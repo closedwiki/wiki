@@ -20,6 +20,8 @@ There are several ways to put an image in a topic.
 
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
+_The icons on this page were created by TWiki:Main.ArthurClemens - except for the Dot graph and Line graph images._
+
 ---++ Graphics table
 
 | *&nbsp;* | *File Name* | *Description* | *Write...* |

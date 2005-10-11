@@ -450,14 +450,18 @@ pub/TWiki/TWikiDocGraphics/bmp.gif 0660
 pub/TWiki/TWikiDocGraphics/bubble.gif 0660
 pub/TWiki/TWikiDocGraphics/c.gif 0660
 pub/TWiki/TWikiDocGraphics/cachetopic.gif 0660
+pub/TWiki/TWikiDocGraphics/changes-small.gif 0660
 pub/TWiki/TWikiDocGraphics/changes.gif 0660
+pub/TWiki/TWikiDocGraphics/checked.gif 0660
 pub/TWiki/TWikiDocGraphics/choice-cancel.gif 0660
 pub/TWiki/TWikiDocGraphics/choice-no.gif 0660
 pub/TWiki/TWikiDocGraphics/choice-yes.gif 0660
+pub/TWiki/TWikiDocGraphics/closed.gif 0660
 pub/TWiki/TWikiDocGraphics/days.gif 0660
 pub/TWiki/TWikiDocGraphics/detail.gif 0660
 pub/TWiki/TWikiDocGraphics/dll.gif 0660
 pub/TWiki/TWikiDocGraphics/doc.gif 0660
+pub/TWiki/TWikiDocGraphics/done.gif 0660
 pub/TWiki/TWikiDocGraphics/dot_ld.gif 0660
 pub/TWiki/TWikiDocGraphics/dot_lr.gif 0660
 pub/TWiki/TWikiDocGraphics/dot_lrd.gif 0660
@@ -475,6 +479,7 @@ pub/TWiki/TWikiDocGraphics/else.gif 0660
 pub/TWiki/TWikiDocGraphics/eml.gif 0660
 pub/TWiki/TWikiDocGraphics/empty.gif 0660
 pub/TWiki/TWikiDocGraphics/exe.gif 0660
+pub/TWiki/TWikiDocGraphics/filter.gif 0660
 pub/TWiki/TWikiDocGraphics/fla.gif 0660
 pub/TWiki/TWikiDocGraphics/flag.gif 0660
 pub/TWiki/TWikiDocGraphics/folder.gif 0660
@@ -557,6 +562,7 @@ pub/TWiki/TWikiDocGraphics/rss-small.gif 0660
 pub/TWiki/TWikiDocGraphics/searchtopic.gif 0660
 pub/TWiki/TWikiDocGraphics/sh.gif 0660
 pub/TWiki/TWikiDocGraphics/sniff.gif 0660
+pub/TWiki/TWikiDocGraphics/sort.gif 0660
 pub/TWiki/TWikiDocGraphics/stargold.gif 0660
 pub/TWiki/TWikiDocGraphics/starred.gif 0660
 pub/TWiki/TWikiDocGraphics/statistics.gif 0660
@@ -572,6 +578,7 @@ pub/TWiki/TWikiDocGraphics/topicdiffs.gif 0660
 pub/TWiki/TWikiDocGraphics/trash.gif 0660
 pub/TWiki/TWikiDocGraphics/ttf.gif 0660
 pub/TWiki/TWikiDocGraphics/txt.gif 0660
+pub/TWiki/TWikiDocGraphics/unchecked.gif 0660
 pub/TWiki/TWikiDocGraphics/up.gif 0660
 pub/TWiki/TWikiDocGraphics/updated.gif 0660
 pub/TWiki/TWikiDocGraphics/viewtopic.gif 0660
