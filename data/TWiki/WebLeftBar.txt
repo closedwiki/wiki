@@ -12,6 +12,8 @@
    * [[WebStatistics][%MAKETEXT{"Statistics"}%]] 
    * [[WebPreferences][%MAKETEXT{"Preferences"}%]] 
 ----
+%INCLUDE{TWikiTipsOfTheDayInclude}% 
+----
    * <b>%MAKETEXT{"User Reference"}%</b>
    * ATasteOfTWiki
    * TextFormattingRules

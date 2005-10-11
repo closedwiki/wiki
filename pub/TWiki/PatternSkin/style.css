@@ -511,7 +511,6 @@ a:hover .twikiAccessKey {
 .patternLeftBar {
 	border-width:1px 1px 1px 0;
 	border-style:solid;
-	overflow:hidden;
 }
 .patternLeftBar a:link,
 .patternLeftBar a:visited {
@@ -528,9 +527,9 @@ a:hover .twikiAccessKey {
 .patternLeftBar .patternLeftBarContents {
 	font-size:94%; /*S4*/
 	font-weight:normal;
-	margin:-1px 0 0 0;
-	padding:0 0 1.7em 1em;
+	margin:-1px 0.5em 1.7em 1em;
 	width:auto;
+	overflow:hidden;
 }
 .patternLeftBar .patternLanguageOption {
 	padding:.25em 0 .25em 1em;
@@ -881,4 +880,29 @@ tr.twikiDiffDebug td {
 }
 .twikiDiffLineNumberHeader {
 	padding:.3em 0;
+}
+
+/* TipsContrib support */
+
+/*
+Arthur, please check.  Maybe we'd like 
+to remove the .patternMain prefix ...
+
+-- MD, 2005-10-11
+*/
+
+.patternMain .tipsOfTheDay {
+  background:#eeeeee;
+  border:1px solid #ccc;
+}
+.patternMain .tipsOfTheDay b {
+  background:#ffd8aa;
+  color:#333;
+  display:block;
+}
+.patternMain .tipsOfTheDay b {
+  padding:2px 5px;
+}
+.patternMain .tipsOfTheDayContents {
+  padding:5px;
 }
