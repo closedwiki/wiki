@@ -11,7 +11,7 @@
   <!-- tag must be on one line for twiki! -->
   <applet name="wikiapplet" code="com.touchgraph.wikibrowser.TGWikiBrowserApplet" archive="%PUBURLPATH%/%TWIKIWEB%/TouchGraphPlugin/TGWikiBrowser.jar" width="500" height="500">
    <param name="DATA_URL" value="%PUBURL%/%WEB%/touchgraph.txt"/>
-   <param name="WIKI_URL" value="<nop>%SCRIPTURL%/view/%WEB%/"/>
+   <param name="WIKI_URL" value="<nop>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/"/>
    <param name="INITIAL_NODE" value="<nop>%TOPIC%"/>
    <param name="LOCALITY_RADIUS" value="2"/>
    <param name="SHOW_BACKLINKS" value="false"/>    
@@ -27,4 +27,4 @@
  </body>
 </html>
 
-<!-- java -cp <nop>TGWikiBrowser.jar;<nop>BrowserLauncher.jar com.touchgraph.wikibrowser.TGWikiBrowser  <nop>%PUBURL%/%WEB%/touchgraph.txt <nop>%SCRIPTURL%/view/%WEB%/ <nop>%TOPIC% 2 false -->
+<!-- java -cp <nop>TGWikiBrowser.jar;<nop>BrowserLauncher.jar com.touchgraph.wikibrowser.TGWikiBrowser  <nop>%PUBURL%/%WEB%/touchgraph.txt <nop>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/ <nop>%TOPIC% 2 false -->

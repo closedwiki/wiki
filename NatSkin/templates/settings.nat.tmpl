@@ -10,7 +10,7 @@
 %TMPL:DEF{"content"}%
 <h2>Preference Settings for [[%WEB%.%TOPIC%]]:</h2>
 <div class="natEdit">
-<form name="SettingsFormular" method="post" action="%SCRIPTURLPATH%/manage/%WEB%/%TOPIC%">
+<form name="SettingsFormular" method="post" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
   <input type="hidden" name="action" value="saveSettings" />
   <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
   <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
