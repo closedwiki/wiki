@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-TODO: this topics is not rendering correctly - ot has lost its leftbar.
 
 ---+!! Customization of !PatternSkin
 
