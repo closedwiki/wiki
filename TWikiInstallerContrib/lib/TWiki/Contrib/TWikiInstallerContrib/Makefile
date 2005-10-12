@@ -15,7 +15,6 @@ $(MakeFor).tar :
 	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/extensions/ downloads/kernels/TWikiKernel-$(BRANCH)-`bin/svnrev.pl`.* config/ cpan/MIRROR/TWIKI/
 	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) 
 
-# TODO: call the build process for the plugins
 extensions : 
 	cd $(TWIKIDEV)/$(BRANCH)/tools/; perl build_all_extensions.pl
 	cp $(TWIKIDEV)/$(BRANCH)/twikiplugins/*/*.zip downloads/extensions
