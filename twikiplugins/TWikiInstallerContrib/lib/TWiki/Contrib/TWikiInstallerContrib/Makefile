@@ -1,5 +1,6 @@
 
 TWIKIDEV ?= ~/twiki
+BRANCH ?= DEVELOP
 MakeFor ?= twiki.org-`bin/svnrev.pl`
 
 all : help
@@ -11,10 +12,13 @@ $(MakeFor).tar.bz2 : $(MakeFor).tar
 
 $(MakeFor).tar : 
 	tar -f $(MakeFor).tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform && find -maxdepth 1 -type f`
-	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/addons/ downloads/contribs/ downloads/plugins/ downloads/kernels/TWikiKernel-$(BRANCH)-`bin/svnrev.pl`.* config/ cpan/MIRROR/TWIKI/
+	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/extensions/ downloads/kernels/TWikiKernel-$(BRANCH)-`bin/svnrev.pl`.* config/ cpan/MIRROR/TWIKI/
 	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) 
 
-extensions : plugins contribs addons
+# TODO: call the build process for the plugins
+extensions : 
+	cd $(TWIKIDEV)/$(BRANCH)/tools/; perl build_all_extensions.pl
+	cp $(TWIKIDEV)/$(BRANCH)/twikiplugins/*/*.zip downloads/extensions
 
 distro : twiki-cpan extensions $(MakeFor).tar.bz2 
 
@@ -25,15 +29,6 @@ minicpan :
 
 twiki-cpan : minicpan
 	cpan/mirror-cpan.pl --twiki `bin/calc-twiki-deps.pl`
-
-plugins :
-	bin/download-twiki-extensions.pl plugins
-
-contribs :
-	bin/download-twiki-extensions.pl contribs
-
-addons :
-	bin/download-twiki-extensions.pl addons
 
 ################################################################################
 
@@ -59,7 +54,6 @@ help : print
 	@echo make distro - test-distro + bzip2 compression
 	@echo 
 	@echo "make extensions - download extensions (all of plugins, contribs, addons)"
-	@echo make plugins contribs addons - download specific extensions types
 	@echo 
 	@echo make minicpan - mirror latest version of cpan modules
 	@echo make twiki-cpan - create twiki cpan repository
