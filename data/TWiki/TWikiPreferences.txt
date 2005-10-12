@@ -152,7 +152,7 @@ _(Click for form-based editing of existing preferences.)_
    * ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
 <verbatim>
       * #Set HTTP_EQUIV_ON_VIEW = 
-      * Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&amp;contenttype=text/xml" />
+      * Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss" />
 </verbatim>
 
    * ==http-equiv== meta tags for ==edit== script:

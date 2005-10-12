@@ -5,5 +5,7 @@
   <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
   <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%</link>
   <description>The Documentation Web of TWiki. TWiki is a Web-Based Collaboration Platform for the Corporate World.</description>
-%INCLUDE{"%TWIKIWEB%.WebRssBase"}%
+%INCLUDE{"%TWIKIWEB%.WebRssBase"}%<!--
+   * Set SKIN = rss
+-->
 

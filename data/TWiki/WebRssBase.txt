@@ -8,9 +8,9 @@ There are three ways to find out what's new in each TWiki web:
 
 ---++ RSS Feed Usage
 
-   * The URL for an RSS feed is =%SCRIPTURL%/view%SCRIPTSUFFIX%/&lt;web&gt;/WebRss?skin=rss=
-   * For this <nop>%WEB% web it is %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss (or %SCRIPTURL%/view%SCRIPTSUFFIX%/Main/WebRss?skin=rss&contenttype=text/plain for plain text RSS)
-   * You can also create a custom feed based on a search. Add a =search=value= parameter to the URL, e.g. %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&search=plugin is a what's new feed about Plugins.
+   * The URL for an RSS feed is =%SCRIPTURL%/view%SCRIPTSUFFIX%/&lt;web&gt;/WebRss=
+   * For this <nop>%WEB% web it is %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss
+   * You can also create a custom feed based on a search. Add a =search=value= parameter to the URL, e.g. %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?search=plugin is a what's new feed about Plugins.
 
 ---++ RSS Feed Internals
 
@@ -19,13 +19,15 @@ Each web has a WebRss topic which includes part of this <nop>%TOPIC% topic. This
 The WebRss topic in each web contains the following text:
 
 -----
-<verbatim>
-<channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%">
-  <title><nop>%WIKITOOLNAME%'s <nop>%INCLUDINGWEB% web</title>
-  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%</link>
-  <description>(the description of the web). TWiki is a Web-Based Collaboration Platform for the Corporate World.</description>
-%INCLUDE{"%TWIKIWEB%.WebRssBase"}%
-</verbatim>
+<pre>
+&lt;channel rdf:about="%<nop>SCRIPTURL%/view%<nop>SCRIPTSUFFIX%/%<nop>INCLUDINGWEB%">
+  &lt;title>%<nop>WIKITOOLNAME%'s %<nop>INCLUDINGWEB% web&lt;/title>
+  &lt;link>%<nop>SCRIPTURL%/view%<nop>SCRIPTSUFFIX%/%<nop>INCLUDINGWEB%&lt;/link>
+  &lt;description>(the description of the web). TWiki is a Web-Based Collaboration Platform for the Corporate World.&lt;/description>
+%<nop>INCLUDE{"%TWIKIWEB%.WebRssBase"}% &lt;!--
+   * Set <nop>SKIN = rss
+-->
+</pre>
 -----
 
 
@@ -34,7 +36,7 @@ Below part is included by each <nop>WebRss topic:
 
 -----
 <verbatim>
-%STARTINCLUDE%<image rdf:resource="%WEBLOGOIMG%" />
+%STARTINCLUDE%<image rdf:resource="%WIKILOGOIMG%" />
   <dc:language>en-us</dc:language>
   <dc:rights>%WEBRSSCOPYRIGHT%</dc:rights>
   <dc:publisher>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:publisher>
@@ -51,12 +53,12 @@ Below part is included by each <nop>WebRss topic:
     </rdf:Seq>
   </items>
 </channel>
-<image rdf:about="%WEBLOGOIMG%">
-  <title>%WEBLOGOALT%.%INCLUDINGWEB%</title>
+<image rdf:about="%WIKILOGOIMG%">
+  <title>%WIKILOGOALT%.%INCLUDINGWEB%</title>
   <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%</link>
-  <url>%WEBLOGOIMG%</url>
+  <url>%WIKILOGOIMG%</url>
 </image>
-%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="on" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic?t=$isodate</link>$n  <description>$summary (last changed by <nop>$wikiname)</description>$n <author><nop>$wikiname</author>$n <dc:date>$isodate</dc:date>$n  <dc:contributor>$n    <rdf:Description link=\"%SCRIPTURL%/view%SCRIPTSUFFIX%?topic=$wikiusername\">$n      <rdf:value>$username</rdf:value>$n    </rdf:Description>$n  </dc:contributor>$n  <wiki:version>$rev</wiki:version>$n  <wiki:status>updated</wiki:status>$n  <wiki:importance>major</wiki:importance>$n  <wiki:diff>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:diff>$n  <wiki:history>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:history>$n</item>"}%
+%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="on" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic?t=$isodate</link>$n  <description>$summary (last changed by <nop>$wikiname)</description>$n  <dc:date>$isodate</dc:date>$n  <dc:contributor>$n    <rdf:Description link=\"%SCRIPTURL%/view%SCRIPTSUFFIX%?topic=$wikiusername\">$n      <rdf:value>$username</rdf:value>$n    </rdf:Description>$n  </dc:contributor>$n  <wiki:version>$rev</wiki:version>$n  <wiki:status>updated</wiki:status>$n  <wiki:importance>major</wiki:importance>$n  <wiki:diff>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:diff>$n  <wiki:history>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:history>$n</item>"}%
 %STOPINCLUDE%
 </verbatim>
 -----
