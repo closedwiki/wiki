@@ -1,7 +1,0 @@
-. SETTINGS
-
-cd $TWIKISTAGE/twikiplugins/$PLUGINNAME
-tar zcvf $TWIKISTAGE/$PLUGINNAME.tar.gz .
-
-rm -rf $TWIKISTAGE/twikiplugins/$PLUGINNAME && echo "Removed exported files"
-ls -la $TWIKISTAGE/$PLUGINNAME.tar.gz 

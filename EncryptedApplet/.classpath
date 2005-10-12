@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-    <classpathentry kind="src" path=""/>
-    <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
-    <classpathentry kind="lib" path="C:/j2sdk1.4.0/jre/lib/jce.jar"/>
-    <classpathentry kind="lib" path="C:/j2sdk1.4.0/jre/lib/ext/sunjce_provider.jar"/>
-    <classpathentry kind="output" path=""/>
-</classpath>

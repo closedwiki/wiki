@@ -1,7 +1,0 @@
-. SETTINGS
-
-cd $TWIKIROOT
-tar zxvf $TWIKISTAGE/$PLUGINNAME.tar.gz "./lib/TWiki/Plugins/$PLUGINNAME*" "./data/TWiki/$PLUGINNAME*" "./pub/TWiki/$PLUGINNAME/*"
-
-# adding -k to the tar option would prevent it from overwriting existing
-# files.
