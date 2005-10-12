@@ -2392,10 +2392,10 @@ sub _IF {
 # $topic and $web should be for the immediate parent topic in the
 # include hierarchy. Works for both URLs and absolute server paths.
 sub _INCLUDE {
-    my ( $this, $params, $topic, $web ) = @_;
+    my ( $this, $params, $includingTopic, $includingWeb ) = @_;
 
-    # compute include key before mangling params
-    my $key = $web.'.'.$topic.':'.$params->stringify();
+    # remember args for the key before mangling the params
+    my $args = $params->stringify();
 
     # Remove params, so they don't get expanded in the included page
     my $path = $params->remove('_DEFAULT') || '';
@@ -2407,7 +2407,7 @@ sub _INCLUDE {
 
     if( $path =~ /^https?\:/ ) {
         # include web page
-        return $this->_includeUrl( $path, $pattern, $web, $topic );
+        return $this->_includeUrl( $path, $pattern, $includingWeb, $includingTopic );
     }
 
     $path =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
@@ -2430,21 +2430,21 @@ sub _INCLUDE {
     # TopicName.txt
     # Web.TopicName.txt
     # Web/TopicName.txt
-    my $incweb = $web;
-    my $inctopic = $path;
-    $inctopic =~ s/\.txt$//; # strip .txt extension
-    if ( $inctopic =~ /^($regex{webNameRegex})[\.\/]($regex{wikiWordRegex})$/o ) {
-        $incweb = $1;
-        $inctopic = $2;
+    my $includedWeb = $includingWeb;
+    my $includedTopic = $path;
+    $includedTopic =~ s/\.txt$//; # strip .txt extension
+    if( $includedTopic =~ /^($regex{webNameRegex})[\.\/]($regex{wikiWordRegex})$/o ) {
+        $includedWeb = $1;
+        $includedTopic = $2;
     }
 
     # See Codev.FailedIncludeWarning for the history.
-    unless( $this->{store}->topicExists($incweb, $inctopic)) {
+    unless( $this->{store}->topicExists($includedWeb, $includedTopic)) {
         if( $warn eq 'on' ) {
-            return $this->inlineAlert( 'alerts', 'no_such_topic', $inctopic );
+            return $this->inlineAlert( 'alerts', 'no_such_topic', $includedTopic );
         } elsif( isTrue( $warn )) {
-            $inctopic =~ s/\//\./go;
-            $warn =~ s/\$topic/$inctopic/go;
+            $includedTopic =~ s/\//\./go;
+            $warn =~ s/\$includingTopic/$includedTopic/go;
             return $warn;
         } # else fail silently
         return '';
@@ -2452,19 +2452,23 @@ sub _INCLUDE {
 
     # prevent recursive includes. Note that the inclusion of a topic into
     # itself is not blocked; however subsequent attempts to include the
-    # topic will fail.
-    my $count = grep($web.'.'.$topic, keys %{$this->{includes}});
+    # topic will fail. There is a hard block of 99 on any recursive include.
+    my $key = $includingWeb.'.'.$includingTopic;
+    my $count = grep( $key, keys %{$this->{includes}});
+    $key .= $args;
     if( $this->{includes}->{$key} || $count > 99) {
         if( $warn eq 'on' ) {
             my $more = '';
-            if( defined $this->{includes} ) {
-                $more .= join( ', ', keys %{$this->{includes}} );
-            }
+            # Commented out because no order in the hash, so of very limited
+            # use in debugging.
+            #if( defined $this->{includes} ) {
+            #    $more .= join( ', ', keys %{$this->{includes}} );
+            #}
             return $this->inlineAlert( 'alerts', 'already_included',
-                                       $incweb, $inctopic, $more );
+                                       $includedWeb, $includedTopic, $more );
         } elsif( isTrue( $warn )) {
-            $inctopic =~ s/\//\./go;
-            $warn =~ s/\$topic/$inctopic/go;
+            $includedTopic =~ s/\//\./go;
+            $warn =~ s/\$topic/$includedTopic/go;
             return $warn;
         } # else fail silently
         return '';
@@ -2474,25 +2478,24 @@ sub _INCLUDE {
     my $prefsMark = $this->{prefs}->mark();
 
     $this->{includes}->{$key} = 1;
-    $this->{SESSION_TAGS}{INCLUDINGWEB} = $web;
-    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $topic;
+    $this->{SESSION_TAGS}{INCLUDINGWEB} = $includingWeb;
+    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $includingTopic;
 
     # copy params into session tags
     foreach my $k ( keys %$params ) {
         $this->{SESSION_TAGS}{$k} = $params->{$k};
     }
 
-    $topic = $inctopic;
-    $web = $incweb;
-
     ( $meta, $text ) =
-      $this->{store}->readTopic( undef, $web, $topic,
+      $this->{store}->readTopic( undef, $includedWeb, $includedTopic,
                                  $rev );
 
     unless( $this->{security}->checkAccessPermission(
-        'VIEW', $this->{user}, $text, $topic, $web )) {
+        'VIEW', $this->{user}, $text, $includedTopic, $includedWeb )) {
         if( isTrue( $warn )) {
-            return $this->inlineAlert( 'alerts', 'access_denied', $topic );
+die;
+            return $this->inlineAlert( 'alerts', 'access_denied',
+                                       $includedTopic );
         } # else fail silently
         return '';
     }
@@ -2513,28 +2516,29 @@ sub _INCLUDE {
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                               $this->{_verbatims} );
 
-    $this->_expandAllTags( \$text, $topic, $web );
+    $this->_expandAllTags( \$text, $includedTopic, $includedWeb );
 
     # 4th parameter tells plugin that its called for an included file
-    $this->{plugins}->commonTagsHandler( $text, $topic, $web, 1 );
+    $this->{plugins}->commonTagsHandler( $text, $includedTopic,
+                                         $includedWeb, 1 );
 
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
     # right context
     # SMELL: This is a hack.
-    if( $web ne $incweb ) {
+    if( $includedWeb ne $includingWeb ) {
         # 'TopicName' to 'Web.TopicName'
-        $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
-        $text =~ s/(^|[\s\(])($regex{wikiWordRegex})/$1$web\.$2/go;
-        $text =~ s/(^|[\s\(])$TranslationToken/$1/go;
+        $text =~ s/(^|[\s(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
+        $text =~ s/(^|[\s(])($regex{wikiWordRegex})/$1$includedWeb\.$2/go;
+        $text =~ s/(^|[\s(])$TranslationToken/$1/go;
         # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
-        $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $web, $1 )/geo;
+        $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1 )/geo;
         # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
-        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $web, $1, $2 )/geo;
+        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1, $2 )/geo;
         # FIXME: Support for <noautolink>
     }
 
     # handle tags again because of plugin hook
-    $this->_expandAllTags( \$text, $topic, $web );
+    $this->_expandAllTags( \$text, $includedTopic, $includedWeb );
 
     # restore the tags
     delete $this->{includes}->{$key};
