@@ -1,5 +1,0 @@
-
-. SETTINGS
-
-
-cd "$TWIKISTAGE" && cvs export -f -r HEAD twikiplugins/$PLUGINNAME
