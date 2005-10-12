@@ -216,7 +216,6 @@ my @types = (
 foreach my $iType ( @types )
 {
     my $ext = $iType->{type};
-#    print STDERR $ext, "\n";
 
     print $q->h2( $ext );
     my $xmlCatalogue = "../$iType->{dir}/$iType->{xml}";
@@ -230,11 +229,9 @@ foreach my $iType ( @types )
 
     my $xs = new XML::Simple( KeyAttr => 1, AttrIndent => 1 ) or die $!;
     my $xmlExt = $xs->XMLin( $xmlCatalogue, ForceArray => [ $ext ], SuppressEmpty => '' ) or warn "No ${ext}s catalogue: $!";
-    print STDERR Dumper( $xmlExt );
     my %hExt = map { $_->{name}, $_ } @{$xmlExt->{$ext}};
     foreach my $idExt ( $q->param($ext) )
     {
-	print STDERR Dumper( $idExt );
 	my $ExtS = $hExt{$idExt} or warn "no entry for $idExt ?", next;
 	my $name = $ExtS->{name} or die "no extension name? wtf?";
 	$ExtS->{file} ||= "../$iType->{dir}/$name.zip";
@@ -422,7 +419,6 @@ sub continueToWikiText
 sub installTWikiExtension
 {
     my $p = shift;
-    print STDERR "installTWikiExtension: ", Dumper( $p );
     my $file = $p->{file} or die "no twiki extension file specified";
     my $dir = $p->{dir} || ".";
     my $name = $p->{name} || $file;
@@ -446,8 +442,6 @@ sub installTWikiExtension
 	next if $file =~ /,v$/;
 	# filter out other miscellaneous crap that sometimes appear in plugins releases
 	next if $file =~ m/~$/;
-
-#	print STDERR "$file\n";
 
 	if ( my ($cd,$path,$base) = $file =~ m|^($cdinto)?([^/]+)/(.+)?$| )
 	# because path isn't optional, this skips over files in the (local) root directory
@@ -664,7 +658,6 @@ __HTML__
 sub _dirCatalogue
 {
     my $p = shift;
-    print STDERR Dumper( $p ), "\n";
 
     die unless $p->{type} && $p->{cgi} && $p->{dir};
 #    $p->{fileFilter} ||= q/.*/;
@@ -676,7 +669,6 @@ sub _dirCatalogue
 	@dirReleases = grep { /$p->{fileFilter}/ } readdir( RELEASES );  #or warn $!; 
 	closedir( RELEASES ) or warn $!;
     }
-    print STDERR "catlogue: ", Dumper( \@dirReleases );
     return [] unless @dirReleases;
 
     foreach my $twiki ( @dirReleases )
@@ -688,7 +680,6 @@ sub _dirCatalogue
 	};
     }
 
-    print STDERR "releases: ", Dumper( \@releases );
     return \@releases;
 }
 
@@ -748,7 +739,7 @@ sub releasesCatalogue
 	    $label ||= '';
 	    $branch ||= '';
 	    warn "$release: $rel doesn't match?", next unless $revInfo;
-	    print STDERR "label=[$label], branch=[$branch], revInfo=[$revInfo]\n";
+#	    print STDERR "label=[$label], branch=[$branch], revInfo=[$revInfo]\n";
 
 	    $release->{homepage} ||= "http://twiki.org/cgi-bin/view/Codev/TWiki$label$branch$revInfo";
 
