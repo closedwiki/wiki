@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1122128753" format="1.1" version="$Rev$"}%
 <div style="float:right;border:0px 10px 10px 10px">
 <img src="%WIKILOGOIMG%" alt="%WIKILOGOALT" border="0" /><br />
-The official TWiki<sup>TM</sup> site is<br />
+The official TWiki&trade; site is<br />
 http://twiki.org/
 </div>
 ---+!! Welcome to the %WEB% Web
@@ -27,8 +27,8 @@ This is the place to learn about TWiki features, find where to download it, and 
 </blockquote>
 
 ---++ Disclaimer
-   * TWiki<sup>TM</sup> is a trademark of Peter Thoeny
-   * __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers<sup>TM</sup> in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
+   * TWiki&trade; is a trademark of Peter Thoeny
+   * __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers&trade; in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
    * Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]]

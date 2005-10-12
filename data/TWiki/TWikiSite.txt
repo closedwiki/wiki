@@ -38,7 +38,7 @@
 
 <blockquote> %X% If you have to log-in to use TWiki, for example, if Twiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: %MAINWEB%.TWikiGuest.</blockquote>
 
-TWiki<sup>TM</sup> is a trademark of TWiki:Main.PeterThoeny - originator of TWiki.
+TWiki&trade; is a trademark of TWiki:Main.PeterThoeny - originator of TWiki.
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * TWiki has its root in the GPLed <nop>JosWiki. Many thanks to Markus Peter and Dave Harris for creating <nop>JosWiki!
    * TWiki's home address is http://twiki.org/.
