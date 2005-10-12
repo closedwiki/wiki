@@ -84,7 +84,7 @@ h1,
 	margin:0 0 .5em 0;
 }
 .patternNoViewPage h1 {
-	font-size:160%;
+	font-size:170%;
 }
 .patternTopic h2,
 .patternTopic h3,
@@ -454,8 +454,11 @@ a:visited .twistyLinkLabel {
 }
 .twikiButton, 
 .twikiSubmit {
+	font-size:100%;
 	border-width:1px;
+	border-style:solid;
 	vertical-align:middle;
+	padding:1px;
 }
 .twikiCheckbox,
 .twikiRadioButton {
@@ -537,7 +540,10 @@ a:hover .twikiAccessKey {
 .patternTopBar {}
 .patternTopBarContents {
 	margin:0em;
-	padding:0 2em 0 1em; /* right padding same as .patternViewPage .patternMain */
+	padding:5px 2em 5px 1em; /* right padding same as .patternViewPage .patternMain */ 
+}
+.patternTopBarContents table {
+	height:50px; /* together with a padding of 2x 5px this assumes a logo of 40px height */
 }
 .patternTopBarContents .patternSearchBox td {
 	height:50px;
@@ -550,6 +556,9 @@ a:hover .twikiAccessKey {
 	border-width:1px 1px 1px 0;
 	border-style:solid;
 	font-size:94%; /*S4*/
+}
+.patternLeftBar a img {
+	margin:1px 0 0 0;
 }
 .patternLeftBar a:link,
 .patternLeftBar a:visited {
@@ -570,17 +579,21 @@ a:hover .twikiAccessKey {
 	width:auto;
 	overflow:hidden;
 }
-.patternLeftBar .patternLanguageOption {
-	padding:.25em 0.25em .25em 1em;
-	margin:-1px 0 0 0;
-}
 .patternLeftBarPersonal {
-	position:relative;
-	z-index:3;
 	margin:-1px 0 .7em 0;
 	padding:.25em 0 .25em 1em;
 	border-width:1px 0;
 	border-style:solid;
+}
+.patternLeftBarPersonal ul {
+	list-style: none;
+	margin:0;
+	padding:0;
+}
+.patternLeftBarPersonal li {
+	padding-left:1em;
+	background-repeat:no-repeat;
+	background-position:0 .5em;
 }
 .patternLeftBarPersonal a:hover {
 	text-decoration:none;
@@ -699,6 +712,22 @@ td.patternToolBar {
 	z-index:2;
 }
 
+.patternMetaNav {
+	font-size:85%; /*S2*/
+}
+.patternMetaNav a:link,
+.patternMetaNav a:visited {
+	text-decoration:none;
+}
+.patternMetaNav .patternSeparator {
+	margin:0 .5em;
+}
+.patternMetaNav input {
+	vertical-align:top;
+	padding:0;
+	height:1.2em; /* 85% of default line-height 1.4 */
+}
+
 /* Edit page */
 
 .twikiChangeFormButtonHolder {
@@ -716,7 +745,7 @@ td.patternToolBar {
 	text-decoration:underline;
 }
 .patternSig {
-	margin:.25em 0 0 0;
+	margin:.25em 0;
 }
 
 .patternAccessKeyInfo {

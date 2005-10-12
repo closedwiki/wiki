@@ -1,11 +1,11 @@
 %{ Internationalisable Messages/constructs }%
 %TMPL:DEF{"sep"}%<span class="twikiSeparator">&nbsp;|&nbsp;</span>%TMPL:END%
-%TMPL:DEF{"LOG_IN"}%%_{"Log In"}%%TMPL:END%
-%TMPL:DEF{"LOG_OUT"}%%_{"Log Out"}%%TMPL:END%
- 
-
-
 %TMPL:DEF{"titlesep"}%&lt;%TMPL:END%
+
+
+
+%TMPL:DEF{"LOG_IN"}%%ICON{key}% %_{"Log In"}%%TMPL:END%
+%TMPL:DEF{"LOG_OUT"}%%ICON{logout}% %_{"Log Out"}%%TMPL:END%
 
 
 
@@ -108,6 +108,12 @@ document.write('<\/style>');
 		background:none;
 	}
 	*/
+	.patternLeftBarPersonal,
+	.tipsOfTheDay,
+	.twikiHelp,
+	.patternAccessKeyInfo {
+		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/info_bg.gif");
+	}
 	.patternMain {
 		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/page_bg.gif") #fff repeat-x;
 	}
@@ -119,6 +125,9 @@ document.write('<\/style>');
 	}
 	.patternTopic .twikiTable th {
 		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/twikiTable_header_bg.gif");
+	}
+	.patternLeftBarPersonal li {
+		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/bullet-blue.gif");
 	}
 </style>
 <script type="text/javascript">
@@ -179,7 +188,7 @@ document.write('<\/style>');
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="patternLeftBar">%IF{"context i18n_enabled" then="<div class=\"patternLanguageOption\">[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopschangelanguage][%_{"Change language"}%]]</div>"}%%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
+%TMPL:DEF{"leftbar"}%<div class="patternLeftBar">%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 <div class="patternLeftBarContents">
 %INCLUDE{"%WEB%.WebLeftBar"}%
 </div></div>%TMPL:END%

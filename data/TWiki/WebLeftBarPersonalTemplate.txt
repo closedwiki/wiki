@@ -2,9 +2,8 @@
 Customise this topic; samples and ideas available at TWiki:TWiki.WebLeftBarCookbook.
 
 %STARTINCLUDE%
-   * *My links*
+*My links:*
    * [[%WIKIUSERNAME%][My home page]]
    * 
-<a class="twikiSmall" href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=20051011134358">edit</a>
+<a class="twikiSmall" href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%">edit</a>
 %STOPINCLUDE%
-

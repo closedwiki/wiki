@@ -9,6 +9,7 @@ This is the TWiki icon library. The graphics can be used in topics and by web ap
 There are several ways to put an image in a topic.
 
    * *Shorthand notation:* <code>%<nop>ICON{help}%</code> results in: %ICON{help}%
+      * Note that =ICON{}= assumes an image of 16 x 16 pixels
    * *Really shorthand notation:* in %TWIKIWEB%.TWikiPreferences set a variable to an ICON, for example: <code>   * Set H = %<nop>ICON{help}% </code>. Now you can use the icon by writing =%<nop>H%=.
    * There are other approaches as well:
       * In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
@@ -37,15 +38,14 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
 | <img src="%ATTACHURLPATH%/cachetopic.gif" alt="Cache topic" title="Cache topic" />  | =cachetopic.gif= | Cache topic | =%<nop>ICON{cachetopic}%= |
 | <img src="%ATTACHURLPATH%/changes.gif" alt="Changes" title="Changes" />  | =changes.gif= | Changes | =%<nop>ICON{changes}%= |
-| <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes (small)" title="Changes (small)" />  | =changes-small.gif= | Changes (small) | =%<nop>ICON{changes-small}%= |
+| <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes" title="Changes" />  | =changes-small.gif= | Changes (small), 14x13 | =<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/changes-small.gif" width="14" height="13" alt="Changes" border="0" />= |
 | <img src="%ATTACHURLPATH%/checked.gif" alt="Checked checkbox" title="Checked checkbox" />  | =checked.gif= | Checked checkbox | =%<nop>ICON{checked}%= |
 | <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="Cancel" title="Cancel" />  | =choice-cancel.gif= | Cancel | =%<nop>ICON{choice-cancel}%= |
 | <img src="%ATTACHURLPATH%/choice-no.gif" alt="No" title="No" />  | =choice-no.gif= | No | =%<nop>ICON{choice-no}%= |
 | <img src="%ATTACHURLPATH%/choice-yes.gif" alt="Yes / Done" title="Yes / Done" />  | =choice-yes.gif= | Yes / Done | =%<nop>ICON{choice-yes}%= |
-| <img src="%ATTACHURLPATH%/closed.gif" alt="CLOSED" title="CLOSED" />  | =closed.gif= | CLOSED, 48x16 | =%<nop>ICON{closed}%= |
+| <img src="%ATTACHURLPATH%/closed.gif" alt="CLOSED" title="CLOSED" />  | =closed.gif= | CLOSED, 48x16 | n.a. |
 | <img src="%ATTACHURLPATH%/days.gif" alt="Days / Calendar" title="Days / Calendar" />  | =days.gif= | Days, Calendar | =%<nop>ICON{days}%= |
-| <img src="%ATTACHURLPATH%/detail.gif" alt="Detail" title="Detail" />  | =detail.gif= | Detail | =%<nop>ICON{detail}%= |
-| <img src="%ATTACHURLPATH%/done.gif" alt="DONE" title="DONE" />  | =done.gif= | DONE, 37x16 | =%<nop>ICON{done}%= |
+| <img src="%ATTACHURLPATH%/done.gif" alt="DONE" title="DONE" />  | =done.gif= | DONE, 37x16 | n.a. |
 | <img src="%ATTACHURLPATH%/dot_ld.gif" alt="Dot graph left-down" title="Dot graph left-down" />  | =dot_ld.gif= | Dot graph left-down | =%<nop>ICON{dot_ld}%= |
 | <img src="%ATTACHURLPATH%/dot_lr.gif" alt="Dot graph left-right" title="Dot graph left-right" />  | =dot_lr.gif= | Dot graph left-right | =%<nop>ICON{dot_lr}%= |
 | <img src="%ATTACHURLPATH%/dot_lrd.gif" alt="Dot graph left-right-down" title="Dot graph left-right-down" />  | =dot_lrd.gif= | Dot graph left-right-down | =%<nop>ICON{dot_lrd}%= |
@@ -62,6 +62,8 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/empty.gif" alt="Empty transparent spacer" title="Empty transparent spacer" />  | =empty.gif= | Empty transparent 16x16 spacer | =%<nop>ICON{empty}%= |
 | <img src="%ATTACHURLPATH%/filter.gif" alt="Filter" title="Filter" />  | =filter.gif= | Filter | =%<nop>ICON{filter}%= |
 | <img src="%ATTACHURLPATH%/flag.gif" alt="Flag" title="Flag" />  | =flag.gif= | Flag | =%<nop>ICON{flag}%= |
+| <img src="%ATTACHURLPATH%/flag-gray.gif" alt="Flag" title="Flag" />  | =flag-gray.gif= | Gray flag | =%<nop>ICON{flag-gray}%= |
+| <img src="%ATTACHURLPATH%/flag-gray-small.gif" alt="Flag" title="Flag" />  | =flag-gray-small.gif= | Small gray flag | n.a. |
 | <img src="%ATTACHURLPATH%/folder.gif" alt="Folder" title="Folder" />  | =folder.gif= | Folder | =%<nop>ICON{folder}%= |
 | <img src="%ATTACHURLPATH%/gear.gif" alt="Gear" title="Gear" />  | =gear.gif= | Gear | =%<nop>ICON{gear}%= |
 | <img src="%ATTACHURLPATH%/globe.gif" alt="Globe" title="Globe" />  | =globe.gif= | Globe | =%<nop>ICON{globe}%= |
@@ -78,6 +80,8 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
 | <img src="%ATTACHURLPATH%/index.gif" alt="Index" title="Index" />  | =index.gif= | Index | =%<nop>ICON{index}%= |
 | <img src="%ATTACHURLPATH%/indexlist.gif" alt="Index list" title="Index list" />  | =indexlist.gif= | Index list | =%<nop>ICON{indexlist}%= |
+| <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
+| <img src="%ATTACHURLPATH%/key.gif" alt="Key" title="Key" />  | =key.gif= | Key | =%<nop>ICON{key}%= |
 | <img src="%ATTACHURLPATH%/led-aqua.gif" alt="Aqua led" title="Aqua led" />  | =led-aqua.gif= | Aqua led | =%<nop>ICON{led-aqua}%= |
 | <img src="%ATTACHURLPATH%/led-blue.gif" alt="Blue led" title="Blue led" />  | =led-blue.gif= | Blue led | =%<nop>ICON{led-blue}%= |
 | <img src="%ATTACHURLPATH%/led-gray.gif" alt="Gray led" title="Gray led" />  | =led-gray.gif= | Gray led | =%<nop>ICON{led-gray}%= |
@@ -103,10 +107,11 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/lockfoldergray.gif" alt="Locked folder, gray" title="Locked folder, gray" />  | =lockfoldergray.gif= | Locked folder, gray | =%<nop>ICON{lockfoldergray}%= |
 | <img src="%ATTACHURLPATH%/locktopic.gif" alt="Locked topic" title="Locked topic" />  | =locktopic.gif= | Locked topic | =%<nop>ICON{locktopic}%= |
 | <img src="%ATTACHURLPATH%/locktopicgray.gif" alt="Locked topic, gray" title="Locked topic, gray" />  | =locktopicgray.gif= | Locked topic, gray | =%<nop>ICON{locktopicgray}%= |
+| <img src="%ATTACHURLPATH%/logout.gif" alt="Log out" title="Log out" />  | =logout.gif= | Log out | =%<nop>ICON{logout}%= |
 | <img src="%ATTACHURLPATH%/mail.gif" alt="Mail" title="Mail" />  | =mail.gif= | Mail | =%<nop>ICON{mail}%= |
 | <img src="%ATTACHURLPATH%/minus.gif" alt="Minus" title="Minus" />  | =minus.gif= | Minus | =%<nop>ICON{minus}%= |
 | <img src="%ATTACHURLPATH%/more.gif" alt="Read more" title="Read more" />  | =more.gif= | Read more | =%<nop>ICON{more}%= |
-| <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | More, 14x11 | =%<nop>ICON{more-small}%= |
+| <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 14x13 | n.a. |
 | <img src="%ATTACHURLPATH%/new.gif" alt="NEW" title="NEW" />  | =new.gif= | NEW | =%<nop>ICON{new}%= |
 | <img src="%ATTACHURLPATH%/newtopic.gif" alt="New topic" title="New topic" />  | =newtopic.gif= | New topic | =%<nop>ICON{newtopic}%= |
 | <img src="%ATTACHURLPATH%/note.gif" alt="Note" title="Note" />  | =note.gif= | Note | =%<nop>ICON{note}%= |
@@ -120,7 +125,7 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/refreshtopic.gif" alt="Refresh topic" title="Refresh topic" />  | =refreshtopic.gif= | Refresh topic | =%<nop>ICON{refreshtopic}%= |
 | <img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
 | <img src="%ATTACHURLPATH%/right.gif" alt="Right" title="Right" />  | =right.gif= | Right | =%<nop>ICON{right}%= |
-| <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =%<nop>ICON{rss-feed}%= |
+| <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | n.a. |
 | <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
 | <img src="%ATTACHURLPATH%/searchtopic.gif" alt="Search topic" title="Search topic" />  | =searchtopic.gif= | Search topic | =%<nop>ICON{searchtopic}%= |
 | <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
@@ -130,7 +135,7 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/stop.gif" alt="Stop" title="Stop" />  | =stop.gif= | Stop | =%<nop>ICON{stop}%= |
 | <img src="%ATTACHURLPATH%/target.gif" alt="Target" title="Target" />  | =target.gif= | Target | =%<nop>ICON{target}%= |
 | <img src="%ATTACHURLPATH%/tip.gif" alt="Tip, idea" title="Tip, idea" />  | =tip.gif= | Tip, idea | =%<nop>ICON{tip}%= |
-| <img src="%ATTACHURLPATH%/todo.gif" alt="TODO" title="TODO" />  | =todo.gif= | TODO, 37x16 | =%<nop>ICON{todo}%= |
+| <img src="%ATTACHURLPATH%/todo.gif" alt="TODO" title="TODO" />  | =todo.gif= | TODO, 37x16 | n.a. |
 | <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
 | <img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
 | <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="Topic back-links" title="Topic back-links" />  | =topicbacklinks.gif= | Topic back-links | =%<nop>ICON{topicbacklinks}%= |
@@ -138,13 +143,14 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
 | <img src="%ATTACHURLPATH%/unchecked.gif" alt="Unchecked checkbox" title="Unchecked checkbox" />  | =unchecked.gif= | Unchecked checkbox | =%<nop>ICON{unchecked}%= |
 | <img src="%ATTACHURLPATH%/up.gif" alt="Up" title="Up" />  | =up.gif= | Up | =%<nop>ICON{up}%= |
-| <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | =%<nop>ICON{updated}%= |
+| <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | n.a. |
 | <img src="%ATTACHURLPATH%/viewtopic.gif" alt="View topic" title="View topic" />  | =viewtopic.gif= | View topic | =%<nop>ICON{viewtopic}%= |
 | <img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />  | =warning.gif= | Warning, important | =%<nop>ICON{warning}%= |
 | <img src="%ATTACHURLPATH%/watch.gif" alt="Watch" title="Watch" />  | =watch.gif= | Watch | =%<nop>ICON{watch}%= |
+| <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web background" title="Web background" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
 | <img src="%ATTACHURLPATH%/wip.gif" alt="Work in progress, under construction" title="Work in progress, under construction" />  | =wip.gif= | Work in progress, under construction | =%<nop>ICON{wip}%= |
 | <img src="%ATTACHURLPATH%/wrench.gif" alt="Wrench, tools" title="Wrench, tools" />  | =wrench.gif= | Wrench, tools | =%<nop>ICON{wrench}%= |
-| <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | =%<nop>ICON{xml-feed}%= |
+| <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | n.a. |
 | <img src="%ATTACHURLPATH%/xml-small.gif" alt="XML feed" title="XML feed" />  | =xml-small.gif= | XML feed | =%<nop>ICON{xml-small}%= |
 
 ---++ File icon table
@@ -198,7 +204,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="locktopic.gif" attr="" autoattached="1" comment="" date="1128927051" path="locktopic.gif" size="217" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="choice-no.gif" attr="" autoattached="1" comment="" date="1128926965" path="choice-no.gif" size="166" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="wav.gif" attr="" autoattached="1" comment="" date="1128927114" path="wav.gif" size="377" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="lock.gif" attr="" autoattached="1" comment="" date="1128927048" path="lock.gif" size="348" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="lock.gif" attr="" autoattached="1" comment="" date="1128927048" path="lock.gif" size="225" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="newtopic.gif" attr="" autoattached="1" comment="" date="1128927060" path="newtopic.gif" size="340" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="locktopicgray.gif" attr="" autoattached="1" comment="" date="1128927053" path="locktopicgray.gif" size="159" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="viewtopic.gif" attr="" autoattached="1" comment="" date="1128927110" path="viewtopic.gif" size="118" user="UnknownUser" version=""}%
@@ -244,7 +250,6 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="home.gif" attr="" autoattached="1" comment="" date="1128927015" path="home.gif" size="342" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="led-aqua.gif" attr="" autoattached="1" comment="" date="1128927024" path="led-aqua.gif" size="393" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="detail.gif" attr="" autoattached="1" comment="" date="1128926968" path="detail.gif" size="118" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="detail-small.gif" attr="" autoattached="1" comment="" date="1128927057" path="detail-small.gif" size="109" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="notify.gif" attr="" autoattached="1" comment="" date="1128927063" path="notify.gif" size="347" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="reg.gif" attr="" autoattached="1" comment="" date="1128927080" path="reg.gif" size="377" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="empty.gif" attr="" autoattached="1" comment="" date="1128926990" path="empty.gif" size="100" user="UnknownUser" version=""}%
@@ -259,7 +264,6 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="lockfoldergray.gif" attr="" autoattached="1" comment="" date="1128927050" path="lockfoldergray.gif" size="156" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="ppt.gif" attr="" autoattached="1" comment="" date="1128927072" path="ppt.gif" size="373" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="more.gif" attr="" autoattached="1" comment="" date="1128927057" path="more.gif" size="118" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="more-small.gif" attr="" autoattached="1" comment="" date="1128927057" path="more-small.gif" size="87" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="line_udr.gif" attr="" autoattached="1" comment="" date="1128927043" path="line_udr.gif" size="115" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="index.gif" attr="" autoattached="1" comment="" date="1128927018" path="index.gif" size="100" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="html.gif" attr="" autoattached="1" comment="" date="1128927017" path="html.gif" size="376" user="UnknownUser" version=""}%
@@ -340,10 +344,20 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="group.gif" attr="" autoattached="1" comment="" date="1128927009" path="group.gif" size="182" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="dot_ld.gif" attr="" autoattached="1" comment="" date="1128926971" path="dot_ld.gif" size="106" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrowbleft.gif" attr="" autoattached="1" comment="" date="1128926948" path="arrowbleft.gif" size="98" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="wrench.gif" attr="" autoattached="1" comment="" date="1128927116" path="wrench.gif" size="329" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="wrench.gif" attr="" autoattached="1" comment="" date="1128927116" path="wrench.gif" size="337" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="attachfile.gif" attr="" autoattached="1" comment="" date="1128926957" path="attachfile.gif" size="121" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="line_ud.gif" attr="" autoattached="1" comment="" date="1128927038" path="line_ud.gif" size="114" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="gear.gif" attr="" autoattached="1" comment="" date="1128926999" path="gear.gif" size="601" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="hourglass.gif" attr="" autoattached="1" comment="" date="1128927016" path="hourglass.gif" size="606" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrowright.gif" attr="" autoattached="1" comment="" date="1128926954" path="arrowright.gif" size="97" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="dot_ud.gif" attr="" autoattached="1" comment="" date="1128926976" path="dot_ud.gif" size="108" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="more-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="more-small.gif" size="87" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="key.gif" attr="" autoattached="1" comment="" date="1128926976" path="key.gif" size="91" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="info.gif" attr="" autoattached="1" comment="" date="1128926976" path="info.gif" size="212" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="closed.gif" attr="" autoattached="1" comment="" date="1128926976" path="closed.gif" size="379" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="done.gif" attr="" autoattached="1" comment="" date="1128926976" path="done.gif" size="313" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="logout.gif" attr="" autoattached="1" comment="" date="1128926976" path="logout.gif" size="344" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="flag-gray.gif" attr="" autoattached="1" comment="" date="1128926976" path="flag-gray.gif" size="125" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="flag-gray-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="flag-gray-small.gif" size="148" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="web-bg.gif" attr="" autoattached="1" comment="" date="1128926976" path="web-bg.gif" size="85" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="changes-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="changes-small.gif" size="89" user="UnknownUser" version=""}%

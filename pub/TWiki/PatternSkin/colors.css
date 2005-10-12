@@ -27,7 +27,7 @@
 	BG2 link hover background color (red)  											#D6000F 
 	BG3	light gray																	#efefef
 	BG4 active form field (not implemented yet)										#ffc
-	BG5 info background very light blue												#E9F1F7
+	BG5 info background very light blue	(placeholder for background image)			#E8EEF7
 	BG6	patternTopicAction light yellow (same as T3)								#FBF7E8
 	BG7 header background (very light yellow)										#FDFAF1
 	BG8 accent on sorted table column												#ccc
@@ -195,7 +195,7 @@ a:hover.twistyTrigger {
 
 /* TipsContrib */
 .tipsOfTheDay {
-	background-color:#E9F1F7; /*BG5*/ 
+	background-color:#E8EEF7; /*BG5*/ 
 	border-color:#BFD8ED; /*BO3*/
 }
 .patternTopic .tipsOfTheDayHeader {
@@ -203,11 +203,11 @@ a:hover.twistyTrigger {
 	color:#333; /*T11*/
 }
 /* TipsContrib - in left bar */
-.patternLeftBar .tipsOfTheDayTitle a:link,
-.patternLeftBar .tipsOfTheDayTitle a:visited {
+.patternLeftBar .tipsOfTheDay a:link,
+.patternLeftBar .tipsOfTheDay a:visited {
 	color:#a00; /*T5*/
 }
-.patternLeftBar .tipsOfTheDayTitle a:hover {
+.patternLeftBar .tipsOfTheDay a:hover {
 	color:#FBF7E8; /*T3*/
 }
 
@@ -322,7 +322,7 @@ a:hover.twistyTrigger {
 	background-color:transparent;
 }
 .twikiHelp {
-	background-color:#E9F1F7; /*BG5*/
+	background-color:#E8EEF7; /*BG5*/
 	border-color:#BFD8ED; /*BO3*/
 }
 .twikiAccessKey {
@@ -397,7 +397,7 @@ a:hover .twikiAccessKey {
 	color:#333; /*T11*/
 }
 .patternLeftBarPersonal {
-	background-color:#E9F1F7;
+	background-color:#E8EEF7;
 	border-color:#BFD8ED; /*BO3*/
 }
 .patternLeftBarPersonal a:link,
@@ -489,6 +489,17 @@ a:hover .twikiAccessKey {
 	color:inherit;
 }
 
+.patternMetaNav {
+	color:#8E9195; /*T8*/
+}
+.patternMetaNav a:link,
+.patternMetaNav a:visited {
+	color:#7A4707; /*T6*/ /* same as patternLeftBar */
+}
+.patternMetaNav a:hover {
+	color:#FBF7E8; /*C3*/ /* same as patternLeftBar */
+}
+
 /* Edit page */
 
 .patternEditPage textarea#topic {
@@ -504,7 +515,7 @@ a:hover .twikiAccessKey {
 }
 .patternAccessKeyInfo {
 	color:#666; /*T7*/
-	background-color:#E9F1F7; /*BG5*/
+	background-color:#E8EEF7; /*BG5*/
 	border-color:#BFD8ED; /*BO3*/
 }
 .patternAccessKeyInfo a:link,
