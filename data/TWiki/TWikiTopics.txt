@@ -11,7 +11,7 @@ A TWiki topic is a rich information unit. *Each* topic has:
 
    * name
       * instantly identify what the topic is about
-      * link to it from other topics just by typing it in it's WikiWord
+      * link to it from other topics just by typing in it's WikiWord
    * content
       * edited by simply clicking the [[#PageBottom][edit link]]
       * enter plain text, leaving a blank space between paragraphs like email (all you need)

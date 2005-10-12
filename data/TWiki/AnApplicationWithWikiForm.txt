@@ -1,0 +1,45 @@
+%META:TOPICINFO{author="TWikiContributor" date="1098088852" format="1.0" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiFAQ"}%
+---++ FAQ:
+How can I create a simple [[TWikiForms][TWiki Form]] based application?
+
+
+---++ Answer:
+
+   1 Create a [[TWikiForms][TWiki Form]] and define fields (TWikiForms)
+   1 Add the form in the list of Web Forms. Set the variable WEBFORMS in WebPreferences
+   1 Create a Template Topic and in Edit mode 
+   1 In edit mode add the [[TWikiForms][TWiki Form]] you defined to the Template Topic
+   1 Create a HTML Form with necessary fields
+   1 Define =SEARCH= function for listing items.  See TWikiVariables#SEARCH_text_search_content
+
+For more information follow the links...
+
+The following is the code source of TWikiFAQ:
+
+<verbatim>
+<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+New FAQ topic: &nbsp; (Use a name in TWiki.WikiNotation) <br />
+<input type="text" name="topic" size="32" />
+<input type="hidden" name="onlywikiname" value="on" />
+<input type="hidden" name="templatetopic" value="TWikiFaqTemplate" />
+<input type="hidden" name="topicparent" value="%TOPIC%" />
+<input type="submit" value="Create Topic" /> <br />
+</form>
+</verbatim>
+
+----
+
+And the =SEARCH= function:
+<verbatim>
+%SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" regex="on" nosearch="on" nototal="on"}%
+</verbatim>
+
+
+
+__Back to:__ TWikiFAQ
+
+__Related Topics:__ UserDocumentationCategory
+
+-- TWiki:Main.MiyokoTakushima - 18 Oct 2004 <br />
+

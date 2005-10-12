@@ -3,7 +3,7 @@
 
 This is a real FAQ, and also a demo of one easily implemented knowledge base solution. See how it's done, click ==[Edit]==.
 
-%SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" regex="on" nosearch="on" nototal="on"}%
+%SEARCH{ "Back to\:__ TWikiFAQ" casesensitive="on" regex="on" nosearch="on" nototal="on" format="   * *Question:* $summary(noheader) ([[$topic][details]])"}%
 
 __NOTE:__ The most recent version of this FAQ is at TWiki:TWiki/TWikiFAQ.
 
