@@ -253,7 +253,7 @@ sub _expireDeadSessions {
               $time >= $D->{_SESSION_ATIME} +
                 $TWiki::cfg{SessionExpiresAfter} ||
                   $D->{_SESSION_ETIME} && $time >= $D->{_SESSION_ETIME} ) {
-            unlink( $file ) || die "Failed $!";
+            unlink( $file );
             next;
         }
 	}
