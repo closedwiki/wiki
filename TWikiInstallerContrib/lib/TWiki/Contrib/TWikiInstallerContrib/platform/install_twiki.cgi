@@ -34,7 +34,7 @@ my $localDirConfig;
 my $cgibin;
 my $home;
 my $tmp;
-my ( $VIEW, $TESTENV );
+my ( $VIEW );
 my $MECHBIN;
 my $PERL;
 my $administrator;
@@ -65,12 +65,13 @@ BEGIN {
     use FindBin;
     use Config;
     use File::Path qw( mkpath );
+    use Data::Dumper qw( Dumper );
 
     $cgibin = $FindBin::Bin;
     $home = (getpwuid($>))[7] or die "no home directory?";
 
     $tmp = "$cgibin/tmp";
-    -e $tmp || mkpath $tmp, 0, 0777;
+    -d $tmp || mkpath $tmp, 0, 0777;
 
     eval qq{ 
 	use lib( "$cgibin/lib/CPAN/lib", "$cgibin/lib/CPAN/lib/arch" );
@@ -95,7 +96,6 @@ BEGIN {
 	LogDir           => "$home/twiki/log",
     };
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
-    $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $MECHBIN = URI->new( "twiki", $install_cgi->scheme )->abs( $install_cgi );
 
     $PERL = $q->param( 'perl' ) || findProgramOnPaths( 'perl' );
@@ -113,7 +113,6 @@ use CGI::Carp qw( fatalsToBrowser );
 use File::Copy qw( cp mv );
 use File::Path qw( mkpath rmtree );
 use File::Basename qw( basename );
-use Data::Dumper qw( Dumper );
 use XML::Simple;
 use Archive::Any;
 use File::Slurp qw( read_file write_file );
@@ -126,7 +125,7 @@ use WWW::Mechanize::TWiki 0.08;
 ################################################################################
 # already installed?
 ################################################################################
-if ( -e "$FindBin::Bin/twiki" )
+if ( -d "$FindBin::Bin/twiki" )
 {
     print $q->header();
     print $q->h1( "already installed" );
@@ -161,6 +160,7 @@ my $mapTWikiDirs = {
     templates => { dest => $localDirConfig->{TemplateDir} },
     bin => { dest => "$cgibin/twiki", perms => 0755, },
     locale => { dest => $localDirConfig->{LocalesDir} },
+#    logs => ?
 };
 
 ################################################################################
@@ -208,9 +208,7 @@ __LOCALLIB_CFG__
 # install contrib plugin addon
 ################################################################################
 my @types = (
-	{ type => 'contrib', dir => "downloads/contribs/", xml => "contribs.xml", },
-	{ type => 'plugin', dir => "downloads/plugins/", xml => "plugins.xml", },
-	{ type => 'addon', dir => "downloads/addons/", xml => "addons.xml", },
+        { type => 'extension', dir => 'downloads/extensions/', xml => 'extensions.xml', },
 	{ type => 'systemweb', dir => "downloads/webs/system/", xml => "systemwebs.xml", },
 	{ type => 'localweb', dir => "webs/local/", xml => "localwebs.xml", },
     );
@@ -222,12 +220,21 @@ foreach my $iType ( @types )
 
     print $q->h2( $ext );
     my $xmlCatalogue = "../$iType->{dir}/$iType->{xml}";
-    warn qq{xml catalogue file "$iType->{xml}" not found}, next unless -e $xmlCatalogue;
+    unless ( -e $xmlCatalogue )
+    {
+	warn qq{xml catalogue file "$iType->{xml}" ($xmlCatalogue) not found\n};
+	$xmlCatalogue = "$tmp/$iType->{xml}";
+	warn qq{xml catalogue file "$iType->{xml}" ($xmlCatalogue) not found\n}, next
+	    unless -e $xmlCatalogue;
+    }
+
     my $xs = new XML::Simple( KeyAttr => 1, AttrIndent => 1 ) or die $!;
     my $xmlExt = $xs->XMLin( $xmlCatalogue, ForceArray => [ $ext ], SuppressEmpty => '' ) or warn "No ${ext}s catalogue: $!";
+    print STDERR Dumper( $xmlExt );
     my %hExt = map { $_->{name}, $_ } @{$xmlExt->{$ext}};
     foreach my $idExt ( $q->param($ext) )
     {
+	print STDERR Dumper( $idExt );
 	my $ExtS = $hExt{$idExt} or warn "no entry for $idExt ?", next;
 	my $name = $ExtS->{name} or die "no extension name? wtf?";
 	$ExtS->{file} ||= "../$iType->{dir}/$name.zip";
@@ -253,11 +260,14 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
 	$LocalSiteCfg .= qq{\$TWiki::cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
     }
 #    $LocalSiteCfg .= qq{\$TWiki::cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
-    $LocalSiteCfg .= qq{\$TWiki::cfg{Regsiter}{HidePasswd} = 1;\n};
+    $LocalSiteCfg .= qq{\$TWiki::cfg{Register}{HidePasswd} = 1;\n};
     $LocalSiteCfg .= qq{\$TWiki::cfg{AutoAttachPubFiles} = 1;\n};
     $LocalSiteCfg .= qq{\$TWiki::cfg{EnableHierarchicalWebs} = 1;\n};
     $LocalSiteCfg .= qq{\$TWiki::cfg{LoginManager} = 'TWiki::Client::TemplateLogin';\n};
     $LocalSiteCfg .= qq{\$TWiki::cfg{WarningsAreErrors} = 1;\n};
+
+    # SMELL: blech, temp hack
+    $LocalSiteCfg .= qq{\$TWiki::cfg{Site}{CharSet} = 'iso-8859-15';\n};
 
     my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
     open(FH, ">$file") or die "Can't open $file: $!";
@@ -397,14 +407,13 @@ exit 0;
 ################################################################################
 
 # a handy link to the place to go after the next step
-# uses globals: $VIEW $TESTENV
+# uses globals: $VIEW 
 sub continueToWikiText
 {
     my $text = '';
     $text .= qq{<a target="details" href="$VIEW/TWiki/TWikiRegistration" >register TWikiAdmin</a> $administrator<br/>\n}
 	    if ( $administrator );
     $text .= qq{<a target="details" href="$VIEW/TWiki/InstalledPlugins">proceed to wiki</a><br/>\n};
-    $text .= qq{run <a target="details" href="$TESTENV/foo/bar" >testenv</a><br/>\n};
     $text .= qq{<br/><br/>};
 }
 
@@ -455,13 +464,14 @@ sub installTWikiExtension
 	    if ( $base =~ m|/$| )
 	    {
 		my $dir = "$dirDest/$base";
-		-e $dir || mkpath( $dir );
+		print "dir=[$dir]\n";
+		-d $dir || mkpath( $dir );
 		next;
 	    }
 
 	    # handle regular files
-	    print "$path/$base <br />\n";
 	    my $destFile = "$dirDest/$base";
+	    print "$path/$base -&gt; $destFile<br />\n";
 
 	    # KLUDGEy implementation to support scriptSuffix
 #	    print STDERR "path=[$path] INSTALL=[$INSTALL] file=[$file] dirDest=[$dirDest] base=[$base] scriptSuffix=[$localDirConfig->{ScriptSuffix}]\n";
@@ -579,7 +589,7 @@ __HTML__
 		$q->a( { -href=>'http://twiki.org/cgi-bin/view/Codev/TWikiKernel?skin=print.pattern', -target=>'details' }, 'TWikiKernel' )) .
 		q{</div>};
     }
-    my %kernels = ( dir => "../downloads/kernel/", xml => "kernels.xml", type => "kernel" );
+    my %kernels = ( dir => "../downloads/kernels/", xml => "kernels.xml", type => "kernel" );
     releasesCatalogue({ %kernels, cgi => $q });
     $text .= catalogue({ %kernels, inputType => "radio", title => "TWikiKernel", cgi => $q });
 
@@ -589,10 +599,11 @@ __HTML__
 
 ################################################################################
 # EXTENSIONS
-    $text .= catalogue({ dir => "../downloads/contribs/", xml => "contribs.xml", title => "Contribs", type => "contrib", cgi => $q });
-    $text .= catalogue({ dir => "../downloads/plugins/", xml => "plugins.xml", title => "Plugins", type => "plugin", cgi => $q });
-    $text .= catalogue({ dir => "../downloads/addons/", xml => "addons.xml", title => "AddOns", type => "addon", cgi => $q });
-#    $text .= catalogue({ dir => "../downloads/skins/", xml => "skins.xml", title => "Skins", type => "skin", cgi => $q });
+    my %extensions = ( dir => "../downloads/extensions/", xml => "extensions.xml", type => "extension" );
+    extensionsCatalogue({ %extensions, cgi => $q });
+    $text .= catalogue({ %extensions, title => "Extensions", cgi => $q });
+
+#    $text .= catalogue({ dir => "../downloads/extensions/", xml => "extensions.xml", title => "Extensions", type => "extension", cgi => $q });
 #    $text .= catalogue({ dir => "../downloads/patches/", xml => "patches.xml", title => "Patches", type => "patch", cgi => $q });
 #    $text .= catalogue({ dir => "../downloads/webs/", xml => "webs.xml", title => "Web Templates", type => "web", cgi => $q });
 
@@ -653,8 +664,10 @@ __HTML__
 sub _dirCatalogue
 {
     my $p = shift;
+    print STDERR Dumper( $p ), "\n";
 
     die unless $p->{type} && $p->{cgi} && $p->{dir};
+#    $p->{fileFilter} ||= q/.*/;
     my @releases = ();
 
     my @dirReleases = ();
@@ -663,6 +676,7 @@ sub _dirCatalogue
 	@dirReleases = grep { /$p->{fileFilter}/ } readdir( RELEASES );  #or warn $!; 
 	closedir( RELEASES ) or warn $!;
     }
+    print STDERR "catlogue: ", Dumper( \@dirReleases );
     return [] unless @dirReleases;
 
     foreach my $twiki ( @dirReleases )
@@ -674,6 +688,7 @@ sub _dirCatalogue
 	};
     }
 
+    print STDERR "releases: ", Dumper( \@releases );
     return \@releases;
 }
 
@@ -702,6 +717,17 @@ sub wikiCatalogue
 {
     my $p = shift;
     $p->{fileFilter} = qr/\.wiki\.tar\.gz$/;
+    $p->{list} = _dirCatalogue( $p );
+    $p->{dir} = $tmp;
+    SaveXML( $p ) if @{$p->{list}};
+}
+
+################################################################################
+
+sub extensionsCatalogue
+{
+    my $p = shift;
+    $p->{fileFilter} = qr/\.zip$/;
     $p->{list} = _dirCatalogue( $p );
     $p->{dir} = $tmp;
     SaveXML( $p ) if @{$p->{list}};
