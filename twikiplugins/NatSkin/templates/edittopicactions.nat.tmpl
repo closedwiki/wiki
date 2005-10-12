@@ -10,5 +10,5 @@
 %FISKINSTATE% <!-- -->
 <br/> %FORMBUTTON{"$1 |"}%
 <a href="javascript:self.location.reload();" accesskey="u">Undo</a>
-| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
+| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
 %TMPL:END%
