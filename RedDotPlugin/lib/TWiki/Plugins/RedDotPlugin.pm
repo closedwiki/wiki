@@ -20,6 +20,7 @@ package TWiki::Plugins::RedDotPlugin;
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE
         $debug $styleLink $doneHeader $hasInitRedirector
+	$redirectUrl
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -30,7 +31,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '1.25';
+$RELEASE = '1.26';
 
 ###############################################################################
 sub writeDebug {
@@ -51,6 +52,7 @@ sub initPlugin {
     
   $doneHeader = 0;
   $hasInitRedirector = 0;
+  $redirectUrl = '';
   
   return 1;
 }
@@ -118,10 +120,11 @@ sub initRedirector {
 	$toWeb = $1;
 	$toTopic = $2;
       } 
-      my $redirectUrl = &TWiki::Func::getViewUrl($toWeb,$toTopic);
-      if ($redirectUrl ne &TWiki::Func::getViewUrl($web,$topic)) {
-	&writeDebug("redirecting to $redirectUrl");
-	&TWiki::Func::redirectCgiQuery($query,$redirectUrl);
+      my $tmp = &TWiki::Func::getViewUrl($toWeb,$toTopic);
+      if ($tmp ne &TWiki::Func::getViewUrl($web,$topic)) {
+	$redirectUrl = $tmp; # doit in the redirectCgiQueryHandler
+      } else {
+	$redirectUrl = '';
       }
     }
   }
@@ -245,6 +248,25 @@ sub _getValueFromTopic {
   return '';
 }
 
+###############################################################################
+sub redirectCgiQueryHandler {
+  if ($redirectUrl ne '') {
+    my ($query, $url) = @_;
+
+    my $scriptUrl = &TWiki::Func::getScriptUrl('XXX', 'XXX', 'oops');
+    $scriptUrl =~ s/XXX.*$//go;
+    &writeDebug("scriptUrl=$scriptUrl");
+
+    if ($url =~ /^$scriptUrl/) {
+      &writeDebug("got an oops redirection to $_[1] ... suppressing ours");
+    } else {
+      &writeDebug("redirecting to $redirectUrl");
+      print $query->redirect($redirectUrl);
+    }
+  }
+
+  return 0;
+}
 
 
 
