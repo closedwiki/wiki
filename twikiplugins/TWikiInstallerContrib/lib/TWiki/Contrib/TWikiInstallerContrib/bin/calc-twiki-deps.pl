@@ -128,6 +128,8 @@ SVK
 ^Unicode::String$
 ^Jcode
 ^Net::SMTP$
+^CGI::Cookie$
+^MIME::Base64$
 __MODULES__
 
 print $deps, "\n";
