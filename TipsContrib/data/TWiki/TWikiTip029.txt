@@ -6,9 +6,11 @@ You can use an RSS news reader to find out what is new in a TWiki web. This comp
 
 For the <nop>%MAINWEB% web, point your RSS news reader to:
 
-<code> %SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/WebRss?skin=rss </code>
+<code> %SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/WebRss </code>
 
-For other TWiki webs, replace =/%MAINWEB%/= with the name of the web.
+For other TWiki webs, replace =/%MAINWEB%/= with the name of the web:
+
+%WEBLIST{ format="   * <code> %SCRIPTURL%/view%SCRIPTSUFFIX%/$name/WebRss </code>" }%
 
 __See also:__
 	* WebRssBase - help on TWiki RSS news feeds
