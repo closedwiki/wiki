@@ -94,7 +94,7 @@ sub wrapUp {
           ($TWiki::cfg{SystemWebName}, "mailincron", time() );
     } else {
         $this->{lastMailIn} = TWiki::Func::saveFile( # COMPATIBILITY
-            TWiki::Func::getDataDir()."/TWiki/.mailincron", time() ); # COMPATIBILITY
+            TWiki::Func::getDataDir()."/.mailincron", time() ); # COMPATIBILITY
     }
 }
 
