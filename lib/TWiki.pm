@@ -1718,17 +1718,15 @@ sub _webOrTopicList {
         $line = $format;
         $line =~ s/\$web\b/$web/goi;
         $line =~ s/\$name\b/$item/goi;
-    if($isWeb) {
-      my $webindent=$item;
-      $webindent=~s/\/$//go;
-      $webindent =~ s/\w+\//\&nbsp;\&nbsp;/go;
-      $webindent =~ s/[A-Z]+.*//go;
-      my $indenteditem=$item;
-      $indenteditem=~s/\/$//go;
-      $indenteditem =~ s/\w+\///go;
-      $line =~ s/\$webindent/$webindent/goi;
-      $line =~ s/\$indentedname/$indenteditem/goi;
-    }
+	    if($isWeb) {
+      		my $indenteditem=$item;
+      		$indenteditem=~s/\/$//go;
+      		$indenteditem =~ s/\w+\//\&nbsp;\&nbsp;/go;
+      		my $webindent=$indenteditem;
+      		$webindent =~ s/[A-Z]+.*//go;
+      		$line =~ s/\$webindent/$webindent/goi;
+     		$line =~ s/\$indentedname/$indenteditem/goi;
+    	}
         $line =~ s/\$qname/"$item"/goi;
         $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
         $line =~ s/\$marker/$mark/goi;

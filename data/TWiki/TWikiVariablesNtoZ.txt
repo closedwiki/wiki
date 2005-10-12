@@ -334,7 +334,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>WEBLIST{"format" ...}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
-     | ="format"= | Format of one line, may include =$name= variable | ="$name"= |
+     | ="format"= | Format of one line, may include =$name= variable. (to support HierarchicalWebs, there are 2 added variables =$webindent= and =$indentedname=) | ="$name"= |
      | =format="format"= | (Alternative to above) | ="$name"= |
      | =separator=", "= | line separator | ="\n"= (new line) |
      | =webs="public"=   | comma sep list of Web, public expands to all non-hidden | ="public"= |
