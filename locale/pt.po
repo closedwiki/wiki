@@ -45,13 +45,13 @@ msgstr "%2 - Registro de %2 (%3)"
 msgid "%1 User Authentication"
 msgstr "Autenticação de Usuário no %1"
 
-#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:6
-#: data/TWiki/WebLeftBarExample.txt:2 data/Trash/WebLeftBar.txt:4
-#: data/_default/WebLeftBar.txt:6
+#: data/Main/WebLeftBar.txt:2 data/Sandbox/WebLeftBar.txt:2
+#: data/TWiki/WebLeftBar.txt:2 data/TWiki/WebLeftBarExample.txt:2
+#: data/Trash/WebLeftBar.txt:2 data/_default/WebLeftBar.txt:2
 msgid "%1 Web"
 msgstr "Web %1"
 
-#: data/TWiki/WebLeftBarExample.txt:3 data/Trash/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBarExample.txt:3
 msgid "%1 Web Home"
 msgstr "Início da web %1"
 
@@ -621,8 +621,8 @@ msgstr "Alterar formulário"
 msgid "Change from:"
 msgstr "Alterar de:"
 
-#: templates/oopschangelanguage.tmpl:23 templates/oopschangelanguage.tmpl:4
-#: templates/oopslanguagechanged.tmpl:4 templates/twiki.pattern.tmpl:186
+#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:23
+#: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr "Alterar idioma"
 
@@ -648,9 +648,9 @@ msgstr "Alterar tópico"
 msgid "Changed"
 msgstr "Alterado"
 
-#: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:10
-#: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:4
-#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:10
+#: data/Main/WebLeftBar.txt:8 data/Sandbox/WebLeftBar.txt:8
+#: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:4
+#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:6
 msgid "Changes"
 msgstr "Alterações"
 
@@ -1026,7 +1026,8 @@ msgstr "Volte no seu navegador e salve suas alterações localmente."
 msgid "Good examples:"
 msgstr "Bons exemplos:"
 
-#: data/Main/WebLeftBar.txt:9
+#: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBar.txt:5
 msgid "Groups"
 msgstr "Grupos"
 
@@ -1054,8 +1055,9 @@ msgstr "Esconder ajuda sobre formatação"
 msgid "Hide help"
 msgstr "Esconder ajuda"
 
-#: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
-#: data/TWiki/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:7
+#: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
+#: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
+#: data/_default/WebLeftBar.txt:3
 msgid "Home"
 msgstr "Início"
 
@@ -1156,9 +1158,9 @@ msgstr "%1 incorreto(a)"
 msgid "Incorrect Password"
 msgstr "Senha incorreta"
 
-#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:8
-#: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:5
-#: data/Trash/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:6
+#: data/TWiki/WebLeftBar.txt:6 data/TWiki/WebLeftBarExample.txt:5
+#: data/Trash/WebLeftBar.txt:4 data/_default/WebLeftBar.txt:4
 msgid "Index"
 msgstr "Índice"
 
@@ -1207,7 +1209,7 @@ msgstr ""
 "fazer links pra ela depois. Caracteres não permitidos em nomes de web, como "
 "espaços, serão removidos automaticamente."
 
-#: data/TWiki/WebTopBar.txt:11
+#: data/TWiki/WebTopBar.txt:7
 msgid "Jump:"
 msgstr "Pular para:"
 
@@ -1250,11 +1252,11 @@ msgstr "Listar tópicos que comecem com a letra:"
 msgid "Local file"
 msgstr "Arquivo local"
 
-#: templates/twiki.pattern.tmpl:3
+#: templates/twiki.pattern.tmpl:7
 msgid "Log In"
 msgstr "Iniciar sessão"
 
-#: templates/twiki.pattern.tmpl:4
+#: templates/twiki.pattern.tmpl:8
 msgid "Log Out"
 msgstr "Encerrar sessão"
 
@@ -1385,8 +1387,8 @@ msgstr "Notas:"
 msgid "Notices:"
 msgstr "Avisos:"
 
-#: data/Main/WebLeftBar.txt:13 data/Sandbox/WebLeftBar.txt:11
-#: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:11
+#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:9
+#: data/TWiki/WebLeftBar.txt:9 data/_default/WebLeftBar.txt:7
 msgid "Notifications"
 msgstr "Notificações"
 
@@ -1494,8 +1496,8 @@ msgstr ""
 msgid "Possible form templates"
 msgstr "Possíveis modelos de formulário"
 
-#: data/Main/WebLeftBar.txt:15 data/Sandbox/WebLeftBar.txt:13
-#: data/TWiki/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:13
+#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:11
+#: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:9
 msgid "Preferences"
 msgstr "Preferências"
 
@@ -1619,12 +1621,12 @@ msgstr "Salvar alterações"
 msgid "Saved to:"
 msgstr "Salvo como:"
 
-#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:9
-#: data/TWiki/WebLeftBar.txt:9 data/TWiki/WebLeftBarExample.txt:6
+#: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
+#: data/TWiki/WebLeftBar.txt:7 data/TWiki/WebLeftBarExample.txt:6
 #: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:27
 #: data/TWiki/WebTopicNonWikiTemplate.txt:15
-#: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:8
-#: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:5
+#: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:5
 msgid "Search"
 msgstr "Busca"
 
@@ -1738,11 +1740,11 @@ msgstr "Tamanho"
 msgid "Skip to actions"
 msgstr "Pular para ações"
 
-#: templates/twiki.pattern.tmpl:182
+#: templates/twiki.pattern.tmpl:187
 msgid "Skip to bottom"
 msgstr "Pular para o final"
 
-#: templates/twiki.pattern.tmpl:182
+#: templates/twiki.pattern.tmpl:187
 msgid "Skip to topic"
 msgstr "Pular para o tópico"
 
@@ -1766,8 +1768,8 @@ msgstr "Ordenar resultados por:"
 msgid "Start of topic"
 msgstr "Final do tópico"
 
-#: data/Main/WebLeftBar.txt:14 data/Sandbox/WebLeftBar.txt:12
-#: data/TWiki/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:12
+#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:10
+#: data/TWiki/WebLeftBar.txt:10 data/_default/WebLeftBar.txt:8
 msgid "Statistics"
 msgstr "Estatísticas"
 
@@ -2249,7 +2251,8 @@ msgstr "Referência do usuário"
 msgid "Username"
 msgstr "Nome de usuário"
 
-#: data/Main/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:4 data/Sandbox/WebLeftBar.txt:4
+#: data/TWiki/WebLeftBar.txt:4
 msgid "Users"
 msgstr "Usuários"
 
@@ -2599,7 +2602,3 @@ msgstr "obtidos em %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "ver"
-
-#: plugins/TipsContrib/TWikiTipsOfTheDayInclude
-msgid "Read on"
-msgstr ""

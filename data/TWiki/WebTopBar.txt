@@ -4,6 +4,6 @@
 <a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a>
 </td></tr></table></div>
 <div class="twikiRight patternMetaNav">
-%IF{"context i18n_enabled" then='[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopschangelanguage][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/flag-gray-small.gif" width="14" height="13" alt="%MAKETEXT{\"Change language\"}%" border="0" /> %MAKETEXT{"Change language"}%]]<span class="patternSeparator">|</span>'}%<form name="top" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">%MAKETEXT{"Jump:"}% <input type="text" id="go" name="topic" size="16" /></label>
+%IF{"context i18n_enabled" then='[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?template=oopschangelanguage][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/flag-gray-small.gif" width="14" height="13" alt="%MAKETEXT{\"Change language\"}%" border="0" /> %MAKETEXT{"Change language"}%]]<span class="patternSeparator">|</span>'}%<form name="top" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">%MAKETEXT{"Jump:"}% <input type="text" id="go" name="topic" size="16" /></label>
 </form>
 </div>

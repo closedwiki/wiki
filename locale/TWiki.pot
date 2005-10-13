@@ -43,13 +43,13 @@ msgstr ""
 msgid "%1 User Authentication"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:6
-#: data/TWiki/WebLeftBarExample.txt:2 data/Trash/WebLeftBar.txt:4
-#: data/_default/WebLeftBar.txt:6
+#: data/Main/WebLeftBar.txt:2 data/Sandbox/WebLeftBar.txt:2
+#: data/TWiki/WebLeftBar.txt:2 data/TWiki/WebLeftBarExample.txt:2
+#: data/Trash/WebLeftBar.txt:2 data/_default/WebLeftBar.txt:2
 msgid "%1 Web"
 msgstr ""
 
-#: data/TWiki/WebLeftBarExample.txt:3 data/Trash/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBarExample.txt:3
 msgid "%1 Web Home"
 msgstr ""
 
@@ -575,8 +575,8 @@ msgstr ""
 msgid "Change from:"
 msgstr ""
 
-#: templates/oopschangelanguage.tmpl:23 templates/oopschangelanguage.tmpl:4
-#: templates/oopslanguagechanged.tmpl:4 templates/twiki.pattern.tmpl:186
+#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:23
+#: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr ""
 
@@ -602,9 +602,9 @@ msgstr ""
 msgid "Changed"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:10
-#: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:4
-#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:10
+#: data/Main/WebLeftBar.txt:8 data/Sandbox/WebLeftBar.txt:8
+#: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:4
+#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:6
 msgid "Changes"
 msgstr ""
 
@@ -950,7 +950,8 @@ msgstr ""
 msgid "Good examples:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:9
+#: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBar.txt:5
 msgid "Groups"
 msgstr ""
 
@@ -978,8 +979,9 @@ msgstr ""
 msgid "Hide help"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
-#: data/TWiki/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:7
+#: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
+#: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
+#: data/_default/WebLeftBar.txt:3
 msgid "Home"
 msgstr ""
 
@@ -1070,9 +1072,9 @@ msgstr ""
 msgid "Incorrect Password"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:8
-#: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:5
-#: data/Trash/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:6
+#: data/TWiki/WebLeftBar.txt:6 data/TWiki/WebLeftBarExample.txt:5
+#: data/Trash/WebLeftBar.txt:4 data/_default/WebLeftBar.txt:4
 msgid "Index"
 msgstr ""
 
@@ -1108,7 +1110,7 @@ msgid ""
 "will automatically be removed."
 msgstr ""
 
-#: data/TWiki/WebTopBar.txt:11
+#: data/TWiki/WebTopBar.txt:7
 msgid "Jump:"
 msgstr ""
 
@@ -1151,11 +1153,11 @@ msgstr ""
 msgid "Local file"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:3
+#: templates/twiki.pattern.tmpl:7
 msgid "Log In"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:4
+#: templates/twiki.pattern.tmpl:8
 msgid "Log Out"
 msgstr ""
 
@@ -1281,8 +1283,8 @@ msgstr ""
 msgid "Notices:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:13 data/Sandbox/WebLeftBar.txt:11
-#: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:11
+#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:9
+#: data/TWiki/WebLeftBar.txt:9 data/_default/WebLeftBar.txt:7
 msgid "Notifications"
 msgstr ""
 
@@ -1384,8 +1386,8 @@ msgstr ""
 msgid "Possible form templates"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:15 data/Sandbox/WebLeftBar.txt:13
-#: data/TWiki/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:13
+#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:11
+#: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:9
 msgid "Preferences"
 msgstr ""
 
@@ -1506,12 +1508,12 @@ msgstr ""
 msgid "Saved to:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:9
-#: data/TWiki/WebLeftBar.txt:9 data/TWiki/WebLeftBarExample.txt:6
+#: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
+#: data/TWiki/WebLeftBar.txt:7 data/TWiki/WebLeftBarExample.txt:6
 #: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:27
 #: data/TWiki/WebTopicNonWikiTemplate.txt:15
-#: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:8
-#: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:5
+#: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:5
 msgid "Search"
 msgstr ""
 
@@ -1620,11 +1622,11 @@ msgstr ""
 msgid "Skip to actions"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:182
+#: templates/twiki.pattern.tmpl:187
 msgid "Skip to bottom"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:182
+#: templates/twiki.pattern.tmpl:187
 msgid "Skip to topic"
 msgstr ""
 
@@ -1646,8 +1648,8 @@ msgstr ""
 msgid "Start of topic"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:14 data/Sandbox/WebLeftBar.txt:12
-#: data/TWiki/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:12
+#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:10
+#: data/TWiki/WebLeftBar.txt:10 data/_default/WebLeftBar.txt:8
 msgid "Statistics"
 msgstr ""
 
@@ -2064,7 +2066,8 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:4 data/Sandbox/WebLeftBar.txt:4
+#: data/TWiki/WebLeftBar.txt:4
 msgid "Users"
 msgstr ""
 
@@ -2380,8 +2383,4 @@ msgstr ""
 
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
-msgstr ""
-
-#: plugins/TipsContrib/TWikiTipsOfTheDayInclude
-msgid "Read on"
 msgstr ""
