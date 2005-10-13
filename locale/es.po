@@ -2356,7 +2356,7 @@ msgstr ""
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:258
 msgid "_language_name"
-msgstr "español"
+msgstr "Español"
 
 #: data/TWiki/WebSearchAdvanced.txt:66 data/TWiki/WebSearchAdvanced.txt:84
 msgid "about BookView"
