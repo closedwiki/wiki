@@ -50,9 +50,11 @@ hr {
 }
 
 /* top */
+.natHeaderArt {
+  background: #99CC66;
+}
 .natTopBar {
   font-family:'Trebuchet MS', arial, sans-serif;
-  background: #99CC66;
   border-bottom: 2px solid #6699CC;
   color:white;
 }
@@ -369,7 +371,4 @@ hr {
 /* blogging */
 .blogSideBarSection ul {
   padding-left:1.5em;
-}
-.blogSideBarSection ul li {
-  margin-bottom:0.4em;
 }

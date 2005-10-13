@@ -72,9 +72,9 @@ hr {
 .natBody {
   background:#e5e5e5;
 }
-.natTopLeftContents,
-.natTopRightContents {
-  margin-left:20px;
+.natTopLeft,
+.natTopRight {
+  padding:20px 20px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -90,12 +90,15 @@ hr {
 }
 
 /* top */
+.natHeaderArt {
+  background:#eeeeee;
+}
 .natTopBar {
   color:#333333;
-  background:#eeeeee;
   border-top:5px #aaaaaa solid;
   border-bottom:1px #aaaaaa dotted;
   font-family:arial,sans-serif;
+  height:135px;
 }
 .natWebTitle {
   font:normal xx-large verdana,arial,sans-serif;
@@ -246,7 +249,7 @@ hr {
 }
 
 .natSearchTableTitle th {
-  background:#f0f0f0;
+  background:#eeeeee;
   border-bottom:1px #aaaaaa solid;
   border-left:1px #aaaaaa solid;
 }
@@ -287,9 +290,50 @@ hr {
 .blogAbout {
   line-height:120%;
 }
+.blogSideBar {
+  line-height:1.3em;
+}
 .blogSideBarSection ul {
   margin-left:0px;
 }
-.blogSideBarSection ul li {
-  margin-bottom:0.4em;
+.blogInfo {
+  font-size:0.9em;
+}
+.blogText {
+  margin-top:5px;
+  padding:1px; /* fix for konqueror */
+}
+.blogCommentOdd {
+  background:#fafafa;
+  border-bottom:1px #eeeeee solid;
+  border-top:1px #eeeeee solid;
+}
+.blogComment .blogDate {
+  font-size:0.8em;
+  color:#777;
+  font-weight:normal;
+}
+.blogCommentNr {
+  color:#aaaaaa;
+  margin-right:10px;
+}
+.blogCommentCount {
+  color:#777;
+  margin-left:10px;
+  font-size:80%;
+}
+.blogSubComments {
+  padding:5px;
+}
+.blogSubComment {
+  border-left:5px solid #eeeeee;
+  padding-left:5px;
+}
+.blogAddComment textarea,
+.blogAddComment input {
+  font-family: Arial, Sans-Serif;
+}
+.blogArchiveDescription {
+  margin-bottom:20px;
+  font-size:0.9em;
 }

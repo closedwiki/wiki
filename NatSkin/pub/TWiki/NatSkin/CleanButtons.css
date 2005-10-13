@@ -2,11 +2,11 @@
 @import url('BaseButtons.css');
 
 .natWebButtons {
-  background:#eeeeee;
   border-bottom:1px #aaaaaa dotted;
 }
 .natTopBar {
   border-bottom:0px;
+  height:100px;
 }
 .natWebButtonsContents {
   margin-left:20px;

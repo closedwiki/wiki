@@ -130,8 +130,10 @@ hr {
 }
 
 /* top */
-.natTopBar {
+.natHeaderArt {
   background:#003366;
+}
+.natTopBar {
   border-bottom:1px solid #ffffff;
   border-top:0px;
   color:#ffffff;

@@ -28,7 +28,6 @@ hr {
 }
 .natBodyContents {
   background-color: white;
-  border: 1px solid #959596;
   text-align: left;
   border: 1px solid #959596;
   font-size: 65.5%;
@@ -52,7 +51,7 @@ hr {
 .natTopLeftContents,
 .natTopRightContents{
   padding-top:5em;
-  padding-bottom:5.4em;
+  padding-bottom:5em;
   margin-left:20px;
 }
 .natTopRightContents {
@@ -69,9 +68,13 @@ hr {
 .natSearchBox input {
   font-size:1em;
 }
-.natTopBar {
-  background:#3388CC;
-  border:1px solid #3388CC; /* IE fix */
+.natHeaderArt {
+  /*background:#3388CC;
+  background-color: #4C99D1;*/
+  border:1px solid white; /* IE fix */
+  background-image:url(BlueTechCherryBar.jpg); 
+  background-repeat:no-repeat;
+  background-position:top center;
 }
 .natTopBar,
 .natTopBar a {
@@ -81,11 +84,6 @@ hr {
   font-size:1.1em;
   margin-left:2px;
 }
-/*
-.natTopBar {
-  background:url(woman.jpg);
-}
-*/
 .natTopRight form {
   font-weight:bold;
   margin:0px;
@@ -97,7 +95,7 @@ hr {
 }
 .natWebTitle a {
   color:white;
-  /*text-shadow:2px 2px 2px #0055aa;*/
+  /*text-shadow:1px 1px 1px black;*/
 
 }
 .natWebLocator {
@@ -105,7 +103,9 @@ hr {
 }
 .natSearchBox input {
   background-color: #3388CC;
+  background-color: #2474BD;
   border:0px;
+  width:12em;
   font-family:arial,sans-serif;
 }
 .natAction {
@@ -115,13 +115,12 @@ hr {
 }
 
 /* sidebar */
+.natMiddleRight {
+  /*border-left:1px solid #ddd;*/
+}
 .natSideBarContents {
   font-family:Verdana, Arial, Sans-Serif;
   color: #666;
-  /*
-  background:#f9f9f9;
-  border-right:1px dotted #ddd;
-  */
   font-size:1em;
 }
 .natSideBar h1 {
@@ -187,6 +186,7 @@ hr {
 
 /* main */
 .natMiddle {
+  background-color: white;
   font-weight:normal;
   color:#444;
 }
@@ -514,7 +514,7 @@ hr {
   color:#06c;
 }
 .blogComment .blogDate {
-  font-size:0.8em;
+  font-size:0.9em;
   color:#777;
   font-weight:normal;
 }
@@ -526,7 +526,8 @@ hr {
   color:#959596;
   margin-left:10px;
   text-shadow:none;
-  font-size:80%;
+  font-size:0.9em;
+  float:right;
 }
 .blogComments .blogCommentCount {
   color:#444444;
@@ -569,13 +570,27 @@ hr {
 .blogSideBarSection {
   margin-bottom:20px;
 }
-.blogSideBarCategories li:before {
-  content: "";
+.blogSideBarSection ol {
+  margin-left:0.5em;
 }
-.blogSideBarCategories ul {
-  text-indent:0px;
-  padding-left:0px;
-  list-style-type: none;
+.blogEntryCount {
+  float:right;
+  font-size:0.9em;
+  color:#959596;
+}
+.blogEntryCount,
+.blogSideBarSection .blogCommentCount {
+  text-align:right;
+}
+.blogSideBarSection li,
+.blogSideBarCategories li {
+  padding-right:0px;
+}
+
+.blogSideBarComments .blogEntryCount,
+.blogSideBarComments .blogCommentCount {
+  margin-left:2em;
+  margin-right:0px;
 }
 
 /* BlackListPlugin */
@@ -595,4 +610,10 @@ hr {
 /* RedDotPlugin */
 .redDot {
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+}
+
+/* HeadlinesPlugin */
+.headlinesTeaser img {
+  border:1px solid #b8b8b8;
+  padding:3px;
 }

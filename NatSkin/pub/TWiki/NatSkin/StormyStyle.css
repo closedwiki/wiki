@@ -144,8 +144,10 @@ hr {
 
 
 /* top */
-.natTopBar {
+.natHeaderArt {
   background:#000000;
+}
+.natTopBar {
   border-bottom:1px solid #999999;
   border-top:3px dotted #999999;
   color:#ffffff;
@@ -216,9 +218,11 @@ hr {
 }
 
 /* main */
+.natMiddle {
+  background:#333333;
+}
 .natMainFooterContents,
 .natMainContents {
-  background:#333333;
   color:#cccccc;
   font:normal small arial,sans-serif;
 }

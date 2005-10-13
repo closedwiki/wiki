@@ -39,10 +39,15 @@ hr {
 }
 
 /* top */
+.natHeaderArt {
+  background: #B22222;
+  background-image:url(RedWomanBar.jpg); 
+  background-repeat:no-repeat;
+  background-position:top left;
+}
 .natTopBar {
   font-family: Georgia, 'Times New Roman', serif;
   color:white;
-  background: #B22222;
   border-bottom: 1px solid #FFFFFF;
 }
 
@@ -132,6 +137,7 @@ hr {
 .natMiddle {
   color: #666666;
   font-family: 'Trebuchet MS', sans-serif;
+  background:#FFFFFF;
 }
 
 .natMain .twikiEmulatedLink,
@@ -357,8 +363,6 @@ hr {
   padding-left:1.3em;
 }
 .blogSideBarSection ul li {
-  margin-bottom:0.6em;
-  line-height:1.1em;
 }
 .blogSideBarSection ol {
   padding-left:2em;

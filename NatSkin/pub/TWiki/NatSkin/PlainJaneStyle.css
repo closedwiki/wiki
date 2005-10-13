@@ -128,10 +128,22 @@ a:hover {
 
 
 /* top */
+.natHeaderArt {
+  background-image:url(BlueFieldBar.jpg); 
+  background-repeat:no-repeat;
+  background-position:top left;
+}
+.natTopBar {
+  height:157px;
+}
+.natWebButtons a,
+.natTopBar a,
+.natTopBar {
+  color:#ffffff;
+}
 .natTopBar a:hover {
   text-decoration:none;
   background:#3f59bb;
-  color:#ffffff;
 }
 .natWebTitle {
   font-size:xx-large;
@@ -139,7 +151,7 @@ a:hover {
 .natWebTitle,
 .natWebTitle a:hover,
 .natWebTitle a {
-  color:#3f59bb;
+  /*color:#3f59bb;*/
   background:transparent;
   font-weight:bold;
   margin:0px;
@@ -147,13 +159,13 @@ a:hover {
 
 .natSearchBox input, 
 .natSearchBox {
-  color:#666666;
+  /*color:#666666;*/
   border:0px;
 }
 
 .natWebSlogan {
   padding-left:15px;
-  color:#666666;
+  color:white;
 }
 .natWebLocator {
   font-size:small;
@@ -286,18 +298,16 @@ a:hover {
 }
 
 /* blogging */
-.blogSideBarComments li a {
+.blogSideBarSection li a {
   display:inline;
-}
-.blogSideBarComments li {
-  margin-bottom:0.5em;
+  margin:0px;
+  padding:0px;
 }
 .blogSideBarSection ul {
-  list-style-type:circle;
+  list-style-type:disc;
 }
 .blogSideBarSection ul li {
   margin-left:25px;
-  line-height:1.1em;
 }
 .blogSideBarSection ol {
   padding-left:5px;
@@ -306,5 +316,38 @@ a:hover {
   margin-left:25px;
 }
 .blogAbout {
-  margin-left:15px;
+  margin-left:10px;
+}
+.blogCommentCount {
+  float:right;
+  margin:0 0 10px 10px;
+  font-size:0.9em;
+}
+.blogInfo {
+  font-size:0.9em;
+}
+.blogText {
+  margin-top:5px;
+  padding:1px; /* fix for konqueror */
+}
+.blogComment h3 {
+  font-size:1.2em;
+}
+.blogCommentOdd {
+  background:#efefef;
+}
+.blogCommentNr {
+  color:#3f59bb;
+  margin-right:10px;
+}
+.blogDate {
+  font-size:0.9em;
+}
+.blogAddComment textarea,
+.blogAddComment input {
+  font-family: Arial, Sans-Serif;
+}
+.blogArchiveDescription {
+  margin-bottom:20px;
+  font-size:0.9em;
 }
