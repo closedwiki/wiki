@@ -62,7 +62,7 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | v1.26, 12 Oct 2005 |
+|  Plugin Version: | v1.27, 12 Oct 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  12 Oct 2005: | don't overwrite a system oops redirect, e.g. if a mandatory formfield is missing |
 |  27 Sep 2005: | added forgotten style.css; added support to redirect a save |
