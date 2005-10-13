@@ -2524,6 +2524,12 @@ die;
     # right context
     # SMELL: This is a hack.
     if( $includedWeb ne $includingWeb ) {
+	    my $removed = {};    
+	    unless( TWiki::isTrue( $this->{prefs}->getPreferencesValue('NOAUTOLINK')) ) {
+	        # Handle WikiWords
+	        $text = $this->{renderer}->takeOutBlocks( $text, 'noautolink', $removed );
+	    }
+
         # 'TopicName' to 'Web.TopicName'
         $text =~ s/(^|[\s(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
         $text =~ s/(^|[\s(])($regex{wikiWordRegex})/$1$includedWeb\.$2/go;
@@ -2532,7 +2538,8 @@ die;
         $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1 )/geo;
         # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
         $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1, $2 )/geo;
-        # FIXME: Support for <noautolink>
+        
+        $this->{renderer}->putBackBlocks( \$text, $removed, 'noautolink' );
     }
 
     # handle tags again because of plugin hook
