@@ -34,7 +34,7 @@ __Preferences:__
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
       * #Set DENYWEBVIEW = 
-      * #Set ALLOWWEBVIEW = 
+      * #Set ALLOWWEBVIEW = Main.TWikiAdminGroup
       * #Set DENYWEBCHANGE = 
       * #Set ALLOWWEBCHANGE = 
       * #Set DENYWEBRENAME = 
