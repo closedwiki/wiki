@@ -2290,7 +2290,7 @@ msgstr ""
 
 #: lib/TWiki/I18N.pm:258
 msgid "_language_name"
-msgstr ""
+msgstr "Nederlands"
 
 #: data/TWiki/WebSearchAdvanced.txt:66 data/TWiki/WebSearchAdvanced.txt:84
 msgid "about BookView"
