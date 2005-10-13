@@ -42,7 +42,7 @@ sub writeDebug {
 sub initPlugin {
   ($topic, $web, $user, $installWeb) = @_;
 
-  $debug = 1; # toggle me
+  $debug = 0; # toggle me
 
   my $styleUrl = "%PUBURL%\/$installWeb/RedDotPlugin/style.css";
   $styleLink = 
