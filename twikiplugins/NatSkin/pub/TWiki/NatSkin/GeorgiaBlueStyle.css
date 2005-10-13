@@ -121,8 +121,10 @@ hr {
 }
 
 /* top */
-.natTopBar {
+.natHeaderArt {
   background:#336699;
+}
+.natTopBar {
   border-top:3px solid #99ccff;
 }
 .natWebTitle a {
@@ -302,35 +304,77 @@ hr {
 
 /* blogging */
 .blogAbout {
-  padding:0px 15px;
+  padding:0px 0px 0px 15px;
   font-size:0.8em;
+  line-height:1.1em;
 }
 .blogSideBar {
   color:#444444;
+  line-height:1.2em;
 }
 .blogSideBar a {
   color:#336699;
   font-weight:normal;
 }
 .blogSideBar a:hover {
-  color:#996666;
+  color:#99cc66
 }
 .blogSideBar ul {
   font-weight:normal;
-}
-.blogSideBarCategories ul,
-.blogSideBarLatest ul,
-.blogSideBarComments ul {
-  padding:0px;
+  margin-left:0px;
   padding-left:15px;
-  list-style:none;
+  list-style-type:none;
 }
-.blogSideBarCategories li,
-.blogSideBarLatest li,
-.blogSideBarComments li {
-  margin-bottom:0.8em;
-  line-height:120%;
+.blogSideBar ul li {
+  margin-bottom:0.4em;
 }
-.blogSideBarAdmin {
-  padding-left:1ex;
+.blogInfo {
+  font-size:0.9em;
+}
+.blogText {
+  margin-top:5px;
+  padding:1px; /* fix for konqueror */
+}
+.blogCommentOdd {
+  background:#fafafa;
+  border-bottom:1px #eeeeee solid;
+  border-top:1px #eeeeee solid;
+}
+.blogComment .blogDate {
+  font-size:0.8em;
+  color:#666;
+  font-weight:normal;
+}
+.blogCommentNr {
+  color:#666;
+  margin-right:10px;
+}
+.blogCommentCount {
+  color:#666;
+  margin-left:2em;
+  font-size:0.9em;
+  float:right;
+}
+.blogHeadline .blogCommentCount {
+  font-size:0.7em;
+}
+.blogSubComments {
+  padding:5px;
+}
+.blogSubComment {
+  border-left:1px solid #777;
+  padding-left:5px;
+}
+.blogAddComment {
+  font-size:0.9em;
+}
+.blogAddComment textarea,
+.blogAddComment input {
+  font-family: Arial, Sans-Serif;
+  color:#444444;
+  font-size:1.0em;
+}
+.blogArchiveDescription {
+  margin-bottom:20px;
+  font-size:0.9em;
 }

@@ -2,13 +2,11 @@
 @import url('BaseButtons.css');
 
 .natTopBar {
-  padding-bottom:2em;
   border-bottom:0px;
 }
 .natWebButtons {
   padding-left:0px;
   padding-right:0px;
-  background: #99CC66;
   border-bottom: 2px solid #6699CC;
 }
 .natWebButtonsContents {
@@ -36,6 +34,5 @@
 .natWebButtons ul li.current a {
   text-decoration: none;
   background:#669966;
-  color:#99CC66;
   color:white;
 }

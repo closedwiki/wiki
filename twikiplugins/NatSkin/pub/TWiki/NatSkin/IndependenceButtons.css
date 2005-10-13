@@ -8,10 +8,9 @@
   border-bottom:1px solid #ffffff;
 }
 .natWebButtonsContents {
-  background: #b22222;
   font-size:x-small;
   font-family:'Trebuchet MS', arial, sans-serif;
-  padding:0px 25px 0px 25px;
+  padding:0px 25px 7px 25px;
 }
 .natWebButtons ul li {
   padding-right:10px;
@@ -24,10 +23,10 @@
 .natWebButtons ul li.current a:hover,
 .natWebButtons ul li a:hover {
   text-decoration: none;
-  border-bottom:5px solid #0F314E;
+  border-bottom:5px solid white;
 }
 
 .natWebButtons ul li.current a {
   text-decoration: none;
-  border-bottom:5px solid #b22222;
+  border-bottom:5px solid #0F314E;
 }

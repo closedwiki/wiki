@@ -155,10 +155,12 @@ hr { border-bottom: 1px solid #999999; }
 }
 
 /* top */
+.natHeaderArt {
+  background: #E7AA5C;
+}
 .natTopBar {
   font-family: 'Trebuchet MS', arial, sans-serif;
   color:white;
-  background: #E7AA5C;
   border-bottom: 1px solid #FFFFFF;
 }
 .natWebTitle {
@@ -333,7 +335,13 @@ hr { border-bottom: 1px solid #999999; }
   color:#CC6600;
 }
 
+.blogSideBar {
+  line-height:100%;
+}
 .blogSideBarSection ul {
   padding-left:0px;
   list-style-type:none;
+}
+.blogSideBarSection ul li {
+  padding-bottom:2px;
 }
