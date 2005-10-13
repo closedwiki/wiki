@@ -356,6 +356,8 @@ The standard webs shipped with this release have these settings disabled. Howeve
    * #Set ALLOWWEBVIEW = 
    * _etc_
 
+%RED%Note:%ENDCOLOR% For security reasons, the[[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to %MAINWEB%.TWikiAdminGroup. 
+
 ---++++ TWiki.SitePermissions
 
 This topic gives you a quick view of the permissions on each web  - i.e. it aggregates ALLOWWEB* etc. into a handy table. It is also installed on TWiki.org as TWiki:TWiki.SitePermissions but is not in Cairo.
