@@ -18,6 +18,8 @@ TWiki user authentication is split into three sections; password management, use
 
 Once a user is logged on, they are remembered using a "session id" stored in a cookie in the browser (or by other less elegant means if the user has disabled cookies). This avoids them having to log on again and again.
 
+Please note FileAttachments are not protected by TWiki User Authentication. 
+
 ---++ Password Management
 
 As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURL%/configure][ =configure= ]] interface for more details.
