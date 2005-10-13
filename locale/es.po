@@ -149,6 +149,10 @@ msgstr "Imprimible"
 msgid "&Raw text"
 msgstr "Texto original"
 
+#: templates/view.pattern.tmpl:51
+msgid "Web"
+msgstr "Web"
+
 #: templates/view.pattern.tmpl:82
 msgid "&Web"
 msgstr "&Web"
@@ -1027,6 +1031,7 @@ msgstr "Ocultar el archivo"
 #: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
 #: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
 #: data/_default/WebLeftBar.txt:3
+#: templates/view.pattern.tmpl:51
 msgid "Home"
 msgstr ""
 

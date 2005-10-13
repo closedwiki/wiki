@@ -658,6 +658,12 @@ a:hover .twikiAccessKey {
 	float:right;
 	text-align:right;
 }
+.patternTop .patternHomePath a:link,
+.patternTop .patternHomePath a:visited,
+.patternTop .patternRevInfo a:link,
+.patternTop .patternRevInfo a:visited {
+	text-decoration:none;
+}
 
 /* Button tool bar */
 .patternToolBar {

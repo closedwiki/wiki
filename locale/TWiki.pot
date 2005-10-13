@@ -146,6 +146,10 @@ msgstr ""
 msgid "&Raw text"
 msgstr ""
 
+#: templates/view.pattern.tmpl:51
+msgid "Web"
+msgstr ""
+
 #: templates/view.pattern.tmpl:82
 msgid "&Web"
 msgstr ""
@@ -982,6 +986,7 @@ msgstr ""
 #: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
 #: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
 #: data/_default/WebLeftBar.txt:3
+#: templates/view.pattern.tmpl:51
 msgid "Home"
 msgstr ""
 
