@@ -147,7 +147,8 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/viewtopic.gif" alt="View topic" title="View topic" />  | =viewtopic.gif= | View topic | =%<nop>ICON{viewtopic}%= |
 | <img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />  | =warning.gif= | Warning, important | =%<nop>ICON{warning}%= |
 | <img src="%ATTACHURLPATH%/watch.gif" alt="Watch" title="Watch" />  | =watch.gif= | Watch | =%<nop>ICON{watch}%= |
-| <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web background" title="Web background" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
+| <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
+| <img src="%ATTACHURLPATH%/web-bg-small.gif" alt="Web" title="Web" />  | =web-bg-small.gif= | Web background, 14x13 | n.a. |
 | <img src="%ATTACHURLPATH%/wip.gif" alt="Work in progress, under construction" title="Work in progress, under construction" />  | =wip.gif= | Work in progress, under construction | =%<nop>ICON{wip}%= |
 | <img src="%ATTACHURLPATH%/wrench.gif" alt="Wrench, tools" title="Wrench, tools" />  | =wrench.gif= | Wrench, tools | =%<nop>ICON{wrench}%= |
 | <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | n.a. |
@@ -361,3 +362,4 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="flag-gray-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="flag-gray-small.gif" size="148" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="web-bg.gif" attr="" autoattached="1" comment="" date="1128926976" path="web-bg.gif" size="85" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="changes-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="changes-small.gif" size="89" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="web-bg-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="web-bg-small.gif" size="79" user="UnknownUser" version=""}%
