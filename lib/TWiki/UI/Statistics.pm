@@ -232,13 +232,16 @@ sub _collectLogData {
     while ( my $line = <$TMPFILE> ) {
         my @fields = split( /\s*\|\s*/, $line );
 
-        my( $date, $userName );
+        my( $date, $logFileUserName );
         while( !$date && scalar( @fields )) {
             $date = shift @fields;
         }
-        while( !$userName && scalar( @fields )) {
-            $userName = shift @fields;
+        while( !$logFileUserName && scalar( @fields )) {
+            $logFileUserName = shift @fields;
         }
+        
+        my $userObj = $session->{users}->findUser($logFileUserName);
+        
         my( $opName, $webTopic, $notes, $ip ) = @fields;
 
         # ignore minor changes - not statistically helpful
@@ -256,11 +259,11 @@ sub _collectLogData {
 
             } elsif( $opName eq 'save' ) {
                 $statSaves{$webName}++;
-                $contrib{$webName}{$userName}++;
+                $contrib{$webName}{$userObj->webDotWikiName()}++;
 
             } elsif( $opName eq 'upload' ) {
                 $statUploads{$webName}++;
-                $contrib{$webName}{$userName}++;
+                $contrib{$webName}{$userObj->webDotWikiName()}++;
 
             } elsif( $opName eq 'rename' ) {
                 # Pick up the old and new topic names
