@@ -79,11 +79,11 @@ Use this powerful feature with great care! %<nop>ALL_VARIABLES% can be used to g
 
 ---++ Creating Custom Variables
 
-   * You can add your own Variables for us across an entire site or a single web, using the standard [[#SettingPrefs][Variables syntax]]. Whatever you include in your Variable will be expanded on display, exactly as if it had been entered directly.
+   * You can add your own Variables for use across an entire site or a single web, using the standard [[#SettingPrefs][Variables syntax]]. Whatever you include in your Variable will be expanded on display, exactly as if it had been entered directly.
 
 <blockquote style="background-color:#f9f9f9">
 *Example: Create a custom logo variable* <br />
-   * To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences page, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, ex: =LogoTopic=:
+   * To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences page, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, ex: =LogoTopic= - Sample variable setting in WebPreferences:
       * ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
