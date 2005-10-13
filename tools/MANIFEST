@@ -731,6 +731,7 @@ UpgradeTwiki 0550
 !include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 !include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
+!include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/HeadlinesPlugin
 !include twikiplugins/InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 !include twikiplugins/RenderListPlugin/lib/TWiki/Plugins/RenderListPlugin
