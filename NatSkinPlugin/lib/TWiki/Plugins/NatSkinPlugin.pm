@@ -252,7 +252,15 @@ sub initSkinState {
   $theStyle =~ s/\s+$//;
   #writeDebug("$theStyle is known") if $knownStyles{$theStyle};
   #writeDebug("$theStyle is UNKNOWN") unless $knownStyles{$theStyle};
-  $theStyle = $defaultStyle unless $knownStyles{$theStyle};
+  my $found = 0;
+  foreach my $style (keys %knownStyles) {
+    if ($style eq $theStyle || lc $style eq lc $theStyle) {
+      $found = 1;
+      $theStyle = $style;
+      last;
+    }
+  }
+  $theStyle = $defaultStyle unless $found;
   $skinState{'style'} = $theStyle;
 
   # cycle styles
@@ -460,7 +468,7 @@ sub commonTagsHandler
 sub endRenderingHandler {
   $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
   $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
-  $_[0] =~ s/(<a .*?href=[\"\']?)([^\"\'\s]+[\"\']?)(\s*[a-z]*)/renderExternalLink($1,$2,$3)/geoi;
+  $_[0] =~ s/<a (.*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
 
   # remove leftover tags of supported plugins if they are not installed
   # so that they are remove from the NatSkin templates
@@ -1478,17 +1486,20 @@ sub renderRevisions {
 # reused code from the BlackListPlugin
 sub renderExternalLink
 {
-  my ($thePrefix, $theUrl, $thePostfix) = @_;
+  my ($thePrefix, $theUrl) = @_;
+
+
 
   my $addClass = 0;
-  my $text = "$thePrefix$theUrl$thePostfix";
+  my $text = $thePrefix.$theUrl;
 
   $theUrl =~ /^http/i && ($addClass = 1); # only for http and hhtps
   $theUrl =~ /^$urlHost/i && ($addClass = 0); # not for own host
-  $thePostfix =~ /^\s?class/ && ($addClass = 0); # prevent adding it twice
+  $thePrefix =~ /\sclass="natExternalLink"\s/ && ($addClass = 0); # prevent adding it twice
 
   if ($addClass) {
-    $text = "$thePrefix$theUrl class=\"natExternalLink\"$thePostfix";
+#    writeDebug("called renderExternalLink($thePrefix, $theUrl)");
+    $text = "class=\"natExternalLink\" target=\"_blank\" $thePrefix$theUrl";
 #    writeDebug("got external link '$text'");
 #  } else {
 #    writeDebug("no external link '$text'");
