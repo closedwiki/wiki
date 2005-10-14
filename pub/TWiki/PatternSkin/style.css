@@ -305,11 +305,11 @@ a:visited .twistyLinkLabel {
 .twikiAttachments,
 .twikiForm {
 	margin:1em 0;
-	font-size:94%; /*S4*/
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
-	padding:20px; /*s5*/
+	font-size:94%; /*S4*/
+	padding:20px; /*S5*/
 	border-width:1px 0 0 0;
 	border-style:solid;
 	margin:0 0 -1px 0;
@@ -323,7 +323,6 @@ a:visited .twistyLinkLabel {
 	padding:0px;
 	border-spacing:0px;
 	empty-cells:show;
-	font-size:94%; /*S4*/
 	border-style:solid;
 	border-width:1px 1px 0 1px;
 }

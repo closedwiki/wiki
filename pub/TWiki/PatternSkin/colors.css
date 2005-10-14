@@ -227,6 +227,10 @@ a:hover.twistyTrigger {
 .twikiForm {
 	color:#666; /*T7*/
 }
+.patternContent .twikiAttachments,
+.patternContent .twikiForm {
+	color:#333; /*T11*/
+}
 .patternEditPage .twikiForm {
 	color:#000; /*T1*/
 }
