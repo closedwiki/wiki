@@ -9,5 +9,7 @@
    * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
    * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
+   * [[WebTopicCreator][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
+
 ---
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
