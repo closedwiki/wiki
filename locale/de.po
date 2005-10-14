@@ -2150,7 +2150,6 @@ msgstr ""
 "Topic konnte nicht im Stil der alten Kategorie-Tabelle aktualisiert werden"
 
 #: data/TWiki/WebSearchAdvanced.txt:44
-#, fuzzy
 msgid "Topic name"
 msgstr "Topic Name"
 
@@ -2331,10 +2330,9 @@ msgid "WARNING:"
 msgstr "WARNUNG:"
 
 #: templates/oopsalerts.tmpl:7
-#, fuzzy
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr ""
-"Warnung: Konnte INCLUDE %1 nicht zweimal durchführen, Topic wurde bereits "
+"Warnung: Konnte INCLUDE %1 nicht wiederholt durchführen, Topic wurde bereits "
 "inkludiert. %2"
 
 #: templates/oopsalerts.tmpl:6
@@ -2630,43 +2628,3 @@ msgstr "abgefragt um %1"
 msgid "view"
 msgstr "Ansehen"
 
-#~ msgid "Web"
-#~ msgstr "Web"
-
-#~ msgid "Notes:"
-#~ msgstr "Hinweise:"
-
-#, fuzzy
-#~ msgid "..."
-#~ msgstr "mehr..."
-
-#~ msgid "Automated notification of topic changes"
-#~ msgstr "Automatische Benachrichtigung von Änderungen dieses Topics"
-
-#~ msgid "Changed by:"
-#~ msgstr "Geändert von:"
-
-#~ msgid "Changed:"
-#~ msgstr "Geändert:"
-
-#, fuzzy
-#~ msgid "Locked topics"
-#~ msgstr "Gesperrte Topics"
-
-#~ msgid "New or changed topics in %1, since %2:"
-#~ msgstr "Neue oder geänderte Topics in %1 seit %2"
-
-#~ msgid "Review recent changes in:"
-#~ msgstr "Anzeigen der aktuellen Änderungen in:"
-
-#~ msgid "Subscribe / Unsubscribe in:"
-#~ msgstr "Abonnieren / Abbestellen von:"
-
-#~ msgid "This is an automated email from %1."
-#~ msgstr "Dies ist eine automatisierte E-Mail von %1"
-
-#~ msgid "Topics in %1 web:"
-#~ msgstr "Topics in %1 Web:"
-
-#~ msgid "now %1"
-#~ msgstr "jetzt %1"
