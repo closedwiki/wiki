@@ -11,8 +11,8 @@ sub configure{
     my $apacheDefault="/etc/apache/httpd.conf";
  
     $config->{APACHE}{httpd}=askUser($config->{APACHE}{httpd},
-                                $apacheDefault,
-                                "Absolute path to httpd.conf",
+                                '',
+                                "Apache configuration file",
                                 sub {return (-e shift)});
 }
 

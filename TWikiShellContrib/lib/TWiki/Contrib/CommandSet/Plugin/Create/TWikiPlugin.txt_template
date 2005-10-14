@@ -2,6 +2,11 @@
 
 %TOC%
 
+---+ Purpose
+%STARTINCLUDE%
+Short Explanation of this extension
+%STOPINCLUDE%
+
 ---++ Syntax Rules
 (none)
 
@@ -16,17 +21,14 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>%
 	* Your own setting, i.e.:
 		* Set EXAMPLE = got it!
 
-	* Debug plugin: (See output in =data/debug.txt=)
+	* Debug plugin: (See output in =$logdir/debug.txt=)
 		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-	* This plugin is preinstalled, you do not need to install it.
-
 ---+ Installation Instructions
-You are strongly recommended to use this Contrib to help split your code development away from your live TWiki environment, as described [[#DevelopmentModel][above].
 	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your development ($TWIKI_DEV) directory. Content:
+	* Unzip ==%TOPIC%.zip== in your TWiki  directory. Content:
 	| *File:* | *Description:* |
 %$MANIFEST%
 	* Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.

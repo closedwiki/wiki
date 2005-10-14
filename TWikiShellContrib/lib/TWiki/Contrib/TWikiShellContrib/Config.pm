@@ -2,8 +2,8 @@
 package TWiki::Contrib::TWikiShellContrib::Config;
 
 sub new {
-  my $self=bless {};
-  
+
+  my $self=bless {},shift;
   $self->{verbosity}=1;
   return  $self;
 }
@@ -32,7 +32,7 @@ sub handleParams {
              last;
           }
       } else {
-          $self->{execute}.=$ARGV[$n]." ";
+          $self->{execute}.=$ARGV[$n].' ';
       }
       $n++;
   }   

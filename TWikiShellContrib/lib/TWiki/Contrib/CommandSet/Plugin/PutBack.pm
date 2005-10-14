@@ -8,7 +8,7 @@ use File::Copy;
 
 my $doco = {
    "SMRY" => "Put back Plugin/Contrib files into their checkout area",
-   "SYNOPSIS" =>" plugin putback <Plugin/Contrib> - Copies the files for the Plugin/Contrib into the proper twikiplugins directory",
+   "SYNOPSIS" =>" plugin putback <Plugin/Contrib>",
    "DESCRIPTION" =>
 " This command will copy the files listed in the <PLUGINNAME>.MF file
  back to the twikiplugins/<PLUGINNAME> directory, to be able to 
@@ -65,7 +65,6 @@ sub handleFile {
    } elsif ($targetFile =~ /(.+\/)?(.+\.MF)/) {
       $targetFile =~ s/$2/MANIFEST/;
    }
-
 
    makepath($targetFile);
 

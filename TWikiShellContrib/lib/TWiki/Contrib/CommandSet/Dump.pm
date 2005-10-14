@@ -2,6 +2,19 @@ package TWiki::Contrib::CommandSet::Dump;
 
 use Data::Dumper;
 
+=pod
+---++ TWiki::Contrib::CommandSet::Dump
+
+This is a sample CommandSet. Used to dump various debug informations:
+
+| *Command* | *Description* |
+| dump | Shows the help for the dump subcommands |
+| dump config  | Dumps the config |
+| dump handlers | Dumps the registered handlers |
+
+=cut
+
+
 sub run_config {
     my $shell=shift;
     my $config=shift;

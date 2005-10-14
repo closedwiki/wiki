@@ -18,8 +18,7 @@ sub configure {
     $config->{RUNTEST}{dir} = askUser($config->{RUNTEST}{dir},
                                    $testDir,
                                    "Path to the unit tests",
-                                   \&checkIfDir,
-                                   1);
+                                   \&checkIfDir);
 
     $config->{RUNTEST}{asserts} = $config->{RUNTEST}{asserts}||1;
 
