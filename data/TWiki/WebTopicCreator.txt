@@ -15,4 +15,5 @@
      <input type="hidden" name="onlynewtopic" value="on" />
      <input type="submit" value="Create" />
 </form>
+
 %MAKETEXT{"To create a new topic, enter name of topic and click 'create.'"}%

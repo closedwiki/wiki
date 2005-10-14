@@ -7,7 +7,7 @@
    * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
    * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
-   * [[WebCreateTopic][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
+   * [[WebTopicCreator][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
 
 ---
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
