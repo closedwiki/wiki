@@ -698,6 +698,10 @@ msgstr ""
 msgid "Create <nop>TestTopic###"
 msgstr ""
 
+#: data/Sandbox/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
+msgid "Create New Topic"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:114
 msgid "Create a link to the attached file"
 msgstr ""

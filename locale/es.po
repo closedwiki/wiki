@@ -737,6 +737,11 @@ msgstr "Crear"
 msgid "Create <nop>TestTopic###"
 msgstr "Crear esta pagina"
 
+#: data/Sandbox/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
+#, fuzzy
+msgid "Create New Topic"
+msgstr "Crear esta pagina"
+
 #: templates/attach.pattern.tmpl:114
 msgid "Create a link to the attached file"
 msgstr "Crear un enlace al archivo"

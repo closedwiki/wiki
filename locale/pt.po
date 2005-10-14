@@ -748,6 +748,10 @@ msgstr "Criar(&e)"
 msgid "Create <nop>TestTopic###"
 msgstr "Criar <nop>TestTopic###"
 
+#: data/Sandbox/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
+msgid "Create New Topic"
+msgstr "Criar novo tópico"
+
 #: templates/attach.pattern.tmpl:114
 msgid "Create a link to the attached file"
 msgstr "Criar um link para o arquivo anexado"

@@ -750,6 +750,11 @@ msgstr "A&nlegen"
 msgid "Create <nop>TestTopic###"
 msgstr "Ein <nop>TestTopic### anlegen"
 
+#: data/Sandbox/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
+#, fuzzy
+msgid "Create New Topic"
+msgstr "Dieses Topic anlegen"
+
 #: templates/attach.pattern.tmpl:114
 msgid "Create a link to the attached file"
 msgstr "Verweis auf die angehängte Datei erzeugen"
@@ -2627,4 +2632,3 @@ msgstr "abgefragt um %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
-
