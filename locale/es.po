@@ -46,6 +46,7 @@ msgstr "Autentificación de usuario %1"
 #: data/Main/WebLeftBar.txt:2 data/Sandbox/WebLeftBar.txt:2
 #: data/TWiki/WebLeftBar.txt:2 data/TWiki/WebLeftBarExample.txt:2
 #: data/Trash/WebLeftBar.txt:2 data/_default/WebLeftBar.txt:2
+#: templates/view.pattern.tmpl:51
 #, fuzzy
 msgid "%1 Web"
 msgstr "Pagina de inicio de %1"
@@ -148,10 +149,6 @@ msgstr "Imprimible"
 #: templates/view.pattern.tmpl:82
 msgid "&Raw text"
 msgstr "Texto original"
-
-#: templates/view.pattern.tmpl:51
-msgid "Web"
-msgstr "Web"
 
 #: templates/view.pattern.tmpl:82
 msgid "&Web"
@@ -615,7 +612,7 @@ msgstr "Cambiar el formulario"
 msgid "Change from:"
 msgstr "Cambiar desde:"
 
-#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:23
+#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr ""
@@ -1031,7 +1028,6 @@ msgstr "Ocultar el archivo"
 #: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
 #: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
 #: data/_default/WebLeftBar.txt:3
-#: templates/view.pattern.tmpl:51
 msgid "Home"
 msgstr ""
 
@@ -1326,11 +1322,6 @@ msgstr "Notas:"
 
 #: templates/changeform.pattern.tmpl:34
 msgid "Notes"
-msgstr "Notas"
-
-#: templates/oopschangelanguage.tmpl:8
-#, fuzzy
-msgid "Notes:"
 msgstr "Notas"
 
 #: templates/renamewebbase.pattern.tmpl:63
@@ -1752,7 +1743,7 @@ msgstr ""
 msgid "TWiki password reset for %1"
 msgstr ""
 
-#: templates/oopschangelanguage.tmpl:15
+#: templates/oopschangelanguage.tmpl:13
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
 "change the language for this session, choose one of the following and hit "
@@ -2285,7 +2276,7 @@ msgstr ""
 msgid "You can see the differences [[%1][here]]."
 msgstr ""
 
-#: templates/oopschangelanguage.tmpl:10
+#: templates/oopschangelanguage.tmpl:8
 msgid ""
 "You can set your favourite language permanently by setting the %1 variable "
 "in your user topic."
@@ -2425,7 +2416,7 @@ msgstr ""
 msgid "manage"
 msgstr "administre"
 
-#: data/Trash/WebHome.txt:5
+#: data/Trash/WebHome.txt:6
 #, fuzzy
 msgid "more..."
 msgstr "(mas)"
@@ -2458,6 +2449,13 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vea"
+
+#~ msgid "Web"
+#~ msgstr "Web"
+
+#, fuzzy
+#~ msgid "Notes:"
+#~ msgstr "Notas"
 
 #, fuzzy
 #~ msgid "..."

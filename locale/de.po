@@ -46,6 +46,7 @@ msgstr "%1 Benutzer Authentifizierung"
 #: data/Main/WebLeftBar.txt:2 data/Sandbox/WebLeftBar.txt:2
 #: data/TWiki/WebLeftBar.txt:2 data/TWiki/WebLeftBarExample.txt:2
 #: data/Trash/WebLeftBar.txt:2 data/_default/WebLeftBar.txt:2
+#: templates/view.pattern.tmpl:51
 msgid "%1 Web"
 msgstr "%1 Web"
 
@@ -148,10 +149,6 @@ msgstr "&Drucken"
 #: templates/view.pattern.tmpl:82
 msgid "&Raw text"
 msgstr "&Quelltext"
-
-#: templates/view.pattern.tmpl:51
-msgid "Web"
-msgstr "Web"
 
 #: templates/view.pattern.tmpl:82
 msgid "&Web"
@@ -627,7 +624,7 @@ msgstr "Formular wechseln"
 msgid "Change from:"
 msgstr "Geändert von:"
 
-#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:23
+#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr "Sprache wechseln"
@@ -1068,7 +1065,6 @@ msgstr "Hilfe verstecken"
 #: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
 #: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
 #: data/_default/WebLeftBar.txt:3
-#: templates/view.pattern.tmpl:51
 msgid "Home"
 msgstr "Startseite"
 
@@ -1393,10 +1389,6 @@ msgstr "Hinweis:"
 #: templates/changeform.pattern.tmpl:34
 msgid "Notes"
 msgstr "Hinweise"
-
-#: templates/oopschangelanguage.tmpl:8
-msgid "Notes:"
-msgstr "Hinweise:"
 
 #: templates/renamewebbase.pattern.tmpl:63
 msgid "Notices:"
@@ -1841,7 +1833,7 @@ msgstr ""
 msgid "TWiki password reset for %1"
 msgstr "TWiki Passwort zurücksetzen für %1"
 
-#: templates/oopschangelanguage.tmpl:15
+#: templates/oopschangelanguage.tmpl:13
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
 "change the language for this session, choose one of the following and hit "
@@ -2447,7 +2439,7 @@ msgstr ""
 msgid "You can see the differences [[%1][here]]."
 msgstr "Sie können die Unterschiede [[%1][hier]] einsehen."
 
-#: templates/oopschangelanguage.tmpl:10
+#: templates/oopschangelanguage.tmpl:8
 msgid ""
 "You can set your favourite language permanently by setting the %1 variable "
 "in your user topic."
@@ -2605,7 +2597,7 @@ msgstr "nach Querverweisen in _allen öffentlichen Webs_ suchen"
 msgid "manage"
 msgstr "verwalten"
 
-#: data/Trash/WebHome.txt:5
+#: data/Trash/WebHome.txt:6
 msgid "more..."
 msgstr "mehr..."
 
@@ -2637,6 +2629,12 @@ msgstr "abgefragt um %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
+
+#~ msgid "Web"
+#~ msgstr "Web"
+
+#~ msgid "Notes:"
+#~ msgstr "Hinweise:"
 
 #, fuzzy
 #~ msgid "..."

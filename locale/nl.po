@@ -46,6 +46,7 @@ msgstr "%1 Gebruikersauthenticatie"
 #: data/Main/WebLeftBar.txt:2 data/Sandbox/WebLeftBar.txt:2
 #: data/TWiki/WebLeftBar.txt:2 data/TWiki/WebLeftBarExample.txt:2
 #: data/Trash/WebLeftBar.txt:2 data/_default/WebLeftBar.txt:2
+#: templates/view.pattern.tmpl:51
 msgid "%1 Web"
 msgstr "%1 Web"
 
@@ -145,10 +146,6 @@ msgstr "&Printbaar"
 #: templates/view.pattern.tmpl:82
 msgid "&Raw text"
 msgstr "&Brontekst"
-
-#: templates/view.pattern.tmpl:51
-msgid "Web"
-msgstr "Web"
 
 #: templates/view.pattern.tmpl:82
 msgid "&Web"
@@ -579,7 +576,7 @@ msgstr ""
 msgid "Change from:"
 msgstr ""
 
-#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:23
+#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr ""
@@ -986,7 +983,6 @@ msgstr ""
 #: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
 #: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
 #: data/_default/WebLeftBar.txt:3
-#: templates/view.pattern.tmpl:51
 msgid "Home"
 msgstr ""
 
@@ -1278,10 +1274,6 @@ msgstr ""
 
 #: templates/changeform.pattern.tmpl:34
 msgid "Notes"
-msgstr ""
-
-#: templates/oopschangelanguage.tmpl:8
-msgid "Notes:"
 msgstr ""
 
 #: templates/renamewebbase.pattern.tmpl:63
@@ -1696,7 +1688,7 @@ msgstr ""
 msgid "TWiki password reset for %1"
 msgstr ""
 
-#: templates/oopschangelanguage.tmpl:15
+#: templates/oopschangelanguage.tmpl:13
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
 "change the language for this session, choose one of the following and hit "
@@ -1951,7 +1943,9 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:253
 msgid "Topic can not be upgraded from old style category table"
-msgstr "De pagina kan niet worden opgewaardeerd van een vroegere versie categorie-tabel"
+msgstr ""
+"De pagina kan niet worden opgewaardeerd van een vroegere versie categorie-"
+"tabel"
 
 #: data/TWiki/WebSearchAdvanced.txt:44
 msgid "Topic name"
@@ -2220,7 +2214,7 @@ msgstr ""
 msgid "You can see the differences [[%1][here]]."
 msgstr ""
 
-#: templates/oopschangelanguage.tmpl:10
+#: templates/oopschangelanguage.tmpl:8
 msgid ""
 "You can set your favourite language permanently by setting the %1 variable "
 "in your user topic."
@@ -2357,7 +2351,7 @@ msgstr ""
 msgid "manage"
 msgstr ""
 
-#: data/Trash/WebHome.txt:5
+#: data/Trash/WebHome.txt:6
 msgid "more..."
 msgstr ""
 
@@ -2389,3 +2383,6 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr ""
+
+#~ msgid "Web"
+#~ msgstr "Web"
