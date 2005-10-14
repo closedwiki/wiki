@@ -199,9 +199,9 @@ Dakar Release introduces the use of 'safe pipes' to prevent any malicious reques
 
 ---+++ CPAN Requirements
 
-CPAN:Error and CPAN:Algorithm::Diff are now considered TWiki _prerequisites_, and are not shipped with the distribution itself anymore.  CPAN:Text::Diff is a prerequisite for the UpgradeTWiki script only. CPAN:URI is a prerequisite for =configure=. Other new prerequisites are CPAN:CGI::Session and CPAN:CGI::Cookie, if you want to take advantage of the new session support.
+CPAN:Text::Diff is a prerequisite for the UpgradeTWiki script only. CPAN:URI is a prerequisite for =configure=. Other new prerequisites are CPAN:CGI::Session and CPAN:CGI::Cookie, if you want to take advantage of the new session support.
 
-If you want user interface internationalization support, CPAN:Locale::Maketext::Lexicon and CPAN:Encode (on perl 5.8's core) are required, as well as perl 5.8 or higher. See TWiki:Codev.UserInterfaceLocalisation for details on TWiki internationalization support.
+If you want user interface internationalization support, CPAN:Locale::Maketext::Lexicon and CPAN:Encode (in perl 5.8's core) are required, as well as perl 5.8 or higher. See TWiki:Codev.UserInterfaceLocalisation for details on TWiki internationalization support.
 
 ---+++ Installation and configuration
 
