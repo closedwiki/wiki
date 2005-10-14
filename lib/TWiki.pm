@@ -2494,7 +2494,6 @@ sub _INCLUDE {
     unless( $this->{security}->checkAccessPermission(
         'VIEW', $this->{user}, $text, $includedTopic, $includedWeb )) {
         if( isTrue( $warn )) {
-die;
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $includedTopic );
         } # else fail silently
