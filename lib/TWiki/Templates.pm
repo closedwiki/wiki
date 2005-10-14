@@ -188,7 +188,7 @@ Translates a string to the current language. Supports the following formats:
 Inside the { ... }, there should be a comma-separated list of double-quoted
 strings, like:
 
-<code>"Translate this [_1] for [_2", "parameter one", "parameter two".</code>
+<code>"Translate this [_1] for [_2]", "parameter one", "parameter two".</code>
 
 Return value: (eventually) translated text
 
