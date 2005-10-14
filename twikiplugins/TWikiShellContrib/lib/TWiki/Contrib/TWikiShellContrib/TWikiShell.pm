@@ -11,18 +11,9 @@ use Cwd;
 use strict;
 
 use base qw(Term::Shell);
-use vars qw { $VERSION $RELEASE $config $prefix $prefixPath};
+use vars qw {$VERSION $config $prefix $prefixPath};
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$VERSION = "2.00";
 
 my @systemModules =qw (TWiki::Contrib::TWikiShellContrib::Standard);
 
@@ -46,12 +37,13 @@ sub new {
    $new->init_handlers($config);
    $new->discover($config);
    $new->{config}=$config;
+   TWiki::Contrib::TWikiShellContrib::Zip::checkUnzipMechanism($new,$config);
    return $new;
 }
 
 sub splash {
    print "TWiki Interactive Shell v$VERSION
-Oct 2004 - written by Rafael Alvarez based on MartinCleaver work
+Oct 2005 - written by Rafael Alvarez based on MartinCleaver work
 Type \"help\" for a list of available commands
 
 ";
@@ -66,10 +58,6 @@ sub init_handlers {
    }
 }
 
-#    my $self=shift;
-#    my $module=shift;
-#    $self->cmd("import $module");
-# }
 
 my $prompt="twiki";
 sub prompt {
@@ -78,11 +66,7 @@ sub prompt {
 }
 
 sub prompt_str() { 
-#    if ($config->mode) {
-#       return $prompt."/".$config->mode." > ";
-#    } else {
       return "$prompt > "; 
-#    }
 }
 
 ####################### HANDLERS ##############################################
@@ -254,7 +238,6 @@ sub add_handlers {
 ##############################
 
 # TODO: import Some::Command using "import some command "
-# sub run_importa {
 sub importCommand {
    my $self = shift;
    my ( $config, $cmd) = @_;

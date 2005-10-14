@@ -92,16 +92,16 @@ sub addInstallToApacheConfig {
             } elsif (($line =~ /\<\/IfModule\>/) && $modAlias eq 1) {
                 $modAlias=2;
                 print OUTBASE "    $firstLine
-    alias /$basePath /$baseDir
+    alias /$basePath/pub $baseDir/pub
 
-    <Directory \"/$baseDir\">
+    <Directory \"$baseDir/pub\">
          AllowOverride All
          Allow From All
     </Directory>
 
-    alias /$basePath/bin /$baseDir/bin
+    alias /$basePath/bin $baseDir/bin
     
-    <Directory \"/$baseDir/bin\">
+    <Directory \"$baseDir/bin\">
          AllowOverride All
          Allow From All
         Options ExecCGI

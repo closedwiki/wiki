@@ -1,27 +1,26 @@
 package TWiki::Contrib::TWikiShellContrib::Zip;
 
 use Exporter;
+use TWiki::Contrib::TWikiShellContrib::Common;
 
 @ISA=(Exporter);
 @EXPORT=qw(checkUnzipMechanism unzip zip);
 
 use strict;
+=pod
+---++ TWiki::Contrib::TWikiShellContrib::Zip
 
+Provides services to manipulate zip files.
 
-sub zip {
-   my ($config,$zipName,@files)=@_;
-   print 'Zipping to File '.$zipName."\n";
-   
-   my $cmd="zip -u -v $zipName ".join(" ",@files);
-   print $cmd."\n";
-   `$cmd`;
-   
-#    if ($config->{ZIP}{useArchiveZip}) {
-#    } else{
-#
-#    }
-}
+=cut
 
+=pod
+
+---+++ unzip($config,$sourceFile,$targetDir)
+
+Unzips $sourceFile to $targetDir. It's uses ==Archive::Zip== if installed, or the configured unzip program if not.
+
+=cut
 sub unzip {
     my ($config,$sourceFile,$destDir)=@_;
     
@@ -44,10 +43,21 @@ sub unzip {
     print "\n"; 
 }
 
+sub _useArchiveZip {
+   my $config=shift;
+   return (defined $config->{ZIP}{useArchiveZip} && $config->{ZIP}{useArchiveZip} eq 1);
+}
+
+sub _useUnzip {
+   my $config=shift;
+   return (defined $config->{ZIP}{unzipPath} &&  defined $config->{ZIP}{unzipParams});
+}
+
 sub checkUnzipMechanism {
-    my ($shell,$config)=shift;
-    if ((defined $config->{ZIP}{useArchiveZip} && $config->{ZIP}{useArchiveZip} eq 0) ||(defined $config->{ZIP}{unzipPath} && 
-                                           defined $config->{ZIP}{unzipParams})) {
+    my $shell=shift;
+    my $config=$shell->{config};
+    if (_useArchiveZip($config) ||
+        _useUnzip($config)) {
         $shell->printVeryVerbose("**** Zip file services installed ****\n");
         return;
     }
@@ -58,28 +68,29 @@ sub checkUnzipMechanism {
     
     eval "use Archive::Zip";
     if ($@) {
-        $config->printNotQuiet("NOT INSTALLED\n");
+        $shell->printNotQuiet("NOT INSTALLED\n");
         $config->{ZIP}{useArchiveZip}=0;
-        _checkUnzipPath($config);
+        _checkUnzipPath($shell);
     } else {
-        $config->printNotQuiet("INSTALLED \n");
+        $shell->printNotQuiet("INSTALLED \n");
         $config->{ZIP}{useArchiveZip}=1;
     }
     $config->save();
-    $config->printNotQuiet("**** Zip files service Configured  ****\n");
+    $shell->printNotQuiet("**** Zip files service Configured  ****\n");
 
 }
 
 sub _checkUnzipPath {
-    my $config=shift;
-    my $unzipPath =shift|| "/usr/bin/unzip"; # Reasonable Default
+    my $shell=shift;
+    my $config=$shell->{config};
+    my $unzipPath =shift|| ""; #"/usr/bin/unzip"; # Reasonable Default
     
-    $config->printNotQuiet(" * Searching an unzip program at $unzipPath .... ");
+    $shell->printNotQuiet(" * Searching an unzip program at $unzipPath .... ");
     
     if ($unzipPath && -f $unzipPath) {
-        $config->printNotQuiet("FOUND\n");
+        $shell->printNotQuiet("FOUND\n");
     } else {
-        $config->printNotQuiet("NOT FOUND\n");
+        $shell->printNotQuiet("NOT FOUND\n");
         $unzipPath=_findUnzipPath($config);
     }    
     $config->{ZIP}{unzipPath} = $unzipPath;
@@ -89,29 +100,24 @@ sub _checkUnzipPath {
 sub askDirectoryParameter
 {
     my $config=shift;
-    print " Please tell me the parameters to tell the unzip program \n which is target directory ---> "; 
-    my $params;
-    do {
-        chomp ($params = <STDIN>);
-    } until (($params=~ /^\-\-*[a-zA-Z]+/) ? 1 :
-        (print(" Hmmm - $params don't seem a reasonable parameter ... please check and try again\n      --->"), 0) 
-    );
-    
-    $params = $params || "-d"; # Reasonable Default for unzip
-   return $params;
+
+    my $unzipParam=askUser(undef,
+                          '-d',
+                          'Parameter to specify the target directory to unzip',
+                          sub {return ($_[0] =~/^\-\-*[a-zA-Z]+/)},
+                          1);
+
+   return $unzipParam;
 }
 
 sub _findUnzipPath {
     my $config=shift;
-    
-    print " Please tell me the path to an unzip program\n      ---> "; 
-    my $path;
-    do {
-        chomp ($path = <STDIN>) ;
-    } until ((-f "$path") ? 1 :
-        (print(" Hmmm - I can't see an unzip program at $path ... please check and try again\n      --->"), 0) 
-        );
-    return $path;
+    my $unzippath=askUser(undef,
+                          "/usr/bin/unzip",
+                          "Absolute path to the unzip program",
+                          sub {return (-f shift)});
+
+    return $unzippath;
 }
 
 1;

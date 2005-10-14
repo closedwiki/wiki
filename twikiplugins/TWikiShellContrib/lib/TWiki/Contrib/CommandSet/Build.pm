@@ -6,10 +6,10 @@ use TWiki::Contrib::TWikiShellContrib::DirHandling;
 use File::Copy;
 
 my $doco = {
-   "SMRY" => "Interfaces with the build.pl script",
-    "SYNOPSIS" =>" build <TExtension> <target>  - 
+   'SMRY' => 'Interfaces with the build.pl script',
+    'SYNOPSIS' =>" build <TExtension> <target>  - 
     executes build.pl for the given plugin passing the specified <target> ",
-   "DESCRIPTION" =>
+   'DESCRIPTION' =>
 " This command provides an interface to the build.pl script. It assumes
 that the script is in the standard directory:
 

@@ -2,18 +2,15 @@ package TWiki::Contrib::CommandSet::TWiki;
 
 use TWiki::Contrib::CommandSet::TWiki::Conf;
 
+=pod
 
-# sub help {
-#    my $shell=shift;
-#    my $config=shift;
-#     return "TWiki Related Commands\n";
-# }
-#
-# sub smry {
-#     return " Display this help";
-# }
-#
-#
+---++ TWiki::Contrib::CommandSet::TWiki
+
+This CommandSet don't have any command. It exist only to discover all the information about the TWiki installation where TWikiShell recides, and make it available through the TWikiShellConfigObject.
+
+
+=cut
+
 sub onImport {
     my ($shell) = @_; 
        configure(@_);

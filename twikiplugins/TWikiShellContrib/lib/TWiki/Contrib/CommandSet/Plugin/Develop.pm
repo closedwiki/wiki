@@ -2,6 +2,9 @@ package TWiki::Contrib::CommandSet::Plugin::Develop;
 use strict;
 use TWiki::Contrib::TWikiShellContrib::DirHandling;
 use TWiki::Contrib::TWikiShellContrib::Help qw{assembleHelp};
+use TWiki::Contrib::TWikiShellContrib::Common;
+
+use TWiki::Contrib::BuildContrib::BaseBuild;
 
 use File::Copy;
 
@@ -11,16 +14,13 @@ use vars qw {$MANIFEST $DEPENDENCIES};
 
 my $doco = {
    "SMRY" => "Prepares the file of a Plugin/Contrib for development",
-   "SYNOPSIS" =>" plugin develop <Plugin/Contrib> - Copies the files for the Plugin/Contrib into the twiki root for development",
+   "SYNOPSIS" =>" plugin develop <Plugin/Contrib>",
    "DESCRIPTION" =>
 " This command will copy all the related files for a Plugin/Contrib
  from the \${TWIKIROOT}/twikiplugins directory to the proper place 
  under the \${TWIKIROOT} directory, while creating a manifest file 
- with all the files copied.
- This is an alternative to the =mklinks -copy=  command, with the
- added value that it creates a manifest file that can be used by 
- the Package CommandSet or the BuildContrib based =build.pl= 
- script to create a release version.
+ in the \${TWIKIROOT} with all the files copied.
+ This is an alternative to the =mklinks.sh -copy=  command.
 
 ",
    "EXAMPLE" =>
@@ -46,23 +46,47 @@ sub smry {
 
 
 sub run {
-   #TODO: Use the manifest from the plugin directory as the manifest
     my $shell=shift;
     my $config=shift;
     my $plugin=shift;
     my $pluginsDir=$config->{TWIKI}{root}."/twikiplugins";
-    my @files=_processDir($shell,$pluginsDir."/".$plugin,$config->{TWIKI}{root},'',$plugin);
+    my $srcDir=$pluginsDir.'/'.$plugin;
+    my $targetDir=$config->{TWIKI}{root};
+    my $manifestFile=findRelativeTo($srcDir.'/'.makeExtensionPath($plugin),'MANIFEST');
+    my $dependenciesFile=findRelativeTo($srcDir.'/'.makeExtensionPath($plugin),'DEPENDENCIES');
 
-    #     $shell->printVerbose('Generating Manifest file');
-#
-#     open MANIFEST,">$config->{TWIKI}{root}/$plugin.MF";
-#     foreach my $file (@files) {
-#         $file =~ s/$config->{TWIKI}{root}\///;
-#         print MANIFEST $file."\n";
-#     }
-#     close MANIFEST;
+    if ($manifestFile) {
+       my ($files,$otherModules)=readManifest($srcDir,'',$manifestFile);
+       return unless $files;
+       
+       foreach my $fileData (@{$files}) {
+          my $file=$fileData->{name};
+          next if (!$file);
+          print "processing $file\n";
+          my $targetFile="$targetDir/$file";
+          makepath($targetFile);
+          copy("$srcDir/$file",$targetFile);
+       }
+       copy($manifestFile,$config->{TWIKI}{root}.'/'.$plugin.'.MF');
+       copy($dependenciesFile, $config->{TWIKI}{root}.'/'.$plugin.'.DEP') if $dependenciesFile;
+
+    } else {
+       #If the manifest file is not found, just process everything in the plugin directory
+       $manifestFile=$config->{TWIKI}{root}.'/'.$plugin.'.MF';
+
+       my @files=_processDir($shell,$pluginsDir."/".$plugin,$config->{TWIKI}{root},'',$plugin);
+
+       $shell->printVerbose('Generating Manifest file');
+
+       open MANIFEST,">$config->{TWIKI}{root}/$plugin.MF";
+       foreach my $file (@files) {
+         $file =~ s/$config->{TWIKI}{root}\///;
+         print MANIFEST $file."\n";
+       }
+       close MANIFEST;
+    }
+
 }
-
 
 sub _processDir {
    my ($shell,$srcDir,$targetDir,$currentDir,$plugin)=@_;
@@ -75,7 +99,7 @@ sub _processDir {
      $currentTargetDir.="/".$currentDir;
    }
    
-#    my @files;
+   my @files;
    my @entries = dirEntries($currentSrcDir);
    foreach my $entry (@entries) {
       next if ($entry =~ /^\.+$/ || $entry =~ /\.svn/);
@@ -98,23 +122,22 @@ sub _processDir {
       if (-d $src) {
          _processDir($shell,$currentSrcDir,$currentTargetDir,$entry,$plugin);
       } elsif (-f $src) {
-         #if (-f $currentTargetDir.'/'.$entry) {
-         #   unlink  $currentTargetDir.'/'.$entry;
-         #  }
+         if (-f $currentTargetDir.'/'.$entry) {
+            unlink  $currentTargetDir.'/'.$entry;
+         }
          
          makepath($currentTargetDir.'/'.$entry);
          $shell->printVerbose('copying '.$entry.' to '. $targetEntry."\n");
          
          copy($src, $targetEntry) || warn "Warning: Failed to copy $src to $currentTargetDir: $!";
          
-#          push (@files,$targetEntry) unless $entry=~ /($MANIFEST|$DEPENDENCIES)/;
-         
+         push (@files,$targetEntry) unless $entry=~ /($MANIFEST|$DEPENDENCIES)/;
       } else {                                 
-         warn "Somethign Happened with $src\n";
+         warn "Something Happened with $src\n";
       } 
 
    }
-#    return @files;
+    return @files;
 }
 
 1;

@@ -1,5 +1,9 @@
 data/TWiki/CommandSet.txt
 data/TWiki/TWikiShellContrib.txt 
+data/TWiki/TWikiShellServices.txt
+data/TWiki/TWikiShellConfigObject.txt
+data/TWiki/TWikiShellBundledCommandSets.txt
+data/TWiki/TWikiShellContrib.txt 
 lib/TWiki/Contrib/CommandSet/Apache.pm 
 lib/TWiki/Contrib/CommandSet/Apache/Conf.pm 
 lib/TWiki/Contrib/CommandSet/Apache/Httpd.pm 

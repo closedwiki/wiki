@@ -102,7 +102,7 @@ sub undefined_smry {
 sub undefined_help {
     return "No help available\n";
 }
-    
+
 sub run_shorcuts {
    if (! -f 'cli') {
       `ln -s cli twikishell`;
@@ -117,7 +117,7 @@ sub _createFile {
    my $file=shift;
    if (! -f $file) {
       open FILE,">$file";
-      print FILE "twikishell $file \$*\n";
+      print FILE "perl twikishell $file \$*\n";
       close FILE;
       chmod 0755, $file;
    }

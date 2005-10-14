@@ -63,7 +63,7 @@ my  $shell= new TWiki::Contrib::TWikiShellContrib::TWikiShell($config);
 
 if ($config->{execute} && $config->{execute} ne "shell") {
 #     $shell->cmd("sdk " . $config->{execute});
-   $shell->cmd($config->{execute});
+   $shell->cmd($config->{execute}) ;
 }else {
     print "\n";
     $shell->splash();

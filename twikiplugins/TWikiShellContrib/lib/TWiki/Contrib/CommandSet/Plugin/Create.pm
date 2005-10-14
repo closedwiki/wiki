@@ -8,7 +8,7 @@ use File::Path;
 
 my $doco = {
    "SMRY" => "Creates the suggested directory structure for a new plugin",
-   "SYNOPSIS" =>" plugin create <TWikiExtension> [-contrib] - Creates the directory twikiplugins/<TWikiExtension> with the suggested structure",
+   "SYNOPSIS" =>" plugin create <TWikiExtension>",
    "DESCRIPTION" =>
 " This command will creates the directory twikiplugins/<Plugin/Contrib> 
  with the following structure;
@@ -27,8 +27,9 @@ my $doco = {
            TWiki/
               <TWikiExtension>/
 
-  If the -contrib option is present, the directory under lib/TWiki will 
-  be Contrib instead of Plugin.
+ To create the files, this command uses the templates distributed
+ in lib/TWiki/Contrib/CommandSet/Plugin/Create and the EmptyPlugin.pm file.
+
 "};
 
 
@@ -70,7 +71,7 @@ sub _buildDirNames {
    my $pubDir=$projectDir.'/pub/TWiki/'.$project;
 
    my $libDir=$projectDir.'/lib/TWiki/';
-   if (defined($option) && $option eq '-contrib') {
+   if ($project =~ /[a-zA-Z]+Contrib$/) {
       $libDir.='Contrib';
    } else {
       $libDir.='Plugins';
@@ -83,13 +84,6 @@ sub _buildDirNames {
 
    return ($projectDir,$dataDir,$pubDir,$libDir);
 }
-
-sub makePaths {
-   my ($dataDir,$pubDir,$libDir)=@_;
-#    makepath($dataDir.'/');
-#    makepath($pubDir.'/');
-}
-
 
 sub _createBuildScript {
    my ($project,$rootDir,$libDir)=@_;
