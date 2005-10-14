@@ -207,6 +207,12 @@ __LOCALLIB_CFG__
 ################################################################################
 # install contrib plugin addon
 ################################################################################
+
+{
+    my %extensions = ( dir => "../downloads/extensions/", xml => "extensions.xml", type => "extension" );
+    extensionsCatalogue({ %extensions, cgi => $q });
+}
+
 my @types = (
         { type => 'extension', dir => 'downloads/extensions/', xml => 'extensions.xml', },
 	{ type => 'systemweb', dir => "downloads/webs/system/", xml => "systemwebs.xml", },

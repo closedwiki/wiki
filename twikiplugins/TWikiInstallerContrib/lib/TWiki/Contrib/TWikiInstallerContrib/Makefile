@@ -16,7 +16,7 @@ $(MakeFor).tar :
 	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) 
 
 extensions : 
-	cd $(TWIKIDEV)/$(BRANCH)/tools/; perl build_all_extensions.pl
+	cd $(TWIKIDEV)/$(BRANCH)/tools/; TWIKI_LIBS=$(TWIKIDEV)/$(BRANCH)/twikiplugins/BuildContrib/lib/ perl build_all_extensions.pl
 	cp $(TWIKIDEV)/$(BRANCH)/twikiplugins/*/*.zip downloads/extensions
 
 distro : twiki-cpan extensions $(MakeFor).tar.bz2 

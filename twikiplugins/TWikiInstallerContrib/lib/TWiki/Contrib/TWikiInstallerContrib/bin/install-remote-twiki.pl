@@ -60,11 +60,11 @@ my $result = GetOptions( $Config,
 			 'browser=s',
 			 'administrator=s', 'WIKIWEBMASTER=s',
 			 'scriptsuffix=s', 'perl=s', 'cgiurl=s',
-# plugin, addon, contrib
-			'plugin=s@', 'addon=s@', 'contrib=s@',
+# extensions
+			'extension=s@',
 # install_account, install_host, install_dir
 			'install_account=s', 'install_host=s', 'install_dir=s', 'force|f!',
-# plugin, contrib, addon
+# 
 			'report!', 'verbose', 'help|?', 'man', 'debug', 'agent=s',
 			);
 pod2usage( 1 ) if $Config->{help};
@@ -76,9 +76,7 @@ $Config->{TWikiFor} ||= 'http://develop.twiki.org/~wnorris/twiki.org.tar.bz2';
 $Config->{cgibin} = $Config->{install_dir} . "/cgi-bin";
 
 # set defaults
-$Config->{plugin} ||= [];	# qw( TWikiReleaseTrackerPlugin ) ];
-$Config->{contrib} ||= [];	# qw( DistributionContrib ) ];
-$Config->{addon} ||= [];	# qw( GetAWebAddOn ) ];
+$Config->{extension} ||= [];    # qw( TWikiReleaseTrackerPlugin DistributionContrib GetAWebAddOn )
 $Config->{web} ||= [];
 print Dumper( $Config ) if $Config->{debug};
 
@@ -153,9 +151,7 @@ sub PushRemoteTWikiInstall
 	use URI;
 	my $urlInstallWithConfig = URI->new( "$Config->{cgiurl}/install_twiki.cgi" );
 	$urlInstallWithConfig->query_form({ 
-		plugin => $parms->{plugin}, 
-		addon => $parms->{addon}, 
-		contrib => $parms->{contrib}, 
+		extension => $parms->{extension}, 
 		localweb => $parms->{localweb},
 		kernel => $parms->{kernel},
 		scriptsuffix => $parms->{scriptsuffix},
@@ -183,7 +179,7 @@ Copyright 2004,2005 Will Norris.  All Rights Reserved.
 
 =head1 SYNOPSIS
 
-install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -install_dir -force|-f [-plugin ...]* [-contrib ...]* [-addon ...]* [-report|-noreport] [-browser programName] [-verbose] [-debug] [-help] [-man]
+install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -install_dir -force|-f [-extension ...]* [-report|-noreport] [-browser programName] [-verbose] [-debug] [-help] [-man]
 
 =head1 OPTIONS
 
@@ -206,11 +202,7 @@ install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -inst
 
 =item B<-force|f>					Erase and overwrite an existing TWiki installation CAUTION!
 
-=item B<-plugin>					name of plugin to install (eg, SpreadSheetPlugin, FindElsewherePlugin)
-
-=item B<-contrib>					name of contrib module to install (eg, AttrsContrib, DistributionContrib)
-
-=item B<-addon>						name of addon to install (eg, GetAWebAddOn)
+=item B<-extension>					name of plugin, contrib, or addon to install (eg, SpreadSheetPlugin, TwistyContrib, GetAWebAddon)
 
 =item B<-(no-)report>					control creation of TWiki.TWikiInstallationReport on the installed wiki
 
