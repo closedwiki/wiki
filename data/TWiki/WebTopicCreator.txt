@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1098812697" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1098812697" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 <form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%BASEWEB%"}%/">
 <!-- TODO: do we still need INTURLENCODE nastyness? -->
@@ -15,6 +15,4 @@
      <input type="hidden" name="onlynewtopic" value="on" />
      <input type="submit" value="Create" />
 </form>
-
-
-To create a new topic, enter name of topic and click 'create'
+%MAKETEXT{"To create a new topic, enter name of topic and click 'create.'"}%
