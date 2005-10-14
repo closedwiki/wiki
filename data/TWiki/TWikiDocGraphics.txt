@@ -128,6 +128,7 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONPATH{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
 | <img src="%ATTACHURLPATH%/searchtopic.gif" alt="Search topic" title="Search topic" />  | =searchtopic.gif= | Search topic | =%<nop>ICON{searchtopic}%= |
+| <img src="%ATTACHURLPATH%/search-small.gif" alt="Search" title="Search" />  | =search-small.gif= | Small search button, 13x13 | =&lt;img src="%<nop>ICONPATH{search-small}%" width="13" height="13" alt="Search" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
 | <img src="%ATTACHURLPATH%/stargold.gif" alt="Gold star, favorites" title="Gold star, favorites" />  | =stargold.gif= | Gold star, favorites | =%<nop>ICON{stargold}%= |
 | <img src="%ATTACHURLPATH%/starred.gif" alt="Red star, highlight" title="Red star, highlight" />  | =starred.gif= | Red star, highlight | =%<nop>ICON{starred}%= |
@@ -363,3 +364,4 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="web-bg.gif" attr="" autoattached="1" comment="" date="1128926976" path="web-bg.gif" size="85" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="changes-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="changes-small.gif" size="89" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="web-bg-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="web-bg-small.gif" size="79" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="search-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="search-small.gif" size="554" user="UnknownUser" version=""}%

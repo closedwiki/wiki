@@ -503,6 +503,9 @@ a:hover .twikiAccessKey {
 .patternMetaNav a:hover {
 	color:#FBF7E8; /*C3*/ /* same as patternLeftBar */
 }
+.patternMetaNav input {
+	background-color:#FEFBF3; /*BG9*/
+}
 
 /* Edit page */
 

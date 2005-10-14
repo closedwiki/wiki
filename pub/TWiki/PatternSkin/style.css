@@ -727,10 +727,14 @@ td.patternToolBar {
 .patternMetaNav .patternSeparator {
 	margin:0 .5em;
 }
-.patternMetaNav input {
-	vertical-align:top;
+.patternMetaNav input#searchboxTop {
 	padding:0;
+	margin:0 0 0 1.5em;
 	height:1.2em; /* 85% of default line-height 1.4 */
+}
+.patternMetaNav input#goSearchTop {
+	margin:0 0 0 2px;
+	border:0;
 }
 
 /* Edit page */

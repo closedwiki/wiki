@@ -4,6 +4,5 @@
 <a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a>
 </td></tr></table></div>
 <div class="twikiRight patternMetaNav">
-%IF{"context i18n_enabled" then='[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?template=oopschangelanguage][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/flag-gray-small.gif" width="13" height="13" alt="%MAKETEXT{\"Change language\"}%" border="0" /> %MAKETEXT{"Change language"}%]]<span class="patternSeparator">|</span>'}%<form name="top" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">%MAKETEXT{"Jump:"}% <input type="text" id="go" name="topic" size="16" /></label>
-</form>
+%IF{"context i18n_enabled" then='[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?template=oopschangelanguage][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/flag-gray-small.gif" width="13" height="13" alt="%MAKETEXT{\"Change language\"}%" border="0" /> %MAKETEXT{"Change language"}%]]'}%<form name="top" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%"><input id="searchboxTop" type="text" name="search" value="%URLPARAM{ "search" encode="entity" scope="topic" }%" size="16" /><input type="image" id="goSearchTop" value="GoSearch" name="GoSearch" src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/search-small.gif" align="middle" border="0" style="width:13px; height:13px;" /></form>
 </div>

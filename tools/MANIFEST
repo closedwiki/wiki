@@ -418,6 +418,18 @@ pub/TWiki/TWikiDocGraphics/twikiTable_header_bg.gif 0660
 pub/TWiki/TWikiDocGraphics/layout.css 0660
 pub/TWiki/TWikiDocGraphics/empty.css 0660
 pub/TWiki/TWikiDocGraphics/page_bg.gif 0660
+pub/TWiki/PatternSkin/info_bg.gif 0660
+pub/TWiki/PatternSkin/bullet-blue.gif 0660
+pub/TWiki/PatternSkin/style.css 0660
+pub/TWiki/PatternSkin/twikiPageForm_bg.gif 0660
+pub/TWiki/PatternSkin/view.pattern.tmpl 0660
+pub/TWiki/PatternSkin/colors.css 0660
+pub/TWiki/PatternSkin/twikiTable_header_bg.gif 0660
+pub/TWiki/PatternSkin/layout.css 0660
+pub/TWiki/PatternSkin/tips_bg.gif 0660
+pub/TWiki/PatternSkin/page_bg.gif 0660
+pub/TWiki/PatternSkin/patternskin_screenshot_full.gif 0660
+pub/TWiki/PatternSkin/patternskin_screenshot.gif 0660
 pub/TWiki/PatternSkinCss/CSS_element_layout_view.pattern.tmpl.png 0660
 pub/TWiki/PatternSkinCssCookbook/hideleftbar_Cairo.css 0660
 pub/TWiki/PatternSkinCssCookbook/hideleftbar_Dakar.css 0660
@@ -569,6 +581,7 @@ pub/TWiki/TWikiDocGraphics/jpg.gif 0660
 pub/TWiki/TWikiDocGraphics/dot_ld.gif 0660
 pub/TWiki/TWikiDocGraphics/fla.gif 0660
 pub/TWiki/TWikiDocGraphics/searchtopic.gif 0660
+pub/TWiki/TWikiDocGraphics/search-small.gif 0660
 pub/TWiki/TWikiDocGraphics/pdf.gif 0660
 pub/TWiki/TWikiDocGraphics/choice-yes.gif 0660
 pub/TWiki/TWikiDocGraphics/line_udl.gif 0660
