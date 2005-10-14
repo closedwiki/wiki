@@ -2196,9 +2196,11 @@ sub handleCommonTags {
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
-    my $verbatims = {};
+    #use a "global var", so included topics can extract and putback 
+    #their verbatim blocks safetly.
+    $this->{_verbatims}={};
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
-                                              $verbatims );
+                                              $this->{_verbatims});
 
     my $memW = $this->{SESSION_TAGS}{INCLUDINGWEB};
     my $memT = $this->{SESSION_TAGS}{INCLUDINGTOPIC};
@@ -2225,10 +2227,11 @@ sub handleCommonTags {
     # SMELL: is this a hack? Looks like it....
     $text =~ s/^<nop>\r?\n//gm;
 
-    $this->{renderer}->putBackBlocks( \$text, $verbatims, 'verbatim' );
+    $this->{renderer}->putBackBlocks( \$text, $this->{_verbatims}, 'verbatim' );
 
     # TWiki Plugin Hook (for cache Plugins only)
     $this->{plugins}->afterCommonTagsHandler( $text, $theTopic, $theWeb );
+    $this->{_verbatims}=undef;
 
     return $text;
 }
