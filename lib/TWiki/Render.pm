@@ -959,7 +959,7 @@ sub getRenderedVersion {
     my $session = $this->{session};
     my $plugins = $session->{plugins};
     my $prefs = $session->{prefs};
-
+    
     @{$this->{LIST}} = ();
 
     # Initial cleanup
@@ -982,7 +982,8 @@ sub getRenderedVersion {
     my $removedScript = {};
     my $removedHead = {};
 
-    $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
+    $text = $this->takeOutBlocks( $text, 'verbatim', $session->{_removed} );
+
     $text = $this->takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
                                      $removedComments );
     $text = $this->takeOutProtected( $text, qr/<!DOCTYPE([^<>]*)>?/mi,
@@ -1210,7 +1211,7 @@ sub getRenderedVersion {
     $plugins->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
-    $this->putBackBlocks( \$text, $removed, 'verbatim', 'pre', \&verbatimCallBack );
+    $this->putBackBlocks( \$text, $session->{_removed}, 'verbatim', 'pre', \&verbatimCallBack );
 
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 

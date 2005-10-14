@@ -1004,9 +1004,10 @@ sub new {
     $remoteUser ||= $query->remote_user() || $TWiki::cfg{DefaultUserLogin};
 
     my $this = bless( {}, $class );
+    
     $this->{htmlHeaders} = {};
     $this->{context} = {};
-
+    $this->{_removed}={};
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;
     $this->{plugins} = new TWiki::Plugins( $this );
@@ -2192,15 +2193,15 @@ sub handleCommonTags {
     ASSERT($theTopic) if DEBUG;
 
     return $text unless $text;
-
+    my $verbatim={};
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
     #use a "global var", so included topics can extract and putback 
     #their verbatim blocks safetly.
-    $this->{_verbatims}={};
+    
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
-                                              $this->{_verbatims});
+                                              $verbatim);
 
     my $memW = $this->{SESSION_TAGS}{INCLUDINGWEB};
     my $memT = $this->{SESSION_TAGS}{INCLUDINGTOPIC};
@@ -2227,11 +2228,10 @@ sub handleCommonTags {
     # SMELL: is this a hack? Looks like it....
     $text =~ s/^<nop>\r?\n//gm;
 
-    $this->{renderer}->putBackBlocks( \$text, $this->{_verbatims}, 'verbatim' );
+    $this->{renderer}->putBackBlocks( \$text, $verbatim, 'verbatim' );
 
     # TWiki Plugin Hook (for cache Plugins only)
     $this->{plugins}->afterCommonTagsHandler( $text, $theTopic, $theWeb );
-    $this->{_verbatims}=undef;
 
     return $text;
 }
@@ -2513,15 +2513,13 @@ sub _INCLUDE {
     # take out verbatims, pushing them into the same storage block
     # as the including topic so when we do the replacement at
     # the end they are all there
-    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
-                                              $this->{_verbatims} );
-
+    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',$this->{_removed} );
+    
     $this->_expandAllTags( \$text, $includedTopic, $includedWeb );
 
     # 4th parameter tells plugin that its called for an included file
     $this->{plugins}->commonTagsHandler( $text, $includedTopic,
                                          $includedWeb, 1 );
-
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
     # right context
     # SMELL: This is a hack.
@@ -2552,10 +2550,10 @@ sub _INCLUDE {
     %{$this->{SESSION_TAGS}} = %saveTags;
 
     $this->{prefs}->restore( $prefsMark );
-
+    $this->{renderer}->putBackBlocks( \$text, $this->{_removed}, 'verbatim' );
     $text =~ s/^[\r\n]+/\n/;
     $text =~ s/[\r\n]+$/\n/;
-
+    
     return $text;
 }
 
