@@ -70,6 +70,9 @@ Follow these steps:
 
 See example at: PatternSkinCssCookbookCenterPage
 
+---+ Use different fonts
+
+See example at: PatternSkinCssCookbookFonts
 
 
 %META:FILEATTACHMENT{name="hideleftbar_Dakar.css" attr="" autoattached="1" comment="css to hide the left bar (Dakar)" date="1129323328" path="hideleftbar_Dakar.css" size="112" user="ArthurClemens" version=""}%
