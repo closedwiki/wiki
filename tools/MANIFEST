@@ -118,8 +118,8 @@ data/TWiki/ObjectMethod.txt 0660
 data/TWiki/PatternSkin.txt 0660
 data/TWiki/PatternSkinCss.txt 0660
 data/TWiki/PatternSkinCssCookbook.txt 0660
-data/TWiki/PatternSkinCustomization.txt 0660
-data/TWiki/PatternSkinPalette.txt 0660
+data/TWiki/PatternSkinCssCookbookCenterPage.txt 0660
+data/TWiki/PatternSkinCssCookbookFonts.txt 0660
 data/TWiki/PeterThoeny.txt 0660
 data/TWiki/PlainSkin.txt 0660
 data/TWiki/PreviewBackground.txt 0660
@@ -433,11 +433,8 @@ pub/TWiki/PatternSkin/patternskin_screenshot.jpg 0660
 pub/TWiki/PatternSkinCss/CSS_element_layout_view.pattern.tmpl.png 0660
 pub/TWiki/PatternSkinCssCookbook/hideleftbar_Cairo.css 0660
 pub/TWiki/PatternSkinCssCookbook/hideleftbar_Dakar.css 0660
-pub/TWiki/PatternSkinCustomization/LowRes.css 0660
-pub/TWiki/PatternSkinPalette/PatternSkinPalette.css 0660
-pub/TWiki/PatternSkinPalette/filterColours.pl.txt 0660
-pub/TWiki/PatternSkinPalette/makeColourTable.pl.txt 0660
-pub/TWiki/PatternSkinPalette/textmask.gif 0660
+pub/TWiki/PatternSkinCssCookbookCenterPage/centerpage.css 0660
+pub/TWiki/PatternSkinCssCookbookFonts/fonts.css 0660
 pub/TWiki/PlainSkin/fullscreen.gif 0660
 pub/TWiki/PlainSkin/screenshot.gif 0660
 pub/TWiki/PreviewBackground/blankltgraybg.gif 0660
