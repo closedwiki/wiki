@@ -586,7 +586,7 @@ sub writeCompletePage {
     $text =~ s/([<]\/head[>])/$htmlHeader$1/i if $htmlHeader;
     chomp($text);
     
-    if ( (defined($query->param('command_line'))) && ($query->param('command_line') != 1) ) {
+    if ( (!defined($this->{context}->{command_line})) || ($this->{context}->{command_line} != 1) ) {
         # can't use simple length() in case we have UNICODE
         # see perldoc -f length
         my $len = do { use bytes; length( $text ); };
