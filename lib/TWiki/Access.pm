@@ -137,14 +137,11 @@ sub checkAccessPermission {
     my $denyText;
 
     # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
-    my $tmp;
-    $tmp = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
+    $allowText = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
                                              $web, $topic );
 
-    $allowText = $tmp if $tmp;
-    $tmp = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode,
+    $denyText = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode,
                                              $web, $topic );
-    $denyText = $tmp if $tmp;
 
     # Check DENYTOPIC
     if( defined( $denyText )) {
