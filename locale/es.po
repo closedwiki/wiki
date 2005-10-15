@@ -1,19 +1,23 @@
+# translation of es.po to
 # TWiki translation for Spanish
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
 # Will Norris
+# Will Norris, 2005.
+# Will Norris, 2005.
 msgid ""
 msgstr ""
-"Project-Id-Version: TWiki $Id\n"
+"Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Will Norris <>\n"
+"PO-Revision-Date: 2005-10-15 03:56-0400\n"
+"Last-Translator: Will Norris\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.10\n"
 
 #. ($days)
 #: lib/TWiki/Time.pm:263
@@ -58,7 +62,7 @@ msgstr "Pagina de inicio de %1"
 
 #: data/TWiki/NewUserTemplate.txt:26
 msgid "%1 has a list of other TWiki users."
-msgstr ""
+msgstr "%1 tiene una lista de otros uarios de TWiki"
 
 #: templates/registernotifyadmin.tmpl:10
 msgid "%1 has been registered with email %2"
@@ -86,7 +90,7 @@ msgstr "%1 esta en uno amos grupes y no puede ser remouido"
 
 #: data/TWiki/NewUserTemplate.txt:8
 msgid "%1 just for me"
-msgstr ""
+msgstr "%1 solo para mi"
 
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:201
@@ -130,9 +134,8 @@ msgid "&Edit"
 msgstr "&Editar"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:11
-#, fuzzy
 msgid "&Edit text"
-msgstr "(editar el texto)"
+msgstr "&Editar el texto"
 
 #: templates/view.pattern.tmpl:82
 msgid "&History"
@@ -165,7 +168,7 @@ msgstr ""
 #: data/TWiki/WebTopicNonWikiTemplate.txt:18
 #: data/TWiki/WebTopicViewTemplate.txt:18
 msgid "(More options in WebSearch)"
-msgstr ""
+msgstr "(Mas opciones en WebSearch)"
 
 #: data/Sandbox/WebHome.txt:10
 msgid "(Use a topic name in TWiki.WikiNotation)"
@@ -192,9 +195,8 @@ msgid "(change form)"
 msgstr "(cambiar el formulario)"
 
 #: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
-#, fuzzy
 msgid "(change language)"
-msgstr "(cambios)"
+msgstr "(cambiar idioma)"
 
 #: templates/changes.pattern.tmpl:5
 msgid "(changes)"
@@ -325,10 +327,8 @@ msgstr ""
 "administrar webs"
 
 #: templates/preview.pattern.tmpl:77
-msgid ""
-"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
-msgstr ""
-"<span class='twikiAlert'><b>No olvidar</b></span> para guardar [tus] cambios."
+msgid "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
+msgstr "<span class='twikiAlert'><b>No olvidar</b></span> para guardar [tus] cambios."
 
 #: templates/oopsaccessdenied.tmpl:25
 msgid ""
@@ -424,12 +424,11 @@ msgstr ""
 
 #: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:38
 msgid "All public webs"
-msgstr ""
+msgstr "Todas webs publicas"
 
 #: data/TWiki/WebSearchAdvanced.txt:84
-#, fuzzy
 msgid "All topics in %1"
-msgstr "Numero de paginas in el web %1:"
+msgstr "Todas paginas en el web %1:"
 
 #: templates/renamebase.pattern.tmpl:35
 #: templates/renamewebbase.pattern.tmpl:33
@@ -446,8 +445,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:176
 #, fuzzy
-msgid ""
-"An e-mail could not be delivered. Please notify your %1 administrator, %2"
+msgid "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr "No se puede enviar email notifique a su administrador %1, %2"
 
 #: templates/oopsattention.tmpl:226
@@ -497,14 +495,12 @@ msgid "Attachment"
 msgstr "Archivo"
 
 #: lib/TWiki/UI/Manage.pm:340
-#, fuzzy
 msgid "Attachment already exists in new topic"
-msgstr "La pagina %1 no existe"
+msgstr "El archivo ya existe en nueva pagina"
 
 #: lib/TWiki/UI/Manage.pm:320
-#, fuzzy
 msgid "Attachment does not exist"
-msgstr "La pagina %1 no existe"
+msgstr "El archivo no se existe"
 
 #: templates/oopsattention.tmpl:49
 msgid "Attachment move failed"
@@ -561,7 +557,7 @@ msgstr ""
 
 #: templates/oopsalerts.tmpl:10 templates/oopsattention.tmpl:39
 msgid "Can't find user %1"
-msgstr ""
+msgstr "No se puede encontrar usario %1"
 
 #: templates/oopsattention.tmpl:225
 msgid "Can't get an email address for %1"
@@ -636,9 +632,8 @@ msgid "Change topic"
 msgstr "Cambiar la pagina"
 
 #: lib/TWiki/UI/RDiff.pm:275 lib/TWiki/UI/RDiff.pm:281
-#, fuzzy
 msgid "Changed"
-msgstr "(cambios)"
+msgstr "Cambiado"
 
 #: data/Main/WebLeftBar.txt:8 data/Sandbox/WebLeftBar.txt:8
 #: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:4
@@ -722,11 +717,11 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:117
 msgid "Could not create the new web %1"
-msgstr ""
+msgstr "No se puede crear la nueva web %1"
 
 #: templates/oopsattention.tmpl:230
 msgid "Could not save %1."
-msgstr ""
+msgstr "No se pedo guardir %1."
 
 #: templates/view.pattern.tmpl:28
 msgid "Cr&eate"
@@ -738,9 +733,8 @@ msgid "Create <nop>TestTopic###"
 msgstr "Crear esta pagina"
 
 #: data/Sandbox/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
-#, fuzzy
 msgid "Create New Topic"
-msgstr "Crear esta pagina"
+msgstr "Crear nueva pagina"
 
 #: templates/attach.pattern.tmpl:114
 msgid "Create a link to the attached file"
@@ -793,8 +787,7 @@ msgid "Delete"
 msgstr "Borrar"
 
 #: templates/view.pattern.tmpl:43
-msgid ""
-"Delete or rename this topic; set parent topic; view and compare revisions"
+msgid "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
@@ -806,9 +799,8 @@ msgid "Delete topic:"
 msgstr "Borrar la pagina:"
 
 #: lib/TWiki/UI/RDiff.pm:254
-#, fuzzy
 msgid "Deleted"
-msgstr "Borrar"
+msgstr "Borrado"
 
 #: templates/renamedelete.pattern.tmpl:27
 #: templates/renamewebdelete.pattern.tmpl:27
@@ -825,7 +817,7 @@ msgstr ""
 
 #: templates/rdiff.pattern.tmpl:19
 msgid "Diffs"
-msgstr ""
+msgstr "Differencias"
 
 #: templates/preview.pattern.tmpl:67 templates/preview.pattern.tmpl:70
 msgid "Discard"
@@ -891,9 +883,8 @@ msgid "Edit personal data"
 msgstr ""
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
-#, fuzzy
 msgid "Edit text"
-msgstr "(editar el texto)"
+msgstr "Editar el texto"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:24
 #: templates/view.pattern.tmpl:33
@@ -987,8 +978,7 @@ msgid ""
 msgstr ""
 
 #: templates/oopsattention.tmpl:234
-msgid ""
-"Go back in your browser and insert information for all mandatory fields."
+msgid "Go back in your browser and insert information for all mandatory fields."
 msgstr ""
 
 #: templates/oopsattention.tmpl:285 templates/oopssaveerr.tmpl:10
@@ -997,21 +987,20 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:194
 msgid "Good examples:"
-msgstr ""
+msgstr "Buenos ejemplos:"
 
 #: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:5
 #: data/TWiki/WebLeftBar.txt:5
 msgid "Groups"
-msgstr ""
+msgstr "Grupas"
 
 #: data/TWiki/WebLeftBarLogin.txt:4
 msgid "Hello %1!"
-msgstr ""
+msgstr "Hola %1!"
 
 #: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:27
-#, fuzzy
 msgid "Help"
-msgstr "ayuda"
+msgstr "Ayuda"
 
 #: templates/attach.pattern.tmpl:66
 msgid "Hide existing attachments"
@@ -1026,9 +1015,8 @@ msgid "Hide formatting help"
 msgstr "Ocultar el formata de ayuda"
 
 #: templates/attach.pattern.tmpl:49
-#, fuzzy
 msgid "Hide help"
-msgstr "Ocultar el archivo"
+msgstr "Ocultar la ayuda"
 
 #: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
 #: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
@@ -1241,7 +1229,7 @@ msgstr "Mas aciones en la pagina %1"
 
 #: templates/rdiff.pattern.tmpl:20 templates/view.pattern.tmpl:42
 msgid "More topic actions..."
-msgstr ""
+msgstr "Mas acciones de pagina:"
 
 #: templates/attachagain.pattern.tmpl:23
 #: templates/moveattachment.pattern.tmpl:16
@@ -1257,18 +1245,16 @@ msgid "Move or Delete File %1"
 msgstr "Mover o Borrar el archivo %1"
 
 #: templates/renameweb.pattern.tmpl:27
-msgid ""
-"Move this web to the Trash web to delete it (for example, rename it to %1)."
+msgid "Move this web to the Trash web to delete it (for example, rename it to %1)."
 msgstr ""
 
 #: data/TWiki/NewUserTemplate.txt:5
-#, fuzzy
 msgid "My Links"
-msgstr "Enlace"
+msgstr "Mis Enlaces"
 
 #: lib/TWiki/Search.pm:786
 msgid "NEW"
-msgstr ""
+msgstr "NUEVO"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:2
 #: data/TWiki/WebTopicViewTemplate.txt:2
@@ -1312,8 +1298,7 @@ msgstr ""
 msgid ""
 "Note that any URLs that refer to the attachment will be broken after this "
 "move."
-msgstr ""
-"Note que todos los URLs que referencian para esa union que podra romper."
+msgstr "Note que todos los URLs que referencian para esa union que podra romper."
 
 #: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
 #: templates/renamebase.pattern.tmpl:80
@@ -1344,7 +1329,7 @@ msgstr "Numero de paginas:"
 #: templates/oopslanguagechanged.tmpl:5 templates/oopssaveerr.pattern.tmpl:5
 #: templates/oopssaveerr.tmpl:11
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: templates/oopsmore.pattern.tmpl:48
 msgid "Older revision:"
@@ -1356,7 +1341,7 @@ msgstr ""
 
 #: data/TWiki/WebSearch.txt:40 data/TWiki/WebSearchAdvanced.txt:80
 msgid "Other search options:"
-msgstr ""
+msgstr "Otras opciones de buscar:"
 
 #: templates/login.pattern.tmpl:41
 msgid "Password"
@@ -1372,7 +1357,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:164
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Las contraseña no son eguales"
 
 #: data/TWiki/NewUserTemplate.txt:12
 msgid "Personal Preferences (details in %1)"
@@ -1380,7 +1365,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:110
 msgid "Pick one of the %1."
-msgstr ""
+msgstr "Escoger una de ??? %1."
 
 #: templates/oopsattention.tmpl:188 templates/oopsattention.tmpl:222
 msgid "Please contact %1 if you have any questions."
@@ -1422,11 +1407,10 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:214
 msgid "Please try again."
-msgstr ""
+msgstr "Por favor, trata otro vez."
 
 #: templates/mailresetpassword.tmpl:12
-msgid ""
-"Please visit %1 to change your password to something more memorable for you."
+msgid "Please visit %1 to change your password to something more memorable for you."
 msgstr ""
 
 #: templates/changeform.pattern.tmpl:31
@@ -1435,13 +1419,12 @@ msgstr "Posible patrón de formulario"
 
 #: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:11
 #: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:9
-#, fuzzy
 msgid "Preferences"
-msgstr "(configurar preferencias)"
+msgstr "Preferencias"
 
 #: templates/settings.pattern.tmpl:56
 msgid "Preferences for"
-msgstr ""
+msgstr "Preferencias por"
 
 #: templates/edit.pattern.tmpl:136
 msgid "Preview"
@@ -1475,9 +1458,8 @@ msgstr ""
 
 #: data/Sandbox/WebHome.txt:21 data/TWiki/WebSearch.txt:44
 #: data/TWiki/WebSearchAdvanced.txt:85
-#, fuzzy
 msgid "Recently changed topics"
-msgstr "Borrar la pagina:"
+msgstr "Paginas cambiados recemente"
 
 #: data/TWiki/WebSearchAdvanced.txt:54
 msgid "Regular expression search"
@@ -1566,7 +1548,7 @@ msgstr "Guardar"
 #: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:5
 #: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:5
 msgid "Search"
-msgstr ""
+msgstr "Buscar"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Search %1 &Web only"
@@ -1574,7 +1556,7 @@ msgstr ""
 
 #: templates/backlinksweb.pattern.tmpl:10
 msgid "Search a&ll webs"
-msgstr ""
+msgstr "Buscard todas las webs"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 #: templates/backlinksweb.pattern.tmpl:10 templates/view.pattern.tmpl:82
@@ -1591,11 +1573,11 @@ msgstr ""
 
 #: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:32
 msgid "Search where:"
-msgstr ""
+msgstr "Buscar donde:"
 
 #: templates/search.pattern.tmpl:37 templates/searchbookview.pattern.tmpl:6
 msgid "Searched:"
-msgstr ""
+msgstr "Buscando:"
 
 #: templates/oopsattention.tmpl:42
 msgid "See %1 for a list of existing users or register as new user in %2."
@@ -1645,9 +1627,8 @@ msgid "Show formatting help"
 msgstr ""
 
 #: templates/attach.pattern.tmpl:49
-#, fuzzy
 msgid "Show help"
-msgstr "ayuda"
+msgstr "Monstrar ayuda"
 
 #: data/TWiki/NewUserTemplate.txt:13
 msgid ""
@@ -1763,7 +1744,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:121 templates/oopsattention.tmpl:138
 msgid "Thank you for registering"
-msgstr ""
+msgstr "Gracias para registrar"
 
 #: templates/registernotify.tmpl:8
 msgid ""
@@ -1789,7 +1770,7 @@ msgstr "La pagina %1 ya existir"
 
 #: templates/oopsaccessdenied.tmpl:24
 msgid "The %1 web does not exist"
-msgstr ""
+msgstr "La web %1 no se existe"
 
 #: data/Sandbox/WebHome.txt:4
 msgid ""
@@ -1877,7 +1858,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:165
 msgid "The two passwords you entered do not match."
-msgstr ""
+msgstr "Los dos contraseñas no son eguales."
 
 #: data/Main/WebRss.txt:7
 msgid ""
@@ -1904,8 +1885,7 @@ msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:8
-msgid ""
-"They have been editing for %1 and their lease is still active for another %2."
+msgid "They have been editing for %1 and their lease is still active for another %2."
 msgstr ""
 
 #: templates/oopsattention.tmpl:257
@@ -1992,7 +1972,7 @@ msgstr ""
 #: templates/moveattachment.pattern.tmpl:36
 #: templates/renamebase.pattern.tmpl:52
 msgid "To web:"
-msgstr ""
+msgstr "A la web:"
 
 #: templates/oopsattention.tmpl:229
 msgid "Topic Save Error"
@@ -2003,9 +1983,8 @@ msgid "Topic can not be upgraded from old style category table"
 msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:44
-#, fuzzy
 msgid "Topic name"
-msgstr "Nombre de la pagina:"
+msgstr "Nombre de la pagina"
 
 #: templates/moveattachment.pattern.tmpl:46
 #: templates/renamebase.pattern.tmpl:57
@@ -2030,9 +2009,8 @@ msgid "Topic was merged"
 msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:71
-#, fuzzy
 msgid "Topics per web"
-msgstr "Numero de paginas in el web %1:"
+msgstr "Paginas por web"
 
 #: templates/renamewebbase.pattern.tmpl:64
 msgid "Topics which are currently being edited by other users in the %1 Web:"
@@ -2045,8 +2023,7 @@ msgid ""
 msgstr ""
 
 #: templates/renamewebbase.pattern.tmpl:69
-msgid ""
-"Topics which refer to this web that you do not have permission to change:"
+msgid "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:61
@@ -2056,7 +2033,7 @@ msgstr ""
 #: templates/oopsleaseconflict.pattern.tmpl:7
 #: templates/oopsleaseconflict.tmpl:30
 msgid "Try Again"
-msgstr ""
+msgstr "Tratar otro vez"
 
 #: lib/TWiki/UI/RDiff.pm:268
 #, fuzzy
@@ -2127,9 +2104,8 @@ msgstr "Usuario"
 
 #: data/Main/WebLeftBar.txt:4 data/Sandbox/WebLeftBar.txt:4
 #: data/TWiki/WebLeftBar.txt:4
-#, fuzzy
 msgid "Users"
-msgstr "Usuario"
+msgstr "Usuarios"
 
 #: templates/oopsattention.tmpl:130
 msgid ""
@@ -2158,16 +2134,15 @@ msgid "View raw text without formatting"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:42
-#, fuzzy
 msgid "View revision"
-msgstr "Revicion mas nueva:"
+msgstr "Ver revision"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 #: templates/oopsleaseconflict.pattern.tmpl:15
 #: templates/oopsleaseconflict.tmpl:27 templates/rdiff.pattern.tmpl:18
 #: templates/view.pattern.tmpl:20
 msgid "View topic"
-msgstr ""
+msgstr "Ver pagina"
 
 #: templates/view.pattern.tmpl:82
 msgid "View total topic history"
@@ -2194,9 +2169,8 @@ msgid "Web Search"
 msgstr ""
 
 #: data/TWiki/WebLeftBarExample.txt:8 data/TWiki/WebLeftBarWebsList.txt:2
-#, fuzzy
 msgid "Webs"
-msgstr "&Web"
+msgstr "Webs"
 
 #: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
 msgid "Welcome to the %1 web"
@@ -2229,7 +2203,7 @@ msgstr ""
 
 #: templates/view.pattern.tmpl:51
 msgid "You are here"
-msgstr ""
+msgstr "Esta aqui"
 
 #: templates/oopsattention.tmpl:94
 msgid ""
@@ -2319,8 +2293,7 @@ msgid "Your password has been changed to %1."
 msgstr ""
 
 #: templates/registernotify.tmpl:12
-msgid ""
-"Your personal %1 topic is located at %2. You can customize it as you like:"
+msgid "Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:155
@@ -2341,8 +2314,7 @@ msgid "[[%1][Search]] for similar topics in all public webs"
 msgstr ""
 
 #: templates/settings.pattern.tmpl:87
-msgid ""
-"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgid "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
 
 # please enter the name of your language here (written in the native language):
@@ -2418,9 +2390,8 @@ msgid "manage"
 msgstr "administre"
 
 #: data/Trash/WebHome.txt:6
-#, fuzzy
 msgid "more..."
-msgstr "(mas)"
+msgstr "mas..."
 
 #: templates/oopsmore.pattern.tmpl:31
 msgid "none (remove topic parent)"
@@ -2451,42 +2422,3 @@ msgstr ""
 msgid "view"
 msgstr "vea"
 
-#~ msgid "Web"
-#~ msgstr "Web"
-
-#, fuzzy
-#~ msgid "Notes:"
-#~ msgstr "Notas"
-
-#, fuzzy
-#~ msgid "..."
-#~ msgstr "(mas)"
-
-#~ msgid "Changed by:"
-#~ msgstr "Cambiar para:"
-
-#~ msgid "Topics in %1 web:"
-#~ msgstr "Numero de paginas in el web %1:"
-
-#~ msgid "Move attachment..."
-#~ msgstr "Mover la union..."
-
-#~ msgid "%1 - Registration for %2"
-#~ msgstr "%1 - Registro de %2"
-
-#, fuzzy
-#~ msgid "Edit topic text"
-#~ msgstr "Editar esto texto de pagina"
-
-#, fuzzy
-#~ msgid "Jump to start of topic"
-#~ msgstr "Numero de paginas:"
-
-#~ msgid "Back"
-#~ msgstr "Retroceder"
-
-#~ msgid "Edit content"
-#~ msgstr "Editar el contenido"
-
-#~ msgid "More"
-#~ msgstr "Mas"
