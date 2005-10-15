@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-Peter Thoeny orginator and one of the authors of TWiki and therefore a TWiki:Codev/CoreTeam member and a %MAINWEB%.TWikiContributor.
+Peter Thoeny was the orginator of TWiki and continues as a TWiki:Codev/CoreTeam member and a %MAINWEB%.TWikiContributor.
 
 See home page at TWiki:Main/%TOPIC%
 
