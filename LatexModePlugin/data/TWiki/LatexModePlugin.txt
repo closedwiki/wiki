@@ -1,0 +1,232 @@
+%META:TOPICINFO{author="ScottHoge" date="1125954924" format="1.0" version="1.4"}%
+---+!! <nop>%TOPIC%
+
+This <nop>LaTeX Mode TWiki Plugin allows you to include <nop>LaTeX mark up commands within a TWiki page.  It uses external programs (specifically latex, dvips, and convert) to generate =png= images from the mark up.  These images are then included in the rendered TWiki page.  The first time a particular image is generated, there may be a significant lag in page rendering as the images are generated on the server.  Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.  When you remove a math expression from a page, its image is deleted.  
+
+This plugin expands the functionality provided by the (older) TWiki:Plugins.MathModePlugin.
+
+%TOC%
+
+---++ Syntax Rules
+
+The plugin interprets a number of delimiters to declare <nop>LaTeX markup strings.  For example, if the LatexModePlugin is successfully installed, the string =\int_{-\infty}^\infty e^{-\alpha x^2} dx = \sqrt{\frac{\pi}{\alpha}}= will render as an image %$\int_{-\infty}^\infty e^{ -\alpha x^2 } dx = \sqrt{ \frac{\pi}{\alpha} }$%, when enclosed within the defined delimiters.
+
+---+++ Standard Syntax
+
+This plugin has two standard modes: 
+	* *in-line*, declared by %<nop>$ $%. Similar to <nop>LaTeX's inline math mode, the math markup is rendered on the same line as other text in the string.
+	* *own-line*, declared by %<nop>\[ \]% or %<nop>MATHMODE{ ... }%.  These equations will be rendered with center justification on their own line. 
+
+For the majority of users, these commands should be sufficient 
+
+---+++ Extended Syntax
+
+For those that are well familiar with <nop>LaTeX, a multi-line syntax allowing more complicated markup commands can be declared using
+<pre>
+%<nop>BEGINLATEX%
+  \begin{&lt;environment&gt;}
+	 _latex markup_ 
+  \end{&lt;environment&gt;}
+%<nop>ENDLATEX%
+</pre>
+Typically, the declared &lt;environment&gt; will be =displaymath=, although there is no limitation.
+
+
+Additional options can be included to modify the rendered result.  These include
+<div align="center">
+| *option* | *possible values* | *default* | *description* | 
+| inline | 0 or 1 | 0 | controls inline vs ownline rendering |
+| label | alpha-numeric | --- | produces a linkable equation number for ownline markup |
+| density | positive integer | %LATEXMODEPLUGIN_DENSITY% (set below) | controls rendered font size |
+| scale | positive number | %LATEXMODEPLUGIN_SCALE% (set below) | sets post-rendered image scaling |
+| gamma | positive number | %LATEXMODEPLUGIN_GAMMA% (set below) | controls rendered font darkness |
+| color | --- | 'black' | sets foreground font color (details below) |
+</div>
+
+For example, to declare an equation to be numbered by TWiki (not in the <nop>LaTeX image) with a larger font size and in red, use the following syntax:
+
+%<nop>BEGINLATEX{label="eq1" density="175" color="red"}%
+
+  _latex markup_
+
+%<nop>ENDLATEX%
+
+HTML references to Latex equations with a defined =&lt;label&gt;= can be generated using %<nop>REFLATEX{&lt;label&gt;}%.
+
+---+++ Tables, Figures, and back-references
+
+To round out the functionality available in standard <nop>LaTeX, the automatic generation of Figure and Table reference links is also available.  These are declared using
+	* %<nop>BEGINFIGURE{label="fig:label" caption="this is a figure"}% ... %<nop>ENDFIGURE%, and
+	* %<nop>BEGINTABLE{label="tbl:label" caption="this is a table"}% ... %<nop>ENDTABLE%. 
+These commands will create an HTML table with a numbered caption either above (TABLE) or below (FIGURE) the included text.  Back-references to these declared environments can be accessed through %<nop>REFLATEX{&lt;label&gt;}%.
+To keep the counters/back-references seperate for each of the three types of references, use =eqn:=, =fig:=, and =tbl:= as the first four characters in any declared label.
+
+---+++ Font Color 
+
+As of v1.3, one can now directly control the foreground font color in the
+rendered mathematics.  This is achieved through use of the =color.sty=
+package in the intermediate latex file.
+
+Latex is able to render colors defined in 3 color spaces: =gray=, =rgb=, and
+=cmyk=.  A limited number of colors are predefined in Latex.  These include:
+<div align="center">
+| *color* | *color space* | *color space value* |
+|	=black=|	gray	| 0 |
+|	=white=|	gray	| 1 |
+|	=red=|	rgb	| 1,0,0 |
+|	=green=|	rgb	| 0,1,0 |
+|	=blue=|	rgb	| 0,0,1 |
+|	=cyan=|	cmyk	| 1,0,0,0 |
+|	=magenta=|	cmyk	| 0,1,0,0 |
+|	=yellow=|	cmyk	| 0,0,1,0 |
+</div>
+
+To use additional colors, they need to be defined in (what is known as) the
+Latex preamble.  The preamble can be set as either a web or topic preference
+variable
+<verbatim>
+	* #Set PREAMBLE = \usepackage{color} \definecolor{Aqua}{rgb}{0,1,1}
+</verbatim>
+
+or as a multi-line declaration, using the tags:
+%<nop>BEGINLATEXPREAMBLE% and %<nop>ENDLATEXPREAMBLE%
+
+For convenience, the following TWiki colors are pre-defined in the LatexModePlugin
+<verbatim>
+	\definecolor{Red}{rgb}{1,0,0}
+	\definecolor{Blue}{rgb}{0,0,1}
+	\definecolor{Yellow}{rgb}{1,1,0}
+	\definecolor{Orange}{rgb}{1,0.4,0}
+	\definecolor{Pink}{rgb}{1,0,1}
+	\definecolor{Purple}{rgb}{0.5,0,0.5}
+	\definecolor{Teal}{rgb}{0,0.5,0.5}
+	\definecolor{Navy}{rgb}{0,0,0.5}
+	\definecolor{Aqua}{rgb}{0,1,1}
+	\definecolor{Lime}{rgb}{0,1,0}
+	\definecolor{Green}{rgb}{0,0.5,0}
+	\definecolor{Olive}{rgb}{0.5,0.5,0}
+	\definecolor{Maroon}{rgb}{0.5,0,0}
+	\definecolor{Brown}{rgb}{0.6,0.4,0.2}
+	\definecolor{Black}{gray}{0}
+	\definecolor{Gray}{gray}{0.5}
+	\definecolor{Silver}{gray}{0.75}
+	\definecolor{White}{gray}{1}
+</verbatim>
+One does not need to declare a preamble to use these colors.
+
+---++ Examples
+
+<table width="600" align="center" border=1><tr><td>
+%PURPLE%This is an example of the %BEGINLATEX{inline="1" density="200" gamma="1.0" color="Purple"}%\LaTeX%ENDLATEX% rendering possibilities using the LatexModePlugin.%ENDCOLOR%  
+
+<blockquote>
+The singular value decomposition of a matrix %$A$% is defined as
+%BEGINLATEX{label="one" color="Green"}%
+\begin{displaymath}
+A = U \Sigma V^H
+\end{displaymath}
+%ENDLATEX%
+where %$U$% and %$V$% are both matrices with orthonormal columns, %$\{\cdot\}^H$% indicates a complex-conjugate transpose, and %$\Sigma$% is a diagonal matrix with singular values %\[ \sigma_1 > \sigma_2 > \cdots > \sigma_n \geq 0 \]% along the main diagonal.  Eq. %REFLATEX{one}% is just one of the many matrix decompositions that exists for matrix %$A$%.  
+</blockquote>
+</table>
+
+After the plugin has been succesfully installed and configured, this example should render like this:
+<div align="center">
+	 <img src="%ATTACHURLPATH%/expl-v1.4.png" alt="expl-v1.4.png"  width="673" height="237"  />
+</div>
+
+[Note: the following may or may not be useful...]
+Both DENSITY and SCALE alter the rendered image size and quality. For example, if one doubles the DENSITY and halves the SCALE, the rendered image resolution will improve but keep the same image size on the rendered page.  (Note: DENSITY * SCALE is the same in both cases)
+<div align="center">
+| density = 116, scale = 2.0 : | %BEGINLATEX{density="116" scale="2.0"}% \[ \mathcal{A } \] %ENDLATEX% |
+| density = 232, scale = 1.0 : | %BEGINLATEX{density="232" scale="1.0"}% \[\mathcal{A}\] %ENDLATEX% | 
+</div>
+
+For regular browser viewing, the SCALE parameter sould be set to 1.0.  However, one can use these parameters to improve print quality when printing a topic.  To do this, increase the DENSITY setting (a value of 300 will give roughly 300dpi) and then set the SCALE setting below 1.0.
+
+---++Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+these plugin settings write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>LATEXMODEPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, as shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Enables <nop>LaTeX markup (mathematics and more) in TWiki pages
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+	* Set the dots-per-inch default density level for the rendered images (116 is suggested for 11pt browser fonts.)
+		* Set DENSITY = 116
+
+	* Set the gamma correction for the rendered images.  This controls how dark the rendered text appears
+		* Set GAMMA = 0.6
+
+	* Set the scaling for the image size.  Typically, set to '1'.
+		* Set SCALE = 1.0
+
+	* Uncomment the following to define a site-wide custom color, <nop>DarkBlue.
+		* #Set PREAMBLE = \usepackage{color} \definecolor{DarkBlue}{rgb}{0,0.1,0.43} 
+
+	* In addition, the following parameters are available at the *topic* level, =EQN=, =FIG=, =TBL=, to override counter reset.  (i.e. if =&nbsp;&nbsp;&nbsp;*&nbsp;Set&nbsp;EQN&nbsp;=&nbsp;3= is declared in a topic, the first labeled equation will be given the number =4=.)
+
+---+++ Plugin Installation Instructions
+
+First, confirm that the external software needed by the plugin is installed on the TWiki server.  This includes:
+	* The =Digest::MD5= perl module.
+	* A working <nop>LaTeX implementation ([[http://www.tug.org/tetex/][tetex]] and <nop>[[http://www.miktex.org/][MikTeX]] are two popular choices)
+	* the [[http://www.cs.wisc.edu/~ghost/][Ghostscript]] package
+	* the 'convert' executable from either <nop>[[http://www.imagemagick.org/][ImageMagick]] or <nop>[[http://www.graphicsmagick.org/][GraphicsMagick]]
+
+Second,
+	* Download the ==%TOPIC%.zip== file from the Plugin web
+	* Unzip ZIP file in your twiki installation directory. Content:
+		| *File:* | *Description:* |
+		| ==lib/TWiki/Plugins/LatexModePlugin.pm== | Plugin Perl module |
+		| ==data/TWiki/LatexModePlugin.txt== | Plugin topic and documentation |
+		| ==pub/TWiki/LatexModePlugin/expl-v1.4.png== | example image of rendered latex |
+
+Finally,
+	* customize the installization specific variables to point to the local location of =latex=, =dvips= and =convert=
+
+---++ More Details
+
+Version control is not specifically used for the image files.  Because the images are generated from the raw text, the topic history includes all the versions of the markup for the expressions, and can be re-rendered when you view a different version.
+
+
+This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin created by TWiki:Main.GraemeLufkin.  There are a number of significant differences:
+	* latex-dvips-convert is used in place of =latex2html=, consequently
+		* hash table mismatching between twiki and images generated by =latex2html= is eliminated, which was a source of many problems in the TWiki:Plugins.MathModePlugin.
+		* greater flexibility in markup rendering is available.
+		* the rendering is done image-by-image, so the cost of total page rendering time should be linear. (that is, ten images will take ten times as long to render as one image.)
+	* multi-line latex markup is now possible.  Consequently, this now means that a &lt;nop&gt; must be included to disable rendering in documentation, as opposed to spliting the math markup over multiple lines as before.
+	* equations can be numbered, with automatic cross-links available
+	* if errors occur during the latex markup processing, they are reported during the editing =preview= screen, but not during the standard =view=.  The motivation for this is that, in general, _authors_ care about the error but _readers_ do not.
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ScottHoge |
+|  Plugin Version: | 14 Oct 2005 (v 2.1) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Oct 2005 (v 2.1) | minor modifications for GenPDFLatexAddOn support |
+|  unreleased  (v 2.0) | Major rewrite for Dakar |
+|  30 Sep 2005 (v 1.41) | relaxed the scrubing a little bit... previous version caused problems with REFLATEX |
+|  29 Sep 2005 (v 1.4) | more robust scrubing of =convert= input parameters. errors on =save= now reported. |
+|  5 Sep 2005 (v 1.3) | added image scale parameter, color rendering, and preamble hooks | 
+|  22 Aug 2005 (v 1.2) | Forked from the TWiki:Plugins.MathModePlugin by TWiki:Main.GraemeLufkin |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.025 |
+|  CPAN Dependencies: | Digest::MD5, File::Basename, Image::Info |
+|  Other Dependencies: | A working installation of =latex= and =convert= |
+|  Perl Version: | 5.8.0 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+This plugin was created and tested on the 02 Sep 2004 version of TWiki, using <nop>ImageMagick v5.5.7, EPS <nop>GhostScript v7.05, and tetex v2.02.  It has been reported to work (Thanks Jos!) using
+<nop>ImageMagick 6.2.3, tetex 3.0 and ghostscript 8.51 as well.
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins.MathModePlugin
+
+%META:FILEATTACHMENT{name="expl-v1.4.png" attr="" comment="" date="1125951879" path="expl-v1.4.png" size="22729" user="ScottHoge" version="1.4"}%
