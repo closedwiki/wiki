@@ -5,9 +5,11 @@ use Data::Dumper qw( Dumper );
 BEGIN {
     use File::Spec;
 
-    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS} || '../lib' )) {
+    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS}  )) {
         unshift @INC, $pc;
     }
+    unshift @INC, '../lib/CPAN/lib/';
+    unshift @INC, '../lib/';
 
     # designed to be run within a SVN checkout area
     my @path = split( /\/+/, File::Spec->rel2abs($0) );

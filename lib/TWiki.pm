@@ -1004,9 +1004,14 @@ sub new {
     $remoteUser ||= $query->remote_user() || $TWiki::cfg{DefaultUserLogin};
 
     my $this = bless( {}, $class );
-    
+
     $this->{htmlHeaders} = {};
     $this->{context} = {};
+    if ($query->param('command_line') == 1 ) {
+	    $this->{context}->{command_line} = 1;
+		$TWiki::cfg{UseClientSessions} = 0;	#don't use sessions on the command line
+    }
+
     $this->{_removed}={};
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;

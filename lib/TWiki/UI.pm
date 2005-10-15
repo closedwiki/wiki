@@ -69,7 +69,7 @@ sub run {
         # script is called by cron job or user
         $scripted = 1;
         $user = '';
-        $query = new CGI( "" );
+        $query = new CGI( {'command_line'=>1} );
         while( scalar( @ARGV )) {
             my $arg = shift( @ARGV );
             if ( $arg =~ /^-?([A-Za-z0-9_]+)$/o ) {
@@ -87,7 +87,6 @@ sub run {
     }
 
     my $session = new TWiki( $user, $query );
-    $session->{context}->{command_line} = $scripted;
 
     local $SIG{__DIE__} = \&Carp::confess;
 
