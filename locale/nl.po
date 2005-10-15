@@ -1115,10 +1115,6 @@ msgid ""
 "will automatically be removed."
 msgstr ""
 
-#: data/TWiki/WebTopBar.txt:7
-msgid "Jump:"
-msgstr ""
-
 #: data/TWiki/WebSearchAdvanced.txt:46
 msgid "Last editor"
 msgstr ""
@@ -1623,11 +1619,11 @@ msgstr ""
 msgid "Skip to actions"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:187
+#: templates/twiki.pattern.tmpl:172
 msgid "Skip to bottom"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:187
+#: templates/twiki.pattern.tmpl:172
 msgid "Skip to topic"
 msgstr ""
 

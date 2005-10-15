@@ -1214,10 +1214,6 @@ msgstr ""
 "fazer links pra ela depois. Caracteres não permitidos em nomes de web, como "
 "espaços, serão removidos automaticamente."
 
-#: data/TWiki/WebTopBar.txt:7
-msgid "Jump:"
-msgstr "Pular para:"
-
 #: data/TWiki/WebSearchAdvanced.txt:46
 msgid "Last editor"
 msgstr "Último a alterar"
@@ -1741,11 +1737,11 @@ msgstr "Tamanho"
 msgid "Skip to actions"
 msgstr "Pular para ações"
 
-#: templates/twiki.pattern.tmpl:187
+#: templates/twiki.pattern.tmpl:172
 msgid "Skip to bottom"
 msgstr "Pular para o final"
 
-#: templates/twiki.pattern.tmpl:187
+#: templates/twiki.pattern.tmpl:172
 msgid "Skip to topic"
 msgstr "Pular para o tópico"
 
@@ -2603,6 +2599,9 @@ msgstr "obtidos em %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "ver"
+
+#~ msgid "Jump:"
+#~ msgstr "Pular para:"
 
 #~ msgid "Web"
 #~ msgstr "Web"

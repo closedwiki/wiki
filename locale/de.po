@@ -1224,10 +1224,6 @@ msgstr ""
 "nachher leichter ist darauf zu verweisen. Zeichen wie z.B. Leerzeichen, die "
 "nicht in Web Namen erlaubt sind, werden automatisch entfernt."
 
-#: data/TWiki/WebTopBar.txt:7
-msgid "Jump:"
-msgstr "Sprung:"
-
 #: data/TWiki/WebSearchAdvanced.txt:46
 msgid "Last editor"
 msgstr "Letzter Bearbeiter"
@@ -1758,11 +1754,11 @@ msgstr "Größe"
 msgid "Skip to actions"
 msgstr "Zu den Aktionen"
 
-#: templates/twiki.pattern.tmpl:187
+#: templates/twiki.pattern.tmpl:172
 msgid "Skip to bottom"
 msgstr "nach unten"
 
-#: templates/twiki.pattern.tmpl:187
+#: templates/twiki.pattern.tmpl:172
 msgid "Skip to topic"
 msgstr "Zum Topic"
 
@@ -2632,3 +2628,6 @@ msgstr "abgefragt um %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
+
+#~ msgid "Jump:"
+#~ msgstr "Sprung:"
