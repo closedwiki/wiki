@@ -1,0 +1,15 @@
+.patternPage {
+    margin-left:8%;
+    margin-right:8%;
+}
+.patternLeftBar {
+	display:none;
+}
+.patternMain,
+.patternTopBar,
+.patternBottomBar {
+	margin-left:0; /* left margin + width of left bar */	
+}
+.patternBottomBar {
+	padding-left:1em;
+}

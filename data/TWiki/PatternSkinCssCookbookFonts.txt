@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="ArthurClemens" date="1129333616" format="1.1" version="1.1"}%
+---+!!  PatternSkinCssCookbook: Font variation
+
+Cookbook example with other fonts and font colors.
+
+   * Set USERSTYLEURL = %ATTACHURL%/fonts.css
+
+
+
+%META:FILEATTACHMENT{name="fonts.css" attachment="fonts.css" attr="" comment="" date="1129333615" path="fonts.css" size="240" stream="fonts.css" user="Main.ArthurClemens" version="0"}%

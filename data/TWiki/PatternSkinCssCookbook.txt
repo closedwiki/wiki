@@ -1,7 +1,61 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128637970" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="ArthurClemens" date="1129333294" format="1.1" version="1.2"}%
 ---+!! %TWIKIWEB%.PatternSkin CSS Cookbook
 
+This topic describes how to customize the default look of TWiki for your own needs by changing the default style sheets.
+
 %TOC%
+
+---++ Introduction
+
+!PatternSkin uses 3 style sheets:
+   * layout.css - the positioning of main page elements (blocks), widths and heights
+   * style.css - fonts, sizes, margins and paddings
+   * colors.css - border colors, text colors and background colors
+These stylesheets are attached to the %TWIKIWEB%.PatternSkin topic.
+
+When customizing your TWiki installation, you can either choose to completely rewrite all css styles, or to selectively override some styles. The latter option is by far less time consuming, but all depends on your graphical wishes.
+
+---+++ Rewriting CSS
+   * Create a new topic that will contain your new CSS files
+   * Attach 3 new style sheets to the topic
+   * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files (remove the dashes):
+<verbatim>
+      * #Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/layout.css
+      * #Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/style.css
+      * #Set TWIKICOLORURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/colors.css
+ </verbatim>
+   * If you use less than these 3 CSS files, let the =TWIKIXXXURL= variable point to an empty CSS file. An empty file is attached to the !PatternSkin topic:
+<verbatim>
+      * #Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+      * #Set TWIKICOLORURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+ </verbatim>
+
+---+++ Adding to existing CSS
+With CSS you cannot remove already defined classes, you can only add to it, or overwrite existing styles. <br />
+Overriding default CSS is done with 3 variables: =USERLAYOUTURL=, =USERSTYLEURL=, =USERCOLORSURL=.
+   * Create a new topic that will contain your new CSS files
+   * Attach 1, 2 or 3 new style sheets to the topic, dependent on your CSS setup (if you don't change much, you might as well put everything in one CSS file, layout, margins and colors)
+   * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files (below the =TWIKIXXXURL= variables) (remove the dashes):
+<verbatim>
+      * #Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/layout.css
+      * #Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/style.css
+      * #Set USERCOLORSURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/colors.css
+ </verbatim>
+   * If you use only little CSS and you've only attached one file, write:
+<verbatim>
+      * #Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/style.css
+ </verbatim>
+
+Instead of setting these variables in [[%TWIKIWEB%.TWikiPreferences]], you can set these in your home topic, or in any other topic. Setting style URL variables in:
+   * [[%TWIKIWEB%.TWikiPreferences]]: the style is visible for all users, site-wide
+   * WebPreferences: the style is visible for all users in one web
+   * Home topic: the style is visible for that one user when viewing the site
+   * Some other topic: the style is only visible in that one topic
+
+User styles are always loaded after TWiki styles.
+
+The rest of this topic shows examples of small CSS changes.
+
 
 ---++ Hide the left bar
 
@@ -10,8 +64,13 @@ Use the =USERSTYLEURL= variable. No, variable is not used for users only; and th
 Follow these steps:
    1 Create a new topic, for instance HideLeftBar. You may also want to use a central place for styles - in that case you can choose TWikiPreferences, or a new topic [[TWiki.CustomStyles]] or something. I'll use the last one for the example below.
    1 In that topic, attach a css file (see attached example). Use the file that matches your TWiki installation (current is Cairo).
-   1 In the topic where you wish to hide the left bar, write <code>   * Set USERSTYLEURL = %<nop>PUBURL%/TWiki/CustomStyles/hideleftbar_Dakar.css</code>
+   1 In the topic where you wish to hide the left bar, write <verbatim>   * Set USERSTYLEURL = %PUBURL%/TWiki/CustomStyles/hideleftbar_Dakar.css</verbatim>
+
+---++ Center the page
+
+See example at: PatternSkinCssCookbookCenterPage
 
 
-%META:FILEATTACHMENT{name="hideleftbar_Cairo.css" attr="" comment="css to hide the left bar (Cairo)" date="1128637851" path="hideleftbar_Cairo.css" size="106" user="ArthurClemens" version="1.1"}%
-%META:FILEATTACHMENT{name="hideleftbar_Dakar.css" attr="" comment="css to hide the left bar (Dakar)" date="1128637872" path="hideleftbar_Dakar.css" size="112" user="ArthurClemens" version="1.1"}%
+
+%META:FILEATTACHMENT{name="hideleftbar_Dakar.css" attr="" autoattached="1" comment="css to hide the left bar (Dakar)" date="1129323328" path="hideleftbar_Dakar.css" size="112" user="ArthurClemens" version=""}%
+%META:FILEATTACHMENT{name="hideleftbar_Cairo.css" attr="" autoattached="1" comment="css to hide the left bar (Cairo)" date="1129323327" path="hideleftbar_Cairo.css" size="106" user="ArthurClemens" version=""}%
