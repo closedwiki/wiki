@@ -9,6 +9,13 @@
 
 
 
+
+%TMPL:DEF{"simpleweblogo"}%<div class="patternSimpleLogo"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a></div>%TMPL:END%
+%TMPL:DEF{"simplewikilogo"}%<div class="patternSimpleLogo"><a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a></div>%TMPL:END%
+
+
+
+
 %TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title='%_{"Back to topic"}%' accesskey='C' rel='nofollow'>%_{"&Cancel"}%</a>%TMPL:END%
 
 
@@ -222,7 +229,7 @@ document.write('<\/style>');
 
 %TMPL:DEF{"content"}%<div class="patternTopic">
 ---+ %TMPL:P{"heading"}%
----+++ <span class="twikiAlert">%TMPL:P{"webaction"}%</span>
+%IF{" '%TMPL:P{"webaction"}%' = '' " then="" else="<h3><span class='twikiAlert'>%TMPL:P{"webaction"}%</span></h3>"}%
 %TMPL:P{"message"}%
 </div>
 %TMPL:P{"topicaction"}%
@@ -234,6 +241,8 @@ document.write('<\/style>');
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
+<div class="patternMiddleContainer"><div class="patternMain">%TMPL:P{"simplewikilogo"}%
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>
 %TMPL:P{"bodyend"}%
 %TMPL:END%

@@ -84,7 +84,7 @@ h1,
 	margin:0 0 .5em 0;
 }
 .patternNoViewPage h1 {
-	font-size:170%;
+	font-size:175%;
 }
 .patternTopic h2,
 .patternTopic h3,
@@ -762,6 +762,10 @@ td.patternToolBar {
 	border-style:solid;
 	margin:0 0 .5em 0;
 	z-index:2;
+}
+
+.patternSimpleLogo {
+	margin:0 0 1.5em 0;
 }
 
 /* Edit page */
