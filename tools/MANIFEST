@@ -69,6 +69,7 @@ data/Sandbox/WebRss.txt 0660
 data/Sandbox/WebSearch.txt 0660
 data/Sandbox/WebSearchAdvanced.txt 0660
 data/Sandbox/WebStatistics.txt 0660
+data/Sandbox/WebTopicCreator.txt 0660
 data/Sandbox/WebTopicList.txt 0660
 data/TWiki/ATasteOfTWiki.txt 0660
 data/TWiki/ATasteOfTWikiTemplate.txt 0660
@@ -252,6 +253,7 @@ data/TWiki/WebLeftBarCookbook.txt 0660
 data/TWiki/WebLeftBarExample.txt 0660
 data/TWiki/WebLeftBarLogin.txt 0660
 data/TWiki/WebLeftBarPersonalTemplate.txt 0660
+data/TWiki/WebLeftBarSearch.txt 0660
 data/TWiki/WebLeftBarWebsList.txt 0660
 data/TWiki/WebNotify.txt 0660
 data/TWiki/WebPreferences.txt 0660
@@ -262,6 +264,7 @@ data/TWiki/WebSearchAdvanced.txt 0660
 data/TWiki/WebSiteTools.txt 0660
 data/TWiki/WebStatistics.txt 0660
 data/TWiki/WebTopBar.txt 0660
+data/TWiki/WebTopicCreator.txt 0660
 data/TWiki/WebTopicEditTemplate.txt 0660
 data/TWiki/WebTopicList.txt 0660
 data/TWiki/WebTopicNonWikiTemplate.txt 0660
@@ -299,6 +302,7 @@ data/_default/WebRss.txt 0660
 data/_default/WebSearch.txt 0660
 data/_default/WebSearchAdvanced.txt 0660
 data/_default/WebStatistics.txt 0660
+data/_default/WebTopicCreator.txt 0660
 data/_default/WebTopicList.txt 0660
 data/mime.types 0440
 DakarReleaseNotes.html 0440

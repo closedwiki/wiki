@@ -43,9 +43,9 @@ msgstr "Registratie voor %2 (%3)"
 msgid "%1 User Authentication"
 msgstr "%1 Gebruikersauthenticatie"
 
-#: data/Main/WebLeftBar.txt:2 data/Sandbox/WebLeftBar.txt:2
-#: data/TWiki/WebLeftBar.txt:2 data/TWiki/WebLeftBarExample.txt:2
-#: data/Trash/WebLeftBar.txt:2 data/_default/WebLeftBar.txt:2
+#: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
+#: data/TWiki/WebLeftBar.txt:3 data/TWiki/WebLeftBarExample.txt:2
+#: data/Trash/WebLeftBar.txt:3 data/_default/WebLeftBar.txt:3
 #: templates/view.pattern.tmpl:51
 msgid "%1 Web"
 msgstr "%1 Web"
@@ -384,7 +384,7 @@ msgstr ""
 msgid "Adding a %1 variable in WebPreferences"
 msgstr ""
 
-#: data/TWiki/WebLeftBar.txt:23
+#: data/TWiki/WebLeftBar.txt:24
 msgid "Admin Maintenance"
 msgstr ""
 
@@ -576,8 +576,9 @@ msgstr ""
 msgid "Change from:"
 msgstr ""
 
-#: data/TWiki/WebLeftBarSearch.txt templates/oopschangelanguage.tmpl:21
-#: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
+#: data/TWiki/WebLeftBarSearch.txt:5 data/TWiki/WebTopBar.txt:8
+#: templates/oopschangelanguage.tmpl:21 templates/oopschangelanguage.tmpl:4
+#: templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr "Taal veranderen"
 
@@ -603,9 +604,9 @@ msgstr ""
 msgid "Changed"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:8 data/Sandbox/WebLeftBar.txt:8
-#: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:4
-#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:6
+#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:9
+#: data/TWiki/WebLeftBar.txt:9 data/TWiki/WebLeftBarExample.txt:4
+#: data/Trash/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:7
 msgid "Changes"
 msgstr ""
 
@@ -663,8 +664,8 @@ msgstr ""
 msgid "Conflict"
 msgstr ""
 
-#: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
-#: templates/oopsaccessdenied.tmpl:42
+#: data/TWiki/TWikiVariablesAtoM.txt:267 templates/oopsaccessdenied.tmpl:11
+#: templates/oopsaccessdenied.tmpl:18 templates/oopsaccessdenied.tmpl:42
 msgid "Contact %1 if you have any questions."
 msgstr ""
 
@@ -694,11 +695,15 @@ msgstr ""
 msgid "Cr&eate"
 msgstr ""
 
+#: data/TWiki/WebTopicCreator.txt:16
+msgid "Create"
+msgstr ""
+
 #: data/Sandbox/WebHome.txt:18
 msgid "Create <nop>TestTopic###"
 msgstr ""
 
-#: data/Sandbox/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
+#: data/Sandbox/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:11
 msgid "Create New Topic"
 msgstr ""
 
@@ -955,8 +960,8 @@ msgstr ""
 msgid "Good examples:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:5
-#: data/TWiki/WebLeftBar.txt:5
+#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:6
+#: data/TWiki/WebLeftBar.txt:6
 msgid "Groups"
 msgstr ""
 
@@ -984,9 +989,9 @@ msgstr ""
 msgid "Hide help"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:3 data/Sandbox/WebLeftBar.txt:3
-#: data/TWiki/WebLeftBar.txt:3 data/Trash/WebLeftBar.txt:3
-#: data/_default/WebLeftBar.txt:3
+#: data/Main/WebLeftBar.txt:4 data/Sandbox/WebLeftBar.txt:4
+#: data/TWiki/WebLeftBar.txt:4 data/Trash/WebLeftBar.txt:4
+#: data/_default/WebLeftBar.txt:4
 msgid "Home"
 msgstr ""
 
@@ -1077,9 +1082,9 @@ msgstr ""
 msgid "Incorrect Password"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:6
-#: data/TWiki/WebLeftBar.txt:6 data/TWiki/WebLeftBarExample.txt:5
-#: data/Trash/WebLeftBar.txt:4 data/_default/WebLeftBar.txt:4
+#: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
+#: data/TWiki/WebLeftBar.txt:7 data/TWiki/WebLeftBarExample.txt:5
+#: data/Trash/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:5
 msgid "Index"
 msgstr ""
 
@@ -1114,6 +1119,10 @@ msgid ""
 "link to them later on. Characters not allowed in web names, such as spaces "
 "will automatically be removed."
 msgstr ""
+
+#: data/TWiki/WebLeftBarSearch.txt:3
+msgid "Jump"
+msgstr "Springen"
 
 #: data/TWiki/WebSearchAdvanced.txt:46
 msgid "Last editor"
@@ -1276,16 +1285,20 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
+#: data/TWiki/TWikiVariablesAtoM.txt:264
+msgid "Notes:"
+msgstr ""
+
 #: templates/renamewebbase.pattern.tmpl:63
 msgid "Notices:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:9
-#: data/TWiki/WebLeftBar.txt:9 data/_default/WebLeftBar.txt:7
+#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:10
+#: data/TWiki/WebLeftBar.txt:10 data/_default/WebLeftBar.txt:8
 msgid "Notifications"
 msgstr ""
 
-#: templates/search.pattern.tmpl:32 templates/searchbookview.pattern.tmpl:12
+#: templates/search.pattern.tmpl:23 templates/searchbookview.pattern.tmpl:12
 #: templates/searchformat.pattern.tmpl:7
 msgid "Number of topics:"
 msgstr ""
@@ -1330,6 +1343,10 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:110
 msgid "Pick one of the %1."
+msgstr ""
+
+#: data/Trash/TrashAttachment.txt:3
+msgid "Placeholder for trashed attachments"
 msgstr ""
 
 #: templates/oopsattention.tmpl:188 templates/oopsattention.tmpl:222
@@ -1383,8 +1400,8 @@ msgstr ""
 msgid "Possible form templates"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:11
-#: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:9
+#: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:12
+#: data/TWiki/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
 msgid "Preferences"
 msgstr ""
 
@@ -1505,13 +1522,13 @@ msgstr ""
 msgid "Saved to:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
-#: data/TWiki/WebLeftBar.txt:7 data/TWiki/WebLeftBarExample.txt:6
-#: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:27
+#: data/Main/WebLeftBar.txt:8 data/Sandbox/WebLeftBar.txt:8
+#: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:6
+#: data/TWiki/WebLeftBarSearch.txt:2 data/TWiki/WebSearch.txt:20
+#: data/TWiki/WebSearchAdvanced.txt:27
 #: data/TWiki/WebTopicNonWikiTemplate.txt:15
-#: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:5
-#: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:5
-#: data/TWiki/WebLeftBarSearch
+#: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:6
+#: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:6
 msgid "Search"
 msgstr ""
 
@@ -1540,7 +1557,7 @@ msgstr ""
 msgid "Search where:"
 msgstr ""
 
-#: templates/search.pattern.tmpl:37 templates/searchbookview.pattern.tmpl:6
+#: templates/search.pattern.tmpl:28 templates/searchbookview.pattern.tmpl:6
 msgid "Searched:"
 msgstr ""
 
@@ -1646,8 +1663,8 @@ msgstr ""
 msgid "Start of topic"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:10
-#: data/TWiki/WebLeftBar.txt:10 data/_default/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:11
+#: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:9
 msgid "Statistics"
 msgstr ""
 
@@ -1917,6 +1934,10 @@ msgstr ""
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr ""
 
+#: data/TWiki/WebTopicCreator.txt:19
+msgid "To create a new topic, enter name of topic and click 'create.'"
+msgstr ""
+
 #: templates/moveattachment.pattern.tmpl:20
 msgid "To delete an attachment move it to web %1, topic %2."
 msgstr ""
@@ -2058,7 +2079,7 @@ msgstr ""
 msgid "User Account %1 Deleted"
 msgstr ""
 
-#: data/TWiki/WebLeftBar.txt:15
+#: data/TWiki/WebLeftBar.txt:16
 msgid "User Reference"
 msgstr ""
 
@@ -2066,8 +2087,8 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:4 data/Sandbox/WebLeftBar.txt:4
-#: data/TWiki/WebLeftBar.txt:4
+#: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBar.txt:5
 msgid "Users"
 msgstr ""
 
@@ -2295,19 +2316,19 @@ msgstr ""
 msgid "about regular expression search"
 msgstr ""
 
-#: lib/TWiki/Access.pm:153
+#: lib/TWiki/Access.pm:150
 msgid "access denied on topic"
 msgstr ""
 
-#: lib/TWiki/Access.pm:181
+#: lib/TWiki/Access.pm:178
 msgid "access denied on web"
 msgstr ""
 
-#: lib/TWiki/Access.pm:170
+#: lib/TWiki/Access.pm:167
 msgid "access not allowed on topic"
 msgstr ""
 
-#: lib/TWiki/Access.pm:193
+#: lib/TWiki/Access.pm:190
 msgid "access not allowed on web"
 msgstr ""
 
@@ -2387,7 +2408,3 @@ msgstr ""
 
 #~ msgid "Web"
 #~ msgstr "Web"
-
-#: data/TWiki/WebLeftBarSearch
-msgid "Jump"
-msgstr "Springen"

@@ -34,10 +34,7 @@ foreach my $source (<R>) {
     if( $source =~ m/^bin\/[a-z]/ ||
         ($source =~ m/^lib\/.*\.pm$/ && (! ($source =~ m/^lib\/CPAN\/.*\.pm$/))) ||
         $source =~ m/^templates\/.*\.tmpl$/ ||
-        $source =~ m/^data\/TWiki\/.*Template\.txt$/ ||
-        $source =~ m/^data\/TWiki\/TWikiPreferences\.txt$/ ||
-        $source =~ m/^data\/Main\/.*Template\.txt$/ ||
-        $source =~ m/^data\/.*\/Web.*.txt$/
+        $source =~ m/^data\/.*\.txt$/
         ) {
         push(@sources, $source);
    }
