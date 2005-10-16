@@ -576,10 +576,10 @@ msgstr ""
 msgid "Change from:"
 msgstr ""
 
-#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:21
+#: data/TWiki/WebLeftBarSearch.txt templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
-msgstr ""
+msgstr "Taal veranderen"
 
 #: templates/renamebase.pattern.tmpl:71
 #: templates/renamewebbase.pattern.tmpl:75
@@ -1511,6 +1511,7 @@ msgstr ""
 #: data/TWiki/WebTopicNonWikiTemplate.txt:15
 #: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:5
 #: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBarSearch
 msgid "Search"
 msgstr ""
 
@@ -2386,3 +2387,7 @@ msgstr ""
 
 #~ msgid "Web"
 #~ msgstr "Web"
+
+#: data/TWiki/WebLeftBarSearch
+msgid "Jump"
+msgstr "Springen"

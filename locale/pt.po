@@ -622,7 +622,7 @@ msgstr "Alterar formulário"
 msgid "Change from:"
 msgstr "Alterar de:"
 
-#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:21
+#: data/TWiki/WebLeftBarSearch.txt templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr "Alterar idioma"
@@ -1624,6 +1624,7 @@ msgstr "Salvo como:"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:15
 #: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:5
 #: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBarSearch
 msgid "Search"
 msgstr "Busca"
 
@@ -2600,11 +2601,12 @@ msgstr "obtidos em %1"
 msgid "view"
 msgstr "ver"
 
-#~ msgid "Jump:"
-#~ msgstr "Pular para:"
-
 #~ msgid "Web"
 #~ msgstr "Web"
 
 #~ msgid "Notes:"
 #~ msgstr "Notas:"
+
+#: data/TWiki/WebLeftBarSearch
+msgid "Jump"
+msgstr "Pular para"

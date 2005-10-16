@@ -3,6 +3,9 @@
 <tr><td valign="middle">
 <a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a>
 </td></tr></table></div>
+<!-- Optional change language / jump box and search box at in top  bar */
 <div class="twikiRight patternMetaNav">
-%IF{"context i18n_enabled" then='[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?template=oopschangelanguage][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/flag-gray-small.gif" width="13" height="13" alt="%MAKETEXT{\"Change language\"}%" border="0" /> %MAKETEXT{"Change language"}%]]'}%<form name="top" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%"><input id="searchboxTop" type="text" name="search" value="%URLPARAM{ "search" encode="entity" scope="topic" }%" size="16" /><input type="image" id="goSearchTop" value="GoSearch" name="GoSearch" src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/search-small.gif" align="middle" border="0" style="width:13px; height:13px;" /></form>
-</div>
+%IF{"context i18n_enabled" then='[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?template=oopschangelanguage][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/flag-gray-small.gif" width="13" height="13" alt="%MAKETEXT{\"Change language\"}%" border="0" /> %MAKETEXT{"Change language"}%]]'}%
+ <form name="jumpForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%"> <input type="text" id="jumpBox" name="topic" size="16" /></label><input type="image" id="jumpButton" src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/arrowright-small.gif" align="middle" border="0" style="width:13px; height:13px;" /></form>
+ <form name="quickSearchForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/WebSearch"}%"><input id="quickSearchSearchBox" type="text" name="search" value="%URLPARAM{ "search" encode="entity" scope="topic" }%" size="16" /><input type="image" id="quickSearchButton" src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/search-small.gif" align="middle" border="0" style="width:13px; height:13px;" /></form>
+</div> -->

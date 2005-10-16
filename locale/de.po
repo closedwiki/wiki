@@ -624,7 +624,7 @@ msgstr "Formular wechseln"
 msgid "Change from:"
 msgstr "Geändert von:"
 
-#: data/TWiki/WebTopBar.txt:7 templates/oopschangelanguage.tmpl:21
+#: data/TWiki/WebLeftBarSearch.txt templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr "Sprache wechseln"
@@ -1641,6 +1641,7 @@ msgstr "Speichern nach:"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:15
 #: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:5
 #: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:5
+#: data/TWiki/WebLeftBarSearch
 msgid "Search"
 msgstr "Suchen"
 
@@ -2629,5 +2630,6 @@ msgstr "abgefragt um %1"
 msgid "view"
 msgstr "Ansehen"
 
-#~ msgid "Jump:"
-#~ msgstr "Sprung:"
+#: data/TWiki/WebLeftBarSearch
+msgid "Jump"
+msgstr "Sprung"

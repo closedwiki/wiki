@@ -195,11 +195,9 @@ a:hover.twistyTrigger {
 
 /* TipsContrib */
 .tipsOfTheDay {
-	background-color:#E8EEF7; /*BG5*/ 
-	border-color:#BFD8ED; /*BO3*/
+	background-color:#E8EEF7; /*BG5*/
 }
 .patternTopic .tipsOfTheDayHeader {
-	background-color:#fff;
 	color:#333; /*T11*/
 }
 /* TipsContrib - in left bar */
@@ -379,6 +377,19 @@ a:hover .twikiAccessKey {
 .patternTopBarContents .patternSearchBox td {
 	color:#8E9195; /*T8*/
 }
+.patternMetaNav {
+	color:#8E9195; /*T8*/
+}
+.patternMetaNav a:link,
+.patternMetaNav a:visited {
+	color:#8E9195; /*T7*/
+}
+.patternMetaNav a:hover {
+	color:#FBF7E8; /*C3*/
+}
+.patternMetaNav input {
+	background-color:#FEFBF3; /*BG9*/
+}
 /* Left bar */
 .patternLeftBar {
 	border-color:#E2DCC8; /*BO4*/
@@ -399,6 +410,13 @@ a:hover .twikiAccessKey {
 .patternLeftBar b,
 .patternLeftBar strong {
 	color:#333; /*T11*/
+}
+.patternLeftBar input#quickSearchBox,
+.patternLeftBar input#jumpBox {
+	border-color:#E2DCC8;
+}
+.patternLeftBar .patternChangeLanguage {
+	color:#8E9195; /*T8*/
 }
 .patternLeftBarPersonal {
 	background-color:#E8EEF7;
@@ -491,20 +509,6 @@ a:hover .twikiAccessKey {
 .patternToolBar a:hover .twikiAccessKey {
 	background-color:transparent;
 	color:inherit;
-}
-
-.patternMetaNav {
-	color:#8E9195; /*T8*/
-}
-.patternMetaNav a:link,
-.patternMetaNav a:visited {
-	color:#7A4707; /*T6*/ /* same as patternLeftBar */
-}
-.patternMetaNav a:hover {
-	color:#FBF7E8; /*C3*/ /* same as patternLeftBar */
-}
-.patternMetaNav input {
-	background-color:#FEFBF3; /*BG9*/
 }
 
 /* Edit page */

@@ -365,3 +365,4 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="changes-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="changes-small.gif" size="89" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="web-bg-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="web-bg-small.gif" size="79" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="search-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="search-small.gif" size="554" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="arrowright-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="arrowright-small.gif" size="100" user="UnknownUser" version=""}%
