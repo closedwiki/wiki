@@ -382,6 +382,7 @@ lib/TWiki.cfg 0440
 lib/TWiki.pm 0440
 locale/de.po 0440
 locale/es.po 0440
+locale/nl.po 0440
 locale/pt.po 0440
 LICENSE 0440
 pub/_work_areas/.htaccess 0440
@@ -405,6 +406,8 @@ pub/TWiki/ClassicSkin/fullscreen.gif 0660
 pub/TWiki/ClassicSkin/screenshot.gif 0660
 pub/TWiki/FileAttachment/Sample.txt 0660
 pub/TWiki/FileAttachment/Smile.gif 0660
+pub/TWiki/PatternSkin/empty.css 0660
+pub/TWiki/PatternSkin/i_arrow_down.gif
 pub/TWiki/PatternSkin/info_bg.gif 0660
 pub/TWiki/PatternSkin/bullet-blue.gif 0660
 pub/TWiki/PatternSkin/style.css 0660
@@ -421,6 +424,11 @@ pub/TWiki/PatternSkinCssCookbook/hideleftbar_Cairo.css 0660
 pub/TWiki/PatternSkinCssCookbook/hideleftbar_Dakar.css 0660
 pub/TWiki/PatternSkinCssCookbookCenterPage/centerpage.css 0660
 pub/TWiki/PatternSkinCssCookbookFonts/fonts.css 0660
+pub/TWiki/PatternSkinCustomization/LowRes.css 0660
+pub/TWiki/PatternSkinPalette/PatternSkinPalette.css 0660
+pub/TWiki/PatternSkinPalette/filterColours.pl.txt 0660
+pub/TWiki/PatternSkinPalette/makeColourTable.pl.txt 0660
+pub/TWiki/PatternSkinPalette/textmask.gif
 pub/TWiki/PlainSkin/fullscreen.gif 0660
 pub/TWiki/PlainSkin/screenshot.gif 0660
 pub/TWiki/PreviewBackground/blankltgraybg.gif 0660
