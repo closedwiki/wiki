@@ -5,42 +5,150 @@
  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
  <style type="text/css">
 
-body { 
-  font-family:"Lucida Grande", verdana, arial, sans-serif;
-  font-size: small;
-  background-color: #f7f7f7;
-  margin: 0;
+
+	
+/* HTML elements */
+html body {
+	line-height:1.4em; /*S1*/
+	font-family:"Lucida Grande", verdana, arial, sans-serif;
+	margin:0em;
+	padding:0em;
+	font-size:x-small;
+	voice-family:"\"}\""; 
+	voice-family:inherit;
+	font-size:small;
 }
-.twikiContent {
-  margin-top: 4em;
-  margin-left: 10em;
-  margin-right: 10em;
-  padding: 1em;
-  background-color: white;
-  border: solid #ccc 1px;
+html>body { /* Mozilla */
+	font-size:small;	
 }
-h1 {
-  font-size:195%;
-  color:#DE5D07;
-  margin:0 0 .5em 0;
+p {
+	margin:1em 0 0 0;
 }
-strong {
-  color: #666;
+table {
+	border-collapse:separate;
 }
-a:visited, a:link {
-  background-color: transparent;
-  color: #775;
+th {
+	line-height:1.15em;
 }
-a:hover {
-  background-color: red;
-  color: white;
+strong, b {
+	font-weight:bold;
 }
- 
- 
+hr {
+	height:1px;
+	border:none;
+}
+pre, code, tt {
+	font-size:100%;
+	line-height:1.4em; /*S1*/
+}
+/* put overflow pre in a scroll area */
+pre {
+	overflow-x:auto;
+    overflow-y:visible;
+    padding-bottom:1.5em;
+    width:100%;
+}
+html>body pre { /* hide from IE */
+	padding-bottom:0;
+	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
+}
+ol li, ul li {
+	line-height:1.4em; /*S1*/
+}
+	
+/* Text */
+h1, h2, h3, h4, h5, h6 {
+	font-family:"Lucida Grande", arial, verdana, sans-serif;
+	line-height:104%;
+	padding:0em;
+	margin:1em 0 .1em 0;
+}
+
+:link:focus,
+:visited:focus,
+:link,
+:visited,
+:link:active,
+:visited:active {
+	text-decoration:underline;
+}
+:link:hover,
+:visited:hover {
+	text-decoration:none;
+}
+
+img {
+	vertical-align:text-bottom;
+}
+
+html body {
+	background-color:#fff; /*BG1*/
+	color:#000; /*T1*/
+}
+/* be kind to netscape 4 that doesn't understand inheritance */
+body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
+	background-color:transparent;
+}
+hr {
+	color:#ccc; /*BO6*/
+	background-color:#ccc; /*BO6*/
+}
+pre, code, tt {
+	color:#7A4707; /*T6*/
+}
+h1, h2, h3, h4, h5, h6 {
+	color:#a00; /*T5*/
+}
+.patternNoViewPage h1 {
+	font-size:170%;
+}
+h1 a:link,
+h1 a:visited {
+	color:#a00; /*T5*/
+}
+:link:focus,
+:visited:focus,
+:link,
+:visited,
+:link:active,
+:visited:active {
+	color:#06c; /*T2*/;
+	background-color:transparent;
+}
+:link:hover,
+:visited:hover {
+	color:#FBF7E8; /*C3*/
+	background-color:#D6000F; /*BG2*/
+}
+:link:hover img,
+:visited:hover img {
+	background:#fff; /*BG1*/
+}
+.patternMain {
+	margin:0 0 0 16%;
+}
+.patternNoViewPage .patternMain {
+	margin-left:3%;
+	margin-right:3%;
+	/* padding in style.css */
+}
+.patternMain {
+	padding:0 1.5em 1em 2em;
+	border-width:1px;
+	border-style:solid;
+}
+.patternNoViewPage .patternMain {
+	padding-top:2em;
+	padding-bottom:2em;
+	margin-bottom:1em;
+}
+.patternMain {
+	background-color:#fff; /*BG1*/
+	border-color:#E2DCC8; /*BO4*/
+}
  </style>
 </head>
-<body>
-<div class='twikiContent'>
+<body class="patternNoViewPage"><div class="patternMain">
  <h1>Welcome to TWiki</h1>
  <ul>
   <li> <a href="readme.txt">README</a> </li>
