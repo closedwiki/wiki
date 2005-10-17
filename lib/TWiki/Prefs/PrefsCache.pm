@@ -88,6 +88,7 @@ sub loadPrefsFromTopic {
     if( $session->{store}->topicExists( $web, $topic )) {
         my( $meta, $text ) =
           $session->{store}->readTopic( undef, $web, $topic, undef );
+        
         my $parser = new TWiki::Prefs::Parser();
         $parser->parseText( $text, $this, $keyPrefix );
         $parser->parseMeta( $meta, $this, $keyPrefix );

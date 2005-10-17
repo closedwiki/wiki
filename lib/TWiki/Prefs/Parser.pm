@@ -68,25 +68,36 @@ sub parseText {
     my $key = '';
     my $value ='';
     my $type;
+    my $verbatim_depth = 0;
+    my $tag = 'verbatim';
     foreach my $line ( split( /\r?\n/, $text ) ) {
-        if( $line =~ m/$TWiki::regex{setVarRegex}/o ) {
-            if( $type ) {
-                $prefs->insert( $type, $keyPrefix.$key, $value );
-            }
-            $type = $1;;
-            $key = $2;
-            $value = (defined $3) ? $3 : '';
-        } elsif( $type ) {
-            if( $line =~ /^\s+/ && $line !~ m/$TWiki::regex{bulletRegex}/o ) {
-                # follow up line, extending value
-                $value .= "\n$line";
-            } else {
-                $prefs->insert( $type, $keyPrefix.$key, $value );
-                undef $type;
-            }
-        }
+        if( $line =~ m/^([^<]*)<$tag\b([^>]*)?>(.*)$/im ) {
+        	$verbatim_depth++;
+        }    
+        if( $line =~ m/^([^<]*)<\/$tag>(.*)$/im ) {
+        	--$verbatim_depth;
+		}
+		   
+		if ( $verbatim_depth <= 0) {
+	        if( $line =~ m/$TWiki::regex{setVarRegex}/o ) {
+    	        if( $type ) {
+    	            $prefs->insert( $type, $keyPrefix.$key, $value );
+    	        }
+    	        $type = $1;;
+    	        $key = $2;
+    	        $value = (defined $3) ? $3 : '';
+    	    } elsif( $type ) {
+    	        if( $line =~ /^\s+/ && $line !~ m/$TWiki::regex{bulletRegex}/o ) {
+    	            # follow up line, extending value
+    	            $value .= "\n$line";
+    	        } else {
+    	            $prefs->insert( $type, $keyPrefix.$key, $value );
+    	            undef $type;
+    	        }
+    	    }
+    	}
     }
-    if( $type ) {
+    if( $type && ( $verbatim_depth <= 0) ) {
         $prefs->insert( $type, $keyPrefix.$key, $value );
     }
 }

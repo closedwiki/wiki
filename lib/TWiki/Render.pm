@@ -1483,33 +1483,46 @@ sub takeOutBlocks {
     my $pre;
     my $scoop;
     my $tagParams;
+    
+    #SMELL: does not deal correctly with multiple verbatim tags on the same line
 
     foreach my $line ( split/\r?\n/, $intext ) {
-        if( $line =~ m/^([^<]*)<$tag\b([^>]*)?>(.*)$/im ) {
-            unless( $depth++ ) {
+    	my $openTagFoundInThisLine = 0;
+        if( $line =~ m/^(.*)<$tag\b([^>]*)?>(.*)$/im ) {
+        	$openTagFoundInThisLine = 1;
+        	$depth++;
+            if ( $depth == 1 ) {
                 $pre = $1;
                 $tagParams = $2;
                 if( defined( $3 ) && $3 ne '' ) {
-                    $scoop = $3."\n";
+                    $scoop = $3;
                 } else {
                     $scoop = '';
                 }
-                next;
+                $line = $scoop;
+#                next;
             }
         }
-        if( $depth && $line =~ m/^([^<]*)<\/$tag>(.*)$/im ) {
+        if( $depth && $line =~ m/^(.*)<\/$tag>(.*)$/im ) {
             my $bol = $1;
             my $eol = $2;
-            unless( --$depth ) {
+            if ( $depth == 1) {
                 my $placeholder = $tag.$placeholderMarker;
                 $placeholderMarker++;
                 $map->{$placeholder}{params} = $tagParams;
-                $map->{$placeholder}{text} = $scoop.$bol;
+                if ( $scoop eq $line ) {
+                	#we're on the same line, $bol is all we want
+	                $map->{$placeholder}{text} = $bol;
+                } else {
+	                $map->{$placeholder}{text} = $scoop.$bol;
+                }
                 $line = $pre.'<!--'.$TWiki::TranslationToken.$placeholder.
-                  $TWiki::TranslationToken.'-->'.$eol;
+                  $TWiki::TranslationToken.'-->';
+
             }
+            --$depth;
         }
-        if ( $depth ) {
+        if ( $depth > 0 ) {
             $scoop .= $line."\n";
         } else {
             $out .= $line."\n";
@@ -1526,7 +1539,7 @@ sub takeOutBlocks {
         $map->{$placeholder}{params} = $tagParams;
         $map->{$placeholder}{text} = $scoop;
         $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
-          $TWiki::TranslationToken."-->\n";
+          $TWiki::TranslationToken."-->";
     }
 
     return $out;
@@ -1570,7 +1583,7 @@ sub putBackBlocks {
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
             $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
-              (<$newtag$params>\n$val</$newtag>);
+              (<$newtag$params>$val</$newtag>);
             delete( $map->{$placeholder} );
         }
     }
