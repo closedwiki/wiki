@@ -139,6 +139,7 @@ BEGIN {
 
     $I18Mods =
     {
+        'Locale::Maketext' => "Localization framework",
         'Locale::Maketext::Lexicon' => "I18N translations",
     };
 
