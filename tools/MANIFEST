@@ -24,8 +24,10 @@ bin/twiki 0550
 bin/upload 0550
 bin/view 0550
 bin/viewfile 0550
-bin/logos/T-logo34x26-t.gif
 bin/logos/favicon.ico
+bin/logos/info.gif
+bin/logos/T-logo-140x40-t.gif
+bin/logos/warning.gif
 bin/LocalLib.cfg.txt 440
 COPYING 0440
 COPYRIGHT 0440
