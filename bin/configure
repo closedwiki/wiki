@@ -139,7 +139,6 @@ BEGIN {
 
     $I18Mods =
     {
-        'Locale::Maketext' => "Localization framework",
         'Locale::Maketext::Lexicon' => "I18N translations",
     };
 
@@ -1194,15 +1193,12 @@ sub handleUpdate {
         $output .= CGI::h2('Enter the configuration password');
         if ($TWiki::cfg{Password} ne '') {
         	$output .= CGI::p(CGI::strong("Your Password:").CGI::br());
-            #$output .= CGI::span(<<'HERE'
-#First time users: leave this field empty and create a new password below at
-#New Password. <span class="twikiAlert"><b>If no password is set, anyone will be able to make changes.</b></span>
-#HERE
-#                               .CGI::br());
             $output .= CGI::password_field( 'cfgAccess', '', 20, 80 );
             $output .= '&nbsp;' . CGI::submit(-class=>'twikiSubmit', -value=>'Save changes');
-               $output .= CGI::br();
-           }
+            $output .= CGI::br();
+        } else {
+			$output .= CGI::hidden( 'cfgAccess', '' );
+        }
         my $forgotPassword = '';
         if ($TWiki::cfg{Password} ne '') {
             $forgotPassword = CGI::strong("Forgot your password?"). CGI::br(). 'To reset the password, log in to the server and delete the <code>$TWiki::cfg{Password} = \'...\';</code> line in <code>lib/LocalSite.cfg</code><p />';
@@ -1219,7 +1215,9 @@ HERE
 		if ($TWiki::cfg{Password} ne '') {
         	$output .= CGI::p( "You may change your password here:" );
 		}
+
         $output .= CGI::div({ class => 'formElem'},
+        
                             CGI::strong("New Password:").
                             CGI::br().
                             CGI::password_field( 'newCfgP', '', 20, 80 ).
