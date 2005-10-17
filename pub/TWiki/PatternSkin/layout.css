@@ -52,9 +52,11 @@
 
 /* positioning the left bar (width:13em) */
 
-.patternLeftBar,
-.patternLeftBarContents /* needed for Explorer 5.0 */ {
+.patternLeftBar {
 	width:16%;
+}
+.patternLeftBarContents /* needed for Explorer 5.0 */ {
+	width:100%;
 }
 .patternMain {
 	margin:0 0 0 16%;

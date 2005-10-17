@@ -270,7 +270,8 @@ th.twikiSortedDescendingCol a:hover font,
 }
 /* TipsContrib - in left bar */
 .patternLeftBar .tipsOfTheDay {
-	margin:1em 0 .5em 0;
+	margin:1em 1em .5em 0;
+	padding:0 2em 0 0;
 	border-width:0;
 }
 .patternLeftBar .tipsOfTheDayHeader img {
@@ -390,7 +391,7 @@ a:visited .twistyLinkLabel {
 .twikiForm table table,
 .twikiForm table table th,
 .twikiForm table table td {
-	border:none;
+	border:0px;
 }
 
 
@@ -399,12 +400,15 @@ a:visited .twistyLinkLabel {
 	padding:.3em 0 .6em 0;
 }
 .twikiToc ul {
-	list-style:outside; /* list style image is set in twiki.pattern.tmpl */
+	list-style: none;
 	padding:0 0 0 .5em;
 	margin:0em;
 }
 .twikiToc li {
 	margin-left:1em;
+	padding-left:1em;
+	background-repeat:no-repeat;
+	background-position:0 .5em;
 }
 .twikiToc .twikiTocTitle {
 	margin:0em;
@@ -591,26 +595,24 @@ a:hover .twikiAccessKey {
 .patternLeftBar li {
 	padding-left:0;
 }
-.patternLeftBar .patternLeftBarContents {
-	margin:-1px 0 1em 0;
-	padding:0 .5em 0 1em;
-	width:89%;
+.patternLeftBarContents {
+	margin:0 .5em 0 0;
+	padding:0 0 1em 0;
 }
 .patternLeftBar .patternForm {
 	margin:.5em 0 1em 0;
 }
 html>body .patternLeftBar .patternForm { /* Hide from IE */
-	margin:1.25em 0 1em 0;
+	margin-top:1.25em;
 }
-.patternLeftBar .patternFormElements {
+.patternLeftBar .patternFormContainer {
 	margin:0 0 3px 0;
-	width:100%;
 }
 .patternLeftBar input#quickSearchBox,
 .patternLeftBar input#jumpBox {
 	margin:0;
 	height:12px; /* with padding and border this adds up to 16px height - same as button */
-	width:80%;
+	width:70%;
 	border-width:1px;
 	border-style:solid;
 	font-size:85%; /*S3*/
@@ -627,7 +629,7 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 }
 .patternLeftBarPersonal {
 	margin:-1px 0 .7em 0;
-	padding:.25em 0 .25em 1em;
+	padding:.25em .5em .25em 1em;
 	border-width:1px 0;
 	border-style:solid;
 }
@@ -643,6 +645,20 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 }
 .patternLeftBarPersonal a:hover {
 	text-decoration:none;
+}
+/* set the left margin */
+.patternLeftBarContents .patternForm,
+.patternLeftBarContents ul,
+.patternLeftBarContents hr,
+.patternLeftBarContents .patternForm,
+.patternLeftBarContents .tipsOfTheDay {
+	margin-left:1.25em;
+}
+.patternLeftBarPersonal {
+	padding-left:1.25em;
+}
+.patternLeftBarPersonalContent ul {
+	margin-left:0;
 }
 
 /* Bottom bar */

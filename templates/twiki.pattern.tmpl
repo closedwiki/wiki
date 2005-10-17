@@ -44,7 +44,20 @@
     
    	function initPage() { }
 
- 	addLoadEvent(initPage);    
+ 	addLoadEvent(initPage);
+ 	
+ 	/**
+ 	clears default form field value
+ 	*/
+ 	function clearDefaultandCSS(el) {
+		if (el.defaultValue==el.value) el.value = "";
+		// If Dynamic Style is supported, clear the style
+		//if (el.style) el.style.cssText = "";
+		removeClass(el, "patternDefaultFormField"); /* removeClass is included in TwistyContrib/twist.js */
+	}
+	function setDefaultText(el, text) {
+		el.value = el.text;
+	}
 
 //]]>
 </script>%TMPL:END%
@@ -90,16 +103,16 @@ document.write('<\/style>');
 <style type="text/css" media="all">
 	/* Styles that are set using variables */
 	.twikiToc li {
-		list-style-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/i_arrow_down.gif");
+		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/bullet-down.gif");
 	}	        
 	.patternWebIndicator {
 		background-color:%WEBBGCOLOR%;
 	}
-	.patternLeftBarPersonal,
 	.twikiHelp,
 	.patternAccessKeyInfo {
 		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/info_bg.gif");
 	}
+	.patternLeftBarPersonal,
 	.tipsOfTheDay {
 		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/tips_bg.gif") #fff repeat-x;
 	}
@@ -177,9 +190,7 @@ document.write('<\/style>');
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="patternLeftBar">%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
-<div class="patternLeftBarContents">
-%INCLUDE{"%WEB%.WebLeftBar"}%
+%TMPL:DEF{"leftbar"}%<div class="patternLeftBar"><div class="patternLeftBarContents">%INCLUDE{"%WEB%.WebLeftBar"}%
 </div></div>%TMPL:END%
 
 

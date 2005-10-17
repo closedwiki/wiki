@@ -1,7 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121074151" format="1.1" version="$Rev$"}%
+%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarSearch" }%
-   * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][<nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
-   * [[%HOMETOPIC%][ %ICON{"home"}% %MAKETEXT{"Home"}%]]
+---
+   * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
    * [[%MAINWEB%.TWikiUsers][ %ICON{"person"}% %MAKETEXT{"Users"}%]]
    * [[%MAINWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
    * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
@@ -11,8 +12,6 @@
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
    * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
 %INCLUDE{TWikiTipsOfTheDayInclude}% 
-%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-----
    * <b>%MAKETEXT{"User Reference"}%</b>
    * ATasteOfTWiki
    * TextFormattingRules
@@ -35,3 +34,5 @@
 ---
    * *ToolsCategories*
 %SEARCH{"ToolsCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
+---
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
