@@ -15,6 +15,7 @@ BEGIN {
     }
     unshift @INC, "$root/test/unit";
     unshift @INC, "$root/bin";
+    unshift @INC, "$root/lib";
     require 'setlib.cfg';
 };
 
