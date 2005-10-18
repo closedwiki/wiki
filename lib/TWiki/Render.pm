@@ -1517,7 +1517,7 @@ sub takeOutBlocks {
 	                $map->{$placeholder}{text} = $scoop.$bol;
                 }
                 $line = $pre.'<!--'.$TWiki::TranslationToken.$placeholder.
-                  $TWiki::TranslationToken.'-->';
+                  $TWiki::TranslationToken.'-->'.$eol;
 
             }
             --$depth;
