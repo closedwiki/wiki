@@ -1277,6 +1277,10 @@ msgstr "Lokale Datei"
 msgid "Log In"
 msgstr "Einloggen"
 
+#: data/TWiki/WebLeftBarLogin.tmpl:4
+msgid "Register"
+msgstr "Registrieren"
+
 #: templates/twiki.pattern.tmpl:8
 msgid "Log Out"
 msgstr "Ausloggen"

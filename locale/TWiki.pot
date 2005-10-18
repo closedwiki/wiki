@@ -1167,6 +1167,10 @@ msgstr ""
 msgid "Log In"
 msgstr ""
 
+#: data/TWiki/WebLeftBarLogin.tmpl:4
+msgid "Register"
+msgstr ""
+
 #: templates/twiki.pattern.tmpl:8
 msgid "Log Out"
 msgstr ""

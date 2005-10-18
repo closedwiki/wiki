@@ -1165,11 +1165,15 @@ msgstr ""
 
 #: templates/twiki.pattern.tmpl:7
 msgid "Log In"
-msgstr ""
+msgstr "Inloggen"
+
+#: data/TWiki/WebLeftBarLogin.tmpl:4
+msgid "Register"
+msgstr "Registreren"
 
 #: templates/twiki.pattern.tmpl:8
 msgid "Log Out"
-msgstr ""
+msgstr "Uitloggen"
 
 #: templates/mailresetpassword.tmpl:9
 msgid "Login name %1"
