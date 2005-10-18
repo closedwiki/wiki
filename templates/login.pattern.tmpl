@@ -34,6 +34,7 @@
 %TMPL:P{"simpleheader"}%
 ---+ %BANNER%
 %NOTE%
+<div style="margin:1em 0 3em 0;">
 <form action="%SCRIPTURL%/login%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 *%_{"Username"}%*
 <div class="twikiSmall twikiGrayText">%AUTHREALM%</div>
@@ -43,6 +44,12 @@
 <input type="hidden" name="origurl" value="%ORIGURL%" /> %BR%
 <input class="twikiSubmit" type="submit" value='%_{"Logon"}%' />
 </form>
+</div>
+<div class="twikiSmallish">
+%_{"See also:"}% %TWIKIWEB%.TWikiRegistration, %TWIKIWEB%.ResetPassword, %TWIKIWEB%.ChangePassword
+---
+%_{"Contact [_1] if you have any questions.", "%WIKIWEBMASTER%"}%
+</div>
 %TMPL:END%
 
 
