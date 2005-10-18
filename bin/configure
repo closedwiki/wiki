@@ -3746,10 +3746,15 @@ ul {
 .blockLinkAttribute {
     margin-left:0.35em;
 }
+.blockLinkAttribute a:link,
+.blockLinkAttribute a:visited {
+	text-decoration:none;
+}
 a.blockLink {
     display:block;
     padding:0.25em 1em;
     border-bottom:1px solid #aaa;
+    text-decoration:none;
 }
 a:link.blockLink,
 a:visited.blockLink {
@@ -3804,12 +3809,6 @@ div.options div.optionHeader a:visited:hover {
     background-color:#666;
     text-decoration:underline;
 }
-div.options div.optionHeader a:link:hover .warn,
-div.options div.optionHeader a:visited:hover .warn,
-div.options div.optionHeader a:link:hover .error,
-div.options div.optionHeader a:visited:hover .error {
-    
-}
 div.options .twikiSmall {
     margin-left:0.5em;
     color:#bbb;
@@ -3846,6 +3845,11 @@ div.foldableBlock td {
     color:#f60; /* orange */
     background-color:#FFE8D9; /* light orange */
     border-bottom:1px solid #f60;
+}
+a.info,
+a.warn,
+a.error {
+	text-decoration:none;
 }
 .error {
     color:#f00; /*T9*/ /*red*/

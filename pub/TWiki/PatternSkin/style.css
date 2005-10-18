@@ -270,8 +270,8 @@ th.twikiSortedDescendingCol a:hover font,
 }
 /* TipsContrib - in left bar */
 .patternLeftBar .tipsOfTheDay {
-	margin:1em 1em .5em 0;
-	padding:0 2em 0 0;
+	margin:1em 2em .5em 0;
+	padding:0 .5em 0 0;
 	border-width:0;
 }
 .patternLeftBar .tipsOfTheDayHeader img {
@@ -595,10 +595,6 @@ a:hover .twikiAccessKey {
 .patternLeftBar li {
 	padding-left:0;
 }
-.patternLeftBarContents {
-	margin:0 .5em 0 0;
-	padding:0 0 1em 0;
-}
 .patternLeftBar .patternForm {
 	margin:.5em 0 1em 0;
 }
@@ -629,7 +625,7 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 }
 .patternLeftBarPersonal {
 	margin:-1px 0 .7em 0;
-	padding:.25em .5em .25em 1em;
+	padding:.25em .5em .25em 1.25em;
 	border-width:1px 0;
 	border-style:solid;
 }
@@ -646,19 +642,8 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 .patternLeftBarPersonal a:hover {
 	text-decoration:none;
 }
-/* set the left margin */
-.patternLeftBarContents .patternForm,
-.patternLeftBarContents ul,
-.patternLeftBarContents hr,
-.patternLeftBarContents .patternForm,
-.patternLeftBarContents .tipsOfTheDay {
-	margin-left:1.25em;
-}
-.patternLeftBarPersonal {
-	padding-left:1.25em;
-}
-.patternLeftBarPersonalContent ul {
-	margin-left:0;
+.patternLeftBarContents {
+	padding:0 1em 0 1.25em;
 }
 
 /* Bottom bar */
