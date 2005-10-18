@@ -4,8 +4,40 @@
 %TMPL:INCLUDE{"viewtopicactions"}%
 %TMPL:INCLUDE{"viewsidebar"}%
 %TMPL:INCLUDE{"searchbox"}%
-%TMPL:DEF{"titleaction"}% %TMPL:END%
-%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_VIEW% %TMPL:END%
+%TMPL:DEF{"title"}%
+%IFSKINSTATETHEN{release="beijing"}%
+  %IFDEFINED{"%PAGETITLE%" action="view|preview|save|edit" then="%PAGETITLE%" else="%TOPIC%"}%
+%ELSESKINSTATE%
+  %IFDEFINEDTHEN{"%PAGETITLE%" action="view|preview|save|edit"}%
+    %PAGETITLE%
+  %ELSIFDEFINED{"%FORMFIELD{"Headline"}%" action="view|preview|save|edit"}%
+    %FORMFIELD{"Headline"}%
+  %ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%" action="view|preview|save|edit"}%
+    %TOPIC% - %FORMFIELD{"TopicDescription"}%
+  %ELSEDEFINED%
+    %TOPIC%
+  %FIDEFINED%
+%FISKINSTATE%
+%TMPL:END%
+%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_VIEW% 
+%IFSKINSTATETHEN{release="beijing"}%
+%ELSESKINSTATE%
+%IFDEFINEDTHEN{"%FORMFIELD{"SubjectCategory"}%"}%
+<meta name="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
+<meta http-equiv="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
+%FIDEFINED%
+%IFDEFINEDTHEN{"%FORMFIELD{"Headline"}%" action="view"}%
+<meta name="description" content="%FORMFIELD{"Headline"}%" />
+%ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%"}%
+<meta name="description" content="%FORMFIELD{"TopicDesctription"}%" />
+%FIDEFINED%
+%IFDEFINEDTHEN{"%FORMFIELD{"Author"}%"}%
+<meta name="author" content="%FORMFIELD{"Author"}%" />
+%ELSEDEFINED%
+<meta name="author" content="%REVINFO{"$wikiname"}%" />
+%FIDEFINED%
+%FISKINSTATE%
+%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.SearchForm.search.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT%

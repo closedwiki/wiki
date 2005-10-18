@@ -1,6 +1,6 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsmore.nat.tmpl -->
-%TMPL:DEF{"titleaction"}%(more)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (more)%TMPL:END%
 %TMPL:DEF{"heading"}%More Actions on <nop>%WEB%.%TOPIC%%TMPL:END%
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
 %TMPL:DEF{"message"}%
@@ -11,7 +11,7 @@
   <td style="padding-left:20px"> <select name="topicparent"><option value="">Select...</option>
      %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
      </select>&nbsp;
-  <td><input type="submit" style="color:green;width:5em" value="Edit"/><br/>
+  <td><input type="submit" style="color:green;width:5em" value="Ok"/><br/>
   </td>
 </tr><tr>
   <td>

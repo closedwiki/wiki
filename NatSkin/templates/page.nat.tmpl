@@ -1,42 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>
-%IFSKINSTATETHEN{release="beijing"}%
-  %IFDEFINED{"%PAGETITLE%" action="view|preview|save|edit" then="%PAGETITLE%" else="%TOPIC%"}%
-%ELSESKINSTATE%
-  %IFDEFINEDTHEN{"%PAGETITLE%" action="view|preview|save|edit"}%
-    %PAGETITLE%
-  %ELSIFDEFINED{"%FORMFIELD{"Headline"}%" action="view|preview|save|edit"}%
-    %FORMFIELD{"Headline"}%
-  %ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%" action="view|preview|save|edit"}%
-    %TOPIC% - %FORMFIELD{"TopicDescription"}%
-  %ELSEDEFINED%
-    %TOPIC%
-  %FIDEFINED%
-%FISKINSTATE%
-&nbsp;%TMPL:P{"titleaction"}% - <nop>%WIKITOOLNAME%
-</title>
+<title>%TMPL:P{"title"}% - <nop>%WIKITOOLNAME%</title>
 <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
 <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
 <meta http-equiv="Content-Style-Type" content="text/css" /> 
-%IFSKINSTATETHEN{release="beijing"}%
-%ELSESKINSTATE%
-%IFDEFINEDTHEN{"%FORMFIELD{"SubjectCategory"}%"}%
-<meta name="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
-<meta http-equiv="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
-%FIDEFINED%
-%IFDEFINEDTHEN{"%FORMFIELD{"Headline"}%" action="view"}%
-<meta name="description" content="%FORMFIELD{"Headline"}%" />
-%ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%"}%
-<meta name="description" content="%FORMFIELD{"TopicDesctription"}%" />
-%FIDEFINED%
-%IFDEFINEDTHEN{"%FORMFIELD{"Author"}%"}%
-<meta name="author" content="%FORMFIELD{"Author"}%" />
-%ELSEDEFINED%
-<meta name="author" content="%REVINFO{"$wikiname"}%" />
-%FIDEFINED%
-%FISKINSTATE%
 <!-- skin styles -->
 %GETSKINSTYLE%
 <link rel="icon" href="%PUBURL%/%TWIKIWEB%/NatSkin/favicon.ico" type="image/x-icon" /> 

@@ -283,6 +283,9 @@ hr {
   border-right:1px solid #ddd;
   border-bottom:1px solid #ddd;
 }
+.twikiTable th strong font {
+  /*color:#666; */
+}
 
 .twikiTable th {
   background:#fff6bf;
@@ -304,7 +307,7 @@ hr {
 }
 .twikiPageForm input,
 .natTopicForm input {
-  color:#333;
+  color:#444;
 }
 .twikiPageForm table td,
 .twikiPageForm table th,
@@ -330,11 +333,14 @@ hr {
 .natTopicForm table th a {
   background:#fff6bf;
 }
+.natTopicForm select[multiple="on"] {
+  width:98%;
+}
+.natTopicForm select,
 .twikiPageForm table textarea,
 .twikiPageForm table input,
 .natTopicForm table textarea,
 .natTopicForm table input {
-  border:0px;
   background:white;
   border:1px solid #ffd324;
   margin:2px;

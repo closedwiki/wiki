@@ -482,8 +482,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* see also page.nat.tmpl */
 .natMain .natExternalLink:after {
-  margin-left:5px;
+  margin-left:3px;
   content:url("external.png");
+  margin-right:3px;
 }
 
 
@@ -583,12 +584,19 @@ img.alignleft {
 }
 .blogNavigation table {
   width:100%;
+  line-height:110%;
 }
 .blogPrev {
   text-align:left;
+  padding-left:2px;
+  padding-right:5px;
+  width:50%;
 }
 .blogNext {
   text-align:right;
+  padding-left:5px;
+  padding-right:2px;
+  width:50%;
 }
 
 .blogCommentOdd,
@@ -734,7 +742,6 @@ img.alignleft {
 }
 .headlinesDescription {
   font-size:1.1em;
-  text-transform:capitalize;
 }
 .headlinesLogo {
   float:right;
@@ -761,7 +768,6 @@ img.alignleft {
 }
 .headlinesArticle .headlinesTitle a {
   font-size:1.4em;
-  text-transform:capitalize;
 }
 .headlinesArticle .headlinesDate {
   font-style:oblique;
