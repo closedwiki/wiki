@@ -1268,7 +1268,7 @@ msgstr "Iniciar sessão"
 
 #: data/TWiki/WebLeftBarLogin.tmpl:4
 msgid "Register"
-msgstr ""
+msgstr "Registro"
 
 #: templates/twiki.pattern.tmpl:8
 msgid "Log Out"
