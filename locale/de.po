@@ -748,18 +748,16 @@ msgid "Cr&eate"
 msgstr "A&nlegen"
 
 #: data/TWiki/WebTopicCreator.txt:16
-#, fuzzy
 msgid "Create"
-msgstr "A&nlegen"
+msgstr "Anlegen"
 
 #: data/Sandbox/WebHome.txt:18
 msgid "Create <nop>TestTopic###"
 msgstr "Ein <nop>TestTopic### anlegen"
 
 #: data/Sandbox/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:12
-#, fuzzy
 msgid "Create New Topic"
-msgstr "Dieses Topic anlegen"
+msgstr "Neues Topic anlegen"
 
 #: templates/attach.pattern.tmpl:114
 msgid "Create a link to the attached file"
@@ -1395,8 +1393,7 @@ msgid "Notes"
 msgstr "Hinweise"
 
 #: data/TWiki/TWikiVariablesAtoM.txt:264
-#, fuzzy
-msgid "Notes:"
+msgid "Notes"
 msgstr "Hinweise"
 
 #: templates/renamewebbase.pattern.tmpl:63
@@ -1711,9 +1708,8 @@ msgid "See also the verbose %1."
 msgstr "Verwenden Sie ggf. den ausführlichen %1."
 
 #: templates/login.pattern.tmpl:49
-#, fuzzy
 msgid "See also:"
-msgstr "Alles auswählen"
+msgstr "Siehe auch:"
 
 #: templates/attachagain.pattern.tmpl:45
 msgid "Select a new local file to update this attachment."
@@ -1815,13 +1811,12 @@ msgid "Step 1: Select topic parent:"
 msgstr "Schritt 1: Ober-Topic auswählen"
 
 #: templates/oopsmore.pattern.tmpl:34
-#, fuzzy
 msgid ""
 "Step 2: Continue to <input type='submit' class='twikiButton' value='Edit' /> "
 "and save %1 to activate the new parent"
 msgstr ""
-"Schritt 2: Setzen Sie mit <input type='submit' class='twikiSubmit' "
-"value='Edit' /> fort und speichern Sie %1 ab, um das neue Ober-Topic zu "
+"Schritt 2: Setzen Sie mit <input type='submit' class='twikiButton' value='Edit' /> "
+"fort und speichern Sie %1 ab, um das neue Ober-Topic zu "
 "aktivieren."
 
 #: data/TWiki/NewUserTemplate.txt:19
@@ -2656,5 +2651,4 @@ msgstr "abgefragt um %1"
 msgid "view"
 msgstr "Ansehen"
 
-#~ msgid "Home"
-#~ msgstr "Startseite"
+
