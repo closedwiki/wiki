@@ -15,6 +15,7 @@
 	S3 small font size, twikiSmall													85%
 	S4 horizontal bar padding (h2, patternTop)										5px
 	S5 form and attachment padding													20px
+	S6 left margin left bar															12px
 
 	---------------------------------------------------------------------------------------	*/
 
@@ -270,8 +271,8 @@ th.twikiSortedDescendingCol a:hover font,
 }
 /* TipsContrib - in left bar */
 .patternLeftBar .tipsOfTheDay {
-	margin:1em 2em .5em 0;
-	padding:0 .5em 0 0;
+	width:134px;
+	margin:1em 0 .5em 0;
 	border-width:0;
 }
 .patternLeftBar .tipsOfTheDayHeader img {
@@ -541,7 +542,7 @@ a:hover .twikiAccessKey {
 .patternTopBar {}
 .patternTopBarContents {
 	margin:0em;
-	padding:5px 2em 5px 1em; /* right padding same as .patternViewPage .patternMain */ 
+	padding:5px 2em 5px 12px; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
 }
 .patternTopBarContents table {
 	height:50px; /* together with a padding of 2x 5px this assumes a logo of 40px height */
@@ -551,6 +552,16 @@ a:hover .twikiAccessKey {
 	vertical-align:middle;
 	font-size:94%; /*S2*/
 }
+
+/* Bottom bar */
+.patternBottomBar {
+	padding-bottom:1em;
+}
+.patternBottomBarContents {
+	padding:.5em 2.5em 1.5em 2.2em;
+	font-size:94%; /*S2*/
+}
+
 .patternMetaNav {
 	font-size:85%; /*S3*/
 }
@@ -608,14 +619,14 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 .patternLeftBar input#jumpBox {
 	margin:0;
 	height:12px; /* with padding and border this adds up to 16px height - same as button */
-	width:70%;
+	width:111px; /* 115 minus border width */
 	border-width:1px;
 	border-style:solid;
 	font-size:85%; /*S3*/
 }
 .patternLeftBar input#quickSearchButton,
 .patternLeftBar input#jumpButton {
-	margin:0 0 0 4px;
+	margin:0 0 0 3px;
 	padding:0;
 	border:0;
 }
@@ -625,7 +636,7 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 }
 .patternLeftBarPersonal {
 	margin:-1px 0 .7em 0;
-	padding:.25em .5em .25em 1.25em;
+	padding:.25em .5em .25em 12px; /*S6*/
 	border-width:1px 0;
 	border-style:solid;
 }
@@ -643,16 +654,7 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 	text-decoration:none;
 }
 .patternLeftBarContents {
-	padding:0 1em 0 1.25em;
-}
-
-/* Bottom bar */
-.patternBottomBar {
-	padding-bottom:1em;
-}
-.patternBottomBarContents {
-	padding:.5em 2.5em 1.5em .25em;
-	font-size:94%; /*S2*/
+	padding:0 1em 1.5em 12px; /*S6*/
 }
 
 /* table used in various places */

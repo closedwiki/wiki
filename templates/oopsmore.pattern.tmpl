@@ -31,7 +31,7 @@
         <option value="none">%_{"none (remove topic parent)"}%</option>
         %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
         </select>
-      * %_{"Step 2: Continue to <input type='submit' class='twikiSubmit' value='Edit' /> and save [_1] to activate the new parent", "<nop>%TOPIC%"}%
+      * %_{"Step 2: Continue to <input type='submit' class='twikiButton' value='Edit' /> and save [_1] to activate the new parent", "<nop>%TOPIC%"}%
         <input type="hidden" name="t" value="%SERVERTIME{$year$mo$day$hour$min$sec}%" />
 </form>
 
@@ -39,7 +39,7 @@
    * *%_{"View previous topic revision:"}%*
       * %_{"Revision:"}% <input type="text" name="rev" size="6" value="%PARAM2%" />
         <input type="checkbox" class="twikiCheckbox" id="raw" name="raw" /><label for="raw">%_{"in raw text format"}%</label>
-        <input type="submit" class="twikiSubmit" value='%_{"View revision"}%' />
+        <input type="submit" class="twikiButton" value='%_{"View revision"}%' />
       * %_{"Revisions:"}% 1 ... %PARAM1%
 </form>
 
@@ -47,7 +47,7 @@
    * *%_{"Compare revisions:"}%*
       * %_{"Older revision:"}%&nbsp;&nbsp; <input type="text" name="rev2" size="6" value="1" />
       * %_{"Newer revision:"}% <input type="text" name="rev1" size="6" value="%PARAM1%" />
-        <input type="submit" class="twikiSubmit" value='%_{"View difference"}%' />
+        <input type="submit" class="twikiButton" value='%_{"View difference"}%' />
 </form>
 
    * *%_{"Edit topic preference settings:"}%*

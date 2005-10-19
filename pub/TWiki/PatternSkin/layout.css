@@ -53,16 +53,17 @@
 /* positioning the left bar (width:13em) */
 
 .patternLeftBar {
-	width:16%;
+	width:156px;
 }
 .patternLeftBarContents /* needed for Explorer 5.0 */ {
 	width:100%;
 }
 .patternMain {
-	margin:0 0 0 16%;
+	position:relative;
+	margin:0 0 0 156px;
 }
 .patternBottomBar {
-	margin:0 0 0 17%; /* add small margin for content offset */
+	margin:0 0 0 156px; /* add small margin for content offset */
 }
 
 /*	-----------------------------------------------------------

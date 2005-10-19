@@ -414,7 +414,6 @@ a:hover .twikiAccessKey {
 .patternLeftBar input#quickSearchBox,
 .patternLeftBar input#jumpBox {
 	border-color:#E2DCC8;
-	background-color:#fff;
 }
 .patternLeftBar .patternChangeLanguage {
 	color:#8E9195; /*T8*/
