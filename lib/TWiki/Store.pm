@@ -840,8 +840,6 @@ sub saveAttachment {
         }
 
         if ( $opts->{stream} ) {
-            my $fileVersion = $this->getRevisionNumber( $web, $topic,
-                                                        $attachment );
             $action = 'upload';
 
             $attrs = {
@@ -899,6 +897,8 @@ sub saveAttachment {
             throw $error if $error;
 
             $attrs->{name} ||= $attachment;
+            my $fileVersion = $this->getRevisionNumber( $web, $topic,
+                                                        $attachment );
             $attrs->{version} = $fileVersion;
             $attrs->{path} = $opts->{filepath},;
             $attrs->{size} = $opts->{filesize};
