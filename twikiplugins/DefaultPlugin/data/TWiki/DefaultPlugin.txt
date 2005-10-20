@@ -3,7 +3,7 @@
 
 ---+ Default TWiki Plugin
 
-This plugin supports some depreciated rendering of older TWiki versions and of <nop>JosWiki. Create a new [[%TWIKIWEB%.TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some other functionality.
+This plugin supports some deprecated rendering of older TWiki versions and of <nop>JosWiki. Create a new [[%TWIKIWEB%.TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some other functionality.
 
 The plugin is *disabled* by default. You should enable it on sites where there is very old data using legacy syntax.
 
@@ -24,9 +24,9 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin can be used to specify some simple custom rendering rules. It also renders depreciated ==*_text_*== as __bold italic__ text.
+		* Set SHORTDESCRIPTION = This plugin can be used to specify some simple custom rendering rules. It also renders deprecated ==*_text_*== as __bold italic__ text.
 
-	* Allow depreciated ==%<nop>INCLUDE:"TopicName"%== syntax:
+	* Allow deprecated ==%<nop>INCLUDE:"TopicName"%== syntax:
 		* Set OLDINCLUDE = 1
 
 	* Debug plugin: (See output in =data/debug.txt=)
