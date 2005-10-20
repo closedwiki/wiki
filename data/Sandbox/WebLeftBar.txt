@@ -2,6 +2,7 @@
 %INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 <div class="patternLeftBarContents">
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarSearch" }%
+---
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
    * [[WebTopicCreator][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
    * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]

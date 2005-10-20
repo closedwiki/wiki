@@ -1,8 +1,17 @@
 <div class="patternForm">
-<div class="patternFormContainer"><form name="jumpForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%"> <input type="text" id="jumpBox" name="topic" size="16" value="%MAKETEXT{"Jump"}%" class="patternDefaultFormField" onfocus="clearDefaultandCSS(this);" onblur="setDefaultText(this, %MAKETEXT{"Jump"}%);" /></label><input type="image" id="jumpButton" src="%ICONPATH{arrowright}%" align="middle" border="0" alt='%MAKETEXT{"Jump"}%' /></form></div>
-<div class="patternFormContainer"><form name="quickSearchForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/WebSearch"}%">
-%IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input id=\"quickSearchBox\" type=\"text\" name=\"search\" class=\"patternDefaultFormField\" value=\"%MAKETEXT{"Search"}%\" size=\"16\" onfocus=\"clearDefaultandCSS(this);\" />" else="<input id=\"quickSearchBox\" type=\"text\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"16\" />" }%<input type="image" id="quickSearchButton" src="%ICONPATH{searchtopic}%" align="middle" border="0" alt='%MAKETEXT{"Search"}%' /></form></div>
+<form name="jumpForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
+<table cellspacing="0" cellpadding="0" border="0">
+<tr>
+<th><input type="text" class="patternFormField patternFormFieldDefaultColor" name="topic" size="16" value="%MAKETEXT{"Jump"}%" onfocus="clearDefaultandCSS(this);" /></th><th class="patternFromSpacer">&nbsp;</th><th class="patternFormButton" width="16"><input type="image" class="patternFormButton" src="%ICONPATH{arrowright}%" align="middle" title='%MAKETEXT{"Jump"}%' /></th>
+</tr></table>
+</form>
+<form name="quickSearchForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/WebSearch"}%">
+<table cellspacing="0" cellpadding="0" border="0">
+<tr>
+<th>%IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input type=\"text\" class=\"patternFormField patternFormFieldDefaultColor\" name=\"search\" value=\"%MAKETEXT{"Search"}%\" size=\"16\" onfocus=\"clearDefaultandCSS(this);\" />" else="<input type=\"text\" class=\"patternFormField\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"16\" />" }%</th><th class="patternFromSpacer">&nbsp;</th><th class="patternFormButton" width="16"><input type="image" class="patternFormButton" src="%ICONPATH{searchtopic}%" align="middle" title='%MAKETEXT{"Search"}%' /></th>
+</tr></table>
+</form>
 <!-- START OF CHANGE LANGUAGE LINK -->
-%IF{"context i18n_enabled" then='<div class="patternChangeLanguage">[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?template=oopschangelanguage][<img src="%ICONPATH{flag-gray-small}%" alt="%MAKETEXT{\"Change language\"}%" height="13" width="13" border="0" /> %MAKETEXT{"Change language"}%]]</div>'}%
+%IF{"context i18n_enabled" then='<div class="patternChangeLanguage">[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?template=oopschangelanguage][<img src="%ICONPATH{flag-gray-small}%" alt="%MAKETEXT{"Change language"}%" height="13" width="13" border="0" /> %MAKETEXT{"Change language"}%]]</div>'}%
 <!-- END -->
 </div>

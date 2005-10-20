@@ -15,7 +15,7 @@
 	S3 small font size, twikiSmall													85%
 	S4 horizontal bar padding (h2, patternTop)										5px
 	S5 form and attachment padding													20px
-	S6 left margin left bar															12px
+	S6 left margin left bar															1em
 
 	---------------------------------------------------------------------------------------	*/
 
@@ -68,16 +68,24 @@ html>body pre { /* hide from IE */
 	padding-bottom:0;
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
 }
+.twikiNoOverFlow pre,
+html>body .twikiNoOverFlow pre {
+    overflow:visible;
+    background-color:green;
+}
 ol li, ul li {
 	line-height:1.4em; /*S1*/
 }
 	
 /* Text */
 h1, h2, h3, h4, h5, h6 {
-	font-family:"Lucida Grande", arial, verdana, sans-serif;
+	font-family:arial, "Lucida Grande", arial, verdana, sans-serif;
 	line-height:104%;
 	padding:0em;
 	margin:1em 0 .1em 0;
+}
+h1, h2 {
+	font-weight:500;
 }
 h1,
 .patternPreviewArea h1 {
@@ -98,6 +106,7 @@ h1,
 	border-width:0 0 1px 0;
 	border-style:solid;
 	height:auto;
+	
 }
 
 
@@ -271,8 +280,7 @@ th.twikiSortedDescendingCol a:hover font,
 }
 /* TipsContrib - in left bar */
 .patternLeftBar .tipsOfTheDay {
-	width:134px;
-	margin:1em 0 .5em 0;
+	margin:1em 2em .5em 0;
 	border-width:0;
 }
 .patternLeftBar .tipsOfTheDayHeader img {
@@ -486,6 +494,9 @@ a:hover .twikiAccessKey {
 	text-decoration:none;
 	border:none;
 }
+.twikiWebIndent {
+	margin:0 0 0 1.25em;
+}
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
@@ -542,7 +553,7 @@ a:hover .twikiAccessKey {
 .patternTopBar {}
 .patternTopBarContents {
 	margin:0em;
-	padding:5px 2em 5px 12px; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
+	padding:5px 2em 5px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
 }
 .patternTopBarContents table {
 	height:50px; /* together with a padding of 2x 5px this assumes a logo of 40px height */
@@ -605,6 +616,7 @@ a:hover .twikiAccessKey {
 }
 .patternLeftBar li {
 	padding-left:0;
+	margin-right:2em; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
 }
 .patternLeftBar .patternForm {
 	margin:.5em 0 1em 0;
@@ -612,31 +624,43 @@ a:hover .twikiAccessKey {
 html>body .patternLeftBar .patternForm { /* Hide from IE */
 	margin-top:1.25em;
 }
-.patternLeftBar .patternFormContainer {
-	margin:0 0 3px 0;
+.patternLeftBar .patternForm table {
+	width:100%;
 }
-.patternLeftBar input#quickSearchBox,
-.patternLeftBar input#jumpBox {
-	margin:0;
+.patternLeftBar .patternForm th {
+	padding:0 0 2px 0;
+	vertical-align:middle;
+}
+.patternLeftBar .patternForm th.patternFromSpacer {
+	width:1%;
+}
+.patternLeftBar .patternForm th.patternFormFieldButton {
+	width:20px;
+	padding:0 0 0 4px;
+}
+.patternLeftBar input.patternFormField {
+	display:block;
 	height:12px; /* with padding and border this adds up to 16px height - same as button */
-	width:111px; /* 115 minus border width */
+	width:99%;
 	border-width:1px;
 	border-style:solid;
 	font-size:85%; /*S3*/
+	margin:0;
 }
-.patternLeftBar input#quickSearchButton,
-.patternLeftBar input#jumpButton {
-	margin:0 0 0 3px;
-	padding:0;
+.patternLeftBar input.patternFormButton {
+	display:block;
+	padding:0 1em 0 0;
+	margin:auto 1em auto 0;
 	border:0;
+	width:16px;
 }
 .patternLeftBar .patternChangeLanguage {
-	margin:.2em 0 0 0;
+	margin:0 2em 0 0; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
 	font-size:85%; /*S3*/
 }
 .patternLeftBarPersonal {
 	margin:-1px 0 .7em 0;
-	padding:.25em .5em .25em 12px; /*S6*/
+	padding:.25em .5em .25em 1em; /*S6*/
 	border-width:1px 0;
 	border-style:solid;
 }
@@ -654,7 +678,7 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 	text-decoration:none;
 }
 .patternLeftBarContents {
-	padding:0 1em 1.5em 12px; /*S6*/
+	padding:0 1em 1.5em 1em; /*S6*/
 }
 
 /* table used in various places */

@@ -2155,30 +2155,34 @@ ol li, ul li {
     
 /* Text */
 h1, h2, h3, h4, h5, h6 {
-    font-family:"Lucida Grande", arial, verdana, sans-serif;
-    line-height:104%;
-    padding:0em;
-    margin:1em 0 .1em 0;
+	font-family:arial, "Lucida Grande", arial, verdana, sans-serif;
+	line-height:104%;
+	padding:0em;
+	margin:1em 0 .1em 0;
+}
+h1, h2 {
+	font-weight:500;
 }
 h1,
 .patternPreviewArea h1 {
-    font-size:200%;
-    margin:0 0 .5em 0;
+	font-size:200%;
+	margin:0 0 .5em 0;
 }
 .patternNoViewPage h1 {
-    font-size:170%;
+	font-size:175%;
 }
 .patternTopic h2,
 .patternTopic h3,
 .patternTopic h4,
 .patternTopic h5 {
-    display:block;
-    /* give header a background color for easy scanning: */
-    padding:.2em 5px;
-    margin:1em -5px .35em -5px;
-    border-width:0 0 1px 0;
-    border-style:solid;
-    height:auto;
+	display:block;
+	/* give header a background color for easy scanning: */
+	padding:.2em 5px;
+	margin:1em -5px .35em -5px;
+	border-width:0 0 1px 0;
+	border-style:solid;
+	height:auto;
+	
 }
 
 

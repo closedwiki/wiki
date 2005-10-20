@@ -1727,7 +1727,8 @@ sub _webOrTopicList {
 	    if($isWeb) {
       		my $indenteditem=$item;
       		$indenteditem=~s/\/$//go;
-      		$indenteditem =~ s/\w+\//\&nbsp;\&nbsp;/go;
+      		my $indentedstyle=CGI::span({class=>'twikiWebIndent'});
+      		$indenteditem =~ s/\w+\//$indentedstyle/go;
       		my $webindent=$indenteditem;
       		$webindent =~ s/[A-Z]+.*//go;
       		$line =~ s/\$webindent/$webindent/goi;

@@ -411,9 +411,11 @@ a:hover .twikiAccessKey {
 .patternLeftBar strong {
 	color:#333; /*T11*/
 }
-.patternLeftBar input#quickSearchBox,
-.patternLeftBar input#jumpBox {
+.patternLeftBar input.patternFormField {
 	border-color:#E2DCC8;
+}
+.patternLeftBar input.patternFormButton {
+	background-color:transparent; /* no bg color with image button */
 }
 .patternLeftBar .patternChangeLanguage {
 	color:#8E9195; /*T8*/
@@ -511,7 +513,7 @@ a:hover .twikiAccessKey {
 	color:inherit;
 }
 
-.patternDefaultFormField {
+.patternFormFieldDefaultColor {
 	color:#8E9195; /*T8*/
 }
 
