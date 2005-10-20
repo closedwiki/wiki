@@ -386,6 +386,7 @@ lib/TWiki/Users/Password.pm 0440
 lib/TWiki/Users.pm 0440
 lib/TWiki.cfg 0440
 lib/TWiki.pm 0440
+locale/da.po 0440
 locale/de.po 0440
 locale/es.po 0440
 locale/nl.po 0440
