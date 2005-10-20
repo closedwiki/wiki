@@ -52,7 +52,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.52';
+$RELEASE = '2.53';
 
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';
@@ -66,6 +66,7 @@ $knownStyleSidebars = '^(left|right|both|off)$';
 ###############################################################################
 sub writeDebug {
   &TWiki::Func::writeDebug("- NatSkinPlugin - " . $_[0]) if $debug;
+  #print STDERR "DEBUG: NatSkinPlugin - " . $_[0] . "\n" if $debug;
 }
 
 
@@ -402,6 +403,7 @@ sub initSkinState {
 # $_[2] - The web
 sub commonTagsHandler
 {
+  writeDebug("commonTagsHandler called");
   &initSkinState(); # this might already be too late but there is no
                     # handler between initPlugin and beforeCommonTagsHandler
 		    # which only matters if you've got a SessionPlugin and the 
@@ -468,7 +470,7 @@ sub commonTagsHandler
 sub endRenderingHandler {
   $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
   $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
-  $_[0] =~ s/<a (.*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
+  $_[0] =~ s/<a\s+([^>]*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
 
   # remove leftover tags of supported plugins if they are not installed
   # so that they are remove from the NatSkin templates
@@ -1498,7 +1500,9 @@ sub renderExternalLink
   $thePrefix =~ /\sclass="natExternalLink"\s/ && ($addClass = 0); # prevent adding it twice
 
   if ($addClass) {
-#    writeDebug("called renderExternalLink($thePrefix, $theUrl)");
+#    writeDebug("called renderExternalLink()");
+#    writeDebug("thePrefix=$thePrefix");
+#    writeDebug("theUrl=$theUrl");
     $text = "class=\"natExternalLink\" target=\"_blank\" $thePrefix$theUrl";
 #    writeDebug("got external link '$text'");
 #  } else {
