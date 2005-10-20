@@ -7,4 +7,4 @@ Cookbook example with other fonts and font colors.
 
 
 
-%META:FILEATTACHMENT{name="fonts.css" attachment="fonts.css" attr="" comment="" date="1129333615" path="fonts.css" size="240" stream="fonts.css" user="Main.ArthurClemens" version="0"}%
+%META:FILEATTACHMENT{name="fonts.css" attachment="fonts.css" attr="" comment="" date="1129333615" path="fonts.css" size="240" stream="fonts.css" user="Main.ArthurClemens" version="1"}%
