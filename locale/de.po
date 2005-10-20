@@ -1388,11 +1388,7 @@ msgstr ""
 msgid "Note:"
 msgstr "Hinweis:"
 
-#: templates/changeform.pattern.tmpl:34
-msgid "Notes"
-msgstr "Hinweise"
-
-#: data/TWiki/TWikiVariablesAtoM.txt:264
+#: templates/changeform.pattern.tmpl:34 data/TWiki/TWikiVariablesAtoM.txt:264
 msgid "Notes"
 msgstr "Hinweise"
 
