@@ -8,9 +8,8 @@
 <blockquote>
 <form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/"> 
 %MAKETEXT{"Create a new document by name:"}% &nbsp; %MAKETEXT{"(Use a topic name in TWiki.WikiNotation)"}% <br /> 
-<input type="text" name="topic" size="32" /> 
+<input type="text" name="topic" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create by Name"}%' />
 <input type="hidden" name="onlywikiname" value="on" />
-<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create by Name"}%' /> 
 </form>
 
 <form name="createNewTestTopic" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%BASEWEB%/TestTopicXXXXXXXXXX">

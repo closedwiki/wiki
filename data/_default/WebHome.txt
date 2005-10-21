@@ -8,8 +8,7 @@
  
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
-<input type="text" name="search" size="22" />
-<input type="submit" value='%MAKETEXT{"Search"}%' />
+<input type="text" name="search" size="22" /><input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' />
 <br/>
 ([[WebSearchAdvanced][%MAKETEXT{"advanced search"}%]])
 </form>	

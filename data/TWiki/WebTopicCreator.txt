@@ -8,12 +8,11 @@
 <!-- TODO: Add default text in this page -->
 <!--
 %COMMENT{type="TopicNameConstrainer" field="topic" noform="on"}%
--->
-     <input type="hidden" name="templatetopic" value="WebTopicEditTemplate" />
-     <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-     <input type="hidden" name="onlywikiname" value="on" />
-     <input type="hidden" name="onlynewtopic" value="on" />
-     <input type="submit" value="Create" />
+-->&nbsp;<input type="submit" class="twikiSubmit" value="Create" />
+<input type="hidden" name="templatetopic" value="WebTopicEditTemplate" />
+<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<input type="hidden" name="onlywikiname" value="on" />
+<input type="hidden" name="onlynewtopic" value="on" />
 </form>
 
 %MAKETEXT{"To create a new topic, enter name of topic and click 'create.'"}%

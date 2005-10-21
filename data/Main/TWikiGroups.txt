@@ -5,12 +5,11 @@ These groups can be used to define fine grained %TWIKIWEB%.TWikiAccessControl in
 
 <form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/" method="get">
    * New Group:
-     <input type="text" name="topic" value="NameGroup" size="30"/>
+     <input type="text" name="topic" value="NameGroup" size="30"/>&nbsp;<input class="twikiSubmit" type="submit" value="Add"/>
      <input type="hidden" name="templatetopic" value="TWikiGroupTemplate"/>
      <input type="hidden" name="topicparent" value="%TOPIC%"/>
      <input type="hidden" name="onlywikiname" value="on" />
      <input type="hidden" name="onlynewtopic" value="on" />
-     <input type="submit" value="Add"/>
       * __Note:__ A group topic name must be a %TWIKIWEB%.WikiWord and __must__ end in =...Group=. New topics are based on TWikiGroupTemplate
 </form>
 

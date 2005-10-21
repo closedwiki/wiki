@@ -11,8 +11,7 @@
 
 <form name="search" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
    * %MAKETEXT{"Use the [[WebSearch][Search]] link on top of this page, or do a simple"}%
-   * <input type="text" name="search" size="32" value="%TOPIC%" />
-     <input type="submit" value='%MAKETEXT{"Search"}%' />
+   * <input type="text" name="search" size="32" value="%TOPIC%" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' />
      <input type="hidden" name="scope" value="text" />
      <input type="hidden" name="ignorecase" value="on" />
      &nbsp;&nbsp; %MAKETEXT{"(More options in WebSearch)"}%

@@ -14,8 +14,7 @@ and [[%TWIKIWEB%.TWikiPreferences]]). Replace this text with a description of yo
  
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
-<input type="text" name="search" size="22" />
-<input type="submit" value="Search" />
+<input type="text" name="search" size="22" /><input type="submit" class="twikiSubmit" value="Search" />
 <br/>
 ([[WebSearchAdvanced][advanced search]])
 </form>   

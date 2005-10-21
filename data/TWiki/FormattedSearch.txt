@@ -178,8 +178,7 @@ Use an HTML form and an embedded formatted search on the same topic. You can lin
 <verbatim>
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 Find Topics: 
-<input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />
-<input type="submit" value="Search" />
+<input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
 %SEARCH{ search="%URLPARAM{"q"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%
@@ -189,8 +188,7 @@ Result:
 
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 Find Topics: 
-<input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />
-<input type="submit" value="Search" />
+<input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
 Result:
 %SEARCH{ search="%URLPARAM{"q"}%" format="   * $web.$topic: %BR% $summary" nosearch="on" }%

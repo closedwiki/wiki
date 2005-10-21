@@ -18,8 +18,7 @@ This is the place to learn about TWiki features, find where to download it, and 
 
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
-<input type="text" name="search" size="22" />
-<input type="submit" value="Search" /><br/>
+<input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /><br/>
 ([[WebSearchAdvanced][advanced search]])
 </form>
 </blockquote>

@@ -24,7 +24,7 @@
 <tr>
 <td colspan="2" class="first">
   <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
-  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;[[%INCLUDINGWEB%.WebSearch][%MAKETEXT{"Simple search"}%]] | &nbsp;[[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
+  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearch][%MAKETEXT{"Simple search"}%]]&nbsp;|&nbsp;[[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
 <div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain ="SOAP"=, ="WSDL"=, a literal ="web service"=, but not ="shampoo"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
 </td>
 </tr>

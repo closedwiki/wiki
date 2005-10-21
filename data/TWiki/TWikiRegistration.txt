@@ -214,7 +214,7 @@ for ( var i = 0; i < sIn.length; i++ )
 </tr>
 <tr>
   <td valign="top" align="right"> &nbsp; <input type="hidden" name="topic" value="%TOPIC%" /><input type="hidden" name="action" value="register" /></td>
-  <td> <input type="submit" value=" Submit " /></td>
+  <td><input type="submit" class="twikiSubmit" value=" Submit " /></td>
 </tr>
 </table>
 </form>
