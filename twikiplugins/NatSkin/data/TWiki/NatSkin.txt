@@ -73,8 +73,9 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.52 (2005-10-10) |
+|  Skin Version: | v2.53 (2005-10-18) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-10-18: | workaround crash due to recursive accessdenied-exceptions |
 |  2005-10-10: | added skin style cycling to the NatSkinStyleBrowser; \
 					  fixed way how the oops dialogues switch off the sidebar |
 |  2005-10-09: | new release NatSkin-2.51: \
@@ -109,7 +110,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 10 Oct 2005
+-- TWiki:Main/MichaelDaum - 18 Oct 2005
 
 %META:FILEATTACHMENT{name="NatSkin.zip" attr="" comment="" date="1110909107" path="NatSkin.zip" size="325290" user="MichaelDaum" version="1.3"}%
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="MichaelDaum" version="1.1"}%
