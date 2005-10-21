@@ -87,6 +87,12 @@ h1, h2, h3, h4, h5, h6 {
 h1, h2 {
 	font-weight:500;
 }
+h1 { font-size:200%; }
+h2 { font-size:170%; }
+h3 { font-size:140%; }
+h4 { font-size:125%; }
+h5 { font-size:110%; }
+h6 { font-size:95%; }
 h1,
 .patternPreviewArea h1 {
 	font-size:200%;
@@ -101,7 +107,7 @@ h1,
 .patternTopic h5 {
 	display:block;
 	/* give header a background color for easy scanning: */
-	padding:.2em 5px;
+	padding:.1em 5px;
 	margin:1em -5px .35em -5px;
 	border-width:0 0 1px 0;
 	border-style:solid;
@@ -967,7 +973,7 @@ table#twikiSearchTable td.first {
 	margin-bottom:1em;
 }
 .patternBookViewList .twikiTopRow {
-	padding:.2em 5px; /*S4*/
+	padding:.1em 5px; /*S4*/
 	margin:2.5em -5px .15em -5px; /*S4*/
 }
 .patternBookViewList .twikiBottomRow {
@@ -1015,4 +1021,3 @@ tr.twikiDiffDebug td {
 .twikiDiffLineNumberHeader {
 	padding:.3em 0;
 }
-
