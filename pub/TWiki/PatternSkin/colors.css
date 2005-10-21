@@ -126,7 +126,7 @@ textarea,
 input,
 select {
 	border-color:#ccc; /*BO6*/
-	background-color:#FEFBF3; /*BG9*/
+	background-color:#fff; /*BG1*/
 }
 
 /*	-----------------------------------------------------------
@@ -412,7 +412,8 @@ a:hover .twikiAccessKey {
 	color:#333; /*T11*/
 }
 .patternLeftBar input.patternFormField {
-	border-color:#E2DCC8;
+	border-color:#E2DCC8; /*BO4*/
+	background-color:#fff; /*BG1*/
 }
 .patternLeftBar input.patternFormButton {
 	background-color:transparent; /* no bg color with image button */
