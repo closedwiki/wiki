@@ -79,7 +79,7 @@ ol li, ul li {
 	
 /* Text */
 h1, h2, h3, h4, h5, h6 {
-	font-family:arial, "Lucida Grande", arial, verdana, sans-serif;
+	font-family:"Lucida Grande", arial, verdana, sans-serif;
 	line-height:104%;
 	padding:0em;
 	margin:1em 0 .1em 0;
