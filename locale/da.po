@@ -2087,8 +2087,8 @@ msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "For at *gemme* ændringerne: Klik på [Gem opdateringer] knappen."
 
 #: data/TWiki/WebTopicCreator.txt:19
-msgid "To create a new topic, enter name of topic and click 'create.'"
-msgstr "For at oprette en ny side, skriv navnet på siden og klik 'Opret'."
+msgid "Enter name of topic:"
+msgstr "Skriv navnet på siden:"
 
 #: templates/moveattachment.pattern.tmpl:20
 msgid "To delete an attachment move it to web %1, topic %2."

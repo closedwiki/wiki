@@ -390,11 +390,11 @@ msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
-msgstr ""
+msgstr "Geavanceerd zoeken"
 
 #: data/TWiki/WebSearch.txt:20
 msgid "Advanced search"
-msgstr ""
+msgstr "Geavanceerd zoeken"
 
 #: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:38
 msgid "All public webs"
@@ -1223,7 +1223,7 @@ msgstr ""
 
 #: lib/TWiki/Search.pm:786
 msgid "NEW"
-msgstr ""
+msgstr "NIEUW"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:2
 #: data/TWiki/WebTopicViewTemplate.txt:2
@@ -1527,36 +1527,36 @@ msgstr ""
 #: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:7
 #: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:7
 msgid "Search"
-msgstr ""
+msgstr "Zoeken"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Search %1 &Web only"
-msgstr ""
+msgstr "Zoek alleen in %1 &web"
 
 #: templates/backlinksweb.pattern.tmpl:10
 msgid "Search a&ll webs"
-msgstr ""
+msgstr "Zoek in a&lle webs"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 #: templates/backlinksweb.pattern.tmpl:10 templates/view.pattern.tmpl:82
 msgid "Search all webs for topics that link to here"
-msgstr ""
+msgstr "Zoek in alle webs naar pagina's die hierheen linken"
 
 #: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Search string"
-msgstr ""
+msgstr "Zoektekst"
 
 #: templates/view.pattern.tmpl:82
 msgid "Search the <nop>%WEB% Web for topics that link to here"
-msgstr ""
+msgstr "Zoek in <nop>%WEB% Web naar pagina's die hierheen linken"
 
 #: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:32
 msgid "Search where:"
-msgstr ""
+msgstr "Waar zoeken:"
 
 #: templates/search.pattern.tmpl:28 templates/searchbookview.pattern.tmpl:6
 msgid "Searched:"
-msgstr ""
+msgstr "Gezocht:"
 
 #: templates/oopsattention.tmpl:42
 msgid "See %1 for a list of existing users or register as new user in %2."
@@ -1936,8 +1936,8 @@ msgid "To *save* changes: Press the [Save Changes] button."
 msgstr ""
 
 #: data/TWiki/WebTopicCreator.txt:19
-msgid "To create a new topic, enter name of topic and click 'create.'"
-msgstr ""
+msgid "Enter name of topic:"
+msgstr "Paginanaam:"
 
 #: templates/moveattachment.pattern.tmpl:20
 msgid "To delete an attachment move it to web %1, topic %2."
@@ -2078,7 +2078,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:7
 msgid "User Account %1 Deleted"
-msgstr ""
+msgstr "Gebruikers account %1 gewist"
 
 #: data/TWiki/WebLeftBar.txt:16
 msgid "User Reference"
@@ -2086,11 +2086,11 @@ msgstr ""
 
 #: templates/login.pattern.tmpl:39
 msgid "Username"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 #: data/Main/WebLeftBar.txt:6 data/TWiki/WebLeftBar.txt:7
 msgid "Users"
-msgstr ""
+msgstr "Gebruikers"
 
 #: templates/oopsattention.tmpl:130
 msgid ""
@@ -2100,46 +2100,46 @@ msgstr ""
 
 #: templates/attachtables.pattern.tmpl:45 templates/view.pattern.tmpl:82
 msgid "Version"
-msgstr ""
+msgstr "Versie"
 
 #: data/TWiki/NewUserTemplate.txt:17
 msgid "Vertical size of text edit box:"
-msgstr ""
+msgstr "Hoogte van het tekstkader:"
 
 #: templates/oopsmore.pattern.tmpl:50
 msgid "View difference"
-msgstr ""
+msgstr "Bekijk verschillen"
 
 #: templates/oopsmore.pattern.tmpl:39
 msgid "View previous topic revision:"
-msgstr ""
+msgstr "Bekijk vorige paginarevisie"
 
 #: templates/view.pattern.tmpl:82
 msgid "View raw text without formatting"
-msgstr ""
+msgstr "Bekijk brontekst zonder opmaak"
 
 #: templates/oopsmore.pattern.tmpl:42
 msgid "View revision"
-msgstr ""
+msgstr "Bekijk revisie"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 #: templates/oopsleaseconflict.pattern.tmpl:15
 #: templates/oopsleaseconflict.tmpl:27 templates/rdiff.pattern.tmpl:18
 #: templates/view.pattern.tmpl:20
 msgid "View topic"
-msgstr ""
+msgstr "Bekijk pagina"
 
 #: templates/view.pattern.tmpl:82
 msgid "View total topic history"
-msgstr ""
+msgstr "Bekijk paginageschiedenis"
 
 #: data/TWiki/NewUserTemplate.txt:6
 msgid "Visit %1 to learn about TWiki"
-msgstr ""
+msgstr "Bezoek %1 om meer over TWiki te weten te komen"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:23
 msgid "WARNING:"
-msgstr ""
+msgstr "WAARSCHUWING:"
 
 #: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -2151,20 +2151,20 @@ msgstr ""
 
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
-msgstr ""
+msgstr "Zoeken in Web"
 
 #: data/TWiki/WebLeftBarExample.txt:8 data/TWiki/WebLeftBarWebsList.txt:2
 msgid "Webs"
-msgstr ""
+msgstr "Webs"
 
 #: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
 msgid "Welcome to the %1 web"
-msgstr ""
+msgstr "Welkom bij het %1 web"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
-msgstr ""
+msgstr "Wie"
 
 #: templates/oopsattention.tmpl:16
 msgid "Would you like to go to:"

@@ -2113,8 +2113,8 @@ msgstr ""
 "Para *salvar* suas alterações: aperte o botão [Salvar alterações] abaixo."
 
 #: data/TWiki/WebTopicCreator.txt:19
-msgid "To create a new topic, enter name of topic and click 'create.'"
-msgstr "Para criar um novo tópico, entre o nome do tópico e clique em 'criar'."
+msgid "Enter name of topic:"
+msgstr "Entre o nome do tópico:"
 
 #: templates/moveattachment.pattern.tmpl:20
 msgid "To delete an attachment move it to web %1, topic %2."

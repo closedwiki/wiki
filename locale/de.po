@@ -2133,7 +2133,7 @@ msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "Änderungen *speichern*: [Änderungen speichern] Knopf drücken."
 
 #: data/TWiki/WebTopicCreator.txt:19
-msgid "To create a new topic, enter name of topic and click 'create.'"
+msgid "Enter name of topic:"
 msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:20
