@@ -355,7 +355,8 @@ sub _findAttachments {
     foreach my $file (keys %filesListedInPub) {
         if ($filesListedInMeta{$file}) {
             # Bring forward any missing yet wanted attributes
-            foreach my $field qw(comment attr user) {
+            #SMELL: this will over-write (empty) any meta data field not listed here :( 
+            foreach my $field qw(comment attr user version) {
               if ($filesListedInMeta{$file}{$field}) {
 #              		$this->{session}->writeDebug("$file: bringing forward field $field: was ".$filesListedInPub{$file}{$field});
               		$filesListedInPub{$file}{$field} =
