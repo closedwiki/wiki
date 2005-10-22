@@ -68,7 +68,7 @@ Perform a search as dictated by CGI parameters:
 
 sub search {
     my $session = shift;
-
+    
     $session->enterContext( 'search' );
 
     my $query = $session->{cgiQuery};
@@ -107,13 +107,14 @@ sub search {
     $attrWeb =~ tr/+/ /;       # pluses become spaces
     $attrWeb =~ s/%([0-9a-fA-F]{2})/pack('c',hex($1))/ge;  # %20 becomes space
 
-    $session->writePageHeader();
+#    $session->writePageHeader();
 
     # SMELL: what's all the 'scalar' crud, below?
-    $session->{search}->searchWeb(
-        _callback       => \&_contentCallback,
+    my $text = $session->{search}->searchWeb(
+#        _callback       => \&_contentCallback,	#FIXME - can't process format=| $topic | line by line...
+        _callback       => undef,
         _cbdata         => undef,
-        inline          => 0,
+        'inline'          => 0,
         'search'        => scalar $query->param( 'search' ),
         'web'           => $attrWeb,
         'topic'         => scalar $query->param( 'topic' ),
@@ -141,10 +142,14 @@ sub search {
         'separator'     => scalar $query->param( 'separator' ),
         'subweb'     => scalar $query->param( 'subweb' )
     );
+ 
+    $session->writeCompletePage($text);
+    
 }
 
 sub _contentCallback {
     TWiki::spamProof( $_[1] );
+#FIXME: if you're going to define a callback, you have to convert from TML too    
     print $_[1];
 }
 

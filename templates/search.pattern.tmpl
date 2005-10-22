@@ -7,7 +7,7 @@
 
 
 
-%TMPL:DEF{"topicaction"}% %TMPL:END%
+%TMPL:DEF{"topicaction"}%  %TMPL:END%
 
 
 
@@ -15,7 +15,8 @@
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">%_{"Results from [_1] web", "<nop>%WEB%"}%</span><span class="twikiRight">%_{"retrieved at [_1]", "%DISPLAYTIME{\"$hour:$min ($tz)\"}%"}%</span><br class="twikiClear" /></div>%REPEAT%<div class="patternSearchResults"><div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></div><div class="twikiRight twikiSRAuthor">%AUTHOR%</div><div class="twikiRight twikiSRRev">%REVISION% - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a>&nbsp;</div><br class="twikiClear" /></div><div class="twikiBottomRow"><div class="twikiSummary twikiGrayText">%TEXTHEAD%</div></div></div>%REPEAT%%TMPL:END%
+%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">%_{"Results from [_1] web", "<nop>%WEB%"}%</span><span class="twikiRight">%_{"retrieved at [_1]", "%DISPLAYTIME{\"$hour:$min ($tz)\"}%"}%</span><br class="twikiClear" /></div>
+%REPEAT%<div class="patternSearchResults"><div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></div><div class="twikiRight twikiSRAuthor">%AUTHOR%</div><div class="twikiRight twikiSRRev">%REVISION% - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a>&nbsp;</div><br class="twikiClear" /></div><div class="twikiBottomRow"><div class="twikiSummary twikiGrayText">%TEXTHEAD%</div></div></div>%REPEAT%%TMPL:END%
 
 
 
@@ -37,5 +38,5 @@
 
 
 %TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="patternMiddleContainer">%TMPL:P{"leftbar"}%<div class="patternMain">
-%TMPL:P{"content"}%
+%TMPL:P{"content"}% 
 </div></div>%TMPL:P{"bottombar"}%%TMPL:END%

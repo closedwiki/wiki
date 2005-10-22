@@ -358,6 +358,11 @@ SMELL: If =regex= is defined, it will force type='regex'
 
 SMELL: If =template= is defined =bookview= will not work
 
+SMELL: it seems that if you define =_callback= or =inline= then you are
+	responsible for converting the TML to HTML yourself!
+	
+FIXME: =callback= cannot work with format parameter (consider format='| $topic |'
+
 =cut
 
 sub searchWeb {
