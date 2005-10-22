@@ -12,7 +12,7 @@
    * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
    * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
-%INCLUDE{TWikiTipsOfTheDayInclude}% 
+---
    * <b>%MAKETEXT{"User Reference"}%</b>
    * ATasteOfTWiki
    * TextFormattingRules

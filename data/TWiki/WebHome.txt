@@ -1,7 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1122128753" format="1.1" version="$Rev$"}%
-<div style="float:right; margin:.5em 0 2em 2em;">
-<a href="http://twiki.org"><img src="%ATTACHURLPATH%/twiki_home.gif" alt="Link to TWiki.org website" width='337' height='93' border='0' /></a>
-</div>
+<table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" rowspan="2">
 ---+!! Welcome to the %WEB% Web
 
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
@@ -22,6 +20,12 @@ This is the place to learn about TWiki features, find where to download it, and 
 ([[WebSearchAdvanced][advanced search]])
 </form>
 </blockquote>
+</td><td valign="top" style="padding:0 0 0 30px;">
+<a href="http://twiki.org"><img src="%ATTACHURLPATH%/twiki_home.gif" alt="Link to TWiki.org website" width='337' height='93' border='0' /></a>
+<br />
+<br />
+%INCLUDE{TWikiTipsOfTheDayInclude}%
+</td></tr></table>
 
 ---++ Disclaimer
    * TWiki&trade; is a trademark of Peter Thoeny
@@ -29,6 +33,5 @@ This is the place to learn about TWiki features, find where to download it, and 
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
    * Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]]
-
 
 %META:FILEATTACHMENT{name="twiki_home.gif" attachment="twiki_home.gif" attr="h" comment="" date="1129246975" path="twiki_home.gif" size="5646" stream="twiki_home.gif" user="Main.TWikiContributor" version="1"}%
