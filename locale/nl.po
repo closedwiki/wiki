@@ -174,27 +174,27 @@ msgstr "(__Suggestie:__ Plaats een foto op uw persoonlijke pagina!)"
 
 #: templates/attach.pattern.tmpl:36
 msgid "(attach)"
-msgstr ""
+msgstr "(bijlage toevoegen)"
 
 #: templates/backlinksweb.pattern.tmpl:5
 msgid "(backlinks in %1 Web)"
-msgstr ""
+msgstr "(teruglinks in web %1)"
 
 #: templates/backlinksallwebs.pattern.tmpl:5
 msgid "(backlinks in all Webs)"
-msgstr ""
+msgstr "(teruglinks in alle webs)"
 
 #: templates/changeform.pattern.tmpl:5
 msgid "(change form)"
-msgstr ""
+msgstr "(wijzig formulier)"
 
 #: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
 msgid "(change language)"
-msgstr ""
+msgstr "(wijzig taal)"
 
 #: templates/changes.pattern.tmpl:5
 msgid "(changes)"
-msgstr ""
+msgstr "(wijzigingen)"
 
 #: templates/renamedelete.pattern.tmpl:5
 #: templates/renamewebdelete.pattern.tmpl:5
@@ -579,35 +579,35 @@ msgstr ""
 #: data/TWiki/WebLeftBarSearch.txt:6 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
-msgstr "Taal veranderen"
+msgstr "Taal wijzigen"
 
 #: templates/renamebase.pattern.tmpl:71
 #: templates/renamewebbase.pattern.tmpl:75
 msgid "Change links in topics that refer to %1 in any Web:"
-msgstr ""
+msgstr "Wijzig links in alle pagina's in alle webs die verwijzen naar %1"
 
 #: templates/renamebase.pattern.tmpl:69
 #: templates/renamewebbase.pattern.tmpl:73
 msgid "Change links in topics that refer to %1 in the %2 Web:"
-msgstr ""
+msgstr "Wijzig links in pagina's in %2 web die verwijzen naar %1"
 
 #: templates/attachagain.pattern.tmpl:32
 msgid "Change properties only"
-msgstr ""
+msgstr "Wijzig alleen de eigenschappen"
 
 #: templates/edit.pattern.tmpl:120
 msgid "Change topic"
-msgstr ""
+msgstr "Wijzig pagina"
 
 #: lib/TWiki/UI/RDiff.pm:275 lib/TWiki/UI/RDiff.pm:281
 msgid "Changed"
-msgstr ""
+msgstr "Gewijzigd"
 
 #: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:9
 #: data/TWiki/WebLeftBar.txt:11 data/TWiki/WebLeftBarExample.txt:4
 #: data/Trash/WebLeftBar.txt:8 data/_default/WebLeftBar.txt:8
 msgid "Changes"
-msgstr ""
+msgstr "Wijzigingen"
 
 #: templates/edit.pattern.tmpl:136 templates/preview.pattern.tmpl:67
 #: templates/preview.pattern.tmpl:70
