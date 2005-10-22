@@ -24,9 +24,7 @@ zeroresults="off%URLPARAM{search}%"
 <tr>
 <th class="last">%MAKETEXT{"Search where:"}%</th>
 <td class="last">
-<input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{"scope" default="text"}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label><br />
-<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{scope}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label><br />
-<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{scope}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
+<input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{"scope" default="text"}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{scope}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label>&nbsp;&nbsp;&nbsp;<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{scope}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
 <hr />
 <input type="checkbox" class="twikiCheckbox" id="web" name="web" %IF{" '%URLPARAM{web}%' = 'on'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
 </td>
