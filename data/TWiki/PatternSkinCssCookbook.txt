@@ -7,44 +7,43 @@ This topic describes how to customize the default look of TWiki for your own nee
 
 ---++ Introduction
 
-!PatternSkin uses 3 style sheets:
-   * layout.css - the positioning of main page elements (blocks), widths and heights
-   * style.css - fonts, sizes, margins and paddings
-   * colors.css - border colors, text colors and background colors
-These stylesheets are attached to the %TWIKIWEB%.PatternSkin topic.
+!PatternSkin uses 3 style sheets (attached to %TWIKIWEB%.PatternSkin):
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] - the positioning of main page elements (blocks), widths and heights
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][stylestyle.css]] - fonts, sizes, margins and paddings
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]] - border colors, text colors and background colors
 
 When customizing your TWiki installation, you can either choose to completely rewrite all css styles, or to selectively override some styles. The latter option is by far less time consuming, but all depends on your graphical wishes.
 
----+++ Rewriting CSS
+---+++ Major changes: Rewriting CSS
    * Create a new topic that will contain your new CSS files
    * Attach 3 new style sheets to the topic
-   * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files (remove the dashes):
-<verbatim>
-      * #Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/layout.css
-      * #Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/style.css
-      * #Set TWIKICOLORURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/colors.css
- </verbatim>
-   * If you use less than these 3 CSS files, let the =TWIKIXXXURL= variable point to an empty CSS file. An empty file is attached to the !PatternSkin topic:
-<verbatim>
-      * #Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
-      * #Set TWIKICOLORURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
- </verbatim>
+   * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files:
+<pre>
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/layout.css
+      * <nop>Set TWIKISTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/style.css
+      * <nop>Set TWIKICOLORURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
+ </pre>
+   * If you use less than these 3 CSS files, let the =TWIKIXXXURL= variable point to an empty CSS file. For this purpose [[%PUBURL%/%TWIKIWEB%/PatternSkin/empty.css][empty.css]] is attached to %TWIKIWEB%.PatternSkin:
+<pre>
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/empty.css
+      * <nop>Set TWIKICOLORURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/empty.css
+ </pre>
 
----+++ Adding to existing CSS
+---+++ Minor changes: Adding to existing CSS
 With CSS you cannot remove already defined classes, you can only add to it, or overwrite existing styles. <br />
 Overriding default CSS is done with 3 variables: =USERLAYOUTURL=, =USERSTYLEURL=, =USERCOLORSURL=.
    * Create a new topic that will contain your new CSS files
    * Attach 1, 2 or 3 new style sheets to the topic, dependent on your CSS setup (if you don't change much, you might as well put everything in one CSS file, layout, margins and colors)
-   * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files (below the =TWIKIXXXURL= variables) (remove the dashes):
-<verbatim>
-      * #Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/layout.css
-      * #Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/style.css
-      * #Set USERCOLORSURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/colors.css
- </verbatim>
+   * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files (below the =TWIKIXXXURL= variables):
+<pre>
+      * <nop>Set USERLAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/layout.css
+      * <nop>Set USERSTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/style.css
+      * <nop>Set USERCOLORSURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
+ </pre>
    * If you use only little CSS and you've only attached one file, write:
-<verbatim>
-      * #Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/YourNewTopic/style.css
- </verbatim>
+<pre>
+      * Set USERSTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/style.css
+ </pre>
 
 Instead of setting these variables in [[%TWIKIWEB%.TWikiPreferences]], you can set these in your home topic, or in any other topic. Setting style URL variables in:
    * [[%TWIKIWEB%.TWikiPreferences]]: the style is visible for all users, site-wide
@@ -73,6 +72,10 @@ See example at: PatternSkinCssCookbookCenterPage
 ---++ Use different fonts
 
 See example at: PatternSkinCssCookbookFonts
+
+---++ No top bar
+
+See example at: PatternSkinCssCookbookNoTopBar
 
 
 %META:FILEATTACHMENT{name="hideleftbar_Dakar.css" attr="" autoattached="1" comment="css to hide the left bar (Dakar)" date="1129323328" path="hideleftbar_Dakar.css" size="112" user="ArthurClemens" version=""}%

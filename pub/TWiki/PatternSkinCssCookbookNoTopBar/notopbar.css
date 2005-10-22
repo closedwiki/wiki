@@ -1,0 +1,17 @@
+
+.patternTopBar {
+	display:none;
+}
+.patternLeftBar,
+.patternMain {
+	top:0px;
+}
+.patternMain {
+	border-top:0px;
+}
+.patternLeftBar {
+	background:url("http://visiblearea.com/devtwiki/pub/Main/WebPreferences/logo.gif") #fff 1em 10px no-repeat;
+}
+.patternLeftBarPersonal {
+	margin-top:60px;
+}
