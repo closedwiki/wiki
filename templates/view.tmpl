@@ -15,7 +15,7 @@
 
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
-Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
+%META{"parent" prefix="<br />Parents: "}%
 %META{"moved"}%
 </div>%TMPL:END%
 
@@ -49,7 +49,7 @@ Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
   %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
   %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here">Web</a> <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here">All webs</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%" rel='nofollow'>Printable</a>
-  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" rel='nofollow'>Diffs</a> %REVISIONS%
+  %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
   %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
 
 %TMPL:P{"htmldoctype"}%

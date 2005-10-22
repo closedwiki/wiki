@@ -376,7 +376,7 @@ Renders the differences between version of a TwikiTopic
 | rev1 | the higher revision |
 | rev2 | the lower revision |
 | render | the rendering style {sequential, sidebyside, raw, debug} | (preferences) DIFFRENDERSTYLE, =sequential= |
-| type | history, diff, last} history diff, version to version, last version to previous | =diff= |
+| type | history, diff, last} history diff, version to version, last version to previous | =history= |
 | context | number of lines of context |
 | skin | the skin(s) to use to display the diff |
 TODO:
@@ -401,7 +401,7 @@ sub diff {
     my $renderStyle = $query->param('render') ||
       $session->{prefs}->getPreferencesValue( 'DIFFRENDERSTYLE' ) ||
         'sequential';
-    my $diffType = $query->param('type') || 'diff';
+    my $diffType = $query->param('type') || 'history';
     my $contextLines = $query->param('context');
     unless( defined $contextLines ) {
         $session->{prefs}->getPreferencesValue( 'DIFFCONTEXTLINES' );
@@ -455,7 +455,12 @@ sub diff {
     do {
         my $diff = $difftmpl;
         $diff =~ s/%REVTITLE1%/$r1/go;
-        my $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, undef, $r1, '$date - $wikiusername' );
+        my $rInfo = '';
+        if ( $r1 > $r2 + 1) {
+        	$rInfo = $session->{i18n}->maketext("Changes from r[_1] to r[_2]", $r2, $r1);
+        } else {
+	        $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, undef, $r1, '$date - $wikiusername' );
+        }
         # eliminate white space to prevent wrap around in HR table:
         $rInfo =~ s/\s+/&nbsp;/g;
         $diff =~ s/%REVINFO1%/$rInfo/go;
@@ -494,13 +499,13 @@ sub diff {
         $revisions .= ' '.
           CGI::a( { href=>$session->getScriptUrl($webName, $topic, 'view',
                                                  rev => $i ),
-                    rel => 'nofollow' }, $i);
+                    rel => 'nofollow' }, 'r'.$i);
         if( $i != 1 ) {
             if( $i == $breakRev ) {
                 $i = 1;
             } else {
                 if( ( $i == $rev1 ) && ( !$isMultipleDiff ) ) {
-                    $revisions .= $revSeperator;
+                    $revisions .= ' '.$revSeperator;
                 } else {
                     $j = $i - 1;
                     $revisions .= ' '.
