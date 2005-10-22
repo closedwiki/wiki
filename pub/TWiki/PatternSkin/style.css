@@ -89,8 +89,8 @@ h1, h2 {
 }
 h1 { font-size:200%; }
 h2 { font-size:170%; }
-h3 { font-size:140%; }
-h4 { font-size:125%; }
+h3 { font-size:135%; }
+h4 { font-size:122%; }
 h5 { font-size:110%; }
 h6 { font-size:95%; }
 h1,
@@ -558,16 +558,7 @@ a:hover .twikiAccessKey {
 
 .patternTopBar {}
 .patternTopBarContents {
-	margin:0em;
-	padding:5px 2em 5px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
-}
-.patternTopBarContents table {
-	height:50px; /* together with a padding of 2x 5px this assumes a logo of 40px height */
-}
-.patternTopBarContents .patternSearchBox td {
-	height:50px;
-	vertical-align:middle;
-	font-size:94%; /*S2*/
+	padding:10px 2em 10px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
 }
 
 /* Bottom bar */
