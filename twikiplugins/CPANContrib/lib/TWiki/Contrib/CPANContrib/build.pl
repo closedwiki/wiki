@@ -65,7 +65,7 @@ use TWiki::Contrib::Build;
     {
 	print "Installing $module\n";
 	print "-" x 80, "\n";
-	`perl install-cpan.pl --mirror=MIRROR/MINICPAN/ --baselibdir=$base_lib_dir $module`;
+	`perl install-cpan.pl --mirror=MIRROR/MINICPAN/ --baselibdir=$base_lib_dir $module </dev/null`;
     }
 
       `chmod -R 777 $base_lib_dir/.cpan`;
