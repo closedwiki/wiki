@@ -217,6 +217,10 @@ document.write('<\/style>');
 
 
 
+%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" title="%_{"View total topic history"}%" accesskey="H" rel="nofollow">%_{"&History"}%</a>: %REVISIONS% </span>%TMPL:END%
+
+
+
 %TMPL:DEF{"topicaction"}%%TMPL:P{"topicactionbar"}%%TMPL:END%
 
 
@@ -243,8 +247,6 @@ document.write('<\/style>');
 %TMPL:P{"topicaction"}%
 %TMPL:END%
 
-%TMPL:DEF{"revisions"}%
-<a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" title="%_{"View total topic history"}%" accesskey="H" rel="nofollow"rel='nofollow'>%_{"&History"}%</a>: %REVISIONS% %TMPL:END%
 
 
 %TMPL:DEF{"oops"}%
