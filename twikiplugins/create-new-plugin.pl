@@ -8,7 +8,9 @@ use Cwd;
 ################################################################################
 
 my ( $name ) = @ARGV;
-my $type = 'Plugin';
+my @types = qw( Plugin Contrib );
+( my $type = $name ) =~ s/^.*?(Plugin|Contrib|)?$/$1/;
+die "'$name' must end in one of: " . join( ', ', @types ) . "\n" unless $type;
 
 usage(), exit 0 unless $name;
 
@@ -19,48 +21,88 @@ chdir $FindBin::Bin;
 #print STDERR "$name already exists; will not overwrite (use --f/--force to override)\n";
 -e $name && die "$name already exists; will not overwrite\n";
 
-eval { mkpath [ "$name/lib/TWiki/Plugins/$name/", "$name/data/TWiki/" ] };
+my $twiki_lib_dir = '';
+# TOOD: object
+if ( $type =~ /^Plugin/ ) {
+    $twiki_lib_dir = "lib/TWiki/Plugins";
+} elsif ( $type =~ /^Contrib/ ) {
+    $twiki_lib_dir = "lib/TWiki/Contrib";
+}
+my $lib_base_dir = "$name/$twiki_lib_dir";
+eval { mkpath "$lib_base_dir/$name" };
 $@ && die $@;
 
 { # BuildContrib
-#cp "BuildContrib/lib/TWiki/Contrib/BuildContrib/build.pl", "$name/lib/TWiki/Plugins/$name/build.pl" or die $!;
-    open( BUILD, '<', "BuildContrib/lib/TWiki/Contrib/BuildContrib/build.pl" ) or die $!;
+    # TODO: object
+    my $build_pl_dir;
+    if ( $type =~ /^Plugin/ ) {
+#	$build_pl_dir = ???
+    } elsif ( $type =~ /^Contrib/ ) {
+	$build_pl_dir = "EmptyContrib/lib/TWiki/Contrib/EmptyContrib";
+    }
+    open( BUILD, '<', "$build_pl_dir/build.pl" ) or die $!;
     local $/ = undef;
     my $build = <BUILD>;
     close BUILD;
 
-    $build =~ s/BuildContrib/$name/g;
+    $build =~ s/(Build|Empty)Contrib/$name/g;
 
-    open( BUILD, '>', "$name/lib/TWiki/Plugins/$name/build.pl" ) or die $!;
+    open( BUILD, '>', "$lib_base_dir/$name/build.pl" ) or die $!;
     print BUILD $build;
     close BUILD;
 }
 
 { # PluginSkeleton
-#    cp "../lib/TWiki/Plugins/EmptyPlugin.pm", "$name/lib/TWiki/Plugins/$name.pm" or die $!;
-    open( PLUGIN, '<', "../lib/TWiki/Plugins/EmptyPlugin.pm" ) or die $!;
-    local $/ = undef;
-    my $lib = <PLUGIN>;
-    close PLUGIN;
+    my $pm = '';
+    # TOOD: object
+    if ( $type =~ /^Plugin/ )
+    {
+	open( PM, '<', "../lib/TWiki/Plugins/EmptyPlugin.pm" ) or die $!;
+	local $/ = undef;
+	$pm = <PM>;
+	close PM;
+    } elsif ( $type =~ /^Contrib/ )
+    {
+	open( CONTRIB, '<', "EmptyContrib/lib/TWiki/Contrib/EmptyContrib.pm" ) or die $!;
+	local $/ = undef;
+	$pm = <CONTRIB>;
+	close CONTRIB;
+    }
 
-    $lib =~ s/EmptyPlugin/$name/g;
+    $pm =~ s/Empty$type/$name/g;
 
-    open( PLUGIN, '>', "$name/lib/TWiki/Plugins/$name.pm" ) or die $!;
-    print PLUGIN $lib;
-    close PLUGIN;
+    open( PM, '>', "$lib_base_dir/$name.pm" ) or die $!;
+    print PM $pm;
+    close PM;
 
-    open( MANIFEST, '>', "$name/lib/TWiki/Plugins/$name/MANIFEST" ) or die $!;
+    open( MANIFEST, '>', "$lib_base_dir/$name/MANIFEST" ) or die $!;
     print MANIFEST <<__MANIFEST__;
 data/TWiki/$name.txt  Plugin doc page
-lib/TWiki/Plugins/$name.pm  Plugin Perl module 
+$twiki_lib_dir/$name.pm  Plugin Perl module 
 __MANIFEST__
     close MANIFEST;
 
-    open( DEPENDENCIES, '>', "$name/lib/TWiki/Plugins/$name/DEPENDENCIES" ) or die $!;
+    open( DEPENDENCIES, '>', "$lib_base_dir/$name/DEPENDENCIES" ) or die $!;
     close DEPENDENCIES;
 
+    eval { mkpath "$name/data/TWiki/" };
+    $@ && die $@;
+
+    # TODO: object
+    my $topic = '';
+    if ( $type =~ /^Plugin/ ) {
+    } elsif ( $type =~ /^Contrib/ ) {
+	open( TOPIC, '<', "EmptyContrib/data/TWiki/EmptyContrib.txt" ) or die $!;
+	local $/ = undef;
+	$topic = <TOPIC>;
+	close TOPIC;
+
+	$topic =~ s/EmptyContrib/$name/g;
+    }
+
     open( TOPIC, '>', "$name/data/TWiki/$name.txt" ) or die $!;
-    print TOPIC "xxx";
+    # TODO: get page from twiki.org
+    print TOPIC $topic;
     close TOPIC;
 
     # TODO: make unit tests
