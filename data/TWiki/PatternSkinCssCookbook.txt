@@ -70,7 +70,7 @@ Follow these steps:
 
 See example at: PatternSkinCssCookbookCenterPage
 
----+ Use different fonts
+---++ Use different fonts
 
 See example at: PatternSkinCssCookbookFonts
 

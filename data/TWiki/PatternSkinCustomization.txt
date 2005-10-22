@@ -1,0 +1,70 @@
+%META:TOPICINFO{author="ArthurClemens" date="1130019100" format="1.1" version="1.1"}%
+---+!! %TWIKIWEB%.PatternSkin Customization
+
+%TOC%
+
+---++ How can I change the web logo?
+
+By default the logo at the top left of each web points to the image with name =logo.gif= that is attached to each web's WebPreferences. <br />
+The default variables that cause this behavior are defined in [[%TWIKIWEB%.TWikiPreferences]]:
+<pre>
+      * Set <nop>WEBLOGONAME = logo.gif
+      * Set <nop>WEBLOGOIMG = %<nop>PUBURL%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
+      * Set <nop>WEBLOGOURL = %<nop>SCRIPTURL%/view%<nop>SCRIPTSUFFIX%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
+      * Set <nop>WEBLOGOALT = Home
+</pre>
+
+There are several ways to change the logo in a web:
+   * Create a new image named =logo.gif= and attach it to the web's WebPreferences topic. %TWIKIWEB%.PatternSkin's stylesheet assumes the logo is 40px high. More about that later.
+   * You can also upload the image with FTP to =/pub/YourWeb/WebPreferences/=.
+or:
+   * Attach whatever image and attach it to the web's WebPreferences topic. Then add to the WebPreferences (under _Custom web preferences_):
+<pre>
+      * Set <nop>WEBLOGONAME = your-logo-name.gif-or-png
+</pre>
+
+---++ How do I set a site-wide logo?
+
+Edit %TWIKIWEB%.WebTopBar and change:
+<pre>
+&lt;a href="%<nop>WEBLOGOURL%">&lt;img src="%<nop>WEBLOGOIMG%" border="0" alt="%<nop>WEBLOGOALT%"/>&lt;/a>
+</pre>
+to:
+<pre>
+&lt;a href="%<nop>WIKILOGOURL%">&lt;img src="%<nop>WIKILOGOIMG%" border="0" alt="%<nop>WIKILOGOALT%"/>&lt;/a>
+</pre>
+
+---++ My logo does not fit the top bar
+
+%TWIKIWEB%.PatternSkin's stylesheet assumes the logo is 40px high. The top bar is 60px high, and has a vertical padding of 5px. This makes the logo appear in the middle of the top bar.
+
+---+++ If you want to have a higher top bar:
+
+=layout.css= has these style definitions:
+<verbatim>
+.patternLeftBar {
+	top:60px; /* height of patternTopBar */
+}
+.patternTopBar {
+	height:60px;
+}
+</verbatim>
+
+You can change these numbers in [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] directly, or create a new stylesheet, attach it to a topic and point =USERLAYOUTURL= to that topic attachment. See %TWIKIWEB%.PatternSkinCssCookbook about creating custom styles.
+
+---+++ If you want to change the white space above and below the logo
+
+[[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]] has this style definition:
+<verbatim>
+.patternTopBarContents {
+	padding:10px 2em 10px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
+}
+</verbatim>
+
+Assuming you want to keep the 60px top bar height (otherwise see above): if your logo is 50px high, change the 10px to 5px:
+<verbatim>
+.patternTopBarContents {
+	padding:5px 2em 5px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
+}
+</verbatim>
+
