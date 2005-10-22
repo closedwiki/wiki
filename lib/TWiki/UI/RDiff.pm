@@ -376,7 +376,7 @@ Renders the differences between version of a TwikiTopic
 | rev1 | the higher revision |
 | rev2 | the lower revision |
 | render | the rendering style {sequential, sidebyside, raw, debug} | (preferences) DIFFRENDERSTYLE, =sequential= |
-| type | history, diff, last} history diff, version to version, last version to previous | =history= |
+| type | {history, diff, last} history diff, version to version, last version to previous | =history= |
 | context | number of lines of context |
 | skin | the skin(s) to use to display the diff |
 TODO:
