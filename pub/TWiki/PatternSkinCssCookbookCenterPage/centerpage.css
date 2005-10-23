@@ -1,15 +1,11 @@
 .patternPage {
-    margin-left:8%;
-    margin-right:8%;
+    margin-left:4%;
+    margin-right:4%;
 }
 .patternLeftBar {
-	display:none;
+	left:4%;
+	width:156px; /* with percentages the calculations get a bit complex */
 }
-.patternMain,
-.patternTopBar,
-.patternBottomBar {
-	margin-left:0; /* left margin + width of left bar */	
-}
-.patternBottomBar {
-	padding-left:1em;
+.patternMain {
+	margin-left:156px;
 }

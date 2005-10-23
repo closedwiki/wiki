@@ -4,6 +4,17 @@
 	positioning of page elements
 	-----------------------------------------------------------	*/
 
+/*	---------------------------------------------------------------------------------------
+	CONSTANTS
+	
+	Sizes
+	----------------------------------------
+	C1 left bar width																16%
+	C2 right bar width (currently not used)											0%
+	C3 top bar height																60px
+
+	---------------------------------------------------------------------------------------	*/
+	
 .twikiLeft {
 	float:left;
 	position:relative;
@@ -20,7 +31,7 @@
 	margin:0;
 	padding:0;
 	height:0;
-	line-height:0%;
+	line-height:0px;
 	clear:both;
 	display:block;
 }
@@ -32,37 +43,34 @@
 	Positioning of layout blocks
 	-----------------------------------------------------------	*/
 
-.patternMiddleContainer {}
+.patternMiddleContainer {
+	float:left;
+	display:inline; /* IE doubles the margins on floats, this takes care of the problem */
+	width:100%;
+	margin-left:-0px; /*C2*/
+}
 .patternLeftBar {
 	position:absolute;
 	left:0;
-	margin:0;
-	padding:0;
-}
-
-/* setting the height of the top bar */
-
-.patternMiddleContainer {}
-.patternLeftBar {
-	top:60px; /* height of patternTopBar */
-}
-.patternTopBar {
-	height:60px;
-}
-
-/* positioning the left bar (width:13em) */
-
-.patternLeftBar {
-	width:16%;
+	margin-left:0px; /*C2*/
 }
 .patternLeftBarContents /* needed for Explorer 5.0 */ {
 	width:100%;
 }
-.patternMain {
-	position:relative;
-	margin:0 0 0 16%;
+
+/* setting the height of the top bar */
+.patternLeftBar {
+	top:60px; /*C3*/
 }
-.patternBottomBar {
+.patternTopBar {
+	height:60px; /*C3*/
+}
+
+/* setting the width of the left bar */
+.patternLeftBar {
+	width:16%; /*C1*/
+}
+.patternMain {
 	margin:0 0 0 16%;
 }
 
@@ -82,11 +90,7 @@
 	margin-left:5%;
 	margin-right:5%;
 }
-.patternPrintPage .patternBottomBar {
-	margin-left:5%;
-	margin-right:0;
-	padding:0;
-}
+
 /* Plain */
 
 .patternPlainPage .patternMain {

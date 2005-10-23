@@ -374,6 +374,9 @@ a:hover .twikiAccessKey {
 .patternTopBar {
 	background-color:transparent;
 }
+.patternBottomBar {
+	border-color:#ddd; /*BO7*/
+}
 .patternTopBarContents .patternSearchBox td {
 	color:#8E9195; /*T8*/
 }
@@ -394,7 +397,7 @@ a:hover .twikiAccessKey {
 .patternLeftBar {
 	border-color:#E2DCC8; /*BO4*/
 	color:#666; /*T7*/
-	background-color:transparent;
+	background-color:#FBF7E8;
 }
 .patternLeftBar hr {
 	color:#E2DCC8; /*BO4*/
@@ -423,7 +426,7 @@ a:hover .twikiAccessKey {
 }
 .patternLeftBarPersonal {
 	background-color:#E8EEF7;
-	border-color:#BFD8ED; /*BO3*/
+	border-color:#E2DCC8; /*BO4/
 }
 .patternLeftBarPersonal a:link,
 .patternLeftBarPersonal a:visited {
@@ -615,9 +618,6 @@ table#twikiSearchTable td.first {
 
 /* Print */
 
-.patternPrintPage .patternMain {
-	border-color:#fff #ddd #ddd #ddd; /*BO7*/
-}
 .patternPrintPage .patternContent .twikiAttachments,
 .patternPrintPage .patternContent .twikiForm {
 	background:#fff; /*BG1*/
