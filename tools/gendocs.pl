@@ -63,6 +63,8 @@ close(F);
 1;
 
 sub eachfile {
+    print "Looking at $_\n" if $Config->{debug};
+
     my $dir = $File::Find::dir;
     if( $dir =~ m!/\.! ||
         $dir =~ m!/Plugins! ||

@@ -45,11 +45,15 @@ sub target_build {
     $this->SUPER::target_build();
 
     # generate the POD documentation
-    print "Building documentation....\n";
+    print "Building documentation in $this->{basedir}....\n";
+    print "  Building TWiki.SourceCode tree docs...\n";
     print `perl gendocs.pl -root $this->{basedir}`;
+    # SMELL this exit code test does not work.
+    die "$!" if $!;
+    print "  Generating AUTHORS...\n";
     $this->cp( $this->{basedir}.'/AUTHORS',
                $this->{basedir}.'/pub/Main/TWikiContributor/AUTHORS' );
-
+    print "  Generating HTML static docs...\n";
     print `cd ../bin ; ./view TWiki.TWikiDocumentation skin plain | ../tools/fix_local_links.pl > ../TWikiDocumentation.html 2> /dev/null`;
     print `cd ../bin ; ./view TWiki.TWikiHistory skin plain > ../TWikiHistory.html 2> /dev/null`;
     print `cd ../bin ; ./view TWiki.DakarReleaseNotes skin plain > ../DakarReleaseNotes.html 2> /dev/null`;
