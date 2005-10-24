@@ -5,7 +5,7 @@
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
    * [[WebTopicCreator][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
    * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
-   * [[%INCLUDINGWEB%.WebSearchAdvanced][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+   * [[%INCLUDINGWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
    * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
    * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]

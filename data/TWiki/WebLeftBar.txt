@@ -7,7 +7,7 @@
    * [[%MAINWEB%.TWikiUsers][ %ICON{"person"}% %MAKETEXT{"Users"}%]]
    * [[%MAINWEB%.TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
    * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
-   * [[%INCLUDINGWEB%.WebSearchAdvanced][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+   * [[%INCLUDINGWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
    * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
    * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]

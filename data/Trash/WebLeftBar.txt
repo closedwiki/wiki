@@ -5,7 +5,7 @@
 ---
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
    * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
-   * [[WebSearchAdvanced][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+   * [[%INCLUDINGWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
    * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
 ---
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
