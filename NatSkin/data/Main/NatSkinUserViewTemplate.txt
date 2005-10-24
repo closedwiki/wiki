@@ -19,4 +19,3 @@
 %TMPL:P{"attachments"}%
 %TMPL:P{"topicinfo"}%
 %TMPL:END%
-%META:TOPICMOVED{by="MichaelDaum" date="1123612936" from="Trash.NatSkinUserViewTemplate" to="Main.NatSkinUserViewTemplate"}%
