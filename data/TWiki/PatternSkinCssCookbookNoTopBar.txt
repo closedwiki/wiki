@@ -1,7 +1,16 @@
 %META:TOPICINFO{author="ArthurClemens" date="1130024123" format="1.1" version="1.1"}%
    * Set USERSTYLEURL=%ATTACHURL%/notopbar.css
 
+Add dynamic variable:
+<verbatim>
+<style type="text/css" media="all">
+.patternLeftBar { background-image:url("%PUBURL%/%WEB%/%WEBPREFSTOPIC%/logo.gif"); }
+</style>
+</verbatim>
 
+<style type="text/css" media="all">
+.patternLeftBar { background-image:url("%PUBURL%/%WEB%/%WEBPREFSTOPIC%/logo.gif"); }
+</style>
 
 -- Main.ArthurClemens - 22 Oct 2005
 
