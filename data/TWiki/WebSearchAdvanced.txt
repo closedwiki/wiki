@@ -3,19 +3,20 @@
 ---+ %MAKETEXT{"Advanced Search"}%
 
 %SEARCH{
- "%URLPARAM{search}%"
- type="keyword"
- scope="%URLPARAM{scope}%"
- web="%URLPARAM{web}%"
- nosearch="%URLPARAM{nosearch}%"
- casesensitive="%URLPARAM{casesensitive}%"
- bookview="%URLPARAM{bookview}%"
- nosummary="%URLPARAM{nosummary}%"
- nototal="%URLPARAM{nototal}%"
- order="%URLPARAM{order}%"
- reverse="%URLPARAM{reverse}%"
- regex="%URLPARAM{regex}%"
- limit="%URLPARAM{limit}%"
+"%URLPARAM{search}%"
+type="keyword"
+scope="%URLPARAM{scope}%"
+web="%URLPARAM{web}%"
+nosearch="%URLPARAM{nosearch}%"
+casesensitive="%URLPARAM{casesensitive}%"
+bookview="%URLPARAM{bookview}%"
+nosummary="%URLPARAM{nosummary}%"
+nototal="%URLPARAM{nototal}%"
+order="%URLPARAM{order}%"
+reverse="%URLPARAM{reverse}%"
+regex="%URLPARAM{regex}%"
+limit="%URLPARAM{limit}%"
+zeroresults="off%URLPARAM{search}%"
 }%
 <noautolink>
 <div class="twikiPageForm">
