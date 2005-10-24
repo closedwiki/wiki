@@ -173,13 +173,14 @@ The same as %<nop>HTTP but operates on the HTTPS environment variables present w
    * Related: [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
 
 #VarICON
----+++ ICON{"type"} -- small icon of common attachment types
-   * Small 16x16 pixel icon of common attachment types. Specify file type only, file name, or full path name
-   * Syntax: =%<nop>ICON{"type"}%=
-   * Samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
-   * Example: =%<nop>ICON{"pdf"}%= expands to %ICON{"pdf"}%
+---+++ ICON{"type"} -- small documentation graphic or icon of common attachment types
+   * Small graphic (commonly 16x16 pixels) used to enhance topics. Specify the name of the graphic.
+   * A set of 16x16 pixel icons of common attachment types is provided. Specify file type only, file name, or full path name.
+   * Syntax: =%<nop>ICON{"name"}%= or =%<nop>ICON{"type"}%=
+   * Graphic samples: %ICON{"arrowbright"}% =arrowbright=, %ICON{"bubble"}% =bubble=, %ICON{"choice-yes"}% =choice-yes=, %ICON{"hand"}% =hand=
+   * Filetype samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
+   * Example: =%<nop>ICON{"info"}%= expands to %ICON{"info"}%
    * Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
-If the file type is not recognised, the default icon %ICON{}% is used.
 
 #VarIF
 ---+++ IF -- simple conditionals

@@ -180,6 +180,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 | <img src="%ATTACHURLPATH%/js.gif" alt="js" title="js" />  | =js.gif= | !JavaScript | =%<nop>ICON{js}%= |
 | <img src="%ATTACHURLPATH%/mdb.gif" alt="mdb" title="mdb" />  | =mdb.gif= | Microsoft Access database File | =%<nop>ICON{mdb}%= |
 | <img src="%ATTACHURLPATH%/mov.gif" alt="mov" title="mov" />  | =mov.gif= | !Quicktime movie | =%<nop>ICON{mov}%= |
+| <img src="%ATTACHURLPATH%/mp3.gif" alt="mp3" title="mp3" />  | =mp3.gif= | MP3 | =%<nop>ICON{mp3}%= |
 | <img src="%ATTACHURLPATH%/pdf.gif" alt="pdf" title="pdf" />  | =pdf.gif= | PDF | =%<nop>ICON{pdf}%= |
 | <img src="%ATTACHURLPATH%/pl.gif" alt="pl" title="pl" />  | =pl.gif= | Perl source code file | =%<nop>ICON{pl}%= |
 | <img src="%ATTACHURLPATH%/png.gif" alt="png" title="png" />  | =png.gif= | PNG | =%<nop>ICON{png}%= |
@@ -206,6 +207,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="locktopic.gif" attr="" autoattached="1" comment="" date="1128927051" path="locktopic.gif" size="217" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="choice-no.gif" attr="" autoattached="1" comment="" date="1128926965" path="choice-no.gif" size="166" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="wav.gif" attr="" autoattached="1" comment="" date="1128927114" path="wav.gif" size="377" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="mp3.gif" attr="" autoattached="1" comment="" date="1128927114" path="mp3.gif" size="377" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="lock.gif" attr="" autoattached="1" comment="" date="1128927048" path="lock.gif" size="225" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="newtopic.gif" attr="" autoattached="1" comment="" date="1128927060" path="newtopic.gif" size="340" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="locktopicgray.gif" attr="" autoattached="1" comment="" date="1128927053" path="locktopicgray.gif" size="159" user="UnknownUser" version=""}%
