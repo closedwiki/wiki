@@ -63,7 +63,7 @@ close(F);
 1;
 
 sub eachfile {
-    print "Looking at $_\n" if $Config->{debug};
+    print "Looking at $_\n" if ($Config->{debug} && $Config->{verbose});
 
     my $dir = $File::Find::dir;
     if( $dir =~ m!/\.! ||
