@@ -127,7 +127,7 @@ sub endRenderingHandler
          $childTopicTemplate = $1; 
       }      
       if ($childTopicTemplate ne '') {
-	 s/<a href="(.*?)\?topicparent=(.*?)">\?<\/a>/<a href="$1\?topicparent=$2\&templatetopic=$childTopicTemplate">\?<\/a>/g;
+         s/href="(.*?)\?topicparent=([^"]+)"(.*?)<\/a>/href="$1\?topicparent=$2\&templatetopic=$childTopicTemplate"$3<\/a>/g;
       }
 	 $result .= $_;
     }    
