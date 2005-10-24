@@ -802,6 +802,7 @@ sub _newTopicScreen {
         $confirm, $doAllowNonWikiWord ) = @_;
 
     my $query = $session->{cgiQuery};
+    my $tmplname = $query->param( 'template' ) || '';
     my $tmpl = '';
     my $skin = $session->getSkin();
     my $currentWebOnly = $query->param( 'currentwebonly' ) || '';
@@ -812,7 +813,7 @@ sub _newTopicScreen {
     $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
 
     if( $attachment ) {
-        $tmpl = $session->{templates}->readTemplate( 'moveattachment', $skin );
+        $tmpl = $session->{templates}->readTemplate( $tmplname || 'moveattachment', $skin );
         $tmpl =~ s/%FILENAME%/$attachment/go;
     } elsif( $confirm ) {
         $tmpl = $session->{templates}->readTemplate( 'renameconfirm', $skin );
