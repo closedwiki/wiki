@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ColeBeck" date="1113414050" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="ColeBeck" date="1113414050" format="1.0" version="1.12"}%
 ---+ Directed Graph Plugin
 This plugin accepts valid input to create a .dot file.  [[http://www.graphviz.org/][Graphviz's]] dot application is then used to create a .png of the directed graph.
 
@@ -122,8 +122,9 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ColeBeck |
-|  Plugin Version: | 13 Apr 2005 (V1.200) |
+|  Plugin Version: | 24 Oct 2005 (V1.210) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Oct 2005: | Incorporated areamap patch (MagnusLewisSmith)  --JoanTouzet |
 |  13 Apr 2005: | Added clientside maps functionality; correctly finds pub directory |
 |  25 Mar 2005: | Cleaner code |
 |  01 Jul 2004: | Initial version |
