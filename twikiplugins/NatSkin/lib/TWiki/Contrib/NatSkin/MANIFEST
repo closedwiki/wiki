@@ -99,6 +99,7 @@ templates/settingstopicactions.nat.tmpl
 templates/view.nat.tmpl
 templates/view.print.nat.tmpl
 templates/viewtopicactions.nat.tmpl
+data/Main/NatSkinUserViewTemplate.txt
 data/TWiki/NatSkin.txt
 data/TWiki/NatSkinCss.txt
 data/TWiki/NatSkinTemplates.txt
