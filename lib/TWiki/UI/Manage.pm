@@ -309,10 +309,11 @@ sub rename {
         # Does old attachment exist?
         unless( $store->attachmentExists( $oldWeb, $oldTopic,
                                           $attachment )) {
+			my $tmplname = $query->param( 'template' ) || '';
             throw TWiki::OopsException(
                 'attention',
                 web => $oldWeb, topic => $oldTopic,
-                def => 'move_err',
+                def => ($tmplname eq 'deleteattachment') ? 'delete_err' : 'move_err',
                 keep => 1,
                 params => [
                     $newWeb, $newTopic,

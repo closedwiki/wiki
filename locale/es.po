@@ -502,8 +502,8 @@ msgid "Attachment already exists in new topic"
 msgstr "El archivo ya existe en nueva pagina"
 
 #: lib/TWiki/UI/Manage.pm:320
-msgid "Attachment does not exist"
-msgstr "El archivo no se existe"
+msgid "Attachment does not exist."
+msgstr "El archivo no se existe."
 
 #: templates/oopsattention.tmpl:49
 msgid "Attachment move failed"

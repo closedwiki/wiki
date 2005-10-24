@@ -510,8 +510,8 @@ msgid "Attachment already exists in new topic"
 msgstr "Der Anhang existiert bereits in dem neuen Topic"
 
 #: lib/TWiki/UI/Manage.pm:320
-msgid "Attachment does not exist"
-msgstr "Anhang existiert nicht"
+msgid "Attachment does not exist."
+msgstr "Anhang existiert nicht."
 
 #: templates/oopsattention.tmpl:49
 msgid "Attachment move failed"

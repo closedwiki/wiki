@@ -51,6 +51,12 @@
 
 %PARAM4%
 %TMPL:END%
+%TMPL:DEF{"delete_err"}%
+---+++ %_{"Attachment delete failed"}%
+%_{"During deletion of attachment =[_1]= an error was found. Please notify your [_2] administrator.", "%URLPARAM{attachment}%", "<nop>%WIKITOOLNAME%"}%
+
+%PARAM4%
+%TMPL:END%
 %TMPL:DEF{"topic_exists"}%
 ---+++ %_{"The [_1] topic already exists", "\"%TOPIC%\""}%
 %_{"Cannot create [_1] because it already exists.", "%TOPIC%"}%

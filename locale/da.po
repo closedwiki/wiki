@@ -499,8 +499,8 @@ msgid "Attachment already exists in new topic"
 msgstr "Den vedhæftede fil eksisterer allerede på den nye side"
 
 #: lib/TWiki/UI/Manage.pm:320
-msgid "Attachment does not exist"
-msgstr "Vedhæftet fil findes ikke"
+msgid "Attachment does not exist."
+msgstr "Vedhæftet fil findes ikke."
 
 #: templates/oopsattention.tmpl:49
 msgid "Attachment move failed"

@@ -467,7 +467,7 @@ msgid "Attachment already exists in new topic"
 msgstr ""
 
 #: lib/TWiki/UI/Manage.pm:320
-msgid "Attachment does not exist"
+msgid "Attachment does not exist."
 msgstr ""
 
 #: templates/oopsattention.tmpl:49
