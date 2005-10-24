@@ -141,7 +141,7 @@ sub handleDot
         }
         # create the map
         else {
-            $command=system("$cmd -Tcmapx -o $cmapx $tmpFile");
+            $command=system("$cmd -Tcmap -o $cmapx $tmpFile");
             if($command) {
                 # errors existed so remove created files
                 unlink "$cmapx";
@@ -160,7 +160,7 @@ sub handleDot
         $mapfile =~ s/(<map\ id\=\")(.*?)(\"\ name\=\")(.*?)(\">)/$1$hash_code$3$hash_code$5/go;
         # place map and "foo.png" at the source of the <dot> tag in $Web.$Topic
         my $loc = &TWiki::Func::getPubUrlPath() . "/$web/$topic";
-        return "$mapfile<img usemap=\"#$hash_code\" src=\"$loc/graph$hash_code.png\"/>";
+        return "<map name=\"$hash_code\">\n$mapfile</MAP>\n<img usemap=\"#$hash_code\" src=\"$loc/graph$hash_code.png\"/>";
     } else {
         # attach "foo.png" at the source of the <dot> tag in $Web.$Topic
         $loc= &TWiki::Func::getPubUrlPath() . "/$web/$topic";
