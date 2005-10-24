@@ -30,9 +30,9 @@
 	* [[Main.WebPreferences][Preferences]]
 </div>
 </div>
-<div style="%IFSKINSTATE{buttons="on" then="display:none"}%">
+%IFSKINSTATETHEN{buttons="off"}%
 %FORMATLIST{"%WEBLIST{webs="public" separator=" "}%" exclude="Main|TWiki|Sandbox|TestCases|Trash" split=" " separator="$n" format="<h2>$percntWEBLINK{\"$1\"}$percnt</h2>"}%
-</div>
+%FISKINSTATE%
 <div class="navUserSection %IFSKINSTATE{buttons="on" glue="off" then="navUser"}%">
 ---++ %WEBLINK{"User"}%
 <div class="navUser">
