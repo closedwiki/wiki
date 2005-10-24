@@ -371,6 +371,7 @@ sub getVisitors {
       $wikiName =~ s/^\s+//g;
       $wikiName =~ s/\s+$//g;
       next unless $wikiName;
+      next if $wikiName =~ /^TWiki/o; # exclude default user
 
       $wikiName =~ s/^.*?\.(.*)$/$1/g;
       
