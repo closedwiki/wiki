@@ -27,3 +27,8 @@ _Documentation for TWiki users._
       * TextFormattingFAQ: Common how-to questions about posting in TWiki  
       * Frequent users should also browse the full [[TWikiReferenceManual][Reference Manual]]!
 
+
+   * *Help on InstalledPlugins*
+<blockquote>
+%PLUGINDESCRIPTIONS%
+</blockquote>
