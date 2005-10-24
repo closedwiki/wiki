@@ -1,13 +1,79 @@
 ---+!! CPANContrib Contrib Package
 
-Add short description here of your CPANContrib contrib.
+Provides pure-perl and precompiled CPAN modules in a handy bundle
+   * TWiki:Codev.TWikiCore
+   * TWiki:Plugins.TWikiInstallerContrib
+   * tests (?)
+   * later, add CPAN module requirements for all of the plugins
 
 %TOC%
 
 ---++ Summary of Contents
-   * 
-   * 
-
+<table><tr>
+<td>
+   * CPAN:ExtUtils::MakeMaker 
+   * CPAN:Storable 
+   * CPAN:Test::Harness 
+   * CPAN:Test::More 
+   * CPAN:YAML 
+   * CPAN:Compress::Zlib 
+   * CPAN:IO::Zlib 
+   * CPAN:IO::String 
+   * CPAN:Archive::Tar 
+   * CPAN:Tie::Gzip 
+   * CPAN:Archive::TarGzip 
+   * CPAN:Archive::Zip 
+   * CPAN:Archive::Any
+   * CPAN:Data::Startup 
+   * CPAN:Math::BigInt 
+   * CPAN:File::Package 
+   * CPAN:File::Where 
+   * CPAN:File::AnySpec 
+   * CPAN:ExtUtils::CBuilder 
+</td>
+<td>
+   * CPAN:ExtUtils::ParserXS 
+   * CPAN:Tree::DAG_Node
+   * CPAN:Carp::Assert
+   * CPAN:Class::Data::Inheritable
+   * CPAN:Class::ISA 
+   * CPAN:Class::Virtually::Abstract
+   * CPAN:Error 
+   * CPAN:URI 
+   * CPAN:HTML::Tagset 
+   * CPAN:HTML::Parser 
+   * CPAN:LWP 
+   * CPAN:LWP::UserAgent
+   * CPAN:XML::Parser 
+   * CPAN:XML::Simple 
+   * CPAN:Algorithm::Diff 
+   * CPAN:Text::Diff 
+   * CPAN:HTML::Diff
+   * CPAN:Test::Builder::Tester 
+   * CPAN:Test::LongString
+</td>
+<td>
+   * CPAN:WWW::Mechanize 
+   * CPAN:HTML::TableExtract 
+   * CPAN:WWW::Mechanize::TWiki
+   * CPAN:Number::Compare 
+   * CPAN:Text::Glob 
+   * CPAN:File::Find::Rule 
+   * CPAN:File::Slurp 
+   * CPAN:File::Slurp::Tree
+   * CPAN:CGI::Session
+   * CPAN:Encode 
+   * CPAN:Locale::Maketext::Lexicon
+   * CPAN:Digest::base 
+   * CPAN:Digest::SHA1
+   * CPAN:Unicode::Map
+   * CPAN:Unicode::Map8 
+   * CPAN:Jcode 
+   * CPAN:Unicode::String 
+   * CPAN:Unicode::MapUTF8
+</td>
+</tr></table>
+ 
 ---++ Detailed Documentation
 <!-- use %$POD% when using with Build module to automatically extract documentation -->
    * 
@@ -18,10 +84,10 @@ Add short description here of your CPANContrib contrib.
 Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>JSCALENDARCONTRIB_STUB%==
 
    * One line description:
-      * Set SHORTDESCRIPTION = Add short description here of your CPANContrib contrib
+      * Set SHORTDESCRIPTION = Bundled CPAN Modules
 
    * Name of the perl package
-      * Set STUB = _name of the stub, TWiki::Contrib::..._<!-- use %$STUB% when building with Build.pm -->
+      * Set STUB = %$STUB%
 
 ---++ Installation Instructions
 
@@ -30,20 +96,17 @@ __Note:__ You do not need to install anything on the browser to use this contrib
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Contrib topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Contrib topic repository |
-     | ==lib/TWiki/Contrib/%TOPIC%.pm== | Contrib Perl module |
-<!-- replace table body above, keeping the header, with %$MANIFEST% when using with Build module to automatically extract MANIFEST -->
+%$MANIFEST%
    * Test if the installation was successful:
       * _enter samples here_
 
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/%USERNAME% |
-|  Copyright &copy;: | <!-- e.g. "2004, SlobSoft Gmbh, All Rights Reserved" --> |
+|  Author: | TWiki:Main.WillNorris |
+|  Copyright &copy;: |  |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Dependencies: | none <!-- use %$DEPENDENCIES% with the Build Module to auotmatically extract dependencies --> |
-|  Version: | <!-- use %$VERSION% with the Build module to auto-extract from the .pm --> |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  %DATE%: | Initial version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -52,5 +115,4 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/%USERNAME% - %DATE%
-<!-- replace %DATE% with %$DATE% for Build module, to get build date -->
+-- TWiki:Main/WillNorris - %$DATE%

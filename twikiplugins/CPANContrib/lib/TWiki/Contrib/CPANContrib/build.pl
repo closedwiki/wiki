@@ -35,6 +35,8 @@ use TWiki::Contrib::Build;
 
     $this->SUPER::target_build();
 
+if ( 0 )
+{
     # Do other build stuff here
     use Cwd;
     my $base_lib_dir = getcwd . "/../../../../lib/CPAN";
@@ -89,6 +91,7 @@ use TWiki::Contrib::Build;
 	  close MANIFEST;
       }
   }
+}
 }
 
 # Create the build object
