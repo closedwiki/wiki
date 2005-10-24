@@ -34,7 +34,6 @@ Here is the list of smilies supported by this plugin. To add others, attach new 
 | <nop>:yes:      | %ATTACHURL%/yes.gif         | "yes" |
 | <nop>:no:         | %ATTACHURL%/no.gif          | "no" |
 | <nop>:love:       | %ATTACHURL%/love.gif        | "in love" |
-| <nop>:scull:      | %ATTACHURL%/skull.gif       | "skull" |
 | <nop>:skull:      | %ATTACHURL%/skull.gif       | "skull" |
 
 ---++ <nop>%TOPIC% Global Settings
