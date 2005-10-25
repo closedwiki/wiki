@@ -481,7 +481,7 @@ h1, h2, h3, h4, h5, h6 {
 /* external link */
 
 /* see also page.nat.tmpl */
-.natMain .natExternalLink:after {
+.natMiddle .natExternalLink:after {
   margin-left:3px;
   content:url("external.png");
   margin-right:3px;
@@ -708,7 +708,7 @@ img.alignleft {
   font-weight:bold;
   margin-left:2px;
   margin-right:2px;
-  line-height:100%;
+  line-height:25%;
   font-size:18px;
   text-decoration:none;
 }
