@@ -43,9 +43,9 @@ msgstr ""
 msgid "%1 User Authentication"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:5
+#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:5
 #: data/TWiki/WebLeftBar.txt:6 data/TWiki/WebLeftBarExample.txt:2
-#: data/Trash/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:5
+#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:6
 #: templates/view.pattern.tmpl:51
 msgid "%1 Web"
 msgstr ""
@@ -66,7 +66,7 @@ msgstr ""
 msgid "%1 home"
 msgstr ""
 
-#: templates/oopsattention.tmpl:93
+#: templates/oopsattention.tmpl:99
 msgid "%1 is an invalid name for a new web"
 msgstr ""
 
@@ -119,7 +119,7 @@ msgstr ""
 msgid "&Cancel"
 msgstr ""
 
-#: templates/view.pattern.tmpl:24
+#: templates/view.pattern.tmpl:24 templates/view.tmpl:33
 msgid "&Compose"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid "&Edit text"
 msgstr ""
 
-#: templates/view.pattern.tmpl:82
+#: templates/twiki.pattern.tmpl:219 templates/twiki.tmpl:157
 msgid "&History"
 msgstr ""
 
@@ -155,12 +155,12 @@ msgstr ""
 msgid "(%1 vs. %2)"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:71
+#: data/TWiki/WebSearchAdvanced.txt:72
 msgid "(=all= to show all topics)"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:18
-#: data/TWiki/WebTopicViewTemplate.txt:18
+#: data/TWiki/WebTopicNonWikiTemplate.txt:17
+#: data/TWiki/WebTopicViewTemplate.txt:17
 msgid "(More options in WebSearch)"
 msgstr ""
 
@@ -168,7 +168,7 @@ msgstr ""
 msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:123
+#: templates/oopsattention.tmpl:129
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
 msgstr ""
 
@@ -226,7 +226,7 @@ msgstr ""
 msgid "(oops)"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:38
+#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:39
 msgid "(otherwise search %1 Web only)"
 msgstr ""
 
@@ -248,7 +248,7 @@ msgstr ""
 msgid "(search results)"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:54
+#: data/TWiki/WebSearchAdvanced.txt:55
 msgid "(semicolon =;= for and)"
 msgstr ""
 
@@ -256,11 +256,11 @@ msgstr ""
 msgid "(set preferences)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:198
+#: templates/oopsattention.tmpl:204
 msgid "(single character first name)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:197
+#: templates/oopsattention.tmpl:203
 msgid "(single character last name)"
 msgstr ""
 
@@ -318,13 +318,13 @@ msgid ""
 "collaboration. You are trying to %2 in a web that does not exist."
 msgstr ""
 
-#: templates/oopsattention.tmpl:108
+#: templates/oopsattention.tmpl:114
 msgid ""
 "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
 "=#FFFF00=."
 msgstr ""
 
-#: templates/oopsattention.tmpl:125
+#: templates/oopsattention.tmpl:131
 msgid "A confirmation e-mail has been sent to %1"
 msgstr ""
 
@@ -335,7 +335,7 @@ msgid ""
 "if necessary."
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:27
+#: data/Sandbox/WebHome.txt:26
 msgid ""
 "A more extensive changes list is available via the [[%1][Recent Changes]] "
 "link in the navigation menu."
@@ -380,7 +380,7 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-#: templates/oopsattention.tmpl:260
+#: templates/oopsattention.tmpl:266
 msgid "Adding a %1 variable in WebPreferences"
 msgstr ""
 
@@ -396,11 +396,11 @@ msgstr ""
 msgid "Advanced search"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:38
+#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:39
 msgid "All public webs"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:84
+#: data/TWiki/WebSearchAdvanced.txt:85
 msgid "All topics in %1"
 msgstr ""
 
@@ -409,18 +409,18 @@ msgstr ""
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr ""
 
-#: templates/oopsattention.tmpl:186
+#: templates/oopsattention.tmpl:192
 msgid ""
 "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
 "different username."
 msgstr ""
 
-#: templates/oopsattention.tmpl:176
+#: templates/oopsattention.tmpl:182
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
 
-#: templates/oopsattention.tmpl:226
+#: templates/oopsattention.tmpl:232
 msgid "An email address is required before a password can be reset."
 msgstr ""
 
@@ -462,12 +462,16 @@ msgstr ""
 msgid "Attachment"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:340
+#: lib/TWiki/UI/Manage.pm:341
 msgid "Attachment already exists in new topic"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:320
-msgid "Attachment does not exist."
+#: templates/oopsattention.tmpl:55
+msgid "Attachment delete failed"
+msgstr ""
+
+#: lib/TWiki/UI/Manage.pm:321
+msgid "Attachment does not exist"
 msgstr ""
 
 #: templates/oopsattention.tmpl:49
@@ -515,11 +519,11 @@ msgstr ""
 msgid "Backlinks:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:103
+#: templates/oopsattention.tmpl:109
 msgid "Base web %1 is missing or does not exist"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:36
+#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:37
 msgid "Both body and title"
 msgstr ""
 
@@ -527,7 +531,7 @@ msgstr ""
 msgid "Can't find user %1"
 msgstr ""
 
-#: templates/oopsattention.tmpl:225
+#: templates/oopsattention.tmpl:231
 msgid "Can't get an email address for %1"
 msgstr ""
 
@@ -543,23 +547,23 @@ msgstr ""
 msgid "Cancel editing and discard changes"
 msgstr ""
 
-#: templates/oopsattention.tmpl:56
+#: templates/oopsattention.tmpl:62
 msgid "Cannot create %1 because it already exists."
 msgstr ""
 
-#: templates/oopsattention.tmpl:99
+#: templates/oopsattention.tmpl:105
 msgid "Cannot create web %1 because it already exists"
 msgstr ""
 
-#: templates/oopsattention.tmpl:62 templates/oopsattention.tmpl:68
+#: templates/oopsattention.tmpl:68 templates/oopsattention.tmpl:74
 msgid "Cannot rename %1 to %2 because it already exists."
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:53
+#: data/TWiki/WebSearchAdvanced.txt:54
 msgid "Case sensitive"
 msgstr ""
 
-#: templates/oopsattention.tmpl:266
+#: templates/oopsattention.tmpl:272
 msgid ""
 "Certain characters are not permitted in filenames, and other filenames are "
 "not permitted for security reasons. Your filename matched one of the "
@@ -576,7 +580,7 @@ msgstr ""
 msgid "Change from:"
 msgstr ""
 
-#: data/TWiki/WebLeftBarSearch.txt:6 templates/oopschangelanguage.tmpl:21
+#: data/TWiki/WebLeftBarSearch.txt:15 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr ""
@@ -603,10 +607,15 @@ msgstr ""
 msgid "Changed"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:9
+#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:9
 #: data/TWiki/WebLeftBar.txt:11 data/TWiki/WebLeftBarExample.txt:4
-#: data/Trash/WebLeftBar.txt:8 data/_default/WebLeftBar.txt:8
+#: data/Trash/WebLeftBar.txt:9 data/_default/WebLeftBar.txt:9
 msgid "Changes"
+msgstr ""
+
+#. ($r2, $r1)
+#: lib/TWiki/UI/RDiff.pm:460
+msgid "Changes from r%1 to r%2"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:136 templates/preview.pattern.tmpl:67
@@ -631,7 +640,7 @@ msgstr ""
 msgid "Click here"
 msgstr ""
 
-#: templates/oopsattention.tmpl:249
+#: templates/oopsattention.tmpl:255
 msgid "Click on [[%1][Debug topic text]]."
 msgstr ""
 
@@ -641,7 +650,7 @@ msgid ""
 "references."
 msgstr ""
 
-#: templates/oopsattention.tmpl:107
+#: templates/oopsattention.tmpl:113
 msgid "Color %1 has an invalid format"
 msgstr ""
 
@@ -663,17 +672,17 @@ msgstr ""
 msgid "Conflict"
 msgstr ""
 
-#: data/TWiki/TWikiVariablesAtoM.txt:267 templates/login.pattern.tmpl:51
+#: data/TWiki/TWikiVariablesAtoM.txt:268 templates/login.pattern.tmpl:51
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
 #: templates/oopsaccessdenied.tmpl:42
 msgid "Contact %1 if you have any questions."
 msgstr ""
 
-#: templates/oopsattention.tmpl:302
+#: templates/oopsattention.tmpl:308
 msgid "Continue and try to rename web?"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:23
+#: data/TWiki/WebTopicViewTemplate.txt:22
 msgid "Continue to *[[%1][Create the new page]]*"
 msgstr ""
 
@@ -683,11 +692,11 @@ msgid ""
 "platform is the property of the contributing authors."
 msgstr ""
 
-#: templates/oopsattention.tmpl:117
+#: templates/oopsattention.tmpl:123
 msgid "Could not create the new web %1"
 msgstr ""
 
-#: templates/oopsattention.tmpl:230
+#: templates/oopsattention.tmpl:236
 msgid "Could not save %1."
 msgstr ""
 
@@ -695,15 +704,11 @@ msgstr ""
 msgid "Cr&eate"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:16
-msgid "Create"
-msgstr ""
-
-#: data/Sandbox/WebHome.txt:18
+#: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
 msgstr ""
 
-#: data/Sandbox/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:12
+#: data/Sandbox/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:13
 msgid "Create New Topic"
 msgstr ""
 
@@ -711,7 +716,7 @@ msgstr ""
 msgid "Create a link to the attached file"
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:17
+#: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
 msgstr ""
 
@@ -719,7 +724,7 @@ msgstr ""
 msgid "Create a new document by name:"
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:13
+#: data/Sandbox/WebHome.txt:11
 msgid "Create by Name"
 msgstr ""
 
@@ -731,11 +736,11 @@ msgstr ""
 msgid "Create this topic"
 msgstr ""
 
-#: templates/oopsattention.tmpl:259
+#: templates/oopsattention.tmpl:265
 msgid "Creating a suitable Form Definition topic"
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:22
+#: data/Sandbox/WebHome.txt:21
 msgid "Current time on this server:"
 msgstr ""
 
@@ -779,16 +784,12 @@ msgstr ""
 msgid "Deleted topics will be moved to the %1 web"
 msgstr ""
 
-#: templates/oopsattention.tmpl:184
+#: templates/oopsattention.tmpl:190
 msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr ""
 
 #: templates/rdiff.pattern.tmpl:11
 msgid "Difference Topic"
-msgstr ""
-
-#: templates/rdiff.pattern.tmpl:19
-msgid "Diffs"
 msgstr ""
 
 #: templates/preview.pattern.tmpl:67 templates/preview.pattern.tmpl:70
@@ -799,12 +800,18 @@ msgstr ""
 msgid "Do not show attachment in table"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:65
+#: data/TWiki/WebSearchAdvanced.txt:66
 msgid "Do show:"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:58
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Don't show:"
+msgstr ""
+
+#: templates/oopsattention.tmpl:56
+msgid ""
+"During deletion of attachment =%1= an error was found. Please notify your %2 "
+"administrator."
 msgstr ""
 
 #: templates/oopsattention.tmpl:50
@@ -813,19 +820,19 @@ msgid ""
 "administrator."
 msgstr ""
 
-#: templates/oopsattention.tmpl:78
+#: templates/oopsattention.tmpl:84
 msgid ""
 "During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
 "4 administrator."
 msgstr ""
 
-#: templates/oopsattention.tmpl:81
+#: templates/oopsattention.tmpl:87
 msgid ""
 "During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
 "administrator."
 msgstr ""
 
-#: templates/oopsattention.tmpl:281
+#: templates/oopsattention.tmpl:287
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
@@ -859,7 +866,7 @@ msgid "Edit text"
 msgstr ""
 
 #: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:24
-#: templates/view.pattern.tmpl:33
+#: templates/view.pattern.tmpl:33 templates/view.tmpl:33
 msgid "Edit this topic text"
 msgstr ""
 
@@ -875,11 +882,11 @@ msgstr ""
 msgid "Enter a new username and password to change identity:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:170
+#: templates/oopsattention.tmpl:176
 msgid "Error registering user %1"
 msgstr ""
 
-#: templates/oopsattention.tmpl:280
+#: templates/oopsattention.tmpl:286
 msgid "Error saving topic"
 msgstr ""
 
@@ -905,7 +912,7 @@ msgstr ""
 msgid "Existing form data will be lost! (still available in old version)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:265
+#: templates/oopsattention.tmpl:271
 msgid "Filename %1 is not legal for a TWiki attachment."
 msgstr ""
 
@@ -925,11 +932,11 @@ msgstr ""
 msgid "Force new revision"
 msgstr ""
 
-#: templates/oopsattention.tmpl:237
+#: templates/oopsattention.tmpl:243
 msgid "Form Definition %1 missing"
 msgstr ""
 
-#: templates/oopsattention.tmpl:242
+#: templates/oopsattention.tmpl:248
 msgid "Form definition missing"
 msgstr ""
 
@@ -947,20 +954,20 @@ msgid ""
 "preferences</a>."
 msgstr ""
 
-#: templates/oopsattention.tmpl:234
+#: templates/oopsattention.tmpl:240
 msgid ""
 "Go back in your browser and insert information for all mandatory fields."
 msgstr ""
 
-#: templates/oopsattention.tmpl:285 templates/oopssaveerr.tmpl:10
+#: templates/oopsattention.tmpl:291 templates/oopssaveerr.tmpl:10
 msgid "Go back in your browser and save your changes locally."
 msgstr ""
 
-#: templates/oopsattention.tmpl:194
+#: templates/oopsattention.tmpl:200
 msgid "Good examples:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:7 data/TWiki/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:8 data/TWiki/WebLeftBar.txt:8
 msgid "Groups"
 msgstr ""
 
@@ -968,7 +975,7 @@ msgstr ""
 msgid "Hello %1!"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:27
+#: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:28
 msgid "Help"
 msgstr ""
 
@@ -988,6 +995,10 @@ msgstr ""
 msgid "Hide help"
 msgstr ""
 
+#: templates/view.print.pattern.tmpl:26
+msgid "History:"
+msgstr ""
+
 #: data/TWiki/NewUserTemplate.txt:15
 msgid "Horizontal size of text edit box:"
 msgstr ""
@@ -1004,15 +1015,15 @@ msgstr ""
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
 
-#: templates/oopsattention.tmpl:251
+#: templates/oopsattention.tmpl:257
 msgid "If this line isn't present see _upgrade_ section below"
 msgstr ""
 
-#: templates/oopsattention.tmpl:245
+#: templates/oopsattention.tmpl:251
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:41 data/TWiki/WebSearchAdvanced.txt:81
+#: data/TWiki/WebSearch.txt:39 data/TWiki/WebSearchAdvanced.txt:82
 msgid ""
 "If you already know the name of the topic, enter the name of the topic into "
 "the [[%1][Jump box]] at the top"
@@ -1050,8 +1061,8 @@ msgstr ""
 msgid "If you want to create the topic"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:21
-#: data/TWiki/WebTopicViewTemplate.txt:21
+#: data/TWiki/WebTopicNonWikiTemplate.txt:20
+#: data/TWiki/WebTopicViewTemplate.txt:20
 msgid "If you would like to create this page:"
 msgstr ""
 
@@ -1063,29 +1074,29 @@ msgstr ""
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:48
+#: data/TWiki/WebSearchAdvanced.txt:49
 msgid "In reversed order"
 msgstr ""
 
-#: templates/oopsattention.tmpl:191
+#: templates/oopsattention.tmpl:197
 msgid "Incorrect %1"
 msgstr ""
 
-#: templates/oopsattention.tmpl:84
+#: templates/oopsattention.tmpl:90
 msgid "Incorrect Password"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:8 data/Sandbox/WebLeftBar.txt:7
+#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:7
 #: data/TWiki/WebLeftBar.txt:9 data/TWiki/WebLeftBarExample.txt:5
-#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:6
+#: data/Trash/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:7
 msgid "Index"
 msgstr ""
 
-#: templates/oopsattention.tmpl:211
+#: templates/oopsattention.tmpl:217
 msgid "Invalid Activation Code"
 msgstr ""
 
-#: templates/oopsattention.tmpl:203
+#: templates/oopsattention.tmpl:209
 msgid "Invalid email address"
 msgstr ""
 
@@ -1113,19 +1124,19 @@ msgid ""
 "will automatically be removed."
 msgstr ""
 
-#: data/TWiki/WebLeftBarSearch.txt:2
+#: data/TWiki/WebLeftBarSearch.txt:5
 msgid "Jump"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:46
+#: data/TWiki/WebSearchAdvanced.txt:47
 msgid "Last editor"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:45
+#: data/TWiki/WebSearchAdvanced.txt:46
 msgid "Last modified time"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:70
+#: data/TWiki/WebSearchAdvanced.txt:71
 msgid "Limit results to:"
 msgstr ""
 
@@ -1144,11 +1155,11 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:42 data/TWiki/WebSearchAdvanced.txt:82
+#: data/TWiki/WebSearch.txt:40 data/TWiki/WebSearchAdvanced.txt:83
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:43 data/TWiki/WebSearchAdvanced.txt:83
+#: data/TWiki/WebSearch.txt:41 data/TWiki/WebSearchAdvanced.txt:84
 msgid "List topics that start with the letter:"
 msgstr ""
 
@@ -1172,7 +1183,7 @@ msgstr ""
 msgid "Logon"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:52
+#: data/TWiki/WebSearchAdvanced.txt:53
 msgid "Make search:"
 msgstr ""
 
@@ -1183,7 +1194,7 @@ msgid ""
 "sensitive"
 msgstr ""
 
-#: templates/oopsattention.tmpl:158
+#: templates/oopsattention.tmpl:164
 msgid "Missing Fields"
 msgstr ""
 
@@ -1221,7 +1232,7 @@ msgstr ""
 msgid "My Links"
 msgstr ""
 
-#: lib/TWiki/Search.pm:786
+#: lib/TWiki/Search.pm:791
 msgid "NEW"
 msgstr ""
 
@@ -1230,7 +1241,7 @@ msgstr ""
 msgid "NOTE: This Wiki topic does not exist yet"
 msgstr ""
 
-#: templates/oopsattention.tmpl:90
+#: templates/oopsattention.tmpl:96
 msgid "Name of new web is missing"
 msgstr ""
 
@@ -1238,7 +1249,7 @@ msgstr ""
 msgid "New parent web:<br>(subwebs must be enabled)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:74
+#: templates/oopsattention.tmpl:80
 msgid "New topic name %1 is not a %2"
 msgstr ""
 
@@ -1258,7 +1269,7 @@ msgstr ""
 msgid "No permission to view %1"
 msgstr ""
 
-#: templates/oopsattention.tmpl:151
+#: templates/oopsattention.tmpl:157
 msgid "No users to reset passwords for."
 msgstr ""
 
@@ -1278,7 +1289,7 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-#: data/TWiki/TWikiVariablesAtoM.txt:264
+#: data/TWiki/TWikiVariablesAtoM.txt:265
 msgid "Notes:"
 msgstr ""
 
@@ -1286,17 +1297,16 @@ msgstr ""
 msgid "Notices:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:10
-#: data/TWiki/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:9
+#: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:10
+#: data/TWiki/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
 msgid "Notifications"
 msgstr ""
 
-#: templates/search.pattern.tmpl:23 templates/searchbookview.pattern.tmpl:12
-#: templates/searchformat.pattern.tmpl:7
+#: templates/search.pattern.tmpl:24 templates/searchbookview.pattern.tmpl:12
 msgid "Number of topics:"
 msgstr ""
 
-#: templates/oopsaccessdenied.pattern.tmpl:5 templates/oopsaccessdenied.tmpl:6
+#: templates/oopsaccessdenied.pattern.tmpl:2 templates/oopsaccessdenied.tmpl:6
 #: templates/oopslanguagechanged.tmpl:5 templates/oopssaveerr.pattern.tmpl:5
 #: templates/oopssaveerr.tmpl:11
 msgid "OK"
@@ -1310,7 +1320,7 @@ msgstr ""
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:40 data/TWiki/WebSearchAdvanced.txt:80
+#: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:81
 msgid "Other search options:"
 msgstr ""
 
@@ -1318,15 +1328,15 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: templates/oopsattention.tmpl:133
+#: templates/oopsattention.tmpl:139
 msgid "Password changed successfully!"
 msgstr ""
 
-#: templates/oopsattention.tmpl:150 templates/oopsattention.tmpl:154
+#: templates/oopsattention.tmpl:156 templates/oopsattention.tmpl:160
 msgid "Password reset failed"
 msgstr ""
 
-#: templates/oopsattention.tmpl:164
+#: templates/oopsattention.tmpl:170
 msgid "Passwords do not match"
 msgstr ""
 
@@ -1334,7 +1344,7 @@ msgstr ""
 msgid "Personal Preferences (details in %1)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:110
+#: templates/oopsattention.tmpl:116
 msgid "Pick one of the %1."
 msgstr ""
 
@@ -1342,7 +1352,7 @@ msgstr ""
 msgid "Placeholder for trashed attachments"
 msgstr ""
 
-#: templates/oopsattention.tmpl:188 templates/oopsattention.tmpl:222
+#: templates/oopsattention.tmpl:194 templates/oopsattention.tmpl:228
 msgid "Please contact %1 if you have any questions."
 msgstr ""
 
@@ -1350,27 +1360,27 @@ msgstr ""
 msgid "Please enter your username and password:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:58 templates/oopsattention.tmpl:64
-#: templates/oopsattention.tmpl:70
+#: templates/oopsattention.tmpl:64 templates/oopsattention.tmpl:70
+#: templates/oopsattention.tmpl:76
 msgid "Please go _back_ in your browser and try a new name."
 msgstr ""
 
-#: templates/oopsattention.tmpl:273
+#: templates/oopsattention.tmpl:279
 msgid "Please go back in your browser and check again."
 msgstr ""
 
-#: templates/oopsattention.tmpl:75
+#: templates/oopsattention.tmpl:81
 msgid ""
 "Please go back in your browser and chose a topic name that is a %TWIKIWEB%."
 "WikiWord or check the allow non-Wiki Word box"
 msgstr ""
 
-#: templates/oopsattention.tmpl:100 templates/oopsattention.tmpl:104
-#: templates/oopsattention.tmpl:114 templates/oopsattention.tmpl:161
-#: templates/oopsattention.tmpl:167 templates/oopsattention.tmpl:200
-#: templates/oopsattention.tmpl:208 templates/oopsattention.tmpl:32
-#: templates/oopsattention.tmpl:36 templates/oopsattention.tmpl:87
-#: templates/oopsattention.tmpl:91 templates/oopsattention.tmpl:96
+#: templates/oopsattention.tmpl:102 templates/oopsattention.tmpl:106
+#: templates/oopsattention.tmpl:110 templates/oopsattention.tmpl:120
+#: templates/oopsattention.tmpl:167 templates/oopsattention.tmpl:173
+#: templates/oopsattention.tmpl:206 templates/oopsattention.tmpl:214
+#: templates/oopsattention.tmpl:32 templates/oopsattention.tmpl:36
+#: templates/oopsattention.tmpl:93 templates/oopsattention.tmpl:97
 msgid "Please go back in your browser and try again."
 msgstr ""
 
@@ -1380,7 +1390,7 @@ msgid ""
 "stuck, please mail %2."
 msgstr ""
 
-#: templates/oopsattention.tmpl:214
+#: templates/oopsattention.tmpl:220
 msgid "Please try again."
 msgstr ""
 
@@ -1393,8 +1403,8 @@ msgstr ""
 msgid "Possible form templates"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:13 data/Sandbox/WebLeftBar.txt:12
-#: data/TWiki/WebLeftBar.txt:14 data/_default/WebLeftBar.txt:11
+#: data/Main/WebLeftBar.txt:14 data/Sandbox/WebLeftBar.txt:12
+#: data/TWiki/WebLeftBar.txt:14 data/_default/WebLeftBar.txt:12
 msgid "Preferences"
 msgstr ""
 
@@ -1432,8 +1442,8 @@ msgstr ""
 msgid "Read new revision help text in new window"
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:21 data/TWiki/WebSearch.txt:44
-#: data/TWiki/WebSearchAdvanced.txt:85
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:42
+#: data/TWiki/WebSearchAdvanced.txt:86
 msgid "Recently changed topics"
 msgstr ""
 
@@ -1441,7 +1451,7 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:54
+#: data/TWiki/WebSearchAdvanced.txt:55
 msgid "Regular expression search"
 msgstr ""
 
@@ -1463,7 +1473,7 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
-#: templates/oopsattention.tmpl:61 templates/oopsattention.tmpl:67
+#: templates/oopsattention.tmpl:67 templates/oopsattention.tmpl:73
 msgid "Rename failed"
 msgstr ""
 
@@ -1471,7 +1481,7 @@ msgstr ""
 msgid "Rename or move topic:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:269
+#: templates/oopsattention.tmpl:275
 msgid "Rename the file on your local machine and try uploading again."
 msgstr ""
 
@@ -1499,7 +1509,7 @@ msgstr ""
 msgid "Revision"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:40 templates/view.print.pattern.tmpl:26
+#: templates/oopsmore.pattern.tmpl:40
 msgid "Revision:"
 msgstr ""
 
@@ -1519,13 +1529,13 @@ msgstr ""
 msgid "Saved to:"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:8
 #: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:6
-#: data/TWiki/WebLeftBarSearch.txt:4 data/TWiki/WebSearch.txt:20
-#: data/TWiki/WebSearchAdvanced.txt:27
-#: data/TWiki/WebTopicNonWikiTemplate.txt:15
-#: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:7
-#: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:7
+#: data/TWiki/WebLeftBarSearch.txt:11 data/TWiki/WebSearch.txt:20
+#: data/TWiki/WebSearchAdvanced.txt:28
+#: data/TWiki/WebTopicNonWikiTemplate.txt:14
+#: data/TWiki/WebTopicViewTemplate.txt:14 data/Trash/WebLeftBar.txt:8
+#: data/_default/WebHome.txt:11 data/_default/WebLeftBar.txt:8
 msgid "Search"
 msgstr ""
 
@@ -1542,7 +1552,7 @@ msgstr ""
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:59
+#: data/TWiki/WebSearchAdvanced.txt:60
 msgid "Search string"
 msgstr ""
 
@@ -1550,11 +1560,11 @@ msgstr ""
 msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:32
+#: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
 msgid "Search where:"
 msgstr ""
 
-#: templates/search.pattern.tmpl:28 templates/searchbookview.pattern.tmpl:6
+#: templates/search.pattern.tmpl:29 templates/searchbookview.pattern.tmpl:6
 msgid "Searched:"
 msgstr ""
 
@@ -1562,7 +1572,7 @@ msgstr ""
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr ""
 
-#: templates/oopsattention.tmpl:238
+#: templates/oopsattention.tmpl:244
 msgid "See %1 for information about Form Definitions."
 msgstr ""
 
@@ -1624,7 +1634,7 @@ msgstr ""
 msgid "Similar topics in this web (if any):"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:27
+#: data/TWiki/WebSearchAdvanced.txt:28
 msgid "Simple search"
 msgstr ""
 
@@ -1638,11 +1648,11 @@ msgstr ""
 msgid "Skip to actions"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:190
+#: templates/twiki.pattern.tmpl:189
 msgid "Skip to bottom"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:190
+#: templates/twiki.pattern.tmpl:189
 msgid "Skip to topic"
 msgstr ""
 
@@ -1656,7 +1666,7 @@ msgid ""
 "work on, what help they'd like, etc."
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:42
+#: data/TWiki/WebSearchAdvanced.txt:43
 msgid "Sort results by:"
 msgstr ""
 
@@ -1664,8 +1674,8 @@ msgstr ""
 msgid "Start of topic"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:11
-#: data/TWiki/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:10
+#: data/Main/WebLeftBar.txt:13 data/Sandbox/WebLeftBar.txt:11
+#: data/TWiki/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:11
 msgid "Statistics"
 msgstr ""
 
@@ -1685,7 +1695,7 @@ msgid ""
 "=width: auto= to disable."
 msgstr ""
 
-#: templates/oopsattention.tmpl:145 templates/oopsattention.tmpl:219
+#: templates/oopsattention.tmpl:151 templates/oopsattention.tmpl:225
 msgid "Submit"
 msgstr ""
 
@@ -1693,7 +1703,7 @@ msgstr ""
 msgid "Submitted content:"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:60
+#: data/TWiki/WebSearchAdvanced.txt:61
 msgid "Summaries"
 msgstr ""
 
@@ -1719,11 +1729,11 @@ msgstr ""
 msgid "Test Topics"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:34
+#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:35
 msgid "Text body"
 msgstr ""
 
-#: templates/oopsattention.tmpl:121 templates/oopsattention.tmpl:138
+#: templates/oopsattention.tmpl:127 templates/oopsattention.tmpl:144
 msgid "Thank you for registering"
 msgstr ""
 
@@ -1739,13 +1749,13 @@ msgid ""
 "verification code is %2."
 msgstr ""
 
-#: templates/oopsattention.tmpl:192
+#: templates/oopsattention.tmpl:198
 msgid ""
 "The %1 field must be your first and lastname in %2, e.g. your capitalized "
 "first and lastname with spaces removed."
 msgstr ""
 
-#: templates/oopsattention.tmpl:55
+#: templates/oopsattention.tmpl:61
 msgid "The %1 topic already exists"
 msgstr ""
 
@@ -1767,7 +1777,7 @@ msgid ""
 "Corporate World."
 msgstr ""
 
-#: templates/oopsattention.tmpl:212
+#: templates/oopsattention.tmpl:218
 msgid "The activation code %1 is invalid."
 msgstr ""
 
@@ -1791,7 +1801,7 @@ msgid ""
 "_eventually_ allow you to rename any topics that were locked)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:204
+#: templates/oopsattention.tmpl:210
 msgid "The email address for this account is not valid."
 msgstr ""
 
@@ -1799,21 +1809,21 @@ msgstr ""
 msgid "The entry for user %1 was missing in the password system."
 msgstr ""
 
-#: templates/oopsattention.tmpl:292
+#: templates/oopsattention.tmpl:298
 msgid "The following topics are locked for edit, and cannot be moved:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:298
+#: templates/oopsattention.tmpl:304
 msgid "The following topics refer to topics in this web, but are being edited:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:295
+#: templates/oopsattention.tmpl:301
 msgid ""
 "The following topics refer to topics in this web, but you are denied access "
 "to them:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:244
+#: templates/oopsattention.tmpl:250
 msgid "The form should be defined in the topic %1"
 msgstr ""
 
@@ -1825,19 +1835,19 @@ msgstr ""
 msgid "The new web has been created"
 msgstr ""
 
-#: templates/oopsattention.tmpl:85
+#: templates/oopsattention.tmpl:91
 msgid "The password you entered in the *old password* field is incorrect."
 msgstr ""
 
-#: templates/oopsattention.tmpl:232
+#: templates/oopsattention.tmpl:238
 msgid "The required field %1 was not filled in."
 msgstr ""
 
-#: templates/oopsattention.tmpl:247
+#: templates/oopsattention.tmpl:253
 msgid "The topic is in an old format"
 msgstr ""
 
-#: templates/oopsattention.tmpl:165
+#: templates/oopsattention.tmpl:171
 msgid "The two passwords you entered do not match."
 msgstr ""
 
@@ -1851,17 +1861,17 @@ msgstr ""
 msgid "Their lease on this topic expired %1 ago."
 msgstr ""
 
-#: templates/oopsattention.tmpl:288
+#: templates/oopsattention.tmpl:294
 msgid "There are problems with renaming this web:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:172
+#: templates/oopsattention.tmpl:178
 msgid ""
 "There has been a problem adding your user id to the Password system. Please "
 "contact %1."
 msgstr ""
 
-#: templates/oopsattention.tmpl:250
+#: templates/oopsattention.tmpl:256
 msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr ""
 
@@ -1870,11 +1880,11 @@ msgid ""
 "They have been editing for %1 and their lease is still active for another %2."
 msgstr ""
 
-#: templates/oopsattention.tmpl:257
+#: templates/oopsattention.tmpl:263
 msgid "This can be automatically upgraded by:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:240
+#: templates/oopsattention.tmpl:246
 msgid "This could be for several reasons:"
 msgstr ""
 
@@ -1905,11 +1915,11 @@ msgid ""
 "already in the %1 web."
 msgstr ""
 
-#: templates/oopsattention.tmpl:255
+#: templates/oopsattention.tmpl:261
 msgid "This requires the form definition to be present."
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:23
+#: data/TWiki/WebTopicNonWikiTemplate.txt:22
 msgid ""
 "This topic name is not recommended because it will not be linked "
 "automatically. See %1 for details"
@@ -1935,8 +1945,8 @@ msgstr ""
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:19
-msgid "Enter name of topic:"
+#: data/TWiki/WebTopicCreator.txt:18
+msgid "To create a new topic, enter name of topic and click 'create.'"
 msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:20
@@ -1960,15 +1970,15 @@ msgstr ""
 msgid "To web:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:229
+#: templates/oopsattention.tmpl:235
 msgid "Topic Save Error"
 msgstr ""
 
-#: templates/oopsattention.tmpl:253
+#: templates/oopsattention.tmpl:259
 msgid "Topic can not be upgraded from old style category table"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:44
+#: data/TWiki/WebSearchAdvanced.txt:45
 msgid "Topic name"
 msgstr ""
 
@@ -1985,7 +1995,7 @@ msgstr ""
 msgid "Topic settings"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:28 data/TWiki/WebSearchAdvanced.txt:35
+#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:36
 msgid "Topic title"
 msgstr ""
 
@@ -1993,7 +2003,7 @@ msgstr ""
 msgid "Topic was merged"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:71
+#: data/TWiki/WebSearchAdvanced.txt:72
 msgid "Topics per web"
 msgstr ""
 
@@ -2012,7 +2022,7 @@ msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:61
+#: data/TWiki/WebSearchAdvanced.txt:62
 msgid "Total matches"
 msgstr ""
 
@@ -2057,15 +2067,15 @@ msgstr ""
 msgid "Upload up to %1 KB."
 msgstr ""
 
-#: templates/oopsattention.tmpl:272
+#: templates/oopsattention.tmpl:278
 msgid "Uploaded file %1 does not exist or is empty"
 msgstr ""
 
-#: templates/oopsattention.tmpl:277
+#: templates/oopsattention.tmpl:283
 msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr ""
 
-#: templates/oopsattention.tmpl:276
+#: templates/oopsattention.tmpl:282
 msgid "Uploaded file is too big"
 msgstr ""
 
@@ -2086,17 +2096,17 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:6 data/TWiki/WebLeftBar.txt:7
+#: data/Main/WebLeftBar.txt:7 data/TWiki/WebLeftBar.txt:7
 msgid "Users"
 msgstr ""
 
-#: templates/oopsattention.tmpl:130
+#: templates/oopsattention.tmpl:136
 msgid ""
 "Users with automatically generated passwords should proceed immediately to "
 "[[%1][change password]] to change their password to something memorable."
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:45 templates/view.pattern.tmpl:82
+#: templates/attachtables.pattern.tmpl:45
 msgid "Version"
 msgstr ""
 
@@ -2127,7 +2137,7 @@ msgstr ""
 msgid "View topic"
 msgstr ""
 
-#: templates/view.pattern.tmpl:82
+#: templates/twiki.pattern.tmpl:219 templates/twiki.tmpl:157
 msgid "View total topic history"
 msgstr ""
 
@@ -2135,7 +2145,7 @@ msgstr ""
 msgid "Visit %1 to learn about TWiki"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:23
+#: data/TWiki/WebTopicNonWikiTemplate.txt:22
 msgid "WARNING:"
 msgstr ""
 
@@ -2172,15 +2182,15 @@ msgstr ""
 msgid "Write protect your home page: (set it to your %1)"
 msgstr ""
 
-#: templates/oopsattention.tmpl:181
+#: templates/oopsattention.tmpl:187
 msgid "You are already registered"
 msgstr ""
 
-#: templates/oopsattention.tmpl:124
+#: templates/oopsattention.tmpl:130
 msgid "You are also listed in the %1 topic"
 msgstr ""
 
-#: templates/oopsattention.tmpl:289
+#: templates/oopsattention.tmpl:295
 msgid "You are denied access to the following topics in the web:"
 msgstr ""
 
@@ -2188,7 +2198,7 @@ msgstr ""
 msgid "You are here"
 msgstr ""
 
-#: templates/oopsattention.tmpl:94
+#: templates/oopsattention.tmpl:100
 msgid ""
 "You are recommended to choose short names, preferably less than 10 "
 "characters, starting with an upper-case alphabetic character and using only "
@@ -2207,7 +2217,7 @@ msgid ""
 "have any questions."
 msgstr ""
 
-#: templates/oopsattention.tmpl:112
+#: templates/oopsattention.tmpl:118
 msgid ""
 "You can also use the names of the standard HTML colors (black, silver, gray, "
 "white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
@@ -2226,7 +2236,7 @@ msgstr ""
 msgid "You can rename this web to a different web name."
 msgstr ""
 
-#: templates/oopsattention.tmpl:122
+#: templates/oopsattention.tmpl:128
 msgid "You can review your changes in your personal TWiki topic %1"
 msgstr ""
 
@@ -2240,11 +2250,11 @@ msgid ""
 "in your user topic."
 msgstr ""
 
-#: templates/oopsattention.tmpl:182
+#: templates/oopsattention.tmpl:188
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr ""
 
-#: templates/oopsattention.tmpl:135
+#: templates/oopsattention.tmpl:141
 msgid "You need to close your browser to make this change take effect."
 msgstr ""
 
@@ -2254,11 +2264,11 @@ msgid ""
 "the form presented to you when this email was sent, or by visiting %2"
 msgstr ""
 
-#: templates/oopsattention.tmpl:262
+#: templates/oopsattention.tmpl:268
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr ""
 
-#: templates/oopsattention.tmpl:140
+#: templates/oopsattention.tmpl:146
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
@@ -2306,11 +2316,11 @@ msgstr ""
 msgid "_language_name"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:66 data/TWiki/WebSearchAdvanced.txt:84
+#: data/TWiki/WebSearchAdvanced.txt:67 data/TWiki/WebSearchAdvanced.txt:85
 msgid "about BookView"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:54
+#: data/TWiki/WebSearchAdvanced.txt:55
 msgid "about regular expression search"
 msgstr ""
 
@@ -2330,7 +2340,7 @@ msgstr ""
 msgid "access not allowed on web"
 msgstr ""
 
-#: data/_default/WebHome.txt:14
+#: data/_default/WebHome.txt:13
 msgid "advanced search"
 msgstr ""
 
@@ -2343,7 +2353,7 @@ msgstr ""
 msgid "checkboxes of referenced topics"
 msgstr ""
 
-#: templates/oopsattention.tmpl:159
+#: templates/oopsattention.tmpl:165
 msgid "fields are required."
 msgstr ""
 
