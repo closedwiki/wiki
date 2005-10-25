@@ -85,6 +85,7 @@ Some of these styles are used in templates:
 |.twikiPageForm  |
 |.twikiSeparator  |
 |.twikiAccessKey  |
+|.twikiLinkLabel  |
 
 ---++ Going further
 
