@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128887434" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1130236482" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
 
 This is the supplemental plugin for the NatSkin. This plugin is inspired
@@ -156,6 +156,27 @@ hit the WebSearch those days also. Here's the list of differences:
 	* use =noSpamPadding= to obfuscate email addresses
 	* light weighted google-like hit colorization
 
+<nop>NatSearch can be further reduced to certain webs and topics by setting WebPreferences.
+Besides the NOSEARCHALL feature of every web that excludes a web from search the following variables
+ restrict the hit set:
+
+| *Name* | *Description* |
+| =NATSEARCHINCLUDEWEB= | a regular expression that must match webs to be considered |
+| =NATSEARCHEXCLUDEWEB= | a regular expression that must not match a web |
+| =NATSEARCHINCLUDETOPIC= | a regular expression that must match a topic in the hit set |
+| =NATSEARCHEXCLUDETOPIC= | a regular expression that excludes a topic from the hit set |
+
+Furthermore, the variable =NATSEARCHTOPICSUMMARY= can be set to a <nop>TopicFunction that
+returns a summary text that is to be displayed when a topic matches the search. The <nop>TopicFunction
+is called by using a parametriced INCLUDE of the form
+<verbatim>
+%INCLUDE{"<topic-function>" THISWEB="<web>" THISTOPIC="<topic>"}%
+</verbatim>
+where =&lt;web>.&lt;topic>= is the current hit to be summarized. The returned text is 
+used instead of the normal text summary of TWiki which extracts the text from the whiteboard area of
+a topic. This feature is usefull for <nop>TWikiApplications where the data of a topic is stored
+in TWikiForms instead.
+
 Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible search parameters
 (TODO: maby move that stuff in here).
 
@@ -262,8 +283,9 @@ using these settings will be changed accordingly.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.53 (2005-10-20) |
+|  Plugin Version: | v2.60 (2005-10-25) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  25 Oct 2005: | customization of =natsearch= by WebPreferences |
 |  20 Oct 2005: | improved external link detection |
 |  10 Oct 2005: | added switchstyle feature to cycle thru all installed skin styles|
 |  09 Oct 2005: | rewrite of skin state: support switching border, \
