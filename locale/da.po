@@ -153,7 +153,7 @@ msgstr "&Web"
 msgid "(%1 vs. %2)"
 msgstr "(%1 vs. %2)"
 
-#: data/TWiki/WebSearchAdvanced.txt:72
+#: data/TWiki/WebSearchAdvanced.txt:76
 msgid "(=all= to show all topics)"
 msgstr "(=all= for at vise alle sider)"
 
@@ -225,7 +225,7 @@ msgstr "(flyt vedhæftet fil)"
 msgid "(oops)"
 msgstr "(advarsel)"
 
-#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:39
+#: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
 msgid "(otherwise search %1 Web only)"
 msgstr "(ellers begrænses søgningen til %1 webbet)"
 
@@ -247,7 +247,7 @@ msgstr "(omdøb)"
 msgid "(search results)"
 msgstr "(søgeresultater)"
 
-#: data/TWiki/WebSearchAdvanced.txt:55
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "(semicolon =;= for and)"
 msgstr "(semikolon =;= betyder og)"
 
@@ -420,15 +420,15 @@ msgstr "Administrative emner"
 msgid "Advanced Search"
 msgstr "Avanceret søgning"
 
-#: data/TWiki/WebSearch.txt:20
+#: data/TWiki/WebSearch.txt:24
 msgid "Advanced search"
 msgstr "Avanceret søgning"
 
-#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:39
+#: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
 msgid "All public webs"
 msgstr "Alle offentlige webs"
 
-#: data/TWiki/WebSearchAdvanced.txt:85
+#: data/TWiki/WebSearchAdvanced.txt:89
 msgid "All topics in %1"
 msgstr "Alle sider i %1"
 
@@ -558,7 +558,7 @@ msgstr "Referencer:"
 msgid "Base web %1 is missing or does not exist"
 msgstr "Basis-webbet %1 mangler eller er ikke oprettet"
 
-#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:37
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:41
 msgid "Both body and title"
 msgstr "Både kildetekst og sidenavn"
 
@@ -596,7 +596,7 @@ msgstr "Kan ikke oprette webbet %1 fordi det allerede eksisterer"
 msgid "Cannot rename %1 to %2 because it already exists."
 msgstr "Kan ikke omdøbe %1 til %2, da siden allerede eksisterer"
 
-#: data/TWiki/WebSearchAdvanced.txt:54
+#: data/TWiki/WebSearchAdvanced.txt:58
 msgid "Case sensitive"
 msgstr "Case-sensitiv søgning (forskel på STORE og små bogstaver)"
 
@@ -846,11 +846,11 @@ msgstr "Fortryd"
 msgid "Do not show attachment in table"
 msgstr "Vis ikke vedhæftet fil i tabel på siden"
 
-#: data/TWiki/WebSearchAdvanced.txt:66
+#: data/TWiki/WebSearchAdvanced.txt:70
 msgid "Do show:"
 msgstr "Vis:"
 
-#: data/TWiki/WebSearchAdvanced.txt:59
+#: data/TWiki/WebSearchAdvanced.txt:63
 msgid "Don't show:"
 msgstr "Vis ikke:"
 
@@ -1050,7 +1050,7 @@ msgstr "Grupper"
 msgid "Hello %1!"
 msgstr "Hej %1!"
 
-#: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:28
+#: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:32
 msgid "Help"
 msgstr "Hjælp"
 
@@ -1100,7 +1100,7 @@ msgstr "Hvis denne linie er udeladt, se _upgrade_ afsnittet nedenfor"
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr "Hvis denne side mangler, opret den, eller tjek den for fejl."
 
-#: data/TWiki/WebSearch.txt:39 data/TWiki/WebSearchAdvanced.txt:82
+#: data/TWiki/WebSearch.txt:43 data/TWiki/WebSearchAdvanced.txt:86
 msgid ""
 "If you already know the name of the topic, enter the name of the topic into "
 "the [[%1][Jump box]] at the top"
@@ -1160,7 +1160,7 @@ msgstr ""
 "Billeder vil blive vist direkte på siden, for andre typer vedhæftede filer "
 "oprettes et link."
 
-#: data/TWiki/WebSearchAdvanced.txt:49
+#: data/TWiki/WebSearchAdvanced.txt:53
 msgid "In reversed order"
 msgstr "I omvendt rækkefølge"
 
@@ -1226,15 +1226,15 @@ msgstr ""
 msgid "Jump"
 msgstr "Hop"
 
-#: data/TWiki/WebSearchAdvanced.txt:47
+#: data/TWiki/WebSearchAdvanced.txt:51
 msgid "Last editor"
 msgstr "Sidst opdateret af"
 
-#: data/TWiki/WebSearchAdvanced.txt:46
+#: data/TWiki/WebSearchAdvanced.txt:50
 msgid "Last modified time"
 msgstr "Sidst ændret"
 
-#: data/TWiki/WebSearchAdvanced.txt:71
+#: data/TWiki/WebSearchAdvanced.txt:75
 msgid "Limit results to:"
 msgstr "Begræns antallet af resultater til:"
 
@@ -1253,11 +1253,11 @@ msgstr "Linie: %1 til %2"
 msgid "Link"
 msgstr "Link"
 
-#: data/TWiki/WebSearch.txt:40 data/TWiki/WebSearchAdvanced.txt:83
+#: data/TWiki/WebSearch.txt:44 data/TWiki/WebSearchAdvanced.txt:87
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr "Vis alle sider i %1 webbet i alfabetisk orden"
 
-#: data/TWiki/WebSearch.txt:41 data/TWiki/WebSearchAdvanced.txt:84
+#: data/TWiki/WebSearch.txt:45 data/TWiki/WebSearchAdvanced.txt:88
 msgid "List topics that start with the letter:"
 msgstr "Vis alle sider der starter med bogstavet: "
 
@@ -1281,7 +1281,7 @@ msgstr "Brugernavn %1"
 msgid "Logon"
 msgstr "Log ind"
 
-#: data/TWiki/WebSearchAdvanced.txt:53
+#: data/TWiki/WebSearchAdvanced.txt:57
 msgid "Make search:"
 msgstr "Tilpas søgning:"
 
@@ -1301,6 +1301,11 @@ msgstr "Manglende felter"
 #: templates/oopsattention.tmpl:31
 msgid "Missing action command"
 msgstr "Manglende aktionskommando (action command)"
+
+#: data/TWiki/WebSearchAdvanced.txt:5
+#, fuzzy
+msgid "Modify search"
+msgstr "Tilpas søgning:"
 
 #: templates/oopsmore.pattern.tmpl:4
 msgid "More Actions on Topic %1"
@@ -1423,7 +1428,7 @@ msgstr "Tidligere version:"
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Kun medlemmer af %1 må udføre denne handling."
 
-#: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:81
+#: data/TWiki/WebSearch.txt:42 data/TWiki/WebSearchAdvanced.txt:85
 msgid "Other search options:"
 msgstr "Yderligere søgemuligheder:"
 
@@ -1555,8 +1560,8 @@ msgstr ""
 msgid "Read new revision help text in new window"
 msgstr "Læs hjælpeteksten til Gennemtving nyt versionsnummer i et nyt vindue"
 
-#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:42
-#: data/TWiki/WebSearchAdvanced.txt:86
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:46
+#: data/TWiki/WebSearchAdvanced.txt:90
 msgid "Recently changed topics"
 msgstr "Senest ændrede sider"
 
@@ -1564,7 +1569,7 @@ msgstr "Senest ændrede sider"
 msgid "Register"
 msgstr "Registrering"
 
-#: data/TWiki/WebSearchAdvanced.txt:55
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Regular expression search"
 msgstr "Søg med regulære udtryk"
 
@@ -1644,8 +1649,8 @@ msgstr "Gemt i:"
 
 #: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:8
 #: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:6
-#: data/TWiki/WebLeftBarSearch.txt:11 data/TWiki/WebSearch.txt:20
-#: data/TWiki/WebSearchAdvanced.txt:28
+#: data/TWiki/WebLeftBarSearch.txt:11 data/TWiki/WebSearch.txt:24
+#: data/TWiki/WebSearchAdvanced.txt:32
 #: data/TWiki/WebTopicNonWikiTemplate.txt:14
 #: data/TWiki/WebTopicViewTemplate.txt:14 data/Trash/WebLeftBar.txt:8
 #: data/_default/WebHome.txt:11 data/_default/WebLeftBar.txt:8
@@ -1665,7 +1670,7 @@ msgstr "Søg i alle webs"
 msgid "Search all webs for topics that link to here"
 msgstr "Søg i alle webs efter sider der linker til denne side"
 
-#: data/TWiki/WebSearchAdvanced.txt:60
+#: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
 msgstr "Søgestreng"
 
@@ -1673,7 +1678,7 @@ msgstr "Søgestreng"
 msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr "Søg i <nop>%WEB% webbet efter sider der linker til denne side"
 
-#: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
+#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 msgid "Search where:"
 msgstr "Søg hvor:"
 
@@ -1751,7 +1756,7 @@ msgstr ""
 msgid "Similar topics in this web (if any):"
 msgstr "Lignende sider i dette web (hvis nogen):"
 
-#: data/TWiki/WebSearchAdvanced.txt:28
+#: data/TWiki/WebSearchAdvanced.txt:32
 msgid "Simple search"
 msgstr "Simpel søgning"
 
@@ -1785,7 +1790,7 @@ msgstr ""
 "Andre brugere opretter en personlig portal med favorit-links, hvad de "
 "arbejder med, hvad de godt kunne bruge hjælp til, etc."
 
-#: data/TWiki/WebSearchAdvanced.txt:43
+#: data/TWiki/WebSearchAdvanced.txt:47
 msgid "Sort results by:"
 msgstr "Sortér resultater efter:"
 
@@ -1827,11 +1832,11 @@ msgstr "Send"
 msgid "Submitted content:"
 msgstr "Tilføjet indhold:"
 
-#: data/TWiki/WebSearchAdvanced.txt:61
+#: data/TWiki/WebSearchAdvanced.txt:65
 msgid "Summaries"
 msgstr "Sammendrag"
 
-#: data/TWiki/WebSearch.txt:21
+#: data/TWiki/WebSearch.txt:25
 msgid ""
 "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
 "=\"web service\"=, but not =\"shampoo\"=, write:"
@@ -1859,7 +1864,7 @@ msgstr ""
 msgid "Test Topics"
 msgstr "Test-sider"
 
-#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:35
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:39
 msgid "Text body"
 msgstr "Kildetekst"
 
@@ -2157,7 +2162,7 @@ msgstr "Fejl ved skrivning af siden"
 msgid "Topic can not be upgraded from old style category table"
 msgstr "Siden kan ikke opgraderes fra den gamle stil, 'category table'"
 
-#: data/TWiki/WebSearchAdvanced.txt:45
+#: data/TWiki/WebSearchAdvanced.txt:49
 msgid "Topic name"
 msgstr "Sidenavn"
 
@@ -2174,7 +2179,7 @@ msgstr "Fejl ved skrivning af siden"
 msgid "Topic settings"
 msgstr "Side-præferencer"
 
-#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:36
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:40
 msgid "Topic title"
 msgstr "Sidenavn"
 
@@ -2182,7 +2187,7 @@ msgstr "Sidenavn"
 msgid "Topic was merged"
 msgstr "Sidens kildetekst blev flettet"
 
-#: data/TWiki/WebSearchAdvanced.txt:72
+#: data/TWiki/WebSearchAdvanced.txt:76
 msgid "Topics per web"
 msgstr "Sider pr. web"
 
@@ -2204,7 +2209,7 @@ msgstr ""
 "Sider, der refererer til dette web, og som du ikke har rettigheder til at "
 "ændre:"
 
-#: data/TWiki/WebSearchAdvanced.txt:62
+#: data/TWiki/WebSearchAdvanced.txt:66
 msgid "Total matches"
 msgstr "Antal hits"
 
@@ -2531,11 +2536,11 @@ msgstr ""
 msgid "_language_name"
 msgstr "Dansk"
 
-#: data/TWiki/WebSearchAdvanced.txt:67 data/TWiki/WebSearchAdvanced.txt:85
+#: data/TWiki/WebSearchAdvanced.txt:71 data/TWiki/WebSearchAdvanced.txt:89
 msgid "about BookView"
 msgstr "om BookView"
 
-#: data/TWiki/WebSearchAdvanced.txt:55
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "about regular expression search"
 msgstr "om søgning med regulære udtryk"
 

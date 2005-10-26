@@ -161,7 +161,7 @@ msgstr "&Web"
 msgid "(%1 vs. %2)"
 msgstr "(%1 vs. %2)"
 
-#: data/TWiki/WebSearchAdvanced.txt:72
+#: data/TWiki/WebSearchAdvanced.txt:76
 msgid "(=all= to show all topics)"
 msgstr ""
 
@@ -232,7 +232,7 @@ msgstr "(mover la union)"
 msgid "(oops)"
 msgstr "(oops)"
 
-#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:39
+#: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
 msgid "(otherwise search %1 Web only)"
 msgstr ""
 
@@ -254,7 +254,7 @@ msgstr "(renombrar)"
 msgid "(search results)"
 msgstr "(resultados de la busquenda)"
 
-#: data/TWiki/WebSearchAdvanced.txt:55
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "(semicolon =;= for and)"
 msgstr ""
 
@@ -420,15 +420,15 @@ msgstr ""
 msgid "Advanced Search"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:20
+#: data/TWiki/WebSearch.txt:24
 msgid "Advanced search"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:39
+#: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
 msgid "All public webs"
 msgstr "Todas webs publicas"
 
-#: data/TWiki/WebSearchAdvanced.txt:85
+#: data/TWiki/WebSearchAdvanced.txt:89
 msgid "All topics in %1"
 msgstr "Todas paginas en el web %1:"
 
@@ -560,7 +560,7 @@ msgstr "Referencias:"
 msgid "Base web %1 is missing or does not exist"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:37
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:41
 msgid "Both body and title"
 msgstr ""
 
@@ -596,7 +596,7 @@ msgstr "No se puede crear el %1 web por que ya lo existe"
 msgid "Cannot rename %1 to %2 because it already exists."
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:54
+#: data/TWiki/WebSearchAdvanced.txt:58
 msgid "Case sensitive"
 msgstr ""
 
@@ -840,11 +840,11 @@ msgstr ""
 msgid "Do not show attachment in table"
 msgstr "No muestre la union en el tabulador"
 
-#: data/TWiki/WebSearchAdvanced.txt:66
+#: data/TWiki/WebSearchAdvanced.txt:70
 msgid "Do show:"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:59
+#: data/TWiki/WebSearchAdvanced.txt:63
 msgid "Don't show:"
 msgstr ""
 
@@ -1018,7 +1018,7 @@ msgstr "Grupas"
 msgid "Hello %1!"
 msgstr "Hola %1!"
 
-#: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:28
+#: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:32
 msgid "Help"
 msgstr "Ayuda"
 
@@ -1067,7 +1067,7 @@ msgstr ""
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:39 data/TWiki/WebSearchAdvanced.txt:82
+#: data/TWiki/WebSearch.txt:43 data/TWiki/WebSearchAdvanced.txt:86
 msgid ""
 "If you already know the name of the topic, enter the name of the topic into "
 "the [[%1][Jump box]] at the top"
@@ -1118,7 +1118,7 @@ msgstr ""
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Imagenes podra mostrar, por otras uniones al enlace que podra crear."
 
-#: data/TWiki/WebSearchAdvanced.txt:49
+#: data/TWiki/WebSearchAdvanced.txt:53
 msgid "In reversed order"
 msgstr ""
 
@@ -1172,15 +1172,15 @@ msgstr ""
 msgid "Jump"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:47
+#: data/TWiki/WebSearchAdvanced.txt:51
 msgid "Last editor"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:46
+#: data/TWiki/WebSearchAdvanced.txt:50
 msgid "Last modified time"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:71
+#: data/TWiki/WebSearchAdvanced.txt:75
 msgid "Limit results to:"
 msgstr ""
 
@@ -1199,11 +1199,11 @@ msgstr ""
 msgid "Link"
 msgstr "Enlace"
 
-#: data/TWiki/WebSearch.txt:40 data/TWiki/WebSearchAdvanced.txt:83
+#: data/TWiki/WebSearch.txt:44 data/TWiki/WebSearchAdvanced.txt:87
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:41 data/TWiki/WebSearchAdvanced.txt:84
+#: data/TWiki/WebSearch.txt:45 data/TWiki/WebSearchAdvanced.txt:88
 msgid "List topics that start with the letter:"
 msgstr ""
 
@@ -1227,7 +1227,7 @@ msgstr ""
 msgid "Logon"
 msgstr "Iniciar la session"
 
-#: data/TWiki/WebSearchAdvanced.txt:53
+#: data/TWiki/WebSearchAdvanced.txt:57
 msgid "Make search:"
 msgstr ""
 
@@ -1244,6 +1244,10 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:31
 msgid "Missing action command"
+msgstr ""
+
+#: data/TWiki/WebSearchAdvanced.txt:5
+msgid "Modify search"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:4
@@ -1368,7 +1372,7 @@ msgstr "Revicion anterior:"
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:81
+#: data/TWiki/WebSearch.txt:42 data/TWiki/WebSearchAdvanced.txt:85
 msgid "Other search options:"
 msgstr "Otras opciones de buscar:"
 
@@ -1490,8 +1494,8 @@ msgstr ""
 msgid "Read new revision help text in new window"
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:42
-#: data/TWiki/WebSearchAdvanced.txt:86
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:46
+#: data/TWiki/WebSearchAdvanced.txt:90
 msgid "Recently changed topics"
 msgstr "Paginas cambiados recemente"
 
@@ -1499,7 +1503,7 @@ msgstr "Paginas cambiados recemente"
 msgid "Register"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:55
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Regular expression search"
 msgstr ""
 
@@ -1581,8 +1585,8 @@ msgstr "Guardar"
 
 #: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:8
 #: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:6
-#: data/TWiki/WebLeftBarSearch.txt:11 data/TWiki/WebSearch.txt:20
-#: data/TWiki/WebSearchAdvanced.txt:28
+#: data/TWiki/WebLeftBarSearch.txt:11 data/TWiki/WebSearch.txt:24
+#: data/TWiki/WebSearchAdvanced.txt:32
 #: data/TWiki/WebTopicNonWikiTemplate.txt:14
 #: data/TWiki/WebTopicViewTemplate.txt:14 data/Trash/WebLeftBar.txt:8
 #: data/_default/WebHome.txt:11 data/_default/WebLeftBar.txt:8
@@ -1602,7 +1606,7 @@ msgstr "Buscard todas las webs"
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:60
+#: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
 msgstr ""
 
@@ -1610,7 +1614,7 @@ msgstr ""
 msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
+#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 msgid "Search where:"
 msgstr "Buscar donde:"
 
@@ -1685,7 +1689,7 @@ msgstr ""
 msgid "Similar topics in this web (if any):"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:28
+#: data/TWiki/WebSearchAdvanced.txt:32
 msgid "Simple search"
 msgstr ""
 
@@ -1717,7 +1721,7 @@ msgid ""
 "work on, what help they'd like, etc."
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:43
+#: data/TWiki/WebSearchAdvanced.txt:47
 msgid "Sort results by:"
 msgstr ""
 
@@ -1755,11 +1759,11 @@ msgstr ""
 msgid "Submitted content:"
 msgstr "Editar el contenido"
 
-#: data/TWiki/WebSearchAdvanced.txt:61
+#: data/TWiki/WebSearchAdvanced.txt:65
 msgid "Summaries"
 msgstr ""
 
-#: data/TWiki/WebSearch.txt:21
+#: data/TWiki/WebSearch.txt:25
 msgid ""
 "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
 "=\"web service\"=, but not =\"shampoo\"=, write:"
@@ -1782,7 +1786,7 @@ msgstr ""
 msgid "Test Topics"
 msgstr "Borrar la pagina:"
 
-#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:35
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:39
 msgid "Text body"
 msgstr ""
 
@@ -2031,7 +2035,7 @@ msgstr ""
 msgid "Topic can not be upgraded from old style category table"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:45
+#: data/TWiki/WebSearchAdvanced.txt:49
 msgid "Topic name"
 msgstr "Nombre de la pagina"
 
@@ -2048,7 +2052,7 @@ msgstr ""
 msgid "Topic settings"
 msgstr "Propiedades de la pagina"
 
-#: data/TWiki/WebSearch.txt:27 data/TWiki/WebSearchAdvanced.txt:36
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:40
 #, fuzzy
 msgid "Topic title"
 msgstr "Propiedades de la pagina"
@@ -2057,7 +2061,7 @@ msgstr "Propiedades de la pagina"
 msgid "Topic was merged"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:72
+#: data/TWiki/WebSearchAdvanced.txt:76
 msgid "Topics per web"
 msgstr "Paginas por web"
 
@@ -2076,7 +2080,7 @@ msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:62
+#: data/TWiki/WebSearchAdvanced.txt:66
 msgid "Total matches"
 msgstr ""
 
@@ -2373,11 +2377,11 @@ msgstr ""
 msgid "_language_name"
 msgstr "Español"
 
-#: data/TWiki/WebSearchAdvanced.txt:67 data/TWiki/WebSearchAdvanced.txt:85
+#: data/TWiki/WebSearchAdvanced.txt:71 data/TWiki/WebSearchAdvanced.txt:89
 msgid "about BookView"
 msgstr ""
 
-#: data/TWiki/WebSearchAdvanced.txt:55
+#: data/TWiki/WebSearchAdvanced.txt:59
 msgid "about regular expression search"
 msgstr ""
 
