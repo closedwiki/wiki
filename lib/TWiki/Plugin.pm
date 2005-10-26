@@ -261,12 +261,14 @@ sub getDescription {
         return ' !'.$this->{name}.': (disabled)';
     } 
 
-    my $result = ' '.$this->{web}.'.'.$this->{name}.' (';
     my $release = $this->getRelease();
     my $version = $this->getVersion();
     $version =~ s/\$Rev: (\d+) \$/$1/g;
-    $result .= $release.', ' if $release;
-    $result .= $version.'): '.$this->{description};
+    $version = $release.', '.$version if $release;
+
+    my $result = ' '.$this->{web}.'.'.$this->{name}.' ';
+    $result .= CGI::span( { class=> 'twikiGrayText twikiSmall'}, '('.$version.')' );
+    $result .= ': '.$this->{description};
 
     return $result;
 }
