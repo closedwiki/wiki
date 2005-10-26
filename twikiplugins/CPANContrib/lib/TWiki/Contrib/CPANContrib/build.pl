@@ -38,6 +38,9 @@ use TWiki::Contrib::Build;
 if ( 0 )
 {
     # Do other build stuff here
+    # get cpan minimirror up-to-date
+    # create twiki mini-minicpan mirror (also publish this)
+
     use Cwd;
     my $base_lib_dir = getcwd . "/../../../../lib/CPAN";
     use File::Path qw( mkpath rmtree );
