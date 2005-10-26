@@ -841,6 +841,9 @@ td.patternToolBar {
 
 /* Attach page */
 
+.patternAttachPage .twikiAttachments {
+	font-size:94%; /*S2*/
+}
 .patternAttachPage .patternVersatileTable table {
 	margin-bottom:0;
 	width:auto;

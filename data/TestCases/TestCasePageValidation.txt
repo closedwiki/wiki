@@ -1,0 +1,93 @@
+%META:TOPICINFO{author="ArthurClemens" date="1130275816" format="1.1" version="1.1"}%
+*A list of templates, with links to the [[http://validator.w3.org/][W3C validation service]]. Pages should get validated as XHTML 1.0 Transitional.*
+
+<!-- %TABLE{ sort="off" headeralign="left, left" }% -->
+| *Template view* | *Comment* | *Validation url* | *Validation result* | *Status* |
+| [[%SCRIPTURL%/attach/%TWIKIWEB%/%HOMETOPIC%][attach new]] 																| =attach.pattern.tmpl=, =attachnew.pattern.tmpl= 																| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/attach/%TWIKIWEB%/%HOMETOPIC%}%][validate]] 															|  |  |
+| [[%SCRIPTURL%/attach/%WEB%/%TOPIC%?filename=favicon.ico&revInfo=1][attach again]] 										| =attach.pattern.tmpl=, =attachnagain.pattern.tmpl=, =attachtables.pattern.tmpl= 								| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/attach/%WEB%/%TOPIC%?filename=favicon.ico&revInfo=1}%][validate]] 									|  |  |
+| [[%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=backlinksweb][backlinks web]]											| =backlinks.pattern.tmpl=, =backlinksweb.pattern.tmpl= 														| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=backlinksweb}%][validate]] 										|  |  |
+| [[%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=backlinksallwebs][backlinks all webs]]									| =backlinks.pattern.tmpl=, =backlinksallwebs.pattern.tmpl= 													| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=backlinksallwebs}%][validate]] 									|  |  |
+| [[%SCRIPTURL%/changes/%TWIKIWEB%/%HOMETOPIC%][changes]] 																	| =changes.pattern.tmpl= 																						| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/changes/%TWIKIWEB%/%HOMETOPIC%}%][validate]] 															|  |  |
+| [[%SCRIPTURL%/changes/%TWIKIWEB%/%HOMETOPIC%?minor=1][view all changes]] 													| =changes.pattern.tmpl= 																						| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/changes/%TWIKIWEB%/%HOMETOPIC%?minor=1}%][validate]] 													|  |  |
+| [[%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=favicon.ico&web=Trash&template=deleteattachment][delete attachment]] 		| =deleteattachment.pattern.tmpl=																				| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=favicon.ico&web=Trash&template=deleteattachment}%][validate]] 		|  |  |
+| [[%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=foo.bar&web=Trash&template=deleteattachment][deleteattachment error]] 		| =oopsattention.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=foo.bar&web=Trash&template=deleteattachment}%][validate]] 			|  |  |
+| [[%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=favicon.ico][moveattachment]] 												| =moveattachment.pattern.tmpl=																					| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=favicon.ico}%][validate]] 											|  |  |
+| [[%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=foo.bar][moveattachment error]] 											| =oopsattention.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rename/%WEB%/%TOPIC%?attachment=foo.bar}%][validate]] 												|  |  |
+| TODO: =changeform.pattern.tmpl= 																							|  																												|  																																								|  |  |
+| [[%SCRIPTURL%/edit/%TWIKIWEB%/%HOMETOPIC%?t=1091026613][edit]] 															|  																												| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/edit/%TWIKIWEB%/%HOMETOPIC%?t=1091026613}%][validate]] 												|  |  |
+| [[%SCRIPTURL%/edit/%MAINWEB%/%WIKINAME%?action=form&t=1130355004][edit user data form]] 									| =editform.pattern.tmpl= Note: user topic must exist (test: name=<nop>%WIKINAME%; topic=%MAINWEB%.%WIKINAME%) 	| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/edit/%MAINWEB%/%WIKINAME%?action=form&t=1130355004}%][validate]] 										|  |  |
+| [[%SCRIPTURL%/edit/%MAINWEB%/%WIKINAME%?action=text&t=1130355004][edit text]] 											| =editform.pattern.tmpl= Note: user topic must exist (test: name=<nop>%WIKINAME%; topic=%MAINWEB%.%WIKINAME%) 	| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/edit/%MAINWEB%/%WIKINAME%?action=text&t=1130355004}%][validate]] 										|  |  |
+| [[%SCRIPTURL%/login/%TWIKIWEB%/%HOMETOPIC%][log in]] 																		| =login.pattern.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/login/%TWIKIWEB%/%HOMETOPIC%}%][validate]] 															|  |  |
+| [[%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=oopschangelanguage][change language]] 									| =oopschangelanguage.pattern.tmpl=																				| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=oopschangelanguage}%][validate]] 								|  |  |
+| [[%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=oopsmore&param1=2&param2=2][more options]]			 					| =oopsmore.pattern.tmpl=																						| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/oops/%TWIKIWEB%/%HOMETOPIC%?template=oopsmore&param1=2&param2=2}%][validate]]			 				|  |  |
+| TODO: =oopssaveerr.pattern.tmpl= 																							|  																												|  																																								|  |  |
+| TODO: =preview.pattern.tmpl= 																								| Test manually by saving the page html and paste that in the form on http://validator.w3.org					|																							  																	|  |  |
+| [[%SCRIPTURL%/rdiff/%TWIKIWEB%/%HOMETOPIC%?type=history][rdiff history]]													| =rdiff.pattern.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rdiff/%TWIKIWEB%/%HOMETOPIC%?type=history}%][validate]] 												|  |  |
+| [[%SCRIPTURL%/rdiff/%TWIKIWEB%/%HOMETOPIC%?render=sidebyside][rdiff side by side]]										| =rdiff.pattern.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rdiff/%TWIKIWEB%/%HOMETOPIC%?render=sidebyside}%][validate]] 											|  |  |
+| [[%SCRIPTURL%/rdiff/%TWIKIWEB%/%HOMETOPIC%?render=debug][rdiff debug]]													| =rdiff.pattern.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rdiff/%TWIKIWEB%/%HOMETOPIC%?render=debug}%][validate]] 												|  |  |
+| [[%SCRIPTURL%/manage/%TWIKIWEB%/%HOMETOPIC%?action=editSettings][settings]]												| =settings.pattern.tmpl=																						| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/manage/%TWIKIWEB%/%HOMETOPIC%?action=editSettings}%][validate]] 										|  |  |
+| [[%SCRIPTURL%/rename/%TWIKIWEB%/%HOMETOPIC%?newweb=Trash&nonwikiword=on][(rename) delete]]								| =renamebase.pattern.tmpl=, =renamedelete.pattern.tmpl=														| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rename/%TWIKIWEB%/%HOMETOPIC%?newweb=Trash&nonwikiword=on}%][validate]] 								|  |  |
+| [[%SCRIPTURL%/rename/%TWIKIWEB%/%HOMETOPIC%][(rename) move]]																| =renamebase.pattern.tmpl=																						| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rename/%TWIKIWEB%/%HOMETOPIC%}%][validate]] 															|  |  |
+| [[%SCRIPTURL%/rename/%TWIKIWEB%/%HOMETOPIC%?action=renameweb][rename web]]												| =renamebase.pattern.tmpl=, =renameweb.pattern.tmpl=, =renamewebdelete.pattern.tmpl=							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/rename/%TWIKIWEB%/%HOMETOPIC%?action=renameweb}%][validate]] 											|  |  |
+| TODO: =renamewebconfirm.pattern.tmpl= 																					|  																												|  																																								|  |  |
+| TODO: =oopsaccessdenied.pattern.tmpl= 																					|  																												|  																																								|  |  |
+| TODO: =oopsleaseconflict.pattern.tmpl= 																					|  																												|  																																								|  |  |
+| [[%SCRIPTURL%/search/%TWIKIWEB%/%HOMETOPIC%?search=wiki&scope=topic][search]]												| =search.pattern.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/search/%TWIKIWEB%/%HOMETOPIC%?search=wiki&scope=topic}%][validate]] 									|  |  |
+| [[%SCRIPTURL%/search/%TWIKIWEB%/%HOMETOPIC%?search=wiki&scope=topic&order=topic&bookview=on&limit=all][search (bookview)]]| =search.pattern.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/search/%TWIKIWEB%/%HOMETOPIC%?search=wiki&scope=topic&order=topic&bookview=on&limit=all}%][validate]] |  |  |
+| TODO: =searchformat.pattern.tmpl= 																						|  																												|  																																								|  |  |
+| TODO: =searchmeta.pattern.tmpl= 																							|  																												|  																																								|  |  |
+| [[%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%][view]] 																		| =view.pattern.tmpl=																							| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%}%][validate]] 															|  |  |
+| [[%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%?skin=plain][view raw]]															| =view.plain.pattern.tmpl=											 											| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%?skin=plain}%][validate]] 													|  |  |
+| [[%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%?raw=on][view raw]] 																| =view.pattern.tmpl=												 											| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%?raw=on}%][validate]] 														|  |  |
+| [[%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%?skin=print.pattern,pattern][view print version]]								| =view.print.pattern.tmpl=										 												| [[http://validator.w3.org/check?uri=%ENCODE{%SCRIPTURL%/view/%TWIKIWEB%/%HOMETOPIC%?skin=print.pattern,pattern}%][validate]]									|  |  |
+
+
+<!-- %TABLE{ sort="off" headeralign="left, left" }% -->
+| *Style sheet* | *Comment* | *Validation url* | *Validation result* | *Status* |
+| [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] |  | [[http://jigsaw.w3.org/css-validator/validator?uri=%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][validate]]  |  |  |
+| [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]] |  | [[http://jigsaw.w3.org/css-validator/validator?uri=%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][validate]] |  |  |
+| [[%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]] |  | [[http://jigsaw.w3.org/css-validator/validator?uri=%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][validate]] |  |  |
+
+<!--
+attach.pattern.tmpl
+attachagain.pattern.tmpl
+attachnew.pattern.tmpl
+attachtables.pattern.tmpl
+backlinks.pattern.tmpl
+backlinksallwebs.pattern.tmpl
+backlinksweb.pattern.tmpl
+changeform.pattern.tmpl
+changes.pattern.tmpl
+deleteattachment.pattern.tmpl
+edit.pattern.tmpl
+editform.pattern.tmpl
+edittext.pattern.tmpl
+login.pattern.tmpl
+moveattachment.pattern.tmpl
+oopsaccessdenied.pattern.tmpl
+oopschangelanguage.tmpl
+oopsleaseconflict.pattern.tmpl
+oopsmore.pattern.tmpl
+oopssaveerr.pattern.tmpl
+preview.pattern.tmpl
+rdiff.pattern.tmpl
+renamebase.pattern.tmpl
+renameconfirm.pattern.tmpl
+renamedelete.pattern.tmpl
+rename.pattern.tmpl
+renameweb.pattern.tmpl
+renamewebbase.pattern.tmpl
+renamewebconfirm.pattern.tmpl
+renamewebdelete.pattern.tmpl
+search.pattern.tmpl
+searchbookview.pattern.tmpl
+searchformat.pattern.tmpl
+searchmeta.pattern.tmpl
+settings.pattern.tmpl
+twiki.pattern.tmpl
+view.pattern.tmpl
+view.print.pattern.tmpl
+view.plain.pattern.tmpl
+-->
+
+%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="" date="1130354471" path="favicon.ico" size="3638" stream="favicon.ico" user="Main.ArthurClemens" version="1"}%
