@@ -212,7 +212,7 @@ sub upload {
                                         def => 'zero_size_upload',
                                         web => $webName,
                                         topic => $topic,
-                                        params => $fileName );
+                                        params => ($fileName || '""') );
         }
 
         my $maxSize = $session->{prefs}->getPreferencesValue( 'ATTACHFILESIZELIMIT' );
