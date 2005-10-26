@@ -384,7 +384,7 @@ sub searchWeb {
     my $doMultiple =    TWiki::isTrue( $params{multiple} );
     my $nonoise =       TWiki::isTrue( $params{nonoise} );
     my $noEmpty =       TWiki::isTrue( $params{noempty}, $nonoise );
-    my $noHeader =      TWiki::isTrue( $params{noheader}, $nonoise );
+    my $noHeader =      TWiki::isTrue( $params{noheader} || (($format ne '')&&$inline), $nonoise );	#SMELL: this is a horrible Cairo compatibility hack, it seems everyone was relying on
     my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
     my $noSummary =     TWiki::isTrue( $params{nosummary}, $nonoise );
     my $zeroResults =   1 - TWiki::isTrue( ($params{zeroresults} || 'on'), $nonoise );

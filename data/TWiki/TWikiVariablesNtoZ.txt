@@ -170,7 +170,7 @@ __Note:__ This topic is included by TWikiVariables
      | =nonoise="on"= | Shorthand for =nosummary="on" nosearch="on" nototal="on" zeroresults="off" noheader="on" noempty="on" | Off |
      | =nosummary="on"= | Show topic title only | Show topic summary |
      | =nosearch="on"= | Suppress search string | Show search string |
-     | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
+     | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header, unless seach is inline and a format is specified (Cairo compatibility) |
      | =nototal="on"= | Do not show number of topics found | Show number |
      | =zeroresults="off"= | Suppress all output if there are no hits | =zeroresults="on"=, displays: "Number of topics: 0" |
      | =noempty="on"= | Suppress results for webs that have no hits. | Show webs with no hits |
