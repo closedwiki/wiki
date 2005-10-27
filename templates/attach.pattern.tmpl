@@ -82,7 +82,6 @@
 <div id="helptoggle" class="twikiHelp twistyHidden">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div>
-<div>
 %TMPL:P{"previousdetails"}%
 <div class="patternVersatileTable">
 <table width="100%">%TMPL:P{"previous"}% 
@@ -125,15 +124,13 @@
 			<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">%_{"Do not show attachment in table"}%</label>
 		</td>
 		<td class="patternHelpCol">%_{"Attachments will not be shown in topic view page."}%</td>
-	</tr>
-	%TMPL:P{"changepropertiesaction"}%
+	</tr>%TMPL:P{"changepropertiesaction"}%
 </table>
 </div>
 %TMPL:P{"topicaction"}%</form>
 <div class="twikiHelp twistyMakeHidden">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%
-</div>
 </div>
 %TMPL:P{"existingattachments"}%
 %TMPL:P{"standardfooter"}%%TMPL:END%
