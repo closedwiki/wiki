@@ -59,19 +59,16 @@ pre, code, tt {
 }
 /* put overflow pre in a scroll area */
 pre {
-	overflow-x:auto;
-    overflow-y:visible;
-    padding-bottom:1.5em;
     width:100%;
+    margin:1em 0; /* Win IE tries to make this bigger otherwise */
 }
 html>body pre { /* hide from IE */
-	padding-bottom:0;
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
 }
-.twikiNoOverFlow pre,
-html>body .twikiNoOverFlow pre {
-    overflow:visible;
-    background-color:green;
+* html pre {
+	overflow-x:auto;
+    overflow-y:hidden;
+	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
 }
 ol li, ul li {
 	line-height:1.4em; /*S1*/
