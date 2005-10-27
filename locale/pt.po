@@ -215,6 +215,14 @@ msgstr "(editar texto)"
 msgid "(edit)"
 msgstr "(editar)"
 
+#: data/TWiki/TWikiRegistration.txt:42
+msgid "(how you log in) LoginName:"
+msgstr "(como você se identifica) LoginName:"
+
+#: data/TWiki/TWikiRegistration.txt:37
+msgid "(identifies you to others) WikiName:"
+msgstr "(identifica você aos outros) WikiName:"
+
 #: templates/oopsmore.pattern.tmpl:2
 msgid "(more)"
 msgstr "(mais)"
@@ -293,6 +301,26 @@ msgid ""
 msgstr ""
 "*Ajuda:* Por favor veja %TWIKIWEB%.FileAttachment para maiores informações "
 "sobre anexar arquivos."
+
+#: data/TWiki/TWikiRegistration.txt:10
+msgid ""
+"*Important:* the information provided in this form will be stored in a "
+"database on the TWiki server. This database is accessible to anyone who can "
+"access the server through the web (though passwords will be encrypted, and "
+"email addresses will be obfusticated to help prevent spamming). Your "
+"country, or the country where the server is hosted, may have Data Protection "
+"laws governing the maintenance of such databases. If you are in doubt, you "
+"should contact %1 for details of the Data Protection Policy of this TWiki "
+"server before registering."
+msgstr ""
+"*Importante:* as informações fornecidas nesse formulário serão armazenadas "
+"num banco de dados no servidor do TWiki. Este banco de dados é acessível por "
+"qualquer pessoa que possa acessar o servidor pela web (porém as senhas serão "
+"criptografadas e endereços de e-mail ofuscados para evitar SPAM). Seu país, ou "
+"o país onde o servidor está hospedado, podem ter Leis de Proteção de Dados "
+"regulando a manutenção desse tipo de banco de dados. Se estiver em dúvida, você "
+"deveria contactar %1 sobre detalhes na Política de Proteção de Dados desse "
+"servidor TWiki antes de se registrar."
 
 #: templates/attachagain.pattern.tmpl:53
 msgid ""
@@ -406,6 +434,10 @@ msgstr "Ação %1: %2."
 #: templates/addform.tmpl:1
 msgid "Add form"
 msgstr "Adicionar formulário"
+
+#: data/TWiki/TWikiRegistration.txt:225
+msgid "Add your name to the list of users in the %1 topic in the %2 web."
+msgstr "Adicionar seu nome à lista de usuários no tópico %1 da web %2."
 
 #: lib/TWiki/UI/RDiff.pm:261
 msgid "Added"
@@ -707,6 +739,18 @@ msgstr "A cor %1 tem um formato inválido"
 msgid "Comment"
 msgstr "Comentário"
 
+#: data/TWiki/TWikiRegistration.txt:208
+msgid "Comments:"
+msgstr "Comentários:"
+
+#: data/TWiki/TWikiRegistration.txt:59
+msgid "Company URL: <br> (or department URL)"
+msgstr "URL da Organização <br> (ou URL do departamento)"
+
+#: data/TWiki/TWikiRegistration.txt:56
+msgid "Company name:"
+msgstr "Nome da Organização:"
+
 #: templates/oopsmore.pattern.tmpl:47
 msgid "Compare revisions:"
 msgstr "Comparar revisões:"
@@ -750,6 +794,10 @@ msgstr "Não foi possível criar a nova web %1"
 msgid "Could not save %1."
 msgstr "Não foi possível salvar %1."
 
+#: data/TWiki/TWikiRegistration.txt:62
+msgid "Country:"
+msgstr "País:"
+
 #: templates/view.pattern.tmpl:28
 msgid "Cr&eate"
 msgstr "Criar(&e)"
@@ -785,6 +833,14 @@ msgstr "Criar barra lateral pessoal"
 #: lib/TWiki/Render.pm:560 lib/TWiki/Render.pm:572
 msgid "Create this topic"
 msgstr "Criar este tópico"
+
+#: data/TWiki/TWikiRegistration.txt:224
+msgid ""
+"Create your personal %1 topic using your WikiName as topic name, and add the "
+"data you submitted to the topic."
+msgstr ""
+"Criar seu tópico pessoal no %1 usando seu WikiName como nome do tópico, e "
+"adicionar os dados que você forneceu ao tópico."
 
 #: templates/oopsattention.tmpl:265
 msgid "Creating a suitable Form Definition topic"
@@ -937,6 +993,10 @@ msgstr "Editar o texto desse tópico"
 msgid "Edit topic preference settings:"
 msgstr "Editar preferências do tópico:"
 
+#: data/TWiki/TWikiRegistration.txt:46
+msgid "Email address:"
+msgstr "Endereço de e-mail:"
+
 #: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:75
 msgid "End of topic"
 msgstr "Final do tópico"
@@ -977,6 +1037,10 @@ msgstr "Anexos existentes"
 msgid "Existing form data will be lost! (still available in old version)"
 msgstr "Dados existentes serão perdidos! (ainda disponíveis na versão antiga)"
 
+#: data/TWiki/TWikiRegistration.txt:213
+msgid "Fields marked %1 are required"
+msgstr "Campos marcados com %1 são obrigatórios"
+
 #: templates/oopsattention.tmpl:271
 msgid "Filename %1 is not legal for a TWiki attachment."
 msgstr "O nome de arquivo %1 não é válido para um anexo no TWiki."
@@ -997,6 +1061,18 @@ msgid ""
 msgstr ""
 "Procurar tópicos <a href='%1' title='Procurar na web %2 por tópicos que "
 "façam link pra cá' accesskey='w'>na &web %2 </a> que façam link pra %3"
+
+#: data/TWiki/TWikiRegistration.txt:223
+msgid ""
+"Finish creating an account for you, so that you can start editing pages "
+"using your WikiName."
+msgstr ""
+"Finalizar a criação de uma conta pra você, de forma que você possa "
+"começar a editar página usando seu WikiName."
+
+#: data/TWiki/TWikiRegistration.txt:30
+msgid "First Name:"
+msgstr "Primeiro nome:"
 
 #: templates/edit.pattern.tmpl:134 templates/preview.pattern.tmpl:65
 msgid "Force new revision"
@@ -1125,6 +1201,11 @@ msgstr ""
 "Se você recebeu esse e-mail por engano: alguém (%1) se registrou no sítio %2 "
 "usando seu endereço de e-mail %3. Contate %4 se isso foi um engano."
 
+#: data/TWiki/TWikiRegistration.txt:233
+msgid "If you have any questions about registration, send an email to %1."
+msgstr ""
+"Se você tiver qualquer questão sobre o registro, mande um email para %1."
+
 #: templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr "Se você tiver qualquer questão, contate %1."
@@ -1228,6 +1309,10 @@ msgstr ""
 #: data/TWiki/WebLeftBarSearch.txt:5
 msgid "Jump"
 msgstr "Pular para"
+
+#: data/TWiki/TWikiRegistration.txt:34
+msgid "Last Name:"
+msgstr "Último Nome:"
 
 #: data/TWiki/WebSearchAdvanced.txt:51
 msgid "Last editor"
@@ -1389,8 +1474,8 @@ msgid ""
 msgstr ""
 "Note que quaisquer URLs que se refiram ao anexo vão quebrar depois de mover."
 
-#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
-#: templates/renamebase.pattern.tmpl:80
+#: data/TWiki/TWikiRegistration.txt:6 templates/registerconfirm.tmpl:13
+#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:80
 #: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:84
 msgid "Note:"
 msgstr "Notas:"
@@ -1426,9 +1511,18 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Revisão mais antiga:"
 
+#: data/TWiki/TWikiRegistration.txt:231
+msgid "Once registered you can login using your %1 and password."
+msgstr ""
+"Uma vez registrado, você pode iniciar sua sessão usando seu %1 e sua senha."
+
 #: templates/oopsaccessdenied.tmpl:16
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Apenas membros do %1 têm permissão para realizar essa ação."
+
+#: data/TWiki/TWikiRegistration.txt:203
+msgid "Other Country"
+msgstr "Outro país"
 
 #: data/TWiki/WebSearch.txt:42 data/TWiki/WebSearchAdvanced.txt:85
 msgid "Other search options:"
@@ -1570,6 +1664,16 @@ msgstr "Tópicos alterados recentemente"
 msgid "Register"
 msgstr "Registro"
 
+#: data/TWiki/TWikiRegistration.txt:6
+msgid "Registered users can ChangePasswords and ResetPasswords."
+msgstr ""
+"Usuários registrados podem [[ChangePasswords][Alterar a senha]] e "
+"[[ResetPasswords][Reiniciar a senha]]."
+
+#: data/TWiki/TWikiRegistration.txt:2
+msgid "Registration"
+msgstr "Registro"
+
 #: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Regular expression search"
 msgstr "Busca com expressões regulares"
@@ -1619,6 +1723,10 @@ msgstr "Trocar formulário..."
 #: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
 msgstr "Resultados na web %1"
+
+#: data/TWiki/TWikiRegistration.txt:52
+msgid "Retype password:"
+msgstr "Repita a senha:"
 
 #: templates/oopsattention.tmpl:24
 msgid "Rev %1 was saved by %2, while you were still editing."
@@ -1729,6 +1837,10 @@ msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 "Selecione, copie e cole o texto da sua assinatura no final da sua entrada"
 
+#: data/TWiki/TWikiRegistration.txt:226
+msgid "Send you a confirmation of your registration by email."
+msgstr "Enviar a você uma confirmação do seu registro por email."
+
 #: templates/oopsmore.pattern.tmpl:28
 msgid "Set new topic parent:"
 msgstr "Indicar novo tópico pai:"
@@ -1825,7 +1937,8 @@ msgstr ""
 "Estilo da caixa de edição de texto. =with: 99%= para largura total da tela "
 "(padrão), =with: auto= para desabilitar."
 
-#: templates/oopsattention.tmpl:151 templates/oopsattention.tmpl:225
+#: data/TWiki/TWikiRegistration.txt:217 templates/oopsattention.tmpl:151
+#: templates/oopsattention.tmpl:225
 msgid "Submit"
 msgstr "Enviar"
 
@@ -2136,6 +2249,14 @@ msgstr "Para criar um novo tópico, entre o nome do tópico e clique em 'criar'.
 msgid "To delete an attachment move it to web %1, topic %2."
 msgstr "Para remover um anexo mova-o para a web %1, tópico %2."
 
+#: data/TWiki/TWikiRegistration.txt:4
+msgid ""
+"To edit pages on this TWikiSite, you must have a registered user name and "
+"password."
+msgstr ""
+"Para editar páginas nesse [[TWikiSite][SítioTWiki]], você precisa ter um "
+"nome de usuário e uma senha registrados."
+
 #: templates/oopsleaseconflict.tmpl:24
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
 msgstr "Para editar o tópico, clique 'Editar Assim Mesmo'."
@@ -2143,6 +2264,10 @@ msgstr "Para editar o tópico, clique 'Editar Assim Mesmo'."
 #: templates/preview.pattern.tmpl:80
 msgid "To make *more changes*: Go back in your browser."
 msgstr "Para fazer *mais alterações*: volte no seu navegador."
+
+#: data/TWiki/TWikiRegistration.txt:8
+msgid "To register as a new user, simply fill out this form:"
+msgstr "Para se registrar como um novo usuário, preencha esse formulário:"
 
 #: templates/oopsleaseconflict.tmpl:22
 msgid "To see if they have finished their edit yet, click 'Try Again'."
@@ -2363,6 +2488,18 @@ msgstr "Webs"
 msgid "Welcome to the %1 web"
 msgstr "Bém-vindo(a) à web %1"
 
+#: data/TWiki/TWikiRegistration.txt:222
+msgid ""
+"When %1 recives the form, it will mail an account activation code to the "
+"email address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the email, to activate your account. Once your "
+"account is activated, %1 will:"
+msgstr ""
+"Quando o %1 receber o formulário, ele vai enviar um código de ativação da "
+"conta para o endereço de e-mail que você forneceu acima. Entre aquele código "
+"de ativação na tela seguinte, ou acesse o link no e-mail, para ativar sua "
+"conta. Uma vez que a conta estiver ativada, o %1 vai:"
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
@@ -2501,6 +2638,10 @@ msgstr ""
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "Sua senha foi alterada para %1."
+
+#: data/TWiki/TWikiRegistration.txt:49
+msgid "Your password:"
+msgstr "Sua senha:"
 
 #: templates/registernotify.tmpl:12
 msgid ""

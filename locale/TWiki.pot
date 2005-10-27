@@ -213,6 +213,14 @@ msgstr ""
 msgid "(edit)"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:42
+msgid "(how you log in) LoginName:"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:37
+msgid "(identifies you to others) WikiName:"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:2
 msgid "(more)"
 msgstr ""
@@ -282,6 +290,18 @@ msgstr ""
 msgid ""
 "*Help:* Please see %TWIKIWEB%.FileAttachment for more information about "
 "attaching files."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:10
+msgid ""
+"*Important:* the information provided in this form will be stored in a "
+"database on the TWiki server. This database is accessible to anyone who can "
+"access the server through the web (though passwords will be encrypted, and "
+"email addresses will be obfusticated to help prevent spamming). Your "
+"country, or the country where the server is hosted, may have Data Protection "
+"laws governing the maintenance of such databases. If you are in doubt, you "
+"should contact %1 for details of the Data Protection Policy of this TWiki "
+"server before registering."
 msgstr ""
 
 #: templates/attachagain.pattern.tmpl:53
@@ -374,6 +394,10 @@ msgstr ""
 
 #: templates/addform.tmpl:1
 msgid "Add form"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:225
+msgid "Add your name to the list of users in the %1 topic in the %2 web."
 msgstr ""
 
 #: lib/TWiki/UI/RDiff.pm:261
@@ -659,6 +683,18 @@ msgstr ""
 msgid "Comment"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:208
+msgid "Comments:"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:59
+msgid "Company URL: <br> (or department URL)"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:56
+msgid "Company name:"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:47
 msgid "Compare revisions:"
 msgstr ""
@@ -700,6 +736,10 @@ msgstr ""
 msgid "Could not save %1."
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:62
+msgid "Country:"
+msgstr ""
+
 #: templates/view.pattern.tmpl:28
 msgid "Cr&eate"
 msgstr ""
@@ -734,6 +774,12 @@ msgstr ""
 
 #: lib/TWiki/Render.pm:560 lib/TWiki/Render.pm:572
 msgid "Create this topic"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:224
+msgid ""
+"Create your personal %1 topic using your WikiName as topic name, and add the "
+"data you submitted to the topic."
 msgstr ""
 
 #: templates/oopsattention.tmpl:265
@@ -874,6 +920,10 @@ msgstr ""
 msgid "Edit topic preference settings:"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:46
+msgid "Email address:"
+msgstr ""
+
 #: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:75
 msgid "End of topic"
 msgstr ""
@@ -912,6 +962,10 @@ msgstr ""
 msgid "Existing form data will be lost! (still available in old version)"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:213
+msgid "Fields marked %1 are required"
+msgstr ""
+
 #: templates/oopsattention.tmpl:271
 msgid "Filename %1 is not legal for a TWiki attachment."
 msgstr ""
@@ -926,6 +980,16 @@ msgstr ""
 msgid ""
 "Find topics <a href='%1' title='Search the %2 Web for topics that link to "
 "here' accesskey='w'>in %2 &web</a> that link to %3"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:223
+msgid ""
+"Finish creating an account for you, so that you can start editing pages "
+"using your WikiName."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:30
+msgid "First Name:"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:134 templates/preview.pattern.tmpl:65
@@ -1039,6 +1103,10 @@ msgid ""
 "using your mail address %3. Contact %4 if this is in error."
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:233
+msgid "If you have any questions about registration, send an email to %1."
+msgstr ""
+
 #: templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr ""
@@ -1126,6 +1194,10 @@ msgstr ""
 
 #: data/TWiki/WebLeftBarSearch.txt:5
 msgid "Jump"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:34
+msgid "Last Name:"
 msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:51
@@ -1283,8 +1355,8 @@ msgid ""
 "move."
 msgstr ""
 
-#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
-#: templates/renamebase.pattern.tmpl:80
+#: data/TWiki/TWikiRegistration.txt:6 templates/registerconfirm.tmpl:13
+#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:80
 #: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:84
 msgid "Note:"
 msgstr ""
@@ -1320,8 +1392,16 @@ msgstr ""
 msgid "Older revision:"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:231
+msgid "Once registered you can login using your %1 and password."
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:16
 msgid "Only members of the %1 are allowed to perform this action."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:203
+msgid "Other Country"
 msgstr ""
 
 #: data/TWiki/WebSearch.txt:42 data/TWiki/WebSearchAdvanced.txt:85
@@ -1455,6 +1535,14 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:6
+msgid "Registered users can ChangePasswords and ResetPasswords."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:2
+msgid "Registration"
+msgstr ""
+
 #: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Regular expression search"
 msgstr ""
@@ -1503,6 +1591,10 @@ msgstr ""
 
 #: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:52
+msgid "Retype password:"
 msgstr ""
 
 #: templates/oopsattention.tmpl:24
@@ -1611,6 +1703,10 @@ msgstr ""
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:226
+msgid "Send you a confirmation of your registration by email."
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:28
 msgid "Set new topic parent:"
 msgstr ""
@@ -1699,7 +1795,8 @@ msgid ""
 "=width: auto= to disable."
 msgstr ""
 
-#: templates/oopsattention.tmpl:151 templates/oopsattention.tmpl:225
+#: data/TWiki/TWikiRegistration.txt:217 templates/oopsattention.tmpl:151
+#: templates/oopsattention.tmpl:225
 msgid "Submit"
 msgstr ""
 
@@ -1957,12 +2054,22 @@ msgstr ""
 msgid "To delete an attachment move it to web %1, topic %2."
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:4
+msgid ""
+"To edit pages on this TWikiSite, you must have a registered user name and "
+"password."
+msgstr ""
+
 #: templates/oopsleaseconflict.tmpl:24
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
 msgstr ""
 
 #: templates/preview.pattern.tmpl:80
 msgid "To make *more changes*: Go back in your browser."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:8
+msgid "To register as a new user, simply fill out this form:"
 msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:22
@@ -2173,6 +2280,14 @@ msgstr ""
 msgid "Welcome to the %1 web"
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:222
+msgid ""
+"When %1 recives the form, it will mail an account activation code to the "
+"email address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the email, to activate your account. Once your "
+"account is activated, %1 will:"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
@@ -2287,6 +2402,10 @@ msgstr ""
 
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:49
+msgid "Your password:"
 msgstr ""
 
 #: templates/registernotify.tmpl:12

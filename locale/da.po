@@ -212,6 +212,14 @@ msgstr "(editér tekst)"
 msgid "(edit)"
 msgstr "(editér)"
 
+#: data/TWiki/TWikiRegistration.txt:42
+msgid "(how you log in) LoginName:"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:37
+msgid "(identifies you to others) WikiName:"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:2
 msgid "(more)"
 msgstr "(mere)"
@@ -291,6 +299,18 @@ msgid ""
 msgstr ""
 "*Hjælp:* For yderligere information om vedhæftede filer, læs da venligst %"
 "TWIKIWEB%.FileAttachment."
+
+#: data/TWiki/TWikiRegistration.txt:10
+msgid ""
+"*Important:* the information provided in this form will be stored in a "
+"database on the TWiki server. This database is accessible to anyone who can "
+"access the server through the web (though passwords will be encrypted, and "
+"email addresses will be obfusticated to help prevent spamming). Your "
+"country, or the country where the server is hosted, may have Data Protection "
+"laws governing the maintenance of such databases. If you are in doubt, you "
+"should contact %1 for details of the Data Protection Policy of this TWiki "
+"server before registering."
+msgstr ""
 
 #: templates/attachagain.pattern.tmpl:53
 msgid ""
@@ -403,6 +423,10 @@ msgstr "Handling %1: %2."
 #: templates/addform.tmpl:1
 msgid "Add form"
 msgstr "Tilføj formular"
+
+#: data/TWiki/TWikiRegistration.txt:225
+msgid "Add your name to the list of users in the %1 topic in the %2 web."
+msgstr ""
 
 #: lib/TWiki/UI/RDiff.pm:261
 msgid "Added"
@@ -702,6 +726,20 @@ msgstr "Farven %1 er et ugyldigt format"
 msgid "Comment"
 msgstr "Kommentar"
 
+#: data/TWiki/TWikiRegistration.txt:208
+#, fuzzy
+msgid "Comments:"
+msgstr "Kommentar"
+
+#: data/TWiki/TWikiRegistration.txt:59
+msgid "Company URL: <br> (or department URL)"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:56
+#, fuzzy
+msgid "Company name:"
+msgstr "Sidenavn:"
+
 #: templates/oopsmore.pattern.tmpl:47
 msgid "Compare revisions:"
 msgstr "Sammenlign versioner:"
@@ -745,6 +783,10 @@ msgstr "Kunne ikke oprette det nye web %1"
 msgid "Could not save %1."
 msgstr "%1 kunne ikke gemmes."
 
+#: data/TWiki/TWikiRegistration.txt:62
+msgid "Country:"
+msgstr ""
+
 #: templates/view.pattern.tmpl:28
 msgid "Cr&eate"
 msgstr "Opret"
@@ -780,6 +822,12 @@ msgstr "Opret personlig side-menu"
 #: lib/TWiki/Render.pm:560 lib/TWiki/Render.pm:572
 msgid "Create this topic"
 msgstr "Opret denne side"
+
+#: data/TWiki/TWikiRegistration.txt:224
+msgid ""
+"Create your personal %1 topic using your WikiName as topic name, and add the "
+"data you submitted to the topic."
+msgstr ""
 
 #: templates/oopsattention.tmpl:265
 msgid "Creating a suitable Form Definition topic"
@@ -933,6 +981,11 @@ msgstr "Editér sidens tekst"
 msgid "Edit topic preference settings:"
 msgstr "Editér præferencer for siden:"
 
+#: data/TWiki/TWikiRegistration.txt:46
+#, fuzzy
+msgid "Email address:"
+msgstr "Ugyldig e-mail-adresse"
+
 #: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:75
 msgid "End of topic"
 msgstr "Bunden af siden"
@@ -975,6 +1028,11 @@ msgstr ""
 "Eksisterende formular-data vil gå tabt! (vil stadig kunne fremfindes i "
 "historikken)"
 
+#: data/TWiki/TWikiRegistration.txt:213
+#, fuzzy
+msgid "Fields marked %1 are required"
+msgstr "felter er obligatoriske"
+
 #: templates/oopsattention.tmpl:271
 msgid "Filename %1 is not legal for a TWiki attachment."
 msgstr "Filnavnet %1 er ikke lovligt for en vedhæftet fil."
@@ -994,6 +1052,16 @@ msgid ""
 msgstr ""
 "Find sider <a href='%1' title='Søg i %2 webbet efter sider der linker til "
 "denne side' accesskey='l'>i %2 webbet</a> der linker til %3"
+
+#: data/TWiki/TWikiRegistration.txt:223
+msgid ""
+"Finish creating an account for you, so that you can start editing pages "
+"using your WikiName."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:30
+msgid "First Name:"
+msgstr ""
 
 #: templates/edit.pattern.tmpl:134 templates/preview.pattern.tmpl:65
 msgid "Force new revision"
@@ -1121,6 +1189,11 @@ msgstr ""
 "forsøgt at registrere sig på sitet %2 ved at bruge din e-mail adresse. "
 "Kontakt %4 hvis dette er en fejl."
 
+#: data/TWiki/TWikiRegistration.txt:233
+#, fuzzy
+msgid "If you have any questions about registration, send an email to %1."
+msgstr "Hvis du har spørgsmål, så kontakt venligst %1."
+
 #: templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr "Hvis du har spørgsmål, så kontakt venligst %1."
@@ -1225,6 +1298,10 @@ msgstr ""
 #: data/TWiki/WebLeftBarSearch.txt:5
 msgid "Jump"
 msgstr "Hop"
+
+#: data/TWiki/TWikiRegistration.txt:34
+msgid "Last Name:"
+msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:51
 msgid "Last editor"
@@ -1387,8 +1464,8 @@ msgstr ""
 "Vær opmærksom på, at alle links der rereferer direkte til denne vedhæftede "
 "fil ikke vil virke mere efter flytningen."
 
-#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
-#: templates/renamebase.pattern.tmpl:80
+#: data/TWiki/TWikiRegistration.txt:6 templates/registerconfirm.tmpl:13
+#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:80
 #: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:84
 msgid "Note:"
 msgstr "Note:"
@@ -1424,9 +1501,17 @@ msgstr "OK"
 msgid "Older revision:"
 msgstr "Tidligere version:"
 
+#: data/TWiki/TWikiRegistration.txt:231
+msgid "Once registered you can login using your %1 and password."
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:16
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Kun medlemmer af %1 må udføre denne handling."
+
+#: data/TWiki/TWikiRegistration.txt:203
+msgid "Other Country"
+msgstr ""
 
 #: data/TWiki/WebSearch.txt:42 data/TWiki/WebSearchAdvanced.txt:85
 msgid "Other search options:"
@@ -1569,6 +1654,15 @@ msgstr "Senest ændrede sider"
 msgid "Register"
 msgstr "Registrering"
 
+#: data/TWiki/TWikiRegistration.txt:6
+msgid "Registered users can ChangePasswords and ResetPasswords."
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:2
+#, fuzzy
+msgid "Registration"
+msgstr "Version"
+
 #: data/TWiki/WebSearchAdvanced.txt:59
 msgid "Regular expression search"
 msgstr "Søg med regulære udtryk"
@@ -1618,6 +1712,10 @@ msgstr "Udskift formular..."
 #: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
 msgstr "Søgeresultater i %1 web"
+
+#: data/TWiki/TWikiRegistration.txt:52
+msgid "Retype password:"
+msgstr ""
 
 #: templates/oopsattention.tmpl:24
 msgid "Rev %1 was saved by %2, while you were still editing."
@@ -1727,6 +1825,10 @@ msgstr "Vælg %1 webbet, for at slette siden."
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Vælg (triple-klik i feltet), og copy/paste din signatur til siden"
 
+#: data/TWiki/TWikiRegistration.txt:226
+msgid "Send you a confirmation of your registration by email."
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:28
 msgid "Set new topic parent:"
 msgstr "Vælg ny side-forælder:"
@@ -1824,7 +1926,8 @@ msgstr ""
 "Udseende på editerings-feltet. =width: 99%= for fuld vinduesbredde "
 "(standard), =width: auto= for at de-aktivere."
 
-#: templates/oopsattention.tmpl:151 templates/oopsattention.tmpl:225
+#: data/TWiki/TWikiRegistration.txt:217 templates/oopsattention.tmpl:151
+#: templates/oopsattention.tmpl:225
 msgid "Submit"
 msgstr "Send"
 
@@ -2134,6 +2237,12 @@ msgid "To delete an attachment move it to web %1, topic %2."
 msgstr ""
 "Ønsker du at slette en vedhæftet fil, flyt den da til siden %2 i %1 webbet."
 
+#: data/TWiki/TWikiRegistration.txt:4
+msgid ""
+"To edit pages on this TWikiSite, you must have a registered user name and "
+"password."
+msgstr ""
+
 #: templates/oopsleaseconflict.tmpl:24
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
 msgstr ""
@@ -2142,6 +2251,10 @@ msgstr ""
 #: templates/preview.pattern.tmpl:80
 msgid "To make *more changes*: Go back in your browser."
 msgstr "For at lave *flere ændringer*: Benyt tilbage-knappen i browseren."
+
+#: data/TWiki/TWikiRegistration.txt:8
+msgid "To register as a new user, simply fill out this form:"
+msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:22
 msgid "To see if they have finished their edit yet, click 'Try Again'."
@@ -2360,6 +2473,14 @@ msgstr "Webs"
 msgid "Welcome to the %1 web"
 msgstr "Velkommen til %1 webbet"
 
+#: data/TWiki/TWikiRegistration.txt:222
+msgid ""
+"When %1 recives the form, it will mail an account activation code to the "
+"email address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the email, to activate your account. Once your "
+"account is activated, %1 will:"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
@@ -2497,6 +2618,11 @@ msgstr ""
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "Dit password er opdateret til %1."
+
+#: data/TWiki/TWikiRegistration.txt:49
+#, fuzzy
+msgid "Your password:"
+msgstr "Password"
 
 #: templates/registernotify.tmpl:12
 msgid ""
