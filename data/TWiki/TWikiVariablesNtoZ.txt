@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 3494$"}%
+%META:TOPICINFO{author="PeterThoeny" date="1130377817" format="1.1" version="1.2"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 __Note:__ This topic is included by TWikiVariables
 
@@ -52,7 +52,8 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ QUERYSTRING -- full, unprocessed string of parameters to this URL
    * Syntax: %<nop>QUERYSTRING%
    * Expands to: <code> %QUERYSTRING% </code>
-   * String of all the URL parameters that were on the URL used to get to the current page. For example, if you click on %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?name=Samantha;age=24;favorite_colour=pink you can see this in action. This string can be appended to a URL to pass parameter values on to another page.<br /> %X% URLs built this way are typically restricted in length, typically to 2048 characters. If you need more space than this, you will need to use an HTML form and =%<nop>URLPARAM=.
+   * String of all the URL parameters that were on the URL used to get to the current page. For example, if you add [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?name=Samantha;age=24;eyes=blue][?name=Samantha;age=24;eyes=blue]] to this URL you can see this in action. This string can be appended to a URL to pass parameter values on to another page.
+   * %X% Note: URLs built this way are typically restricted in length, typically to 2048 characters. If you need more space than this, you will need to use an HTML form and =%<nop>URLPARAM{}%=.
    * Related: [[#VarURLPARAM][URLPARAM]]
  
 #VarREMOTEADDR
@@ -100,53 +101,32 @@ __Note:__ This topic is included by TWikiVariables
    * Example: =%<nop>REVINFO{"$date - $wikiusername" rev="1.1"}%= returns revision info of first revision
    * Related: [[#VarREVINFO][REVINFO]]
 
-#VarSECTION
----+++ SECTION{"name"} -- Marks the start of a named section
-   * Syntax: =%<nop>SECTION{"name"}%=
-   * Supported parameters:
-     | *Parameter:* | *Description:* | *Default:* |
-     | ="name"= | Name of the section. Must be unique inside a topic. | Mandatory parameter without a default |
-   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]]
+#VarSCRIPTNAME
+---+++ SCRIPTNAME -- name of current script
+   * The name of the current script is shown, including script suffix, if any (for example =viewauth.cgi=)
+   * Syntax: =%<nop>SCRIPTNAME%=
+   * Expands to: =%SCRIPTNAME%=
+   * Related: [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
 
-#VarSESSIONVARIABLE
----+++ SESSION_VARIABLE -- get, set or clear a session variable
-   * Syntax: =%<nop>SESSION_VARIABLE{"name"}%=
-   * Syntax: =%<nop>SESSION_VARIABLE{"name" set="value"}%=
-   * Syntax: =%<nop>SESSION_VARIABLE{"name" clear=""}%=
-   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]]
-%H% The users ID is in the =AUTHUSER= session variable, and is read-only.
-
-#VarSESSIONID
----+++ SESSIONID -- The unique ID for this session | %SESSIONID% |
-   * Syntax: =%<nop>SESSIONID%=
-   * Expand to: %SESSIONID%
-   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
-
-#VarSESSIONVAR
----+++ SESSIONVAR -- The name of CGI and session variable that stores the session ID
-   * Syntax: =%<nop>SESSIONVAR%=
-   * Expand to: %SESSIONVAR%
-   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+#VarSCRIPTSUFFIX
+---+++ SCRIPTSUFFIX -- script suffix
+   * Some <nop>%WIKITOOLNAME% installations require a file extension for CGI scripts, such as =.pl= or =.cgi=
+   * Syntax: =%<nop>SCRIPTSUFFIX%=
+   * Expands to: <code>%SCRIPTSUFFIX%</code>
+   * Related: [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
 
 #VarSCRIPTURL
 ---+++ SCRIPTURL -- script URL of <nop>%WIKITOOLNAME%
    * Syntax: =%<nop>SCRIPTURL%=
    * Expands to: =%SCRIPTURL%=
    * Example: To get the authenticated version of current topic write =%<nop>SCRIPTURL%/viewauth%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%= which expands to =%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%=
-   * Related: [[#VarPUBURL][PUBURL]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
+   * Related: [[#VarPUBURL][PUBURL]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
 
 #VarSCRIPTURLPATH
 ---+++ SCRIPTURLPATH -- script URL path of <nop>%WIKITOOLNAME%
    * Syntax: =%<nop>SCRIPTURLPATH%=
    * Expands to: =%SCRIPTURLPATH%=
-   * Related: [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]]
-
-#VarSCRIPTSUFFIX
----+++ SCRIPTSUFFIX -- script suffix
-   * Some <nop>%WIKITOOLNAME% installations require a file extension for CGI scripts like =.pl= or =.cgi=
-   * Syntax: =%<nop>SCRIPTSUFFIX%=
-   * Expands to: <code>%SCRIPTSUFFIX%</code>
-   * Related: [[#VarSCRIPTURL][SCRIPTURL]]
+   * Related: [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]]
 
 #VarSEARCH
 ---+++ SEARCH{"text"} -- search content
@@ -181,33 +161,59 @@ __Note:__ This topic is included by TWikiVariables
      | =separator=", "= | Line separator between hits | Newline ="$n"= |
    * Example: =%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%=
    * Example with format: =%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%= _(displays results in a table with header - [[FormattedSearch][details]])_
-   * %H% If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
+   * %H% Hint: If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
    * Related: [[#VarMETASEARCH][METASEARCH]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEBLIST][WEBLIST]], FormattedSearch
+
+#VarSECTION
+---+++ SECTION{"name"} -- Marks the start of a named section
+   * Syntax: =%<nop>SECTION{"name"}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="name"= | Name of the section. Must be unique inside a topic. | Mandatory parameter without a default |
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]]
 
 #VarSERVERTIME
 ---+++ SERVERTIME -- server time
    * Syntax: =%<nop>SERVERTIME%=
    * Expands to: =%SERVERTIME%=
+   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME2][SERVERTIME{"format"}]]
-
-%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarSERVERTIME2
 ---+++ SERVERTIME{"format"} -- formatted server time
    * Same format qualifiers as =%<nop>GMTIME%=
    * Syntax: =%<nop>SERVERTIME{"format"}%=
    * Example: =%<nop>SERVERTIME{"$hou:$min"}%= expands to =%SERVERTIME{"$hou:$min"}%=
+   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
-%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+#VarSESSIONVARIABLE
+---+++ SESSION_VARIABLE -- get, set or clear a session variable
+   * Syntax: =%<nop>SESSION_VARIABLE{"name"}%=
+   * Syntax: =%<nop>SESSION_VARIABLE{"name" set="value"}%=
+   * Syntax: =%<nop>SESSION_VARIABLE{"name" clear=""}%=
+   * %H% Hint: The users ID is in the =AUTHUSER= session variable, and is read-only
+   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]]
+
+#VarSESSIONID
+---+++ SESSIONID -- unique ID for this session
+   * Syntax: =%<nop>SESSIONID%=
+   * Expand to: %SESSIONID%
+   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+
+#VarSESSIONVAR
+---+++ SESSIONVAR -- name of CGI and session variable that stores the session ID
+   * Syntax: =%<nop>SESSIONVAR%=
+   * Expand to: %SESSIONVAR%
+   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarSPACEDTOPIC
 ---+++ SPACEDTOPIC -- topic name, spaced and URL-encoded
-   * The current topic name with added spaces, for regular expression search of Ref-By
+   * The current topic name with added spaces, for regular expression search of backlinks
    * Syntax: =%<nop>SPACEDTOPIC%=
    * Expands to: =%SPACEDTOPIC%=
+   * %T% Hint: This variable is provided almost exclusively for generating URLs for searching for backlinks to topics
    * Related: [[#VarTOPIC][TOPIC]]
-%T% This rather bizarre function is provided almost exclusively for generating URLs for searching for backlinks to topics.
 
 #VarSTARTINCLUDE
 ---+++ STARTINCLUDE -- start position of topic text if included
@@ -247,9 +253,8 @@ __Note:__ This topic is included by TWikiVariables
    * Example: =%<nop>TOC{depth="2"}%=
    * Example: =%<nop>TOC{"TWikiDocumentation" web="%TWIKIWEB%" title="Contents:"}%=
    * Example: see TWiki:Sandbox.TestTopicInclude
+   * %T% Hint: TOC will generate links to the headings, so when a reader clicks on a heading it will jump straight where that heading is anchored in the text. If you have two headings with exactly the same text, then their anchors will also be identical and they won't be able to jump to them. To make the anchors unique, you can add an invisible HTML comment to the text of the heading. This will be hidden in normal view, but will force the anchors to be different. For example, <tt>---+ Heading &lt;!--5--&gt;</tt>.
    * Related: [[#VarTOC][TOC]]
-
-%X% TOC will generate links to the headings, so when a reader clicks on a heading it will jump straight where that heading is anchored in the text. If you have two headings with exactly the same text, then their anchors will also be identical and they won't be able to jump to them. To make the anchors unique, you can add an invisible HTML comment to the text of the heading. This will be hidden in normal view, but will force the anchors to be different. For example, <tt>---+ Heading &lt;!--5--&gt;</tt>.
 
 #VarTOPIC
 ---+++ TOPIC -- name of current topic
@@ -293,20 +298,17 @@ __Note:__ This topic is included by TWikiVariables
      | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
      | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (new line) |
    * Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%TOPIC%?skin=print= URL. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print#VarURLPARAM][Test this]]: %URLPARAM{"skin"}%
+   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * %X% Note: There is a risk that this variable could be misused for cross-scripting.
    * Related: [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
-
-%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
-
-%X% Note that there is a risk that this variable could be misused for cross-scripting.
 
 #VarUSERNAME
 ---+++ USERNAME -- your login username
    * TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. Un-authenticated users are all %MAINWEB%.TWikiGuest.
    * Syntax: =%<nop>USERNAME%=
    * Expands to: =%USERNAME%=
+   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
-
-%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarUSERLANGUAGE
 ---+++ USERLANGUAGE -- current user's language
@@ -352,21 +354,15 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarWIKIHOMEURL
 ---+++ WIKIHOMEURL -- site home URL
-*DEPRECATED*, use %WIKILOGOURL% defined in WebPreferences instead. This variables value is defined in lib/TWiki.cfg::$wikiHomeUrl which is marked deprecated. Will be removed in future versions.
-
-   * The base URL of <nop>%WIKITOOLNAME%, is the link of the Home icon in the upper left corner, defined in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]]
-   * Syntax: =%<nop>WIKIHOMEURL%=
-   * Expands to: =%WIKIHOMEURL%=
-   * Related: [[#VarWIKITOOLNAME][WIKITOOLNAME]]
+   * %X% Note: *DEPRECATED*, use =%<nop>WIKILOGOURL%= defined in WebPreferences instead. This variables value is defined in lib/TWiki.cfg::$wikiHomeUrl which is marked deprecated. Will be removed in future versions.
 
 #VarWIKINAME
 ---+++ WIKINAME -- your Wiki username
    * The WikiName is the same as %<nop>USERNAME% if not defined in the %MAINWEB%.%WIKIUSERSTOPIC% topic
    * Syntax: =%<nop>WIKINAME%=
    * Expands to: =%WIKINAME%=
+   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
-
-%X% When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarWIKIPREFSTOPIC
 ---+++ WIKIPREFSTOPIC -- name of site-wide preferences topic
@@ -385,9 +381,8 @@ __Note:__ This topic is included by TWikiVariables
    * Your %<nop>WIKINAME% with %MAINWEB% web prefix, useful to point to your <nop>%WIKITOOLNAME% home page
    * Syntax: =%<nop>WIKIUSERNAME%=
    * Expands to: =%WIKIUSERNAME%=, renders as %WIKIUSERNAME%
+   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details
    * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]]
-
-%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details
 
 #VarWIKIUSERSTOPIC
 ---+++ WIKIUSERSTOPIC -- name of topic listing all registers users
@@ -404,4 +399,3 @@ __Note:__ This topic is included by TWikiVariables
 
 
 __Related Topics:__ UserDocumentationCategory
-
