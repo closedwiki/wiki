@@ -33,16 +33,16 @@ __Preferences:__
 		* Set WEBFORMS = 
 
 	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
-		*# Set DENYWEBVIEW = 
-		*# Set ALLOWWEBVIEW = 
-		*# Set DENYWEBCHANGE = 
-		*# Set ALLOWWEBCHANGE = 
-		*# Set DENYWEBRENAME = 
-		*# Set ALLOWWEBRENAME = 
+      * #Set DENYWEBVIEW = 
+      * #Set ALLOWWEBVIEW = 
+      * #Set DENYWEBCHANGE = 
+      * Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
+      * #Set DENYWEBRENAME = 
+      * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
 
-	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
-		* #Set ALLOWTOPICCHANGE = 
-		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+   * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
+      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 	* Web preferences that are *not* allowed to be overridden by user preferences:
 		* Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
