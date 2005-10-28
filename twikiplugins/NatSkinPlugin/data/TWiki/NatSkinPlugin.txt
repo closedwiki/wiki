@@ -1,8 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130236482" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1130516069" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
 
-This is the supplemental plugin for the NatSkin. This plugin is inspired
-by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/PhotonSkin by TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= . This plugin tries
+This is the supplemental plugin for the NatSkin. Its main purpose is to supply "skin states"
+to control different styles and variants to be switched dynamically while you are online. But
+see the below for a full list of all provided features.
+
+This plugin tries
 to be maximal compatible with all past, current and upcomming TWiki releases, namely beijing,
 cairo and dakar. Therefore some mechanisms have been internalized that are only available on
 the newest dakar engine, sandbox security and html login dialogues comparable  to TWiki:Plugins/AuthPagePlugin. In addition the plugin tries to be interface-compatible to all
@@ -10,27 +13,33 @@ engines using the =Func.pm= API. In those cases where this is _not_ possible, be
 functions are not part of the =Func.pm= API, access functions have been added to 
 address the different implementations and incompatibilities (e.g. access to topic meta data).
 
+This plugin is inspired
+by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/PhotonSkin by TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
+
 %TOC%
 
 ---++ Current Features
-	* Sandbox security: backport of the dakar sandbox
-	* Login page: independent implementation of a login page (see ) for
-	  maximal compatibility with old TWiki releases
-	* WebSideBar: a configurable navigation bar on the 
-	  left hand side, with topic content on the right;
-	* MySideBar: every user can extend the sidebar with a personalized navigation
-	* <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
 	* Skin state: an internal representation of different ways to render the NatSkin concerning
-		* the style variant,
+		* the skin style,
+		* style variants,
 		* the sidebar location,
-		* the page border decoration and
-		* the web buttons in the topbar 
+		* the page border decoration,
+		* the web buttons in the topbar and
+		* the positioning of the search box
 	* Conditional content: 
 		* USERACTIONS, NATLOGON: display topic actions depending on the user being logged in or not
 		* IFSKINSTATE: render skin differently depending on the current skin state
 		* IFACCESS: render different content or include topics depending on access rights
 		* IFDEFINED: render content based on twiki variables being defined or not (compare to the
 		  <nop>IfStatement of the upcomming dakar release)
+	* skin style control: infrastructure to get, set and display the skin style that
+	  is currently active using the NatSkinStyleBrowser
+	* WebSideBar: a configurable navigation bar on the 
+	  left hand side, with topic content on the right;
+	* MySideBar: every user can extend the sidebar with a personalized navigation
+	* <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
+	* Login page: independent implementation of a login page (see ) for
+	  maximal compatibility with old TWiki releases
 	* GROUPSUMMARY: render %MAINWEB%.TWikiGroups nicely
 	* Group based subsription: generate an automated email notification if a new TWiki
 	  user want's to join a TWiki Group
@@ -38,10 +47,9 @@ address the different implementations and incompatibilities (e.g. access to topi
 	  of dynamic html; so mailto links are still clickable while the pure html text does not
 	  allow to extract the addresses by respective web crawlers.
 	* marking external links: add a nice icon to offsite links
-	* skin style control: add infrastructure to get, set and display the skin style that
-	  is currently active using the NatSkinStyleBrowser
 	* FORMATLIST: render list items according a format parameter (will be externalized into
 	  a separate plugin asap).
+	* Sandbox security: backport of the dakar sandbox
 
 ---++ Syntax Rules
 | *Tag* | *Desciption* |
@@ -70,6 +78,8 @@ address the different implementations and incompatibilities (e.g. access to topi
   (obsolete on dakar) |
 | =%<nop>KNOWNSKINSTYLES%= \
 | render a list of all known skin styles being attachted to the NatSkin topic |
+| =%<nop>KNOWNVARIATIONS%= \
+| render a list of all known styles variations being attachted to the NatSkin topic |
 | =%<nop>GETSKINSTYLE%= \
 | get the current skin style; the priority is \
   (1) urlparam =style=&lt;name>=, \
@@ -83,10 +93,13 @@ address the different implementations and incompatibilities (e.g. access to topi
   &lt;tests> can be \
   <ul> \
 	 <li> =style="&lt;name>"=: test if the current style is &lt;name> </li> \
+	 <li> =variation="&lt;name>"=: test if the style variation is &lt;name> </li> \
 	 <li> =border="on,off,thin"=: test if the current border is on, off or "thin" </li> \
 	 <li> =buttons="on,off"=: test if the web buttons are currently on or off </li> \
 	 <li> =sidebar="left,right,off"=: \
 			test if the sidebar is currently on the right, left or off </li> \
+	 <li> =searchbox="top,pos1,pos2,pos3,off"=: \
+			test if the searchbox is currently on given position or off </li> \
 	 <li> =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on\
 			is beijing, cairo or dakar </li>\
 	 <li> =action="view,edit,preview,..."=: test the current topic action </li> \
@@ -208,9 +221,10 @@ session of the user. So every setting can be changed by an url parameter to take
 duration of the user session. The default values are given below 
 
 	* switch to the given style,
-	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty,
-		<nop>SeaGreen, Squash or Stormy, url param =style=
+	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty, <nop>SeaGreen, Squash or Stormy, url param =style=
 		* Set SKINSTYLE = Clean
+	* switch to the given style variation (<nop>PlasticLove, Subway, <nop>OrangeTunnel etc) or none, url param =stylevariation=
+		* Set STYLEVARIATION = none
 	* change the border decoration on, off or to thin (enabling a thin blog-like page layout),
 	  url param is =styleborder=
 		* Set STYLEBORDER = off
@@ -218,6 +232,8 @@ duration of the user session. The default values are given below
 		* Set STYLEBUTTONS = off
 	* switch the sidebar to be displayed on the right or left side or off, url param is =stylesidebar=
 		* Set STYLESIDEBAR = left
+	* switch the searchbox to be displayed in the topbar (top), at the top of the sidebar (pos1), in the middle of the sidebar (pos2), at the bottom of the sidebar (pos3) or off, url param is =stylessearchbox=
+		* Set STYLESSEARCHBOX = top
 
 In addition there's a url parameter =togglesidebar= that disables the sidebar for this request
 only. 
@@ -228,6 +244,9 @@ To emulate the Kubrick style on the old
 	* Set STYLEBORDER = thin
 	* Set STYLEBUTTONS = on
 	* Set STYLESIDEBAR = right
+	* Set STYLESVARIATION = none
+	* Set STYLESSEARCHBOX = pos1
+
 to your [[%TWIKIWEB%.TWikiPreferences]]. Try out other settings using the NatSkinStyleBrowser,
 or even INCLUDE it in your [[%MAINWEB%.%WIKINAME%SideBar]].
 
@@ -283,8 +302,12 @@ using these settings will be changed accordingly.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.60 (2005-10-25) |
+|  Plugin Version: | v2.70 (2005-10-28) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Oct 2005: | add searchbox and style variations to the skin state; \
+                  configuring header art is now done using style variations; \
+                  fixed the NatSkinStyleBrowser to only "stick" to changes; \
+                  extended IFSKINSTATE to cover the new skin state variables |
 |  25 Oct 2005: | customization of =natsearch= by WebPreferences |
 |  20 Oct 2005: | improved external link detection |
 |  10 Oct 2005: | added switchstyle feature to cycle thru all installed skin styles|
@@ -311,5 +334,5 @@ using these settings will be changed accordingly.
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 20 Oct 2005 
+-- TWiki:Main.MichaelDaum - 28 Oct 2005 
 
