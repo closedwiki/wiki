@@ -64,10 +64,10 @@ sub new {
     # Find out when we last processed mail
     if( defined $this->{session} ) {
         $this->{lastMailIn} = $session->{store}->readMetaData(
-            '', "mailincron" ) || 0;
+            '', 'mailincron' ) || 0;
     } else {
         $this->{lastMailIn} = TWiki::Func::readFile(
-            TWiki::Func::getDataDir()."/.mailincron" ) || 0; # COMPATIBILITY
+            TWiki::Func::getDataDir().'/.mailincron' ) || 0; # COMPATIBILITY
     }
 
     return $this;
@@ -91,7 +91,7 @@ sub wrapUp {
 
     if( defined $this->{session} ) {
         $this->{session}->{store}->saveMetaData
-          ($TWiki::cfg{SystemWebName}, "mailincron", time() );
+          ('', 'mailincron', time() );
     } else {
         $this->{lastMailIn} = TWiki::Func::saveFile( # COMPATIBILITY
             TWiki::Func::getDataDir()."/.mailincron", time() ); # COMPATIBILITY
@@ -110,7 +110,9 @@ and process them for inclusion in TWiki topics.
 sub processInbox {
     my( $this, $box ) = @_;
 
-    print "Process $box->{folder}\n" if $this->{debug};
+    my $ftype = Email::FolderType::folder_type($box->{folder});
+    print "Process $ftype folder $box->{folder}\n" if $this->{debug};
+
     my $folder = new Email::Folder( $box->{folder} );
     my $user;
     if( defined $this->{session} ) {
@@ -125,12 +127,13 @@ sub processInbox {
 
     print "Scanning $box->{folder}\n" if $this->{debug};
     my $mail; # an Email::Simple object
+    my $num = 0; # message number
     while( ($mail = $folder->next_message()) ) {
+        my $delete = 0;
         $mail = new Email::MIME( $mail->as_string() );
         # If the subject line is a valid TWiki Web.WikiName, then we want
         # to process it.
         my( $web, $topic );
-        my $wnre = 
         if( $mail->header('Subject') =~
                 /^\s*($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex})\s*$/i ) {
             ( $web, $topic ) = ( $1, $2 );
@@ -179,20 +182,36 @@ sub processInbox {
                 $this->reply( $box,
                     $mail, 'Thank you for your successful submission');
             }
-            $kill{$mail->header( 'Message-ID' )} = 1;
+            $delete = $box->{delete};
         }
+        if ( $delete || $box->{deleteall} ) {
+            $kill{$mail->header( 'Message-ID' )} = $num;
+        }
+        $num++;
     }
 
-    if( $box->{delete} || $box->{deleteall} ) {
+    if( $ftype eq 'POP3' ) {
+        # HACK to overcome lack of Email::Delete::POP3 - it would be smarter
+        # to give CPAN an impl of Email::Delete::POP3, but this is quicker
+        foreach my $id ( values %kill ) {
+            $folder->{_folder}->{_server}->delete( $id );
+        }
+        # must quit, otherwise the object will go out of scope and the
+        # folder will be reset before the connection is closed.
+        $folder->{_folder}->{_server}->quit();
+        $folder->{_folder}->{_server} = undef; # to reopen if needed again
+    } else {
         eval 'use Email::Delete';
-        unless( $@ ) {
+        if( $@ ) {
+            print STDERR "Cannot delete: $@\n";
+        } else {
+            # fall back to Email::Delete (which doesn't support POP3)
             Email::Delete::delete_message
                 ( from => $box->{folder},
                   matching =>
                     sub {
                         my $test = shift;
-                        if( $box->{deleteall} ||
-                              $kill{$mail->header('Message-ID')} ) {
+                        if( defined $kill{$mail->header('Message-ID')} ) {
                             print "Delete ",$mail->header('Message-ID'),"\n";
                             return 1 unless $this->{debug};
                         }
@@ -280,8 +299,8 @@ sub _saveAttachment {
     my $err = '';
     if( $this->{session} ) {
         $this->{session}->{store}->saveAttachment(
-            $web, $topic, $filename, { comment => $comment,
-                                       file => $tmpfile });
+            $web, $topic, $filename, $user,
+            { comment => $comment, file => $tmpfile });
     } else {
         $err = TWiki::Store::saveAttachment(  # COMPATIBILITY
             $web, $topic, '', '',
