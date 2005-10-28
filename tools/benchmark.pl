@@ -105,9 +105,9 @@ sub run {
     }
 
     # run once in the browser to generate the query file
-    print "*** Query wget -O - http://localhost/$code/bin/view/$testpage$p\n" if $debug;
+    print "*** Query wget -O - $server/$code/bin/view/$testpage$p\n" if $debug;
     my $mess =
-      `wget -O - 'http://localhost/$code/bin/benchmark/$testpage$p' 2>&1`;
+      `wget -O - '$server/$code/bin/benchmark/$testpage$p' 2>&1`;
     die "$mess\nFAILED $!"  if ( $? );
 
     my $total = 0;
