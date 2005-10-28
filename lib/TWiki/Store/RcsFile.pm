@@ -196,7 +196,7 @@ Get a meta-data block for this web
 
 sub readMetaData {
     my( $this, $name ) = @_;
-    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/'.$name;
+    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.'.$name;
     if( -e $file ) {
         return $this->_readFile( $file );
     }
@@ -243,7 +243,7 @@ is stored alongside a web.
 sub saveMetaData {
     my ( $this, $name, $text ) = @_;
 
-    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/'.$name;
+    my $file = $TWiki::cfg{DataDir}.'/'.$this->{web}.'/.'.$name;
 
     return $this->_saveFile( $file, $text );
 }
