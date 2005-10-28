@@ -10,6 +10,7 @@ use strict;
 #    * permissions!
 #    * PATCHES!
 #    * get rid of =pre-wiki.sh= and =post-wiki.sh= and become a completely web-based install! (oh so close!)
+#       * CpanContrib is hopefully a solution
 #    * error checking is pretty good, but error recovery might not be?
 #    * ???
 # TODO: (long term)
@@ -267,6 +268,7 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
     $LocalSiteCfg .= qq{\$TWiki::cfg{AutoAttachPubFiles} = 1;\n};
     $LocalSiteCfg .= qq{\$TWiki::cfg{EnableHierarchicalWebs} = 1;\n};
     $LocalSiteCfg .= qq{\$TWiki::cfg{LoginManager} = 'TWiki::Client::TemplateLogin';\n};
+    $LocalSiteCfg .= qq{\$TWiki::cfg{UseInternationalisation} = 1;\n};
     $LocalSiteCfg .= qq{\$TWiki::cfg{WarningsAreErrors} = 1;\n};
 
     # SMELL: blech, temp hack
