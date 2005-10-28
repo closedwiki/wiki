@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="rohdedan" date="1130492386" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="rohdedan" date="1130499327" format="1.0" version="1.6"}%
 ---+!! <nop>%TOPIC%
 
 %TOPIC% helps to create simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%.
 
 A %<nop>CLI% tag creates a image button and a simple click on it will change the state of the image button.
 
-Every state change will saved to a topic with name <i>&lt;YourTopicName&gt;</i><nop>ChecklistItemState. It is possible to 
+Every state change will be saved to a topic with name <i>&lt;YourTopicName&gt;</i><nop>ChecklistItemState. It is possible to 
 define states (default: todo and done) and matching icons. You can also put more than one checklist into a topic.
 
 
@@ -16,31 +16,43 @@ define states (default: todo and done) and matching icons. You can also put more
 
 Example 1: Create a simple checklist:
 <verbatim>
-	1 %CLI% first step
-	1 %CLI% second step
-	1 %CLI% last step
+	1 first step %CLI% 
+	1 second step %CLI% 
+	1 last step %CLI% 
 </verbatim>
 
 Example 2: Create a checklist with three states and own icons:
 <verbatim>
 %CHECKLIST{states="todo|doing|done" stateicons=":no:|:-I|8-)"%
 
-	1 %CLI% first step
-	1 %CLI% second step
+	1 first step %CLI% 
+	1 second step %CLI% 
 </verbatim>
 
-Example 3: Create two checklists on a topic:
+Example 3: Create two checklists on a topic (%X% every %<nop>CHECKLIST% and every %<nop>CLI% tag needs a name attribute):
 <verbatim>
 %CHECKLIST{name="first checklist"}%
 
-  1 %CLI% first step
-  1 %CLI% second step
+  1 first step %CLI{name="first checklist"}% 
+  1 second step %CLI{name="first checklist"}% 
 
 %CHECKLIST{name="second checklist"}%
 
-  1 %CLI% first step
-  1 %CLI% next step
+  1 first step %CLI{name="second checklist"}% 
+  1 next step %CLI{name="second checklist"}% 
+</verbatim>
 
+Example 4: Create a checklist in a table
+<verbatim>
+| *state* | *todo* |
+| %CLI%	| first step |
+| %CLI%	| second step |
+</verbatim>
+
+Example 5: Create a checklist without annoying line breaks:
+<verbatim>
+  1 %CLI{text="my first step"}%
+  1 %CLI{text="my second step"}%
 </verbatim>
 
 
@@ -48,24 +60,26 @@ Example 3: Create two checklists on a topic:
 
 Just type a %<nop>CLI% (<nop>CheckList Item) into a topic to create a single checklist item.
 
-To change the states or state icons you can set it for topic with a %<nop>CHECKLIST& tag before any %<nop>CLI% tag occurs.
+To change the states or state icons you can set it for topic with a %<nop>CHECKLIST% tag.
 
 
 ---++ Attributes
 
 | *Attribute* | *Comment* | *Example* |
-| *%<nop>CLI{...}%* |||
+|  *%<nop>CLI{...}%*  |||
 | id  | unique id of a checklist item; usefull and recommended if you insert new checklist items in an existing checklist with states | id="myfirstownid" |
-| *%<nop>CHECKLIST{...}%* |||
-| name | a naming context - useful if you define more than one checklist on a topic | name="_default" |
-| *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%* |||
+| text | allows to place text behind the button (usefull to avoid annoying line break between checklist button and text) | text="my first step" |
+|  *%<nop>CHECKLIST{...}%*  |||
+| reset | if defined it enables the reset image button with a given text or icon | reset="Reset all" | 
+|  *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%*  |||
+| name | a naming context - useful and recommended if you define more than one checklist on a topic | name="_default" |
 | states | all known states (separated by a '&brvbar;') | states="todo&brvbar;done" |
 | stateicons | icon list with states (separated by a '&brvbar;') | stateicons=":no:&brvbar;:yes:" |
 
 ---++ Examples
 
-	1 %CLI% first step
-	1 %CLI% next step
+	1 %CLI{text="first step"}%
+	1 %CLI{text="next step"}%
 
 	| State | TODO |
 	| %CLI% | first step |
@@ -73,7 +87,6 @@ To change the states or state icons you can set it for topic with a %<nop>CHECKL
 
 ---++ Planned Features
 
-	* Reset button to reset all states of a checklist
 	* State button to set all states of a checklist to a given state
 	* State statistics
   
@@ -106,8 +119,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | 27 Oct 2005 (V1.000) |
+|  Plugin Version: | 27 Oct 2005 (V1.001) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.001 (27 Oct 2005) | TWiki:Main.DanielRohde: added new features ('reset','text' attributes); fixed major 'name' attribute bug; fixed documentation bugs | 
 |  v1.000 (27 Oct 2005): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
@@ -120,6 +134,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+<!-- %NOCACHE% -->
 
 -- TWiki:Main.DanielRohde - 27 Oct 2005
 
