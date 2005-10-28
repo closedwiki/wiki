@@ -1,0 +1,63 @@
+/* header art variation */
+.natHeaderArt {
+  background:white;
+  background-image:url(PlasticLoveBar.jpg); 
+  background-repeat:no-repeat;
+  background-position:top left;
+}
+.natTopBar {
+  height:140px;
+}
+/*
+.natTopBar {
+  border-top:10px solid white;
+}
+.natWebButtons,
+.natMiddleLeft,
+.natTopLeft {
+  border-left:10px solid white;
+}
+.natMiddleRight,
+.natWebButtons,
+.natTopRight {
+  border-right:10px solid white;
+}
+*/
+.natSearchBoxTop input {
+  background:white;
+  color:black;
+  border:1px solid black;
+}
+.natTopRightContents a:hover {
+  color:white;
+  background:#FE1C70;
+  text-decoration:none;
+}
+.natTopRightContents {
+  color:white;
+}
+.natSearchBox,
+.natWebButtons,
+.natWebButtons a,
+.natAction,
+.natWebSlogan,
+.natTopBar,
+.natTopBar a {
+  color:black;
+}
+.natWebSlogan,
+.natWebLocator {
+  display:none;
+}
+.natWebTitle,
+.natWebTitle a {
+  color:#FE1C70;
+}
+.natWebSlogan {
+  color:#010569;
+  color:white;
+  font-weight:bold;
+}
+.natWebTitle {
+  text-decoration:underline;
+}

@@ -174,20 +174,40 @@ hr {
   color:#ffcc66;
 }
 
+.natSearchBox,
+.natSearchBox input {
+  font-size:0.8em;
+}
 .natSearchBox input {
   background:#003366;
   color:white;
   border:1px dotted white;
 }
+.natSearchBoxTop input {
+  width:16em;
+}
+.natSearchBoxPos1 input,
+.natSearchBoxPos2 input,
+.natSearchBoxPos3 input {
+  color:#333333;
+  background:#999999;
+  font-size:1em;
+}
 
 .natTopRightContents {
   font-size:small;
 }
-.natSearchBox 
-.natSearchBox input {
-  font-size:0.8em;
-  width:12em;
+.natSearchBoxPos1 {
+  margin-top:10px;
 }
+.natSearchBoxPos1 input,
+.natSearchBoxPos2 input,
+.natSearchBoxPos3 input {
+  color:#333333;
+  background:#999999;
+  font-weight:bold;
+}
+
 .natWebSlogan,
 .natWebLocator {
   font-size:x-small;

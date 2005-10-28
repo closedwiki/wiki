@@ -90,11 +90,25 @@ hr {
   font:normal small 'Trebuchet MS', arial, sans-serif;
 }
 
+.natSearchBox,
+.natSearchBox input {
+  font-size:x-small;
+}
 .natSearchBox input {
   margin-top:5px;
+}
+.natSearchBoxTop input {
+  margin-top:5px;
   background:#99cc66;
-  color:#ffffff;
+  color:white;
   border:1px dotted white;
+}
+.natSearchBoxPos1 input,
+.natSearchBoxPos2 input,
+.natSearchBoxPos3 input {
+  border:1px solid #6699cc;
+  color:#666666;
+  font-weight:bold;
 }
 .natAction {
   font-weight:bold;
@@ -103,10 +117,6 @@ hr {
 
 .natTopRightContents {
   font-size:small;
-}
-.natSearchBox 
-.natSearchBox input {
-  font-size:x-small;
 }
 .natTopicActions {
   font-size:0.8em;

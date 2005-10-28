@@ -1,0 +1,41 @@
+/* header art variation */
+.natHeaderArt {
+  background:white;
+  background-image:url(SepiaFieldBar.jpg); 
+  background-repeat:no-repeat;
+  background-position:top left;
+}
+.natTopBar {
+  height:140px;
+}
+/*
+.natTopBar {
+  border-top:10px solid white;
+}
+.natWebButtons,
+.natMiddleLeft,
+.natTopLeft {
+  border-left:10px solid white;
+}
+.natMiddleRight,
+.natWebButtons,
+.natTopRight {
+  border-right:10px solid white;
+}
+*/
+.natSearchBoxTop input {
+  background:black;
+  color:white;
+  border:1px solid #AF9258;
+}
+.natSearchBox,
+.natWebButtons,
+.natWebButtons a,
+.natWebTitle,
+.natWebTitle a,
+.natAction,
+.natWebSlogan,
+.natTopBar,
+.natTopBar a {
+  color:white;
+}

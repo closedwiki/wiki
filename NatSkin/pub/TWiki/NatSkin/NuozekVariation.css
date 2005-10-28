@@ -1,0 +1,32 @@
+/* header art variation */
+.natHeaderArt {
+  background:white;
+  background-image:url(NuozekBar.jpg); 
+  background-repeat:no-repeat;
+  background-position:top left;
+}
+.natTopBar {
+  height:140px;
+}
+.natSearchBoxTop input {
+  background:black;
+  color:white;
+  border:1px solid white;
+}
+.natSearchBox,
+.natWebButtons,
+.natWebButtons a,
+.natAction,
+.natTopBar,
+.natTopBar a {
+  color:white;
+}
+.natWebTitle,
+.natWebTitle a,
+.natWebSlogan {
+  color:black;
+}
+.natWebSlogan,
+.natWebLocator {
+  display:none;
+}

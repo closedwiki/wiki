@@ -115,24 +115,12 @@ __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:P
 -- TWiki:Main/MichaelDaum - 18 Oct 2005
 
 
-%META:FILEATTACHMENT{name="NatSkin.zip" attr="" comment="" date="1110909107" path="NatSkin.zip" size="325290" user="MichaelDaum" version="1.3"}%
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="MichaelDaum" version="1.1"}%
 %META:FILEATTACHMENT{name="previewbg.png" attr="" comment="" date="1114174051" path="previewbg.png" size="19334" user="MichaelDaum" version="1.1"}%
 %META:FILEATTACHMENT{name="Cairo_UI_pm.diff" attr="" comment="" date="1120239647" path="Cairo_UI_pm.diff" size="413" user="MichaelDaum" version="1.1"}%
 %META:FILEATTACHMENT{name="TablePlugin_pm.diff" attr="" comment="" date="1120239660" path="TablePlugin_pm.diff" size="3205" user="MichaelDaum" version="1.1"}%
 %META:FILEATTACHMENT{name="Independence.jpeg" attr="h" comment="" date="1124706583" path="Independence.jpeg" size="53113" user="MichaelDaum" version="1.2"}%
 %META:FILEATTACHMENT{name="Squash.jpeg" attr="h" comment="" date="1124706784" path="Squash.jpeg" size="50940" user="MichaelDaum" version="1.2"}%
-%META:FILEATTACHMENT{name="BaseStyle.css" attachment="BaseStyle.css" attr="" comment="" date="1111145731" path="BaseStyle.css" size="8838" tmpFilename="/var/tmp/CGItemp63783" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="CleanStyle.css" attachment="CleanStyle.css" attr="" comment="" date="1111145731" path="CleanStyle.css" size="8838" tmpFilename="/var/tmp/CGItemp63783" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="GeorgiaBlueStyle.css" attachment="GeorgiaBlueStyle.css" attr="" comment="" date="1111145744" path="GeorgiaBlueStyle.css" size="4555" tmpFilename="/var/tmp/CGItemp63773" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="GettysburgStyle.css" attachment="GettysburgStyle.css" attr="" comment="" date="1111145755" path="GettysburgStyle.css" size="3221" tmpFilename="/var/tmp/CGItemp63961" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="PlainJaneStyle.css" attachment="PlainJaneStyle.css" attr="" comment="" date="1111145769" path="PlainJaneStyle.css" size="3326" tmpFilename="/var/tmp/CGItemp63861" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="RustyStyle.css" attachment="RustyStyle.css" attr="" comment="" date="1111145782" path="RustyStyle.css" size="4480" tmpFilename="/var/tmp/CGItemp63764" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="StormyStyle.css" attachment="StormyStyle.css" attr="" comment="" date="1111145793" path="StormyStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="IndependenceStyle.css" attachment="IndependenceStyle.css" attr="" comment="" date="1111145793" path="IndependenceStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="SquashStyle.css" attachment="SquashStyle.css" attr="" comment="" date="1111145793" path="SquashStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="SeaGreenStyle.css" attachment="SeaGreenStyle.css" attr="" comment="" date="1111145793" path="SeaGreenStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
-%META:FILEATTACHMENT{name="KubrickStyle.css" attachment="KubrickStyle.css" attr="" comment="" date="1111145793" path="KubrickStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
 %META:FILEATTACHMENT{name="Kubrick.jpeg" attr="h" comment="" date="1124706654" path="Kubrick.jpeg" size="35719" user="MichaelDaum" version="1.2"}%
 %META:FILEATTACHMENT{name="external.png" attachment="external.png" attr="h" comment="" date="1123862151" path="external.png" size="165" tmpFilename="/var/tmp/CGItemp25437" user="Main.MichaelDaum" version="0"}%
 %META:FILEATTACHMENT{name="Clean.jpeg" attr="h" comment="" date="1124706451" path="Clean.jpeg" size="56887" user="MichaelDaum" version="1.1"}%

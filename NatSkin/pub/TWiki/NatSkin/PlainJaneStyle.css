@@ -129,21 +129,18 @@ a:hover {
 
 /* top */
 .natHeaderArt {
-  background-image:url(BlueFieldBar.jpg); 
-  background-repeat:no-repeat;
-  background-position:top left;
 }
 .natTopBar {
-  height:157px;
 }
 .natWebButtons a,
 .natTopBar a,
 .natTopBar {
-  color:#ffffff;
+/*  color:#ffffff;*/
 }
 .natTopBar a:hover {
   text-decoration:none;
   background:#3f59bb;
+  color:#ffffff;
 }
 .natWebTitle {
   font-size:xx-large;
@@ -151,31 +148,35 @@ a:hover {
 .natWebTitle,
 .natWebTitle a:hover,
 .natWebTitle a {
-  /*color:#3f59bb;*/
+  color:#3f59bb;
   background:transparent;
   font-weight:bold;
   margin:0px;
 }
 
+.natTopLeftContents,
+.natTopRightContents,
+.natSearchBox,
+.natSearchBox input,
+.natWebSlogan {
+  font-size:x-small;
+}
+
 .natSearchBox input, 
 .natSearchBox {
-  /*color:#666666;*/
-  border:0px;
+  color:#666666;
+}
+.natSearchBox input {
+  border:1px solid #666666;
+  font-weight:bold;
 }
 
 .natWebSlogan {
   padding-left:15px;
-  color:white;
+  color:#3f59bb;
 }
 .natWebLocator {
   font-size:small;
-}
-.natTopLeftContents,
-.natTopRightContents,
-.natSearchBox 
-.natSearchBox input,
-.natWebSlogan {
-  font-size:x-small;
 }
 
 /* sidebar */
@@ -225,6 +226,7 @@ a:hover {
 /* main */
 .natMiddle {
   font-size:small;
+  background:white;
 }
 .natMainFooter,
 .natMain {
