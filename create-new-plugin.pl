@@ -7,9 +7,10 @@ use Cwd;
 
 ################################################################################
 
-my ( $name ) = @ARGV;
+my ( $name ) = ( @ARGV, '' );
 my @types = qw( Plugin Contrib );
-( my $type = $name ) =~ s/^.*?(Plugin|Contrib|)?$/$1/;
+print "[$name]\n";
+( my $type = $name ) =~ s/^.*?(Plugin|Contrib)?$/$1/;
 die "'$name' must end in one of: " . join( ', ', @types ) . "\n" unless $type;
 
 usage(), exit 0 unless $name;
@@ -36,7 +37,7 @@ $@ && die $@;
     # TODO: object
     my $build_pl_dir;
     if ( $type =~ /^Plugin/ ) {
-#	$build_pl_dir = ???
+	$build_pl_dir = "BuildContrib/lib/TWiki/Contrib/BuildContrib";
     } elsif ( $type =~ /^Contrib/ ) {
 	$build_pl_dir = "EmptyContrib/lib/TWiki/Contrib/EmptyContrib";
     }
