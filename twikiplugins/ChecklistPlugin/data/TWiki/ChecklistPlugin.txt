@@ -1,0 +1,125 @@
+%META:TOPICINFO{author="rohdedan" date="1130492386" format="1.0" version="1.5"}%
+---+!! <nop>%TOPIC%
+
+%TOPIC% helps to create simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%.
+
+A %<nop>CLI% tag creates a image button and a simple click on it will change the state of the image button.
+
+Every state change will saved to a topic with name <i>&lt;YourTopicName&gt;</i><nop>ChecklistItemState. It is possible to 
+define states (default: todo and done) and matching icons. You can also put more than one checklist into a topic.
+
+
+%TOC%
+
+------
+---++ Usage Examples
+
+Example 1: Create a simple checklist:
+<verbatim>
+	1 %CLI% first step
+	1 %CLI% second step
+	1 %CLI% last step
+</verbatim>
+
+Example 2: Create a checklist with three states and own icons:
+<verbatim>
+%CHECKLIST{states="todo|doing|done" stateicons=":no:|:-I|8-)"%
+
+	1 %CLI% first step
+	1 %CLI% second step
+</verbatim>
+
+Example 3: Create two checklists on a topic:
+<verbatim>
+%CHECKLIST{name="first checklist"}%
+
+  1 %CLI% first step
+  1 %CLI% second step
+
+%CHECKLIST{name="second checklist"}%
+
+  1 %CLI% first step
+  1 %CLI% next step
+
+</verbatim>
+
+
+---++ Syntax Rules
+
+Just type a %<nop>CLI% (<nop>CheckList Item) into a topic to create a single checklist item.
+
+To change the states or state icons you can set it for topic with a %<nop>CHECKLIST& tag before any %<nop>CLI% tag occurs.
+
+
+---++ Attributes
+
+| *Attribute* | *Comment* | *Example* |
+| *%<nop>CLI{...}%* |||
+| id  | unique id of a checklist item; usefull and recommended if you insert new checklist items in an existing checklist with states | id="myfirstownid" |
+| *%<nop>CHECKLIST{...}%* |||
+| name | a naming context - useful if you define more than one checklist on a topic | name="_default" |
+| *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%* |||
+| states | all known states (separated by a '&brvbar;') | states="todo&brvbar;done" |
+| stateicons | icon list with states (separated by a '&brvbar;') | stateicons=":no:&brvbar;:yes:" |
+
+---++ Examples
+
+	1 %CLI% first step
+	1 %CLI% next step
+
+	| State | TODO |
+	| %CLI% | first step |
+	| %CLI% | next step |
+
+---++ Planned Features
+
+	* Reset button to reset all states of a checklist
+	* State button to set all states of a checklist to a given state
+	* State statistics
+  
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = helps to create simple checklists.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+	* Setup states and icons (remove # for setup):
+		* # Set STATES = todo|done
+		* # Set STATEICONS = :no:|:yes:	  
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the installation was successful: see Examples section 
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.DanielRohde |
+|  Plugin Version: | 27 Oct 2005 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.000 (27 Oct 2005): | TWiki:Main.DanielRohde: Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | TWiki:Plugins.SmiliesPlugin |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | <!-- %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% --> |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main.DanielRohde - 27 Oct 2005
+
