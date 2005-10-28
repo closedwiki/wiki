@@ -130,6 +130,9 @@ SVK
 ^Net::SMTP$
 ^CGI::Cookie$
 ^MIME::Base64$
+^Crypt::SSLeay$
+^Net::SSLeay$
+^IO::Socket::SSL$
 __MODULES__
 
 print $deps, "\n";

@@ -68,12 +68,12 @@ foreach my $module (
 #		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
 		    	qw( Test::Builder::Tester Test::LongString ),
 		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
-		    # Net::SSLeay IO::Socket::SSL
 		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
 		    qw( CGI::Session ),
 		    qw( Encode Locale::Maketext::Lexicon ),
 		    qw( Digest::base Digest::SHA1 ),
 		    qw( Unicode::Map Unicode::Map8 Jcode Unicode::String Unicode::MapUTF8 ),
+		    qw( Net::SSLeay ),	# Net::SSLeay IO::Socket::SSL
 		    )
 {
     print "Installing $module\n";
