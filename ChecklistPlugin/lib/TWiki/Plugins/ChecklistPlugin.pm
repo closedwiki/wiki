@@ -57,12 +57,14 @@ package TWiki::Plugins::ChecklistPlugin;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
-        $debug $defaults 
-	$defaultsInitialized %defaults @renderedOptions @flagOptions
-	$namedIds $idMapRef $query
+        $debug 
+	$defaultsInitialized %globalDefaults %namedDefaults @renderedOptions @flagOptions
+	%namedIds $idMapRef $query
+	$resetDone $stateChangeDone
     );
 
-$VERSION = '1.000'; #dro# initial version
+$VERSION = '1.001'; #dro# added new features ('reset','text' attributes); fixed 'name' attribute bug; fixed documentation bugs
+#$VERSION = '1.000'; #dro# initial version
 
 $pluginName = 'ChecklistPlugin';  # Name of this Plugin
 
@@ -79,6 +81,9 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+
+    # XXX
+    ### $debug = 1;
 
     $defaultsInitialized = 0;
 
@@ -98,8 +103,8 @@ sub commonTagsHandler
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
     eval {
-	    $_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
 	    $_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/ge;
+	    $_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;
 	    $_[0] =~ s/%CLI%/&handleChecklistItem("",$_[0])/ge;
 	    $_[0] =~ s/%CLI{(.*?)}%/&handleChecklistItem($1, $_[0])/ge;
     };
@@ -112,11 +117,14 @@ sub initDefaults() {
 	TWiki::Func::writeDebug("initDefaults") if $debug;
 
 	my $pubUrlPath = TWiki::Func::getPubUrlPath();
-	%defaults = (
+	%globalDefaults = (
 		'id' => undef,
 		'name' => '_default',
 		'states' => 'todo|done',
-		'stateicons' =>':no:|:yes:'
+		'stateicons' =>':no:|:yes:',
+		'text' => '',
+		'reset' => undef
+
 	);
 
 	@listOptions = ('states','stateicons');
@@ -128,15 +136,19 @@ sub initDefaults() {
 
 	$query = TWiki::Func::getCgiQuery();
 
+	$resetDone = 0;
+	$stateChangeDone = 0;
+
 	$defaultsInitialized = 1;
 
 }
 
+# =========================
 sub initOptions() {
 	my ($attributes) = @_;
 	my %params = TWiki::Func::extractParameters($attributes);
 
-	my @allOptions = keys %defaults;
+	my @allOptions = keys %globalDefaults;
 
         # Check attributes:
         @unknownParams= ( );
@@ -145,9 +157,16 @@ sub initOptions() {
         }
         return 0 if $#unknownParams != -1; 
 
-        # Setup options (attributes>plugin preferences>defaults):
+	my $name;
+	
+	$name=$params{'name'};
+	$name=$globalDefaults{'name'} unless $name;
+	
+
+        # Setup options (attributes>named defaults>plugin preferences>global defaults):
         foreach my $option (@allOptions) {
                 $v = $params{$option};
+		$v = $namedDefaults{$name}{$option} unless defined $v;
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
                                 $options{$option} = ($v!=0)&&($v!~/no/i)&&($v!~/off/i);
@@ -160,7 +179,7 @@ sub initOptions() {
                         } else {
                                 $v = TWiki::Func::getPluginPreferencesValue("\U$option\E") || undef;
                         }
-                        $options{$option}=(defined $v)? $v : $defaults{$option};
+                        $options{$option}=(defined $v)? $v : $globalDefaults{$option};
                 }
 
         }
@@ -175,7 +194,7 @@ sub initOptions() {
 					push  @newlist, $newval;
 				}
 				$options{$option}=join('|',@newlist);
-				TWiki::Func::writeDebug("listed option $option found:".$options{$option});
+				TWiki::Func::writeDebug("listed option $option found:".$options{$option}) if $debug;
 			} else {
 				$options{$option}=&TWiki::Func::renderText($options{$option}, $web);
 			}
@@ -184,17 +203,42 @@ sub initOptions() {
 
 	
 }
+# =========================
 sub handleChecklist {
 	local ($attributes, $refText) = @_;
+
 	my $text="";
+
+	local(%options, @unknownParams);
 
 	&initDefaults() unless $defaultsInitialized;
 
 	my %params = TWiki::Func::extractParameters($attributes);
 
-	# overwrite defaults:
-	foreach $default (keys %defaults) {
-		$defaults{$default}=$params{$default} if defined $params{$default};
+	my $name = $params{'name'};
+	$name=$globalDefaults{'name'} unless defined $name;
+
+	# create named defaults (attributes>global defaults):
+	foreach $default (keys %globalDefaults) {
+		$namedDefaults{$name}{$default}=
+			(defined $params{$default})?
+					$params{$default}:$globalDefaults{$default};
+		
+	}
+
+	&initOptions($attributes);
+
+	if ((defined $query->param("clreset"))&&(!$resetDone)) {
+		&doChecklistItemStateReset($query->param("clreset"));
+		$resetDone=1;
+	}
+
+	if (defined $options{'reset'}) {
+		
+		$text.=qq@<form method="post" action="@.&TWiki::Func::getViewUrl($web,$topic).qq@">@;
+		$text.=qq@<input type="image" name="clreset" value="@.$options{'name'}.qq@" alt="@.$options{'reset'}.qq@" title=""/>@;
+		$text.=qq@</form>@;
+		
 	}
 
 	return $text;
@@ -207,14 +251,15 @@ sub handleChecklistItem {
 
 	&initDefaults() unless $defaultsInitialized;
 
-
 	&initOptions($attributes);
 
-	$namedIds{$options{'name'}}++ unless $options{'id'};
+	$namedIds{$options{'name'}}++ unless defined $options{'id'};
 
-	if (defined $query->param("clpsc")) {
+	if ((defined $query->param("clpsc"))&&(!$stateChangeDone)) {
 		&doChecklistItemStateChange($query->param("clpsc"));
+		$stateChangeDone=1;
 	}
+
 
 	return &renderChecklistItem();
 
@@ -233,22 +278,32 @@ sub getNextState {
 			last;
 		}
 	}
-	TWiki::Func::writeDebug("getNextState($lastState)=$state");
+	TWiki::Func::writeDebug("getNextState($lastState)=$state; allstates=".$options{states}) if $debug;
 
 	return $state;
 	
 }
 # =========================
+sub doChecklistItemStateReset {
+	my ($name) = @_;
+	TWiki::Func::writeDebug("doChecklistItemStateReset($name)") if $debug;
+	foreach $id (%{ $$idMapRef{$name}}) {
+		delete $$idMapRef{$name}{$id};
+	}
+	&saveChecklistItemStateTopic();
+}
+# =========================
 sub doChecklistItemStateChange {
-	my ($id) = @_;
-	TWiki::Func::writeDebug("called doChecklistItemStateChange($id, $topic, $web)") if $debug;
-	return if ($id ne $namedIds{$options{'name'}})
-	          &&((!defined $options{'id'})||($id ne $options{'id'}));
+	my ($name_id) = @_;
+	TWiki::Func::writeDebug("doChecklistItemStateChange($name_id)") if $debug;
 
-	if (defined $$idMapRef{$options{'name'}}{$id}) {
-		$$idMapRef{$options{'name'}}{$id}=&getNextState($$idMapRef{$options{'name'}}{$id});
+	$name_id=~/^([^\[]+)\[([^\]]+)\]$/;
+	my ($name, $id) = ($1, $2);
+
+	if (defined $$idMapRef{$name}{$id}) {
+		$$idMapRef{$name}{$id}=&getNextState($$idMapRef{$name}{$id});
 	} else {
-		$$idMapRef{$options{'name'}}{$id}=&getNextState;
+		$$idMapRef{$name}{$id}=&getNextState(undef);
 	}
 
 	&saveChecklistItemStateTopic();
@@ -263,7 +318,7 @@ sub renderChecklistItem {
 	my @states = split /\|/, $options{'states'};
 	my @icons = split /\|/, $options{'stateicons'};
 
-	TWiki::Func::writeDebug("stateicons=".$options{'stateicons'});
+	TWiki::Func::writeDebug("stateicons=".$options{'stateicons'}) if $debug;
 
 	my $state = (defined $$idMapRef{$options{'name'}}{$tId}) ? $$idMapRef{$options{'name'}}{$tId} : $states[0];
 	my $icon = $icons[0];
@@ -277,13 +332,20 @@ sub renderChecklistItem {
 
 	$icon=~/img[^>]+?src="([^">]+?)"[^>]*/is;
 	my $iconsrc=$1;
-	TWiki::Func::writeDebug("icon=$icon");
-	TWiki::Func::writeDebug("iconsrc=$iconsrc");
 
-	$text.=qq@<noautolink><form name="changeitemstate$tId" method="post">@;
-	$text.=qq@<input src="$iconsrc" type="image" name="clpsc" value="@.${tId}.qq@" @;
+	my $action=TWiki::Func::getViewUrl($web,$topic);
+	$text.=qq@<noautolink><form action="$action" name="changeitemstate$tId" method="post">@;
+	$text.=qq@<input src="$iconsrc" type="image" name="clpsc" value="@.$options{'name'}.'['.${tId}.']'.qq@" @;
 	$text.=qq@title="$state" alt="@.${state}.qq@"/>@;
+	$text.=' '.TWiki::Func::renderText($options{'text'}, $web) unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 	$text.=qq@</form></noautolink>@;
+
+	## my $href = TWiki::Func::getViewUrl($web, $topic);
+	## $href.=($href=~/\?/)?"&":"?";
+	## $href.="clpsc=$tId";
+	## $text.=qq@<noautolink>@;
+	## $text.=qq@<a href="$href"><img border="0" src="$iconsrc" alt="$state" /></a>@;
+	## $text.=qq@</noautolink>@;
 
 	return $text;
 }
@@ -311,7 +373,7 @@ sub readChecklistItemStateTopic {
 # =========================
 sub saveChecklistItemStateTopic {
 	my $clisTopicName = "${topic}ChecklistItemState";
-	TWiki::Func::writeDebug("saveChecklistItemStateTopic($topic, $web): $clisTopicName");
+	TWiki::Func::writeDebug("saveChecklistItemStateTopic($topic, $web): $clisTopicName") if $debug;
 	## TWiki::Func::setTopicEditLock($web, $clisTopicName, 1);
 	my $topicText = "";
 	$topicText.="%RED% WARNING! THIS TOPIC IS GENERATED BY $pluginName PLUGIN. DO NOT EDIT!%ENDCOLOR%\n";
