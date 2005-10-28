@@ -187,17 +187,24 @@ hr { border-bottom: 1px solid #999999; }
   font:normal small 'Trebuchet MS', arial, sans-serif;
 }
 
+.natSearchBox,
 .natSearchBox input {
+  font-size:x-small;
+}
+.natSearchBoxTop input {
   background:#E7AA5C;
   border:1px dotted #CC6600;
   color:white;
 }
+.natSearchBoxPos1 input,
+.natSearchBoxPos2 input,
+.natSearchBoxPos3 input {
+  border:1px dotted #CC6600;
+  color:#666666;
+  font-weight:bold;
+}
 .natTopRightContents {
   font-size:small;
-}
-.natSearchBox 
-.natSearchBox input {
-  font-size:x-small;
 }
 .natTopicActions {
   font-size:0.8em;

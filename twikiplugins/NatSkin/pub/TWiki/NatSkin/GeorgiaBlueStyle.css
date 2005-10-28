@@ -171,6 +171,18 @@ hr {
   color:#999966;
   font:normal x-small verdana,arial,sans-serif;
 }
+.natSearchBoxPos1 input,
+.natSearchBoxPos3 input {
+  background:white;
+  color:#999966;
+}
+.natSearchBoxPos2 input {
+  width:95%;
+  background:#eeeeee;
+  color:#666;
+  padding:2px 5px;
+  font-weight:bold;
+}
 
 .natMiddleLeft {
   border-right:1px dotted #999999;
@@ -193,10 +205,7 @@ hr {
   text-decoration:none;
 }
 .natSideBar h2 {
-  padding-bottom:2px;
-  padding-top:2px;
-  padding-left:15px;
-  padding-right:5px;
+  padding:2px 5px 2px 15px;
 }
 .natWebLink a,
 .natSideBar h2,

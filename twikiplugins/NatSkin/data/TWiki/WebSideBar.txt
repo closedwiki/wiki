@@ -98,6 +98,12 @@
 	* [[Trash.WebStatistics][Statistics]]
 	* [[Trash.WebPreferences][Preferences]]
 </div>
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<p/>
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+</div>
+%FISKINSTATE%
 <div class="natSideBarPersonal">
 %MYSIDEBAR%
 </div>

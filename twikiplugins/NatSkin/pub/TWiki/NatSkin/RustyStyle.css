@@ -145,10 +145,19 @@ hr {
 }
 
 .natSearchBox input {
-  background:#9C3300;
-  color:white;
   border:1px dotted white;
   font-size:x-small;
+}
+.natSearchBoxTop input {
+  background:#9C3300;
+  color:white;
+}
+.natSearchBoxPos1 input,
+.natSearchBoxPos2 input,
+.natSearchBoxPos3 input {
+  background:#ff9831;
+  color:#9C3300;
+  font-weight:bold;
 }
 
 .natWebTitle a {

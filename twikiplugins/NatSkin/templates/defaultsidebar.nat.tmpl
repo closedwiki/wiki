@@ -5,4 +5,16 @@
 %BROADCASTMESSAGE%
 %FISKINSTATE% 
 %TMPL:END%
-%TMPL:DEF{"sidebar"}% %TMPL:P{"defaultsidebar"}% %TMPL:END%
+%TMPL:DEF{"sidebar"}% 
+%IFSKINSTATETHEN{searchbox="pos1"}%
+<div class="natSearchBox natSearchBoxPos1">
+%TMPL:P{"searchbox"}%
+</div>
+%FISKINSTATE% <!-- -->
+%TMPL:P{"defaultsidebar"}% 
+%IFSKINSTATETHEN{searchbox="pos3"}%
+<div class="natSearchBox natSearchBoxPos3">
+%TMPL:P{"searchbox"}%
+</div>
+%FISKINSTATE%
+%TMPL:END%

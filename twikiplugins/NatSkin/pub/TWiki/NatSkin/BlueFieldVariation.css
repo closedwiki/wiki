@@ -1,0 +1,27 @@
+/* header art variation */
+.natHeaderArt {
+  background-image:url(BlueFieldBar.jpg); 
+  background-repeat:no-repeat;
+  background-position:top left;
+}
+.natTopBar {
+  height:150px;
+}
+
+.natSearchBoxTop input {
+  background:#293768;
+  color:white;
+  border:1px solid white;
+}
+
+.natSearchBox,
+.natWebButtons,
+.natWebButtons a,
+.natWebTitle,
+.natWebTitle a,
+.natAction,
+.natWebSlogan,
+.natTopBar,
+.natTopBar a {
+  color:white;
+}

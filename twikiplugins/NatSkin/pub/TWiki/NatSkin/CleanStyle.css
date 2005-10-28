@@ -120,6 +120,10 @@ hr {
   font-size:x-small;
 }
 
+.natSearchBox input {
+  background:white;
+}
+
 /* sidebar */
 .natSideBar {
   color:#003366;
