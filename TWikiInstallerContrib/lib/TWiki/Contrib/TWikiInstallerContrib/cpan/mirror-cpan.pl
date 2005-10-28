@@ -22,7 +22,7 @@ Creates a local mirror of everything related to WWW::Mechanize
   ./mirror-cpan.pl WWW::Mechanize
   ./mirror-cpan.pl \^WWW::Mechanize      # more selective; only WWW::Mechanize tree on down, but not, eg, Test::WWW::Mechanize
 Creates a local mirror used by twiki modules
-  ./mirror-cpan --twiki `./calc-twiki-deps.pl`
+  ./mirror-cpan --twiki `../bin/calc-twiki-deps.pl`
 __USAGE__
 
     print "\nAvailable Configurations:  ";
