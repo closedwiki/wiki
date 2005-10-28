@@ -118,6 +118,8 @@ Because there are cases where you actually want to avoid overlapping edits altog
 
 TWiki will now pick up the language you are using in your browser, and try to present system messages in that language, if it is available. If your preferred language is not available, TWiki will revert to English. You'll also have an option to choose a language different from that used in your browser.
 
+Internationalisation support is optional and enabled by the {UseInternationalisation} setting.
+
 The translation is performed by the Perl standard internationalization framework. If you want to contribute a new language, it would be most welcome: See TWiki:Codev.UserInterfaceLocalisation for instructions on how to help.
 
 ---+++ New options on the editing screen

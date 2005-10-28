@@ -101,6 +101,9 @@ package TWiki::I18N;
 use vars qw( $initialised @initErrors );
 
 BEGIN {
+    # we only need to proceed if user wants internationalisation support
+    return unless $TWiki::cfg{UseInternationalisation};
+
     # we first assume it's ok
     $initialised = 1;
 
