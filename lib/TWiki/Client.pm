@@ -210,6 +210,9 @@ to. Flush the user's session (if any) to disk.
 sub finish {
     my $this = shift;
 
+    $this->{cgisession}->flush() 
+      if $this->{cgisession}; # just to make sure ...
+
     _expireDeadSessions();
 }
 
