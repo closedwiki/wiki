@@ -854,6 +854,7 @@ sub target_uninstall {
     sub get_basic_credentials {
         my($self, $realm, $uri) = @_;
         unless ( $knownUser ) {
+            local $/ = "\n";
             print 'Logon to ',$uri->host_port,$NL;
             print 'Enter ',$realm,': ';
             $knownUser = <STDIN>;
