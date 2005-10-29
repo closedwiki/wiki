@@ -1,12 +1,16 @@
-%META:TOPICINFO{author="PeterThoeny" date="1106382775" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1130572729" format="1.0" version="1.7"}%
 ---+ Black List Plugin
 
-This is a simple utility to keep black sheep away from a public TWiki site. The site can be protected against excessive page access (e.g. by bad robots) and suspicious activities of users, such as multiple registrations or rapid topic updates indicating Wiki:WikiSpam.
+This is a simple utility to keep black sheep away from a public TWiki site. The site can be protected against excessive page access (e.g. by bad robots), suspicious activities of users, such as multiple registrations or rapid topic updates indicating Wiki:WikiSpam, or saving text with wiki-spam.
 
 The Plugin monitors activities by IP address and uses three IP address lists to protect the TWiki site:
 	* WHITELIST: Manually maintained list of users who should never get on the BANLIST
 	* BLACKLIST: Manually maintained list of malicious users
 	* BANLIST: Automatically updated list of users with suspicious activities
+
+On topic save, text is compared to a known list of spam patterns. If wiki-spam is identified, topic save is cancelled, an error message is shown, and the IP address is put on the BANLIST. Two wiki-spam lists are used:
+	* Local SPAMLIST: Manually maintained list of spam patterns
+	* Public wiki-spam list: Big list of wiki-spam patterns, retrieved from external web site
 
 Users on the BLACKLIST and BANLIST will have every page access delayed by one minute and will get an error message.
 
@@ -16,39 +20,75 @@ To fight Wiki-spam, the Plugin can also add a =rel="nofollow"= parameter to exte
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
+__General settings:__
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Utility to keep malicious users away from a public TWiki site
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
+	* Log access of blacklist and spam list activities: (0 or 1)
+		* Set LOGACCESS = 1
+
+	* Access restriction:
+		* #Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+
+__WHITELIST, BLACKLIST and BANLIST settings:__
 	* WHITELIST: Comma delimited list of IP addresses; possible to use partial addresses ending in a dot
 		* Set WHITELIST = 127.0.0.1
 
 	* BLACKLIST: Comma delimited list of IP addresses; possible to use partial addresses ending in a dot
 		* Set BLACKLIST = 203.88.152., 203.88.155., 219.65.75.
 
-<form name="banlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="get">
+#BanList
+<form name="banlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#BanList" method="post">
 	* BANLIST: Automatically updated list of IP addresses based on BANLIST configuration
-		* <select name="action"> <option></option> <option value="ban_add">Add</option> <option value="ban_remove">Remove</option> </select> IP address <input type="text" name="ip" size="16" value="" /> <input type="submit" value="Submit" /> %BLACKLIST{ action="%URLPARAM{action}%" value="%URLPARAM{ip}%" }%
+		* Action: <select name="action"> <option></option> <option value="ban_add">Add</option> <option value="ban_remove">Remove</option> </select> IP address <input type="text" name="ip" size="16" value="" /> <input type="submit" value="Submit" /> %BLACKLIST{ action="%URLPARAM{action}%" value="%URLPARAM{ip}%" }%
 		* Current list: %BLACKLIST{ action="ban_show" }%
 </form>
 
-	* BANLIST configuration, comma delimited list of: Points for registration, points for each save and upload, points for view raw, points for other actions like view, threshold to add to BANLIST, measured over time (in seconds)
+	* BANLIST configuration, comma delimited list of: 
+		1 points for registration
+		2 Points for each save and upload
+		3 Points for view raw
+		4 Points for other actions like view
+		5 Threshold to add to BANLIST
+		6 Measured over time (in seconds)
 		* Set BANLISTCONFIG = 20, 5, 1, 20, 120, 300
 		* Your current score: %BLACKLIST{ action="user_score" }% for IP address %REMOTE_ADDR%
 
 	* Message for users on BLACKLIST and BANLIST:
-		* Set BLACKLISTMESSAGE = You are black listed at the %WIKITOOLNAME% web site due to excessive access or suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake. Black listed IP addresses will be submitted to major blacklist databases.
+		* Set BLACKLISTMESSAGE = Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to excessive access or suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
+__Wiki-spam filtering settings:__
+	* Filter wiki-spam on topic save based on SPAMLIST: (0 or 1)
+		* Set FILTERWIKISPAM = 1
+
+	* Comma separated list of Web.Topics to exclude from wiki-spam filtering:
+		* Set SPAMEXCLUDETOPICS = 
+
+#SpamList
+<form name="spamlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#SpamList" method="post">
+	* Local SPAMLIST: Manually maintained list of spam patterns (NOTE: *Must be* %TWIKIWEB%.RegularExpression patterns)
+		* Action: <select name="action"> <option></option> <option value="spam_add">Add</option> <option value="spam_remove">Remove</option> </select> wiki-spam regex pattern <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLIST{ action="%URLPARAM{action}%" value="%URLPARAM{spam}%" }%
+		* Current list: %BLACKLIST{ action="spam_show" }%
+</form>
+
+	* Public wiki-spam list: Big list of wiki-spam patterns, retrieved from external web site (thanks to <nop>MoinMoin's [[http://moinmoin.wikiwikiweb.de/AntiSpamGlobalSolution][AntiSpamGlobalSolution]] wiki-spam list)
+		* Set SPAMLISTURL = http://arch.thinkmo.de/cgi-bin/spam-merge
+
+	* Cache refresh time (in minutes) for public wiki-merge pattern list:
+		* Set SPAMLISTREFRESH = 60
+
+	* Cache refresh time (in minutes) for internal wiki-spam regular expression cache:
+		* Set SPAMREGEXREFRESH = 10
+
+	* Message for users trying to save text with wiki-spam:
+		* Set WIKISPAMMESSAGE = Wiki-spam detected, "%WIKISPAMWORD%" is a banned word and cannot be saved. Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
+
+__Nofollow link setting:__
 	* Add a =rel="nofollow"= parameter to external URLs. Use this is to fight Wiki-spam. Search engines will not follow the link if a URL has a nofollow parameter, such as =&lt;a href="http://spammer.com/" rel="nofollow"&gt;=. Specify topic age in hours for which the nofollow parameter should appear (set it to a value that gives you enough time to remove spam); set it to -1 to add the nofollow parameter unconditionally to external URLs; or 0 to disable: (-1, 0, 1...N)
 		* Set NOFOLLOWAGE = -1
-
-	* Log access of users on BLACKLIST and BANLIST: (1 or 0)
-		* Set LOGACCESS = 1
-
-	* Access restriction
-		* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
 ---++ Plugin Installation Instructions
 
@@ -60,7 +100,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	  | ==pub/TWiki/%TOPIC%/.htaccess== | Apache access control to protect pub dir |
+	  | ==templates/oopsblacklist.tmpl== | Generic oops message |
+	* Write protect this Plugin topics by removing the # hash sign from the ALLOWTOPICCHANGE setting
+	* Make sure =pub/TWiki/%TOPIC%/= is writable by the CGI user (typically =nobody=)
+	* Dakar release only: Run the configure utility in your browser to enable the Plugin
 	* Test if the installation was successful:
 		1 Using above form, add the IP address of one of your workstations to the BANLIST
 		1 Access TWiki from that workstation
@@ -68,16 +112,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 			* else, you should get an 500 Internal Server Error for other scripts
 		1 On a different workstation, remove the IP address of the test workstation from the BANLIST
 
-
----++ Known Issues
-
-	* The BANLIST does not work until you add and remove an IP address using above form
-
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 22 Jan 2005 (V1.004) |
+|  Plugin Version: | 29 Oct 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Oct 2005: | Added wiki-spam handling to prevent topic save with wiki-spam |
+|  27 Oct 2005: | For BANLIST, add/remove multiple IP addresses at once, contributed by TWiki:Main.MichaelDaum |
 |  22 Jan 2005: | Added NOFOLLOWAGE handling |
 |  19 Jan 2005: | Added score for "view raw" to address e-mail harvester issue |
 |  05 Apr 2004: | Fixed bug in event log (requiring update of earlier Plugin versions); doc updates |
@@ -86,11 +127,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 97% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Blacklists/][Google blacklist directory]]
 
--- TWiki:Main/PeterThoeny - 22 Jan 2005
+-- TWiki:Main/PeterThoeny - 29 Oct 2005
 
