@@ -968,7 +968,7 @@ table#twikiSearchTable td.first {
 	margin-bottom:1em;
 }
 .patternBookViewList .twikiTopRow {
-	padding:.1em 5px; /*S4*/
+	padding:.25em 5px .15em 5px; /*S4*/
 	margin:2.5em -5px .15em -5px; /*S4*/
 }
 .patternBookViewList .twikiBottomRow {

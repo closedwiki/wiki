@@ -602,19 +602,13 @@ table#twikiSearchTable td.first {
 	background-color:transparent; /* set to BGCOLOR in template */
 	color:#666; /*T7*/
 }
-.patternBookViewList .twikiTopRow a:link, 
-.patternBookViewList .twikiTopRow a:visited {
-	color:#FBF7E8; /*C3*/
-}
-.patternBookViewList .twikiTopRow a:hover {
-	color:#06c; /*T2*/;
-}
 .patternBookViewList .twikiBottomRow {
 	border-color:#ddd; /*BO7*/
 }
 .patternBookViewList .patternSearchResultCount {
 	color:#8E9195; /*T8*/
 }
+
 
 /* Print */
 
