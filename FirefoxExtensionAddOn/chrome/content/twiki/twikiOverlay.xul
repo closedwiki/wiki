@@ -112,27 +112,27 @@ oncommand="twiki.surround('pre','&lt;pre&gt;','&lt;/pre&gt;');"/>
 				</toolbarbutton>
 				<toolbarbutton type="menu" label="&twiki.paragraph.menu;" accesskey="&twiki.paragraph.accesskey;" oncommand="open=true;" image="chrome://twiki/skin/person.gif" tooltiptext="&twiki.paragraph.tip;" orient="vertical">
 					<menupopup>
-						<menuitem label="&twiki.paragraph.level1;" accesskey="&twiki.paragraph.level1.accesskey;" class="menuitem-iconic menu-iconic" oncommand="twiki.paragraph('paragraph','---+');"/>
-						<menuitem label="&twiki.paragraph.level2;" accesskey="&twiki.paragraph.level2.accesskey;" class="menuitem-iconic menu-iconic" oncommand="twiki.paragraph('paragraph','---++');"/>
-						<menuitem label="&twiki.paragraph.level3;" accesskey="&twiki.paragraph.level3.accesskey;" class="menuitem-iconic menu-iconic" oncommand="twiki.paragraph('paragraph','---+++');"/>
+						<menuitem label="&twiki.paragraph.level1;" class="menuitem-iconic menu-iconic" oncommand="twiki.paragraph('paragraph','---+');"/>
+						<menuitem label="&twiki.paragraph.level2;" class="menuitem-iconic menu-iconic" oncommand="twiki.paragraph('paragraph','---++');"/>
+						<menuitem label="&twiki.paragraph.level3;" class="menuitem-iconic menu-iconic" oncommand="twiki.paragraph('paragraph','---+++');"/>
 						<menuseparator/>
-						<menuitem id="context-paragraph-decrement" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.declevel;" accesskey="&twiki.paragraph.declevel.accesskey;" oncommand="twiki.changeParagraphs(-1);"/>
-						<menuitem id="context-paragraph-increment" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.inclevel;" accesskey="&twiki.paragraph.inclevel.accesskey;" oncommand="twiki.changeParagraphs(1);"/>
+						<menuitem id="context-paragraph-decrement" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.declevel;" oncommand="twiki.changeParagraphs(-1);"/>
+						<menuitem id="context-paragraph-increment" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.inclevel;" oncommand="twiki.changeParagraphs(1);"/>
 						<menuseparator/>
-						<menuitem id="context-paragraph-fancy;" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.fancy;" accesskey="&twiki.paragraph.fancy.accesskey;" oncommand="twiki.insertHeadingFancy();"/>
+						<menuitem id="context-paragraph-fancy;" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.fancy;" oncommand="twiki.insertHeadingFancy();"/>
 					</menupopup>
 				</toolbarbutton>
 				<toolbarbutton type="menu" label="&twiki.list.menu;" accesskey="&twiki.list.accesskey;" oncommand="open=true;" image="chrome://twiki/skin/icon_list_simple.png" tooltiptext="&twiki.list.tip;" orient="vertical">
 					<menupopup>
-						<menuitem id="context-list-simple" class="menuitem-iconic menu-iconic" label="&twiki.list.simple;" accesskey="&twiki.list.simple.accesskey;" oncommand="twiki.insertList('*');"/>
-						<menuitem id="context-list-numbered" class="menuitem-iconic menu-iconic" label="&twiki.list.numbered;" accesskey="&twiki.list.numbered.accesskey;" oncommand="twiki.insertList('1.');"/>
-						<menuitem id="context-list-fancy" class="menuitem-iconic menu-iconic" label="&twiki.list.fancy;" accesskey="&twiki.list.fancy.accesskey;" oncommand="twiki.insertListFancy('*');"/>
-						<menuitem id="context-list-definition" class="menuitem-iconic menu-iconic" label="&twiki.list.definition;" accesskey="&twiki.list.definition.accesskey;" oncommand="twiki.insertDefinitionList();"/>
+						<menuitem id="context-list-simple" class="menuitem-iconic menu-iconic" label="&twiki.list.simple;" oncommand="twiki.insertList('*');"/>
+						<menuitem id="context-list-numbered" class="menuitem-iconic menu-iconic" label="&twiki.list.numbered;" oncommand="twiki.insertList('1.');"/>
+						<menuitem id="context-list-fancy" class="menuitem-iconic menu-iconic" label="&twiki.list.fancy;" oncommand="twiki.insertListFancy('*');"/>
+						<menuitem id="context-list-definition" class="menuitem-iconic menu-iconic" label="&twiki.list.definition;" oncommand="twiki.insertDefinitionList();"/>
 						<menuseparator/>
-						<menuitem id="context-indentation-more" label="&twiki.indentation.more;" accesskey="&twiki.indentation.more.accesskey;" class="menuitem-iconic menu-iconic" oncommand="twiki.indentMore();"/>
-						<menuitem id="context-indentation-less" label="&twiki.indentation.less;" accesskey="&twiki.indentation.less.accesskey;" class="menuitem-iconic menu-iconic" oncommand="twiki.indentLess();"/>
+						<menuitem id="context-indentation-more" label="&twiki.indentation.more;" class="menuitem-iconic menu-iconic" oncommand="twiki.indentMore();"/>
+						<menuitem id="context-indentation-less" label="&twiki.indentation.less;" class="menuitem-iconic menu-iconic" oncommand="twiki.indentLess();"/>
 						<menuseparator/>
-						<menuitem id="context-list-remove" class="menuitem-iconic menu-iconic" label="&twiki.list.remove;" accesskey="&twiki.list.remove.accesskey;" oncommand="twiki.removeList();"/>
+						<menuitem id="context-list-remove" class="menuitem-iconic menu-iconic" label="&twiki.list.remove;" oncommand="twiki.removeList();"/>
 					</menupopup>
 				</toolbarbutton>
 				<toolbarbutton type="menu" label="&twiki.template.menu;" accesskey="&twiki.template.accesskey;" oncommand="open=true;" image="chrome://twiki/skin/icon_template.png" tooltiptext="&twiki.template.tip;" orient="vertical">
@@ -162,12 +162,12 @@ oncommand="twiki.surround('pre','&lt;pre&gt;','&lt;/pre&gt;');"/>
 					<menupopup>
 						<menu label="&twiki.quotations;">
 							<menupopup id="popupQuotations">
-								<menuitem id="context-quote-double" label="&#8222;&#8230;&#8221;" oncommand="twiki.surround('quotation','„','”');"/>
-								<menuitem id="context-quote-double-upper" label="&#8220;&#8230;&#8221;" oncommand="twiki.surround('quotation','“','”');"/>
-								<menuitem id="context-quote-single" label="&#8218;&#8230;&#8217;" oncommand="twiki.surround('quotation','‚','’');"/>
-								<menuitem id="context-quote-single-upper" label="&#8216;&#8230;&#8217;" oncommand="twiki.surround('quotation','‘','’');"/>
-								<menuitem id="context-quote-double-alt" label="&#187;&#8230;&#171;" oncommand="twiki.surround('quotation','»','«');"/>
-								<menuitem id="context-quote-single-alt" label="&#8250;&#8230;&#8249;" oncommand="twiki.surround('quotation','›','‹');"/>
+								<menuitem id="context-quote-double" label="&#8222;&#8230;&#8221;" oncommand="twiki.surroundBlock('quotation','„','”');"/>
+								<menuitem id="context-quote-double-upper" label="&#8220;&#8230;&#8221;" oncommand="twiki.surroundBlock('quotation','“','”');"/>
+								<menuitem id="context-quote-single" label="&#8218;&#8230;&#8217;" oncommand="twiki.surroundBlock('quotation','‚','’');"/>
+								<menuitem id="context-quote-single-upper" label="&#8216;&#8230;&#8217;" oncommand="twiki.surroundBlock('quotation','‘','’');"/>
+								<menuitem id="context-quote-double-alt" label="&#187;&#8230;&#171;" oncommand="twiki.surroundBlock('quotation','»','«');"/>
+								<menuitem id="context-quote-single-alt" label="&#8250;&#8230;&#8249;" oncommand="twiki.surroundBlock('quotation','›','‹');"/>
 							</menupopup>
 						</menu>
 						<menu label="&twiki.super;">
@@ -331,27 +331,27 @@ oncommand="twiki.surround('pre','&lt;pre&gt;','&lt;/pre&gt;');"/>
 				</menu>
 				<menu label="&twiki.paragraph.menu;" accesskey="&twiki.paragraph.accesskey;" id="context-paragraph" class="menuitem-iconic menu-iconic">
 					<menupopup>
-						<menuitem id="context-paragraph" label="&twiki.paragraph.level1;" accesskey="&twiki.paragraph.level1.accesskey;" oncommand="twiki.paragraph('paragraph','---+');"/>
-						<menuitem id="context-subparagraph" label="&twiki.paragraph.level2;" accesskey="&twiki.paragraph.level2.accesskey;" oncommand="twiki.paragraph('subparagraph','---++');"/>
-						<menuitem id="context-subsubparagraph" label="&twiki.paragraph.level3;" accesskey="&twiki.paragraph.level3.accesskey;" oncommand="twiki.paragraph('subsubparagraph','---+++');"/>
+						<menuitem id="context-paragraph" label="&twiki.paragraph.level1;" oncommand="twiki.paragraph('paragraph','---+');"/>
+						<menuitem id="context-subparagraph" label="&twiki.paragraph.level2;" oncommand="twiki.paragraph('subparagraph','---++');"/>
+						<menuitem id="context-subsubparagraph" label="&twiki.paragraph.level3;" oncommand="twiki.paragraph('subsubparagraph','---+++');"/>
 						<menuseparator/>
-						<menuitem id="context-paragraph-decrement" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.declevel;" accesskey="&twiki.paragraph.declevel.accesskey;" oncommand="twiki.changeParagraphs(-1);"/>
-						<menuitem id="context-paragraph-increment" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.inclevel;" accesskey="&twiki.paragraph.inclevel.accesskey;" oncommand="twiki.changeParagraphs(1);"/>
+						<menuitem id="context-paragraph-decrement" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.declevel;" oncommand="twiki.changeParagraphs(-1);"/>
+						<menuitem id="context-paragraph-increment" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.inclevel;" oncommand="twiki.changeParagraphs(1);"/>
 						<menuseparator/>
-						<menuitem id="context-paragraph-fancy;" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.fancy;" accesskey="&twiki.paragraph.fancy.accesskey;" oncommand="twiki.insertHeadingFancy();"/>
+						<menuitem id="context-paragraph-fancy;" class="menuitem-iconic menu-iconic" label="&twiki.paragraph.fancy;" oncommand="twiki.insertHeadingFancy();"/>
 					</menupopup>
 				</menu>
 				<menu label="&twiki.list.menu;" id="context-list" class="menuitem-iconic menu-iconic">
 					<menupopup>
-						<menuitem id="context-list-simple" class="menuitem-iconic menu-iconic" label="&twiki.list.simple;" accesskey="&twiki.list.simple.accesskey;" oncommand="twiki.insertList('*');"/>
-						<menuitem id="context-list-numbered" class="menuitem-iconic menu-iconic" label="&twiki.list.numbered;" accesskey="&twiki.list.numbered.accesskey;" oncommand="twiki.insertList('1.');"/>
-						<menuitem id="context-list-definition" class="menuitem-iconic menu-iconic" label="&twiki.list.definition;" accesskey="&twiki.list.definition.accesskey;" oncommand="twiki.insertDefinitionList();"/>	
-						<menuitem id="context-list-fancy" class="menuitem-iconic menu-iconic" label="&twiki.list.fancy;" accesskey="&twiki.list.fancy.accesskey;" oncommand="twiki.insertListFancy('*');"/>
+						<menuitem id="context-list-simple" class="menuitem-iconic menu-iconic" label="&twiki.list.simple;" oncommand="twiki.insertList('*');"/>
+						<menuitem id="context-list-numbered" class="menuitem-iconic menu-iconic" label="&twiki.list.numbered;" oncommand="twiki.insertList('1.');"/>
+						<menuitem id="context-list-definition" class="menuitem-iconic menu-iconic" label="&twiki.list.definition;" oncommand="twiki.insertDefinitionList();"/>	
+						<menuitem id="context-list-fancy" class="menuitem-iconic menu-iconic" label="&twiki.list.fancy;" oncommand="twiki.insertListFancy('*');"/>
 					<menuseparator/>
-						<menuitem id="context-indentation-more" class="menuitem-iconic menu-iconic" label="&twiki.indentation.more;" accesskey="&twiki.indentation.more.accesskey;" oncommand="twiki.indentMore();"/>
-						<menuitem id="context-indentation-less" class="menuitem-iconic menu-iconic" label="&twiki.indentation.less;" accesskey="&twiki.indentation.less.accesskey;" oncommand="twiki.indentLess();"/>
+						<menuitem id="context-indentation-more" class="menuitem-iconic menu-iconic" label="&twiki.indentation.more;" oncommand="twiki.indentMore();"/>
+						<menuitem id="context-indentation-less" class="menuitem-iconic menu-iconic" label="&twiki.indentation.less;" oncommand="twiki.indentLess();"/>
 						<menuseparator/>
-						<menuitem id="context-list-remove" class="menuitem-iconic menu-iconic" label="&twiki.list.remove;" accesskey="&twiki.list.remove.accesskey;" oncommand="twiki.removeList();"/>
+						<menuitem id="context-list-remove" class="menuitem-iconic menu-iconic" label="&twiki.list.remove;" oncommand="twiki.removeList();"/>
 					</menupopup>
 				</menu>
 				<menu label="&twiki.template.menu;" id="context-template" class="menuitem-iconic menu-iconic">
@@ -380,12 +380,12 @@ oncommand="twiki.surround('pre','&lt;pre&gt;','&lt;/pre&gt;');"/>
 					<menupopup>
 						<menu label="&twiki.quotations;">
 							<menupopup id="popupQuotations">
-								<menuitem id="context-quote-double" label="&#8222;&#8230;&#8221;" oncommand="twiki.surround('quotation','„','”');"/>
-								<menuitem id="context-quote-double-upper" label="&#8220;&#8230;&#8221;" oncommand="twiki.surround('quotation','“','”');"/>
-								<menuitem id="context-quote-single" label="&#8218;&#8230;&#8217;" oncommand="twiki.surround('quotation','‚','’');"/>
-								<menuitem id="context-quote-single-upper" label="&#8216;&#8230;&#8217;" oncommand="twiki.surround('quotation','‘','’');"/>
-								<menuitem id="context-quote-double-alt" label="&#187;&#8230;&#171;" oncommand="twiki.surround('quotation','»','«');"/>
-								<menuitem id="context-quote-single-alt" label="&#8250;&#8230;&#8249;" oncommand="twiki.surround('quotation','›','‹');"/>
+								<menuitem id="context-quote-double" label="&#8222;&#8230;&#8221;" oncommand="twiki.surroundBlock('quotation','„','”');"/>
+								<menuitem id="context-quote-double-upper" label="&#8220;&#8230;&#8221;" oncommand="twiki.surroundBlock('quotation','“','”');"/>
+								<menuitem id="context-quote-single" label="&#8218;&#8230;&#8217;" oncommand="twiki.surroundBlock('quotation','‚','’');"/>
+								<menuitem id="context-quote-single-upper" label="&#8216;&#8230;&#8217;" oncommand="twiki.surroundBlock('quotation','‘','’');"/>
+								<menuitem id="context-quote-double-alt" label="&#187;&#8230;&#171;" oncommand="twiki.surroundBlock('quotation','»','«');"/>
+								<menuitem id="context-quote-single-alt" label="&#8250;&#8230;&#8249;" oncommand="twiki.surroundBlock('quotation','›','‹');"/>
 							</menupopup>
 						</menu>
 						<menu label="&twiki.super;">

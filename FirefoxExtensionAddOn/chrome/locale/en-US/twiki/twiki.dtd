@@ -18,10 +18,10 @@
 <!ENTITY twiki.bold.accesskey "o">	<!-- could interfere with Bookmarks, mentioned in twikioverlay.xul	was b -->
 <!ENTITY twiki.bold.tip "Bold">
 <!ENTITY twiki.bolditalic "Bold Italic">
-<!ENTITY twiki.bolditalic.accesskey "c"> <!-- was j - changed for visibility -->
+<!ENTITY twiki.bolditalic.accesskey "y"> <!-- was j - changed for visibility -->
 <!ENTITY twiki.bolditalic.tip "Bold Italic">
 <!ENTITY twiki.italic "Italic">
-<!ENTITY twiki.italic.accesskey "i">
+<!ENTITY twiki.italic.accesskey "z">
 <!ENTITY twiki.italic.tip "Italic">
 <!ENTITY twiki.format.menu "Format">
 <!ENTITY twiki.format.accesskey "r">	<!-- could interfere with File, mentioned in twikioverlay.xul	was f -->
@@ -49,7 +49,7 @@
 
 <!-- links -->
 <!ENTITY twiki.links.menu "Links">
-<!ENTITY twiki.links.accesskey "k">
+<!ENTITY twiki.links.accesskey "x">
 <!ENTITY twiki.links.tip "Links">
 <!ENTITY twiki.forcedlink "Forced link...">
 <!ENTITY twiki.forcedlink.accesskey "z">	<!-- could interfere with format, even though not mentioned in twikioverlay.xul?	was f -->
@@ -62,11 +62,11 @@
 <!ENTITY twiki.paragraph.menu "Heading">
 <!ENTITY twiki.paragraph.accesskey "n">
 <!ENTITY twiki.paragraph.tip "Heading">
-<!ENTITY twiki.paragraph.level1 "---+ Level 1 heading">
+<!ENTITY twiki.paragraph.level1 "1st Level heading">
 <!ENTITY twiki.paragraph.level1.accesskey "1">
-<!ENTITY twiki.paragraph.level2 "---++ Level 2 heading">
+<!ENTITY twiki.paragraph.level2 "2nd Level heading">
 <!ENTITY twiki.paragraph.level2.accesskey "2">
-<!ENTITY twiki.paragraph.level3 "---+++ Level 3 heading">
+<!ENTITY twiki.paragraph.level3 "3rd Level heading">
 <!ENTITY twiki.paragraph.level3.accesskey "3">
 <!ENTITY twiki.paragraph.inclevel "Demote heading">
 <!ENTITY twiki.paragraph.inclevel.accesskey "z">
@@ -77,16 +77,16 @@
 
 <!-- template -->
 <!ENTITY twiki.template.menu "Insert">
-<!ENTITY twiki.template.accesskey "j">
+<!ENTITY twiki.template.accesskey "i">
 <!ENTITY twiki.template.tip "Insert TOC, Icons, etc">
 <!ENTITY twiki.template.toc "Table of contents">
-<!ENTITY twiki.template.notoc "No table of contents">
-<!ENTITY twiki.template.tipicon "Tip">
+<!ENTITY twiki.template.notoc "Omit table of contents">
+<!ENTITY twiki.template.tipicon "Suggestion">
 <!ENTITY twiki.template.helpicon "Help">
 <!ENTITY twiki.template.warnicon "Warning">
-<!ENTITY twiki.template.staricon "Attention">
-<!ENTITY twiki.template.newicon "">
-<!ENTITY twiki.template.updatedicon "">
+<!ENTITY twiki.template.staricon "Important">
+<!ENTITY twiki.template.newicon "New">
+<!ENTITY twiki.template.updatedicon "Updated">
 <!ENTITY twiki.template.attachurlvar "Attachment URL">
 <!ENTITY twiki.template.topicvar "Current Topic">
 <!ENTITY twiki.template.webvar "Current Web">
@@ -106,9 +106,9 @@
 <!ENTITY twiki.list.remove "Remove">
 <!ENTITY twiki.list.remove.accesskey "y"> <!-- could interfere with format, mentioned in twikioverlay.xul	was r -->
 
-<!ENTITY twiki.indentation.more "Increase indentation">
+<!ENTITY twiki.indentation.more "More indentation">
 <!ENTITY twiki.indentation.more.accesskey "z">
-<!ENTITY twiki.indentation.less "Decrease indentation">
+<!ENTITY twiki.indentation.less "Less indentation">
 <!ENTITY twiki.indentation.less.accesskey "z">
 
 <!-- other complex elements -->
@@ -126,7 +126,7 @@
 
 <!-- special characters -->
 <!ENTITY twiki.specialchars.menu "Special chars">
-<!ENTITY twiki.specialchars.accesskey "s">
+<!ENTITY twiki.specialchars.accesskey "@">
 <!ENTITY twiki.specialchars.tip "Non-ASCII characters">
 <!ENTITY twiki.quotations "Quotation marks">
 <!ENTITY twiki.super "Super">
@@ -153,7 +153,7 @@
 <!ENTITY twiki.table.columns "Columns">
 <!ENTITY twiki.table.content "Default content">
 <!ENTITY twiki.table.options "Options (only available with TablePlugin)">
-<!ENTITY twiki.table.usePlugin "Use TablePlugin">
+<!ENTITY twiki.table.usePlugin "Use TablePlugin (disabled)">
 <!ENTITY twiki.table.border "Visible border">
 <!ENTITY twiki.table.heading "Emphasized title row">
 <!ENTITY twiki.table.color "Background color">
