@@ -17,7 +17,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 
-
 # =========================
 package TWiki::Plugins::BlackListPlugin;
 
@@ -54,6 +53,18 @@ $RELEASE = 'Dakar';
     $noFollowAge = 0;
     $topicAge = 0;
     $urlHost = "initialized_later";
+}
+
+# =========================
+sub writeDebug
+{
+    TWiki::Func::writeDebug("$pluginName - " . $_[0]) if $debug;
+}
+
+# =========================
+sub writeDebugTimes
+{
+    TWiki::Func::writeDebugTimes("$pluginName - " . $_[0]) if $debug;
 }
 
 # =========================
@@ -106,13 +117,14 @@ sub initPlugin
     $isBlackSheep = 0;
     $userScore = "N/A";
     if( ( $remoteAddr ) && ( $remoteAddr !~ /^$whiteList/ ) ) {
-        if( $remoteAddr =~ /^$blackRE/ ) {
+        if( $blackRE ne "()" && $remoteAddr =~ /^$blackRE/ ) {
             # already a black sheep
             $isBlackSheep = 1;
         } else {
             # check for new candidate of black sheep
 
-            my( $c1, $c2, $c3, $c4, $c5, $c6 ) = split( /, */, TWiki::Func::getPreferencesValue( "\U$pluginName\E_BANLISTCONFIG" ) );
+            my( $c1, $c2, $c3, $c4, $c5, $c6 ) =
+                split( /,\s*/, TWiki::Func::getPreferencesValue( "\U$pluginName\E_BANLISTCONFIG" ) );
             $cfg{ "ptReg" }   = $c1 || 10;
             $cfg{ "ptChg" }   = $c2 || 5;
             $cfg{ "ptView" }  = $c3 || 1;
@@ -121,7 +133,7 @@ sub initPlugin
             $cfg{ "period" }  = $c6 || 300;
 
             $userScore = _handleEventLog( $remoteAddr, $scriptName, $queryString );
-            TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin() score: $userScore" ) if $debug;
+            writeDebug( "initPlugin() score: $userScore" );
             if( $userScore > $cfg{ "ptLimit" } ) {
                 $isBlackSheep = 1;
                 _handleBanList( "add", $remoteAddr );
@@ -135,17 +147,24 @@ sub initPlugin
         _writeLog( $scriptName );
         # sleep for one minute
         sleep 60 unless( $debug );
-        if( $scriptName =~ /view/ ) {
-            # view script: show message later in commonTagsHandler
+        if( $scriptName =~ /oops/ ) {
+            # show oops message normal
         } else {
-            # other scripts: force a "500 Internal Server Error" error
-            exit 1;
+            # other scripts: redirect to oops message
+            my $cgiQuery = TWiki::Func::getCgiQuery();
+            unless( $cgiQuery ) {
+                exit 1; # Force a "500 Internal Server Error" error
+            }
+            my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_BLACKLISTMESSAGE" ) ||
+                      "You are black listed at %WIKITOOLNAME%.";
+            my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg );
+            print $cgiQuery->redirect( $url );
+            exit 0; # should never reach this
         }
     }
 
     # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK, "
-                           . "whiteList $whiteList, blackRE $blackRE" ) if $debug;
+    writeDebug( "initPlugin( $web.$topic ) is OK, whiteList $whiteList, blackRE $blackRE" );
     return 1;
 }
 
@@ -154,14 +173,8 @@ sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    writeDebug( "commonTagsHandler( $_[2].$_[1] )" );
 
-    if( $isBlackSheep ) {
-        my $message = TWiki::Func::getPreferencesValue( "\U$pluginName\E_BLACKLISTMESSAGE" ) ||
-                      "You are black listed at %WIKITOOLNAME%. "
-                    . "In addition, your IP address will be submitted to major blacklist databases.";
-        $_[0] = $message;
-    }
     $_[0] =~ s/%BLACKLIST{(.*?)}%/_handleBlackList( $1, $_[2], $_[1] )/geo;
 }
 
@@ -170,7 +183,7 @@ sub endRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
+    writeDebug( "endRenderingHandler( $web.$topic )" );
 
     # This handler is called by getRenderedVersion just after the line loop, that is,
     # after almost all XHTML rendering of a topic. <nop> tags are removed after this.
@@ -180,38 +193,227 @@ sub endRenderingHandler
 }
 
 # =========================
+sub beforeSaveHandler
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    writeDebug( "beforeSaveHandler( $_[2].$_[1] )" );
+    # This handler is called by TWiki::Store::saveTopic just before the save action.
+
+    # Bail out unless spam filtering is enabled
+    return unless( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_FILTERWIKISPAM" ) );
+
+    # Bail out for excluded topics
+    my @arr = split( /,\s*/, TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMEXCLUDETOPICS" ) );
+    foreach( @arr ) {
+        return if( ( /^(.*)/ ) && ( $1 eq "$_[2].$_[1]" ) );
+    }
+
+    my $spamListRegex = _getSpamListRegex();
+    if( $_[0] =~ /$spamListRegex/ ) {
+        my $badword = $1;
+        my $cgiQuery = TWiki::Func::getCgiQuery();
+        if( $cgiQuery ) {
+            my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
+            _handleBanList( "add", $remoteAddr );
+            _writeLog( "SPAMLIST add: $remoteAddr, spam '$badword'" );
+
+            my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
+                      "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
+            $msg =~ s/%WIKISPAMWORD%/$badword/;
+            $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg );
+            print $cgiQuery->redirect( $url );
+            exit 0; # should never reach this
+        }
+        # else (unlikely case) force a "500 Internal Server Error" error
+        exit 1;
+    }
+}
+
+# =========================
+sub _getSpamListRegex
+{
+    my $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMREGEXREFRESH" ) || 5;
+    $refresh =~ s/.*?([0-9]+).*/$1/s || 5;
+    $refresh = 1 if( $refresh < 1 );
+
+    my $cacheFile = _makeFileName( "spam_regex" );
+    if( ( -e $cacheFile ) && ( ( time() - (stat(_))[9] ) <= ( $refresh * 60 ) ) ) {
+        # return cached version if it exists and isn't too old
+        return TWiki::Func::readFile( $cacheFile );
+    }
+
+    # merge public and local spam list
+    my $text = _getSpamMergeText() . "\n" . _handleSpamList( "read", "" );
+    $text =~ s/<[^>]*//go;      # strip <tags>
+    $text =~ s/ *\#.*//go;      # strip comments
+    $text =~ s/^[\n\r]+//os;
+    $text =~ s/[\n\r]+$//os;
+    $text =~ s/[\n\r]+/\|/gos;  # build regex
+    $text = "http://[\\w\\.\\-:\\@/]*?($text)";
+    TWiki::Func::saveFile( $cacheFile, $text );
+    return $text;
+}
+
+# =========================
+sub _getSpamMergeText
+{
+    my $url = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMLISTURL" ) ||
+              'http://arch.thinkmo.de/cgi-bin/spam-merge';
+    my $refresh = 30; # minutes
+    my $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMLISTREFRESH" ) || 15;
+    $refresh =~ s/.*?([0-9]+).*/$1/s || 15;
+    $refresh = 10 if( $refresh < 10 );
+
+    my $cacheFile = _makeFileName( "spam_merge" );
+    if( ( -e $cacheFile ) && ( ( time() - (stat(_))[9] ) <= ( $refresh * 60 ) ) ) {
+        # return cached version if it exists and isn't too old
+        return TWiki::Func::readFile( $cacheFile );
+    }
+
+    $url =~ /http\:\/\/(.*?)(\/.*)/;
+    my $host = $1;
+    my $port = 0;
+    my $path = $2;
+    # figure out how to get to TWiki::Net which is wide open in Cairo and before,
+    # but Dakar uses the session object.  
+    my $text = $TWiki::Plugins::SESSION->{net}
+        ? $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path )
+        : TWiki::Net::getUrl( $host, $port, $path );
+
+    if( $text =~ /text\/plain\s*ERROR\: (.*)/s ) {
+        my $msg = $1;
+        $msg =~ s/[\n\r]/ /gos;
+        TWiki::Func::writeDebug( "- $pluginName ERROR: Can't read $url ($msg)" );
+        return "#ERROR: Can't read $url ($msg)";
+    }
+    if( $text =~ /HTTP\/[0-9\.]+\s*([0-9]+)\s*([^\n]*)/s ) {
+        unless( $1 == 200 ) {
+           TWiki::Func::writeDebug( "- $pluginName ERROR: Can't read $url ($1 $2)" );
+           return "#ERROR: Can't read $url ($1 $2)";
+        }
+    }
+    $text =~ s/\r\n/\n/gos;
+    $text =~ s/\r/\n/gos;
+    $text =~ s/^.*?\n\n(.*)/$1/os;  # strip header
+    unless( $text =~ /.{128}/ ) {
+        # spam-merge file is too short, possibly temporary read error
+        TWiki::Func::writeDebug( "- $pluginName WARNING: Content of $url is too short, using old cache" );
+        TWiki::Func::saveFile(  _makeFileName( "spam_merge_err" ), $text );
+        $text = TWiki::Func::readFile( $cacheFile ); # read old cache content
+    }
+    TWiki::Func::saveFile( $cacheFile, $text );
+    return $text;
+}
+
+
+# =========================
+sub _handleSpamList
+{
+    my ( $theAction, $theValue ) = @_;
+    my $fileName = _makeFileName( "spam_list", 0 );
+    writeDebug( "_handleSpamList( Action: $theAction, value: $theValue, file: $fileName )" );
+    my $text = TWiki::Func::readFile( $fileName ) || "# The spam-list is a generated file, do not edit\n";
+    if( $theAction eq "read" ) {
+        $text =~ s/^\#[^\n]*\n//s;
+        return $text;
+    }
+
+    my @errorMessages;
+    my @infoMessages;
+    foreach my $item (split( /,\s*/, $theValue )) {
+      $item =~ s/^\s+//;
+      $item =~ s/\s+$//;
+
+      if( $theAction eq "add" ) {
+        if( $text =~ /\n\Q$item\E\n/s ) {
+            push @infoMessages, "Warning: Spam pattern '$item' is already on the list";
+            next;
+        }
+        $text .= "$item\n";
+        push @infoMessages, "Note: Added spam pattern '$item'";
+        unlink( _makeFileName( "spam_regex" ) ); # remove cache
+
+      } elsif( $theAction eq "remove" ) {
+        unless( ( $item ) && ( $text =~ s/(\n)\Q$item\E\n/$1/s ) ) {
+            push @errorMessages, "Error: Spam pattern '$item' not found";
+            next;
+        }
+        push @infoMessages, "Note: Removed spam pattern '$item'";
+        unlink( _makeFileName( "spam_regex" ) ); # remove cache
+
+      } else {
+        # never reach
+        return "Error: invalid action '$theAction'";
+      }
+    }
+
+    if (@errorMessages) {
+      writeDebug("spamlist=$text");
+      return '<div class="twikiAlert">' .  join("<br /> ", @errorMessages) . '</div>';
+
+    } else {
+      if (@infoMessages) {
+        # SMELL: overwrites a concurrent save
+        writeDebug("spamlist=$text");
+        TWiki::Func::saveFile( $fileName, $text );
+        return '<br />' . join( "<br /> ", @infoMessages );
+
+      } else {
+        return 'Error: done nothing';
+      }
+    }
+}
+
+# =========================
 sub _handleBlackList
 {
     my( $theAttributes, $theWeb, $theTopic ) = @_;
-    my $action = &TWiki::Func::extractNameValuePair( $theAttributes, "action" );
-    my $value  = &TWiki::Func::extractNameValuePair( $theAttributes, "value" );
+    my $action = TWiki::Func::extractNameValuePair( $theAttributes, "action" );
+    my $value  = TWiki::Func::extractNameValuePair( $theAttributes, "value" );
     my $text = "";
+
+    writeDebug( "_handleBlackList( Action: $action, value: $value, topic: $theWeb.$theTopic )" );
     if( $action eq "ban_show" ) {
         $text = _handleBanList( "read", "" );
+        $text =~ s/[\n\r]+$//os;
+        $text =~ s/[\n\r]+/, /gos;
+
+    } elsif( $action eq "spam_show" ) {
+        $text = _handleSpamList( "read", "" );
         $text =~ s/[\n\r]+$//os;
         $text =~ s/[\n\r]+/, /gos;
 
     } elsif( $action eq "user_score" ) {
         $text = $userScore;
 
-    } elsif( $action =~ /^(ban_add|ban_remove)$/ ) {
+    } elsif( $action =~ /^(ban_add|ban_remove|spam_add|spam_remove)$/ ) {
+        my $anchor = "#BanList";
         if( "$theWeb.$theTopic" eq "$installWeb.$pluginName" ) {
             my $wikiName = &TWiki::Func::userToWikiName( $user );
-            if(  &TWiki::Func::checkAccessPermission( "CHANGE", $wikiName, "", $pluginName, $installWeb ) ) {
+            if( TWiki::Func::checkAccessPermission( "CHANGE", $wikiName, "", $pluginName, $installWeb ) ) {
                 if( $action eq "ban_add" ) {
-                    $text = _handleBanList( "add", $value );
+                    $text .= _handleBanList( "add", $value );
                     _writeLog( "BANLIST add: $value, by user" );
-                } else {
-                    $text = _handleBanList( "remove", $value );
+                } elsif( $action eq "ban_remove" ) {
+                    $text .= _handleBanList( "remove", $value );
                     _writeLog( "BANLIST delete: $value by user" );
+                } elsif( $action eq "spam_add" ) {
+                    $text .= _handleSpamList( "add", $value );
+                    $anchor = "#SpamList";
+                    _writeLog( "SPAMLIST add: $value, by user" );
+                } else {
+                    $text .= _handleSpamList( "remove", $value );
+                    $anchor = "#SpamList";
+                    _writeLog( "SPAMLIST delete: $value by user" );
                 }
             } else {
-                $text = "Error: You do not have permission to add IP addresses";
+                $text = "Error: You do not have permission to maintain the list";
             }
         } else {
-             $text = "Error: For use on $installWeb.$pluginName topic only";
+            $text = "Error: For use on $installWeb.$pluginName topic only";
         }
-        $text .= " [ [[$theWeb.$theTopic][OK]] ]";
+        $text .= " [ [[$theWeb.$theTopic$anchor][OK]] ]";
     }
     return $text;
 }
@@ -219,36 +421,68 @@ sub _handleBlackList
 # =========================
 sub _handleBanList
 {
-    my ( $theAction, $theIP ) = @_;
+    my ( $theAction, $theIPs ) = @_;
     my $fileName = _makeFileName( "ban_list", 0 );
-    TWiki::Func::writeDebug( "- ${pluginName}::_handleBanList( Action: $theAction, IP: $theIP, file: $fileName )" ) if $debug;
+    writeDebug( "_handleBanList( Action: $theAction, IP: $theIPs, file: $fileName )" );
     my $text = TWiki::Func::readFile( $fileName ) || "# The ban-list is a generated file, do not edit\n";
     if( $theAction eq "read" ) {
         $text =~ s/^\#[^\n]*\n//s;
         return $text;
+    }
 
-    } elsif( $theAction eq "add" ) {
+    my @errorMessages;
+    my @infoMessages;
+    foreach my $theIP (split( /,\s*/, $theIPs )) {
+      $theIP =~ s/^\s+//;
+      $theIP =~ s/\s+$//;
+
+      if( $theAction eq "add" ) {
         unless( ( $theIP ) && ( $theIP =~ /^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/ ) ) {
-            return "Error: Invalid IP address $theIP";
+            push @errorMessages, "Error: Invalid IP address '$theIP'";
+            next;
         }
-        if( $text =~ s/(\n)\Q$theIP\E\n/$1/s ) {
-            return "Error: IP address $theIP is already on the list";
+
+        if( $text =~ /\n\Q$theIP\E\n/s ) {
+            push @infoMessages, "Warning: IP address '$theIP' is already on the list";
+            next;
         }
+
         $text .= "$theIP\n";
+
+        push @infoMessages, "Note: Added IP address '$theIP'";
+
+      } elsif( $theAction eq "remove" ) {
+        unless( ( $theIP ) && ( $text =~ s/(\n)\Q$theIP\E\n/$1/s ) ) {
+            push @errorMessages, "Error: IP address '$theIP' not found";
+            next;
+        }
+        push @infoMessages, "Note: Removed IP address '$theIP'";
+
+      } else {
+        # never reach
+        return "Error: invalid action '$theAction'";
+      }
+    }
+
+    if (@errorMessages) {
+      writeDebug("banlist=$text");
+      return '<div class="twikiAlert">' .  join("<br /> ", @errorMessages) . '</div>';
+
+    } else {
+      if (@infoMessages) {
+        # SMELL: overwrites a concurrent save 
+        writeDebug("banlist=$text");
         TWiki::Func::saveFile( $fileName, $text );
         unless( -e "$fileName" ) {
             # assuming save failed because of missing dir
             _makeFileDir();
             TWiki::Func::saveFile( $fileName, $text );
         }
-        return "Note: Added IP address $theIP";
+        return '<br />' . join( "<br /> ", @infoMessages );
 
-    } elsif( $theAction eq "remove" ) {
-        unless( ( $theIP ) && ( $text =~ s/(\n)\Q$theIP\E\n/$1/s ) ) {
-            return "Error: IP address $theIP not found";
-        }
-        TWiki::Func::saveFile( $fileName, $text );
-        return "Note: Removed IP address $theIP";
+      } else {
+        return 'Error: done nothing';
+      }
     }
 }
 
@@ -259,7 +493,7 @@ sub _handleEventLog
 
     # read/update/save event logs
     my $fileName = _makeFileName( "event_log" );
-    TWiki::Func::writeDebug( "- ${pluginName}::_handleEventLog( IP: $theIP, type: $theType, query: $theQueryString )" ) if $debug;
+    writeDebug( "_handleEventLog( IP: $theIP, type: $theType, query: $theQueryString )" );
     my $text = TWiki::Func::readFile( $fileName ) || "# The event-list is a generated file, do not edit\n";
     my $time = time();
     $text .= "$time, $theIP, $theType";
@@ -335,7 +569,7 @@ sub _writeLog
     if( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_LOGACCESS" ) ) {
         # FIXME: Call to unofficial function
         TWiki::Store::writeLog( "blacklist", "$web.$topic", $theText );
-        ##TWiki::Func::writeDebug( "BLACKLIST access by $remoteAddr, $web/$topic, $theText" );
+        writeDebug( "BLACKLIST access by $remoteAddr, $web/$topic, $theText" );
     }
 }
 

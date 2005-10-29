@@ -1,2 +1,4 @@
 data/TWiki/BlackListPlugin.txt NEW
 lib/TWiki/Plugins/BlackListPlugin.pm NEW
+pub/TWiki/BlackListPlugin/.htaccess NEW
+templates/oopsblacklist.tmpl NEW
