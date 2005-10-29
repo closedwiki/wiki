@@ -1,6 +1,18 @@
 Time::ParseDate,>=2003.0211,cpan,Required. Available from the CPAN:Time::ParseDate archive.
 Error,>=0.15,cpan,Required. Available from the CPAN archive.
 Email::Folder,>=0.84,cpan,Required. Available from the CPAN archive.
+Email::FolderType,,cpan,Required. Available from the CPAN archive.
 Email::FolderType::Net,>=1.02,cpan,Required. Available from the CPAN archive.
+MIME::Base64,,cpan,Required for Email::MIME::Encodings. Available from the CPAN archive.
+Email::MIME::Encodings,,cpan,Required for Email::MIME. Available from the CPAN archive.
+Email::MIME::ContentType,,cpan,Required for Email::MIME. Available from the CPAN archive.
+MIME::Types,,cpan,Required for Email::MIME. Available from the CPAN archive.
 Email::MIME,>=1.82,cpan,Required. Available from the CPAN archive.
 Email::Delete,>=1.02,cpan,Optional, recommended. Available from the CPAN archive.
+Module::Pluggable,,cpan,Required for Email::FolderType. Available from the CPAN archive.
+Email::Simple,,cpan,Required. Available from the CPAN archive.
+Net::POP3,,cpan,Optional. Available from the CPAN archive.
+Email::Folder::POP3,,cpan,Optional. Available from the CPAN archive.
+Net::IMAP::Simple,,cpan,Optional. Available from the CPAN archive.
+URI::imap,,cpan,Optional. Available from the CPAN archive.
+Email::Folder::IMAP,,cpan,Optional. Available from the CPAN archive.
