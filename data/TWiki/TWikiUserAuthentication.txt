@@ -97,7 +97,7 @@ The ==bin/logon== script accomplishes this. The ==bin/logon== script must be set
 
 ---++ Sessions
 
-TWiki uses the CPAN:CGI::Session and CPAN:CGI::Cookie modules to track sessions using cookies. These modules are de facto standards for session management among Perl programmers. If you can't use Cookies for any reason, CPAN:CGI::Session also supports session tracking using IP matching. However this is inherently insecure and you are strongly advised against it.
+TWiki uses the CPAN:CGI::Session and CPAN:CGI::Cookie modules to track sessions using cookies. These modules are de facto standards for session management among Perl programmers. If you can't use Cookies for any reason, CPAN:CGI::Session also supports session tracking using the client IP address. See [[#HowTo][How to choose an authentication method]] for a discussion of the pros and cons of the various authentication methods.
 
 There are a number of TWikiVariables available that you can use to interrogate your current session. You can even add your own session variables to the TWiki cookie. Session variables are referred to as "sticky" variables.
 
@@ -144,6 +144,29 @@ If your {PasswordManager} supports password changing, you can change and reset p
 
    * The ChangePassword form ( ==TWiki/ChangePassword== ):
    * The ResetPassword form ( ==TWiki/ResetPassword== ):
+
+#HowTo
+---++ How to choose an authentication method
+
+One of the key features of TWiki is that it is possible to add HTML to topics. No authentication method is 100% secure on a website where end users can add HTML, as there is always a risk that a malicious user can add code to a topic that gathers user information, such as session IDs. The TWiki developers have been forced to make certain tradeoffs, in the pursuit of efficiency, that may be exploited by a hacker.
+
+This section discusses some of the known risks. You can be sure that any potential hackers have read this section as well!
+
+Firstly, the *most secure* method is without doubt to use the webserver authentication support, with Sessions turned *off*.
+
+The *second most secure method* is to use TWiki's internal authentication with Sessions turned *off*. This method is less secure than using the webserver because passwords are sent in *plain text* and can therefore be intercepted in transit.
+
+As soon as you allow the server to maintain information about a logged-in user, you open a door to potential attacks. There are a variety of ways a malicious user can pervert TWiki to obtain another users session ID, the most common of which is known as a [[http://www.perl.com/pub/a/2002/02/20/css.html][cross-site scripting]] attack. Once a hacker has an SID they can pretend to be that user.
+
+To help prevent these sorts of attacks, TWiki supports *IP matching*, which ensures that the IP address of the user requesting a specific session is the same as the IP address of the user who created the session. This works well as long as IP addresses are unique to each client, and as long as the IP address of the client can't be faked.
+
+The *third most secure* method is to use sessions with IP matching ({UseIPMatching} switched on). Shorter session expiry times are more secure ({Sessions}{ExpireAfter}). The default session lifetime is 6 hours, which is quite a long lifetime for a session.
+
+Session IDs are usually stored by TWiki in cookies, which are stored in the client browser. Cookies work well, but not all environments or users permit cookies to be stored in browsers. So TWiki also supports two other methods of determining the session ID. The first method uses the client IP address to determine the session ID. The second uses a rewriting method that rewrites local URLs in TWiki pages to include the session ID in the URL. 
+
+The first method works well as long as IP addresses are *unique* to each individual client, and client IP addresses can't be faked by a hacker. If IP addresses are unique and can't be faked, it is almost as secure as cookies + IP matching, so it ranks as the *fourth most secure method*.
+
+If you have to turn IP matching off, and cookies can't be relied on, then you may have to rely on the second method, URL rewriting. This method exposes the session IDs very publicly, so should be regarded as the *least secure method*.
 
 %STOPINCLUDE%
 

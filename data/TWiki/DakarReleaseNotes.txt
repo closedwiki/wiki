@@ -317,6 +317,8 @@ Plugins are no longer searched for every time a TWiki script is run. Instead the
 
 TWiki:Plugins.SessionPlugin and TWiki:Plugins.AuthPagePlugin have been integrated into the core. TWiki now supports cookied sessions, in the context of a much improved authentication architecture. The setup for authentication is now much simpler, and for most sites can be done entirely from the =configure= interface. There are some incompatibilities with TWiki::Plugins.SessionPlugin, with resepect to the in-line variables. See TWiki.TWikiUserAuthentication in the release for full details of how authentication works now. TWiki also now supports the concept of pluggable password managers, making the integration of corporate authentication services much simpler.
 
+Administrators, especially of public sites, need to be aware of the security implications of cookied sessions, and the potential risks of cross-site scripting attacks that may be used to steal user sessions. See TWiki.TWikiUserAuthentication for more details.
+
 ---+++ Protections
 
 The evaluation of protections has been re-worked to make it more naturally understandable, and also fill a number of holes in the protection scheme, These holes meant that it was relatively easy to _deny_ access to a topic, but rather difficult to subsequently _restore_ access without either compromising other topics, or compromising old revisions.

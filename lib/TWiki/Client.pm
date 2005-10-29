@@ -77,7 +77,12 @@ sub makeClient {
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
 
     if( $TWiki::cfg{UseClientSessions} ) {
-        eval 'use CGI::Session; use CGI::Cookie';
+        my $use = 'use CGI::Session';
+        if( $TWiki::cfg{Sessions}{UseIPMatching} ) {
+            $use .= ' qw(-ip-match)';
+        }
+        $use .= '; use CGI::Cookie';
+        eval $use;
         throw Error::Simple( $@ ) if $@;
         CGI::Session->name( 'TWIKISID' );
     }
@@ -117,6 +122,34 @@ sub new {
     return $this;
 }
 
+# read/write IP to SID map, return SID
+sub _IP2SID {
+    my( $sid ) = @_;
+
+    my $ip = $ENV{'REMOTE_ADDR'};
+
+    return undef unless $ip; # no IP address, can't map
+
+    my %ips;
+    if( open( IPMAP, '<', $TWiki::cfg{Sessions}{Dir}.'/ip2sid' )) {
+        local $/ = undef;
+        %ips = map { split( /:/, $_ ) } split( /\r?\n/, <IPMAP> );
+        close(IPMAP);
+    }
+    if( $sid ) {
+        # known SID, map the IP addr to it
+        $ips{$ip} = $sid;
+        open( IPMAP, '>', $TWiki::cfg{Sessions}{Dir}.'/ip2sid') ||
+          die "Failed to open ip2sid map for write. Ask your administrator to make sure that the {Sessions}{Dir} is writable by the webserver user.";
+        print IPMAP map { "$_:$ips{$_}\n" } keys %ips;
+        close(IPMAP);
+    } else {
+        # Return the SID for this IP address
+        $sid = $ips{$ip};
+    }
+    return $sid;
+}
+
 =pod
 
 ---++ ObjectMethod loadSession()
@@ -142,9 +175,24 @@ sub loadSession {
 
     # First, see if there is a cookied session, creating a new session
     # if necessary.
-    my $cgisession = CGI::Session->new(
-        undef, $query,
-        { Directory => $TWiki::cfg{SessionDir} } );
+    my $cgisession;
+    if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
+        # map the end user IP address to SID
+        my $sid = _IP2SID();
+        if( $sid ) {
+            $cgisession = CGI::Session->new(
+                undef, $sid, { Directory => $TWiki::cfg{Sessions}{Dir} } );
+        } else {
+            $cgisession = CGI::Session->new(
+                undef, undef,
+                { Directory => $TWiki::cfg{Sessions}{Dir} } );
+            _IP2SID( $cgisession->id() );
+        }
+    } else {
+        $cgisession = CGI::Session->new(
+            undef, $query,
+            { Directory => $TWiki::cfg{Sessions}{Dir} } );
+    }
 
     $authUser ||= $cgisession->param( 'AUTHUSER' );
 
@@ -223,15 +271,15 @@ sub finish {
 sub _expireDeadSessions {
 	my $time = time() || 0;
 
-	opendir(D, $TWiki::cfg{SessionDir}) || return;
+	opendir(D, $TWiki::cfg{Sessions}{Dir}) || return;
 	foreach my $file ( grep { /cgisess_[0-9a-f]{32}/ } readdir(D) ) {
         $file = TWiki::Sandbox::untaintUnchecked(
-            $TWiki::cfg{SessionDir}.'/'.$file );
+            $TWiki::cfg{Sessions}{Dir}.'/'.$file );
 		my @stat = stat( $file );
 
         my $lat = $stat[8] || $stat[9] || $stat[10] || 0;
 		# Abort tiny 2-day olds. They can't be valid sessions.
-		if( $time - $lat >= $TWiki::cfg{SessionExpiresAfter} &&
+		if( $time - $lat >= $TWiki::cfg{Sessions}{ExpireAfter} &&
               $stat[7] <= 6 ) {
 			unlink $file;
 			next;
@@ -254,7 +302,7 @@ sub _expireDeadSessions {
         # or has exceeded its registered expiry time.
         if( !$D ||
               $time >= $D->{_SESSION_ATIME} +
-                $TWiki::cfg{SessionExpiresAfter} ||
+                $TWiki::cfg{Sessions}{ExpireAfter} ||
                   $D->{_SESSION_ETIME} && $time >= $D->{_SESSION_ETIME} ) {
             unlink( $file );
             next;
@@ -284,7 +332,7 @@ sub userLoggedIn {
       # create new session if necessary
       CGI::Session->new(
           undef, $twiki->{cgiQuery},
-          { Directory => $TWiki::cfg{SessionDir} } );
+          { Directory => $TWiki::cfg{Sessions}{Dir} } );
     $this->{cgisession} = $cgisession;
 
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
@@ -386,7 +434,7 @@ sub endRenderingHandler {
     # If cookies are not turned on and transparent CGI session IDs are,
     # grab every URL that is an internal link and pass a CGI variable
     # with the session ID
-    unless( $this->{haveCookie} ) {
+    unless( $this->{haveCookie} || !$TWiki::cfg{Sessions}{IDsInURLs} ) {
         # rewrite internal links to include the transparent session ID
         # Doesn't catch Javascript, because there are just so many ways
         # to generate links from JS.
@@ -405,7 +453,6 @@ sub endRenderingHandler {
     }
 
     # And, finally, the logon stuff
-    # this MUST render after TigerSkinPlugin commonTagsHandler does TIGERLOGON
     $_[0] =~ s/%SESSIONLOGON%/$this->_dispLogon()/geo;
     $_[0] =~ s/%SKINSELECT%/$this->_skinSelect()/geo;
 }
@@ -440,6 +487,7 @@ sub modifyHeader {
     my( $this, $hopts ) = @_;
 
     return unless $this->{sessionId};
+    return if $TWiki::cfg{Sessions}{MapIP2SID};
 
     my $query = $this->{twiki}->{cgiQuery};
     my $c = CGI::Cookie->new( -name => $CGI::Session::NAME,
@@ -465,7 +513,8 @@ sub redirectCgiQuery {
 
     return 0 unless $this->{sessionId};
 
-    $url = $this->_rewriteURL( $url ) unless $this->{haveCookie};
+    $url = $this->_rewriteURL( $url )
+      unless( !$TWiki::cfg{Sessions}{IDsInURLs} || $this->{haveCookie} );
 
     # This usually won't be important, but just in case they haven't
     # yet received the cookie and happen to be redirecting, be sure
@@ -481,7 +530,12 @@ sub redirectCgiQuery {
                                    -value => $this->{sessionId},
                                    -path => '/' );
     push( @{$this->{cookies}}, $cookie );
-    print $query->redirect( -url => $url, -cookie => $this->{cookies} );
+
+    if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
+        print $query->redirect( -url => $url );
+    } else {
+        print $query->redirect( -url => $url, -cookie => $this->{cookies} );
+    }
 
     return 1;
 }
@@ -721,7 +775,7 @@ sub _dispLogon {
 
     my $urlToUse = $this->loginUrlPath();
 
-    unless( $this->{haveCookie} ) {
+    unless( $this->{haveCookie} || !$TWiki::cfg{Sessions}{IDsInURLs} ) {
         $urlToUse = $this->_rewriteURL( $urlToUse );
     }
 
