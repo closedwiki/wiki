@@ -686,7 +686,7 @@ sub _CHECKVAR_DataDir {
 sub _CHECKVAR_LocalesDir {
     my $e = _findMajorDir('LocalesDir', 'locale');
     my $e2 = _checkTreePerms( $TWiki::cfg{LocalesDir}, "r" );
-    $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{DataDir});
+    $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{LocalesDir});
     $e .= ERROR($e2) if $e2;
     return $e;
 }
@@ -1066,6 +1066,18 @@ sub _showPlugins {
         );
     }
     return $block;
+}
+
+sub _showLanguages {
+  opendir ( DIR, $TWiki::cfg{LocalesDir}) or die ('Couldn\'t read TWiki locales/ directory!' );
+  my $block = '';
+  foreach my $file ( grep { /^.*\.po$/ } readdir DIR ) {
+    $file =~ m/^(.*)\.po$/;
+    my $lang = $1;
+    $block .= _checkAndBuildValueGrabber ( 'BOOLEAN', '', 'Enable the language <strong>' . $lang . '</strong>', '{Languages}{' . $lang . '}{Enabled}' );
+  }
+  closedir( DIR );
+  return $block;
 }
 
 ########################################################################
@@ -1789,6 +1801,12 @@ sub presentEditableInfo {
                     $descr = '';
                 }
                 $blocks[$depth] .= _showPlugins();
+            } elsif ( m/\*LANGUAGES\*/ ) {
+                if ( $type eq '_HELP' ) {
+                    $blocks[$depth] .= _docBlock( $descr );
+                    $descr = '';
+                }
+                $blocks[$depth] .= _showLanguages();
             } elsif( $type ) {
                 $descr .= "$_ ";
             }

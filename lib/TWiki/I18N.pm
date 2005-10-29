@@ -34,7 +34,6 @@ package TWiki::I18N;
 
 use TWiki;
 use Assert;
-use File::Find;
 
 # ##########################################################
 # # Initizaling default language: Engligh is an AUTO lexicon
@@ -88,21 +87,66 @@ sub language {
   return 'en';
 }
 
-sub available_languages {
+sub enabled_languages {
   my $this = shift;
-  return $this->{available_languages};
+  return $this->{enabled_languages};
 }
 
 # back to the right package
 package TWiki::I18N;
 ######################################################
 
-
 use vars qw( $initialised @initErrors );
 
+=pod
+
+---++ ClassMethod available_languages
+
+Lists languages tags for languages available at TWiki installation. Returns a
+list containing the tags of the available languages.
+
+__Note__: the languages available to users are determined in the =configure=
+interface.
+
+=cut
+
+sub available_languages {
+
+    my @available ;
+    
+    if ( opendir( DIR, $TWiki::cfg{LocalesDir} ) ) {
+        my @all = grep { m/^(.*)\.po$/ } (readdir( DIR ));
+        foreach my $file ( @all ) {
+            $file =~ m/^(.*)\.po$/;
+            my $lang = $1;
+            if ($TWiki::cfg{Languages}{$lang}{Enabled}) {
+                push(@available, _normalize_language_tag($lang));
+            }
+        }
+        closedir( DIR );
+    }
+
+    return @available;
+}
+
+# utility function: normalize language tags like ab_CD to ab-cd
+# also renove any character there is not a letter [a-z] or a hyphen.
+sub _normalize_language_tag {
+  my $tag = shift;
+  $tag = lc($tag);;
+  $tag =~ s/\_/-/g;
+  $tag =~ s/[^a-z-]//g;
+  return $tag;
+}
+
+# initialisation block
 BEGIN {
     # we only need to proceed if user wants internationalisation support
     return unless $TWiki::cfg{UseInternationalisation};
+
+    # no languages enabled is the same as disabling {UseInternationalisation}
+    my @languages = available_languages();
+    return unless (scalar(@languages));
 
     # we first assume it's ok
     $initialised = 1;
@@ -118,12 +162,14 @@ BEGIN {
       $initialised &&= 0;
     }
 
-    my $dependencies = <<HERE;
-    use Locale::Maketext::Lexicon {
-        'en'    => [ 'Auto' ],
-        '*'     => [ 'Gettext' => '$TWiki::cfg{LocalesDir}' . '/*.po' ]
-    };
-HERE
+    # dinamically build languages to be loaded according to admin-enabled
+    # languages.
+    my $dependencies = "use Locale::Maketext::Lexicon { 'en'    => [ 'Auto' ], ";
+    foreach my $lang (@languages) {
+      $dependencies .= " '$lang'     => [ 'Gettext' => '$TWiki::cfg{LocalesDir}/$lang.po' ], ";
+    }
+    $dependencies .= '};';
+
     eval $dependencies;
     if ( $@ ) {
       $initialised &&= 0;
@@ -174,8 +220,8 @@ sub get {
     $this->{session} = $session;
 
     # languages we know about
-    $this->{available_languages} = { en => 'English' };
-    $this->{checked_available}   = undef;
+    $this->{enabled_languages} = { en => 'English' };
+    $this->{checked_enabled}   = undef;
     
     # what to do with failed translations (only needed when already initialised
     # and language is not English);
@@ -239,36 +285,30 @@ sub language {
 
 =pod
 
----++ ObjectMethod available_languages() -> %languages
+---++ ObjectMethod enabled_languages() -> %languages
 
 Returns an array with language tags as keys and language (native) names as
-values. Useful for listing available languages to the user.
+values, for all the languages enabled in this TWiki.TWikiSite. Useful for
+listing available languages to the user.
 
 =cut
 
-sub available_languages {
+sub enabled_languages {
 
     my $this = shift;
 
     # don't need to check twice
-    return $this->{available_languages} if $this->{checked_available};
+    return $this->{enabled_languages} if $this->{checked_enabled};
   
-    File::Find::find( { wanted =>
-                        sub {
-                            if ($File::Find::name =~ /^.*\/([a-zA-Z]+(\_[a-zA-Z]+)?)\.po$/ ) {
-                                my $tag = _normalize_language_tag($1);
-                                my $h = TWiki::I18N->get_handle($tag);
-                                my $name = $h->maketext("_language_name");
-                                $name = ($this->{session}->UTF82SiteCharSet($name)) || $name ; 
-                                $this->_add_language($tag, $name);
-                            }
-                        },
-                        untaint => 1
-                      },
-                      $TWiki::cfg{LocalesDir}
-                    );
-    $this->{checked_available} = 1;
-    return $this->{available_languages};
+    foreach my $tag ( available_languages() ) {
+        my $h = TWiki::I18N->get_handle($tag);
+        my $name = $h->maketext("_language_name");
+        $name = ($this->{session}->UTF82SiteCharSet($name)) || $name ; 
+        $this->_add_language($tag, $name);
+    }
+
+    $this->{checked_enabled} = 1;
+    return $this->{enabled_languages};
 
 }
 
@@ -276,17 +316,7 @@ sub available_languages {
 # private utility method: add a pair tag/language name
 sub _add_language {
   my ( $this, $tag, $name ) = @_;  
-  ${$this->{available_languages}}{$tag} = $name;
-}
-
-# utility function: normalize language tags like ab_CD to ab-cd
-# also renove any character there is not a letter [a-z] or a hyphen.
-sub _normalize_language_tag {
-  my $tag = shift;
-  $tag = lc($tag);;
-  $tag =~ s/\_/-/g;
-  $tag =~ s/[^a-z-]//g;
-  return $tag;
+  ${$this->{enabled_languages}}{$tag} = $name;
 }
 
 1;
