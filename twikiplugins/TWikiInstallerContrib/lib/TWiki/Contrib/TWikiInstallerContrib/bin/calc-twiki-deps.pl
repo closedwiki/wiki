@@ -142,6 +142,9 @@ SVK
 ^URI::imap
 ^Time::ParseDate$
 ^Module::Pluggable
+^XML::Stream$
+^Net::XMPP
+^Net::Jabber
 __MODULES__
 
 print $deps, "\n";
