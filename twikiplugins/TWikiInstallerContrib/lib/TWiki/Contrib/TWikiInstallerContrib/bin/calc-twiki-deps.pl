@@ -133,6 +133,15 @@ SVK
 ^Crypt::SSLeay$
 ^Net::SSLeay$
 ^IO::Socket::SSL$
+^Email::Simple
+^Email::Folder
+^Email::MIME
+^Net::POP3$
+^MIME::Types
+^Net::IMAP::Simple
+^URI::imap
+^Time::ParseDate$
+^Module::Pluggable
 __MODULES__
 
 print $deps, "\n";
