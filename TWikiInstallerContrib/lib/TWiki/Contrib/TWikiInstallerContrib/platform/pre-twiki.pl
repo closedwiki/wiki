@@ -74,7 +74,8 @@ foreach my $module (
 		    qw( Digest::base Digest::SHA1 ),
 		    qw( Unicode::Map Unicode::Map8 Jcode Unicode::String Unicode::MapUTF8 ),
 		    qw( Net::SSLeay ),	# Net::SSLeay IO::Socket::SSL
-		    qw( Module::Pluggable Email::FolderType Email::Simple Email::Folder Email::FolderType::Net Net::POP3 Email::Folder::POP3 Net::IMAP::Simple URI::imap Email::Folder::IMAP MIME::Base64 Email::MIME::Encodings Email::MIME::ContentType MIME::Types Email::MIME Email::Delete Time::ParseDate )
+		    qw( Module::Pluggable Email::FolderType Email::Simple Email::Folder Email::FolderType::Net Net::POP3 Email::Folder::POP3 Net::IMAP::Simple URI::imap Email::Folder::IMAP MIME::Base64 Email::MIME::Encodings Email::MIME::ContentType MIME::Types Email::MIME Email::Delete Time::ParseDate ),
+		    qw( XML::Stream Net::XMPP Net::Jabber ),
 		    )
 {
     print "Installing $module\n";
