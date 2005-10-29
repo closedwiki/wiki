@@ -1770,7 +1770,7 @@ using numeric entities.
 sub entityEncode {
     my $text = shift;
 
-    $text =~ s/([^ -~\n\r]|[]["<>&])/ (ord($1) < 128)?('&#'.ord( $1 ).';'):($1) /ge;
+    $text =~ s/([^ -~\n\r]|[]["<>&])/'&#'.ord( $1 ).';'/ge;
     return $text;
 }
 
