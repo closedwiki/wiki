@@ -168,6 +168,8 @@ The first method works well as long as IP addresses are *unique* to each individ
 
 If you have to turn IP matching off, and cookies can't be relied on, then you may have to rely on the second method, URL rewriting. This method exposes the session IDs very publicly, so should be regarded as the *least secure method*.
 
+See TWiki:Codev.SecuringYourTWiki for more information
+
 %STOPINCLUDE%
 
 __Related Topics:__ AdminDocumentationCategory
