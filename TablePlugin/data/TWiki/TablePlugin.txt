@@ -42,6 +42,8 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 	* Default table attributes:
 		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="1" cellspacing="1" headerbg="#e6e6e6" headercolor="#000000" databg="#eaeaea, #ffffff"
+		* Classic skin table attributes:
+			* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"
 
 ---++ Table Attributes
 
