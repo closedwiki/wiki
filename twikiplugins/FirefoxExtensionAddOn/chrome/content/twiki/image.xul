@@ -67,10 +67,10 @@ function onCancel()
 	<groupbox flex="1" align="start">
 		<caption label="&twiki.image.format;"/>
 		<radiogroup oncommand="document.getElementById('format-pixels').disabled = !document.getElementById('format-thumbsized').selected">
-			<radio id="format-full" label="&twiki.image.format.full;"/>
+			<radio id="format-full" label="&twiki.image.format.full;" selected="true"/>
 			<radio id="format-framed" label="&twiki.image.format.framed;"/>
-			<radio id="format-thumb" label="&twiki.image.format.thumb;" selected="true"/>
-			<radio id="format-thumbsized" label="&twiki.image.format.thumbsized;"/>
+			<radio id="format-thumb" label="&twiki.image.format.thumb;" disabled="true"/>
+			<radio id="format-thumbsized" label="&twiki.image.format.thumbsized;" disabled="true"/>
 		</radiogroup>
 		<hbox>
 			<spacer width="22"/>

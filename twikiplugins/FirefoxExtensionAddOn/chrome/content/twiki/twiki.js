@@ -605,7 +605,7 @@ var twiki = {
 		for (c=0;c<columns;c=c+1) {
 		    table=table+cellStart+content;
 		}
-		table=table+"\n";
+		table=table+"|\n";
 	    }
 	    table=table+"\n";
 	    twiki.insertAtCursor(table);
