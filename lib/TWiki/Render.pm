@@ -982,6 +982,7 @@ sub getRenderedVersion {
     my $removedScript = {};
     my $removedHead = {};
 
+    $text = $this->takeOutBlocks( $text, 'finished_rendering', $session->{_removed} );
     $text = $this->takeOutBlocks( $text, 'verbatim', $session->{_removed} );
 
     $text = $this->takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
@@ -1212,6 +1213,7 @@ sub getRenderedVersion {
 
     # replace verbatim with pre in the final output
     $this->putBackBlocks( \$text, $session->{_removed}, 'verbatim', 'pre', \&verbatimCallBack );
+    $this->putBackBlocks( \$text, $session->{_removed}, 'finished_rendering', '');
 
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
@@ -1329,6 +1331,13 @@ have to be protected this way.
 sub protectPlainText {
     my( $this, $text ) = @_;
 
+    # prevent text from getting rendered in inline search and link tool
+    # tip text by escaping links (external, internal, Interwiki)
+    $text =~ s/((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
+
+    $text =~ s/($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
+    $text =~ s/([@%])/<nop>$1<nop>/g;    # email address, variable
+
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
     # - no encoding for HTML pages, to avoid breaking international 
     # characters. Only works for ISO-8859-1 sites, since the Unicode
@@ -1339,12 +1348,6 @@ sub protectPlainText {
             $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
         $text =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
     }
-
-    # prevent text from getting rendered in inline search and link tool
-    # tip text by escaping links (external, internal, Interwiki)
-    $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
-    $text =~ s/(?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
-    $text =~ s/([@%])/<nop>$1<nop>/g;    # email address, variable
 
     return $text;
 }
@@ -1480,66 +1483,34 @@ sub takeOutBlocks {
 
     my $out = '';
     my $depth = 0;
-    my $pre;
     my $scoop;
     my $tagParams;
-    
-    #SMELL: does not deal correctly with multiple verbatim tags on the same line
 
-    foreach my $line ( split/\r?\n/, $intext ) {
-    	my $openTagFoundInThisLine = 0;
-        if( $line =~ m/^(.*)<$tag\b([^>]*)?>(.*)$/im ) {
-        	$openTagFoundInThisLine = 1;
-        	$depth++;
-            if ( $depth == 1 ) {
-                $pre = $1;
-                $tagParams = $2;
-                if( defined( $3 ) && $3 ne '' ) {
-                    $scoop = $3;
-                } else {
-                    $scoop = '';
-                }
-                $line = $scoop;
-#                next;
-            }
-        }
-        if( $depth && $line =~ m/^(.*)<\/$tag>(.*)$/im ) {
-            my $bol = $1;
-            my $eol = $2;
-            if ( $depth == 1) {
-                my $placeholder = $tag.$placeholderMarker;
-                $placeholderMarker++;
-                $map->{$placeholder}{params} = $tagParams;
-                if ( $scoop eq $line ) {
-                	#we're on the same line, $bol is all we want
-	                $map->{$placeholder}{text} = $bol;
-                } else {
-	                $map->{$placeholder}{text} = $scoop.$bol;
-                }
-                $line = $pre.'<!--'.$TWiki::TranslationToken.$placeholder.
-                  $TWiki::TranslationToken.'-->'.$eol;
-
-            }
-            --$depth;
-        }
-        if ( $depth > 0 ) {
-            $scoop .= $line."\n";
-        } else {
-            $out .= $line."\n";
-        }
-    }
-
-    if ( $depth ) {
-        # This would generate matching close tags
-        # while ( $depth-- ) {
-        #     $scoop .= "</$tag>\n";
-        # }
-        my $placeholder = $tag.$placeholderMarker;
-        $placeholderMarker++;
-        $map->{$placeholder}{params} = $tagParams;
-        $map->{$placeholder}{text} = $scoop;
-        $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
-          $TWiki::TranslationToken."-->";
+    foreach my $token ( split/(<\/?$tag>)/, $intext ) {
+    	if ($token =~ /<$tag>/) {
+    		$depth++;
+    		if ($depth eq 1) {
+    			$tagParams = $1;
+    			next;
+    		}
+    	} elsif ($token =~ /<\/$tag>/) {
+    		$depth--;
+    		if ($depth eq 0) {
+                	my $placeholder = $tag.$placeholderMarker;
+                	$placeholderMarker++;    		
+    			$map->{$placeholder}{text} = $scoop;
+    			$map->{$placeholder}{params} = $tagParams;
+    			$out .= '<!--'.$TWiki::TranslationToken.$placeholder.
+					$TWiki::TranslationToken.'-->';
+    			$scoop = '';
+    			next;
+    		}
+    	}
+    	if ($depth > 0) {
+    		$scoop .= $token;
+    	} else {
+    		$out .= $token;
+    	}
     }
 
     return $out;
@@ -1569,24 +1540,37 @@ to be mapped to
 
 Cool, eh what? Jolly good show.
 
+And if you set $newtag to '', we replace the taken out block with the valuse itself
+   * which i'm using to stop the rendering process, but then at the end put in the html directly
+   (for <finished_rendering> tag.
+
 =cut
 
 sub putBackBlocks {
     my( $this, $text, $map, $tag, $newtag, $callback ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
-    $newtag ||= $tag;
+    $newtag = $tag if (!defined($newtag));
 
     foreach my $placeholder ( keys %$map ) {
         if( $placeholder =~ /^$tag\d+$/ ) {
             my $params = $map->{$placeholder}{params} || '';
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
-            $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
-              (<$newtag$params>$val</$newtag>);
+            if ($newtag eq '') {
+            	$$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)($val);
+            } else {
+            	$$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
+              	(<$newtag$params>$val</$newtag>);
+            }
             delete( $map->{$placeholder} );
         }
     }
+    
+	if ($newtag eq '') {
+		$$text =~ s/&#60;\/?$tag&#62;//ge;
+		$$text =~ s/<\/?$tag>//ge;
+	}
 }
 
 =pod
@@ -1967,10 +1951,80 @@ sub renderFormFieldArg {
             $value = $field->{value} || '';
             $value =~ s/^\s*(.*?)\s*$/$1/go;
             $value = breakName( $value, $breakArgs );
+
             return $value;
         }
     }
     return '';
+}
+
+
+=pod
+
+---++ ObjectMethod renderFormFieldArgRSS( $this, $theWeb, $theTopic, $meta, $args ) -> $escapedHTML
+
+Parse the arguments to a $formfield specification and extract
+the relevant formfield from the given meta data.
+
+used to show HTML in rss feeds
+
+=cut
+
+sub renderFormFieldArgRSS {
+    my( $this, $theWeb, $theTopic, $meta, $args ) = @_;
+
+	my $value = renderFormFieldArg($meta, $args );
+	$value = $this->getRenderedVersion ( $value, $theWeb, $theTopic );	
+	
+    # Encode special chars into XML &#nnn; entities for use in RSS feeds
+    # - no encoding for HTML pages, to avoid breaking international 
+    # characters. Only works for ISO-8859-1 sites, since the Unicode
+    # encoding (&#nnn;) is identical for first 256 characters. 
+    # I18N TODO: Convert to Unicode from any site character set.
+    if( $this->{session}->inContext( 'rss' ) &&
+          defined( $TWiki::cfg{Site}{CharSet} ) &&
+            $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
+        $value =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
+    }	
+    
+    $value =~ s/%/&#37;/g;	#just in case (damned TOC was still getting expanded somewhere..
+
+	return '<finished_rendering>'.TWiki::entityEncode($value).'</finished_rendering>';	#SMELL: we could do with a <finished_rendering> tag
+}
+
+=pod
+
+---++ ObjectMethod makeTopicSummaryRSS (  $theText, $theTopic, $theWeb, $theFlags ) -> $tml
+
+Makes a plain text summary of the given topic by simply trimming a bit
+off the top. Truncates to $TMTRUNC chars or, if a number is specified in $theFlags,
+to that length.
+
+used to show HTML in rss feeds
+
+=cut
+
+sub makeTopicSummaryRSS {
+    my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
+    $theFlags ||= '';
+
+#TODO: really should make this a Diff.. (but that will require a new inline diff method)
+    my $value = $this->getRenderedVersion ( $theText, $theWeb, $theTopic );	
+
+    # Encode special chars into XML &#nnn; entities for use in RSS feeds
+    # - no encoding for HTML pages, to avoid breaking international 
+    # characters. Only works for ISO-8859-1 sites, since the Unicode
+    # encoding (&#nnn;) is identical for first 256 characters. 
+    # I18N TODO: Convert to Unicode from any site character set.
+    if( $this->{session}->inContext( 'rss' ) &&
+          defined( $TWiki::cfg{Site}{CharSet} ) &&
+            $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
+        $value =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
+    }	
+    $value =~ s/%/&#37;/g;	#just in case (damned TOC was still getting expanded somewhere..
+
+    return '<finished_rendering>'.TWiki::entityEncode($value).'</finished_rendering>';	#SMELL: we could do with a <finished_rendering> tag
 }
 
 =pod
