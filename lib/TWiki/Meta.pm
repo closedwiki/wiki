@@ -461,10 +461,11 @@ sub merge {
             my $thisD = $this->get( 'FIELD', $otherD->{name} );
             if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
                 if( $formDef->isTextMergeable( $thisD->{name} )) {
-                    my $merged = TWiki::Merge::insDelMerge( $otherD->{value},
-                                                            $thisD->{value},
-                                                            qr/(\s+)/,
-                                                            $formDef );
+                    my $merged = TWiki::Merge::insDelMerge(
+                        $otherD->{value}, $thisD->{value},
+                        qr/(\s+)/,
+                        $this->{_session},
+                        $formDef->getField( $thisD->{name} ) );
                     # SMELL: we don't merge attributes or title
                     $thisD->{value} = $merged;
                 }

@@ -345,8 +345,6 @@ sub test_prevTopicFormSave {
     $this->assert_str_equals('Barney', $meta->get('FIELD','Textfield')->{value});
 }
 
-#Mergeing is only enabled if the topic text comes from =text= and =originalrev= is &gt; 0 and is not the same as the revision number of the most recent revision. If mergeing is enabled both the topic and the meta-data are merged.
-
 sub test_simpleFormSave1 {
     my $this = shift;
     my $query = new CGI({
@@ -449,6 +447,63 @@ sub test_templateTopicWithMeta {
     my $pref = $meta->get( 'PREFERENCE', 'VIEW_TEMPLATE' );
     $this->assert_not_null($pref);
     $this->assert_str_equals('UserTopic', $pref->{value});
+}
+
+#Mergeing is only enabled if the topic text comes from =text= and =originalrev= is &gt; 0 and is not the same as the revision number of the most recent revision. If mergeing is enabled both the topic and the meta-data are merged.
+
+sub test_merge {
+    my $this = shift;
+    $twiki = new TWiki();
+    $user = $twiki->{user};
+    my $oldmeta = new TWiki::Meta( $twiki, $testweb, 'MergeSave');
+    my $oldtext = $testtext1;
+    $twiki->{store}->extractMetaData( $oldmeta, \$oldtext );
+    $twiki->{store}->saveTopic( $user, $testweb, 'MergeSave',
+                                $testform1, $oldmeta );
+
+    my $query1 = new CGI(
+        {
+            action => [ 'save' ],
+            text   => [ "Soggy bat" ],
+            originalrev => 1,
+            formtemplate => [ 'TestForm1' ],
+            TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
+            TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
+            TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
+            TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
+            TWiki::Form::cgiName(undef,'Textfield') => [ 'Bat' ],
+            topic  => [ $testweb.'.MergeSave' ]
+           });
+    $twiki = new TWiki( $testuser1, $query1);
+    $this->capture( \&TWiki::UI::Save::save, $twiki);
+
+    my $query2 = new CGI(
+        {
+            action => [ 'save' ],
+            text   => [ "Wet rat" ],
+            originalrev => 1,
+            formtemplate => [ 'TestForm1' ],
+            TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
+            TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
+            TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
+            TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
+            TWiki::Form::cgiName(undef,'Textfield') => [ 'Rat' ],
+            topic  => [ $testweb.'.MergeSave' ]
+           });
+    $twiki = new TWiki( $testuser2, $query2);
+    try {
+        $this->capture( \&TWiki::UI::Save::save, $twiki);
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals('merge_notice', $e->{def});
+    } otherwise {
+        $this->assert(0);
+    };
+
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
+                                                  'MergeSave');
+    #print $text;
+    #print $meta->stringify();
 }
 
 1;

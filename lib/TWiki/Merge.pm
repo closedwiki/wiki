@@ -34,7 +34,7 @@ use Assert;
 
 =pod
 
----++ StaticMethod insDelMerge( $a, $b, $sep, $info )
+---++ StaticMethod insDelMerge( $a, $b, $sep, $session, $info )
 
 Perform a merge of two versions of the same text, using
 HTML tags to mark conflicts.
@@ -59,7 +59,7 @@ sub insDelMerge {
     my @a = split( /($sep)/, $ia );
     my @b = split( /($sep)/, $ib );
 
-    ASSERT($session->isa('TWiki')) if DEBUG;
+    ASSERT($session && $session->isa('TWiki')) if DEBUG;
 
     my @out;
     Algorithm::Diff::traverse_balanced( \@a, \@b,

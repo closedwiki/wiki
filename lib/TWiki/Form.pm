@@ -683,12 +683,28 @@ If the form does not define the field, it is assumed to be mergeable.
 sub isTextMergeable {
     my( $this, $name ) = @_;
 
-    foreach my $fieldDef ( @{$this->{fields}} ) {
-        next unless( $fieldDef->{name} && $fieldDef->{name} eq $name);
+    my $fieldDef = $this->getField( $name );
+    if( $fieldDef ) {
         return( $fieldDef->{type} !~ /^(checkbox|radio|select)/ );
     }
     # Field not found - assume it is mergeable
     return 1;
+}
+
+=pod
+
+---++ ObjectMethod getField( $name ) -> \%row
+   * =$name= - name of a form field (value of the =name= attribute)
+Returns the field, or undef if the form does not define the field.
+
+=cut
+
+sub getField {
+    my( $this, $name ) = @_;
+    foreach my $fieldDef ( @{$this->{fields}} ) {
+        return $fieldDef if ( $fieldDef->{name} && $fieldDef->{name} eq $name);
+    }
+    return undef;
 }
 
 =pod
