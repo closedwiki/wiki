@@ -114,11 +114,11 @@ Merging only applies to text fields. When there are conflicts in field data in f
 
 Because there are cases where you actually want to avoid overlapping edits altogether (e.g. if you are changing forms data) TWiki will *warn* if you attempt to edit a topic that someone else is editing. It will also warn if a merge was required during a save.
 
----+++ Internationalisation
+---+++ User Interface Internationalisation
 
 TWiki will now pick up the language you are using in your browser, and try to present system messages in that language, if it is available. If your preferred language is not available, TWiki will revert to English. You'll also have an option to choose a language different from that used in your browser.
 
-Internationalisation support is optional and enabled by the {UseInternationalisation} setting.
+User Interface Internationalisation support is optional and enabled by the {UseInternationalisation} setting.
 
 The translation is performed by the Perl standard internationalization framework. If you want to contribute a new language, it would be most welcome: See TWiki:Codev.UserInterfaceLocalisation for instructions on how to help.
 
