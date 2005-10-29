@@ -125,7 +125,6 @@ use strict;
 use File::Copy;
 use File::Spec;
 use File::Find;
-use FileHandle;
 use Pod::Text;
 use POSIX;
 use CGI ( -any );
@@ -271,9 +270,6 @@ sub new {
                permissions => 0440 });
         print STDERR 'Auto-adding install script to manifest',$NL;
     }
-
-
-##################
 
     # Generate a TWiki table representing the manifest contents
     # and a hash table representing the files
@@ -497,12 +493,8 @@ Perform a "system" command.
 sub sys_action {
     my ($this, $cmd) = @_;
 
-    
     if ($this->{-v} || $this->{-n}) {
         print $cmd.$NL;
-    }
-    if (1) { ;#$this->{-q}) {
-      $cmd .= " >/dev/null 2>/dev/null";
     }
     unless ($this->{-n}) {
         system($cmd);
@@ -680,7 +672,6 @@ sub target_release {
     $this->build('build');
     $this->build('installer');
     $this->build('stage');
-    $this->build('md5');
     $this->build('archive');
 }
 
@@ -695,14 +686,7 @@ sub target_stage {
     my $this = shift;
     my $project = $this->{project};
 
-    $this->{tmpDir} = $this->_getTmpDir($project);
-
-# SMELL is there a safer way?
-    if (-d $this->{tmpDir}) {
-      print 'Clearing '.$this->{tmpDir}.$NL if $this->{-v};
-      $this->sys_action('rm -rf '.$this->{tmpDir});
-    }
-
+    $this->{tmpDir} = '/tmp/'.$$;
     $this->makepath($this->{tmpDir});
 
     $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir});
@@ -746,39 +730,23 @@ sub target_archive {
     die 'no project set' unless defined ($project);
     die 'tmpDir ('.$this->{tmpDir}.') not found' unless ( -e $this->{tmpDir} );
 
-    print "\nArchiving project $project\n";
     $this->cd($this->{tmpDir});
-
     $this->sys_action('zip -r -q '.$project.'.zip *');
-    $this->_generate_md5($this->{files}, $project.'.zip', $this->{tmpDir});
-
+    $this->perl_action('File::Copy::move("'.$this->{tmpDir}.'/'.$project.'.zip", "'.
+                         $this->{basedir}.'/'.$project.'.zip");');
     $this->sys_action('tar czpf '.$project.'.tgz *');
-    $this->_generate_md5($this->{files}, $project.'.tgz', $this->{tmpDir});
+    $this->perl_action('File::Copy::move("'.$this->{tmpDir}.'/'.$project.'.tgz", "'.
+                         $this->{basedir}.'/'.$project.'.tgz")');
 
-    # Move them into place
-    # SMELL - original action was to move, not copy.
-    # Only real difference is a bit more disk wastage
-    my $cpOrMv = 'File::Copy::copy'; #SMELL why not use $this->cp?
-    $this->perl_action(
-		       $cpOrMv.'("'.$this->{tmpDir}.'/'.$project.'.zip", "'.
-		       $this->{basedir}.'/'.$project.'.zip");');
-
-    $this->perl_action(
-		       $cpOrMv.'("'.$this->{tmpDir}.'/'.$project.'.tgz", "'.
-		       $this->{basedir}.'/'.$project.'.tgz")');
-
-    $this->perl_action(
-		       $cpOrMv.'("'.$this->{tmpDir}.'/'.$project.'.md5", "'.
-		       $this->{basedir}.'/'.$project.'.md5")');
+    $this->sys_action('md5sum '.$this->{basedir}.'/'.$project.'.tgz '.
+                        $this->{basedir}.'/'.$project.'.zip > '.
+                        $this->{basedir}.'/'.$project.'.md5');
 
 
-    print '  Build dir was '.$this->{tmpDir},$NL if ($this->{-v});
-    print '  ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
-    print '  TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
-    print '  TOPIC is '.$this->{basedir}.'/'.$project.'.txt',$NL;
-    print '  MD5 checksums in '.$this->{basedir}.'/'.$project.'.md5',$NL;
-
-    print "  Note: MD5s match temp area ($this->{tmpDir}) not working copy ($this->{basedir})",$NL if ($this->{-v});
+    print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
+    print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
+    print 'Release TOPIC is '.$this->{basedir}.'/'.$project.'.txt',$NL;
+    print 'MD5 checksums are in '.$this->{basedir}.'/'.$project.'.md5',$NL;
 }
 
 =pod
@@ -837,58 +805,14 @@ sub target_handsoff_install {
     my $this = shift;
     $this->build('release');
 
-    # aggregate the MD5s
-    # drop the installer, md5, tgz and zip
-
-    my $project = $this->{project};
-
     my $twiki = $ENV{TWIKI_HOME};
     die 'TWIKI_HOME not set' unless $twiki;
     $this->cd($twiki);
-    my @kills = ($project.'.md5', $project.'.tgz', $project.'_installer.pl', $project.'.zip');
-    
-    my $zipFlags = "";
-    unless ($this->{-v}) {
-      $zipFlags = "-q";
-    }
-
-    print "\n=> hands-off installing $this->{project} into $twiki\n";
-    $this->sys_action('unzip -u -o '.$zipFlags.' '.$this->{basedir}.'/'.
+    $this->sys_action('unzip -u -o '.$this->{basedir}.'/'.
                         $this->{project}.'.zip');
-
     # kill off the module installer
-    foreach my $kill (@kills) {
-      $this->rm($twiki.'/'.$kill);
-    }
-
-
-    # SMELL - it seems -v is not inherited.
-#    $this->{-v} = 1; # uncomment for debugging
-
-    # read in the MD5
-    print 'Aggregating MD5 of ',$this->{project}," into ",$twiki, $NL;
-
-
-    open(MD5, '<'.$this->{basedir}.'/'.$project.'.md5') ||  die 'Failed to open $!';
-    open(AGGREGATEMD5, '>>'.$twiki.'/'.'DEPS.md5') || die 'Failed to open $!';
-
-  LINE:
-    while (my $line = <MD5>) { 
-      # read in the MD5, skipping lines we don't want 
-      foreach my $exclude (@kills) {
-	if ($line =~ m!$exclude!) {
-	  next LINE;
-	}
-      }
-
-      print AGGREGATEMD5 $line;
-      print 'Aggregated MD5 : '.$line if $this->{-v};
-
-    }
-    close (AGGREGATEMD5);
-    close (MD5);
-    
-  }
+    $this->rm($twiki.'/'.$this->{project}.'_installer.pl');
+}
 
 =pod
 
@@ -930,7 +854,6 @@ sub target_uninstall {
     sub get_basic_credentials {
         my($self, $realm, $uri) = @_;
         unless ( $knownUser ) {
-            local $/ = "\n";
             print 'Logon to ',$uri->host_port,$NL;
             print 'Enter ',$realm,': ';
             $knownUser = <STDIN>;
@@ -1176,32 +1099,6 @@ sub target_installer {
     $this->prot(0755, $installScript);
 }
 
-=pod 
-
----++++ target_md5
-Generate MD5, saves as project.md5 (TODO: say where) 
-
-=cut
-
-sub target_md5 {
-  my $this = shift;
-
-  $this->{tmpDir} = $this->_getTmpDir($this->{project});
-  die 'no tmpDir set' unless defined ($this->{tmpDir});
-  die 'tmpDir ('.$this->{tmpDir}.') not found' unless ( -e $this->{tmpDir} );
-  
-  $this->cd($this->{tmpDir});
-
-  $this->_generate_md5s($this->{files}, $this->{tmpDir});
-  
-  my $md5 = $this->{tmpDir}.'/'.$this->{project}.'.md5';
-  $this->_save_md5s($this->{files}, $md5);
-
-  # SMELL there may be a scenario in which the MD5 should be in the MANIFEST
-
-}
-
-
 =pod
 
 ---++++ build($target)
@@ -1279,89 +1176,6 @@ sub _manicollect {
         $n =~ s/$rootdir\/?//;
         $manilist{$n} = 'NEW' unless exists $manilist{$n};
     }
-}
-
-=pod
-
----++++ generate_md5
-Generate an md5 for a single file, insert it into the fileset
-Usually used to generate a checksum for a file created on the fly.
-
-=cut
-
-
-sub _generate_md5 {
-  my ($this, $fileset, $filename, $dir) = @_;
-  die "No such $dir/$filename " unless -f "$dir/$filename";
-
-  my $md5 =   $this->_digestForFile($filename, $dir);
-  my $new = {
-	     'md5' => $md5,
-	     'name' => $filename
-	     };
-  
-  push(@$fileset, $new);
-}
-
-
-=pod
-
----++++ _generate_md5s
-Generate md5s for a fileset
-
-=cut
-
-sub _generate_md5s {
-    my ($this, $set, $dir) = @_;
-
-    foreach my $file (@$set) {
-        my $name = $file->{name};
-	$file->{md5}=$this->_digestForFile($name, $dir);
-    }
-}
-
-sub _save_md5s {
-  my ($this, $set, $filename) = @_;
-  my $fh = new FileHandle $filename, "w";
-
-  die "Couldn't write to $filename - $!" unless (defined $fh);
-  foreach my $file (@$set) {
-    my ($name, $md5) = ($file->{name}, $file->{md5});
-    die "No MD5 for $file " unless $md5;
-    print $fh "$md5  $name\n";
-  }
-  close $fh;
-}
-
-sub _digestForFile {
-  my ($this, $file, $dir) = @_;
-  my $debug = $this->{-v}; 
-  print "Getting digest for '$dir/$file': " if $debug;
-
-  my $fh = new FileHandle $dir.'/'.$file, "r";
-  unless ( defined $fh ) {
-    return "MISSING";
-  }
-  unless ( -s $fh ) {
-    close $fh;
-    return "EMPTY";
-  }
-  use Digest::MD5;
-  my $ctx = Digest::MD5->new;
-  $ctx->addfile($fh);
-  my $res = $ctx->hexdigest();
-
-  print $res."\n" if $debug;
-  return $res;
-}
-
-sub _getTmpDir {
-  my ($this, $project) = @_;
-  die "Needs a project parameter" unless $project;
- 
-  my $ans = '/tmp/twikibuild-'.getlogin().'/'.$project;
-  print 'TmpDir for $project is '.$ans if $this->{-v};
-  return $ans;
 }
 
 1;
