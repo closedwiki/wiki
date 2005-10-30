@@ -175,7 +175,7 @@ sub commonTagsHandler
 
     writeDebug( "commonTagsHandler( $_[2].$_[1] )" );
 
-    $_[0] =~ s/%BLACKLIST{(.*?)}%/_handleBlackList( $1, $_[2], $_[1] )/geo;
+    $_[0] =~ s/%BLACKLISTPLUGIN{(.*?)}%/_handleBlackList( $1, $_[2], $_[1] )/geo;
 }
 
 # =========================
@@ -234,7 +234,7 @@ sub beforeSaveHandler
 sub _getSpamListRegex
 {
     my $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMREGEXREFRESH" ) || 5;
-    $refresh =~ s/.*?([0-9]+).*/$1/s || 5;
+    $refresh = 1 unless( $refresh =~ s/.*?([0-9]+).*/$1/s );
     $refresh = 1 if( $refresh < 1 );
 
     my $cacheFile = _makeFileName( "spam_regex" );
@@ -260,9 +260,8 @@ sub _getSpamMergeText
 {
     my $url = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMLISTURL" ) ||
               'http://arch.thinkmo.de/cgi-bin/spam-merge';
-    my $refresh = 30; # minutes
-    my $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMLISTREFRESH" ) || 15;
-    $refresh =~ s/.*?([0-9]+).*/$1/s || 15;
+    my $refresh = TWiki::Func::getPreferencesValue( "\U$pluginName\E_SPAMLISTREFRESH" ) || 10;
+    $refresh = 10 unless( $refresh =~ s/.*?([0-9]+).*/$1/s );
     $refresh = 10 if( $refresh < 10 );
 
     my $cacheFile = _makeFileName( "spam_merge" );
@@ -568,7 +567,9 @@ sub _writeLog
     my ( $theText ) = @_;
     if( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_LOGACCESS" ) ) {
         # FIXME: Call to unofficial function
-        TWiki::Store::writeLog( "blacklist", "$web.$topic", $theText );
+        $TWiki::Plugins::SESSION
+          ? $TWiki::Plugins::SESSION->writeLog( "blacklist", "$web.$topic", $theText )
+          : TWiki::Store::writeLog( "blacklist", "$web.$topic", $theText );
         writeDebug( "BLACKLIST access by $remoteAddr, $web/$topic, $theText" );
     }
 }

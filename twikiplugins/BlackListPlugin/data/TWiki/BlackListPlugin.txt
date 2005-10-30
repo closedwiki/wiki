@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1130572729" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1130649965" format="1.0" version="1.8"}%
 ---+ Black List Plugin
 
 This is a simple utility to keep black sheep away from a public TWiki site. The site can be protected against excessive page access (e.g. by bad robots), suspicious activities of users, such as multiple registrations or rapid topic updates indicating Wiki:WikiSpam, or saving text with wiki-spam.
@@ -43,8 +43,8 @@ __WHITELIST, BLACKLIST and BANLIST settings:__
 #BanList
 <form name="banlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#BanList" method="post">
 	* BANLIST: Automatically updated list of IP addresses based on BANLIST configuration
-		* Action: <select name="action"> <option></option> <option value="ban_add">Add</option> <option value="ban_remove">Remove</option> </select> IP address <input type="text" name="ip" size="16" value="" /> <input type="submit" value="Submit" /> %BLACKLIST{ action="%URLPARAM{action}%" value="%URLPARAM{ip}%" }%
-		* Current list: %BLACKLIST{ action="ban_show" }%
+		* Action: <select name="ban_action"> <option></option> <option value="ban_add">Add</option> <option value="ban_remove">Remove</option> </select> IP address(es) <input type="text" name="ip" size="16" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{ban_action}%" value="%URLPARAM{ip}%" }%
+		* Current list: %BLACKLISTPLUGIN{ action="ban_show" }%
 </form>
 
 	* BANLIST configuration, comma delimited list of: 
@@ -55,7 +55,7 @@ __WHITELIST, BLACKLIST and BANLIST settings:__
 		5 Threshold to add to BANLIST
 		6 Measured over time (in seconds)
 		* Set BANLISTCONFIG = 20, 5, 1, 20, 120, 300
-		* Your current score: %BLACKLIST{ action="user_score" }% for IP address %REMOTE_ADDR%
+		* Your current score: %BLACKLISTPLUGIN{ action="user_score" }% for IP address %REMOTE_ADDR%
 
 	* Message for users on BLACKLIST and BANLIST:
 		* Set BLACKLISTMESSAGE = Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to excessive access or suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
@@ -70,8 +70,8 @@ __Wiki-spam filtering settings:__
 #SpamList
 <form name="spamlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#SpamList" method="post">
 	* Local SPAMLIST: Manually maintained list of spam patterns (NOTE: *Must be* %TWIKIWEB%.RegularExpression patterns)
-		* Action: <select name="action"> <option></option> <option value="spam_add">Add</option> <option value="spam_remove">Remove</option> </select> wiki-spam regex pattern <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLIST{ action="%URLPARAM{action}%" value="%URLPARAM{spam}%" }%
-		* Current list: %BLACKLIST{ action="spam_show" }%
+		* Action: <select name="spam_action"> <option></option> <option value="spam_add">Add</option> <option value="spam_remove">Remove</option> </select> wiki-spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{spam_action}%" value="%URLPARAM{spam}%" }%
+		* Current list: %BLACKLISTPLUGIN{ action="spam_show" }%
 </form>
 
 	* Public wiki-spam list: Big list of wiki-spam patterns, retrieved from external web site (thanks to <nop>MoinMoin's [[http://moinmoin.wikiwikiweb.de/AntiSpamGlobalSolution][AntiSpamGlobalSolution]] wiki-spam list)
@@ -84,7 +84,7 @@ __Wiki-spam filtering settings:__
 		* Set SPAMREGEXREFRESH = 10
 
 	* Message for users trying to save text with wiki-spam:
-		* Set WIKISPAMMESSAGE = Wiki-spam detected, "%WIKISPAMWORD%" is a banned word and cannot be saved. Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
+		* Set WIKISPAMMESSAGE = Wiki-spam detected: "%WIKISPAMWORD%" is a banned word and cannot be saved. Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
 __Nofollow link setting:__
 	* Add a =rel="nofollow"= parameter to external URLs. Use this is to fight Wiki-spam. Search engines will not follow the link if a URL has a nofollow parameter, such as =&lt;a href="http://spammer.com/" rel="nofollow"&gt;=. Specify topic age in hours for which the nofollow parameter should appear (set it to a value that gives you enough time to remove spam); set it to -1 to add the nofollow parameter unconditionally to external URLs; or 0 to disable: (-1, 0, 1...N)
@@ -115,8 +115,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 29 Oct 2005 |
+|  Plugin Version: | 30 Oct 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  30 Oct 2005: | Dakar Release compatibility: Work around Dakar preferencs bug |
 |  29 Oct 2005: | Added wiki-spam handling to prevent topic save with wiki-spam |
 |  27 Oct 2005: | For BANLIST, add/remove multiple IP addresses at once, contributed by TWiki:Main.MichaelDaum |
 |  22 Jan 2005: | Added NOFOLLOWAGE handling |
@@ -135,5 +136,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Blacklists/][Google blacklist directory]]
 
--- TWiki:Main/PeterThoeny - 29 Oct 2005
+-- TWiki:Main/PeterThoeny - 30 Oct 2005
 
