@@ -1333,8 +1333,12 @@ sub protectPlainText {
 
     # prevent text from getting rendered in inline search and link tool
     # tip text by escaping links (external, internal, Interwiki)
+#    $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
+#    $text =~ s/(^|(<=\W))((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
     $text =~ s/((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
 
+#    $text =~ s/(?<=[\s\(])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
+#    $text =~ s/(^|(<=\W))($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
     $text =~ s/($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
     $text =~ s/([@%])/<nop>$1<nop>/g;    # email address, variable
 
@@ -1513,6 +1517,17 @@ sub takeOutBlocks {
     	}
     }
 
+	#unmatched tags
+	if ($scoop ne '') {
+		my $placeholder = $tag.$placeholderMarker;
+		$placeholderMarker++;    		
+		$map->{$placeholder}{text} = $scoop;
+		$map->{$placeholder}{params} = $tagParams;
+		$out .= '<!--'.$TWiki::TranslationToken.$placeholder.
+				$TWiki::TranslationToken.'-->';
+	}
+
+
     return $out;
 }
 
@@ -1569,7 +1584,6 @@ sub putBackBlocks {
     
 	if ($newtag eq '') {
 		$$text =~ s/&#60;\/?$tag&#62;//ge;
-		$$text =~ s/<\/?$tag>//ge;
 	}
 }
 
