@@ -470,6 +470,11 @@ sub internalLink {
       $theLinkText =~ s/\//\./go;
     }
 
+    #WebHome links to tother webs render as the WebName
+    if (($theLinkText eq $TWiki::cfg{HomeTopicName}) && 
+        ($theWeb ne $this->{session}->{webName})) {
+            $theLinkText = $theWeb;
+    }
 
     # Get rid of leading/trailing spaces in topic name
     $theTopic =~ s/^\s*//o;

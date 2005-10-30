@@ -43,5 +43,6 @@ When you type a <nop>WikiWord, you establish a hyperlink. It's as easy as that.
    * Turn acronyms into <nop>WikiWords, i.e. take =FaqIndex= for a "FAQ index" topic.
    * You can specify any link label by using double square brackets, e.g. write =[<nop>[TWikiAccessControl][access control]]= to get a link to TWikiAccessControl that looks like [[TWikiAccessControl][access control]].
    * %X% The topic is assumed to be in the current TWiki web.  Prepending the name of a TWiki web and a period links to a topic in another web.
+   * %X% When linking to a <nop>WebHome topic outside the currently viewed web, the link will be rendered as the name of the web, eg WebHome, Sandbox.WebHome
 
 __Related Topics:__ WikiSyntax, TextFormattingRules
