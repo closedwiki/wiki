@@ -102,6 +102,25 @@ sub setSessionValue {
 
 =pod
 
+---+++ clearSessionValue( $key ) -> $result
+
+Clear a session value via the client session module
+   * =$key=   - Session key
+Return: =$result=   ="1"= if success; undef if session plugin is not installed
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub clearSessionValue {
+#   my( $theKey, $theValue ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    $TWiki::Plugins::SESSION->{client}->clearSessionValue( @_ );
+}
+
+=pod
+
 ---+++ getSkin( ) -> $skin
 
 Get the skin path, set by the =SKIN= preferences variable or the =skin= CGI parameter
