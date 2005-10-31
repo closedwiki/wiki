@@ -106,7 +106,7 @@ sub edit {
     # Check lease, unless we have been instructed to ignore it
     # or if we are using the 10X's topic name for dynamic topic names
     my $breakLock = $query->param( 'breaklock' ) || '';
-    unless($breakLock || ($topic =~ /X{10}/ )) {
+    unless( $breakLock || ($topic =~ /X{10}/ )) {
         my $lease = $store->getLease( $webName, $topic );
         if( $lease ) {
             my $who = $lease->{user}->webDotWikiName();
@@ -115,30 +115,39 @@ sub edit {
                 # redirect; we are trying to break someone else's lease
                 my( $future, $past );
                 my $why = $lease->{message};
-                my $def = 'active';
-                if( time() > $lease->{expires} ) {
-                    $def = 'old';
-                    $past = TWiki::Time::formatDelta(time()-$lease->{expires},
-                                                     $session->{i18n}
-                                                    );
-                    $future = '';
+                my $def;
+                my $t = time();
+                if( $t > $lease->{expires} ) {
+                    # The lease has expired, but see if we are still
+                    # expected to issue a "less forceful' warning
+                    if( $TWiki::cfg{LeaseLengthLessForceful} < 0 ||
+                          $t < $lease->{expires} +
+                            $TWiki::cfg{LeaseLengthLessForceful} ) {
+                        $def = 'old';
+                        $past = TWiki::Time::formatDelta(
+                            $t - $lease->{expires}, $session->{i18n} );
+                        $future = '';
+                    }
                 }
                 else {
-                    $past = TWiki::Time::formatDelta(time()-$lease->{taken},
-                                                     $session->{i18n}
-                                                    );
-                    $future = TWiki::Time::formatDelta($lease->{expires}-time(),
-                                                       $session->{i18n}
-                                                      );
+                    # The lease is active
+                    $def = 'active';
+                    $past = TWiki::Time::formatDelta(
+                        $t - $lease->{taken}, $session->{i18n} );
+                    $future = TWiki::Time::formatDelta(
+                        $lease->{expires} - $t, $session->{i18n} );
                 }
-                # use a 'keep' redirect to ensure we pass parameter
-                # values in the query on to the oops script
-                throw TWiki::OopsException( 'leaseconflict',
-                                            keep => 1,
-                                            def => $def,
-                                            web => $webName,
-                                            topic => $topic,
-                                            params => [ $who, $past, $future ] );
+                if( $def ) {
+                    # use a 'keep' redirect to ensure we pass parameter
+                    # values in the query on to the oops script
+                    throw TWiki::OopsException( 'leaseconflict',
+                                                keep => 1,
+                                                def => $def,
+                                                web => $webName,
+                                                topic => $topic,
+                                                params =>
+                                                  [ $who, $past, $future ] );
+                }
             }
         }
     }

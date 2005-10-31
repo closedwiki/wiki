@@ -1232,8 +1232,7 @@ sub writeLog {
     if( ref($user) && $user->isa('TWiki::User')) {
         $user = $user->wikiName();
     }
-#SMELL: Hardwired TWikiGuest
-    if ($user eq 'TWikiGuest') {
+    if( $user eq $cfg{DefaultUserWikiName} ) {
        my $cgiQuery = $this->{cgiQuery};
        if( $cgiQuery ) {
            my $agent = $cgiQuery->user_agent();

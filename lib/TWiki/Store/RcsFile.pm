@@ -737,7 +737,7 @@ sub _saveFile {
 sub _readFile {
     my( $this, $name ) = @_;
     my $data;
-    if( open( IN_FILE, '<'.$name )) {
+    if( open( IN_FILE, '<', $name )) {
         binmode( IN_FILE );
         local $/ = undef;
         $data = <IN_FILE>;

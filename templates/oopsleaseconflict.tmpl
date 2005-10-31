@@ -5,15 +5,18 @@
 %TMPL:DEF{"heading"}%%_{"Conflict"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}%%TMPL:END%
 %TMPL:DEF{"active"}%
+%_{"[_1] is editing [_2].", "%PARAM1%", "%WEB%.%TOPIC%"}%
+
 %_{"They have been editing for [_1] and their lease is still active for another [_2].", "%PARAM2%", "%PARAM3%"}%
 %TMPL:END%
 %TMPL:DEF{"old"}%
+%_{"[_1] may still be editing [_2].", "%PARAM1%", "%WEB%.%TOPIC%"}%
+
 %_{"Their lease on this topic expired [_1] ago.", "%PARAM2%"}%
 
 %_{"The chances are good that they simply navigated away from the edit page without saving."}%
 %TMPL:END%
 %TMPL:DEF{"message"}%
-%_{"[_1] is editing [_2].", "%PARAM1%", "%WEB%.%TOPIC%"}%
 
 %INSTANTIATE%
 
