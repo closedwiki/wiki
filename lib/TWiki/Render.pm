@@ -1523,7 +1523,7 @@ sub takeOutBlocks {
     }
 
 	#unmatched tags
-	if ($scoop ne '') {
+	if (defined($scoop) && ($scoop ne '')) {
 		my $placeholder = $tag.$placeholderMarker;
 		$placeholderMarker++;    		
 		$map->{$placeholder}{text} = $scoop;

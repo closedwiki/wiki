@@ -1520,27 +1520,17 @@ sub _TOC {
     my $insideVerbatim = 0;
     my $highest = 99;
     my $result  = '';
+    
+    my $verbatim = {};
+    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
+                                               $verbatim);
+    $text = $this->{renderer}->takeOutBlocks( $text, 'pre',
+                                               $verbatim);
+    
 
     # SMELL: this handling of <pre> is archaic.
     # SMELL: use forEachLine
     foreach my $line ( split( /\r?\n/, $text ) ) {
-        if( $line =~ /^.*<pre\b/io ) {
-            $insidePre++;
-            next;
-        }
-        if( $line =~ /^.*<\/pre>/io ) {
-            $insidePre--;
-            next;
-        }
-        if( $line =~ /^<verbatim\b/io ) {
-            $insideVerbatim++;
-            next;
-        }
-        if( $line =~ /^<\/verbatim>$/io ) {
-            $insideVerbatim--;
-            next;
-        }
-        next if ($insidePre || $insideVerbatim);
         my $level;
         if ( $line =~ m/$regex{headerPatternDa}/o ) {
             $line = $2;
@@ -2076,7 +2066,7 @@ sub _processTags {
         $stackTop .= $expr;
     }
 
-$this->{renderer}->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
+    $this->{renderer}->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
 
     return $stackTop;
 }
