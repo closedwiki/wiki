@@ -1,9 +1,11 @@
-%META:TOPICINFO{author="rohdedan" date="1130499327" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="rohdedan" date="1130764285" format="1.0" version="1.8"}%
 ---+!! <nop>%TOPIC%
 
 %TOPIC% helps to create simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%.
 
-A %<nop>CLI% tag creates a image button and a simple click on it will change the state of the image button.
+A %<nop>CLI% tag creates a image button and a simple click on it will change the state of the image button. 
+The default states are 'todo' (represented by a :-I image button) and 'done' (represented by a :ok: image button).
+
 
 Every state change will be saved to a topic with name <i>&lt;YourTopicName&gt;</i><nop>ChecklistItemState. It is possible to 
 define states (default: todo and done) and matching icons. You can also put more than one checklist into a topic.
@@ -42,7 +44,7 @@ Example 3: Create two checklists on a topic (%X% every %<nop>CHECKLIST% and ever
   1 next step %CLI{name="second checklist"}% 
 </verbatim>
 
-Example 4: Create a checklist in a table
+Example 4: Create a checklist in a table:
 <verbatim>
 | *state* | *todo* |
 | %CLI%	| first step |
@@ -74,14 +76,14 @@ To change the states or state icons you can set it for topic with a %<nop>CHECKL
 |  *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%*  |||
 | name | a naming context - useful and recommended if you define more than one checklist on a topic | name="_default" |
 | states | all known states (separated by a '&brvbar;') | states="todo&brvbar;done" |
-| stateicons | icon list with states (separated by a '&brvbar;') | stateicons=":no:&brvbar;:yes:" |
+| stateicons | icon list with states (separated by a '&brvbar;') | stateicons=":-I&brvbar;:ok:" |
 
 ---++ Examples
 
 	1 %CLI{text="first step"}%
 	1 %CLI{text="next step"}%
 
-	| State | TODO |
+	| *State* | *TODO* |
 	| %CLI% | first step |
 	| %CLI% | next step |
 
@@ -101,14 +103,18 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
-	* Setup states and icons (remove # for setup):
+	* Setup states and icons (defaults: <verbatim>todo|done</verbatim> and <verbatim>:-I|:ok:</verbatim>; remove # for setup):
 		* # Set STATES = todo|done
-		* # Set STATEICONS = :no:|:yes:	  
+		* # Set STATEICONS = :-I|:ok:	  
+
+	* Enables 'reset' button (default: disabled with undefined value; value is a text or icon):
+		* # Set RESET = [Reset all]
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
+	* Install CPAN modules (e.g: perl -MCPAN -e "install Digest::MD5" - is recommended if a cache is used).
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -119,8 +125,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | 27 Oct 2005 (V1.001) |
+|  Plugin Version: | 31 Oct 2005 (V1.002) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.002 (31 Oct 2005) | TWiki:Main.DanielRohde: fixed cache problems; fixed HTML/URL encoding bugs; fixed reload bug; fixed reset image button bug; added anchors|
 |  v1.001 (27 Oct 2005) | TWiki:Main.DanielRohde: added new features ('reset','text' attributes); fixed major 'name' attribute bug; fixed documentation bugs | 
 |  v1.000 (27 Oct 2005): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
@@ -128,7 +135,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other Dependencies: | TWiki:Plugins.SmiliesPlugin |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | <!-- %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% --> |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 98% --> |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
