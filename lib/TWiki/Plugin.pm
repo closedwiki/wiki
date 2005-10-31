@@ -213,6 +213,7 @@ sub registerHandlers {
             }
         }
     }
+    $this->{session}->enterContext( $this->{name}.'Enabled' );
 }
 
 # Invoke a handler
