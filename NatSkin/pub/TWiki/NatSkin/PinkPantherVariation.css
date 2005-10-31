@@ -6,9 +6,6 @@
   background-repeat:no-repeat;
   background-position:top center;
 }
-.natTopBar {
-  height:165px;
-}
 .natSearchBoxTop,
 .natTopicActions a,
 .natWebTitle,
@@ -32,6 +29,7 @@
 }
 .natTopBar {
   border-top:0px;
+  height:165px;
 }
 
 .natAction {
