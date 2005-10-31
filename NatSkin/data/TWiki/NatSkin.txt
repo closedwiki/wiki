@@ -73,8 +73,9 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.60 (2005-10-25) |
+|  Skin Version: | v2.61 (2005-10-31) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-10-31: | safari fixes where content leaps out of the main area |
 |  2005-10-24: | added <nop>UserView templates; standardised favicon handling |
 |  2005-10-18: | workaround crash due to recursive accessdenied-exceptions |
 |  2005-10-13: | preliminary css support for header art; added some default headers |
