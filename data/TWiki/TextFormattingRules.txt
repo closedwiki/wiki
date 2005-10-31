@@ -260,9 +260,11 @@ WebNotify
 <tr valign="top">
 <td>
  *Verbatim (Literal) text:* %BR%
- Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags. Each tag must be on a line by itself.
+ Surround code excerpts and other formatted text with =&lt;verbatim&gt;= and =&lt;/verbatim&gt;= tags.
 
 %T% =verbatim= tags disable HTML code. Use =&lt;pre&gt;= and =&lt;/pre&gt;= tags instead if you want the HTML code within the tags to be interpreted.
+
+*NOTE:* VARIABLES are still Set within verbatim tags (this is a historical peculiarity)
 </td><td>
 <verbatim>
 <verbatim>

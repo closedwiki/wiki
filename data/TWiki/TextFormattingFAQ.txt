@@ -63,6 +63,8 @@ This text will keep its format as it is:
 
 The =pre= tag is standard HTML; =verbatim= is a special TWiki tag that forces text to fixed font mode, and also prevents other tags and TWiki shortcuts from being expanded.
 
+*NOTE:* VARIABLES are still Set within verbatim tags (this is a historical peculiarity)
+
 ---
 ---+++ How do I create tables?
 

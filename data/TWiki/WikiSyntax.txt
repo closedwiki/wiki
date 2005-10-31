@@ -37,7 +37,7 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive Text
 
    * To display a word or phrase in =MONOSPACED TYPE=, put it in equal signs: =<nop>=like this==. <br />Use =<nop>=<nop>=two=== for bold: ==bold mono==.
 
-   * Use ==&lt;verbatim&gt;== to enclose code excerpts, filenames, and other unformatted text, with the opening and closing tags on their own separate lines:
+   * Use ==&lt;verbatim&gt;== to enclose code excerpts, filenames, and other unformatted text:
 <blockquote style="background-color:#f5f5f5">
 <pre>
 <b>&lt;verbatim&gt;</b>
@@ -45,6 +45,7 @@ unformatted text!
 <b>&lt;/verbatim&gt;</b>
 </pre>
 </blockquote>
+      * *NOTE:* VARIABLES are still Set within verbatim tags (this is a historical peculiarity)
 
    * Three (or more) consecutive *hyphens* expand into a horizontal rule:%BR% =---=
 
