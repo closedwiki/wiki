@@ -5,9 +5,6 @@
   background-repeat:no-repeat;
   background-position:top center;
 }
-.natTopBar {
-  height:165px;
-}
 .natWebTitle,
 .natWebTitle a {
   color:black;
@@ -29,6 +26,7 @@
 }
 .natTopBar {
   border-top:0px;
+  height:165px;
 }
 
 .natAction {
