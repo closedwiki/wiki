@@ -10,8 +10,9 @@ Designed by: Crawford Currie
 ---++ Expected
 <!-- expected RECUSS -->
 There was an old Man of the coast
+There was an old Man of the coast
 <p />
-<span class='twikiAlert'> Warning: Can't INCLUDE TestCases.<nop>RecursiveInclude twice, topic is already included.</span>
+<span class='twikiAlert'> Warning: Can't INCLUDE TestCases.<nop>RecursiveInclude repeatedly, topic is already included.</span>
 <p />
 Who placidly sat on a post;
 But when it was cold

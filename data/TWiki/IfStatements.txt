@@ -45,7 +45,7 @@ this expands to:
 You are %IF{ "$ WIKINAME='TWikiGuest' and not defined OPEN_DAY" then="not" }% allowed to
 %IF{ "context view" then="view" else="edit"}% this TWiki today.
 
-Context identifiers are used in TWiki to label various stages of the rendering process. They are especially useful for [[TWikiSkins][skin]] authors to find out where they are in the renderin gprocess. The following context identifiers are available:
+Context identifiers are used in TWiki to label various stages of the rendering process. They are especially useful for [[TWikiSkins][skin]] authors to find out where they are in the rendering process. The following context identifiers are available:
 | *id* | *context* |
 | authenticated | a user is authenticated |
 | body_text  | when the body text is being processed in a view |
@@ -65,5 +65,7 @@ Context identifiers are used in TWiki to label various stages of the rendering p
 | search | in search script (see TWikiScripts) |
 | view | in view script (see TWikiScripts) |
 | rest | in rest script (see TWikiScripts) |
+
+In addition there is an identifier for each enabled plugin; for example, if =Gallous<nop>BreeksPlugin is installed *and enabled*, then the context ID =Gallous<nop>BreeksPluginEnabled= will be set.
 
 The %IF statements is kept deliberately simple. In particular, note that there is no way to conditionally execute a Set statement. If you need more sophisticated control over formatting, then consider using the SpreadSheetPlugin.
