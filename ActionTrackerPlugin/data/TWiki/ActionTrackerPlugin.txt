@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121939551" format="1.1" version="$Rev$"}%
 ---+!! Action Tracker Plugin
 
-This plugin provides support for tracking actions embedded in meeting minutes. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live".
+This plugin provides support for tracking actions embedded in [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live".
 
 Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'. The action tracker can also be used for private reminders, for example TODO lists and diary entries, and has been successfully applied to functions as diverse as risk management and bug tracking.
 
