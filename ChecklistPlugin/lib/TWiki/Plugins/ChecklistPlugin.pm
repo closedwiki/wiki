@@ -58,12 +58,13 @@ package TWiki::Plugins::ChecklistPlugin;
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
         $debug 
-	$defaultsInitialized %globalDefaults %namedDefaults @renderedOptions @flagOptions
+	$defaultsInitialized %globalDefaults %namedDefaults @renderedOptions @flagOptions @filteredOptions
 	%namedIds $idMapRef $query
 	$resetDone $stateChangeDone
     );
 
-$VERSION = '1.001'; #dro# added new features ('reset','text' attributes); fixed 'name' attribute bug; fixed documentation bugs
+$VERSION = '1.002'; #dro# fixed cache problems; fixed HTML/URL encoding bugs; fixed reload bug; fixed reset image button bug; added anchors 
+#$VERSION = '1.001'; #dro# added new features ('reset','text' attributes); fixed 'name' attribute bug; fixed documentation bugs
 #$VERSION = '1.000'; #dro# initial version
 
 $pluginName = 'ChecklistPlugin';  # Name of this Plugin
@@ -121,14 +122,16 @@ sub initDefaults() {
 		'id' => undef,
 		'name' => '_default',
 		'states' => 'todo|done',
-		'stateicons' =>':no:|:yes:',
+		'stateicons' =>':-I|:ok:',
 		'text' => '',
 		'reset' => undef
 
 	);
 
 	@listOptions = ('states','stateicons');
-	@renderedOptions = ( 'stateicons');
+	@renderedOptions = ( 'text', 'stateicons', 'reset');
+
+	@filteredOptions = ( 'id', 'name');
 
 	@flagOptions = ( );
 
@@ -159,8 +162,8 @@ sub initOptions() {
 
 	my $name;
 	
-	$name=$params{'name'};
-	$name=$globalDefaults{'name'} unless $name;
+	$name=&substIllegalChars($params{'name'}) if defined $params{'name'};
+	$name=$globalDefaults{'name'} unless defined $name;
 	
 
         # Setup options (attributes>named defaults>plugin preferences>global defaults):
@@ -185,6 +188,7 @@ sub initOptions() {
         }
         # Render some options:
         foreach my $option (@renderedOptions) {
+		next unless defined $options{$option};
                 if ($options{$option} !~ /^(\s|\&nbsp\;)*$/) {
 			if (grep /^\Q$option\E$/,@listOptions) {
 				my @newlist;
@@ -200,6 +204,12 @@ sub initOptions() {
 			}
                 }
         }
+
+	# filter some options:
+	foreach my $option (@filteredOptions) {
+		$options{$option}=&substIllegalChars($options{$option}) if defined $options{$option};
+	}
+
 
 	
 }
@@ -234,10 +244,29 @@ sub handleChecklist {
 	}
 
 	if (defined $options{'reset'}) {
+		my $imgsrc = &getImageSrc($options{'reset'});
+
+		my $title=$options{'reset'};
+		$title=~s/<\S+[^>]*\>//sg; # strip HTML
+		$title=&htmlEncode($title);
+
+		my $action=&TWiki::Func::getViewUrl($web,$topic);
+		$action=~s/#.*$//s;
+		$action.=getUniqueUrlParam($action);
+		$action.="#reset${name}";
 		
-		$text.=qq@<form method="post" action="@.&TWiki::Func::getViewUrl($web,$topic).qq@">@;
-		$text.=qq@<input type="image" name="clreset" value="@.$options{'name'}.qq@" alt="@.$options{'reset'}.qq@" title=""/>@;
+		$text.=qq@<noautolink>@;
+		$text.=qq@<form method="post" action="$action">@;
+		$text.=qq@<a name="reset${name}">&nbsp;</a>@;
+		$text.=qq@<input type="image" name="clreset" value="$name"@;
+		$text.=qq@ src="$imgsrc"@ if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
+		$text.=qq@ title="$title" alt="$title"@;
+		$text.=qq@>@;
+		$text.=" $title" if ($title!~/^\s*$/i)&&($imgsrc ne "");
+		$text.=' '.&htmlEncode($options{'text'}) if defined $options{'text'};
+		$text.=qq@</input>@;
 		$text.=qq@</form>@;
+		$text.=qq@</noautolink>@;
 		
 	}
 
@@ -256,7 +285,7 @@ sub handleChecklistItem {
 	$namedIds{$options{'name'}}++ unless defined $options{'id'};
 
 	if ((defined $query->param("clpsc"))&&(!$stateChangeDone)) {
-		&doChecklistItemStateChange($query->param("clpsc"));
+		&doChecklistItemStateChange($query->param("clpsc"),$query->param("clpscls"));
 		$stateChangeDone=1;
 	}
 
@@ -294,17 +323,16 @@ sub doChecklistItemStateReset {
 }
 # =========================
 sub doChecklistItemStateChange {
-	my ($name_id) = @_;
+	my ($name_id, $lastState) = @_;
 	TWiki::Func::writeDebug("doChecklistItemStateChange($name_id)") if $debug;
 
 	$name_id=~/^([^\[]+)\[([^\]]+)\]$/;
 	my ($name, $id) = ($1, $2);
 
-	if (defined $$idMapRef{$name}{$id}) {
-		$$idMapRef{$name}{$id}=&getNextState($$idMapRef{$name}{$id});
-	} else {
-		$$idMapRef{$name}{$id}=&getNextState(undef);
-	}
+	# reload?
+	return if ((defined $$idMapRef{$name}{$id})&&($$idMapRef{$name}{$id} ne $lastState));
+
+	$$idMapRef{$name}{$id}=&getNextState($$idMapRef{$name}{$id});
 
 	&saveChecklistItemStateTopic();
 }
@@ -312,15 +340,16 @@ sub doChecklistItemStateChange {
 sub renderChecklistItem {
 	TWiki::Func::writeDebug("renderChecklistItem") if $debug;
 	my $text = "";
+	my $name = $options{'name'};
 
-	my $tId = $options{'id'}?$options{'id'}:$namedIds{$options{'name'}};
+	my $tId = $options{'id'}?$options{'id'}:$namedIds{$name};
 
 	my @states = split /\|/, $options{'states'};
 	my @icons = split /\|/, $options{'stateicons'};
 
 	TWiki::Func::writeDebug("stateicons=".$options{'stateicons'}) if $debug;
 
-	my $state = (defined $$idMapRef{$options{'name'}}{$tId}) ? $$idMapRef{$options{'name'}}{$tId} : $states[0];
+	my $state = (defined $$idMapRef{$name}{$tId}) ? $$idMapRef{$name}{$tId} : $states[0];
 	my $icon = $icons[0];
 
 	for (my $i=0; $i<=$#states; $i++) {
@@ -330,25 +359,73 @@ sub renderChecklistItem {
 		}
 	}
 
-	$icon=~/img[^>]+?src="([^">]+?)"[^>]*/is;
-	my $iconsrc=$1;
+	my $iconsrc=&getImageSrc($icon);
 
 	my $action=TWiki::Func::getViewUrl($web,$topic);
-	$text.=qq@<noautolink><form action="$action" name="changeitemstate$tId" method="post">@;
-	$text.=qq@<input src="$iconsrc" type="image" name="clpsc" value="@.$options{'name'}.'['.${tId}.']'.qq@" @;
-	$text.=qq@title="$state" alt="@.${state}.qq@"/>@;
-	$text.=' '.TWiki::Func::renderText($options{'text'}, $web) unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+
+	# remove anchor
+	$action=~s/#.*$//i; 
+
+	## $action.=(($action=~/\?/)?'&':'?').(int(rand(256))*time());
+	$action.=getUniqueUrlParam($action);
+
+	my $stId = &substIllegalChars($tId); # substituted tId
+	my $heState = &htmlEncode($state); # HTML encoded state
+	my $uetId = &urlEncode($tId); # URL encoded tId
+
+	$text.=qq@<noautolink>@;
+	$text.=qq@<a name="$stId">&nbsp;</a>@;
+	$text.=qq@<form action="$action#$stId" name="changeitemstate\[$stId\]" method="post">@;
+	$text.=qq@<input type="hidden" name="clpscls" value="$heState"/>@;
+	$text.=qq@<input src="$iconsrc" type="image" name="clpsc" value="$name\[$stId\]" @;
+	$text.=qq@title="$heState" alt="$heState"/>@;
+	$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 	$text.=qq@</form></noautolink>@;
 
-	## my $href = TWiki::Func::getViewUrl($web, $topic);
-	## $href.=($href=~/\?/)?"&":"?";
-	## $href.="clpsc=$tId";
+	## $action.=($action=~/\?/)?"&":"?";
+	## $action.="clpsc=$uetId";
 	## $text.=qq@<noautolink>@;
-	## $text.=qq@<a href="$href"><img border="0" src="$iconsrc" alt="$state" /></a>@;
+	## $text.=qq@<a name="$uetId"/>@;
+	## $text.=qq@<a href="$action"><img border="0" src="$iconsrc" title="$heState" alt="$heState" /></a>@;
 	## $text.=qq@</noautolink>@;
 
 	return $text;
 }
+# =========================
+sub getUniqueUrlParam {
+	my ($url) = @_;
+	return (($url=~/\?/)?'&':'?').(int(rand(256))*time());
+}
+# =========================
+sub urlEncode {
+	my ($txt)=@_;
+	$txt=~s/([^A-Za-z0-9\-\.])/sprintf("%%%02X", ord($1))/seg;
+	return $txt;
+}
+# =========================
+sub htmlEncode {
+	my ($txt)=@_;
+	$txt=~s/([^A-Za-z0-9\-\.\s\_])/sprintf("&#%02X;", ord($1))/seg;
+	return $txt;
+}
+# ========================
+sub substIllegalChars {
+	my ($txt)=@_;
+	$txt=~s/([^A-Za-z0-9\-\.\_])//seg;
+	return $txt;
+}
+# ========================
+sub getImageSrc {
+	my ($txt)=@_;
+	my $ret = undef;
+	if ($txt=~/img[^>]+?src="([^">]+?)"[^>]*/is) {
+		$ret=$1;
+	}
+	return $ret;
+}
+
+
+
 # =========================
 sub readChecklistItemStateTopic {
 	TWiki::Func::writeDebug("readChecklistItemStateTopic($topic,$web)") if $debug;
