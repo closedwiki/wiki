@@ -1996,6 +1996,10 @@ sub _processTags {
         return $text;
     }
 
+     my $verbatim = {};
+    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
+                                               $verbatim);
+
     my @queue = split( /(%)/, $text );
     my @stack;
     my $stackTop = ''; # the top stack entry. Done this way instead of
@@ -2071,6 +2075,8 @@ sub _processTags {
         $stackTop = pop( @stack );
         $stackTop .= $expr;
     }
+
+$this->{renderer}->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
 
     return $stackTop;
 }
@@ -2204,7 +2210,6 @@ sub handleCommonTags {
 
     #use a "global var", so included topics can extract and putback 
     #their verbatim blocks safetly.
-    
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                               $verbatim);
 
@@ -2214,6 +2219,10 @@ sub handleCommonTags {
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
 
     $this->_expandAllTags( \$text, $theTopic, $theWeb );
+
+    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
+                                              $verbatim);
+
 
     # Plugin Hook
     $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 0 );
@@ -2515,11 +2524,6 @@ sub _INCLUDE {
     }
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
-    # take out verbatims, pushing them into the same storage block
-    # as the including topic so when we do the replacement at
-    # the end they are all there
-    $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',$this->{_removed} );
-    
     $this->_expandAllTags( \$text, $includedTopic, $includedWeb );
 
     # 4th parameter tells plugin that its called for an included file
@@ -2543,7 +2547,7 @@ sub _INCLUDE {
         $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1 )/geo;
         # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
         $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1, $2 )/geo;
-        
+
         $this->{renderer}->putBackBlocks( \$text, $removed, 'noautolink' );
     }
 
@@ -2555,7 +2559,6 @@ sub _INCLUDE {
     %{$this->{SESSION_TAGS}} = %saveTags;
 
     $this->{prefs}->restore( $prefsMark );
-    $this->{renderer}->putBackBlocks( \$text, $this->{_removed}, 'verbatim' );
     $text =~ s/^[\r\n]+/\n/;
     $text =~ s/[\r\n]+$/\n/;
     
