@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1130764885" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="rohdedan" date="1130765005" format="1.0" version="1.8"}%
 ---+!! <nop>%TOPIC%
 
 %TOPIC% helps to create simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%.
@@ -64,8 +64,16 @@ Just type a %<nop>CLI% (<nop>CheckList Item) into a topic to create a single che
 
 To change the states or state icons you can set it for topic with a %<nop>CHECKLIST% tag.
 
+Both tags can be used with attributes documented in the next section.
 
 ---++ Attributes
+Usage: %<nop>CLI{attribute1="value1" attribute2="value2" ...}% <br/> or %<nop>CHECKLIST{attribute1="value1" attribute2="value2" ...}%
+
+Examples:
+<verbatim>
+%CHECKLIST{showlegend="on" reset=":-I Reset checklist"}%
+%CLI{id="i1"}%
+</verbatim>
 
 | *Attribute* | *Comment* | *Example* |
 |  *%<nop>CLI{...}%*  |||
@@ -111,7 +119,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Enables 'reset' button (default: disabled with undefined value; value is a text or icon):
 		* # Set RESET = [Reset all]
 
-	* Enabled state legend (default: disabled)
+	* Enables state legend (default: disabled)
 		* # Set SHOWLEGEND = off
 
 ---++ Plugin Installation Instructions
