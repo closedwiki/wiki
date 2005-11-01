@@ -1,3 +1,4 @@
 .twistyHidden { display:none; }
 .twistyMakeVisible { display:none; }
 .twistyPlaceholder { /* color to be implemented by skin */ }
+.twistyRememberSetting { /* behavior class */ }

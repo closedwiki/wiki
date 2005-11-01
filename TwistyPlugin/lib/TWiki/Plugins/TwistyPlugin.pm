@@ -78,28 +78,32 @@ EOF
 
 
 sub _TWISTYSHOW {
-    my($session, $params, $theTopic, $theWeb) = @_;
-    my $id=$params->{'id'}||'';
-    my $link=$params->{'link'}||'';
-    my $mode=$params->{'mode'}||'span';
-    return '<'.$mode.' id="'.$id.'show" class="twistyMakeVisible"><a href="#" class="twistyTrigger">'.$link.'</a></'.$mode.'>';
+     return _TWISTYBUTTON(@_, 'show');
 }
 
 sub _TWISTYHIDE {
-    my($session, $params, $theTopic, $theWeb) = @_;
-    my $id=$params->{'id'}||'';
+     return _TWISTYBUTTON(@_, 'hide');
+}
+
+sub _TWISTYBUTTON {
+	my($session, $params, $theTopic, $theWeb, $theState) = @_;
+	my $id=$params->{'id'}||'';
     my $link=$params->{'link'}||'';
     my $mode=$params->{'mode'}||'span';
-
-    return '<'.$mode.' id="'.$id.'hide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">'.$link.'</a></'.$mode.'>';
+    my $img=$params->{'img'} || '';
+    $img =~ s/['\"]//go;
+    my $imgTag=($img ne '') ? '<img src="'.$img.'" alt="" />' : '';
+    my $initialHidden=($theState eq 'hide') ? 'twistyHidden ' : '';
+    return '<'.$mode.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.'</a></'.$mode.'>';
 }
 
 sub _TWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
     my $id=$params->{'id'}||'';
     my $mode=$params->{'mode'}||'span';
+    my $cookieEnabled=($params->{'remember'} eq 'on') ? ' twistyRememberSetting' : '';
     unshift @modes,$mode;
-    return '<'.$mode.' id="'.$id.'toggle" class="twistyMakeHidden">';
+    return '<'.$mode.' id="'.$id.'toggle" class="twistyMakeHidden'.$cookieEnabled.'">';
 }
 
 sub _ENDTWISTYTOGGLE {

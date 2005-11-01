@@ -8,54 +8,72 @@
 Convenience plugin for TWiki:Plugins.TwistyContrib.
 
 It has two major features:
-	* When active, the Twisty javascript library is included in every topic.
-	* Provides a convenience sintax to define twisty areas.
+	* When active, the Twisty javascript library is included in every topic. _Note: TWiki:TWiki.PatternSkin also includes this javascript library._
+	* Provides a convenience syntax to define Twisty areas.
 
 Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sections.
 
 ---++ Syntax Rules
 
 #VarTWISTYSHOW
----+++ TWISTYSHOW{id="myid" link="Link Text"} -- Twisty Show link.
+---+++ TWISTYSHOW
+*Show/open link*
 	* Syntax: =%<nop>TWISTYSHOW{id="myid" link="Link Text"}%=
 	* Supported parameters:
-    | *Parameter:* | *Description:* | *Default:* |
+    | *Parameter* | *Description* | *Value* |
     | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
-    | =link="Link Text"= | The text to be used in the Twisty Show link | required |
-    | =mode="div/span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
-	* Example: =%<nop>TWISTYSHOW{id="demo" link=" Click to Unfold "}%= expands to 
-=&lt;span id="demoshow" class="twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt; Click to Unfold &lt;/a>&lt;/span&gt;=
+    | =link="Link Text"= | The text to be used in the Twisty Show link  | required |
+    | =mode="div/span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
+    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+	* Example: =%<nop>TWISTYSHOW{id="demo" link=" Click to Unfold " img="%<nop>ICONPATH{toggleopen}%"}%= expands to: <br /> 
+	=&lt;span id="demoshow" class="twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt;&lt;span class="twikiLinkLabel"&gt; Click to Unfold &lt;/span&gt;&lt;img src="http://visiblearea.com/devtwiki/pub/TWiki/TWikiDocGraphics/toggleopen.gif" alt="" /&gt;&lt;/a&gt;&lt;/span&gt;=
 	* Related: [[#VarTWISTYHIDE][TWISTYHIDE]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
 #VarTWISTYHIDE
----+++ TWISTYHIDE{id="myid" link="Link Text"} -- Twisty Hide link.
+---+++ TWISTYHIDE
+*Hide/close link*
 	* Syntax: =%<nop>TWISTYHIDE{id="myid" link="Link Text"}%=
 	* Supported parameters:
-    | *Parameter:* | *Description:* | *Default:* |
+    | *Parameter* | *Description* | *Value* |
     | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
-    | =link="Link Text"= | The text to be used in the Twisty Hide link | required |
-    | =mode="div/span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
-	* Example: =%<nop>TWISTYHIDE{id="demo" link=" Click to Fold "}%= expands to 
-=&lt;span id="demohide" class="twistyHidden twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt; Click to Fold &lt;/a>&lt;/span&gt;=
+    | =link="Link Text"= | The text to be used in the Twisty Hide link  | required |
+    | =mode="div/span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
+    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+	* Example: =%<nop>TWISTYHIDE{id="demo" link=" Click to Fold " img="%<nop>ICONPATH{toggleclose}%"}%= expands to: <br /> 
+	=&lt;span id="demohide" class="twistyHidden twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt;&lt;span class="twikiLinkLabel"&gt; Click to Fold &lt;/span&gt;&lt;img src="http://visiblearea.com/devtwiki/pub/TWiki/TWikiDocGraphics/toggleclose.gif" alt="" /&gt;&lt;/a&gt;&lt;/span&gt;=
 	* Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
 #VarTWISTYTOGGLE
----+++ TWISTYTOGGLE{id="myid"} -- Twisty Toggle section.
+---+++ TWISTYTOGGLE
+*Twisty Toggle contents section*
 	* Syntax: =%<nop>TWISTYTOGGLE{id="myid"}%=
 	* Supported parameters:
-    | *Parameter:* | *Description:* | *Default:* |
-    | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
-    | =mode="div/span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
-	* Example: =%<nop>TWISTYTOOGLE{id="demo" mode="div"}%= expands to 
-=&lt;div id="demotoggle" class="twistyMakeHidden"&gt;=
+    | *Parameter* | *Description* | *Value* |
+    | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]].  | required  |
+    | =mode="div/span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag.  | optional, defaults to =&lt;span&gt;= |
+    | =remember="on"= | When the Twisty is clicked its state is remembered the next time the page is shown.<br /> *Note:* when used, think carefully about a unique name (id) for the Twisty, otherwise the cookie that is set might affect other Twisties with the same name. | optional, defaults to forget |
+	* Example: =%<nop>TWISTYTOGGLE{id="demo" mode="div" remember="on"}%= expands to: <br /> 
+	=&lt;div id="demotoggle" class="twistyMakeHidden twistyRememberState"&gt;=
 	* Related: [[#VarTWISTYHIDE][TWISTYHIDE]], [[#VarTWISTYHIDE][TWISTYHIDE]] an [[#VarENDTWISTYTOGGLE][ENDTWISTYTOGGLE]]
 
 #VarENDTWISTYTOGGLE
----+++ ENDTWISTYTOGGLE -- Outputs the required string for end a Twisty Toggle section.
+---+++ ENDTWISTYTOGGLE
+*The Twisty closure*
 	* Syntax: =%<nop>ENDTWISTYTOGGLE%=
-        * Will end the most inner unclosed Twisty Toggle section, using the proper tag
-	* Example: =%<nop>ENDTWISTYTOGGLE%= expands to =&lt;/div&gt;= if =mode="div"= was used in the last [[#VarTWISTYTOGGLE][TWISTYTOGGLE]],
+		* Will end the most inner unclosed Twisty Toggle section, using the proper tag
+	* Example: =%<nop>ENDTWISTYTOGGLE%= expands to: =&lt;/div&gt;= if =mode="div"= was used in the last [[#VarTWISTYTOGGLE][TWISTYTOGGLE]],
 	* Related: [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
+
+---++ Demo & Test
+ If the plugin is properly installed, you should see the Twisty effect below:
+
+
+%TWISTYSHOW{id="demo" link="Click to show" img="%ICONPATH{toggleopen}%"}% %TWISTYHIDE{id="demo" link="Click to hide" img="%ICONPATH{'toggleclose'}%"}% 
+---
+%TWISTYTOGGLE{id="demo" mode="div" remember="on"}% 
+*TwistyPlugin is properly installed!*
+---
+%ENDTWISTYTOGGLE% 
 
 ---++ Plugin Settings
 
@@ -78,15 +96,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
    %$DEPENDENCIES%
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
----++ Demo & Test
- If the plugin is properly installed, you should see the twisty effect below:
 
-%TWISTYSHOW{id="demo" link=" Click to Unfold "}% %TWISTYHIDE{id="demo" link=" Click to Fold "}% 
----
-%TWISTYTOGGLE{id="demo" mode="div"}% 
-TwistyPlugin is properly installed
-%ENDTWISTYTOGGLE% 
----
 ---+ Plugin Info
 
 | Authors: | TWiki:Main.RafaelAlvarez |
