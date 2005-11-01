@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="rohdedan" date="1130835435" format="1.0" version="1.9"}%
----+!! Checklist Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1130765065" format="1.0" version="$Rev$"}%
+---+!! <nop>%TOPIC%
 
 <nop>ChecklistPlugin creates simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%
 and depends on the TWiki:Plugins.SmiliesPlugin (see [[#ChecklistPluginInfo][Plugin Info]]).
