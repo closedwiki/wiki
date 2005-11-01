@@ -10,3 +10,4 @@
 
 # Allow all access
 Allow from all
+options -Indexes
