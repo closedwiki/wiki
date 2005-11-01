@@ -21,7 +21,7 @@ Typical usage:
 <verbatim>
   use TWiki::Contrib::DBCacheContrib;
 
-  $db = new TWiki::Contrib::DBCacheContrib::DBCache( $web ); # always done
+  $db = new TWiki::Contrib::DBCacheContrib( $web ); # always done
   $db->load(); # may be always done, or only on demand when a tag is parsed that needs it
 
   # the DB is a hash of topics keyed on their name
@@ -262,7 +262,7 @@ sub _onReload {
         }
     }
 
-    $this->onReload( @_ );
+    onReload( @_ );
 }
 
 =begin text
