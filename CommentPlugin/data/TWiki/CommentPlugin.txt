@@ -82,9 +82,15 @@ Customisation of the comment plugin requires
 	* familiarity with HTML forms,
 	* some familiarity with the [[%TWIKIWEB%.TWikiTemplates][TWiki templating language]].
 
-The plugin picks up its templates from a standard TWiki template file, named "comments". This allows different templates to be defined for different TWiki skins. This template file may include other template files, or may include a topic from a user web (this is an extension to the normal handling of =%TMPL:INCLUDE= described in the documentation). The shipped plugin defines default templates in =comments.tmpl= and then includes the topic %TWIKIWEB%.CommentsTmpl. If you want to define your own templates, add them to %TWIKIWEB%.UserTemplates. Note that you can use =%TMPL:INCLUDE= in this file to include other files of templates. Note also that if you want to override any of the default templates shipped with the plugin, you can simply do so by defining them in %TWIKIWEB%.UserTemplates, and they will replace the installed versions.
-
 To define a comment type, you have to provide two simple template definitions in the template file; one for the prompt box, and one for the generated output. If we have a template type "mytype", these are named =PROMPT:mytype= and =OUTPUT:mytype= respectively. See =comments.tmpl= in the templates directory for examples.
+
+The plugin picks up these template definitions from a standard TWiki template file, =templates/comments.tmpl=. This allows different templates to be defined for different TWiki skins. By default, this template includes the topic %TWIKIWEB%.CommentsTemplate, which contains all the shipped standard templates and in turn includes %TWIKIWEB%.<nop>UserCommentsTemplate. This allows for several levels of customisation:
+   1 To override all default templates, everywhere, change =comments.tmpl= to include a different topic (this customisation will be lost next time you upgrade, though).
+   1 To add site-wide local template customisations, add them to %TWIKIWEB%.<nop>UserCommentTemplate. You can redefine the standard templates here if you want, and your definitions will override the standard definitions.
+   1 To override templates on a web-by-web basis, add a topic !UserCommentTemplate to the web (this will replace %TWIKIWEB%.<nop>UserCommentTemplate)
+   1 To override templates for a specific skin, add them to %TWIKIWEB%.<nop>UserComment&lt;Skin&gt;Template (where &lt;Skin&gt; is the name of the skin with the first letter capitalised, e.g. Pattern)
+
+%X% Templates are picked up by following the [[TWikiTemplates#Finding_Templates][standard TWiki rules]] for locating template files. Note that you can use =%TMPL:INCLUDE= to include other files of templates.
 
 ---++ The =PROMPT= template
 The =PROMPT= template defines the contents of an HTML form that is used to capture the comment. This form invokes the comment generator when submitted. Parameters to the comment generator are defined using standard HTML input fields, such as =input=, =textarea= and =select=. The user enters values for these parameters, and these are then available when the =OUTPUT= template is expanded, in the form of <code>%<nop>URLPARAM%</code>s.
@@ -138,6 +144,7 @@ All the usual TWikiVariables that can be used in a topic template can also be us
 
 |  Plugin Author: | v1.0 TWiki:Main.DavidWeller v2.0 TWiki:Main.PeterMasiar v3.0 TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
 | Change History: <!-- Most recent first --> ||
+| 1 Nov 2005 | 4.001 Revised template handling to allow for more generic customisation |
 | 22 Feb 2005 | 4.000 TWiki:Main.CrawfordCurrie made Dakar release ready. Recoded for new Plugins handlers, much more efficient. Removed TIME, now replaced by SERVERTIME. |
 | 25 Feb 2005 | 3.009 TWiki:Main.CrawfordCurrie Added Olivier Berger's fix for anchors and Jacob Eisinger's fix for variable expansion. |
 | 16 Oct 2004 | 3.008 Added the =noform= attribute to Comment - TWiki:Main.MartinCleaver |

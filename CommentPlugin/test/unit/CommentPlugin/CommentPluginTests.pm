@@ -103,14 +103,14 @@ sub inputTest {
     writeTopic($web, $topic, $sample);
     my $pidx = $eidx;
     my $html =
-      TWiki::Plugins::CommentPlugin::Comment::_handleInput
-          ($sattrs,
-           $baseweb,
-           $basetopic,
-           \$pidx,
-           "The Message",
-           "",
-           "bottom");
+      TWiki::Plugins::CommentPlugin::Comment::_handleInput(
+          $sattrs,
+          $baseweb,
+          $basetopic,
+          \$pidx,
+          "The Message",
+          "",
+          "bottom");
 
     $this->assert($pidx == $eidx + 1, $html);
 
@@ -170,8 +170,7 @@ sub inputTest {
     $this->assert(scalar($dattrs =~ s/\s*type=\"hidden\"//io), $dattrs);
     $this->assert(scalar($dattrs =~ s/\s*value=\"save\"//io), $dattrs);
     $this->assert_str_equals("", trim($dattrs));
-
-    $html =~ s/<textarea  (.*?)>(.*?)<\/textarea>//i;
+    $html =~ s/<textarea (.*?)>(.*?)<\/textarea>//i;
     $dattrs = $1;
     $this->assert_matches(qr/name=\"comment\"/, $dattrs);
     my $mess = $2;
@@ -200,7 +199,7 @@ sub inputTest {
     my $text = "Ignore this text";
 
     # invoke the save handler
-    TWiki::UI::Save::save( $session );
+    $this->capture(\&TWiki::UI::Save::save, $session );
 
     $text = TWiki::Func::readTopicText($web, $topic);
     $this->assert_matches(qr/$comm/, $text, "$web.$topic: $text");
