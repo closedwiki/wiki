@@ -208,8 +208,13 @@ sub bulkRegister {
     my $log = '---+ Report for Bulk Register'."\n\n%TOC%\n";
 
     #-- Process each row, generate a log as we go
-    foreach my $row ( values %data ) {
+    ROW: foreach my $row ( values %data ) {
         $row->{webName} = $userweb;
+
+        #-- Following two lines untaint WikiName as required and verify it is
+        #-- not zero length
+        $row->{WikiName} = TWiki::Sandbox::untaintUnchecked($row->{WikiName});
+        next ROW if (length($row->{WikiName}) == 0);
 
         my ($userTopic, $uLog) =
           _registerSingleBulkUser($session, $row, $settings );
