@@ -10,4 +10,11 @@
 
 # Allow all access
 Allow from all
+
+# Deny people from looking at the index
+# Bare in mind that this is largely inadequate
+# See http://twiki.org/cgi-bin/view/Codev/SecuringAttachments
+# and http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item610
+# If you think you have a solution it is in your best interests to share it 
+# so others can test your idea.
 options -Indexes
