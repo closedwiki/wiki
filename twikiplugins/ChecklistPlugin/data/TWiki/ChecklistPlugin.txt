@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1130854518" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="TWikiContributor" date="1130765065" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%
