@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 <channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%">
   <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
   <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%</link>
@@ -8,4 +6,3 @@
 %INCLUDE{"%TWIKIWEB%.WebRssBase"}%<!--
    * Set SKIN = rss
 -->
-

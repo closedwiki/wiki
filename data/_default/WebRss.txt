@@ -6,4 +6,3 @@
 %INCLUDE{"%TWIKIWEB%.WebRssBase"}%<!--
    * Set SKIN = rss
 -->
-

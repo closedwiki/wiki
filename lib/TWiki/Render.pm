@@ -57,8 +57,9 @@ my $SUMMARYLINES = 6;
 
 # limiting lookbehind and lookahead for wikiwords and emphasis
 # use like \b
+#SMELL: they really limit the number of places emphasis can happen.
 my $STARTWW = qr/^|(?<=[\s\(])/m;
-my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
+my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)<])/m;
 
 =pod
 
@@ -1164,7 +1165,7 @@ sub getRenderedVersion {
             $isList = 0;
         }
 
-        $result .= $line."\n";
+        $result .= $line;
         $isFirst = 0;
     }
 
@@ -1178,6 +1179,8 @@ sub getRenderedVersion {
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
 
+#SMELL: this processing should not be done outside the TML section of the rendered page
+#SMELL: this definition prevents empahsising more than 2 words
     $text =~ s/${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW/_fixedFontText($1,1)/gem;
     $text =~ s/${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
     $text =~ s/${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW/<strong>$1<\/strong>/gm;
