@@ -177,6 +177,13 @@ __Note:__ This topic is included by TWikiVariables
    * Example: =%<nop>ICON{"info"}%= expands to %ICON{"info"}%
    * Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
+#VarICONPATH
+---+++ ICONPATH{"name"} -- url path of small documentation graphic or icon of common attachment types
+   * See [[#VarICON][ICON]]
+   * Syntax: =%<nop>ICONPATH{"name"}%= or =%<nop>ICONPATH{"type"}%=
+   * Example: =%<nop>ICONPATH{"info"}%= expands to =%ICONPATH{"info"}%= which renders as %ICONPATH{"info"}%
+   * Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
+
 #VarIF
 ---+++ IF{"condition" ...} -- simple conditionals
    * Syntax: =%<nop>IF{"CONDITION" then="THEN" else="ELSE"}%=

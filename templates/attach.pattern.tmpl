@@ -46,7 +46,7 @@
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td class="patternToolBar">
-<span id="helpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Show help"}%%ICON{toggleopen}%</a></span><span id="helphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Hide help"}%%ICON{toggleclose}%</a></span>
+<span id="attachhelpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Show help"}%%ICON{toggleopen}%</a></span><span id="attachhelphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Hide help"}%%ICON{toggleclose}%</a></span>
 </td>
 </tr>
 </table>
@@ -63,8 +63,8 @@
 
 
 %TMPL:DEF{"existingattachments"}%
-<span class="twikiSmallish"><span id="existingshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">%_{"Show existing attachments"}%</span>%ICON{toggleopen}%</a></span><span id="existinghide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">%_{"Hide existing attachments"}%</span>%ICON{toggleclose}%</a></span></span>
-<div id="existingtoggle" class="twistyMakeHidden">
+<span class="twikiSmallish"><span id="attachexistingshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">%_{"Show existing attachments"}%</span>%ICON{toggleopen}%</a></span><span id="attachexistinghide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">%_{"Hide existing attachments"}%</span>%ICON{toggleclose}%</a></span></span>
+<div id="attachexistingtoggle" class="twistyMakeHidden twistyRememberSetting">
 %META{"attachments" all="on" title="<h2>%_{"Existing attachments"}%</h2>"}%
 </div>
 %TMPL:END%
@@ -79,7 +79,7 @@
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 %TMPL:P{"simpleheader"}%
 %TMPL:P{"toolbar"}%
-<div id="helptoggle" class="twikiHelp twistyHidden">
+<div id="attachhelptoggle" class="twikiHelp twistyHidden twistyRememberSetting">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div>
 %TMPL:P{"previousdetails"}%
