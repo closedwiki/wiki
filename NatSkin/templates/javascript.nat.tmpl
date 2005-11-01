@@ -70,7 +70,6 @@ function writeEmailAddrs(addrs, linkText, id) {
 
 // DON'T overwrite existing onload handlers
 //	http://simon.incutio.com/archive/2004/05/26/addLoadEvent
-
 function addLoadEvent(func){
   var oldonload = window.onload;
   if (typeof window.onload != 'function') {
@@ -87,10 +86,12 @@ function addLoadEvent(func){
 
 // default plugin impls
 function initObfuscator() {}
+function initTwist() {}
 
-function initPage() {
+function initNatSkin() {
   initObfuscator(); // SMELL: package this as a plugin of its own and use addLoadEvent
+  initTwist(); // SMELL: why do I have to call it here to make it work ???
   %TMPL:P{"onloadscript"}%
 }
 
-addLoadEvent(initPage);
+addLoadEvent(initNatSkin);
