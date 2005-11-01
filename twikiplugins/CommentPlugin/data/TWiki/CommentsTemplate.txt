@@ -1,6 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
-Templates for CommentPlugin - See %TWIKIWEB%.CommentPlugin#Customisation for help
+Templates for CommentPlugin - See %TWIKIWEB%.CommentPlugin#Customisation for help.
+
+While this topic can be viewed as a TWiki topic, it is used by the CommentPlugin as a template file - see TWikiTemplates. The important content in here is in the verbatim blocks. The rest of the topic is just comments.
 
 *WARNING: THIS FILE WILL BE OVERWRITTEN WHEN YOU UPGRADE THE COMMENT PLUGIN*
 
@@ -179,5 +181,12 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 %TMPL:END%
 </verbatim>
 
-%TMPL:INCLUDE{"%TWIKIWEB%.UserTemplates"}%
+---+ Include TWiki.UserTemplates
+Note: UserTemplates is included from the TWiki web for backward compatibility only. It should not be used - add user templates to UserCommentsTemplate instead
+
+%TMPL:INCLUDE{"TWiki.UserTemplates"}%
+
+---+ Include UserCommentsTemplate
+%TMPL:INCLUDE(UserComments}%
+
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
