@@ -1,7 +1,8 @@
-%META:TOPICINFO{author="rohdedan" date="1130765065" format="1.0" version="1.8"}%
----+!! <nop>%TOPIC%
+%META:TOPICINFO{author="rohdedan" date="1130835435" format="1.0" version="1.9"}%
+---+!! Checklist Plugin
 
-%TOPIC% helps to create simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%.
+<nop>ChecklistPlugin creates simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%
+and depends on the TWiki:Plugins.SmiliesPlugin (see [[#ChecklistPluginInfo][Plugin Info]]).
 
 A %<nop>CLI% tag creates a image button and a simple click on it will change the state of the image button. 
 The default states are 'todo' (represented by a :-I image button) and 'done' (represented by a :ok: image button).
@@ -14,58 +15,140 @@ define states (default: todo and done) and matching icons. You can also put more
 %TOC%
 
 ------
+---++ Syntax Rules
+
+Just type a %<nop>CLI% (<nop>CheckList Item) into a topic to create a single checklist item. A simple mouse click on it will change
+the state of this item.
+
+To modify the states or state icons you can set it for topic with a %<nop>CHECKLIST% tag.
+
+Both tags can be used with attributes documented in the [[#ChecklistAttributes][Attributes section]].
+
+To create a link to the checklist item state topic you can put the following forced link on your checklist topic: <verbatim>[<nop>[%<nop>TOPIC%ChecklistItemState]]</verbatim>. 
+If you have installed the TWiki:Plugins.SpreadSheetPlugin you can find a statistics on this item state topic. 
+And if you have installed the TWiki:Plugins.EditTablePlugin you can edit the states directly.
+
 ---++ Usage Examples
 
-Example 1: Create a simple checklist:
+To change the state of a checklist item just click on it.
+
+<table>
+<tr><td align="center"> *You type:* </td><td align="center"> *You get: (simulated)* </td></tr>
+<tr><td colspan="2" bgcolor="#CCCCCC">
+*Example 1: Create a simple checklist:*
+	* "second step" icon was clicked one time
+	* "last step" icon was clicked two times
+</td></tr>
+<tr>
+<td bgcolor="#EEEEEE" valign="top">
 <verbatim>
 	1 first step %CLI% 
 	1 second step %CLI% 
 	1 last step %CLI% 
 </verbatim>
-
-Example 2: Create a checklist with three states and own icons:
+</td>
+<td bgcolor="#EEEEEE" valign="top">
+	1 first step <br/> :-I
+	1 second step <br/> :ok:
+	1 last step <br/> :-I
+</td>
+</tr>
+<tr><td colspan="2" bgcolor="#CCCCCC">
+*Example 2: Create a checklist with three states and own icons:*
+	* "second step" icon was clicked on time
+	* and "third step" icon was clicked two times
+</td></tr>
+<tr>
+<td bgcolor="#EEEEEE" valign="top">
 <verbatim>
 %CHECKLIST{states="todo|doing|done" stateicons=":no:|:-I|8-)"%
 
 	1 first step %CLI% 
 	1 second step %CLI% 
+	1 third step %CLI%
 </verbatim>
-
-Example 3: Create two checklists on a topic (%X% every %<nop>CHECKLIST% and every %<nop>CLI% tag needs a name attribute):
+</td>
+<td bgcolor="#EEEEEE" valign="top">
+	1 first step <br/> :no:
+	1 second step <br/> :-I
+	1 third step <br/> 8-)
+</td>
+</tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 3: Create two checklists on a topic:*
+<br/> (%X% every %<nop>CHECKLIST% and every %<nop>CLI% tag needs a name attribute)</td></tr>
+<tr>
+<td bgcolor="#EEEEEE" valign="top">
 <verbatim>
 %CHECKLIST{name="first checklist"}%
 
-  1 first step %CLI{name="first checklist"}% 
-  1 second step %CLI{name="first checklist"}% 
+	1 first step %CLI{name="first checklist"}% 
+	1 second step %CLI{name="first checklist"}% 
 
 %CHECKLIST{name="second checklist"}%
 
-  1 first step %CLI{name="second checklist"}% 
-  1 next step %CLI{name="second checklist"}% 
+	1 first step %CLI{name="second checklist"}% 
+	1 next step %CLI{name="second checklist"}% 
 </verbatim>
+</td>
+<td bgcolor="#EEEEEE" valign="top">
 
-Example 4: Create a checklist in a table:
+	1 first step <br/> :-I
+	1 second step <br/> :-I
+
+	1 first step <br/> :-I
+	1 next step <br/> :-I
+</td>
+</tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 4: Create a checklist in a table:* </td></tr>
+<tr>
+<td bgcolor="#EEEEEE" valign="top">
 <verbatim>
 | *state* | *todo* |
 | %CLI%	| first step |
 | %CLI%	| second step |
 </verbatim>
-
-Example 5: Create a checklist without annoying line breaks:
+</td>
+<td bgcolor="#EEEEEE" valign="top">
+| *state* | *todo* |
+| :-I | first step |
+| :-I | second step |
+</td>
+</tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 5: Create a checklist without annoying line breaks:* </td></tr>
+<tr>
+<td bgcolor="#EEEEEE" valign="top">
 <verbatim>
-  1 %CLI{text="my first step"}%
-  1 %CLI{text="my second step"}%
+	1 %CLI{text="my first step"}%
+	1 %CLI{text="my second step"}%
 </verbatim>
+</td>
+<td bgcolor="#EEEEEE" valign="top">
+	1 :-I my first step
+	1 :-I my second step
+</td>
+</tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 5: Create a legend and a reset button:* </td></tr>
+<td bgcolor="#EEEEEE" valign="top">
+<verbatim>
+	1 first step %CLI{name="second checklist"}% 
+	1 next step %CLI{name="second checklist"}% 
+
+%CHECKLIST{legend="on" reset=":-I Reset"}%
+</verbatim>
+</td>
+<td bgcolor="#EEEEEE" valign="top">
+	1 first step <br/> :-I
+	1 next step <br/> :-I
+
+( :-I - todo :ok: - done ) :-I Reset
+
+</td>
+</tr>
 
 
----++ Syntax Rules
+</table>
 
-Just type a %<nop>CLI% (<nop>CheckList Item) into a topic to create a single checklist item.
-
-To change the states or state icons you can set it for topic with a %<nop>CHECKLIST% tag.
-
-Both tags can be used with attributes documented in the next section.
-
+#ChecklistAttributes
 ---++ Attributes
 Usage: %<nop>CLI{attribute1="value1" attribute2="value2" ...}% <br/> or %<nop>CHECKLIST{attribute1="value1" attribute2="value2" ...}%
 
@@ -80,6 +163,7 @@ Examples:
 | id  | unique id of a checklist item (default: autogenerated); useful and recommended if you insert new checklist items in an existing checklist with states | id="myfirstownid" |
 | text | allows to place text behind the button (default: ""); useful to avoid the annoying line break between checklist button and text | text="my first step" |
 |  *%<nop>CHECKLIST{...}%*  |||
+| anchors | enables/disables link anchors (default: enabled); a state change will scroll your topic to the clicked checklist item; useful for long checklists | anchors="yes" |
 | reset | if defined it enables the reset image button with a given text or icon (default: undefined)| reset="Reset all" | 
 | showlegend | if set to "on" a states legend with icons will be displayed (default: off),<br/> e.g: ( :-I - todo :ok: - done) | showlegend="off" |
 |  *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%*  |||
@@ -88,6 +172,7 @@ Examples:
 | stateicons | icon list with states separated by a '&brvbar;' (default: ":-I&brvbar;:ok:) | stateicons=":-I&brvbar;:ok:" |
 
 ---++ Examples
+Use this examples to check your installation:
 
 	1 %CLI{text="first step"}%
 	1 %CLI{text="next step"}%
@@ -96,18 +181,13 @@ Examples:
 	| %CLI% | first step |
 	| %CLI% | next step |
 
----++ Planned Features
-
-	* State button to set all states of a checklist to a given state
-	* State statistics
-  
 
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = helps to create simple checklists.
+		* Set SHORTDESCRIPTION = Create simple checklists.
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -119,8 +199,11 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Enables 'reset' button (default: disabled with undefined value; value is a text or icon):
 		* # Set RESET = [Reset all]
 
-	* Enables state legend (default: disabled)
+	* Enables/Disables state legend (default: disabled)
 		* # Set SHOWLEGEND = off
+
+	* Enables/Disables link anchors (default: enabled)
+		* # Set ANCHORS = on
 
 ---++ Plugin Installation Instructions
 
@@ -133,12 +216,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* Test if the installation was successful: see Examples section 
 
+#ChecklistPluginInfo
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | BETA (V1.003) |
+|  Plugin Version: | 1 Nov 2005 (V1.003) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.003 (BETA) | TWiki:Main.DanielRohde:  added showlegend attribute;|
+|  v1.003 (1 Nov 2005) | TWiki:Main.DanielRohde: added attributes (showlegend, anchors); fixed states bug (illegal characters in states option); improved documentation (thanx TWiki:Main.PeterThoeny); fixed typos; fixed some minor bugs|
 |  v1.002 (31 Oct 2005) | TWiki:Main.DanielRohde: fixed cache problems; fixed HTML/URL encoding bugs; fixed reload bug; fixed reset image button bug; added anchors|
 |  v1.001 (27 Oct 2005) | TWiki:Main.DanielRohde: added new features ('reset','text' attributes); fixed major 'name' attribute bug; fixed documentation bugs | 
 |  v1.000 (27 Oct 2005): | TWiki:Main.DanielRohde: Initial version |
@@ -147,7 +231,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other Dependencies: | TWiki:Plugins.SmiliesPlugin |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 98% --> |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 98% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
