@@ -174,7 +174,7 @@ sub _loadTopic {
     while ( $line = <$fh> ) {
         if ( $line =~ m/^%META:FORM{name=\"([^\"]*)\"}%/o ) {
             $form = new TWiki::Contrib::DBCacheContrib::Map() unless $form;
-            my $name = $1;
+            my( $web, $name ) = TWiki::Func::normalizeWebTopicName('', $1);
             $form->set( "name", $name );
             $form->set( "_up", $meta );
             $meta->set( "form", $name );
