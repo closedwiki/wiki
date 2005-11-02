@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130765065" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1130940917" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%
 and depends on the TWiki:Plugins.SmiliesPlugin (see [[#ChecklistPluginInfo][Plugin Info]]).
 
-A %<nop>CLI% tag creates a image button and a simple click on it will change the state of the image button. 
+A %<nop>CLI% tag creates a image button and a simple click on it changes the state of the image button. 
 The default states are 'todo' (represented by a :-I image button) and 'done' (represented by a :ok: image button).
 
 
@@ -185,7 +185,7 @@ Examples:
 | text | allows to place text behind the button (default: ""); useful to avoid the annoying line break between checklist button and text | text="my first step" |
 |  *%<nop>CHECKLIST{...}%*  |||
 | anchors | enables/disables link anchors (default: enabled); a state change will scroll your topic to the clicked checklist item; useful for long checklists | anchors="yes" |
-| reset | it enables a reset image button with a given text or icon (default: undefined); if you put a @<i>&lt;state&gt;</i> into the reset value, you can reset a checklist to the given <i>&lt;state&gt;</i> | reset="Reset all" | 
+| reset | it enables a reset image button with a given text or icon (default: undefined); if you put a @<i>&lt;state&gt;</i> into the reset value, you can reset a checklist to the given <i>&lt;state&gt;</i>, e.g: <verbatim>reset="@done :ok: set all done"</verbatim>| reset="Reset all" | 
 | showlegend | if set to "on" a states legend with icons will be displayed (default: off),<br/> e.g: ( :-I - todo :ok: - done) | showlegend="off" |
 |  *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%*  |||
 | name | a naming context (default: "_default") - useful and recommended if you define more than one checklist on a topic (%X% if you use it in %<nop>CHECKLIST% you must use it in all related %<nop>CLI% tags too) | name="mychecklist1" |
@@ -202,7 +202,7 @@ Use this examples to check your installation:
 	| %CLI% | first step |
 	| %CLI% | next step |
 
-
+[[%TOPIC%ChecklistItemState]]
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
@@ -238,14 +238,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Linux/UNIX: Don't forget to change owner of data/TWiki/%TOPIC%.txt to your WWW server uid/gid (e.g: chown wwwrun:wwwrun ...).
 	* Test if the installation was successful: see Examples section 
 
 #ChecklistPluginInfo
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | 1 Nov 2005 (V1.004) |
+|  Plugin Version: | 2 Nov 2005 (V1.005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.005 (2 Nov 2005) | TWiki:Main.DanielRohde: fixed major bug (edit lock); fixed html encoding; improved doc |
 |  v1.004 (1 Nov 2005) | TWiki:Main.DanielRohde: added unknown parameter handling (new attribute: unknownparamsmsg); added 'set to a given state' feature; changed reset behavior; fixed typos |
 |  v1.003 (1 Nov 2005) | TWiki:Main.DanielRohde: added attributes (showlegend, anchors); fixed states bug (illegal characters in states option); improved documentation (thanx TWiki:Main.PeterThoeny); fixed typos; fixed some minor bugs|
 |  v1.002 (31 Oct 2005) | TWiki:Main.DanielRohde: fixed cache problems; fixed HTML/URL encoding bugs; fixed reload bug; fixed reset image button bug; added anchors|
