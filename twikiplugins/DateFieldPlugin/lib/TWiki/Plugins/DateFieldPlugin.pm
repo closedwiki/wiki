@@ -43,11 +43,6 @@ sub initPlugin {
         print STDERR "$mess\n";
         TWiki::Func::writeWarning( $mess );
         return 0;
-    } elsif( $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
-        TWiki::Func::writeWarning(
-            'JSCalendarContrib >=0.961 required, '.
-              $TWiki::Contrib::JSCalendarContrib::VERSION.' found');
-        return 0;
     }
 
     return 1;
