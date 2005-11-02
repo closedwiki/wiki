@@ -134,21 +134,23 @@ sub doInit {
   #writeDebug("defaultWikiUserName=$defaultWikiUserName, wikiUserName=$wikiUserName, isGuest=$isGuest");
 
   $query = &TWiki::Func::getCgiQuery();
-  $useSpamObfuscator = 1;
-  if ($query) { # are we in cgi mode?
-    # disable during register context
-    my $theAction = $query->url(-relative=>1); # cannot use skinState yet, we are in initPlugin
-    my $theSkin = $query->param('skin') || '';
-    my $theContentType = $query->param('contenttype');
-    #writeDebug("theAction=$theAction");
-    if ($theAction =~ /^(register|mailnotif|feed)/ || 
-	$theSkin eq 'rss' ||
-	$theContentType) {
-      $useSpamObfuscator = 0;
+  $useSpamObfuscator = &TWiki::Func::getPreferencesFlag('OBFUSCATEEMAIL');
+  if ($useSpamObfuscator) {
+    if ($query) { # are we in cgi mode?
+      # disable during register context
+      my $theAction = $query->url(-relative=>1); # cannot use skinState yet, we are in initPlugin
+      my $theSkin = $query->param('skin') || '';
+      my $theContentType = $query->param('contenttype');
+      #writeDebug("theAction=$theAction");
+      if ($theAction =~ /^(register|mailnotif|feed)/ || 
+	  $theSkin eq 'rss' ||
+	  $theContentType) {
+	$useSpamObfuscator = 0;
+      }
+    } else {
+      $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
+      #writeDebug("no query ... batch mode");
     }
-  } else {
-    $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
-    #writeDebug("no query ... batch mode");
   }
   $nrEmails = 0;
   $doneHeader = 0;

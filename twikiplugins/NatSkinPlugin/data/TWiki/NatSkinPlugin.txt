@@ -166,7 +166,6 @@ hit the WebSearch those days also. Here's the list of differences:
 	* added perl's =use strict= and fixed all warnings
 	* fixed several mod-perl issues
 	* add friendly message when nothing's been found
-	* use =noSpamPadding= to obfuscate email addresses
 	* light weighted google-like hit colorization
 
 <nop>NatSearch can be further reduced to certain webs and topics by setting WebPreferences.
@@ -277,6 +276,17 @@ using these settings will be changed accordingly.
 	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
 	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black", headerbg="black"
 
+---+++ Email Obfuscation
+The standard TWiki engine tries to obfuscate email addresses by adding a phrase to the email url (like NOSPAM)
+to fool collecting web crawlers. But that is not adequate enough today as crawlers are aware of that. The solution
+to that is to remove every trace of a pattern that could be an email address from the html source code and regenerate
+them using javascript. Most likely, web crawlers will only parse the html and don't run a javascript interpreter 
+beforehand. Nevertheless the obfuscation feature can be switched on and off by adding the =OBFUSCATEEMAIL= variable
+to your TWiki.TWikiPreferences like
+
+	* Set OBFUSCATEEMAIL = on
+
+
 ---++ Plugin Installation Instructions
 
 	* Install the plugins this one depends on (see below) of not done so already.
@@ -302,8 +312,9 @@ using these settings will be changed accordingly.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.70 (2005-10-28) |
+|  Plugin Version: | v2.71 (2005-11-02) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|   2 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
 |  28 Oct 2005: | add searchbox and style variations to the skin state; \
                   configuring header art is now done using style variations; \
                   fixed the NatSkinStyleBrowser to only "stick" to changes; \
