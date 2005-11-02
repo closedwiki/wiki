@@ -248,11 +248,11 @@ read from disc rather than from the cache. Passed a list of topic names that hav
 =cut
 
 sub onReload {
-	#my ( $this, $@topics) = @_;
+	#my ( $this, @$topics) = @_;
 }
 
 sub _onReload {
-    my ( $this ) = @_;
+    my $this = shift;
 
     # Fill in parent relations
     foreach my $topic ( $this->getValues() ) {
@@ -262,7 +262,7 @@ sub _onReload {
         }
     }
 
-    onReload( @_ );
+    $this->onReload(@_);
 }
 
 =begin text
