@@ -16,33 +16,37 @@
 %TMPL:DEF{"attachments"}%%META{"attachments"}%%TMPL:END%
 
 
-
-%TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title='%_{"View topic"}%'>%_{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%_{"Edit"}%</strike></span>%TMPL:END%
-
-
-
-%TMPL:DEF{"wysiwyg"}%%TMPL:P{"sep"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title='%_{"Edit this topic text"}%'>%_{"&Compose"}%</a></span>%TMPL:END%
-
-
-
 %TMPL:DEF{"create_topic"}%%_{"Cr&eate"}%%TMPL:END%
 %TMPL:DEF{"edit_topic"}%%_{"&Edit"}%%TMPL:END%
 
 
+%TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title='%_{"View topic"}%'>%_{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%_{"Edit"}%</strike></span>%TMPL:END%
 
-%TMPL:DEF{"active_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%_{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
+%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%_{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
+%TMPL:DEF{"activatable_raw_edit"}%%TMPL:P{context="inactive" then="inactive_edit" else="editraw"}%%TMPL:END%
+
+
+%TMPL:DEF{"wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title='%_{"Edit this topic text"}%'>%_{"&Compose"}%</a></span>%TMPL:END%
+%TMPL:DEF{"activatable_wysiwyg_edit_if_available"}%%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
+%TMPL:DEF{"activatable_wysiwyg_edit"}%%TMPL:P{context="inactive" else="activatable_wysiwyg_edit_if_available"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_combo_edit"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_wysiwyg_edit"}%%TMPL:END%
+
+%TMPL:DEF{"activatable_switchable_edit"}%%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg" else="activatable_raw_edit"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"inactive_attach"}%<strike>%_{"Attach"}%</strike>%TMPL:END%
+
 %TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="A" title="%_{"Attach an image or document to this topic"}%" rel="nofollow">%_{"&Attach"}%</a>%TMPL:END%
+%TMPL:DEF{"inactive_attach"}%<strike>%_{"Attach"}%</strike>%TMPL:END%
+%TMPL:DEF{"activatable_attach"}%%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%%TMPL:END%
 
 
-
-%TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%_{"More topic actions..."}%</strike></span>%TMPL:END%
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%_{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%_{"&More topic actions"}%</a>%TMPL:END%
+%TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%_{"More topic actions..."}%</strike></span>%TMPL:END%
+%TMPL:DEF{"activatable_more"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
 
-
+%TMPL:DEF{toolbar_buttons}%<div class="patternToolBarButtons">%TMPL:P{"activatable_switchable_edit"}%<span class="patternButton">%TMPL:P{"activatable_attach"}%</span><span class="patternButton">%TMPL:P{"printable"}%</span></div>%TMPL:END%
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
 <table cellpadding="0" cellspacing="0" border="0">
@@ -52,7 +56,7 @@
 <td class="patternRevInfo"><span class="patternRevision">%REVINFO%</span></td></tr>
 <tr>
 <td class="patternToolBar" colspan="2">
-<div class="patternToolBarButtons">%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%<span class="patternButton">%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%</span><span class="patternButton"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" accesskey="P" title="%_{"Printable version of this topic"}%" rel="nofollow">%_{"&Printable"}%</a></span></div>
+%TMPL:P{"toolbar_buttons"}%
 </td>
 </tr>
 </table>
@@ -77,9 +81,15 @@
 %TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
+%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" title="%_{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%_{"&Printable"}%</a>%TMPL:END%
 
+%TMPL:DEF{"viewraw"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%_{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%_{"Raw View"}%</a>%TMPL:END%
 
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%%TMPL:P{"sep"}%%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%%TMPL:P{"sep"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" title="%_{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%_{"&Printable"}%</a>%TMPL:P{"sep"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%_{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%_{"&Raw text"}%</a>%TMPL:P{"sep"}%%_{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="%_{"Search the <nop>%WEB% Web for topics that link to here"}%" accesskey="W">%_{"&Web"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%_{"Search all webs for topics that link to here"}%" accesskey="L">%_{"A&ll Webs"}%</a> %TMPL:P{"sep"}% %TMPL:P{"revisions"}% %TMPL:P{"sep"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
+%TMPL:DEF{"raw"}%%TMPL:P{"viewraw"}% %TMPL:P{context="WysiwygPluginEnabled" then="editraw"}%%TMPL:END%
+
+%TMPL:DEF{"backlinks"}%%_{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="%_{"Search the <nop>%WEB% Web for topics that link to here"}%" accesskey="W">%_{"&Web"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%_{"Search all webs for topics that link to here"}%" accesskey="L">%_{"A&ll Webs"}%</a>%TMPL:END%
+
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_switchable_edit"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:P{"raw"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}% %TMPL:P{"sep"}% %TMPL:P{"revisions"}% %TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 
 
 
