@@ -2,6 +2,7 @@
 #
 # Intended for use on PC where softlinks (as done by mklinks.sh) are not
 # available
+# SMELL this will become unnecessary once twikishell is bundled.
 use strict;
 use File::Path;
 use File::Copy;
@@ -34,6 +35,11 @@ if ($modules[0] eq "all") {
   opendir(D, "twikiplugins") || die "Must be run from root of installation";
   @modules = ( grep { /(Plugin|Contrib)$/ } readdir( D )); 
   closedir( D );
+}
+
+
+if ($modules[0] eq "default") {
+    @modules = qw(CommentPlugin EditTablePlugin InterwikiPlugin PreferencesPlugin SpreadSheetPlugin SmiliesPlugin TablePlugin WysiwygPlugin TipsContrib);
 }
 
 print "Installing modules: ".join(",", @modules).":\n";
