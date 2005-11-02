@@ -261,7 +261,7 @@ sub initSkinState {
   &initKnownStyles();
   my $prefStyle = 
     &TWiki::Func::getSessionValue('NATSKIN_SKINSTYLE') ||
-    &TWiki::Func::getPreferencesValue("SKINSTYLE") ||
+    &TWiki::Func::getPreferencesValue('SKINSTYLE') ||
     $defaultStyle;
   $prefStyle =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyle) {
@@ -311,7 +311,7 @@ sub initSkinState {
   # handle border
   my $prefStyleBorder =
     &TWiki::Func::getSessionValue('NATSKIN_STYLEBORDER') ||
-    &TWiki::Func::getPreferencesValue("STYLEBORDER") ||
+    &TWiki::Func::getPreferencesValue('STYLEBORDER') ||
     $defaultStyleBorder;
   $prefStyleBorder =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleBorder) {
@@ -327,7 +327,7 @@ sub initSkinState {
   # handle buttons
   my $prefStyleButtons =
     &TWiki::Func::getSessionValue('NATSKIN_STYLEBUTTONS') ||
-    &TWiki::Func::getPreferencesValue("STYLEBUTTONS") ||
+    &TWiki::Func::getPreferencesValue('STYLEBUTTONS') ||
     $defaultStyleButtons;
   $prefStyleButtons =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleButtons) {
@@ -343,7 +343,7 @@ sub initSkinState {
   # handle sidebar 
   my $prefStyleSideBar =
     &TWiki::Func::getSessionValue('NATSKIN_STYLESIDEBAR') ||
-    &TWiki::Func::getPreferencesValue("STYLESIDEBAR") ||
+    &TWiki::Func::getPreferencesValue('STYLESIDEBAR') ||
     $defaultStyleSideBar;
   $prefStyleSideBar =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleSideBar) {
@@ -359,7 +359,7 @@ sub initSkinState {
   # handle searchbox
   my $prefStyleSearchBox =
     &TWiki::Func::getSessionValue('NATSKIN_STYLESEARCHBOX') ||
-    &TWiki::Func::getPreferencesValue("STYLESEARCHBOX") ||
+    &TWiki::Func::getPreferencesValue('STYLESEARCHBOX') ||
     $defaultStyleSearchBox;
   $prefStyleSearchBox =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleSearchBox) {
@@ -375,7 +375,7 @@ sub initSkinState {
   # handle variation 
   my $prefStyleVariation =
     &TWiki::Func::getSessionValue('NATSKIN_STYLEVARIATION') ||
-    &TWiki::Func::getPreferencesValue("STYLEVARIATION") ||
+    &TWiki::Func::getPreferencesValue('STYLEVARIATION') ||
     $defaultVariation;
   $prefStyleVariation =~ s/^\s*(.*)\s*$/$1/go;
   if ($theStyleVariation) {
@@ -1687,9 +1687,10 @@ sub escapeParameter {
 sub clearSessionValue {
   my $key = shift;
 
-  # using dakar's client 
-  if (defined &TWiki::Client::clearSessionValue) {
-    return $TWiki::Plugins::SESSION->{client}->clearSessionValue($key);
+  # using dakar's Func API
+  if ($isDakar) {
+    #return $TWiki::Plugins::SESSION->{client}->clearSessionValue($key);
+    return &TWiki::Func::clearSessionValue($key);
   }
   
   # using the SessionPlugin
