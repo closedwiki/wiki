@@ -56,9 +56,6 @@ sub initPlugin {
     $currentWeb = $web;
     $calledThisSession = 0;
 
-    if( defined( &TWiki::Func::getContext )) {
-        TWiki::Func::getContext()->{WysiwygPluginEnabled} = 1;
-    }
     # Plugin correctly initialized
     return 1;
 }
