@@ -132,6 +132,7 @@ document.write('<\/style>');
 		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/bullet-blue.gif");
 	}
 </style>
+%TMPL:INCLUDE{"cssmediatypes"}%
 <script type="text/javascript">
 <!--
 /* Use javascript to check if style urls are valid (non-empty) */
@@ -170,12 +171,13 @@ document.write('<\/style>');
 %TMPL:P{"script"}%
 %TMPL:P{"twikistyle"}%
 %TMPL:P{"templatecustomstyle"}%
+%TMPL:P{"templatemediastyle"}%
 </head>%TMPL:END%
 
 
 
 %TMPL:DEF{"templatecustomstyle"}%<style type="text/css" media="all"></style>%TMPL:END%
-
+%TMPL:DEF{"templatemediastyle"}%<style type="text/css" media="print"></style>%TMPL:END%
 
 
 %TMPL:DEF{"titleaction"}% %TMPL:END%
