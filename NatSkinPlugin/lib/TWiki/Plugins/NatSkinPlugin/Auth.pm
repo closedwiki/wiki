@@ -100,7 +100,7 @@ sub logon {
   if ($theUser eq $defaultWikiUserName) {
     # logout
     $theUrl = &TWiki::Func::getScriptUrl($theWeb, $theTopic, $theAction);
-    $theUrl =~ s/^https:/http:/o;
+    #$theUrl =~ s/^https:/http:/o; SMELL SMELL SMELL 
   } else {
     # logon
     #&_getPrefsFromTopic($mainWeb, $theUser);
