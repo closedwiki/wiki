@@ -84,13 +84,17 @@ function addLoadEvent(func){
   }
 }
 
+function focusSearchBox () {
+  if (typeof document.SearchForm != 'undefined') {
+    document.SearchForm.search.focus();
+  }
+}
+
 // default plugin impls
 function initObfuscator() {}
-function initTwist() {}
 
 function initNatSkin() {
   initObfuscator(); // SMELL: package this as a plugin of its own and use addLoadEvent
-  initTwist(); // SMELL: why do I have to call it here to make it work ???
   %TMPL:P{"onloadscript"}%
 }
 
