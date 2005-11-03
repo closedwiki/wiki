@@ -73,7 +73,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.71 (2005-11-02) |
+|  Skin Version: | v2.72 (2005-11-02) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  2005-11-02: | fixed javascript problems combined with the TWiki:Plugins.TwistyPlugin; \
                  trigger printing when clicking on "Print" |
