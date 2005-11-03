@@ -3,45 +3,16 @@
 
 
 %TMPL:DEF{"script"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PatternSkin/twiki_settings.js"></script>
 <script type="text/javascript">
-<!--HIDE
-ns4 = (document.layers)? true:false;
-ie4 = (document.all)? true:false;
-dom = (document.getElementById)?true:false;
-
-toShow=new Array();
-toHide=new Array();
-
-function initForm() {
-  try { document.main.text.focus(); } catch (er) {}
-  for (i = 0; i < toShow.length; i++) {
-     if(dom) {
-        document.getElementById(toShow[i]).style.display="inline";
-     } else if( ie4 ) {
-        document.all[toShow[i]].style.display="inline";
-     } else if( ns4 ) {
-        document.layers[toShow[i]].style.display="inline";
-     }
-  }
-  for ( i = 0; i < toHide.length; i++) {
-    if(dom) {
-        document.getElementById(toHide[i]).style.display="none";
-    } else if( ie4 ) {
-        document.all[toHide[i]].style.display="none";
-    } else if( ns4 ) {
-        document.layers[toHide[i]].style.display="none";
-    }
-  }
-}
-	function launchWindow( theWeb, theTopic ) {
-		win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-		if( win ) {
-			win.focus();
-		}
-		return false;
+//<![CDATA[
+	function launchWindow(inWeb, inTopic ) {
+		return launchTheWindow("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/", inWeb, inTopic, "plain.pattern");
 	}
-//STOP HIDING-->
-</script> %TMPL:END%
+//]]>
+</script>
+%TMPL:END%
 
 
 
@@ -75,7 +46,7 @@ function initForm() {
 <div class="twikiEditTextarea">
 <input type="hidden" name="action" value="saveSettings" />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
-<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='if(window.event.keyCode==27)return false;'>
+<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>
 %TEXT%
 </textarea>
 </div>

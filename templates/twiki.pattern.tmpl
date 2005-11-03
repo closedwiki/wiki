@@ -22,136 +22,24 @@
 
 
 %TMPL:DEF{"script"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PatternSkin/pattern.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-	// DON'T overwrite existing onload handlers
-	// http://simon.incutio.com/archive/2004/05/26/addLoadEvent
-	function addLoadEvent(func){
-		var oldonload = window.onload;
-		if (typeof window.onload != 'function') {
-			window.onload = function() {
-			    func();
-            }
-		} else {
-			window.onload = function() {
-				oldonload();
-				func();
-			}
-		}
-	}
-    
-   	function initPage() { }
-
- 	addLoadEvent(initPage);
- 	
- 	/**
- 	clears default form field value
- 	*/
- 	function clearDefaultandCSS(el) {
-		if (el.defaultValue==el.value) el.value = "";
-		// If Dynamic Style is supported, clear the style
-		//if (el.style) el.style.cssText = "";
-		removeClass(el, "patternFormFieldDefaultColor"); /* removeClass is included in TwistyContrib/twist.js */
-	}
-	function setDefaultText(el, text) {
-		el.value = el.text;
-	}
-
-//]]>
-</script>%TMPL:END%
+%TMPL:END%
 
 
 
 %TMPL:DEF{"twikistyle"}%
-<!-- Link to stylesheets in case javascript is off. -->
-<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%TWIKILAYOUTURL%" media="all" />
-<link id="twikiStyleCss" rel="stylesheet" type="text/css" href="%TWIKISTYLEURL%" media="all" />
-<link id="twikiColorsCss" rel="stylesheet" type="text/css" href="%TWIKICOLORSURL%" media="all" />
-<!-- But if javascript is on, disable the links. -->
-<script type="text/javascript">
-   if (document.getElementById) {
-      document.getElementById("twikiLayoutCss").disabled = true;
-      document.getElementById("twikiStyleCss").disabled = true;
-      document.getElementById("twikiColorsCss").disabled = true;
-   }
-</script>
-<style type="text/css" media="all">
-/* Twisty */
-@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
+<!--[if IE]>
+<style>
+* html pre {
+	overflow-x:auto;
+    overflow-y:hidden;
+	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
+}
 </style>
-<script type="text/javascript">
-<!--
-/* Use javascript to check if style urls are valid (non-empty) */
-document.write('<style type="text/css" media="all">');
-/* Default TWiki layout */
-if ("%TWIKILAYOUTURL%".split("?")[0].length && "%TWIKILAYOUTURL%".split("TWIKILAYOUTURL")[0].length) {
-	document.write('@import url("%TWIKILAYOUTURL%");'); 
-}
-/* Default TWiki style */
-if ("%TWIKISTYLEURL%".split("?")[0].length && "%TWIKISTYLEURL%".split("TWIKISTYLEURL")[0].length) {
-	document.write('@import url("%TWIKISTYLEURL%");'); 
-}
-/* Default TWiki colors */
-if ("%TWIKICOLORSURL%".split("?")[0].length && "%TWIKICOLORSURL%".split("TWIKICOLORSURL")[0].length) {
-	document.write('@import url("%TWIKICOLORSURL%");'); 
-}
-document.write('<\/style>');
-//-->
-</script>
-<style type="text/css" media="all">
-	/* Styles that are set using variables */
-	.twikiToc li {
-		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/bullet-down.gif");
-	}	        
-	.patternWebIndicator,
-	.patternBookViewList .twikiTopRow {
-		background-color:%WEBBGCOLOR%;
-	}
-	.twikiHelp,
-	.patternAccessKeyInfo {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/info_bg.gif");
-	}
-	.patternLeftBarPersonal,
-	.tipsOfTheDay {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/tips_bg.gif") #fff repeat-x;
-	}
-	.patternMain {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/page_bg.gif") #fff repeat-x;
-	}
-	.patternPrintPage .patternMain {
-		background:#fff;
-	}
-	.twikiPageForm table {
-		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/twikiPageForm_bg.gif");
-	}
-	.patternTopic .twikiTable th {
-		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/twikiTable_header_bg.gif");
-	}
-	.patternLeftBarPersonal li {
-		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/bullet-blue.gif");
-	}
-</style>
-%TMPL:INCLUDE{"cssmediatypes"}%
-<script type="text/javascript">
-<!--
-/* Use javascript to check if style urls are valid (non-empty) */
-document.write('<style type="text/css" media="all">');
-/* Custom overriding layout per web or per topic */
-if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
-	document.write('@import url("%USERLAYOUTURL%");'); 
-}
-/* Custom overriding style per web or per topic */
-if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
-	document.write('@import url("%USERSTYLEURL%");'); 
-}
-/* Custom overriding style per web or per topic */
-if ("%USERCOLORSURL%".split("?")[0].length && "%USERCOLORSURL%".split("USERCOLORSURL")[0].length) {
-	document.write('@import url("%USERCOLORSURL%");'); 
-}
-document.write('<\/style>');
-//-->
-</script>
+<![endif]-->
+%TMPL:INCLUDE{"css.pattern"}%
 %TMPL:END%
 
 

@@ -65,11 +65,7 @@ pre {
 html>body pre { /* hide from IE */
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
 }
-* html pre {
-	overflow-x:auto;
-    overflow-y:hidden;
-	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
-}
+/* IE behavior for pre is defined in twiki.pattern.tmpl in conditional comment */
 ol li, ul li {
 	line-height:1.4em; /*S1*/
 }

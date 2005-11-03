@@ -174,6 +174,7 @@ data/TWiki/TWikiFuncDotPm.txt 0660
 data/TWiki/TWikiGlossary.txt 0660
 data/TWiki/TWikiHistory.txt 0660
 data/TWiki/TWikiInstallationGuide.txt 0660
+data/TWiki/TWikiJavascripts.txt 0660
 data/TWiki/TWikiLogos.txt 0660
 data/TWiki/TWikiMergeDotPm.txt 0660
 data/TWiki/TWikiMetaData.txt 0660
@@ -428,6 +429,7 @@ pub/TWiki/PatternSkin/twikiTable_header_bg.gif 0660
 pub/TWiki/PatternSkin/layout.css 0660
 pub/TWiki/PatternSkin/tips_bg.gif 0660
 pub/TWiki/PatternSkin/page_bg.gif 0660
+pub/TWiki/PatternSkin/pattern.js 0660
 pub/TWiki/PatternSkin/patternskin_screenshot_full.png 0660
 pub/TWiki/PatternSkin/patternskin_screenshot.jpg 0660
 pub/TWiki/PatternSkinCss/CSS_element_layout_view.pattern.tmpl.png 0660
@@ -637,6 +639,8 @@ pub/TWiki/TWikiLogos/T-logo-88x31-t.gif 0660
 pub/TWiki/TWikiLogos/T-logo.svg 0660
 pub/TWiki/TWikiLogos/favicon.ico 0660
 pub/TWiki/TWikiTemplates/testscreen.gif 0660
+pub/TWiki/TWikiJavascripts/twiki.js 0660
+pub/TWiki/TWikiJavascripts/twiki_settings.js 0660
 pub/TWiki/WabiSabi/wabisabi.gif 0660
 pub/TWiki/WebHome/twiki_home.gif 0660
 pub/TWiki/WebPreferences/favicon.ico 0660
