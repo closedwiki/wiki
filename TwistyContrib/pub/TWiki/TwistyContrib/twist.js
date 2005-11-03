@@ -65,7 +65,7 @@ document.write("<\/style>");
 	}
 
 	function indexOf(element,array) {
-      for (var i = 0; i < array.length; i++) {
+      for (var i = 0; i < array.length; ++i) {
         if (array[i]==element) {
           return i;
 		}
@@ -78,7 +78,7 @@ document.write("<\/style>");
 		var elements = [];
 		var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
 		
-		for (var i = 0; i < allObjects.length; i++) {
+		for (var i = 0; i < allObjects.length; ++i) {
           if (allObjects.item(i).className.indexOf(className) != -1)
             elements.push(allObjects.item(i));
 		}
@@ -95,7 +95,7 @@ document.write("<\/style>");
 		var elements = [];
 		var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
 		
-		for (var i = 0; i < allObjects.length; i++) {
+		for (var i = 0; i < allObjects.length; ++i) {
           if (allObjects.item(i).id.indexOf(id) != -1)
             elements.push(allObjects.item(i));
 		}
@@ -105,25 +105,25 @@ document.write("<\/style>");
 
 	function initTwist () {
 		
-		makeHiddenElements = getElementsByClassName('twistyMakeHidden');
+		var makeHiddenElements = getElementsByClassName('twistyMakeHidden');
 		var i;
-		for (i = 0; i < makeHiddenElements.length; i++) {
+		for (i = 0; i < makeHiddenElements.length; ++i) {
           replaceClass(makeHiddenElements[i], 'twistyMakeHidden', 'twistyHidden');
 		}
 		
-		makeVisibleElements = getElementsByClassName('twistyMakeVisible');
-		for (i = 0; i < makeVisibleElements.length; i++) {
+		var makeVisibleElements = getElementsByClassName('twistyMakeVisible');
+		for (i = 0; i < makeVisibleElements.length; ++i) {
           removeClass(makeVisibleElements[i], 'twistyMakeVisible');
 		}
 
-		triggerElements = getElementsByClassName('twistyTrigger');
+		var triggerElements = getElementsByClassName('twistyTrigger');
 		var id;
-		for (i = 0; i < triggerElements.length; i++) {
+		for (i = 0; i < triggerElements.length; ++i) {
 			triggerElements[i].onclick = function() {
             	twist(this.parentNode.id.slice(0,-4));
 	            return false;
 			};
-			elemid = triggerElements[i].parentNode.id.slice(0,-4);
+			var elemid = triggerElements[i].parentNode.id.slice(0,-4);
 			if (id != elemid) {
 				id = elemid;
 				var toggleElem = document.getElementById(id+'toggle');
@@ -179,7 +179,7 @@ document.write("<\/style>");
 		if (days) {
 			var date = new Date();
 			date.setTime(date.getTime()+(days*24*60*60*1000));
-			var expires = "; expires="+date.toGMTString();
+			expires = "; expires="+date.toGMTString();
 		}
 		document.cookie = name + "=" + value + expires + "; path=/";
 	}
@@ -190,7 +190,7 @@ document.write("<\/style>");
 		if (ca.length == 0) {
 			ca = document.cookie.split(';');
 		}
-		for (var i=0;i < ca.length;i++) {
+		for (var i=0;i < ca.length;++i) {
 			var c = ca[i];
 			while (c.charAt(0)==' ') c = c.substring(1,c.length);
 			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
