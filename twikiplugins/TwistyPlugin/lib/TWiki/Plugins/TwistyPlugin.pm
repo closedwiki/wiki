@@ -92,7 +92,7 @@ sub _TWISTYBUTTON {
     my $mode=$params->{'mode'}||'span';
     my $img=$params->{'img'} || '';
     $img =~ s/['\"]//go;
-    my $imgTag=($img ne '') ? '<img src="'.$img.'" alt="" />' : '';
+    my $imgTag=($img ne '') ? '<img src="'.$img.'" border="0" alt="" />' : '';
     my $initialHidden=($theState eq 'hide') ? 'twistyHidden ' : '';
     return '<'.$mode.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.'</a></'.$mode.'>';
 }
