@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="rohdedan" date="1119365812" format="1.0" version="1.6"}%
----++!! Calendar Plugin (version 1.017)
+%META:TOPICINFO{author="TWikiContributer" date="1119365812" format="1.0" version="$Rev$"}%
+---++!! Calendar Plugin (version 1.018)
 
 The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page. Multiple topics can be specified as the source of the events, and these can be in any web.
 
@@ -199,6 +199,12 @@ A list of Events is just a bullet list like this:
 | ==todaycolor="#nnnn"== | Background of today's cell | The web bgcolor |
 | ==todaycontentcolor="#nnnn"== | Content color of today's cell | contentcolor setting |
 | and other attributes of HTML::CalendarMonthSimple |||
+| ==aslist== | Controls whether events displayed in calendar style (=aslist=0=) or list style (=aslist=1=). | 0 |
+| ==days== | Specifies how many days of calendar data to list. Only valid if =aslist=1=. | 1 |
+| ==months== | Specifies how many months of calendars to display. Only valid if =aslist=0=. | 1 |
+| ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | $day |
+| ==todaydatenumberformat== | Specifies formatting for the date number for the current day (today) in the calendar. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | ==datenumberformat== |
+| ==multidayformat== | Specifies formatting of the description for multi-day events. See [[%TOPIC#MultiDayFormatting]] for details. | ==$description== |
 
 ---+++ Event Syntax
 
@@ -230,12 +236,80 @@ I.e. ==format== is:
 <img alt="$description" SRC="%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif" /></a>
 </verbatim>
 
+#MultiDayFormatting
+---+++ Multi-Day Event Formatting
+
+The multidayformat option allows the description of each day of a
+multiday event to be displayed differently.  This could be used to
+visually or textually annotate the description to indicate continuance
+from or to other days.
+
+The option consists of a comma separated list of formats for each
+type of day in a multiday event:
+
+first, middle, last, middle-unseen, last-unseen
+
+Where:
+
+   * _first_ is the format used when the first day of the event is
+    displayed
+   * _middle_ is the format used when the day being displayed is not
+    the first or last day
+   * _last_ is the format used when the last day of the event is
+     displayed
+   * _middle-unseen_ is the format used when the day being displayed
+    is not the first or last day of the event, but the preceding days
+    of the event have not been displayed. For example, if an event
+    runs from 29 Apr to 2 May and a May calendar is being displayed,
+    then this format would be used for 1 May.
+   * _last-unseen_ is the format used when the day being displayed is
+    the last day of the event, but the preceding days of the event
+    have not been displayed. For example, if an event runs from 29 Apr
+    to 1 May and a May calendar is being displayed, then this format
+    would be used for 1 May. Note that in the previous example (event
+    from 29 Apr to 2 May), this format would *not* be used for a May
+    calendar because the event was "seen" on 1 May; so, the _last_
+    format would be used for 2 May.
+
+Within each format, date information for the current day can be
+substituted using the same format codes as accepted by
+=%<nop>GMTIME%=. An extension to these codes allows the date of the
+first and/or last day of the event to also be rendered.
+
+   * =$first(_<format>_)= will render the first date of the event
+     according to _<format>_, where _<format>_ is, again, a string of
+     codes acceptable to =%<nop>GMTIME%=.
+   * =$last(_<format>_)= will render the last date of the event in the
+     way just described for =$first()=
+ 
+Missing formats will be filled in as follows:
+
+   * _middle_ will be set to _first_
+   * _last_ will be set to _middle_
+   * _middle-unseen_ will be set to _middle_
+   * _last-unseen_ will be set to _last_
+
+Missing formats are different from empty formats. For example,
+
+multidayformat="$description (until $last($day $month)),,"
+
+specifies an empty format for _middle_ and _last_. The result of this
+is that only the first day will be shown. Note that since an
+unspecified _middle-unseen_ is set from the (empty) _middle_ format,
+an event that begins prior to the calendar being displayed but ending
+in the current calendar will not be displayed. In contrast,
+multidayformat="$description" will simply display the description for
+each day of the event; all days (within the scope of the calendar)
+will be displayed.
+
+The default format is to simply display the description of the event.
+
 ---++ Default settings
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = This plugin shows a monthly calendar with highlighted events
 	* How the cell content is formatted 
 <verbatim>
-		* Set FORMAT = $old<br /><small>$description</small>
+		* #Set FORMAT = $old<br /><small>$description</small>
 </verbatim>
 	* __Note:__ You can add settings of any of the recognized attributes (in upper case like SHOWWEEKDAYHEADERS). Examples are shown below:
 		* Set CELLALIGNMENT = center
@@ -269,8 +343,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AndreaSterbini |
-|  Plugin Version: | V1.017 (21 Jun 2005) |
+|  Plugin Version: | V1.018 (3 Nov 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.018: | TWiki:Main.DavidBright: Added capability to display multiple months in one call, display events in a list, and provided for more extensive formatting of date and description of events. |
 |  V1.017: | TWiki:Main.DanielRohde: Added start and end date support for periodic repeaters; Added initlang patch by TWiki:Main.JensKloecker; Changed 'my' to 'local' so exceptions working again; Removed fetchxmap debug message; Fixed illegal date bug; Allowed month abbreviations in month attribute |
 |  V1.016: | TWiki:Main/DavidBright: Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0 |
 |  V1.015: | TWiki:Main.PatriceFournier: Added back support for preview showing unsaved events; Two loop fixes from TWiki:Main.DanielRohde |
