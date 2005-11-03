@@ -23,6 +23,7 @@ package TWiki::Plugins::CalendarPlugin;
 
 
 # use strict;
+use Time::Local;
 
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
@@ -30,6 +31,7 @@ use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
 $VERSION   = '$Rev$';
 $RELEASE = 'Dakar';
 
+#$VERSION   = '1.017';  #dro# Added start and end date support for periodic repeaters; Added initlang patch by TWiki:Main.JensKloecker; Changed 'my' to 'local' so exceptions working again; Removed fetchxmap debug message; Fixed illegal date bug; Allowed month abbreviations in month attribute
 #VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
 #VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
 #VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
@@ -71,7 +73,7 @@ sub initPlugin
 # =========================
 sub initDefaults
 {
-    my $webColor = &TWiki::Func::getPreferencesValue("WEBBGCOLOR", $web) ||
+    my $webColor = &TWiki::Func::getPreferencesValue('WEBBGCOLOR', $web) ||
 		    'wheat' ;
 
     # reasonable defaults to produce a small calendar
@@ -118,8 +120,11 @@ sub initDefaults
 	lang			=> 'English',
 	topic			=> $topic,
 	web			=> $web,
-	format			=> "<a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/\$web/\$topic\"><font size=\"+2\">"
-                                 . "\$old</font><img alt=\"\$description\" src=\"%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif\" border=\"0\" /></a>"
+	format			=> '<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic"><font size="+2">'
+                                 . '$old</font><img alt="$description" src="%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif" border="0" /></a>',
+	datenumberformat	=> '$day',
+	todaydatenumberformat	=> undef,
+	multidayformat		=> undef, # Default: display description unchanged
     );
 
     # now get defaults from CalendarPlugin topic
@@ -136,7 +141,7 @@ sub initDefaults
 sub commonTagsHandler
 {
     $_[0] =~ s/%CALENDAR{(.*?)}%/&handleCalendar( $1, \$_[0], $_[1], $_[2] )/geo;
-    $_[0] =~ s/%CALENDAR%/&handleCalendar(        "", \$_[0], $_[1], $_[2] )/geo;
+    $_[0] =~ s/%CALENDAR%/&handleCalendar(        '', \$_[0], $_[1], $_[2] )/geo;
 }
 
 # =========================
@@ -169,7 +174,7 @@ sub expandIncludedEvents
     # prevent recursive loop
     if( ( @theProcessedTopics ) && ( grep { /^$theWeb.$theTopic$/ } @theProcessedTopics ) ) {
         # file already included
-        return "";
+        return '';
     } else {
         # remember for next time
         push( @theProcessedTopics, "$theWeb.$theTopic" );
@@ -190,7 +195,7 @@ sub fetchDays
     my( $pattern, $refBullets ) = @_;
 
     $pattern = "^\\s*\\*\\s+$pattern(\\s+X\\s+{(.+)})?\\s+-\\s+(.*)\$";
-    my @res = map { join '|', ( map { $_ || "" } m/$pattern/ ) }
+    my @res = map { join '|', ( map { $_ || '' } m/$pattern/ ) }
               grep { m/$pattern/ } @$refBullets;
 
     # Remove the bullets we handled, so that when several patterns
@@ -215,7 +220,7 @@ sub fetchxmap {
 	use Date::Calc qw( Add_Delta_Days );
 	($xlist, $y, $m) = @_;
 	@ret = &emptyxmap($y, $m);
-	@xcepts = split ",", $xlist;
+	@xcepts = split ',', $xlist;
 	for $xc (@xcepts) {
 		if (@dparts = $xc =~ m/$full_date_rx\s*-\s*$full_date_rx/) {
 			($d1, $m1, $y1, $d2, $m2, $y2) = @dparts;
@@ -247,18 +252,29 @@ sub fetchxmap {
 sub handleCalendar
 {
     my( $attributes, $refText, $theTopic, $theWeb ) = @_;
+    my $result = '';	  # This is used to accumulate the result text
 
-    use Date::Calc qw( Date_to_Days Days_in_Month Day_of_Week Nth_Weekday_of_Month_Year Add_Delta_Days Today_and_Now Add_Delta_YMDHMS Today);
+    use Date::Calc qw( 
+		       Add_Delta_Days 
+		       Add_Delta_YM
+		       Add_Delta_YMDHMS 
+		       Date_to_Days 
+		       Day_of_Week 
+		       Days_in_Month 
+		       Nth_Weekday_of_Month_Year 
+		       Today 
+		       Today_and_Now 
+		       );
 
     # lazy load of needed libraries
-    if (   $libsError  ) { return "";  }
+    if (   $libsError  ) { return '';  }
     if ( ! $libsLoaded ) {
 	eval 'require HTML::CalendarMonthSimple';
 	if ( defined( $HTML::CalendarMonthSimple::VERSION ) ) {
 	    $libsLoaded = 1;
 	} else	{
 	    $libsError = 1;
-	    return "";
+	    return '';
 	}
     }
     initDefaults() unless( $defaultsInitialized );
@@ -273,140 +289,269 @@ sub handleCalendar
 	$options{$option} = $v if defined($v);
     }
 
-    # read fixed months/years
-    my $m = scalar &TWiki::Func::extractNameValuePair( $attributes, "month" );
-    my $y = scalar &TWiki::Func::extractNameValuePair( $attributes, "year" );
+    # Default todaydatenumberformat to datenumberformat if not otherwise set
 
-    # read and set the desired language
-    my $lang = scalar &TWiki::Func::extractNameValuePair( $attributes, "lang" );
-    $lang = $lang ? $lang : $defaults{lang};
-    #Date::Calc::Language(Date::Calc::Decode_Language($lang)) if $lang;
-    Date::Calc::Language(Date::Calc::Decode_Language($lang));
+    $options{todaydatenumberformat} = $options{datenumberformat} if (! $options{todaydatenumberformat});    
 
-    
     # get GMT offset
     my ($currentYear, $currentMonth, $currentDay, $currentHour, $currentMinute, $currentSecond) = Today_and_Now(1);
-    my $gmtoff = scalar &TWiki::Func::extractNameValuePair( $attributes, "gmtoffset" );
+    my $gmtoff = scalar &TWiki::Func::extractNameValuePair( $attributes, 'gmtoffset' );
     if ( $gmtoff ) {
     	$gmtoff += 0;
-    	($currentYear, $currentMonth, $currentDay, $currentHour, $currentMinute, $currentSecond) = Add_Delta_YMDHMS($currentYear, $currentMonth, $currentDay, $currentHour, $currentMinute, $currentSecond, 0, 0, 0, $gmtoff, 0, 0);
+    	($currentYear,
+	 $currentMonth,
+	 $currentDay,
+	 $currentHour,
+	 $currentMinute,
+	 $currentSecond) = Add_Delta_YMDHMS($currentYear,
+					    $currentMonth,
+					    $currentDay,
+					    $currentHour,
+					    $currentMinute,
+					    $currentSecond,
+					    0, 0, 0, $gmtoff, 0, 0);
     }
-	
-    local %months = (  Jan=>1, Feb=>2, Mar=>3, Apr=>4,  May=>5,  Jun=>6,
-		    Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12);
 
-    # handle relative dates, too  #cs#
-    $y = 0 if $y eq "";  # to avoid warnings in +=
-    $y += $currentYear if $y =~ /^[-+]|^0?$/;  # must come before $m !
-    if ( $m =~ /^[-+]|^0?$/ ) {
-        $m = 0 if $m eq "";  # to avoid warnings in +=
-        $m += $currentMonth;
+
+    # read fixed months/years
+    my $m = scalar &TWiki::Func::extractNameValuePair( $attributes, 'month' );
+    my $y = scalar &TWiki::Func::extractNameValuePair( $attributes, 'year' );
+
+    # Check syntax of year parameter. It can be blank (meaning the
+    # current year), an absolute number, or a relative number (e.g.,
+    # "+1", meaning next year).
+
+    if (!$y || $y =~ /^[-+]?\d+$/) {
+	# OK
+	$y = 0 if $y eq '';	# to avoid warnings in +=
+	# Add current year if year is 0 or relative
+	$y += $currentYear if $y =~ /^([-+]\d+|0)$/; # must come before $m !
+    } else {
+	return "\n\n%<nop>CALENDAR{$attributes}% has invalid year specification.\n\n";
+    }
+
+    # Check syntax of month parameter. It can be blank (meaning the
+    # current month), a month abbreviation, an absolute number, or a
+    # relative number (e.g., "+1", meaning next month).
+
+    if (!$m || $m =~ /^[-+]?\d+$/) {
+	# OK - absolute or relative number
+        $m = 0 if $m eq '';	# to avoid warnings in +=
+	# Add current month if month is 0 or relative
+        $m += $currentMonth if ($m =~ /^([-+]\d+|0)$/); 
         ($m += 12, --$y) while $m <= 0;
         ($m -= 12, ++$y) while $m > 12;
     } elsif ( $m=~ /^(\w{3})$/) {
-	$m = $months{$1} if defined $months{$1};
+	# Could be month abbreviation
+	if (defined $months{$1}) {
+	    # OK - month abbreviation
+	    $m = $months{$1} 
+	} else {
+	    return "\n\n%<nop>CALENDAR{$attributes}% has invalid month specification.\n\n";
+	}
+    } else {
+	return "\n\n%<nop>CALENDAR{$attributes}% has invalid month specification.\n\n";
     } 
-    
-    my $cal = new HTML::CalendarMonthSimple(month => $m, year => $y, today_year => $currentYear, today_month => $currentMonth, today_date => $currentDay);
 
-    # set the day names in the desired language
-#    if ($lang) {
-       $cal->saturday(Date::Calc::Day_of_Week_to_Text(6));
-       $cal->sunday(Date::Calc::Day_of_Week_to_Text(7));
-       $cal->weekdays(map { Date::Calc::Day_of_Week_to_Text $_ } (1..5));
-#    }
+    # read and set the desired language
+    my $lang = scalar &TWiki::Func::extractNameValuePair( $attributes, 'lang' );
+    $lang = $lang ? $lang : $defaults{lang};
+    Date::Calc::Language(Date::Calc::Decode_Language($lang));
 
-    
-    my $p = "";
-    while (($k,$v) = each %options) {
-	$p = "HTML::CalendarMonthSimple::$k";
-	$cal->$k($v) if defined(&$p);
+
+    local %months = (  Jan=>1, Feb=>2, Mar=>3, Apr=>4,  May=>5,  Jun=>6,
+		       Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12);
+
+
+    # Process "aslist" parameter (if set, display the calendar as a
+    # list, not as a table)
+
+    my $asList = scalar &TWiki::Func::extractNameValuePair( $attributes,
+							    'aslist' );
+
+    # Process "days" parameter (goes with aslist=1; specifies the
+    # number of days of calendar data to list).  Default is 1.
+
+    my $numDays = scalar &TWiki::Func::extractNameValuePair( $attributes,
+							     'days' );
+    $numDays = 1 if (! $numDays);
+
+    # Process "months" parameter (goes with aslist=0; specifies the
+    # number of months of calendar data to list) Default is 1.
+
+    my $numMonths = scalar &TWiki::Func::extractNameValuePair( $attributes, 'months' );
+    $numMonths = 1 if (! $numMonths);
+
+    # Figure out last month/year to display. This calculation depends
+    # upon whether we are doing a list display or calendar display.
+
+    my $lastMonth = $m + 0;
+    my $lastYear = $y + 0;
+    my $listStartDay = 1; # Starting day of the month for an event list display
+
+    if ($asList) {
+
+	# Add the number of days past our start day. The start day is
+	# today if the month being displayed is the current month. If
+	# it is *not* the current month, then start with day 1 of the
+	# starting month.
+
+	if (($y != $currentYear) && ($m != $currentMonth)) {
+	    $listStartDay = 1;
+	} else {
+	    $listStartDay = $currentDay;
+	} 
+	($lastYear, $lastMonth) = Add_Delta_Days($y, $m, $listStartDay,
+						 $numDays - 1);
+    } else {
+	($lastYear, $lastMonth) = Add_Delta_YM($y, $m, 1, 0, $numMonths - 1);
     }
 
-    # header color
-    my $webColor = &TWiki::Func::getPreferencesValue("WEBBGCOLOR", $options{web}) ||
-		    'wheat' ;
-    # Highlight today
-    $options{todaycolor}  = $webColor;
-    $options{headercolor} = $webColor;
+    # Read in the event list. For the sake of efficiency, this is done
+    # before entering the loop for producing the calendar(s).
 
-    # set the initial day values if normal date numbers are not shown
-    if ($cal->showdatenumbers == 0) {
-	for ($i=1; $i<33 ; $i++) {
-	    $cal->setcontent($i,"$i");
-	}
-    }
-
-	# set names for days of the week
-	if ($options{showweekdayheaders} && defined($options{daynames}))
-	{
-		my @daynames = split( /\|/, $options{daynames} );
-		if (@daynames == 7)
-		{
-			$cal->weekdays( $daynames[0], $daynames[1], $daynames[2], $daynames[3], $daynames[4] );
-			$cal->saturday( $daynames[5] );
-			$cal->sunday( $daynames[6] );
-		}
-	}
-
-    # parse events
-    my @days = ();
-    my ($descr, $d, $dd, $mm, $yy, $text) =
-       ('',     '', '',  '',  '',  ''   );
-    local %wdays = ( Sun=>7, Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6);
-    local $days_rx = '[0-9]?[0-9]';
-    local $months_rx = join ('|', keys %months);
-    local $wdays_rx = join ('|', keys %wdays);
-    local $years_rx = '[12][0-9][0-9][0-9]';
-    local $date_rx = "($days_rx)\\s+($months_rx)";
-    local $monthly_rx = "([1-6])\\s+($wdays_rx)";
-    local $full_date_rx = "$date_rx\\s+($years_rx)";
-    local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
-    local $weekly_rx = "E\\s+($wdays_rx)";
-    local $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
-    local $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
-    $text = getTopicText($theTopic, $theWeb, $refText, %options);
+    my $text = getTopicText($theTopic, $theWeb, $refText, %options);
 
     # recursively expand includes
     # (don't rely on TWiki::Func::expandCommonVariables to avoid deep recursion)
     $text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $options{web}, $options{topic}, () )/geo;
 
-    # keep only bullet lines
-    my @bullets = grep { /^\s+\*/ } split( /[\n\r]+/, $text );
+    # Before this was modified to do multiple months, there was a
+    # clause to bail out early if there were no events, simply
+    # returning a "blank" calendar. However, since the plugin can now
+    # do multiple calendars, the loop to do so needs to be executed
+    # even if there are no events to display (so multiple blank
+    # calendars can be displayed!). A small optimization is lost, but
+    # the number of times people display blank calendars will
+    # hopefully be small enough that this won't matter.
 
-    # bail out early if no events
-    unless( @bullets ) {
-        return $cal->as_HTML;
-    }
+    # These two hashes are used to keep track of multi-day events that
+    # occur over month boundaries. This is needed for processing the
+    # multidayformat. The counter variable is used in the loops for
+    # identifying the events by ordinal number of their occurence. The
+    # counter will produce the same result each time through the loop
+    # since the text is read once (above).
 
-    # collect all date intervals with year
-    @days = fetchDays( "$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
-    foreach $d (@days) {
-        my ($dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
-		if (length($xcstr) > 9) {
-			@xmap = &fetchxmap($xcstr, $y, $m);
+    my %multidayeventswithyear = ();
+    my %multidayeventswithoutyear = ();
+    my $multiday_counter;
+
+    # Loop, displaying one month at a time for the number of months
+    # requested.
+
+    while (($y < $lastYear) || (($y <= $lastYear) && ($m <= $lastMonth))) {
+	my $cal = new HTML::CalendarMonthSimple(month => $m, year => $y,
+						today_year => $currentYear,
+						today_month => $currentMonth,
+						today_date => $currentDay);
+
+	# set the day names in the desired language
+	$cal->saturday(Date::Calc::Day_of_Week_to_Text(6));
+	$cal->sunday(Date::Calc::Day_of_Week_to_Text(7));
+	$cal->weekdays(map { Date::Calc::Day_of_Week_to_Text $_ } (1..5));
+
+	my $p = '';
+	while (($k,$v) = each %options) {
+	    $p = "HTML::CalendarMonthSimple::$k";
+	    $cal->$k($v) if defined(&$p);
+	}
+
+	# header color
+	my $webColor = &TWiki::Func::getPreferencesValue('WEBBGCOLOR',
+							 $options{web}) ||
+							     'wheat' ;
+	# Highlight today
+	$options{todaycolor}  = $webColor;
+	$options{headercolor} = $webColor;
+
+	# set the initial day values if normal date numbers are not shown
+	if ($cal->showdatenumbers == 0) {
+	    for ($i=1; $i<33 ; $i++) {
+		if (($cal->month == $cal->today_month())
+		    && ($cal->year == $cal->today_year())
+		    && ($i == $cal->today_date())) {
+		    $cal->setcontent($i, &formatToday($cal, $i, %options));
 		} else {
-			@xmap = &emptyxmap($y, $m);
+		    $cal->setcontent($i, &formatDateNumber($cal, $i, %options));
+		}
+	    }
+	}
+
+	# set names for days of the week
+	if ($options{showweekdayheaders} && defined($options{daynames}))
+	{
+	    my @daynames = split( /\|/, $options{daynames} );
+	    if (@daynames == 7)
+	    {
+		$cal->weekdays( $daynames[0], $daynames[1], $daynames[2],
+				$daynames[3], $daynames[4] );
+		$cal->saturday( $daynames[5] );
+		$cal->sunday( $daynames[6] );
+	    }
+	}
+
+	# parse events
+	my @days = ();
+	my ($descr, $d, $dd, $mm, $yy) =
+	    ('',     '', '',  '',  '' );
+	local %months = (  Jan=>1, Feb=>2, Mar=>3, Apr=>4,  May=>5,  Jun=>6,
+			   Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12);
+	local %wdays = ( Sun=>7, Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6);
+	local $days_rx = '[0-9]?[0-9]';
+	local $months_rx = join ('|', keys %months);
+	local $wdays_rx = join ('|', keys %wdays);
+	local $years_rx = '[12][0-9][0-9][0-9]';
+	local $date_rx = "($days_rx)\\s+($months_rx)";
+	local $monthly_rx = "([1-6])\\s+($wdays_rx)";
+	local $full_date_rx = "$date_rx\\s+($years_rx)";
+	local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
+	local $weekly_rx = "E\\s+($wdays_rx)";
+	local $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
+	local $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
+
+	# Keep only bullet lines from the text. Note that this is done
+	# inside the loop because as each pattern is matched by
+	# fetchDays, the matched lines are deleted from the bullet
+	# list. Therefore, if multiple months are being displayed, all
+	# but the first month would be blank were @bullets set up
+	# outside the loop.
+
+	my @bullets = grep { /^\s+\*/ } split( /[\n\r]+/, $text );
+
+	# collect all date intervals with year
+	@days = fetchDays( "$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
+	$multidaycounter = 0;
+	foreach $d (@days) {
+	    my ($dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    $multidaycounter++; # Identify this event
+	    eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
 		}
 		my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
 		my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
 		for my $d (1 .. Days_in_Month ($y, $m)) {
 		    my $date = Date_to_Days ($y, $m, $d);
-		    if ($date1 <= $date && $date <= $date2) {
-			if ($xmap[$d]) {
-			    &highlightDay( $cal, $d, $descr, %options);
-			}
+		    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
+			&highlightMultiDay($cal, $d, $descr, $date1, $date2, $date,
+					   defined($multidayeventswithyear{$multidaycounter}),
+					   %options);
+			# Mark this event as having been displayed
+			$multidayeventswithyear{$multidaycounter}++;
 		    }
 		}
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
-    # then collect all intervals without year
-    @days = fetchDays( "$date_rx\\s+-\\s+$date_rx", \@bullets );
-    foreach $d (@days) {
-        my ($dd1, $mm1, $dd2, $mm2, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
+	# then collect all intervals without year
+	@days = fetchDays( "$date_rx\\s+-\\s+$date_rx", \@bullets );
+	$multidaycounter = 0;
+	foreach $d (@days) {
+	    my ($dd1, $mm1, $dd2, $mm2, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    $multidaycounter++; # Identify this event
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -417,45 +562,56 @@ sub handleCalendar
 		for my $d (1 .. Days_in_Month ($y, $m)) {
 		    my $date = Date_to_Days ($y, $m, $d);
 		    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
-			&highlightDay( $cal, $d, $descr, %options);
+			&highlightMultiDay($cal, $d, $descr, $date1, $date2, $date,
+					   defined($multidayeventswithoutyear{$multidaycounter}),
+					   %options);
+			# Mark this event as having been displayed
+			$multidayeventswithoutyear{$multidaycounter}++;
 		    }
 		}
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
-    # first collect all dates with year
-    @days = fetchDays( "$full_date_rx", \@bullets );
-    foreach $d (@days) {
-        ($dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if ($yy == $y && $months{$mm} == $m) {
-            &highlightDay( $cal, $dd, $descr, %options);
-        }
-    }
-    # collect all anniversary dates
-    @days = fetchDays( "$anniversary_date_rx", \@bullets );
-    foreach $d (@days) {
-        ($dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if ($yy <= $y && $months{$mm} == $m) {
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
+	# first collect all dates with year
+	@days = fetchDays( "$full_date_rx", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
+		if ($yy == $y && $months{$mm} == $m) {
+		    &highlightDay( $cal, $dd, $descr, %options);
+		}
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
+	# collect all anniversary dates
+	@days = fetchDays( "$anniversary_date_rx", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
+		if ($yy <= $y && $months{$mm} == $m) {
 
-	    # Annotate anniversaries with the number of years since
-	    # the original occurence. Do not annotate the first
-	    # occurence (i.e., someone's birth date looks like "X's
-	    # Birthday", not "X's Birthday (0)", but for subsequent
-	    # years it will look like "X's Birthday (3)", meaning that
-	    # they are 3 years old.
+		    # Annotate anniversaries with the number of years
+		    # since the original occurence. Do not annotate
+		    # the first occurence (i.e., someone's birth date
+		    # looks like "X's Birthday", not "X's Birthday
+		    # (0)", but for subsequent years it will look like
+		    # "X's Birthday (3)", meaning that they are 3
+		    # years old.
 
-            my $elapsed = $y - $yy;
-	    my $elapsed_indicator = ($elapsed > 0) 
-		? " ($elapsed)"
-		: "";
-            &highlightDay( $cal, $dd, $descr . $elapsed_indicator, %options);
-        }
-    }
-    # then collect all dates without year
-    @days = fetchDays( "$date_rx", \@bullets );
-    foreach $d (@days) {
-        ($dd, $mm, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+		    my $elapsed = $y - $yy;
+		    my $elapsed_indicator = ($elapsed > 0) 
+			? " ($elapsed)"
+			: '';
+		    &highlightDay( $cal, $dd, $descr . $elapsed_indicator, %options);
+		}
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
+	# then collect all dates without year
+	@days = fetchDays( "$date_rx", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $mm, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -464,15 +620,15 @@ sub handleCalendar
 		if ($months{$mm} == $m && $xmap[$dd]) {
 		    &highlightDay( $cal, $dd, $descr, %options );
 		}
-	};
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
 
-    # collect monthly repeaters
-    @days = fetchDays( "$monthly_rx", \@bullets );
-    foreach $d (@days) {
-        ($nn, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	# collect monthly repeaters
+	@days = fetchDays( "$monthly_rx", \@bullets );
+	foreach $d (@days) {
+	    ($nn, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -482,15 +638,15 @@ sub handleCalendar
 		if ($hd <= Days_in_Month($y, $m) && $xmap[$hd]) {
 		    &highlightDay( $cal, $hd, $descr, %options );
 		}
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
 
-    # collect weekly repeaters with start and end dates
-    @days = fetchDays( "$weekly_rx\\s+$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
-    foreach $d (@days) {
-        ($dd, $dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	# collect weekly repeaters with start and end dates
+	@days = fetchDays( "$weekly_rx\\s+$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -505,17 +661,16 @@ sub handleCalendar
 			&highlightDay( $cal, $hd, $descr, %options );
 		    }
 		    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
-		    
 		} while ($ny == $y && $nm == $m);
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
 
-    # collect weekly repeaters with start dates
-    @days = fetchDays( "$weekly_rx\\s+$full_date_rx", \@bullets );
-    foreach $d (@days) {
-        ($dd, $dd1, $mm1, $yy1, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	# collect weekly repeaters with start dates
+	@days = fetchDays( "$weekly_rx\\s+$full_date_rx", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $dd1, $mm1, $yy1, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -530,15 +685,15 @@ sub handleCalendar
 		    }
 		    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
 		} while ($ny == $y && $nm == $m);
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
 
-    # collect weekly repeaters
-    @days = fetchDays( "$weekly_rx", \@bullets );
-    foreach $d (@days) {
-        ($dd, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	# collect weekly repeaters
+	@days = fetchDays( "$weekly_rx", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -551,15 +706,15 @@ sub handleCalendar
 		    }
 		    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
 		} while ($ny == $y && $nm == $m);
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
 
-    # collect num-day-mon repeaters
-    @days = fetchDays( "$numdaymon_rx", \@bullets );
-    foreach $d (@days) {
-        ($dd, $dy, $mn, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	# collect num-day-mon repeaters
+	@days = fetchDays( "$numdaymon_rx", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $dy, $mn, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		$mn = $months{$mn};
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
@@ -567,7 +722,7 @@ sub handleCalendar
 		    @xmap = &emptyxmap($y, $m);
 		}
 		if ( $mn == $m ) {
-		    if ($dd == "L") {
+		    if ($dd eq 'L') {
 			$dd = 6;
 			do {
 			    $dd--;
@@ -580,15 +735,15 @@ sub handleCalendar
 			&highlightDay( $cal, $hd, $descr, %options );
 		    }
 		}
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
 
-    # collect periodic repeaters with start and end dates
-    @days = fetchDays( "$periodic_rx\\s+-\\s+$full_date_rx", \@bullets );
-    foreach $d (@days) {
-        my ($p, $dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	# collect periodic repeaters with start and end dates
+	@days = fetchDays( "$periodic_rx\\s+-\\s+$full_date_rx", \@bullets );
+	foreach $d (@days) {
+	    my ($p, $dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -596,25 +751,25 @@ sub handleCalendar
 		}
 		$mm1= $months{$mm1};
 		while (  $yy1 < $y  || ( $yy1==$y  &&  $mm1 < $m )) {
-			($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
+		    ($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
 		}
 		my $ldate = Date_to_Days ($yy2, $months{$mm2}, $dd2);
 		while ( ($yy1 == $y) && ($mm1 == $m) ) {
-			my $date = Date_to_Days($yy1, $mm1, $dd1);
-			if ($xmap[$dd1] && ($date <=$ldate)) {
-			    &highlightDay( $cal, $dd1, $descr, %options );
-			}
-			($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
+		    my $date = Date_to_Days($yy1, $mm1, $dd1);
+		    if ($xmap[$dd1] && ($date <=$ldate)) {
+			&highlightDay( $cal, $dd1, $descr, %options );
+		    }
+		    ($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
 		}
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
-	
-    # collect periodic repeaters with start dates
-    @days = fetchDays( "$periodic_rx", \@bullets );
-    foreach $d (@days) {
-        ($p, $dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	    };	
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
+
+	# collect periodic repeaters
+	@days = fetchDays( "$periodic_rx", \@bullets );
+	foreach $d (@days) {
+	    ($p, $dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -632,15 +787,15 @@ sub handleCalendar
 			($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
 		    }
 		}
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
-	
-    # collect date monthly repeaters
-    @days = fetchDays( "($days_rx)", \@bullets );
-    foreach $d (@days) {
-        ($dd, $xs, $xcstr, $descr) = split( /\|/, $d);
-	eval {
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
+
+	# collect date monthly repeaters
+	@days = fetchDays( "($days_rx)", \@bullets );
+	foreach $d (@days) {
+	    ($dd, $xs, $xcstr, $descr) = split( /\|/, $d);
+	    eval {
 		if (length($xcstr) > 9) {
 		    @xmap = &fetchxmap($xcstr, $y, $m);
 		} else {
@@ -649,17 +804,62 @@ sub handleCalendar
 		if ($dd > 0 && $dd <= Days_in_Month($y, $m) && $xmap[$dd]) {
 		    &highlightDay( $cal, $dd, $descr, %options );
 		}
-	};	
-        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
-    }
+	    };
+	    &TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+	}
 
-    return $cal->as_HTML;
+	# Format the calendar as either a list or a table
+
+	if (! $asList ) {
+	    $result .= $cal->as_HTML . "\n";
+	} else {
+	    if (! $numDays) {
+		$numDays = Days_in_Month($cal->year(), $cal->month()) - $cal->today_date() + 1;
+	    }
+	    my $day = $listStartDay;
+	    while ($numDays > 0) {
+		if ($day > Days_in_Month($cal->year(), $cal->month())) {
+
+		    # End of month reached, reset the starting day
+		    # (for the next month) and break out of the loop
+
+		    $listStartDay = 1;
+		    last;
+		}
+		my $content = $cal->getcontent($day);
+		if ($content && ($content !~ m/^\s*$/)) {
+		    # Only display those days with events
+		    if (($cal->month == $cal->today_month())
+			&& ($cal->year == $cal->today_year())
+			&& ($day == $cal->today_date())) {
+			$result .= &formatToday($cal, $day, %options);
+		    } else {
+			$result .= &formatDateNumber($cal, $day, %options);
+		    }
+		    $result .= $content;
+		}
+		$day++;
+		$numDays--;
+	    }
+	}
+
+	# Advance to next month in preparation for possibly
+	# constructing another calendar
+
+	if ($m < 12) {		# Same year
+	    $m++;
+	} else {		# Go to next year
+	    $y++;
+	    $m = 1;
+	}
+    }
+    return $result;
 }
 sub getTopicText {
     my ($theTopic, $theWeb, $refText, %options) = @_;
     my $topics = $options{topic};
     my @topics = split /, */, $topics;
-    my $ans = "";
+    my $ans = '';
     foreach my $topicpair (@topics) {
         if ($topicpair =~ m/([^\.]+)\.([^\.]+)/) {
            ($web, $topic) = ($1, $2);
@@ -683,8 +883,17 @@ sub getTopicText {
 sub highlightDay
 {
 	my ($c, $day, $description, %options) = @_;
+	use Date::Calc qw(Add_Delta_Days
+			  Day_of_Week
+			  Day_of_Week_Abbreviation
+			  Day_of_Week_to_Text
+			  Day_of_Year
+			  Month_to_Text);
 	my $old = $c->getcontent($day);
 	my $format = $options{format};
+
+	$format = &formatDate($c, $format, Date_to_Days($c->year(), $c->month(), $day), '');
+
 	$format =~ s/\$description/$description/g ;
 	$format =~ s/\$web/$options{web}/g ;
 	$format =~ s/\$topic/$options{topic}/g ;
@@ -694,6 +903,303 @@ sub highlightDay
 	$format =~ s/\$n/\n/g ;
 
 	$c->setcontent($day,$format);
+}
+
+=pod
+
+---++ StaticMethod formatDate ($cal, $formatString, $date) -> $value
+   * =$cal= A reference to the Date::Calc calendar in use.
+   * =$formatString= twiki time date format, default =$day $month $year - $hour:$min=
+   * =$date= The date (Date::Calc days value) of the date to format.
+             At some point we should handle times, too.
+=$formatString= supports:
+   | $seconds | secs |
+   | $minutes | mins |
+   | $hours | hours |
+   | $day | date |
+   | $wday | weekday name |
+   | $dow | day number (0 = Sunday) |
+   | $week | week number |
+   | $month | month name |
+   | $mo | month number |
+   | $year | 4-digit year |
+   | $ye | 2-digit year |
+   | $http | full HTTP header format date/time |
+   | $email | full email format date/time |
+   | $rcs | full RCS format date/time |
+   | $epoch | seconds since 1st January 1970 |
+
+Note that this description (and some of the code) is taken from the
+TWiki function formatTime. Ideally, we would be able to use that
+function, but that function deals with time in seconds from the epoch
+and this plugin uses a different notion of time.
+
+=cut
+
+sub formatDate
+{
+    my ($cal, $formatString, $date) = @_;
+    use Date::Calc qw(Add_Delta_Days
+		      Day_of_Week
+		      Day_of_Week_Abbreviation
+		      Day_of_Week_to_Text
+		      Day_of_Year
+		      Month_to_Text);
+
+    &TWiki::Func::writeDebug("formatDate: $format, $date") if $debug;
+    my $outputTimeZone = 'gmtime'; # FIXME: Should be configurable
+    my $value = '';	# Return value for the function
+    my ($year, $mon, $day) = Add_Delta_Days(1, 1, 1, $date - 1);
+    my ($sec, $min, $hour) = ('00', '00', '00'); # in the future, we might add times
+    my $monthAbbr = sprintf '%0.3s', Month_to_Text($mon);
+    my $monthName = Month_to_Text($mon);
+
+    # Set a value for seconds since the epoch
+    my $epochSeconds = timegm($sec, $min, $hour, $day, $mon-1, $year);
+
+    # use default TWiki format "31 Dec 1999 - 23:59" unless specified
+    $formatString ||= '$day $month $year - $hour:$min';
+
+    # Unfortunately, there is a disconnect between the TWiki
+    # formatTime() function and Date::Calc when it comes to the day of
+    # the week. formatTime() numbers from Sun=0 to Sat=6, whereas
+    # Date::Calc numbers from Mon=1 to Sun=7. So, the Date::Calc value
+    # is mapped to the formatTime() value here in setting up the $wdayName
+    # variable.
+
+    my $wday = (1, 2, 3, 4, 5, 6, 0)[&Day_of_Week($year, $mon, $day) - 1];
+    my $wdayAbbr = Day_of_Week_Abbreviation(Day_of_Week($year, $mon, $day));
+    my $weekday = Day_of_Week_to_Text(Day_of_Week($year, $mon, $day));
+    my $yearday = Day_of_Year($year, $mon, $day);
+
+    #standard twiki date time formats
+
+    # RCS format, example: "2001/12/31 23:59:59"
+    $formatString =~ s/\$rcs/\$year\/\$mo\/\$day \$hour:\$min:\$sec/gi;
+
+    # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
+    # - based on RFC 2616/1123 and HTTP::Date; also used
+    # by TWiki::Net for Date header in emails.
+    $formatString =~ s/\$(http|email)/\$wday, \$day \$month \$year \$hour:\$min:\$sec \$tz/gi;
+
+    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
+    # e.g. "2002-12-31T19:30Z"
+    my $tzd = '';
+    if( $outputTimeZone eq 'gmtime' ) {
+	$tzd = 'Z';
+    } else {
+	#TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
+    }
+    $formatString =~ s/\$iso/\$year-\$mo-\$dayT\$hour:\$min$tzd/gi;
+
+    # The matching algorithms here are the same as those in
+    # TWiki::Time::formatTime()
+
+    $value = $formatString;
+    $value =~ s/\$seco?n?d?s?/sprintf('%.2u',$sec)/gei;
+    $value =~ s/\$minu?t?e?s?/sprintf('%.2u',$min)/gei;
+    $value =~ s/\$hour?s?/sprintf('%.2u',$hour)/gei;
+    $value =~ s/\$day/sprintf('%.2u',$day)/gei;
+    $value =~ s/\$wday/$wdayAbbr/gi;
+    $value =~ s/\$dow/$wday/gi;
+    $value =~ s/\$week/_weekNumber($day,$mon-1,$year,$wday)/egi;
+    $value =~ s/\$mont?h?/$monthAbbr/gi;
+    $value =~ s/\$mo/sprintf('%.2u',$mon+1)/gei;
+    $value =~ s/\$year?/sprintf('%.4u',$year)/gei;
+    $value =~ s/\$ye/sprintf('%.2u',$year%100)/gei;
+    $value =~ s/\$epoch/$epochSeconds/gi;
+
+    # SMELL: how do we get the different timezone strings (and when
+    # we add usertime, then what?)
+    my $tz_str = ( $outputTimeZone eq 'servertime' ) ? 'Local' : 'GMT';
+    $value =~ s/\$tz/$tz_str/geoi;
+
+    # We add processing of a newline indicator
+    $value =~ s/\$n/\n/g ;
+    return $value;
+}
+
+sub _weekNumber {
+    my( $day, $mon, $year, $wday ) = @_;
+
+    # calculate the calendar week (ISO 8601)
+    my $nextThursday = timegm(0, 0, 0, $day, $mon, $year) +
+      (3 - ($wday + 6) % 7) * 24 * 60 * 60; # nearest thursday
+    my $firstFourth = timegm(0, 0, 0, 4, 0, $year); # january, 4th
+    return sprintf('%.0f', ($nextThursday - $firstFourth) / ( 7 * 86400 )) + 1;
+}
+
+sub formatDateNumber
+{
+    my ($cal, $day, %options) = @_;
+    my $format = $options{datenumberformat};
+    use Date::Calc qw( 
+		       check_date
+		       Date_to_Days 
+		       );
+
+
+    if (check_date($cal->year(), $cal->month(), $day)) {
+	return &formatDate($cal, $format, Date_to_Days($cal->year(), $cal->month(), $day));
+    } else {
+	return "";
+    }
+}
+
+sub formatToday
+{
+    my ($cal, $day, %options) = @_;
+    my $format = $options{todaydatenumberformat};
+    use Date::Calc qw( 
+		       Date_to_Days 
+		       );
+    
+    return formatDate($cal, $format, Date_to_Days($cal->year(), $cal->month(), $day));
+}
+
+=pod
+
+---++ StaticMethod highlightMultiDay ($cal, $d, $description, $first, $last, $today, $seen, %options) -> $value
+   * =$cal= is the current calendar
+   * =$d= is the day (within the calendar/month) to highlight
+   * =$description= is the description of the event
+   * =$first= is the Date::Calc day value of the first day of the event
+   * =$last= is the Date::Calc day value of the last day of the event
+   * =$today= is the Date::Calc day value of the day being highlighted
+   * =$seen= is non-zero (true) if this event has been already been indicated in this calendar
+   * =%options= is a set of plugin options
+
+The multidayformat option allows the description of each day of a
+multiday event to be displayed differently.  This could be used to
+visually or textually annotate the description to indicate
+continuance from or to other days.
+
+The option consists of a comma separated list of formats for each
+type of day in a multiday event:
+
+first, middle, last, middle-unseen, last-unseen
+
+Where:
+
+   * _first_ is the format used when the first day of the event is
+    displayed
+   * _middle_ is the format used when the day being displayed is not the
+    first or last day
+   * _last_ is the format used when the last day of the event is
+    displayed
+   * _middle-unseen_ is the format used when the day being displayed is
+    not the first or last day of the event, but the preceding days of
+    the event have not been displayed. For example, if an event runs
+    from 29 Apr to 2 May and a May calendar is being displayed, then
+    this format would be used for 1 May.
+   * _last-unseen_ is the format used when the day being displayed is the
+    last day of the event, but the preceding days of the event have not
+    been displayed. For example, if an event runs from 29 Apr to 1 May
+    and a May calendar is being displayed, then this format would be
+    used for 1 May. Note that in the previous example (event from 29 Apr
+    to 2 May), this format would *not* be used for a May calendar
+    because the event was "seen" on 1 May; so, the _last_ format would
+    be used for 2 May.
+
+Missing formats will be filled in as follows:
+
+   * _middle_ will be set to _first_
+   * _last_ will be set to _middle_
+   * _middle-unseen_ will be set to _middle_
+   * _last-unseen_ will be set to _last_
+
+Missing formats are different from empty formats. For example,
+
+multidayformat="$description (until $last($day $month)),,"
+
+specifies an empty format for _middle_ and _last_. The result of this
+is that only the first day will be shown. Note that since an
+unspecified _middle-unseen_ is set from the (empty) _middle_ format,
+an event that begins prior to the calendar being displayed but ending
+in the current calendar will not be displayed. In contrast,
+multidayformat="$description" will simply display the description for
+each day of the event; all days (within the scope of the calendar)
+will be displayed.
+
+The default format is to simply display the description of the event.
+
+=cut
+
+sub highlightMultiDay
+{
+    my ($cal, $d, $description, $first, $last, $today, $seen, %options) = @_;
+    my $format = '$description';
+    my $fmt = $options{multidayformat};
+    my @fmts;
+
+
+    if (!$fmt || ($fmt =~ m/^\s*$/)) {
+	# If no special format set, just use the default format (the description)
+	$fmts[0] = $fmts[1] = $fmts[2] = $fmts[3] = $fmts[4] = $format;
+    } else {
+	@fmts = split /,\s*/, $fmt, 5; # Get the individual format variants
+	for (my $i = 0; $i < $#fmts; $i++) {
+	    $fmts[$i] =~ s/\$comma/,/g;
+	    $fmts[$i] =~ s/\$percnt/%/g;
+	}
+	#
+	# fill in the missing formats:
+	#
+	if ($#fmts < 1) {
+	    $fmts[1] = $fmts[0]; # Set middle from first
+	}
+	if ($#fmts < 2) {
+	    $fmts[2] = $fmts[1]; # Set last from middle
+	}
+	if ($#fmts < 3) {
+	    $fmts[3] = $fmts[1]; # Set middle-unseen from middle
+	}
+	if ($#fmts < 4) {
+	    $fmts[4] = $fmts[2]; # Set last-unseen from last
+	}
+    }
+
+    # Annotate the description for a multiday event. An interval that
+    # is only one day (i.e., $date1 and $date2 are equal) is not
+    # marked as a multiday event. For an actual multiday event, the
+    # description is modified according to the formats supplied for a
+    # first, middle, or last day of the event.
+
+    if ($first == $last) {
+	# Skip annotation, not really a multi-day event.
+    } elsif ($today == $first) {
+	# This is the first day of the event
+	$format = $fmts[0];
+    } elsif ($today == $last) {
+	if (!$seen) {
+	    $format = $fmts[4];
+	} else {
+	    $format = $fmts[2];
+	}
+    } else {
+	# This is a day in the middle of the event
+	if (!$seen) {
+	    $format = $fmts[3];
+	} else {
+	    $format = $fmts[1];
+	}
+    }
+
+    # Substitute date/time information for the first and last dates,
+    # if specified in the format.
+
+    $format =~ s/\$first\(([^)]*)\)/&formatDate($cal, $1, $first)/gei;
+    $format =~ s/\$last\(([^)]*)\)/&formatDate($cal, $1, $last)/gei;
+
+    # Finally, plug in the event description
+
+    $format =~ s/\$description/$description/;
+
+    # If the format ends up non-blank, highlight the day.
+
+    if ($format && ($format !~ m/^\s*$/)) {
+	&highlightDay($cal, $d, $format, %options);
+    }
 }
 
 1;
