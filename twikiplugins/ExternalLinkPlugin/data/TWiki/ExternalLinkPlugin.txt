@@ -1,0 +1,74 @@
+%META:TOPICINFO{author="NelsonFerraz" date="1130675738" format="1.0" version="1.1"}%
+---+ External Link Plugin
+
+This plugin will mark external links so users don't leave your site by accident.
+
+Note that this will only work for forced links (like
+<code>[<nop/>[http://some.site.com]<nop/>[some site]<nop/>]</code>). Explicit
+URL's in text are left untouched.
+
+---++ Syntax Rules
+
+(none)
+
+---++ Plugin Settings
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin will mark external links so users don't leave your site by accident.
+
+	* External link mark (you can use an image if you want)
+		* Set MARK = &raquo;
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+This plugin is installed by default with a TWiki release. You should not need to install the plugin unless it is for an upgrade.
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+          | ==ExternalLinkPlugin_installer.pl== | Plugin installer script |
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+
+---++ Testing your installation
+
+To tst if the plugin is correctly installed, check the following links.
+
+---+++ External links
+
+These links must be marked with a %EXTERNALLINKPLUGIN_MARK%:
+
+	* [[http://TWiki.org][TWiki.org: TWiki's home]]
+	* [[ftp://no.where.com][Some inexistent FTP site]]
+	* [[https://sourceforge.net][Sourceforge.net under a secure connection]]
+
+---+++ Local links
+
+Surprisingly ;-) , ExternalLinkPlugin won't mark local links as being external. The
+following links must not be marked with a %EXTERNALLINKPLUGIN_MARK%:
+
+	* [[%ATTACHURL%/bli.png][link to (inexistent) local attachment]]
+	* [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%][explicit link to this topic]]
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.AurelioAHeckert, TWiki:Main.NelsonFerraz, TWiki:Main.AntonioTerceiro |
+|  Plugin Version: | 1.001 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  02 Nov 2005: | Initial release |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+
