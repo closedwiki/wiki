@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributer" date="1119365812" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributer" date="1131032162" format="1.0" version="$Rev$"}%
 ---++!! Calendar Plugin (version 1.018)
 
 The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page. Multiple topics can be specified as the source of the events, and these can be in any web.
@@ -168,7 +168,7 @@ A list of Events is just a bullet list like this:
 | ==month="+mm"== or =="-mm"== | relative month | Current month |
 | ==gmtoffset="+/-hh"== | Timezone expressed as number of hours offset from GMT | Server timezone |
 | ==topic="TopicName"==  | Topic containing events | The topic containing the tag |
-| ==topic="Web.TopicName1, <nop>Web.TopicName2"==  | Topics containig events | The topics containing the tags |
+| ==topic="Web.TopicName1, <nop>Web.TopicName2"==  | Topics containing events | The topics containing the tags |
 | ==web="Webname"==		| Web containing the event topic | The current web |
 | ==lang="language"==	 | Language: First few characters of "English", "Français", "Deutsch", "Español", "Português", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "suomi", "Magyar", "Polski | "English" |
 | ==daynames="Mon&brvbar;Tue&brvbar;..."== | Custom day names | "Monday&brvbar;Tuesday&brvbar;Wednesday&brvbar;Thursday&brvbar;<br />Friday&brvbar;Saturday&brvbar;Sunday" |
@@ -204,7 +204,7 @@ A list of Events is just a bullet list like this:
 | ==months== | Specifies how many months of calendars to display. Only valid if =aslist=0=. | 1 |
 | ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | $day |
 | ==todaydatenumberformat== | Specifies formatting for the date number for the current day (today) in the calendar. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | ==datenumberformat== |
-| ==multidayformat== | Specifies formatting of the description for multi-day events. See [[%TOPIC#MultiDayFormatting]] for details. | ==$description== |
+| ==multidayformat== | Specifies formatting of the description for multi-day events. See [[%TOPIC%#MultiDayFormatting][Multi-Day Event Formatting]] for details. | ==$description== |
 
 ---+++ Event Syntax
 
@@ -251,43 +251,43 @@ first, middle, last, middle-unseen, last-unseen
 
 Where:
 
-   * _first_ is the format used when the first day of the event is
-    displayed
-   * _middle_ is the format used when the day being displayed is not
-    the first or last day
-   * _last_ is the format used when the last day of the event is
-     displayed
-   * _middle-unseen_ is the format used when the day being displayed
-    is not the first or last day of the event, but the preceding days
-    of the event have not been displayed. For example, if an event
-    runs from 29 Apr to 2 May and a May calendar is being displayed,
-    then this format would be used for 1 May.
-   * _last-unseen_ is the format used when the day being displayed is
-    the last day of the event, but the preceding days of the event
-    have not been displayed. For example, if an event runs from 29 Apr
-    to 1 May and a May calendar is being displayed, then this format
-    would be used for 1 May. Note that in the previous example (event
-    from 29 Apr to 2 May), this format would *not* be used for a May
-    calendar because the event was "seen" on 1 May; so, the _last_
-    format would be used for 2 May.
+	* _first_ is the format used when the first day of the event is
+	 displayed
+	* _middle_ is the format used when the day being displayed is not
+	 the first or last day
+	* _last_ is the format used when the last day of the event is
+	  displayed
+	* _middle-unseen_ is the format used when the day being displayed
+	 is not the first or last day of the event, but the preceding days
+	 of the event have not been displayed. For example, if an event
+	 runs from 29 Apr to 2 May and a May calendar is being displayed,
+	 then this format would be used for 1 May.
+	* _last-unseen_ is the format used when the day being displayed is
+	 the last day of the event, but the preceding days of the event
+	 have not been displayed. For example, if an event runs from 29 Apr
+	 to 1 May and a May calendar is being displayed, then this format
+	 would be used for 1 May. Note that in the previous example (event
+	 from 29 Apr to 2 May), this format would *not* be used for a May
+	 calendar because the event was "seen" on 1 May; so, the _last_
+	 format would be used for 2 May.
 
 Within each format, date information for the current day can be
 substituted using the same format codes as accepted by
 =%<nop>GMTIME%=. An extension to these codes allows the date of the
 first and/or last day of the event to also be rendered.
 
-   * =$first(_<format>_)= will render the first date of the event
-     according to _<format>_, where _<format>_ is, again, a string of
-     codes acceptable to =%<nop>GMTIME%=.
-   * =$last(_<format>_)= will render the last date of the event in the
-     way just described for =$first()=
+	* =$first(_format_)= will render the first date of the event
+	  according to _format_, where _format_ is, again, a string of
+	  codes acceptable to =%<nop>GMTIME%=.
+	* =$last(_format_)= will render the last date of the event in the
+	  way just described for =$first()=
  
 Missing formats will be filled in as follows:
 
-   * _middle_ will be set to _first_
-   * _last_ will be set to _middle_
-   * _middle-unseen_ will be set to _middle_
-   * _last-unseen_ will be set to _last_
+	* _middle_ will be set to _first_
+	* _last_ will be set to _middle_
+	* _middle-unseen_ will be set to _middle_
+	* _last-unseen_ will be set to _last_
 
 Missing formats are different from empty formats. For example,
 
