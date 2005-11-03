@@ -2,16 +2,10 @@
 %TMPL:INCLUDE{"search"}%
 %TMPL:DEF{"titleaction"}%(changes) %TMPL:END%
 %TMPL:DEF{"searchbody"}%<br />%TMPL:P{"repeatedsearchblock"}%%TMPL:END%
-%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%
+
+
+%TMPL:DEF{"content"}%
 %TMPL:P{"searchbody"}%
-<br clear="all" />
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td> </td>
-  <td width="50%">
-    %TMPL:P{"copyright"}%
-  </td>
- </tr>
-</table>%TMPL:END%
+%TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"topicaction"}% Subscribe or unsubscribe in %NOTIFYTOPIC% %TMPL:END%

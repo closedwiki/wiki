@@ -87,10 +87,11 @@ sub changes {
             $thisChange = $session->{renderer}->getRenderedVersion
               ( $thisChange, $webName, $changedTopic );
 
+            #had to remove the diff's as it was causing problems with unmatched html tags
             my $summary = 
               $session->{renderer}->summariseChanges( $query->{user},
                                                       $webName, $changedTopic,
-                                                      $rev - 1, $rev, 1 );
+                                                      $rev );
             $thisChange =~ s/%TEXTHEAD%/$summary/go;
             $page .= $thisChange;
             $done{$changedTopic} = 1;

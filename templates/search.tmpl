@@ -24,19 +24,13 @@
 	<tr>
 		<td width="50%"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></td>
 		<td width="30%"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION%</td>
-		<td width="20%">%AUTHOR%</td>
+		<td width="20%"> %AUTHOR%</td>
 	</tr>
 	<tr>
 		<td colspan="2"><font size="-1">%TEXTHEAD%</font></td>
 		<td width="20%">&nbsp;</td>
 	</tr>
 </table>%REPEAT%<br clear="all" />%TMPL:END%
-
-%TMPL:DEF{"content"}%
-%SPLIT%Search: <b> %SEARCHSTRING% </b>
-<p />%TMPL:P{"searchbody"}%
-<p />%SPLIT%
-%TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"content"}%
 %SPLIT%Search: <b> %SEARCHSTRING% </b>
