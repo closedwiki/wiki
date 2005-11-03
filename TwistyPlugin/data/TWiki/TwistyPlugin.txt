@@ -3,7 +3,7 @@
 
 %TOC%
 
----+ Summary
+---++ Summary
 
 Convenience plugin for TWiki:Plugins.TwistyContrib.
 
@@ -81,7 +81,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWISTYPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-	* Set SHORTDESCRIPTION = Convenience plugin for TWiki:Plugins.TwistyContrib.
+	* Set SHORTDESCRIPTION = Twisty section javascript library to open/close content dynamically
 
 	* Debug plugin: (See output in =data/debug.txt=)
 	* Set DEBUG = 0
@@ -97,17 +97,15 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 
----+ Plugin Info
+---++ Plugin Info
 
 | Authors: | TWiki:Main.RafaelAlvarez |
 | Copyright &copy;: | 2005 Rafael Alvarez |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
 | 12/09/2005 | 1.000 First Version |
-|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
-
-
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
