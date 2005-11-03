@@ -62,8 +62,8 @@ sub initPlugin {
 <style type="text/css" media="all">
 @import url("%PUBURL%/TWiki/TwistyContrib/twist.css");
 </style>
-
-<script type="text/javascript" src="%PUBURL%/TWiki/TwistyContrib/twist.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 EOF
 
     TWiki::Func::addToHEAD('TWISTYPLUGIN_TWISTY',$header);
