@@ -362,8 +362,10 @@ sub viewfile {
                                              $fileName, $rev );
         if( $fileContent ) {
             my $mimeType = _suffixToMimeType( $session, $fileName );
-            print $query->header( -type => $mimeType,
-                                  -Content_Disposition => 'inline;filename='.$fileName);
+            print $query->header(
+                -type => $mimeType,
+                -Content_length => length( $fileContent ),
+                -Content_Disposition => 'inline;filename='.$fileName);
             print $fileContent;
             return;
         } else {
