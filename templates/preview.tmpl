@@ -1,16 +1,4 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"script"}%
-<script type="text/javascript">
-<!--HIDE
-function launchWindow( theWeb, theTopic ) {
-  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-  if( win ) {
-    win.focus();
-  }
-  return false;
-}
-//STOP HIDING-->
-</script>%TMPL:END%
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
    &nbsp; &nbsp;
@@ -19,7 +7,7 @@ function launchWindow( theWeb, theTopic ) {
    <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify <br />
    &nbsp; &nbsp;
    <input type="checkbox" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /> Force new revision
-   <font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>help</a>)</font>
+   <font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="#%_{"Opens page in new window"}%" rel='nofollow'>help</a>)</font>
    </div>%TMPL:END%
 
 %TMPL:DEF{"bodystart"}%

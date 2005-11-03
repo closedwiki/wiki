@@ -1,4 +1,9 @@
-# TWiki translation for DanishThis file is distributed under the same license as TWiki itselfCopyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.Translators:Steffen Poulsen
+# TWiki translation for Danish
+This file is distributed under the same license as TWiki itself
+Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
+Translators:
+Steffen Poulsen
+
 # 
 msgid ""
 msgstr ""
@@ -83,7 +88,10 @@ msgstr "%1 er medlem af mindst en gruppe og kan ikke fjernes"
 msgid "%1 just for me"
 msgstr "%1 kun til mig"
 
-#   "<nop>$fromWeb.<nop>$fromTopic",#   $date,#   $by)#. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
+#   "<nop>$fromWeb.<nop>$fromTopic",
+#   $date,
+#   $by)
+#. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:201
 msgid "%1 moved from %2 on %3 by %4"
@@ -2657,7 +2665,8 @@ msgstr ""
 "[3 mellemrum (et antal gange)] * [mellemrum] Set [mellemrum] VARIABELNAVN "
 "[mellemrum] = [værdi]"
 
-# please enter the name of your language here (written in the native language):#: lib/TWiki/I18N.pm:258
+# please enter the name of your language here (written in the native language):
+#: lib/TWiki/I18N.pm:258
 #: lib/TWiki/I18N.pm:258
 msgid "_language_name"
 msgstr "Dansk"
@@ -2760,6 +2769,10 @@ msgstr "fremsøgt %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vis"
+
+#: templates/edit.pattern.tmpl:62
+msgid "Opens page in new window"
+msgstr ""
 
 #~ msgid "Diffs"
 #~ msgstr "Historik"

@@ -1,3 +1,7 @@
+var ns4 = (document.layers) ? true : false;
+var ie4 = (document.all) ? true : false;
+var dom = (document.getElementById) ? true : false;
+
 // DON'T overwrite existing onload handlers
 // http://simon.incutio.com/archive/2004/05/26/addLoadEvent
 function addLoadEvent(func){

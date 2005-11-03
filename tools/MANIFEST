@@ -641,7 +641,10 @@ pub/TWiki/TWikiLogos/T-logo.svg 0660
 pub/TWiki/TWikiLogos/favicon.ico 0660
 pub/TWiki/TWikiTemplates/testscreen.gif 0660
 pub/TWiki/TWikiJavascripts/twiki.js 0660
-pub/TWiki/TWikiJavascripts/twiki_settings.js 0660
+pub/TWiki/TWikiJavascripts/twiki_attach.js 0660
+pub/TWiki/TWikiJavascripts/twiki_edit.js 0660
+pub/TWiki/TWikiJavascripts/twiki_renamebase.js 0660
+pub/TWiki/TWikiJavascripts/twiki_renamedelete.js 0660
 pub/TWiki/WabiSabi/wabisabi.gif 0660
 pub/TWiki/WebHome/twiki_home.gif 0660
 pub/TWiki/WebPreferences/favicon.ico 0660
@@ -675,6 +678,9 @@ templates/changeform.pattern.tmpl 0440
 templates/changeform.tmpl 0440
 templates/changes.pattern.tmpl 0440
 templates/changes.tmpl 0440
+templates/cssmediatypes.tmpl 0440
+templates/css.pattern.tmpl 0440
+templates/css.tmpl 0440
 templates/edit.iejs.tmpl 0440
 templates/edit.pattern.tmpl 0440
 templates/edit.tmpl 0440

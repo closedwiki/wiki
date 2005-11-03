@@ -2537,3 +2537,7 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr ""
+
+#: templates/edit.pattern.tmpl:62
+msgid "Opens page in new window"
+msgstr ""

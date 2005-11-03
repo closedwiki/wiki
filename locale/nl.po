@@ -2544,6 +2544,10 @@ msgstr ""
 msgid "view"
 msgstr ""
 
+#: templates/edit.pattern.tmpl:62
+msgid "Opens page in new window"
+msgstr "Opent pagina in een nieuw venster"
+
 #~ msgid "Enter name of topic:"
 #~ msgstr "Paginanaam:"
 

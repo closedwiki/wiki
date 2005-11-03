@@ -21,10 +21,22 @@
 
 
 
+%TMPL:DEF{"templatescript"}%%TMPL:END%
+
+
+
 %TMPL:DEF{"script"}%
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PatternSkin/pattern.js"></script>
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+	function launchWindow(inWeb, inTopic) {
+		return launchTheWindow("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/", inWeb, inTopic, "plain.pattern");
+	}
+//]]>
+</script>
+%TMPL:P{"templatescript"}%
 %TMPL:END%
 
 
@@ -39,7 +51,7 @@
 }
 </style>
 <![endif]-->
-%TMPL:INCLUDE{"css.pattern"}%
+%TMPL:INCLUDE{"css.pattern.tmpl"}%
 %TMPL:END%
 
 

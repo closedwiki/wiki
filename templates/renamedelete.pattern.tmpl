@@ -2,6 +2,18 @@
 
 
 
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript">
+//<![CDATA[
+	var pageElem = document.rename;
+//]]>
+</script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamedelete.js"></script>
+%TMPL:END%
+
+
+
 %TMPL:DEF{"titleaction"}%%_{"(delete)"}% %TMPL:END%
 
 
@@ -25,15 +37,6 @@
 
 
 %TMPL:DEF{"movewebhelp"}%%_{"Deleted topics will be moved to the [_1] web", "%NEW_WEB%"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"hidden"}% 
-<script type="text/javascript">
-<!-- hide
-checkAll(false)
-// stop hiding -->
-</script> %TMPL:END%
 
 
 

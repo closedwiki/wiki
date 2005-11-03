@@ -2,40 +2,6 @@
 
 
 
-%TMPL:DEF{"script"}%
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-	// DON'T overwrite existing onload handlers
-	// http://simon.incutio.com/archive/2004/05/26/addLoadEvent
-	function addLoadEvent(func){
-		var oldonload = window.onload;
-		if (typeof window.onload != 'function') {
-			window.onload = function() {
-			    func();
-            }
-		} else {
-			window.onload = function() {
-				oldonload();
-				func();
-			}
-		}
-	}
-	function initPage() { }
-	function launchWindow( theWeb, theTopic ) {
-		var win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-	  if( win ) {
-		win.focus();
-	  }
-	  return false;
-	}
-
-	addLoadEvent(initPage);
-
-//]]>
-</script>%TMPL:END%
-
-
 
 %TMPL:DEF{"templatecustomstyle"}%
 <style type="text/css" media="all">
@@ -62,12 +28,12 @@
 
 
 %TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
-<input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" rel='nofollow'>%_{"help"}%</a></span></div>
+<input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label>&nbsp;&nbsp;<a href="#%_{"Opens page in new window"}%" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" rel='nofollow'>%_{"help"}%</a></span></div>
 <div class="patternActionButtons">
 <input type="submit" id="save" class="twikiSubmit" value='%_{"Save Changes"}%' /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%_{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label> %_{"or"}% <input id="discard" type="submit" class="twikiButton" value='%_{"Discard"}%' name="action_cancel" /><label accesskey="d" for="discard"></label>
 %FORMFIELDS%
 </div>
-<div class="patternAccessKeyInfo"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, D = %_{"Discard"}%</div></div>%TMPL:END%
+<div class="patternAccessKeyInfo"><a href="#%_{"Opens page in new window"}%" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, D = %_{"Discard"}%</div></div>%TMPL:END%
 
 
 

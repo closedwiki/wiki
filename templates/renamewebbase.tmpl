@@ -1,26 +1,13 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"script"}%
- <script type="text/javascript">
- <!--HIDE
-  function launchWindow( theWeb, theTopic ) {
-    win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-    if( win ) {
-      win.focus();
-    }
-    return false;
- }
- function checkAll( theCheck )
- {
-   // find button element index
-   var j = 0;
-   for( var i = 0; i < document.renameweb.length; i++ ) {
-     if( document.renameweb.elements[i].name.match( "referring_topics" ) ) {
-       document.renameweb.elements[i].checked = theCheck;
-     }
-   }
- }
- //STOP HIDING-->
- </script>%TMPL:END%
+
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript">
+//<![CDATA[
+	var pageElem = document.renameweb;
+//]]>
+</script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+%TMPL:END%
 
 %TMPL:DEF{"content"}%
 <form method="post" name="renameweb" action="%SCRIPTURLPATH%/renameweb%SCRIPTSUFFIX%/%WEB%">
@@ -49,15 +36,14 @@
 
 %GLOBAL_SEARCH%
 
-<input type="button" value="Select all" onclick="checkAll(true);" />
-<input type="button" value="Clear" onclick="checkAll(false);" /> checkboxes of referenced topics
+<input type="button" value="Select all" onclick="checkAll(true);" />&nbsp;<input type="button" value="Clear" onclick="checkAll(false);" /> checkboxes of referenced topics
 
 __Note:__
    * Get help on
      <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Renaming and moving webs</a>.
    * Select the %TRASHWEB% Web to delete the topic.
    * The checkmarked topics will be updated. 
-%TMPL:P{"topicinfo"}%%TMPL:P{"hidden"}%
+%TMPL:P{"topicinfo"}%
 </form>%TMPL:END%
 
 %TMPL:DEF{"renameweb"}%

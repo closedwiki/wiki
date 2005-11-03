@@ -2,16 +2,8 @@
 
 
 
-%TMPL:DEF{"script"}%
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PatternSkin/twiki_settings.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-	function launchWindow(inWeb, inTopic ) {
-		return launchTheWindow("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/", inWeb, inTopic, "plain.pattern");
-	}
-//]]>
-</script>
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PatternSkin/twiki_edit.js"></script>
 %TMPL:END%
 
 

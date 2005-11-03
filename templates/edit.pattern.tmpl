@@ -2,83 +2,9 @@
 
 
 
-%TMPL:DEF{"script"}%
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-	ns4 = (document.layers)? true:false;
-	ie4 = (document.all)? true:false;
-	dom = (document.getElementById)?true:false;
-	
-	toShow=new Array();
-	toHide=new Array();
-	
-	// DON'T overwrite existing onload handlers
-	// http://simon.incutio.com/archive/2004/05/26/addLoadEvent
-	function addLoadEvent(func){
-		var oldonload = window.onload;
-		if (typeof window.onload != 'function') {
-			window.onload = function() {
-			    func();
-            }
-		} else {
-			window.onload = function() {
-				oldonload();
-				func();
-			}
-		}
-	}
-	
-	function initForm() {
-        try { document.main.text.focus(); } catch (er) {}
-		for (i = 0; i < toShow.length; i++) {
-			if(dom) {
-				document.getElementById(toShow[i]).style.display="inline";
-			} else if( ie4 ) {
-				document.all[toShow[i]].style.display="inline";
-			} else if( ns4 ) {
-				document.layers[toShow[i]].style.display="inline";
-			}
-		}
-		for ( i = 0; i < toHide.length; i++) {
-			if(dom) {
-				document.getElementById(toHide[i]).style.display="none";
-			} else if( ie4 ) {
-				document.all[toHide[i]].style.display="none";
-			} else if( ns4 ) {
-				document.layers[toHide[i]].style.display="none";
-			}
-		}
-	}
-	function checkAll( theButton, theButtonOffset, theNum, theCheck ) {
-		// find button element index
-		var j = 0;
-		for( var i = 0; i <= document.main.length; ++i ) {
-			if( theButton == document.main.elements[i] ) {
-				j = i;
-				break;
-			}
-		}
-		// set/clear all checkboxes
-		var last = j+theButtonOffset+theNum;
-		for( var i = last-theNum; i < last; ++i ) {
-			document.main.elements[i].checked = theCheck;
-		}
-	}
-	function launchWindow( theWeb, theTopic, theAnchor ) {
-		if( ! theAnchor ) {
-			theAnchor = "";
-		}
-		win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain.pattern" + theAnchor, theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-		if( win ) {
-			win.focus();
-		}
-		return false;
-	}
-
-	addLoadEvent(initForm);
-//]]>
-</script>%TMPL:END%
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
+%TMPL:END%
 
 
 
@@ -131,9 +57,9 @@
 
 
 %TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
-<input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" title='%_{"Read new revision help text in new window"}%' rel='nofollow'>%_{"help"}%</a></span></div>
+<input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="#%_{"Opens page in new window"}%" title='%_{"Read new revision help text in new window"}%' rel='nofollow'>%_{"help"}%</a></span></div>
 <div class="patternActionButtons">
-<input type="submit" class="twikiSubmit" name="action_save" id="save" value='%_{"Save"}%' /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%_{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value='%_{"Preview"}%' /><label accesskey="p" for="preview"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value='%_{"Cancel"}%' title='%_{"Cancel editing and discard changes"}%' /><label accesskey="c" for="cancel"></label></div><div class="patternAccessKeyInfo"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, P = %_{"Preview"}%, C = %_{"Cancel"}%</div></div>%TMPL:END%
+<input type="submit" class="twikiSubmit" name="action_save" id="save" value='%_{"Save"}%' /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%_{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value='%_{"Preview"}%' /><label accesskey="p" for="preview"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value='%_{"Cancel"}%' title='%_{"Cancel editing and discard changes"}%' /><label accesskey="c" for="cancel"></label></div><div class="patternAccessKeyInfo"><a href="#%_{"Opens page in new window"}%" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, P = %_{"Preview"}%, C = %_{"Cancel"}%</div></div>%TMPL:END%
 
 
 
@@ -142,7 +68,7 @@
 %TMPL:P{"toolbar"}%<div id="edithelptoggle" class="twikiHelp twistyHidden twistyRememberSetting">%TMPL:P{"syntaxhelp"}%</div>
 <div class="patternFormHolder">
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-<textarea id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%'>%TEXT%</textarea>
+<textarea id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
 <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />

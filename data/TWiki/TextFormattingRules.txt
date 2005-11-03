@@ -42,7 +42,7 @@ Three or more dashes at the beginning of a line, followed by plus signs and the 
 You can create a table of contents with the [[TWikiVariables#VarTOC][ =%<nop>TOC%= ]] variable. If you want to *exclude* a heading from the TOC, put =!!= after the =---+=.
 
 %X% Empty headings are allowed, but won't appear in the table of contents.
-</td><td style='text-color: #990000'>
+</td><td style='color:#900'>
 <verbatim>
 ---++ Sushi
 ---+++ Maguro

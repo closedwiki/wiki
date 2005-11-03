@@ -2,33 +2,19 @@
 
 
 
-%TMPL:DEF{"script"}%
+%TMPL:DEF{"templatescript"}%
 <script type="text/javascript">
-<!--HIDE
-	function initPage() { }
-	function launchWindow( theWeb, theTopic ) {
-		win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-		if( win ) {
-			win.focus();
-		}
-		return false;
-	}
-	function checkAll( theCheck ) {
-		// find button element index
-		var j = 0;
-		for( var i = 0; i < document.rename.length; i++ ) {
-			if( document.rename.elements[i].name.match( "referring_topics" ) ) {
-				document.rename.elements[i].checked = theCheck;
-			}
-		}
-	}
-//STOP HIDING-->
-</script>%TMPL:END%
+//<![CDATA[
+	var pageElem = document.rename;
+//]]>
+</script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+%TMPL:END%
 
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage patternRenamePage" onload="initPage()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+<body class="patternNoViewPage patternRenamePage"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
 
 
 
@@ -70,11 +56,10 @@
 
 <div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in any Web:", "[[%WEB%.%TOPIC%]]"}%</div>%GLOBAL_SEARCH%</div>
 <hr />
-<input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" /> <input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%
+<input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%
 <p />
 
 %TMPL:P{"topicaction"}%
-%TMPL:P{"hidden"}%
 </form>
 <div class="twikiHelp">
 *%_{"Note:"}%*

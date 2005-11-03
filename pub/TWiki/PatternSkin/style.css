@@ -508,7 +508,7 @@ a:hover .twikiAccessKey {
 .patternTopicAction {
 	font-size:94%; /*S2*/
 	line-height:1.5em;
-	margin:0 0 3em 0;
+	margin:-1px 0 3em 0;
 	padding:.5em 20px; /*S5*/
 	border-width:1px 0;
 	border-style:solid;

@@ -1,7 +1,3 @@
-var ns4 = (document.layers) ? true : false;
-var ie4 = (document.all) ? true : false;
-var dom = (document.getElementById) ? true : false;
-
 var toShow = new Array();
 var toHide = new Array();
 
@@ -36,3 +32,21 @@ function handleKeyDown(e) {
 	if (code==27) return false;
 	return true;
 }
+
+function checkAll( theButton, theButtonOffset, theNum, theCheck ) {
+	// find button element index
+	var i, j = 0;
+	for (i = 0; i <= document.main.length; ++i) {
+		if( theButton == document.main.elements[i] ) {
+			j = i;
+			break;
+		}
+	}
+	// set/clear all checkboxes
+	var last = j+theButtonOffset+theNum;
+	for(i = last-theNum; i < last; ++i) {
+		document.main.elements[i].checked = theCheck;
+	}
+}
+
+addLoadEvent(initForm);

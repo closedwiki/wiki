@@ -12,7 +12,21 @@
 
 
 
-%TMPL:DEF{"script"}%%TMPL:END%
+%TMPL:DEF{"templatescript"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"script"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+	function launchWindow(inWeb, inTopic) {
+		return launchTheWindow("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/", inWeb, inTopic, "plain");
+	}
+//]]>
+</script>
+%TMPL:P{"templatescript"}%
+%TMPL:END%
 
 
 
@@ -20,30 +34,20 @@
 
 
 
+%TMPL:DEF{"twikistyle"}%
+%TMPL:INCLUDE{"css.tmpl"}%
+%TMPL:END%
+
+
+
 %TMPL:DEF{"head"}%
 <head>
 	%TMPL:P{"windowtitle"}%
 	<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
-	<style type="text/css" media="all">
-	.twikiNewLink {
-		color:%NEWTOPICFONTCOLOR%;
-		background-color:%NEWTOPICBGCOLOR%;
-	}
-	.twikiTable {
-		border-collapse:collapse;
-	}
-	.twikiTable td,
-	.twikiTable th {
-		border:thin solid black;
-		margin:0px;
-	}
-	/* to hide Twisty elements: */
-	.twistyHidden { display:none; }
-	.twistyMakeVisible { display:none; }
-</style>
-<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
-<base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
-%TMPL:P{"script"}%
+	<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
+	<base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+	%TMPL:P{"script"}%
+	%TMPL:P{"twikistyle"}%
 </head>%TMPL:END%
 
 

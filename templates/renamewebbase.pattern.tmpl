@@ -1,32 +1,20 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"script"}%
+
+
+%TMPL:DEF{"templatescript"}%
 <script type="text/javascript">
-<!--HIDE
-	function initPage() { }
-	function launchWindow( theWeb, theTopic ) {
-		win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-		if( win ) {
-			win.focus();
-		}
-		return false;
-	}
-	function checkAll( theCheck ) {
-		// find button element index
-		var j = 0;
-		for( var i = 0; i < document.renameweb.length; i++ ) {
-			if( document.renameweb.elements[i].name.match( "referring_topics" ) ) {
-				document.renameweb.elements[i].checked = theCheck;
-			}
-		}
-	}
-//STOP HIDING-->
-</script>%TMPL:END%
+//<![CDATA[
+	var pageElem = document.renameweb;
+//]]>
+</script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+%TMPL:END%
 
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage patternRenamePage" onload="initPage()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+<body class="patternNoViewPage patternRenamePage"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
 
 
 
@@ -49,13 +37,14 @@
 <td class="patternOldCol patternHelpCol"></td>
 </tr>
 <tr>
-<th>%_{"New web name:"}%</br></th>
+<th>%_{"New web name:"}%</th>
 <td class="patternMainCol">%TMPL:P{"newsubweb"}%</td>
-<td class="patternMainCol patternHelpCol" rowspan="2">%TMPL:P{"movewebhelp"}%</td>
+<td class="patternMainCol patternHelpCol" colspan="2">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr %SUBWEBSENABLE%>
 <th>%_{"New parent web:<br>(subwebs must be enabled)"}%</th>
 <td class="patternMainCol">%TMPL:P{"newparentweb"}%</td>
+<td class="patternMainCol patternHelpCol" colspan="2"></td>
 </tr>
 </table>
 </div>
@@ -76,15 +65,14 @@
 <div class="patternTopicActionSecondary">
 <table>
 <tr>
-<td><input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" /><input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%</td>
+<td><input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%</td>
 </tr></table></div>
 <div class="twikiHelp">
 *%_{"Note:"}%*
-   * %_{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Click here</a> to get help on managing webs", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs"}%
+   * %_{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Get help on managing webs</a>", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs"}%
    * %_{"The checkmarked topics will be updated"}%
 </div>
 %TMPL:P{"topicaction"}%
-%TMPL:P{"hidden"}%
 </form>
 %TMPL:END%
 

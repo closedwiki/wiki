@@ -2793,3 +2793,6 @@ msgstr "abgefragt um %1"
 msgid "view"
 msgstr "Ansehen"
 
+#: templates/edit.pattern.tmpl:62
+msgid "Opens page in new window"
+msgstr ""

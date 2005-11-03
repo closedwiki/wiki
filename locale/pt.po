@@ -2780,6 +2780,11 @@ msgstr "obtidos em %1"
 msgid "view"
 msgstr "ver"
 
+#: templates/edit.pattern.tmpl:62
+msgid "Opens page in new window"
+msgstr ""
+
+
 #~ msgid "Create"
 #~ msgstr "Criar"
 

@@ -2601,6 +2601,10 @@ msgstr ""
 msgid "view"
 msgstr "vea"
 
+#: templates/edit.pattern.tmpl:62
+msgid "Opens page in new window"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Create"
 #~ msgstr "Crear"
