@@ -384,7 +384,8 @@ sub searchWeb {
     my $doMultiple =    TWiki::isTrue( $params{multiple} );
     my $nonoise =       TWiki::isTrue( $params{nonoise} );
     my $noEmpty =       TWiki::isTrue( $params{noempty}, $nonoise );
-    my $noHeader =      TWiki::isTrue( $params{noheader} || (($header eq '')&&($format ne '')&&$inline), $nonoise );	#SMELL: this is a horrible Cairo compatibility hack, it seems everyone was relying on
+    my $noHeader =      (TWiki::isTrue( $params{noheader}, $nonoise)
+      || (($header eq '') && ($format ne '') && $inline));	#SMELL: this is a horrible Cairo compatibility hack, it seems everyone was relying on
     my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
     my $noSummary =     TWiki::isTrue( $params{nosummary}, $nonoise );
     my $zeroResults =   1 - TWiki::isTrue( ($params{zeroresults} || 'on'), $nonoise );
@@ -589,12 +590,12 @@ sub searchWeb {
         next unless $store->webExists( $web );  # can't process what ain't thar
 
         my $prefs = $session->{prefs};
-        my $thisWebNoSearchAll = $prefs->getWebPreferencesValue( 'NOSEARCHALL', $web );
+        my $thisWebNoSearchAll = $prefs->getWebPreferencesValue( 'NOSEARCHALL', $web ) || '';
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
         next if ( $searchAllFlag
-                  && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
+                    && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
                   && $web ne $session->{webName} );
 
         # Run the search on topics in this web
