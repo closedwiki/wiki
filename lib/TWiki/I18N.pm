@@ -153,16 +153,16 @@ BEGIN {
 
     eval "use base 'Locale::Maketext'";
     if ( $@ ) {
-      $initialised &&= 0;
-      push(@initErrors, "Couldn't load Locale::Maketext. It's needed for I18N support:\n" . $@);
+      $initialised = 0;
+      push(@initErrors, "I18N: Couldn't load required perl module Locale::Maketext: " . $@."\nInstall the module or turn off {UseInternationalisation}");
     }
 
     unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
-      push(@initErrors, '{LocalesDir} not configured - run configure (I18N disabled).');
-      $initialised &&= 0;
+      push(@initErrors, 'I18N: {LocalesDir} not configured. Define it or turn off {UseInternationalisation}');
+      $initialised = 0;
     }
 
-    # dinamically build languages to be loaded according to admin-enabled
+    # dynamically build languages to be loaded according to admin-enabled
     # languages.
     my $dependencies = "use Locale::Maketext::Lexicon { 'en'    => [ 'Auto' ], ";
     foreach my $lang (@languages) {
@@ -172,8 +172,8 @@ BEGIN {
 
     eval $dependencies;
     if ( $@ ) {
-      $initialised &&= 0;
-      push(@initErrors, "Couldn't load Perl Locale::Maketext::Lexicon. It's need for I18N support:\n" . $@);
+      $initialised = 0;
+      push(@initErrors, "I18N - Couldn't load required perl module Locale::Maketext::Lexicon: " . $@ . "\nInstall the module or turn off {UseInternationalisation}");
     }
 }
 
@@ -192,7 +192,7 @@ sub get {
 
     unless ($initialised) {
         foreach my $error (@initErrors) {
-            $session->writeWarning(@initErrors);
+            $session->writeWarning($error);
         }
     }
 
@@ -211,9 +211,9 @@ sub get {
         }
     } else {
         $this = new TWiki::I18N::Fallback();
-        # we couldn't initialise 'optional' I18N infrastrcture, warn that we
+        # we couldn't initialise 'optional' I18N infrastructure, warn that we
         # can only use English.
-        $session->writeWarning('TWiki::I18N: falling back to English: ' . $this);
+        $session->writeWarning('Could not load I18N infrastructure; falling back to English');
     }
    
     # keep a reference to the session object
