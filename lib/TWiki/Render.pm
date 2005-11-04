@@ -1682,8 +1682,7 @@ sub summariseChanges {
     my $store = $this->{session}->{store};
 
     my( $nmeta, $ntext ) = $store->readTopic( $user, $web, $topic, $nrev );
-
-    if( $nrev > 1 && $orev ne $nrev ) {
+    if( $nrev && $nrev > 1 && $orev ne $nrev ) {
         my $metaPick = qr/^[A-Z](?!OPICINFO)/; # all except TOPICINFO
         # there was a prior version. Diff it.
         $ntext = $this->TML2PlainText(
