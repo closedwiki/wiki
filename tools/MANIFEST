@@ -12,6 +12,7 @@ bin/oops 0550
 bin/passwd 0550
 bin/preview 0550
 bin/rdiff 0550
+bin/rdiffauth 0550
 bin/register 0550
 bin/rename 0550
 bin/resetpasswd 0550
@@ -23,6 +24,7 @@ bin/statistics 0550
 bin/twiki 0550
 bin/upload 0550
 bin/view 0550
+bin/viewauth 0550
 bin/viewfile 0550
 bin/logos/favicon.ico 0660
 bin/logos/info.gif 0660

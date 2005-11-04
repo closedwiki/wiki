@@ -297,9 +297,9 @@ __Note:__ This topic is included by TWikiVariables
      | =encode="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | no encoding |
      | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
      | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (new line) |
-   * Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%TOPIC%?skin=print= URL. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print#VarURLPARAM][Test this]]: %URLPARAM{"skin"}%
+   * Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%TOPIC%?skin=print= URL.
    * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
-   * %X% Note: There is a risk that this variable could be misused for cross-scripting.
+   * %X% Note: There is a risk that this variable could be misused for cross-site scripting.
    * Related: [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
 
 #VarUSERNAME

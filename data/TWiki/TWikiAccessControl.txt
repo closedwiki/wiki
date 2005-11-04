@@ -161,7 +161,7 @@ This setup can be useful to hide a new web until content its ready for deploymen
 
 ---+++ Authenticate all Webs and Restrict Selected Webs
 
-Use the following setup to authenticate users for topic viewing in all webs and to restrict access to selected webs:
+Use the following setup to authenticate users for topic viewing in all webs and to restrict access to selected webs. Requires TWikiUserAuthentication to be enabled.
 
    1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
       * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
@@ -169,13 +169,10 @@ Use the following setup to authenticate users for topic viewing in all webs and 
       * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
    1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
       * ==Set <nop>NOSEARCHALL = on==
-   1. *Add* ==view== to the list of authenticated scripts in the =.htaccess= file.
-
-%H% This method only works if the ==view== script is authenticated, which means that all Users have to login, even for read-only access. (An open guest account, like %MAINWEB%.TWikiGuest, can get around this, allowing anyone to login to a common account with, for example, view-only access for public webs.) TWikiInstallationGuide has more on Basic Authentication, using the ==.htaccess== file.
 
 ---+++ Authenticate and Restrict Selected Webs Only
 
-Use the following setup to provide unrestricted viewing access to open webs, with authentication only on selected webs:
+Use the following setup to provide unrestricted viewing access to open webs, with authentication only on selected webs. Requires TWikiUserAuthentication to be enabled.
 
    1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
       * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
@@ -183,14 +180,6 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
       * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
    1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
       * ==Set <nop>NOSEARCHALL = on==
-   1. *Enable* =={RememberUserIPAddress}== in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]] as described in TWikiUserAuthentication. <nop>%WIKITOOLNAME% will now remember the IP address of an authenticated user. 
-   1. *Copy* the ==view== script to ==viewauth== (or better, create a symbolic link) 
-   1. *Add* ==viewauth== to the list of authenticated scripts in the =.htaccess= file. The ==view== script should not be listed in the =.htaccess= file.
-
-When a user accesses a web where you enabled view restriction, <nop>%WIKITOOLNAME% will redirect from the =view= script to the =viewauth= script once (this happens only if the user has never edited a topic). Doing so will ask for authentication. The =viewauth= script shows the requested topic if the user could log on and if the user is authorized to see that web.
-
-%X% *Authenticating webs is not very secure*, as there is a way to circumvent the read access restriction. It can be useful in certain situations - for example, to simplify site organization and clutter, by hiding low traffic webs - but is not recommended for securing sensitive content.
-
 
 ---+++ Hide Control Settings
 
@@ -205,4 +194,3 @@ When a user accesses a web where you enabled view restriction, <nop>%WIKITOOLNAM
 %STOPINCLUDE%
 
 __Related Topics:__ AdminDocumentationCategory
-

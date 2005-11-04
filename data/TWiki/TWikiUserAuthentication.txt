@@ -145,6 +145,12 @@ If your {PasswordManager} supports password changing, you can change and reset p
    * The ChangePassword form ( ==TWiki/ChangePassword== ):
    * The ResetPassword form ( ==TWiki/ResetPassword== ):
 
+#IndividualScripts
+---++ Controlling access to individual scripts
+You may want to add or remove scripts from the list of scripts that require authentication. The method for doing this is different for each of Template Login and Apache Login.
+   * For Template Login, update the {AuthScripts} list using =configure=
+   * For Apache Login, add/remove the script from =
+.htaccess=
 #HowTo
 ---++ How to choose an authentication method
 

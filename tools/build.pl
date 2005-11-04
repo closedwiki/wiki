@@ -50,6 +50,11 @@ sub target_build {
     $this->cp( $this->{basedir}.'/AUTHORS',
                $this->{basedir}.'/pub/Main/TWikiContributor/AUTHORS' );
 
+    for my $script qw( view rdiff ) {
+        $this->cp( $this->{basedir}."/bin/$script",
+                                    $this->{basedir}."/bin/${script}auth" );
+    }
+
     print `cd ../bin ; ./view TWiki.TWikiDocumentation skin plain | ../tools/fix_local_links.pl > ../TWikiDocumentation.html 2> /dev/null`;
     print `cd ../bin ; ./view TWiki.TWikiHistory skin plain > ../TWikiHistory.html 2> /dev/null`;
     print `cd ../bin ; ./view TWiki.DakarReleaseNotes skin plain > ../DakarReleaseNotes.html 2> /dev/null`;
