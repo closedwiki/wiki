@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1129333062" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1129333062" format="1.1" version="$Rev$"}%
 ---+!!  PatternSkinCssCookbook: Center the page
 
 Cookbook example how to center the page (left bar hidden).

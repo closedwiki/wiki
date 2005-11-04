@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127406241" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1127406241" format="1.1" version="$Rev$"}%
 ---+!! Search Pattern Cookbook
 
 The Search function in TWiki is very powerful. Especially searches using a RegularExpression play an important part of tapping TWiki's full potential. Unfortunately RegularExpressions can be incredibly obscure to the uninitiated. 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1130024123" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1130024123" format="1.1" version="$Rev$"}%
    * Set USERSTYLEURL=%ATTACHURL%/notopbar.css
 
 Add dynamic variable:
