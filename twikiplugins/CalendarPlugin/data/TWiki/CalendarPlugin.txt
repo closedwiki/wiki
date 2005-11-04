@@ -174,13 +174,13 @@ A list of Events is just a bullet list like this:
 | ==daynames="Mon&brvbar;Tue&brvbar;..."== | Custom day names | "Monday&brvbar;Tuesday&brvbar;Wednesday&brvbar;Thursday&brvbar;<br />Friday&brvbar;Saturday&brvbar;Sunday" |
 | ==header="..."==	 | Text at the top of the calendar; use ==$m== for current month, ==$y== for year | Current month and year |
 | ==weekstartsonmonday="1"== or =="0"== | Flag to start week on Monday | "0" (Sunday) |
-| ==showdatenumbers="0"== | Show day numbers 1...31 in date cells. Note that ==showdatenumbers=1== means that ==HTML::CalendarMonthSimple== will add the date numbers to the cells. If ==showdatenumbers=0==, then the plugin adds the date numbers. The result of this is that a calendar will *always* show the date numbers. | "0" |
+| ==showdatenumbers="0"== | Show day numbers 1...31 in date cells. Note that ==showdatenumbers=1== means that ==HTML::CalendarMonthSimple== will add the date numbers to the cells. If ==showdatenumbers=0==, then the plugin adds the date numbers. The result of this is that a calendar will *always* show the date numbers. | "0" (except with aslist="1", see below) |
 | ==showweekdayheaders="1"== | Show the weekday headers | "0" |
 | ==weekdayheadersbig="0"== | If enabled, show weekday headers in bold cell headings | "1" |
 | ==cellalignment="left"== | Horizontal cell alignment of day cells: "left", "center", "right", "justify", "char" | "center" |
 | ==vcellalignment="middle"== | Vertical cell alignment of day cells: "top", "middle", "bottom", "baseline" | "top" |
 | ==cellheight="n"== | Height in pixels of each cell in the calendar | Minimum height needed |
-| ==format="..."== | How to highlight a date | See above |
+| ==format="..."== | How to highlight a date | See [[%TOPIC%#EventFormatting][Event Formatting]] below |
 | ==width="n"== or =="n%"== | Width of calendar table in pixels or percent | Minimum width needed |
 | ==border="n"== | Border width of calendar table | "1" |
 | ==nowrap="1"== or =="0"== | Prevent cell content from wrapping | "0" |
@@ -199,10 +199,10 @@ A list of Events is just a bullet list like this:
 | ==todaycolor="#nnnn"== | Background of today's cell | The web bgcolor |
 | ==todaycontentcolor="#nnnn"== | Content color of today's cell | contentcolor setting |
 | and other attributes of HTML::CalendarMonthSimple |||
-| ==aslist== | Controls whether events displayed in calendar style (=aslist=0=) or list style (=aslist=1=). | 0 |
+| ==aslist== | Controls whether events displayed in calendar style (=aslist=0=) or list style (=aslist=1=). Note that specifying =aslist=1= forces =showdatenumbers=1=.  This is done to ensure that the date number is formatted according to =datenumberformat= and that only the days that have an event are listed. | 0 |
 | ==days== | Specifies how many days of calendar data to list. Only valid if =aslist=1=. | 1 |
 | ==months== | Specifies how many months of calendars to display. Only valid if =aslist=0=. | 1 |
-| ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | $day |
+| ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | '$day' (if =aslist=0=)%BR%'   * $day $mon $year' (if =aslist=1=) |
 | ==todaydatenumberformat== | Specifies formatting for the date number for the current day (today) in the calendar. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | ==datenumberformat== |
 | ==multidayformat== | Specifies formatting of the description for multi-day events. See [[%TOPIC%#MultiDayFormatting][Multi-Day Event Formatting]] for details. | ==$description== |
 
@@ -226,15 +226,34 @@ Events are defined by bullets with the following syntax:
 | ^ | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - dd MMM yyyy - description== </nobr> | E3 12 Apr 2005 - 31 Dec 2005 - Every three days from 12 Apr 2005 through 31 Dec 2005 (inclusive) |
 | *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
 
-If an event falls in the selected month then the corresponding day is (by default):
+#EventFormatting
+---+++ Event formatting
+
+For a table-style calendar, if an event falls in the selected month then the corresponding day is (by default):
 	* highlighted (font size +2)
 	* linked to the topic containing the event list
 	* marked with an icon whose ALT string is the event's description
 I.e. ==format== is:
 <verbatim>
-<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic"><font size="+2">$old</font>
-<img alt="$description" SRC="%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif" /></a>
+$old<font size="+2"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">
+<img alt="$description" SRC="%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif" /></a></font>
 </verbatim>
+
+For a list-style calendar, if an event falls in the selected time period, then it is displayed (by default):
+	* As a bullet item
+	* With the date as dd Mmm yyyy
+	* Linked to the topic containing the event list
+In other words, ==datenumberformat== is:
+<verbatim>
+	* $day $mon $year
+</verbatim>
+and ==format== is:
+<verbatim>
+$old - <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">
+$description</a>
+</verbatim>
+
+This displays the events in a form very similar to that in which they are specified (although specific to a particular date).
 
 #MultiDayFormatting
 ---+++ Multi-Day Event Formatting

@@ -120,9 +120,8 @@ sub initDefaults
 	lang			=> 'English',
 	topic			=> $topic,
 	web			=> $web,
-	format			=> '<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic"><font size="+2">'
-                                 . '$old</font><img alt="$description" src="%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif" border="0" /></a>',
-	datenumberformat	=> '$day',
+	format			=> undef,
+	datenumberformat	=> undef,
 	todaydatenumberformat	=> undef,
 	multidayformat		=> undef, # Default: display description unchanged
     );
@@ -289,10 +288,6 @@ sub handleCalendar
 	$options{$option} = $v if defined($v);
     }
 
-    # Default todaydatenumberformat to datenumberformat if not otherwise set
-
-    $options{todaydatenumberformat} = $options{datenumberformat} if (! $options{todaydatenumberformat});    
-
     # get GMT offset
     my ($currentYear, $currentMonth, $currentDay, $currentHour, $currentMinute, $currentSecond) = Today_and_Now(1);
     my $gmtoff = scalar &TWiki::Func::extractNameValuePair( $attributes, 'gmtoffset' );
@@ -368,6 +363,29 @@ sub handleCalendar
 
     my $asList = scalar &TWiki::Func::extractNameValuePair( $attributes,
 							    'aslist' );
+
+    if ($asList) {
+
+    # If displaying as a list, force showdatenumbers to 1 so that the Plugin can format them later.
+    # This logic seems backwards, but if showdatenumber is 0, the calendar initialization code below will put date numbers into the contents of each day. Then, when displaying the list, every day will be included in the list because the contents is not "empty." This would produce an ugly list. In contrast, if HTML::CalendarSimple is told to put the date numbers on the calendar, this will be done outside of the content. Therefore, we can later display only those days that actually have events, at the cost of formatting the date numbers again.
+
+
+	$options{showdatenumbers} = 1;
+	if (!$options{format}) {
+	$options{format} = '$old - <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">$description</a>$n';
+	}
+	if (!$options{datenumberformat}) {
+	$options{datenumberformat} = '	* $day $mon $year';
+	}
+    } else {
+	if (!$options{datenumberformat}) {
+	$options{datenumberformat} = '$day';
+	}
+    }
+
+    # Default todaydatenumberformat to datenumberformat if not otherwise set
+
+    $options{todaydatenumberformat} = $options{datenumberformat} if (! $options{todaydatenumberformat});    
 
     # Process "days" parameter (goes with aslist=1; specifies the
     # number of days of calendar data to list).  Default is 1.
@@ -957,8 +975,8 @@ sub formatDate
     # Set a value for seconds since the epoch
     my $epochSeconds = timegm($sec, $min, $hour, $day, $mon-1, $year);
 
-    # use default TWiki format "31 Dec 1999 - 23:59" unless specified
-    $formatString ||= '$day $month $year - $hour:$min';
+    # Set to format to empty string if undefined to avoid possible warnings
+    $formatString ||= '';
 
     # Unfortunately, there is a disconnect between the TWiki
     # formatTime() function and Date::Calc when it comes to the day of
