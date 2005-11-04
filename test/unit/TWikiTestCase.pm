@@ -166,9 +166,10 @@ sub capture {
 
     my $text = undef;
     my @params = @_;
+    my $result;
 
     try {
-        &$proc( @params );
+        $result = &$proc( @params );
     } finally {
         close(STDOUT)            or die "Can't close STDOUT: $!";
         open(STDOUT, ">&OLDOUT") or die "Can't restore stderr: $!";
@@ -177,13 +178,12 @@ sub capture {
 
     $text = '';
     open(FH, '/tmp/cgi');
-    while(<FH>) {
-        $text .= $_;
-    }
+    local $/ = undef;
+    $text = <FH>;
     close(FH);
     unlink('/tmp/cgi');
 
-    return $text;
+    return ( $text, $result );
 }
 
 1;
