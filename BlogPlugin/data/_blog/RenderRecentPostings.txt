@@ -1,0 +1,47 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129823869" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * LIMIT: maximal number of BlogEntries to list
+   * CAT: optionally render restrict list to this category
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<div class="blogSideBarSection blogSideBarLatest">
+---+ Latest %IFDEFINED{"%CAT%" then=" in %CAT%"}%%REDDOT{"%TOPIC%"}%
+%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND
+~~~          State='enabled'
+~~~         %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'"}%
+~~~         "
+~~~         order="createdate" reverse="on" limit="%LIMIT%"
+~~~         format="   * [[$topic][$formfield(Headline)]]"
+~~~ }%
+</div>
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" LIMIT="1" CAT="BlogDev"}%
+</div>
+
+<div class="alt">
+%INCLUDE{"%TOPIC%" LIMIT="10"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the list of recent postings in the WebSideBar"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1127297546" from="Blog.RenderLatestEntries" to="Blog.RenderRecentPostings"}%

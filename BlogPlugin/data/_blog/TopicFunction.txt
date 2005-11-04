@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129817300" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+%INCLUDE{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+
+See also: %TOPIC%Template
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicType
+-->
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TopicType"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType of topics to be called by a (parameterized) INCLUDE "}%

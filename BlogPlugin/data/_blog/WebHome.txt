@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130355270" format="1.1" version="1.1"}%
+%INCLUDE{"RenderFrontPage" LIMIT="10" FULL="5" CAT=".*" AUTHOR=".*"}%
+<style type="text/css">.natTopicForm {display:none}</style>
+<!--
+   * Set ALLOWTOPICCHANGE = BlogAdminGroup
+   * Set PAGETITLE = %FORMFIELD{"TopicDescription"}%
+   * Set WHITEBOARD = off
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="FrontPage"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Welcome to Micha's Blog"}%

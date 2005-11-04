@@ -1,0 +1,37 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130320927" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+See also: RenderArchiveLink
+
+---++ Parameters
+NONE
+
+---++ Implementation
+%STARTINCLUDE%
+<div class="blogSideBarSection blogSideBarArchive">
+---+ Archive%REDDOT{"%WEB%.%TOPIC%"}%
+<ul>
+%INCLUDE{"RenderArchiveLink" FROM="1 Dec 2005" TO="1 Jan 2006" TITLE="December 2005"}%
+%INCLUDE{"RenderArchiveLink" FROM="1 Nov 2005" TO="1 Dez 2005" TITLE="November 2005"}%
+%INCLUDE{"RenderArchiveLink" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005"}%
+%INCLUDE{"RenderArchiveLink" FROM="1 Sep 2005" TO="1 Oct 2005" TITLE="September 2005"}%
+%INCLUDE{"RenderArchiveLink" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005"}%
+%INCLUDE{"RenderArchiveLink" FROM="1 Jul 2005" TO="1 Aug 2005" TITLE="July 2005"}%
+</ul>
+</div>
+%STOPINCLUDE%
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a list of all months that have postings."}%

@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1131113329" format="1.1" version="1.1"}%
+---+ The BlogUp blogging setup for TWiki
+
+TODO: write docu
+
+See also: BlogPlugin, [[_blog.WebHome][BlogUp template web]]
+
+
+
+-- Main.MichaelDaum - 04 Nov 2005
+
+
+%META:TOPICMOVED{by="MichaelDaum" date="1131113305" from="TWiki.BlogApp" to="TWiki.BlogUp"}%

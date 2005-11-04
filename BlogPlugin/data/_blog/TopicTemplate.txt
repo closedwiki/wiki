@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="TWikiContributor" date="1131091903" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+%INCLUDE{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TopicType"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType used to create topics of the associated type"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1124113548" from="Blog.BlogTemplate" to="Blog.TopicTemplate"}%

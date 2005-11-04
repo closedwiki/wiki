@@ -1,0 +1,48 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130320796" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="AdminTool"}%
+---+!! %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+%TOC{depth="2"}%
+
+The about field at the top of the sidebar will display different content
+depending on the level of the blog which you currently reached.
+
+see also: WebSideBar, BlogSideBar, WebLeftBar
+
+---++ Default sidebar
+%STARTINCLUDE%
+%SECTION{"Default"}%
+%RED%Enter blog description%ENDCOLOR%
+%ENDSECTION{"Default"}%
+%STOPINCLUDE%
+
+---++ Admin sidebar
+%SECTION{"Admin"}%
+You are at the administrative and implementation level of this Blog which the 
+%BASETOPIC% topic is part of. To explore this level you might start at the TopicTypes or the
+AdminTools.
+%ENDSECTION{"Admin"}%
+
+---++ Aggregation sidebar
+%SECTION{"Aggregation"}%
+You are in the aggregations section, lots of [[NewsFeeds][nice feeds]]. Note, that you have to visit the syndicated sites to comment. Maybe we will find a way to bring news and blogs closer to
+each other inside <nop>%WIKITOOLNAME%.
+%ENDSECTION{"Aggregation"}%
+
+---++ Archive sidebar
+%SECTION{"Archive"}%
+You are in the <nop>BlogArchive. This is the complete collection of all articles that have been
+posted to this blog.
+%ENDSECTION{"Archive"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = AdminTool
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Describes your blog"}%

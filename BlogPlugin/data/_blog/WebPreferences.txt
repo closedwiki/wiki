@@ -1,0 +1,40 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130412368" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+---++ <nop>%WEB% Web Preferences
+%FORMFIELD{"TopicDescription"}%
+
+   * Set SITEMAPLIST = on
+   * Set SITEMAPWHAT = Decent Blogging using TWiki
+   * Set SITEMAPUSETO = Decent Blogging using TWiki
+   * Set NOSEARCHALL = 
+   * Set NOAUTOLINK = 
+
+   * Set NATSEARCHINCLUDEWEB = Blog
+   * Set NATSEARCHEXCLUDEWEB = 
+   * Set NATSEARCHINCLUDETOPIC = (BlogEntry|BlogComment)\d+.*
+   * Set NATSEASRCHEXCLUDETOPIC = 
+   * Set NATSEARCHTOPICSUMMARY = RenderTopicSummary
+   * Set STYLESEARCHBOX = pos2
+   
+   * WebTopicEditTemplate
+   * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm
+   * Set #DENYWEBVIEW = 
+   * Set #ALLOWWEBVIEW = 
+   * Set #DENYWEBCHANGE = %MAINWEB%.TWikiGuest
+   * Set #ALLOWWEBCHANGE = %MAINWEB%.BlogAuthorGroup
+   * Set #DENYWEBRENAME = 
+   * Set ALLOWWEBRENAME = %MAINWEB%.BlogAuthorGroup
+
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+
+   * Set FINALPREFERENCES = ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
+
+__Related Topics__:
+   * [[Main.TWikiPreferences]]
+   * [[TWiki.TWikiPreferences]]
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Preferences of the %25WEB%25 web"}%
+%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="placeholder favicon" date="1100974473" path="favicon.ico" size="318" tmpFilename="/var/tmp/CGItemp25580" user="TWikiContributor" version="1.1"}%

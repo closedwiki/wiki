@@ -1,0 +1,42 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129895826" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+NONE
+
+---++ Implementation
+%STARTINCLUDE%
+<div class="blogSideBarSection blogSideBarCategories">
+---+ Categories%REDDOT{"%TOPIC%"}%
+<noautolink>
+%~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
+~~~         format="   * <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
+~~~                         title=\"$formfield(TopicDescription)\">$topic</a>
+~~~         <span class=\"blogEntryCount\">
+~~~         $percntDBQUERY{\"TopicType='BlogEntry' AND 
+~~~                          SubjectCategory=~'\b$topic\b' AND
+~~~                          State='enabled'\"
+~~~            hidenull=\"on\" format=\"none\" header=\"$dollarcount\"
+~~~         }$percnt
+~~~         </span>
+~~~         "
+~~~ }%
+</noautolink>
+</div>
+%STOPINCLUDE%
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the list of SubjectCategories in the BlogSideBar"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1129818691" from="Blog.RenderCategoryList" to="Blog.RenderCategories"}%

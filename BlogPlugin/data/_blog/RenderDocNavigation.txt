@@ -1,0 +1,58 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129837152" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: topic name of a BlogComment or BlogEntry to which the prev-next doc navigation is displayed
+   * WHERE: search parameter to restrict the linked documents
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+<div class="blogNavigation">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <td valign="top">
+    %IFDEFINED{"%PREVDOC{"%NAME%" web="%WEB%" where="%WHERE%"}%" then="&#171;" else="&nbsp;"}%
+  </td>
+  <td valign="top" class="blogPrev">
+%~~ PREVDOC{"%NAME%" web="%WEB%"
+~~~   format="[[$web.$topic][$percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" format=\"$expand(Headline or Name)\"}$percnt]]"
+~~~   where="%WHERE%"
+~~~ }% 
+  </td>
+  <td valign="top" class="blogNext"> 
+%~~ NEXTDOC{"%NAME%" web="%WEB%"
+~~~   format="[[$web.$topic][$percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" format=\"$expand(Headline or Name)\"}$percnt]]"
+~~~   where="%WHERE%"
+~~~ }% 
+  </td>
+  <td valign="top">
+    %IFDEFINED{"%NEXTDOC{"%NAME%" where="%WHERE%" web="%WEB%"}%" then="&#187;" else="&nbsp;"}%
+</td>
+</tr>
+</table>
+</div>
+*~~
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="BlogEntry2" WHERE="TopicType='BlogEntry'"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a double linked list to previous and next documents"}%

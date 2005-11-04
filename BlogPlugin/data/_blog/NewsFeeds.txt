@@ -1,0 +1,30 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130176388" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="FrontPage"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+<style type="text/css">
+.natTopicForm {display:none}
+.feeds .twikiFirstCol {
+  width:15em;
+}
+</style>
+
+Want to read all feeds in a row? Then start [[%WEB%.BlogLink0][here]].
+
+<div class="feeds">
+%~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
+~~~         format="$percntINCLUDE{\"RenderFeedsInCategory\" NAME=\"$topic\"}$percnt"
+~~~ }%
+</div>
+
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
+   * Set SIDEBAR = Aggregation
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, FrontPage"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="BlogLink Aggregation"}%

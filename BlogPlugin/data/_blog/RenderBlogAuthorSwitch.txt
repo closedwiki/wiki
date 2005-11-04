@@ -1,0 +1,36 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130486726" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+NONE
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+%~~ CALC{"$IF(%DBQUERY{"TopicType=~'\bBlogAuthor\b'" limit="1" format="$count"}%==1,
+~~~   <style type=\"text/css\">.blogAuthor {display:none}</style>)"}%
+*~~
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"RenderFullTeaser" NAME="TestBlogEntry0"}%
+%INCLUDE{"%TOPIC%"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Switch of the blogAuthor css class when this blog is single-authored"}%

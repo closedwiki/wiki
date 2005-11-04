@@ -1,0 +1,38 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129733832" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: name of a BlogAuthor
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+<h1 style="margin-bottom:0px;padding-bottom:0px">[[%MAINWEB%.%NAME%][%SPACEOUT{"%NAME%"}%]]</h1>
+<div class="blogArchiveDescription">
+   %DBQUERY{topic="%NAME%" format="$expand(TopicDescription)"}% 
+</div>
+%INCLUDE{"RenderFrontPage" FULL="3" LIMIT="10" CAT=".*" AUTHOR="%NAME%"}%
+*~~ 
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="MichaelDaum"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render all BlogEntries of a BlogAuthor as teaser."}%

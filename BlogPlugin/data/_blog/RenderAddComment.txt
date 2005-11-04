@@ -1,0 +1,70 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129717878" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+NONE
+
+
+---++ Implementation
+%STARTINCLUDE% <div class="blogAddComment">
+---++ Leave a Reply
+<form name="AddCommentForm" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/" method="post">
+<input type="hidden" name="redirect" value="%BASETOPIC%#bottomComment" />
+<input type="hidden" name="onlywikiname" value="on" />
+<input type="hidden" name="templatetopic" value="BlogCommentTemplate" />
+<input type="hidden" name="formtemplate" value="BlogCommentForm" />
+<input type="hidden" name="TopicType" value="BlogComment" />
+<input type="hidden" name="BlogRef" value="%BASETOPIC%" />
+<input type="hidden" name="BaseRef" value="%DBQUERY{topics="%BASETOPIC%" format="$expand(BaseRef or name)"}%" />
+<input type="hidden" name="topicparent" value="WebHome" />
+<input type="hidden" name="Nr" value="%INCLUDE{"RenderNextCommentNr" NAME="%BASETOPIC%"}%" />
+<input type="hidden" name="topic" value="BlogCommentXXXXXXXXXX" />
+<table border="0" width="100%">
+<tr>
+  <td><input type="text" id="name" name="Name" value="%WIKINAME%" style="width:60%"/>
+      <label for="name">Name <span style="color:red;font-size:0.8em">**</span></label>
+  </td>
+</tr>
+<tr>
+  <td><input type="text" id="email" name="EMail" style="width:60%"/>
+      <label for="email">EMail <span style="color:red;font-size:0.8em">**</span></label>
+  </td>
+</tr>
+<tr>
+  <td><input type="text" id="url" name="Url" style="width:60%"/>
+      <label for="email">Url</label>
+  </td>
+</tr>
+<tr>
+  <td><input type="text" id="headline" name="Headline" style="width:60%"/>
+      <label for="headline">Headline</label>
+  </td>
+</tr>
+<tr>
+  <td><textarea id="text" wrap="virtual" name="Text" style="width:98%" rows="10"></textarea></td>
+</tr>
+<tr>
+  <td align="right">
+      <input type="submit" class="blogSubmitButton" value="Submit" />
+  </td>
+</tr>
+</table>
+</form> 
+</div> %STOPINCLUDE%
+
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a form to post a BlogComment"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1124473947" from="Blog.RenderAddCommentButton" to="Blog.RenderAddComment"}%

@@ -1,0 +1,40 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130175445" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: name of an BlogLink
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+%~~ DBQUERY{topic="%NAME%"
+~~~   format="$percntIFDEFINEDTHEN{\"$expand(Headline)\"}$percnt
+~~~      $expand(Name): $expand(Headline)
+~~~   $percntELSEDEFINED$percnt
+~~~      $expand(Name)
+~~~   $percntFIDEFINED$percnt
+*~~ "}%
+*~~
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="BlogLink0"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Getter function for NewsFeeds"}%

@@ -1,0 +1,64 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130333334" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * FROM: starting timepoint
+   * TO: ending timepoint
+ 
+---++ Implementation
+---+++ Main
+<verbatim>
+%STARTINCLUDE%
+---++ Used categories
+<div class="specialArea">
+%~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
+~~~   separator=" "
+~~~   header="$percntTABLE{sort=\"on\" initsort=\"2\" initdirection=\"up\"}$percnt$n
+~~~      | *SubjectCategory* 
+~~~      | *Nr Postings* |$n"
+~~~   format="$percntINCLUDE{\"%TOPIC%\" section=\"subquery\" 
+~~~           CAT=\"$topic\" 
+~~~           FROM=\"%FROM%\"
+~~~           TO=\"%TO%\"
+~~~   }$percnt"
+~~~ }%
+</div>
+<style type="text/css">
+.specialArea table th img {display:none}
+</style>
+%STOPINCLUDE%
+</verbatim>
+
+---+++ Subquery
+<verbatim>
+%SECTION{"subquery"}% %~~ DBQUERY{
+~~~   "TopicType='BlogEntry' AND 
+~~~    SubjectCategory=~'\b%CAT%\b' AND 
+~~~    State='enabled' AND
+~~~    createdate >= %FROM% AND
+~~~    createdate < %TO%
+~~~   "
+~~~   limit="1" hidenull="on"
+~~~   format="| %CAT% | $count |$n"
+~~~ }%%ENDSECTION{"subquery"}%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" FROM="%CALC{"$TIME(1 Aug 2005)"}%" TO="%CALC{"$TIME(1 Sep 2005)"}%"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render statistics of SubjectCategories used in a timespan"}%

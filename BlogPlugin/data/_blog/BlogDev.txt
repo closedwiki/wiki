@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129159992" format="1.1" version="1.1"}%
+%INCLUDE{"RenderBlogEntriesInCategory" NAME="%TOPIC%"}%
+%INCLUDE{"RenderFeedsInCategory" NAME="%TOPIC%"}%
+<style type="text/css">.natTopicForm {display:none}</style>
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
+   * Set WHITEBOARD = off
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="FrontPage, SubjectCategory"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Development information about blogging on the <nop>%25WIKITOOLNAME%25"}%

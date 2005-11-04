@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="TWikiContributor" date="1127378258" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+%INCLUDE{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+
+<!--
+See also: %TOPIC%Template
+-->
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+-->
+
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicType"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType of pages that display a (sub)set of BlogEntries"}%
