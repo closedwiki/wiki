@@ -152,6 +152,7 @@ data/TWiki/TWiki.txt 0660
 data/TWiki/TWikiAccessControl.txt 0660
 data/TWiki/TWikiAdminCookBook.txt 0660
 data/TWiki/TWikiCategoryTable.txt 0660
+data/TWiki/TWikiContributor.txt 0660
 data/TWiki/TWikiCss.txt 0660
 data/TWiki/TWikiDocGraphics.txt 0660
 data/TWiki/TWikiDocumentation.txt 0660
@@ -633,6 +634,7 @@ templates/changes.tmpl 0440
 templates/cssmediatypes.tmpl 0440
 templates/css.pattern.tmpl 0440
 templates/css.tmpl 0440
+templates/deleteattachment.pattern.tmpl 0440
 templates/edit.iejs.tmpl 0440
 templates/edit.pattern.tmpl 0440
 templates/edit.tmpl 0440
