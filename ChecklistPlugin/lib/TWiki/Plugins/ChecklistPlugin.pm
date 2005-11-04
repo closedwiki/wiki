@@ -73,7 +73,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.005'; #dro# fixed major bug (edit lock); fixed html encoding; improved doc
+$REVISION = '1.006'; #dro# added new attribute (useforms); fixed legend bug; fixed HTML encoding bug
+#$REVISION = '1.005'; #dro# fixed major bug (edit lock); fixed html encoding; improved doc
 #$REVISION = '1.004'; #dro# added unknown parameter handling (new attribute: unknownparamsmsg); added 'set to a given state' feature; changed reset behavior; fixed typos
 #$VERSION = '1.003'; #dro# added attributes (showlegend, anchors); fixed states bug (illegal characters in states option); improved documentation; fixed typos; fixed some minor bugs
 #$VERSION = '1.002'; #dro# fixed cache problems; fixed HTML/URL encoding bugs; fixed reload bug; fixed reset image button bug; added anchors 
@@ -138,9 +139,10 @@ sub initDefaults() {
 		'stateicons' =>':-I|:ok:',
 		'text' => '',
 		'reset' => undef,
-		'showlegend' => 'off',
-		'anchors' => 'on',
-		'unknownparamsmsg' => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.ChecklistPlugin topic for more details): %KNOWNPARAMSLIST%'
+		'showlegend' => 0,
+		'anchors' => 1,
+		'unknownparamsmsg' => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.ChecklistPlugin topic for more details): %KNOWNPARAMSLIST%',
+		'useforms' => 0
 	);
 
 	@listOptions = ('states','stateicons');
@@ -148,7 +150,7 @@ sub initDefaults() {
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
-	@flagOptions = ('showlegend', 'anchors' );
+	@flagOptions = ('showlegend', 'anchors', 'useforms' );
 
 	$idMapRef = &readChecklistItemStateTopic();
 
@@ -187,7 +189,7 @@ sub initOptions() {
 		$v = $namedDefaults{$name}{$option} unless defined $v;
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
-                                $options{$option} = ($v!~/false/i)&&($v!~/no/i)&&($v!~/off/i);
+                                $options{$option} = ($v!~/(false|no|off|0|disable)/i);
                         } else {
                                 $options{$option} = $v;
                         }
@@ -208,12 +210,11 @@ sub initOptions() {
 			if (grep /^\Q$option\E$/,@listOptions) {
 				my @newlist = ( );
 				foreach my $i (split /\|/,$options{$option}) {
-					my $newval=TWiki::Func::renderText($i,$web);
+					my $newval=&TWiki::Func::renderText($i, $web);
 					$newval=~s/\|/\&brvbar\;/sg;
 					push  @newlist, $newval;
 				}
 				$options{$option}=join('|',@newlist);
-				TWiki::Func::writeDebug("listed option $option found:".$options{$option}) if $debug;
 			} else {
 				$options{$option}=&TWiki::Func::renderText($options{$option}, $web);
 			}
@@ -289,8 +290,11 @@ sub handleChecklist {
 		$legend.=qq@(@;
 		foreach my $state (@states) {
 			my $icon = shift @icons;
-			$icon=~s/(alt|title)="[^">"]+/$1="$state"/sg;
-			$legend.=qq@$icon - $state @; 	
+			my $iconsrc = &getImageSrc($icon);
+			my $heState = &htmlEncode($state);
+			$legend.=qq@<img @;
+			$legend.=qq@ src="$iconsrc"@ if (defined $iconsrc ) && ($iconsrc!~/^\s*$/s);
+			$legend.=qq@ alt="$heState" title="$heState"/> - $heState @; 	
 		}
 		$legend.=qq@) @;
 		$legend.=qq@</noautolink>@;
@@ -314,21 +318,38 @@ sub handleChecklist {
 
 		my $action=&TWiki::Func::getViewUrl($web,$topic);
 		$action=~s/#.*$//s;
-		$action.=getUniqueUrlParam($action);
+		$action.=&getUniqueUrlParam($action);
+
+
+		if ( ! $options{'useforms'} ) {
+			$action.="&clreset=".&urlEncode("${name}\[${state}\]");
+		}
+
 		$action.="#reset${name}" if $options{'anchors'};
 
 		$text.=qq@<noautolink>@;
-		$text.=qq@<form method="post" action="$action">@;
-		$text.=$legend;
-		$text.=qq@<a name="reset${name}">&nbsp;</a>@ if $options{'anchors'} ;
-		$text.=qq@<input type="image" name="clreset" value="${name}\[${state}\]"@;
-		$text.=qq@ src="$imgsrc"@ if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
-		$text.=qq@ title="$title" alt="$title"@;
-		$text.=qq@>@;
-		$text.=" $title" if ($title!~/^\s*$/i)&&($imgsrc ne "");
-		$text.=' '.&htmlEncode($options{'text'}) if defined $options{'text'};
-		$text.=qq@</input>@;
-		$text.=qq@</form>@;
+		if ( ! $options{'useforms'}) {
+			$text.=qq@<a name="reset${name}">&nbsp;</a>@ if $options{'anchors'};
+			$text.=$legend;
+			$text.=qq@<a href="${action}">@;
+			$text.=qq@<img border="0"@;
+			$text.=qq@ src="${imgsrc}"@ if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
+			$text.=qq@ title="${title}" alt="${title}" />@;
+			$text.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
+			$text.=qq@</a> @;
+		} else {
+			$text.=qq@<form method="post" action="$action">@;
+			$text.=$legend;
+			$text.=qq@<a name="reset${name}">&nbsp;</a>@ if $options{'anchors'} ;
+			$text.=qq@<input type="image" name="clreset" value="${name}\[${state}\]"@;
+			$text.=qq@ src="$imgsrc"@ if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
+			$text.=qq@ title="$title" alt="$title"@;
+			$text.=qq@>@;
+			$text.=" $title" if ($title!~/^\s*$/i)&&($imgsrc ne "");
+			$text.=' '.&htmlEncode($options{'text'}) if defined $options{'text'};
+			$text.=qq@</input>@;
+			$text.=qq@</form>@;
+		}
 		$text.=qq@</noautolink>@;
 	} else {
 		$text.=$legend; 
@@ -348,8 +369,8 @@ sub handleChecklistItem {
 
 	$namedIds{$options{'name'}}++ unless defined $options{'id'};
 
-	if ((defined $query->param("clpsc"))&&(!$stateChangeDone)) {
-		&doChecklistItemStateChange($query->param("clpsc"),$query->param("clpscls"));
+	if ((defined $query->param('clpsc'))&&(!$stateChangeDone)) {
+		&doChecklistItemStateChange($query->param('clpsc'),$query->param('clpscls'));
 		$stateChangeDone=1;
 	}
 
@@ -392,7 +413,7 @@ sub doChecklistItemStateReset {
 # =========================
 sub doChecklistItemStateChange {
 	my ($name_id, $lastState) = @_;
-	TWiki::Func::writeDebug("doChecklistItemStateChange($name_id)") if $debug;
+	TWiki::Func::writeDebug("doChecklistItemStateChange($name_id,$lastState)") if $debug;
 
 	$name_id=~/^([^\[]+)\[([^\]]+)\]$/;
 	my ($name, $id) = ($1, $2);
@@ -442,25 +463,38 @@ sub renderChecklistItem {
 
 	my $stId = &substIllegalChars($tId); # substituted tId
 	my $heState = &htmlEncode($state); # HTML encoded state
+	my $ueState = &urlEncode($state); # URL encoded state
 	my $uetId = &urlEncode($tId); # URL encoded tId
+
+	if ( ! $options{'useforms'} ) {
+		$action.=($action=~/\?/)?"&":"?";
+		$action.="clpsc=".&urlEncode("$name\[$stId\]");
+		$action.="&clpscls=$ueState";
+	}
 
 	$action.="#$stId" if $options{'anchors'};
 
 	$text.=qq@<noautolink>@;
-	$text.=qq@<a name="$stId">&nbsp;</a>@ if $options{'anchors'};
-	$text.=qq@<form action="$action" name="changeitemstate\[$stId\]" method="post">@;
-	$text.=qq@<input type="hidden" name="clpscls" value="$heState"/>@;
-	$text.=qq@<input src="$iconsrc" type="image" name="clpsc" value="$name\[$stId\]" @;
-	$text.=qq@title="$heState" alt="$heState"/>@;
-	$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
-	$text.=qq@</form></noautolink>@;
-
-	## $action.=($action=~/\?/)?"&":"?";
-	## $action.="clpsc=$uetId";
-	## $text.=qq@<noautolink>@;
-	## $text.=qq@<a name="$uetId"/>@;
-	## $text.=qq@<a href="$action"><img border="0" src="$iconsrc" title="$heState" alt="$heState" /></a>@;
-	## $text.=qq@</noautolink>@;
+	if ( ! $options{'useforms'} ) {
+		$text.=qq@<a name="$uetId">&nbsp;</a>@ if $options{'anchors'};
+		$text.=qq@<a href="$action">@;
+		$text.=qq@<img border="0"@;
+		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
+		$text.=qq@ title="$heState" alt="$heState" />@;
+		$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		$text.=qq@ </a> @;
+	} else {
+		$text.=qq@<a name="$stId">&nbsp;</a>@ if $options{'anchors'};
+		$text.=qq@<form action="$action" name="changeitemstate\[$stId\]" method="post">@;
+		$text.=qq@<input type="hidden" name="clpscls" value="$heState"/>@;
+		$text.=qq@<input @;
+		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
+		$text.=qq@ type="image" name="clpsc" value="$name\[$stId\]" @;
+		$text.=qq@title="$heState" alt="$heState"/>@;
+		$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		$text.=qq@</form>@;
+	}
+	$text.=qq@</noautolink>@;
 
 	return $text;
 }
@@ -480,7 +514,9 @@ sub urlEncode {
 # =========================
 sub htmlEncode {
 	my ($txt)=@_;
-	$txt=~s/([^A-Za-z0-9\-\.\s\_\[\]])/sprintf("&#%02X;", ord($1))/seg;
+	## $txt=~s/([^A-Za-z0-9\-\.\s\_\[\]\&\;\#])/sprintf("&#%02X;", ord($1))/seg;
+	$txt=~s/(["<>])/sprintf("&#%02X;", ord($1))/seg;
+	
 	return $txt;
 }
 # ========================
