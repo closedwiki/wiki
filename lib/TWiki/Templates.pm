@@ -341,7 +341,7 @@ sub _readTemplateFile {
     # if the name ends in .tmpl, then this is an explicit include from
     # the templates directory. No further searching required.
     if( $name =~ /\.tmpl$/ ) {
-        return TWiki::readFile( $TWiki::cfg{TemplateDir}.'/'.$name );
+        return readFile( $TWiki::cfg{TemplateDir}.'/'.$name );
     }
 
     my @skinList = split( /,+/, $skins );
@@ -356,7 +356,7 @@ sub _readTemplateFile {
           my $candidate;
           $candidate->{name}=$file;
           $candidate->{validate} = \&validateFile;
-          $candidate->{retrieve} = \&TWiki::readFile;
+          $candidate->{retrieve} = \&readFile;
 
           push @candidates, $candidate;
        }
@@ -369,7 +369,7 @@ sub _readTemplateFile {
        my $candidate;
        $candidate->{name}=$file;
        $candidate->{validate} = \&validateFile;
-       $candidate->{retrieve} = \&TWiki::readFile;
+       $candidate->{retrieve} = \&readFile;
 
        push @candidates, $candidate;
     }
@@ -470,7 +470,14 @@ sub validateTopic {
 sub retrieveTopic {
    my( $store, $web, $topic ) = @_;
    my ( $meta, $text ) = $store->readTopic( undef, $web, $topic, undef );
+   $text =~ s/([^\n]*)\n*$/$1/;        # strip bonus LF's at end because they generate extra <p/>'s
    return $text;
+}
+
+sub readFile {
+    my $text = TWiki::readFile( @_ );
+    $text =~ s/([^\n]*)\n*$/$1/;        # strip bonus LF's at end because they generate extra <p/>'s
+    return $text;
 }
 
 1;
