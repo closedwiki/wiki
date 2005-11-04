@@ -337,7 +337,7 @@ sub _cacheTWikiUsersTopic {
     # This matches:
     #   * TWikiGuest - guest - 10 Mar 2005
     #   * TWikiGuest - 10 Mar 2005
-    while( $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+$//om ) {
+    while( $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$//om ) {
         my $web = $1 || $TWiki::cfg{UsersWebName};
         $wUser = $2;	# WikiName
         $lUser = $3 || $wUser;	# userid
