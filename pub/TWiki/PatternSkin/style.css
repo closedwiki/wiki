@@ -517,8 +517,8 @@ a:hover .twikiAccessKey {
 .patternActionButtons a:visited {
 	padding:1px 1px 2px 1px;
 }
-.patternTopicAction .patternActionButtons a:link,
-.patternTopicAction .patternActionButtons a:visited {
+.patternActionButtons a:link,
+.patternActionButtons a:visited {
 	text-decoration:none;
 }
 .patternTopicAction .patternSaveOptions {
@@ -848,9 +848,10 @@ td.patternToolBar {
 	text-align:right;
 }
 .patternPrevious {
-	margin:1em 0;
+	margin:1em 0 3em 0;
 }
-#moveattachment {
+.patternMoveAttachment {
+	margin:-1.5em 0 3em 0;
 	font-size:94%; /*S2*/
 }
 .patternPrevious table {
@@ -891,9 +892,6 @@ table#twikiSearchTable td.first {
 	Search results
 	styles and overridden styles used in search.pattern.tmpl
 	-----------------------------------------------------------	*/
-	
-.patternSearchResultsPage {}
-.patternSearchResults {}
 
 .patternSearchResultsHeader {
 	padding:.25em 5px .15em 5px; /*S4*/

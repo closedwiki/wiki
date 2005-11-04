@@ -20,7 +20,6 @@
 
 <div class="patternPrevious"><div class="twikiAttachments">
 %ATTACHTABLE% </div></div>
-<div id="moveattachment" class="patternActionButtons"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%_{"Move"}%</a> %_{"or"}% <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%_{"Delete"}%</a> =%FILENAME%= </div>
 %TMPL:END%
 
 
@@ -51,6 +50,10 @@
    * %_{"*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in the topic will change, but the comment shown against the attachment history will be the comment when the file was uploaded."}%
    * %_{"*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."}%
 %TMPL:END%
+
+
+%TMPL:DEF{"movedelete"}%
+<div class="patternMoveAttachment"><div class="patternActionButtons"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%ICON{move}% <span class="twikiLinkLabel">%_{"Move"}%</span></a> %_{"or"}% <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%ICON{trash}% <span class="twikiLinkLabel">%_{"Delete"}%</span></a> =%FILENAME%= </div></div>%TMPL:END%
 
 
 
