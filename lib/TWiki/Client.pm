@@ -328,23 +328,25 @@ sub userLoggedIn {
 
     my $twiki = $this->{twiki};
 
-    my $cgisession = $this->{cgisession} ||
-      # create new session if necessary
-      CGI::Session->new(
-          undef, $twiki->{cgiQuery},
-          { Directory => $TWiki::cfg{Sessions}{Dir} } );
-    $this->{cgisession} = $cgisession;
+    if( $TWiki::cfg{UseClientSessions} ) {
+        my $cgisession = $this->{cgisession} ||
+          # create new session if necessary
+          CGI::Session->new(
+              undef, $twiki->{cgiQuery},
+              { Directory => $TWiki::cfg{Sessions}{Dir} } );
+        $this->{cgisession} = $cgisession;
 
-    if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
-        $cgisession->param( 'AUTHUSER', $authUser );
-        $twiki->enterContext( 'authenticated' );
-    } else {
-        # if we are not authenticated, expire any existing session
-        $cgisession->clear( [ 'AUTHUSER' ] );
-        $twiki->leaveContext( 'authenticated' );
+        if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
+            $cgisession->param( 'AUTHUSER', $authUser );
+            $twiki->enterContext( 'authenticated' );
+        } else {
+            # if we are not authenticated, expire any existing session
+            $cgisession->clear( [ 'AUTHUSER' ] );
+            $twiki->leaveContext( 'authenticated' );
+        }
+
+        $this->{sessionId} = $cgisession->id();
     }
-
-    $this->{sessionId} = $cgisession->id();
     $this->{authUser} = $authUser;
 }
 
@@ -368,6 +370,7 @@ sub _rewriteURL {
     my( $this, $url ) = @_;
 
     return $url unless $url;
+
     my $sessionId = $this->{sessionId};
     return $url unless $sessionId;
     return $url if $url =~ m/\?$CGI::Session::NAME=/;
@@ -511,25 +514,25 @@ sub redirectCgiQuery {
 
     my( $this, $query, $url ) = @_;
 
-    return 0 unless $this->{sessionId};
+    if( $this->{sessionId} ) {
+        $url = $this->_rewriteURL( $url )
+          unless( !$TWiki::cfg{Sessions}{IDsInURLs} || $this->{haveCookie} );
 
-    $url = $this->_rewriteURL( $url )
-      unless( !$TWiki::cfg{Sessions}{IDsInURLs} || $this->{haveCookie} );
-
-    # This usually won't be important, but just in case they haven't
-    # yet received the cookie and happen to be redirecting, be sure
-    # they have the cookie. (this is a lot more important with
-    # transparent CGI session IDs, because the session DIES when those
-    # people go across a redirect without a ?CGISESSID= in it... But
-    # EVEN in that case, they should be redirecting to a URL that
-    # already *HAS* a sessionID in it... Maybe...)
-    #
-    # So this is just a big fat precaution, just like the rest of this
-    # whole handler.
-    my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
-                                   -value => $this->{sessionId},
-                                   -path => '/' );
-    push( @{$this->{cookies}}, $cookie );
+        # This usually won't be important, but just in case they haven't
+        # yet received the cookie and happen to be redirecting, be sure
+        # they have the cookie. (this is a lot more important with
+        # transparent CGI session IDs, because the session DIES when those
+        # people go across a redirect without a ?CGISESSID= in it... But
+        # EVEN in that case, they should be redirecting to a URL that
+        # already *HAS* a sessionID in it... Maybe...)
+        #
+        # So this is just a big fat precaution, just like the rest of this
+        # whole handler.
+        my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
+                                       -value => $this->{sessionId},
+                                       -path => '/' );
+        push( @{$this->{cookies}}, $cookie );
+    }
 
     if( $TWiki::cfg{Sessions}{MapIP2SID} ) {
         print $query->redirect( -url => $url );
@@ -646,8 +649,8 @@ Get a url path for login (no protocol, host)
 =cut
 
 sub loginUrlPath {
-    my ( $this, $origurl ) = @_;
-    my $path = $this->loginUrl( $origurl );
+    my $this = shift;
+    my $path = $this->loginUrl( @_ );
     $path =~ s@.*?//.*?/@/@ if $path;
     return $path;
 }

@@ -48,32 +48,31 @@ sub new {
     return $this;
 }
 
+# Triggered on auth fail
 sub forceAuthentication {
     my $this = shift;
     my $twiki = $this->{twiki};
 
     unless( $twiki->inContext( 'authenticated' )) {
         my $query = $twiki->{cgiQuery};
-        #This method of encoding the parameters could fall foul of the
-        # limit on parameters to a GET, since a redirect is used later.
-        # Fortunately this is very unlikely, because of the way TWiki works.
-        my $origurl = $query->url() . $query->path_info() .
-          '?' . $query->query_string();
-        $query->param( origurl => $origurl );
+        # SMELL CGI::url drops the anchor. Report as bug against CGI::?
+        $query->param( origurl => $query->url( -path => 1, -query => 1 ));
         $this->login( $query, $twiki );
         return 1;
     }
     return undef;
 }
 
+# Content of a login link
 sub loginUrl {
     my $this = shift;
     my $twiki = $this->{twiki};
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
-    my $url = $twiki->getScriptUrl( $web, $topic, 'login', @_ );
-
-    return $url;
+    my $query = $twiki->{cgiQuery};
+    return $twiki->getScriptUrl( $web, $topic, 'login',
+                                 origurl => $query->url( -path => 1,
+                                                         -query => 1 ), @_ );
 }
 
 =pod
