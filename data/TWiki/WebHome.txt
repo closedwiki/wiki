@@ -24,7 +24,7 @@ This is the place to learn about TWiki features, find where to download it, and 
 <a href="http://twiki.org"><img src="%ATTACHURLPATH%/twiki_home.gif" alt="Link to TWiki.org website" width='337' height='93' border='0' /></a>
 <br />
 <br />
-%INCLUDE{TWikiTipsOfTheDayInclude}%
+%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%
 </td></tr></table>
 
 ---++ Disclaimer

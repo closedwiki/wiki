@@ -10,6 +10,6 @@
    * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
    * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
    * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
-%INCLUDE{%TWIKIWEB%.TWikiTipsOfTheDayInclude}% 
+%INCLUDE{ "%TWIKIWEB%.TWikiTipsOfTheDayInclude" warn="off" }%
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
 </div>
