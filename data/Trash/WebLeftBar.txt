@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1093167095" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1093167095" format="1.0" version="$Rev$"}%
 %INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 <div class="patternLeftBarContents">
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarSearch" }%
