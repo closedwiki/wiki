@@ -39,29 +39,6 @@ sub new {
     return bless( $class->SUPER::new( "TWiki" ), $class );
 }
 
-sub target_build {
-    my $this = shift;
-
-    $this->SUPER::target_build();
-
-    # generate the POD documentation
-    print "Building documentation....\n";
-    print `perl gendocs.pl -root $this->{basedir}`;
-    $this->cp( $this->{basedir}.'/AUTHORS',
-               $this->{basedir}.'/pub/Main/TWikiContributor/AUTHORS' );
-
-    for my $script qw( view rdiff ) {
-        $this->cp( $this->{basedir}."/bin/$script",
-                                    $this->{basedir}."/bin/${script}auth" );
-    }
-
-    print `cd ../bin ; ./view TWiki.TWikiDocumentation skin plain | ../tools/fix_local_links.pl > ../TWikiDocumentation.html 2> /dev/null`;
-    print `cd ../bin ; ./view TWiki.TWikiHistory skin plain > ../TWikiHistory.html 2> /dev/null`;
-    print `cd ../bin ; ./view TWiki.DakarReleaseNotes skin plain > ../DakarReleaseNotes.html 2> /dev/null`;
-
-    print "Documentation built\n";
-}
-
 sub target_stage {
     my $this = shift;
 
@@ -69,6 +46,7 @@ sub target_stage {
 
     #use a Cairo install to create new ,v files for the data, and pub
     #WARNING: I don't know how to get the 'last' release, so i'm hardcoding Cairo
+    $this->stage_gendocs();
     $this->stage_rcsfiles();
 }
 
@@ -79,17 +57,16 @@ sub _checkInFile {
     return if ( shift =~ /\,v$/ ); #lets not check in ,v files
 
     my $currentRevision = 0;
-    print "Checking in $new/$file\n";
+    print "Checking in $new/$file\r";
     if ( -e $old.'/'.$file.',v' ) {
         $this->cp($old.'/'.$file.',v', $new.'/'.$file.',v');
         #force unlock
-        `rcs -u -M $new/$file,v`;
+        `rcs -u -M $new/$file,v 2>&1`;
         #lock to this user
-        `rcs -l $new/$file`;
+        `rcs -l $new/$file 2>&1`;
 
         #try to get current revision number
-        my ($rcsInfo) = "rlog -r $new/$file";
-        $rcsInfo = `$rcsInfo`;
+        my $rcsInfo = `rlog -r $new/$file 2>&1`;
         if ( $rcsInfo =~ /revision \d+\.(\d+)/ ) {     #revision 1.2
             $currentRevision = $1;
         } else {
@@ -103,10 +80,11 @@ sub _checkInFile {
     my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
     `$cmd`;
 
-    #check in TODO: this commits as the current user, not TWikiContributor
-    `ci -mbuildrelease -t-new-topic $new/$file`;
+    #check in
+    `ci -mbuildrelease -wTWikiContributor -t-new-topic $new/$file 2>&1`;
     #get a copy of the latest revsion, no lock
-    `co -u -M $new/$file`;
+    `co -u -M $new/$file 2>&1`;
+    print "\n";
 }
 
 # recursively check in files to RCS
@@ -115,7 +93,7 @@ sub _checkInDir {
     my $dir;
 
     opendir( $dir, "$new/$root" ) || die "Failed to open $root: $!";
-    print "Scanning $new/$root...\n";
+    print "Scanning $new/$root...\r";
     foreach my $content ( grep { !/^\./ } readdir($dir)) {
         my $sub = "$root/$content";
         if( -d "$new/$sub" ) {
@@ -125,6 +103,31 @@ sub _checkInDir {
         }
     }
     close($dir);
+}
+
+sub stage_gendocs {
+    my $this = shift;
+
+    # Note: generated documentation files do *NOT* appear in MANIFEST
+
+    # generate the POD documentation
+    print "Building automatic documentation to $this->{tmpDir}...";
+    print `perl $this->{basedir}/tools/gendocs.pl -debug -root $this->{tmpDir}`;
+    $this->cp( "$this->{tmpDir}/AUTHORS",
+               "$this->{tmpDir}/pub/Main/TWikiContributor/AUTHORS" );
+    $this->cp( "$this->{tmpDir}/AUTHORS",
+               "$this->{tmpDir}/pub/TWiki/TWikiContributor/AUTHORS" );
+
+    for my $script qw( view rdiff ) {
+        $this->cp( "$this->{tmpDir}/bin/$script",
+                   "$this->{tmpDir}/bin/${script}auth" );
+    }
+
+    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiDocumentation skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiDocumentation.html 2> /dev/null`;
+    print `cd $this->{basedir}/bin ; ./view TWiki.TWikiHistory skin plain > $this->{tmpDir}/TWikiHistory.html 2> /dev/null`;
+    print `cd $this->{basedir}/bin ; ./view TWiki.DakarReleaseNotes skin plain > $this->{tmpDir}/DakarReleaseNotes.html 2> /dev/null`;
+
+    print "Automatic documentation built\n";
 }
 
 sub stage_rcsfiles() {
