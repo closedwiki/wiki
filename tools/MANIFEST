@@ -490,6 +490,14 @@ pub/TWiki/TWikiDocGraphics/led-orange.gif 0660
 pub/TWiki/TWikiDocGraphics/led-purple.gif 0660
 pub/TWiki/TWikiDocGraphics/led-red.gif 0660
 pub/TWiki/TWikiDocGraphics/led-yellow.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-aqua.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-blue.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-gray.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-green.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-orange.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-purple.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-red.gif 0660
+pub/TWiki/TWikiDocGraphics/led-box-yellow.gif 0660
 pub/TWiki/TWikiDocGraphics/left.gif 0660
 pub/TWiki/TWikiDocGraphics/line_ld.gif 0660
 pub/TWiki/TWikiDocGraphics/line_lr.gif 0660
@@ -513,6 +521,7 @@ pub/TWiki/TWikiDocGraphics/mdb.gif 0660
 pub/TWiki/TWikiDocGraphics/minus.gif 0660
 pub/TWiki/TWikiDocGraphics/more-small.gif 0660
 pub/TWiki/TWikiDocGraphics/more.gif 0660
+pub/TWiki/TWikiDocGraphics/move.gif 0660
 pub/TWiki/TWikiDocGraphics/mov.gif 0660
 pub/TWiki/TWikiDocGraphics/mp3.gif 0660
 pub/TWiki/TWikiDocGraphics/new.gif 0660
