@@ -1,6 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121074151" format="1.1" version="$Rev$"}%
 %INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
-<div class="patternLeftBarContents">
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarSearch" }%
 ---
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
@@ -37,4 +36,3 @@
 %SEARCH{"ToolsCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
 ---
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-</div>

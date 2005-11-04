@@ -517,8 +517,8 @@ a:hover .twikiAccessKey {
 .patternActionButtons a:visited {
 	padding:1px 1px 2px 1px;
 }
-.patternActionButtons a:link,
-.patternActionButtons a:visited {
+.patternTopicAction .patternActionButtons a:link,
+.patternTopicAction .patternActionButtons a:visited {
 	text-decoration:none;
 }
 .patternTopicAction .patternSaveOptions {
@@ -651,7 +651,7 @@ html>body .patternLeftBar .patternForm { /* Hide from IE */
 	font-size:85%; /*S3*/
 }
 .patternLeftBarPersonal {
-	margin:-1px 0 .7em 0;
+	margin:-1px 0 .7em -1em; /*S6*/
 	padding:.25em .5em .25em 1em; /*S6*/
 	border-width:1px 0;
 	border-style:solid;
@@ -788,6 +788,10 @@ td.patternToolBar {
 .patternSimpleLogo {
 	margin:0 0 1.5em 0;
 }
+input.patternFormFieldVerticalForm {
+	margin:.1em 0 .6em 0;
+	border-color:red;
+}
 
 /* Edit page */
 
@@ -848,10 +852,9 @@ td.patternToolBar {
 	text-align:right;
 }
 .patternPrevious {
-	margin:1em 0 3em 0;
+	margin:1em 0;
 }
-.patternMoveAttachment {
-	margin:-1.5em 0 3em 0;
+#moveattachment {
 	font-size:94%; /*S2*/
 }
 .patternPrevious table {
@@ -892,6 +895,9 @@ table#twikiSearchTable td.first {
 	Search results
 	styles and overridden styles used in search.pattern.tmpl
 	-----------------------------------------------------------	*/
+	
+.patternSearchResultsPage {}
+.patternSearchResults {}
 
 .patternSearchResultsHeader {
 	padding:.25em 5px .15em 5px; /*S4*/
