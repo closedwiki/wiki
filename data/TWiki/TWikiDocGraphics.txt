@@ -39,7 +39,6 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/cachetopic.gif" alt="Cache topic" title="Cache topic" />  | =cachetopic.gif= | Cache topic | =%<nop>ICON{cachetopic}%= |
 | <img src="%ATTACHURLPATH%/changes.gif" alt="Changes" title="Changes" />  | =changes.gif= | Changes | =%<nop>ICON{changes}%= |
 | <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes" title="Changes" />  | =changes-small.gif= | Changes (small), 13x13 | =&lt;img src="%<nop>ICONPATH{changes-small}%" width="13" height="13" alt="Changes" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/checked.gif" alt="Checked checkbox" title="Checked checkbox" />  | =checked.gif= | Checked checkbox | =%<nop>ICON{checked}%= |
 | <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="Cancel" title="Cancel" />  | =choice-cancel.gif= | Cancel | =%<nop>ICON{choice-cancel}%= |
 | <img src="%ATTACHURLPATH%/choice-no.gif" alt="No" title="No" />  | =choice-no.gif= | No | =%<nop>ICON{choice-no}%= |
 | <img src="%ATTACHURLPATH%/choice-yes.gif" alt="Yes / Done" title="Yes / Done" />  | =choice-yes.gif= | Yes / Done | =%<nop>ICON{choice-yes}%= |
@@ -153,6 +152,7 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="Topic difference" title="Topic difference" />  | =topicdiffs.gif= | Topic difference | =%<nop>ICON{topicdiffs}%= |
 | <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
 | <img src="%ATTACHURLPATH%/unchecked.gif" alt="Unchecked checkbox" title="Unchecked checkbox" />  | =unchecked.gif= | Unchecked checkbox | =%<nop>ICON{unchecked}%= |
+| <img src="%ATTACHURLPATH%/checked.gif" alt="Checked checkbox" title="Checked checkbox" />  | =checked.gif= | Checked checkbox | =%<nop>ICON{checked}%= |
 | <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | =&lt;img src="%<nop>ICONPATH{updated}%" width="55" height="16" alt="UPDATED" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/viewtopic.gif" alt="View topic" title="View topic" />  | =viewtopic.gif= | View topic | =%<nop>ICON{viewtopic}%= |
 | <img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />  | =warning.gif= | Warning, important | =%<nop>ICON{warning}%= |
