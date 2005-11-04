@@ -167,49 +167,59 @@ sub load {
     my $query = $session->{cgiQuery};
 
     my @pluginList = ();
+    my %already;
 
     unless( $allDisabled ) {
-        if( $TWiki::cfg{PluginsOrder} ) {
-            @pluginList = split( /[,\s]+/, $TWiki::cfg{PluginsOrder} );
-        }
-	foreach my $plugin ( sort keys %{$TWiki::cfg{Plugins}} )
-	{
-	    push @pluginList, $plugin unless grep { /^$plugin$/ } @pluginList;
-	}
         if ( $query && defined( $query->param( 'debugenableplugins' ))) {
-            @pluginList = split( /[,\s]+/, $query->param( 'debugenableplugins' ));
+            @pluginList = split( /[,\s]+/,
+                                 $query->param( 'debugenableplugins' ));
+        } else {
+            if( $TWiki::cfg{PluginsOrder} ) {
+                foreach my $plugin( split( /[,\s]+/,
+                                           $TWiki::cfg{PluginsOrder} )) {
+                    # Note this allows the same plugin to be listed
+                    # multiple times! Thus their handlers can be called
+                    # more than once. This is *desireable*.
+                    if( $TWiki::cfg{Plugins}{$plugin}{Enabled} ) {
+                        push( @pluginList, $plugin );
+                        $already{$plugin} = 1;
+                    }
+                }
+            }
+            foreach my $plugin ( sort keys %{$TWiki::cfg{Plugins}} ) {
+                if( $TWiki::cfg{Plugins}{$plugin}{Enabled} &&
+                      !$already{$plugin} ) {
+                    push( @pluginList, $plugin );
+                    $already{$plugin} = 1;
+                }
+            }
         }
     }
     my $user; # the user login name
     my $userDefiner; # the plugin that is defining the user
     foreach my $pn ( @pluginList ) {
         my $p;
-        if( $TWiki::cfg{Plugins}{$pn}{Enabled} ) {
-            unless( $p = $lookup{$pn} ) {
-                $p = new TWiki::Plugin( $session, $pn,
-                                        $TWiki::cfg{Plugins}{$pn}{Module} )
-            }
-            # Note this allows the same plugin to be listed
-            # multiple times! Thus their handlers can be called
-            # more than once.
-            push @{$this->{plugins}}, $p;
-            my $anotherUser = $p->load();
-            if( $anotherUser ) {
-                if( $userDefiner ) {
-                    die 'Two plugins - '. $userDefiner->{name} . ' and ' .
-                      $p->{name} .
-                        ' are both trying to define the user login name.';
-                } else {
-                    $userDefiner = $p;
-                    $user = $anotherUser;
-                }
-            }
-            # Report initialisation errors
-            if( $p->{errors} ) {
-                $this->{session}->writeWarning( join( "\n", $p->{errors} ));
-            }
-            $lookup{$pn} = $p;
+        unless( $p = $lookup{$pn} ) {
+            $p = new TWiki::Plugin( $session, $pn,
+                                    $TWiki::cfg{Plugins}{$pn}{Module} )
         }
+        push @{$this->{plugins}}, $p;
+        my $anotherUser = $p->load();
+        if( $anotherUser ) {
+            if( $userDefiner ) {
+                die 'Two plugins - '. $userDefiner->{name} . ' and ' .
+                  $p->{name} .
+                    ' are both trying to define the user login name.';
+            } else {
+                $userDefiner = $p;
+                $user = $anotherUser;
+            }
+        }
+        # Report initialisation errors
+        if( $p->{errors} ) {
+            $this->{session}->writeWarning( join( "\n", $p->{errors} ));
+        }
+        $lookup{$pn} = $p;
     }
 
     return $user;
