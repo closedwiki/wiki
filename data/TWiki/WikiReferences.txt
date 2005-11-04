@@ -10,7 +10,11 @@ Some useful articles and books around collaboration and the Wiki technology in p
 
    * Book: The Wiki Way, Quick Collaboration on the Web; by Bo Leuf and Ward Cunningham; Addison-Wesley Pub Co; ISBN:020171499X
 
+   * Book: Wiki: Web Collaboration; by Anja Ebersbach, Markus Glaser, Richard Heigl; Springer; ISBN:3540259953 (the book is about TWiki and <nop>MediaWiki; German version is [[http://www.wiki-tools.de/]["WikiTools: Kooperation im Web"]])
+
    * Presentation: Wiki, a Shared Blog for the Corporate World; by Peter Thoeny; !LinuxWorld; 05 Aug 2004; http://TWiki.org/cgi-bin/view/Codev/TWikiPresentation05Aug2004
+
+   * Article: Team Builder - the TWiki wiki and the enterprise; by Peter Thoeny; Linux-Magazine UK; 05 May 2005; http://www.linux-magazine.com/issue/55
 
    * Article: 'Wiki' May Alter How Employees Work Together; by Kara Swisher; Wall Street Journal; 29 Jul 2004; http://online.wsj.com/article/0,,SB109105974578777189,00.html (subscription required)
 

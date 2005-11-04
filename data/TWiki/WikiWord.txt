@@ -1,7 +1,14 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-A <nop>WikiWord consists of two or more words with initial capitals, run together.
+---+!! What is a WikiWord?
+A <nop>WikiWord consists of two or more words with initial capitals, run together. *<nop>WikiWords are topic names.* A TWiki topic name always has a fixed format: two or more words with initial capitals, run together. Like the name of the current topic: WikiWord. When you type the name of a topic, you create a link to that topic. You type =WebHome= and on saving the page this becomes WebHome. It's as easy as that.
 
 When you type a <nop>WikiWord, you establish a hyperlink. It's as easy as that.
+
+!WikiWord linking is easy to use:
+   * You don't have to know the full path to where the topic is stored - you just type the name
+   * You don't need to write HTML
+   * Without HTML the topic text is easier to read when editing
+   * Easy linking leads to interesting texts with links placed in context
 
 <nop>WikiWords are styled like this because:
 
@@ -9,40 +16,50 @@ When you type a <nop>WikiWord, you establish a hyperlink. It's as easy as that.
    * It leads to interesting Wiki topics
    * It avoids the need to fiddle with HTML tags
    * It avoids over-general topics because at least two words are required
-
-*Syntax of a <nop>WikiWord*
+---++ Syntax of a <nop>WikiWord
 
    * Uppercase letter(s)
    * Lowercase letter(s)
    * Uppercase letter(s)
    * Optional lowercase or uppercase letter(s) or number(s)
 
-*Good examples for <nop>WikiWords:*
+---++ Good examples of <nop>WikiWords
 
    * WikiWord
    * GoodStyle
+   * VersionFiveDotThree
+   * ReleaseVersion5dot3
    * AVeryLongWikiTopicNameIsAlsoPossible: wherever an uppercase or lowercase letter is allowed, a group of letters of the same case is allowed
    * YearTwoThousand
 
-*Bad examples for <nop>WikiWords:*
+---++ Bad examples of <nop>WikiWords:
 
    * Web: Name without the uppercase letter(s), lowercase letter(s), uppercase letter(s) sequence
    * T5Wiki: Name with number before the uppercase, lowercase, uppercase sequence
    * Md5sumsAfterBurning: Name with number before the uppercase, lowercase, uppercase sequence
    * Know-How: Name with dashes in between
 
-*Hints*
+---++ Variations in linking
 
+When you write the name of a topic, it becomes a link. There are more ways
+
+   * To write a custom *link label*, use bracket notation: =[<nop>[TWikiPreferences][Site-wide settings]]= - this becomes: [[TWikiPreferences][Site-wide settings]]
+   * To link to a topic in *another web*, write: =Sandbox.WebSearch= - this becomes: Sandbox.WebSearch
+   * To show the web name in the link use bracket notation: =[<nop>[Sandbox.WebHome]]= - this becomes: [[Sandbox.WebHome]]
+   * To link to a topic on *another Wiki site*, use: =TWiki:Main/WebHome= - this becomes: TWiki:Main/WebHome (sites are defined in the InterwikiPlugin)
+   * To link to a part on the *same page*, write a dash and the name of the header, with spaces replaced by underscores (and =!= removed): =[<nop>[#Good_examples_for_WikiWords]]= becomes: [[#Good_examples_for_WikiWords]]. You can also link to a part on another page: =%TWIKIWEB%.WebHome#TWiki_Reference_Manual= becomes: %TWIKIWEB%.WebHome#TWiki_Reference_Manual.
+
+*Hints*
    * Insert <nop>WikiWords wherever you can. Rich linking helps to make a Wiki successful.
    * Be specific. All topics in a web share one name space. For example, instead of =FunctionalSpec= write =BreadSlicerFunctionalSpec= because other projects might also have a functional spec topic.
-   * %H% To stop a <nop>WikiWord from being turned into a hyperlink, insert the text =&lt;nop&gt;= immediately before the <nop>WikiWord.
-   * It is recommended to create topics with singular names. Plural <nop>WikiWords are automatically linked to the singular topic, i.e. the link WikiWords links to the topic WikiWord.
+   * To stop a WikiWord from being turned into a hyperlink, insert an exclamation point immediately before the WikiWord. For example, write =!<nop>SunOS= to get !SunOS.
+   * Create topics with singular names. Plural <nop>WikiWords are automatically linked to the singular topic, i.e. the link WikiWords links to the topic WikiWord.
    * Sometimes you have to be creative to find a good <nop>WikiName. Examples:
       * To create a topic about the the *Bread Slicer 1.2* product, use =BreadSlicer1dot2= or =BreadSlicer1pt2=, but not =BreadSlicer1.2=.
       * To create a topic about *year 2000*, you could go for =YearTwoK= or =YearTwoThousand=, but not =Year2K= or =Y2K= or =Y2000=.
    * Turn acronyms into <nop>WikiWords, i.e. take =FaqIndex= for a "FAQ index" topic.
    * You can specify any link label by using double square brackets, e.g. write =[<nop>[TWikiAccessControl][access control]]= to get a link to TWikiAccessControl that looks like [[TWikiAccessControl][access control]].
-   * %X% The topic is assumed to be in the current TWiki web.  Prepending the name of a TWiki web and a period links to a topic in another web.
-   * %X% When linking to a <nop>WebHome topic outside the currently viewed web, the link will be rendered as the name of the web, eg WebHome, Sandbox.WebHome
+   * %X% The topic is assumed to be in the current TWiki web.  Prepending the name of a TWiki web and a period links to a topic in another web. e.g. write =%MAINWEB%.TWikiUsers= to link to %MAINWEB%.TWikiUsers
+   * %X% When linking to a <nop>WebHome topic in another web, the link will be rendered as the name of the web, eg WebHome, Sandbox.WebHome
 
 __Related Topics:__ WikiSyntax, TextFormattingRules

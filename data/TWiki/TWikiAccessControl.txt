@@ -55,6 +55,8 @@ Groups are defined by group topics created in the ==%MAINWEB%== web, like the %M
       * ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
    1. These are summarised on SitePermissions
 
+%X% TWiki has strict formatting rules. Make sure you have three spaces, an asterisk, and an extra space in front of any access control rule.
+
 #SuperAdminGroup
 ---+++ The <nop>SuperAdminGroup
 
@@ -183,7 +185,7 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
 
 ---+++ Hide Control Settings
 
-%T% To hide access control settings from normal browser viewing, place them in comment markers.
+%T% To hide access control settings from normal browser viewing, place them in HTML comment markers.
 
 <style="background-color:#f5f5f5">
 =&lt;!--= <br />

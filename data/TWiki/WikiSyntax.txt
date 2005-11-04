@@ -21,7 +21,7 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive Text
 
    * For an external link, type the full URL: =http://twiki.org/=.
 
-   * To prevent a <nop>WikiWord from becoming a link, type =&lt;nop&gt;= first, ==&lt;nop&gt;NoLinkPlease==.
+   * To prevent a <nop>WikiWord from becoming a link, type =&lt;nop&gt;= (or !) first, ==&lt;nop&gt;NoLinkPleaseWereBritish== or ==!NoLinkPleaseWereBritish==.
 
    * To indent with a bullet, enter =[space][space][space][asterisk][space]=.
       * Use multiples of 3 spaces to start *nested bullets*.
@@ -48,5 +48,7 @@ unformatted text!
       * *NOTE:* VARIABLES are still Set within verbatim tags (this is a historical peculiarity)
 
    * Three (or more) consecutive *hyphens* expand into a horizontal rule:%BR% =---=
+
+   * Follow GoodStyle recommendations when editing topics.
 
    * See TextFormattingRules for the complete set of formatting rules.

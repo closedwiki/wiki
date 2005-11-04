@@ -173,6 +173,7 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
 | a. | Lowercase letters | a, b, c, d... |
 | I. | Uppercase Roman Numerals | I, II, III, IV... |
 | i. | Lowercase Roman Numerals | i, ii, iii, iv... |
+%T% If you don't want to cram long text onto one line, wrap it and align continuation lines with leading spaces.
 
 </td><td>
 <verbatim>
@@ -184,6 +185,7 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
       i. Bats
          1. Pipistrelle
          1. Horseshoe
+            (lesser)
 </verbatim>
 </td><td>
    1. Mammals
@@ -194,6 +196,7 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
       i. Bats
          1. Pipistrelle
          1. Horseshoe
+            (lesser)
 </td>
 </tr>
 <tr valign="top">
@@ -244,7 +247,8 @@ four \
 <tr valign="top">
 <td>
  *<nop>WikiWord Links:* %BR%
- <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. %BR% If you want to link to a topic in a different <nop>%WIKITOOLNAME% web write =Otherweb.TopicName=. (The link label is the the name of the web if it is <nop>%HOMETOPIC%, otherwise it is the topic name)
+ <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. %BR%
+If you want to link to a topic in a different <nop>%WIKITOOLNAME% web write =Otherweb.TopicName=. (The link label is the the name of the web if it is <nop>%HOMETOPIC%, otherwise it is the topic name)
 </td><td>
 <verbatim>
 WebNotify
@@ -393,10 +397,14 @@ The rules described under __Forced Links__ apply for internal link references.
 ---++ Using HTML
 
 You can use just about any HTML tag without a problem - however, there are a few usability and technical considerations to keep in mind.
-
    * On collaboration pages, it's better *not* to use HTML, but to use [[#TWikiShorthand][TWiki shorthand]] instead - this keeps the text uncluttered and easy to edit.
    * Use [[http://www.w3.org/TR/xhtml1/][XHTML 1.0 Transitional]] syntax
    * Remove all empty lines. TWiki inserts =&lt;p /&gt;= paragraph tags on empty lines, which causes problems if done between HTML tags that do not allow paragraph tags, like for example between table tags.
+   * Remove leading spaces. TWiki might interpret some text as lists.
+   * Do not span a tag over more than one line
+   * %X% Script tags may be filtered out, at the discretion of your sysadmin
+
+   * %T% If you're pasting in preformatted HTML text and notice problems, check the file in a text processor with no text wrap. Also, save without hard line breaks on text wrap, in your HTML editing program.
 
 %T% TWiki converts shorthand notation to HTML for display. To copy a fully marked-up page, simply view source in your browser and save the contents. If you need to save HTML frequently, you may want to check out TWiki:Plugins/PublishAddOn.
 
