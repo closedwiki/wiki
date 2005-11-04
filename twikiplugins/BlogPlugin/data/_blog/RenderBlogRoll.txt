@@ -1,0 +1,50 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130174493" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+NONE
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<noautolink>
+%~~ DBQUERY{"TopicType=~'\bBlogLink\b'" web="%WEB%"
+~~~   order="Name" hidenull="on"
+~~~   header="<div class=\"blogSideBarSection blogSideBarAggregations\">
+~~~     $n---+ [[$web.NewsFeeds][Blogroll]]$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt"
+~~~   format="   * 
+~~~      $percntIFDEFINEDTHEN{\"$formfield(Feed)\" glue=\"off\"}$percnt
+~~~        <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
+~~~           title=\"$formfield(Headline)\">$formfield(Name)</a>
+~~~      $percntELSEDEFINED$percnt
+~~~        <a href=\"$formfield(Url)\"
+~~~           title=\"$formfield(Headline)\">$formfield(Name)</a>
+*~~        $percntREDDOT{\"$web.$topic\"}$percnt
+~~~      $percntFIDEFINED$percnt"
+~~~   footer="</div>"
+~~~ }%
+*~~
+</noautolink>
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the list of BlogLinks in the BlogSideBar"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1130170326" from="Blog.RenderAggregations" to="Blog.RenderBlogRoll"}%

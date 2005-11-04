@@ -1,0 +1,64 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130177357" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: topic name of a BlogComment or BlogEntry to which the prev-next doc navigation is displayed
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+<div class="blogNavigation">
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+  <td valign="top">
+%~~ IFDEFINED{"%PREVDOC{"%NAME%" web="%WEB%" where="TopicType=~'\bBlogLink\b'" order="Name"}%" 
+~~~    then="&#171;" 
+~~~    else="&nbsp;"
+~~~ }%
+  </td>
+  <td valign="top" class="blogPrev">
+%~~ PREVDOC{"%NAME%" web="%WEB%"
+~~~   where="TopicType=~'\bBlogLink\b'" order="Name"
+~~~   format="[[$topic][$percntINCLUDE{\"RenderTagline\" NAME=\"$topic\"}$percnt]]"
+~~~ }% 
+  </td>
+  <td valign="top" class="blogNext"> 
+%~~ NEXTDOC{"%NAME%" web="%WEB%"
+~~~   where="TopicType=~'\bBlogLink\b'"  order="Name"
+~~~   format="[[$topic][$percntINCLUDE{\"RenderTagline\" NAME=\"$topic\"}$percnt]]"
+~~~ }% 
+  </td>
+  <td valign="top">
+%~~ IFDEFINED{"%NEXTDOC{"%NAME%" web="%WEB%" where="TopicType=~'\bBlogLink\b'" order="Name"}%" 
+~~~   then="&#187;"
+~~~   else="&nbsp;"
+~~~ }%
+  </td>
+</tr>
+</table>
+</div>
+*~~
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="BlogLink1"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a double linked list to previous and next BlogLink"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1130169982" from="Blog.RenderFeedNavigation" to="Blog.RenderBlogLinkNavigation"}%

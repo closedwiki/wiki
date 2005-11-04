@@ -1,0 +1,58 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129745208" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: BlogEntry or BlogComment whose BlogComments are to be rendered
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+<div class="blogComments">
+<a name="topComment"></a>
+<h2>
+%~~ COUNTCOMMENTS{"%NAME%"
+~~~                hidenull="on"
+~~~                single="One Comment" format="$count Comments"}%
+</h2>
+~~~ %CALC{"$SET(incr, 0)"}%
+%~~ DBQUERY{"TopicType='BlogComment' AND BlogRef='%NAME%'"
+~~~        order="createdate"
+~~~        format="$percntCALC{\"$dollarSETM(incr, +1)\"}$percnt
+~~~                <div class=\"blogComment
+~~~                $percntCALC{\"$dollarIF(
+~~~                              $dollarODD($dollarGET(incr)),
+~~~                              blogCommentOdd,
+~~~                              blogCommentEven)\"}$percnt\">
+~~~               %INCLUDE{"RenderBlogComment" section="format"}%
+~~~               <div class=\"blogSubComments\">
+~~~                  $percntINCLUDE{\"RenderSubComments\" NAME=\"$topic\"}$percnt
+~~~               </div>
+~~~               </div>"
+~~~ }%
+<a name="bottomComment"></a>
+</div>
+*~~ 
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="TestBlogEntry0"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Renders all comments of a BlogEntry"}%

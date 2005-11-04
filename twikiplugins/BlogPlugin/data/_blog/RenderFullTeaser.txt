@@ -1,0 +1,77 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130399550" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+see also: RenderBlogTeaser
+
+---++ Parameters
+   * NAME: BlogEntry topic name
+
+---++ Implementation
+---+++ Main
+<verbatim>
+%STARTINCLUDE%
+*~~ 
+%~~ DBQUERY{topic="%NAME%"
+~~~   format="%INCLUDE{"RenderFullTeaser" section="format"}%"}%
+~~~ %INCLUDE{"RenderBlogAuthorSwitch"}%
+*~~
+%STOPINCLUDE%
+</verbatim>
+
+---+++ Format
+<verbatim>
+%SECTION{"format"}%
+*~~ <div class=\"blogEntry\">
+~~~   <h1 class=\"blogHeadline\">$n
+~~~     <noautolink>$n
+~~~     [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
+~~~     <span class=\"blogCommentCount\">
+~~~       $percntCOUNTCOMMENTS{\"$topic\" hidenull=\"on\"}$percnt
+~~~     </span>$n
+~~~   </noautolink>$n
+~~~   </h1>$n
+~~~   <div class=\"blogInfo\">
+~~~     <span class=\"blogDate\">
+~~~       $percntTIMESINCE{from=\"$expand(createdate)\"}$percnt ago
+~~~     </span>
+~~~     in 
+~~~     <span class=\"blogCategory\"> 
+~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~     </span>
+~~~     <span class=\"blogAuthor\"> 
+~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
+~~~     </span>
+~~~   </div>$n
+~~~   <noautolink>$n
+~~~   <div class=\"blogText\">
+~~~        <div class=\"blogTeaser\">
+~~~          $formfield(Teaser)
+~~~        </div>
+~~~      $formfield(Text)
+~~~      <div class=\"blogMore\"> ... [[$web.$topic][more]]</div>
+~~~   </div>$n
+~~~   </noautolink>$n
+~~~ </div>
+*~~ 
+%ENDSECTION{"format"}%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="TestBlogEntry0"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a BlogEntry for a FrontPage"}%

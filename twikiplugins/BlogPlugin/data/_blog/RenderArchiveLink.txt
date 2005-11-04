@@ -1,0 +1,60 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130333048" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+The lin will only be rendered if there is at least one posting
+in the given timespan.
+
+---++ Parameters
+   * FROM: start of archive
+   * TO: end of archive
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+%~~ DBQUERY{
+~~~   "TopicType=~'\bBlogEntry\b' AND
+~~~    State='enabled' AND
+~~~    createdate >= %CALC{"$TIME(%FROM%)"}% AND
+~~~    createdate < %CALC{"$TIME(%TO%)"}%
+~~~   "
+~~~    separator="none" limit="1" hidenull="on"
+~~~    format="$percntCALC{\"$IF($count>0,
+~~~      <li>
+~~~       <a href=\\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/BlogArchive?
+*~~        title=%ENCODE{"%TITLE%"}%;
+*~~        from=%CALC{"$TIME(%FROM%)"}%;
+*~~        to=%CALC{"$TIME(%TO%)"}%;
+*~~       \\">%TITLE%</a>
+*~~       <span class=\"blogEntryCount\">$count</span>
+*~~      </li>
+*~~    )\"}$percnt$n*~~"
+~~~ }%
+*~~
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt above glue -->
+---++ Test
+<div class="alt">
+<ul>
+%INCLUDE{"%TOPIC%" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005"}%
+</ul>
+</div>
+
+<!-- interrupt above glue -->
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a link into the BlogArchive that will extract a given timespan from it"}%

@@ -1,0 +1,21 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129300908" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+%INCLUDE{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+%INCLUDE{"RenderTWikiFormList" ATTR="%TOPIC%"}%
+
+See also: %TOPIC%Template, %MAINWEB%.BlogAuthorGroup
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = AdminTool
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TopicType, TWikiFormAttribute"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType used in BlogEntryForm to collect all BlogEntries of one author"}%

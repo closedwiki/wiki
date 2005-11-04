@@ -1,0 +1,21 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129560810" format="1.1" version="1.1"}%
+%INCLUDE{"RenderBlogEntry" NAME="%TOPIC%"}%  
+%INCLUDE{"RenderBlogComments "NAME="%TOPIC%"}%  
+%INCLUDE{"RenderAddComment"}%    
+<style type="text/css">.natTopicForm {display:none}</style>
+<!--    
+   * Set WHITEBOARD = off
+   * Set SIDEBAR = BlogEntry
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup  
+-->  
+
+
+%META:FORM{name="BlogEntryForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogEntry"}%
+%META:FIELD{name="Headline" attributes="M" title="Headline" value="Let's get blogged"}%
+%META:FIELD{name="BlogAuthor" attributes="M" title="BlogAuthor" value="MichaelDaum"}%
+%META:FIELD{name="SubjectCategory" attributes="M" title="SubjectCategory" value="BlogDev"}%
+%META:FIELD{name="Teaser" attributes="M" title="Teaser" value="This is a test blog entry."}%
+%META:FIELD{name="Text" attributes="" title="Text" value="We will use this BlogEntry for testing, especially for all [[TopicFunctions]]. The state of %0d%0athis BlogEntry is disabled to exclude it from the [[FrontPages]]."}%
+%META:FIELD{name="State" attributes="" title="State" value="disabled"}%
+%META:FIELD{name="Related" attributes="" title="Related" value="TestBlogEntry1"}%

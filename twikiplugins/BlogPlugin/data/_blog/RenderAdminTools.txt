@@ -1,0 +1,37 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129738747" format="1.1" version="1.1"}%
+---+ Function %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+See also: WebSideBar
+
+---++ Parameters
+NONE
+
+---++ Implementation
+%STARTINCLUDE%
+<noautolink>
+<div class="blogSideBarSection blogSideBarAdmin">
+---+ AdminTools%REDDOT{"%WEB%.%TOPIC%"}%
+%~~ DBQUERY{"TopicType='AdminTool|TopicType'"
+~~~    format="   1 <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
+~~~                         title=\"$formfield(TopicDescription)\">$topic</a>"
+~~~ }%
+   %CALC{"$IF($EXISTS(_blog/WebHome),1 [[_blog.WebHome][BlogTemplateWeb]])"}%
+</div>
+</noautolink>
+%STOPINCLUDE%
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICVIEW = %MAINWEB%.BlogAdminGroup
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Sidebar for the %25MAINWEB%25.BlogAdminGroup"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1129534643" from="Blog.BlogAdminSideBar" to="Blog.RenderAdminTools"}%

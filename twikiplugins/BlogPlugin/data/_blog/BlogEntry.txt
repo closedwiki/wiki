@@ -1,0 +1,33 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129816990" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicType"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+
+---++ List of all BlogEntries
+<noautolink>
+| *Name* | *Headline* | *Author* | *Comments*| *Date* | 
+%~~ DBQUERY{"TopicType='BlogEntry'" order="createdate" reverse="on"
+~~~   format="| [[$web.$topic][$topic]]
+~~~           | $expand(Headline)
+~~~           | [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
+~~~           | $percntDBQUERY{\"BaseRef='$topic'\" hidenull=\"on\"
+~~~             separator=\"none\" format=\"none\" header=\"$dollarcount\"}$percnt
+~~~           | <nobr>$formatTime(createdate)</nobr>
+~~~           |"
+~~~ }%
+</noautolink>
+
+See also: %TOPIC%Template, BlogEntryForm
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicType
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicType"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType to create blog entries"}%

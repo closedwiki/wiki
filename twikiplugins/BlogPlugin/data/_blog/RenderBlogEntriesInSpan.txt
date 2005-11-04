@@ -1,0 +1,49 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130332971" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * FROM: starting timepoint in epoch seconds
+   * TO: ending timepoint in epoch seconds
+   * TITLE: optional title
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+%~~ DBQUERY{
+~~~    "TopicType=~'\bBlogEntry\b' AND 
+~~~     State='enabled' AND
+~~~     createdate >= %FROM% AND
+~~~     createdate < %TO%
+~~~    "
+~~~    order="created" hidenull="on" reverse="on"
+~~~    header="$percntTABLE{valign=\"top\"}$percnt$n
+~~~            | *Nr* | *Date* | *Headline* | *SubjectCategory* |"
+~~~    format="| $index
+~~~            | <nobr>$formatTime(createdate, '$day $mon $year')</nobr>
+~~~            | [[$web.$topic][$formfield(Headline)]]
+~~~            | $formfield(SubjectCategory)
+~~~            |"
+~~~ }%
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" FROM="%CALC{"$TIME(1 Aug 2005)"}%" TO="%CALC{"$TIME(1 Sep 2005)"}%" TITLE="August"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a list of BlogEntries in a given time periot."}%
+%META:TOPICMOVED{by="MichaelDaum" date="1130332793" from="Blog.RenderBlogEntryListInSpan" to="Blog.RenderBlogEntriesInSpan"}%

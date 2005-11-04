@@ -1,0 +1,27 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129824294" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TWikiForm"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
+| TopicType | select | 1 | BlogEntry | classifies this as a blog entry | M |
+| BlogAuthor | text | 25 | | Author of the blog entry | M |
+| Headline | text | 78 | | headline of the blog entry | M |
+| Teaser | textarea | 80x4 | | teaser displayed in front pages | M |
+| Text | textarea | 80x15 | | client data | |
+| SubjectCategory | checkbox | 3 | %DBQUERY{"TopicType=~'\bSubjectCategory\b'" separator=", "}% | Blog entry categories | M |
+| Related | select+multi+values | 5 | %DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'"  format="$percntENCODE{\"$formatTime(createdate): $expand(Headline)\"}$percnt=$topic" separator=", " order="created" reverse="on" limit="100"}%| list of related blog entries | |
+| State | select | 1 | enabled, disabled | |  |
+
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TWikiForm
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TWikiForm"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TWikiForm for BlogEntries"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1129136731" from="Blog.BlogForm" to="Blog.BlogEntryForm"}%

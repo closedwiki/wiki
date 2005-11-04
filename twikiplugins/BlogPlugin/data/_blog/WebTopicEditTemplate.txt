@@ -1,0 +1,20 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130240189" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicTemplate"}%
+%NOP{
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
+   * Set SIDEBAR = Default
+
+-- %WIKIUSERNAME% - %DATE%
+
+-->
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Generic template for topics in the %25WEB%25 web"}%

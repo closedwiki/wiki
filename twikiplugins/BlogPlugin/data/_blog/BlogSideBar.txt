@@ -1,0 +1,124 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130383754" format="1.1" version="1.1"}%
+---+ Default sidebar
+<div class="alt">
+%STARTINCLUDE%
+%SECTION{"Default"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+<div class="blogAbout">
+%INCLUDE{"BlogAbout" section="Default"}%
+</div>
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+<p/>
+</div>
+%FISKINSTATE%
+%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%INCLUDE{"RenderRecentComments" LIMIT="10"}%
+%INCLUDE{"RenderRecentPostings" LIMIT="10"}%
+%INCLUDE{"RenderArchives"}%
+%INCLUDE{"RenderCategories"}%
+%INCLUDE{"RenderBlogRoll"}%
+<!-- %<nop>INCLUDE{"RenderVisitors"}% -->
+%INCLUDE{"RenderAdminTools" warn="off"}%
+%ENDSECTION{"Default"}%
+%STOPINCLUDE%
+</div>
+
+---+ Admin sidebar
+<div class="alt">
+%SECTION{"Admin"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+<div class="blogAbout">
+%INCLUDE{"BlogAbout" section="Admin"}%
+</div>
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+<p/>
+</div>
+%FISKINSTATE%
+%INCLUDE{"RenderNewTopicTypeForm"
+         NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%" warn="off"}%
+%INCLUDE{"RenderTopicTypes" 
+         NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%"}%
+%ENDSECTION{"Admin"}%
+</div>
+
+---+ BlogEntry sidebar
+<div class="alt">
+%SECTION{"BlogEntry"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+<div class="blogAbout">
+%INCLUDE{"BlogAbout" section="Default"}%
+</div>
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+<p/>
+</div>
+%FISKINSTATE%
+%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+
+<div class="blogSideBarSection">
+%RELATEDENTRIES{"%BASETOPIC%" format="   * [[$topic][$headline]]" header="---+ Related$n" depth="2"}%
+</div>
+%INCLUDE{"RenderRecentPostings" LIMIT="10"}%
+%INCLUDE{"RenderAdminTools" warn="off"}%
+%ENDSECTION{"BlogEntry"}%
+</div>
+
+---+ Aggregation sidebar
+<div class="alt">
+%SECTION{"Aggregation"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+<div class="blogAbout">
+%INCLUDE{"BlogAbout" section="Aggregation"}%
+</div>
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+<p/>
+</div>
+%FISKINSTATE%
+%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%INCLUDE{"RenderBlogRoll"}%
+%INCLUDE{"RenderAdminTools" warn="off"}%
+%ENDSECTION{"Aggregation"}%
+</div>
+
+---+ Archive sidebar
+<div class="alt">
+%SECTION{"Archive"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+<div class="blogAbout">
+%INCLUDE{"BlogAbout" section="Archive"}%
+</div>
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+<p/>
+</div>
+%FISKINSTATE%
+%INCLUDE{"RenderArchives"}%
+%INCLUDE{"RenderAdminTools" warn="off"}%
+%ENDSECTION{"Archive"}%
+</div>
+
+---+ Nosidebar sidebar
+<div class="alt">
+%SECTION{"nosidebar"}%
+%ENDSECTION{"nosidebar"}%
+</div>
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = AdminTool
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="BlogSideBar: set of sidebar sections included by the WebSideBar"}%

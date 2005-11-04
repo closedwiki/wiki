@@ -1,0 +1,54 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130253048" format="1.1" version="1.1"}%
+%STARTINCLUDE%<noautolink>
+<channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss">
+  <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
+  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%</link>
+  <description>%SITEMAPWHAT%</description>
+<image rdf:resource="%WEBLOGOIMG%" />
+  <dc:language>en-us</dc:language>
+  <dc:rights>%WEBRSSCOPYRIGHT%</dc:rights>
+  <dc:publisher>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:publisher>
+  <dc:creator>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:creator>
+  <dc:source>%WIKITOOLNAME%</dc:source>
+  <items>
+    <rdf:Seq>
+%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled' OR TopicType=~'BlogComment'" web="%INCLUDINGWEB%"
+~~~   order="created"  reverse="on" limit="20" 
+~~~   format="  <rdf:li rdf:resource=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\" />"
+~~~ }%
+    </rdf:Seq>
+  </items>
+</channel>
+<image rdf:about="%WEBLOGOIMG%">
+  <title>TWiki/NatSkin</title>
+  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%</link>
+  <url>%WEBLOGOIMG%</url>
+</image>
+%~~ DBQUERY{"(TopicType=~'\bBlogEntry\b' AND State='enabled') OR TopicType=~'BlogComment'" web="%INCLUDINGWEB%"
+~~~   order="created" reverse="on" limit="20" separator="$n"
+~~~   format="
+*~~   <item rdf:about=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\">$n
+~~~      <title>$expand(Headline or Name)</title>$n
+~~~      <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic</link>$n
+~~~      <description>
+~~~        $encode($percntCALC{\"$IF($EXACT(BlogComment,$expand(TopicType)),$expand(Name) replies on \\"[[$expand(BaseRef)][$expand(@BaseRef.Headline)]]\\":)\"}$percnt
+~~~        $expand(Teaser)<p/>$expand(Text))
+~~~      </description>$n
+~~~      <dc:creator>$expand(createuser)</dc:creator>$n
+~~~      <dc:date>$formatTime(createdate, '$year-$mo-$dayT$hour:$minute+02:00')</dc:date>$n
+~~~      <dc:subject>$expand(SubjectCategory)</dc:subject>
+~~~      <dc:contributor>$n
+~~~        <rdf:Description link=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/$expand($createuser)\">$n
+~~~          <rdf:value>$expand(info.author)</rdf:value>$n
+~~~        </rdf:Description>$n
+~~~      </dc:contributor>$n
+~~~   </item>
+~~~ "}%
+</noautolink>%STOPINCLUDE%
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SKIN = rss
+-->
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Rss feed of the %25WEB%25 web"}%

@@ -1,0 +1,72 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130399721" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+see also: RenderFullTeaser
+
+---++ Parameters
+   * NAME: BlogEntry topic name
+
+---++ Implementation
+---+++ Main
+<verbatim>
+%STARTINCLUDE%
+*~~
+%~~ DBQUERY{topic="%NAME%" web="%WEB%"
+~~~   format="%INCLUDE{"RenderBlogTeaser" section="format"}%"}%
+*~~
+%STOPINCLUDE%
+</verbatim>
+
+---+++ Format
+<verbatim>
+%SECTION{"format"}%
+*~~ <div class=\"blogEntry\">
+~~~   <h2 class=\"blogHeadline\">
+~~~     [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
+~~~     <span class=\"blogCommentCount\">
+~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"}$percnt
+~~~     </span>
+~~~   </h2>$n
+~~~   <div class=\"blogInfo\">
+~~~     <span class=\"blogDate\">
+~~~       $percntTIMESINCE{from=\"$expand(createdate)\"}$percnt ago
+~~~     </span> in
+~~~     <span class=\"blogCategory\"> 
+~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~     </span>
+~~~     <span class=\"blogAuthor\"> 
+~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
+~~~     </span>
+~~~   </div>
+~~~   <div class=\"blogText\">$n
+~~~      <noautolink>$n
+~~~      $formfield(Teaser)
+~~~      <div class=\"blogMore\"> ... [[$web.$topic][more]]</div>$n
+~~~      </noautolink>$n
+~~~   </div>
+~~~ </div>
+*~~ 
+%ENDSECTION{"format"}%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="TestBlogEntry0"}%
+</div>
+
+
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a teaser for a BlogEntry"}%

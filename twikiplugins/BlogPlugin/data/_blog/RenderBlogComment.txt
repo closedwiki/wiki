@@ -1,0 +1,87 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130259839" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+%RED%Note%ENDCOLOR%, the use of hardcoded rights in REDDOT{grant="..."}
+in the "format" section below
+as long as the TWiki.RedDotPlugin does not support Main.TWikiGroups natively. Replace
+it with your main BlogAuthor or remove the =grant="..."= completely to allow
+guests to get reddots to their comments.
+
+see also: RenderDocNavigation
+
+---++ Parameters
+   * NAME: BlogComment topic name
+
+---++ Implementation
+---+++ Main
+<verbatim>
+%STARTINCLUDE%
+%INCLUDE{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
+%~~ DBQUERY{topics="%NAME%" 
+~~~  format="
+*~~     <div class=\"blogRef\">
+~~~        <h2>Comment(s) on 
+~~~            [[$expand(BaseRef)][\"$expand(@BaseRef.Headline or BaseRef)\"
+~~~            <span class=\"blogDate\">($formatTime(@BaseRef.createdate, '$day, $mon $year'))</span>]]
+~~~        </h2>
+~~~     </div>$n
+~~~     <div class=\"blogComment\">
+~~~     %INCLUDE{"%TOPIC%" section="format"}%
+~~~     </div>"
+~~~ }% 
+%INCLUDE{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
+%STOPINCLUDE%
+</verbatim>
+
+<!--
+-->
+
+---+++ Format
+<verbatim>
+%SECTION{"format"}%
+*~~ <h3 style=\"margin-bottom:0px;padding-bottom:0px\">
+~~~   <a name=\"$topic\"></a><a name=\"$expand(Nr)\"></a>
+~~~   <span class=\"blogCommentNr\">$expand(Nr)</span>
+~~~   $percntIFDEFINED{\"$expand(Url)\" 
+~~~      then=\"[[$expand(Url)][$expand(Name)]] [[$web.$topic][\"
+~~~      else=\"[[$web.$topic][$expand(Name)\"}$percnt
+~~~   <span class=\"blogDate\">
+~~~     replied
+~~~     $percntTIMESINCE{
+~~~        from=\"$formatTime(@BaseRef.createdate)\"
+~~~        to=\"$formatTime(createdate)\"
+~~~      }$percnt later
+~~~   </span>]]
+*~~   $percntREDDOT{\"$web.$topic\" grant=\"MichaelDaum\"}$percnt 
+~~~ </h3>$n
+~~~ <noautolink>$n
+~~~    $percntIFDEFINEDTHEN{\"$expand(Headline)\" glue=\"off\"}$percnt$n
+~~~       <h4>$expand(Headline)</h4>$n
+~~~    $percntFIDEFINED$percnt$n
+~~~ <div class=\"blogCommentText\">$n
+~~~    $expand(Text)
+~~~ </div>$n
+~~~ </noautolink>
+*~~ 
+%ENDSECTION{"format"}%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="BlogComment0"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a single BlogComment"}%

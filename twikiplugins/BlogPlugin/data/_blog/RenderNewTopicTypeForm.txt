@@ -1,0 +1,43 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130149189" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: name of TopicType which we render a button for
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<div class="twikiPageForm">
+<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/" method="post">
+<input type="hidden" name="onlywikiname" value="on" />
+<input type="hidden" name="templatetopic" value="%NAME%Template" />
+<input type="hidden" name="TopicType" value="%NAME%" />
+<input type="hidden" name="TopicDescription" value="" />
+<input type="hidden" name="topicparent" value="%NAME%" />
+<input type="submit" value="New <nop>%NAME%" class="blogSubmitButton" />
+<input type="text" name="topic" size="40"/>
+</form> 
+</div>
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="TopicType"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set ALLOWTOPICVIEW = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Renders a form that allows generate a new topic of the given type"}%

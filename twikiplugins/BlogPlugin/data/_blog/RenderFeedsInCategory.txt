@@ -1,0 +1,36 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130170262" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: name of a SubjectCategory
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+%~~ DBQUERY{"TopicType='BlogLink' AND SubjectCategory=~'\b%NAME%\b' AND Feed!=''"
+~~~        separator="$n" hidenull="on"
+~~~        header="| *%NAME% feeds* ||"
+~~~        format="| [[$web.$topic][$formfield(Name)]] | $formfield(Headline) |"
+~~~ }% 
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="WikiWorld"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render list of all NewsFeeds of a given SubjectCategory"}%

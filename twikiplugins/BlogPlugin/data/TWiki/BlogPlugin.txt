@@ -1,0 +1,56 @@
+%META:TOPICINFO{author="TWikiContributor" date="1131114884" format="1.1" version="1.1"}%
+---+!! <nop>%TOPIC%
+
+This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
+
+%TOC%
+
+---++ Syntax Rules
+
+   * 
+   * 
+
+---++ Examples
+
+   * 
+   * 
+
+---++ Plugin Settings
+
+   * Set SHORTDESCRIPTION = Supplemental plugin to BlogUp 
+
+---++ Plugin Installation Instructions
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MichaelDaum |
+|  Plugin Version: | 04 Nov 2005 (V0.01) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  04 Nov 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | TWiki:Plugins/ExtendedSelectionPlugin, \
+                         TWiki:Plugins/GluePlugin, \
+                         TWiki:Plugins/HeadlinesPlugin, \
+                         TWiki:Plugins/RedDotPlugin, \
+                         TWiki:Plugins/NatSkinPlugin, \
+                         TWiki:Plugins/SpreadSheetPlugin \
+|
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main.MichaelDaum - 04 Nov 2005
+

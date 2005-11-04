@@ -1,0 +1,17 @@
+%META:TOPICINFO{author="TWikiContributor" date="1127497825" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicTemplate"}%
+%NOP{
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+}%
+%INCLUDE{"RenderBlogComment" NAME="%TOPIC%"}%
+%INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%
+%INCLUDE{"RenderAddComment"}%
+<style type="text/css">.natTopicForm {display:none}</style>
+
+<!-- 
+   * Set WHITEBOARD = off
+-->
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Template for BlogComments"}%

@@ -1,0 +1,33 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129823453" format="1.1" version="1.1"}%
+---+ %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+see also: TWiki.WebAliases, TWiki.AliasPlugin
+
+%STOPALIASAREA%
+<noautolink>
+   * BlogWeb: Blog.WebHome
+   * NatSkinPlugin: TWiki.NatSkinPlugin
+   * NatSkin: TWiki.NatSkin
+   * DBCacheContrib: TWiki.DBCacheContrib
+   * BlogPlugin: TWiki.BlogPlugin
+   * JojoWiki: [[http://jojowiki.dyndns.org][JojoWiki]]
+   * WordPress: [[http://wordpress.org][WordPress]]
+   * MovableType: [[http://www.sixapart.com/movabletype][MovableType]]
+   * MovableStyle: [[http://www.movablestyle.com][MovableStyle]]
+   * BinaryBonsai: [[http://binarybonsai.com][BinaryBonsai]]
+   * Kwiki: [[http://www.kwiki.com][Kwiki]]
+</noautolink>
+%STARTALIASAREA%
+
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = AdminTool
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Aliases for the BlogWeb"}%

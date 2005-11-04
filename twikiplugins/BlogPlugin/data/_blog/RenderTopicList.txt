@@ -1,0 +1,39 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129746599" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: TopicType to lookup
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+---++ List of all topics of type '%NAME%'
+| *Name* | *Description* | 
+%~~ DBQUERY{"TopicType=~'\b%NAME%\b'" order="Name or name"
+~~~        format="| [[$web.$topic][$expand(Name or name)]] | $expand(TopicDescription or Headline) |"
+~~~ }%
+*~~ 
+%STOPINCLUDE%
+</verbatim>
+
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="TopicFunction"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Implements a formatted metadatasearch"}%
+%META:TOPICMOVED{by="MichaelDaum" date="1124115742" from="Blog.FuncTopicList" to="Blog.RenderTopicList"}%

@@ -1,0 +1,47 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130337579" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * LIMIT: maximal number of comments to list
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%%~~ RECENTCOMMENTS{
+~~~  format="   * [[$web.$topic][$headline]]
+*~~    <span class=\"blogCommentCount\">$count</span><br/>
+~~~    <span class=\"blogSideBarCommenter\">
+~~~      $percntTIMESINCE{from=\"$date\"}$percnt ago
+~~~      $commenter replied
+~~~    </span>"
+~~~  limit="%LIMIT%" age="2592000"
+~~~  header="$n<noautolink>$n
+*~~     <div class=\"blogSideBarSection blogSideBarComments\">$n
+*~~     ---+ Comments$percntREDDOT{\"%TOPIC%\"}$percnt$n"
+~~~  footer="</div>$n</noautolink>"
+~~~ }%%STOPINCLUDE%
+</verbatim>
+
+<!--
+   * 2592000 ca 1 month
+   * 5184000 ca 2 months
+-->
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" LIMIT="10"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the list of recent comments in the WebSideBar"}%
