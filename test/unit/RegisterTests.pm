@@ -143,6 +143,22 @@ sub registerAccount {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template});
         $this->assert_str_equals("thanks", $e->{def});
+        $this->assert_equals(2, scalar(@mails));
+        my $done = '';
+        foreach my $mail ( @mails ) {
+            if( $mail =~ /^Subject:.*Registration for/m ) {
+                if( $mail =~ /^To: .*\b$testUserEmail\b/m ) {
+                    $this->assert(!$done, $done."\n---------\n".$mail);
+                    $done = $mail;
+                } else {
+                    $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
+                }
+            } else {
+                $this->assert(0, $mail);
+            }
+        }
+        $this->assert($done);
+        @mails = ();
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -250,25 +266,17 @@ sub test_registerVerifyOk {
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     };
-    $this->assert_equals(3, scalar(@mails));
-    my @done = ('', '' );
+    $this->assert_equals(1, scalar(@mails));
+    my $done = '';
     foreach my $mail ( @mails ) {
-        if( $mail =~ /^Subject:.*Registration for/m ) {
-            if( $mail =~ /^To: .*\b$testUserEmail\b/m ) {
-                $this->assert(!$done[0], $done[0]."\n---------\n".$mail);
-                $done[0] = $mail;
-            } else {
-                $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
-            }
-        } elsif( $mail =~ /Your verification code is /m ) {
-            $this->assert(!$done[1], $done[1]."\n---------\n".$mail);
-            $done[1] = $mail;
+        if( $mail =~ /Your verification code is /m ) {
+            $this->assert(!$done, $done."\n---------\n".$mail);
+            $done = $mail;
         } else {
             $this->assert(0, $mail);
         }
     }
-    $this->assert($done[0]);
-    $this->assert($done[1]);
+    $this->assert($done);
     @mails = ();
 }
 
