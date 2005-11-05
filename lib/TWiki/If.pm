@@ -156,7 +156,7 @@ $defOps{'>'} =
     type => 1,
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return $a->evaluate($twiki) >= $b->evaluate($twiki);
+        return $a->evaluate($twiki) > $b->evaluate($twiki);
     }
    };
 $defOps{'<'} =
@@ -165,7 +165,7 @@ $defOps{'<'} =
     type => 1,
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return $a->evaluate($twiki) <= $b->evaluate($twiki);
+        return $a->evaluate($twiki) < $b->evaluate($twiki);
     }
    };
 $defOps{not} =
