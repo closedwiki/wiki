@@ -1498,8 +1498,8 @@ sub takeOutBlocks {
     my $scoop;
     my $tagParams;
 
-    foreach my $token ( split/(<\/?$tag>)/, $intext ) {
-    	if ($token =~ /<$tag>/) {
+    foreach my $token ( split/(<\/?$tag[^>]*>)/, $intext ) {
+    	if ($token =~ /<$tag\b([^>]*)?>/) {
     		$depth++;
     		if ($depth eq 1) {
     			$tagParams = $1;
