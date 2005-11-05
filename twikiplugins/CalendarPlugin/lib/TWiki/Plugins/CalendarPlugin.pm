@@ -31,6 +31,7 @@ use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
 $VERSION   = '$Rev$';
 $RELEASE = 'Dakar';
 
+#$VERSION   = '1.018'; #dab# Added support displaying calendars for multiple months; added support for displaying events as a list
 #$VERSION   = '1.017';  #dro# Added start and end date support for periodic repeaters; Added initlang patch by TWiki:Main.JensKloecker; Changed 'my' to 'local' so exceptions working again; Removed fetchxmap debug message; Fixed illegal date bug; Allowed month abbreviations in month attribute
 #VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
 #VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
@@ -366,20 +367,29 @@ sub handleCalendar
 
     if ($asList) {
 
-    # If displaying as a list, force showdatenumbers to 1 so that the Plugin can format them later.
-    # This logic seems backwards, but if showdatenumber is 0, the calendar initialization code below will put date numbers into the contents of each day. Then, when displaying the list, every day will be included in the list because the contents is not "empty." This would produce an ugly list. In contrast, if HTML::CalendarSimple is told to put the date numbers on the calendar, this will be done outside of the content. Therefore, we can later display only those days that actually have events, at the cost of formatting the date numbers again.
+    # If displaying as a list, force showdatenumbers to 1 so that the
+    # Plugin can format them later.  This logic seems backwards, but
+    # if showdatenumber is 0, the calendar initialization code below
+    # will put date numbers into the contents of each day. Then, when
+    # displaying the list, every day will be included in the list
+    # because the contents is not "empty." This would produce an ugly
+    # list. In contrast, if HTML::CalendarSimple is told to put the
+    # date numbers on the calendar, this will be done outside of the
+    # content. Therefore, we can later display only those days that
+    # actually have events, at the cost of formatting the date numbers
+    # again.
 
 
 	$options{showdatenumbers} = 1;
 	if (!$options{format}) {
-	$options{format} = '$old - <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">$description</a>$n';
+	    $options{format} = '$old - <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">$description</a>$n';
 	}
 	if (!$options{datenumberformat}) {
-	$options{datenumberformat} = '	* $day $mon $year';
+	    $options{datenumberformat} = '	* $day $mon $year';
 	}
     } else {
 	if (!$options{datenumberformat}) {
-	$options{datenumberformat} = '$day';
+	    $options{datenumberformat} = '$day';
 	}
     }
 
