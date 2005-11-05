@@ -81,6 +81,43 @@ sub initPlugin
     # get debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
+    my $cgiQuery = TWiki::Func::getCgiQuery();
+
+    # Registration protection
+    if( ( $cgiQuery ) && ( $ENV{'SCRIPT_NAME'} ) && ( $ENV{'SCRIPT_NAME'} =~ /^.*\/register/ ) ) {
+        my $magic = "";
+        $magic = $cgiQuery->param('rx') || "";
+        $magic =~ s/.*?([0-9]+).*/$1/s || "";
+        my $expire = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGEXPIRE" ) || 0;
+        $expire =~ s/.*?([0-9]+).*/$1/s || 0;
+        if( $expire > 0 ) {
+            $expire *= 60;
+            $expire = time() - $expire;
+            my $fileName = _makeFileName( "magic" );
+            my $ok = 0;
+            foreach( split( /\n/, TWiki::Func::readFile( $fileName ) ) ) {
+                 if( /^([0-9]+) ([0-9]+)/ ) {
+                     my $fmagic = $1;
+                     my $ftime = $2;
+                     if( ( $fmagic eq $magic ) && ( $ftime > $expire ) ) {
+                         $ok = 1;
+                         last;
+                     }
+                }
+            }
+            unless( $ok ) {
+                # magic number expired
+                _writeLog( "REGEXPIRE: Magic $magic is missing, bad or expired" );
+                my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGMESSAGE" ) ||
+                      "Registration failed, please try again.";
+                $ok = "[[%TWIKIWEB%.TWikiRegistration][OK]]";
+                my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
+                print $cgiQuery->redirect( $url );
+                exit 0; # should never reach this
+            }
+        }
+    }
+
     # initialize for rel="nofollow" links
     $urlHost = TWiki::Func::getUrlHost();
     $noFollowAge = TWiki::Func::getPreferencesValue( "\U$pluginName\E_NOFOLLOWAGE" ) || 0;
@@ -90,7 +127,7 @@ sub initPlugin
         $noFollowAge *= 3600;
         my( $date ) = TWiki::Func::getRevisionInfo( $web, $topic );
         $topicAge = time() - $date if( $date );
-    }
+    } 
 
     # white list
     my $whiteList = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WHITELIST" ) || "127.0.0.1";
@@ -151,13 +188,13 @@ sub initPlugin
             # show oops message normal
         } else {
             # other scripts: redirect to oops message
-            my $cgiQuery = TWiki::Func::getCgiQuery();
             unless( $cgiQuery ) {
                 exit 1; # Force a "500 Internal Server Error" error
             }
             my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_BLACKLISTMESSAGE" ) ||
                       "You are black listed at %WIKITOOLNAME%.";
-            my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg );
+            my $ok = "[[http://en.wikipedia.org/wiki/Link_spam][OK]]";
+            my $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
             print $cgiQuery->redirect( $url );
             exit 0; # should never reach this
         }
@@ -221,7 +258,8 @@ sub beforeSaveHandler
             my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
                       "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
             $msg =~ s/%WIKISPAMWORD%/$badword/;
-            $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg );
+            my $ok = "[[http://en.wikipedia.org/wiki/Link_spam][OK]]";
+            $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
             print $cgiQuery->redirect( $url );
             exit 0; # should never reach this
         }
@@ -373,7 +411,23 @@ sub _handleBlackList
     my $text = "";
 
     writeDebug( "_handleBlackList( Action: $action, value: $value, topic: $theWeb.$theTopic )" );
-    if( $action eq "ban_show" ) {
+    if( $action eq "magic" ) {
+        $text = int( rand( 100000 ) ) + 1;
+        my $time = time();
+        my $expire = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGEXPIRE" ) || 0;
+        $expire =~ s/.*?([0-9]+).*/$1/s || 0;
+        $expire *= 60;
+        $expire = $time - $expire;
+        my $fileName = _makeFileName( "magic" );
+        # read magic file
+        my $mtext = TWiki::Func::readFile( $fileName );
+        # remove expired numbers
+        my @magic = grep { /^[0-9]+ ([0-9]+)/ && ( $1 > $expire ) } split( /[\n\r]+/, $mtext );
+        # add new magic number with timestamp
+        $magic[++$#magic] = "$text $time";
+        TWiki::Func::saveFile( $fileName, join( "\n", @magic )  . "\n" );
+
+    } elsif( $action eq "ban_show" ) {
         $text = _handleBanList( "read", "" );
         $text =~ s/[\n\r]+$//os;
         $text =~ s/[\n\r]+/, /gos;

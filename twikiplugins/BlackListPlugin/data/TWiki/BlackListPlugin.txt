@@ -1,5 +1,9 @@
-%META:TOPICINFO{author="PeterThoeny" date="1130649965" format="1.0" version="1.8"}%
----+ Black List Plugin
+%META:TOPICINFO{author="PeterThoeny" date="1131156658" format="1.0" version="1.9"}%
+---+!! Black List Plugin
+
+%TOC%
+
+---++ Description
 
 This is a simple utility to keep black sheep away from a public TWiki site. The site can be protected against excessive page access (e.g. by bad robots), suspicious activities of users, such as multiple registrations or rapid topic updates indicating Wiki:WikiSpam, or saving text with wiki-spam.
 
@@ -14,13 +18,15 @@ On topic save, text is compared to a known list of spam patterns. If wiki-spam i
 
 Users on the BLACKLIST and BANLIST will have every page access delayed by one minute and will get an error message.
 
+The registration form can also be protected from improper use.
+
 To fight Wiki-spam, the Plugin can also add a =rel="nofollow"= parameter to external URLs. Search engines will not follow links that have this parameter, taking away the incentive to add spam to TWiki.
 
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-__General settings:__
+---+++ General settings
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Utility to keep malicious users away from a public TWiki site
 
@@ -33,7 +39,7 @@ __General settings:__
 	* Access restriction:
 		* #Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
-__WHITELIST, BLACKLIST and BANLIST settings:__
+---+++ WHITELIST, BLACKLIST and BANLIST settings
 	* WHITELIST: Comma delimited list of IP addresses; possible to use partial addresses ending in a dot
 		* Set WHITELIST = 127.0.0.1
 
@@ -60,7 +66,7 @@ __WHITELIST, BLACKLIST and BANLIST settings:__
 	* Message for users on BLACKLIST and BANLIST:
 		* Set BLACKLISTMESSAGE = Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to excessive access or suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
-__Wiki-spam filtering settings:__
+---+++ Wiki-spam filtering settings
 	* Filter wiki-spam on topic save based on SPAMLIST: (0 or 1)
 		* Set FILTERWIKISPAM = 1
 
@@ -86,7 +92,15 @@ __Wiki-spam filtering settings:__
 	* Message for users trying to save text with wiki-spam:
 		* Set WIKISPAMMESSAGE = Wiki-spam detected: "%WIKISPAMWORD%" is a banned word and cannot be saved. Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
-__Nofollow link setting:__
+---+++ Registration protection settings
+	* Protect registration: (0 to disable, or number of minutes to expire)
+		* Set REGEXPIRE = 0
+		* If enabled, a magic number is protecting the registration process. TWiki expects a form field with a magic number. An error message is shown if not valid or if expired. This makes it harder to register a user by a script. A hidden field needs to be added to the registration form:%BR% =&lt;input type="hidden" name="rx" value="%<nop>BLACKLISTPLUGIN{ action="magic" }%" /&gt;=
+
+	* Message shown when using registration form incorrectly: (this message is deliberately vague)
+		* Set REGMESSAGE = Registration failed, please try again.
+
+---+++ Nofollow link setting
 	* Add a =rel="nofollow"= parameter to external URLs. Use this is to fight Wiki-spam. Search engines will not follow the link if a URL has a nofollow parameter, such as =&lt;a href="http://spammer.com/" rel="nofollow"&gt;=. Specify topic age in hours for which the nofollow parameter should appear (set it to a value that gives you enough time to remove spam); set it to -1 to add the nofollow parameter unconditionally to external URLs; or 0 to disable: (-1, 0, 1...N)
 		* Set NOFOLLOWAGE = -1
 
@@ -115,8 +129,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 30 Oct 2005 |
+|  Plugin Version: | 04 Nov 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  04 Nov 2005: | Added registration protection with magic number |
 |  30 Oct 2005: | Dakar Release compatibility: Work around Dakar preferencs bug |
 |  29 Oct 2005: | Added wiki-spam handling to prevent topic save with wiki-spam |
 |  27 Oct 2005: | For BANLIST, add/remove multiple IP addresses at once, contributed by TWiki:Main.MichaelDaum |
@@ -136,5 +151,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Blacklists/][Google blacklist directory]]
 
--- TWiki:Main/PeterThoeny - 30 Oct 2005
+-- TWiki:Main/PeterThoeny - 04 Nov 2005
 
