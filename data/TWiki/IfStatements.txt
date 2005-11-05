@@ -29,7 +29,7 @@ atom ::= context identifier, TWiki variable name, single-quoted string
 | or | True if one or other side is true |
 | not | negate the following expression |
 | <nop>=, !<nop>= | String comparison |
-| >, &gt;, >=, &gt;= | Number comparison (there is no explicit numeric =) |
+| &lt;, &gt;, &lt;=, &gt;= | Number comparison (there is no explicit numeric =) |
 | context | True if the current context is set (see below) |
 | defined | True if a user preference variable of this name is defined |
 | $ | expands a variable name. Plugins handlers *are not called*. Returns the empty string if not defined. Built-in variables and user-defined preferences are supported, but you *cannot* pass parameters. |
