@@ -501,10 +501,6 @@ a:hover .twikiAccessKey {
 	Pattern skin specific elements
 	-----------------------------------------------------------	*/
 
-.patternSeparator {
-	font-family:monospace;
-}
-
 .patternTopicAction {
 	font-size:94%; /*S2*/
 	line-height:1.5em;
@@ -565,28 +561,6 @@ a:hover .twikiAccessKey {
 	font-size:94%; /*S2*/
 }
 
-.patternMetaNav {
-	font-size:85%; /*S3*/
-}
-.patternMetaNav a:link,
-.patternMetaNav a:visited {
-	text-decoration:none;
-}
-.patternMetaNav .patternSeparator {
-	margin:0 .5em;
-}
-.patternMetaNav input#quickSearchBox,
-.patternMetaNav input#jumpBox {
-	margin:0 0 0 .85em;
-	padding:0;
-	height:1.2em; /* 85% of default line-height 1.4 */
-}
-.patternMetaNav input#quickSearchButton,
-.patternMetaNav input#jumpButton {
-	margin:0 0 0 2px;
-	border:0;
-}
-
 /* Left bar */
 .patternLeftBar {
 	border-width:1px 0 0 0;
@@ -610,25 +584,21 @@ a:hover .twikiAccessKey {
 	padding-left:0;
 	margin-right:2em; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
 }
-.patternLeftBar .patternForm {
+.patternLeftBar .patternFormHolder {
 	margin:.5em 0 1em 0;
 }
-html>body .patternLeftBar .patternForm { /* Hide from IE */
+html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 	margin-top:1.25em;
 }
-.patternLeftBar .patternForm table {
+.patternLeftBar .patternFormHolder table {
 	width:100%;
 }
-.patternLeftBar .patternForm th {
+.patternLeftBar .patternFormHolder th {
 	padding:0 0 2px 0;
 	vertical-align:middle;
 }
-.patternLeftBar .patternForm th.patternFromSpacer {
+.patternLeftBar .patternFormHolder th.patternFormSpacer {
 	width:1%;
-}
-.patternLeftBar .patternForm th.patternFormFieldButton {
-	width:20px;
-	padding:0 0 0 4px;
 }
 .patternLeftBar input.patternFormField {
 	display:block;
@@ -810,7 +780,7 @@ input.patternFormFieldVerticalForm {
 	text-decoration:underline;
 }
 .patternSig {
-	margin:.25em 0 .5em 0;
+	margin:.25em 0;
 }
 
 .patternAccessKeyInfo {

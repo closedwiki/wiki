@@ -380,19 +380,7 @@ a:hover .twikiAccessKey {
 .patternTopBarContents .patternSearchBox td {
 	color:#8E9195; /*T8*/
 }
-.patternMetaNav {
-	color:#8E9195; /*T8*/
-}
-.patternMetaNav a:link,
-.patternMetaNav a:visited {
-	color:#8E9195; /*T7*/
-}
-.patternMetaNav a:hover {
-	color:#FBF7E8; /*C3*/
-}
-.patternMetaNav input {
-	background-color:#FEFBF3; /*BG9*/
-}
+
 /* Left bar */
 .patternLeftBar {
 	border-color:#E2DCC8; /*BO4*/

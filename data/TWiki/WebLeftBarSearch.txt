@@ -1,14 +1,14 @@
-<div class="patternForm">
+<div class="patternFormHolder">
 <form name="jumpForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
 <table cellspacing="0" cellpadding="0" border="0">
 <tr>
-<th><input type="text" class="patternFormField patternFormFieldDefaultColor" name="topic" size="16" value="%MAKETEXT{"Jump"}%" onfocus="clearDefaultandCSS(this);" /></th><th class="patternFromSpacer">&nbsp;</th><th class="patternFormButton" width="16"><input type="image" class="patternFormButton" src="%ICONPATH{arrowright}%" align="middle" title='%MAKETEXT{"Jump"}%' /></th>
+<th><input type="text" class="patternFormField patternFormFieldDefaultColor" name="topic" size="16" value="%MAKETEXT{"Jump"}%" onfocus="clearDefaultandCSS(this);" /></th><th class="patternFormSpacer">&nbsp;</th><th class="patternFormButton" width="16"><input type="image" class="patternFormButton" src="%ICONPATH{arrowright}%" align="middle" title='%MAKETEXT{"Jump"}%' /></th>
 </tr></table>
 </form>
 <form name="quickSearchForm" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/WebSearch"}%">
 <table cellspacing="0" cellpadding="0" border="0">
 <tr>
-<th>%IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input type=\"text\" class=\"patternFormField patternFormFieldDefaultColor\" name=\"search\" value=\"%MAKETEXT{"Search"}%\" size=\"16\" onfocus=\"clearDefaultandCSS(this);\" />" else="<input type=\"text\" class=\"patternFormField\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"16\" />" }%</th><th class="patternFromSpacer">&nbsp;</th><th class="patternFormButton" width="16"><input type="image" class="patternFormButton" src="%ICONPATH{searchtopic}%" align="middle" title='%MAKETEXT{"Search"}%' /></th>
+<th>%IF{" '%URLPARAM{"search" encode="entity" scope="topic"}%' = '' " then="<input type=\"text\" class=\"patternFormField patternFormFieldDefaultColor\" name=\"search\" value=\"%MAKETEXT{"Search"}%\" size=\"16\" onfocus=\"clearDefaultandCSS(this);\" />" else="<input type=\"text\" class=\"patternFormField\" name=\"search\" value=\"%URLPARAM{ "search" encode="entity" scope="topic" }%\" size=\"16\" />" }%</th><th class="patternFormSpacer">&nbsp;</th><th class="patternFormButton" width="16"><input type="image" class="patternFormButton" src="%ICONPATH{searchtopic}%" align="middle" title='%MAKETEXT{"Search"}%' /></th>
 </tr></table>
 </form>
 <!-- START OF CHANGE LANGUAGE LINK -->
