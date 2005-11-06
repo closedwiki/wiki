@@ -96,7 +96,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set BGCOLOR = #EEEEEE
 	* Color of the headings' text:
 		* Set HDCOLOR = #000000
-  
+
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
