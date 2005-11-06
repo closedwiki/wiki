@@ -36,7 +36,7 @@ __Preferences:__
       * #Set DENYWEBVIEW = 
       * #Set ALLOWWEBVIEW = 
       * #Set DENYWEBCHANGE = 
-      * Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
+      * #Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
       * #Set DENYWEBRENAME = 
       * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
 
