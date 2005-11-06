@@ -1644,7 +1644,7 @@ msgid "QuietSave"
 msgstr "Salvar em silêncio"
 
 #: templates/view.pattern.tmpl:86
-msgid "Raw View"
+msgid "&Raw View"
 msgstr "Texto Puro"
 
 #: templates/registernotify.tmpl:10

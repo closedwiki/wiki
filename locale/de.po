@@ -1653,7 +1653,7 @@ msgid "QuietSave"
 msgstr "StillesSpeichern"
 
 #: templates/view.pattern.tmpl:86
-msgid "Raw View"
+msgid "&Raw View"
 msgstr ""
 
 #: templates/registernotify.tmpl:10
