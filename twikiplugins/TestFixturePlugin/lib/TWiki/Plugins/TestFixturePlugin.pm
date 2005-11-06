@@ -196,15 +196,13 @@ sub preRenderingHandler {
 sub outsidePREHandler {
     # Replace the text "%outsidePREHandler%" with some
     # recognisable text.
-    $oph++;
-    $_[0] =~ s/%outsidePreHandler(\d+)%/$1OPH${oph}_line1\n$1OPH${oph}_line2\n$1OPH${oph}_line3\n/g;
+    $_[0] =~ s/%outsidePreHandler(\d+)%/$oph++;"$1OPH${oph}_line1\n$1OPH${oph}_line2\n$1OPH${oph}_line3\n"/ge;
 }
 
 sub insidePREHandler {
     # Replace the text "%insidePREHandler%" with some
     # recognisable text.
-    $iph++;
-    $_[0] =~ s/%insidePreHandler(\d+)%/$1IPH${iph}_line1\n$1IPH${iph}_line2\n$1IPH${iph}_line3\n/g;
+    $_[0] =~ s/%insidePreHandler(\d+)%/$iph++;"$1IPH${iph}_line1\n$1IPH${iph}_line2\n$1IPH${iph}_line3\n"/ge;
 }
 
 sub postRenderingHandler {

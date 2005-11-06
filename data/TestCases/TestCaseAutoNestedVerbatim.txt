@@ -13,7 +13,7 @@ Designed by: Crawford Currie
 <table>
 <tr><th>Expected</th><th>Actual</th></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected FIRST TEST -->
 <font color="purple"> Before Verbatim </font>
 <pre>
 &lt;%EGG%&gt; In outer verbatim &lt;%ENDBREAKFAST%&gt;
@@ -39,7 +39,7 @@ In inner verbatim with <text in angle braces>
 <!-- /actual -->
 </td></tr></table>
 ---++ Expected at end of topic
-<!-- expected -->
+<!-- expected SECOND TEST -->
 Function is
 <pre>
 ---++ sub marine() =&gt; dive dive dive
