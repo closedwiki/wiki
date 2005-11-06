@@ -12,7 +12,7 @@ Designed by: Crawford Currie
 ---++ Expected
 <!-- expected expand rex DEFAULT -->
 <div class="patternSearchString">Searched: <b>hit me with your rhythm stick</b></div><div class="patternSearchResultsBegin"></div>
-<div class="patternSearchResultsHeader" style="background-color:yellow"><span class="twikiLeft">Results from TestCases web</span><span class="twikiRight">retrieved at @TIME GMT</span><br class="twikiClear" /></div><div class="patternSearchResults">
+<div class="patternSearchResultsHeader" style="background-color:yellow"><span class="twikiLeft">Results from TestCases web</span><span class="twikiRight">retrieved at @TIME (GMT)</span><br class="twikiClear" /></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>

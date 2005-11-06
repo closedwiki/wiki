@@ -37,7 +37,6 @@ And called for some hot buttered toast.
 <!-- expected expand FNF -->
 <p></p>
 <span class='twikiAlert'> Warning: Can't find topic FileNotFound</span>
-<p></p>
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->

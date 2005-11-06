@@ -10,37 +10,37 @@ PRE is actually an HTML tag, but TWiki performs extra processing on it
 ---++ Simple
 ---+++ Expected
 <!-- expected 1 -->
-Outside
+Outside verbatim
 <pre>
-Inside
+Inside verbatim
 </pre>
-Outside
+Outside verbatim
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
-Outside
+Outside verbatim
 <verbatim>
-Inside
+Inside verbatim
 </verbatim>
-Outside
+Outside verbatim
 <!-- /actual -->
 
 ---++ With parameters
 ---+++ Expected
 <!-- expected 2 -->
-Outside
+Outside verbatim with class
 <pre class="twikiAlert">
-Inside
+Inside verbatim with class
 </pre>
-Outside
+Outside verbatim with class
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
-Outside
+Outside verbatim with class
 <verbatim class="twikiAlert">
-Inside
+Inside verbatim with class
 </verbatim>
-Outside
+Outside verbatim with class
 <!-- /actual -->
 
 ---++ Indented
