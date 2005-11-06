@@ -1288,6 +1288,8 @@ HERE
             next if( $type eq 'NUMBER' && $val + 1 == $def + 1 );
             next if( $type eq 'BOOLEAN' && ($val && $def || !$val && !$def));
             next if( $val eq $def );
+            $def = '0' unless $def;
+            $val = '0' unless $val;
             $output .= CGI::h3($var).
               CGI::b('old ').
               CGI::code($def).
