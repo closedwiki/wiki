@@ -1,5 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1122128753" format="1.1" version="$Rev$"}%
-<table cellspacing="0" cellpadding="0" border="0"><tr><td valign="top" rowspan="2">
+<table cellspacing="0" cellpadding="0" border="1">
+<tr><td valign="top" rowspan="2">
 ---+!! Welcome to the %WEB% Web
 
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
@@ -20,11 +21,10 @@ This is the place to learn about TWiki features, find where to download it, and 
 ([[WebSearchAdvanced][advanced search]])
 </form>
 </blockquote>
-</td><td valign="top" style="padding:0 0 0 30px;">
-<a href="http://twiki.org"><img src="%ATTACHURLPATH%/twiki_home.gif" alt="Link to TWiki.org website" width='337' height='93' border='0' /></a>
-<br />
-<br />
-%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%
+</td>
+<td class="patternToolBar" style="padding: 20px">
+<a href="http://twiki.org"><img src="%PUBURL%/TWiki/TWikiLogos/T-logo-169x130-t.gif" alt="Link to TWiki.org website" border="0" align="left" valign="middle" /><font size="+2" style="line-height:150%">The official TWiki site is <font color="blue">twiki.org</font></font></a><br />
+</tr><tr><td valign="top" colspan="2">%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%
 </td></tr></table>
 
 ---++ Disclaimer
