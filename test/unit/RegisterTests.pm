@@ -167,7 +167,7 @@ sub registerAccount {
         $this->assert(0, $e->stringify);
     } otherwise {
         $this->assert(0, "expected an oops redirect");
-    }
+    };
 }
 
 sub test_userTopic {
@@ -191,6 +191,7 @@ sub test_userTopic {
 #Assumes the verification code is foo
 sub test_registerVerifyOk {
     my $this = shift;
+    $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
                           'TopicName' => [
                                           'TWikiRegistration'
@@ -367,6 +368,80 @@ sub test_registerBadVerify {
     # check the verification code
     $this->assert_matches(qr/'TestUser\.foo'/,$mess);
 }
+
+
+# Register a user with verification explicitly switched off
+# (SUPER's tear_down will take care for re-installing %TWiki::cfg)
+sub test_registerNoVerifyOk {
+    my $this = shift;
+    $TWiki::cfg{Register}{NeedVerification}  =  0;
+    my $query = new CGI ({
+                          'TopicName' => [
+                                          'TWikiRegistration'
+                                         ],
+                          'Twk1Email' => [
+                                          $testUserEmail
+                                         ],
+                          'Twk1WikiName' => [
+                                             $testUserWikiName
+                                            ],
+                          'Twk1Name' => [
+                                         'Test User'
+                                        ],
+                          'Twk0Comment' => [
+                                            ''
+                                           ],
+                          'Twk1LoginName' => [
+                                              $testUserLoginName
+                                             ],
+                          'Twk1FirstName' => [
+                                              'Test'
+                                             ],
+                          'Twk1LastName' => [
+                                             'User'
+                                            ],
+                          'action' => [
+                                       'register'
+                                      ]
+                         });
+
+    $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $session->{net}->setMailHandler(\&sentMail);
+
+    try {
+        TWiki::UI::Register::register_cgi($session);
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template});
+        $this->assert_str_equals("thanks", $e->{def});
+        $this->assert_equals(2, scalar(@mails));
+        my $done = '';
+        foreach my $mail ( @mails ) {
+            if( $mail =~ /^Subject:.*Registration for/m ) {
+                if( $mail =~ /^To: .*\b$testUserEmail\b/m ) {
+                    $this->assert(!$done, $done."\n---------\n".$mail);
+                    $done = $mail;
+                } else {
+                    $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
+                }
+            } else {
+                $this->assert(0, $mail);
+            }
+        }
+        $this->assert($done);
+        @mails = ();
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+}
+
 
 ################################################################################
 ################################ RESET PASSWORD TESTS ##########################
