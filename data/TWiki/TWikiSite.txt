@@ -24,7 +24,7 @@
 ---+++ "TWiki" stands for...
 
    * _Wiki wiki_ means "quick" in Hawaiian. The shuttle at Honolulu Airport is called the _wiki wiki_ bus, which is where the original Wiki web got its name.
-   * _TWiki_ is short for _TakeFive Wiki_, the name of the company where its founder worked. (It was later discovered that _Twiki_ is also the name of an AI robot that co-starred in the <a href="http://www.buck-rogers.com/" target="_blank"><i>Buck Rogers...</i></a> movie and TV series from 1979 - see TWiki in the logo.)
+   * _TWiki_ is short for _TakeFive Wiki_, the name of the company where its founder worked. (It was later discovered that _Twiki_ is also the name of an AI robot that co-starred in the <a href="http://www.buck-rogers.com/" target="_blank"><i>Buck Rogers...</i></a> movie and TV series from 1979)
 
 ---+++ Selected TWiki Topics...
    * TWikiSite provides a basic big picture overview of the TWiki platform

@@ -114,9 +114,18 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
       * other than checkboxes: ==name==, ex: ==?BugPriority=1==
       * checkbox: ==namevalue=1==, ex: ==?ColorRed=1==. <br /> 
         Boxes with a tick must be specified.
-      * ex: ==http://somehost/twiki/edit/Sandbox/TestTopic?formtemplate=TopicTemplate&TopicType=Testing==
+      * example: This will add a textfield for the new topic name and a "Create"-Button to your page. When the button is pressed, the topic editor will open with the form "MyForm" already attached to the new topic.
+       <verbatim>
+    <form name="newtopic" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/">
+       <input type="hidden" name="formtemplate" value="MyForm" />
+       New topic name <input type="text" name="topic" size="40" />
+       <input type="submit" value="Create" />
+    </form>
+       </verbatim>
    * If you want to make a TWikiApplication where you need an automatically generated unique topicname, you can use 10 X's in the edit / save URL, and they will be replaced on topic save with a count value
       * the Codev:DevelopBranch bugs tracking system uses something like ==http://develop.twiki.org/~develop/cgi-bin/edit/Bugs/ItemXXXXXXXXXX?formtemplate=Bugs.ItemTemplate&_T=0501092906== 
+
+%X% Initial values will not be submitted to the form of a new topic if you only use the formtemplate parameter.
 
 ---++ Setting Up Multiple Form Options
 
@@ -135,7 +144,17 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
 
 #UsingFormData
 ---++ Searching for Form Data
-TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
+TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==FORMFIELD==, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
+
+<blockquote>
+*Example* %BR%
+TWiki users often want to have an overview of topics they contributed to. With the ==$formfield== parameter it is easy to display the value of a classification field next to the topic link:
+<verbatim>
+| *Topic* | *Classification* |
+%SEARCH{"Main.UserName" scope="text" regex="off" nosearch="on" nototal="on" order="modified" reverse="on"
+format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |" web="Sandbox"}%
+</verbatim>
+</blockquote> 
 
 ---++ Extending the range of form data types
 Several plugins allow you to extend the range of data types accepted by forms. For example, the TWiki:Plugins.DateFieldPlugin lets you add a 'date' type to the available data types. All data types are single-valued (can only have one value) with the following exceptions:

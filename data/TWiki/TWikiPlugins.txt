@@ -33,11 +33,11 @@ The recommended approach to testing new Plugins before making them public is to 
 
 InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly and 3) what TWiki:Codev.PluginHandlers they invoke. Any failures are shown in the Errors section. The %<nop>FAILEDPLUGINS% TWikiVariable can be used to debug failures. You may also want to check your webserver error log and the various TWiki log files.
 
----+++ A Note on Plugin Performance
+---+++ Some Notes on Plugin Performance
 
 The performance of the system depends to some extent on the number of Plugins installed and on the Plugin implementation. Some Plugins impose no measurable performance decrease, some do. You can only really tell by installing the plugin and running experiments yourself. The Apache =ab= utility is very useful for doing this.
 
-If you need to install an "expensive" Plugin, and you need its functionality only in one web, you can place the Plugin topic into that web. TWiki will initialize the Plugin only if the Plugin topic is found (which won't be the case for other webs.)
+%T% If you need to install an "expensive" Plugin, and you need its functionality only in one web, you can place the Plugin topic into that web. TWiki will initialize the Plugin only if the Plugin topic is found (which won't be the case for other webs.)
 
 ---+++ Listing Active Plugins
 
@@ -78,6 +78,14 @@ TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to
      =eval { require IPC::Run }= %BR%
      =return "&lt;font color=\"red\"&gt;SamplePlugin: Can't load required modules ($@)&lt;/font&gt;" if $@;=
    * You can use a flag to avoid running the initialization twice
+
+---+++ Security
+   * Badly written plugins can open huge security holes in TWiki. This is especially true if care isn't taken to prevent execution of arbitrary commands on the server.
+   * Don't allow sensitive configuration data to be edited by users. it is better to add sensitive configuration options to the TWiki::cfg hash than adding it as preferences in the plugin topic
+      * See TWiki:Plugins.MailInContrib for an example of this
+      * TWiki::Plugins.BuildContrib can help you with this
+   * Always use the TWiki::Sandbox to execute commands.
+   * Always audit the plugins you install, and make sure you are happy with the level of security provided. While every effort is made to monitor plugin authors activities, at the end of the day they are uncontrolled user contributions.
 
 #CreatePlugins
 ---++ Creating Plugins

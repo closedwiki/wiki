@@ -25,7 +25,6 @@
    * InterWikis
    * ManagingWebs
    * TWikiSiteTools
-   * TWikiAdminCookBook
    * %WIKIPREFSTOPIC%
    * %WEBPREFSTOPIC%
 ---

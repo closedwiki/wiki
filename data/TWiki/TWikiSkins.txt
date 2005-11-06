@@ -93,7 +93,7 @@ Then add a div tag to the =%<nop>BROADCASTMESSAGE%= variable located after the =
 </verbatim>
 
 ---++ Attachment Tables
-Controlling the look and feel of attachment tables is a little bit more complex than for the rest of a skin. By default the attachment table is a standard TWiki table, and the look is controlled in the same ay as other tables. In a very few cases you may want to change the _content_ of the table as well.
+Controlling the look and feel of attachment tables is a little bit more complex than for the rest of a skin. By default the attachment table is a standard TWiki table, and the look is controlled in the same way as other tables. In a very few cases you may want to change the _content_ of the table as well.
 
 The format of standard attachment tables is defined through the use of special _TWiki template macros_ which by default are defined in the =templates/twiki.tmpl= template using the =%TMPL:DEF= macro syntax described in TWikiTemplates. These macros are:
 | *Macro* | *Description* |
