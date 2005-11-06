@@ -84,7 +84,7 @@ my %defOps;
 $defOps{context} =
   { name => 'context',
     prec => 5,
-    type => 0,
+    type => 0, # unary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return $twiki->inContext($b->evaluate($twiki)) || 0;
@@ -93,7 +93,7 @@ $defOps{context} =
 $defOps{'$'} =
   { name => '$',
     prec => 5,
-    type => 0,
+    type => 0, # unary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         my $text = $b->evaluate($twiki) || '';
@@ -107,7 +107,7 @@ $defOps{'$'} =
 $defOps{defined} =
   { name => 'defined',
     prec => 5,
-    type => 0,
+    type => 0, # unary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         my $eval =  $b->evaluate($twiki) || '';
@@ -117,7 +117,7 @@ $defOps{defined} =
 $defOps{'='} =
   { name => '=',
     prec => 4,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return  $a->evaluate($twiki ) eq $b->evaluate($twiki);
@@ -126,7 +126,7 @@ $defOps{'='} =
 $defOps{'!='} =
   { name => '!=',
     prec => 4,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return $a->evaluate($twiki) ne $b->evaluate($twiki);
@@ -135,7 +135,7 @@ $defOps{'!='} =
 $defOps{'>='} =
   { name => '>=',
     prec => 4,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return $a->evaluate($twiki) >= $b->evaluate($twiki);
@@ -144,7 +144,7 @@ $defOps{'>='} =
 $defOps{'<='} =
   { name => '<=',
     prec => 4,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return $a->evaluate($twiki) <= $b->evaluate($twiki);
@@ -153,7 +153,7 @@ $defOps{'<='} =
 $defOps{'>'} =
   { name => '>',
     prec => 4,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return $a->evaluate($twiki) > $b->evaluate($twiki);
@@ -162,7 +162,7 @@ $defOps{'>'} =
 $defOps{'<'} =
   { name => '<',
     prec => 4,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return $a->evaluate($twiki) < $b->evaluate($twiki);
@@ -171,7 +171,7 @@ $defOps{'<'} =
 $defOps{not} =
   { name => 'not',
     prec => 3,
-    type => 0,
+    type => 0, # unary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return !$b->evaluate($twiki);
@@ -180,7 +180,7 @@ $defOps{not} =
 $defOps{and} =
   { name => 'and',
     prec => 2,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return 0 unless $a->evaluate($twiki);
@@ -190,7 +190,7 @@ $defOps{and} =
 $defOps{or} =
   { name => 'or',
     prec => 1,
-    type => 1,
+    type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         return 1 if $a->evaluate($twiki);
@@ -301,14 +301,15 @@ sub _apply {
     my $o = pop( @$opers );
     my $r = pop( @$opands );
     unless( defined( $r )) {
-        $this->{error} = 'Missing operand?';
+        $this->{error} = 'Missing operand after '.$o->{name};
         return undef;
     }
     my $l = undef;
     if( $o->{type} == 1 ) {
+        # binary
         $l = pop( @$opands );
-        unless( defined( $r )) {
-            $this->{error} = 'Missing operand?';
+        unless( defined( $l )) {
+            $this->{error} = 'Missing operand before '.$o->{name};
             return undef;
         }
     }

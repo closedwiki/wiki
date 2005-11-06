@@ -2383,7 +2383,9 @@ sub _IF {
     }
 
     my $expr = $ifFactory->parse( $params->{_DEFAULT} );
-    return $ifFactory->{error} unless $expr;
+    return $this->inlineAlert(
+        'alerts', 'generic', 'IF{', $params->stringify(), '}:',
+        $ifFactory->{error} ) unless $expr;
 
     if( $expr->evaluate( $this )) {
         return $params->{then} || '';
