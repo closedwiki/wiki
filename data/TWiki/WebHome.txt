@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1122128753" format="1.1" version="$Rev$"}%
-<table cellspacing="0" cellpadding="0" border="1">
+<table cellspacing="0" cellpadding="0" border="0">
 <tr><td valign="top" rowspan="2">
 ---+!! Welcome to the %WEB% Web
 
