@@ -142,9 +142,9 @@ sub _normalize_language_tag {
 # initialisation block
 BEGIN {
     # we only need to proceed if user wants internationalisation support
-    return unless $TWiki::cfg{UseInternationalisation};
+    return unless $TWiki::cfg{UserInterfaceInternationalisation};
 
-    # no languages enabled is the same as disabling {UseInternationalisation}
+    # no languages enabled is the same as disabling {UserInterfaceInternationalisation}
     my @languages = available_languages();
     return unless (scalar(@languages));
 
@@ -154,11 +154,11 @@ BEGIN {
     eval "use base 'Locale::Maketext'";
     if ( $@ ) {
       $initialised = 0;
-      push(@initErrors, "I18N: Couldn't load required perl module Locale::Maketext: " . $@."\nInstall the module or turn off {UseInternationalisation}");
+      push(@initErrors, "I18N: Couldn't load required perl module Locale::Maketext: " . $@."\nInstall the module or turn off {UserInterfaceInternationalisation}");
     }
 
     unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
-      push(@initErrors, 'I18N: {LocalesDir} not configured. Define it or turn off {UseInternationalisation}');
+      push(@initErrors, 'I18N: {LocalesDir} not configured. Define it or turn off {UserInterfaceInternationalisation}');
       $initialised = 0;
     }
 
@@ -173,7 +173,7 @@ BEGIN {
     eval $dependencies;
     if ( $@ ) {
       $initialised = 0;
-      push(@initErrors, "I18N - Couldn't load required perl module Locale::Maketext::Lexicon: " . $@ . "\nInstall the module or turn off {UseInternationalisation}");
+      push(@initErrors, "I18N - Couldn't load required perl module Locale::Maketext::Lexicon: " . $@ . "\nInstall the module or turn off {UserInterfaceInternationalisation}");
     }
 }
 
