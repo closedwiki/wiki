@@ -5,10 +5,11 @@ This page is a reference for all CSS classes used in PatternSkin.
 
 %TOC{title="Page contents:"}%
 
-!PatternSkin uses 3 stylesheets:
+!PatternSkin uses 4 stylesheets:
    * [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]: positioning of block elements on the page
    * [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]]: margins, paddings, borders, font sizes
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][stycolorsle.css]]: text colors, background colors, border colors
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]]: text colors, background colors, border colors
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/print.css][print.css]]: optimalizations for printed page
    
 If you want to learn how to create your own look or skin based on !PatternSkin, read further in PatternSkin.
 
@@ -54,6 +55,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 ---++ Style classes
 
    * View
+      * .patternPageShadow - shadow border around .patternPage
       * .patternContent - container around .patternTopic in view.pattern.tmpl only; to be able to give .twikiAttachments and .twikiForm a different appearance when they are not enclosed by it, for example the personal data form on the user pages
       * .patternTopic - TWiki topic text
       * .patternTop - area at top of topic text, with patternHomePath, revision and action buttons
@@ -68,6 +70,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
          * .patternVersatileTable .patternOldCol - table column with 'old' appearance, for instance the old attachment or the old topic name
          * .patternVersatileTable .patternHelpCol - table column with help texts
       * .patternHomePath - breadcrumb at top
+      * .patternHomePathTitle - "You are here" text
       * .patternRevInfo - revision info and author name
       * .patternToolBar - holder for .patternToolBarButtons
       * .patternToolBarButtons - action buttons at top of page

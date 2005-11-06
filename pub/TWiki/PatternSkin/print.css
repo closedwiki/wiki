@@ -1,0 +1,86 @@
+/* Content */
+/* show url for links */
+a:link:after,
+a:visited:after {
+	content: " (" attr(href) ") ";
+	font-size:85%; /*S3*/
+}
+/* ... except for bits of the gui */
+td.patternHomePath a:visited:after,
+td.patternHomePath a:link:after,
+td.patternRevInfo a:visited:after,
+td.patternRevInfo a:link:after,
+.patternBottomBar a:visited:after,
+.patternBottomBar a:link:after {
+	content:"";
+}
+.patternHomePath img,
+.patternHomePathTitle {
+	display:none;
+}
+
+/* Layout */
+.patternPage, 
+.patternPageShadow {
+	margin:0;
+}
+.patternMain {
+	margin:0;
+	padding:1em 2em 0 2em;
+	left:0;
+}
+/* hide bits of the gui */
+.patternTopicAction,
+td.patternToolBar,
+.patternLeftBar,
+.patternTopBar {
+	display:none;
+}
+
+/* Style */
+.patternMain {
+	margin:0;
+	padding:0;
+	border:none;
+}
+h2, h3,	h4,	h5 {
+	border:none;
+}
+.patternBottomBar {
+	margin:1em 0 0 0;
+}
+.patternBottomBarContents {
+	padding:0;
+}
+.patternTopicFooter {
+	margin:2em 0 2em 0;
+	font-size:94%; /*S2*/
+}
+.patternTop {
+	border:0;
+}
+
+/* Colors */
+body {
+	background-color:#fff;
+}
+.patternPage, 
+.patternPageShadow {
+	background:#fff;
+}
+.patternBottomBar {
+	background:#fff;
+	color:#000;
+}
+h2 {
+	background-color:transparent;
+}
+.patternContent .twikiAttachments,
+.patternContent .twikiForm {
+	background:#fff; /*BG1*/
+}
+
+
+/* define custom print styles here */
+
+
