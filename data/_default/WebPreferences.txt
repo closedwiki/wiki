@@ -41,7 +41,7 @@ __Preferences:__
       * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
 
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
-      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+      * #Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 	* Web preferences that are *not* allowed to be overridden by user preferences:
