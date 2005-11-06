@@ -1506,17 +1506,19 @@ sub takeOutBlocks {
     			next;
     		}
     	} elsif ($token =~ /<\/$tag>/) {
-    		$depth--;
-    		if ($depth eq 0) {
-                	my $placeholder = $tag.$placeholderMarker;
-                	$placeholderMarker++;    		
-    			$map->{$placeholder}{text} = $scoop;
-    			$map->{$placeholder}{params} = $tagParams;
-    			$out .= '<!--'.$TWiki::TranslationToken.$placeholder.
-					$TWiki::TranslationToken.'-->';
-    			$scoop = '';
-    			next;
-    		}
+    	       if ($depth > 0) {
+                    $depth--;
+                    if ($depth eq 0) {
+                            my $placeholder = $tag.$placeholderMarker;
+                            $placeholderMarker++;    		
+                            $map->{$placeholder}{text} = $scoop;
+                            $map->{$placeholder}{params} = $tagParams;
+                            $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
+                                            $TWiki::TranslationToken.'-->';
+                            $scoop = '';
+                            next;
+                    }
+                }
     	}
     	if ($depth > 0) {
     		$scoop .= $token;
@@ -2017,9 +2019,7 @@ sub renderFormFieldArgRSS {
 
 ---++ ObjectMethod makeTopicSummaryRSS (  $theText, $theTopic, $theWeb, $theFlags ) -> $tml
 
-Makes a plain text summary of the given topic by simply trimming a bit
-off the top. Truncates to $TMTRUNC chars or, if a number is specified in $theFlags,
-to that length.
+Makes a HTML summary of the given topic, currently without evaluating all variables
 
 used to show HTML in rss feeds
 
