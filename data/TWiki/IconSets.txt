@@ -6,8 +6,8 @@ With Icon Sets every skin may have its own set of graphics/icons.
 For this a topic is assigned to be the "icon topic" (by setting the variable =%<nop>ICONTOPIC%= in %TWIKIWEB%.TWikiPreferences). Each time an image is retrieved, TWiki will get it from the attachments folder from this topic.
 
 To set ICONTOPIC, write in %TWIKIWEB%.TWikiPreferences:
-<verbatim>
-   * Set ICONTOPIC = %TWIKIWEB%.YourIconTopicName
-</verbatim>
+<code>
+   * <nop>Set ICONTOPIC = %<nop>TWIKIWEB%.YourIconTopicName
+</code>
 
 __Related topics:__ %TWIKIWEB%.TWikiDocGraphics, %TWIKIWEB%.FileAttachment, AdminDocumentationCategory
