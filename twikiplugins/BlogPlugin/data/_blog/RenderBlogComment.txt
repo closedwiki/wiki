@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131359646" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131393412" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -22,11 +22,15 @@ see also: RenderDocNavigation
 %~~ DBQUERY{topics="%NAME%" 
 ~~~  format="
 *~~     <div class=\"blogRef\">
+~~~     $n%STOPALIASAREA%$n
 ~~~        <h2>Comment(s) on 
-~~~            [[$expand(BaseRef)][\"$expand(@BaseRef.Headline or BaseRef)\"
-~~~            <span class=\"blogDate\">($formatTime(@BaseRef.createdate, '$day, $mon $year'))</span>]]
+~~~            [[$web.$expand(BaseRef)][\"$expand(@BaseRef.Headline or BaseRef)\"
+~~~            <span class=\"blogDate\">
+~~~              ($formatTime(@BaseRef.createdate, '$day, $mon $year'))
+~~~            </span>]]
 ~~~        </h2>
-~~~     </div>$n
+~~~     $n%STARTALIASAREA%$n
+~~~     </div>
 ~~~     <div class=\"blogComment\">
 ~~~     %INCLUDE{"%TOPIC%" section="format"}%
 ~~~     </div>"

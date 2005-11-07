@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131361199" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131393054" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 %INCLUDE{"RenderBlogEntry" NAME="%TOPIC%"}%
-%INCLUDE{"RenderBlogComments "NAME="%TOPIC%"}%
+%INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%
 %INCLUDE{"RenderAddComment"}%
 <style type="text/css">.natTopicForm {display:none}</style>
 

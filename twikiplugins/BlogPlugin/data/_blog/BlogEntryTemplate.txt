@@ -4,7 +4,7 @@
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 }%
 %INCLUDE{"RenderBlogEntry" NAME="%TOPIC%"}%
-%INCLUDE{"RenderBlogComments "NAME="%TOPIC%"}%
+%INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%
 %INCLUDE{"RenderAddComment"}%
 <style type="text/css">.natTopicForm {display:none}</style>
 
