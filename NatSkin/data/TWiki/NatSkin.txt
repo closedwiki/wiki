@@ -75,7 +75,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Skin Version: | v2.73 (2005-11-07) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-   2005-11-07: | more safari fixes |
+|  2005-11-07: | more safari fixes |
 |  2005-11-02: | fixed javascript problems combined with the TWiki:Plugins.TwistyPlugin; \
                  trigger printing when clicking on "Print" |
 |  2005-10-31: | safari fixes where content leaps out of the main area |
@@ -116,7 +116,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 02 Nov 2005
+-- TWiki:Main/MichaelDaum - 07 Nov 2005
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="MichaelDaum" version="1.1"}%
