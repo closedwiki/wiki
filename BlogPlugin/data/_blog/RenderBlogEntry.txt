@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130486613" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131359805" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -32,7 +32,8 @@
 ~~~   $n</noautolink>$n
 ~~~   <div class=\"blogInfo\">
 ~~~     <span class=\"blogDate\">
-~~~       $percntTIMESINCE{from=\"$formfield(createdate)\"}$percnt ago 
+~~~       $percntTIMESINCE{\"$formfield(createdate)\" 
+~~~          format=\"$time ago\" null=\"about now\"}$percnt
 ~~~     </span>
 ~~~     in 
 ~~~     <span class=\"blogCategory\"> $formfield(SubjectCategory) </span>

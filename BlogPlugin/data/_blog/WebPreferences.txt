@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130412368" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131360652" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ <nop>%WEB% Web Preferences
 %FORMFIELD{"TopicDescription"}%
@@ -9,7 +9,7 @@
    * Set NOSEARCHALL = 
    * Set NOAUTOLINK = 
 
-   * Set NATSEARCHINCLUDEWEB = Blog
+   * Set NATSEARCHINCLUDEWEB = _blog
    * Set NATSEARCHEXCLUDEWEB = 
    * Set NATSEARCHINCLUDETOPIC = (BlogEntry|BlogComment)\d+.*
    * Set NATSEASRCHEXCLUDETOPIC = 
@@ -33,6 +33,7 @@
 __Related Topics__:
    * [[Main.TWikiPreferences]]
    * [[TWiki.TWikiPreferences]]
+
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129747034" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131359559" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -22,8 +22,10 @@
 ~~~            $percntTIMESINCE{
 ~~~              from=\"$formatTime(@BlogRef.createdate)\"
 ~~~              to=\"$formatTime(createdate)\"
+~~~              null=\"immediately\"
+~~~              format=\"$time later\"
 ~~~            }$percnt
-~~~            later]]
+~~~            ]]
 ~~~            </span>
 *~~            $percntREDDOT{\"$web.$topic\" grant=\"MichaelDaum\"}$percnt 
 ~~~            $percntINCLUDE{\"RenderSubComments\" NAME=\"$topic\"}$percnt

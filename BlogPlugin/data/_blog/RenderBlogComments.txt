@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129745208" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131380199" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -13,7 +13,7 @@
 <div class="blogComments">
 <a name="topComment"></a>
 <h2>
-%~~ COUNTCOMMENTS{"%NAME%"
+%~~ COUNTCOMMENTS{"%WEB%.%NAME%"
 ~~~                hidenull="on"
 ~~~                single="One Comment" format="$count Comments"}%
 </h2>

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130399721" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131380648" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -26,12 +26,17 @@ see also: RenderFullTeaser
 ~~~   <h2 class=\"blogHeadline\">
 ~~~     [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
 ~~~     <span class=\"blogCommentCount\">
-~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"}$percnt
+~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" 
+~~~       format=\"[[$web.$topic#topComment][$dollarcount]]\"}$percnt
 ~~~     </span>
 ~~~   </h2>$n
 ~~~   <div class=\"blogInfo\">
 ~~~     <span class=\"blogDate\">
-~~~       $percntTIMESINCE{from=\"$expand(createdate)\"}$percnt ago
+~~~       $percntTIMESINCE{
+~~~          \"$expand(createdate)\"
+~~~          format=\"$time ago\"
+~~~          null=\"about now\"
+~~~       }$percnt
 ~~~     </span> in
 ~~~     <span class=\"blogCategory\"> 
 ~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" format=\"[[$web.$1][$1]]\"}$percnt
