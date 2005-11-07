@@ -144,14 +144,15 @@ hr { border-bottom: 1px solid #999999; }
 .natMiddle {
   padding: 20px 25px;
 }
-.natTopBar {
-  padding-top:1.5em;
-  padding-bottom:1.5em;
-}
 .natTopRightContents,
 .natTopLeftContents {
   margin-right:20px;
   margin-left:20px;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+.natTopRightContents {
+  margin-top:35px;
 }
 
 /* top */

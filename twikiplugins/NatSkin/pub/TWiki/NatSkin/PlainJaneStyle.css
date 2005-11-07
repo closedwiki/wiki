@@ -25,6 +25,8 @@ a:hover {
 
 .natTopRightContents,
 .natTopLeftContents {
+  padding-top:2em;
+  padding-bottom:2em;
   margin-left:10px;
   margin-right:10px;
 }
@@ -130,8 +132,6 @@ a:hover {
 /* top */
 .natHeaderArt {
 }
-.natTopBar {
-}
 .natWebButtons a,
 .natTopBar a,
 .natTopBar {
@@ -154,12 +154,14 @@ a:hover {
   margin:0px;
 }
 
+.natTopicActions,
 .natTopLeftContents,
 .natTopRightContents,
-.natSearchBox,
-.natSearchBox input,
-.natWebSlogan {
+.natSearchBoxTop input {
   font-size:x-small;
+}
+.natTopicActions {
+  font-size:0.99em;
 }
 
 .natSearchBox input, 
@@ -180,9 +182,9 @@ a:hover {
 }
 
 /* sidebar */
-.natSideBar {
+.natSideBarContents {
   color:#666666;
-  font-size:0.9em;
+  font-size:small;
   line-height:110%;
 }
 .natSideBar h1 a,

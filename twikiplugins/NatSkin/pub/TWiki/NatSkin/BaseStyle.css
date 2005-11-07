@@ -32,8 +32,10 @@ h1, h2, h3, h4, h5, h6 {
 .natTopLeft, .natTopRight, 
 .natTopLeftContents, .natTopRightContents, 
 .natWebButtons, .natWebButtonsContents
+
 						{ border: 1px solid blue }
 .natMiddle, 
+.natTopBarSizer,
 .natSideBar, natSideBarContents			{ border: 1px solid red }
 .natMain, .natMainContents,
 .natSideBar, .natSideBarContents,
@@ -63,6 +65,7 @@ h1, h2, h3, h4, h5, h6 {
 .natSideBar, .natTopRight {
   width:16em;
   min-width:16em;
+  max-width:16em;
   _width:16em; /* IE hack */
 }
 .natSideBar {
@@ -71,20 +74,21 @@ h1, h2, h3, h4, h5, h6 {
 .natMainFooter {
   vertical-align:bottom;
 }
+.natTopLeftContents {
+  margin-top:10px;
+}
 .natTopRightContents {
   white-space:nowrap;
+  margin-top:29px;
 }
 .natSideBarContents, .natMainContents {
   min-height:50em;
   overflow:hidden;
 }
-.natTopRight,
-.natTopLeft {
-  padding-top:1em;
-  padding-bottom:1em;
-}
-.natTopRightContents {
-  margin-top:7px;
+.natTopBarSizer {
+  height:5em;
+  max-height:5em;
+  border:1px solid transparent; /* konqueror fix */
 }
 
 /* topbar */
@@ -808,3 +812,4 @@ img.alignleft {
   content:"";
   margin-left:0px;
 }
+

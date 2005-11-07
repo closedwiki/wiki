@@ -2,9 +2,12 @@
 .natHeaderArt {
   background:#B41D02;
 }
+.natSearchBoxTop,
 .natSearchBoxTop input {
   background:#B41D02;
   color:white;
+}
+.natSearchBoxTop input {
   border:1px solid white;
 }
 .natHeaderArt {
@@ -12,8 +15,9 @@
   background-repeat:no-repeat;
   background-position:top left;
 }
-.natTopBar {
-  height:185px;
+.natTopBarSizer {
+  height:165px;
+  max-height:200px;
 }
 .natWebButtons,
 .natWebButtons a,

@@ -1,9 +1,6 @@
 /* variation to switch on the web buttons for rusty */
 @import url('BaseButtons.css');
 
-.natTopBar {
-  padding-bottom:2em;
-}
 .natWebButtons {
   border-bottom:1px solid #ffffff;
   padding-left:0px;

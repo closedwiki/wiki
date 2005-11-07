@@ -6,8 +6,9 @@
   background-repeat:no-repeat;
   background-position:top left;
 }
-.natTopBar {
-  height:165px;
+.natTopBarSizer {
+  height:140px;
+  max-height:200px;
 }
 .natSearchBoxTop,
 .natTopicActions a,
@@ -18,11 +19,16 @@
   color:white;
 }
 
-.natSearchBoxTop,
-.natTopicActions a,
-.natTopicActions {
+.natSearchBoxTop {
   color:black;
-  font-weight:bold;
+}
+
+.natTopicActions:hover {
+  background:#ACDBEB;
+  color:black;
+}
+.natTopicActions a {
+  color:black;
 }
 .natSearchBoxTop input {
   background:white;
@@ -31,7 +37,7 @@
 }
 
 .natTopicActions a:hover {
-  background:#ACDBEB;
+  background:white;
   text-decoration:none;
 }
 
@@ -44,7 +50,7 @@
 }
 
 .natAction {
-  color:white;
+  color:red;
   font-weight:bold;
 }
 

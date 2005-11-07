@@ -21,8 +21,6 @@ hr {
 }
 .natTopBar {
   border-top:1px dotted white;
-  padding-top:1.5em;
-  padding-bottom:1.5em;
 }
 .natWebButtons,
 .natTopLeft {
@@ -32,10 +30,18 @@ hr {
 .natTopRight{
   border-right:1px dotted white;
 }
+.natTopBarSizer {
+  height:130px;
+  max-height:130px;
+}
 .natTopLeftContents,
 .natTopRightContents {
+  margin-top:30px;
   margin-left:20px;
   margin-right:20px;
+}
+.natTopRightContents {
+  margin-top:50px;
 }
 
 .natMiddle {
@@ -148,6 +154,9 @@ hr {
   border:1px dotted white;
   font-size:x-small;
 }
+.natSearchBoxTop {
+  margin-top:10px;
+}
 .natSearchBoxTop input {
   background:#9C3300;
   color:white;
@@ -205,10 +214,12 @@ hr {
 
 /* sidebar */
 .natSideBar {
-  font-size:0.8em;
-  line-height:140%;
   background:#ff9831;
   color:#9C3300;
+}
+.natSideBarContents {
+  font-size:0.8em;
+  line-height:140%;
 }
 
 .natSideBar h1,

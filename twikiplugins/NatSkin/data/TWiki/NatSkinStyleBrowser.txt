@@ -7,32 +7,32 @@
 <tr><td colspan="2">
 *Style:* <select style="width:100%" name="style">
 <noautolink>
-%FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{style=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n"}%
+%FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{style=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n" separator=" "}%
 </noautolink>
 </select>
 </td></tr>
 <tr><td colspan="2">
 *Variation:* <select style="width:100%" name="stylevariation">
 <noautolink>
-%FORMATLIST{"none, %KNOWNVARIATIONS%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{variation=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n"}%
+%FORMATLIST{"none, %KNOWNVARIATIONS%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{variation=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n" separator=" "}%
 </noautolink>
 </select>
 </td></tr>
 <tr><td colspan="2">
 *Switches:*
-	* <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%"/>Border On
-	* <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%"/>Border Off
-	* <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%"/>Thin Layout
-	* <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}%"/>Sidebar Left
-	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}%"/>Sidebar Right
-	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%"/>Sidebar Off
-	* <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%"/>Web Buttons On
-	* <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%"/>Web Buttons Off
-	* <input type="radio" name="stylesearchbox" value="top"%IFSKINSTATE{searchbox="top" then=" checked=\"checked\""}%"/>Searchbox in topbar
-	* <input type="radio" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%"/>Searchbox in position 1
-	* <input type="radio" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%"/>Searchbox in position 2
-	* <input type="radio" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%"/>Searchbox in position 3
-	* <input type="radio" name="stylesearchbox" value="off"%IFSKINSTATE{searchbox="off" then=" checked=\"checked\""}%"/>Searchbox off
+	* <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%/>Border On
+	* <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%/>Border Off
+	* <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%/>Thin Layout
+	* <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}%/>Sidebar Left
+	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}%/>Sidebar Right
+	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%/>Sidebar Off
+	* <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%/>Web Buttons On
+	* <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%/>Web Buttons Off
+	* <input type="radio" name="stylesearchbox" value="top"%IFSKINSTATE{searchbox="top" then=" checked=\"checked\""}%/>Searchbox in topbar
+	* <input type="radio" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%/>Searchbox in position 1
+	* <input type="radio" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%/>Searchbox in position 2
+	* <input type="radio" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%/>Searchbox in position 3
+	* <input type="radio" name="stylesearchbox" value="off"%IFSKINSTATE{searchbox="off" then=" checked=\"checked\""}%/>Searchbox off
 </td></tr>
 <tr>
 <td><input style="width:100%" type="submit" name="switchstyle" value="Prev"/></td>

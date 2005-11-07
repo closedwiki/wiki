@@ -25,10 +25,6 @@ hr {
 }
 
 /* page layout */
-.natTopBar {
-  padding-top:2em;
-  padding-bottom:2em;
-}
 .natSideBar {
   padding:10px 20px 10px 20px;
 }
@@ -40,6 +36,11 @@ hr {
 .natTopLeftContents {
   margin-left:20px;
   margin-right:20px;
+  margin-top:25px;
+  margin-bottom:25px;
+}
+.natTopRightContents {
+  margin-top:35px;
 }
 .natWebTitle,
 .natWebTitle a {
@@ -219,6 +220,8 @@ hr {
 .natSideBar {
   color:#333333;
   background:#999999;
+}
+.natSideBarContents {
   font:normal x-small georgia,serif;
 }
 
