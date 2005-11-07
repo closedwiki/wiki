@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1129560810" format="1.1" version="1.1"}%
 %INCLUDE{"RenderBlogEntry" NAME="%TOPIC%"}%  
-%INCLUDE{"RenderBlogComments "NAME="%TOPIC%"}%  
+%INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%  
 %INCLUDE{"RenderAddComment"}%    
 <style type="text/css">.natTopicForm {display:none}</style>
 <!--    
