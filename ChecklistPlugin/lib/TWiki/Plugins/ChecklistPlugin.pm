@@ -60,7 +60,6 @@ use vars qw(
         $debug 
 	$defaultsInitialized %globalDefaults %namedDefaults @renderedOptions @flagOptions @filteredOptions
 	%namedIds $idMapRef $query
-	$resetDone $stateChangeDone
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -73,7 +72,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.006'; #dro# added new attribute (useforms); fixed legend bug; fixed HTML encoding bug
+$REVISION = '1.006'; #dro# changed context of two variables;
+#$REVISION = '1.006'; #dro# added new attribute (useforms); fixed legend bug; fixed HTML encoding bug
 #$REVISION = '1.005'; #dro# fixed major bug (edit lock); fixed html encoding; improved doc
 #$REVISION = '1.004'; #dro# added unknown parameter handling (new attribute: unknownparamsmsg); added 'set to a given state' feature; changed reset behavior; fixed typos
 #$VERSION = '1.003'; #dro# added attributes (showlegend, anchors); fixed states bug (illegal characters in states option); improved documentation; fixed typos; fixed some minor bugs
@@ -117,6 +117,7 @@ sub commonTagsHandler
     # This is the place to define customized tags and variables
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
+    local($resetDone,$stateChangeDone) = (0,0);
     eval {
 	    $_[0] =~ s/%CHECKLIST{(.*?)}%/&handleChecklist($1,$_[0])/ge;
 	    $_[0] =~ s/%CHECKLIST%/&handleChecklist("",$_[0])/ge;

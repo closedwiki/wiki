@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131116119" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131353716" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%
@@ -190,7 +190,7 @@ Examples:
 | showlegend | if set to "on" a states legend with icons will be displayed (default: off),<br/> e.g: ( :-I - todo :ok: - done) | showlegend="off" |
 |  *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%*  |||
 | name | a naming context (default: "_default") - useful and recommended if you define more than one checklist on a topic (%X% if you use it in %<nop>CHECKLIST% you must use it in all related %<nop>CLI% tags too) | name="mychecklist1" |
-| states | all known states (default: "todo&brvbar;done"); a list separated by a '&brvbar;') | states="todo&brvbar;done" |
+| states | all known states (default: "todo&brvbar;done"; a list separated by a '&brvbar;') | states="todo&brvbar;done" |
 | stateicons | icon list with states separated by a '&brvbar;' (default: ":-I&brvbar;:ok:) | stateicons=":-I&brvbar;:ok:" |
 | useforms | if enabled HTML forms are used instead of hyperlinks (default: disabled) | useforms="off" |
 
@@ -250,8 +250,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | 4 Nov 2005 (v1.006) |
+|  Plugin Version: | BETA (v1.006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.007 (BETA) | TWiki:Main.DanielRohde: changed context of two variables | 
 |  v1.006 (4 Nov 2005) | TWiki:Main.DanielRohde: added new attribute (useforms); fixed legend bug; fixed HTML encoding bug |
 |  v1.005 (2 Nov 2005) | TWiki:Main.DanielRohde: fixed major bug (edit lock); fixed html encoding; improved doc |
 |  v1.004 (1 Nov 2005) | TWiki:Main.DanielRohde: added unknown parameter handling (new attribute: unknownparamsmsg); added 'set to a given state' feature; changed reset behavior; fixed typos |
