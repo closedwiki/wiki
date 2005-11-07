@@ -1,12 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131353716" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131379012" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
-<nop>ChecklistPlugin creates simple checklists. It handles the tags %<nop>CLI% (<nop>CheckList Item) and %<nop>CHECKLIST%
+<nop>ChecklistPlugin creates simple checklists. 
+It handles the tags %<nop>CLI% (<nop>CheckList Item), %<nop>CHECKLIST%, %<nop>CHECKLISTSTART%, %<nop>CHECKLISTEND%
 and depends on the TWiki:Plugins.SmiliesPlugin (see [[#ChecklistPluginInfo][Plugin Info]]).
 
 A %<nop>CLI% tag creates a image button and a simple click on it changes the state of the image button. 
 The default states are 'todo' (represented by a :-I image button) and 'done' (represented by a :ok: image button).
 
+If you put a bullet list or a numbered list between %<nop>CHECKLISTSTART% and %<nop>CHECKLISTEND% every bullet list item gets a checklist item.
 
 Every state change will be saved to a topic with name <i>&lt;YourTopicName&gt;</i><nop>ChecklistItemState. It is possible to 
 define states (default: todo and done) and matching icons. You can also put more than one checklist into a topic.
@@ -20,7 +22,9 @@ define states (default: todo and done) and matching icons. You can also put more
 Just type a %<nop>CLI% (<nop>CheckList Item) into a topic to create a single checklist item. A simple mouse click on it will change
 the state of this item. If the last state is reached the item state falls back to the first state.
 
-To modify the states or state icons you can set it for topic with a %<nop>CHECKLIST% tag.
+If you put a bullet or numbered list between %<nop>CHECKLISTSTART% and %<nop>CHECKLISTEND% every bullet list item gets a checklist item.
+
+To modify the states or state icons you can set it with %<nop>CHECKLISTSTART% or %<nop>CHECKLIST% tag. This tags can also be used to create "reset" buttons.
 
 Both tags can be used with attributes documented in the [[#ChecklistAttributes][Attributes section]].
 
@@ -42,6 +46,29 @@ To change the state of a checklist item just click on it.
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
 <verbatim>
+%CHECKLISTSTART%
+	1 first step
+	1 second step 
+	1 last step 
+%CHECKLISTEND%
+</verbatim>
+</td>
+<td bgcolor="#EEEEEE" valign="top">
+	1 first step :-I
+	1 second step :ok:
+	1 last step :-I
+</td>
+</tr>
+
+
+<tr><td colspan="2" bgcolor="#CCCCCC">
+*Example 2: Create a simple freehand checklist:*
+	* "second step" icon was clicked one time
+	* "last step" icon was clicked two times
+</td></tr>
+<tr>
+<td bgcolor="#EEEEEE" valign="top">
+<verbatim>
 	1 first step %CLI% 
 	1 second step %CLI% 
 	1 last step %CLI% 
@@ -54,18 +81,19 @@ To change the state of a checklist item just click on it.
 </td>
 </tr>
 <tr><td colspan="2" bgcolor="#CCCCCC">
-*Example 2: Create a checklist with three states and own icons:*
+*Example 3: Create a checklist with three states and own icons:*
 	* "second step" icon was clicked one time
 	* and "third step" icon was clicked two times
 </td></tr>
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
 <verbatim>
-%CHECKLIST{states="todo|doing|done" stateicons=":no:|:-I|8-)"%
+%CHECKLISTSTART{states="todo|doing|done" stateicons=":no:|:-I|8-)"}%
 
-	1 first step %CLI% 
-	1 second step %CLI% 
-	1 third step %CLI%
+	1 first step 
+	1 second step
+	1 third step 
+%CHECKLISTEND%
 </verbatim>
 </td>
 <td bgcolor="#EEEEEE" valign="top">
@@ -74,15 +102,15 @@ To change the state of a checklist item just click on it.
 	1 third step 8-)
 </td>
 </tr>
-<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 3: Create two checklists on a topic:*
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 4: Create two checklists on a topic:*
 <br/> (%X% every %<nop>CHECKLIST% and every %<nop>CLI% tag needs a name attribute)</td></tr>
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
 <verbatim>
-%CHECKLIST{name="first checklist"}%
-
-	1 first step %CLI{name="first checklist"}% 
-	1 second step %CLI{name="first checklist"}% 
+%CHECKLISTSTART{name="first checklist"}%
+	1 first step 
+	1 second step
+%CHECKLISTEND%
 
 %CHECKLIST{name="second checklist"}%
 
@@ -99,7 +127,7 @@ To change the state of a checklist item just click on it.
 	1 next step :-I
 </td>
 </tr>
-<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 4: Create a checklist in a table:* </td></tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 5: Create a checklist in a table:* </td></tr>
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
 <verbatim>
@@ -114,7 +142,7 @@ To change the state of a checklist item just click on it.
 | :-I | second step |
 </td>
 </tr>
-<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 5: Create a checklist without annoying line breaks if HTML forms are used:* </td></tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 6: Create a checklist without annoying line breaks if HTML forms are used:* </td></tr>
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
 <verbatim>
@@ -128,14 +156,15 @@ To change the state of a checklist item just click on it.
 	1 :-I my second step
 </td>
 </tr>
-<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 6: Create a legend and a reset button:* </td></tr>
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 7: Create a legend and a reset button:* </td></tr>
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
 <verbatim>
-	1 first step %CLI{name="second checklist"}% 
-	1 next step %CLI{name="second checklist"}% 
+%CHECKLISTSTART{showlegend="on" reset=":-I Reset"}%
+	1 first step 
+	1 next step
+%CHECKLISTEND%
 
-%CHECKLIST{legend="on" reset=":-I Reset"}%
 </verbatim>
 </td>
 <td bgcolor="#EEEEEE" valign="top">
@@ -146,14 +175,14 @@ To change the state of a checklist item just click on it.
 
 </td>
 </tr>
-<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 7: Create a button to set all states in a checklist to 'done'*
+<tr><td colspan="2" bgcolor="#CCCCCC"> *Example 8: Create a button to set all states in a checklist to 'done'*
 	* the reset button was clicked
 </td></tr>
 <tr>
 <td bgcolor="#EEEEEE" valign="top">
 <verbatim>
-	1 first step %CLI{name="second checklist"}% 
-	1 next step %CLI{name="second checklist"}% 
+	1 first step %CLI% 
+	1 next step %CLI% 
 
 %CHECKLIST{reset=":ok: set all done @done"}%
 </verbatim>
@@ -172,7 +201,10 @@ To change the state of a checklist item just click on it.
 
 #ChecklistAttributes
 ---++ Attributes
-Usage: %<nop>CLI{attribute1="value1" attribute2="value2" ...}% <br/> or %<nop>CHECKLIST{attribute1="value1" attribute2="value2" ...}%
+Usage: 
+<br/> %<nop>CLI{attribute1="value1" attribute2="value2" ...}% 
+<br/> or %<nop>CHECKLIST{attribute1="value1" attribute2="value2" ...}%
+<br/> or %<nop>CHECKLISTSTART{attribute1="value1" attribute2="value2" ...}%
 
 Examples:
 <verbatim>
@@ -180,19 +212,18 @@ Examples:
 %CLI{id="i1"}%
 </verbatim>
 
-| *Attribute* | *Comment* | *Example* |
-|  *%<nop>CLI{...}%*  |||
-| id  | unique id of a checklist item (default: autogenerated); useful and recommended if you insert new checklist items in an existing checklist with states | id="myfirstownid" |
-| text | allows to place text behind the button (default: ""); useful to avoid the annoying line break between checklist button and text if HTML forms are used (related: useforms attribute) | text="my first step" |
-|  *%<nop>CHECKLIST{...}%*  |||
-| anchors | enables/disables link anchors (default: enabled); a state change will scroll your topic to the clicked checklist item; useful for long checklists | anchors="yes" |
-| reset | it enables a reset image button with a given text or icon (default: undefined); if you put a @<i>&lt;state&gt;</i> into the reset value, you can reset a checklist to the given <i>&lt;state&gt;</i>, e.g: <verbatim>reset="@done :ok: set all done"</verbatim>| reset="Reset all" | 
-| showlegend | if set to "on" a states legend with icons will be displayed (default: off),<br/> e.g: ( :-I - todo :ok: - done) | showlegend="off" |
-|  *%<nop>CHECKLIST{...}% and %<nop>CLI{...}%*  |||
-| name | a naming context (default: "_default") - useful and recommended if you define more than one checklist on a topic (%X% if you use it in %<nop>CHECKLIST% you must use it in all related %<nop>CLI% tags too) | name="mychecklist1" |
-| states | all known states (default: "todo&brvbar;done"; a list separated by a '&brvbar;') | states="todo&brvbar;done" |
-| stateicons | icon list with states separated by a '&brvbar;' (default: ":-I&brvbar;:ok:) | stateicons=":-I&brvbar;:ok:" |
-| useforms | if enabled HTML forms are used instead of hyperlinks (default: disabled) | useforms="off" |
+| *Attribute* | *Usable in Tag(s)* | *Comment* | *Example* |
+| anchors | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | enables/disables link anchors (default: enabled); if enabled a state change will scroll your topic to the clicked checklist item; useful for long checklists | anchors="yes" |
+| clipos | %<nop>CHECKLISTSTART% | determines the position of the checklist item icon (default: right); if you use another value than "left" the checklist item icon will be appended to a numbered or bullet list item | pos="left" |
+| id  | %<nop>CLI% | unique id of a checklist item (default: autogenerated); useful and recommended if you insert new checklist items in an existing checklist with states | id="myfirstownid" |
+| name | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | a naming context (default: "_default") - useful and recommended if you define more than one checklist on a topic (%X% if you use it in %<nop>CHECKLIST% you must use it in all related %<nop>CLI% tags too) | name="mychecklist1" |
+| pos | %<nop>CHECKLISTSTART% | defines the reset button and state button position (default: bottom); if you use another value than "top" the button position falls back to default | pos="bottom" |
+| reset | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | it enables a reset image button with a given text or icon (default: undefined); if you put a @<i>&lt;state&gt;</i> into the reset value, you can reset a checklist to the given <i>&lt;state&gt;</i>, e.g: <verbatim>reset="@done :ok: set all done"</verbatim>| reset="Reset all" | 
+| showlegend | %<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | if set to "on" a states legend with icons will be displayed (default: off),<br/> e.g: ( :-I - todo :ok: - done) | showlegend="off" |
+| states | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | all known states (default: "todo&brvbar;done"; a list separated by a '&brvbar;') | states="todo&brvbar;done" |
+| stateicons | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/>%<nop>CHECKLISTSTART% | icon list with states separated by a '&brvbar;' (default: ":-I&brvbar;:ok:) | stateicons=":-I&brvbar;:ok:" |
+| text | %<nop>CLI% | allows to place text behind the button (default: ""); useful to avoid the annoying line break between checklist button and text if HTML forms are used (related: useforms attribute) | text="my first step" |
+| useforms | %<nop>CLI%<br/>%<nop>CHECKLIST%<br/> %<nop>CHECKLISTSTART% | if enabled HTML forms are used instead of hyperlinks (default: disabled) | useforms="off" |
 
 ---++ Examples
 Use this examples to check your installation:
@@ -250,9 +281,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | BETA (v1.006) |
+|  Plugin Version: | 7 Nov 2005 (v1.007) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.007 (BETA) | TWiki:Main.DanielRohde: changed context of two variables | 
+|  v1.007 (7 Nov 2005) | TWiki:Main.DanielRohde:  added new feature (CHECKLISTSTART/END tags, attributes: clipos, pos); fixed bugs | 
 |  v1.006 (4 Nov 2005) | TWiki:Main.DanielRohde: added new attribute (useforms); fixed legend bug; fixed HTML encoding bug |
 |  v1.005 (2 Nov 2005) | TWiki:Main.DanielRohde: fixed major bug (edit lock); fixed html encoding; improved doc |
 |  v1.004 (1 Nov 2005) | TWiki:Main.DanielRohde: added unknown parameter handling (new attribute: unknownparamsmsg); added 'set to a given state' feature; changed reset behavior; fixed typos |
