@@ -1,8 +1,17 @@
 /* thin variant for clean */
 @import url("BaseThin.css");
 
-.natLayoutTable {
-  border:1px #aaaaaa solid;
+.natMiddleRight,
+.natTopRight {
+  border-right:1px #aaaaaa solid;
+}
+.natMiddleLeft,
+.natTopLeft {
+  border-left:1px #aaaaaa solid;
+}
+.natSideBar,
+.natMainFooter {
+  border-bottom:1px #aaaaaa solid;
 }
 .natBottomBar {
   background:#e5e5e5;

@@ -7,8 +7,9 @@
   background-position:top center;
 }
 
-.natTopBar {
-  height:148px;
+.natTopBarSizer {
+  height:140px;
+  max-height:140px;
 }
 
 .natSearchBoxTop {

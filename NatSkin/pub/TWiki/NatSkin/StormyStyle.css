@@ -25,14 +25,15 @@ hr {
   font-family:arial,sans-serif;
 }
 
-.natTopBar {
-  padding-top:1.5em;
-  padding-bottom:1.5em;
-}
 .natTopRightContents,
 .natTopLeftContents{
   margin-left:20px;
   margin-right:20px;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+.natTopRightContents {
+  margin-top:30px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -193,7 +194,7 @@ hr {
 }
 
 /* sidebar */
-.natSideBar {
+.natSideBarContents {
   color:#99ccff;
   font:normal small arial,sans-serif;
 }

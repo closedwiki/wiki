@@ -2,22 +2,26 @@
 %TMPL:DEF{"defaulttopbar"}%
     <tr>
       <td class="natTopBar natTopLeft %IFSKINSTATE{glue="off" action="oops" then="natTopRight"}%" valign="top">
-	<div class="natTopLeftContents">
-	  <div class="natWebTitle">
-	    <a href="%WIKILOGOURL%">%WIKITOOLNAME%</a><span class="natWebLocator">%TMPL:P{"locator"}%</span>
+	<div class="natTopBarSizer">
+	  <div class="natTopLeftContents">
+	    <div class="natWebTitle">
+	      <a href="%WIKILOGOURL%">%WIKITOOLNAME%</a><span class="natWebLocator">%TMPL:P{"locator"}%</span>
+	    </div>
+	    <div class="natWebSlogan">%SITEMAPUSETO%</div>
 	  </div>
-	  <div class="natWebSlogan">%SITEMAPUSETO%</div>
 	</div>
       </td>
       <td class="natTopBar natTopRight" valign="top" style="%IFSKINSTATE{glue="off" action="oops" then="display:none"}%">
-	<div class="natTopRightContents">
-%IFSKINSTATETHEN{searchbox="top"}% 
-	  <div class="natSearchBox natSearchBoxTop">
-%TMPL:P{"searchbox"}%
-	  </div>
-%FISKINSTATE%
-	  <div class="natTopicActions">
-%TMPL:P{"topicactions"}% 
+	<div class="natTopBarSizer">
+	  <div class="natTopRightContents">
+  %IFSKINSTATETHEN{searchbox="top"}% 
+	    <div class="natSearchBox natSearchBoxTop">
+  %TMPL:P{"searchbox"}%
+	    </div>
+  %FISKINSTATE%
+	    <div class="natTopicActions">
+  %TMPL:P{"topicactions"}% 
+	    </div>
 	  </div>
 	</div>
       </td>

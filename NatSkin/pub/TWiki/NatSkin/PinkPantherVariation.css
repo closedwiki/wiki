@@ -29,7 +29,10 @@
 }
 .natTopBar {
   border-top:0px;
-  height:165px;
+}
+.natTopBarSizer {
+  height:140px;
+  max-height:200px;
 }
 
 .natAction {

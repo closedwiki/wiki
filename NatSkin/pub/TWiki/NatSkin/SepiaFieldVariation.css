@@ -5,8 +5,9 @@
   background-repeat:no-repeat;
   background-position:top left;
 }
-.natTopBar {
+.natTopBarSizer {
   height:140px;
+  max-height:180px;
 }
 /*
 .natTopBar {

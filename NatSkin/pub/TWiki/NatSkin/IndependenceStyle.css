@@ -28,14 +28,16 @@ hr {
 .natMiddle {
   padding:20px;
 }
-.natTopBar {
-  padding-top:1.5em;
-}
 
 .natTopRightContents,
 .natTopLeftContents {
   margin-left:20px;
   margin-right:20px;
+  margin-top:20px;
+  margin-bottom:20px;
+}
+.natTopRightContents {
+  margin-top:35px;
 }
 
 /* top */
@@ -102,7 +104,7 @@ hr {
 }
 
 /* sidebar */
-.natSideBar {
+.natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
   font-size: small;
   line-height:120%;

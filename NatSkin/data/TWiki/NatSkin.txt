@@ -73,8 +73,9 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.72 (2005-11-02) |
+|  Skin Version: | v2.73 (2005-11-07) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+   2005-11-07: | more safari fixes |
 |  2005-11-02: | fixed javascript problems combined with the TWiki:Plugins.TwistyPlugin; \
                  trigger printing when clicking on "Print" |
 |  2005-10-31: | safari fixes where content leaps out of the main area |

@@ -39,14 +39,15 @@ hr {
   margin-left:10px;
   margin-right:10px;
 }
-.natTopBar {
-  padding-top:1.5em;
-  padding-bottom:1.5em;
-}
 .natTopLeftContents,
 .natTopRightContents {
   margin-left:20px;
   margin-right:20px;
+  margin-top:30px;
+  margin-bottom:30px
+}
+.natTopRightContents {
+  margin-top:45px;
 }
 
 /* top */
@@ -94,11 +95,7 @@ hr {
 .natSearchBox input {
   font-size:x-small;
 }
-.natSearchBox input {
-  margin-top:5px;
-}
 .natSearchBoxTop input {
-  margin-top:5px;
   background:#99cc66;
   color:white;
   border:1px dotted white;
@@ -125,7 +122,7 @@ hr {
 
 
 /* sidebar */
-.natSideBar {
+.natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
   font-size: small;
   line-height:120%;

@@ -72,9 +72,12 @@ hr {
 .natBody {
   background:#e5e5e5;
 }
-.natTopLeft,
-.natTopRight {
-  padding:20px 20px;
+.natTopLeftContents,
+.natTopRightContents {
+  margin:20px 20px;
+}
+.natTopRightContents {
+  margin-top:40px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -84,9 +87,6 @@ hr {
 .natSideBar {
   padding-left:20px;
   padding-right:20px;
-}
-.natTopRight, .natSideBar {
-  width:16em;
 }
 
 /* top */
@@ -98,7 +98,6 @@ hr {
   border-top:5px #aaaaaa solid;
   border-bottom:1px #aaaaaa dotted;
   font-family:arial,sans-serif;
-  height:135px;
 }
 .natWebTitle {
   font:normal xx-large verdana,arial,sans-serif;
@@ -125,7 +124,7 @@ hr {
 }
 
 /* sidebar */
-.natSideBar {
+.natSideBarContents {
   color:#003366;
   font:normal small arial,sans-serif;
   line-height:140%;

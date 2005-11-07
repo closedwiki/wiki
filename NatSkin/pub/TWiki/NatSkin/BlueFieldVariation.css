@@ -4,8 +4,9 @@
   background-repeat:no-repeat;
   background-position:top left;
 }
-.natTopBar {
-  height:150px;
+.natTopBarSizer {
+  height:140px;
+  max-height:140px;
 }
 
 .natSearchBoxTop input {

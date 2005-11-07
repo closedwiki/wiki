@@ -96,18 +96,9 @@ hr {
 .natMainFooter {
   padding:20px 20px 20px 10px;
 }
-.natSideBar, .natTopRight {
-  width:17em;
-  min-width:17em;
-  _width:17em; /* IE hack */
-}
 .natSideBar {
   padding-top:20px;
   padding-bottom:20px;
-}
-.natTopBar {
-  padding-top:1.5em;
-  padding-bottom:1.5em;
 }
 .natMiddle {
   background:white;
@@ -116,8 +107,10 @@ hr {
 }
 .natTopRightContents,
 .natTopLeftContents {
-  margin-left:20px;
-  margin-right:20px;
+  margin:20px;
+}
+.natTopRightContents {
+  margin-top:40px;
 }
 
 /* top */
@@ -156,6 +149,9 @@ hr {
 .natSearchBox {
   color:#99ccff;
 }
+.natSearchBoxTop {
+  margin-top:10px;
+}
 .natTopRightContents {
   font-family:arial,sans-serif;
 }
@@ -167,7 +163,7 @@ hr {
 }
 
 /* sidebar */
-.natSideBar {
+.natSideBarContents {
   color:#999966;
   font:normal x-small verdana,arial,sans-serif;
 }

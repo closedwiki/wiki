@@ -50,12 +50,16 @@ hr {
 }
 .natTopLeftContents,
 .natTopRightContents{
-  padding-top:5em;
-  padding-bottom:5em;
+  margin-top:4em;
+  margin-bottom:1em;
   margin-left:20px;
 }
 .natTopRightContents {
-  margin-top:12px;
+  margin-top:5.2em;
+}
+.natTopBarSizer {
+  height:140px;
+  max-height:140px;
 }
 .natSearchBox input {
   width:14em;
@@ -525,8 +529,12 @@ hr {
   color:#959596;
   margin-right:10px;
 }
-.blogCommentCount {
+.blogCommentCount a:visited,
+.blogCommentCount a:link,
+.blogCommentCount a {
   color:#959596;
+}
+.blogCommentCount {
   margin-left:10px;
   text-shadow:none;
   font-size:0.9em;
