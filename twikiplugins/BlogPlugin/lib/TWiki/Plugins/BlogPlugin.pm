@@ -23,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.02';
+$RELEASE = '0.03';
 
 use Time::Local;
 use TWiki::Contrib::DBCacheContrib;
