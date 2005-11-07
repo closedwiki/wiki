@@ -48,6 +48,7 @@ package TWiki::Client;
 use strict;
 use Assert;
 use Error qw( :try );
+use TWiki;
 
 BEGIN {
     # suppress stupid warning in CGI::Cookie
@@ -261,14 +262,22 @@ sub finish {
     $this->{cgisession}->flush() 
       if $this->{cgisession}; # just to make sure ...
 
-    _expireDeadSessions();
+    return unless( $TWiki::cfg{Sessions}{ExpireAfter} > 0 );
+
+    expireDeadSessions();
 }
 
-# Delete sessions that are sitting around but are really expired.
-# This *assumes* that the sessions are stored as files.
-# Ths doesn't get run until after the user's query has been
-# responded to, so it shouldn't be burdensome.
-sub _expireDeadSessions {
+=pod
+
+---++ StaticMethod expireDeadSessions()
+Delete sessions that are sitting around but are really expired.
+This *assumes* that the sessions are stored as files.
+
+This is a static method, but requires TWiki::cfg
+
+=cut
+
+sub expireDeadSessions {
 	my $time = time() || 0;
 
 	opendir(D, $TWiki::cfg{Sessions}{Dir}) || return;
