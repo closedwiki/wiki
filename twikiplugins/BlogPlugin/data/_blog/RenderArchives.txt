@@ -1,7 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130320927" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131361922" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
+
+%RED%Note%ENDCOLOR%: you need to edit this TopicFunction to display newer archives than
+December 2005. You can disable some calles to RenderArchiveLink below if your blog starts
+later than July 2005. This would have been automated _if_ that did not harm performance.
 
 See also: RenderArchiveLink
 
@@ -9,6 +13,7 @@ See also: RenderArchiveLink
 NONE
 
 ---++ Implementation
+<verbatim>
 %STARTINCLUDE%
 <div class="blogSideBarSection blogSideBarArchive">
 ---+ Archive%REDDOT{"%WEB%.%TOPIC%"}%
@@ -22,6 +27,12 @@ NONE
 </ul>
 </div>
 %STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%"}%
+</div>
 
 %INCLUDE{"RenderFunctionCallers"}%
 

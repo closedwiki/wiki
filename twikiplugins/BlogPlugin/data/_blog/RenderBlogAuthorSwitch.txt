@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130486726" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131205052" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -10,11 +10,17 @@ NONE
 <verbatim>
 %STARTINCLUDE%
 *~~
-%~~ CALC{"$IF(%DBQUERY{"TopicType=~'\bBlogAuthor\b'" limit="1" format="$count"}%==1,
-~~~   <style type=\"text/css\">.blogAuthor {display:none}</style>)"}%
+%~~ IF{"
+~~~
+%~~   DBQUERY{"TopicType=~'\bBlogAuthor\b'" web="%WEB%" limit="1" 
+~~~      header="$count" format="none" separator="none"
+~~~   }%<=1" then="<style type=\"text/css\">.blogAuthor {display:none;}</style>"
+~~~ }%
 *~~
 %STOPINCLUDE%
 </verbatim>
+
+<!-- break glue -->
 
 ---++ Test
 <div class="alt">

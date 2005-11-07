@@ -4,8 +4,8 @@ data/TWiki/BlogUp.txt
 data/TWiki/BlogPlugin.txt
 data/Main/BlogAdminGroup.txt
 data/Main/BlogAuthorGroup.txt
-templates/Blog/view.rss.tmpl
-templates/Blog/view.print.nat.tmpl
+templates/_blog/view.rss.tmpl
+templates/_blog/view.print.nat.tmpl
 data/_blog/AdminTool.txt
 data/_blog/AdminToolTemplate.txt
 data/_blog/BaseRef.txt

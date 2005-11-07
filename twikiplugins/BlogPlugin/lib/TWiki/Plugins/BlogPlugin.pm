@@ -23,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.01';
+$RELEASE = '0.02';
 
 use Time::Local;
 use TWiki::Contrib::DBCacheContrib;
@@ -191,7 +191,8 @@ sub _DBQUERY {
       my $format = '';
       $format = $theSep if ($index > 1);
       $format .= $theFormat;
-      $format =~ s/\$(?:expand|formfield)\((.*?)\)/expandPath($theWeb, $root, $1)/geo;
+      $format =~ s/\$formfield\((.*?)\)/getFormField($theWeb, $topicName, $1)/geo;
+      $format =~ s/\$expand\((.*?)\)/expandPath($theWeb, $root, $1)/geo;
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime(expandPath($theWeb, $root, $1), $2)/geo; # single quoted
       $format = expandVariables($format, topic=>$topicName, web=>$theWeb, index=>$index, count=>$count);
       $text .= $format;
@@ -211,6 +212,8 @@ sub _DBQUERY {
 sub expandVariables {
   my ($theFormat, %params) = @_;
 
+  return '' unless $theFormat;
+  
   foreach my $key (keys %params) {
     if($theFormat =~ s/\$$key/$params{$key}/g) {
       #print STDERR "DEBUG: expanding $key->$params{$key}\n";
@@ -308,7 +311,7 @@ sub _DBTEST {
 
   my $size = $db{$theWeb}->size();
   $result .= "   * size=$size\n";
-  foreach my $key1 ('BlogEntry14') {
+  foreach my $key1 ('BlogEntry0') {
   
     my $value1 = $db{$theWeb}->fastget($key1) || '';
     $result .= "   * <nobr> $key1 = $value1</nobr>\n";
@@ -583,20 +586,21 @@ sub countBlogRefs {
 sub _COUNTCOMMENTS {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called _COUNTCOMMENTS()");
+  #writeDebug("called _COUNTCOMMENTS()");
 
   $theBlogRef = $params->{_DEFAULT};
   $theFormat = $params->{format} || '$count';
-  $theSingle = $params->{single} || '$count';
+  $theSingle = $params->{single} || $theFormat;
   $theHideNull = $params->{hidenull} || 'off';
   $theNullString = $params->{null} || '0';
-  $theWeb = $params->{web} || $theWeb;
   $theOffset = $params->{offset} || 0;
+  $theWeb = $params->{web} || $theWeb;
+
+  ($theWeb, $theBlogRef) = &TWiki::Func::normalizeWebTopicName($theWeb, $theBlogRef);
+  #writeDebug("theBlogRef=$theBlogRef");
+  #writeDebug("theWeb=$theWeb");
 
   &initDB($theWeb);
-
-  writeDebug("theBlogRef=$theBlogRef");
-  writeDebug("theWeb=$theWeb");
 
   # query topics
   my $nrTopics = &countBlogRefs($theWeb, $theBlogRef);
@@ -606,12 +610,9 @@ sub _COUNTCOMMENTS {
   return '' if $theHideNull eq 'on' && $nrTopics == 0;
   $nrTopics = $theNullString if $theNullString && $nrTopics == 0;
   my $text = ($nrTopics == 1)?$theSingle:$theFormat;
-  $text =~ s/\$n/\n/go;
-  $text =~ s/\$count/$nrTopics/go;
-  $text =~ s/\$dollar/\$/go;
-  $text =~ s/\$percnt/\%/go;
+  $text = expandVariables($text,count=>$nrTopics);
 
-  writeDebug("text=$text");
+  #writeDebug("text=$text");
 
   return $text;
 }
@@ -628,17 +629,14 @@ sub getRelatedEntries {
   
   # get related topics we refer to
   my %relatedTopics = ();
-  my ($meta, undef) = &TWiki::Func::readTopic($theWeb, $theTopic);
-  if ($meta) { # match always
-    my $relatedTopics = $meta->get('FIELD', 'Related');
-    if (!$relatedTopics) {
-      writeDebug("ERROR: no relatedTopics in $theWeb.$theTopic"); 
-    } else {
-      foreach my $related (split(/, /, $relatedTopics->{value})) {
-	next if $theRelatedTopics && $theRelatedTopics->{$related};
-	$relatedTopics{$related} = 1;
-	writeDebug("found related $related");
-      }
+  my $relatedTopics = &getFormField($theWeb, $theTopic, 'Related');
+  if (!$relatedTopics) {
+    writeDebug("ERROR: no relatedTopics in $theWeb.$theTopic"); 
+  } else {
+    foreach my $related (split(/, /, $relatedTopics)) {
+      next if $theRelatedTopics && $theRelatedTopics->{$related};
+      $relatedTopics{$related} = 1;
+      writeDebug("found related $related");
     }
   }
 
@@ -679,6 +677,8 @@ sub _RELATEDENTRIES {
   my $theDepth = $params->{depth} || 2;
   $theWeb = $params->{web} || $theWeb;
 
+  &initDB($theWeb);
+
   # get direct related
   my $relatedTopics = &getRelatedEntries($theWeb, $theTopic, $theDepth);
 
@@ -698,12 +698,8 @@ sub _RELATEDENTRIES {
 
     # render meta data of related topics
     if ($text =~ /\$headline/) {
-      my ($relatedMeta, undef) = &TWiki::Func::readTopic($theWeb, $related);
-      if ($relatedMeta) {
-	my $headline = $relatedMeta->get('FIELD', 'Headline');
-	$text =~ s/\$headline/$headline->{value}/geo
-	  if $headline;
-      }
+      my $headline = &getFormField($theWeb, $related, 'Headline');
+      $text =~ s/\$headline/$headline/g;
     }
 
     if ($isFirst) {
@@ -741,7 +737,8 @@ sub _TIMESINCE {
   my $theUnits = $params->{units} || 2;
   my $theSeconds = $params->{seconds} || 'off';
   my $theAbs = $params->{abs} || 'off';
-  my $theNull = $params->{null} || 'not long';
+  my $theNull = $params->{null} || 'about now';
+  my $theFormat = $params->{format} || '$time';
 
   if (!$theFrom && !$theTo) {
     # if there's no starting date then get the current revision date
@@ -794,11 +791,11 @@ sub _TIMESINCE {
    
   #print STDERR "DEBUG: theFrom=$theFrom, theTo=$theTo, since=$since\n";
 
-  # calculate result
+  # calculate time string
   my $unit;
   my $count;
   my $seconds;
-  my $result = '';
+  my $timeString = '';
   my $state = 0;
 
   # step one: the first chunk
@@ -812,8 +809,8 @@ sub _TIMESINCE {
 
     # finding next unit
     if ($count) {
-      $result .= ', ' if $state > 0;
-      $result .= ($count == 1) ? '1 '.$unit : "$count ${unit}s";
+      $timeString .= ', ' if $state > 0;
+      $timeString .= ($count == 1) ? '1 '.$unit : "$count ${unit}s";
       $state++;
     } else {
       next;
@@ -823,10 +820,11 @@ sub _TIMESINCE {
     last if $theUnits && $state >= $theUnits;
   }
   
-  $result = $theNull if $result eq '';
-
-  #writeDebug("result='$result'");
-  return $result;
+  if ($timeString eq '') {
+    return expandVariables($theNull);
+  } else {
+    return expandVariables($theFormat, 'time'=>$timeString);
+  }
 }
 
 ###############################################################################
@@ -886,6 +884,21 @@ sub parseTime {
 
     # give up, return start of epoch (01 Jan 1970 GMT)
     return 0;
+}
+
+###############################################################################
+sub getFormField {
+  my ($theWeb, $theTopic, $theFormField) = @_;
+
+  my $topicObj = $db{$theWeb}->fastget($theTopic);
+  return '' unless $topicObj;
+  
+  my $form = $topicObj->fastget('form');
+  return '' unless $form;
+
+  $form = $topicObj->fastget($form);
+  my $formfield = $form->fastget($theFormField) || '';
+  return TWiki::urlDecode($formfield);
 }
 
 ###############################################################################

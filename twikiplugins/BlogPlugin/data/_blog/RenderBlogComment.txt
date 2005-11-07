@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130259839" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131359646" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -50,9 +50,10 @@ see also: RenderDocNavigation
 ~~~   <span class=\"blogDate\">
 ~~~     replied
 ~~~     $percntTIMESINCE{
-~~~        from=\"$formatTime(@BaseRef.createdate)\"
-~~~        to=\"$formatTime(createdate)\"
-~~~      }$percnt later
+~~~        \"$formatTime(createdate)\"
+~~~        format=\"$time ago\"
+~~~        null=\"immediately\"
+~~~      }$percnt
 ~~~   </span>]]
 *~~   $percntREDDOT{\"$web.$topic\" grant=\"MichaelDaum\"}$percnt 
 ~~~ </h3>$n

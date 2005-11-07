@@ -6,7 +6,6 @@ see also: TWiki.WebAliases, TWiki.AliasPlugin
 
 %STOPALIASAREA%
 <noautolink>
-   * BlogWeb: Blog.WebHome
    * NatSkinPlugin: TWiki.NatSkinPlugin
    * NatSkin: TWiki.NatSkin
    * DBCacheContrib: TWiki.DBCacheContrib
