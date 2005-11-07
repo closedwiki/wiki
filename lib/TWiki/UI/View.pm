@@ -354,33 +354,17 @@ sub viewfile {
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'viewfile' );
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'viewfile' );
 
-    my $topRev = $session->{store}->getRevisionNumber( $webName, $topic, $fileName );
+    my $topRev = $session->{store}->getRevisionNumber(
+        $webName, $topic, $fileName );
 
-    if( $rev && $rev ne $topRev ) {
-        my $fileContent =
-          $session->{store}->readAttachment( $session->{user}, $webName, $topic,
-                                             $fileName, $rev );
-        if( $fileContent ) {
-            my $mimeType = _suffixToMimeType( $session, $fileName );
-            print $query->header(
-                -type => $mimeType,
-                -Content_length => length( $fileContent ),
-                -Content_Disposition => 'inline;filename='.$fileName);
-            print $fileContent;
-            return;
-        } else {
-            # If no file content we'll try and show pub content, should there be a warning FIXME
-        }
-    }
+    my $fileContent = $session->{store}->readAttachment(
+        $session->{user}, $webName, $topic, $fileName, $rev );
 
-    # this should actually kick off a document conversion 
-    # (.doc, .xls... to .html) and show the html file.
-    # Convert only if html file does not yet exist
-    # for now, show the original document:
-
-    my $host = $session->{urlHost};
-    $session->redirect( $host.$TWiki::cfg{PubUrlPath}.
-                        "/$webName/$topic/$fileName" );
+    print $query->header(
+        -type => _suffixToMimeType( $session, $fileName ),
+        -Content_length => length( $fileContent ),
+        -Content_Disposition => 'inline;filename='.$fileName);
+    print $fileContent;
 }
 
 sub _suffixToMimeType {
