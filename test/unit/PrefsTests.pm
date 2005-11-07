@@ -369,4 +369,17 @@ sub test_local_to_web {
                              $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
+sub test_whitespace {
+    my $this = shift;
+
+    $this->_setTopicPref("ONE", "   VAL \n  UE   ");
+    $this->_setTopicPref("TWO", "   VAL\n   U\n   E");
+
+    my $t = new TWiki( $testUser, $topicquery );
+    $this->assert_str_equals("VAL ",
+                             $t->{prefs}->getPreferencesValue("ONE"));
+    $this->assert_str_equals("VAL\n   U\n   E",
+                             $t->{prefs}->getPreferencesValue("TWO"));
+}
+
 1;
