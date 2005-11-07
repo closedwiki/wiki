@@ -64,7 +64,7 @@ You can attach _any_ type of file to a topic - documents, images, programs, what
    * Do this again - this time, upload a GIF, JPG or PNG image file.
       * Check the ==[Link:]== box to _Create a link to the attached file at the end of the topic_. The image will show up at the bottom of the topic. 
       * To move the image, edit the topic and place the last line (containing =%<nop>ATTACHURL%=) anywhere on the page.
-   * If you have a GIF, JPG or PNG image of yourself, your cat, your sprawling family estate...why not upload it now to personalize your account page: %MAINWEB%.%USERNAME%?
+   * If you have a GIF, JPG or PNG image of yourself, your cat, your sprawling family estate...why not upload it now to personalize your account page: %WIKIUSERNAME%?
 
 ---++ 8. Get email alerts whenever pages are changed...
 %NOTIFYTOPIC% is a subscription service that automatically notifies you by email when topics change in a TWiki web. This is a convenience service - for many people, checking email is easier than checking the Web.
