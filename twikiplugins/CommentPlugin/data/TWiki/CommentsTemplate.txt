@@ -187,6 +187,6 @@ Note: UserTemplates is included from the TWiki web for backward compatibility on
 %TMPL:INCLUDE{"TWiki.UserTemplates"}%
 
 ---+ Include UserCommentsTemplate
-%TMPL:INCLUDE(UserComments}%
+%TMPL:INCLUDE{UserComments}%
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
