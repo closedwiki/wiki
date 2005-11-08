@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130332971" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131399571" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -23,7 +23,7 @@
 ~~~    format="| $index
 ~~~            | <nobr>$formatTime(createdate, '$day $mon $year')</nobr>
 ~~~            | [[$web.$topic][$formfield(Headline)]]
-~~~            | $formfield(SubjectCategory)
+~~~            | $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
 ~~~            |"
 ~~~ }%
 %STOPINCLUDE%

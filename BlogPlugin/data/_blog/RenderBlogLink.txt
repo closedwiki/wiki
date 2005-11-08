@@ -1,7 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130401792" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131398490" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
+... displayed as a form gathering all information about this link or an aggregation
+if the linked site has a nice rss feed.
 
 ---++ Parameters
    * NAME: topic name of an BlogLink
@@ -17,9 +19,9 @@
 ~~~   format="
 ~~~      $percntIFDEFINEDTHEN{\"$formfield(Feed)\" glue=\"off\"}$percnt
 ~~~      <div class=\"blogSubjectCategory\">
-~~~      $percntFORMATLIST{\"$formfield(SubjectCategory)\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~      $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
 ~~~      </div>
-~~~      <div>$formfield(Comment)</div>
+~~~      <div> $formfield(Url) <p/>$formfield(Comment)</div>
 ~~~      $percntHEADLINES{
 *~~         href=\"$formfield(Feed)\" 
 ~~~         limit=\"%LIMIT%\"
@@ -32,7 +34,7 @@
 ~~~      $n| *Name:* | $formfield(Name) |
 ~~~      $n| *Headline:* | $formfield(Headline) |
 ~~~      $n| *Url:* | $formfield(Url) |
-~~~      $n| *Category:* | $formfield(SubjectCategory) |
+~~~      $n| *Category:* | $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt |
 ~~~      $n$n<div> *Comment:* $formfield(Comment)</div>
 ~~~      $percntFIDEFINED%
 *~~      "

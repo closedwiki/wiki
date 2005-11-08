@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130333334" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131399643" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -41,7 +41,7 @@
 ~~~    createdate < %TO%
 ~~~   "
 ~~~   limit="1" hidenull="on"
-~~~   format="| %CAT% | $count |$n"
+~~~   format="| [[$web.%CAT%][%CAT%]] | $count |$n"
 ~~~ }%%ENDSECTION{"subquery"}%
 </verbatim>
 

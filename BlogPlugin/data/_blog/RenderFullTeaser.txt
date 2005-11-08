@@ -43,7 +43,7 @@ see also: RenderBlogTeaser
 ~~~     </span>
 ~~~     in 
 ~~~     <span class=\"blogCategory\"> 
-~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
 ~~~     </span>
 ~~~     <span class=\"blogAuthor\"> 
 ~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 

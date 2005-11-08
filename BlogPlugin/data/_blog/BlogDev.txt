@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129159992" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131397119" format="1.1" version="1.1"}%
 %INCLUDE{"RenderBlogEntriesInCategory" NAME="%TOPIC%"}%
-%INCLUDE{"RenderFeedsInCategory" NAME="%TOPIC%"}%
+%INCLUDE{"RenderBlogLinksInCategory" NAME="%TOPIC%"}%
 <style type="text/css">.natTopicForm {display:none}</style>
 
 <!--

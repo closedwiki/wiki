@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129884522" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131397120" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
 %NOP{
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 }%
 %INCLUDE{"RenderBlogEntriesInCategory" NAME="%TOPIC%"}%
-%INCLUDE{"RenderFeedsInCategory" NAME="%TOPIC%"}%
+%INCLUDE{"RenderBlogLinksInCategory" NAME="%TOPIC%"}%
 <style type="text/css">.natTopicForm {display:none}</style>
 
 <!--
