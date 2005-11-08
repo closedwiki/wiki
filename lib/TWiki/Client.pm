@@ -273,29 +273,28 @@ sub finish {
 Delete sessions that are sitting around but are really expired.
 This *assumes* that the sessions are stored as files.
 
-This is a static method, but requires TWiki::cfg
+This is a static method, but requires TWiki::cfg. It is designed to be
+run from a session or from a cron job.
 
 =cut
 
 sub expireDeadSessions {
 	my $time = time() || 0;
+    my $exp = $TWiki::cfg{Sessions}{ExpireAfter} || 36000; # 10 hours
+    $exp = -$exp if $exp < 0;
 
 	opendir(D, $TWiki::cfg{Sessions}{Dir}) || return;
 	foreach my $file ( grep { /cgisess_[0-9a-f]{32}/ } readdir(D) ) {
         $file = TWiki::Sandbox::untaintUnchecked(
             $TWiki::cfg{Sessions}{Dir}.'/'.$file );
 		my @stat = stat( $file );
-
-        my $lat = $stat[8] || $stat[9] || $stat[10] || 0;
-		# Abort tiny 2-day olds. They can't be valid sessions.
-		if( $time - $lat >= $TWiki::cfg{Sessions}{ExpireAfter} &&
-              $stat[7] <= 6 ) {
-			unlink $file;
-			next;
-		}
-
+        # Kill small old files. They can't be valid sessions.
 		# Ignore tiny new files. They can't be complete sessions.
-		next if ($stat[7] <= 6);
+        if( $stat[7] <= 50 ) {
+            my $lat = $stat[8] || $stat[9] || $stat[10] || 0;
+            unlink $file if( $time - $lat >= $exp );
+            next;
+		}
 
 		open(F, $file) || next;
 		my $session = <F>;
@@ -309,10 +308,8 @@ sub expireDeadSessions {
 		next if ( $@ );
         # The session is expired if it is empty, hasn't been accessed in ages
         # or has exceeded its registered expiry time.
-        if( !$D ||
-              $time >= $D->{_SESSION_ATIME} +
-                $TWiki::cfg{Sessions}{ExpireAfter} ||
-                  $D->{_SESSION_ETIME} && $time >= $D->{_SESSION_ETIME} ) {
+        if( !$D || $time >= $D->{_SESSION_ATIME} + $exp ||
+              $D->{_SESSION_ETIME} && $time >= $D->{_SESSION_ETIME} ) {
             unlink( $file );
             next;
         }

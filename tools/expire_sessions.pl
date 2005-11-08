@@ -20,6 +20,11 @@
 # This is so it can pick up the right TWiki environment from
 # setlib.cfg.
 #
+# It will expire sessions that have not been used for
+# |{Sessions}{ExpireAfter}| seconds i.e. if you set {Sessions}{ExpireAfter}
+# to -36000 or 36000 it will expire sessions that have not been used for
+# more than 100 hours,
+#
 BEGIN {
     unshift @INC, '.';
     require 'setlib.cfg';
