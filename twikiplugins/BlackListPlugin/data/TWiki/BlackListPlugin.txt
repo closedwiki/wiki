@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1131156658" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1131476373" format="1.0" version="1.10"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -54,10 +54,10 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 </form>
 
 	* BANLIST configuration, comma delimited list of: 
-		1 points for registration
+		1 Points for registration
 		2 Points for each save and upload
-		3 Points for view raw
-		4 Points for other actions like view
+		3 Points for view and other actions
+		4 Points for view raw
 		5 Threshold to add to BANLIST
 		6 Measured over time (in seconds)
 		* Set BANLISTCONFIG = 20, 5, 1, 20, 120, 300
@@ -93,7 +93,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set WIKISPAMMESSAGE = Wiki-spam detected: "%WIKISPAMWORD%" is a banned word and cannot be saved. Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
 ---+++ Registration protection settings
-	* Protect registration: (0 to disable, or number of minutes to expire)
+	* Protect registration: (number of minutes to expire, 15 minutes is recommended, 0 to disable)
 		* Set REGEXPIRE = 0
 		* If enabled, a magic number is protecting the registration process. TWiki expects a form field with a magic number. An error message is shown if not valid or if expired. This makes it harder to register a user by a script. A hidden field needs to be added to the registration form:%BR% =&lt;input type="hidden" name="rx" value="%<nop>BLACKLISTPLUGIN{ action="magic" }%" /&gt;=
 
@@ -129,8 +129,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 04 Nov 2005 |
+|  Plugin Version: | 08 Nov 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Nov 2005: | Doc fixes; code warning fixes; allow empty local SPAMLIST and public spam list |
 |  04 Nov 2005: | Added registration protection with magic number |
 |  30 Oct 2005: | Dakar Release compatibility: Work around Dakar preferencs bug |
 |  29 Oct 2005: | Added wiki-spam handling to prevent topic save with wiki-spam |
@@ -149,7 +150,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Blacklists/][Google blacklist directory]]
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 04 Nov 2005
+-- TWiki:Main/PeterThoeny - 08 Nov 2005
 

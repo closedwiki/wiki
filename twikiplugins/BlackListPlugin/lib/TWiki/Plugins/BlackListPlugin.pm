@@ -85,11 +85,10 @@ sub initPlugin
 
     # Registration protection
     if( ( $cgiQuery ) && ( $ENV{'SCRIPT_NAME'} ) && ( $ENV{'SCRIPT_NAME'} =~ /^.*\/register/ ) ) {
-        my $magic = "";
-        $magic = $cgiQuery->param('rx') || "";
-        $magic =~ s/.*?([0-9]+).*/$1/s || "";
+        my $magic = $cgiQuery->param('rx') || "";
+        $magic = "" unless( $magic =~ s/.*?([0-9]+).*/$1/s );
         my $expire = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGEXPIRE" ) || 0;
-        $expire =~ s/.*?([0-9]+).*/$1/s || 0;
+        $expire = 0 unless( $expire =~ s/.*?([0-9]+).*/$1/s );
         if( $expire > 0 ) {
             $expire *= 60;
             $expire = time() - $expire;
@@ -121,8 +120,7 @@ sub initPlugin
     # initialize for rel="nofollow" links
     $urlHost = TWiki::Func::getUrlHost();
     $noFollowAge = TWiki::Func::getPreferencesValue( "\U$pluginName\E_NOFOLLOWAGE" ) || 0;
-    $noFollowAge =~ s/.*?(\-?[0-9]*.*)/$1/ || 0;
-    $noFollowAge = 0 unless( $noFollowAge );
+    $noFollowAge = 0 unless( $noFollowAge =~ s/.*?(\-?[0-9]*.*)/$1/s );
     if( $noFollowAge > 0 ) {
         $noFollowAge *= 3600;
         my( $date ) = TWiki::Func::getRevisionInfo( $web, $topic );
@@ -247,6 +245,7 @@ sub beforeSaveHandler
     }
 
     my $spamListRegex = _getSpamListRegex();
+    return if( $spamListRegex =~ /\(\)$/ ); # empty list
     if( $_[0] =~ /$spamListRegex/ ) {
         my $badword = $1;
         my $cgiQuery = TWiki::Func::getCgiQuery();
@@ -415,7 +414,7 @@ sub _handleBlackList
         $text = int( rand( 100000 ) ) + 1;
         my $time = time();
         my $expire = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGEXPIRE" ) || 0;
-        $expire =~ s/.*?([0-9]+).*/$1/s || 0;
+        $expire = 0 unless( $expire =~ s/.*?([0-9]+).*/$1/s );
         $expire *= 60;
         $expire = $time - $expire;
         my $fileName = _makeFileName( "magic" );
@@ -624,7 +623,7 @@ sub _writeLog
         $TWiki::Plugins::SESSION
           ? $TWiki::Plugins::SESSION->writeLog( "blacklist", "$web.$topic", $theText )
           : TWiki::Store::writeLog( "blacklist", "$web.$topic", $theText );
-        writeDebug( "BLACKLIST access by $remoteAddr, $web/$topic, $theText" );
+        writeDebug( "BLACKLIST access, $web/$topic, $theText" );
     }
 }
 
