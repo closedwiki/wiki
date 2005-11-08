@@ -53,7 +53,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.71';
+$RELEASE = '2.74';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -943,7 +943,7 @@ sub ifDefinedImpl {
 	$theVariable = &_getValueFromTopic($web, $topic, $varName, $topicText);
 	$theVariable =~ s/^\s+//;
 	$theVariable =~ s/\s+$//;
-	$theVariable = &TWiki::Func::expandCommonVariables($theVariable);
+	$theVariable = &TWiki::Func::expandCommonVariables($theVariable, $web, $topic);
 	$theThen =~ s/%$varName%/$theVariable/g;# SMELL: do we need to backport topic vars?
       } else {
 	return $before.$theElse.$after unless $theElsIfArgs;
@@ -1272,7 +1272,8 @@ You may add the user to the $group topic at
 EOM
 
   $useSpamObfuscator = 0; # temporarily disable it
-  $text = &TWiki::Func::expandCommonVariables($text, $wikiName);
+  my $mainWeb = &TWiki::Func::getMainWebname();
+  $text = &TWiki::Func::expandCommonVariables($text, $wikiName, $mainWeb);
  
   writeDebug("This Email will be send:\n$text");
   my $senderr = &TWiki::Net::sendEmail($text); # FIXME on dakar
@@ -1567,9 +1568,12 @@ sub renderExternalLink
 
   my $addClass = 0;
   my $text = $thePrefix.$theUrl;
+  my $httpsUrlHost = $urlHost;
+  $httpsUrlHost =~ s/^http:\/\//https:\/\//go;
 
   $theUrl =~ /^http/i && ($addClass = 1); # only for http and hhtps
   $theUrl =~ /^$urlHost/i && ($addClass = 0); # not for own host
+  $theUrl =~ /^$httpsUrlHost/i && ($addClass = 0); # not for own host
   $thePrefix =~ /\sclass="natExternalLink"\s/ && ($addClass = 0); # prevent adding it twice
 
   if ($addClass) {
