@@ -33,7 +33,7 @@ _(Click for form-based editing of existing preferences.)_
       * Set FAVICON = %PUBURL%/%BASEWEB%/%WEBPREFSTOPIC%/favicon.ico
 
    * Copyright notice:
-      * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="&copy; 1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%BASEWEB%.%BASETOPIC%"}%
+      * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" width="80" height="15" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="&copy; 1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%BASEWEB%.%BASETOPIC%"}%
 
 
 
