@@ -53,7 +53,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.60';
+$RELEASE = '2.71';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -1464,7 +1464,7 @@ sub renderEmailObfuscator {
   #writeDebug("called renderEmailObfuscator()");
 
   my $text = "\n".
-    '<script language="javascript" type="text/javascript">'."\n".
+    '<script type="text/javascript">'."\n".
     '<!--'."\n";
 
   $text .= "function initObfuscator() {\n";
