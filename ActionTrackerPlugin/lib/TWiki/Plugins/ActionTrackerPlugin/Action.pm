@@ -485,11 +485,13 @@ sub _matchType_date {
 # action falls due
 sub _matchField_within {
     my ( $this, $val ) = @_;
-    my $slack = $this->secsToGo() - $val * 60 * 60 * 24;
+    my $secs = $this->secsToGo();
+    my $slack = $secs - $val * 60 * 60 * 24;
+
     if ($val > 0) {
-        return ($slack <= 0);
+        return ($slack <= 0) if ($secs > 0);
     } else {
-        return ($slack >= 0);
+        return ($slack >= 0) if ($secs < 0);
     }
 }
 
