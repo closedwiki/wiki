@@ -56,6 +56,9 @@ package TWiki::Plugins::HolidaylistPlugin;
 
 # =========================
 
+use strict;
+use warnings;
+
 use Date::Calc qw(:all);
 
 # not really required:
@@ -65,14 +68,17 @@ eval {
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+        $web $topic $user $installWeb $VERSION $pluginName
         $debug 
 	%defaults @renderedOptions @flagOptions $refText 
+	@unknownParams %options
+	%table %locationtable %icontable 
 	%months %daysofweek
 	$months_rx $date_rx $daterange_rx $bullet_rx $bulletdate_rx $bulletdaterange_rx $dow_rx $day_rx
 	$year_rx $monthyear_rx $monthyearrange_rx
 	$defaultsInitialized
-	$theWeb $theTopic
+	$theWeb $theTopic $attributes
+	$startDays
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -84,19 +90,21 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
- #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
-#VERSION = '1.011'; #dro# improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg;
-#VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
-#VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
-#VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
-#VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
-#VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
-#VERSION = '1.005'; #dro# added new features (startdate support; weekendbgcolor); fixed documentation bugs
-#VERSION = '1.004'; #dro# some performance improvements; code cleanup; documentation
-#VERSION = '1.003'; #dro# fix plugin preferences handling; format column name; rename some subroutines
-#VERSION = '1.002'; #dro# renders some options; fixes: white space bug, documentation bugs; 
-#VERSION = '1.001'; #dro# complete reimplementation of HolidaylistPlugin
-#VERSION = '1.021'; #pj# initial version
+
+$REVISION = '1.013'; #dro# added Perl strict pragma; 
+#$VERSION = '1.012'; #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
+#$VERSION = '1.011'; #dro# improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg;
+#$VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
+#$VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
+#$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
+#$VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
+#$VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
+#$VERSION = '1.005'; #dro# added new features (startdate support; weekendbgcolor); fixed documentation bugs
+#$VERSION = '1.004'; #dro# some performance improvements; code cleanup; documentation
+#$VERSION = '1.003'; #dro# fix plugin preferences handling; format column name; rename some subroutines
+#$VERSION = '1.002'; #dro# renders some options; fixes: white space bug, documentation bugs; 
+#$VERSION = '1.001'; #dro# complete reimplementation of HolidaylistPlugin
+#$VERSION = '1.021'; #pj# initial version
 
 $pluginName = 'HolidaylistPlugin';  # Name of this Plugin
 
@@ -227,8 +235,9 @@ sub initOptions() {
 	return 0 if $#unknownParams != -1; 
 
 	# Setup options (attributes>plugin preferences>defaults):
+	%options= ();
 	foreach my $option (@allOptions) {
-		$v = $params{$option};
+		my $v = $params{$option};
 		if (defined $v) {
 			if (grep /^\Q$option\E$/, @flagOptions) {
 				$options{$option} = ($v!=0)&&($v!~/no/i)&&($v!~/off/i);
@@ -388,6 +397,7 @@ sub getDays {
 }
 # =========================
 sub getTableRefs {
+	my ($person) = @_;
 	# cut whitespaces
 	$person=~s/\s+$//;
 
@@ -409,8 +419,9 @@ sub getTableRefs {
 }
 # =========================
 sub handleDateRange {
+	my ($person, $start, $end, $descr, $location, $icon, $excref) = @_;
 
-	my ($ptableref,$ltableref,$itableref) = getTableRefs();
+	my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);
 
 	my  $date = $startDays;
 	for (my $i=0; ($i < $options{days}) && (($date+$i)<=$end); $i++) {
@@ -431,28 +442,28 @@ sub handleDateRange {
 # =========================
 sub fetchHolidaylist {
 	my ($text) = @_;
-	local %table = ( );
-	local %locationtable = ( );
-	local %icontable = ( );
+	%table = ( );
+	%locationtable = ( );
+	%icontable = ( );
 
-	local ($dd,$mm,$yy) = &getStartDate();
+	my ($dd,$mm,$yy) = &getStartDate();
 
-	local ($startDays) = Date_to_Days($yy,$mm,$dd);
+	$startDays = Date_to_Days($yy,$mm,$dd);
 	
-	local ($eyy, $emm, $edd) = Add_Delta_Days($yy,$mm,$dd,$options{days});
-	local ($endDays) = Date_to_Days($eyy,$emm,$edd); 
+	my ($eyy, $emm, $edd) = Add_Delta_Days($yy,$mm,$dd,$options{days});
+	my ($endDays) = Date_to_Days($eyy,$emm,$edd); 
 	
-	local ($line, $descr);
+	my ($line, $descr);
 	foreach $line (grep(/$bullet_rx/, split(/\r?\n/, $text))) {
-		local ($person, $start, $end, $location, $icon);
+		my ($person, $start, $end, $location, $icon);
 
 		$line =~ s/$bullet_rx//g; 
 
 		$descr = $line;
 
-		&replaceSpecialDateNotations() if $options{compatmode}; 
+		&replaceSpecialDateNotations($line) if $options{compatmode}; 
 
-		local $excref = &fetchExceptions();
+		my $excref = &fetchExceptions($line, $startDays, $endDays);
 
 		if ( ($line =~ m/^$daterange_rx/) || ($line =~ m/^$monthyearrange_rx/) ) {
 			my ($sdate, $edate);
@@ -460,7 +471,7 @@ sub fetchHolidaylist {
 			($start, $end ) = ( &getDays($sdate, 0), &getDays($edate, 1) );
 			next unless (defined $start) && (defined $end);
 
-			&handleDateRange(); 
+			&handleDateRange($person, $start, $end, $descr, $location, $icon, $excref); 
 
 		} elsif ( ($line =~ m/^$date_rx/) || ($line =~ m/^$monthyear_rx/) ) {
 			my $date;
@@ -468,9 +479,9 @@ sub fetchHolidaylist {
 			($start, $end) = ( &getDays($date,0), &getDays($date,1) );
 			next unless (defined $start) && (defined $end);
 
-			&handleDateRange();
+			&handleDateRange($person, $start, $end, $descr, $location, $icon, $excref);
 		} elsif ($options{compatmode}) {
-			&handleCalendarEvents();
+			&handleCalendarEvents($line, $descr, $yy,$mm,$dd, $startDays, $endDays, $excref);
 		}
 
 	}
@@ -506,21 +517,22 @@ sub replaceSpecialDateNotations {
 	# replace special (business) notations:
 	### DDD Wn yyyy
 	### DDD Week n yyyy
-	$line =~s /($dow_rx)\s+W(eek)?\s*([0-9]?[0-9])\s+($year_rx)/getFullDateFromBusinessDate($1,$3,$4)/egi;
+	$_[0] =~s /($dow_rx)\s+W(eek)?\s*([0-9]?[0-9])\s+($year_rx)/getFullDateFromBusinessDate($1,$3,$4)/egi;
 	### Wn yyyy
 	### Week n yyyy
-	$line =~s /W(eek)?\s*([0-9]?[0-9])\s+($year_rx)/getFullDateFromBusinessDate('Mon',$2,$3)/egi;
+	$_[0] =~s /W(eek)?\s*([0-9]?[0-9])\s+($year_rx)/getFullDateFromBusinessDate('Mon',$2,$3)/egi;
 }
 # =========================
 sub fetchExceptions {
+	my ($line, $startDays, $endDays) = @_;
 
 	my @exceptions = ( );
 
-	$line =~s /X\s+{\s*([^}]+)\s*}// || return \@exceptions;
+	$_[0] =~s /X\s+{\s*([^}]+)\s*}// || return \@exceptions;
 	my $ex=$1;
 
 
-	for $x ( split /\s*\,\s*/, $ex ) {
+	for my $x ( split /\s*\,\s*/, $ex ) {
 		my ($start, $end) = (undef, undef);
 		if (($x =~ m/^$daterange_rx$/)||($x =~ m/^$monthyearrange_rx/)) {
 			my ($sdate,$edate) = split /\s*\-\s*/, $x;
@@ -544,7 +556,7 @@ sub fetchExceptions {
 # =========================
 sub getFullDateFromBusinessDate {
 	my($t_dow, $week, $year) = @_;
-
+	my ($ret);
 	my ($y1,$m1,$d1);
 	if (check_business_date($year, $week, $daysofweek{$t_dow})) {
 		($y1, $m1, $d1) = Business_to_Standard($year,$week,$daysofweek{$t_dow});
@@ -554,12 +566,13 @@ sub getFullDateFromBusinessDate {
 }
 # =========================
 sub handleCalendarEvents {
-	my ($strdate);
+	my ($line, $descr, $yy,$mm,$dd, $startDays, $endDays, $excref) = @_;
+	my ($strdate, $person, $location, $icon);
 
 	if  ($line =~ m/^A\s+$date_rx/) {
 		### Yearly: A dd MMM yyyy
 		($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
-		my ($ptableref,$ltableref,$itableref) = getTableRefs();
+		my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);
 		$strdate=~s/^A\s+//;
 		my ($dd1, $mm1, $yy1) = split /\s+/, $strdate;
 		$mm1 = $months{$mm1};
@@ -579,7 +592,7 @@ sub handleCalendarEvents {
 	} elsif ($line =~ m/^$day_rx\s+($months_rx)/) {
 		### Interval: dd MMM
 		($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
-		my ($ptableref,$ltableref,$itableref) = getTableRefs();
+		my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);
 		my ($dd1, $mm1) = split /\s+/, $strdate;
 		$mm1 = $months{$mm1};
 		return if $dd1>31;
@@ -600,7 +613,7 @@ sub handleCalendarEvents {
 		### Monthly: L DDD
 
 		($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
-		my ($ptableref,$ltableref,$itableref) = getTableRefs();
+		my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);
 		my ($n1,$dow1,$mm1) = split /\s+/, $strdate;
 		$dow1 = $daysofweek{$dow1};
 		$mm1 = $months{$mm1} if defined $mm1;
@@ -633,7 +646,7 @@ sub handleCalendarEvents {
 	} elsif ($line =~ m/^$day_rx\s+/) {
 		### Monthly: dd
 		($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
-		my ($ptableref,$ltableref,$itableref) = getTableRefs();
+		my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);
 		return if $strdate > 31;
 		for (my $i=0; $i < $options{days}; $i++) {
 			next if $$excref[$i];
@@ -655,7 +668,7 @@ sub handleCalendarEvents {
 		} else {
 			($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
 		}
-		my ($ptableref,$ltableref,$itableref) = getTableRefs();	
+		my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);	
 
 		$strdate=~s/^E\s+//;
 		my ($dow1) = split /\s+/, $strdate;
@@ -701,7 +714,7 @@ sub handleCalendarEvents {
 		} else {
 			($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
 		}
-		my ($ptableref,$ltableref,$itableref) = getTableRefs();
+		my ($ptableref,$ltableref,$itableref) = &getTableRefs($person);
 
 		$strdate=~s/^E//;
 		my ($n1) = split /\s+/, $strdate;
@@ -710,7 +723,7 @@ sub handleCalendarEvents {
 
 		$strdate=~s/^\d+\s+//;
 
-		($start, $end) = (undef, undef);
+		my ($start, $end) = (undef, undef);
 		my ($dd1, $mm1, $yy1) = split /\s+/, $strdate;
 		$mm1 = $months{$mm1};
 

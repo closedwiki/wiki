@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1125920033" format="1.0" version="1.29"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131456524" format="1.0" version="$Rev$"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -41,7 +41,7 @@ Example5: To list that Lisa will by not at work from April to June and the compl
 	* Dec 2005 - Lisa
 </verbatim>
 
-Example6: To list in all time table entries that anybody will by not at work on Christmas Day:
+Example6: To list in all time table entries that anybody will be not at work on Christmas Day:
 <verbatim>
 	* 25 Dec 2005 - Christmas Day @all
 </verbatim>
@@ -71,7 +71,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |^| ==&nbsp;* MMM yyyy - MMM yyyy - name - location - icon==| ==&nbsp;* Nov 2005 - Dec 2005 - Lola - is 2 month not at work - :yes:== |
 | Exception | insert the following before the name field and after a date (range): \
   ==&nbsp;X { dd MMM yyyy, dd MMM yyy - dd MMM yyyy }== | ==&nbsp;* Dec 2005 X { 5 Dec 2005 - 7 Dec 2005, 12 Dec 2005 } - Sarah - will be away for the complete december except between 5 Dec and 7 Dec and on 12 Dec 2005== |
-| Public Holidays | just type '@all' in the name field | ==&nbsp;* 25 Dec - Christmas Day @all== | 
+| Public Holidays | just type '@all' in the name field | ==&nbsp;* 25 Dec 2005 - Christmas Day @all== | 
 
 
 *Notes and hints:*
@@ -90,7 +90,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	  </verbatim>  
 	  or if you put the entries to another topic and use the topic attribute, e.g: 
 	  <verbatim> %<nop>HOLIDAYLIST{topic="TimeTableDataTopic" tablecaption="Planned Holidays (see TimeTableDataTopic)"}% </verbatim>
-	* You can hide "@all" in a entry if you put it into HTML comments, e.g: <verbatim>&nbsp;* 25 Dec 2005 - Christmas Day &lt;!--@all--&gt;</verbatim>
+	* You can hide '@all' in an entry if you put it into HTML comments, e.g: <verbatim>&nbsp;* 25 Dec 2005 - Christmas Day &lt;!--@all--&gt;</verbatim>
 #AttriButes
 ---++ Attributes
 
@@ -138,7 +138,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 
 
 *Hints:* 
-	* You can use TWiki.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon, compatmodeicon
+	* You can use TWiki.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon, compatmodeicon, pubholidayicon
 	* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
 ---++ Example
@@ -201,7 +201,6 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/example.gif== | Example image |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed: Copy the example above into a new topic and change
 	  the year number to the current year.
 
@@ -209,8 +208,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.012 (5 Sep 2005) |
+|  Plugin Version: | v1.013 (8 Nov 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.013 (8 Nov 2005) | TWiki:Main.DanielRohde: added Perl strict pragma; | 
 |  v1.012 (5 Sep 2005): | TWiki:Main.DanielRohde: added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli |
 |  v1.011 (11 Jul 2005): | TWiki:Main.DanielRohde: improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg |
 |  v1.010 (5 Jul 2005): | TWiki:Main.DanielRohde: added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation |
