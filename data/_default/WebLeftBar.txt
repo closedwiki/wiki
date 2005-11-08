@@ -3,6 +3,7 @@
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarSearch" }%
 ---
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
+   * [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/WebTopicCreator?parent=%BASETOPIC%][ %ICON{"newtopic"}% %MAKETEXT{"Create New Topic"}%]]
    * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
    * [[%INCLUDINGWEB%.WebSearch][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
    * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
