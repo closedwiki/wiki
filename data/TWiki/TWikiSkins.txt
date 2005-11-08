@@ -17,6 +17,51 @@ Use the existing TWikiTemplates (like =view.tmpl=) or skin files as a base for y
 
 %X% Two skin names have _reserved_ meanings; =text= skin, and skin names starting with =rss= have _hard-coded meanings. [[HardCodedSkins][See below]].
 
+The following template files are referenced in the TWiki core code, and must be defined in the =templates= directory for a skin to work. Remember that if a skin doesn't define a template, then TWiki will fall back to the default version of the file.
+
+Certain template files are expected to provide certain TMPL:DEFs - these are listed in sub-bullets.
+   * =addform=
+   * =attachagain=
+   * =attachnew=
+   * =attachtables=
+      * =ATTACH:files:footer=, =ATTACH:files:header=, =ATTACH:files:row=, =ATTACH:versions:footer=, =ATTACH:versions:header=, =ATTACH:versions:row=
+   * =changeform=
+   * =changes=
+   * =edit=
+   * =form=
+   * =formtables=
+      * =FORM:display:footer=, =FORM:display:header=, =FORM:display:row=
+   * =login=
+      * =LOG_IN=, =LOG_IN_BANNER=, =LOG_OUT=, =LOGGED_IN_BANNER=, =NEW_USER_NOTE=, =UNRECOGNISED_USER=
+   * =mirrorlink=
+   * =mirrornote=
+   * =moveattachment=
+   * =oops=
+   * =oopsaccessdenied=
+      * =no_such_topic=, =no_such_web=, =only_group=, =topic_access=
+   * =oopsattention=
+      * =already_exists=, =bad_email=, =bad_ver_code=, =bad_wikiname=, =base_web_missing=, =confirm=, =created_web=, =delete_err=, =illegally_named_upload=, =invalid_web_color=, =invalid_web_name=, =in_a_group=, =mandatory_field=, =merge_notice=, =missing_action=, =missing_fields=, =move_err=, =missing_action=, =no_form_def=, =no_users_to_reset=, =notwikiuser=, =oversized_upload=, =password_changed=, =password_mismatch=, =problem_adding=, =remove_user_done=, =rename_err=, =rename_not_wikiword=, =rename_topic_exists=, =rename_web_err=, =rename_web_exists=, =rename_web_prerequisites=, =reset_bad=, =reset_ok=, =save_error=, =send_mail_error=, =thanks=, =topic_exists=, =unrecognized_action=, =web_creation_error=, =web_exists=, =web_missing=, =wrong_password=, =zero_size_upload=
+   * =oopsleaseconflict=
+      * =active=, =old=
+   * =oopsmirror=
+   * =oopssaveerr=
+   * =preview=
+   * =rename=
+   * =renameconfirm=
+   * =renamedelete=
+   * =renameweb=
+   * =renamewebconfirm=
+   * =renamewebdelete=
+   * =searchbookview=
+   * =searchformat=
+   * =search=
+   * =settings=
+   * =rdiff=
+   * =registernotify=
+   * =registernotifyadmin=
+   * =twikicatitems=
+   * =view=
+
 ---++ Variables in Skins
 
 You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVariables, and other predefined variables to compose your skins. Some commonly used variables in skins:
