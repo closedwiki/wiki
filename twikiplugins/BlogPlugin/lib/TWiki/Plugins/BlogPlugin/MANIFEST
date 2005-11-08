@@ -47,7 +47,7 @@ data/_blog/RenderBlogTeaser.txt
 data/_blog/RenderCategories.txt
 data/_blog/RenderCategoriesInSpan.txt
 data/_blog/RenderDocNavigation.txt
-data/_blog/RenderFeedsInCategory.txt
+data/_blog/RenderBlogLinksInCategory.txt
 data/_blog/RenderFrontPage.txt
 data/_blog/RenderFullTeaser.txt
 data/_blog/RenderFunctionCallers.txt
