@@ -68,7 +68,7 @@ eval {
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $REVISION $pluginName
         $debug 
 	%defaults @renderedOptions @flagOptions $refText 
 	@unknownParams %options
