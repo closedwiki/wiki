@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130516069" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1130959811" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
 
 This is the supplemental plugin for the NatSkin. Its main purpose is to supply "skin states"
@@ -314,7 +314,7 @@ to your TWiki.TWikiPreferences like
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Plugin Version: | v2.71 (2005-11-02) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|   2 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
+|  02 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
 |  28 Oct 2005: | add searchbox and style variations to the skin state; \
                   configuring header art is now done using style variations; \
                   fixed the NatSkinStyleBrowser to only "stick" to changes; \
@@ -345,5 +345,5 @@ to your TWiki.TWikiPreferences like
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 28 Oct 2005 
+-- TWiki:Main.MichaelDaum - 02 Nov 2005 
 
