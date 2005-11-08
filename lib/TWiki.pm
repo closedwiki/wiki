@@ -491,9 +491,9 @@ sub UTF82SiteCharSet {
     # If not UTF-8 - assume in site character set, no conversion required
     return undef unless( $text =~ $regex{validUtf8StringRegex} );
 
-    # If site charset is already UTF-8 no need to convert anything:
+    # If site charset is already UTF-8, there is no need to convert anything:
     if ( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
-        # Convert into internal Unicode characters if on Perl 5.8 or higher.
+        # warn if using Perl older than 5.8
         if( $] <  5.008 ) {
             $this->writeWarning( 'UTF-8 not supported on Perl '.$].
                                  ' - use Perl 5.8 or higher..' );
@@ -1753,15 +1753,17 @@ quote should be escaped as <strong class=html>&amp;quot;</strong>.</p>
 Other entities exist for special characters that cannot easily be entered
 with some keyboards...
 
-This method encodes &lt;, &gt;, &amp;, &quot; and any 8-bit characters
-using numeric entities.
+This method encodes &lt;, &gt;, &amp;, &quot; and any non-printable ascii
+characters (except for \n and \r) using numeric entities.
 
 =cut
 
 sub entityEncode {
     my $text = shift;
 
-    $text =~ s/([^ -~\n\r]|[]["<>&])/'&#'.ord( $1 ).';'/ge;
+    # encode with entities all non-printable ascii chars (< \x1f),
+    # except \n (\xa) and \r (\xd); plus '>', '<', '&' and '"'.
+    $text =~ s/[\x1-\x9\xb\xc\xe-\x1f<>"&]/'&#'.ord($&).';'/ge;
     return $text;
 }
 
