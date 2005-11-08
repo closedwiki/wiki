@@ -59,7 +59,6 @@ Certain template files are expected to provide certain TMPL:DEFs - these are lis
    * =rdiff=
    * =registernotify=
    * =registernotifyadmin=
-   * =twikicatitems=
    * =view=
 
 ---++ Variables in Skins
