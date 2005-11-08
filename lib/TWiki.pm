@@ -491,6 +491,20 @@ sub UTF82SiteCharSet {
     # If not UTF-8 - assume in site character set, no conversion required
     return undef unless( $text =~ $regex{validUtf8StringRegex} );
 
+    # If site charset is already UTF-8 no need to convert anything:
+    if ( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
+        # Convert into internal Unicode characters if on Perl 5.8 or higher.
+        if( $] <  5.008 ) {
+            $this->writeWarning( 'UTF-8 not supported on Perl '.$].
+                                 ' - use Perl 5.8 or higher..' );
+        }
+
+        # SMELL: is this true yet?
+        $this->writeWarning( 'UTF-8 not yet supported as site charset -'.
+                             'TWiki is likely to have problems' );
+        return $text;
+    }
+
     # Convert into ISO-8859-1 if it is the site charset
     if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
         # ISO-8859-1 maps onto first 256 codepoints of Unicode
@@ -498,18 +512,6 @@ sub UTF82SiteCharSet {
         $text =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
           chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
             /egx;
-    } elsif ( $TWiki::cfg{Site}{CharSet} eq 'utf-8' ) {
-        # Convert into internal Unicode characters if on Perl 5.8 or higher.
-        if( $] >= 5.008 ) {
-            require Encode;            # Perl 5.8 or higher only
-            # 'decode' into UTF-8
-            $text = Encode::decode('utf8', $text);
-        } else {
-            $this->writeWarning( 'UTF-8 not supported on Perl '.$].
-                                 ' - use Perl 5.8 or higher..' );
-        }
-        $this->writeWarning( 'UTF-8 not yet supported as site charset -'.
-                             'TWiki is likely to have problems' );
     } else {
         # Convert from UTF-8 into some other site charset
         if( $] >= 5.008 ) {
