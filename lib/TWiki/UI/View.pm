@@ -167,14 +167,16 @@ sub view {
         'view';
 
     my $tmpl = $session->{templates}->readTemplate( $template, $skin );
-    unless( $tmpl ) {
-        my $mess = CGI::start_html().
-          CGI::h1('TWiki Installation Error').
-          'Template "'.$template.'" not found '.CGI::p().
-            'Check the configuration setting for {TemplateDir}'.
-                CGI::end_html();
-        $session->writeCompletePage( $mess );
-        return;
+    if( !$tmpl && $template ne 'view' ) {
+        $tmpl = $session->{templates}->readTemplate( 'view', $skin );
+    }
+
+    if( !$tmpl ) {
+        throw TWiki::OopsException( 'attention',
+                                    def => 'no_such_template',
+                                    web => $webName,
+                                    topic => $topicName,
+                                    params => [ $template, 'VIEW_TEMPLATE' ] );
     }
 
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;

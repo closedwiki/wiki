@@ -188,15 +188,20 @@ sub edit {
     # Get edit template, standard or a different skin
     my $template = $session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
         'edit';
-    $tmpl = $session->{templates}->readTemplate( $template.$editaction, $skin );
-    if( ! $tmpl ) {
-        my $mess = CGI::start_html().
-          CGI::h1('TWiki Installation Error').
-              'Template '.$template.$editaction.'" not found'.
-              'Check the configuration setting for {TemplateDir}'.
-                CGI::end_html();
-        $session->writeCompletePage( $mess );
-        return;
+    $tmpl =
+      $session->{templates}->readTemplate( $template.$editaction, $skin );
+
+    if( !$tmpl && $template ne 'edit' ) {
+        $tmpl = $session->{templates}->readTemplate( 'edit', $skin );
+    }
+
+    if( !$tmpl ) {
+        throw TWiki::OopsException( 'attention',
+                                    def => 'no_such_template',
+                                    web => $webName,
+                                    topic => $topic,
+                                    params => [ $template.$editaction,
+                                                'EDIT_TEMPLATE' ] );
     }
 
     unless( $topicExists ) {
@@ -221,9 +226,9 @@ sub edit {
         }
 
         $text = $session->expandVariablesOnTopicCreation( $text, $user );
-	$tmpl =~ s/%NEWTOPIC%/1/;
+        $tmpl =~ s/%NEWTOPIC%/1/;
     } else {
-	$tmpl =~ s/%NEWTOPIC%//;
+        $tmpl =~ s/%NEWTOPIC%//;
     }
     $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/;
 

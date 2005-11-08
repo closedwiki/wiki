@@ -312,6 +312,16 @@
 
 %TMPL:END%
 
+%TMPL:DEF{no_such_template}%
+%_{"Could not find template"}% =%PARAM1%=
+
+%_{"Check your configuration setting for {TemplateDir}. If that's not the problem, it may be because you have a setting of =%PARAM2%= that is pointing to a template that doesn't exist."}%
+
+=%PARAM2%= %_{"is currently set to"}% <code><nop>%%PARAM2%%</code>
+
+(don't forget to check your Topic Settings)
+%TMPL:END%
+
 %TMPL:DEF{"message"}%
 %INSTANTIATE%
 %TMPL:END%
