@@ -86,8 +86,6 @@ h1, h2, h3, h4, h5, h6 {
   overflow:hidden;
 }
 .natTopBarSizer {
-  height:5em;
-  max-height:5em;
   border:1px solid transparent; /* konqueror fix */
 }
 
