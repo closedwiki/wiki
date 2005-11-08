@@ -1763,7 +1763,7 @@ sub entityEncode {
 
     # encode with entities all non-printable ascii chars (< \x1f),
     # except \n (\xa) and \r (\xd); plus '>', '<', '&' and '"'.
-    $text =~ s/[\x1-\x9\xb\xc\xe-\x1f<>"&]/'&#'.ord($&).';'/ge;
+    $text =~ s/[\x{1}-\x{9}\x{b}\x{c}\x{e}-\x{1f}<>"&]/'&#'.ord($&).';'/ge;
     return $text;
 }
 
