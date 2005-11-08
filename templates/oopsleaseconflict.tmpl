@@ -28,6 +28,7 @@
 %TMPL:END%
 %TMPL:DEF{"topicaction"}%
 [[%WEB%.%TOPIC%][%_{"View topic"}%]] %TMPL:P{"sep"}%
+<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a> %TMPL:P{"sep"}%
 <form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %QUERYPARAMS% 
 <input type="submit" value='%_{"Try Again"}%' />
