@@ -17,7 +17,6 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 
    * All !PatternSkin specific classes have the prefix =pattern=: patternEditPage, patternTopicAction, etcetera. 
    * TWiki specific classes (emitted by the TWiki engine) have the prefix =twiki=: twikiButton, twikiToc, etcetera. See for a complete list TWikiCss.
-   * ID names are not used, only class names, to allow multipe class names. 
 
 ---++ Namespaces
 
@@ -42,21 +41,25 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 ---++ Layout classes
 
    * Main layout elements
-      * .patternPage - html content container
-      * .patternMiddleContainer - holder for patternMain and twikiLeftbar
-      * .patternMain - holder of patternTop, patternTopic, twikiAttachments, etc.
-      * .patternTopBar - top bar area
-      * .patternTopBarContents - logo
-      * .patternLeftBar - left bar area
+      * #patternScreen - holder of patternPageShadow and patternBottomBar
+      * #patternPageShadow - shadow border around patternPage
+      * #patternPage - html content container
+      * #patternColumnWrapper - holder for patternMain and patternLeftbar
+      * #patternMain - holder of patternMainContents
+      * #patternTopBar - top bar area
+      * .patternTopBarContents - header art with logo; contains topic %TWIKIWEB%.WebTopBar
+      * #patternLeftBar - left bar area
       * .patternLeftBarContents - used for left menu
-      * .patternBottomBar - bottom bar area
+      * #patternBottomBar - bottom bar area
       * .patternBottomBarContents - copyright
 
 ---++ Style classes
 
    * View
-      * .patternPageShadow - shadow border around .patternPage
+      * .patternMainContents - holder of patternTop, patternTopic, twikiForm, twikiAttachments, etc.
       * .patternContent - container around .patternTopic in view.pattern.tmpl only; to be able to give .twikiAttachments and .twikiForm a different appearance when they are not enclosed by it, for example the personal data form on the user pages
+      * .patternTopBarLogo - logo position in patternTopBar (topic %TWIKIWEB%.WebTopBar)
+      * .patternTopBarOverlay - striped white image background
       * .patternTopic - TWiki topic text
       * .patternTop - area at top of topic text, with patternHomePath, revision and action buttons
       * .patternTopicAction - container for .patternActionButtons

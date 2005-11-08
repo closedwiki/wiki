@@ -9,6 +9,9 @@ The official TWiki logo is a big "T" in a speech bubble convenying "working toge
 %STARTINCLUDE%
 <table cellpadding="5"><tr><td valign="top">
 
+=T-logo-235x67.png=: <br />
+    <img src="%ATTACHURLPATH%/T-logo-235x67.png" alt="T-logo, no text, white bg, 235x67" />
+    
 =T-logo-169x130-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-169x130-t.gif" alt="T-logo, no text, transparent bg, 169x130" />
 
@@ -32,6 +35,12 @@ The official TWiki logo is a big "T" in a speech bubble convenying "working toge
 =T-logo-456x130-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-456x130-t.gif" alt="T-logo, transparent bg, 456x130" />
 
+=T-logo-235x67-t.png=: <br />
+    <img src="%ATTACHURLPATH%/T-logo-235x67-t.png" alt="T-logo, transparent bg, 235x67" />
+    
+=T-logo-235x67-t.gif=: <br />
+    <img src="%ATTACHURLPATH%/T-logo-235x67-t.gif" alt="T-logo, transparent bg, 235x67" />
+    
 =T-logo-175x50-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-175x50-t.gif" alt="T-logo, transparent bg, 175x50" />
 

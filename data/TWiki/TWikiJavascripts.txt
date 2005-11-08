@@ -1,8 +1,8 @@
 ---+ TWiki Javascripts
 
-This topic contains javascript files that are included by TWiki templates.
+This topic contains javascript files that are included by TWiki templates, and may be used by skin templates and in topics.
 
-__Related Topics:__ TWikiTemplates, TWikiSkins
+__Related Topics:__ TWikiTemplates, TWikiSkins, PatternJavascripts
 
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 	
