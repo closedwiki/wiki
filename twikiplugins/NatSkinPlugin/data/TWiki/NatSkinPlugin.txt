@@ -312,8 +312,9 @@ to your TWiki.TWikiPreferences like
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.71 (2005-11-02) |
+|  Plugin Version: | v2.74 (2005-11-08) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Nov 2005: | fixed use of uninitialized variables; https links to the same site are not external once |
 |  02 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
 |  28 Oct 2005: | add searchbox and style variations to the skin state; \
                   configuring header art is now done using style variations; \
@@ -345,5 +346,5 @@ to your TWiki.TWikiPreferences like
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 02 Nov 2005 
+-- TWiki:Main.MichaelDaum - 08 Nov 2005 
 
