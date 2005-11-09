@@ -584,7 +584,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>S
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
-	* Do not handle =%<nop>CALC{}%= tag in included topic while including topic: (default: 1)
+	* Do not handle =%<nop>CALC{}%= variable in included topic while including topic: (default: 1)
 		* Set SKIPINCLUDE = 1
 
 <noautolink>
