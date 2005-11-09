@@ -53,6 +53,8 @@ BEGIN {
         my $query = new CGI("");
         $query->path_info("/Current/TestTopic");
         my $twiki = new TWiki(undef, $query);
+        $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
+        $twiki = new TWiki(undef, $query);
         $TWiki::Plugins::SESSION = $twiki;
         $page = $twiki->getScriptUrl('Current', 'TestTopic', 'view');
     }
@@ -231,7 +233,7 @@ HERE
               name => 'simpleBullList',
               html => '<ul><li>bullet item</li></ul>',
               tml => <<'HERE',
-	* bullet item
+   * bullet item
 
 HERE
           },
@@ -251,8 +253,8 @@ X
 HERE
               finaltml => <<'HERE',
 X
-	* level 1
-		* level 2 
+   * level 1
+      * level 2 
 HERE
           },
           {
@@ -265,15 +267,15 @@ HERE
 <ol><li>Sushi</li><li type="A">Sushi</li><li type="i">Sushi</li></ol>
 HERE
               tml => <<'HERE',
-	1 Sushi
+   1 Sushi
 
-	A. Sushi
+   A. Sushi
 
-	i. Sushi
+   i. Sushi
 
-	1 Sushi
-	A. Sushi
-	i. Sushi
+   1 Sushi
+   A. Sushi
+   i. Sushi
 
 HERE
           },
@@ -285,13 +287,13 @@ HERE
 <ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello<br />kitty</li></ol>
 HERE
               tml => <<'HERE',
-	1 Things
-	1 Stuff
-		* Banana Stuff
-		* Other
-		* 
-	1 Something
-	1 kello<br />kitty
+   1 Things
+   1 Stuff
+      * Banana Stuff
+      * Other
+      * 
+   1 Something
+   1 kello<br />kitty
 
 HERE
           },
@@ -303,14 +305,14 @@ HERE
 HERE
               tml => <<'HERE',
    $ Sushi: Japan
-	$ Dim Sum: S. F.
-	Sauerkraut: Germany
+   $ Dim Sum: S. F.
+   Sauerkraut: Germany
 
 HERE
               finaltml => <<'HERE',
    Sushi: Japan
-	$ Dim Sum: S. F.
-	Sauerkraut: Germany
+   $ Dim Sum: S. F.
+   Sauerkraut: Germany
 
 HERE
           },
