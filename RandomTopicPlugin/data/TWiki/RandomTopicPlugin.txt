@@ -63,7 +63,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/MichaelSparks |
 |  Plugin Version: | %$VERSION% |
 | Change History: <!-- Most recent first --> ||
-|  15 Nov 2004 | 1.200 Crawford Currie - removed non-functional persist option, added exclude and include parameters, ported to Cairo & BuildCOntrib build system, add to CVS. |
+|  15 Nov 2004 | 1.200 Crawford Currie - removed non-functional persist option, added exclude and include parameters, ported to Cairo & BuildContrib build system, add to CVS. |
 |  10 Jul 2003 | 1.010 Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.005 |
