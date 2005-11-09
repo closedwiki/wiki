@@ -44,7 +44,13 @@ close(R);
 # extract the strings in a new potfile.
 print("I: scanning sources, it may take some time...\n");
 my $extractor = new TWiki::I18N::Extract;
-$extractor->extract_file($_) foreach @sources;
+foreach my $file (@sources) {
+  if ( -e $file ) {
+    $extractor->extract_file($file) ;
+  } else {
+    print "W: $file is listed in MANIFEST and does not exist!\n";
+  }
+}
 $extractor->compile();
 $extractor->write_po($newpotfile);
 
