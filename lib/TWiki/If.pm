@@ -97,6 +97,9 @@ $defOps{'$'} =
     exec => sub {
         my( $twiki, $a, $b ) = @_;
         my $text = $b->evaluate($twiki) || '';
+        if( $text && defined( $twiki->{cgiQuery}->param( $text ))) {
+            return $twiki->{cgiQuery}->param( $text );
+        }
         $text = "%$text%";
         $twiki->_expandAllTags(\$text,
                                $twiki->{topicName},
@@ -110,8 +113,11 @@ $defOps{defined} =
     type => 0, # unary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        my $eval =  $b->evaluate($twiki) || '';
-        return defined( $twiki->{prefs}->getPreferencesValue( $eval ));
+        my $eval =  $b->evaluate($twiki);
+        return 0 unless $eval;
+        return 1 if( defined( $twiki->{cgiQuery}->param( $eval )));
+        return 1 if( defined( $twiki->{prefs}->getPreferencesValue( $eval )));
+        return 0;
     }
    };
 $defOps{'='} =
@@ -138,7 +144,9 @@ $defOps{'>='} =
     type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return $a->evaluate($twiki) >= $b->evaluate($twiki);
+        my $ea = $a->evaluate($twiki) || 0;
+        my $eb = $b->evaluate($twiki) || 0;
+        return $ea >= $eb;
     }
    };
 $defOps{'<='} =
@@ -147,7 +155,9 @@ $defOps{'<='} =
     type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return $a->evaluate($twiki) <= $b->evaluate($twiki);
+        my $ea = $a->evaluate($twiki) || 0;
+        my $eb = $b->evaluate($twiki) || 0;
+        return $ea <= $eb;
     }
    };
 $defOps{'>'} =
@@ -156,7 +166,9 @@ $defOps{'>'} =
     type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return $a->evaluate($twiki) > $b->evaluate($twiki);
+        my $ea = $a->evaluate($twiki) || 0;
+        my $eb = $b->evaluate($twiki) || 0;
+        return $ea > $eb;
     }
    };
 $defOps{'<'} =
@@ -165,7 +177,9 @@ $defOps{'<'} =
     type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return $a->evaluate($twiki) < $b->evaluate($twiki);
+        my $ea = $a->evaluate($twiki) || 0;
+        my $eb = $b->evaluate($twiki) || 0;
+        return $ea < $eb;
     }
    };
 $defOps{not} =
