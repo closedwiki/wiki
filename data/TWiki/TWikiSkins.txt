@@ -46,6 +46,9 @@ Certain template files are expected to provide certain TMPL:DEFs - these are lis
    * =oopsmirror=
    * =oopssaveerr=
    * =preview=
+   * =rdiff=
+   * =registernotify=
+   * =registernotifyadmin=
    * =rename=
    * =renameconfirm=
    * =renamedelete=
@@ -56,10 +59,8 @@ Certain template files are expected to provide certain TMPL:DEFs - these are lis
    * =searchformat=
    * =search=
    * =settings=
-   * =rdiff=
-   * =registernotify=
-   * =registernotifyadmin=
    * =view=
+=twiki.tmpl= is a master template conventionally used by other templates, but not used directly by code.
 
 ---++ Variables in Skins
 
