@@ -31,7 +31,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '1.27';
+$RELEASE = '1.28';
 
 ###############################################################################
 sub writeDebug {
@@ -168,7 +168,7 @@ sub renderRedDot {
 
   my $theWebTopics;
   if ($theWebTopics = &TWiki::Func::extractNameValuePair($args)) {
-    $theWebTopics = &TWiki::Func::expandCommonVariables($theWebTopics);
+    $theWebTopics = &TWiki::Func::expandCommonVariables($theWebTopics, $topic, $web);
   } else {
     $theWebTopics = "$web.$topic";
   }
