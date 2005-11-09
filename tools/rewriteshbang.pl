@@ -3,6 +3,10 @@
 # Rewrite "/usr/bin/perl" shebang lines to "perl"
 # SMELL: This script would not be necessary if there was a CommonFrontEndCgiScript
 # i.e. use of the bin/twiki script
+#
+# bug/limitation: it can't be used more than once, it only makes changes
+# if the existing path is "/usr/bin/perl" (e.g. you can't just re-run the 
+# script if you mistype the new path).
 
 use FileHandle;
 
