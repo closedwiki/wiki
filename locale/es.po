@@ -43,14 +43,14 @@ msgstr "%*(%1,segundo) "
 msgid "%1 - Registration for %2 (%3)"
 msgstr "%1 - Registro de %2 (%3)"
 
-#: templates/login.pattern.tmpl:10
+#: templates/login.pattern.tmpl:9
 msgid "%1 User Authentication"
 msgstr "Autentificación de usuario %1"
 
-#: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:5
-#: data/TWiki/WebLeftBar.txt:6 data/TWiki/WebLeftBarExample.txt:2
-#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:6
-#: templates/view.pattern.tmpl:55
+#: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:4
+#: data/TWiki/WebLeftBar.txt:5 data/TWiki/WebLeftBarExample.txt:2
+#: data/Trash/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:5
+#: templates/view.pattern.tmpl:57
 #, fuzzy
 msgid "%1 Web"
 msgstr "Pagina de inicio de %1"
@@ -76,8 +76,13 @@ msgstr "Pagina de inicio de %1"
 msgid "%1 is an invalid name for a new web"
 msgstr "%1 es un nombre invalido para la nueva web"
 
-#: templates/login.pattern.tmpl:22
+#: templates/login.pattern.tmpl:21
 msgid "%1 is currently logged in"
+msgstr "%1 esta en linea"
+
+#: templates/oopsattention.tmpl:320
+#, fuzzy
+msgid "%1 is currently set to %2"
 msgstr "%1 esta en linea"
 
 #: templates/oopsleaseconflict.tmpl:8
@@ -122,7 +127,7 @@ msgstr "La pagina %1 no existe"
 msgid "%1 web to try out TWiki"
 msgstr ""
 
-#: templates/view.pattern.tmpl:40
+#: templates/view.pattern.tmpl:43
 msgid "&Attach"
 msgstr "&Unir"
 
@@ -130,11 +135,11 @@ msgstr "&Unir"
 msgid "&Cancel"
 msgstr "&Cancelar"
 
-#: templates/view.pattern.tmpl:29 templates/view.tmpl:33
+#: templates/view.pattern.tmpl:32 templates/view.tmpl:33
 msgid "&Compose"
 msgstr ""
 
-#: templates/view.pattern.tmpl:20
+#: templates/view.pattern.tmpl:21
 msgid "&Edit"
 msgstr "&Editar"
 
@@ -142,23 +147,23 @@ msgstr "&Editar"
 msgid "&Edit text"
 msgstr "&Editar el texto"
 
-#: templates/twiki.pattern.tmpl:121 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:122 templates/twiki.tmpl:164
 msgid "&History"
 msgstr "&Historia"
 
-#: templates/view.pattern.tmpl:45
+#: templates/view.pattern.tmpl:48
 msgid "&More topic actions"
 msgstr "&Mas acciones de la pagina"
 
-#: templates/view.pattern.tmpl:84
+#: templates/view.pattern.tmpl:85
 msgid "&Printable"
 msgstr "Imprimible"
 
-#: templates/view.pattern.tmpl:90
+#: templates/view.pattern.tmpl:91
 msgid "&Web"
 msgstr "&Web"
 
-#: templates/rdiff.pattern.tmpl:3
+#: templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
 msgstr "(%1 vs. %2)"
 
@@ -179,7 +184,7 @@ msgstr ""
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:20
+#: templates/attach.pattern.tmpl:19
 msgid "(attach)"
 msgstr "(unir)"
 
@@ -203,6 +208,11 @@ msgstr "(cambiar idioma)"
 msgid "(changes)"
 msgstr "(cambios)"
 
+#: templates/deleteattachment.pattern.tmpl:2
+#, fuzzy
+msgid "(delete attachment)"
+msgstr "(mover la union)"
+
 #: templates/renamedelete.pattern.tmpl:17
 #: templates/renamewebdelete.pattern.tmpl:17
 msgid "(delete)"
@@ -216,7 +226,7 @@ msgstr "(editar el formulario)"
 msgid "(edit text)"
 msgstr "(editar el texto)"
 
-#: templates/edit.pattern.tmpl:38 templates/edit.pattern.tmpl:51
+#: templates/edit.pattern.tmpl:32 templates/edit.pattern.tmpl:45
 msgid "(edit)"
 msgstr "(editar)"
 
@@ -236,6 +246,11 @@ msgstr "(mas)"
 msgid "(move attachment)"
 msgstr "(mover la union)"
 
+#: data/TWiki/WebTopicCreator.txt:17 data/TWiki/WebTopicCreator.txt:19
+#, fuzzy
+msgid "(no parent, orphaned topic)"
+msgstr "Paginas cambiados recemente"
+
 #: templates/oopsaccessdenied.tmpl:3 templates/oopsleaseconflict.tmpl:3
 #: templates/oopssaveerr.tmpl:2
 msgid "(oops)"
@@ -245,7 +260,7 @@ msgstr "(oops)"
 msgid "(otherwise search %1 Web only)"
 msgstr ""
 
-#: templates/preview.pattern.tmpl:16 templates/preview.pattern.tmpl:26
+#: templates/preview.pattern.tmpl:16 templates/preview.pattern.tmpl:25
 msgid "(preview)"
 msgstr "(previsualizar)"
 
@@ -279,14 +294,14 @@ msgstr ""
 msgid "(single character last name)"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:45
+#: templates/attach.pattern.tmpl:44
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 "Error\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 
-#: templates/attachagain.pattern.tmpl:51
+#: templates/attachagain.pattern.tmpl:50
 msgid ""
 "*Change comment:* If you use _Change Properties_ to change a comment, the "
 "comment shown in the topic will change, but the comment shown against the "
@@ -296,7 +311,7 @@ msgstr ""
 "comentario, el comentario mostiado cambiara, pero el comentario mostraido "
 "por la historia delaurión sera el comentario cuando el archivo sea enviado."
 
-#: templates/attach.pattern.tmpl:44
+#: templates/attach.pattern.tmpl:43
 #, fuzzy
 msgid ""
 "*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
@@ -319,7 +334,7 @@ msgid ""
 "server before registering."
 msgstr ""
 
-#: templates/attachagain.pattern.tmpl:52
+#: templates/attachagain.pattern.tmpl:51
 msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
 "that will be updated or added."
@@ -327,7 +342,7 @@ msgstr ""
 "*Archivo local:* Si escoge un archivo diferente en el archivo local, sera el "
 "archivo que sera actualizado ó anexado."
 
-#: templates/attachagain.pattern.tmpl:50
+#: templates/attachagain.pattern.tmpl:49
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties\"; see %1."
@@ -340,7 +355,7 @@ msgstr ""
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "<a href='%1' rel='nofollow'>Editar preferencias</a> para esta pagina"
 
-#: templates/renamewebbase.pattern.tmpl:72
+#: templates/renamewebbase.pattern.tmpl:71
 #, fuzzy
 msgid ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
@@ -350,7 +365,7 @@ msgstr ""
 "%','ManagingWebs')\" href='%1' rel='nofollow'>Click aqui</a> para ayudar a "
 "administrar webs"
 
-#: templates/preview.pattern.tmpl:43
+#: templates/preview.pattern.tmpl:42
 msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
@@ -385,7 +400,7 @@ msgstr ""
 "nombre de la web na esta escrito incorrectamente en la pagina anterior; "
 "corriga si es necesario."
 
-#: data/Sandbox/WebHome.txt:26
+#: data/Sandbox/WebHome.txt:24
 msgid ""
 "A more extensive changes list is available via the [[%1][Recent Changes]] "
 "link in the navigation menu."
@@ -399,7 +414,7 @@ msgstr ""
 "El sistema creara una nueva contraseña para un hombre de usuario %1 "
 "(wikiname %2) sero enviado para %3"
 
-#: templates/view.pattern.tmpl:90
+#: templates/view.pattern.tmpl:91
 msgid "A&ll Webs"
 msgstr "Todas las webs"
 
@@ -411,7 +426,7 @@ msgstr "Acceso Denegado"
 msgid "Access check on %1 failed"
 msgstr "Codigo de acceso fallido por %1"
 
-#: templates/edit.pattern.tmpl:62 templates/preview.pattern.tmpl:36
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
 msgid "Access keys"
 msgstr "Teclas de acceso"
 
@@ -440,7 +455,7 @@ msgstr "Anexar"
 msgid "Adding a %1 variable in WebPreferences"
 msgstr "Anadiendo una variable en WebPreferences"
 
-#: data/TWiki/WebLeftBar.txt:24
+#: data/TWiki/WebLeftBar.txt:23
 msgid "Admin Maintenance"
 msgstr ""
 
@@ -460,8 +475,8 @@ msgstr "Todas webs publicas"
 msgid "All topics in %1"
 msgstr "Todas paginas en el web %1:"
 
-#: templates/renamebase.pattern.tmpl:21
-#: templates/renamewebbase.pattern.tmpl:21
+#: templates/renamebase.pattern.tmpl:20
+#: templates/renamewebbase.pattern.tmpl:20
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "Permitir algo que no es <nop>WikiWord como nuevo nombre de pagina"
 
@@ -485,7 +500,7 @@ msgstr ""
 "Para una cuenta de email es necesario antes una contraseña poder ser "
 "reiniciada."
 
-#: templates/moveattachment.pattern.tmpl:71
+#: templates/moveattachment.pattern.tmpl:70
 msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
@@ -497,15 +512,15 @@ msgstr ""
 msgid "And populated with topics from the base web"
 msgstr ""
 
-#: templates/changeform.pattern.tmpl:43
+#: templates/changeform.pattern.tmpl:42
 msgid "Any change you made to topic before coming to this page are preserved."
 msgstr ""
 
-#: templates/view.pattern.tmpl:41
+#: templates/view.pattern.tmpl:44
 msgid "Attach"
 msgstr "Unir"
 
-#: templates/view.pattern.tmpl:40
+#: templates/view.pattern.tmpl:43
 msgid "Attach an image or document to this topic"
 msgstr "Unir la imagen o documento a esta pagina"
 
@@ -513,7 +528,7 @@ msgstr "Unir la imagen o documento a esta pagina"
 msgid "Attach file to topic %1"
 msgstr "Unir el archivo a la pagina %1"
 
-#: templates/attach.pattern.tmpl:25
+#: templates/attach.pattern.tmpl:24
 msgid "Attach image or document on %1"
 msgstr "Unir la imagen o documento en %1"
 
@@ -543,7 +558,7 @@ msgstr "El archivo no se existe."
 msgid "Attachment move failed"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:110
+#: templates/attach.pattern.tmpl:109
 msgid "Attachments will not be shown in topic view page."
 msgstr "No se puede mostrar las uniones de la vista de la pagina."
 
@@ -560,7 +575,7 @@ msgstr "Propiedad"
 msgid "Available Information"
 msgstr ""
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:79
+#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:80
 msgid "Back to top"
 msgstr ""
 
@@ -568,7 +583,7 @@ msgstr ""
 msgid "Back to topic"
 msgstr ""
 
-#: templates/view.pattern.tmpl:90
+#: templates/view.pattern.tmpl:91
 msgid "Backlinks"
 msgstr "Referencias"
 
@@ -604,11 +619,11 @@ msgstr ""
 msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 
-#: templates/changeform.pattern.tmpl:18 templates/edit.pattern.tmpl:62
+#: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/edit.pattern.tmpl:62
+#: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
 msgstr "Cancelar edicion y descarge los cambios"
 
@@ -635,36 +650,36 @@ msgid ""
 "following regular expressions, so it was rejected:"
 msgstr ""
 
-#: templates/changeform.pattern.tmpl:18
+#: templates/changeform.pattern.tmpl:17
 msgid "Change form"
 msgstr "Cambiar el formulario"
 
-#: templates/moveattachment.pattern.tmpl:60
-#: templates/renamebase.pattern.tmpl:33
-#: templates/renamewebbase.pattern.tmpl:35
+#: templates/moveattachment.pattern.tmpl:59
+#: templates/renamebase.pattern.tmpl:32
+#: templates/renamewebbase.pattern.tmpl:34
 msgid "Change from:"
 msgstr "Cambiar desde:"
 
-#: data/TWiki/WebLeftBarSearch.txt:15 templates/oopschangelanguage.tmpl:21
+#: data/TWiki/WebLeftBarSearch.txt:13 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
 msgid "Change language"
 msgstr ""
 
-#: templates/renamebase.pattern.tmpl:57
-#: templates/renamewebbase.pattern.tmpl:64
+#: templates/renamebase.pattern.tmpl:56
+#: templates/renamewebbase.pattern.tmpl:63
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr ""
 
-#: templates/renamebase.pattern.tmpl:55
-#: templates/renamewebbase.pattern.tmpl:62
+#: templates/renamebase.pattern.tmpl:54
+#: templates/renamewebbase.pattern.tmpl:61
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr ""
 
-#: templates/attachagain.pattern.tmpl:32
+#: templates/attachagain.pattern.tmpl:31
 msgid "Change properties only"
 msgstr "Cambiar propiedades solamente"
 
-#: templates/edit.pattern.tmpl:46
+#: templates/edit.pattern.tmpl:40
 msgid "Change topic"
 msgstr "Cambiar la pagina"
 
@@ -672,9 +687,9 @@ msgstr "Cambiar la pagina"
 msgid "Changed"
 msgstr "Cambiado"
 
-#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:9
-#: data/TWiki/WebLeftBar.txt:11 data/TWiki/WebLeftBarExample.txt:4
-#: data/Trash/WebLeftBar.txt:9 data/_default/WebLeftBar.txt:9
+#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:8
+#: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:4
+#: data/Trash/WebLeftBar.txt:8 data/_default/WebLeftBar.txt:9
 #, fuzzy
 msgid "Changes"
 msgstr "(cambios)"
@@ -685,8 +700,15 @@ msgstr "(cambios)"
 msgid "Changes from r%1 to r%2"
 msgstr "Cambiar desde:"
 
-#: templates/edit.pattern.tmpl:62 templates/preview.pattern.tmpl:33
-#: templates/preview.pattern.tmpl:36
+#: templates/oopsattention.tmpl:318
+msgid ""
+"Check your configuration setting for {TemplateDir}. If that's not the "
+"problem, it may be because you have a setting of =%PARAM2%= that is pointing "
+"to a template that doesn't exist."
+msgstr ""
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+#: templates/preview.pattern.tmpl:35
 msgid "Checkpoint"
 msgstr "Revición de puntos"
 
@@ -694,12 +716,12 @@ msgstr "Revición de puntos"
 msgid "Child topics in %1 web:"
 msgstr ""
 
-#: templates/changeform.pattern.tmpl:25
+#: templates/changeform.pattern.tmpl:24
 msgid "Choose a new form template"
 msgstr "Escoger el nuevo patrón del formulario"
 
-#: templates/renamebase.pattern.tmpl:59
-#: templates/renamewebbase.pattern.tmpl:68
+#: templates/renamebase.pattern.tmpl:58
+#: templates/renamewebbase.pattern.tmpl:67
 msgid "Clear all"
 msgstr ""
 
@@ -721,7 +743,7 @@ msgstr ""
 msgid "Color %1 has an invalid format"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:85 templates/attachtables.pattern.tmpl:45
+#: templates/attach.pattern.tmpl:84 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Comment"
 msgstr "Comentar"
@@ -753,7 +775,7 @@ msgstr ""
 msgid "Conflict"
 msgstr ""
 
-#: data/TWiki/TWikiVariablesAtoM.txt:270 templates/login.pattern.tmpl:51
+#: data/TWiki/TWikiVariablesAtoM.txt:270 templates/login.pattern.tmpl:50
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
 #: templates/oopsaccessdenied.tmpl:42
 msgid "Contact %1 if you have any questions."
@@ -777,6 +799,11 @@ msgstr ""
 msgid "Could not create the new web %1"
 msgstr "No se puede crear la nueva web %1"
 
+#: templates/oopsattention.tmpl:316
+#, fuzzy
+msgid "Could not find template"
+msgstr "Escoger el nuevo patrón del formulario"
+
 #: templates/oopsattention.tmpl:238
 msgid "Could not save %1."
 msgstr "No se pedo guardir %1."
@@ -785,7 +812,7 @@ msgstr "No se pedo guardir %1."
 msgid "Country:"
 msgstr ""
 
-#: templates/view.pattern.tmpl:19
+#: templates/view.pattern.tmpl:20
 msgid "Cr&eate"
 msgstr "Crear"
 
@@ -794,11 +821,17 @@ msgstr "Crear"
 msgid "Create <nop>TestTopic###"
 msgstr "Crear esta pagina"
 
-#: data/Sandbox/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:13
+#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:13
+#: data/_default/WebLeftBar.txt:6
 msgid "Create New Topic"
 msgstr "Crear nueva pagina"
 
-#: templates/attach.pattern.tmpl:97
+#: data/TWiki/WebTopicCreator.txt:5
+#, fuzzy
+msgid "Create New Topic in %1 Web"
+msgstr "Crear nueva pagina"
+
+#: templates/attach.pattern.tmpl:96
 msgid "Create a link to the attached file"
 msgstr "Crear un enlace al archivo"
 
@@ -832,10 +865,6 @@ msgstr ""
 msgid "Creating a suitable Form Definition topic"
 msgstr ""
 
-#: data/Sandbox/WebHome.txt:21
-msgid "Current time on this server:"
-msgstr ""
-
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Date"
@@ -845,7 +874,8 @@ msgstr "Fecha"
 msgid "Dear %1"
 msgstr ""
 
-#: templates/attachagain.pattern.tmpl:23
+#: templates/attachagain.pattern.tmpl:56
+#: templates/deleteattachment.pattern.tmpl:10
 #: templates/renameconfirm.pattern.tmpl:21
 #: templates/renamedelete.pattern.tmpl:21
 #: templates/renamedelete.pattern.tmpl:43
@@ -854,7 +884,17 @@ msgstr ""
 msgid "Delete"
 msgstr "Borrar"
 
-#: templates/view.pattern.tmpl:45
+#: templates/deleteattachment.pattern.tmpl:15
+#, fuzzy
+msgid "Delete File %1"
+msgstr "Mover o Borrar el archivo %1"
+
+#: templates/deleteattachment.pattern.tmpl:6
+#, fuzzy
+msgid "Delete file attachment"
+msgstr "Mover el archivo"
+
+#: templates/view.pattern.tmpl:48
 msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
@@ -880,15 +920,15 @@ msgstr ""
 msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr ""
 
-#: templates/rdiff.pattern.tmpl:11
+#: templates/rdiff.pattern.tmpl:18
 msgid "Difference Topic"
 msgstr ""
 
-#: templates/preview.pattern.tmpl:33 templates/preview.pattern.tmpl:36
+#: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
 msgid "Discard"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:108
+#: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
 msgstr "No muestre la union en el tabulador"
 
@@ -941,12 +981,12 @@ msgstr ""
 msgid "Each preference has the syntax"
 msgstr ""
 
-#: templates/view.pattern.tmpl:23
+#: templates/view.pattern.tmpl:24
 msgid "Edit"
 msgstr "(editar)"
 
 #: templates/oopsleaseconflict.pattern.tmpl:13
-#: templates/oopsleaseconflict.tmpl:39
+#: templates/oopsleaseconflict.tmpl:40
 msgid "Edit Anyway"
 msgstr ""
 
@@ -958,8 +998,8 @@ msgstr ""
 msgid "Edit text"
 msgstr "Editar el texto"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:25
-#: templates/view.pattern.tmpl:29 templates/view.tmpl:33
+#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:26
+#: templates/view.pattern.tmpl:32 templates/view.tmpl:33
 msgid "Edit this topic text"
 msgstr "Editar esto texto de pagina"
 
@@ -971,11 +1011,11 @@ msgstr "Editar las preferencias de la pagina:"
 msgid "Email address:"
 msgstr ""
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:79
+#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:80
 msgid "End of topic"
 msgstr ""
 
-#: templates/login.pattern.tmpl:26
+#: templates/login.pattern.tmpl:25
 msgid "Enter a new username and password to change identity:"
 msgstr ""
 
@@ -1001,11 +1041,11 @@ msgstr ""
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:52
+#: templates/attach.pattern.tmpl:51
 msgid "Existing attachments"
 msgstr "Uniones existentes"
 
-#: templates/changeform.pattern.tmpl:42
+#: templates/changeform.pattern.tmpl:41
 msgid "Existing form data will be lost! (still available in old version)"
 msgstr ""
 "Datos existentes que pueda perder (sin embargo, estan disponibles en la "
@@ -1041,7 +1081,7 @@ msgstr ""
 msgid "First Name:"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:60 templates/preview.pattern.tmpl:31
+#: templates/edit.pattern.tmpl:54 templates/preview.pattern.tmpl:30
 msgid "Force new revision"
 msgstr "Haga una nueva revicion"
 
@@ -1053,7 +1093,7 @@ msgstr ""
 msgid "Form definition missing"
 msgstr ""
 
-#: templates/renamebase.pattern.tmpl:66
+#: templates/renamebase.pattern.tmpl:65
 msgid ""
 "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
 "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
@@ -1080,7 +1120,7 @@ msgstr ""
 msgid "Good examples:"
 msgstr "Buenos ejemplos:"
 
-#: data/Main/WebLeftBar.txt:8 data/TWiki/WebLeftBar.txt:8
+#: data/Main/WebLeftBar.txt:7 data/TWiki/WebLeftBar.txt:7
 msgid "Groups"
 msgstr "Grupas"
 
@@ -1092,11 +1132,11 @@ msgstr "Hola %1!"
 msgid "Help"
 msgstr "Ayuda"
 
-#: templates/attach.pattern.tmpl:50
+#: templates/attach.pattern.tmpl:49
 msgid "Hide existing attachments"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:105
+#: templates/attach.pattern.tmpl:104
 msgid "Hide file"
 msgstr "Ocultar el archivo"
 
@@ -1104,7 +1144,7 @@ msgstr "Ocultar el archivo"
 msgid "Hide formatting help"
 msgstr "Ocultar el formata de ayuda"
 
-#: templates/attach.pattern.tmpl:33
+#: templates/attach.pattern.tmpl:32
 msgid "Hide help"
 msgstr "Ocultar la ayuda"
 
@@ -1188,7 +1228,7 @@ msgstr ""
 msgid "If you would like to create this web"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:100
+#: templates/attach.pattern.tmpl:99
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Imagenes podra mostrar, por otras uniones al enlace que podra crear."
 
@@ -1204,9 +1244,9 @@ msgstr ""
 msgid "Incorrect Password"
 msgstr "Contraseña Incorrecta"
 
-#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:7
-#: data/TWiki/WebLeftBar.txt:9 data/TWiki/WebLeftBarExample.txt:5
-#: data/Trash/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:7
+#: data/Main/WebLeftBar.txt:8 data/Sandbox/WebLeftBar.txt:6
+#: data/TWiki/WebLeftBar.txt:8 data/TWiki/WebLeftBarExample.txt:5
+#: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:7
 msgid "Index"
 msgstr ""
 
@@ -1273,7 +1313,7 @@ msgstr ""
 msgid "Line: %1 to %2"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:94
+#: templates/attach.pattern.tmpl:93
 msgid "Link"
 msgstr "Enlace"
 
@@ -1285,7 +1325,7 @@ msgstr ""
 msgid "List topics that start with the letter:"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:74
+#: templates/attach.pattern.tmpl:73
 msgid "Local file"
 msgstr "Archivo local"
 
@@ -1301,7 +1341,7 @@ msgstr "Cerrar la session"
 msgid "Login name %1"
 msgstr ""
 
-#: templates/login.pattern.tmpl:45
+#: templates/login.pattern.tmpl:44
 msgid "Logon"
 msgstr "Iniciar la session"
 
@@ -1332,12 +1372,12 @@ msgstr ""
 msgid "More Actions on Topic %1"
 msgstr "Mas aciones en la pagina %1"
 
-#: templates/rdiff.pattern.tmpl:20 templates/view.pattern.tmpl:46
+#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:49
 msgid "More topic actions..."
 msgstr "Mas acciones de pagina:"
 
-#: templates/attachagain.pattern.tmpl:23
-#: templates/moveattachment.pattern.tmpl:16
+#: templates/attachagain.pattern.tmpl:56
+#: templates/moveattachment.pattern.tmpl:15
 msgid "Move"
 msgstr "Mover"
 
@@ -1345,7 +1385,7 @@ msgstr "Mover"
 msgid "Move file attachment"
 msgstr "Mover el archivo"
 
-#: templates/moveattachment.pattern.tmpl:29
+#: templates/moveattachment.pattern.tmpl:28
 msgid "Move or Delete File %1"
 msgstr "Mover o Borrar el archivo %1"
 
@@ -1353,7 +1393,7 @@ msgstr "Mover o Borrar el archivo %1"
 msgid "My Links"
 msgstr "Mis Enlaces"
 
-#: lib/TWiki/Search.pm:791
+#: lib/TWiki/Search.pm:792
 msgid "NEW"
 msgstr "NUEVO"
 
@@ -1367,7 +1407,7 @@ msgstr "La pagina %1 no existe"
 msgid "Name of new web is missing"
 msgstr ""
 
-#: templates/renamewebbase.pattern.tmpl:45
+#: templates/renamewebbase.pattern.tmpl:44
 msgid "New parent web:<br>(subwebs must be enabled)"
 msgstr ""
 
@@ -1375,7 +1415,7 @@ msgstr ""
 msgid "New topic name %1 is not a %2"
 msgstr ""
 
-#: templates/renamewebbase.pattern.tmpl:40
+#: templates/renamewebbase.pattern.tmpl:39
 msgid "New web name:"
 msgstr ""
 
@@ -1395,7 +1435,7 @@ msgstr ""
 msgid "No users to reset passwords for."
 msgstr ""
 
-#: templates/moveattachment.pattern.tmpl:72
+#: templates/moveattachment.pattern.tmpl:71
 msgid ""
 "Note that any URLs that refer to the attachment will be broken after this "
 "move."
@@ -1403,12 +1443,12 @@ msgstr ""
 "Note que todos los URLs que referencian para esa union que podra romper."
 
 #: data/TWiki/TWikiRegistration.txt:6 templates/registerconfirm.tmpl:13
-#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:65
-#: templates/renamewebbase.pattern.tmpl:71 templates/settings.pattern.tmpl:47
+#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:64
+#: templates/renamewebbase.pattern.tmpl:70 templates/settings.pattern.tmpl:47
 msgid "Note:"
 msgstr "Notas:"
 
-#: templates/changeform.pattern.tmpl:34
+#: templates/changeform.pattern.tmpl:33
 msgid "Notes"
 msgstr "Notas"
 
@@ -1417,12 +1457,12 @@ msgstr "Notas"
 msgid "Notes:"
 msgstr "Notas"
 
-#: templates/renamewebbase.pattern.tmpl:52
+#: templates/renamewebbase.pattern.tmpl:51
 msgid "Notices:"
 msgstr "Avisos:"
 
-#: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:10
-#: data/TWiki/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:10
+#: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:9
+#: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:10
 #, fuzzy
 msgid "Notifications"
 msgstr "&Mas acciones de la pagina"
@@ -1445,13 +1485,19 @@ msgstr "Revicion anterior:"
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 
+#: data/TWiki/WebTopicCreator.txt:29
+msgid ""
+"Once you created the topic, consider adding links in related topics to the "
+"new topic so that people can find it."
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:16
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr ""
 
-#: templates/edit.pattern.tmpl:60 templates/edit.pattern.tmpl:62
-#: templates/edit.tmpl:21 templates/preview.pattern.tmpl:31
-#: templates/preview.pattern.tmpl:36 templates/preview.tmpl:10
+#: templates/edit.pattern.tmpl:54 templates/edit.pattern.tmpl:56
+#: templates/edit.tmpl:21 templates/preview.pattern.tmpl:30
+#: templates/preview.pattern.tmpl:35 templates/preview.tmpl:10
 msgid "Opens page in new window"
 msgstr ""
 
@@ -1463,7 +1509,7 @@ msgstr ""
 msgid "Other search options:"
 msgstr "Otras opciones de buscar:"
 
-#: templates/login.pattern.tmpl:42
+#: templates/login.pattern.tmpl:41
 msgid "Password"
 msgstr "Contraseña"
 
@@ -1495,7 +1541,7 @@ msgstr ""
 msgid "Please contact %1 if you have any questions."
 msgstr ""
 
-#: templates/login.pattern.tmpl:18
+#: templates/login.pattern.tmpl:17
 msgid "Please enter your username and password:"
 msgstr "Por favor, ingrese usuario y contraseña:"
 
@@ -1539,12 +1585,12 @@ msgid ""
 "Please visit %1 to change your password to something more memorable for you."
 msgstr ""
 
-#: templates/changeform.pattern.tmpl:31
+#: templates/changeform.pattern.tmpl:30
 msgid "Possible form templates"
 msgstr "Posible patrón de formulario"
 
-#: data/Main/WebLeftBar.txt:14 data/Sandbox/WebLeftBar.txt:12
-#: data/TWiki/WebLeftBar.txt:14 data/_default/WebLeftBar.txt:12
+#: data/Main/WebLeftBar.txt:13 data/Sandbox/WebLeftBar.txt:11
+#: data/TWiki/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:12
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -1552,28 +1598,28 @@ msgstr "Preferencias"
 msgid "Preferences for"
 msgstr "Preferencias por"
 
-#: templates/edit.pattern.tmpl:62
+#: templates/edit.pattern.tmpl:56
 msgid "Preview"
 msgstr ""
 
-#: templates/attachagain.pattern.tmpl:40
+#: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
 msgstr ""
 
-#: templates/view.pattern.tmpl:84
+#: templates/view.pattern.tmpl:85
 msgid "Printable version of this topic"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:62 templates/preview.pattern.tmpl:36
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
 msgid "Quiet Save"
 msgstr "Guardar sin notificación"
 
-#: templates/edit.pattern.tmpl:62 templates/preview.pattern.tmpl:33
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
 msgid "QuietSave"
 msgstr "Guardar sin notificación"
 
-#: templates/view.pattern.tmpl:86
-msgid "&Raw View"
+#: templates/view.pattern.tmpl:87
+msgid "Raw View"
 msgstr ""
 
 #: templates/registernotify.tmpl:10
@@ -1582,7 +1628,7 @@ msgid ""
 "more, study the TWikiTutorial, which is accessible from the same link."
 msgstr ""
 
-#: templates/edit.pattern.tmpl:60
+#: templates/edit.pattern.tmpl:54
 msgid "Read new revision help text in new window"
 msgstr ""
 
@@ -1663,7 +1709,7 @@ msgstr ""
 msgid "Rev %1 was saved by %2, while you were still editing."
 msgstr ""
 
-#: templates/rdiff.pattern.tmpl:38
+#: templates/rdiff.pattern.tmpl:46
 msgid "Revision"
 msgstr "Revición"
 
@@ -1675,11 +1721,11 @@ msgstr "Revición:"
 msgid "Revisions:"
 msgstr "Reviciones:"
 
-#: templates/edit.pattern.tmpl:62 templates/preview.pattern.tmpl:36
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
 msgid "Save"
 msgstr "Guardar"
 
-#: templates/preview.pattern.tmpl:33
+#: templates/preview.pattern.tmpl:32
 msgid "Save Changes"
 msgstr ""
 
@@ -1688,12 +1734,12 @@ msgstr ""
 msgid "Saved to:"
 msgstr "Guardar"
 
-#: data/Main/WebLeftBar.txt:10 data/Sandbox/WebLeftBar.txt:8
-#: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:6
+#: data/Main/WebLeftBar.txt:9 data/Sandbox/WebLeftBar.txt:7
+#: data/TWiki/WebLeftBar.txt:9 data/TWiki/WebLeftBarExample.txt:6
 #: data/TWiki/WebLeftBarSearch.txt:11 data/TWiki/WebSearch.txt:24
 #: data/TWiki/WebSearchAdvanced.txt:32
 #: data/TWiki/WebTopicNonWikiTemplate.txt:14
-#: data/TWiki/WebTopicViewTemplate.txt:14 data/Trash/WebLeftBar.txt:8
+#: data/TWiki/WebTopicViewTemplate.txt:14 data/Trash/WebLeftBar.txt:7
 #: data/_default/WebHome.txt:11 data/_default/WebLeftBar.txt:8
 msgid "Search"
 msgstr "Buscar"
@@ -1707,7 +1753,7 @@ msgid "Search a&ll webs"
 msgstr "Buscard todas las webs"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-#: templates/backlinksweb.pattern.tmpl:10 templates/view.pattern.tmpl:90
+#: templates/backlinksweb.pattern.tmpl:10 templates/view.pattern.tmpl:91
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
@@ -1715,7 +1761,7 @@ msgstr ""
 msgid "Search string"
 msgstr ""
 
-#: templates/view.pattern.tmpl:90
+#: templates/view.pattern.tmpl:91
 msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr ""
 
@@ -1745,25 +1791,25 @@ msgstr ""
 msgid "See also the verbose %1."
 msgstr ""
 
-#: templates/login.pattern.tmpl:49
+#: templates/login.pattern.tmpl:48
 #, fuzzy
 msgid "See also:"
 msgstr "Seleccionar todos"
 
-#: templates/attachagain.pattern.tmpl:44
+#: templates/attachagain.pattern.tmpl:43
 msgid "Select a new local file to update this attachment."
 msgstr "Seleccionar un neuvo archivo local para actulisar esa union."
 
-#: templates/renamebase.pattern.tmpl:59
-#: templates/renamewebbase.pattern.tmpl:68
+#: templates/renamebase.pattern.tmpl:58
+#: templates/renamewebbase.pattern.tmpl:67
 msgid "Select all"
 msgstr "Seleccionar todos"
 
-#: templates/renamebase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:66
 msgid "Select the %1 Web to delete the topic."
 msgstr ""
 
-#: templates/edit.pattern.tmpl:81
+#: templates/edit.pattern.tmpl:75
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 
@@ -1775,7 +1821,7 @@ msgstr ""
 msgid "Set new topic parent:"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:50
+#: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
 msgstr ""
 
@@ -1783,7 +1829,7 @@ msgstr ""
 msgid "Show formatting help"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:33
+#: templates/attach.pattern.tmpl:32
 msgid "Show help"
 msgstr "Monstrar ayuda"
 
@@ -1807,17 +1853,9 @@ msgid "Size"
 msgstr "Tamaño"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:18
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:75
-#: templates/view.pattern.tmpl:79
+#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:77
+#: templates/view.pattern.tmpl:80
 msgid "Skip to actions"
-msgstr ""
-
-#: templates/twiki.pattern.tmpl:91
-msgid "Skip to bottom"
-msgstr ""
-
-#: templates/twiki.pattern.tmpl:91
-msgid "Skip to topic"
 msgstr ""
 
 #: templates/registernotify.tmpl:15
@@ -1834,12 +1872,12 @@ msgstr ""
 msgid "Sort results by:"
 msgstr ""
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:75
+#: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:77
 msgid "Start of topic"
 msgstr ""
 
-#: data/Main/WebLeftBar.txt:13 data/Sandbox/WebLeftBar.txt:11
-#: data/TWiki/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:11
+#: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:10
+#: data/TWiki/WebLeftBar.txt:12 data/_default/WebLeftBar.txt:11
 msgid "Statistics"
 msgstr ""
 
@@ -1948,7 +1986,7 @@ msgstr ""
 msgid "The activation code %1 is invalid."
 msgstr ""
 
-#: templates/moveattachment.pattern.tmpl:70
+#: templates/moveattachment.pattern.tmpl:69
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "La union y historial que podra ser movido para la nueva pagina."
 
@@ -1958,11 +1996,11 @@ msgid ""
 "without saving."
 msgstr ""
 
-#: templates/renamewebbase.pattern.tmpl:73
+#: templates/renamewebbase.pattern.tmpl:72
 msgid "The checkmarked topics will be updated"
 msgstr ""
 
-#: templates/renamebase.pattern.tmpl:68
+#: templates/renamebase.pattern.tmpl:67
 msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
 "_eventually_ allow you to rename any topics that were locked)"
@@ -1994,7 +2032,7 @@ msgstr ""
 msgid "The form should be defined in the topic %1"
 msgstr ""
 
-#: templates/moveattachment.pattern.tmpl:24
+#: templates/moveattachment.pattern.tmpl:23
 msgid "The new topic chosen must already exist."
 msgstr "La nueva pagina debe ya existir."
 
@@ -2104,19 +2142,21 @@ msgid ""
 "especially if you made any changes to form fields."
 msgstr ""
 
-#: templates/preview.pattern.tmpl:47
+#: templates/preview.pattern.tmpl:46
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
 msgstr ""
 
-#: templates/preview.pattern.tmpl:45
+#: templates/preview.pattern.tmpl:44
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:18
-msgid "To create a new topic, enter name of topic and click 'create.'"
+#: data/TWiki/WebTopicCreator.txt:27
+msgid ""
+"To create a new topic, enter a %TWIKIWEB%.WikiWord for the topic name, "
+"select a topic parent and click 'create.'"
 msgstr ""
 
-#: templates/moveattachment.pattern.tmpl:20
+#: templates/moveattachment.pattern.tmpl:19
 msgid "To delete an attachment move it to web %1, topic %2."
 msgstr ""
 
@@ -2135,7 +2175,7 @@ msgstr ""
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
 msgstr ""
 
-#: templates/preview.pattern.tmpl:46
+#: templates/preview.pattern.tmpl:45
 msgid "To make *more changes*: Go back in your browser."
 msgstr ""
 
@@ -2147,8 +2187,9 @@ msgstr ""
 msgid "To see if they have finished their edit yet, click 'Try Again'."
 msgstr ""
 
-#: templates/moveattachment.pattern.tmpl:36
-#: templates/renamebase.pattern.tmpl:38
+#: templates/deleteattachment.pattern.tmpl:21
+#: templates/moveattachment.pattern.tmpl:35
+#: templates/renamebase.pattern.tmpl:37
 msgid "To web:"
 msgstr "A la web:"
 
@@ -2164,18 +2205,20 @@ msgstr ""
 msgid "Topic name"
 msgstr "Nombre de la pagina"
 
-#: templates/moveattachment.pattern.tmpl:46
-#: templates/renamebase.pattern.tmpl:43
+#: data/TWiki/WebTopicCreator.txt:7 templates/deleteattachment.pattern.tmpl:30
+#: templates/moveattachment.pattern.tmpl:45
+#: templates/renamebase.pattern.tmpl:42
 msgid "Topic name:"
+msgstr "Nombre de la pagina:"
+
+#: data/TWiki/WebTopicCreator.txt:14
+#, fuzzy
+msgid "Topic parent:"
 msgstr "Nombre de la pagina:"
 
 #: templates/oopssaveerr.tmpl:4
 msgid "Topic save error"
 msgstr ""
-
-#: templates/edit.pattern.tmpl:23
-msgid "Topic settings"
-msgstr "Propiedades de la pagina"
 
 #: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:40
 #, fuzzy
@@ -2190,17 +2233,17 @@ msgstr ""
 msgid "Topics per web"
 msgstr "Paginas por web"
 
-#: templates/renamewebbase.pattern.tmpl:53
+#: templates/renamewebbase.pattern.tmpl:52
 msgid "Topics which are currently being edited by other users in the %1 Web:"
 msgstr ""
 
-#: templates/renamewebbase.pattern.tmpl:56
+#: templates/renamewebbase.pattern.tmpl:55
 msgid ""
 "Topics which refer to this web and are are currently being edited by other "
 "users:"
 msgstr ""
 
-#: templates/renamewebbase.pattern.tmpl:58
+#: templates/renamewebbase.pattern.tmpl:57
 msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
@@ -2210,7 +2253,7 @@ msgid "Total matches"
 msgstr ""
 
 #: templates/oopsleaseconflict.pattern.tmpl:7
-#: templates/oopsleaseconflict.tmpl:33
+#: templates/oopsleaseconflict.tmpl:34
 msgid "Try Again"
 msgstr "Tratar otro vez"
 
@@ -2219,7 +2262,7 @@ msgstr "Tratar otro vez"
 msgid "Unchanged"
 msgstr "(cambios)"
 
-#: templates/login.pattern.tmpl:30
+#: templates/login.pattern.tmpl:29
 msgid "Unrecognised user and/or password"
 msgstr "No reconocido usuario y/o contraseña"
 
@@ -2243,11 +2286,11 @@ msgstr ""
 msgid "Update image or document on %TOPIC%"
 msgstr ""
 
-#: templates/attachagain.pattern.tmpl:57 templates/attachnew.pattern.tmpl:23
+#: templates/attachagain.pattern.tmpl:60 templates/attachnew.pattern.tmpl:23
 msgid "Upload file"
 msgstr "Subir el archivo"
 
-#: templates/attach.pattern.tmpl:80
+#: templates/attach.pattern.tmpl:79
 msgid "Upload up to %1 KB."
 msgstr ""
 
@@ -2272,16 +2315,16 @@ msgstr ""
 msgid "User Account %1 Deleted"
 msgstr ""
 
-#: data/TWiki/WebLeftBar.txt:16
+#: data/TWiki/WebLeftBar.txt:15
 #, fuzzy
 msgid "User Reference"
 msgstr "(configurar preferencias)"
 
-#: templates/login.pattern.tmpl:39
+#: templates/login.pattern.tmpl:38
 msgid "Username"
 msgstr "Usuario"
 
-#: data/Main/WebLeftBar.txt:7 data/TWiki/WebLeftBar.txt:7
+#: data/Main/WebLeftBar.txt:6 data/TWiki/WebLeftBar.txt:6
 msgid "Users"
 msgstr "Usuarios"
 
@@ -2307,7 +2350,7 @@ msgstr ""
 msgid "View previous topic revision:"
 msgstr "Vea antes la revicion de la pagina:"
 
-#: templates/view.pattern.tmpl:86
+#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:87
 msgid "View raw text without formatting"
 msgstr ""
 
@@ -2316,13 +2359,13 @@ msgid "View revision"
 msgstr "Ver revision"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
-#: templates/oopsleaseconflict.pattern.tmpl:15
-#: templates/oopsleaseconflict.tmpl:30 templates/rdiff.pattern.tmpl:18
-#: templates/view.pattern.tmpl:23
+#: templates/oopsleaseconflict.pattern.tmpl:16
+#: templates/oopsleaseconflict.tmpl:30 templates/rdiff.pattern.tmpl:25
+#: templates/view.pattern.tmpl:24
 msgid "View topic"
 msgstr "Ver pagina"
 
-#: templates/twiki.pattern.tmpl:121 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:122 templates/twiki.tmpl:164
 msgid "View total topic history"
 msgstr ""
 
@@ -2387,7 +2430,7 @@ msgstr ""
 msgid "You are denied access to the following topics in the web:"
 msgstr ""
 
-#: templates/view.pattern.tmpl:55
+#: templates/view.pattern.tmpl:57
 msgid "You are here"
 msgstr "Esta aqui"
 
@@ -2488,7 +2531,7 @@ msgid ""
 "Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:81
+#: templates/edit.pattern.tmpl:75
 msgid "Your signature to copy/paste:"
 msgstr "Su asignatura para copiar y pegar:"
 
@@ -2511,7 +2554,7 @@ msgid ""
 msgstr ""
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:305
+#: lib/TWiki/I18N.pm:308
 msgid "_language_name"
 msgstr "Español"
 
@@ -2549,8 +2592,8 @@ msgstr ""
 msgid "change, update, previous revisions, move, delete..."
 msgstr "cambie, actualize, reviciones anteriores, mueva, borre..."
 
-#: templates/renamebase.pattern.tmpl:59
-#: templates/renamewebbase.pattern.tmpl:68
+#: templates/renamebase.pattern.tmpl:58
+#: templates/renamewebbase.pattern.tmpl:67
 msgid "checkboxes of referenced topics"
 msgstr ""
 
@@ -2558,7 +2601,7 @@ msgstr ""
 msgid "fields are required."
 msgstr ""
 
-#: templates/edit.pattern.tmpl:60 templates/preview.pattern.tmpl:31
+#: templates/edit.pattern.tmpl:54 templates/preview.pattern.tmpl:30
 msgid "help"
 msgstr "ayuda"
 
@@ -2590,12 +2633,14 @@ msgstr "mas..."
 msgid "none (remove topic parent)"
 msgstr "ninguno ()"
 
-#: data/TWiki/WebLeftBarLogin.txt:4 templates/attachagain.pattern.tmpl:23
-#: templates/attachagain.pattern.tmpl:57 templates/attachnew.pattern.tmpl:23
-#: templates/changeform.pattern.tmpl:18 templates/edit.pattern.tmpl:62
-#: templates/moveattachment.pattern.tmpl:16
+#: data/TWiki/WebLeftBarLogin.txt:4 templates/attachagain.pattern.tmpl:56
+#: templates/attachagain.pattern.tmpl:60 templates/attachnew.pattern.tmpl:23
+#: templates/changeform.pattern.tmpl:17
+#: templates/deleteattachment.pattern.tmpl:10 templates/edit.pattern.tmpl:56
+#: templates/moveattachment.pattern.tmpl:15
 #: templates/oopsleaseconflict.pattern.tmpl:15
-#: templates/preview.pattern.tmpl:33 templates/rename.pattern.tmpl:31
+#: templates/oopsleaseconflict.pattern.tmpl:16
+#: templates/preview.pattern.tmpl:32 templates/rename.pattern.tmpl:31
 #: templates/renameconfirm.pattern.tmpl:21
 #: templates/renamedelete.pattern.tmpl:43 templates/renameweb.pattern.tmpl:31
 #: templates/renamewebconfirm.pattern.tmpl:25
@@ -2615,6 +2660,9 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vea"
+
+#~ msgid "Topic settings"
+#~ msgstr "Propiedades de la pagina"
 
 #~ msgid "&Raw text"
 #~ msgstr "Texto original"
