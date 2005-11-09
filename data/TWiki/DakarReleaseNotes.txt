@@ -131,7 +131,7 @@ You will notice a couple of changes to the editing screen; first, there is no sw
 You now have much more control over _which_ topics in a web you are interested in changes to. You can choose to receive notifications about topics selected by name, or by their parent relationship. See %TWIKIWEB%.MailerContrib for more details.
 
 ---+++ Parameterised Includes
-=%<nop>INCLUDE= tags have a predefined set of parameters. In the past, any parameters not in this set were simply ignored. With Dakar, these parameters are now defined as TWikiVariables within the included topic - for example,
+=%<nop>INCLUDE{}%= variables have a predefined set of parameters. In the past, any parameters not in this set were simply ignored. With Dakar, these parameters are now defined as TWikiVariables within the included topic - for example,
 <verbatim>
 %INCLUDE{ "BugList" FAVOURITE="Damsel Flies" }%
 </verbatim>
@@ -146,7 +146,7 @@ My favourite bugs are Damsel Flies
 
 ---+++ Named Section Include
 
-=%<nop>INCLUDE= tag allows to include only a named section of the included topic. These sections are defined in the included topic using the =%<nop>SECTION%= and =%<nop>ENDSECTION%= tags. For example, if the included topic has:
+The =%<nop>INCLUDE{}%= variable allows to include only a named section of the included topic. These sections are defined in the included topic using the =%<nop>SECTION%= and =%<nop>ENDSECTION%= variables. For example, if the included topic has:
 
 <verbatim>
 ---+ News
@@ -403,9 +403,9 @@ Previous TWiki versions would automatically convert three spaces at the start of
 
 ---+++ Evaluation order of !TWikiVariables
 
-In previous TWiki versions the evaluation order of %TAG%s depended on where they were expanded in the code. The parser was somewhat crude, and could easily be confused when embedded variables (variables embedded in the parameters of other variables) were used.
+In previous TWiki versions the evaluation order of =%<nop>VARIABLE%s= depended on where they were expanded in the code. The parser was somewhat crude, and could easily be confused when embedded variables (variables embedded in the parameters of other variables) were used.
 
-The parser has been replaced in Dakar with a deterministic variable parser with predictable behaviour. Specifically, variables are now always evaluated left to right and inside out. For example, consider %TAG2{ "%TAG1{ "%TAG0{ "params" }%" }%" }% %TAG3%. Previously, the expansion order would have depended on the order of expressions in the code, so the expansion may have proceeded TAG3 - TAG0 - TAG2 - TAG1. If you were lucky, this was the intended order. In Dakar, the order is now guranteed to be TAG0 - TAG1 - TAG2 - TAG3 (i.e. inside out and left to right).
+The parser has been replaced in Dakar with a deterministic variable parser with predictable behaviour. Specifically, variables are now always evaluated left to right and inside out. For example, consider =%<nop>VAR2{ "%<nop>VAR1{ "%<nop>VAR0{ "params" }%" }%" }% %<nop>VAR3%=. Previously, the expansion order would have depended on the order of expressions in the code, so the expansion may have proceeded VAR3 - VAR0 - VAR2 - VAR1. If you were lucky, this was the intended order. In Dakar, the order is now guranteed to be VAR0 - VAR1 - VAR2 - VAR3 (i.e. inside out and left to right).
 
 The main impact of this is that some TWikiApplications may cease to work if they have been written to take advantage of the old chaotic order. There is no way to predict which will work and which will fail, so you will have to deal with this on a case-by-case basis. In most cases !TWikiApplication authors will have worked hard to do the "sensible thing" so instances of this problem should be rare.
 

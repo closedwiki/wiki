@@ -80,7 +80,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>ENDSECTION{"name"}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* | 
-     | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous %<nop>SEcTION% tag. | Mandatory parameter without a default |
+     | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous %<nop>SECTION% variable. | Mandatory parameter without a default |
    * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]]
    
    
@@ -202,7 +202,7 @@ __Note:__ This topic is included by TWikiVariables
      | =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
      | =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
      | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
-     | =section="name"= | Includes only the specified section, as defined in the included topic by the [[#VarSECTION][SECTION]] and [[#VarENDSECTION][ENDSECTION]] tags| |
+     | =section="name"= | Includes only the specified section, as defined in the included topic by the [[#VarSECTION][SECTION]] and [[#VarENDSECTION][ENDSECTION]] variables| |
      Any other parameters will be defined as variables within the scope of the included topic. For example, =%<nop>INCLUDE{"AnotherTopic" PONE="val 1" PTWO="val 2"}%= will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included topic.
    * Example: To include a part of a webpage, use this pattern: =%<nop>INCLUDE{"http://some.page.com/index.html" pattern="^.*?BEFORE(.*)AFTER.*" }%=, where =BEFORE= is the part of the page just before the inclusion, and =AFTER= is the part just after the inclusion. 
    * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], IncludeTopicsAndWebPages, [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]], [[#VarSECTION][SECTION]], [[#VarENDSECTION][ENDSECTION]]

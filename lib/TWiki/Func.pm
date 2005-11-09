@@ -1428,17 +1428,17 @@ sub getTopicList {
 
 =pod=
 
----+++ registerTagHandler( $tag, \&fn, $syntax )
+---+++ registerTagHandler( $var, \&fn, $syntax )
 Should only be called from initPlugin.
 
-Register a function to handle a simple tag. Handles both %<nop>TAG% and %<nop>TAG{...}%. Registered tags are treated the same as TWiki internal tags, and are expanded at the same time. This is a _lot_ more efficient than using the =commonTagsHandler=.
-   * =$tag= - The name of the tag i.e. the 'MYTAG' part of %<nop>MYTAG%. The tag name *must* match /^[A-Z][A-Z0-9_]*$/ or it won't work.
+Register a function to handle a simple variable. Handles both %<nop>VAR% and %<nop>VAR{...}%. Registered variables are treated the same as TWiki internal variables, and are expanded at the same time. This is a _lot_ more efficient than using the =commonTagsHandler=.
+   * =$var= - The name of the variable, i.e. the 'MYVAR' part of %<nop>MYVAR%. The variable name *must* match /^[A-Z][A-Z0-9_]*$/ or it won't work.
    * =\&fn= - Reference to the handler function.
-   * =$syntax= can be 'classic' (the default) or 'context-free'. 'classic' syntax is appropriate where you want the tag to support classic TWiki syntax i.e. to accept an unquoted default parameter. For example, %MYTAG{unquoted parameter}%. If your tag will only use named parameters, you can use 'context-free' syntax, which supports a more natural and friendly syntax. For example, %MYTAG{param1=value1, value 2, param3="value 3", param4='value 5"}%
+   * =$syntax= can be 'classic' (the default) or 'context-free'. 'classic' syntax is appropriate where you want the variable to support classic TWiki syntax i.e. to accept the standard =%<nop>MYVAR{ "unnamed" param1="value1" param2="value2" }%= syntax, as well as an unquoted default parameter, such as =%<nop>MYVAR{unquoted parameter}%=. If your variable will only use named parameters, you can use 'context-free' syntax, which supports a more relaxed syntax. For example, %MYVAR{param1=value1, value 2, param3="value 3", param4='value 5"}%
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
-The tag handler function must be of the form:
+The variable handler function must be of the form:
 <verbatim>
 sub handler(\%session, \%params, $theTopic, $theWeb)
 </verbatim>
@@ -1730,7 +1730,7 @@ Those expressions marked type 'RE' are precompiled regular expressions that can 
 | anchorRegex    | #AnchorNames                     | RE |
 | abbrevRegex    | Abbreviations e.g. GOV, IRS      | RE |
 | emailAddrRegex | email@address.com                | RE |
-| tagNameRegex   | Standard tag names e.g. %<nop>THIS_BIT% (THIS_BIT only) | RE |
+| tagNameRegex   | Standard variable names e.g. %<nop>THIS_BIT% (THIS_BIT only) | RE |
 
 =cut
 
@@ -1769,7 +1769,7 @@ sub loadTemplate {
 =pod
 
 ---+++ sub expandTemplate( $theDef  ) -> $string
-Do a %TMPL:P{$theDef}%, only expanding the template (not expanding any tags other than %TMPL tags)
+Do a %TMPL:P{$theDef}%, only expanding the template (not expanding any variables other than %TMPL)
    * =$theDef= - template name
 Return: the text of the expanded template
 
