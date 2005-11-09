@@ -76,9 +76,10 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'NovemberEdition';
 
-$REVISION = '1.007'; #dro# added new feature (CHECKLISTSTART/END tags, attributes: clipos, pos); fixed bugs
+$REVISION = '1.008'; #dro# fixed docs; changed default text positioning (text attribute)
+#$REVISION = '1.007'; #dro# added new feature (CHECKLISTSTART/END tags, attributes: clipos, pos); fixed bugs
 #$REVISION = '1.006'; #dro# added new attribute (useforms); fixed legend bug; fixed HTML encoding bug
 #$REVISION = '1.005'; #dro# fixed major bug (edit lock); fixed html encoding; improved doc
 #$REVISION = '1.004'; #dro# added unknown parameter handling (new attribute: unknownparamsmsg); added 'set to a given state' feature; changed reset behavior; fixed typos
@@ -515,21 +516,31 @@ sub renderChecklistItem {
 	if ( ! $options{'useforms'} ) {
 		$text.=qq@<a name="$uetId">&nbsp;</a>@ if $options{'anchors'};
 		$text.=qq@<a href="$action">@;
+		if (lc($options{'clipos'}) ne 'left') {
+			$text.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		}
 		$text.=qq@<img border="0"@;
 		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
 		$text.=qq@ title="$heState" alt="$heState" />@;
-		$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		if (lc($options{'clipos'}) eq 'left') {
+			$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		}
 		$text.=qq@ </a> @;
 	} else {
 		$text.=qq@<a name="$stId">&nbsp;</a>@ if $options{'anchors'};
 		$text.=qq@<form action="$action" name="changeitemstate\[$stId\]" method="post">@;
 		$text.=qq@<input type="hidden" name="clpscls" value="$heState"/>@;
 		$text.=qq@<input type="hidden" name="clpscn" value="@.&htmlEncode($name).qq@"/>@;
+		if (lc($options{'clipos'}) ne 'left') {
+			$text.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		}
 		$text.=qq@<input @;
 		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
 		$text.=qq@ type="image" name="clpsc" value="$stId" @;
 		$text.=qq@title="$heState" alt="$heState"/>@;
-		$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		if (lc($options{'clipos'}) eq 'left') {
+			$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+		}
 		$text.=qq@</form>@;
 	}
 	$text.=qq@</noautolink>@;
