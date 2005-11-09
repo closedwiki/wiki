@@ -184,7 +184,8 @@ Get the time of the most recent revision
 =cut
 
 sub getLatestRevisionTime {
-    return (stat shift->{file})[9];
+    my @e = stat( shift->{file} );
+    return $e[9] || 0;
 }
 
 =pod
