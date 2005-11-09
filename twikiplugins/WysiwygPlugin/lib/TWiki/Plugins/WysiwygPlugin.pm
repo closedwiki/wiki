@@ -37,7 +37,7 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
+use vars qw( $VERSION $RELEASE $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb $modern );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -49,13 +49,20 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
     $currentWeb = $web;
     $calledThisSession = 0;
+    $modern = defined( &TWiki::Func::normalizeWebTopicName );
 
+    # switch in the post rendering handler depending on whether this
+    # is Dakar or earlier.
+    if( $modern ) {
+        *postRenderingHandler = \&afterRendering;
+    } else {
+        *endRenderingHandler = \&afterRendering;
+    }
     # Plugin correctly initialized
     return 1;
 }
@@ -106,6 +113,10 @@ sub beforeSaveHandler {
     $_[0] = $html2tml->convert( $_[0] );
 
     $_[0] =~ s/<!--META_(\d+)_META-->/$rescue[$1-1]/g;
+
+    # NOTE: we're not finished yet. We had to leave markers in to protect
+    # some constructs, such as variables, from further expansion. They
+    # will be mopped up in the postRenderingHandler.
 }
 
 # Invoked when the selected skin is in use to convert the text to HTML
@@ -142,6 +153,12 @@ sub beforeCommonTagsHandler {
     $calledThisSession = 1;
 }
 
+sub afterRendering {
+    return unless $html2tml;
+
+    $html2tml->cleanup( @_ );
+}
+
 # callback passed down to TML2HTML generator
 sub getViewUrl {
     my( $web, $topic ) = @_;
@@ -163,7 +180,11 @@ sub parseWikiUrl {
     my $anchor = $1 || '';
 
     if( $url =~ /^(\w+\.)?\w+$/ ) {
-        ( $web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $url);
+        if( $modern ) {
+            ( $web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $url);
+        } else {
+            ( $web, $topic) = TWiki::Store::normalizeWebTopicName(undef, $url);
+        }
         return $web.'.'.$topic . $anchor;
     }
     my $aurl = TWiki::Func::getViewUrl('WEB', 'TOPIC');
@@ -178,7 +199,7 @@ sub parseWikiUrl {
 
     $topic .= $anchor;
 
-    return $topic if( $web eq $currentWeb);
+    return $topic if( $web eq $currentWeb );
     return $web.'.'.$topic;
 }
 
