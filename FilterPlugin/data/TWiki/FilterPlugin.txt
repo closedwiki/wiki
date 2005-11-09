@@ -79,8 +79,9 @@ This is a second comment.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 22 Aug 2005 (v0.91) |
+|  Plugin Version: | 09 Nov 2005 (v0.92) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Nov 2005: | fixed deep recursion using =expand="on"= |
 |  22 Aug 2005: | Initial version; added =expand= toggle |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
@@ -92,4 +93,4 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
---- TWiki:Main.MichaelDaum - 22 Aug 2005
+--- TWiki:Main.MichaelDaum - 09 Nov 2005

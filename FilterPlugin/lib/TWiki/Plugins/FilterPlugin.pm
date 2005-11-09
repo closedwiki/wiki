@@ -23,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.91';
+$RELEASE = '0.92';
 
 ###############################################################################
 sub writeDebug {
@@ -93,10 +93,10 @@ sub handleFilter
     }
     if ($text =~ /%STARTINCLUDE%(.*)%STOPINCLUDE%/gs) {
       $text = $1;
-    }
-    if ($theExpand eq 'on') {
-      $text = &TWiki::Func::expandCommonVariables($text, $topic, $web);
-      $text = &TWiki::Func::renderText($text, $web);
+      if ($theExpand eq 'on') {
+	$text = &TWiki::Func::expandCommonVariables($text, $topic, $web);
+	$text = &TWiki::Func::renderText($text, $web);
+      }
     }
   }
 
