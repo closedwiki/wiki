@@ -3,8 +3,14 @@ use strict;
 
 use File::Path;
 use File::Copy;
+use Cwd;
 
 my $install;
+my $basedir;
+
+BEGIN {
+    $basedir = Cwd::getcwd();
+}
 
 sub usage {
     print <<EOM;
@@ -67,7 +73,7 @@ sub just_link {
     my( $moduleDir, $dir, $file ) = @_;
     return if -e $file;
     File::Path::mkpath( $dir ) unless( -e $dir || -l $dir );
-    my $argh = `ln -s $moduleDir/$file $file`;
+    my $argh = `ln -s $basedir/$moduleDir/$file $file`;
     die "$argh $@" if ( $argh || $@ );
     print "Lunk $file\n";
 }
