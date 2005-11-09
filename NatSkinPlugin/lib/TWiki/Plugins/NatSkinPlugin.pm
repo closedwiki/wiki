@@ -53,7 +53,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.74';
+$RELEASE = '2.75';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -943,7 +943,7 @@ sub ifDefinedImpl {
 	$theVariable = &_getValueFromTopic($web, $topic, $varName, $topicText);
 	$theVariable =~ s/^\s+//;
 	$theVariable =~ s/\s+$//;
-	$theVariable = &TWiki::Func::expandCommonVariables($theVariable, $web, $topic);
+	$theVariable = &TWiki::Func::expandCommonVariables($theVariable, $topic, $web);
 	$theThen =~ s/%$varName%/$theVariable/g;# SMELL: do we need to backport topic vars?
       } else {
 	return $before.$theElse.$after unless $theElsIfArgs;
