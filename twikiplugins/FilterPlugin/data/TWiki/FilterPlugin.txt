@@ -93,4 +93,4 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
---- TWiki:Main.MichaelDaum - 09 Nov 2005
+-- TWiki:Main.MichaelDaum - 09 Nov 2005
