@@ -65,7 +65,8 @@ sub copy_in {
 
 sub just_link {
     my( $moduleDir, $dir, $file ) = @_;
-    File::Path::mkpath( $dir );
+    return if -e $file;
+    File::Path::mkpath( $dir ) unless( -e $dir || -l $dir );
     my $argh = `ln -s $moduleDir/$file $file`;
     die "$argh $@" if ( $argh || $@ );
     print "Lunk $file\n";
