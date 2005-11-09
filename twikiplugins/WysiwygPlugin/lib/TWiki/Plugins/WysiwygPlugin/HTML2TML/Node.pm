@@ -289,7 +289,7 @@ sub _convertList {
     foreach my $kid ( @{$this->{children}} ) {
         # be tolerant of dl, ol and ul with no li
         if( $kid->{tag} =~ m/^[dou]l$/i ) {
-            $text .= $kid->_convertList( $indent."\t" );
+            $text .= $kid->_convertList( $indent."   " );
             next;
         }
         next unless $kid->{tag} =~ m/^(dt|dd|li)$/i;
@@ -311,7 +311,7 @@ sub _convertList {
         foreach my $grandkid ( @{$kid->{children}} ) {
             my $t;
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
-                $t = $grandkid->_convertList( $indent."\t" );
+                $t = $grandkid->_convertList( $indent."   " );
             } else {
                 ( $f, $t ) = $grandkid->generate( $WC::NO_BLOCK_TML );
                 $t =~ s/$WC::CHECKn/ /g;
@@ -714,7 +714,7 @@ sub _handleLIST {
         !$this->_isConvertableList( $options | $WC::NO_BLOCK_TML )) {
         return ( 0, undef );
     }
-    return ( $WC::BLOCK_TML, $this->_convertList( "\t" ));
+    return ( $WC::BLOCK_TML, $this->_convertList( "   " ));
 }
 
 sub _handleTABLE {
