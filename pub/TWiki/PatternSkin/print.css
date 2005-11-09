@@ -6,12 +6,16 @@ a:visited:after {
 	font-size:85%; /*S3*/
 }
 /* ... except for bits of the gui */
-td.patternHomePath a:visited:after,
-td.patternHomePath a:link:after,
-td.patternRevInfo a:visited:after,
-td.patternRevInfo a:link:after,
-.patternBottomBar a:visited:after,
-.patternBottomBar a:link:after {
+.patternHomePath a:link:after,
+.patternHomePath a:visited:after,
+.patternRevInfo a:link:after,
+.patternRevInfo a:visited:after,
+#patternBottomBar a:link:after,
+#patternBottomBar a:visited:after,
+.twikiAttachments a:link:after,
+.twikiAttachments a:visited:after,
+.twikiForm a:link:after,
+.twikiForm a:visited:after {
 	content:"";
 }
 .patternHomePath img,
@@ -20,37 +24,52 @@ td.patternRevInfo a:link:after,
 }
 
 /* Layout */
-.patternPage, 
-.patternPageShadow {
+#patternScreen,
+#patternPageShadow, 
+#patternPage {
 	margin:0;
+	padding:0;
+	top:0;
 }
-.patternMain {
+.patternPrintPage #patternScreen {
+	padding:1cm;
+	width:21cm;
+}
+body html {
+	background:#fff;
+}
+.patternMainContents {
 	margin:0;
-	padding:1em 2em 0 2em;
+	padding:0;
 	left:0;
 }
 /* hide bits of the gui */
 .patternTopicAction,
 td.patternToolBar,
-.patternLeftBar,
-.patternTopBar {
+#patternLeftBar,
+#patternTopBar {
 	display:none;
+	width:0;
+}
+#patternMain {
+	width:100%;
 }
 
 /* Style */
-.patternMain {
-	margin:0;
+#patternColumnWrapper {
 	padding:0;
 	border:none;
 }
 h2, h3,	h4,	h5 {
 	border:none;
 }
-.patternBottomBar {
+#patternBottomBar {
 	margin:1em 0 0 0;
 }
 .patternBottomBarContents {
 	padding:0;
+	margin-left:0;
+	margin-right:0;
 }
 .patternTopicFooter {
 	margin:2em 0 2em 0;
@@ -64,11 +83,7 @@ h2, h3,	h4,	h5 {
 body {
 	background-color:#fff;
 }
-.patternPage, 
-.patternPageShadow {
-	background:#fff;
-}
-.patternBottomBar {
+#patternBottomBar {
 	background:#fff;
 	color:#000;
 }
@@ -77,7 +92,7 @@ h2 {
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
-	background:#fff; /*BG1*/
+	background:#fff;
 }
 
 

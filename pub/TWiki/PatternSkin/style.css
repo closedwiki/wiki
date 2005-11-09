@@ -1,7 +1,7 @@
 
 /*	-----------------------------------------------------------
 	STYLE
-	Appearance: margins, padding, fonts, borders
+	Appearance:margins, padding, fonts, borders
 	-----------------------------------------------------------	*/
 	
 
@@ -27,8 +27,6 @@
 html body {
 	line-height:1.4em; /*S1*/
 	font-family:"Lucida Grande", verdana, arial, sans-serif;
-	margin:0em;
-	padding:0em;
 	font-size:x-small;
 	voice-family:"\"}\""; 
 	voice-family:inherit;
@@ -59,8 +57,8 @@ pre, code, tt {
 }
 /* put overflow pre in a scroll area */
 pre {
-    width:100%;
-    margin:1em 0; /* Win IE tries to make this bigger otherwise */
+ width:100%;
+ margin:1em 0; /* Win IE tries to make this bigger otherwise */
 }
 html>body pre { /* hide from IE */
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
@@ -99,7 +97,7 @@ h1,
 .patternTopic h4,
 .patternTopic h5 {
 	display:block;
-	/* give header a background color for easy scanning: */
+	/* give header a background color for easy scanning:*/
 	padding:.1em 5px;
 	margin:1em -5px .35em -5px;
 	border-width:0 0 1px 0;
@@ -184,8 +182,8 @@ label {
 	
 /* TablePlugin */
 .twikiTable {
-    border-collapse: collapse;
-    border-width:1px;
+ border-collapse:collapse;
+ border-width:1px;
 	border-style:solid;
 }
 .twikiTable td,
@@ -194,10 +192,10 @@ label {
 	border-style:solid;
 }
 .twikiTable th {
-    padding:.4em .5em;
+ padding:.4em .5em;
 }
 .twikiTable td {
-    padding:.25em .5em;
+ padding:.25em .5em;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -278,17 +276,17 @@ th.twikiSortedDescendingCol a:hover font,
 	text-decoration:none;
 }
 /* TipsContrib - in left bar */
-.patternLeftBar .tipsOfTheDay {
+#patternLeftBar .tipsOfTheDay {
 	margin:1em 2em .5em 0;
 	border-width:0;
 }
-.patternLeftBar .tipsOfTheDayHeader img {
+#patternLeftBar .tipsOfTheDayHeader img {
 	display:none;
 }
-.patternLeftBar .tipsOfTheDayContents {
+#patternLeftBar .tipsOfTheDayContents {
 	padding:.25em .25em .5em .25em;
 }
-.patternLeftBar .tipsOfTheDayHeader {
+#patternLeftBar .tipsOfTheDayHeader {
 	display:block;
 	font-weight:normal;
 }
@@ -334,7 +332,7 @@ a:visited .twistyLinkLabel {
 .twikiAttachments table {
 	line-height:1.4em; /*S1*/
 	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
+	voice-family:"\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
 	width:100%;
 }
@@ -394,7 +392,7 @@ a:visited .twistyLinkLabel {
 .twikiAttachments td a:visited,
 .twikiForm td a:link,
 .twikiForm td a:visited {
-	font-weight: normal;
+	font-weight:normal;
 }
 .twikiForm table table,
 .twikiForm table table th,
@@ -408,7 +406,7 @@ a:visited .twistyLinkLabel {
 	padding:.3em 0 .6em 0;
 }
 .twikiToc ul {
-	list-style: none;
+	list-style:none;
 	padding:0 0 0 .5em;
 	margin:0em;
 }
@@ -527,80 +525,92 @@ a:hover .twikiAccessKey {
 	font-size:94%; /*S2*/
 	margin-bottom:1em;
 }	
-.patternWebIndicator {}
-.patternPage {
-	font-size:100%;
+.patternWebIndicator {
 }
-.patternMiddleContainer {}
-.patternMain {
-	padding:0 2em;
+#patternPageShadow {
+}
+#patternPage {
+	font-size:100%;
+	height:100%; /* for Win/IE */
+}
+#patternColumnWrapper {
 	border-width:1px 0 0 0;
 	border-style:solid;
 }
-.patternNoViewPage .patternMain {
-	padding-top:2em;
-	padding-bottom:2em;
+.patternMainContents {
+	padding:0 2em 2em 2em;
+}
+.patternNoViewPage .patternMainContents {
+	padding:2em 4em;
 	margin-bottom:1em;
 }
 
 /* Top bar */
 
-.patternTopBar {}
+#patternTopBar {} /* see topic TWiki/WebTopBar */
 .patternTopBarContents {
-	padding:10px 2em 10px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
+}
+.patternTopBarOverlay {
+	position:relative;
+	z-index:3;
+	top:0;
+	left:0;
+	height:64px; /*C3*/
+}
+.patternTopBarLogo {
+	position:absolute;
+	top:0px;
+	left:0px;
+	margin:12px 0 0 1em; /* (C3 - 40px) / 2 */ /* vertically centers the logo; assumes a logo height of 40px */ /*S6*/
 }
 
 /* Bottom bar */
-.patternBottomBar {
-	margin:4em 0 0 0;
-	border-width:1px 0 0 0;
-	border-style:solid;
-}
 .patternBottomBarContents {
-	padding:.5em 0;
-	font-size:94%; /*S2*/
+	font-size:85%; /*S3*/
+	line-height:1.3em;
+	text-align:center;
 }
 
 /* Left bar */
-.patternLeftBar {
-	border-width:1px 0 0 0;
-	border-style:solid;
+#patternLeftBar {
 	overflow:hidden;
 	font-size:94%; /*S2*/
+	border-width:0 1px 0 0;
+	border-style:dotted;
 }
-.patternLeftBar a img {
+#patternLeftBar a img {
 	margin:1px 0 0 0;
 }
-.patternLeftBar a:link,
-.patternLeftBar a:visited {
+#patternLeftBar a:link,
+#patternLeftBar a:visited {
 	text-decoration:none;
 }
-.patternLeftBar ul {
+#patternLeftBar ul {
 	padding:0em;
 	margin:0em;
 	list-style:none;
 }
-.patternLeftBar li {
+#patternLeftBar li {
 	padding-left:0;
-	margin-right:2em; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
+	margin-right:2em; /*S6*/ /*needed for proper wrapping:1em is left margin, 1em is right margin*/
 }
-.patternLeftBar .patternFormHolder {
+#patternLeftBar .patternFormHolder {
 	margin:.5em 0 1em 0;
 }
-html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
+html>body #patternLeftBar .patternFormHolder { /* Hide from IE */
 	margin-top:1.25em;
 }
-.patternLeftBar .patternFormHolder table {
+#patternLeftBar .patternFormHolder table {
 	width:100%;
 }
-.patternLeftBar .patternFormHolder th {
+#patternLeftBar .patternFormHolder th {
 	padding:0 0 2px 0;
 	vertical-align:middle;
 }
-.patternLeftBar .patternFormHolder th.patternFormSpacer {
+#patternLeftBar .patternFormHolder th.patternFormSpacer {
 	width:1%;
 }
-.patternLeftBar input.patternFormField {
+#patternLeftBar input.patternFormField {
 	display:block;
 	height:12px; /* with padding and border this adds up to 16px height - same as button */
 	width:99%;
@@ -609,15 +619,15 @@ html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 	font-size:85%; /*S3*/
 	margin:0;
 }
-.patternLeftBar input.patternFormButton {
+#patternLeftBar input.patternFormButton {
 	display:block;
 	padding:0 1em 0 0;
 	margin:auto 1em auto 0;
 	border:0;
 	width:16px;
 }
-.patternLeftBar .patternChangeLanguage {
-	margin:0 2em 0 0; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
+#patternLeftBar .patternChangeLanguage {
+	margin:0 2em 0 0; /*S6*/ /*needed for proper wrapping:1em is left margin, 1em is right margin*/
 	font-size:85%; /*S3*/
 }
 .patternLeftBarPersonal {
@@ -627,7 +637,7 @@ html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 	border-style:solid;
 }
 .patternLeftBarPersonal ul {
-	list-style: none;
+	list-style:none;
 	margin:0;
 	padding:0;
 }
@@ -640,7 +650,8 @@ html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 	text-decoration:none;
 }
 .patternLeftBarContents {
-	padding:0 1em 1.5em 1em; /*S6*/
+	width:100%;
+	padding:0 1em 2.5em 1em; /*S6*/
 }
 
 /* table used in various places */
@@ -680,6 +691,12 @@ html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 .patternTop td {
 	vertical-align:top;
 }
+.patternTop .patternHomePath {
+	width:65%;
+}
+.patternTop .patternRevInfo {
+	width:35%;
+}
 .patternTop .patternHomePath,
 .patternTop .patternRevInfo {
 	padding:.25em .5em .25em 0;
@@ -689,7 +706,7 @@ html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 	text-align:left;
 	width:auto;
 }
-.patternTop .patternRevInfo {
+.patternTop .patternRevision {
 	float:right;
 	text-align:right;
 }
@@ -698,6 +715,9 @@ html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 .patternTop .patternRevInfo a:link,
 .patternTop .patternRevInfo a:visited {
 	text-decoration:none;
+}
+.patternHomePathTitle {
+	font-weight:bold;
 }
 
 /* Button tool bar */
@@ -814,7 +834,7 @@ input.patternFormFieldVerticalForm {
 .patternAttachPage .patternVersatileTable table {
 	margin-bottom:0;
 	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
+	voice-family:"\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
 	width:100%;	
 }
@@ -837,6 +857,9 @@ input.patternFormFieldVerticalForm {
 .patternRenamePage .patternVersatileTable th {
 	text-align:right;
 	width:10%;
+}
+.patternRenamePage .patternTopicAction {
+	margin-top:2.5em;
 }
 
 /* WebSearch, WebSearchAdvanced */
@@ -883,7 +906,7 @@ table#twikiSearchTable td.first {
 }
 .patternSearchResults table {
 	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
+	voice-family:"\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
 	width:100%;
 }
@@ -952,11 +975,26 @@ table#twikiSearchTable td.first {
 
 /* Print */
 
-.patternPrintPage {
-	/*font-size: 12pt;*/
+.patternPrintPage #patternColumnWrapper {
+	border:none;
 }
-.patternPrintPage .patternMain {
-	padding:1em 2em 0 2em;
+.patternPrintPage .patternMainContents {
+	margin:0;
+	padding:0;
+}
+.patternPrintPage h2,
+.patternPrintPage h3,
+.patternPrintPage h4,
+.patternPrintPage h5 {
+	border:none;
+}
+.patternPrintPage #patternBottomBar {
+	margin:1em 0 0 0;
+}
+.patternPrintPage .patternBottomBarContents {
+	padding:0;
+	margin-left:0;
+	margin-right:0;
 }
 .patternPrintPage .patternTopicFooter {
 	margin:2em 0 2em 0;
@@ -965,6 +1003,9 @@ table#twikiSearchTable td.first {
 
 /* Diff */
 
+.patternDiffPage .patternTopicAction {
+	margin-top:2.5em;
+}
 .patternDiffPage .twikiDiffTable {
 	margin:2em 0;
 }
@@ -983,6 +1024,6 @@ tr.twikiDiffDebug td {
 	padding:.3em 0;
 }
 
-.patternPlainPage .patternMain {
-	padding-top:2em;
+.patternPlainPage .patternMainContents {
+	padding:2em;
 }

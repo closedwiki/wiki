@@ -1,18 +1,22 @@
 %META:TOPICINFO{author="TWikiContributor" date="1130024123" format="1.1" version="$Rev$"}%
-   * Set USERSTYLEURL=%ATTACHURL%/notopbar.css
 
-Add dynamic variable:
+__example topic for PatternSkinCssCookbook__
+
+---+!!  !PatternSkinCssCookbook Recipe: Hide the top bar
+<verbatim>
+   * Set USERSTYLEURL=%ATTACHURL%/notopbar.css
+</verbatim>
+
+Add the dynamic variable link to the logo image to the topic text:
 <verbatim>
 <style type="text/css" media="all">
-.patternLeftBar { background-image:url("%PUBURL%/%WEB%/%WEBPREFSTOPIC%/logo.gif"); }
+#patternLeftBar { background-image:url("%PUBURL%/%WEB%/%WEBPREFSTOPIC%/logo.gif"); }
 </style>
 </verbatim>
 
 <style type="text/css" media="all">
-.patternLeftBar { background-image:url("%PUBURL%/%WEB%/%WEBPREFSTOPIC%/logo.gif"); }
+#patternLeftBar { background-image:url("%PUBURL%/%WEB%/%WEBPREFSTOPIC%/logo.gif"); }
 </style>
-
--- Main.ArthurClemens - 22 Oct 2005
 
 
 %META:FILEATTACHMENT{name="notopbar.css" attachment="notopbar.css" attr="" comment="" date="1130024123" path="notopbar.css" size="3" stream="notopbar.css" user="Main.ArthurClemens" version="1"}%

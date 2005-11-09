@@ -2,7 +2,12 @@
 
 
 
-%TMPL:DEF{"bodystart"}%<body class="patternViewPage patternPrintPage">%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternViewPage patternPrintPage%TMPL:END%
+
+
+
+%TMPL:DEF{"leftbar"}%%TMPL:END%
+%TMPL:DEF{"topbar"}%%TMPL:END%
 
 
 
@@ -13,11 +18,6 @@
 
 %TMPL:DEF{"attachments"}%
 %META{"attachments"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"main"}%<div class="patternMiddleContainer"><div class="patternMain">%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div>%TMPL:P{"bottombar"}%</div>%TMPL:END%
 
 
 
@@ -38,8 +38,4 @@
 
 
 
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:P{"page"}%

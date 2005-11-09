@@ -20,9 +20,11 @@
 	T9 alert 																		#f00
 	T10 green 'new'																	#049804
 	T11 dark gray																	#333
+	T12 light gray (on middle gray; patternBottomBar)								#E8EEF7
 	
 	Background colors
 	----------------------------------------
+	BG0 body background																#8D939A
 	BG1	white; attachment, form table background									#fff
 	BG2 link hover background color (red)  											#D6000F 
 	BG3	light gray																	#efefef
@@ -35,6 +37,7 @@
 	BG10 light green 'new'															#ECFADC
 	BG11 dark gray; diff header background (same as T8)								#8E9195
 	BG12 dark yellow, submit button													#FED764
+	BG13 middle gray patternBottomBar												#82858B
 	
 	Border colors
 	----------------------------------------
@@ -50,7 +53,7 @@
 	---------------------------------------------------------------------------------------	*/
  
 html body {
-	background-color:#fff; /*BG1*/
+	background-color:#8D939A; /*BG0*/
 	color:#000; /*T1*/
 }
 /* be kind to netscape 4 that doesn't understand inheritance */
@@ -201,11 +204,11 @@ a:hover.twistyTrigger {
 	color:#333; /*T11*/
 }
 /* TipsContrib - in left bar */
-.patternLeftBar .tipsOfTheDay a:link,
-.patternLeftBar .tipsOfTheDay a:visited {
+#patternLeftBar .tipsOfTheDay a:link,
+#patternLeftBar .tipsOfTheDay a:visited {
 	color:#a00; /*T5*/
 }
-.patternLeftBar .tipsOfTheDay a:hover {
+#patternLeftBar .tipsOfTheDay a:hover {
 	color:#FBF7E8; /*T3*/
 }
 
@@ -340,6 +343,13 @@ a:hover .twikiAccessKey {
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
 	-----------------------------------------------------------	*/
+
+#patternPageShadow {
+	background-color:transparent;
+}
+#patternPage {
+	background-color:#fff; /*BG1*/
+}
 .patternTopicAction {
 	color:#666; /*T7*/
 	border-color:#E2DCC8; /*BO4*/
@@ -367,49 +377,58 @@ a:hover .twikiAccessKey {
 .patternWebIndicator {
 	background-color:#fff;
 }
-.patternMain {
+#patternMain {
 	background-color:#fff; /*BG1*/
+}
+#patternColumnWrapper {
 	border-color:#E2DCC8; /*BO4*/
 }
-.patternTopBar {
+#patternTopBar {
 	background-color:transparent;
-}
-.patternBottomBar {
-	border-color:#ddd; /*BO7*/
 }
 .patternTopBarContents .patternSearchBox td {
 	color:#8E9195; /*T8*/
 }
+#patternBottomBar {
+}
+.patternBottomBarContents,
+.patternBottomBarContents a:link,
+.patternBottomBarContents a:visited {
+	color:#333; /*T11*/
+}
+.patternBottomBarContents a:hover {
+	color:#FBF7E8; /*T3*/
+}
 
 /* Left bar */
-.patternLeftBar {
-	border-color:#E2DCC8; /*BO4*/
+#patternLeftBar {
+	/*background-color:#FBF7E8;*/ /*C3*/
 	color:#666; /*T7*/
-	background-color:#FBF7E8;
+	border-color:#E2DCC8; /*BO4*/
 }
-.patternLeftBar hr {
+#patternLeftBar hr {
 	color:#E2DCC8; /*BO4*/
 	background-color:#E2DCC8; /*BO4*/
 }
-.patternLeftBar a:link,
-.patternLeftBar a:visited {
+#patternLeftBar a:link,
+#patternLeftBar a:visited {
 	color:#7A4707; /*T6*/
 }
-.patternLeftBar a:hover {
+#patternLeftBar a:hover {
 	color:#FBF7E8; /*C3*/
 }
-.patternLeftBar b,
-.patternLeftBar strong {
+#patternLeftBar b,
+#patternLeftBar strong {
 	color:#333; /*T11*/
 }
-.patternLeftBar input.patternFormField {
+#patternLeftBar input.patternFormField {
 	border-color:#E2DCC8; /*BO4*/
 	background-color:#fff; /*BG1*/
 }
-.patternLeftBar input.patternFormButton {
+#patternLeftBar input.patternFormButton {
 	background-color:transparent; /* no bg color with image button */
 }
-.patternLeftBar .patternChangeLanguage {
+#patternLeftBar .patternChangeLanguage {
 	color:#8E9195; /*T8*/
 }
 .patternLeftBarPersonal {
@@ -423,9 +442,6 @@ a:hover .twikiAccessKey {
 .patternLeftBarPersonal a:hover {
 	color:#FBF7E8; /*C3*/
 	background-color:#D6000F; /*BG2*/
-}
-.patternBottomBarContents {
-	color:#8E9195;	/*T8*/
 }
 .patternVersatileTable table {
 	border-color:#ccc;
@@ -600,6 +616,20 @@ table#twikiSearchTable td.first {
 
 /* Print */
 
+body.patternPrintPage {
+	background:#fff;
+}
+.patternPrintPage #patternPage, 
+.patternPrintPage #patternPageShadow {
+	background:#fff;
+}
+.patternPrintPage #patternBottomBar {
+	background:#fff;
+	color:#000;
+}
+.patternPrintPage h2 {
+	background-color:transparent;
+}
 .patternPrintPage .patternContent .twikiAttachments,
 .patternPrintPage .patternContent .twikiForm {
 	background:#fff; /*BG1*/
@@ -640,3 +670,4 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiDiffLineNumberHeader {
 	background-color:#ddd;
 }
+

@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"twiki.pattern"}%
 
 
-%TMPL:DEF{"bodystart"}%<body class="patternPlainPage">%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternPlainPage%TMPL:END%
 
 
 
@@ -15,19 +15,10 @@
 
 
 
-%TMPL:DEF{"main"}%<div class="patternMiddleContainer"><div class="patternMain">%TMPL:P{"content"}%
-</div></div>%TMPL:END%
-
-
-
 %TMPL:DEF{"content"}%<div class="patternContent"><div class="patternTopic">
 %TEXT%</div>
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%</div>%TMPL:END%
 
 
 
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:P{"page"}%

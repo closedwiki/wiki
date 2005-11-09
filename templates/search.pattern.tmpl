@@ -11,7 +11,7 @@
 
 
 
-%TMPL:DEF{"bodystart"}%<body class="patternSearchResultsPage" onload="initPage()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternSearchResultsPage%TMPL:END%
 
 
 
@@ -28,9 +28,3 @@
 %TMPL:DEF{"content"}%
 %SPLIT%<div class="patternSearchString">%_{"Searched:"}% <b><nop>%SEARCHSTRING%</b></div><div class="patternSearchResultsBegin"></div>
 %TMPL:P{"searchbody"}%%SPLIT%%TMPL:P{"standardfooter"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"standardfooter"}%
-<div class="patternTopicFooter"></div>
-#PageBottom %TMPL:END%

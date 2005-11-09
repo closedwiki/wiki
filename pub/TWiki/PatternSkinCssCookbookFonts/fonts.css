@@ -10,17 +10,17 @@ h1, h2, h3, h4, h5, h6 {
 	border:3px double #555;
 	padding:.5em;
 }
-.patternLeftBar {
-	font-family:Arial;
+#patternLeftBar {
+	font-family:Times;
 }
 .patternTop {
-	font-family:Arial;
+	font-family:Times;
 }
-.patternLeftBar a:link,
-.patternLeftBar a:visited {
+#patternLeftBar a:link,
+#patternLeftBar a:visited {
 	color:#666;
 }
-.patternLeftBar a:hover {
+#patternLeftBar a:hover {
 	color:#acc3b1;
 }
 .patternLeftBarPersonal {
@@ -30,6 +30,6 @@ h1, h2, h3, h4, h5, h6 {
 .patternLeftBarPersonal a:visited {
 	color:#800;
 }
-.patternMain {
+#patternMain {
 	background:none;
 }

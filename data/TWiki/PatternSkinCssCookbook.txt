@@ -14,7 +14,7 @@ This topic describes how to customize the default look of TWiki for your own nee
 
 When customizing your TWiki installation, you can either choose to completely rewrite all css styles, or to selectively override some styles. The latter option is by far less time consuming, but all depends on your graphical wishes.
 
----+++ Major changes: Rewriting CSS
+---+++ When you need big changes: Rewriting CSS
    * Create a new topic that will contain your new CSS files
    * Attach 3 new style sheets to the topic
    * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files:
@@ -29,7 +29,7 @@ When customizing your TWiki installation, you can either choose to completely re
       * <nop>Set TWIKICOLORURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/empty.css
  </pre>
 
----+++ Minor changes: Adding to existing CSS
+---+++ When you need small changes: Adding to existing CSS
 With CSS you cannot remove already defined classes, you can only add to it, or overwrite existing styles. <br />
 Overriding default CSS is done with 3 variables: =USERLAYOUTURL=, =USERSTYLEURL=, =USERCOLORSURL=.
    * Create a new topic that will contain your new CSS files
@@ -55,28 +55,21 @@ User styles are always loaded after TWiki styles.
 
 The rest of this topic shows examples of small CSS changes.
 
+---++ Recipes
 
----++ Hide the left bar
+---+++ Hide the left bar
+   
+See example at: PatternSkinCssCookbookNoLeftBar
 
-Use the =USERSTYLEURL= variable. No, variable is not used for users only; and the order in which variables are read makes that topic variables always take precedence over user variables. So write a =USERSTYLEURL= in a topic.
-
-Follow these steps:
-   1 Create a new topic, for instance HideLeftBar. You may also want to use a central place for styles - in that case you can choose TWikiPreferences, or a new topic [[TWiki.CustomStyles]] or something. I'll use the last one for the example below.
-   1 In that topic, attach a css file (see attached example). Use the file that matches your TWiki installation (current is Cairo).
-   1 In the topic where you wish to hide the left bar, write <verbatim>   * Set USERSTYLEURL = %PUBURL%/TWiki/CustomStyles/hideleftbar_Dakar.css</verbatim>
-
----++ Center the page
-
-See example at: PatternSkinCssCookbookCenterPage
-
----++ Use different fonts
+---+++ Use different fonts
 
 See example at: PatternSkinCssCookbookFonts
 
----++ No top bar
+---+++ No top bar
 
 See example at: PatternSkinCssCookbookNoTopBar
 
+---+++ Full screen: no gray borders
 
-%META:FILEATTACHMENT{name="hideleftbar_Dakar.css" attr="" autoattached="1" comment="css to hide the left bar (Dakar)" date="1129323328" path="hideleftbar_Dakar.css" size="112" user="ArthurClemens" version=""}%
-%META:FILEATTACHMENT{name="hideleftbar_Cairo.css" attr="" autoattached="1" comment="css to hide the left bar (Cairo)" date="1129323327" path="hideleftbar_Cairo.css" size="106" user="ArthurClemens" version=""}%
+See example at: PatternSkinCssCookbookFullScreen
+

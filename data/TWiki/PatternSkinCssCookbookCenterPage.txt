@@ -1,9 +1,0 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129333062" format="1.1" version="$Rev$"}%
----+!!  PatternSkinCssCookbook: Center the page
-
-Cookbook example how to center the page (left bar hidden).
-
-   * Set USERSTYLEURL = %ATTACHURL%/centerpage.css
-
-
-%META:FILEATTACHMENT{name="centerpage.css" attachment="centerpage.css" attr="" comment="CSS to center the page" date="1129330178" path="centerpage.css" size="206" stream="centerpage.css" user="Main.ArthurClemens" version="1"}%

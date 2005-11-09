@@ -5,7 +5,7 @@
 
 %TMPL:DEF{"templatecustomstyle"}%
 <style type="text/css" media="all">
-.patternPreviewPage .patternMain {
+.patternPreviewPage #patternMain {
 	background-image:url(%PREVIEWBGIMAGE%);
 }
 </style>%TMPL:END%
@@ -18,8 +18,7 @@
 
 
 
-%TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage patternPreviewPage"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternPreviewPage%TMPL:END%
 
 
 
@@ -66,8 +65,4 @@
 
 
 
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:P{"page"}%

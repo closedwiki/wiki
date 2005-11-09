@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1129333294" format="1.1" version="$Rev$"}%
+
+__example topic for PatternSkinCssCookbook__
+
+---+!!  @PatternSkinCssCookbook Recipe: Hide the left bar
+<verbatim>
+   * Set USERSTYLEURL = %ATTACHURL%/hideleftbar_Dakar.css
+</verbatim>
+
+%META:FILEATTACHMENT{name="hideleftbar_Dakar.css" attr="" autoattached="1" comment="css to hide the left bar (Dakar)" date="1129323328" path="hideleftbar_Dakar.css" size="112" user="ArthurClemens" version=""}%
+%META:FILEATTACHMENT{name="hideleftbar_Cairo.css" attr="" autoattached="1" comment="css to hide the left bar (Cairo)" date="1129323327" path="hideleftbar_Cairo.css" size="106" user="ArthurClemens" version=""}%

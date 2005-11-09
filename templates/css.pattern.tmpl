@@ -1,46 +1,33 @@
-<!-- Link to stylesheets in case javascript is off. -->
-<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%TWIKILAYOUTURL%" media="all" />
-<link id="twikiStyleCss" rel="stylesheet" type="text/css" href="%TWIKISTYLEURL%" media="all" />
-<link id="twikiColorsCss" rel="stylesheet" type="text/css" href="%TWIKICOLORSURL%" media="all" />
-<!-- But if javascript is on, disable the links. -->
-<script type="text/javascript">
-   if (document.getElementById) {
-      document.getElementById("twikiLayoutCss").disabled = true;
-      document.getElementById("twikiStyleCss").disabled = true;
-      document.getElementById("twikiColorsCss").disabled = true;
-   }
-</script>
+%IF{ "context TwistyPluginEnabled" then="" else="<style type='text/css' media='all'>@import url('%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css');</style>"}%
 <style type="text/css" media="all">
-/* Twisty */
-@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
+/* Check if style urls are valid (non-empty) */
+	%IF{ "$ TWIKILAYOUTURL" then="@import url('%TWIKILAYOUTURL%');" else=""}%
+	%IF{ "$ TWIKISTYLEURL"  then="@import url('%TWIKISTYLEURL%');" else=""}%
+	%IF{ "$ TWIKICOLORSURL" then="@import url('%TWIKICOLORSURL%');" else=""}%
 </style>
-<script type="text/javascript">
-<!--
-/* Use javascript to check if style urls are valid (non-empty) */
-document.write('<style type="text/css" media="all">');
-/* Default TWiki layout */
-if ("%TWIKILAYOUTURL%".split("?")[0].length && "%TWIKILAYOUTURL%".split("TWIKILAYOUTURL")[0].length) {
-	document.write('@import url("%TWIKILAYOUTURL%");'); 
+<!--[if IE]>
+<style>
+* html pre {
+	overflow-x:auto;
+    overflow-y:hidden;
+	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
 }
-/* Default TWiki style */
-if ("%TWIKISTYLEURL%".split("?")[0].length && "%TWIKISTYLEURL%".split("TWIKISTYLEURL")[0].length) {
-	document.write('@import url("%TWIKISTYLEURL%");'); 
-}
-/* Default TWiki colors */
-if ("%TWIKICOLORSURL%".split("?")[0].length && "%TWIKICOLORSURL%".split("TWIKICOLORSURL")[0].length) {
-	document.write('@import url("%TWIKICOLORSURL%");'); 
-}
-document.write('<\/style>');
-//-->
-</script>
+</style>
+<![endif]-->
 <style type="text/css" media="all">
 	/* Styles that are set using variables */
+	body {
+		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_page.gif");
+		background-repeat:repeat-x;
+	}
 	.twikiToc li {
 		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/bullet-down.gif");
-	}	        
-	.patternWebIndicator,
+	}
 	.patternBookViewList .twikiTopRow {
 		background-color:%WEBBGCOLOR%;
+	}
+	.patternTopBarOverlay {
+		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_white.gif");
 	}
 	.twikiHelp,
 	.patternAccessKeyInfo {
@@ -48,12 +35,13 @@ document.write('<\/style>');
 	}
 	.patternLeftBarPersonal,
 	.tipsOfTheDay {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_blue.gif") #fff repeat-x;
+		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_blue.jpg") #fff repeat-x;
 	}
-	.patternMain {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_yellow.gif") #fff repeat-x;
+	#patternLeftBar,
+	#patternMain {
+		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_yellow.jpg") #fff repeat-x;
 	}
-	.patternPrintPage .patternMain {
+	.patternPrintPage #patternMain {
 		background:#fff;
 	}
 	.twikiPageForm table {
@@ -65,24 +53,24 @@ document.write('<\/style>');
 	.patternLeftBarPersonal li {
 		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/bullet-blue.gif");
 	}
+	#patternPageShadow {
+		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
+	}
 </style>
-%TMPL:INCLUDE{"cssmediatypes"}%
 <script type="text/javascript">
-<!--
-/* Use javascript to check if style urls are valid (non-empty) */
-document.write('<style type="text/css" media="all">');
-/* Custom overriding layout per web or per topic */
-if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
-	document.write('@import url("%USERLAYOUTURL%");'); 
-}
-/* Custom overriding style per web or per topic */
-if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
-	document.write('@import url("%USERSTYLEURL%");'); 
-}
-/* Custom overriding style per web or per topic */
-if ("%USERCOLORSURL%".split("?")[0].length && "%USERCOLORSURL%".split("USERCOLORSURL")[0].length) {
-	document.write('@import url("%USERCOLORSURL%");'); 
-}
-document.write('<\/style>');
-//-->
+/* only draw web color bg if the transparent gradient can be drawn */
+//<![CDATA[
+	document.write('<style type="text/css" media="all">');
+	document.write('#patternTopBar {background-color:%WEBBGCOLOR%;}'); 
+	document.write('<\/style>');
+//]]>
 </script>
+<style type="text/css" media="all">
+/* Check if style urls are valid (non-empty) */
+	%IF{ "$ USERLAYOUTURL" then="@import url('%USERLAYOUTURL%');" else=""}%
+	%IF{ "$ USERSTYLEURL"  then="@import url('%USERSTYLEURL%');" else=""}%
+	%IF{ "$ USERCOLORSURL" then="@import url('%USERCOLORSURL%');" else=""}%
+</style>
+<style type="text/css" media="print">
+	@import url("%PUBURL%/%TWIKIWEB%/PatternSkin/print.css");
+</style>
