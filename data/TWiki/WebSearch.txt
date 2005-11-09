@@ -2,8 +2,6 @@
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
-%IF{" '%URLPARAM{search}%' = '' " then="" else='<span class="twistyMakeVisible"><a href="#" style="text-decoration:none;" onclick="location.hash=\'twikiSearchForm\'; return false;">%ICON{down}% <span class="patternLinkLabel">%MAKETEXT{Modify search}%</span></a>'}%
-
 %SEARCH{ 
 "%URLPARAM{search}%" 
 type="keyword" 
