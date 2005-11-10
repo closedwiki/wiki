@@ -422,8 +422,8 @@ HERE
           {
               exec => 3,
               name => 'mailtoLink2',
-              html => '<a href="mailto:a@z.com">mailto:a@z.com</a>',
-              tml => 'mailto:a@z.com',
+              html => ' a@z.com ',
+              tml => ' a@z.com ',
           },
           {
               exec => 3,
