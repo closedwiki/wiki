@@ -3,16 +3,17 @@
 %NOP{
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 }%
-%INCLUDE{"RenderBlogEntriesInCategory" NAME="%TOPIC%"}%
-%INCLUDE{"RenderBlogLinksInCategory" NAME="%TOPIC%"}%
-<style type="text/css">.natTopicForm {display:none}</style>
+%INCLUDE{"RenderBlogEntriesInCategory" NAME="%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set WHITEBOARD = off
-   * Set SIDEBAR = Default
-   * Set SIDEBARARGS = %TOPIC%
+   * Set SIDEBAR = Category
 -->
+
+<style type="text/css">
+  .natTopicForm {display:none}
+</style>
 
 
 %META:FORM{name="TopicForm"}%

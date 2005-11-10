@@ -36,6 +36,12 @@ You are in the <nop>BlogArchive. This is the complete collection of all articles
 posted to this blog.
 %ENDSECTION{"Archive"}%
 
+---++ Category sidebar
+%SECTION{"Category"}%
+You are visiting this blog by category, that is all postings here are filed into the %BASETOPIC%
+category.
+%ENDSECTION{"Category"}%
+
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin

@@ -23,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.04';
+$RELEASE = '0.05';
 
 use Time::Local;
 use TWiki::Contrib::DBCacheContrib;
@@ -140,7 +140,7 @@ sub _DBQUERY {
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theLimit = $params->{limit} || '';
-  my $theSkip = $params->{skip} || '';
+  my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
   $theTopics = $params->{topics} || $params->{topic};
   $theWeb = $params->{web} || $theWeb;
@@ -162,12 +162,14 @@ sub _DBQUERY {
   @topicNames = grep(!/$theExclude/, @topicNames) if $theExclude;
 
   # normalize 
-  $theSkip =~ s/[^\d]//go;
-  $theSkip = 0 if $theSkip =~ /^$/o;
+  $theSkip =~ s/[^-\d]//go;
+  $theSkip = 0 if $theSkip eq '';
+  $theSkip = 0 if $theSkip < 0;
   $theFormat = '' if $theFormat eq 'none';
   $theSep = '' if $theSep eq 'none';
   $theLimit =~ s/[^\d]//go;
   $theLimit = scalar(@topicNames) if $theLimit eq '';
+  $theLimit += $theSkip;
 
   my ($topicNames, $hits, $msg) = &dbQuery($theSearch, $theWeb, 
     \@topicNames, $theOrder, $theReverse);
@@ -184,12 +186,14 @@ sub _DBQUERY {
   my $text = '';
   if ($theFormat && $theLimit) {
     my $index = 0;
+    my $isFirst = 1;
     foreach my $topicName (@$topicNames) {
       $index++;
       next if $index <= $theSkip;
       my $root = $hits->{$topicName};
       my $format = '';
-      $format = $theSep if ($index > 1);
+      $format = $theSep unless $isFirst;
+      $isFirst = 0;
       $format .= $theFormat;
       $format =~ s/\$formfield\((.*?)\)/getFormField($theWeb, $topicName, $1)/geo;
       $format =~ s/\$expand\((.*?)\)/expandPath($theWeb, $root, $1)/geo;
@@ -438,6 +442,7 @@ sub _RECENTCOMMENTS {
   my $theAge = $params->{age} || 0; # 5184000 are ca 2 months TODO compute TIMESINCE reversely
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
+  my $theCategory = $params->{category} || '.*';
   $theAge =~ s/[^\d]+//go;
   $theWeb = $params->{web} || $theWeb;
   
@@ -467,7 +472,7 @@ sub _RECENTCOMMENTS {
       }
     }
 
-    # check if referer is enabled
+    # check if referer is enabled and matches the category
     my $baseRefName = $topicForm->fastget('BaseRef');
     next unless $baseRefName;
     my $baseRefObj = $db{$theWeb}->fastget($baseRefName);
@@ -478,6 +483,8 @@ sub _RECENTCOMMENTS {
     my $state = $baseRefForm->fastget('State');
     next unless $state;
     next unless $state eq 'enabled';
+    my $category = $baseRefForm->fastget('SubjectCategory');
+    next unless $category =~ /$theCategory/;
 
     # found
     $blogComments{$topicName}{obj} = $topicObj;
@@ -622,7 +629,7 @@ sub getRelatedEntries {
   my ($theWeb, $theTopic, $theDepth, $theRelatedTopics) = @_;
 
   writeDebug("getRelatedEntries($theWeb, $theTopic, $theDepth) called");
-  $theRelatedTopics->{$theTopic} = 1;
+  $theRelatedTopics->{$theTopic} = $theDepth;
   writeDebug("already got " . join(",", sort keys %$theRelatedTopics));
   $theDepth = 1 unless defined $theDepth;
   return $theRelatedTopics unless $theDepth;
@@ -635,16 +642,18 @@ sub getRelatedEntries {
   } else {
     foreach my $related (split(/, /, $relatedTopics)) {
       next if $theRelatedTopics && $theRelatedTopics->{$related};
-      $relatedTopics{$related} = 1;
+      my $state = &getFormField($theWeb, $related, 'State');
+      next unless $state eq 'enabled';
+      $relatedTopics{$related} = $theDepth;
       writeDebug("found related $related");
     }
   }
 
   # get related topics that refer to us
-  my ($revRelatedTopics) = &dbQuery('Related=~\'\b' . $theTopic . '\b\'', $theWeb);
+  my ($revRelatedTopics) = &dbQuery('Related=~\'\b' . $theTopic . '\b\' AND State=\'enabled\'', $theWeb);
   foreach my $related (@$revRelatedTopics) {
     next if $theRelatedTopics && $theRelatedTopics->{$related};
-    $relatedTopics{$related} = 1;
+    $relatedTopics{$related} = $theDepth;
     writeDebug("found rev related $related");
   }
 
@@ -652,12 +661,7 @@ sub getRelatedEntries {
   writeDebug("get trans related of $theTopic");
   foreach my $related (keys %relatedTopics) {
     next if $theRelatedTopics && $theRelatedTopics->{$related};
-    my $transRelatedTopics = &getRelatedEntries($theWeb, $related, $theDepth - 1, $theRelatedTopics);
-    if ($transRelatedTopics) {
-      foreach my $transRelated (keys  %$transRelatedTopics) {
-	$theRelatedTopics->{$transRelated} = 1;
-      }
-    }
+    &getRelatedEntries($theWeb, $related, $theDepth - 1, $theRelatedTopics);
   }
   
   writeDebug("theRelatedTopics=" . join(",", sort keys %$theRelatedTopics) . " ... $theTopic in depth $theDepth");
@@ -673,6 +677,7 @@ sub _RELATEDENTRIES {
   $theTopic = $params->{_DEFAULT} || return '';
   my $theFormat = $params->{format} || '$topic';
   my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
   my $theSeparator = $params->{separator} || '$n';
   my $theDepth = $params->{depth} || 2;
   $theWeb = $params->{web} || $theWeb;
@@ -680,21 +685,26 @@ sub _RELATEDENTRIES {
   &initDB($theWeb);
 
   # get direct related
-  my $relatedTopics = &getRelatedEntries($theWeb, $theTopic, $theDepth);
-
-  # sort related topics by creation date
-  ($relatedTopics) = &dbQuery("State='enabled' AND name !='$theTopic'", 
-    $theWeb, [keys %{$relatedTopics}], 'created', 'on');
-  return '' if !$relatedTopics || !@$relatedTopics;
+  my %relatedTopics;
+  &getRelatedEntries($theWeb, $theTopic, $theDepth, \%relatedTopics);
+  delete $relatedTopics{$theTopic};
+  foreach my $key (keys %relatedTopics) {
+    $relatedTopics{$key} = $theDepth - $relatedTopics{$key};
+    #print STDERR "DEBUG: $theTopic has relative $key in depth $relatedTopics{$key}\n";
+  }
+  return '' unless scalar(keys %relatedTopics);
+  my @relatedTopics = sort {$relatedTopics{$a} <=> $relatedTopics{$b}} keys %relatedTopics;
 
   # rendere result
   my $result = $theHeader;
   my $isFirst = 1;
-  foreach my $related (@$relatedTopics) {
+  foreach my $related (@relatedTopics) {
     writeDebug("found related=$related");
 
     my $text = $theFormat;
     $text =~ s/\$topic/$related/go;
+    $text =~ s/\$web/$theWeb/go;
+    $text =~ s/\$depth/$relatedTopics{$related}/go;
 
     # render meta data of related topics
     if ($text =~ /\$headline/) {
@@ -710,6 +720,7 @@ sub _RELATEDENTRIES {
     $result .= $text;
     writeDebug("result=$result");
   }
+  $result .= $theFooter;
 
   # subst standards
   $result =~ s/\$n/\n/go;
