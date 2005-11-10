@@ -73,6 +73,10 @@ pre {
 	%IF{ "$ USERSTYLEURL"  then="@import url('%USERSTYLEURL%');" else=""}%
 	%IF{ "$ USERCOLORSURL" then="@import url('%USERCOLORSURL%');" else=""}%
 </style>
+<style type="text/css" media="all">
+	/* remove borders for now */
+	@import url('%PUBURL%/%TWIKIWEB%/PatternSkinCssCookbookFullScreen/fullscreen.css');
+</style>
 <style type="text/css" media="print">
 	@import url("%PUBURL%/%TWIKIWEB%/PatternSkin/print.css");
 </style>
