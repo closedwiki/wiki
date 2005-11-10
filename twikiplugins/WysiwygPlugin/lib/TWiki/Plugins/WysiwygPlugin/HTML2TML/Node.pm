@@ -518,6 +518,14 @@ sub _handleTT { return _handleCODE( @_ ); }
 sub _handleHTML { return _flatKids( @_ ); }
 sub _handleBODY { return _flatKids( @_ ); }
 
+# pseudo-tags that may leak through in TWikiVariables
+# We have to handle this to avoid a matching close tag </nop>
+sub _handleNOP {
+    my( $this, $options ) = @_;
+    my( $flags, $text ) = $this->_flatKids( $options );
+    return ($flags, '<nop>'.$text);
+}
+
 # tags we ignore completely (contents as well)
 sub _handleDOCTYPE { return ( 0, '' ); }
 sub _handleHEAD { return ( 0, '' ); }
