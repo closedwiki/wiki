@@ -1,11 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131355080" format="1.1" version="1.1"}%
-%INCLUDE{"RenderFrontPage" LIMIT="10" FULL="5" CAT=".*" AUTHOR=".*"}%
-<style type="text/css">.natTopicForm {display:none}</style>
+%META:TOPICINFO{author="TWikiContributor" date="1131556405" format="1.1" version="1.1"}%
+%INCLUDE{"RenderFrontPage" SKIP="%URLPARAM{"skip" default=" 0"}%" CAT=".*" AUTHOR=".*"}%
+
 <!--
    * Set ALLOWTOPICCHANGE = BlogAdminGroup
    * Set PAGETITLE = %FORMFIELD{"TopicDescription"}%
    * Set WHITEBOARD = off
 -->
+
+<style type="text/css">
+  .natTopicForm {display:none}
+</style>
+
 
 
 %META:FORM{name="TopicForm"}%

@@ -1,14 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131360010" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131560391" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
    * LIMIT: maximal number of comments to list
+   * CAT: restrict scope to the given SubjectCategory
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%%~~ RECENTCOMMENTS{
+~~~  category="%CAT%"
 ~~~  format="   * [[$web.$topic][$headline]]
 *~~    <span class=\"blogCommentCount\">$count</span><br/>
 ~~~    <span class=\"blogSideBarCommenter\">
@@ -30,7 +32,7 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" LIMIT="10"}%
+%INCLUDE{"%TOPIC%" LIMIT="10" CAT="BlogDev"}%
 </div>
 
 %INCLUDE{"RenderFunctionCallers"}%

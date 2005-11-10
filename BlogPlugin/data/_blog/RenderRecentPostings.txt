@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129823869" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131560463" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -11,13 +11,16 @@
 <verbatim>
 %STARTINCLUDE%
 <div class="blogSideBarSection blogSideBarLatest">
----+ Latest %IFDEFINED{"%CAT%" then=" in %CAT%"}%%REDDOT{"%TOPIC%"}%
+---+ Latest%REDDOT{"%TOPIC%"}%
 %~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND
 ~~~          State='enabled'
 ~~~         %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'"}%
 ~~~         "
 ~~~         order="createdate" reverse="on" limit="%LIMIT%"
 ~~~         format="   * [[$topic][$formfield(Headline)]]"
+~~~         footer="<style type=\"text/css\">.blogSideBarLatest {
+~~~           $percntCALC{\"$dollarIF($count==0,display:none)\"}$percnt
+~~~           </style>"
 ~~~ }%
 </div>
 %STOPINCLUDE%

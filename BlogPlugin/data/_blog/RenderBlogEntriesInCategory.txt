@@ -1,10 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129733657" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131555980" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
    * NAME: name of a SubjectCategory
+   * SKIP: offset into the archive
 
 ---++ Implementation
 <verbatim>
@@ -14,7 +15,7 @@
 <div class="blogArchiveDescription">
     %DBQUERY{topics="%NAME%" format="$expand(TopicDescription)"}% 
 </div>
-%INCLUDE{"RenderFrontPage" FULL="3" LIMIT="10" CAT="%NAME%" AUTHOR=".*"}%
+%INCLUDE{"RenderFrontPage" SKIP="%SKIP%" CAT="%NAME%" AUTHOR=".*"}%
 *~~ %STOPINCLUDE%
 </verbatim>
 

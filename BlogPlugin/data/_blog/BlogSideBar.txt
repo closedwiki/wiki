@@ -1,6 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130383754" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1131636166" format="1.1" version="1.37"}%
 ---+ Default sidebar
 <div class="alt">
+<verbatim>
 %STARTINCLUDE%
 %SECTION{"Default"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
@@ -15,19 +16,21 @@
 %INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
 %INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
 %INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%INCLUDE{"RenderRecentComments" LIMIT="10"}%
+%INCLUDE{"RenderRecentComments" LIMIT="10" CAT=".*"}%
 %INCLUDE{"RenderRecentPostings" LIMIT="10"}%
 %INCLUDE{"RenderArchives"}%
 %INCLUDE{"RenderCategories"}%
-%INCLUDE{"RenderBlogRoll"}%
+%INCLUDE{"RenderBlogRoll" CAT=".*"}%
 <!-- %<nop>INCLUDE{"RenderVisitors"}% -->
 %INCLUDE{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Default"}%
 %STOPINCLUDE%
+</verbatim>
 </div>
 
 ---+ Admin sidebar
 <div class="alt">
+<verbatim>
 %SECTION{"Admin"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %INCLUDE{"BlogAbout" section="Admin"}%
@@ -43,10 +46,12 @@
 %INCLUDE{"RenderTopicTypes" 
          NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%"}%
 %ENDSECTION{"Admin"}%
+</verbatim>
 </div>
 
 ---+ BlogEntry sidebar
 <div class="alt">
+<verbatim>
 %SECTION{"BlogEntry"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %INCLUDE{"BlogAbout" section="Default"}%
@@ -60,17 +65,16 @@
 %INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
 %INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
 %INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-
-<div class="blogSideBarSection">
-%RELATEDENTRIES{"%BASETOPIC%" format="   * [[$topic][$headline]]" header="---+ Related$n" depth="2"}%
-</div>
+%INCLUDE{"RenderRelatedEntries" NAME="%BASETOPIC%"}%
 %INCLUDE{"RenderRecentPostings" LIMIT="10"}%
 %INCLUDE{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"BlogEntry"}%
+</verbatim>
 </div>
 
 ---+ Aggregation sidebar
 <div class="alt">
+<verbatim>
 %SECTION{"Aggregation"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %INCLUDE{"BlogAbout" section="Aggregation"}%
@@ -84,13 +88,15 @@
 %INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
 %INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
 %INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%INCLUDE{"RenderBlogRoll"}%
+%INCLUDE{"RenderBlogRoll" CAT=".*"}%
 %INCLUDE{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Aggregation"}%
+</verbatim>
 </div>
 
 ---+ Archive sidebar
 <div class="alt">
+<verbatim>
 %SECTION{"Archive"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %INCLUDE{"BlogAbout" section="Archive"}%
@@ -104,12 +110,41 @@
 %INCLUDE{"RenderArchives"}%
 %INCLUDE{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Archive"}%
+</verbatim>
 </div>
+
+---+ Category sidebar
+<div class="alt">
+<verbatim>
+%SECTION{"Category"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+<div class="blogAbout">
+%INCLUDE{"BlogAbout" section="Category"}%
+</div>
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+<p/>
+</div>
+%FISKINSTATE%
+%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%INCLUDE{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
+%INCLUDE{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
+%INCLUDE{"RenderBlogRoll" CAT="%BASETOPIC%"}%
+%INCLUDE{"RenderCategories"}%
+%INCLUDE{"RenderAdminTools" warn="off"}%
+%ENDSECTION{"Category"}%
+</verbatim>
+</div>
+
 
 ---+ Nosidebar sidebar
 <div class="alt">
+<verbatim>
 %SECTION{"nosidebar"}%
 %ENDSECTION{"nosidebar"}%
+</verbatim>
 </div>
 
 <!--

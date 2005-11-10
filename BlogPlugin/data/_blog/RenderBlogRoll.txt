@@ -1,16 +1,16 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130174493" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131559547" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
-NONE
+   * CAT: reduce the blogroll to BlogLinks in the given SubjectCategory
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
 <noautolink>
-%~~ DBQUERY{"TopicType=~'\bBlogLink\b'" web="%WEB%"
+%~~ DBQUERY{"TopicType=~'\bBlogLink\b' AND SubjectCategory=~'\b%CAT%\b'" web="%WEB%"
 ~~~   order="Name" hidenull="on"
 ~~~   header="<div class=\"blogSideBarSection blogSideBarAggregations\">
 ~~~     $n---+ [[$web.NewsFeeds][Blogroll]]$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt"
@@ -32,7 +32,7 @@ NONE
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%"}%
+%INCLUDE{"%TOPIC%" CAT=".*"}%
 </div>
 
 %INCLUDE{"RenderFunctionCallers"}%

@@ -49,6 +49,8 @@ data/_blog/RenderCategoriesInSpan.txt
 data/_blog/RenderDocNavigation.txt
 data/_blog/RenderBlogLinksInCategory.txt
 data/_blog/RenderFrontPage.txt
+data/_blog/RenderFrontPageNavigation.txt
+data/_blog/RenderFrontTeaser.txt
 data/_blog/RenderFullTeaser.txt
 data/_blog/RenderFunctionCallers.txt
 data/_blog/RenderNewBlogEntryButton.txt

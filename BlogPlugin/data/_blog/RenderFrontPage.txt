@@ -1,22 +1,32 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130399598" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131555957" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-see: RenderFullTeaser, RenderBlogTeaser
+see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderFrontPageNavigation
 
 ---++ Parameters
-   * FULL: number of full teasers
-   * LIMIT: number of teasers 
+   * SKIP: offset into the archive
    * CAT: categories to extract
    * AUTHOR: extract postings of this author
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-<noautolink>
+~~~
+%~~ DBQUERY{
+~~~   "TopicType=~'\bBlogEntry\b' AND
+~~~    SubjectCategory=~'\b%CAT%\b' AND
+~~~    State='enabled' AND
+~~~    BlogAuthor='%AUTHOR%'
+~~~   "
+~~~   limit="5" skip="%SKIP%" 
+~~~   order="created" reverse="on" web="%WEB%" 
+~~~   format="%INCLUDE{"RenderFullTeaser" section="format" NAME="$topic"}%"
+~~~ }%
 <!--
-%~~ CALC{"$SET(postings,
+%~~  CALC{"
+~~~   $SET(nrPostings,
 *~~
 %~~   DBQUERY{
 ~~~      "TopicType=~'\bBlogEntry\b' AND
@@ -24,32 +34,19 @@ see: RenderFullTeaser, RenderBlogTeaser
 ~~~       State='enabled' AND
 ~~~       BlogAuthor='%AUTHOR%'
 ~~~      "
-~~~      limit="%LIMIT%" separator=", " order="created" reverse="on"
+~~~      format="none" header="$count" separator="none"
 ~~~      web="%WEB%"
-~~~   }%
-~~~ )$IF($LISTSIZE($GET(postings))==0,$SET(postings,none))"}%
+~~~   }%)"}%
 -->
-</noautolink>
-%~~ DBQUERY{
-~~~    web="%WEB%"
-~~~    topics="%CALC{"$GET(postings)"}%" 
-~~~    limit="%FULL%" order="created" reverse="on" hidenull="on"
-~~~    format="%INCLUDE{"RenderFullTeaser" section="format" NAME="$topic"}%"
-~~~ }%
-%~~ DBQUERY{
-~~~    web="%WEB%"
-~~~    topics="%CALC{"$GET(postings)"}%" 
-~~~    skip="%FULL%" limit="%LIMIT%" order="created" reverse="on" hidenull="on"
-~~~    header="---+ Earlier Postings$n"
-~~~    format="%INCLUDE{"RenderBlogTeaser" section="format" NAME="$topic"}%"
-~~~ }%
+~~~ %INCLUDE{"RenderFrontPageNavigation" SKIP="%SKIP%" MAX="%CALC{"$GET(nrPostings)"}%"}%
 ~~~ %INCLUDE{"RenderBlogAuthorSwitch"}%
+~~~
 %STOPINCLUDE%
 </verbatim>
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" LIMIT="2" FULL="1" CAT="BlogDev" AUTHOR=".*"}%
+%INCLUDE{"%TOPIC%" SKIP="0" CAT="BlogDev" AUTHOR=".*"}%
 </div>
 
 %INCLUDE{"RenderFunctionCallers"}%
@@ -63,4 +60,4 @@ see: RenderFullTeaser, RenderBlogTeaser
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a set of teasers where the first n are rendered verbosly"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a set of BlogEntries"}%

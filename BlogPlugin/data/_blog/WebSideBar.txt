@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130399853" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1131566032" format="1.1" version="1.28"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -15,6 +15,7 @@ See also: RenderAdminTools, WebLeftBar, BlogSideBar
    display:none;
 }
 </style>
+</div>
 %STOPINCLUDE%
 
 </div>

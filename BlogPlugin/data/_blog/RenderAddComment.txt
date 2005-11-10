@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129717878" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1131566130" format="1.1" version="1.13"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -43,7 +43,7 @@ NONE
   </td>
 </tr>
 <tr>
-  <td><textarea id="text" wrap="virtual" name="Text" style="width:98%" rows="10"></textarea></td>
+  <td><textarea id="text" wrap="virtual" name="Text" style="width:98%" rows="10" cols="80"></textarea></td>
 </tr>
 <tr>
   <td align="right">
