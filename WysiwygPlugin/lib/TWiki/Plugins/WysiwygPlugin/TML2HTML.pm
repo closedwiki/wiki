@@ -239,8 +239,6 @@ sub _getRenderedVersion {
     $text =~ s/{$TT0/</go;
     $text =~ s/}$TT0/>/go;
 
-    # mailto: URI - this should be collapsed into linkProtocoPattern
-    $text =~ s/(?:^|(?<=[-*\s(]))((mailto):([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink($1,$1)/geo;
     # standard URI
     $text =~ s/(?:^|(?<=[-*\s(]))($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink($1,$1)/geo;
 
@@ -405,6 +403,9 @@ sub _getRenderedVersion {
 
     # protect % from being used in further variable expansions
     $text =~ s/%/&#37;/g;
+
+    # protect @ from being used in mail links
+    $text =~ s/@/&#64;/g;
 
     return $text;
 }
