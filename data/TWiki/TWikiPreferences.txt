@@ -147,7 +147,7 @@ _(Click for form-based editing of existing preferences.)_
 
 ---+++ HTTP-<nop>EQUIV Settings
 
-   * %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev/BackFromPreviewLosesText or TWiki:Codev/RefreshEditPage). These settings do not affect proxy caches.
+   * %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev.BackFromPreviewLosesText or TWiki:Codev.RefreshEditPage). These settings do not affect proxy caches.
 
    * ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
 <verbatim>
@@ -312,17 +312,7 @@ You can introduce new VARIABLES and use them in your topics and templates. There
    * %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
    * %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
    * %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
-   * TWiki:Plugins/PreferencesPlugin makes editing preferences a snap.
+   * TWiki:Plugins.PreferencesPlugin makes editing preferences a snap.
 
 __Note__: Can't edit?
 [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw topic]]
-<!-- Test code, used in TWiki testing
-   * Set GLOBALFINALTESTPREF1 = global final test pref 1
-   * Set GLOBALFINALTESTPREF2 = global final test pref 2
-   * Set GLOBALTESTPREF = global test pref
-   * Set OVERRIDETHISTESTPREF = ERROR global setting
-Done on separate lines to test merging
-   * Set FINALPREFERENCES = GLOBALFINALTESTPREF1
-   * Set FINALPREFERENCES = GLOBALFINALTESTPREF2
--->
-
