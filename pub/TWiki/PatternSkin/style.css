@@ -754,7 +754,7 @@ td.patternToolBar {
 .patternToolBar .patternButton a:visited {
 	display:block;
 	margin:0 0 0 4px;
-	/*margin-bottom:-1px;*/ /* use with a patternToolBarBottom border */
+	margin-bottom:-1px; /* use with a patternToolBarBottom border */
 	border-width:1px;
 	border-style:solid;
 	/* relative + z-index removed due to buggy Win/IE redrawing problems */
@@ -778,10 +778,8 @@ td.patternToolBar {
 }
 .patternToolBarBottom {
 	position:relative;
-	/*
 	border-width:1px 0 0 0;
 	border-style:solid;
-	*/
 	margin:0 0 .5em 0;
 	z-index:2;
 }
