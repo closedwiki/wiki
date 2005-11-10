@@ -1,20 +1,32 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127893315" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131643806" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="MySideBar"}%
+---+ %WIKIUSERNAME%'s sidebar
+
 %STARTINCLUDE%
----+ My Sidebar%REDDOT{"%MAINWEB%.%WIKINAME%SideBar"}%
-	* <a>My Links</a>
-		* 
-		* 
-		* 
-	* <a>Documentation</a>
-		* [[%TWIKIWEB%.WelcomeGuest][Welcome Guest]]
-		* [[%TWIKIWEB%.TWikiUsersGuide][User's Guide]]
-		* [[%TWIKIWEB%.TWikiReferenceManual][Reference Manual]]
-		* [[%TWIKIWEB%.GoodStyle][Good Style]]
-		* [[%TWIKIWEB%.TWikiFAQ][FAQs]]
-		* [[%TWIKIWEB%.FileAttachment][File Attachments]]
-	* [[TWiki.InstalledPlugins][Plugins]]
-%FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="		* [[%TWIKIWEB%.$1Plugin][$1]]" pattern="(\w+)Plugin" sort="on"}%
+---+ [[%WEB%.%TOPIC%][MySidebar]]%REDDOT{"%WEB%.%TOPIC%"}%
+   * <span>%TWISTYSHOW{id="mylinks" link="Links"}%%TWISTYHIDE{id="mylinks" link="Links"}%</span>%TWISTYTOGGLE{id="mylinks" mode="span" remember="on"}%
+      * 
+      * 
+      * 
+      * %ENDTWISTYTOGGLE% 
+   * <span>%TWISTYSHOW{id="mydocu" link="Documentation"}%%TWISTYHIDE{id="mydocu" link="Documentation"}%</span>%TWISTYTOGGLE{id="mydocu" mode="span" remember="on"}%
+      * [[%TWIKIWEB%.WelcomeGuest][Welcome Guest]]
+      * [[%TWIKIWEB%.TWikiUsersGuide][User's Guide]]
+      * [[%TWIKIWEB%.TWikiReferenceManual][Reference Manual]]
+      * [[%TWIKIWEB%.GoodStyle][Good Style]]
+      * [[%TWIKIWEB%.TWikiFAQ][FAQs]]
+      * %TWIKIWEB%.TWikiVariables
+      * %TWIKIWEB%.TWikiForms
+      * %TWIKIWEB%.FormattedSearch
+      * %TWIKIWEB%.FileAttachment%ENDTWISTYTOGGLE% 
+   * <span>%TWISTYSHOW{id="myplugins" link="Plugins"}%%TWISTYHIDE{id="myplugins" link="Plugins"}%</span>%TWISTYTOGGLE{id="myplugins" mode="span" remember="on"}%
+%FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="      * $1" sort="on"}%%ENDTWISTYTOGGLE% 
+   * %TWISTYSHOW{id="mystyles" link="Skin Styles"}%%TWISTYHIDE{id="mystyles" link="Skin Styles"}%
+%TWISTYTOGGLE{id="mystyles" mode="span" remember="on"}% 
+%INCLUDE{"TWiki.NatSkinStyleBrowser"}%
+%ENDTWISTYTOGGLE% 
 %STOPINCLUDE%
 
-	* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+<!--
+   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+-->

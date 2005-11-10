@@ -312,8 +312,12 @@ to your TWiki.TWikiPreferences like
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.75 (2005-11-09) |
+|  Plugin Version: | v2.76 (2005-11-10) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Nov 2005: | added switchvariation urlparam; \
+                  work arround bug in dakar (nested calls to getRenderedVersion()); \
+		  fixed dupplicate target/class in external links; \
+		  improved <nop>MySideBarTemplate using Twisties; \
 |  09 Nov 2005: | fixed wrong call to =expandCommonVariables()= ... doh |
 |  08 Nov 2005: | fixed use of uninitialized variables; https links to the same site are not external once |
 |  02 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
@@ -347,5 +351,5 @@ to your TWiki.TWikiPreferences like
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 09 Nov 2005 
+-- TWiki:Main.MichaelDaum - 10 Nov 2005 
 
