@@ -1207,7 +1207,9 @@ sub _getDataFromQuery {
                 $data->{passwordB} = $value;
             } elsif( $name eq 'LoginName' ) {
                 # Sanitise login name
-                $value =~ s/[^\w]//g;
+                #$value =~ s/[^\w]//g;
+                # commented out because login names need to be any
+                # printable char sequence, and may include utf-8.
             }
 
             # 'WikiName' omitted because they can't
