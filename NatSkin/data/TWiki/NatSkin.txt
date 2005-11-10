@@ -73,8 +73,9 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.74 (2005-11-08) |
+|  Skin Version: | v2.76 (2005-11-10) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-11-10: | improved NatSkinStyleBrowser |
 |  2005-11-08: | firefox layout fixes |
 |  2005-11-07: | more safari fixes |
 |  2005-11-02: | fixed javascript problems combined with the TWiki:Plugins.TwistyPlugin; \
@@ -117,7 +118,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 08 Nov 2005
+-- TWiki:Main/MichaelDaum - 10 Nov 2005
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="MichaelDaum" version="1.1"}%
