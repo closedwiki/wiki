@@ -1,25 +1,34 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130407891" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131640943" format="1.1" version="1.1"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%
 <div class="natSkinStyleBrowser">
 <form method="post" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
 <table border="0">
-<tr><td colspan="2">
-*Style:* <select style="width:100%" name="style">
+<tr><td colspan="3"> *Style:* </td></tr>
+<tr>
+<td><a href="?switchstyle=prev" title="Switch to previous style">%ICON{arrowleft}%</td>
+<td>
+<select style="width:100%" name="style">
 <noautolink>
 %FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{style=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n" separator=" "}%
 </noautolink>
 </select>
-</td></tr>
-<tr><td colspan="2">
-*Variation:* <select style="width:100%" name="stylevariation">
+</td>
+<td><a href="?switchstyle=next" title="Switch to next style">%ICON{arrowright}%</td>
+</tr>
+<tr><td colspan="2"> *Variation:* </td></tr>
+<tr><td><a href="?switchvariation=prev" title="Switch to previous variation">%ICON{arrowleft}%</a></td>
+<td>
+<select style="width:100%" name="stylevariation">
 <noautolink>
 %FORMATLIST{"none, %KNOWNVARIATIONS%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{variation=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n" separator=" "}%
 </noautolink>
 </select>
-</td></tr>
-<tr><td colspan="2">
-*Switches:*
+</td>
+<td><a href="?switchvariation=next" title="Switch to previous variation">%ICON{arrowright}%</a></td>
+<tr><td colspan="3"> *Switches:* </td></tr>
+<tr>
+<td colspan="3">
 	* <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%/>Border On
 	* <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%/>Border Off
 	* <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%/>Thin Layout
@@ -29,18 +38,18 @@
 	* <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%/>Web Buttons On
 	* <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%/>Web Buttons Off
 	* <input type="radio" name="stylesearchbox" value="top"%IFSKINSTATE{searchbox="top" then=" checked=\"checked\""}%/>Searchbox in topbar
-	* <input type="radio" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%/>Searchbox in position 1
-	* <input type="radio" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%/>Searchbox in position 2
-	* <input type="radio" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%/>Searchbox in position 3
+	* <input type="radio" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%/>Searchbox in pos. 1
+	* <input type="radio" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%/>Searchbox in pos. 2
+	* <input type="radio" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%/>Searchbox in pos. 3
 	* <input type="radio" name="stylesearchbox" value="off"%IFSKINSTATE{searchbox="off" then=" checked=\"checked\""}%/>Searchbox off
 </td></tr>
 <tr>
-<td><input style="width:100%" type="submit" name="switchstyle" value="Prev"/></td>
-<td><input style="width:100%" type="submit" name="switchstyle" value="Next"/></td>
-</tr>
-<tr>
-<td><input style="width:100%" type="submit" value="OK"/></td>
-<td><input style="width:100%" type="submit" name="reset" value="Reset"/></td>
+<td colspan="3" align="center">
+<div style="white-space:nowrap">
+<input style="width:49%" type="submit" value="OK" title="Submit changes"/>
+<input style="width:49%" type="submit" name="resetstyle" value="Reset" title="Reset to defaults"/>
+</div>
+</td>
 </tr>
 </table>
 <input type="hidden" name="search" value="%URLPARAM{search}%" />

@@ -162,8 +162,17 @@ hr {
   color:#777;
 }
 
+.natSideBarContents .natSkinStyleBrowser ul li {
+  padding-left:10px;
+}
 .natSideBarContents .natSkinStyleBrowser ul {
-  padding-left:2ex;
+  padding-top:0px;
+  margin-top:0px;
+  margin-bottom:5px;
+  white-space:nowrap;
+}
+.natSideBarContents .natSkinStyleBrowser ul li:before {
+  content:"";
 }
 
 .natSideBarSearch {
@@ -603,6 +612,18 @@ hr {
   margin-left:2em;
   margin-right:0px;
 }
+/*
+.blogRelated1 a {
+  color:#0066cc;
+}
+.blogRelated2 a {
+  color:#508ECC;
+  color:#A4B8CC;
+}
+.blogRelated3 a {
+  color:#A4B8CC;
+}
+*/
 
 /* BlackListPlugin */
 .blackList {
