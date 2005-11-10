@@ -56,13 +56,6 @@ sub initPlugin {
     $calledThisSession = 0;
     $modern = defined( &TWiki::Func::normalizeWebTopicName );
 
-    # switch in the post rendering handler depending on whether this
-    # is Dakar or earlier.
-    if( $modern ) {
-        *postRenderingHandler = \&afterRendering;
-    } else {
-        *endRenderingHandler = \&afterRendering;
-    }
     # Plugin correctly initialized
     return 1;
 }
@@ -153,10 +146,23 @@ sub beforeCommonTagsHandler {
     $calledThisSession = 1;
 }
 
-sub afterRendering {
-    return unless $html2tml;
+# DEPRECATED in Dakar (modifyHeaderHandler does the job better)
+sub writeHeaderHandler {
+    return '' if $modern;
 
-    $html2tml->cleanup( @_ );
+    my $query = shift;
+    return "Expires: 0\nCache-control: max-age=0, must-revalidate\n";
+
+}
+
+# Dakar modify headers.
+sub modifyHeaderHandler {
+    my( $headers, $query ) = @_;
+
+    if( $query->param( 'wysiwyg_edit' )) {
+        $headers->{Expires} = 0;
+        $headers->{'Cache-control'} = 'max-age=0, must-revalidate';
+    }
 }
 
 # callback passed down to TML2HTML generator
@@ -179,13 +185,14 @@ sub parseWikiUrl {
     $url =~ s/([#\?].*)$//;
     my $anchor = $1 || '';
 
-    if( $url =~ /^(\w+\.)?\w+$/ ) {
+    if( $url =~ /^((%(MAIN|TWIKI)WEB%|\w+)\.)?\w+$/ ) {
+        my $webexpr = $1 || '';
         if( $modern ) {
             ( $web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $url);
         } else {
             ( $web, $topic) = TWiki::Store::normalizeWebTopicName(undef, $url);
         }
-        return $web.'.'.$topic . $anchor;
+        return $webexpr.$topic.$anchor;
     }
     my $aurl = TWiki::Func::getViewUrl('WEB', 'TOPIC');
     $aurl =~ s!WEB/TOPIC.*$!!;

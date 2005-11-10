@@ -614,12 +614,12 @@ sub _handleA {
             $topic = &{$this->{context}->{parseWikiUrl}}( $href );
         }
         my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
-
         if( $topic ) {
             my $cleantext = $text;
             $cleantext =~ s/(<nop>)//g;
             # if the clean text is the known topic we can ignore it
-            if( $cleantext eq $topic || $topic =~ /\.$cleantext$/ ) {
+            if( ($cleantext eq $topic || $topic =~ /\.$cleantext$/) &&
+                  $topic =~ /^[\w.#]+$/ ) {
                 # wikiword or web.wikiword
                 return (0, $WC::CHECK1.$nop.$topic.$WC::CHECK2);
             } else {
@@ -627,7 +627,8 @@ sub _handleA {
                 return (0, $WC::CHECKw.'['.$nop.'['.$topic.']['.$text.
                         ']]'.$WC::CHECKw );
             }
-        } elsif ( $href =~ $WC::PROTOCOL ) {
+        } elsif( $href =~ $WC::PROTOCOL ) {
+            # the url starts with a protocol ID or a twiki variable
             # normal link
             if( $text eq $href ) {
                 # Wikiword

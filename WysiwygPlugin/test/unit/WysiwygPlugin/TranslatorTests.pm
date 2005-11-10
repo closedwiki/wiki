@@ -863,6 +863,26 @@ HERE
               html => '<span class="TMLvariable">SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}</span>',
               tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
           },
+          {
+              exec => 2,
+              name => 'variableInIMGtag',
+              html => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif"></img>',
+              tml  => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif" />',
+              finaltml => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif"></img>'
+          },
+          {
+              exec => 2,
+              name => 'twikiWebSnarf',
+              html => '<a href="%TWIKIWEB%.TopicName">bah</a>',
+              tml  => '[[%TWIKIWEB%.TopicName][bah]]',
+          },
+          {
+              exec => 2,
+              name => 'mainWebSnarf',
+              html => '<a href="%MAINWEB%.TopicName">bah</a>',
+              tml  => '[[%MAINWEB%.TopicName][bah]]',
+          },
+
          ];
 
 
