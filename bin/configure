@@ -1039,52 +1039,31 @@ sub _checkAndBuildValueGrabber {
 sub _showPlugins {
     my %modules;
     foreach my $libDir ( @INC ) {
-	my $dirPlugins = "$libDir/TWiki/Plugins";
-        if( opendir( DIR, $dirPlugins ) ) {
-            foreach my $file ( grep { /^[A-Za-z0-9_]+Plugin\.pm$/ } readdir DIR ) {
-                ( my $module = $file ) =~ s/\.pm$//;
+        if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
+            foreach my $file ( grep { /^[A-Za-z0-9_]+Plugin\.pm$/ }
+                                 readdir DIR ) {
+                my $module = $file;
+                $module =~ s/\.pm$//;
                 $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
-                ( $module ) = $module =~ /^(.*)$/;    # untaint
+                $module =~ /^(.*)$/;    # untaint
+                $module = $1;
                 # only add the first instance of any plugin, as only
                 # the first can get loaded from @INC.
-		unless ( $modules{$module} )
-		{
-		    $modules{$module}->{dir} = $dirPlugins;
-		    $modules{$module}->{discovered} = "$dirPlugins/$file";
-		}
+                unless( $modules{$module} ) {
+                    $modules{$module} =  $libDir;
+                }
                 closedir( DIR );
             }
         }
     }
     my $block = '';
     foreach my $m ( sort keys %modules ) {
-	my $version = '';
-	my $description = '';
-	my $error_loading = $FALSE;
-	eval {
-	    do "$modules{$m}->{discovered}";
-	    die "$m loading error" if $!;
-	    $version = eval '$TWiki::Plugins::' . $m . '::VERSION' || '?.??';
-
-	    # SMELL - i'm assuming that the Plugin topic is in the SystemWeb :( (SMELL from below)
-	    # SMELL: bigger SMELL: this totally breaks Storage encapsulation
-	    # SMELL: this won't even work until DataDir has already been set (and saved!)
-	    my $plugin_topic_filename = "$TWiki::cfg{DataDir}/$TWiki::cfg{SystemWebName}/$m.txt";
-	    if ( (-e $plugin_topic_filename) && open( TOPIC, '<', $plugin_topic_filename ) )
-	    {   # read the SHORTDESCRIPTION line from the topic
-		local $/ = undef;
-		$description = <TOPIC>;
-		close TOPIC; 
-		( $description ) = $description =~ /SHORTDESCRIPTION\s*=\s*(.*)/;
-		$description |= '';
-	    }
-	};
-	# TODO: provide some sort of warning about why the module failed to load (eg, dependencies not met)
         $block .= _checkAndBuildValueGrabber
           ( 'BOOLEAN', '', 
 #SMELL - i'm assuming that the Plugin topic is in the SystemWeb :(
-qq{<a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/$m">$m</a> - $description ($version)\n},
-	    '{Plugins}{'.$m.'}{Enabled}');
+"<a rel=\"nofollow\" href=\"$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/$m\">$m</a>",
+            '{Plugins}{'.$m.'}{Enabled}'
+        );
     }
     return $block;
 }
@@ -1377,7 +1356,7 @@ sub performSanityChecks {
           CGI::pre($brokenLocalSiteError).
           'The @INC path is '.
           CGI::pre(join(":", @INC)).
-          NOTE("Check that the file doesn't contain any syntax errors, and the webserver user is allowed to read it.");
+          NOTE('This may be because this is the first time you have run configure. In this case you can simply ignore this error until you have filled in your <a rel="nofollow" href="#" onclick="foldBlock(\'GeneralPathSettings\'); return false;">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.');
     }
 
     # Check whether basic CGI modules exist (some broken installations of
@@ -1895,12 +1874,10 @@ unless( $TWiki::cfg{OS} ) {
 }
 
 # if this fails, ignore the problem, but we have to do it
-if ( _findFileOnPath( 'LocalSite.cfg' ) ) {
-    unless( eval 'do "LocalSite.cfg"' ) {
-	# Capture the Perl error(s)
-	$brokenLocalSiteError = 'require failed: '.
-	    ( $! || '') . ( $@ || '');
-    }
+unless( eval 'do "LocalSite.cfg"' ) {
+    # Capture the Perl error(s)
+    $brokenLocalSiteError = 'require failed: '.
+      ( $! ? $! : '') . ( $@ ? $@ : '');
 }
 
 # Read the configuration file now in order to set locale;
@@ -1909,7 +1886,7 @@ if ( _findFileOnPath( 'LocalSite.cfg' ) ) {
 unless( eval 'require "TWiki.cfg" ' ) {
     # Capture the Perl error(s)
     $brokenTWikiCfgError = 'require failed: '.
-      ( $! || '') . ( $@ || '');
+      ( $! ? $! : '') . ( $@ ? $@ : '');
 }
 
 # and again
