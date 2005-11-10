@@ -17,7 +17,7 @@ Most of the redesign, refactoring and documentation work in Dakar release was do
    * [[TWiki:Main.GregAbbas][Greg Abbas]] - integration of !SessionPlugin
    * [[TWiki:Main.MartinCleaver][Martin Cleaver]] - registration process, and automatic attachments
    * [[TWiki:Main.PeterNixon][Peter Nixon]] - hierarchical subwebs support
-   * [[TWiki:Main.ThomasWeigert][Thomas Weigert]] - preferences editing
+   * [[TWiki:Main.ThomasWeigert][Thomas Weigert]] - preferences handling and form enhancements
 Other people who gave significant amounts of their time and patience to less sexy aspects of the work, or were pivotal in the design process, are:
    * [[TWiki:Main.AntonAylward][Anton Aylward]]
    * [[TWiki:Main.LynnwoodBrown][Lynnwood Brown]]
