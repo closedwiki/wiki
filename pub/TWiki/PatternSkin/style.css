@@ -277,8 +277,11 @@ th.twikiSortedDescendingCol a:hover font,
 }
 /* TipsContrib - in left bar */
 .patternLeftBar .tipsOfTheDay {
-	margin:1em 2em .5em 0;
-	border-width:0;
+	margin:0 1em 0 0;
+}
+html>body .patternLeftBar .tipsOfTheDay { /* Mozilla */
+	padding:0 1em 0 0;
+	width:100%;
 }
 .patternLeftBar .tipsOfTheDayHeader img {
 	display:none;
@@ -595,7 +598,6 @@ a:hover .twikiAccessKey {
 }
 .patternLeftBar li {
 	padding-left:0;
-	margin-right:2em; /*S6*/ /*needed for proper wrapping:1em is left margin, 1em is right margin*/
 }
 .patternLeftBar .patternFormHolder {
 	margin:.5em 0 1em 0;
@@ -603,23 +605,17 @@ a:hover .twikiAccessKey {
 html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 	margin-top:1.25em;
 }
-.patternLeftBar .patternFormHolder table {
-	width:70%;
-}
-html>body .patternLeftBar .patternFormHolder table { /* Hide from IE */
-	width:100%;
-}
 .patternLeftBar .patternFormHolder th {
 	padding:0 0 2px 0;
-	vertical-align:middle;
+	height:12px;
 }
 .patternLeftBar .patternFormHolder th.patternFormSpacer {
-	width:1%;
+	width:3px;
 }
 .patternLeftBar input.patternFormField {
 	display:block;
 	height:12px; /* with padding and border this adds up to 16px height - same as button */
-	width:99%;
+	width:auto;
 	border-width:1px;
 	border-style:solid;
 	font-size:85%; /*S3*/
@@ -633,7 +629,7 @@ html>body .patternLeftBar .patternFormHolder table { /* Hide from IE */
 	width:16px;
 }
 .patternLeftBar .patternChangeLanguage {
-	margin:0 2em 0 0; /*S6*/ /*needed for proper wrapping:1em is left margin, 1em is right margin*/
+	margin:0 2em 0 0; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
 	font-size:85%; /*S3*/
 }
 .patternLeftBarPersonal {
@@ -643,7 +639,7 @@ html>body .patternLeftBar .patternFormHolder table { /* Hide from IE */
 	border-style:solid;
 }
 .patternLeftBarPersonal ul {
-	list-style:none;
+	list-style: none;
 	margin:0;
 	padding:0;
 }
@@ -656,10 +652,9 @@ html>body .patternLeftBar .patternFormHolder table { /* Hide from IE */
 	text-decoration:none;
 }
 .patternLeftBarContents {
-	width:100%;
-	padding:0 1em 2.5em 1em; /*S6*/
+	padding:0 0 1.5em 1em; /*S6*/
+	overflow:hidden;
 }
-
 
 /* table used in various places */
 .patternVersatileTable table {
@@ -689,7 +684,7 @@ html>body .patternLeftBar .patternFormHolder table { /* Hide from IE */
 }
 
 .patternTop {
-	font-size:85%; /*S3*/
+	font-size:94%; /*S2*/
 }
 .patternTop table {
 	border:none;

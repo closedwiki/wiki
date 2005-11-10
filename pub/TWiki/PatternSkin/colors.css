@@ -197,7 +197,7 @@ a:hover.twistyTrigger {
 }
 
 /* TipsContrib */
-.tipsOfTheDay {
+.tipsOfTheDayContents {
 	background-color:#E8EEF7; /*BG5*/
 }
 .patternTopic .tipsOfTheDayHeader {
@@ -395,7 +395,7 @@ a:hover .twikiAccessKey {
 .patternBottomBarContents,
 .patternBottomBarContents a:link,
 .patternBottomBarContents a:visited {
-	color:#333; /*T11*/
+	color:#8E9195; /*T8*/
 }
 .patternBottomBarContents a:hover {
 	color:#FBF7E8; /*T3*/
