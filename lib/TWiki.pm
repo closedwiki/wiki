@@ -676,7 +676,7 @@ sub writePageHeader {
     $hopts->{'Content-Type'} = $contentType;
 
     # New (since 1.026)
-    $this->{plugins}->modifyHeaderHandler( $hopts );
+    $this->{plugins}->modifyHeaderHandler( $hopts, $this->{cgiQuery} );
 
     # add cookie(s)
     $this->{client}->modifyHeader( $hopts );
