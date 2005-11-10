@@ -383,14 +383,16 @@ sub getGroups {
 
 =pod
 
----++ ObjectMethod isInList( @list ) -> $boolean
+---++ ObjectMethod isInList( $list ) -> $boolean
 
 Return true we are in the list of user objects passed.
+
+$list is a string representation of a user list.
 
 =cut
 
 sub isInList {
-    my( $this, $userlist ) = @_;
+    my( $this, $userlist, $scanning ) = @_;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     unless( ref( $userlist )) {
@@ -405,7 +407,10 @@ sub isInList {
     }
     foreach $user ( @$userlist ) {
         if( $user->isGroup() ) {
-            return 1 if $this->isInList( $user->groupMembers() );
+            $scanning = {} unless $scanning;
+            next if $scanning->{$user};
+            $scanning->{$user} = 1;
+            return 1 if $this->isInList( $user->groupMembers(), $scanning );
         }
     }
     return 0;
