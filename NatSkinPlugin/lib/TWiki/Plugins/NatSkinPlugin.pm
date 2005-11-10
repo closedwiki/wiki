@@ -53,7 +53,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.75';
+$RELEASE = '2.76';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -219,6 +219,7 @@ sub initSkinState {
   my $theRaw;
   my $theReset;
   my $theSwitchStyle;
+  my $theSwitchVariation;
 
   my $doStickyStyle = 0;
   my $doStickyBorder = 0;
@@ -231,7 +232,8 @@ sub initSkinState {
   if ($query) {
     $theRaw = $query->param('raw');
     $theSwitchStyle = $query->param('switchstyle');
-    $theReset = $query->param('reset');
+    $theSwitchVariation = $query->param('switchvariation');
+    $theReset = $query->param('resetstyle');
     if ($theReset) {
       writeDebug("clearing session values");
       &clearSessionValue('NATSKIN_SKINSTYLE');
@@ -397,6 +399,33 @@ sub initSkinState {
   $theStyleVariation = $defaultVariation unless $found;
   $skinState{'variation'} = $theStyleVariation;
 
+  # cycle styles
+  if ($theSwitchVariation) {
+    $theSwitchVariation = lc $theSwitchVariation;
+    $doStickyVariation = 1;
+    my $state = 0;
+    my @knownVariations;
+    if ($theSwitchVariation eq 'next') {
+      @knownVariations = sort {$a cmp $b} keys %knownVariations #next
+    } else {
+      @knownVariations = sort {$b cmp $a} keys %knownVariations #prev
+    }
+    my $firstVari;
+    foreach my $vari (@knownVariations) {
+      $firstVari = $vari unless $firstVari;
+      if ($theStyleVariation eq $vari) {
+	$state = 1;
+	next;
+      }
+      if ($state == 1) {
+	$skinState{'variation'} = $vari;
+	$state = 2;
+	last;
+      }
+    }
+    $skinState{'variation'} = $firstVari if $state == 1;
+  }
+
   # handle TablePlugin attributes
   my $prefsName = "\U$theStyle\ETABLEATTRIBUTES";
   my $tablePluginAttrs = 
@@ -516,13 +545,13 @@ sub commonTagsHandler
     }
     $useSpamObfuscator = $oldUseSpamObfuscator;
   }
+  $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
+  $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
 
 }
 
 ###############################################################################
 sub endRenderingHandler {
-  $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
-  $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
   $_[0] =~ s/<a\s+([^>]*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
 
   # remove leftover tags of supported plugins if they are not installed
@@ -890,12 +919,12 @@ sub renderWebSideBar {
   my $text;
   my $meta;
   my $theWeb;
-  if (&TWiki::Func::topicExists($web, "WebSideBar")) {
-    ($meta, $text) = &TWiki::Func::readTopic($web, "WebSideBar");
+  if (&TWiki::Func::topicExists($web, 'WebSideBar')) {
+    ($meta, $text) = &TWiki::Func::readTopic($web, 'WebSideBar');
     $theWeb = $web;
   } else {
     $theWeb = &TWiki::Func::getTwikiWebname ();
-    ($meta, $text) = &TWiki::Func::readTopic($theWeb, "WebSideBar");
+    ($meta, $text) = &TWiki::Func::readTopic($theWeb, 'WebSideBar');
   }
 
   #writeDebug("renderWebSideBar() from $theWeb.WebSideBar");
@@ -909,14 +938,15 @@ sub renderWebSideBar {
 
   #writeDebug("expandCommonVariables(text,$topic,$web)");
   #writeDebug("text=$text");
-  $text = &TWiki::Func::expandCommonVariables($text, $topic, $theWeb);
+  $text = &TWiki::Func::expandCommonVariables($text, 'WebSideBar', $theWeb);
   #writeDebug("renderText(text,$theWeb");
-  $text = &TWiki::Func::renderText($text, $theWeb);
+  $text = &TWiki::Func::renderText($text, $theWeb, 'WebSideBar');
 
   # ignore permission warnings here ;)
   $text =~ s/No permission to read.*//g;
 
   #writeDebug("done renderWebSideBar()");
+
 
   return $text;
 }
@@ -1574,7 +1604,7 @@ sub renderExternalLink
   $theUrl =~ /^http/i && ($addClass = 1); # only for http and hhtps
   $theUrl =~ /^$urlHost/i && ($addClass = 0); # not for own host
   $theUrl =~ /^$httpsUrlHost/i && ($addClass = 0); # not for own host
-  $thePrefix =~ /\sclass="natExternalLink"\s/ && ($addClass = 0); # prevent adding it twice
+  $thePrefix =~ /class="natExternalLink"/ && ($addClass = 0); # prevent adding it twice
 
   if ($addClass) {
 #    writeDebug("called renderExternalLink()");
