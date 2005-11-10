@@ -68,9 +68,12 @@
 
 
 
-%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div id="patternColumnWrapper"><div id="patternMain"><div class="patternMainContents">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
+%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<table id="patternColumnWrapper" cellpadding="0" cellspacing="0">
+<tr>
+%TMPL:P{"leftbar"}%
+<td id="patternMain"><div class="patternMainContents">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
 %TMPL:P{"content"}%
-</div><!--end patternMainContents--></div><!--end patternMain-->%TMPL:P{"leftbar"}%</div><!--end patternColumnWrapper-->%TMPL:END%
+</div><!--end patternMainContents--></td><!--end patternMain--></td><!--end patternColumnWrapperCol--></tr></table><!--end patternColumnWrapper-->%TMPL:END%
 
 
 

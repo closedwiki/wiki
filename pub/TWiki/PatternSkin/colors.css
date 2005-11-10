@@ -204,11 +204,11 @@ a:hover.twistyTrigger {
 	color:#333; /*T11*/
 }
 /* TipsContrib - in left bar */
-#patternLeftBar .tipsOfTheDay a:link,
-#patternLeftBar .tipsOfTheDay a:visited {
+.patternLeftBar .tipsOfTheDay a:link,
+.patternLeftBar .tipsOfTheDay a:visited {
 	color:#a00; /*T5*/
 }
-#patternLeftBar .tipsOfTheDay a:hover {
+.patternLeftBar .tipsOfTheDay a:hover {
 	color:#FBF7E8; /*T3*/
 }
 
@@ -378,6 +378,7 @@ a:hover .twikiAccessKey {
 	background-color:#fff;
 }
 #patternMain {
+	border-color:#E2DCC8; /*BO4*/
 	background-color:#fff; /*BG1*/
 }
 #patternColumnWrapper {
@@ -401,34 +402,33 @@ a:hover .twikiAccessKey {
 }
 
 /* Left bar */
-#patternLeftBar {
+.patternLeftBar {
 	/*background-color:#FBF7E8;*/ /*C3*/
 	color:#666; /*T7*/
-	border-color:#E2DCC8; /*BO4*/
 }
-#patternLeftBar hr {
+.patternLeftBar hr {
 	color:#E2DCC8; /*BO4*/
 	background-color:#E2DCC8; /*BO4*/
 }
-#patternLeftBar a:link,
-#patternLeftBar a:visited {
+.patternLeftBar a:link,
+.patternLeftBar a:visited {
 	color:#7A4707; /*T6*/
 }
-#patternLeftBar a:hover {
+.patternLeftBar a:hover {
 	color:#FBF7E8; /*C3*/
 }
-#patternLeftBar b,
-#patternLeftBar strong {
+.patternLeftBar b,
+.patternLeftBar strong {
 	color:#333; /*T11*/
 }
-#patternLeftBar input.patternFormField {
+.patternLeftBar input.patternFormField {
 	border-color:#E2DCC8; /*BO4*/
 	background-color:#fff; /*BG1*/
 }
-#patternLeftBar input.patternFormButton {
+.patternLeftBar input.patternFormButton {
 	background-color:transparent; /* no bg color with image button */
 }
-#patternLeftBar .patternChangeLanguage {
+.patternLeftBar .patternChangeLanguage {
 	color:#8E9195; /*T8*/
 }
 .patternLeftBarPersonal {

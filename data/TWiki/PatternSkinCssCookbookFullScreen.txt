@@ -6,3 +6,5 @@ __example topic for PatternSkinCssCookbook__
 <verbatim>
    * Set USERSTYLEURL = %ATTACHURL%/fullscreen.css
 </verbatim>
+
+%META:FILEATTACHMENT{name="fullscreen.css" attr="" autoattached="1" comment="css to hide the borders" date="1129323328" path="fullscreen.css" size="301" user="ArthurClemens" version=""}%

@@ -7,7 +7,7 @@
 </style>
 <!--[if IE]>
 <style>
-* html pre {
+pre {
 	overflow-x:auto;
     overflow-y:hidden;
 	padding-bottom:expression(this.scrollWidth > this.offsetWidth ? 16 : 0);
@@ -57,6 +57,7 @@
 		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
 	}
 </style>
+<!--
 <script type="text/javascript">
 /* only draw web color bg if the transparent gradient can be drawn */
 //<![CDATA[
@@ -65,6 +66,7 @@
 	document.write('<\/style>');
 //]]>
 </script>
+-->
 <style type="text/css" media="all">
 /* Check if style urls are valid (non-empty) */
 	%IF{ "$ USERLAYOUTURL" then="@import url('%USERLAYOUTURL%');" else=""}%

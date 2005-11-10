@@ -57,8 +57,8 @@ pre, code, tt {
 }
 /* put overflow pre in a scroll area */
 pre {
- width:100%;
- margin:1em 0; /* Win IE tries to make this bigger otherwise */
+	width:100%;
+	margin:1em 0; /* Win IE tries to make this bigger otherwise */
 }
 html>body pre { /* hide from IE */
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
@@ -182,8 +182,8 @@ label {
 	
 /* TablePlugin */
 .twikiTable {
- border-collapse:collapse;
- border-width:1px;
+	border-collapse:collapse;
+	border-width:1px;
 	border-style:solid;
 }
 .twikiTable td,
@@ -192,10 +192,10 @@ label {
 	border-style:solid;
 }
 .twikiTable th {
- padding:.4em .5em;
+	padding:.4em .5em;
 }
 .twikiTable td {
- padding:.25em .5em;
+	padding:.25em .5em;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -276,17 +276,17 @@ th.twikiSortedDescendingCol a:hover font,
 	text-decoration:none;
 }
 /* TipsContrib - in left bar */
-#patternLeftBar .tipsOfTheDay {
+.patternLeftBar .tipsOfTheDay {
 	margin:1em 2em .5em 0;
 	border-width:0;
 }
-#patternLeftBar .tipsOfTheDayHeader img {
+.patternLeftBar .tipsOfTheDayHeader img {
 	display:none;
 }
-#patternLeftBar .tipsOfTheDayContents {
+.patternLeftBar .tipsOfTheDayContents {
 	padding:.25em .25em .5em .25em;
 }
-#patternLeftBar .tipsOfTheDayHeader {
+.patternLeftBar .tipsOfTheDayHeader {
 	display:block;
 	font-weight:normal;
 }
@@ -571,46 +571,52 @@ a:hover .twikiAccessKey {
 	text-align:center;
 }
 
-/* Left bar */
-#patternLeftBar {
-	overflow:hidden;
-	font-size:94%; /*S2*/
-	border-width:0 1px 0 0;
+#patternMain {
+	border-width:0 0 0 1px;
 	border-style:dotted;
 }
-#patternLeftBar a img {
+
+/* Left bar */
+.patternLeftBar {
+	overflow:hidden;
+	font-size:94%; /*S2*/
+}
+.patternLeftBar a img {
 	margin:1px 0 0 0;
 }
-#patternLeftBar a:link,
-#patternLeftBar a:visited {
+.patternLeftBar a:link,
+.patternLeftBar a:visited {
 	text-decoration:none;
 }
-#patternLeftBar ul {
+.patternLeftBar ul {
 	padding:0em;
 	margin:0em;
 	list-style:none;
 }
-#patternLeftBar li {
+.patternLeftBar li {
 	padding-left:0;
 	margin-right:2em; /*S6*/ /*needed for proper wrapping:1em is left margin, 1em is right margin*/
 }
-#patternLeftBar .patternFormHolder {
+.patternLeftBar .patternFormHolder {
 	margin:.5em 0 1em 0;
 }
-html>body #patternLeftBar .patternFormHolder { /* Hide from IE */
+html>body .patternLeftBar .patternFormHolder { /* Hide from IE */
 	margin-top:1.25em;
 }
-#patternLeftBar .patternFormHolder table {
+.patternLeftBar .patternFormHolder table {
+	width:70%;
+}
+html>body .patternLeftBar .patternFormHolder table { /* Hide from IE */
 	width:100%;
 }
-#patternLeftBar .patternFormHolder th {
+.patternLeftBar .patternFormHolder th {
 	padding:0 0 2px 0;
 	vertical-align:middle;
 }
-#patternLeftBar .patternFormHolder th.patternFormSpacer {
+.patternLeftBar .patternFormHolder th.patternFormSpacer {
 	width:1%;
 }
-#patternLeftBar input.patternFormField {
+.patternLeftBar input.patternFormField {
 	display:block;
 	height:12px; /* with padding and border this adds up to 16px height - same as button */
 	width:99%;
@@ -619,14 +625,14 @@ html>body #patternLeftBar .patternFormHolder { /* Hide from IE */
 	font-size:85%; /*S3*/
 	margin:0;
 }
-#patternLeftBar input.patternFormButton {
+.patternLeftBar input.patternFormButton {
 	display:block;
 	padding:0 1em 0 0;
 	margin:auto 1em auto 0;
 	border:0;
 	width:16px;
 }
-#patternLeftBar .patternChangeLanguage {
+.patternLeftBar .patternChangeLanguage {
 	margin:0 2em 0 0; /*S6*/ /*needed for proper wrapping:1em is left margin, 1em is right margin*/
 	font-size:85%; /*S3*/
 }
@@ -653,6 +659,7 @@ html>body #patternLeftBar .patternFormHolder { /* Hide from IE */
 	width:100%;
 	padding:0 1em 2.5em 1em; /*S6*/
 }
+
 
 /* table used in various places */
 .patternVersatileTable table {
@@ -682,7 +689,7 @@ html>body #patternLeftBar .patternFormHolder { /* Hide from IE */
 }
 
 .patternTop {
-	font-size:94%; /*S2*/
+	font-size:85%; /*S3*/
 }
 .patternTop table {
 	border:none;
@@ -692,10 +699,10 @@ html>body #patternLeftBar .patternFormHolder { /* Hide from IE */
 	vertical-align:top;
 }
 .patternTop .patternHomePath {
-	width:65%;
+	width:60%;
 }
 .patternTop .patternRevInfo {
-	width:35%;
+	width:40%;
 }
 .patternTop .patternHomePath,
 .patternTop .patternRevInfo {
@@ -730,7 +737,8 @@ td.patternToolBar {
 }
 .patternToolBar a:link,
 .patternToolBar a:visited {
-	text-decoration:none;}
+	text-decoration:none;
+}
 .patternToolBarButtons {
 	float:right;
 }
@@ -745,7 +753,8 @@ td.patternToolBar {
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
 	display:block;
-	margin:0 0 -1px 4px;
+	margin:0 0 0 4px;
+	/*margin-bottom:-1px;*/ /* use with a patternToolBarBottom border */
 	border-width:1px;
 	border-style:solid;
 	/* relative + z-index removed due to buggy Win/IE redrawing problems */
@@ -769,8 +778,10 @@ td.patternToolBar {
 }
 .patternToolBarBottom {
 	position:relative;
+	/*
 	border-width:1px 0 0 0;
 	border-style:solid;
+	*/
 	margin:0 0 .5em 0;
 	z-index:2;
 }
@@ -976,6 +987,9 @@ table#twikiSearchTable td.first {
 /* Print */
 
 .patternPrintPage #patternColumnWrapper {
+	border:none;
+}
+.patternPrintPage #patternMain {
 	border:none;
 }
 .patternPrintPage .patternMainContents {

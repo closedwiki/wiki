@@ -32,10 +32,12 @@
 
 
 
-%TMPL:DEF{"main"}%<div id="patternColumnWrapper"><div id="patternMain"><div class="patternMainContents">
+%TMPL:DEF{"main"}%<table id="patternColumnWrapper" cellpadding="0" cellspacing="0">
+<tr>
+<td id="patternMain"><div class="patternMainContents">
 %TMPL:P{"simplewikilogo"}%
 %TMPL:P{"content"}%
-</div></div></div>%TMPL:END%
+</div><!--end patternMainContents--></td><!--end patternMain--></tr></table><!--end patternColumnWrapper-->%TMPL:END%
 
 
 

@@ -2,7 +2,7 @@
 
 __example topic for PatternSkinCssCookbook__
 
----+!!  @PatternSkinCssCookbook Recipe: Hide the left bar
+---+!!  PatternSkinCssCookbook Recipe: Hide the left bar
 <verbatim>
    * Set USERSTYLEURL = %ATTACHURL%/hideleftbar_Dakar.css
 </verbatim>
