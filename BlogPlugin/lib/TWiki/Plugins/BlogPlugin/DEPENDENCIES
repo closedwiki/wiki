@@ -5,3 +5,4 @@ TWiki::Contrib::DBCacheContrib,>=Dakar,perl,Required
 TWiki::Plugins::ExtendedSelectionPlugin,>=1.002,perl,Required
 TWiki::Plugins::HeadlinesPlugin,>=1.001,perl,Required
 TWiki::Plugins::SpreadSheetPlugin,>=1.001,perl,Required
+TWiki::Plugins::TimeSincePlugin,>=0.99,perl,Required

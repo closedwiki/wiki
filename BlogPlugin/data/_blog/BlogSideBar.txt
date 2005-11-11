@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1131636166" format="1.1" version="1.37"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131636166" format="1.1" version="1.1"}%
 ---+ Default sidebar
 <div class="alt">
 <verbatim>

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130177357" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131663302" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -46,7 +46,7 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="BlogLink1"}%
+%INCLUDE{"%TOPIC%" NAME="BlogLink2"}%
 </div>
 
 %INCLUDE{"RenderFunctionCallers"}%

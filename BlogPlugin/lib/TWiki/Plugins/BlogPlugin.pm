@@ -18,43 +18,16 @@ package TWiki::Plugins::BlogPlugin;
 
 ###############################################################################
 use vars qw(
-        $VERSION $RELEASE $debug @seconds
-	%prevTopicCache %nextTopicCache %db %MON2NUM
+        $VERSION $RELEASE $debug
+	%prevTopicCache %nextTopicCache %db
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.05';
+$RELEASE = '0.06';
 
-use Time::Local;
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::BlogPlugin::WebDB;
-
-%MON2NUM = (
-  Jan => 0,
-  Feb => 1,
-  Mar => 2,
-  Apr => 3,
-  May => 4,
-  Jun => 5,
-  Jul => 6,
-  Aug => 7,
-  Sep => 8,
-  Oct => 9,
-  Nov => 10,
-  Dec => 11
-);
-
-@seconds = (
-  ['year',   60 * 60 * 24 * 365],
-  ['month',  60 * 60 * 24 * 30],
-  ['week',   60 * 60 * 24 * 7],
-  ['day',    60 * 60 * 24],
-  ['hour',   60 * 60],
-  ['minute', 60],
-  ['second', 1]
-);
-
 
 ###############################################################################
 sub writeDebug {
@@ -75,7 +48,6 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('RECENTCOMMENTS', \&_RECENTCOMMENTS);
   TWiki::Func::registerTagHandler('COUNTCOMMENTS', \&_COUNTCOMMENTS);
   TWiki::Func::registerTagHandler('RELATEDENTRIES', \&_RELATEDENTRIES);
-  TWiki::Func::registerTagHandler('TIMESINCE', \&_TIMESINCE);
   TWiki::Func::registerTagHandler('CITEBLOG', \&_CITEBLOG);
 
   TWiki::Func::registerTagHandler('DBTEST', \&_DBTEST); # for debugging
@@ -628,11 +600,10 @@ sub _COUNTCOMMENTS {
 sub getRelatedEntries {
   my ($theWeb, $theTopic, $theDepth, $theRelatedTopics) = @_;
 
-  writeDebug("getRelatedEntries($theWeb, $theTopic, $theDepth) called");
-  $theRelatedTopics->{$theTopic} = $theDepth;
-  writeDebug("already got " . join(",", sort keys %$theRelatedTopics));
+  #writeDebug("getRelatedEntries($theWeb, $theTopic, $theDepth) called");
   $theDepth = 1 unless defined $theDepth;
-  return $theRelatedTopics unless $theDepth;
+  $theRelatedTopics->{$theTopic} = $theDepth;
+  return $theRelatedTopics unless $theDepth > 0;
   
   # get related topics we refer to
   my %relatedTopics = ();
@@ -661,7 +632,7 @@ sub getRelatedEntries {
   writeDebug("get trans related of $theTopic");
   foreach my $related (keys %relatedTopics) {
     next if $theRelatedTopics && $theRelatedTopics->{$related};
-    &getRelatedEntries($theWeb, $related, $theDepth - 1, $theRelatedTopics);
+    &getRelatedEntries($theWeb, $related, $relatedTopics{$related}-1, $theRelatedTopics);
   }
   
   writeDebug("theRelatedTopics=" . join(",", sort keys %$theRelatedTopics) . " ... $theTopic in depth $theDepth");
@@ -729,172 +700,6 @@ sub _RELATEDENTRIES {
   $result =~ s/\$headline//go;
 
   return $result;
-}
-
-###############################################################################
-# Adapted from WordPress plugin TimeSince by
-# Michael Heilemann (http://binarybonsai.com), 
-# Dunstan Orchard (http://www.1976design.com/blog/archive/2004/07/23/redesign-time-presentation/),
-# Nataile Downe (http://blog.natbat.co.uk/archive/2003/Jun/14/time_since)
-# 
-# thanks to all of you
-sub _TIMESINCE {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-
-  #print STDERR "DEBUG: _TIMESINCE(" . $params->stringify() . ") called\n";
-
-  my $theFrom = $params->{_DEFAULT} || $params->{from} || '';
-  my $theTo = $params->{to} || '';
-  my $theUnits = $params->{units} || 2;
-  my $theSeconds = $params->{seconds} || 'off';
-  my $theAbs = $params->{abs} || 'off';
-  my $theNull = $params->{null} || 'about now';
-  my $theFormat = $params->{format} || '$time';
-
-  if (!$theFrom && !$theTo) {
-    # if there's no starting date then get the current revision date
-    my ($meta, undef) = &TWiki::Func::readTopic($theWeb, $theTopic);
-    ($theFrom) = $meta->getRevisionInfo();
-    $theTo = time();
-  } else {
-
-    $theFrom =~ s/^\s*(.*)\s*$/$1/go;
-    $theTo =~ s/^\s*(.*)\s*$/$1/go;
-
-  
-    # convert time to epoch seconds
-    if ($theFrom ne '') {
-      if ($theFrom !~ /^\d+$/) { # already epoch seconds
-	eval {
-	  local $SIG{'__DIE__'};
-	  $theFrom = &parseTime($theFrom);
-	};
-	if ($@) {
-	  my $message = $@;
-	  $message =~ s/\sat\s.*//gos;
-	  return &inlineError("ERROR: can't parse from=\"$theFrom\" - $message");
-	}
-      }
-    } else {
-      $theFrom = time();
-    }
-    if ($theTo ne '') {
-      if ($theTo !~ /^\d+$/) { # already epoch seconds
-	eval {
-	  local $SIG{'__DIE__'};
-	  $theTo = &parseTime($theTo);
-	};
-	if ($@) {
-	  my $message = $@;
-	  $message =~ s/at.*//gos;
-	  return &inlineError("ERROR: can't parse to=\"$theTo\" - $message");
-	}
-      }
-    } else {
-      $theTo = time();
-    }
-  }
-
-  my $since = $theTo - $theFrom;
-  if ($theAbs eq 'on') {
-    $since = abs($since);
-  }
-   
-  #print STDERR "DEBUG: theFrom=$theFrom, theTo=$theTo, since=$since\n";
-
-  # calculate time string
-  my $unit;
-  my $count;
-  my $seconds;
-  my $timeString = '';
-  my $state = 0;
-
-  # step one: the first chunk
-  my $max = ($theSeconds eq 'on')?7:6;
-  for (my $i = 0; $i < $max; $i++) {
-    $unit = $seconds[$i][0];
-    $seconds = $seconds[$i][1];
-    $count = int(($since + 0.0) / $seconds);
-
-    #writeDebug("unit=$unit, seconds=$seconds, count=$count, since=$since");
-
-    # finding next unit
-    if ($count) {
-      $timeString .= ', ' if $state > 0;
-      $timeString .= ($count == 1) ? '1 '.$unit : "$count ${unit}s";
-      $state++;
-    } else {
-      next;
-    }
-
-    $since -= ($count * $seconds);
-    last if $theUnits && $state >= $theUnits;
-  }
-  
-  if ($timeString eq '') {
-    return expandVariables($theNull);
-  } else {
-    return expandVariables($theFormat, 'time'=>$timeString);
-  }
-}
-
-###############################################################################
-# duplication of TWiki::Time::parseTime 
-# but using timelocal() instead of timegm()
-sub parseTime {
-    my( $date ) = @_;
-
-    # NOTE: This routine *will break* if input is not one of below formats!
-    
-    # FIXME - why aren't ifs around pattern match rather than $5 etc
-    # try "31 Dec 2001 - 23:59"  (TWiki date)
-    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
-        my $year = $3;
-        $year -= 1900 if( $year > 1900 );
-        # The ($2) will look up the constant so named
-        return timelocal( 0, $5, $4, $1, $MON2NUM{$2}, $year );
-    }
-
-    # try "31 Dec 2001"
-    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)/) {
-        my $year = $3;
-        $year -= 1900 if( $year > 1900 );
-        # The ($2) will look up the constant so named
-        return timelocal( 0, 0, 0, $1, $MON2NUM{$2}, $year );
-    }
-
-    # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)[\.\:]([0-9]+)/) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timelocal( $6, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timelocal( 0, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001-12-31T23:59:59Z" or "2001-12-31T23:59:59+01:00" (ISO date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timelocal( $6, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001-12-31T23:59Z" or "2001-12-31T23:59+01:00" (ISO short date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        $year -= 1900 if( $year > 1900 );
-        return timelocal( 0, $5, $4, $3, $2-1, $year );
-    }
-
-    # give up, return start of epoch (01 Jan 1970 GMT)
-    return 0;
 }
 
 ###############################################################################
