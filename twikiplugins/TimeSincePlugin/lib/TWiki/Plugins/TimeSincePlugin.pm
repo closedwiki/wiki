@@ -144,7 +144,7 @@ sub _TIMESINCE {
     $since = abs($since);
   }
    
-  print STDERR "DEBUG: theFrom=$theFrom, theTo=$theTo, since=$since\n";
+  #print STDERR "DEBUG: theFrom=$theFrom, theTo=$theTo, since=$since\n";
 
   # calculate time string
   my $unit;
