@@ -101,7 +101,8 @@ sub _TWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
     my $id=$params->{'id'}||'';
     my $mode=$params->{'mode'}||'span';
-    my $cookieEnabled=($params->{'remember'} eq 'on') ? ' twistyRememberSetting' : '';
+    my $remember=$params->{'remember'}||'off';
+    my $cookieEnabled=($remember eq 'on') ? ' twistyRememberSetting' : '';
     unshift @modes,$mode;
     return '<'.$mode.' id="'.$id.'toggle" class="twistyMakeHidden'.$cookieEnabled.'">';
 }
