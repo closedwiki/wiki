@@ -24,7 +24,7 @@
 
 
 %TMPL:DEF{"content"}%
-<form method="post" name="renameweb" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%">
+<form method="post" name="renameweb" action="%SCRIPTURL{"rename"}%/%WEB%">
 <input type="hidden" name="action" value="renameweb" />
 <input type="hidden" name="confirm" value="getlock" />
 %TMPL:P{"simpleheader"}%
@@ -68,7 +68,7 @@
 </tr></table></div>
 <div class="twikiHelp">
 *%_{"Note:"}%*
-   * %_{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Get help on managing webs</a>", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs"}%
+   * %_{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Get help on managing webs</a>", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingWebs"}%
    * %_{"The checkmarked topics will be updated"}%
 </div>
 %TMPL:P{"topicaction"}%

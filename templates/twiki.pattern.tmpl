@@ -13,7 +13,7 @@
 
 
 
-%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title='%_{"Back to topic"}%' accesskey='C' rel='nofollow'>%_{"&Cancel"}%</a>%TMPL:END%
+%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" title='%_{"Back to topic"}%' accesskey='C' rel='nofollow'>%_{"&Cancel"}%</a>%TMPL:END%
 
 
 
@@ -32,7 +32,7 @@
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
-		return launchTheWindow("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/", inWeb, inTopic, "plain.pattern");
+		return launchTheWindow("%SCRIPTURL{"view"}%/", inWeb, inTopic, "plain.pattern");
 	}
 //]]>
 </script>
@@ -58,7 +58,7 @@
 <link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 <meta name="robots" content="noindex" />
 %HTTP_EQUIV_ON_VIEW%
-<base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+<base href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" />
 %TMPL:P{"script"}%
 %TMPL:P{"twikistyle"}%
 %TMPL:P{"templatecustomstyle"}%
@@ -109,7 +109,7 @@
 
 
 
-%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" title="%_{"View total topic history"}%" accesskey="H" rel="nofollow">%_{"&History"}%</a>: %REVISIONS%</span>%TMPL:END%
+%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%_{"View total topic history"}%" accesskey="H" rel="nofollow">%_{"&History"}%</a>: %REVISIONS%</span>%TMPL:END%
 
 
 

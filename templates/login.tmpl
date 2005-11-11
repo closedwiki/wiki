@@ -19,7 +19,7 @@
 ---+ %BANNER%
 %NOTE%
 %AUTHREALM%
-<form action='%SCRIPTURL%/login%SCRIPTSUFFIX%/%WEB%/%TOPIC%' method='post'>
+<form action='%SCRIPTURL{"login"}%/%WEB%/%TOPIC%' method='post'>
 <table border='0'>
 <tr><th>Username</th><td>
 <input type='text' size='30' name='username' value='%URLPARAM{"username"}%' />
@@ -42,7 +42,7 @@
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
  <meta name="robots" content="noindex" />
  %HTTP_EQUIV_ON_VIEW%
- <base href="%SCRIPTURL%/login%SCRIPTSUFFIX%" />
+ <base href="%SCRIPTURL{"login"}%" />
  %TMPL:P{"twikistyle"}%
  %TMPL:P{"templatecustomstyle"}%
  <!-- add JS script here -->

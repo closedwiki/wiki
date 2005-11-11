@@ -2,15 +2,15 @@
 %TMPL:INCLUDE{"oopsleaseconflict.tmpl"}%
 
 %TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> 
-<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form action="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%" method="post">
 %QUERYPARAMS% 
 <input type="submit" value='%_{"Try Again"}%' />
 </form>
 %TMPL:P{"sep"}%
-<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form action="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" name="breaklock" value="on" />
 %QUERYPARAMS% 
 <input type="submit" value='%_{"Edit Anyway"}%' />
 </form>
-%_{"or"}% <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on">%_{"View raw text without formatting"}%</a>
+%_{"or"}% <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=on">%_{"View raw text without formatting"}%</a>
 %_{"or"}% [[%WEB%.%TOPIC%][%_{"View topic"}%]]</span></div>%TMPL:END%

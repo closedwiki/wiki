@@ -8,10 +8,10 @@
 
 %SESSION_VARIABLE{"LANGUAGE" set="%URLPARAM{language}%"}%
 
-%_{"Your language will be changed to [_1] from the next screen. You will be redirected to there right now. If you aren't, ~[~[[_2]~]~[click here~]~] to proceed.", "*%SESSION_VARIABLE{LANGUAGE}%*", "%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"}%
+%_{"Your language will be changed to [_1] from the next screen. You will be redirected to there right now. If you aren't, ~[~[[_2]~]~[click here~]~] to proceed.", "*%SESSION_VARIABLE{LANGUAGE}%*", "%SCRIPTURL{"view"}%/%WEB%/%TOPIC%"}%
 
 <script type="text/javascript">
-window.location.href = '%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+window.location.href = '%SCRIPTURL{"view"}%/%WEB%/%TOPIC%';
 </script>
 
 %TMPL:END%

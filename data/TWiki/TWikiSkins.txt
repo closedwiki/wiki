@@ -36,7 +36,6 @@ Certain template files are expected to provide certain TMPL:DEFs - these are lis
    * =mirrorlink=
    * =mirrornote=
    * =moveattachment=
-   * =oops=
    * =oopsaccessdenied=
       * =no_such_topic=, =no_such_web=, =only_group=, =topic_access=
    * =oopsattention=

@@ -59,7 +59,7 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarDISPLAYTIME2
 ---+++ DISPLAYTIME{"format"} -- formatted display time
-   * Formatted time - either GMT or Local server time, depending on setting in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. Same format qualifiers as =%<nop>GMTIME%=
+   * Formatted time - either GMT or Local server time, depending on setting in [[%SCRIPTURL{"configure"}%][configure]]. Same format qualifiers as =%<nop>GMTIME%=
    * Syntax: =%<nop>DISPLAYTIME{"format"}%=
    * Example: =%<nop>DISPLAYTIME{"$hou:$min"}%= expands to =%DISPLAYTIME{"$hou:$min"}%=
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]

@@ -14,5 +14,5 @@
 
 
 %TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%">%_{"Results from [_1] web", "<nop>%WEB%"}%</div>%REPEAT%<div class="patternSearchResults">
-<div class="twikiTopRow"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a> (<a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION% - %AUTHOR%)</div>
+<div class="twikiTopRow"><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a> (<a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION% - %AUTHOR%)</div>
 <div class="twikiBottomRow">%TEXTHEAD%</div></div>%REPEAT%%TMPL:END%

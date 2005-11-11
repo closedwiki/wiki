@@ -19,7 +19,7 @@
 
 
 %TMPL:DEF{"namehelp"}%
-%_{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('%TWIKIWEB%','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WikiWord"}%
+%_{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('%TWIKIWEB%','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/WikiWord"}%
 %TMPL:END%
 
 
@@ -32,4 +32,4 @@
 
 
 
-%TMPL:P{"rename"}%
+%TMPL:P{"rename"}

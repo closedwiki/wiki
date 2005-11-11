@@ -10,7 +10,7 @@
 %TMPL:END%
 
 %TMPL:DEF{"content"}%
-<form method="post" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form method="post" name="rename" action="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%">
 %TMPL:P{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% <code>%TOPIC%</code>
 
@@ -31,7 +31,7 @@
 
 __Note:__
    * Get help on
-     <a target="ManagingTopics" onclick="return launchWindow('%TWIKIWEB%','ManagingTopics')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingTopics" rel='nofollow'>Renaming and moving topics</a>.
+     <a target="ManagingTopics" onclick="return launchWindow('%TWIKIWEB%','ManagingTopics')" href="%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingTopics" rel='nofollow'>Renaming and moving topics</a>.
    * Select the %TRASHWEB% Web to delete the topic.
    * The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)
 %TMPL:P{"topicinfo"}%

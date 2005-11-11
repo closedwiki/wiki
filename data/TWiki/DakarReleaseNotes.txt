@@ -224,6 +224,9 @@ The =configure= script can be used like the old =testenv= for public review of t
 
 New optional features include {AutoAttachPubFiles} and {EnableHierarchicalWebs}. Both are switched off by default but can be enabled in =configure=.
 
+---++++ Improved support for shorter URLs
+See TWiki:TWiki.ShorterURLCookbook
+
 ---+++ Preferences
 
 There have been some significant changes to the handling of preferences, aimed at making them more logical, consistent and easy to use.

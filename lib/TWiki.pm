@@ -185,6 +185,7 @@ BEGIN {
         REMOTE_USER       => \&_REMOTE_USER,
         REVINFO           => \&_REVINFO,
         SCRIPTNAME        => \&_SCRIPTNAME,
+        SCRIPTURL         => \&_SCRIPTURL,
         SEARCH            => \&_SEARCH,
         SERVERTIME        => \&_SERVERTIME,
         SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
@@ -272,9 +273,6 @@ BEGIN {
         require locale;
     }
 
-    $TWiki::cfg{DispScriptUrlPath} = $TWiki::cfg{ScriptUrlPath}
-      unless defined( $TWiki::cfg{DispScriptUrlPath} );
-
     # Constant tags dependent on the config
     $constantTags{AUTHREALM}       = $TWiki::cfg{AuthRealm};
     $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
@@ -284,7 +282,7 @@ BEGIN {
     $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
     $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
     $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
-    $constantTags{SCRIPTURLPATH}   = $TWiki::cfg{DispScriptUrlPath};
+    $constantTags{SCRIPTURLPATH}   = $TWiki::cfg{ScriptUrlPath};
     $constantTags{LOCALSITEPREFS}  = $TWiki::cfg{LocalSitePreferences};
     $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
     $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
@@ -860,21 +858,27 @@ Returns the absolute URL to a TWiki script, providing the web and topic as
 =cut
 
 sub getScriptUrl {
-    my( $this, $theWeb, $theTopic, $theScript, @params ) = @_;
+    my( $this, $web, $topic, $script, @params ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
-    ( $theWeb, $theTopic ) =
-      $this->normalizeWebTopicName( $theWeb, $theTopic );
-    $theWeb ||= '';
+    ( $web, $topic ) =
+      $this->normalizeWebTopicName( $web, $topic );
+    $web ||= '';
 
     # SMELL: topics and webs that contain spaces?
 
     # $this->{urlHost} is needed, see Codev.PageRedirectionNotWorking
-    my $url = $this->{urlHost};
-    $url .= $TWiki::cfg{DispScriptUrlPath} . "/$theScript";
-    $url .= $TWiki::cfg{ScriptSuffix};
-    $url .= "/$theWeb/$theTopic";
+    my $url;
+    if( defined $TWiki::cfg{ScriptUrlPaths} ) {
+        $url = $TWiki::cfg{ScriptUrlPaths}{$script};
+    }
+    unless( $url ) {
+        $url = $this->{urlHost}.$TWiki::cfg{ScriptUrlPath}.'/'.
+          $script.$TWiki::cfg{ScriptSuffix};
+    }
+
+    $url .= '/'.$web.'/'.$topic;
 
     my $ps = '';
     while( my $p = shift @params ) {
@@ -972,16 +976,15 @@ Be very careful where you use it!
 =cut
 
 sub normalizeWebTopicName {
-    my( $this, $theWeb, $theTopic ) = @_;
+    my( $this, $web, $topic ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
-    ASSERT(defined $theTopic) if DEBUG;
+    ASSERT(defined $topic) if DEBUG;
 
-    if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
-        $theWeb = $1;
-        $theTopic = $2;
+    if( $topic =~ m|^([^.]+)[./](.*)$| ) {
+        $web = $1;
+        $topic = $2;
     }
-    my( $web, $topic ) = ( $theWeb, $theTopic );
     $web ||= $cfg{UsersWebName};
     $topic ||= $cfg{HomeTopicName};
     $web =~ s/^%((MAIN|TWIKI)WEB)%$/$this->_expandTag( $1 )/e;
@@ -1171,7 +1174,6 @@ sub new {
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
     $this->{SESSION_TAGS}{ATTACHURL}      = $this->{urlHost}.'%ATTACHURLPATH%';
     $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$TWiki::cfg{PubUrlPath};
-    $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$TWiki::cfg{DispScriptUrlPath};
 
     $prefs->pushPreferences(
         $TWiki::cfg{UsersWebName}, $user->wikiName(),
@@ -2868,21 +2870,43 @@ sub _MAKETEXT {
 
 sub _SCRIPTNAME {
     #my ( $this, $params, $theTopic, $theWeb ) = @_;
-    my $value = $ENV{SCRIPT_URL};
-    if( $value ) {
-        # e.g. '/cgi-bin/view.cgi/TWiki/WebHome'
-        $value =~ s|^$TWiki::cfg{DispScriptUrlPath}/?||o;  # cut URL path to get 'view.cgi/TWiki/WebHome'
-        $value =~ s|/.*$||;                    # cut extended path to get 'view.cgi'
-        return $value;
-    }
-    # no SCRIPT_URL, try SCRIPT_FILENAME
-    $value = $ENV{SCRIPT_FILENAME};
+    # try SCRIPT_FILENAME
+    my $value = $ENV{SCRIPT_FILENAME};
     if( $value ) {
         $value =~ s!.*/([^/]+)$!$1!o;
         return $value;
     }
+    # try SCRIPT_URL (won't work with url rewriting)
+    $value = $ENV{SCRIPT_URL};
+    if( $value ) {
+        # e.g. '/cgi-bin/view.cgi/TWiki/WebHome'
+        # cut URL path to get 'view.cgi/TWiki/WebHome'
+        $value =~ s|^$TWiki::cfg{ScriptUrlPath}/?||o;
+        # cut extended path to get 'view.cgi'
+        $value =~ s|/.*$||;
+        return $value;
+    }
     # no joy
     return '';
+}
+
+sub _SCRIPTURL {
+    my ( $this, $params, $topic, $web ) = @_;
+    my $script = $params->{_DEFAULT};
+    my $url;
+
+    if( $script ) {
+        if( defined $TWiki::cfg{ScriptUrlPaths} ) {
+            $url = $TWiki::cfg{ScriptUrlPaths}{$script};
+        }
+        unless( $url ) {
+            $url = $this->{urlHost}.$TWiki::cfg{ScriptUrlPath}.'/'.
+              $script.$TWiki::cfg{ScriptSuffix};
+        }
+    } else {
+        $url = $this->{urlHost}.$TWiki::cfg{ScriptUrlPath};
+    }
+    return $url;
 }
 
 sub _ALL_VARIABLES {

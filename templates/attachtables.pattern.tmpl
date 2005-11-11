@@ -8,7 +8,7 @@
 
 %{ A basic row definition, for attachment table and attach screen }%
 %TMPL:DEF{ATTACH:files:row(basic)}%
-| %A_ICON%<span class="twikiHidden">%A_EXT%</span> | <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURL%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=%A_FILE%&revInfo=1" title='%_{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%_{"manage"}%</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
+| %A_ICON%<span class="twikiHidden">%A_EXT%</span> | <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURL{"attach"}%/%WEB%/%TOPIC%?filename=%A_FILE%&revInfo=1" title='%_{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%_{"manage"}%</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
 
 %{ Header for topic attachment table }%
 %TMPL:DEF{ATTACH:files:header}%

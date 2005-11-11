@@ -22,8 +22,8 @@
 %REPEAT%
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
-		<td width="50%"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></td>
-		<td width="30%"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION%</td>
+		<td width="50%"><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></td>
+		<td width="30%"><a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION%</td>
 		<td width="20%"> %AUTHOR%</td>
 	</tr>
 	<tr>
@@ -39,7 +39,7 @@
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"main"}%
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form name="main" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%">
 %TMPL:P{"standardheader"}%
 </form>
 %TMPL:P{"content"}%%TMPL:END%

@@ -59,7 +59,7 @@
 
 
 %TMPL:DEF{"content"}%
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURL{"upload"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 %TMPL:P{"simpleheader"}%
 %TMPL:P{"toolbar"}%
 <div id="attachhelptoggle" class="twikiHelp twistyHidden twistyRememberSetting">

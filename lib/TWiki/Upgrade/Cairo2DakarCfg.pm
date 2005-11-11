@@ -32,8 +32,16 @@ sub upgradeConfig {
                       "{DefaultUrlHost}", 1 );
     print CFG old2new($scriptUrlPath, "/twiki/bin",
                       "{ScriptUrlPath}", 1 );
-    print CFG old2new($dispScriptUrlPath, "/twiki/bin",
-                      "{DispScriptUrlPath}", 0 );
+    if( $dispScriptUrlPath && $dispScriptUrlPath ne "/twiki/bin" ) {
+        my $m = "WARNING: incompatible URL rewriting mechanism dispScriptUrlPath (was set to '$dispScriptUrlPath') has been IGNORED. Please see TWiki:TWiki.ShorterURLCookbook for help in understanding this.\n\n";
+        print CFG "#$m";
+        print STDERR $m;
+    }
+    if( $dispViewPath && $dispViewPath ne "/view" ) {
+        my $m = "WARNING: incompatible URL rewriting mechanism dispViewPath (was set to '$dispViewPath') has been IGNORED. Please see TWiki:TWiki.ShorterURLCookbook for help in understanding this.\n";
+        print CFG "#$m";
+        print STDERR $m;
+    }
     print CFG old2new($pubUrlPath, "/twiki/pub",
                       "{PubUrlPath}" );
     print CFG old2new($dataDir, "/home/httpd/twiki/data",
@@ -167,7 +175,7 @@ my @ActiveSubstitutions = ();
 # If subs is true, then the mapping (from old value to new variable name)
 # is cached and substituted into future expanded non-default values.
 # Thus if $dataDir is /tmp/blah and debugLogFilename is
-# "/tmp/blah/debug.txt" then this will be mapped to "$cfg{dataDir}/debug.txt"
+# "/tmp/blah/debug.txt" then this will be mapped to "$cfg{DataDir}/debug.txt"
 # Note that the substitutions are done in order, so longer substitutions
 # defined later in the config will override shorter ones defined earlier.
 # NOTE THAT THE DEFAULT IS THE CAIRO DEFAULT, NOT THE DAKAR DEFAULT

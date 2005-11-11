@@ -24,7 +24,7 @@
 
 
 %TMPL:DEF{"content"}%
-<form method="post" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form method="post" name="rename" action="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%">
 %TMPL:P{"simpleheader"}%
 <div class="patternVersatileTable">
 <table>
@@ -62,7 +62,7 @@
 </form>
 <div class="twikiHelp">
 *%_{"Note:"}%*
-   * %_{"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB%','ManagingTopics')\" href=\"[_1]\" rel='nofollow'>Renaming and moving topics</a>.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingTopics"}%
+   * %_{"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB%','ManagingTopics')\" href=\"[_1]\" rel='nofollow'>Renaming and moving topics</a>.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingTopics"}%
    * %_{"Select the [_1] Web to delete the topic.", "%TRASHWEB%"}%
    * %_{"The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)"}%
 </div>

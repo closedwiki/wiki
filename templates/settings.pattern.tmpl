@@ -34,7 +34,7 @@
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
 <div class="patternFormHolder">
-<form method="post" name="main" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form method="post" name="main" action="%SCRIPTURL{"manage"}%/%WEB%/%TOPIC%">
 <div class="twikiEditTextarea">
 <input type="hidden" name="action" value="saveSettings" />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
@@ -45,7 +45,7 @@
 %TMPL:P{"topicaction"}%
 <div class="twikiHelp">
 *%_{"Note:"}%*
-   * %_{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','TWikiVariables')\" href='[_1]' rel='nofollow'>Setting topic preferences</a>.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiVariables"}%
+   * %_{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','TWikiVariables')\" href='[_1]' rel='nofollow'>Setting topic preferences</a>.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/TWikiVariables"}%
    * %_{"Each preference has the syntax"}% <br />
      %_{"~[multiple of 3 spaces~] * ~[space~] Set ~[space~] VARIABLENAME ~[space~] = ~[value~]"}%
 </div>

@@ -25,7 +25,7 @@
 
 %_{"Those changes have been merged with yours to create Rev [_1]. Text fields will have been merged, but other data such as form fields may have overwritten the other users changes. Please inspect the topic to make sure it is OK, especially if you made any changes to form fields.", "%PARAM3%"}%
 
-%_{"You can see the differences ~[~[[_1]~]~[here~]~].", "%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%"}%
+%_{"You can see the differences ~[~[[_1]~]~[here~]~].", "%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%"}%
 %TMPL:END%
 %TMPL:DEF{"missing_action"}%
 ---+++ %_{"Missing action command"}%
@@ -135,7 +135,7 @@
 %TMPL:DEF{"reset_ok"}%
 %PARAM1%
 
-%_{"Users with automatically generated passwords should proceed immediately to ~[~[[_1]~]~[change password~]~] to change their password to something memorable.", "%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ChangePassword"}%
+%_{"Users with automatically generated passwords should proceed immediately to ~[~[[_1]~]~[change password~]~] to change their password to something memorable.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ChangePassword"}%
 %TMPL:END%
 %TMPL:DEF{"password_changed"}%
 ---+++ %_{"Password changed successfully!"}%
@@ -147,7 +147,7 @@
 
 %_{"Your activation code has been sent to [_1].  Either click on the link in your email or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxx\")", "%PARAM1%"}%
 
-<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<form action="%SCRIPTURL{"register"}%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=' %_{"Submit"}% ' />
@@ -189,7 +189,7 @@
 ---+++ %_{"You are already registered"}%
 %_{"You cannot register twice, the name [_1] is already registered.", "'%PARAM1%'"}%
 
-%_{"Did you want to ~[~[[_1]~]~[reset [_2]'s password~]~]?", "%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki.ResetPassword?username=%PARAM1%", "%PARAM1%"}%
+%_{"Did you want to ~[~[[_1]~]~[reset [_2]'s password~]~]?", "%SCRIPTURL{"view"}%/TWiki.ResetPassword?username=%PARAM1%", "%PARAM1%"}%
 
 %_{"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."}%
 
@@ -221,7 +221,7 @@
 
 %_{"Please try again."}%
 
-<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<form action="%SCRIPTURL{"register"}%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=' %_{"Submit"}% ' />
@@ -254,7 +254,7 @@
 
 ---++ 2. %_{"The topic is in an old format"}%
 
-   * %_{"Click on ~[~[[_1]~]~[Debug topic text~]~].", "%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug"}%
+   * %_{"Click on ~[~[[_1]~]~[Debug topic text~]~].", "%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=debug"}%
       * %_{"There should be a line that includes [_1], look for [_2] (or [_3])", "=META:FORM=", "name=\"%PARAM1%.%PARAM2%\"", "name=\"%PARAM2%\""}%
       * %_{"If this line isn't present see _upgrade_ section below"}%
 
@@ -307,7 +307,7 @@
 %PARAM4%
 
 <div %PARAM5%>
-<a href="%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%?action=renameweb;confirm=continue" />%_{"Continue and try to rename web?"}%</a>
+<a href="%SCRIPTURL{"rename"}%/%WEB%/%HOMETOPIC%?action=renameweb;confirm=continue" />%_{"Continue and try to rename web?"}%</a>
 </div>
 
 %TMPL:END%

@@ -106,7 +106,7 @@ __Note:__ This topic is included by TWikiVariables
    * The name of the current script is shown, including script suffix, if any (for example =viewauth.cgi=)
    * Syntax: =%<nop>SCRIPTNAME%=
    * Expands to: =%SCRIPTNAME%=
-   * Related: [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
+   * Related: [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]]
 
 #VarSCRIPTSUFFIX
 ---+++ SCRIPTSUFFIX -- script suffix
@@ -116,16 +116,21 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
 
 #VarSCRIPTURL
----+++ SCRIPTURL -- script URL of <nop>%WIKITOOLNAME%
+---+++ SCRIPTURL -- script URL
    * Syntax: =%<nop>SCRIPTURL%=
    * Expands to: =%SCRIPTURL%=
    * Example: To get the authenticated version of current topic write =%<nop>SCRIPTURL%/viewauth%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%= which expands to =%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%=
+   * Syntax: =%<nop>SCRIPTURL{"script"}%=
+   * Expands to: =%SCRIPTURL{"script"}%=
+   * Example: To get the authenticated version of current topic write =%<nop>SCRIPTURL{"viewauth"}%/%WEB%/%TOPIC%= which expands to =%SCRIPTURL{"viewauth"}%/%WEB%/%TOPIC%=
+   * This second form of SCRIPTURL handles URL rewriting (see TWiki:TWiki.ShorterURLCookbook).
    * Related: [[#VarPUBURL][PUBURL]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
 
 #VarSCRIPTURLPATH
----+++ SCRIPTURLPATH -- script URL path of <nop>%WIKITOOLNAME%
+---+++ SCRIPTURLPATH -- script URL path
    * Syntax: =%<nop>SCRIPTURLPATH%=
    * Expands to: =%SCRIPTURLPATH%=
+   * As SCRIPTURL, but doesn't include the host part of the URL. Of limited use, and not recommended.
    * Related: [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]]
 
 #VarSEARCH

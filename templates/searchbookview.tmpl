@@ -5,8 +5,8 @@
 %TMPL:DEF{"repeatedsearchblock"}%
 %REPEAT%<table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr bgcolor="%WEBBGCOLOR%">
-  <td width="60%"><h1><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TOPICNAME%</a> &nbsp;</h1></td>
-  <td width="20%"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION% &nbsp;</td>
+  <td width="60%"><h1><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPICNAME%">%TOPICNAME%</a> &nbsp;</h1></td>
+  <td width="20%"><a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION% &nbsp;</td>
   <td width="20%">%AUTHOR%</td>
 </tr>
 </table>
@@ -14,4 +14,4 @@
 %TEXTHEAD%
 <p />&nbsp;<p />
 <hr />
-%REPEAT%<br clear="all" />%TMPL:END%
+%REPEAT%<br clear="all" />%TMPL:END

@@ -3,7 +3,7 @@
 
 *TWiki Administrator Group*
 
-   * Set GROUP = 
+   * Set GROUP = TWikiAdminGroup
    * #Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
