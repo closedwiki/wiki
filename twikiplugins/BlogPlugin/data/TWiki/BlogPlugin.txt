@@ -31,7 +31,7 @@ This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 10 Nov 2005 (v0.05) |
+|  Plugin Version: | 11 Nov 2005 (v0.06) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  04 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |

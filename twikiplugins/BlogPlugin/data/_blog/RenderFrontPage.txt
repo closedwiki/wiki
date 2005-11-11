@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131555957" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131647399" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -38,7 +38,7 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderFrontPageNavig
 ~~~      web="%WEB%"
 ~~~   }%)"}%
 -->
-~~~ %INCLUDE{"RenderFrontPageNavigation" SKIP="%SKIP%" MAX="%CALC{"$GET(nrPostings)"}%"}%
+~~~ %INCLUDE{"%WEB%.RenderFrontPageNavigation" SKIP="%SKIP%" MAX="%CALC{"$GET(nrPostings)"}%"}%
 ~~~ %INCLUDE{"RenderBlogAuthorSwitch"}%
 ~~~
 %STOPINCLUDE%

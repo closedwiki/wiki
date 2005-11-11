@@ -1,0 +1,39 @@
+%META:TOPICINFO{author="TWikiContributor" date="1131636192" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+   * NAME: topic to collect related once
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+%~~ RELATEDENTRIES{"%NAME%"
+~~~   depth="2"
+~~~   header="
+~~~     <div class=\"blogSideBarSection blogSideBarRelated\">
+~~~     $n---+ Related$n" 
+~~~   format="   * <span class=\"blogRelated$depth\">[[$web.$topic][$headline]]</span>"
+~~~   footer="</div>"
+~~~ }%
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<div class="alt">
+%INCLUDE{"%TOPIC%" NAME="BlogEntry6"}%
+</div>
+
+%INCLUDE{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a list of related BlogEntries for the BlogEntry sidebar"}%

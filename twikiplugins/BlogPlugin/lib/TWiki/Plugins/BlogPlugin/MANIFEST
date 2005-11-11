@@ -60,6 +60,7 @@ data/_blog/RenderNewTopicTypeForm.txt
 data/_blog/RenderNextCommentNr.txt
 data/_blog/RenderRecentComments.txt
 data/_blog/RenderRecentPostings.txt
+data/_blog/RenderRelatedEntries.txt
 data/_blog/RenderSubComments.txt
 data/_blog/RenderTWikiFormList.txt
 data/_blog/RenderTagline.txt
