@@ -21,7 +21,7 @@ Generic prompt box used by other templates
 </verbatim>
 Short comment, signed and dated
 <verbatim>
-%TMPL:DEF{outputoneliner}%	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %DATE% %SERVERTIME%%TMPL:END%
+%TMPL:DEF{outputoneliner}%	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %SERVERTIME%%TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
 ---++ User templates
@@ -86,7 +86,7 @@ anchor/location/COMMENT
 %TMPL:DEF{PROMPT:tableprepend}%%TMPL:P{promptbox}%%TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:tableprepend}%%POS:AFTER%| %URLPARAM{"comment" newline="<br />"}% </td><td> %WIKIUSERNAME% </td><td> %DATE% %SERVERTIME% |
+%TMPL:DEF{OUTPUT:tableprepend}%%POS:AFTER%| %URLPARAM{"comment" newline="<br />"}% </td><td> %WIKIUSERNAME% </td><td> %SERVERTIME% |
 %TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ Comments, signed and dated, added at end of table above the anchor/location/COMM
 %TMPL:DEF{PROMPT:tableappend}%%TMPL:P{promptbox}%%TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:tableappend}%%POS:BEFORE%| %URLPARAM{"comment" newline="<br />"}% | %WIKIUSERNAME% | %DATE% %SERVERTIME% |
+%TMPL:DEF{OUTPUT:tableappend}%%POS:BEFORE%| %URLPARAM{"comment" newline="<br />"}% | %WIKIUSERNAME% | %SERVERTIME% |
 %TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
@@ -136,7 +136,7 @@ Action added to action table directly above comment box
 %TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:action}%%POS:BEFORE%%ACTION{who="%URLPARAM{"who"}%" due="%URLPARAM{"due"}%"}% %URLPARAM{"comment" newline="<br />"}%<br />- Created by %WIKIUSERNAME%, %DATE% %SERVERTIME%
+%TMPL:DEF{OUTPUT:action}%%POS:BEFORE%%ACTION{who="%URLPARAM{"who"}%" due="%URLPARAM{"due"}%"}% %URLPARAM{"comment" newline="<br />"}%<br />- Created by %WIKIUSERNAME%, %SERVERTIME%
 %TMPL:END%
 </verbatim>
 ----------------------------------------------------------------------------
@@ -162,7 +162,7 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 </verbatim>
 <verbatim>
 %TMPL:DEF{OUTPUT:toctalk}%
-%POS:BEFORE%---+++ %DATE% %SERVERTIME% %WIKIUSERNAME%: %URLPARAM{"comment_summary"}%
+%POS:BEFORE%---+++ %SERVERTIME% %WIKIUSERNAME%: %URLPARAM{"comment_summary"}%
 %POS:BEFORE%%URLPARAM{"comment_text" }%
 %POS:BEFORE%
 %TMPL:END%
