@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131393412" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131747451" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -54,8 +54,9 @@ see also: RenderDocNavigation
 ~~~   <span class=\"blogDate\">
 ~~~     replied
 ~~~     $percntTIMESINCE{
-~~~        \"$formatTime(createdate)\"
-~~~        format=\"$time ago\"
+~~~        from=\"$expand(@BaseRef.createdate)\"
+~~~        to=\"$expand(createdate)\"
+~~~        format=\"$time after the incident\"
 ~~~        null=\"immediately\"
 ~~~      }$percnt
 ~~~   </span>]]
@@ -67,6 +68,7 @@ see also: RenderDocNavigation
 ~~~    $percntFIDEFINED$percnt$n
 ~~~ <div class=\"blogCommentText\">$n
 ~~~    $expand(Text)
+~~~    ...&nbsp;[[$web.$topic#bottomComment][reply]]
 ~~~ </div>$n
 ~~~ </noautolink>
 *~~ 
