@@ -36,10 +36,14 @@ package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
 
 use strict;
 
+use TWiki::Func; # needed for regular expressions
+
 use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
 @TWiki::Plugins::WysiwygPlugin::HTML2TML::Node::ISA = qw( WC );
 
 use HTML::Entities;
+
+use vars qw( $reww );
 
 =pod
 
@@ -617,11 +621,16 @@ sub _handleA {
         if( $topic ) {
             my $cleantext = $text;
             $cleantext =~ s/(<nop>)//g;
+            $reww = TWiki::Func::getRegularExpression('wikiWordRegex')
+              unless $reww;
             # if the clean text is the known topic we can ignore it
-            if( ($cleantext eq $topic || $topic =~ /\.$cleantext$/) &&
-                  $topic =~ /^[\w.#]+$/ ) {
-                # wikiword or web.wikiword
-                return (0, $WC::CHECK1.$nop.$topic.$WC::CHECK2);
+            if( ($cleantext eq $topic || $topic =~ /\.$cleantext$/)) {
+                if( $topic =~ /^(\w+\.)?$reww[\w#]*$/o ) {
+                    # wikiword or web.wikiword, optional anchor
+                    return (0, $WC::CHECK1.$nop.$topic.$WC::CHECK2);
+                } else {
+                    return (0, $WC::CHECKw.'['.$nop.'['.$topic.']]'.$WC::CHECKw );
+                }
             } else {
                 # text and link differ
                 return (0, $WC::CHECKw.'['.$nop.'['.$topic.']['.$text.

@@ -857,32 +857,44 @@ HERE
 |||
 </b>',
           },
+          #{
+          #    exec => 3,
+          #    name => 'complexTWikiVariable',
+          #    html => '<span class="TMLvariable">SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}</span>',
+          #    tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
+          #},
           {
-              exec => 2,
-              name => 'complexTWikiVariable',
-              html => '<span class="TMLvariable">SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}</span>',
-              tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
-          },
-          {
-              exec => 2,
+              exec => 3,
               name => 'variableInIMGtag',
-              html => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif"></img>',
+              html => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif" />',
               tml  => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif" />',
               finaltml => '<img src="%ATTACHURLPATH%/T-logo-16x16.gif"></img>'
           },
           {
-              exec => 2,
+              exec => 3,
               name => 'twikiWebSnarf',
               html => '<a href="%TWIKIWEB%.TopicName">bah</a>',
               tml  => '[[%TWIKIWEB%.TopicName][bah]]',
           },
           {
-              exec => 2,
+              exec => 3,
               name => 'mainWebSnarf',
               html => '<a href="%MAINWEB%.TopicName">bah</a>',
               tml  => '[[%MAINWEB%.TopicName][bah]]',
           },
-
+          {
+              exec => 3,
+              name => 'mainFormWithVars',
+              html => '<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">',
+              tml  => '<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">',
+          },
+          {
+              exec => 3,
+              name => "Item871",
+              tml => "[[Test]] Entry [[Test Page]]\n",
+              tml => "[[Test]] Entry [[TestPage][Test Page]]\n",
+              html => '<a href="'.$page.'/Current/Test">Test</a>Entry<a href="'.$page.'/Current/TestPage">Test Page</a>',
+          },
          ];
 
 
