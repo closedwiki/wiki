@@ -67,7 +67,6 @@ sub initPlugin {
 EOF
 
     TWiki::Func::addToHEAD('TWISTYPLUGIN_TWISTY',$header);
-    TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
     TWiki::Func::registerTagHandler('TWISTYSHOW',\&_TWISTYSHOW);
     TWiki::Func::registerTagHandler('TWISTYHIDE',\&_TWISTYHIDE);
     TWiki::Func::registerTagHandler('TWISTYTOGGLE',\&_TWISTYTOGGLE);
@@ -86,8 +85,8 @@ sub _TWISTYHIDE {
 }
 
 sub _TWISTYBUTTON {
-	my($session, $params, $theTopic, $theWeb, $theState) = @_;
-	my $id=$params->{'id'}||'';
+    my($session, $params, $theTopic, $theWeb, $theState) = @_;
+    my $id=$params->{'id'}||'';
     my $link=$params->{'link'}||'';
     my $mode=$params->{'mode'}||'span';
     my $img=$params->{'img'} || '';
