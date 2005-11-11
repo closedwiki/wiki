@@ -66,13 +66,13 @@ Templates are used to define the "comment style" i.e. how comments appear in the
 
 A set of default comment templates are shipped with the plugin. These are:
 | *Template type* | *Description* |
-| =top= | Comments, signed and dated, added at top of the topic (the anchor is ignored) |
-| =bottom= | Comments, signed and dated, added at end of the target topic (the anchor is ignored) |
-| =above= | Comments, signed and dated, added immediately before the target anchor, or the =%COMMENT= if no anchor is specified |
-| =below= | Comments, signed and dated, added immediately below the target anchor, or the =%COMMENT= if no anchor is specified |
-| =threadmode= | Wiki thread mode comment, signed and dated |
-| =tableprepend= | Comments, signed and dated, formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
-| =tableappend= | Comments, signed and dated, formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
+| =top= | Comments, signed and dated (server time), added at top of the topic (the anchor is ignored) |
+| =bottom= | Comments, signed and dated (server time), added at end of the target topic (the anchor is ignored) |
+| =above= | Comments, signed and dated (server time), added immediately before the target anchor, or the =%COMMENT= if no anchor is specified |
+| =below= | Comments, signed and dated (server time), added immediately below the target anchor, or the =%COMMENT= if no anchor is specified |
+| =threadmode= | Wiki thread mode comment, signed and dated (server time) |
+| =tableprepend= | Comments, signed and dated (server time), formatted as an HTML table row, added below the anchor (which must be in an HTML &lt;table>) |
+| =tableappend= | Comments, signed and dated (server time), formatted as an HTML table row, added above the anchor (which must be in an HTML &lt;table>) |
 
 Your local installation may add more template types as well - see [[#TemPlates][Customisation]], below.
 
@@ -138,33 +138,21 @@ All the usual TWikiVariables that can be used in a topic template can also be us
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-	* This plugin is pre-installed in your TWiki release.
-
+	* This plugin is pre-installed in most TWiki releases. However if you need to upgrade the plugin for any reason:
+      * Download the archive file from the Plugin web (see below)
+      * Unpack the archive in your twiki installation directory.
+      * You may need to correct file permissions.
+      * Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+	%$DEPENDENCIES%
+      * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 ---+ Plugin Info
-
-|  Plugin Author: | v1.0 TWiki:Main.DavidWeller v2.0 TWiki:Main.PeterMasiar v3.0 TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-| Change History: <!-- Most recent first --> ||
-| 1 Nov 2005 | 4.001 Revised template handling to allow for more generic customisation |
-| 22 Feb 2005 | 4.000 TWiki:Main.CrawfordCurrie made Dakar release ready. Recoded for new Plugins handlers, much more efficient. Removed TIME, now replaced by SERVERTIME. |
-| 25 Feb 2005 | 3.009 TWiki:Main.CrawfordCurrie Added Olivier Berger's fix for anchors and Jacob Eisinger's fix for variable expansion. |
-| 16 Oct 2004 | 3.008 Added the =noform= attribute to Comment - TWiki:Main.MartinCleaver |
-| 12 Oct 2004 | 3.007 TWiki:Main.CrawfordCurrie Disabled comment boxes in rdiff pane. |
-| 6 Oct 2004 | 3.006 TWiki:Main.CrawfordCurrie Fixed action template, which was expanded incorrectly. Upped default comment box to 70 chars default width. |
-| 16 Aug 2004 | 3.005 Cairo readiness; dependency checking; added =threadmode= template. TWiki:Main.CrawfordCurrie |
-| 11 Apr 2004 | 3.004 TWiki:Main.CrawfordCurrie  fixed minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
-| 6 April 2004 | 3.003 TWiki:Main.CrawfordCurrie Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
-| 13 March 2004 | 3.002  TWiki:Main.CrawfordCurrie Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site specifics, support %<nop>COMMENT%, internationalisation fixes.|
-| 18 Feb 2004 | 3.001 TWiki:Main/CrawfordCurrie rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
-| 7 Feb 2004 | TWiki:Main/CrawfordCurrie rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
-| 23 Sep 2003 | 2.000 TWiki:Main/PeterMasiar: 80% rewrite/refactor, adding templates |
-| 15 July 2003 | TWiki:Main/PeterMasiar added "reminder" parameter and feature to pass comments to oopslockedcomments.tmpl template to copy-paste later |
-| 5 March 2002 | Bug fixes, TWiki:Main/JonLambert created oopslockedcomments.tmpl template |
-| 24 Feb 2002 | added a few more user requests, made "English" text configurable |
-| 4 Dec 2001 | 1.010 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft" |
-| 30 Nov 2001 | 1.000 Initial version |
-|  Dependencies: | <table border=1><tr><th align="left">Name</th><th align="left">Version</th><th align="left">Description</th></tr><tr><td align="left">TWiki::Contrib::Attrs</td><td align="left">&gt;=1.000</td><td align="left">Required. Download from TWiki:Plugins/AttrsContrib and install.</td></tr><tr><td align="left">TWiki::Plugins</td><td align="left"> &gt;=1.010</td><td align="left">This plugin will not work with this TWiki version. It requires TWiki features introduced in Feb 2003 or later release.</td></tr></table> |
+|  Plugin Author: | TWiki:Main.DavidWeller, TWiki:Main.PeterMasiar, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
+| Change History: | Please refer to the TWiki Subversion repository for a complete change history of this plugin. |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | >= 5.6.1 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%
