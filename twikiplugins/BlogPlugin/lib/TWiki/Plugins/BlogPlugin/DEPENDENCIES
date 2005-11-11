@@ -1,8 +1,9 @@
 TWiki::Plugins,>=1.026,perl,TWiki Dakar release.
 TWiki::Plugins::RedDotPlugin,>=1.27,perl,Required
 TWiki::Plugins::GluePlugin,>=1.5,perl,Required
-TWiki::Contrib::DBCacheContrib,>=Dakar,perl,Required
+TWiki::Contrib::DBCacheContrib,Dakar,perl,Required
 TWiki::Plugins::ExtendedSelectionPlugin,>=1.002,perl,Required
 TWiki::Plugins::HeadlinesPlugin,>=1.001,perl,Required
 TWiki::Plugins::SpreadSheetPlugin,>=1.001,perl,Required
 TWiki::Plugins::TimeSincePlugin,>=0.99,perl,Required
+TWiki::Plugins::TwistyPlugin,Dakar,perl,Required
