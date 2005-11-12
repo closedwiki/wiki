@@ -69,7 +69,4 @@ See example at: PatternSkinCssCookbookFonts
 
 See example at: PatternSkinCssCookbookNoTopBar
 
----+++ Full screen: no gray borders
-
-See example at: PatternSkinCssCookbookFullScreen
 

@@ -16,15 +16,15 @@
 
 
 %TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<div class="patternSearchResults"><div class="patternSearchResultsHeader">&nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; %_{"Difference Topic"}%
-      <b><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%">%TOPIC%</a></b>
-      (<a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?rev=%REVTITLE1%" rel='nofollow'>%REVTITLE1%</a> - %REVINFO1%)</div>
+      <b><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">%TOPIC%</a></b>
+      (<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%" rel='nofollow'>%REVTITLE1%</a> - %REVINFO1%)</div>
 %TEXT%</div>%REPEAT%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%">%_{"View topic"}%</a>
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">%_{"View topic"}%</a>
  %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
- %TMPL:P{"sep"}% <a href="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>%_{"More topic actions..."}%</a></span></div>%TMPL:END%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>%_{"More topic actions..."}%</a></span></div>%TMPL:END%
 
 
 
@@ -32,12 +32,10 @@
 
 
 
-%TMPL:DEF{"main"}%<table id="patternColumnWrapper" cellpadding="0" cellspacing="0">
-<tr>
-<td id="patternMain"><div class="patternMainContents">
+%TMPL:DEF{"main"}%<div id="patternColumnWrapper"><div id="patternMain"><div class="patternMainContents">
 %TMPL:P{"simplewikilogo"}%
 %TMPL:P{"content"}%
-</div><!--end patternMainContents--></td><!--end patternMain--></tr></table><!--end patternColumnWrapper-->%TMPL:END%
+</div><!-- /patternMainContents-->%TMPL:P{"bottombar"}%</div><!-- /patternMain--></div><!-- /patternColumnWrapper-->%TMPL:END%
 
 
 

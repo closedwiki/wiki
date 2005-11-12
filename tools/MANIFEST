@@ -396,7 +396,6 @@ pub/TWiki/PatternSkinCss/CSS_element_layout_view.pattern.tmpl.png 0660
 pub/TWiki/PatternSkinCssCookbookNoTopBar/notopbar.css 0660
 pub/TWiki/PatternSkinCssCookbookNoLeftBar/hideleftbar_Cairo.css 0660
 pub/TWiki/PatternSkinCssCookbookNoLeftBar/hideleftbar_Dakar.css 0660
-pub/TWiki/PatternSkinCssCookbookFullScreen/fullscreen.css 0660
 pub/TWiki/PatternSkinCssCookbookFonts/fonts.css 0660
 pub/TWiki/PatternSkinCustomization/LowRes.css 0660
 pub/TWiki/PatternSkinJavascripts/browserdetect_lite.js 0660
