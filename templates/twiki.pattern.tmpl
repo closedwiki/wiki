@@ -79,11 +79,14 @@
 
 
 
-%TMPL:DEF{"topbar"}%<div id="patternTopBar"><div class="patternTopBarContents">%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div id="patternTopBar"><div class="patternTopBarContents">
+%INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"leftbar"}%<div id="patternLeftBar"><div class="patternLeftBarContents">%INCLUDE{"%WEB%.WebLeftBar"}%</div><!-- /patternLeftBarContents--></div><!-- /patternLeftBar-->%TMPL:END%
+%TMPL:DEF{"leftbar"}%<div id="patternLeftBar">
+<div class="patternLeftBarContents">
+%INCLUDE{"%WEB%.WebLeftBar"}%</div><!-- /patternLeftBarContents--></div><!-- /patternLeftBar-->%TMPL:END%
 
 
 

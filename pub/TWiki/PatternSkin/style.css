@@ -559,7 +559,7 @@ a:hover .twikiAccessKey {
 /* Top bar */
 
 .patternTopBarContents {
-	padding:10px 2em 10px 1em; /*S6*/ /* right padding same as .patternViewPage #patternMain; left padding same as #patternLeftBar */ 
+	padding:12px 0 0 1em; /*S6*/ /* right padding same as .patternViewPage #patternMain; left padding same as #patternLeftBar */ 
 }
 
 
@@ -609,8 +609,8 @@ a:hover .twikiAccessKey {
 	text-decoration:none;
 }
 .patternLeftBarContents ul {
-	padding:0em;
-	margin:0em;
+	padding:0;
+	margin:.5em 0 1em 0;
 	list-style:none;
 }
 .patternLeftBarContents li {
