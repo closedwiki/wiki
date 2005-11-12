@@ -38,7 +38,7 @@ html body {
 	
 	Sizes
 	----------------------------------------
-	C1 left bar width																18%
+	C1 left bar width																15em
 	C1b lef bar min-width															125px
 	C2 right bar width (currently not used)											0%
 	C3 top bar height																64px
@@ -83,11 +83,11 @@ html body {
 
 /* setting the width of the left bar */
 #patternLeftBar {
-	width:18%; /*C1*/
+	width:15em; /*C1*/
 	min-width:125px; /*C1b*/
 }
 #patternMain {
-	margin:0 0 0 18%;
+	margin:0 0 0 15em;
 }
 
 /*	-----------------------------------------------------------

@@ -509,12 +509,12 @@ a:hover .twikiAccessKey {
 .patternNoViewPage #patternMain {
 	padding-top:2em;
 	padding-bottom:2em;
-	margin-bottom:1em;
 }
 #patternTopBar {}
 /* Bottom bar */
 #patternBottomBar {
 	margin:4em 0 0 0;
+	padding:0 0 .5em 0;
 	border-width:1px 0 0 0;
 	border-style:solid;
 }
@@ -565,7 +565,8 @@ a:hover .twikiAccessKey {
 
 .patternBottomBarContents {
 	padding:.5em 0;
-	font-size:94%; /*S2*/
+	font-size:85%; /*S3*/
+	line-height:1.2em;
 }
 
 
@@ -596,10 +597,10 @@ a:hover .twikiAccessKey {
 	border-width:1px 1px 1px 0;
 	border-style:solid;
 	overflow:hidden;
-	font-size:94%; /*S2*/
 }
 .patternLeftBarContents {
 	padding:0 1em 1.5em 1em; /*S6*/
+	font-size:94%; /*S2*/
 }
 .patternLeftBarContents a img {
 	margin:1px 0 0 0;
