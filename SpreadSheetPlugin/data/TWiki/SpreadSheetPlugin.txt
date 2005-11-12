@@ -476,7 +476,7 @@ Conventions for Syntax:
 #FuncSUMPRODUCT
 ---+++ SUMPRODUCT( list, list ) -- scalar product on ranges of cells
 	* Syntax: ==$SUMPRODUCT( list, list, _list..._ )==
-	* Example: ==%<nop>CALC{"$SUM(R2:C1..R4:C1, R2:C5..R4:C5)"}%== evaluates and returns the result of ==($T(R2:C1) * $T(R2:C5) + $T(R3:C1) * $T(R3:C5) + $T(R4:C1) * $T(R4:C5))==
+	* Example: ==%<nop>CALC{"$SUMPRODUCT(R2:C1..R4:C1, R2:C5..R4:C5)"}%== evaluates and returns the result of ==($T(R2:C1) * $T(R2:C5) + $T(R3:C1) * $T(R3:C5) + $T(R4:C1) * $T(R4:C5))==
 	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSUM][$SUM()]]=
 
 #FuncT
