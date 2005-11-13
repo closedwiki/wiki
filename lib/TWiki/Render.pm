@@ -1129,18 +1129,20 @@ sub getRenderedVersion {
             $isList = 0;
         }
         elsif ( $line =~ m/^(\t|   )+\S/ ) {
-            $isList = 1;
             if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> / ) {
                 # Definition list
                 $this->_addListItem( \$result, 'dl', 'dd', $1, '' );
+                $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
                 # Definition list
                 $this->_addListItem( \$result, 'dl', 'dd', $1, '' );
+                $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
                 # Unnumbered list
                 $this->_addListItem( \$result, 'ul', 'li', $1, '' );
+                $isList = 1;
             }
             elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
                 # Numbered list
@@ -1153,10 +1155,22 @@ sub getRenderedVersion {
                 }
                 $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
                 $this->_addListItem( \$result, 'ol', 'li', $1, $ot );
+                $isList = 1;
+            }
+            elsif( $isList && $line =~ /^(\t|   )+\s*\S/ ) {
+                # indented line extending prior list item
+                $result .= $line;
+                next;
             }
             else {
                 $isList = 0;
             }
+        } elsif( $isList && $line =~ /^(\t|   )+\s*\S/ ) {
+            # indented line extending prior list item; case where indent
+            # starts with is at least 3 spaces or a tab, but may not be a
+            # multiple of 3.
+            $result .= $line;
+            next;
         }
 
         # Finish the list

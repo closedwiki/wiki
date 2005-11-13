@@ -10,11 +10,11 @@ Working in TWiki is as easy as typing in text. You don't need to know HTML, thou
 
 <table class="twikiTable">
 <tr>
-<th>
+<th width="50%">
  Formatting Command:
-</th><th>
+</th><th width="25%">
  You write:
-</th><th>
+</th><th width="25%">
  You get:
 </th>
 </tr>
@@ -163,6 +163,23 @@ Multiple of three spaces, an asterisk, and another space.
    * back to level 1
 </td>
 </tr>
+<tr valign="top"><td>
+%H% For all the list types, you can break a list item over several lines by indenting lines after the first one by *at least 3 spaces* e.g.
+</td><td>
+<verbatim>
+   * Here is
+   a bullet
+   broken over
+   three lines.
+This text is not indented
+</verbatim>
+</td><td>
+   * Here is
+   a bullet
+   broken over
+   three lines.
+This text is not indented
+</td></tr>
 <tr valign="top">
 <td>
 *Numbered List:* %BR%
@@ -173,8 +190,6 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
 | a. | Lowercase letters | a, b, c, d... |
 | I. | Uppercase Roman Numerals | I, II, III, IV... |
 | i. | Lowercase Roman Numerals | i, ii, iii, iv... |
-%T% If you don't want to cram long text onto one line, wrap it and align continuation lines with leading spaces.
-
 </td><td>
 <verbatim>
    1. Mammals

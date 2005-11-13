@@ -164,7 +164,7 @@ class CatAnimal {
 <ul>
 <li>level 1
 <ul>
-<li>level 2
+<li>level 2 and some more
 </li>
 </ul>
 </li>
@@ -174,6 +174,7 @@ class CatAnimal {
 <!-- actual -->
 	* level 1
 		* level 2
+          and some more
 <!-- /actual -->
 </td></tr>
 <tr><td> Ordered List</td><td>
