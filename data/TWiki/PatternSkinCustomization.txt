@@ -3,7 +3,9 @@
 
 %TOC%
 
----++ How can I change the web logo?
+---++ Logo questions
+
+---+++ How can I change the web logo?
 
 By default the logo at the top left of each web points to the image with name =logo.gif= that is attached to each web's WebPreferences. <br />
 The default variables that cause this behavior are defined in [[%TWIKIWEB%.TWikiPreferences]]:
@@ -23,7 +25,7 @@ or:
       * Set <nop>WEBLOGONAME = your-logo-name.gif-or-png
 </pre>
 
----++ How do I set a site-wide logo?
+---+++ How do I set a site-wide logo?
 
 In TWiki.TWikiPreferences, set:
 <pre>
@@ -31,7 +33,7 @@ In TWiki.TWikiPreferences, set:
 </pre>
 
 
----++ My logo does not fit the top bar
+---+++ My logo does not fit the top bar
 
 The top bar is 64 pixels high by default. If you have a bigger logo you might want to change the height of the top bar in [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]:
 <verbatim>
@@ -57,6 +59,7 @@ Change:
 <verbatim>
 table.patternTopBarContents td {
 	height:100%;
+	width:100%;
 	vertical-align:middle;
 }
 </verbatim>
@@ -64,6 +67,7 @@ to:
 <verbatim>
 table.patternTopBarContents td {
 	height:100%;
+	width:100%;
 	vertical-align:top;
 }
 </verbatim>
@@ -72,7 +76,42 @@ You can also define an offset like this:
 <verbatim>
 table.patternTopBarContents td {
 	height:100%;
+	width:100%;
 	vertical-align:top;
 	padding-top:12px;
 }
 </verbatim>
+
+---+++ How do I set a page-wide top background image?
+
+Assuming your image is the height of the top bar (else see [[#My_logo_does_not_fit_the_top_bar][My logo does not fit the top bar]]), remove the left margin (_padding_ actually) in [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]]:
+
+<verbatim>
+table.patternTopBarContents {
+	padding:0 0 0 1em; /*S6*/ /* left padding same as #patternLeftBar */ 
+	height:100%;
+	width:100%;
+}	
+</verbatim>
+to:
+<verbatim>
+table.patternTopBarContents {
+	padding:0;
+	height:100%;
+	width:100%;
+}		
+</verbatim>
+
+and change [[TWiki.WebTopBar]]:
+
+<verbatim>
+<div class="patternTopBarLogo"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a></div>
+</verbatim>
+
+to:
+
+<verbatim>
+<div class="patternTopBarLogo" style="width:100%; height:100%; background-image:url('%WEBLOGOIMG%'); background-repeat:no-repeat;"></div>
+</verbatim>
+
+

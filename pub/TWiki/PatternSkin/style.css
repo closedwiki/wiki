@@ -517,9 +517,12 @@ a:hover .twikiAccessKey {
 #patternTopBar {}
 table.patternTopBarContents {
 	padding:0 0 0 1em; /*S6*/ /* left padding same as #patternLeftBar */ 
+	height:100%;
+	width:100%;
 }	
 table.patternTopBarContents td {
 	height:100%;
+	width:100%;
 	vertical-align:middle;
 }
 
