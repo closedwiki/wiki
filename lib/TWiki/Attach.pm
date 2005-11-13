@@ -280,18 +280,16 @@ sub getAttachmentLink {
         unless( $fileLink ) {
             push( @attrs, src=>"%ATTACHURLPATH%/$attName" );
             push( @attrs, alt=>$attName );
-            return "\t* $fileComment: ".CGI::br().CGI::img({ @attrs });
+            return "   * $fileComment: ".CGI::br().CGI::img({ @attrs });
         }
     } else {
         # normal attached file
         $fileLink = $prefs->getPreferencesValue( 'ATTACHEDFILELINKFORMAT' );
         unless( $fileLink ) {
-            return "\t* [[%ATTACHURL%/$attName][$attName]]: $fileComment";
+            return "   * [[%ATTACHURL%/$attName][$attName]]: $fileComment";
         }
     }
 
-    $fileLink =~ s/^      /\t\t/go;
-    $fileLink =~ s/^   /\t/go;
     $fileLink =~ s/\$name/$attName/g;
     $fileLink =~ s/\$comment/$fileComment/g;
     $fileLink =~ s/\$size/$imgSize/g;

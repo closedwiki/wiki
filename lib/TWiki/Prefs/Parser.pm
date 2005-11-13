@@ -77,7 +77,7 @@ sub parseText {
             $key = $2;
             $value = (defined $3) ? $3 : '';
         } elsif( $type ) {
-            if( $line =~ /^(\s{3}|\t)+[^\s*]/ &&
+            if( $line =~ /^(\s{3}|\t)+\s*[^\s*]/ &&
                   $line !~ m/$TWiki::regex{bulletRegex}/o ) {
                 # follow up line, extending value
                 $value .= "\n$line";
