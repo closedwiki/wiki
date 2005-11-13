@@ -987,9 +987,11 @@ sub getRenderedVersion {
     my $removedComments = {};
     my $removedScript = {};
     my $removedHead = {};
+    my $removedVerbatim = {};
+    my $removedLiterals = {};
 
-    $text = $this->takeOutBlocks( $text, 'finished_rendering', $session->{_removed} );
-    $text = $this->takeOutBlocks( $text, 'verbatim', $session->{_removed} );
+    $text = $this->takeOutBlocks( $text, 'literal', $removedLiterals );
+    $text = $this->takeOutBlocks( $text, 'verbatim', $removedVerbatim );
 
     $text = $this->takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
                                      $removedComments );
@@ -1234,8 +1236,8 @@ sub getRenderedVersion {
     $plugins->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
-    $this->putBackBlocks( \$text, $session->{_removed}, 'verbatim', 'pre', \&verbatimCallBack );
-    $this->putBackBlocks( \$text, $session->{_removed}, 'finished_rendering', '');
+    $this->putBackBlocks( \$text, $removedVerbatim, 'verbatim', 'pre', \&verbatimCallBack );
+    $this->putBackBlocks( \$text, $removedLiterals, 'literal', '');
 
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
@@ -1269,6 +1271,7 @@ sub verbatimCallBack {
 
     return TWiki::entityEncode( $val );
 }
+
 
 =pod
 
@@ -1581,7 +1584,7 @@ Cool, eh what? Jolly good show.
 
 And if you set $newtag to '', we replace the taken out block with the valuse itself
    * which i'm using to stop the rendering process, but then at the end put in the html directly
-   (for <finished_rendering> tag.
+   (for <literal> tag.
 
 =cut
 
@@ -1782,6 +1785,7 @@ sub forEachLine {
     $options->{in_pre} = 0;
     $options->{in_pre} = 0;
     $options->{in_verbatim} = 0;
+    $options->{in_literal} = 0;
     $options->{in_noautolink} = 0;
     my $newText = '';
     foreach my $line ( split( /([\r\n]+)/, $text ) ) {
@@ -1791,7 +1795,9 @@ sub forEachLine {
         }
         $options->{in_verbatim}++ if( $line =~ m|^\s*<verbatim\b[^>]*>\s*$|i );
         $options->{in_verbatim}-- if( $line =~ m|^\s*</verbatim>\s*$|i );
-        unless( $options->{in_verbatim} > 0 ) {
+        $options->{in_literal}++ if( $line =~ m|^\s*<literal\b[^>]*>\s*$|i );
+        $options->{in_literal}-- if( $line =~ m|^\s*</literal>\s*$|i );
+        unless (( $options->{in_verbatim} > 0 ) || (( $options->{in_literal} > 0 ))){
             $options->{in_pre}++ if( $line =~ m|<pre\b|i );
             $options->{in_pre}-- if( $line =~ m|</pre>|i );
             $options->{in_noautolink}++ if( $line =~ m|^\s*<noautolink\b[^>]*>\s*$|i );
@@ -1799,6 +1805,7 @@ sub forEachLine {
         }
         unless( $options->{in_pre} > 0 && !$options->{pre} ||
                 $options->{in_verbatim} > 0 && !$options->{verbatim} ||
+                $options->{in_literal} > 0 && !$options->{literal} ||
                 $options->{in_noautolink} > 0 && !$options->{noautolink} ) {
 
             $line = &$fn( $line, $options );
@@ -2024,9 +2031,9 @@ sub renderFormFieldArgRSS {
         $value =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
     }	
     
-    $value =~ s/%/&#37;/g;	#just in case (damned TOC was still getting expanded somewhere..
+    $value =~ s/%/&#37;/g;	#SMELL: just in case (damned TOC was still getting expanded somewhere..
 
-	return '<finished_rendering>'.TWiki::entityEncode($value).'</finished_rendering>';	#SMELL: we could do with a <finished_rendering> tag
+	return '<literal>'.TWiki::entityEncode($value).'</literal>';	#SMELL: we could do with a <literal> tag
 }
 
 =pod
@@ -2059,7 +2066,7 @@ sub makeTopicSummaryRSS {
     }	
     $value =~ s/%/&#37;/g;	#just in case (damned TOC was still getting expanded somewhere..
 
-    return '<finished_rendering>'.TWiki::entityEncode($value).'</finished_rendering>';	#SMELL: we could do with a <finished_rendering> tag
+    return '<literal>'.TWiki::entityEncode($value).'</literal>';	#SMELL: we could do with a <literal> tag
 }
 
 =pod

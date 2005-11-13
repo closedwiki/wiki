@@ -1017,7 +1017,6 @@ sub new {
 		$TWiki::cfg{UseClientSessions} = 0;	#don't use sessions on the command line
     }
 
-    $this->{_removed}={};
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;
     $this->{plugins} = new TWiki::Plugins( $this );
