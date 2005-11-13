@@ -378,7 +378,7 @@ sub sysCommand {
         $data = `$cmd`;
         # restore STDERR
         close( STDERR );
-        open( STDERR, '>&', $olderr ) || die "Can't restore STDERR";;
+        open( STDERR, '>&'.$olderr ) || die "Can't restore STDERR";;
         $exit = ( $? >> 8 );
     }
 
