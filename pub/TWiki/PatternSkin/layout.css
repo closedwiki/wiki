@@ -73,11 +73,12 @@ html body {
 	width:100%;
 }
 
-/* setting the height of the top bar */
+/* height of the top bar */
 #patternLeftBar {
 	top:64px; /*C3*/
 }
-#patternTopBar {
+#patternTopBar,
+#patternTopBar table.patternTopBarContents {
 	height:64px; /*C3*/
 }
 

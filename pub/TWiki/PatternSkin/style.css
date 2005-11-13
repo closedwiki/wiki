@@ -499,6 +499,9 @@ a:hover .twikiAccessKey {
 	Pattern skin specific elements
 	-----------------------------------------------------------	*/
 
+#patternPage {
+	font-size:100%;
+}
 #patternColumnWrapper {
 }
 #patternMain {
@@ -510,7 +513,16 @@ a:hover .twikiAccessKey {
 	padding-top:2em;
 	padding-bottom:2em;
 }
+/* Top bar */
 #patternTopBar {}
+table.patternTopBarContents {
+	padding:0 0 0 1em; /*S6*/ /* left padding same as #patternLeftBar */ 
+}	
+table.patternTopBarContents td {
+	height:100%;
+	vertical-align:middle;
+}
+
 /* Bottom bar */
 #patternBottomBar {
 	margin:4em 0 0 0;
@@ -518,7 +530,11 @@ a:hover .twikiAccessKey {
 	border-width:1px 0 0 0;
 	border-style:solid;
 }
-
+.patternBottomBarContents {
+	padding:.5em 0;
+	font-size:85%; /*S3*/
+	line-height:1.2em;
+}
 
 .patternSeparator {
 	font-family:monospace;
@@ -551,25 +567,6 @@ a:hover .twikiAccessKey {
 	margin-bottom:1em;
 }	
 .patternWebIndicator {}
-.patternPage {
-	font-size:100%;
-}
-
-
-/* Top bar */
-
-.patternTopBarContents {
-	padding:12px 0 0 1em; /*S6*/ /* right padding same as .patternViewPage #patternMain; left padding same as #patternLeftBar */ 
-}
-
-
-.patternBottomBarContents {
-	padding:.5em 0;
-	font-size:85%; /*S3*/
-	line-height:1.2em;
-}
-
-
 .patternMetaNav {
 	font-size:85%; /*S3*/
 }

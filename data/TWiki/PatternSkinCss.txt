@@ -42,12 +42,12 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 
    * Main layout elements
       * #patternScreen - holder of patternPageShadow and patternBottomBar
-      * #patternPageShadow - shadow border around patternPage
+      * #patternPageShadow - shadow border around patternPage; default not used
       * #patternPage - html content container
       * #patternColumnWrapper - holder for patternMain and patternLeftbar
       * #patternMain - holder of patternMainContents
       * #patternTopBar - top bar area
-      * .patternTopBarContents - header art with logo; contains topic %TWIKIWEB%.WebTopBar
+      * .patternTopBarContents - table (for easy vertical alignment) for header art / logo; contains topic %TWIKIWEB%.WebTopBar
       * #patternLeftBar - left bar area
       * .patternLeftBarContents - used for left menu
       * #patternBottomBar - bottom bar area

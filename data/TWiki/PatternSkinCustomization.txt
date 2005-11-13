@@ -25,46 +25,54 @@ or:
 
 ---++ How do I set a site-wide logo?
 
-Edit %TWIKIWEB%.WebTopBar and change:
+In TWiki.TWikiPreferences, set:
 <pre>
-&lt;a href="%<nop>WEBLOGOURL%">&lt;img src="%<nop>WEBLOGOIMG%" border="0" alt="%<nop>WEBLOGOALT%"/>&lt;/a>
+   * Set <nop>WEBLOGOIMG = %<nop>WIKILOGOIMG%
 </pre>
-to:
-<pre>
-&lt;a href="%<nop>WIKILOGOURL%">&lt;img src="%<nop>WIKILOGOIMG%" border="0" alt="%<nop>WIKILOGOALT%"/>&lt;/a>
-</pre>
+
 
 ---++ My logo does not fit the top bar
 
-%TWIKIWEB%.PatternSkin's stylesheet assumes the logo is 40px high. The top bar is 60px high, and has a vertical padding of 5px. This makes the logo appear in the middle of the top bar.
-
----+++ If you want to have a higher top bar:
-
-=layout.css= has these style definitions:
+The top bar is 64 pixels high by default. If you have a bigger logo you might want to change the height of the top bar in [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]:
 <verbatim>
-.patternLeftBar {
-	top:60px; /* height of patternTopBar */
+/* height of the top bar */
+#patternLeftBar {
+	top:64px; /*C3*/
 }
-.patternTopBar {
-	height:60px;
+#patternTopBar,
+#patternTopBar table.patternTopBarContents {
+	height:64px; /*C3*/
 }
 </verbatim>
+
+(C3 is used as reference to all occurrences with the same value)
 
 You can change these numbers in [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] directly, or create a new stylesheet, attach it to a topic and point =USERLAYOUTURL= to that topic attachment. See %TWIKIWEB%.PatternSkinCssCookbook about creating custom styles.
 
 ---+++ If you want to change the white space above and below the logo
 
-[[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]] has this style definition:
+The logo is centered vertically be default. If you want to align it to the top, change the style in [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]].
+
+Change:
 <verbatim>
-.patternTopBarContents {
-	padding:10px 2em 10px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
+table.patternTopBarContents td {
+	height:100%;
+	vertical-align:middle;
+}
+</verbatim>
+to:
+<verbatim>
+table.patternTopBarContents td {
+	height:100%;
+	vertical-align:top;
 }
 </verbatim>
 
-Assuming you want to keep the 60px top bar height (otherwise see above): if your logo is 50px high, change the 10px to 5px:
+You can also define an offset like this:
 <verbatim>
-.patternTopBarContents {
-	padding:5px 2em 5px 1em; /*S6*/ /* right padding same as .patternViewPage .patternMain; left padding same as .patternLeftBar */ 
+table.patternTopBarContents td {
+	height:100%;
+	vertical-align:top;
+	padding-top:12px;
 }
 </verbatim>
-
