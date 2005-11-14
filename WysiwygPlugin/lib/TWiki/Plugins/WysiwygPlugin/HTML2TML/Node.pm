@@ -413,10 +413,11 @@ sub _isConvertableTableRow {
         if( lc( $kid->{tag} ) eq 'th' ) {
             ( $flags, $text ) = $kid->_flatKids( $options );
             $text = _trim( $text );
-            $text = '*'.$text.'*';
+            $text = ' *'._trim( $text ).'* ' if $text;
         } elsif(lc( $kid->{tag} ) eq 'td' ) {
             ( $flags, $text ) = $kid->_flatKids( $options );
             $text = _trim( $text );
+            $text = ' '.$text.' ' if $text;
         } elsif( !$kid->{tag} ) {
             next;
         } else {
@@ -426,12 +427,12 @@ sub _isConvertableTableRow {
         return 0 if( $flags & $WC::BLOCK_TML );
         if( $kid->{attrs} ) {
             my $a = _deduceAlignment( $kid );
-            if( $a eq 'right' ) {
-                $text = '  '.$text;
-            } elsif( $a eq 'center' ) {
-                $text = '  '.$text.'  ';
-            } elsif( $a eq 'left' ) {
-                $text .= '  ';
+            if( $text && $a eq 'right' ) {
+                $text = ' '.$text;
+            } elsif( $text && $a eq 'center' ) {
+                #text = '  '.$text.'  ';
+            } elsif( $text && $a eq 'left' ) {
+                $text .= ' ';
             }
             if( $kid->{attrs}->{rowspan} && $kid->{attrs}->{rowspan} > 1 ) {
                 return 0;

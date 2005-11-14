@@ -79,7 +79,6 @@ sub test_save {
 
     # this _should_ init the plugin
     $TWiki::Plugins::SESSION = new TWiki('guest', $query );
-    $this->assert( $TWiki::Plugins::WysiwygPlugin::currentWeb );
     my $text = '<a href="'.TWiki::Func::getViewUrl("Sandbox","WikiSyntax").'">syntax</a><a href="http://gnu.org">GNU</a><a href="http://xml.org">XML</a>';
 
     TWiki::Plugins::WysiwygPlugin::beforeSaveHandler( $text, "WysiwygPluginTest", "Sandbox" );

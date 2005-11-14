@@ -37,7 +37,7 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb $modern );
+use vars qw( $VERSION $RELEASE $html2tml $tml2html $inSave $calledThisSession $modern $imgMap );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -52,8 +52,8 @@ $RELEASE = 'Dakar';
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
-    $currentWeb = $web;
     $calledThisSession = 0;
+    $inSave = 0;
     $modern = defined( &TWiki::Func::normalizeWebTopicName );
 
     # Plugin correctly initialized
@@ -72,25 +72,30 @@ sub beforeSaveHandler {
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
-        $imgMap = {};
-        my $imgs = TWiki::Func::getPreferencesValue( "WYSIWYGPLUGIN_ICONS" );
-        if( $imgs ) {
-            $inSave = 1;
-            while( $imgs =~ s/src="(.*?)" alt="(.*?)"// ) {
-                my( $src, $alt ) = ( $1, $2 );
-                $src = TWiki::Func::expandCommonVariables( $src,$_[1],$_[2] );
-                $alt .= '%' if $alt =~ /^%/;
-                $imgMap->{$src} = $alt;
+        unless( $imgMap ) {
+            $imgMap = {};
+            my $imgs =
+              TWiki::Func::getPreferencesValue( "WYSIWYGPLUGIN_ICONS" );
+            if( $imgs ) {
+                local $inSave = 1;
+                while( $imgs =~ s/src="(.*?)" alt="(.*?)"// ) {
+                    my( $src, $alt ) = ( $1, $2 );
+                    $src = TWiki::Func::expandCommonVariables( $src,$_[1],$_[2] );
+                    $alt .= '%' if $alt =~ /^%/;
+                    $imgMap->{$src} = $alt;
+                }
             }
-            $inSave = 0;
         }
-        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML
-          ( { convertImage => sub {
-                  my $x = shift;
-                  return undef unless $x;
-                  return $imgMap->{$x};
-              },
-              parseWikiUrl => \&parseWikiUrl } );
+        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML(
+            {
+                convertImage => sub {
+                    my $x = shift;
+                    return undef unless $x;
+                    return $imgMap->{$x};
+                },
+                parseWikiUrl => \&parseWikiUrl,
+            }
+           );
     }
 
     my @rescue;
@@ -121,7 +126,7 @@ sub beforeSaveHandler {
 sub beforeCommonTagsHandler {
     #my ( $text, $topic, $web )
 
-    return if ( $inSave || $calledThisSession );
+    return if( $inSave || $calledThisSession );
     my $query = TWiki::Func::getCgiQuery();
 
     return unless $query;
@@ -144,6 +149,14 @@ sub beforeCommonTagsHandler {
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
     $_[0] = $tml2html->convert( $text );
     $calledThisSession = 1;
+}
+
+# This handler is required to re-insert blocks that were removed to protect
+# them from TWiki rendering, such as TWiki variables.
+sub endRenderingHandler {
+    return if( $inSave || !$tml2html );
+
+    return $tml2html->cleanup( @_ );
 }
 
 # DEPRECATED in Dakar (modifyHeaderHandler does the job better)
@@ -169,8 +182,10 @@ sub modifyHeaderHandler {
 sub getViewUrl {
     my( $web, $topic ) = @_;
 
-    # the documentation says getViewUrl defaults the web. It doesn't.
-    $web ||= $currentWeb;
+    # the Cairo documentation says getViewUrl defaults the web. It doesn't.
+    unless( defined $TWiki::Plugins::SESSION ) {
+        $web ||= $TWiki::webName;
+    }
 
     return TWiki::Func::getViewUrl( $web, $topic );
 }
@@ -206,7 +221,11 @@ sub parseWikiUrl {
 
     $topic .= $anchor;
 
-    return $topic if( $web eq $currentWeb );
+    if( defined $TWiki::Plugins::SESSION ) {
+        return $topic if( $web eq $TWiki::Plugins::SESSION->{webName} );
+    } else {
+        return $topic if( $web eq $TWiki::webName );
+    }
     return $web.'.'.$topic;
 }
 
