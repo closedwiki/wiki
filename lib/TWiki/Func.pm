@@ -231,10 +231,11 @@ sub getOopsUrl {
     my( $web, $topic, $template, @params ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $template =~ s/^oops//;
-    return $TWiki::Plugins::SESSION->getOopsUrl( $template, web => $web,
-                                                 topic => $topic,
-                                                 params => \@params );
+    my $res = $TWiki::Plugins::SESSION->getOopsUrl( 'TeMpLaTe', web => $web,
+                                                    topic => $topic,
+                                                    params => \@params );
+    $res =~ s/oopsTeMpLaTe/$template/g;
+    return $res;
 }
 
 =pod
