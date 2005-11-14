@@ -699,6 +699,7 @@ sub _handlePRE {
     unless( $options & $WC::NO_BLOCK_TML ) {
         my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
         my $p = _htmlParams( $this->{attrs} );
+        $text =~ s/<br( \/)?>/$WC::NBBR/g;
         return ($WC::BLOCK_TML, "$WC::CHECKn<pre$p>$WC::CHECKn".$text.
                 "$WC::CHECKn</pre>$WC::CHECKn");
     }
