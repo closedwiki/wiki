@@ -1,11 +1,16 @@
-.patternPage {
-    margin-left:4%;
-    margin-right:4%;
+html body {
+	margin:2em;
+	background-color:#8D929A;
 }
-.patternLeftBar {
-	left:4%;
-	width:156px; /* with percentages the calculations get a bit complex */
+#patternLeftBar {
+	margin-top:2em;
+	margin-left:2em;
 }
-.patternMain {
-	margin-left:156px;
+#patternBottomBar {
+	border:none;
+}
+.patternBottomBarContents, 
+.patternBottomBarContents a:link,
+.patternBottomBarContents a:visited {
+	color:#ccc;
 }

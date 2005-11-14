@@ -502,16 +502,15 @@ a:hover .twikiAccessKey {
 #patternPage {
 	font-size:100%;
 }
-#patternColumnWrapper {
-}
 #patternMain {
-	padding:0 2em;
 	border-width:1px 0 0 0;
 	border-style:solid;
 }
+.patternMainContents {
+	padding:0 2em 1em 2em;
+}
 .patternNoViewPage #patternMain {
 	padding-top:2em;
-	padding-bottom:2em;
 }
 /* Top bar */
 #patternTopBar {}
@@ -522,21 +521,19 @@ table.patternTopBarContents {
 }	
 table.patternTopBarContents td {
 	height:100%;
-	width:100%;
 	vertical-align:middle;
 }
 
 /* Bottom bar */
 #patternBottomBar {
-	margin:4em 0 0 0;
-	padding:0 0 .5em 0;
+	padding:1em 2em;
 	border-width:1px 0 0 0;
 	border-style:solid;
 }
 .patternBottomBarContents {
-	padding:.5em 0;
 	font-size:85%; /*S3*/
-	line-height:1.2em;
+	line-height:1.3em;
+	text-align:center;
 }
 
 .patternSeparator {
@@ -594,7 +591,7 @@ table.patternTopBarContents td {
 
 /* Left bar */
 #patternLeftBar {
-	border-width:1px 1px 1px 0;
+	border-width:1px 1px 0 0;
 	border-style:solid;
 	overflow:hidden;
 }
@@ -620,9 +617,11 @@ table.patternTopBarContents td {
 }
 .patternLeftBarContents .patternFormHolder {
 	margin:.5em 0 1em 0;
+	width:100%;
 }
 html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 	margin-top:1.25em;
+	width:95%; /* otherwise it will grow when the window is resized on Firefox */
 }
 .patternLeftBarContents .patternFormHolder table {
 	width:100%;
@@ -989,11 +988,9 @@ table#twikiSearchTable td.first {
 
 /* Print */
 
-.patternPrintPage {
-	/*font-size: 12pt;*/
-}
 .patternPrintPage #patternMain {
-	padding:1em 2em 0 2em;
+	margin-top:1em;
+	border:none;
 }
 .patternPrintPage .patternTopicFooter {
 	margin:2em 0 2em 0;

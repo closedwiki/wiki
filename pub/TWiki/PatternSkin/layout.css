@@ -38,8 +38,7 @@ html body {
 	
 	Sizes
 	----------------------------------------
-	C1 left bar width																15em
-	C1b lef bar min-width															125px
+	C1 left bar width																16em
 	C2 right bar width (currently not used)											0%
 	C3 top bar height																64px
 	---------------------------------------------------------------------------------------	*/
@@ -84,11 +83,10 @@ html body {
 
 /* setting the width of the left bar */
 #patternLeftBar {
-	width:15em; /*C1*/
-	min-width:125px; /*C1b*/
+	width:16em; /*C1*/
 }
 #patternMain {
-	margin:0 0 0 15em;
+	padding:0 0 0 16em;
 }
 
 /*	-----------------------------------------------------------
@@ -96,6 +94,7 @@ html body {
 	-----------------------------------------------------------	*/
 	
 .patternNoViewPage #patternMain {
+	padding-left:0;
 	margin-left:3%;
 	margin-right:3%;
 	/* padding in style.css */
@@ -104,6 +103,7 @@ html body {
 /* Print */
 
 .patternPrintPage #patternMain {
+	padding-left:0;
 	margin-left:5%;
 	margin-right:5%;
 }
@@ -111,6 +111,7 @@ html body {
 /* Plain */
 
 .patternPlainPage #patternMain {
+	padding-left:0;
 	margin-left:0px;
 	margin-right:0px;
 	/* padding in style.css */

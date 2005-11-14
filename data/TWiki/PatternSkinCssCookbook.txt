@@ -1,4 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1129333294" format="1.1" version="$Rev$"}%
+
+__See also: PatternSkinCustomization__
+
 ---+!! %TWIKIWEB%.PatternSkin CSS Cookbook
 
 This topic describes how to customize the default look of TWiki for your own needs by changing the default style sheets.
@@ -69,4 +72,10 @@ See example at: PatternSkinCssCookbookFonts
 
 See example at: PatternSkinCssCookbookNoTopBar
 
+---+++ Centered page (a border around the page)
 
+See example at: PatternSkinCssCookbookCenterPage
+
+---+++ Large background image in the top bar
+
+See example at: PatternSkinCssCookbookTopBarBackgroundImage

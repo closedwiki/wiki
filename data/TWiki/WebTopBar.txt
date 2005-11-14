@@ -1,2 +1,2 @@
 %META:TOPICINFO{author="TWikiContributor" date="1128371875" format="1.1" version="$Rev$"}%
-<div class="patternTopBarLogo"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a></div><!-- /patternTopBarLogo-->
+<span class="patternTopBarLogo"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a></span><!-- /patternTopBarLogo-->

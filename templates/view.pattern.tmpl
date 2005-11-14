@@ -2,6 +2,20 @@
 
 
 
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PatternSkinJavascripts/pattern_equalheightcols.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+	addLoadEvent(makeColumnsEqualHeight);
+	
+	function makeColumnsEqualHeight () {
+		makeEqualHeight('patternLeftBar','patternMain');
+	}
+//]]>
+</script>%TMPL:END%
+
+
+
 %TMPL:DEF{"bodyclassname"}%patternViewPage%TMPL:END%
 
 
@@ -19,6 +33,13 @@
 
 %TMPL:DEF{"create_topic"}%%_{"Cr&eate"}%%TMPL:END%
 %TMPL:DEF{"edit_topic"}%%_{"&Edit"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"leftbar"}%<div id="patternLeftBar">
+<div class="patternLeftBarContents">
+%INCLUDE{"%WEB%.WebLeftBar"}%</div><!-- /patternLeftBarContents--></div><!-- /patternLeftBar-->%TMPL:END%
+
 
 
 %TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title='%_{"View topic"}%'>%_{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%_{"Edit"}%</strike></span>%TMPL:END%
@@ -71,7 +92,7 @@
 %TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div id="patternColumnWrapper">
 <div id="patternMain"><div class="patternMainContents">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
 %TMPL:P{"content"}%
-</div><!-- /patternMainContents-->%TMPL:P{"bottombar"}%%TMPL:P{"leftbar"}%</div><!-- /patternMain--><div class="twikiClear"></div></div><!-- /patternColumnWrapper--><div class="twikiClear"></div>%TMPL:END%
+</div><!-- /patternMainContents-->%TMPL:P{"leftbar"}%</div><!-- /patternMain--><div class="twikiClear"></div></div><!-- /patternColumnWrapper--><div class="twikiClear"></div>%TMPL:P{"bottombar"}%%TMPL:END%
 
 
 

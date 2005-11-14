@@ -4,7 +4,8 @@ var dom = (document.getElementById) ? true : false;
 
 // DON'T overwrite existing onload handlers
 // http://simon.incutio.com/archive/2004/05/26/addLoadEvent
-function addLoadEvent(func){
+// usage: addLoadEvent(my_function_to_perform_on_onload);
+function addLoadEvent(func) {
 	var oldonload = window.onload;
 	if (typeof window.onload != 'function') {
 		window.onload = function() {
