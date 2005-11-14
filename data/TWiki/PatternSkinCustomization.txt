@@ -123,7 +123,12 @@ to:
 
 ---+++ I want more than a logo in the top bar
 
-The %TWIKIWEB%.WebTopBar topic contents is placed inside a table, although looking at the topic text you wouldn't guess that. The table is written in =twiki.pattern.tmpl= (the gray text is from the template):
+In %TWIKIWEB%.WebTopBar shows a logo, but that does not mean you cannot put other things in there. You can put a table, or divs or images.
+
+<div class="twikiHelp">
+You probably don't need the following information unless you are encountering a strange problem.
+
+The !WebTopBar contents is placed inside a table that is written by =twiki.pattern.tmpl= (the gray text is from the template):
 
 <code><span class="twikiGrayText">
 &lt;div id="patternTopBar"><br />
@@ -137,24 +142,4 @@ The %TWIKIWEB%.WebTopBar topic contents is placed inside a table, although looki
 &lt;/tr><br />
 &lt;/table><br />
 &lt;/div></span></code>
-
-
-The most obvious thing would be to put more columns in the table, like this:
-
-<code><span class="twikiGrayText">
-&lt;div id="patternTopBar"><br />
-&lt;table class="patternTopBarContents" border="0" cellpadding="0" cellspacing="0"><br />
-&lt;tr><br />
-&lt;td></span><br />
-&lt;span class="patternTopBarLogo"><br />
-&lt;a href="%<nop>WEBLOGOURL%">&lt;img src="%<nop>WEBLOGOIMG%" border="0" alt="%<nop>WEBLOGOALT%"/>&lt;/a><br />
-&lt;/span><br />
-<span style="color:green;">&lt;/td>&lt;td>Some things in here&lt;/td>&lt;td align="right">And finally some things at the right</span><br />
-<span class="twikiGrayText">&lt;/td><br />
-&lt;/tr><br />
-&lt;/table><br />
-&lt;/div></span></code>
-
-Each =&lt;/td>&lt;td>= creates a new column. You can set column attributes directly in the <code>td</code>s or in a stylesheet =.patternTopBarContents td=.
-
-
+</div>
