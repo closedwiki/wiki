@@ -219,6 +219,9 @@ sub _getRenderedVersion {
     # change !%XXX to %<nop>XXX
     $text =~ s/!%(?=[A-Z]+({|%))/%<nop>/g;
 
+    # Pull comments
+    $text =~ s/<!--(.*?)-->/$this->_liftOut(CGI::span({class=>"TMLcomment"}, $1))/ge;
+
     $text =~ s/<(.?(noautolink|nop).*?)>/$TT1($1)$TT1/gi;
 
     # protect HTML tags by pulling them out

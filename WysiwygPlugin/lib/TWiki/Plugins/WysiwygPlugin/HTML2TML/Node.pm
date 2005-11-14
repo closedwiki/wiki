@@ -670,6 +670,10 @@ sub _handleSPAN {
         # don't create unnamed variables
         $var = '%'.$nop.$var.'%' if( $var );
         return (0, $var);
+    } elsif( defined( $this->{attrs}->{class} ) &&
+        $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
+        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+        return (0, '<!--'.$text.'-->' );
     } elsif (defined( $this->{attrs}->{class} ) &&
              $this->{attrs}->{class} =~ /\bTMLnop\b/) {
         my($flags, $kids ) = $this->_flatKids( $options | $WC::NOP_ALL );

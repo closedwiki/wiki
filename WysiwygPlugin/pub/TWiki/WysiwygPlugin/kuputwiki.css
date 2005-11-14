@@ -107,6 +107,10 @@ div#twiki-icons img:active {
 .TMLnop {
   border: thick solid red;
 }
+.TMLcomment { 
+  font-style: italic;
+  background: #9999FF;
+}
 
 /*********
  * Icons *
