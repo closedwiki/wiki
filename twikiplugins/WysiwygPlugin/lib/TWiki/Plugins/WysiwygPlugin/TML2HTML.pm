@@ -459,15 +459,15 @@ sub _takeOutBlocks {
     my $n = 0;
 
     foreach my $line ( split/\r?\n/, $intext ) {
-        if ( $line =~ m/$open/ ) {
-            unless ( $depth++ ) {
+        if( $line =~ m/$open/ ) {
+            unless( $depth++ ) {
                 $out .= $1;
                 $tagParams = $2;
-                $scoop = $3;
-                next;
+                $scoop = '';
+                $line = $3;
             }
         }
-        if ( $depth && $line =~ m/$close/ ) {
+        if( $depth && $line =~ m/$close/ ) {
             $scoop .= $1;
             my $rest = $2;
             unless ( --$depth ) {
@@ -475,8 +475,7 @@ sub _takeOutBlocks {
                 $map->{$placeholder}{params} = _parseParams( $tagParams );
                 $map->{$placeholder}{text} = $scoop;
 
-                $line = '<!--'.$TT0.$placeholder.
-                  $TT0.'-->'.$rest;
+                $line = $TT0.$placeholder.$TT0;
                 $n++;
             }
         }
@@ -495,7 +494,7 @@ sub _takeOutBlocks {
         my $placeholder = $tag.$n;
         $map->{$placeholder}{params} = _parseParams( $tagParams );
         $map->{$placeholder}{text} = $scoop;
-        $out .= '<!--'.$TT0.$placeholder.$TT0."-->";
+        $out .= $TT0.$placeholder.$TT0;
     }
 
     return $out;
@@ -513,7 +512,7 @@ sub _putBackBlocks {
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
             no strict 'refs';
-            $_[0] =~ s/<!--$TT0$placeholder$TT0-->/&$fn($params,$val)/e;
+            $_[0] =~ s/$TT0$placeholder$TT0/&$fn($params,$val)/e;
             use strict 'refs';
             delete( $map->{$placeholder} );
         }
