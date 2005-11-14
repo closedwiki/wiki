@@ -39,8 +39,10 @@ use TWiki;
 use CGI qw( -any );
 use HTML::Entities;
 
-my $TT0 = "\a";
-my $TT1 = "\b";
+my $TT0 = chr(0);
+my $TT1 = chr(1);
+my $TT2 = chr(2);
+
 my $STARTWW = qr/^|(?<=[\s\(])/m;
 my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
@@ -130,16 +132,17 @@ sub _processTags {
                 }
             }
             if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)({.*})?$/o ) {
+                my $nop = $1 || '';
                 my $tag = $2 . ( $3 || '' );
-                if( $this->{markvars} ) {
-                    $tag = CGI::span({class => 'TMLvariable'}, $tag);
+                if( scalar( @stack ) == 1 ) {
+                    $tag = CGI::span({ class=>'TMLvariable' }, $tag );
                 } else {
-                    $tag = '&#37;'.$tag.'&#37;';
+                    $tag = '%'.$tag.'%';
                 }
-                if( $1 && $1 eq '<nop>' ) {
-                    $tag = CGI::span({class => 'TMLnop'}, $tag);
+                if( $nop eq '<nop>' ) {
+                    $tag = CGI::span( { class=>'TMLnop' }, $tag );
                 }
-                $stackTop = pop( @stack ).$tag;
+                $stackTop = pop( @stack ).$this->_liftOut( $tag );
             } else {
                 push( @stack, $stackTop );
                 $stackTop = '%'; # push a new context
@@ -174,6 +177,9 @@ sub _makeWikiWord {
 
 sub _makeSquab {
     my( $this, $url, $text ) = @_;
+    if( $url =~ /[<>"\x00-\x1f]/ ) {
+        return defined($text) ? "[[$url][$text]]" : "[[$url]]";
+    }
     unless( $url =~ /^$TWiki::regex{linkProtocolPattern}/ ||
               $url =~ /[^\w\s]/ ) {
         $text ||= $url;
@@ -210,12 +216,23 @@ sub _getRenderedVersion {
     # Remove PRE to prevent TML interpretation of text inside it
     $text = _takeOutBlocks( $text, 'pre', $removed );
 
-    $text =~ s/\\\n//gs;  # Join lines ending in '\'
+    # change !%XXX to %<nop>XXX
+    $text =~ s/!%(?=[A-Z]+({|%))/%<nop>/g;
+
+    $text =~ s/<(.?(noautolink|nop).*?)>/$TT1($1)$TT1/gi;
+
+    # protect HTML tags by pulling them out
+    $text =~ s/(<\/?[a-z]+(\s[^>]*)?>)/ $this->_liftOut($1) /gei;
+
+    $text =~ s/$TT1\((.*?)\)$TT1/<$1>/go;
+
+    # Convert TWiki tags to spans outside parameters
+    $text = $this->_processTags( $text );
 
     # Change ' !AnyWord' to ' <nop>AnyWord',
     $text =~ s/$STARTWW!(?=[\w\*\=])/<nop>/gm;
-    # and !%XXX to %<nop>XXX
-    $text =~ s/$STARTWW!%(?=[A-Z]+({|%))/%<nop>/gm;
+
+    $text =~ s/\\\n//gs;  # Join lines ending in '\'
 
     # Blockquoted email (indented with '> ')
     # Could be used to provide different colours for different numbers of '>'
@@ -266,10 +283,14 @@ sub _getRenderedVersion {
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*)\|.*\|\s*$/ ) {
-            $line =~ s/^(\s*)\|(.*)/_emitTR($1,$2,$insideTABLE)/e;
+            unless( $insideTABLE ) {
+                push( @result, CGI::start_table(
+                    { border=>1, cellpadding=>0, cellspacing=>1 } ));
+            }
+            $line =~ s/^(\s*)\|(.*)/_emitTR($1,$2)/e;
             $insideTABLE = 1;
         } elsif( $insideTABLE ) {
-            push( @result, '</table>' );
+            push( @result, CGI::end_table() );
             $insideTABLE = 0;
         }
 
@@ -387,27 +408,17 @@ sub _getRenderedVersion {
 
     _putBackBlocks( $text, $removed, 'pre' );
 
-    $text = $this->_dropBack( $text );
-
-    # protect HTML parameters by pulling them out
-    $text =~ s/(<[a-z]+ )([^>]+)>/$1.$this->_liftOut($2).'>'/gei;
-
-    # Convert TWiki tags to spans outside parameters
-    $text = $this->_processTags( $text );
-
-    $text = $this->_dropBack( $text );
-
     # replace verbatim with pre in the final output
     _putBackBlocks( $text, $removed, 'verbatim', 'pre',
                     \&_encodeEntities );
 
-    # protect % from being used in further variable expansions
-    $text =~ s/%/&#37;/g;
 
-    # protect @ from being used in mail links
-    $text =~ s/@/&#64;/g;
+    return $this->_liftOut( $text );
+}
 
-    return $text;
+sub cleanup {
+    my $this = shift;
+    $_[0] = $this->_dropBack( $_[0] );
 }
 
 sub _encodeEntities {
@@ -557,51 +568,60 @@ sub _addListItem {
     }
 }
 
-# Lifted straight out of DevelopBranch Render.pm
 sub _emitTR {
-    my ( $thePre, $theRow, $insideTABLE ) = @_;
+    my ( $pre, $row ) = @_;
 
-    unless( $insideTABLE ) {
-        $thePre .= CGI::start_table({ cellspacing => 1,
-                                      cellpadding => 0,
-                                      border => 1 });
-    }
+    $row =~ s/\t/   /g;  # change tabs to space
+    $row =~ s/^\s*\|(.*)\|\s*$/$1/;
 
-    $theRow =~ s/\t/   /g;  # change tabs to space
-    $theRow =~ s/\s*$//;    # remove trailing spaces
-#    $theRow =~ s/(\|\|+)/$TT0.length($1).'|'/ge;  # calc COLSPAN
-    my $cells = '';
-    foreach( split( /\|/, $theRow ) ) {
-        my $colspan = 1;
+    my @tr;
+    my $colspan = 1;
+
+    foreach my $cell ( split( /(\|)/, $row ) ) {
+        # have to do this or we lose || at the end of row
+        next if $cell eq '|';
+
+        # make sure there's something there in empty cells. Otherwise
+        # the editor will compress it to nothing.
+        $cell =~ s/^\s+$/ &nbsp; /;
+
+        if( $cell eq '' && scalar(@tr)) {
+            if( $tr[$#tr]->{colspan}) {
+                $tr[$#tr]->{colspan}++;
+            } else {
+                $tr[$#tr]->{colspan} = 1;
+            }
+        }
+
         my $attr = {};
 
-        if ( s/$TT0([0-9]+)//o ) {
-            $colspan = $1;
-        }
-        s/^\s+$/ &nbsp; /;
         my( $left, $right ) = ( 0, 0 );
-        if( /^(\s*).*?(\s*)$/ ) {
+        if( $cell =~ /^(\s*).*?(\s*)$/ ) {
             $left = length( $1 );
             $right = length( $2 );
         }
+
         if( $left > $right ) {
-            $attr->{style} = 'text-align: right';
             $attr->{class} = 'align-right';
+            $attr->{style} = 'text-align: right';
         } elsif( $left < $right ) {
-            $attr->{style} = 'text-align: left';
             $attr->{class} = 'align-left';
+            $attr->{style} = 'text-align: left';
         } elsif( $left > 1 ) {
-            $attr->{style} = 'text-align: center';
             $attr->{class} = 'align-center';
+            $attr->{style} = 'text-align: center';
         }
-        $attr->{colspan} = $colspan if $colspan > 1;
-        if( /^\s*\*(.*)\*\s*$/ ) {
-            $cells .= CGI::th( $attr, $1 );
+
+        if( $cell =~ /^\s*\*(.*)\*\s*$/ ) {
+            push( @tr, { fn => \&CGI::th, attr => $attr, text => $1 });
         } else {
-            $cells .= CGI::td( $attr, $_ );
+            push( @tr, { fn => \&CGI::td, attr => $attr, text => $cell });
         }
+        $colspan = 1;
     }
-    return $thePre.CGI::Tr( $cells );
+
+    return CGI::Tr( join(
+        '', map { &{$_->{fn}}($_->{attr}, $_->{text}) } @tr));
 }
 
 1;

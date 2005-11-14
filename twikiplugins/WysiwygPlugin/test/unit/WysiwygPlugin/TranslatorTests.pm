@@ -335,20 +335,20 @@ HERE
 HERE
               finaltml => <<'HERE',
 
-|*L*|*C*|*R*|
-|A2|  2  |  2|
-|A3|  3  |3  |
-|A4-6|four|four|
-|^|five|five|
+| *L* | *C* | *R* |
+| A2 | 2 |  2 |
+| A3 | 3 | 3  |
+| A4-6 | four | four |
+| ^ | five | five |
 
-|^|six|six|
+| ^ | six | six |
 HERE
           },
           {
               exec => 0,# disabled because of Kupu problems handling colspans
               name => 'tableWithSpans',
               html => <<'HERE',
-<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td class="align-center" style="text-align: center">2</td><td class="align-right" style="text-align: right">2</td></tr><tr><td>A3</td><td class="align-center" style="text-align: center">3</td><td class="align-left" style="text-align: left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
+<table border="1" cellpadding="0" cellspacing="1"><tr><th> L </th><th> C </th><th> R </th></tr><tr><td> A2 </td><td class="align-center" style="text-align: center">  2  </td><td class="align-right" style="text-align: right">  2 </td></tr><tr><td> A3 </td><td class="align-center" style="text-align: center">  3  </td><td class="align-left" style="text-align: left">  3  </td></tr><tr><td colspan="3"> multi span </td></tr><tr><td> A4-6 </td><td> four </td><td> four </td></tr><tr><td>^</td><td> five</td><td>five </td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
 HERE
               tml => <<'HERE',
 
@@ -357,19 +357,19 @@ HERE
 | A3 |  3  | 3  |
 | multi span |||
 | A4-6 | four | four |
-|^| five | five |
+|^| five|five |
 
 |^| six | six |
 
 HERE
               finaltml => <<'HERE',
 
-|*L*|*C*|*R*|
-|A2|  2  |  2|
-|A3|  3  |3  |
-|multi span|||
-|A4-6|four|four|
-|^|five|five|
+| *L* |*C* |*R* |
+| A2 |  2  |  2 |
+| A3 |  3  | 3  |
+| multi span |||
+| A4-6 | four | four |
+|^| five|five |
 
 |^|six|six|
 HERE
@@ -459,11 +459,11 @@ LinkBox LinkBoxs LinkBoxies LinkBoxess LinkBoxesses LinkBoxes',
           {
               exec => 3,
               name => 'squabsWithVars',
-              html => '<a href="'.$page.'/Current/WikiSyntax">wiki syntax</a><a href="&#37;MAINWEB&#37;.TWiki users"><span class="TMLvariable">MAINWEB</span>.TWiki users</a>escaped: [<span class="TMLnop">[wiki syntax]</span>]',
+              html => '<a href="'.$page.'/Current/WikiSyntax">wiki syntax</a>[[<span class="TMLvariable">MAINWEB</span>.TWiki users]] escaped: [<span class="TMLnop">[wiki syntax]</span>]',
               tml => '[[wiki syntax]] [[%MAINWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]',
-              finaltml => '[[WikiSyntax][wiki syntax]] <a href="%MAINWEB%.TWiki users">%MAINWEB%.TWiki users</a>escaped: [<nop>[wiki syntax]]',
+              finaltml => '[[WikiSyntax][wiki syntax]] [[%MAINWEB%.TWiki users]] escaped: [<nop>[wiki syntax]]',
           },
           {
               exec => 3,
@@ -487,8 +487,9 @@ escaped:
           {
               exec => 3,
               name => 'plingedVarTwo',
-              html => 'nowt!<span class="TMLvariable">MAINWEB</span>',
+              html => 'nowt<span class="TMLnop"><span class="TMLvariable">MAINWEB</span></span>',
               tml => 'nowt!%MAINWEB%',
+              finaltml => 'nowt%<nop>MAINWEB%',
           },
           {
               exec => 3,
@@ -793,13 +794,13 @@ Outside
               html => '<table cellspacing="0" cellpadding="8" border="1" class="plain" _moz_resizing="true">
 <tbody>
 <tr>a0<td>a1</td><td>a2</td><td>a3</td></tr>
-<tr>b0<td>b1</td><td>b2</td><td>b3</td></tr>
+<tr>b0<td colspan="2">b1</td><td></td><td>b3</td></tr>
 <tr>c0<td>c1</td><td>c2</td><td>c3</td></tr>
 </tbody>
 </table>',
-              tml => '|a1|a2|a3|
-|b1|b2|b3|
-|c1|c2|c3|
+              tml => '| a1 | a2 | a3 |
+| b1 || b3 |
+| c1 | c2 | c3 |
 ',
           },
           {
@@ -811,8 +812,8 @@ Outside
           {
               exec => 3,
               name=>"TWikiTagsInHTMLParam",
-              html=>'<a href="&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;">Burble</a>'.
-                "<a href='&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;'>Burble</a>",
+              html=>'<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
+                "<a href='%SCRIPTURL%/view%SCRIPTSUFFIX%'>Burble</a>",
               tml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
                 "<a href='%SCRIPTURL%/view%SCRIPTSUFFIX%'>Burble</a>",
               finaltml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
@@ -853,16 +854,10 @@ HERE
               name => 'tableInBold',
               html => '<b>abcd<table><tr><td>efg</td><td> </td></tr><tr><td> </td><td> </td></tr></table></b>',
               tml  => '<b>abcd
-|efg||
+| efg ||
 |||
 </b>',
           },
-          #{
-          #    exec => 3,
-          #    name => 'complexTWikiVariable',
-          #    html => '<span class="TMLvariable">SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}</span>',
-          #    tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
-          #},
           {
               exec => 3,
               name => 'variableInIMGtag',
@@ -873,13 +868,13 @@ HERE
           {
               exec => 3,
               name => 'twikiWebSnarf',
-              html => '<a href="%TWIKIWEB%.TopicName">bah</a>',
+              html => '[[<span class="TMLvariable">TWIKIWEB</span>.TopicName][bah]]',
               tml  => '[[%TWIKIWEB%.TopicName][bah]]',
           },
           {
               exec => 3,
               name => 'mainWebSnarf',
-              html => '<a href="%MAINWEB%.TopicName">bah</a>',
+              html => '[[<span class="TMLvariable">MAINWEB</span>.TopicName][bah]]',
               tml  => '[[%MAINWEB%.TopicName][bah]]',
           },
           {
@@ -894,6 +889,22 @@ HERE
               tml => "[[Test]] Entry [[Test Page]]\n",
               tml => "[[Test]] Entry [[TestPage][Test Page]]\n",
               html => '<a href="'.$page.'/Current/Test">Test</a>Entry<a href="'.$page.'/Current/TestPage">Test Page</a>',
+          },
+          {
+              exec => 0,
+              name => "Item863",
+              tml => <<EOE,
+||1| 2 |  3 | 4  ||
+EOE
+              html => '<table cellpadding="0" border="1" cellspacing="1">',
+              finaltml => <<EOE,
+EOE
+          },
+          {
+              exec => 3,
+              name => 'Item945',
+              html => '<span class="TMLvariable">SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}</span>',
+              tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
           },
          ];
 
@@ -996,7 +1007,7 @@ sub _compareHTML {
                 $okset = "";
             }
             $result .= "***** Expected HTML: ".encode($a).
-              "\n***** Actual HTML: ".encode($b)."\n";
+                     "\n*****   Actual HTML: ".encode($b)."\n";
             $failed = 1;
         }
     }
@@ -1037,6 +1048,7 @@ sub compareTML_HTML {
     my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&TWiki::Plugins::WysiwygPlugin::getViewUrl);
     $txer->{markvars} = 1;
     my $tx = $txer->convert( $args->{tml} );
+    $txer->cleanup($tx);
     $this->_compareHTML($args->{html}, $tx, 1);
 }
 
