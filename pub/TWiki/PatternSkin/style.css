@@ -717,18 +717,18 @@ html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 .patternTop td {
 	vertical-align:top;
 }
-.patternTop .patternHomePath,
-.patternTop .patternRevInfo {
+.patternTop td.patternHomePath,
+.patternTop td.patternRevInfo {
 	padding:.25em .5em .25em 0;
 	line-height:1.25em;
 }
-.patternTop .patternHomePath {
+.patternTop td.patternHomePath {
 	text-align:left;
 	width:auto;
 }
-.patternTop .patternRevInfo {
-	float:right;
+.patternTop td.patternRevInfo {
 	text-align:right;
+	width:40%;
 }
 .patternTop .patternHomePath a:link,
 .patternTop .patternHomePath a:visited,
