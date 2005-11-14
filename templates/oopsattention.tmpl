@@ -271,10 +271,15 @@
 %TMPL:END%
 %TMPL:DEF{"illegally_named_upload"}%
 ---+++ %_{"Filename [_1] is not legal for a TWiki attachment.", "<code>%PARAM1%</code>"}%
-%_{"Certain characters are not permitted in filenames, and other filenames are not permitted for security reasons. Your filename matched one of the following regular expressions, so it was rejected:"}%
+%_{"Certain characters are not permitted in attachment filenames, and other filenames are not permitted, for security reasons."}%
+
+%_{"Rename the file on your local machine and try uploading again."}%
+
+---+++ Technical details
+Your filename matched one of the following regular expressions, so it was rejected:"}%
    {UploadFilter}: <code>%PARAM2%</code>
    {NameFilter}: <code>%PARAM3%</code>
-%_{"Rename the file on your local machine and try uploading again."}%
+%_{"You may be able to get your TWiki administrator to change these if they are inappropriate for your environment"}%
 %TMPL:END%
 %TMPL:DEF{"zero_size_upload"}%
 ---+++ %_{"Uploaded file [_1] does not exist or is empty", "<code>%PARAM1%</code>"}%
