@@ -11,7 +11,7 @@ How can I create a simple [[TWikiForms][TWiki Form]] based application?
    1 Create a Template Topic and in Edit mode 
    1 In edit mode add the [[TWikiForms][TWiki Form]] you defined to the Template Topic
    1 Create a HTML Form with necessary fields
-   1 Define =SEARCH= function for listing items.  See TWikiVariables#SEARCH_text_search_content
+   1 Define =SEARCH= function for listing items.  See TWikiVariables#VarSEARCH
 
 For more information follow the links...
 

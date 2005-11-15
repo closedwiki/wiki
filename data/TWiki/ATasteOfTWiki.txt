@@ -15,7 +15,7 @@ A Wiki is like a web site, except that you can edit the content in your browser
    * "Wiki" is short for "wiki wiki", the Hawaiian for "Quick"
    * The idea originates from [[http://www.hyperdictionary.com/computing/hypercard][Macintosh Hypercard]], via [[http://www.c2.com/cgi/wiki?WardCunningham][Ward Cunningham]]
    * In Ward's words, Wiki is _"the simplest online database that could possibly work"_
-   * A Wiki is basically a shared, online, persistant whiteboard</td></tr></table>
+   * A Wiki is basically a shared, online, persistent whiteboard</td></tr></table>
 
 ---++ TWiki Wiki
 <table cellspacing="10"><tr><td>
@@ -223,7 +223,7 @@ TWiki understands pages in plain text just fine, but you can %RED% __jazz__ %END
          * <code>[<nop>[BumpyWords][bumpy words]] appears as [[BumpyWords][bumpy words]]</code>
    * An ordinary URL pasted into text will appear as a link - http://www.google.com
       * You can also prettify URLs using square brackets:
-         * <code>[<nop>[http://www.<nop>.google.com][Google]]</code> appears as [[http://www.google.com][Google]]
+         * <code>[<nop>[http://www.google.com/][Google]]</code> appears as [[http://www.google.com/][Google]]
    * Use %<nop>SEARCH. This is an interface to a sophisticated search engine that embeds the results of the search in your page. See %TWIKIWEB%.TWikiVariables for full details.
 
 ---++ More formatting
@@ -266,7 +266,7 @@ TWiki understands pages in plain text just fine, but you can %RED% __jazz__ %END
 </table>
    * Attachments are simply files, in whatever format you want.
    * TWiki recognises some file formats, notably image files (.gif)
-      * Write =%<nop>ATTACHURL%/myco.gif= to see this: %ATTACHURLPATH%/myco.gif
+      * Write =%<nop>ATTACHURL%/myco.gif= to see this: %ATTACHURL%/myco.gif
 
 ---++ Wiki Culture
 Enough about mechanics; how is a wiki actually _used_ ? Well, that's really up to you, but there are a number of tricks that the wiki community has developed for collaborative writing that work pretty well:
@@ -309,7 +309,7 @@ You may see a comment box on a page in Thread<nop>Mode that makes it easy to qui
    * A Wiki trick for grouping pages together
    * Example: to group together a set of pages all relating to the weather:
       1 Create a page called 'Category<nop>Weather'
-      1 Put a SEARCH that contain the word 'Category<nop>Weather' into it
+      1 Put a SEARCH that contains the word 'Category<nop>Weather' into it
          * <code>%<nop>SEARCH{"Category<nop>Weather" nosearch="on" nosummary="on"}%</code>
       1 Put the BumpyWord 'Category<nop>Weather' on all the pages relating to the weather<br />(usually at the bottom, below a horizontal bar)
 

@@ -1,13 +1,75 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 ---+ Admin tools
-Manage whole <b><nop>%WIKITOOLNAME%</b> site from one screen.
+Manage whole <b>%WIKITOOLNAME%</b> site from one screen.
 
-   * *[[%MAINWEB%.%WIKIUSERSTOPIC%][Users]]:* [[TWikiRegistration][Register]], NewUserTemplate, UserForm, ResetPassword, ChangePassword, MaintenanceGuide
-   * *[[TWikiSiteTools][Site Tools]]:* [[%SCRIPTURL%/configure][configure]], %TWIKIWEB%.%WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
+   * *[[%MAINWEB%.%WIKIUSERSTOPIC%][Users]]:* [[TWikiRegistration][Register]], NewUserTemplate, UserForm, ResetPassword, ChangePassword
+   * *[[TWikiSiteTools][Site Tools]]:* [[%SCRIPTURL%/configure][Configure]], %TWIKIWEB%.%WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
    * *Managing:* [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
+   * *Webs:*
+<blockquote>
+<table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">
+  <tr bgcolor="#99CCCC">
+    <th>Web</th>
+    <th>Tools</th>
+    <th>Use to...</th>
+  </tr>
+%SEARCH{ "^%WEBPREFSTOPIC%$" web="all" scope="topic" regex="on" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td> <b>[[$web.%HOMETOPIC%][$web]]</b></td>$n <td> [[$web.%HOMETOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif\" alt=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Recent changes in the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif\" alt=\"Get notified of changes to the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%WEBPREFSTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%STATISTICSTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/statistics.gif\" alt=\"Statistics of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopicList][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/indexlist.gif\" alt=\"Bullet list of all topics\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebIndex][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/index.gif\" alt=\"Index of all topics\" width=\"16\" height=\"16\" border=\"0\">]]</td><td>$pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*)</td></tr>" }%
+  <tr bgcolor="#ffffff">
+    <td colspan="3"><font size="-1">This table is updated automatically based on <nop>WebPreferences settings of the individual webs. </font></td>
+  </tr>
+</table>
+<table border="0" cellspacing="2" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td valign="top">
+<font size="-1">
+Legend:
+</font></td>
+    <td valign="top">
+&nbsp;</td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif" alt="Home of web" width="16" height="16" border="0"> !WebHome
+</font></td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif" alt="Search web" width="16" height="16" border="0"> !WebSearch
+</font></td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif" alt="Recent changes in the web" width="16" height="16" border="0"> !WebChanges
+</font></td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif" alt="Get notified of changes to the web" width="16" height="16" border="0"> !WebNotify
+</font></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td valign="top">
+&nbsp;</td>
+    <td valign="top">
+&nbsp;</td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/wrench.gif" alt="Preferences of web" width="16" height="16" border="0"> !WebPreferences
+</font></td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/statistics.gif" alt="Statistics of web" width="16" height="16" border="0"> !WebStatistics 
+</font></td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/indexlist.gif" alt="Bullet list of all topics" width="16" height="16" border="0"> !WebTopicList
+</font></td>
+    <td valign="top">
+<font size="-1">
+<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/index.gif" alt="Index of all topics" width="16" height="16" border="0"> !WebIndex
+</font></td>
+  </tr>
+</table>
+</blockquote>
 
 ---++ All Admin Tools Category topics
-%SEARCH{"%TOPIC%" excludetopics="%TOPIC%" nonoise="on" format="   * $web.$topic$n      * $summary(100, noheader)"}%
+%SEARCH{"%TOPIC%" excludetopics="%TOPIC%" nonoise="on" format="   * $web.$topic: $summary(100, noheader)"}%
 
 ---++ Plugins
 %PLUGINDESCRIPTIONS%

@@ -17,7 +17,7 @@ System requirements are updated as follows:
    * Perl 5.8 sites using any character set do not require additional modules, since CPAN:Encode is installed as part of Perl. 
    * This feature still works on Perl 5.005_03 as per TWikiSystemRequirements, or Perl 5.6, as long as CPAN:Unicode::MapUTF8 is installed.  
 
-ISO-2022-*, HZ-* and other 'non-ASCII-safe' multi-byte character sets are now specifically excluded from use as the site character set, since they interfere with TWiki ML; however, many multi-byte character sets work fine, e.g. EUC-JP, GB2312, etc.
+The following 'non-ASCII-safe' character encodings are now excluded from use as the site character set, since they interfere with TWiki markup: ISO-2022-*, HZ-*, Shift-JIS, MS-Kanji, GB2312, GBK, GB18030, Johab and UHC. However, many multi-byte character sets work fine, e.g. EUC-JP, EUC-KR, EUC-TW, and EUC-CN. In addition, UTF-8 can already be used, with some limitations, for East Asian languages where EUC character encodings are not acceptable - see TWiki:Codev/ProposedUTF8SupportForI18N.
 
 It's now possible to override the site character set defined in the ={SiteLocale} setting in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] - this enables you to have a slightly different spelling of the character set in the server locale (e.g. 'eucjp') and the HTTP header sent to the browser (e.g. 'euc-jp').
 
