@@ -646,7 +646,6 @@ sub _handleWikiWord {
     # false means suppress link for non-existing pages
     $linkIfAbsent = ( $topic !~ /^$TWiki::regex{abbrevRegex}$/o );
 
-    $text = $topic;
     # SMELL - it seems $linkIfAbsent, $keepWeb are always inverses of each
     # other
     # TODO: check the spec of doKeepWeb vs $doLinkToMissingPages
@@ -1523,19 +1522,19 @@ sub takeOutBlocks {
     			next;
     		}
     	} elsif ($token =~ /<\/$tag>/) {
-    	       if ($depth > 0) {
-                    $depth--;
-                    if ($depth eq 0) {
-                            my $placeholder = $tag.$placeholderMarker;
-                            $placeholderMarker++;    		
-                            $map->{$placeholder}{text} = $scoop;
-                            $map->{$placeholder}{params} = $tagParams;
-                            $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
-                                            $TWiki::TranslationToken.'-->';
-                            $scoop = '';
-                            next;
-                    }
+            if ($depth > 0) {
+                $depth--;
+                if ($depth eq 0) {
+                    my $placeholder = $tag.$placeholderMarker;
+                    $placeholderMarker++;
+                    $map->{$placeholder}{text} = $scoop;
+                    $map->{$placeholder}{params} = $tagParams;
+                    $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
+                      $TWiki::TranslationToken.'-->';
+                    $scoop = '';
+                    next;
                 }
+            }
     	}
     	if ($depth > 0) {
     		$scoop .= $token;
@@ -1544,14 +1543,14 @@ sub takeOutBlocks {
     	}
     }
 
-	#unmatched tags
+	# unmatched tags
 	if (defined($scoop) && ($scoop ne '')) {
 		my $placeholder = $tag.$placeholderMarker;
-		$placeholderMarker++;    		
+		$placeholderMarker++;
 		$map->{$placeholder}{text} = $scoop;
 		$map->{$placeholder}{params} = $tagParams;
 		$out .= '<!--'.$TWiki::TranslationToken.$placeholder.
-				$TWiki::TranslationToken.'-->';
+          $TWiki::TranslationToken.'-->';
 	}
 
 
