@@ -76,6 +76,7 @@ foreach my $module (
 		    qw( Net::SSLeay ),	# Net::SSLeay IO::Socket::SSL
 		    qw( Module::Pluggable Email::FolderType Email::Simple Email::Folder Email::FolderType::Net Net::POP3 Email::Folder::POP3 Net::IMAP::Simple URI::imap Email::Folder::IMAP MIME::Base64 Email::MIME::Encodings Email::MIME::ContentType MIME::Types Email::MIME Email::Delete Time::ParseDate ),
 		    qw( XML::Stream Net::XMPP Net::Jabber ),
+		    qw( Time::Local ),		# for BlogPlugin
 		    )
 {
     print "Installing $module\n";
