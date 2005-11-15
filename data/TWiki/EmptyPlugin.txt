@@ -21,7 +21,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
 
-   * Your own setting, i.e.:
+   * Your own setting, for example:
       * Set EXAMPLE = got it!
 
    * Debug plugin: (See output in =data/debug.txt=)
@@ -34,7 +34,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
-|  Plugin Version: | 21 Mar 2003 |
+|  Plugin Version: | 21 Mar 2004 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  21 Mar 2004: | Added afterSaveHandler |
 |  14 Jul 2001: | Changed to plug&amp;play |
@@ -45,6 +45,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 

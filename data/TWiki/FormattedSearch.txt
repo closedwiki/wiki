@@ -6,7 +6,7 @@
 
 _Inline search feature allows flexible formatting of search result_
 
-The =[[TWikiVariables#VarSEARCH][%<nop>SEARCH{...}%]]= variable documented in TWikiVariables has a fixed format for the search result, that is, a table consisting of topic names and topic summaries. Use the =format="..."= parameter to specify a customized format of the search result. The string of the format parameter is typically a bullet list or table row containing variables (such as =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=).
+The default output format of a =[[TWikiVariables#VarSEARCH][%<nop>SEARCH{...}%]]= is a table consisting of topic names and topic summaries. Use the =format="..."= parameter to customize the search result. The format parameter typically defines a bullet or a table row containing variables, such as =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=.
 
 ---++ Syntax
 
@@ -43,7 +43,10 @@ Variables that can be used in the format string:
 | =$createusername= | Login name of topic revision 1.1, e.g. =jsmith= |
 | =$createwikiname= | Wiki user name of topic revision 1.1, e.g. =<nop>JohnSmith= |
 | =$createwikiusername= | Wiki user name of topic revision 1.1, e.g. =%MAINWEB%.<nop>JohnSmith= |
-| =$summary(options)= | Topic summary, just the plain text, all formatting and line breaks discarded.  =options= may contain any of the following: a number (characters shown in the summary), =showvarnames= (shows variables as VARIABLE and VARIABLE{...}; otherwise removed), =noheader= (suppresses the headings at the beginning).  |
+| =$summary= | Topic summary, just the plain text, all formatting and line breaks removed; up to 162 characters |
+| =$summary(50)= | Topic summary, up to 50 characters shown |
+| =$summary(showvarnames)= | Topic summary, with =%<nop>ALLTWIKI{...}%= variables shown as =ALLTWIKI{...}= |
+| =$summary(noheader)= | Topic summary, with leading =---+ headers= removed%BR% __Note:__ The tokens can be combined, for example =$summary(100, showvarnames, noheader)= |
 | =$formname= | The name of the form attached to the topic; empty if none |
 | =$formfield(name)= | The field value of a form field; for example, =$formfield(<nop>TopicClassification)= would get expanded to =PublicFAQ=. This applies only to topics that have a [[TWikiForms][TWikiForm]] |
 | =$formfield(name, 10)= | Form field value, "<tt>- </tt>" hyphenated each 10 characters |
@@ -51,7 +54,7 @@ Variables that can be used in the format string:
 | =$formfield(name, 30, ...)= | Form field value, shortended to 30 characters with "<tt>...</tt>" indication |
 | =$pattern(reg-exp)= | A regular expression pattern to extract some text from a topic (does not search meta data; use =$formfield= instead). In case of a =multiple="on"= search, the pattern is applied to the line found in each search hit.%BB% Specify a RegularExpression that covers the whole text (topic or line), which typically starts with =.*=, and must end in =.*= %BB% Put text you want to keep in parenthesis, like =$pattern(.*?(from here.*?to here).*)= %BB% Example: =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the email address from a bullet of format =* Email: ...= %BB% This example has non-greedy =.*?= patterns to scan for the first occurance of the Email bullet; use greedy =.*= patterns to scan for the last occurance %BB% Limitation: Do not use =.*)= inside the pattern, e.g. =$pattern(.*foo(.*)bar.*)= does not work, but =$pattern(.*foo(.*?)bar.*)= does %BB% Note: Make sure that the integrity of a web page is not compromised; for example, if you include an HTML table make sure to include everything including the table end tag |
 | =$count(reg-exp)= | Count of number of times a regular expression pattern appears in the text of a topic (does not search meta data). Follows guidelines for use and limitations outlined above under =$pattern(reg-exp)=. Example: =$count(.*?(---[+][+][+][+]) .*)= counts the number of &lt;H4&gt; headers in a page. |
-| =$n= or =$n()= | New line |
+| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
 | =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
 | =$quot= | Double quote (="=). Alternatively write =\"= to escape it |
 | =$percnt= | Percent sign (=%=) |
