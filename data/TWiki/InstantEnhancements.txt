@@ -35,11 +35,11 @@ It's just as easy to refine later on, so you're not locked in, just looking bett
 
 ---+++ Set Page Background Color 
 
-Without getting into the TWikiTemplates system yet, you can easily edit the ==view.tmpl== (in the =templates= directory). In the HTML at the top, the body tag has the page background hardcoded to white ==bgcolor="#ffffff"==. You can change that color value to new variable. First, define a new preferences variable in the site-level  TWikiPreferences, e.g. =* Set =PAGEBGCOLOR = #d0d0d0=, then edit the ==view.tmpl== template file and change ==bgcolor="#ffffff"== to ==bgcolor="%<nop>PAGEBGCOLOR%"==. If you want you can set the page background color individualy per web, simple add a =* Set =PAGEBGCOLOR = #d0d0d0= bullet to the WebPreferences to overload the site-level preferences. (Without font color control, you'll have to stick to light colors.
+Without getting into the TWikiTemplates system yet, you can easily edit the ==view.tmpl== (in the =templates= directory). In the HTML at the top, the body tag has the page background hardcoded to white ==bgcolor="#ffffff"==. You can change that color value to new variable. First, define a new preferences variable in the site-level  TWikiPreferences, e.g. =* Set =PAGEBGCOLOR = #d0d0d0=, then edit the ==view.tmpl== template file and change ==bgcolor="#ffffff"== to ==bgcolor="%<nop>PAGEBGCOLOR%"==. If you want you can set the page background color individualy per web, simple add a =* Set =PAGEBGCOLOR = #d0d0d0= bullet to the WebPreferences to overload the site-level preferences. (Without font color control, you'll have to stick to light colors.)
 
 ---+++ Titles-Only Topic List - WebTopicList
 
-__A good first navigation tool for new users,__ a fast-loading linked list (page titles only) of a web's topics is a quick and easy way see what's available. By default, slower, but more powerfull WebIndex is used. 
+__A good first navigation tool for new users,__ a fast-loading linked list (page titles only) of a web's topics is a quick and easy way see what's available. By default, slower, but more powerful WebIndex is used. 
 
 Without explaining what WEBTOPICLIST is, just try it: 
 
@@ -54,13 +54,13 @@ This should be enabled, see the "Miscellaneous Settings" in the TWikiPreferences
 
 Icons can do a lot to enhance scannability of topics. For instance, on *HELP* pages, most people tend to jump around looking for answers rather than reading through - icons help point out the most important bits.
 
-%TWIKIWEB%.TWikiDocGraphicsPattern has a whole collection of ready icon images for %TWIKIWEB%.PatternSkin (you can find the graphics for classic skin in %TWIKIWEB%.TWikiDocGraphics). You can use these images in any topic by referring to their name. For example, %TWIKIWEB%.TWikiDocGraphicsPattern has an image attachment called =days.gif=. To get this image in a topic, write =%<nop>ICON{"days"}%= to get %ICON{"days"}%.
+%TWIKIWEB%.TWikiDocGraphics has a whole collection of ready icon images. You can use these images in any topic by referring to their name. For example, !TWikiDocGraphics has an image attachment called =days.gif=. To show this image in a topic, write =%<nop>ICON{"days"}%= to get %ICON{"days"}%.
 
 For more information about icon sets, see: %TWIKIWEB%.IconSets.
 
 *Creating image variables*
 
-You may find it easier to write shorthand graphic notation. You can create your own image variables by defining them in a preference topic (most likely [[%TWIKIWEB%.TWikiPreferences]].
+You may find it easier to write shorthand graphic notation. You can create your own image variables by defining them in a preference topic (most likely [[%MAINWEB%.%WIKIPREFSTOPIC%]].)
 
 A variable name may be one letter, like =Y=, or may be longer like =HELP=, =WARN= etc. You can also add your own images, e.g. a =NEW=, or a =ASK= to ask question.
 
@@ -73,7 +73,7 @@ Or if you have a custom image to use, attach this to !TWikiPreferences and write
    * Set DOWN = <img src="%ATTACHURL%/my_image.gif" border="0" alt="DOWN" width="16" height="16" />
 </verbatim>
 
-All images in %TWIKIWEB%.TWikiDocGraphicsPattern are 16 x 16 pixels.
+Most images in %TWIKIWEB%.TWikiDocGraphics are 16 x 16 pixels.
 
    * __Related:__ There are other approaches for creating more extensive TWiki icon libraries. This is a simply and quick way to get started. See %TWIKIWEB%.TWikiDocGraphics for more info.
 
@@ -81,7 +81,7 @@ All images in %TWIKIWEB%.TWikiDocGraphicsPattern are 16 x 16 pixels.
 
 TOC is Table-Of-Content, generated automagically from headers (defined like that: ==---++== , see TWikiShorthand).
 
-For example, you may want to put all your custom variables in TWikiPreferences right on top of the page, and generate table of contens, like:
+For example, you may want to put all your custom variables in TWikiPreferences right on top of the page, and generate table of contents, like:
 
    * Preferences for easy creating nice pages 
       * Graphics icons in text 
@@ -98,7 +98,7 @@ Non-admin users wil be interested only in first part, non-system preferences.
 ---
 ---++ Personal Productivity - Tools and Tips for Working Faster
 
-Although this area applies to all TWiki set-ups, the initial focus is on TWiki site managers working on a Linux/Apache TWiki site, from a Windows local PC. The assumption being: if you're working with Linux as your desktop, you're probably a programmer or system admin and have these basics handled!
+Although this area applies to all TWiki setups, the initial focus is on TWiki site managers working on a Linux/Apache TWiki site, from a Windows local PC. The assumption being: if you're working with Linux as your desktop, you're probably a programmer or system admin and have these basics handled!
 
 ---+++ Use your favorite text editor for major edits
 
@@ -158,9 +158,7 @@ When you're creating main gateway pages, you may want to temporarily (or permane
 ---
 ---++ Change the Default Logo
 
-If you want to change the default logo, simply attach a new logo.gif to the web's <nop>WebPreferences.  
-
-You can change the logo's filename by overriding the name using WEBLOGONAME in <nop>WebPreferneces
+If you want to change the logo per TWiki web, simply attach a new logo.gif to the web's <nop>WebPreferences, and change the logo's filename by overriding the name using WEBLOGONAME in <nop>WebPreferences:  
    * =Set WEBLOGONAME = filename.gif=
 
 Other cusomtisations are possible using =WEBLOGOIMG=, =WEBLOGOURL=, and =WEBLOGOALT= (they mirror the =WIKILOGO*= TWiki variables, but are applied to each web, rather than to the %<nop>WIKITOOLNAME%-based references)
@@ -171,7 +169,7 @@ If you'd like to have the same customised logo for all the webs, make these chan
 ----
 ---++ Customize Topic Classification Forms
 
-With a simple one or two-line default topic form available for every topic  - in *Edit* mode, click the ==[Add]== button, and select the form if it isn't alredy enabled. Then, click the title to get to the actual form, ==[Edit]==, and carefully change values, probably basic page classifications. You'll get some increased value, and hands-on experience with TWikiForms, without having to read up about them first. %X% __(add the corresponding search per category - copy a default and change)__
+With a simple one or two-line default topic form available for every topic  - in *Edit* mode, click the ==[Add]== button, and select the form if it isn't already enabled. Then, click the title to get to the actual form, ==[Edit]==, and carefully change values, probably basic page classifications. You'll get some increased value, and hands-on experience with TWikiForms, without having to read up about them first. %X% __(add the corresponding search per category - copy a default and change)__
 
 
 ---

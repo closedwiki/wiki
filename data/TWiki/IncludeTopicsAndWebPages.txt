@@ -41,7 +41,7 @@ __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUD
 ---+++ 3. Display the current time in Tokyo in a TWiki page
 
    * You type:
-      * ==Tokyo: %<nop>INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%==
+      * ==Tokyo: %<nop>INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*&lt;\!--tzdate:date--&gt;(.*?)&lt;\!--/tzdate:date--&gt;.*"}%==
    * You get:
       * Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
 
