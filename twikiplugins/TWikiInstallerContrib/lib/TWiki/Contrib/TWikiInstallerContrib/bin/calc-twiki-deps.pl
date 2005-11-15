@@ -145,6 +145,7 @@ SVK
 ^XML::Stream$
 ^Net::XMPP
 ^Net::Jabber
+^Time::Local$
 __MODULES__
 
 print $deps, "\n";
