@@ -41,7 +41,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>D
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
 |  Plugin Version: | 1.030 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-| 5 Mar 2004 | 1.030 Crawford Currie prepared for Dakar release; disabled by default |
+|  05 Mar 2004: | 1.030 Crawford Currie prepared for Dakar release; disabled by default |
 |  21 Mar 2004: | Added afterSaveHandler |
 |  14 Jul 2001: | Changed to plug&amp;play |
 |  27 Feb 2001: | Initial version |
@@ -50,6 +50,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>D
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
 
