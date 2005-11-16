@@ -28,6 +28,20 @@ use strict;
 The PrefsCache package holds a cache of topics that have been read in, using
 the TopicPrefs class.  These functions manage that cache.
 
+We maintain 2 hashes of values:
+   * {locals} Contains all locals at this level. Locals are values that
+     only apply when the current topic is the topic where the local is
+     defined. The variable names are decorated with the locality where
+     they apply.
+   * {values} contains all sets, locals, and all values inherited from
+     the parent level
+
+As each cache level is built, the values are copied down from the parent
+cache level. This sounds monstrously inefficient, but in fact perl does
+this a lot better than doing a multi-level lookup when a value is referenced.
+This is especially important when many prefs lookups may be done in a
+session, for example when searching.
+
 =cut
 
 package TWiki::Prefs::PrefsCache;
@@ -37,7 +51,7 @@ use Assert;
 
 =pod
 
----++ ClassMethod new( $prefs, $type, $web, $topic, $prefix )
+---++ ClassMethod new( $prefs, $type, $web, $topic, $prefix, $parent )
 
 Creates a new Prefs object.
    * =$prefs= - controlling TWiki::Prefs object
@@ -45,13 +59,13 @@ Creates a new Prefs object.
    * =$web= - web containing topic to load from (required is =$topic= is set)
    * =$topic= - topic to load from
    * =$prefix= - key prefix for all preferences (used for plugins)
-
+   * =$parent= - the PrefsCache object to use to initialise values from
 If the specified topic is not found, returns an empty object.
 
 =cut
 
 sub new {
-    my( $class, $prefs, $type, $web, $topic, $prefix ) = @_;
+    my( $class, $prefs, $type, $web, $topic, $prefix, $parent) = @_;
 
     ASSERT($prefs->isa( 'TWiki::Prefs')) if DEBUG;
     ASSERT($type) if DEBUG;
@@ -59,12 +73,44 @@ sub new {
     my $this = bless( {}, $class );
     $this->{MANAGER} = $prefs;
     $this->{TYPE} = $type;
+    $this->{SOURCE} = '';
+    $this->{CONTEXT} = $prefs;
+
+    if( $parent && $parent->{values} ) {
+        %{$this->{values}} = %{$parent->{values}};
+    }
+    if( $parent && $parent->{locals} ) {
+        %{$this->{locals}} = %{$parent->{locals}};
+    }
 
     if( $web && $topic ) {
         $this->loadPrefsFromTopic( $web, $topic, $prefix );
     }
 
     return $this;
+}
+
+=pod
+
+---++ ObjectMethod finalise( $parent )
+Finalise preferences in this cache, by freezing any preferences
+listed in FINALPREFERENCES at their current value.
+   * $parent = object that supports getPreferenceValue
+
+=cut
+
+sub finalise {
+    my $this = shift;
+
+    my $value = $this->{values}{FINALPREFERENCES};
+    if( $value ) {
+        foreach ( split( /[\s,]+/, $value ) ) {
+            # Note: cannot refinalise an already final value
+            unless( $this->{CONTEXT}->isFinalised( $_ )) {
+                $this->{final}{$_} = 1;
+            }
+        }
+    }
 }
 
 =pod
@@ -88,7 +134,7 @@ sub loadPrefsFromTopic {
     if( $session->{store}->topicExists( $web, $topic )) {
         my( $meta, $text ) =
           $session->{store}->readTopic( undef, $web, $topic, undef );
-        
+
         my $parser = new TWiki::Prefs::Parser();
         $parser->parseText( $text, $this, $keyPrefix );
         $parser->parseMeta( $meta, $this, $keyPrefix );
@@ -102,26 +148,25 @@ Adds a key-value pair of the given type to the object. Type is Set or Local.
 Callback used for the Prefs::Parser object, or can be used to add
 arbitrary new entries to a prefs cache.
 
-Note that final preferences can't be set this way, they can only
-be set in the context of a full topic read, because they cannot
-be finalised until after the whole topic has been read.
+Note that attempts to redefine final preferences will be ignored.
 
 =cut
 
 sub insert {
-    my( $this, $type, $theKey, $theValue ) = @_;
+    my( $this, $type, $key, $value ) = @_;
 
-    $theValue =~ s/\t/ /g;                 # replace TAB by space
-    $theValue =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
-    $theValue =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
-    $theValue =~ s/`//g;                   # filter out dangerous chars
-    if ( $theKey eq 'FINALPREFERENCES' ) {
-        foreach ( split( /[\s,]+/, $theValue ) ) {
-            $this->{final}{$_} = 1;
-        }
+    return if $this->{CONTEXT}->isFinalised( $key );
+
+    $value =~ s/\t/ /g;                 # replace TAB by space
+    $value =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
+    $value =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
+    $value =~ s/`//g;                   # filter out dangerous chars
+    if( $type eq 'Local' ) {
+        $this->{locals}{$this->{SOURCE}.'-'.$key} = $value;
     } else {
-        $this->{$type}{$theKey} = $theValue;
+        $this->{values}{$key} = $value;
     }
+    $this->{SetHere} = 1;
 }
 
 =pod
@@ -132,7 +177,7 @@ Generate an (HTML if $html) representation of the content of this cache.
 =cut
 
 sub stringify {
-    my( $this, $html, $shown ) = @_;
+    my( $this, $html ) = @_;
     my $res;
 
     if( $html ) {
@@ -143,28 +188,35 @@ sub stringify {
         $res = '******** '.$this->{TYPE}.' '.$this->{SOURCE}."\n";
     }
 
-    my %shown;
-
-    foreach my $type qw( Set Local ) {
-        foreach my $key ( sort keys %{$this->{$type}} ) {
-
-            #next if $shown->{$type.$key};
-
-            my $final = '';
-            if ( $this->{final}{$key}) {
-                $final = ' *final* ';
-            }
-            my $val = $this->{$type}{$key};
-            $val =~ s/^(.{32}).*$/$1..../s;
-            if( $html ) {
-                $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
-                $res .= CGI::Tr( {valign=>'top'},
-                                 CGI::td(" $type $final $key").
-                                     CGI::td( $val ))."\n";
-            } else {
-                $res .= "$type $final $key = $val\n";
-            }
-            $shown->{$type.$key} = 1;
+    foreach my $key ( sort keys %{$this->{values}} ) {
+        next unless $this->{SetHere}{$key};
+        my $final = '';
+        if ( $this->{final}{$key}) {
+            $final = ' *final* ';
+        }
+        my $val = $this->{values}{$key};
+        $val =~ s/^(.{32}).*$/$1..../s;
+        if( $html ) {
+            $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
+            $res .= CGI::Tr( {valign=>'top'},
+                             CGI::td(" Set $final $key").
+                                 CGI::td( $val ))."\n";
+        } else {
+            $res .= "Set $final $key = $val\n";
+        }
+    }
+    foreach my $key ( sort keys %{$this->{locals}} ) {
+        next unless $this->{SetHere}{$key};
+        my $final = '';
+        my $val = $this->{locals}{$key};
+        $val =~ s/^(.{32}).*$/$1..../s;
+        if( $html ) {
+            $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
+            $res .= CGI::Tr( {valign=>'top'},
+                             CGI::td(" Local $key").
+                                 CGI::td( $val ))."\n";
+        } else {
+            $res .= "Local $key = $val\n";
         }
     }
     return $res;

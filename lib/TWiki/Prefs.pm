@@ -62,6 +62,8 @@ sub new {
     $this->{session} = $session;
     push( @{$this->{PREFS}}, $cache ) if defined( $cache );
     # $this->{CACHE} - hash of TWiki::Prefs objects, for other topics and webs
+    # remember what "Local" means
+    $this->{LOCAL} = $session->{webName}.'.'.$this->{session}->{topicName};
 
     return $this;
 }
@@ -92,10 +94,11 @@ sub pushGlobalPreferences {
 }
 
 sub _newCache {
-    my( $this, $type, $web, $topic, $prefix ) = @_;
+    my( $this, $type, $web, $topic, $prefix, $parent ) = @_;
 
     my $req =
-      new TWiki::Prefs::PrefsCache( $this, $type, $web, $topic, $prefix );
+      new TWiki::Prefs::PrefsCache( $this, $type, $web, $topic, $prefix,
+                                   $parent );
 
     $this->{CACHE}{$web.'.'.$topic} =
       new TWiki::Prefs( $this->{session}, $req );
@@ -118,9 +121,17 @@ preferences stack.
 sub pushPreferences {
     my( $this, $web, $topic, $type, $prefix ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
+    my $top;
 
-    my $req = $this->_newCache($type, $web, $topic, $prefix );
-    push( @{$this->{PREFS}}, $req ) if $req;
+    if( $this->{PREFS} ) {
+        $top = $this->{PREFS}[$#{$this->{PREFS}}];
+    }
+    my $req = $this->_newCache($type, $web, $topic, $prefix, $top );
+
+    if( $req ) {
+        push( @{$this->{PREFS}}, $req );
+        $req->finalise( $this );
+    }
 }
 
 =pod
@@ -187,36 +198,32 @@ topic is the same as the current web,topic in the session.
 
 sub getPreferencesValue {
     my( $this, $key ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    # establish the 'local' level
-    my $local = $this->{session}->{webName}.'.'.
-      $this->{session}->{topicName};
+    return undef unless @{$this->{PREFS}};
+    my $top = $this->{PREFS}[$#{$this->{PREFS}}];
+    my $lk = "$this->{LOCAL}-$key";
+    if( defined( $top->{locals}{$lk} )){
+        return $top->{locals}{$lk};
+    } else {
+        return $top->{values}{$key};
+    }
+}
 
-    # is there a final value?
-    my $final = $this->_getFinalValue( $key );
+=pod
 
-    return $final if defined $final;
-    my $val;
-    foreach my $level ( reverse @{$this->{PREFS}} ) {
-        # If we get as high as User level, check for cookie values.
-        if( $level->{TYPE} =~ /^USER/ ) {
-            # if the key was finalised somewhere higher on the stack,
-            # then we can't take it from the cookie.
-            $val = $this->{session}->{client}->getSessionValue( $key );
-            return $val if defined( $val );
-        }
-        if( defined $local && defined $level->{SOURCE} &&
-              $level->{SOURCE} eq $local ) {
-            $val = $level->{Local}{$key};
-        }
-        unless( defined $val ) {
-            $val = $level->{Set}{$key};
-        }
-        return $val if defined( $val );
+---++ ObjectMethod isFinalised( $key )
+Return true if $key is finalised somewhere in the prefs stack
+
+=cut
+
+sub isFinalised {
+    my( $this, $key ) = @_;
+
+    foreach my $level ( @{$this->{PREFS}} ) {
+        return 1 if $level->{final}{$key};
     }
 
-    return undef;
+    return 0;
 }
 
 =pod
@@ -262,25 +269,6 @@ sub getWebPreferencesValue {
         $this->{CACHE}{$wtn}->pushWebPreferences( $web );
     }
     return $this->{CACHE}{$wtn}->getPreferencesValue( $key );
-}
-
-# The the key is finalised somewhere in the stack, then return the
-# final value. If the key is finalised, return a value even if
-# a value isn't defined, to block lower level definition. If it
-# isn't final, return undef.
-sub _getFinalValue {
-    my( $this, $key ) = @_;
-    my $candVal;
-
-    foreach my $level ( @{$this->{PREFS}} ) {
-        my $val = $level->{Set}{$key};
-        $candVal = $val if defined $val;
-        if( $level->{final}{$key} ) {
-            return $candVal || '';
-        }
-    }
-
-    return undef;
 }
 
 =pod
