@@ -999,6 +999,9 @@ table#twikiSearchTable td.first {
 
 /* Diff */
 
+.patternDiffPage #patternMain {
+	border:none;
+}
 .patternDiffPage .twikiDiffTable {
 	margin:2em 0;
 }
@@ -1019,4 +1022,6 @@ tr.twikiDiffDebug td {
 
 .patternPlainPage #patternMain {
 	padding-top:2em;
+}
+ng-top:2em;
 }
