@@ -2,18 +2,18 @@
 <!-- template: search.nat.tmpl -->
 %TMPL:DEF{"content"}% %SPLIT%<b>Search</b>: <span class="natSearchString">%SEARCHSTRING%</span> %SPLIT% <table class="natSearchTable" cellpadding="0" cellspacing="0">
 <tr class="natSearchTableTitle">
-  <th width="50%">%WEB% Web</th>
-  <th width="30%">Changed</th>
-  <th width="20%">Changed by</th>
+  <th width="50%" class="natSearchTarget">%WEB% Web</th>
+  <th width="30%" class="natSearchRevision">Changed</th>
+  <th width="20%" class="natSearchAuthor">Changed by</th>
 </tr>
 <!-- debug: search header end -->%REPEAT%<!-- debug: search repeat start -->
 <tr class="natSearchHit">
-  <th width="50%">
+  <th width="50%" class="natSearchTarget">
     <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TOPICNAME%</a>
   </th>
-  <th width="30%">
+  <th width="30%" class="natSearchRevision">
     <a style="white-space:pre"href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME% - %REVISION%</a>
-  </th><th width="20%">
+  </th><th width="20%" class="natSearchAuthor">
     %AUTHOR% 
   </th>
 </tr>

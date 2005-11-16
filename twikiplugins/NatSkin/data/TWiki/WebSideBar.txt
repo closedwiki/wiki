@@ -1,7 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127482214" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1132161897" format="1.1" version="1.9"}%
 ---+ %TOPIC%
 
 %STARTINCLUDE%
+<div class="natSideBarTitle">
+<h1>Navigation%REDDOT{"%TWIKIWEB%.WebSideBar"}%</h1>
+</div>
 <style type="text/css">
 .navMain {%CALC{"$IF($EXACT(%BASEWEB%,Main),,display:none;)"}%}
 .navUserSection {%CALC{"$IF($EXISTS(User/WebHome),,display:none;)"}%}
@@ -13,8 +16,10 @@
 .navTestCasesSection {%CALC{"$IF($EXISTS(TestCases/WebHome),,display:none;)"}%}
 .navTestCases {%CALC{"$IF($EXACT(%BASEWEB%,TestCases),,display:none;)"}%}
 .navTrashSection {%CALC{"$IF($EXACT(%BASEWEB%,Trash),,display:none;)"}%}
+%IFSKINSTATETHEN{style="Pattern" glue="off"}%
+%FORMATLIST{"%WEBLIST{"$name" separator=" "}% TestCases" split=" " separator="$n" format=".nav$1Section h2 a {background:$percntVAR{\"WEBBGCOLOR\" web=\"$1\"}$percnt;}"}%
+%FISKINSTATE%
 </style>
----+ Navigation%REDDOT{"%TWIKIWEB%.WebSideBar"}%
 <div class="navMainSection %IFSKINSTATE{buttons="on" glue="off" then="navMain"}%">
 ---++ %WEBLINK{"Main"}%
 <div class="navMain">
