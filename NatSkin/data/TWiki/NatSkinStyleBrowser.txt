@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131640943" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1132075980" format="1.0" version="1.15"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%
 <div class="natSkinStyleBrowser">
@@ -6,7 +6,7 @@
 <table border="0">
 <tr><td colspan="3"> *Style:* </td></tr>
 <tr>
-<td><a href="?switchstyle=prev" title="Switch to previous style">%ICON{arrowleft}%</td>
+<td><a href="?switchstyle=prev&refresh=on" title="Switch to previous style"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowleft.gif" border="0" /></td>
 <td>
 <select style="width:100%" name="style">
 <noautolink>
@@ -14,10 +14,10 @@
 </noautolink>
 </select>
 </td>
-<td><a href="?switchstyle=next" title="Switch to next style">%ICON{arrowright}%</td>
+<td><a href="?switchstyle=next&refresh=on" title="Switch to next style"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" /></td>
 </tr>
 <tr><td colspan="2"> *Variation:* </td></tr>
-<tr><td><a href="?switchvariation=prev" title="Switch to previous variation">%ICON{arrowleft}%</a></td>
+<tr><td><a href="?switchvariation=prev&refresh=on" title="Switch to previous variation"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowleft.gif" border="0" /></a></td>
 <td>
 <select style="width:100%" name="stylevariation">
 <noautolink>
@@ -25,7 +25,7 @@
 </noautolink>
 </select>
 </td>
-<td><a href="?switchvariation=next" title="Switch to previous variation">%ICON{arrowright}%</a></td>
+<td><a href="?switchvariation=next&refresh=on" title="Switch to previous variation"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" /></a></td>
 <tr><td colspan="3"> *Switches:* </td></tr>
 <tr>
 <td colspan="3">

@@ -1,5 +1,14 @@
 <!-- template: defaultsidebar.nat.tmpl -->
-%TMPL:DEF{"defaultsidebar"}% %WEBSIDEBAR% 
+%TMPL:DEF{"defaultsidebar"}% 
+%IFSKINSTATETHEN{style="Pattern"}%
+<div class="natSideBarTitle">
+<h1 style="background-color:%WEBBGCOLOR%">%WEB%</h1>
+</div>
+%INCLUDE{"%WEB%.WebLeftBar"}%
+</div>
+%ELSESKINSTATE%
+%WEBSIDEBAR% 
+%FISKINSTATE%
 %IFSKINSTATETHEN{release="beijing"}%
 %ELSESKINSTATE%
 %BROADCASTMESSAGE%

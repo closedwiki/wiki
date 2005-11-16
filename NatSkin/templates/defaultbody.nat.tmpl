@@ -32,13 +32,15 @@
       </td>
     </tr>
   </table> 
-  <div class="natBottomBar">
+  <div class="natBottomBar %IFSKINSTATE{sidebar="right|off" glue="off" then="natBottomLeft"}% %IFSKINSTATE{sidebar="left|off" glue="off" then="natBottomRight"}%">
     <div class="natBottomBarContents">
       <div class="natCopyRight">%WEBCOPYRIGHT%</div>
       <div class="natTWikiInfo">
 	<!--a href="http://TWiki.org" border="0"><img  border="0" src="%PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWikiPowered.gif" alt=TWiki.org"/></a><br/-->
 	Powered by <a href="http://TWiki.org">TWiki/%WIKIRELEASENAME%</a>
-	<nop>%WIKIVERSION%, 
+	<nop>%WIKIVERSION%
+      </div>
+      <div class="natSyndicate">
 	[[%WEB%.WebRss][Syndicate this site <img src="%ICONPATH{rss-feed}%" alt="rss-feed" align="top" border="0"/>]]
       </div>
     </div>
