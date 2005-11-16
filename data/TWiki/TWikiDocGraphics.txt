@@ -136,6 +136,7 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
 | <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONPATH{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
+| <img src="%ATTACHURLPATH%/save.gif" alt="Save" title="Save" />  | =save.gif= | Save | =%<nop>ICON{save}%= |
 | <img src="%ATTACHURLPATH%/searchtopic.gif" alt="Search topic" title="Search topic" />  | =searchtopic.gif= | Search topic | =%<nop>ICON{searchtopic}%= |
 | <img src="%ATTACHURLPATH%/search-small.gif" alt="Search" title="Search" />  | =search-small.gif= | Small search button, 13x13 | =&lt;img src="%<nop>ICONPATH{search-small}%" width="13" height="13" alt="Search" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
@@ -350,6 +351,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="right.gif" attr="" autoattached="1" comment="" date="1128927083" path="right.gif" size="192" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="rss-feed.gif" attr="" autoattached="1" comment="" date="1128927084" path="rss-feed.gif" size="227" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="rss-small.gif" attr="" autoattached="1" comment="" date="1128927085" path="rss-small.gif" size="122" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="save.gif" attr="" autoattached="1" comment="" date="1128926976" path="save.gif" size="217" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="search-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="search-small.gif" size="554" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="searchtopic.gif" attr="" autoattached="1" comment="" date="1128927086" path="searchtopic.gif" size="580" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="sh.gif" attr="" autoattached="1" comment="" date="1128927088" path="sh.gif" size="380" user="UnknownUser" version=""}%
