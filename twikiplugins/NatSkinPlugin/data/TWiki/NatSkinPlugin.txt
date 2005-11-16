@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130959811" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132153728" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
 
 This is the supplemental plugin for the NatSkin. Its main purpose is to supply "skin states"
@@ -275,6 +275,7 @@ using these settings will be changed accordingly.
 	* Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
 	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
 	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black", headerbg="black"
+	* Set PATTERNTABLEATTRIBUTES =  databg="#f0f0f0, white" headercolor="#444444"
 
 ---+++ Email Obfuscation
 The standard TWiki engine tries to obfuscate email addresses by adding a phrase to the email url (like NOSPAM)
@@ -316,8 +317,8 @@ to your TWiki.TWikiPreferences like
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  10 Nov 2005: | added switchvariation urlparam; \
                   work arround bug in dakar (nested calls to getRenderedVersion()); \
-		  fixed dupplicate target/class in external links; \
-		  improved <nop>MySideBarTemplate using Twisties; \
+		  fixed duplicate target/class in external links; \
+		  improved <nop>MySideBarTemplate using Twisties |
 |  09 Nov 2005: | fixed wrong call to =expandCommonVariables()= ... doh |
 |  08 Nov 2005: | fixed use of uninitialized variables; https links to the same site are not external once |
 |  02 Nov 2005: | added OBFUSCATEEMAIL flag to switch off this feature |
