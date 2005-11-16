@@ -73,8 +73,9 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.76 (2005-11-10) |
+|  Skin Version: | v2.77 (2005-11-16) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-11-16: | added <nop>PatternStyle emulating cairo's <nop>PatternSkin |
 |  2005-11-10: | improved NatSkinStyleBrowser |
 |  2005-11-08: | firefox layout fixes |
 |  2005-11-07: | more safari fixes |
