@@ -3,7 +3,6 @@
 
 This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
 
-<pre>
 <table width="100%">
 <tr align="center">
 <td bgcolor="#000000"><font color="#FFFFFF"><b> #000000 </b></font></td><td bgcolor="#000033"><font color="#FFFFFF"><b> #000033 </b></font></td><td bgcolor="#000066"><font color="#FFFFFF"><b> #000066 </b></font></td><td bgcolor="#000099"><font color="#FFFFFF"><b> #000099 </b></font></td><td bgcolor="#0000CC"><font color="#FFFFFF"><b> #0000CC </b></font></td><td bgcolor="#0000FF"><font color="#FFFFFF"><b> #0000FF </b></font></td>
@@ -114,7 +113,6 @@ This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
 <td bgcolor="#FFFF00"><b> #FFFF00 </b></td><td bgcolor="#FFFF33"><b> #FFFF33 </b></td><td bgcolor="#FFFF66"><b> #FFFF66 </b></td><td bgcolor="#FFFF99"><b> #FFFF99 </b></td><td bgcolor="#FFFFCC"><b> #FFFFCC </b></td><td bgcolor="#FFFFFF"><b> #FFFFFF </b></td>
 </tr>
 </table>
-</pre>
 
 See TWiki:Codev.ColorScheme for links to web sites with web safe pallettes, scheme generators and other color tools & reference.
 
