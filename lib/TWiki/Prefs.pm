@@ -93,19 +93,6 @@ sub pushGlobalPreferences {
     }
 }
 
-sub _newCache {
-    my( $this, $type, $web, $topic, $prefix, $parent ) = @_;
-
-    my $req =
-      new TWiki::Prefs::PrefsCache( $this, $type, $web, $topic, $prefix,
-                                   $parent );
-
-    $this->{CACHE}{$web.'.'.$topic} =
-      new TWiki::Prefs( $this->{session}, $req );
-
-    return $req;
-}
-
 =pod
 
 ---++ ObjectMethod pushPreferences( $web, $topic, $type )
@@ -126,7 +113,10 @@ sub pushPreferences {
     if( $this->{PREFS} ) {
         $top = $this->{PREFS}[$#{$this->{PREFS}}];
     }
-    my $req = $this->_newCache($type, $web, $topic, $prefix, $top );
+
+    my $req =
+      new TWiki::Prefs::PrefsCache( $this, $type, $web, $topic, $prefix,
+                                   $top );
 
     if( $req ) {
         push( @{$this->{PREFS}}, $req );
@@ -243,14 +233,10 @@ sub getTopicPreferencesValue {
     my $wtn = $web.'.'.$topic;
 
     unless( $this->{CACHE}{$wtn} ) {
-        my $req =
+        $this->{CACHE}{$wtn} =
           new TWiki::Prefs::PrefsCache( $this, 'TOPIC', $web, $topic );
-
-        $this->{CACHE}{$wtn} = $req;
     }
-
-    my $val = return $this->{CACHE}{$wtn}->{values}{$key};
-    return $val;
+    return $this->{CACHE}{$wtn}->{values}{$key};
 }
 
 =pod
@@ -271,10 +257,11 @@ sub getWebPreferencesValue {
     my $wtn = $web.'.'.$TWiki::cfg{WebPrefsTopicName};
 
     unless( $this->{CACHE}{$wtn} ) {
-        $this->{CACHE}{$wtn} = new TWiki::Prefs( $this->{session} );
-        $this->{CACHE}{$wtn}->pushWebPreferences( $web );
+        my $blank = new TWiki::Prefs( $this->{session} );
+        $blank->pushWebPreferences( $web );
+        $this->{CACHE}{$wtn} = $blank->{PREFS}[0];
     }
-    return $this->{CACHE}{$wtn}->getPreferencesValue( $key );
+    return $this->{CACHE}{$wtn}->{values}{$key};
 }
 
 =pod
