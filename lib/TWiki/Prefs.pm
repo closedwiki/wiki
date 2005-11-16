@@ -233,7 +233,8 @@ sub isFinalised {
 Recover a preferences value that is defined in a specific topic. Does
 not recover web, user or global settings.
 
-Intended for use in protections mechanisms.
+Intended for use in protections mechanisms, where the order doesn't match
+the prefs stack.
 
 =cut
 
@@ -242,10 +243,14 @@ sub getTopicPreferencesValue {
     my $wtn = $web.'.'.$topic;
 
     unless( $this->{CACHE}{$wtn} ) {
-        $this->_newCache( 'TOPIC', $web, $topic );
+        my $req =
+          new TWiki::Prefs::PrefsCache( $this, 'TOPIC', $web, $topic );
+
+        $this->{CACHE}{$wtn} = $req;
     }
 
-    return $this->{CACHE}{$wtn}->getPreferencesValue( $key );
+    my $val = return $this->{CACHE}{$wtn}->{values}{$key};
+    return $val;
 }
 
 =pod
@@ -256,7 +261,8 @@ Recover a preferences value that is defined in the webhome topic of
 a specific web.. Does not recover user or global settings, but
 does recover settings from containing webs.
 
-Intended for use in protections mechanisms.
+Intended for use in protections mechanisms, where the order doesn't match
+the prefs stack.
 
 =cut
 
