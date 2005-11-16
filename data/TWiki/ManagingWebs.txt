@@ -7,7 +7,7 @@ _Adding webs is a web based operation; renaming and deleting webs are manual ope
 
 ---++ Overview
 
-A TWikiSite is divided into webs; each one represents one subject, one area of collaboration. Administrators (in the Main.TWikiAdminGroup) can add/rename/delete webs.
+A TWikiSite is divided into webs; each one represents one subject, one area of collaboration. Administrators (in the %MAINWEB%.TWikiAdminGroup) can add/rename/delete webs.
 
 #WebTemplate
 ---++ Choose Web Template
@@ -22,8 +22,9 @@ In either case you will want to be sure to verify that your new web has all the 
 ---++ Adding a New Web
 
 <form name="admin" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
-Create a new web by filling out this form. __Note:__ It is not recommended to create a new web for each little project. You can organize content within a web using TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
-|  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | The name must start with an upper case letter, followed by upper or lower case letters or numbers |
+Create a new web by filling out this form.%BR%
+__%X% Note:__ *Keep the mumber of webs to a minimum!* It is not recommended to create a new web for each little project. You can organize content within a web using categories, TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
+|  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | The name must start with an upper case letter, followed by upper or lower case letters or numbers. Specify a short name to avoid long URLs. |
 |  *Based on web:* | <select name="baseweb"> %WEBLIST{ "<option>$name</option>" webs="webtemplate,public" selection="_default" separator=" "}% </select> | Select a TemplateWeb |
 |  *Web color:* | <input name="webbgcolor" type="text" value="#D0D0D0" size="16" /> | Enter a StandardColors code for the web |
 |  *Description:<br /> &nbsp;<br /> &nbsp;* | <input type="text" name="sitemapwhat" value="" size="60" /><br /> Enter a short description of the web. Write =Web.TopicName= instead of just =TopicName= if you include links. This will list the web in the %TWIKIWEB%.SiteMap (leave field empty if you prefer not to update the directory.) ||
@@ -36,8 +37,8 @@ Create a new web by filling out this form. __Note:__ It is not recommended to cr
 
 __Notes:__
    * Attachments will NOT get copied over along with their topics
-   * While creating the new web TWiki will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
-   * TWiki does not edit the [[%TWIKIWEB%.TWikiPreferences]] file to update the =WIKIWEBLIST=.  This must be done by hand
+   * While creating the new web, TWiki will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
+   * TWiki does not edit the [[%TWIKIWEB%.TWikiPreferences]] to update the =WIKIWEBLIST=.  This must be done by hand
 
 ---++ Renaming or Deleting a Web
 
@@ -59,7 +60,9 @@ If you want to rename the TWiki web, remember it is referred to by =%<nop>TWIKIW
 
 ---++ Hierarchical Webs
 
-Hierarchical web support is enabled by turning on the =EnableHierarchicalWebs= setting in =configure=. Without this setting, TWiki will only allow a single level of hierarchy (webs). If you set this, you can use multiple levels, like a directory tree, i.e. webs within webs.
+Hierarchical web support is enabled by turning on the ={EnableHierarchicalWebs}= setting in =configure=. Without this setting, TWiki will only allow a single level of hierarchy (webs). If you set this, you can use multiple levels, like a directory tree, i.e. webs within webs.
+
+__%T% Note:__ You might not need hierarchical webs. TWiki topics already have a parent/child relationship within a web, which is shown in the breadcrumb. Try to keep the number of webs to a minimum in order to keep search and cross-referencing simple.
 
 You can create hierarchical webs via the _Adding a New Web_ form above, by using a slash- or dot-separated path name which is based on an existing web name in the _Name of new web:_ field.
 

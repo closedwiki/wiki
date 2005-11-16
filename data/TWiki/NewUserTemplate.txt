@@ -18,14 +18,14 @@ __%MAKETEXT{"Personal Preferences (details in [_1])" args="%TWIKIWEB%.TWikiVaria
       * Set EDITBOXHEIGHT = 22
    * %MAKETEXT{"Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable."}%
       * Set EDITBOXSTYLE = width: 99%
-   * %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%MAINWEB%.WikiName"}%
+   * %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%TWIKIWEB%.WikiName"}%
       * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 __%MAKETEXT{"Related Topics:"}%__
    * %TWIKIWEB%.ChangePassword
    * %MAKETEXT{"[_1] has a list of other TWiki users." args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
-   * UserDocumentationCategory
-   * UserToolsCategory
+   * %TWIKIWEB%.UserDocumentationCategory
+   * %TWIKIWEB%.UserToolsCategory
 
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%

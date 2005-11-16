@@ -23,17 +23,17 @@ It is not necessary to have user home pages in the TWiki system for Authenticati
 
    * ChangePassword is for users who can remember their password and want to change it
    * ResetPassword is for users who cannot remember their password; a system generated password is emailed to them
-    * BulkResetPassword if for administrators who want to reset many passwords at once
+   * BulkResetPassword if for administrators who want to reset many passwords at once
 
 ---++ Removing User Accounts
 
-To remove a user account (FredQuimby, who logs in as "fred"):
+To remove a user account (<nop>FredQuimby, who logs in as "fred"):
 
    1 If you are using a =.htpasswd= file, edit the =.htpasswd= file to delete the line starting =fred:=
    2 Remove the =FredQuimby - fred= line from the <nop>%MAINWEB%.TWikiUsers topic
    3 Remove =FredQuimby= from all groups and from all the =ALLOWWEB/ALLOWTOPIC...= declarations, if any.%BR% __Note:__ If you fail to do this you risk creating a security hole, as the next user to register with the wikiname Fred<nop>Quimby will inherit the old Fred<nop>Quimby's permissions.
-   4 _[optional]_ Delete their user topic: %MAINWEB%.<nop>FredQuimby
+   4 _[optional]_ Delete their user topic %MAINWEB%.<nop>FredQuimby.
 
-__Note:__ Consider leaving the user topic file in place so their past signatures and revision author entries don't end up looking like AnUncreatedTopic. If you want to make it clear the user is inactive on your site (e.g. %MAINWEB%.UserWikiName) or has been banished add a note to that effect and write protect the page (TWikiAccessControl). The existance of the <nop>UserName topic should also prevent that user name from being re-used, sealing the potential security hole regarding inherited permissions..
+__Note:__ Consider leaving the user topic file in place so their past signatures and revision author entries don't end up looking like AnUncreatedTopic. If you want to make it clear the user is no longer with the organization or has been banished, replace the topic content with a note to that effect. The existance of the <nop>UserName topic should also prevent that user name from being re-used, sealing the potential security hole regarding inherited permissions..
 
 __Related Topics:__ AdminDocumentationCategory

@@ -34,7 +34,7 @@ You can embed a nicely [[FormattedSearch][formatted search]] in a topic by using
 
 ---++ Search Preferences
 
-You can define these search preferences
+TWikiPreferences defines these search preferences:
 
    * =SEARCHDEFAULTTTYPE=: Default search type for search forms which calls the =search= script
       * Currently =%SEARCHDEFAULTTTYPE%=
