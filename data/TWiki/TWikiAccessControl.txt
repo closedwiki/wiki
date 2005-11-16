@@ -55,7 +55,7 @@ Groups are defined by group topics created in the ==%MAINWEB%== web, like the %M
       * ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
    1. These are summarised on SitePermissions
 
-%X% TWiki has strict formatting rules. Make sure you have three spaces, an asterisk, and an extra space in front of any access control rule.
+__%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces, an asterisk, and an extra space in front of any access control rule.
 
 #SuperAdminGroup
 ---+++ The <nop>SuperAdminGroup
@@ -89,9 +89,9 @@ You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web.
       * ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
 *Be careful* with empty values for any of these. In older versions of TWiki,
-      * <code>Set <nop>ALLOWWEBVIEW = </code>
+   * ==Set <nop>ALLOWWEBVIEW = <nop>==
 meant the same as not setting it at all. However since TWiki Dakar release, it means _allow no-one access_ i.e. prevent anyone from viewing the web. Similarly
-      * <code>Set <nop>DENYWEBVIEW = </code>
+   * ==Set <nop>DENYWEBVIEW = <nop>==
 now means _do not deny anyone the right to view this web_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
 
 ---+++ Controlling access to a Topic
@@ -107,9 +107,9 @@ now means _do not deny anyone the right to view this web_. See "How TWiki evalua
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
 
 *Be careful* with empty values for any of these. In older versions of TWiki,
-      * <code>Set <nop>ALLOWTOPICVIEW = </code>
+   * ==Set <nop>ALLOWTOPICVIEW = <nop>==
 meant the same as not setting it at all. However since TWiki Dakar release, it means _allow no-one access_ i.e. prevent anyone from viewing the topic. Similarly
-      * <code>Set <nop>DENYTOPICVIEW = </code>
+   * ==Set <nop>DENYTOPICVIEW = <nop>==
 now means _do not deny anyone the right to view this topic_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
 
 ---+++ Controlling access to Attachments
@@ -129,6 +129,8 @@ The easiest way to apply the same access control rules for attachments as apply 
 
 That way all the controls that apply to the topic also apply to attachments to the topic. Other types of webserver have similar support.
 
+__Note:__ Images embedded in topics will load much slower since each image will be delivered by the =viewfile= script.
+
 ---+++ How TWiki evaluates ALLOW/DENY settings
 
 When deciding whether to grant access, TWiki evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
@@ -137,7 +139,7 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
    1 If DENYTOPIC is set to a list of wikinames
       * people in the list will be *DENIED*.
    1 If DENYTOPIC is set to _empty_ ( i.e. <tt>Set DENYTOPIC =</tt> )
-      * access is *PERMITTED* _i.e _ no-one is denied access to this topic
+      * access is *PERMITTED* _i.e_ no-one is denied access to this topic
    1 If ALLOWTOPIC is set
       1 people in the list are *PERMITTED*
       1 everyone else is *DENIED*
@@ -157,9 +159,9 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
 Another way of hiding webs is to keep them hidden by not publishing the URL and by preventing the ==all webs== search option from accessing obfuscated webs. Do so by enabling the ==NOSEARCHALL== variable in %WEBPREFSTOPIC%:
    * ==Set <nop>NOSEARCHALL = on==
 
-This setup can be useful to hide a new web until content its ready for deployment.
+This setup can be useful to hide a new web until content its ready for deployment, or to hide view access restricted webs.
 
-%X% *Obfuscating webs is very insecure*, as anyone who knows the URL can access the web.
+__%X% Note:__ Obfuscating a web without view access control is very insecure, as anyone who knows the URL can access the web.
 
 ---+++ Authenticate all Webs and Restrict Selected Webs
 
@@ -185,13 +187,13 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
 
 ---+++ Hide Control Settings
 
-%T% To hide access control settings from normal browser viewing, place them in HTML comment markers.
+__%T% Tip:__ To hide access control settings from normal browser viewing, place them in HTML comment markers.
 
-<style="background-color:#f5f5f5">
-=&lt;!--= <br />
-=&nbsp;  * Set <nop>DENYTOPICCHANGE = Main.<nop>SomeGroup= <br />
-=--&gt;=
-</style>
+<blockquote>
+==&lt;!--== <br />
+==&nbsp;  * Set <nop>DENYTOPICCHANGE = %MAINWEB%.<nop>SomeGroup== <br />
+==--&gt;==
+</blockquote>
 
 %STOPINCLUDE%
 
