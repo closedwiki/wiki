@@ -6,7 +6,8 @@ function makeEqualHeight() {
 		// Or remove the last one entirely if you've got 2 columns.  Or add another if you've got 4!
 		var divs = new Array();
 		for (i=0;i<arguments.length; ++i) {
- 			divs[i] = document.getElementById(arguments[i]);
+			var elem = document.getElementById(arguments[i]);
+ 			if (elem) divs.push(elem);
  		}
  		
 		// Let's determine the maximum height out of all columns specified
