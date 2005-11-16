@@ -259,6 +259,7 @@ sub initSkinState {
     #writeDebug("urlparam stylevariation=$theStyleVariation") if $theStyleVariation;
     #writeDebug("urlparam stylevariation=$theStyleSearchBox") if $theStyleSearchBox;
     #writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
+    #writeDebug("urlparam switchvariation=$theSwitchVariation") if $theSwitchVariation;
   }
 
   # handle style
@@ -410,6 +411,7 @@ sub initSkinState {
     } else {
       @knownVariations = sort {$b cmp $a} keys %knownVariations #prev
     }
+    push @knownVariations, 'off';
     my $firstVari;
     foreach my $vari (@knownVariations) {
       $firstVari = $vari unless $firstVari;
@@ -474,7 +476,6 @@ sub initSkinState {
 
   $skinState{'sidebar'} = $theToggleSideBar 
     if $theToggleSideBar && $theToggleSideBar ne '';
-
 }
 
 ###############################################################################
@@ -947,8 +948,7 @@ sub renderWebSideBar {
 
   #writeDebug("done renderWebSideBar()");
 
-
-  return $text;
+  return $text."\n";
 }
 
 ###############################################################################
