@@ -3973,7 +3973,7 @@ if( $action eq 'update' ) {
     $body .=  "<p><strong>Use this page to set the configuration options for TWiki. Fill in the settings, and then press 'Next'.</strong></p>";
     $body .=  "<div class=\"explanation\"><div class=\"specialRemark\">";
     $body .= CGI::img({src=>$ENV{SCRIPT_NAME}.'?action=image;image=info.gif;type=image/gif', alt=>''}) . '&nbsp;';
-    $body .=  <<HERE;    
+    $body .=  <<'HERE';
 <b>If you are installing TWiki for the first time</b><br />If you just want to get up and running, the only section you need to worry about below is
 <a rel="nofollow" href="#" onclick="foldBlock('GeneralPathSettings'); return false;">General path settings</a>. You can always come
 back and configure other settings later.</div>
