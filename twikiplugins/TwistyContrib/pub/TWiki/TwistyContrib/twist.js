@@ -15,7 +15,6 @@ document.write("<\/style>");
 	addLoadEvent(initTwist, true);
 
 	function initTwist () {
-		alert("initTwist");
 		var makeHiddenElements = getElementsByClassName('twistyMakeHidden');
 		var i;
 		for (i = 0; i < makeHiddenElements.length; ++i) {
