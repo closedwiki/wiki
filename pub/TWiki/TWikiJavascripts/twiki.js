@@ -4,18 +4,21 @@ var dom = (document.getElementById) ? true : false;
 
 // DON'T overwrite existing onload handlers
 // http://simon.incutio.com/archive/2004/05/26/addLoadEvent
-// usage: addLoadEvent(my_function_to_perform_on_onload);
-function addLoadEvent(func) {
+// setting prepend to true lets the function be executed first
+function addLoadEvent(func, prepend) {
 	var oldonload = window.onload;
 	if (typeof window.onload != 'function') {
 		window.onload = function() {
 			func();
 		}
 	} else {
-		window.onload = function() {
-			oldonload();
-			func();
+		var prependFunc = function() {
+			func(); oldonload();
 		}
+		var appendFunc = function() {
+			oldonload(); func();
+		}
+		window.onload = prepend ? prependFunc : appendFunc;
 	}
 }
 
