@@ -46,16 +46,6 @@ sub parent {
     return $this->{_parent};
 }
 
-# the data, set/get data hash values
-#sub data {
-#    my $this = shift;
-#    my $key = shift;
-#    return $this->{_data} unless ($key);
-#    my $val = shift;
-#    return $this->{_data}->{$key} unless (defined $val);
-#    return $this->{_data}->{$key} = $val;
-#}
-
 # PUBLIC gets a ref to the children
 sub children {
     my $this = shift;
@@ -101,6 +91,5 @@ sub toHTML {
     }
     return $res;
 }
-
 
 1;
