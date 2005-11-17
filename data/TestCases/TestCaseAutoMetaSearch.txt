@@ -10,7 +10,7 @@ Designed by: Crawford Currie
 ---+ Search for parents
 Expected:
 <!-- expected expand -->
-<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/%TOPIC%"><b>%TOPIC%</b></a>
+<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/%TOPIC%"><b>%TOPIC%</b></a>
 <!-- /expected -->
 Actual:
 <!-- actual -->
@@ -19,7 +19,7 @@ Actual:
 ---+ Search for moved topic
 Expected:
 <!-- expected expand -->
-Itwos <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
+Itwos <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
 <!-- /expected -->
 Actual: 
 <!-- actual -->
@@ -28,7 +28,7 @@ Actual:
 ---+ Search for field value
 Expected:
 <!-- expected expand -->
-<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
+<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/DeliberatelyMoved"><b>DeliberatelyMoved</b></a>
 <!-- /expected -->
 Actual: 
 <!-- actual -->
