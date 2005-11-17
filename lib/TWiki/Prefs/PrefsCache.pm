@@ -166,7 +166,7 @@ sub insert {
     } else {
         $this->{values}{$key} = $value;
     }
-    $this->{SetHere} = 1;
+    $this->{SetHere}{$key} = 1;
 }
 
 =pod
@@ -182,7 +182,7 @@ sub stringify {
 
     if( $html ) {
         $res = CGI::Tr( {style=>'background-color: yellow'},
-                   CGI::Th( {colspan=>2}, $this->{TYPE}.' '.
+                   CGI::th( {colspan=>2}, $this->{TYPE}.' '.
                               $this->{SOURCE} ))."\n";
     } else {
         $res = '******** '.$this->{TYPE}.' '.$this->{SOURCE}."\n";
