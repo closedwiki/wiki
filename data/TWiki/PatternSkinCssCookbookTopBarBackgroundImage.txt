@@ -9,21 +9,24 @@ The style below sets [[%ATTACHURL%/universe.jpg][an image]] as background of =#p
 Add the dynamic variable link to the big image:
 <verbatim>
 <style type="text/css" media="all">
-#patternTopBar { background-image:url("%ATTACHURLPATH%/universe.jpg"); }
+#patternTopBar { background-image:url("%ATTACHURLPATH%/universe.jpg"); background-position:0 500px; }
 </style>
 </verbatim>
+
+The =background-position= shifts the image in the div 'viewport' - in this case we shift the image 500px up to show an interesting part.
+
 <div class="twikiHelp">
 %ICON{info}% If you don't write this overloading style in a template and use an external =.css= file, you need to set the image to the absolute url:
 <pre>
 &lt;style type="text/css" media="all">
-#patternTopBar { background-image:url("<nop>%ATTACHURL%/universe.jpg"); }
+#patternTopBar { background-image:url("<nop>%ATTACHURL%/universe.jpg"); background-position:0 500px; }
 &lt;/style>
 </pre>
 You can always write a =&lt;style>= in a topic - all current browsers support this - but the page won't validate as valid XHTML.
 </div>
 
 <style type="text/css" media="all">
-#patternTopBar { background-image:url("%ATTACHURLPATH%/universe.jpg"); }
+#patternTopBar { background-image:url("%ATTACHURLPATH%/universe.jpg"); background-position:0 500px; }
 #patternMain
 </style>
 
