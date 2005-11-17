@@ -66,6 +66,7 @@ if ( 0 )
 		    qw( Encode Locale::Maketext::Lexicon ),
 		    qw( Digest::base Digest::SHA1 ),
 		    qw( Unicode::Map Unicode::Map8 Jcode Unicode::String Unicode::MapUTF8 ),
+		    qw( Time::Local ),	# for BlogPlugin
 			)
     {
 	print "Installing $module\n";
