@@ -1,0 +1,203 @@
+
+/*	-----------------------------------------------------------
+	LAYOUT
+	positioning of page elements
+	-----------------------------------------------------------	*/
+
+/*	---------------------------------------------------------------------------------------
+	CONSTANTS
+	
+	Sizes
+	----------------------------------------
+	C1 left bar width																19%
+	C2 right bar width (currently not used)											0%
+	C3 top bar height																64px
+	C4 left margin																	6%
+	C5 top margin																	7px
+	C6L patternPage shadow border width left										7px
+	C6R patternPage shadow border width right										7px
+	C6T patternPage shadow border width top											7px
+	C6B patternPage shadow border width bottom										7px
+	C7 bottom spacer																8px
+
+	---------------------------------------------------------------------------------------	*/
+	
+.twikiLeft {
+	float:left;
+	position:relative;
+}
+.twikiRight {
+	position:relative;
+	float:right;
+	display:inline;
+	margin:0;
+	text-align:right;
+}
+.twikiClear {
+	/* to clean up floats */
+	margin:0;
+	padding:0;
+	height:0;
+	line-height:0px;
+	clear:both;
+	display:block;
+}
+.twikiHidden {
+	display:none;
+}
+
+html body {
+	margin:0;
+	padding:0;
+}
+
+/*	-----------------------------------------------------------
+	Positioning of layout blocks
+	-----------------------------------------------------------	*/
+
+#patternScreen {
+	margin:0 6% 8px 6%; /*C5 - C6T, C5, C7, C4*/
+	padding:0 0 .25em 0;
+}
+#patternPageShadow {
+	padding:7px 7px 7px 7px; /*C6T, C6R, C6B, C6L*/
+}
+#patternPage {
+}
+#patternTopBar {
+	height:64px; /*C3*/
+}
+#patternBottomBar {
+	margin:4em 7px 0 7px; /*C6R, C6L*/
+}
+
+/*	-----------------------------------------------------------
+	Full height columns. See:http://www.positioniseverything.net/articles/onetruelayout/
+	-----------------------------------------------------------	*/
+
+#patternMain {
+/*block1*/
+	float:left;
+	width:81%; /*100-C1*/
+	margin-left:19%; /*C1*/
+}
+* html #patternMain {
+	display:inline;
+}
+#patternLeftBar {
+/*block2*/
+	float:left;
+	width:19%; /*C1*/
+	margin-left:-100%;
+}
+#patternRightBar {
+	float:left;
+	width:0;
+	background-color:#ccc;
+	display:none;
+}
+/* Start Mac IE5 filter \*/
+#patternMain, #patternLeftBar, #patternRightBar {
+	padding-bottom:32767px !important;
+	margin-bottom:-32767px !important; 
+}
+@media all and (min-width:0px) {
+#patternMain, #patternLeftBar, #patternRightBar {
+	padding-bottom:0 !important;
+	margin-bottom:0 !important; 
+}
+#patternMain:before, #patternLeftBar:before, #patternRightBar:before {
+	content:'[DO NOT LEAVE IT IS NOT REAL]';
+	display:block;
+	background:inherit;
+	padding-top:32767px !important;
+	margin-bottom:-32767px !important;
+	height:0;
+}
+}
+/* End Mac IE5 filter */
+#patternColumnWrapper {
+	overflow:hidden; /* This hides the excess padding in non-IE browsers */
+}
+/* we need this for IE 5.01 - otherwise the patternColumnWrapper does not expand to the
+necessary height (unless fixed, this problem becomes even more acute 
+weirdness as the method is enhanced */
+#patternColumnWrapper {
+/* Normally a Holly-style hack height:1% would suffice but that causes 
+IE 5.01 to completely collapse the patternColumnWrapper - instead we float it */
+	float:left;
+/* NB. possibly only IE 5.01 needs to get this float value - otherwise 5.5 sometimes 
+(I saw it happen many moons ago) makes the width of patternColumnWrapper too small 
+the float:none with the comment is ignored by 5.01,
+5.5 and above see it and carry on about their business
+It's probably fine to just remove it, but it's left here 
+just in case that many moons ago problem rears its head again */
+	float/**/:none;
+}
+/* easy clearing */
+#patternColumnWrapper:after {
+	content:'[DO NOT LEAVE IT IS NOT REAL]'; 
+	display:block; 
+	height:0; 
+	clear:both; 
+	visibility:hidden;
+}
+#patternColumnWrapper {
+	display:inline-block;
+}
+/*\*/
+#patternColumnWrapper {
+	display:block;
+}
+/* end easy clearing */
+/* Safari needs this - otherwise the ghost overflow, though painted 
+correctly obscures links and form elements that by rights should be above it.
+An unintended side-effect is that it cause such elements to vanish in IE 5.01
+and 5.5, hence the child selector hack */
+* > #footer, * > form, * > #notes, * > .output {
+	position:relative;
+	z-index:1000;
+}
+/* ]]> */
+
+
+/*	-----------------------------------------------------------
+	Pages that are not view
+	-----------------------------------------------------------	*/
+	
+.patternNoViewPage #patternLeftBar,
+.patternPrintPage #patternLeftBar,
+.patternPlainPage #patternLeftBar,
+.patternDiffPage  #patternLeftBar {
+	display:none;
+	width:0;
+}
+.patternNoViewPage #patternMain,
+.patternPrintPage #patternMain,
+.patternPlainPage #patternMain,
+.patternDiffPage  #patternMain {
+	margin-left:0;
+	width:100%;
+}
+
+/* Print, Plain */
+
+.patternPrintPage #patternScreen,
+.patternPrintPage #patternPage, 
+.patternPrintPage #patternPageShadow,
+.patternPlainPage #patternScreen,
+.patternPlainPage #patternPageShadow, 
+.patternPlainPage #patternPage {
+	margin:0;
+	padding:0;
+	top:0;
+}
+.patternPrintPage #patternScreen,
+.patternPlainPage #patternScreen {
+	margin-bottom:8px; /*C7*/
+}
+
+.patternPrintPage #patternScreen {
+	padding:1cm;
+	width:21cm;
+}

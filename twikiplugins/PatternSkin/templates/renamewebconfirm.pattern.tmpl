@@ -1,0 +1,29 @@
+%TMPL:INCLUDE{"renamewebbase"}%
+
+
+
+%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%%_{"Confirm rename or move"}%%TMPL:END%
+
+
+%TMPL:DEF{"newsubweb"}%<input type="hidden" name="newsubweb" value="%NEW_SUBWEB%"  />%NEW_SUBWEB%%TMPL:END%
+
+
+
+%TMPL:DEF{"newparentweb"}%<input type="hidden" name="newparentweb" value="%NEW_PARENTWEB%" />%NEW_PARENTWEB%%TMPL:END%
+
+
+
+<!--
+   * Set refresh_prompt = Refresh
+   * Set submit_prompt = Submit
+-->
+%TMPL:DEF{"topicactionbuttons"}%<input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" />
+<input type="submit" class="twikiSubmit" value="%RENAMEWEB_SUBMIT%" then=refresh_prompt" else="submit_prompt"}%" /> %_{"or"}% <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?action=renameweb&confirm=cancel">%TMPL:P{"canceltopicaction"}%</a>%TMPL:END%
+
+
+
+%TMPL:P{"renameweb"}%

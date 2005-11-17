@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%(rename) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%Rename%TMPL:END%
+%TMPL:DEF{"webaction"}%%_{"Rename"}%%TMPL:END%
 
 
 
@@ -14,29 +14,21 @@
 
 
 
-%TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
+%TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
 
 
 
 %TMPL:DEF{"namehelp"}%
-It's usually best to choose a 
-<a target="WikiWord" onclick="return launchWindow('%TWIKIWEB%','WikiWord')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WikiWord">WikiWord</a> 
-for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed.
+%_{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('%TWIKIWEB%','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/WikiWord"}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"movewebhelp"}%You can move the topic to a different web.%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%%_{"You can move the topic to a different web."}%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
-<table>
-<tr>
-<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Rename/Move" /></td>
-<td class="twikiAddCol"></td>
-</tr></table></div>%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Rename/Move"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 

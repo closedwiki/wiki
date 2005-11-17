@@ -6,28 +6,22 @@
 
 
 
-%TMPL:DEF{"webaction"}% Attach file to topic <b>%TOPIC%</b> %TMPL:END%
+%TMPL:DEF{"webaction"}% %_{"Attach file to topic [_1]", "*%TOPIC%*"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"previousdetails"}%
----++ Attach new file%TMPL:END%
+---++ %_{"Attach new file"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"action"}%Attach new file%TMPL:END%
+%TMPL:DEF{"action"}%%_{"Attach new file"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
-<table>
-<tr>
-<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
-<td class="twikiAddCol">&nbsp;</td>
-</tr>
-</table>
-</div>%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%
+<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
+%TMPL:END%
 
 
 

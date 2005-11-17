@@ -1,24 +1,30 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:INCLUDE{"search"}%
-%TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
 
 
 
-%TMPL:DEF{"bodystart"}%<body class="twikiNoViewPage twikiDiffPage"><a name="PageTop"></a>%TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"([_1] vs. [_2])", "%REVTITLE2%", "%REVTITLE1%"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">&nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; Difference Topic
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternDiffPage%TMPL:END%
+
+
+
+%TMPL:DEF{"leftbar"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<div class="patternSearchResults"><div class="patternSearchResultsHeader">&nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; %_{"Difference Topic"}%
       <b><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">%TOPIC%</a></b>
-      (<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%REVTITLE1%</a> - %REVINFO1%)</div>
+      (<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%" rel='nofollow'>%REVTITLE1%</a> - %REVINFO1%)</div>
 %TEXT%</div>%REPEAT%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">View topic</a>
- %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a> %REVISIONS%
- %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a>
-</div>%TMPL:END%
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">%_{"View topic"}%</a>
+ %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>%_{"More topic actions..."}%</a></span></div>%TMPL:END%
 
 
 
@@ -26,9 +32,10 @@
 
 
 
-%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:DEF{"main"}%<div id="patternColumnWrapper"><div id="patternMain"><div class="patternMainContents">
+%TMPL:P{"simplewikilogo"}%
 %TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
+</div><!-- /patternMainContents--></div><!-- /patternMain--><div class="twikiClear"></div></div><!-- /patternColumnWrapper--><div class="twikiClear"></div>%TMPL:END%
 
 
 
@@ -36,5 +43,4 @@
 
 
 
-%TMPL:DEF{"topicinfo"}%<div class="twikiTopicInfo"><span class="twikiRevInfo twikiGrayText">Revision %REVTITLE2% - %REVINFO2%<br />
-Revision %REVTITLE1% - %REVINFO1%</span></div>%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div class="patternTopicInfo"><span class="patternRevInfo twikiGrayText">%TAIL%</span></div>%TMPL:END%%REPEAT%%_{"Revision"}% %REVTITLE% - %REVINFO%<br />%TMPL:END%

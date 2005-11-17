@@ -1,0 +1,47 @@
+%TMPL:INCLUDE{"renamewebbase"}%
+
+
+
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript">
+//<![CDATA[
+	var pageElem = document.renameweb;
+//]]>
+</script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamedelete.js"></script>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}%%_{"(delete)"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%%_{"Delete"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="36" />%TMPL:END%
+
+
+
+%TMPL:DEF{"newparentweb"}%<select name="newparentweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_PARENTWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
+
+
+
+%TMPL:DEF{"namehelp"}%
+%_{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web.", "%NEW_WEB%"}%
+%TMPL:END%
+
+
+
+%TMPL:DEF{"movewebhelp"}%%_{"Deleted topics will be moved to the [_1] web", "%NEW_WEB%"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Delete"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
+
+
+
+%TMPL:P{"renameweb"}%

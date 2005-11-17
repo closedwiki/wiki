@@ -6,54 +6,58 @@
 
 
 
-%TMPL:DEF{"webaction"}% Update attachment *%FILENAME%* on *%TOPIC%* %TMPL:END%
+%TMPL:DEF{"webaction"}% %_{"Update attachment *%FILENAME%* on *%TOPIC%*"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"simpleheader"}%
----+ Update image or document on %TOPIC% %TMPL:END%
+---+ %_{"Update image or document on %TOPIC%"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"previousdetails"}%
----++ Update file <span class="twikiTitle">%FILENAME%</span>
-<div class="twikiPrevious"><div class="twikiAttachments">
-<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
-%ATTACHTABLE%</div></div> %TMPL:END%
+---+++ %_{"Update file [_1]", "%FILENAME%"}%
+
+<div class="patternPrevious"><div class="twikiAttachments">
+%ATTACHTABLE% </div></div>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"changepropertiesaction"}%
+<tr>
+	<th> </th>
+	<td colspan="2">
+		<input type="submit" class="twikiSubmit" name="changeproperties" value='%_{"Change properties only"}%' />
+	</td>
+</tr>%TMPL:END%
 
 
 
 %TMPL:DEF{"previous"}%
   <tr>
-  <th class="twikiOldCol">Previous upload</th>
-  <td class="twikiOldCol">
+  <th class="patternOldCol">%_{"Previous upload"}%</th>
+  <td class="patternOldCol">
    <code>%FILEPATH%</code> <span class="twikiGrayText">%TMPL:P{"fileuser"}%</span>
   </td>
-  <td class="twikiHelpCol twikiOldCol">Select a new local file to update this attachment.</td>
+  <td class="patternHelpCol">%_{"Select a new local file to update this attachment."}%</td>
  </tr>%TMPL:END%
 
+
+
 %TMPL:DEF{"extranotes"}%
-   * *Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
-     uploading a file by pressing "Change Properties"; see <a target="HiddenAttachment" onclick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment">HiddenAttachment</a>
-   * *Change comment:* If you use _Change Properties_ to change a comment, the comment shown in 
-     the topic will change, but the comment shown against the attachment history will be the 
-     comment when the file was uploaded.
-   * *Local file:* If you select a different file in _Local file:_, it is this that will be 
-     updated or added.
+   * %_{"*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties\"; see [_1]." , "<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%TWIKIWEB%','HiddenAttachment')\" href=\"%SCRIPTURL{"view"}%/%TWIKIWEB%/HiddenAttachment\" rel='nofollow'>HiddenAttachment</a>"}%
+   * %_{"*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in the topic will change, but the comment shown against the attachment history will be the comment when the file was uploaded."}%
+   * %_{"*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."}%
 %TMPL:END%
 
 
+%TMPL:DEF{"movedelete"}%
+<div class="patternMoveAttachment"><div class="patternActionButtons"><a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%ICON{move}% <span class="twikiLinkLabel">%_{"Move"}%</span></a> %_{"or"}% <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%ICON{trash}% <span class="twikiLinkLabel">%_{"Delete"}%</span></a> =%FILENAME%= </div></div>%TMPL:END%
 
-%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
-<tr class="twikiTopicActionSecondary">
-<td class="twikiCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment...</a></td>
-</tr>
-<tr class="twikiTopicAction">
-<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
-<td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="changeproperties" value="Change properties only" /></td>
-</tr>
-</table>%TMPL:END%
+
+
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 
