@@ -1282,6 +1282,13 @@ sub extractMetaData {
         }
     }
 
+    $format =~ s/[^\d\.]//g;
+    if( $format && $format < 1.1 ) {
+        # compatibility; topics version 1.0 and earlier equivalenced tab
+        # with three spaces. Respect that.
+        $$rtext =~ s/\t/   /g;
+    }
+
     return $meta;
 }
 
