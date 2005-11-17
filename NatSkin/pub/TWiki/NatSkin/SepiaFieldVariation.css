@@ -1,6 +1,5 @@
 /* header art variation */
 .natHeaderArt {
-  background:white;
   background-image:url(SepiaFieldBar.jpg); 
   background-repeat:no-repeat;
   background-position:top left;

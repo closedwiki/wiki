@@ -1,9 +1,6 @@
 /* variation to switch on the web buttons for clean */
 @import url('BaseButtons.css');
 
-.natWebButtons {
-  background:#f8f8f8;
-}
 .natTopBar {
   border-bottom:0px;
 }
@@ -16,20 +13,32 @@
 }
 
 .natWebButtons ul li {
-  padding-right:0px;
+  padding-right:10px;
 }
 .natWebButtons ul li a {
   padding:5px 5px;
   font-weight:normal;
   font-weight:bold;
-  border:1px #ddd dotted;
+  border-top:1px #ddd dotted;
+  border-left:1px #ddd dotted;
+  border-right:1px #ddd dotted;
+  border-bottom:0px;
 }
-.natWebButtons ul li.current a:hover,
 .natWebButtons ul li a:hover {
   text-decoration: none;
+  background-color:#b4d5ff;
 }
 
+.natWebButtons ul li.current a:hover {
+  text-decoration: none;
+  color:#1e5bbd;
+  background-color:#b4d5ff;
+}
 .natWebButtons ul li.current a {
+  background:white;
+  color:#e24628;
+  background-color:#F3EDE7;
+  color:#900;
   text-decoration: none;
 }
 
