@@ -24,10 +24,25 @@ and translating the resultant HTML back into TML.
 The flow of control is as follows:
    1 User hits "edit"
    2 The kupu 'edit' template is instantiated with all the js and css
-   3 kupu editor invokes view URL with the 'wysiwyg_edit=1' parameter to obtain clean document
-   4 commonTagsHandler here performs the necessary translation
+   3 kupu editor invokes view URL with the 'wysiwyg_edit=1' parameter to
+     obtain the clean document
+      * The earliest possible handler is implemented by the plugin in this
+        mode. This handler formats the text and then saves it so the rest
+        of twiki rendering can't do anything to it. At the end of rendering
+        it drops the saved text back in.
+   4 User edits
    5 editor saves by posting to 'save' with the 'wysiwyg_edit=1' parameter
    6 the beforeSaveHandler sees this and converts the HTML back to tml
+Note: In the case of a new topic, you might expect to see the "create topic"
+screen in the editor when it goesback to twiki for the topic content. This
+doesn't happen because the earliest possible handler is called on the topic
+content and not the template. The template is effectively ignored and a blank
+document is sent to the editor.
+
+Attachment uploads can be handled by URL requests from the editor to the TWiki
+upload script. If these uploads are done in an IFRAME, then the redirect at
+the end of the upload is done in the IFRAME and the user doesn't see the
+upload screens. This avoids the need to add any scripts to the bin dir.
 
 =cut
 
@@ -37,7 +52,8 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE $html2tml $tml2html $inSave $calledThisSession $modern $imgMap );
+use vars qw( $VERSION $RELEASE $MODERN $MARKVARS );
+use vars qw( $html2tml $tml2html $convertingImage $imgMap );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -52,9 +68,13 @@ $RELEASE = 'Dakar';
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
-    $calledThisSession = 0;
-    $inSave = 0;
-    $modern = defined( &TWiki::Func::normalizeWebTopicName );
+    $tml2html->{calledThisSession} = 0 if $tml2html;
+
+    $MODERN = defined( &TWiki::Func::normalizeWebTopicName );
+
+    my $mv = TWiki::Func::getPreferencesValue(
+        'WYSIWYGPLUGIN_MARK_VARIABLES' );
+    $MARKVARS = ( $mv && $mv eq 'on' );
 
     # Plugin correctly initialized
     return 1;
@@ -72,29 +92,12 @@ sub beforeSaveHandler {
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
-        unless( $imgMap ) {
-            $imgMap = {};
-            my $imgs =
-              TWiki::Func::getPreferencesValue( "WYSIWYGPLUGIN_ICONS" );
-            if( $imgs ) {
-                local $inSave = 1;
-                while( $imgs =~ s/src="(.*?)" alt="(.*?)"// ) {
-                    my( $src, $alt ) = ( $1, $2 );
-                    $src = TWiki::Func::expandCommonVariables( $src,$_[1],$_[2] );
-                    $alt .= '%' if $alt =~ /^%/;
-                    $imgMap->{$src} = $alt;
-                }
-            }
-        }
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML(
             {
-                convertImage => sub {
-                    my $x = shift;
-                    return undef unless $x;
-                    return $imgMap->{$x};
-                },
+                convertImage => \&convertImage,
                 parseWikiUrl => \&parseWikiUrl,
-            }
+            },
+            $MARKVARS
            );
     }
 
@@ -126,7 +129,9 @@ sub beforeSaveHandler {
 sub beforeCommonTagsHandler {
     #my ( $text, $topic, $web )
 
-    return if( $inSave || $calledThisSession );
+    return if( $convertingImage ||
+                 $tml2html && $tml2html->{calledThisSession} );
+
     my $query = TWiki::Func::getCgiQuery();
 
     return unless $query;
@@ -148,20 +153,21 @@ sub beforeCommonTagsHandler {
     # lifted out, and we need them.
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
     $_[0] = $tml2html->convert( $text );
-    $calledThisSession = 1;
+    $tml2html->{calledThisSession} = 1;
 }
 
 # This handler is required to re-insert blocks that were removed to protect
 # them from TWiki rendering, such as TWiki variables.
+# Would prefer to use the postRenderingHandler
 sub endRenderingHandler {
-    return if( $inSave || !$tml2html );
+    return if( $convertingImage || !$tml2html );
 
     return $tml2html->cleanup( @_ );
 }
 
 # DEPRECATED in Dakar (modifyHeaderHandler does the job better)
 sub writeHeaderHandler {
-    return '' if $modern;
+    return '' if $MODERN;
 
     my $query = shift;
     return "Expires: 0\nCache-control: max-age=0, must-revalidate\n";
@@ -190,6 +196,29 @@ sub getViewUrl {
     return TWiki::Func::getViewUrl( $web, $topic );
 }
 
+# callback used to convert an image reference into a TWiki variable
+sub convertImage {
+    my $x = shift;
+    return undef unless $x;
+    local $convertingImage = 1; # override in stack below here
+
+    unless( $imgMap ) {
+        $imgMap = {};
+        my $imgs =
+          TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_ICONS' );
+        if( $imgs ) {
+            while( $imgs =~ s/src="(.*?)" alt="(.*?)"// ) {
+                my( $src, $alt ) = ( $1, $2 );
+                $src = TWiki::Func::expandCommonVariables( $src,$_[1],$_[2] );
+                $alt .= '%' if $alt =~ /^%/;
+                $imgMap->{$src} = $alt;
+            }
+        }
+    }
+
+    return $imgMap->{$x};
+}
+
 # callback used in TML generation to parse a URL and see if it
 # can be recognised as an internal wiki link. If the url is in
 # the current web, only return the topic
@@ -202,7 +231,7 @@ sub parseWikiUrl {
 
     if( $url =~ /^((%(MAIN|TWIKI)WEB%|\w+)\.)?\w+$/ ) {
         my $webexpr = $1 || '';
-        if( $modern ) {
+        if( $MODERN ) {
             ( $web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $url);
         } else {
             ( $web, $topic) = TWiki::Store::normalizeWebTopicName(undef, $url);
