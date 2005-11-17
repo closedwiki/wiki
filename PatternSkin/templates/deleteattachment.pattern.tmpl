@@ -1,0 +1,34 @@
+%TMPL:INCLUDE{"moveattachment"}%
+%TMPL:DEF{"titleaction"}%%_{"(delete attachment)"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}% *%_{"Delete file attachment"}%* %TMPL:END%
+
+
+
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value=' %_{"Delete"}% ' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"pagetitle"}%
+---+ %_{"Delete File [_1]", "<code>%FILENAME%</code>"}%
+%TMPL:END%
+
+
+
+%TMPL:DEF{"toweb"}%
+<th>%_{"To web:"}%</th>
+<td class="patternOldCol"><b><nop>%URLPARAM{web}%</b><input type="hidden" name="newweb" value="%URLPARAM{web}%" /></td>
+<td class="patternOldCol patternHelpCol"></td>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"totopic"}%
+<tr>
+<th>%_{"Topic name:"}%</th>
+<td class="patternMainCol"><input name="newtopic" value="TrashAttachment" /></td>
+<td class="patternMainCol patternHelpCol">%TMPL:P{"namehelp"}%</td>
+</tr>
+%TMPL:END%

@@ -1,5 +1,21 @@
-%TMPL:INCLUDE{"twiki"}%
 %TMPL:INCLUDE{"search"}%
-%TMPL:DEF{"titleaction"}%(changes) %TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}%%_{"(changes)"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"toolbar"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}%<nop>%WEB% %TMPL:P{"titlesep"}% <nop>%WIKITOOLNAME%</title>%TMPL:END%
+
+
+
 %TMPL:DEF{"searchbody"}%<br />%TMPL:P{"repeatedsearchblock"}%%TMPL:END%
-%TMPL:DEF{"content"}%<div class="twikiTopic">%TMPL:P{"searchbody"}%</div>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%<div class="patternTopic">%TMPL:P{"searchbody"}%</div>%TMPL:END%

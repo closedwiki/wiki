@@ -2,11 +2,23 @@
 
 
 
-%TMPL:DEF{"titleaction"}%(delete) %TMPL:END%
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript">
+//<![CDATA[
+	var pageElem = document.rename;
+//]]>
+</script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_renamedelete.js"></script>
+%TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%Delete%TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(delete)"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%%_{"Delete"}%%TMPL:END%
 
 
 
@@ -14,36 +26,21 @@
 
 
 
-%TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
+%TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_WEB%,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
 
 
 
 %TMPL:DEF{"namehelp"}%
-If this topic already exists in the Trash web you can specify a different name, e.g. <nop>%NEW_TOPIC%1234.
+%_{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web.", "%NEW_WEB%"}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"movewebhelp"}%Deleted topics will be moved to the Trash web%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%%_{"Deleted topics will be moved to the [_1] web", "%NEW_WEB%"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"hidden"}% 
-<script type="text/javascript">
-<!-- hide
-checkAll(false)
-// stop hiding -->
-</script> %TMPL:END%
-
-
-
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
-<table>
-<tr>
-<td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Delete" /></td>
-<td class="twikiAddCol"></td>
-</tr></table></div>%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Delete"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 

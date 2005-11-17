@@ -1,5 +1,5 @@
 %TMPL:INCLUDE{"view"}%
-%TMPL:DEF{"titleaction"}%(search results) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(search results)"}% %TMPL:END%
 
 
 
@@ -7,42 +7,24 @@
 
 
 
-%TMPL:DEF{"topicaction"}% %TMPL:END%
+%TMPL:DEF{"topicaction"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"bodystart"}%<body class="twikiSearchResultsPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternSearchResultsPage%TMPL:END%
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%<div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Results from %WEB% web</div>%REPEAT%<div class="twikiSearchResults">
-<div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a> <span class="twikiAlert">%LOCKED%</span></div>
-<div class="twikiRight twikiSRAuthor">
-%AUTHOR%
-</div>
-<div class="twikiRight twikiSRRev"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME%</a> - %REVISION%</div><br class="twikiClear" /></div>
-<div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText">%TEXTHEAD%</div></div></div>%REPEAT%%TMPL:END%
+%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">%_{"Results from [_1] web", "<nop>%WEB%"}%</span><span class="twikiRight">%_{"retrieved at [_1]", "%DISPLAYTIME{\"$hour:$min ($tz)\"}%"}%</span><br class="twikiClear" /></div>
+%REPEAT%<div class="patternSearchResults"><div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></div><div class="twikiRight twikiSRAuthor"> %AUTHOR%</div><div class="twikiRight twikiSRRev">%REVISION% - <a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a>&nbsp;</div><br class="twikiClear" /></div><div class="twikiBottomRow"><div class="twikiSummary twikiGrayText">%TEXTHEAD%</div></div></div>%REPEAT%%TMPL:END%
 
 
 
 %TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%%SPLIT%
-<div class="twikiSearchResultCount">Number of topics: <b>%NTOPICS%</b></div>%TMPL:END%
+<div class="patternSearchResultCount">%_{"Number of topics:"}% <b>%NTOPICS%</b></div>%TMPL:END%
 
 
 
 %TMPL:DEF{"content"}%
-%SPLIT%<div class="twikiSearchString">Searched: <b><nop>%SEARCHSTRING%</b></div><div class="twikiSearchResultsBegin"></div>
+%SPLIT%<div class="patternSearchString">%_{"Searched:"}% <b><nop>%SEARCHSTRING%</b></div><div class="patternSearchResultsBegin"></div>
 %TMPL:P{"searchbody"}%%SPLIT%%TMPL:P{"standardfooter"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"standardfooter"}%
-<div class="twikiTopicFooter"></div>
-#PageBottom %TMPL:END%
-
-
-
-%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">
-%TMPL:P{"content"}%
-</div></div>%TMPL:P{"bottombar"}%%TMPL:END%

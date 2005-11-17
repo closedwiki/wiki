@@ -1,163 +1,122 @@
-%META:TOPICINFO{author="guest" date="1092178786" format="1.0" version="1.2"}%
----+!! Css elements in !PatternSkin
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+---+!! CSS elements in !PatternSkin
 
 This page is a reference for all CSS classes used in PatternSkin.
 
 %TOC{title="Page contents:"}%
 
-The !PatternSkin stylesheet is divided in two files:
-	* [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]: positioning of block elements on the page
-	* [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]]: appearance of blocks and all other page elements
-
+!PatternSkin uses 4 stylesheets:
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]: positioning of block elements on the page
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]]: margins, paddings, borders, font sizes
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]]: text colors, background colors, border colors
+   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/print.css][print.css]]: optimalizations for printed page
+   
 If you want to learn how to create your own look or skin based on !PatternSkin, read further in PatternSkin.
 
 ---++ Naming conventions
 
-!PatternSkin follows the naming conventions used in TWiki core code: all TWiki class names have the prefix =twiki=: twikiEditPage, twikiTopicAction, etcetera. ID names are not used, only class names, to allow multipe class names. See also: TWikiCss.
+   * All !PatternSkin specific classes have the prefix =pattern=: patternEditPage, patternTopicAction, etcetera. 
+   * TWiki specific classes (emitted by the TWiki engine) have the prefix =twiki=: twikiButton, twikiToc, etcetera. See for a complete list TWikiCss.
 
 ---++ Namespaces
 
 !PatternSkin uses namespaces for templates, by adding one (sometimes two - multiple) class names to the template's body tag. 
 
-	* The body tag in view.pattern.tmpl for instance has the class name "twikiViewPage": =&lt;body class="twikiViewPage"&gt;=. All CSS elements specific to the view template thus can be defined as =.twikiViewPage .someClassName=.
-	* All templates that are _not_ the view template have the body class name "twikiNoViewPage". That makes it easy to give all of these pages a different layout in one sweep (smaller or wider margins for instance). Template edit.pattern.tmpl uses =&lt;body class="twikiNoViewPage twikiEditPage"&gt;=.
+   * The body tag in view.pattern.tmpl for instance has the class name "patternViewPage": =&lt;body class="patternViewPage"&gt;=. All CSS elements specific to the view template thus can be defined as =.patternViewPage .someClassName=.
+   * All templates that are _not_ the view template have the body class name "patternNoViewPage". That makes it easy to give all of these pages a different layout in one sweep (smaller or wider margins for instance). Template edit.pattern.tmpl uses =&lt;body class="patternNoViewPage patternEditPage"&gt;=.
 
----+++ body class names
+---+++ Page type classes
 
-	* .twikiViewPage
-	* .twikiViewPage .twikiPrintPage
-	* .twikiNoViewPage
-	* .twikiNoViewPage .twikiEditPage
-	* .twikiNoViewPage .twikiAttachPage
-	* .twikiNoViewPage .twikiChangeFormPage
-	* .twikiNoViewPage .twikiDiffPage
-	* .twikiNoViewPage .twikiRenamePage
-	* .twikiSearchResultsPage
+   * .patternViewPage
+   * .patternViewPage .patternPrintPage
+   * .patternNoViewPage
+   * .patternNoViewPage .patternEditPage
+   * .patternNoViewPage .patternAttachPage
+   * .patternNoViewPage .patternChangeFormPage
+   * .patternNoViewPage .patternDiffPage
+   * .patternNoViewPage .patternRenamePage
+   * .patternSearchResultsPage
+   * .patternPlainPage (view.plain.pattern.tmpl)
 
 ---++ Layout classes
 
-	* General
-		* .twikiLeft - a left floating element
-		* .twikiRight - a right floating element
-		* .twikiClear - to clean up either of these floats: put immediately after the containing block
-		* .twikiHidden - hidden element
-
-	* TWiki block elements
-		* .twikiMiddleContainer - holder for twikiMain and twikiLeftbar
-		* .twikiLeftBar - left bar area
-		* .twikiLeftBarContents - used for left menu
-		* .twikiMain - holder of twikiToolbar, twikiTopic, twikiAttachments, etc.
-		* .twikiTopBar - top bar area
-		* .twikiBottomBar - bottom bar area
-
-	* Layout adjustments on specific pages
-		* .twikiNoViewPage .twikiMain
-		* .twikiPrintPage .twikiMain
-		* .twikiPrintPage .twikiBottomBar
+   * Main layout elements
+      * #patternScreen - holder of patternPageShadow and patternBottomBar
+      * #patternPageShadow - shadow border around patternPage; default not used
+      * #patternPage - html content container
+      * #patternColumnWrapper - holder for patternMain and patternLeftbar
+      * #patternMain - holder of patternMainContents
+      * #patternTopBar - top bar area
+      * .patternTopBarContents - table (for easy vertical alignment) for header art / logo; contains topic %TWIKIWEB%.WebTopBar
+      * #patternLeftBar - left bar area
+      * .patternLeftBarContents - used for left menu
+      * #patternBottomBar - bottom bar area
+      * .patternBottomBarContents - copyright
 
 ---++ Style classes
-	
-	* .twikiMiddleContainer - holder for twikiMain and twikiLeftbar
-	* .twikiMain - holder of twikiToolbar, twikiTopic, twikiAttachments, etc)
-	* .twikiTopBar - top bar area
-	* .twikiTopBarContents - logo, go box
-	* .twikiLeftBar - left bar area
-	* .twikiWebIndicator - shows current Web name; background of color %<nop>WEBBGCOLOR%
-	* .twikiLeftBarContents - used for left menu (a bullet list) 
-	* .twikiLeftBarPersonal - block of personal links (included topic %<nop>MAINWEB%.%<nop>USERNAME%LeftBar)
-	* .twikiBottomBar - bottom bar area
-	* .twikiBottomBarContents - copyright
-	* .twikiTopic
-	* .twikiAttachments - attachment table; used in template attachtables.tmpl
-	* .twikiForm - !WebForm table; used in template attachtables.tmpl
-	* .twikiTopicAction - actions buttons at bottom of page; holder of table with buttons
-	* .twikiTopicActionSecondary - second layer above twikiTopicAction (for instance in Preview)
-	* .twikiTopicActionHelp - help text row
-	* .twikiCancelCol - table columns (td) for cancel button
-	* .twikiSubmitCol - table columns (td) for submit button
-	* .twikiAddCol - table columns (td) for additional button/link (for instance: "Move attachment")
-	* .twikiSeparator - separator character
-	* .twikiToc - topic contents (%<nop>TOC%)
-	* .twikiTocTitle - title of TOC (%<nop>TOC{title="Contents:"}%)
-	* .twikiTopicInfo - revision (%<nop>REVINFO%) and moved (%<nop>META{"moved"}%) info
-	* .twikiRevInfo - revision info (top and bottom of page)
-	* .twikiTopicFooter - used for breadcrumb (twikiHomePath)
-	* .twikiHomePath - breadcrumb
-	* .twikiToolBar - action buttons at top of topic (a bullet list), revision info
-	* .twikiPageNav - links "end of topic" and "to top"
-	* .twikiSearchBox - go box and current page in top bar
-	* .twikiHelp - help text
-	* .twikiBroadcastMessage - BROADCASTMESSAGE
-	* .twikiAlert - red
-	* .twikiGrayText - grayed out text, literally gray
-	* .twikiSmall - styled "small"
-	* .twikiNewLink - style of links to yet non-existent pages (not used)
 
-	* Table class names (emitted from TWiki.TablePlugin)
-		* .twikiSortedAscendingCol - sortable table column header that is sorted ascending (uses TWiki.TablePlugin)
-		* .twikiSortedDescendingCol - ditto sorted descending
-		* .twikiFirstCol
-	* Other table class names
-		* .twikiVersatileTable - table used in various places (Attach, Rename, Changeform)
-		* .twikiVersatileTable .twikiMainCol - table column that is the most important part of the table
-		* .twikiVersatileTable .twikiOldCol - table column with 'old' appearance, for instance the old attachment or the old topic name
-		* .twikiVersatileTable .twikiHelpCol - table column with help texts
-		
-	* Search
-		* .twikiNew - emitted from Search.pm and Changes.pm with the text NEW
-		* .twikiSummary - summary text with search results
-		* .twikiSearchResults - the big block of all results
-		* .twikiSearchResultsHeader - top of block, styled with %<nop>WEBBGCOLOR%
-		* .twikiSearchResults .twikiTopRow  - top of one result, with link, author, revision
-		* .twikiSearchResults .twikiBottomRow - result summary
-		* .twikiSearchResults .twikiAlert - used with "locked" text 
-		* .twikiSearchResultCount - result count
-		* .twikiBookViewList - the big block of all results with book view option
+   * View
+      * .patternMainContents - holder of patternTop, patternTopic, twikiForm, twikiAttachments, etc.
+      * .patternContent - container around .patternTopic in view.pattern.tmpl only; to be able to give .twikiAttachments and .twikiForm a different appearance when they are not enclosed by it, for example the personal data form on the user pages
+      * .patternTopBarLogo - logo position in patternTopBar (topic %TWIKIWEB%.WebTopBar)
+      * .patternTopBarOverlay - striped white image background
+      * .patternTopic - TWiki topic text
+      * .patternTop - area at top of topic text, with patternHomePath, revision and action buttons
+      * .patternTopicAction - container for .patternActionButtons
+      * .patternActionButtons - action buttons at bottom of page
+      * .patternMoved - topic moved info (only visible when the topic has changed name or web)
+      * .patternWebIndicator - not used
+      * .patternFormHolder - container around form to manage the size of form elements
+      * .patternLeftBarPersonal - block of personal links (included topic %<nop>MAINWEB%.%<nop>USERNAME%LeftBar)
+      * .patternVersatileTable - table used in various places (Attach, Rename, Changeform)
+         * .patternVersatileTable .patternMainCol - table column that is the most important part of the table
+         * .patternVersatileTable .patternOldCol - table column with 'old' appearance, for instance the old attachment or the old topic name
+         * .patternVersatileTable .patternHelpCol - table column with help texts
+      * .patternHomePath - breadcrumb at top
+      * .patternHomePathTitle - "You are here" text
+      * .patternRevInfo - revision info and author name
+      * .patternToolBar - holder for .patternToolBarButtons
+      * .patternToolBarButtons - action buttons at top of page
+      * .patternToolBarBottom - seperator
+      * .patternSimpleLogo - logo used on 'simple' pages like the login screen
+      * .patternFormFieldVerticalForm - input field in vertically formatted form 
 
-	* Form elements
-		* .twikiCheckbox - styled checkbox
-		* .twikiRadioButton
-		* .twikiSubmit - submit button (in twikiTopicAction this is the darkest button; in twikiTopic it has a lighter color)
-		* .twikiButton - general button (in Rename/Delete: clear/select all checkboxes)
-		* .twikiSecondary - button next to submit button (same appearance as twikiButton)
-		* .twikiTertiary - button at far right (blue color)
-		* .twikiCancel - cancel button
-		* .twikiEditPage .twikiFormHolder - constrains the width of the textarea
-		* .twikiChangeFormButton - emitted from Form.pm, button to change the !WebForm - styled as link
-		* .twikiEditForm - emitted from Form.pm, editable !WebForm table
-		* .twikiEditFormTextField - emitted from Form.pm, input textfield in twikiEditForm
-		* .twikiSig - signature copy field
+   * Edit
+      * .patternSig - signature copy box
+      * .patternSaveOptions - holder for .patternSaveOptionsContents
+      * .patternSaveOptionsContents - checkboxes that change the state of a topic save; for instance "Force revision" checkbox
+      * .patternAccessKeyInfo - info block with access key information
 
-	* Preview
-		* .twikiPreviewPage .twikiPreviewArea - holder of previewed topic text
-	
-	* Attach
-		* .twikiAttachPage .twikiNotes - holder of help text
-		* .twikiAttachPage .twikiPrevious - attachment table of previous versions
+   * Preview page
+      * .patternPreviewArea - container around preview of .patternTopic
 
-	* Diff
-		* .twikiDiffPage .twikiDiffTable - block of revisions; emitted from RDiff.pm (also all diff classes below)
-		* .twikiDiffPage .twikiDiffDeletedHeader
-		* .twikiDiffPage .twikiDiffDeletedMarker
-		* .twikiDiffPage .twikiDiffDeletedText
-		* .twikiDiffPage .twikiDiffAddedHeader
-		* .twikiDiffPage .twikiDiffAddedMarker
-		* .twikiDiffPage .twikiDiffAddedText
-		* .twikiDiffPage th.twikiDiffChangedHeader
-		* .twikiDiffPage .twikiDiffChangedText
-		* .twikiDiffPage .twikiDiffUnchangedText
-		* .twikiDiffPage .twikiDiffLineNumberHeader
+   * Attach page
+      * .patternPrevious - attachment table of previous versions
+      * .patternMoveAttachment - container for "Move or Delete attachment"
 
----++ CSS tags emitted from TWiki core code
+   * Search results
+      * .patternSearchResultsHeader
+      * .patternSearchString
+      * .patternSearchResults
+      * .patternSearchResultCount
+      * .patternSearchResultsBegin - for changes template with noheader="on"
+      * .patternBookViewList
 
-See: TWikiCss
+   * Print
+      * .patternTopicFooter - revision and author info at bottom of printed topic
+
+   * %TWIKIWEB%.WebLeftBarSearch
+      * .patternFormSpacer - for layout purposes
+      * .patternFormField
+      * .patternFormButton
+      * .patternChangeLanguage - change language button
 
 ---++ Layout per template
 
 ---+++ View template
 
-<img src="%ATTACHURLPATH%/CSS_element_layout_view.pattern.tmpl.png" alt="CSS layout in View template" style="border:1px solid #ddd;" width="576" height="735"  />
+<img src="%ATTACHURLPATH%/CSS_element_layout_view.pattern.tmpl.png" alt="CSS layout in View template" style="border:1px solid #ddd;" width="598" height="758"  />
 
--- Main.ArthurClemens - 08 Aug 2004
+__Related Topics:__ TWikiSkins, AdminDocumentationCategory
 
-%META:FILEATTACHMENT{name="CSS_element_layout_view.pattern.tmpl.png" attr="" comment="CSS layout in View template" date="1092178786" path="CSS_element_layout_view.pattern.tmpl.png" size="48981" user="guest" version="1.1"}%
+%META:FILEATTACHMENT{name="CSS_element_layout_view.pattern.tmpl.png" attr="h" comment="" date="1092634624" path="CSS_element_layout_view.pattern.tmpl.png" size="42799" user="TWikiContributor" version="1.1"}%

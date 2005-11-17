@@ -1,0 +1,56 @@
+%TMPL:INCLUDE{"twiki"}%
+
+
+
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage%TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}% %_{"[_1] User Authentication", "<nop>%WIKITOOLNAME%"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"LOG_IN_BANNER"}% %_{"Please enter your username and password:"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"LOGGED_IN_BANNER"}% %_{"[_1] is currently logged in", "%MAINWEB%.%WIKINAME%"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"NEW_USER_NOTE"}% <h2> %_{"Enter a new username and password to change identity:"}% </h2> %TMPL:END%
+
+
+
+%TMPL:DEF{"UNRECOGNISED_USER"}% <h2> %_{"Unrecognised user and/or password"}% </h2> %TMPL:END%
+
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+---+ %BANNER%
+%NOTE%
+<div style="margin:1em 0 3em 0; width:50%;">
+<form action="%SCRIPTURL{"login"}%/%WEB%/%TOPIC%" method="post">
+*%_{"Username"}%*
+<div class="twikiSmall twikiGrayText">%AUTHREALM%</div>
+<input class="patternFormFieldVerticalForm" type="text" size="30" name="username" value="%URLPARAM{"username"}%" /> %BR%
+*%_{"Password"}%* %BR%
+<input class="patternFormFieldVerticalForm" type="password" size="30" name="password" value="" />
+<input type="hidden" name="origurl" value="%ORIGURL%" /> %BR%
+<input class="twikiSubmit" type="submit" value='%_{"Logon"}%' />
+</form>
+</div>
+<div class="twikiSmallish">
+%_{"See also:"}% %TWIKIWEB%.TWikiRegistration, %TWIKIWEB%.ResetPassword, %TWIKIWEB%.ChangePassword
+---
+%_{"Contact [_1] if you have any questions.", "%WIKIWEBMASTER%"}%
+</div>
+%TMPL:END%
+
+
+
+%TMPL:P{"page"}%

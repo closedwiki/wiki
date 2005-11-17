@@ -2,109 +2,126 @@
 
 
 
-%TMPL:DEF{"script"}%
-<script type="text/javascript">
-<!--HIDE
-	function initForm() {
-	   document.main.filepath.focus();
-	}
-	function launchWindow( theWeb, theTopic ) {
-	  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-	  if( win ) {
-		win.focus();
-	  }
-	  return false;
-	}
-//STOP HIDING-->
-</script> %TMPL:END%
-
-
-
-%TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiAttachPage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
-
-
-
-%TMPL:DEF{"titleaction"}%(attach) %TMPL:END%
-
-
-
-%TMPL:DEF{"simpleheader"}%
----+ Attach image or document on %TOPIC% %TMPL:END%
-
-
-
-%TMPL:DEF{"notes"}%
-   * *Help:* Please see %TWIKIWEB%.FileAttachment for more information about attaching files.
-   * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error" message when you upload a file, you need to try again. It should work the second time.
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki_attach.js"></script>
 %TMPL:END%
 
 
 
-%TMPL:DEF{"content"}%
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
-%TMPL:P{"simpleheader"}%
+%TMPL:DEF{"templatecustomstyle"}%%TMPL:END%
 
-<div>
-%TMPL:P{"previousdetails"}%
-<div class="twikiVersatileTable">
-<table width="100%">%TMPL:P{"previous"}% 
-	<tr>
-		<th>
-			Local file 
-		</th>
-		<td class="twikiMainCol">
-			<input type="hidden" name="filename" value="%FILENAME%" /><input type="file" name="filepath" value="%FILEPATH%" size="30" /> 
-		</td>
-		<td class="twikiHelpCol twikiMainCol">
-Upload up to %ATTACHFILESIZELIMIT% KB.
-		</td>
-	</tr>
-	<tr>
-		<th>
-			Comment 
-		</th>
-		<td>
-			<input class="comment" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="50" /> 
-		</td>
-		<td class="twikiHelpCol"></td>
-	</tr>
-	<tr>
-		<th>
-			Link 
-		</th>
-		<td>
-			<input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink" %ATTACHLINKBOX% /><label for="createlink">Create a link to the attached file</label>
-		</td>
-		<td class="twikiHelpCol">
-Images will be displayed, for other attachments a link will be created.
-		</td>
-	</tr>
-	<tr>
-		<th>
-			Hide file 
-		</th>
-		<td>
-			<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">Do not show attachment in table</label>
-		</td>
-		<td class="twikiHelpCol">Attachments will not be shown in topic view page.</td>
-	</tr>
+
+
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternAttachPage%TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}%%_{"(attach)"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"simpleheader"}%
+---+ %_{"Attach image or document on [_1]", "%TOPIC%"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"toolbar"}%<div class="patternTop">
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="patternToolBar">
+<span id="attachhelpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Show help"}%%ICON{toggleopen}%</a></span><span id="attachhelphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Hide help"}%%ICON{toggleclose}%</a></span>
+</td>
+</tr>
 </table>
 </div>
-%TMPL:P{"topicaction"}%</form>
-<div class="twikiHelp twikiGrayText">
+<div class="patternToolBarBottom"></div>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"notes"}%
+   * %_{"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files."}%
+   * %_{"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server Error\" message when you upload a file, you need to try again. It should work the second time."}% %TMPL:END%
+
+
+
+%TMPL:DEF{"existingattachments"}%
+<span class="twikiSmallish"><span id="attachexistingshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">%_{"Show existing attachments"}%</span>%ICON{toggleopen}%</a></span><span id="attachexistinghide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">%_{"Hide existing attachments"}%</span>%ICON{toggleclose}%</a></span></span>
+<div id="attachexistingtoggle" class="twistyMakeHidden twistyRememberSetting">
+%META{"attachments" all="on" title="<h2>%_{"Existing attachments"}%</h2>"}%
+</div>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"changepropertiesaction"}%%TMPL:END%
+%TMPL:DEF{"movedelete"}%%TMPL:END%
+
+
+%TMPL:DEF{"content"}%
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURL{"upload"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+%TMPL:P{"simpleheader"}%
+%TMPL:P{"toolbar"}%
+<div id="attachhelptoggle" class="twikiHelp twistyHidden twistyRememberSetting">
 %TMPL:P{"notes"}%
-%TMPL:P{"extranotes"}%</div></div>
----++ Existing attachments for <span class="twikiTitle"><nop>%TOPIC%</span>
-%META{"attachments" all="on"}%
+%TMPL:P{"extranotes"}%</div>
+%TMPL:P{"previousdetails"}%
+<div class="patternVersatileTable">
+<table width="100%">%TMPL:P{"previous"}% 
+	<tr>
+		<th class="patternMainCol">
+			%_{"Local file"}%
+		</th>
+		<td class="patternMainCol">
+			<input type="hidden" name="filename" value="%FILENAME%" /><input type="file" name="filepath" value="%FILEPATH%" size="30" /> 
+		</td>
+		<td class="patternHelpCol patternMainCol">
+%_{"Upload up to [_1] KB.", "%ATTACHFILESIZELIMIT%"}%
+		</td>
+	</tr>
+	<tr>
+		<th>
+			%_{"Comment"}%
+		</th>
+		<td>
+			<input type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="50" /> 
+		</td>
+		<td class="patternHelpCol"></td>
+	</tr>
+	<tr>
+		<th>
+			%_{"Link"}%
+		</th>
+		<td>
+			<input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink" %ATTACHLINKBOX% /><label for="createlink">%_{"Create a link to the attached file"}%</label>
+		</td>
+		<td class="patternHelpCol">
+%_{"Images will be displayed, for other attachments a link will be created."}%
+		</td>
+	</tr>
+	<tr>
+		<th>
+			%_{"Hide file"}%
+		</th>
+		<td>
+			<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">%_{"Do not show attachment in table"}%</label>
+		</td>
+		<td class="patternHelpCol">%_{"Attachments will not be shown in topic view page."}%</td>
+	</tr>%TMPL:P{"changepropertiesaction"}%
+</table>
+</div>
+%TMPL:P{"topicaction"}%
+%TMPL:P{"movedelete"}%
+</form>
+<div class="twikiHelp twistyMakeHidden">
+%TMPL:P{"notes"}%
+%TMPL:P{"extranotes"}%
+</div>
+%TMPL:P{"existingattachments"}%
 %TMPL:P{"standardfooter"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"attach"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
+%TMPL:P{"page"}%
 %TMPL:END%
