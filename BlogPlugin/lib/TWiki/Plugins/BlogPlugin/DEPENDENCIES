@@ -7,3 +7,4 @@ TWiki::Plugins::HeadlinesPlugin,>=1.001,perl,Required
 TWiki::Plugins::SpreadSheetPlugin,>=1.001,perl,Required
 TWiki::Plugins::TimeSincePlugin,>=0.99,perl,Required
 TWiki::Plugins::TwistyPlugin,Dakar,perl,Required
+TWiki::Plugins::NatSkinPlugin,>1.25,perl,Required

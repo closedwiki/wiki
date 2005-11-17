@@ -2,46 +2,296 @@
 ---+!! <nop>%TOPIC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
+It bundles some of the features found in common blogging applications 
+that are very hard or even impossible to implement using <nop>TWikiML. 
+Some of the features implemented here as a plugin can be used in a
+more general way and aren't restricted to blogging per se. Most notably
+the DBQUERY tag will be refactored to live in a plugin of its own.
+Note, howerver, that most of the other tags are tightly related to the
+data modle of BlogUp, i.e. it relies on its <nop>TopicType and <nop>TWikiForm 
+definitions. 
+
 
 %TOC%
 
 ---++ Syntax Rules
 
-   * 
-   * 
+---+++ CITEBLOG
+Format a link to another <nop>BlogEntry displaying its headline and date.
 
----++ Examples
+*Syntax:*
 
-   * 
-   * 
+| *%<nop>CITEBLOG{"&lt;topic>"}%* ||
+| =&lt;topic>= | name of a <nop>BlogEntry topic, e.g. <nop>BlogEntry0 |
+
+*Example:*
+
+=%<nop>CITEBLOG{"_blog.BlogEntry0"}%=
+
+%CITEBLOG{"_blog.BlogEntry0"}%
+
+
+---+++ COUNTCOMMENTS
+Count the <nop>BlogComments that refer to a given topic recursively, that is
+the number of <nop>BlogComment topics that refer to a given <nop>BlogEntry and 
+each <nop>BlogComment refering to the <nop>BlogComment found so far. Reference
+is expressed by the <nop>BlogRef formfield in the <nop>BlogCommentForm.
+
+*Syntax:*
+| *%<nop>COUNTCOMMENTS{"&lt;topic>" ... }%* ||
+| =&lt;topic>= \
+| name of a <nop>BlogEntry or <nop>BlogComment topic, e.g. <nop>BlogEntry0 |
+| =web="..."= \
+| web where to search for references; defaults to the \
+  web specified as part of the "topic" parameter or the current one |
+| =format="..."= \
+| format string used to display the count; \
+  the variable $count is replaced by the calculated references; \
+  defaults to "$count" |
+| =single="..."= \
+| format string used to display a single hit; \
+  defaults to the "format" value (see above) |
+| =null="..."= \
+| format string used to display a zero hit; defaults to "0" |
+| =hidenull="on,off"= \
+| if set to "on" nohting is displayed if no references where found; \
+  defaults to "off" |
+| =offset="..."= \
+| add an "offset" to the computed number of hits; so if offset="9" and \
+  11 references where found the $count is set to 20 |
+
+Following variables are expanded in format strings:
+   * $percnt: % sign
+   * $dollar: $ sign
+   * $n: newline
+   * $t: tab
+   * $nop: "empty string"
+   * $count: the calculated number of references (plus an optional offset)
+
+---+++ DBQUERY
+Lightweighted frontend to the DBCacheContrib. This is a drop-in replacement for
+TWiki's SEARCH which uses a database store instead of a =grep= on the pure
+topic texts to extract data. If you are looking for a more sophisticated way of
+handling queries and sub-queries then have a look at the
+TWiki:Plugins.FormQueryPlugin. The DBQUERY tag is provided to ease the use of
+<nop>TWikiApplications based on the DBCacheContrib combining its flexible query
+language with unrestricted formatting and an extend mechanism to extract topic
+properties. DBQUERY can be used in either of two modes (a) as a pure search
+tool or (b) as a tool to extract properties of a set of known topics. So you
+have to specify either the "search" or the "topics" argument in the DBQUERY
+tag.
+
+*Syntax:*
+| *%<nop>DBQUERY{"&lt;search>"}%* ||
+| =&lt;search>= \
+| search clause, see documentation of the DBCacheContrib (mode (a)) |
+| =topics="..."= or =topic="..."= \
+| set of topics to consult (mode (b)); \
+  if "topics" are specified in addition to a "search" it will be restricted to \
+  the given topics |
+| =web="..."= | web where to search for hits; defaults to the current one |
+| =format="..."= | format string to display search hits;\
+  defaults to "$topic"; the special format string "none" disables the format string |
+| =header="..."= | format string to prepended to the list of hits |
+| =footer="..."= | format string to appended to the list of hits |
+| =separator="..."= | format string used to separate hits; \
+  defaults to "$n"; the special separator "none" disables separation |
+| =include="..."= | pattern each found topic name must match to be considered a hit |
+| =exclude="..."= | pattern each found topic name must not match to be considered a hit |
+| =order="..."= | specifies the sorting of hits; defaults to "name" |
+| =reverse="..."= | specify if hits should be sorted in reverse order; defaults to "off" |
+| =limit="..."= | maximum number of topics to include in the hit set |
+| =skip="..."= | number of topics to skip while constructing the hit set; defaults to "0" |
+| =hidenull="..."= | flag to indicate that an empty hit set should not be displayed |
+
+Following variables are expanded in format strings:
+   * $percnt: % sign
+   * $dollar: $ sign
+   * $n: newline
+   * $t: tab
+   * $nop: "empty string"
+   * $count: the number of hits
+   * $web: the web where the hits where found
+   * $formfield(&lt;formfield-name>): the value of the given formfield
+   * $formatTime(&lt;formfield-accessor> [,&lt;format>]): format the datefield pointed
+     to by the &lt;formfield-accessor> using the given &lt;format>; the format can be
+     in any form supported by =TWiki::Func::formatTime()= 
+     (see [[%TWIKIWEB%.TWikiVariables#DISPLAYTIME_format_formatted_dis][TWikiVariables]] documentation).
+   * $expand(&lt;formfield-accessor>): return the formfield pointed to by the 
+      &lt;formfield-accessor>
+   * $encode(...): encode entities so that the text can be included in an rss feed
+
+A formfield accessor allows to rever to the properties of a topic, i.e. its formfield properties,
+but also topic properties of related topics that can be reached from the current one using the '@'
+symbol. For example, if a topic A uses a form that contains a field named "Ref" and specifies a reference to 
+another topic B (by using its name) you can access the "Headline" in B from A using =$expand(@Ref.Headline)=.
+A more basic use is =$expand(Ref)= which is identical to =$formfield(Ref)=. 
+
+Formfield accessors are a stripped version of a similar concept in the <nop>FormQueryPlugin, optimized
+for efficiency.
+
+*API:*
+
+The DBQUERY functionality can be access directly using the plugins =dbQuery()= function.
+
+| *(@$topicNames, %$topicObjs, $errorMsg) = dbQuery($search, $web [, @$topics, $order, $reverse])* ||
+| =search= | search clause |
+| =web= | web to search in |
+| =topics= | restrict search to this list of topics |
+
+returns a list pointer of all found topics names, a hash pointer to an array of all found
+topic objects (keys are the name of the topics) and a possibly defined error message.
+
+
+---+++ PREVDOC, NEXTDOC
+Display the previous/next topic in an ordered .
+These tags can be used to establish a navigation within a set of related topics
+paging to the preceeding or succeeding one. A set of related topics is defined
+using a "where" and an "order" clause which the given topic is supposed to be part of.
+
+*Syntax:*
+| *%<nop>PREVDOC{"&lt;topic" where="..." ...}%, %<nop>NEXTDOC{"&lt;topic" where="..." ...}%* ||
+| =&lt;topic>= | topic which we search the predecessor/successor of |
+| =web="..."= | web where to search for related topics; \
+  defaults to the web given with the &lt;topic> parameter or the current one |
+| =where="..."= \
+| search clause, see documentation of the DBCacheContrib |
+| =order="..."= \
+| document property used to sort the hit set; defaults to "created" |
+
+
+---+++ RECENTCOMMENTS
+Display an ordered list of most recent <nop>BlogComments, grouped by the
+refered <nop>BlogEntry.
+
+*Syntax:*
+| *%<nop>RECENTCOMMENTS{"&lt;format>" ...}%* ||
+| =&lt;format>= | format string used to display the hit results; \
+  each hit is displayed using the given format |
+| =header="..."= | format string to prepended to the list of hits being displayed |
+| =footer="..."= | format string to appended to the list of hits being displayed |
+| =separator="..."= | format string used to separate hits; \
+  defaults top "$n"; the special separator "none" disables separation |
+| =limit="..."= | restrict the number of hits being displayed; \
+  defaults to "-1" which means unlimited |
+| =age="..."= | restrict the age of comments being displayed; \
+  values must be given in epoch seconds, e.g. 5184000 being ca. 2 months; \
+  defaults to "0" which means unlimited |
+| =category="..."= \
+| pattern that limits comments to those whose <nop>BlogEntries match the \
+  <nop>SubjectCategory; \ defaults to ".*" |
+
+(Each <nop>BlogEntry that is found given the above search parameters and limits
+is called a hit.)
+
+Following variables are expanded in format strings:
+   * $percnt: % sign
+   * $dollar: $ sign
+   * $n: newline
+   * $t: tab
+   * $nop: "empty string"
+   * $count: the number of comments on the given <nop>BlogEntry
+   * $topic: the topic name of the refering <nop>BlogEntry, e.g. <nop>BlogEntry0
+   * $web: the web where the hit was found
+   * $headline: the headline of the refering <nop>BlogEntry 
+   * $commenter: a list of links to the comments in the format \
+      [<nop>[BlogEntry0#BlogComment1][&lt;author>]],... (author: name of
+      commenter)
+   * $date: date of the most recent comment on the current hit.
+
+See also the interface <nop>TopicFunction "RenderRecentComments". 
+
+%RED%TODO: link to BlogUp docu%ENDCOLOR%
+
+---+++ RELATEDENTRIES
+Display a list of <nop>BlogEntries related to a given one. The Relationship
+is manually encoded in the data model using the "Related" formfield. The
+relation is computed transitively and reflexively ('til a configurable depth).
+That is, two <nop>BlogEntries A and B are related if A points to B or vice versa
+or A and B are connected by a series of related postings C1,...CN, where A is related 
+to C1 and B CN is related to B.
+
+*Syntax:*
+| *%<nop>RELATEDENTRIES{"&lt;topic>" ...}%* ||
+| =&lt;topic>= | topic name of a <nop>BlogEntry related once are search for |
+| =web="..."= | web where to search for related topics; \
+  defaults to the web given with the &lt;topic> parameter or the current one |
+| =format="..."= | format string to display a hit;\
+  defaults to "$topic" |
+| =header="..."= | format string to prepended to the list of hits |
+| =footer="..."= | format string to appended to the list of hits |
+| =separator="..."= | format string used to separate hits; \
+  defaults to "$n"; the special separator "none" disables separation |
+| =depth="..."= | depth of recursion (the number of hops from posting A to posting B); \
+  defaults to "2"; |
+
+Note, that large "depth" values will very soon include your complete blog archive.
+The hit set also depends on the amount of direct relationships that you add to your
+<nop>BlogEntries. So either use a low "depth" value and add more direct relations based on
+your own judgement, or just specify one related entry and use a "depth" value of up to
+3 for good results.
+
+Following variables are expanded in format strings:
+   * $percnt: % sign
+   * $dollar: $ sign
+   * $n: newline
+   * $t: tab
+   * $topic: topic name of a hit
+   * $web: web name where the hit was found
+   * $depth: distance to the given &lt;topic> (depth in which this topic was found)
+   * $headline: headline of the related <nop>BlogEntry
+
+The relatedness feature here is a very naive and purely manual one.
+We'd like to semi-automate this task using some automatic classificator
+on document similarities. Making use of weights following links is an option too to
+improve the hit set quality.
+
+Read
+   * Wikipedia:Latent_semantic_analysis 
+   * [[http://mitpress.mit.edu/catalog/item/default.asp?ttype=2&tid=3391][Foundations of Statistical Natural Language Processing]]
+   * [[http://www.perl.com/pub/a/2003/02/19/engine.html][Building a Vector Space Search Engine in Perl]]
+   * [[http://search.cpan.org/~mceglows/Search-VectorSpace-0.02/][Search-VectorSpace]]
+And send me a patch if you've coded that into TWiki ;).
+
 
 ---++ Plugin Settings
 
-   * Set SHORTDESCRIPTION = Supplemental plugin to BlogUp 
-
+   * Set SHORTDESCRIPTION = Basic blogging features used to implement the BlogUp <nop>TWikiApplication
+   
 ---++ Plugin Installation Instructions
 
-   * Download the ZIP file from the Plugin web (see below)
+   * Download and install all additionally required plugins listed in the
+     [[#Plugin_Info][dependencies information]] below
+   * Download the BlogPlugin ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==data/_blog/*.txt== | blog template web |
+     | ==data/Main/BlogAdminGroup.txt== | blog admin group |
+     | ==data/Main/BlogAuthorGroup.txt== | blog author group |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 11 Nov 2005 (v0.07) |
+|  Plugin Version: | 17 Nov 2005 (v0.08) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  04 Nov 2005: | Initial version |
+|  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Plugins/ExtendedSelectionPlugin, \
-                         TWiki:Plugins/GluePlugin, \
-                         TWiki:Plugins/HeadlinesPlugin, \
-                         TWiki:Plugins/RedDotPlugin, \
-                         TWiki:Plugins/NatSkinPlugin, \
-                         TWiki:Plugins/SpreadSheetPlugin \
+|  Other Dependencies: \
+| \
+TWiki:Contrib.DBCacheContrib, \
+TWiki:Plugins/ExtendedSelectionPlugin, \
+TWiki:Plugins/GluePlugin, \
+TWiki:Plugins/HeadlinesPlugin, \
+TWiki:Plugins/NatSkinPlugin, \
+TWiki:Plugins/RedDotPlugin, \
+TWiki:Plugins/SpreadSheetPlugin \
+TWiki:Plugins/TimeSincePlugin, \
+TWiki:Plugins/TwistyPlugin \
 |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
@@ -52,5 +302,5 @@ This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.MichaelDaum - 04 Nov 2005
+-- TWiki:Main.MichaelDaum - 17 Nov 2005
 

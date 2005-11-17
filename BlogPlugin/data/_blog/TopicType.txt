@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127320867" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132096928" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -14,7 +14,7 @@ See also: TopicTypeTemplate
    * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
    * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
    * Set SIDEBAR = Admin
-   * Set SIDEBARARG = AdminTool
+   * Set SIDEBARARG = TopicType
 -->
 
 
