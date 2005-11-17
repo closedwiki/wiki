@@ -23,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.07';
+$RELEASE = '0.08';
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
@@ -43,12 +43,12 @@ sub initPlugin {
   %nextTopicCache = ();
   %db = ();
 
+  TWiki::Func::registerTagHandler('CITEBLOG', \&_CITEBLOG);
+  TWiki::Func::registerTagHandler('COUNTCOMMENTS', \&_COUNTCOMMENTS);
   TWiki::Func::registerTagHandler('NEXTDOC', \&_NEXTDOC);
   TWiki::Func::registerTagHandler('PREVDOC', \&_PREVDOC);
   TWiki::Func::registerTagHandler('RECENTCOMMENTS', \&_RECENTCOMMENTS);
-  TWiki::Func::registerTagHandler('COUNTCOMMENTS', \&_COUNTCOMMENTS);
   TWiki::Func::registerTagHandler('RELATEDENTRIES', \&_RELATEDENTRIES);
-  TWiki::Func::registerTagHandler('CITEBLOG', \&_CITEBLOG);
 
   TWiki::Func::registerTagHandler('DBTEST', \&_DBTEST); # for debugging
   TWiki::Func::registerTagHandler('DBQUERY', \&_DBQUERY);
@@ -73,8 +73,11 @@ sub initDB {
 sub _CITEBLOG {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  $theTopic = $params->{_DEFAULT} || $theTopic;
+  $theTopic = $params->{_DEFAULT} || $params->{topic};
   ($theWeb, $theTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
+
+  return &inlineError("ERROR: CITEBLOG has no topic argument") 
+    unless $theTopic;
 
   &initDB($theWeb);
 
@@ -102,22 +105,25 @@ sub _DBQUERY {
   
 
   # params
+  my $theSearch = $params->{_DEFAULT} || $params->{search};
+  my $theTopics = $params->{topics} || $params->{topic};
+  
+  return &inlineError("ERROR: DBQUERY needs either a \"search\" or a \"topic\" argument ") 
+    if !$theSearch && !$theTopics;
+  return '' if $theTopics && $theTopics eq 'none';
+
   my $theFormat = $params->{format} || '$topic';
-  my $theSearch = $params->{_DEFAULT};
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
   my $theInclude = $params->{include};
   my $theExclude = $params->{exclude};
   my $theOrder = $params->{order} || 'name';
   my $theReverse = $params->{reverse} || 'off';
   my $theSep = $params->{separator} || '$n';
-  my $theHeader = $params->{header} || '';
-  my $theFooter = $params->{footer} || '';
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
-  $theTopics = $params->{topics} || $params->{topic};
   $theWeb = $params->{web} || $theWeb;
-
-  return '' if $theTopics && $theTopics eq 'none';
 
   &initDB($theWeb);
 
@@ -203,13 +209,6 @@ sub expandVariables {
   $theFormat =~ s/\$encode\((.*)\)/&encode($1)/ges;
 
   return $theFormat;
-}
-###############################################################################
-sub flatten {
-  my $text = shift;
-
-  $text =~ s/[\n\r]+/ /gos;
-  return $text;
 }
 
 ###############################################################################
@@ -330,7 +329,6 @@ sub getPrevNextTopic {
     #writeDebug("found in cache: prevTopic=$prevTopic, nextTopic=$nextTopic");
     return ($prevTopic, $nextTopic);
   }
-  &initDB($theWeb);
 
   my ($resultList) = &dbQuery($theWhere, $theWeb, undef, $theOrder);
   my $state = 0;
@@ -365,11 +363,14 @@ sub _PREVDOC {
   my $theOrder = $params->{order} || 'created';
   $theWeb = $params->{web} || $theWeb;
 
+  return &inlineError("ERROR: PREVDOC has no \"where\" argument") unless $theWhere;
+
   my ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
 
   #writeDebug('theFormat='.$theFormat);
   #writeDebug('theWhere='. $theWhere) if $theWhere;
   
+  &initDB($thisWeb);
   my ($prevTopic, $nextTopic) = &getPrevNextTopic($thisWeb, $thisTopic, $theWhere, $theOrder);
   if ($prevTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$prevTopic, web=>$thisWeb);
@@ -383,17 +384,20 @@ sub _NEXTDOC {
 
   #writeDebug("called _NEXTDOC($theTopic)");
   
-  $theTopic = $params->{_DEFAULT} || $theTopic;
+  $theTopic = $params->{_DEFAULT} || $params->{topic} || $theTopic;
   my $theFormat = $params->{format} || '$topic';
   my $theWhere = $params->{where};
   my $theOrder = $params->{order} || 'created';
   $theWeb = $params->{web} || $theWeb;
+
+  return &inlineError("ERROR: NEXTDOC has no \"where\" argument") unless $theWhere;
 
   my ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
 
   #writeDebug('theFormat='.$theFormat);
   #writeDebug('theWhere='. $theWhere) if $theWhere;
 
+  &initDB($thisWeb);
   my ($prevTopic, $nextTopic) = &getPrevNextTopic($thisWeb, $thisTopic, $theWhere, $theOrder);
   if ($nextTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$nextTopic, web=>$thisWeb);
@@ -417,6 +421,9 @@ sub _RECENTCOMMENTS {
   my $theCategory = $params->{category} || '.*';
   $theAge =~ s/[^\d]+//go;
   $theWeb = $params->{web} || $theWeb;
+
+  return &inlineError("ERROR: RECENTCOMMENTS has no \"format\" argument") 
+    unless $theFormat;
   
   &initDB($theWeb);
 
@@ -463,6 +470,9 @@ sub _RECENTCOMMENTS {
     $blogComments{$topicName}{createdate} = $topicCreateDate;
     $blogComments{$topicName}{author} = $topicForm->fastget('Name');
     $baseRefs{$baseRefName}{obj} = $baseRefObj;
+    $baseRefs{$baseRefName}{latestdate} = $topicCreateDate 
+      if !$baseRefs{$baseRefName}{latestdate} || 
+	  $baseRefs{$baseRefName}{latestdate} > $topicCreateDate;
     $baseRefs{$baseRefName}{createdate} = $baseRefObj->fastget('createdate');
     $baseRefs{$baseRefName}{count}++;
     $baseRefs{$baseRefName}{headline} = $baseRefForm->fastget('Headline');
@@ -480,7 +490,7 @@ sub _RECENTCOMMENTS {
 
   # sort
   my @baseRefs = sort {
-      $baseRefs{$b}{createdate} <=> $baseRefs{$a}{createdate}
+      $baseRefs{$b}{latestdate} <=> $baseRefs{$a}{latestdate}
     } keys %baseRefs;
   foreach my $baseRefName (@baseRefs) {
     @{$baseRefs{$baseRefName}{comments}} = sort {
@@ -495,18 +505,13 @@ sub _RECENTCOMMENTS {
     next if $seen{$baseRefName};
     $seen{$baseRefName} = 1;
 
-    my $text = $theSeparator if $result;
+    my $text = $theSeparator if $result && $theSeparator ne 'none';
     $text .= $theFormat;
 
     # get variables
     my $headline = $baseRefs{$baseRefName}{headline};
     my $commenter = '';
-    my $date = '';
 
-    # get latest comment date
-    my $latestComment = $baseRefs{$baseRefName}{comments}[0];
-    $date = $blogComments{$latestComment}{createdate};
-    
     # get commenter
     my @commenter;
     my %seenAuthor;
@@ -526,7 +531,7 @@ sub _RECENTCOMMENTS {
       count=>$baseRefs{$baseRefName}{count}>1?$baseRefs{$baseRefName}{count}:'',
       headline=>$headline,
       commenter=>$commenter,
-      date=>$date
+      date=>$baseRefs{$baseRefName}{latestdate}
     );
       
     $result .= $text;
@@ -567,13 +572,16 @@ sub _COUNTCOMMENTS {
 
   #writeDebug("called _COUNTCOMMENTS()");
 
-  $theBlogRef = $params->{_DEFAULT};
+  $theBlogRef = $params->{_DEFAULT} || $params->{topic};
   $theFormat = $params->{format} || '$count';
   $theSingle = $params->{single} || $theFormat;
   $theHideNull = $params->{hidenull} || 'off';
   $theNullString = $params->{null} || '0';
   $theOffset = $params->{offset} || 0;
   $theWeb = $params->{web} || $theWeb;
+
+  return &inlineError("ERROR: COUNTCOMMENTS has no topic argument") 
+    unless $theBlogRef;
 
   ($theWeb, $theBlogRef) = &TWiki::Func::normalizeWebTopicName($theWeb, $theBlogRef);
   #writeDebug("theBlogRef=$theBlogRef");
@@ -645,13 +653,16 @@ sub _RELATEDENTRIES {
 
   writeDebug("_RELATEDENTRIES() called");
 
-  $theTopic = $params->{_DEFAULT} || return '';
+  $theTopic = $params->{_DEFAULT} || $params->{topic};
   my $theFormat = $params->{format} || '$topic';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theSeparator = $params->{separator} || '$n';
   my $theDepth = $params->{depth} || 2;
   $theWeb = $params->{web} || $theWeb;
+
+  return &inlineError("ERROR: RELATEDENTRIES has no topic argument") 
+    unless $theTopic;
 
   &initDB($theWeb);
 
@@ -686,7 +697,7 @@ sub _RELATEDENTRIES {
     if ($isFirst) {
       $isFirst = 0;
     } else {
-      $result .= $theSeparator;
+      $result .= $theSeparator if $theSeparator ne 'none';
     }
     $result .= $text;
     writeDebug("result=$result");
@@ -695,6 +706,7 @@ sub _RELATEDENTRIES {
 
   # subst standards
   $result =~ s/\$n/\n/go;
+  $result =~ s/\$t\b/\t/go;
   $result =~ s/\$percnt/%/go;
   $result =~ s/\$dollar/\$/go;
   $result =~ s/\$headline//go;
@@ -771,8 +783,6 @@ sub dbQuery {
     }
     @topicNames = reverse @topicNames if $theReverse eq 'on';
   }
-
-  # limit
 
   return (\@topicNames, \%hits, undef);
 }

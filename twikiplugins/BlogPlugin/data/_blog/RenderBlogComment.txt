@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131747451" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132222822" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -23,7 +23,7 @@ see also: RenderDocNavigation
 ~~~  format="
 *~~     <div class=\"blogRef\">
 ~~~     $n%STOPALIASAREA%$n
-~~~        <h2>Comment(s) on 
+~~~        <h2>On 
 ~~~            [[$web.$expand(BaseRef)][\"$expand(@BaseRef.Headline or BaseRef)\"
 ~~~            <span class=\"blogDate\">
 ~~~              ($formatTime(@BaseRef.createdate, '$day, $mon $year'))
@@ -48,9 +48,15 @@ see also: RenderDocNavigation
 *~~ <h3 style=\"margin-bottom:0px;padding-bottom:0px\">
 ~~~   <a name=\"$topic\"></a><a name=\"$expand(Nr)\"></a>
 ~~~   <span class=\"blogCommentNr\">$expand(Nr)</span>
-~~~   $percntIFDEFINED{\"$expand(Url)\" 
-~~~      then=\"[[$expand(Url)][$expand(Name)]] [[$web.$topic][\"
-~~~      else=\"[[$web.$topic][$expand(Name)\"}$percnt
+~~~   $percntIFDEFINEDTHEN{\"$expand(Url)\"}$percnt
+~~~     [[$expand(Url)][$expand(Name)]] [[$web.$topic][
+~~~   $percntELSEDEFINED$percnt
+~~~      $percntCALC{
+~~~        \"$dollarIF($dollarEXISTS(%MAINWEB%.$expand(Name)),
+~~~          [[%MAINWEB%.$expand(Name)][$expand(Name)]] [[$web.$topic][,
+~~~         [[$web.$topic][$expand(Name))\"
+~~~      }$percnt
+~~~   $percntFIDEFINED%
 ~~~   <span class=\"blogDate\">
 ~~~     replied
 ~~~     $percntTIMESINCE{

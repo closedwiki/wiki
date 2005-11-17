@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1124204031" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132096902" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -22,7 +22,8 @@ See also: %TOPIC%Template
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicType
 -->
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicType"}%
-%META:FIELD{name="TopicDescription" attributes="" title="TopicDescription" value="TopicType for an attribute description of a TWikiForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicType"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType for an attribute description of a TWikiForm"}%

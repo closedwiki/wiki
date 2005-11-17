@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131091903" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132096812" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -9,6 +9,7 @@
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicType
 -->
 
 

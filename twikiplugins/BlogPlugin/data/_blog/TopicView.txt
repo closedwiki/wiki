@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1124237363" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132096947" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -23,9 +23,10 @@ See also: %TOPIC%Template
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicType
 -->
 
-%META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="AdminTool, TopicType"}%
-%META:FIELD{name="TopicDescription" attributes="" title="TopicDescription" value="TopicType of topics that implement a TMPL template to view topics"}%
 
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TopicType"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType of topics that implement a TMPL template to view topics"}%

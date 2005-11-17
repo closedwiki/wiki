@@ -3,6 +3,7 @@
 ---++ <nop>%WEB% Web Preferences
 %FORMFIELD{"TopicDescription"}%
 
+   * Set WEBBGCOLOR = #eeeeee
    * Set SITEMAPLIST = on
    * Set SITEMAPWHAT = Decent Blogging using TWiki
    * Set SITEMAPUSETO = Decent Blogging using TWiki
