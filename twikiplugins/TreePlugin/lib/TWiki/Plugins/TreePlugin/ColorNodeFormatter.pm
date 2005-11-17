@@ -46,5 +46,4 @@ sub colors {
 	return \@{ $this->{_colors} };
 }
 
-
 1;
