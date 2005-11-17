@@ -48,22 +48,23 @@ my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 =pod
 
----++ ClassMethod new( )
+---++ ClassMethod new( \&getViewUrl, $markVars )
 
 Construct a new TML to HTML convertor.
 
 $getViewUrl is a reference to a method:
    * getViewUrl($web,$topic) -> $url (where $topic may include an anchor)
 
+$markVars is true if we are to expand TWiki variables to spans. It should
+be false otherwise (TWiki variables will be left as text).
+
 =cut
 
 sub new {
-    my( $class, $getViewUrl ) = @_;
+    my( $class, $getViewUrl, $markVars ) = @_;
     my $this = {};
     $this->{getViewUrl} = $getViewUrl;
-    my $mv = TWiki::Func::getPreferencesValue(
-        'WYSIWYGPLUGIN_MARK_VARIABLES' );
-    $this->{markvars} = ( $mv && $mv eq 'on' );
+    $this->{markvars} = $markVars;
     return bless( $this, $class );
 }
 
@@ -134,7 +135,7 @@ sub _processTags {
             if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)({.*})?$/o ) {
                 my $nop = $1 || '';
                 my $tag = $2 . ( $3 || '' );
-                if( scalar( @stack ) == 1 ) {
+                if( scalar( @stack ) == 1 && $this->{markvars} ) {
                     $tag = CGI::span({ class=>'TMLvariable' }, $tag );
                 } else {
                     $tag = '%'.$tag.'%';

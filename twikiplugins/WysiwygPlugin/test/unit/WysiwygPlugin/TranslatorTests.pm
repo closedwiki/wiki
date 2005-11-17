@@ -1045,8 +1045,7 @@ sub _paramsSame {
 sub compareTML_HTML {
     my ( $this, $args ) = @_;
 
-    my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&TWiki::Plugins::WysiwygPlugin::getViewUrl);
-    $txer->{markvars} = 1;
+    my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&TWiki::Plugins::WysiwygPlugin::getViewUrl, 1);
     my $tx = $txer->convert( $args->{tml} );
     $txer->cleanup($tx);
     $this->_compareHTML($args->{html}, $tx, 1);

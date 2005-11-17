@@ -3,7 +3,7 @@
 # Build class for WysiwygPlugin
 #
 BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS} || '')) {
     unshift @INC, $pc;
   }
 }
