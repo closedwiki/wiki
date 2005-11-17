@@ -51,21 +51,21 @@ use Assert;
 
 =pod
 
----++ ClassMethod new( $prefs, $type, $web, $topic, $prefix, $parent )
+---++ ClassMethod new( $prefs, $parent, $type, $web, $topic, $prefix )
 
 Creates a new Prefs object.
    * =$prefs= - controlling TWiki::Prefs object
+   * =$parent= - the PrefsCache object to use to initialise values from
    * =$type= - Type of prefs object to create, see notes.
    * =$web= - web containing topic to load from (required is =$topic= is set)
    * =$topic= - topic to load from
    * =$prefix= - key prefix for all preferences (used for plugins)
-   * =$parent= - the PrefsCache object to use to initialise values from
 If the specified topic is not found, returns an empty object.
 
 =cut
 
 sub new {
-    my( $class, $prefs, $type, $web, $topic, $prefix, $parent) = @_;
+    my( $class, $prefs, $parent, $type, $web, $topic, $prefix) = @_;
 
     ASSERT($prefs->isa( 'TWiki::Prefs')) if DEBUG;
     ASSERT($type) if DEBUG;

@@ -17,10 +17,11 @@ _Special text strings expand on the fly to display user data or system info_
 ---++ Setting Variables
 You can set variables in all the following places:
    1 local site level in %LOCALSITEPREFS%
-   1 web level in %WEBPREFSTOPIC% of each web
    1 user level in individual user topics in %MAINWEB% web
-   1 session variables (if sessions are enabled)
+   1 web level in %WEBPREFSTOPIC% of each web
    1 topic level in topics in webs
+   1 plugin topics (see TWikiPlugins)
+   1 session variables (if sessions are enabled)
 
 Settings at higher-numbered levels override settings of the same variable at lower numbered levels, unless the variable was included in the setting of FINALPREFERENCES at a lower-numbered level, in which case it is locked at the value it has at that level.
 

@@ -1191,6 +1191,9 @@ sub new {
     # Finish plugin initialization - register handlers
     $this->{plugins}->enable();
 
+    $prefs->pushPreferenceValues( 'SESSION',
+                                  $this->{client}->getSessionValues() );
+
     return $this;
 }
 

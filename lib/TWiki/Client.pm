@@ -551,6 +551,22 @@ sub redirectCgiQuery {
 
 =pod
 
+---++ ObjectMethod getSessionValues() -> \%values
+Get a name->value hash of all the defined session variables
+
+=cut
+
+sub getSessionValues {
+    my( $this ) = @_;
+
+    my $cgisession = $this->{cgisession};
+    return undef unless $cgisession;
+
+    return $cgisession->param_hashref();
+}
+
+=pod
+
 ---++ ObjectMethod getSessionValue( $name ) -> $value
 Get the value of a session variable.
 

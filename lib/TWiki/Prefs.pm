@@ -89,7 +89,6 @@ sub pushGlobalPreferences {
         my( $lweb, $ltopic ) = $this->{session}->normalizeWebTopicName(
             undef, $TWiki::cfg{LocalSitePreferences} );
         $this->pushPreferences( $lweb, $ltopic, 'SITE' );
-
     }
 }
 
@@ -98,7 +97,7 @@ sub pushGlobalPreferences {
 ---++ ObjectMethod pushPreferences( $web, $topic, $type )
    * =$web= - web to read from
    * =$topic= - topic to read
-   * =$type= - DEFAULT, SITE, USER, WEB, TOPIC or PLUGIN
+   * =$type= - DEFAULT, SITE, USER, SESSION, WEB, TOPIC or PLUGIN
    * =$prefix= - key prefix for all preferences (used for plugins)
 Reads preferences from the given topic, and pushes them onto the
 preferences stack.
@@ -115,8 +114,8 @@ sub pushPreferences {
     }
 
     my $req =
-      new TWiki::Prefs::PrefsCache( $this, $type, $web, $topic, $prefix,
-                                   $top );
+      new TWiki::Prefs::PrefsCache(
+          $this, $top, $type, $web, $topic, $prefix );
 
     if( $req ) {
         push( @{$this->{PREFS}}, $req );
@@ -144,6 +143,34 @@ sub pushWebPreferences {
         $this->pushPreferences(
             $path, $TWiki::cfg{WebPrefsTopicName}, 'WEB' );
     }
+}
+
+=pod
+
+---++ ObjectMethod pushPreferencesValues( $type, \%values )
+Push a new preference level using type and values given
+
+=cut
+
+sub pushPreferenceValues {
+    my( $this, $type, $values ) = @_;
+
+    return unless $values;
+
+    my $top;
+    if( $this->{PREFS} ) {
+        $top = $this->{PREFS}[$#{$this->{PREFS}}];
+    }
+
+    my $req = new TWiki::Prefs::PrefsCache( $this, $top, $type );
+
+    foreach my $key ( keys %$values ) {
+        my $val = $values->{$key} || '';
+        $req->insert( 'Set', $key, $val );
+    }
+
+    push( @{$this->{PREFS}}, $req );
+    $req->finalise( $this );
 }
 
 =pod
@@ -191,7 +218,7 @@ sub getPreferencesValue {
 
     return undef unless @{$this->{PREFS}};
     my $top = $this->{PREFS}[$#{$this->{PREFS}}];
-    my $lk = "$this->{LOCAL}-$key";
+    my $lk = $this->{LOCAL}.'-'.$key;
     if( defined( $top->{locals}{$lk} )){
         return $top->{locals}{$lk};
     } else {
@@ -234,7 +261,7 @@ sub getTopicPreferencesValue {
 
     unless( $this->{CACHE}{$wtn} ) {
         $this->{CACHE}{$wtn} =
-          new TWiki::Prefs::PrefsCache( $this, 'TOPIC', $web, $topic );
+          new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC', $web, $topic );
     }
     return $this->{CACHE}{$wtn}->{values}{$key};
 }
