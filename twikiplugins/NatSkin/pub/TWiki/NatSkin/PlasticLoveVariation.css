@@ -1,6 +1,5 @@
 /* header art variation */
 .natHeaderArt {
-  background:white;
   background-image:url(PlasticLoveBar.jpg); 
   background-repeat:no-repeat;
   background-position:top left;
@@ -23,8 +22,6 @@
   color:white;
 }
 .natSearchBox,
-.natWebButtons,
-.natWebButtons a,
 .natAction,
 .natWebSlogan,
 .natTopBar,
@@ -47,3 +44,28 @@
 .natWebTitle {
   text-decoration:underline;
 }
+.natWebButtons {
+  padding-left:10px;
+}
+.natWebButtonsContents {
+  padding:5px 10px 5px;
+}
+.natWebButtons ul li a {
+  margin:0px;
+  padding:2px 5px;
+  border-bottom:0px !important;
+  border:1px solid transparent;
+}
+.natWebButtons ul li.current a:hover {
+  background:white;
+  color:#FE1C70;
+}
+.natWebButtons ul li.current a {
+  background:white;
+  color:black;
+}
+.natWebButtons ul li a:hover {
+  background:#FE1C70;
+  color:black;
+}
+

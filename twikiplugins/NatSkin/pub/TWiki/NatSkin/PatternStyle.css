@@ -3,70 +3,70 @@
 
 /* html */
 .natBody {
-	line-height:1.55em;
-	font-family:"Lucida Grande", verdana, lucida, arial, sans-serif;
-	background-color:#f8f8f8;
-	margin:0;
-	padding:0;
-	font-size:x-small;
-	voice-family:"\"}\""; 
-	voice-family:inherit;
-	font-size:small;
+  line-height:1.55em;
+  font-family:"Lucida Grande", verdana, lucida, arial, sans-serif;
+  background-color:#f8f8f8;
+  margin:0;
+  padding:0;
+  font-size:x-small;
+  voice-family:"\"}\""; 
+  voice-family:inherit;
+  font-size:small;
 }
 html>body {
-	font-size:small;	
+  font-size:small;	
 }
 
 /* be kind to netscape 4 that doesn't understand inheritance */
 body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
-	background-color:transparent;
+  background-color:transparent;
 }
 p {
-	margin:1em 0 0 0;
+  margin:1em 0 0 0;
 }
 table {
-	border-collapse:separate;
+  border-collapse:separate;
 }
 strong, b {
-	font-weight:bold;
+  font-weight:bold;
 }
 hr {
-	color:#9E9E70;
-	background-color:#9E9E70;
-	height:1px;
-	border:none;
+  color:#9E9E70;
+  background-color:#9E9E70;
+  height:1px;
+  border:none;
 }
 pre, code, tt {
-	font-size:100%;
-	line-height:1.4em;
-	color:#7A4707;
+  font-size:100%;
+  line-height:1.4em;
+  color:#7A4707;
 }
 pre {
-	margin-top:1em;
-	margin-bottom:1em;
+  margin-top:1em;
+  margin-bottom:1em;
 }
 
 /* Text */
 
 h1, h2, h3, h4, h5, h6 {
-	font-family:"Lucida Grande", arial, lucida, verdana, sans-serif;
-	line-height:104%;
-	padding:0;
-	/*margin:1em 0 0.1em 0;*/
-	font-weight:bold;
+  font-family:"Lucida Grande", arial, lucida, verdana, sans-serif;
+  line-height:104%;
+  padding:0;
+  /*margin:1em 0 0.1em 0;*/
+  font-weight:bold;
 }
 h1 {
-	font-size:210%;
-	color:#e24628;
-	margin:0 0 0.1em 0;
+  font-size:210%;
+  color:#e24628;
+  margin:0 0 0.1em 0;
 }
 h2 {
-	font-size:145%;
-	display:block;
-	background-color:#F3EDE7;
-	color:#900;
-	padding:0.2em 0.7em 0 0.7em;
-	margin:1em 0 0.15em 0;
+  font-size:145%;
+  display:block;
+  background-color:#F3EDE7;
+  color:#900;
+  padding:0.2em 0.7em 0 0.7em;
+  margin:1em 0 0.15em 0;
 }
 h3 { font-size:140%; color:#900;}
 h4 { font-size:125%; color:#900;}
@@ -101,19 +101,19 @@ a:visited:active {
 }
 a:link:hover,
 a:visited:hover {
-	text-decoration:underline;
-	background-color:#b4d5ff;
-	color:#1559B3;
+  /*text-decoration:underline;*/
+  background-color:#b4d5ff;
+  color:#1559B3;
 }
 a:link img,
 a:visited img,
 a:hover img,
 a:active img {
-	background-color:transparent;
+  background-color:transparent;
 }
 th a:link,
 th a:visited {
-	font-weight:bold;
+  font-weight:bold;
 }
 
 /* sorting of table columns */
@@ -125,59 +125,59 @@ th.twikiSortedAscendingCol a:visited {
 }
 th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover {
-	text-decoration:none;
-	border-top:0;
-	border-bottom:1px solid #999;
+  text-decoration:none;
+  border-top:0;
+  border-bottom:1px solid #999;
 }
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:visited,
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:visited {
-	border-bottom:1px solid #999;
+  border-bottom:1px solid #999;
 }
 th.twikiSortedDescendingCol a:hover,
 th.twikiSortedDescendingCol a:hover {
-	text-decoration:none;
-	border-bottom:0;
-	border-top:1px solid #999;
+  text-decoration:none;
+  border-bottom:0;
+  border-top:1px solid #999;
 }
 
 /* Forms */
 
 form { 
-	display:inline;
-	margin:0;
-	padding:0;
+  display:inline;
+  margin:0;
+  padding:0;
 }
 textarea {
-	font-family:monospace;
-	font-size:100%;
-	margin:0.25em 0;
+  font-family:monospace;
+  font-size:100%;
+  margin:0.25em 0;
 }
 input, select {
-	font-family:verdana,arial,sans-serif;
-	padding:1px;
-	/*background-color:#E8F1F9;*/
+  font-family:verdana,arial,sans-serif;
+  padding:1px;
+  /*background-color:#E8F1F9;*/
 }
 select {
-	padding:0;
-	font-size:100%;
+  padding:0;
+  font-size:100%;
 }
 fieldset {
-	border:1px solid #22638c;
-	padding-left:1em;
+  border:1px solid #22638c;
+  padding-left:1em;
 }
 legend {
-	padding: 0.2em 1em;
-	color:#8490A1; /* .twikiGrayText value */
-	font-size:95%;
-	border:1px solid #8490A1; /* .twikiGrayText value */
-	background-color:#f8f8f8;
+  padding: 0.2em 1em;
+  color:#8490A1; /* .twikiGrayText value */
+  font-size:95%;
+  border:1px solid #8490A1; /* .twikiGrayText value */
+  background-color:#f8f8f8;
 }
 label {
-	margin-left:0.5em;
-	font-size:95%;
-	line-height:125%;
+  margin-left:0.5em;
+  font-size:95%;
+  line-height:125%;
 }
 
 /* twiki styles */
@@ -227,20 +227,21 @@ label {
 .natMain .natNoteHeading {
   color:#e24628;
 }
+.natSignature {
+  color:#8490A1; 
+}
 
 /* topbar */
 .natHeaderArt {
+  background-color:#F8F4F1;
   background-color:#f8f8f8;
 }
-.natTopLeft {
-  padding:5px 1em;
-}
-.natTopRight {
-  padding:5px 1em;
+.natTopLeftContents, .natTopRightContents {
+  margin:2em 1em;
 }
 .natTopRightContents {
+  margin-top:2.8em;
   white-space:nowrap;
-  margin-top:0px;
   line-height:1.4em;
   font-family:arial, sans-serif;
   font-size:85%;
@@ -251,28 +252,24 @@ label {
   font-size:100%;
 }
 .natSearchBoxTop {
-  margin-top:0.8em;
   margin-bottom:0.4em;
-}
-.natTopRight {
-  padding-top:5px;
-  padding-bottom:0.7em;
-  vertical-align:bottom;
 }
 .natWebSlogan {
   font-size:100%;
-}
-.natTopBarSizer {
-  height:70px;
 }
 .natWebSlogan,
 .natWebTitle {
   line-height:1em;
 }
+.natWebTitle {
+  color:#1e5bbd;
+}
 .natWebTitle a,
+.natWebTitle a:hover,
 .natWebTitle a:link,
 .natWebTitle a:visited,
 .natWebTitle a:hover {
+  color:#1e5bbd;
   color:#e24628;
   background:transparent;
 }
@@ -286,6 +283,7 @@ label {
 }
 
 .natSideBar {
+  background-color:#F8F4F1;
   background-color:#f8f8f8;
   border-top:1px solid #ddd;
   color:#800;
@@ -510,6 +508,7 @@ html>body .natSideBar li a {
 }
 
 /* twiki forms */
+.natTopicEditForm,
 .natTopicForm {
   margin:2em 0;
   font-size:90%;
@@ -518,6 +517,7 @@ html>body .natSideBar li a {
   background:#f1f1f1;
   padding:3em 1em;
 }
+.natTopicEditForm table,
 .natTopicForm table {
   border-collapse:collapse;
   padding:0px;
@@ -525,6 +525,7 @@ html>body .natSideBar li a {
   color:#888e9c;
   border:1px solid #ccc;
 }
+.natTopicEditForm th,
 .natTopicForm th {
   padding:0.2em 0.6em;
   height:2.5em;
@@ -532,6 +533,7 @@ html>body .natSideBar li a {
   background-color:white;
   vertical-align:middle;
 }
+.natTopicEditForm table td,
 .natTopicForm table td {
   background-color:white;
   border-left:none;
@@ -547,6 +549,9 @@ td.natTopicFormFirstCol {
   background-color:#E0E9F7;
   padding-left:1em;
   color:black;
+}
+th.natTopicFormTitle {
+  text-align:center;
 }
 .natTopicEditForm table td {
   border-left:1px solid #ddd;
@@ -610,4 +615,54 @@ td.natTopicFormFirstCol {
 }
 html>body .twikiToc li a {
   width:auto;
+}
+
+/* plugin support */
+
+/* tip of the day */
+.tipsOfTheDay {
+  margin:1.5em -1em;
+  padding:0.25em 0 0.5em 1em;
+  background-color:#DFEDFD;
+  border-top:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+}
+.tipsOfTheDayHeader {
+  display:block;
+  font-family:"Lucida Grande", verdana, lucida, arial, sans-serif;
+  font-size:110%;
+  line-height:1.4em;
+  color:black;
+  text-align:center;
+  font-weight:bold;
+  border-bottom:3px solid #22638C;
+  margin-left:-1em;
+  padding-bottom:0.4em;
+  margin-bottom:0.4em;
+}
+.tipsOfTheDayText {
+  margin-right:1em;
+}
+.tipsOfTheDayTitle {
+  font-weight:bold;
+}
+
+/* blogging */
+.blogSideBar li a {
+  display:inline;
+}
+.blogCommentOdd {
+  background:#F8F4F1;
+}
+.blogCommentNr {
+  color:#959596;
+  color:#9E9E70;
+  margin-right:1em;
+  margin-left:0.3em;
+}
+.blogSubComments {
+  padding:1px;
+}
+.blogSubComment {
+  border-left:2px solid #ddd;
 }

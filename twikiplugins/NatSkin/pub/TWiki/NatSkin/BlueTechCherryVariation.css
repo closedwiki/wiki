@@ -1,6 +1,5 @@
 /* header art variation */
 .natHeaderArt {
-  /*background-color: #2474BD;*/
   border:1px solid white; /* IE fix */
   background-image:url(BlueTechCherryBar.jpg); 
   background-repeat:no-repeat;
