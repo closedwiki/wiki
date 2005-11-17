@@ -799,8 +799,8 @@ sub searchWeb {
                 } else {
                     # don't callback yet because of table
                     # rendering
-                    $out = $session->handleCommonTags( $out, $web, $topic );
-                    $out = $renderer->getRenderedVersion( $out, $web, $topic );
+                    #$out = $session->handleCommonTags( $out, $web, $topic );
+                    #$out = $renderer->getRenderedVersion( $out, $web, $topic );
                 }
 
                 if( $doBookView ) {
