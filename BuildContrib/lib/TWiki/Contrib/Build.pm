@@ -233,7 +233,7 @@ sub new {
     $this->{libdir} = $libpath;
     if( $this->{project} =~ /Plugin$/ ) {
         $this->{libdir} .= '/TWiki/Plugins';
-    } elsif( $this->{project} =~ /Contrib$/ ) {
+    } elsif( $this->{project} =~ /(Contrib|Skin)$/ ) {
         $this->{libdir} .= '/TWiki/Contrib';
     }
 
