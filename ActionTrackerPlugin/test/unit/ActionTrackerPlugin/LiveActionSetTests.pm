@@ -20,6 +20,11 @@ sub new {
   return $self;
 }
 
+BEGIN {
+    new TWiki();
+    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
+};
+
 sub set_up {
     my $this = shift;
 

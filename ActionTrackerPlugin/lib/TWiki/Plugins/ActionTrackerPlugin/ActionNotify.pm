@@ -66,6 +66,7 @@ sub doNotifications {
     my $attrs = new TWiki::Attrs( $expr, 1 );
     my $hdr =
       TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEHEADER' );
+
     my $bdy =
       TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEFORMAT' );
     my $vert =

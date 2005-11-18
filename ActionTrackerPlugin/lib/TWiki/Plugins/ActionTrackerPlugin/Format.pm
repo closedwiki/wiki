@@ -46,10 +46,12 @@ sub new {
     my ( $class, $header, $fields, $orient, $textform, $changeFields ) = @_;
 
     my $this = {};
+    $header ||= '';
     $header =~ s/^\s*\|//so;
     $header =~ s/\|\s*$//so;
     my @heads = split( /\|/, $header );
 
+    $fields ||= '';
     $fields =~ s/^\s*\|//so;
     $fields =~ s/\|\s*$//so;
     my @bodies = split( /\|/, $fields );
@@ -191,7 +193,7 @@ sub _formatAsString {
     my $this = shift;
     my $object = shift;
 
-    my $fmt = $this->{TEXTFORM};
+    my $fmt = $this->{TEXTFORM} || '';
     $fmt =~ s/\$(\w+\b)(\(\))?/&_expandString( $object, $1, 0, @_ )/geos;
 
     return $fmt;
@@ -295,7 +297,7 @@ sub _generateHTMLTable {
 sub formatStringTable {
     my $this = shift;
     my $data = shift;
-    my $text = "";
+    my $text = '';
     foreach my $row ( @$data ) {
         my $horzrow = $this->_formatAsString( $row, @_ );
         $text .= $horzrow."\n";

@@ -18,6 +18,11 @@ sub new {
     return $self;
 }
 
+BEGIN {
+    new TWiki();
+    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
+};
+
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
@@ -143,6 +148,10 @@ sub testMatchesOpen {
     $this->assert($action->matches($attrs));
     $attrs = new TWiki::Attrs("within=1",1);
     $this->assert(!$action->matches($attrs));
+
+    $attrs = new TWiki::Attrs("within=-2",1);
+    $this->assert(!$action->matches($attrs));
+
     $attrs = new TWiki::Attrs("late",1);
     $this->assert(!$action->matches($attrs));
     
@@ -205,8 +214,11 @@ sub testMatchesOpen {
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $attrs = new TWiki::Attrs("late",1);
     $this->assert($action->matches($attrs));
-    $attrs = new TWiki::Attrs("within=1",1);
+
+    $attrs = new TWiki::Attrs("within=-1",1);
     $this->assert($action->matches($attrs), $action->secsToGo());
+    $attrs = new TWiki::Attrs("within=1",1);
+    $this->assert(!$action->matches($attrs), $action->secsToGo());
 }
 
 sub testMatchesClosed {

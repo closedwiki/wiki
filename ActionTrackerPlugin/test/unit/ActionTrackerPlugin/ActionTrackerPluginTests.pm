@@ -15,6 +15,11 @@ sub new {
   return $self;
 }
 
+BEGIN {
+    new TWiki();
+    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
+};
+
 my $peopleWeb = "TemporaryActionTrackerTestUsersWeb";
 my $savePeople;
 my $testWeb = "TemporaryActionTrackerTestTopicsWeb";

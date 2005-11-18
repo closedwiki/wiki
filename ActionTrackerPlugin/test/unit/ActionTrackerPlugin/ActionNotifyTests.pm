@@ -23,6 +23,11 @@ sub new {
     return $self;
 }
 
+BEGIN {
+    new TWiki();
+    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
+};
+
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
@@ -318,7 +323,7 @@ sub test_B_NotifyLate {
     $this->assert_matches(qr/H/, $ok);
 }
 
-sub test_C_ChangedSince {
+sub detest_C_ChangedSince {
     my $this = shift;
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
     TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications(
