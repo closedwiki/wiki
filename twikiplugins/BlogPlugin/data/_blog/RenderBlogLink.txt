@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131398490" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132324333" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -93,7 +93,7 @@ if the linked site has a nice rss feed.
 *~~   $percntFIDEFINED$percnt
 *~~   <div class=\"headlinesCreator\">$creator</div>
 *~~   $percntIFDEFINEDTHEN{\"$subject\"}$percnt
-*~~     <div class=\"headlinesSubject\">$subject</div>
+*~~     <div class=\"headlinesSubject\"> \"$subject\"</div>
 *~~   $percntFIDEFINED$percnt
 *~~   <div class=\"headlinesTeaser\">$description</div>
 *~~ </div>
