@@ -6,11 +6,15 @@ use base qw( TWikiTestCase );
 use TWiki;
 use Error qw( :try );
 
+#================================================================================
+
 my $twiki;
 my $topicquery;
 
 my $webSubWeb = 'TestCases/HierarchicalWebs';
 my $testTopic = 'Topic';
+
+#================================================================================
 
 sub set_up {
     my $this = shift;
@@ -48,7 +52,8 @@ sub new {
     return $self;
 }
 
-################################################################################
+#================================================================================
+#================================================================================
 
 sub test_createSubWeb {
     my $this = shift;
@@ -66,6 +71,8 @@ sub test_createSubWeb {
     }
 }
 
+#================================================================================
+
 sub test_createSubWebTopic {
     my $this = shift;
     $twiki = new TWiki();
@@ -77,5 +84,36 @@ sub test_createSubWebTopic {
 			       );
     $this->assert( $twiki->{store}->topicExists( $webSubWeb, $testTopic ) );
 }
+
+#================================================================================
+
+sub test_create_subweb_with_same_name_as_a_topic {
+    my $this = shift;
+    $twiki = new TWiki();
+    my $twikiUserObject = $twiki->{user};
+
+    my $testTopic = 'SubWeb';
+    my $testText = 'TOPIC';
+
+    # create the page
+    $twiki->{store}->saveTopic( $twiki->{user}, $webSubWeb, $testTopic, $testText );
+    $this->assert( $twiki->{store}->topicExists( $webSubWeb, $testTopic ) );
+
+    { my ( undef, $text ) = $twiki->{store}->readTopic( 
+	$twikiUserObject, $webSubWeb, $testTopic );
+    $this->assert_equals( $testText, $text );
+    }
+
+    # create the subweb with the same name as the page
+    $twiki->{store}->createWeb( $twikiUserObject, "$webSubWeb/$testTopic" );
+    $this->assert( $twiki->{store}->webExists( "$webSubWeb/$testTopic" ) );
+    
+    { my ( undef, $text ) = $twiki->{store}->readTopic( 
+	$twikiUserObject, $webSubWeb, $testTopic );
+    $this->assert_equals( $testText, $text );
+    }
+}
+
+#================================================================================
 
 1;
