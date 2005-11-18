@@ -113,7 +113,7 @@ __TOPIC__
 
     # base page should evaluate (more or less) to the included page's text
     { my ( undef, $text ) = $twiki->{store}->readTopic( $twikiUserObject, $webSubWeb, $baseTopic );
-    # TODO: expand/evaluate $text
+    $text = $twiki->handleCommonTags( $text, $webSubWeb, $baseTopic );
     $this->assert_matches( qr/$testText\s*$/, $text );
     }
 }
