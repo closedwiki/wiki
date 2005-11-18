@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128882670" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131731565" format="1.1" version="1.1"}%
 ---+ <nop>UserInfoPlugin
 
 This plugin analyses the log files of your twiki-engine and extracts usefull
@@ -56,7 +56,6 @@ TWiki/Dakar has build-in support for cgi sessions.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
