@@ -1,99 +1,99 @@
-lib/TWiki/Plugins/BlogPlugin.pm
-lib/TWiki/Plugins/BlogPlugin/WebDB.pm
-data/TWiki/BlogUp.txt
-data/TWiki/BlogPlugin.txt
-data/Main/BlogAdminGroup.txt
-data/Main/BlogAuthorGroup.txt
-templates/_blog/view.rss.tmpl
-templates/_blog/view.print.nat.tmpl
-data/_blog/AdminTool.txt
-data/_blog/AdminToolTemplate.txt
-data/_blog/BaseRef.txt
-data/_blog/BlogAbout.txt
-data/_blog/BlogArchive.txt
-data/_blog/BlogAuthor.txt
-data/_blog/BlogAuthorTemplate.txt
-data/_blog/BlogComment.txt
-data/_blog/BlogCommentForm.txt
-data/_blog/BlogCommentTemplate.txt
-data/_blog/BlogDev.txt
-data/_blog/BlogEntry.txt
-data/_blog/BlogEntry0.txt
-data/_blog/BlogEntryForm.txt
-data/_blog/BlogEntryTemplate.txt
-data/_blog/BlogLink.txt
-data/_blog/BlogLinkForm.txt
-data/_blog/BlogLinkTemplate.txt
-data/_blog/BlogRef.txt
-data/_blog/BlogSideBar.txt
-data/_blog/FrontPage.txt
-data/_blog/HiddenFormViewTemplate.txt
-data/_blog/NewsFeeds.txt
-data/_blog/RenderAddComment.txt
-data/_blog/RenderAdminTools.txt
-data/_blog/RenderArchiveLink.txt
-data/_blog/RenderArchives.txt
-data/_blog/RenderBlogAuthorSwitch.txt
-data/_blog/RenderBlogComment.txt
-data/_blog/RenderBlogComments.txt
-data/_blog/RenderBlogEntriesInCategory.txt
-data/_blog/RenderBlogEntriesInSpan.txt
-data/_blog/RenderBlogEntriesOfAuthor.txt
-data/_blog/RenderBlogEntry.txt
-data/_blog/RenderBlogLink.txt
-data/_blog/RenderBlogLinkNavigation.txt
-data/_blog/RenderBlogRoll.txt
-data/_blog/RenderBlogTeaser.txt
-data/_blog/RenderCategories.txt
-data/_blog/RenderCategoriesInSpan.txt
-data/_blog/RenderDocNavigation.txt
-data/_blog/RenderBlogLinksInCategory.txt
-data/_blog/RenderFrontPage.txt
-data/_blog/RenderFrontPageNavigation.txt
-data/_blog/RenderFrontTeaser.txt
-data/_blog/RenderFullTeaser.txt
-data/_blog/RenderFunctionCallers.txt
-data/_blog/RenderNewBlogEntryButton.txt
-data/_blog/RenderNewBlogLinkButton.txt
-data/_blog/RenderNewCategoryButton.txt
-data/_blog/RenderNewTopicTypeForm.txt
-data/_blog/RenderNextCommentNr.txt
-data/_blog/RenderRecentComments.txt
-data/_blog/RenderRecentPostings.txt
-data/_blog/RenderRelatedEntries.txt
-data/_blog/RenderSubComments.txt
-data/_blog/RenderTWikiFormList.txt
-data/_blog/RenderTagline.txt
-data/_blog/RenderTopicList.txt
-data/_blog/RenderTopicSummary.txt
-data/_blog/RenderTopicTypes.txt
-data/_blog/RenderVisitors.txt
-data/_blog/SubjectCategory.txt
-data/_blog/SubjectCategoryTemplate.txt
-data/_blog/TWikiForm.txt
-data/_blog/TWikiFormAttribute.txt
-data/_blog/TWikiFormAttributeTemplate.txt
-data/_blog/TWikiFormTemplate.txt
-data/_blog/TestBlogEntry0.txt
-data/_blog/TopicDescription.txt
-data/_blog/TopicForm.txt
-data/_blog/TopicFunction.txt
-data/_blog/TopicFunctionTemplate.txt
-data/_blog/TopicTemplate.txt
-data/_blog/TopicTemplateTemplate.txt
-data/_blog/TopicType.txt
-data/_blog/TopicTypeTemplate.txt
-data/_blog/TopicView.txt
-data/_blog/TopicViewTemplate.txt
-data/_blog/WebAliases.txt
-data/_blog/WebChanges.txt
-data/_blog/WebHome.txt
-data/_blog/WebIndex.txt
-data/_blog/WebLeftBar.txt
-data/_blog/WebNotify.txt
-data/_blog/WebPreferences.txt
-data/_blog/WebRss.txt
-data/_blog/WebSideBar.txt
-data/_blog/WebStatistics.txt
-data/_blog/WebTopicEditTemplate.txt
-data/_blog/WebTopicList.txt
+lib/TWiki/Plugins/BlogPlugin.pm 440
+lib/TWiki/Plugins/BlogPlugin/WebDB.pm 440
+data/TWiki/BlogUp.txt 440
+data/TWiki/BlogPlugin.txt 440
+data/Main/BlogAdminGroup.txt 440
+data/Main/BlogAuthorGroup.txt 440
+templates/_blog/view.rss.tmpl 440
+templates/_blog/view.print.nat.tmpl 440
+data/_blog/AdminTool.txt 440
+data/_blog/AdminToolTemplate.txt 440
+data/_blog/BaseRef.txt 440
+data/_blog/BlogAbout.txt 440
+data/_blog/BlogArchive.txt 440
+data/_blog/BlogAuthor.txt 440
+data/_blog/BlogAuthorTemplate.txt 440
+data/_blog/BlogComment.txt 440
+data/_blog/BlogCommentForm.txt 440
+data/_blog/BlogCommentTemplate.txt 440
+data/_blog/BlogDev.txt 440
+data/_blog/BlogEntry.txt 440
+data/_blog/BlogEntry0.txt 440
+data/_blog/BlogEntryForm.txt 440
+data/_blog/BlogEntryTemplate.txt 440
+data/_blog/BlogLink.txt 440
+data/_blog/BlogLinkForm.txt 440
+data/_blog/BlogLinkTemplate.txt 440
+data/_blog/BlogRef.txt 440
+data/_blog/BlogSideBar.txt 440
+data/_blog/FrontPage.txt 440
+data/_blog/HiddenFormViewTemplate.txt 440
+data/_blog/NewsFeeds.txt 440
+data/_blog/RenderAddComment.txt 440
+data/_blog/RenderAdminTools.txt 440
+data/_blog/RenderArchiveLink.txt 440
+data/_blog/RenderArchives.txt 440
+data/_blog/RenderBlogAuthorSwitch.txt 440
+data/_blog/RenderBlogComment.txt 440
+data/_blog/RenderBlogComments.txt 440
+data/_blog/RenderBlogEntriesInCategory.txt 440
+data/_blog/RenderBlogEntriesInSpan.txt 440
+data/_blog/RenderBlogEntriesOfAuthor.txt 440
+data/_blog/RenderBlogEntry.txt 440
+data/_blog/RenderBlogLink.txt 440
+data/_blog/RenderBlogLinkNavigation.txt 440
+data/_blog/RenderBlogRoll.txt 440
+data/_blog/RenderBlogTeaser.txt 440
+data/_blog/RenderCategories.txt 440
+data/_blog/RenderCategoriesInSpan.txt 440
+data/_blog/RenderDocNavigation.txt 440
+data/_blog/RenderBlogLinksInCategory.txt 440
+data/_blog/RenderFrontPage.txt 440
+data/_blog/RenderFrontPageNavigation.txt 440
+data/_blog/RenderFrontTeaser.txt 440
+data/_blog/RenderFullTeaser.txt 440
+data/_blog/RenderFunctionCallers.txt 440
+data/_blog/RenderNewBlogEntryButton.txt 440
+data/_blog/RenderNewBlogLinkButton.txt 440
+data/_blog/RenderNewCategoryButton.txt 440
+data/_blog/RenderNewTopicTypeForm.txt 440
+data/_blog/RenderNextCommentNr.txt 440
+data/_blog/RenderRecentComments.txt 440
+data/_blog/RenderRecentPostings.txt 440
+data/_blog/RenderRelatedEntries.txt 440
+data/_blog/RenderSubComments.txt 440
+data/_blog/RenderTWikiFormList.txt 440
+data/_blog/RenderTagline.txt 440
+data/_blog/RenderTopicList.txt 440
+data/_blog/RenderTopicSummary.txt 440
+data/_blog/RenderTopicTypes.txt 440
+data/_blog/RenderVisitors.txt 440
+data/_blog/SubjectCategory.txt 440
+data/_blog/SubjectCategoryTemplate.txt 440
+data/_blog/TWikiForm.txt 440
+data/_blog/TWikiFormAttribute.txt 440
+data/_blog/TWikiFormAttributeTemplate.txt 440
+data/_blog/TWikiFormTemplate.txt 440
+data/_blog/TestBlogEntry0.txt 440
+data/_blog/TopicDescription.txt 440
+data/_blog/TopicForm.txt 440
+data/_blog/TopicFunction.txt 440
+data/_blog/TopicFunctionTemplate.txt 440
+data/_blog/TopicTemplate.txt 440
+data/_blog/TopicTemplateTemplate.txt 440
+data/_blog/TopicType.txt 440
+data/_blog/TopicTypeTemplate.txt 440
+data/_blog/TopicView.txt 440
+data/_blog/TopicViewTemplate.txt 440
+data/_blog/WebAliases.txt 440
+data/_blog/WebChanges.txt 440
+data/_blog/WebHome.txt 440
+data/_blog/WebIndex.txt 440
+data/_blog/WebLeftBar.txt 440
+data/_blog/WebNotify.txt 440
+data/_blog/WebPreferences.txt 440
+data/_blog/WebRss.txt 440
+data/_blog/WebSideBar.txt 440
+data/_blog/WebStatistics.txt 440
+data/_blog/WebTopicEditTemplate.txt 440
+data/_blog/WebTopicList.txt 440
