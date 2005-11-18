@@ -5,7 +5,7 @@ NatSkin is a skin driven by cascading stylesheets. This is a rework of the
 TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
 [[http://nats-www.informatik.uni-hamburg.de/Main/WebHome][Natural Language Systems Division]] 
 (NATS) of the University of Hamburg, Germany. 
-The NatSkin comes with 11 predefined styles that are inspired by the 
+The NatSkin comes with 12 predefined styles that are inspired by the 
 [[http://www.movabletype.org][MovableType]] and 
 [[http://wordpress.org][WordPress]] among others a port of the Kubrick style by 
 [[http://binarybonsai.com][Michael Heilemann]].

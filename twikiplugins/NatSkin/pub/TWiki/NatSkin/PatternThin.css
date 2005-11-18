@@ -1,6 +1,9 @@
 /* thin variant for clean */
 @import url("BaseThin.css");
 
+.natBodyContents {
+  width:70em;
+}
 .natWebButtons,
 .natMiddleRight,
 .natTopRight {
