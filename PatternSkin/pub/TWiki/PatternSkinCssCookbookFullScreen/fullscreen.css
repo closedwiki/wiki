@@ -1,0 +1,20 @@
+#patternPageShadow, 
+#patternPage {
+	margin:0;
+	padding:0;
+	top:0;
+}
+#patternPageShadow {
+	background:#fff;
+}
+#patternScreen {
+	margin-left:0;
+	margin-right:0;
+}
+html body {
+	background:#fff;
+}
+/* add a bottom border to mark the end of the page */
+#patternColumnWrapper {
+	border-width:1px 0 1px 0;
+}

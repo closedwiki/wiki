@@ -1,0 +1,9 @@
+.twikiLeftBar {
+   display:none;
+}
+.twikiMain {
+   margin-left:0;
+}
+.twikiBottomBar {
+   margin-left:2em
+}

@@ -1,0 +1,20 @@
+#patternTopBar {
+	display:none;
+}
+#patternLeftBar,
+#patternMain {
+	top:0px;
+}
+#patternColumnWrapper {
+	border-top:0px;
+}
+#patternLeftBar {
+	/* dynamic background image set in topic */
+	/* or write a hard coded image location here */
+	background-attachment:relative;
+	background-position:1em 12px;
+	background-repeat:no-repeat;
+}
+.patternLeftBarPersonal {
+	margin-top:64px; /* top bar height */
+}
