@@ -1,212 +1,212 @@
-templates/addform.nat.tmpl
-templates/attach.nat.tmpl
-templates/attachagain.nat.tmpl
-templates/attachnew.nat.tmpl
-templates/attachsidebar.nat.tmpl
-templates/attachtables.nat.tmpl
-templates/attachtopicactions.nat.tmpl
-templates/changeform.nat.tmpl
-templates/changeformsidebar.nat.tmpl
-templates/changeformtopicactions.nat.tmpl
-templates/changes.nat.tmpl
-templates/changestopicactions.nat.tmpl
-templates/defaultbody.nat.tmpl
-templates/defaultsidebar.nat.tmpl
-templates/defaulttopicactions.nat.tmpl
-templates/defaulttopbar.nat.tmpl
-templates/edit.nat.tmpl
-templates/editform.nat.tmpl
-templates/editsidebar.nat.tmpl
-templates/edittext.nat.tmpl
-templates/edittopicactions.nat.tmpl
-templates/form.nat.tmpl
-templates/formtables.nat.tmpl
-templates/javascript.nat.tmpl
-templates/login.nat.tmpl
-templates/mailnotify.nat.tmpl
-templates/moveattachment.nat.tmpl
-templates/moveattachmentsidebar.nat.tmpl
-templates/moveattachmenttopicactions.nat.tmpl
-templates/oops.nat.tmpl
-templates/oopsaccesschange.nat.tmpl
-templates/oopsaccesscreateweb.nat.tmpl
-templates/oopsaccessdenied.nat.tmpl
-templates/oopsaccessgroup.nat.tmpl
-templates/oopsaccessrename.nat.tmpl
-templates/oopsaccessview.nat.tmpl
-templates/oopsaccessvote.nat.tmpl
-templates/oopsattention.nat.tmpl
-templates/oopsauth.nat.tmpl
-templates/oopsbadpwformat.nat.tmpl
-templates/oopschangepasswd.nat.tmpl
-templates/oopsempty.nat.tmpl
-templates/oopserrbase.nat.tmpl
-templates/oopsleaseconflict.nat.tmpl
-templates/oopslocked.nat.tmpl
-templates/oopslockedrename.nat.tmpl
-templates/oopslogon.nat.tmpl
-templates/oopslogonbase.nat.tmpl
-templates/oopsmanage.nat.tmpl
-templates/oopsmissing.nat.tmpl
-templates/oopsmngcreateweb.nat.tmpl
-templates/oopsmore.nat.tmpl
-templates/oopsmoveerr.nat.tmpl
-templates/oopsnoformdef.nat.tmpl
-templates/oopsnotwikiuser.nat.tmpl
-templates/oopsnoweb.nat.tmpl
-templates/oopspreview.nat.tmpl
-templates/oopsregemail.nat.tmpl
-templates/oopsregexist.nat.tmpl
-templates/oopsregpasswd.nat.tmpl
-templates/oopsregrequ.nat.tmpl
-templates/oopsregthanks.nat.tmpl
-templates/oopsregwiki.nat.tmpl
-templates/oopsrenameerr.nat.tmpl
-templates/oopsrenamenotwikiword.nat.tmpl
-templates/oopsresetpasswd.nat.tmpl
-templates/oopsrev.nat.tmpl
-templates/oopssave.nat.tmpl
-templates/oopssaveerr.nat.tmpl
-templates/oopssendmailerr.nat.tmpl
-templates/oopssidebar.nat.tmpl
-templates/oopssoftwareerr.nat.tmpl
-templates/oopstopicactions.nat.tmpl
-templates/oopstopicexists.nat.tmpl
-templates/oopsupload.nat.tmpl
-templates/oopswrongpassword.nat.tmpl
-templates/page.nat.tmpl
-templates/preview.nat.tmpl
-templates/previewtopicactions.nat.tmpl
-templates/rdiff.nat.tmpl
-templates/rdifftopicactions.nat.tmpl
-templates/rename.nat.tmpl
-templates/renamebase.nat.tmpl
-templates/renameconfirm.nat.tmpl
-templates/renamedelete.nat.tmpl
-templates/renamerefs.nat.tmpl
-templates/renamesidebar.nat.tmpl
-templates/renametopicactions.nat.tmpl
-templates/search.nat.tmpl
-templates/searchbase.nat.tmpl
-templates/searchbookview.nat.tmpl
-templates/searchbox.nat.tmpl
-templates/searchformat.nat.tmpl
-templates/searchmeta.nat.tmpl
-templates/searchrenameview.nat.tmpl
-templates/searchtopicactions.nat.tmpl
-templates/settings.nat.tmpl
-templates/settingstopicactions.nat.tmpl
-templates/view.nat.tmpl
-templates/view.print.nat.tmpl
-templates/viewtopicactions.nat.tmpl
-data/Main/NatSkinUserViewTemplate.txt
-data/TWiki/NatSkin.txt
-data/TWiki/NatSkinCss.txt
-data/TWiki/NatSkinTemplates.txt
-data/TWiki/NatSkinStyleBrowser.txt
-data/TWiki/WebSideBar.txt
-pub/TWiki/NatSkin/BaseBorder.css
-pub/TWiki/NatSkin/BaseButtons.css
-pub/TWiki/NatSkin/BaseRight.css
-pub/TWiki/NatSkin/BaseStyle.css
-pub/TWiki/NatSkin/BaseThin.css
-pub/TWiki/NatSkin/Cairo_UI_pm.diff
-pub/TWiki/NatSkin/Clean.jpeg
-pub/TWiki/NatSkin/CleanBorder.css
-pub/TWiki/NatSkin/CleanButtons.css
-pub/TWiki/NatSkin/CleanRight.css
-pub/TWiki/NatSkin/CleanStyle.css
-pub/TWiki/NatSkin/CleanThin.css
-pub/TWiki/NatSkin/CleanThin.jpeg
-pub/TWiki/NatSkin/GeorgiaBlue.jpeg
-pub/TWiki/NatSkin/GeorgiaBlueBorder.css
-pub/TWiki/NatSkin/GeorgiaBlueButtons.css
-pub/TWiki/NatSkin/GeorgiaBlueRight.css
-pub/TWiki/NatSkin/GeorgiaBlueStyle.css
-pub/TWiki/NatSkin/GeorgiaBlueThin.css
-pub/TWiki/NatSkin/GeorgiaBlueThin.jpeg
-pub/TWiki/NatSkin/Gettysburg.jpeg
-pub/TWiki/NatSkin/GettysburgBorder.css
-pub/TWiki/NatSkin/GettysburgButtons.css
-pub/TWiki/NatSkin/GettysburgRight.css
-pub/TWiki/NatSkin/GettysburgStyle.css
-pub/TWiki/NatSkin/GettysburgThin.css
-pub/TWiki/NatSkin/GettysburgThin.jpeg
-pub/TWiki/NatSkin/Independence.jpeg
-pub/TWiki/NatSkin/IndependenceBorder.css
-pub/TWiki/NatSkin/IndependenceButtons.css
-pub/TWiki/NatSkin/IndependenceRight.css
-pub/TWiki/NatSkin/IndependenceStyle.css
-pub/TWiki/NatSkin/IndependenceThin.css
-pub/TWiki/NatSkin/IndependenceThin.jpeg
-pub/TWiki/NatSkin/Kubrick.jpeg
-pub/TWiki/NatSkin/KubrickBorder.css
-pub/TWiki/NatSkin/KubrickButtons.css
-pub/TWiki/NatSkin/KubrickRight.css
-pub/TWiki/NatSkin/KubrickStyle.css
-pub/TWiki/NatSkin/KubrickThin.css
-pub/TWiki/NatSkin/NoSideBar.css
-pub/TWiki/NatSkin/PlainJane.jpeg
-pub/TWiki/NatSkin/PlainJaneBorder.css
-pub/TWiki/NatSkin/PlainJaneButtons.css
-pub/TWiki/NatSkin/PlainJaneRight.css
-pub/TWiki/NatSkin/PlainJaneStyle.css
-pub/TWiki/NatSkin/PlainJaneThin.css
-pub/TWiki/NatSkin/PlainJaneThin.jpeg
-pub/TWiki/NatSkin/Rusty.jpeg
-pub/TWiki/NatSkin/RustyBorder.css
-pub/TWiki/NatSkin/RustyButtons.css
-pub/TWiki/NatSkin/RustyRight.css
-pub/TWiki/NatSkin/RustyStyle.css
-pub/TWiki/NatSkin/RustyThin.css
-pub/TWiki/NatSkin/RustyThin.jpeg
-pub/TWiki/NatSkin/SeaGreen.jpeg
-pub/TWiki/NatSkin/SeaGreenBorder.css
-pub/TWiki/NatSkin/SeaGreenButtons.css
-pub/TWiki/NatSkin/SeaGreenRight.css
-pub/TWiki/NatSkin/SeaGreenStyle.css
-pub/TWiki/NatSkin/SeaGreenThin.css
-pub/TWiki/NatSkin/SeaGreenThin.jpeg
-pub/TWiki/NatSkin/SepiaTWiki.png
-pub/TWiki/NatSkin/Squash.jpeg
-pub/TWiki/NatSkin/SquashBorder.css
-pub/TWiki/NatSkin/SquashButtons.css
-pub/TWiki/NatSkin/SquashRight.css
-pub/TWiki/NatSkin/SquashStyle.css
-pub/TWiki/NatSkin/SquashThin.css
-pub/TWiki/NatSkin/SquashThin.jpeg
-pub/TWiki/NatSkin/Stormy.jpeg
-pub/TWiki/NatSkin/StormyBorder.css
-pub/TWiki/NatSkin/StormyButtons.css
-pub/TWiki/NatSkin/StormyRight.css
-pub/TWiki/NatSkin/StormyStyle.css
-pub/TWiki/NatSkin/StormyThin.css
-pub/TWiki/NatSkin/StormyThin.jpeg
-pub/TWiki/NatSkin/TablePlugin_pm.diff
-pub/TWiki/NatSkin/external.png
-pub/TWiki/NatSkin/favicon.ico
-pub/TWiki/NatSkin/previewbg.png
-pub/TWiki/NatSkin/BlueFieldBar.jpg
-pub/TWiki/NatSkin/BlueFieldVariation.css
-pub/TWiki/NatSkin/BlueTechCherryBar.jpg
-pub/TWiki/NatSkin/BlueTechCherryVariation.css
-pub/TWiki/NatSkin/NuozekVariation.css
-pub/TWiki/NatSkin/NuozekBar.jpg
-pub/TWiki/NatSkin/OrangeTunnelVariation.css
-pub/TWiki/NatSkin/OrangeTunnelBar.jpg
-pub/TWiki/NatSkin/PinkPantherVariation.css
-pub/TWiki/NatSkin/PinkPantherBar.jpg
-pub/TWiki/NatSkin/PlasticLoveVariation.css
-pub/TWiki/NatSkin/PlasticLoveBar.jpg
-pub/TWiki/NatSkin/RedWomanVariation.css
-pub/TWiki/NatSkin/RedWomanBar.jpg
-pub/TWiki/NatSkin/SepiaFieldVariation.css
-pub/TWiki/NatSkin/SepiaFieldBar.jpg
-pub/TWiki/NatSkin/SubwayVariation.css
-pub/TWiki/NatSkin/SubwayBar.jpg
-pub/TWiki/NatSkin/WaterVariation.css
-pub/TWiki/NatSkin/WaterBar.jpg
-pub/TWiki/NatSkin/PatternBorder.css
-pub/TWiki/NatSkin/PatternButtons.css
-pub/TWiki/NatSkin/PatternStyle.css
-pub/TWiki/NatSkin/PatternThin.css
+templates/addform.nat.tmpl 00440
+templates/attach.nat.tmpl 0440
+templates/attachagain.nat.tmpl 0440
+templates/attachnew.nat.tmpl 0440
+templates/attachsidebar.nat.tmpl 0440
+templates/attachtables.nat.tmpl 0440
+templates/attachtopicactions.nat.tmpl 0440
+templates/changeform.nat.tmpl 0440
+templates/changeformsidebar.nat.tmpl 0440
+templates/changeformtopicactions.nat.tmpl 0440
+templates/changes.nat.tmpl 0440
+templates/changestopicactions.nat.tmpl 0440
+templates/defaultbody.nat.tmpl 0440
+templates/defaultsidebar.nat.tmpl 0440
+templates/defaulttopicactions.nat.tmpl 0440
+templates/defaulttopbar.nat.tmpl 0440
+templates/edit.nat.tmpl 0440
+templates/editform.nat.tmpl 0440
+templates/editsidebar.nat.tmpl 0440
+templates/edittext.nat.tmpl 0440
+templates/edittopicactions.nat.tmpl 0440
+templates/form.nat.tmpl 0440
+templates/formtables.nat.tmpl 0440
+templates/javascript.nat.tmpl 0440
+templates/login.nat.tmpl 0440
+templates/mailnotify.nat.tmpl 0440
+templates/moveattachment.nat.tmpl 0440
+templates/moveattachmentsidebar.nat.tmpl 0440
+templates/moveattachmenttopicactions.nat.tmpl 0440
+templates/oops.nat.tmpl 0440
+templates/oopsaccesschange.nat.tmpl 0440
+templates/oopsaccesscreateweb.nat.tmpl 0440
+templates/oopsaccessdenied.nat.tmpl 0440
+templates/oopsaccessgroup.nat.tmpl 0440
+templates/oopsaccessrename.nat.tmpl 0440
+templates/oopsaccessview.nat.tmpl 0440
+templates/oopsaccessvote.nat.tmpl 0440
+templates/oopsattention.nat.tmpl 0440
+templates/oopsauth.nat.tmpl 0440
+templates/oopsbadpwformat.nat.tmpl 0440
+templates/oopschangepasswd.nat.tmpl 0440
+templates/oopsempty.nat.tmpl 0440
+templates/oopserrbase.nat.tmpl 0440
+templates/oopsleaseconflict.nat.tmpl 0440
+templates/oopslocked.nat.tmpl 0440
+templates/oopslockedrename.nat.tmpl 0440
+templates/oopslogon.nat.tmpl 0440
+templates/oopslogonbase.nat.tmpl 0440
+templates/oopsmanage.nat.tmpl 0440
+templates/oopsmissing.nat.tmpl 0440
+templates/oopsmngcreateweb.nat.tmpl 0440
+templates/oopsmore.nat.tmpl 0440
+templates/oopsmoveerr.nat.tmpl 0440
+templates/oopsnoformdef.nat.tmpl 0440
+templates/oopsnotwikiuser.nat.tmpl 0440
+templates/oopsnoweb.nat.tmpl 0440
+templates/oopspreview.nat.tmpl 0440
+templates/oopsregemail.nat.tmpl 0440
+templates/oopsregexist.nat.tmpl 0440
+templates/oopsregpasswd.nat.tmpl 0440
+templates/oopsregrequ.nat.tmpl 0440
+templates/oopsregthanks.nat.tmpl 0440
+templates/oopsregwiki.nat.tmpl 0440
+templates/oopsrenameerr.nat.tmpl 0440
+templates/oopsrenamenotwikiword.nat.tmpl 0440
+templates/oopsresetpasswd.nat.tmpl 0440
+templates/oopsrev.nat.tmpl 0440
+templates/oopssave.nat.tmpl 0440
+templates/oopssaveerr.nat.tmpl 0440
+templates/oopssendmailerr.nat.tmpl 0440
+templates/oopssidebar.nat.tmpl 0440
+templates/oopssoftwareerr.nat.tmpl 0440
+templates/oopstopicactions.nat.tmpl 0440
+templates/oopstopicexists.nat.tmpl 0440
+templates/oopsupload.nat.tmpl 0440
+templates/oopswrongpassword.nat.tmpl 0440
+templates/page.nat.tmpl 0440
+templates/preview.nat.tmpl 0440
+templates/previewtopicactions.nat.tmpl 0440
+templates/rdiff.nat.tmpl 0440
+templates/rdifftopicactions.nat.tmpl 0440
+templates/rename.nat.tmpl 0440
+templates/renamebase.nat.tmpl 0440
+templates/renameconfirm.nat.tmpl 0440
+templates/renamedelete.nat.tmpl 0440
+templates/renamerefs.nat.tmpl 0440
+templates/renamesidebar.nat.tmpl 0440
+templates/renametopicactions.nat.tmpl 0440
+templates/search.nat.tmpl 0440
+templates/searchbase.nat.tmpl 0440
+templates/searchbookview.nat.tmpl 0440
+templates/searchbox.nat.tmpl 0440
+templates/searchformat.nat.tmpl 0440
+templates/searchmeta.nat.tmpl 0440
+templates/searchrenameview.nat.tmpl 0440
+templates/searchtopicactions.nat.tmpl 0440
+templates/settings.nat.tmpl 0440
+templates/settingstopicactions.nat.tmpl 0440
+templates/view.nat.tmpl 0440
+templates/view.print.nat.tmpl 0440
+templates/viewtopicactions.nat.tmpl 0440
+data/Main/NatSkinUserViewTemplate.txt 0440
+data/TWiki/NatSkin.txt 0440
+data/TWiki/NatSkinCss.txt 0440
+data/TWiki/NatSkinTemplates.txt 0440
+data/TWiki/NatSkinStyleBrowser.txt 0440
+data/TWiki/WebSideBar.txt 0440
+pub/TWiki/NatSkin/BaseBorder.css 0440
+pub/TWiki/NatSkin/BaseButtons.css 0440
+pub/TWiki/NatSkin/BaseRight.css 0440
+pub/TWiki/NatSkin/BaseStyle.css 0440
+pub/TWiki/NatSkin/BaseThin.css 0440
+pub/TWiki/NatSkin/Cairo_UI_pm.diff 0440
+pub/TWiki/NatSkin/Clean.jpeg 0440
+pub/TWiki/NatSkin/CleanBorder.css 0440
+pub/TWiki/NatSkin/CleanButtons.css 0440
+pub/TWiki/NatSkin/CleanRight.css 0440
+pub/TWiki/NatSkin/CleanStyle.css 0440
+pub/TWiki/NatSkin/CleanThin.css 0440
+pub/TWiki/NatSkin/CleanThin.jpeg 0440
+pub/TWiki/NatSkin/GeorgiaBlue.jpeg 0440
+pub/TWiki/NatSkin/GeorgiaBlueBorder.css 0440
+pub/TWiki/NatSkin/GeorgiaBlueButtons.css 0440
+pub/TWiki/NatSkin/GeorgiaBlueRight.css 0440
+pub/TWiki/NatSkin/GeorgiaBlueStyle.css 0440
+pub/TWiki/NatSkin/GeorgiaBlueThin.css 0440
+pub/TWiki/NatSkin/GeorgiaBlueThin.jpeg 0440
+pub/TWiki/NatSkin/Gettysburg.jpeg 0440
+pub/TWiki/NatSkin/GettysburgBorder.css 0440
+pub/TWiki/NatSkin/GettysburgButtons.css 0440
+pub/TWiki/NatSkin/GettysburgRight.css 0440
+pub/TWiki/NatSkin/GettysburgStyle.css 0440
+pub/TWiki/NatSkin/GettysburgThin.css 0440
+pub/TWiki/NatSkin/GettysburgThin.jpeg 0440
+pub/TWiki/NatSkin/Independence.jpeg 0440
+pub/TWiki/NatSkin/IndependenceBorder.css 0440
+pub/TWiki/NatSkin/IndependenceButtons.css 0440
+pub/TWiki/NatSkin/IndependenceRight.css 0440
+pub/TWiki/NatSkin/IndependenceStyle.css 0440
+pub/TWiki/NatSkin/IndependenceThin.css 0440
+pub/TWiki/NatSkin/IndependenceThin.jpeg 0440
+pub/TWiki/NatSkin/Kubrick.jpeg 0440
+pub/TWiki/NatSkin/KubrickBorder.css 0440
+pub/TWiki/NatSkin/KubrickButtons.css 0440
+pub/TWiki/NatSkin/KubrickRight.css 0440
+pub/TWiki/NatSkin/KubrickStyle.css 0440
+pub/TWiki/NatSkin/KubrickThin.css 0440
+pub/TWiki/NatSkin/NoSideBar.css 0440
+pub/TWiki/NatSkin/PlainJane.jpeg 0440
+pub/TWiki/NatSkin/PlainJaneBorder.css 0440
+pub/TWiki/NatSkin/PlainJaneButtons.css 0440
+pub/TWiki/NatSkin/PlainJaneRight.css 0440
+pub/TWiki/NatSkin/PlainJaneStyle.css 0440
+pub/TWiki/NatSkin/PlainJaneThin.css 0440
+pub/TWiki/NatSkin/PlainJaneThin.jpeg 0440
+pub/TWiki/NatSkin/Rusty.jpeg 0440
+pub/TWiki/NatSkin/RustyBorder.css 0440
+pub/TWiki/NatSkin/RustyButtons.css 0440
+pub/TWiki/NatSkin/RustyRight.css 0440
+pub/TWiki/NatSkin/RustyStyle.css 0440
+pub/TWiki/NatSkin/RustyThin.css 0440
+pub/TWiki/NatSkin/RustyThin.jpeg 0440
+pub/TWiki/NatSkin/SeaGreen.jpeg 0440
+pub/TWiki/NatSkin/SeaGreenBorder.css 0440
+pub/TWiki/NatSkin/SeaGreenButtons.css 0440
+pub/TWiki/NatSkin/SeaGreenRight.css 0440
+pub/TWiki/NatSkin/SeaGreenStyle.css 0440
+pub/TWiki/NatSkin/SeaGreenThin.css 0440
+pub/TWiki/NatSkin/SeaGreenThin.jpeg 0440
+pub/TWiki/NatSkin/SepiaTWiki.png 0440
+pub/TWiki/NatSkin/Squash.jpeg 0440
+pub/TWiki/NatSkin/SquashBorder.css 0440
+pub/TWiki/NatSkin/SquashButtons.css 0440
+pub/TWiki/NatSkin/SquashRight.css 0440
+pub/TWiki/NatSkin/SquashStyle.css 0440
+pub/TWiki/NatSkin/SquashThin.css 0440
+pub/TWiki/NatSkin/SquashThin.jpeg 0440
+pub/TWiki/NatSkin/Stormy.jpeg 0440
+pub/TWiki/NatSkin/StormyBorder.css 0440
+pub/TWiki/NatSkin/StormyButtons.css 0440
+pub/TWiki/NatSkin/StormyRight.css 0440
+pub/TWiki/NatSkin/StormyStyle.css 0440
+pub/TWiki/NatSkin/StormyThin.css 0440
+pub/TWiki/NatSkin/StormyThin.jpeg 0440
+pub/TWiki/NatSkin/TablePlugin_pm.diff 0440
+pub/TWiki/NatSkin/external.png 0440
+pub/TWiki/NatSkin/favicon.ico 0440
+pub/TWiki/NatSkin/previewbg.png 0440
+pub/TWiki/NatSkin/BlueFieldBar.jpg 0440
+pub/TWiki/NatSkin/BlueFieldVariation.css 0440
+pub/TWiki/NatSkin/BlueTechCherryBar.jpg 0440
+pub/TWiki/NatSkin/BlueTechCherryVariation.css 0440
+pub/TWiki/NatSkin/NuozekVariation.css 0440
+pub/TWiki/NatSkin/NuozekBar.jpg 0440
+pub/TWiki/NatSkin/OrangeTunnelVariation.css 0440
+pub/TWiki/NatSkin/OrangeTunnelBar.jpg 0440
+pub/TWiki/NatSkin/PinkPantherVariation.css 0440
+pub/TWiki/NatSkin/PinkPantherBar.jpg 0440
+pub/TWiki/NatSkin/PlasticLoveVariation.css 0440
+pub/TWiki/NatSkin/PlasticLoveBar.jpg 0440
+pub/TWiki/NatSkin/RedWomanVariation.css 0440
+pub/TWiki/NatSkin/RedWomanBar.jpg 0440
+pub/TWiki/NatSkin/SepiaFieldVariation.css 0440
+pub/TWiki/NatSkin/SepiaFieldBar.jpg 0440
+pub/TWiki/NatSkin/SubwayVariation.css 0440
+pub/TWiki/NatSkin/SubwayBar.jpg 0440
+pub/TWiki/NatSkin/WaterVariation.css 0440
+pub/TWiki/NatSkin/WaterBar.jpg 0440
+pub/TWiki/NatSkin/PatternBorder.css 0440
+pub/TWiki/NatSkin/PatternButtons.css 0440
+pub/TWiki/NatSkin/PatternStyle.css 0440
+pub/TWiki/NatSkin/PatternThin.css 0440
