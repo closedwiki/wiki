@@ -410,7 +410,7 @@ sub formatTime {
             $stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$1, $3 $2 $5/o;
         }
     } else {
-        $stime = "BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats";
+        $stime = "BAD DATE FORMAT see %TWIKIWEB%.ActionTrackerPlugin#DateFormats";
     }
     return $stime;
 }

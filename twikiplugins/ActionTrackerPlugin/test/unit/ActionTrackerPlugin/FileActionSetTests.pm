@@ -21,6 +21,11 @@ my $testweb1 = "ActionTrackerPluginTestWeb";
 my $testweb2 = "ActionTrackerPluginTestSecondaryWeb";
 my $twiki;
 
+BEGIN {
+    new TWiki();
+    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
+};
+
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
