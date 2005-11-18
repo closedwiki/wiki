@@ -1,0 +1,16 @@
+html body {
+	margin:2em;
+	background-color:#8D929A;
+}
+#patternLeftBar {
+	margin-top:2em;
+	margin-left:2em;
+}
+#patternBottomBar {
+	border:none;
+}
+.patternBottomBarContents, 
+.patternBottomBarContents a:link,
+.patternBottomBarContents a:visited {
+	color:#ccc;
+}

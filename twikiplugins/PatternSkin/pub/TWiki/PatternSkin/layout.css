@@ -1,0 +1,120 @@
+
+/*	-----------------------------------------------------------
+	LAYOUT
+	positioning of page elements
+	-----------------------------------------------------------	*/
+
+html body {
+	margin:0;
+	padding:0;
+}
+.twikiLeft {
+	float:left;
+	position:relative;
+}
+.twikiRight {
+	position:relative;
+	float:right;
+	display:inline;
+	margin:0;
+	text-align:right;
+}
+.twikiClear {
+	/* to clean up floats */
+	margin:0;
+	padding:0;
+	height:0;
+	line-height:0px;
+	clear:both;
+	display:block;
+}
+.twikiHidden {
+	display:none;
+}
+
+
+/*	---------------------------------------------------------------------------------------
+	CONSTANTS
+	
+	Sizes
+	----------------------------------------
+	C1 left bar width																16em
+	C2 right bar width (currently not used)											0%
+	C3 top bar height																64px
+	---------------------------------------------------------------------------------------	*/
+
+/*	-----------------------------------------------------------
+	Positioning of layout blocks
+	-----------------------------------------------------------	*/
+
+#patternScreen {
+	margin:0;
+	padding:0;
+}
+#patternPageShadow {
+	padding:0;
+}
+#patternPage {
+}
+
+#patternColumnWrapper {
+	float:left;
+	display:inline; /* IE doubles the margins on floats, this takes care of the problem */
+	width:100%;
+	margin-left:-0px; /*C2*/
+}
+#patternLeftBar {
+	position:absolute;
+	left:0;
+	margin-left:0px; /*C2*/
+}
+.patternLeftBarContents /* needed for Explorer 5.0 */ {
+	width:100%;
+}
+
+/* height of the top bar */
+#patternLeftBar {
+	top:64px; /*C3*/
+}
+#patternTopBar,
+#patternTopBar table.patternTopBarContents {
+	height:64px; /*C3*/
+}
+
+/* setting the width of the left bar */
+#patternLeftBar {
+	width:16em; /*C1*/
+}
+#patternMain {
+	padding:0 0 0 16em;
+}
+
+/*	-----------------------------------------------------------
+	Pages that are not view
+	-----------------------------------------------------------	*/
+	
+.patternNoViewPage #patternMain {
+	padding-left:0;
+	margin-left:3%;
+	margin-right:3%;
+	/* padding in style.css */
+}
+
+/* Print */
+
+.patternPrintPage #patternMain {
+	padding-left:0;
+	margin-left:5%;
+	margin-right:5%;
+}
+
+/* Plain */
+
+.patternPlainPage #patternMain {
+	padding-left:0;
+	margin-left:0px;
+	margin-right:0px;
+	/* padding in style.css */
+}
+
+
