@@ -9,8 +9,8 @@ use Error qw( :try );
 my $twiki;
 my $topicquery;
 
-my $webSubWeb = 'TestCases/Item0';
-my $testTopic = 'Ads';
+my $webSubWeb = 'TestCases/HierarchicalWebs';
+my $testTopic = 'Topic';
 
 sub set_up {
     my $this = shift;
@@ -51,6 +51,19 @@ sub new {
 ################################################################################
 
 sub test_createSubWeb {
+    my $this = shift;
+    $twiki = new TWiki();
+    my $twikiUserObject = $twiki->{user};
+
+    { my $webTest = 'Item0';
+    $twiki->{store}->createWeb( $twikiUserObject, "$webSubWeb/$webTest" );
+    $this->assert( $twiki->{store}->webExists( "$webSubWeb/$webTest" ) );
+    }
+
+    { my $webTest = 'Item0_';
+    $twiki->{store}->createWeb( $twikiUserObject, "$webSubWeb/$webTest" );
+    $this->assert( $twiki->{store}->webExists( "$webSubWeb/$webTest" ) );
+    }
 }
 
 sub test_createSubWebTopic {
