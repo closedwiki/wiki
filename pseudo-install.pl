@@ -35,7 +35,7 @@ sub installModule {
     my $module = shift;
     print "Processing $module\n";
     my $subdir = 'Plugins';
-    $subdir = 'Contrib' if $module =~ /Contrib$/;
+    $subdir = 'Contrib' if $module =~ /(Contrib|Skin)$/;
     my $moduleDir = "twikiplugins/$module/";
 
     unless (-d $moduleDir) {
