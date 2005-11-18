@@ -780,23 +780,17 @@ img.alignleft {
   font-size:1.4em;
 }
 .headlinesArticle .headlinesDate {
-  font-style:oblique;
   font-size:0.9em;
   margin-left:0px;
   white-space:nowrap;
 }
+.headlinesSubject,
 .headlinesCreator {
-  font-style:oblique;
+  display:inline;
+  font-size:0.9em;
 }
-.headlinesSubject {
-  float:right;
-  font-weight:bold;
-  margin-left:5px;
-  margin-bottom:5px;
-  margin-top:5px;
-  margin-top:0px;
-  min-width:100px;
-  text-align:center;
+.headlinesSubject img {
+  display:none;
 }
 .headlinesTeaser {
   margin-top:5px;
