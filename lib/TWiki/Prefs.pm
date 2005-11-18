@@ -61,7 +61,8 @@ sub new {
     ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
     push( @{$this->{PREFS}}, $cache ) if defined( $cache );
-    # $this->{CACHE} - hash of TWiki::Prefs objects, for other topics and webs
+    # $this->{TOPICS} - hash of TWiki::Prefs objects, for solitary topics
+    # $this->{WEBS} - hash of TWiki::Prefs objects, for solitary webs
     # remember what "Local" means
     $this->{LOCAL} = $session->{webName}.'.'.$this->{session}->{topicName};
 
@@ -140,8 +141,7 @@ sub pushWebPreferences {
     foreach my $tmp ( @webPath ) {
         $path .= '/' if $path;
         $path .= $tmp;
-        $this->pushPreferences(
-            $path, $TWiki::cfg{WebPrefsTopicName}, 'WEB' );
+        $this->pushPreferences( $path, $TWiki::cfg{WebPrefsTopicName}, 'WEB' );
     }
 }
 
@@ -259,11 +259,11 @@ sub getTopicPreferencesValue {
     my( $this, $key, $web, $topic ) = @_;
     my $wtn = $web.'.'.$topic;
 
-    unless( $this->{CACHE}{$wtn} ) {
-        $this->{CACHE}{$wtn} =
+    unless( $this->{TOPICS}{$wtn} ) {
+        $this->{TOPICS}{$wtn} =
           new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC', $web, $topic );
     }
-    return $this->{CACHE}{$wtn}->{values}{$key};
+    return $this->{TOPICS}{$wtn}->{values}{$key};
 }
 
 =pod
@@ -283,12 +283,13 @@ sub getWebPreferencesValue {
     my( $this, $key, $web ) = @_;
     my $wtn = $web.'.'.$TWiki::cfg{WebPrefsTopicName};
 
-    unless( $this->{CACHE}{$wtn} ) {
+    unless( $this->{WEBS}{$wtn} ) {
         my $blank = new TWiki::Prefs( $this->{session} );
         $blank->pushWebPreferences( $web );
-        $this->{CACHE}{$wtn} = $blank->{PREFS}[0];
+        $this->{WEBS}{$wtn} = $blank;
     }
-    return $this->{CACHE}{$wtn}->{values}{$key};
+
+    return $this->{WEBS}{$wtn}->getPreferencesValue( $key );
 }
 
 =pod

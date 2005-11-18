@@ -1450,6 +1450,7 @@ which may include one of:
    2 'template' (for only template webs)
 $filter may also contain the word 'public' which will further filter
 webs on whether NOSEARCHALL is specified for them or not.
+'allowed' filters out webs that the user is denied access to by a *WEBVIEW.
 
 If $TWiki::cfg{EnableHierarchicalWebs} is set, will also list
 sub-webs recursively.
@@ -1471,13 +1472,23 @@ sub getListOfWebs {
         @webList = grep { /(?:^_|\/_)/, } @webList;
     }
 
-    my $prefs = $this->{session}->{prefs};
     if( $filter =~ /\bpublic\b/ ) {
+        my $prefs = $this->{session}->{prefs};
+        my $wn = $this->{session}->{webName};
         @webList =
           grep {
-              $_ eq $this->{session}->{webName} ||
+              $_ eq $wn ||
                 !$prefs->getWebPreferencesValue( 'NOSEARCHALL', $_ )
             } @webList;
+    }
+
+    if( $filter =~ /\ballowed\b/ ) {
+        my $security = $this->{session}->{security};
+        my $user = $this->{session}->{user};
+        @webList =
+          grep {
+              $security->checkAccessPermission( 'view', $user, '', undef, $_ )
+          } @webList;
     }
 
     return sort @webList;

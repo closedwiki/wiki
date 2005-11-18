@@ -73,7 +73,7 @@ sub parseText {
             if( $type ) {
                 $prefs->insert( $type, $keyPrefix.$key, $value );
             }
-            $type = $1;;
+            $type = $1;
             $key = $2;
             $value = (defined $3) ? $3 : '';
         } elsif( $type ) {

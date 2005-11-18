@@ -1696,9 +1696,9 @@ sub _webOrTopicList {
         my @webslist = split( /,\s?/, $webs );
         foreach my $aweb ( @webslist ) {
             if( $aweb eq 'public' ) {
-                push( @list, $this->{store}->getListOfWebs( 'user,public' ) );
+                push( @list, $this->{store}->getListOfWebs( 'user,public,allowed' ) );
             } elsif( $aweb eq 'webtemplate' ) {
-                push( @list, $this->{store}->getListOfWebs( 'template' ));
+                push( @list, $this->{store}->getListOfWebs( 'template,allowed' ));
             } else{
                 push( @list, $aweb ) if( $this->{store}->webExists( $aweb ) );
             }

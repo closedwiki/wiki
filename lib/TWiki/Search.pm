@@ -459,7 +459,7 @@ sub searchWeb {
                 if( TWiki::isTrue( $subWeb ) || $web =~ /^(all|on)$/i ) {
                     my $webarg = ($web =~/^(all|on)$/i) ? undef : $web;
                     push( @tmpWebs,
-                      $store->getListOfWebs( 'user', $webarg ));
+                      $store->getListOfWebs( 'user,allowed', $webarg ));
                 }
             }
         }
@@ -468,7 +468,7 @@ sub searchWeb {
         # default to current web
         push( @tmpWebs, $session->{webName} );
         if ( TWiki::isTrue( $subWeb )) {
-            push( @tmpWebs, $store->getListOfWebs( 'user',
+            push( @tmpWebs, $store->getListOfWebs( 'user,allowed',
                                                    $session->{webName} ));
         }
     }

@@ -106,21 +106,20 @@ Check if user is allowed to access topic
    * =$action=  - 'VIEW', 'CHANGE', 'CREATE', etc.
    * =$user=    - User object
    * =$text=    - If empty: Read '$theWebName.$theTopicName' to check permissions
-   * =$topic=   - Topic name to check, e.g. 'SomeTopic'
+   * =$topic=   - Topic name to check, e.g. 'SomeTopic' *undef to check web perms only)
    * =$web=     - Web, e.g. 'Know'
 If the check fails, the reason can be recoveered using getReason.
 
 =cut
 
 sub checkAccessPermission {
-    my( $this, $mode, $user,
-        $theTopicText, $topic, $web ) = @_;
+    my( $this, $mode, $user, $theTopicText, $topic, $web ) = @_;
     ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     undef $this->{failure};
 
-    #print STDERR "Check access ", $user->stringify()," to $web.$topic\n";
+    #print STDERR "Check $mode access ", $user->stringify()," to $web.",$topic?$topic:'',"\n";
 
     # super admin is always allowed
     if( $user->isAdmin() ) {
@@ -136,12 +135,14 @@ sub checkAccessPermission {
     my $allowText;
     my $denyText;
 
-    # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
-    $allowText = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
-                                             $web, $topic );
+    if( $topic ) {
+        # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
+        $allowText = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
+                                                       $web, $topic );
 
-    $denyText = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode,
-                                             $web, $topic );
+        $denyText = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode,
+                                                      $web, $topic );
+    }
 
     # Check DENYTOPIC
     if( defined( $denyText )) {
@@ -195,7 +196,7 @@ sub checkAccessPermission {
 
     #print STDERR "OK, permitted\n";
     #print STDERR "ALLOW: $allowText\n" if defined $allowText;
-    #print STDERR "DEBY: $denyText\n" if defined $denyText;
+    #print STDERR "DENY: $denyText\n" if defined $denyText;
     return 1;
 }
 

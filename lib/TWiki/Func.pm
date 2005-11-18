@@ -732,6 +732,7 @@ which may include one of:
    2 'template' (for only template webs i.e. those starting with "_")
 =$filter= may also contain the word 'public' which will further filter
 out webs that have NOSEARCHALL set on them.
+'allowed' filters out webs the current user can't read.
 
 For example, the deprecated getPublicWebList function can be duplicated
 as follows:
