@@ -436,6 +436,7 @@ sub initSkinState {
   my $skinTablePluginAttrs =
     &TWiki::Func::getPreferencesValue("$prefsName") ||
     &TWiki::Func::getPreferencesValue("NATSKINPLUGIN_$prefsName") || '';
+
   # order matters ... differently *sigh*
   if ($isDakar) {
     $tablePluginAttrs .= ' ' . $skinTablePluginAttrs;

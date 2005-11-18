@@ -1,9 +1,9 @@
-bin/natlogon
-bin/natsearch
-data/TWiki/NatSkinPlugin.txt
-data/TWiki/MySideBar.txt
-data/TWiki/MySideBarTemplate.txt
-lib/TWiki/Plugins/NatSkinPlugin.pm
-lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm
-lib/TWiki/Plugins/NatSkinPlugin/Search.pm
-lib/TWiki/Plugins/NatSkinPlugin/Auth.pm
+bin/natlogon 550
+bin/natsearch 550
+data/TWiki/NatSkinPlugin.txt 440
+data/TWiki/MySideBar.txt 440
+data/TWiki/MySideBarTemplate.txt 440
+lib/TWiki/Plugins/NatSkinPlugin.pm 440
+lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm 440
+lib/TWiki/Plugins/NatSkinPlugin/Search.pm 440
+lib/TWiki/Plugins/NatSkinPlugin/Auth.pm 440
