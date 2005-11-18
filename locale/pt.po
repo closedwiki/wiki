@@ -76,10 +76,6 @@ msgstr "%1 é um nome inválido para a nova web"
 msgid "%1 is currently logged in"
 msgstr "%1 está autenticado nesse momento"
 
-#: templates/oopsattention.tmpl:325
-msgid "%1 is currently set to %2"
-msgstr "%1 atualmente tem o valor %2"
-
 #: templates/oopsleaseconflict.tmpl:8
 msgid "%1 is editing %2."
 msgstr "%1 está editando %2."
@@ -287,9 +283,10 @@ msgid "(single character last name)"
 msgstr "(último nome com um caractere só)"
 
 #: templates/attach.pattern.tmpl:44
+#, fuzzy
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
-"Error\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
+"Error\\\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 "*Bug:* Internet Explorer 4.0 ou anterior: se você receber uma mensagem "
@@ -308,10 +305,11 @@ msgstr ""
 "anexado."
 
 #: templates/attach.pattern.tmpl:43
+#, fuzzy
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
-"('%TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> "
-"for more information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
+"('%TWIKIWEB%','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</"
+"a> for more information about attaching files."
 msgstr ""
 "*Ajuda:* Por favor, veja <a target='TWikiVariables' onclick=\"return "
 "launchWindow('%TWIKIWEB%','FileAttachment')\" href=\"%1\" "
@@ -810,13 +808,13 @@ msgstr "Criar(&e)"
 msgid "Create <nop>TestTopic###"
 msgstr "Criar <nop>TopicoTeste###"
 
-#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:13
-#: data/_default/WebLeftBar.txt:6
+#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:6
 msgid "Create New Topic"
 msgstr "Criar novo tópico"
 
 #: data/TWiki/WebTopicCreator.txt:5
-msgid "Create New Topic in %1 Web"
+#, fuzzy
+msgid "Create New Topic in <nop>%BASEWEB% Web"
 msgstr "Criar novo tópico na Web %1"
 
 #: templates/attach.pattern.tmpl:96
@@ -1195,7 +1193,8 @@ msgstr "Se você quiser fazer um busca completa por texto:"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-msgid "If you used the \"Jump\" feature to jump to this page:"
+#, fuzzy
+msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
 msgstr "Se você usou a função \"Pular para\" para chegar a essa página:"
 
 #: templates/oopsaccessdenied.tmpl:39
@@ -1899,9 +1898,10 @@ msgid "Summaries"
 msgstr "Resumos"
 
 #: data/TWiki/WebSearch.txt:25
+#, fuzzy
 msgid ""
-"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
-"=\"web service\"=, but not =\"shampoo\"=, write:"
+"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
+"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
 msgstr ""
 "DICA: para procurar por todos os tópicos contendo =\"SOAP\"=, =\"WSDL\"=, ="
 "\"web service\"= literalmente, mas sem =\"shampoo\"=, escreva:"
@@ -1911,11 +1911,12 @@ msgid "TWiki password reset for %1"
 msgstr "Restaurar senha no TWiki para %1"
 
 #: templates/oopschangelanguage.tmpl:13
+#, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit "
-"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
-"the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit \\"
+"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
+"bottom of the page to return to the previous topic."
 msgstr ""
 "A interface de usuário do TWiki está disponível em vários idiomas. Se você "
 "quiser alterar o idioma para essa sessão, escolha um dos seguintes e clique "
@@ -2069,14 +2070,6 @@ msgstr "O tópico está no formato antigo"
 #: templates/oopsattention.tmpl:173
 msgid "The two passwords you entered do not match."
 msgstr "As duas senhas que você digitou não coincidem."
-
-#: data/Main/WebRss.txt:5
-msgid ""
-"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-"Platform for the Corporate World."
-msgstr ""
-"A web para usuários, grupos e escritórios. O TWiki é uma plataforma "
-"colaborativa baseada na web e voltada para o mundo das organizações."
 
 #: templates/oopsleaseconflict.tmpl:15
 msgid "Their lease on this topic expired %1 ago."
@@ -2554,10 +2547,11 @@ msgstr ""
 "isso."
 
 #: templates/oopsattention.tmpl:148
+#, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
-"code is of the form \"YourName.xxxx\")"
+"code is of the form \\\"YourName.xxxx\\\")"
 msgstr ""
 "Seu código de ativação foi enviado para %1. Para ativar sua conta, você pode "
 "ou clicar no link constante na mensagem enviada ao seu e-mail ou colocar o "
@@ -2599,7 +2593,7 @@ msgstr ""
 "[valor]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:308
+#: lib/TWiki/I18N.pm:305
 msgid "_language_name"
 msgstr "Português"
 
@@ -2656,6 +2650,11 @@ msgstr "com formato de texto puro"
 msgid "indicates mandatory fields"
 msgstr "indica campos obrigatórios"
 
+#: templates/oopsattention.tmpl:325
+#, fuzzy
+msgid "is currently set to"
+msgstr "%1 atualmente tem o valor %2"
+
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
 msgid "looking for references in _%1 web_ only"
 msgstr "procurando por referências _apenas na web %1_"
@@ -2703,6 +2702,13 @@ msgstr "obtidos em %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "ver"
+
+#~ msgid ""
+#~ "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
+#~ "Platform for the Corporate World."
+#~ msgstr ""
+#~ "A web para usuários, grupos e escritórios. O TWiki é uma plataforma "
+#~ "colaborativa baseada na web e voltada para o mundo das organizações."
 
 #~ msgid ""
 #~ "*Properties:* The comment and visibility (i.e. is attachment hidden) can "

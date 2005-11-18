@@ -74,11 +74,6 @@ msgstr "%1 er ikke et lovligt navn til et nyt web"
 msgid "%1 is currently logged in"
 msgstr "%1 er logget på i øjeblikket"
 
-#: templates/oopsattention.tmpl:325
-#, fuzzy
-msgid "%1 is currently set to %2"
-msgstr "%1 er logget på i øjeblikket"
-
 #: templates/oopsleaseconflict.tmpl:8
 msgid "%1 is editing %2."
 msgstr "%1 editerer i øjeblikket %2"
@@ -293,9 +288,10 @@ msgid "(single character last name)"
 msgstr "(første bogstav i efternavn)"
 
 #: templates/attach.pattern.tmpl:44
+#, fuzzy
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
-"Error\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
+"Error\\\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 "*Bug*: Internet Explorer 4.0 eller tidligere: Hvis du får fejlmeldingen "
@@ -316,9 +312,9 @@ msgstr ""
 #: templates/attach.pattern.tmpl:43
 #, fuzzy
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
-"('%TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> "
-"for more information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
+"('%TWIKIWEB%','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</"
+"a> for more information about attaching files."
 msgstr ""
 "Hjælp til <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB"
 "%','TWikiVariables')\" href=\"%1\" rel='nofollow'>definition af side-"
@@ -805,14 +801,13 @@ msgstr "Opret"
 msgid "Create <nop>TestTopic###"
 msgstr "Opret <nop>TestTopic###"
 
-#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:13
-#: data/_default/WebLeftBar.txt:6
+#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:6
 msgid "Create New Topic"
 msgstr "Opret ny side"
 
 #: data/TWiki/WebTopicCreator.txt:5
 #, fuzzy
-msgid "Create New Topic in %1 Web"
+msgid "Create New Topic in <nop>%BASEWEB% Web"
 msgstr "Opret ny side"
 
 #: templates/attach.pattern.tmpl:96
@@ -1193,7 +1188,8 @@ msgstr "Hvis du gerne vil søge i den fulde tekst:"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-msgid "If you used the \"Jump\" feature to jump to this page:"
+#, fuzzy
+msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
 msgstr "Hvis du brugte \"Hop\" funktionen til at hoppe til denne side:"
 
 #: templates/oopsaccessdenied.tmpl:39
@@ -1896,9 +1892,10 @@ msgid "Summaries"
 msgstr "Sammendrag"
 
 #: data/TWiki/WebSearch.txt:25
+#, fuzzy
 msgid ""
-"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
-"=\"web service\"=, but not =\"shampoo\"=, write:"
+"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
+"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
 msgstr ""
 "TIP: For at søge efter sider, der indeholder =\"SOAP\"=, =\"WSDL\"= og "
 "strengen =\"web service\"= men ikke =\"shampoo\"=, skriv følgende:"
@@ -1908,11 +1905,12 @@ msgid "TWiki password reset for %1"
 msgstr "Nulstilling af TWiki password for %1"
 
 #: templates/oopschangelanguage.tmpl:13
+#, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit "
-"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
-"the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit \\"
+"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
+"bottom of the page to return to the previous topic."
 msgstr ""
 "TWiki's brugergrænseflade er tilgængelig på flere sprog. Hvis du gerne vil "
 "ændre sproget i denne session, vælg et af de følgende sprog og klik  \"Skift "
@@ -2066,15 +2064,6 @@ msgstr "Siden er i et gammelt format"
 #: templates/oopsattention.tmpl:173
 msgid "The two passwords you entered do not match."
 msgstr "De to passwords du har indtastet er ikke ens."
-
-#: data/Main/WebRss.txt:5
-#, fuzzy
-msgid ""
-"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-"Platform for the Corporate World."
-msgstr ""
-"%1 webbet på TWiki. TWiki er en web-baseret kollaborations-platform skabt "
-"til virksomheden."
 
 #: templates/oopsleaseconflict.tmpl:15
 msgid "Their lease on this topic expired %1 ago."
@@ -2539,10 +2528,11 @@ msgstr ""
 "dette."
 
 #: templates/oopsattention.tmpl:148
+#, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
-"code is of the form \"YourName.xxxx\")"
+"code is of the form \\\"YourName.xxxx\\\")"
 msgstr ""
 "Din aktiveringskode er blevet sendt til %1. Enten kan du klikke på linket i "
 "den tilsendte e-mail eller du kan indtaste aktiveringskoden i feltet "
@@ -2585,7 +2575,7 @@ msgstr ""
 "[mellemrum] = [værdi]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:308
+#: lib/TWiki/I18N.pm:305
 msgid "_language_name"
 msgstr "Dansk"
 
@@ -2642,6 +2632,11 @@ msgstr "i kildetekst-format"
 msgid "indicates mandatory fields"
 msgstr "angiver obligatoriske felter"
 
+#: templates/oopsattention.tmpl:325
+#, fuzzy
+msgid "is currently set to"
+msgstr "%1 er logget på i øjeblikket"
+
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
 msgid "looking for references in _%1 web_ only"
 msgstr "finder referencer (kun i _%1 Web_)"
@@ -2689,6 +2684,14 @@ msgstr "fremsøgt %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vis"
+
+#, fuzzy
+#~ msgid ""
+#~ "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
+#~ "Platform for the Corporate World."
+#~ msgstr ""
+#~ "%1 webbet på TWiki. TWiki er en web-baseret kollaborations-platform skabt "
+#~ "til virksomheden."
 
 #~ msgid ""
 #~ "*Properties:* The comment and visibility (i.e. is attachment hidden) can "

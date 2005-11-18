@@ -74,11 +74,6 @@ msgstr "%1 ist ein ungültiger Name für ein neues Web"
 msgid "%1 is currently logged in"
 msgstr "%1 ist gerade eingeloggt"
 
-#: templates/oopsattention.tmpl:325
-#, fuzzy
-msgid "%1 is currently set to %2"
-msgstr "%1 ist gerade eingeloggt"
-
 #: templates/oopsleaseconflict.tmpl:8
 msgid "%1 is editing %2."
 msgstr "%1 bearbeitet %2"
@@ -293,9 +288,10 @@ msgid "(single character last name)"
 msgstr "(Erster Buchstabe des Nachnamens)"
 
 #: templates/attach.pattern.tmpl:44
+#, fuzzy
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
-"Error\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
+"Error\\\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 "*Fehler*: Internet Explorer 4.0 oder früher: When Sie die Fehlermeldung "
@@ -314,13 +310,15 @@ msgstr ""
 "bestehen."
 
 #: templates/attach.pattern.tmpl:43
+#, fuzzy
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
-"('%TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> "
-"for more information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
+"('%TWIKIWEB%','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</"
+"a> for more information about attaching files."
 msgstr ""
-"*Hilfe:* Für mehr Informationen über den Umgang mit Dateianhängen lesen Sie bitte <a target='TWikiVariables' onclick=\"return launchWindow"
-"('%TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a>."
+"*Hilfe:* Für mehr Informationen über den Umgang mit Dateianhängen lesen Sie "
+"bitte <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB"
+"%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a>."
 
 #: data/TWiki/TWikiRegistration.txt:10
 msgid ""
@@ -800,14 +798,13 @@ msgstr "A&nlegen"
 msgid "Create <nop>TestTopic###"
 msgstr "Ein <nop>TestTopic### anlegen"
 
-#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:13
-#: data/_default/WebLeftBar.txt:6
+#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:6
 msgid "Create New Topic"
 msgstr "Neues Topic anlegen"
 
 #: data/TWiki/WebTopicCreator.txt:5
 #, fuzzy
-msgid "Create New Topic in %1 Web"
+msgid "Create New Topic in <nop>%BASEWEB% Web"
 msgstr "Neues Topic anlegen"
 
 #: templates/attach.pattern.tmpl:96
@@ -1194,7 +1191,8 @@ msgstr "Wenn Sie eine Volltextsuche wollten:"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-msgid "If you used the \"Jump\" feature to jump to this page:"
+#, fuzzy
+msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
 msgstr ""
 "Wenn Sie die \"Sprung\" Funktion benutzt haben um auf diese Seite zu "
 "gelangen:"
@@ -1903,9 +1901,10 @@ msgid "Summaries"
 msgstr "Zusammenfassungen"
 
 #: data/TWiki/WebSearch.txt:25
+#, fuzzy
 msgid ""
-"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
-"=\"web service\"=, but not =\"shampoo\"=, write:"
+"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
+"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
 msgstr ""
 "TIPP: Um nach Topics zu suchen die =\"SOAP\"=, =\"WSDL\"= und den Begriff ="
 "\"web service\"= beinhalten, in denen aber nicht =\"shampoo\"= vorkommt, "
@@ -1916,11 +1915,12 @@ msgid "TWiki password reset for %1"
 msgstr "TWiki Passwort zurücksetzen für %1"
 
 #: templates/oopschangelanguage.tmpl:13
+#, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit "
-"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
-"the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit \\"
+"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
+"bottom of the page to return to the previous topic."
 msgstr ""
 "TWikis Benutzeroberfläche ist in vielen Sprachen verfügbar. Wenn Sie für "
 "diese Sitzung die Sprache wechseln möchten wählen Sie eine der folgenden aus "
@@ -2077,14 +2077,6 @@ msgstr "Das Topic hat ein altes Format"
 #: templates/oopsattention.tmpl:173
 msgid "The two passwords you entered do not match."
 msgstr "Die beiden eingegebenen Passwörter stimmen nicht überein."
-
-#: data/Main/WebRss.txt:5
-msgid ""
-"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-"Platform for the Corporate World."
-msgstr ""
-"Das %1 Web von TWiki. TWiki ist eine webbasierte Kollaborations-Plattform "
-"für die Unternehmenswelt."
 
 #: templates/oopsleaseconflict.tmpl:15
 msgid "Their lease on this topic expired %1 ago."
@@ -2555,8 +2547,8 @@ msgid ""
 "You may be able to get your TWiki administrator to change these if they are "
 "inappropriate for your environment"
 msgstr ""
-"Eventuell bekommen Sie ihren TWiki Administrator dazu Änderungen vorzunehmen, "
-"die besser für Umgebung passen."
+"Eventuell bekommen Sie ihren TWiki Administrator dazu Änderungen "
+"vorzunehmen, die besser für Umgebung passen."
 
 #: templates/oopsattention.tmpl:143
 msgid "You need to close your browser to make this change take effect."
@@ -2568,10 +2560,11 @@ msgstr ""
 "Sie müssen wahrscheinlich Ihren Administrator, %1, fragen, um das zu tun."
 
 #: templates/oopsattention.tmpl:148
+#, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
-"code is of the form \"YourName.xxxx\")"
+"code is of the form \\\"YourName.xxxx\\\")"
 msgstr ""
 "Ihr Aktivierungs-Code wurde nach %1 gesendet. Entweder klicken Sie auf den "
 "Verweis in Ihrer Mail oder Sie fügen den Code in die Box unten ein, um Ihre "
@@ -2612,7 +2605,7 @@ msgstr ""
 "VARIABLENNAME [Leerzeichen] = [Wert]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:308
+#: lib/TWiki/I18N.pm:305
 msgid "_language_name"
 msgstr "Deutsch"
 
@@ -2669,6 +2662,11 @@ msgstr "im Quelltext Format"
 msgid "indicates mandatory fields"
 msgstr "kennzeichnet Pflichtfelder"
 
+#: templates/oopsattention.tmpl:325
+#, fuzzy
+msgid "is currently set to"
+msgstr "%1 ist gerade eingeloggt"
+
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
 msgid "looking for references in _%1 web_ only"
 msgstr "nach Querverweisen nur in _%1 Web_ suchen"
@@ -2717,3 +2715,9 @@ msgstr "abgefragt um %1"
 msgid "view"
 msgstr "Ansehen"
 
+#~ msgid ""
+#~ "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
+#~ "Platform for the Corporate World."
+#~ msgstr ""
+#~ "Das %1 Web von TWiki. TWiki ist eine webbasierte Kollaborations-Plattform "
+#~ "für die Unternehmenswelt."

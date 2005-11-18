@@ -74,11 +74,6 @@ msgstr "%1 is geen geldige naam voor een nieuw web"
 msgid "%1 is currently logged in"
 msgstr "%1 is op dit moment ingelogd"
 
-#: templates/oopsattention.tmpl:325
-#, fuzzy
-msgid "%1 is currently set to %2"
-msgstr "%1 is op dit moment ingelogd"
-
 #: templates/oopsleaseconflict.tmpl:8
 msgid "%1 is editing %2."
 msgstr "%1 is %2 aan het bewerken"
@@ -288,8 +283,8 @@ msgstr ""
 
 #: templates/attach.pattern.tmpl:44
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
-"Error\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
+"Error\\\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 
@@ -302,9 +297,9 @@ msgstr ""
 
 #: templates/attach.pattern.tmpl:43
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
-"('%TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> "
-"for more information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
+"('%TWIKIWEB%','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</"
+"a> for more information about attaching files."
 msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:10
@@ -755,13 +750,12 @@ msgstr ""
 msgid "Create <nop>TestTopic###"
 msgstr ""
 
-#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:13
-#: data/_default/WebLeftBar.txt:6
+#: data/Sandbox/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:6
 msgid "Create New Topic"
 msgstr ""
 
 #: data/TWiki/WebTopicCreator.txt:5
-msgid "Create New Topic in %1 Web"
+msgid "Create New Topic in <nop>%BASEWEB% Web"
 msgstr ""
 
 #: templates/attach.pattern.tmpl:96
@@ -1111,7 +1105,7 @@ msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-msgid "If you used the \"Jump\" feature to jump to this page:"
+msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:39
@@ -1784,8 +1778,8 @@ msgstr ""
 
 #: data/TWiki/WebSearch.txt:25
 msgid ""
-"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
-"=\"web service\"=, but not =\"shampoo\"=, write:"
+"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
+"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
 msgstr ""
 
 #: templates/mailresetpassword.tmpl:3
@@ -1795,9 +1789,9 @@ msgstr ""
 #: templates/oopschangelanguage.tmpl:13
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit "
-"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
-"the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit \\"
+"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
+"bottom of the page to return to the previous topic."
 msgstr ""
 
 #: data/Sandbox/WebHome.txt:6
@@ -1924,12 +1918,6 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:173
 msgid "The two passwords you entered do not match."
-msgstr ""
-
-#: data/Main/WebRss.txt:5
-msgid ""
-"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-"Platform for the Corporate World."
 msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:15
@@ -2356,7 +2344,7 @@ msgstr ""
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
-"code is of the form \"YourName.xxxx\")"
+"code is of the form \\\"YourName.xxxx\\\")"
 msgstr ""
 
 #: templates/mailresetpassword.tmpl:10
@@ -2389,7 +2377,7 @@ msgid ""
 "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
 
-#: lib/TWiki/I18N.pm:308
+#: lib/TWiki/I18N.pm:305
 msgid "_language_name"
 msgstr "Nederlands"
 
@@ -2445,6 +2433,11 @@ msgstr ""
 #: templates/form.tmpl:3
 msgid "indicates mandatory fields"
 msgstr ""
+
+#: templates/oopsattention.tmpl:325
+#, fuzzy
+msgid "is currently set to"
+msgstr "%1 is op dit moment ingelogd"
 
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
 msgid "looking for references in _%1 web_ only"
