@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128882620" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131731534" format="1.1" version="1.1"}%
 ---+!! <nop>RedDotPlugin
 
 This plugin renders a clickable red dot (<a style="color:red; font-weight:bold; padding-left:2px; padding-right:2px; line-height:100%; font-size:18px; text-decoration:none" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%">.</a>) to ease the edit access to
@@ -54,7 +54,6 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
@@ -81,6 +80,7 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.MichaelDaum - 09 Nov 2005
+
 
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1124736061" path="style.css" size="157" user="MichaelDaum" version="1.1"}%
