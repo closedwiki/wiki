@@ -121,4 +121,19 @@ sub test_create_subweb_with_same_name_as_a_topic {
 
 #================================================================================
 
+sub test_url_parameters {
+    my $this = shift;
+    $twiki = new TWiki();
+    my $twikiUserObject = $twiki->{user};
+
+    my $topicquery = new CGI( { 
+	action => 'view',
+	topic => "$webSubWeb/$testTopic",
+	} );
+
+    $twiki = new TWiki( 'AdminUser', $topicquery );
+}
+
+#================================================================================
+
 1;
