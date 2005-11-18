@@ -101,17 +101,22 @@ sub test_create_subweb_with_same_name_as_a_topic {
 
     { my ( undef, $text ) = $twiki->{store}->readTopic( 
 	$twikiUserObject, $webSubWeb, $testTopic );
-    $this->assert_equals( $testText, $text );
+    $this->assert_matches( qr/$testText\s*$/, $text );
     }
 
     # create the subweb with the same name as the page
     $twiki->{store}->createWeb( $twikiUserObject, "$webSubWeb/$testTopic" );
     $this->assert( $twiki->{store}->webExists( "$webSubWeb/$testTopic" ) );
     
-    { my ( undef, $text ) = $twiki->{store}->readTopic( 
-	$twikiUserObject, $webSubWeb, $testTopic );
-    $this->assert_equals( $testText, $text );
+    { my ( undef, $text ) = $twiki->{store}->readTopic( $twikiUserObject, $webSubWeb, $testTopic );
+    $this->assert_matches( qr/$testText\s*$/, $text );
     }
+
+#    $twiki->{store}->removePage( $twikiUserObject, 
+#    $this->assert( ! $twiki->{store}->topicExists( $webSubWeb, $testTopic ) );
+
+    $twiki->{store}->removeWeb( $twikiUserObject, "$webSubWeb/$testTopic" );
+    $this->assert( ! $twiki->{store}->webExists( "$webSubWeb/$testTopic" ) );
 }
 
 #================================================================================
