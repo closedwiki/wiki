@@ -87,6 +87,39 @@ sub test_createSubWebTopic {
 
 #================================================================================
 
+sub test_include_subweb_non_wikiword_topic {
+    my $this = shift;
+    $twiki = new TWiki();
+    my $twikiUserObject = $twiki->{user};
+
+    my $baseTopic = 'IncludeSubWebNonWikiWordTopic';
+    my $includeTopic = 'Topic';
+    my $testText = 'TEXT';
+
+    # create the (including) page
+    $twiki->{store}->saveTopic( $twiki->{user}, $webSubWeb, $baseTopic, <<__TOPIC__ );
+%INCLUDE{ "$webSubWeb/$includeTopic" }%
+__TOPIC__
+    $this->assert( $twiki->{store}->topicExists( $webSubWeb, $baseTopic ) );
+
+    # create the (included) page
+    $twiki->{store}->saveTopic( $twiki->{user}, $webSubWeb, $includeTopic, $testText );
+    $this->assert( $twiki->{store}->topicExists( $webSubWeb, $includeTopic ) );
+
+    # verify included page's text
+    { my ( undef, $text ) = $twiki->{store}->readTopic( $twikiUserObject, $webSubWeb, $includeTopic );
+    $this->assert_matches( qr/$testText\s*$/, $text );
+    }
+
+    # base page should evaluate (more or less) to the included page's text
+    { my ( undef, $text ) = $twiki->{store}->readTopic( $twikiUserObject, $webSubWeb, $baseTopic );
+    # TODO: expand/evaluate $text
+    $this->assert_matches( qr/$testText\s*$/, $text );
+    }
+}
+
+#================================================================================
+
 sub test_create_subweb_with_same_name_as_a_topic {
     my $this = shift;
     $twiki = new TWiki();
