@@ -1494,13 +1494,14 @@ sub _TOC {
     my ( $this, $text, $defaultTopic, $defaultWeb, $args ) = @_;
 
     my $params = new TWiki::Attrs( $args );
-
     # get the topic name attribute
     my $topic = $params->{_DEFAULT} || $defaultTopic;
 
     # get the web name attribute
+    $defaultWeb =~ s#/#.#g;
     my $web = $params->{web} || $defaultWeb;
-    $web =~ s/\//\./g;
+
+    $web =~ s#/#\.#g;
     my $webPath = $web;
     $webPath =~ s/\./\//g;
 
@@ -1526,13 +1527,11 @@ sub _TOC {
     my $insideVerbatim = 0;
     my $highest = 99;
     my $result  = '';
-    
     my $verbatim = {};
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                                $verbatim);
     $text = $this->{renderer}->takeOutBlocks( $text, 'pre',
                                                $verbatim);
-    
 
     # SMELL: this handling of <pre> is archaic.
     # SMELL: use forEachLine
