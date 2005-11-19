@@ -563,7 +563,7 @@ sub UTF82SiteCharSet {
 Write a complete HTML page with basic header to the browser.
 $text is the HTML of the page body (&lt;html&gt; to &lt;/html&gt;)
 
-This method removes noautolink and no tags before outputting the page.
+This method removes noautolink and nop tags before outputting the page.
 
 =cut
 
@@ -711,7 +711,7 @@ sub redirect {
     unless( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
         if ( $query && $query->param( 'noredirect' )) {
             my $content = join(' ', @_) . " \n";
-            $this->writeCompletePage( $query, $content );
+            $this->writeCompletePage( $content );
         } elsif ( $this->{client}->redirectCgiQuery( $query, $url ) ) {
         } elsif ( $query ) {
             print $query->redirect( $url );
