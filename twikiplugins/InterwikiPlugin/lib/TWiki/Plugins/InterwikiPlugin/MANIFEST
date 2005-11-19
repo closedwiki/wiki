@@ -1,2 +1,3 @@
 lib/TWiki/Plugins/InterwikiPlugin.pm
 data/TWiki/InterwikiPlugin.txt
+data/TWiki/InterWikis.txt
