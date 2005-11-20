@@ -519,6 +519,7 @@ sub emitTable {
                     $cell = CGI::font({ color=>$color }, $cell)
                       unless $color =~ /^(|none)$/i;
                 }
+                $type = 'td';
             }
             my $fn = 'CGI::'.$type;
             no strict 'refs';
