@@ -289,11 +289,6 @@ You can enable/disable plugins using the [[%SCRIPTURL{"configure"}%][configure]]
       * Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
 
 
----++ Access Control Settings
-
-   * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
-      * Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
-
 ---++ Creating New Preference Variables
  
 You can introduce new VARIABLES and use them in your topics and templates. There is no need to change the TWiki engine (Perl scripts).

@@ -170,7 +170,7 @@ sub _createWeb {
 
     # check permission, user authorized to create webs?
     TWiki::UI::checkAccess( $session, $webName, $topicName,
-                            'changewebs', $session->{user} );
+                            'MANAGE', $session->{user} );
 
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {

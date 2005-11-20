@@ -72,6 +72,7 @@ You can define who is allowed to read or write to a web or a topic. Note that so
    * Restricting CHANGE blocks creating new topics, changing topics or attaching files.
    * Restricting RENAME controls who is allowed to rename, move or delete a topic.
       * To rename, move or delete a topic, the user also also needs VIEW and CHANGE permission.  They also need CHANGE access to change references in any referring topics (though the rename can proceed without this access), and CHANGE access to the target topic.
+   * Restricting MANAGE controls access to certain management functions, such as 'create web'. It must be set in the %TWIKIWEB% web.
 
 ---+++ Controlling access to a Web
 
