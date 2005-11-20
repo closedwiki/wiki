@@ -284,6 +284,7 @@ sub test_registerVerifyOk {
 #Register a user, then give a bad verification code. It should barf.
 sub test_registerBadVerify {
     my $this = shift;
+    $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
                           'TopicName' => [
                                           'TWikiRegistration'
