@@ -221,7 +221,7 @@ sub _generateEmails {
         $mail =~ s/%LASTDATE%/$lastTime/geo;
         $mail = $twiki->handleCommonTags( $mail, $web, $homeTopic );
 
-        my $url = $TWiki::cfg{DispScriptUrlPath};
+        my $url = $TWiki::cfg{ScriptUrlPath};
         my $base = $TWiki::cfg{DefaultUrlHost} . $url;
         $mail =~ s/(href=\")([^"]+)/$1.relativeURL($base,$2)/goei;
         $mail =~ s/(action=\")([^"]+)/$1.relativeURL($base,$2)/goei;
