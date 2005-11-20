@@ -68,7 +68,7 @@ Move unwanted Attachments to web =Trash=, topic =TrashAttachment=.
       1. ==Attach== file: =Sample.txt=
       1. ==Edit== topic and write text: =%<nop>INCLUDE{"%<nop>ATTACHURL%/Sample.txt"}%=
          * Content of attached file is shown inlined.
-         * Read more in IncludeTopicsAndWebPages.
+         * Read more about INCLUDE in [[TWikiVariables#VarINCLUDE][TWiki<nop>Variables]]
 
    * GIF, JPG and PNG images can be attached and shown embedded in a topic. Example:
       1. ==Attach== file: =Smile.gif=
@@ -83,8 +83,8 @@ Files attached to a topic are displayed in a directory table, displayed at the b
 <blockquote class="twikiAttachments">
 <table border="1" cellspacing="0" cellpadding="1"> 
 <tr><th align="center" bgcolor="#99CCCC" class="twikiFirstCol"><strong>I</strong></th><th align="center" bgcolor="#99CCCC"><strong>Attachment</strong></th><th align="center" bgcolor="#99CCCC"> <strong>Action</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Size</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment</strong> </th></tr>
-<tr><td class="twikiFirstCol">%ICON{"txt"}%</td><td><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=&amp;filename=Sample.txt">Sample.txt</a>     </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Sample.txt&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Just a sample  </td></tr>
-<tr><td class="twikiFirstCol">%ICON{"bmp"}%</td><td><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=&amp;filename=Smile.gif">Smile.gif</a>     </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Smile.gif&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:38  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Smiley face  </td></tr>
+<tr><td class="twikiFirstCol">%ICON{"txt"}%</td><td><a href="%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=&amp;filename=Sample.txt">Sample.txt</a>     </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Sample.txt&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Just a sample  </td></tr>
+<tr><td class="twikiFirstCol">%ICON{"bmp"}%</td><td><a href="%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=&amp;filename=Smile.gif">Smile.gif</a>     </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Smile.gif&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:38  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Smiley face  </td></tr>
 </table>
 </blockquote>
 
@@ -98,7 +98,7 @@ Clicking on a ==Manage== link takes you to a new page that looks a bit like this
 <nop><h2>Update attachment <code>Sample.txt</code></h2>
 <div class="twikiAttachments patternPrevious">
 <table border="1" cellspacing="0" cellpadding="1"> <tr><th align="center" bgcolor="#99CCCC"> <strong>Version</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Action</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment</strong> </th></tr>
-<tr><td>  1.1   </td><td>  <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.1&amp;filename=Sample.txt">view</a>  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>    Just a sample    </td></tr>
+<tr><td>  1.1   </td><td>  <a href="%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=1.1&amp;filename=Sample.txt">view</a>  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>    Just a sample    </td></tr>
 </table>
 </div>
 <p />
