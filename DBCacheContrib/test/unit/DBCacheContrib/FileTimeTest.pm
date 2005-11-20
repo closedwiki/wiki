@@ -22,6 +22,15 @@ sub new {
   return $self;
 }
 
+sub _readFile {
+    my $f = shift;
+    local $/ = undef;
+    open(F,"<",$f) || die $!;
+    my $x = <F>;
+    close(F);
+    return $x;
+}
+
 sub set_up {
     my $this = shift;
 
@@ -31,7 +40,7 @@ sub set_up {
 
     $twiki->{store}->createWeb($twiki->{user}, $testweb);
 
-  my $dbt = $twiki->{store}->readFile("./testDB.dat");
+  my $dbt = _readFile("./testDB.dat");
   $root = TWiki::Func::getDataDir() . "/$testweb";
   $files = new TWiki::Contrib::DBCacheContrib::Array();
   foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
