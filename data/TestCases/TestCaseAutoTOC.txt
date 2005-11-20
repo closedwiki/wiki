@@ -7,7 +7,7 @@ Description: tests for TOCs included from other topics and with funny deprecated
 Designed by: Crawford Currie
 
 <table><tr><th>Expected</th><th>Actual</th></tr>
-<tr><td>
+<tr valign="top"><td>
 <!-- expected expand -->
 <div class="twikiToc">
 <ul>
@@ -30,7 +30,7 @@ Designed by: Crawford Currie
 <!-- actual -->
 %TOC{"TocFixture"}%
 <!-- /actual -->
-</td></tr><tr><td>
+</td></tr><tr valign="top"><td>
 <!-- expected -->
 <div class="twikiToc">
 <span class="twikiTocTitle">The Top</span>
@@ -66,14 +66,6 @@ Designed by: Crawford Currie
 <li> <a href="#normal_H2">normal H2</a>
 </li>
 </ul>
-</li>
-<li> <a href="#space_H1">space H1</a>
-<ul>
-<li> <a href="#H2">H2</a>
-</li>
-</ul>
-</li>
-<li> <a href="#H1">H1</a>
 </li>
 </ul>
 </div>
