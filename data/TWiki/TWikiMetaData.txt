@@ -124,7 +124,7 @@ The recommended sequence is:
 
 ---++ Viewing Meta Data in Page Source
 
-When viewing a topic the ==Raw Text== link can be clicked to show the text of a topic (i.e., as seen when editing).  This is done by adding <code>raw=on</code> to URL.  <code>raw=debug</code> shows the meta data as well as the topic data, ex: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug">debug view for this topic</a>
+When viewing a topic the ==Raw Text== link can be clicked to show the text of a topic (i.e., as seen when editing).  This is done by adding <code>raw=on</code> to URL.  <code>raw=debug</code> shows the meta data as well as the topic data, ex: <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=debug">debug view for this topic</a>
 
 #MetaDataRendering
 ---++ Rendering Meta Data

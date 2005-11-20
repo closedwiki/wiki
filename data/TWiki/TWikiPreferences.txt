@@ -292,7 +292,7 @@ You can enable/disable plugins using the [[%SCRIPTURL{"configure"}%][configure]]
 ---++ Access Control Settings
 
    * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
-      * #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
 ---++ Creating New Preference Variables
  

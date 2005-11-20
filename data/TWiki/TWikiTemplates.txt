@@ -175,7 +175,7 @@ All other variables are unchanged, e.g. are carried over "as is" into the new to
 
 Here is an example for creating new topics based on a specific template topic:
 
-<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<form name="new" action="%SCRIPTURL{"edit"}%/%INTURLENCODE{"%WEB%"}%/">
    * New example topic: 
      <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$yearx$mox$day}%" size="23" />&nbsp;<input type="submit" class="twikiSubmit" value="Create" />
      <input type="hidden" name="templatetopic" value="ExampleTopicTemplate" />

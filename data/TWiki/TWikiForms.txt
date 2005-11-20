@@ -116,7 +116,7 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
         Boxes with a tick must be specified.
       * example: This will add a textfield for the new topic name and a "Create"-Button to your page. When the button is pressed, the topic editor will open with the form "MyForm" already attached to the new topic.
        <verbatim>
-    <form name="newtopic" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/">
+    <form name="newtopic" action="%SCRIPTURL{"edit"}%/%WEB%/">
        <input type="hidden" name="formtemplate" value="MyForm" />
        New topic name <input type="text" name="topic" size="40" />
        <input type="submit" value="Create" />

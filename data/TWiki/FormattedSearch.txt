@@ -91,10 +91,10 @@ To get this:
  <th bgcolor="#99CCCC"> <strong>OperatingSystem:</strong> </th>
  <th bgcolor="#99CCCC"> <strong>OsVersion:</strong> </th></tr>
 <tr>
- <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/IncorrectDllVersionW32PTH10DLL">IncorrectDllVersionW32PTH10DLL</a>  </td><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/OsWin">OsWin</a>  </td><td>  95/98  </td></tr>
+ <td>  <a href="%SCRIPTURL{"view"}%/Sandbox/IncorrectDllVersionW32PTH10DLL">IncorrectDllVersionW32PTH10DLL</a>  </td><td>  <a href="%SCRIPTURL{"view"}%/Sandbox/OsWin">OsWin</a>  </td><td>  95/98  </td></tr>
 <tr>
- <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/WinDoze95Crash">WinDoze95Crash</a>  </td>
- <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/OsWin">OsWin</a>  </td>
+ <td>  <a href="%SCRIPTURL{"view"}%/Sandbox/WinDoze95Crash">WinDoze95Crash</a>  </td>
+ <td>  <a href="%SCRIPTURL{"view"}%/Sandbox/OsWin">OsWin</a>  </td>
  <td>  95  </td></tr>
 </table>
 
@@ -179,7 +179,7 @@ Use an HTML form and an embedded formatted search on the same topic. You can lin
 *Write this:*
 
 <verbatim>
-<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%">
 Find Topics: 
 <input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>
@@ -189,7 +189,7 @@ Result:
 
 *To get this:*
 
-<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%">
 Find Topics: 
 <input type="text" name="q" size="32" value="%URLPARAM{"q"}%" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 </form>

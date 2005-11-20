@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 ---+ Web Site Tools
 %STARTINCLUDE%
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/SearchResult">
+<form action="%SCRIPTURL{"search"}%/%INTURLENCODE{"%INCLUDINGWEB%"}%/SearchResult">
 <noautolink>
    * <input type="text" name="search" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> &nbsp;&nbsp; (More options in [[%INCLUDINGWEB%.WebSearch][WebSearch]])
    * [[%INCLUDINGWEB%.WebChanges][WebChanges]]: Display recent changes to the %INCLUDINGWEB% web

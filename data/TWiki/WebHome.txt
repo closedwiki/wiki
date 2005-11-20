@@ -17,7 +17,7 @@ This is the place to learn about TWiki features, find where to download it, and 
    * [[AdminToolsCategory][Admin Tools]]: manage the <nop>%WIKITOOLNAME% site
 
 <blockquote>
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<form action="%SCRIPTURL{"search"}%/%INTURLENCODE{"%WEB%"}%/">
 <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /><br/>
 ([[WebSearchAdvanced][advanced search]])
 </form>

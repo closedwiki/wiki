@@ -73,7 +73,7 @@ The filtering select dialogue is created as in Pattern 1:
 <verbatim>
 %STARTSIDEBAR%
 *Filter:* %BR%
-<form name="selectType" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/" >
+<form name="selectType" action="%SCRIPTURL{"view"}%/%WEB%/" >
 <select name="type" size="1" onchange="document.location=this.value;"> 
 %SEARCH{ "^\|[^\|]*\| *option *\|" topic="TopicClassification" web="%WEB%" regex="on" 
 multiple="on" nosearch="on" nototal="on" format="<option value=%INCLUDINGTOPIC%?type=$pattern(^\| *(.*?) *\|.*)>$pattern(^\| *(.*?) *\|.*)</option>" }% 
