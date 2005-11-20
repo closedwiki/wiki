@@ -1095,7 +1095,7 @@ sub setConfig {
 
     foreach my $config ( keys %$updates ) {
         # kill the old settings if any are there
-        $txt =~ s/\$TWiki::cfg\{$config\}\s*=.*?;//s;
+        $txt =~ s/\$TWiki::cfg\{$config\}\s*=.*?;\s*\n//s;
     }
     $txt =~ s/^1;$//gm;
 
@@ -1125,9 +1125,7 @@ sub setConfig {
 sub _perlifyType {
     my ($val,$type) = @_;
 
-    if ($type eq 'REGEX') {
-        return "qr($val)";
-    } elsif ($type eq 'BOOLEAN') {
+    if ($type eq 'BOOLEAN') {
         return ($val ? 1 : 0);
     } elsif ($type eq 'NUMBER') {
         return 0+$val;
@@ -1136,7 +1134,7 @@ sub _perlifyType {
         return $val;
     } else {
         $val =~ s/'/\\'/g;
-        return "'$val'";
+        return "'".$val."'";
     }
 }
 

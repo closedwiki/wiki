@@ -1,4 +1,5 @@
 #!/usr/bin/perl -wT
+#-d:DProf
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
