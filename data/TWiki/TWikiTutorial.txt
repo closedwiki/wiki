@@ -33,7 +33,7 @@ The color-coded control strips at the top and/or bottom of the page has a collec
    * ==[Ref-By]== - find out what other topics link to this topic (reverse link)
    * ==[Printable]== - goes to a stripped down version of the page, good for printing
    * ==[Diffs]== - topics are under revision control - =[Diffs]= shows you the complete change history of the topic, ex: who changed what and when.
-   * ==[r1.3 | &gt; | r1.2 | &gt; | r1.1]== - view a previous version of the topic or the difference between two versions.
+   * ==[r1.3 | &gt; | r2 | &gt; | r1 ]== - view a previous version of the topic or the difference between two versions.
    * ==[More]== - additional controls, like ==[Rename/move]==, version control and setting the topic's parent.
 
 ---++ 6. Change a page, and create a new one...

@@ -156,7 +156,7 @@ The format of tables of file versions in the Upload screen are also formattable,
 The =ATTACH:row= macros are expanded for each file in the attachment table, using the following special tags:
 | *Tag* | *Description* |
 | =%A_URL%= | URL that will recover the file |
-| =%A_REV%= | Revision of this file e.g. "1.1" |
+| =%A_REV%= | Revision of this file |
 | =%A_ICON%= | A file icon suitable for representing the attachment content |
 | =%A_FILE%= | The name of the file |
 | =%A_SIZE%= | The size of the file |

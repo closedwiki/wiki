@@ -138,7 +138,7 @@ The footer of the page is also highlighted in colour, and is usually where you w
   <td valign="top" colspan="2">
     <font size="-1" color="black"> <a href="none"><b>Edit</b></a>
     |  <a href="none">Attach</a>
-    |  <a href="none">Diffs</a>  | r1.2 <a href="none">&gt;</a> r1.1
+    |  <a href="none">Diffs</a>  | r2 <a href="none">&gt;</a> r1
     |  <a href="none">More</a> </font>
   </td>
  </tr>

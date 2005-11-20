@@ -98,7 +98,7 @@ Clicking on a ==Manage== link takes you to a new page that looks a bit like this
 <nop><h2>Update attachment <code>Sample.txt</code></h2>
 <div class="twikiAttachments patternPrevious">
 <table border="1" cellspacing="0" cellpadding="1"> <tr><th align="center" bgcolor="#99CCCC"> <strong>Version</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Action</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment</strong> </th></tr>
-<tr><td>  1.1   </td><td>  <a href="%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=1.1&amp;filename=Sample.txt">view</a>  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>    Just a sample    </td></tr>
+<tr><td>  1   </td><td>  <a href="%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=1&amp;filename=Sample.txt">view</a>  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>    Just a sample    </td></tr>
 </table>
 </div>
 <p />
