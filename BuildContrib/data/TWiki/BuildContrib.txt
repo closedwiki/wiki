@@ -71,7 +71,7 @@ The fixtures do not replace _all_ of the TWiki core functionality, just those pi
 		* Set SHORTDESCRIPTION = Automate build process for Pugins, Add-ons and Contrib modules
 
 ---+ Installation Instructions
-You are strongly recommended to use this Contrib to help split your code development away from your live TWiki environment, as described [[#DevelopmentModel][above].
+You are strongly recommended to use this Contrib to help split your code development away from your live TWiki environment, as described [[#DevelopmentModel][above]].
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your development ($TWIKI_DEV) directory. Content:
 	| *File:* | *Description:* |
