@@ -710,7 +710,7 @@ sub redirect {
 
     unless( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
         if ( $query && $query->param( 'noredirect' )) {
-            my $content = join(' ', @_) . " \n";
+            my $content = join(' ', @_) . "\n";
             $this->writeCompletePage( $content );
         } elsif ( $this->{client}->redirectCgiQuery( $query, $url ) ) {
         } elsif ( $query ) {
