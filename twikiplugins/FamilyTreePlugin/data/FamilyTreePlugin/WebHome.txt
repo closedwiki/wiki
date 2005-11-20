@@ -1,0 +1,1 @@
+%SEARCH{"%[Mm]ETA:FIELD{.*name=.Sex.*" type="regex" format="[[$topic][$percntSPACEOUT{$topic}$percnt]]" nonoise="on" separator=" "}%

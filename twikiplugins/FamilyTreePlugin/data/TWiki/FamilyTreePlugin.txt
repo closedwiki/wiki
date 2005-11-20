@@ -1,0 +1,53 @@
+---+ Family Tree Plugin
+
+The Family Tree Plugin is a simple database that uses TWiki searches to perform
+queries over genealogical data in a TWiki web and generate family trees.
+
+<div style="float: right">
+<img src="%ATTACHURLPATH%/example_tree.png" alt="example_tree.png" />
+</div>
+
+Each person in the family, and each union (marriage or other union), are stored as TWiki topics. Each person topic includes a standard "person topic" (!StdPerson) that defines some basic searches, and has a form that records basic details about the person. Extra detail can be added freeform to the topic, or can be recorded in a "records" table to ease searching.
+
+The standard person include defines the following queries over the data:
+   * Female line (ancestors of this person)
+   * Male line (ancestors of this person)
+   * Family tree (rooted at this person)
+
+Union topics similarly have a standard include (!StdUnion) and a form. Union topics are named for the couple they represent, male then female, separated by a capital 'X'. Children of the union are listed in a simple one-column table in the union topic.
+
+The plugin installs a new web, called [[FamilyTreePlugin.WebHome][FamilyTreePlugin]]. This web contains an example family tree (a small fragment of my own family tree), a left bar topic, and two "creator topics", !NewPerson and !NewUnion, that help you in creating person and union records respectively. You should not edit directly in this web, as it may be overwritten when you upgrade the plugin. Instead you should create your own new web (see TWiki.ManagingWebs) and manually copy what you need over to the new web (copy everything and then remove all files with 'Currie' in the name).
+
+The schema of the database was inspired by the standard LDS "GED" format, so translation back and forth from this format should be fairly straightforward. it would be great if someone could write some scripts to do this.....!
+
+Note: searches over my family tree (360 persons, 120 unions) are just about fast enough. If you are planning on capturing a much bigger tree, then there is a next generation of the plugin in development which will use the FormQueryPlugin for faster searching.
+
+---++ Syntax Rules
+
+   * %<nop>MANCESTORS("person"}% - generate a representation of the male line leading to the given person
+   * %<nop>FANCESTORS{"person"}% -  generate a representation of the female line leading to the given person
+   * %<nop>DESCENDANTS{"person"}% - generate a complete family tree rooted at the given person
+
+---++ Plugin Settings
+   * Set SHORTDESCRIPTION = A simple genealogy database
+
+---++ Plugin Installation Instructions
+
+   * Unzip the plugin over your TWiki installation
+   * Enable the plugin in =configure=
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk |
+|  Plugin Version: | %$VERSION% |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | requires TWiki 'Dakar' release or later |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+
+%META:FILEATTACHMENT{name="example_tree.png" attachment="example_tree.png" attr="H" comment="" date="1132486622" path="example_tree.png" size="21228" stream="example_tree.png" user="Main.TWikiGuest" version="1"}%
