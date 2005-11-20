@@ -46,9 +46,9 @@ A Form Template specifies the fields in a form. A Form Template is simply a page
 =| !OsVersion | text | 16 | | blah blah... | &nbsp; |=
 
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
-| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/TopicClassification"><nop>TopicClassification</a> | select |  1  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/NoDisclosure"><nop>NoDisclosure</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicSupported"><nop>PublicSupported</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicFAQ"><nop>PublicFAQ</a> | blah blah... | &nbsp; |
-| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OperatingSystem"><nop>OperatingSystem</a> | checkbox |  3  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsHPUX"><nop>OsHPUX</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsLinux"><nop>OsLinux</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsSolaris"><nop>OsSolaris</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsWin"><nop>OsWin</a> | blah blah... | &nbsp; |
-| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... | &nbsp; |
+| <a href="%SCRIPTURL{"view"}%/Sandbox/TopicClassification"><nop>TopicClassification</a> | select |  1  | <a href="%SCRIPTURL{"view"}%/Sandbox/NoDisclosure"><nop>NoDisclosure</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/PublicSupported"><nop>PublicSupported</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/PublicFAQ"><nop>PublicFAQ</a> | blah blah... | &nbsp; |
+| <a href="%SCRIPTURL{"view"}%/Sandbox/OperatingSystem"><nop>OperatingSystem</a> | checkbox |  3  | <a href="%SCRIPTURL{"view"}%/Sandbox/OsHPUX"><nop>OsHPUX</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/OsLinux"><nop>OsLinux</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/OsSolaris"><nop>OsSolaris</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/OsWin"><nop>OsWin</a> | blah blah... | &nbsp; |
+| <a href="%SCRIPTURL{"view"}%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... | &nbsp; |
 </blockquote>
 
 You can also retrieve possible values for select, checkbox or radio types from other topics:

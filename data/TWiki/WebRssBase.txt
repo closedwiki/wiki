@@ -8,9 +8,9 @@ There are three ways to find out what's new in each TWiki web:
 
 ---++ RSS Feed Usage
 
-   * The URL for an RSS feed is =%SCRIPTURL%/view%SCRIPTSUFFIX%/&lt;web&gt;/WebRss=
-   * For this <nop>%WEB% web it is %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss
-   * You can also create a custom feed based on a search. Add a =search=value= parameter to the URL, e.g. %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?search=plugin is a what's new feed about Plugins.
+   * The URL for an RSS feed is =%SCRIPTURL{"view"}%/&lt;web&gt;/WebRss=
+   * For this <nop>%WEB% web it is %SCRIPTURL{"view"}%/%WEB%/WebRss
+   * You can also create a custom feed based on a search. Add a =search=value= parameter to the URL, e.g. %SCRIPTURL{"view"}%/%WEB%/WebRss?search=plugin is a what's new feed about Plugins.
 
 ---++ RSS Feed Internals
 
@@ -43,22 +43,22 @@ Below part is included by each <nop>WebRss topic:
   <dc:creator>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:creator>
   <dc:source>%WIKITOOLNAME%</dc:source>
   <wiki:interwiki>
-    <rdf:Description link="%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%/">
+    <rdf:Description link="%SCRIPTURL{"view"}%/%INCLUDINGWEB%/">
       <rdf:value>TWiki.%INCLUDINGWEB%</rdf:value>
     </rdf:Description>
   </wiki:interwiki>
   <items>
     <rdf:Seq>
-%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="off" nototal="on" limit="16" format="      <rdf:li rdf:resource=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\" />"}%
+%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="off" nototal="on" limit="16" format="      <rdf:li rdf:resource=\"%SCRIPTURL{"view"}%/$web/$topic\" />"}%
     </rdf:Seq>
   </items>
 </channel>
 <image rdf:about="%WIKILOGOIMG%">
   <title>%WIKILOGOALT%.%INCLUDINGWEB%</title>
-  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%</link>
+  <link>%SCRIPTURL{"view"}%/%INCLUDINGWEB%</link>
   <url>%WIKILOGOIMG%</url>
 </image>
-%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="off" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic?t=$isodate</link>$n  <description>$summary (last changed by <nop>$wikiname)</description>$n  <dc:date>$isodate</dc:date>$n  <dc:contributor>$n    <rdf:Description link=\"%SCRIPTURL%/view%SCRIPTSUFFIX%?topic=$wikiusername\">$n      <rdf:value>$username</rdf:value>$n    </rdf:Description>$n  </dc:contributor>$n  <wiki:version>$rev</wiki:version>$n  <wiki:status>updated</wiki:status>$n  <wiki:importance>major</wiki:importance>$n  <wiki:diff>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:diff>$n  <wiki:history>%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic</wiki:history>$n</item>"}%
+%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="off" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL{"view"}%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL{"view"}%/$web/$topic?t=$isodate</link>$n  <description>$summary (last changed by <nop>$wikiname)</description>$n  <dc:date>$isodate</dc:date>$n  <dc:contributor>$n    <rdf:Description link=\"%SCRIPTURL{"view"}%?topic=$wikiusername\">$n      <rdf:value>$username</rdf:value>$n    </rdf:Description>$n  </dc:contributor>$n  <wiki:version>$rev</wiki:version>$n  <wiki:status>updated</wiki:status>$n  <wiki:importance>major</wiki:importance>$n  <wiki:diff>%SCRIPTURL{"rdiff"}%/$web/$topic</wiki:diff>$n  <wiki:history>%SCRIPTURL{"rdiff"}%/$web/$topic</wiki:history>$n</item>"}%
 %STOPINCLUDE%
 </verbatim>
 -----

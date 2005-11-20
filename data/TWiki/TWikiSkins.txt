@@ -97,7 +97,7 @@ The =%<nop>WEBTOPICLIST%= includes a "Jump" box to jump to a topic. The box also
 
 Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
 
-<form name="sample" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<form name="sample" action="%SCRIPTURL{"view"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
 <table border="3"><tr><td>
 <select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
  <option selected="selected" value="">Navigate...</option>

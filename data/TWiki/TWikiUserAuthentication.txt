@@ -22,7 +22,7 @@ Please note FileAttachments are not protected by TWiki User Authentication.
 
 ---++ Password Management
 
-As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURL%/configure][ =configure= ]] interface for more details.
+As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURL{"configure"}%][ =configure= ]] interface for more details.
 
 ---++ New User Registration
 
@@ -45,7 +45,7 @@ Does exactly what it says on the tin. Forget about authentication to make your s
 Template Login asks for a username and password in a web page, and processes them using whatever Password Manager you choose. Users can log in and log out.
 
 ---++++ Enabling Template Login
-   1 Use the [[%SCRIPTURL%/configure][ =configure= ]] interface to
+   1 Use the [[%SCRIPTURL{"configure"}%][ =configure= ]] interface to
       1 enable the =TemplateLogin= login manager (on the Security Settings pane).
       1 select the appropriate password manager for your system, or provide your own.
    1 Register yourself in the TWikiRegistration topic.
@@ -76,8 +76,8 @@ The same private =.htpasswd= file used in TWiki Template Login can be used to au
 
 ---++++ Enabling Apache Login using =mod_auth=
 You can use any other Apache authentication module that sets REMOTE_USER.
-   1 Use [[%SCRIPTURL%/configure%SCRIPTSUFFIX%#LoginManager][configure]] to select the =ApacheLogin= login manager.
-   1 Use [[%SCRIPTURL%/configure%SCRIPTSUFFIX%#PasswordManager][configure]] to set up TWiki to create the right kind of =.htpasswd= entries.
+   1 Use [[%SCRIPTURL{"configure"}%#LoginManager][configure]] to select the =ApacheLogin= login manager.
+   1 Use [[%SCRIPTURL{"configure"}%#PasswordManager][configure]] to set up TWiki to create the right kind of =.htpasswd= entries.
    1 Create a =.htaccess= file in the =twiki/bin= directory.<br />%H% There is an template for this file in =twiki/bin/.htaccess.txt= that you can copy and change. The comments in the file explain what need to be done.<br />%H% If you got it right, the browser should now ask for login name and password when you click on the <u>Edit</u>. If =.htaccess= does not have the desired effect, you may need to "AllowOverride All" for the directory in =httpd.conf= (if you have root access; otherwise, email web server support)
     <br /> %X% At this time TWikiAccessControls do not control access to files in the =pub= area, unless they are only accessed through the =viewfile= script. If your =pub= directory is set up to allow open access you may want to add =.htaccess= files in there as well to restrict access 
    1 You can create a custom version of TWikiRegistration by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly.

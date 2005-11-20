@@ -4,8 +4,8 @@
 ---+++ %MAKETEXT{"If you used the \"Jump\" feature to jump to this page:"}%
 
    * %MAKETEXT{"Make sure you spelled the [_1] correctly and try again. Remember, a [_2] is case sensitive" args="%TWIKIWEB%.WikiWord,<nop>WikiWord"}%
-   * %MAKETEXT{"Similar topics in this web (if any):"}% %SEARCH{ "%TOPIC%" limit="16" scope="topic" nosearch="on" nototal="on" format="     [[$topic]], " }% [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%][...]]
-   * %MAKETEXT{"[[[_1]][Search]] for similar topics in all public webs" args="%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%/?web=all&amp;scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%"}%
+   * %MAKETEXT{"Similar topics in this web (if any):"}% %SEARCH{ "%TOPIC%" limit="16" scope="topic" nosearch="on" nototal="on" format="     [[$topic]], " }% [[%SCRIPTURL{"search"}%/%WEB%/?scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%][...]]
+   * %MAKETEXT{"[[[_1]][Search]] for similar topics in all public webs" args="%SCRIPTURL{"search"}%/%WEB%/?web=all&amp;scope=topic&amp;nosummary=on&amp;nototal=on&amp;search=%TOPIC%"}%
 
 ---+++ %MAKETEXT{"If you intend to do a full text search:"}%
 

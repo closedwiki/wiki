@@ -24,7 +24,7 @@ for ( var i = 0; i < sIn.length; i++ )
 </script>
 
 <div class="twikiPageForm">
-<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%" method="post">
+<form action="%SCRIPTURL{"register"}%/%MAINWEB%/%HOMETOPIC%" method="post">
 <table border="1">
 <tr>
   <td align="right"> %MAKETEXT{"First Name:"}% </td>

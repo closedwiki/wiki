@@ -21,7 +21,7 @@ In either case you will want to be sure to verify that your new web has all the 
 #CreateNewWeb
 ---++ Adding a New Web
 
-<form name="admin" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+<form name="admin" action="%SCRIPTURL{"manage"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 Create a new web by filling out this form.%BR%
 __%X% Note:__ *Keep the mumber of webs to a minimum!* It is not recommended to create a new web for each little project. You can organize content within a web using categories, TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
 |  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | The name must start with an upper case letter, followed by upper or lower case letters or numbers. Specify a short name to avoid long URLs. |

@@ -35,7 +35,7 @@ __Preferences:__
       * Set WEBFORMS = TestForm1 TestForm2
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
-      * #Set DENYWEBVIEW = 
+      * #Set DENYWEBVIEW = TWikiGuest
       * #Set ALLOWWEBVIEW = 
       * #Set DENYWEBCHANGE = 
       * #Set ALLOWWEBCHANGE = 
@@ -47,7 +47,7 @@ __Preferences:__
       * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
    * Web preferences that are *not* allowed to be overridden by user preferences:
-      * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
+      * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST
 
 __Notes:__
    * A preference is defined as: <br /> =6 spaces * Set NAME = value= <br /> Example:

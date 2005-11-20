@@ -94,7 +94,7 @@ How to populate a list box with all usernames of registered TWiki users
 ---+++ Solution
 
 <verbatim>
-<form name="testing" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%" method="get">
+<form name="testing" action="%SCRIPTURL{"view"}%/%MAINWEB%" method="get">
 <select name="topic">
 <option>Select user...</option>
 %SEARCH{ "Name:;Email:;Country:" web="%MAINWEB%" type="regex" nosearch="on" nototal="on" format="<option>$topic</option>" }%
@@ -105,7 +105,7 @@ How to populate a list box with all usernames of registered TWiki users
 
 Which expands to this: (here limited to all Z* users because TWiki.org has so many)
 
-<form name="testing" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%" method="get">
+<form name="testing" action="%SCRIPTURL{"view"}%/%MAINWEB%" method="get">
 <select name="topic">
 <option>Select user...</option>
 %SEARCH{ "Name:;Email:;Country:" web="%MAINWEB%" type="regex" topic="Z*" nosearch="on" nototal="on" format="<option>$topic</option>" }%
@@ -131,7 +131,7 @@ Please note that the Search pattern is unchanged compared to Pattern 3a. The cha
 
 ---+++ Test case
 The Search pattern 3a with the abovementioned modification is, in effect:
-<form name="testing" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%" method="get">
+<form name="testing" action="%SCRIPTURL{"view"}%/%MAINWEB%" method="get">
 <select name="topic" size="2" MULTIPLE>
 <option>Select user...</option>
 %SEARCH{ "Name:;Email:;Country:" web="%MAINWEB%" type="regex" topic="Z*" nosearch="on" nototal="on" format="<option>$topic</option>" }%

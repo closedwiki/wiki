@@ -5,5 +5,5 @@ Customise this topic; samples and ideas available at TWiki:TWiki.WebLeftBarCookb
 *My links:*
    * [[%WIKIUSERNAME%][My home page]]
    * 
-<a class="twikiSmall" href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%">edit</a>
+<a class="twikiSmall" href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%">edit</a>
 %STOPINCLUDE%

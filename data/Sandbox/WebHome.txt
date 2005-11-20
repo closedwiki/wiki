@@ -12,7 +12,7 @@
 <input type="hidden" name="onlywikiname" value="on" />
 </form>
 
-<form name="createNewTestTopic" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%BASEWEB%/TestTopicXXXXXXXXXX">
+<form name="createNewTestTopic" action="%SCRIPTURL{"edit"}%/%BASEWEB%/TestTopicXXXXXXXXXX">
 %MAKETEXT{"Create a new auto-numbered test topic:"}%
 <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create <nop>TestTopic###"}%' />
 </form>

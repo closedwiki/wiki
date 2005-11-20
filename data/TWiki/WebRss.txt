@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-<channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%">
+<channel rdf:about="%SCRIPTURL{"view"}%/%WEB%">
   <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
-  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%</link>
+  <link>%SCRIPTURL{"view"}%/%WEB%</link>
   <description>The Documentation Web of TWiki. TWiki is a Web-Based Collaboration Platform for the Corporate World.</description>
 %INCLUDE{"%TWIKIWEB%.WebRssBase"}%<!--
    * Set SKIN = rss

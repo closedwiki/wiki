@@ -3,7 +3,7 @@
 Manage whole <b>%WIKITOOLNAME%</b> site from one screen.
 
    * *[[%MAINWEB%.%WIKIUSERSTOPIC%][Users]]:* [[TWikiRegistration][Register]], NewUserTemplate, UserForm, ResetPassword, ChangePassword
-   * *[[TWikiSiteTools][Site Tools]]:* [[%SCRIPTURL%/configure][Configure]], %TWIKIWEB%.%WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
+   * *[[TWikiSiteTools][Site Tools]]:* [[%SCRIPTURL{"configure][Configure]], "}%KIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
    * *Managing:* [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
    * *Webs:*
 <blockquote>

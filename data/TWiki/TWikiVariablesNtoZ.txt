@@ -52,7 +52,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ QUERYSTRING -- full, unprocessed string of parameters to this URL
    * Syntax: %<nop>QUERYSTRING%
    * Expands to: <code> %QUERYSTRING% </code>
-   * String of all the URL parameters that were on the URL used to get to the current page. For example, if you add [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?name=Samantha;age=24;eyes=blue][?name=Samantha;age=24;eyes=blue]] to this URL you can see this in action. This string can be appended to a URL to pass parameter values on to another page.
+   * String of all the URL parameters that were on the URL used to get to the current page. For example, if you add [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?name=Samantha;age=24;eyes=blue][?name=Samantha;age=24;eyes=blue]] to this URL you can see this in action. This string can be appended to a URL to pass parameter values on to another page.
    * %X% Note: URLs built this way are typically restricted in length, typically to 2048 characters. If you need more space than this, you will need to use an HTML form and =%<nop>URLPARAM{}%=.
    * Related: [[#VarURLPARAM][URLPARAM]]
  
@@ -118,8 +118,8 @@ __Note:__ This topic is included by TWikiVariables
 #VarSCRIPTURL
 ---+++ SCRIPTURL -- script URL
    * Syntax: =%<nop>SCRIPTURL%=
-   * Expands to: =%SCRIPTURL%=
-   * Example: To get the authenticated version of current topic write =%<nop>SCRIPTURL%/viewauth%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%= which expands to =%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%=
+   * Expands to: =%SCRIPTURL{"
+   * Example: To get the authenticated version of current topic write ="}%L%/viewauth%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%= which expands to =%SCRIPTURL{"viewauth"}%/%WEB%/%TOPIC%=
    * Syntax: =%<nop>SCRIPTURL{"script"}%=
    * Expands to: =%SCRIPTURL{"script"}%=
    * Example: To get the authenticated version of current topic write =%<nop>SCRIPTURL{"viewauth"}%/%WEB%/%TOPIC%= which expands to =%SCRIPTURL{"viewauth"}%/%WEB%/%TOPIC%=
