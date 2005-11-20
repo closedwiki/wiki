@@ -189,7 +189,7 @@ sub test_createNewTopic1 {
   my $this = shift;
   my $db = $this->{db};
 
-  my $res = $db->createNewTopic("TEST", new TWiki::Attrs("relation=subdir text=Blah form=DirForm template=FileTemplate", $testweb, "Dir1", 1));
+  my $res = $db->createNewTopic("TEST", new TWiki::Attrs("relation=subdir text=Blah form=DirForm template=FileTemplate", 1), $testweb, "Dir1");
 
   $this->assert_str_equals("<form name=\"topiccreator0\" action=\"%SCRIPTURL%/autocreate/$testweb/Dir1\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"subdir\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
 
@@ -198,7 +198,7 @@ sub test_createNewTopic1 {
   $res = $db->deriveNewTopic( "copy", "Dir1");
   $this->assert_str_equals("Dir\n", $res);
 
-  $res = $db->createNewTopic("TEST", new TWiki::Attrs("base=Dir75 relation=copy text=Blah form=DirForm template=FileTemplate", $testweb, "TestTopic", 1));
+  $res = $db->createNewTopic("TEST", new TWiki::Attrs("base=Dir75 relation=copy text=Blah form=DirForm template=FileTemplate", 1), $testweb, "TestTopic");
 
   $this->assert_str_equals("<form name=\"topiccreator1\" action=\"%SCRIPTURL%/autocreate/$testweb/Dir75\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"copy\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
 }
