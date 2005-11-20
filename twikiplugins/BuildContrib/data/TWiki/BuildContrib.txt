@@ -85,16 +85,8 @@ You are strongly recommended to use this Contrib to help split your code develop
 | Authors: | TWiki:Main.CrawfordCurrie |
 | Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Version: | %$VERSION% (See SVN for change history) |
 | Dependencies: | %$DEPENDENCIES% |
-| 24/05/05 | 1.007 Crawford Currie improved POSINSTALL support and documentation |
-| 24/03/05 | 1.006 Crawford Currie  made it look in the same directory as build.pl for MANIFEST and DEPENDENCIES and the INSTALL files, first |
-| 15/03/05 | 1.005 Crawford Currie made the installer script check in files in Dakar installs, and fixed bugs highlighted by Thomas Weigert |
-| 04/12/04 | 1.004 Martin Cleaver removed twikicli - now in TWiki:Plugins.TWikiShellContrib |
-| 12/10/04 | 1.003 Crawford Currie added ONLYIF control to DEPENDENCIES. Added optional PREINSTALL and POSTINSTALL scripts (used to e.g. remove dead code). |
-| 1/10/04 | 1.002 Crawford Currie added topic updating reminder to installer |
-| 30/08/04 | 1.001 Crawford Currie added installer scripts |
-| 26/08/04 | Martin Cleaver added twikicli |
-| 14/08/04 | 1.000 Crawford Currie made the initial implementation, separated out from the old SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/BuildContribAppraisal |
