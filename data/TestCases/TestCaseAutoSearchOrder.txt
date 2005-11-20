@@ -17,7 +17,7 @@ format="!$topic; Text Item; Number Item; modified date"
 ---+++ Search ordered by Topic Name
 _This search should be ordered by sequence of values in "Topic Name" field._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY TOPIC NAME -->
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
@@ -30,7 +30,7 @@ SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 ---+++ Search ordered by Topic Name, reversed
 _This search should be ordered by *reversed* sequence of values in "Topic Name" field._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY REV VALUE -->
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
@@ -43,7 +43,7 @@ SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 ---+++ Search ordered by "Text Item" formfield
 _This search should be ordered by sequence of values in "Text Item" field._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY TEXT ITEM -->
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
@@ -56,7 +56,7 @@ SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 ---+++ Search ordered by "Text Item" formfield, reversed
 _This search should be ordered by *reversed* sequence of values in "Text Item" field._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY REV TEXT ITEM -->
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
@@ -70,7 +70,7 @@ SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 ---+++ Search ordered by "Number Item" formfield
 _This search should be ordered by sequence of values in "Number Item" field._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY NUMBER ITEM -->
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
@@ -83,7 +83,7 @@ SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 ---+++ Search ordered by "Number Item" formfield, reversed
 _This search should be ordered by *reversed* sequence of values in "Number Item" field._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY REV NUMBER ITEM -->
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
@@ -96,7 +96,7 @@ SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 ---+++ Search ordered by date modified
 _This search should be ordered in sequence of values in "Modified" field (newest first)._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY DATE MODIFIED -->
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
@@ -109,7 +109,7 @@ SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 ---+++ Search ordered by date modified, reversed
 _This search should be ordered in sequence of values in "Modified" field (oldest recently modified first)._ %BR%
 ---++++ Expected
-<!-- expected rex -->
+<!-- expected rex ORDER BY REV DATE MODIFIED -->
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
@@ -120,7 +120,7 @@ SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 <!-- /actual -->
 
 ---+++ Search ordered by date created
-<!-- expected rex -->
+<!-- expected rex ORDER BY DATE CREATED -->
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
