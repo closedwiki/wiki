@@ -125,7 +125,6 @@ use strict;
 use File::Copy;
 use File::Spec;
 use File::Find;
-use Pod::Text;
 use POSIX;
 use CGI ( -any );
 use diagnostics;
@@ -992,7 +991,7 @@ does not generate any output files. The target will be invoked
 automatically if =%$POD%= is used in a .txt file. POD documentation
 is intended for use by developers only.
 
-POD test in =.pm= files should use TWiki syntax or HTML. Packages should be
+POD text in =.pm= files should use TWiki syntax or HTML. Packages should be
 introduced with a level 0 header, and each method in the package by
 a second level header. Make sure you document any global variables used
 by the module.
@@ -1001,23 +1000,26 @@ by the module.
 
 sub target_pod {
     my $this = shift;
-    my $tmpfile = '/tmp/buildpod';
     $this->{POD} = '';
-
+    local $/ = "\n";
     foreach my $file (@{$this->{files}}) {
         my $pmfile = $file->{name};
         if ($pmfile =~ /\.pm$/o) {
             $pmfile = $this->{basedir}.'/'.$pmfile;
-            my $parser = new Pod::Text(indent => 0);
-            $parser->parse_from_file($pmfile, $tmpfile);
-            open(TMP, $tmpfile);
-            while (<TMP>) {
-                $this->{POD} .= $_;
+            open(PMFILE,"<$pmfile") || die $!;
+            my $inPod = 0;
+            while( my $line = <PMFILE>) {
+                if( $line =~ /^=(begin|pod)/) {
+                    $inPod = 1;
+                } elsif ($line =~ /^=cut/) {
+                    $inPod = 0;
+                } elsif ($inPod) {
+                    $this->{POD} .= $line;
+                }
             }
-            close(TMP);
+            close(PMFILE);
         }
     }
-    unlink($tmpfile);
 }
 
 =pod
