@@ -131,7 +131,9 @@ When viewing a topic the ==Raw Text== link can be clicked to show the text of a 
 
 Meta Data is rendered with the %<nop>META% variable. This is mostly used in the =view=, =preview= and =edit= scripts.
 
-__Note:__ Rendering meta data is currently not supported in topic text. As a workaround, use FormattedSearch on the current topic only to render form fields.
+You can render form fields in topic text by using the FORMFIELD variable. Example:%BR%
+=%<nop>FORMFIELD{"TopicClassification"}%= %BR%
+For details, see TWikiVariables#VarFORMFIELD.
 
 Current support covers:
 
