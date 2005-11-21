@@ -61,6 +61,15 @@ my $SUMMARYLINES = 6;
 my $STARTWW = qr/^|(?<=[\s\(])/m;
 my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)<])/m;
 
+
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+        import locale();
+    }
+}
+
 =pod
 
 ---++ ClassMethod new ($session)
@@ -75,11 +84,6 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
     ASSERT($session->isa( 'TWiki')) if DEBUG;
-
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-    }
 
     $this->{session} = $session;
 

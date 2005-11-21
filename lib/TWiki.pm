@@ -271,6 +271,7 @@ BEGIN {
 
     if( $TWiki::cfg{UseLocale} ) {
         require locale;
+        import locale();
     }
 
     # Constant tags dependent on the config

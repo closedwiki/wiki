@@ -35,6 +35,14 @@ use Assert;
 use TWiki::User;
 use TWiki::Time;
 
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+        import locale();
+    }
+}
+
 =pod
 
 ---++ ClassMethod new ($session, $impl)
@@ -46,11 +54,6 @@ sub new {
     my ( $class, $session ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
-
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-    }
 
     $this->{session} = $session;
 

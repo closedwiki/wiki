@@ -55,6 +55,14 @@ use vars qw( $STORE_FORMAT_VERSION );
 
 $STORE_FORMAT_VERSION = '1.1';
 
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+        import locale();
+    }
+}
+
 =pod
 
 ---++ ClassMethod new()
@@ -66,11 +74,6 @@ Construct a Store module, linking in the chosen sub-implementation.
 sub new {
     my ( $class, $session ) = @_;
     ASSERT($session->isa('TWiki')) if DEBUG;
-
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-    }
 
     my $this = bless( {}, $class );
 

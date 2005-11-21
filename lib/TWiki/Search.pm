@@ -38,6 +38,16 @@ use TWiki::Time;
 
 my $emptySearch =   'something.Very/unLikelyTo+search-for;-)';
 
+BEGIN {
+    # 'Use locale' for internationalisation of Perl sorting and searching - 
+    # main locale settings are done in TWiki::setupLocale
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+        import locale();
+    }
+}
+
 =pod
 
 ---++ ClassMethod new ($session)
@@ -49,13 +59,6 @@ Constructor for the singleton Search engine object.
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-
-    # 'Use locale' for internationalisation of Perl sorting and searching - 
-    # main locale settings are done in TWiki::setupLocale
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-    }
 
     ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
