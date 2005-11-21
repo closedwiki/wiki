@@ -182,7 +182,7 @@ Details of DakarRelease can be found in DakarReleaseNotes
    * *18 Jan 2003* - TWiki:Main.PeterThoeny
       * Support for =/bin/view/Web.TopicName= topic view URL (besides the default =/bin/view/Web/TopicName= URL); useful for InterwikiPlugin links like TWiki:Codev.ReadmeFirst
    * *31 Dec 2002* - TWiki:Main.PeterThoeny
-      * Enhanced Plugin API to manipulate topic data with new functions in FuncDotPm: =readTopicText=, =saveTopicText=, =setTopicEditLock=, =checkTopicEditLock=
+      * Enhanced Plugin API to manipulate topic data with new functions in Func.pm: =readTopicText=, =saveTopicText=, =setTopicEditLock=, =checkTopicEditLock=
    * *31 Dec 2002* - TWiki:Main.PeterThoeny
       * New =%<nop>NOAUTOLINK%= setting in the %WIKIPREFSTOPIC% to disable the auto-linking of WikiWords
    * *29 Dec 2002* - TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.RichardDonkin, TWiki:Main.SvenDowideit
