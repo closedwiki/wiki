@@ -1,97 +1,187 @@
-%META:TOPICINFO{author="PeterThoeny" date="1028273417" format="1.0" version="1.4"}%
----+ Headlines Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1132326420" format="1.0" version="1.1"}%
+---+!! Headlines Plugin
 
-This plugin displays RSS feeds from news sites. Use it to build news portals that show headline news.
+%TOC%
+
+---++ Description
+This plugin displays RSS and ATOM feeds from news sites. Use it to build news portals that show headline news.
 
 __Note:__ Syndic8.com ( http://www.syndic8.com/ ) is a good site listing many RSS feeds.
 
----++ <nop>%TOPIC% Global Settings
+---++ Syntax Rules
+
+=%<nop>HEADLINES{"..."}%=
+
+| *Parameter* | *Explanation* | *Default* |
+| ="http://..."= | URL of RSS feed | None; is required |
+| =href="http://..."= | (Alternative to above) | N/A |
+| =refresh="60"= | Refresh rate in minutes for caching feed; ="0"= for no caching | Global =REFRESH= setting |
+| =limit="12"= | Maximum number of items shown | Global =LIMIT= setting |
+| =header= | Header. Can include these variables: \
+				 - $channeltitle, $title: title of channel (channel.title) %BR% \
+				 - $channellink, $link: link of channel (channel.link) %BR% \
+				 - $channeldescription, $description: description (channel.description) %BR% \
+				 - $channeldate, $date: publication date of the channel (channel.pubDate) %BR% \
+				 - $rights: copyrights of the channel (channel.copyright) %BR% \
+				 - $imagetitle: title text for site (image.title) %BR% \
+				 - $imagelink: link for site (image.link) %BR% \
+				 - $imageurl: URL of image (image.url) %BR% \
+				 - $imagedescription: description of image (image.description) \
+				 | Global =HEADER= setting |
+| =format= | Format of one item. Can include these variables: %BR% \
+				 - $title: news item title (item.title) %BR% \
+				 - $link: news item link (item.link)  %BR% \
+				 - $description: news item description (item.description) %BR% \
+				 - $date: the publication date (item.pubDate, item.date) %BR% \
+				 - $category: the article category (item.category) \
+				 | Global =FORMAT= setting |
+
+The =header= and =format= parameters might also use variables rendering the =dc=, =image= and
+=content= namespace information. Note, that only bits of interest have been implemented
+so far and those namespaces might not be implemented fully yet.
+
+---+++ Rendering the =dc= namespace
+The following variables are extracting the =dc= namespace info,
+that could be used in =header= and =format=. Nnote, that some of the variables are 
+already used above. This is done by purpose to use different feeds with the 
+same formating parameters. If there's a conflict the non-dc tags have higher precedence, 
+i.e. a &lt;title&gt; content &lt;/title&gt; is prefered over 
+&lt;dc:title&gt; content &lt;/dc:title&gt; .
+	* $title: channel/article title (dc:title)
+	* $creator: channel creator (dc:creator)
+	* $subject: subject text; this will also add an image according to the subject hash
+					list, see [[#Subject_Images][above]] (dc:subject)
+	* $description: ... (dc:description)
+	* $publisher: the channel/article publisher (dc:publisher)
+	* $contributor: ... (dc:contributor)
+	* $date: ... (dc:date)
+	* $type: ... (dc:type)
+	* $format: ... (dc:format)
+	* $identifier: ... (dc:identifier)
+	* $source: ... (dc:source)
+	* $language: ... (dc:language)
+	* $relation: ... (dc:relation)
+	* $coverage: ... (dc: coverage)
+	* $rights: ... (dc: rights)
+
+---+++ Rendering the =image= namespace
+An =image:item= is converted into an &lt;img&gt; tag using the following mappings:
+	* =src=: image url (rdf:about attribute of the image.item tag)
+	* =alt=: image title (title)
+	* =width=: image width (image:width)
+	* =height=: image height image:height)
+
+---+++ Rendering the =content= namespace
+The variable $content is refering to the &lt;content:encoding&gt; content &lt;/content:encoding&gt;.
+
+---++ Examples
+
+Write 
+<verbatim>
+%HEADLINES{"http://slashdot.org/slashdot.rdf" 
+  header="*[[$link][$title]]:* $description" 
+  format="$t* [[$link][$title]]"
+}%
+</verbatim>  
+to get the latest Slashdot news as a bullet list format:
+
+%HEADLINES{"http://slashdot.org/slashdot.rdf" header="---+!! [[$link][$title]]$n $description" format="$t* [[$link][$title]]"}%
+
+Write 
+<verbatim>
+%HEADLINES{"http://www.business-opportunities.biz/feed" limit="3"}%
+</verbatim>
+
+to get the latest postings on the "Business Opportunities" weblog:
+
+%HEADLINES{"http://www.business-opportunities.biz/feed" limit="3"}%
+
+---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>HEADLINES_SHORTDESCRIPTION%==
 
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, shown in the TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Build news portals that show headline news based on RSS news feeds from news sites.
 
-	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
-		* Set DEBUG = 0
-
 	* Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =30=
-		* Set REFRESH = 30
+		* Set REFRESH = 60
 
 	* Maximum number of items shown. Default: =100=
 		* Set LIMIT = 100
 
+	* Use LWP::UserAgent, or fallback to TWiki's internal =getUrl()= method, Default: =yes=
+		* Set USELWPUSERAGENT = yes
+	* Timeout fetching a feed using the LWP::UserAgent, Default: =20=
+		* Set USERAGENTTIMEOUT = 20
+
 	* Default header: (variables are explained in the syntax rules)
 <verbatim>
-		* Set HEADER = | *[[$channellink][$channeltitle]] [[$imagelink][<img src="$imageurl" alt="$imagetitle" border="0" />]]* |
+		* Set HEADER = <div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0"/>%BR%</div><div class="headlinesTitle">$n---+!! [[$link][$title]]</div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>
 </verbatim>
-
 	* Default format of one item: (variables are explained in the syntax rules)
 <verbatim>
-		* Set FORMAT = | [[$link][$title]] |
+		* Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle">[[$link][$title]]</div>$n<hr/><span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject">"$subject"</span>$n<div class="headlinesText"> $description</div></div>
 </verbatim>
 
----++ Syntax Rules
+---++ Style sheets
+The default HEADER and FORMAT settings use the following styles. See the [[%ATTACHURL%/style.css][style.css]] file 
+defining the default CSS properties  (indentation illustrates enclosure).
 
-The =%<nop>HEADLINES{...}%= variable gets expanded to the content pulled from an RSS feed. 
-
-| *%<nop>HEADLINES% Parameter* | *Explanation* | *Default* |
-| =href= | URL of RSS feed | None; is required |
-| =refresh= | Refresh rate in minutes for caching feed; ="0"= for no caching | Global =REFRESH= setting |
-| =limit= | Maximum number of items shown | Global =LIMIT= setting |
-| =header= | Header. Can include these variables:<br /> - $channeltitle: Title of channel <br /> - $channellink: Link of channel <br /> - $channeldescription: Description of channel <br /> - $imagetitle: Title text for site <br /> - $imagelink: Link for site <br /> - $imageurl: URL of image <br /> - $imagedescription: Description of image | Global =HEADER= setting |
-| =format= | Format of one item. Can include these variables:<br /> - $title: News item title <br /> - $link: News item link <br /> - $description: News item description | Global =FORMAT= setting |
-
-<!-- NOT YET IMPLEMENTED:
-| =refresh= | Refresh rate in minutes | Global =REFRESH= setting |
--->
-
----++ Examples
-
-Write =%<nop>HEADLINES{ href="http://slashdot.org/slashdot.rdf" }%= to get the latest Slashdot news in table format:
-
-  %HEADLINES{ href="http://slashdot.org/slashdot.rdf" }%
-
-Write =%<nop>HEADLINES{ href="http://www.moreover.com/cgi-local/page?o=rss&c=Aerospace%20and%20defense%20industry%20news" header="	* [<nop>[$channellink][$channeltitle]]:" format="		* [<nop>[$link][$title]] ($description)" }%= to get Aerospace and defense industry news rendered as a bullet list:
-
-%HEADLINES{ href="http://www.moreover.com/cgi-local/page?o=rss&c=Aerospace%20and%20defense%20industry%20news" header="	* [[$channellink][$channeltitle]]:" format="		* [[$link][$title]] ($description)" }%
-
----++ Known issues
-
-	* Topic load time depends on timeit takes to load the RSS feed. A future version might include some caching to improve performance.
-	* This plugin uses the undocumented =TWiki::Net::getUrl()= function. The plugin might break in a future TWiki release.
-	* URLs on virtual hosts cannot be read, for example, TWiki:Codev/TWikiSyndication does not work. This is a limitation of =TWiki::Net::getUrl()=
+	* headlinesRss: output of the HeadlinesPlugin (div)
+		* headlinesChannel: channel header (div)
+			* headlinesLogo: channel logo (div)
+			* headlinesTitle: channel title (div)
+			* headlinesDate: channel date (div)
+			* headlinesDescription: channel description (div)
+			* headlinesRight: channel copyright (div)
+		* headlinesArticle: one news item (div)
+			* headlinesTitle: article title (div)
+			* headlinesDate: article date (span)
+			* headlinesCreator: author of article (span)
+			* headlinesSubject: subect category of the article (span)
+			* headlineText: article text (div)
 
 ---++ Plugin Installation Instructions
-
-*Note:* You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	  | ==pub/TWiki/%TOPIC%/style.css== | default css |
+	  | ==lib/TWiki//%TOPIC%.pm== | Plugin Perl module |
 	* Test if the plugin is correctly installed:
-		* Check if above example shows a news feed instead of variable.
+	  Check if above examples show a news feed instead of variable.
+
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 11 May 2005 (V1.004) |
+|  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
+|  Plugin Version: | 21 Nov 2005 (V1.100) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  11 May 2005: | added DevelopBranch compatability (TWiki:Main.WillNorris) |
+|  21 Nov 2004: | TWiki:Main.MichaelDaum: \
+		  added ATOM support; \
+						extended RSS support; \
+		  added dublion core support; \
+		  added content support; \
+		  optionally using LWP to fetch feeds to follow redirections; \
+		  corrected CPAN dependencies ; \
+		  recoding special chars from html integer to entity encoding \
+		  to increase browser compatibility; \
+		  added css support |
+|  11 May 2005: | TWiki:Main.WillNorris: added <nop>DevelopBranch compatability |
 |  31 Oct 2004: | Fixed taint issue by TWiki:Main.AdrianWeiler; small performance improvement |
-|  29 Oct 2004: | Fixed issue of eternal caching if mod_perl or <nop>SpeedyCGI is used |
+|  29 Oct 2004: | Fixed issue of external caching if mod_perl or <nop>SpeedyCGI is used |
 |  02 Aug 2002: | Implemented caching of feeds, thanks to TWiki:Main/RobDuarte |
 |  11 Jun 2002: | Initial version (V1.000) |
-|  CPAN Dependencies: | none |
+|  CPAN Dependencies: | LWP::UserAgent, Digest::MD5 |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.004 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 99.5%, %TOPIC% 94% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- Main.PeterThoeny - 02 Aug 2002
+-- TWiki:Main.PeterThoeny - 21 Nov 2005 %BR%
+-- TWiki:Main.MichaelDaum - 21 Nov 2005
+%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%
