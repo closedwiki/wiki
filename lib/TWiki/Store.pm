@@ -534,10 +534,10 @@ sub readAttachment {
 
     if( $user &&
           !$this->{session}->{security}->checkAccessPermission
-            ( 'change', $user, undef, $topic, $web )) {
-        throw TWiki::AccessControlException( 'CHANGE', $user,
-                                             $web, $topic,
-                                             $this->{session}->{security}->getReason());
+            ( 'view', $user, undef, $topic, $web )) {
+        throw TWiki::AccessControlException(
+            'VIEW', $user, $web, $topic,
+            $this->{session}->{security}->getReason());
     }
 
     my $handler = $this->_getHandler( $web, $topic, $attachment );
