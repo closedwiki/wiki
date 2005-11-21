@@ -1,2 +1,2 @@
 Digets::MD5,>=2.33,cpan,Required. Download from CPAN and install.
-LWP::UserAgent,>=5.8,cpan,Optional. Download from CPAN and install.
+LWP::UserAgent,>=5.803,cpan,Optional. Download from CPAN and install.

@@ -157,7 +157,7 @@ defining the default CSS properties  (indentation illustrates enclosure).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Plugin Version: | 21 Nov 2005 (V1.100) |
+|  Plugin Version: | 21 Nov 2005 (v1.91) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  21 Nov 2004: | TWiki:Main.MichaelDaum: \
 		  added ATOM support; \
@@ -168,13 +168,14 @@ defining the default CSS properties  (indentation illustrates enclosure).
 		  corrected CPAN dependencies ; \
 		  recoding special chars from html integer to entity encoding \
 		  to increase browser compatibility; \
-		  added css support |
+		  added css support;\
+		  use =getWorkArea()= if available |
 |  11 May 2005: | TWiki:Main.WillNorris: added <nop>DevelopBranch compatability |
 |  31 Oct 2004: | Fixed taint issue by TWiki:Main.AdrianWeiler; small performance improvement |
 |  29 Oct 2004: | Fixed issue of external caching if mod_perl or <nop>SpeedyCGI is used |
 |  02 Aug 2002: | Implemented caching of feeds, thanks to TWiki:Main/RobDuarte |
 |  11 Jun 2002: | Initial version (V1.000) |
-|  CPAN Dependencies: | LWP::UserAgent, Digest::MD5 |
+|  CPAN Dependencies: | CPAN:LWP::UserAgent, CPAN:Digest::MD5 |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.004 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 99.5%, %TOPIC% 94% |
