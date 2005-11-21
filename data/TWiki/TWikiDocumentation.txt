@@ -15,7 +15,7 @@ __Doubleclick anywhere__ to return to the top of the page.
 Note - if you are reading this at twiki.org, then you are reading about the code running on that site.%BR%
 If you want to read about the features on your local TWiki, then you should read the documentation there!
 
-%TOC{depth="5"}%
+%TOC{ depth="2" }%
 
 __Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
 
