@@ -2370,10 +2370,10 @@ sub _VAR {
     my( $this, $params, $topic, $inweb ) = @_;
     my $key = $params->{_DEFAULT};
     my $web = $params->{web} || $inweb;
-    if( $web =~ m/%$regex{tagNameRegex}%/o ) { # handle %MAINWEB%-type cases 
-        handleInternalTags( $web, $inweb, $topic );
-    }
-    return $this->{prefs}->getWebPreferencesValue( $key, $web );
+    # handle %MAINWEB%-type cases
+    ( $web, $topic ) = $this->normalizeWebTopicName( $web, $topic );
+    # always return a value, even when the key isn't defined
+    return $this->{prefs}->getWebPreferencesValue( $key, $web ) || '';
 }
 
 sub _PLUGINVERSION {
@@ -2661,12 +2661,12 @@ sub _ENCODE {
 }
 
 sub _SEARCH {
-    my ( $this, $params, $theTopic, $theWeb ) = @_;
+    my ( $this, $params, $topic, $web ) = @_;
     # pass on all attrs, and add some more
     #$params->{_callback} = undef;
     $params->{inline} = 1;
-    $params->{baseweb} = $theWeb;
-    $params->{basetopic} = $theTopic;
+    $params->{baseweb} = $web;
+    $params->{basetopic} = $topic;
     $params->{search} = $params->{_DEFAULT} if( $params->{_DEFAULT} );
     $params->{type} = $this->{prefs}->getPreferencesValue( 'SEARCHVARDEFAULTTYPE' ) unless( $params->{type} );
 
