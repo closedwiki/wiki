@@ -588,29 +588,29 @@ sub _renameweb {
               $movingLockedTopics || $modifyingLockedTopics) {
 
             # check if the user can rename all the topics in this web.
-            $webTopicInfo{movedenied} =
+            push( @{$webTopicInfo{movedenied}},
               grep { !$webTopicInfo{move}{$_}{access} }
-                sort keys %{$webTopicInfo{move}};
+                sort keys %{$webTopicInfo{move}} );
 
             # check if there are any locked topics in this web or
             # its subwebs.
-            $webTopicInfo{movelocked} =
+            push( @{$webTopicInfo{movelocked}},
               grep { defined($webTopicInfo{move}{$_}{leaseuser}) &&
                        $webTopicInfo{move}{$_}{leaseuser} ne $user }
-                sort keys %{$webTopicInfo{move}};
+                sort keys %{$webTopicInfo{move}} );
 
             # Next, build up a list of all the referrers which the
             # user doesn't have permission to change.
-            $webTopicInfo{modifydenied} =
+            push( @{$webTopicInfo{modifydenied}},
               grep { !$webTopicInfo{modify}{$_}{access} }
-                sort keys %{$webTopicInfo{modify}};
+                sort keys %{$webTopicInfo{modify}} );
 
             # Next, build up a list of all the referrers which are
             # currently locked.
-            $webTopicInfo{modifylocked} =
+            push( @{$webTopicInfo{modifylocked}},
               grep { defined($webTopicInfo{modify}{$_}{leaseuser}) &&
                        $webTopicInfo{modify}{$_}{leaseuser} ne $user }
-                sort keys %{$webTopicInfo{modify}};
+                sort keys %{$webTopicInfo{modify}} );
 
             unless( $confirm ) {
                 my $nocontinue = '';
@@ -618,16 +618,25 @@ sub _renameweb {
                       @{$webTopicInfo{movelocked}} ) {
                     $nocontinue = 'style="display: none"';
                 }
+                my $mvd = join(' ', @{$webTopicInfo{movedenied}} ) || 'none';
+                $mvd = substr($mvd, 0, 300).'... (more)'
+                  if( length($mvd) > 300);
+                my $mvl = join(' ', @{$webTopicInfo{movelocked}} ) || 'none';
+                $mvl = substr($mvl, 0, 300).'... (more)'
+                  if( length($mvl) > 300);
+                my $mdd = join(' ', @{$webTopicInfo{modifydenied}} ) || 'none';
+                $mdd = substr($mdd, 0, 300).'... (more)'
+                  if( length($mdd) > 300);
+                my $mdl = join(' ', @{$webTopicInfo{modifylocked}} ) || 'none';
+                $mdl = substr($mdl, 0, 300).'... (more)'
+                  if( length($mdl) > 300);
                 throw TWiki::OopsException(
                     'attention',
                     web => $oldWeb,
                     topic => '',
                     def => 'rename_web_prerequisites',
                     params => [
-                        join(', ', @{$webTopicInfo{movedenied}} ) || 'none',
-                        join(', ', @{$webTopicInfo{movelocked}} ) || 'none',
-                        join(', ', @{$webTopicInfo{modifydenied}} ) || 'none',
-                        join(', ', @{$webTopicInfo{modifylocked}} ) || 'none',
+                        $mvd, $mvl, $mdd, $mdl,
                         $nocontinue
                        ] );
             }
