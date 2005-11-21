@@ -191,5 +191,4 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 -- TWiki:Main.MichaelDaum - 14 Sep 2005
-%META:FILEATTACHMENT{name="ImageGalleryPlugin.zip" attr="" comment="v3.0 (15 June 2005)" date="1118829177" path="ImageGalleryPlugin.zip" size="12781" user="MichaelDaum" version="1.7"}%
-%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="TWikiContributor" version="1.1"}%
