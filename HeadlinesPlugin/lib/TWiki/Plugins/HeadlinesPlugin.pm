@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002 Peter Thoeny <Peter@Thoeny.com>
+# Copyright (C) 2002-2004 Peter Thoeny, peter@thoeny.com
 # Copyright (C) 2005 MichaelDaum <micha@nats.informatik.uni-hamburg.de>
 # Copyright (C) 2005 TWiki Contributors
 #
@@ -37,7 +37,7 @@ use Digest::MD5 qw(md5_hex);
 
 
 $VERSION = '$Rev$';
-$RELEASE = '1.100';
+$RELEASE = '1.91';
 
 $debug = 0; # toggle me
 
@@ -145,27 +145,6 @@ $debug = 0; # toggle me
   376 => 'Yuml',
   710 => 'circ',
   732 => 'tilde',
-  8194 => 'ensp',
-  8195 => 'emsp',
-  8201 => 'thinsp',
-  8204 => 'zwnj',
-  8205 => 'zwj',
-  8206 => 'lrm',
-  8207 => 'rlm',
-  8211 => 'ndash',
-  8212 => 'mdash',
-  8216 => 'lsquo',
-  8217 => 'rsquo',
-  8218 => 'sbquo',
-  8220 => 'ldquo',
-  8221 => 'rdquo',
-  8222 => 'bdquo',
-  8224 => 'dagger',
-  8225 => 'Dagger',
-  8240 => 'permil',
-  8249 => 'lsaquo',
-  8250 => 'rsaquo',
-  8364 => 'euro',
   402 => 'fnof',
   913 => 'Alpha',
   914 => 'Beta',
@@ -219,6 +198,27 @@ $debug = 0; # toggle me
   977 => 'thetasym',
   978 => 'upsih',
   982 => 'piv',
+  8194 => 'ensp',
+  8195 => 'emsp',
+  8201 => 'thinsp',
+  8204 => 'zwnj',
+  8205 => 'zwj',
+  8206 => 'lrm',
+  8207 => 'rlm',
+  8211 => 'ndash',
+  8212 => 'mdash',
+  8216 => 'lsquo',
+  8217 => 'rsquo',
+  8218 => 'sbquo',
+  8220 => 'ldquo',
+  8221 => 'rdquo',
+  8222 => 'bdquo',
+  8224 => 'dagger',
+  8225 => 'Dagger',
+  8240 => 'permil',
+  8249 => 'lsaquo',
+  8250 => 'rsaquo',
+  8364 => 'euro',
   8226 => 'bull',
   8230 => 'hellip',
   8242 => 'prime',
@@ -380,9 +380,13 @@ sub readRssFeed
   my $cacheDir = '';
   my $cacheFile = '';
   if ($theRefresh) {
-    $cacheDir  = TWiki::Func::getPubDir() . '/' . $installWeb . '/HeadlinesPlugin';
-    $cacheDir  =~ /(.*)/;  
-    $cacheDir  = $1; # untaint (save because only internal variables)
+    if (defined &TWiki::Func::getWorkArea) {
+      $cacheDir = TWiki::Func::getWorkArea('HeadlinesPlugin');
+    } else {
+      $cacheDir  = TWiki::Func::getPubDir() . '/' . $installWeb . '/HeadlinesPlugin';
+      $cacheDir  =~ /(.*)/;  
+      $cacheDir  = $1; # untaint (save because only internal variables)
+    }
     $cacheFile = $cacheDir . '/_rss-' . md5_hex($theUrl);
     $cacheFile =~ /(.*)/;  $cacheFile = $1; # untaint
     if ((-e $cacheFile) && ((time() - (stat(_))[9]) <= ($theRefresh * 60))) {
@@ -517,7 +521,6 @@ sub parseRssFeed {
   $header =~ s/\$(rights|coverage|relation|language|source|identifier|format|date|contributor|creator|title|subject|description)//go;
   $text .= $header;
 
-#  $raw =~ s/<textinput[^>]*>.*?<\/textinput>//gos;
   $raw =~ s/<\/?items>//go;
   $raw =~ s/^.*?(<item[^>]*>)/$1/gos;  # cut stuff above all <item>s
 
