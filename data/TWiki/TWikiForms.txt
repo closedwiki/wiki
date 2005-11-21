@@ -3,11 +3,18 @@
 %STARTINCLUDE%
 ---# TWiki Forms
 
-_Structured data (key-value pairs) attached to topics, according to a specification given in another topic_
+_Add structure to content with forms attached to twiki topics. TWiki forms (with form fields) and formatted search are the base for building database applications._
 
 ---++ Overview
 
-When forms are enabled for a web, and a form is selected in a topic, the form data is shown when the topic is viewed, and the form can be edited in edit mode. You can define an as many different form types as you want, though you can only have one form per topic. 
+By adding form-based input to freeform content, you can structure topics with unlimited, easily searchable categories. A form is enabled for a web and can be added to a topic. The form data is shown in tabular format when the topic is viewed, and can be changed in edit mode using edit fields, radio buttons, check boxes and list boxes. Many different form types can be defined in a web, though a topic can only have only form attached to it at a time.
+
+Typical steps to build an application based on TWiki forms:
+   1. Define a form template
+   1. Enable the form for a web
+   1. Add the form to a [[TWikiTemplates#Template_Topics][template topic]]
+   1. Build an HTML form to create new topics based on that template topic
+   1. Build a FormattedSearch to list topics that share the same form
 
 ---++ Defining a Form Template
 
@@ -33,7 +40,7 @@ A Form Template specifies the fields in a form. A Form Template is simply a page
 
 ---+++ Defining a Form
 
-   1. Create a new topic with your form name: ==<nop>YourForm==, ==<nop>ExpenseReport==, ==<nop>InfoCategory==, ==<nop>RecordReview==, whatever you need.
+   1. Create a new topic with your form name: ==<nop>YourForm==, ==<nop>ExpenseReportForm==, ==<nop>InfoCategoryForm==, ==<nop>RecordReviewForm==, whatever you need.
    1. Create a TWiki table, with each column head representing one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, ==Tooltip message==, and ==Attributes== _(see sample below)_.
    1. For each field, fill in a new line; for the type of field, select from the list.
    1. Save the topic _(you can later choose to [[#EnablingForms][enable/disable]] individual forms)_.
@@ -57,7 +64,7 @@ You can also retrieve possible values for select, checkbox or radio types from o
 *Example: <nop>WebForm*
 
    * In the <nop>WebForm topic, define the form:
-     <br />  
+     <br />
      | *Name* | *Type* | *Size* | *Values*  | *Tooltip message* | *Attributes* |
      | <nop>TopicClassification | select | 1 |    | blah blah... | &nbsp; |
      | <nop>OperatingSystem | checkbox | 3 |    | blah blah... | &nbsp; |
@@ -66,7 +73,7 @@ You can also retrieve possible values for select, checkbox or radio types from o
      %X% Leave the ==Values== field *blank*.
 
    * Then in the <nop>TopicClassification topic, define the possible values:
-     <br />  
+     <br />
      | *Name* | *Type* | *Tooltip message* |
      | <nop>NoDisclosure | option | blah blah... |
      | Public Supported | option | blah blah... |
@@ -106,15 +113,15 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
 </blockquote>
    * With ==WEBFORMS== enabled, an extra button is added to the edit view. If the topic doesn't have a Form, an *Add Form* button appears at the end of the topic. If a Form is present, a *Change* button appears in the top row of the Form. The buttons open a screen that enables selection of a form specified in =WEBFORMS=, or the *No form* option.
 
----++ Creating a new topic with a Form (and default values)
+---++ Add a form to a topic
 
-   * A default Form Template (new topics get this default form) can be provided by creating the =WebTopicEditTemplate= topic in a web and adding a form to it. Initial Form values can be set there.  
+   * Edit a topic and follow the "Add form" button to add a Form to the topic. This is typically done to a [[TWikiTemplates#TemplateTopic][template topic]], either to the =WebTopicEditTemplate= topic in a web, or a new topic that serves as an application specific template topic. Initial Form values can be set there.
 
    * Additionally a new topic can be given a Form using the =formtemplate= parameter in the (edit or save) URL.  Initial values can then be provided in the URLs or as form values:
       * other than checkboxes: ==name==, ex: ==?BugPriority=1==
       * checkbox: ==namevalue=1==, ex: ==?ColorRed=1==. <br /> 
         Boxes with a tick must be specified.
-      * example: This will add a textfield for the new topic name and a "Create"-Button to your page. When the button is pressed, the topic editor will open with the form "MyForm" already attached to the new topic.
+      * Example: This will add a textfield for the new topic name and a "Create"-Button to your topic. When the button is pressed, the topic editor will open with the form "MyForm" already attached to the new topic.
        <verbatim>
     <form name="newtopic" action="%SCRIPTURL{"edit"}%/%WEB%/">
        <input type="hidden" name="formtemplate" value="MyForm" />
@@ -122,16 +129,13 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
        <input type="submit" value="Create" />
     </form>
        </verbatim>
-   * If you want to make a TWikiApplication where you need an automatically generated unique topicname, you can use 10 X's in the edit / save URL, and they will be replaced on topic save with a count value
-      * the Codev:DevelopBranch bugs tracking system uses something like ==http://develop.twiki.org/~develop/cgi-bin/edit/Bugs/ItemXXXXXXXXXX?formtemplate=Bugs.ItemTemplate&_T=0501092906== 
+   * __%T% Tip:__ For TWiki applications you can [[TWikiTemplates#AutomaticallyGeneratedTopicname][automatically generate unique topicnames]].
 
-%X% Initial values will not be submitted to the form of a new topic if you only use the formtemplate parameter.
+   * __%X% Note:__ Initial values will not be submitted to the form of a new topic if you only use the formtemplate parameter.
 
----++ Setting Up Multiple Form Options
-
-   * The ==WEBFORMS== variable in WebPreferences lists the different forms that can be selected from the topic editor.
+---++ Build an HTML form to create new Form-based topics
    
-   * New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form.
+   * New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form. [[TWikiTemplates#TemplateTopics][Template topics]] has more.
 
 ---++ Changing a form
    * You can change a form definition, and TWiki will try to make sure you don't lose any data from the topics that use that form. 
@@ -144,7 +148,7 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
 
 #UsingFormData
 ---++ Searching for Form Data
-TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==FORMFIELD==, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
+TWiki Forms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==FORMFIELD==, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]].
 
 <blockquote>
 *Example* %BR%
@@ -157,7 +161,7 @@ format="|<b>[[$web.$topic][$topic]]</b> |<nop>$formfield(TopicClassification) |"
 </blockquote> 
 
 ---++ Extending the range of form data types
-Several plugins allow you to extend the range of data types accepted by forms. For example, the TWiki:Plugins.DateFieldPlugin lets you add a 'date' type to the available data types. All data types are single-valued (can only have one value) with the following exceptions:
+Several Plugins allow you to extend the range of data types accepted by forms. For example, the TWiki:Plugins.DateFieldPlugin lets you add a 'date' type to the available data types. All data types are single-valued (can only have one value) with the following exceptions:
    * any type name starting with =checkbox=
    * any type name with =+multi= anywhere in the name
 Types with names like this can both take multiple values.
@@ -178,4 +182,4 @@ The new Form Template system should work with old Category Table data with no sp
 
 %STOPINCLUDE%
 
-__Related Topics:__ UserDocumentationCategory
+__Related Topics:__ UserDocumentationCategory, TWikiTemplates
