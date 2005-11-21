@@ -10,65 +10,122 @@ There are several ways to put an image in a topic.
 
    * *Shorthand notation:* <code>%<nop>ICON{help}%</code> results in: %ICON{help}%
       * Note that =ICON{}= assumes an image of 16 x 16 pixels
-   * *Really shorthand notation:* in %TWIKIWEB%.TWikiPreferences set a variable to an ICON, for example: <code>   * Set H = %<nop>ICON{help}% </code>. Now you can use the icon by writing =%<nop>H%=.
+   * *Really shorthand notation:* in %TWIKIWEB%.TWikiPreferences set a variable to an ICON, for example:%BR% =<nop>   * Set H = %<nop>ICON{help}%= %BR% Now you can use the icon by writing =%<nop>H%=.
    * There are other approaches as well:
       * In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
       * You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
       * The TWiki:Plugins.SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
-   * To create an image with a link, write: =[<nop>[WebHome][%<nop>ICON{home}%]]= to get: [[WebHome][%ICON{home}%]]
-   * To get the full icon filename path, call =ICONPATH=: <code>%<nop>ICONPATH{"toggleopen"}%</code> gets you: <code>%ICONPATH{"toggleopen"}%</code> (if you paste that in a topic you will get: %ICONPATH{"toggleopen"}%
+   * To create an image with a link, write: =[<nop>[%HOMETOPIC%][%<nop>ICON{home}%]]= to get: [[%HOMETOPIC%][%ICON{home}%]]
+   * To get the full icon filename path, call =ICONPATH=: <code>%<nop>ICONPATH{"toggleopen"}%</code> gets you: <code>%ICONPATH{"toggleopen"}%</code> (if you paste that in a topic you will get: %ICONPATH{"toggleopen"}%)
 
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
-_The icons on this page were created by TWiki:Main.ArthurClemens - except for the Dot graph and Line graph images._
+__Contributors:__ The icons on this page were originally designed by TWiki:Main.PeterThoeny. All except led-color icons, dot graph and line graph images were then recreated by TWiki:Main.ArthurClemens.
 
 ---++ Graphics
 
----+++ Icons
+---+++ %ICON{note}% Document icons
 
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
-| <img src="%ATTACHURLPATH%/arrowbdown.gif" alt="Arrow blue down" title="Arrow blue down" />  | =arrowbdown.gif= | Arrow blue down | =%<nop>ICON{arrowbdown}%= |
-| <img src="%ATTACHURLPATH%/arrowbleft.gif" alt="Arrow blue left" title="Arrow blue left" />  | =arrowbleft.gif= | Arrow blue left | =%<nop>ICON{arrowbleft}%= |
-| <img src="%ATTACHURLPATH%/arrowbright.gif" alt="Arrow blue right" title="Arrow blue right" />  | =arrowbright.gif= | Arrow blue right | =%<nop>ICON{arrowbright}%= |
-| <img src="%ATTACHURLPATH%/arrowbup.gif" alt="Arrow blue up" title="Arrow blue up" />  | =arrowbup.gif= | Arrow blue up | =%<nop>ICON{arrowbup}%= |
-| <img src="%ATTACHURLPATH%/arrowdot.gif" alt="Meet here (arrows to red dot)" title="Meet here (arrows to red dot)" />  | =arrowdot.gif= | Meet here (arrows to red dot) | =%<nop>ICON{arrowdot}%= |
-| <img src="%ATTACHURLPATH%/arrowdown.gif" alt="Arrow down" title="Arrow down" />  | =arrowdown.gif= | Arrow down | =%<nop>ICON{arrowdown}%= |
-| <img src="%ATTACHURLPATH%/arrowleft.gif" alt="Arrow left" title="Arrow left" />  | =arrowleft.gif= | Arrow left | =%<nop>ICON{arrowleft}%= |
-| <img src="%ATTACHURLPATH%/arrowright.gif" alt="Arrow right" title="Arrow right" />  | =arrowright.gif= | Arrow right | =%<nop>ICON{arrowright}%= |
-| <img src="%ATTACHURLPATH%/arrowup.gif" alt="Arrow up" title="Arrow up" />  | =arrowup.gif= | Arrow up | =%<nop>ICON{arrowup}%= |
-| <img src="%ATTACHURLPATH%/attachfile.gif" alt="Attach file" title="Attach file" />  | =attachfile.gif= | Attach file | =%<nop>ICON{attachfile}%= |
 | <img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
-| <img src="%ATTACHURLPATH%/cachetopic.gif" alt="Cache topic" title="Cache topic" />  | =cachetopic.gif= | Cache topic | =%<nop>ICON{cachetopic}%= |
-| <img src="%ATTACHURLPATH%/changes.gif" alt="Changes" title="Changes" />  | =changes.gif= | Changes | =%<nop>ICON{changes}%= |
-| <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes" title="Changes" />  | =changes-small.gif= | Changes (small), 13x13 | =&lt;img src="%<nop>ICONPATH{changes-small}%" width="13" height="13" alt="Changes" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="Cancel" title="Cancel" />  | =choice-cancel.gif= | Cancel | =%<nop>ICON{choice-cancel}%= |
-| <img src="%ATTACHURLPATH%/choice-no.gif" alt="No" title="No" />  | =choice-no.gif= | No | =%<nop>ICON{choice-no}%= |
-| <img src="%ATTACHURLPATH%/choice-yes.gif" alt="Yes / Done" title="Yes / Done" />  | =choice-yes.gif= | Yes / Done | =%<nop>ICON{choice-yes}%= |
 | <img src="%ATTACHURLPATH%/days.gif" alt="Days / Calendar" title="Days / Calendar" />  | =days.gif= | Days, Calendar | =%<nop>ICON{days}%= |
 | <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
-| <img src="%ATTACHURLPATH%/edittopic.gif" alt="Edit topic" title="Edit topic" />  | =edittopic.gif= | Edit topic | =%<nop>ICON{edittopic}%= |
 | <img src="%ATTACHURLPATH%/filter.gif" alt="Filter" title="Filter" />  | =filter.gif= | Filter | =%<nop>ICON{filter}%= |
+| <img src="%ATTACHURLPATH%/gear.gif" alt="Gear" title="Gear" />  | =gear.gif= | Gear | =%<nop>ICON{gear}%= |
+| <img src="%ATTACHURLPATH%/globe.gif" alt="Globe" title="Globe" />  | =globe.gif= | Globe | =%<nop>ICON{globe}%= |
+| <img src="%ATTACHURLPATH%/hand.gif" alt="Pointing hand" title="Pointing hand" />  | =hand.gif= | Pointing hand | =%<nop>ICON{hand}%= |
+| <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>H%=, =%<nop>ICON{help}%= |
+| <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
+| <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
+| <img src="%ATTACHURLPATH%/more.gif" alt="Read more" title="Read more" />  | =more.gif= | Read more | =%<nop>ICON{more}%= |
+| <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 13x13 | =&lt;img src="%<nop>ICONPATH{more-small}%" width="13" height="13" alt="Read more" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/move.gif" alt="Move" title="Move" />  | =move.gif= | Move | =%<nop>ICON{move}%= |
+| <img src="%ATTACHURLPATH%/note.gif" alt="Note" title="Note" />  | =note.gif= | Note | =%<nop>ICON{note}%= |
+| <img src="%ATTACHURLPATH%/pencil.gif" alt="Pencil / Refactor / Edit" title="Pencil / Refactor / Edit" />  | =pencil.gif= | Pencil / Refactor / Edit | =%<nop>P%=, =%<nop>ICON{pencil}%= |
+| <img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
+| <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
+| <img src="%ATTACHURLPATH%/stargold.gif" alt="Gold star, favorites" title="Gold star, favorites" />  | =stargold.gif= | Gold star, favorites | =%<nop>ICON{stargold}%= |
+| <img src="%ATTACHURLPATH%/starred.gif" alt="Red star, highlight" title="Red star, highlight" />  | =starred.gif= | Red star, highlight | =%<nop>S%=, =%<nop>ICON{starred}%= |
+| <img src="%ATTACHURLPATH%/stop.gif" alt="Stop" title="Stop" />  | =stop.gif= | Stop | =%<nop>ICON{stop}%= |
+| <img src="%ATTACHURLPATH%/target.gif" alt="Target" title="Target" />  | =target.gif= | Target | =%<nop>ICON{target}%= |
+| <img src="%ATTACHURLPATH%/tip.gif" alt="Tip, idea" title="Tip, idea" />  | =tip.gif= | Tip, idea | =%<nop>T%=, =%<nop>ICON{tip}%= |
+| <img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />  | =warning.gif= | Warning, important | =%<nop>W%=, =%<nop>ICON{warning}%= |
+| <img src="%ATTACHURLPATH%/watch.gif" alt="Watch" title="Watch" />  | =watch.gif= | Watch | =%<nop>ICON{watch}%= |
+| <img src="%ATTACHURLPATH%/wip.gif" alt="Work in progress, under construction" title="Work in progress, under construction" />  | =wip.gif= | Work in progress, under construction | =%<nop>ICON{wip}%= |
+| <img src="%ATTACHURLPATH%/wrench.gif" alt="Wrench, tools" title="Wrench, tools" />  | =wrench.gif= | Wrench, tools | =%<nop>ICON{wrench}%= |
+
+
+---+++ %ICON{viewtopic}% Topic, %ICON{attachfile}% file, %ICON{folder}% folder icons
+
+| *&nbsp;* | *File Name* | *Description* | *Write...* |
+| <img src="%ATTACHURLPATH%/viewtopic.gif" alt="View topic" title="View topic" />  | =viewtopic.gif= | View topic | =%<nop>ICON{viewtopic}%= |
+| <img src="%ATTACHURLPATH%/printtopic.gif" alt="Print topic" title="Print topic" />  | =printtopic.gif= | Print topic | =%<nop>ICON{printtopic}%= |
+| <img src="%ATTACHURLPATH%/refreshtopic.gif" alt="Refresh topic" title="Refresh topic" />  | =refreshtopic.gif= | Refresh topic | =%<nop>ICON{refreshtopic}%= |
+| <img src="%ATTACHURLPATH%/newtopic.gif" alt="New topic" title="New topic" />  | =newtopic.gif= | New topic | =%<nop>ICON{newtopic}%= |
+| <img src="%ATTACHURLPATH%/edittopic.gif" alt="Edit topic" title="Edit topic" />  | =edittopic.gif= | Edit topic | =%<nop>ICON{edittopic}%= |
+| <img src="%ATTACHURLPATH%/save.gif" alt="Save" title="Save" />  | =save.gif= | Save | =%<nop>ICON{save}%= |
+| <img src="%ATTACHURLPATH%/attachfile.gif" alt="Attach file" title="Attach file" />  | =attachfile.gif= | Attach file | =%<nop>ICON{attachfile}%= |
+| <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
+| <img src="%ATTACHURLPATH%/searchtopic.gif" alt="Search topic" title="Search topic" />  | =searchtopic.gif= | Search topic | =%<nop>ICON{searchtopic}%= |
+| <img src="%ATTACHURLPATH%/search-small.gif" alt="Search" title="Search" />  | =search-small.gif= | Small search button, 13x13 | =&lt;img src="%<nop>ICONPATH{search-small}%" width="13" height="13" alt="Search" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="Topic back-links" title="Topic back-links" />  | =topicbacklinks.gif= | Topic back-links | =%<nop>ICON{topicbacklinks}%= |
+| <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="Topic difference" title="Topic difference" />  | =topicdiffs.gif= | Topic difference | =%<nop>ICON{topicdiffs}%= |
+| <img src="%ATTACHURLPATH%/statistics.gif" alt="Statistics" title="Statistics" />  | =statistics.gif= | Statistics | =%<nop>ICON{statistics}%= |
+| <img src="%ATTACHURLPATH%/index.gif" alt="Index" title="Index" />  | =index.gif= | Index | =%<nop>ICON{index}%= |
+| <img src="%ATTACHURLPATH%/indexlist.gif" alt="Index list" title="Index list" />  | =indexlist.gif= | Index list | =%<nop>ICON{indexlist}%= |
+| <img src="%ATTACHURLPATH%/cachetopic.gif" alt="Cache topic" title="Cache topic" />  | =cachetopic.gif= | Cache topic | =%<nop>ICON{cachetopic}%= |
+| <img src="%ATTACHURLPATH%/folder.gif" alt="Folder" title="Folder" />  | =folder.gif= | Folder | =%<nop>ICON{folder}%= |
+| <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
+| <img src="%ATTACHURLPATH%/web-bg-small.gif" alt="Web" title="Web" />  | =web-bg-small.gif= | Web background, 13x13 | =&lt;img src="%<nop>ICONPATH{web-bg-small}%" width="13" height="13" alt="Web" border="0" /&gt;= |
+
+
+---+++ %ICON{person}% Person, %ICON{group}% group, %ICON{lock}% access icons
+
+| *&nbsp;* | *File Name* | *Description* | *Write...* |
+| <img src="%ATTACHURLPATH%/person.gif" alt="Person" title="Person" />  | =person.gif= | Person | =%<nop>ICON{person}%= |
+| <img src="%ATTACHURLPATH%/persons.gif" alt="Persons" title="Persons" />  | =persons.gif= | Persons | =%<nop>ICON{persons}%= |
+| <img src="%ATTACHURLPATH%/group.gif" alt="Group" title="Group" />  | =group.gif= | Group | =%<nop>ICON{group}%= |
+| <img src="%ATTACHURLPATH%/logout.gif" alt="Log out" title="Log out" />  | =logout.gif= | Log out | =%<nop>ICON{logout}%= |
+| <img src="%ATTACHURLPATH%/key.gif" alt="Key" title="Key" />  | =key.gif= | Key | =%<nop>ICON{key}%= |
+| <img src="%ATTACHURLPATH%/lock.gif" alt="Lock" title="Lock" />  | =lock.gif= | Lock | =%<nop>ICON{lock}%= |
+| <img src="%ATTACHURLPATH%/locktopic.gif" alt="Locked topic" title="Locked topic" />  | =locktopic.gif= | Locked topic | =%<nop>ICON{locktopic}%= |
+| <img src="%ATTACHURLPATH%/locktopicgray.gif" alt="Locked topic, gray" title="Locked topic, gray" />  | =locktopicgray.gif= | Locked topic, gray | =%<nop>ICON{locktopicgray}%= |
+| <img src="%ATTACHURLPATH%/lockfolder.gif" alt="Locked folder" title="Locked folder" />  | =lockfolder.gif= | Locked folder | =%<nop>ICON{lockfolder}%= |
+| <img src="%ATTACHURLPATH%/lockfoldergray.gif" alt="Locked folder, gray" title="Locked folder, gray" />  | =lockfoldergray.gif= | Locked folder, gray | =%<nop>ICON{lockfoldergray}%= |
+
+
+---+++ %ICON{changes}% Changes, %ICON{notify}% notification icons
+
+| *&nbsp;* | *File Name* | *Description* | *Write...* |
+| <img src="%ATTACHURLPATH%/changes.gif" alt="Changes" title="Changes" />  | =changes.gif= | Changes | =%<nop>ICON{changes}%= |
+| <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes" title="Changes" />  | =changes-small.gif= | Changes (small), 13x13 | =&lt;img src="%<nop>ICONPATH{changes-small}%" width="13" height="13" alt="Changes" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/recentchanges.gif" alt="Recent changes" title="Recent changes" />  | =recentchanges.gif= | Recent changes | =%<nop>ICON{recentchanges}%= |
+| <img src="%ATTACHURLPATH%/mail.gif" alt="Mail" title="Mail" />  | =mail.gif= | Mail | =%<nop>ICON{mail}%= |
+| <img src="%ATTACHURLPATH%/notify.gif" alt="Notify" title="Notify" />  | =notify.gif= | Notify | =%<nop>ICON{notify}%= |
+| <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONPATH{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
+| <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | =&lt;img src="%<nop>ICONPATH{xml-feed}%" width="36" height="13" alt="XML feed" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/xml-small.gif" alt="XML feed" title="XML feed" />  | =xml-small.gif= | XML feed | =%<nop>ICON{xml-small}%= |
+
+
+---+++ %ICON{choice-yes}% Status, %ICON{flag}% flag, %ICON{led-box-red}% LED icons
+
+| *&nbsp;* | *File Name* | *Description* | *Write...* |
+| <img src="%ATTACHURLPATH%/new.gif" alt="NEW" title="NEW" />  | =new.gif= | NEW, 30x16 | =%<nop>N%=, =&lt;img src="%<nop>ICONPATH{new}%" width="30" height="16" alt="New" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/todo.gif" alt="TODO" title="TODO" />  | =todo.gif= | TODO, 37x16 | =&lt;img src="%<nop>ICONPATH{todo}%" width="37" height="16" alt="TODO" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | =%<nop>U%=, =&lt;img src="%<nop>ICONPATH{updated}%" width="55" height="16" alt="UPDATED" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/done.gif" alt="DONE" title="DONE" />  | =done.gif= | DONE, 37x16 | =&lt;img src="%<nop>ICONPATH{done}%" width="37" height="16" alt="Done" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/closed.gif" alt="CLOSED" title="CLOSED" />  | =closed.gif= | CLOSED, 48x16 | =&lt;img src="%<nop>ICONPATH{closed}%" width="48" height="16" alt="Closed" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/minus.gif" alt="Minus" title="Minus" />  | =minus.gif= | Minus | =%<nop>ICON{minus}%= |
+| <img src="%ATTACHURLPATH%/plus.gif" alt="Plus" title="Plus" />  | =plus.gif= | Plus | =%<nop>ICON{plus}%= |
+| <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="Cancel" title="Cancel" />  | =choice-cancel.gif= | Cancel | =%<nop>ICON{choice-cancel}%= |
+| <img src="%ATTACHURLPATH%/choice-no.gif" alt="No" title="No" />  | =choice-no.gif= | No | =%<nop>ICON{choice-no}%= |
+| <img src="%ATTACHURLPATH%/choice-yes.gif" alt="Yes / Done" title="Yes / Done" />  | =choice-yes.gif= | Yes / Done | =%<nop>Y%=, =%<nop>ICON{choice-yes}%= |
+| <img src="%ATTACHURLPATH%/unchecked.gif" alt="Unchecked checkbox" title="Unchecked checkbox" />  | =unchecked.gif= | Unchecked checkbox | =%<nop>ICON{unchecked}%= |
+| <img src="%ATTACHURLPATH%/checked.gif" alt="Checked checkbox" title="Checked checkbox" />  | =checked.gif= | Checked checkbox | =%<nop>ICON{checked}%= |
 | <img src="%ATTACHURLPATH%/flag.gif" alt="Flag" title="Flag" />  | =flag.gif= | Flag | =%<nop>ICON{flag}%= |
 | <img src="%ATTACHURLPATH%/flag-gray.gif" alt="Flag" title="Flag" />  | =flag-gray.gif= | Gray flag | =%<nop>ICON{flag-gray}%= |
 | <img src="%ATTACHURLPATH%/flag-gray-small.gif" alt="Flag" title="Flag" />  | =flag-gray-small.gif= | Small gray flag, 13x13 | =&lt;img src="%<nop>ICONPATH{flag-gray-small}%" width="13" height="13" alt="Flag" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/folder.gif" alt="Folder" title="Folder" />  | =folder.gif= | Folder | =%<nop>ICON{folder}%= |
-| <img src="%ATTACHURLPATH%/gear.gif" alt="Gear" title="Gear" />  | =gear.gif= | Gear | =%<nop>ICON{gear}%= |
-| <img src="%ATTACHURLPATH%/globe.gif" alt="Globe" title="Globe" />  | =globe.gif= | Globe | =%<nop>ICON{globe}%= |
-| <img src="%ATTACHURLPATH%/go_back.gif" alt="Go back" title="Go back" />  | =go_back.gif= | Go back | =%<nop>ICON{go_back}%= |
-| <img src="%ATTACHURLPATH%/go_end.gif" alt="Go to end" title="Go to end" />  | =go_end.gif= | Go to end | =%<nop>ICON{go_end}%= |
-| <img src="%ATTACHURLPATH%/go_fb.gif" alt="Go fast back" title="Go fast back" />  | =go_fb.gif= | Go fast back | =%<nop>ICON{go_fb}%= |
-| <img src="%ATTACHURLPATH%/go_ff.gif" alt="Go fast forward" title="Go fast forward" />  | =go_ff.gif= | Go fast forward | =%<nop>ICON{go_ff}%= |
-| <img src="%ATTACHURLPATH%/go_forward.gif" alt="Go forward" title="Go forward" />  | =go_forward.gif= | Go forward | =%<nop>ICON{go_forward}%= |
-| <img src="%ATTACHURLPATH%/go_start.gif" alt="Go to start" title="Go to start" />  | =go_start.gif= | Go to start | =%<nop>ICON{go_start}%= |
-| <img src="%ATTACHURLPATH%/group.gif" alt="Group" title="Group" />  | =group.gif= | Group | =%<nop>ICON{group}%= |
-| <img src="%ATTACHURLPATH%/hand.gif" alt="Pointing hand" title="Pointing hand" />  | =hand.gif= | Pointing hand | =%<nop>ICON{hand}%= |
-| <img src="%ATTACHURLPATH%/help.gif" alt="Help" title="Help" />  | =help.gif= | Help | =%<nop>ICON{help}%= |
-| <img src="%ATTACHURLPATH%/home.gif" alt="Home" title="Home" />  | =home.gif= | Home | =%<nop>ICON{home}%= |
-| <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
-| <img src="%ATTACHURLPATH%/index.gif" alt="Index" title="Index" />  | =index.gif= | Index | =%<nop>ICON{index}%= |
-| <img src="%ATTACHURLPATH%/indexlist.gif" alt="Index list" title="Index list" />  | =indexlist.gif= | Index list | =%<nop>ICON{indexlist}%= |
-| <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
-| <img src="%ATTACHURLPATH%/key.gif" alt="Key" title="Key" />  | =key.gif= | Key | =%<nop>ICON{key}%= |
 | <img src="%ATTACHURLPATH%/led-aqua.gif" alt="Aqua led" title="Aqua led" />  | =led-aqua.gif= | Aqua led | =%<nop>ICON{led-aqua}%= |
 | <img src="%ATTACHURLPATH%/led-blue.gif" alt="Blue led" title="Blue led" />  | =led-blue.gif= | Blue led | =%<nop>ICON{led-blue}%= |
 | <img src="%ATTACHURLPATH%/led-gray.gif" alt="Gray led" title="Gray led" />  | =led-gray.gif= | Gray led | =%<nop>ICON{led-gray}%= |
@@ -85,71 +142,36 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/led-box-purple.gif" alt="Purple led" title="Purple led" />  | =led-box-purple.gif= | Purple led | =%<nop>ICON{led-box-purple}%= |
 | <img src="%ATTACHURLPATH%/led-box-red.gif" alt="Red led" title="Red led" />  | =led-box-red.gif= | Red led | =%<nop>ICON{led-box-red}%= |
 | <img src="%ATTACHURLPATH%/led-box-yellow.gif" alt="Yellow led" title="Yellow led" />  | =led-box-yellow.gif= | Yellow led | =%<nop>ICON{led-box-yellow}%= |
-| <img src="%ATTACHURLPATH%/right.gif" alt="Right" title="Right" />  | =right.gif= | Right | =%<nop>ICON{right}%= |
-| <img src="%ATTACHURLPATH%/left.gif" alt="Left" title="Left" />  | =left.gif= | Left | =%<nop>ICON{left}%= |
-| <img src="%ATTACHURLPATH%/up.gif" alt="Up" title="Up" />  | =up.gif= | Up | =%<nop>ICON{up}%= |
-| <img src="%ATTACHURLPATH%/down.gif" alt="Down" title="Down" />  | =down.gif= | Down | =%<nop>ICON{down}%= |
-| <img src="%ATTACHURLPATH%/lock.gif" alt="Lock" title="Lock" />  | =lock.gif= | Lock | =%<nop>ICON{lock}%= |
-| <img src="%ATTACHURLPATH%/lockfolder.gif" alt="Locked folder" title="Locked folder" />  | =lockfolder.gif= | Locked folder | =%<nop>ICON{lockfolder}%= |
-| <img src="%ATTACHURLPATH%/lockfoldergray.gif" alt="Locked folder, gray" title="Locked folder, gray" />  | =lockfoldergray.gif= | Locked folder, gray | =%<nop>ICON{lockfoldergray}%= |
-| <img src="%ATTACHURLPATH%/locktopic.gif" alt="Locked topic" title="Locked topic" />  | =locktopic.gif= | Locked topic | =%<nop>ICON{locktopic}%= |
-| <img src="%ATTACHURLPATH%/locktopicgray.gif" alt="Locked topic, gray" title="Locked topic, gray" />  | =locktopicgray.gif= | Locked topic, gray | =%<nop>ICON{locktopicgray}%= |
-| <img src="%ATTACHURLPATH%/logout.gif" alt="Log out" title="Log out" />  | =logout.gif= | Log out | =%<nop>ICON{logout}%= |
-| <img src="%ATTACHURLPATH%/mail.gif" alt="Mail" title="Mail" />  | =mail.gif= | Mail | =%<nop>ICON{mail}%= |
-| <img src="%ATTACHURLPATH%/minus.gif" alt="Minus" title="Minus" />  | =minus.gif= | Minus | =%<nop>ICON{minus}%= |
-| <img src="%ATTACHURLPATH%/more.gif" alt="Read more" title="Read more" />  | =more.gif= | Read more | =%<nop>ICON{more}%= |
-| <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 13x13 | =&lt;img src="%<nop>ICONPATH{more-small}%" width="13" height="13" alt="Read more" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/move.gif" alt="Move" title="Move" />  | =move.gif= | Move | =%<nop>ICON{move}%= |
-| <img src="%ATTACHURLPATH%/newtopic.gif" alt="New topic" title="New topic" />  | =newtopic.gif= | New topic | =%<nop>ICON{newtopic}%= |
-| <img src="%ATTACHURLPATH%/note.gif" alt="Note" title="Note" />  | =note.gif= | Note | =%<nop>ICON{note}%= |
-| <img src="%ATTACHURLPATH%/notify.gif" alt="Notify" title="Notify" />  | =notify.gif= | Notify | =%<nop>ICON{notify}%= |
-| <img src="%ATTACHURLPATH%/pencil.gif" alt="Pencil / Refactor / Edit" title="Pencil / Refactor / Edit" />  | =pencil.gif= | Pencil / Refactor / Edit | =%<nop>ICON{pencil}%= |
-| <img src="%ATTACHURLPATH%/person.gif" alt="Person" title="Person" />  | =person.gif= | Person | =%<nop>ICON{person}%= |
-| <img src="%ATTACHURLPATH%/persons.gif" alt="Persons" title="Persons" />  | =persons.gif= | Persons | =%<nop>ICON{persons}%= |
-| <img src="%ATTACHURLPATH%/plus.gif" alt="Plus" title="Plus" />  | =plus.gif= | Plus | =%<nop>ICON{plus}%= |
-| <img src="%ATTACHURLPATH%/printtopic.gif" alt="Print topic" title="Print topic" />  | =printtopic.gif= | Print topic | =%<nop>ICON{printtopic}%= |
-| <img src="%ATTACHURLPATH%/recentchanges.gif" alt="Recent changes" title="Recent changes" />  | =recentchanges.gif= | Recent changes | =%<nop>ICON{recentchanges}%= |
-| <img src="%ATTACHURLPATH%/refreshtopic.gif" alt="Refresh topic" title="Refresh topic" />  | =refreshtopic.gif= | Refresh topic | =%<nop>ICON{refreshtopic}%= |
-| <img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
-| <img src="%ATTACHURLPATH%/save.gif" alt="Save" title="Save" />  | =save.gif= | Save | =%<nop>ICON{save}%= |
-| <img src="%ATTACHURLPATH%/searchtopic.gif" alt="Search topic" title="Search topic" />  | =searchtopic.gif= | Search topic | =%<nop>ICON{searchtopic}%= |
-| <img src="%ATTACHURLPATH%/search-small.gif" alt="Search" title="Search" />  | =search-small.gif= | Small search button, 13x13 | =&lt;img src="%<nop>ICONPATH{search-small}%" width="13" height="13" alt="Search" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
-| <img src="%ATTACHURLPATH%/stargold.gif" alt="Gold star, favorites" title="Gold star, favorites" />  | =stargold.gif= | Gold star, favorites | =%<nop>ICON{stargold}%= |
-| <img src="%ATTACHURLPATH%/starred.gif" alt="Red star, highlight" title="Red star, highlight" />  | =starred.gif= | Red star, highlight | =%<nop>ICON{starred}%= |
-| <img src="%ATTACHURLPATH%/statistics.gif" alt="Statistics" title="Statistics" />  | =statistics.gif= | Statistics | =%<nop>ICON{statistics}%= |
-| <img src="%ATTACHURLPATH%/stop.gif" alt="Stop" title="Stop" />  | =stop.gif= | Stop | =%<nop>ICON{stop}%= |
-| <img src="%ATTACHURLPATH%/target.gif" alt="Target" title="Target" />  | =target.gif= | Target | =%<nop>ICON{target}%= |
-| <img src="%ATTACHURLPATH%/tip.gif" alt="Tip, idea" title="Tip, idea" />  | =tip.gif= | Tip, idea | =%<nop>ICON{tip}%= |
-| <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
-| <img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
-| <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="Topic back-links" title="Topic back-links" />  | =topicbacklinks.gif= | Topic back-links | =%<nop>ICON{topicbacklinks}%= |
-| <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="Topic difference" title="Topic difference" />  | =topicdiffs.gif= | Topic difference | =%<nop>ICON{topicdiffs}%= |
-| <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
-| <img src="%ATTACHURLPATH%/unchecked.gif" alt="Unchecked checkbox" title="Unchecked checkbox" />  | =unchecked.gif= | Unchecked checkbox | =%<nop>ICON{unchecked}%= |
-| <img src="%ATTACHURLPATH%/checked.gif" alt="Checked checkbox" title="Checked checkbox" />  | =checked.gif= | Checked checkbox | =%<nop>ICON{checked}%= |
-| <img src="%ATTACHURLPATH%/viewtopic.gif" alt="View topic" title="View topic" />  | =viewtopic.gif= | View topic | =%<nop>ICON{viewtopic}%= |
-| <img src="%ATTACHURLPATH%/warning.gif" alt="Warning, important" title="Warning, important" />  | =warning.gif= | Warning, important | =%<nop>ICON{warning}%= |
-| <img src="%ATTACHURLPATH%/watch.gif" alt="Watch" title="Watch" />  | =watch.gif= | Watch | =%<nop>ICON{watch}%= |
-| <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
-| <img src="%ATTACHURLPATH%/web-bg-small.gif" alt="Web" title="Web" />  | =web-bg-small.gif= | Web background, 13x13 | =&lt;img src="%<nop>ICONPATH{web-bg-small}%" width="13" height="13" alt="Web" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/wip.gif" alt="Work in progress, under construction" title="Work in progress, under construction" />  | =wip.gif= | Work in progress, under construction | =%<nop>ICON{wip}%= |
-| <img src="%ATTACHURLPATH%/wrench.gif" alt="Wrench, tools" title="Wrench, tools" />  | =wrench.gif= | Wrench, tools | =%<nop>ICON{wrench}%= |
 
----+++ Word graphics
+
+---+++ %ICON{home}% Navigation icons
 
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
-| <img src="%ATTACHURLPATH%/closed.gif" alt="CLOSED" title="CLOSED" />  | =closed.gif= | CLOSED, 48x16 | =&lt;img src="%<nop>ICONPATH{closed}%" width="48" height="16" alt="Closed" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/done.gif" alt="DONE" title="DONE" />  | =done.gif= | DONE, 37x16 | =&lt;img src="%<nop>ICONPATH{done}%" width="37" height="16" alt="Done" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/new.gif" alt="NEW" title="NEW" />  | =new.gif= | NEW | =%<nop>ICON{new}%= |
-| <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONPATH{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
-| <img src="%ATTACHURLPATH%/todo.gif" alt="TODO" title="TODO" />  | =todo.gif= | TODO, 37x16 | =&lt;img src="%<nop>ICONPATH{todo}%" width="37" height="16" alt="TODO" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | =&lt;img src="%<nop>ICONPATH{updated}%" width="55" height="16" alt="UPDATED" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | =&lt;img src="%<nop>ICONPATH{xml-feed}%" width="36" height="13" alt="XML feed" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/xml-small.gif" alt="XML feed" title="XML feed" />  | =xml-small.gif= | XML feed | =%<nop>ICON{xml-small}%= |
+| <img src="%ATTACHURLPATH%/home.gif" alt="Home" title="Home" />  | =home.gif= | Home | =%<nop>ICON{home}%= |
+| <img src="%ATTACHURLPATH%/arrowdot.gif" alt="Meet here (arrows to red dot)" title="Meet here (arrows to red dot)" /> | =arrowdot.gif= | Meet here (arrows to red dot) | =%<nop>ICON{arrowdot}%= |
+| <img src="%ATTACHURLPATH%/left.gif" alt="Left" title="Left" />  | =left.gif= | Left | =%<nop>ICON{left}%= |
+| <img src="%ATTACHURLPATH%/right.gif" alt="Right" title="Right" />  | =right.gif= | Right | =%<nop>ICON{right}%= |
+| <img src="%ATTACHURLPATH%/up.gif" alt="Up" title="Up" />  | =up.gif= | Up | =%<nop>ICON{up}%= |
+| <img src="%ATTACHURLPATH%/down.gif" alt="Down" title="Down" />  | =down.gif= | Down | =%<nop>ICON{down}%= |
+| <img src="%ATTACHURLPATH%/arrowbleft.gif" alt="Arrow blue left" title="Arrow blue left" />  | =arrowbleft.gif= | Arrow blue left | =%<nop>ICON{arrowbleft}%= |
+| <img src="%ATTACHURLPATH%/arrowbright.gif" alt="Arrow blue right" title="Arrow blue right" />  | =arrowbright.gif= | Arrow blue right | =%<nop>ICON{arrowbright}%= |
+| <img src="%ATTACHURLPATH%/arrowbup.gif" alt="Arrow blue up" title="Arrow blue up" />  | =arrowbup.gif= | Arrow blue up | =%<nop>ICON{arrowbup}%= |
+| <img src="%ATTACHURLPATH%/arrowbdown.gif" alt="Arrow blue down" title="Arrow blue down" />  | =arrowbdown.gif= | Arrow blue down | =%<nop>ICON{arrowbdown}%= |
+| <img src="%ATTACHURLPATH%/arrowleft.gif" alt="Arrow left" title="Arrow left" />  | =arrowleft.gif= | Arrow left | =%<nop>ICON{arrowleft}%= |
+| <img src="%ATTACHURLPATH%/arrowright.gif" alt="Arrow right" title="Arrow right" />  | =arrowright.gif= | Arrow right | =%<nop>M%=, =%<nop>ICON{arrowright}%= |
+| <img src="%ATTACHURLPATH%/arrowup.gif" alt="Arrow up" title="Arrow up" />  | =arrowup.gif= | Arrow up | =%<nop>ICON{arrowup}%= |
+| <img src="%ATTACHURLPATH%/arrowdown.gif" alt="Arrow down" title="Arrow down" />  | =arrowdown.gif= | Arrow down | =%<nop>ICON{arrowdown}%= |
+| <img src="%ATTACHURLPATH%/go_start.gif" alt="Go to start" title="Go to start" />  | =go_start.gif= | Go to start | =%<nop>ICON{go_start}%= |
+| <img src="%ATTACHURLPATH%/go_fb.gif" alt="Go fast back" title="Go fast back" />  | =go_fb.gif= | Go fast back | =%<nop>ICON{go_fb}%= |
+| <img src="%ATTACHURLPATH%/go_back.gif" alt="Go back" title="Go back" />  | =go_back.gif= | Go back | =%<nop>ICON{go_back}%= |
+| <img src="%ATTACHURLPATH%/go_forward.gif" alt="Go forward" title="Go forward" />  | =go_forward.gif= | Go forward | =%<nop>ICON{go_forward}%= |
+| <img src="%ATTACHURLPATH%/go_ff.gif" alt="Go fast forward" title="Go fast forward" />  | =go_ff.gif= | Go fast forward | =%<nop>ICON{go_ff}%= |
+| <img src="%ATTACHURLPATH%/go_end.gif" alt="Go to end" title="Go to end" />  | =go_end.gif= | Go to end | =%<nop>ICON{go_end}%= |
+| <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
+| <img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
 
----+++ Drawing graphics
+
+---+++ %ICON{line_ur}% Block graphics
 
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/line_ld.gif" alt="" title="" />  | =line_ld.gif= | Line graph left-down | =%<nop>ICON{line_ld}%= |
@@ -176,7 +198,8 @@ _The icons on this page were created by TWiki:Main.ArthurClemens - except for th
 | <img src="%ATTACHURLPATH%/dot_ur.gif" alt="" title="" />  | =dot_ur.gif= | Dot graph up-right | =%<nop>ICON{dot_ur}%= |
 | <img src="%ATTACHURLPATH%/empty.gif" alt="" title="" />  | =empty.gif= | Empty transparent 16x16 spacer | =%<nop>ICON{empty}%= |
 
----+++ Filetype icons
+
+---+++ %ICON{gif}% Filetype icons
 
 Filetype icons are used by the attachment table and are seldom used in topics. Write =%<nop>ICON{pdf}%= to show the %ICON{pdf}% icon.
 
