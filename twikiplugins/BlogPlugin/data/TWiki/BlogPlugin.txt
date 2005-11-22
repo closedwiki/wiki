@@ -279,11 +279,11 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 22 Nov 2005 (v0.09) |
+|  Plugin Version: | 22 Nov 2005 (v0.11) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | none |
+|  CPAN Dependencies: | CPAN:Digest::MD5 |
 |  Other Dependencies: \
 | \
 TWiki:Contrib.DBCacheContrib, \
