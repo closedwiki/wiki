@@ -2,13 +2,13 @@
 # See http://twiki.org/cgi-bin/view/Codev/FixUpHtaccess
 # This will become a CommandSet for twikishell in Edinburgh
 
-BinHtaccess::replaceBinHtaccess(@ARGV);
+replaceBinHtaccess(@ARGV);
 my @subdirs = qw(lib data templates locale);
-SubDirHtaccess::installHtaccess('subdir-htaccess.txt', @subdirs);
-SubDirHtaccess::installHtaccess('pub-htaccess.txt', 'pub');
+installHtaccess('subdir-htaccess.txt', @subdirs);
+installHtaccess('pub-htaccess.txt', 'pub');
 #installRedirectRoot(".");
+print adminLoginNameMessage();
 
-package SubDirHtaccess;
 use File::Copy;
 
 sub installHtaccess {
@@ -34,8 +34,6 @@ sub installRedirectRoot {
     print "Replaced $rootIndexFile with redirect\n";
 }
 
-
-package BinHtaccess;
 
 # e.g. ("/home/mrjc/wikiconsulting.com/twiki/data", "wikiconsulting.com/twiki");
 
@@ -135,9 +133,20 @@ adminUsers      = which .htpasswd users can access configure
 e.g.
 fixHtaccess.pl /home/account/wikiconsulting.com/twiki/data wikiconsulting.com /twiki YourAdminLoginName
 
-Note that you are responsible for putting an Admin LoginName into .htpasswd.
+EOM
+ $ans .= 
+
+  return $ans.".";
+}
+
+sub adminLoginNameMessage {
+
+return <<EOM
+
+Note that you are responsible for putting an Admin LoginName into data/.htpasswd.
 On UNIX you can use the htpasswd tool for this.
 
+e.g. htpasswd -c data/.htpasswd AdminLoginName 
 EOM
-  return $ans.".";
+
 }
