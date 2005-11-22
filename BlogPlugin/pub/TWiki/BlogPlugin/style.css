@@ -1,0 +1,152 @@
+/* blogging */
+
+/* debug 
+.blogAbout, .blogSideBar, .blogSideBarCommenter, .blogSideBarSection,
+.blogEntry, .blogHeadline, .blogInfo, .blogDate, .blogText, .blogMore,
+.blogComments, .blogComment, .blogCommentOdd, .blogCommentEven,
+.blogAddComment, .blogCommentCount, .blogCommentNr, .blogCommentDate,
+.blogSubComments, .blogSubComment, .blogRef, .blogNavigation, .blogRelated1,
+.blogRelated2, .blogRelated3, .blogNext, .blogPrev, .blogCommentText,
+.blogSubmitButton, .blogFeedCategory
+{
+   border:1px solid red;
+}
+*/
+
+.blogAbout {
+  text-align:justify; 
+  font-size:0.9em; 
+  margin-bottom:1.5em;
+}
+.blogEntry {
+  padding-bottom:20px;
+}
+
+.blogHeadline {
+  margin:0px;
+  padding:0px;
+  margin-bottom:0px;
+}
+
+.blogInfo {
+  padding-bottom:5px;
+}
+
+.blogText {
+  text-align:justify;
+}
+.blogTeaser {
+  margin-bottom:1em;
+}
+.blogMore {
+  display:inline;
+  margin:0px;
+  padding:0px;
+}
+
+.blogNavigation {
+  font-size:0.8em;
+  margin-bottom:10px;
+  padding:0px;
+}
+.blogNavigation table {
+  width:100%;
+  line-height:110%;
+}
+.blogPrev {
+  text-align:left;
+  padding-left:2px;
+  padding-right:5px;
+  width:50%;
+}
+.blogNext {
+  text-align:right;
+  padding-left:5px;
+  padding-right:2px;
+  width:50%;
+}
+.blogCommentNr {
+  margin-right:1em;
+}
+
+.blogCommentOdd,
+.blogCommentEven {
+  margin-top:20px;
+}
+.blogCommentCount {
+  margin-left:5px;
+}
+.blogComment {
+  padding:5px;
+}
+.blogComments {
+  margin-top:20px;
+}
+.blogRef h2 a:hover,
+.blogComment h3 a:hover,
+.blogComment h4 a:hover {
+  text-decoration:underline;
+}
+
+.blogAddComment {
+  margin-top:10px;
+}
+.blogComment h4 {
+  margin-top:5px;
+  margin-bottom:5px;
+  padding:0px;
+}
+.blogSubComments {
+  margin-top:10px;
+}
+.blogSubComment {
+  padding-left:5px;
+  line-height:2em;
+}
+
+.blogSideBarCommenter {
+  font-size:0.9em;
+}
+
+.blogSideBar form {
+  margin:0px;
+}
+
+.blogSideBar .blogSubmitButton {
+  width:100%;
+  margin:0px;
+  padding:0px;
+}
+.blogSideBar .twikiPageForm input,
+.blogSideBar .twikiPageForm {
+  width:90%;
+  margin:auto;
+  font-size:x-small;
+}
+.blogComment .natExternalLink:after {
+  content:"";
+  margin-left:0px;
+}
+.blogFeedCategory { 
+  margin-top:5px;
+  margin-bottom:5px;
+}
+
+/* pattern skin specific settings */
+.patternLeftBarContents .blogSideBar {
+  margin-right:2em;
+  line-height:120%;
+}
+.patternLeftBarContents .blogSideBar ul li {
+  margin-bottom:0.5em;
+  line-height:120%;
+}
+.patternMainContents .blogSubComments {
+  padding:5px;
+}
+.patternMainContents .blogSubComment {
+  border-left:5px solid #E2DCC8;
+}
+.patternMainContents .blogSubComment .blogCommentText {
+  line-height:1.5em;
+}

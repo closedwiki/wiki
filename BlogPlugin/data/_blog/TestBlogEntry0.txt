@@ -2,7 +2,7 @@
 %INCLUDE{"RenderBlogEntry" NAME="%TOPIC%"}%  
 %INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%  
 %INCLUDE{"RenderAddComment"}%    
-<style type="text/css">.natTopicForm {display:none}</style>
+<style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
 <!--    
    * Set WHITEBOARD = off
    * Set SIDEBAR = BlogEntry

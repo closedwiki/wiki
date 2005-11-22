@@ -4,7 +4,7 @@
 %FORMFIELD{"TopicDescription"}%
 
 <style type="text/css">
-.natTopicForm {display:none}
+.natTopicForm, .twikiForm {display:none}
 .feeds .twikiFirstCol {
   width:15em;
 }
