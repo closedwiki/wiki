@@ -20,14 +20,16 @@ package TWiki::Plugins::BlogPlugin;
 use vars qw(
         $VERSION $RELEASE $debug $doneHeader
 	%prevTopicCache %nextTopicCache %db
+	%recentCommentsCache
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.10';
+$RELEASE = '0.11';
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::BlogPlugin::WebDB;
+use Digest::MD5 qw(md5_hex);
 
 ###############################################################################
 sub writeDebug {
@@ -43,6 +45,7 @@ sub initPlugin {
   %prevTopicCache = ();
   %nextTopicCache = ();
   %db = ();
+  %recentCommentsCache = ();
 
   TWiki::Func::registerTagHandler('CITEBLOG', \&_CITEBLOG);
   TWiki::Func::registerTagHandler('COUNTCOMMENTS', \&_COUNTCOMMENTS);
@@ -425,7 +428,16 @@ sub _NEXTDOC {
 sub _RECENTCOMMENTS {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #print STDERR "DEBUG: _RECENTCOMMENTS(" . $params->stringify() . ") called\n";
+  my $key = md5_hex("$theTopic.$theWeb" . $params->stringify());
+
+  #print STDERR "DEBUG: _RECENTCOMMENTS(".$params->stringify().") called\n";
+  #print STDERR "DEBUG: key=$key\n";
+
+  my $cacheEntry = $recentCommentsCache{$key};
+  if ($cacheEntry) {
+    #print STDERR "DEBUG: found in cache\n";
+    return $cacheEntry;
+  }
 
   my $theFormat = $params->{_DEFAULT} || $params->{format};
   my $theSeparator = $params->{separator} || '$n';
@@ -444,6 +456,7 @@ sub _RECENTCOMMENTS {
 
   my %blogComments;
   my %baseRefs;
+  my $now = time();
   foreach my $topicName ($db{$theWeb}->getKeys()) {
 
     # get blog comment
@@ -458,7 +471,6 @@ sub _RECENTCOMMENTS {
     # check if blog comment is too old
     my $topicCreateDate = $topicObj->fastget('createdate');
     if ($theAge) {
-      my $now = time();
       my $diff = $now - $topicCreateDate;
       if ($diff > $theAge) {
 	#print STDERR "DEBUG: $topicName exipred, diff=$diff\n";
@@ -485,9 +497,11 @@ sub _RECENTCOMMENTS {
     $blogComments{$topicName}{createdate} = $topicCreateDate;
     $blogComments{$topicName}{author} = $topicForm->fastget('Name');
     $baseRefs{$baseRefName}{obj} = $baseRefObj;
-    $baseRefs{$baseRefName}{latestdate} = $topicCreateDate 
-      if !$baseRefs{$baseRefName}{latestdate} || 
-	  $baseRefs{$baseRefName}{latestdate} > $topicCreateDate;
+
+    if (!$baseRefs{$baseRefName}{latestdate} ||
+	$baseRefs{$baseRefName}{latestdate} < $topicCreateDate) {
+      $baseRefs{$baseRefName}{latestdate} = $topicCreateDate;
+    }
     $baseRefs{$baseRefName}{createdate} = $baseRefObj->fastget('createdate');
     $baseRefs{$baseRefName}{count}++;
     $baseRefs{$baseRefName}{headline} = $baseRefForm->fastget('Headline');
@@ -514,7 +528,7 @@ sub _RECENTCOMMENTS {
   }
 
   # render result
-  my $result;
+  my $result = '';
   my %seen = ();
   foreach my $baseRefName (@baseRefs) { # newest postings first
     next if $seen{$baseRefName};
@@ -551,12 +565,11 @@ sub _RECENTCOMMENTS {
       
     $result .= $text;
   }
-  if ($result) {
-    $result = expandVariables($theHeader.$result.$theFooter);
-    return $result;
-  } else {
-    return '';
-  }
+
+  $result = expandVariables($theHeader.$result.$theFooter) if $result;
+  $recentCommentsCache{$key} = $result;
+
+  return $result;
 }
 
 ###############################################################################
