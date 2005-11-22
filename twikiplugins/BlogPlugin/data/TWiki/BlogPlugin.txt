@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131114884" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132669453" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
@@ -262,6 +262,8 @@ And send me a patch if you've coded that into TWiki ;).
 
    * Download and install all additionally required plugins listed in the
      [[#Plugin_Info][dependencies information]] below
+   * patch the TWiki:Plugins.ExtendedSelectPlugin using the provided 
+     [[%ATTACHURL%/ExtendedSelectPlugin_pm.diff][patch]].
    * Download the BlogPlugin ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
@@ -272,11 +274,12 @@ And send me a patch if you've coded that into TWiki ;).
      | ==data/Main/BlogAuthorGroup.txt== | blog author group |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
+     | ==pub/TWiki/BlogPlugin/ExtendedSelectPlugin_pm.diff== | patch for the <nop>ExtendedSelectPlugin |
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 17 Nov 2005 (v0.08) |
+|  Plugin Version: | 22 Nov 2005 (v0.09) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -304,3 +307,5 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.MichaelDaum - 17 Nov 2005
 
+
+%META:FILEATTACHMENT{name="ExtendedSelectPlugin_pm.diff" attachment="ExtendedSelectPlugin_pm.diff" attr="" comment="against 11 Oct 2005 (V1.001)" date="1132669136" path="ExtendedSelectPlugin_pm.diff" size="461" stream="ExtendedSelectPlugin_pm.diff" user="TWikiContributor" version="1.1"}%
