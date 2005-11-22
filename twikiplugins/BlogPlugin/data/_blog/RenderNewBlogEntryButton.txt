@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130169817" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132678239" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -24,6 +24,7 @@ See also: RenderNewBlogLinkButton, RenderNewCategoryButton
 <input type="hidden" name="TopicType" value="%TOPIC%" />
 <input type="hidden" name="TopicDescription" value="" />
 <input type="hidden" name="action" value="form" />
+<input type="hidden" name="Date" value="%SERVERTIME%" />
 <input type="submit" class="blogSubmitButton" value="%TEXT%" />
 </form>
 *~~
