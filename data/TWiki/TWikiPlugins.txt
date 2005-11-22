@@ -20,24 +20,46 @@ TWiki plugins are developed and contributed by interested members of the communi
 #InstallPlugin
 ---++ Installing Plugins
 
-Each <nop>TWikiPlugin comes with its own documentation: step-by-step installation instructions, a detailed description of any special requirements, version details, and a working example for testing. Many plugins have an install script that automates these steps for you.
+Each TWiki Plugin comes with its own documentation: Step-by-step installation instructions, a detailed description of any special requirements, version details, and a working example for testing. Many plugins have an install script that automates these steps for you.
 
 *Special Requests:* Some Plugins need certain Perl modules to be preinstalled on the host system. Plugins may also use other resources, like graphics, other modules, applications, templates. You should be able to find detailed instructions are in the Plugin documentation.
 
-Each Plugin has a standard release page, located in the TWiki:Plugins web at TWiki.org. There's usually a number of other related pages, such as a developers page, and an appraisal page.
+Each Plugin has a standard release topic, located in the TWiki:Plugins web at TWiki.org. There's usually a number of other related topics, such as a developers page, and an appraisal page.
 
 #PreTesting
 ---+++ On-Site Pretesting
 
-The recommended approach to testing new Plugins before making them public is to create a second local twiki installation, and test the plugin there. You can allow selected users access to the test area. Once you are satisifed that it won't compromise your main installation, you can install it there as well.
+The recommended approach to testing new Plugins before making them public is to create a second local TWiki installation, and test the plugin there. You can allow selected users access to the test area. Once you are satisifed that it won't compromise your main installation, you can install it there as well.
 
-InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly and 3) what TWiki:Codev.PluginHandlers they invoke. Any failures are shown in the Errors section. The %<nop>FAILEDPLUGINS% TWikiVariable can be used to debug failures. You may also want to check your webserver error log and the various TWiki log files.
+InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly and 3) what TWiki:Codev.PluginHandlers they invoke. Any failures are shown in the Errors section. The =[[TWikiVariables#VarFAILEDPLUGINS][%<nop>FAILEDPLUGINS%]]= variable can be used to debug failures. You may also want to check your webserver error log and the various TWiki log files.
 
 ---+++ Some Notes on Plugin Performance
 
-The performance of the system depends to some extent on the number of Plugins installed and on the Plugin implementation. Some Plugins impose no measurable performance decrease, some do. You can only really tell by installing the plugin and running experiments yourself. The Apache =ab= utility is very useful for doing this.
+The performance of the system depends to some extent on the number of Plugins installed and on the Plugin implementation. Some Plugins impose no measurable performance decrease, some do. For example, a Plugin might use many Perl libraries that need to be initialized with each page view (unless you run mod_perl). You can only really tell the performance impact by installing the Plugin and by measuring the performance with and without the new Plugin. Use the TWiki:Plugins.PluginBenchmarkAddOn, or test manually with the Apache =ab= utility. Example on Unix:%BR% =time wget -qO /dev/null <nop>%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/AbcPlugin=
 
 %T% If you need to install an "expensive" Plugin, and you need its functionality only in one web, you can place the Plugin topic into that web. TWiki will initialize the Plugin only if the Plugin topic is found (which won't be the case for other webs.)
+
+#ManagingPlugins
+---++ Managing Installed Plugins
+
+Some Plugins require additional settings or offer extra options that you have to select. Also, you may want to make a Plugin available only in certain webs, or temporarily disable it. And may want to list all available Plugins in certain topics. You can handle all of these management tasks with simple procedures.
+
+---+++ Enabling Plugins
+
+Plugins can be enabled and disabled with the [[%SCRIPTURL{configure}%][configure]] script. An installed Plugin needs to be enabled before it can be used.
+
+---+++ Plugin Evaluation Order
+
+By default, TWiki executes Plugins in alphabetical oder on Plugin name. It is possible to change the order, for example to evaluate a database variables before the speadsheet CALCs. This can be done with the [[%SCRIPTURL{configure}%][configure]] script.
+
+---+++ Plugin Specific Settings
+
+Plugin-specific settings are done in individual Plugin topics. Two settings are standard for each Plugin:
+   1 One line description, used to form the bullets describing the Plugins in the %TWIKIWEB%.TextFormattingRules topic:
+      * =Set SHORTDESCRIPTION = Create dynamic foo bar reports=
+   1 Debug Plugin, output can be seen in =data/debug.txt=. Set to 0=off or 1=on:
+      * =Set DEBUG = 0=
+   * The settings can be retrieved as Preferences variables like =%&lt;pluginname&gt;_&lt;var&gt;%=. For example, =%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%= shows the description of the <nop>DefaultPlugin.
 
 ---+++ Listing Active Plugins
 
@@ -55,13 +77,13 @@ On this TWiki site, the enabled Plugins are: %ACTIVATEDPLUGINS%.
 #PluginAPI
 ---++ The TWiki Plugin API
 
-The Application Programming Interface (API) for <nop>TWikiPlugins provides the specifications for hooking into the core TWiki code from your external Perl Plugin module.
+The Application Programming Interface (API) for TWiki Plugins provides the specifications for hooking into the core TWiki code from your external Perl Plugin module.
 
 ---+++ Available Core Functions
 
-The TWikiFuncDotPm module (=lib/TWiki/Func.pm=) describes ALL the interfaces available to Plugins. Plugins should ONLY use the interfaces described in this module.
+The TWikiFuncDotPm module (=lib/TWiki/Func.pm=) describes *all* the interfaces available to Plugins. Plugins should *only* use the interfaces described in this module.
 
-%X% If you use other core functions not described in =Func.pm=, you run the risk of creating security holes. Also, your Plugin will likely break and require updating when you upgrade to a new version of TWiki.
+__%X% Note:__ If you use other core functions not described in =Func.pm=, you run the risk of creating security holes. Also, your Plugin will likely break and require updating when you upgrade to a new version of TWiki.
 
 ---+++ Predefined Hooks
 
@@ -71,19 +93,34 @@ In addition to TWiki core functions, Plugins can use *predefined hooks*, or *cal
 
 TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to use.
 
+#FastPluginHints
 ---+++ Hints on Writing Fast Plugins
 
-   * Delay initialization as late as possible. For example, if your plugin is a simple syntax processor, you might delay loading extra Perl modules until yu actually see the syntax in the text.
+   * Delay initialization as late as possible. For example, if your plugin is a simple syntax processor, you might delay loading extra Perl modules until you actually see the syntax in the text.
    * For example, use an =eval= block like this:%BR%
      =eval { require IPC::Run }= %BR%
      =return "&lt;font color=\"red\"&gt;SamplePlugin: Can't load required modules ($@)&lt;/font&gt;" if $@;=
    * You can use a flag to avoid running the initialization twice
+   * The TWiki:Plugins.PluginBenchmarkAddOn comes in handy to measure and fine-tune the performance of your Plugin
+
+---+++ Plugin Version Detection
+
+To eliminate the incompatibility problems bound to arise from active open Plugin development, a Plugin versioning system is provided for automatic compatibility checking.
+
+   * All modules require a =$VERSION='0.000'= variable, beginning at =1.000=.
+
+   * The =initPlugin= handler should check all dependencies and return TRUE if the initialization is OK or FALSE if something went wrong.
+      * The Plugin initialization code does not register a Plugin that returns FALSE (or that has no =initPlugin= handler).
+
+   * =$TWiki::Plugins::VERSION= in the =TWiki::Plugins= module contains the TWiki Plugin API version, currently *%PLUGINVERSION{}%*.
+      * You can also use the =[[TWikiVariables#VarPLUGINVERSION][%<nop>PLUGINVERSION{}%]]= variable to query the Plugin API version or the version of installed Plugins.
 
 ---+++ Security
+
    * Badly written plugins can open huge security holes in TWiki. This is especially true if care isn't taken to prevent execution of arbitrary commands on the server.
    * Don't allow sensitive configuration data to be edited by users. it is better to add sensitive configuration options to the TWiki::cfg hash than adding it as preferences in the plugin topic
       * See TWiki:Plugins.MailInContrib for an example of this
-      * TWiki::Plugins.BuildContrib can help you with this
+      * TWiki:Plugins.BuildContrib can help you with this
    * Always use the TWiki::Sandbox to execute commands.
    * Always audit the plugins you install, and make sure you are happy with the level of security provided. While every effort is made to monitor plugin authors activities, at the end of the day they are uncontrolled user contributions.
 
@@ -108,6 +145,19 @@ The Plugin API handles the details of connecting your Perl module with main TWik
 
 Copy file =lib/TWiki/Plugins/EmptyPlugin.pm= to =&lt;name&gt;Plugin.pm=. The =EmptyPlugin.pm= module contains mostly empty functions, so it does nothing, but it's ready to be used. Customize it. Refer to the [[#PluginAPI][Plugin API]] specs for more information.
 
+If your Plugin uses its own modules and objects, you must include the name of the Plugin in the package name. For example, write =Package <nop>MyFirstPlugin::Attrs;= instead of just =Package Attrs;=. Then call it using:
+<pre>
+use TWiki::Plugins::MyFirstPlugin::Attrs;
+$var = MyFirstPlugin::Attrs->new();
+</pre>
+
+#MeasurePerformance
+---+++ Measuring and Improving the Plugin Performance
+
+A high quality Plugin performs well. You can use the TWiki:Plugins.PluginBenchmarkAddOn to measure your TWiki:Plugins.PluginBenchmarks. The data is needed as part of the Documentation Topic.
+
+See also [[#FastPluginHints][Hints on Writing Fast Plugins]].
+
 #CreatePluginTopic
 ---+++ Writing the Documentation Topic
 
@@ -121,9 +171,10 @@ The Plugin documentation topic contains usage instructions and version details. 
       * go back to your site to the %TWIKIWEB% web
       * In the GoBox enter your Plugin name, for example =MyFirstPlugin=, press enter and create the new topic
       * paste &amp; save new Plugin topic on your site
-   2. *Customize* your Plugin topic.
-      * In case you plan to publish your Plugin at TWiki.org, use Interwiki names for author names, like TWiki:Main/%WIKINAME%. 
-   3. *Save* your topic, for use in [[#CreatePluginPackage][packaging]] and [[#PublishPlugin][publishing]] your Plugin.
+   1. *Customize* your Plugin topic.
+      * Important: In case you plan to publish your Plugin on TWiki.org, use Interwiki names for author names and links to TWiki.org topics, such as TWiki:Main/%WIKINAME%. This is important because links should work properly in a Plugin topic installed on any TWiki, not just on TWiki.org.
+   1. *Document* the performance data you gathered while [[#MeasurePerformance][measuring the performance]]
+   1. *Save* your topic, for use in [[#CreatePluginPackage][packaging]] and [[#PublishPlugin][publishing]] your Plugin.
 
 <blockquote style="background-color:#f5f5f5">
 *OUTLINE: Doc Topic Contents* <br />
@@ -150,7 +201,7 @@ The TWiki:Plugins.BuildContrib is a powerful build environment that is used by t
 
 If you don't want (or can't) use the !BuildContrib, then a minimum Plugin release consists of a Perl module with a WikiName that ends in =Plugin=, ex: =MyFirstPlugin.pm=, and a documentation page with the same name(=MyFirstPlugin.txt=).
 
-   1. Distribute the Plugin files in a directory structure that mirrors TWiki. If your Plugin uses additional files, include them ALL:
+   1. Distribute the Plugin files in a directory structure that mirrors TWiki. If your Plugin uses additional files, include them all:
       * =lib/TWiki/Plugins/MyFirstPlugin.pm=
       * =data/TWiki/MyFirstPlugin.txt=
       * =pub/TWiki/MyFirstPlugin/uparrow.gif= [a required graphic]
@@ -165,29 +216,42 @@ If you don't want (or can't) use the !BuildContrib, then a minimum Plugin releas
 You can release your tested, packaged Plugin to the TWiki community through the TWiki:Plugins web. All Plugins submitted to TWiki.org are available for download and further development in TWiki:Plugins/PluginPackage.
 
 Publish your plugin by following these steps:
-   1. *Post* the Plugin documentation topic in the TWiki:Plugins/PluginPack
-age:
-      * enter the Plugin name in the "How to Create a Plugin" section,
- for example =MyFirstPlugin=
-      * paste in the topic text from [[#CreatePluginTopic][Creating Pl
-ugin Documentation]] and save
-   1. *Attach* the distribution zip file to the topic, ex: =MyFirstPlugin.z
-ip=
-   1. *Link* from the doc page to a new, blank page named after the Plugin,
- and ending in =Dev=, ex: =MyFirstPluginDev=. This is the discussion page for fu
-ture development. (User support for Plugins is handled in TWiki:Support.)
-   1. *Put* the Plugin into the CVS repository, see TWiki:Plugins/ReadmeFir
-st (optional)
+   1. *Post* the Plugin documentation topic in the TWiki:Plugins/PluginPackage:
+      * enter the Plugin name in the "How to Create a Plugin" section, for example =MyFirstPlugin=
+      * paste in the topic text from [[#CreatePluginTopic][Writing the Documentation Topic]] and save
+   1. *Attach* the distribution zip file to the topic, ex: =MyFirstPlugin.zip=
+   1. *Link* from the doc page to a new, blank page named after the Plugin, and ending in =Dev=, ex: =MyFirstPluginDev=. This is the discussion page for future development. (User support for Plugins is handled in TWiki:Support.)
+   1. *Put* the Plugin into the SVN repository, see TWiki:Plugins/ReadmeFirst (optional)
 
 %N% Once you have done the above steps once, you can use the !BuildContrib to upload updates to your plugin.
 
+Thank you very much for sharing your Plugin with the TWiki community :-)
+
 #RecommendedStorageOfPluginData
----++ Where to store Plugin Internal Data
+---++ Recommended Storage of Plugin Specific Data
 
-Plugins that need to store data should use the functions in the FuncDotPm interface. These functions support saving and loading of:
-   * Topics
-   * Attachments
+Plugins sometimes need to store data. This can be Plugin internal data such as cache data, or data generated for browser consumption such as images. Plugins should store data using TWikiFuncDotPm functions that support saving and loading of topics and attachments.
 
-You can also create a plugin "work area" using the =getWorkArea= function, which gives you a persistant directory where you can store data files. 
+---+++ Plugin Internal Data
+
+You can create a Plugin "work area" using the =TWiki::Func::getWorkArea()= function, which gives you a persistant directory where you can store data files. By default they will not be web accessible. The directory is guaranteed to exist, and to be writable by the webserver user. Use =TWiki::Func::storeFile()= and =TWiki::Func::readFile()= to persistently store and retrieve data.
+
+---+++ Web Accessible Data
+
+Topic specific data such as generated images can be stored in the topic's attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
+
+Recommendation for file name:
+   * Prefix the filename with an underscore (the leading underscore avoids a nameclash with files attached to the same topic)
+   * Identify where the attachment originated from, typically by including the Plugin name in the file name
+   * Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
+   * Example: =_FooBarPlugin_img123.gif=
+
+Web specific data can be stored in the Plugin's attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
+
+Recommendation for file names in Plugin attachment area:
+   * Prefix the filename with an underscore
+   * Include the name of the web in the filename
+   * Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
+   * Example: =_Main_img123.gif=
 
 __Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory
