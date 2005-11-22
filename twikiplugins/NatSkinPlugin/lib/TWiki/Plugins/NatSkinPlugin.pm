@@ -847,13 +847,18 @@ sub renderUserActions {
     #writeDebug("get WHITEBOARD from $web.$topic");
     my $whiteBoard = _getValueFromTopic($web, $topic, 'WHITEBOARD') || '';
     $whiteBoard =~ s/^\s*(.*?)\s*$/$1/g;
-    my $formAction = '';
-    $formAction = '&action=form' if $whiteBoard eq 'off';
+    my $editUrlParams = '';
+    my $useWysiwyg = &TWiki::Func::getPreferencesFlag('USEWYSIWYG');
+    if ($TWiki::cfg{Plugins}{WysiwygPlugin} && $useWysiwyg) {
+      $editUrlParams = '&skin=kupu';
+    }  else {
+      $editUrlParams = '&action=form' if $whiteBoard eq 'off';
+    }
     $text = 
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($web, $topic, "edit") 
       . '?t=' . time() 
-      . $formAction
+      . $editUrlParams
       . '" accesskey="e">Edit</a> | ' .
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($web, $topic, "attach") 
@@ -1215,15 +1220,22 @@ sub _getValueFromTopic
 {
   my ($theWeb, $theTopic, $theKey, $text) = @_;
 
-  if (!$text) {
-    my $meta;
-    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theTopic);
-  }
+  if ($isDakar) {
+    my $value = 
+      $TWiki::Plugins::SESSION->{prefs}->getTopicPreferencesValue($theKey, 
+	$theWeb, $theTopic) || '';
+    return $value;
+  } else {
+    if (!$text) {
+      my $meta;
+      ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theTopic);
+    }
 
-  foreach my $line (split(/\n/, $text)) {
-    if ($line =~ /^(?:\t|\s\s\s)+\*\sSet\s$theKey\s\=\s*(.*)/) {
-      my $value = defined $1 ? $1 : "";
-      return $value;
+    foreach my $line (split(/\n/, $text)) {
+      if ($line =~ /^(?:\t|\s\s\s)+\*\sSet\s$theKey\s\=\s*(.*)/) {
+	my $value = defined $1 ? $1 : "";
+	return $value;
+      }
     }
   }
 

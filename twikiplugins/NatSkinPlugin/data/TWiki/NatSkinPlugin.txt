@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132153728" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132658676" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
 
 This is the supplemental plugin for the NatSkin. Its main purpose is to supply "skin states"
@@ -287,6 +287,15 @@ to your TWiki.TWikiPreferences like
 
 	* Set OBFUSCATEEMAIL = on
 
+---+++ <nop>WysiwygPlugin support
+When the TWiki:Plugins.WysiwygPlugin is installed on your <nop>%WIKITOOLNAME% installation
+the "Edit" topicaction can be enabled to start the Kupu wysiwyg html editor instead of the 
+normal TWiki textarea by setting the USEWYSIWYG variable to "on" (in your %WIKIUSERNAME% topic,
+WebPreferences or TWiki.TWikiPreferences) 
+
+   * Set USEWYSIWYG = off
+
+By default this value is set to "off"
 
 ---++ Plugin Installation Instructions
 
@@ -313,8 +322,10 @@ to your TWiki.TWikiPreferences like
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.76 (2005-11-10) |
+|  Plugin Version: | v2.78 (2005-11-22) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  22 Nov 2005: | added support for the <nop>WysiwygPlugin;\
+                  added custom templates for the <nop>BlackListPlugin's error messages |
 |  10 Nov 2005: | added switchvariation urlparam; \
                   work arround bug in dakar (nested calls to getRenderedVersion()); \
 		  fixed duplicate target/class in external links; \
