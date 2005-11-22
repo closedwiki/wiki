@@ -121,7 +121,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 </verbatim>
 	* Default format of one item: (variables are explained in the syntax rules)
 <verbatim>
-		* Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle">[[$link][$title]]</div>$n<hr/><span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject">"$subject"</span>$n<div class="headlinesText"> $description</div></div>
+		* Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle">[[$link][$title]]</div>$n<hr/><span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>
 </verbatim>
 
 ---++ Style sheets
@@ -157,11 +157,10 @@ defining the default CSS properties  (indentation illustrates enclosure).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Plugin Version: | 21 Nov 2005 (v1.91) |
+|  Plugin Version: | 22 Nov 2005 (v1.92) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  21 Nov 2004: | TWiki:Main.MichaelDaum: \
-		  added ATOM support; \
-						extended RSS support; \
+|  21 Nov 2005: | added ATOM support; \
+	          extended RSS support; \
 		  added dublion core support; \
 		  added content support; \
 		  optionally using LWP to fetch feeds to follow redirections; \
@@ -183,6 +182,7 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.PeterThoeny - 21 Nov 2005 %BR%
--- TWiki:Main.MichaelDaum - 21 Nov 2005
+-- TWiki:Main.PeterThoeny - 11 May 2005 %BR%
+-- TWiki:Main.MichaelDaum - 22 Nov 2005
+
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%

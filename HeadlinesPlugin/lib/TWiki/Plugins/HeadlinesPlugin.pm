@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2002-2004 Peter Thoeny, peter@thoeny.com
-# Copyright (C) 2005 MichaelDaum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 # Copyright (C) 2005 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
@@ -475,6 +475,7 @@ sub parseRssFeed {
     if ($sub =~ /<link[^>]*>\s*(.*?)\s*<\/link>/) {
       $val = $1;
       $baseRef = $val;
+      $baseRef =~ s/^(https?.\/\/.*?)\/.*$/$1/go;
       $header =~ s/\$(channel)?link/$val/gos;
     }
     if ($sub =~ /<description[^>]*>(.*?)<\/description>/) {
@@ -605,6 +606,7 @@ sub parseAtomFeed {
     if ($sub =~ /<link href="([^"]*)"[^>]*type="text\/html"[^>]*\/>/) {
       $val = $1;
       $baseRef = $val;
+      $baseRef =~ s/^(https?.\/\/.*?)\/.*$/$1/go;
       $header =~ s/\$(channel)?link/$val/gos;
     }
     if ($sub =~ /<updated[^>]*>(.*?)<\/updated>/) {
@@ -925,17 +927,19 @@ sub parseCONTENT {
 sub getUrlLWP {
   my $theUrl = shift;
 
+  #writeDebug("called getUrlLWP($theUrl)");
+
   unless ($userAgent) {
     eval "use LWP::UserAgent";
     die $@ if $@;
 
-    my $proxyHost = TWiki::Func::getPreferencesValue("PROXYHOST");
-    my $proxyPort = TWiki::Func::getPreferencesValue("PROXYPORT");
+    my $proxyHost = TWiki::Func::getPreferencesValue('PROXYHOST') || '';
+    my $proxyPort = TWiki::Func::getPreferencesValue('PROXYPORT') || '';
 
     $userAgent = LWP::UserAgent->new();
     $userAgent->agent('TWiki HeadlinesPlugin'); 
       # don't leave the LWP default string there as
-      # this is blocked by some sites
+      # this is blocked by some sites, e.g. google news
     $userAgent->timeout($userAgentTimeout);
     $userAgent->proxy("http", "$proxyHost:$proxyPort/")
       if $proxyHost && $proxyPort;
@@ -951,7 +955,6 @@ sub getUrlLWP {
     $text =~ s/\r\n?/ /gos;
     $text =~ s/\n/ /gos;
     #$text =~ s/ +/ /gos;
-
     return ($text, undef);
   }
 }
