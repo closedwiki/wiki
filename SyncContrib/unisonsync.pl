@@ -13,6 +13,7 @@ require $configFile;
 
 #print Dumper($UnisonSync::options);
 die "No options hashref set" unless ($UnisonSync::options); 
+# SMELL: should check for the options I am looking for
 
 syncTWikiInstall($UnisonSync::options, @ARGV);
 
@@ -49,6 +50,42 @@ sub report {
    print $text;
 }
 
+sub reportLastOutputs {
+   my ($account) = @_;
+   local( *FH ) ;
+
+   for my $runOutputType qw(unisonCaptureLog unisonStdErrFile) {
+      my $file = $account->{$runOutputType};  
+      open( FH, $file) or next; # Error appending contents of $account->{$runOutputFile} 
+      my $text = do { local( $/ ) ; <FH> };
+      $account->{report} .= "====$runOutputType===\n$text\n===end===\n";
+      close FH;
+      report($account, "Sweeping $runOutputType ($file) into report and deleting $file\n") if ($account->{debug} > 2);
+      if ($account->{debug} > 2) {
+        report($account, "Not deleting '$file' as debug is 2 or above\n");
+      } else {
+	unlink $file; 
+      }
+   }
+}
+
+# if the user wants it as mixed with unison's output we delete it from internal store 
+# at the point we write it out.
+sub reportFlush {
+   my ($account) = @_;
+   my $filename = $account->{'unisonLogfile'};
+   if ($filename) {
+   		my $report = $account->{'report'};
+ 	    unless (open( FILE, ">>$filename" )) {	
+ 	    	die "Cannot write report to $filename - $! - log: $report";
+ 	    	return;
+   		};
+    	print FILE $report;
+	    close(FILE); 
+	    $account->{'report'} = ''; # as we've flushed it
+   }
+}
+
 sub syncAccount {
 	my ($accounts, $accountName, $options) = @_;
 	my $account = $accounts->{$accountName};
@@ -69,6 +106,9 @@ sub syncAccount {
 	}
 
 	exposeAttribute($account, 'accountName', $accountName);
+	my $timestamp = time2str('%Y%m%d-%H%M%S', time());
+	exposeAttribute($account, 'timestamp', $timestamp);
+        expandAccountVariables($account, 'unisonStdErrFile', 'unisonCaptureLog', 'unisonLogfile');
 		
 	report($account, "Settings: for $accountName:\n".Dumper($account)."\n") if ($account->{debug} > 2);
 	report($account, "Syncing $accountName\n") if ($account->{debug});
@@ -78,14 +118,13 @@ sub syncAccount {
     foreach my $web (@webs) {
     	syncWeb($account, $web);
     }
+	reportFlush($account);
 	deletePlinkLauncherScript($account);
 }
 
 sub syncWeb {
 	my ($account, $web) = @_;
 	use Date::Format;
-	my $timestamp = time2str('%Y%m%d-%H%M%S', time());
-	exposeAttribute($account, 'timestamp', $timestamp);
 	exposeAttribute($account, 'web', $web);
 	syncDir($account, $account->{dataDir}, $web);
 	syncDir($account, $account->{pubDir}, $web);
@@ -113,7 +152,6 @@ sub syncDir {
     	mkpath $clientDirAbs || report($account, "ERROR: could not make $clientDirAbs\n");
     }
     my $serverDir = $dir.'/'.$optionalServerParentSlash.$web;
-	report($account, "\n... Syncing $dir \n") if ($account->{debug} > 1);
 	syncFileSet($account, $clientDir, $serverDir);
 }
 
@@ -121,11 +159,16 @@ sub syncFileSet {
    my ($account, $clientDir, $serverDir) = @_;
 
    my $cmd = getSyncFileSetCommand($account, $clientDir, $serverDir);
-   report($account, "BEFORE SUBSTITUTIONS: ".$cmd."\n") if ($account->{debug} > 2);
+
+   report($account, "BEFORE SUBSTITUTIONS:\n".$cmd."\n") if ($account->{debug} > 2);
    $cmd = doSubstitutions($account, $cmd);
+
+   report($account, "AFTER SUBSTITUTIONS:\n".$cmd."\n") if ($account->{debug} > 2);
    report($account, $cmd."\n") if ($account->{debug} > 1);
    unless($account->{dryrun}) {
-	   report($account, `$cmd`);
+   	reportFlush();
+	system($cmd);
+	reportLastOutputs($account);
    } else {
    	   report($account, "dry run, so not executing\n");
    	   report($account, "(turn debug >= 2 to see cmd that would be executed)\n") unless ($account->{debug})
@@ -145,20 +188,22 @@ sub optionalParentSlash {
 sub getSyncFileSetCommand {
     my ($account, $clientDir, $serverDir) = @_;    
 
-	my @optionalSshCmd = ();
-	my $optionalServerSpec = '';
-	if ($account->{serverSite}) {
-	   $optionalServerSpec = $account->{protocol}.'://'.$account->{serverSite}.'/';
-	   @optionalSshCmd = ("-sshcmd", $account->{plinkTempLauncherScriptFile});
-	}
+    my @optionalSshCmd = ();
+    my $optionalServerSpec = '';
+    if ($account->{serverSite}) {
+	$optionalServerSpec = $account->{protocol}.'://'.$account->{serverSite}.'/';
+	@optionalSshCmd = ("-sshcmd", $account->{plinkTempLauncherScriptFile});
+    }
 
     my $clientFileSet = $account->{clientRoot}.'/'.$clientDir;
     my $serverFileSet = $optionalServerSpec.$account->{serverRoot}.'/'.$serverDir;
 
     my @unisonArgs = (@optionalSshCmd, $account->{unisonOptions});
-    my @cmd = ($account->{clientUnisonExecutable}, $clientFileSet, $serverFileSet, @unisonArgs);
 
-	return join(' ',@cmd);
+    my $unisonCaptureErrors = $account->{unisonCaptureErrors};
+    my @cmd = ($account->{clientUnisonExecutable}, $clientFileSet, $serverFileSet, @unisonArgs, $unisonCaptureErrors);
+
+    return join(' ',@cmd);
 }
 
 
@@ -200,11 +245,21 @@ sub exposeAttribute {
 	report($account, "Exposed attribute '$attribute' = $value\n") if ($account->{debug} > 2);
 }
 
+# SMELL - that I have to expose some variables early seems fishy. Never mind.
+sub expandAccountVariables {
+   my ($account, @vars) = @_;
+   foreach my $var (@vars) {
+      my $value = doSubstitutions($account, $account->{$var});
+      report($account, "Expanding early the attribute '$var' = $value\n") if ($account->{debug} > 2);
+      $account->{$var} = $value;
+   }
+}
+
 sub doSubstitutions {
- my ($account, $cmd) = @_;
+ my ($account, $text) = @_;
 	foreach my $key (keys %$account) {
 		my $value = $account->{$key};
-		$cmd =~ s/%$key%/$value/g if ($value); #SMELL - this needs to be a literal key, e.g. pass key = '{$}'
+		$text =~ s/%$key%/$value/g if ($value); #SMELL - this needs to be a literal key, e.g. pass key = '{$}'
 	}
- return $cmd;
+ return $text;
 }
