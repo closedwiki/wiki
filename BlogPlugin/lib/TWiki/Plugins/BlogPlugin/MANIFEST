@@ -4,6 +4,7 @@ data/TWiki/BlogUp.txt 0440
 data/TWiki/BlogPlugin.txt 0440
 data/Main/BlogAdminGroup.txt 0440
 data/Main/BlogAuthorGroup.txt 0440
+pub/TWiki/BlogPlugin/ExtendedSelectPlugin_pm.diff 0440
 templates/_blog/view.rss.tmpl 0440
 templates/_blog/view.print.nat.tmpl 0440
 data/_blog/AdminTool.txt 0440

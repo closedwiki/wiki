@@ -1,0 +1,10 @@
+--- /tmp/ExtendedSelectPlugin/lib/TWiki/Plugins/ExtendedSelectPlugin.pm	2005-10-11 18:33:47.000000000 +0200
++++ lib/TWiki/Plugins/ExtendedSelectPlugin.pm	2005-10-17 18:14:20.000000000 +0200
+@@ -46,6 +46,7 @@
+     $isValues= ( $type =~ /\+values(\+.+)?$/o);
+     my $choices = '';
+     foreach $item ( @$possibleValues ) {
++        $item = &TWiki::urlDecode($item);
+         $params={};
+ 	$itemValue=$item;
+ 	if( $isValues && ($item =~ /^(.*?[^\\])=(.*)$/o) ) {
