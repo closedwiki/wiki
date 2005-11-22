@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129824294" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132677933" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TWikiForm"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -6,6 +6,7 @@
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
 | TopicType | select | 1 | BlogEntry | classifies this as a blog entry | M |
 | BlogAuthor | text | 25 | | Author of the blog entry | M |
+| Date | text | 25 | | Creation date | M |
 | Headline | text | 78 | | headline of the blog entry | M |
 | Teaser | textarea | 80x4 | | teaser displayed in front pages | M |
 | Text | textarea | 80x15 | | client data | |

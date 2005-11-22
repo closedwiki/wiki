@@ -23,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.09';
+$RELEASE = '0.10';
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;

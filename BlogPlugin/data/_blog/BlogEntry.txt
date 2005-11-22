@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129816990" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132679611" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -9,7 +9,7 @@
 <noautolink>
 | *Name* | *Headline* | *Author* | *Comments*| *Date* | 
 %~~ DBQUERY{"TopicType='BlogEntry'" order="createdate" reverse="on"
-~~~   format="| [[$web.$topic][$topic]]
+~~~   format="| [[$web.$topic][$topic]]$percntREDDOT{\"$web.$topic\"}$percnt
 ~~~           | $expand(Headline)
 ~~~           | [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
 ~~~           | $percntDBQUERY{\"BaseRef='$topic'\" hidenull=\"on\"

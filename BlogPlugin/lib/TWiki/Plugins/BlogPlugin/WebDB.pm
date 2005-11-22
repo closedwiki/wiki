@@ -14,16 +14,36 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 ###############################################################################
-use strict;
-use TWiki::Contrib::DBCacheContrib;
 
 package TWiki::Plugins::BlogPlugin::WebDB;
+
+use strict;
+use TWiki::Contrib::DBCacheContrib;
+use Time::Local;
 @TWiki::Plugins::BlogPlugin::WebDB::ISA = ("TWiki::Contrib::DBCacheContrib");
+
+use vars qw( %MON2NUM );
+
+%MON2NUM = (
+  Jan => 0,
+  Feb => 1,
+  Mar => 2,
+  Apr => 3,
+  May => 4,
+  Jun => 5,
+  Jul => 6,
+  Aug => 7,
+  Sep => 8,
+  Oct => 9,
+  Nov => 10,
+  Dec => 11);
+
+
 
 ###############################################################################
 sub new {
   my ( $class, $web ) = @_;
-  my $this = bless( $class->SUPER::new($web, "_DBQueryWebDB"), $class );
+  my $this = bless( $class->SUPER::new($web, "_BlogPluginWebDB"), $class );
   return $this;
 }
 
@@ -37,9 +57,36 @@ sub onReload {
     my $topic = $this->fastget($topicName);
 
     # createdate
-    next if $topic->fastget('createdate');
-    my ($createDate, $createUser) = &TWiki::Func::getRevisionInfo($this->{_web}, $topicName, 1);
+    my $form = $topic->fastget('form');
+    my $dateField;
+    if ($form) {
+      $form = $topic->fastget($form);
+      $dateField = $form->fastget('Date');
+    }
+
+    my $createDate;
+    if ($dateField) {
+      $createDate = parseTime($dateField);
+    } else {
+      ($createDate, undef) = &TWiki::Func::getRevisionInfo($this->{_web}, $topicName, 1);
+    }
+
     $topic->set('createdate', $createDate);
-    $topic->set('createuser', $createUser);
   }
+}
+
+
+###############################################################################
+sub parseTime {
+  my $date = shift;
+  
+  # try "31 Dec 2001 - 23:59"  (TWiki date)
+  if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
+    my $year = $3;
+    $year -= 1900 if( $year > 1900 );
+    # The ($2) will look up the constant so named
+    return timelocal( 0, $5, $4, $1, $MON2NUM{$2}, $year );
+  }
+  
+  return 0;
 }

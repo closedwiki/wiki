@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131393054" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132680067" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 %INCLUDE{"RenderBlogEntry" NAME="%TOPIC%"}%
 %INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%
@@ -21,3 +21,4 @@
 %META:FIELD{name="SubjectCategory" attributes="M" title="SubjectCategory" value="BlogDev"}%
 %META:FIELD{name="State" attributes="" title="State" value="enabled"}%
 %META:FIELD{name="Related" attributes="" title="Related" value=""}%
+%META:FIELD{name="Date" attributes="M" title="Date" value="20 Aug 2005 - 11:38"}%

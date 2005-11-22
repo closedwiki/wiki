@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129560810" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132679711" format="1.1" version="1.1"}%
 %INCLUDE{"RenderBlogEntry" NAME="%TOPIC%"}%  
 %INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%  
 %INCLUDE{"RenderAddComment"}%    
@@ -19,3 +19,4 @@
 %META:FIELD{name="Text" attributes="" title="Text" value="We will use this BlogEntry for testing, especially for all [[TopicFunctions]]. The state of %0d%0athis BlogEntry is disabled to exclude it from the [[FrontPages]]."}%
 %META:FIELD{name="State" attributes="" title="State" value="disabled"}%
 %META:FIELD{name="Related" attributes="" title="Related" value="TestBlogEntry1"}%
+%META:FIELD{name="Date" attributes="M" title="Date" value="13 Aug 2005 - 01:42"}%
