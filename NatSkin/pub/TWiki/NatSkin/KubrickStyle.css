@@ -277,26 +277,18 @@ hr {
 }
 
 /* tables */
+
 .twikiTable {
   border:1px solid #d9d6e7;
   background:#f6f7f8;
   font-size:0.9em;
 }
 
-.twikiTable td,
-.twikiTable th {
-  border-left:1px solid #ddd;
-  border-right:1px solid #ddd;
-  border-bottom:1px solid #ddd;
-}
-.twikiTable th strong font {
-  /*color:#666; */
-}
-
 .twikiTable th {
   background:#fff6bf;
   border-top:1px solid #ffd324;
   border-bottom:1px solid #ffd324;
+  text-align:center;
 }
 
 /* twiki forms */
@@ -344,15 +336,17 @@ hr {
   background:#fff6bf;
 }
 .natTopicForm select[multiple="on"] {
-  width:98%;
+  width:99%;
 }
+.natTopicEditForm select,
+.natTopicEditForm input,
+.natTopicEditForm textarea,
 .natTopicForm select,
 .twikiPageForm table textarea,
 .twikiPageForm table input,
 .natTopicForm table textarea,
 .natTopicForm table input {
-  background:white;
-  border:1px solid #ffd324;
+  border:1px solid #d9d6e7;
   margin:2px;
   font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   font-size:small;
@@ -362,7 +356,6 @@ hr {
 .natTopicFormFirstCol {
   color:#06c;
 }
-
 /* attachments */
 .natTopicAttachments table th,
 .natTopicAttachments table td {
