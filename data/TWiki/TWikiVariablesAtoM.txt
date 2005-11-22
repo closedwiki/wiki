@@ -76,14 +76,13 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarURLPARAM][URLPARAM]]
 
 #VarENDSECTION
----+++ ENDSECTION{"name"} -- Marks the end of a named section
+---+++ ENDSECTION{"name"} -- marks the end of a named section
    * Syntax: =%<nop>ENDSECTION{"name"}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* | 
      | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous %<nop>SECTION% variable. | Mandatory parameter without a default |
-   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]]
-   
-   
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
+
 #VarFAILEDPLUGINS
 ---+++ FAILEDPLUGINS -- debugging for plugins that failed to load, and handler list
    * Syntax: =%<nop>FAILEDPLUGINS%=
@@ -192,38 +191,20 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[SpreadSheetPlugin#FuncIF][$IF()]] of SpreadSheetPlugin
 
 #VarINCLUDE
----+++ INCLUDE{"page"} -- include other topics or web pages
+---+++ INCLUDE{"page"} -- include other topic or web page
    * Syntax: =%<nop>INCLUDE{"page" ...}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= | |
      | ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= | |
-     | ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
+     | ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org:80/index.html"}%=. Supported content types are =text/html= and =text/plain=. <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
      | =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
-     | =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
+     | =rev="2"= | Include a previous topic revision; N/A for URLs | top revision |
      | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
      | =section="name"= | Includes only the specified section, as defined in the included topic by the [[#VarSECTION][SECTION]] and [[#VarENDSECTION][ENDSECTION]] variables| |
-     *Any other parameters* will be defined as variables within the scope of the included topic. For example, =%<nop>INCLUDE{"AnotherTopic" PONE="val 1" PTWO="val 2"}%= will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included topic.
+     | =PARONE="val 1"%BR% PARTWO="val 2"= | Any other parameter will be defined as a variable within the scope of the included topic. The example parameters on the left will result in =%<nop>PARONE%= and =%<nop>PARTWO%= being defined within the included topic. | |
+   * Examples: See IncludeTopicsAndWebPages
    * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]], [[#VarSECTION][SECTION]], [[#VarENDSECTION][ENDSECTION]]
----++++ Example: Include part of a webpage using a pattern
-<verbatim>
-%INCLUDE{"http://some.page.com/index.html" pattern="^.*?BEFORE(.*)AFTER.*" }%
-</verbatim>
-where =BEFORE= is the part of the page just before the inclusion, and =AFTER= is the part just after the inclusion. 
-
----++++ Example: Display regression test results in a TWiki page
-<verbatim>
-%INCLUDE{"http://domain/~qa/v1.1/REDTest.log.txt"}%
-</verbatim>
-
----++++ Example: Display the current time in Tokyo
-<verbatim>
-Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*&lt;\!--tzdate:date--&gt;(.*?)&lt;\!--/tzdate:date--&gt;.*"}%
-</verbatim>
-You get:
-<div>
-Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
-</div>
 
 #VarINCLUDINGTOPIC
 ---+++ INCLUDINGTOPIC -- name of topic that includes current topic
@@ -239,8 +220,8 @@ Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.
    * Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
 #VarLANGUAGES
----+++ LANGUAGES -- TWiki available languages
-   * list the languages available (as _PO_ files) to TWiki.
+---+++ LANGUAGES -- list available TWiki languages
+   * List the languages available (as =PO= files) to TWiki.
      Those are the languages in which TWiki's user interface is available.
    * Syntax: =%<nop>LANGUAGES{...}%=
    * Supported parameters:
@@ -251,7 +232,6 @@ Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.
      | *Variable* | *Meaning* |
      | =$langname= | language's name, as informed by the translators |
      | =$langtag= | language's tag. Ex: =en=, =pt-br=, etc. |
-        
 
 #VarLOCALSITEPREFS
 ---+++ LOCALSITEPREFS -- web.topicname of site preferences topic

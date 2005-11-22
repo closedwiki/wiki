@@ -170,12 +170,12 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarMETASEARCH][METASEARCH]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEBLIST][WEBLIST]], FormattedSearch
 
 #VarSECTION
----+++ SECTION{"name"} -- Marks the start of a named section
+---+++ SECTION{"name"} -- marks the start of a named section
    * Syntax: =%<nop>SECTION{"name"}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | ="name"= | Name of the section. Must be unique inside a topic. | Mandatory parameter without a default |
-   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]]
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSERVERTIME
 ---+++ SERVERTIME -- server time
@@ -226,7 +226,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>STARTINCLUDE%=
    * Syntax: =%<nop>STARTINCLUDE{param}%=
       * If param does not expand to a non-zero integer, then nothing will be included.
-   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
+   * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSTATISTICSTOPIC
 ---+++ STATISTICSTOPIC -- name of statistics topic
@@ -238,7 +238,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ STOPINCLUDE -- end position of topic text if included
    * If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself.
    * Syntax: =%<nop>STOPINCLUDE%=
-   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
+   * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
 
 #VarTOC
 ---+++ TOC -- table of contents of current topic
