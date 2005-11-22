@@ -13,7 +13,7 @@
 ~~~   FROM="%IFDEFINED{"%URLPARAM{"from"}%" then="%URLPARAM{"from"}%" else="1"}%"
 ~~~   TO="%IFDEFINED{"%URLPARAM{"to"}%" then="%URLPARAM{"to"}%" else="9999999999"}%"
 ~~~ }%
-<style type="text/css">.natTopicForm {display:none}</style>
+<style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Archive

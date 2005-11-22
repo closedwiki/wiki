@@ -9,7 +9,7 @@
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 -->
 <style type="text/css">
-  .natTopicForm {display:none}
+  .natTopicForm, .twikiForm {display:none}
 </style>
 
 %META:FORM{name="TopicForm"}%
