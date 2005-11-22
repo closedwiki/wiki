@@ -44,6 +44,8 @@
 .natWebTitle {
   text-decoration:underline;
 }
+
+/* web buttons */
 .natWebButtons {
   padding-left:10px;
 }
@@ -69,3 +71,46 @@
   color:black;
 }
 
+/* forms */
+.natTopicEditForm,
+.natTopicForm,
+.twikiPageForm th,
+.natTopicForm td {
+  border-top:2px solid #FE1C70;
+  border-bottom:2px solid #FE1C70;
+}
+.natTopicEditForm table th a,
+.natTopicEditForm th,
+.natTopicForm table th a,
+.natTopicForm th {
+  background:transparent;
+}
+.natTopicEditForm,
+.natTopicEditForm .twikiTable,
+.natTopicForm,
+.natTopicForm .twikiTable {
+  background:#fafafa;
+}
+.natTopicForm,
+.natTopicEditForm {
+  padding:5px;
+}
+
+.natTopicEditForm th,
+.natTopicEditForm td,
+.natTopicForm th,
+.twikiPageForm th,
+.natTopicForm td {
+  background:transparent;
+  border:0px;
+}
+
+.natTopicForm select,
+.twikiPageForm select,
+.twikiPageForm table textarea,
+.twikiPageForm table input,
+.natTopicForm table textarea,
+.natTopicForm table input {
+  border:0px;
+  border:1px solid #666666;
+}

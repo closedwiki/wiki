@@ -300,16 +300,20 @@ hr {
 }
 
 /* twiki forms */
-.twikiPageForm table,
 .natTopicForm table {
+  border:0px;
+}
+.twikiPageForm table,
+.natTopicForm {
   background:#fff6bf;
   border-top:2px solid #ffd324;
   border-bottom:2px solid #ffd324;
   border-left:0px;
   border-right:0px;
-  padding-bottom:5px;
-  font-size:x-small;
   font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+}
+.natTopicForm {
+  padding:5px;
 }
 .twikiPageForm input,
 .natTopicForm input {

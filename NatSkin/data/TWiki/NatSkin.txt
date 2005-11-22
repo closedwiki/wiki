@@ -122,27 +122,27 @@ __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:P
 -- TWiki:Main/MichaelDaum - 10 Nov 2005
 
 
-%META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="previewbg.png" attr="" comment="" date="1114174051" path="previewbg.png" size="19334" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="Cairo_UI_pm.diff" attr="" comment="" date="1120239647" path="Cairo_UI_pm.diff" size="413" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="TablePlugin_pm.diff" attr="" comment="" date="1120239660" path="TablePlugin_pm.diff" size="3205" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="Independence.jpeg" attr="h" comment="" date="1124706583" path="Independence.jpeg" size="53113" user="MichaelDaum" version="1.2"}%
-%META:FILEATTACHMENT{name="Squash.jpeg" attr="h" comment="" date="1124706784" path="Squash.jpeg" size="50940" user="MichaelDaum" version="1.2"}%
-%META:FILEATTACHMENT{name="Kubrick.jpeg" attr="h" comment="" date="1124706654" path="Kubrick.jpeg" size="35719" user="MichaelDaum" version="1.2"}%
-%META:FILEATTACHMENT{name="external.png" attachment="external.png" attr="h" comment="" date="1123862151" path="external.png" size="165" tmpFilename="/var/tmp/CGItemp25437" user="Main.MichaelDaum" version="0"}%
-%META:FILEATTACHMENT{name="Clean.jpeg" attr="h" comment="" date="1124706451" path="Clean.jpeg" size="56887" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="CleanThin.jpeg" attr="h" comment="" date="1124706478" path="CleanThin.jpeg" size="51905" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="GeorgiaBlue.jpeg" attr="h" comment="" date="1124706508" path="GeorgiaBlue.jpeg" size="53646" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="GeorgiaBlueThin.jpeg" attr="h" comment="" date="1124706527" path="GeorgiaBlueThin.jpeg" size="49838" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="Gettysburg.jpeg" attr="h" comment="" date="1124706558" path="Gettysburg.jpeg" size="55745" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="GettysburgThin.jpeg" attr="h" comment="" date="1124706570" path="GettysburgThin.jpeg" size="52234" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="IndependenceThin.jpeg" attr="h" comment="" date="1124706638" path="IndependenceThin.jpeg" size="50108" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="PlainJane.jpeg" attr="h" comment="" date="1124706668" path="PlainJane.jpeg" size="50928" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="PlainJaneThin.jpeg" attr="h" comment="" date="1124706685" path="PlainJaneThin.jpeg" size="44181" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="Rusty.jpeg" attr="h" comment="" date="1124706699" path="Rusty.jpeg" size="56897" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="RustyThin.jpeg" attr="h" comment="" date="1124706717" path="RustyThin.jpeg" size="50184" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="SeaGreen.jpeg" attr="h" comment="" date="1124706729" path="SeaGreen.jpeg" size="56265" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="SeaGreenThin.jpeg" attr="h" comment="" date="1124706749" path="SeaGreenThin.jpeg" size="52702" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="SquashThin.jpeg" attr="h" comment="" date="1124706795" path="SquashThin.jpeg" size="49337" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="Stormy.jpeg" attr="h" comment="" date="1124706818" path="Stormy.jpeg" size="52029" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="StormyThin.jpeg" attr="h" comment="" date="1124706827" path="StormyThin.jpeg" size="51154" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="previewbg.png" attr="" comment="" date="1114174051" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Cairo_UI_pm.diff" attr="" comment="" date="1120239647" path="Cairo_UI_pm.diff" size="413" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="TablePlugin_pm.diff" attr="" comment="" date="1120239660" path="TablePlugin_pm.diff" size="3205" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Independence.jpeg" attr="h" comment="" date="1124706583" path="Independence.jpeg" size="53113" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Squash.jpeg" attr="h" comment="" date="1124706784" path="Squash.jpeg" size="50940" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Kubrick.jpeg" attr="h" comment="" date="1124706654" path="Kubrick.jpeg" size="35719" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="external.png" attachment="external.png" attr="h" comment="" date="1123862151" path="external.png" size="165" tmpFilename="/var/tmp/CGItemp25437" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Clean.jpeg" attr="h" comment="" date="1124706451" path="Clean.jpeg" size="56887" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="CleanThin.jpeg" attr="h" comment="" date="1124706478" path="CleanThin.jpeg" size="51905" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlue.jpeg" attr="h" comment="" date="1124706508" path="GeorgiaBlue.jpeg" size="53646" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueThin.jpeg" attr="h" comment="" date="1124706527" path="GeorgiaBlueThin.jpeg" size="49838" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Gettysburg.jpeg" attr="h" comment="" date="1124706558" path="Gettysburg.jpeg" size="55745" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="GettysburgThin.jpeg" attr="h" comment="" date="1124706570" path="GettysburgThin.jpeg" size="52234" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="IndependenceThin.jpeg" attr="h" comment="" date="1124706638" path="IndependenceThin.jpeg" size="50108" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJane.jpeg" attr="h" comment="" date="1124706668" path="PlainJane.jpeg" size="50928" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJaneThin.jpeg" attr="h" comment="" date="1124706685" path="PlainJaneThin.jpeg" size="44181" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Rusty.jpeg" attr="h" comment="" date="1124706699" path="Rusty.jpeg" size="56897" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="RustyThin.jpeg" attr="h" comment="" date="1124706717" path="RustyThin.jpeg" size="50184" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreen.jpeg" attr="h" comment="" date="1124706729" path="SeaGreen.jpeg" size="56265" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreenThin.jpeg" attr="h" comment="" date="1124706749" path="SeaGreenThin.jpeg" size="52702" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="SquashThin.jpeg" attr="h" comment="" date="1124706795" path="SquashThin.jpeg" size="49337" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="Stormy.jpeg" attr="h" comment="" date="1124706818" path="Stormy.jpeg" size="52029" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="StormyThin.jpeg" attr="h" comment="" date="1124706827" path="StormyThin.jpeg" size="51154" user="TWikiContributor" version="1.1"}%

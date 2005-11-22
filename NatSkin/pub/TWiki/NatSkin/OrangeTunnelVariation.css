@@ -53,7 +53,7 @@
 
 /* twiki table variation */
 
-.natTopicForm table,
+.natTopicForm,
 .twikiPageForm th,
 .natTopicForm td {
   border-top:2px solid #06c;

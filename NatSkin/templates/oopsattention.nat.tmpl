@@ -171,6 +171,7 @@ link in your email or enter the code in the box below to activate your membershi
 (This code is of the form "YourName.xxxx")
 
 <form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<input type="hidden" name="rx" value="%BLACKLISTPLUGIN{action="magic"}%" />
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=" Submit " />

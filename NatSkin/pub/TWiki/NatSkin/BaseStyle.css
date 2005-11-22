@@ -789,9 +789,6 @@ img.alignleft {
   display:inline;
   font-size:0.9em;
 }
-.headlinesSubject img {
-  display:none;
-}
 .headlinesTeaser {
   margin-top:5px;
   margin-left:30px;
@@ -805,4 +802,3 @@ img.alignleft {
   content:"";
   margin-left:0px;
 }
-
