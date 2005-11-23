@@ -322,8 +322,9 @@ By default this value is set to "off"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.78 (2005-11-22) |
+|  Plugin Version: | v2.80 (2005-11-23) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Nov 2005: | added $nop to IFSKINSTATETHEN content |
 |  22 Nov 2005: | added support for the <nop>WysiwygPlugin;\
                   added custom templates for the <nop>BlackListPlugin's error messages |
 |  10 Nov 2005: | added switchvariation urlparam; \
