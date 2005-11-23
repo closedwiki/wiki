@@ -71,6 +71,9 @@ h1 a:link,
 h1 a:visited {
 	color:#a00; /*T5*/
 }
+h1 a:hover {
+	color:#FBF7E8; /*T3*/
+}
 .patternTopic h2 {
 	background-color:#FDFAF1;
 	border-color:#E2DCC8; /*BO4*/

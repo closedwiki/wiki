@@ -39,8 +39,7 @@ html body {
 	Sizes
 	----------------------------------------
 	C1 left bar width																16em
-	C2 right bar width (currently not used)											0%
-	C3 top bar height																64px
+	C2 top bar height																64px
 	---------------------------------------------------------------------------------------	*/
 
 /*	-----------------------------------------------------------
@@ -58,35 +57,15 @@ html body {
 }
 
 #patternColumnWrapper {
-	float:left;
-	display:inline; /* IE doubles the margins on floats, this takes care of the problem */
-	width:100%;
-	margin-left:-0px; /*C2*/
-}
-#patternLeftBar {
-	position:absolute;
-	left:0;
-	margin-left:0px; /*C2*/
-}
-.patternLeftBarContents /* needed for Explorer 5.0 */ {
 	width:100%;
 }
-
-/* height of the top bar */
-#patternLeftBar {
-	top:64px; /*C3*/
+#patternLeftBar,
+.patternLeftBarContents {
+	width:16em; /*C1*/
 }
 #patternTopBar,
 #patternTopBar table.patternTopBarContents {
-	height:64px; /*C3*/
-}
-
-/* setting the width of the left bar */
-#patternLeftBar {
-	width:16em; /*C1*/
-}
-#patternMain {
-	padding:0 0 0 16em;
+	height:64px; /*C2*/
 }
 
 /*	-----------------------------------------------------------

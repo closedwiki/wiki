@@ -277,7 +277,7 @@ th.twikiSortedDescendingCol a:hover font,
 }
 /* TipsContrib - in left bar */
 #patternLeftBar .tipsOfTheDay {
-	margin:1em 2em .5em 0;
+	margin:1em 1em .5em 0;
 	border-width:0;
 }
 #patternLeftBar .tipsOfTheDayHeader img {
@@ -596,8 +596,9 @@ table.patternTopBarContents td {
 	overflow:hidden;
 }
 .patternLeftBarContents {
-	padding:0 1em 1.5em 1em; /*S6*/
+	padding:0 0 1.5em 1em; /*S6*/
 	font-size:94%; /*S2*/
+	overflow:hidden;
 }
 .patternLeftBarContents a img {
 	margin:1px 0 0 0;
@@ -612,8 +613,9 @@ table.patternTopBarContents td {
 	list-style:none;
 }
 .patternLeftBarContents li {
-	padding-left:0;
-	margin-right:2em; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
+	padding:0 1em 0 0;
+	margin:0;
+	overflow:hidden;
 }
 .patternLeftBarContents .patternFormHolder {
 	margin:.5em 0 1em 0;
@@ -621,7 +623,6 @@ table.patternTopBarContents td {
 }
 html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 	margin-top:1.25em;
-	width:95%; /* otherwise it will grow when the window is resized on Firefox */
 }
 .patternLeftBarContents .patternFormHolder table {
 	width:100%;
@@ -650,7 +651,6 @@ html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 }
 .patternLeftBarContents input.patternFormButton {
 	display:block;
-	padding:0 1em 0 0;
 	margin:auto 1em auto 0;
 	border:0;
 	width:16px;
