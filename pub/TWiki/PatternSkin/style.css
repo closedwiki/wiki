@@ -598,7 +598,6 @@ table.patternTopBarContents td {
 .patternLeftBarContents {
 	padding:0 0 1.5em 1em; /*S6*/
 	font-size:94%; /*S2*/
-	overflow:hidden;
 }
 .patternLeftBarContents a img {
 	margin:1px 0 0 0;
@@ -615,7 +614,6 @@ table.patternTopBarContents td {
 .patternLeftBarContents li {
 	padding:0 1em 0 0;
 	margin:0;
-	overflow:hidden;
 }
 .patternLeftBarContents .patternFormHolder {
 	margin:.5em 0 1em 0;
@@ -660,7 +658,7 @@ html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 	font-size:85%; /*S3*/
 }
 .patternLeftBarPersonal {
-	margin:-1px 0 .7em -1em; /*S6*/
+	margin:-1px -1px .7em -1em; /*S6*/
 	padding:.25em .5em .25em 1em; /*S6*/
 	border-width:1px 0;
 	border-style:solid;
