@@ -131,26 +131,6 @@ Used for viewing attachments. Normally, a site will publish the attachments (=pu
 ---++ =preview=
 This script is _deprecated_. Its functions are covered by the =save= script.
 
-
----++ =rest=
-This script can be invoked via http in a similar way as the view script (see *Invocation Examples*, bellow) to execute a plugin method. It'll print the result directly to the stream unless the =endPoint= parameter is specified, in which case the control is redirected to the given topic.
-
-The =rest= script can receive one parameter:
-
-| =endPoint= | Where to redirect the response once the request is served, in the form "Web.Topic" |
-
-Any additional parameter is passed directly to the method (i.e: The method can get any other parameter using the $query object)
-
----+++ Invocation Examples:
-
-=http://my.host/bin/rest/EmptyPlugin/testRest=
-
-Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and print the result directly to the stream.
-
-=http://my.host/bin/rest/EmptyPlugin/testRest?endPoint=SomeWeb.SomeTopic=
-
-Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and redirect the control to <nop>SomeWeb.SomeTopic
-
 ---++ =configure=
 =configure= is the browser script used for inspection and configuration of the TWiki configuration. None of the parameters to this script are useable for any purpose except =configure=.
 
