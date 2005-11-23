@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132700333" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132759877" format="1.1" version="1.1"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -30,4 +30,4 @@ see also: TWiki.WebAliases, TWiki.AliasPlugin
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Aliases for the BlogWeb"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Aliases for the %25WEB%25 web"}%

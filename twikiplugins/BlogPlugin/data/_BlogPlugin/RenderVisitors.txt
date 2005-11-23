@@ -9,7 +9,7 @@ NONE
 ---++ Implementation
 %STARTINCLUDE%
 <div class="blogSideBarSection blogSideBarVisitors" style="%<nop>CALC{"$IF(%NRLASTVISITORS% == 0,display:none)"}%">
----+ Visitors Today%REDDOT{"%TOPIC%"}%
+---+ Visitors Today%REDDOT{"%WEB%.%TOPIC%"}%
 %LASTVISITORS{format="   * $wikiusername"}%
 </div>
 %STOPINCLUDE%

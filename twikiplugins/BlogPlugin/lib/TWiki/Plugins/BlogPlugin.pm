@@ -24,7 +24,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.21';
+$RELEASE = '0.22';
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
@@ -181,6 +181,8 @@ sub _DBCALL {
   # substitute variables
   $sectionText =~ s/%INCLUDINGWEB%/$theWeb/g;
   $sectionText =~ s/%INCLUDINGTOPIC%/$theTopic/g;
+  $sectionText =~ s/%WEB%/$thisWeb/g;
+  $sectionText =~ s/%TOPIC%/$thisTopic/g;
   foreach my $key (keys %$params) {
     $sectionText =~ s/%$key%/$params->{$key}/g;
   }
