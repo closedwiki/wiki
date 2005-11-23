@@ -73,8 +73,10 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.78 (2005-11-22) |
+|  Skin Version: | v2.80 (2005-11-23) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-11-23: | added nops in expensive IFSKINSTATETHEN, \
+                 i.e. to prevent the sidebar to be computed multiple times |
 |  2005-11-22: | moved basic blogging css to the <nop>BlogPlugin |
 |  2005-11-16: | added <nop>PatternStyle emulating cairo's <nop>PatternSkin |
 |  2005-11-10: | improved NatSkinStyleBrowser |
