@@ -356,9 +356,10 @@ hr {
 }
 .blogCommentCount {
   color:#666;
-  margin-left:2em;
   font-size:0.9em;
   float:right;
+  width:2em;
+  text-align:right;
 }
 .blogHeadline .blogCommentCount {
   font-size:0.7em;
