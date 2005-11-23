@@ -502,6 +502,9 @@ a:hover .twikiAccessKey {
 #patternPage {
 	font-size:100%;
 }
+#patternColumnWrapper {
+	table-layout:fixed;
+}
 #patternMain {
 	border-width:1px 0 0 0;
 	border-style:solid;
