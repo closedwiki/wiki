@@ -687,6 +687,9 @@ sub renderIfSkinStateThen {
       (!$theRelease || $skinState{'release'} =~ /$theRelease/) &&
       (!$theAction || $skinState{'action'} =~ /$theAction/)) {
     #writeDebug("match then");
+    if ($theThen =~ s/\$nop//go) {
+      $theThen = TWiki::Func::expandCommonVariables($theThen, $topic, $web);
+    }
     return $before.$theThen.$after if $theThen;
   } else {
     if ($elsIfArgs) {
@@ -694,6 +697,9 @@ sub renderIfSkinStateThen {
       return $before."%IFSKINSTATETHEN{$elsIfArgs}%$theElse%FISKINSTATE%".$after;
     } else {
       #writeDebug("match else");
+      if ($theElse =~ s/\$nop//go) {
+	$theElse = TWiki::Func::expandCommonVariables($theElse, $topic, $web);
+      }
       return $before.$theElse.$after if $theElse;
     }
   }
@@ -916,11 +922,9 @@ sub renderWebSideBar {
 
   #writeDebug("called renderWebSideBar()");
 
-
   if ($skinState{'sidebar'} eq 'off') {
     return '';
   }
-
 
   # get sidebar for web
   my $text;
