@@ -13,7 +13,7 @@ if the linked site has a nice rss feed.
 ---+++ Main
 <verbatim>
 %STARTINCLUDE%
-%INCLUDE{"RenderBlogLinkNavigation" NAME="%NAME%"}%
+%DBCALL{"RenderBlogLinkNavigation" NAME="%NAME%"}%
 <noautolink>
 %~~ DBQUERY{topic="%NAME%"
 ~~~   format="
@@ -26,8 +26,8 @@ if the linked site has a nice rss feed.
 *~~         href=\"$formfield(Feed)\" 
 ~~~         limit=\"%LIMIT%\"
 ~~~         refresh=\"$formfield(Refresh)\"
-~~~         header=\"$percntINCLUDE{\"%TOPIC%\" section=\"header\"}$percnt\"
-~~~         format=\"$percntINCLUDE{\"%TOPIC%\" section=\"article\"}$percnt\"
+~~~         header=\"$percntDBCALL{\"%TOPIC%\" section=\"header\"}$percnt\"
+~~~         format=\"$percntDBCALL{\"%TOPIC%\" section=\"article\"}$percnt\"
 *~~      }$percnt
 ~~~      $percntELSEDEFINED$percnt
 ~~~      $n<!-- -->
@@ -41,7 +41,7 @@ if the linked site has a nice rss feed.
 ~~~ }%
 
 </noautolink>
-%INCLUDE{"RenderBlogLinkNavigation" NAME="%NAME%"}%
+%DBCALL{"RenderBlogLinkNavigation" NAME="%NAME%"}%
 %STOPINCLUDE%
 </verbatim>
 
@@ -103,10 +103,10 @@ if the linked site has a nice rss feed.
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="BlogLink3" LIMIT="3"}%
+%DBCALL{"%TOPIC%" NAME="BlogLink3" LIMIT="3"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

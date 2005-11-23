@@ -15,17 +15,17 @@
 <div class="blogArchiveDescription">
    %DBQUERY{topic="%NAME%" format="$expand(TopicDescription)"}% 
 </div>
-%INCLUDE{"RenderFrontPage" SKIP="%SKIP%" CAT=".*" AUTHOR="%NAME%"}%
+%DBCALL{"RenderFrontPage" SKIP="%SKIP%" CAT=".*" AUTHOR="%NAME%"}%
 *~~ 
 %STOPINCLUDE%
 </verbatim>
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="MichaelDaum"}%
+%DBCALL{"%TOPIC%" NAME="MichaelDaum"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

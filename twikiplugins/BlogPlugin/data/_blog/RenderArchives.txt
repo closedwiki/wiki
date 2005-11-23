@@ -18,12 +18,12 @@ NONE
 <div class="blogSideBarSection blogSideBarArchive">
 ---+ Archive%REDDOT{"%WEB%.%TOPIC%"}%
 <ul>
-%INCLUDE{"RenderArchiveLink" FROM="1 Dec 2005" TO="1 Jan 2006" TITLE="December 2005"}%
-%INCLUDE{"RenderArchiveLink" FROM="1 Nov 2005" TO="1 Dec 2005" TITLE="November 2005"}%
-%INCLUDE{"RenderArchiveLink" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005"}%
-%INCLUDE{"RenderArchiveLink" FROM="1 Sep 2005" TO="1 Oct 2005" TITLE="September 2005"}%
-%INCLUDE{"RenderArchiveLink" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005"}%
-%INCLUDE{"RenderArchiveLink" FROM="1 Jul 2005" TO="1 Aug 2005" TITLE="July 2005"}%
+%DBCALL{"RenderArchiveLink" FROM="1 Dec 2005" TO="1 Jan 2006" TITLE="December 2005"}%
+%DBCALL{"RenderArchiveLink" FROM="1 Nov 2005" TO="1 Dec 2005" TITLE="November 2005"}%
+%DBCALL{"RenderArchiveLink" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005"}%
+%DBCALL{"RenderArchiveLink" FROM="1 Sep 2005" TO="1 Oct 2005" TITLE="September 2005"}%
+%DBCALL{"RenderArchiveLink" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005"}%
+%DBCALL{"RenderArchiveLink" FROM="1 Jul 2005" TO="1 Aug 2005" TITLE="July 2005"}%
 </ul>
 </div>
 %STOPINCLUDE%
@@ -31,10 +31,10 @@ NONE
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%"}%
+%DBCALL{"%TOPIC%"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

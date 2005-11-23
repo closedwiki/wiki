@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
-%INCLUDE{"%TWIKIWEB%.WebChanges"}%
+%DBCALL{"%TWIKIWEB%.WebChanges"}%
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 -->

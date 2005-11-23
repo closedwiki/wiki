@@ -19,8 +19,8 @@ See also: %TOPIC%Template, FrontPage
 </form> 
 </noautolink>
 
-%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
-%INCLUDE{"RenderTWikiFormList" ATTR="%TOPIC%"}%
+%DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
+%DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%
 
 
 ---++ Categories in the Wild

@@ -3,7 +3,7 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-%INCLUDE{"RenderTWikiFormList" ATTR="%TOPIC%"}%
+%DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%
 
 
 See also: BlogComment, BlogCommentTemplate

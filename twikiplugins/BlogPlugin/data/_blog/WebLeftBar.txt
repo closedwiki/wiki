@@ -8,7 +8,7 @@ See also: RenderAdminTools, WebSideBar
 <div class="natSideBarContents">
 
 %STARTINCLUDE%
-%INCLUDE{"WebSideBar"}%
+%DBCALL{"WebSideBar"}%
 %STOPINCLUDE%
 
 </div>

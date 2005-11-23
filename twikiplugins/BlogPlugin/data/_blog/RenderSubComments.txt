@@ -45,7 +45,7 @@
 ~~~            ...&nbsp;[[$web.$topic#$topic][reply]]
 ~~~          </div>
 ~~~          $percntENDTWISTYTOGGLE$percnt
-~~~          $percntINCLUDE{\"RenderSubComments\" NAME=\"$topic\"}$percnt
+~~~          $percntDBCALL{\"RenderSubComments\" NAME=\"$topic\"}$percnt
 *~~          </div>
 *~~        "
 ~~~ }%
@@ -55,10 +55,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="TestBlogEntry0"}%
+%DBCALL{"%TOPIC%" NAME="TestBlogEntry0"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

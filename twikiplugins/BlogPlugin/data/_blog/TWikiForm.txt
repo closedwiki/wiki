@@ -5,8 +5,8 @@
 
 See also: %TOPIC%Template, WebPreferences, TWikiFormAttributes
 
-%INCLUDE{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
-%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 
 
 <!--

@@ -17,7 +17,7 @@ see also: RenderNewBlogEntryButton, RenderNewBlogLinkButton
 *~~
 %STOPINCLUDE%
 <!-- interrupt glue -->
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICVIEW = %MAINWEB%.BlogAuthorGroup

@@ -19,13 +19,13 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"RenderTWikiFormList" ATTR="Headline"}%
+%DBCALL{"RenderTWikiFormList" ATTR="Headline"}%
 </div>
 <div class="alt">
-%INCLUDE{"RenderTWikiFormList" ATTR="BlogCommentReference"}%
+%DBCALL{"RenderTWikiFormList" ATTR="BlogCommentReference"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

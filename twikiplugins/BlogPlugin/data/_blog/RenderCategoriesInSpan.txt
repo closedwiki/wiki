@@ -18,7 +18,7 @@
 ~~~   header="$percntTABLE{sort=\"on\" initsort=\"2\" initdirection=\"up\"}$percnt$n
 ~~~      | *SubjectCategory* 
 ~~~      | *Nr Postings* |$n"
-~~~   format="$percntINCLUDE{\"%TOPIC%\" section=\"subquery\" 
+~~~   format="$percntDBCALL{\"%TOPIC%\" section=\"subquery\" 
 ~~~           CAT=\"$topic\" 
 ~~~           FROM=\"%FROM%\"
 ~~~           TO=\"%TO%\"
@@ -47,10 +47,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" FROM="%CALC{"$TIME(1 Aug 2005)"}%" TO="%CALC{"$TIME(1 Sep 2005)"}%"}%
+%DBCALL{"%TOPIC%" FROM="%CALC{"$TIME(1 Aug 2005)"}%" TO="%CALC{"$TIME(1 Sep 2005)"}%"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

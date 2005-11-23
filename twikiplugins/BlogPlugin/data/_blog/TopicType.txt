@@ -3,10 +3,10 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-%INCLUDE{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
-%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
-%INCLUDE{"RenderTopicList" NAME="%TOPIC%, TWikiFormAttribute"}%
-%INCLUDE{"RenderTWikiFormList" ATTR="%TOPIC%"}%
+%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
+%DBCALL{"RenderTopicList" NAME="%TOPIC%, TWikiFormAttribute"}%
+%DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%
 
 See also: TopicTypeTemplate
 

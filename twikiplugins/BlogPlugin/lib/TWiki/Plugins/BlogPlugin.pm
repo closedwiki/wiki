@@ -56,6 +56,7 @@ sub initPlugin {
 
   TWiki::Func::registerTagHandler('DBTEST', \&_DBTEST); # for debugging
   TWiki::Func::registerTagHandler('DBQUERY', \&_DBQUERY);
+  TWiki::Func::registerTagHandler('DBCALL', \&_DBCALL);
 
   return 1;
 }
@@ -115,6 +116,83 @@ sub _CITEBLOG {
     $theTopic;
   my $createDate = TWiki::Func::formatTime($topicObj->fastget('createdate'), '$day $mon $year');
   return "[[$theWeb.$theTopic][$displayText ($createDate)]]";
+}
+
+###############################################################################
+# lightweighted INCLUDE using stored procedures instead of extracting them
+# from the topics again and again
+sub _DBCALL {
+  my ($session, $params, $theTopic, $theWeb) = @_;
+
+  # remember args for the key before mangling the params
+  my $args = $params->stringify();
+
+  #print STDERR "DEBUG: called DBCALL{$args}\n";
+
+  my $path = $params->remove('_DEFAULT') || '';
+  my $section = $params->remove('section') || 'default';
+  my $warn = $params->remove('warn') || 'on';
+  $warn = ($warn eq 'on')?1:0;
+
+  my ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $path);
+  
+  # check access rights
+  my $wikiUserName = TWiki::Func::getWikiUserName();
+  unless (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $thisTopic, $thisWeb)) {
+    if ($warn) {
+      return inlineError("ERROR: DBCALL access to '$thisWeb.$thisTopic' denied");
+    } 
+    return '';
+  }
+
+  # init database
+  &initDB($thisWeb);
+
+  # get section
+  my $topicObj = $db{$thisWeb}->fastget($thisTopic);
+  if (!$topicObj) {
+    if ($warn) {
+      return inlineError("ERROR: DBCALL can't find topic <nop>$thisWeb.$thisTopic");
+    } else {
+      return '';
+    }
+  }
+  my $sectionText = $topicObj->fastget("_section$section") if $topicObj;
+  if (!$sectionText) {
+    if($warn) {
+      return inlineError("ERROR: DBCALL can't find section '$section' in topic '$thisWeb.$thisTopic'");
+    } else {
+      return '';
+    }
+  }
+
+  # prevent recursive calls
+  my $key = $thisWeb.'.'.$thisTopic;
+  my $count = grep($key, keys %{$session->{dbcalls}});
+  $key .= $args;
+  if ($session->{dbcalls}->{$key} || $count > 99) {
+    if($warn) {
+      return inlineError("ERROR: DBCALL reached max recursion at '$thisWeb.$thisTopic'");
+    }
+    return '';
+  }
+  $session->{dbcalls}->{$key} = 1;
+
+  # substitute variables
+  $sectionText =~ s/%INCLUDINGWEB%/$theWeb/g;
+  $sectionText =~ s/%INCLUDINGTOPIC%/$theTopic/g;
+  foreach my $key (keys %$params) {
+    $sectionText =~ s/%$key%/$params->{$key}/g;
+  }
+
+  # expand
+  $sectionText = TWiki::Func::expandCommonVariables($sectionText);
+
+  # cleanup
+  delete $session->{dbcalls}->{$key};
+
+  return $sectionText;
+  #return '<verbatim>'.$sectionText.'</verbatim>';
 }
 
 ###############################################################################
@@ -194,6 +272,7 @@ sub _DBQUERY {
       $format =~ s/\$formfield\((.*?)\)/getFormField($theWeb, $topicName, $1)/geo;
       $format =~ s/\$expand\((.*?)\)/expandPath($theWeb, $root, $1)/geo;
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime(expandPath($theWeb, $root, $1), $2)/geo; # single quoted
+      #$format =~ s/\$dbcall\((.*?)\)/dbCall($1)/ge; ## TODO
       $format = expandVariables($format, topic=>$topicName, web=>$theWeb, index=>$index, count=>$count);
       $text .= $format;
       last if $index == $theLimit;
@@ -300,38 +379,37 @@ sub _DBTEST {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   &initDB($theWeb);
-  my $result;
+  my $result = "<noautolink>\n";
 
   my $size = $db{$theWeb}->size();
-  $result .= "   * size=$size\n";
-  foreach my $key1 ('BlogEntry0') {
+  $result .= "---++ size=$size\n";
+  foreach my $key1 ('RenderBlogEntry') {
   
     my $value1 = $db{$theWeb}->fastget($key1) || '';
-    $result .= "   * <nobr> $key1 = $value1</nobr>\n";
+    $result .= "---++ <nobr> $key1 = $value1</nobr>\n";
 
     foreach my $key2 (sort $value1->getKeys()) {
-      next if $key2 eq 'text';
       my $value2 = $value1->fastget($key2);
-      $result .= "      * <nobr> $key2 = $value2</nobr>\n" if $value2;
+      next unless $value2;
+      $result .= "---+++ <nobr> $key2\n<verbatim>\n$value2\n</verbatim>\n</nobr>\n";
     }
     my $topicForm = $value1->fastget('form');
     if ($topicForm) {
-      $result .= "   * $topicForm:\n";
+      $result .= "---++ $topicForm\n";
       $topicForm = $value1->fastget($topicForm);
       foreach my $key2 (sort $topicForm->getKeys()) {
         my $value2 = $topicForm->fastget($key2);
-        $result .= "      * <nobr> $key2 = $value2</nobr>\n" if $value2;
+        $result .= "<nobr> $key2 = $value2</nobr><br/>\n" if $value2;
       }
     }
     my $topicInfo = $value1->fastget('info');
-    $result .= "   * info: $topicInfo\n";
+    $result .= "---++ info: $topicInfo\n";
     foreach my $key2 (sort $topicInfo->getKeys()) {
       my $value2 = $topicInfo->fastget($key2);
-      $result .= "      * <nobr> $key2 = $value2</nobr>\n" if $value2;
+      $result .= "<nobr> $key2 = $value2</nobr><br/>\n" if $value2;
     }
   }
-  return $result;
-
+  return $result."\n</noautolink>\n";
 }
 
 ###############################################################################

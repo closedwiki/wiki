@@ -22,13 +22,13 @@
   <td valign="top" class="blogPrev">
 %~~ PREVDOC{"%NAME%" web="%WEB%"
 ~~~   where="TopicType=~'\bBlogLink\b'" order="Name"
-~~~   format="[[$topic][$percntINCLUDE{\"RenderTagline\" NAME=\"$topic\"}$percnt]]"
+~~~   format="[[$topic][$percntDBCALL{\"RenderTagline\" NAME=\"$topic\"}$percnt]]"
 ~~~ }% 
   </td>
   <td valign="top" class="blogNext"> 
 %~~ NEXTDOC{"%NAME%" web="%WEB%"
 ~~~   where="TopicType=~'\bBlogLink\b'"  order="Name"
-~~~   format="[[$topic][$percntINCLUDE{\"RenderTagline\" NAME=\"$topic\"}$percnt]]"
+~~~   format="[[$topic][$percntDBCALL{\"RenderTagline\" NAME=\"$topic\"}$percnt]]"
 ~~~ }% 
   </td>
   <td valign="top">
@@ -46,10 +46,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="BlogLink2"}%
+%DBCALL{"%TOPIC%" NAME="BlogLink2"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

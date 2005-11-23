@@ -12,7 +12,7 @@
 
 <div class="feeds">
 %~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
-~~~         format="$percntINCLUDE{\"RenderBlogLinksInCategory\" NAME=\"$topic\"}$percnt"
+~~~         format="$percntDBCALL{\"RenderBlogLinksInCategory\" NAME=\"$topic\"}$percnt"
 ~~~ }%
 </div>
 

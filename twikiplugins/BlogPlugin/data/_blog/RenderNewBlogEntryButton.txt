@@ -30,7 +30,7 @@ See also: RenderNewBlogLinkButton, RenderNewCategoryButton
 *~~
 %STOPINCLUDE%
 <!-- interrupt glue -->
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 See also: BlogEntryTemplate, BlogEntryForm
 

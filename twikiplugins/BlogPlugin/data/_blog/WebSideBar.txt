@@ -8,7 +8,7 @@ See also: RenderAdminTools, WebLeftBar, BlogSideBar
 <div class="natSideBarContents">
 
 %STARTINCLUDE%<div class="blogSideBar">
-%INCLUDE{"BlogSideBar" section="%IFDEFINED{"%SIDEBAR%" then="%SIDEBAR%" else="Default"}%"}%
+%DBCALL{"BlogSideBar" section="%IFDEFINED{"%SIDEBAR%" then="%SIDEBAR%" else="Default"}%"}%
 <style type="text/css">
 .natRevision,
 .natWebLocator {

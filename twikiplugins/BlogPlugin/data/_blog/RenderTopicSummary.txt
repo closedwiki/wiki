@@ -18,10 +18,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" THISTOPIC="TestBlogEntry0" THISWEB="%WEB%"}%
+%DBCALL{"%TOPIC%" THISTOPIC="TestBlogEntry0" THISWEB="%WEB%"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

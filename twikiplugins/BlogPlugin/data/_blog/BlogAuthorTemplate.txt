@@ -3,7 +3,7 @@
 %NOP{
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 }%
-%INCLUDE{"RenderBlogEntriesOfAuthor" NAME="%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%"}%
+%DBCALL{"RenderBlogEntriesOfAuthor" NAME="%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

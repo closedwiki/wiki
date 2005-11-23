@@ -15,7 +15,7 @@
 </table>
 </form> 
 
-%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+%DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 
 See also: %TOPIC%Template
 

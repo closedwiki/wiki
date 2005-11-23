@@ -27,7 +27,7 @@ See also: BlogLink, RenderNewBlogEntryButton, BlogLinkForm, BlogLinkTemplate
 *~~
 %STOPINCLUDE%
 <!-- -->
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

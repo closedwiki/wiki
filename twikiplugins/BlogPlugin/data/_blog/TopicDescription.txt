@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="TWikiFormAttribute"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
-%INCLUDE{"RenderTWikiFormList" ATTR="%TOPIC%"}%
+%DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
