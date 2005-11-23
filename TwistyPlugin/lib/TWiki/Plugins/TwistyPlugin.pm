@@ -69,6 +69,9 @@ EOF
     TWiki::Func::addToHEAD('TWISTYPLUGIN_TWISTY',$header);
     TWiki::Func::registerTagHandler('TWISTYSHOW',\&_TWISTYSHOW);
     TWiki::Func::registerTagHandler('TWISTYHIDE',\&_TWISTYHIDE);
+    TWiki::Func::registerTagHandler('TWISTYBUTTON',\&_TWISTYBUTTON);
+    TWiki::Func::registerTagHandler('TWISTY',\&_TWISTY);
+    TWiki::Func::registerTagHandler('ENDTWISTY',\&_ENDTWISTYTOGGLE);
     TWiki::Func::registerTagHandler('TWISTYTOGGLE',\&_TWISTYTOGGLE);
     TWiki::Func::registerTagHandler('ENDTWISTYTOGGLE',\&_ENDTWISTYTOGGLE);
 
@@ -77,23 +80,23 @@ EOF
 
 
 sub _TWISTYSHOW {
-     return _TWISTYBUTTON(@_, 'show');
+    return _twistyImpl(@_, 'show');
 }
 
 sub _TWISTYHIDE {
-     return _TWISTYBUTTON(@_, 'hide');
+    return _twistyImpl(@_, 'hide');
 }
 
 sub _TWISTYBUTTON {
-    my($session, $params, $theTopic, $theWeb, $theState) = @_;
-    my $id=$params->{'id'}||'';
-    my $link=$params->{'link'}||'';
-    my $mode=$params->{'mode'}||'span';
-    my $img=$params->{'img'} || '';
-    $img =~ s/['\"]//go;
-    my $imgTag=($img ne '') ? '<img src="'.$img.'" border="0" alt="" />' : '';
-    my $initialHidden=($theState eq 'hide') ? 'twistyHidden ' : '';
-    return '<'.$mode.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.'</a></'.$mode.'>';
+    return 
+      '<span>' . # fixes "jumpy" links in some browsers
+      _twistyImpl(@_, 'show') . 
+      _twistyImpl(@_, 'hide') . 
+      '</span>';
+}
+
+sub _TWISTY {
+    return _TWISTYBUTTON(@_) . _TWISTYTOGGLE(@_);
 }
 
 sub _TWISTYTOGGLE {
@@ -109,7 +112,20 @@ sub _TWISTYTOGGLE {
 sub _ENDTWISTYTOGGLE {
     my($session, $params, $theTopic, $theWeb) = @_;
     my $mode=shift @modes;
-    return '</'.$mode.'>';
+    return '</'.$mode.'>' if $mode;
+}
+
+sub _twistyImpl {
+    my($session, $params, $theTopic, $theWeb, $theState) = @_;
+
+    my $id = $params->{'id'} || '';
+    my $link = $params->{$theState.'link'} || $params->{'link'} || '';
+    my $mode = $params->{'buttonmode'} || $params->{'mode'} || 'span';
+    my $img = $params->{$theState.'img'} || $params->{'img'} || '';
+    $img =~ s/['\"]//go;
+    my $imgTag = ($img ne '') ? '<img src="'.$img.'" border="0" alt="" />' : '';
+    my $initialHidden = ($theState eq 'hide') ? 'twistyHidden ' : '';
+    return '<'.$mode.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.'</a></'.$mode.'>';
 }
 
 

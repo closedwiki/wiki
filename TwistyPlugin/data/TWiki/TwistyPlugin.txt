@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="RafaelAlvarez" date="1126488524" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="MichaelDaum" date="1130850299" format="1.1" version="1.2"}%
 ---+!! %TOPIC%
 
 %TOC%
@@ -18,11 +18,11 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
 #VarTWISTYSHOW
 ---+++ TWISTYSHOW
 *Show/open link*
-	* Syntax: =%<nop>TWISTYSHOW{id="myid" link="Link Text"}%=
+	* Syntax: =%<nop>TWISTYSHOW{id="myid" ... }%=
 	* Supported parameters:
     | *Parameter* | *Description* | *Value* |
     | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
-    | =link="Link Text"= | The text to be used in the Twisty Show link  | required |
+    | =link="Link Text"= | The text to be used in the Twisty Show link  | optional |
     | =mode="div/span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
     | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
 	* Example: =%<nop>TWISTYSHOW{id="demo" link=" Click to Unfold " img="%<nop>ICONPATH{toggleopen}%"}%= expands to: <br /> 
@@ -32,11 +32,11 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
 #VarTWISTYHIDE
 ---+++ TWISTYHIDE
 *Hide/close link*
-	* Syntax: =%<nop>TWISTYHIDE{id="myid" link="Link Text"}%=
+	* Syntax: =%<nop>TWISTYHIDE{id="myid" ... }%=
 	* Supported parameters:
     | *Parameter* | *Description* | *Value* |
     | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
-    | =link="Link Text"= | The text to be used in the Twisty Hide link  | required |
+    | =link="Link Text"= | The text to be used in the Twisty Hide link  | optional |
     | =mode="div/span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
     | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
 	* Example: =%<nop>TWISTYHIDE{id="demo" link=" Click to Fold " img="%<nop>ICONPATH{toggleclose}%"}%= expands to: <br /> 
@@ -63,6 +63,41 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
 		* Will end the most inner unclosed Twisty Toggle section, using the proper tag
 	* Example: =%<nop>ENDTWISTYTOGGLE%= expands to: =&lt;/div&gt;= if =mode="div"= was used in the last [[#VarTWISTYTOGGLE][TWISTYTOGGLE]],
 	* Related: [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
+
+#VarTWISTYBUTTON
+---+++ TWISTYBUTTON
+*Shorthand version for TWISTYSHOW &amp; TWISTYHIDE*
+This is usefull if both the show and the hide button take the same arguments. 
+	* Syntax: =%<nop>TWISTYBUTTON{id="myid" ... }%=
+	* Supported parameters:
+    | *Parameter* | *Description* | *Value* |
+    | =id= | Unique identifier. Used to link [[#VarTWISTYBUTTON][TWISTYBUTTON]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
+    | =link="Link Text"= | The text to be used in the Twisty button link  | optional |
+    | =hidelink="Link Text"= | The text to be used in the Twisty hide link  | optional |
+    | =showlink="Link Text"= | The text to be used in the Twisty show link  | optional |
+    | =mode="div/span"= | Specify if the Twisty link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
+    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+    | =hideimg="image url"= | Specify the image to be show in the Twisty hide link | optiona, defaults to =img= value |
+    | =showimg="image url"= | Specify the image to be show in the Twisty show link | optional, defaults to =img= value |
+	* Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYHIDE][TWISTYHIDE]]
+
+#VarTWISTY
+---+++ TWISTY
+*Shorthand version for TWISTYSHOW &amp; TWISTYHIDE &amp; TWISTYTOGGLE*
+This renders the button as well as the toggled content section contained within this and the closing ENDTWISTY tag.
+	* Syntax: =%<nop>TWISTY{id="myid" ... }%=
+	* Supported parameters:
+    | *Parameter* | *Description* | *Value* |
+    | all parameters supported by [[#VarTWISTYSHOW][TWISTYBUTTON]] |||
+    | =mode="div/span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag.  | optional, defaults to =&lt;span&gt;= |
+    | =buttonmode="div/span"= | Specify if the Twisty link link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults =mode= value |
+	* Related [[#VarTWISTYSHOW][TWISTYBUTTON]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
+
+#VarENDTWISTY
+---+++ ENDTWISTY
+*Twisty closure*
+
+complements the opening TWISTY tag. See [[#VarENDTWISTYTOGGLE][ENDTWISTYTOGGLE]].
 
 ---++ Demo & Test
  If the plugin is properly installed, you should see the Twisty effect below:
