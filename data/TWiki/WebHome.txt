@@ -8,23 +8,20 @@
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
 
----++ Available Information
+---++ TWiki Documentation and Configuration
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
    * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
    * [[DakarReleaseNotes][Dakar Release Notes]]: Describes what's new in this release of TWiki.
    * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial
    * [[TWikiFAQ][Frequently Asked Questions]]: about TWiki
    * [[TWikiReferenceManual][Reference Manual]]: Documentation for webmasters, system administrators
    * [[AdminToolsCategory][Admin Tools]]: manage the <nop>%WIKITOOLNAME% site
-
-<blockquote>
-<form action="%SCRIPTURL{"search"}%/%INTURLENCODE{"%WEB%"}%/">
-<input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /><br/>
-([[WebSearchAdvanced][advanced search]])
+   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />%BR%
+     ([[WebSearchAdvanced][advanced search]])
 </form>
-</blockquote>
 </td>
 <td valign="top" width="255" style="padding:1em 15px 15px 30px;"><center>
-<a href="http://twiki.org"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Link to TWiki.org website" border="0" /></a>
+<a href="http://twiki.org"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
 <br />The official TWiki site is <a href="http://twiki.org"><span class="twikiLinkLabel">twiki.org</span></a></center>
 <p />
 <p />
@@ -34,10 +31,9 @@ This is the place to learn about TWiki features, find where to download it, and 
 </td></tr></table>
 
 ---++ Disclaimer
-   * TWiki&trade; is a trademark of Peter Thoeny
+   * TWiki&trade;, the [[TWikiLogos][TWiki logo]] and the "Collaborate with TWiki" tagline are trademarks of [[TWiki:Main.PeterThoeny][Peter Thoeny]]
    * __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers&trade; in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
-   * Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]]
+   * Get the latest version from [[http://TWiki.org/download.html][TWiki.org downloads]]
 
-%META:FILEATTACHMENT{name="twiki_home.gif" attachment="twiki_home.gif" attr="h" comment="" date="1129246975" path="twiki_home.gif" size="5646" stream="twiki_home.gif" user="Main.TWikiContributor" version="1"}%

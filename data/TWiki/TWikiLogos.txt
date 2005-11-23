@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
+%META:TOPICINFO{author="TWikiContributor" date="1131435038" format="1.1" version="$Rev$"}%
 ---+ TWiki Logos 
 
 The official TWiki logo is a big "T" in a speech bubble convenying "working together", and has a "collaborate with TWiki" tag line.
@@ -8,18 +7,21 @@ The official TWiki logo is a big "T" in a speech bubble convenying "working toge
 
 %STARTINCLUDE%
 <table cellpadding="5"><tr><td valign="top">
-
-=T-logo-235x67.png=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-235x67.png" alt="T-logo, no text, white bg, 235x67" />
     
 =T-logo-169x130-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-169x130-t.gif" alt="T-logo, no text, transparent bg, 169x130" />
+
+=T-logo-87x67-t.gif=: <br />
+    <img src="%ATTACHURLPATH%/T-logo-87x67-t.gif" alt="T-logo, no text, transparent bg, 87x68" />
 
 =T-logo-65x50-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-65x50-t.gif" alt="T-logo, no text, transparent bg, 65x50" />
 
 =T-logo-58x45-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-58x45-t.gif" alt="T-logo, no text, transparent bg, 58x50" />
+
+=T-logo-52x40-t.gif=: <br />
+    <img src="%ATTACHURLPATH%/T-logo-52x40-t.gif" alt="T-logo, no text, transparent bg, 52x40" />
 
 =T-logo-46x35-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-46x35-t.gif" alt="T-logo, no text, transparent bg, 46x35" />
@@ -34,9 +36,6 @@ The official TWiki logo is a big "T" in a speech bubble convenying "working toge
 
 =T-logo-456x130-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-456x130-t.gif" alt="T-logo, transparent bg, 456x130" />
-
-=T-logo-235x67-t.png=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-235x67-t.png" alt="T-logo, transparent bg, 235x67" />
     
 =T-logo-235x67-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-235x67-t.gif" alt="T-logo, transparent bg, 235x67" />
@@ -62,6 +61,8 @@ The official TWiki logo is a big "T" in a speech bubble convenying "working toge
 </td></tr></table>
 %STOPINCLUDE%
 
+These logos are based on master artwork [[%ATTACHURL%/T-logo.svg][T-logo.svg]] and [[%ATTACHURL%/T-logo-3640x1038-b.png][T-logo-3640x1038-b.png]].
+
 ---++ Logo Customization
 
 TWiki is shipped with the official TWiki logo in the banner. Site owners may replace the banner logo with their own logo. The logo can be changed in the =WIKILOGOIMG= setting (site-wide in TWikiPreferences, or per web in WebPreferences of any web).
@@ -79,7 +80,7 @@ You may NOT use any original artwork from TWiki.org, nor make or use modified ve
    * You may use the 'collaborate with TWiki' logo on a Web site that is powered by the TWiki collaboration platform.
    * You may use the 'collaborate with TWiki' logo in product description and promotional material IF and ONLY IF such use can in no way be interpreted as anything other than an attribution. Using the TWiki name and artwork in a manner that implies endorsement of a product or service is not allowed.
 
-TWiki&trade; is a trademark of TWiki:Main.PeterThoeny.
+TWiki&trade;, the TWiki logo and the "Collaborate with TWiki" tagline are a trademarks of TWiki:Main.PeterThoeny. The TWiki logo is Copyright 2005 by TWiki:Main.PeterThoeny, TWiki:Main.ArthurClemens and TWikiContributors.
 
 ---++ Background and Feedback
 

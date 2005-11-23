@@ -187,7 +187,7 @@ _(Click for form-based editing of existing preferences.)_
 
 ---+++ Skin icons
 
-   * The topic from which graphics and icons are fetched with =%<nop>ICON{}%= syntax and in attachment tables. See %TWIKIWEB%.IconSets and %TWIKIWEB%.TWikiDocGraphics.
+   * Topic containing the icon graphics library. Icons can easily be rendered with =%<nop>ICON{name}%=.
       * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
 
 ---+++ Legacy support

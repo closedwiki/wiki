@@ -56,8 +56,6 @@ Icons can do a lot to enhance scannability of topics. For instance, on *HELP* pa
 
 %TWIKIWEB%.TWikiDocGraphics has a whole collection of ready icon images. You can use these images in any topic by referring to their name. For example, !TWikiDocGraphics has an image attachment called =days.gif=. To show this image in a topic, write =%<nop>ICON{"days"}%= to get %ICON{"days"}%.
 
-For more information about icon sets, see: %TWIKIWEB%.IconSets.
-
 *Creating image variables*
 
 You may find it easier to write shorthand graphic notation. You can create your own image variables by defining them in a preference topic (most likely [[%MAINWEB%.%WIKIPREFSTOPIC%]].)
