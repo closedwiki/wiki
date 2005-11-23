@@ -10,7 +10,7 @@
    * Set NOSEARCHALL = 
    * Set NOAUTOLINK = 
 
-   * Set NATSEARCHINCLUDEWEB = _blog
+   * Set NATSEARCHINCLUDEWEB = _BlogPlugin
    * Set NATSEARCHEXCLUDEWEB = 
    * Set NATSEARCHINCLUDETOPIC = (BlogEntry|BlogComment)\d+.*
    * Set NATSEASRCHEXCLUDETOPIC = 
