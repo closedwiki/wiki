@@ -53,7 +53,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.76';
+$RELEASE = '2.80';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
