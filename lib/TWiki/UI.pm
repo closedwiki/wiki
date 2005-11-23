@@ -228,7 +228,7 @@ sub checkAccess {
     my ( $session, $web, $topic, $mode, $user ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
-    unless( $session->{security}->checkAccessPermission( $mode, $user, '',
+    unless( $session->{security}->checkAccessPermission( $mode, $user, undef,
                                                          $topic, $web )) {
         throw TWiki::OopsException( 'accessdenied',
                                     def => 'topic_access',

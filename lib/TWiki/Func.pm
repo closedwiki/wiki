@@ -1171,7 +1171,7 @@ sub saveTopicText {
     # check access permission
     unless( $ignorePermissions ||
             $session->{security}->checkAccessPermission( 'change',
-                                                     $session->{user}, '',
+                                                     $session->{user}, undef,
                                                      $topic, $web )
           ) {
         my @plugin = caller();

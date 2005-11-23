@@ -143,6 +143,34 @@ sub loadPrefsFromTopic {
 
 =pod
 
+---++ ObjectMethod loadPrefsFromText( $text, $web, $topic )
+
+Loads preferences from a topic. All settings loaded are prefixed
+with the key prefix (default '').
+
+=cut
+
+# SMELL: this is required because TWiki stores access control
+# information in topic text; a dreadful idea, but one we are
+# stuck with.
+
+sub loadPrefsFromText {
+    my( $this, $text, $web, $topic ) = @_;
+    ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
+
+    $this->{SOURCE} = $web.'.'.$topic;
+
+    my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
+    my $session = $this->{MANAGER}->{session};
+    $session->{store}->extractMetaData( $meta, \$text );
+
+    my $parser = new TWiki::Prefs::Parser();
+    $parser->parseText( $text, $this, '' );
+    $parser->parseMeta( $meta, $this, '' );
+}
+
+=pod
+
 ---++ ObjectMethod insert($type, $key, $val)
 Adds a key-value pair of the given type to the object. Type is Set or Local.
 Callback used for the Prefs::Parser object, or can be used to add

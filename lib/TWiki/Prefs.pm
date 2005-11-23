@@ -268,6 +268,29 @@ sub getTopicPreferencesValue {
 
 =pod
 
+---++ getTextPreferencesValue( $key, $text, $web, $topic ) -> $value
+Get a preference value from the settings in the text. The parsed
+values are cached against the web, topic.
+
+=cut
+
+# SMELL: this is horrible! But it's inevitable given the truly dreadful
+# business of storing access controls embedded in topic text.
+sub getTextPreferencesValue {
+    my( $this, $key, $text, $web, $topic ) = @_;
+
+    my $wtn = $web.'.'.$topic;
+
+    unless( $this->{TEXT}{$wtn} ) {
+        $this->{TEXT}{$wtn} =
+          new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC' );
+        $this->{TEXT}{$wtn}->loadPrefsFromText( $text, $web, $topic );
+    }
+    return $this->{TEXT}{$wtn}->{values}{$key};
+}
+
+=pod
+
 ---++ ObjectMethod getWebPreferencesValue( $key, $web ) -> $value
 
 Recover a preferences value that is defined in the webhome topic of

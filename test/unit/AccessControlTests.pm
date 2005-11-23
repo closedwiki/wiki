@@ -218,4 +218,52 @@ THIS
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 
+sub test_text {
+    my $this = shift;
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
+                                <<THIS
+If ALLOWTOPIC is set
+   1. people in the list are PERMITTED
+   2. everyone else is DENIED
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
+THIS
+                                , undef);
+    $twiki = new TWiki();
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
+
+    my $text = <<THIS;
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrGreen
+THIS
+
+    $twiki = new TWiki();
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrOrange),
+                   $text,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert($twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrGreen),
+                   $text,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrYellow),
+                   $text,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrWhite),
+                   $text,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrBlue),
+                   $text,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+}
+
 1;

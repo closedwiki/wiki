@@ -1490,7 +1490,7 @@ sub getListOfWebs {
         my $user = $this->{session}->{user};
         @webList =
           grep {
-              $security->checkAccessPermission( 'view', $user, '', undef, $_ )
+              $security->checkAccessPermission( 'view', $user, undef, undef, $_ )
           } @webList;
     }
 

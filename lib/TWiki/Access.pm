@@ -105,7 +105,7 @@ sub getReason {
 Check if user is allowed to access topic
    * =$action=  - 'VIEW', 'CHANGE', 'CREATE', etc.
    * =$user=    - User object
-   * =$text=    - If empty: Read '$theWebName.$theTopicName' to check permissions
+   * =$text=    - If undef or '': Read '$theWebName.$theTopicName' to check permissions
    * =$topic=   - Topic name to check, e.g. 'SomeTopic' *undef to check web perms only)
    * =$web=     - Web, e.g. 'Know'
 If the check fails, the reason can be recoveered using getReason.
@@ -113,7 +113,7 @@ If the check fails, the reason can be recoveered using getReason.
 =cut
 
 sub checkAccessPermission {
-    my( $this, $mode, $user, $theTopicText, $topic, $web ) = @_;
+    my( $this, $mode, $user, $text, $topic, $web ) = @_;
     ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
@@ -135,11 +135,18 @@ sub checkAccessPermission {
     my $allowText;
     my $denyText;
 
-    if( $topic ) {
-        # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
+    # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
+    if( $text ) {
+        # override topic permissions. Note: ignores embedded metadata
+        # SMELL: this is horrible! But it's inevitable given the dreadful
+        # business of storing access controls embedded in topic text.
+        $allowText = $prefs->getTextPreferencesValue( 'ALLOWTOPIC'.$mode,
+                                                      $text, $web, $topic );
+        $denyText = $prefs->getTextPreferencesValue( 'DENYTOPIC'.$mode,
+                                                     $text, $web, $topic );
+    } elsif( $topic ) {
         $allowText = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
                                                        $web, $topic );
-
         $denyText = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode,
                                                       $web, $topic );
     }
