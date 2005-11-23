@@ -50,9 +50,6 @@ pub/TWiki/PatternSkinCssCookbookNoLeftBar/hideleftbar_Dakar.css 0660
 pub/TWiki/PatternSkinCssCookbookNoTopBar/notopbar.css 0660
 pub/TWiki/PatternSkinCssCookbookTopBarBackgroundImage/universe.jpg 0660
 pub/TWiki/PatternSkinCustomization/LowRes.css 0660
-pub/TWiki/PatternSkinJavascripts/browserdetect_lite.js 0660
-pub/TWiki/PatternSkinJavascripts/opacity.js 0660
-pub/TWiki/PatternSkinJavascripts/pattern_equalheightcols.js 0660
 pub/TWiki/PatternSkinPalette/PatternSkinPalette.css 0660
 pub/TWiki/PatternSkinPalette/filterColours.pl.txt 0660
 pub/TWiki/PatternSkinPalette/makeColourTable.pl.txt 0660
