@@ -3,8 +3,8 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-%INCLUDE{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
-%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 
 See also: %TOPIC%Template
 

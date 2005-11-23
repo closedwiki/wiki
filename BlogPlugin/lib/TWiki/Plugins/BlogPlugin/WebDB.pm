@@ -72,7 +72,34 @@ sub onReload {
     }
 
     $topic->set('createdate', $createDate);
+
+    # stored procedures
+    my $text = $topic->fastget('text');
+
+    # get default section
+    my $defaultSection = $text;
+    $defaultSection =~ s/.*?%STARTINCLUDE%//s;
+    $defaultSection =~ s/%STOPINCLUDE%.*//s;
+    applyGlue($defaultSection);
+    $topic->set('_sectiondefault', $defaultSection);
+
+    # get named sections
+    while($text =~ s/%SECTION{[^}]*?"(.*?)"}%(.*?)%ENDSECTION{[^}]*?"(.*?)"}%//s) {
+      my $name = $1;
+      my $sectionText = $2;
+      applyGlue($sectionText);
+      $topic->set("_section$name", $sectionText);
+    }
   }
+}
+
+###############################################################################
+# local copy from GluePlugin
+sub applyGlue {
+
+  $_[0] =~ s/%~~\s+([A-Z]+{)/%$1/gos;  # %~~
+  $_[0] =~ s/\s*[\n\r]+~~~\s+/ /gos;   # ~~~
+  $_[0] =~ s/\s*[\n\r]+\*~~\s+//gos;   # *~~
 }
 
 

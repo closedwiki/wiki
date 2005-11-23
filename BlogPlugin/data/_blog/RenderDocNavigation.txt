@@ -41,10 +41,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="BlogEntry2" WHERE="TopicType='BlogEntry'"}%
+%DBCALL{"%TOPIC%" NAME="BlogEntry2" WHERE="TopicType='BlogEntry'"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

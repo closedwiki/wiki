@@ -40,13 +40,13 @@ in the given timespan.
 ---++ Test
 <div class="alt">
 <ul>
-%INCLUDE{"%TOPIC%" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005"}%
+%DBCALL{"%TOPIC%" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005"}%
 </ul>
 </div>
 
 <!-- interrupt above glue -->
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

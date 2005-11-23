@@ -3,7 +3,7 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
 
 ---++ List of all BlogEntries
 <noautolink>

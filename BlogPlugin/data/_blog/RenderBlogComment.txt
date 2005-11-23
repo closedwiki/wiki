@@ -18,7 +18,7 @@ see also: RenderDocNavigation
 ---+++ Main
 <verbatim>
 %STARTINCLUDE%
-%INCLUDE{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
+%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
 %~~ DBQUERY{topics="%NAME%" 
 ~~~  format="
 *~~     <div class=\"blogRef\">
@@ -32,10 +32,10 @@ see also: RenderDocNavigation
 ~~~     $n%STARTALIASAREA%$n
 ~~~     </div>
 ~~~     <div class=\"blogComment\">
-~~~     %INCLUDE{"%TOPIC%" section="format"}%
+~~~     %DBCALL{"%TOPIC%" section="format"}%
 ~~~     </div>"
 ~~~ }% 
-%INCLUDE{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
+%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
 %STOPINCLUDE%
 </verbatim>
 
@@ -83,10 +83,10 @@ see also: RenderDocNavigation
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="BlogComment0"}%
+%DBCALL{"%TOPIC%" NAME="BlogComment0"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

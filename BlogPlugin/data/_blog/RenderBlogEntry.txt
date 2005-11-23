@@ -11,12 +11,12 @@
 <verbatim>
 %STARTINCLUDE%
 *~~
-%INCLUDE{"RenderDocNavigation" NAME="%NAME%" WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"}%
+%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"}%
 %~~ DBQUERY{topic="%NAME%" web="%WEB%"
-~~~    format="%INCLUDE{"RenderBlogEntry" section="format"}%"
+~~~    format="%DBCALL{"RenderBlogEntry" section="format"}%"
 ~~~ }%
-%INCLUDE{"RenderDocNavigation" NAME="%NAME%" WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"}%
-%INCLUDE{"RenderBlogAuthorSwitch"}%
+%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"}%
+%DBCALL{"RenderBlogAuthorSwitch"}%
 *~~
 %STOPINCLUDE%
 </verbatim>
@@ -57,10 +57,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="BlogEntry0"}%
+%DBCALL{"%TOPIC%" NAME="BlogEntry0"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

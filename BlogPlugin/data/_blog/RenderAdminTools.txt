@@ -21,7 +21,7 @@ NONE
 </noautolink>
 %STOPINCLUDE%
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICVIEW = %MAINWEB%.BlogAdminGroup

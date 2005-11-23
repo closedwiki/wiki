@@ -96,6 +96,10 @@
   margin-bottom:5px;
   padding:0px;
 }
+.blogComment .natExternalLink:after {
+  content:"";
+  margin-left:0px;
+}
 .blogSubComments {
   margin-top:10px;
 }
@@ -122,10 +126,6 @@
   width:90%;
   margin:auto;
   font-size:x-small;
-}
-.blogComment .natExternalLink:after {
-  content:"";
-  margin-left:0px;
 }
 .blogFeedCategory { 
   margin-top:5px;

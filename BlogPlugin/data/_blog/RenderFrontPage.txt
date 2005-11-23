@@ -22,7 +22,7 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderFrontPageNavig
 ~~~   "
 ~~~   limit="5" skip="%SKIP%" 
 ~~~   order="created" reverse="on" web="%WEB%" 
-~~~   format="%INCLUDE{"RenderFullTeaser" section="format" NAME="$topic"}%"
+~~~   format="%DBCALL{"RenderFullTeaser" section="format" NAME="$topic"}%"
 ~~~ }%
 <!--
 %~~  CALC{"
@@ -38,18 +38,18 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderFrontPageNavig
 ~~~      web="%WEB%"
 ~~~   }%)"}%
 -->
-~~~ %INCLUDE{"%WEB%.RenderFrontPageNavigation" SKIP="%SKIP%" MAX="%CALC{"$GET(nrPostings)"}%"}%
-~~~ %INCLUDE{"RenderBlogAuthorSwitch"}%
+~~~ %DBCALL{"%WEB%.RenderFrontPageNavigation" SKIP="%SKIP%" MAX="%CALC{"$GET(nrPostings)"}%"}%
+~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
 ~~~
 %STOPINCLUDE%
 </verbatim>
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" SKIP="0" CAT="BlogDev" AUTHOR=".*"}%
+%DBCALL{"%TOPIC%" SKIP="0" CAT="BlogDev" AUTHOR=".*"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

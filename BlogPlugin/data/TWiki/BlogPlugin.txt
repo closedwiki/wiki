@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132669453" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132752494" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
@@ -22,7 +22,7 @@ Format a link to another <nop>BlogEntry displaying its headline and date.
 *Syntax:*
 
 | *%<nop>CITEBLOG{"&lt;topic>"}%* ||
-| =&lt;topic>= | name of a <nop>BlogEntry topic, e.g. <nop>BlogEntry0 |
+| ="&lt;topic>"= | name of a <nop>BlogEntry topic, e.g. <nop>BlogEntry0 |
 
 *Example:*
 
@@ -39,7 +39,7 @@ is expressed by the <nop>BlogRef formfield in the <nop>BlogCommentForm.
 
 *Syntax:*
 | *%<nop>COUNTCOMMENTS{"&lt;topic>" ... }%* ||
-| =&lt;topic>= \
+| ="&lt;topic>"= \
 | name of a <nop>BlogEntry or <nop>BlogComment topic, e.g. <nop>BlogEntry0 |
 | =web="..."= \
 | web where to search for references; defaults to the \
@@ -83,7 +83,7 @@ tag.
 
 *Syntax:*
 | *%<nop>DBQUERY{"&lt;search>"}%* ||
-| =&lt;search>= \
+| ="&lt;search>"= \
 | search clause, see documentation of the DBCacheContrib (mode (a)) |
 | =topics="..."= or =topic="..."= \
 | set of topics to consult (mode (b)); \
@@ -142,6 +142,35 @@ The DBQUERY functionality can be access directly using the plugins =dbQuery()= f
 returns a list pointer of all found topics names, a hash pointer to an array of all found
 topic objects (keys are the name of the topics) and a possibly defined error message.
 
+---+++ DBCALL
+A lightweighted drop-in replacement for parametric INCLUDES. 
+DBCALL uses the database store to fetch topics or sections of it. Topic sections are
+precomputed and stored under their name in the database cache to be available without 
+consulting the raw topic text and needing to extract them every time again. "Glue" chars
+(see TWiki:Plugins:GluePlugin) are applied in advance so that the actual rendering time
+is minimized. DBCALL does therefore not allow to call "external" pages as INCLUDE allows.
+DBCALL's "warn" parameter can only be set to "on" and "off" and does not allow to contain
+alternative texts. That asside DBCALLs can be called recursively as INCLUDEs can,
+parametrized using key-value arguments and
+obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>SECTION{"..."}% 
+and %<nop>ENDSECTION{"..."}%.
+
+DBCALL is called "call" and not "include" as its main purpose is to ease 
+<nop>TWikiApplications where <nop>TopicFunctions are treated as stored procedures.
+
+Using the <nop>DBCacheContrib topic sections are stored into the topic object of the database.
+The section between %<nop>STARTINCLUDE% ... %<nop>STOPINCLUDE% is called 
+=_sectiondefault= whereas all sections between %<nop>SECTION{"&lt;name>"}% .... 
+%<nop>ENDSECTION{"&lt;name>"}% are called =_section&lt;name>= and are stored accordingly.
+
+*Syntax:*
+| *%<nop>DBCALL{"&lt;topic" ...}%* ||
+| ="&lt;topic>"= | topic that we'd like to call |
+| =section="..."= | optional named section; without this parameter the "default" section is used |
+| =&lt;key>="&lt;value>"= | topic arguments to be substituted within the included text; that is \
+            every occurence of &lt;key> is substituted with &lt;value> |
+| =warn="on,off"= | enable/suppress error warnings |
+
 
 ---+++ PREVDOC, NEXTDOC
 Display the previous/next topic in an ordered .
@@ -151,7 +180,7 @@ using a "where" and an "order" clause which the given topic is supposed to be pa
 
 *Syntax:*
 | *%<nop>PREVDOC{"&lt;topic" where="..." ...}%, %<nop>NEXTDOC{"&lt;topic" where="..." ...}%* ||
-| =&lt;topic>= | topic which we search the predecessor/successor of |
+| ="&lt;topic>"= | topic which we search the predecessor/successor of |
 | =web="..."= | web where to search for related topics; \
   defaults to the web given with the &lt;topic> parameter or the current one |
 | =where="..."= \
@@ -166,7 +195,7 @@ refered <nop>BlogEntry.
 
 *Syntax:*
 | *%<nop>RECENTCOMMENTS{"&lt;format>" ...}%* ||
-| =&lt;format>= | format string used to display the hit results; \
+| ="&lt;format>"= | format string used to display the hit results; \
   each hit is displayed using the given format |
 | =header="..."= | format string to prepended to the list of hits being displayed |
 | =footer="..."= | format string to appended to the list of hits being displayed |
@@ -213,7 +242,7 @@ to C1 and B CN is related to B.
 
 *Syntax:*
 | *%<nop>RELATEDENTRIES{"&lt;topic>" ...}%* ||
-| =&lt;topic>= | topic name of a <nop>BlogEntry related once are search for |
+| ="&lt;topic>"= | topic name of a <nop>BlogEntry related once are search for |
 | =web="..."= | web where to search for related topics; \
   defaults to the web given with the &lt;topic> parameter or the current one |
 | =format="..."= | format string to display a hit;\
@@ -279,7 +308,7 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 22 Nov 2005 (v0.11) |
+|  Plugin Version: | 23 Nov 2005 (v0.20) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -305,7 +334,7 @@ TWiki:Plugins/TwistyPlugin \
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.MichaelDaum - 17 Nov 2005
+-- TWiki:Main.MichaelDaum - 23 Nov 2005
 
 
 %META:FILEATTACHMENT{name="ExtendedSelectPlugin_pm.diff" attachment="ExtendedSelectPlugin_pm.diff" attr="" comment="against 11 Oct 2005 (V1.001)" date="1132669136" path="ExtendedSelectPlugin_pm.diff" size="461" stream="ExtendedSelectPlugin_pm.diff" user="TWikiContributor" version="1.1"}%

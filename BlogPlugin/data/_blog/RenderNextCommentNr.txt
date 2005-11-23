@@ -24,14 +24,14 @@
 
 ---++ Test
 <div class="alt">
-&lt;%INCLUDE{"%TOPIC%" NAME="TestBlogEntry0"}%&gt;
+&lt;%DBCALL{"%TOPIC%" NAME="TestBlogEntry0"}%&gt;
 </div>
 
 <div class="alt">
-&lt;%INCLUDE{"%TOPIC%" NAME="BlogComment18"}%&gt;
+&lt;%DBCALL{"%TOPIC%" NAME="BlogComment18"}%&gt;
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

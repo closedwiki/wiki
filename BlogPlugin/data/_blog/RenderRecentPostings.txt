@@ -28,14 +28,14 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" LIMIT="1" CAT="BlogDev"}%
+%DBCALL{"%TOPIC%" LIMIT="1" CAT="BlogDev"}%
 </div>
 
 <div class="alt">
-%INCLUDE{"%TOPIC%" LIMIT="10"}%
+%DBCALL{"%TOPIC%" LIMIT="10"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

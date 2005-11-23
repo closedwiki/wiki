@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131556405" format="1.1" version="1.1"}%
-%INCLUDE{"RenderFrontPage" SKIP="%URLPARAM{"skip" default=" 0"}%" CAT=".*" AUTHOR=".*"}%
+%DBCALL{"RenderFrontPage" SKIP="%URLPARAM{"skip" default=" 0"}%" CAT=".*" AUTHOR=".*"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = BlogAdminGroup

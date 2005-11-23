@@ -1,28 +1,28 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131636166" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132702997" format="1.1" version="1.1"}%
 ---+ Default sidebar
 <div class="alt">
 <verbatim>
 %STARTINCLUDE%
 %SECTION{"Default"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
-%INCLUDE{"BlogAbout" section="Default"}%
+%DBCALL{"BlogAbout" section="Default"}%
 </div>
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">
-%TMPL:P{"searchbox"}%
+%$nopTMPL:P{"searchbox"}%
 <p/>
 </div>
 %FISKINSTATE%
-%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%INCLUDE{"RenderRecentComments" LIMIT="10" CAT=".*"}%
-%INCLUDE{"RenderRecentPostings" LIMIT="10"}%
-%INCLUDE{"RenderArchives"}%
-%INCLUDE{"RenderCategories"}%
-%INCLUDE{"RenderBlogRoll" CAT=".*"}%
-<!-- %<nop>INCLUDE{"RenderVisitors"}% -->
-%INCLUDE{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderRecentComments" LIMIT="10" CAT=".*"}%
+%DBCALL{"RenderRecentPostings" LIMIT="10"}%
+%DBCALL{"RenderArchives"}%
+%DBCALL{"RenderCategories"}%
+%DBCALL{"RenderBlogRoll" CAT=".*"}%
+<!-- %<nop>DBCALL{"RenderVisitors"}% -->
+%DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Default"}%
 %STOPINCLUDE%
 </verbatim>
@@ -33,17 +33,17 @@
 <verbatim>
 %SECTION{"Admin"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
-%INCLUDE{"BlogAbout" section="Admin"}%
+%DBCALL{"BlogAbout" section="Admin"}%
 </div>
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">
-%TMPL:P{"searchbox"}%
+%$nopTMPL:P{"searchbox"}%
 <p/>
 </div>
 %FISKINSTATE%
-%INCLUDE{"RenderNewTopicTypeForm"
+%DBCALL{"RenderNewTopicTypeForm"
          NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%" warn="off"}%
-%INCLUDE{"RenderTopicTypes" 
+%DBCALL{"RenderTopicTypes" 
          NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%"}%
 %ENDSECTION{"Admin"}%
 </verbatim>
@@ -54,20 +54,20 @@
 <verbatim>
 %SECTION{"BlogEntry"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
-%INCLUDE{"BlogAbout" section="Default"}%
+%DBCALL{"BlogAbout" section="Default"}%
 </div>
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">
-%TMPL:P{"searchbox"}%
+%$nopTMPL:P{"searchbox"}%
 <p/>
 </div>
 %FISKINSTATE%
-%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%INCLUDE{"RenderRelatedEntries" NAME="%BASETOPIC%"}%
-%INCLUDE{"RenderRecentPostings" LIMIT="10"}%
-%INCLUDE{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderRelatedEntries" NAME="%BASETOPIC%"}%
+%DBCALL{"RenderRecentPostings" LIMIT="10"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"BlogEntry"}%
 </verbatim>
 </div>
@@ -77,19 +77,19 @@
 <verbatim>
 %SECTION{"Aggregation"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
-%INCLUDE{"BlogAbout" section="Aggregation"}%
+%DBCALL{"BlogAbout" section="Aggregation"}%
 </div>
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">
-%TMPL:P{"searchbox"}%
+%$nopTMPL:P{"searchbox"}%
 <p/>
 </div>
 %FISKINSTATE%
-%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%INCLUDE{"RenderBlogRoll" CAT=".*"}%
-%INCLUDE{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderBlogRoll" CAT=".*"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Aggregation"}%
 </verbatim>
 </div>
@@ -99,16 +99,16 @@
 <verbatim>
 %SECTION{"Archive"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
-%INCLUDE{"BlogAbout" section="Archive"}%
+%DBCALL{"BlogAbout" section="Archive"}%
 </div>
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">
-%TMPL:P{"searchbox"}%
+%$nopTMPL:P{"searchbox"}%
 <p/>
 </div>
 %FISKINSTATE%
-%INCLUDE{"RenderArchives"}%
-%INCLUDE{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderArchives"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Archive"}%
 </verbatim>
 </div>
@@ -118,22 +118,22 @@
 <verbatim>
 %SECTION{"Category"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
-%INCLUDE{"BlogAbout" section="Category"}%
+%DBCALL{"BlogAbout" section="Category"}%
 </div>
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">
-%TMPL:P{"searchbox"}%
+%$nopTMPL:P{"searchbox"}%
 <p/>
 </div>
 %FISKINSTATE%
-%INCLUDE{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%INCLUDE{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%INCLUDE{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
-%INCLUDE{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
-%INCLUDE{"RenderBlogRoll" CAT="%BASETOPIC%"}%
-%INCLUDE{"RenderCategories"}%
-%INCLUDE{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
+%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
+%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderCategories"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Category"}%
 </verbatim>
 </div>

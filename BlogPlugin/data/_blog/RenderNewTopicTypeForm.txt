@@ -25,10 +25,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="TopicType"}%
+%DBCALL{"%TOPIC%" NAME="TopicType"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

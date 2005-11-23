@@ -3,9 +3,9 @@
 %NOP{
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 }%
-%INCLUDE{"RenderBlogComment" NAME="%TOPIC%"}%
-%INCLUDE{"RenderBlogComments" NAME="%TOPIC%"}%
-%INCLUDE{"RenderAddComment"}%
+%DBCALL{"RenderBlogComment" NAME="%TOPIC%"}%
+%DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
+%DBCALL{"RenderAddComment"}%
 <style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
 
 <!-- 

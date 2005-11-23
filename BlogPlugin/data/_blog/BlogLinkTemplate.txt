@@ -3,7 +3,7 @@
 %NOP{
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 }%
-%INCLUDE{"RenderBlogLink" NAME="%TOPIC%" LIMIT="%FORMFIELD{"Limit"}%"}%
+%DBCALL{"RenderBlogLink" NAME="%TOPIC%" LIMIT="%FORMFIELD{"Limit"}%"}%
 <style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
 
 <!--

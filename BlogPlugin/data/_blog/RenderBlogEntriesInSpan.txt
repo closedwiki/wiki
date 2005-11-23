@@ -31,10 +31,10 @@
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" FROM="%CALC{"$TIME(1 Aug 2005)"}%" TO="%CALC{"$TIME(1 Sep 2005)"}%" TITLE="August"}%
+%DBCALL{"%TOPIC%" FROM="%CALC{"$TIME(1 Aug 2005)"}%" TO="%CALC{"$TIME(1 Sep 2005)"}%" TITLE="August"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

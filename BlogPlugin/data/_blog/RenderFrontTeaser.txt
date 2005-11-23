@@ -34,25 +34,25 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontPage
 ~~~    web="%WEB%"
 ~~~    topics="%CALC{"$GET(postings)"}%" 
 ~~~    limit="%FULL%" order="created" reverse="on" hidenull="on"
-~~~    format="%INCLUDE{"RenderFullTeaser" section="format" NAME="$topic"}%"
+~~~    format="%DBCALL{"RenderFullTeaser" section="format" NAME="$topic"}%"
 ~~~ }%
 %~~ DBQUERY{
 ~~~    web="%WEB%"
 ~~~    topics="%CALC{"$GET(postings)"}%" 
 ~~~    skip="%FULL%" limit="%LIMIT%" order="created" reverse="on" hidenull="on"
 ~~~    header="---+ Earlier Postings$n"
-~~~    format="%INCLUDE{"RenderBlogTeaser" section="format" NAME="$topic"}%"
+~~~    format="%DBCALL{"RenderBlogTeaser" section="format" NAME="$topic"}%"
 ~~~ }%
-~~~ %INCLUDE{"RenderBlogAuthorSwitch"}%
+~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%
 </verbatim>
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" LIMIT="2" FULL="1" CAT="BlogDev" AUTHOR=".*"}%
+%DBCALL{"%TOPIC%" LIMIT="2" FULL="1" CAT="BlogDev" AUTHOR=".*"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

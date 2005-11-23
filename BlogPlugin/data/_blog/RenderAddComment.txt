@@ -19,7 +19,7 @@ NONE
 <input type="hidden" name="BlogRef" value="%BASETOPIC%" />
 <input type="hidden" name="BaseRef" value="%DBQUERY{topics="%BASETOPIC%" format="$expand(BaseRef or name)"}%" />
 <input type="hidden" name="topicparent" value="WebHome" />
-<input type="hidden" name="Nr" value="%INCLUDE{"RenderNextCommentNr" NAME="%BASETOPIC%"}%" />
+<input type="hidden" name="Nr" value="%DBCALL{"RenderNextCommentNr" NAME="%BASETOPIC%"}%" />
 <input type="hidden" name="topic" value="BlogCommentXXXXXXXXXX" />
 <table border="0" width="100%">
 <tr>
@@ -55,7 +55,7 @@ NONE
 </div> %STOPINCLUDE%
 
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

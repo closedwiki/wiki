@@ -7,8 +7,8 @@ BlogLinks are collected in the Blogroll in the sidebar. If a BlogLink has got
 [[NewsFeeds][NewsFeed]] information we render an aggregation of that here using
 the RenderBlogLink TopicFunction.
 
-%INCLUDE{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%INCLUDE{"RenderTopicList" NAME="%TOPIC%"}%
+%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 
 See also: %TOPIC%Template, %TOPIC%Form
 

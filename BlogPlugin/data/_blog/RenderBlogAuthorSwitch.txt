@@ -24,11 +24,11 @@ NONE
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"RenderFullTeaser" NAME="TestBlogEntry0"}%
-%INCLUDE{"%TOPIC%"}%
+%DBCALL{"RenderFullTeaser" NAME="TestBlogEntry0"}%
+%DBCALL{"%TOPIC%"}%
 </div>
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

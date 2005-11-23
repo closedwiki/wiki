@@ -14,7 +14,7 @@ see also: RenderFullTeaser
 %STARTINCLUDE%
 *~~
 %~~ DBQUERY{topic="%NAME%" web="%WEB%"
-~~~   format="%INCLUDE{"RenderBlogTeaser" section="format"}%"}%
+~~~   format="%DBCALL{"RenderBlogTeaser" section="format"}%"}%
 *~~
 %STOPINCLUDE%
 </verbatim>
@@ -58,12 +58,12 @@ see also: RenderFullTeaser
 
 ---++ Test
 <div class="alt">
-%INCLUDE{"%TOPIC%" NAME="TestBlogEntry0"}%
+%DBCALL{"%TOPIC%" NAME="TestBlogEntry0"}%
 </div>
 
 
 
-%INCLUDE{"RenderFunctionCallers"}%
+%DBCALL{"RenderFunctionCallers"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

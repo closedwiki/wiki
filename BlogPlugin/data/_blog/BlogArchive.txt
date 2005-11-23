@@ -4,12 +4,12 @@
 ---+ Archive %IFDEFINED{"%URLPARAM{"title"}%" then="%URLPARAM{"title"}%" glue="off"}%
 </noautolink>
 
-%~~ INCLUDE{"RenderBlogEntriesInSpan"
+%~~ DBCALL{"RenderBlogEntriesInSpan"
 ~~~   FROM="%IFDEFINED{"%URLPARAM{"from"}%" then="%URLPARAM{"from"}%" else="1"}%"
 ~~~   TO="%IFDEFINED{"%URLPARAM{"to"}%" then="%URLPARAM{"to"}%" else="9999999999"}%"
 ~~~ }%
 
-%~~ INCLUDE{"RenderCategoriesInSpan" 
+%~~ DBCALL{"RenderCategoriesInSpan" 
 ~~~   FROM="%IFDEFINED{"%URLPARAM{"from"}%" then="%URLPARAM{"from"}%" else="1"}%"
 ~~~   TO="%IFDEFINED{"%URLPARAM{"to"}%" then="%URLPARAM{"to"}%" else="9999999999"}%"
 ~~~ }%
