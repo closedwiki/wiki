@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132752494" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132754021" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
@@ -150,7 +150,9 @@ consulting the raw topic text and needing to extract them every time again. "Glu
 (see TWiki:Plugins:GluePlugin) are applied in advance so that the actual rendering time
 is minimized. DBCALL does therefore not allow to call "external" pages as INCLUDE allows.
 DBCALL's "warn" parameter can only be set to "on" and "off" and does not allow to contain
-alternative texts. That asside DBCALLs can be called recursively as INCLUDEs can,
+alternative texts. The "pattern" feature used to extract a fragment from
+an INCLUDEd text using regular expression  has been droppped.
+That aside DBCALLs can be called recursively as INCLUDEs can,
 parametrized using key-value arguments and
 obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>SECTION{"..."}% 
 and %<nop>ENDSECTION{"..."}%.
@@ -308,7 +310,7 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 23 Nov 2005 (v0.20) |
+|  Plugin Version: | 23 Nov 2005 (v0.21) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |

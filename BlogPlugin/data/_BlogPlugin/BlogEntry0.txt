@@ -1,0 +1,24 @@
+%META:TOPICINFO{author="TWikiContributor" date="1132680067" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+%DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
+%DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
+%DBCALL{"RenderAddComment"}%
+<style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
+
+<!--
+   * Set WHITEBOARD = off
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
+   * Set SIDEBAR = BlogEntry
+-->
+
+
+%META:FORM{name="BlogEntryForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogEntry"}%
+%META:FIELD{name="BlogAuthor" attributes="M" title="BlogAuthor" value="MichaelDaum"}%
+%META:FIELD{name="Headline" attributes="M" title="Headline" value="Welcome to BlogUp"}%
+%META:FIELD{name="Teaser" attributes="M" title="Teaser" value="This is a <b>blog</b>ging set<b>up</b> for TWiki/Dakar.%0d%0a"}%
+%META:FIELD{name="Text" attributes="" title="Text" value="Visit the [[http://jojowiki.dyndns.org/Blog/BlogDev][BlogDev]]  to track latest news.%0d%0aon the development of this setup.%0d%0a%0d%0aFirst steps to complete this %25WEB%25:%0d%0a   * The _BlogPlugin web is the template web for a set of blog webs on %0d%0a     your <nop>%25WIKITOOLNAME%25. Use [[TWiki.ManagingWebs#Adding_a_New_Web][ManagingWebs]] to create a new web.%0d%0a   * unfortunately not everything is adjusted to derive a NewBlog from the _blog template:%0d%0a     you need to copy templates/_blog to templates/NewBlog;%0d%0a     edit NewBlog.WebPreferences and replace _blog with NewBlog in the preferences%0d%0a   * Revise the access rights on [[WebPreferences]]. By default commenting is open%0d%0a     to everybody. You might restrict it to registered users only by adding TWikiGuest to%0d%0a     the  DENYWEBCHANGE variable.%0d%0a   * Revise the two blog related groups %25MAINWEB%25.BlogAuthourGroup and%0d%0a     %25MAINWEB%25.BlogAdminGroup.%0d%0a   * Edit [[BlogAbout]] to describe your blog.%0d%0a   * The WebHome and all other [[FrontPages]] have a specific way of selecting which%0d%0a     articles are to be displayed, which of them as in full or only as teasers. Edit%0d%0a     [[WebHome]] to your  needs.%0d%0a   * Recent comments are listed in the sidebar as long as they didn't get too old. So%0d%0a     your blog will only show comment activities within a recent time period. Edit%0d%0a     [[RenderRecentComments]] and change the %22age%22  parameter (epoch seconds) %0d%0a     to your needs.%0d%0a   * The [[BlogSideBar]] is divided into several sections to be displayed on different%0d%0a     levels of the application. You might want to adjust them to fit your needs, e.g.%0d%0a     show recent visitors using [[RenderVisitors]] which uses the TWiki:Plugins.UserInfoPlugin%0d%0a     to display the visitors of today.%0d%0a   * There's a set of [[AdminTools]] which are displayed using the [[RenderAdminTools]] %0d%0a     TopicFunction and  displayed in the [[BlogSideBar]] if you are member of the %0d%0a     %25MAINWEB%25.BlogAdminGroup.%0d%0a     You might tag other frequently used pages as [[AdminTool]] to add them %0d%0a     to the BlogSideBar.%0d%0a   * Finally, set the state of this BlogEntry to %22disabled%22 to prevent it to be published%0d%0a     on your blog.%0d%0a%0d%0aUse %25CITEBLOG%7b%22TestBlogEntry0%22%7d%25 to test aspects of this blogging application.%0d%0a%0d%0a"}%
+%META:FIELD{name="SubjectCategory" attributes="M" title="SubjectCategory" value="BlogDev"}%
+%META:FIELD{name="State" attributes="" title="State" value="enabled"}%
+%META:FIELD{name="Related" attributes="" title="Related" value=""}%
+%META:FIELD{name="Date" attributes="M" title="Date" value="20 Aug 2005 - 11:38"}%

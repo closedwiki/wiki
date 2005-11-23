@@ -16,7 +16,7 @@ NONE
 ~~~    format="   1 <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
 ~~~                         title=\"$formfield(TopicDescription)\">$topic</a>"
 ~~~ }%
-   %CALC{"$IF($EXISTS(_blog/WebHome),1 [[_blog.WebHome][BlogTemplateWeb]])"}%
+   %CALC{"$IF($EXISTS(_BlogPlugin/WebHome),1 [[_BlogPlugin.WebHome][BlogTemplateWeb]])"}%
 </div>
 </noautolink>
 %STOPINCLUDE%
