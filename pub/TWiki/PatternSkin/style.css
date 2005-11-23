@@ -615,15 +615,14 @@ table.patternTopBarContents td {
 	list-style:none;
 }
 .patternLeftBarContents li {
-	padding:0 1em 0 0;
-	margin:0;
+	width:100%;
+	margin:0 1em 0 0;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .patternLeftBarContents .patternFormHolder {
-	margin:.5em 0 1em 0;
+	margin:1em 0;
 	width:100%;
-}
-html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
-	margin-top:1.25em;
 }
 .patternLeftBarContents .patternFormHolder table {
 	width:100%;
@@ -636,7 +635,7 @@ html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 	width:100%;
 }
 .patternLeftBarContents .patternFormHolder th.patternFormSpacer {
-	width:3px;
+	width:1px;
 }
 .patternLeftBarContents .patternFormHolder th.patternFormFieldButton {
 	width:16px;
