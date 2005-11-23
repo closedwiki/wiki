@@ -19,6 +19,9 @@ html body {
 background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_page.gif");
 background-repeat:repeat-x;
 }
+#patternPageShadow {
+background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
+}
 </style>
 </verbatim>
 <div class="twikiHelp">
@@ -38,6 +41,9 @@ You can always write a =&lt;style>= in a topic - all current browsers support th
 html body {
 background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_page.gif");
 background-repeat:repeat-x;
+}
+#patternPageShadow {
+background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
 }</style>
 
 %META:FILEATTACHMENT{name="centerpage.css" attr="" autoattached="1" comment="css to frame the page centered on the screen" date="1129323328" path="centerpage.css" size="259" user="ArthurClemens" version=""}%

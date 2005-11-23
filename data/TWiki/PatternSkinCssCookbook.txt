@@ -17,7 +17,7 @@ This topic describes how to customize the default look of TWiki for your own nee
 
 When customizing your TWiki installation, you can either choose to completely rewrite all css styles, or to selectively override some styles. The latter option is by far less time consuming, but all depends on your graphical wishes.
 
----+++ When you need big changes: Rewriting CSS
+---+++ When you need lots of graphic changes: Rewriting CSS
    * Create a new topic that will contain your new CSS files
    * Attach 3 new style sheets to the topic
    * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files:
@@ -32,7 +32,7 @@ When customizing your TWiki installation, you can either choose to completely re
       * <nop>Set TWIKICOLORURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/empty.css
  </pre>
 
----+++ When you need small changes: Adding to existing CSS
+---+++ When you need small adjustments: Adding to existing CSS
 With CSS you cannot remove already defined classes, you can only add to it, or overwrite existing styles. <br />
 Overriding default CSS is done with 3 variables: =USERLAYOUTURL=, =USERSTYLEURL=, =USERCOLORSURL=.
    * Create a new topic that will contain your new CSS files
