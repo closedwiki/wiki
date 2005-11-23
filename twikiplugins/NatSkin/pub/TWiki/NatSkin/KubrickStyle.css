@@ -539,11 +539,15 @@ hr {
 .blogCommentCount a {
   color:#959596;
 }
+.blogCommentCount a:hover {
+  color: #147;
+  text-decoration:none;
+}
 .blogCommentCount {
   margin-left:10px;
-  text-shadow:none;
   font-size:0.9em;
   float:right;
+  width:2em;
 }
 .blogComments .blogCommentCount {
   color:#444444;
