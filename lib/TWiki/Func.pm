@@ -19,20 +19,24 @@
 
 =pod
 
----++ package TWiki::Func
+---+ TWiki::Func Perl Package Documentation
+
+_Official list of stable TWiki functions for Plugin developers_
+
+---++ Description
 
 This module defines official functions that [[%TWIKIWEB%.TWikiPlugins][Plugins]]
 can use to interact with the TWiki engine and content.
 
-Refer to lib/TWiki/Plugins/EmptyPlugin.pm for a template plugin and
-documentation on how to write a plugin.
+Refer to lib/TWiki/Plugins/EmptyPlugin.pm for a template Plugin and
+documentation on how to write a Plugin.
 
 Plugins should *only* use functions published in this module. If you use
 functions in other TWiki libraries you might create a security hole and
 you will likely need to change your Plugin when you upgrade TWiki.
 
 Deprecated functions will still work in older code, though they should
-_not_ be called in new plugins and should be replaced in older plugins
+_not_ be called in new Plugins and should be replaced in older Plugins
 as soon as possible.
 
 The version of the TWiki::Func module is defined by the VERSION number of the
@@ -41,8 +45,8 @@ by the =%<nop>PLUGINVERSION{}%= variable. The 'Since' field in the function
 documentation refers to the VERSION number and the date that the function
 was addded.
 
-*Note* Contrib authors beware! These methods should only ever be called
-from the context of a TWiki plugin. They require a session context to be
+__Note:__ Contrib authors beware! These methods should only ever be called
+from the context of a TWiki Plugin. They require a session context to be
 established before they are called, and will not work if simply called from
 another TWiki module unless the session object is defined first.
 
@@ -87,7 +91,7 @@ sub getSessionValue {
 Set a session value via the client session module
    * =$key=   - Session key
    * =$value= - Value associated with key
-Return: =$result=   ="1"= if success; undef if session plugin is not installed
+Return: =$result=   ="1"= if success; undef if session Plugin is not installed
 
 *Since:* TWiki::Plugins::VERSION 1.000 (17 Aug 2001)
 
@@ -106,7 +110,7 @@ sub setSessionValue {
 
 Clear a session value via the client session module
    * =$key=   - Session key
-Return: =$result=   ="1"= if success; undef if session plugin is not installed
+Return: =$result=   ="1"= if success; undef if session Plugin is not installed
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
@@ -124,6 +128,7 @@ sub clearSessionValue {
 ---+++ getSkin( ) -> $skin
 
 Get the skin path, set by the =SKIN= preferences variable or the =skin= CGI parameter
+
 Return: =$skin= Comma-separated list of skins, e.g. ='gnu,tartan'=. Empty string if none
 
 *Since:* TWiki::Plugins::VERSION 1.000 (29 Jul 2001)
@@ -141,6 +146,7 @@ sub getSkin {
 ---+++ getUrlHost( ) -> $host
 
 Get protocol, domain and optional port of script URL
+
 Return: =$host= URL host, e.g. ="http://example.com:80"=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -179,6 +185,7 @@ sub getScriptUrl {
 ---+++ getScriptUrlPath( ) -> $path
 
 Get script URL path
+
 Return: =$path= URL path of TWiki scripts, e.g. ="/cgi-bin"=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -243,6 +250,7 @@ sub getOopsUrl {
 ---+++ getPubUrlPath( ) -> $path
 
 Get pub URL path
+
 Return: =$path= URL path of pub directory, e.g. ="/pub"=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (14 Jul 2001)
@@ -258,6 +266,7 @@ sub getPubUrlPath {
 ---+++ getCgiQuery( ) -> $query
 
 Get CGI query object. Important: Plugins cannot assume that scripts run under CGI, Plugins must always test if the CGI query object is set
+
 Return: =$query= CGI query object; or 0 if script is called as a shell script
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -317,13 +326,13 @@ The context is a set of identifiers that are set
 during specific phases of TWiki processing. For example, each of
 the standard scripts in the 'bin' directory each has a context
 identifier - the view script has 'view', the edit script has 'edit'
-etc. So you can easily tell what 'type' of script your plugin is
+etc. So you can easily tell what 'type' of script your Plugin is
 being called within. The core context identifiers are listed
 in the %TWIKIWEB%.TWikiTemplates topic. Please be careful not to
 overwrite any of these identifiers!
 
-Context identifiers can be used to communicate between plugins, and between
-plugins and templates. For example, in FirstPlugin.pm, you might write:
+Context identifiers can be used to communicate between Plugins, and between
+Plugins and templates. For example, in FirstPlugin.pm, you might write:
 <verbatim>
 sub initPlugin {
    TWiki::Func::getContext()->{'FirstPlugin'} = 1;
@@ -356,10 +365,10 @@ sub getContext {
 
 ---++ Functions: Preferences
 
-   * $attr ) -> %params
+---+++ extractParameters($attr ) -> %params
 
 Extract all parameters from a variable string and returns a hash of parameters
-- Parameter: =$attr= | Attribute string
+   * =$attr= - Attribute string
 Return: =%params=  Hash containing all parameters. The nameless parameter is stored in key =_DEFAULT=
 
 *Since:* TWiki::Plugins::VERSION 1.025 (26 Aug 2004)
@@ -514,6 +523,7 @@ sub getPluginPreferencesFlag {
 ---+++ getWikiToolName( ) -> $name
 
 Get toolname as defined in TWiki.cfg
+
 Return: =$name= Name of tool, e.g. ='TWiki'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
@@ -529,6 +539,7 @@ sub getWikiToolName {
 ---+++ getMainWebname( ) -> $name
 
 Get name of Main web as defined in TWiki.cfg
+
 Return: =$name= Name, e.g. ='Main'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
@@ -544,6 +555,7 @@ sub getMainWebname {
 ---+++ getTwikiWebname( ) -> $name
 
 Get name of TWiki documentation web as defined in TWiki.cfg
+
 Return: =$name= Name, e.g. ='TWiki'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
@@ -561,6 +573,7 @@ sub getTwikiWebname {
 ---+++ getDefaultUserName( ) -> $loginName
 
 Get default user name as defined in the configuration as =DefaultUserLogin=
+
 Return: =$loginName= Default user name, e.g. ='guest'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -576,6 +589,7 @@ sub getDefaultUserName {
 ---+++ getWikiName( ) -> $wikiName
 
 Get Wiki name of logged in user
+
 Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -589,9 +603,10 @@ sub getWikiName {
 
 =pod
 
----+++ getWikiUserName( $text ) -> $wikiName
+---+++ getWikiUserName( ) -> $wikiName
 
 Get Wiki name of logged in user with web prefix
+
 Return: =$wikiName= Wiki Name, e.g. ="Main.JohnDoe"=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -652,6 +667,7 @@ sub userToWikiName {
 ---+++ isGuest( ) -> $flag
 
 Test if logged in user is a guest
+
 Return: =$flag= ="1"= if yes, ="0"= if not
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -665,9 +681,13 @@ sub isGuest {
 
 =pod
 
----+++ isValidWikiWord (  $name  ) -> $boolean
+---+++ isValidWikiWord ( $text ) -> $boolean
 
 Check for a valid WikiWord or WikiName
+   * =$text= - Word to test 
+Return: =$flag=   ="1"= if yes, ="0"= if no
+
+*Since:* TWiki::Plugins::VERSION 1.100 (Dec 2005)
 
 =cut
 
@@ -906,13 +926,15 @@ sub getRevisionInfo {
 =pod
 
 ---+++ getRevisionAtTime( $web, $topic, $time ) -> $rev
+
+Get the revision number of a topic at a specific time.
    * =$web= - web for topic
    * =$topic= - topic
    * =$time= - time (in epoch secs) for the rev
-
-Get the revision number of a topic at a specific time.
-Returns a single-digit rev number or undef if it couldn't be determined
+Return: Single-digit revision number, or undef if it couldn't be determined
 (either because the topic isn't that old, or there was a problem)
+
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -927,7 +949,9 @@ sub getRevisionAtTime {
 Check if a lease has been taken by some other user.
    * =$web= Web name, e.g. ="Main"=, or empty
    * =$topic= Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"=
-Return =( $oopsUrl, $loginName, $unlockTime )= | The =$oopsUrl= for calling redirectCgiQuery(), user's =$loginName=, and estimated =$unlockTime= in minutes, or ( '', '', 0 ) if no lease exists.
+Return: =( $oopsUrl, $loginName, $unlockTime )= - The =$oopsUrl= for calling redirectCgiQuery(), user's =$loginName=, and estimated =$unlockTime= in minutes, or ( '', '', 0 ) if no lease exists.
+
+*Since:* TWiki::Plugins::VERSION 1.010 (31 Dec 2002)
 
 =cut
 
@@ -976,6 +1000,8 @@ always takes out a lease.
 
 It is *impossible* to fully lock a topic. Concurrent changes will be
 merged.
+
+*Since:* TWiki::Plugins::VERSION 1.010 (31 Dec 2002)
 
 =cut
 
@@ -1068,12 +1094,13 @@ sub readTopicText {
    * =$meta= - reference to TWiki::Meta object
    * =$text= - text of the topic (without embedded meta-data!!!
    * =\%options= - ref to hash of save options
-=\%options= may include:
-| =dontlog= | don't log this change in twiki log |
-| =comment= | comment for save |
-| =minor= | True if this is a minor change, and is not to be notified |
-
+     =\%options= may include:
+     | =dontlog= | don't log this change in twiki log |
+     | =comment= | comment for save |
+     | =minor= | True if this is a minor change, and is not to be notified |
 Return: error message or undef.
+
+*Since:* TWiki::Plugins::VERSION 1.000 (29 Jul 2001)
 
 For example,
 <verbatim>
@@ -1082,7 +1109,7 @@ $text =~ s/APPLE/ORANGE/g;
 TWiki::Func::saveTopic( $web, $topic, $meta, $text, { comment => 'refruited' } );
 </verbatim>
 
-*Note* plugins handlers ( e.g. =beforeSaveHandler= ) will be called as
+__Note:__ Plugins handlers ( e.g. =beforeSaveHandler= ) will be called as
 appropriate.
 
 =cut
@@ -1195,6 +1222,8 @@ The destination topic must not already exist.
 
 Rename a topic to the $TWiki::cfg{TrashWebName} to delete it.
 
+*Since:* TWiki::Plugins::VERSION 1.1
+
 <verbatim>
 use Error qw( :try );
 
@@ -1210,8 +1239,6 @@ try {
     ...
 };
 </verbatim>
-
-*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -1467,7 +1494,7 @@ sub boo {
 }
 </verbatim>
 would let you do this:
-=%EXEC{"ps -Af" silent="on"}%=
+=%<nop>EXEC{"ps -Af" silent="on"}%=
 
 =cut
 
@@ -1492,13 +1519,13 @@ sub registerTagHandler {
 
 ---+++ addToHEAD( $id, $header )
 Adds =$header= to the HTML header (the <head> tag).
-This is useful for plugins that want to include some javascript custom css.
+This is useful for Plugins that want to include some javascript custom css.
    * =$id= - Unique ID to prevent the same HTML from being duplicated. Plugins should use a prefix to prevent name clashes (e.g EDITTABLEPLUGIN_JSCALENDAR)
    * =$header= - the HTML to be added to the <head> section. The HTML must be valid in a HEAD tag - no checks are performed.
 
 All TWiki variables present in =$header= will be expanded before being inserted into the =<head>= section.
 
-Note that this is _not_ the same as the HTTP header, which is modified through the plugins =modifyHeaderHandler=.
+Note that this is _not_ the same as the HTTP header, which is modified through the Plugins =modifyHeaderHandler=.
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
@@ -1615,14 +1642,16 @@ sub formatTime {
 
 ---+++ getWorkArea( $pluginName ) -> $directorypath
 
-Gets a private directory for the plugin. The plugin is entirely responsible
+Gets a private directory for Plugin use. The Plugin is entirely responsible
 for managing this directory; TWiki will not read from it, or write to it.
 
 The directory is guaranteed to exist, and to be writable by the webserver
 user. By default it will *not* be web accessible.
 
-The directory and it's contents are permanent, so plugins must be careful
+The directory and it's contents are permanent, so Plugins must be careful
 to keep their areas tidy.
+
+*Since:* TWiki::Plugins::VERSION 1.1 (Dec 2005)
 
 =cut
 
@@ -1630,6 +1659,56 @@ sub getWorkArea {
     my( $plugin ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->getWorkArea( $plugin );
+}
+
+=pod
+
+---+++ readFile( $filename ) -> $text
+
+Read file, low level. Used for Plugin workarea.
+   * =$filename= - Full path name of file
+Return: =$text= Content of file, empty if not found
+
+__NOTE:__ Use this function only for the Plugin workarea, *not* for topics and attachments. Use the [[#Functions_Content_Handling][content handling functions]] to manipulate topics and attachments.
+
+*Since:* TWiki::Plugins::VERSION 1.000 (07 Dec 2002)
+
+=cut
+
+sub readFile {
+    my $name = shift;
+    my $data = '';
+    open( IN_FILE, "<$name" ) || return '';
+    local $/ = undef; # set to read to EOF
+    $data = <IN_FILE>;
+    close( IN_FILE );
+    $data = '' unless $data; # no undefined
+    return $data;
+}
+
+=pod
+
+---+++ saveFile( $filename, $text )
+
+Save file, low level. Used for Plugin workarea.
+   * =$filename= - Full path name of file
+   * =$text=     - Text to save
+Return:                none
+
+__NOTE:__ Use this function only for the Plugin workarea, *not* for topics and attachments. Use the [[#Functions_Content_Handling][content handling functions]] to manipulate topics and attachments.
+
+*Since:* TWiki::Plugins::VERSION 1.000 (07 Dec 2002)
+
+=cut
+
+sub saveFile {
+    my( $name, $text ) = @_;
+
+    unless ( open( FILE, ">$name" ) )  {
+        die "Can't create file $name - $!\n";
+    }
+    print FILE $text;
+    close( FILE);
 }
 
 =pod
@@ -1874,6 +1953,9 @@ foreach my $topic (keys %$result ) {
    foreach my $matching_line ( @{$result->{$topic}} ) {
       ...etc
 </verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
 =cut
 
 sub searchInWebContent {
@@ -1951,7 +2033,10 @@ stop using them as soon as possible.
 *DEPRECATED* since 1.1 - use =getListOfWebs= instead.
 
 Get list of all public webs, e.g. all webs that do not have the =NOSEARCHALL= flag set in the WebPreferences
+
 Return: =@webs= List of all public webs, e.g. =( 'Main',  'Know', 'TWiki' )=
+
+*Since:* TWiki::Plugins::VERSION 1.000 (07 Dec 2002)
 
 =cut
 
@@ -1964,7 +2049,7 @@ sub getPublicWebList {
 
 ---+++ formatGmTime( $time, $format ) -> $text
 
-*DEPRECATED* TWiki::Plugins::VERSION 1.025 (7 Dec 2002)
+*DEPRECATED* since 1.1 - use =formatTime= instead.
 
 Format the time to GM time
    * =$time=   - Time in epoc seconds
@@ -1988,13 +2073,15 @@ sub formatGmTime {
 
 ---+++ getDataDir( ) -> $dir
 
+*DEPRECATED* since 1.1 - use the [[#Functions_Content_Handling][content handling functions]] to manipulate topics instead
+
 Get data directory (topic file root)
+
 Return: =$dir= Data directory, e.g. ='/twiki/data'=
 
-*DEPRECATED:* TWiki::Plugins::VERSION 1.1
+This function violates store encapsulation and is therefore *deprecated*.
 
-This function violates store encapsulation and is therefore *deprecated*. Use
-the various web, topic and attachment manipulation functions instead.
+*Since:* TWiki::Plugins::VERSION 1.000 (07 Dec 2002)
 
 =cut
 
@@ -2006,14 +2093,17 @@ sub getDataDir {
 
 ---+++ getPubDir( ) -> $dir
 
-*DEPRECATED:* TWiki::Plugins::VERSION 1.1
+*DEPRECATED* since 1.1 - use the [[#Functions_Content_Handling][content handling functions]] to manipulateattachments instead
 
 Get pub directory (file attachment root). Attachments are in =$dir/Web/TopicName=
+
 Return: =$dir= Pub directory, e.g. ='/htdocs/twiki/pub'=
 
 This function violates store encapsulation and is therefore *deprecated*.
 
 Use =readAttachment= and =saveAttachment= instead.
+
+*Since:* TWiki::Plugins::VERSION 1.000 (07 Dec 2002)
 
 =cut
 
@@ -2025,10 +2115,10 @@ sub getPubDir {
 
 ---+++ checkDependencies( $moduleName, $dependenciesRef ) -> $error
 
-*DEPRECATED:* TWiki::Plugins::VERSION 1.1
-
-Use Plugins.BuildContrib and define DEPENDENCIES that can be statically
+*DEPRECATED* since 1.1 - use TWiki:Plugins.BuildContrib and define DEPENDENCIES that can be statically
 evaluated at install time instead. It is a lot more efficient.
+
+*Since:* TWiki::Plugins::VERSION 1.025 (01 Aug 2004)
 
 =cut
 
@@ -2069,56 +2159,6 @@ sub checkDependencies {
     return undef if( $depsOK );
 
     return $report;
-}
-
-=pod
-
----+++ readFile( $filename ) -> $text
-
-*DEPRECATED:* TWiki::Plugins::VERSION 1.1
-Deprecated because this API must not manipulate text files, just
-TWiki topics and webs.
-
-Read text file, low level. NOTE: For topics use readTopicText()
-   * =$filename= - Full path name of file
-Return: =$text=        Content of file
-
-=cut
-
-sub readFile {
-    my $name = shift;
-    my $data = '';
-    open( IN_FILE, "<$name" ) || return '';
-    local $/ = undef; # set to read to EOF
-    $data = <IN_FILE>;
-    close( IN_FILE );
-    $data = '' unless $data; # no undefined
-    return $data;
-}
-
-=pod
-
----+++ saveFile( $filename, $text )
-
-*DEPRECATED:* TWiki::Plugins::VERSION 1.1
-Deprecated because this API must not manipulate text files, just
-TWiki topics and webs.
-
-Save text file, low level.
-   * =$filename= - Full path name of file
-   * =$text=     - Text to save
-Return:                none
-
-=cut
-
-sub saveFile {
-    my( $name, $text ) = @_;
-
-    unless ( open( FILE, ">$name" ) )  {
-        die "Can't create file $name - $!\n";
-    }
-    print FILE $text;
-    close( FILE);
 }
 
 1;
