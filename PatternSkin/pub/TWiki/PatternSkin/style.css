@@ -504,10 +504,10 @@ a:hover .twikiAccessKey {
 }
 #patternColumnWrapper {
 	table-layout:fixed;
+	border-width:1px 0;
+	border-style:solid;
 }
 #patternMain {
-	border-width:1px 0 0 0;
-	border-style:solid;
 }
 .patternMainContents {
 	padding:0 2em 1em 2em;
@@ -529,9 +529,7 @@ table.patternTopBarContents td {
 
 /* Bottom bar */
 #patternBottomBar {
-	padding:1em 2em;
-	border-width:1px 0 0 0;
-	border-style:solid;
+	padding:1em 2em 1.5em 2em;
 }
 .patternBottomBarContents {
 	font-size:85%; /*S3*/
@@ -594,7 +592,7 @@ table.patternTopBarContents td {
 
 /* Left bar */
 #patternLeftBar {
-	border-width:1px 1px 0 0;
+	border-width:0 1px 0 0;
 	border-style:solid;
 	overflow:hidden;
 }
@@ -1022,6 +1020,4 @@ tr.twikiDiffDebug td {
 
 .patternPlainPage #patternMain {
 	padding-top:2em;
-}
-ng-top:2em;
 }
