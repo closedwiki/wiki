@@ -9,7 +9,7 @@ NONE
 ---++ Implementation
 %STARTINCLUDE%
 <div class="blogSideBarSection blogSideBarCategories">
----+ Categories%REDDOT{"%TOPIC%"}%
+---+ Categories%REDDOT{"%WEB%.%TOPIC%"}%
 <noautolink>
 %~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
 ~~~         format="   * <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"

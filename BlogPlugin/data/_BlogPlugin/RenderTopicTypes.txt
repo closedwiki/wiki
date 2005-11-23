@@ -9,7 +9,7 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
----+ %NAME%%REDDOT{"RenderTopicTypes"}%
+---+ %NAME%%REDDOT{"%WEB%.%TOPIC%"}%
 <div class="blogSideBarSection blogSideBarTopicType">
 <noautolink>
 %~~ DBQUERY{"TopicType=~'\b%NAME%\b'" 

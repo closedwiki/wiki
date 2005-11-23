@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132688116" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132760168" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -24,7 +24,9 @@ no newer comments than that.
 %STARTINCLUDE%%~~ RECENTCOMMENTS{
 ~~~  category="%CAT%"
 ~~~  format="   * [[$web.$topic][$headline]]
-*~~    <span class=\"blogCommentCount\">$count</span><br/>
+~~~    <span class=\"blogCommentCount\">
+~~~      <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web.$topic#topComment\">$percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"}$percnt</a>
+~~~    </span><br/>
 ~~~    <span class=\"blogSideBarCommenter\">
 ~~~      $percntTIMESINCE{\"$date\" format=\"$time ago\"}$percnt
 ~~~      $commenter replied
@@ -32,7 +34,7 @@ no newer comments than that.
 ~~~  limit="%LIMIT%" age="2592000"
 ~~~  header="$n<noautolink>$n
 *~~     <div class=\"blogSideBarSection blogSideBarComments\">$n
-*~~     ---+ Comments$percntREDDOT{\"%TOPIC%\"}$percnt$n"
+*~~     ---+ Comments$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt$n"
 ~~~  footer="</div>$n</noautolink>"
 ~~~ }%%STOPINCLUDE%
 </verbatim>
