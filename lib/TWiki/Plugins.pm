@@ -217,7 +217,7 @@ sub load {
         }
         # Report initialisation errors
         if( $p->{errors} ) {
-            $this->{session}->writeWarning( join( "\n", $p->{errors} ));
+            $this->{session}->writeWarning( join( "\n", @{$p->{errors}} ));
         }
         $lookup{$pn} = $p;
     }

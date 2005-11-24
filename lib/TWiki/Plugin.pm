@@ -203,13 +203,23 @@ sub registerHandlers {
         return;
     }
 
+    my $compat = eval '\%'.$p.'::TWikiCompatibility';
     foreach my $h ( @registrableHandlers ) {
         my $sub = $p.'::'.$h;
         if( defined( &$sub )) {
-            $plugins->addListener( $h, $this );
             if( $deprecated{$h} ) {
-                $this->{session}->writeWarning
-                  ( $this->{name}.' defines deprecated '.$h );
+                if( defined( $compat )) {
+                    if( $compat->{$h} > $TWiki::Plugins::VERSION ) {
+                        $plugins->addListener( $h, $this );
+                    } elsif( !$compat->{$h} ) {
+die $compat->{$h} if $p =~ /Wysiwyg/;
+                        $this->{session}->writeWarning(
+                            $this->{name}.' defines deprecated '.$h );
+                        $plugins->addListener( $h, $this );
+                    }
+                }
+            } else {
+                $plugins->addListener( $h, $this );
             }
         }
     }

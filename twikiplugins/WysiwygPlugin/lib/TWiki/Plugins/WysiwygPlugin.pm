@@ -54,6 +54,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $RELEASE $MODERN $MARKVARS );
 use vars qw( $html2tml $tml2html $convertingImage $imgMap );
+use vars qw( %TWikiCompatibility );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -156,16 +157,29 @@ sub beforeCommonTagsHandler {
     $tml2html->{calledThisSession} = 1;
 }
 
+# DEPRECATED in Dakar (postRenderingHandler does the job better)
+# This handler is required to re-insert blocks that were removed to protect
+# them from TWiki rendering, such as TWiki variables.
+$TWikiCompatibility{endRenderingHandler} = 1.1;
+sub endRenderingHandler {
+    return if( $TWiki::Plugins::VERSION >= 1.1 ||
+                 $convertingImage || !$tml2html );
+
+    return $tml2html->cleanup( @_ );
+}
+
+# Dakar handler, replaces endRenderingHandler above
 # This handler is required to re-insert blocks that were removed to protect
 # them from TWiki rendering, such as TWiki variables.
 # Would prefer to use the postRenderingHandler
-sub endRenderingHandler {
+sub postRenderingHandler {
     return if( $convertingImage || !$tml2html );
 
     return $tml2html->cleanup( @_ );
 }
 
 # DEPRECATED in Dakar (modifyHeaderHandler does the job better)
+$TWikiCompatibility{writeHeaderHandler} = 1.1;
 sub writeHeaderHandler {
     return '' if $MODERN;
 
