@@ -16,35 +16,34 @@
 ###############################################################################
 package TWiki::Plugins::BlogPlugin;
 
-###############################################################################
+use strict;
 use vars qw(
         $VERSION $RELEASE $debug $doneHeader
-	%prevTopicCache %nextTopicCache %db
+	%prevTopicCache %nextTopicCache
 	%recentCommentsCache
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.22';
+$RELEASE = '0.30';
+$debug = 0; # toggle me
 
-use TWiki::Contrib::DBCacheContrib;
-use TWiki::Contrib::DBCacheContrib::Search;
+use TWiki::Plugins::DBCachePlugin qw(dbQuery getFormField initDB);
 use TWiki::Plugins::BlogPlugin::WebDB;
 use Digest::MD5 qw(md5_hex);
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug('- BlogPlugin - ' . $_[0]) if $debug;
+  #&TWiki::Func::writeDebug('- BlogPlugin - ' . $_[0]) if $debug;
+  print STDERR "DEBUG - BlogPlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################
 sub initPlugin {
 
-  $debug = 0; # toggle me
 
   $doneHeader = 0;
   %prevTopicCache = ();
   %nextTopicCache = ();
-  %db = ();
   %recentCommentsCache = ();
 
   TWiki::Func::registerTagHandler('CITEBLOG', \&_CITEBLOG);
@@ -55,8 +54,6 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('RELATEDENTRIES', \&_RELATEDENTRIES);
 
   TWiki::Func::registerTagHandler('DBTEST', \&_DBTEST); # for debugging
-  TWiki::Func::registerTagHandler('DBQUERY', \&_DBQUERY);
-  TWiki::Func::registerTagHandler('DBCALL', \&_DBCALL);
 
   return 1;
 }
@@ -76,19 +73,6 @@ sub commonTagsHandler {
 }
 
 ###############################################################################
-sub initDB {
-  my $theWeb = shift;
-
-  return unless $theWeb;
-
-  unless ($db{$theWeb}) {
-#    print STDERR "DEBUG: init DB for $theWeb\n";
-    $db{$theWeb} = new TWiki::Plugins::BlogPlugin::WebDB($theWeb);
-    $db{$theWeb}->load();
-  }
-}
-
-###############################################################################
 sub _CITEBLOG {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
@@ -98,11 +82,11 @@ sub _CITEBLOG {
   return &inlineError("ERROR: CITEBLOG has no topic argument") 
     unless $theTopic;
 
-  &initDB($theWeb);
+  my $theDB = &initDB($theWeb);
 
   my $text = "[[$theWeb.$theTopic][$theTopic]]";
 
-  my $topicObj = $db{$theWeb}->fastget($theTopic);
+  my $topicObj = $theDB->fastget($theTopic);
   return $text unless $topicObj;
   
   my $form = $topicObj->fastget('form');
@@ -116,177 +100,6 @@ sub _CITEBLOG {
     $theTopic;
   my $createDate = TWiki::Func::formatTime($topicObj->fastget('createdate'), '$day $mon $year');
   return "[[$theWeb.$theTopic][$displayText ($createDate)]]";
-}
-
-###############################################################################
-# lightweighted INCLUDE using stored procedures instead of extracting them
-# from the topics again and again
-sub _DBCALL {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-
-  # remember args for the key before mangling the params
-  my $args = $params->stringify();
-
-  #print STDERR "DEBUG: called DBCALL{$args}\n";
-
-  my $path = $params->remove('_DEFAULT') || '';
-  my $section = $params->remove('section') || 'default';
-  my $warn = $params->remove('warn') || 'on';
-  $warn = ($warn eq 'on')?1:0;
-
-  my ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $path);
-  
-  # check access rights
-  my $wikiUserName = TWiki::Func::getWikiUserName();
-  unless (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $thisTopic, $thisWeb)) {
-    if ($warn) {
-      return inlineError("ERROR: DBCALL access to '$thisWeb.$thisTopic' denied");
-    } 
-    return '';
-  }
-
-  # init database
-  &initDB($thisWeb);
-
-  # get section
-  my $topicObj = $db{$thisWeb}->fastget($thisTopic);
-  if (!$topicObj) {
-    if ($warn) {
-      return inlineError("ERROR: DBCALL can't find topic <nop>$thisWeb.$thisTopic");
-    } else {
-      return '';
-    }
-  }
-  my $sectionText = $topicObj->fastget("_section$section") if $topicObj;
-  if (!$sectionText) {
-    if($warn) {
-      return inlineError("ERROR: DBCALL can't find section '$section' in topic '$thisWeb.$thisTopic'");
-    } else {
-      return '';
-    }
-  }
-
-  # prevent recursive calls
-  my $key = $thisWeb.'.'.$thisTopic;
-  my $count = grep($key, keys %{$session->{dbcalls}});
-  $key .= $args;
-  if ($session->{dbcalls}->{$key} || $count > 99) {
-    if($warn) {
-      return inlineError("ERROR: DBCALL reached max recursion at '$thisWeb.$thisTopic'");
-    }
-    return '';
-  }
-  $session->{dbcalls}->{$key} = 1;
-
-  # substitute variables
-  $sectionText =~ s/%INCLUDINGWEB%/$theWeb/g;
-  $sectionText =~ s/%INCLUDINGTOPIC%/$theTopic/g;
-  $sectionText =~ s/%WEB%/$thisWeb/g;
-  $sectionText =~ s/%TOPIC%/$thisTopic/g;
-  foreach my $key (keys %$params) {
-    $sectionText =~ s/%$key%/$params->{$key}/g;
-  }
-
-  # expand
-  $sectionText = TWiki::Func::expandCommonVariables($sectionText);
-
-  # cleanup
-  delete $session->{dbcalls}->{$key};
-
-  return $sectionText;
-  #return '<verbatim>'.$sectionText.'</verbatim>';
-}
-
-###############################################################################
-sub _DBQUERY {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-  
-
-  # params
-  my $theSearch = $params->{_DEFAULT} || $params->{search};
-  my $theTopics = $params->{topics} || $params->{topic};
-  
-  return &inlineError("ERROR: DBQUERY needs either a \"search\" or a \"topic\" argument ") 
-    if !$theSearch && !$theTopics;
-  return '' if $theTopics && $theTopics eq 'none';
-
-  my $theFormat = $params->{format} || '$topic';
-  my $theHeader = $params->{header} || '';
-  my $theFooter = $params->{footer} || '';
-  my $theInclude = $params->{include};
-  my $theExclude = $params->{exclude};
-  my $theOrder = $params->{order} || 'name';
-  my $theReverse = $params->{reverse} || 'off';
-  my $theSep = $params->{separator} || '$n';
-  my $theLimit = $params->{limit} || '';
-  my $theSkip = $params->{skip} || 0;
-  my $theHideNull = $params->{hidenull} || 'off';
-  $theWeb = $params->{web} || $theWeb;
-
-  &initDB($theWeb);
-
-  #print STDERR "DEBUG: _DBQUERY(" . $params->stringify() . ")\n";
-
-  # get topics
-  my @topicNames;
-  if ($theTopics) {
-    @topicNames = split(/, /, $theTopics);
-  } else {
-    @topicNames = $db{$theWeb}->getKeys();
-  }
-  @topicNames = grep(/$theInclude/, @topicNames) if $theInclude;
-  @topicNames = grep(!/$theExclude/, @topicNames) if $theExclude;
-
-  # normalize 
-  $theSkip =~ s/[^-\d]//go;
-  $theSkip = 0 if $theSkip eq '';
-  $theSkip = 0 if $theSkip < 0;
-  $theFormat = '' if $theFormat eq 'none';
-  $theSep = '' if $theSep eq 'none';
-  $theLimit =~ s/[^\d]//go;
-  $theLimit = scalar(@topicNames) if $theLimit eq '';
-  $theLimit += $theSkip;
-
-  my ($topicNames, $hits, $msg) = &dbQuery($theSearch, $theWeb, 
-    \@topicNames, $theOrder, $theReverse);
-#  print STDERR "DEBUG: topicNames=@$topicNames\n";
-
-  return $msg if $msg;
-
-
-  my $count = scalar(@$topicNames);
-#  print STDERR "DEBUG: count=$count\n";
-  return '' if ($count <= $theSkip) && $theHideNull eq 'on';
-
-  # format
-  my $text = '';
-  if ($theFormat && $theLimit) {
-    my $index = 0;
-    my $isFirst = 1;
-    foreach my $topicName (@$topicNames) {
-      $index++;
-      next if $index <= $theSkip;
-      my $root = $hits->{$topicName};
-      my $format = '';
-      $format = $theSep unless $isFirst;
-      $isFirst = 0;
-      $format .= $theFormat;
-      $format =~ s/\$formfield\((.*?)\)/getFormField($theWeb, $topicName, $1)/geo;
-      $format =~ s/\$expand\((.*?)\)/expandPath($theWeb, $root, $1)/geo;
-      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime(expandPath($theWeb, $root, $1), $2)/geo; # single quoted
-      #$format =~ s/\$dbcall\((.*?)\)/dbCall($1)/ge; ## TODO
-      $format = expandVariables($format, topic=>$topicName, web=>$theWeb, index=>$index, count=>$count);
-      $text .= $format;
-      last if $index == $theLimit;
-    }
-  }
-
-  $theHeader = expandVariables($theHeader.$theSep, count=>$count, web=>$theWeb) if $theHeader;
-  $theFooter = expandVariables($theSep.$theFooter, count=>$count, web=>$theWeb) if $theFooter;
-
-  $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter");
-  #print STDERR "DEBUG: text='$text'\n";
-  return $text;
 }
 
 ###############################################################################
@@ -305,89 +118,22 @@ sub expandVariables {
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$nop//g;
-  $theFormat =~ s/\$encode\((.*)\)/&encode($1)/ges;
 
   return $theFormat;
 }
 
 ###############################################################################
-sub encode {
-  my $text = shift;
-
-  $text = "\n<noautolink>\n$text\n</noautolink>\n";
-  $text = &TWiki::Func::expandCommonVariables($text);
-  $text = &TWiki::Func::renderText($text);
-  $text =~ s/[\n\r]+/ /go;
-  $text =~ s/\n*<\/?noautolink>\n*//go;
-  $text = &TWiki::entityEncode($text);
-  $text =~ s/^\s*(.*?)\s*$/$1/gos;
-
-  return $text;
-}
-
-###############################################################################
-sub expandPath {
-  my ($theWeb, $theRoot, $thePath) = @_;
-
-  return '' if !$thePath || !$theRoot;
-  $thePath =~ s/^\.//o;
-  $thePath =~ s/\[([^\]]+)\]/$1/o;
-
-  #print STDERR "DEBUG: expandPath($theWeb, $theRoot, $thePath)\n";
-  if ($thePath =~ /^(.*?) or (.*)$/) {
-    my $first = $1;
-    my $tail = $2;
-    my $result = expandPath($theWeb, $theRoot, $first);
-    #print STDERR "DEBUG: result=$result\n";
-    return $result if (defined $result && $result ne '');
-    return expandPath($theWeb, $theRoot, $tail);
-  }
-
-  if ($thePath =~ m/^(\w+)(.*)$/o) {
-    my $first = $1;
-    my $tail = $2;
-    my $root = $theRoot->fastget($first);
-    unless ($root) {
-      # try form
-      # TODO: try form FIRST
-      my $form = $theRoot->fastget('form');
-      if ($form) {
-	$form = $theRoot->fastget($form);
-	$root = $form->fastget($first) if $form;
-      }
-    }
-    return expandPath($theWeb, $root, $tail) if ref($root);
-    if ($root) {
-      my $field = TWiki::urlDecode($root);
-      #print STDERR "DEBUG: result=$field\n";
-      return $field;
-    }
-  }
-  if ($thePath =~ /^@([^\.]+)(.*)$/) {
-    my $first = $1;
-    my $tail = $2;
-    my $result = expandPath($theWeb, $theRoot, $first);
-    my $root = ref($result)?$result:$db{$theWeb}->fastget($result); 
-    return expandPath($theWeb, $root, $tail)
-  }
-
-  #print STDERR "DEBUG: result is empty\n";
-  return '';
-}
-
-
-###############################################################################
 sub _DBTEST {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  &initDB($theWeb);
+  my $theDB = &initDB($theWeb);
   my $result = "<noautolink>\n";
 
-  my $size = $db{$theWeb}->size();
+  my $size = $theDB->size();
   $result .= "---++ size=$size\n";
   foreach my $key1 ('RenderBlogEntry') {
   
-    my $value1 = $db{$theWeb}->fastget($key1) || '';
+    my $value1 = $theDB->fastget($key1) || '';
     $result .= "---++ <nobr> $key1 = $value1</nobr>\n";
 
     foreach my $key2 (sort $value1->getKeys()) {
@@ -415,41 +161,6 @@ sub _DBTEST {
 }
 
 ###############################################################################
-sub getPrevNextTopic {
-  my ($theWeb, $theTopic, $theWhere, $theOrder) = @_;
-
-  #print STDERR "DEBUG: getPrevNextTopic($theWeb, $theTopic, $theWhere) called\n";
-  my $key = $theWeb.'.'.$theTopic.':'.$theWhere.':'.$theOrder;
-  my $prevTopic = $prevTopicCache{$key};
-  my $nextTopic = $nextTopicCache{$key};
-
-  if ($prevTopic && $nextTopic) {
-    #writeDebug("found in cache: prevTopic=$prevTopic, nextTopic=$nextTopic");
-    return ($prevTopic, $nextTopic);
-  }
-
-  my ($resultList) = &dbQuery($theWhere, $theWeb, undef, $theOrder);
-  my $state = 0;
-  foreach my $t (@$resultList) {
-    if ($state == 1) {
-      $state = 2;
-      $nextTopic = $t;
-      last;
-    }
-    $state = 1 if $t eq $theTopic;
-    $prevTopic = $t if $state == 0;
-    #writeDebug("t=$t, state=$state");
-  }
-  $prevTopic = '_notfound' if !$prevTopic || $state == 0;
-  $nextTopic = '_notfound' if !$nextTopic || !$state == 2;
-  $prevTopicCache{$key} = $prevTopic;
-  $nextTopicCache{$key} = $nextTopic;
-  #writeDebug("prevTopic=$prevTopic, nextTopic=$nextTopic");
-
-  return ($prevTopic, $nextTopic);
-}
-
-###############################################################################
 sub _PREVDOC {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
@@ -468,8 +179,8 @@ sub _PREVDOC {
   #writeDebug('theFormat='.$theFormat);
   #writeDebug('theWhere='. $theWhere) if $theWhere;
   
-  &initDB($thisWeb);
-  my ($prevTopic, $nextTopic) = &getPrevNextTopic($thisWeb, $thisTopic, $theWhere, $theOrder);
+  my $theDB = &initDB($thisWeb);
+  my ($prevTopic, $nextTopic) = &getPrevNextTopic($theDB, $thisWeb, $thisTopic, $theWhere, $theOrder);
   if ($prevTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$prevTopic, web=>$thisWeb);
   }
@@ -495,14 +206,50 @@ sub _NEXTDOC {
   #writeDebug('theFormat='.$theFormat);
   #writeDebug('theWhere='. $theWhere) if $theWhere;
 
-  &initDB($thisWeb);
-  my ($prevTopic, $nextTopic) = &getPrevNextTopic($thisWeb, $thisTopic, $theWhere, $theOrder);
+  my $theDB = &initDB($thisWeb);
+  my ($prevTopic, $nextTopic) = &getPrevNextTopic($theDB, $thisWeb, $thisTopic, $theWhere, $theOrder);
   if ($nextTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$nextTopic, web=>$thisWeb);
     return $theFormat;
   }
   return '';
 }
+
+###############################################################################
+sub getPrevNextTopic {
+  my ($theDB, $theWeb, $theTopic, $theWhere, $theOrder) = @_;
+
+  #print STDERR "DEBUG: getPrevNextTopic($theWeb, $theTopic, $theWhere) called\n";
+  my $key = $theWeb.'.'.$theTopic.':'.$theWhere.':'.$theOrder;
+  my $prevTopic = $prevTopicCache{$key};
+  my $nextTopic = $nextTopicCache{$key};
+
+  if ($prevTopic && $nextTopic) {
+    #writeDebug("found in cache: prevTopic=$prevTopic, nextTopic=$nextTopic");
+    return ($prevTopic, $nextTopic);
+  }
+
+  my ($resultList) = &dbQuery($theDB, $theWhere, undef, $theOrder);
+  my $state = 0;
+  foreach my $t (@$resultList) {
+    if ($state == 1) {
+      $state = 2;
+      $nextTopic = $t;
+      last;
+    }
+    $state = 1 if $t eq $theTopic;
+    $prevTopic = $t if $state == 0;
+    #writeDebug("t=$t, state=$state");
+  }
+  $prevTopic = '_notfound' if !$prevTopic || $state == 0;
+  $nextTopic = '_notfound' if !$nextTopic || !$state == 2;
+  $prevTopicCache{$key} = $prevTopic;
+  $nextTopicCache{$key} = $nextTopic;
+  #writeDebug("prevTopic=$prevTopic, nextTopic=$nextTopic");
+
+  return ($prevTopic, $nextTopic);
+}
+
 
 ###############################################################################
 sub _RECENTCOMMENTS {
@@ -532,15 +279,15 @@ sub _RECENTCOMMENTS {
   return &inlineError("ERROR: RECENTCOMMENTS has no \"format\" argument") 
     unless $theFormat;
   
-  &initDB($theWeb);
+  my $theDB = &initDB($theWeb);
 
   my %blogComments;
   my %baseRefs;
   my $now = time();
-  foreach my $topicName ($db{$theWeb}->getKeys()) {
+  foreach my $topicName ($theDB->getKeys()) {
 
     # get blog comment
-    my $topicObj = $db{$theWeb}->fastget($topicName); 
+    my $topicObj = $theDB->fastget($topicName); 
     my $topicForm = $topicObj->fastget('form');
     next unless $topicForm;
     $topicForm = $topicObj->fastget($topicForm);
@@ -561,7 +308,7 @@ sub _RECENTCOMMENTS {
     # check if referer is enabled and matches the category
     my $baseRefName = $topicForm->fastget('BaseRef');
     next unless $baseRefName;
-    my $baseRefObj = $db{$theWeb}->fastget($baseRefName);
+    my $baseRefObj = $theDB->fastget($baseRefName);
     next unless $baseRefObj;
     my $baseRefForm = $baseRefObj->fastget('form');
     next unless $baseRefForm;
@@ -573,6 +320,8 @@ sub _RECENTCOMMENTS {
     next unless $category =~ /$theCategory/;
 
     # found
+    $theLimit-- unless $baseRefs{$baseRefName};
+    
     $blogComments{$topicName}{obj} = $topicObj;
     $blogComments{$topicName}{createdate} = $topicCreateDate;
     $blogComments{$topicName}{author} = $topicForm->fastget('Name');
@@ -593,7 +342,7 @@ sub _RECENTCOMMENTS {
     #print STDERR "DEBUG: baseRef createdate=$baseRefs{$baseRefName}{createdate}\n";
     #print STDERR "DEBUG: baseRef count=$baseRefs{$baseRefName}{count}\n";
     #print STDERR "DEBUG: baseRef headline=$baseRefs{$baseRefName}{headline}\n";
-    $theLimit--;
+
     last if $theLimit == 0; # zero limit is unlimited
   }
 
@@ -653,52 +402,30 @@ sub _RECENTCOMMENTS {
 }
 
 ###############################################################################
-# recursion
-sub countBlogRefs {
-  my ($theWeb, $theBlogRef) = @_;
-
-  writeDebug("called countBlogRefs($theWeb, $theBlogRef)");
-  my $nrTopics = 0;
-  if ($theBlogRef) {
-    my $queryString = 
-      'TopicType=~\'\bBlogComment\b\' AND BlogRef=\''.$theBlogRef.'\'';
-    my ($blogRefs) = &dbQuery($queryString, $theWeb);
-
-    foreach my $blogRef (@$blogRefs) {
-      ($theWeb, $theBlogRef) = &TWiki::Func::normalizeWebTopicName($theWeb, $blogRef);
-      $nrTopics += 1 + &countBlogRefs($theWeb, $theBlogRef);
-    }
-  }
-
-  writeDebug("result is $nrTopics");
-  return $nrTopics;
-}
-
-###############################################################################
 sub _COUNTCOMMENTS {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called _COUNTCOMMENTS()");
+  writeDebug("called _COUNTCOMMENTS()");
 
-  $theBlogRef = $params->{_DEFAULT} || $params->{topic};
-  $theFormat = $params->{format} || '$count';
-  $theSingle = $params->{single} || $theFormat;
-  $theHideNull = $params->{hidenull} || 'off';
-  $theNullString = $params->{null} || '0';
-  $theOffset = $params->{offset} || 0;
+  my $theBlogRef = $params->{_DEFAULT} || $params->{topic};
+  my $theFormat = $params->{format} || '$count';
+  my $theSingle = $params->{single} || $theFormat;
+  my $theHideNull = $params->{hidenull} || 'off';
+  my $theNullString = $params->{null} || '0';
+  my $theOffset = $params->{offset} || 0;
   $theWeb = $params->{web} || $theWeb;
 
   return &inlineError("ERROR: COUNTCOMMENTS has no topic argument") 
     unless $theBlogRef;
 
   ($theWeb, $theBlogRef) = &TWiki::Func::normalizeWebTopicName($theWeb, $theBlogRef);
-  #writeDebug("theBlogRef=$theBlogRef");
-  #writeDebug("theWeb=$theWeb");
+  writeDebug("theBlogRef=$theBlogRef");
+  writeDebug("theWeb=$theWeb");
 
-  &initDB($theWeb);
+  my $theDB = &initDB($theWeb);
 
   # query topics
-  my $nrTopics = &countBlogRefs($theWeb, $theBlogRef);
+  my $nrTopics = &countBlogRefs($theDB, $theBlogRef);
 
   # render result
   $nrTopics += $theOffset;
@@ -713,46 +440,26 @@ sub _COUNTCOMMENTS {
 }
 
 ###############################################################################
-sub getRelatedEntries {
-  my ($theWeb, $theTopic, $theDepth, $theRelatedTopics) = @_;
+# recursion
+sub countBlogRefs {
+  my ($theDB, $theBlogRef) = @_;
 
-  #writeDebug("getRelatedEntries($theWeb, $theTopic, $theDepth) called");
-  $theDepth = 1 unless defined $theDepth;
-  $theRelatedTopics->{$theTopic} = $theDepth;
-  return $theRelatedTopics unless $theDepth > 0;
-  
-  # get related topics we refer to
-  my %relatedTopics = ();
-  my $relatedTopics = &getFormField($theWeb, $theTopic, 'Related');
-  if (!$relatedTopics) {
-    writeDebug("ERROR: no relatedTopics in $theWeb.$theTopic"); 
-  } else {
-    foreach my $related (split(/, /, $relatedTopics)) {
-      next if $theRelatedTopics && $theRelatedTopics->{$related};
-      my $state = &getFormField($theWeb, $related, 'State');
-      next unless $state eq 'enabled';
-      $relatedTopics{$related} = $theDepth;
-      writeDebug("found related $related");
+  writeDebug("called countBlogRefs($theDB, $theBlogRef)");
+  my $nrTopics = 0;
+  if ($theBlogRef) {
+    my $queryString = 
+      'TopicType=~\'\bBlogComment\b\' AND BlogRef=\''.$theBlogRef.'\'';
+    my ($blogRefs, undef, $errMsg) = &dbQuery($theDB, $queryString);
+
+    die $errMsg if $errMsg; # never reach
+
+    foreach my $blogRef (@$blogRefs) {
+      $nrTopics += 1 + &countBlogRefs($theDB, $blogRef);
     }
   }
 
-  # get related topics that refer to us
-  my ($revRelatedTopics) = &dbQuery('Related=~\'\b' . $theTopic . '\b\' AND State=\'enabled\'', $theWeb);
-  foreach my $related (@$revRelatedTopics) {
-    next if $theRelatedTopics && $theRelatedTopics->{$related};
-    $relatedTopics{$related} = $theDepth;
-    writeDebug("found rev related $related");
-  }
-
-  # get transitive related
-  writeDebug("get trans related of $theTopic");
-  foreach my $related (keys %relatedTopics) {
-    next if $theRelatedTopics && $theRelatedTopics->{$related};
-    &getRelatedEntries($theWeb, $related, $relatedTopics{$related}-1, $theRelatedTopics);
-  }
-  
-  writeDebug("theRelatedTopics=" . join(",", sort keys %$theRelatedTopics) . " ... $theTopic in depth $theDepth");
-  return $theRelatedTopics;
+  writeDebug("result is $nrTopics");
+  return $nrTopics;
 }
 
 ###############################################################################
@@ -772,11 +479,11 @@ sub _RELATEDENTRIES {
   return &inlineError("ERROR: RELATEDENTRIES has no topic argument") 
     unless $theTopic;
 
-  &initDB($theWeb);
+  my $theDB = &initDB($theWeb);
 
   # get direct related
   my %relatedTopics;
-  &getRelatedEntries($theWeb, $theTopic, $theDepth, \%relatedTopics);
+  &getRelatedEntries($theDB, $theTopic, $theDepth, \%relatedTopics);
   delete $relatedTopics{$theTopic};
   foreach my $key (keys %relatedTopics) {
     $relatedTopics{$key} = $theDepth - $relatedTopics{$key};
@@ -798,7 +505,7 @@ sub _RELATEDENTRIES {
 
     # render meta data of related topics
     if ($text =~ /\$headline/) {
-      my $headline = &getFormField($theWeb, $related, 'Headline');
+      my $headline = &getFormField($theDB, $related, 'Headline');
       $text =~ s/\$headline/$headline/g;
     }
 
@@ -823,76 +530,46 @@ sub _RELATEDENTRIES {
 }
 
 ###############################################################################
-sub getFormField {
-  my ($theWeb, $theTopic, $theFormField) = @_;
+sub getRelatedEntries {
+  my ($theDB, $theTopic, $theDepth, $theRelatedTopics) = @_;
 
-  my $topicObj = $db{$theWeb}->fastget($theTopic);
-  return '' unless $topicObj;
+  #writeDebug("getRelatedEntries($theTopic, $theDepth) called");
+  $theDepth = 1 unless defined $theDepth;
+  $theRelatedTopics->{$theTopic} = $theDepth;
+  return $theRelatedTopics unless $theDepth > 0;
   
-  my $form = $topicObj->fastget('form');
-  return '' unless $form;
-
-  $form = $topicObj->fastget($form);
-  my $formfield = $form->fastget($theFormField) || '';
-  return TWiki::urlDecode($formfield);
-}
-
-###############################################################################
-sub dbQuery {
-  my ($theSearch, $theWeb, $theTopics, $theOrder, $theReverse) = @_;
-
-# TODO return empty result on an emtpy topics list
-
-  $theOrder ||= '';
-  $theReverse ||= '';
-  $theSearch ||= '';
-  $theTopics ||= '';
-
-#  print STDERR "DEBUG: dbQuery($theSearch, $theWeb, $theTopics, $theOrder, $theReverse) called\n";
-#  print STDERR "DEBUG: theTopics=" . join(',', @$theTopics) . "\n" if $theTopics;
-
-  my @topicNames = $theTopics?@$theTopics:$db{$theWeb}->getKeys();
-  
-  # parse & fetch
-  my %hits;
-  if ($theSearch) {
-    my $search = new TWiki::Contrib::DBCacheContrib::Search($theSearch);
-    unless ($search) {
-      return (undef, undef, &inlineError("ERROR: can't parse query $theSearch"));
-    }
-    foreach my $topicName (@topicNames) {
-      my $topicObj = $db{$theWeb}->fastget($topicName);
-      if ($search->matches($topicObj)) {
-	$hits{$topicName} = $topicObj;
-#	print STDERR "DEBUG: adding hit for $topicName\n";
-      }
-    }
+  # get related topics we refer to
+  my %relatedTopics = ();
+  my $relatedTopics = &getFormField($theDB, $theTopic, 'Related');
+  if (!$relatedTopics) {
+    writeDebug("ERROR: no relatedTopics in $theTopic"); 
   } else {
-    foreach my $topicName (@topicNames) {
-      my $topicObj = $db{$theWeb}->fastget($topicName);
-      $hits{$topicName} = $topicObj if $topicObj;
-#      print STDERR "DEBUG: adding hit for $topicName\n";
+    foreach my $related (split(/, /, $relatedTopics)) {
+      next if $theRelatedTopics && $theRelatedTopics->{$related};
+      my $state = &getFormField($theDB, $related, 'State');
+      next unless $state eq 'enabled';
+      $relatedTopics{$related} = $theDepth;
+      writeDebug("found related $related");
     }
   }
 
-  # sort
-  @topicNames = keys %hits;
-  if (@topicNames > 1) {
-    if ($theOrder eq 'name') {
-      @topicNames = sort {$a cmp $b} @topicNames;
-    } elsif ($theOrder =~ /^created/) {
-      @topicNames = sort {
-	expandPath($theWeb, $hits{$a}, 'createdate') <=> expandPath($theWeb, $hits{$b}, 'createdate')
-      } @topicNames;
-    } else {
-      @topicNames = sort {
-	expandPath($theWeb, $hits{$a}, $theOrder) cmp expandPath($theWeb, $hits{$b}, $theOrder)
-      } @topicNames;
-    }
-    @topicNames = reverse @topicNames if $theReverse eq 'on';
+  # get related topics that refer to us
+  my ($revRelatedTopics) = &dbQuery($theDB, 'Related=~\'\b' . $theTopic . '\b\' AND State=\'enabled\'');
+  foreach my $related (@$revRelatedTopics) {
+    next if $theRelatedTopics && $theRelatedTopics->{$related};
+    $relatedTopics{$related} = $theDepth;
+    writeDebug("found rev related $related");
   }
 
-  return (\@topicNames, \%hits, undef);
+  # get transitive related
+  writeDebug("get trans related of $theTopic");
+  foreach my $related (keys %relatedTopics) {
+    next if $theRelatedTopics && $theRelatedTopics->{$related};
+    &getRelatedEntries($theDB, $related, $relatedTopics{$related}-1, $theRelatedTopics);
+  }
+  
+  writeDebug("theRelatedTopics=" . join(",", sort keys %$theRelatedTopics) . " ... $theTopic in depth $theDepth");
+  return $theRelatedTopics;
 }
 
 ###############################################################################

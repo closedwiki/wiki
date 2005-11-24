@@ -15,39 +15,37 @@
 ~~~            <a name=\"$topic\"></a><a name=\"$formfield(Nr)\"></a>
 ~~~            <span class=\"blogCommentNr\">$formfield(Nr)</span>
 ~~~            $percntIFDEFINEDTHEN{\"$expand(Url)\"}$percnt
-~~~              [[$expand(Url)][$expand(Name)]] [[$web.$topic][
+~~~              [[$expand(Url)][$expand(Name)]] 
 ~~~            $percntELSEDEFINED$percnt
 ~~~              $percntCALC{
 ~~~                \"$dollarIF($dollarEXISTS(%MAINWEB%.$expand(Name)),
-~~~                  [[%MAINWEB%.$expand(Name)][$expand(Name)]] [[$web.$topic][,
-~~~                  [[$web.$topic][$expand(Name))\"
+~~~                  [[%MAINWEB%.$expand(Name)][$expand(Name)]],
+~~~                  $expand(Name))\"
 ~~~              }$percnt
-~~~            $percntFIDEFINED%
-~~~            <span class=\"blogDate\">
-~~~              $percntTIMESINCE{
-~~~                from=\"$formatTime(@BlogRef.createdate)\"
-~~~                to=\"$formatTime(createdate)\"
-~~~                null=\"immediately\"
-~~~                format=\"$time later\"
-~~~              }$percnt
-~~~            </span>]]
-~~~          <span>
-~~~            $percntTWISTYSHOW{id=\"twist$topic\"
-~~~              img=\"$percntICONPATH{\"toggleopen\"}$percnt\"
+~~~            $percntFIDEFINED$percnt, 
+~~~            $percntTWISTY{id=\"twist$topic\" 
+~~~               buttonmode=\"span\" mode=\"div\" remember=\"on\"
+~~~               link=\"
+~~~                 <span class=\\"blogDate\\">
+~~~                   $percntTIMESINCE{
+~~~                     from=\"$formatTime(@BlogRef.createdate)\"
+~~~                     to=\"$formatTime(createdate)\"
+~~~                     null=\"immediately\"
+~~~                     format=\"$time later\"
+~~~                   }$percnt
+*~~                 </span>
+*~~                 $expand(': ' and Headline)
+~~~               \"
+~~~              showimg=\"$percntICONPATH{\"toggleopen\"}$percnt\"
+~~~              hideimg=\"$percntICONPATH{\"toggleclose\"}$percnt\"
 ~~~            }$percnt
-~~~            $percntTWISTYHIDE{id=\"twist$topic\"
-~~~              img=\"$percntICONPATH{\"toggleclose\"}$percnt\"
-~~~            }$percnt
-~~~          </span>
-~~~          $percntTWISTYTOGGLE{id=\"twist$topic\" mode=\"div\"}$percnt
-~~~          <div class=\"blogCommentText\">
-~~~            $formfield(Text)
-~~~            ...&nbsp;[[$web.$topic#$topic][reply]]
-~~~          </div>
-~~~          $percntENDTWISTYTOGGLE$percnt
-~~~          $percntDBCALL{\"RenderSubComments\" NAME=\"$topic\"}$percnt
-*~~          </div>
-*~~        "
+~~~            <div class=\"blogCommentText\">
+~~~              $formfield(Text)
+~~~              ...&nbsp;[[$web.$topic#$topic][reply]]
+~~~            </div>
+~~~            $percntENDTWISTY$percnt
+~~~            $percntDBCALL{\"RenderSubComments\" NAME=\"$topic\"}$percnt
+*~~          </div>"
 ~~~ }%
 *~~
 %STOPINCLUDE%

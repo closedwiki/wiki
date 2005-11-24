@@ -1,13 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132754021" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132852112" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
 It bundles some of the features found in common blogging applications 
 that are very hard or even impossible to implement using <nop>TWikiML. 
-Some of the features implemented here as a plugin can be used in a
-more general way and aren't restricted to blogging per se. Most notably
-the DBQUERY tag will be refactored to live in a plugin of its own.
-Note, howerver, that most of the other tags are tightly related to the
+Note, that most of the tags are tightly related to the
 data modle of BlogUp, i.e. it relies on its <nop>TopicType and <nop>TWikiForm 
 definitions. 
 
@@ -26,9 +23,9 @@ Format a link to another <nop>BlogEntry displaying its headline and date.
 
 *Example:*
 
-=%<nop>CITEBLOG{"_blog.BlogEntry0"}%=
+=%<nop>CITEBLOG{"_BlogPlugin.BlogEntry0"}%=
 
-%CITEBLOG{"_blog.BlogEntry0"}%
+%CITEBLOG{"_BlogPlugin.BlogEntry0"}%
 
 
 ---+++ COUNTCOMMENTS
@@ -67,111 +64,6 @@ Following variables are expanded in format strings:
    * $t: tab
    * $nop: "empty string"
    * $count: the calculated number of references (plus an optional offset)
-
----+++ DBQUERY
-Lightweighted frontend to the DBCacheContrib. This is a drop-in replacement for
-TWiki's SEARCH which uses a database store instead of a =grep= on the pure
-topic texts to extract data. If you are looking for a more sophisticated way of
-handling queries and sub-queries then have a look at the
-TWiki:Plugins.FormQueryPlugin. The DBQUERY tag is provided to ease the use of
-<nop>TWikiApplications based on the DBCacheContrib combining its flexible query
-language with unrestricted formatting and an extend mechanism to extract topic
-properties. DBQUERY can be used in either of two modes (a) as a pure search
-tool or (b) as a tool to extract properties of a set of known topics. So you
-have to specify either the "search" or the "topics" argument in the DBQUERY
-tag.
-
-*Syntax:*
-| *%<nop>DBQUERY{"&lt;search>"}%* ||
-| ="&lt;search>"= \
-| search clause, see documentation of the DBCacheContrib (mode (a)) |
-| =topics="..."= or =topic="..."= \
-| set of topics to consult (mode (b)); \
-  if "topics" are specified in addition to a "search" it will be restricted to \
-  the given topics |
-| =web="..."= | web where to search for hits; defaults to the current one |
-| =format="..."= | format string to display search hits;\
-  defaults to "$topic"; the special format string "none" disables the format string |
-| =header="..."= | format string to prepended to the list of hits |
-| =footer="..."= | format string to appended to the list of hits |
-| =separator="..."= | format string used to separate hits; \
-  defaults to "$n"; the special separator "none" disables separation |
-| =include="..."= | pattern each found topic name must match to be considered a hit |
-| =exclude="..."= | pattern each found topic name must not match to be considered a hit |
-| =order="..."= | specifies the sorting of hits; defaults to "name" |
-| =reverse="..."= | specify if hits should be sorted in reverse order; defaults to "off" |
-| =limit="..."= | maximum number of topics to include in the hit set |
-| =skip="..."= | number of topics to skip while constructing the hit set; defaults to "0" |
-| =hidenull="..."= | flag to indicate that an empty hit set should not be displayed |
-
-Following variables are expanded in format strings:
-   * $percnt: % sign
-   * $dollar: $ sign
-   * $n: newline
-   * $t: tab
-   * $nop: "empty string"
-   * $count: the number of hits
-   * $web: the web where the hits where found
-   * $formfield(&lt;formfield-name>): the value of the given formfield
-   * $formatTime(&lt;formfield-accessor> [,&lt;format>]): format the datefield pointed
-     to by the &lt;formfield-accessor> using the given &lt;format>; the format can be
-     in any form supported by =TWiki::Func::formatTime()= 
-     (see [[%TWIKIWEB%.TWikiVariables#DISPLAYTIME_format_formatted_dis][TWikiVariables]] documentation).
-   * $expand(&lt;formfield-accessor>): return the formfield pointed to by the 
-      &lt;formfield-accessor>
-   * $encode(...): encode entities so that the text can be included in an rss feed
-
-A formfield accessor allows to rever to the properties of a topic, i.e. its formfield properties,
-but also topic properties of related topics that can be reached from the current one using the '@'
-symbol. For example, if a topic A uses a form that contains a field named "Ref" and specifies a reference to 
-another topic B (by using its name) you can access the "Headline" in B from A using =$expand(@Ref.Headline)=.
-A more basic use is =$expand(Ref)= which is identical to =$formfield(Ref)=. 
-
-Formfield accessors are a stripped version of a similar concept in the <nop>FormQueryPlugin, optimized
-for efficiency.
-
-*API:*
-
-The DBQUERY functionality can be access directly using the plugins =dbQuery()= function.
-
-| *(@$topicNames, %$topicObjs, $errorMsg) = dbQuery($search, $web [, @$topics, $order, $reverse])* ||
-| =search= | search clause |
-| =web= | web to search in |
-| =topics= | restrict search to this list of topics |
-
-returns a list pointer of all found topics names, a hash pointer to an array of all found
-topic objects (keys are the name of the topics) and a possibly defined error message.
-
----+++ DBCALL
-A lightweighted drop-in replacement for parametric INCLUDES. 
-DBCALL uses the database store to fetch topics or sections of it. Topic sections are
-precomputed and stored under their name in the database cache to be available without 
-consulting the raw topic text and needing to extract them every time again. "Glue" chars
-(see TWiki:Plugins:GluePlugin) are applied in advance so that the actual rendering time
-is minimized. DBCALL does therefore not allow to call "external" pages as INCLUDE allows.
-DBCALL's "warn" parameter can only be set to "on" and "off" and does not allow to contain
-alternative texts. The "pattern" feature used to extract a fragment from
-an INCLUDEd text using regular expression  has been droppped.
-That aside DBCALLs can be called recursively as INCLUDEs can,
-parametrized using key-value arguments and
-obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>SECTION{"..."}% 
-and %<nop>ENDSECTION{"..."}%.
-
-DBCALL is called "call" and not "include" as its main purpose is to ease 
-<nop>TWikiApplications where <nop>TopicFunctions are treated as stored procedures.
-
-Using the <nop>DBCacheContrib topic sections are stored into the topic object of the database.
-The section between %<nop>STARTINCLUDE% ... %<nop>STOPINCLUDE% is called 
-=_sectiondefault= whereas all sections between %<nop>SECTION{"&lt;name>"}% .... 
-%<nop>ENDSECTION{"&lt;name>"}% are called =_section&lt;name>= and are stored accordingly.
-
-*Syntax:*
-| *%<nop>DBCALL{"&lt;topic" ...}%* ||
-| ="&lt;topic>"= | topic that we'd like to call |
-| =section="..."= | optional named section; without this parameter the "default" section is used |
-| =&lt;key>="&lt;value>"= | topic arguments to be substituted within the included text; that is \
-            every occurence of &lt;key> is substituted with &lt;value> |
-| =warn="on,off"= | enable/suppress error warnings |
 
 
 ---+++ PREVDOC, NEXTDOC
@@ -299,8 +191,7 @@ And send me a patch if you've coded that into TWiki ;).
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-     | ==data/_blog/*.txt== | blog template web |
+     | ==data/_BlogPlugin/*.txt== | blog template web |
      | ==data/Main/BlogAdminGroup.txt== | blog admin group |
      | ==data/Main/BlogAuthorGroup.txt== | blog author group |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
@@ -310,7 +201,7 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 23 Nov 2005 (v0.22) |
+|  Plugin Version: | 24 Nov 2005 (v0.30) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
