@@ -1,5 +1,5 @@
 ---+ Family Tree Plugin
-
+%TOC%
 The Family Tree Plugin is a simple database that uses TWiki searches to perform
 queries over genealogical data in a TWiki web and generate family trees.
 
@@ -32,6 +32,7 @@ Note: searches over my family tree (360 persons, 120 unions) are just about fast
    * Set SHORTDESCRIPTION = A simple genealogy database
 
 ---++ Plugin Installation Instructions
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
    * Unzip the plugin over your TWiki installation
    * Enable the plugin in =configure=
@@ -40,9 +41,10 @@ Note: searches over my family tree (360 persons, 120 unions) are just about fast
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | requires TWiki 'Dakar' release or later |
-|  Perl Version: | 5.0 |
+|  Other Dependencies: | %$DEPENDENCIES% |
+|  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
