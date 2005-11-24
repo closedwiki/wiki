@@ -208,15 +208,15 @@ sub registerHandlers {
         my $sub = $p.'::'.$h;
         if( defined( &$sub )) {
             if( $deprecated{$h} ) {
-                if( defined( $compat )) {
-		    if (!defined( $compat->{$h} ) || 
-			$compat->{$h} < $TWiki::Plugins::VERSION) {
-                        $this->{session}->writeWarning(
-                            $this->{name}.' defines deprecated '.$h );
-		    }
+                if( $compat && $compat->{$h} &&
+                      $compat->{$h} <= $TWiki::Plugins::VERSION ) {
+                    # Compatibility handler not required in this version
+                    next;
                 }
-            } 
-	    $plugins->addListener( $h, $this );
+                $this->{session}->writeWarning(
+                    $this->{name}.' defines deprecated '.$h );
+            }
+            $plugins->addListener( $h, $this );
         }
     }
     $this->{session}->enterContext( $this->{name}.'Enabled' );
