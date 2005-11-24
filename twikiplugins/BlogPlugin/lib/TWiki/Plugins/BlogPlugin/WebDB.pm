@@ -18,9 +18,9 @@
 package TWiki::Plugins::BlogPlugin::WebDB;
 
 use strict;
-use TWiki::Contrib::DBCacheContrib;
+use TWiki::Plugins::DBCachePlugin::WebDB;
 use Time::Local;
-@TWiki::Plugins::BlogPlugin::WebDB::ISA = ("TWiki::Contrib::DBCacheContrib");
+@TWiki::Plugins::BlogPlugin::WebDB::ISA = ("TWiki::Plugins::DBCachePlugin::WebDB");
 
 use vars qw( %MON2NUM );
 
@@ -39,11 +39,11 @@ use vars qw( %MON2NUM );
   Dec => 11);
 
 
-
 ###############################################################################
 sub new {
-  my ( $class, $web ) = @_;
-  my $this = bless( $class->SUPER::new($web, "_BlogPluginWebDB"), $class );
+  my ( $class, $web, $cacheName ) = @_;
+  $cacheName = '_BlogPluginWebDB' unless $cacheName;
+  my $this = bless( $class->SUPER::new($web, $cacheName), $class );
   return $this;
 }
 
@@ -53,8 +53,14 @@ sub new {
 sub onReload {
   my ($this, $topics) = @_;
 
+  #print STDERR "DEBUG: BlogPlugin::WebDB - called onReload(@_)\n";
+
+  $this->SUPER::onReload($topics);
+
   foreach my $topicName (@$topics) {
     my $topic = $this->fastget($topicName);
+
+    #print STDERR "DEBUG: reloading $topicName\n";
 
     # createdate
     my $form = $topic->fastget('form');
@@ -73,35 +79,10 @@ sub onReload {
 
     $topic->set('createdate', $createDate);
 
-    # stored procedures
-    my $text = $topic->fastget('text');
-
-    # get default section
-    my $defaultSection = $text;
-    $defaultSection =~ s/.*?%STARTINCLUDE%//s;
-    $defaultSection =~ s/%STOPINCLUDE%.*//s;
-    applyGlue($defaultSection);
-    $topic->set('_sectiondefault', $defaultSection);
-
-    # get named sections
-    while($text =~ s/%SECTION{[^}]*?"(.*?)"}%(.*?)%ENDSECTION{[^}]*?"(.*?)"}%//s) {
-      my $name = $1;
-      my $sectionText = $2;
-      applyGlue($sectionText);
-      $topic->set("_section$name", $sectionText);
-    }
   }
+
+  #print STDERR "DEBUG: BlogPlugin::WebDB - done onReload()\n";
 }
-
-###############################################################################
-# local copy from GluePlugin
-sub applyGlue {
-
-  $_[0] =~ s/%~~\s+([A-Z]+{)/%$1/gos;  # %~~
-  $_[0] =~ s/\s*[\n\r]+~~~\s+/ /gos;   # ~~~
-  $_[0] =~ s/\s*[\n\r]+\*~~\s+//gos;   # *~~
-}
-
 
 ###############################################################################
 sub parseTime {

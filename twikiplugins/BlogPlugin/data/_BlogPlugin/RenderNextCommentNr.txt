@@ -11,7 +11,7 @@
 %STARTINCLUDE%
 *~~
 %~~ DBQUERY{topics="%NAME%" separator="none"
-~~~    format="$percntIFDEFINED{\"$expand(Nr)\" then=\"$expand(Nr).\"}$percnt"
+~~~    format="$expand(Nr and '.')"
 ~~~  }%
 *~~ 
 %~~ DBQUERY{"TopicType='BlogComment' AND BlogRef='%NAME%'" 

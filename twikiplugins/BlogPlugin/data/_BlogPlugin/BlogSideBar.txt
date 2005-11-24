@@ -16,7 +16,7 @@
 %DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
 %DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
 %DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%DBCALL{"RenderRecentComments" LIMIT="10" CAT=".*"}%
+%DBCALL{"RenderRecentComments" LIMIT="5" CAT=".*"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10"}%
 %DBCALL{"RenderArchives"}%
 %DBCALL{"RenderCategories"}%
