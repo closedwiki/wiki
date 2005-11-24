@@ -134,7 +134,7 @@ sub run {
             print STDERR $mess;
             $session->writeWarning( $mess );
             # tell the browser where to look for more help
-            print 'TWiki detected an error or attempted hack - please check your TWiki logs and webserver logs for more information.'."\n\n";
+            print 'TWiki detected an internal error - please check your TWiki logs and webserver logs for more information.'."\n\n";
             $mess =~ s/ at .*$//s;
             # cut out pathnames from public announcement
             $mess =~ s#/[\w./]+#path#g;

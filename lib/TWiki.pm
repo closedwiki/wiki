@@ -1445,31 +1445,35 @@ sub _includeUrl {
         return $text;
     }
 
-    $text = $this->{net}->getUrl( $host, $port, $path, $user, $pass );
-    $text =~ s/\r\n/\n/gs;
-    $text =~ s/\r/\n/gs;
-    $text =~ s/^(.*?\n)\n(.*)/$2/s;
-    my $httpHeader = $1;
-    my $contentType = '';
-    if( $httpHeader =~ /content\-type\:\s*([^\n]*)/ois ) {
-        $contentType = $1;
-    }
-    if( $contentType =~ /^text\/html/ ) {
-        $path =~ s/[#?].*$//;
-        $host = 'http://'.$host;
-        if( $port != 80 ) {
-            $host .= ":$port";
+    try {
+        $text = $this->{net}->getUrl( $host, $port, $path, $user, $pass );
+        $text =~ s/\r\n/\n/gs;
+        $text =~ s/\r/\n/gs;
+        $text =~ s/^(.*?\n)\n(.*)/$2/s;
+        my $httpHeader = $1;
+        my $contentType = '';
+        if( $httpHeader =~ /content\-type\:\s*([^\n]*)/ois ) {
+            $contentType = $1;
         }
-        $text = _cleanupIncludedHTML( $text, $host, $path );
-
-    } elsif( $contentType =~ /^text\/(plain|css)/ ) {
-        # do nothing
-
-    } else {
-        $text = $this->inlineAlert( 'alerts', 'bad_content', $contentType );
-    }
-
-    $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
+        if( $contentType =~ /^text\/html/ ) {
+            $path =~ s/[#?].*$//;
+            $host = 'http://'.$host;
+            if( $port != 80 ) {
+                $host .= ":$port";
+            }
+            $text = _cleanupIncludedHTML( $text, $host, $path );
+        } elsif( $contentType =~ /^text\/(plain|css)/ ) {
+            # do nothing
+        } else {
+            $text = $this->inlineAlert( 'alerts', 'bad_content',
+                                        $contentType );
+        }
+        $text = applyPatternToIncludedText( $text, $thePattern )
+          if( $thePattern );
+    } catch Error::Simple with {
+        my $e = shift;
+        $text = $this->inlineAlert( 'alerts', 'geturl_failed', $theUrl );
+    };
 
     return $text;
 }
