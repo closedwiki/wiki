@@ -210,7 +210,7 @@ sub registerHandlers {
             if( $deprecated{$h} ) {
                 if( defined( $compat )) {
 		    if (!defined( $compat->{$h} ) || 
-			$compat->{$h} <= $TWiki::Plugins::VERSION) {
+			$compat->{$h} < $TWiki::Plugins::VERSION) {
                         $this->{session}->writeWarning(
                             $this->{name}.' defines deprecated '.$h );
 		    }
