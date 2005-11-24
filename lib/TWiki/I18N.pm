@@ -212,8 +212,9 @@ sub get {
     } else {
         $this = new TWiki::I18N::Fallback();
         # we couldn't initialise 'optional' I18N infrastructure, warn that we
-        # can only use English.
-        $session->writeWarning('Could not load I18N infrastructure; falling back to English');
+        # can only use English if I18N has been requested with configure
+        $session->writeWarning('Could not load I18N infrastructure; falling back to English')
+	    if $TWiki::cfg{UserInterfaceInternationalisation};
     }
    
     # keep a reference to the session object
