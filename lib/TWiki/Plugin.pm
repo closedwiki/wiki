@@ -209,18 +209,14 @@ sub registerHandlers {
         if( defined( &$sub )) {
             if( $deprecated{$h} ) {
                 if( defined( $compat )) {
-                    if( $compat->{$h} > $TWiki::Plugins::VERSION ) {
-                        $plugins->addListener( $h, $this );
-                    } elsif( !$compat->{$h} ) {
-die $compat->{$h} if $p =~ /Wysiwyg/;
+		    if (!defined( $compat->{h} ) || 
+			$compat->{h} <= $TWiki::Plugins::VERSION) {
                         $this->{session}->writeWarning(
                             $this->{name}.' defines deprecated '.$h );
-                        $plugins->addListener( $h, $this );
-                    }
+		    }
                 }
-            } else {
-                $plugins->addListener( $h, $this );
-            }
+            } 
+	    $plugins->addListener( $h, $this );
         }
     }
     $this->{session}->enterContext( $this->{name}.'Enabled' );
