@@ -43,6 +43,7 @@ package TWiki;
 
 use strict;
 use Assert;
+use Error qw( :try );
 
 require 5.005;        # For regex objects and internationalisation
 
