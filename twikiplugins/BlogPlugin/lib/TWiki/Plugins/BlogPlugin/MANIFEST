@@ -1,5 +1,6 @@
 lib/TWiki/Plugins/BlogPlugin.pm 0440
 lib/TWiki/Plugins/BlogPlugin/WebDB.pm 0440
+lib/TWiki/Plugins/BlogPlugin/Core.pm 0440
 data/TWiki/BlogUp.txt 0440
 data/TWiki/BlogPlugin.txt 0440
 data/Main/BlogAdminGroup.txt 0440
