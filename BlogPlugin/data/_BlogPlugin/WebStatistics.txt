@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130239958" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132927879" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%WEB% Web
 
 | *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
+| Nov 2005 |  3038 |  130 |  0 | 513 [[WebRss]]<br />391 [[WebHome]]<br />133 [[TestTopic1]]<br />115 [[TestBlogEntry0]]<br />105 [[BlogLink21]]<br />104 [[BlogComment29]]<br />&nbsp;97 [[BlogEntry20]]<br />&nbsp;65 [[BlogEntry18]]<br />&nbsp;64 [[RenderSubComments]]<br />&nbsp;60 [[TestTopic2]]<br />&nbsp;57 [[BlogEntry6]] | 130 Main.MichaelDaum |
 
 __Notes:__
 	* Do not edit this topic, it is updated automatically. (You can also <a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/%WEB%">force</a> an update)
@@ -16,7 +17,6 @@ __Notes:__
    * Set SIDEBAR = Admin
    * Set SIDEBARARG = AdminTool
 -->
-
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
