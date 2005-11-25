@@ -24,7 +24,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.30';
+$RELEASE = '0.31';
 $debug = 0; # toggle me
 
 use TWiki::Plugins::DBCachePlugin qw(dbQuery getFormField initDB);

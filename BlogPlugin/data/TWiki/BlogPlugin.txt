@@ -201,14 +201,14 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 24 Nov 2005 (v0.30) |
+|  Plugin Version: | 25 Nov 2005 (v0.31) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Digest::MD5 |
 |  Other Dependencies: \
 | \
-TWiki:Contrib.DBCacheContrib, \
+TWiki:Plugins.DBCachePlugin, \
 TWiki:Plugins/ExtendedSelectionPlugin, \
 TWiki:Plugins/GluePlugin, \
 TWiki:Plugins/HeadlinesPlugin, \
@@ -227,7 +227,7 @@ TWiki:Plugins/TwistyPlugin \
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.MichaelDaum - 23 Nov 2005
+-- TWiki:Main.MichaelDaum - 25 Nov 2005
 
 
 %META:FILEATTACHMENT{name="ExtendedSelectPlugin_pm.diff" attachment="ExtendedSelectPlugin_pm.diff" attr="" comment="against 11 Oct 2005 (V1.001)" date="1132669136" path="ExtendedSelectPlugin_pm.diff" size="461" stream="ExtendedSelectPlugin_pm.diff" user="TWikiContributor" version="1.1"}%
