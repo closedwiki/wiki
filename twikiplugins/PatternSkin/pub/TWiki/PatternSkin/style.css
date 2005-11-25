@@ -512,9 +512,7 @@ a:hover .twikiAccessKey {
 .patternMainContents {
 	padding:0 2em 1em 2em;
 }
-.patternNoViewPage #patternMain {
-	padding-top:2em;
-}
+
 /* Top bar */
 #patternTopBar {}
 table.patternTopBarContents {
@@ -697,8 +695,6 @@ table.patternTopBarContents td {
 	padding:5px 1em 5px 1.25em; /*S4*/
 }
 
-
-
 /* Topic text */
 .patternTopic {
 	padding:0 0 1.5em 0;
@@ -795,6 +791,18 @@ td.patternToolBar {
 }
 input.patternFormFieldVerticalForm {
 	margin:.1em 0 .6em 0;
+}
+
+/* Pages that are not a view page */
+
+.patternNoViewPage #patternMain {
+	padding-top:2em;
+	padding-bottom:4em;
+}
+.patternNoViewPage #patternBottomBar {
+	/* same margins as #patternPage in layout.css */
+	margin-left:3%;
+	margin-right:3%;
 }
 
 /* Edit page */
@@ -1020,4 +1028,6 @@ tr.twikiDiffDebug td {
 
 .patternPlainPage #patternMain {
 	padding-top:2em;
+}
+ng-top:2em;
 }
