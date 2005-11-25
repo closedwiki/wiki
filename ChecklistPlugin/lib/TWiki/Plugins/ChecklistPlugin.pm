@@ -78,7 +78,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'NovemberEdition';
 
-$REVISION = '1.008'; #dro# fixed docs; changed default text positioning (text attribute); allowed common variable usage in stateicons attribute; fixed multiple checklists bugs
+$REVISION = '1.009'; #dro# fixed stateicons handling; fixed TablePlugin sorting problem
+#$REVISION = '1.008'; #dro# fixed docs; changed default text positioning (text attribute); allowed common variable usage in stateicons attribute; fixed multiple checklists bugs
 #$REVISION = '1.007'; #dro# added new feature (CHECKLISTSTART/END tags, attributes: clipos, pos); fixed bugs
 #$REVISION = '1.006'; #dro# added new attribute (useforms); fixed legend bug; fixed HTML encoding bug
 #$REVISION = '1.005'; #dro# fixed major bug (edit lock); fixed html encoding; improved doc
@@ -303,7 +304,7 @@ sub handleChecklist {
 		$legend.=qq@(@;
 		foreach my $state (@states) {
 			my $icon = shift @icons;
-			my $iconsrc = &getImageSrc($icon);
+			my ($iconsrc) = &getImageSrc($icon);
 			my $heState = &htmlEncode($state);
 			$legend.=qq@<img @;
 			$legend.=qq@ src="$iconsrc"@ if (defined $iconsrc ) && ($iconsrc!~/^\s*$/s);
@@ -322,7 +323,7 @@ sub handleChecklist {
 			$reset=~s/\@\S+//s;
 		}
 		
-		my $imgsrc = &getImageSrc($reset);
+		my ($imgsrc) = &getImageSrc($reset);
 		$imgsrc="" unless defined $imgsrc;
 
 		my $title=$reset;
@@ -490,7 +491,7 @@ sub renderChecklistItem {
 		}
 	}
 
-	my $iconsrc=&getImageSrc($icon);
+	my ($iconsrc,$textBef,$textAft)=&getImageSrc($icon);
 
 	my $action=TWiki::Func::getViewUrl($web,$topic);
 
@@ -514,15 +515,19 @@ sub renderChecklistItem {
 	$action.="#$stId" if $options{'anchors'};
 
 	$text.=qq@<noautolink>@;
+	
+	$text.=qq@<!--\[CLTABLEPLUGINSORTFIX\]-->$heState<!--\[/CLTABLEPLUGINSORTFIX\]-->@;
 	if ( ! $options{'useforms'} ) {
 		$text.=qq@<a name="$uetId">&nbsp;</a>@ if $options{'anchors'};
 		$text.=qq@<a href="$action">@;
 		if (lc($options{'clipos'}) ne 'left') {
 			$text.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
+		$text.=qq@$textBef@ if $textBef;
 		$text.=qq@<img border="0"@;
 		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
 		$text.=qq@ title="$heState" alt="$heState" />@;
+		$text.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
 			$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
@@ -535,10 +540,12 @@ sub renderChecklistItem {
 		if (lc($options{'clipos'}) ne 'left') {
 			$text.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
+		$text.=qq@$textBef@ if $textBef;
 		$text.=qq@<input @;
 		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
 		$text.=qq@ type="image" name="clpsc" value="$stId" @;
 		$text.=qq@title="$heState" alt="$heState"/>@;
+		$text.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
 			$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
@@ -577,11 +584,13 @@ sub substIllegalChars {
 # ========================
 sub getImageSrc {
 	my ($txt)=@_;
-	my $ret = undef;
-	if ($txt=~/img[^>]+?src="([^">]+?)"[^>]*/is) {
-		$ret=$1;
+	my ($src,$b,$a) = (undef, undef, undef);
+	##if ($txt=~/$(.*?)img[^>]+?src="([^">]+?)"[^>]*(.*)$/is) {
+	if ($txt=~/^([^<]*)<img[^>]+?src="([^">]+?)"[^>]*>(.*)$/is) {
+		##$src=$1;
+		($b,$src,$a)=($1,$2,$3);
 	}
-	return $ret;
+	return ($src,$b,$a);
 }
 
 
@@ -652,4 +661,7 @@ sub createUnknownParamsMessage {
 	return $msg;
 }
 
+sub endRenderingHandler  {
+	$_[0]=~s/<!--\[CLTABLEPLUGINSORTFIX\]-->.*?<!--\[\/CLTABLEPLUGINSORTFIX\]-->//sg;
+}
 1;
