@@ -38,7 +38,7 @@ html body {
 	
 	Sizes
 	----------------------------------------
-	C1 left bar width																16em
+	C1 left bar width																13em
 	C2 top bar height																64px
 	---------------------------------------------------------------------------------------	*/
 
@@ -60,7 +60,7 @@ html body {
 }
 #patternLeftBar,
 .patternLeftBarContents {
-	width:16em; /*C1*/
+	width:13em; /*C1*/
 }
 #patternTopBar,
 #patternTopBar table.patternTopBarContents {
