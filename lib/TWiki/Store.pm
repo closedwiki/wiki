@@ -1054,8 +1054,7 @@ sub repRev {
 
     if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
         # write log entry
-        my $extra = 'repRev by '.$user->login().": $rev " .
-          $revuser->login().
+        my $extra = "repRev $rev by " . $revuser->login() .
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
         $this->{session}->writeLog( 'cmd', $web.'.'.$topic, $extra, $user );
