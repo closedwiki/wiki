@@ -234,28 +234,31 @@ Plugins sometimes need to store data. This can be Plugin internal data such as c
 
 ---+++ Plugin Internal Data
 
-You can create a Plugin "work area" using the =TWiki::Func::getWorkArea()= function, which gives you a persistant directory where you can store data files. By default they will not be web accessible. The directory is guaranteed to exist, and to be writable by the webserver user. If you are not comfortable with Perls standard methods for reading and writing files, you can use the shortcut =TWiki::Func::storeFile()= and =TWiki::Func::readFile()= to persistently store and retrieve simple data in this area.
+You can create a Plugin "work area" using the =TWiki::Func::getWorkArea()= function, which gives you a persistant directory where you can store data files. By default they will not be web accessible. The directory is guaranteed to exist, and to be writable by the webserver user. For convenience, =TWiki::Func::storeFile()= and =TWiki::Func::readFile()= are provided to persistently store and retrieve simple data in this area.
 
 ---+++ Web Accessible Data
 
-Topic specific data such as generated images can be stored in the topics attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
+__Topic specific data__ such as generated images can be stored in the topics attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
 
 Recommendation for file name:
    * Prefix the filename with an underscore (the leading underscore avoids a nameclash with files attached to the same topic)
    * Identify where the attachment originated from, typically by including the Plugin name in the file name
-   * Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
+   * Use only alphanumeric characters, underscores, dashes and periods to avoid platform dependency issues and URL issues
    * Example: =_FooBarPlugin_img123.gif=
 
-Web specific data can be stored in the Plugin's attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
+__Web specific data__ can be stored in the Plugin's attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
 
 Recommendation for file names in Plugin attachment area:
    * Prefix the filename with an underscore
    * Include the name of the web in the filename
-   * Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
-   * Example: =_Main_img123.gif=
+   * Use only alphanumeric characters, underscores, dashes and periods to avoid platform dependency issues and URL issues
+   * Example: =_Main_roundedge-ul.gif=
 
 ---++ Handling deprecated functions
+
 From time-to-time, the TWiki developers will add new functions to the interface (either to TWikiFuncDotPm, or new handlers). Sometimes these improvements mean that old functions have to be deprecated to keep the code manageable.
+
+FIXME: The following is not KISS
 
 When this happens, the deprecated functions will be supported in the interface for at least one more TWiki release (i.e. one more after the one they are first deprecated in). When a plugin uses (or defines) the deprecated function, a warning will be generated in the TWiki warnings log. Admins who see these warnings in their logs should check TWiki.org and if necessary, contact the plugin author, for an updated version of the plugin.
 

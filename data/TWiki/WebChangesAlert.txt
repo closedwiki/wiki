@@ -1,9 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
----+ Web Changes Notification Service
+---+++ Web Changes Notification Service
 
 Each TWiki web has an automatic email notification service that sends you an email with links to all of the topics modified since the last alert. 
 
 %INCLUDE{"MailerContrib"}%
 
----+ Sysadmins
-Notification is supported by an add-on to the TWiki kernel called the MailerContrib. See the MailerContrib topic for details of how to set this service up.
+__Note for System Administrators:__ Notification is supported by an add-on to the TWiki kernel called the !MailerContrib. See the MailerContrib topic for details of how to set this service up.
+

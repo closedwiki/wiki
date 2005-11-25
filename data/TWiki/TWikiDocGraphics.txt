@@ -65,6 +65,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/edittopic.gif" alt="Edit topic" title="Edit topic" />  | =edittopic.gif= | Edit topic | =%<nop>ICON{edittopic}%= |
 | <img src="%ATTACHURLPATH%/save.gif" alt="Save" title="Save" />  | =save.gif= | Save | =%<nop>ICON{save}%= |
 | <img src="%ATTACHURLPATH%/attachfile.gif" alt="Attach file" title="Attach file" />  | =attachfile.gif= | Attach file | =%<nop>ICON{attachfile}%= |
+| <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
 | <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
 | <img src="%ATTACHURLPATH%/searchtopic.gif" alt="Search topic" title="Search topic" />  | =searchtopic.gif= | Search topic | =%<nop>ICON{searchtopic}%= |
 | <img src="%ATTACHURLPATH%/search-small.gif" alt="Search" title="Search" />  | =search-small.gif= | Small search button, 13x13 | =&lt;img src="%<nop>ICONPATH{search-small}%" width="13" height="13" alt="Search" border="0" /&gt;= |

@@ -6,13 +6,13 @@
       * documents and other files can be uploaded and downloaded
       * all you need is a Web browser and any available network connection
 
----+++ TWiki is an UNUSUAL Web-based collaboration platform
+---++ TWiki is an UNUSUAL Web-based collaboration platform
    * There's no doubt that, to most people, TWiki at first seems almost the opposite of how the Web and online communications "normally" work. Why?
       * TWiki operates like a whiteboard for the Web - it lets you and all other users write, place pictures and post links, anywhere on any page.
       * Not only that, everyone can EDIT anything, anywhere on a page.
       * At first, this may seem "too" open - it soon becomes second-nature, allowing you the freedom to edit and update the way you want to.
 
----+++ TWiki is a powerful Web enhancement...
+---++ TWiki is a powerful Web enhancement...
    * TWiki's parsing engine is written in Perl. It reads a text file, and converts TWiki shorthand into standard HTML, on the fly. The point is to:
       * make adding and editing text simple _(How simple? Click on the *Edit* link at the bottom of the page...)_ 
       * let you find information _fast_ ([[WebSearch][WebSearch]])
@@ -21,12 +21,14 @@
 
    * TWiki is one of many WikiWikiClones, based on Ward Cunningham's original [[http://c2.com/][Wiki Wiki Web]].
 
----+++ "TWiki" stands for...
+---++ "TWiki" stands for...
 
    * _Wiki wiki_ means "quick" in Hawaiian. The shuttle at Honolulu Airport is called the _wiki wiki_ bus, which is where the original Wiki web got its name.
-   * _TWiki_ is short for _TakeFive Wiki_, the name of the company where its founder worked. (It was later discovered that _Twiki_ is also the name of an AI robot that co-starred in the <a href="http://www.buck-rogers.com/" target="_blank"><i>Buck Rogers...</i></a> movie and TV series from 1979)
+   * _TWiki_ is short for _TakeFive Wiki_, the name of the company where its founder Peter Thoeny worked. (It was later discovered that _Twiki_ is also the name of an AI robot that co-starred in the <a href="http://www.buck-rogers.com/" target="_blank"><i>Buck Rogers</i></a> movie and TV series from 1979.)
 
----+++ Selected TWiki Topics...
+---++ Selected TWiki Topics...
+
+   * WelcomeGuest is a fast track guide to TWiki
    * TWikiSite provides a basic big picture overview of the TWiki platform
    * TWikiTopics is a quick and concentrated look at the TWiki core
    * TWikiPlannedFeatures lists approved additions to future TWiki versions.
@@ -38,13 +40,14 @@
 
 <blockquote> %X% If you have to log-in to use TWiki, for example, if Twiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: %MAINWEB%.TWikiGuest.</blockquote>
 
-TWiki&trade; is a trademark of TWiki:Main.PeterThoeny - originator of TWiki.
+---++ Disclaimer
+
+   * TWiki&trade;, the TWiki logo and the "Collaborate with TWiki" tagline are trademarks of TWiki:Main.PeterThoeny - founder of TWiki.
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * TWiki has its root in the GPLed <nop>JosWiki. Many thanks to Markus Peter and Dave Harris for creating <nop>JosWiki!
-   * TWiki's home address is http://twiki.org/.
-   * Source code is available upon request: see http://twiki.org/download.html.
-   * WelcomeGuest is a fast track guide to TWiki.
-   * This site is powered by TWiki version *%WIKIVERSION%*.
+   * TWiki's home address is http://twiki.org/
+   * The latest TWiki release is available from http://twiki.org/download.html
+   * This site is powered by TWiki version *%WIKIVERSION%*
 
 __Related Topics:__ UserDocumentationCategory
 
