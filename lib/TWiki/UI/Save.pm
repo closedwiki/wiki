@@ -91,6 +91,8 @@ sub buildNewTopic {
     my ( $prevMeta, $prevText );
     my ( $templateText, $templateMeta );
     my $templatetopic = $query->param( 'templatetopic');
+    my $templateweb = $webName;
+
     if( $topicExists ) {
         ( $prevMeta, $prevText ) =
           $store->readTopic( undef, $webName, $topic, undef );
@@ -103,6 +105,9 @@ sub buildNewTopic {
             }
         }
     } elsif ($templatetopic) {
+	( $templateweb, $templatetopic ) =
+	  $session->normalizeWebTopicName( $templateweb, $templatetopic );
+
         ( $templateMeta, $templateText ) =
           $store->readTopic( $session->{user}, $webName,
                              $templatetopic, undef );
