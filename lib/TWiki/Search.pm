@@ -404,7 +404,7 @@ sub searchWeb {
     my $type =          $params{type} || '';
     my $webName =       $params{web} || '';
     my $date =          $params{date} || '';
-    my $subWeb =        $params{'subweb'} || '';
+    my $recurse =       $params{'recurse'} || '';
     my $finalTerm =     $inline ? ( $params{nofinalnewline} || 0 ) : 0;
 
     $baseWeb =~ s/\./\//go;
@@ -459,7 +459,7 @@ sub searchWeb {
                 $excludeWeb{$web} = 1;
             } else {
                 push( @tmpWebs, $web );
-                if( TWiki::isTrue( $subWeb ) || $web =~ /^(all|on)$/i ) {
+                if( TWiki::isTrue( $recurse ) || $web =~ /^(all|on)$/i ) {
                     my $webarg = ($web =~/^(all|on)$/i) ? undef : $web;
                     push( @tmpWebs,
                       $store->getListOfWebs( 'user,allowed', $webarg ));
@@ -470,7 +470,7 @@ sub searchWeb {
     } else {
         # default to current web
         push( @tmpWebs, $session->{webName} );
-        if ( TWiki::isTrue( $subWeb )) {
+        if ( TWiki::isTrue( $recurse )) {
             push( @tmpWebs, $store->getListOfWebs( 'user,allowed',
                                                    $session->{webName} ));
         }
