@@ -983,7 +983,7 @@ sub normalizeWebTopicName {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT(defined $topic) if DEBUG;
 
-    if( $topic =~ m|^([^.]+)[./](.*)$| ) {
+    if( $topic =~ m|^(.*)[\./](.*)$| ) {
         $web = $1;
         $topic = $2;
     }
