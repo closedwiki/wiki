@@ -1094,9 +1094,13 @@ sub new {
     }
 
     # Check to see if we just dissected a web path missing its WebHome
-    if($topic ne "" && $this->{store}->webExists("$web/$topic")) {
-        $web .= '/'.$topic;
-        $topic = "";
+    if($topic ne "") {
+      if(!$this->{store}->topicExists($web,$topic)) {
+	if($this->{store}->webExists("$web/$topic")) {
+	  $web .= '/'.$topic;
+	  $topic = "";
+	}
+      }
     }
     # All roads lead to WebHome
     $topic = $TWiki::cfg{HomeTopicName} if ( $topic =~ /\.\./ );
