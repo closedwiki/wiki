@@ -2458,7 +2458,7 @@ sub _INCLUDE {
     my $includedWeb = $includingWeb;
     my $includedTopic = $path;
     $includedTopic =~ s/\.txt$//; # strip .txt extension
-    if( $includedTopic =~ /^($regex{webNameRegex})[\.\/]($regex{wikiWordRegex})$/o ) {
+    if( $includedTopic =~ /^($regex{webNameRegex})[\.\/]([$regex{mixedAlphaNum}_]+)$/o ) {
         $includedWeb = $1;
         $includedTopic = $2;
     }
