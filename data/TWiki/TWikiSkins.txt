@@ -7,7 +7,7 @@ _Skins overlay regular templates with alternate header/footer layouts; topic tex
 
 ---++ Overview
 
-Skins are customized TWikiTemplates files. You can use skins to change the look of a <nop>%WIKITOOLNAME% topic, for example, the layout of the header and footer. Rendered text between header and footer does __not__ change. You can also use skins to define an alternate view, like a view optimized for printing.
+Skins are customized TWikiTemplates files. You can use skins to change the look of a TWiki topic, for example, the layout of the header and footer. Rendered text between header and footer does __not__ change. You can also use skins to define an alternate view, like a view optimized for printing.
 
 ---++ Defining Skins
 
@@ -15,7 +15,7 @@ Skin files are located in the =twiki/templates= directory and are named with the
 
 Use the existing TWikiTemplates (like =view.tmpl=) or skin files as a base for your own skin, name it for example =view.myskin.tmpl=.
 
-%X% Two skin names have _reserved_ meanings; =text= skin, and skin names starting with =rss= have _hard-coded meanings. [[HardCodedSkins][See below]].
+__%X% Note:__ Two skin names have _reserved_ meanings; =text= skin, and skin names starting with =rss= have [[#HardCodedSkins][hard-coded meanings]].
 
 The following template files are referenced in the TWiki core code, and must be defined in the =templates= directory for a skin to work. Remember that if a skin doesn't define a template, then TWiki will fall back to the default version of the file.
 
@@ -79,7 +79,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>SCRIPTSUFFIX%= | The script suffix, ex: =.pl=, =.cgi= |
 | =%<nop>WEB%= | The name of the current web. __Note:__ It is recommended to URL-encode the variable in form actions with =%<nop>INTURLENCODE{"%<nop>WEB%"}%= for proper handling in an internationalized environment |
 | =%<nop>TOPIC%= | The name of the current topic. __Note:__ It is recommended to URL-encode the variable in form actions with =%<nop>INTURLENCODE{"%<nop>TOPIC%"}%= for proper handling in an internationalized environment |
-| =%<nop>WEBTOPICLIST%= | Common links of current web, defined in the WebPreferences. It includes a [[#GoBox]] |
+| =%<nop>WEBTOPICLIST%= | Common links of current web, defined in the WebPreferences. It includes a [[#GoBox][Go box]] |
 | =%<nop>TEXT%= | The topic text, e.g. the content that can be edited |
 | =%<nop>META{"form"}%= | [[TWikiForms][TWikiForm]], if any |
 | =%<nop>META{"attachments"}%= | FileAttachment table |
@@ -93,7 +93,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 #GoBox
 ---+++ The "Go" Box and Navigation Box
 
-The =%<nop>WEBTOPICLIST%= includes a "Jump" box to jump to a topic. The box also understands URLs, e.g. you can type http://www.google.com/ to jump to an external web site. The feature is handy if you build a skin that has a select box of frequently used links, like Intranet home, employee database, sales database and such. A little <nop>JavaScript gets into action on the onSelect method of the select tag to fill the selected URL into the "Go" box field, then submits the form.
+The =%<nop>WEBTOPICLIST%= includes a "Go" box, also called "Jump" box, to jump to a topic. The box also understands URLs, e.g. you can type http://www.google.com/ to jump to an external web site. The feature is handy if you build a skin that has a select box of frequently used links, like Intranet home, employee database, sales database and such. A little <nop>JavaScript gets into action on the onSelect method of the select tag to fill the selected URL into the "Go" box field, then submits the form.
 
 Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
 
@@ -165,7 +165,7 @@ The =ATTACH:row= macros are expanded for each file in the attachment table, usin
 | =%A_COMMENT%= | The comment they put in when uploading it |
 | =%A_ATTRS%= | The attributes of the file as seen on the upload screen e.g "h" for a hidden file |
 
-Note: it is easy to change the look and feel for an entire site by editing the =twiki.tmpl= template file. However, to simplify upgrading, you should avoid doing this. Instead, write a skin-specific template file e.g. =attach.myskin.tmpl= and use =%TMPL:INCLUDE{attach.myskin.tmpl}%= to include it in each of your skin files. As long as it it included _after_ twiki.tmpl, your macro definitions will override the defaults defined there.
+Note: it is easy to change the look and feel for an entire site by editing the =twiki.tmpl= template file. However, to simplify upgrading, you should avoid doing this. Instead, write a skin-specific template file e.g. =attach.myskin.tmpl= and use =%TMPL:INCLUDE{attach.myskin.tmpl}%= to include it in each of your skin files. As long as it is included _after_ twiki.tmpl, your macro definitions will override the defaults defined there.
 
 ---++ Packaging and Publishing Skins
 
@@ -181,19 +181,23 @@ TWiki uses a _skin search path_, which lets you combine skins additively. The sk
 
 TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. Each skin on the path is searched for in turn. For example, if you have set the skin path to =local,pattern= then =view.local.tmpl= will be searched for first, then =view.pattern.tmpl= and finally =view.tmpl=.
 
-The basic skin is defined by setting the %<nop>SKIN% TWikiVariable:
-   * =Set SKIN = catskin,bearskin=
+The basic skin is defined by setting the =%<nop>SKIN%= TWiki Variable:
 
-You can also add a parameter to the URL: ?skin=catskin,bearskin
+   * =Set SKIN = catskin, bearskin=
 
-Setting %<nop>SKIN% (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
+You can also add a parameter to the URL, such as =?skin=catskin, bearskin=. Example activation of PlainSkin that removes all page decoration:
+
+   * %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=plain
+
+Setting =%<nop>SKIN%= (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
 
    * =Set COVER = ruskin=
 
-This pushes a different skin to the front of the skin search path (so for our example above, that final skin path will be =ruskin,catskin,bearskin=). There is also an equivalent =cover= URL parameter.
+This pushes a different skin to the front of the skin search path (so for our example above, that final skin path will be =ruskin, catskin, bearskin=). There is also an equivalent =cover= URL parameter.
 
 The full skin path is built up as follows: =%<nop>SKIN%= (or =?skin= if it is set), then =%<nop>COVER%= is added, then =?cover=.
 
+#HardCodedSkins
 ---++ Hard Coded Skins
 
 The =text= skin is reserved for TWiki internal use.
