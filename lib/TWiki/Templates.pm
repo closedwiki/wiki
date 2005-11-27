@@ -152,7 +152,7 @@ sub tmplP {
     my $else = $params->remove('else');
     if( $context ) {
         $template = $then if defined( $then );
-        foreach my $id ( split( /, */, $context )) {
+        foreach my $id ( split( /\,\s*/, $context )) {
             unless( $this->{session}->{context}->{$id} ) {
                 $template = ( $else || '' );
                 last;
@@ -344,7 +344,7 @@ sub _readTemplateFile {
         return TWiki::readFile( $TWiki::cfg{TemplateDir}.'/'.$name );
     }
 
-    my @skinList = split( /,+/, $skins );
+    my @skinList = split( /\,\s*/, $skins );
 
     # Search the web dir and the root dir for the skinned version first
     my @candidates;
