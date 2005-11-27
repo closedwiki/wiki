@@ -28,10 +28,11 @@
    * %WIKIPREFSTOPIC%
    * %WEBPREFSTOPIC%
 ---
-   * *Documentation*
-%SEARCH{"DocumentationCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
----
-   * *ToolsCategories*
-%SEARCH{"ToolsCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
+   * <b>%MAKETEXT{"Categories"}%</b>
+   * [[AdminDocumentationCategory][Admin Documentation]]
+   * [[AdminToolsCategory][Admin Tools]]
+   * [[DeveloperDocumentationCategory][Developer Doc]]
+   * [[UserDocumentationCategory][User Documentation]]
+   * [[UserToolsCategory][User Tools]]
 ---
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
