@@ -1014,10 +1014,6 @@ sub new {
 
     $this->{htmlHeaders} = {};
     $this->{context} = {};
-    if ( (defined($query->param('command_line'))) && ($query->param('command_line') == 1) ) {
-	    $this->{context}->{command_line} = 1;
-		$TWiki::cfg{UseClientSessions} = 0;	#don't use sessions on the command line
-    }
 
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;

@@ -30,6 +30,7 @@ Statistics extraction and presentation
 package TWiki::UI::Statistics;
 
 use strict;
+use Assert;
 use File::Copy qw(copy);
 use IO::File;
 use Error qw( :try );
@@ -55,21 +56,21 @@ sub statistics {
     my $webName = $session->{webName};
 
     my $tmp = '';
-    my $destWeb = $TWiki::cfg{UsersWebName}; #web to redirect to after finishing
+    # web to redirect to after finishing
+    my $destWeb = $TWiki::cfg{UsersWebName};
     my $logDate = $session->{cgiQuery}->param( 'logdate' ) || '';
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
     $debug = $session->{cgiQuery}->param( 'debug' );
 
-    if( !$session->{scripted} ) {
+    unless( $session->inContext( 'command_line' )) {
         # running from CGI
         $session->writePageHeader();
         print CGI::start_html(-title=>'TWiki: Create Usage Statistics');
     }
-
     # Initial messages
-    _printMsg( 'TWiki: Create Usage Statistics', $session );
-    _printMsg( '!Do not interrupt this script!' );
-    _printMsg( '(Please wait until page download has finished)' );
+    _printMsg( $session, 'TWiki: Create Usage Statistics' );
+    _printMsg( $session, '!Do not interrupt this script!' );
+    _printMsg( $session, '(Please wait until page download has finished)' );
 
     unless( $logDate ) {
         $logDate =
@@ -82,18 +83,18 @@ sub statistics {
         $logYear = $1;
         $logMonth = $TWiki::Time::ISOMONTH[ ( $2 % 12 ) - 1 ];
     } else {
-        _printMsg( "!Error in date $logDate - must be YYYYMM", $session );
+        _printMsg( $session, "!Error in date $logDate - must be YYYYMM" );
         return;
     }
 
     my $logMonthYear = "$logMonth $logYear";
-    _printMsg( "* Statistics for $logMonthYear", $session );
+    _printMsg( $session, "* Statistics for $logMonthYear" );
 
     my $logFile = $TWiki::cfg{LogFileName};
     $logFile =~ s/%DATE%/$logDate/g;
 
     unless( -e $logFile ) {
-        _printMsg( "!Log file $logFile does not exist; aborting", $session );
+        _printMsg( $session, "!Log file $logFile does not exist; aborting" );
         return;
     }
 
@@ -121,33 +122,24 @@ sub statistics {
 
     # Do a single data collection pass on the temporary copy of logfile,
     # then process each web once.
-    my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, 
-        $statUploadsRef) = _collectLogData( $session, $TMPFILE, $logMonthYear );
-
-#    # DEBUG ONLY
-#    _debugPrintHash($viewRef);
-#    _debugPrintHash($contribRef);
-#    print "statViews tests===========\n";
-#    print "Views in Main = " . ${$statViewsRef}{'Main'} . "\n";
-#    print "hash stats (used/avail) = " . %{$statViewsRef}."\n";
-#    foreach my $web (keys %{$statViewsRef}) {
-#        print "Web summary for $web\n";
-#        print $statViewsRef->{$web}."\n";
-#        print $statSavesRef->{$web}."\n";
-#        print $statUploadsRef->{$web}."\n";
-#    }
+    my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, $statUploadsRef) =
+      _collectLogData( $session, $TMPFILE, $logMonthYear );
 
     my @weblist;
-
-    if( $session->{webName} ) {
-        # do a particular web:
-        push( @weblist, $session->{webName} );
+    my $webSet = $session->{cgiQuery}->param( 'webs' );
+    unless( defined( $webSet ) || $session->inContext( 'command_line' )) {
+        $webSet = $session->{webName};
+    }
+    if( $webSet) {
+        # do specific webs
+        push( @weblist, split( /,\s*/, $webSet ));
     } else {
-        # do all user webs:
+        # otherwise do all user webs:
         @weblist = $session->{store}->getListOfWebs( 'user' );
     }
     my $firstTime = 1;
     foreach my $web ( @weblist ) {
+
         $destWeb = _processWeb( $session,
                                 $web,
                                 $logMonthYear,
@@ -164,15 +156,15 @@ sub statistics {
     unlink $tmpFilename;# FIXME: works on Windows???  Unlink before
     # usage to ensure deleted on crash?
 
-    if( !$session->{scripted} ) {
+    if( !$session->inContext( 'command_line' ) ) {
         $tmp = $TWiki::cfg{Stats}{TopicName};
         my $url = $session->getScriptUrl( $destWeb, $tmp, 'view' );
-        _printMsg( '* Go back to '
+        _printMsg( $session, '* Go back to '
                    . CGI::a( { href => $url,
-                               rel => 'nofollow' }, $tmp), $session );
+                               rel => 'nofollow' }, $tmp) );
     }
-    _printMsg( 'End creating usage statistics', $session );
-    print CGI::end_html() unless( $session->{scripted} );
+    _printMsg( $session, 'End creating usage statistics' );
+    print CGI::end_html() unless( $session->inContext( 'command_line' ) );
 }
 
 # Debug only
@@ -299,10 +291,10 @@ sub _processWeb {
     my( $topic, $user ) = ( $session->{topicName}, $session->{user} );
 
     if( $isFirstTime ) {
-        _printMsg( '* Executed by '.$user->wikiName(), $session );
+        _printMsg( $session, '* Executed by '.$user->wikiName() );
     }
 
-    _printMsg( "* Reporting on TWiki.$web web", $session );
+    _printMsg( $session, "* Reporting on TWiki.$web web" );
 
     # Handle null values, print summary message to browser/stdout
     my $statViews = $statViewsRef->{$web};
@@ -311,7 +303,7 @@ sub _processWeb {
     $statViews ||= 0;
     $statSaves ||= 0;
     $statUploads ||= 0;
-    _printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads", $session );
+    _printMsg( $session, "  - view: $statViews, save: $statSaves, upload: $statUploads" );
 
     
     # Get the top N views and contribs in this web
@@ -324,11 +316,11 @@ sub _processWeb {
     if( @topViews ) {
         $statTopViews = join( CGI::br(), @topViews );
         $topViews[0] =~ s/[\[\]]*//g;
-        _printMsg( '  - top view: '.$topViews[0], $session );
+        _printMsg( $session, '  - top view: '.$topViews[0] );
     }
     if( @topContribs ) {
         $statTopContributors = join( CGI::br(), @topContribs );
-        _printMsg( '  - top contributor: '.$topContribs[0], $session );
+        _printMsg( $session, '  - top contributor: '.$topContribs[0] );
     }
 
     # Update the WebStatistics topic
@@ -378,16 +370,15 @@ sub _processWeb {
         }
         $text = join( "\n", @lines );
         $text .= "\n";
-
         $session->{store}->saveTopic( $user, $web, $statsTopic,
                                       $text, $meta,
                                       { minor => 1,
                                         dontlog => 1 } );
 
-        _printMsg( "  - Topic $statsTopic updated", $session );
+        _printMsg( $session, "  - Topic $statsTopic updated" );
 
     } else {
-        _printMsg( "! Warning: No updates done, topic $web.$statsTopic does not exist", $session );
+        _printMsg( $session, "! Warning: No updates done, topic $web.$statsTopic does not exist" );
     }
 
     return $web;
@@ -446,9 +437,9 @@ sub _getTopList
 }
 
 sub _printMsg {
-    my( $msg, $session ) = @_;
+    my( $session, $msg ) = @_;
 
-    if( $session->{scripted} ) {
+    if( $session->{command_line} ) {
         $msg =~ s/&nbsp;/ /go;
     } else {
         if( $msg =~ s/^\!// ) {

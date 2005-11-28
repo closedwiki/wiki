@@ -277,4 +277,8 @@ Other parameters as described under =manage=, =action=changePassword=.
 | =LoginName= | *list* of usernames to reset | none |
 | =Introduction= | ? | '' |
 
+---++ =statistics=
+| *Parameter* | *Description* | *Default* |
+| =webs= | *list* of webs to run stats on | none |
+
 __Related Topics:__ AdminDocumentationCategory, DeveloperDocumentationCategory

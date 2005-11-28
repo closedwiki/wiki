@@ -68,8 +68,10 @@ sub run {
     } else {
         # script is called by cron job or user
         $scripted = 1;
-        $user = '';
-        $query = new CGI( {'command_line'=>1} );
+        # don't use sessions on the command line
+		$TWiki::cfg{UseClientSessions} = 0;
+        $user = $TWiki::cfg{SuperAdminGroup};
+        $query = new CGI();
         while( scalar( @ARGV )) {
             my $arg = shift( @ARGV );
             if ( $arg =~ /^-?([A-Za-z0-9_]+)$/o ) {
@@ -87,6 +89,7 @@ sub run {
     }
 
     my $session = new TWiki( $user, $query );
+    $session->enterContext( 'command_line' ) if $scripted;
 
     local $SIG{__DIE__} = \&Carp::confess;
 

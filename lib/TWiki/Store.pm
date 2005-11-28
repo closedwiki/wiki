@@ -473,12 +473,8 @@ sub moveWeb {
     unshift(@webList,$oldWeb);
     foreach my $webIter (@webList) {
         if( $webIter ) {
-            $webIter =~ /(.*)/;
-            $webIter = $1;
             my @webTopicList = $this->getTopicNames( $webIter );
             foreach my $webTopic (@webTopicList) {
-                $webTopic =~ /(.*)/;
-                $webTopic = $1;
                 $this->lockTopic( $user, $webIter, $webTopic );
             }
         }
@@ -495,12 +491,8 @@ sub moveWeb {
     unshift(@webList, $newWeb);
     foreach my $webIter (@webList) {
         if( $webIter ) {
-            $webIter =~ /(.*)/;
-            $webIter = $1;
             my @webTopicList = $this->getTopicNames( $webIter );
             foreach my $webTopic (@webTopicList) {
-                $webTopic =~ /(.*)/;
-                $webTopic = $1;
                 $this->unlockTopic( $user, $webIter, $webTopic );
             }
         }
