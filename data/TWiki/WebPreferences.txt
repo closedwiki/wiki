@@ -27,7 +27,7 @@ These settings override the defaults for this web only. See %TWIKIWEB%.TWikiPref
       * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
    * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
-      * Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
+      * #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
    * Web preferences that are *not* allowed to be overridden by user preferences:
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME, ALLOWWEBMANAGE, DENYWEBMANAGE
