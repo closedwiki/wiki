@@ -78,7 +78,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'NovemberEdition';
 
-$REVISION = '1.009'; #dro# fixed stateicons handling; fixed TablePlugin sorting problem
+$REVISION = '1.010'; #dro# fixed URL parameter bugs (preserve URL parameters; URL encoding); used CGI module to generate HTML; fixed table sorting bug in a ChecklistItemState topic
+#$REVISION = '1.009'; #dro# fixed stateicons handling; fixed TablePlugin sorting problem
 #$REVISION = '1.008'; #dro# fixed docs; changed default text positioning (text attribute); allowed common variable usage in stateicons attribute; fixed multiple checklists bugs
 #$REVISION = '1.007'; #dro# added new feature (CHECKLISTSTART/END tags, attributes: clipos, pos); fixed bugs
 #$REVISION = '1.006'; #dro# added new attribute (useforms); fixed legend bug; fixed HTML encoding bug
@@ -306,9 +307,8 @@ sub handleChecklist {
 			my $icon = shift @icons;
 			my ($iconsrc) = &getImageSrc($icon);
 			my $heState = &htmlEncode($state);
-			$legend.=qq@<img @;
-			$legend.=qq@ src="$iconsrc"@ if (defined $iconsrc ) && ($iconsrc!~/^\s*$/s);
-			$legend.=qq@ alt="$heState" title="$heState"/> - $heState @; 	
+			$legend.=$query->img({src=>$iconsrc, alt=>$heState, title=>$heState});
+			$legend.=qq@ - $heState @;
 		}
 		$legend.=qq@) @;
 		$legend.=qq@</noautolink>@;
@@ -344,27 +344,27 @@ sub handleChecklist {
 
 		$text.=qq@<noautolink>@;
 		if ( ! $options{'useforms'}) {
-			$text.=qq@<a name="reset${name}">&nbsp;</a>@ if $options{'anchors'};
+			$text.=$query->a({name=>"reset${name}"}, '&nbsp;') if $options{'anchors'};
 			$text.=$legend;
-			$text.=qq@<a href="${action}">@;
-			$text.=qq@<img border="0"@;
-			$text.=qq@ src="${imgsrc}"@ if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
-			$text.=qq@ title="${title}" alt="${title}" />@;
-			$text.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			$text.=qq@</a> @;
+			my $linktext="";
+			my $imgparams = {title=>$title, alt=>$title, border=>0};
+			$$imgparams{src}=$imgsrc if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
+			$linktext.=$query->img($imgparams);
+			$linktext.=qq@ ${title}@ if ($title!~/^\s*$/i)&&($imgsrc ne "");
+			$text.=$query->a({href=>$action}, $linktext);
 		} else {
-			$text.=qq@<form method="post" action="$action">@;
-			$text.=$legend;
-			$text.=qq@<a name="reset${name}">&nbsp;</a>@ if $options{'anchors'} ;
-			$text.=qq@<input type="hidden" name "clresetst" value="@.&htmlEncode($state).qq@"/>@;
-			$text.=qq@<input type="image" name="clreset" value="@.&htmlEncode($name).qq@"@;
-			$text.=qq@ src="$imgsrc"@ if (defined $imgsrc ) && ($imgsrc!~/^\s*$/s);
-			$text.=qq@ title="$title" alt="$title"@;
-			$text.=qq@>@;
-			$text.=" $title" if ($title!~/^\s*$/i)&&($imgsrc ne "");
-			$text.=' '.&htmlEncode($options{'text'}) if defined $options{'text'};
-			$text.=qq@</input>@;
-			$text.=qq@</form>@;
+			my $form="";
+			$form.=$query->start_form({method=>'post', action=>$action});
+			$form.=$legend;
+			$form.=$query->a({name=>"reset${name}"},'&nbsp;') if $options{'anchors'} ;
+			$form.=$query->hidden({name=>'clresetst', value=>&htmlEncode($state)});
+			$form.=$query->image_button({name=>"clreset", value=>&htmlEncode($name),
+				src=>$imgsrc, title=>$title, alt=>$title});
+			$form.=" $title" if ($title!~/^\s*$/i)&&($imgsrc ne "");
+			$form.=' '.&htmlEncode($options{'text'}) if defined $options{'text'};
+			$form.=$query->end_form();
+			$form=~s/[\r\n]+//sg;
+			$text.=$form;
 		}
 		$text.=qq@</noautolink>@;
 	} else {
@@ -511,45 +511,51 @@ sub renderChecklistItem {
 		$action.="&clpscn=".&urlEncode($name);
 		$action.="&clpscls=$ueState";
 	}
-
+	my %queryVars = $query->Vars();
+	foreach my $p (keys %queryVars) {
+		$action.="&$p=".&urlEncode($queryVars{$p}) 
+			unless ($p =~ /^(clp.*|contenttype|)$/i)||(!$queryVars{$p});
+	}
 	$action.="#$stId" if $options{'anchors'};
 
 	$text.=qq@<noautolink>@;
 	
-	$text.=qq@<!--\[CLTABLEPLUGINSORTFIX\]-->$heState<!--\[/CLTABLEPLUGINSORTFIX\]-->@;
+	$text.=$query->comment("\[CLTABLEPLUGINSORTFIX\]");
+	$text.=$heState;
+	$text.=$query->comment("\[/CLTABLEPLUGINSORTFIX\]");
+
+	$text.=$query->a({name=>$uetId}, "&nbsp;") if $options{'anchors'};
+
 	if ( ! $options{'useforms'} ) {
-		$text.=qq@<a name="$uetId">&nbsp;</a>@ if $options{'anchors'};
-		$text.=qq@<a href="$action">@;
+		
+		my $linktext="";
 		if (lc($options{'clipos'}) ne 'left') {
-			$text.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+			$linktext.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
-		$text.=qq@$textBef@ if $textBef;
-		$text.=qq@<img border="0"@;
-		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
-		$text.=qq@ title="$heState" alt="$heState" />@;
-		$text.=qq@$textAft@ if $textAft;
+		$linktext.=qq@$textBef@ if $textBef;
+		$linktext.=$query->img({src=>$iconsrc, border=>0, title=>$heState, alt=>$heState});
+		$linktext.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
-			$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
-		$text.=qq@ </a> @;
+		$text.=$query->a({-href=>$action},$linktext);
 	} else {
-		$text.=qq@<a name="$stId">&nbsp;</a>@ if $options{'anchors'};
-		$text.=qq@<form action="$action" name="changeitemstate\[$stId\]" method="post">@;
-		$text.=qq@<input type="hidden" name="clpscls" value="$heState"/>@;
-		$text.=qq@<input type="hidden" name="clpscn" value="@.&htmlEncode($name).qq@"/>@;
+		my $form=$query->start_form(-method=>"POST", -action=>$action, -name=>"changeitemstate\[$stId\]");
+		$form.=$query->hidden(-name=>'clpscls', -value=>$heState);
+		$form.=$query->hidden(-name=>'clpscn', -value=>&htmlEncode($name));
 		if (lc($options{'clipos'}) ne 'left') {
-			$text.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+			$form.=$options{'text'}.' ' unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
-		$text.=qq@$textBef@ if $textBef;
-		$text.=qq@<input @;
-		$text.=qq@ src="$iconsrc"@ if (defined $iconsrc) && ($iconsrc!~/^\s*$/s);
-		$text.=qq@ type="image" name="clpsc" value="$stId" @;
-		$text.=qq@title="$heState" alt="$heState"/>@;
-		$text.=qq@$textAft@ if $textAft;
+		$form.=qq@$textBef@ if $textBef;
+		$form.=$query->image_button(-name=>'clpsc', -src=>$iconsrc, 
+				-value=>$stId, -title=>$heState, -alt=>$heState);
+		$form.=qq@$textAft@ if $textAft;
 		if (lc($options{'clipos'}) eq 'left') {
-			$text.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
+			$form.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
-		$text.=qq@</form>@;
+		$form.=$query->end_form();
+		$form=~s/[\r\n]+//gs;
+		$text.=$form;
 	}
 	$text.=qq@</noautolink>@;
 
@@ -559,13 +565,13 @@ sub renderChecklistItem {
 sub getUniqueUrlParam {
 	my ($url) = @_;
 	my $r = 0;
-	$r = rand(256) while ($r <= 1);
-	return (($url=~/\?/)?'&':'?').(int($r)*time()).int($r);
+	$r = rand(1000) while ($r <= 100);
+	return (($url=~/\?/)?'&':'?').'clpid='.time().int($r);
 }
 # =========================
 sub urlEncode {
 	my ($txt)=@_;
-	$txt=~s/([^A-Za-z0-9\-\.])/sprintf("%%%02X", ord($1))/seg;
+	$txt=~s/([^A-Za-z0-9\$\-\_\.\+\!\*\'\(\)\,])/sprintf("%%%02X", ord($1))/seg;
 	return $txt;
 }
 # =========================
@@ -626,11 +632,12 @@ sub saveChecklistItemStateTopic {
 	}
 	my $topicText = "";
 	$topicText.="%RED% WARNING! THIS TOPIC IS GENERATED BY $installWeb.$pluginName PLUGIN. DO NOT EDIT THIS TOPIC (except table data)!%ENDCOLOR%\n";
-	$topicText.=qq@<br/>Back to the \[\[$web.$topic\]\[checklist topic $topic\]\].\n\n@;
+	$topicText.=qq@%BR%Back to the \[\[$web.$topic\]\[checklist topic $topic\]\].\n\n@;
 	foreach my $name ( sort keys %{ $idMapRef } ) {
 		my $statesel = join ", ",  (split /\|/, ($namedDefaults{$name}{'states'}?$namedDefaults{$name}{'states'}:$globalDefaults{'states'}));
 		$topicText.="\n";
 		$topicText.=qq@%EDITTABLE{format="|text,20,$name|text,10,|select,1,$statesel|"}%\n@;
+		$topicText.=qq@%TABLE{footerrows="1"}%\n@;
 		$topicText.="|*context*|*id*|*state*|\n";
 		
 		foreach my $id (sort keys %{ $$idMapRef{$name}}) {
@@ -662,6 +669,10 @@ sub createUnknownParamsMessage {
 }
 
 sub endRenderingHandler  {
-	$_[0]=~s/<!--\[CLTABLEPLUGINSORTFIX\]-->.*?<!--\[\/CLTABLEPLUGINSORTFIX\]-->//sg;
+	if (defined $query) {
+		my $startTag=$query->comment("\[CLTABLEPLUGINSORTFIX\]");
+		my $endTag=$query->comment("\[/CLTABLEPLUGINSORTFIX\]");
+		$_[0]=~s/\Q$startTag\E.*?\Q$endTag\E//sg;
+	}
 }
 1;
