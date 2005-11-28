@@ -20,41 +20,69 @@
 # DIAGNOSIS
 #   unisonOptions => '-debug update',
 
+# Items in the accounts nested structure override the general settings 
 
 $UnisonSync::options = {
-## Change these
+## CHANGE FROM HERE DOWN
 
+# Which accounts to sync by default (see the nested structure below)
     'syncAccounts' => ['TestAccountRemote'],
 
+# Where your TWiki directory is on your local machine(contains pub and data).
+    'clientRoot' => 'c:/moreprgs/indigoperl/apache/TWiki',
+
+# The executable for PuTTY plink, I used the putty-0.58-installer.exe to install
+# From http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
+    'plinkExecutable' => 'c:\\program files\\putty\plink.exe',
+
+# Where you've stored your private key for PuTTY
+# See http://twiki.org/cgi-bin/view/Codev/UnisonKeySetup
+    'clientServerPrivateKey' => 'c:\\Documents and Settings\\Martin Cleaver\\PuttyPrivateKey.ppk',
+
+# Download Unison from http://www.cis.upenn.edu/~bcpierce/unison/download.html
+# e.g. https://svn.cis.upenn.edu/svnroot/unison-contributed-binaries/windows/
+    'clientUnisonExecutable' => 'c:\\moreprgs\\unison\\unison-2.12.15-win-gui.exe',
+    'serverUnisonExecutable' => 'unison',
+
 	'accounts' => {
+
+# Define as many of these accounts as you like
+
+
 		'TestAccountRemote' => {
-			serverRoot => '/home/mrjc/wikiconsulting.com/twiki',
+									# How you log in
 		    serverAccount => 'wikiconsulting',
+									# Where you keep TWiki installed
+			serverRoot => '/home/mrjc/wikiconsulting.com/twiki',
+									# Machine to ssh to
 		    serverSite => 'wikiconsulting.com',
+									# Which webs to sync
 			webs => ['Sandbox'],
-			debug => '2',
+									# debug = 0, 1, 2
+			debug => '1',
+									# If not undef, don't actually execute the command.
+									# Use with debug
 			dryrun => '',
 		},
+
+# Much rarer case:
+# local to local transfer
+# in principle useful if you are syncing with acrowiki
 		'TestAccountLocal' => {
-			clientRoot => 'c:/temp/syncContribTest/TWiki',
-	        serverRoot => 'c:/moreprgs/indigoperl/apache/TWiki',
+			clientRoot => 'd:/acrowikidirectory/TWiki',
+	            serverRoot => 'c:/moreprgs/indigoperl/apache/TWiki',
 			webs => ['Sandbox', 'CleaverSite'],
 			unisonOptions => '-backups',
-			debug => '2',
+			debug => '1',
 			dryrun => '',
 		},
 	}	
 
-    'clientServerPrivateKey' => 'c:\\Documents and Settings\\Martin Cleaver\\PuttyPrivateKey.ppk',
-    'clientRoot' => 'c:/moreprgs/indigoperl/apache/TWiki',
+
     
-    'plinkExecutable' => 'c:\\program files\\putty\plink.exe',
+## OKAY STOP!!! THIS IS THE END OF THE COMMONLY CHANGED OPTIONS.
     'plinkTempLauncherScriptFile' => 'c:\\temp\\plinkLauncher.bat',
 
-    'clientUnisonExecutable' => 'c:\\moreprgs\\unison\\unison-2.12.15-win-gui.exe',
-    'serverUnisonExecutable' => 'unison',
-    
-## End of commonly changed options
     'unisonStdErrFile' => '%timestamp%-%accountName%.stdErr',
     'unisonCaptureErrors' => '2> %unisonStdErrFile%',
     'unisonCaptureLog' => '%timestamp%-%accountName%.uniLog',
