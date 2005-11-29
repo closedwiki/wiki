@@ -39,7 +39,10 @@ use vars qw(
 	%skinState $hasInitSkinState
 	%emailCollection $nrEmails $doneHeader
 	$STARTWW $ENDWW
+	%TWikiCompatibility
     );
+
+$TWikiCompatibility{endRenderingHandler} = 1.1;
 
 # from Render.pm
 $STARTWW = qr/^|(?<=[\s\(])/m;
@@ -53,7 +56,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.80';
+$RELEASE = '2.81';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -562,13 +565,19 @@ sub endRenderingHandler {
   $_[0] =~ s/%STOPALIASAREA%//go;
   $_[0] =~ s/%REDDOT{.*?}%//go;
 
-  if ($isDakar) {
-    my $oldUseSpamObfuscator = $useSpamObfuscator;
-    $useSpamObfuscator = 0;
-    &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
-    $useSpamObfuscator = $oldUseSpamObfuscator;
-  }
 }
+###############################################################################
+sub postRenderingHandler { 
+  
+  endRenderingHandler(@_); 
+
+  my $oldUseSpamObfuscator = $useSpamObfuscator;
+  $useSpamObfuscator = 0;
+  &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
+  $useSpamObfuscator = $oldUseSpamObfuscator;
+}
+
+
 
 ###############################################################################
 sub renderIfAccess {

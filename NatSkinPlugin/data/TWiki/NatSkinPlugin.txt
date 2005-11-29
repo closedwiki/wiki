@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132658676" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1132762223" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
 
 This is the supplemental plugin for the NatSkin. Its main purpose is to supply "skin states"
@@ -322,8 +322,9 @@ By default this value is set to "off"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.80 (2005-11-23) |
+|  Plugin Version: | v2.81 (2005-11-29) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Nov 2005: | fixed warning about using the deprecated endRenderingHandler on dakar |
 |  23 Nov 2005: | added $nop to IFSKINSTATETHEN content |
 |  22 Nov 2005: | added support for the <nop>WysiwygPlugin;\
                   added custom templates for the <nop>BlackListPlugin's error messages |
@@ -364,5 +365,5 @@ By default this value is set to "off"
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 10 Nov 2005 
+-- TWiki:Main.MichaelDaum - 23 Nov 2005 
 
