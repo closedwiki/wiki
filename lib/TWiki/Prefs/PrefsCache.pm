@@ -160,8 +160,8 @@ sub loadPrefsFromText {
 
     $this->{SOURCE} = $web.'.'.$topic;
 
-    my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
     my $session = $this->{MANAGER}->{session};
+    my $meta = new TWiki::Meta( $session, $web, $topic );
     $session->{store}->extractMetaData( $meta, \$text );
 
     my $parser = new TWiki::Prefs::Parser();
