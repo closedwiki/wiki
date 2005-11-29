@@ -1272,7 +1272,6 @@ intervention. Use this for defensive programming warnings (e.g. assertions).
 sub writeWarning {
     my $this = shift;
     ASSERT($this->isa( 'TWiki')) if DEBUG;
-die join(",",caller()) if (ref $_[0] || $_[0] =~ /^ARRAY/);
     $this->_writeReport( $TWiki::cfg{WarningFileName}, @_ );
 }
 
