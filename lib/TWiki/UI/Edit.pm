@@ -317,10 +317,7 @@ sub edit {
         }
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
         $formText = $session->{templates}->readTemplate( "addform", $session->getSkin() );
-    }
-    if( $formText ) {
         $formText = $session->handleCommonTags( $formText, $webName, $topic );
-        $formText = $session->{renderer}->getRenderedVersion( $formText, $webName, $topic );
     }
     $tmpl =~ s/%FORMFIELDS%/$formText/g;
 

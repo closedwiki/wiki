@@ -327,6 +327,7 @@ sub renderForEdit {
         $session->enterContext( 'mandatoryfields' );
     }
     my $tmpl = $session->{templates}->readTemplate( "form" );
+    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
 
     # Note: if WEBFORMS preference is not set, can only delete form.
     $tmpl =~ s/%FORMTITLE%/$this->_link($this->{web}.'.'.$this->{topic})/geo;

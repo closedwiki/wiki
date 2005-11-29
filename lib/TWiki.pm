@@ -2849,8 +2849,8 @@ sub _LANGUAGES {
 }
 
 sub _MAKETEXT {
-    my ( $this, $params ) = @_;
-    
+    my( $this, $params ) = @_;
+
     my $str = $params->{_DEFAULT} || $params->{string} || "";
     return "" unless $str;
 
@@ -2871,7 +2871,7 @@ sub _MAKETEXT {
     my @args = split (/\s*,\s*/, $params->{args} || "") ;
     # fill omitted args with zeros
     while ((scalar @args) < $max) {
-      push(@args, 0);
+        push(@args, 0);
     }
 
     # do the magic:
