@@ -1,7 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2005 Rafael Alvarez, soronthar@sourceforge.net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
