@@ -318,10 +318,13 @@ sub edit {
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
         my $formText = $session->{templates}->readTemplate( "addform", $session->getSkin() );
+        $formText = $session->handleCommonTags( $formText, $webName, $topic );
+        $formText = $session->{renderer}->getRenderedVersion( $formText, $webName, $topic );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } else {
         $tmpl =~ s/%FORMFIELDS%//go;
     }
+
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
     my $p = $session->{prefs};
 
