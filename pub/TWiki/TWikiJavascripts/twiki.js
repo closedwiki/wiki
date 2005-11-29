@@ -55,7 +55,7 @@ function removeClass(element, classname) {
 function addClass(element, classname) {
   var classes = getClassList(element);
   if (indexOf(classname, classes)<0) {
-    classes[classes.length]=classname;
+    classes.push(classname);
     setClassList(element,classes);
   }
 }
@@ -82,6 +82,7 @@ function getClassList(element) {
 // Set the classes on an eement from an array of class names
 function setClassList(element, classlist) {
   element.className=classlist.join(' ');
+  element.classes = classlist;
 }
 
 // Determine the first index of a string in an array. Return
@@ -116,20 +117,6 @@ function getElementsByClassName(className) {
 // class "twikiAlert" then "twikiA" will match, as will "kiA"
 function hasClassName(elem, className) {
   return elem.className.indexOf(className) != -1;
-}
-
-// Iterates over all elements and returns those with an ID that contains the
-// id fragment passed in.
-// SMELL: tremendously inefficient! Don't use this!
-function getElementsById(id) {
-  var elements = [];
-  var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
-  
-  for (var i = 0; i < allObjects.length; ++i) {
-    if (allObjects.item(i).id.indexOf(id) != -1)
-      elements.push(allObjects.item(i));
-  }
-  return elements;
 }
 
 // Add a cookie. If 'days' is set to a non-zero number of days,
