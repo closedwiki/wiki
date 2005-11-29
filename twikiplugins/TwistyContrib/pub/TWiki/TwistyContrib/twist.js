@@ -4,45 +4,76 @@ var COOKIE_EXPIRES = 31; // days
 
 // hide straight away instead of waiting for onload
 // http://www.quirksmode.org/blog/archives/2005/06/three_javascrip_1.html#link4
+// SMELL should this be a <link> to another stylesheet? (probably not worth it)
 document.write("<style type='text/css'>");
 document.write(".twistyMakeHidden {display:none;}");
 document.write("<\/style>");
 
-// SMELL should this be a <link> to another stylesheet? (probably not worth it)
-
 // Asssume core javascript code is loaded via main template
 	
+	// Add function initTwist to the head of the functions that are called at onload
 	addLoadEvent(initTwist, true);
 
+	// Twisty should degrade gracefully when javascript is off.
+	// Then the hidden contents should be visible and the toggle links invisible.
+	// To do this, the content is hidden with javascript, while the links are
+	// displayed with javascript.
+	// Hiding and showing is done by adding and removing style classes to the elements.
 	function initTwist () {
-		var makeHiddenElements = getElementsByClassName('twistyMakeHidden');
-		var i;
-		for (i = 0; i < makeHiddenElements.length; ++i) {
-          replaceClass(makeHiddenElements[i], 'twistyMakeHidden', 'twistyHidden');
+
+		// Twisty can work with spans and with divs
+		// Create a collection of these HTML elements, and iterate over these elements only
+		var spansAndDivs = getHtmlElements("span", "div");
+		
+		var e, i;
+		var hasClass; // function variable
+		
+		// Replace all elements with css class "twistyMakeHidden" with "twistyHidden"
+		// so these elements will become hidden
+		// The Twisty content will most probably have a "twistyMakeHidden" class
+		i = spansAndDivs.length;
+		hasClass = hasClassName("twistyMakeHidden");
+		while (i--) {
+			e = spansAndDivs[i];
+			if (e && hasClass(e)) {
+				replaceClass(e, "twistyMakeHidden", "twistyHidden");
+			}
 		}
 		
-		var makeVisibleElements = getElementsByClassName('twistyMakeVisible');
-		for (i = 0; i < makeVisibleElements.length; ++i) {
-          removeClass(makeVisibleElements[i], 'twistyMakeVisible');
+		// Remove all classnames "twistyMakeVisible" (set to display:none)
+		// so these elements become visible
+		// Twisty toggle links will most probably have a "twistyMakeVisible" class
+		i = spansAndDivs.length;
+		hasClass = hasClassName("twistyMakeVisible");
+		while (i--) {
+			e = spansAndDivs[i];
+			if (e && hasClass(e)) {
+				removeClass(e, 'twistyMakeVisible');
+			}
 		}
-
-		var triggerElements = getElementsByClassName('twistyTrigger');
-		var id;
-		for (i = 0; i < triggerElements.length; ++i) {
-			triggerElements[i].onclick = function() {
-            	twist(this.parentNode.id.slice(0,-4));
-	            return false;
-			};
-			var elemid = triggerElements[i].parentNode.id.slice(0,-4);
-			if (id != elemid) {
-				id = elemid;
-				var toggleElem = document.getElementById(id+'toggle');
-				var cookie  = readCookie(COOKIE_PREFIX + id);
-				if (cookie == "1") {
-					twistShow(id, toggleElem);
-				}
-				if (cookie == "0") {
-					twistHide(id, toggleElem);
+	
+		// The twistyTrigger are the links or buttons that command the toggling
+		// This script assumes that the clickable element is either a link, a button, a span or a div
+		var linksAndButtons = getHtmlElements("a", "button", "span", "div");
+		i = linksAndButtons.length;
+		hasClass = hasClassName("twistyTrigger");
+		var found = false;
+		var twistIds = [];
+		while (i--) {
+			e = linksAndButtons[i];
+			if (e && hasClass(e)) {
+				var twistId = e.parentNode.id.slice(0,-4);
+				twistIds.push(twistId);
+				e.onclick = function() {
+					twist(twistId);
+					return false;
+				};
+				if (!found) {
+					found = true;
+					var toggleElem = document.getElementById(twistId + 'toggle');
+					var cookie  = readCookie(COOKIE_PREFIX + twistId);
+					if (cookie == "1") twistShow(twistId, toggleElem);
+					if (cookie == "0") twistHide(twistId, toggleElem);
 				}
 			}
 		}
@@ -58,10 +89,11 @@ document.write("<\/style>");
 			twistShow(id, toggleElem);
 			state = 1; // shown
 		}
-// Use class name 'twistyRememberSetting' to see if a cookie can be set
-// This is not illegal, see: http://www.w3.org/TR/REC-html40/struct/global.html#h-7.5.2
-// 'For general purpose processing by user agents'
-		if (hasClassName(toggleElem, "twistyRememberSetting")) {
+		// Use class name 'twistyRememberSetting' to see if a cookie can be set
+		// This is not illegal, see: http://www.w3.org/TR/REC-html40/struct/global.html#h-7.5.2
+		// 'For general purpose processing by user agents'
+		var hasClass = hasClassName("twistyRememberSetting");
+		if (hasClass(toggleElem)) {
 			writeCookie(COOKIE_PREFIX + id, state, COOKIE_EXPIRES);
 		}
 	}
