@@ -301,7 +301,7 @@ sub view {
         } else {
             $session->enterContext( 'body_text' );
             $page .= _prepare($text, @args);
-            $session->leaveContext( 'view' );
+            $session->leaveContext( 'body_text' );
         }
 
         $session->enterContext( 'footer_text' );
