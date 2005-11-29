@@ -37,7 +37,7 @@ use Digest::MD5 qw(md5_hex);
 
 
 $VERSION = '$Rev$';
-$RELEASE = '1.91';
+$RELEASE = '1.93';
 
 $debug = 0; # toggle me
 
@@ -337,29 +337,23 @@ sub doInit {
 }
 
 # =========================
-sub commonTagsHandler
-{
+sub commonTagsHandler {
+
   $_[0] =~ s/([ \t]*)%HEADLINES{(.*?)}%/handleHeadlinesTag($1, $2)/geo;
-  $_[0] =~ s/<head>(.*?[\r\n]+)/"<head>$1".handleAddHeader()."\n"/eo;
-}
 
-
-# =========================
-sub handleAddHeader {
-  return '' if $doneHeader;
-  $doneHeader = 1;
-
-  return
-    '<link rel="stylesheet" href="' . 
-    '%PUBURL%/' .
-    $installWeb .
-    '/HeadlinesPlugin/style.css' .
-    '" type="text/css" media="all" />';
+  if (!$doneHeader) {
+    my $link = 
+      '<link rel="stylesheet" '.
+      'href="%PUBURL%/%TWIKIWEB%/HeadlinesPlugin/style.css" '.
+      'type="text/css" media="all" />';
+    if($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$link\n/o) {
+      $doneHeader = 1;
+    }
+  }
 }
 
 # =========================
-sub errorMsg
-{
+sub errorMsg {
   return 
     $_[0] .
     '<span class="twikiAlert">' .
@@ -580,8 +574,6 @@ sub parseRssFeed {
     last if $count > $limit;
   }
 
-  $text =~ s/<\!\[CDATA\[(.*?)\]\]>/$1/gos;
-
   # fix relative img urls
   $text =~ s/(<img .*?src=['"])\//$1$baseRef\//go if $baseRef;
 
@@ -721,9 +713,12 @@ sub parseAtomFeed {
 sub recode {
   my $text = shift;
 
-  $text =~ s/&lt;/</go;
-  $text =~ s/&gt;/>/go;
-  $text =~ s/&amp;/&/go;
+  unless ($text =~ s/<\!\[CDATA\[(.*?)\]\]>/$1/gos) {
+    $text =~ s/&lt;/</go;
+    $text =~ s/&gt;/>/go;
+    $text =~ s/&amp;/&/go;
+  }
+
   $text =~ s/&#xD;/\n/go;
 
   # TODO: partial utf8 support
