@@ -2798,7 +2798,7 @@ msgstr "ajuda"
 
 #: templates/oopsmore.pattern.tmpl:21
 msgid "in %1 &web."
-msgstr "na web %1."
+msgstr "na &web %1."
 
 #: templates/oopsmore.pattern.tmpl:23
 msgid "in a&ll webs."
