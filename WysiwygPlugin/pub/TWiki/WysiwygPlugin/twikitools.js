@@ -177,8 +177,8 @@ function tagCleaner() {
 function childFinder(check) {
   return function(selNode, button, editor, event) {
     var c = null;
-    var sel = editor.getSelection();
     if (!selNode) return null;
+    var sel = editor.getSelection();
     var nodeQueue = new Array(selNode);
     while (nodeQueue.length > 0) {
       var node = nodeQueue.pop();
@@ -481,7 +481,9 @@ function TWikiWikiWordTool() {
     var elem = doc.createElement('a');
     elem.setAttribute('href', url);
     var selection = editor.getSelection();
-    elem.appendChild(doc.createTextNode(wikiword));
+    if (selection.startOffset() == selection.endOffset()) {
+      elem.appendChild(doc.createTextNode(wikiword));
+    }
     _insertNode(editor, elem);
     editor.updateState();
   };
