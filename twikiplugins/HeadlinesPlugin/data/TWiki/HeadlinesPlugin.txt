@@ -157,8 +157,9 @@ defining the default CSS properties  (indentation illustrates enclosure).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Plugin Version: | 22 Nov 2005 (v1.92) |
+|  Plugin Version: | 29 Nov 2005 (v1.93) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  29 Nov 2005: | fixed CDATA handling |
 |  21 Nov 2005: | added ATOM support; \
 	          extended RSS support; \
 		  added dublion core support; \
