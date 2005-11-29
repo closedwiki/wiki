@@ -2,8 +2,6 @@
 #
 # Copyright (C) 2004 Rafael Alvarez, soronthar@flashmail.com
 # Copyright (C) 2004 Bernd Raichle, bernd.raichle@gmx.de
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -130,7 +128,6 @@ sub getFormFieldList
     my $text='';
     foreach my $formField ( split( /\s*,\s*/, $formFieldList) ) {
        $params->{_DEFAULT}=$formField;
-#       $text.= $TWiki::Plugins::SESSION->{renderer}->renderFormField($params, $topic, $web);
        $text .= '%FORMFIELD{"'.$formField.'" '
                .'format="'.$format.'" '
                .'topic="'.$topic.'" '
