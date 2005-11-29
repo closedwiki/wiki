@@ -29,7 +29,7 @@ For example:
    * daisy@flowers.com
    * daisy@flowers.com: Web*
    * DaisyCutter: Petal* (1) WeedKillers (3) Red*Phlox
-    * StarTrekFan: * - *Wars - *sInTheirEyes - *shipTroopers
+   * StarTrekFan: * - *Wars - *sInTheirEyes - *shipTroopers
 </verbatim>
 A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
 
