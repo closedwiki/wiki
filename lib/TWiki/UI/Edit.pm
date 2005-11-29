@@ -292,9 +292,9 @@ sub edit {
     # Don't want to render form fields, so this after getRenderedVersion
     my $formMeta = $meta->get( 'FORM' );
     my $form = '';
+    my $formText = '';
     $form = $formMeta->{name} if( $formMeta );
     if( $form && !$saveCmd ) {
-        my $formText;
         my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
         # if there's a form template, then pull whatever values exist in
         # the query into the meta, overriding the values in the topic.
@@ -315,15 +315,14 @@ sub edit {
             $formText = $formDef->renderForEdit( $webName, $topic, $meta,
                                                  $getValuesFromFormTopic );
         }
-        $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
-        my $formText = $session->{templates}->readTemplate( "addform", $session->getSkin() );
+        $formText = $session->{templates}->readTemplate( "addform", $session->getSkin() );
+    }
+    if( $formText ) {
         $formText = $session->handleCommonTags( $formText, $webName, $topic );
         $formText = $session->{renderer}->getRenderedVersion( $formText, $webName, $topic );
-        $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } else {
-        $tmpl =~ s/%FORMFIELDS%//go;
     }
+    $tmpl =~ s/%FORMFIELDS%/$formText/g;
 
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
     my $p = $session->{prefs};
