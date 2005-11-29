@@ -90,12 +90,13 @@ sub extract {
     $self->SUPER::extract($file, $_);
 
     my $line;
+    my $doublequoted = '"(\\\"|[^"])*"';
   
     # TWiki's %MAKETEXT{...}% into topics and templates :
     $line = 1; pos($_) = 0;
     my @_lines = split(/\n/,$_);
     foreach (@_lines) {
-        while (m/%MAKETEXT\{\s*(string=)?($doublequoted)(\s*args=($doublequoted))?\s*\}%/gm) {
+        while (m/%MAKETEXT\{\s*(string=)?($doublequoted)/gm) {
             my $str = substr($2, 1, -1);
 	    $str =~ s/\\"/"/g;
 	    $self->add_entry($str, [ $file, $line, '']);
