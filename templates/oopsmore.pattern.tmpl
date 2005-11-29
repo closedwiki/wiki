@@ -16,9 +16,11 @@
       * <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?currentwebonly=on" rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a>,
         %MAKETEXT{"looking for references in _[_1] web_ only" args="%WEB%"}%
 
-   * *%MAKETEXT{"Backlinks:"}%*
-      * %MAKETEXT{"Find topics <a href='[_1]' title='Search the [_2] Web for topics that link to here' accesskey='w'>in [_2] &web</a> that link to [_3]" args="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb, <nop>%WEB%, <nop>%TOPIC%"}%
-      * %MAKETEXT{"Find topics <a href='[_1]' title='Search all webs for topics that link to here' accesskey='l'>in a&ll public webs</a> that link to [_2]" args="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs, <nop>%TOPIC%"}%
+   * *%MAKETEXT{"Backlinks:"}%* <br/>
+      * *<a href='%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey='w'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a>*,
+        %MAKETEXT{"in [_1] &web." args="<nop>%WEB%"}%
+      * <a href='%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs' title='%MAKETEXT{"Search all webs for topics that link to here"}%' accesskey='l'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a>,
+        %MAKETEXT{"in a&ll webs."}%
 
    * *%MAKETEXT{"Child topics in [_1] web:" args="<nop>%WEB%"}%*
       * %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" default="%MAKETEXT{"No child topics"}%"}%

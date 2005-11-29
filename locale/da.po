@@ -46,7 +46,7 @@ msgstr "%1 Bruger-authentikation"
 #: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:4
 #: data/TWiki/WebLeftBar.txt:5 data/TWiki/WebLeftBarExample.txt:2
 #: data/Trash/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:5
-#: templates/view.pattern.tmpl:78
+#: templates/view.pattern.tmpl:68
 msgid "%1 Web"
 msgstr "%1 web"
 
@@ -74,6 +74,11 @@ msgstr "%1 er ikke et lovligt navn til et nyt web"
 msgid "%1 is currently logged in"
 msgstr "%1 er logget på i øjeblikket"
 
+#: templates/oopsattention.tmpl:325
+#, fuzzy
+msgid "%1 is currently set to %2"
+msgstr "%1 er logget på i øjeblikket"
+
 #: templates/oopsleaseconflict.tmpl:8
 msgid "%1 is editing %2."
 msgstr "%1 editerer i øjeblikket %2"
@@ -95,7 +100,7 @@ msgstr "%1 editerer i øjeblikket %2"
 #   $date,
 #   $by)
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
-#: lib/TWiki/Render.pm:202
+#: lib/TWiki/Render.pm:206
 msgid "%1 moved from %2 on %3 by %4"
 msgstr "%1 blev flyttet fra %2 den %3 af %4"
 
@@ -119,7 +124,7 @@ msgstr "siden %1 eksisterer ikke"
 msgid "%1 web to try out TWiki"
 msgstr "%1 web for at prøve TWiki af"
 
-#: templates/view.pattern.tmpl:64
+#: templates/view.pattern.tmpl:54
 msgid "&Attach"
 msgstr "&Vedhæft"
 
@@ -127,11 +132,11 @@ msgstr "&Vedhæft"
 msgid "&Cancel"
 msgstr "&Fortryd"
 
-#: templates/view.pattern.tmpl:53 templates/view.tmpl:33
+#: templates/view.pattern.tmpl:43 templates/view.tmpl:33
 msgid "&Compose"
 msgstr "&Komponér"
 
-#: templates/view.pattern.tmpl:35
+#: templates/view.pattern.tmpl:25
 msgid "&Edit"
 msgstr "&Editér"
 
@@ -143,15 +148,15 @@ msgstr "&Editér tekst"
 msgid "&History"
 msgstr "&Historik"
 
-#: templates/view.pattern.tmpl:69
+#: templates/view.pattern.tmpl:59
 msgid "&More topic actions"
 msgstr "&Flere muligheder med denne side"
 
-#: templates/view.pattern.tmpl:107
+#: templates/view.pattern.tmpl:98
 msgid "&Printable"
 msgstr "&Printvenlig"
 
-#: templates/view.pattern.tmpl:113
+#: templates/view.pattern.tmpl:104
 msgid "&Web"
 msgstr "&Web"
 
@@ -290,8 +295,8 @@ msgstr "(første bogstav i efternavn)"
 #: templates/attach.pattern.tmpl:44
 #, fuzzy
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
-"Error\\\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
+"Error\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 "*Bug*: Internet Explorer 4.0 eller tidligere: Hvis du får fejlmeldingen "
@@ -312,9 +317,9 @@ msgstr ""
 #: templates/attach.pattern.tmpl:43
 #, fuzzy
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
-"('%TWIKIWEB%','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</"
-"a> for more information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
+"('%TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> "
+"for more information about attaching files."
 msgstr ""
 "Hjælp til <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB"
 "%','TWikiVariables')\" href=\"%1\" rel='nofollow'>definition af side-"
@@ -339,6 +344,29 @@ msgid ""
 msgstr ""
 "*Lokal fil:* Hvis du vælger en lokal fil, der har et _andet navn_ end den "
 "aktuelle, arbejder du i stedet på _den_ i stedet for."
+
+#: templates/attachagain.pattern.tmpl:49
+msgid ""
+"*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
+"changed without uploading a file by pressing \"Change Properties\"; see %1."
+msgstr ""
+"*Attributter:* Kommentaren og synligheden (er den vedhæftede fil skjult) kan "
+"opdateres uden at uploade en ny fil, ved at klikke \"Opdatér kun attributter"
+"\"; se %1."
+
+#: templates/oopsmore.pattern.tmpl:56
+msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
+msgstr "Opdatér <a href='%1' rel='nofollow'>side-præferencer</a>"
+
+#: templates/renamewebbase.pattern.tmpl:71
+#, fuzzy
+msgid ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</a>"
+msgstr ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>Hjælp</a> til administration "
+"af webs"
 
 #: templates/preview.pattern.tmpl:42
 msgid ""
@@ -392,7 +420,7 @@ msgstr ""
 "Et nyt *system-genereret* password for brugernavnet %1 (wikiname %2) er "
 "blevet sendt til %3"
 
-#: templates/view.pattern.tmpl:113
+#: templates/view.pattern.tmpl:104
 msgid "A&ll Webs"
 msgstr "A&lle webs"
 
@@ -492,11 +520,11 @@ msgid "Any change you made to topic before coming to this page are preserved."
 msgstr ""
 "Alle ændringer, som du har lavet før du skiftede til denne side er gemt."
 
-#: templates/view.pattern.tmpl:65
+#: templates/view.pattern.tmpl:55
 msgid "Attach"
 msgstr "Vedhæft"
 
-#: templates/view.pattern.tmpl:64
+#: templates/view.pattern.tmpl:54
 msgid "Attach an image or document to this topic"
 msgstr "Vedhæft fx et billede eller et dokument til denne side"
 
@@ -551,8 +579,7 @@ msgstr "Attribut"
 msgid "Available Information"
 msgstr "Tilgængelig information"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21
-#: templates/view.pattern.tmpl:102
+#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
 msgid "Back to top"
 msgstr "Til toppen"
 
@@ -560,7 +587,7 @@ msgstr "Til toppen"
 msgid "Back to topic"
 msgstr "Tilbage til siden"
 
-#: templates/view.pattern.tmpl:113
+#: templates/view.pattern.tmpl:104
 msgid "Backlinks"
 msgstr "Referencer"
 
@@ -621,6 +648,10 @@ msgstr "Kan ikke omdøbe %1 til %2, da siden allerede eksisterer"
 #: data/TWiki/WebSearchAdvanced.txt:58
 msgid "Case sensitive"
 msgstr "Case-sensitiv søgning (forskel på STORE og små bogstaver)"
+
+#: data/TWiki/WebLeftBar.txt:31
+msgid "Categories"
+msgstr ""
 
 #: templates/oopsattention.tmpl:274
 #, fuzzy
@@ -693,7 +724,7 @@ msgstr ""
 msgid "Checkpoint"
 msgstr "Checkpoint"
 
-#: templates/oopsmore.pattern.tmpl:23
+#: templates/oopsmore.pattern.tmpl:25
 msgid "Child topics in %1 web:"
 msgstr "Datter-sider i %1 webbet:"
 
@@ -710,7 +741,11 @@ msgstr "Nulstil alle"
 msgid "Click here"
 msgstr "Klik her"
 
-#: lib/TWiki/Render.pm:185
+#: templates/oopsattention.tmpl:257
+msgid "Click on [[%1][Debug topic text]]."
+msgstr "Klik på [[%1][debug kildetekst]]."
+
+#: lib/TWiki/Render.pm:189
 msgid ""
 "Click to move topic back to previous location, with option to change "
 "references."
@@ -741,7 +776,7 @@ msgstr ""
 msgid "Company name:"
 msgstr "Sidenavn:"
 
-#: templates/oopsmore.pattern.tmpl:47
+#: templates/oopsmore.pattern.tmpl:49
 msgid "Compare revisions:"
 msgstr "Sammenlign versioner:"
 
@@ -754,7 +789,7 @@ msgstr "Bekræft omdøbning eller sletning"
 msgid "Conflict"
 msgstr "Konflikt"
 
-#: data/TWiki/TWikiVariablesAtoM.txt:270 templates/login.pattern.tmpl:50
+#: data/TWiki/TWikiVariablesAtoM.txt:268 templates/login.pattern.tmpl:50
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
 #: templates/oopsaccessdenied.tmpl:42
 msgid "Contact %1 if you have any questions."
@@ -768,10 +803,11 @@ msgstr "Fortsæt med at prøve at omdøbe webbet?"
 msgid "Continue to *[[%1][Create the new page]]*"
 msgstr "Fortsæt med at *[[%1][oprette den nye side]]*"
 
-#: data/TWiki/TWikiPreferences.txt:36
+#: data/TWiki/TWikiPreferences.txt:39
+#, fuzzy
 msgid ""
-"Copyright %1 by the contributing authors. All material on this collaboration "
-"platform is the property of the contributing authors."
+"Copyright &&copy; by the contributing authors. All material on this "
+"collaboration platform is the property of the contributing authors."
 msgstr ""
 "Copyright %1 ved de deltagende brugere. Alt indhold i denne kollaborations-"
 "platform er de deltagende brugeres ejendom."
@@ -793,7 +829,7 @@ msgstr "%1 kunne ikke gemmes."
 msgid "Country:"
 msgstr ""
 
-#: templates/view.pattern.tmpl:34
+#: templates/view.pattern.tmpl:24
 msgid "Cr&eate"
 msgstr "Opret"
 
@@ -807,7 +843,7 @@ msgstr "Opret ny side"
 
 #: data/TWiki/WebTopicCreator.txt:5
 #, fuzzy
-msgid "Create New Topic in <nop>%BASEWEB% Web"
+msgid "Create New Topic in %1 Web"
 msgstr "Opret ny side"
 
 #: templates/attach.pattern.tmpl:96
@@ -830,7 +866,7 @@ msgstr "Opret med sidenavn"
 msgid "Create personal sidebar"
 msgstr "Opret personlig side-menu"
 
-#: lib/TWiki/Render.pm:566 lib/TWiki/Render.pm:578
+#: lib/TWiki/Render.pm:570 lib/TWiki/Render.pm:582
 msgid "Create this topic"
 msgstr "Opret denne side"
 
@@ -873,7 +909,7 @@ msgstr "Flyt eller slet filen %1"
 msgid "Delete file attachment"
 msgstr "Flyt vedhæftet fil"
 
-#: templates/view.pattern.tmpl:69
+#: templates/view.pattern.tmpl:59
 msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
@@ -896,7 +932,7 @@ msgstr "Slettet"
 msgid "Deleted topics will be moved to the %1 web"
 msgstr "Slettede sider bliver flyttet til %1 webbet"
 
-#: data/TWiki/TWikiVariablesAtoM.txt:273
+#: templates/oopsattention.tmpl:192
 msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr "Ville du gerne [[%1][resette passwordet for %2]]?"
 
@@ -973,7 +1009,7 @@ msgstr ""
 msgid "Each preference has the syntax"
 msgstr "Alle præferencer har syntaksen"
 
-#: templates/view.pattern.tmpl:45
+#: templates/view.pattern.tmpl:35
 msgid "Edit"
 msgstr "Editieren"
 
@@ -990,12 +1026,12 @@ msgstr "Opdater bruger-information"
 msgid "Edit text"
 msgstr "Editér teksten"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:47
-#: templates/view.pattern.tmpl:53 templates/view.tmpl:33
+#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:37
+#: templates/view.pattern.tmpl:43 templates/view.tmpl:33
 msgid "Edit this topic text"
 msgstr "Editér sidens tekst"
 
-#: templates/oopsmore.pattern.tmpl:53
+#: templates/oopsmore.pattern.tmpl:55
 msgid "Edit topic preference settings:"
 msgstr "Editér præferencer for siden:"
 
@@ -1004,8 +1040,7 @@ msgstr "Editér præferencer for siden:"
 msgid "Email address:"
 msgstr "Ugyldig e-mail-adresse"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21
-#: templates/view.pattern.tmpl:102
+#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
 msgid "End of topic"
 msgstr "Bunden af siden"
 
@@ -1047,6 +1082,10 @@ msgstr ""
 "Eksisterende formular-data vil gå tabt! (vil stadig kunne fremfindes i "
 "historikken)"
 
+#: templates/oopsalerts.tmpl:13
+msgid "Failed to include URL %1"
+msgstr ""
+
 #: data/TWiki/TWikiRegistration.txt:213
 #, fuzzy
 msgid "Fields marked %1 are required"
@@ -1055,6 +1094,10 @@ msgstr "felter er obligatoriske"
 #: templates/oopsattention.tmpl:273
 msgid "Filename %1 is not legal for a TWiki attachment."
 msgstr "Filnavnet %1 er ikke lovligt for en vedhæftet fil."
+
+#: templates/oopsmore.pattern.tmpl:20 templates/oopsmore.pattern.tmpl:22
+msgid "Find topics that link to %1 ..."
+msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:223
 msgid ""
@@ -1077,6 +1120,26 @@ msgstr "Formular-definition %1 mangler"
 #: templates/oopsattention.tmpl:250
 msgid "Form definition missing"
 msgstr "Formular-definition mangler"
+
+#: templates/renamebase.pattern.tmpl:65
+msgid ""
+"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
+"TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
+"moving topics</a>."
+msgstr ""
+"Hjælp til <a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingTopics')\" href=\"%1\" rel='nofollow'>omdøbning og flytning af "
+"sider</a>."
+
+#: templates/settings.pattern.tmpl:48
+msgid ""
+"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
+"TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Setting topic "
+"preferences</a>."
+msgstr ""
+"Hjælp til <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB"
+"%','TWikiVariables')\" href=\"%1\" rel='nofollow'>definition af side-"
+"præferencer</a>."
 
 #: templates/oopsattention.tmpl:242
 msgid ""
@@ -1138,7 +1201,7 @@ msgstr "Hvad med at vedhæfte et foto af dig selv?"
 msgid "How to activate your %1 registration"
 msgstr "Således aktiverer du din %1 registrering"
 
-#: data/TWiki/TWikiPreferences.txt:36
+#: data/TWiki/TWikiPreferences.txt:39
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
 "Idéer, forespørgsler, problemer med %1? <a href='%2'>Send en e-mail</a>"
@@ -1181,6 +1244,12 @@ msgstr "Hvis du har spørgsmål, så kontakt venligst %1."
 msgid "If you have any questions, please contact %1."
 msgstr "Hvis du har spørgsmål, så kontakt venligst %1."
 
+#: templates/registernotify.tmpl:25
+msgid "If you haven't set a password yet or you want to reset it, go to: %1"
+msgstr ""
+"Hvis du ikke har valgt et password endnu, eller du ønsker at nulstille det, "
+"så gå til: %1"
+
 #: data/TWiki/WebTopicNonWikiTemplate.txt:10
 #: data/TWiki/WebTopicViewTemplate.txt:10
 msgid "If you intend to do a full text search:"
@@ -1189,7 +1258,7 @@ msgstr "Hvis du gerne vil søge i den fulde tekst:"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
 #, fuzzy
-msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
+msgid "If you used the \"Jump\" feature to jump to this page:"
 msgstr "Hvis du brugte \"Hop\" funktionen til at hoppe til denne side:"
 
 #: templates/oopsaccessdenied.tmpl:39
@@ -1218,6 +1287,10 @@ msgstr "I omvendt rækkefølge"
 #: templates/oopsattention.tmpl:199
 msgid "Incorrect %1"
 msgstr "Forkert %1"
+
+#: templates/oopsattention.tmpl:202
+msgid "Incorrect %TWIKIWEB%.WikiNames:"
+msgstr ""
 
 #: templates/oopsattention.tmpl:92
 msgid "Incorrect Password"
@@ -1249,6 +1322,19 @@ msgstr ""
 "bruger_ gemmer en opdatering mens _du opdaterer_, vil dine ændringer blot "
 "blive _flettet med hans_. Men formular-data bliver ikke flettet, så ændrer "
 "du i disse, anbefales det at synkronisere først."
+
+#: templates/rename.pattern.tmpl:22
+msgid ""
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
+"a> for the new topic name, otherwise automatic linking may not work. "
+"Characters not allowed in topic names, such as spaces will automatically be "
+"removed."
+msgstr ""
+"Det anbefales at vælge et <a target='WikiWord' onclick=\"return launchWindow"
+"('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> som "
+"sidenavn, ellers slås den automatiske linkning fra. Karakterer der ikke er "
+"tilladte i sidenavne, som fx mellemrum, bliver automatisk fjernet."
 
 #: templates/renameweb.pattern.tmpl:22
 msgid ""
@@ -1353,7 +1439,7 @@ msgstr "Tilpas søgning:"
 msgid "More Actions on Topic %1"
 msgstr "Flere muligheder med siden %1"
 
-#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:70
+#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:60
 msgid "More topic actions..."
 msgstr "Flere muligheder med denne side..."
 
@@ -1374,7 +1460,7 @@ msgstr "Flyt eller slet filen %1"
 msgid "My Links"
 msgstr "Mine links"
 
-#: lib/TWiki/Search.pm:792
+#: lib/TWiki/Search.pm:795
 msgid "NEW"
 msgstr "NY"
 
@@ -1399,11 +1485,11 @@ msgstr "Det nye sidenavn %1 er ikke et %2"
 msgid "New web name:"
 msgstr "Nyt web-navn:"
 
-#: templates/oopsmore.pattern.tmpl:49
+#: templates/oopsmore.pattern.tmpl:51
 msgid "Newer revision:"
 msgstr "Ny version"
 
-#: templates/oopsmore.pattern.tmpl:24
+#: templates/oopsmore.pattern.tmpl:26
 msgid "No child topics"
 msgstr "Ingen dattersider"
 
@@ -1433,7 +1519,7 @@ msgstr "Note:"
 msgid "Notes"
 msgstr "Noter"
 
-#: data/TWiki/TWikiVariablesAtoM.txt:267
+#: data/TWiki/TWikiVariablesAtoM.txt:265
 msgid "Notes:"
 msgstr "Noter:"
 
@@ -1456,7 +1542,7 @@ msgstr "Antal sider:"
 msgid "OK"
 msgstr "OK"
 
-#: templates/oopsmore.pattern.tmpl:48
+#: templates/oopsmore.pattern.tmpl:50
 msgid "Older revision:"
 msgstr "Tidligere version:"
 
@@ -1564,6 +1650,13 @@ msgstr ""
 msgid "Please try again."
 msgstr "Venligst forsøg igen."
 
+#: templates/mailresetpassword.tmpl:12
+msgid ""
+"Please visit %1 to change your password to something more memorable for you."
+msgstr ""
+"Besøg venligst siden %1 for at ændre dit password til ét der er lettere at "
+"huske."
+
 #: templates/changeform.pattern.tmpl:30
 msgid "Possible form templates"
 msgstr "Mulige formularer"
@@ -1585,7 +1678,7 @@ msgstr "Vis udkast"
 msgid "Previous upload"
 msgstr "Forrige upload"
 
-#: templates/view.pattern.tmpl:107
+#: templates/view.pattern.tmpl:98
 msgid "Printable version of this topic"
 msgstr "Printervenlig version af denne side"
 
@@ -1597,9 +1690,18 @@ msgstr "Gem (uden notifikation)"
 msgid "QuietSave"
 msgstr "Gem (uden notifikation)"
 
-#: templates/view.pattern.tmpl:109
+#: templates/view.pattern.tmpl:100
 msgid "Raw View"
 msgstr ""
+
+#: templates/registernotify.tmpl:10
+msgid ""
+"Read %1 to get a quick overview of this collaboration platform. To learn "
+"more, study the TWikiTutorial, which is accessible from the same link."
+msgstr ""
+"Siden %1 giver et et hurtigt overblik over denne kollaborations-platform. "
+"For at få en dybere indsigt i systemet kan du læse siden TWikiTutorial, som "
+"kan nås fra samme link."
 
 #: templates/edit.pattern.tmpl:54
 msgid "Read new revision help text in new window"
@@ -1681,15 +1783,15 @@ msgstr ""
 msgid "Rev %1 was saved by %2, while you were still editing."
 msgstr "Version %1 blev gemt af %2 mens du foretog ændringer i siden."
 
-#: templates/rdiff.pattern.tmpl:46
+#: templates/rdiff.pattern.tmpl:47
 msgid "Revision"
 msgstr "Version"
 
-#: templates/oopsmore.pattern.tmpl:40
+#: templates/oopsmore.pattern.tmpl:42
 msgid "Revision:"
 msgstr "Version:"
 
-#: templates/oopsmore.pattern.tmpl:43
+#: templates/oopsmore.pattern.tmpl:45
 msgid "Revisions:"
 msgstr "Versioner:"
 
@@ -1724,7 +1826,8 @@ msgid "Search a&ll webs"
 msgstr "Søg i alle webs"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-#: templates/backlinksweb.pattern.tmpl:10 templates/view.pattern.tmpl:113
+#: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:22
+#: templates/view.pattern.tmpl:104
 msgid "Search all webs for topics that link to here"
 msgstr "Søg i alle webs efter sider der linker til denne side"
 
@@ -1732,7 +1835,12 @@ msgstr "Søg i alle webs efter sider der linker til denne side"
 msgid "Search string"
 msgstr "Søgestreng"
 
-#: templates/view.pattern.tmpl:113
+#: templates/oopsmore.pattern.tmpl:20
+#, fuzzy
+msgid "Search the %1 Web for topics that link to here"
+msgstr "Søg i <nop>%WEB% webbet efter sider der linker til denne side"
+
+#: templates/view.pattern.tmpl:104
 msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr "Søg i <nop>%WEB% webbet efter sider der linker til denne side"
 
@@ -1789,7 +1897,7 @@ msgstr "Vælg (triple-klik i feltet), og copy/paste din signatur til siden"
 msgid "Send you a confirmation of your registration by email."
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:28
+#: templates/oopsmore.pattern.tmpl:30
 msgid "Set new topic parent:"
 msgstr "Vælg ny side-forælder:"
 
@@ -1827,8 +1935,8 @@ msgid "Size"
 msgstr "Størrelse"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:18
-#: data/Main/PatternSkinUserViewTemplate.txt:21
-#: templates/view.pattern.tmpl:102 templates/view.pattern.tmpl:99
+#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:90
+#: templates/view.pattern.tmpl:93
 msgid "Skip to actions"
 msgstr "Gå til valgmuligheder"
 
@@ -1848,7 +1956,7 @@ msgstr ""
 msgid "Sort results by:"
 msgstr "Sortér resultater efter:"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:99
+#: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:90
 msgid "Start of topic"
 msgstr "Toppen af siden"
 
@@ -1857,11 +1965,11 @@ msgstr "Toppen af siden"
 msgid "Statistics"
 msgstr "Statistik"
 
-#: templates/oopsmore.pattern.tmpl:29
+#: templates/oopsmore.pattern.tmpl:31
 msgid "Step 1: Select topic parent:"
 msgstr "1. skridt: Vælg side-forælder"
 
-#: templates/oopsmore.pattern.tmpl:34
+#: templates/oopsmore.pattern.tmpl:36
 msgid ""
 "Step 2: Continue to <input type='submit' class='twikiButton' value='Edit' /> "
 "and save %1 to activate the new parent"
@@ -1891,11 +1999,11 @@ msgstr "Tilføjet indhold:"
 msgid "Summaries"
 msgstr "Sammendrag"
 
-#: data/TWiki/WebSearch.txt:25
+#: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
 #, fuzzy
 msgid ""
-"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
-"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
+"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
+"=\"web service\"=, but not =\"shampoo\"=, write:"
 msgstr ""
 "TIP: For at søge efter sider, der indeholder =\"SOAP\"=, =\"WSDL\"= og "
 "strengen =\"web service\"= men ikke =\"shampoo\"=, skriv følgende:"
@@ -1908,9 +2016,9 @@ msgstr "Nulstilling af TWiki password for %1"
 #, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit \\"
-"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
-"bottom of the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
 msgstr ""
 "TWiki's brugergrænseflade er tilgængelig på flere sprog. Hvis du gerne vil "
 "ændre sproget i denne session, vælg et af de følgende sprog og klik  \"Skift "
@@ -2064,6 +2172,15 @@ msgstr "Siden er i et gammelt format"
 #: templates/oopsattention.tmpl:173
 msgid "The two passwords you entered do not match."
 msgstr "De to passwords du har indtastet er ikke ens."
+
+#: data/Main/WebRss.txt:5
+#, fuzzy
+msgid ""
+"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
+"Platform for the Corporate World."
+msgstr ""
+"%1 webbet på TWiki. TWiki er en web-baseret kollaborations-platform skabt "
+"til virksomheden."
 
 #: templates/oopsleaseconflict.tmpl:15
 msgid "Their lease on this topic expired %1 ago."
@@ -2357,6 +2474,14 @@ msgstr "Brugernavn"
 msgid "Users"
 msgstr "Brugere"
 
+#: templates/oopsattention.tmpl:138
+msgid ""
+"Users with automatically generated passwords should proceed immediately to "
+"[[%1][change password]] to change their password to something memorable."
+msgstr ""
+"Brugere med system-genererede passwords opfordres til snarest muligt at [[%1]"
+"[opdatere passwordet]] til et der er nemmere at huske."
+
 #: templates/attachtables.pattern.tmpl:45
 msgid "Version"
 msgstr "Version"
@@ -2365,26 +2490,26 @@ msgstr "Version"
 msgid "Vertical size of text edit box:"
 msgstr "Højde på edit-boks:"
 
-#: templates/oopsmore.pattern.tmpl:50
+#: templates/oopsmore.pattern.tmpl:52
 msgid "View difference"
 msgstr "Vis forskel"
 
-#: templates/oopsmore.pattern.tmpl:39
+#: templates/oopsmore.pattern.tmpl:41
 msgid "View previous topic revision:"
 msgstr "Vis forrige version af siden:"
 
-#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:109
+#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
 msgid "View raw text without formatting"
 msgstr "Vis rå kildetekst uden formatering"
 
-#: templates/oopsmore.pattern.tmpl:42
+#: templates/oopsmore.pattern.tmpl:44
 msgid "View revision"
 msgstr "Vis denne version"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 #: templates/oopsleaseconflict.pattern.tmpl:16
 #: templates/oopsleaseconflict.tmpl:30 templates/rdiff.pattern.tmpl:25
-#: templates/view.pattern.tmpl:45
+#: templates/view.pattern.tmpl:35
 msgid "View topic"
 msgstr "Vis side"
 
@@ -2455,7 +2580,7 @@ msgstr "Du findes også på siden %1"
 msgid "You are denied access to the following topics in the web:"
 msgstr "Du har ikke adgang til de følgende sider i dette web:"
 
-#: templates/view.pattern.tmpl:78
+#: templates/view.pattern.tmpl:68
 msgid "You are here"
 msgstr "Du er her"
 
@@ -2477,6 +2602,14 @@ msgstr ""
 msgid "You are trying to %1 a topic that does not exist."
 msgstr "Du forsøger at udføre handlingen %1 på en side der ikke eksisterer."
 
+#: templates/oopsaccessdenied.tmpl:33
+msgid ""
+"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
+"have any questions."
+msgstr ""
+"Du kan [[%1][oprette et nyt web]], hvis du har rettigheden til det. Kontakt %"
+"2 hvis du har spørgsmål."
+
 #: templates/oopsattention.tmpl:120
 msgid ""
 "You can also use the names of the standard HTML colors (black, silver, gray, "
@@ -2486,6 +2619,10 @@ msgstr ""
 "Du kan også bruge HTML standardfarverne ved navn (black, silver, gray, "
 "white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
 "teal, or aqua)"
+
+#: templates/registernotify.tmpl:24
+msgid "You can change your password at via %1"
+msgstr "Du kan skifte dit password v.h.a. %1"
 
 #: templates/rename.pattern.tmpl:27
 msgid "You can move the topic to a different web."
@@ -2498,6 +2635,10 @@ msgstr "Du kan omdøbe dette web til et nyt navn."
 #: templates/oopsattention.tmpl:130
 msgid "You can review your changes in your personal TWiki topic %1"
 msgstr "Du kan tjekke opdateringerne til din personlige TWiki side, %1"
+
+#: templates/oopsattention.tmpl:28
+msgid "You can see the differences [[%1][here]]."
+msgstr "Du kan se forskellene [[%1][her]]."
 
 #: templates/oopschangelanguage.tmpl:8
 msgid ""
@@ -2521,6 +2662,14 @@ msgstr ""
 msgid "You need to close your browser to make this change take effect."
 msgstr "Alle browservinduer skal lukkes ned, før denne ændring slår igennem."
 
+#: templates/registerconfirm.tmpl:11
+msgid ""
+"You now need to verify your email address. You can do so by entering %1 in "
+"the form presented to you when this email was sent, or by visiting %2"
+msgstr ""
+"Du skal nu verificere din e-mail-adresse. Det gør du ved at indsætte din %1 "
+"på siden som du har fået via den sendte e-mail eller ved at gå til siden %2."
+
 #: templates/oopsattention.tmpl:270
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr ""
@@ -2532,12 +2681,20 @@ msgstr ""
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
-"code is of the form \\\"YourName.xxxx\\\")"
+"code is of the form \"YourName.xxxx\")"
 msgstr ""
 "Din aktiveringskode er blevet sendt til %1. Enten kan du klikke på linket i "
 "den tilsendte e-mail eller du kan indtaste aktiveringskoden i feltet "
 "nedenfor for at aktivere dit brugernavn (aktiveringskoden har formatet "
 "\"YourName.xxxx\")"
+
+#: templates/oopslanguagechanged.tmpl:11
+msgid ""
+"Your language will be changed to %1 from the next screen. You will be "
+"redirected to there right now. If you aren't, [[%2][click here]] to proceed."
+msgstr ""
+"Sproget bliver skiftet til %1 fra næste skærmbillede. Du bliver nu "
+"viderestillet. Hvis det ikke virker, så [[%2][klik her]] for at fortsætte."
 
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
@@ -2547,6 +2704,13 @@ msgstr "Dit password er opdateret til %1."
 #, fuzzy
 msgid "Your password:"
 msgstr "Password"
+
+#: templates/registernotify.tmpl:12
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
+msgstr ""
+"Din personlige side, %1, findes på %2. Du er velkommen til at tilpasse den "
+"efter dine egne behov:"
 
 #: templates/edit.pattern.tmpl:75
 msgid "Your signature to copy/paste:"
@@ -2575,7 +2739,7 @@ msgstr ""
 "[mellemrum] = [værdi]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:305
+#: lib/TWiki/I18N.pm:306
 msgid "_language_name"
 msgstr "Dansk"
 
@@ -2587,19 +2751,19 @@ msgstr "om BookView"
 msgid "about regular expression search"
 msgstr "om søgning med regulære udtryk"
 
-#: lib/TWiki/Access.pm:150
+#: lib/TWiki/Access.pm:158
 msgid "access denied on topic"
 msgstr "adgang til siden nægtet"
 
-#: lib/TWiki/Access.pm:178
+#: lib/TWiki/Access.pm:186
 msgid "access denied on web"
 msgstr "adgang til web nægtet"
 
-#: lib/TWiki/Access.pm:167
+#: lib/TWiki/Access.pm:175
 msgid "access not allowed on topic"
 msgstr "adgang til side ikke tilladt "
 
-#: lib/TWiki/Access.pm:190
+#: lib/TWiki/Access.pm:198
 msgid "access not allowed on web"
 msgstr "adgang til web ikke tilladt "
 
@@ -2624,18 +2788,22 @@ msgstr "felter er obligatoriske"
 msgid "help"
 msgstr "hjælp"
 
-#: templates/oopsmore.pattern.tmpl:41
+#: templates/oopsmore.pattern.tmpl:21
+msgid "in %1 &web."
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:23
+#, fuzzy
+msgid "in a&ll webs."
+msgstr "Søg i alle webs"
+
+#: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"
 msgstr "i kildetekst-format"
 
 #: templates/form.tmpl:3
 msgid "indicates mandatory fields"
 msgstr "angiver obligatoriske felter"
-
-#: templates/oopsattention.tmpl:325
-#, fuzzy
-msgid "is currently set to"
-msgstr "%1 er logget på i øjeblikket"
 
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
 msgid "looking for references in _%1 web_ only"
@@ -2653,7 +2821,7 @@ msgstr "opdatér"
 msgid "more..."
 msgstr "mere..."
 
-#: templates/oopsmore.pattern.tmpl:31
+#: templates/oopsmore.pattern.tmpl:33
 msgid "none (remove topic parent)"
 msgstr "ingen (fjern sidens forælder)"
 
@@ -2673,7 +2841,7 @@ msgstr "ingen (fjern sidens forælder)"
 msgid "or"
 msgstr "eller"
 
-#: lib/TWiki/Render.pm:195
+#: lib/TWiki/Render.pm:199
 msgid "put it back"
 msgstr "flyt siden tilbage"
 
@@ -2684,39 +2852,6 @@ msgstr "fremsøgt %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vis"
-
-#, fuzzy
-#~ msgid ""
-#~ "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-#~ "Platform for the Corporate World."
-#~ msgstr ""
-#~ "%1 webbet på TWiki. TWiki er en web-baseret kollaborations-platform skabt "
-#~ "til virksomheden."
-
-#~ msgid ""
-#~ "*Properties:* The comment and visibility (i.e. is attachment hidden) can "
-#~ "be changed without uploading a file by pressing \"Change Properties\"; "
-#~ "see %1."
-#~ msgstr ""
-#~ "*Attributter:* Kommentaren og synligheden (er den vedhæftede fil skjult) "
-#~ "kan opdateres uden at uploade en ny fil, ved at klikke \"Opdatér kun "
-#~ "attributter\"; se %1."
-
-#~ msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
-#~ msgstr "Opdatér <a href='%1' rel='nofollow'>side-præferencer</a>"
-
-#, fuzzy
-#~ msgid ""
-#~ "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
-#~ "%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</"
-#~ "a>"
-#~ msgstr ""
-#~ "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
-#~ "%','ManagingWebs')\" href='%1' rel='nofollow'>Hjælp</a> til "
-#~ "administration af webs"
-
-#~ msgid "Click on [[%1][Debug topic text]]."
-#~ msgstr "Klik på [[%1][debug kildetekst]]."
 
 #~ msgid ""
 #~ "Find topics <a href='%1' title='Search all webs for topics that link to "
@@ -2731,100 +2866,6 @@ msgstr "vis"
 #~ msgstr ""
 #~ "Find sider <a href='%1' title='Søg i %2 webbet efter sider der linker til "
 #~ "denne side' accesskey='l'>i %2 webbet</a> der linker til %3"
-
-#~ msgid ""
-#~ "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
-#~ "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
-#~ "moving topics</a>."
-#~ msgstr ""
-#~ "Hjælp til <a target='ManagingTopics' onclick=\"return launchWindow('%"
-#~ "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>omdøbning og "
-#~ "flytning af sider</a>."
-
-#~ msgid ""
-#~ "Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
-#~ "TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Setting topic "
-#~ "preferences</a>."
-#~ msgstr ""
-#~ "Hjælp til <a target='TWikiVariables' onclick=\"return launchWindow('%"
-#~ "TWIKIWEB%','TWikiVariables')\" href=\"%1\" rel='nofollow'>definition af "
-#~ "side-præferencer</a>."
-
-#~ msgid "If you haven't set a password yet or you want to reset it, go to: %1"
-#~ msgstr ""
-#~ "Hvis du ikke har valgt et password endnu, eller du ønsker at nulstille "
-#~ "det, så gå til: %1"
-
-#~ msgid ""
-#~ "It's usually best to choose a <a target='WikiWord' onclick=\"return "
-#~ "launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' "
-#~ "rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic "
-#~ "linking may not work. Characters not allowed in topic names, such as "
-#~ "spaces will automatically be removed."
-#~ msgstr ""
-#~ "Det anbefales at vælge et <a target='WikiWord' onclick=\"return "
-#~ "launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' "
-#~ "rel='nofollow'>WikiWord</a> som sidenavn, ellers slås den automatiske "
-#~ "linkning fra. Karakterer der ikke er tilladte i sidenavne, som fx "
-#~ "mellemrum, bliver automatisk fjernet."
-
-#~ msgid ""
-#~ "Please visit %1 to change your password to something more memorable for "
-#~ "you."
-#~ msgstr ""
-#~ "Besøg venligst siden %1 for at ændre dit password til ét der er lettere "
-#~ "at huske."
-
-#~ msgid ""
-#~ "Read %1 to get a quick overview of this collaboration platform. To learn "
-#~ "more, study the TWikiTutorial, which is accessible from the same link."
-#~ msgstr ""
-#~ "Siden %1 giver et et hurtigt overblik over denne kollaborations-platform. "
-#~ "For at få en dybere indsigt i systemet kan du læse siden TWikiTutorial, "
-#~ "som kan nås fra samme link."
-
-#~ msgid ""
-#~ "Users with automatically generated passwords should proceed immediately "
-#~ "to [[%1][change password]] to change their password to something "
-#~ "memorable."
-#~ msgstr ""
-#~ "Brugere med system-genererede passwords opfordres til snarest muligt at "
-#~ "[[%1][opdatere passwordet]] til et der er nemmere at huske."
-
-#~ msgid ""
-#~ "You can [[%1][create a new web]] if you have permission. Contact %2 if "
-#~ "you have any questions."
-#~ msgstr ""
-#~ "Du kan [[%1][oprette et nyt web]], hvis du har rettigheden til det. "
-#~ "Kontakt %2 hvis du har spørgsmål."
-
-#~ msgid "You can change your password at via %1"
-#~ msgstr "Du kan skifte dit password v.h.a. %1"
-
-#~ msgid "You can see the differences [[%1][here]]."
-#~ msgstr "Du kan se forskellene [[%1][her]]."
-
-#~ msgid ""
-#~ "You now need to verify your email address. You can do so by entering %1 "
-#~ "in the form presented to you when this email was sent, or by visiting %2"
-#~ msgstr ""
-#~ "Du skal nu verificere din e-mail-adresse. Det gør du ved at indsætte din %"
-#~ "1 på siden som du har fået via den sendte e-mail eller ved at gå til "
-#~ "siden %2."
-
-#~ msgid ""
-#~ "Your language will be changed to %1 from the next screen. You will be "
-#~ "redirected to there right now. If you aren't, [[%2][click here]] to "
-#~ "proceed."
-#~ msgstr ""
-#~ "Sproget bliver skiftet til %1 fra næste skærmbillede. Du bliver nu "
-#~ "viderestillet. Hvis det ikke virker, så [[%2][klik her]] for at fortsætte."
-
-#~ msgid ""
-#~ "Your personal %1 topic is located at %2. You can customize it as you like:"
-#~ msgstr ""
-#~ "Din personlige side, %1, findes på %2. Du er velkommen til at tilpasse "
-#~ "den efter dine egne behov:"
 
 #~ msgid "Current time on this server:"
 #~ msgstr "Klokkeslet på serveren:"
