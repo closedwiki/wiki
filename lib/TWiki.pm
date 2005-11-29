@@ -1185,9 +1185,6 @@ sub new {
     $prefs->pushPreferences(
         $this->{webName}, $this->{topicName}, 'TOPIC' );
 
-    # language information; must be loaded after preferences are available
-    $this->{i18n} = TWiki::I18N::get( $this );
-
     $this->{renderer} = new TWiki::Render( $this );
 
     # Finish plugin initialization - register handlers
@@ -1195,6 +1192,11 @@ sub new {
 
     $prefs->pushPreferenceValues( 'SESSION',
                                   $this->{client}->getSessionValues() );
+
+
+    # language information; must be loaded after
+    # *all possible preferences sources* are available
+    $this->{i18n} = TWiki::I18N::get( $this );
 
     return $this;
 }
