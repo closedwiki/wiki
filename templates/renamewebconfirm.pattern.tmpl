@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(rename)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%%_{"Confirm rename or move"}%%TMPL:END%
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Confirm rename or move"}%%TMPL:END%
 
 
 %TMPL:DEF{"newsubweb"}%<input type="hidden" name="newsubweb" value="%NEW_SUBWEB%"  />%NEW_SUBWEB%%TMPL:END%
@@ -22,7 +22,7 @@
    * Set submit_prompt = Submit
 -->
 %TMPL:DEF{"topicactionbuttons"}%<input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" />
-<input type="submit" class="twikiSubmit" value="%RENAMEWEB_SUBMIT%" then=refresh_prompt" else="submit_prompt"}%" /> %_{"or"}% <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?action=renameweb&confirm=cancel">%TMPL:P{"canceltopicaction"}%</a>%TMPL:END%
+<input type="submit" class="twikiSubmit" value="%RENAMEWEB_SUBMIT%" then=refresh_prompt" else="submit_prompt"}%" /> %MAKETEXT{"or"}% <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?action=renameweb&confirm=cancel">%TMPL:P{"canceltopicaction"}%</a>%TMPL:END%
 
 
 

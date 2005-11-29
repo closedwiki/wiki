@@ -1,43 +1,43 @@
 %{ Templates for lease conflict messages. One DEF is selected and inserted at %INSTANTIATE }%
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"titleaction"}%%_{"(oops)"}% %TMPL:END%
-%TMPL:DEF{"webaction"}% *%_{"Attention"}%* %TMPL:END%
-%TMPL:DEF{"heading"}%%_{"Conflict"}%%TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(oops)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Conflict"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}%%TMPL:END%
 %TMPL:DEF{"active"}%
-%_{"[_1] is editing [_2].", "%PARAM1%", "%WEB%.%TOPIC%"}%
+%MAKETEXT{"[_1] is editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
 
-%_{"They have been editing for [_1] and their lease is still active for another [_2].", "%PARAM2%", "%PARAM3%"}%
+%MAKETEXT{"They have been editing for [_1] and their lease is still active for another [_2]." args="%PARAM2%, %PARAM3%"}%
 %TMPL:END%
 %TMPL:DEF{"old"}%
-%_{"[_1] may still be editing [_2].", "%PARAM1%", "%WEB%.%TOPIC%"}%
+%MAKETEXT{"[_1] may still be editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
 
-%_{"Their lease on this topic expired [_1] ago.", "%PARAM2%"}%
+%MAKETEXT{"Their lease on this topic expired [_1] ago." args="%PARAM2%"}%
 
-%_{"The chances are good that they simply navigated away from the edit page without saving."}%
+%MAKETEXT{"The chances are good that they simply navigated away from the edit page without saving."}%
 %TMPL:END%
 %TMPL:DEF{"message"}%
 
 %INSTANTIATE%
 
-%_{"It is probably OK to go ahead and edit, unless you intend to change the form attached to the topic. If they _do_ save while you are editing, your changes will be merged with theirs. Form data cannot easily be merged, so in this case you are recommended to check with them first."}%
+%MAKETEXT{"It is probably OK to go ahead and edit, unless you intend to change the form attached to the topic. If they _do_ save while you are editing, your changes will be merged with theirs. Form data cannot easily be merged, so in this case you are recommended to check with them first."}%
 
-%_{"To see if they have finished their edit yet, click 'Try Again'."}%
+%MAKETEXT{"To see if they have finished their edit yet, click 'Try Again'."}%
 
-%_{"To edit the topic anyway, hit 'Edit Anyway'."}%
+%MAKETEXT{"To edit the topic anyway, hit 'Edit Anyway'."}%
 %TMPL:END%
 %TMPL:DEF{"topicaction"}%
-[[%WEB%.%TOPIC%][%_{"View topic"}%]] %TMPL:P{"sep"}%
+[[%WEB%.%TOPIC%][%MAKETEXT{"View topic"}%]] %TMPL:P{"sep"}%
 <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a> %TMPL:P{"sep"}%
 <form action="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%" method="post">
 %QUERYPARAMS% 
-<input type="submit" value='%_{"Try Again"}%' />
+<input type="submit" value='%MAKETEXT{"Try Again"}%' />
 </form>
 %TMPL:P{"sep"}%
 <form action="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" name="breaklock" value="on" />
 %QUERYPARAMS% 
-<input type="submit" value='%_{"Edit Anyway"}%' />
+<input type="submit" value='%MAKETEXT{"Edit Anyway"}%' />
 </form> %TMPL:END%
 
 %TMPL:P{"oops"}%

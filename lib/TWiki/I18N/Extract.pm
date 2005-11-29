@@ -91,21 +91,7 @@ sub extract {
 
     my $line;
   
-    # TWiki templates:
-    $line = 1; pos($_) = 0;
-    my $doublequoted = '"(\\\"|[^"])*"';
-    my @_lines = split(/\n/,$_);
-    foreach (@_lines) {
-        while (m/%(TMPL:MAKETEXT|_)\{\s*($doublequoted)(\s*,\s*($doublequoted))*\s*\}%/gm) {
-            my $str = substr($2, 1, -1);
-	    #print "$file: $str\n";
-            $str =~ s/\\"/"/g;
-	    #print "$file: $str\n";
-            $self->add_entry($str, [ $file, $line, '' ]);
-        }
-        $line ++;
-    }
-    # TWiki topics:
+    # TWiki's %MAKETEXT{...}% into topics and templates :
     $line = 1; pos($_) = 0;
     my @_lines = split(/\n/,$_);
     foreach (@_lines) {

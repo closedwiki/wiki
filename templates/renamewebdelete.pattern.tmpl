@@ -14,11 +14,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%%_{"(delete)"}% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(delete)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%%_{"Delete"}%%TMPL:END%
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Delete"}%%TMPL:END%
 
 
 
@@ -31,16 +31,16 @@
 
 
 %TMPL:DEF{"namehelp"}%
-%_{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web.", "%NEW_WEB%"}%
+%MAKETEXT{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web." args="%NEW_WEB%"}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"movewebhelp"}%%_{"Deleted topics will be moved to the [_1] web", "%NEW_WEB%"}%%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%%MAKETEXT{"Deleted topics will be moved to the [_1] web" args="%NEW_WEB%"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Delete"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Delete"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 

@@ -4,11 +4,11 @@
 %TMPL:DEF{ATTACH:files:header(basic)}%
 <div class="twikiAttachments"><p></p>
 <!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
-| *I* | *%_{"Attachment"}%* | *%_{"Action"}%* | *%_{"Size"}%* | *%_{"Date"}%* | *%_{"Who"}%* | *%_{"Comment"}%* |%TMPL:END%
+| *I* | *%MAKETEXT{"Attachment"}%* | *%MAKETEXT{"Action"}%* | *%MAKETEXT{"Size"}%* | *%MAKETEXT{"Date"}%* | *%MAKETEXT{"Who"}%* | *%MAKETEXT{"Comment"}%* |%TMPL:END%
 
 %{ A basic row definition, for attachment table and attach screen }%
 %TMPL:DEF{ATTACH:files:row(basic)}%
-| %A_ICON%<span class="twikiHidden">%A_EXT%</span> | <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURL{"attach"}%/%WEB%/%TOPIC%?filename=%A_FILE%&revInfo=1" title='%_{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%_{"manage"}%</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
+| %A_ICON%<span class="twikiHidden">%A_EXT%</span> | <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURL{"attach"}%/%WEB%/%TOPIC%?filename=%A_FILE%&revInfo=1" title='%MAKETEXT{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%MAKETEXT{"manage"}%</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
 
 %{ Header for topic attachment table }%
 %TMPL:DEF{ATTACH:files:header}%
@@ -27,7 +27,7 @@
 
 %{ Header for table at top of attach screen }%
 %TMPL:DEF{ATTACH:files:header:A}%
-%TMPL:P{ATTACH:files:header(basic)}% *[[%TWIKIWEB%.FileAttribute][%_{"Attribute"}%]]* |
+%TMPL:P{ATTACH:files:header(basic)}% *[[%TWIKIWEB%.FileAttribute][%MAKETEXT{"Attribute"}%]]* |
 %TMPL:END%
 
 %{ Row for table at top of attach screen }%
@@ -42,12 +42,12 @@
 
 %{ Header for versions table in attach screen }%
 %TMPL:DEF{ATTACH:versions:header}%
-|  *%_{"Version"}%*  |  *%_{"Action"}%*   |  *%{"Size"}%*  |  *%_{"Date"}%*  |  *%_{"Who"}%*  |  *%_{"Comment"}%*  |
+|  *%MAKETEXT{"Version"}%*  |  *%MAKETEXT{"Action"}%*   |  *%{"Size"}%*  |  *%MAKETEXT{"Date"}%*  |  *%MAKETEXT{"Who"}%*  |  *%MAKETEXT{"Comment"}%*  |
 %TMPL:END%
 
 %{ Row for versions table in attach screen }%
 %TMPL:DEF{ATTACH:versions:row}%
-| %A_REV%  | <a href="%A_URL%">%_{"view"}%</a> | %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |
+| %A_REV%  | <a href="%A_URL%">%MAKETEXT{"view"}%</a> | %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |
 %TMPL:END%
 
 %{ Footer for versions table in attach screen }%

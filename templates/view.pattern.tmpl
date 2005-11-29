@@ -21,8 +21,8 @@
 %TMPL:DEF{"attachments"}%%META{"attachments"}%%TMPL:END%
 
 
-%TMPL:DEF{"create_topic"}%%_{"Cr&eate"}%%TMPL:END%
-%TMPL:DEF{"edit_topic"}%%_{"&Edit"}%%TMPL:END%
+%TMPL:DEF{"create_topic"}%%MAKETEXT{"Cr&eate"}%%TMPL:END%
+%TMPL:DEF{"edit_topic"}%%MAKETEXT{"&Edit"}%%TMPL:END%
 
 
 
@@ -32,15 +32,15 @@
 
 
 
-%TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title='%_{"View topic"}%'>%_{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%_{"Edit"}%</strike></span>%TMPL:END%
+%TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title='%MAKETEXT{"View topic"}%'>%MAKETEXT{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%MAKETEXT{"Edit"}%</strike></span>%TMPL:END%
 
-%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%_{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
+%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
 %TMPL:DEF{"activatable_raw_edit"}%%TMPL:P{context="inactive" then="inactive_edit" else="editrawnowysiwyg"}%%TMPL:END%
 
 %TMPL:DEF{"editrawwysiwyg"}%%TMPL:P{"sep"}%%TMPL:P{"editraw"}%%TMPL:END%
 %TMPL:DEF{"editrawnowysiwyg"}%%TMPL:P{"editraw"}%%TMPL:END%
 
-%TMPL:DEF{"wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title='%_{"Edit this topic text"}%'>%_{"&Compose"}%</a></span>%TMPL:END%
+%TMPL:DEF{"wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%'>%MAKETEXT{"&Compose"}%</a></span>%TMPL:END%
 %TMPL:DEF{"activatable_wysiwyg_edit_if_available"}%%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
 %TMPL:DEF{"activatable_wysiwyg_edit"}%%TMPL:P{context="inactive" else="activatable_wysiwyg_edit_if_available"}%%TMPL:END%
 
@@ -51,13 +51,13 @@
 
 
 
-%TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="A" title="%_{"Attach an image or document to this topic"}%" rel="nofollow">%_{"&Attach"}%</a>%TMPL:END%
-%TMPL:DEF{"inactive_attach"}%<strike>%_{"Attach"}%</strike>%TMPL:END%
+%TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="A" title="%MAKETEXT{"Attach an image or document to this topic"}%" rel="nofollow">%MAKETEXT{"&Attach"}%</a>%TMPL:END%
+%TMPL:DEF{"inactive_attach"}%<strike>%MAKETEXT{"Attach"}%</strike>%TMPL:END%
 %TMPL:DEF{"activatable_attach"}%%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%%TMPL:END%
 
 
-%TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%_{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%_{"&More topic actions"}%</a>%TMPL:END%
-%TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%_{"More topic actions..."}%</strike></span>%TMPL:END%
+%TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%MAKETEXT{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%MAKETEXT{"&More topic actions"}%</a>%TMPL:END%
+%TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%MAKETEXT{"More topic actions..."}%</strike></span>%TMPL:END%
 %TMPL:DEF{"activatable_more"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
 
 %TMPL:DEF{toolbar_buttons}%<div class="patternToolBarButtons">%TMPL:P{"activatable_switchable_edit"}%<span class="patternButton">%TMPL:P{"activatable_attach"}%</span><span class="patternButton">%TMPL:P{"printable"}%</span></div>%TMPL:END%
@@ -65,7 +65,7 @@
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td class="patternHomePath"><span class="patternHomePathTitle">%_{"You are here"}%: </span>[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] <span class="twikiSeparator">&gt;</span> <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><img src="%ICONPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></td>
+<td class="patternHomePath"><span class="patternHomePathTitle">%MAKETEXT{"You are here"}%: </span>[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] <span class="twikiSeparator">&gt;</span> <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><img src="%ICONPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></td>
 <td class="patternRevInfo"><span class="patternRevision">%REVINFO%</span></td></tr>
 <tr>
 <td class="patternToolBar" colspan="2">
@@ -87,21 +87,21 @@
 
 
 
-%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden"> %_{"Start of topic"}% | <a href="#Actions">%_{"Skip to actions"}%</a><hr /></div>
+%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden"> %MAKETEXT{"Start of topic"}% | <a href="#Actions">%MAKETEXT{"Skip to actions"}%</a><hr /></div>
 <div class="patternContent"><div class="patternTopic">%TEXT%
 #TopicEnd
-</div><div class="twikiHidden"><hr />%_{"End of topic"}%<br /><a href="#Actions">%_{"Skip to actions"}%</a> | <a href="#PageTop">%_{"Back to top"}%</a><hr /></div>
+</div><div class="twikiHidden"><hr />%MAKETEXT{"End of topic"}%<br /><a href="#Actions">%MAKETEXT{"Skip to actions"}%</a> | <a href="#PageTop">%MAKETEXT{"Back to top"}%</a><hr /></div>
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%</div>
 %TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" title="%_{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%_{"&Printable"}%</a>%TMPL:END%
+%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
 
-%TMPL:DEF{"viewraw"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%_{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%_{"Raw View"}%</a>%TMPL:END%
+%TMPL:DEF{"viewraw"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%MAKETEXT{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%MAKETEXT{"Raw View"}%</a>%TMPL:END%
 
 %TMPL:DEF{"raw"}%%TMPL:P{"viewraw"}%%TMPL:P{context="WysiwygPluginEnabled" then="editrawwysiwyg"}%%TMPL:END%
 
-%TMPL:DEF{"backlinks"}%%_{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="%_{"Search the <nop>%WEB% Web for topics that link to here"}%" accesskey="W">%_{"&Web"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%_{"Search all webs for topics that link to here"}%" accesskey="L">%_{"A&ll Webs"}%</a>%TMPL:END%
+%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="%MAKETEXT{"Search the <nop>%WEB% Web for topics that link to here"}%" accesskey="W">%MAKETEXT{"&Web"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll Webs"}%</a>%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_switchable_edit"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:P{"raw"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 

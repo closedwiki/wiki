@@ -4,8 +4,8 @@
 
 
 
-%TMPL:DEF{"LOG_IN"}%%ICON{key}% %_{"Log In"}%%TMPL:END%
-%TMPL:DEF{"LOG_OUT"}%%ICON{logout}% %_{"Log Out"}%%TMPL:END%
+%TMPL:DEF{"LOG_IN"}%%ICON{key}% %MAKETEXT{"Log In"}%%TMPL:END%
+%TMPL:DEF{"LOG_OUT"}%%ICON{logout}% %MAKETEXT{"Log Out"}%%TMPL:END%
 
 
 
@@ -13,7 +13,7 @@
 
 
 
-%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title='%_{"Back to topic"}%' accesskey='C' rel='nofollow'>%_{"&Cancel"}%</a>%TMPL:END%
+%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title='%MAKETEXT{"Back to topic"}%' accesskey='C' rel='nofollow'>%MAKETEXT{"&Cancel"}%</a>%TMPL:END%
 
 
 
@@ -106,7 +106,7 @@
 
 
 
-%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" title="%_{"View total topic history"}%" accesskey="H" rel="nofollow">%_{"&History"}%</a>: %REVISIONS%</span>%TMPL:END%
+%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS%</span>%TMPL:END%
 
 
 

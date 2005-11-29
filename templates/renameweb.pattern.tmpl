@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(rename)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%%_{"Rename"}%%TMPL:END%
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Rename"}%%TMPL:END%
 
 
 
@@ -19,16 +19,16 @@
 
 
 %TMPL:DEF{"namehelp"}%
-%_{"It's usually best to choose a short name for the new web, as it is easier to link to them later on. Characters not allowed in web names, such as spaces will automatically be removed."}%
+%MAKETEXT{"It's usually best to choose a short name for the new web, as it is easier to link to them later on. Characters not allowed in web names, such as spaces will automatically be removed."}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"movewebhelp"}%%_{"You can rename this web to a different web name."}% <br />%_{"To delete this web: move this web to the Trash web by renaming it to [_1].", "%TRASHWEB%/%WEB%"}% %TMPL:END%
+%TMPL:DEF{"movewebhelp"}%%MAKETEXT{"You can rename this web to a different web name."}% <br />%MAKETEXT{"To delete this web: move this web to the Trash web by renaming it to [_1]." args="%TRASHWEB%/%WEB%"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Rename/Move"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Rename/Move"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 

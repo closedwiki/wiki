@@ -38,7 +38,6 @@ The following tokens are supported by this language:
 | %<nop>TMPL:DEF% | Opens a template definition |
 | %<nop>TMPL:END% | Closes a template definition |
 | %<nop>TMPL:INCLUDE% | Includes another file of templates |
-| %<nop>TMPL:MAKETEXT% | Translates text into the user's language |
 
 Note; the template cache does not get reset during initialisation, so
 the haveTemplate test will return true if a template was loaded during
@@ -178,57 +177,6 @@ sub tmplP {
 
 =pod
 
---++ ObjectMethod _expandMaketext( $params ) -> $translation
-
-Translates a string to the current language. Supports the following formats:
-
-   * =%<nop>TMPL:MAKETEXT{ ... }%=
-   * =%_{ ... }%=
-
-Inside the { ... }, there should be a comma-separated list of double-quoted
-strings, like:
-
-<code>"Translate this [_1] for [_2]", "parameter one", "parameter two".</code>
-
-Return value: (eventually) translated text
-
-=cut
-
-sub _expandMaketext {
-    my ( $this, $params ) = @_;
-
-    my $str;
-    my @args;
-    while ($params) {
-        $params =~ s/^\s*//; # remove any leading spaces
-        last unless $params;
-     
-        last unless ($params =~ m/^("((\\\"|[^"])*)")(.*)$/); #next argument
-
-        $str = $1;
-        $params = substr($params,length($str)); #remove extracted string
-        $params =~ s/^\s*,//; # remove comma
-        $str = substr($str,1,-1);
-        $str =~ s/\\"/"/g;
-
-
-        push( @args, $str );
-    }
-
-    # translate
-    my $result = $this->{session}->{i18n}->maketext( @args );
-
-    # replace accesskeys:
-    $result =~ s#&([a-zA-Z])#<span class='twikiAccessKey'>$1</span>#g;
-
-    # replace escaped amperstands:
-    $result =~ s/&&/\&/g;
-    
-    return $result;
-}
-
-=pod
-
 ---++ ObjectMethod readTemplate ( $name, $skins, $web ) -> $text
 
 Return value: expanded template text
@@ -275,9 +223,6 @@ sub readTemplate {
 
     # Kill comments, marked by %{ ... }%
     $text =~ s/%{.*?}%//sg;
-
-    # handle %TMPL:MAKETEXT{ ... }% and %TMPL:GEXTTEXT{ ... }%
-    $text =~ s/%(TMPL\:MAKETEXT|_)\{(\s*"((\\\"|[^"])*)"(\s*,\s*"((\\\"|[^"])*)")*\s*)\}%/$this->_expandMaketext($2)/geo;
 
     if( ! ( $text =~ /%TMPL\:/s ) ) {
         # no template processing

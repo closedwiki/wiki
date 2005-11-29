@@ -16,7 +16,7 @@
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td class="patternToolBar">
-<span id="edithelpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Show formatting help"}%%ICON{toggleopen}%</a></span><span id="edithelphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Hide formatting help"}%%ICON{toggleclose}%</a></span>&nbsp;
+<span id="edithelpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%MAKETEXT{"Show formatting help"}%%ICON{toggleopen}%</a></span><span id="edithelphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%MAKETEXT{"Hide formatting help"}%%ICON{toggleclose}%</a></span>&nbsp;
 </td>
 </tr>
 </table>
@@ -29,7 +29,7 @@
 
 
 
-%TMPL:DEF{"titleaction"}%%_{"(edit)"}% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(edit)"}% %TMPL:END%
 
 
 
@@ -37,12 +37,12 @@
 
 
 
-%TMPL:DEF{"webaction"}%%_{"Change topic"}%%TMPL:END%
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Change topic"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"simpleheader"}%
----+ <nop>%TOPIC% %_{"(edit)"}%%TMPL:END%
+---+ <nop>%TOPIC% %MAKETEXT{"(edit)"}%%TMPL:END%
 
 
 
@@ -51,9 +51,9 @@
 
 
 %TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
-<input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="#%_{"Opens page in new window"}%" title='%_{"Read new revision help text in new window"}%' rel='nofollow'>%_{"help"}%</a></span></div>
+<input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="#%MAKETEXT{"Opens page in new window"}%" title='%MAKETEXT{"Read new revision help text in new window"}%' rel='nofollow'>%MAKETEXT{"help"}%</a></span></div>
 <div class="patternActionButtons">
-<input type="submit" class="twikiSubmit" name="action_save" id="save" value='%_{"Save"}%' /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%_{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value='%_{"Preview"}%' /><label accesskey="p" for="preview"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value='%_{"Cancel"}%' title='%_{"Cancel editing and discard changes"}%' /><label accesskey="c" for="cancel"></label></div><div class="patternAccessKeyInfo"><a href="#%_{"Opens page in new window"}%" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, P = %_{"Preview"}%, C = %_{"Cancel"}%</div></div>%TMPL:END%
+<input type="submit" class="twikiSubmit" name="action_save" id="save" value='%MAKETEXT{"Save"}%' /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%MAKETEXT{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%MAKETEXT{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label>&nbsp;%MAKETEXT{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value='%MAKETEXT{"Preview"}%' /><label accesskey="p" for="preview"></label>&nbsp;%MAKETEXT{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value='%MAKETEXT{"Cancel"}%' title='%MAKETEXT{"Cancel editing and discard changes"}%' /><label accesskey="c" for="cancel"></label></div><div class="patternAccessKeyInfo"><a href="#%MAKETEXT{"Opens page in new window"}%" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%MAKETEXT{"Access keys"}%</a>: S = %MAKETEXT{"Save"}%, Q = %MAKETEXT{"Quiet Save"}%, K = %MAKETEXT{"Checkpoint"}%, P = %MAKETEXT{"Preview"}%, C = %MAKETEXT{"Cancel"}%</div></div>%TMPL:END%
 
 
 
@@ -72,7 +72,7 @@
 <input type="hidden" name="newtopic" value="%NEWTOPIC%" />
 <input type="hidden" name="cmd" value="%CMD%" />
 <div class="patternSig">
-<label for="sig" class="twikiGrayText">%_{"Your signature to copy/paste:"}%&nbsp;&nbsp;</label><input size="41" name="sig" type="text" readonly="readonly" title='%_{"Select, copy and paste your signature text to the bottom of your entry"}%' id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
+<label for="sig" class="twikiGrayText">%MAKETEXT{"Your signature to copy/paste:"}%&nbsp;&nbsp;</label><input size="41" name="sig" type="text" readonly="readonly" title='%MAKETEXT{"Select, copy and paste your signature text to the bottom of your entry"}%' id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
 </form>

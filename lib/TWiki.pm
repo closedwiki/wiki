@@ -2873,7 +2873,15 @@ sub _MAKETEXT {
     }
 
     # do the magic:
-    return $this->{i18n}->maketext($str, @args);
+    my $result  =  $this->{i18n}->maketext($str, @args);
+
+    # replace accesskeys:
+    $result =~ s#(^|[^&])&([a-zA-Z])#$1<span class='twikiAccessKey'>$2</span>#g;
+
+    # replace escaped amperstands:
+    $result =~ s/&&/\&/g;
+
+    return $result;
 }
 
 sub _SCRIPTNAME {
