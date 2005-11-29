@@ -31,7 +31,7 @@ function startKupu() {
 
     var navigatingAway = function () {
       if (kupu.content_changed && 
-          confirm('You have unsaved changes. Do you want to save before leaving the page? (OK to save, Cancel to discard your changes)')) {
+          confirm('You have unsaved changes. If you navigate away from this page you will LOSE any changes you have made. Do you want to save before leaving this edit? (OK to SAVE, Cancel to DISCARD your changes)')) {
         kupu.config.reload_src = 0;
         var form = document.getElementById('twiki-main-form');
         TWikiHandleSubmit();

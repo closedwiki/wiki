@@ -53,7 +53,7 @@ use strict;
 use TWiki::Func;
 
 use vars qw( $VERSION $RELEASE $MODERN $MARKVARS );
-use vars qw( $html2tml $tml2html $convertingImage $imgMap );
+use vars qw( $html2tml $tml2html $convertingImage $imgMap $cairoCalled );
 use vars qw( %TWikiCompatibility );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -69,9 +69,12 @@ $RELEASE = 'Dakar';
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
-    $tml2html->{calledThisSession} = 0 if $tml2html;
-
-    $MODERN = defined( &TWiki::Func::normalizeWebTopicName );
+    if( defined( &TWiki::Func::normalizeWebTopicName )) {
+        $MODERN = 1;
+    } else {
+        # SMELL: nasty global var needed for Cairo
+        $cairoCalled = 0;
+    }
 
     my $mv = TWiki::Func::getPreferencesValue(
         'WYSIWYGPLUGIN_MARK_VARIABLES' );
@@ -129,9 +132,17 @@ sub beforeSaveHandler {
 # call is hard, and then preventing a repeat call is harder!
 sub beforeCommonTagsHandler {
     #my ( $text, $topic, $web )
-
-    return if( $convertingImage ||
-                 $tml2html && $tml2html->{calledThisSession} );
+    return if $convertingImage;
+    if( $MODERN ) {
+        return unless TWiki::Func::getContext()->{body_text};
+    } else {
+        # DANGEROUS SMELL: only way to tell what we are processing is
+        # the order of the calls to commonTagsHandler - the first call after
+        # initPlugin is the body text in Cairo. We only want to process the
+        # body text.
+        return if( $cairoCalled );
+        $cairoCalled = 1;
+    }
 
     my $query = TWiki::Func::getCgiQuery();
 
@@ -154,7 +165,6 @@ sub beforeCommonTagsHandler {
     # lifted out, and we need them.
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
     $_[0] = $tml2html->convert( $text );
-    $tml2html->{calledThisSession} = 1;
 }
 
 # DEPRECATED in Dakar (postRenderingHandler does the job better)
