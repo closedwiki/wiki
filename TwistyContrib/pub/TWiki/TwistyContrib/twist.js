@@ -57,7 +57,6 @@ document.write("<\/style>");
 		var linksAndButtons = getHtmlElements("a", "button", "span", "div");
 		i = linksAndButtons.length;
 		hasClass = hasClassName("twistyTrigger");
-		var found = false;
 		var twistIds = [];
 		while (i--) {
 			e = linksAndButtons[i];
@@ -68,13 +67,10 @@ document.write("<\/style>");
 					twist(this.parentNode.id.slice(0,-4));
 					return false;
 				};
-				if (!found) {
-					found = true;
-					var toggleElem = document.getElementById(twistId + 'toggle');
-					var cookie  = readCookie(COOKIE_PREFIX + twistId);
-					if (cookie == "1") twistShow(twistId, toggleElem);
-					if (cookie == "0") twistHide(twistId, toggleElem);
-				}
+				var toggleElem = document.getElementById(twistId + 'toggle');
+				var cookie  = readCookie(COOKIE_PREFIX + twistId);
+				if (cookie == "1") twistShow(twistId, toggleElem);
+				if (cookie == "0") twistHide(twistId, toggleElem);
 			}
 		}
 	}
