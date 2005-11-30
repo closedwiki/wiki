@@ -65,7 +65,7 @@ document.write("<\/style>");
 				var twistId = e.parentNode.id.slice(0,-4);
 				twistIds.push(twistId);
 				e.onclick = function() {
-					twist(twistId);
+					twist(this.parentNode.id.slice(0,-4));
 					return false;
 				};
 				if (!found) {
