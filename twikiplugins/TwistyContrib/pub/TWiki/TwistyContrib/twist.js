@@ -57,16 +57,17 @@ document.write("<\/style>");
 		var linksAndButtons = getHtmlElements("a", "button", "span", "div");
 		i = linksAndButtons.length;
 		hasClass = hasClassName("twistyTrigger");
-		var twistIds = [];
+		var oldId; // used to check that each twistId is used only once in the following loop
 		while (i--) {
 			e = linksAndButtons[i];
 			if (e && hasClass(e)) {
-				var twistId = e.parentNode.id.slice(0,-4);
-				twistIds.push(twistId);
 				e.onclick = function() {
 					twist(this.parentNode.id.slice(0,-4));
 					return false;
 				};
+				var twistId = e.parentNode.id.slice(0,-4);
+				if (twistId == oldId) continue;
+				oldId = twistId;
 				var toggleElem = document.getElementById(twistId + 'toggle');
 				var cookie  = readCookie(COOKIE_PREFIX + twistId);
 				if (cookie == "1") twistShow(twistId, toggleElem);
