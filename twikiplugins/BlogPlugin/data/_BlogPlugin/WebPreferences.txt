@@ -15,17 +15,17 @@
    * Set NATSEASRCHEXCLUDETOPIC = 
    * Set NATSEARCHTOPICSUMMARY = RenderTopicSummary
    * Set STYLESEARCHBOX = pos2
-   * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
    
-   * WebTopicEditTemplate
+   * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
    * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm
+   * WebTopicEditTemplate
+
    * Set #DENYWEBVIEW = 
    * Set #ALLOWWEBVIEW = 
    * Set #DENYWEBCHANGE = %MAINWEB%.TWikiGuest
    * Set #ALLOWWEBCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set #DENYWEBRENAME = 
    * Set ALLOWWEBRENAME = %MAINWEB%.BlogAuthorGroup
-
    * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
    * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 

@@ -24,7 +24,7 @@ use vars qw(
 use TWiki::Plugins::BlogPlugin::WebDB; # must be compiled in advance
 
 $VERSION = '$Rev$';
-$RELEASE = '0.40';
+$RELEASE = '0.41';
 
 ###############################################################################
 sub initPlugin {
@@ -38,7 +38,6 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('PREVDOC', \&handlePrevDoc);
   TWiki::Func::registerTagHandler('RECENTCOMMENTS', \&handleRecentComments);
   TWiki::Func::registerTagHandler('RELATEDENTRIES', \&handleRelatedEntries);
-  TWiki::Func::registerTagHandler('DBTEST', \&handleDBTest); # for debugging
 
   return 1;
 }
@@ -61,9 +60,6 @@ sub handleRecentComments {
 }
 sub handleRelatedEntries { 
   newCore()->handleRelatedEntries(@_);
-}
-sub handleDBTest { 
-  newCore()->handleDBTest(@_);
 }
 
 ###############################################################################

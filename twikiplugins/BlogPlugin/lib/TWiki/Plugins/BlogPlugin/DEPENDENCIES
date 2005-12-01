@@ -1,4 +1,3 @@
-Digets::MD5,>=2.33,cpan,Required. Download from CPAN and install.
 TWiki::Plugins,>=1.1,perl,TWiki Dakar release.
 TWiki::Plugins::DBCachePlugin,>=1.00,perl,Required
 TWiki::Plugins::ExtendedSelectionPlugin,>=1.002,perl,Required

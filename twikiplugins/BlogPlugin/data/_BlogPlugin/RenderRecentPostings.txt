@@ -20,7 +20,7 @@
 ~~~         format="   * [[$topic][$formfield(Headline)]]"
 ~~~         footer="<style type=\"text/css\">.blogSideBarLatest {
 ~~~           $percntCALC{\"$dollarIF($count==0,display:none)\"}$percnt
-~~~           </style>"
+~~~           } </style>"
 ~~~ }%
 </div>
 %STOPINCLUDE%
