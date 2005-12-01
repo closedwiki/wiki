@@ -21,17 +21,15 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE
         $debug $styleLink $doneHeader $hasInitRedirector
 	$redirectUrl $doneRedirect $query
+	%TWikiCompatibility
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '1.28';
+$TWikiCompatibility{endRenderingHandler} = 1.1;
+$VERSION = '$Rev$';
+$RELEASE = '1.29';
+
+$debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
@@ -42,7 +40,6 @@ sub writeDebug {
 sub initPlugin {
   ($topic, $web, $user, $installWeb) = @_;
 
-  $debug = 0; # toggle me
 
   my $styleUrl = "%PUBURL%\/$installWeb/RedDotPlugin/style.css";
   $styleLink = 
@@ -135,10 +132,11 @@ sub initRedirector {
 ###############################################################################
 sub endRenderingHandler {
   return if $doneRedirect || $redirectUrl eq '' || !$query;
-
   writeDebug("called endRenderingHandler()");
-  
   &TWiki::Func::redirectCgiQuery($query, $redirectUrl);
+}
+sub postRenderingHandler {
+  return endRenderingHandler(@_);
 }
 
 ###############################################################################
