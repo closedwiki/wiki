@@ -48,15 +48,8 @@ $TWikiCompatibility{endRenderingHandler} = 1.1;
 $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.81';
+$RELEASE = '2.91';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -1491,7 +1484,7 @@ sub renderFormButton {
     return '';
   }
   
-  my $text = "<a href=\"javascript:submitEditFormular('save', '$action');\" accesskey=\"f\">$actionText</a>";
+  my $text = "<a href=\"javascript:submitEditFormular('save', '$action');\" accesskey=\"f\" title=\"$actionText\">$actionText</a>";
   $theFormat =~ s/\$1/$text/;
   return $theFormat;
 }

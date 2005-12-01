@@ -1,14 +1,14 @@
 <!-- template: edittopicactions.nat.tmpl -->
 %TMPL:DEF{"topicactions"}%
 <span class="natAction">Edit</span>
-| <a href="javascript:submitEditFormular('preview','preview');" accesskey="p">Preview</a> 
+| <a href="javascript:submitEditFormular('preview','preview');" accesskey="p" title="Preview your changes">Preview</a> 
 %IFSKINSTATETHEN{release="beijing"}% <!-- -->
-| <a href="javascript:submitEditFormular('save', 'save');" accesskey="s">Save</a>
+| <a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title="Save and exit">Save</a>
 %ELSESKINSTATE% <!-- -->
-| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s">Save</a> 
-| <a href="javascript:submitEditFormular('save', 'save');" accesskey="q">Quit</a>
+| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title="Save and continue editing">Save</a> 
+| <a href="javascript:submitEditFormular('save', 'save');" accesskey="q" title="Save and exit">Quit</a>
 %FISKINSTATE% <!-- -->
 <br/> %FORMBUTTON{"$1 |"}%
-<a href="javascript:self.location.reload();" accesskey="u">Undo</a>
-| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
+<a href="javascript:self.location.reload();" accesskey="u" title="Abandon your changes but continue editing">Undo</a>
+| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a>
 %TMPL:END%

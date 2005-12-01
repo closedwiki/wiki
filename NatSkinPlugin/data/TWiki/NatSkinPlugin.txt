@@ -322,8 +322,9 @@ By default this value is set to "off"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.81 (2005-11-29) |
+|  Plugin Version: | v2.91 (2005-12-01) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  01 Dec 2005: | added tooltips to topic actions |
 |  29 Nov 2005: | fixed warning about using the deprecated endRenderingHandler on dakar |
 |  23 Nov 2005: | added $nop to IFSKINSTATETHEN content |
 |  22 Nov 2005: | added support for the <nop>WysiwygPlugin;\
@@ -365,5 +366,5 @@ By default this value is set to "off"
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 23 Nov 2005 
+-- TWiki:Main.MichaelDaum - 01 Dec 2005 
 
