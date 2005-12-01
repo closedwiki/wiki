@@ -1,6 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133290384" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
-%DBCALL{"%TWIKIWEB%.WebChanges"}%
+%DBCALL{"RenderWebChanges" SKIP="%URLPARAM{"skip" default=" 0"}%"}%
+<style type="text/css">
+.natTopicForm {display:none}
+</style>
+
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = nosidebar
+   * Set STYLESIDEBAR = off
 -->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Display the most recent changes in this web"}%

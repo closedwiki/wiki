@@ -1,10 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131556132" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133291260" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
    * SKIP: initial offset
+   * INCR: number of topics per page
    * MAX: maximum number of entries in the set
 
 ---++ Implementation
@@ -14,10 +15,8 @@
 <!--
 <noautolink>
 %~~ CALC{"
-~~~   $SET(theNextSkip,%SKIP%)
-~~~   $SET(thePrevSkip,%SKIP%)
-~~~   $SETM(theNextSkip,+5)
-~~~   $SETM(thePrevSkip,-5)
+~~~   $SET(theNextSkip,$EVAL(%SKIP%+%INCR%))
+~~~   $SET(thePrevSkip,$EVAL(%SKIP%-%INCR%))
 ~~~   $IF($GET(thePrevSkip)<0,$SET(thePrevSkip,0))
 ~~~ "}%
 </noautolink>
@@ -38,7 +37,7 @@
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" SKIP="0"}%
+%DBCALL{"%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%" INCR="10" MAX="200"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

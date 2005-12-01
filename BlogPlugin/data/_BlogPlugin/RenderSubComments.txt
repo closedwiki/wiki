@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132223171" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133282569" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -38,11 +38,13 @@
 ~~~               \"
 ~~~              showimg=\"$percntICONPATH{\"toggleopen\"}$percnt\"
 ~~~              hideimg=\"$percntICONPATH{\"toggleclose\"}$percnt\"
-~~~            }$percnt
+~~~            }$percnt$n
+~~~            <noautolink>
 ~~~            <div class=\"blogCommentText\">
 ~~~              $formfield(Text)
 ~~~              ...&nbsp;[[$web.$topic#$topic][reply]]
-~~~            </div>
+~~~            </div>$n
+~~~            </noautolink>
 ~~~            $percntENDTWISTY$percnt
 ~~~            $percntDBCALL{\"RenderSubComments\" NAME=\"$topic\"}$percnt
 *~~          </div>"

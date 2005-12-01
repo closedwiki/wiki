@@ -45,14 +45,13 @@ data/_BlogPlugin/RenderBlogEntriesOfAuthor.txt 0440
 data/_BlogPlugin/RenderBlogEntry.txt 0440
 data/_BlogPlugin/RenderBlogLink.txt 0440
 data/_BlogPlugin/RenderBlogLinkNavigation.txt 0440
+data/_BlogPlugin/RenderBlogLinksInCategory.txt 0440
 data/_BlogPlugin/RenderBlogRoll.txt 0440
 data/_BlogPlugin/RenderBlogTeaser.txt 0440
 data/_BlogPlugin/RenderCategories.txt 0440
 data/_BlogPlugin/RenderCategoriesInSpan.txt 0440
 data/_BlogPlugin/RenderDocNavigation.txt 0440
-data/_BlogPlugin/RenderBlogLinksInCategory.txt 0440
 data/_BlogPlugin/RenderFrontPage.txt 0440
-data/_BlogPlugin/RenderFrontPageNavigation.txt 0440
 data/_BlogPlugin/RenderFrontTeaser.txt 0440
 data/_BlogPlugin/RenderFullTeaser.txt 0440
 data/_BlogPlugin/RenderFunctionCallers.txt 0440
@@ -61,6 +60,7 @@ data/_BlogPlugin/RenderNewBlogLinkButton.txt 0440
 data/_BlogPlugin/RenderNewCategoryButton.txt 0440
 data/_BlogPlugin/RenderNewTopicTypeForm.txt 0440
 data/_BlogPlugin/RenderNextCommentNr.txt 0440
+data/_BlogPlugin/RenderPageNavigation.txt 0440
 data/_BlogPlugin/RenderRecentComments.txt 0440
 data/_BlogPlugin/RenderRecentPostings.txt 0440
 data/_BlogPlugin/RenderRelatedEntries.txt 0440
@@ -71,6 +71,7 @@ data/_BlogPlugin/RenderTopicList.txt 0440
 data/_BlogPlugin/RenderTopicSummary.txt 0440
 data/_BlogPlugin/RenderTopicTypes.txt 0440
 data/_BlogPlugin/RenderVisitors.txt 0440
+data/_BlogPlugin/RenderWebChanges.txt 0440
 data/_BlogPlugin/SubjectCategory.txt 0440
 data/_BlogPlugin/SubjectCategoryTemplate.txt 0440
 data/_BlogPlugin/TWikiForm.txt 0440

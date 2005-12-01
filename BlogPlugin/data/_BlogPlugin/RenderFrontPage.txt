@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131647399" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133291260" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderFrontPageNavigation
+see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 
 ---++ Parameters
    * SKIP: offset into the archive
@@ -38,7 +38,10 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderFrontPageNavig
 ~~~      web="%WEB%"
 ~~~   }%)"}%
 -->
-~~~ %DBCALL{"%WEB%.RenderFrontPageNavigation" SKIP="%SKIP%" MAX="%CALC{"$GET(nrPostings)"}%"}%
+%~~ DBCALL{"%WEB%.RenderPageNavigation" 
+~~~    SKIP="%SKIP%" INCR="5"
+~~~    MAX="%CALC{"$GET(nrPostings)"}%"
+~~~ }%
 ~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
 ~~~
 %STOPINCLUDE%

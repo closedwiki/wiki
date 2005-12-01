@@ -19,9 +19,8 @@ package TWiki::Plugins::BlogPlugin::Core;
 use strict;
 use vars qw( $debug );
 
-use TWiki::Plugins::DBCachePlugin qw(dbQuery getFormField initDB);
+use TWiki::Plugins::DBCachePlugin;
 use TWiki::Plugins::BlogPlugin::WebDB;
-use Digest::MD5 qw(md5_hex);
 
 $debug = 0; # toggle me
 
@@ -49,7 +48,7 @@ sub handleCiteBlog {
   return &inlineError("ERROR: CITEBLOG has no topic argument") 
     unless $theTopic;
 
-  my $theDB = &initDB($theWeb);
+  my $theDB = TWiki::Plugins::DBCachePlugin::getDB($theWeb);
 
   my $text = "[[$theWeb.$theTopic][$theTopic]]";
 
@@ -67,44 +66,6 @@ sub handleCiteBlog {
     $theTopic;
   my $createDate = TWiki::Func::formatTime($topicObj->fastget('createdate'), '$day $mon $year');
   return "[[$theWeb.$theTopic][$displayText ($createDate)]]";
-}
-
-###############################################################################
-sub handleDBTest {
-  my ($this, $session, $params, $theTopic, $theWeb) = @_;
-
-  my $theDB = &initDB($theWeb);
-  my $result = "<noautolink>\n";
-
-  my $size = $theDB->size();
-  $result .= "---++ size=$size\n";
-  foreach my $key1 ('RenderBlogEntry') {
-  
-    my $value1 = $theDB->fastget($key1) || '';
-    $result .= "---++ <nobr> $key1 = $value1</nobr>\n";
-
-    foreach my $key2 (sort $value1->getKeys()) {
-      my $value2 = $value1->fastget($key2);
-      next unless $value2;
-      $result .= "---+++ <nobr> $key2\n<verbatim>\n$value2\n</verbatim>\n</nobr>\n";
-    }
-    my $topicForm = $value1->fastget('form');
-    if ($topicForm) {
-      $result .= "---++ $topicForm\n";
-      $topicForm = $value1->fastget($topicForm);
-      foreach my $key2 (sort $topicForm->getKeys()) {
-        my $value2 = $topicForm->fastget($key2);
-        $result .= "<nobr> $key2 = $value2</nobr><br/>\n" if $value2;
-      }
-    }
-    my $topicInfo = $value1->fastget('info');
-    $result .= "---++ info: $topicInfo\n";
-    foreach my $key2 (sort $topicInfo->getKeys()) {
-      my $value2 = $topicInfo->fastget($key2);
-      $result .= "<nobr> $key2 = $value2</nobr><br/>\n" if $value2;
-    }
-  }
-  return $result."\n</noautolink>\n";
 }
 
 ###############################################################################
@@ -126,7 +87,7 @@ sub handlePrevDoc {
   #writeDebug('theFormat='.$theFormat);
   #writeDebug('theWhere='. $theWhere) if $theWhere;
   
-  my $theDB = &initDB($thisWeb);
+  my $theDB = TWiki::Plugins::DBCachePlugin::getDB($thisWeb);
   my ($prevTopic, $nextTopic) = $this->getPrevNextTopic($theDB, $thisWeb, $thisTopic, $theWhere, $theOrder);
   if ($prevTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$prevTopic, web=>$thisWeb);
@@ -153,7 +114,7 @@ sub handleNextDoc {
   #writeDebug('theFormat='.$theFormat);
   #writeDebug('theWhere='. $theWhere) if $theWhere;
 
-  my $theDB = &initDB($thisWeb);
+  my $theDB = TWiki::Plugins::DBCachePlugin::getDB($thisWeb);
   my ($prevTopic, $nextTopic) = $this->getPrevNextTopic($theDB, $thisWeb, $thisTopic, $theWhere, $theOrder);
   if ($nextTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$nextTopic, web=>$thisWeb);
@@ -176,7 +137,7 @@ sub getPrevNextTopic {
     return ($prevTopic, $nextTopic);
   }
 
-  my ($resultList) = &dbQuery($theDB, $theWhere, undef, $theOrder);
+  my ($resultList) = $theDB->dbQuery($theWhere, undef, $theOrder);
   my $state = 0;
   foreach my $t (@$resultList) {
     if ($state == 1) {
@@ -197,14 +158,11 @@ sub getPrevNextTopic {
   return ($prevTopic, $nextTopic);
 }
 
-
-
 ###############################################################################
 sub handleRecentComments {
   my ($this, $session, $params, $theTopic, $theWeb) = @_;
 
-  my $key = md5_hex("$theTopic.$theWeb" . $params->stringify());
-
+  my $key = "$theTopic.$theWeb" . $params->stringify();
   #writeDebug("handleRecentComments(".$params->stringify().") called");
 
   my $cacheEntry = $this->{recentCommentsCache}{$key};
@@ -226,7 +184,7 @@ sub handleRecentComments {
   return &inlineError("ERROR: RECENTCOMMENTS has no \"format\" argument") 
     unless $theFormat;
   
-  my $theDB = &initDB($theWeb);
+  my $theDB = TWiki::Plugins::DBCachePlugin::getDB($theWeb);
 
   my %blogComments;
   my %baseRefs;
@@ -370,14 +328,15 @@ sub handleCountComments {
 
 
   # query topics
-  my $nrTopics = $this->{countCommentsCache}{$theBlogRef};
+  my $key = $theWeb.$theBlogRef;
+  my $nrTopics = $this->{countCommentsCache}{$key};
 
   if (defined $nrTopics) {
     #writeDebug("found $nrTopics comments in cache for $theBlogRef");
   } else {
-    my $theDB = &initDB($theWeb);
+    my $theDB = TWiki::Plugins::DBCachePlugin::getDB($theWeb);
     $nrTopics = &countBlogRefs($theDB, $theBlogRef);
-    $this->{countCommentsCache}{$theBlogRef} = $nrTopics;
+    $this->{countCommentsCache}{$key} = $nrTopics;
     #writeDebug("found $nrTopics comments for $theBlogRef");
   }
 
@@ -410,7 +369,7 @@ sub handleRelatedEntries {
   return &inlineError("ERROR: RELATEDENTRIES has no topic argument") 
     unless $theTopic;
 
-  my $theDB = &initDB($theWeb);
+  my $theDB = TWiki::Plugins::DBCachePlugin::getDB($theWeb);
 
   # get direct related
   my %relatedTopics;
@@ -435,7 +394,7 @@ sub handleRelatedEntries {
 
     # render meta data of related topics
     if ($text =~ /\$headline/) {
-      my $headline = &getFormField($theDB, $related, 'Headline');
+      my $headline = $theDB->getFormField($related, 'Headline');
       $text =~ s/\$headline/$headline/g;
     }
 
@@ -503,7 +462,7 @@ sub countBlogRefs {
   if ($theBlogRef) {
     my $queryString = 
       'TopicType=~\'\bBlogComment\b\' AND BlogRef=\''.$theBlogRef.'\'';
-    my ($blogRefs, undef, $errMsg) = &dbQuery($theDB, $queryString);
+    my ($blogRefs, undef, $errMsg) = $theDB->dbQuery($queryString);
 
     die $errMsg if $errMsg; # never reach
 
@@ -528,13 +487,13 @@ sub getRelatedEntries {
   
   # get related topics we refer to
   my %relatedTopics = ();
-  my $relatedTopics = &getFormField($theDB, $theTopic, 'Related');
+  my $relatedTopics = $theDB->getFormField($theTopic, 'Related');
   if (!$relatedTopics) {
     #writeDebug("ERROR: no relatedTopics in $theTopic"); 
   } else {
     foreach my $related (split(/, /, $relatedTopics)) {
       next if $theRelatedTopics && $theRelatedTopics->{$related};
-      my $state = &getFormField($theDB, $related, 'State');
+      my $state = $theDB->getFormField($related, 'State');
       next unless $state eq 'enabled';
       $relatedTopics{$related} = $theDepth;
       #writeDebug("found related $related");
@@ -542,7 +501,7 @@ sub getRelatedEntries {
   }
 
   # get related topics that refer to us
-  my ($revRelatedTopics) = &dbQuery($theDB, 'Related=~\'\b' . $theTopic . '\b\' AND State=\'enabled\'');
+  my ($revRelatedTopics) = $theDB->dbQuery('Related=~\'\b' . $theTopic . '\b\' AND State=\'enabled\'');
   foreach my $related (@$revRelatedTopics) {
     next if $theRelatedTopics && $theRelatedTopics->{$related};
     $relatedTopics{$related} = $theDepth;
