@@ -1,6 +1,6 @@
 # ChartPlugin for TWiki Collaboration Platform
 #
-# Copyright (C) 2002 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2004 Peter Thoeny, Peter@Thoeny.com
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # This program is free software; you can redistribute it and/or
@@ -40,7 +40,9 @@ use vars qw(
 	$pluginInitialized $perlGDModuleFound $perlPOSIXModuleFound
 	$defaultType @defaultAreaColors @defaultLineColors
 	$defaultWidth $defaultHeight $defaultBGcolor $defaultNumYGrids
-	$defaultDataValue $defaultScale
+	$defaultDataValue $defaultScale $defaultGridColor $defaultPointSize
+	$defaultLineWidth
+	$defaultBarLeadingSpace $defaultBarTrailingSpace $defaultBarSpace
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -134,8 +136,20 @@ sub _init_defaults
     $defaultNumYGrids = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_NUMYGRIDS" ) || 10;
     # Get default value to use if there is no data seen in the table
     $defaultDataValue = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_DEFAULTDATA" );
-    # Get default value to use if there is no data seen in the table
+    # Get default value for the scale (linear/semilog)
     $defaultScale = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_SCALE" );
+    # Get default grid color.
+    $defaultGridColor = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_GRIDCOLOR" ) || '#000000';
+    # Get default value for the size, in pixels, of drawn data points
+    $defaultPointSize = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_POINTSIZE" ) || 2;
+    # Get default value for the width, in pixels, of drawn lines
+    $defaultLineWidth = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_LINEWIDTH" ) || 3;
+    # Get default value for the leading space before the first bar.
+    $defaultBarLeadingSpace = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_BARLEADINGSPACE" ) || 0;
+    # Get default value for the trailing space after the last bar.
+    $defaultBarTrailingSpace = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_BARTRAILINGSPACE" ) || 0;
+    # Get default value for the space between bars.
+    $defaultBarSpace = &TWiki::Func::getPreferencesValue( "CHARTPLUGIN_BARSPACE" ) || 0;
 
     $pluginInitialized = 1;
 }
@@ -277,17 +291,56 @@ sub _makeChart
 
     # See if the parameter 'type' is available.  This is a required
     # parameter.  If it is missing, then generate an error message.
-    my $type = $this->_Parameters->getParameter( "type", undef);
+    my $type = $this->_Parameters->getParameter( "type", $defaultType);
     return _make_error("parameter *type* must be specified") if( ! defined $type );
+    my @unknownTypes = grep(!/area|line|bar|arealine|combo|scatter/, ($type));
     # Check for a valid type
-    if ($type ne "line" and $type ne "area" and $type ne "arealine") {
-	return _make_error("Invalid value of *$type* for parameter *type* ");
-    }
+    return _make_error("Invalid value of *$type* for parameter *type* ") if (@unknownTypes);
     $chart->setType($type);
+
+    # See if the parameter 'subtype' (old name 'datatype') is available.
+    my $dataType = $this->_Parameters->getParameter( "datatype", undef);
+    my $subType = $this->_Parameters->getParameter( "subtype", undef);
+    return _make_error("paramters *datatype* and *subtype* can't both be specified") if (defined $dataType && defined $subType);
+    $subType = $dataType if (defined $dataType);
+    if (defined $subType) {
+	my @subTypes = split(/[\s,]+/, $subType);
+	# Check for valid subtypes
+	my @unknownSubTypes = grep(!/area|line|point|pline|scatter|bar/, @subTypes);
+	return _make_error("unknown subtypes: " . join(", ", @unknownSubTypes)) if (@unknownSubTypes);
+	# Now check to make sure that the subtypes specified are valid for the
+	# specified type.
+	### Check 'line' type
+	if ($type eq "line") {
+	    @unknownSubTypes = grep(!/line|point|pline/, @subTypes);
+	    return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type line") if (@unknownSubTypes);
+	}
+
+	### Check 'area' type
+	if ($type eq "area") {
+	    @unknownSubTypes = grep(!/area/, @subTypes);
+	    return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type area") if (@unknownSubTypes);
+	}
+
+	### Check 'scatter' type
+	if ($type eq "scatter") {
+	    @unknownSubTypes = grep(!/area|line|point|pline|bar/, @subTypes);
+	    return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type scatter") if (@unknownSubTypes);
+	}
+
+	### Check 'combo' type
+	if ($type eq "combo") {
+	    @unknownSubTypes = grep(!/area|line|point|pline|bar/, @subTypes);
+	    return _make_error("unsupported subtypes: " . join(", ", @unknownSubTypes) . " for type combo") if (@unknownSubTypes);
+	}
+
+	# All OK so set the subtype.
+	$chart->setSubTypes(@subTypes);
+    }
 
     # See if the parameter 'scale' is available.
     my $scale = $this->_Parameters->getParameter( "scale", $defaultScale);
-    if ($scale ne "base10" and $scale ne "semilog") {
+    if ($scale ne "base10" and $scale ne "linear" and $scale ne "semilog") {
 	return _make_error("Invalid value of *$scale* for parameter *scale* ");
     }
     $chart->setScale($scale);
@@ -332,12 +385,6 @@ sub _makeChart
     my $data = $this->_Parameters->getParameter( "data", undef);
     return _make_error("parameter *data* must be specified") if( ! defined $data );
 
-    # See if the parameter 'datatype' is available.
-    my $dataType = $this->_Parameters->getParameter( "datatype", undef);
-    if (defined $dataType) {
-	$chart->setDataTypes(split(/[\s,]+/, $dataType));
-    }
-
     # See if the parameter 'xaxis' is available.
     my $xAxis = $this->_Parameters->getParameter( "xaxis", undef);
 
@@ -354,20 +401,28 @@ sub _makeChart
     $chart->setXaxisAngle($xaxisangle);
 
     # See if the parameter 'ymin' is available.
-    my $yMin =$this->_Parameters->getParameter( "ymin", undef);
-    if (defined $yMin && $scale eq "semilog" && $yMin <= 0) {
-	return _make_error("user set ymin=$yMin is &lt;= 0 which is not valid when scale=semilog");
+    my $yMin = $this->_Parameters->getParameter( "ymin", undef);
+    if (defined $yMin) {
+	if ($scale eq "semilog" && $yMin <= 0) {
+	    return _make_error("user set ymin=$yMin is &lt;= 0 which is not valid when scale=semilog");
+	}
     }
     $chart->setYmin( $yMin );
 
     # See if the parameter 'ymax' is available.
-    $chart->setYmax( $this->_Parameters->getParameter( "ymax", undef) );
+    my $yMax = $this->_Parameters->getParameter( "ymax", undef);
+    if (defined $yMax) {
+	if ($scale eq "semilog" && $yMax <= 0) {
+	    return _make_error("user set ymax=$yMax is &lt;= 0 which is not valid when scale=semilog");
+	}
+    }
+    $chart->setYmax( $yMax );
 
     # See if the parameter 'numygrids' is available.
     $chart->setNumYGrids( $this->_Parameters->getParameter( "numygrids", $defaultNumYGrids) );
 
     # See if the parameter 'numxgrids' is available.
-    my $numxgrids = $this->_Parameters->getParameter( "numxgrids", undef);
+    my $numxgrids = $this->_Parameters->getParameter( "numxgrids", 10);
     $chart->setNumXGrids($numxgrids);
 
     # See if the parameter 'xgrid' is available.
@@ -406,6 +461,10 @@ sub _makeChart
     # See if the parameter 'colors' is available.
     my $colors = $this->_Parameters->getParameter( "colors", undef);
     $chart->setColors(split(/[\s,]+/, $colors)) if (defined $colors);
+
+    # Get the chart grid  color.
+    my $gridColor = $this->_Parameters->getParameter( "gridcolor", $defaultGridColor);
+    $chart->setGridColor(split(/[\s,]+/, $gridColor));
 
     # See if the parameter 'defaultdata' is available.
     my $DataValueDefault = $this->_Parameters->getParameter( "defaultdata", $defaultDataValue);
@@ -485,9 +544,20 @@ sub _makeChart
 	}
     }
 
+    # Set the default point size
+    $chart->setPointSize( $this->_Parameters->getParameter( "pointsize", $defaultPointSize ) );
+
+    # Set the default line width
+    $chart->setLineWidth( $this->_Parameters->getParameter( "linewidth", $defaultLineWidth ) );
+
+    # Set default bar graph values
+    $chart->setBarLeadingSpace($defaultBarLeadingSpace);
+    $chart->setBarTrailingSpace($defaultBarTrailingSpace);
+    $chart->setBarSpace($defaultBarSpace);
+
     # Create the actual chart.
     my $err = $chart->makeChart();
-    return _make_error("chart object error: $err") if ($err);
+    return _make_error("chart error: name=$name: $err") if ($err);
 
     # Get remaining parameters and pass to <img ... />
     my $options = "";
