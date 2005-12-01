@@ -449,6 +449,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* twiki forms */
+.natTopicForm {
+  overflow:auto;
+}
 .natTopicForm .twikiFirstCol,
 .natTopicFormFirstCol {
   width:20%;

@@ -1,14 +1,14 @@
 <!-- template: previewtopicactions.nat.tmpl -->
 %TMPL:DEF{"topicactions"}%
-<a href="javascript:history.back();" accesskey="e">Edit</a>
+<a href="javascript:history.back();" accesskey="e" title="Continue editing">Edit</a>
 | <span class="natAction">Preview</span> 
 %IFSKINSTATETHEN{release="beijing"}% <!-- -->
-| <a href="javascript:submitEditFormular('save', 'save');" accesskey="s">Save</a>
+| <a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title="Save and exit">Save</a>
 %ELSESKINSTATE% <!-- -->
-| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s">Save</a> 
-| <a href="javascript:submitEditFormular('save', 'save');" accesskey="q">Quit</a>
+| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title="Save and continue editing">Save</a> 
+| <a href="javascript:submitEditFormular('save', 'save');" accesskey="q" title="Save and exit">Quit</a>
 %FISKINSTATE% <!-- -->
 <br/> %FORMBUTTON{"$1 |"}%
-<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u">Undo</a>
-| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
+<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u" title="Abandon your changes but continue editing">Undo</a>
+| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a>
 %TMPL:END%

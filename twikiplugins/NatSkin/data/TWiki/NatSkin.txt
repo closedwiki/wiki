@@ -75,7 +75,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.90 (2005-12-01) |
+|  Skin Version: | v2.91 (2005-12-01) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  2005-12-01: | added transparent borders and corners to the Kubrick style; \
                  improved <nop>PlasticLoveVariation; \
@@ -84,7 +84,8 @@ The default style is hardcoded into the NatSkinPlugin.
 		 w3c validation fixes to the style browser; \
 		 more form fixes in the preview and editform pages; \
 		 replaced every launchWindow() javascript with a proper a href using \
-		 a _blank target |
+		 a _blank target;\
+		 added tooltips to topicactions |
 |  2005-11-23: | added nops in expensive IFSKINSTATETHEN, \
                  i.e. to prevent the sidebar to be computed multiple times |
 |  2005-11-22: | moved basic blogging css to the <nop>BlogPlugin |

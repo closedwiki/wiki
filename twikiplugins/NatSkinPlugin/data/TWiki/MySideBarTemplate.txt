@@ -1,15 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131643806" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133357180" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="MySideBar"}%
 ---+ %WIKIUSERNAME%'s sidebar
 
 %STARTINCLUDE%
 ---+ [[%WEB%.%TOPIC%][MySidebar]]%REDDOT{"%WEB%.%TOPIC%"}%
-   * <span>%TWISTYSHOW{id="mylinks" link="Links"}%%TWISTYHIDE{id="mylinks" link="Links"}%</span>%TWISTYTOGGLE{id="mylinks" mode="span" remember="on"}%
+   * %TWISTY{id="mylinks" link="Links" remember="on"}%
       * 
       * 
       * 
-      * %ENDTWISTYTOGGLE% 
-   * <span>%TWISTYSHOW{id="mydocu" link="Documentation"}%%TWISTYHIDE{id="mydocu" link="Documentation"}%</span>%TWISTYTOGGLE{id="mydocu" mode="span" remember="on"}%
+      * %ENDTWISTY% 
+   * %TWISTY{id="mydocu" link="Documentation" remember="on"}%
       * [[%TWIKIWEB%.WelcomeGuest][Welcome Guest]]
       * [[%TWIKIWEB%.TWikiUsersGuide][User's Guide]]
       * [[%TWIKIWEB%.TWikiReferenceManual][Reference Manual]]
@@ -18,10 +18,10 @@
       * %TWIKIWEB%.TWikiVariables
       * %TWIKIWEB%.TWikiForms
       * %TWIKIWEB%.FormattedSearch
-      * %TWIKIWEB%.FileAttachment%ENDTWISTYTOGGLE% 
-   * <span>%TWISTYSHOW{id="myplugins" link="Plugins"}%%TWISTYHIDE{id="myplugins" link="Plugins"}%</span>%TWISTYTOGGLE{id="myplugins" mode="span" remember="on"}%
+      * %TWIKIWEB%.FileAttachment%ENDTWISTY% 
+   * %TWISTY{id="myplugins" link="Plugins" remember="on"}%
 %FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="      * $1" sort="on"}%%ENDTWISTYTOGGLE% 
-   * %TWISTYSHOW{id="mystyles" link="Skin Styles"}%%TWISTYHIDE{id="mystyles" link="Skin Styles"}%
+   * %TWISTYBUTTON{id="mystyles" link="Skin Styles"}%
 %TWISTYTOGGLE{id="mystyles" mode="span" remember="on"}% 
 %INCLUDE{"TWiki.NatSkinStyleBrowser"}%
 %ENDTWISTYTOGGLE% 
