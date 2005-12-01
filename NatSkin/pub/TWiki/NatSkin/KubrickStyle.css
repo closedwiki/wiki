@@ -27,9 +27,9 @@ hr {
   text-align: center;
 }
 .natBodyContents {
-  background-color: white;
-  text-align: left;
-  border: 1px solid #959596;
+  background:white;
+  text-align:left;
+  /*border: 1px solid #959596;*/
   font-size: 65.5%;
   font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
@@ -78,6 +78,7 @@ hr {
 .natTopBar,
 .natTopBar a {
   color:white;
+  border:0px;
 }
 .natWebSlogan {
   font-size:1.1em;
@@ -525,11 +526,15 @@ hr {
 .blogComment h3 a {
   color:#06c;
 }
-.blogRef .blogDate,
-.blogComment .blogDate {
+.blogComment .blogDate,
+.blogRef .blogDate {
   font-size:0.9em;
   color:#777;
   font-weight:normal;
+}
+.blogSubComment .blogDate {
+  font-size:1em;
+  color: #06c;
 }
 .blogCommentNr {
   color:#959596;
@@ -548,6 +553,7 @@ hr {
   font-size:0.9em;
   float:right;
   width:2em;
+  text-align:right;
 }
 .blogComments .blogCommentCount {
   color:#444444;
@@ -628,6 +634,14 @@ hr {
   color:#A4B8CC;
 }
 */
+.blogText cite {
+  display:block;
+  margin: 10px 0;
+  padding: 0 10px 0 50px;
+  background: url('quote.png') 10px top no-repeat;
+  border: none;
+  font-style:normal;
+}
 
 /* BlackListPlugin */
 .blackList {

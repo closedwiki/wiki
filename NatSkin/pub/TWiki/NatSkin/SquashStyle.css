@@ -326,8 +326,7 @@ hr { border-bottom: 1px solid #999999; }
   float:left;
   height:5em;
   width:100%;
-  margin-left:5px;
-  margin-right:5px;
+  padding:30px 5px 10px 5px;
 }
 
 /* supported plugins and applications */

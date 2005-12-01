@@ -1,8 +1,9 @@
 /* thin variant for base */
-.natBodyContents {
+.natPageBox {
+  width:60em;
   margin-right:auto;
   margin-left:auto;
-  width:60em;
   margin-bottom:20px;
   margin-top:1px; /* konqueror fix */
 }
+

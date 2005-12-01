@@ -23,26 +23,26 @@
 }
 .natSearchBox,
 .natAction,
-.natWebSlogan,
 .natTopBar,
 .natTopBar a {
   color:black;
 }
+.natWebTitle,
+.natWebTitle a {
+  color:#2BAFFA;
+  color:#FE1C70;
+}
+/*
+.natWebSlogan {
+  color:#2BAFFA;
+}
+.natWebTitle a {
+  text-decoration:underline;
+}
+*/
 .natWebSlogan,
 .natWebLocator {
   display:none;
-}
-.natWebTitle,
-.natWebTitle a {
-  color:#FE1C70;
-}
-.natWebSlogan {
-  color:#010569;
-  color:white;
-  font-weight:bold;
-}
-.natWebTitle {
-  text-decoration:underline;
 }
 
 /* web buttons */
@@ -71,38 +71,41 @@
   color:black;
 }
 
-/* forms */
+/* forms 'n tables */
+.twikiToc,
 .natTopicEditForm,
-.natTopicForm,
 .twikiPageForm th,
 .natTopicForm td {
   border-top:2px solid #FE1C70;
   border-bottom:2px solid #FE1C70;
 }
+.twikiPageForm th,
 .natTopicEditForm table th a,
 .natTopicEditForm th,
+.natTopicEditForm td,
 .natTopicForm table th a,
+.natTopicForm td,
 .natTopicForm th {
   background:transparent;
+  border:0px;
 }
+
+.twikiTable th {
+  background:transparent;
+  border:0px;
+  border:1px solid #d9d6e7;
+}
+.twikiToc,
+.twikiTable,
 .natTopicEditForm,
 .natTopicEditForm .twikiTable,
 .natTopicForm,
 .natTopicForm .twikiTable {
-  background:#fafafa;
+  background:#f4f4f4;
 }
 .natTopicForm,
 .natTopicEditForm {
   padding:5px;
-}
-
-.natTopicEditForm th,
-.natTopicEditForm td,
-.natTopicForm th,
-.twikiPageForm th,
-.natTopicForm td {
-  background:transparent;
-  border:0px;
 }
 
 .natTopicForm select,
@@ -113,4 +116,26 @@
 .natTopicForm table input {
   border:0px;
   border:1px solid #666666;
+}
+
+.twikiPageForm {
+  background:#f4f4f4;
+  border:0px;
+  padding:5px;
+  border:1px solid #d9d6e7;
+  margin-bottom:1em;
+}
+.twikiPageForm table {
+  background:transparent;
+  margin:0px;
+  margin-top:-1em;
+  border:0px;
+}
+.twikiPageForm form {
+  padding:0px;
+  margin:0px;
+}
+
+.twikiToc li a:hover {
+  background:#d9d6e7;
 }

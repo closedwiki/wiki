@@ -1,7 +1,7 @@
 /* thin variant for clean */
 @import url("BaseThin.css");
 
-.natBodyContents {
+.natPageBox {
   width:70em;
 }
 .natWebButtons,
