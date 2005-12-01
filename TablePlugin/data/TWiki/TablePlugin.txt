@@ -13,6 +13,7 @@ Gives extra control of table display:
 		* A =TABLEATTRIBUTES= preferences setting on site-level (%TWIKIWEB%.TWikiPreferences) or web-level (any WebPreferences), e.g.
 			* =Set TABLEATTRIBUTES = tableborder="0" cellpadding="1" ...=
 		* Before a table using =%<nop>TABLE{...}%=
+   * Row spans
 
 ---++ Sorting
 
@@ -24,6 +25,21 @@ Click on column heading text to sort by a column.  Initial column will be sorted
 		* MMM is Jan, Feb, etc
 	* number is digits, with optional decimal point
 	* otherwise treated as text
+
+---++ Row spans
+
+Table cells with a single caret indicate follow-up rows of multi-row spans. For example,
+<table width="100%"><tr><td>
+<verbatim>
+| One One | One Two | One Three |
+| ^ | Two Two | Two Three |
+| Three One | ^ | Three Three |
+</verbatim>
+</td><td align="right">
+| One One | One Two | One Three |
+| ^ | Two Two | Two Three |
+| Three One | ^ | Three Three |
+</td></tr></table>
 
 ---++ <nop>%TOPIC% Global Settings
 
