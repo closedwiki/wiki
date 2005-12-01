@@ -2,16 +2,16 @@
 %TMPL:DEF{"sidebar"}%
 ---+ Help
 ---++ <nop>%WIKITOOLNAME%
-   * <a href="javascript:launchWindow('%TWIKIWEB%','GoodStyle');">GoodStyle</a>
-   * <a href="javascript:launchWindow('%TWIKIWEB%','TextFormattingRules');">TextFormatting</a> 
-   * <a href="javascript:launchWindow('%TWIKIWEB%','TWikiVariables');">Variables</a>
-   * <a href="javascript:launchWindow('%TWIKIWEB%','FormattedSearch');">Formatted Search</a>
-   * <a href="javascript:launchWindow('%TWIKIWEB%','TWikiForms');">Form based input</a>
-   * <a href="javascript:launchWindow('%TWIKIWEB%','IncludeTopicsAndWebPages');">Including</a>
----++ <a href="javascript:launchWindow('%TWIKIWEB%', 'InstalledPlugins');">Plugins</a>
+   * <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle" target="_blank">GoodStyle</a>
+   * <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules" target="_blank">TextFormatting</a> 
+   * <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiVariables" target="_blank">Variables</a>
+   * <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/FormattedSearch" target="_blank">Formatted Search</a>
+   * <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiForms" target="_blank">Form based input</a>
+   * <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/IncludeTopicsAndWebPages" target="_blank">Including</a>
+---++ <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/InstalledPlugins" target="_blank">Plugins</a>
 <ul>
-%FORMATLIST{"%ACTIVATEDPLUGINS%" separator=" " format="<li> [[%TWIKIWEB%.$1Plugin][$1]] </li>" pattern="(\w+)Plugin" sort="on"}%
+%FORMATLIST{"%ACTIVATEDPLUGINS%" separator=" " format="<li><a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/$1Plugin\" target=\"_blank\">$1</a></li>" pattern="(\w+)Plugin" sort="on"}%
 </ul>
 ---++ External
-   * <a href="javascript:window.open('http://en.selfhtml.org', 'SelfHtml');">SelfHtml</a>
+   * <a href="http://en.selfhtml.org" target="_blank">SelfHtml</a>
 %TMPL:END%

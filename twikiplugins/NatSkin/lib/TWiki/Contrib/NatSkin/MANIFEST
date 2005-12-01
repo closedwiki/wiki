@@ -112,6 +112,7 @@ data/TWiki/WebSideBar.txt 0440
 pub/TWiki/NatSkin/BaseBorder.css 0440
 pub/TWiki/NatSkin/BaseButtons.css 0440
 pub/TWiki/NatSkin/BaseRight.css 0440
+pub/TWiki/NatSkin/BaseShadow.css 0440
 pub/TWiki/NatSkin/BaseStyle.css 0440
 pub/TWiki/NatSkin/BaseThin.css 0440
 pub/TWiki/NatSkin/Cairo_UI_pm.diff 0440
@@ -214,3 +215,8 @@ pub/TWiki/NatSkin/PatternBorder.css 0440
 pub/TWiki/NatSkin/PatternButtons.css 0440
 pub/TWiki/NatSkin/PatternStyle.css 0440
 pub/TWiki/NatSkin/PatternThin.css 0440
+pub/TWiki/NatSkin/quote.png 0440
+pub/TWiki/NatSkin/Border.png 0440
+pub/TWiki/NatSkin/BorderLine.png 0440
+pub/TWiki/NatSkin/Box.png 0440
+pub/TWiki/NatSkin/BoxLine.png 0440
