@@ -1,6 +1,6 @@
 # Table Plugin Library for TWiki Collaboration Platform
 #
-# Copyright (C) 2002 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2004 Peter Thoeny, Peter@Thoeny.com
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
 # This program is free software; you can redistribute it and/or
@@ -231,53 +231,73 @@ sub getData
     my @data = ();
     my @returnData = ();
     my $value;
-    my $rowOpt = "<=";
-    my $rowInc = 1;
-    my $colOpt = "<=";
-    my $colInc = 1;
     # Determine if this is a single column.  If not, then return data in
     # row format.
     if ($c1 == $c2) {
 	if ($r1 > $r2) {
-	    $rowInc = -1;
-	    $rowOpt = ">=";
-	}
-	for (my $r = $r1; eval "$r $rowOpt $r2"; $r += $rowInc) {
-	    $value = $selectedTable[$r][$c1];
-	    push ( @data, $selectedTable[$r][$c1] ) if (defined $value);
+	    for (my $r = $r1; $r >= $r2; $r -= 1) {
+		$value = $selectedTable[$r][$c1];
+		push ( @data, $selectedTable[$r][$c1] ) if (defined $value);
+	    }
+	} else {
+	    for (my $r = $r1; $r <= $r2; $r += 1) {
+		$value = $selectedTable[$r][$c1];
+		push ( @data, $selectedTable[$r][$c1] ) if (defined $value);
+	    }
 	}
 	# If found data, then push onto array to be returned
 	push (@returnData, [@data]) if (@data != 0);
     } else {
 	if ($r1 == $r2) {
 	    if ($c1 > $c2) {
-		$colInc = -1;
-		$colOpt = ">=";
-	    }
-	    for (my $c = $c1; eval "$c $colOpt $c2"; $c += $colInc) {
-		$value = $selectedTable[$r1][$c];
-		push ( @data, $selectedTable[$r1][$c] ) if (defined $value);
+		for (my $c = $c1; $c >= $c2; $c -= 1) {
+		    $value = $selectedTable[$r1][$c];
+		    push ( @data, $selectedTable[$r1][$c] ) if (defined $value);
+		}
+	    } else {
+		for (my $c = $c1; $c <= $c2; $c += 1) {
+		    $value = $selectedTable[$r1][$c];
+		    push ( @data, $selectedTable[$r1][$c] ) if (defined $value);
+		}
 	    }
 	    # If found data, then push onto array to be returned
 	    push (@returnData, [@data]) if (@data != 0);
 	} else {
-	    if ($r1 > $r2) {
-		$rowInc = -1;
-		$rowOpt = ">=";
-	    }
-	    if ($c1 > $c2) {
-		$colInc = -1;
-		$colOpt = ">=";
-	    }
 	    # More than one column so get each row of data
-	    for (my $r = $r1; eval "$r $rowOpt $r2"; $r += $rowInc) {
-		@data = ();
-		for (my $c = $c1; eval "$c $colOpt $c2"; $c += $colInc) {
-		    $value = $selectedTable[$r][$c];
-		    push ( @data, $selectedTable[$r][$c] ) if (defined $value);
+	    if ($r1 > $r2) {
+		for (my $r = $r1; $r >= $r2; $r -= 1) {
+		    @data = ();
+		    if ($c1 > $c2) {
+			for (my $c = $c1; $c >= $c2; $c -= 1) {
+			    $value = $selectedTable[$r][$c];
+			    push ( @data, $selectedTable[$r][$c] ) if (defined $value);
+			}
+		    } else {
+			for (my $c = $c1; $c <= $c2; $c += 1) {
+			    $value = $selectedTable[$r][$c];
+			    push ( @data, $selectedTable[$r][$c] ) if (defined $value);
+			}
+		    }
+		    # If found data, then push onto array to be returned
+		    push (@returnData, [@data]) if (@data != 0);
 		}
-		# If found data, then push onto array to be returned
-		push (@returnData, [@data]) if (@data != 0);
+	    } else {
+		for (my $r = $r1; $r <= $r2; $r += 1) {
+		    @data = ();
+		    if ($c1 > $c2) {
+			for (my $c = $c1; $c >= $c2; $c -= 1) {
+			    $value = $selectedTable[$r][$c];
+			    push ( @data, $selectedTable[$r][$c] ) if (defined $value);
+			}
+		    } else {
+			for (my $c = $c1; $c <= $c2; $c += 1) {
+			    $value = $selectedTable[$r][$c];
+			    push ( @data, $selectedTable[$r][$c] ) if (defined $value);
+			}
+		    }
+		    # If found data, then push onto array to be returned
+		    push (@returnData, [@data]) if (@data != 0);
+		}
 	    }
 	}
     }
@@ -324,25 +344,40 @@ sub getDataColumns
 
     my @returnData = ();
     my $value = 0;
-    my $rowOpt = "<=";
-    my $rowInc = 1;
-    my $colOpt = "<=";
-    my $colInc = 1;
-    if ($r1 > $r2) {
-	$rowInc = -1;
-	$rowOpt = ">=";
-    }
     if ($c1 > $c2) {
-	$colInc = -1;
-	$colOpt = ">=";
-    }
-    for (my $c = $c1; eval "$c $colOpt $c2"; $c += $colInc) {
-	my @data = ();
-	for (my $r = $r1; eval "$r $rowOpt $r2"; $r += $rowInc) {
-            $value = $selectedTable[$r][$c];
-            push ( @data, $selectedTable[$r][$c] ) if( defined $value );
+	for (my $c = $c1; $c >= $c2; $c -= 1) {
+	    my @data = ();
+	    if ($r1 > $r2) {
+		for (my $r = $r1; $r >= $r2; $r -= 1) {
+		    $value = $selectedTable[$r][$c];
+		    push ( @data, $selectedTable[$r][$c] ) if( defined $value );
+		}
+	    } else {
+		for (my $r = $r1; $r <= $r2; $r += 1) {
+		    $value = $selectedTable[$r][$c];
+		    push ( @data, $selectedTable[$r][$c] ) if( defined $value );
+		}
+	    }
+	    # If found data, then push onto array to be returned
+	    push (@returnData, [@data]) if (@data != 0);
 	}
-	push (@returnData, [@data]);
+    } else {
+	for (my $c = $c1; $c <= $c2; $c += 1) {
+	    my @data = ();
+	    if ($r1 > $r2) {
+		for (my $r = $r1; $r >= $r2; $r -= 1) {
+		    $value = $selectedTable[$r][$c];
+		    push ( @data, $selectedTable[$r][$c] ) if( defined $value );
+		}
+	    } else {
+		for (my $r = $r1; $r <= $r2; $r += 1) {
+		    $value = $selectedTable[$r][$c];
+		    push ( @data, $selectedTable[$r][$c] ) if( defined $value );
+		}
+	    }
+	    # If found data, then push onto array to be returned
+	    push (@returnData, [@data]) if (@data != 0);
+	}
     }
     return @returnData;
 }
