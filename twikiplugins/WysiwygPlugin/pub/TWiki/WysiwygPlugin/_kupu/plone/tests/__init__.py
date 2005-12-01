@@ -1,1 +1,4 @@
-# make this directory a package
+try:
+    import Products.CMFPlone
+except ImportError:
+    raise RuntimeError('These tests depend on CMFPlone.')

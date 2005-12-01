@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- $Id: sitetree_link_library.xml.jx 8770 2005-01-31 19:04:36Z gregor $ -->
+<!-- $Id: sitetree_link_library.xml.jx 8771 2005-01-31 19:05:00Z gregor $ -->
 
 <collection 
   xmlns:jx="http://apache.org/cocoon/templates/jx/1.0"

@@ -28,4 +28,4 @@ else:
 
 if request.QUERY_STRING:
     target += '?' + request.QUERY_STRING
-return response.redirect(target)
+return response.redirect(target, status=301)

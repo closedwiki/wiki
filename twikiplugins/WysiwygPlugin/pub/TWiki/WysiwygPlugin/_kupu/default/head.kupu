@@ -5,7 +5,7 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     >
-  <kupu:id>$Id: head.kupu 9585 2005-03-02 15:15:08Z guido $</kupu:id>
+  <kupu:id>$Id: head.kupu 16467 2005-08-25 11:08:10Z guido $</kupu:id>
 
   <kupu:part name="head">
     <head>
@@ -24,12 +24,16 @@
 
   <kupu:part name="jsincludes">
     <script type="text/javascript" src="sarissa.js"> </script>
+    <script type="text/javascript" src="sarissa_ieemu_xpath.js"> </script>
     <script type="text/javascript" src="kupuhelpers.js"> </script>
     <script type="text/javascript" src="kupueditor.js"> </script>
     <script type="text/javascript" src="kupubasetools.js"> </script>
     <script type="text/javascript" src="kupuloggers.js"> </script>
-    <script type="text/javascript" src="kupucontentfilters.js"> </script>
+    <script type="text/javascript" src="kupunoi18n.js"> </script>
+    <script type="text/javascript" src="../../i18n.js/i18n.js"> </script>
     <script type="text/javascript" src="kupucleanupexpressions.js"> </script>
+    <script type="text/javascript" src="kupucontentfilters.js"> </script>
+    <script type="text/javascript" src="kuputoolcollapser.js"> </script>
   </kupu:part>
 
   <!-- XXX this could be a separate feature, maybe -->

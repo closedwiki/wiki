@@ -21,28 +21,57 @@ the local machine aren't allowed to run scripts.-->
 <script type="text/javascript" src="../common/kupuhelpers.js"> </script>
 <script type="text/javascript" src="test_kupuhelpers.js"> </script>
 
+<script type="text/javascript" src="../common/kupunoi18n.js"> </script>
+
 <script type="text/javascript" src="../common/kupucontentfilters.js"> </script>
 <script type="text/javascript" src="test_xhtml.js"> </script>
 
+<script type="text/javascript" src="../common/kupubasetools.js"> </script>
+<script type="text/javascript" src="test_kupubasetools.js"> </script>
+
 <script type="text/javascript" src="../plone/kupu_plone_layer/kupuploneeditor.js"> </script>
+<script type="text/javascript" src="../plone/kupu_plone_layer/kupuploneui.js"> </script>
 <script type="text/javascript" src="test_plone.js"> </script>
 
 <script type="text/javascript" src="../common/kupubeforeunload.js"> </script>
 <script type="text/javascript" src="test_beforeunload.js"> </script>
 
+<script type="text/javascript" src="test_kupuinit.js"> </script>
+
 <script type="text/javascript">
 //<![CDATA[
 
     function runTests() {
-        var body = document.getElementById('body');
-        var testsuite = new TestSuite(new HTMLReporter(body));
+        // global set up
+        // This provides a global sandbox, the only known way to get
+        // execCommand tests working in Mozilla. Don't touch the body node!
+        // Even if you re-add it you'll break other tests!
+
+        var iframe = getFromSelector('iframe');
+        iframe.style.display = 'block';
+        // IE seems to re-initialize the iframe on designMode change,
+        // destroying the blank document. But only Mozilla needs that mode.
+        if (_SARISSA_IS_MOZ) {
+            iframe.contentWindow.document.designMode = 'on';
+        };
+
+        var body = getFromSelector('body');
+        var testsuite = new TestSuite(new HTMLReporter(body, true));
         testsuite.registerTest(KupuHelpersTestCase);
         testsuite.registerTest(KupuEditorTestCase);
         testsuite.registerTest(KupuSelectionTestCase);
         testsuite.registerTest(KupuXhtmlTestCase);
         testsuite.registerTest(KupuPloneTestCase);
         testsuite.registerTest(KupuBeforeUnloadTestCase);
+        testsuite.registerTest(InitKupuCheckersTestCase);
+        testsuite.registerTest(KupuUITestCase);
+        testsuite.registerTest(ImageToolTestCase);
         testsuite.runSuite();
+
+        // global tear down
+
+        iframe.contentWindow.document.designMode = 'off';
+        iframe.style.display = 'none';
     };
 
 //]]>
@@ -65,6 +94,13 @@ the local machine aren't allowed to run scripts.-->
     </dict>
 </xml>
 </div>
+<select id="kupu-tb-styles" style="display:none">
+<option value="p">Normal</option>
+<option value="h2|Heading">Heading</option>
+<option value="h3|Subheading">Subheading</option>
+<option value="pre">Formatted</option>
+<option value="div|Caption">Caption</option>
+</select>
 <iframe style="display: none" id="iframe" ></iframe>
 <div style="display:none" id="testdiv" ></div>
 </body>

@@ -2,7 +2,7 @@
 <!--
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -13,7 +13,7 @@
 XSL transformation from Kupu Library XML to HTML for the image library
 drawer.
 
-$Id: imagedrawer.xsl 11509 2005-04-27 10:45:36Z guido $
+$Id: imagedrawer.xsl 9879 2005-03-18 12:04:00Z yuppie $
 -->
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"

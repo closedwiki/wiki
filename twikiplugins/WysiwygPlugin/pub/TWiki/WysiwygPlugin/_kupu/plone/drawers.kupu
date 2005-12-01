@@ -6,16 +6,12 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     >
-    <kupu:id>$Id: drawers.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+    <kupu:id>$Id: drawers.kupu 14546 2005-07-12 14:35:55Z duncan $</kupu:id>
 
   <kupu:part name="styles">
-    <link href="kupudrawerstyles.css" rel="stylesheet" type="text/css"
-          tal:attributes="href string:${portal_url}/kupudrawerstyles.css" />
   </kupu:part>
 
   <kupu:part name="jsincludes">
-    <script type="text/javascript" src="kupudrawers.js"
-            tal:attributes="src string:${portal_url}/kupudrawers.js"> </script>
   </kupu:part>
 
   <kupu:part name="xmlconfig">
@@ -26,7 +22,7 @@
     <image_xsl_uri tal:content="string:${portal_url}/kupudrawers/drawer.xsl" />
     <link_xsl_uri tal:content="string:${portal_url}/kupudrawers/drawer.xsl" />
     <tal:var define="
-        base here/absolute_url;
+        base kupu_base_override|here/absolute_url;
         posfactory python:base.find('/portal_factory/');
         base python:posfactory > 0 and base[:posfactory] or base;
         lib_prefix    string:${base}/kupulibraries.xml?resource_type=;

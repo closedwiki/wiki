@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -24,14 +24,15 @@ function initKupu(iframeids) {
         own UI object.
     */
 
+    // first we create a logger
     var l = new PlainLogger('kupu-toolbox-debuglog', 5);
-
-    // load the config
+    
+    // now some config values
     var conf = loadDictFromXML(document, 'kupuconfig');
     
     var documents = new Array();
     for (var i=0; i < iframeids.length; i++) {
-        var iframe = document.getElementById(iframeids[i]);
+        var iframe = getFromSelector(iframeids[i]);
         documents.push(new KupuDocument(iframe));
     };
 
@@ -45,7 +46,7 @@ function initKupu(iframeids) {
     // now we can create a UI object which we can use from the UI
     var ui = new KupuUI('kupu-tb-styles');
 
-    // the ui must be registered to the editor as well so it can be notified
+    // the ui must be registered to the editor like a tool so it can be notified
     // of state changes
     kupu.registerTool('ui', ui); // XXX Should this be a different method?
 
@@ -57,7 +58,7 @@ function initKupu(iframeids) {
     };
 
     var boldchecker = ParentWithStyleChecker(new Array('b', 'strong'),
-					     'font-weight', 'bold');
+                                             'fontWeight', 'bold');
     var boldbutton = new KupuStateButton('kupu-bold-button', 
                                          execCommand('bold'),
                                          boldchecker,
@@ -66,7 +67,7 @@ function initKupu(iframeids) {
     kupu.registerTool('boldbutton', boldbutton);
 
     var italicschecker = ParentWithStyleChecker(new Array('i', 'em'),
-						'font-style', 'italic');
+                                                'fontStyle', 'italic');
     var italicsbutton = new KupuStateButton('kupu-italic-button', 
                                            execCommand('italic'),
                                            italicschecker, 
@@ -74,7 +75,8 @@ function initKupu(iframeids) {
                                            'kupu-italic-pressed');
     kupu.registerTool('italicsbutton', italicsbutton);
 
-    var underlinechecker = ParentWithStyleChecker(new Array('u'));
+    var underlinechecker = ParentWithStyleChecker(new Array('u'),
+                                                'textDecoration', 'underline');
     var underlinebutton = new KupuStateButton('kupu-underline-button', 
                                               execCommand('underline'),
                                               underlinechecker,
@@ -234,4 +236,4 @@ function initKupu(iframeids) {
     kupu.registerFilter(nonxhtmltagfilter);
 
     return kupu;
-}
+};

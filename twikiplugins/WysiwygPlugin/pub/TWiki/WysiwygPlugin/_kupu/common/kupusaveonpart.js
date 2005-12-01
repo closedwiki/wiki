@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,12 +8,12 @@
  *
  *****************************************************************************/
 
-// $Id: kupusaveonpart.js 6741 2004-09-27 09:52:44Z duncan $
+// $Id: kupusaveonpart.js 9879 2005-03-18 12:04:00Z yuppie $
 
 function saveOnPart() {
     /* ask the user if (s)he wants to save the document before leaving */
     if (kupu.content_changed && 
-        confirm('You have unsaved changes. Do you want to save before leaving the page?')) {
+        confirm(_('You have unsaved changes. Do you want to save before leaving the page?'))) {
         kupu.config.reload_src = 0;
         kupu.saveDocument(false, true);
     };

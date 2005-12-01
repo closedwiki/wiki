@@ -3,7 +3,7 @@
     implementation="default"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     >
-  <kupu:id>$Id: wire.kupu 9585 2005-03-02 15:15:08Z guido $</kupu:id>
+  <kupu:id>$Id: wire.kupu 12162 2005-05-10 15:53:10Z guido $</kupu:id>
 
   <!--
     This file defines the wiring of this implementation. Wiring means
@@ -36,6 +36,7 @@
     <kupu:insert-part feature="head" part="bootstrap-editor" />
     <kupu:insert-part feature="saveonpart" part="jsincludes" />
     <kupu:insert-part feature="sourceedit" part="jsincludes" />
+    <kupu:insert-part feature="spellchecker" part="jsincludes" />
     <kupu:insert-part feature="drawers" part="jsincludes" />
   </kupu:fill-slot>
 
@@ -83,6 +84,7 @@
     <kupu:insert-part feature="drawers" part="buttons" />
     <kupu:insert-part feature="toolbar" part="buttongroup-remove" />
     <kupu:insert-part feature="toolbar" part="buttongroup-undo" />
+    <kupu:insert-part feature="spellchecker" part="buttons" />
     <kupu:insert-part feature="sourceedit" part="buttons" />
   </kupu:fill-slot>
 

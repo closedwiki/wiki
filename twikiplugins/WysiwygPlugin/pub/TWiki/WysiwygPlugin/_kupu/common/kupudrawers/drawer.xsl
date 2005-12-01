@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!--
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -17,17 +17,26 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:tal="http://xml.zope.org/namespaces/tal" xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="kupu">
+ <tal:block define="x python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=UTF-8')" />
     <xsl:param name="drawertype">image</xsl:param>
     <xsl:param name="drawertitle">Image Drawer</xsl:param>
     <xsl:param name="showupload"></xsl:param>
     <xsl:param name="usecaptions"></xsl:param>
-    <xsl:variable name="titlelength" select="20"/>
+    <xsl:variable name="titlelength" select="60"/>
+        <xsl:variable name="i18n_drawertitle"> 
+        <xsl:choose>
+            <xsl:when i18n:translate="imagedrawer_title" test="$drawertype='image'">Insert Image</xsl:when>
+            <xsl:when i18n:translate="linkdrawer_title"
+test="$drawertype='link'">Insert Link</xsl:when>
+        </xsl:choose>
+</xsl:variable>
     <xsl:template match="/">
         <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
             <head>
                 <title>
-                    <xsl:value-of select="$drawertitle"/>
+                    <xsl:value-of select="$i18n_drawertitle"/>
                 </title>
                 <link type="text/css" rel="stylesheet">
                     <xsl:attribute name="href">kupudrawerstyles.css </xsl:attribute>
@@ -37,14 +46,23 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
                 <div style="width: 500px; border: solid black 1px; width: 100px">
                     <div id="kupu-librarydrawer">
                         <h1 style="padding: 0;float: left;">
-                            <xsl:value-of select="$drawertitle"/>
+                            <xsl:value-of select="$i18n_drawertitle"/>
                         </h1>
                         <div id="kupu-searchbox" style="text-align: right">
                             <form onsubmit="return false;">
+                                <xsl:variable name="search_value" 
+                                              i18n:translate="kupudrawer_search">search</xsl:variable>
                                 <input id="kupu-searchbox-input"
-                                    name="searchbox" value="search"
-                                    style="font-style: italic"
-                                    onclick="if (this.value == 'search') this.value = ''; this.style.fontStyle='normal';" onkeyup="if (event.keyCode == 13 ) drawertool.current_drawer.search();"/>
+                                    class="kupu-searchbox-input nofocus"
+                                    name="searchbox"
+                                    style="font-style: italic;"
+                                    onkeyup="if (event.keyCode == 13 ) drawertool.current_drawer.search();">
+                                   <xsl:attribute name="value">
+                                      <xsl:value-of select="$search_value" />
+                                   </xsl:attribute>
+                                   <xsl:attribute name="onclick">
+                                      if (this.value == '<xsl:value-of select="$search_value" />') this.value = ''; this.style.fontStyle='normal';</xsl:attribute>
+                                </input>
                             </form>
                         </div>
                         <div class="kupu-panels">
@@ -77,6 +95,10 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
                                         <xsl:apply-templates
                                         select="/libraries/*[@selected]//resource[@selected]" mode="link-properties"/>
                                         </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:apply-templates
+                                            select="/libraries/*[@selected]//resource[@selected]" mode="properties"/>
+                                        </xsl:otherwise>
                                         </xsl:choose>
                                         </div>
                                     </td>
@@ -84,8 +106,14 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
                             </table>
                         </div>
                         <div class="kupu-dialogbuttons">                            
-                            <button type="button" onclick="drawertool.current_drawer.save();">Ok</button>
-                            <button type="button" onclick="drawertool.closeDrawer();">Cancel</button>
+                            <button type="button" 
+                                    class="kupu-dialog-button"
+                                    i18n:translate="" 
+                                    onclick="drawertool.current_drawer.save();">Ok</button>
+                            <button type="button"
+                                    class="kupu-dialog-button" 
+                                    i18n:translate="" 
+                                    onclick="drawertool.closeDrawer();">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -98,12 +126,8 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
             <xsl:attribute name="id">
                 <xsl:value-of select="@id"/>
             </xsl:attribute>
-            <div>
-                <xsl:apply-templates select="icon"/>
-            </div>
-            <span class="drawer-item-title">
-                <xsl:value-of select="title"/>
-            </span>
+            <xsl:apply-templates select="icon"/>
+            <span class="drawer-item-title"><xsl:value-of select="title"/></span>
         </div>
     </xsl:template>
     <xsl:template match="items">
@@ -116,7 +140,7 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
                     <xsl:when
                             test="local-name()='collection'">drawertool.current_drawer.selectCollection('<xsl:value-of select="@id"/>');</xsl:when>
 
-                    <xsl:otherwise>drawertool.current_drawer.selectItem('<xsl:value-of select="@id"/>')</xsl:otherwise>
+                    <xsl:otherwise>drawertool.current_drawer.selectItem(this, '<xsl:value-of select="@id"/>')</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
             <xsl:apply-templates select="icon"/>
@@ -128,7 +152,8 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
             <xsl:attribute name="onclick">
                 drawertool.current_drawer.selectUpload();
             </xsl:attribute>
-            <span class="drawer-item-title">Upload ...</span>
+            <span class="drawer-item-title" 
+                  i18n:translate="imagedrawer_upload_link">Upload ...</span>
         </div>
     </xsl:template>
     <xsl:template match="icon">
@@ -140,7 +165,7 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
     <xsl:template match="label|title">
         <span class="drawer-item-title">
             <xsl:if test="../@selected">
-                <xsl:attribute name="style">background-color: #C0C0C0</xsl:attribute>
+                <xsl:attribute name="class">drawer-item-title selected-item</xsl:attribute>
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="string-length() &gt; $titlelength">
@@ -179,40 +204,42 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
             <xsl:when test="preview">
                 <tr>
                     <td>
-                        <strong>Preview</strong>
+                        <strong i18n:translate="imagedrawer_upload_preview_label">Preview</strong>
                         <br/>
                         <img src="{preview}" title="{title}" height="{height}"
                             width="{width}" alt="{title}"/>
                     </td>
                 </tr>
             </xsl:when>
+            <xsl:otherwise>
+                <img src="{uri}" title="{title}" height="120" alt="{title}" />
+            </xsl:otherwise>
         </xsl:choose>
         <div>
             <xsl:value-of select="size"/>
-            <xsl:if test="width"> (<xsl:value-of select="width"/> by
-                    <xsl:value-of select="height"/>)</xsl:if>
+            <xsl:if test="width" i18n:translate="imagedrawer_size">(<span i18n:name="width"><xsl:value-of select="width" /></span> by <span i18n:name="height"><xsl:value-of select="height" /></span>)</xsl:if>
         </div>
         <div>
             <xsl:value-of select="description"/>
         </div>
         <div>
             <form onsubmit="return false;">
-                <strong>ALT-text</strong>
+                <strong i18n:translate="imagedrawer_upload_alt_text">ALT-text</strong>
                 <br/>
                 <input type="text" id="image_alt" size="20" value="{title}"/>
                 <br/>
                 <input type="radio" name="image-align" id="image-align-left"
                     checked="checked" value="image-left"/>
-                <label for="image-align-left">Left</label>
+                <label for="image-align-left" i18n:translate="imagedrawer_left">Left</label>
                 <input type="radio" name="image-align" id="image-align-inline" value="image-inline"/>
-                <label for="image-align-inline">Inline</label>
+                <label for="image-align-inline" i18n:translate="imagedrawer_inline">Inline</label>
                 <input type="radio" name="image-align" id="image-align-right" value="image-right"/>
-                <label for="image-align-right">Right</label>
+                <label for="image-align-right" i18n:translate="imagedrawer_right">Right</label>
                 <xsl:if test="$usecaptions='yes'">
                     <br/>
                     <input type="checkbox" name="image-caption"
                         id="image-caption" checked="checked"/>
-                    <label for="image-caption">Caption</label>
+                    <label for="image-caption" i18n:translate="imagedrawer_caption_label">Caption</label>
                 </xsl:if>
             </form>
         </div>
@@ -222,30 +249,31 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
             <table>
                 <tr class="kupu-linkdrawer-title-row">
                     <td>
-                        <strong>Title</strong>
+                        <strong i18n:translate="linkdrawer_title_label">Title</strong>
                         <br/>
                         <xsl:value-of select="title"/>
                     </td>
                 </tr>
                 <tr class="kupu-linkdrawer-description-row">
                     <td>
-                        <strong>Description</strong>
+                        <strong i18n:translate="linkdrawer_description_label">Description</strong>
                         <br/>
                         <xsl:value-of select="description"/>
                     </td>
                 </tr>
                 <tr class="kupu-linkdrawer-name-row">
                     <td>
-                        <strong>Name</strong>
+                        <strong i18n:translate="linkdrawer_name_label">Name</strong>
                         <br/>
                         <input type="text" id="link_name" size="10"/>
                     </td>
                 </tr>
                 <tr class="kupu-linkdrawer-target-row">
                     <td>
-                        <strong>Target</strong>
+                        <strong i18n:translate="linkdrawer_target_label">Target</strong>
                         <br/>
-                        <input type="text" id="link_target" value="_self" size="10"/>
+                        <input type="text" id="link_target" value="_self" 
+                               size="10"/>
                     </td>
                 </tr>
             </table>
@@ -254,24 +282,26 @@ $Id: imagedrawer.xsl 4105 2004-04-21 23:56:13Z guido $
     
     <!-- image upload form -->
     <xsl:template match="uploadbutton" mode="image-upload">
-        <div id="kupu-upload-instructions" i18n:translate="upload-instructions">
-            Select an image from your computer and click ok to have it automatically uploaded to selected folder and inserted into the editor.
-        </div><br/>
+     <div>
+        <div id="kupu-upload-instructions" i18n:translate="imagedrawer_upload_instructions">
+            Select an image from your computer and click ok to have it
+            automatically uploaded to selected folder and inserted into the
+            editor.
+        </div>
         <form name="kupu_upload_form" method="POST" action="" scrolling="off" target="kupu_upload_form_target"
               enctype="multipart/form-data" style="margin: 0; border: 0;">
 
-            <span id="kupu-upload-to"><strong>Upload to: </strong> <xsl:value-of select="/libraries/*[@selected]/title"/> </span><br/>
-            <input id="kupu-upload-file" type="file" name="node_prop_image" /><br/>
-            <label>Title: 
-                <input id="kupu-upload-title" type="text" name="node_prop_caption" size="23" value=""/>
-            </label><br/>
-            <input type="reset" i18n:translate="upload-resetform" value="Clear"/>
-
+            <label for="kupu-upload-file" i18n:translate="imagedrawer_upload_to_label">Upload to: <span i18n:name="folder"><xsl:value-of select='/libraries/*[@selected]/title' /></span></label>
+            <input id="kupu-upload-file" type="file" name="node_prop_image" size="20"/><br/>
+            <label for="kupu-upload-title"
+i18n:translate="imagedrawer_upload_title_label">Title:</label>
+            <input id="kupu-upload-title" type="text" name="node_prop_caption" size="23" value=""/><br/>
         </form>
 
         <iframe id="kupu-upload-form-target" name="kupu_upload_form_target"
                 src="kupublank.html" scrolling="off" frameborder="0" width="0px" height="0px" display="None">
         </iframe>
+      </div>
     </xsl:template>
     
 </xsl:stylesheet>

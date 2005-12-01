@@ -33,6 +33,10 @@ Installation
 Drop the 'kupu' directory into your instance home's Products
 directory.
 
+If you are installing from a release tar bundle, the following build
+steps may be skipped. Skip down to the paragraph starting `Now restart
+the Zope instance`_.
+
 If you are installing a version checked out of SVN then you must
 generate the Plone template by typing::
 
@@ -40,6 +44,20 @@ generate the Plone template by typing::
 
 If you see xsltproc throw an error about not being able to load
 external entities, ignore it.
+
+Windows users need to first get a copy of xsltproc.exe from
+http://www.zlatkovic.com/pub/libxml/. As a minimum you need to
+download the zipfiles for libxslt, libxml2, iconv and zlib.
+Extracting all of the .dll and .exe files into ``c:\libxslt`` is
+sufficient for the make command to work (ignore subdirectories in the
+zipfiles). Then just start a command prompt in the kupu directory and
+run the same command as for other users (on windows it runs make.bat
+so you don't need a separate make program)::
+
+   C:\>cd \Plone 2\Data\Products\kupu
+   C:\Plone 2\Data\Products\kupu>make plonemacros
+
+.. _Now restart the Zope instance:
 
 Now restart the Zope instance. Now go to the Plone Control Panel,
 section Add/remove Products and select 'kupu' for installation.
@@ -51,6 +69,21 @@ users to choose whichever they prefer. You can specify Kupu as the
 default editor for new users from the ZMI::
 
   "portal_memberdata" -> "Properties" -> "wysiwyg_editor" = "Kupu"
+
+Upgrading
+=========
+If you are upgrading from an earlier version of Kupu then be aware
+that some of the default settings for Plone may have changed.
+
+If you have not changed any of the default settings, then you should
+run the new 'sample-kupu-customisation-policy' script in the
+kupu-plone skin folder. This will reset all configuration options to
+their defaults.
+
+If you have customised your own setting then you should create your
+own 'kupu-customisation-policy' script based on the sample. The script
+has been written such that in most cases only the data declarations at
+the beginning of the script will need changing.
 
 Installation Problems
 =====================
@@ -97,7 +130,7 @@ control panel. Kupu appears as a configurable product on the control
 panel.
 
 You can also define a customisation policy script called
-'kupu-customisation-policy' in a skin folder. If there is a script of
+`kupu-customisation-policy` in a skin folder. If there is a script of
 this name then it will be run automatically every time you install (or
 reinstall) kupu in your plone site. This script should use the
 kupu_library_tool to set up the configuration as you wish it for your
@@ -126,8 +159,10 @@ When this is checked:
 
  - the URL used for the link will require an extra hit on the server,
    and will contain the internal UID. These issues may be avoided by
-   configuring the output transform for image caption support (see
-   below).
+   configuring the output transform for image caption support (`see
+   below`__).
+
+__ captioning_
 
  - Links to non-Archetypes objects are not affected by this option.
 
@@ -259,10 +294,11 @@ Custom Paragraph styles
 -----------------------
 Paragraph styles come from 3 sources:
 
-   a) Styles ``Normal``, ``Heading``, ``Subheading`` and ``Formatted`` are always defined.
+   a) The style ``Normal`` is always defined
 
    b) Use the Plone control panel to add additional styles to be
-      available on all content types.
+      available on all content types. ``Heading``, ``Subheading`` and 
+      ``Formatted`` are added automatically on installation.
 
    c) For Archetypes content types additional styles may be defined for
       individual fields.
@@ -270,6 +306,9 @@ Paragraph styles come from 3 sources:
 Styles defined under `Paragraph Styles`_ in the control panel are in the format ``title|tag``
 or ``title|tag|class``. e.g.::
 
+    Heading|h2
+    Subheading|h3
+    Formatted|pre
     Pull Quote|div|pullQuote
 
 Each rich text field can define its own set of paragraph styles to be
@@ -307,6 +346,8 @@ define classes ``image-left``, ``image-inline`` and ``image-right``. You
 should add these as in the example below even if you do not require
 the optional captioning support.
 
+.. _captioning:
+
 Optionally kupu can automatically add captions to images. To enable
 this feature you must be linking to an Archetypes based image type,
 and the field you are editing must have its ``default_output_type`` set to
@@ -326,9 +367,9 @@ tag is also removed. In other words::
 
 is replaced by::
 
-    <div class="image-left captioned">
+    <div class="image-left captioned" style="width:200px;">
       <div><img width="200" ... /></div>
-      <div class="image-caption" style="width:200px;">
+      <div class="image-caption">
          ...description text...
       </div>
     </div>

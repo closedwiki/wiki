@@ -258,11 +258,13 @@ Tool implementations (depending on the complexity of the tool a tool either
         deleteLink()
             - delete the current link, if any
 
+    ImageTool - add and edit images
 
-    ImageTool - add images
+        createImage(url, alttext, imgclass)
+            - create an image
 
-        createImage(url)
-            - create image according to form data
+        setImageClass(imgclass)
+            - set the class of the selected image
 
     TableTool - add and edit tables
 

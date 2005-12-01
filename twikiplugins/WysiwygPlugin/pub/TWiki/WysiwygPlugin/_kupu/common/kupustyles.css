@@ -2,7 +2,7 @@
  *
  * Kupu common styles
  *
- * Copyright (c) 2003-2004 Kupu Contributors. See CREDITS.txt
+ * Copyright (c) 2003-2005 Kupu Contributors. See CREDITS.txt
  *
  * Instead of customizing this file, it is recommended to add your own
  * CSS file.  Feel free to use whole or parts of this for your own
@@ -10,7 +10,7 @@
  *
  *****************************************************************************/
 
-/* $Id: kupustyles.css 9585 2005-03-02 15:15:08Z guido $ */
+/* $Id: kupustyles.css 16467 2005-08-25 11:08:10Z guido $ */
 
 .kupu-fulleditor, .kupu-toolboxes {
   font-family: Verdana, "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -18,30 +18,22 @@
 }
 
 div.kupu-fulleditor .kupu-fulleditor-zoomed {
-  /*border: solid 3px ButtonHighlight;*/
   height: 100%;
-   padding: 0px;
+  padding: 0px;
 }
 
 div.kupu-fulleditor .kupu-editorframe {
-  margin-right: 20em;
-}
-
-div.kupu-fulleditor-zoomed .kupu-editorframe {
    margin: 0px;
+   margin-right: 20em;
    border: none;
 }
 
 div.kupu-fulleditor-zoomed {
-   z-index: 1;
+   z-index: 100;
    margin: 0; border: none;
    position: fixed;
    top: 0; left: 0;
    background-color: white;
-}
-
-div.kupu-fulleditor-zoomed div.kupu-toolboxes {
-  display: none;
 }
 
 * html div.kupu-fulleditor-zoomed {
@@ -50,25 +42,33 @@ div.kupu-fulleditor-zoomed div.kupu-toolboxes {
 
 div.kupu-fulleditor-zoomed .kupu-editor-iframe {
   border: none;
-  margin: 0px;
+  margin: 0;
 }
 
 div.kupu-smalleditor .kupu-editorframe {
   margin-right: 0.2em;
 }
 
-/*
-div.kupu-sourcemode #kupu-editor {
-   display: none;
+h1.kupu-toolbox-heading, h1.kupu-toolbox-heading-closed {
+  cursor: default;
+  background-image: url("kupuimages/closed.png");
+  background-repeat: no-repeat;
+  background-position: left;
 }
 
-div.kupu-sourcemode textarea.kupu-editor-textarea {
-   display: block;
-}*/
+h1.kupu-toolbox-heading-opened {
+  cursor: default;
+  background-image: url("kupuimages/opened.png");
+  background-repeat: no-repeat;
+  background-position: left;
+}
 
 div.kupu-sourcemode span.kupu-tb-buttongroup,
-div.kupu-sourcemode select { display: none; }
+body.kupu-fulleditor-zoomed select { display: none; }
+body.kupu-fulleditor-zoomed div.kupu-fulleditor-zoomed select { display: inline; }
+div.kupu-sourcemode select { display: none !IMPORTANT; }
 div.kupu-sourcemode span#kupu-logo,
+div.kupu-sourcemode span#kupu-zoom,
 div.kupu-sourcemode span#kupu-source { display: inline; }
 
 div.kupu-smalleditor {
@@ -85,7 +85,7 @@ div.kupu-smalleditor {
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
 
-#kupu-tb-buttons button {
+.kupu-tb-buttons button {
   color: ButtonText;
   border: 1px solid ButtonFace;
   margin-top: 0;
@@ -95,13 +95,13 @@ div.kupu-smalleditor {
   background-repeat: no-repeat;
 }
 
-#kupu-tb-buttons button:hover {
+.kupu-tb-buttons button:hover {
   cursor: default;
   border: 1px solid;
   border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
 }
 
-#kupu-tb-buttons button:active {
+.kupu-tb-buttons button:active {
   border: 1px solid;
   border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
 }
@@ -110,6 +110,7 @@ div.kupu-smalleditor {
   margin-left: 2px;
   margin-right: 2px;
 }
+
 
 .kupu-bold {background-image: url("kupuimages/bold.png");}
 .kupu-bold-pressed {background-image: url("kupuimages/bold.png"); background-color: white;}
@@ -132,13 +133,14 @@ div.kupu-smalleditor {
 .kupu-justifycenter {background-image: url("kupuimages/justify-center.png");}
 .kupu-justifyleft {background-image: url("kupuimages/justify-left.png");}
 .kupu-justifyright {background-image: url("kupuimages/justify-right.png");}
-.kupu-logo {background-image: url("kupuimages/kupu_icon.gif");}
+button.kupu-logo {background-image: url("kupuimages/kupu_icon.gif");}
 .kupu-outdent {background-image: url("kupuimages/outdent.png");}
 .kupu-redo {background-image: url("kupuimages/redo.png");}
 .kupu-save {background-image: url("kupuimages/save.png");}
 .kupu-save-and-exit {background-image: url("kupuimages/exit.gif");}
 .kupu-space {background-image: url("kupuimages/space.gif");}
 .kupu-source {background-image: url("kupuimages/view-source.png");}
+.kupu-spellchecker {background-image: url("kupuimages/text-check.png");}
 .kupu-subscript {background-image: url("kupuimages/subscript.png");}
 .kupu-subscript-pressed {background-image: url("kupuimages/subscript.png"); background-color: white}
 .kupu-superscript {background-image: url("kupuimages/superscript.png");}
@@ -152,12 +154,12 @@ div.kupu-smalleditor {
 .kupu-zoom {background-image: url("kupuimages/zoom-in.gif");}
 .kupu-zoom-pressed {background-image: url("kupuimages/zoom-out.gif");}
 
-#kupu-tb-buttons button.invisible { 
+.kupu-tb-buttons button.invisible { 
   display: none;
   /*visibility: hidden;*/
 }
 
-#kupu-tb-buttons button.visible { 
+.kupu-tb-buttons button.visible { 
   display: inline;
 }
 
@@ -167,7 +169,7 @@ div.kupu-editorframe {
   border: solid 2px ButtonFace;
 }
 
-#kupu-editor {
+iframe.kupu-editor-iframe {
   height: 450px;
   width: 99%;
 }
@@ -185,6 +187,10 @@ div.kupu-toolboxes {
   margin-right: 0.3em;
   margin-bottom: 0.3em;
   font-size: 0.8em;
+}
+
+div.kupu-fulleditor-zoomed div.kupu-toolboxes {
+  display: none;
 }
 
 div.kupu-toolbox, div.kupu-toolbox-active {
@@ -230,8 +236,8 @@ div.kupu-toolbox-results {
   display: none;
 }
 
-div.kupu-toolbox table#kupu-toolbox-addtable input, 
-div.kupu-toolbox-active table#kupu-toolbox-edittable input {
+div.kupu-toolbox table.kupu-toolbox-addtable input, 
+div.kupu-toolbox-active table.kupu-toolbox-edittable input {
   width: 20px;
 }
 
@@ -239,19 +245,8 @@ div.kupu-toolbox-active {
   background-color: ButtonFace;
 }
 
-div.kupu-toolbox button {
-  font-size: 0.9em;
-  border: 1px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
-}
-
-div.kupu-toolbox button:active {
-  border: 1px solid;
-  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
-}
-
-#kupu-toolbox-editlink, #kupu-toolbox-edittable,
-#kupu-ulstyles, #kupu-olstyles {
+.kupu-toolbox-editlink, .kupu-toolbox-edittable,
+.kupu-ulstyles, .kupu-olstyles {
   display: none;
 }
 
@@ -274,3 +269,11 @@ div#kupu-fgcolorchooser div:hover {
   /* border: outset 1px; */
 }
 
+div.kupu-drawer {
+   overflow: auto;
+}
+
+button.disabled {
+   opacity:0.5;
+   filter:alpha(opacity=50);
+}

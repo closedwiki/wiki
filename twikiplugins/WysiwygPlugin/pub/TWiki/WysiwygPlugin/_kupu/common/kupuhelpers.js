@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupuhelpers.js 9585 2005-03-02 15:15:08Z guido $
+// $Id: kupuhelpers.js 12353 2005-05-16 12:29:05Z duncan $
 
 /*
 
@@ -75,29 +75,66 @@ Some notes about the scripts:
 function addEventHandler(element, event, method, context) {
     /* method to add an event handler for both IE and Mozilla */
     var wrappedmethod = new ContextFixer(method, context);
+    var args = new Array(null, null);
+    for (var i=4; i < arguments.length; i++) {
+        args.push(arguments[i]);
+    };
+    wrappedmethod.args = args;
     try {
         if (_SARISSA_IS_MOZ) {
             element.addEventListener(event, wrappedmethod.execute, false);
         } else if (_SARISSA_IS_IE) {
             element.attachEvent("on" + event, wrappedmethod.execute);
         } else {
-            throw "Unsupported browser!";
+            throw _("Unsupported browser!");
         };
+        return wrappedmethod.execute;
     } catch(e) {
-        alert('exception ' + e.message + ' while registering an event handler for element ' + element + ', event ' + event + ', method ' + method);
+        alert(_('exception ${message} while registering an event handler ' +
+                'for element ${element}, event ${event}, method ${method}',
+                {'message': e.message, 'element': element,
+                    'event': event,
+                    'method': method}));
     };
 };
 
 function removeEventHandler(element, event, method) {
     /* method to remove an event handler for both IE and Mozilla */
     if (_SARISSA_IS_MOZ) {
-        window.removeEventListener('focus', method, false);
+        window.removeEventListener(event, method, false);
     } else if (_SARISSA_IS_IE) {
         element.detachEvent("on" + event, method);
     } else {
-        throw "Unsupported browser!";
+        throw _("Unsupported browser!");
     };
 };
+
+/* Replacement for window.document.getElementById()
+ * selector can be an Id (so we maintain backwards compatability)
+ * but is intended to be a subset of valid CSS selectors.
+ * For now we only support the format: "#id tag.class"
+ */
+function getFromSelector(selector) {
+    var match = /#(\S+)\s*([^ .]+)\.(\S+)/.exec(selector);
+    if (!match) {
+        return window.document.getElementById(selector);
+    }
+    var id=match[1], tag=match[2], className=match[3];
+    var base = window.document.getElementById(id);
+    return getBaseTagClass(base, tag, className);
+}
+
+function getBaseTagClass(base, tag, className) {
+    var classPat = new RegExp('\\b'+className+'\\b');
+
+    var nodes = base.getElementsByTagName(tag);
+    for (var i = 0; i < nodes.length; i++) {
+        if (classPat.test(nodes[i].className)) {
+            return nodes[i];
+        }
+    }
+    return null;
+}
 
 function openPopup(url, width, height) {
     /* open and center a popup window */
@@ -122,26 +159,25 @@ function selectSelectItem(select, item) {
     select.selectedIndex = 0;
 };
 
-function ParentWithStyleChecker(tagnames, style, stylevalue) {
+function ParentWithStyleChecker(tagnames, style, stylevalue, command) {
     /* small wrapper that provides a generic function to check if a
        button should look pressed in */
     return function(selNode, button, editor, event) {
         /* check if the button needs to look pressed in */
+        if (command) {
+            var result = editor.getInnerDocument().queryCommandState(command)
+            if (result || editor.getSelection().getContentLength() == 0) {
+                return result;
+            };
+        };
         var currnode = selNode;
-        if (!currnode) {
-            return;
-        };
-        if (currnode.nodeType == 3) {
-            currnode = currnode.parentNode;
-        };
         while (currnode && currnode.style) {
             for (var i=0; i < tagnames.length; i++) {
                 if (currnode.nodeName.toLowerCase() == tagnames[i].toLowerCase()) {
                     return true;
                 };
             };
-            if (tagnames.contains(currnode.nodeName.toLowerCase()) && 
-                    (style && currnode.style[style] == stylevalue)) {
+            if (style && currnode.style[style] == stylevalue) {
                 return true;
             };
             currnode = currnode.parentNode;
@@ -198,7 +234,7 @@ function loadDictFromXML(document, islandid) {
         calling context.
     */
     var dict = {};
-    var confnode = document.getElementById(islandid);
+    var confnode = getFromSelector(islandid);
     var root = null;
     for (var i=0; i < confnode.childNodes.length; i++) {
         if (confnode.childNodes[i].nodeType == 1) {
@@ -207,7 +243,7 @@ function loadDictFromXML(document, islandid) {
         };
     };
     if (!root) {
-        throw('No element found in the config island!');
+        throw(_('No element found in the config island!'));
     };
     dict = _load_dict_helper(root);
     return dict;
@@ -224,7 +260,6 @@ function NodeIterator(node, continueatnextsibling) {
 
         returns false if no nodes are left
     */
-    
     this.node = node;
     this.current = node;
     this.terminator = continueatnextsibling ? null : node;
@@ -287,7 +322,7 @@ function BaseSelection() {
             this will fail if the selection is not inside the node
         */
         if (!this.selectionInsideNode(node)) {
-            throw('Selection not inside the node!');
+            throw(_('Selection not inside the node!'));
         };
         // a bit sneaky: what we'll do is insert a new br node to replace
         // the current selection, then we'll walk up to that node in both
@@ -359,7 +394,7 @@ function BaseSelection() {
         /* returns a Boolean to indicate if the selection is resided
             inside the node
         */
-        var currnode = self.getSelectedNode();
+        var currnode = this.parentElement();
         while (currnode) {
             if (currnode == node) {
                 return true;
@@ -508,7 +543,7 @@ function MozillaSelection(document) {
             // 'Control range', range consists of a single element, so startOffset is 0
             if (startnodeoffset != 0) {
                 // just an assertion to see if my assumption about this case is right
-                throw('Start node offset detected in a node without children!');
+                throw(_('Start node offset detected in a node without children!'));
             };
             return 0;
         };
@@ -561,8 +596,10 @@ function MozillaSelection(document) {
             // node doesn't have any content, so offset is always 0
             if (endnodeoffset != 0) {
                 // just an assertion to see if my assumption about this case is right
-                alert('End node offset detected in a node without children!');
-                throw('End node offset detected in a node without children!');
+                var msg = _('End node offset detected in a node without ' +
+                            'children!');
+                alert(msg);
+                throw(msg);
             };
             return 0;
         };
@@ -641,10 +678,10 @@ function MozillaSelection(document) {
         
         // now cut the chunk
         if (!startparent) {
-            throw('Start offset out of range!');
+            throw(_('Start offset out of range!'));
         };
         if (!endparent) {
-            throw('End offset out of range!');
+            throw(_('End offset out of range!'));
         };
 
         var newrange = range.cloneRange();
@@ -765,7 +802,7 @@ function MozillaSelection(document) {
                 };
                 currnode = currnode.nextSibling;
             };
-            throw('Offset out of document range');
+            throw(_('Offset out of document range'));
         } else if (realoffset < 0) {
             var currnode = offsetparent.prevSibling;
             var curroffset = 0;
@@ -809,6 +846,15 @@ function MozillaSelection(document) {
     this.toString = function() {
         return this.selection.toString();
     };
+
+    this.getRange = function() {
+        return this.selection.getRangeAt(0);
+    }
+    this.restoreRange = function(range) {
+        var selection = this.selection;
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
 };
 
 MozillaSelection.prototype = new BaseSelection;
@@ -864,12 +910,6 @@ function IESelection(document) {
             node was placed, or some value that resolves to true to select
             the placed node
         */
-        // XXX one big hack!!
-        
-        // XXX this method hasn't been optimized *at all* but can probably 
-        // be made a hell of a lot faster, however for now it's complicated
-        // enough the way it is and I want to have it stable first
-        
         if (this.selection.type == 'Control') {
             var range = this.selection.createRange();
             range.item(0).parentNode.replaceChild(newnode, range.item(0));
@@ -882,99 +922,25 @@ function IESelection(document) {
                 range.select();
             };
         } else {
-            var selrange = this.selection.createRange();
-            var startpoint = selrange.duplicate();
-            startpoint.collapse();
-            var endpoint = selrange.duplicate();
-            endpoint.collapse(false);
-            var parent = selrange.parentElement();
-            if (parent.tagName=='IMG') parent=parent.parentElement;
+            var document = this.document.getDocument();
+            var range = this.selection.createRange();
 
-            var elrange = selrange.duplicate();
-            elrange.moveToElementText(parent);
-            
-            // now find the start parent and offset
-            var startoffset = this.startOffset();
-            var endoffset = this.endOffset();
-            
-            // copy parent to contain new nodes, don't copy its children (false arg)
-            var newparent = this.document.getDocument().createElement('span');
-            // also make a temp node to copy some temp nodes into later
-            var tempparent = newparent.cloneNode(false);
-
-            // this is awful, it is a hybrid DOM/copy'n'paste solution
-            // first it gets the chunk of data before the selection and
-            // pastes that (as a string) into the new parent, then it appendChilds
-            // the new node and then it pastes the stuff behind the selection 
-            // to a temp node (there's no string paste method to append) and
-            // copies the contents of that to the new node using appendChild...
-
-            // first the first bit, straightforward string pasting
-            var temprange = elrange.duplicate();
-            temprange.moveToElementText(parent);
-            temprange.collapse();
-            temprange.moveEnd('character', startoffset);
-            if (temprange.isEqual(elrange)) {
-                // cursor was on the last position in the parent
-                while (parent.hasChildNodes()) {
-                    newparent.appendChild(parent.firstChild);
-                };
-            } else {
-                // using htmlText here should fix markup problems (opening tags without closing ones etc.)
-                newparent.insertAdjacentHTML('afterBegin', temprange.htmlText);
-            };
-
-            // now some straightforward appendChilding the new node
-            newparent.appendChild(newnode);
-            
-            // getting the rest of the elements behind the selection can only be 
-            // done using htmlText (afaik) so we end up with a string, which we
-            // can not just use to attach to the new node (innerHTML would 
-            // overwrite the content) so we use set it as the innerHTML of the 
-            // temp node and after that's done appendChild all the child elements
-            // of the temp node to the new parent
-            temprange.moveToElementText(parent);
-            temprange.collapse(false);
-            temprange.moveStart('character', -endoffset);
-            if (temprange.isEqual(elrange)) {
-                // cursor was on position 0 of the parent
-                while (parent.hasChildNodes()) {
-                    tempparent.appendChild(parent.firstChild);
-                };
-            } else if (endoffset > 0) {
-                tempparent.insertAdjacentHTML('afterBegin', temprange.htmlText);
-            };
-            while (tempparent.hasChildNodes()) {
-                newparent.appendChild(tempparent.firstChild);
-            };
-
-            // so now we have the result in newparent, replace the old parent in 
-            // the document and we're done
-            //parent.parentNode.replaceChild(newparent, parent);
-            while (parent.hasChildNodes()) {
-                parent.removeChild(parent.firstChild);
-            };
-            while (newparent.hasChildNodes()) {
-                var child = newparent.firstChild;
-                parent.appendChild(newparent.firstChild);
-            };
+            range.pasteHTML('<img id="kupu-tempnode">');
+            tempnode = document.getElementById('kupu-tempnode');
+            tempnode.replaceNode(newnode);
 
             if (selectAfterPlace) {
                 // see MozillaSelection.replaceWithNode() for some comments about
                 // selectAfterPlace
-                var temprange = this.document.getDocument().body.createTextRange();
-                if (selectAfterPlace.nodeType == 1) {
-                    temprange.moveToElementText(selectAfterPlace);
+                if (selectAfterPlace.nodeType == Node.ELEMENT_NODE) {
+                    range.moveToElementText(selectAfterPlace);
                 } else {
-                    temprange.moveToElementText(newnode);
+                    range.moveToElementText(newnode);
                 };
-                //temprange.moveEnd('character', -1);
-                temprange.select();
+                range.select();
             };
         };
-
-        this.selection = this.document.getDocument().selection;
-
+        this.reset();
         return newnode;
     };
 
@@ -1009,15 +975,14 @@ function IESelection(document) {
     };
 
     this.getContentLength = function() {
+        if (this.selection.type == 'Control') {
+            return this.selection.createRange().length;
+        };
         var contentlength = 0;
-        var range = this.selection.createRange().duplicate();
-        var startpoint = range.duplicate();
-        startpoint.collapse();
-        var endpoint = range.duplicate();
-        endpoint.collapse(false);
-        while (!startpoint.isEqual(endpoint)) {
-            startpoint.moveEnd('character', 1);
-            startpoint.moveStart('character', 1);
+        var range = this.selection.createRange();
+        var endrange = range.duplicate();
+        while (range.compareEndPoints('StartToEnd', endrange) < 0) {
+            range.move('character', 1);
             contentlength++;
         };
         return contentlength;
@@ -1119,8 +1084,19 @@ function IESelection(document) {
         }
     };
     
+    this.getRange = function() {
+        return this.selection.createRange();
+    }
+
+    this.restoreRange = function(range) {
+        try {
+            range.select();
+        } catch(e) {
+        };
+    }
+
     this.toString = function() {
-        return this.selection.createRange().htmlText;
+        return this.selection.createRange().text;
     };
 };
 
@@ -1160,8 +1136,9 @@ function ContextFixer(func, context) {
         for (var i=0; i < arguments.length; i++) {
             args.push(arguments[i]);
         };
-        self.func.apply(self.context, args);
+        return self.func.apply(self.context, args);
     };
+
 };
 
 /* Alternative implementation of window.setTimeout
@@ -1255,15 +1232,105 @@ Array.prototype.contains = function(element, objectequality) {
     return false;
 };
 
+// return a copy of an array with doubles removed
+Array.prototype.removeDoubles = function() {
+    var ret = [];
+    for (var i=0; i < this.length; i++) {
+        if (!ret.contains(this[i])) {
+            ret.push(this[i]);
+        };
+    };
+    return ret;
+};
+
+Array.prototype.map = function(func) {
+    /* apply 'func' to each element in the array */
+    for (var i=0; i < this.length; i++) {
+        this[i] = func(this[i]);
+    };
+};
+
+Array.prototype.reversed = function() {
+    var ret = [];
+    for (var i = this.length; i > 0; i--) {
+        ret.push(this[i - 1]);
+    };
+    return ret;
+};
+
 // JavaScript has a friggin' blink() function, but not for string stripping...
 String.prototype.strip = function() {
     var stripspace = /^\s*([\s\S]*?)\s*$/;
     return stripspace.exec(this)[1];
 };
 
+String.prototype.reduceWhitespace = function() {
+    /* returns a string in which all whitespace is reduced 
+        to a single, plain space */
+    var spacereg = /(\s+)/g;
+    var copy = this;
+    while (true) {
+        var match = spacereg.exec(copy);
+        if (!match) {
+            return copy;
+        };
+        copy = copy.replace(match[0], ' ');
+    };
+};
+
+String.prototype.entitize = function() {
+    var ret = this.replace(/&/g, '&amp;');
+    ret = ret.replace(/"/g, '&quot;');
+    ret = ret.replace(/</g, '&lt;');
+    ret = ret.replace(/>/g, '&gt;');
+    return ret;
+};
+
+String.prototype.deentitize = function() {
+    var ret = this.replace(/&gt;/g, '>');
+    ret = ret.replace(/&lt;/g, '<');
+    ret = ret.replace(/&quot;/g, '"');
+    ret = ret.replace(/&amp;/g, '&');
+    return ret;
+};
+
+String.prototype.urldecode = function() {
+    var reg = /%([a-fA-F0-9]{2})/g;
+    var str = this;
+    while (true) {
+        var match = reg.exec(str);
+        if (!match || !match.length) {
+            break;
+        };
+        var repl = new RegExp(match[0], 'g');
+        str = str.replace(repl, String.fromCharCode(parseInt(match[1], 16)));
+    };
+    return str;
+};
+
+String.prototype.centerTruncate = function(maxlength) {
+    if (this.length <= maxlength) {
+        return this;
+    };
+    var chunklength = maxlength / 2 - 3;
+    var start = this.substr(0, chunklength);
+    var end = this.substr(this.length - chunklength);
+    return start + ' ... ' + end;
+};
+
 //----------------------------------------------------------------------------
 // Exceptions
 //----------------------------------------------------------------------------
+
+function debug(str, win) {
+    if (!win) {
+        win = window;
+    };
+    var doc = win.document;
+    var div = doc.createElement('div');
+    div.appendChild(doc.createTextNode(str));
+    doc.getElementsByTagName('body')[0].appendChild(div);
+};
 
 // XXX don't know if this is the regular way to define exceptions in JavaScript?
 function Exception() {

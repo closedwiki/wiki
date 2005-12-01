@@ -5,11 +5,11 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     >
-  <kupu:id>$Id: xmlconfig.kupu 11430 2005-04-25 15:46:33Z guido $</kupu:id>
+  <kupu:id>$Id: xmlconfig.kupu 12162 2005-05-10 15:53:10Z guido $</kupu:id>
 
   <kupu:part name="xmlconfig">
     <div style="display: none;">
-      <xml id="kupuconfig">
+      <xml id="kupuconfig" class="kupuconfig">
         <kupuconfig>
           <kupu:define-slot name="kupuconfig" />
         </kupuconfig>

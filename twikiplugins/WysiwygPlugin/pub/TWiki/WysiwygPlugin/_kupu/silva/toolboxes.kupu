@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <kupu:feature
     name="toolboxes"
     implementation="silva"
@@ -6,53 +7,62 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     >
-
+    
   <kupu:part name="properties">
     <div class="kupu-toolbox" id="kupu-toolbox-properties">
-      <h1 style="border-top: none">properties</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">properties</h1>
 
-      <form name="kupu-properties-form">
-        <table width="100%" style="color: #333;" border="0">
-          <tr id="propsrow">
-            <td valign="top">
-              name
-            </td>
-            <td valign="top">
-              input
-            </td>
-          </tr>
-        </table>
-      </form>
+      <div class="kupu-tooltray">
+        <form name="kupu-properties-form" id="kupu-properties-form">
+          <table width="99%" style="color: #333;" border="0">
+            <tr id="propsrow">
+              <td valign="top">
+                name
+              </td>
+              <td valign="top">
+                input
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
 
     </div>
   </kupu:part>
 
   <kupu:part name="characters">
     <div class="kupu-toolbox" id="kupu-toolbox-characters">
-      <h1 style="border-top: none">non-standard characters</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">non-standard characters</h1>
 
-      <form name="kupu-characters-form">
-        <select id="charselect">
-          <option value="">select</option>
-        </select>
-      </form>
+      <div class="kupu-tooltray">
+        <form name="kupu-characters-form">
+          <select id="charselect">
+            <option value="">select</option>
+          </select>
+        </form>
+      </div>
 
     </div>
   </kupu:part>
+
 
   <kupu:part name="links">
     <div class="kupu-toolbox" id="kupu-toolbox-links">
       <script type="text/javascript" tal:define="container model/get_container; folder_context python: '/'.join(container.getPhysicalPath())" tal:content="string:
         function getLink() {
-          getObjectReference('${container/absolute_url}/edit/document_lookup', '_reference_', '${folder_context}');
+          reference.getReference(
+            function(path, id, title) {
+              kupu.getTool('linktool').createLink(path);
+            }, '${container/absolute_url}',
+            '', true);;
         }
       "></script>
 
-      <h1 style="border-top: none">link</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">link</h1>
 
-      <div id="kupu-toolbox-addlink"> </div>
-      <div id="kupu-toolbox-editlink"> </div>
       <div class="kupu-tooltray">
+        <div id="kupu-toolbox-addlink"> </div>
+        <div id="kupu-toolbox-editlink" class="kupu-toolbox-editlink"> </div>
 
         <form name="kupu_link_form" onsubmit="return false;">
           <input type="button" class="transport" style="margin-bottom:0.2em;" onclick="getLink(); return false;" value="get link reference..." />
@@ -76,7 +86,7 @@
   <kupu:part name="indexes">
     <div class="kupu-toolbox" id="kupu-toolbox-indexes">
 
-      <h1>index item</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">index item</h1>
 
       <div class="kupu-tooltray">
 
@@ -97,14 +107,25 @@
 
     <div class="kupu-toolbox" id="kupu-toolbox-images">
 
-    <script type="text/javascript" tal:define="container model/get_container; folder_context python: '/'.join(container.getPhysicalPath())" tal:content="string:
+    <script type="text/javascript" tal:define="container model/get_container; folder_context python: container" tal:content="string:
       function getImage() {
-        openAssetLookupWindow('${container/absolute_url}/edit/asset_lookup?filter=Silva+Image', '${folder_context}');
+        reference.getReference(
+          function(path, id, title) {
+            var imgtool = kupu.getTool('imagetool');
+            imgtool.createImage(path);
+            if (title) {
+                var selNode = kupu.getSelectedNode();
+                var image = kupu.getNearestParentOfType(selNode, 'img');
+                image.setAttribute('title', title);
+                imgtool.updateState(selNode);
+            };
+          }, '${folder_context/absolute_url}',
+          'Silva Image', true);;
       }
     "></script>
 
 
-    <h1>image</h1>
+    <h1 class="kupu-toolbox-heading" i18n:translate="">image</h1>
 
     <div class="kupu-tooltray">
 
@@ -113,7 +134,7 @@
         <div id="kupu-toolbox-image-edit" style="color: black; display: none">
           <input type="button" class="transport" value="edit image..."
                   tal:attributes="onclick string:window.open('${container/absolute_url}/' + 
-                                    document.getElementById('kupu-toolbox-image-src').value + '/edit')" />
+                                    getFromSelector('kupu-toolbox-image-src').value + '/edit')" />
           <input type="text" id="kupu-toolbox-image-src" style="margin-left:0.2em; width:96%" />
           &#160;link to:<br />
           <input type="radio" id="kupu-toolbox-image-link-radio-hires" name="linkradio" value="hires" /> hires version<br />
@@ -149,7 +170,7 @@
 
     <div class="kupu-toolbox" id="kupu-toolbox-citation">
 
-      <h1 i18n:translate="citationtool">citation</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">citation</h1>
 
       <div class="kupu-tooltray">
 
@@ -191,7 +212,7 @@
 
     <div class="kupu-toolbox" id="kupu-toolbox-abbr">
 
-      <h1 i18n:translate="abbrtool">abbreviations and acronyms</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">abbreviations and acronyms</h1>
 
       <div class="kupu-tooltray">
 
@@ -241,7 +262,7 @@
     <div class="kupu-toolbox" id="kupu-toolbox-tables">
     <!-- start kupu toolbox tables -->
     
-    <h1 i18n:translate="table-inspector">table</h1>
+    <h1 class="kupu-toolbox-heading" i18n:translate="">table</h1>
 
     <div class="kupu-tooltray">
 
@@ -266,7 +287,7 @@
           </tr>
           <tr>
             <td colspan="2">
-              <div id="kupu-toolbox-addtable">
+              <div id="kupu-toolbox-addtable" class="kupu-toolbox-addtable">
                 <table width="100%" style="color: #333;">
                   <tr>
                     <td class="align-right" width="30%">rows</td>
@@ -286,7 +307,7 @@
                 </table>
                 <input type="button" class="button" id="kupu-table-addtable-button" value="add table" />
               </div>
-              <div id="kupu-toolbox-edittable" style="display: none">
+              <div id="kupu-toolbox-edittable" class="kupu-toolbox-edittable" style="display: none">
                 <table width="100%">
                   <tr>
                     <td class="align-right" style="padding-right:0.3em" width="30%">column align</td>
@@ -340,7 +361,7 @@
   <kupu:part name="toc">
     <div class="kupu-toolbox" id="kupu-toolbox-toc">
 
-      <h1>table of contents</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">table of contents</h1>
 
       <div class="kupu-tooltray">
 
@@ -370,7 +391,7 @@
   <kupu:part name="external_source">
     <div class="kupu-toolbox" id="kupu-toolbox-extsource">
 
-      <h1>external source</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">external source</h1>
 
       <div class="kupu-tooltray">
         
@@ -381,7 +402,7 @@
           <select id="kupu-toolbox-extsource-id">
             <tal:block repeat="extsource here/get_available_sources">
               <tal:block define="id python: extsource[0]; object python:extsource[1]">
-                <option tal:attributes="value id" tal:content="python:object.title and object.title or id" />
+                <option tal:attributes="value id" tal:content="python:object.get_title() or id" />
               </tal:block>
             </tal:block>
           </select>
@@ -400,7 +421,7 @@
   <kupu:part name="typochars">
     <div class="kupu-toolbox" id="kupu-toolbox-typochars">
     
-      <h1 i18n:translate="typographical-characters">typographical characters</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">typographical characters</h1>
       <div class="kupu-tooltray">
         <!-- euro , ` ' ,, `` '' << >> - - -->
         &#x20AC; &#8218; &#145; &#146; &#132; &#147; &#148; &#171; &#187; &#8212; &#8211; &#183;
@@ -410,9 +431,9 @@
   </kupu:part>
 
   <kupu:part name="save">
-    <div class="kupu-toolbox">
+    <div class="kupu-toolbox" id="kupu-toolbox-save">
     
-      <h1 i18n:translate="save">save</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">save</h1>
       <div class="kupu-tooltray">
         <form action="." method="POST" onsubmit="return false">
           <input type="button" class="button" value="save document" id="kupu-save-toolbox-button" onclick="kupu.saveDocument()" />
@@ -424,7 +445,7 @@
 
   <kupu:part name="cleanupexpressions">
     <div class="kupu-toolbox" id="kupu-toolbox-cleanupexpressions">
-      <h1 i18n:translate="">cleanup</h1>
+      <h1 class="kupu-toolbox-heading" i18n:translate="">cleanup</h1>
       <div class="kupu-tooltray">
         <select id="kupucleanupexpressionselect" class="kupu-toolbox-st">
         </select>

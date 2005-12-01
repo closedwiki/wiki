@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -40,7 +40,7 @@ function KupuMultiEditor(documents, config, logger) {
                 this.afterInit();
             };
             this._saveSelection();
-            this.logMessage('Editor initialized');
+            this.logMessage(_('Editor initialized'));
         } else {
             this._setDesignModeWhenReady();
         };
@@ -106,7 +106,7 @@ function KupuMultiEditor(documents, config, logger) {
     this._setDesignModeWhenReady = function() {
         this._designModeSetAttempts++;
         if (this._designModeSetAttempts > 25) {
-            alert('Couldn\'t set design mode. Kupu will not work on this browser.');
+            alert(_('Couldn\'t set design mode. Kupu will not work on this browser.'));
             return;
         };
         var should_retry = false;
@@ -153,7 +153,7 @@ function KupuMultiEditor(documents, config, logger) {
         this._initialized = false;
         
         // set the window status so people can see we're actually saving
-        window.status= "Please wait while saving document...";
+        window.status= _("Please wait while saving document...");
 
         // set a default id
         if (!idprefix) {
@@ -161,14 +161,14 @@ function KupuMultiEditor(documents, config, logger) {
         };
         
         // pass the content through the filters
-        this.logMessage("Starting HTML cleanup");
+        this.logMessage(_("Starting HTML cleanup"));
         var contents = new Array();
         for (var i=0; i < this.documents.length; i++) {
             var transform = this._filterContent(this.documents[i].getDocument().documentElement);
             contents.push(this._serializeOutputToString(transform));
         };
         
-        this.logMessage("Cleanup done, sending document to server");
+        this.logMessage(_("Cleanup done, sending document to server"));
         
         // now create the form input, since IE 5.5 doesn't support the 
         // ownerDocument property we use window.document as a fallback (which

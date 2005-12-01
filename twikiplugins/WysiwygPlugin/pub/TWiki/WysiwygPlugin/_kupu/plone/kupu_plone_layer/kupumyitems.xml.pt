@@ -1,4 +1,4 @@
-<tal:block define="charset site_properties/default_charset|string:utf-8;
+<tal:block define="charset here/portal_properties/site_properties/default_charset|here/portal_properties/default_charset|string:utf-8;
         content_type python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=%s' % charset);"
  replace='structure string:&lt;?xml version="1.0" encoding="${charset}" ?&gt;'>
 <?xml version="1.0"?>

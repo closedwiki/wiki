@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <kupu:feature
     name="head"
     implementation="silva"
@@ -11,6 +12,8 @@
             tal:attributes="src string:${root_url}/kupu/sarissa.js"> </script>
     <script type="text/javascript" src="kupuhelpers.js"
             tal:attributes="src string:${root_url}/kupu/kupuhelpers.js"> </script>
+    <script type="text/javascript" src="kupunoi18n.js"
+            tal:attributes="src string:${root_url}/kupu/kupunoi18n.js"> </script>
     <script type="text/javascript" src="kupueditor.js"
             tal:attributes="src string:${root_url}/kupu/kupueditor.js"> </script>
     <script type="text/javascript" src="kupubasetools.js"
@@ -25,8 +28,10 @@
             tal:attributes="src string:${root_url}/kupu/kupusourceedit.js"> </script>
     <script type="text/javascript" src="kupucleanupexpressions.js"
             tal:attributes="src string:${root_url}/kupu/kupucleanupexpressions.js"> </script>
-    <script type="text/javascript" src="lookupwindowscripts.js"
-            tal:attributes="src string:${root_url}/kupu_silva/lookupwindowscripts.js"> </script>
+    <script type="text/javascript" src="kupuspellchecker.js"
+            tal:attributes="src string:${root_url}/kupu/kupuspellchecker.js"> </script>
+    <script type="text/javascript" src="kuputoolcollapser.js"
+            tal:attributes="src string:${root_url}/kupu/kuputoolcollapser.js"> </script>
 
     <script type="text/javascript" src="kupusilvatools.js"
             tal:attributes="src string:${root_url}/kupu_silva/kupusilvatools.js"> </script>
@@ -39,12 +44,17 @@
 	var kupu = null;
 	var kupuui = null;
 	function startKupu() {
-	    var frame = document.getElementById('kupu-editor'); 
+	    var frame = getFromSelector('kupu-editor'); 
 	    kupu = initSilvaKupu(frame); 
 	    kupuui = kupu.getTool('ui'); 
 	    kupu.initialize();
 	};
+        // register the function to the unload registry
+        window.onload_registry.register(startKupu);
     </script>
+  </kupu:part>
+
+  <kupu:part name="meta">
   </kupu:part>
 
 </kupu:feature>

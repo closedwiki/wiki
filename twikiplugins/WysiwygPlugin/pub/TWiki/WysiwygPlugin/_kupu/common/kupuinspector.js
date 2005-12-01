@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupuinspector.js 6741 2004-09-27 09:52:44Z duncan $
+// $Id: kupuinspector.js 9879 2005-03-18 12:04:00Z yuppie $
 
 /* The Kupu Inspector tool 
 
@@ -148,7 +148,7 @@ function Element(node, panel, visibility) {
 function KupuInspector(inspectorelement) {
     /* the Inspector tool, a tool to set attributes on elements */
     
-    this.element = document.getElementById(inspectorelement);
+    this.element = getFromSelector(inspectorelement);
     this._lastnode = null;
 
     this.default_attrs = new Array('id', 'className');

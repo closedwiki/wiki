@@ -251,14 +251,10 @@ document. The idea is that the filter should use DOM functionality to
 filter the incoming DOM and return the filtered version.  To register
 a content filter to Kupu, use 'kupu.registerFilter(filter)'.
 
-7. Built-in XHTML conversion
-----------------------------
-
-There's also an optional built-in XHTML conversion, which is fully 
-configurable. By default it accepts any tags defined in XHTML 1.0 
-transitional, as well as any attributes except for the event 
-attributes (those beginning with 'on'). Tags not in the html namespace 
-are stripped.
+The XHTML conversion is configurable. By default it accepts any tags
+defined in XHTML 1.0 transitional, as well as any attributes except
+for the event attributes (those beginning with 'on'). Tags not in the
+html namespace are stripped.
 
 A tag is permitted if it is defined in XHTML and not blacklisted.
 Optionally kupu can also filter to maintain a valid XHTML nesting of
@@ -304,7 +300,7 @@ through the `<htmlfilter>` section of the configuration::
 
         <htmlfilter>
           ... as above ...
-            <style>list-style-image</style>
+            <xstyle>list-style-image</xstyle>
             <class>badClassName</class>
         </htmlfilter>
 
@@ -317,9 +313,7 @@ Additional attributes may be added to existing tags by calling the
 adds an attribute `special` to the `div` tag. The method tags three
 parameters: a list of attributes, a list of tags, and optionally a
 filter method to be called for that attribute. If the filter method is
-omitted the attribute is simply copied. If the list contains the entry
-'*' (that will probably be the only option in the list if so) all
-attributes are copied to the resulting element.
+omitted the attribute is simply copied.
 
 The validation API is as follows (for the purposes of this api, a
 `dict` means an object whose property names are the dict keys):
@@ -380,7 +374,7 @@ classBlacklist
   copied out of Microsoft Word.
  
 
-8. Loggers
+7. Loggers
 ----------
 
 Loggers are classes to log messages. A logger will usually do nothing,
@@ -395,7 +389,7 @@ and it may get a severity argument, which can be 0 for debug messages,
 A logger should be passed to the editor on instantiation time (it's
 one of the constructor's arguments).
 
-9. And the rest
+8. And the rest
 ---------------
 
 Of course there's a lot more to Kupu that can be customized, added or

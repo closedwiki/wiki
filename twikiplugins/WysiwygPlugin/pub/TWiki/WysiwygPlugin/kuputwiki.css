@@ -37,11 +37,11 @@ div.kupu-tb {
 span.kupu-tb-buttongroup {
   margin-right: 0px;
   margin-left: 0px;
-  padding-left: 4px;
-  padding-right: 4px;
+  padding-left: 11px;
+  padding-right: 8px;
   text-align: center;
   float: left;
-  background: url("separator.png");
+  /*background: url("separator.png");*/
   background-repeat: no-repeat;
 }
 
@@ -73,7 +73,6 @@ div#twiki-icons {
 
 div#twiki-icons img {
   background-color: #EEEEEE;
-  cursor: hand;
   cursor: pointer;
 }
 
@@ -133,7 +132,6 @@ div#twiki-icons img:active {
 .kupu-redo {background-image: url("redo.png");}
 .kupu-save {background-image: url("save.png");}
 .kupu-undo {background-image: url("undo.png");}
-.kupu-logo {background-image: url("help.png");}
 .kupu-removelink {background-image: url("remove.png");}
 
 /* TWiki-only buttons */
@@ -142,6 +140,7 @@ div#twiki-icons img:active {
 .twiki-vardrawer-button { background: url("vars.png"); }
 .twiki-cancel-button { background-image: url("cancel.png"); }
 .twiki-insert-icon { background-image: url("smiley.png"); }
+.twiki-help {background-image: url("help.png");}
 .twiki-remove-var-button {
   background-color: white;
   background: url("remove.png");

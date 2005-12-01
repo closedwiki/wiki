@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -12,7 +12,7 @@
 This module contains the Plone specific version of the Kupu library
 tool.
 
-$Id: plonelibrarytool.py 9723 2005-03-10 11:58:38Z duncan $
+$Id: plonelibrarytool.py 16077 2005-08-15 10:06:38Z duncan $
 """
 import os
 from ZODB.PersistentList import PersistentList
@@ -23,25 +23,26 @@ import Globals
 from Globals import InitializeClass
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.CMFCore.utils import UniqueObject
+from Products.CMFCore.utils import UniqueObject, getToolByName
 
 from Products.kupu.plone.librarytool import KupuLibraryTool
 from Products.kupu.plone import permissions, scanner
 from Products.kupu import kupu_globals
+from Products.kupu.config import TOOLNAME, TOOLTITLE
 
 _default_libraries = (
-    dict(id="string:portal_root",
+    dict(id="root",
          title="string:Home",
          uri="string:${portal_url}",
          src="string:${portal_url}/kupucollection.xml",
-         icon="string:${portal_url}/kupuimages/kupulibrary.png"),
-    dict(id="string:${folder_url}",
+         icon="string:${portal_url}/misc_/CMFPlone/plone_icon"),
+    dict(id="current",
          title="string:Current folder",
          uri="string:${folder_url}",
          src="string:${folder_url}/kupucollection.xml",
-         icon="string:${portal_url}/kupuimages/kupulibrary.png"),
+         icon="string:${portal_url}/folder_icon.gif"),
     dict(id="myitems",
-         title="string:My items",
+         title="string:My recent items",
          uri="string:${portal_url}/kupumyitems.xml",
          src="string:${portal_url}/kupumyitems.xml",
          icon="string:${portal_url}/kupuimages/kupusearch_icon.gif"),
@@ -68,12 +69,18 @@ _excluded_html = [
 # Default should list all styles used by Kupu
 _style_whitelist = ['text-align', 'list-style-type', 'float']
 
+_default_paragraph_styles = (
+    "Heading|h2|Heading",
+    "Subheading|h3|Subheading",
+    "Formatted|pre",
+)
+
 class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
     """Plone specific version of the kupu library tool"""
 
-    id = "kupu_library_tool"
+    id = TOOLNAME
     meta_type = "Kupu Library Tool"
-    title = "Kupu WYSIWYG editor configuration"
+    title = TOOLTITLE
     security = ClassSecurityInfo()
 
     # protect methods provided by super class KupuLibraryTool
@@ -88,7 +95,7 @@ class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
     def __init__(self):
         self._libraries = PersistentList()
         self._res_types = PersistentMapping()
-        self.linkbyuid = True
+        self.linkbyuid = False
 
     def manage_afterAdd(self, item, container):
         # We load default values here, so __init__ can still be used
@@ -112,15 +119,15 @@ class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
         try:
             return self.table_classnames
         except AttributeError:
-            return ('plain', 'listing', 'grid', 'data')
+            return ('plain', 'listing', 'vertical listing', 'listing nosort|unsorted listing')
 
     security.declareProtected('View', "getParagraphStyles")
     def getParagraphStyles(self):
-        """Return a list of classnames supported in tables"""
+        """Return a list of classnames supported by paragraphs"""
         try:
             return self.paragraph_styles
         except AttributeError:
-            return ()
+            return _default_paragraph_styles
 
     security.declareProtected('View', "getHtmlExclusions")
     def getHtmlExclusions(self):
@@ -146,13 +153,65 @@ class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
     def installBeforeUnload(self):
         return getattr(self, 'install_beforeunload', True)
 
+    security.declareProtected('View', 'isKupuEnabled')
+    def isKupuEnabled(self, useragent='', allowAnonymous=False, REQUEST=None):
+        def numerics(s):
+            '''Convert a string into a tuple of all digit sequences
+            '''
+            seq = ['']
+            for c in s:
+                if c.isdigit():
+                    seq[-1] = seq[-1] + c
+                elif seq[-1]:
+                    seq.append('')
+            return tuple([ int(val) for val in seq if val])
+
+        # First check whether the user actually wants kupu
+        pm = getToolByName(self, 'portal_membership')
+        if pm.isAnonymousUser() and not allowAnonymous:
+            return False
+
+        user = pm.getAuthenticatedMember()
+        if user.getProperty('wysiwyg_editor').lower() != 'kupu':
+            return False
+
+        # Then check whether their browser supports it.
+        if not useragent:
+            useragent = REQUEST['HTTP_USER_AGENT']
+
+        if 'Opera' in useragent or 'BEOS' in useragent:
+            return False
+
+        if not useragent.startswith('Mozilla/'):
+            return False
+
+        try:
+            mozillaver = numerics(useragent[len('Mozilla/'):].split(' ')[0])
+            if mozillaver > (5,0):
+                return True
+            elif mozillaver == (5,0):
+                rv = useragent.find(' rv:')
+                if rv >= 0:
+                    verno = numerics(useragent[rv+4:].split(')')[0])
+                    return verno >= (1,3,1)
+
+            MSIE = useragent.find('MSIE')
+            if MSIE >= 0:
+                verno = numerics(useragent[MSIE+4:].split(';')[0])
+                return verno >= (5,5)
+
+        except:
+            # In case some weird browser makes the test code blow up.
+            pass
+        return False
+
     # ZMI views
     manage_options = (SimpleItem.manage_options[1:] + (
          dict(label='Config', action='kupu_config'),
          dict(label='Libraries', action='zmi_libraries'),
          dict(label='Resource types', action='zmi_resource_types'),
          dict(label='Documentation', action='zmi_docs'),
-         #dict(label='Status', action='sanity_check'),
+         dict(label='Status', action='sanity_check'),
          ))
 
 
@@ -168,7 +227,7 @@ class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
 
     security.declarePublic('docs')
     def docs(self):
-        """Returns FormController docs formatted as HTML"""
+        """Returns Kupu docs formatted as HTML"""
         docpath = os.path.join(Globals.package_home(kupu_globals), 'doc')
         f = open(os.path.join(docpath, 'PLONE2.txt'), 'r')
         _docs = f.read()
@@ -176,7 +235,7 @@ class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
 
     security.declareProtected(permissions.ManageLibraries, "zmi_docs")
     zmi_docs = PageTemplateFile("zmi_docs.pt", globals())
-    zmi_docs.title = 'kupu configuration'
+    zmi_docs.title = 'kupu configuration documentation'
 
     security.declareProtected(permissions.ManageLibraries, "sanity_check")
     sanity_check = PageTemplateFile("sanity_check.pt", globals())
@@ -199,7 +258,9 @@ class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
     def zmi_get_libraries(self):
         """Return the libraries sequence for the ZMI view"""
         #return ()
-        return [dict([(key, value.text) for key, value in lib.items()])
+        def text(value):
+            return getattr(value, 'text', value)
+        return [dict([(key, text(value)) for key, value in lib.items()])
                 for lib in self._libraries]
 
     security.declareProtected(permissions.ManageLibraries,
@@ -236,6 +297,17 @@ class PloneKupuLibraryTool(UniqueObject, SimpleItem, KupuLibraryTool):
         """Move libraries down through the ZMI"""
         self.moveDown(indices)
         REQUEST.RESPONSE.redirect(self.absolute_url() + '/zmi_libraries')
+
+    security.declarePublic("zmi_get_default_library")
+    def zmi_get_default_library(self):
+        """Return the default selected library for the ZMI view"""
+        return getattr(self, '_default_library', '')
+
+    security.declareProtected(permissions.ManageLibraries,
+                              "zmi_set_default_library")
+    def zmi_set_default_library(self, defid=''):
+        """Return the libraries sequence for the ZMI view"""
+        self._default_library = defid
 
     security.declareProtected(permissions.ManageLibraries,
                               "zmi_get_type_mapping")

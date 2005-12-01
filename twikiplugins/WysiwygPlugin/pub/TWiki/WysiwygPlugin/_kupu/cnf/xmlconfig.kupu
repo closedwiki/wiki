@@ -8,7 +8,7 @@
 
   <kupu:part name="xmlconfig">
     <div style="display: none;">
-      <xml id="kupuconfig">
+      <xml id="kupuconfig" class="kupuconfig">
         <kupuconfig>
           <kupu:define-slot name="kupuconfig" />
         </kupuconfig>

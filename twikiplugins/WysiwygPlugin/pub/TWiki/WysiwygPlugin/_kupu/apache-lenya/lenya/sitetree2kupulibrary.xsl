@@ -4,7 +4,7 @@
   Transform lenya Sitetree to Kupu's library format
   for usage in the link drawer.
   
-  @version $Id: sitetree2kupulibrary.xsl 8770 2005-01-31 19:04:36Z gregor $
+  @version $Id: sitetree2kupulibrary.xsl 8771 2005-01-31 19:05:00Z gregor $
 -->
 
 <xsl:stylesheet version="1.0"

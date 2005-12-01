@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupusilvainit.js 10581 2005-04-13 13:59:49Z guido $
+// $Id: kupusilvainit.js 18260 2005-10-07 12:54:17Z guido $
 
 // XXX Port this to the default dist?
 KupuEditor.prototype.afterInit = function() {
@@ -98,7 +98,7 @@ function initSilvaKupu(iframe) {
     };
 
     var boldchecker = ParentWithStyleChecker(new Array('b', 'strong'),
-                                                'font-weight', 'bold');
+                                             'font-weight', 'bold');
     var boldbutton = new KupuStateButton('kupu-bold-button', 
                                          execCommand('bold'),
                                          boldchecker,
@@ -107,7 +107,7 @@ function initSilvaKupu(iframe) {
     kupu.registerTool('boldbutton', boldbutton);
 
     var italicschecker = ParentWithStyleChecker(new Array('i', 'em'),
-                                                    'font-style', 'italic');
+                                                'font-style', 'italic');
     var italicsbutton = new KupuStateButton('kupu-italic-button', 
                                            execCommand('italic'),
                                            italicschecker, 
@@ -146,7 +146,7 @@ function initSilvaKupu(iframe) {
     kupu.registerTool('redobutton', redobutton);
 
     var listtool = new ListTool('kupu-list-ul-addbutton', 'kupu-list-ol-addbutton',
-                                    'kupu-ulstyles', 'kupu-olstyles');
+                                'kupu-ulstyles', 'kupu-olstyles');
     kupu.registerTool('listtool', listtool);
 
     var dltool = new DefinitionListTool('kupu-list-dl-addbutton');
@@ -194,7 +194,7 @@ function initSilvaKupu(iframe) {
   
     var imagetool = new SilvaImageTool(
         'kupu-toolbox-image-edit', 'kupu-toolbox-image-src',
-        'kupu-toolbox-image-target', 'kupu-toolbox-image-target-input', 
+        'kupu-toolbox-image-target', 'kupu-toolbox-image-target-input',
         'kupu-toolbox-image-link-radio-hires',
         'kupu-toolbox-image-link-radio-link',  'kupu-toolbox-image-link',
         'kupu-toolbox-image-align', 'kupu-toolbox-image-alt', 
@@ -216,12 +216,20 @@ function initSilvaKupu(iframe) {
         );
     tabletool.registerToolBox('tabletoolbox', tabletoolbox);
 
+    var propertytool = new SilvaPropertyTool('propsrow', 
+                                                'kupu-properties-form');
+    kupu.registerTool('properties', propertytool);
+
     var showpathtool = new ShowPathTool();
     kupu.registerTool('showpathtool', showpathtool);
 
     var sourceedittool = new SourceEditTool('kupu-source-button',
                                             'kupu-editor-textarea');
     kupu.registerTool('sourceedittool', sourceedittool);
+
+    var spellchecker = new KupuSpellChecker('kupu-spellchecker-button',
+                                            'kupu_spellcheck');
+    kupu.registerTool('spellchecker', spellchecker);
 
     var cleanupexpressions = new CleanupExpressionsTool(
             'kupucleanupexpressionselect', 'kupucleanupexpressionbutton');
@@ -264,20 +272,55 @@ function initSilvaKupu(iframe) {
     drawertool.registerDrawer('imagelibdrawer', imagelibdrawer);
     */
     
-    //var nonxhtmltagfilter = new NonXHTMLTagFilter();
-    //kupu.registerFilter(nonxhtmltagfilter);
+//    var nonxhtmltagfilter = new NonXHTMLTagFilter();
+//    kupu.registerFilter(nonxhtmltagfilter);
 
     kupu.xhtmlvalid.setAttrFilter(['is_toc', 'toc_depth', 'is_citation', 
                                     'source', 'author', 'source_id', 
                                     'silva_type', 'alignment', 
-                                    'link_to_hires', 'link']);
+                                    'link_to_hires', 'link', 'silva_src',
+                                    'silva_href', 'silva_column_info']);
     // allow all attributes on div, since ExternalSources require that
     kupu.xhtmlvalid.includeTagAttributes(['div'], ['*']);
     kupu.xhtmlvalid.includeTagAttributes(['p'], ['silva_type']);
     kupu.xhtmlvalid.includeTagAttributes(['h6'], ['silva_type']);
     kupu.xhtmlvalid.includeTagAttributes(['img'], ['alignment', 
                                             'link_to_hires', 
-                                            'target', 'link']);
+                                            'target', 'link',
+                                            'silva_src']);
+    kupu.xhtmlvalid.includeTagAttributes(['a'], ['silva_href']);
+    kupu.xhtmlvalid.includeTagAttributes(['table'], ['silva_column_info']);
+
+    if (window.kuputoolcollapser) {
+        var collapser = new window.kuputoolcollapser.Collapser(
+                                                        'kupu-toolboxes');
+        collapser.initialize();
+    };
+    
+    // have to set a blacklist of tags for div, since IE will otherwise
+    // save every possible HTML attr for the div
+    kupu.xhtmlvalid.excludeTagAttributes(['div'], ['onrowexit', 'onfocusout',
+                'onrowsinserted', 'disabled', 'oncopy', 'onresizestart',
+                'onerrorupdate', 'tabIndex', 'ondeactivate', 
+                'ondataavailable', 'ondragover', 'title', 'accessKey', 
+                'onkeypress', 'dataFld', 'onmousemove', 'onactivate',
+                'onafterupdate', 'ondrag', 'contentEditable', 'hideFocus',
+                'onblur', 'onmouseout', 'oncellchange', 'onmouseleave',
+                'onkeydown', 'dataSrc', 'onmousewheel', 'onpaste', 'ondrop',
+                'onrowsdelete', 'onrowenter', 'ondragend', 'align', 
+                'onlayoutcomplete', 'onbeforedeactivate', 'nofocusrect',
+                'ondblclick', 'onselectstart', 'onreadystatechange',
+                'dataFormatAs', 'onmousedown', 'onscroll', 'style',
+                'implementation', 'onbeforecut', 'oncontrolselect',
+                'ondatasetcomplete', 'onmouseup', 'noWrap', 'onfocusin',
+                'onresizeend', 'oncontextmenu', 'ondragstart', 'onmoveend',
+                'onbeforeeditfocus', 'onpropertychange', 'lang', 
+                'onmovestart', 'onkeyup', 'dir', 'onfilterchange',
+                'onmouseenter', 'onresize', 'onclick', 'onbeforecopy',
+                'onfocus', 'ondatasetchanged', 'id', 'onmove', 'onpage',
+                'ondragenter', 'ondragleave', 'oncut', 'onbeforedeactivate',
+                'onhelp', 'onlosecapture', 'onbeforeupdate', 'onmouseover',
+                'onbeforeactivate']);
 
     return kupu;
 };

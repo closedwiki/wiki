@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -13,12 +13,12 @@
 
 function SourceEditTool(sourcebuttonid, sourceareaid) {
     /* Source edit tool to edit document's html source */
-    this.sourceButton = document.getElementById(sourcebuttonid);
+    this.sourceButton = getFromSelector(sourcebuttonid);
     this.sourcemode = false;
     this._currently_editing = null;
 
     this.getSourceArea = function() {
-        return document.getElementById(sourceareaid);
+        return getFromSelector(sourceareaid);
     }
 
     this.cancelSourceMode = function() {
@@ -33,7 +33,7 @@ function SourceEditTool(sourcebuttonid, sourceareaid) {
         this.editor = editor;
         this._fixTabIndex(this.sourceButton);
         addEventHandler(this.sourceButton, "click", this.switchSourceEdit, this);
-        this.editor.logMessage('Source edit tool initialized');
+        this.editor.logMessage(_('Source edit tool initialized'));
     };
  
     this.switchSourceEdit = function(event, nograb) {
@@ -55,7 +55,7 @@ function SourceEditTool(sourcebuttonid, sourceareaid) {
 
             var data='';
             if(kupu.config.filtersourceedit) {
-                window.status = 'Cleaning up HTML...';
+                window.status = _('Cleaning up HTML...');
                 var transform = kupu._filterContent(kupu.getInnerDocument().documentElement);
                 data = kupu.getXMLBody(transform);
                 data = kupu._fixupSingletons(data).replace(/<\/?body[^>]*>/g, "");
@@ -89,20 +89,26 @@ function SourceEditTool(sourcebuttonid, sourceareaid) {
             this._currently_editing = null;
         };
         this.sourcemode = !this.sourcemode;
-     };
+    };
+    this.enable = function() {
+        KupuButtonEnable(this.sourceButton);
+    }
+    this.disable = function() {
+        KupuButtonDisable(this.sourceButton);
+    }
 };
 
 SourceEditTool.prototype = new KupuTool;
 
 function MultiSourceEditTool(sourcebuttonid, textareaprefix) {
     /* Source edit tool to edit document's html source */
-    this.sourceButton = document.getElementById(sourcebuttonid);
+    this.sourceButton = getFromSelector(sourcebuttonid);
     this.textareaprefix = textareaprefix;
 
     this.getSourceArea = function() {
         var docobj = this._currently_editing||kupu.getDocument();
         var sourceareaid = this.textareaprefix + docobj.getEditable().id;
-        return document.getElementById(sourceareaid);
+        return getFromSelector(sourceareaid);
     }
 
     this._currently_editing = null;

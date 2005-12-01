@@ -13,15 +13,11 @@
 # preferred kupu configuration.
 from Products.CMFCore.utils import getToolByName
 
-LINKABLE = ('MyObjectType',
-            'AnotherObjectType',)
-
-MEDIAOBJECT = ('MyImage',
-               'Image',)
-
-COLLECTION = ('Folder',
-              'ATFolder',
-              'Large Plone Folder')
+RESOURCES = dict(
+    linkable = ('Document', 'Image', 'File', 'News Item', 'Event'),
+    mediaobject = ('Image',),
+    collection = ('Plone Site', 'Folder', 'Large Plone Folder'),
+    )
 
 EXCLUDED_HTML = [
   {'tags': ('center','span','tt','big','small','u','s','strike','basefont','font',),
@@ -45,30 +41,88 @@ CLASS_BLACKLIST = ['MsoNormal', 'MsoTitle', 'MsoHeader', 'MsoFootnoteText',
         'Bullet1', 'Bullet2']
 
 TABLE_CLASSNAMES = ('plain', 'listing', 'grid', 'data')
+
 PARAGRAPH_STYLES = (
-    'Fancy|div|fancyClass',
-    'Plain|div|plainClass',
+    "Heading|h2|Heading",
+    "Subheading|h3|Subheading",
+    "Formatted|pre",
+#    'Fancy|div|fancyClass',
+#    'Plain|div|plainClass',
 )
     
+LIBRARIES = (
+    dict(id="root",
+         title="string:Home",
+         uri="string:${portal_url}",
+         src="string:${portal_url}/kupucollection.xml",
+         icon="string:${portal_url}/misc_/CMFPlone/plone_icon"),
+    dict(id="current",
+         title="string:Current folder",
+         uri="string:${folder_url}",
+         src="string:${folder_url}/kupucollection.xml",
+         icon="string:${portal_url}/folder_icon.gif"),
+    dict(id="myitems",
+         title="string:My recent items",
+         uri="string:${portal_url}/kupumyitems.xml",
+         src="string:${portal_url}/kupumyitems.xml",
+         icon="string:${portal_url}/kupuimages/kupusearch_icon.gif"),
+    dict(id="recentitems",
+         title="string:Recent items",
+         uri="string:${portal_url}/kupurecentitems.xml",
+         src="string:${portal_url}/kupurecentitems.xml",
+         icon="string:${portal_url}/kupuimages/kupusearch_icon.gif")
+    )
+DEFAULT_LIBRARY = 'myitems'
+
+INSTALL_BEFOREUNLOAD = True
+LINKBYUID = False
+
 tool = getToolByName(context, 'kupu_library_tool')
 typetool = getToolByName(context, 'portal_types')
 
 def typefilter(types):
-    all_meta_types = dict([ (t.content_meta_type, 1) for t in typetool.listTypeInfo()])
+    all_meta_types = dict([ (t.id, 1) for t in typetool.listTypeInfo()])
     return [ t for t in types if t in all_meta_types ]
 
+print "remove old resources"
+types = tool.zmi_get_type_mapping()
+tool.deleteResourceTypes([ t for (t,p) in types])
+
 print "add resources"
-tool.addResourceType('linkable', typefilter(LINKABLE))
-tool.addResourceType('mediaobject', typefilter(MEDIAOBJECT))
-tool.addResourceType('collection', typefilter(COLLECTION))
+for k,v in RESOURCES.items():
+    tool.addResourceType(k, typefilter(v))
+
+mappings = tool.zmi_get_type_mapping()
+for rname, t in mappings:
+    print rname, ", ".join(t)
+
+print "remove old libraries"
+libs = tool.zmi_get_libraries()
+tool.deleteLibraries(range(len(libs)))
+
+print "add libraries"
+for lib in LIBRARIES:
+    tool.addLibrary(**lib)
+
+for lib in tool.zmi_get_libraries():
+    keys = lib.keys()
+    keys.remove('id')
+    keys.sort()
+    print lib['id']
+    for k in (keys):
+        print '   ',k, lib[k]
+
+tool.zmi_set_default_library(DEFAULT_LIBRARY)
 
 print "configure kupu"
-tool.configure_kupu(linkbyuid=True,
-    table_classnames = ('plain', 'listing', 'grid', 'data'),
+tool.configure_kupu(
+    table_classnames = TABLE_CLASSNAMES,
     parastyles=PARAGRAPH_STYLES,
     html_exclusions = EXCLUDED_HTML,
     style_whitelist = STYLE_WHITELIST,
     class_blacklist = CLASS_BLACKLIST,
-    installBeforeUnload=True)
+    installBeforeUnload=INSTALL_BEFOREUNLOAD,
+    linkbyuid=LINKBYUID,
+    )
 
 return printed

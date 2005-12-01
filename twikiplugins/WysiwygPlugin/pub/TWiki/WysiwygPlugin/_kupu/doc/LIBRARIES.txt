@@ -470,4 +470,4 @@ Futures
 
   * Deeper standards support (WebDAV/DASL)
 
-  * Image/file upload via the library 
+

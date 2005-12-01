@@ -17,15 +17,15 @@
 
 function TWiki3StateButton(buttonid, check, command,
                            clazz) {
-    /* A button that can have two states (e.g. pressed and
-       not-pressed) based on CSS classes */
-    this.button = window.document.getElementById(buttonid);
-    this.command = command;
-    this.parentcheck = parentFinder(check);
-    this.childcheck = childFinder(check);
-    this.clazz = clazz;
-    this.state = 0;
-
+  /* A button that can have two states (e.g. pressed and
+     not-pressed) based on CSS classes */
+  this.button = window.document.getElementById(buttonid);
+  this.command = command;
+  this.parentcheck = parentFinder(check);
+  this.childcheck = childFinder(check);
+  this.clazz = clazz;
+  this.state = 0;
+  
     this.execCommand = function() {
       this.command(this, this.editor);
       this.editor.updateState();
@@ -283,6 +283,7 @@ function TWikiPickListDrawer(elementid, selector_id, tool) {
   this.tool = tool;
 
   this.save = function() {
+    this.editor.resumeEditing();
     this.tool.pick(this.varSelect.options[this.varSelect.selectedIndex].value);
   };
 };
@@ -339,6 +340,7 @@ function TWikiNewAttachmentDrawer(drawerid, formid, tool) {
   this.tool = tool;
 
   this.save = function() {
+    this.editor.resumeEditing();
     if (this.tool) {
       var path = this.form.filepath.value;
       var last = path.lastIndexOf('/');
@@ -476,14 +478,19 @@ TWikiNOPTool.prototype = new KupuTool;
 function TWikiWikiWordTool() {
   this.pick = function(wikiword) {
     var editor = this.editor;
+    var addWW = false;
+    var selection = editor.getSelection();
+    //if (selection.selection.anchorNode) {
+    var s = selection.startOffset();
+    var e = selection.endOffset();
+    var addWW = (s == e);
     var url = editor.config.view_url+editor.config.current_web+'/'+wikiword;
     var doc = editor.getInnerDocument();
     var elem = doc.createElement('a');
     elem.setAttribute('href', url);
-    var selection = editor.getSelection();
-    if (selection.startOffset() == selection.endOffset()) {
+    elem.setAttribute('class', 'generated');
+    if (addWW)
       elem.appendChild(doc.createTextNode(wikiword));
-    }
     _insertNode(editor, elem);
     editor.updateState();
   };

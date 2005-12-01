@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,27 +8,54 @@
  *
  *****************************************************************************/
 
-// $Id: kupusilvatools.js 11446 2005-04-26 09:24:54Z guido $
+// $Id: kupusilvatools.js 19933 2005-11-16 14:56:53Z guido $
 
 // a mapping from namespace to field names, here you can configure which 
 // metadata fields should be editable with the property editor (needs to
 // be moved to somewhere in Silva or something?)
 EDITABLE_METADATA = {
-    'http://infrae.com/namespaces/metadata/silva-extra': 
-            [['contactname', 'text', 0, 'Contact name'],
-                ['contactemail', 'text', 0, 'Contact email']
-            ],
-    'http://infrae.com/namespaces/metadata/abstract':
-            [['author', 'text', 1, 'Presenting author'],
-                ['co_authors', 'textarea', 0, 'Co-author(s)']]
+    'http://infrae.com/namespaces/metadata/silva-news': 
+            [['subjects', 'checkbox', 1, 'Subjects'],
+                ['target_audiences', 'checkbox', 1, 'Target audiences'],
+                ['start_datetime', 'datetime', 1, 'Start date/time'],
+                ['end_datetime', 'datetime', 0, 'End date/time'],
+                ['location', 'text', 0, 'Location']
+            ]
 }
-
+ 
 function SilvaLinkTool() {
     /* redefine the contextmenu elements */
 };
 
 SilvaLinkTool.prototype = new LinkTool;
-    
+
+SilvaLinkTool.prototype.updateLink = function (linkel, url, type, 
+                                                    name, target, title) {
+    if (type && type == 'anchor') {
+        linkel.removeAttribute('href');
+        linkel.setAttribute('name', name);
+    } else {
+        linkel.href = url;
+        linkel.setAttribute('silva_href', url);
+        if (linkel.innerHTML == "") {
+            var doc = this.editor.getInnerDocument();
+            linkel.appendChild(doc.createTextNode(title || url));
+        }
+        if (title) {
+            linkel.title = title;
+        } else {
+            linkel.removeAttribute('title');
+        }
+        if (target && target != '') {
+            linkel.setAttribute('target', target);
+        }
+        else {
+            linkel.removeAttribute('target');
+        };
+        linkel.style.color = this.linkcolor;
+    };
+};
+
 SilvaLinkTool.prototype.createContextMenuElements = function(selNode, event) {
     /* create the 'Create link' or 'Remove link' menu elements */
     var ret = new Array();
@@ -41,16 +68,18 @@ SilvaLinkTool.prototype.createContextMenuElements = function(selNode, event) {
     return ret;
 };
 
-function SilvaLinkToolBox(inputid, targetselectid, targetinputid, addbuttonid, updatebuttonid, delbuttonid, toolboxid, plainclass, activeclass) {
+function SilvaLinkToolBox(inputid, targetselectid, targetinputid, 
+                            addbuttonid, updatebuttonid, delbuttonid, 
+                            toolboxid, plainclass, activeclass) {
     /* create and edit links */
     
-    this.input = document.getElementById(inputid);
-    this.targetselect = document.getElementById(targetselectid);
-    this.targetinput = document.getElementById(targetinputid);
-    this.addbutton = document.getElementById(addbuttonid);
-    this.updatebutton = document.getElementById(updatebuttonid);
-    this.delbutton = document.getElementById(delbuttonid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.input = getFromSelector(inputid);
+    this.targetselect = getFromSelector(targetselectid);
+    this.targetinput = getFromSelector(targetinputid);
+    this.addbutton = getFromSelector(addbuttonid);
+    this.updatebutton = getFromSelector(updatebuttonid);
+    this.delbutton = getFromSelector(delbuttonid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
 };
@@ -80,13 +109,14 @@ SilvaLinkToolBox.prototype.selectTargetHandler = function(event) {
         input.style.display = 'inline';
     };
 };
-
+ 
 SilvaLinkToolBox.prototype.createLinkHandler = function(event) {
     var url = this.input.value;
-    var target = this.targetselect.options[this.targetselect.selectedIndex].value;
+    var target = this.targetselect.options[
+                    this.targetselect.selectedIndex].value;
     if (target == 'input') {
         target = this.targetinput.value;
-    };
+     };
     this.tool.createLink(url, 'link', null, target);
 };
 
@@ -96,10 +126,16 @@ SilvaLinkToolBox.prototype.updateState = function(selNode, event) {
     var href = '';
     while (currnode) {
         if (currnode.nodeName.toLowerCase() == 'a') {
-            href = currnode.getAttribute('href');
+            href = currnode.getAttribute('silva_href');
+            if (!href) {
+                href = currnode.getAttribute('href');
+            };
             if (href) {
                 if (this.toolboxel) {
                     this.toolboxel.className = this.activeclass;
+                    if (this.toolboxel.open_handler) {
+                        this.toolboxel.open_handler();
+                    };
                 };
                 this.input.value = href;
                 var target = currnode.getAttribute('target');
@@ -121,7 +157,8 @@ SilvaLinkToolBox.prototype.updateState = function(selNode, event) {
                         this.targetinput.style.display = 'none';
                     } else {
                         // XXX this is pretty hard-coded...
-                        this.targetselect.selectedIndex = this.targetselect.options.length - 1;
+                        this.targetselect.selectedIndex = 
+                                this.targetselect.options.length - 1;
                         this.targetinput.value = target;
                         this.targetinput.style.display = 'inline';
                     };
@@ -145,30 +182,30 @@ SilvaLinkToolBox.prototype.updateState = function(selNode, event) {
     };
     this.input.value = '';
 };
-
+ 
 function SilvaImageTool(editelid, urlinputid, targetselectid, targetinputid, 
                         hireslinkradioid, linklinkradioid, linkinputid, 
                         alignselectid, titleinputid, toolboxid, plainclass, 
                         activeclass) {
     /* Silva specific image tool */
-    this.editel = document.getElementById(editelid);
-    this.urlinput = document.getElementById(urlinputid);
-    this.targetselect = document.getElementById(targetselectid);
-    this.targetinput = document.getElementById(targetinputid);
-    this.hireslinkradio = document.getElementById(hireslinkradioid);
-    this.linklinkradio = document.getElementById(linklinkradioid);
-    this.linkinput = document.getElementById(linkinputid);
-    this.alignselect = document.getElementById(alignselectid);
-    this.titleinput = document.getElementById(titleinputid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.editel = getFromSelector(editelid);
+    this.urlinput = getFromSelector(urlinputid);
+    this.targetselect = getFromSelector(targetselectid);
+    this.targetinput = getFromSelector(targetinputid);
+    this.hireslinkradio = getFromSelector(hireslinkradioid);
+    this.linklinkradio = getFromSelector(linklinkradioid);
+    this.linkinput = getFromSelector(linkinputid);
+    this.alignselect = getFromSelector(alignselectid);
+    this.titleinput = getFromSelector(titleinputid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
-};
+}
 
 SilvaImageTool.prototype = new ImageTool;
 
 SilvaImageTool.prototype.initialize = function(editor) {
-    this.editor = editor;
+   this.editor = editor;
     addEventHandler(this.targetselect, 'change', this.setTarget, this);
     addEventHandler(this.targetselect, 'change', this.selectTargetHandler, this);
     addEventHandler(this.targetinput, 'change', this.setTarget, this);
@@ -203,7 +240,10 @@ SilvaImageTool.prototype.updateState = function(selNode, event) {
     var image = this.editor.getNearestParentOfType(selNode, 'img');
     if (image) {
         this.editel.style.display = 'block';
-        var src = image.getAttribute('src');
+        var src = image.getAttribute('silva_src');
+        if (!src) {
+            src = image.getAttribute('src');
+        };
         this.urlinput.value = src;
         var target = image.getAttribute('target');
         if (!target) {
@@ -238,6 +278,9 @@ SilvaImageTool.prototype.updateState = function(selNode, event) {
             this.linkinput.value = '';
         };
         if (this.toolboxel) {
+            if (this.toolboxel.open_handler) {
+                this.toolboxel.open_handler();
+            };
             this.toolboxel.className = this.activeclass;
         };
         var align = image.getAttribute('alignment');
@@ -263,6 +306,25 @@ SilvaImageTool.prototype.updateState = function(selNode, event) {
     };
 };
 
+SilvaImageTool.prototype.createImage = function(url, alttext, imgclass) {
+    /* create an image */
+    var img = this.editor.getInnerDocument().createElement('img');
+    img.src = url;
+    img.setAttribute('silva_src', url);
+    img.removeAttribute('height');
+    img.removeAttribute('width');
+    if (alttext) {
+        img.alt = alttext;
+    };
+    if (imgclass) {
+        img.className = imgclass;
+    };
+    img = this.editor.insertNodeAtSelection(img, 1);
+    this.editor.logMessage(_('Image inserted'));
+    this.editor.updateState();
+    return img;
+};
+    
 SilvaImageTool.prototype.setTarget = function() {
     var target = this.targetselect.options[this.targetselect.selectedIndex].value;
     if (target == 'input') {
@@ -285,6 +347,7 @@ SilvaImageTool.prototype.setSrc = function() {
     
     var src = this.urlinput.value;
     img.setAttribute('src', src);
+    img.setAttribute('silva_src', src);
     this.editor.logMessage('Image updated');
 };
 
@@ -346,7 +409,7 @@ SilvaImageTool.prototype.setAlign = function() {
     var align = this.alignselect.options[this.alignselect.selectedIndex].value;
     image.setAttribute('alignment', align);
 };
-
+ 
 function SilvaTableTool() {
     /* Silva specific table functionality
         overrides most of the table functionality, required because Silva requires
@@ -516,36 +579,49 @@ function SilvaTableTool() {
         for (var i=0; i < widths.length; i++) {
             widths[i] = widths[i].strip();
             silva_column_info.push('C:' + widths[i]);
-            widths[i] = parseInt(widths[i]);
+            var widthint = parseInt(widths[i]);
+            if (!isNaN(widthint)) {
+                widths[i] = widthint;
+            } else if (widths[i] != '*') {
+                alert(_('Illegal or missing width entry in column info!'));
+                return;
+            };
         };
         silva_column_info = silva_column_info.join(' ');
         table.setAttribute('silva_column_info', silva_column_info);
         
+        // find the first cell, use its parent as the row
+        // XXX note that this might potentially go wrong on nested tables!
+        var firstrow = table.getElementsByTagName('td')[0].parentNode;
+
         // now convert the relative widths to percentages
         // first find the first row containing cells
         var totalunits = 0;
         for (var i=0; i < widths.length; i++) {
-            totalunits += widths[i];
-        };
-        var iterator = new NodeIterator(table);
-        var currnode = null;
-        var row = null;
-        while (currnode = iterator.next()) {
-            if (currnode.nodeName.toLowerCase() == 'td') {
-                row = currnode.parentNode;
-                break;
+            if (widths[i] == '*') {
+                totalunits += 1;
+            } else {
+                totalunits += widths[i];
             };
         };
-        var iterator = new NodeIterator(row);
+
         var percent_per_unit = 100.0 / totalunits;
-        var currcell = null;
-        for (var i=0; i < widths.length; i++) {
-            while (currcell = iterator.next()) {
-                if (currcell.nodeName.toLowerCase() == 'td') {
-                    currcell.setAttribute('width', '' + (widths[i] * percent_per_unit) + '%');
-                    break;
-                };
+
+        var children = firstrow.childNodes;
+        var currcellindex = 0;
+        for (var i=0; i < children.length; i++) {
+            var child = children[i];
+            if (child.nodeType != 1 || child.nodeName.toLowerCase() != 'td') {
+                continue;
             };
+            var width = widths[currcellindex];
+            if (width != '*') {
+                child.setAttribute('width', '' + 
+                            (width * percent_per_unit) + '%');
+            } else {
+                child.removeAttribute('width');
+            };
+            currcellindex++;
         };
     };
 
@@ -567,7 +643,11 @@ function SilvaTableTool() {
             silvacolinfo = silvacolinfo.split(' ');
             for (var i=0; i < silvacolinfo.length; i++) {
                 var pair = silvacolinfo[i].split(':');
-                widths.push(parseInt(pair[1]));
+                if (pair[1] == '*') {
+                    widths.push('*');
+                } else {
+                    widths.push(parseInt(pair[1]));
+                };
             };
             widths = this._factorWidths(widths);
         };
@@ -762,22 +842,22 @@ function SilvaTableToolBox(addtabledivid, edittabledivid, newrowsinputid,
         a completely different format for tables
     */
 
-    this.addtablediv = document.getElementById(addtabledivid);
-    this.edittablediv = document.getElementById(edittabledivid);
-    this.newrowsinput = document.getElementById(newrowsinputid);
-    this.newcolsinput = document.getElementById(newcolsinputid);
-    this.makeheaderinput = document.getElementById(makeheaderinputid);
-    this.classselect = document.getElementById(classselectid);
-    this.alignselect = document.getElementById(alignselectid);
-    this.widthinput = document.getElementById(widthinputid);
-    this.addtablebutton = document.getElementById(addtablebuttonid);
-    this.addrowbutton = document.getElementById(addrowbuttonid);
-    this.delrowbutton = document.getElementById(delrowbuttonid);
-    this.addcolbutton = document.getElementById(addcolbuttonid);
-    this.delcolbutton = document.getElementById(delcolbuttonid);
-    this.fixbutton = document.getElementById(fixbuttonid);
-    this.delbutton = document.getElementById(delbuttonid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.addtablediv = getFromSelector(addtabledivid);
+    this.edittablediv = getFromSelector(edittabledivid);
+    this.newrowsinput = getFromSelector(newrowsinputid);
+    this.newcolsinput = getFromSelector(newcolsinputid);
+    this.makeheaderinput = getFromSelector(makeheaderinputid);
+    this.classselect = getFromSelector(classselectid);
+    this.alignselect = getFromSelector(alignselectid);
+    this.widthinput = getFromSelector(widthinputid);
+    this.addtablebutton = getFromSelector(addtablebuttonid);
+    this.addrowbutton = getFromSelector(addrowbuttonid);
+    this.delrowbutton = getFromSelector(delrowbuttonid);
+    this.addcolbutton = getFromSelector(addcolbuttonid);
+    this.delcolbutton = getFromSelector(delcolbuttonid);
+    this.fixbutton = getFromSelector(fixbuttonid);
+    this.delbutton = getFromSelector(delbuttonid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
 
@@ -822,6 +902,9 @@ function SilvaTableToolBox(addtabledivid, edittabledivid, newrowsinputid,
             };
             selectSelectItem(this.classselect, table.className);
             if (this.toolboxel) {
+                if (this.toolboxel.open_handler) {
+                    this.toolboxel.open_handler();
+                };
                 this.toolboxel.className = this.activeclass;
             };
         } else {
@@ -840,7 +923,7 @@ function SilvaTableToolBox(addtabledivid, edittabledivid, newrowsinputid,
         var rows = parseInt(this.newrowsinput.value);
         var cols = parseInt(this.newcolsinput.value);
         var makeHeader = this.makeheaderinput.checked;
-        var classchooser = document.getElementById("kupu-table-classchooser-add");
+        var classchooser = getFromSelector("kupu-table-classchooser-add");
         var tableclass = this.classselect.options[this.classselect.selectedIndex].value;
         this.tool.createTable(rows, cols, makeHeader, tableclass);
     };
@@ -1016,11 +1099,11 @@ SilvaTableToolBox.prototype = new TableToolBox;
 
 function SilvaIndexTool(inputid, addbuttonid, updatebuttonid, deletebuttonid, toolboxid, plainclass, activeclass) {
     /* a tool to manage index items (named anchors) for Silva */
-    this.input = document.getElementById(inputid);
-    this.addbutton = document.getElementById(addbuttonid);
-    this.updatebutton = document.getElementById(updatebuttonid);
-    this.deletebutton = document.getElementById(deletebuttonid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.input = getFromSelector(inputid);
+    this.addbutton = getFromSelector(addbuttonid);
+    this.updatebutton = getFromSelector(updatebuttonid);
+    this.deletebutton = getFromSelector(deletebuttonid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
 
@@ -1164,6 +1247,9 @@ function SilvaIndexTool(inputid, addbuttonid, updatebuttonid, deletebuttonid, to
         var indexel = this.editor.getNearestParentOfType(selNode, 'A');
         if (indexel && !indexel.getAttribute('href')) {
             if (this.toolboxel) {
+                if (this.toolboxel.open_handler) {
+                    this.toolboxel.open_handler();
+                };
                 this.toolboxel.className = this.activeclass;
             };
             this.input.value = indexel.getAttribute('name');
@@ -1194,10 +1280,10 @@ function SilvaIndexTool(inputid, addbuttonid, updatebuttonid, deletebuttonid, to
 SilvaIndexTool.prototype = new KupuTool;
 
 function SilvaTocTool(depthselectid, addbuttonid, delbuttonid, toolboxid, plainclass, activeclass) {
-    this.depthselect = document.getElementById(depthselectid);
-    this.addbutton = document.getElementById(addbuttonid);
-    this.delbutton = document.getElementById(delbuttonid);
-    this.toolbox = document.getElementById(toolboxid);
+    this.depthselect = getFromSelector(depthselectid);
+    this.addbutton = getFromSelector(addbuttonid);
+    this.delbutton = getFromSelector(delbuttonid);
+    this.toolbox = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
     this._inside_toc = false;
@@ -1259,6 +1345,9 @@ function SilvaTocTool(depthselectid, addbuttonid, delbuttonid, toolboxid, plainc
             this.delbutton.style.display = 'inline';
             this._inside_toc = true;
             if (this.toolbox) {
+                if (this.toolbox.open_handler) {
+                    this.toolbox.open_handler();
+                };
                 this.toolbox.className = this.activeclass;
             };
         } else {
@@ -1373,14 +1462,14 @@ function SilvaAbbrTool(abbrradioid, acronymradioid, radiocontainerid, titleinput
                             addbuttonid, updatebuttonid, delbuttonid,
                             toolboxid, plainclass, activeclass) {
     /* tool to manage citation elements */
-    this.abbrradio = document.getElementById(abbrradioid);
-    this.acronymradio = document.getElementById(acronymradioid);
-    this.radiocontainer = document.getElementById(radiocontainerid);
-    this.titleinput = document.getElementById(titleinputid);
-    this.addbutton = document.getElementById(addbuttonid);
-    this.updatebutton = document.getElementById(updatebuttonid);
-    this.delbutton = document.getElementById(delbuttonid);
-    this.toolbox = document.getElementById(toolboxid);
+    this.abbrradio = getFromSelector(abbrradioid);
+    this.acronymradio = getFromSelector(acronymradioid);
+    this.radiocontainer = getFromSelector(radiocontainerid);
+    this.titleinput = getFromSelector(titleinputid);
+    this.addbutton = getFromSelector(addbuttonid);
+    this.updatebutton = getFromSelector(updatebuttonid);
+    this.delbutton = getFromSelector(delbuttonid);
+    this.toolbox = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
     
@@ -1403,6 +1492,9 @@ function SilvaAbbrTool(abbrradioid, acronymradioid, radiocontainerid, titleinput
             this.titleinput.value = element.getAttribute('title');
             this.radiocontainer.style.display = 'none';
             if (this.toolbox) {
+                if (this.toolbox.open_handler) {
+                    this.toolbox.open_handler();
+                };
                 this.toolbox.className = this.activeclass;
             };
         } else {
@@ -1495,12 +1587,12 @@ SilvaAbbrTool.prototype = new KupuTool;
 function SilvaCitationTool(authorinputid, sourceinputid, addbuttonid, updatebuttonid, delbuttonid, 
                             toolboxid, plainclass, activeclass) {
     /* tool to manage citation elements */
-    this.authorinput = document.getElementById(authorinputid);
-    this.sourceinput = document.getElementById(sourceinputid);
-    this.addbutton = document.getElementById(addbuttonid);
-    this.updatebutton = document.getElementById(updatebuttonid);
-    this.delbutton = document.getElementById(delbuttonid);
-    this.toolbox = document.getElementById(toolboxid);
+    this.authorinput = getFromSelector(authorinputid);
+    this.sourceinput = getFromSelector(sourceinputid);
+    this.addbutton = getFromSelector(addbuttonid);
+    this.updatebutton = getFromSelector(updatebuttonid);
+    this.delbutton = getFromSelector(delbuttonid);
+    this.toolbox = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
     this._inside_citation = false;
@@ -1574,6 +1666,9 @@ function SilvaCitationTool(authorinputid, sourceinputid, addbuttonid, updatebutt
             this.sourceinput.value = citation.getAttribute('source');
             this._inside_citation = true;
             if (this.toolbox) {
+                if (this.toolbox.open_handler) {
+                    this.toolbox.open_handler();
+                };
                 this.toolbox.className = this.activeclass;
             };
         } else {
@@ -1671,13 +1766,13 @@ SilvaCitationTool.prototype = new KupuTool;
 
 function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cancelbuttonid,
                                     updatebuttonid, delbuttonid, toolboxid, plainclass, activeclass) {
-    this.idselect = document.getElementById(idselectid);
-    this.formcontainer = document.getElementById(formcontainerid);
-    this.addbutton = document.getElementById(addbuttonid);
-    this.cancelbutton = document.getElementById(cancelbuttonid);
-    this.updatebutton = document.getElementById(updatebuttonid);
-    this.delbutton = document.getElementById(delbuttonid);
-    this.toolbox = document.getElementById(toolboxid);
+    this.idselect = getFromSelector(idselectid);
+    this.formcontainer = getFromSelector(formcontainerid);
+    this.addbutton = getFromSelector(addbuttonid);
+    this.cancelbutton = getFromSelector(cancelbuttonid);
+    this.updatebutton = getFromSelector(updatebuttonid);
+    this.delbutton = getFromSelector(delbuttonid);
+    this.toolbox = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
 
@@ -1690,8 +1785,16 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
     // store the base url, this will be prepended to the id to form the url to
     // get the codesource from (Zope's acquisition will make sure it ends up on
     // the right object)
-    var urlparts = document.location.toString().split('/')
-    this._baseurl = urlparts.slice(0, urlparts.length - 2).join('/');
+    var urlparts = document.location.pathname.toString().split('/')
+    var urlparts_to_use = [];
+    for (var i=0; i < urlparts.length; i++) {
+        var part = urlparts[i];
+        if (part == 'edit') {
+            break;
+        };
+        urlparts_to_use.push(part);
+    };
+    this._baseurl = urlparts_to_use.join('/');
 
     this.initialize = function(editor) {
         this.editor = editor;
@@ -1704,7 +1807,7 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
             addEventHandler(editor.getInnerDocument(), 'keydown', this.handleKeyPressOnExternalSource, this);
             addEventHandler(editor.getInnerDocument(), 'keyup', this.handleKeyPressOnExternalSource, this);
         };
-
+        
         // search for a special serialized identifier of the current document
         // which is used to send to the ExternalSource element when sending
         // requests so the ExternalSources know their context
@@ -1716,7 +1819,7 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
                 this.docref = meta.getAttribute('content');
             };
         };
-        
+         
         this.updatebutton.style.display = 'none';
         this.delbutton.style.display = 'none';
         this.cancelbutton.style.display = 'none';
@@ -1792,16 +1895,17 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
             handler.call(this, this._url);
             return;
         };
-        var request = Sarissa.getXmlHttpRequest();
-        request.open('GET', this._baseurl + '/edit/get_extsource_url?id=' + id, true);
+        var request = new XMLHttpRequest();
+        request.open('GET', 
+            this._baseurl + '/edit/get_extsource_url?id=' + id, true);
         var callback = new ContextFixer(function() {
-                                            if (request.readyState == 4) {
-                                                var url = request.responseText;
-                                                this._id = id;
-                                                this._url = url;
-                                                handler.call(this, url);
-                                            };
-                                        }, this);
+                    if (request.readyState == 4) {
+                        var url = request.responseText;
+                        this._id = id;
+                        this._url = url;
+                        handler.call(this, url);
+                    };
+                }, this);
         request.onreadystatechange = callback.execute;
         request.send('');
     };
@@ -1815,7 +1919,7 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
             // validate the data and take further actions
             var formdata = this._gatherFormData();
             var doc = window.document;
-            var request = Sarissa.getXmlHttpRequest();
+            var request = new XMLHttpRequest();
             request.open('POST', this._url + '/validate_form_to_request', true);
             var callback = new ContextFixer(this._addExternalSourceIfValidated, request, this);
             request.onreadystatechange = callback.execute;
@@ -1826,7 +1930,7 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
 
     this._continueStartExternalSourceEdit = function(url) {
         url = url + '/get_rendered_form_for_editor?docref=' + this.docref;
-        var request = Sarissa.getXmlHttpRequest();
+        var request = new XMLHttpRequest();
         request.open('GET', url, true);
         var callback = new ContextFixer(this._addFormToTool, request, this);
         request.onreadystatechange = callback.execute;
@@ -1851,7 +1955,7 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
         url = url + '/get_rendered_form_for_editor';
         var formdata = this._gatherFormDataFromElement();
         formdata += '&docref=' + this.docref;
-        var request = Sarissa.getXmlHttpRequest();
+        var request = new XMLHttpRequest();
         request.open('POST', url, true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var callback = new ContextFixer(this._addFormToTool, request, this);
@@ -1867,6 +1971,11 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
 
     this._addFormToTool = function(object) {
         if (this.readyState == 4) {
+            if (this.status != '200') {
+                // element not found, return without doing anythink
+                object.resetTool();
+                return;
+            };
             while (object.formcontainer.hasChildNodes()) {
                 object.formcontainer.removeChild(object.formcontainer.firstChild);
             };
@@ -2076,7 +2185,7 @@ function SilvaExternalSourceTool(idselectid, formcontainerid, addbuttonid, cance
 SilvaExternalSourceTool.prototype = new KupuTool;
 
 function SilvaKupuUI(textstyleselectid) {
-    this.tsselect = document.getElementById(textstyleselectid);
+    this.tsselect = getFromSelector(textstyleselectid);
 
     this.updateState = function(selNode) {
         /* set the text-style pulldown */
@@ -2162,12 +2271,13 @@ function SilvaKupuUI(textstyleselectid) {
 
 SilvaKupuUI.prototype = new KupuUI;
 
-function SilvaPropertyTool(tablerowid) {
+function SilvaPropertyTool(tablerowid, formid) {
     /* a simple tool to edit metadata fields
 
         the fields' contents are stored in Silva's metadata sets
     */
     this.tablerow = document.getElementById(tablerowid);
+    this.form = document.getElementById(formid);
     this.table = this.tablerow.parentNode;
     while (!this.table.nodeName.toLowerCase() == 'table') {
         this.table = this.table.parentNode;
@@ -2196,10 +2306,16 @@ SilvaPropertyTool.prototype.initialize = function(editor) {
             continue;
         };
         var rowcopy = this.tablerow.cloneNode(true);
-        var tag = this.parseFormElIntoRow(meta, rowcopy);
+        this.tablerow.parentNode.appendChild(rowcopy);
+        // create the form elements, pass in the rowcopy so the row can be
+        // rendered real-time, this because IE doesn't select checkboxes that
+        // arent' visible(!!)
+        this.parseFormElIntoRow(meta, rowcopy);
+        /*
         if (tag) {
             this.tablerow.parentNode.appendChild(tag);
         };
+        */
     };
     // throw away the original row: we don't need it anymore...
     this.tablerow.parentNode.removeChild(this.tablerow);
@@ -2242,13 +2358,39 @@ SilvaPropertyTool.prototype.parseFormElIntoRow = function(metatag, tablerow) {
     tablerow.getElementsByTagName('td')[0].appendChild(titlefield);
     titlefield.className = 'metadata-field';
     
-    var input = null;
     var value = metatag.getAttribute('content');
     var parentvalue = metatag.getAttribute('parentcontent');
-    if (type == 'text') {
+    var td = tablerow.getElementsByTagName('td')[1]
+    if (type == 'text' || type == 'textarea' || type == 'datetime') {
+        this._createSimpleItemHTML(type, value, name, 
+                                    namespace, mandatory, td);
+    } else if (type == 'checkbox') {
+        var titlecell = tablerow.getElementsByTagName('td')[0];
+        this._createCheckboxItemHTML(titlecell, value, name, namespace, 
+                                        mandatory, td);
+    };
+    if (parentvalue && parentvalue != '') {
+        td.appendChild(document.createElement('br'));
+        td.appendChild(document.createTextNode('acquired value:'));
+        td.appendChild(document.createElement('br'));
+        td.appendChild(document.createTextNode(parentvalue));
+    };
+
+    return tablerow;
+};
+
+// just to make the above method a bit more readable
+SilvaPropertyTool.prototype._createSimpleItemHTML = function(type, value, 
+                                                            name, namespace,
+                                                            mandatory, td) {
+    var input = null;
+    if (type == 'text' || type == 'datetime') {
         input = document.createElement('input');
-        input.value = value;
         input.setAttribute('type', 'text');
+        input.value = value;
+        if (type == 'datetime') {
+            input.setAttribute('widget:type', 'datetime');
+        };
     } else if (type == 'textarea') {
         input = document.createElement('textarea');
         var content = document.createTextNode(value);
@@ -2260,38 +2402,136 @@ SilvaPropertyTool.prototype.parseFormElIntoRow = function(metatag, tablerow) {
     if (mandatory) {
         input.setAttribute('mandatory', 'true');
     };
-    var td = tablerow.getElementsByTagName('td')[1]
     td.appendChild(input);
-    if (parentvalue && parentvalue != '') {
-        td.appendChild(document.createElement('br'));
-        td.appendChild(document.createTextNode('acquired value:'));
-        td.appendChild(document.createElement('br'));
-        td.appendChild(document.createTextNode(parentvalue));
-    };
+};
 
-    return tablerow;
+SilvaPropertyTool.prototype._createCheckboxItemHTML = function(titlecell, 
+                                                    value, name, namespace, 
+                                                    mandatory, td) {
+    // elements are seperated by ||
+    var infos = value.split('||');
+
+    // messy stuff coming up, that make the checkboxes appear in some
+    // 'foldable' div
+    var outerdiv = document.createElement('div');
+    outerdiv.className = 'kupu-properties-checkbox-outerdiv';
+
+    // the arrow and 'items' label
+    var itemsdiv = document.createElement('div');
+    outerdiv.appendChild(itemsdiv);
+    var img = document.createElement('img');
+    // XXX would be nice if this would be absolute...
+    img.src = 'kupu_silva/closed_arrow.gif'; 
+    outerdiv.image = img; // XXX memory leak!!
+    itemsdiv.appendChild(img);
+    itemsdiv.appendChild(document.createTextNode(_('items')));
+    itemsdiv.setAttribute('title', _('click to unfold'));
+
+    // handler for showing/hiding the checkbox divs
+    var handler = function(evt) {
+        if (this.lastChild.style.display == 'none') {
+            this.image.src = 'kupu_silva/opened_arrow.gif';
+            this.image.setAttribute('title', _('click to fold'));
+            this.lastChild.style.display = 'block';
+        } else {
+            this.image.src = 'kupu_silva/closed_arrow.gif';
+            this.image.setAttribute('title', _('click to unfold'));
+            this.lastChild.style.display = 'none';
+        }
+    };
+    addEventHandler(itemsdiv, 'click', handler, outerdiv);
+    addEventHandler(titlecell, 'click', handler, outerdiv);
+
+    // innerdiv is where the actual checkboxes are displayed in, and what
+    // is collapsed/uncollapsed
+    var innerdiv = document.createElement('div');
+    innerdiv.className = 'kupu-properties-checkbox-innerdiv';
+    outerdiv.appendChild(innerdiv);
+    td.appendChild(outerdiv);
+
+    for (var i=0; i < infos.length; i++) {
+        // in certain cases the value you want to display is different
+        // from that you want to store, in that case seperate id from
+        // value with a |, there should always be a value|checked, but
+        // in some cases you may want a value|title|checked set...
+        var info = infos[i].split('|');
+        var itemvalue = info[0];
+        var title = info[0];
+        var checked = (info[1] == 'true' || info[1] == 'yes');
+        if (info.length == 3) {
+            title = info[1];
+            checked = (info[2] == 'true' || info[2] == 'yes');
+        };
+        var div = document.createElement('div');
+        div.className = 'kupu-properties-checkbox-line';
+        innerdiv.appendChild(div);
+
+        var cbdiv = document.createElement('div');
+        cbdiv.className = 'kupu-properties-checkbox-input';
+        div.appendChild(cbdiv);
+        
+        var checkbox = document.createElement('input');
+        checkbox.setAttribute('name', name);
+        checkbox.setAttribute('namespace', namespace);
+        checkbox.type = 'checkbox';
+        checkbox.value = itemvalue;
+        cbdiv.appendChild(checkbox);
+        if (checked) {
+            checkbox.checked = 'checked';
+        };
+        checkbox.className = 'metadata-checkbox';
+        // XXX a bit awkward to set this on all checkboxes
+        if (mandatory) {
+            checkbox.setAttribute('mandatory', 'true');
+        };
+        var textdiv = document.createElement('div');
+        textdiv.className = 'kupu-properties-checkbox-item-title';
+        textdiv.appendChild(document.createTextNode(title));
+        div.appendChild(textdiv);
+    };
+    // we can not hide the checkboxes earlier because IE requires them
+    // to be *visible* in order to check them from code :(
+    innerdiv.style.display = 'none';
 };
 
 SilvaPropertyTool.prototype.beforeSave = function() {
     /* save the metadata to the document */
+    if (window.widgeteer) {
+        widgeteer.widget_registry.prepareForm(this.form);
+    };
     var doc = this.editor.getInnerDocument();
     var inputs = this.table.getElementsByTagName('input');
     var textareas = this.table.getElementsByTagName('textarea');
+    var checkboxdata = {}; // name: value for all checkboxes checked
     var errors = [];
     var okay = [];
     for (var i=0; i < inputs.length; i++) {
         var input = inputs[i];
-        if (!input.getAttribute('type') == 'text' || !input.getAttribute('namespace')) {
+        if (!input.getAttribute('namespace')) {
             continue;
         };
         var name = input.getAttribute('name');
         var scheme = input.getAttribute('namespace');
-        var value = input.value;
-        if (input.getAttribute('mandatory') && value.strip() == '') {
-            errors.push(name);
-            continue;
+        if (input.getAttribute('type') == 'text') {
+            var value = input.value;
+            if (input.getAttribute('mandatory') && value.strip() == '') {
+                errors.push(name);
+                continue;
+            };
+            okay.push([name, scheme, value]);
+        } else if (input.getAttribute('type') == 'checkbox') {
+            if (checkboxdata[name] === undefined) {
+                checkboxdata[name] = [];
+                // XXX yuck!!
+                checkboxdata[name].namespace = scheme;
+                checkboxdata[name].mandatory = 
+                    input.getAttribute('mandatory') ? true : false;
+            };
+            if (input.checked) {
+                checkboxdata[name].push(
+                    input.value.replace('|', '&pipe;', 'g'));
+            };
         };
-        okay.push([name, scheme, value]);
     };
     for (var i=0; i < textareas.length; i++) {
         var textarea = textareas[i];
@@ -2304,15 +2544,25 @@ SilvaPropertyTool.prototype.beforeSave = function() {
         };
         okay.push([name, scheme, value]);
     };
+    for (var name in checkboxdata) {
+        if (checkboxdata[name].mandatory && checkboxdata[name].length == 0) {
+            errors.push(name);
+        } else {
+            var data = checkboxdata[name];
+            okay.push([name, data.namespace, data.join('|')]);
+        };
+    };
     if (errors.length) {
-        throw('Error: fields ' + errors.join(', ') + ' are required but not filled in');
+        throw('Error in properties: fields ' + errors.join(', ') + 
+                ' are required but not filled in');
     };
     for (var i=0; i < okay.length; i++) {
         this._addMetaTag(doc, okay[i][0], okay[i][1], okay[i][2]);
     };
 };
 
-SilvaPropertyTool.prototype._addMetaTag = function(doc, name, scheme, value, parentvalue) {
+SilvaPropertyTool.prototype._addMetaTag = function(doc, name, scheme, 
+                                                    value, parentvalue) {
     var head = doc.getElementsByTagName('head')[0];
     if (!head) {
         throw('The editable document *must* have a <head> element!');

@@ -5,10 +5,11 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     >
-    <kupu:id>$Id: body.kupu 11418 2005-04-25 02:55:31Z gregor $</kupu:id>
 
   <kupu:part name="body">
-    <body onload="kupu = startKupu();">
+    <body 
+      onload="kupu = startKupu(); new KupuLenyaDist().init();">
+      <h1/>
       <kupu:define-slot name="body" />
     </body>
   </kupu:part>

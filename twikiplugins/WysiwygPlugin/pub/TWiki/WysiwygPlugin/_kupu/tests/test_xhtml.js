@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id$
+// $Id: test_xhtml.js 15802 2005-08-09 09:06:11Z duncan $
 
 // Various tests for html -> xhtml processing.
 
@@ -20,7 +20,7 @@ function KupuXhtmlTestCase() {
     }
     this.verifyResult = function(newdoc, exp) {
         var expected = this.incontext(exp);
-        var actual = newdoc.xml;
+        var actual = Sarissa.serialize(newdoc);
         actual = actual.replace('\xa0', '&nbsp;');
         if (actual == expected)
             return;
@@ -31,7 +31,7 @@ function KupuXhtmlTestCase() {
             var e = context.exec(expected)[1];
             throw('Assertion failed: ' + a + ' != ' + e);
         }
-        throw('Assertion failed: ' + var1 + ' != ' + var2);
+        throw('Assertion failed: ' + actual + ' != ' + expected);
     }
 
     this.conversionTest = function(data, expected) {
@@ -44,20 +44,11 @@ function KupuXhtmlTestCase() {
     }
 
     this.setUp = function() {
+        var iframe = document.getElementById('iframe');
+        this.doc = iframe.contentWindow.document;
+        this.body = this.doc.getElementsByTagName('body')[0];
+        this.doc.getElementsByTagName('title')[0].text = 'test';
         this.editor = new KupuEditor(null, {}, null);
-        this.doc = document.getElementById('iframe').contentWindow.document;
-        var head = this.doc.createElement('head');
-        var title = this.doc.createElement('title');
-        var titletext = this.doc.createTextNode('test');
-        this.body = this.doc.createElement('body');
-
-        title.appendChild(titletext);
-        head.appendChild(title);
-        var html = this.doc.documentElement;
-        while (html.childNodes.length > 0)
-            html.removeChild(html.childNodes[0]);
-        html.appendChild(head);
-        html.appendChild(this.body);
     };
 
     this.arrayContains = function(ary, test) {
@@ -215,6 +206,10 @@ function KupuXhtmlTestCase() {
         this.editor.xhtmlvalid.setAttrFilter(['special']);
         this.conversionTest(data, data);
     }
+
+    this.tearDown = function() {
+        this.body.innerHTML = '';
+    };
 }
 
 KupuXhtmlTestCase.prototype = new TestCase;

@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupueditor.js 11449 2005-04-26 09:57:16Z guido $
+// $Id: kupueditor.js 18104 2005-10-03 14:10:11Z duncan $
 
 //----------------------------------------------------------------------------
 // Main classes
@@ -34,8 +34,7 @@ function KupuDocument(iframe) {
     // methods
     this.execCommand = function(command, arg) {
         /* delegate execCommand */
-        // XXX Is the command always a string? Can't it be '' or 0 or so?
-        if (!arg) arg = null;
+        if (arg === undefined) arg = null;
         this.document.execCommand(command, false, arg);
     };
     
@@ -69,7 +68,6 @@ function KupuDocument(iframe) {
     this.getEditable = function() {
         return this.editable;
     };
-
 };
 
 /* KupuEditor
@@ -91,11 +89,12 @@ function KupuEditor(document, config, logger) {
     this._designModeSetAttempts = 0;
     this._initialized = false;
 
-    // some properties to save the selection, required for IE to remember where 
-    // in the iframe the selection was
+    // some properties to save the selection, required for IE to remember 
+    // where in the iframe the selection was
     this._previous_range = null;
 
-    // this property is true if the content is changed, false if no changes are made yet
+    // this property is true if the content is changed, false if no changes 
+    // are made yet
     this.content_changed = false;
 
     // methods
@@ -103,7 +102,6 @@ function KupuEditor(document, config, logger) {
         /* Should be called on iframe.onload, will initialize the editor */
         //DOM2Event.initRegistration();
         this._initializeEventHandlers();
-        this.focusDocument();
         if (this.getBrowserName() == "IE") {
             var body = this.getInnerDocument().getElementsByTagName('body')[0];
             body.setAttribute('contentEditable', 'true');
@@ -117,7 +115,7 @@ function KupuEditor(document, config, logger) {
         } else {
             this._setDesignModeWhenReady();
         };
-        this.logMessage('Editor initialized');
+        this.logMessage(_('Editor initialized'));
     };
 
     this.setContextMenu = function(menu) {
@@ -156,9 +154,7 @@ function KupuEditor(document, config, logger) {
         // unfortunately it's not possible to do this on blur, since that's
         // too late. also (some versions of?) IE 5.5 doesn't support the
         // onbeforedeactivate event, which would be ideal here...
-        if (this.getBrowserName() == 'IE') {
-            this._saveSelection();
-        };
+        this._saveSelection();
 
         if (event.type == 'click' || event.type=='mouseup' ||
                 (event.type == 'keyup' && 
@@ -184,22 +180,28 @@ function KupuEditor(document, config, logger) {
                     this.updateState(event);
                     break;
                 } else {
-                    this.logMessage('Exception while processing updateState on ' + id + ': ' + e, 2);
+                    this.logMessage(
+                        _('Exception while processing updateState on ' +
+                            '${id}: ${msg}', {'id': id, 'msg': e}), 2);
                 };
             };
         };
     };
     
     this.saveDocument = function(redirect, synchronous) {
-        /* save the document, redirect if te arg is provided and the save is successful 
-        
-            the (optional) redirect argument can be used to make the client jump to
-            another URL when the save action was successful.
+        /* save the document
+
+            the (optional) redirect argument can be used to make the client 
+            jump to another URL when the save action was successful.
+
+            synchronous is a boolean to allow sync saving (usually better to
+            not save synchronous, since it may make browsers freeze on errors,
+            this is used for saveOnPart, though)
         */
         
         // if no dst is available, bail out
         if (!this.config.dst) {
-            this.logMessage('No destination URL available!', 2);
+            this.logMessage(_('No destination URL available!'), 2);
             return;
         }
         var sourcetool = this.getTool('sourceedittool');
@@ -212,7 +214,7 @@ function KupuEditor(document, config, logger) {
         this._initialized = false;
         
         // set the window status so people can see we're actually saving
-        window.status= "Please wait while saving document...";
+        window.status= _("Please wait while saving document...");
 
         // call (optional) beforeSave() method on all tools
         for (var id in this.tools) {
@@ -229,14 +231,14 @@ function KupuEditor(document, config, logger) {
         };
         
         // pass the content through the filters
-        this.logMessage("Starting HTML cleanup");
+        this.logMessage(_("Starting HTML cleanup"));
         var transform = this._filterContent(this.getInnerDocument().documentElement);
 
         // serialize to a string
         var contents = this._serializeOutputToString(transform);
         
-        this.logMessage("Cleanup done, sending document to server");
-        var request = Sarissa.getXmlHttpRequest();
+        this.logMessage(_("Cleanup done, sending document to server"));
+        var request = new XMLHttpRequest();
     
         if (!synchronous) {
             request.onreadystatechange = (new ContextFixer(this._saveCallback, 
@@ -244,9 +246,9 @@ function KupuEditor(document, config, logger) {
             request.open("PUT", this.config.dst, true);
             request.setRequestHeader("Content-type", this.config.content_type);
             request.send(contents);
-            this.logMessage("Request sent to server");
+            this.logMessage(_("Request sent to server"));
         } else {
-            this.logMessage('Sending request to server');
+            this.logMessage(_('Sending request to server'));
             request.open("PUT", this.config.dst, false);
             request.setRequestHeader("Content-type", this.config.content_type);
             request.send(contents);
@@ -270,7 +272,7 @@ function KupuEditor(document, config, logger) {
         this._initialized = false;
         
         // set the window status so people can see we're actually saving
-        window.status= "Please wait while saving document...";
+        window.status= _("Please wait while saving document...");
 
         // call (optional) beforeSave() method on all tools
         for (var tid in this.tools) {
@@ -292,7 +294,7 @@ function KupuEditor(document, config, logger) {
         };
         
         // pass the content through the filters
-        this.logMessage("Starting HTML cleanup");
+        this.logMessage(_("Starting HTML cleanup"));
         var transform = this._filterContent(this.getInnerDocument().documentElement);
         
         // XXX need to fix this.  Sometimes a spurious "\n\n" text 
@@ -300,7 +302,7 @@ function KupuEditor(document, config, logger) {
         // serializer on .xml
         var contents =  this._serializeOutputToString(transform);
         
-        this.logMessage("Cleanup done, sending document to server");
+        this.logMessage(_("Cleanup done, sending document to server"));
         
         // now create the form input, since IE 5.5 doesn't support the 
         // ownerDocument property we use window.document as a fallback (which
@@ -324,7 +326,7 @@ function KupuEditor(document, config, logger) {
             and adding basic elements such as lists
             */
         if (!this._initialized) {
-            this.logMessage('Editor not initialized yet!');
+            this.logMessage(_('Editor not initialized yet!'));
             return;
         };
         if (this.getBrowserName() == "IE") {
@@ -341,25 +343,24 @@ function KupuEditor(document, config, logger) {
             };
         };
         this.getDocument().execCommand(command, param);
-        var message = 'Command ' + command + ' executed';
+        var message = _('Command ${command} executed', {'command': command});
         if (param) {
-            message += ' with parameter ' + param;
+            message = _('Command ${command} executed with parameter ${param}',
+                            {'command': command, 'param': param});
         }
         this.updateState();
         this.logMessage(message);
     };
-    
+
     this.getSelection = function() {
         /* returns a Selection object wrapping the current selection */
-        if (this.getBrowserName() == "IE") {
-            this._restoreSelection();
-        };
+        this._restoreSelection();
         return this.getDocument().getSelection();
     };
-    
+
     this.getSelectedNode = function() {
         /* returns the selected node (read: parent) or none */
-        return this.getSelection().getSelectedNode();
+        return this.getSelection().parentElement();
     };
 
     this.getNearestParentOfType = function(node, type) {
@@ -401,7 +402,7 @@ function KupuEditor(document, config, logger) {
     this.insertNodeAtSelection = function(insertNode, selectNode) {
         /* insert a newly created node into the document */
         if (!this._initialized) {
-            this.logMessage('Editor not initialized yet!');
+            this.logMessage(_('Editor not initialized yet!'));
             return;
         };
 
@@ -413,10 +414,7 @@ function KupuEditor(document, config, logger) {
         };
         
         var ret = this.getSelection().replaceWithNode(insertNode, selectNode);
-        
-        if (browser == 'IE') {
-            this._saveSelection();
-        };
+        this._saveSelection();
 
         return ret;
     };
@@ -445,16 +443,21 @@ function KupuEditor(document, config, logger) {
         } else if (_SARISSA_IS_IE) {
             return "IE";
         } else {
-            throw "Browser not supported!";
+            throw _("Browser not supported!");
         }
     };
     
     this.handleSaveResponse = function(request, redirect) {
-        if (request.status != '200' && request.status != '204'){
-            alert('Error saving your data.\nResponse status: ' + 
-                  request.status + 
-                  '.\nCheck your server log for more information.')
-            window.status = "Error saving document"
+        // mind the 1223 status, somehow IE gives that sometimes (on 204?)
+        // at first we didn't want to add it here, since it's a specific IE
+        // bug, but too many users had trouble with it...
+        if (request.status != '200' && request.status != '204' &&
+                request.status != '1223') {
+            var msg = _('Error saving your data.\nResponse status: ' + 
+                            '${status}.\nCheck your server log for more ' +
+                            'information.', {'status': request.status});
+            alert(msg);
+            window.status = _("Error saving document");
         } else if (redirect) { // && (!request.status || request.status == '200' || request.status == '204'))
             window.document.location = redirect;
             this.content_changed = false;
@@ -465,7 +468,7 @@ function KupuEditor(document, config, logger) {
                 this.reloadSrc();
             };
             // we're done so we can start editing again
-            window.status= "Document saved";
+            window.status= _("Document saved");
         };
         this._initialized = true;
     };
@@ -517,7 +520,7 @@ function KupuEditor(document, config, logger) {
         */
         this._designModeSetAttempts++;
         if (this._designModeSetAttempts > 25) {
-            alert('Couldn\'t set design mode. Kupu will not work on this browser.');
+            alert(_('Couldn\'t set design mode. Kupu will not work on this browser.'));
             return;
         };
         var success = false;
@@ -557,15 +560,21 @@ function KupuEditor(document, config, logger) {
 
     this._restoreSelection = function() {
         /* re-selects the previous selection in IE. We only restore if the
-         current selection is not in the document.*/
+        current selection is not in the document.*/
         if (this._previous_range && !this._isDocumentSelected()) {
             try {
                 this._previous_range.select();
             } catch (e) {
-                this.logMessage('Error placing back selection');
+                alert("Error placing back selection");
+                this.logMessage(_('Error placing back selection'));
             };
         };
     };
+    
+    if (this.getBrowserName() != "IE") {
+        this._saveSelection = function() {};
+        this._restoreSelection = function() {};
+    }
 
     this._isDocumentSelected = function() {
         var editable_body = this.getInnerDocument().getElementsByTagName('body')[0];
@@ -588,7 +597,7 @@ function KupuEditor(document, config, logger) {
         this._previous_range = null;
     };
 
-    this._filterContent = function(documentElement) {
+    this._filterContent = function(documentElement) {            
         /* pass the content through all the filters */
         // first copy all nodes to a Sarissa document so it's usable
         var xhtmldoc = Sarissa.getDomDocument();
@@ -607,9 +616,9 @@ function KupuEditor(document, config, logger) {
         var bodies = transform.getElementsByTagName('body');
         var data = '';
         for (var i = 0; i < bodies.length; i++) {
-            data += bodies[i].xml;
+            data += Sarissa.serialize(bodies[i]);
         }
-        return data;
+        return this.escapeEntities(data);
     };
 
     this.getHTMLBody = function() {
@@ -620,7 +629,7 @@ function KupuEditor(document, config, logger) {
         for (var i = 0; i < bodies.length; i++) {
             data += bodies[i].innerHTML;
         }
-        return data;
+        return this.escapeEntities(data);
     };
 
     // If we have multiple bodies this needs to remove the extras.
@@ -719,16 +728,18 @@ function KupuEditor(document, config, logger) {
         if (this.config.strict_output) {
             var contents =  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" ' + 
                             '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n' + 
-                            '<html xmlns="http://www.w3.org/1999/xhtml">' + 
-                            transform.getElementsByTagName("head")[0].xml +
-                            transform.getElementsByTagName("body")[0].xml +
+                            '<html xmlns="http://www.w3.org/1999/xhtml">' +
+                            Sarissa.serialize(transform.getElementsByTagName("head")[0]) +
+                            Sarissa.serialize(transform.getElementsByTagName("body")[0]) +
                             '</html>';
         } else {
             var contents = '<html>' + 
-                            transform.getElementsByTagName("head")[0].xml +
-                            transform.getElementsByTagName("body")[0].xml +
+                            Sarissa.serialize(transform.getElementsByTagName("head")[0]) +
+                            Sarissa.serialize(transform.getElementsByTagName("body")[0]) +
                             '</html>';
         };
+
+        contents = this.escapeEntities(contents);
 
         if (this.config.compatible_singletons) {
             contents = this._fixupSingletons(contents);
@@ -736,6 +747,15 @@ function KupuEditor(document, config, logger) {
         
         return contents;
     };
+    this.escapeEntities = function(xml) {
+        // XXX: temporarily disabled
+        return xml;
+        // Escape non-ascii characters as entities.
+        return xml.replace(/[^\r\n -\177]/g,
+            function(c) {
+            return '&#'+c.charCodeAt(0)+';';
+        });
+    }
 
     this.getFullEditor = function() {
         var fulleditor = this.getDocument().getEditable();
@@ -752,6 +772,44 @@ function KupuEditor(document, config, logger) {
     this.clearClass = function(name) {
         var fulleditor = this.getFullEditor();
         fulleditor.className = fulleditor.className.replace(' '+name, '');
+    }
+
+    this.suspendEditing = function() {
+        this._previous_range = this.getSelection().getRange();
+        this.setClass('kupu-modal');
+        for (var id in this.tools) {
+            this.tools[id].disable();
+        }
+        if (this.getBrowserName() == "IE") {
+            var body = this.getInnerDocument().getElementsByTagName('body')[0];
+            body.setAttribute('contentEditable', 'false');
+        } else {
+
+            this.getInnerDocument().designMode = "Off";
+            var iframe = this.getDocument().getEditable();
+            iframe.style.position = iframe.style.position?"":"relative"; // Changing this disables designMode!
+        }
+        this.suspended = true;
+    }
+    
+    this.resumeEditing = function() {
+        if (!this.suspended) {
+            return;
+        }
+        this.suspended = false;
+        this.clearClass('kupu-modal');
+        for (var id in this.tools) {
+            this.tools[id].enable();
+        }
+        if (this.getBrowserName() == "IE") {
+            this._restoreSelection();
+            var body = this.getInnerDocument().getElementsByTagName('body')[0];
+            body.setAttribute('contentEditable', 'true');
+        } else {
+            var doc = this.getInnerDocument();
+            doc.designMode = "On";
+            this.getSelection().restoreRange(this._previous_range);
+        }
     }
 }
 

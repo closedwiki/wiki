@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -12,7 +12,7 @@
 This module does some twirks to let us use kupu with Zope2, CMF/Plone
 and Zope3
 
-$Id: __init__.py 8226 2005-01-12 12:55:38Z duncan $
+$Id: __init__.py 14546 2005-07-12 14:35:55Z duncan $
 """
 
 # we need this for the CMF install script
@@ -57,10 +57,19 @@ if have_cmf:
     registerDirectory('common', globals())
 
     if have_plone:
-        import plone
-        initialize = plone.initialize
+        from Products.kupu.plone import initialize
+
 elif have_zope2 and have_fss:
     import zope2
     initialize = zope2.initialize
+
+if have_zope2:
+    # in Zope 2, make all modules in the 'python' lib available
+    def __allow_access_to_unprotected_subobjects__(name, value=None):
+        return name in ('python')
+
+    from AccessControl import allow_module
+    allow_module('Products.kupu.python.nationalizer')
+    allow_module('Products.kupu.python.spellcheck')
 
 # do nothing for zope3 (all is done in zcml)

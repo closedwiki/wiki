@@ -5,18 +5,20 @@
 ##bind namespace=
 ##bind script=script
 ##bind subpath=traverse_subpath
-##parameters=fieldname
+##parameters=fieldname, content
 from Products.CMFCore.utils import getToolByName
 from Products.PythonScripts.standard import structured_text, newline_to_br
 
 field = context.getField(fieldname)
-text_format = context.getContentType(fieldname)
-accessor = field.getEditAccessor(context)
-
-content = accessor()
+text_format = context.REQUEST.get('%s_text_format' % fieldname, context.getContentType(fieldname))
 
 if len(content)==0 or 'html' in text_format.lower():
-    return content
- 
+    return str(content)
+
 transforms = getToolByName(context, 'portal_transforms')
-return transforms.convertTo('text/html', content, mimetype=text_format)
+
+converted = transforms.convertToData('text/html', content, mimetype=text_format)
+if converted is not None:
+    return converted
+
+return content

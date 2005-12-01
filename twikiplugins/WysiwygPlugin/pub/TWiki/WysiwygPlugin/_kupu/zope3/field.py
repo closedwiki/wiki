@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -9,7 +9,7 @@
 ##############################################################################
 """HTMLBody field
 
-$Id: field.py 3415 2004-03-25 14:42:47Z philikon $
+$Id: field.py 9879 2005-03-18 12:04:00Z yuppie $
 """
 
 from zope.interface import implements

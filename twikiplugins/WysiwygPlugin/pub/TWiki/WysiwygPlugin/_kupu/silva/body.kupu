@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <kupu:feature
     name="body"
     implementation="silva"
@@ -8,7 +9,7 @@
 
   <kupu:part name="body">
     <body>
-      <metal:macro define-macro="fulleditor">
+      <metal:macro define-macro="body">
         <kupu:define-slot name="body" />
       </metal:macro>
     </body>
@@ -42,6 +43,7 @@
   <kupu:part name="editorframe">
     <div class="kupu-editorframe">
       <iframe id="kupu-editor" 
+              class="kupu-editor-iframe"
               width="99%"
               frameborder="0" 
               src="kupu_content"

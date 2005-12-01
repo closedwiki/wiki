@@ -2,7 +2,7 @@
 <!--
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -26,7 +26,7 @@ contains:
 If the XSLT processor supports XInclude, the above stated items may of
 course be located in different files and included later.
 
-$Id: make.xsl 9272 2005-02-17 16:14:36Z duncan $
+$Id: make.xsl 14422 2005-07-08 13:02:09Z duncan $
 -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -37,9 +37,17 @@ $Id: make.xsl 9272 2005-02-17 16:14:36Z duncan $
   <xsl:output
     method="xml"
     indent="yes"
+    encoding="ascii"
     omit-xml-declaration="yes"
     />
 
+  <xsl:strip-space
+    elements="kupu:*"
+    />
+
+  <xsl:preserve-space
+    elements="kupu:part"
+    />
 
   <!-- ### Global parameters ### -->
 
@@ -276,5 +284,24 @@ $Id: make.xsl 9272 2005-02-17 16:14:36Z duncan $
       <xsl:apply-templates mode="expand" />
     </xsl:copy>
   </xsl:template>
+
+  <!-- Copy nodes through verbatim, but omit the id attribute
+       from most of them -->
+<!--  <xsl:template match="*" mode="expand">
+    <xsl:choose>
+     <xsl:when test="local-name()='xml' or local-name='iframe'">
+        <xsl:copy>
+          <xsl:copy-of select="@*" />
+          <xsl:apply-templates mode="expand" />
+        </xsl:copy>
+     </xsl:when>
+     <xsl:otherwise>
+        <xsl:copy>
+          <xsl:copy-of select="@*[local-name() != 'id']" />
+          <xsl:apply-templates mode="expand" />
+        </xsl:copy>
+     </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template> -->
 
 </xsl:stylesheet>
