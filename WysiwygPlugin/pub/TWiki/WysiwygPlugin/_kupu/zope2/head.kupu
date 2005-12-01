@@ -26,8 +26,14 @@
         tal:attributes="src string:${kupu_url}/kupubasetools.js"> </script>
     <script type="text/javascript" src="kupuloggers.js"
         tal:attributes="src string:${kupu_url}/kupuloggers.js"> </script>
+    <script type="text/javascript" src="kupunoi18n.js"
+        tal:attributes="src string:${kupu_url}/kupunoi18n.js"> </script>
     <script type="text/javascript" src="kupucontentfilters.js"
         tal:attributes="src string:${kupu_url}/kupucontentfilters.js"> </script>
+    <script type="text/javascript" src="kupuspellchecker.js"
+        tal:attributes="src string:${kupu_url}/kupuspellchecker.js"> </script>
+    <script type="text/javascript" src="kuputoolcollapser.js"
+        tal:attributes="src string:${kupu_url}/kuputoolcollapser.js"> </script>
     <script type="text/javascript" src="kupucleanupexpressions.js"
         tal:attributes="src string:${kupu_url}/kupucleanupexpressions.js"> </script>
   </kupu:part>

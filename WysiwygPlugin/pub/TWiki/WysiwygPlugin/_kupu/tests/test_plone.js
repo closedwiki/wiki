@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,11 +8,13 @@
  *
  *****************************************************************************/
 
-// $Id$
+// $Id: test_plone.js 15966 2005-08-11 15:16:18Z duncan $
 
 // Various tests for html -> xhtml processing.
 
 function KupuPloneTestCase() {
+    SelectionTestCase.apply(this);
+    this.base_setUp = this.setUp;
     this.name = 'KupuPloneTestCase';
 
     this.incontext = function(s) {
@@ -34,20 +36,10 @@ function KupuPloneTestCase() {
     }
 
     this.setUp = function() {
-        this.editor = new KupuEditor(null, {}, null);
-        this.doc = document.getElementById('iframe').contentWindow.document;
-        var head = this.doc.createElement('head');
-        var title = this.doc.createElement('title');
-        var titletext = this.doc.createTextNode('test');this
-        this.body = this.doc.createElement('body');
-
-        title.appendChild(titletext);
-        head.appendChild(title);
-        var html = this.doc.documentElement;
-        while (html.childNodes.length > 0)
-            html.removeChild(html.childNodes[0]);
-        html.appendChild(head);
-        html.appendChild(this.body);
+        this.base_setUp();
+        this.editor = new KupuEditor(this.kupudoc, {}, null);
+        this.ui = new PloneKupuUI('kupu-tb-styles');
+        this.ui.editor = this.editor;
     };
 
     this.testRelativeLinks1 = function() {
@@ -58,6 +50,7 @@ function KupuPloneTestCase() {
         var actual = this.editor.makeLinksRelative(data, base);
         this.verifyResult(actual, expected);
     }
+
     this.testRelativeLinks2 = function() {
         var data =  '<a href="http://localhost/cms/folder/otherdoc#key">[1]</a>';
         var expected = '<a href="otherdoc#key">[1]</a>';
@@ -66,6 +59,7 @@ function KupuPloneTestCase() {
         var actual = this.editor.makeLinksRelative(data, base);
         this.verifyResult(actual, expected);
     }
+
     this.testRelativeLinks3 = function() {
         var data =  '<a href="http://localhost/cms/otherfolder/otherdoc">[1]</a>';
         var expected = '<a href="../otherfolder/otherdoc">[1]</a>';
@@ -74,6 +68,7 @@ function KupuPloneTestCase() {
         var actual = this.editor.makeLinksRelative(data, base);
         this.verifyResult(actual, expected);
     }
+
     this.testRelativeLinks4 = function() {
         var data =  '<a href="http://localhost:9080/plone/Members/admin/art1">[1]</a>';
         var expected = '<a href="art1">[1]</a>';
@@ -82,6 +77,7 @@ function KupuPloneTestCase() {
         var actual = this.editor.makeLinksRelative(data, base);
         this.verifyResult(actual, expected);
     }
+
     this.testRelativeLinks5 = function() {
         var data =  '<a href="http://localhost:9080/plone/Members/admin/art1/subitem">[1]</a>';
         var expected = '<a href="art1/subitem">[1]</a>';
@@ -100,6 +96,32 @@ function KupuPloneTestCase() {
         this.verifyResult(actual, expected);
     }
 
+    this.testSetTextStyle = function() {
+        var data = '<p>line 1</p><div class="Caption">line 2</div><div class="Caption">line 3</div>';
+        // select  .....................................|e 2</div><div class="Caption">line|...
+        var expected = '<p>line 1</p><h2>line 2</h2><h2>line 3</h2>';
+        this.body.innerHTML = data;
+        this._setSelection(10, null, 18, null, 'e 2line');
+        this.ui.setTextStyle('h2');
+        this.assertEquals(this._cleanHtml(this.body.innerHTML), expected);
+    }
+
+    this.testSetTextStyleTable = function() {
+        var data = '<table><tbody><tr><td>test</td></tr></tbody></table>';
+        // select   ................es...................
+        var expected = '<table><tbody><tr><td><div class="te st">test</div></td></tr></tbody></table>';
+        var withheader = '<table><tbody><tr><th>test</th></tr></tbody></table>';
+        this.body.innerHTML = data;
+        var idx = _SARISSA_IS_IE ? 2 : 1;
+        this._setSelection(idx, null, idx+2, null, 'es');
+        this.ui.setTextStyle('div|te st'); // Space in class forces IE to put it in quotes!
+        this.assertEquals(this._cleanHtml(this.body.innerHTML), expected);
+        this._setSelection(idx, null, idx+2, null, 'es');
+        this.ui.setTextStyle('td');
+        this.assertEquals(this._cleanHtml(this.body.innerHTML), data);
+        this.ui.setTextStyle('th');
+        this.assertEquals(this._cleanHtml(this.body.innerHTML), withheader);
+    }
 }
 
-KupuPloneTestCase.prototype = new TestCase;
+KupuPloneTestCase.prototype = new SelectionTestCase;

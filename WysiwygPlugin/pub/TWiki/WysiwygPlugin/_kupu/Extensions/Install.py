@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -11,10 +11,11 @@
 
 This is best executed using CMFQuickInstaller
 
-$Id: Install.py 8384 2005-01-18 14:31:41Z duncan $
+$Id: Install.py 18104 2005-10-03 14:10:11Z duncan $
 """
 import os.path
 import sys
+import re
 from StringIO import StringIO
 
 from App.Common import package_home
@@ -22,6 +23,7 @@ from App.Common import package_home
 from Products.CMFCore.utils import getToolByName, minimalpath
 from Products.CMFCore.DirectoryView import createDirectoryView
 from Products.kupu import kupu_globals
+from Products.kupu.config import TOOLNAME, PROJECTNAME, TOOLTITLE
 from OFS.ObjectManager import BadRequestException
 from zExceptions import BadRequest
 
@@ -30,16 +32,15 @@ try:
 except ImportError:
     pass # Plone not available
 
-PROJECTNAME = 'Kupu'
-
 kupu_package_dir = package_home(kupu_globals)
 
 def register_layer(self, relpath, name, out):
     """Register a file system directory as skin layer
     """
+    print >>out, "register skin layers"
     skinstool = getToolByName(self, 'portal_skins')
     if name not in skinstool.objectIds():
-        kupu_plone_skin_dir = os.path.join(kupu_package_dir, relpath)
+        kupu_plone_skin_dir = minimalpath(os.path.join(kupu_package_dir, relpath))
         createDirectoryView(skinstool, kupu_plone_skin_dir, name)
         print >>out, "The layer '%s' was added to the skins tool" % name
 
@@ -76,8 +77,84 @@ def install_plone(self, out):
     install_libraries(self, out)
     install_configlet(self, out)
     install_transform(self, out)
+    install_resources(self, out)
     install_customisation(self, out)
 
+def _read_resources():
+    resourcefile = open(os.path.join(kupu_package_dir, 'plone', 'head.kupu'), 'r')
+    try:
+        data = resourcefile.read()
+        return data
+    finally:
+        resourcefile.close()
+
+def css_files(resources):
+    CSSPAT = re.compile(r'\<link [^>]*rel="stylesheet"[^>]*\${portal_url}/([^"]*)"')
+    for m in CSSPAT.finditer(resources):
+        id = m.group(1)
+        yield id
+
+def js_files(resources):
+    JSPAT = re.compile(r'\<script [^>]*\${portal_url}/([^"]*)"')
+    for m in JSPAT.finditer(resources):
+        id = m.group(1)
+        if id=='sarissa.js':
+            continue
+        yield id
+
+def install_resources(self, out):
+    """Add the js and css files to the resource registry so that
+    they can be merged for download.
+    """
+    try:
+        from Products.ResourceRegistries.config import CSSTOOLNAME, JSTOOLNAME
+    except ImportError:
+        print >>out, "Resource registry not found: kupu will load its own resources"
+        return
+
+    data = _read_resources()
+    
+    CONDITION = '''python:portal.kupu_library_tool.isKupuEnabled(REQUEST=request)'''
+    csstool = getToolByName(self, CSSTOOLNAME)
+    jstool = getToolByName(self, JSTOOLNAME)
+
+    for id in css_files(data):
+        print >>out, "CSS file", id
+        cookable = True
+        csstool.manage_removeStylesheet(id=id)
+        csstool.manage_addStylesheet(id=id,
+            expression=CONDITION,
+            rel='stylesheet',
+            enabled=True,
+            cookable=cookable)
+
+    for id in js_files(data):
+        print >>out, "JS file", id
+        jstool.manage_removeScript(id=id)
+        jstool.manage_addScript(id=id,
+            expression=CONDITION,
+            enabled=True,
+            cookable=True)
+
+def uninstall_resources(self, out):
+    """Remove the js and css files from the resource registries"""
+    try:
+        from Products.ResourceRegistries.config import CSSTOOLNAME, JSTOOLNAME
+    except ImportError:
+        return
+
+    data = _read_resources()
+    
+    csstool = getToolByName(self, CSSTOOLNAME)
+    jstool = getToolByName(self, JSTOOLNAME)
+
+    for id in css_files(data):
+        csstool.manage_removeStylesheet(id=id)
+
+    for id in js_files(data):
+        jstool.manage_removeScript(id=id)
+    print >>out, "Resource files removed"
+    
 def install_libraries(self, out):
     """Install everything necessary to support Kupu Libraries
     """
@@ -105,8 +182,8 @@ def install_configlet(self, out):
         return
     try:
         portal_conf.registerConfiglet( 'kupu'
-               , 'Kupu'      
-               , 'string:${portal_url}/kupu_library_tool/kupu_config' 
+               , TOOLTITLE
+               , 'string:${portal_url}/%s/kupu_config' % TOOLNAME
                , ''                 # a condition   
                , 'Manage portal'    # access permission
                , 'Products'         # section to which the configlet should be added: 
@@ -175,6 +252,23 @@ def install(self):
     print >>out, "kupu successfully installed"
     return out.getvalue()
 
+def uninstall_transform(self, out):
+    transform_tool = getToolByName(self, 'portal_transforms')
+    try:
+        transform_tool.manage_delObjects(['html-to-captioned'])
+    except:
+        pass
+    else:
+        print >>out, "Transform removed"
+
+def uninstall_tool(self, out):
+    try:
+        self.manage_delObjects([TOOLNAME])
+    except:
+        pass
+    else:
+        print >>out, "Kupu tool removed"
+
 def uninstall(self):
     out = StringIO()
 
@@ -184,5 +278,9 @@ def uninstall(self):
         configTool.unregisterConfiglet('kupu')
         out.write('Removed kupu configlet\n')
 
+    uninstall_transform(self, out)
+    uninstall_tool(self, out)
+    uninstall_resources(self, out)
+    
     print >> out, "Successfully uninstalled %s." % PROJECTNAME
     return out.getvalue()

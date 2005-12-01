@@ -5,8 +5,9 @@
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="kupu"
     >
-  <kupu:id>$Id: colorchooser.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+  <kupu:id>$Id: colorchooser.kupu 9520 2005-02-26 16:30:23Z duncan $</kupu:id>
 
   <kupu:part name="colorchooser">
     <table id="kupu-colorchooser" cellpadding="0" cellspacing="0"

@@ -2,7 +2,7 @@
  *
  * Kupu common styles
  *
- * Copyright (c) 2003 Kupu Contributors. See CREDITS.txt
+ * Copyright (c) 2003-2005 Kupu Contributors. See CREDITS.txt
  *
  * Instead of customizing this file, it is recommended to customize
  * kupucustom.css. Feel free to use whole or parts of this for your
@@ -43,7 +43,7 @@ div.kupu-smalleditor {
   margin-right: 2px;
 }
 
-#kupu-tb-buttons button {
+div.kupu-tb button {
   margin-top: 0;
   margin-left: 0;
   height: 26px;
@@ -51,34 +51,34 @@ div.kupu-smalleditor {
   background-repeat: no-repeat;
 }
 
-#kupu-tb-buttons button:hover {
+div.kupu-tb button:hover {
   cursor: pointer;
 }
 
-.kupu-save {display: none; background-image: url("../common/kupuimages/save.gif");}
+.kupu-save {display: none; background-image: url("../common/kupuimages/save.png");}
 .kupu-save-and-exit {background-image: url("../common/kupuimages/exit.gif");}
-.kupu-bold {background-image: url("../common/kupuimages/bold.gif");}
-.kupu-italic {background-image: url("../common/kupuimages/italic.gif");}
-.kupu-hilitecolor {display: none; background-image: url("../common/kupuimages/bgcolor.gif");}
-.kupu-justifycenter {background-image: url("../common/kupuimages/centre.gif");}
-.kupu-inserthorizontalrule {background-image: url("../common/kupuimages/hr.gif");}
-.kupu-hyperlink {background-image: url("../common/kupuimages/hyperlink.gif");}
-.kupu-image {background-image: url("../common/kupuimages/image.gif");}
-.kupu-indent {display: none; background-image: url("../common/kupuimages/indent.gif");}
-.kupu-italic {background-image: url("../common/kupuimages/italic.gif");}
-.kupu-justifyleft {background-image: url("../common/kupuimages/left_just.gif");}
-.kupu-insertunorderedlist {background-image: url("../common/kupuimages/list.gif");}
-.kupu-insertorderedlist {background-image: url("../common/kupuimages/numbered.gif");}
-.kupu-outdent {display: none; background-image: url("../common/kupuimages/outdent.gif");}
-.kupu-redo {background-image: url("../common/kupuimages/redo.gif");}
-.kupu-justifyright {background-image: url("../common/kupuimages/right_just.gif");}
+.kupu-bold {background-image: url("../common/kupuimages/bold.png");}
+.kupu-italic {background-image: url("../common/kupuimages/italic.png");}
+.kupu-hilitecolor {display: none; background-image: url("../common/kupuimages/background-color.png");}
+.kupu-justifycenter {background-image: url("../common/kupuimages/justify-centre.png");}
+.kupu-inserthorizontalrule {background-image: url("../common/kupuimages/hr.png");}
+.kupu-hyperlink {background-image: url("../common/kupuimages/inthyperlink.png");}
+.kupu-image {background-image: url("../common/kupuimages/image.png");}
+.kupu-indent {display: none; background-image: url("../common/kupuimages/indent.png");}
+.kupu-italic {background-image: url("../common/kupuimages/italic.png");}
+.kupu-justifyleft {background-image: url("../common/kupuimages/justify_left.png");}
+.kupu-insertunorderedlist {background-image: url("../common/kupuimages/unordered-list.png");}
+.kupu-insertorderedlist {background-image: url("../common/kupuimages/ordered-list.png");}
+.kupu-outdent {display: none; background-image: url("../common/kupuimages/outdent.png");}
+.kupu-redo {background-image: url("../common/kupuimages/redo.png");}
+.kupu-justifyright {background-image: url("../common/kupuimages/justify-right.png");}
 .kupu-space {background-image: url("../common/kupuimages/space.gif");}
-.kupu-subscript {background-image: url("../common/kupuimages/subscript.gif");}
-.kupu-superscript {background-image: url("../common/kupuimages/superscript.gif");}
-.kupu-table {background-image: url("../common/kupuimages/table.gif");}
-.kupu-forecolor {display: none; background-image: url("../common/kupuimages/textcolor.gif");}
-.kupu-underline {background-image: url("../common/kupuimages/underline.gif");}
-.kupu-undo {background-image: url("../common/kupuimages/undo.gif");}
+.kupu-subscript {background-image: url("../common/kupuimages/subscript.png");}
+.kupu-superscript {background-image: url("../common/kupuimages/superscript.png");}
+.kupu-table {background-image: url("../common/kupuimages/table.png");}
+.kupu-forecolor {display: none; background-image: url("../common/kupuimages/text-color.png");}
+.kupu-underline {background-image: url("../common/kupuimages/underline.png");}
+.kupu-undo {background-image: url("../common/kupuimages/undo.png");}
 .kupu-logo {display: none; background-image: url("../common/kupuimages/kupu_icon.gif");}
 
 div.kupu-editorframe {
@@ -89,7 +89,7 @@ div.kupu-editorframe {
 }
 
 
-#kupu-editor {
+iframe.kupu-editor-iframe {
   height: 450px;
   width: 99%;
 }
@@ -147,7 +147,7 @@ table#kupu-toolbox-addtable {
 
 
 #kupu-toolbox-editlink, #kupu-toolbox-edittable,
-#kupu-ulstyles, #kupu-olstyles {
+select.kupu-ulstyles, select.kupu-olstyles {
   display: none;
 }
 

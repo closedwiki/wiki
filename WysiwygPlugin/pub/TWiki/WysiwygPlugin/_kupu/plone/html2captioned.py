@@ -9,6 +9,8 @@
 #
 from Products.CMFCore.utils import getToolByName
 from Products.PortalTransforms.interfaces import itransform
+from DocumentTemplate.DT_Util import html_quote
+from DocumentTemplate.DT_Var import newline_to_br
 import re
 
 __revision__ = '$Id$'
@@ -41,7 +43,7 @@ ATTR_PATTERN = re.compile('''
 CLASS_PATTERN = re.compile('\s*class=("[^"]*captioned[^"]*"|[^" \/>]+)')
 IMAGE_TEMPLATE = '''\
 <div class="%(class)s" style="width:%(width)spx;">
- <div style="width:%(width)s">
+ <div style="width:%(width)spx;">
   %(tag)s
  </div>
  <div class="image-caption">
@@ -100,8 +102,11 @@ class HTMLToCaptioned:
                     d = attrs.groupdict()
                     target = at_tool.reference_catalog.lookupObject(src)
                     if target:
-                        d['caption'] = target.Description()
+                        d['caption'] = newline_to_br(target.Description())
                         d['tag'] = CLASS_PATTERN.sub('', d['tag'])
+                        if not width:
+                            d['width'] = target.getWidth()
+
                         return IMAGE_TEMPLATE % d
                 return match.group(0) # No change
 

@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,22 +8,24 @@
  *
  *****************************************************************************/
 
-// $Id: kupuploneinit.js 7833 2004-12-13 10:42:11Z duncan $
+// $Id: kupuploneinit.js 16104 2005-08-17 08:58:19Z duncan $
 
-function initPloneKupu(iframe, fieldname) {
+function initPloneKupu(editorId) {
+    var topnode = getFromSelector(editorId);
+    var prefix = '#'+editorId+' ';
+
+    var iframe = getFromSelector(prefix+'iframe.kupu-editor-iframe');
+    var textarea = getFromSelector(prefix+'textarea.kupu-editor-textarea');
     var l = new DummyLogger();
 
     // XXX this should be fixed in stylesheets, but I don't know how to do 
     // that without applying this change to the outter document. Damn iframes.
     var ibody = iframe.contentWindow.document.body;
-    var textarea = document.getElementById(fieldname);
     var form = textarea.form;
-    ibody.style.margin = "12px";
-    ibody.className = "kupu"; // This is set in emptypage but gets lost for some reason.
     ibody.innerHTML = textarea.value || '<p class=""><br></p>';
 
     // now some config values
-    var conf = loadDictFromXML(document, 'kupuconfig');
+    var conf = loadDictFromXML(document, prefix+'xml.kupuconfig');
 
     // the we create the document, hand it over the id of the iframe
     var doc = new KupuDocument(iframe);
@@ -36,7 +38,7 @@ function initPloneKupu(iframe, fieldname) {
     kupu.setContextMenu(cm);
 
     // now we can create a UI object which we can use from the UI
-    var ui = new PloneKupuUI('kupu-tb-styles');
+    var ui = new PloneKupuUI(prefix+'select.kupu-tb-styles');
     kupu.registerTool('ui', ui);
 
     // function that returns a function to execute a button command
@@ -48,7 +50,7 @@ function initPloneKupu(iframe, fieldname) {
 
     var boldchecker = ParentWithStyleChecker(new Array('b', 'strong'),
 					     'font-weight', 'bold');
-    var boldbutton = new KupuStateButton('kupu-bold-button', 
+    var boldbutton = new KupuStateButton(prefix+'button.kupu-bold', 
                                          execCommand('bold'),
                                          boldchecker,
                                          'kupu-bold',
@@ -57,7 +59,7 @@ function initPloneKupu(iframe, fieldname) {
 
     var italicschecker = ParentWithStyleChecker(new Array('i', 'em'),
 						'font-style', 'italic');
-    var italicsbutton = new KupuStateButton('kupu-italic-button', 
+    var italicsbutton = new KupuStateButton(prefix+'button.kupu-italic', 
                                            execCommand('italic'),
                                            italicschecker, 
                                            'kupu-italic', 
@@ -65,7 +67,7 @@ function initPloneKupu(iframe, fieldname) {
     kupu.registerTool('italicsbutton', italicsbutton);
 
     var underlinechecker = ParentWithStyleChecker(new Array('u'));
-    var underlinebutton = new KupuStateButton('kupu-underline-button', 
+    var underlinebutton = new KupuStateButton(prefix+'button.kupu-underline', 
                                               execCommand('underline'),
                                               underlinechecker,
                                               'kupu-underline', 
@@ -73,7 +75,7 @@ function initPloneKupu(iframe, fieldname) {
     kupu.registerTool('underlinebutton', underlinebutton);
 
     var subscriptchecker = ParentWithStyleChecker(new Array('sub'));
-    var subscriptbutton = new KupuStateButton('kupu-subscript-button',
+    var subscriptbutton = new KupuStateButton(prefix+'button.kupu-subscript',
                                               execCommand('subscript'),
                                               subscriptchecker,
                                               'kupu-subscript',
@@ -81,55 +83,55 @@ function initPloneKupu(iframe, fieldname) {
     kupu.registerTool('subscriptbutton', subscriptbutton);
 
     var superscriptchecker = ParentWithStyleChecker(new Array('super', 'sup'));
-    var superscriptbutton = new KupuStateButton('kupu-superscript-button', 
+    var superscriptbutton = new KupuStateButton(prefix+'button.kupu-superscript', 
                                                 execCommand('superscript'),
                                                 superscriptchecker,
                                                 'kupu-superscript', 
                                                 'kupu-superscript-pressed');
     kupu.registerTool('superscriptbutton', superscriptbutton);
 
-    var justifyleftbutton = new KupuButton('kupu-justifyleft-button',
+    var justifyleftbutton = new KupuButton(prefix+'button.kupu-justifyleft',
                                            execCommand('justifyleft'));
     kupu.registerTool('justifyleftbutton', justifyleftbutton);
 
-    var justifycenterbutton = new KupuButton('kupu-justifycenter-button',
+    var justifycenterbutton = new KupuButton(prefix+'button.kupu-justifycenter',
                                              execCommand('justifycenter'));
     kupu.registerTool('justifycenterbutton', justifycenterbutton);
 
-    var justifyrightbutton = new KupuButton('kupu-justifyright-button',
+    var justifyrightbutton = new KupuButton(prefix+'button.kupu-justifyright',
                                             execCommand('justifyright'));
     kupu.registerTool('justifyrightbutton', justifyrightbutton);
 
-    var outdentbutton = new KupuButton('kupu-outdent-button', execCommand('outdent'));
+    var outdentbutton = new KupuButton(prefix+'button.kupu-outdent', execCommand('outdent'));
     kupu.registerTool('outdentbutton', outdentbutton);
 
-    var indentbutton = new KupuButton('kupu-indent-button', execCommand('indent'));
+    var indentbutton = new KupuButton(prefix+'button.kupu-indent', execCommand('indent'));
     kupu.registerTool('indentbutton', indentbutton);
 
-    var undobutton = new KupuButton('kupu-undo-button', execCommand('undo'));
+    var undobutton = new KupuButton(prefix+'button.kupu-undo', execCommand('undo'));
     kupu.registerTool('undobutton', undobutton);
 
-    var redobutton = new KupuButton('kupu-redo-button', execCommand('redo'));
+    var redobutton = new KupuButton(prefix+'button.kupu-redo', execCommand('redo'));
     kupu.registerTool('redobutton', redobutton);
 
-    var removeimagebutton = new KupuRemoveElementButton('kupu-removeimage-button',
+    var removeimagebutton = new KupuRemoveElementButton(prefix+'button.kupu-removeimage',
 							'img',
 							'kupu-removeimage');
     kupu.registerTool('removeimagebutton', removeimagebutton);
-    var removelinkbutton = new KupuRemoveElementButton('kupu-removelink-button',
+    var removelinkbutton = new KupuRemoveElementButton(prefix+'button.kupu-removelink',
 						       'a',
 						       'kupu-removelink');
     kupu.registerTool('removelinkbutton', removelinkbutton);
 
     // add some tools
 
-    var listtool = new ListTool('kupu-list-ul-addbutton',
-                                'kupu-list-ol-addbutton',
-                                'kupu-ulstyles',
-                                'kupu-olstyles');
+    var listtool = new ListTool(prefix+'button.kupu-insertunorderedlist',
+                                prefix+'button.kupu-insertorderedlist',
+                                prefix+'select.kupu-ulstyles',
+                                prefix+'select.kupu-olstyles');
     kupu.registerTool('listtool', listtool);
 
-    var definitionlisttool = new DefinitionListTool('kupu-list-dl-addbutton');
+    var definitionlisttool = new DefinitionListTool(prefix+'button.kupu-insertdefinitionlist');
     kupu.registerTool('definitionlisttool', definitionlisttool);
     
     var tabletool = new TableTool();
@@ -138,8 +140,8 @@ function initPloneKupu(iframe, fieldname) {
     var showpathtool = new ShowPathTool('kupu-showpath-field');
     kupu.registerTool('showpathtool', showpathtool);
 
-    var sourceedittool = new SourceEditTool('kupu-source-button',
-                                            'kupu-editor-textarea');
+    var sourceedittool = new SourceEditTool(prefix+'button.kupu-source',
+                                            prefix+'textarea.kupu-editor-textarea');
     kupu.registerTool('sourceedittool', sourceedittool);
 
     var imagetool = NoContextMenu(new ImageTool());
@@ -148,7 +150,9 @@ function initPloneKupu(iframe, fieldname) {
     var linktool = NoContextMenu(new LinkTool());
     kupu.registerTool('linktool', linktool);
 
-    var zoom = new KupuZoomTool('kupu-zoom-button');
+    var zoom = new KupuZoomTool(prefix+'button.kupu-zoom',
+        prefix+'select.kupu-tb-styles',
+        prefix+'button.kupu-logo');
     kupu.registerTool('zoomtool', zoom);
 
     // Use the generic beforeUnload handler if we have it:
@@ -158,7 +162,7 @@ function initPloneKupu(iframe, fieldname) {
         beforeunloadTool.addHandler(function() {
             return ibody.innerHTML != initialBody;
         });
-        beforeunloadTool.chkId['kupu-tb-styles'] = beforeunloadTool.chkId[fieldname] = function() { return false; }
+        beforeunloadTool.chkId[textarea.id] = function() { return false; }
         beforeunloadTool.addForm(form);
     }
     // Patch for bad AT format pulldown.
@@ -182,57 +186,59 @@ function initPloneKupu(iframe, fieldname) {
     // Function that returns function to open a drawer
     var opendrawer = function(drawerid) {
         return function(button, editor) {
-            drawertool.openDrawer(drawerid);
+            drawertool.openDrawer(prefix+drawerid);
         };
     };
 
-    var imagelibdrawerbutton = new KupuButton('kupu-imagelibdrawer-button',
+    var imagelibdrawerbutton = new KupuButton(prefix+'button.kupu-image',
                                               opendrawer('imagelibdrawer'));
     kupu.registerTool('imagelibdrawerbutton', imagelibdrawerbutton);
 
-    var linklibdrawerbutton = new KupuButton('kupu-linklibdrawer-button',
+    var linklibdrawerbutton = new KupuButton(prefix+'button.kupu-inthyperlink',
                                              opendrawer('linklibdrawer'));
     kupu.registerTool('linklibdrawerbutton', linklibdrawerbutton);
 
-    var linkdrawerbutton = new KupuButton('kupu-linkdrawer-button',
+    var linkdrawerbutton = new KupuButton(prefix+'button.kupu-exthyperlink',
                                           opendrawer('linkdrawer'));
     kupu.registerTool('linkdrawerbutton', linkdrawerbutton);
 
-    var tabledrawerbutton = new KupuButton('kupu-tabledrawer-button',
+    var tabledrawerbutton = new KupuButton(prefix+'button.kupu-table',
                                            opendrawer('tabledrawer'));
     kupu.registerTool('tabledrawerbutton', tabledrawerbutton);
 
     // create some drawers, drawers are some sort of popups that appear when a 
     // toolbar button is clicked
-    var drawertool = new DrawerTool();
+    var drawertool = window.drawertool || new DrawerTool();
     kupu.registerTool('drawertool', drawertool);
 
+    var drawerparent = prefix+'div.kupu-librarydrawer-parent';
     var linklibdrawer = new LinkLibraryDrawer(linktool, conf['link_xsl_uri'],
                                               conf['link_libraries_uri'],
-                                              conf['search_links_uri']);
-    drawertool.registerDrawer('linklibdrawer', linklibdrawer);
+                                              conf['search_links_uri'], drawerparent);
+    drawertool.registerDrawer(prefix+'linklibdrawer', linklibdrawer, kupu);
 
     var imagelibdrawer = new ImageLibraryDrawer(imagetool, conf['image_xsl_uri'],
                                                 conf['image_libraries_uri'],
-                                                conf['search_images_uri']);
-    drawertool.registerDrawer('imagelibdrawer', imagelibdrawer);
+                                                conf['search_images_uri'], drawerparent);
+    drawertool.registerDrawer(prefix+'imagelibdrawer', imagelibdrawer, kupu);
 
-    var linkdrawer = new LinkDrawer('kupu-linkdrawer', linktool);
-    drawertool.registerDrawer('linkdrawer', linkdrawer);
+    var linkdrawer = new LinkDrawer(prefix+'div.kupu-linkdrawer', linktool);
+    drawertool.registerDrawer(prefix+'linkdrawer', linkdrawer, kupu);
 
-    var tabledrawer = new TableDrawer('kupu-tabledrawer', tabletool);
-    drawertool.registerDrawer('tabledrawer', tabledrawer);
+    var tabledrawer = new TableDrawer(prefix+'div.kupu-tabledrawer', tabletool);
+    drawertool.registerDrawer(prefix+'tabledrawer', tabledrawer, kupu);
 
     // register form submit handler, remove the drawer's contents before submitting 
     // the form since it seems to crash IE if we leave them alone
     function prepareForm(event) {
-        kupu.saveDataToField(this.form, field);
-        var drawer = document.getElementById('kupu-librarydrawer');
-        drawer.parentNode.removeChild(drawer);
+        kupu.saveDataToField(this.form, this);
+        var drawer = window.document.getElementById('kupu-librarydrawer');
+        if (drawer) {
+            drawer.parentNode.removeChild(drawer);
+        }
     };
-    var field = document.getElementById(fieldname);
-    addEventHandler(field.form, 'submit', prepareForm, field);
-                
+    addEventHandler(textarea.form, 'submit', prepareForm, textarea);
+
     return kupu;
 };
 

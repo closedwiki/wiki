@@ -32,7 +32,7 @@
         <select id="kupu-table-classchooser"> </select>
       </div>
 
-      <div id="kupu-toolbox-addtable">
+      <div id="kupu-toolbox-addtable" class="kupu-toolbox-addtable">
         <div class="kupu-toolbox-label">Rows</div>
         <input type="text" id="kupu-table-newrows" style="width: 98%" />
 
@@ -55,7 +55,7 @@
 
       </div>
 
-      <div id="kupu-toolbox-edittable">
+      <div id="kupu-toolbox-edittable" class="kupu-toolbox-edittable">
       
           <div class="kupu-toolbox-label">Col Align
             <select id="kupu-table-alignchooser">

@@ -36,8 +36,8 @@ function initKupu(iframe) {
     // now we can create the controller
     var kupu = new KupuEditor(doc, conf, l);
 
-    var contextmenu = new ContextMenu();
-    kupu.setContextMenu(contextmenu);
+    //var contextmenu = new ContextMenu();
+    //kupu.setContextMenu(contextmenu);
 
     // now we can create a UI object which we can use from the UI
     var ui = new KupuUI('kupu-tb-styles');
@@ -282,15 +282,17 @@ function initKupu(iframe) {
     drawertool.registerDrawer('newImageDrawer', newImageDrawer);
 
     // New attachment drawer
-    var newAttButton = new KupuButton('twiki-attach-button',
-                                      opendrawer('newAttDrawer'));
-    kupu.registerTool('newAttButton', newAttButton);
+    /* 
+       var newAttButton = new KupuButton('twiki-attach-button',
+       opendrawer('newAttDrawer'));
+       kupu.registerTool('newAttButton', newAttButton);
 
-    var newAttDrawer =
-      new TWikiNewAttachmentDrawer('twiki-new-attachment-drawer',
-                                   'twiki-upload-form',
-                                   null);
-    drawertool.registerDrawer('newAttDrawer', newAttDrawer);
+       var newAttDrawer =
+       new TWikiNewAttachmentDrawer('twiki-new-attachment-drawer',
+       'twiki-upload-form',
+       null);
+       drawertool.registerDrawer('newAttDrawer', newAttDrawer);
+    */
 
     /* Note: the XHTML filter is disabled, so that any non-XHTML
      * tags imported from the source are passed back out of the

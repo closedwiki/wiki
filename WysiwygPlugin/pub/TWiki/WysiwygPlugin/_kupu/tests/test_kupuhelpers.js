@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,25 +8,122 @@
  *
  *****************************************************************************/
 
-// $Id: test_kupuhelpers.js 9384 2005-02-21 15:11:54Z duncan $
+// $Id: test_kupuhelpers.js 9982 2005-03-21 09:53:57Z yuppie $
+
+function SelectionTestCase() {
+
+    this.assertEquals = function(var1, var2, message) {
+        /* assert whether 2 vars have the same value */
+        // XXX: this should be removed again when issue 188 is resolved
+        // toSource() of Mozilla objects returns always the same
+        if (!message)  {
+            message = '';
+        } else {
+            message = "'" + message + "' ";
+        }
+        if (var1 != var2) {
+            throw('Assertion '+message+'failed: ' + var1 + ' != ' + var2);
+        };
+    };
+
+    var visibleEmptyElements = new Array('IMG', 'BR', 'HR');
+    var blockElements = new Array('P', 'DIV');
+
+    this.setUp = function() {
+        var iframe = document.getElementById('iframe');
+        this.doc = iframe.contentWindow.document;
+        this.body = this.doc.getElementsByTagName('body')[0];
+        this.kupudoc = new KupuDocument(iframe);
+        this.selection = this.kupudoc.getSelection();
+        this.kupudoc.getWindow().focus();
+    };
+
+    this._MozillaPosition = function(element, offset, lastnode) {
+        // this does not skip invisible whitespace
+        var node = element.firstChild;
+        for (var i=0; i < element.childNodes.length; i++) {
+            if (node.nodeType == node.TEXT_NODE) {
+                var endcounts = !node.nextSibling &&
+                         blockElements.contains(element.tagName.toUpperCase());
+                if ((offset < node.length) ||
+                    ((offset == node.length) && (!lastnode || endcounts))) {
+                    return [node, offset];
+                };
+                if (endcounts) {
+                    offset -= 1;
+                };
+                offset -= node.length;
+            } else if (node.nodeType == node.ELEMENT_NODE) {
+                if (visibleEmptyElements.contains(node.tagName.toUpperCase())) {
+                    if (offset > 0 && !node.nextSibling) {
+                        offset -= 1;
+                        i += 1;
+                    };
+                    if (offset == 0) {
+                        return [element, i];
+                    };
+                    offset -= 1;
+                } else {
+                    position = this._MozillaPosition(node, offset, lastnode);
+                    if (position[0]) {
+                        return position;
+                    };
+                    offset = position[1];
+                };
+            };
+            node = node.nextSibling;
+        };
+        return [node, offset];
+    };
+
+    this._setSelection = function(startOffset, startNextNode, endOffset,
+                                     endNextNode, verificationString) {
+        var element = this.body;
+        var innerSelection = this.selection.selection;
+        if (_SARISSA_IS_IE) {
+            var range = innerSelection.createRange();
+            var endrange = innerSelection.createRange();
+            range.moveToElementText(element);
+            range.moveStart('character', startOffset);
+            endrange.moveToElementText(element);
+            endrange.moveStart('character', endOffset);
+            range.setEndPoint('EndToStart', endrange);
+            range.select();
+        } else {
+            var position = this._MozillaPosition(element, startOffset,
+                                                 startNextNode);
+            innerSelection.collapse(position[0], position[1]);
+            if (startOffset != endOffset) {
+                var position = this._MozillaPosition(element, endOffset,
+                                                     endNextNode);
+                innerSelection.extend(position[0], position[1]);
+            };
+        };
+        this.assertEquals('"'+this.selection.toString().replace(/\r|\n/g, '')+'"',
+                          '"'+verificationString+'"');
+    };
+
+    this._cleanHtml = function(s) {
+        s = s.toLowerCase().replace(/[\r\n]/g, "");
+        s = s.replace(/\>[ ]+\</g, "><");
+        return s;
+    };
+
+    this.tearDown = function() {
+        this.body.innerHTML = '';
+    };
+};
+
+SelectionTestCase.prototype = new TestCase;
 
 function KupuHelpersTestCase() {
     this.name = 'KupuHelpersTestCase';
 
     this.setUp = function() {
-        this.doc = document.getElementById('iframe').contentWindow.document;
-        var head = this.doc.createElement('head');
-        var title = this.doc.createElement('title');
-        var titletext = this.doc.createTextNode('test');
-        this.body = this.doc.createElement('body');
-
-        title.appendChild(titletext);
-        head.appendChild(title);
-        var html = this.doc.documentElement;
-        while (html.childNodes.length > 0)
-            html.removeChild(html.childNodes[0]);
-        html.appendChild(head);
-        html.appendChild(this.body);
+        var iframe = document.getElementById('iframe');
+        this.doc = iframe.contentWindow.document;
+        this.body = this.doc.getElementsByTagName('body')[0];
+        this._testdiv = document.getElementById('testdiv');
     };
         
     this.testSelectSelectItem = function() {
@@ -94,36 +191,114 @@ function KupuHelpersTestCase() {
         this.assertEquals(dict['list'][0], 0);
         this.assertEquals(dict['list'].length, 2);
     };
+
+    this.testGetFromSelector = function() {
+        data = '<div><span id="xspan" class="xyzzy"></span></div>';
+        this._testdiv.innerHTML = data;
+        node = getFromSelector("xspan");
+        this.assertEquals(node && node.id, "xspan");
+        node = getFromSelector("#testdiv span.xyzzy");
+        this.assertEquals(node && node.id, "xspan");
+        data = '<div><button class="xyzzy"></button><span id="xspan" class="foo xyzzy bar"></span></div>';
+        this._testdiv.innerHTML = data;
+        node = getFromSelector("#testdiv span.xyzzy");
+        this.assertEquals(node && node.id, "xspan");
+    };
+
+    this.tearDown = function() {
+        this.body.innerHTML = '';
+        this._testdiv.innerHTML = '';
+    };
 };
 
 KupuHelpersTestCase.prototype = new TestCase;
 
 function KupuSelectionTestCase() {
-    this.setUp = function() {
-        this.main_body = document.getElementById('body');
-        this.iframe = this.main_body.appendChild(document.createElement('iframe'));
-        this.kupudoc = new KupuDocument(this.iframe);
-        this.document = this.iframe.contentWindow.document;
-        var doc = this.document;
-        doc.designMode = 'on';
-        var docel = doc.documentElement ? doc.documentElement : doc;
-        this.body = docel.appendChild(doc.createElement('body'));
-        this.kupudoc.getWindow().focus();
-    };
 
     this.testReplaceWithNode = function() {
-        var node = this.document.createElement('p');
-        var nbsp = this.document.createTextNode('\xa0');
-        node.appendChild(nbsp);
-        this.body.appendChild(node);
-        var selection = _SARISSA_IS_IE ? new IESelection(this.kupudoc) : new MozillaSelection(this.kupudoc);
-        selection.selectNodeContents(node);
-        this.assertEquals(selection.getSelectedNode(), node);
+        this.body.innerHTML = '<p>foo bar baz</p>';
+        // select                    |bar|
+        this._setSelection(4, null, 7, null, 'bar');
+        node = this.doc.createElement('img');
+        this.selection.replaceWithNode(node, true);
+        this.assertEquals(this.body.innerHTML.toLowerCase(), '<p>foo <img> baz</p>');
     };
 
-    this.tearDown = function() {
-        this.main_body.removeChild(this.iframe);
+    this.testReplaceWithNodeTwice = function() {
+        this.body.innerHTML = '<p>foo bar baz</p>';
+        // select                    |bar|
+        this._setSelection(4, null, 7, null, 'bar');
+        node = this.doc.createElement('img');
+        this.selection.replaceWithNode(node, true);
+        this.selection.replaceWithNode(node, true);
+        this.assertEquals(this.body.innerHTML.toLowerCase(), '<p>foo <img> baz</p>');
+    };
+
+    this.testParentElementMissing = function() {
+        this.body.innerHTML = '<p>foo <b>bar</b><img><img> baz</p>';
+        // remove selection
+        var selection = this.selection.selection;
+        _SARISSA_IS_IE ? selection.empty() : selection.removeAllRanges();
+        node = this.doc.getElementsByTagName('p')[0];
+        this.assertEquals(this.selection.parentElement(), node);
+    };
+
+    this.testParentElementBold = function() {
+        this.body.innerHTML = '<p>foo <b>bar</b><img/><img/> baz</p>';
+        // select                       |bar|
+        this._setSelection(4, true, 7, false, 'bar');
+        node = this.doc.getElementsByTagName('b')[0];
+        this.assertEquals(this.selection.parentElement(), node);
+    };
+
+    this.testParentElementImg = function() {
+        this.body.innerHTML = '<p>foo <b>bar</b><img/><img/> baz</p>';
+        // select                              |<img/>|
+        this._setSelection(7, true, 8, false, '');
+        node = this.doc.getElementsByTagName('img')[0];
+        this.assertEquals(this.selection.parentElement(), node);
+    };
+
+    this.testParentElementImgSpecial = function() {
+        this.body.innerHTML = '<p>foo <a><img/></a></p>';
+        // select                       |<img/>|
+        this._setSelection(4, true, 5, null, '');
+        node = this.doc.getElementsByTagName('img')[0];
+        foo = this.selection.parentElement();
+        this.assertEquals(this.selection.parentElement(), node);
+    };
+
+    this.testParentElementMixed = function() {
+        this.body.innerHTML = '<p>foo <b>bar</b><img><img> baz</p>';
+        // select                        |ar</b><img><img> b|
+        this._setSelection(5, null, 11, null, 'ar b');
+        node = this.doc.getElementsByTagName('p')[0];
+        this.assertEquals(this.selection.parentElement(), node);
+    };
+
+    this.testParentElement_r9516 = function() {
+        this.body.innerHTML = '<p>foo <b>bar</b><img/></p><p>baz</p>';
+        // select                              |<img/></p><p>baz|
+        this._setSelection(7, true, 12, false, 'baz');
+        node = this.doc.getElementsByTagName('body')[0];
+        this.assertEquals(this.selection.parentElement(), node);
+    };
+
+    this.testGetContentLength = function() {
+        this.body.innerHTML = '<p>foo bar baz</p>';
+        // select                    |bar|
+        this._setSelection(4, null, 7, null, 'bar');
+        this.assertEquals(this.selection.getContentLength(), 3);
+    };
+
+    this.testToString = function() {
+        this.body.innerHTML = '<p>foo <b>bar</b> baz</p>';
+        var selection = this.kupudoc.getSelection();
+        selection.selectNodeContents(this.body);
+        this.assertEquals(selection.toString(), 'foo bar baz');
+        selection.selectNodeContents(this.body.firstChild.childNodes[1]);
+        this.assertEquals(selection.toString(), 'bar');
     };
 };
 
-KupuSelectionTestCase.prototype = new TestCase;
+KupuSelectionTestCase.prototype = new SelectionTestCase;

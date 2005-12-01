@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -17,7 +17,7 @@ KupuEditor.prototype._getBase = function(dom) {
     }
 }
 
-// $Id: kupuploneeditor.js 9710 2005-03-08 15:33:37Z duncan $
+// $Id: kupuploneeditor.js 9879 2005-03-18 12:04:00Z yuppie $
 KupuEditor.prototype.makeLinksRelative = function(contents,base,debug) {
     // After extracting text from Internet Explorer, all the links in
     // the document are absolute.

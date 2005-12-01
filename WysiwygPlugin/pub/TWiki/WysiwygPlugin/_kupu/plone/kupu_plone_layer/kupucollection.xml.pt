@@ -1,4 +1,4 @@
-<tal:block define="charset site_properties/default_charset|string:utf-8;
+<tal:block define="charset here/portal_properties/site_properties/default_charset|here/portal_properties/default_charset|string:utf-8;
         content_type python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=%s' % charset);"
  replace='structure string:&lt;?xml version="1.0" encoding="${charset}" ?&gt;'>
 <?xml version="1.0"?>
@@ -7,10 +7,11 @@
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     xmlns:metal="http://xml.zope.org/namespaces/metal"
     >
-  <tal:with define="info python:context.kupuInfoForObjects([context])[0]">
+  <tal:with define="info python:context.kupuInfoForBrains([context])[0]">
     <metal:macro use-macro="here/kupucollection.xml/macros/commonToAllItems" />
     <src tal:define="resource_type request/resource_type | string:mediaobject;
-        global supportsupload python:resource_type=='mediaobject';"
+        global supportsupload python:resource_type=='mediaobject';
+        global showimagesize python:resource_type=='mediaobject';"
          tal:content="string:${here/absolute_url}/${template/getId}?resource_type=${resource_type}">Source</src>
   </tal:with>
 
@@ -21,10 +22,12 @@
          The default resource type is mediaobject
        </tal:comment>
        <tal:var define="
-           meta_types    python:context.kupuMetaTypesForResourceType(resource_type, True);
-           linkable_meta python:context.kupuMetaTypesForResourceType(resource_type, False);
-           values        python:context.contentValues(meta_types);
-           global items  python:context.kupuInfoForObjects(values, linkhere=context.meta_type in linkable_meta, linkparent=True);
+           list_types  python:context.kupuGetResourceTypes(resource_type, True);
+           link_types  python:context.kupuGetResourceTypes(resource_type, False)['portal_type'];
+           content     python:context.getFolderContents(contentFilter=list_types);
+           global items python:context.kupuInfoForBrains(content,
+                linkhere=context.portal_type in link_types,
+                linkparent=True, showimagesize=showimagesize);
            " />
      </metal:slot>
 

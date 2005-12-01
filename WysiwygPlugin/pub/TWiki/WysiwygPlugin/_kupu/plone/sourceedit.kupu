@@ -6,11 +6,9 @@
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
     xmlns:tal="http://xml.zope.org/namespaces/tal"
     >
-    <kupu:id>$Id: sourceedit.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+    <kupu:id>$Id: sourceedit.kupu 14546 2005-07-12 14:35:55Z duncan $</kupu:id>
 
   <kupu:part name="jsincludes">
-    <script type="text/javascript" src="kupusourceedit.js"
-        tal:attributes="src string:${portal_url}/kupusourceedit.js"> </script>
   </kupu:part>
 
 </kupu:feature>

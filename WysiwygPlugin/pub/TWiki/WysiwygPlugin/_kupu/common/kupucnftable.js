@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -14,12 +14,12 @@ TableTool.prototype.setTableRowRepeat = function() {
     var selNode = this.editor.getSelectedNode();
     var row = this.editor.getNearestParentOfType(selNode, 'tr');
     if (!row) {
-        this.editor.logMessage('Not inside a row!', 1);
+        this.editor.logMessage(_('Not inside a row!'), 1);
         return;
     };
     row.setAttribute('repeatable', 'repeatable');
     row.className = 'repeatable';
-    this.editor.logMessage('Row repeated');
+    this.editor.logMessage(_('Row repeated'));
     this.updateState(selNode);
 };
 
@@ -27,13 +27,13 @@ TableTool.prototype.delTableRowRepeat = function() {
     var selNode = this.editor.getSelectedNode();
     var row = this.editor.getNearestParentOfType(selNode, 'tr');
     if (!row) {
-        this.editor.logMessage('Not inside a row!', 1);
+        this.editor.logMessage(_('Not inside a row!'), 1);
         return;
     };
     row.removeAttribute('repeatable');
     row.className = '';
     row.removeAttribute('class');
-    this.editor.logMessage('Row repeat turned off');
+    this.editor.logMessage(_('Row repeat turned off'));
     this.updateState(selNode);
 };
 
@@ -43,23 +43,23 @@ function CNFTableToolBox(addtabledivid, edittabledivid, newrowsinputid,
                     addcolbuttonid, delcolbuttonid, fixbuttonid,
                     fixallbuttonid, toolboxid, plainclass, activeclass) {
 
-    this.addtablediv = document.getElementById(addtabledivid);
-    this.edittablediv = document.getElementById(edittabledivid);
-    this.newrowsinput = document.getElementById(newrowsinputid);
-    this.newcolsinput = document.getElementById(newcolsinputid);
-    this.makeheaderinput = document.getElementById(makeheaderinputid);
-    this.classselect = document.getElementById(classselectid);
-    this.alignselect = document.getElementById(alignselectid);
-    this.addtablebutton = document.getElementById(addtablebuttonid);
-    this.addrowbutton = document.getElementById(addrowbuttonid);
-    this.delrowbutton = document.getElementById(delrowbuttonid);
-    this.setrowrepeatbutton = document.getElementById(setrowrepeatbuttonid);
-    this.delrowrepeatbutton = document.getElementById(delrowrepeatbuttonid);
-    this.addcolbutton = document.getElementById(addcolbuttonid);
-    this.delcolbutton = document.getElementById(delcolbuttonid);
-    this.fixbutton = document.getElementById(fixbuttonid);
-    this.fixallbutton = document.getElementById(fixallbuttonid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.addtablediv = getFromSelector(addtabledivid);
+    this.edittablediv = getFromSelector(edittabledivid);
+    this.newrowsinput = getFromSelector(newrowsinputid);
+    this.newcolsinput = getFromSelector(newcolsinputid);
+    this.makeheaderinput = getFromSelector(makeheaderinputid);
+    this.classselect = getFromSelector(classselectid);
+    this.alignselect = getFromSelector(alignselectid);
+    this.addtablebutton = getFromSelector(addtablebuttonid);
+    this.addrowbutton = getFromSelector(addrowbuttonid);
+    this.delrowbutton = getFromSelector(delrowbuttonid);
+    this.setrowrepeatbutton = getFromSelector(setrowrepeatbuttonid);
+    this.delrowrepeatbutton = getFromSelector(delrowrepeatbuttonid);
+    this.addcolbutton = getFromSelector(addcolbuttonid);
+    this.delcolbutton = getFromSelector(delcolbuttonid);
+    this.fixbutton = getFromSelector(fixbuttonid);
+    this.fixallbutton = getFromSelector(fixallbuttonid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
 
@@ -95,7 +95,7 @@ function CNFTableToolBox(addtabledivid, edittabledivid, newrowsinputid,
         addEventHandler(this.fixallbutton, "click", this.tool.fixAllTables, this.tool);
         this.addtablediv.style.display = "block";
         this.edittablediv.style.display = "none";
-        this.editor.logMessage('Table tool initialized');
+        this.editor.logMessage(_('Table tool initialized'));
     };
 
     this.updateState = function(selNode) {

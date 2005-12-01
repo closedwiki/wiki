@@ -4,7 +4,7 @@
 <script type="text/javascript">
 
 function saveImage() {
-    var f = document.getElementById('imageform');
+    var f = getFromSelector('imageform');
     imagetool.createImage(f.url.value);
     window.close();
 };

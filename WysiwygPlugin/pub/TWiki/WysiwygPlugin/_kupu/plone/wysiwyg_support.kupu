@@ -7,11 +7,14 @@
     xmlns:metal="http://xml.zope.org/namespaces/metal"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     >
-  <kupu:id>$Id: wysiwyg_support.kupu 10603 2005-04-14 08:31:50Z duncan $</kupu:id>
+  <kupu:id>$Id: wysiwyg_support.kupu 14903 2005-07-22 09:56:09Z duncan $</kupu:id>
 
   <kupu:part name="editorbox">
 
-    <div metal:define-macro="wysiwygEditorBox">
+    <div metal:define-macro="wysiwygEditorBox" id="kupu-editor"
+        tal:define="name fieldName|inputname;
+                editorid string:kupu-editor-${name}"
+        tal:attributes="id editorid">
      <tal:usekupu define="fname fieldName|inputname|nothing;
                   usekupu python:here.contentUsesKupu(fname);">
       <div tal:condition="usekupu">
@@ -29,7 +32,7 @@
     <script type="text/javascript"
       tal:content="string:
       addEventHandler(window, 'load',  function() {
-          window.kupu = initPloneKupu(document.getElementById('kupu-editor'), 'kupu-editor-textarea');
+          window.kupu = initPloneKupu('${editorid}');
           window.kupuui = window.kupu.getTool('ui');
           window.drawertool = window.kupu.getTool('drawertool');
           window.kupu.initialize();}  , document);"></script>
@@ -68,7 +71,8 @@
   <tal:noeditor  tal:condition="not:usekupu">
     <tal:archetypes tal:condition="fieldName|nothing">
          <div metal:use-macro="here/widgets/visual/macros/area_format" />
-         <span tal:condition="here/browserSupportsKupu">
+         <span tal:condition="python:portal.kupu_library_tool.isKupuEnabled(REQUEST=context.REQUEST)"
+                tal:define="global kupu_convert_message_generated python:True">
            <a href="#"
                 tal:attributes="href string:${request/URL0}?kupu.convert=${fieldName};">Convert to HTML and edit with Kupu</a></span>
     </tal:archetypes>

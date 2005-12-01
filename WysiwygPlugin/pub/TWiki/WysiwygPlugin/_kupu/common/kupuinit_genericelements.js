@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -59,7 +59,7 @@ function initKupu(iframe) {
     };
 
     var boldchecker = ParentWithStyleChecker(new Array('b', 'strong'),
-					     'font-weight', 'bold');
+                                             'fontWeight', 'bold');
     var boldbutton = new KupuStateButton('kupu-bold-button', 
                                          execCommand('bold'),
                                          boldchecker,
@@ -68,7 +68,7 @@ function initKupu(iframe) {
     kupu.registerTool('boldbutton', boldbutton);
 
     var italicschecker = ParentWithStyleChecker(new Array('i', 'em'),
-						'font-style', 'italic');
+                                                'fontStyle', 'italic');
     var italicsbutton = new KupuStateButton('kupu-italic-button', 
                                            execCommand('italic'),
                                            italicschecker, 
@@ -76,7 +76,8 @@ function initKupu(iframe) {
                                            'kupu-italic-pressed');
     kupu.registerTool('italicsbutton', italicsbutton);
 
-    var underlinechecker = ParentWithStyleChecker(new Array('u'));
+    var underlinechecker = ParentWithStyleChecker(new Array('u'),
+                                                'textDecoration', 'underline');
     var underlinebutton = new KupuStateButton('kupu-underline-button', 
                                               execCommand('underline'),
                                               underlinechecker,
@@ -162,7 +163,7 @@ function initKupu(iframe) {
                                         'kupu-image-float-select', 'kupu-toolbox-images', 
                                         'kupu-toolbox', 'kupu-toolbox-active');
     imagetool.registerToolBox('imagetoolbox', imagetoolbox);
-    
+
     var tabletool = new TableTool();
     kupu.registerTool('tabletool', tabletool);
     // custom TableToolBox for CNF, Codename Future
@@ -238,10 +239,12 @@ function initKupu(iframe) {
                                                     conf['search_images_uri']);
         drawertool.registerDrawer('imagelibdrawer', imagelibdrawer);
     } catch(e) {
-        alert('There was a problem initializing the drawers. Most likely the ' +
-                'XSLT or XML files aren\'t available. If this is not the ' +
-                'Kupu demo version, check your files or the service that ' +
-                'provide them (error: ' + (e.message || e.toString()) + ').');
+        var msg = _('There was a problem initializing the drawers. Most ' +
+                'likely the XSLT or XML files aren\'t available. If this ' +
+                'is not the Kupu demo version, check your files or the ' +
+                'service that provide them (error: ${error}).',
+                {'error': (e.message || e.toString())});
+        alert(msg);
     };
 
     var linkdrawer = new LinkDrawer('kupu-linkdrawer', linktool);

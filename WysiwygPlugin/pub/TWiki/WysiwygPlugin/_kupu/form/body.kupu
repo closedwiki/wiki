@@ -18,6 +18,7 @@
   <kupu:part name="editorframe">
     <div class="kupu-editorframe">
       <iframe id="kupu-editor"
+              class="kupu-editor-iframe"
               frameborder="0"
               src="fulldoc.html"
               scrolling="auto">

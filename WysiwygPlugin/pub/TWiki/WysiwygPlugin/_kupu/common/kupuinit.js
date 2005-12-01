@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupuinit.js 9585 2005-03-02 15:15:08Z guido $
+// $Id: kupuinit.js 16467 2005-08-25 11:08:10Z guido $
 
 
 //----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ function initKupu(iframe) {
     };
 
     var boldchecker = ParentWithStyleChecker(new Array('b', 'strong'),
-					     'font-weight', 'bold');
+                                             'fontWeight', 'bold', 'bold');
     var boldbutton = new KupuStateButton('kupu-bold-button', 
                                          execCommand('bold'),
                                          boldchecker,
@@ -68,7 +68,7 @@ function initKupu(iframe) {
     kupu.registerTool('boldbutton', boldbutton);
 
     var italicschecker = ParentWithStyleChecker(new Array('i', 'em'),
-						'font-style', 'italic');
+                                              'fontStyle', 'italic', 'italic');
     var italicsbutton = new KupuStateButton('kupu-italic-button', 
                                            execCommand('italic'),
                                            italicschecker, 
@@ -76,7 +76,8 @@ function initKupu(iframe) {
                                            'kupu-italic-pressed');
     kupu.registerTool('italicsbutton', italicsbutton);
 
-    var underlinechecker = ParentWithStyleChecker(new Array('u'));
+    var underlinechecker = ParentWithStyleChecker(new Array('u'),
+                                   'textDecoration', 'underline', 'underline');
     var underlinebutton = new KupuStateButton('kupu-underline-button', 
                                               execCommand('underline'),
                                               underlinechecker,
@@ -84,7 +85,8 @@ function initKupu(iframe) {
                                               'kupu-underline-pressed');
     kupu.registerTool('underlinebutton', underlinebutton);
 
-    var subscriptchecker = ParentWithStyleChecker(new Array('sub'));
+    var subscriptchecker = ParentWithStyleChecker(new Array('sub'),
+                                                  null, null, 'subscript');
     var subscriptbutton = new KupuStateButton('kupu-subscript-button',
                                               execCommand('subscript'),
                                               subscriptchecker,
@@ -92,7 +94,8 @@ function initKupu(iframe) {
                                               'kupu-subscript-pressed');
     kupu.registerTool('subscriptbutton', subscriptbutton);
 
-    var superscriptchecker = ParentWithStyleChecker(new Array('super', 'sup'));
+    var superscriptchecker = ParentWithStyleChecker(new Array('super', 'sup'),
+                                                    null, null, 'superscript');
     var superscriptbutton = new KupuStateButton('kupu-superscript-button', 
                                                 execCommand('superscript'),
                                                 superscriptchecker,
@@ -156,9 +159,6 @@ function initKupu(iframe) {
     var linktoolbox = new LinkToolBox("kupu-link-input", "kupu-link-button", 'kupu-toolbox-links', 'kupu-toolbox', 'kupu-toolbox-active');
     linktool.registerToolBox('linktoolbox', linktoolbox);
 
-    var zoom = new KupuZoomTool('kupu-zoom-button');
-    kupu.registerTool('zoomtool', zoom);
-
     var imagetool = new ImageTool();
     kupu.registerTool('imagetool', imagetool);
     var imagetoolbox = new ImageToolBox('kupu-image-input', 'kupu-image-addbutton', 
@@ -184,6 +184,17 @@ function initKupu(iframe) {
     var sourceedittool = new SourceEditTool('kupu-source-button',
                                             'kupu-editor-textarea');
     kupu.registerTool('sourceedittool', sourceedittool);
+
+    var spellchecker = new KupuSpellChecker('kupu-spellchecker-button',
+                                            'spellcheck.cgi');
+    kupu.registerTool('spellchecker', spellchecker);
+
+    var zoom = new KupuZoomTool('kupu-zoom-button');
+    kupu.registerTool('zoomtool', zoom);
+
+    var cleanupexpressions = new CleanupExpressionsTool(
+            'kupucleanupexpressionselect', 'kupucleanupexpressionbutton');
+    kupu.registerTool('cleanupexpressions', cleanupexpressions);
 
     // Drawers...
 
@@ -228,10 +239,12 @@ function initKupu(iframe) {
                                                     conf['search_images_uri']);
         drawertool.registerDrawer('imagelibdrawer', imagelibdrawer);
     } catch(e) {
-        alert('There was a problem initializing the drawers. Most likely the ' +
-                'XSLT or XML files aren\'t available. If this is not the ' +
-                'Kupu demo version, check your files or the service that ' +
-                'provide them (error: ' + (e.message || e.toString()) + ').');
+        var msg = _('There was a problem initializing the drawers. Most ' +
+                'likely the XSLT or XML files aren\'t available. If this ' +
+                'is not the Kupu demo version, check your files or the ' +
+                'service that provide them (error: ${error}).',
+                {'error': (e.message || e.toString())});
+        alert(msg);
     };
 
     var linkdrawer = new LinkDrawer('kupu-linkdrawer', linktool);
@@ -240,14 +253,16 @@ function initKupu(iframe) {
     var tabledrawer = new TableDrawer('kupu-tabledrawer', tabletool);
     drawertool.registerDrawer('tabledrawer', tabledrawer);
 
-    var cleanupexpressions = new CleanupExpressionsTool(
-            'kupucleanupexpressionselect', 'kupucleanupexpressionbutton');
-    kupu.registerTool('cleanupexpressions', cleanupexpressions);
-
     // register some cleanup filter
     // remove tags that aren't in the XHTML DTD
     var nonxhtmltagfilter = new NonXHTMLTagFilter();
     kupu.registerFilter(nonxhtmltagfilter);
 
+    if (window.kuputoolcollapser) {
+        var collapser = new window.kuputoolcollapser.Collapser(
+                                                        'kupu-toolboxes');
+        collapser.initialize();
+    };
+    
     return kupu;
 };

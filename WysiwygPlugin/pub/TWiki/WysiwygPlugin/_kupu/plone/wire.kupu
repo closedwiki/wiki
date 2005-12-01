@@ -2,7 +2,7 @@
   implementation="plone"
   xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
   >
-  <kupu:id>$Id: wire.kupu 9274 2005-02-17 16:22:12Z duncan $</kupu:id>
+  <kupu:id>$Id: wire.kupu 14903 2005-07-22 09:56:09Z duncan $</kupu:id>
 
   <!-- Plone specific wiring -->
 
@@ -19,7 +19,10 @@
   </kupu:fill-slot>
 
   <kupu:fill-slot name="not_has_kupu">
+    <!-- insert styles even if kupu is disabled -->
+    <kupu:insert-part feature="head" part="styles" />
     <kupu:insert-part feature="wysiwyg_support" part="textarea" />
+    <kupu:insert-part feature="body" part="force-kupu" />
   </kupu:fill-slot>
 
   <kupu:fill-slot name="fulleditor">
@@ -38,6 +41,7 @@
     <kupu:insert-part feature="toolboxes" part="toolboxes" />
     <kupu:insert-part feature="colorchooser" part="colorchooser" />
     <kupu:insert-part feature="body" part="editorframe" />
+    <kupu:insert-part feature="body" part="suppress-kupu" />
   </kupu:fill-slot>
 
 </kupu:wire>

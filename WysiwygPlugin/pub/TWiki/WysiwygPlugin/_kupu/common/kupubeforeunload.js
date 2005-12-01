@@ -4,6 +4,9 @@ if (!window.beforeunload) (function() {
         var self = this;
 
         this.message = "Your form has not been saved. All changes you have made will be lost";
+        if (window._) {
+            this.message = _("Your form has not been saved. All changes you have made will be lost");
+        };
         this.forms = [];
         this.chkId = [];
         this.chkType = new this.CheckType();
@@ -20,7 +23,7 @@ if (!window.beforeunload) (function() {
             }
             if (message===true) message = self.message;
             if (message===false) message = undefined;
-            if (event) event.returnValue = message;
+            if (event && message) event.returnValue = message;
             return message;
         }
         this.execute.tool = this;

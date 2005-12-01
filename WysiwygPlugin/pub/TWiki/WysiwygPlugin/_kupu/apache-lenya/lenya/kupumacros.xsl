@@ -111,6 +111,27 @@
     <title>Apache Lenya | Edit <xsl:value-of select="$document-path"/> with Kupu </title>
   </xsl:template>
   
+  <xsl:template match="xhtml:h1[1]">
+    <div style="float:left; width: 50%; margin-left: 5px;">
+      <h1 style="margin: 0; padding: 0;">Edit document</h1>
+      <span 
+        style="font-style: italic; font-size: 1.3em; letter-spacing: 1px; color: gray;">
+        <xsl:value-of select="$document-path"/>
+      </span>
+    </div>
+    <div style="display: inline; float: right;">
+      <a href="http://kupu.oscom.org/" target="_blank">
+        <img src="{$kupu-logo}" style="vertical-align: top; border: 0;" 
+          alt="Kupu logo"/>
+      </a>
+      <a href="http://lenya.apache.org" target="_blank">
+        <img src="{$lenya-logo}" 
+          alt="Lenya project logo" style="border: 0;"/>
+      </a>
+    </div>
+    <br clear="all"/>    
+  </xsl:template>
+  
   <xsl:template match="@*|node()">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>

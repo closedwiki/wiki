@@ -12,20 +12,18 @@ email.
 How can I contribute?
 ---------------------
 
-For small contributions, please send an email with a UNIX patchfile
-attached to kupu-development@lists.sourceforge.net. Make sure you say
-what version the patch applies to, what it changes and why this was
-necessary.
+For small contributions, please send an email with a UNIX patchfile attached
+to kupu-dev@codespeak.net. Make sure you say what version the patch applies
+to, what it changes and why this was necessary.
 
 Alternatively, you can submit bug reports and/or patches to the issue
 tracker: http://codespeak.net/issues/kupu/ (mind the trailing slash).
 
-If you have written a target-platform customization layer for kupu and
-would like us to include it in the main distribution, please send a
-detailed email to kupu-development@lists.sourceforge.net. Depending
-on our decision whether to include it or not, you will receive CVS
-checkin rights. You will then also be responsible for maintaining this
-customization layer.
+If you have written a target-platform customization layer for kupu and would
+like us to include it in the main distribution, please send a detailed email
+to kupu-dev@codespeak.net. Depending on our decision whether to include it or
+not, you will receive SVN checkin rights. You will then also be responsible
+for maintaining this customization layer.
 
 What are the rules?
 -------------------

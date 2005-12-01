@@ -2,7 +2,8 @@
 <kupu:wire
     implementation="zope2"
     xmlns:kupu="http://kupu.oscom.org/namespaces/dist"
-    xmlns:metal="http://xml.zope.org/namespaces/metal">
+    xmlns:metal="http://xml.zope.org/namespaces/metal"
+    metal:define-macro="dummy">
 
   <kupu:fill-slot name="head">
     <metal:macro define-macro="head">
@@ -42,7 +43,7 @@
       <kupu:insert-part feature="xmlconfig" part="defaultconfig" />
     </metal:slot>
     <metal:slot define-slot="config_drawers">
-      <kupu:insert-part feature="drawers" part="xmlconfig" />
+      <kupu:insert-part feature="xmlconfig" part="drawerconfig" />
     </metal:slot>
     <metal:slot define-slot="config_extra" />
   </kupu:fill-slot>
@@ -95,6 +96,9 @@
   <kupu:fill-slot name="toolbar-buttons">
     <metal:slot define-slot="buttongroup_logo">
       <kupu:insert-part feature="toolbar" part="logo" />
+    </metal:slot>
+
+    <metal:slot define-slot="buttongroup_zoom">
       <kupu:insert-part feature="toolbar" part="zoom" />
     </metal:slot>
 
@@ -149,7 +153,11 @@
     <metal:slot define-slot="buttongroup_source">
       <kupu:insert-part feature="sourceedit" part="buttons" />
     </metal:slot>
-    
+
+    <metal:slot define-slot="buttongroup_spellchecker">
+      <kupu:insert-part feature="spellchecker" part="buttons" />
+    </metal:slot>
+
     <metal:slot define-slot="buttongroup_extra" />
     
   </kupu:fill-slot>
@@ -169,6 +177,9 @@
 
     <metal:slot define-slot="toolbox_tables">
       <kupu:insert-part feature="toolboxes" part="tables" />
+    </metal:slot>
+    
+    <metal:slot define-slot="toolbox_cleanup">
       <kupu:insert-part feature="toolboxes" part="cleanupexpressions" />
     </metal:slot>
     

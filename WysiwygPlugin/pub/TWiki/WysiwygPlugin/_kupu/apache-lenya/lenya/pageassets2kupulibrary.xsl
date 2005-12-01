@@ -4,7 +4,7 @@
   Transform lenya info assets about a pages resources
   to Kupu's library format.
   
-  @version $Id: pageassets2kupulibrary.xsl 9553 2005-03-01 16:51:54Z gregor $
+  @version $Id: pageassets2kupulibrary.xsl 9552 2005-03-01 16:51:51Z gregor $
 -->
 
 <xsl:stylesheet version="1.0"

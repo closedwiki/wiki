@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupubasetools.js 11450 2005-04-26 09:57:43Z guido $
+// $Id: kupubasetools.js 14505 2005-07-11 15:54:18Z duncan $
 
 
 //----------------------------------------------------------------------------
@@ -65,11 +65,18 @@ function KupuTool() {
         };
     };
 
+    this.enable = function() {
+        // Called when the tool is enabled after a form is dismissed.
+    }
+
+    this.disable = function() {
+        // Called when the tool is disabled (e.g. for a modal form)
+    }
     // private methods
     addEventHandler = addEventHandler;
     
     this._selectSelectItem = function(select, item) {
-        this.editor.logMessage('Deprecation warning: KupuTool._selectSelectItem');
+        this.editor.logMessage(_('Deprecation warning: KupuTool._selectSelectItem'));
     };
     this._fixTabIndex = function(element) {
         var tabIndex = this.editor.getDocument().getEditable().tabIndex-1;
@@ -93,7 +100,7 @@ function KupuToolBox() {
     };
     
     this._selectSelectItem = function(select, item) {
-        this.editor.logMessage('Deprecation warning: KupuToolBox._selectSelectItem');
+        this.editor.logMessage(_('Deprecation warning: KupuToolBox._selectSelectItem'));
     };
 };
 
@@ -104,13 +111,28 @@ function NoContextMenu(object) {
     }
     return object;
 }
+
+// Helper function for enabling/disabling tools
+function KupuButtonDisable(button) {
+    button = button || this.button;
+    button.disabled = "disabled";
+    button.className += ' disabled';
+}
+function KupuButtonEnable(button) {
+    button = button || this.button;
+    button.disabled = "";
+    button.className = button.className.replace(/ *\bdisabled\b/g, '');
+}
+
+
 //----------------------------------------------------------------------------
 // Implementations
 //----------------------------------------------------------------------------
 
 function KupuButton(buttonid, commandfunc, tool) {
     /* Base prototype for kupu button tools */
-    this.button = window.document.getElementById(buttonid);
+    this.buttonid = buttonid;
+    this.button = getFromSelector(buttonid);
     this.commandfunc = commandfunc;
     this.tool = tool;
 
@@ -123,7 +145,6 @@ function KupuButton(buttonid, commandfunc, tool) {
     this.execCommand = function() {
         /* exec this button's command */
         this.commandfunc(this, this.editor, this.tool);
-        this.editor.focusDocument();
     };
 
     this.updateState = function(selNode, event) {
@@ -131,14 +152,16 @@ function KupuButton(buttonid, commandfunc, tool) {
             look 'pressed in' or not
         */
     };
+    this.disable = KupuButtonDisable;
+    this.enable = KupuButtonEnable;
 };
 
 KupuButton.prototype = new KupuTool;
-
 function KupuStateButton(buttonid, commandfunc, checkfunc, offclass, onclass) {
     /* A button that can have two states (e.g. pressed and
        not-pressed) based on CSS classes */
-    this.button = window.document.getElementById(buttonid);
+    this.buttonid = buttonid;
+    this.button = getFromSelector(buttonid);
     this.commandfunc = commandfunc;
     this.checkfunc = checkfunc;
     this.offclass = offclass;
@@ -147,10 +170,10 @@ function KupuStateButton(buttonid, commandfunc, checkfunc, offclass, onclass) {
 
     this.execCommand = function() {
         /* exec this button's command */
-        this.commandfunc(this, this.editor);
         this.button.className = (this.pressed ? this.offclass : this.onclass);
         this.pressed = !this.pressed;
         this.editor.focusDocument();
+        this.commandfunc(this, this.editor);
     };
 
     this.updateState = function(selNode, event) {
@@ -175,10 +198,26 @@ function KupuStateButton(buttonid, commandfunc, checkfunc, offclass, onclass) {
 
 KupuStateButton.prototype = new KupuButton;
 
+/* Same as the state button, but the focusDocument call is delayed.
+ * Mozilla&Firefox have a bug on windows which can cause a crash if you
+ * change CSS positioning styles on an element which has focus.
+ */
+function KupuLateFocusStateButton(buttonid, commandfunc, checkfunc, offclass, onclass) {
+    KupuStateButton.apply(this, [buttonid, commandfunc, checkfunc, offclass, onclass]);
+    this.execCommand = function() {
+        /* exec this button's command */
+        this.button.className = (this.pressed ? this.offclass : this.onclass);
+        this.pressed = !this.pressed;
+        this.commandfunc(this, this.editor);
+        this.editor.focusDocument();
+    };
+}
+KupuLateFocusStateButton.prototype = new KupuStateButton;
+
 function KupuRemoveElementButton(buttonid, element_name, cssclass) {
     /* A button specialized in removing elements in the current node
        context. Typical usages include removing links, images, etc. */
-    this.button = window.document.getElementById(buttonid);
+    this.button = getFromSelector(buttonid);
     this.onclass = 'invisible';
     this.offclass = cssclass;
     this.pressed = false;
@@ -204,13 +243,13 @@ function KupuUI(textstyleselectid) {
     */
     
     // attributes
-    this.tsselect = document.getElementById(textstyleselectid);
+    this.tsselect = getFromSelector(textstyleselectid);
 
     this.initialize = function(editor) {
         /* initialize the ui like tools */
         this.editor = editor;
         this._fixTabIndex(this.tsselect);
-        addEventHandler(this.tsselect, 'change', this.setTextStyleHandler, this);
+        this._selectevent = addEventHandler(this.tsselect, 'change', this.setTextStyleHandler, this);
     };
 
     this.setTextStyleHandler = function(event) {
@@ -239,7 +278,7 @@ function KupuUI(textstyleselectid) {
             this.editor.execCommand('Cut');
         } catch (e) {
             if (this.editor.getBrowserName() == 'Mozilla') {
-                alert('Cutting from JavaScript is disabled on your Mozilla due to security settings. For more information, read http://www.mozilla.org/editor/midasdemo/securityprefs.html');
+                alert(_('Cutting from JavaScript is disabled on your Mozilla due to security settings. For more information, read http://www.mozilla.org/editor/midasdemo/securityprefs.html'));
             } else {
                 throw e;
             };
@@ -252,7 +291,7 @@ function KupuUI(textstyleselectid) {
             this.editor.execCommand('Copy');
         } catch (e) {
             if (this.editor.getBrowserName() == 'Mozilla') {
-                alert('Copying from JavaScript is disabled on your Mozilla due to security settings. For more information, read http://www.mozilla.org/editor/midasdemo/securityprefs.html');
+                alert(_('Copying from JavaScript is disabled on your Mozilla due to security settings. For more information, read http://www.mozilla.org/editor/midasdemo/securityprefs.html'));
             } else {
                 throw e;
             };
@@ -265,7 +304,7 @@ function KupuUI(textstyleselectid) {
             this.editor.execCommand('Paste');
         } catch (e) {
             if (this.editor.getBrowserName() == 'Mozilla') {
-                alert('Pasting from JavaScript is disabled on your Mozilla due to security settings. For more information, read http://www.mozilla.org/editor/midasdemo/securityprefs.html');
+                alert(_('Pasting from JavaScript is disabled on your Mozilla due to security settings. For more information, read http://www.mozilla.org/editor/midasdemo/securityprefs.html'));
             } else {
                 throw e;
             };
@@ -274,12 +313,35 @@ function KupuUI(textstyleselectid) {
     };
 
     this.setTextStyle = function(style) {
-        /* method for the text style pulldown */
-        // XXX Yuck!!
-        if (this.editor.getBrowserName() == "IE") {
-            style = '<' + style + '>';
+        /* method for the text style pulldown
+            
+            parse the argument into a type and classname part if it contains
+            a pipe symbol (|), generate a block element
+        */
+        var classname = "";
+        var eltype = style;
+        if (style.indexOf('|') > -1) {
+            style = style.split('|');
+            eltype = style[0];
+            classname = style[1];
         };
-        this.editor.execCommand('formatblock', style);
+
+        var command = eltype;
+        // first create the element, then find it and set the classname
+        if (this.editor.getBrowserName() == 'IE') {
+            command = '<' + eltype + '>';
+        };
+        this.editor.getDocument().execCommand('formatblock', command);
+
+        // now get a reference to the element just added
+        var selNode = this.editor.getSelectedNode();
+        var el = this.editor.getNearestParentOfType(selNode, eltype);
+
+        // now set the classname
+        if (classname) {
+            el.className = classname;
+        };
+        this.editor.updateState();
     };
 
     this.updateState = function(selNode) {
@@ -307,11 +369,20 @@ function KupuUI(textstyleselectid) {
   
     this.createContextMenuElements = function(selNode, event) {
         var ret = new Array();
-        ret.push(new ContextMenuElement('Cut', this.cutButtonHandler, this));
-        ret.push(new ContextMenuElement('Copy', this.copyButtonHandler, this));
-        ret.push(new ContextMenuElement('Paste', this.pasteButtonHandler, this));
+        ret.push(new ContextMenuElement(_('Cut'), 
+                    this.cutButtonHandler, this));
+        ret.push(new ContextMenuElement(_('Copy'), 
+                    this.copyButtonHandler, this));
+        ret.push(new ContextMenuElement(_('Paste'), 
+                    this.pasteButtonHandler, this));
         return ret;
     };
+    this.disable = function() {
+        this.tsselect.disabled = "disabled";
+    }
+    this.enable = function() {
+        this.tsselect.disabled = "";
+    }
 }
 
 KupuUI.prototype = new KupuTool;
@@ -319,9 +390,9 @@ KupuUI.prototype = new KupuTool;
 function ColorchooserTool(fgcolorbuttonid, hlcolorbuttonid, colorchooserid) {
     /* the colorchooser */
     
-    this.fgcolorbutton = document.getElementById(fgcolorbuttonid);
-    this.hlcolorbutton = document.getElementById(hlcolorbuttonid);
-    this.ccwindow = document.getElementById(colorchooserid);
+    this.fgcolorbutton = getFromSelector(fgcolorbuttonid);
+    this.hlcolorbutton = getFromSelector(hlcolorbuttonid);
+    this.ccwindow = getFromSelector(colorchooserid);
     this.command = null;
 
     this.initialize = function(editor) {
@@ -336,7 +407,7 @@ function ColorchooserTool(fgcolorbuttonid, hlcolorbuttonid, colorchooserid) {
 
         this.hide();
 
-        this.editor.logMessage('Colorchooser tool initialized');
+        this.editor.logMessage(_('Colorchooser tool initialized'));
     };
 
     this.updateState = function(selNode) {
@@ -367,7 +438,7 @@ function ColorchooserTool(fgcolorbuttonid, hlcolorbuttonid, colorchooserid) {
         this.editor.execCommand(this.command, cell.getAttribute('bgColor'));
         this.hide();
     
-        this.editor.logMessage('Color chosen');
+        this.editor.logMessage(_('Color chosen'));
     };
 
     this.show = function(command) {
@@ -421,6 +492,14 @@ function ColorchooserTool(fgcolorbuttonid, hlcolorbuttonid, colorchooserid) {
 
         return table;
     };
+    this.enable = function() {
+        KupuButtonEnable(this.fgcolorbutton);
+        KupuButtonEnable(this.hlcolorbutton);
+    }
+    this.disable = function() {
+        KupuButtonDisable(this.fgcolorbutton);
+        KupuButtonDisable(this.hlcolorbutton);
+    }
 }
 
 ColorchooserTool.prototype = new KupuTool;
@@ -428,8 +507,8 @@ ColorchooserTool.prototype = new KupuTool;
 function PropertyTool(titlefieldid, descfieldid) {
     /* The property tool */
 
-    this.titlefield = document.getElementById(titlefieldid);
-    this.descfield = document.getElementById(descfieldid);
+    this.titlefield = getFromSelector(titlefieldid);
+    this.descfield = getFromSelector(descfieldid);
 
     this.initialize = function(editor) {
         /* attach the event handlers and set the initial values */
@@ -440,7 +519,7 @@ function PropertyTool(titlefieldid, descfieldid) {
         // set the fields
         var heads = this.editor.getInnerDocument().getElementsByTagName('head');
         if (!heads[0]) {
-            this.editor.logMessage('No head in document!', 1);
+            this.editor.logMessage(_('No head in document!'), 1);
         } else {
             var head = heads[0];
             var titles = head.getElementsByTagName('title');
@@ -461,7 +540,7 @@ function PropertyTool(titlefieldid, descfieldid) {
             }
         }
 
-        this.editor.logMessage('Property tool initialized');
+        this.editor.logMessage(_('Property tool initialized'));
     };
 
     this.updateProperties = function() {
@@ -469,7 +548,7 @@ function PropertyTool(titlefieldid, descfieldid) {
         var doc = this.editor.getInnerDocument();
         var heads = doc.getElementsByTagName('HEAD');
         if (!heads) {
-            this.editor.logMessage('No head in document!', 1);
+            this.editor.logMessage(_('No head in document!'), 1);
             return;
         }
 
@@ -516,7 +595,7 @@ function PropertyTool(titlefieldid, descfieldid) {
             head.appendChild(meta);
         }
 
-        this.editor.logMessage('Properties modified');
+        this.editor.logMessage(_('Properties modified'));
     };
 }
 
@@ -527,7 +606,7 @@ function LinkTool() {
     
     this.initialize = function(editor) {
         this.editor = editor;
-        this.editor.logMessage('Link tool initialized');
+        this.editor.logMessage(_('Link tool initialized'));
     };
     
     this.createLinkHandler = function(event) {
@@ -610,11 +689,12 @@ function LinkTool() {
                 var doc = this.editor.getInnerDocument();
                 linkel = doc.createElement("a");
                 linkel.setAttribute('href', url);
+                linkel.setAttribute('class', 'generated');
                 this.editor.getSelection().replaceWithNode(linkel, true);
                 this.updateLink(linkel, url, type, name, target, title);
             };
         }
-        this.editor.logMessage('Link added');
+        this.editor.logMessage(_('Link added'));
         this.editor.updateState();
     };
     
@@ -623,7 +703,7 @@ function LinkTool() {
         var currnode = this.editor.getSelectedNode();
         var linkel = this.editor.getNearestParentOfType(currnode, 'a');
         if (!linkel) {
-            this.editor.logMessage('Not inside link');
+            this.editor.logMessage(_('Not inside link'));
             return;
         };
         while (linkel.childNodes.length) {
@@ -631,7 +711,7 @@ function LinkTool() {
         };
         linkel.parentNode.removeChild(linkel);
         
-        this.editor.logMessage('Link removed');
+        this.editor.logMessage(_('Link removed'));
         this.editor.updateState();
     };
     
@@ -640,9 +720,9 @@ function LinkTool() {
         var ret = new Array();
         var link = this.editor.getNearestParentOfType(selNode, 'a');
         if (link) {
-            ret.push(new ContextMenuElement('Delete link', this.deleteLink, this));
+            ret.push(new ContextMenuElement(_('Delete link'), this.deleteLink, this));
         } else {
-            ret.push(new ContextMenuElement('Create link', this.createLinkHandler, this));
+            ret.push(new ContextMenuElement(_('Create link'), this.createLinkHandler, this));
         };
         return ret;
     };
@@ -653,9 +733,9 @@ LinkTool.prototype = new KupuTool;
 function LinkToolBox(inputid, buttonid, toolboxid, plainclass, activeclass) {
     /* create and edit links */
     
-    this.input = document.getElementById(inputid);
-    this.button = document.getElementById(buttonid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.input = getFromSelector(inputid);
+    this.button = getFromSelector(buttonid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
     
@@ -702,7 +782,7 @@ function LinkToolBox(inputid, buttonid, toolboxid, plainclass, activeclass) {
         var url = this.input.value;
         linkel.setAttribute('href', url);
 
-        this.editor.logMessage('Link modified');
+        this.editor.logMessage(_('Link modified'));
     };
 };
 
@@ -714,7 +794,7 @@ function ImageTool() {
     this.initialize = function(editor) {
         /* attach the event handlers */
         this.editor = editor;
-        this.editor.logMessage('Image tool initialized');
+        this.editor.logMessage(_('Image tool initialized'));
     };
 
     this.createImageHandler = function(event) {
@@ -723,39 +803,55 @@ function ImageTool() {
         imageWindow.imagetool = this;
         imageWindow.focus();
     };
-    
-    this.createImage = function(url, floatstyle) {
+
+    this.createImage = function(url, alttext, imgclass) {
+        /* create an image */
         var img = this.editor.getInnerDocument().createElement('img');
-        if (floatstyle) {
-            img.style.cssFloat = floatstyle;
+        img.src = url;
+        img.removeAttribute('height');
+        img.removeAttribute('width');
+        if (alttext) {
+            img.alt = alttext;
         };
-        img.setAttribute('src', url);
+        if (imgclass) {
+            img.className = imgclass;
+        };
         img = this.editor.insertNodeAtSelection(img, 1);
-        this.editor.logMessage('Image inserted');
+        this.editor.logMessage(_('Image inserted'));
         this.editor.updateState();
         return img;
     };
-    
+
+    this.setImageClass = function(imgclass) {
+        /* set the class of the selected image */
+        var currnode = this.editor.getSelectedNode();
+        var currimg = this.editor.getNearestParentOfType(currnode, 'IMG');
+        if (currimg) {
+            currimg.className = imgclass;
+        };
+    };
+
     this.createContextMenuElements = function(selNode, event) {
-        return new Array(new ContextMenuElement('Create image', this.createImageHandler, this));
+        return new Array(new ContextMenuElement(_('Create image'), this.createImageHandler, this));
     };
 }
 
 ImageTool.prototype = new KupuTool;
 
-function ImageToolBox(inputfieldid, insertbuttonid, floatselectid, toolboxid, plainclass, activeclass) {
+function ImageToolBox(inputfieldid, insertbuttonid, classselectid, toolboxid, plainclass, activeclass) {
     /* toolbox for adding images */
 
-    this.inputfield = document.getElementById(inputfieldid);
-    this.insertbutton = document.getElementById(insertbuttonid);
-    this.floatselect = document.getElementById(floatselectid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.inputfield = getFromSelector(inputfieldid);
+    this.insertbutton = getFromSelector(insertbuttonid);
+    this.classselect = getFromSelector(classselectid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
 
     this.initialize = function(tool, editor) {
         this.tool = tool;
         this.editor = editor;
+        addEventHandler(this.classselect, "change", this.setImageClass, this);
         addEventHandler(this.insertbutton, "click", this.addImage, this);
     };
 
@@ -767,8 +863,8 @@ function ImageToolBox(inputfieldid, insertbuttonid, floatselectid, toolboxid, pl
             if (this.toolboxel) {
                 this.toolboxel.className = this.activeclass;
                 this.inputfield.value = imageel.getAttribute('src');
-                var floatstyle = imageel.style.cssFloat ? imageel.style.cssFloat : 'left';
-                selectSelectItem(this.floatselect, floatstyle);
+                var imgclass = imageel.className ? imageel.className : 'image-inline';
+                selectSelectItem(this.classselect, imgclass);
             };
         } else {
             if (this.toolboxel) {
@@ -776,12 +872,20 @@ function ImageToolBox(inputfieldid, insertbuttonid, floatselectid, toolboxid, pl
             };
         };
     };
-    
+
     this.addImage = function() {
         /* add an image */
         var url = this.inputfield.value;
-        var floatstyle = this.floatselect.options[this.floatselect.selectedIndex].value;
-        this.tool.createImage(url, floatstyle);
+        var sel_class = this.classselect.options[this.classselect.selectedIndex].value;
+        this.tool.createImage(url, null, sel_class);
+        this.editor.focusDocument();
+    };
+
+    this.setImageClass = function() {
+        /* set the class for the current image */
+        var sel_class = this.classselect.options[this.classselect.selectedIndex].value;
+        this.tool.setImageClass(sel_class);
+        this.editor.focusDocument();
     };
 };
 
@@ -795,16 +899,16 @@ function TableTool() {
         var table =  this.editor.getNearestParentOfType(selNode, 'table');
         if (!table) {
             ret = new Array();
-            var el = new ContextMenuElement('Add table', this.addPlainTable, this);
+            var el = new ContextMenuElement(_('Add table'), this.addPlainTable, this);
             ret.push(el);
             return ret;
         } else {
             var ret = new Array();
-            ret.push(new ContextMenuElement('Add row', this.addTableRow, this));
-            ret.push(new ContextMenuElement('Delete row', this.delTableRow, this));
-            ret.push(new ContextMenuElement('Add column', this.addTableColumn, this));
-            ret.push(new ContextMenuElement('Delete column', this.delTableColumn, this));
-            ret.push(new ContextMenuElement('Delete Table', this.delTable, this));
+            ret.push(new ContextMenuElement(_('Add row'), this.addTableRow, this));
+            ret.push(new ContextMenuElement(_('Delete row'), this.delTableRow, this));
+            ret.push(new ContextMenuElement(_('Add column'), this.addTableColumn, this));
+            ret.push(new ContextMenuElement(_('Delete column'), this.delTableColumn, this));
+            ret.push(new ContextMenuElement(_('Delete Table'), this.delTable, this));
             return ret;
         };
     };
@@ -816,13 +920,15 @@ function TableTool() {
 
     this.createTable = function(rows, cols, makeHeader, tableclass) {
         /* add a table */
+        if (rows < 1 || rows > 99 || cols < 1 || cols > 99) {
+            this.editor.logMessage(_('Invalid table size'), 1);
+            return;
+        };
+
         var doc = this.editor.getInnerDocument();
 
         table = doc.createElement("table");
-        table.setAttribute("border", "1");
-        table.setAttribute("cellpadding", "8");
-        table.setAttribute("cellspacing", "2");
-        table.setAttribute("class", tableclass);
+        table.className = tableclass;
 
         // If the user wants a row of headings, make them
         if (makeHeader) {
@@ -853,16 +959,20 @@ function TableTool() {
 
         this._setTableCellHandlers(table);
 
-        this.editor.logMessage('Table added');
+        this.editor.logMessage(_('Table added'));
+        this.editor.updateState();
         return table;
     };
 
     this._setTableCellHandlers = function(table) {
         // make each cell select its full contents if it's clicked
+        addEventHandler(table, 'click', this._selectContentIfEmpty, this);
+
         var cells = table.getElementsByTagName('td');
         for (var i=0; i < cells.length; i++) {
             addEventHandler(cells[i], 'click', this._selectContentIfEmpty, this);
         };
+        
         // select the nbsp in the first cell
         var firstcell = cells[0];
         if (firstcell) {
@@ -941,7 +1051,8 @@ function TableTool() {
             currtbody.insertBefore(newrow, nextrow);
         }
         
-        this.editor.logMessage('Table row added');
+        this.editor.focusDocument();
+        this.editor.logMessage(_('Table row added'));
     };
 
     this.delTableRow = function() {
@@ -949,14 +1060,25 @@ function TableTool() {
         var currnode = this.editor.getSelectedNode();
         var parentrow = this.editor.getNearestParentOfType(currnode, "TR");
         if (!parentrow) {
-            this.editor.logMessage('No row to delete', 1);
+            this.editor.logMessage(_('No row to delete'), 1);
             return;
         }
+
+        // move selection aside
+        // XXX: doesn't work if parentrow is the only row of thead/tbody/tfoot
+        // XXX: doesn't preserve the colindex
+        var selection = this.editor.getSelection();
+        if (parentrow.nextSibling) {
+            selection.selectNodeContents(parentrow.nextSibling.firstChild);
+        } else if (parentrow.previousSibling) {
+            selection.selectNodeContents(parentrow.previousSibling.firstChild);
+        };
 
         // remove the row
         parentrow.parentNode.removeChild(parentrow);
 
-        this.editor.logMessage('Table row removed');
+        this.editor.focusDocument();
+        this.editor.logMessage(_('Table row removed'));
     };
 
     this.addTableColumn = function() {
@@ -967,7 +1089,7 @@ function TableTool() {
             currtd = this.editor.getNearestParentOfType(currnode, 'TH');
         }
         if (!currtd) {
-            this.editor.logMessage('No parentcolumn found!', 1);
+            this.editor.logMessage(_('No parentcolumn found!'), 1);
             return;
         }
         var currtr = this.editor.getNearestParentOfType(currnode, 'TR');
@@ -975,7 +1097,8 @@ function TableTool() {
         
         // get the current index
         var tdindex = this._getColIndex(currtd);
-        this.editor.logMessage('tdindex: ' + tdindex);
+        // XXX this looks like a debug message, remove
+        this.editor.logMessage(_('tdindex: ${tdindex}'));
 
         // now add a column to all rows
         // first the thead
@@ -1049,7 +1172,8 @@ function TableTool() {
                 }
             }
         }
-        this.editor.logMessage('Table column added');
+        this.editor.focusDocument();
+        this.editor.logMessage(_('Table column added'));
     };
 
     this.delTableColumn = function() {
@@ -1061,6 +1185,14 @@ function TableTool() {
         }
         var currcolindex = this._getColIndex(currtd);
         var currtable = this.editor.getNearestParentOfType(currnode, 'TABLE');
+
+        // move selection aside
+        var selection = this.editor.getSelection();
+        if (currtd.nextSibling) {
+            selection.selectNodeContents(currtd.nextSibling);
+        } else if (currtd.previousSibling) {
+            selection.selectNodeContents(currtd.previousSibling);
+        };
 
         // remove the theaders
         var heads = currtable.getElementsByTagName('THEAD');
@@ -1105,7 +1237,7 @@ function TableTool() {
                     if (cell.nodeType != 1) {
                         continue;
                     }
-                    var colspan = cell.getAttribute('colspan');
+                    var colspan = cell.colSpan;
                     if (currindex == currcolindex) {
                         tr.removeChild(cell);
                         break;
@@ -1114,7 +1246,8 @@ function TableTool() {
                 }
             }
         }
-        this.editor.logMessage('Table column deleted');
+        this.editor.focusDocument();
+        this.editor.logMessage(_('Table column deleted'));
     };
 
     this.delTable = function() {
@@ -1122,11 +1255,11 @@ function TableTool() {
         var currnode = this.editor.getSelectedNode();
         var table = this.editor.getNearestParentOfType(currnode, 'table');
         if (!table) {
-            this.editor.logMessage('Not inside a table!');
+            this.editor.logMessage(_('Not inside a table!'));
             return;
         };
         table.parentNode.removeChild(table);
-        this.editor.logMessage('Table removed');
+        this.editor.logMessage(_('Table removed'));
     };
 
     this.setColumnAlign = function(newalign) {
@@ -1194,7 +1327,7 @@ function TableTool() {
             if (prevsib.nodeType == 1 && 
                     (prevsib.tagName.toUpperCase() == "TD" || 
                         prevsib.tagName.toUpperCase() == "TH")) {
-                var colspan = prevsib.getAttribute('colspan');
+                var colspan = prevsib.colSpan;
                 if (colspan) {
                     currcolindex += parseInt(colspan);
                 } else {
@@ -1203,7 +1336,7 @@ function TableTool() {
             }
             prevsib = prevsib.previousSibling;
             if (currcolindex > 30) {
-                alert("Recursion detected when counting column position");
+                alert(_("Recursion detected when counting column position"));
                 return;
             }
         }
@@ -1236,7 +1369,7 @@ function TableTool() {
         var currnode = this.editor.getSelectedNode();
         var table = this.editor.getNearestParentOfType(currnode, 'TABLE');
         if (!table) {
-            this.editor.logMessage('Not inside a table!');
+            this.editor.logMessage(_('Not inside a table!'));
             return;
         };
         this._fixTableHelper(table);
@@ -1247,13 +1380,20 @@ function TableTool() {
         var doc = this.editor.getInnerDocument();
         var tbody = doc.createElement('tbody');
 
-        var allowed_classes = new Array('plain', 'grid', 'list', 'listing', 'data');
-        if (!allowed_classes.contains(table.getAttribute('class'))) {
-            table.setAttribute('class', 'plain');
+        if (this.editor.config.table_classes) {
+            var allowed_classes = this.editor.config.table_classes['class'];
+            if (!allowed_classes.contains(table.className)) {
+                table.className = allowed_classes[0];
+            };
+        } else {
+            table.removeAttribute('class');
+            table.removeAttribute('className');
         };
-        
-        table.setAttribute('cellpadding', '0');
-        table.setAttribute('cellspacing', '0');
+        table.removeAttribute('border');
+        table.removeAttribute('cellpadding');
+        table.removeAttribute('cellPadding');
+        table.removeAttribute('cellspacing');
+        table.removeAttribute('cellSpacing');
 
         // now get all the rows of the table, the rows can either be
         // direct descendants of the table or inside a 'tbody', 'thead'
@@ -1334,9 +1474,8 @@ function TableTool() {
         };
         table.appendChild(tbody);
 
-        this.editor.getDocument().getWindow().focus();
-
-        this.editor.logMessage('Table cleaned up');
+        this.editor.focusDocument();
+        this.editor.logMessage(_('Table cleaned up'));
     };
 
     this.fixAllTables = function() {
@@ -1361,21 +1500,21 @@ function TableToolBox(addtabledivid, edittabledivid, newrowsinputid,
 
     // a lot of dependencies on html elements here, but most implementations
     // will use them all I guess
-    this.addtablediv = document.getElementById(addtabledivid);
-    this.edittablediv = document.getElementById(edittabledivid);
-    this.newrowsinput = document.getElementById(newrowsinputid);
-    this.newcolsinput = document.getElementById(newcolsinputid);
-    this.makeheaderinput = document.getElementById(makeheaderinputid);
-    this.classselect = document.getElementById(classselectid);
-    this.alignselect = document.getElementById(alignselectid);
-    this.addtablebutton = document.getElementById(addtablebuttonid);
-    this.addrowbutton = document.getElementById(addrowbuttonid);
-    this.delrowbutton = document.getElementById(delrowbuttonid);
-    this.addcolbutton = document.getElementById(addcolbuttonid);
-    this.delcolbutton = document.getElementById(delcolbuttonid);
-    this.fixbutton = document.getElementById(fixbuttonid);
-    this.fixallbutton = document.getElementById(fixallbuttonid);
-    this.toolboxel = document.getElementById(toolboxid);
+    this.addtablediv = getFromSelector(addtabledivid);
+    this.edittablediv = getFromSelector(edittabledivid);
+    this.newrowsinput = getFromSelector(newrowsinputid);
+    this.newcolsinput = getFromSelector(newcolsinputid);
+    this.makeheaderinput = getFromSelector(makeheaderinputid);
+    this.classselect = getFromSelector(classselectid);
+    this.alignselect = getFromSelector(alignselectid);
+    this.addtablebutton = getFromSelector(addtablebuttonid);
+    this.addrowbutton = getFromSelector(addrowbuttonid);
+    this.delrowbutton = getFromSelector(delrowbuttonid);
+    this.addcolbutton = getFromSelector(addcolbuttonid);
+    this.delcolbutton = getFromSelector(delcolbuttonid);
+    this.fixbutton = getFromSelector(fixbuttonid);
+    this.fixallbutton = getFromSelector(fixallbuttonid);
+    this.toolboxel = getFromSelector(toolboxid);
     this.plainclass = plainclass;
     this.activeclass = activeclass;
 
@@ -1410,7 +1549,7 @@ function TableToolBox(addtabledivid, edittabledivid, newrowsinputid,
         addEventHandler(this.fixallbutton, "click", this.tool.fixAllTables, this.tool);
         this.addtablediv.style.display = "block";
         this.edittablediv.style.display = "none";
-        this.editor.logMessage('Table tool initialized');
+        this.editor.logMessage(_('Table tool initialized'));
     };
 
     this.updateState = function(selNode) {
@@ -1442,7 +1581,8 @@ function TableToolBox(addtabledivid, edittabledivid, newrowsinputid,
         var rows = this.newrowsinput.value;
         var cols = this.newcolsinput.value;
         var makeHeader = this.makeheaderinput.checked;
-        var classchooser = document.getElementById("kupu-table-classchooser-add");
+        // XXX getFromSelector
+        var classchooser = getFromSelector("kupu-table-classchooser-add");
         var tableclass = this.classselect.options[this.classselect.selectedIndex].value;
         
         this.tool.createTable(rows, cols, makeHeader, tableclass);
@@ -1468,10 +1608,10 @@ TableToolBox.prototype = new KupuToolBox;
 function ListTool(addulbuttonid, addolbuttonid, ulstyleselectid, olstyleselectid) {
     /* tool to set list styles */
 
-    this.addulbutton = document.getElementById(addulbuttonid);
-    this.addolbutton = document.getElementById(addolbuttonid);
-    this.ulselect = document.getElementById(ulstyleselectid);
-    this.olselect = document.getElementById(olstyleselectid);
+    this.addulbutton = getFromSelector(addulbuttonid);
+    this.addolbutton = getFromSelector(addolbuttonid);
+    this.ulselect = getFromSelector(ulstyleselectid);
+    this.olselect = getFromSelector(olstyleselectid);
 
     this.style_to_type = {'decimal': '1',
                             'lower-alpha': 'a',
@@ -1509,7 +1649,7 @@ function ListTool(addulbuttonid, addolbuttonid, ulstyleselectid, olstyleselectid
         this.ulselect.style.display = "none";
         this.olselect.style.display = "none";
 
-        this.editor.logMessage('List style tool initialized');
+        this.editor.logMessage(_('List style tool initialized'));
     };
 
     this._handleStyles = function(currnode, onselect, offselect) {
@@ -1575,7 +1715,7 @@ function ListTool(addulbuttonid, addolbuttonid, ulstyleselectid, olstyleselectid
             l.setAttribute('type', this.style_to_type[style]);
         }
         this.editor.focusDocument();
-        this.editor.logMessage('List style changed');
+        this.editor.logMessage(_('List style changed'));
     };
 
     this.setUnorderedListStyle = function() {
@@ -1587,6 +1727,19 @@ function ListTool(addulbuttonid, addolbuttonid, ulstyleselectid, olstyleselectid
         /* set the type of an ol */
         this.setListStyle('ol', this.olselect);
     };
+
+    this.enable = function() {
+        KupuButtonEnable(this.addulbutton);
+        KupuButtonEnable(this.addolbutton);
+        this.ulselect.disabled = "";
+        this.olselect.disabled = "";
+    }
+    this.disable = function() {
+        KupuButtonDisable(this.addulbutton);
+        KupuButtonDisable(this.addolbutton);
+        this.ulselect.disabled = "disabled";
+        this.olselect.disabled = "disabled";
+    }
 };
 
 ListTool.prototype = new KupuTool;
@@ -1609,12 +1762,13 @@ function ShowPathTool() {
         
         try {
             window.status = url ? 
-                    (path.toString() + ' - contains link to \'' + url.toString() + '\'') :
+                    (path.toString() + ' - contains link to \'' + 
+                        url.toString() + '\'') :
                     path;
         } catch (e) {
-            this.editor.logMessage('Could not set status bar message, ' +
-                                    'check your browser\'s security settings.', 
-                                    1);
+            this.editor.logMessage(_('Could not set status bar message, ' +
+                                    'check your browser\'s security settings.'
+                                    ), 1);
         };
     };
 };
@@ -1651,7 +1805,7 @@ function ViewSourceTool() {
     
     this.createContextMenuElements = function(selNode, event) {
         /* create the context menu element */
-        return new Array(new ContextMenuElement('View source', this.viewSource, this));
+        return new Array(new ContextMenuElement(_('View source'), this.viewSource, this));
     };
 };
 
@@ -1664,7 +1818,7 @@ function DefinitionListTool(dlbuttonid) {
         behaviour should be similar
     */
 
-    this.dlbutton = document.getElementById(dlbuttonid);
+    this.dlbutton = getFromSelector(dlbuttonid);
     
     this.initialize = function(editor) {
         /* initialize the tool */
@@ -1718,7 +1872,7 @@ function DefinitionListTool(dlbuttonid) {
             } else {
                 var dd = this.editor.getNearestParentOfType(selNode, 'dd');
                 if (!dd) {
-                    this.editor.logMessage('Not inside a definition list element!');
+                    this.editor.logMessage(_('Not inside a definition list element!'));
                     return;
                 };
                 if (dd.childNodes.length == 1 && dd.childNodes[0].nodeValue == '\xa0') {
@@ -1870,8 +2024,8 @@ function DefinitionListTool(dlbuttonid) {
         var selection = this.editor.getSelection();
         selection.selectNodeContents(dt);
         selection.collapse();
-        this.editor.getDocument().getWindow().focus();
 
+        this.editor.focusDocument();
         return dt;
     };
 
@@ -1936,7 +2090,7 @@ function DefinitionListTool(dlbuttonid) {
         var selection = this.editor.getSelection();
         selection.selectNodeContents(p);
         selection.collapse();
-        this.editor.getDocument().getWindow().focus();
+        this.editor.focusDocument();
     };
 
     this._fixStructure = function(doc, dl, offsetnode) {
@@ -1967,8 +2121,10 @@ function DefinitionListTool(dlbuttonid) {
 
 DefinitionListTool.prototype = new KupuTool;
 
-function KupuZoomTool(buttonid) {
-    this.button = window.document.getElementById(buttonid);
+function KupuZoomTool(buttonid, firsttab, lasttab) {
+    this.button = getFromSelector(buttonid);
+    firsttab = firsttab || 'kupu-tb-styles';
+    lasttab = lasttab || 'kupu-logo-button';
 
     this.initialize = function(editor) {
         this.offclass = 'kupu-zoom';
@@ -1981,17 +2137,17 @@ function KupuZoomTool(buttonid) {
         addEventHandler(window, "scroll", this.onscroll, this);
 
         /* Toolbar tabbing */
-        var lastbutton = window.document.getElementById('kupu-logo-button');
-        var firstbutton = window.document.getElementById('kupu-tb-styles');
+        var lastbutton = getFromSelector(lasttab);
+        var firstbutton = getFromSelector(firsttab);
         var iframe = editor.getInnerDocument();
         this.setTabbing(iframe, firstbutton, lastbutton);
         this.setTabbing(firstbutton, null, editor.getDocument().getWindow());
 
-        this.editor.logMessage('Zoom tool initialized');
+        this.editor.logMessage(_('Zoom tool initialized'));
     };
 };
 
-KupuZoomTool.prototype = new KupuStateButton;
+KupuZoomTool.prototype = new KupuLateFocusStateButton;
 KupuZoomTool.prototype.baseinitialize = KupuZoomTool.prototype.initialize;
 
 KupuZoomTool.prototype.onscroll = function() {
@@ -2044,11 +2200,13 @@ KupuZoomTool.prototype.onresize = function() {
     }
     width = width + 'px';
     var offset = iframe.offsetTop;
-    if (sourceArea && !offset) offset = sourceArea.offsetTop-1;
-    height = height - offset -1/*top border*/ + 'px';
+    if (sourceArea) offset = sourceArea.offsetTop-1;
+    // XXX: TODO: Using wrong values here, figure out why.
+    var nheight = Math.max(height - offset -1/*top border*/, 10);
+    nheight = nheight + 'px';
     fulleditor.style.width = width; /*IE needs this*/
     iframe.style.width = width;
-    iframe.style.height = height;
+    iframe.style.height = nheight;
     if (sourceArea) {
         sourceArea.style.width = width;
         sourceArea.style.height = height;
@@ -2061,7 +2219,7 @@ KupuZoomTool.prototype.checkfunc = function(selNode, button, editor, event) {
 
 KupuZoomTool.prototype.commandfunc = function(button, editor) {
     /* Toggle zoom state */
-    var zoom = !button.pressed;
+    var zoom = button.pressed;
     this.zoomed = zoom;
 
     var zoomClass = 'kupu-fulleditor-zoomed';
@@ -2073,11 +2231,13 @@ KupuZoomTool.prototype.commandfunc = function(button, editor) {
         html.style.overflow = 'hidden';
         window.scrollTo(0, 0);
         editor.setClass(zoomClass);
+        body.className += ' '+zoomClass;
         this.onresize();
     } else {
         html.style.overflow = '';
         var fulleditor = iframe.parentNode;
         fulleditor.style.width = '';
+        body.className = body.className.replace(' '+zoomClass, '');
         editor.clearClass(zoomClass);
 
         iframe.style.width = '';
@@ -2095,5 +2255,5 @@ KupuZoomTool.prototype.commandfunc = function(button, editor) {
     doc.designMode=doc.designMode;
 
     window.scrollTo(0, iframe.offsetTop);
-    editor.getDocument().getWindow().focus();
+    editor.focusDocument();
 }

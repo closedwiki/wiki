@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- * Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
  *
  * This software is distributed under the terms of the Kupu
  * License. See LICENSE.txt for license text. For a list of Kupu
@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-// $Id: kupuloggers.js 6741 2004-09-27 09:52:44Z duncan $
+// $Id: kupuloggers.js 9879 2005-03-18 12:04:00Z yuppie $
 
 
 //----------------------------------------------------------------------------
@@ -40,7 +40,7 @@ function DebugLogger() {
 function PlainLogger(debugelid, maxlength) {
     /* writes messages to a debug tool and throws errors */
 
-    this.debugel = document.getElementById(debugelid);
+    this.debugel = getFromSelector(debugelid);
     this.maxlength = maxlength;
     
     this.log = function(message, severity) {

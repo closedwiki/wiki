@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+# Copyright (c) 2003-2005 Kupu Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Kupu
 # License. See LICENSE.txt for license text. For a list of Kupu
@@ -11,8 +11,9 @@
 
 This module contains Kupu's library tool to support drawers.
 
-$Id: librarytool.py 7837 2004-12-13 12:31:45Z duncan $
+$Id: librarytool.py 14615 2005-07-13 11:05:28Z duncan $
 """
+import Acquisition
 from Acquisition import aq_parent, aq_inner, aq_base
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import createExprContext
@@ -21,7 +22,7 @@ from Products.CMFCore.utils import getToolByName
 
 class KupuError(Exception): pass
 
-class KupuLibraryTool:
+class KupuLibraryTool(Acquisition.Implicit):
     """A tool to aid Kupu libraries"""
 
     __implements__ = IKupuLibraryTool
@@ -51,9 +52,12 @@ class KupuLibraryTool:
         """See ILibraryManager"""
         lib = dict(id=id, title=title, uri=uri, src=src, icon=icon)
         for key, value in lib.items():
-            if not(value.startswith('string:') or value.startswith('python:')):
-                value = 'string:' + value
-            lib[key] = Expression(value)
+            if key=='id':
+                lib[key] = value
+            else:
+                if not(value.startswith('string:') or value.startswith('python:')):
+                    value = 'string:' + value
+                lib[key] = Expression(value)
         self._libraries.append(lib)
 
     def getLibraries(self, context):
@@ -63,7 +67,14 @@ class KupuLibraryTool:
         for library in self._libraries:
             lib = {}
             for key in library.keys():
-                lib[key] = library[key](expr_context)
+                if isinstance(library[key], str):
+                    lib[key] = library[key]
+                else:
+                    # Automatic migration from old version.
+                    if key=='id':
+                        lib[key] = library[key] = library[key].text
+                    else:
+                        lib[key] = library[key](expr_context)
             libraries.append(lib)
         return tuple(libraries)
 
@@ -81,10 +92,13 @@ class KupuLibraryTool:
             for key in lib.keys():
                 if dic.has_key(key):
                     value = dic[key]
-                    if not(value.startswith('string:') or
-                           value.startswith('python:')):
-                        value = 'string:' + value
-                    lib[key] = Expression(value)
+                    if key=='id':
+                        lib[key] = value
+                    else:
+                        if not(value.startswith('string:') or
+                               value.startswith('python:')):
+                            value = 'string:' + value
+                        lib[key] = Expression(value)
             self._libraries[index] = lib
 
     def moveUp(self, indices):
