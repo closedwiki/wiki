@@ -13,19 +13,20 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 package TWiki::Plugins::DBCachePlugin;
-require Exporter;
-our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(initDB dbQuery getFormField);
 
 use strict;
-use vars qw( $VERSION $RELEASE $debug $pluginName %webDBs);
+use vars qw( 
+  $VERSION $RELEASE $debug $pluginName %webDB 
+  $wikiWordRegex 
+  $currentWeb $currentTopic $currentUser $installWeb
+);
 
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::DBCachePlugin::WebDB;
 
 $VERSION = '$Rev$';
-$RELEASE = '0.90';
+$RELEASE = '0.91';
 $pluginName = 'DBCachePlugin';
 $debug = 0; # toggle me
 
@@ -37,29 +38,47 @@ sub writeDebug {
 
 ###############################################################################
 sub initPlugin {
-  my ($topic, $web, $user, $installWeb) = @_;
+  ($currentTopic, $currentWeb, $currentUser, $installWeb) = @_;
 
-  %webDBs = ();
+  %webDB = ();
 
   TWiki::Func::registerTagHandler('DBQUERY', \&_DBQUERY);
   TWiki::Func::registerTagHandler('DBCALL', \&_DBCALL);
+  TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
 
-  writeDebug("initialized");
+  $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
+
+  #writeDebug("initialized");
   return 1;
+}
+
+###############################################################################
+sub getDB {
+  my $theWeb = shift;
+
+#  writeDebug("called getDB($theWeb)");
+
+  unless ($webDB{$theWeb}) {
+    my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb) 
+      || 'TWiki::Plugins::DBCachePlugin::WebDB';
+    $impl =~ s/^\s*(.*?)\s*$/$1/o;
+    $webDB{$theWeb} = new $impl($theWeb);
+    $webDB{$theWeb}->load();
+  }
+
+  return $webDB{$theWeb};
 }
 
 ###############################################################################
 sub _DBQUERY {
   my ($session, $params, $theTopic, $theWeb) = @_;
   
-  writeDebug("called _DBQUERY");
+  #writeDebug("called _DBQUERY(" . $params->stringify() . ")");
 
   # params
   my $theSearch = $params->{_DEFAULT} || $params->{search};
   my $theTopics = $params->{topics} || $params->{topic};
   
-  return &inlineError("ERROR: DBQUERY needs either a \"search\" or a \"topic\" argument ") 
-    if !$theSearch && !$theTopics;
   return '' if $theTopics && $theTopics eq 'none';
 
   my $theFormat = $params->{format} || '$topic';
@@ -75,19 +94,13 @@ sub _DBQUERY {
   my $theHideNull = $params->{hidenull} || 'off';
   $theWeb = $params->{web} || $theWeb;
 
-  my $theDB = &initDB($theWeb);
-
-  #print STDERR "DEBUG: _DBQUERY(" . $params->stringify() . ")\n";
+  my $theDB = getDB($theWeb);
 
   # get topics
-  my @topicNames;
+  my @topicNames = ();
   if ($theTopics) {
     @topicNames = split(/, /, $theTopics);
-  } else {
-    @topicNames = $theDB->getKeys();
   }
-  @topicNames = grep(/$theInclude/, @topicNames) if $theInclude;
-  @topicNames = grep(!/$theExclude/, @topicNames) if $theExclude;
 
   # normalize 
   $theSkip =~ s/[^-\d]//go;
@@ -95,19 +108,19 @@ sub _DBQUERY {
   $theSkip = 0 if $theSkip < 0;
   $theFormat = '' if $theFormat eq 'none';
   $theSep = '' if $theSep eq 'none';
+
+  my ($topicNames, $hits, $msg) = $theDB->dbQuery($theSearch, 
+    \@topicNames, $theOrder, $theReverse, $theInclude, $theExclude);
+  #print STDERR "DEBUG: got topicNames=@$topicNames\n";
+
+  return &inlineError($msg) if $msg;
+
   $theLimit =~ s/[^\d]//go;
-  $theLimit = scalar(@topicNames) if $theLimit eq '';
+  $theLimit = scalar(@$topicNames) if $theLimit eq '';
   $theLimit += $theSkip;
-
-  my ($topicNames, $hits, $msg) = &dbQuery($theDB, $theSearch, 
-    \@topicNames, $theOrder, $theReverse);
-#  print STDERR "DEBUG: topicNames=@$topicNames\n";
-
-  return $msg if $msg;
 
 
   my $count = scalar(@$topicNames);
-#  print STDERR "DEBUG: count=$count\n";
   return '' if ($count <= $theSkip) && $theHideNull eq 'on';
 
   # format
@@ -118,16 +131,17 @@ sub _DBQUERY {
     foreach my $topicName (@$topicNames) {
       $index++;
       next if $index <= $theSkip;
-      my $root = $hits->{$topicName};
+      my $topicObj = $hits->{$topicName};
+      my $topicWeb = $topicObj->fastget('web');
       my $format = '';
       $format = $theSep unless $isFirst;
       $isFirst = 0;
       $format .= $theFormat;
-      $format =~ s/\$formfield\((.*?)\)/getFormField($theDB, $topicName, $1)/geo;
-      $format =~ s/\$expand\((.*?)\)/expandPath($theDB, $root, $1)/geo;
-      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime(expandPath($theDB, $root, $1), $2)/geo; # single quoted
+      $format =~ s/\$formfield\((.*?)\)/$theDB->getFormField($topicName, $1)/geo;
+      $format =~ s/\$expand\((.*?)\)/$theDB->expandPath($topicObj, $1)/geo;
+      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
       #$format =~ s/\$dbcall\((.*?)\)/dbCall($1)/ge; ## TODO
-      $format = expandVariables($format, topic=>$topicName, web=>$theWeb, index=>$index, count=>$count);
+      $format = expandVariables($format, topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
       $text .= $format;
       last if $index == $theLimit;
     }
@@ -136,8 +150,7 @@ sub _DBQUERY {
   $theHeader = expandVariables($theHeader.$theSep, count=>$count, web=>$theWeb) if $theHeader;
   $theFooter = expandVariables($theSep.$theFooter, count=>$count, web=>$theWeb) if $theFooter;
 
-  $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter");
-  #print STDERR "DEBUG: text='$text'\n";
+  $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", $currentTopic, $theWeb);
   return $text;
 }
 
@@ -145,20 +158,30 @@ sub _DBQUERY {
 sub _DBCALL {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  writeDebug("called _DBCALL");
+  #writeDebug("called _DBCALL");
 
   # remember args for the key before mangling the params
   my $args = $params->stringify();
-
-  #print STDERR "DEBUG: called DBCALL{$args}\n";
-
-  my $path = $params->remove('_DEFAULT') || '';
   my $section = $params->remove('section') || 'default';
   my $warn = $params->remove('warn') || 'on';
   $warn = ($warn eq 'on')?1:0;
+  my $thisTopic = $params->remove('_DEFAULT') || '';
+  my $thisWeb = $theWeb;
+  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
-  my ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $path);
-  
+  #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic");
+
+  # get web and topic
+  my $thisDB = getDB($thisWeb);
+  my $topicObj = $thisDB->fastget($thisTopic);
+  unless ($topicObj) {
+    if ($warn) {
+      return inlineError("ERROR: DBCALL can't find topic <nop>$thisTopic in <nop>$thisWeb");
+    } else {
+      return '';
+    }
+  }
+
   # check access rights
   my $wikiUserName = TWiki::Func::getWikiUserName();
   unless (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $thisTopic, $thisWeb)) {
@@ -168,18 +191,8 @@ sub _DBCALL {
     return '';
   }
 
-  # init database
-  my $theDB = &initDB($thisWeb);
 
   # get section
-  my $topicObj = $theDB->fastget($thisTopic);
-  if (!$topicObj) {
-    if ($warn) {
-      return inlineError("ERROR: DBCALL can't find topic <nop>$thisWeb.$thisTopic");
-    } else {
-      return '';
-    }
-  }
   my $sectionText = $topicObj->fastget("_section$section") if $topicObj;
   if (!$sectionText) {
     if($warn) {
@@ -211,7 +224,7 @@ sub _DBCALL {
   }
 
   # expand
-  $sectionText = TWiki::Func::expandCommonVariables($sectionText);
+  $sectionText = TWiki::Func::expandCommonVariables($sectionText, $thisTopic, $thisWeb);
 
   # cleanup
   delete $session->{dbcalls}->{$key};
@@ -221,143 +234,52 @@ sub _DBCALL {
 }
 
 ###############################################################################
-sub initDB {
-  my ($theWeb) = @_;
+sub _DBDUMP {
+  my ($session, $params, $theTopic, $theWeb) = @_;
 
-  return undef unless $theWeb;
+  #writeDebug("called _DBDUMP");
 
-  writeDebug("called initDB($theWeb)");
+  my $thisTopic = $params->{_DEFAULT} || $theTopic;
+  my $thisWeb = $params->{web} || $theWeb;
+  ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
+  my $theDB = getDB($thisWeb);
 
-  unless ($webDBs{$theWeb}) {
-    my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb) 
-      || 'TWiki::Plugins::DBCachePlugin::WebDB';
-    $impl =~ s/^\s*(.*?)\s*$/$1/o;
-    $webDBs{$theWeb} = new $impl($theWeb);
-    $webDBs{$theWeb}->load();
-    writeDebug("loaded $webDBs{$theWeb}");
+  my $topicObj = $theDB->fastget($thisTopic) || '';
+  my $result = "\n<noautolink>\n";
+  $result .= "---++ [[$thisWeb.$thisTopic]]\n$topicObj\n";
+
+  # read all keys
+  $result .= "<table class=\"twikiTable\">\n";
+  foreach my $key (sort $topicObj->getKeys()) {
+    my $value = $topicObj->fastget($key);
+    $result .= "<tr><th>$key</th>\n<td><verbatim>\n$value\n</verbatim></td></tr>\n";
   }
+  $result .= "</table>\n";
 
-  return $webDBs{$theWeb};
-}
+  # read info
+  my $topicInfo = $topicObj->fastget('info');
+  $result .= "<p/>\n---++ Info = $topicInfo\n";
+  $result .= "<table class=\"twikiTable\">\n";
+  foreach my $key (sort $topicInfo->getKeys()) {
+    my $value = $topicInfo->fastget($key);
+    $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if $value;
+  }
+  $result .= "</table>\n";
 
-###############################################################################
-sub dbQuery {
-  my ($theDB, $theSearch, $theTopics, $theOrder, $theReverse) = @_;
-
-# TODO return empty result on an emtpy topics list
-
-  $theOrder ||= '';
-  $theReverse ||= '';
-  $theSearch ||= '';
-  $theTopics ||= '';
-
-  writeDebug("called dbQuery($theDB, $theSearch, $theTopics, $theOrder, $theReverse) called");
-#  print STDERR "DEBUG: theTopics=" . join(',', @$theTopics) . "\n" if $theTopics;
-
-  my @topicNames = $theTopics?@$theTopics:$theDB->getKeys();
-  
-  # parse & fetch
-  my %hits;
-  if ($theSearch) {
-    my $search = new TWiki::Contrib::DBCacheContrib::Search($theSearch);
-    unless ($search) {
-      return (undef, undef, &inlineError("ERROR: can't parse query $theSearch"));
+  # read form
+  my $topicForm = $topicObj->fastget('form');
+  if ($topicForm) {
+    $result .= "<p/>\n---++ Form = $topicForm\n";
+    $result .= "<table class=\"twikiTable\">\n";
+    $topicForm = $topicObj->fastget($topicForm);
+    foreach my $key (sort $topicForm->getKeys()) {
+      my $value = $topicForm->fastget($key);
+      $result .= "<tr><th>$key</th><td>$value</td>\n" if $value;
     }
-    foreach my $topicName (@topicNames) {
-      my $topicObj = $theDB->fastget($topicName);
-      if ($search->matches($topicObj)) {
-	$hits{$topicName} = $topicObj;
-#	print STDERR "DEBUG: adding hit for $topicName\n";
-      }
-    }
-  } else {
-    foreach my $topicName (@topicNames) {
-      my $topicObj = $theDB->fastget($topicName);
-      $hits{$topicName} = $topicObj if $topicObj;
-#      print STDERR "DEBUG: adding hit for $topicName\n";
-    }
+    $result .= "</table>\n";
   }
 
-  # sort
-  @topicNames = keys %hits;
-  if (@topicNames > 1) {
-    if ($theOrder eq 'name') {
-      @topicNames = sort {$a cmp $b} @topicNames;
-    } elsif ($theOrder =~ /^created/) {
-      @topicNames = sort {
-	expandPath($theDB, $hits{$a}, 'createdate') <=> expandPath($theDB, $hits{$b}, 'createdate')
-      } @topicNames;
-    } else {
-      @topicNames = sort {
-	expandPath($theDB, $hits{$a}, $theOrder) cmp expandPath($theDB, $hits{$b}, $theOrder)
-      } @topicNames;
-    }
-    @topicNames = reverse @topicNames if $theReverse eq 'on';
-  }
-
-  return (\@topicNames, \%hits, undef);
-}
-
-###############################################################################
-sub expandPath {
-  my ($theDB, $theRoot, $thePath) = @_;
-
-  return '' if !$thePath || !$theRoot;
-  $thePath =~ s/^\.//o;
-  $thePath =~ s/\[([^\]]+)\]/$1/o;
-
-  #print STDERR "DEBUG: expandPath($theRoot, $thePath)\n";
-  if ($thePath =~ /^(.*?) and (.*)$/) {
-    my $first = $1;
-    my $tail = $2;
-    my $result1 = expandPath($theDB, $theRoot, $first);
-    return '' unless defined $result1 && $result1 ne '';
-    my $result2 = expandPath($theDB, $theRoot, $tail);
-    return '' unless defined $result2 && $result2 ne '';
-    return $result1.$result2;
-  }
-  if ($thePath =~ /^'([^']*)'$/) {
-    return $1;
-  }
-  if ($thePath =~ /^(.*?) or (.*)$/) {
-    my $first = $1;
-    my $tail = $2;
-    my $result = expandPath($theDB, $theRoot, $first);
-    return $result if (defined $result && $result ne '');
-    return expandPath($theDB, $theRoot, $tail);
-  }
-
-  if ($thePath =~ m/^(\w+)(.*)$/o) {
-    my $first = $1;
-    my $tail = $2;
-    my $root = $theRoot->fastget($first);
-    unless ($root) {
-      # try form
-      # TODO: try form FIRST
-      my $form = $theRoot->fastget('form');
-      if ($form) {
-	$form = $theRoot->fastget($form);
-	$root = $form->fastget($first) if $form;
-      }
-    }
-    return expandPath($theDB, $root, $tail) if ref($root);
-    if ($root) {
-      my $field = TWiki::urlDecode($root);
-      #print STDERR "DEBUG: result=$field\n";
-      return $field;
-    }
-  }
-
-  if ($thePath =~ /^@([^\.]+)(.*)$/) {
-    my $first = $1;
-    my $tail = $2;
-    my $result = expandPath($theDB, $theRoot, $first);
-    my $root = ref($result)?$result:$theDB->fastget($result); 
-    return expandPath($theDB, $root, $tail)
-  }
-
-  #print STDERR "DEBUG: result is empty\n";
-  return '';
+  return $result."\n</noautolink>\n";
 }
 
 ###############################################################################
@@ -376,6 +298,7 @@ sub expandVariables {
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$nop//g;
+  $theFormat =~ s/\$flatten\((.*)\)/&flatten($1)/ges;
   $theFormat =~ s/\$encode\((.*)\)/&encode($1)/ges;
 
   return $theFormat;
@@ -395,25 +318,35 @@ sub encode {
 
   return $text;
 }
-
 ###############################################################################
-sub getFormField {
-  my ($theDB, $theTopic, $theFormField) = @_;
+sub flatten {
+  my $text = shift;
 
-  my $topicObj = $theDB->fastget($theTopic);
-  return '' unless $topicObj;
-  
-  my $form = $topicObj->fastget('form');
-  return '' unless $form;
+  $text =~ s/&lt;/</g;
+  $text =~ s/&gt;/>/g;
 
-  $form = $topicObj->fastget($form);
-  my $formfield = $form->fastget($theFormField) || '';
-  return TWiki::urlDecode($formfield);
+  $text =~ s/\<[^\>]+\/?\>/XXX/g;
+  $text =~ s/<\!\-\-.*?\-\->//gs;
+  $text =~ s/\&[a-z]+;/ /g;
+  $text =~ s/[ \t]+/ /gs;
+  $text =~ s/%//gs;
+  $text =~ s/_[^_]+_/ /gs;
+  $text =~ s/\&[a-z]+;/ /g;
+  $text =~ s/\&#[0-9]+;/ /g;
+  $text =~ s/[\r\n\|]+/ /gm;
+  $text =~ s/\[\[//go;
+  $text =~ s/\]\]//go;
+  $text =~ s/\]\[//go;
+  $text = &TWiki::entityEncode($text);
+  $text =~ s/(https?)/<nop>$1/go;
+  $text =~ s/\b($wikiWordRegex)\b/<nop>$1/g;
+
+  return $text;
 }
 
 ###############################################################################
 sub inlineError {
-  return '<span class="twikiAlert">' . $_[0] . '</span>' ;
+  return "<div class=\"twikiAlert\">$_[0]</div>";
 }
 
 
