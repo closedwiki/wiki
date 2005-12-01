@@ -1700,12 +1700,8 @@ msgstr ""
 msgid "Search string"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:20
+#: templates/oopsmore.pattern.tmpl:20 templates/view.pattern.tmpl:104
 msgid "Search the %1 Web for topics that link to here"
-msgstr ""
-
-#: templates/view.pattern.tmpl:104
-msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr ""
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37

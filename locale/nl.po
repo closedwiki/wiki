@@ -1706,13 +1706,9 @@ msgstr "Zoek in alle webs naar pagina's die hierheen linken"
 msgid "Search string"
 msgstr "Zoektekst"
 
-#: templates/oopsmore.pattern.tmpl:20
+#: templates/oopsmore.pattern.tmpl:20 templates/view.pattern.tmpl:104
 #, fuzzy
 msgid "Search the %1 Web for topics that link to here"
-msgstr "Zoek in <nop>%WEB% Web naar pagina's die hierheen linken"
-
-#: templates/view.pattern.tmpl:104
-msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr "Zoek in <nop>%WEB% Web naar pagina's die hierheen linken"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
@@ -2616,6 +2612,9 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr ""
+
+#~ msgid "Search the <nop>%WEB% Web for topics that link to here"
+#~ msgstr "Zoek in <nop>%WEB% Web naar pagina's die hierheen linken"
 
 #~ msgid "&Raw text"
 #~ msgstr "&Brontekst"

@@ -1834,13 +1834,9 @@ msgstr "Alle Webs nach Topics durchsuchen, die hierher verweisen"
 msgid "Search string"
 msgstr "Gesuchte Zeichenkette"
 
-#: templates/oopsmore.pattern.tmpl:20
+#: templates/oopsmore.pattern.tmpl:20 templates/view.pattern.tmpl:104
 #, fuzzy
 msgid "Search the %1 Web for topics that link to here"
-msgstr "Das <nop>%WEB% Web nach Topics durchsuchen, die hierher verweisen"
-
-#: templates/view.pattern.tmpl:104
-msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr "Das <nop>%WEB% Web nach Topics durchsuchen, die hierher verweisen"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
@@ -2864,3 +2860,6 @@ msgstr "abgefragt um %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
+
+#~ msgid "Search the <nop>%WEB% Web for topics that link to here"
+#~ msgstr "Das <nop>%WEB% Web nach Topics durchsuchen, die hierher verweisen"

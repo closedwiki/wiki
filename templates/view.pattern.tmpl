@@ -101,7 +101,7 @@
 
 %TMPL:DEF{"raw"}%%TMPL:P{"viewraw"}%%TMPL:P{context="WysiwygPluginEnabled" then="editrawwysiwyg"}%%TMPL:END%
 
-%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="%MAKETEXT{"Search the <nop>%WEB% Web for topics that link to here"}%" accesskey="W">%MAKETEXT{"&Web"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll Webs"}%</a>%TMPL:END%
+%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey="W">%MAKETEXT{"&Web"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll Webs"}%</a>%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_switchable_edit"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:P{"raw"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 

@@ -1835,13 +1835,9 @@ msgstr "Procurar em todas as webs por tópicos que façam link pra cá"
 msgid "Search string"
 msgstr "Sequência de texto da busca"
 
-#: templates/oopsmore.pattern.tmpl:20
+#: templates/oopsmore.pattern.tmpl:20 templates/view.pattern.tmpl:104
 msgid "Search the %1 Web for topics that link to here"
 msgstr "Procurar na web %1 por tópicos que façam link pra cá"
-
-#: templates/view.pattern.tmpl:104
-msgid "Search the <nop>%WEB% Web for topics that link to here"
-msgstr "Procurar na web <nop>%WEB% por tópicos que façam link pra cá"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 msgid "Search where:"
@@ -2859,6 +2855,9 @@ msgstr "obtidos em %1"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "ver"
+
+#~ msgid "Search the <nop>%WEB% Web for topics that link to here"
+#~ msgstr "Procurar na web <nop>%WEB% por tópicos que façam link pra cá"
 
 #~ msgid ""
 #~ "Find topics <a href='%1' title='Search all webs for topics that link to "
