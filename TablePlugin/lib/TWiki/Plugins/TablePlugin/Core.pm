@@ -519,13 +519,14 @@ sub emitTable {
                     $cell = CGI::font({ color=>$color }, $cell)
                       unless $color =~ /^(|none)$/i;
                 }
-                $type = 'td';
+                $type = 'td' unless $type eq 'Y';
             }
+            $colCount++;
+            next if( $type eq 'Y' );
             my $fn = 'CGI::'.$type;
             no strict 'refs';
             $rowtext .= &$fn($attr, " $cell ");
             use strict 'refs';
-            $colCount++;
         }
         $text .= $currTablePre.CGI::Tr( {}, $rowtext )."\n";
         $rowCount++;
