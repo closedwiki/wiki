@@ -308,6 +308,7 @@ a:visited .twistyLinkLabel {
 .twikiAttachments,
 .twikiForm {
 	margin:1em 0;
+	overflow:auto;
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
