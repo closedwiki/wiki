@@ -37,12 +37,10 @@ The section between %<nop>STARTINCLUDE% ... %<nop>STOPINCLUDE% is called
 ---++ Syntax
 ---+++ DBQUERY
 DBQUERY can be used in either of two modes (a) as a pure search
-tool or (b) as a tool to extract properties of (a set of) known topics. So you
-have to specify either the "search" or the "topics" argument in the DBQUERY
-tag.
+tool or (b) as a tool to extract properties of (a set of) known topics.
 
 *Syntax:*
-| *%<nop>DBQUERY{"&lt;search>"}%* ||
+| *%<nop>DBQUERY{"&lt;search>" ... }%* ||
 | ="&lt;search>"= \
 | search clause, see documentation of the DBCacheContrib (mode (a)) |
 | =topics="..."= or =topic="..."= \
@@ -80,6 +78,7 @@ Following variables are expanded in format strings:
    * $expand(&lt;formfield-accessor>): return the formfield pointed to by the 
       &lt;formfield-accessor>
    * $encode(...): encode entities so that the text can be included in an rss feed
+   * $flatten(...): remove any special markup producing a flattened text representation
 
 *Formfield accessors:*
 
@@ -94,13 +93,25 @@ of the formfield "Author" otherwise. More valid examples:
    * =$expand(Name or Author)=: expand to "Name" or "Author"
 
 ---+++ DBCALL
+Fetch topic content or a section of it from the database store.
+
 *Syntax:*
-| *%<nop>DBCALL{"&lt;topic" ...}%* ||
+| *%<nop>DBCALL{"&lt;topic" ... }%* ||
 | ="&lt;topic>"= | topic that we'd like to call |
 | =section="..."= | optional named section; without this parameter the "default" section is used |
 | =&lt;key>="&lt;value>"= | topic arguments to be substituted within the included text; that is \
             every occurence of &lt;key> is substituted with &lt;value> |
 | =warn="on,off"= | enable/suppress error warnings |
+
+---+++ DBDUMP
+Display the database record of a topic (usefull for debugging).
+
+*Syntax:*
+| *%<nop>DBDUMP{"&lt;topic" ... }%* ||
+| ="&lt;topic>"= | topic that we'd like to debug |
+| =web="..."= | name of the web to look for the given topic; \
+  note that you can use the dot-notation in specifying the <nop>web.topic also |
+
 
 ---++ Perl API
 
@@ -112,46 +123,68 @@ own <nop>TWikiApplication. For example, the TWiki:Plugins.BlogPlugin defines a <
 its own where it caches the createdate of a topic being either specified in a formfield  or
 given in the timestamp of the first revision of a topic.
 
----+++ initDB()
-This function must be called ahead of any actual database access. If your <nop>TWikiApplication
-is using a derived <nop>WebDB then use the =WEBDB= variable in your WebPreferences to
-point to its implementation (example: =Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB=). If
-=WEBDB= is not defined the default implementation =TWiki::Plugins::DBCachePlugin::WebDB= is used.
-Note, that this way only one application-specific database cache can be loaded _per web_.
-This is rather a design decision; otherwise each DBQUERY and DBCALL tag had to declare which database it operated on. So currently the rule of thumb is: one web one <nop>TWikiApplication making use
-of this plugin.
+---+++ DBCachePlugin 
+---++++ getDB()
+Returns a database object used for further queries.  This function must be
+called ahead of any actual database access. If your <nop>TWikiApplication is
+using a derived <nop>WebDB then use the =WEBDB= variable in your WebPreferences
+to point to its implementation (example: =Set WEBDB =
+TWiki::Plugins::BlogPlugin::WebDB=). If =WEBDB= is not defined the default
+implementation =TWiki::Plugins::DBCachePlugin::WebDB= is used.  Note, that this
+way only one application-specific database cache can be loaded _per web_.  This
+is rather a design decision; otherwise each DBQUERY and DBCALL tag had to
+declare which database it operated on. So currently the rule of thumb is: one
+web one <nop>TWikiApplication making use of this plugin.
 
-| *$webDB = initDB($web)* ||
+| *$webDB = getDB($web)* ||
 | =web= | name of the web whose database is to be loaded |
 
-returns a database handle. See the TWiki:Plugins::DBCacheContrib documentation
+returns a database object. See the TWiki:Plugins::DBCacheContrib documentation
 for its interfaces.
 
----+++ dbQuery()
-The DBQUERY functionality can be access from within perl using the plugins =dbQuery()= function.
+---+++ DBCachePlugin::WebDB 
+This implements the database object that is used to access the topic records in
+a web. Note, that for each web there is exactly one <nop>WebDB database object.
+A database object is fetched (and initialized if needed) by the
+DBCachePlugin::getDB() function. 
 
-| *(@$topicNames, %$topicObjs, $errorMsg) = dbQuery($webDB, $search, [, @$topics, $order, $reverse])* ||
-| =webDB= | database handle |
+---++++ dbQuery()
+The DBQUERY functionality can be access from within perl using the plugins =dbQuery()= method.
+
+| *(@$topicNames, %$topicObjs, $errorMsg) = $db-&gt;dbQuery([$search, @$topics, $order, $reverse, $include, $exclude])* ||
+| =webDB= | database object |
 | =search= | search clause |
 | =topics= | restrict search to this list of topics |
+| =order= | define a sorting on the hit set; this can be any formfield accessor or \
+  one of the shortcuts "created" (for createdate) or "modified" (for info.date) provided  \
+  for compatibility with TWiki's SEARCH |
+| =reverse=on,off= | revert the sorting order |
+| =include= | pattern that topic names must match to be considered a hit |
+| =exclude= | pattern that topic names must _not_ match to be considered a hit |
 
 returns a list pointer of all found topics names, a hash pointer to an array of all found
 topic objects (keys are the name of the topics) and a possibly defined error message.
 
----+++ getFormField()
+---++++ getFormField()
 Access the formfield value of an arbitrary topic.
 
-| *$value = getFormField($webDB, $topic, $formfield)* ||
-| =webDB= | database handle |
+| *$value = $db-&gt;getFormField($topic, $formfield)* ||
 | =topic= | a topic name |
 | =formfield= | a formfield name |
 
-returns the value of the named formfield
+returns the value of the named formfield 
 
-%RED%TODO: possibly export the other functions also %ENDCOLOR%
+%RED%TODO: document the rest of the methods %ENDCOLOR%
 
 ---++ Plugin Settings
+Plugin description:
    * Set SHORTDESCRIPTION = Lightweighted frontend to the DBCacheContrib
+
+Each web can specify an alternative implementation inherriting from DBCachePlugin::WebDB.
+To specify it you have to set the =WEBDB= variable in the WebPreferences. If not the
+following is the default paramenter (omitting the #)
+   * #Set WEBDB = TWiki::Plugins::DBCachePlugin::WebDB
+   
 
 ---++ Plugin Installation Instructions
 
@@ -167,7 +200,7 @@ returns the value of the named formfield
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 24 Nov 2005 (v0.90) |
+|  Plugin Version: | 01 Dec 2005 (v0.91) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  24 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -180,6 +213,6 @@ returns the value of the named formfield
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 24 Nov 2005
+-- TWiki:Main.MichaelDaum - 01 Dec 2005
 
 
