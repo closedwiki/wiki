@@ -10,7 +10,9 @@
 %TMPL:END%
 
 %TMPL:DEF{"content"}%
-<form method="post" name="renameweb" action="%SCRIPTURL{"renameweb"}%/%WEB%">
+<form method="post" name="renameweb" action="%SCRIPTURL{"rename"}%/%WEB%">
+<input type="hidden" name="action" value="renameweb" />
+<input type="hidden" name="confirm" value="getlock" />
 %TMPL:P{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% <code>%WEB%</code>
 
