@@ -206,7 +206,9 @@ sub findUser {
 
     unless( $wikiname ) {
         # default to wikiname being the same as name.
-        $this->{session}->writeWarning("$name does not exist in TWikiUsers - is this a bogus user?") unless( $name =~ /Group$/ );
+        # Commented out because this warning is too common, and tends to
+        # flood the logs.
+        # $this->{session}->writeWarning("$name does not exist in TWikiUsers - is this a bogus user?") unless( $name =~ /Group$/ );
         $wikiname = $name;
     }
 
