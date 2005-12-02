@@ -16,6 +16,7 @@
  **************************************************/
 
 /* Adjustments to kupu classes */
+
 div.kupu-fulleditor .kupu-editorframe {
   margin-right: 0em;
 }
@@ -23,7 +24,6 @@ div.kupu-fulleditor .kupu-editorframe {
 div.kupu-drawer {
   left: 100%;
   margin-left: -520px;
-  
 }
 
 div.kupu-dialogbuttons {
@@ -31,31 +31,31 @@ div.kupu-dialogbuttons {
 }
 
 div.kupu-tb { 
-    height: 24px;
+  height: 24px;
 }
 
-span.kupu-tb-buttongroup {
-  margin-right: 0px;
-  margin-left: 0px;
-  padding-left: 11px;
-  padding-right: 8px;
-  text-align: center;
-  float: left;
-  /*background: url("separator.png");*/
+/* This is needed with kupu1.3.2 for some reason, as the 
+.kupu-tb-buttons button style isn't getting applied */
+
+.kupu-tb-buttongroup button {
+  color: ButtonText;
+  border: 1px solid ButtonFace;
+  margin-top: 0;
+  margin-left: 0;
+  height: 26px;
+  width: 26px;
   background-repeat: no-repeat;
 }
 
-span.kupu-tb-buttongroup-nobg {
+span.kupu-tb-buttongroup {
   margin-right: 0px;
   margin-left: 0px;
   padding-left: 4px;
   padding-right: 4px;
   text-align: center;
   float: left;
-}
-
-#kupu-tb-buttons button {
-  vertical-align: middle;
+  border-left: 1px dotted ButtonShadow;
+  border-right: 1px dotted ButtonShadow;
 }
 
 /* TWiki only - icons popup */
@@ -132,7 +132,7 @@ div#twiki-icons img:active {
 .kupu-redo {background-image: url("redo.png");}
 .kupu-save {background-image: url("save.png");}
 .kupu-undo {background-image: url("undo.png");}
-.kupu-removelink {background-image: url("remove.png");}
+.kupu-removelink { background-image: url("remove.png");}
 
 /* TWiki-only buttons */
 .twiki-new-attachment { background: url("new-attachment.png"); }
@@ -199,7 +199,4 @@ div#twiki-icons img:active {
 .twiki-verbatim-button-pressed {
   background: url("verbatim.png");
   background-color: white;
-}
-.separator { 
-  background: url("separator.png");
 }
