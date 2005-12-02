@@ -13,7 +13,7 @@
 
 
 
-%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title='%MAKETEXT{"Back to topic"}%' accesskey='C' rel='nofollow'>%MAKETEXT{"&Cancel"}%</a>%TMPL:END%
+%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" title='%MAKETEXT{"Back to topic"}%' accesskey='C' rel='nofollow'>%MAKETEXT{"&Cancel"}%</a>%TMPL:END%
 
 
 
@@ -32,7 +32,7 @@
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
-		return launchTheWindow("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/", inWeb, inTopic, "plain.pattern");
+		return launchTheWindow("%SCRIPTURL{"view"}%/", inWeb, inTopic, "plain.pattern");
 	}
 //]]>
 </script>
@@ -58,7 +58,7 @@
 <link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 <meta name="robots" content="noindex" />
 %HTTP_EQUIV_ON_VIEW%
-<base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+<base href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" />
 %TMPL:P{"script"}%
 %TMPL:P{"twikistyle"}%
 %TMPL:P{"templatecustomstyle"}%
