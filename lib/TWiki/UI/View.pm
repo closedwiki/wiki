@@ -355,10 +355,14 @@ sub viewfile {
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'viewfile' );
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'viewfile' );
-
-    my $topRev = $session->{store}->getRevisionNumber(
-        $webName, $topic, $fileName );
-
+    unless( $fileName && $session->{store}->attachmentExists(
+        $webName, $topic, $fileName )) {
+        throw TWiki::OopsException( 'accessdenied',
+                                    def => 'no_such_attachment',
+                                    web => $webName,
+                                    topic => $topic,
+                                    params => [ 'viewfile', $fileName||'?' ] );
+    }
     my $fileContent = $session->{store}->readAttachment(
         $session->{user}, $webName, $topic, $fileName, $rev );
 
