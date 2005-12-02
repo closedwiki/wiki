@@ -327,7 +327,6 @@ function TWikiInsertAttachmentTool() {
     } catch(exception) {
       alert("Something unexpected happened");
     }
-    this.editor.updateState();
   };
 }
 
@@ -348,11 +347,12 @@ function TWikiNewAttachmentDrawer(drawerid, formid, tool) {
         last = path.lastIndexOf('\\');
       last++;
       var filename = path.substring(last);
-
       this.tool.pick(filename);
     }
 
     this.editor.updateState();
+    // Close the drawer...
+    this.hide();
   };
 };
 
