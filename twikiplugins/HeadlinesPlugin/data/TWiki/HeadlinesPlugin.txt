@@ -13,8 +13,10 @@ __Note:__ Syndic8.com ( http://www.syndic8.com/ ) is a good site listing many RS
 =%<nop>HEADLINES{"..."}%=
 
 | *Parameter* | *Explanation* | *Default* |
-| ="http://..."= | URL of RSS feed | None; is required |
-| =href="http://..."= | (Alternative to above) | N/A |
+| ="..."= | source of RSS feed; this can be an url (starting with http) \
+            or a <nop>web.topic location for internal feeds \
+| None; is required |
+| =href="..."= | (Alternative to above) | N/A |
 | =refresh="60"= | Refresh rate in minutes for caching feed; ="0"= for no caching | Global =REFRESH= setting |
 | =limit="12"= | Maximum number of items shown | Global =LIMIT= setting |
 | =header= | Header. Can include these variables: \
@@ -157,8 +159,9 @@ defining the default CSS properties  (indentation illustrates enclosure).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Plugin Version: | 29 Nov 2005 (v1.93) |
+|  Plugin Version: | 02 Dec 2005 (v1.94) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  02 Dec 2005: | added <nop>web.topic shorthand for internal feeds |
 |  29 Nov 2005: | fixed CDATA handling |
 |  21 Nov 2005: | added ATOM support; \
 	          extended RSS support; \
@@ -184,6 +187,6 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.PeterThoeny - 11 May 2005 %BR%
--- TWiki:Main.MichaelDaum - 22 Nov 2005
+-- TWiki:Main.MichaelDaum - 02 Dec 2005
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%
