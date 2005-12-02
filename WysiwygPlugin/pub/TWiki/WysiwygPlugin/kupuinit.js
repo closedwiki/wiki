@@ -192,6 +192,9 @@ function initKupu(iframe) {
                                             'kupu-editor-textarea');
     kupu.registerTool('sourceedittool', sourceedittool);
 
+    var zoom = new KupuZoomTool('kupu-zoom-button');
+    kupu.registerTool('zoomtool', zoom);
+
     // Save button
     var savebutton = document.getElementById('kupu-save-button');
     function submitForm() {
