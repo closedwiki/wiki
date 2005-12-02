@@ -308,7 +308,6 @@ a:visited .twistyLinkLabel {
 .twikiAttachments,
 .twikiForm {
 	margin:1em 0;
-	overflow:auto;
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
@@ -543,7 +542,7 @@ table.patternTopBarContents td {
 .patternTopicAction {
 	font-size:94%; /*S2*/
 	line-height:1.5em;
-	margin:-1px 0 3em 0;
+	margin:0 0 3em 0;
 	padding:.5em 20px; /*S5*/
 	border-width:1px 0;
 	border-style:solid;
@@ -1030,4 +1029,3 @@ tr.twikiDiffDebug td {
 .patternPlainPage #patternMain {
 	padding-top:2em;
 }
-
