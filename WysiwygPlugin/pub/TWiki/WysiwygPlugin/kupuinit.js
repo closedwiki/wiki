@@ -151,7 +151,7 @@ function initKupu(iframe) {
     kupu.registerTool('redobutton', redobutton);
 
     var removelinkbutton =
-      new KupuRemoveElementButton('kupu-removelink-button',
+      new TWikiRemoveElementButton('kupu-removelink-button',
                                   'a',
                                   'kupu-removelink');
     kupu.registerTool('removelinkbutton', removelinkbutton);

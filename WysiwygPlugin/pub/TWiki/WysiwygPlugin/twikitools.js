@@ -686,3 +686,29 @@ function TWikiSelect(id, tool) {
 }
 
 TWikiSelect.prototype = new KupuTool;
+
+function TWikiRemoveElementButton(buttonid, element_name, cssclass) {
+    this.button = getFromSelector(buttonid);
+
+    this.execCommand = function() {
+      this.button.style.display = 'none';
+      this.editor.focusDocument();
+      this.editor.removeNearestParentOfType(this.editor.getSelectedNode(),
+                                            element_name);
+    };
+
+    this.updateState = function(selNode, event) {
+        if (this.checkfunc(selNode, this, this.editor, event)) {
+          this.button.style.display = 'none';
+        } else {
+          this.button.style.display = 'inline';
+        };
+    };
+
+    this.checkfunc = function(currnode, button, editor, event) {
+        var element = editor.getNearestParentOfType(currnode, element_name);
+        return (element ? false : true);
+    };
+};
+
+TWikiRemoveElementButton.prototype = new KupuButton;
