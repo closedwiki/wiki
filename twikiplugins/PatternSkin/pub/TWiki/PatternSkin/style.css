@@ -182,20 +182,20 @@ label {
 	
 /* TablePlugin */
 .twikiTable {
-    border-collapse: collapse;
+    border-collapse:collapse;
     border-width:1px;
 	border-style:solid;
 }
 .twikiTable td,
 .twikiTable th {
-	border-width:0 1px;
+	border-width:1px;
 	border-style:solid;
 }
 .twikiTable th {
-    padding:.4em .5em;
+    padding:4px;
 }
 .twikiTable td {
-    padding:.25em .5em;
+    padding:2px 4px;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,

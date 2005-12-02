@@ -8,7 +8,8 @@ Working in TWiki is as easy as typing in text. You don't need to know HTML, thou
 #TWikiShorthand
 ---++ TWiki Editing Shorthand
 
-<table border="1" cellpadding="3" cellspacing="1" bgcolor="#ffffff">
+%TABLE{}%
+<table class="twikiTable" border="1" cellpadding="3" bgcolor="#ffffff">
 <tr bgcolor="#ffffff">
 <th width="50%">
  Formatting Command:
@@ -21,7 +22,7 @@ Working in TWiki is as easy as typing in text. You don't need to know HTML, thou
 </th>
 </tr>
 <tr valign="top">
-<td class="twikiTable">
+<td>
  *Paragraphs:* %BR%
  Blank lines will create new paragraphs.
 </td><td>
@@ -41,10 +42,10 @@ Working in TWiki is as easy as typing in text. You don't need to know HTML, thou
  *Headings:* %BR%
 Three or more dashes at the beginning of a line, followed by plus signs and the heading text. One plus creates a top level heading, two pluses a second level heading, etc. The maximum heading depth is 6.
 
-You can create a table of contents with the [[TWikiVariables#VarTOC][ =%<nop>TOC%= ]] variable. If you want to *exclude* a heading from the TOC, put =!!= after the =---+=.
+You can create a table of contents with the [[TWikiVariables#VarTOC][%<nop>TOC%]] variable. If you want to *exclude* a heading from the TOC, put =!!= after the =---+=.
 
 %X% Empty headings are allowed, but won't appear in the table of contents.
-</td><td style='color:#900'>
+</td><td>
 <verbatim>
 ---++ Sushi
 ---+++ Maguro
@@ -150,13 +151,11 @@ Three or more three dashes at the beginning of a line..
  *Bulleted list:* %BR%
 Multiple of three spaces, an asterisk, and another space.
 </td><td>
-<font color="#990000">
 <verbatim>
    * bullet item level 1
       * bullet item level 2
    * back to level 1
 </verbatim>
-</font>
 </td><td>
    * bullet item level 1
       * bullet item level 2
@@ -460,9 +459,9 @@ TWiki Variables are names that are enclosed in percent signs =%= that are expand
    * =%<nop>SEARCH{"sushi"}%= : Inline search showing the search result embedded in a topic. FormattedSearch gives you control over formatting, useful for creating web-based applications.
 
    * TWikiPreferences defines some site-wide variables. Among others:
-      * *Line break:* Write =<span style='background : #FFFFCC;'><font color="#990000">%<nop>BR%</font></span>= to start a new line.
-      * *Colored text:* Write: =<span style='background : #FFFFCC;'><font color="#990000"> %<nop>RED% Red %<nop>ENDCOLOR% and %<nop>BLUE% blue %<nop>ENDCOLOR% colors</font></span>= to get: %RED% Red %ENDCOLOR% and %BLUE% blue %ENDCOLOR% colors.
-      * *Documentation Graphics:* Write: =<span style='background : #FFFFCC;'><font color="#990000"> %<nop>H% Help, %<nop>T% Tip, %<nop>X% Alert</font></span>= to get: %H% Help, %T% Tip, %X% Alert. For more info see TWikiDocGraphics.
+      * *Line break:* Write =<span style='background:#ffc;'><font color="#990000">%<nop>BR%</font></span>= to start a new line.
+      * *Colored text:* Write: =<span style='background:#ffc;'><font color="#990000"> %<nop>RED% Red %<nop>ENDCOLOR% and %<nop>BLUE% blue %<nop>ENDCOLOR% colors</font></span>= to get: %RED% Red %ENDCOLOR% and %BLUE% blue %ENDCOLOR% colors.
+      * *Documentation Graphics:* Write: =<span style='background:#ffc;'><font color="#990000"> %<nop>H% Help, %<nop>T% Tip, %<nop>X% Alert</font></span>= to get: %H% Help, %T% Tip, %X% Alert. For more info see TWikiDocGraphics.
 
    * There are many more variables, see *[[TWikiVariables]]*.
 
