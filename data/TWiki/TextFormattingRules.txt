@@ -8,13 +8,15 @@ Working in TWiki is as easy as typing in text. You don't need to know HTML, thou
 #TWikiShorthand
 ---++ TWiki Editing Shorthand
 
-<table class="twikiTable">
-<tr>
+<table border="1" cellpadding="3" cellspacing="1" bgcolor="#ffffff">
+<tr bgcolor="#ffffff">
 <th width="50%">
  Formatting Command:
-</th><th width="25%">
+</th>
+<th width="25%">
  You write:
-</th><th width="25%">
+</th>
+<th width="25%">
  You get:
 </th>
 </tr>
@@ -46,12 +48,12 @@ You can create a table of contents with the [[TWikiVariables#VarTOC][ =%<nop>TOC
 <verbatim>
 ---++ Sushi
 ---+++ Maguro
----++++++!! Exclude from TOC
+---++++!! Exclude from TOC
 </verbatim>
 </td><td>
 <h2 >Sushi</h2>
 <h3 >Maguro</h3>
-<h6 >Exclude from TOC</h6>
+<h4 >Exclude from TOC</h4>
 </td>
 </tr>
 <tr valign="top">
@@ -152,14 +154,12 @@ Multiple of three spaces, an asterisk, and another space.
 <verbatim>
    * bullet item level 1
       * bullet item level 2
-         * bulleted item level 3
    * back to level 1
 </verbatim>
 </font>
 </td><td>
    * bullet item level 1
       * bullet item level 2
-         * bulleted item level 3
    * back to level 1
 </td>
 </tr>
@@ -167,15 +167,13 @@ Multiple of three spaces, an asterisk, and another space.
 %H% For all the list types, you can break a list item over several lines by indenting lines after the first one by *at least 3 spaces* e.g.
 </td><td>
 <verbatim>
-   * Here is
-   a bullet
+   * A bullet
    broken over
    three lines.
 This text is not indented
 </verbatim>
 </td><td>
-   * Here is
-   a bullet
+   * A bullet
    broken over
    three lines.
 This text is not indented
@@ -238,12 +236,12 @@ Each row of the table is a line containing of one or more cells. Each cell start
    * to span multiple columns, put the =|='s right next to each other =| 2 colspan ||=
    * You can split rows over multiple lines by putting a backslash ='\'= at the end of each line
    * Contents of table cells wrap automatically as determined by the browser.
-%T% The %TWIKIWEB%.TablePlugin increases the number of things you can do with tables - for example, you can control formatting, and create multi-row spans.
+%T% The %TWIKIWEB%.TablePlugin increases the number of things you can do with tables - for example, you can control formatting, and create multi-row spans by using a single caret (^) to indicate follow-up rows.
 </td><td>
 <verbatim>
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
-   | A3 |  3  |  3 |
+| A3 |  3  |  3 |
 | multi span |||
 | A4-6 | \
 four \
@@ -252,7 +250,7 @@ four \
 </td><td>
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
-   | A3 |  3  |  3 |
+| A3 |  3  |  3 |
 | multi span |||
 | A4-6 | \
 four \
@@ -326,7 +324,7 @@ class CatAnimal {
 </tr>
 <tr valign="top">
 <td>
-#SquareBrackets
+#HeRe
  *Forced Links:* %BR%
  You can create a forced internal link by enclosing words in double square brackets.
 %BR% 
@@ -363,18 +361,14 @@ The rules described under __Forced Links__ apply for internal link references.
 
 [[http://gnu.org][GNU]]
 
-[[mailto:barretts@wimpole.street][write to the Barretts]]
-
-[[TextFormattingRules#SquareBrackets][here]]
+[[mailto:a@b.street][mail]]
 </verbatim>
 </td><td>
 [[WikiSyntax][wiki syntax]]
 
 [[http://gnu.org][GNU]]
 
-[[mailto:barretts@wimpole.street][write to the Barretts]]
-
-[[TextFormattingRules#SquareBrackets][here]]
+[[mailto:a@b.com][mail]]
 </td>
 </tr>
 <tr valign="top">
