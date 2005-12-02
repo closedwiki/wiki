@@ -1203,14 +1203,14 @@ sub new {
     $prefs->pushPreferences(
         $this->{webName}, $this->{topicName}, 'TOPIC' );
 
+    $prefs->pushPreferenceValues( 'SESSION',
+                                  $this->{client}->getSessionValues() );
+
+    # requires preferences (such as NEWTOPICBGCOLOR)
     $this->{renderer} = new TWiki::Render( $this );
 
     # Finish plugin initialization - register handlers
     $this->{plugins}->enable();
-
-    $prefs->pushPreferenceValues( 'SESSION',
-                                  $this->{client}->getSessionValues() );
-
 
     # language information; must be loaded after
     # *all possible preferences sources* are available
