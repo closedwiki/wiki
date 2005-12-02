@@ -13,7 +13,7 @@ Keeping this help text short and simple is important since this page is aimed at
    * *links* use topic name or URL: =WebHome=, =http://yahoo.com=, or =[<nop>[http://yahoo.com/][link to Yahoo]]=
    * *monospaced* put word/phrase in equal signs: =<nop>=your words==
    * *paragraphs* separate with blank line
-   * <a target="TextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURL{"view"}%/%TWIKIWEB%/TextFormattingRules">More formatting help</a> and <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">hints on good style</a>
+   * <a target="TextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURL{"view"}%/%TWIKIWEB%/TextFormattingRules">More formatting help</a> and <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURL{"view"}%/%TWIKIWEB%/GoodStyle">hints on good style</a>
 %STOPINCLUDE%
 ---
 

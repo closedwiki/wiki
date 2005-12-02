@@ -9,33 +9,36 @@ __Preferences:__
 
 These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#Default_Web_Preferences][a full list of defaults]].
 
-The list below shows the current value of the standard web preferences. These are the preferences you are most likely to want to customise. If the value show is OK, then you don't need to customise the preference locally for this web. See the notes at the end for the correct syntax for setting values.
+Most of the settings below are commented out. Remove the # sign to enable a local customisation.
+
    * List of topics of the <nop>%WEB% web:
-      * WEBTOPICLIST = %WEBTOPICLIST%
+      * #Set WEBTOPICLIST = %WEBTOPICLIST%
 
 <div style='background-color: %WEBBGCOLOR%;float: right'>
 &nbsp;%WEBBGCOLOR%&nbsp;
 </div>
-   * Web-specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
-      * WEBBGCOLOR = %WEBBGCOLOR%
+   * Web-specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors). This setting is automatically configured when you create a web.
+      * Set WEBBGCOLOR = %WEBBGCOLOR%
 
    * Image, URL and alternate tooltip text of web's logo. Note: don't
     add your own local logos to the TWiki.TWikiLogos topic; create your
     own logos topic instead.
-      * WEBLOGOIMG = %WEBLOGOIMG%
-      * WEBLOGOURL = %WEBLOGOURL%
-      * WEBLOGOALT = %WEBLOGOALT%
+      * #Set WEBLOGOIMG = %WEBLOGOIMG%
+      * #Set WEBLOGOURL = %WEBLOGOURL%
+      * #Set WEBLOGOALT = %WEBLOGOALT%
 
    * List this web in the %TWIKIWEB%.SiteMap. If you want the web listed, then set SITEMAPLIST to =on=, do not set NOSEARCHALL, and add the "what" and "use to..." description for the site map. Use links that include the name of the web, i.e. <nop>%WEB%.Topic links.
-      * SITEMAPLIST = %SITEMAPLIST%
-      * SITEMAPWHAT = %SITEMAPWHAT%
-      * SITEMAPUSETO = %SITEMAPUSETO%
+      * #Set SITEMAPLIST = %SITEMAPLIST%
+      * This setting is automatically configured when you create a web.
+      * Set SITEMAPWHAT =
+      * This setting is automatically configured when you create a web.
+      * Set SITEMAPUSETO =
 
-   * Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
-      * NOSEARCHALL = %NOSEARCHALL%
+   * Exclude web from a =web="all"= search: (Set to =on= for hidden webs). This setting is automatically configured when you create a web.
+      * Set NOSEARCHALL =
 
    * Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
-      * NOAUTOLINK = %NOAUTOLINK%
+      * #Set NOAUTOLINK = %NOAUTOLINK%
    * __Note:__ You can still use the =[<nop>[...][...]]= syntax to link topics if you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
 
    * Default template for *new topics* for this web:
@@ -43,7 +46,7 @@ The list below shows the current value of the standard web preferences. These ar
       * [[%TWIKIWEB%.WebTopicEditTemplate]]: Site-level default topic template
 
    * Comma separated list of *forms* that can be attached to topics in this web. See %TWIKIWEB%.TWikiForms for more information.
-      * WEBFORMS = %WEBFORMS%
+      * #Set WEBFORMS = %WEBFORMS%
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
       * #Set DENYWEBVIEW = 

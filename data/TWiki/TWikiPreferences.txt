@@ -100,6 +100,9 @@ _(Click for form-based editing of existing preferences.)_
       * Set WIKILOGOURL = http://TWiki.org/
       * Set WIKILOGOALT = Powered by <nop>%WIKITOOLNAME%
 
+   * Home page of this site
+      * Set WIKIHOMEURL = %SCRIPTURL{"view"}%
+
    * List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
       * Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
       * %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use the =%<nop>WEBLIST{}%= variable instead: <br />

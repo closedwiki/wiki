@@ -55,14 +55,16 @@ You are %IF{ "$ WIKINAME='TWikiGuest' and not defined OPEN_DAY" then="not" }% al
 
 Context identifiers are used in TWiki to label various stages of the rendering process. They are especially useful for [[TWikiSkins][skin]] authors to find out where they are in the rendering process. The following context identifiers are available:
 | *id* | *context* |
+| absolute_urls | Set if absolute URLs are required |
 | authenticated | a user is authenticated |
-| body_text  | when the body text is being processed in a view |
+| body_text  | when the body text is being processed in a view (useful in plugins handlers) |
 | can_login | current environment supports login |
 | changes | in changes script (see TWikiScripts) |
+| command_line | the running script was run from the command line, and not from CGI |
 | diff | in rdiff script (see TWikiScripts) |
 | edit | in edit script (see TWikiScripts) |
-| footer_text | when the footer text is being processed in a view |
-| header_text | when the header text is being processed in a view |
+| footer_text | when the footer text is being processed in a view (useful in plugins handlers) |
+| header_text | when the header text is being processed in a view (useful in plugins handlers) |
 | inactive | if active links such as 'edit' and 'attach' should be disabled |
 | mirror | if this is a mirror |
 | new_topic | if the topic doesn't already exist |
