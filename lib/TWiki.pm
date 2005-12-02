@@ -290,8 +290,6 @@ BEGIN {
     $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
     $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
     $constantTags{DEFAULTURLHOST}  = $TWiki::cfg{DefaultUrlHost};
-    $constantTags{WIKIHOMEURL}     = $TWiki::cfg{DefaultUrlHost}
-      . $TWiki::cfg{ScriptUrlPath} . '/view' .  $TWiki::cfg{ScriptSuffix};
     $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
     $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
     if( $TWiki::cfg{NoFollow} ) {
@@ -587,8 +585,8 @@ sub writeCompletePage {
           keys %{$this->{htmlHeaders}} );
     $text =~ s/([<]\/head[>])/$htmlHeader$1/i if $htmlHeader;
     chomp($text);
-    
-    if ( (!defined($this->{context}->{command_line})) || ($this->{context}->{command_line} != 1) ) {
+
+    unless( $this->inContext('command_line')) {
         # can't use simple length() in case we have UNICODE
         # see perldoc -f length
         my $len = do { use bytes; length( $text ); };
@@ -709,7 +707,6 @@ sub redirect {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $query = $this->{cgiQuery};
-
     unless( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
         if ( $query && $query->param( 'noredirect' )) {
             my $content = join(' ', @_) . "\n";
@@ -850,12 +847,24 @@ sub getSkin {
 
 =pod
 
----++ ObjectMethod getScriptUrl( $web, $topic, $script, ... ) -> $absoluteScriptURL
+---++ ObjectMethod getScriptUrl( $web, $topic, $script, ... ) -> $scriptURL
 
-Returns the absolute URL to a TWiki script, providing the web and topic as
+Returns the URL to a TWiki script, providing the web and topic as
 "path info" parameters.  The result looks something like this:
 "http://host/twiki/bin/$script/$web/$topic".
    * =...= - an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y#XXX?a=1&b=2</tt>
+
+Note: if the context "command_line" is set (i.e. we are *not* running a
+CGI script) then absolute URLs are *always* generated. Also, if the
+context_id "absolute_urls" is set.
+
+The default script url is taken from {ScriptUrlPath}, unless there is
+an exception defined for the given script in {ScriptUrlPaths}. Both
+{ScriptUrlPath} and {ScriptUrlPaths} may be absolute or relative URIs. If
+they are absolute, then they will always generate absolute URLs. if they
+are relative, then they will be converted to absolute when required.
+
+If either the web or the topic is defined, will generate a full url (including web and topic). Otherwise will generate only up to the script name.
 
 =cut
 
@@ -864,21 +873,30 @@ sub getScriptUrl {
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
-    ( $web, $topic ) =
-      $this->normalizeWebTopicName( $web, $topic );
-    $web ||= '';
-
     # SMELL: topics and webs that contain spaces?
 
-    # $this->{urlHost} is needed, see Codev.PageRedirectionNotWorking
     my $url;
     if( defined $TWiki::cfg{ScriptUrlPaths} ) {
         $url = $TWiki::cfg{ScriptUrlPaths}{$script};
     }
     unless( $url ) {
-        $url = $this->{urlHost}.$TWiki::cfg{ScriptUrlPath}.'/'.
+        $url = $TWiki::cfg{ScriptUrlPath}.'/'.
           $script.$TWiki::cfg{ScriptSuffix};
     }
+
+    if(( $this->inContext( 'command_line' ) ||
+           $this->inContext( 'absolute_urls' )) && $url !~ /^[a-z]+:/ ) {
+        # See http://www.ietf.org/rfc/rfc2396.txt for the definition of
+        # "absolute URI". TWiki bastardises this definition by assuming
+        # that all relative URLs lack the <authority> component as well.
+        $url = $this->{urlHost}.$url;
+    }
+
+    return $url unless ( $web || $topic );
+    ( $web, $topic ) =
+      $this->normalizeWebTopicName( $web, $topic );
+
+    $web ||= '';
 
     $url .= '/'.$web.'/'.$topic;
 
@@ -2909,21 +2927,9 @@ sub _SCRIPTNAME {
 
 sub _SCRIPTURL {
     my ( $this, $params, $topic, $web ) = @_;
-    my $script = $params->{_DEFAULT};
-    my $url;
+    my $script = $params->{_DEFAULT} || '';
 
-    if( $script ) {
-        if( defined $TWiki::cfg{ScriptUrlPaths} ) {
-            $url = $TWiki::cfg{ScriptUrlPaths}{$script};
-        }
-        unless( $url ) {
-            $url = $this->{urlHost}.$TWiki::cfg{ScriptUrlPath}.'/'.
-              $script.$TWiki::cfg{ScriptSuffix};
-        }
-    } else {
-        $url = $this->{urlHost}.$TWiki::cfg{ScriptUrlPath};
-    }
-    return $url;
+    return $this->getScriptUrl( undef, undef, $script );
 }
 
 sub _ALL_VARIABLES {
