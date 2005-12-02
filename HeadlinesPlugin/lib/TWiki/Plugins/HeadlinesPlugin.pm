@@ -37,7 +37,7 @@ use Digest::MD5 qw(md5_hex);
 
 
 $VERSION = '$Rev$';
-$RELEASE = '1.93';
+$RELEASE = '1.94';
 
 $debug = 0; # toggle me
 
@@ -389,6 +389,11 @@ sub readRssFeed
     }
   }
 
+  unless ($theUrl =~ /^https?:\/\//) { # internal
+    my ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($web, $theUrl);
+    $theUrl = TWiki::Func::getViewUrl($thisWeb, $thisTopic);
+  }
+
   my ($text, $errorMsg) = $useLWPUserAgent?&getUrlLWP($theUrl):&getUrl($theUrl);
   return (undef, "ERROR: $errorMsg") if $errorMsg;
 
@@ -730,9 +735,10 @@ sub recode {
   $text =~ s/\xc3\xa9/&eacute;/go;
   $text =~ s/\xc3\xb1/&ntilde;/go;
 
-  $text =~ s/\xe2\x80[\x93\x94]/-/go;
+  $text =~ s/\xe2\x80\xa2/&bull;/go;
+  $text =~ s/\xe2\x80\xa6/&hellip/go;
+  $text =~ s/\xe2\x80[\x93\x94]/-/go; # SMELL: use matching entities
   $text =~ s/\xe2\x80[\x98\x99]/'/go;
-  $text =~ s/\xe2\x80\xa6/.../go;
   $text =~ s/\xe2\x80[\x9c\x9d]/''/go;
   
   $text =~ s/([\xc2\xc3])([\x80-\xbf])/chr(ord($1)<<6&0xC0|ord($2)&0x3F)/eg;
