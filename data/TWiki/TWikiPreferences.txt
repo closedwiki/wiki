@@ -271,17 +271,17 @@ You can enable/disable plugins using the [[%SCRIPTURL{"configure"}%][configure]]
 
 #DocGraphics
    * Graphics used in TWiki documentation - view all images in %ICONTOPIC%. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
-      * Set H = <img src="%ICONPATH{help}%" border="0" alt="HELP" title="HELP" width="16" height="16" border="0" />
-      * Set I = <img src="%ICONPATH{tip}%" border="0" alt="IDEA!" title="IDEA!" width="16" height="16" border="0" />
-      * Set M = <img src="%ICONPATH{arrowright}%" border="0" alt="MOVED TO..." title="MOVED TO..." width="16" height="16" border="0" />
-      * Set N = <img src="%ICONPATH{new}%" border="0" alt="NEW" title="NEW" width="30" height="16" border="0" />
-      * Set P = <img src="%ICONPATH{pencil}%" border="0" alt="REFACTOR" title="REFACTOR" width="16" height="16" border="0" />
-      * Set Q = <img src="%ICONPATH{help}%" border="0" alt="QUESTION?" title="QUESTION?" width="16" height="16" border="0" />
-      * Set S = <img src="%ICONPATH{starred}%" border="0" alt="PICK" title="PICK" width="16" height="16" border="0" />
-      * Set T = <img src="%ICONPATH{tip}%" border="0" alt="TIP" title="TIP" width="16" height="16" border="0" />
-      * Set U = <img src="%ICONPATH{updated}%" border="0" alt="UPDATED" title="UPDATED" width="55" height="16" border="0" />
-      * Set X = <img src="%ICONPATH{warning}%" border="0" alt="ALERT!" title="ALERT!" width="16" height="16" border="0" />
-      * Set Y = <img src="%ICONPATH{choice-yes}%" border="0" alt="DONE" title="DONE" width="16" height="16" border="0" />
+      * Set H = <img src="%ICONPATH{help}%" alt="HELP" title="HELP" width="16" height="16" border="0" />
+      * Set I = <img src="%ICONPATH{tip}%" alt="IDEA!" title="IDEA!" width="16" height="16" border="0" />
+      * Set M = <img src="%ICONPATH{arrowright}%" alt="MOVED TO..." title="MOVED TO..." width="16" height="16" border="0" />
+      * Set N = <img src="%ICONPATH{new}%" alt="NEW" title="NEW" width="30" height="16" border="0" />
+      * Set P = <img src="%ICONPATH{pencil}%" alt="REFACTOR" title="REFACTOR" width="16" height="16" border="0" />
+      * Set Q = <img src="%ICONPATH{help}%" alt="QUESTION?" title="QUESTION?" width="16" height="16" border="0" />
+      * Set S = <img src="%ICONPATH{starred}%" alt="PICK" title="PICK" width="16" height="16" border="0" />
+      * Set T = <img src="%ICONPATH{tip}%" alt="TIP" title="TIP" width="16" height="16" border="0" />
+      * Set U = <img src="%ICONPATH{updated}%" alt="UPDATED" title="UPDATED" width="55" height="16" border="0" />
+      * Set X = <img src="%ICONPATH{warning}%" alt="ALERT!" title="ALERT!" width="16" height="16" border="0" />
+      * Set Y = <img src="%ICONPATH{choice-yes}%" alt="DONE" title="DONE" width="16" height="16" border="0" />
 
    * Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
       * Set NEWTOPICBGCOLOR = #FFFFCE
