@@ -27,7 +27,7 @@ Alias /twiki/ "/home/httpd/twiki/"
 
 #### Change the path to match your local installation
 <Directory "/home/httpd/twiki/bin">
-	 Options +ExecCGI
+	 Options +ExecCGI FollowSymLinks
 	 SetHandler cgi-script
 	 Allow from all
 </Directory>
