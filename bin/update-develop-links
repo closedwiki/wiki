@@ -1,10 +1,5 @@
 #!/bin/sh
 echo "Content-type: text/plain"
 echo ""
-echo "Working dir: "
-echo `pwd`
 cd /home/virtual/site2/fst/home/develop/twikisvn
-echo "Run dir: "
-echo `pwd`
-ls -l
-./mklinks.sh PatternSkin 2>&1
+perl pseudo-install.pl -link 2>&1
