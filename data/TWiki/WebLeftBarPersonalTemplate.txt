@@ -1,9 +1,0 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-Customise this topic; samples and ideas available at TWiki:TWiki.WebLeftBarCookbook.
-
-%STARTINCLUDE%
-*My links:*
-   * [[%WIKIUSERNAME%][My home page]]
-   * 
-<a class="twikiSmall" href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%">edit</a>
-%STOPINCLUDE%

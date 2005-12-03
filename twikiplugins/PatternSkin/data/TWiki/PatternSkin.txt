@@ -33,7 +33,7 @@
 
    * Download the ZIP file from the Skin Home page (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory
-   * Test if installed: %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=pattern
+   * Test if installed: %SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=pattern
    * For skin activation see %TWIKIWEB%.TWikiSkins
 
 ---+++ Troubleshooting
