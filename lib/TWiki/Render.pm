@@ -1677,7 +1677,10 @@ sub summariseChanges {
     my $summary = '';
     my $store = $this->{session}->{store};
 
+    $orev = $nrev - 1 unless (defined($orev) || !defined($nrev));
+
     my( $nmeta, $ntext ) = $store->readTopic( $user, $web, $topic, $nrev );
+
     if( $nrev && $nrev > 1 && $orev ne $nrev ) {
         my $metaPick = qr/^[A-Z](?!OPICINFO)/; # all except TOPICINFO
         # there was a prior version. Diff it.
@@ -1706,6 +1709,9 @@ sub summariseChanges {
                 if( $tml ) {
                     $block =~ s/^-(.*)$/CGI::del( $1 )/se;
                     $block =~ s/^\+(.*)$/CGI::ins( $1 )/se;
+                } elsif ( $this->{session}->inContext('rss')) {
+                    $block =~ s/^-/REMOVED: /;
+                    $block =~ s/^\+/INSERTED: /;
                 }
                 push( @revised, $prev ) if $prev;
                 $block .= $ellipsis if $trim;
