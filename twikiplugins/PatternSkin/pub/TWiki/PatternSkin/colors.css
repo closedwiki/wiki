@@ -222,15 +222,15 @@ a:hover.twistyTrigger {
 }
 
 .twikiAttachments,
-.twikiForm {
+table.twikiFormTable th.twikiFormTableHRow,
+table.twikiFormTable td.twikiFormTableRow {
 	color:#666; /*T7*/
 }
-.patternContent .twikiAttachments,
-.patternContent .twikiForm {
-	color:#333; /*T11*/
-}
-.patternEditPage .twikiForm {
+.twikiEditForm {
 	color:#000; /*T1*/
+}
+.twikiEditForm th {
+	background-color:#eaeaea;
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
@@ -238,7 +238,7 @@ a:hover.twistyTrigger {
 	border-color:#E2DCC8; /*BO4*/
 }
 .twikiAttachments table,
-.twikiForm table {
+table.twikiFormTable {
 	border-color:#ccc; /*BO6*/
 	background-color:#fff; /*BG1*/
 }
@@ -246,30 +246,28 @@ a:hover.twistyTrigger {
 	background-color:#fff; /*BG1*/
 }
 .twikiAttachments th,
-.twikiForm th,
-.twikiAttachments th,
-.twikiForm th {
+table.twikiFormTable th.twikiFormTableHRow,
+.twikiEditForm th {
 	border-color:#ccc; /*BO6*/
-	background-color:#fff; /*BG1*/
 }
 .twikiAttachments td,
-.twikiForm td {
+table.twikiFormTable td.twikiFormTableRow {
 	border-color:#ccc; /*BO6*/
 	background-color:#fff; /*BG1*/
 }
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
-.twikiForm th a:link,
-.twikiForm th a:visited {
+table.twikiFormTable th.twikiFormTableHRow a:link,
+table.twikiFormTable th.twikiFormTableHRow a:visited {
 	color:#06c; /*T2*/
 	border-color:#06c; /*T2*/
 }
 .twikiAttachments th font,
-.twikiForm th font {
+table.twikiFormTable th.twikiFormTableHRow font {
 	color:#06c; /*T2*/
 }
 .twikiAttachments th a:hover,
-.twikiForm th a:hover {
+table.twikiFormTable th.twikiFormTableHRow a:hover {
 	border-color:#06c; /*T2*/
 	background-color:transparent;
 }

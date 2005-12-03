@@ -260,6 +260,10 @@ th.twikiSortedDescendingCol a:hover font,
 	border-style:solid;	
 }
 
+.twikiEditForm {
+	margin:0 0 .5em 0;
+}
+
 /* TipsContrib */
 .tipsOfTheDayContents .tipsOfTheDayTitle {
 	font-weight:bold;
@@ -321,13 +325,13 @@ a:visited .twistyLinkLabel {
 	display:none;
 }
 .twikiAttachments table,
-.twikiForm table {
+table.twikiFormTable {
 	border-collapse:collapse;
 	padding:0px;
 	border-spacing:0px;
 	empty-cells:show;
 	border-style:solid;
-	border-width:1px 1px 0 1px;
+	border-width:1px;
 }
 .twikiAttachments table {
 	line-height:1.4em; /*S1*/
@@ -337,17 +341,16 @@ a:visited .twistyLinkLabel {
 	width:100%;
 }
 .twikiAttachments th,
-.twikiForm th,
-.twikiAttachments th,
-.twikiForm th {
-	padding:.2em .6em;
+table.twikiFormTable th.twikiFormTableHRow,
+.twikiEditForm th {
+	padding:2px 6px;
 	height:2.5em;
 	vertical-align:middle;
 	border-style:solid;
 	border-width:0 0 1px 1px;
 }
 .twikiAttachments th.twikiFirstCol,
-.twikiForm th.twikiFirstCol {
+table.twikiFormTable th.twikiFirstCol {
 	border-left:none;
 	width:0px;
 }
@@ -358,16 +361,19 @@ a:visited .twistyLinkLabel {
 	display:none;
 }
 .twikiAttachments td,
-.twikiForm td {
+table.twikiFormTable td {
 	border-style:solid;
-	border-width:0 0 1px 0;
-	padding:.2em .6em;
+	padding:2px 6px;
 	height:1.4em; /*S1*/
 	text-align:left;
 	vertical-align:top;
 }
-.twikiForm th.twikiFirstCol,
-.twikiForm td.twikiFirstCol {
+.twikiAttachments td,
+table.twikiFormTable td.twikiFormTableRow {
+	border-width:0 0 1px 0;
+}
+table.twikiFormTable th.twikiFirstCol,
+table.twikiFormTable td.twikiFirstCol {
 	border-left:none;
 }
 .twikiAttachments th.twikiFirstCol,
@@ -378,28 +384,22 @@ a:visited .twistyLinkLabel {
 }
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
-.twikiForm th a:link,
-.twikiForm th a:visited {
+table.twikiFormTable th.twikiFormTableHRow a:link,
+table.twikiFormTable th.twikiFormTableHRow a:visited {
 	text-decoration:none;
 }
 .twikiAttachments th a:hover,
-.twikiForm th a:hover {
+table.twikiFormTable th.twikiFormTableHRow a:hover {
 	text-decoration:none;
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
 .twikiAttachments td a:link,
 .twikiAttachments td a:visited,
-.twikiForm td a:link,
-.twikiForm td a:visited {
+table.twikiFormTable td.twikiFormTableRow a:link,
+table.twikiFormTable td.twikiFormTableRow a:visited {
 	font-weight: normal;
 }
-.twikiForm table table,
-.twikiForm table table th,
-.twikiForm table table td {
-	border:0px;
-}
-
 
 .twikiToc {
 	margin:1em 0;
