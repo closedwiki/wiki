@@ -587,20 +587,6 @@ sub _renderNonExistingWikiWord {
                       $ans );
 }
 
-# NOTE: factored for clarity. Test for any speed penalty.
-# returns the (web, topic) 
-#SMELL - we must have implemented this elsewhere?
-sub _getWeb {
-    # Internal link: get any 'Web.' prefix, or use current web
-    my ($theLink) = @_;
-    $theLink =~ s/^($TWiki::regex{webNameRegex}|$TWiki::regex{defaultWebNameRegex})\.//;
-    my $web = $1;
-
-    (my $baz = 'foo') =~ s/foo//;       # reset $1, defensive coding
-    # SMELL - is that really necessary?
-    return ($web, $theLink);
-}
-
 # _handleWikiWord is called by the TWiki Render routine when it sees a 
 # wiki word that needs linking.
 # Handle the various link constructions. e.g.:
@@ -660,76 +646,65 @@ sub _handleWikiWord {
 
 
 # Handle SquareBracketed links mentioned on page $theWeb.$theTopic
-# format: [[$theText]]
-# format: [[$theLink][$theText]]
+# format: [[$text]]
+# format: [[$link][$text]]
 sub _handleSquareBracketedLink {
-    my( $this, $theWeb, $theTopic, $theText, $theLink ) = @_;
+    my( $this, $web, $topic, $text, $link ) = @_;
 
-    $theText = $theLink unless defined( $theText );
+    $text ||= $link;
 
     # Strip leading/trailing spaces
-    $theLink =~ s/^\s*//;
-    $theLink =~ s/\s*$//;
-    if( $theLink =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
-        return _protocolLink($theLink, $theText);
+    $link =~ s/^\s*//;
+    $link =~ s/\s*$//;
+
+    # Spot full URLs
+    if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ||
+          $link =~ /^\// ) {
+        # URL, absolute or relative
+        if ( $link =~ /^(\S+)\s+(.*)$/ ) {
+            # '[[URL#anchor display text]]' link:
+            $link = $1;
+            $text = $2;
+        } else {
+            # '[[Web.odd wiki word#anchor][display text]]' link:
+            # '[[Web.odd wiki word#anchor]]' link:
+            # External link: add <nop> before WikiWord and ABBREV
+            # inside link text, to prevent double links
+            # SMELL - why regex{upperAlpha} here - surely this is a web
+            # match, not a CAPWORD match?
+            $text =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
+        }
+        # SMELL: Can't use CGI::a here, because it encodes ampersands in
+        # the link, and those have already been encoded once in the
+        # rendering loop (they are identified as "stand-alone"). One
+        # encoding works; two is too many. None would be better for everyone!
+        return '<a href="'.$link.'" target="_top">'.$text.'</a>';
     }
-    my $web;
-    ($web, $theLink) = _getWeb($theLink);
-    $web = $theWeb unless ($web);
 
     # Extract '#anchor'
-    # FIXME and NOTE: Had '-' as valid anchor character, removed
-    # $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//;
+    # $link =~ s/(\#[a-zA-Z_0-9\-]*$)//;
     my $anchor = '';
-    if( $theLink =~ s/($TWiki::regex{anchorRegex}$)// ) {
+    if( $link =~ s/($TWiki::regex{anchorRegex}$)// ) {
         $anchor = $1;
     }
 
-    # Get the topic name
-    my $topic = $theLink || $theTopic;  # remaining is topic
-    # Capitalise
-    $topic =~ s/^(.)/\U$1/;
-    $topic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;    
-    # filter out &any; entities
-    $topic =~ s/\&[a-z]+\;//gi;
-    # filter out &#123; entities
-    $topic =~ s/\&\#[0-9]+\;//g;
-    $topic =~ s/[\\\/\#\&\(\)\{\}\[\]\<\>\!\=\:\,\.]//g;
-    $topic =~ s/$TWiki::cfg{NameFilter}//go;    # filter out suspicious chars
-    if( ! $topic ) {
-        return $theText; # no link if no topic
-    }
-    return $this->internalLink( $web, $topic, $theText, $anchor, 1, undef );
-}
+    # filter out &any; entities (legacy)
+    $link =~ s/\&[a-z]+\;//gi;
+    # filter out &#123; entities (legacy)
+    $link =~ s/\&\#[0-9]+\;//g;
+    # Filter junk
+    $link =~ s/[^$TWiki::regex{mixedAlphaNum}.\s]//g;
+    # Capitalise first word
+    $link =~ s/^(.)/\U$1/;
+    # Collapse spaces and capitalise following letter
+    $link =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;
 
-#---++ _protocolLink
-# Called whenever SquareBracketed links point at an external URL 
-# e.g. file: ftp: http: 
-# used to be called specificLink, but renamed as it is specific to a protocol
-#
-# returns the HTML fragment
-sub _protocolLink {
-    my ($url, $theText) = @_;
+    # Topic defaults to the current topic
+    $topic = $link if( $link );
 
-    if ( $url =~ /^(\S+)\s+(.*)$/ ) {
-        # '[[URL#anchor display text]]' link:
-        $url = $1;
-        $theText = $2;
+    ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
 
-    } else {
-        # '[[Web.odd wiki word#anchor][display text]]' link:
-        # '[[Web.odd wiki word#anchor]]' link:
-        # External link: add <nop> before WikiWord and ABBREV
-        # inside link text, to prevent double links
-        # SMELL - why regex{upperAlpha} here - surely this is a web
-        # match, not a CAPWORD match?
-        $theText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
-    }
-    # SMELL: Can't use CGI::a here, because it encodes ampersands in the link,
-    # and those have already been encoded once in the rendering loop (they are
-    # identified as "stand-alone"). One encoding works; two is too many. None
-    # would be better for everyone!
-    return '<a href="'.$url.'" target="_top">'.$theText.'</a>';
+    return $this->internalLink( $web, $topic, $text, $anchor, 1, undef );
 }
 
 # Handle an external link typed directly into text. If it's an image
