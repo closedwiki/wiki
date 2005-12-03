@@ -190,7 +190,7 @@ BEGIN {
         SEARCH            => \&_SEARCH,
         SERVERTIME        => \&_SERVERTIME,
         SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
-        SPACEOUT           => \&_SPACEOUT,
+        SPACEOUT          => \&_SPACEOUT,
         'TMPL:P'          => \&_TMPLP,
         TOPICLIST         => \&_TOPICLIST,
         URLENCODE         => \&_ENCODE,
@@ -862,7 +862,9 @@ The default script url is taken from {ScriptUrlPath}, unless there is
 an exception defined for the given script in {ScriptUrlPaths}. Both
 {ScriptUrlPath} and {ScriptUrlPaths} may be absolute or relative URIs. If
 they are absolute, then they will always generate absolute URLs. if they
-are relative, then they will be converted to absolute when required.
+are relative, then they will be converted to absolute when required (e.g.
+when running from the command line, or when generating rss). If
+$script is not given, absolute URLs will always be generated.
 
 If either the web or the topic is defined, will generate a full url (including web and topic). Otherwise will generate only up to the script name.
 
@@ -873,6 +875,10 @@ sub getScriptUrl {
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
+    my $absolute = $this->inContext( 'command_line' ) ||
+      $this->inContext( 'rss' ) ||
+        $this->inContext( 'absolute_urls' );
+
     # SMELL: topics and webs that contain spaces?
 
     my $url;
@@ -880,12 +886,12 @@ sub getScriptUrl {
         $url = $TWiki::cfg{ScriptUrlPaths}{$script};
     }
     unless( $url ) {
-        $url = $TWiki::cfg{ScriptUrlPath}.'/'.
-          $script.$TWiki::cfg{ScriptSuffix};
+        $url = $TWiki::cfg{ScriptUrlPath};
+        $url .= '/' unless $url =~ /\/$/;
+        $url .= $script.$TWiki::cfg{ScriptSuffix};
     }
 
-    if(( $this->inContext( 'command_line' ) ||
-           $this->inContext( 'absolute_urls' )) && $url !~ /^[a-z]+:/ ) {
+    if( $absolute && $url !~ /^[a-z]+:/ ) {
         # See http://www.ietf.org/rfc/rfc2396.txt for the definition of
         # "absolute URI". TWiki bastardises this definition by assuming
         # that all relative URLs lack the <authority> component as well.
