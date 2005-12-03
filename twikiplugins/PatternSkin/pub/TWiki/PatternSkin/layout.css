@@ -47,11 +47,8 @@ html body {
 	-----------------------------------------------------------	*/
 
 #patternScreen {
-	margin:0;
-	padding:0;
 }
 #patternPageShadow {
-	padding:0;
 }
 #patternPage {
 }
@@ -70,27 +67,16 @@ html body {
 /*	-----------------------------------------------------------
 	Pages that are not view
 	-----------------------------------------------------------	*/
-	
+
 .patternNoViewPage #patternPage {
-	padding-left:0;
 	margin-left:3%;
 	margin-right:3%;
 	/* padding in style.css */
 }
 
-/* Print */
-
-.patternPrintPage #patternPage {
-	padding-left:0;
-	margin-left:5%;
-	margin-right:5%;
-	margin-top:1em;
-}
-
 /* Plain */
 
 .patternPlainPage #patternPage {
-	padding-left:0;
 	margin-left:0px;
 	margin-right:0px;
 	/* padding in style.css */

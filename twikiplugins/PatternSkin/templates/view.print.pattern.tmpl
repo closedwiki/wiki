@@ -6,6 +6,14 @@
 
 
 
+%TMPL:DEF{"templatecustomstyle"}%
+<style type="text/css" media="all">
+	@import url("%PUBURL%/%TWIKIWEB%/PatternSkin/print.css");
+</style>
+%TMPL:END%
+
+
+
 %TMPL:DEF{"leftbar"}%%TMPL:END%
 %TMPL:DEF{"topbar"}%%TMPL:END%
 
@@ -23,7 +31,7 @@
 
 %TMPL:DEF{"topicinfo"}%<div class="patternTopicFooter"><span class="patternHomePath">%MAKETEXT{"This topic:"}% <nop>%WEB% %META{"parent" prefix=" <span class='sep'>&gt;</span> " suffix=""}%
 <span class='sep'>&gt;</span> %TOPIC%</span>
-<div class="patternTopicInfo patternRevInfo twikiGrayText">%MAKETEXT{"History:"}% %REVINFO%</div>%TMPL:END%
+<div class="patternTopicInfo patternRevInfo">%MAKETEXT{"History:"}% %REVINFO%</div>%TMPL:END%
 
 
 
