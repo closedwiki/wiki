@@ -3,6 +3,7 @@ use strict;
 
 use File::Path;
 use File::Copy;
+use File::Spec;
 use Cwd;
 
 my $install;
@@ -69,19 +70,88 @@ sub copy_in {
     print "Copied $file\n";
 }
 
+sub _checkLink {
+    my( $moduleDir,$path,$c) = @_;
+
+    my $base = "$basedir/$moduleDir";
+    my $dest = readlink "$path$c";
+    $dest =~ s#/([^/]*)$##;
+    unless( $1 eq $c ) {
+        print STDERR <<HERE;
+WARNING Confused by
+     $path -> '$dest$1' doesn't point to the expected place
+     (should be $base$path$c)
+HERE
+    }
+
+    $dest = "$basedir/$path$dest";
+    while ( $dest =~ s#/[^/]+/\.\.## ) {
+    }
+    if( "$dest/$c" ne "$base$path$c" ) {
+        print STDERR <<HERE;
+WARNING Confused by
+     $path$c -> '$dest/$c' doesn't point to the expected place
+     (should be $base$path$c)
+HERE
+        return 0;
+    }
+    return 1;
+}
+
+# Will try to link as high in the dir structure as it can
 sub just_link {
     my( $moduleDir, $dir, $file ) = @_;
-    return if -e $file;
-    File::Path::mkpath( $dir ) unless( -e $dir || -l $dir );
-    my $argh = `ln -s $basedir/$moduleDir/$file $file`;
-    die "$argh $@" if ( $argh || $@ );
-    print "Lunk $file\n";
+
+    my $base = "$basedir/$moduleDir";
+    my $relp = '';
+    my @components = split(/\/+/, $file);
+    my $path = '';
+    foreach my $c ( @components ) {
+        if( -l "$path$c" ) {
+            _checkLink($moduleDir,$path,$c);
+            #print STDERR "$path$c already linked\n";
+            last;
+        } elsif( -d "$path$c" ) {
+            $path .= "$c/";
+            $relp .= '../';
+        } elsif( -e "$path$c" ) {
+            print STDERR "ERROR $path$c is in the way\n";
+            last;
+        } else {
+            my $tgt = "$relp$moduleDir$path$c";
+            #print "Link $tgt $path$c\n";
+            #print `cd $path && ls -l $tgt`;
+            my $argh = `ln -s $tgt $path$c 2>&1`;
+            die "$argh $@" if ( $argh || $@ );
+            print "Linked $base$path$c\n";
+            last;
+        }
+    }
 }
 
 sub uninstall {
     my( $moduleDir, $dir, $file ) = @_;
-    unlink $file;
-    print "Unlunk $file\n";
+    # link handling that detects valid linking path components higher in the
+    # tree so it unlinks the directories, and not the leaf files.
+    my @components = split(/\/+/, $file);
+    my $base = "$basedir/$moduleDir";
+    my $relp = '';
+    my $path = '';
+    foreach my $c ( @components ) {
+        if( -l "$path$c" ) {
+            return unless _checkLink($moduleDir,$path,$c);
+            unlink "$path$c";
+            print "Unlinked $path$c\n";
+            return;
+        } else {
+            $path .= "$c/";
+            $relp .= '../';
+        }
+    }
+    if( -e $file ) {
+        unlink $file;
+        print "Removed $file\n";
+    }
 }
 
 unless (@ARGV) {
@@ -121,4 +191,4 @@ print "Installing modules: ".join(",", @modules).":\n";
 foreach my $module (@modules) {
     installModule($module);
 }
-print "Don't forget to enable plugins using configure\n";
+print "Don't forget to enable/disable plugins using configure\n";
