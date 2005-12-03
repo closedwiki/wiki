@@ -208,7 +208,6 @@ sub renderMoved {
     return $text;
 }
 
-
 =pod
 
 ---++ ObjectMethod renderFormField($web, $topic, $meta, $params) -> $text
@@ -1978,73 +1977,6 @@ sub renderFormFieldArg {
         }
     }
     return '';
-}
-
-
-=pod
-
----++ ObjectMethod renderFormFieldArgRSS( $this, $theWeb, $theTopic, $meta, $args ) -> $escapedHTML
-
-Parse the arguments to a $formfield specification and extract
-the relevant formfield from the given meta data.
-
-used to show HTML in rss feeds
-
-=cut
-
-sub renderFormFieldArgRSS {
-    my( $this, $theWeb, $theTopic, $meta, $args ) = @_;
-
-	my $value = renderFormFieldArg($meta, $args );
-	$value = $this->getRenderedVersion ( $value, $theWeb, $theTopic );	
-	
-    # Encode special chars into XML &#nnn; entities for use in RSS feeds
-    # - no encoding for HTML pages, to avoid breaking international 
-    # characters. Only works for ISO-8859-1 sites, since the Unicode
-    # encoding (&#nnn;) is identical for first 256 characters. 
-    # I18N TODO: Convert to Unicode from any site character set.
-    if( $this->{session}->inContext( 'rss' ) &&
-          defined( $TWiki::cfg{Site}{CharSet} ) &&
-            $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
-        $value =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
-    }	
-    
-    $value =~ s/%/&#37;/g;	#SMELL: just in case (damned TOC was still getting expanded somewhere..
-
-	return '<literal>'.TWiki::entityEncode($value).'</literal>';	#SMELL: we could do with a <literal> tag
-}
-
-=pod
-
----++ ObjectMethod makeTopicSummaryRSS (  $theText, $theTopic, $theWeb, $theFlags ) -> $tml
-
-Makes a HTML summary of the given topic, currently without evaluating all variables
-
-used to show HTML in rss feeds
-
-=cut
-
-sub makeTopicSummaryRSS {
-    my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
-    $theFlags ||= '';
-
-#TODO: really should make this a Diff.. (but that will require a new inline diff method)
-    my $value = $this->getRenderedVersion ( $theText, $theWeb, $theTopic );	
-
-    # Encode special chars into XML &#nnn; entities for use in RSS feeds
-    # - no encoding for HTML pages, to avoid breaking international 
-    # characters. Only works for ISO-8859-1 sites, since the Unicode
-    # encoding (&#nnn;) is identical for first 256 characters. 
-    # I18N TODO: Convert to Unicode from any site character set.
-    if( $this->{session}->inContext( 'rss' ) &&
-          defined( $TWiki::cfg{Site}{CharSet} ) &&
-            $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
-        $value =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
-    }	
-    $value =~ s/%/&#37;/g;	#just in case (damned TOC was still getting expanded somewhere..
-
-    return '<literal>'.TWiki::entityEncode($value).'</literal>';	#SMELL: we could do with a <literal> tag
 }
 
 =pod

@@ -820,15 +820,9 @@ sub searchWeb {
                     $out =~ s/%TEXTHEAD%/$text/go;
 
                 } elsif( $format ) {
-                    if( $this->{session}->inContext( 'rss' )) {
-                	    $out =~ s/\$summary\(([^\)]*)\)/$renderer->makeTopicSummaryRSS( $text, $topic, $web, $1 )/ges;
-                	    $out =~ s/\$summary/$renderer->makeTopicSummaryRSS( $text, $topic, $web )/ges;
-                    	$out =~ s/\$formfield\(\s*([^\)]*)\s*\)/$renderer->renderFormFieldArgRSS( $web, $topic, $meta, $1)/ges;
-                    } else {
-        	            $out =~ s/\$summary\(([^\)]*)\)/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
-	                    $out =~ s/\$summary/$renderer->makeTopicSummary( $text, $topic, $web )/ges;
-                    	$out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
-                    }
+                    $out =~ s/\$summary\(([^\)]*)\)/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
+                    $out =~ s/\$summary/$renderer->makeTopicSummary( $text, $topic, $web )/ges;
+                    $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
                     $out =~ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
                     $out =~ s/\$parent/$meta->getParent()/ges;;
                     $out =~ s/\$formname/$meta->getFormName()/ges;
