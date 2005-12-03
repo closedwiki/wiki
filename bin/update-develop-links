@@ -1,4 +1,4 @@
 #!/bin/sh
 echo "Content-type: text/plain"
 echo ""
-./mklinks.sh
+./mklinks.sh PatternSkin
