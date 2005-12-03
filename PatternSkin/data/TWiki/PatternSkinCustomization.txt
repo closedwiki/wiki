@@ -15,7 +15,7 @@ The default variables that cause this behavior are defined in [[%TWIKIWEB%.TWiki
 <pre>
       * Set <nop>WEBLOGONAME = logo.gif
       * Set <nop>WEBLOGOIMG = %<nop>PUBURL%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
-      * Set <nop>WEBLOGOURL = %<nop>SCRIPTURL%/view%<nop>SCRIPTSUFFIX%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
+      * Set <nop>WEBLOGOURL = %<nop>SCRIPTURL{"view"}%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
       * Set <nop>WEBLOGOALT = Home
 </pre>
 
