@@ -115,8 +115,8 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 
 ---+++ View template
 
-<img src="%ATTACHURLPATH%/CSS_element_layout_view.pattern.tmpl.png" alt="CSS layout in View template" style="border:1px solid #ddd;" width="598" height="758"  />
+<img src="%ATTACHURLPATH%/CSS_element_layout_view.pattern.tmpl.png" alt="CSS layout in View template" style="border:1px solid #ddd;" width="560" height="713"  />
 
 __Related Topics:__ TWikiSkins, AdminDocumentationCategory
 
-%META:FILEATTACHMENT{name="CSS_element_layout_view.pattern.tmpl.png" attr="h" comment="" date="1092634624" path="CSS_element_layout_view.pattern.tmpl.png" size="42799" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="CSS_element_layout_view.pattern.tmpl.png" attr="h" comment="" date="1092634624" path="CSS_element_layout_view.pattern.tmpl.png" size="37359" user="TWikiContributor" version="1.1"}%
