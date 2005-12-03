@@ -103,7 +103,7 @@ my @modules;
 
 if ($ARGV[0] eq "all") {
   opendir(D, "twikiplugins") || die "Must be run from root of installation";
-  @modules = ( grep { /(Plugin|Contrib)$/ } readdir( D ));
+  @modules = ( grep { /(Plugin|Contrib|Skin)$/ } readdir( D ));
   closedir( D );
 } elsif ($ARGV[0] eq "default") {
     open(F, "<", "tools/MANIFEST") || die "Could not open MANIFEST: $!";
