@@ -182,20 +182,20 @@ label {
 	
 /* TablePlugin */
 .twikiTable {
-    border-collapse: collapse;
+    border-collapse:collapse;
     border-width:1px;
 	border-style:solid;
 }
 .twikiTable td,
 .twikiTable th {
-	border-width:0 1px;
+	border-width:1px;
 	border-style:solid;
 }
 .twikiTable th {
-    padding:.4em .5em;
+    padding:4px;
 }
 .twikiTable td {
-    padding:.25em .5em;
+    padding:2px 4px;
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -281,7 +281,7 @@ th.twikiSortedDescendingCol a:hover font,
 }
 /* TipsContrib - in left bar */
 #patternLeftBar .tipsOfTheDay {
-	margin:1em 2em .5em 0;
+	margin:1em 1em .5em 0;
 	border-width:0;
 }
 #patternLeftBar .tipsOfTheDayHeader img {
@@ -502,16 +502,17 @@ a:hover .twikiAccessKey {
 #patternPage {
 	font-size:100%;
 }
-#patternMain {
-	border-width:1px 0 0 0;
+#patternColumnWrapper {
+	table-layout:fixed;
+	border-width:1px 0;
 	border-style:solid;
+}
+#patternMain {
 }
 .patternMainContents {
 	padding:0 2em 1em 2em;
 }
-.patternNoViewPage #patternMain {
-	padding-top:2em;
-}
+
 /* Top bar */
 #patternTopBar {}
 table.patternTopBarContents {
@@ -526,9 +527,7 @@ table.patternTopBarContents td {
 
 /* Bottom bar */
 #patternBottomBar {
-	padding:1em 2em;
-	border-width:1px 0 0 0;
-	border-style:solid;
+	padding:1em 2em 1.5em 2em;
 }
 .patternBottomBarContents {
 	font-size:85%; /*S3*/
@@ -543,7 +542,7 @@ table.patternTopBarContents td {
 .patternTopicAction {
 	font-size:94%; /*S2*/
 	line-height:1.5em;
-	margin:-1px 0 3em 0;
+	margin:0 0 3em 0;
 	padding:.5em 20px; /*S5*/
 	border-width:1px 0;
 	border-style:solid;
@@ -591,12 +590,12 @@ table.patternTopBarContents td {
 
 /* Left bar */
 #patternLeftBar {
-	border-width:1px 1px 0 0;
+	border-width:0 1px 0 0;
 	border-style:solid;
 	overflow:hidden;
 }
 .patternLeftBarContents {
-	padding:0 1em 1.5em 1em; /*S6*/
+	padding:0 0 1.5em 1em; /*S6*/
 	font-size:94%; /*S2*/
 }
 .patternLeftBarContents a img {
@@ -612,16 +611,14 @@ table.patternTopBarContents td {
 	list-style:none;
 }
 .patternLeftBarContents li {
-	padding-left:0;
-	margin-right:2em; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
+	width:100%;
+	margin:0 1em 0 0;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .patternLeftBarContents .patternFormHolder {
-	margin:.5em 0 1em 0;
+	margin:1em 0;
 	width:100%;
-}
-html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
-	margin-top:1.25em;
-	width:95%; /* otherwise it will grow when the window is resized on Firefox */
 }
 .patternLeftBarContents .patternFormHolder table {
 	width:100%;
@@ -634,7 +631,7 @@ html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 	width:100%;
 }
 .patternLeftBarContents .patternFormHolder th.patternFormSpacer {
-	width:3px;
+	width:1px;
 }
 .patternLeftBarContents .patternFormHolder th.patternFormFieldButton {
 	width:16px;
@@ -650,7 +647,6 @@ html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 }
 .patternLeftBarContents input.patternFormButton {
 	display:block;
-	padding:0 1em 0 0;
 	margin:auto 1em auto 0;
 	border:0;
 	width:16px;
@@ -698,8 +694,6 @@ html>body .patternLeftBarContents .patternFormHolder { /* Hide from IE */
 	border-style:solid;
 	padding:5px 1em 5px 1.25em; /*S4*/
 }
-
-
 
 /* Topic text */
 .patternTopic {
@@ -797,6 +791,18 @@ td.patternToolBar {
 }
 input.patternFormFieldVerticalForm {
 	margin:.1em 0 .6em 0;
+}
+
+/* Pages that are not a view page */
+
+.patternNoViewPage #patternMain {
+	padding-top:2em;
+	padding-bottom:4em;
+}
+.patternNoViewPage #patternBottomBar {
+	/* same margins as #patternPage in layout.css */
+	margin-left:3%;
+	margin-right:3%;
 }
 
 /* Edit page */
@@ -1022,6 +1028,4 @@ tr.twikiDiffDebug td {
 
 .patternPlainPage #patternMain {
 	padding-top:2em;
-}
-ng-top:2em;
 }
