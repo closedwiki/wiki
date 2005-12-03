@@ -47,42 +47,33 @@ $testpage =~ s/\./\//g;
 experiment( "athens" );
 
 # Now run what you want
-#experiment( "beijing" );
-#experiment( "cairo" );
-#experiment( "MODPERL", "classic" );
-#experiment( "marzia", "classic" );
-experiment( "DEVELOP", "classic" );
-experiment( "MAIN", "classic" );
-#experiment( "rlos", "classic" );
+#experiment( "cairo", 10, 10, "pattern" );
+#experiment( "DEVELOP", 20, 10, "pattern" );
+my $runs = 15;
+my $secs = 10;
+experiment("DEVELOP", $secs, $runs, "pattern", "");
 
 my $baseline;
 
 sub experiment {
-    my ( $install, $skin ) = @_;
+    my ( $install, $secs, $runs, $skin, $plugin ) = @_;
 
     $skin = "" unless $skin;
-    my $url = "$server/$install/bin/view/TWiki/TWikiPreferences";
-    print "*** Getting plugins for $install\n" if $debug;
-    my $plugins = `wget -O - $url 2>&1 | grep 'Currently activated plugins:' | sed -e 's/^.*: //'`;
-    $plugins =~ s/<[^>]*>//g;
-    $plugins =~ s/\s+//g;
-    $plugins =~ s/TestFixturePlugin//;
-    $plugins =~ s/SpreadSheetPlugin//;
-    $plugins =~ s/CommentPlugin//;
-    $plugins =~ s/EditTablePlugin//;
-    $plugins =~ s/InterwikiPlugin//;
-    $plugins =~ s/RenderListPlugin//;
-    $plugins =~ s/SmiliesPlugin//;
-    $plugins =~ s/TablePlugin//;
-    $plugins =~ s/,,/,/g;
-    print "*** Plugins for $install are $plugins\n" if $debug;
-    $plugins = ""; # comment out to enable plugins
-    my ($runs, $elapsed, $internal) = run($install, $skin, $plugins);
+    if( -e "$installdir/$install/lib/LocalSite.cfg" && $plugin) {
+        my $t = `cat $installdir/$install/lib/LocalSite.cfg`;
+        $t =~ s/(cfg{Plugins}{\w+}{Enabled})\s*=\s*\d+;/$1 = 0;/gm;
+        $t =~ s/(cfg{Plugins}{$plugin}{Enabled})\s*=\s*\d;$/$1 = 1;/m;
+        open(F,">$installdir/$install/lib/LocalSite.cfg") || die $!;
+        print F $t;
+        close(F);
+    }
+    my ($runs, $elapsed, $internal) = run($install, $secs, $runs,
+                                          $skin, $plugin);
     $baseline = $elapsed unless $baseline;
-    print "| $install | $skin | $plugins | $runs | $elapsed | ";
+    print "| $install | $skin | $plugin | $runs | $elapsed | ";
     $baseline = $elapsed unless $baseline;
     print $baseline * 100 / $elapsed, " |";
-    if ($internal) {
+    if ($internal && 0) {
         my $overhead = $elapsed - $internal;
         print " ",$internal, " | $overhead |";
     }
@@ -92,10 +83,10 @@ sub experiment {
 }
 
 sub run {
-    my ( $code, $skin, $plugins ) = @_;
+    my ( $code, $secs, $runs, $skin, $plugins ) = @_;
     my $p = "?debugenableplugins=$plugins";
     if ( $skin ) {
-        $p .= "&skin=$skin";
+        $p .= ";skin=$skin";
     }
 
     my $bm = "$installdir/$code/bin/view";
@@ -118,8 +109,10 @@ sub run {
     # run for 5s minimum CPU and 5 runs minimum. You can increase or
     # decrease either of these, the benchmarks will still be normalised
     # to Athens.
+    $secs ||= 5;
+    $runs ||= 5;
     print "\t" if $debug;
-    while ( $total < 5 || $i < 5 ) {
+    while ( $total < $secs || $i < $runs ) {
         $i++;
         print "$i=" if $debug;
         my $r = `cd $installdir/$code/bin && ( time -p $bm ) 2>&1`;

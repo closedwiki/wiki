@@ -743,6 +743,7 @@ tools/rewriteshbang.pl 0550
 tools/expire_sessions.pl 0550
 twiki_httpd_conf.txt 0660
 UpgradeTwiki 0550
+!include twikiplugins/PatternSkin/lib/TWiki/Contrib/PatternSkin
 !include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
 !include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
