@@ -1581,11 +1581,7 @@ sub _TOC {
         } else {
             next;
         }
-        my $urlPath = '';
-        if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
-            # not current topic, can't omit URL
-            $urlPath = $this->getScriptUrl($webPath, $topic, 'view');
-        }
+        my $urlPath = $this->getScriptUrl($webPath, $topic, 'view');
         if( $line && $level <= $depth ) {
             # cut TOC exclude '---+ heading !! exclude this bit'
             $line =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
