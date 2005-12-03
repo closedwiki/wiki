@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(rename)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%%_{"Confirm rename or move"}%%TMPL:END%
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Confirm rename or move"}%%TMPL:END%
 
 
 
@@ -18,7 +18,7 @@
 
 
 
-%TMPL:DEF{"topicactionbuttons"}%<input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" /><input type="submit" class="twikiSubmit" value='%_{"Delete"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" /><input type="submit" class="twikiSubmit" value='%MAKETEXT{"Delete"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 

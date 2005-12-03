@@ -12,11 +12,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%%_{"(set preferences)"}% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(set preferences)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%%_{"Preferences for"}%%TMPL:END%
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Preferences for"}%%TMPL:END%
 
 
 
@@ -26,7 +26,7 @@
 
 
 %TMPL:DEF{"topicactionbuttons"}%
-<input type="submit" class="twikiSubmit" value='%_{"Update"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
+<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Update"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%
 %TMPL:END%
 
 
@@ -44,10 +44,10 @@
 </div>
 %TMPL:P{"topicaction"}%
 <div class="twikiHelp">
-*%_{"Note:"}%*
-   * %_{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','TWikiVariables')\" href='[_1]' rel='nofollow'>Setting topic preferences</a>.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/TWikiVariables"}%
-   * %_{"Each preference has the syntax"}% <br />
-     %_{"~[multiple of 3 spaces~] * ~[space~] Set ~[space~] VARIABLENAME ~[space~] = ~[value~]"}%
+*%MAKETEXT{"Note:"}%*
+   * %MAKETEXT{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','TWikiVariables')\" href='[_1]' rel='nofollow'>Setting topic preferences</a>." args="%SCRIPTURL{"view"}%/%TWIKIWEB%/TWikiVariables"}%
+   * %MAKETEXT{"Each preference has the syntax"}% <br />
+     %MAKETEXT{"~[multiple of 3 spaces~] * ~[space~] Set ~[space~] VARIABLENAME ~[space~] = ~[value~]"}%
 </div>
 %TMPL:P{"hidden"}%
 </form></div>

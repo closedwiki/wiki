@@ -17,7 +17,7 @@
 
 
 
-%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%_{"Allow non <nop>WikiWord for the new topic name"}%</label>%TMPL:END%
+%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label>%TMPL:END%
 
 %TMPL:DEF{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
@@ -31,45 +31,45 @@
 <div class="patternVersatileTable">
 <table>
 <tr>
-<th width="20%">%_{"Change from:"}%</th>
+<th width="20%">%MAKETEXT{"Change from:"}%</th>
 <td class="patternOldCol" colspan="2"><b><nop>%WEB%</b></td>
 <td class="patternOldCol patternHelpCol"></td>
 </tr>
 <tr>
-<th>%_{"New web name:"}%</th>
+<th>%MAKETEXT{"New web name:"}%</th>
 <td class="patternMainCol">%TMPL:P{"newsubweb"}%</td>
 <td class="patternMainCol patternHelpCol" colspan="2">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr %SUBWEBSENABLE%>
-<th>%_{"New parent web:<br>(subwebs must be enabled)"}%</th>
+<th>%MAKETEXT{"New parent web:<br>(subwebs must be enabled)"}%</th>
 <td class="patternMainCol">%TMPL:P{"newparentweb"}%</td>
 <td class="patternMainCol patternHelpCol" colspan="2"></td>
 </tr>
 </table>
 </div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Notices:"}%</div>
-*%_{"Topics which are currently being edited by other users in the [_1] Web:", "<nop>%WEB%"}%*
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Notices:"}%</div>
+*%MAKETEXT{"Topics which are currently being edited by other users in the [_1] Web:" args="<nop>%WEB%"}%*
 %MOVE_LOCKED%
 
-*%_{"Topics which refer to this web and are are currently being edited by other users:"}%* %REF_LOCKED%
+*%MAKETEXT{"Topics which refer to this web and are are currently being edited by other users:"}%* %REF_LOCKED%
 
-*%_{"Topics which refer to this web that you do not have permission to change:"}%*
+*%MAKETEXT{"Topics which refer to this web that you do not have permission to change:"}%*
 %REF_DENIED%
 </div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in the [_2] Web:", "%WEB%", "<nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="%WEB%, <nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in any Web:", "%WEB%"}%</div>%GLOBAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in any Web:" args="%WEB%"}%</div>%GLOBAL_SEARCH%</div>
 <div class="patternTopicActionSecondary">
 <table>
 <tr>
-<td><input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%</td>
+<td><input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(false);" /> %MAKETEXT{"checkboxes of referenced topics"}%</td>
 </tr></table></div>
 <div class="twikiHelp">
-*%_{"Note:"}%*
-   * %_{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Get help on managing webs</a>", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingWebs"}%
-   * %_{"The checkmarked topics will be updated"}%
+*%MAKETEXT{"Note:"}%*
+   * %MAKETEXT{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Get help on managing webs</a>" args="%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingWebs"}%
+   * %MAKETEXT{"The checkmarked topics will be updated"}%
 </div>
 %TMPL:P{"topicaction"}%
 </form>
