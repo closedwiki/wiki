@@ -3,11 +3,10 @@
 a:link:after,
 a:visited:after {
 	content: " (" attr(href) ") ";
+	font-weight:normal;
 	font-size:85%; /*S3*/
 }
 /* ... except for bits of the gui */
-.patternHomePath a:link:after,
-.patternHomePath a:visited:after,
 .patternRevInfo a:link:after,
 .patternRevInfo a:visited:after,
 #patternBottomBar a:link:after,
@@ -15,7 +14,11 @@ a:visited:after {
 .twikiAttachments a:link:after,
 .twikiAttachments a:visited:after,
 .twikiForm a:link:after,
-.twikiForm a:visited:after {
+.twikiForm a:visited:after,
+.twikiTable a:link:after,
+.twikiTable a:visited:after,
+table a:link:after,
+table a:visited:after {
 	content:"";
 }
 .patternHomePath img,
@@ -24,6 +27,7 @@ a:visited:after {
 }
 
 /* Layout */
+
 #patternScreen,
 #patternPageShadow, 
 #patternPage {
@@ -36,43 +40,34 @@ a:visited:after {
 	width:21cm;
 }
 body html {
-	background:#fff;
-}
-.patternMainContents {
 	margin:0;
 	padding:0;
-	left:0;
-}
-/* hide bits of the gui */
-.patternTopicAction,
-td.patternToolBar,
-#patternLeftBar,
-#patternTopBar {
-	display:none;
-	width:0;
 }
 #patternMain {
+	padding-bottom:1em;
 	width:100%;
 }
 
 /* Style */
-h2, h3,	h4,	h5 {
-	border:none;
+
+/* hide bits of the gui */
+.patternTopicAction,
+td.patternToolBar,
+#patternLeftBar {
+	display:none;
 }
-#patternBottomBar {
-	margin:1em 0 0 0;
-}
-.patternBottomBarContents {
-	padding:0;
-	margin-left:0;
-	margin-right:0;
+
+pre,
+html>body pre {
+	overflow:visible;
 }
 .patternTopicFooter {
-	margin:2em 0 2em 0;
-	font-size:94%; /*S2*/
+	font-size:94%;
+	margin:1em 0;
 }
-.patternTop {
-	border:0;
+.patternBottomBar {
+	margin-left:3%;
+	margin-right:3%;
 }
 
 /* Colors */
@@ -90,7 +85,6 @@ h2 {
 .patternContent .twikiForm {
 	background:#fff;
 }
-
 
 /* define custom print styles here */
 

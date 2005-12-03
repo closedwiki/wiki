@@ -249,6 +249,10 @@ table.twikiFormTable {
 	background-color:#fff; /*BG1*/
 }
 .twikiAttachments th,
+table.twikiFormTable th.twikiFormTableHRow {
+	background-color:#fff; /*BG1*/
+}
+.twikiAttachments th,
 table.twikiFormTable th.twikiFormTableHRow,
 .twikiEditForm th {
 	border-color:#ccc; /*BO6*/

@@ -362,7 +362,6 @@ table.twikiFormTable th.twikiFirstCol {
 }
 .twikiAttachments td,
 table.twikiFormTable td {
-	border-style:solid;
 	padding:2px 6px;
 	height:1.4em; /*S1*/
 	text-align:left;
@@ -506,8 +505,6 @@ a:hover .twikiAccessKey {
 	table-layout:fixed;
 	border-width:1px 0;
 	border-style:solid;
-}
-#patternMain {
 }
 .patternMainContents {
 	padding:0 2em 1em 2em;
@@ -795,6 +792,11 @@ input.patternFormFieldVerticalForm {
 
 /* Pages that are not a view page */
 
+.patternNoViewPage #patternPage,
+.patternPrintPage #patternPage,
+.patternPlainPage #patternPage {
+	padding-left:0;
+}
 .patternNoViewPage #patternMain {
 	padding-top:2em;
 	padding-bottom:4em;
@@ -994,13 +996,8 @@ table#twikiSearchTable td.first {
 
 /* Print */
 
-.patternPrintPage #patternMain {
-	margin-top:1em;
-	border:none;
-}
-.patternPrintPage .patternTopicFooter {
-	margin:2em 0 2em 0;
-	font-size:94%; /*S2*/
+.patternPrintPage #patternColumnWrapper {
+	border-top:none;
 }
 
 /* Diff */
