@@ -6,21 +6,21 @@
 
 
 
-%TMPL:DEF{"webaction"}% %_{"Attach file to topic [_1]", "*%TOPIC%*"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% %MAKETEXT{"Attach file to topic [_1]" args="*%TOPIC%*"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"previousdetails"}%
----++ %_{"Attach new file"}%%TMPL:END%
+---++ %MAKETEXT{"Attach new file"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"action"}%%_{"Attach new file"}%%TMPL:END%
+%TMPL:DEF{"action"}%%MAKETEXT{"Attach new file"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"topicactionbuttons"}%
-<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
+<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Upload file"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%
 %TMPL:END%
 
 

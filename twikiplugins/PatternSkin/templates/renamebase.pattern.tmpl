@@ -17,7 +17,7 @@
 
 
 
-%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%_{"Allow non <nop>WikiWord for the new topic name"}%</label>%TMPL:END%
+%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label>%TMPL:END%
 
 %TMPL:DEF{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
@@ -29,17 +29,17 @@
 <div class="patternVersatileTable">
 <table>
 <tr>
-<th>%_{"Change from:"}%</th>
+<th>%MAKETEXT{"Change from:"}%</th>
 <td class="patternOldCol"><b><nop>%WEB%.%TOPIC%</b></td>
 <td class="patternOldCol patternHelpCol"></td>
 </tr>
 <tr>
-<th>%_{"To web:"}%</th>
+<th>%MAKETEXT{"To web:"}%</th>
 <td class="patternMainCol">%TMPL:P{"newweb"}%</td>
 <td class="patternMainCol patternHelpCol">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr>
-<th>%_{"Topic name:"}%</th>
+<th>%MAKETEXT{"Topic name:"}%</th>
 <td class="patternMainCol">%TMPL:P{"newtopic"}%</td>
 <td class="patternMainCol patternHelpCol">%TMPL:P{"namehelp"}%</td>
 </tr>
@@ -51,20 +51,20 @@
 </table>
 </div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in the [_2] Web:", "%TOPIC%", "<nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="%TOPIC%, <nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in any Web:", "[[%WEB%.%TOPIC%]]"}%</div>%GLOBAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in any Web:" args="[[%WEB%.%TOPIC%]]"}%</div>%GLOBAL_SEARCH%</div>
 <hr />
-<input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%
+<input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(false);" /> %MAKETEXT{"checkboxes of referenced topics"}%
 <p />
 
 %TMPL:P{"topicaction"}%
 </form>
 <div class="twikiHelp">
-*%_{"Note:"}%*
-   * %_{"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB%','ManagingTopics')\" href=\"[_1]\" rel='nofollow'>Renaming and moving topics</a>.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingTopics"}%
-   * %_{"Select the [_1] Web to delete the topic.", "%TRASHWEB%"}%
-   * %_{"The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)"}%
+*%MAKETEXT{"Note:"}%*
+   * %MAKETEXT{"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB%','ManagingTopics')\" href=\"[_1]\" rel='nofollow'>Renaming and moving topics</a>." args="%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingTopics"}%
+   * %MAKETEXT{"Select the [_1] Web to delete the topic." args="%TRASHWEB%"}%
+   * %MAKETEXT{"The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)"}%
 </div>
 %TMPL:END%
 
