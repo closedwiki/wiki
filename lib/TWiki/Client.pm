@@ -290,7 +290,7 @@ sub expireDeadSessions {
 		my @stat = stat( $file );
         # Kill small old files. They can't be valid sessions.
 		# Ignore tiny new files. They can't be complete sessions.
-        if( $stat[7] <= 50 ) {
+        if( defined($stat[7]) && $stat[7] <= 50 ) {
             my $lat = $stat[8] || $stat[9] || $stat[10] || 0;
             unlink $file if( $time - $lat >= $exp );
             next;
