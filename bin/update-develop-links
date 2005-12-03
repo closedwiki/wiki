@@ -1,5 +1,6 @@
 #!/bin/sh
 echo "Content-type: text/plain"
 echo ""
-cd ..
+pwd
+cd /home/develop/twikisvn
 ./mklinks.sh PatternSkin 2>&1
