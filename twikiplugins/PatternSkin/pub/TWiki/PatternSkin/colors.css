@@ -71,9 +71,6 @@ h1 a:link,
 h1 a:visited {
 	color:#a00; /*T5*/
 }
-h1 a:hover {
-	color:#FBF7E8; /*T3*/
-}
 .patternTopic h2 {
 	background-color:#FDFAF1;
 	border-color:#E2DCC8; /*BO4*/
@@ -370,14 +367,15 @@ a:hover .twikiAccessKey {
 .patternWebIndicator {
 	background-color:#fff;
 }
-#patternColumnWrapper {
-	border-color:#E2DCC8; /*BO4*/
-}
 #patternMain {
 	background-color:#fff; /*BG1*/
+	border-color:#E2DCC8; /*BO4*/
 }
 #patternTopBar {
 	background-color:#fff; /*BG1*/
+}
+#patternBottomBar {
+	border-color:#E2DCC8; /*BO4*/
 }
 .patternTopBarContents .patternSearchBox td {
 	color:#8E9195; /*T8*/
