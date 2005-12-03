@@ -1,96 +1,103 @@
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
-<span class="twikiNewLink">LinkAtStart<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">LinkAtStart<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->
 
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 
-<table cols=3 border=2>
-<tr><th>Feature</th><th>Expected</th><th>Actual</th></tr>
-<tr><td> Paragraphs</td><td>
+---++ Paragraphs
+---+++ Expected
 <!-- expected PARAS -->
 1st paragraph
 <p />
 2nd paragraph
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 1st paragraph
 
 2nd paragraph
 <!-- /actual -->
-</td></tr>
-<tr><td> Headings</td><td>
+
+---++ Headings
+---+++ Expected
 <!-- expected HEADS -->
 <h2><a name="Sushi"></a>Sushi</h2>
 <h3><a name="Maguro"></a>Maguro</h3>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 ---++ Sushi
 ---+++ Maguro
 <!-- /actual -->
-</td></tr>
-<tr><td> Bold Text</td><td>
+
+---++ Bold Text
+---+++ Expected
 <!-- expected BOLD -->
 <strong>Bold</strong>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 *Bold*
 <!-- /actual -->
-</td></tr>
-<tr><td> Bold Text with URL</td><td>
+
+---++ Bold Text with URL
+---+++ Expected
 <!-- expected BOLD LINK -->
 <strong>reminded about <a target="_top" href="http://www.koders.com">http://www.koders.com</a></strong>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 *reminded about http://www.koders.com*
 <!-- /actual -->
-</td></tr>
-<tr><td> Italic Text</td><td>
+
+---++ Italic Text
+---+++ Expected
 <!-- expected ITALIC -->
 <em>Italic</em>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 _Italic_
 <!-- /actual -->
-</td></tr>
-<tr><td> Bold Italic</td><td>
+
+---++ Bold Italic
+---+++ Expected
 <!-- expected BOLD ITALIC -->
 <strong><em>Bold italic</em></strong>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 __Bold italic__
 <!-- /actual -->
-</td></tr>
-<tr><td> Fixed Font</td><td>
+
+---++ Fixed Font
+---+++ Expected
 <!-- expected FIXED -->
 <code>Fixed font</code>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 =Fixed font=
 <!-- /actual -->
-</td></tr>
-<tr><td> Bold Fixed Font</td><td>
+
+---++ Bold Fixed Font
+---+++ Expected
 <!-- expected BOLD FIXED -->
 <code><b>Bold fixed</b></code>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 ==Bold fixed==
 <!-- /actual -->
-</td></tr>
-<tr><td> Bold Fixed Font</td><td>
+
+---++ Bold Fixed Font
+---+++ Expected
 <!-- expected MIXED -->
 <em>this</em> <em>should</em> <em>italicise</em> <em>each</em> <em>word</em>
 <p />
@@ -98,7 +105,7 @@ __Bold italic__
 <p />
 <em>mixing</em> <strong>them</strong> <em>should</em> <strong>work</strong>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 _this_ _should_ _italicise_ _each_ _word_
 
@@ -106,8 +113,9 @@ _this_ _should_ _italicise_ _each_ _word_
 
 _mixing_ *them* _should_ *work*
 <!-- /actual -->
-</td></tr>
-<tr><td> Verbatim Mode</td><td>
+
+---++ Verbatim Mode
+---+++ Expected
 <!-- expected VERBATIM -->
 <pre>
 &lt;verbatim&gt;
@@ -120,7 +128,7 @@ class CatAnimal {
 }
 </pre>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual VERBATIM -->
 <verbatim>
 <verbatim>
@@ -133,33 +141,36 @@ class CatAnimal {
 }
 </verbatim>
 <!-- /actual -->
-</td></tr>
-<tr><td> Separator</td><td>
+
+---++ Separator
+---+++ Expected
 <!-- expected HR -->
 <hr></hr>
 <hr></hr>
 --
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 ---
 -------
 --
 <!-- /actual -->
-</td></tr>
-<tr><td> List Item</td><td>
+
+---++ List Item
+---+++ Expected
 <!-- expected BULLETS -->
 <ul>
 <li>bullet item
 </li>
 </ul>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 	* bullet item
 <!-- /actual -->
-</td></tr>
-<tr><td> Nested List Item</td><td>
+
+---++ Nested List Item
+---+++ Expected
 <!-- expected NESTBULL -->
 <ul>
 <li>level 1
@@ -170,14 +181,15 @@ class CatAnimal {
 </li>
 </ul>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 	* level 1
 		* level 2
           and some more
 <!-- /actual -->
-</td></tr>
-<tr><td> Ordered List</td><td>
+
+---++ Ordered List
+---+++ Expected
 <!-- expected OL -->
 <ol><li> Sushi</li></ol><p />
 <ol><li type="A"> Sushi</li></ol><p />
@@ -186,7 +198,7 @@ class CatAnimal {
 <li type="A"> Sushi</li>
 <li type="i"> Sushi</li></ol>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 	1. Sushi
 
@@ -198,57 +210,60 @@ class CatAnimal {
 	A. Sushi
 	i. Sushi
 <!-- /actual -->
-</td></tr>
 
-<tr>
-<td>Nested bullets & numbers lists </td>
-<td>
+---++ Nested bullets & numbers lists
 
+---+++ Expected
 <!-- expected expand WIKIWORDAFTER -->
+<span class="twikiNewLink">WikiWordBeforeList<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiWordBeforeList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <ol>
 <li>Things</li>
 <li>Stuff
 <ul>
-<li>Banana Stuff</li>
+<li>Banana Skins</li>
 <li>Other</li>
 <li></li>
 </ul></li>
 <li>Something</li>
-<li>kello kitty</li>
+<li>Hello kitty</li>
 </ol>
-<span class="twikiNewLink">WikiWordAfterList<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">WikiWordAfterList<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->
-</td>
-<td>
+---+++ Actual
 <!-- actual -->
+WikiWordBeforeList
    1 Things
    2 Stuff
-      * Banana Stuff
+      * Banana Skins
       * Other
       * 
    3 Something
-   4 kello kitty
+   4 Hello kitty
 WikiWordAfterList
 <!-- /actual -->
-</td>
-</tr>
-<tr><td> Definition List</td><td>
+
+---++ Definition List
+---+++ Expected
 <!-- expected DL -->
 <dl>
 <dt> Sushi </dt><dd> Japan
 </dd>
-<dt> Dim Sum </dt><dd> S.F.
+<dt> Dim-Sum </dt><dd> San Francisco, USA
+</dd>
+<dt> Honey Fried Locust </dt><dd> Tombouctou, Mali
 </dd>
 
 </dl>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 	$ Sushi: Japan
-	$ Dim Sum: S.F.
+	$ Dim-Sum: San Francisco, USA
+	$ Honey Fried Locust: Tombouctou, Mali
 <!-- /actual -->
-</td></tr>
-<tr><td> Table</td><td>
+
+---++ Table
+---+++ Expected
 <!-- expected SIMPLE TABLE -->
 <p />
 <table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tr><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr>
@@ -266,7 +281,7 @@ WikiWordAfterList
 </table>
 <p />
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 
 | *L* | *C* | *R* |
@@ -279,60 +294,64 @@ WikiWordAfterList
 |^| six | six |
 
 <!-- /actual -->
-</td></tr>
-<tr><td> Prevent a Link</td><td>
+
+---++ Prevent a Link
+---+++ Expected
 <!-- expected NOLINK -->
 <nop>SunOS
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 !SunOS
 <!-- /actual -->
-</td></tr>
-<tr><td> Disable Links</td><td>
+
+---++ Disable Links
+---+++ Expected
 <!-- expected DISLINK -->
 <noautolink>
  RedHat &amp; SuSE
 </noautolink>
 <!-- /expected -->
 Note: noautolink tags will still be there, because they are not removed until immediately before topic display.
-</td><td>
+---+++ Actual
 <!-- actual -->
 <noautolink>
  RedHat & SuSE
 </noautolink>
 <!-- /actual -->
-</td></tr>
-<tr><td> Mailto: Links</td><td>
+
+---++ Mailto: Links
+---+++ Expected
 <!-- expected MAILTOS -->
 <a href="mailto:a@z.com">Mail</a>
 
 <p />
 <a href="mailto:?subject=Hi">Hi</a>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 [[mailto:a@z.com Mail]]
 
 [[mailto:?subject=Hi Hi]]
 <!-- /actual -->
-</td></tr>
-<tr><td> Wiki Word Links</td><td>
+
+---++ Wiki Word Links
+---+++ Expected
 <!-- expected expand WIKIWORDS -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/WebPreferences">WebPreferences</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/WebPreferences">WebPreferences</a>
 <p />
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
 <p />
-<span class="twikiNewLink">CompleteAndUtterNothing<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">CompleteAndUtterNothing<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <p />
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/LinkBox">LinkBox</a>
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/LinkBox">LinkBoxs</a>
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/LinkBoxy">LinkBoxies</a>
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/LinkBoxess">LinkBoxess</a>
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/LinkBoxess">LinkBoxesses</a>
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/LinkBox">LinkBoxes</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBox">LinkBox</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBox">LinkBoxs</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBoxy">LinkBoxies</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBoxess">LinkBoxess</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBoxess">LinkBoxesses</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBox">LinkBoxes</a>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 WebPreferences
 
@@ -347,17 +366,22 @@ LinkBoxess
 LinkBoxesses
 LinkBoxes
 <!-- /actual -->
-</td></tr>
-<tr><td> Square Brackets</td><td>
+
+---++ Square Brackets
+---+++ Expected
 <!-- expected expand SQUABS -->
-<span class="twikiNewLink">wiki syntax<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">wiki syntax<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <p />
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
 <p />
 escaped:
 [<nop>[wiki syntax]]
+<p />
+<a href="/relative/URL" target="_top">relative url</a>
+<p />
+<span class="twikiNewLink">filter%rubbish;from'thelink<a title="Create this topic" rel="nofollow" href="%SCRIPTURL{"edit"}%/TestCases/Filterrubbishfromthelink?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 [[wiki syntax]]
 
@@ -365,17 +389,22 @@ escaped:
 
 escaped:
 ![[wiki syntax]]
+
+[[/relative/URL][relative url]]
+
+[[filter%rubbish;from'thelink]]
 <!-- /actual -->
-</td></tr>
-<tr><td> Protocol Links</td><td>
+
+---++ Protocol Links
+---+++ Expected
 <!-- expected expand PROTOCOL -->
-<span class="twikiNewLink">syntax<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">syntax<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <p />
 <a href="http://gnu.org" target="_top">GNU</a>
 <p />
 <a href="http://xml.org" target="_top">XML</a>
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 [[WikiSyntax][syntax]]
 
@@ -383,16 +412,17 @@ escaped:
 
 [[http://xml.org XML]]
 <!-- /actual -->
-</td></tr>
-<tr><td> Anchors</td><td>
+
+---++ Anchors
+---+++ Expected
 <!-- expected expand ANCHOR -->
-<a class="twikiAnchorLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
+<a class="twikiAnchorLink" href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
 <p />
-<a class="twikiAnchorLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
+<a class="twikiAnchorLink" href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
 <p />
 <a name="MyAnchor"></a> To here
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 [[TestCaseAutoFormatting#NotThere]]
 
@@ -400,30 +430,27 @@ escaped:
 
 #MyAnchor To here
 <!-- /actual -->
-</td></tr>
-<tr><td>
-Escaped variables 1
-</td><td>
+
+---++ Escaped variables 1
+---+++ Expected
 <!-- expected ESCAPEDVAR1 -->
 &#37;MAINWEB%nowt
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 !%MAINWEB%nowt
 <!-- /actual -->
-</td></tr>
-<tr><td>
-Escaped variables 2
-</td><td>
+
+---++ Escaped variables 2 
+---+++ Expected
 <!-- expected expand ESCAPEDVAR2 -->
 nowt!%MAINWEB%
 <!-- /expected -->
-</td><td>
+---+++ Actual
 <!-- actual -->
 nowt!%MAINWEB%
 <!-- /actual -->
-</td></tr>
-</table>
+
 ---++ Complex table
 ---+++ Expected
 <!-- expected expand COMPLEX TABLE -->
@@ -467,6 +494,7 @@ nowt!%MAINWEB%
 <!-- /expected -->
 ---+++ Actual
 Note that when viewing this topic the table below may be formatted by <nop>TablePlugin. This is switched off during the tests. Revisit this URL with <code>?debugenableplugins=</code> to see the table used in the test.
+---+++ Actual
 <!-- actual -->
 | *A0 all rows* | *B0* | *C0 widen this col* | *D0LinkInColHeader* | *E0 not a link this time* |
 |  ^ | B1 left |  C1 center  |  D1 right | *E1 strong* |
@@ -476,6 +504,7 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 |^|^|C5|D5:E5 span 2 cols||
 <!-- /actual -->
 
+---++ Link in a table
 ---+++ Expected
 <!-- expected GOOGLE -->
 <table border="1" cellspacing="0" cellpadding="0" class=twikiTable>
@@ -490,15 +519,18 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 </table>
 <!-- /expected -->
 ---+++ Actual
+---+++ Actual
 <!-- actual -->
 |http://www.google.co.uk|
 | http://www.google.co.uk |
 <!-- /actual -->
 
 ---++ Newlines in variable parameter lists
+---+++ Expected
 <!-- expected expand NEWLINES_IN_VBLS -->
 %IF{"context view" then="X" else="Y"}%
 <!-- /expected -->
+---+++ Actual
 <!-- actual -->
 %IF{
    "context view"
@@ -506,20 +538,24 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
    else = "Y"
 }%
 <!-- /actual -->
----++ Anchor links
 
+---++ Anchor links
+---+++ Expected
 <!-- expected expand -->
-<span class="twikiNewLink">AnchorLink#AnchorName<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
-<a class="twikiAnchorLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TWikiVariables#VarWEBLIST">TWikiVariables#VarWEBLIST</a>
+<span class="twikiNewLink">AnchorLink#AnchorName<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<a class="twikiAnchorLink" href="%SCRIPTURL{"view"}%/TWiki/TWikiVariables#VarWEBLIST">TWikiVariables#VarWEBLIST</a>
 <!-- /expected -->
+---+++ Actual
 <!-- actual -->
 AnchorLink#AnchorName
 TWiki.TWikiVariables#VarWEBLIST
 <!-- /actual -->
 
 ---++ Link at end of topic
+---+++ Expected
 <!-- expected expand LINKATEND -->
-<span class="twikiNewLink">LinkAtEnd<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">LinkAtEnd<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->
+---+++ Actual
 <!-- actual -->
 LinkAtEnd
