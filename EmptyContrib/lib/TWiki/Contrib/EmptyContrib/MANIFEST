@@ -1,2 +1,2 @@
 data/TWiki/EmptyContrib.txt  Plugin doc page
-lib/TWiki/Plugins/EmptyContrib.pm  Plugin Perl module 
+lib/TWiki/Contrib/EmptyContrib.pm  Plugin Perl module 
