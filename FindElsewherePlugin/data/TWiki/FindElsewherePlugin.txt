@@ -1,82 +1,118 @@
-%META:TOPICINFO{author="SteffenPoulsen" date="1112444392" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="SteffenPoulsen" date="1112976682" format="1.0" version="1.4"}%
 ---++ Find Elsewhere Plugin
 
 This plugin will automatically link to another web(s) if a topic isn't found in the current web.  
 
 This is useful for a TWiki site that wants to implement a glossar/dictionary web where common terms are defined and stored.  Without this plugin:
+
 	* Each web would need to create their own topic for a common term 
 	* Link to or INCLUDE the topic from where it is defined
-	* Authors need to remember to put the Web name in front of the topic name, such as [[TWiki.WikiWord]]
+	* Authors need to remember to put the Web name in front of the topic name, such as [[%TWIKIWEB%.WikiWord]]
 
 Without this kind of plugin, it's likely that common terms used within an organization will be defined in multiple webs or the common terms will be unlinked wiki words (as if they didn't exist).
 
 ---+++ Syntax Rules
 
-No new rules are introduced.  However, new automatic TWiki.WikiWord linking will occur.  
+No new rules are introduced.  However, new automatic %TWIKIWEB%.WikiWord linking will occur.  
 
-If a topic is not found in the current web, this plugin will look in the LOOKELSEWHERE web list for that topic.  If and when the topic is found as it looks through the webs in their listed order, it will create a link to that page (styled in superscript).
+If a topic is not found in the current web, this plugin will look through the webs listed in the LOOKELSEWHEREWEBS variable.  If the topic is found (as it looks through the webs in their listed order), it will create one or more links, depending on the number of topics found.
 
 #NewFunctionalityTest
-New Functionality
-| *test case*       | *input*      | *output* | *expected* |
-| Found in this web | <nop>WebHome | WebHome | <nop>WebHome |
-| Found singular here | <nop>WebHomes | WebHomes | <nop>WebHomes (link to WebHome) |
-| Found elsewhere | <nop>TWikiAdminGroup | TWikiAdminGroup | <nop>TWikiAdminGroup<sup>([[Main.TWikiAdminGroup][Main]])</sup> |
-| Found singular elsewhere | <nop>TWikiAdminGroups | TWikiAdminGroups | !TWikiAdminGroups |
-| Found elsewhere, spaced wiki word | [<nop/>[TWiki admin group]] | [[TWiki admin group]] | !TWiki admin group |
-| Found elsewhere, several webs | <nop>TWikiPreferences | TWikiPreferences | <em>TWiki admin group</em><sup>([[Main.TWikiPreferences][Main]],[[TWiki.TWikiPreferences][TWiki]])</sup> |
-| Found elsewhere, abbrev | ACRONYM | ACRONYM | (If ACRONYM is a topic defined in one of the LOOKELSEWHERE webs, a link to it should show up) |
+__New functionality, single hit__
 
-Don't break other types of links...
+| *Test case*			| *Input*				 | *Output<br/>(if installed)* | *Expected*		 |
+| Found here			 | <nop>WebHome		  | WebHome		  | %TWIKIWEB%.WebHome	  |
+| Found singular here | <nop>WebHomes		 | WebHomes		 | [[%TWIKIWEB%.WebHome][WebHomes]] |
+| Found elsewhere	  | <nop>TWikiAdminGroup | TWikiAdminGroup | [[%MAINWEB%.TWikiAdminGroup][TWikiAdminGroup]] |
+| Found singular  elsewhere	  | <nop>TWikiAdminGroups | TWikiAdminGroups | [[%MAINWEB%.TWikiAdminGroup][TWikiAdminGroups]] | 
+| Found elsewhere, spaced wiki word | [<nop/>[TWiki admin group]] | [[TWiki admin group]] | [[%MAINWEB%.TWikiAdminGroup][TWiki admin group]] |
+| Found elsewhere, abbrev | <nop/>ACRONYM | ACRONYM | (If <nop/>ACRONYM is a topic defined in one of the LOOKELSEWHERE webs, a link to it should show up) |
 
-| *input*                         | *output*              |
-| <nop>%TOPIC%#TopicAnchor        | %TOPIC%#NewFunctionalityTest  |
-| <nop>TWiki.WebHome              | TWiki.WebHome         |
-| <nop>WebHome                    | WebHome               |
-| [<nop>[TWiki.WebHome]]          | [[TWiki.WebHome]]     |
-| [<nop>[TWiki.WikiWord]]         | [[TWiki.WikiWord]]    |
-| [<nop>[TWiki.WikiWords]]        | [[TWiki.WikiWords]]   |
-| <nop>TWiki.WikiWord             | TWiki.WikiWord   |
-| <nop>TWiki.WikiWords            | TWiki.WikiWords |
+__New functionality, multiple hits__
+
+If a word is found in two or more LOOKELSEWHERE webs, a special syntax is used:
+
+	* Standard <nop/>WikiWord: <nop/>TWikiPreferences<sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> 
+	* [<nop/>[Spaced wiki word]]: <em>TWiki preferences</em><sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> 
+
+Create this table in [[Sandbox.FindElsewherePluginTest]] to try it out:
+
+<verbatim>
+| *Test case* | *Input* | *Output<br/>(if installed)* | *Expected* |
+| Found elsewhere | <nop>TWikiPreferences | TWikiPreferences | <nop/>TWikiPreferences<sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> |
+| Found elsewhere, spaced wiki word | [<nop/>[TWiki preferences]] | [[TWiki preferences]] | <em>TWiki preferences</em><sup>([[%TWIKIWEB%.TWikiPreferences][%TWIKIWEB%]],[[%MAINWEB%.TWikiPreferences][%MAINWEB%]])</sup> |
+</verbatim>
+
+__Internationalization__
+
+<nop/>FindElsewherePlugin handles international characters (I18N) in links, topics and webs.
+
+__Don't break other types of links__
+
+| *Input*								 | *Output*				  |
+| <nop>%TOPIC%#TopicAnchor		  | %TOPIC%#NewFunctionalityTest  |
+| <nop>%TWIKIWEB%.WebHome			| %TWIKIWEB%.WebHome	 |
+| <nop>WebHome						  | WebHome					|
+| [<nop>[%TWIKIWEB%.WebHome]]	  | [[%TWIKIWEB%.WebHome]]	  |
+| [<nop>[%TWIKIWEB%.WikiWord]]	 | [[%TWIKIWEB%.WikiWord]]	 |
+| [<nop>[%TWIKIWEB%.WikiWords]]	| [[%TWIKIWEB%.WikiWords]]	|
+| <nop>%TWIKIWEB%.WikiWord		  | %TWIKIWEB%.WikiWord	|
+| <nop>%TWIKIWEB%.WikiWords		 | %TWIKIWEB%.WikiWords  |
+| [<nop/>[%MAINWEB%.TWikiAdminGroup][This is a link to <nop/>TWikiAdminGroup in <nop/>%MAINWEB%]] | [[%MAINWEB%.TWikiAdminGroup][This is a link to TWikiAdminGroup in %MAINWEB%]] |
+
+---+++ <nop>%TOPIC% Hints
+
+	* You can en- or disable this plugin for webs, topics or users, using the standard TWiki preferences hierarchy
+	* You can avoid single words being looked up by using =!DontLookup= or =&lt;nop/&gt;DontLookup= syntax
+	* "Groups of webs" can use each other as lookup webs, by setting the LOOKELSEWHEREWEBS variable accordingly in their !WebPreferences.
 
 ---+++ <nop>%TOPIC% Settings
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-	* Set SHORTDESCRIPTION = If a topic isn't found in this web it will look in a predefined list of other webs and attempt to find it there.  
+		* Set SHORTDESCRIPTION = Create links by looking first in the current web, then in a predefined list of other webs
 
-	* List other webs in which to look for topics that don't exist
-	* Set LOOKELSEWHERE = TWiki, Main
+	* Disable look elsewhere - sitewide (here), per web (in <nop/>WebPreferences) or pr. topic
+		* Set DISABLELOOKELSEWHERE = 0
+
+	* List other webs in which to look for topics that don't exist in the current web
+		* Set LOOKELSEWHEREWEBS = TWiki, Main
 
 	* If the TWiki.WikiWord is plural but doesn't exist, also look for the singular word.  Note this setting is for looking in *other* webs only (plural to singular is still automatically done in the current web).
-	* Set PLURALTOSINGULAR = 1
+		* Set DISABLEPLURALTOSINGULAR = 0
 
 	* Debug plugin: (See output in =data/debug.txt=)
-	* Set DEBUG = 0
+		* Set DEBUG = 0
 
 ---+++ Plugin Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+
 | *File:* | *Description:* |
 | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+
 	* Test if the plugin is correctly installed, by viewing %TOPIC%#NewFunctionalityTest
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.MikeBarton |
-|  Change History: | 1 Feb 2002: Initial version |
-|  Change History: | 2 Apr 2005: I18N-support added. New link style. Codev.WebNameAsWikiName supported. |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
+|  Plugin Author: | TWiki:Main.MikeBarton |
+| Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  08 Apr 2005: | (v1.7) - Negated vars =DISABLELOOKELSEWHERE= and =DISABLEPLURALTOSINGULAR= can now be set per web (!WebPreferences) or per topic. |
+|  05 Apr 2005: | (v1.6) - Bugfix: Preambles for ACRONYMS were doubled. |
+|  04 Apr 2005: | (v1.5) - Plugin less greedy - now leaves linktext in [<nop/>[WikiWord][long links with <nop/>ACRONYMS or <nop/>WikiWords]] alone |
+|  03 Apr 2005: | (v1.4) - Documentation update. |
+|  02 Apr 2005: | (v1.3) - I18N-support added. New link style. TWiki:Codev.WebNameAsWikiName supported |
+|  01 Feb 2002: | Initial version |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
 
--- Main.MikeBarton - 1 Feb 2002<br />
+-- TWiki:Main.MikeBarton - 1 Feb 2002
 
