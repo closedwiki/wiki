@@ -7,8 +7,6 @@
 
 This contrib packages in a convenient way the Javascript library and the CSS file needed to implement TWisty Sections.
 
-See the  [[%ATTACHURL%/toggle-optm-jsoff-sep.html][attached file]] for a demo and an example of usage.
-
 To use the libraries, you must place the following scriplet either in the head section of the page (by modifying the Twiki.TWikiSkins) or putting it somewhere in the topic:
 
 <verbatim>
@@ -19,11 +17,11 @@ To use the libraries, you must place the following scriplet either in the head s
 <script type="text/javascript" src="%PUBURL%/TWiki/TwistyContrib/twist.js"></script>
 </verbatim>
 
-It's recommended to use the TWiki:Plugins.TwistyPlugin, as it ease the deployment and use of this contrib.
+It's recommended to use the TWiki:Plugins.TwistyPlugin, as it eases the deployment and use of this contrib.
 
 %RED%Caution: If the previous scriplet is put in the HEAD section of the page or the TWiki:Plugins.TwistyPlugin is used, it won't work if the =&lt;body onload=""&gt;= manager is set by the skin. Check the [[%ATTACHURL%/twist.js][twist.js]] file for an idea on how to register an eventmanager for the onload event without overwriting the previous one.%ENDCOLOR%
 
-This Contrib should works in all versions of TWiki. It has been tested against TWiki:Codev.CairoRelease and TWiki:Codev.DakarRelease.
+This Contrib should work in all versions of TWiki. It has been tested against TWiki:Codev.CairoRelease and TWiki:Codev.DakarRelease.
 ---++ Customization
 
 Skins can customize the color of the twisti placeholder by modifiying the =.twistyPlaceholder= style.
@@ -47,7 +45,7 @@ Skins can customize the color of the twisti placeholder by modifiying the =.twis
 
 ---+ Demo & Text
 
-If the contrib is properly installed, you should see a folding section bellow:
+If the contrib is properly installed (and Javascript is enabled in your browser!), then you should see some folding sections below. Look at [[%SCRIPTURL{"view"}%/%WEB%.%TOPIC%?raw=on]] to see how it's done.
 
 <style type="text/css" media="all">
 @import url("%PUBURL%/TWiki/TwistyContrib/twist.css");
@@ -56,12 +54,41 @@ If the contrib is properly installed, you should see a folding section bellow:
 <script type="text/javascript" src="%PUBURL%/TWiki/TwistyContrib/twist.js"></script>
 
 
-<span id="demoshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger"> Unfold </a></span> <span id="demohide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger"> Fold </a></span> 
+<span id="demoshow" class="twistyHidden">
+<button class="twistyTrigger"> Unfold </button>
+</span>
+<span id="demohide" class="twistyMakeVisible">
+<button class="twistyTrigger"> Fold </button>
+</span>
+<div id="demotoggle" class="twistyMakeVisible">
 ---
-<div id="demotoggle" class="twistyMakeHidden">
-This is a folded text. Everything is OK.
+Click on the button above to fold this section.
+---
 </div>
----
+
+<span id="no_1show" class="twistyMakeVisible">
+	<a href="#" class="twistyTrigger">Expand...</a>
+	<span class="twistyPlaceholder twistyMakeVisible">Hamlet is without question the most famous play in the English language...</span>
+</span>
+<span id="no_1hide" class="twistyHidden">
+	<a href="#" class="twistyTrigger">Collapse...</a>
+</span>
+<div id="no_1toggle" class="twistyMakeHidden">
+Hamlet is without question the most famous play in the English language. Probably written in 1601 or 1602, the tragedy is a milestone in Shakespeare's dramatic development; the playwright achieved artistic maturity in this work through his brilliant depiction of the hero's struggle with two opposing forces: moral integrity and the need to avenge his father's murder.
+
+<span id="no_2show" class="twistyMakeVisible">
+<a href="#" class="twistyTrigger">More...</a>
+</span>
+<span id="no_2hide" class="twistyHidden twistyMakeVisible">
+<a href="#" class="twistyTrigger">Hide more</a>
+</span>
+
+</div>
+
+<div id="no_2toggle" class="twistyMakeHidden">
+For more Shakespeare plays, see Wikipedia:WilliamShakespeare
+</div>
+
 ---+ Contrib Info
 
 | Authors: | Javascript created by TWiki:Main.SamHasler, Contrib packaged by  TWiki:Main.RafaelAlvarez |

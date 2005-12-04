@@ -75,61 +75,36 @@ function getClassList(element) {
 }
 
 // Set the classes on an element from an array of class names
+// Cache the list in the 'classes' attribute on the element
 function setClassList(element, classlist) {
 	element.className = classlist.join(' ');
-	element.classes = classlist;
 }
 
 // Determine the first index of a string in an array.
 // Return -1 if the string is not found.
 function indexOf(element, array) {
-	var i=array.length;
+	var i = array.length;
 	while (i--)	{
 		if (array[i] == element) return i;
 	}
 	return -1;
 }
 
-// Transforms a HTMLCollection to an Array
-function collectionToArray(col) {
-	var a = new Array();
-	var i = col.length;
-	while (i--)	{
-		a[a.length] = col[i];
-	}
-	return a;
-}
-
-// Creates a list of HTML elements whose tags are passed to the function
-// Returns an Array of HTML elements
-// Pass a comma separated list of html tags as function parameters, for instance:
-// var spansAndDivs = getHtmlElements("span", "div")
-// to get an Array of all spans and divs on the page
-function getHtmlElements() {
-	var elements = [];
-	var i = arguments.length;
-	while (i--)	{
-		var c = document.getElementsByTagName(arguments[i]);
-		elements = elements.concat(collectionToArray(c));
-	}
-	return elements;
+// Applies the given function to all elements in the document of
+// the given tag type
+function applyToAllElements(fn, type) {
+    var c = document.getElementsByTagName(type);
+    for (var j = 0; j < c.length; j++) {
+        fn(c[j]);
+    }
 }
 
 // Determine if the element has the given class string somewhere in it's
 // className attribute.
-// Returns function that accepts a HTMLCollection node as argument.
-// This function returns -1 if not found.
-function hasClassName(className) {
-	return function (node) {
-		if (node.nodeType != 3 && node.className) {
-			var c = node.className.split(' ');
-			var len = c.length;
-			for (var i = 0; i < len; i++) {
-      			if (className == c[i]) return true;
-			}
-		}
-		return false;
-	};
+function hasClass(node, className) {
+    if (node.className) {
+        return (indexOf(className, getClassList(node)) >= 0);
+    }
 }
 
 // Add a cookie. If 'days' is set to a non-zero number of days,
@@ -154,8 +129,10 @@ function readCookie(name) {
 	}
 	for (var i=0;i < ca.length;++i) {
 		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		while (c.charAt(0)==' ')
+            c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0)
+            return c.substring(nameEQ.length,c.length);
 	}
 	return null;
 }
