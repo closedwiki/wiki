@@ -662,23 +662,6 @@ sub loginUrl {
 
 =pod
 
----++ ObjectMethod loginUrlPath() -> $url
-
-*VIRTUAL METHOD* implemented by subclasses
-
-Get a url path for login (no protocol, host)
-
-=cut
-
-sub loginUrlPath {
-    my $this = shift;
-    my $path = $this->loginUrl( @_ );
-    $path =~ s@.*?//.*?/@/@ if $path;
-    return $path;
-}
-
-=pod
-
 ---++ ObjectMethod getUser()
 
 *VIRTUAL METHOD* implemented by subclasses
@@ -704,7 +687,7 @@ sub _LOGIN {
     my $url = $this->loginUrl();
     if( $url ) {
         my $text = $twiki->{templates}->expandTemplate('LOG_IN');
-        return '[['.$url.']['.$text.']]';
+        return CGI::a( { href=>$url }, $text );
     }
     return '';
 }
@@ -731,7 +714,7 @@ sub _LOGOUT {
     my $url = _LOGOUTURL( @_ );
     if( $url ) {
         my $text = $twiki->{templates}->expandTemplate('LOG_OUT');
-        return '[['.$url.']['.$text.']]';
+        return CGI::a( {href=>$url }, $text );
     }
     return '';
 }
@@ -783,13 +766,6 @@ sub _LOGINURL {
     return $this->loginUrl();
 }
 
-sub _LOGINURLPATH {
-    my( $twiki, $params ) = @_;
-    my $this = $twiki->{client};
-    ASSERT($this->isa('TWiki::Client')) if DEBUG;
-    return $this->loginUrlPath();
-}
-
 sub _dispLogon {
     my $this = shift;
 
@@ -798,7 +774,7 @@ sub _dispLogon {
     my $web = $twiki->{webName};
     my $sessionId = $this->{sessionId};
 
-    my $urlToUse = $this->loginUrlPath();
+    my $urlToUse = $this->loginUrl();
 
     unless( $this->{haveCookie} || !$TWiki::cfg{Sessions}{IDsInURLs} ) {
         $urlToUse = $this->_rewriteURL( $urlToUse );
