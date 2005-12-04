@@ -58,6 +58,10 @@ An example stand-alone convertor script for HTML to TWiki is included in the ins
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* To enable the editor in one of your skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br /><code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
+*If you want to set up Kupu as your default editor*, then you can set the =EDIT_SKIN= TWiki variable wherever you want.
+   * <nop>Set EDIT_SKIN = kupu
+Set it in a user topic to set it for one user. Set it in WebPreferences to set it for a single web. Or set it in your global TWiki preferences to set it for your whole site!
+
 ---++ Settings
 	* Set SHORTDESCRIPTION = Translator framework and WYSIWYG editor for TWiki topics
 Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
