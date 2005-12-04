@@ -1,5 +1,5 @@
-data/Plugins/NewsPlugin.txt NEW
-data/Plugins/NewsPluginExample.txt NEW
-data/Plugins/NewsPluginExampleHeadlines.txt NEW
-data/Plugins/NewsPluginExampleInclusion.txt NEW
+data/Text/NewsPlugin.txt NEW
+data/Text/NewsPluginExample.txt NEW
+data/Text/NewsPluginExampleHeadlines.txt NEW
+data/Text/NewsPluginExampleInclusion.txt NEW
 lib/TWiki/Plugins/NewsPlugin.pm NEW

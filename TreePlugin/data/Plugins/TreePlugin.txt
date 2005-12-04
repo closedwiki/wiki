@@ -1,6 +1,0 @@
-
----++ <nop>%TOPIC%
-
-This topic has been mooved to the TWiki Documentation web 
-Twiki.TreePlugin
--- Main.MartinRaabe - 20 Jan 2003

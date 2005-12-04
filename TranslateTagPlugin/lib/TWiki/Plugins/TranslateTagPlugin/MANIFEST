@@ -1,9 +1,9 @@
-data/Plugins/TagTranslations.txt NEW
-data/Plugins/TranslateTagPlugin.txt NEW
+data/TWiki/TagTranslations.txt NEW
+data/TWiki/TranslateTagPlugin.txt NEW
 lib/TWiki/Plugins/TranslateTagPlugin.pm NEW
-pub/Plugins/TranslateTagPlugin/Plugins.pm.diff NEW
-pub/Plugins/TranslateTagPlugin/Plugins.pm.diff,v NEW
-pub/Plugins/TranslateTagPlugin/edit.diff NEW
-pub/Plugins/TranslateTagPlugin/edit.diff,v NEW
-pub/Plugins/TranslateTagPlugin/preview.diff NEW
-pub/Plugins/TranslateTagPlugin/preview.diff,v NEW
+pub/TWiki/TranslateTagPlugin/Plugins.pm.diff NEW
+pub/TWiki/TranslateTagPlugin/Plugins.pm.diff,v NEW
+pub/TWiki/TranslateTagPlugin/edit.diff NEW
+pub/TWiki/TranslateTagPlugin/edit.diff,v NEW
+pub/TWiki/TranslateTagPlugin/preview.diff NEW
+pub/TWiki/TranslateTagPlugin/preview.diff,v NEW

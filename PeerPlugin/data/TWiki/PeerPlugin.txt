@@ -39,18 +39,18 @@ PeerReviewExamples<br>
 %TOPIC% variable settings follow:
 
 <verbatim>
-		* Set LINKICON = %PUBURLPATH%/Plugins/PeerPlugin/peerreview.gif
+		* Set LINKICON = %PUBURLPATH%/TWiki/PeerPlugin/peerreview.gif
 		* Set RATINGSUFFIX = 
-		* #Set LISTICONPREFIX = %PUBURLPATH%/Plugins/PeerPlugin/dot_
+		* #Set LISTICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/dot_
 		* #Set LISTICONHEIGHT = 12
 		* #Set LISTICONWIDTH = 64
-		* #Set RATINGICONPREFIX = %PUBURLPATH%/Plugins/PeerPlugin/rating
+		* #Set RATINGICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/rating
 		* #Set RATINGICONHEIGHT = 5
 		* #Set RATINGICONWIDTH = 42
-		* Set LISTICONPREFIX = %PUBURLPATH%/Plugins/PeerPlugin/star_
+		* Set LISTICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/star_
 		* Set LISTICONHEIGHT = 13
 		* Set LISTICONWIDTH = 75
-		* Set RATINGICONPREFIX = %PUBURLPATH%/Plugins/PeerPlugin/star_
+		* Set RATINGICONPREFIX = %PUBURLPATH%/TWiki/PeerPlugin/star_
 		* Set RATINGICONHEIGHT = 13
 		* Set RATINGICONWIDTH = 75
 </verbatim>
