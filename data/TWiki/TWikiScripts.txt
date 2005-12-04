@@ -104,6 +104,8 @@ The =edit= scipt understands the following parameters, typically supplied by HTM
 Form field values are passed in parameters named 'field' - for example, if I have a field =Status= the parameter name is =Status=.
    1 The first sequence of ten or more =X= characters in the topic name will be converted on save to a number such that the resulting topic name is unique in the target web.
 
+The =skin= parameter has a special interpretation for the edit script. If =skin-= is set, then it will override the TWikiVariable ==%<nop>EDIT_SKIN%==, which is used to set up the default editor skin.
+
 ---++ =view=
 Used for viewing topics.
 

@@ -85,7 +85,9 @@ sub edit {
     # apptype is undocumented legacy
     my $cgiAppType = $query->param( 'contenttype' ) ||
       $query->param( 'apptype' ) || 'text/html';
-    my $skin = $session->getSkin();
+    my $skin = $query->param( 'skin' ) ||
+      $session->{prefs}->getPreferencesValue('EDIT_SKIN') ||
+        $session->getSkin();
     my $theParent = $query->param( 'topicparent' ) || '';
     my $ptext = $query->param( 'text' );
     my $store = $session->{store};

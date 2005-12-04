@@ -60,6 +60,9 @@ _(Click for form-based editing of existing preferences.)_
       * Set LINKTOOLTIPINFO = off
       * #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
 
+   * Skin to use for the Editor (can be overwritten by user preferences). If set, this will override the default used skin for editing only. See your editor plugin documentation for details on how to use this setting. Set to 'pattern' to use the standard no-frills editor.
+      * #Set EDIT_SKIN =
+
    * Horizontal size of text edit box: (can be overwritten by user preferences)
       * Set EDITBOXWIDTH = 70
 
