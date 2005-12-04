@@ -45,12 +45,13 @@ package TWiki::Plugins::FindElsewherePlugin;
 
 use vars qw(
             $web $topic $user $installWeb $VERSION $RELEASE
-            $doPluralToSingular
+            $plural2SingularEnabled
             $wnre
             $wwre
             $manre
             $abbre
            );
+use vars qw( %TWikiCompatibility );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -71,13 +72,18 @@ sub initPlugin {
         return 0;
     }
 
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
+    my $pp = 'FINDELSEWHEREPLUGIN_';
+    $lookElsewhereDisabled =
+      TWiki::Func::getPreferencesFlag( 'DISABLELOOKELSEWHERE' ) ||
+          TWiki::Func::getPreferencesFlag( $pp.'DISABLELOOKELSEWHERE' );
 
-    $otherWebMulti =  TWiki::Func::getPreferencesValue( 'FINDELSEWHEREPLUGIN_LOOKELSEWHERE' ) || "";
-    @webList = split( /[\,\s]+/, $otherWebMulti );
+    $otherWebs =
+      TWiki::Func::getPreferencesValue( $pp.'LOOKELSEWHEREWEBS' ) || '';
+    @webList = split( /[\,\s]+/, $otherWebs );
 
-    $doPluralToSingular =
-      TWiki::Func::getPreferencesFlag( 'FINDELSEWHEREPLUGIN_PLURALTOSINGULAR' ) || "";
+    $plural2SingularEnabled =
+      !TWiki::Func::getPreferencesFlag( 'DISABLEPLURALTOSINGULAR' ) &&
+        !TWiki::Func::getPreferencesFlag( $pp.'DISABLEPLURALTOSINGULAR' );
 
     $wnre = TWiki::Func::getRegularExpression('webNameRegex');
     $wwre = TWiki::Func::getRegularExpression('wikiWordRegex');
@@ -90,7 +96,18 @@ sub initPlugin {
 
 sub preRenderingHandler {
     #my ( $text, \%map ) = @_;
+    # SMELL: skips PRE blocks
+    _handle( @_ );
+}
 
+$TWikiCompatibility{startRenderingHandler} = 1.1;
+sub startRenderingHandler {
+    #my ( $text, \%map ) = @_;
+    _handle( @_ );
+}
+
+sub _handle {
+    return if $lookElsewhereDisabled;
 
     # Find instances of WikiWords not in this web, but in the otherWeb(s)
     # If the WikiWord is found in theWeb, put the word back unchanged
@@ -105,7 +122,7 @@ sub preRenderingHandler {
 
 sub _makeTopicLink {
     #my($otherWeb, $theTopic) = @_;
-    return "[[$_[0].$_[1]][$_[0]]]";
+    return "";
 }
 
 sub _findTopicElsewhere {
@@ -133,7 +150,7 @@ sub _findTopicElsewhere {
     my $exist = TWiki::Func::topicExists( $web, $link );
     return $original if $exist;
 
-    if( $doPluralToSingular && $link =~ /s$/ ) {
+    if( $plural2SingularEnabled && $link =~ /s$/ ) {
         my $linkSingular = _makeSingular( $link );
         if( TWiki::Func::topicExists( $web, $linkSingular ) ) {
             # $linkSingular was found in $web.
@@ -153,27 +170,31 @@ sub _findTopicElsewhere {
         my $exist = TWiki::Func::topicExists( $otherWeb, $link );
         if( $exist ) {
             # $link was found in $otherWeb.
-            push(@topicLinks, _makeTopicLink($otherWeb,$link));
-        } elsif ( ( $doPluralToSingular ) && ( $link =~ /s$/ ) ) {
+            push(@topicLinks, [ $otherWeb, $link ]);
+        } elsif ( ( $plural2SingularEnabled ) && ( $link =~ /s$/ ) ) {
             my $linkSingular = _makeSingular( $link );
             if( TWiki::Func::topicExists( $otherWeb, $linkSingular )) {
                 # $linkSingular was found in $otherWeb.
-                push(@topicLinks, _makeTopicLink($otherWeb,$link));
+                push(@topicLinks, [ $otherWeb, $link ]);
             }
         }
     }
 
     if( scalar @topicLinks > 0 ) {
-        # If link text [[was in this form]] <em> it
-        $original =~ s/\[\[(.*)\]\]/<em>$1<\/em>/go;
+        # If link text [[was in this form]] then <em> it
+        $original =~ s/\[\[(.*)\]\]/<em>$1<\/em>/g;
         # Prepend WikiWords with <nop>, preventing double links
         $original =~ s/([\s\(])($wwre)/$1<nop>$2/go;
         if( scalar(@topicLinks) > 1 ) {
             return "<nop>$original<sup>(".
-              join( ',', @topicLinks ).")</sup>" ;
+              join( ',', map { "[[$_[0].$_[1]][$_[0]]]" }
+                      @topicLinks ).")</sup>" ;
         } else {
-            return $topicLinks[0];
+            my $l = $topicLinks[0];
+            return "[[$l->[0].$l->[1]][$l->[0].$l->[1]]]";
         }
+    } else {
+        print STDERR "OK $link (",join(',',@webList),"\n";
     }
     # $link is not in any of these webs
     return $original;
