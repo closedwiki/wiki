@@ -357,7 +357,7 @@ sub userLoggedIn {
 }
 
 # get an RE that matches a local script URL
-sub _myScriptURL {
+sub _myScriptURLRE {
     my $this = shift;
 
     my $s = $this->{_MYSCRIPTURL};
@@ -366,7 +366,14 @@ sub _myScriptURL {
         $s =~ s@\\$M1@[^/]*?@go;
         $s =~ s@\\$M2@[^#\?/]*@go;
         $s =~ s@\\$M3@[^/]*?@go;
-        $this->{_MYSCRIPTURL} = $s;
+        # now add alternates for the various script-specific overrides
+        foreach my $v ( values %{$TWiki::cfg{ScriptUrlPaths}} ) {
+            my $over = $v;
+            # escape non-alphabetics
+            $over =~ s/(\W)/\\$1/g;
+            $s .= '|'.$over;
+        }
+        $this->{_MYSCRIPTURL} = "($s)";
     }
     return $s;
 }
@@ -381,7 +388,7 @@ sub _rewriteURL {
     return $url unless $sessionId;
     return $url if $url =~ m/\?$CGI::Session::NAME=/;
 
-    my $s = $this->_myScriptURL();
+    my $s = $this->_myScriptURLRE();
 
     # If the URL has no colon in it, or it matches the local script
     # URL, it must be an internal URL and therefore needs the session.
@@ -416,9 +423,9 @@ sub _rewriteFORM {
 
     return $url.$rest unless $this->{sessionId};
 
-    my $s = $this->_myScriptURL();
+    my $s = $this->_myScriptURLRE();
 
-    if( $url !~ /:/ || $url =~ /^$s/ ) {
+    if( $url !~ /:/ || $url =~ /^($s)/ ) {
         $rest .= CGI::hidden( -name => $CGI::Session::NAME,
                               -value => $this->{sessionId});
     }
@@ -450,7 +457,6 @@ sub endRenderingHandler {
         # SMELL: this would probably be done better using javascript
         # that handles navigation away from this page, and uses the
         # rules to rewrite any relative URLs at that time.
-        my $s = $this->_myScriptURL();
 
         # a href= rewriting
         $_[0] =~ s/(<a[^>]*(?<=\s)href=(["']))(.*?)(\2)/$1.$this->_rewriteURL($3).$4/geoi;
