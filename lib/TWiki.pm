@@ -878,7 +878,7 @@ sub getScriptUrl {
     my $absolute = $this->inContext( 'command_line' ) ||
       $this->inContext( 'rss' ) ||
         $this->inContext( 'absolute_urls' ) ||
-          !defined( $script );
+          !$script;
 
     # SMELL: topics and webs that contain spaces?
 
