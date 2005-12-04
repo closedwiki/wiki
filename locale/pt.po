@@ -606,8 +606,8 @@ msgid "Backlinks to %1 in all Webs"
 msgstr "Referências a %1 em todas as Webs"
 
 #: templates/oopsmore.pattern.tmpl:19
-msgid "Backlinks:"
-msgstr "Referências:"
+msgid "Backlinks"
+msgstr "Referências"
 
 #: templates/oopsattention.tmpl:111
 msgid "Base web %1 is missing or does not exist"
@@ -731,8 +731,8 @@ msgid "Checkpoint"
 msgstr "Salvar e continuar editando"
 
 #: templates/oopsmore.pattern.tmpl:25
-msgid "Child topics in %1 web:"
-msgstr "Tópicos filhos na web %1:"
+msgid "Child topics in %1 web"
+msgstr "Tópicos filhos na web %1"
 
 #: templates/changeform.pattern.tmpl:24
 msgid "Choose a new form template"
@@ -781,8 +781,8 @@ msgid "Company name:"
 msgstr "Nome da Organização:"
 
 #: templates/oopsmore.pattern.tmpl:49
-msgid "Compare revisions:"
-msgstr "Comparar revisões:"
+msgid "Compare revisions"
+msgstr "Comparar revisões"
 
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
@@ -921,8 +921,8 @@ msgid "Delete topic..."
 msgstr "Remover tópico..."
 
 #: templates/oopsmore.pattern.tmpl:7
-msgid "Delete topic:"
-msgstr "Remover tópico:"
+msgid "Delete topic"
+msgstr "Remover tópico"
 
 #: lib/TWiki/UI/RDiff.pm:254
 msgid "Deleted"
@@ -1032,8 +1032,8 @@ msgid "Edit this topic text"
 msgstr "Editar o texto desse tópico"
 
 #: templates/oopsmore.pattern.tmpl:55
-msgid "Edit topic preference settings:"
-msgstr "Editar preferências do tópico:"
+msgid "Edit topic preference settings"
+msgstr "Editar preferências do tópico"
 
 #: data/TWiki/TWikiRegistration.txt:46
 msgid "Email address:"
@@ -1752,8 +1752,8 @@ msgid "Rename failed"
 msgstr "A renomeação falhou"
 
 #: templates/oopsmore.pattern.tmpl:13
-msgid "Rename or move topic:"
-msgstr "Renomear ou mover tópico:"
+msgid "Rename or move topic"
+msgstr "Renomear ou mover tópico"
 
 #: templates/oopsattention.tmpl:276
 msgid "Rename the file on your local machine and try uploading again."
@@ -1894,8 +1894,8 @@ msgid "Send you a confirmation of your registration by email."
 msgstr "Enviar a você uma confirmação do seu registro por email."
 
 #: templates/oopsmore.pattern.tmpl:30
-msgid "Set new topic parent:"
-msgstr "Indicar novo tópico pai:"
+msgid "Set new topic parent"
+msgstr "Indicar novo tópico pai"
 
 #: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
@@ -2494,8 +2494,8 @@ msgid "View difference"
 msgstr "Ver diferença"
 
 #: templates/oopsmore.pattern.tmpl:41
-msgid "View previous topic revision:"
-msgstr "Ver versão anterior do tópico:"
+msgid "View previous topic revision"
+msgstr "Ver versão anterior do tópico"
 
 #: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
 msgid "View raw text without formatting"
@@ -2793,12 +2793,12 @@ msgid "help"
 msgstr "ajuda"
 
 #: templates/oopsmore.pattern.tmpl:21
-msgid "in %1 &web."
-msgstr "na &web %1."
+msgid "_in %1 web_ only"
+msgstr "_na web %1_"
 
 #: templates/oopsmore.pattern.tmpl:23
-msgid "in a&ll webs."
-msgstr "globa&lmente (em todas as webs)."
+msgid "_in all public webs_"
+msgstr "_globalmente (em todas as webs)_"
 
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"

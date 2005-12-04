@@ -556,8 +556,8 @@ msgid "Backlinks to %1 in all Webs"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:19
-msgid "Backlinks:"
-msgstr ""
+msgid "Backlinks"
+msgstr "Links naar deze pagina"
 
 #: templates/oopsattention.tmpl:111
 msgid "Base web %1 is missing or does not exist"
@@ -581,11 +581,11 @@ msgstr ""
 
 #: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
 msgid "Cancel"
-msgstr ""
+msgstr "Stop wijzigen"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
-msgstr ""
+msgstr "Stop wijzigen en gooi veranderingen weg"
 
 #: templates/oopsattention.tmpl:64
 msgid "Cannot create %1 because it already exists."
@@ -674,8 +674,8 @@ msgid "Checkpoint"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:25
-msgid "Child topics in %1 web:"
-msgstr ""
+msgid "Child topics in %1 web"
+msgstr "Onderliggende pagina's in %1 web"
 
 #: templates/changeform.pattern.tmpl:24
 msgid "Choose a new form template"
@@ -707,32 +707,32 @@ msgstr ""
 #: templates/attach.pattern.tmpl:84 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Comment"
-msgstr ""
+msgstr "Opmerking"
 
 #: data/TWiki/TWikiRegistration.txt:208
 msgid "Comments:"
-msgstr ""
+msgstr "Opmerkingen:"
 
 #: data/TWiki/TWikiRegistration.txt:59
 msgid "Company URL: <br> (or department URL)"
-msgstr ""
+msgstr "URL van organisatie <br> (of van afdeling)"
 
 #: data/TWiki/TWikiRegistration.txt:56
 msgid "Company name:"
-msgstr ""
+msgstr "Naam organisatie"
 
 #: templates/oopsmore.pattern.tmpl:49
-msgid "Compare revisions:"
-msgstr ""
+msgid "Compare revisions"
+msgstr "Vergelijk revisies"
 
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
 msgid "Confirm rename or move"
-msgstr ""
+msgstr "Hernoemen of verplaatsen bevestigen"
 
 #: templates/oopsleaseconflict.tmpl:5
 msgid "Conflict"
-msgstr ""
+msgstr "Conflict"
 
 #: data/TWiki/TWikiVariablesAtoM.txt:268 templates/login.pattern.tmpl:50
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
@@ -857,8 +857,8 @@ msgid "Delete topic..."
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:7
-msgid "Delete topic:"
-msgstr ""
+msgid "Delete topic"
+msgstr "Verwijder pagina""
 
 #: lib/TWiki/UI/RDiff.pm:254
 msgid "Deleted"
@@ -879,7 +879,7 @@ msgstr ""
 
 #: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
 msgid "Discard"
-msgstr ""
+msgstr "Weggooien"
 
 #: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
@@ -935,20 +935,20 @@ msgstr ""
 
 #: templates/view.pattern.tmpl:35
 msgid "Edit"
-msgstr ""
+msgstr "Bewerken"
 
 #: templates/oopsleaseconflict.pattern.tmpl:13
 #: templates/oopsleaseconflict.tmpl:40
 msgid "Edit Anyway"
-msgstr ""
+msgstr "Bewerk hoe dan ook"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:3
 msgid "Edit personal data"
-msgstr ""
+msgstr "Bewerk persoonlijke gegevens"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 msgid "Edit text"
-msgstr ""
+msgstr "Bewerk tekst"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:37
 #: templates/view.pattern.tmpl:43 templates/view.tmpl:33
@@ -956,20 +956,20 @@ msgid "Edit this topic text"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:55
-msgid "Edit topic preference settings:"
-msgstr ""
+msgid "Edit topic preference settings"
+msgstr "Bewerk paginavariabelen"
 
 #: data/TWiki/TWikiRegistration.txt:46
 msgid "Email address:"
-msgstr ""
+msgstr "E-mailadres"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
 msgid "End of topic"
-msgstr ""
+msgstr "Eind van de pagina"
 
 #: templates/login.pattern.tmpl:25
 msgid "Enter a new username and password to change identity:"
-msgstr ""
+msgstr "Typ een nieuwe gebruikersnaam en wachtwoord"
 
 #: templates/oopsattention.tmpl:178
 msgid "Error registering user %1"
@@ -1623,8 +1623,8 @@ msgid "Rename failed"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:13
-msgid "Rename or move topic:"
-msgstr ""
+msgid "Rename or move topic"
+msgstr "Hernoem of verplaats pagina"
 
 #: templates/oopsattention.tmpl:276
 msgid "Rename the file on your local machine and try uploading again."
@@ -1763,8 +1763,8 @@ msgid "Send you a confirmation of your registration by email."
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:30
-msgid "Set new topic parent:"
-msgstr ""
+msgid "Set new topic parent"
+msgstr "Bovenliggende pagina instellen"
 
 #: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
@@ -1828,7 +1828,7 @@ msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:31
 msgid "Step 1: Select topic parent:"
-msgstr ""
+msgstr "Stap 1: Selecteer bovenliggende pagina"
 
 #: templates/oopsmore.pattern.tmpl:36
 msgid ""
@@ -2087,7 +2087,7 @@ msgstr ""
 
 #: templates/preview.pattern.tmpl:46
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
-msgstr ""
+msgstr "Om alle veranderingen *ongedaan te maken*: Klik op de [Weggooien] knop."
 
 #: templates/preview.pattern.tmpl:44
 msgid "To *save* changes: Press the [Save Changes] button."
@@ -2288,7 +2288,7 @@ msgid "View difference"
 msgstr "Bekijk verschillen"
 
 #: templates/oopsmore.pattern.tmpl:41
-msgid "View previous topic revision:"
+msgid "View previous topic revision"
 msgstr "Bekijk vorige paginarevisie"
 
 #: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
@@ -2549,13 +2549,12 @@ msgid "help"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:21
-msgid "in %1 &web."
-msgstr ""
+msgid "_in %1 web_ only"
+msgstr "_in %1 web_"
 
 #: templates/oopsmore.pattern.tmpl:23
-#, fuzzy
-msgid "in a&ll webs."
-msgstr "Zoek in a&lle webs"
+msgid "_in all public webs_"
+msgstr "_in alle publieke webs_"
 
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"

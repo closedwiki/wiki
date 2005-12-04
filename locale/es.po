@@ -596,8 +596,8 @@ msgid "Backlinks to %1 in all Webs"
 msgstr "Referencias a %1 en todas las webs"
 
 #: templates/oopsmore.pattern.tmpl:19
-msgid "Backlinks:"
-msgstr "Referencias:"
+msgid "Backlinks"
+msgstr "Referencias"
 
 #: templates/oopsattention.tmpl:111
 msgid "Base web %1 is missing or does not exist"
@@ -716,7 +716,7 @@ msgid "Checkpoint"
 msgstr "Revición de puntos"
 
 #: templates/oopsmore.pattern.tmpl:25
-msgid "Child topics in %1 web:"
+msgid "Child topics in %1 web"
 msgstr ""
 
 #: templates/changeform.pattern.tmpl:24
@@ -766,8 +766,8 @@ msgid "Company name:"
 msgstr "Nombre de la pagina:"
 
 #: templates/oopsmore.pattern.tmpl:49
-msgid "Compare revisions:"
-msgstr "Comparar las reviciones:"
+msgid "Compare revisions"
+msgstr "Comparar las reviciones"
 
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
@@ -906,8 +906,8 @@ msgid "Delete topic..."
 msgstr "Borrar la pagina..."
 
 #: templates/oopsmore.pattern.tmpl:7
-msgid "Delete topic:"
-msgstr "Borrar la pagina:"
+msgid "Delete topic"
+msgstr "Borrar la pagina"
 
 #: lib/TWiki/UI/RDiff.pm:254
 msgid "Deleted"
@@ -1006,8 +1006,8 @@ msgid "Edit this topic text"
 msgstr "Editar esto texto de pagina"
 
 #: templates/oopsmore.pattern.tmpl:55
-msgid "Edit topic preference settings:"
-msgstr "Editar las preferencias de la pagina:"
+msgid "Edit topic preference settings"
+msgstr "Editar las preferencias de la pagina"
 
 #: data/TWiki/TWikiRegistration.txt:46
 msgid "Email address:"
@@ -1688,8 +1688,8 @@ msgid "Rename failed"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:13
-msgid "Rename or move topic:"
-msgstr "Retitular o mover la pagina:"
+msgid "Rename or move topic"
+msgstr "Retitular o mover la pagina"
 
 #: templates/oopsattention.tmpl:276
 msgid "Rename the file on your local machine and try uploading again."
@@ -1829,7 +1829,7 @@ msgid "Send you a confirmation of your registration by email."
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:30
-msgid "Set new topic parent:"
+msgid "Set new topic parent"
 msgstr ""
 
 #: templates/attach.pattern.tmpl:49
@@ -2358,8 +2358,8 @@ msgid "View difference"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:41
-msgid "View previous topic revision:"
-msgstr "Vea antes la revicion de la pagina:"
+msgid "View previous topic revision"
+msgstr "Vea antes la revicion de la pagina"
 
 #: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
 msgid "View raw text without formatting"
@@ -2623,13 +2623,13 @@ msgid "help"
 msgstr "ayuda"
 
 #: templates/oopsmore.pattern.tmpl:21
-msgid "in %1 &web."
+msgid "_in %1 web_ only"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:23
 #, fuzzy
-msgid "in a&ll webs."
-msgstr "Buscard todas las webs"
+msgid "_in all public webs_"
+msgstr "_Buscard todas las webs_"
 
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"

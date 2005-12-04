@@ -607,8 +607,8 @@ msgid "Backlinks to %1 in all Webs"
 msgstr "Referencer til %1 fra alle offentlige webs"
 
 #: templates/oopsmore.pattern.tmpl:19
-msgid "Backlinks:"
-msgstr "Referencer:"
+msgid "Backlinks"
+msgstr "Referencer"
 
 #: templates/oopsattention.tmpl:111
 msgid "Base web %1 is missing or does not exist"
@@ -732,8 +732,8 @@ msgid "Checkpoint"
 msgstr "Checkpoint"
 
 #: templates/oopsmore.pattern.tmpl:25
-msgid "Child topics in %1 web:"
-msgstr "Datter-sider i %1 webbet:"
+msgid "Child topics in %1 web"
+msgstr "Datter-sider i %1 webbet"
 
 #: templates/changeform.pattern.tmpl:24
 msgid "Choose a new form template"
@@ -782,8 +782,8 @@ msgid "Company name:"
 msgstr "Firmanavn:"
 
 #: templates/oopsmore.pattern.tmpl:49
-msgid "Compare revisions:"
-msgstr "Sammenlign versioner:"
+msgid "Compare revisions"
+msgstr "Sammenlign versioner"
 
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
@@ -922,8 +922,8 @@ msgid "Delete topic..."
 msgstr "Slet side..."
 
 #: templates/oopsmore.pattern.tmpl:7
-msgid "Delete topic:"
-msgstr "Slet side:"
+msgid "Delete topic"
+msgstr "Slet side"
 
 #: lib/TWiki/UI/RDiff.pm:254
 msgid "Deleted"
@@ -1033,8 +1033,8 @@ msgid "Edit this topic text"
 msgstr "Editér sidens kildetekst"
 
 #: templates/oopsmore.pattern.tmpl:55
-msgid "Edit topic preference settings:"
-msgstr "Editér præferencer for siden:"
+msgid "Edit topic preference settings"
+msgstr "Editér præferencer for siden"
 
 #: data/TWiki/TWikiRegistration.txt:46
 msgid "Email address:"
@@ -1751,8 +1751,8 @@ msgid "Rename failed"
 msgstr "Omdøbning fejlede"
 
 #: templates/oopsmore.pattern.tmpl:13
-msgid "Rename or move topic:"
-msgstr "Omdøb eller flyt side:"
+msgid "Rename or move topic"
+msgstr "Omdøb eller flyt side"
 
 #: templates/oopsattention.tmpl:276
 msgid "Rename the file on your local machine and try uploading again."
@@ -1892,8 +1892,8 @@ msgid "Send you a confirmation of your registration by email."
 msgstr "Sende en bekræftelses-e-mail angående din registrering til dig."
 
 #: templates/oopsmore.pattern.tmpl:30
-msgid "Set new topic parent:"
-msgstr "Vælg ny side-forælder:"
+msgid "Set new topic parent"
+msgstr "Vælg ny side-forælder"
 
 #: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
@@ -2487,8 +2487,8 @@ msgid "View difference"
 msgstr "Vis forskel"
 
 #: templates/oopsmore.pattern.tmpl:41
-msgid "View previous topic revision:"
-msgstr "Vis forrige version af siden:"
+msgid "View previous topic revision"
+msgstr "Vis forrige version af siden"
 
 #: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
 msgid "View raw text without formatting"
@@ -2785,12 +2785,12 @@ msgid "help"
 msgstr "hjælp"
 
 #: templates/oopsmore.pattern.tmpl:21
-msgid "in %1 &web."
-msgstr "i %1 &web."
+msgid "_in %1 web_ only"
+msgstr "_i %1 web_"
 
 #: templates/oopsmore.pattern.tmpl:23
-msgid "in a&ll webs."
-msgstr "a&lle webs"
+msgid "_in all public webs_"
+msgstr "_alle webs_"
 
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"
