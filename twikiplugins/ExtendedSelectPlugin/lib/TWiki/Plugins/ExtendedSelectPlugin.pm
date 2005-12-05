@@ -22,7 +22,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $pluginName );
 
-$VERSION = 1.001;
+$VERSION = 1.10;
 $pluginName = 'ExtendedSelectPlugin';
 
 sub initPlugin {
@@ -46,6 +46,7 @@ sub renderFormFieldForEditHandler {
     $isValues= ( $type =~ /\+values(\+.+)?$/o);
     my $choices = '';
     foreach $item ( @$possibleValues ) {
+        $item = &TWiki::urlDecode($item);
         $params={};
 	$itemValue=$item;
 	if( $isValues && ($item =~ /^(.*?[^\\])=(.*)$/o) ) {

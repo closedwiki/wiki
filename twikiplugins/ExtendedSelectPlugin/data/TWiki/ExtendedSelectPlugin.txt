@@ -58,8 +58,9 @@ Content:
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.EricSchwertfeger |
-|  Plugin Version: | 11 Oct 2005 (V1.001) |
+|  Plugin Version: | 05 Dec 2005 (V1.10) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Dec 2005: | added value decoding. See Bugs:Item1045. (TWiki:Main.MichaelDaum) |
 |  11 Oct 2005: | V1.001, fixed editing multiple selects | 
 |  11 Oct 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 and Dakar Beta 3 or later|
