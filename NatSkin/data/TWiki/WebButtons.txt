@@ -1,0 +1,10 @@
+%META:TOPICINFO{author="TWikiContributor" date="1133540400" format="1.0" version="1.1"}%
+%STARTINCLUDE%
+<ul>
+  <li class="%CALC{"$IF($EXACT(%INCLUDINGWEB%,Main),current)"}%">[[Main.WebHome][Main]]</li>
+  <li class="%CALC{"$IF($EXACT(%INCLUDINGWEB%,User),current)"}%" style="%CALC{"$IF($EXISTS(User/WebHome),,display:none;)"}%">[[User.WebHome][User]]</li>
+%FORMATLIST{"%WEBLIST{separator=","}%" exclude="Main|User|TWiki|TestCases|Sandbox" separator="$n" format="<li class=\"$percntCALC{\"$IF($EXACT(%INCLUDINGWEB%,$1),current)\"}$percnt\">[[$1.WebHome][$1]]</li>"}%
+  <li class="%CALC{"$IF($EXACT(%INCLUDINGWEB%,Sandbox),current)"}%">[[Sandbox.WebHome][Sandbox]]</li>
+  <li class="%CALC{"$IF($EXACT(%INCLUDINGWEB%,%TWIKIWEB%),current)"}%">[[%TWIKIWEB%.WebHome][System]]</li>
+</ul>
+%STOPINCLUDE%

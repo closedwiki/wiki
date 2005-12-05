@@ -112,6 +112,7 @@ data/TWiki/NatSkinCss.txt 0440
 data/TWiki/NatSkinTemplates.txt 0440
 data/TWiki/NatSkinStyleBrowser.txt 0440
 data/TWiki/WebSideBar.txt 0440
+data/TWiki/WebButtons.txt 0440
 pub/TWiki/NatSkin/BaseBorder.css 0440
 pub/TWiki/NatSkin/BaseButtons.css 0440
 pub/TWiki/NatSkin/BaseRight.css 0440
