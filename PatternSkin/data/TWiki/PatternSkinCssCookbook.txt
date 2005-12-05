@@ -11,9 +11,9 @@ This topic describes how to customize the default look of TWiki for your own nee
 ---++ Introduction
 
 !PatternSkin uses 3 style sheets (attached to %TWIKIWEB%.PatternSkin):
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] - the positioning of main page elements (blocks), widths and heights
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][stylestyle.css]] - fonts, sizes, margins and paddings
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]] - border colors, text colors and background colors
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] - the positioning of main page elements (blocks), widths and heights
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css][stylestyle.css]] - fonts, sizes, margins and paddings
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]] - border colors, text colors and background colors
 
 When customizing your TWiki installation, you can either choose to completely rewrite all css styles, or to selectively override some styles. The latter option is by far less time consuming, but all depends on your graphical wishes.
 
@@ -22,14 +22,14 @@ When customizing your TWiki installation, you can either choose to completely re
    * Attach 3 new style sheets to the topic
    * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files:
 <pre>
-      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/layout.css
-      * <nop>Set TWIKISTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/style.css
-      * <nop>Set TWIKICOLORURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/layout.css
+      * <nop>Set TWIKISTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/style.css
+      * <nop>Set TWIKICOLORURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
  </pre>
-   * If you use less than these 3 CSS files, let the =TWIKIXXXURL= variable point to an empty CSS file. For this purpose [[%PUBURL%/%TWIKIWEB%/PatternSkin/empty.css][empty.css]] is attached to %TWIKIWEB%.PatternSkin:
+   * If you use less than these 3 CSS files, let the =TWIKIXXXURL= variable point to an empty CSS file. For this purpose [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/empty.css][empty.css]] is attached to %TWIKIWEB%.PatternSkin:
 <pre>
-      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/empty.css
-      * <nop>Set TWIKICOLORURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/empty.css
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/empty.css
+      * <nop>Set TWIKICOLORURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/empty.css
  </pre>
 
 ---+++ When you need small adjustments: Adding to existing CSS
@@ -39,13 +39,13 @@ Overriding default CSS is done with 3 variables: =USERLAYOUTURL=, =USERSTYLEURL=
    * Attach 1, 2 or 3 new style sheets to the topic, dependent on your CSS setup (if you don't change much, you might as well put everything in one CSS file, layout, margins and colors)
    * Point the CSS variables in [[%TWIKIWEB%.TWikiPreferences]] to your new files (below the =TWIKIXXXURL= variables):
 <pre>
-      * <nop>Set USERLAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/layout.css
-      * <nop>Set USERSTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/style.css
-      * <nop>Set USERCOLORSURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
+      * <nop>Set USERLAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/layout.css
+      * <nop>Set USERSTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/style.css
+      * <nop>Set USERCOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
  </pre>
    * If you use only little CSS and you've only attached one file, write:
 <pre>
-      * Set USERSTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/YourNewTopic/style.css
+      * Set USERSTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/style.css
  </pre>
 
 Instead of setting these variables in [[%TWIKIWEB%.TWikiPreferences]], you can set these in your home topic, or in any other topic. Setting style URL variables in:
