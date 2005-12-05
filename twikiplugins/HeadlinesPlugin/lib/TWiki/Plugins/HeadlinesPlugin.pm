@@ -37,7 +37,7 @@ use Digest::MD5 qw(md5_hex);
 
 
 $VERSION = '$Rev$';
-$RELEASE = '1.94';
+$RELEASE = '1.95';
 
 $debug = 0; # toggle me
 
@@ -318,7 +318,7 @@ sub doInit {
   $isInitialized = 1;
 
   # Get plugin preferences
-  $defaultRefresh = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_REFRESH') || 15;
+  $defaultRefresh = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_REFRESH') || 60;
   $defaultLimit   = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_LIMIT') || 100;
   $defaultHeader  = TWiki::Func::getPreferencesValue('HEADLINESPLUGIN_HEADER') ||
     '| *[[$link][$title ]]* |';
@@ -392,7 +392,11 @@ sub readRssFeed
   unless ($theUrl =~ /^https?:\/\//) { # internal
     my ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($web, $theUrl);
     $theUrl = TWiki::Func::getViewUrl($thisWeb, $thisTopic);
+    if ($theUrl =~ /^\//) {
+      $theUrl = TWiki::Func::getUrlHost().$theUrl;
+    }
   }
+  #writeDebug("url=$theUrl");
 
   my ($text, $errorMsg) = $useLWPUserAgent?&getUrlLWP($theUrl):&getUrl($theUrl);
   return (undef, "ERROR: $errorMsg") if $errorMsg;
