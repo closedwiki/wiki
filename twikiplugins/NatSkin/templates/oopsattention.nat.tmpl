@@ -33,7 +33,7 @@ Please inspect the topic to make sure it is OK, especially if you
 made any changes to form fields.
 
 You can see the differences
-[[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%][here]].
+[[%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%][here]].
 %TMPL:END%
 %TMPL:DEF{"missing_action"}%
 ---+++ Missing action command
@@ -149,16 +149,16 @@ white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, tea
 %TMPL:END%
 %TMPL:DEF{"thanks"}%
 ---+++ Thank you for registering
-   * You can review your changes in your personal <nop>%WIKITOOLNAME% topic %TOPIC%.
-     (__Suggestion:__ How about uploading your picture to your topic?)
-   * You are also listed in the %MAINWEB%.%WIKIUSERSTOPIC% topic.
-   * A confirmation e-mail has been sent to %PARAM1%.
+	* You can review your changes in your personal <nop>%WIKITOOLNAME% topic %TOPIC%.
+          (__Suggestion:__ How about uploading your picture to your topic?)
+	* You are also listed in the %MAINWEB%.%WIKIUSERSTOPIC% topic.
+	* A confirmation e-mail has been sent to %PARAM1%.
 %TMPL:END%
 %TMPL:DEF{"reset_ok"}%
 %PARAM1%
 
 Users with automatically generated passwords should proceed immediately 
-to [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ChangePassword][change password]] 
+to [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ChangePassword][change password]] 
 to change their password to something memorable.
 %TMPL:END%
 %TMPL:DEF{"password_changed"}%
@@ -170,7 +170,7 @@ Your activation code has been sent to %PARAM1%.  Either click on the
 link in your email or enter the code in the box below to activate your membership.
 (This code is of the form "YourName.xxxx")
 
-<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<form action="%SCRIPTURLPATH%/register%SCRIPTSUFFIX%" method=get>
 <input type="hidden" name="rx" value="%BLACKLISTPLUGIN{action="magic"}%" />
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
@@ -219,7 +219,7 @@ administrator, <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%2
 ---+++ You are already registered
 You cannot register twice, the name '%PARAM1%' is already registered.
 
-Did you want to [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%.ResetPassword?username=%PARAM1%][reset %PARAM1%'s password]]?
+Did you want to [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%.ResetPassword?username=%PARAM1%][reset %PARAM1%'s password]]?
 
 Alternatively go <a href="javascript:history.back()">back</a> in your browser
 and choose a different username.
@@ -252,7 +252,7 @@ The activation code ==%PARAM1%== is invalid. No verification file %PARAM2%.
 
 Please try again.
 
-<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<form action="%SCRIPTURLPATH%/register%SCRIPTSUFFIX%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=" Submit " />
@@ -264,7 +264,7 @@ The activation code ==%PARAM1%== is invalid. %PARAM2%
 
 Please try again.
 
-<form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
+<form action="%SCRIPTURLPATH%/register%SCRIPTSUFFIX%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=" Submit " />
@@ -289,20 +289,28 @@ See %TWIKIWEB%.TWikiForms for information about Form Definitions.
 This could be for several reasons:
 
 ---++ 1. Form definition missing
-   * The form should be defined in the topic %PARAM1%.%PARAM2%
-   * If this topic is missing create it, otherwise check it for errors.
+<ul>
+  <li> The form should be defined in the topic %PARAM1%.%PARAM2%</li>
+  <li> If this topic is missing create it, otherwise check it for errors.</li>
+</ul>
 
 ---++ 2. The topic is in an old format
-   * Click on [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug][Debug topic text]].
-      * There should be a line that includes =META:FORM=, look for name="%PARAM1%.%PARAM2%" (or name="%PARAM2%")
-      * If this line isn't present see _upgrade_ section below
+<ul>
+  <li> Click on [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug][Debug topic text]].
+  <ul>
+    <li>There should be a line that includes =META:FORM=, look for name="%PARAM1%.%PARAM2%" (or name="%PARAM2%")</li>
+    <li>If this line isn't present see _upgrade_ section below.</li>
+  </ul>
+</ul>
 
 ---++ 3. Topic can not be upgraded from old style category table
 This requires the form definition to be present.
 
 This can be automatically upgraded by:
-   * Creating a suitable Form Definition topic
-   * Adding a =WEBFORMS= variable in WebPreferences
+<ul>
+  <li> Creating a suitable Form Definition topic</li>
+  <li> Adding a =WEBFORMS= variable in WebPreferences </li>
+</ul>
 
 You will probably have to ask your <nop>%WIKITOOLNAME% administrator to do this.
 %TMPL:END%

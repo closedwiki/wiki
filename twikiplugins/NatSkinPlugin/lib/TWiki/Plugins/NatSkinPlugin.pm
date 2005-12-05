@@ -27,7 +27,7 @@ use TWiki::Plugins;
 
 ###############################################################################
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
+        $currentWeb $currentTopic $currentUser $VERSION $RELEASE $debug
         $isGuest $defaultWikiUserName
 	$useSpamObfuscator $isBeijing $isDakar $isCairo
 	$maxRev $query $urlHost
@@ -44,12 +44,14 @@ use vars qw(
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 
+$debug = 0; # toggle me
+
 # from Render.pm
 $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.91';
+$RELEASE = '2.92';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -76,11 +78,8 @@ sub writeDebug {
 #
 #  Called for all plugins.
 #
-sub initPlugin
-{
-  ($topic, $web, $user, $installWeb) = @_;
-    
-  $debug = 0; # toggle me
+sub initPlugin {
+  ($currentTopic, $currentWeb, $currentUser) = @_;
 
   &doInit();
 
@@ -124,7 +123,7 @@ sub doInit {
 
   $defaultWikiUserName = &TWiki::Func::getDefaultUserName();
   $defaultWikiUserName = &TWiki::Func::userToWikiName($defaultWikiUserName, 1);
-  my $wikiUserName = &TWiki::Func::userToWikiName($user, 1);
+  my $wikiUserName = &TWiki::Func::userToWikiName($currentUser, 1);
 
   $isGuest = ($wikiUserName eq $defaultWikiUserName)?1:0;
   #writeDebug("defaultWikiUserName=$defaultWikiUserName, wikiUserName=$wikiUserName, isGuest=$isGuest");
@@ -153,13 +152,13 @@ sub doInit {
   writeDebug("useSpamObfuscator=$useSpamObfuscator");
 
   # Plugin correctly initialized
-  writeDebug("initPlugin ($web.$topic) is OK");
+  writeDebug("initPlugin ($currentWeb.$currentTopic) is OK");
 
   # gather revision information
   if ($isDakar) {
-    $maxRev = $TWiki::Plugins::SESSION->{store}->getRevisionNumber($web, $topic);
+    $maxRev = $TWiki::Plugins::SESSION->{store}->getRevisionNumber($currentWeb, $currentTopic);
   } else {
-    $maxRev = &TWiki::Store::getRevisionNumber($web, $topic);
+    $maxRev = &TWiki::Store::getRevisionNumber($currentWeb, $currentTopic);
   }
   $maxRev =~ s/r?1\.//go;  # cut 'r' and major
 #  writeDebug("maxRev=$maxRev");
@@ -187,10 +186,10 @@ sub initKnownStyles {
   foreach my $fileName (readdir(DIR)) {
     if ($fileName =~ /(.*)Style\.css$/) {
       $knownStyles{$1} = 1;
-      writeDebug("found style $1");
+      #writeDebug("found style $1");
     } elsif ($fileName =~ /(.*)Variation\.css$/) {
       $knownVariations{$1} = 1;
-      writeDebug("found variation $1");
+      #writeDebug("found variation $1");
     }
   }
   closedir(DIR);
@@ -200,6 +199,7 @@ sub initKnownStyles {
 sub initSkinState {
 
   return if $hasInitSkinState;
+
   $hasInitSkinState = 1;
   %skinState = ();
 
@@ -224,6 +224,39 @@ sub initSkinState {
   my $doStickySearchBox = 0;
   my $doStickyVariation = 0;
 
+  # get finalisations
+  
+  # SMELL: we only get the WebPreferences' FINALPREFERENCES here
+  my $finalPreferences = TWiki::Func::getPreferencesValue("FINALPREFERENCES");
+  writeDebug("finalPreferences=$finalPreferences"); 
+  my $isFinalStyle = 0;
+  my $isFinalBorder = 0;
+  my $isFinalButtons = 0;
+  my $isFinalSideBar = 0;
+  my $isFinalVariation = 0;
+  my $isFinalSearchBox = 0;
+  if ($finalPreferences) {
+    my @finalPreferences = split(/[\s,]+/, $finalPreferences);
+    $skinState{final} = ();
+    push @{$skinState{final}}, 'style' if 
+      ($isFinalStyle = grep(/^SKINSTYLE$/, @finalPreferences));
+    push @{$skinState{final}}, 'border' if 
+      ($isFinalBorder = grep(/^STYLEBORDER$/, @finalPreferences));
+    push @{$skinState{final}}, 'buttons' if 
+      ($isFinalButtons = grep(/^STYLEBUTTONS$/, @finalPreferences));
+    push @{$skinState{final}}, 'sidebar' if 
+      ($isFinalSideBar = grep(/^STYLESIDEBAR$/, @finalPreferences));
+    push @{$skinState{final}}, 'variation' if 
+      ($isFinalVariation = grep(/^STYLEVARIATION$/, @finalPreferences));
+    push @{$skinState{final}}, 'searchbox' if 
+      ($isFinalSearchBox = grep(/^STYLESEARCHBOX$/, @finalPreferences));
+    push @{$skinState{final}}, 'switches' if 
+      $isFinalBorder && $isFinalSideBar && $isFinalButtons && $isFinalSearchBox;
+    push @{$skinState{final}}, 'all' if 
+      $isFinalStyle && $isFinalVariation && $isFinalBorder && $isFinalSideBar &&
+      $isFinalButtons && $isFinalSearchBox;
+  }
+
   # from query
   if ($query) {
     $theRaw = $query->param('raw');
@@ -232,12 +265,18 @@ sub initSkinState {
     $theReset = $query->param('resetstyle');
     if ($theReset) {
       writeDebug("clearing session values");
-      &clearSessionValue('NATSKIN_SKINSTYLE');
-      &clearSessionValue('NATSKIN_STYLEBORDER');
-      &clearSessionValue('NATSKIN_STYLEBUTTONS');
-      &clearSessionValue('NATSKIN_STYLESIDEBAR');
-      &clearSessionValue('NATSKIN_STYLEVARIATION');
-      &clearSessionValue('NATSKIN_STYLESEARCHBOX');
+      &clearSessionValue('SKINSTYLE');
+      &clearSessionValue('STYLEBORDER');
+      &clearSessionValue('STYLEBUTTONS');
+      &clearSessionValue('STYLESIDEBAR');
+      &clearSessionValue('STYLEVARIATION');
+      &clearSessionValue('STYLESEARCHBOX');
+      my $redirectUrl = TWiki::Func::getViewUrl($currentWeb, $currentTopic);
+      TWiki::Func::redirectCgiQuery($query, $redirectUrl); 
+	# we need to force a new request because the session value preferences
+	# are still loaded in the preferences cache; only clearing them in
+	# the session object is not enough right now but will be during the next
+	# request; so we redirect to the current url
     } else {
       $theStyle = $query->param('style');
       $theStyleBorder = $query->param('styleborder'); 
@@ -248,24 +287,22 @@ sub initSkinState {
       $theToggleSideBar = $query->param('togglesidebar');
     }
 
-    #writeDebug("urlparam style=$theStyle") if $theStyle;
-    #writeDebug("urlparam styleborder=$theStyleBorder") if $theStyleBorder;
-    #writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
-    #writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
-    #writeDebug("urlparam stylevariation=$theStyleVariation") if $theStyleVariation;
-    #writeDebug("urlparam stylevariation=$theStyleSearchBox") if $theStyleSearchBox;
-    #writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
-    #writeDebug("urlparam switchvariation=$theSwitchVariation") if $theSwitchVariation;
+    writeDebug("urlparam style=$theStyle") if $theStyle;
+    writeDebug("urlparam styleborder=$theStyleBorder") if $theStyleBorder;
+    writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
+    writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
+    writeDebug("urlparam stylevariation=$theStyleVariation") if $theStyleVariation;
+    writeDebug("urlparam stylevariation=$theStyleSearchBox") if $theStyleSearchBox;
+    writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
+    writeDebug("urlparam switchvariation=$theSwitchVariation") if $theSwitchVariation;
   }
 
   # handle style
   &initKnownStyles();
-  my $prefStyle = 
-    &TWiki::Func::getSessionValue('NATSKIN_SKINSTYLE') ||
-    &TWiki::Func::getPreferencesValue('SKINSTYLE') ||
+  my $prefStyle = &TWiki::Func::getPreferencesValue('SKINSTYLE') || 
     $defaultStyle;
   $prefStyle =~ s/^\s*(.*)\s*$/$1/go;
-  if ($theStyle) {
+  if ($theStyle && !$isFinalStyle) {
     $theStyle =~ s/^\s*(.*)\s*$/$1/go;
     $doStickyStyle = 1 if $theStyle ne $prefStyle;
   } else {
@@ -281,9 +318,10 @@ sub initSkinState {
   }
   $theStyle = $defaultStyle unless $found;
   $skinState{'style'} = $theStyle;
+  writeDebug("theStyle=$theStyle");
 
   # cycle styles
-  if ($theSwitchStyle) {
+  if ($theSwitchStyle && !$isFinalStyle) {
     $theSwitchStyle = lc $theSwitchStyle;
     $doStickyStyle = 1;
     my $state = 0;
@@ -310,12 +348,10 @@ sub initSkinState {
   }
 
   # handle border
-  my $prefStyleBorder =
-    &TWiki::Func::getSessionValue('NATSKIN_STYLEBORDER') ||
-    &TWiki::Func::getPreferencesValue('STYLEBORDER') ||
+  my $prefStyleBorder = &TWiki::Func::getPreferencesValue('STYLEBORDER') ||
     $defaultStyleBorder;
   $prefStyleBorder =~ s/^\s*(.*)\s*$/$1/go;
-  if ($theStyleBorder) {
+  if ($theStyleBorder && !$isFinalBorder) {
     $theStyleBorder =~ s/^\s*(.*)\s*$/$1/go;
     $doStickyBorder = 1 if $theStyleBorder ne $prefStyleBorder;
   } else {
@@ -326,12 +362,10 @@ sub initSkinState {
   $skinState{'border'} = $theStyleBorder;
 
   # handle buttons
-  my $prefStyleButtons =
-    &TWiki::Func::getSessionValue('NATSKIN_STYLEBUTTONS') ||
-    &TWiki::Func::getPreferencesValue('STYLEBUTTONS') ||
+  my $prefStyleButtons = &TWiki::Func::getPreferencesValue('STYLEBUTTONS') ||
     $defaultStyleButtons;
   $prefStyleButtons =~ s/^\s*(.*)\s*$/$1/go;
-  if ($theStyleButtons) {
+  if ($theStyleButtons && !$isFinalButtons) {
     $theStyleButtons =~ s/^\s*(.*)\s*$/$1/go;
     $doStickyButtons = 1 if $theStyleButtons ne $prefStyleButtons;
   } else {
@@ -342,12 +376,10 @@ sub initSkinState {
   $skinState{'buttons'} = $theStyleButtons;
 
   # handle sidebar 
-  my $prefStyleSideBar =
-    &TWiki::Func::getSessionValue('NATSKIN_STYLESIDEBAR') ||
-    &TWiki::Func::getPreferencesValue('STYLESIDEBAR') ||
+  my $prefStyleSideBar = &TWiki::Func::getPreferencesValue('STYLESIDEBAR') ||
     $defaultStyleSideBar;
   $prefStyleSideBar =~ s/^\s*(.*)\s*$/$1/go;
-  if ($theStyleSideBar) {
+  if ($theStyleSideBar && !$isFinalSideBar) {
     $theStyleSideBar =~ s/^\s*(.*)\s*$/$1/go;
     $doStickySideBar = 1 if $theStyleSideBar ne $prefStyleSideBar;
   } else {
@@ -358,12 +390,10 @@ sub initSkinState {
   $skinState{'sidebar'} = $theStyleSideBar;
 
   # handle searchbox
-  my $prefStyleSearchBox =
-    &TWiki::Func::getSessionValue('NATSKIN_STYLESEARCHBOX') ||
-    &TWiki::Func::getPreferencesValue('STYLESEARCHBOX') ||
+  my $prefStyleSearchBox = &TWiki::Func::getPreferencesValue('STYLESEARCHBOX') ||
     $defaultStyleSearchBox;
   $prefStyleSearchBox =~ s/^\s*(.*)\s*$/$1/go;
-  if ($theStyleSearchBox) {
+  if ($theStyleSearchBox && !$isFinalSearchBox) {
     $theStyleSearchBox =~ s/^\s*(.*)\s*$/$1/go;
     $doStickySearchBox = 1 if $theStyleSearchBox ne $prefStyleSearchBox;
   } else {
@@ -374,12 +404,10 @@ sub initSkinState {
   $skinState{'searchbox'} = $theStyleSearchBox;
 
   # handle variation 
-  my $prefStyleVariation =
-    &TWiki::Func::getSessionValue('NATSKIN_STYLEVARIATION') ||
-    &TWiki::Func::getPreferencesValue('STYLEVARIATION') ||
+  my $prefStyleVariation = &TWiki::Func::getPreferencesValue('STYLEVARIATION') ||
     $defaultVariation;
   $prefStyleVariation =~ s/^\s*(.*)\s*$/$1/go;
-  if ($theStyleVariation) {
+  if ($theStyleVariation && !$isFinalVariation) {
     $theStyleVariation =~ s/^\s*(.*)\s*$/$1/go;
     $doStickyVariation = 1 if $theStyleVariation ne $prefStyleVariation;
   } else {
@@ -397,7 +425,7 @@ sub initSkinState {
   $skinState{'variation'} = $theStyleVariation;
 
   # cycle styles
-  if ($theSwitchVariation) {
+  if ($theSwitchVariation && !$isFinalVariation) {
     $theSwitchVariation = lc $theSwitchVariation;
     $doStickyVariation = 1;
     my $state = 0;
@@ -451,17 +479,17 @@ sub initSkinState {
   }
 
   # store sticky state into session
-  &TWiki::Func::setSessionValue('NATSKIN_SKINSTYLE', $skinState{'style'}) 
+  &TWiki::Func::setSessionValue('SKINSTYLE', $skinState{'style'}) 
     if $doStickyStyle;
-  &TWiki::Func::setSessionValue('NATSKIN_STYLEBORDER', $skinState{'border'})
+  &TWiki::Func::setSessionValue('STYLEBORDER', $skinState{'border'})
     if $doStickyBorder;
-  &TWiki::Func::setSessionValue('NATSKIN_STYLEBUTTONS', $skinState{'buttons'})
+  &TWiki::Func::setSessionValue('STYLEBUTTONS', $skinState{'buttons'})
     if $doStickyButtons;
-  &TWiki::Func::setSessionValue('NATSKIN_STYLESIDEBAR', $skinState{'sidebar'})
+  &TWiki::Func::setSessionValue('STYLESIDEBAR', $skinState{'sidebar'})
     if $doStickySideBar;
-  &TWiki::Func::setSessionValue('NATSKIN_STYLEVARIATION', $skinState{'variation'})
+  &TWiki::Func::setSessionValue('STYLEVARIATION', $skinState{'variation'})
     if $doStickyVariation;
-  &TWiki::Func::setSessionValue('NATSKIN_STYLESEARCHBOX', $skinState{'searchbox'})
+  &TWiki::Func::setSessionValue('STYLESEARCHBOX', $skinState{'searchbox'})
     if $doStickySearchBox;
   &TWiki::Func::setSessionValue('TABLEATTRIBUTES', $tablePluginAttrs);
 
@@ -480,9 +508,8 @@ sub initSkinState {
 # $_[0] - The text
 # $_[1] - The topic
 # $_[2] - The web
-sub commonTagsHandler
-{
-  #writeDebug("commonTagsHandler called");
+sub commonTagsHandler {
+  writeDebug("commonTagsHandler called");
   &initSkinState(); # this might already be too late but there is no
                     # handler between initPlugin and beforeCommonTagsHandler
 		    # which only matters if you've got a SessionPlugin and the 
@@ -523,7 +550,7 @@ sub commonTagsHandler
   # implementing this stuff again for maximum backwards compatibility
   $_[0] =~ s/%NATREVISIONS%/&renderRevisions()/geo;
   $_[0] =~ s/%PREVREV%/'1.' . &getPrevRevision()/geo;
-  $_[0] =~ s/%CURREV%/'1.' . &getCurRevision($web, $topic)/geo; 
+  $_[0] =~ s/%CURREV%/'1.' . &getCurRevision($currentWeb, $currentTopic)/geo; 
   $_[0] =~ s/%NATMAXREV%/1.$maxRev/go;
 
   # spam obfuscator
@@ -544,6 +571,7 @@ sub commonTagsHandler
     $useSpamObfuscator = $oldUseSpamObfuscator;
   }
   $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
+  $_[0] =~ s/%WEBCOMPONENT{(.*?)}%/&renderWebComponent($1)/geo;
   $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
 
 }
@@ -601,8 +629,8 @@ sub renderIfAccess {
     &TWiki::Func::extractNameValuePair($args, 'else_args') || '';
 
 
-  my $theTopic = $topic;
-  my $theWeb = $web;
+  my $theTopic = $currentTopic;
+  my $theWeb = $currentWeb;
 
   if ($theWebTopic =~ /^(.*)\.(.*)$/) {
     $theWeb = $1;
@@ -670,6 +698,7 @@ sub renderIfSkinStateThen {
   my $theRelease = lc &TWiki::Func::extractNameValuePair($args, 'release');
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action');
   my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
+  my $theFinal = &TWiki::Func::extractNameValuePair($args, 'final');
 
   $before = '' if ($theGlue eq 'on') || !$before;
   $after = '' if ($theGlue eq 'on') || !$after;
@@ -677,7 +706,6 @@ sub renderIfSkinStateThen {
   #writeDebug("theStyle=$theStyle");
   #writeDebug("theThen=$theThen");
   #writeDebug("theElse=$theElse");
-
 
   # SMELL get a ifSkinStateTImpl
   if ((!$theStyle || $skinState{'style'} =~ /$theStyle/) &&
@@ -687,10 +715,11 @@ sub renderIfSkinStateThen {
       (!$theSearchBox || $skinState{'searchbox'} =~ /$theSearchBox/) &&
       (!$theVariation || $skinState{'variation'} =~ /$theVariation/) &&
       (!$theRelease || $skinState{'release'} =~ /$theRelease/) &&
-      (!$theAction || $skinState{'action'} =~ /$theAction/)) {
+      (!$theAction || $skinState{'action'} =~ /$theAction/) &&
+      (!$theFinal || grep(/$theFinal/, @{$skinState{'final'}}))) {
     #writeDebug("match then");
     if ($theThen =~ s/\$nop//go) {
-      $theThen = TWiki::Func::expandCommonVariables($theThen, $topic, $web);
+      $theThen = TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
     }
     return $before.$theThen.$after if $theThen;
   } else {
@@ -700,7 +729,7 @@ sub renderIfSkinStateThen {
     } else {
       #writeDebug("match else");
       if ($theElse =~ s/\$nop//go) {
-	$theElse = TWiki::Func::expandCommonVariables($theElse, $topic, $web);
+	$theElse = TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
       }
       return $before.$theElse.$after if $theElse;
     }
@@ -727,6 +756,7 @@ sub renderIfSkinState {
   my $theRelease = lc &TWiki::Func::extractNameValuePair($args, 'release');
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action');
   my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
+  my $theFinal = &TWiki::Func::extractNameValuePair($args, 'final');
 
 
   #writeDebug("called renderIfSkinState($args)");
@@ -738,7 +768,7 @@ sub renderIfSkinState {
   $before = '' if ($theGlue eq 'on') || !$before;
   $after = '' if ($theGlue eq 'on') || !$after;
 
-  # SMELL get a ifSkinStateTImpl
+  # SMELL do a ifSkinStateImpl
   if ((!$theStyle || $skinState{'style'} =~ /$theStyle/) &&
       (!$theBorder || $skinState{'border'} =~ /$theBorder/) &&
       (!$theButtons || $skinState{'buttons'} =~ /$theButtons/) &&
@@ -746,7 +776,8 @@ sub renderIfSkinState {
       (!$theSearchBox || $skinState{'searchbox'} =~ /$theSearchBox/) &&
       (!$theVariation || $skinState{'variation'} =~ /$theVariation/) &&
       (!$theRelease || $skinState{'release'} =~ /$theRelease/) &&
-      (!$theAction || $skinState{'action'} =~ /$theAction/)) {
+      (!$theAction || $skinState{'action'} =~ /$theAction/) &&
+      (!$theFinal || grep(/$theFinal/, @{$skinState{'final'}}))) {
 
     &escapeParameter($theThen);
     #writeDebug("match");
@@ -829,18 +860,18 @@ sub renderUserActions {
     $theRaw = $query->param('raw');
   }
 
-  my $rev = &getCurRevision($web, $topic, $curRev);
+  my $rev = &getCurRevision($currentWeb, $currentTopic, $curRev);
 
   my $rawAction;
   if ($theRaw) {
     $rawAction =
       '<a href="' . 
-      &TWiki::Func::getScriptUrl($web, $topic, "view") . 
+      &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "view") . 
       "?rev=1.$rev\" accesskey=\"r\">View</a>";
   } else {
     $rawAction =
       '<a href="' .  
-      &TWiki::Func::getScriptUrl($web, $topic, "view") .  
+      &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "view") .  
       "?raw=on&rev=1.$rev\" accesskey=\"r\">Raw</a>";
   }
   
@@ -852,8 +883,8 @@ sub renderUserActions {
       '<strike>Attach</strike> | ' .
       '<strike>Move</strike> | ';
   } else {
-    #writeDebug("get WHITEBOARD from $web.$topic");
-    my $whiteBoard = _getValueFromTopic($web, $topic, 'WHITEBOARD') || '';
+    #writeDebug("get WHITEBOARD from $currentWeb.$currentTopic");
+    my $whiteBoard = _getValueFromTopic($currentWeb, $currentTopic, 'WHITEBOARD') || '';
     $whiteBoard =~ s/^\s*(.*?)\s*$/$1/g;
     my $editUrlParams = '';
     my $useWysiwyg = &TWiki::Func::getPreferencesFlag('USEWYSIWYG');
@@ -864,22 +895,22 @@ sub renderUserActions {
     }
     $text = 
       '<a rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($web, $topic, "edit") 
+      . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "edit") 
       . '?t=' . time() 
       . $editUrlParams
       . '" accesskey="e">Edit</a> | ' .
       '<a rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($web, $topic, "attach") 
+      . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "attach") 
       . '" accesskey="a">Attach</a> | ' .
       '<a rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($web, $topic, "rename")
+      . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "rename")
       . '" accesskey="m">Move</a> | ';
   }
 
   $text .=
       $rawAction . ' | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($web, $topic, "oops") . '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d">Diffs</a> | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($web, $topic, "oops") . '?template=oopsmore" accesskey="x">More</a>';
+      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "oops") . '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d">Diffs</a> | ' .
+      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "oops") . '?template=oopsmore" accesskey="x">More</a>';
 
 
   return $text;
@@ -910,8 +941,8 @@ sub renderMySideBar {
   $text =~ s/\s*$//;
 
   #writeDebug("text='$text'");
-  $text = &TWiki::Func::expandCommonVariables($text, $topic, $web);
-  $text = &TWiki::Func::renderText($text, $web);
+  $text = &TWiki::Func::expandCommonVariables($text, $currentTopic, $currentWeb);
+  $text = &TWiki::Func::renderText($text, $currentWeb);
 
   # ignore permission warnings here ;)
   $text =~ s/No permission to read.*//g;
@@ -920,47 +951,62 @@ sub renderMySideBar {
 }
 
 ###############################################################################
+# deprecated: use WEBCOMPONENT instread
 sub renderWebSideBar {
 
-  #writeDebug("called renderWebSideBar()");
+  return '' if $skinState{'sidebar'} eq 'off';
+  return getWebComponent('WebSideBar')."\n"; # extra linefeed
+}
 
-  if ($skinState{'sidebar'} eq 'off') {
-    return '';
-  }
+###############################################################################
+sub renderWebComponent {
+  my $args = shift;
+
+  my $theComponent = &TWiki::Func::extractNameValuePair($args);
+  my $name = lc $theComponent;
+  $name =~ s/^currentWeb//o;
+
+  return '' if $skinState{$name} && $skinState{$name} eq 'off';
+
+  my $text = getWebComponent($theComponent);
+  $text .= "\n" if $name eq 'sidebar'; # SMELL: extra linefeed hack for sidebars
+
+  return $text
+}
+
+###############################################################################
+sub getWebComponent {
+  my $component = shift;
+
+  #writeDebug("called getWebComponent($component)");
 
   # get sidebar for web
   my $text;
   my $meta;
   my $theWeb;
-  if (&TWiki::Func::topicExists($web, 'WebSideBar')) {
-    ($meta, $text) = &TWiki::Func::readTopic($web, 'WebSideBar');
-    $theWeb = $web;
+  if (&TWiki::Func::topicExists($currentWeb, $component)) {
+    ($meta, $text) = &TWiki::Func::readTopic($currentWeb, $component);
+    $theWeb = $currentWeb;
   } else {
     $theWeb = &TWiki::Func::getTwikiWebname ();
-    ($meta, $text) = &TWiki::Func::readTopic($theWeb, 'WebSideBar');
+    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $component);
   }
 
-  #writeDebug("renderWebSideBar() from $theWeb.WebSideBar");
-
-  # extract INCLUD area
+  # extract INCLUDE area
   if ($text =~ /%STARTINCLUDE%(.*?)%STOPINCLUDE%/gs) {
     $text = $1;
   }
-  $text =~ s/^\s+//;
-  $text =~ s/\s+$//;
-
-  #writeDebug("expandCommonVariables(text,$topic,$web)");
-  #writeDebug("text=$text");
-  $text = &TWiki::Func::expandCommonVariables($text, 'WebSideBar', $theWeb);
-  #writeDebug("renderText(text,$theWeb");
-  $text = &TWiki::Func::renderText($text, $theWeb, 'WebSideBar');
+  $text =~ s/^\s*//;
+  $text =~ s/\s*$//;
+  $text = &TWiki::Func::expandCommonVariables($text, $component, $currentWeb);
+  $text = &TWiki::Func::renderText($text, $currentWeb, $component);
 
   # ignore permission warnings here ;)
   $text =~ s/No permission to read.*//g;
 
-  #writeDebug("done renderWebSideBar()");
+  #writeDebug("done getWebComponent()");
 
-  return $text."\n";
+  return $text;
 }
 
 ###############################################################################
@@ -981,11 +1027,11 @@ sub ifDefinedImpl {
     if ($theVariable =~ /^%([A-Z]+)%$/) {
       my $varName = $1;
       if ($isBeijing) {
-	my $topicText = &TWiki::Func::readTopic($web, $topic);
-	$theVariable = &_getValueFromTopic($web, $topic, $varName, $topicText);
+	my $topicText = &TWiki::Func::readTopic($currentWeb, $currentTopic);
+	$theVariable = &_getValueFromTopic($currentWeb, $currentTopic, $varName, $topicText);
 	$theVariable =~ s/^\s+//;
 	$theVariable =~ s/\s+$//;
-	$theVariable = &TWiki::Func::expandCommonVariables($theVariable, $topic, $web);
+	$theVariable = &TWiki::Func::expandCommonVariables($theVariable, $currentTopic, $currentWeb);
 	$theThen =~ s/%$varName%/$theVariable/g;# SMELL: do we need to backport topic vars?
       } else {
 	return $before.$theElse.$after unless $theElsIfArgs;
@@ -1050,7 +1096,7 @@ sub renderWebLink {
   my $args = shift || '';
 
   my $theWeb = &TWiki::Func::extractNameValuePair($args) || 
-    &TWiki::Func::extractNameValuePair($args, 'web') || $web;
+    &TWiki::Func::extractNameValuePair($args, 'web') || $currentWeb;
   my $theName =
     &TWiki::Func::extractNameValuePair($args, 'name') || $theWeb;
 
@@ -1082,7 +1128,7 @@ sub renderGroupSummary
 
   my %usersEmail;
   my @emailAddrs;
-  my @users = &TWiki::Access::getUsersOfGroup($topic); # FIXME on dakar
+  my @users = &TWiki::Access::getUsersOfGroup($currentTopic); # FIXME on dakar
 
   if ("@users" =~ /%ALLUSERS%/) {
     @users = getAllUsers();
@@ -1101,7 +1147,7 @@ sub renderGroupSummary
 
   my %adminsEmail;
   my @adminAddrs;
-  my $value = _getValueFromTopic($web, $topic, "ALLOWTOPICCHANGE", $text);
+  my $value = _getValueFromTopic($currentWeb, $currentTopic, "ALLOWTOPICCHANGE", $text);
   foreach my $admin (split(/[\,\s]+/, $value)) {
     if ($admin =~ /Group$/) {
       foreach my $admin (&TWiki::Access::getUsersOfGroup($admin)) { # FIXME on dakar
@@ -1177,7 +1223,7 @@ sub renderGroupSummary
 sub renderLogon {
 
   my $dispUser = "";
-  my $logonScriptUrl = &TWiki::Func::getScriptUrl($web, $topic, "natlogon");
+  my $logonScriptUrl = &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "natlogon");
   if ($isGuest) {
     my $registerUrl = &TWiki::Func::getScriptUrl(&TWiki::Func::getTwikiWebname(), "TWikiRegistration", "view");
     if ($TWiki::doEncryptConnection) { # FIXME
@@ -1197,9 +1243,9 @@ sub renderLogon {
     my $logoutWeb = $mainWeb;
     my $logoutTopic = 'WebHome';
     if (&TWiki::Func::checkAccessPermission('VIEW', $defaultWikiUserName, '', 
-      $topic, $web)) {
-      $logoutWeb = $web;
-      $logoutTopic = $topic;
+      $currentTopic, $currentWeb)) {
+      $logoutWeb = $currentWeb;
+      $logoutTopic = $currentTopic;
     }
 
     $dispUser .= '<a href="' 
@@ -1383,7 +1429,7 @@ sub renderFormatList {
   my $theExclude = &TWiki::Func::extractNameValuePair($args, 'exclude') || '';
 
   &escapeParameter($theList);
-  $theList = &TWiki::Func::expandCommonVariables($theList, $topic, $web);
+  $theList = &TWiki::Func::expandCommonVariables($theList, $currentTopic, $currentWeb);
 
   #writeDebug("thePattern='$thePattern'");
   #writeDebug("theFormat='$theFormat'");
@@ -1460,7 +1506,7 @@ sub renderFormButton {
   my $theFormat = &TWiki::Func::extractNameValuePair($args) ||
 		  &TWiki::Func::extractNameValuePair($args, 'format');
 
-  my ($meta, $dumy) = &TWiki::Func::readTopic($web, $topic);
+  my ($meta, $dumy) = &TWiki::Func::readTopic($currentWeb, $currentTopic);
   my $formMeta = &getMetaData($meta, "FORM"); 
   my $form = '';
   $form = $formMeta->{"name"} if $formMeta;
@@ -1478,7 +1524,7 @@ sub renderFormButton {
   }
   if ($form) {
     $actionText = 'Change form';
-  } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $web)) {
+  } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $currentWeb)) {
     $actionText = 'Add form';
   } else {
     return '';
@@ -1549,7 +1595,7 @@ sub renderRevisions {
   $rev1 = $query->param("rev1") if $query;
   $rev2 = $query->param("rev2") if $query;
 
-  my $topicExists = &TWiki::Func::topicExists($web, $topic);
+  my $topicExists = &TWiki::Func::topicExists($currentWeb, $currentTopic);
   if ($topicExists) {
     
     $rev1 = 0 unless $rev1;
@@ -1564,10 +1610,10 @@ sub renderRevisions {
 
     $revTitle1 = "r1.$rev1";
     
-    $revInfo1 = getRevInfo($web, $rev1, $topic);
+    $revInfo1 = getRevInfo($currentWeb, $rev1, $currentTopic);
     if ($rev1 != $rev2) {
       $revTitle2 = "r1.$rev2";
-      $revInfo2 = getRevInfo($web, $rev2, $topic);
+      $revInfo2 = getRevInfo($currentWeb, $rev2, $currentTopic);
     }
 
     #writeDebug("revInfo1=$revInfo1, revInfo2=$revInfo2, revTitle1=$revTitle1, revTitle2=$revTitle2");

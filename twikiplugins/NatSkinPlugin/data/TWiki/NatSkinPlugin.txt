@@ -54,9 +54,13 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
 ---++ Syntax Rules
 | *Tag* | *Desciption* |
 | =%<nop>WEBSIDEBAR%= \
-| displays the left navigation menu using the WebSideBar topic |
+| displays the left navigation menu using the WebSideBar topic (deprecated, use WEBCOMPONENT) |
 | =%<nop>MYSIDEBAR%= \
 | display a personalized WebSideBar for the user currently logged in |
+| =%<nop>WEBCOMPONENT{"name"}%= \
+| display a web component found in the current web or, if not present, in the %TWIKIWEB%, \
+  e.g. use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to replace the deprecated =%<nop>WEBSIDEBAR%= \
+  tag; use %<nop>WEBCOMPONENT{"WebButtons"}% to display the WebButtons respectively |
 | =%<nop>WEBLINK{web="..." name="..."}%= \
 | display a link to a WebHome with the given name and add the SITEMAPUSEDTO description to \
   to the hover balloon |
@@ -104,6 +108,13 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
 			is beijing, cairo or dakar </li>\
 	 <li> =action="view,edit,preview,..."=: test the current topic action </li> \
 	 <li> =glue="on,off"=: control wether to eat surrounding whitespaces or not </li> \
+	 <li> =final="&lt;name>=": test if a skin state variable \
+	      called &lt;name> is set to be changeable \
+	      or not using the the FINALPREFERENCES setting; \
+	      known names are are "style", "sidebar", "buttons", "border", "variation" or "searchbox"; \
+	      "all" tests wether you can vary the skin at all; "switches" tests of you can change at least one \
+	      of "sidebar", "buttons", "border" or "searchbox" \
+	 </li> \
   </ul> \
   The tag will render the "then" content if all tests evaluate to true and \
   the "else" content otherwise. Tested strings can be regular expressions. |
@@ -203,6 +214,17 @@ is used. Each user might define a personalized WebSideBar called =%<nop>WIKINAME
 appended to the WebSideBar. The TWiki:Plugins/RedDotPlugin is used to make customizing the WebSideBar
 easier appended to the different parts that make up the complete sidebar. These are hidden if
 you don't have write access to the respective topic fragments.
+
+---++ About the WebButtons
+
+The WebButtons are used to render the button toolbar at the top of the page when the =STYLEBUTTONS=
+setting is set to ="on"=.
+The WebButtons are an unordered list of
+those links that should be visible there. There exists one WebButtons topic by default in the 
+%TWIKIWEB% web. You can define a WebButtons topic per web overwriting the settings in the
+<nop>%TWIKIWEB%.WebButtons topic. If you do not define a WebButtons topic in a web then the
+default one will be used displaying a set of links to all public webs in your <nop>%WIKITOOLNAME%
+installation.
 
 ---++ About Logon &amp; Logout
 
@@ -322,8 +344,10 @@ By default this value is set to "off"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.91 (2005-12-01) |
+|  Plugin Version: | v2.92 (2005-12-05) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Dec 2005: | skin state variables respect FINALPREFERENCES settings; \
+                  added WEBCOMPONENT |
 |  01 Dec 2005: | added tooltips to topic actions |
 |  29 Nov 2005: | fixed warning about using the deprecated endRenderingHandler on dakar |
 |  23 Nov 2005: | added $nop to IFSKINSTATETHEN content |
@@ -366,5 +390,5 @@ By default this value is set to "off"
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 01 Dec 2005 
+-- TWiki:Main.MichaelDaum - 05 Dec 2005 
 

@@ -7,7 +7,7 @@
 
 <!-- A basic row definition, for attachment table and attach screen -->
 %TMPL:DEF{ATTACH:files:row(basic)}%
-| %A_ICON% | <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURL%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=%A_FILE%&revInfo=1" title="manage properties of <nop>%A_FILE%" rel='nofollow'>props</a>, <a href="%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%A_FILE%" title="move or delete <nop>%A_FILE%" rel='nofollow'>move</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
+| %A_ICON% | <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=%A_FILE%&revInfo=1" title="manage properties of <nop>%A_FILE%" rel='nofollow'>props</a>, <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%A_FILE%" title="move or delete <nop>%A_FILE%" rel='nofollow'>move</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
 
 <!-- Header for topic attachment table -->
 %TMPL:DEF{ATTACH:files:header}%

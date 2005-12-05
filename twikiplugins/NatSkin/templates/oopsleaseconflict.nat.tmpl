@@ -21,19 +21,21 @@ attached to the topic.  If they _do_ save while you are editing, your changes
 will be merged with theirs. Form data cannot easily be merged, so in this case
 you are recommended to check with them first.
 
-   * To edit the topic anyway, hit 'Edit&nbsp;Anyway'.
-   * To see if they have finished their edit yet, click 'Try&nbsp;Again'
-   * If unsure, click 'Cancel'.
+<ul>
+  <li> To edit the topic anyway, hit 'Edit&nbsp;Anyway'. </li>
+  <li> To see if they have finished their edit yet, click 'Try&nbsp;Again' </li>
+  <li> If unsure, click 'Cancel'. </li>
+</ul>
 
 <table border="0"><tr>
-<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <td valign="top">
   <input type="hidden" name="breaklock" value="on" />
   <input type="submit" style="color:red" value="Edit Anyway" />
 %QUERYPARAMS% 
 </td> 
 </form>
-<form class="natOopsButtons" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form class="natOopsButtons" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <td valign="top">
   <input type="submit" style="color:blue" value="Try Again" />
 %QUERYPARAMS% 

@@ -6,7 +6,7 @@
 %TMPL:DEF{"message"}%
 <table border="0">
 ---++ Set Parent Topic</td> </tr>
-<form name="main" action="%EDITURL%">
+<form name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <tr>
   <td style="padding-left:20px"> <select name="topicparent"><option value="">Select...</option>
      %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%

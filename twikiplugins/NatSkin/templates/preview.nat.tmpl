@@ -3,14 +3,12 @@
 %TMPL:INCLUDE{"previewbody"}% 
 %TMPL:INCLUDE{"previewtopicactions"}% 
 %TMPL:INCLUDE{"previewsidebar"}% 
+%TMPL:INCLUDE{"previewjavascript"}%
+%TMPL:INCLUDE{"previewstyles"}%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (preview)%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%<b>%TOPIC%</b></span>%TMPL:END%
 %TMPL:DEF{"content"}% %TEXT%
-<style type="text/css">
-.natMainContents {
-  background-image:url('%PUBURL%/%TWIKIWEB%/NatSkin/previewbg.png');
-</style>
 %META{"form"}%
 <form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
   %IFSKINSTATETHEN{release="cairo"}%

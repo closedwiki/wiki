@@ -3,6 +3,8 @@
 %TMPL:INCLUDE{"oopsbody"}%
 %TMPL:INCLUDE{"oopstopicactions"}%
 %TMPL:INCLUDE{"oopssidebar"}%
+%TMPL:INCLUDE{"oopsjavascript"}%
+%TMPL:INCLUDE{"oopsstyles"}%
 %TMPL:DEF{"title"}%%TOPIC% (oops)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"locator"}% %TMPL:END%
@@ -20,11 +22,6 @@ if you have any questions.
   <input type="submit" style="color:red" value="Cancel">
 </form> %TMPL:END%
 %TMPL:DEF{"content"}%
-<style type="text/css">
-.natMain h1, .natMain h2, .natMain h3, .natMain h4, .natMain h5, .natMain h6 {
-  border-bottom:0px;
-}
-</style>
 %IFSKINSTATETHEN{release="dakar"}%
 <img src="%WIKILOGOIMG%" alt="%WIKILOGOALT%" align="right" vspace="20px"/>
 %ELSESKINSTATE%

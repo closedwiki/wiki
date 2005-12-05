@@ -26,6 +26,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* debug
+.natPageBox,
 .natBody, .natBodyContents			{ border: 1px solid green }
 .natWebTitle, .natSearchBox,
 .natTopBar, .natTopBarContents, 
@@ -53,6 +54,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 .natBodyContents {
   text-align:left;
+}
+.natBoxBorderRight,
+.natBoxBorderTopRight,
+.natBoxBorderBottomRight {
+  width:1px;
 }
 .natLayoutTable {
   table-layout:fixed;
