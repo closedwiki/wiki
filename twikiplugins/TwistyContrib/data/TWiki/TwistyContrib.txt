@@ -11,10 +11,10 @@ To use the libraries, you must place the following scriplet either in the head s
 
 <verbatim>
 <style type="text/css" media="all">
-@import url("%PUBURL%/TWiki/TwistyContrib/twist.css");
+@import url("%PUBURLPATH%/TWiki/TwistyContrib/twist.css");
 </style>
 
-<script type="text/javascript" src="%PUBURL%/TWiki/TwistyContrib/twist.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/TWiki/TwistyContrib/twist.js"></script>
 </verbatim>
 
 It's recommended to use the TWiki:Plugins.TwistyPlugin, as it eases the deployment and use of this contrib.
@@ -48,10 +48,10 @@ Skins can customize the color of the twisti placeholder by modifiying the =.twis
 If the contrib is properly installed (and Javascript is enabled in your browser!), then you should see some folding sections below. Look at [[%SCRIPTURL{"view"}%/%WEB%.%TOPIC%?raw=on]] to see how it's done.
 
 <style type="text/css" media="all">
-@import url("%PUBURL%/TWiki/TwistyContrib/twist.css");
+@import url("%PUBURLPATH%/TWiki/TwistyContrib/twist.css");
 </style>
 
-<script type="text/javascript" src="%PUBURL%/TWiki/TwistyContrib/twist.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/TWiki/TwistyContrib/twist.js"></script>
 
 
 <span id="demoshow" class="twistyHidden">
