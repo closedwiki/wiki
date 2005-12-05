@@ -1,0 +1,27 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% %_{"(change language)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%%TMPL:END%
+%TMPL:DEF{"heading"}%%_{"Change language"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}% <a name="Actions"> </a> <div class="patternTopicAction"><span class="patternActionButtons"> %TMPL:P{"canceltopicaction"}% </span></div>   %TMPL:END%
+
+%TMPL:DEF{"languagenotes"}%
+%ICON{info}% %_{"You can set your favourite language permanently by setting the [_1] variable in your user topic.", "*LANGUAGE*"}%
+%TMPL:END%
+
+%TMPL:DEF{"message"}%
+
+%_{"TWiki's user interface is available in several languages. If you want to change the language for this session, choose one of the following and hit \"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of the page to return to the previous topic."}%
+
+<center>
+<form action="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%" method="get">
+  <select name="language">
+    %LANGUAGES{format="<option value='$langtag'>$langname</option>"}%
+  </select>
+  <input type="hidden" name="template" value="oopslanguagechanged"/>
+  <input type="submit" class="twikiSubmit" value=' %_{"Change language"}% ' />
+</form>
+</center>
+
+%TMPL:P{"languagenotes"}%
+%TMPL:END%
+%TMPL:P{"oops"}%

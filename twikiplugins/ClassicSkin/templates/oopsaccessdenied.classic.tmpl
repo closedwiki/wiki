@@ -1,0 +1,47 @@
+%{ Templates for access denied messages. One DEF is selected and inserted at %INSTANTIATE }%
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%%_{"(oops)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% *%_{"Attention"}%* %TMPL:END%
+%TMPL:DEF{"heading"}%%_{"Access Denied"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%MAINWEB%.%HOMETOPIC%][%_{"OK"}%]] %TMPL:END%
+%TMPL:DEF{"topic_access"}%
+%_{"Access check on [_1] failed", "<nop>%WEB%.<nop>%TOPIC%"}%.
+%_{"Action [_1]: [_2].", "*\"%PARAM1%\"*", "%PARAM2%"}%
+
+%_{"Contact [_1] if you have any questions.", "<a href=\"mailto:%WIKIWEBMASTER%?subject=%PARAM1%&#32;access&#32;denied&#32;for&#32;'%WEB%.%TOPIC%'\">%WIKIWEBMASTER%</a>"}%
+
+
+__%_{"Related topics:"}%__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%
+%TMPL:DEF{"only_group"}%
+%_{"Only members of the [_1] are allowed to perform this action.", "%PARAM1%"}%
+
+%_{"Contact [_1] if you have any questions.", "<a href=\"mailto:%WIKIWEBMASTER%?subject=Access&#32;Denieds&#32;fors&#32;'%WEB%.%TOPIC%',s&#32;needs&#32;'%PARAM1%'\">%WIKIWEBMASTER%</a>"}%
+
+
+__%_{"Related topics:"}%__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+%TMPL:END%
+%TMPL:DEF{"no_such_web"}%
+---++ %_{"The [_1] web does not exist", "\"%WEB%\""}%
+%_{"A [_1] is divided into webs; each one represents one subject, one area of collaboration. You are trying to [_2] in a web that does not exist.", "%TWIKIWEB%.TWikiSite", "'%PARAM1%'"}%
+
+---+++ %_{"If you came here by clicking on a question mark link"}%
+<blockquote>
+%_{"A link to a topic located in another web is written like [_1]. Make sure that the name of the web is not spelt wrongly on the previous page; fix the link if necessary.", "*Otherweb.<nop>TopicName*"}%
+</blockquote>
+
+---+++ %_{"If you would like to create this web"}%
+%_{"You can ~[~[[_1]~]~[create a new web~]~] if you have permission. Contact [_2] if you have any questions.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingWebs?newweb=%WEB%;newtopic=%TOPIC%#CreateNewWeb", "%WIKIWEBMASTER%"}%
+%TMPL:END%
+%TMPL:DEF{"no_such_topic"}%
+---++ %_{"[_1] topic does not exist", "\"%WEB%.%TOPIC%\""}%
+%_{"You are trying to [_1] a topic that does not exist.", "%PARAM1%"}%
+
+---++ %_{"If you want to create the topic"}%
+[[%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][%_{"Click here"}%]].
+
+%_{"Contact [_1] if you have any questions.", "%WIKIWEBMASTER%"}%
+%TMPL:END%
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%
+%TMPL:P{"oops"}%
