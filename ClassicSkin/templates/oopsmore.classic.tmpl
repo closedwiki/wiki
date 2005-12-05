@@ -4,28 +4,30 @@
 %TMPL:DEF{"heading"}%More Actions on Topic [[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"message"}%
 
-   * *Delete topic:*
-      * *<a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on" rel='nofollow'>Delete topic...</a>*,
-        looking for references in _all public webs_ &nbsp; *(recommended)*
-      * <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on&amp;currentwebonly=on" rel='nofollow'>Delete topic...</a>,
-        looking for references in _%WEB% web_ only
+   * *%MAKETEXT{"Delete topic"}%*
+      * <b><a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on" rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a></b>,
+        %MAKETEXT{"looking for references in _all public webs_"}% *%MAKETEXT{"(recommended)"}%*
+      * <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on&amp;currentwebonly=on" rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a>,
+        %MAKETEXT{"looking for references in _[_1] web_ only" args="%WEB%"}%
 
-   * *Rename or move topic:*
-      * *<a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%" rel='nofollow'>Rename/move topic...</a>*,
-        looking for references in _all public webs_ &nbsp; *(recommended)*
-      * <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?currentwebonly=on" rel='nofollow'>Rename/move topic...</a>,
-        looking for references in _%WEB% web_ only
+   * *%MAKETEXT{"Rename or move topic"}%*
+      * <b><a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%" rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a></b>,
+        %MAKETEXT{"looking for references in _all public webs_"}% *%MAKETEXT{"(recommended)"}%*
+      * <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?currentwebonly=on" rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a>,
+        %MAKETEXT{"looking for references in _[_1] web_ only" args="%WEB%"}%
 
-   * *Backlinks (Ref-by):*
-      * Find topics <a href="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title="Search all webs for topics that link to here">in <nop>%WEB% web</a> that link to <nop>%TOPIC%
-      * Find topics <a href="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search the <nop>%WEB% Web for topics that link to here">in all public webs</a> that link to <nop>%TOPIC%
+   * *%MAKETEXT{"Backlinks"}%* <br/>
+      * <b><a href='%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs' title='%MAKETEXT{"Search all webs for topics that link to here"}%' accesskey='l'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a></b>,
+        %MAKETEXT{"<em>in all public webs</em>"}%
+      * <a href='%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey='w'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a>,
+        %MAKETEXT{"<em>in [_1] web</em> only" args="<nop>%WEB%"}%
 
-   * *Child topics in <nop>%WEB% web:*
-      * %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" default="No child topics"}%
+   * *%MAKETEXT{"Child topics in [_1] web" args="<nop>%WEB%"}%*
+      * %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" default="%MAKETEXT{"No child topics"}%"}%
 
 <form name="main" action="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%">
 <input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
-   * *Set new topic parent:*
+   * *Set new topic parent*
       * Step 1: Select topic parent: %BR%
         <select name="topicparent" size="10">
         <option value="none">none (remove topic parent)</option>
@@ -36,21 +38,20 @@
 </form>
 
 <form name="main" action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%">
-   * *View previous topic revision:*
+   * *%MAKETEXT{"View previous topic revision"}%* (1 ... %PARAM1%)
       * Revision: <input type="text" name="rev" size="6" value="%PARAM2%" />
         in <input type="checkbox" class="twikiCheckbox" id="raw" name="raw" /><label for="raw">raw text format</label>
         <input type="submit" class="twikiSubmit" value="View revision" />
-      * Revisions: 1.1 ... %PARAM1%
 </form>
 
 <form name="main" action="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%">
-   * *Compare revisions:*
-      * Older revision:&nbsp;&nbsp; <input type="text" name="rev2" size="6" value="1.1" />
+   * *Compare revisions*
+      * Older revision: <input type="text" name="rev2" size="6" value="1.1" />
       * Newer revision: <input type="text" name="rev1" size="6" value="%PARAM1%" />
         <input type="submit" class="twikiSubmit" value="View difference" />
 </form>
 
-   * *Edit topic preference settings:*
+   * *Edit topic preference settings*
       * <a href="%SCRIPTURL{"manage"}%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic %TMPL:END%
 %TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 %TMPL:P{"oops"}%
