@@ -9,12 +9,17 @@
 <link rel="icon" href="%FAVICON%" type="image/x-icon" /> 
 <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 %GETSKINSTYLE%
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
-<script type="text/javascript" charset="ISO-8859-1">
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<!-- template javascript -->
+<script type="text/javascript">
 <!--
-%TMPL:INCLUDE{"javascript"}%
+%TMPL:P{"javascript"}%
 //-->
 </script>
+<!-- template styles -->
+<style type="text/css">
+%TMPL:P{"styles"}%
+</style>
 </head>
 <body class="natBody">%TMPL:P{"body"}%</body>
 </html>
@@ -23,3 +28,5 @@
 %TMPL:INCLUDE{"defaultsidebar"}%
 %TMPL:INCLUDE{"defaulttopicactions"}%
 %TMPL:INCLUDE{"defaulttopbar"}%
+%TMPL:INCLUDE{"defaultjavascript"}%
+%TMPL:INCLUDE{"defaultstyles"}%

@@ -75,8 +75,17 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.91 (2005-12-01) |
+|  Skin Version: | v2.92 (2005-12-05) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-12-05: | componentized template system adding javascript and styles components; \
+		 removed inline-styles and -javascript and moved it to the respective components \
+		 being inserted into the html header properly now; \
+                 surpressing final skin state switches in the NatSkinStyleBrowser; \
+		 removed absolute urls; removed EDITURL; \
+		 fixed sidebar help for cairo and beijing; \
+		 fixed squeezed main page; \
+		 added the concept of <nop>WebComponents, that is the WebSideBar and the WebButtons; \
+		 the <nop>WebButtons are customizable the way the <nop>WebSideBar already is ; \
 |  2005-12-01: | added transparent borders and corners to the Kubrick style; \
                  improved <nop>PlasticLoveVariation; \
 		 added a custom "cite" style inside blog texts; \
@@ -133,7 +142,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 01 Dec 2005
+-- TWiki:Main/MichaelDaum - 05 Dec 2005
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%

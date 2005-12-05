@@ -4,13 +4,15 @@
 %TMPL:DEF{"message"}%
 There is a possibility that <b> %PARAM1% </b> is editing this topic. <br />
 Please ask the contributor before making changes to this topic.
-   * To look at the text without editing the topic click on the [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw text]].
-   * To edit anyway click on the <a href="%EDITURL%&breaklock=on">Edit anyway</a>. 
-     Note, that this will _break_ the lock&nbsp;%I%
-   * To cancel simply go <a href="javascript:history.back()">back</a> in your browser.
+<ul>
+  <li> To look at the text without editing the topic click on the [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw text]].</li>
+  <li> To edit anyway click on the <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%&breaklock=on">Edit anyway</a>. 
+     Note, that this will _break_ the lock&nbsp;%I%</li>
+  <li> To cancel simply go <a href="javascript:history.back()">back</a> in your browser.</li>
+</ul>
 <form class="natOopsButtons" name="ButtonBox">
-  <input style="color:red" type="button" value="Edit anyway" onclick="window.location.href='%EDITURL%&breaklock=on'">&nbsp;
-  <input type="button" value="View raw" onclick="window.location.href='%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on';">&nbsp;
+  <input style="color:red" type="button" value="Edit anyway" onclick="window.location.href='%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%&breaklock=on'">&nbsp;
+  <input style="color:blue" type="button" value="View raw" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on';">&nbsp;
   <input style="color:green" type="button" value="Cancel" onclick="history.back()">
 </form> 
 %I% __Note:__ Locking gets reset after <b> %PARAM2% </b> minutes of inactivity, 

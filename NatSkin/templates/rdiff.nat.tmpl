@@ -3,16 +3,13 @@
 %TMPL:INCLUDE{"rdiffsidebar"}% 
 %TMPL:INCLUDE{"rdifftopicactions"}% 
 %TMPL:INCLUDE{"rdiffbody"}% 
+%TMPL:INCLUDE{"rdiffjavascript"}%
+%TMPL:INCLUDE{"rdiffstyles"}%
 %TMPL:DEF{"title"}%%TOPIC% (%REVTITLE2% vs. %REVTITLE1%)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"onloadscript"}%focusSearchBox();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}%
-<style type="text/css">
-.natTopRightContents {
-  white-space:normal;
-}
-</style>
 %REPEAT%<table class="twikiTable twikiDiffTable" cellspacing="0" cellpadding="0">
 <th>
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%TOPIC% %REVTITLE1% - %REVINFO1%</a>

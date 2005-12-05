@@ -3,6 +3,8 @@
 %TMPL:INCLUDE{"renamebody"}% 
 %TMPL:INCLUDE{"renamesidebar"}% 
 %TMPL:INCLUDE{"renametopicactions"}% 
+%TMPL:INCLUDE{"renamejavascript"}%
+%TMPL:INCLUDE{"renamestyles"}%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (rename)%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
@@ -12,11 +14,6 @@
 <!--input type="hidden" name="confirm" value="on"-->
 ---+ %TMPL:P{"webaction"}% <nop>%TOPIC%
 
-<style type="text/css">
-.twikiTable {
-  width:auto;
-}
-</style>
 | *&nbsp;* |  *Web:* | *Topic:* |
 |  *From:* |    %WEB% | <nop>%TOPIC% |
 |  *To:* |  %TMPL:P{"newweb"}% | %TMPL:P{"newtopic"}% |

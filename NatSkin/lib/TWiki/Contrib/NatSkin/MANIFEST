@@ -21,7 +21,6 @@ templates/edittext.nat.tmpl 0440
 templates/edittopicactions.nat.tmpl 0440
 templates/form.nat.tmpl 0440
 templates/formtables.nat.tmpl 0440
-templates/javascript.nat.tmpl 0440
 templates/login.nat.tmpl 0440
 templates/mailnotify.nat.tmpl 0440
 templates/moveattachment.nat.tmpl 0440
@@ -69,7 +68,6 @@ templates/oopsrev.nat.tmpl 0440
 templates/oopssave.nat.tmpl 0440
 templates/oopssaveerr.nat.tmpl 0440
 templates/oopssendmailerr.nat.tmpl 0440
-templates/oopssidebar.nat.tmpl 0440
 templates/oopssoftwareerr.nat.tmpl 0440
 templates/oopstopicactions.nat.tmpl 0440
 templates/oopstopicexists.nat.tmpl 0440
@@ -103,6 +101,11 @@ templates/settingstopicactions.nat.tmpl 0440
 templates/view.nat.tmpl 0440
 templates/view.print.nat.tmpl 0440
 templates/viewtopicactions.nat.tmpl 0440
+templates/defaultjavascript.nat.tmpl 0440
+templates/oopsstyles.nat.tmpl 0440
+templates/renamestyles.nat.tmpl 0440
+templates/rdiffstyles.nat.tmpl 0440
+templates/previewstyles.nat.tmpl 0440
 data/Main/NatSkinUserViewTemplate.txt 0440
 data/TWiki/NatSkin.txt 0440
 data/TWiki/NatSkinCss.txt 0440

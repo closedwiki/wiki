@@ -1,4 +1,6 @@
-// vim:set filetype=javascript:
+<!-- template: defaultjavascript.nat.tmpl -->
+<!-- vim:set filetype=javascript: -->
+%TMPL:DEF{"defaultjavascript"}%
 function checkAll(formular, theCheck) {
   var j = 0;
   for( var i = 0; i < document.forms[formular].length; i++ ) {
@@ -94,3 +96,5 @@ function initNatSkin() {
 }
 
 addLoadEvent(initNatSkin);
+%TMPL:END%
+%TMPL:DEF{"javascript"}%%TMPL:P{"defaultjavascript"}%%TMPL:END%

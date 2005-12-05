@@ -1,8 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1133356937" format="1.1" version="1.1"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%<div class="natSkinStyleBrowser">
+%IFSKINSTATETHEN{final="all"}%
+<!-- %RED%all styles and switches are final%ENDCOLOR% -->
+%ELSESKINSTATE%
 <form method="post" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
 <table border="0">
+%IFSKINSTATETHEN{final="style"}% %ELSESKINSTATE%
 <tr><td colspan="3"> *Style:* </td></tr>
 <tr>
 <td><a href="?switchstyle=prev&refresh=on" title="Switch to previous style"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowleft.gif" border="0" alt="prev"/></a></td>
@@ -15,6 +19,8 @@
 </td>
 <td><a href="?switchstyle=next&refresh=on" title="Switch to next style"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="next"/></a></td>
 </tr>
+%FISKINSTATE%
+%IFSKINSTATETHEN{final="variation"}% %ELSESKINSTATE%
 <tr><td colspan="2"> *Variation:* </td></tr>
 <tr><td><a href="?switchvariation=prev&refresh=on" title="Switch to previous variation"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowleft.gif" border="0" alt="prev"/></a></td>
 <td>
@@ -26,23 +32,36 @@
 </td>
 <td><a href="?switchvariation=next&refresh=on" title="Switch to previous variation"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="prev"/></a></td>
 </tr>
+%FISKINSTATE%
+%IFSKINSTATETHEN{final="switches"}% %ELSESKINSTATE%
 <tr><td colspan="3"> *Switches:* </td></tr>
 <tr>
 <td colspan="3">
-   * <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%/>Border On
-   * <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%/>Border Off
-   * <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%/>Thin Layout
-   * <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}%/>Sidebar Left
-   * <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}%/>Sidebar Right
-   * <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%/>Sidebar Off
-   * <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%/>Web Buttons On
-   * <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%/>Web Buttons Off
-   * <input type="radio" name="stylesearchbox" value="top"%IFSKINSTATE{searchbox="top" then=" checked=\"checked\""}%/>Searchbox in topbar
-   * <input type="radio" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%/>Searchbox in pos. 1
-   * <input type="radio" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%/>Searchbox in pos. 2
-   * <input type="radio" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%/>Searchbox in pos. 3
-   * <input type="radio" name="stylesearchbox" value="off"%IFSKINSTATE{searchbox="off" then=" checked=\"checked\""}%/>Searchbox off
+<ul>
+%IFSKINSTATETHEN{final="border"}% %ELSESKINSTATE%
+<li> <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%/>Border On</li>
+<li> <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%/>Border Off</li>
+<li> <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%/>Thin Layout</li>
+%FISKINSTATE%
+%IFSKINSTATETHEN{final="sidebar"}% %ELSESKINSTATE%
+<li> <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}%/>Sidebar Left</li>
+<li> <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}%/>Sidebar Right</li>
+<li> <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%/>Sidebar Off</li>
+%FISKINSTATE%
+%IFSKINSTATETHEN{final="buttons"}% %ELSESKINSTATE%
+<li> <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%/>Web Buttons On</li>
+<li> <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%/>Web Buttons Off</li>
+%FISKINSTATE%
+%IFSKINSTATETHEN{final="searchbox"}% %ELSESKINSTATE%
+<li> <input type="radio" name="stylesearchbox" value="top"%IFSKINSTATE{searchbox="top" then=" checked=\"checked\""}%/>Searchbox in topbar</li>
+<li> <input type="radio" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%/>Searchbox in pos. 1</li>
+<li> <input type="radio" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%/>Searchbox in pos. 2</li>
+<li> <input type="radio" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%/>Searchbox in pos. 3</li>
+<li> <input type="radio" name="stylesearchbox" value="off"%IFSKINSTATE{searchbox="off" then=" checked=\"checked\""}%/>Searchbox off</li>
+%FISKINSTATE%
+</ul>
 </td></tr>
+%FISKINSTATE%
 <tr>
 <td colspan="3" align="center">
 <div style="white-space:nowrap">
@@ -55,7 +74,9 @@
 <input type="hidden" name="search" value="%URLPARAM{search}%" />
 <input type="hidden" name="refresh" value="on" />
 </form>
-</div>%STOPINCLUDE%
+</div>
+%FISKINSTATE%
+%STOPINCLUDE%
 </div>
 
 
