@@ -2623,13 +2623,13 @@ msgid "help"
 msgstr "ayuda"
 
 #: templates/oopsmore.pattern.tmpl:21
-msgid "_in %1 web_ only"
+msgid "<em>in %1 web</em> only"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:23
 #, fuzzy
-msgid "_in all public webs_"
-msgstr "_Buscard todas las webs_"
+msgid "<em>in all public webs</em>"
+msgstr "<em>Buscard todas las webs</em>"
 
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"

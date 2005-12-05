@@ -2805,12 +2805,12 @@ msgid "help"
 msgstr "Hilfe"
 
 #: templates/oopsmore.pattern.tmpl:21
-msgid "_in %1 web_ only"
-msgstr "_im %1 Web_"
+msgid "<em>in %1 web</em> only"
+msgstr "<em>im %1 Web</em>"
 
 #: templates/oopsmore.pattern.tmpl:23
-msgid "_in all public webs_"
-msgstr "_in allen Webs_"
+msgid "<em>in all public webs</em>"
+msgstr "<em>in allen Webs</em>"
 
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"

@@ -2793,12 +2793,12 @@ msgid "help"
 msgstr "ajuda"
 
 #: templates/oopsmore.pattern.tmpl:21
-msgid "_in %1 web_ only"
-msgstr "_na web %1_"
+msgid "<em>in %1 web</em> only"
+msgstr "<em>na web %1</em>"
 
 #: templates/oopsmore.pattern.tmpl:23
-msgid "_in all public webs_"
-msgstr "_globalmente (em todas as webs)_"
+msgid "<em>in all public webs</em>"
+msgstr "<em>globalmente (em todas as webs)</em>"
 
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"
