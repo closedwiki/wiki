@@ -26,9 +26,9 @@
 
 
 %TMPL:DEF{"script"}%
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/PatternSkin/pattern.js"></script>
-%IF{ "context TwistyPluginEnabled" then="" else="<script type='text/javascript' src='%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js'></script>"}%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/pattern.js"></script>
+%IF{ "context TwistyPluginEnabled" then="" else="<script type='text/javascript' src='%PUBURLPATH%/%TWIKIWEB%/TwistyContrib/twist.js'></script>"}%
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {

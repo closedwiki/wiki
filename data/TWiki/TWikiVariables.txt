@@ -47,7 +47,7 @@ Whatever you include in your Variable will be expanded on display, exactly as if
 <blockquote style="background-color:#f9f9f9">
 *Example: Create a custom logo variable* <br />
    * To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences page, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, ex: =LogoTopic= - Sample variable setting in WebPreferences:
-      * ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
+      * ==<nop>Set MYLOGO = %<nop>PUBURLPATH%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
 You can also set preference variables on a topic by clicking the link =Edit topic preference settings= under =More topic actions=. Preferences set in this manner are not visible in the topic text, but take effect nevertheless.

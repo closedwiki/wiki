@@ -13,7 +13,7 @@ Manage whole <b>%WIKITOOLNAME%</b> site from one screen.
     <th>Tools</th>
     <th>Use to...</th>
   </tr>
-%SEARCH{ "^%WEBPREFSTOPIC%$" web="all" scope="topic" regex="on" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td> <b>[[$web.%HOMETOPIC%][$web]]</b></td>$n <td> [[$web.%HOMETOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif\" alt=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Recent changes in the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif\" alt=\"Get notified of changes to the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%WEBPREFSTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%STATISTICSTOPIC%][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/statistics.gif\" alt=\"Statistics of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopicList][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/indexlist.gif\" alt=\"Bullet list of all topics\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebIndex][<img src=\"%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/index.gif\" alt=\"Index of all topics\" width=\"16\" height=\"16\" border=\"0\">]]</td><td>$pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*)</td></tr>" }%
+%SEARCH{ "^%WEBPREFSTOPIC%$" web="all" scope="topic" regex="on" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td> <b>[[$web.%HOMETOPIC%][$web]]</b></td>$n <td> [[$web.%HOMETOPIC%][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/home.gif\" alt=\"Home of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebSearch][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif\" alt=\"Search <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebChanges][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif\" alt=\"Recent changes in the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%NOTIFYTOPIC%][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/notify.gif\" alt=\"Get notified of changes to the <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%WEBPREFSTOPIC%][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/wrench.gif\" alt=\"Preferences of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.%STATISTICSTOPIC%][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/statistics.gif\" alt=\"Statistics of <nop>$web web\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebTopicList][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/indexlist.gif\" alt=\"Bullet list of all topics\" width=\"16\" height=\"16\" border=\"0\">]]&nbsp;[[$web.WebIndex][<img src=\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/index.gif\" alt=\"Index of all topics\" width=\"16\" height=\"16\" border=\"0\">]]</td><td>$pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*)</td></tr>" }%
   <tr bgcolor="#ffffff">
     <td colspan="3"><font size="-1">This table is updated automatically based on <nop>WebPreferences settings of the individual webs. </font></td>
   </tr>
@@ -28,19 +28,19 @@ Legend:
 &nbsp;</td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/home.gif" alt="Home of web" width="16" height="16" border="0"> !WebHome
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/home.gif" alt="Home of web" width="16" height="16" border="0"> !WebHome
 </font></td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif" alt="Search web" width="16" height="16" border="0"> !WebSearch
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/searchtopic.gif" alt="Search web" width="16" height="16" border="0"> !WebSearch
 </font></td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif" alt="Recent changes in the web" width="16" height="16" border="0"> !WebChanges
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/recentchanges.gif" alt="Recent changes in the web" width="16" height="16" border="0"> !WebChanges
 </font></td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/notify.gif" alt="Get notified of changes to the web" width="16" height="16" border="0"> !WebNotify
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/notify.gif" alt="Get notified of changes to the web" width="16" height="16" border="0"> !WebNotify
 </font></td>
   </tr>
   <tr bgcolor="#ffffff">
@@ -50,19 +50,19 @@ Legend:
 &nbsp;</td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/wrench.gif" alt="Preferences of web" width="16" height="16" border="0"> !WebPreferences
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/wrench.gif" alt="Preferences of web" width="16" height="16" border="0"> !WebPreferences
 </font></td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/statistics.gif" alt="Statistics of web" width="16" height="16" border="0"> !WebStatistics 
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/statistics.gif" alt="Statistics of web" width="16" height="16" border="0"> !WebStatistics 
 </font></td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/indexlist.gif" alt="Bullet list of all topics" width="16" height="16" border="0"> !WebTopicList
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/indexlist.gif" alt="Bullet list of all topics" width="16" height="16" border="0"> !WebTopicList
 </font></td>
     <td valign="top">
 <font size="-1">
-<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/index.gif" alt="Index of all topics" width="16" height="16" border="0"> !WebIndex
+<img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/index.gif" alt="Index of all topics" width="16" height="16" border="0"> !WebIndex
 </font></td>
   </tr>
 </table>

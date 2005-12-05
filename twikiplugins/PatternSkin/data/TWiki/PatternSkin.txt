@@ -49,9 +49,9 @@ Check these variables here:
 If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing files, check in %TWIKIWEB%.TWikiPreferences that the following variables do exist and that they are set to on:
 <pre>
    * %<nop>TWIKIWEB%.PatternSkin settings:
-      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/layout.css
-      * <nop>Set TWIKISTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/style.css
-      * <nop>Set TWIKICOLORSURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/colors.css
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/layout.css
+      * <nop>Set TWIKISTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/style.css
+      * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/colors.css
 </pre>
 
 If this still does not work, contact the administrator who installs skins.

@@ -14,7 +14,7 @@ By default the logo at the top left of each web points to the image with name =l
 The default variables that cause this behavior are defined in [[%TWIKIWEB%.TWikiPreferences]]:
 <pre>
       * Set <nop>WEBLOGONAME = logo.gif
-      * Set <nop>WEBLOGOIMG = %<nop>PUBURL%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
+      * Set <nop>WEBLOGOIMG = %<nop>PUBURLPATH%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
       * Set <nop>WEBLOGOURL = %<nop>SCRIPTURL{"view"}%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
       * Set <nop>WEBLOGOALT = Home
 </pre>
@@ -38,7 +38,7 @@ In TWiki.TWikiPreferences, set:
 
 ---+++ My logo does not fit the top bar
 
-The top bar is 64 pixels high by default. If you have a bigger logo you might want to change the height of the top bar in [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]:
+The top bar is 64 pixels high by default. If you have a bigger logo you might want to change the height of the top bar in [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]:
 <verbatim>
 /* height of the top bar */
 #patternLeftBar {
@@ -52,11 +52,11 @@ The top bar is 64 pixels high by default. If you have a bigger logo you might wa
 
 (C3 is used as reference to all occurrences with the same value)
 
-You can change these numbers in [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] directly, or create a new stylesheet, attach it to a topic and point =USERLAYOUTURL= to that topic attachment. See %TWIKIWEB%.PatternSkinCssCookbook about creating custom styles.
+You can change these numbers in [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] directly, or create a new stylesheet, attach it to a topic and point =USERLAYOUTURL= to that topic attachment. See %TWIKIWEB%.PatternSkinCssCookbook about creating custom styles.
 
 ---+++ If you want to change the white space above and below the logo
 
-The logo is centered vertically be default. If you want to align it to the top, change the style in [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]].
+The logo is centered vertically be default. If you want to align it to the top, change the style in [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css][style.css]].
 
 Change:
 <verbatim>
@@ -91,7 +91,7 @@ table.patternTopBarContents td {
 
 A different approach:
 
-Assuming your image is the height of the top bar (else see [[#My_logo_does_not_fit_the_top_bar][My logo does not fit the top bar]]), remove the left margin (_padding_ actually) in [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]]:
+Assuming your image is the height of the top bar (else see [[#My_logo_does_not_fit_the_top_bar][My logo does not fit the top bar]]), remove the left margin (_padding_ actually) in [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css][style.css]]:
 
 <verbatim>
 table.patternTopBarContents {

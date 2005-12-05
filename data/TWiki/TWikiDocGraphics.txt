@@ -12,7 +12,7 @@ There are several ways to put an image in a topic.
       * Note that =ICON{}= assumes an image of 16 x 16 pixels
    * *Really shorthand notation:* in %TWIKIWEB%.TWikiPreferences set a variable to an ICON, for example:%BR% =<nop>   * Set H = %<nop>ICON{help}%= %BR% Now you can use the icon by writing =%<nop>H%=.
    * There are other approaches as well:
-      * In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
+      * In any topic, write =%<nop>PUBURLPATH%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
       * You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
       * The TWiki:Plugins.SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
    * To create an image with a link, write: =[<nop>[%HOMETOPIC%][%<nop>ICON{home}%]]= to get: [[%HOMETOPIC%][%ICON{home}%]]

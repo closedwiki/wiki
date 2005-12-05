@@ -21,7 +21,7 @@ This is the place to learn about TWiki features, find where to download it, and 
 </form>
 </td>
 <td valign="top" width="255" style="padding:1em 15px 15px 30px;"><center>
-<a href="http://twiki.org"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
+<a href="http://twiki.org"><img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-235x67-t.gif" style="margin:.3em 0;" width="235" height="67" alt="Collaborate with TWiki -- visit TWiki.org" title="Collaborate with TWiki -- visit TWiki.org" border="0" /></a>
 <br />The official TWiki site is <a href="http://twiki.org"><span class="twikiLinkLabel">twiki.org</span></a></center>
 <p />
 <p />

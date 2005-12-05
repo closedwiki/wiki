@@ -16,11 +16,11 @@ Add the dynamic variable link to the logo image to the topic text:
 <verbatim>
 <style type="text/css" media="all">
 html body {
-background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_page.gif");
+background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/gradient_page.gif");
 background-repeat:repeat-x;
 }
 #patternPageShadow {
-background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
+background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
 }
 </style>
 </verbatim>
@@ -29,7 +29,7 @@ background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
 <pre>
 &lt;style type="text/css" media="all">
 html body {
-background-image:url("<nop>%PUBURL%/<nop>%TWIKIWEB%/PatternSkin/gradient_page.gif");
+background-image:url("<nop>%PUBURLPATH%/<nop>%TWIKIWEB%/PatternSkin/gradient_page.gif");
 background-repeat:repeat-x;
 }
 &lt;/style>
@@ -39,11 +39,11 @@ You can always write a =&lt;style>= in a topic - all current browsers support th
 
 <style type="text/css" media="all">
 html body {
-background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/gradient_page.gif");
+background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/gradient_page.gif");
 background-repeat:repeat-x;
 }
 #patternPageShadow {
-background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
+background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/striped_pageshadow.gif");
 }</style>
 
 %META:FILEATTACHMENT{name="centerpage.css" attr="" autoattached="1" comment="css to frame the page centered on the screen" date="1129323328" path="centerpage.css" size="259" user="ArthurClemens" version=""}%

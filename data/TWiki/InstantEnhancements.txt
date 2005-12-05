@@ -162,7 +162,7 @@ If you want to change the logo per TWiki web, simply attach a new logo.gif to th
 Other cusomtisations are possible using =WEBLOGOIMG=, =WEBLOGOURL=, and =WEBLOGOALT= (they mirror the =WIKILOGO*= TWiki variables, but are applied to each web, rather than to the %<nop>WIKITOOLNAME%-based references)
 
 If you'd like to have the same customised logo for all the webs, make these changes in %TWIKIWEB%.TWikiPreferences instead of each web's <nop>WebPreferences, e.g.,
-   * =Set WEBLOGOIMG = %<nop>PUBURL%/%TWIKIWEB%/WebPreferences/mylogo.gif=
+   * =Set WEBLOGOIMG = %<nop>PUBURLPATH%/%TWIKIWEB%/WebPreferences/mylogo.gif=
 
 ----
 ---++ Customize Topic Classification Forms

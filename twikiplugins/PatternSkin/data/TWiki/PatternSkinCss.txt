@@ -6,10 +6,10 @@ This page is a reference for all CSS classes used in PatternSkin.
 %TOC{title="Page contents:"}%
 
 !PatternSkin uses 4 stylesheets:
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]: positioning of block elements on the page
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/style.css][style.css]]: margins, paddings, borders, font sizes
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]]: text colors, background colors, border colors
-   * [[%PUBURL%/%TWIKIWEB%/PatternSkin/print.css][print.css]]: optimalizations for printed page
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]]: positioning of block elements on the page
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css][style.css]]: margins, paddings, borders, font sizes
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]]: text colors, background colors, border colors
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/print.css][print.css]]: optimalizations for printed page
    
 If you want to learn how to create your own look or skin based on !PatternSkin, read further in PatternSkin.
 

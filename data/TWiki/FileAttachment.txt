@@ -58,11 +58,11 @@ Move unwanted Attachments to web =Trash=, topic =TrashAttachment=.
    * Once a file is attached it can be referenced in the topic. Example:
       1. ==Attach== file: =Sample.txt=
       1. ==Edit== topic and enter: =%<nop>ATTACHURL%/Sample.txt=
-      1. ==Preview==: =%<nop>ATTACHURL%/Sample.txt= text appears as: %PUBURL%/%WEB%/%TOPIC%/Sample.txt, a link to the text file.
+      1. ==Preview==: =%<nop>ATTACHURL%/Sample.txt= text appears as: %PUBURLPATH%/%WEB%/%TOPIC%/Sample.txt, a link to the text file.
 
    * To reference an attachment located in another topic, enter:
-      * =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/Sample.txt= (if it's within the same web)
-      * =%<nop>PUBURL%/Otherweb/OtherTopic/Sample.txt= (if it's in a different web)
+      * =%<nop>PUBURLPATH%/%<nop>WEB%/OtherTopic/Sample.txt= (if it's within the same web)
+      * =%<nop>PUBURLPATH%/Otherweb/OtherTopic/Sample.txt= (if it's in a different web)
 
    * Attached HTML files and text files can be inlined in a topic. Example:
       1. ==Attach== file: =Sample.txt=
@@ -73,7 +73,7 @@ Move unwanted Attachments to web =Trash=, topic =TrashAttachment=.
    * GIF, JPG and PNG images can be attached and shown embedded in a topic. Example:
       1. ==Attach== file: =Smile.gif=
       1. ==Edit== topic and write text: =%<nop>ATTACHURL%/Smile.gif=
-      1. ==Preview==: text appears as %PUBURL%/%WEB%/%TOPIC%/Smile.gif, an image.
+      1. ==Preview==: text appears as %PUBURLPATH%/%WEB%/%TOPIC%/Smile.gif, an image.
 
 #FileAttachmentTable
 ---++ File Attachment Contents Table

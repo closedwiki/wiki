@@ -242,7 +242,7 @@ Below is an example of a search that searches form data. The questions are:
 <pre>
 %<nop>SEARCH{ "[S]tatus.*(td..td|value\=).*[W]aiting" casesensitive="on" regex="on" 
 nosearch="on" nototal="on" format="| [[$topic]]&lt;br /> ($date - $rev - 
-[[%<nop>SCRIPTURL%/rdiff%<nop>SCRIPTSUFFIX%/$web/$topic][Diffs]]) |"}%
+[[%<nop>SCRIPTURL{rdiff}%/$web/$topic][Diffs]]) |"}%
 </pre>
 
 ---+++ Solution
