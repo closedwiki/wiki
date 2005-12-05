@@ -106,7 +106,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 	* One line description, shown in the TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Build news portals that show headline news based on RSS news feeds from news sites.
 
-	* Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =30=
+	* Refresh rate in minutes for cached feeds. Disable caching: =0=, default: =60=
 		* Set REFRESH = 60
 
 	* Maximum number of items shown. Default: =100=
@@ -159,8 +159,9 @@ defining the default CSS properties  (indentation illustrates enclosure).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Plugin Version: | 02 Dec 2005 (v1.94) |
+|  Plugin Version: | 05 Dec 2005 (v1.95) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  05 Dec 2005: | internal feed urls must be absolute |
 |  02 Dec 2005: | added <nop>web.topic shorthand for internal feeds |
 |  29 Nov 2005: | fixed CDATA handling |
 |  21 Nov 2005: | added ATOM support; \
@@ -187,6 +188,6 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.PeterThoeny - 11 May 2005 %BR%
--- TWiki:Main.MichaelDaum - 02 Dec 2005
+-- TWiki:Main.MichaelDaum - 05 Dec 2005
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%
