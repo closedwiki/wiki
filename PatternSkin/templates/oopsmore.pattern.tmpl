@@ -46,7 +46,9 @@
 
 <form name="main" action="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%">
    * *%MAKETEXT{"Compare revisions"}%*
-      * %MAKETEXT{"Older revision:"}% <input type="text" name="rev2" size="6" value="1" /> &nbsp; %MAKETEXT{"Newer revision:"}% <input type="text" name="rev1" size="6" value="%PARAM1%" /><br />
+      * %MAKETEXT{"Older revision:"}% <input type="text" name="rev2" size="6" value="1" />
+      * %MAKETEXT{"Newer revision:"}% <input type="text" name="rev1" size="6" value="%PARAM1%" /><br />
+      <table class="twikiTable" style="margin:.5em 0;"><tr><td><label for="sequential"><img style="padding:0 10px;" src="%PUBURL%/%TWIKIWEB%/PatternSkin/oopsmore_diff_sequential.gif" alt="sequential" width="80" height="80" /></label></td><td><label for="sidebyside"><img style="padding:0 10px;" src="%PUBURL%/%TWIKIWEB%/PatternSkin/oopsmore_diff_sidebyside.gif" alt="side by side" width="80" height="80" /></label></td><td><label for="debug"><img style="padding:0 10px;" src="%PUBURL%/%TWIKIWEB%/PatternSkin/oopsmore_diff_debug.gif" alt="debug" width="80" height="80" /></label></td></tr><tr><td><input type="radio" name="render" id="sequential" value="sequential" checked="checked" /><label for="sequential"> %MAKETEXT{"Sequential"}%</label></td><td><input type="radio" name="render" id="sidebyside" value="sidebyside" /><label for="sidebyside"> %MAKETEXT{"Side by side"}%</label></td><td><input type="radio" name="render" id="debug" value="debug" /><label for="debug"> %MAKETEXT{"Debug"}%</label></td></tr></table>
       <input type="submit" class="twikiButton" value='%MAKETEXT{"View difference"}%' />
 </form>
 
