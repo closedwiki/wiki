@@ -1,0 +1,328 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%%TMPL:END%
+%TMPL:DEF{"heading"}%%_{"Attention"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+%TMPL:DEF{"remove_user_done"}%
+---+++ %_{"User Account [_1] Deleted", "%PARAM1%"}%
+%_{"Your user name has been removed from the Authentication System."}%
+
+%_{"Your user topic has not been renamed. Please email [_1] to request this.", "<a href='mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Delete&#32;User&amp;body=%PARAM1%'>%WIKIWEBMASTER%</a>"}%
+%TMPL:END%
+%TMPL:DEF{"created_web"}%
+---+++ %_{"The new web has been created"}%
+%_{"And populated with topics from the base web"}%
+
+%_{"Would you like to go to:"}%
+	* %_{"[_1] to start working on the new web", "%HOMETOPIC%"}%
+	* %_{"[_1] to customize the web specific preferences", "%WEBPREFSTOPIC%"}%
+	* %_{"[_1] to create another web", "%TWIKIWEB%.ManagingWebs"}%
+	* %_{"[_1] home", "[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]"}%
+%TMPL:END%
+%TMPL:DEF{"merge_notice"}%
+---+++ %_{"Topic was merged"}%
+%_{"Rev [_1] was saved by [_2], while you were still editing.", "%PARAM1%", "%PARAM2%"}%
+
+%_{"Those changes have been merged with yours to create Rev [_1]. Text fields will have been merged, but other data such as form fields may have overwritten the other users changes. Please inspect the topic to make sure it is OK, especially if you made any changes to form fields.", "%PARAM3%"}%
+
+%_{"You can see the differences ~[~[[_1]~]~[here~]~].", "%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%"}%
+%TMPL:END%
+%TMPL:DEF{"missing_action"}%
+---+++ %_{"Missing action command"}%
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"unrecognized_action"}%
+---+++ %_{"Unrecognized action command [_1]", "%PARAM1%"}%
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"notwikiuser"}%
+---+++ %_{"Can't find user [_1]", "%PARAM1%"}%
+%_{"Please make sure you spelled the [_1] correctly and try again. If you get stuck, please mail [_2].", "%TWIKIWEB%.LoginName", "%WIKIWEBMASTER%"}%
+
+%_{"See [_1] for a list of existing users or register as new user in [_2].", "%MAINWEB%.TWikiUsers", "%TWIKIWEB%.TWikiRegistration"}% %TMPL:END%
+%TMPL:DEF{"in_a_group"}%
+---+++ %_{"[_1] is in at least one group and cannot be removed", "%PARAM1%"}%
+
+%_{"Remove the user from the group(s) [_1] first.", "%PARAM2%"}%
+%TMPL:END%
+%TMPL:DEF{"move_err"}%
+---+++ %_{"Attachment move failed"}%
+%_{"During move of attachment [_1] to [_2] an error was found. Please notify your [_3] administrator.", "%PARAM3%", "<nop>%PARAM1%.<nop>%PARAM2%", "<nop>%WIKITOOLNAME%"}%
+
+%PARAM4%
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"delete_err"}%
+---+++ %_{"Attachment delete failed"}%
+%_{"During deletion of attachment =[_1]= an error was found. Please notify your [_2] administrator.", "%URLPARAM{attachment}%", "<nop>%WIKITOOLNAME%"}%
+
+%PARAM4%
+%TMPL:END%
+%TMPL:DEF{"topic_exists"}%
+---+++ %_{"The [_1] topic already exists", "\"%TOPIC%\""}%
+%_{"Cannot create [_1] because it already exists.", "%TOPIC%"}%
+
+%_{"Please go _back_ in your browser and try a new name."}%
+%TMPL:END%
+%TMPL:DEF{"rename_topic_exists"}%
+---+++ %_{"Rename failed"}%
+%_{"Cannot rename [_1] to [_2] because it already exists.", "%TOPIC%", "<nop>%PARAM1%.<nop>%PARAM2%"}%
+
+%_{"Please go _back_ in your browser and try a new name."}%
+%TMPL:END%
+%TMPL:DEF{"rename_web_exists"}%
+---+++ %_{"Rename failed"}%
+%_{"Cannot rename [_1] to [_2] because it already exists." , "%WEB%", "<nop>%PARAM1%"}%
+
+%_{"Please go _back_ in your browser and try a new name."}%
+%TMPL:END%
+
+%TMPL:DEF{"rename_not_wikiword"}%
+---+++ %_{"New topic name [_1] is not a [_2]", "\"<nop>%PARAM1%\"", "%TWIKIWEB%.WikiWord"}%
+%_{"Please go back in your browser and chose a topic name that is a %TWIKIWEB%.WikiWord or check the allow non-Wiki Word box"}%
+%TMPL:END%
+%TMPL:DEF{"rename_err"}%
+%_{"During rename of topic [_1] to [_2] an error ([_3]) was found. Please notify your [_4] administrator.", "<nop>%WEB%.<nop>%TOPIC%", "<nop>%PARAM2%", "%PARAM1%", "%WIKITOOLNAME%"}%
+%TMPL:END%
+%TMPL:DEF{"rename_web_err"}%
+%_{"During rename of web [_1] to [_2] an error ([_3]) was found. Please notify your [_4] administrator.", "<nop>%WEB%", "<nop>%PARAM2%", "%PARAM1%", "%WIKITOOLNAME%"}%
+%TMPL:END%
+%TMPL:DEF{"wrong_password"}%
+---+++ %_{"Incorrect Password"}%
+%_{"The password you entered in the *old password* field is incorrect."}%
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"web_missing"}%
+---+++ %_{"Name of new web is missing"}%
+%_{"Please go back in your browser and try again."}% %TMPL:END%
+%TMPL:DEF{"invalid_web_name"}%
+---+++ %_{"[_1] is an invalid name for a new web", "\"%PARAM1%\""}%
+%_{"You are recommended to choose short names, preferably less than 10 characters, starting with an upper-case alphabetic character and using only alphanumeric characters. If you want to create a template web (a web just used as a base to create new webs) choose a name that starts with an underscore and has only alphanumeric characters."}%
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"web_exists"}%
+---+++ %_{"Cannot create web [_1] because it already exists", "\"%PARAM1%\""}%
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"base_web_missing"}%
+---+++ %_{"Base web [_1] is missing or does not exist", "%PARAM1%"}%
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"invalid_web_color"}%
+---+++ %_{"Color [_1] has an invalid format", "=%PARAM1%="}%
+%_{"A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. =#FFFF00=."}%
+
+%_{"Pick one of the [_1].", "%TWIKIWEB%.StandardColors"}%
+
+%_{"You can also use the names of the standard HTML colors (black, silver, gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, teal, or aqua)"}%
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"web_creation_error"}%
+---+++ %_{"Could not create the new web [_1]", "%PARAM1%"}%
+%PARAM2%
+%TMPL:END%
+%TMPL:DEF{"thanks"}%
+---+++ %_{"Thank you for registering"}%
+   * %_{"You can review your changes in your personal TWiki topic [_1]", "%TOPIC%"}% <br />
+     %_{"(__Suggestion:__ How about uploading your picture to your topic?)"}%
+   * %_{"You are also listed in the [_1] topic", "%MAINWEB%.%WIKIUSERSTOPIC%"}%
+   * %_{"A confirmation e-mail has been sent to [_1]", "%PARAM1%"}%
+%TMPL:END%
+%TMPL:DEF{"reset_ok"}%
+%PARAM1%
+
+%_{"Users with automatically generated passwords should proceed immediately to ~[~[[_1]~]~[change password~]~] to change their password to something memorable.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ChangePassword"}%
+%TMPL:END%
+%TMPL:DEF{"password_changed"}%
+---+++ %_{"Password changed successfully!"}%
+
+%_{"You need to close your browser to make this change take effect."}%
+%TMPL:END%
+%TMPL:DEF{"confirm"}%
+---+++ %_{"Thank you for registering"}%
+
+%_{"Your activation code has been sent to [_1].  Either click on the link in your email or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxx\")", "%PARAM1%"}%
+
+<form action="%SCRIPTURL{"register"}%" method=get>
+<input type="hidden" name="action" value="verify" size="20" />
+<input type="text" name="code" size="20" />
+<input type="submit" value=' %_{"Submit"}% ' />
+</form>
+
+%TMPL:END%
+%TMPL:DEF{"no_users_to_reset"}%
+---+++ %_{"Password reset failed"}%
+%_{"No users to reset passwords for."}%
+%TMPL:END%
+%TMPL:DEF{"reset_bad"}%
+---+++ %_{"Password reset failed"}%
+%PARAM1%
+%TMPL:END%
+%TMPL:DEF{"missing_fields"}%
+---+++ %_{"Missing Fields"}%
+=<font color="red">**</font>= %PARAM1% %_{"fields are required."}%
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"password_mismatch"}%
+---+++ %_{"Passwords do not match"}%
+%_{"The two passwords you entered do not match."}%
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"problem_adding"}%
+---+++ %_{"Error registering user [_1]", "%PARAM1%"}%
+
+%_{"There has been a problem adding your user id to the Password system. Please contact [_1].", "%WIKIWEBMASTER%"}%
+%TMPL:END%
+%TMPL:DEF{"send_mail_error"}%
+---+++ Mail Error
+%_{"An e-mail could not be delivered. Please notify your [_1] administrator, [_2]", "%WIKITOOLNAME%", "<a href='mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%20Mail%20Error'>%WIKIWEBMASTER%</a>"}%
+
+=%PARAM1%=
+%TMPL:END%
+%TMPL:DEF{"already_exists"}%
+---+++ %_{"You are already registered"}%
+%_{"You cannot register twice, the name [_1] is already registered.", "'%PARAM1%'"}%
+
+%_{"Did you want to ~[~[[_1]~]~[reset [_2]'s password~]~]?", "%SCRIPTURL{"view"}%/TWiki.ResetPassword?username=%PARAM1%", "%PARAM1%"}%
+
+%_{"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."}%
+
+%_{"Please contact [_1] if you have any questions.", "<a href='mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Registration&#32;Question'>%WIKIWEBMASTER%</a>"}%
+%TMPL:END%
+%TMPL:DEF{"bad_wikiname"}%
+---+++ %_{"Incorrect [_1]", "%TWIKIWEB%.WikiName"}%
+%_{"The [_1] field must be your first and lastname in [_2], e.g. your capitalized first and lastname with spaces removed.", "%TWIKIWEB%.WikiName", "%TWIKIWEB%.WikiNotation"}%
+
+| *%_{"Good examples:"}%* | *%_{"Incorrect [_1]":, "%TWIKIWEB%.WikiNames"}%* |
+| =JohnSmith= | =John M. Smith= |
+| =RjMiller= | =RJ Miller= |
+| =RickO= | =Rick O= %_{"(single character last name)"}% |
+| =KellerF= | =FKeller= %_{"(single character first name)"}% |
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"bad_email"}%
+---+++ %_{"Invalid email address"}%
+%_{"The email address for this account is not valid."}%
+
+%PARAM1%
+
+%_{"Please go back in your browser and try again."}%
+%TMPL:END%
+%TMPL:DEF{"bad_ver_code"}%
+---+++ %_{"Invalid Activation Code"}%
+%_{"The activation code [_1] is invalid.", "==%PARAM1%=="}% %PARAM2%
+
+%_{"Please try again."}%
+
+<form action="%SCRIPTURL{"register"}%" method=get>
+<input type="hidden" name="action" value="verify" size="20" />
+<input type="text" name="code" size="20" />
+<input type="submit" value=' %_{"Submit"}% ' />
+</form>
+
+%_{"Please contact [_1] if you have any questions.", "<a href='mailto:%WIKIWEBMASTER%'>%WIKIWEBMASTER%</a>"}%
+%TMPL:END%
+%TMPL:DEF{"no_email_for"}%
+---+++ %_{"Can't get an email address for [_1]", "%PARAM1%"}%
+%_{"An email address is required before a password can be reset."}%
+%TMPL:END%
+%TMPL:DEF{"mandatory_field"}%
+---+++ %_{"Topic Save Error"}%
+%_{"Could not save [_1].", "%WEB%.%TOPIC%"}%
+
+%_{"The required field [_1] was not filled in.", "*%PARAM1%*"}%
+
+%_{"Go back in your browser and insert information for all mandatory fields."}%
+%TMPL:END%
+%TMPL:DEF{"no_form_def"}%
+---+++ %_{"Form Definition [_1] missing", "%PARAM1%.<nop>%PARAM2%"}%
+%_{"See [_1] for information about Form Definitions.", "%TWIKIWEB%.TWikiForms"}%
+
+%_{"This could be for several reasons:"}%
+
+---++ 1. %_{"Form definition missing"}%
+
+   * %_{"The form should be defined in the topic [_1]", "%PARAM1%.%PARAM2%"}%
+   * %_{"If this topic is missing create it, otherwise check it for errors."}%
+
+---++ 2. %_{"The topic is in an old format"}%
+
+   * %_{"Click on ~[~[[_1]~]~[Debug topic text~]~].", "%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=debug"}%
+      * %_{"There should be a line that includes [_1], look for [_2] (or [_3])", "=META:FORM=", "name=\"%PARAM1%.%PARAM2%\"", "name=\"%PARAM2%\""}%
+      * %_{"If this line isn't present see _upgrade_ section below"}%
+
+---++ 3.%_{"Topic can not be upgraded from old style category table"}%
+
+%_{"This requires the form definition to be present."}%
+
+%_{"This can be automatically upgraded by:"}%
+
+   * %_{"Creating a suitable Form Definition topic"}%
+   * %_{"Adding a [_1] variable in WebPreferences", "=WEBFORMS="}%
+
+%_{"You will probably have to ask your administrator, [_1], to do this.", "%WIKIWEBMASTER%"}%
+%TMPL:END%
+%TMPL:DEF{"illegally_named_upload"}%
+---+++ %_{"Filename [_1] is not legal for a TWiki attachment.", "<code>%PARAM1%</code>"}%
+%_{"Certain characters are not permitted in filenames, and other filenames are not permitted for security reasons. Your filename matched one of the following regular expressions, so it was rejected:"}%
+   {UploadFilter}: <code>%PARAM2%</code>
+   {NameFilter}: <code>%PARAM3%</code>
+%_{"Rename the file on your local machine and try uploading again."}%
+%TMPL:END%
+%TMPL:DEF{"zero_size_upload"}%
+---+++ %_{"Uploaded file [_1] does not exist or is empty", "<code>%PARAM1%</code>"}%
+%_{"Please go back in your browser and check again."}%
+%TMPL:END%
+%TMPL:DEF{"oversized_upload"}%
+---+++ %_{"Uploaded file is too big"}%
+%_{"Uploaded file [_1] exceeds limit of [_2] KB", "<code>%PARAM1%</code>", "%PARAM2%"}%
+%TMPL:END%
+%TMPL:DEF{"save_error"}%
+---+++ %_{"Error saving topic"}%
+%_{"During save of [_1] an error was found by the version control system. Please notify your [_2] administrator.", "<nop>%WEB%.<nop>%TOPIC%", "%WIKITOOLNAME%"}%
+
+=%PARAM1%=
+
+%_{"Go back in your browser and save your changes locally."}%
+%TMPL:END%
+%TMPL:DEF{"rename_web_prerequisites"}%
+---+++ %_{"There are problems with renaming this web:"}%
+1.%_{"You are denied access to the following topics in the web:"}%
+%PARAM1%
+
+2. %_{"The following topics are locked for edit, and cannot be moved:"}%
+%PARAM2%
+
+3. %_{"The following topics refer to topics in this web, but you are denied access to them:"}%
+%PARAM3%
+
+4. %_{"The following topics refer to topics in this web, but are being edited:"}%
+%PARAM4%
+
+<div %PARAM5%>
+<a href="%SCRIPTURL{"rename"}%/%WEB%/%HOMETOPIC%?action=renameweb;confirm=continue" />%_{"Continue and try to rename web?"}%</a>
+</div>
+
+%TMPL:END%
+
+%TMPL:DEF{no_such_template}%
+%_{"Could not find template"}% =%PARAM1%=
+
+%_{"Check your configuration setting for {TemplateDir}. If that's not the problem, it may be because you have a setting of =%PARAM2%= that is pointing to a template that doesn't exist."}%
+
+=%PARAM2%= %_{"is currently set to"}% <code><nop>%%PARAM2%%</code>
+
+(don't forget to check your Topic Settings)
+%TMPL:END%
+
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%
+%TMPL:P{"oops"}%
