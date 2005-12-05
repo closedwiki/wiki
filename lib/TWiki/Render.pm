@@ -692,7 +692,7 @@ sub _handleSquareBracketedLink {
     # filter out &#123; entities (legacy)
     $link =~ s/\&\#[0-9]+\;//g;
     # Filter junk
-    $link =~ s/[^$TWiki::regex{mixedAlphaNum}.\s]//g;
+    $link =~ s/[^$TWiki::regex{mixedAlphaNum}.\/\s]//g;
     # Capitalise first word
     $link =~ s/^(.)/\U$1/;
     # Collapse spaces and capitalise following letter
