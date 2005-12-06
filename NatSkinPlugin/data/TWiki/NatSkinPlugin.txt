@@ -344,8 +344,9 @@ By default this value is set to "off"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.92 (2005-12-05) |
+|  Plugin Version: | v2.93 (2005-12-06) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  06 Dec 2005: | switching off the plugin if the skin is not NatSkin |
 |  05 Dec 2005: | skin state variables respect FINALPREFERENCES settings; \
                   added WEBCOMPONENT |
 |  01 Dec 2005: | added tooltips to topic actions |
@@ -390,5 +391,5 @@ By default this value is set to "off"
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 05 Dec 2005 
+-- TWiki:Main.MichaelDaum - 06 Dec 2005 
 

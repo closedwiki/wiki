@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.92';
+$RELEASE = '2.93';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -81,17 +81,6 @@ sub writeDebug {
 sub initPlugin {
   ($currentTopic, $currentWeb, $currentUser) = @_;
 
-  &doInit();
-
-  writeDebug("done initPlugin");
-  return 1;
-}
-
-###############################################################################
-sub doInit {
-
-  writeDebug("called doInit");
-
   # check TWiki version: let's eat spagetti
   $isDakar = (defined $TWiki::cfg{LogFileName})?1:0;
   if ($isDakar) {# dakar
@@ -116,6 +105,32 @@ sub doInit {
 
   writeDebug("isDakar=$isDakar isBeijing=$isBeijing isCairo=$isCairo");
   
+  # check skin
+  my $skin = TWiki::Func::getSkin();
+
+  # clear NatSkinPlugin traces from session
+  unless ($skin =~ /\bnat\b/) {
+    &clearSessionValue('SKINSTYLE');
+    &clearSessionValue('STYLEBORDER');
+    &clearSessionValue('STYLEBUTTONS');
+    &clearSessionValue('STYLESIDEBAR');
+    &clearSessionValue('STYLEVARIATION');
+    &clearSessionValue('STYLESEARCHBOX');
+    &clearSessionValue('TABLEATTRIBUTES');
+    return 0;
+  }
+
+  &doInit();
+
+  writeDebug("done initPlugin");
+  return 1;
+}
+
+###############################################################################
+sub doInit {
+
+  writeDebug("called doInit");
+
   # get skin state from session
   $hasInitKnownStyles = 0;
   $hasInitSkinState = 0;
@@ -271,6 +286,7 @@ sub initSkinState {
       &clearSessionValue('STYLESIDEBAR');
       &clearSessionValue('STYLEVARIATION');
       &clearSessionValue('STYLESEARCHBOX');
+      &clearSessionValue('TABLEATTRIBUTES');
       my $redirectUrl = TWiki::Func::getViewUrl($currentWeb, $currentTopic);
       TWiki::Func::redirectCgiQuery($query, $redirectUrl); 
 	# we need to force a new request because the session value preferences
