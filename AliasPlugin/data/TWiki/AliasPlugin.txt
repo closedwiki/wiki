@@ -131,8 +131,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/OthelloMaurer, TWiki:Main/MichaelDaum |
-|  Plugin Version: | v1.1 (27 Apr 2005) |
+|  Plugin Version: | v1.2 (06 Dec 2005) |
 |  Change History: | &nbsp; |
+|  06 Dec 2005 | fixed deprecation warning on a dakar install; \
+                 added support for non-alphabetical aliases; \
+		 fixed use of uninitialized values due to special chars in alias patterns; \
+		 the ALIAS tag in WebAliases can be used to define global aliases now |
 |  27 Apr 2005 | always read site aliases and then merge in web aliases |
 |  07 Apr 2005 | TWiki:Main/MichaelDaum: major rewrite |
 |  30 Mar 2005 | TWiki:Main/MichaelDaum: added alias area |
@@ -155,4 +159,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 -- TWiki:Main/OthelloMaurer - 09 Oct 2003
--- TWiki:Main/MichaelDaum - 21 Mar 2005
+-- TWiki:Main/MichaelDaum - 06 Dec 2005
