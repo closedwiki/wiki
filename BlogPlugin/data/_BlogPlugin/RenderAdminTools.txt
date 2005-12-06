@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129738747" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133819563" format="1.1" version="1.1"}%
 ---+ Function %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -16,7 +16,7 @@ NONE
 ~~~    format="   1 <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
 ~~~                         title=\"$formfield(TopicDescription)\">$topic</a>"
 ~~~ }%
-   %CALC{"$IF($EXISTS(_BlogPlugin/WebHome),1 [[_BlogPlugin.WebHome][BlogTemplateWeb]])"}%
+   %CALC{"$IF($EXISTS(_BlogPlugin/WebHome),1 [[%SCRIPTURL{"view"}%/_BlogPlugin/WebHome][BlogTemplateWeb]])"}%
 </div>
 </noautolink>
 %STOPINCLUDE%

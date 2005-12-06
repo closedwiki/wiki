@@ -7,4 +7,5 @@ TWiki::Plugins::NatSkinPlugin,>1.25,perl,Required
 TWiki::Plugins::RedDotPlugin,>=1.27,perl,Required
 TWiki::Plugins::SpreadSheetPlugin,>=1.001,perl,Required
 TWiki::Plugins::TimeSincePlugin,>=0.99,perl,Required
+TWiki::Plugins::AliasPlugin,>=1.2,perl,Optional
 TWiki::Plugins::TwistyPlugin,Dakar,perl,Required
