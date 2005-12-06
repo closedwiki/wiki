@@ -25,6 +25,7 @@ sub name { 'WysiwygPluginTests' };
 
 sub include_tests {
 #    qw(TranslatorTests);
+#    qw(WysiwygPluginTests);
     qw(TranslatorTests WysiwygPluginTests);
 };
 

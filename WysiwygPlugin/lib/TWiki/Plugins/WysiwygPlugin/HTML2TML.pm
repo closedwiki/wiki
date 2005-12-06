@@ -72,8 +72,6 @@ sub new {
     $this->xml_mode( 1 );
     $this->unbroken_text( 1 );
 
-    map { $this->{$_} = $options->{$_} } keys %$options;
-
     return $this;
 }
 
@@ -94,7 +92,9 @@ Convert a block of HTML text into TML.
 =cut
 
 sub convert {
-    my( $this, $text ) = @_;
+    my( $this, $text, $options ) = @_;
+
+    map { $this->{$_} = $options->{$_} } keys %$options;
 
     # SMELL: ought to convert to site charset
 

@@ -30,6 +30,7 @@ package TranslatorTests;
 
 use base qw(Test::Unit::TestCase);
 
+use TWiki::Plugins::WysiwygPlugin;
 use TWiki::Plugins::WysiwygPlugin::TML2HTML;
 use TWiki::Plugins::WysiwygPlugin::HTML2TML;
 use Carp;
@@ -97,13 +98,13 @@ HERE
               exec => 3,
               name => 'otherWebLinkAtStart',
               tml => 'OtherWeb.LinkAtStart',
-              html => '<a href="'.$page.'/OtherWeb/LinkAtStart">LinkAtStart</a>',
+              html => '<a href="'.$page.'/OtherWeb/LinkAtStart">OtherWeb.LinkAtStart</a>',
           },
           {
               exec => 3,
               name => 'currentWebLinkAtStart',
               tml => 'Current.LinkAtStart',
-              html => '<a href="'.$page.'/Current/LinkAtStart">LinkAtStart</a>',
+              html => '<a href="'.$page.'/Current/LinkAtStart">Current.LinkAtStart</a>',
               finaltml => 'LinkAtStart'
              },
           {
@@ -812,12 +813,9 @@ Outside
           {
               exec => 3,
               name=>"TWikiTagsInHTMLParam",
-              html=>'<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
-                "<a href='%SCRIPTURL%/view%SCRIPTSUFFIX%'>Burble</a>",
-              tml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
-                "<a href='%SCRIPTURL%/view%SCRIPTSUFFIX%'>Burble</a>",
-              finaltml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
-                '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>',
+              html=>'<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>',
+              tml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>',
+              finaltml => '[[%SCRIPTURL%/view%SCRIPTSUFFIX%][Burble]]',
           },
           {
               exec => 2,
@@ -840,14 +838,14 @@ HERE
           {
               exec => 3,
               name => 'linkToOtherWeb',
-              html => '<a href="Sandbox.WebHome">this</a>',
+              html => '<a href="'.$page.'/Sandbox/WebHome">this</a>',
               tml => '[[Sandbox.WebHome][this]]',
           },
           {
               exec => 3,
               name => 'anchoredLink',
               tml => '[[FAQ.NetworkInternet#Pomona_Network][Test Link]]',
-              html => '<a href="FAQ.NetworkInternet#Pomona_Network">Test Link</a>',
+              html => '<a href="'.$page.'/FAQ/NetworkInternet#Pomona_Network">Test Link</a>',
           },
           {
               exec => 2,
@@ -905,6 +903,23 @@ EOE
               name => 'Item945',
               html => '<span class="TMLvariable">SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}</span>',
               tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
+          },
+          {
+              exec => 3,
+              name => "Web and topic",
+              tml => "Current.TestTopic Sandbox.TestTopic [[Current.TestTopic]] [[Sandbox.TestTopic]]",
+              html => <<HERE,
+<a href="$page/Current/TestTopic">Current.TestTopic</a>
+<a href="$page/Sandbox/TestTopic">Sandbox.TestTopic</a>
+<a href="$page/Current/TestTopic">Current.TestTopic</a>
+<a href="$page/Sandbox/TestTopic">Sandbox.TestTopic</a>
+HERE
+              finaltml => <<HERE,
+TestTopic
+Sandbox.TestTopic
+TestTopic
+Sandbox.TestTopic
+HERE
           },
          ];
 
@@ -1045,18 +1060,27 @@ sub _paramsSame {
 sub compareTML_HTML {
     my ( $this, $args ) = @_;
 
-    my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&TWiki::Plugins::WysiwygPlugin::getViewUrl, 1);
-    my $tx = $txer->convert( $args->{tml} );
+    my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
+    my $tx = $txer->convert(
+        $args->{tml},
+        {
+            getViewUrl => \&TWiki::Plugins::WysiwygPlugin::getViewUrl,
+            markvars => 1,
+        });
     $txer->cleanup($tx);
     $this->_compareHTML($args->{html}, $tx, 1);
 }
 
 sub compareHTML_TML {
     my ( $this, $args ) = @_;
-    my $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML
-      ( { parseWikiUrl => \&TWiki::Plugins::WysiwygPlugin::parseWikiUrl,
-          convertImage => \&convertImage } );
-    my $tx = $txer->convert( $args->{html} );
+    my $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
+    my $tx = $txer->convert(
+        $args->{html},
+        {
+            context => { web => 'Current', topic => 'TestTopic' },
+            convertImage => \&convertImage,
+            rewriteURL => \&TWiki::Plugins::WysiwygPlugin::rewriteURL,
+        });
     if( defined($args->{finaltml}) ) {
         $this->_compareTML($args->{finaltml}, $tx, $args->{name});
     } else {

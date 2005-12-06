@@ -21,6 +21,8 @@ package WysiwygPluginTests;
 
 use strict;
 
+use TWikiTestCase;
+
 use base qw(TWikiTestCase);
 
 use TWiki;
