@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132856137" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133814987" format="1.1" version="1.1"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -6,6 +6,25 @@ see also: TWiki.WebAliases, TWiki.AliasPlugin
 
 %STOPALIASAREA%
 <noautolink>
+<!--
+Note, that you have to add urlencoded versions of your aliases to the WebRss
+if they use special characters.
+
+%ALIAS{name="!--" value="!--"}%
+%ALIAS{name="--" value="&mdash;"}%
+%ALIAS{name="(c)" value="&copy;"}%
+%ALIAS{name="(r)" value="&reg;"}%
+%ALIAS{name="(tm)" value="&trade;"}%
+%ALIAS{name="..." value="&hellip;"}%
+%ALIAS{name=",," value="&bdquo;"}%
+%ALIAS{name="1/2" value="&frac12;"}%
+%ALIAS{name="1/4" value="&frac14;"}%
+%ALIAS{name="3/4" value="&frac34;"}%
+%ALIAS{name="``" value="&ldquo;"}%
+%ALIAS{name="''" value="&rdquo;"}%
+%ALIAS{name="`" value="&lsquo;"}%
+%ALIAS{name="'" value="&rsquo;"}%
+
    * NatSkinPlugin: TWiki.NatSkinPlugin
    * NatSkin: TWiki.NatSkin
    * DBCacheContrib: TWiki.DBCacheContrib
@@ -17,6 +36,8 @@ see also: TWiki.WebAliases, TWiki.AliasPlugin
    * MovableStyle: [[http://www.movablestyle.com][MovableStyle]]
    * BinaryBonsai: [[http://binarybonsai.com][BinaryBonsai]]
    * Kwiki: [[http://www.kwiki.com][Kwiki]]
+-->
+%ALIASES%
 </noautolink>
 %STARTALIASAREA%
 

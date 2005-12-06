@@ -24,7 +24,7 @@ use vars qw(
 use TWiki::Plugins::BlogPlugin::WebDB; # must be compiled in advance
 
 $VERSION = '$Rev$';
-$RELEASE = '0.41';
+$RELEASE = '0.42';
 
 ###############################################################################
 sub initPlugin {
@@ -89,6 +89,16 @@ sub commonTagsHandler {
     }
   }
 }
+
+###############################################################################
+sub postRenderingHandler { 
+  # remove leftover tags of optional plugins if they are not installed
+
+  $_[0] =~ s/%STARTALIASAREA%//go;
+  $_[0] =~ s/%STOPALIASAREA%//go;
+  $_[0] =~ s/%ALIAS{.*?}%//go;
+}
+  
 
 ###############################################################################
 

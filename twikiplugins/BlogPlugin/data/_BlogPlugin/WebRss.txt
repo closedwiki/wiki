@@ -1,5 +1,20 @@
 %META:TOPICINFO{author="TWikiContributor" date="1130253048" format="1.1" version="1.1"}%
 %STARTINCLUDE%<noautolink>
+%ALIAS{name="!--" value="!--"}%
+%ALIAS{name="--" value="&#38;mdash;"}%
+%ALIAS{name="(c)" value="&#38;copy;"}%
+%ALIAS{name="(r)" value="&#38;reg;"}%
+%ALIAS{name="(tm)" value="&#38;trade;"}%
+%ALIAS{name="..." value="&#38;hellip;"}%
+%ALIAS{name=",," value="&#38;bdquo;"}%
+%ALIAS{name="1/2" value="&#38;frac12;"}%
+%ALIAS{name="1/4" value="&#38;frac14;"}%
+%ALIAS{name="3/4" value="&#38;frac34;"}%
+%ALIAS{name="``" value="&#38;ldquo;"}%
+%ALIAS{name="''" value="&#38;rdquo;"}%
+%ALIAS{name="`" value="&#38;lsquo;"}%
+%ALIAS{name="'" value="&#38;rsquo;"}%
+%STARTALIASAREA%
 <channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss">
   <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
   <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%</link>
@@ -44,7 +59,7 @@
 ~~~      </dc:contributor>$n
 ~~~   </item>
 ~~~ "}%
-</noautolink>%STOPINCLUDE%
+%STOPALIASAREA%</noautolink>%STOPINCLUDE%
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SKIN = rss
