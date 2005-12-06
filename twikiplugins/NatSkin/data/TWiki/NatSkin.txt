@@ -85,7 +85,7 @@ The default style is hardcoded into the NatSkinPlugin.
 		 fixed sidebar help for cairo and beijing; \
 		 fixed squeezed main page; \
 		 added the concept of <nop>WebComponents, that is the WebSideBar and the WebButtons; \
-		 the <nop>WebButtons are customizable the way the <nop>WebSideBar already is ; \
+		 the <nop>WebButtons are customizable the way the <nop>WebSideBar already is |
 |  2005-12-01: | added transparent borders and corners to the Kubrick style; \
                  improved <nop>PlasticLoveVariation; \
 		 added a custom "cite" style inside blog texts; \
