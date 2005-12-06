@@ -135,7 +135,7 @@ msgstr "&Unir"
 msgid "&Cancel"
 msgstr "&Cancelar"
 
-#: templates/view.pattern.tmpl:43 templates/view.tmpl:33
+#: templates/view.pattern.tmpl:43
 msgid "&Compose"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr "&Editar"
 msgid "&Edit text"
 msgstr "&Editar el texto"
 
-#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
 msgid "&History"
 msgstr "&Historia"
 
@@ -265,6 +265,7 @@ msgid "(preview)"
 msgstr "(previsualizar)"
 
 #: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
+#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
 msgid "(recommended)"
 msgstr "(recomendado)"
 
@@ -364,6 +365,15 @@ msgstr ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
 "%','ManagingWebs')\" href='%1' rel='nofollow'>Click aqui</a> para ayudar a "
 "administrar webs"
+
+#: templates/oopsmore.pattern.tmpl:23 templates/oopsmore.tmpl:23
+msgid "<em>in %1 web</em> only"
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:21 templates/oopsmore.tmpl:21
+#, fuzzy
+msgid "<em>in all public webs</em>"
+msgstr "<em>Buscard todas las webs</em>"
 
 #: templates/preview.pattern.tmpl:42
 msgid ""
@@ -540,6 +550,11 @@ msgstr "Unir el nuevo archivo"
 msgid "Attachment"
 msgstr "Archivo"
 
+#: templates/oopsaccessdenied.tmpl:45
+#, fuzzy
+msgid "Attachment '%1' does not exist"
+msgstr "El archivo no se existe."
+
 #: lib/TWiki/UI/Manage.pm:341
 msgid "Attachment already exists in new topic"
 msgstr "El archivo ya existe en nueva pagina"
@@ -580,9 +595,11 @@ msgid "Back to top"
 msgstr ""
 
 #: templates/twiki.pattern.tmpl:16
+#, fuzzy
 msgid "Back to topic"
-msgstr ""
+msgstr "Unir el archivo a la pagina %1"
 
+#: templates/oopsmore.pattern.tmpl:19 templates/oopsmore.tmpl:19
 #: templates/view.pattern.tmpl:104
 msgid "Backlinks"
 msgstr "Referencias"
@@ -594,10 +611,6 @@ msgstr "Referencias a %1 en web %2"
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Backlinks to %1 in all Webs"
 msgstr "Referencias a %1 en todas las webs"
-
-#: templates/oopsmore.pattern.tmpl:19
-msgid "Backlinks"
-msgstr "Referencias"
 
 #: templates/oopsattention.tmpl:111
 msgid "Base web %1 is missing or does not exist"
@@ -715,7 +728,7 @@ msgstr ""
 msgid "Checkpoint"
 msgstr "Revición de puntos"
 
-#: templates/oopsmore.pattern.tmpl:25
+#: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
 msgstr ""
 
@@ -725,8 +738,9 @@ msgstr "Escoger el nuevo patrón del formulario"
 
 #: templates/renamebase.pattern.tmpl:58
 #: templates/renamewebbase.pattern.tmpl:67
+#, fuzzy
 msgid "Clear all"
-msgstr ""
+msgstr "Seleccionar todos"
 
 #: templates/oopsaccessdenied.tmpl:40
 msgid "Click here"
@@ -765,14 +779,15 @@ msgstr ""
 msgid "Company name:"
 msgstr "Nombre de la pagina:"
 
-#: templates/oopsmore.pattern.tmpl:49
+#: templates/oopsmore.pattern.tmpl:48
 msgid "Compare revisions"
 msgstr "Comparar las reviciones"
 
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
+#, fuzzy
 msgid "Confirm rename or move"
-msgstr ""
+msgstr "Retitular o mover la pagina"
 
 #: templates/oopsleaseconflict.tmpl:5
 msgid "Conflict"
@@ -780,7 +795,7 @@ msgstr ""
 
 #: data/TWiki/TWikiVariablesAtoM.txt:268 templates/login.pattern.tmpl:50
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
-#: templates/oopsaccessdenied.tmpl:42
+#: templates/oopsaccessdenied.tmpl:42 templates/oopsaccessdenied.tmpl:48
 msgid "Contact %1 if you have any questions."
 msgstr ""
 
@@ -853,7 +868,7 @@ msgstr ""
 msgid "Create personal sidebar"
 msgstr ""
 
-#: lib/TWiki/Render.pm:570 lib/TWiki/Render.pm:582
+#: lib/TWiki/Render.pm:569 lib/TWiki/Render.pm:581
 msgid "Create this topic"
 msgstr "Crear esta pagina"
 
@@ -874,6 +889,10 @@ msgstr "Fecha"
 
 #: templates/mailresetpassword.tmpl:5
 msgid "Dear %1"
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:51
+msgid "Debug"
 msgstr ""
 
 #: templates/attachagain.pattern.tmpl:56
@@ -901,13 +920,14 @@ msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
-msgid "Delete topic..."
-msgstr "Borrar la pagina..."
-
-#: templates/oopsmore.pattern.tmpl:7
+#: templates/oopsmore.pattern.tmpl:7 templates/oopsmore.tmpl:7
 msgid "Delete topic"
 msgstr "Borrar la pagina"
+
+#: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
+#: templates/oopsmore.tmpl:10 templates/oopsmore.tmpl:8
+msgid "Delete topic..."
+msgstr "Borrar la pagina..."
 
 #: lib/TWiki/UI/RDiff.pm:254
 msgid "Deleted"
@@ -923,8 +943,9 @@ msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr ""
 
 #: templates/rdiff.pattern.tmpl:18
+#, fuzzy
 msgid "Difference Topic"
-msgstr ""
+msgstr "Borrar la pagina"
 
 #: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
 msgid "Discard"
@@ -1001,7 +1022,7 @@ msgid "Edit text"
 msgstr "Editar el texto"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:37
-#: templates/view.pattern.tmpl:43 templates/view.tmpl:33
+#: templates/view.pattern.tmpl:43
 msgid "Edit this topic text"
 msgstr "Editar esto texto de pagina"
 
@@ -1018,8 +1039,9 @@ msgid "End of topic"
 msgstr ""
 
 #: templates/login.pattern.tmpl:25
+#, fuzzy
 msgid "Enter a new username and password to change identity:"
-msgstr ""
+msgstr "Por favor, ingrese usuario y contraseña:"
 
 #: templates/oopsattention.tmpl:178
 msgid "Error registering user %1"
@@ -1066,6 +1088,7 @@ msgid "Filename %1 is not legal for a TWiki attachment."
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:20 templates/oopsmore.pattern.tmpl:22
+#: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
 msgid "Find topics that link to %1 ..."
 msgstr ""
 
@@ -1139,8 +1162,9 @@ msgid "Help"
 msgstr "Ayuda"
 
 #: templates/attach.pattern.tmpl:49
+#, fuzzy
 msgid "Hide existing attachments"
-msgstr ""
+msgstr "Uniones existentes"
 
 #: templates/attach.pattern.tmpl:104
 msgid "Hide file"
@@ -1154,7 +1178,7 @@ msgstr "Ocultar el formata de ayuda"
 msgid "Hide help"
 msgstr "Ocultar la ayuda"
 
-#: templates/view.print.pattern.tmpl:26
+#: templates/view.print.pattern.tmpl:34
 #, fuzzy
 msgid "History:"
 msgstr "&Historia"
@@ -1429,11 +1453,11 @@ msgstr ""
 msgid "New web name:"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:51
+#: templates/oopsmore.pattern.tmpl:50
 msgid "Newer revision:"
 msgstr "Revicion mas nueva:"
 
-#: templates/oopsmore.pattern.tmpl:26
+#: templates/oopsmore.pattern.tmpl:26 templates/oopsmore.tmpl:26
 msgid "No child topics"
 msgstr ""
 
@@ -1487,7 +1511,7 @@ msgstr "Numero de paginas:"
 msgid "OK"
 msgstr "OK"
 
-#: templates/oopsmore.pattern.tmpl:50
+#: templates/oopsmore.pattern.tmpl:49
 msgid "Older revision:"
 msgstr "Revicion anterior:"
 
@@ -1609,8 +1633,9 @@ msgid "Preferences for"
 msgstr "Preferencias por"
 
 #: templates/edit.pattern.tmpl:56
+#, fuzzy
 msgid "Preview"
-msgstr ""
+msgstr "(previsualizar)"
 
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
@@ -1648,8 +1673,9 @@ msgid "Recently changed topics"
 msgstr "Paginas cambiados recemente"
 
 #: data/TWiki/WebLeftBarLogin.txt:3
+#, fuzzy
 msgid "Register"
-msgstr ""
+msgstr "Revición"
 
 #: data/TWiki/TWikiRegistration.txt:6
 msgid "Registered users can ChangePasswords and ResetPasswords."
@@ -1680,14 +1706,15 @@ msgid "Remove the user from the group(s) %1 first."
 msgstr ""
 
 #: templates/rename.pattern.tmpl:9 templates/renameweb.pattern.tmpl:9
+#, fuzzy
 msgid "Rename"
-msgstr ""
+msgstr "(renombrar)"
 
 #: templates/oopsattention.tmpl:69 templates/oopsattention.tmpl:75
 msgid "Rename failed"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:13
+#: templates/oopsmore.pattern.tmpl:13 templates/oopsmore.tmpl:13
 msgid "Rename or move topic"
 msgstr "Retitular o mover la pagina"
 
@@ -1700,6 +1727,7 @@ msgid "Rename/Move"
 msgstr "Retitular/Mover"
 
 #: templates/oopsmore.pattern.tmpl:14 templates/oopsmore.pattern.tmpl:16
+#: templates/oopsmore.tmpl:14 templates/oopsmore.tmpl:16
 msgid "Rename/move topic..."
 msgstr "Retitular/mover la pagina..."
 
@@ -1727,17 +1755,14 @@ msgstr "Revición"
 msgid "Revision:"
 msgstr "Revición:"
 
-#: templates/oopsmore.pattern.tmpl:45
-msgid "Revisions:"
-msgstr "Reviciones:"
-
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
 msgid "Save"
 msgstr "Guardar"
 
 #: templates/preview.pattern.tmpl:32
+#, fuzzy
 msgid "Save Changes"
-msgstr ""
+msgstr "(cambios)"
 
 #: templates/registernotifyadmin.tmpl:16
 #, fuzzy
@@ -1763,8 +1788,8 @@ msgid "Search a&ll webs"
 msgstr "Buscard todas las webs"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-#: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:22
-#: templates/view.pattern.tmpl:104
+#: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:20
+#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:104
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
@@ -1772,7 +1797,8 @@ msgstr ""
 msgid "Search string"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:20 templates/view.pattern.tmpl:104
+#: templates/oopsmore.pattern.tmpl:22 templates/oopsmore.tmpl:22
+#: templates/view.pattern.tmpl:104
 msgid "Search the %1 Web for topics that link to here"
 msgstr ""
 
@@ -1828,17 +1854,25 @@ msgstr ""
 msgid "Send you a confirmation of your registration by email."
 msgstr ""
 
+#: templates/oopsmore.pattern.tmpl:51
+#, fuzzy
+msgid "Sequential"
+msgstr "Seleccionar todos"
+
 #: templates/oopsmore.pattern.tmpl:30
+#, fuzzy
 msgid "Set new topic parent"
-msgstr ""
+msgstr "ninguno ()"
 
 #: templates/attach.pattern.tmpl:49
+#, fuzzy
 msgid "Show existing attachments"
-msgstr ""
+msgstr "Uniones existentes"
 
 #: templates/edit.pattern.tmpl:19
+#, fuzzy
 msgid "Show formatting help"
-msgstr ""
+msgstr "Ocultar el formata de ayuda"
 
 #: templates/attach.pattern.tmpl:32
 msgid "Show help"
@@ -1848,6 +1882,10 @@ msgstr "Monstrar ayuda"
 msgid ""
 "Show tool-tip topic info on mouse-over of %1 links, on or off: (see details "
 "in %2)"
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:51
+msgid "Side by side"
 msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:7
@@ -1893,8 +1931,9 @@ msgid "Statistics"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:31
+#, fuzzy
 msgid "Step 1: Select topic parent:"
-msgstr ""
+msgstr "ninguno ()"
 
 #: templates/oopsmore.pattern.tmpl:36
 msgid ""
@@ -2141,7 +2180,7 @@ msgid ""
 "automatically. See %1 for details"
 msgstr ""
 
-#: templates/view.print.pattern.tmpl:24
+#: templates/view.print.pattern.tmpl:32
 msgid "This topic:"
 msgstr "Esta pagina:"
 
@@ -2282,20 +2321,23 @@ msgid "Unrecognized action command %1"
 msgstr ""
 
 #: templates/settings.pattern.tmpl:29
+#, fuzzy
 msgid "Update"
-msgstr ""
+msgstr "Fecha"
 
 #: templates/attachagain.pattern.tmpl:9
 msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
 msgstr "Actualise(XXX) la union *%FILENAME%* en la pagina *%TOPIC%*"
 
 #: templates/attachagain.pattern.tmpl:19
+#, fuzzy
 msgid "Update file %1"
-msgstr ""
+msgstr "Mover o Borrar el archivo %1"
 
 #: templates/attachagain.pattern.tmpl:14
+#, fuzzy
 msgid "Update image or document on %TOPIC%"
-msgstr ""
+msgstr "Unir la imagen o documento en %1"
 
 #: templates/attachagain.pattern.tmpl:60 templates/attachnew.pattern.tmpl:23
 msgid "Upload file"
@@ -2354,16 +2396,18 @@ msgid "Vertical size of text edit box:"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:52
+#, fuzzy
 msgid "View difference"
-msgstr ""
+msgstr "(configurar preferencias)"
 
-#: templates/oopsmore.pattern.tmpl:41
+#: templates/oopsmore.pattern.tmpl:41 templates/oopsmore.tmpl:41
 msgid "View previous topic revision"
 msgstr "Vea antes la revicion de la pagina"
 
 #: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
+#, fuzzy
 msgid "View raw text without formatting"
-msgstr ""
+msgstr "con formato de texto original"
 
 #: templates/oopsmore.pattern.tmpl:44
 msgid "View revision"
@@ -2376,7 +2420,7 @@ msgstr "Ver revision"
 msgid "View topic"
 msgstr "Ver pagina"
 
-#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
 msgid "View total topic history"
 msgstr ""
 
@@ -2457,6 +2501,11 @@ msgstr ""
 #: templates/oopsaccessdenied.tmpl:37
 msgid "You are trying to %1 a topic that does not exist."
 msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:46
+#, fuzzy
+msgid "You are trying to %1 an attachment that does not exist."
+msgstr "El archivo no se existe."
 
 #: templates/oopsaccessdenied.tmpl:33
 msgid ""
@@ -2622,15 +2671,6 @@ msgstr ""
 msgid "help"
 msgstr "ayuda"
 
-#: templates/oopsmore.pattern.tmpl:21
-msgid "<em>in %1 web</em> only"
-msgstr ""
-
-#: templates/oopsmore.pattern.tmpl:23
-#, fuzzy
-msgid "<em>in all public webs</em>"
-msgstr "<em>Buscard todas las webs</em>"
-
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"
 msgstr "con formato de texto original"
@@ -2640,10 +2680,12 @@ msgid "indicates mandatory fields"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
+#: templates/oopsmore.tmpl:11 templates/oopsmore.tmpl:17
 msgid "looking for references in _%1 web_ only"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
+#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
 msgid "looking for references in _all public webs_"
 msgstr ""
 
@@ -2686,6 +2728,9 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vea"
+
+#~ msgid "Revisions:"
+#~ msgstr "Reviciones:"
 
 #~ msgid "Topic settings"
 #~ msgstr "Propiedades de la pagina"

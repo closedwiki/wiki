@@ -127,7 +127,7 @@ msgstr ""
 msgid "&Cancel"
 msgstr ""
 
-#: templates/view.pattern.tmpl:43 templates/view.tmpl:33
+#: templates/view.pattern.tmpl:43
 msgid "&Compose"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgstr ""
 msgid "&Edit text"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
 msgid "&History"
 msgstr ""
 
@@ -255,6 +255,7 @@ msgid "(preview)"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
+#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
 msgid "(recommended)"
 msgstr ""
 
@@ -337,6 +338,14 @@ msgstr ""
 msgid ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
 "%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</a>"
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:23 templates/oopsmore.tmpl:23
+msgid "<em>in %1 web</em> only"
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:21 templates/oopsmore.tmpl:21
+msgid "<em>in all public webs</em>"
 msgstr ""
 
 #: templates/preview.pattern.tmpl:42
@@ -498,6 +507,10 @@ msgstr ""
 msgid "Attachment"
 msgstr ""
 
+#: templates/oopsaccessdenied.tmpl:45
+msgid "Attachment '%1' does not exist"
+msgstr ""
+
 #: lib/TWiki/UI/Manage.pm:341
 msgid "Attachment already exists in new topic"
 msgstr ""
@@ -539,6 +552,7 @@ msgstr ""
 msgid "Back to topic"
 msgstr ""
 
+#: templates/oopsmore.pattern.tmpl:19 templates/oopsmore.tmpl:19
 #: templates/view.pattern.tmpl:104
 msgid "Backlinks"
 msgstr ""
@@ -549,10 +563,6 @@ msgstr ""
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Backlinks to %1 in all Webs"
-msgstr ""
-
-#: templates/oopsmore.pattern.tmpl:19
-msgid "Backlinks:"
 msgstr ""
 
 #: templates/oopsattention.tmpl:111
@@ -669,7 +679,7 @@ msgstr ""
 msgid "Checkpoint"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:25
+#: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
 msgstr ""
 
@@ -717,7 +727,7 @@ msgstr ""
 msgid "Company name:"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:49
+#: templates/oopsmore.pattern.tmpl:48
 msgid "Compare revisions"
 msgstr ""
 
@@ -732,7 +742,7 @@ msgstr ""
 
 #: data/TWiki/TWikiVariablesAtoM.txt:268 templates/login.pattern.tmpl:50
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
-#: templates/oopsaccessdenied.tmpl:42
+#: templates/oopsaccessdenied.tmpl:42 templates/oopsaccessdenied.tmpl:48
 msgid "Contact %1 if you have any questions."
 msgstr ""
 
@@ -802,7 +812,7 @@ msgstr ""
 msgid "Create personal sidebar"
 msgstr ""
 
-#: lib/TWiki/Render.pm:570 lib/TWiki/Render.pm:582
+#: lib/TWiki/Render.pm:569 lib/TWiki/Render.pm:581
 msgid "Create this topic"
 msgstr ""
 
@@ -823,6 +833,10 @@ msgstr ""
 
 #: templates/mailresetpassword.tmpl:5
 msgid "Dear %1"
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:51
+msgid "Debug"
 msgstr ""
 
 #: templates/attachagain.pattern.tmpl:56
@@ -848,12 +862,13 @@ msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
-msgid "Delete topic..."
+#: templates/oopsmore.pattern.tmpl:7 templates/oopsmore.tmpl:7
+msgid "Delete topic"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:7
-msgid "Delete topic"
+#: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
+#: templates/oopsmore.tmpl:10 templates/oopsmore.tmpl:8
+msgid "Delete topic..."
 msgstr ""
 
 #: lib/TWiki/UI/RDiff.pm:254
@@ -947,7 +962,7 @@ msgid "Edit text"
 msgstr ""
 
 #: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:37
-#: templates/view.pattern.tmpl:43 templates/view.tmpl:33
+#: templates/view.pattern.tmpl:43
 msgid "Edit this topic text"
 msgstr ""
 
@@ -1010,6 +1025,7 @@ msgid "Filename %1 is not legal for a TWiki attachment."
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:20 templates/oopsmore.pattern.tmpl:22
+#: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
 msgid "Find topics that link to %1 ..."
 msgstr ""
 
@@ -1090,7 +1106,7 @@ msgstr ""
 msgid "Hide help"
 msgstr ""
 
-#: templates/view.print.pattern.tmpl:26
+#: templates/view.print.pattern.tmpl:34
 msgid "History:"
 msgstr ""
 
@@ -1363,11 +1379,11 @@ msgstr ""
 msgid "New web name:"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:51
+#: templates/oopsmore.pattern.tmpl:50
 msgid "Newer revision:"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:26
+#: templates/oopsmore.pattern.tmpl:26 templates/oopsmore.tmpl:26
 msgid "No child topics"
 msgstr ""
 
@@ -1418,7 +1434,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:50
+#: templates/oopsmore.pattern.tmpl:49
 msgid "Older revision:"
 msgstr ""
 
@@ -1616,7 +1632,7 @@ msgstr ""
 msgid "Rename failed"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:13
+#: templates/oopsmore.pattern.tmpl:13 templates/oopsmore.tmpl:13
 msgid "Rename or move topic"
 msgstr ""
 
@@ -1629,6 +1645,7 @@ msgid "Rename/Move"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:14 templates/oopsmore.pattern.tmpl:16
+#: templates/oopsmore.tmpl:14 templates/oopsmore.tmpl:16
 msgid "Rename/move topic..."
 msgstr ""
 
@@ -1654,10 +1671,6 @@ msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:42
 msgid "Revision:"
-msgstr ""
-
-#: templates/oopsmore.pattern.tmpl:45
-msgid "Revisions:"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
@@ -1691,8 +1704,8 @@ msgid "Search a&ll webs"
 msgstr ""
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-#: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:22
-#: templates/view.pattern.tmpl:104
+#: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:20
+#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:104
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
@@ -1700,7 +1713,8 @@ msgstr ""
 msgid "Search string"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:20 templates/view.pattern.tmpl:104
+#: templates/oopsmore.pattern.tmpl:22 templates/oopsmore.tmpl:22
+#: templates/view.pattern.tmpl:104
 msgid "Search the %1 Web for topics that link to here"
 msgstr ""
 
@@ -1755,6 +1769,10 @@ msgstr ""
 msgid "Send you a confirmation of your registration by email."
 msgstr ""
 
+#: templates/oopsmore.pattern.tmpl:51
+msgid "Sequential"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:30
 msgid "Set new topic parent"
 msgstr ""
@@ -1775,6 +1793,10 @@ msgstr ""
 msgid ""
 "Show tool-tip topic info on mouse-over of %1 links, on or off: (see details "
 "in %2)"
+msgstr ""
+
+#: templates/oopsmore.pattern.tmpl:51
+msgid "Side by side"
 msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:7
@@ -2066,7 +2088,7 @@ msgid ""
 "automatically. See %1 for details"
 msgstr ""
 
-#: templates/view.print.pattern.tmpl:24
+#: templates/view.print.pattern.tmpl:32
 msgid "This topic:"
 msgstr ""
 
@@ -2278,7 +2300,7 @@ msgstr ""
 msgid "View difference"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:41
+#: templates/oopsmore.pattern.tmpl:41 templates/oopsmore.tmpl:41
 msgid "View previous topic revision"
 msgstr ""
 
@@ -2297,7 +2319,7 @@ msgstr ""
 msgid "View topic"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
 msgid "View total topic history"
 msgstr ""
 
@@ -2377,6 +2399,10 @@ msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:37
 msgid "You are trying to %1 a topic that does not exist."
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:46
+msgid "You are trying to %1 an attachment that does not exist."
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:33
@@ -2539,14 +2565,6 @@ msgstr ""
 msgid "help"
 msgstr ""
 
-#: templates/oopsmore.pattern.tmpl:21
-msgid "<em>in %1 web</em> only"
-msgstr ""
-
-#: templates/oopsmore.pattern.tmpl:23
-msgid "<em>in all public webs</em>"
-msgstr ""
-
 #: templates/oopsmore.pattern.tmpl:43
 msgid "in raw text format"
 msgstr ""
@@ -2556,10 +2574,12 @@ msgid "indicates mandatory fields"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
+#: templates/oopsmore.tmpl:11 templates/oopsmore.tmpl:17
 msgid "looking for references in _%1 web_ only"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
+#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
 msgid "looking for references in _all public webs_"
 msgstr ""
 
