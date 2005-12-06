@@ -96,13 +96,7 @@ sub beforeSaveHandler {
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
-        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML(
-            {
-                convertImage => \&convertImage,
-                parseWikiUrl => \&parseWikiUrl,
-            },
-            $MARKVARS
-           );
+        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
     }
 
     my @rescue;
@@ -115,7 +109,14 @@ sub beforeSaveHandler {
     # undo the munging that has already been done (grrrrrrrrrr!!!!)
     $_[0] =~ s/\t/   /g;
 
-    $_[0] = $html2tml->convert( $_[0] );
+    $_[0] = $html2tml->convert(
+        $_[0],
+        {
+            context => { web => $_[2], topic => $_[1] },
+            convertImage => \&convertImage,
+            rewriteURL => \&rewriteURL,
+        }
+       );
 
     $_[0] =~ s/<!--META_(\d+)_META-->/$rescue[$1-1]/g;
 
@@ -158,13 +159,20 @@ sub beforeCommonTagsHandler {
     # Translate the topic text to pure HTML.
     unless( $tml2html ) {
         require TWiki::Plugins::WysiwygPlugin::TML2HTML;
-        $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&getViewUrl);
+        $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
     }
 
     # Have to re-read the topic because verbatim blocks have already been
     # lifted out, and we need them.
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
-    $_[0] = $tml2html->convert( $text );
+
+    $_[0] = $tml2html->convert(
+        $text,
+        {
+            getViewUrl => \&getViewUrl,
+            markvars => $MARKVARS,
+        }
+       );
 }
 
 # DEPRECATED in Dakar (postRenderingHandler does the job better)
@@ -208,7 +216,7 @@ sub modifyHeaderHandler {
     }
 }
 
-# callback passed down to TML2HTML generator
+# callback passed to the TML2HTML convertor
 sub getViewUrl {
     my( $web, $topic ) = @_;
 
@@ -220,9 +228,66 @@ sub getViewUrl {
     return TWiki::Func::getViewUrl( $web, $topic );
 }
 
+# general URL rewriter
+# callback passed to the HTML2TML convertor
+sub rewriteURL {
+    my( $url, $opts ) = @_;
+    #my $orig = $url; #debug
+
+    my $anchor = '';
+    if( $url =~ s/(#.*)$// ) {
+        $anchor = $1;
+    }
+    my $parameters = '';
+    if( $url =~ s/(\?.*)$// ) {
+        $parameters = $1;
+    }
+
+    my @vars = (
+        '%ATTACHURL%',
+        '%PUBURL%',
+        '%PUBURLPATH%',
+        '%MAINWEB%',
+        '%TWIKIWEB%',
+        '%SCRIPTURL{"view"}%',
+        '%SCRIPTURL%',
+        '%SCRIPTURLPATH%',
+       );
+
+    my @exp = split(
+        /\0/, TWiki::Func::expandCommonVariables(
+            join("\0", @vars), $opts->{topic}, $opts->{web} ));
+
+    for my $i (0..$#vars) {
+        $url =~ s/^$exp[$i]/$vars[$i]/;
+    }
+
+    if ($url =~ m#^(?:%SCRIPTURL{"view"}%|%SCRIPTURL%/view[^/]*)/(\w+)(?:/(\w+))?$# && !$parameters) {
+        my( $web, $topic );
+
+        if( $2 ) {
+            ($web, $topic) = ($1, $2);
+        } else {
+            $topic = $1;
+        }
+
+        if( $web && $web ne $opts->{web} ) {
+            #print STDERR "$orig -> $web.$topic$anchor\n"; #debug
+            return $web.'.'.$topic.$anchor;
+        }
+        #print STDERR "$orig -> $topic$anchor\n"; #debug
+        return $topic.$anchor;
+    }
+
+    #print STDERR "$orig -> $url$anchor$parameters\n"; #debug
+    return $url.$anchor.$parameters;
+}
+
 # callback used to convert an image reference into a TWiki variable
+# callback passed to the HTML2TML convertor
 sub convertImage {
-    my $x = shift;
+    my( $x, $opts ) = @_;
+
     return undef unless $x;
     local $convertingImage = 1; # override in stack below here
 
@@ -233,7 +298,8 @@ sub convertImage {
         if( $imgs ) {
             while( $imgs =~ s/src="(.*?)" alt="(.*?)"// ) {
                 my( $src, $alt ) = ( $1, $2 );
-                $src = TWiki::Func::expandCommonVariables( $src,$_[1],$_[2] );
+                $src = TWiki::Func::expandCommonVariables(
+                    $src, $opts->{topic}, $opts->{web} );
                 $alt .= '%' if $alt =~ /^%/;
                 $imgMap->{$src} = $alt;
             }
@@ -241,45 +307,6 @@ sub convertImage {
     }
 
     return $imgMap->{$x};
-}
-
-# callback used in TML generation to parse a URL and see if it
-# can be recognised as an internal wiki link. If the url is in
-# the current web, only return the topic
-sub parseWikiUrl {
-    my $url = shift;
-    my( $web, $topic);
-
-    $url =~ s/([#\?].*)$//;
-    my $anchor = $1 || '';
-
-    if( $url =~ /^((%(MAIN|TWIKI)WEB%|\w+)\.)?\w+$/ ) {
-        my $webexpr = $1 || '';
-        if( $MODERN ) {
-            ( $web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $url);
-        } else {
-            ( $web, $topic) = TWiki::Store::normalizeWebTopicName(undef, $url);
-        }
-        return $webexpr.$topic.$anchor;
-    }
-    my $aurl = TWiki::Func::getViewUrl('WEB', 'TOPIC');
-    $aurl =~ s!WEB/TOPIC.*$!!;
-
-    return undef unless length($url) >= length($aurl);
-
-    return undef unless substr($url, 0, length($aurl)) eq $aurl;
-    $url = substr($url,length($aurl),length($url));
-    return undef unless $url =~ /^(\w+)[.\/](\w+)$/;
-    ( $web, $topic) = ($1, $2);
-
-    $topic .= $anchor;
-
-    if( defined $TWiki::Plugins::SESSION ) {
-        return $topic if( $web eq $TWiki::Plugins::SESSION->{webName} );
-    } else {
-        return $topic if( $web eq $TWiki::webName );
-    }
-    return $web.'.'.$topic;
 }
 
 1;

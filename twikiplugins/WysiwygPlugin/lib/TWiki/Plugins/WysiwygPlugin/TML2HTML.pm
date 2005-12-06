@@ -48,36 +48,35 @@ my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 =pod
 
----++ ClassMethod new( \&getViewUrl, $markVars )
+---++ ClassMethod new()
 
 Construct a new TML to HTML convertor.
-
-$getViewUrl is a reference to a method:
-   * getViewUrl($web,$topic) -> $url (where $topic may include an anchor)
-
-$markVars is true if we are to expand TWiki variables to spans. It should
-be false otherwise (TWiki variables will be left as text).
 
 =cut
 
 sub new {
-    my( $class, $getViewUrl, $markVars ) = @_;
+    my $class = shift;
     my $this = {};
-    $this->{getViewUrl} = $getViewUrl;
-    $this->{markvars} = $markVars;
     return bless( $this, $class );
 }
 
 =pod
 
----++ ObjectMethod convert( $tml ) -> $tml
+---++ ObjectMethod convert( $tml, \%options ) -> $tml
 
 Convert a block of TML text into HTML.
+Options:
+   * getViewUrl is a reference to a method:<br>
+     getViewUrl($web,$topic) -> $url (where $topic may include an anchor)
+   * markVars is true if we are to expand TWiki variables to spans.
+     It should be false otherwise (TWiki variables will be left as text).
 
 =cut
 
 sub convert {
-    my( $this, $content ) = @_;
+    my( $this, $content, $options ) = @_;
+
+    map { $this->{$_} = $options->{$_} } keys %$options;
 
     return '' unless $content;
 
@@ -165,15 +164,16 @@ sub _processTags {
 
 sub _makeLink {
     my( $this, $url, $text ) = @_;
-    $url = $this->_liftOut($url);
     $text ||= $url;
+    $url = $this->_liftOut($url);
     return CGI::a( { href => $url }, $text );
 }
 
 sub _makeWikiWord {
-    my( $this, $web, $topic ) = @_;
+    my( $this, $text, $web, $topic, $anchor ) = @_;
     my $url = &{$this->{getViewUrl}}( $web, $topic );
-    return $this->_makeLink( $url, $topic );
+    $url .= $anchor if $anchor;
+    return $this->_makeLink( $url, $text );
 }
 
 sub _makeSquab {
@@ -181,19 +181,21 @@ sub _makeSquab {
     if( $url =~ /[<>"\x00-\x1f]/ ) {
         return defined($text) ? "[[$url][$text]]" : "[[$url]]";
     }
-    unless( $url =~ /^$TWiki::regex{linkProtocolPattern}/ ||
-              $url =~ /[^\w\s]/ ) {
-        $text ||= $url;
-        my($web,$topic);
-        if( $url =~ /^(?:(\w+)\.)?(\w+)$/ ) {
-            ($web,$topic) = ($1,$2);
+    unless( $text ) {
+        # forced link [[Word]]
+        $text = $url;
+        $url =~ s/(^| )(.)/\U$2/g;
+        if( $url =~ /^(?:($TWiki::regex{webNameRegex})\.)?(.*)$/ ) {
+            $url = &{$this->{getViewUrl}}( $1, $2 );
         } else {
-            $web = '';
-            $topic = $url;
-            $topic =~ s/(^|\W)(\w)/uc($2)/ge
+            $url = &{$this->{getViewUrl}}( undef, $2 );
         }
-        $url = &{$this->{getViewUrl}}( $web, $topic );
+    } elsif ($url =~ /^(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?$/) {
+        # Valid wikiword expression
+        my $a = $3 || '';
+        $url = &{$this->{getViewUrl}}( $1, $2 ) . $a;
     }
+
     return $this->_makeLink($url, $text);
 }
 
@@ -387,7 +389,7 @@ sub _getRenderedVersion {
 
     $text =~ s/<nop>($TWiki::regex{wikiWordRegex})/<span class="TMLnop">$1<\/span>/gom;
 
-    $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_makeWikiWord($1,$2)/geom;
+    $text =~ s/$STARTWW((?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?)/$this->_makeWikiWord($1,$2,$3,$4)/geom;
     foreach my $placeholder ( keys %$removed ) {
         my $pm = $removed->{$placeholder}{params}->{class};
         if( $placeholder =~ /^noautolink/i ) {

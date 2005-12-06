@@ -612,43 +612,35 @@ sub _handleA {
     if( $text && $text =~ /\S/ && $this->{attrs}->{href}) {
         # there's text and an href
         my $href = $this->{attrs}->{href};
-        my $topic;
-        if( $href =~ /^(\w+\.)?\w+$/s ) {
-            $topic = $href;
-        } elsif( $this->{context} && $this->{context}->{parseWikiUrl} ) {
-            $topic = &{$this->{context}->{parseWikiUrl}}( $href );
+        if( $this->{context} && $this->{context}->{rewriteURL} ) {
+            $href = &{$this->{context}->{rewriteURL}}(
+                $href, $this->{context}->{context} );
         }
+        $reww = TWiki::Func::getRegularExpression('wikiWordRegex')
+          unless $reww;
         my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
-        if( $topic ) {
+        if( $href =~ /^(\w+\.)?($reww)(#\w+)?$/ ) {
+            my $web = $1 || '';
+            my $topic = $2;
+            my $anchor = $3 || '';
             my $cleantext = $text;
-            $cleantext =~ s/(<nop>)//g;
-            $reww = TWiki::Func::getRegularExpression('wikiWordRegex')
-              unless $reww;
+            $cleantext =~ s/<nop>//g;
+            $cleantext =~ s/^$this->{context}->{context}->{web}\.//;
+
             # if the clean text is the known topic we can ignore it
-            if( ($cleantext eq $topic || $topic =~ /\.$cleantext$/)) {
-                if( $topic =~ /^(\w+\.)?$reww[\w#]*$/o ) {
-                    # wikiword or web.wikiword, optional anchor
-                    return (0, $WC::CHECK1.$nop.$topic.$WC::CHECK2);
-                } else {
-                    return (0, $WC::CHECKw.'['.$nop.'['.$topic.']]'.$WC::CHECKw );
-                }
-            } else {
-                # text and link differ
-                return (0, $WC::CHECKw.'['.$nop.'['.$topic.']['.$text.
-                        ']]'.$WC::CHECKw );
-            }
-        } elsif( $href =~ $WC::PROTOCOL ) {
-            # the url starts with a protocol ID or a twiki variable
-            # normal link
-            if( $text eq $href ) {
-                # Wikiword
-                return (0, $WC::CHECK1.$nop.$text.$WC::CHECK2);
-            } else {
-                return (0, $WC::CHECKw.'['.$nop.'['.$href.']['.$text.
-                        ']]'.$WC::CHECKw );
+            if( ($cleantext eq $href || $href =~ /\.$cleantext$/)) {
+                return (0, $WC::CHECK1.$nop.$web.$topic.$anchor.$WC::CHECK2);
             }
         }
-        return (0, undef);
+
+        if( $href =~ /${WC::PROTOCOL}[^?]*$/ && $text eq $href ) {
+            return (0, $WC::CHECK1.$nop.$text.$WC::CHECK2);
+        }
+        if( $text eq $href ) {
+            return (0, $WC::CHECKw.'['.$nop.'['.$href.']]'.$WC::CHECKw );
+        }
+        return (0, $WC::CHECKw.'['.$nop.'['.$href.']['.$text.
+                  ']]'.$WC::CHECKw );
     } elsif( $this->{attrs}->{name} ) {
         # allow anchors to be expanded normally. This won't generate
         # wiki anchors, but it's a small price to pay - it would
@@ -779,7 +771,9 @@ sub _handleIMG {
     return (0, undef) unless $this->{context} &&
       $this->{context}->{convertImage};
 
-    my $alt = &{$this->{context}->{convertImage}}( $this->{attrs}->{src} );
+    my $alt = &{$this->{context}->{convertImage}}(
+        $this->{attrs}->{src},
+        $this->{context}->{context});
     if( $alt ) {
         return (0, " $alt ");
     }
