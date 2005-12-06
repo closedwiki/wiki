@@ -23,18 +23,19 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.92';
+$RELEASE = '0.93';
+$debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug("- FilterPlugin - " . $_[0]) if $debug;
+  #&TWiki::Func::writeDebug("- FilterPlugin - " . $_[0]) if $debug;
+  print STDERR "DEBUG: FilterPlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################
 sub initPlugin {
   ($topic, $web, $user) = @_;
 
-  $debug = 0; # toggle me
   return 1;
 }
 
@@ -131,14 +132,13 @@ sub handleFilter
   } elsif ($theMode == 1) {
     # substitution mode
     my $hits = $theMaxHits;
-    while($text =~ /\G(.*?)$thePattern/gmsi) {
-      $result .= $1;
-      my $arg1 = $2 || '';
-      my $arg2 = $3 || '';
-      my $arg3 = $4 || '';
-      my $arg4 = $5 || '';
-      my $arg5 = $6 || '';
-      my $arg6 = $7 || '';
+    while($text =~ /$thePattern/gmsi) {
+      my $arg1 = $1 || '';
+      my $arg2 = $2 || '';
+      my $arg3 = $3 || '';
+      my $arg4 = $4 || '';
+      my $arg5 = $5 || '';
+      my $arg6 = $6 || '';
       my $match = $theFormat;
       $match =~ s/\$1/$arg1/g;
       $match =~ s/\$2/$arg2/g;
@@ -146,12 +146,13 @@ sub handleFilter
       $match =~ s/\$4/$arg4/g;
       $match =~ s/\$5/$arg5/g;
       $match =~ s/\$6/$arg6/g;
-      $result .= $match;
-      writeDebug("($hits) result=$result");
-      writeDebug("($hits) text=$text");
+      writeDebug("match=$match");
+      $text =~ s/$thePattern/$match/gmsi;
+      #writeDebug("($hits) text=$text");
       $hits--;
       last if $theMaxHits && $hits <= 0;
     }
+    $result = $text;
   }
 
   writeDebug("result=$result");
