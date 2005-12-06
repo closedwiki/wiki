@@ -21,10 +21,20 @@ use vars qw(
         $aliasPattern $debug $aliasWikiWordsOnly
 	%seenAliasWebTopics $wordRegex $wikiWordRegex
 	$defaultAliasTopic $foundError $isInitialized $insideAliasArea
+	%TWikiCompatibility $START $STOP
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.1';
+$RELEASE = '1.2';
+
+$START = '(?:^|(?<=[\w\b\s\,\.\;\:\!\?\)\(]))';
+$STOP = '(?:$|(?=[\w\b\s\,\.\;\:\!\?\)\(]))';
+
+$TWikiCompatibility{endRenderingHandler} = 1.1;
+$TWikiCompatibility{outsidePREHandler} = 1.1;
+
+# 0: off, 1: debug, 2: heavy debug
+$debug = 0;
 
 # =========================
 sub writeDebug {
@@ -42,8 +52,6 @@ sub initPlugin
     return 0;
   }
 
-  # 0: off, 1: debug, 2: heavy debug
-  $debug = 0;
 
   # more in doInit if we actually have an alias area
   $isInitialized = 0;
@@ -124,8 +132,25 @@ sub outsidePREHandler
 }
 
 # =========================
-sub endRenderingHandler
-{
+sub preRenderingHandler {
+
+  my $result = '';
+  foreach my $line (split(/\r?\n/, $_[0])) {
+    outsidePREHandler($line);
+    $result .= $line . "\n";
+  }
+
+  $_[0] = $result;
+}
+
+# =========================
+sub endRenderingHandler {
+  $_[0] =~ s/%STARTALIASAREA%//go;
+  $_[0] =~ s/%STOPALIASAREA%//go;
+}
+
+# =========================
+sub postRenderingHandler {
   $_[0] =~ s/%STARTALIASAREA%//go;
   $_[0] =~ s/%STOPALIASAREA%//go;
 }
@@ -187,9 +212,8 @@ sub handleAlias {
 
   if ($thisKey && $thisValue) {
     $aliasHash{$thisKey} = &getConvenientAlias($thisKey, $thisValue);
-    $aliasPattern = join('|', keys(%aliasHash));
-    #writeDebug("handleAlias(): added alias '$thisKey' -> '$thisValue')");
-    #writeDebug("handleAlias(): aliasPattern='$aliasPattern'") if $aliasPattern;
+    makeAliasPattern();
+    writeDebug("handleAlias(): added alias '$thisKey' -> '$thisValue')");
     return "";
   }
 
@@ -211,7 +235,7 @@ sub handleUnAlias {
       my $thisValue = $aliasHash{$thisKey};
       if ($thisValue) {
 	delete $aliasHash{$thisKey};
-	$aliasPattern = join('|', keys(%aliasHash));
+	makeAliasPattern();
 	#writeDebug("handleUnAlias(): removed alias '$thisKey' -> '$thisValue')");
       }
       return "";
@@ -225,6 +249,20 @@ sub handleUnAlias {
   %aliasHash = ();
 
   return "";
+}
+
+# =========================
+sub makeAliasPattern {
+  $aliasPattern = '';
+  foreach my $key (keys %aliasHash) {
+    $key =~ s/\\/\\\\/go;
+    $key =~ s/\(/\\(/go;
+    $key =~ s/\)/\\)/go;
+    $key =~ s/\./\\./go;
+    $aliasPattern .= '|' if $aliasPattern;
+    $aliasPattern .= "(?:$key)";
+  }
+  writeDebug("makeAliasPattern(): aliasPattern='$aliasPattern'") if $aliasPattern;
 }
 
 # =========================
@@ -296,13 +334,12 @@ sub getAliases
 
       $aliasHash{$key} = &getConvenientAlias($key, $value);
 
-      #writeDebug("config match: key='$key', value='$aliasHash{$key}'") if $debug > 1;
+      writeDebug("config match: key='$key', value='$aliasHash{$key}'");
     }
   }
-
-  # create alias pattern
-  $aliasPattern = join('|', keys(%aliasHash));
-  #writeDebug("getAliases(): aliasPattern='$aliasPattern'") if $aliasPattern;
+  # handle our ALIAS commands
+  commonTagsHandler($prefText);
+  makeAliasPattern();
 
   return 1;
 }
@@ -324,16 +361,15 @@ sub getConvenientAlias {
 }
 
 # =========================
-sub handleAliasArea
-{
+sub handleAliasArea {
 
   my $text = shift;
-  return "" unless $text;
+  return '' unless $text;
 
   &doInit(); # delayed initialization
   return $text if $foundError || !$aliasPattern;
 
-  #writeDebug("handleAliasArea() called for '$text'");
+  writeDebug("handleAliasArea() called for '$text'") if $debug > 1;
 
   my $result = '';
 
@@ -370,9 +406,9 @@ sub handleAliasArea
 	      if ($substr) {
 
 		if ($debug > 1) { 
-		  $substr =~ s/\b($aliasPattern)\b/&_debugSubstitute($1)/ge;
+		  $substr =~ s/$START($aliasPattern)$STOP/&_debugSubstitute($1)/ge;
 		} else {
-		  $substr =~ s/\b($aliasPattern)\b/$aliasHash{$1}/g;
+		  $substr =~ s/$START($aliasPattern)$STOP/$aliasHash{$1}/gm;
 		}
 		$result .= $substr;
 
@@ -388,7 +424,7 @@ sub handleAliasArea
   }
   $result =~ s/NOPTOKEN/<nop>/g;
 
-  #writeDebug("result is '$result'");
+  writeDebug("result is '$result'") if $debug > 1;
   return $result;
 }
 
