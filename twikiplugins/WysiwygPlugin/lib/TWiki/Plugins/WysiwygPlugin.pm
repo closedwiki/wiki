@@ -53,7 +53,7 @@ use strict;
 use TWiki::Func;
 
 use vars qw( $VERSION $RELEASE $MODERN $MARKVARS );
-use vars qw( $html2tml $tml2html $convertingImage $imgMap $cairoCalled );
+use vars qw( $html2tml $tml2html $recursionBlock $imgMap $cairoCalled );
 use vars qw( %TWikiCompatibility );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -136,7 +136,7 @@ sub beforeSaveHandler {
 # call is hard, and then preventing a repeat call is harder!
 sub beforeCommonTagsHandler {
     #my ( $text, $topic, $web )
-    return if $convertingImage;
+    return if $recursionBlock;
     if( $MODERN ) {
         return unless TWiki::Func::getContext()->{body_text};
     } else {
@@ -184,7 +184,7 @@ sub beforeCommonTagsHandler {
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 sub endRenderingHandler {
     return if( $TWiki::Plugins::VERSION >= 1.1 ||
-                 $convertingImage || !$tml2html );
+                 $recursionBlock || !$tml2html );
 
     return $tml2html->cleanup( @_ );
 }
@@ -194,7 +194,7 @@ sub endRenderingHandler {
 # them from TWiki rendering, such as TWiki variables.
 # Would prefer to use the postRenderingHandler
 sub postRenderingHandler {
-    return if( $convertingImage || !$tml2html );
+    return if( $recursionBlock || !$tml2html );
 
     return $tml2html->cleanup( @_ );
 }
@@ -236,6 +236,7 @@ sub getViewUrl {
 sub rewriteURL {
     my( $url, $opts ) = @_;
     #my $orig = $url; #debug
+    local $recursionBlock = 1; # override in stack below here
 
     my $anchor = '';
     if( $url =~ s/(#.*)$// ) {
@@ -257,15 +258,18 @@ sub rewriteURL {
         '%SCRIPTURLPATH%',
        );
 
-    my @exp = split(
+    unless( $opts->{exp} ) {
+        my @exp = split(
         /\0/, TWiki::Func::expandCommonVariables(
             join("\0", @vars), $opts->{topic}, $opts->{web} ));
-
-    for my $i (0..$#vars) {
-        $url =~ s/^$exp[$i]/$vars[$i]/;
+        $opts->{exp} = \@exp;
     }
 
-    if ($url =~ m#^(?:%SCRIPTURL{"view"}%|%SCRIPTURL%/view[^/]*)/(\w+)(?:/(\w+))?$# && !$parameters) {
+    for my $i (0..$#{$opts->{exp}}) {
+        $url =~ s/^$opts->{exp}->[$i]/$vars[$i]/;
+    }
+
+    if ($url =~ m#^%SCRIPTURL(?:{"view"}%|%/view[^/]*)/(\w+)(?:/(\w+))?$# && !$parameters) {
         my( $web, $topic );
 
         if( $2 ) {
@@ -292,7 +296,7 @@ sub convertImage {
     my( $x, $opts ) = @_;
 
     return undef unless $x;
-    local $convertingImage = 1; # override in stack below here
+    local $recursionBlock = 1; # override in stack below here
 
     unless( $imgMap ) {
         $imgMap = {};
