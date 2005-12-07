@@ -114,7 +114,6 @@ Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 
 
 %META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="Style: appearance: margins, paddings, fonts" date="1129325986" path="style.css" size="19065" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="empty.css" attr="" autoattached="1" comment="" date="1129323307" path="empty.css" size="4" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="tips_bg.gif" attr="" autoattached="1" comment="" date="1129323432" path="tips_bg.gif" size="3813" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="twikiTable_header_bg.gif" attr="" autoattached="1" comment="" date="1129323321" path="twikiTable_header_bg.gif" size="238" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="page_bg.gif" attr="" autoattached="1" comment="" date="1129323311" path="page_bg.gif" size="4085" user="UnknownUser" version=""}%

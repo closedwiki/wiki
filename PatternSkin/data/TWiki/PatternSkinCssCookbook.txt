@@ -26,11 +26,6 @@ When customizing your TWiki installation, you can either choose to completely re
       * <nop>Set TWIKISTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/style.css
       * <nop>Set TWIKICOLORURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
  </pre>
-   * If you use less than these 3 CSS files, let the =TWIKIXXXURL= variable point to an empty CSS file. For this purpose [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/empty.css][empty.css]] is attached to %TWIKIWEB%.PatternSkin:
-<pre>
-      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/empty.css
-      * <nop>Set TWIKICOLORURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/empty.css
- </pre>
 
 ---+++ When you need small adjustments: Adding to existing CSS
 With CSS you cannot remove already defined classes, you can only add to it, or overwrite existing styles. <br />

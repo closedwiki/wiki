@@ -41,8 +41,8 @@
 | WEBTOPICLIST | textarea | 40x3 | [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" /> | Usually a list of topics | S |
 | TWIKILAYOUTURL | text | 30 | %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css | URL of a CSS | S |
 | TWIKISTYLEURL | text | 30 | %PUBURL%/%TWIKIWEB%/PatternSkin/style.css | URL of a CSS | S |
-| USERLAYOUTURL | text | 30 | %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css | URL of a CSS | S |
-| USERSTYLEURL | text | 30 | %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css | URL of a CSS | S |
+| USERLAYOUTURL | text | 30 |  | URL of a CSS | S |
+| USERSTYLEURL | text | 30 |  | URL of a CSS | S |
 | DS_THEME | text | 30 | gray | Theme: (gray, monochrome, tabstyle | S |
 | DS_QUICKLINKSHEADING | text | 30 |  | Quicklinks headings | S |
 | DS_QUICKLINKS | text | 30 |  | Quicklinks submenu | S |
