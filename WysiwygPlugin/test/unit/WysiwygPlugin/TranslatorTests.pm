@@ -921,6 +921,13 @@ TestTopic
 Sandbox.TestTopic
 HERE
           },
+          {
+              exec => 3,
+              name => 'Item1140',
+              html => '<img src="'.$page.'/T-logo-16x16.gif" />',
+              tml  => '<img src="'.$page.'/T-logo-16x16.gif" />',
+              finaltml => '<img src=\'%SCRIPTURL{"view"}%/T-logo-16x16.gif\'></img>'
+          },
          ];
 
 
