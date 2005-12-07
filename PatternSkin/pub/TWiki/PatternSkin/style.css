@@ -320,7 +320,7 @@ a:visited .twistyLinkLabel {
 	padding:20px; /*S5*/
 	border-width:1px 0 0 0;
 	border-style:solid;
-	margin:0 0 -1px 0;
+	margin:0;
 }
 .twikiAttachments p { /* fix for extra generated <p> */
 	display:none;
