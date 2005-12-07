@@ -279,7 +279,7 @@ __Note:__ This topic is included by TWikiVariables
         If you want to write an actual amperstand that stays just before a letter,
         write two consecutive amperstands (<code>&amp;&amp;</code>): they will
         be transformed in just one.
-      * translatable string starting with underscores (<code>_</code) are reserved. You
+      * translatable string starting with underscores (<code>_</code>) are reserved. You
         should not use translatable phrases starting with an underscore.
         
 
