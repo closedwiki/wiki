@@ -614,7 +614,7 @@ sub _handleA {
         my $href = $this->{attrs}->{href};
         if( $this->{context} && $this->{context}->{rewriteURL} ) {
             $href = &{$this->{context}->{rewriteURL}}(
-                $href, $this->{context}->{context} );
+                $href, $this->{context} );
         }
         $reww = TWiki::Func::getRegularExpression('wikiWordRegex')
           unless $reww;
@@ -625,7 +625,7 @@ sub _handleA {
             my $anchor = $3 || '';
             my $cleantext = $text;
             $cleantext =~ s/<nop>//g;
-            $cleantext =~ s/^$this->{context}->{context}->{web}\.//;
+            $cleantext =~ s/^$this->{context}->{web}\.//;
 
             # if the clean text is the known topic we can ignore it
             if( ($cleantext eq $href || $href =~ /\.$cleantext$/)) {
@@ -771,7 +771,7 @@ sub _handleIMG {
     if( $this->{context} && $this->{context}->{rewriteURL} ) {
         my $href = $this->{attrs}->{src};
         $href = &{$this->{context}->{rewriteURL}}(
-            $href, $this->{context}->{context} );
+            $href, $this->{context} );
         $this->{attrs}->{src} = $href;
     }
 
@@ -780,7 +780,7 @@ sub _handleIMG {
 
     my $alt = &{$this->{context}->{convertImage}}(
         $this->{attrs}->{src},
-        $this->{context}->{context});
+        $this->{context} );
     if( $alt ) {
         return (0, " $alt ");
     }
