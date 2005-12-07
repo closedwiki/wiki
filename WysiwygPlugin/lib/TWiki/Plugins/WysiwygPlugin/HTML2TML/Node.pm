@@ -768,6 +768,13 @@ sub _handleTABLE {
 sub _handleIMG {
     my( $this, $options ) = @_;
 
+    if( $this->{context} && $this->{context}->{rewriteURL} ) {
+        my $href = $this->{attrs}->{src};
+        $href = &{$this->{context}->{rewriteURL}}(
+            $href, $this->{context}->{context} );
+        $this->{attrs}->{src} = $href;
+    }
+
     return (0, undef) unless $this->{context} &&
       $this->{context}->{convertImage};
 
@@ -777,7 +784,7 @@ sub _handleIMG {
     if( $alt ) {
         return (0, " $alt ");
     }
-    return(0, undef);
+    return ( 0, undef );
 }
 
 1;
