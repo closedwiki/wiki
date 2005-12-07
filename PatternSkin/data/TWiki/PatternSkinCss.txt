@@ -57,7 +57,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 
    * View
       * .patternMainContents - holder of patternTop, patternTopic, twikiForm, twikiAttachments, etc.
-      * .patternContent - container around .patternTopic in view.pattern.tmpl only; to be able to give .twikiAttachments and .twikiForm a different appearance when they are not enclosed by it, for example the personal data form on the user pages
+      * .patternContent - container around .patternTopic in view.pattern.tmpl only; to be able to give .twikiAttachments and .twikiForm a different appearance when they are not enclosed by it, for example the personal data form on the user pages (where the user form is positioned outside, above the topic text)
       * .patternTopBarLogo - logo position in patternTopBar (topic %TWIKIWEB%.WebTopBar)
       * .patternTopBarOverlay - striped white image background
       * .patternTopic - TWiki topic text
