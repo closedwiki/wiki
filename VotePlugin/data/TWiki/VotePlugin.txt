@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128883140" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1133979431" format="1.1" version="1.1"}%
 ---+!! <nop>VotePlugin
 
 This plugin might be used to establish an online-voting system. Votes are
 collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlugin.
 
 ---++ Example
-%VOTE{id="FavoritMeal" style="bar" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
+%VOTE{id="FavoritMeal" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
 
 <style type="text/css">
 .Vote {
@@ -14,8 +14,6 @@ collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlu
 .VoteSelect {
   margin-bottom:10px;
 }
-.VoteResult {
-}
 </style>
 
 ---++ Syntax Rules
@@ -23,15 +21,15 @@ collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlu
 The %<nop>VOTE{ ... }% macro defines a poll using the following options:
 | *name* | *description* | *example* |
 | id | The identifier of a poll. This must be unique per topic. \
-		 You can thus have multiple independent votes on the same topic page. | <nop>FaroritMeal |
+       You can thus have multiple independent votes on the same topic page. | <nop>FaroritMeal |
 | style | Possible values are a combination of =bar=, =perc=, =total=  and =sum= \
-	  to specify the display style of the poll results \
-			 (default =bar,perc,total=). | =bar= |
+     to specify the display style of the poll results \
+          (default =bar,perc,total=). | =bar= |
 | select&lt;n&gt; | As you can see in the above example multiple decisions can be made within \
-		 the same poll. This identifier must be unique within a poll. \
-		 You can have up to 5 selects per vote (sorry hardcoded;)) | Drinks |
+       the same poll. This identifier must be unique within a poll. \
+       You can have up to 5 selects per vote (sorry hardcoded;)) | Drinks |
 | options&lt;n&gt; | Each select&lt;n&gt; corresponds to set of options that \
-		 you must specify. | Beer,Wine,Milk |
+       you must specify. | Beer,Wine,Milk |
 
 =select= and =option= might use the pseudo variables =$percnt=, =$dollar=, =$quote= and
 =$doublequote= to render the respective characters in the vote output otherwise not allowed
@@ -42,34 +40,38 @@ The plugin will count only you latest vote. You might only vote once a day.
 
 ---++ Plugin Settings
 
-	* Set SHORTDESCRIPTION = Simple way to count votes
+   * Set SHORTDESCRIPTION = Simple way to count votes
 
 ---++ Plugin Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==bin/vote== | Plugin cgi script |
-	  | ==data/TWiki/VotePlugin.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/VotePlugin.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==bin/vote== | Plugin cgi script |
+     | ==data/TWiki/VotePlugin.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/VotePlugin.pm== | Plugin Perl module |
+     | ==pub/TWiki/VotePlugin/mainbar.gif== | decoration |
+     | ==pub/TWiki/VotePlugin/leftbar.gif== | decoration |
+     | ==pub/TWiki/VotePlugin/rightbar.gif== | decoration |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v1.21 (2005-10-09) |
+|  Plugin Version: | v1.22 (2005-12-07) |
 |  Change History: | &nbsp; | 
+|  2005-12-07 | added gif bar; removed debug flag |
 |  2005-10-09 | fixed invocation of normalizeFileName |
 |  2005-10-08 | added added a little more style flexibility |
 |  2005-10-07 | storing votes into =_Vote*.txt= now (was =Vote*.txt= before) ;\
-					 fixed error messaging on empty argument lists |
+                fixed error messaging on empty argument lists |
 |  2005-09-14 | fixes for dakar |
 |  2005-03-14 | incorporated =getLocaldate()= function |
 |  2005-03-16 | use Cache API only if its there; delayed =use &lt;package&gt;= | 
 |  2005-03-07 | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | security patches from TWiki:Codev/UncoordinatedSecurityAlert23Feb2005 |
+|  Other Dependencies: | none |
 |  Perl Version: | >=5.6.1 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
@@ -77,4 +79,5 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Feedback: | TWiki:Plugins/VotePluginDev |
 |  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
 
--- TWiki:Main.MichaelDaum - 9 Oct 2005
+-- TWiki:Main.MichaelDaum - 7 Dec 2005
+
