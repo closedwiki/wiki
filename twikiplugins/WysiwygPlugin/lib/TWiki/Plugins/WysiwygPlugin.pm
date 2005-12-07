@@ -106,8 +106,10 @@ sub beforeSaveHandler {
     $_[0] =~ s/^(%META:[A-Z]+{.*?}%)\s*$/push(@rescue,$1);'<!--META_'.
       scalar(@rescue).'_META-->'/gem;
 
-    # undo the munging that has already been done (grrrrrrrrrr!!!!)
-    $_[0] =~ s/\t/   /g;
+    unless( $MODERN ) {
+        # undo the munging that has already been done (grrrrrrrrrr!!!!)
+        $_[0] =~ s/\t/   /g;
+    }
 
     $_[0] = $html2tml->convert(
         $_[0],
@@ -118,11 +120,12 @@ sub beforeSaveHandler {
         }
        );
 
-    $_[0] =~ s/<!--META_(\d+)_META-->/$rescue[$1-1]/g;
+    unless( $MODERN ) {
+        # redo the munging
+        $_[0] =~ s/   /\t/g;
+    }
 
-    # NOTE: we're not finished yet. We had to leave markers in to protect
-    # some constructs, such as variables, from further expansion. They
-    # will be mopped up in the postRenderingHandler.
+    $_[0] =~ s/<!--META_(\d+)_META-->/$rescue[$1-1]/g;
 }
 
 # Invoked when the selected skin is in use to convert the text to HTML
