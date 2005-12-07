@@ -1,4 +1,4 @@
-./data/TWiki/ImageGalleryPlugin.txt 0440
-./lib/TWiki/Plugins/ImageGalleryPlugin.pm 0440
-./lib/TWiki/Plugins/ImageGalleryPlugin/Core.pm 0440
-./pub/TWiki/ImageGalleryPlugin/style.css 0440
+data/TWiki/ImageGalleryPlugin.txt 0440
+lib/TWiki/Plugins/ImageGalleryPlugin.pm 0440
+lib/TWiki/Plugins/ImageGalleryPlugin/Core.pm 0440
+pub/TWiki/ImageGalleryPlugin/style.css 0440
