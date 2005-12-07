@@ -1,3 +1,6 @@
 lib/TWiki/Plugins/VotePlugin.pm 0440
 bin/vote 0550
 data/TWiki/VotePlugin.txt 0440
+pub/TWiki/VotePlugin/leftbar.gif 0440
+pub/TWiki/VotePlugin/mainbar.gif 0440
+pub/TWiki/VotePlugin/rightbar.gif 0440

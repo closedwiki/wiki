@@ -26,7 +26,8 @@ use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.21';
+$RELEASE = '1.22';
+$debug = 0; # toggle me
 
 ###############################################################################
 # debug suite
@@ -40,14 +41,13 @@ sub initPlugin {
   ($topic, $web, $user, $installWeb) = @_;
 
   $isInitialized = 0;
-  $debug = 0; # toggle me
 
   return 1;
 }
 
 ###############################################################################
 sub commonTagsHandler {
-  $_[0] =~ s/%VOTE{(.*?)%/&handleVote($1)/geo;
+  $_[0] =~ s/%VOTE{(.*?)}%/&handleVote($1)/geo;
 }
 
 ###############################################################################
@@ -59,9 +59,9 @@ sub handleVote {
 
   my $theId = &TWiki::Func::extractNameValuePair($args, 'id') || '';
   my $theStyle = &TWiki::Func::extractNameValuePair($args, 'style') || 'bar,perc,total';
-  my $theWidth = &TWiki::Func::extractNameValuePair($args, 'width') || '100%';
-  my $theColor = &TWiki::Func::extractNameValuePair($args, 'color') || 'lightblue';
-  my $theBgColor = &TWiki::Func::extractNameValuePair($args, 'bgcolor') || 'lightcyan';
+  my $theWidth = &TWiki::Func::extractNameValuePair($args, 'width') || '300';
+  my $theColor = &TWiki::Func::extractNameValuePair($args, 'color') || '';
+  my $theBgColor = &TWiki::Func::extractNameValuePair($args, 'bgcolor') || '';
   my $theLimit = &TWiki::Func::extractNameValuePair($args, 'limit') || '-1';
 
   my @theSelects = ();
@@ -188,9 +188,12 @@ sub handleVote {
   }
   
   # render vote result
-  $result .= "<div class=\"VoteResult\"><table><tr><td>\n";
+  $result .= '<div class="VoteResult">'
+    .'<table border="0" cellpadding="0" cellspacing="0" '
+    .'width="' . $theWidth .'"><tr><td>'."\n";
   my $isFirst = 1;
   my $n;
+  $theWidth = ($theWidth-28)*0.6;
   foreach my $key (sort keys %keyValueFreq) {
     if ($isFirst) {
       $isFirst = 0;
@@ -206,12 +209,20 @@ sub handleVote {
       $freq = $keyValueFreq{$key}{$value};
       $perc = int(1000 * $freq / $totalVotes{$key}) / 10;
       if ($theStyle =~ /bar/) {
-	$result .= '<table width="' . $theWidth 
-	  . '" cellspacing="0" cellpadding="0"><tr>'
-	  . '<td style="border:0px" bgcolor="' . $theColor . '" '
-	  . 'width="' . ($theWidth/100 * $perc) . '">'
-	  . '</td><td bgcolor="' . $theBgColor 
-	  . '" style="border:0px" align="right">';
+	$result .= '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>'
+	  . '<td style="white-space:nowrap;border:0;'
+	  . ($theBgColor?'background:'.$theBgColor.'; ':'')
+	  . ($theColor?'color:'.$theColor.'; ':'')
+	  . '">'
+	  . '<img src="%PUBURLPATH%/%TWIKIWEB%/VotePlugin/leftbar.gif" alt="leftbar" height="14"/>'
+	  . '<img src="%PUBURLPATH%/%TWIKIWEB%/VotePlugin/mainbar.gif" alt="mainbar" height="14" width="'
+	  . ($theWidth/100*$perc) . '" />' 
+	  . '<img src="%PUBURLPATH%/%TWIKIWEB%/VotePlugin/rightbar.gif" alt="rightbar" height="14" />'
+	  . '</td>'
+	  . '<td align="right" style="white-space:nowrap;border:0;'
+	  . ($theBgColor?'background:'.$theBgColor.'; ':'')
+	  . ($theColor?'color:'.$theColor.'; ':'')
+	  . '">';
 	if ($theStyle =~ /perc/) {
 	  $result .= "$perc\%";
 	  if ($theStyle =~ /total/) {
@@ -272,7 +283,7 @@ sub vote {
 
   my $date = &getLocaldate();
 
-  if (1) { # for debugging
+  if ($debug) {
     $host = int(rand(100)); # for testing
   } else {
     $host = md5_base64("$ENV{REMOTE_ADDR}$user$date");
