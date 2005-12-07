@@ -76,7 +76,7 @@ Options:
 sub convert {
     my( $this, $content, $options ) = @_;
 
-    map { $this->{$_} = $options->{$_} } keys %$options;
+    $this->{opts} = $options;
 
     return '' unless $content;
 
@@ -103,7 +103,6 @@ sub _dropBack {
     # Restore everything that was lifted out
     while( $text =~ s/$TT1([0-9]+)$TT1/$this->{refs}->[$1]/gi ) {
     }
-    $this->{refs} = [];
     return $text;
 }
 
@@ -134,7 +133,7 @@ sub _processTags {
             if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)({.*})?$/o ) {
                 my $nop = $1 || '';
                 my $tag = $2 . ( $3 || '' );
-                if( scalar( @stack ) == 1 && $this->{markvars} ) {
+                if( scalar( @stack ) == 1 && $this->{opts}->{markvars} ) {
                     $tag = CGI::span({ class=>'TMLvariable' }, $tag );
                 } else {
                     $tag = '%'.$tag.'%';
@@ -171,29 +170,45 @@ sub _makeLink {
 
 sub _makeWikiWord {
     my( $this, $text, $web, $topic, $anchor ) = @_;
-    my $url = &{$this->{getViewUrl}}( $web, $topic );
+    my $url = &{$this->{opts}->{getViewUrl}}( $web, $topic );
     $url .= $anchor if $anchor;
     return $this->_makeLink( $url, $text );
 }
 
+sub _expandRef {
+    my( $this, $ref ) = @_;
+    if( $this->{opts}->{expandVarsInURL} ) {
+        my $origtxt = $this->{refs}->[$ref];
+        my $newtxt =
+          &{$this->{opts}->{expandVarsInURL}}( $origtxt, $this->{opts} );
+        return $newtxt if $newtxt ne $origtxt;
+    }
+    return "$TT1$ref$TT1";
+}
+
 sub _makeSquab {
     my( $this, $url, $text ) = @_;
+
+    $url =~ s/$TT1([0-9]+)$TT1/$this->_expandRef($1)/ge;
     if( $url =~ /[<>"\x00-\x1f]/ ) {
+        # we didn't manage to expand some variables in the url
+        # path. Give up.
         return defined($text) ? "[[$url][$text]]" : "[[$url]]";
     }
+
     unless( $text ) {
         # forced link [[Word]]
         $text = $url;
         $url =~ s/(^| )(.)/\U$2/g;
         if( $url =~ /^(?:($TWiki::regex{webNameRegex})\.)?(.*)$/ ) {
-            $url = &{$this->{getViewUrl}}( $1, $2 );
+            $url = &{$this->{opts}->{getViewUrl}}( $1, $2 );
         } else {
-            $url = &{$this->{getViewUrl}}( undef, $2 );
+            $url = &{$this->{opts}->{getViewUrl}}( undef, $2 );
         }
     } elsif ($url =~ /^(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?$/) {
         # Valid wikiword expression
         my $a = $3 || '';
-        $url = &{$this->{getViewUrl}}( $1, $2 ) . $a;
+        $url = &{$this->{opts}->{getViewUrl}}( $1, $2 ) . $a;
     }
 
     return $this->_makeLink($url, $text);
@@ -382,6 +397,7 @@ sub _getRenderedVersion {
 
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
+
     $text =~ s/\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/$this->_makeSquab($1,$2)/ge;
 
     # Handle WikiWords

@@ -114,9 +114,10 @@ sub beforeSaveHandler {
     $_[0] = $html2tml->convert(
         $_[0],
         {
-            context => { web => $_[2], topic => $_[1] },
+            web => $_[2],
+            topic => $_[1],
             convertImage => \&convertImage,
-            rewriteURL => \&rewriteURL,
+            rewriteURL => \&postConvertURL,
         }
        );
 
@@ -172,7 +173,10 @@ sub beforeCommonTagsHandler {
     $_[0] = $tml2html->convert(
         $text,
         {
+            web => $_[2],
+            topic => $_[1],
             getViewUrl => \&getViewUrl,
+            expandVarsInURL => \&expandVarsInURL,
             markvars => $MARKVARS,
         }
        );
@@ -231,9 +235,61 @@ sub getViewUrl {
     return TWiki::Func::getViewUrl( $web, $topic );
 }
 
-# general URL rewriter
+# The subset of vars for which bidirection transformation is supported
+# in URLs only
+use vars qw( @VARS );
+
+# The set of variables that get "special treatment" in URLs
+@VARS = (
+    '%ATTACHURL%',
+    '%ATTACHURLPATH%',
+    '%PUBURL%',
+    '%PUBURLPATH%',
+    '%SCRIPTURL{"view"}%',
+    '%SCRIPTURL%',
+    '%SCRIPTURLPATH%',
+    '%SCRIPTSUFFIX%', # bit dodgy, this one
+   );
+
+# Initialises the mapping from var to URL and back
+sub _populateVars {
+    my $opts = shift;
+
+    return if( $opts->{exp} );
+
+    my @exp = split(
+        /\0/, TWiki::Func::expandCommonVariables(
+            join("\0", @VARS), $opts->{topic}, $opts->{web} ));
+    for my $i (0..$#VARS) {
+        my $nvar = $VARS[$i];
+        if($opts->{markvars}) {
+            # SMELL: this is clunky.... but the markvars transformation has
+            # already happened by the time this is used.
+            $nvar =~ s/^%(.*)%$/CGI::span({class=>"TMLvariable"}, $1)/e;
+        }
+        $opts->{match}[$i] = $nvar;
+        $exp[$i] ||= '';
+    }
+    $opts->{exp} = \@exp;
+}
+
+# callback passed to the TML2HTML convertor on each
+# variable in a URL used in a square bracketed link
+sub expandVarsInURL {
+    my( $url, $opts ) = @_;
+
+    return '' unless $url;
+
+    _populateVars( $opts );
+
+    for my $i (0..$#VARS) {
+        $url =~ s/$opts->{match}[$i]/$opts->{exp}->[$i]/g;
+    }
+    return $url;
+}
+
 # callback passed to the HTML2TML convertor
-sub rewriteURL {
+sub postConvertURL {
     my( $url, $opts ) = @_;
     #my $orig = $url; #debug
     local $recursionBlock = 1; # override in stack below here
@@ -247,26 +303,11 @@ sub rewriteURL {
         $parameters = $1;
     }
 
-    my @vars = (
-        '%ATTACHURL%',
-        '%PUBURL%',
-        '%PUBURLPATH%',
-        '%MAINWEB%',
-        '%TWIKIWEB%',
-        '%SCRIPTURL{"view"}%',
-        '%SCRIPTURL%',
-        '%SCRIPTURLPATH%',
-       );
+    _populateVars( $opts );
 
-    unless( $opts->{exp} ) {
-        my @exp = split(
-        /\0/, TWiki::Func::expandCommonVariables(
-            join("\0", @vars), $opts->{topic}, $opts->{web} ));
-        $opts->{exp} = \@exp;
-    }
-
-    for my $i (0..$#{$opts->{exp}}) {
-        $url =~ s/^$opts->{exp}->[$i]/$vars[$i]/;
+    for my $i (0..$#VARS) {
+        next unless $opts->{exp}->[$i];
+        $url =~ s/^$opts->{exp}->[$i]/$VARS[$i]/;
     }
 
     if ($url =~ m#^%SCRIPTURL(?:{"view"}%|%/view[^/]*)/(\w+)(?:/(\w+))?$# && !$parameters) {

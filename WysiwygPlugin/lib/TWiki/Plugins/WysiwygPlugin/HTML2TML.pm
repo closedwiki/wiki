@@ -60,7 +60,7 @@ of how to call it.
 =cut
 
 sub new {
-    my( $class, $options ) = @_;
+    my( $class ) = @_;
 
     my $this = new HTML::Parser( start_h => [\&_openTag, 'self,tagname,attr' ],
                                  end_h => [\&_closeTag, 'self,tagname'],
@@ -79,7 +79,7 @@ sub _resetStack {
     my $this = shift;
 
     $this->{stackTop} =
-      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, '' );
+      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this->{opts}, '' );
     $this->{stack} = ();
 }
 
@@ -94,7 +94,7 @@ Convert a block of HTML text into TML.
 sub convert {
     my( $this, $text, $options ) = @_;
 
-    map { $this->{$_} = $options->{$_} } keys %$options;
+    $this->{opts} = $options;
 
     # SMELL: ought to convert to site charset
 
@@ -124,7 +124,7 @@ sub _openTag {
 
     push( @{$this->{stack}}, $this->{stackTop} ) if $this->{stackTop};
     $this->{stackTop} =
-      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, $tag, $attrs );
+      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this->{opts}, $tag, $attrs );
 }
 
 sub _closeTag {
@@ -157,74 +157,6 @@ sub _apply {
         $this->{stackTop}->addChild( $top );
         last if( $tag && $top->{tag} eq $tag );
     }
-}
-
-=pod
-
----++ convertUtf8toSiteCharset( $text )
-Based on parts of the TWiki KupuEditorAddOn add-on
-Copyright (C) 2004 Damien Mandrioli and Romain Raugi
-
-Generic encoding subroutine. Require TWiki init.
-
-=cut
-
-sub convertUtf8toSiteCharset {
-    my ( $text, $siteCharset ) = @_;
-    my $charEncoding;
-
-    # Convert into ISO-8859-1 if it is the site charset
-    if ( $siteCharset =~ /^iso-?8859-?1$/i ) {
-        # ISO-8859-1 maps onto first 256 codepoints of Unicode
-        # (conversion from 'perldoc perluniintro')
-        $text =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / chr( ord($1) << 6 & 0xC0 | ord($2)& 0x3F ) /egx;
-        return $text;
-    } elsif ( $siteCharset eq 'utf-8' ) {
-        # Convert into internal Unicode characters if on Perl 5.8 or higher.
-        if( $] >= 5.008 ) {
-            require Encode;                   # Perl 5.8 or higher only
-            $text = Encode::decode('utf8', $text);    # 'decode' into UTF-8
-        } else {
-            die 'UTF-8 not supported on Perl $] - use Perl 5.8 or higher';
-        }
-    } else {
-        # Convert from UTF-8 into some other site charset
-        # Use conversion modules depending on Perl version
-        if( $] >= 5.008 ) {
-            require Encode;                   # Perl 5.8 or higher only
-            import Encode qw(:fallbacks);
-            # Map $siteCharset into real encoding name
-            $charEncoding = Encode::resolve_alias( $siteCharset );
-            if( not $charEncoding ) {
-                die 'Conversion to '.$siteCharset.
-                  ' not supported, or name not recognised';
-            } else {
-                # Convert text using Encode:
-                # - first, convert from UTF8 bytes into internal (UTF-8)
-                # characters
-                $text = Encode::decode('utf8', $text);
-                # - then convert into site charset from internal UTF-8,
-                # inserting \x{NNNN} for characters that can't be converted
-                $text = Encode::encode( $charEncoding, $text, &FB_PERLQQ );
-                ##writeDebug 'Encode result is $fullTopicName';
-            }
-        } else {
-            require Unicode::MapUTF8; # Pre-5.8 Perl versions
-            # SMELL: cairo specific
-            $charEncoding = $siteCharset;
-            if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
-                die 'Conversion to '.$siteCharset.
-                  ' not supported, or name not recognised';
-
-            } else {
-                # Convert text
-                $text = Unicode::MapUTF8::from_utf8
-                  ({ -string => $text, -charset => $charEncoding });
-                # FIXME: Check for failed conversion?
-            }
-        }
-    }
-    return $text;
 }
 
 1;

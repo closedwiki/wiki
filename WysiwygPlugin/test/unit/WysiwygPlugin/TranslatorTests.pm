@@ -813,9 +813,9 @@ Outside
           {
               exec => 3,
               name=>"TWikiTagsInHTMLParam",
-              html=>'<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>',
-              tml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>',
-              finaltml => '[[%SCRIPTURL%/view%SCRIPTSUFFIX%][Burble]]',
+              html=>'<a href="'.$page.'/Burble/Barf">Burble</a>',
+              tml => '[[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Burble/Barf][Burble]]',
+              finaltml => '[[Burble.Barf][Burble]]',
           },
           {
               exec => 2,
@@ -1071,7 +1071,9 @@ sub compareTML_HTML {
     my $tx = $txer->convert(
         $args->{tml},
         {
+            web => 'Current', topic => 'TestTopic',
             getViewUrl => \&TWiki::Plugins::WysiwygPlugin::getViewUrl,
+            expandVarsInURL => \&TWiki::Plugins::WysiwygPlugin::expandVarsInURL,
             markvars => 1,
         });
     $txer->cleanup($tx);
@@ -1084,9 +1086,9 @@ sub compareHTML_TML {
     my $tx = $txer->convert(
         $args->{html},
         {
-            context => { web => 'Current', topic => 'TestTopic' },
+            web => 'Current', topic => 'TestTopic',
             convertImage => \&convertImage,
-            rewriteURL => \&TWiki::Plugins::WysiwygPlugin::rewriteURL,
+            rewriteURL => \&TWiki::Plugins::WysiwygPlugin::postConvertURL,
         });
     if( defined($args->{finaltml}) ) {
         $this->_compareTML($args->{finaltml}, $tx, $args->{name});
