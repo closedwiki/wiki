@@ -888,8 +888,10 @@ sub getScriptUrl {
     }
     unless( $url ) {
         $url = $TWiki::cfg{ScriptUrlPath};
-        $url .= '/' unless $url =~ /\/$/;
-        $url .= $script.$TWiki::cfg{ScriptSuffix};
+        if( $script ) {
+            $url .= '/' unless $url =~ /\/$/;
+            $url .= $script.$TWiki::cfg{ScriptSuffix};
+        }
     }
 
     if( $absolute && $url !~ /^[a-z]+:/ ) {
