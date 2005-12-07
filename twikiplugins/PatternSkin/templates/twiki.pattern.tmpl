@@ -9,7 +9,7 @@
 
 
 
-%TMPL:DEF{"simplewikilogo"}%<div class="patternSimpleLogo"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></div>%TMPL:END%
+%TMPL:DEF{"simplewikilogo"}%<span class="patternSimpleLogo twikiLeft"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></span>%TMPL:END%
 
 
 
@@ -137,7 +137,7 @@
 ---+ %TMPL:P{"heading"}%
 %IF{" '%TMPL:P{"webaction"}%' = '' " then="" else="<h3><span class='twikiAlert'>%TMPL:P{"webaction"}%</span></h3>"}%
 %TMPL:P{"message"}%
-</div>
+</div><!-- /patternTopic-->
 %TMPL:P{"topicaction"}%
 %TMPL:END%
 

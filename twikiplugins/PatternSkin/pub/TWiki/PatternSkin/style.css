@@ -185,6 +185,7 @@ label {
     border-collapse:collapse;
     border-width:1px;
 	border-style:solid;
+	border-spacing:0px;
 }
 .twikiTable td,
 .twikiTable th {
@@ -213,51 +214,28 @@ label {
 th.twikiSortedAscendingCol a:link,
 th.twikiSortedAscendingCol a:link font,
 th.twikiSortedAscendingCol a:visited,
-th.twikiSortedAscendingCol a:visited font,
-.twikiAttachments th.twikiSortedAscendingCol a:link,
-.twikiAttachments th.twikiSortedAscendingCol a:link font,
-.twikiAttachments th.twikiSortedAscendingCol a:visited,
-.twikiAttachments th.twikiSortedAscendingCol a:visited font {
-	text-decoration:none;
+th.twikiSortedAscendingCol a:visited font {
 	border-width:1px 0 0 0;
 	border-style:solid;	
 }
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:link font,
 th.twikiSortedDescendingCol a:visited,
-th.twikiSortedDescendingCol a:visited font,
-.twikiAttachments th.twikiSortedDescendingCol a:link,
-.twikiAttachments th.twikiSortedDescendingCol a:link font,
-.twikiAttachments th.twikiSortedDescendingCol a:visited,
-.twikiAttachments th.twikiSortedDescendingCol a:visited font {
-	text-decoration:none;
+th.twikiSortedDescendingCol a:visited font {
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
 th.twikiSortedAscendingCol a:hover,
-th.twikiSortedAscendingCol a:hover font,
-th.twikiSortedDescendingCol a:hover,
-th.twikiSortedDescendingCol a:hover font,
-.twikiAttachments th.twikiSortedAscendingCol a:hover,
-.twikiAttachments th.twikiSortedAscendingCol a:hover font,
-.twikiAttachments th.twikiSortedDescendingCol a:hover,
-.twikiAttachments th.twikiSortedDescendingCol a:hover font{
-	text-decoration:none;
-	border:0;
-}
-th.twikiSortedAscendingCol a:hover,
-th.twikiSortedAscendingCol a:hover font,
-.twikiAttachments th.twikiSortedAscendingCol a:hover,
-.twikiAttachments th.twikiSortedAscendingCol a:hover font {
+th.twikiSortedAscendingCol a:hover font {
 	border-width:0 0 1px 0;
 	border-style:solid;
+	text-decoration:none;
 }
 th.twikiSortedDescendingCol a:hover,
-th.twikiSortedDescendingCol a:hover font,
-.twikiAttachments th.twikiSortedDescendingCol a:hover,
-.twikiAttachments th.twikiSortedDescendingCol a:hover font {
+th.twikiSortedDescendingCol a:hover font {
 	border-width:1px 0 0 0;
-	border-style:solid;	
+	border-style:solid;
+	text-decoration:none;
 }
 
 .twikiEditForm {
@@ -313,17 +291,16 @@ a:visited .twistyLinkLabel {
 .twikiForm {
 	margin:1em 0;
 	overflow:auto;
+	padding:1px; /* fixes disappearing borders because of overflow:auto; in twikiForm */
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
+	/* form or attachment table inside topic area */
 	font-size:94%; /*S2*/
 	padding:20px; /*S5*/
 	border-width:1px 0 0 0;
 	border-style:solid;
 	margin:0;
-}
-.twikiAttachments p { /* fix for extra generated <p> */
-	display:none;
 }
 .twikiAttachments table,
 table.twikiFormTable {
@@ -344,16 +321,13 @@ table.twikiFormTable {
 .twikiAttachments th,
 table.twikiFormTable th.twikiFormTableHRow,
 .twikiEditForm th {
-	padding:2px 6px;
+	padding:3px 6px;
 	height:2.5em;
 	vertical-align:middle;
-	border-style:solid;
-	border-width:0 0 1px 1px;
 }
-.twikiAttachments th.twikiFirstCol,
-table.twikiFormTable th.twikiFirstCol {
-	border-left:none;
-	width:0px;
+.twikiAttachments th a:link,
+.twikiAttachments th a:visited {
+	text-decoration:none;
 }
 /* don't show any of those ugly sort icons */
 .twikiAttachments th img,
@@ -363,42 +337,24 @@ table.twikiFormTable th.twikiFirstCol {
 }
 .twikiAttachments td,
 table.twikiFormTable td {
-	padding:2px 6px;
+	padding:3px 6px;
 	height:1.4em; /*S1*/
 	text-align:left;
 	vertical-align:top;
 }
-.twikiAttachments td,
-table.twikiFormTable td.twikiFormTableRow {
-	border-width:0 0 1px 0;
-}
-table.twikiFormTable th.twikiFirstCol,
-table.twikiFormTable td.twikiFirstCol {
-	border-left:none;
+.twikiAttachments td {
+	/* don't show column lines in attachment listing */
+	border-width:0;
 }
 .twikiAttachments th.twikiFirstCol,
 .twikiAttachments td.twikiFirstCol {
-	border-left:none;
+	/* make more width for the icon column */
 	width:26px;
 	text-align:center;
 }
-.twikiAttachments th a:link,
-.twikiAttachments th a:visited,
 table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
 	text-decoration:none;
-}
-.twikiAttachments th a:hover,
-table.twikiFormTable th.twikiFormTableHRow a:hover {
-	text-decoration:none;
-	border-width:0 0 1px 0;
-	border-style:solid;
-}
-.twikiAttachments td a:link,
-.twikiAttachments td a:visited,
-table.twikiFormTable td.twikiFormTableRow a:link,
-table.twikiFormTable td.twikiFormTableRow a:visited {
-	font-weight: normal;
 }
 
 .twikiToc {
@@ -853,6 +809,9 @@ input.patternFormFieldVerticalForm {
 
 /* Attach page */
 
+.patternAttachPage .patternTopicAction {
+	margin-top:-1px;
+}
 .patternAttachPage .twikiAttachments {
 	font-size:94%; /*S2*/
 }

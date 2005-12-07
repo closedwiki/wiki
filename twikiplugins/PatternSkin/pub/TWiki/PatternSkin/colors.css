@@ -140,7 +140,7 @@ select {
 .twikiTable,
 .twikiTable td,
 .twikiTable th {
-	border-color:#ddd; /*BO7*/
+	border-color:#ccc; /*BO7*/
 }
 .twikiTable th a:link,
 .twikiTable th a:visited,
@@ -163,28 +163,16 @@ th.twikiSortedAscendingCol a:link,
 th.twikiSortedAscendingCol a:link font,
 th.twikiSortedAscendingCol a:visited,
 th.twikiSortedAscendingCol a:visited font,
-.twikiAttachments th.twikiSortedAscendingCol a:link,
-.twikiAttachments th.twikiSortedAscendingCol a:link font,
-.twikiAttachments th.twikiSortedAscendingCol a:visited,
-.twikiAttachments th.twikiSortedAscendingCol a:visited font,
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:link font,
 th.twikiSortedDescendingCol a:visited,
-th.twikiSortedDescendingCol a:visited font,
-.twikiAttachments th.twikiSortedDescendingCol a:link,
-.twikiAttachments th.twikiSortedDescendingCol a:link font,
-.twikiAttachments th.twikiSortedDescendingCol a:visited,
-.twikiAttachments th.twikiSortedDescendingCol a:visited font {
+th.twikiSortedDescendingCol a:visited font {
 	border-color:#666; /*T7*/
 }
 th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover font,
-.twikiAttachments th.twikiSortedAscendingCol a:hover,
-.twikiAttachments th.twikiSortedAscendingCol a:hover font,
 th.twikiSortedDescendingCol a:hover,
-th.twikiSortedDescendingCol a:hover font,
-.twikiAttachments th.twikiSortedDescendingCol a:hover,
-.twikiAttachments th.twikiSortedDescendingCol a:hover font {
+th.twikiSortedDescendingCol a:hover font {
 	border-color:#D6000F; /*T4*/
 }
 
@@ -233,7 +221,7 @@ table.twikiFormTable td.twikiFormTableRow {
 	color:#000; /*T1*/
 }
 .twikiEditForm th {
-	background-color:#eaeaea;
+	background-color:#E8EEF7; /*BG5*/
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
@@ -252,22 +240,11 @@ table.twikiFormTable {
 table.twikiFormTable th.twikiFormTableHRow {
 	background-color:#fff; /*BG1*/
 }
-.twikiAttachments th,
-table.twikiFormTable th.twikiFormTableHRow,
-.twikiEditForm th {
-	border-color:#ccc; /*BO6*/
-}
-.twikiAttachments td,
-table.twikiFormTable td.twikiFormTableRow {
-	border-color:#ccc; /*BO6*/
-	background-color:#fff; /*BG1*/
-}
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
 table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
 	color:#06c; /*T2*/
-	border-color:#06c; /*T2*/
 }
 .twikiAttachments th font,
 table.twikiFormTable th.twikiFormTableHRow font {
@@ -468,7 +445,6 @@ a:hover .twikiAccessKey {
 	color:#000;
 }
 .patternVersatileTable input {
-	background-color:#fff; /*BG1*/
 }
 .patternVersatileTable input.twikiCheckbox {
 	background-color:transparent;

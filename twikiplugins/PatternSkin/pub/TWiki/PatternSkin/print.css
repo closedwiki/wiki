@@ -37,7 +37,6 @@ table a:visited:after {
 }
 .patternPrintPage #patternScreen {
 	padding:1cm;
-	width:21cm;
 }
 body html {
 	margin:0;
@@ -56,7 +55,15 @@ td.patternToolBar,
 #patternLeftBar {
 	display:none;
 }
-
+.patternMainContents {
+	padding-left:0;
+	padding-right:0;
+}
+.patternContent .twikiAttachments,
+.patternContent .twikiForm {
+	padding-left:1px;
+	padding-right:0;
+}
 pre,
 html>body pre {
 	overflow:visible;
