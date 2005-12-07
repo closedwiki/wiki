@@ -23,6 +23,7 @@
 
 %TMPL:DEF{"create_topic"}%%MAKETEXT{"Cr&eate"}%%TMPL:END%
 %TMPL:DEF{"edit_topic"}%%MAKETEXT{"&Edit"}%%TMPL:END%
+%TMPL:DEF{"wysiwyg_topic"}%%MAKETEXT{"&WYSIWYG"}%%TMPL:END%
 
 
 
@@ -33,39 +34,34 @@
 
 
 %TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" rel="nofollow" title='%MAKETEXT{"View topic"}%'>%MAKETEXT{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%MAKETEXT{"Edit"}%</strike></span>%TMPL:END%
-
-%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
-%TMPL:DEF{"activatable_raw_edit"}%%TMPL:P{context="inactive" then="inactive_edit" else="editrawnowysiwyg"}%%TMPL:END%
-
-%TMPL:DEF{"editrawwysiwyg"}%%TMPL:P{"sep"}%%TMPL:P{"editraw"}%%TMPL:END%
-%TMPL:DEF{"editrawnowysiwyg"}%%TMPL:P{"editraw"}%%TMPL:END%
-
-%TMPL:DEF{"wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%'>%MAKETEXT{"&Compose"}%</a></span>%TMPL:END%
-%TMPL:DEF{"activatable_wysiwyg_edit_if_available"}%%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
-%TMPL:DEF{"activatable_wysiwyg_edit"}%%TMPL:P{context="inactive" else="activatable_wysiwyg_edit_if_available"}%%TMPL:END%
-
-%TMPL:DEF{"activatable_combo_edit"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_wysiwyg_edit"}%%TMPL:END%
-
-%TMPL:DEF{"activatable_switchable_edit"}%%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg" else="activatable_raw_edit"}%%TMPL:END%
+%TMPL:DEF{"inactive_wysiwyg"}%%TMPL:P{"sep"}%<span class="patternButton"><strike>%MAKETEXT{"WYSIWYG"}%</strike></span>%TMPL:END%
 
 
+%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?skin=pattern&?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
+%TMPL:DEF{"edit_wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?skin=kupu&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="W">%TMPL:P{context="new_topic" then="create_topic" else="wysiwyg_topic"}%</a></span>%TMPL:END%
+
+%TMPL:DEF{"activatable_raw_edit"}%%TMPL:P{context="inactive" then="inactive_edit" else="editraw"}%%TMPL:END%
+%TMPL:DEF{"activatable_edit_wysiwyg"}%%TMPL:P{context="inactive" then="inactive_wysiwyg" else="edit_wysiwyg"}%%TMPL:END%
 
 
-%TMPL:DEF{"active_attach"}%<a href="%SCRIPTURL{"attach"}%/%WEB%/%TOPIC%" accesskey="A" title="%MAKETEXT{"Attach an image or document to this topic"}%" rel="nofollow">%MAKETEXT{"&Attach"}%</a>%TMPL:END%
+%TMPL:DEF{"activatable_combo_edit"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%%TMPL:END%
+
+
+%TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="A" title="%MAKETEXT{"Attach an image or document to this topic"}%" rel="nofollow">%MAKETEXT{"&Attach"}%</a>%TMPL:END%
 %TMPL:DEF{"inactive_attach"}%<strike>%MAKETEXT{"Attach"}%</strike>%TMPL:END%
 %TMPL:DEF{"activatable_attach"}%%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%%TMPL:END%
 
 
-%TMPL:DEF{"active_more"}%<a href="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%MAKETEXT{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%MAKETEXT{"&More topic actions"}%</a>%TMPL:END%
+%TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%MAKETEXT{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%MAKETEXT{"&More topic actions"}%</a>%TMPL:END%
 %TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%MAKETEXT{"More topic actions..."}%</strike></span>%TMPL:END%
 %TMPL:DEF{"activatable_more"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
 
-%TMPL:DEF{toolbar_buttons}%<div class="patternToolBarButtons">%TMPL:P{"activatable_switchable_edit"}%<span class="patternButton">%TMPL:P{"activatable_attach"}%</span><span class="patternButton">%TMPL:P{"printable"}%</span></div>%TMPL:END%
+%TMPL:DEF{toolbar_buttons}%<div class="patternToolBarButtons">%TMPL:P{"activatable_raw_edit"}%%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%<span class="patternButton">%TMPL:P{"activatable_attach"}%</span><span class="patternButton">%TMPL:P{"printable"}%</span></div>%TMPL:END%
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
-<td class="patternHomePath"><span class="patternHomePathTitle">%MAKETEXT{"You are here"}%: </span>[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] <span class="twikiSeparator">&gt;</span> <a href="%SCRIPTURL{"view"}%/%WEB%/%HOMETOPIC%"><img src="%ICONPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></td>
+<td class="patternHomePath"><span class="patternHomePathTitle">%MAKETEXT{"You are here"}%: </span>[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] <span class="twikiSeparator">&gt;</span> <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><img src="%ICONPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> <nop>%MAKETEXT{"[_1] Web" args="%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></td>
 <td class="patternRevInfo"><span class="patternRevision">%REVINFO%</span></td></tr>
 <tr>
 <td class="patternToolBar" colspan="2">
@@ -95,20 +91,14 @@
 %TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"printable"}%<a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
+%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
 
-%TMPL:DEF{"viewraw"}%<a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%MAKETEXT{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%MAKETEXT{"Raw View"}%</a>%TMPL:END%
+%TMPL:DEF{"raw"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%MAKETEXT{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%MAKETEXT{"Raw View"}%</a>%TMPL:END%
 
-%TMPL:DEF{"raw"}%%TMPL:P{"viewraw"}%%TMPL:P{context="WysiwygPluginEnabled" then="editrawwysiwyg"}%%TMPL:END%
+%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey="W">%MAKETEXT{"&Web"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll Webs"}%</a>%TMPL:END%
 
-%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey="W">%MAKETEXT{"&Web"}%</a>, <a href="%SCRIPTURL{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll Webs"}%</a>%TMPL:END%
-
-%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_switchable_edit"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:P{"raw"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
-
-
+%TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%%TMPL:P{context="WysiwygPluginEnabled" then="sep"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:P{"raw"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 
 %TMPL:DEF{"topicinfo"}%<div class="patternMoved twikiGrayText">%META{"moved"}%</div><!-- /patternMoved-->%TMPL:END%
-
-
 
 %TMPL:P{"page"}%
