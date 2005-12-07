@@ -372,13 +372,13 @@ sub sysCommand {
 
         my $cq = $this->{CMDQUOTE};
         my $cmd = $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
-        my $olderr;
-        open( $olderr, '>&STDERR' ) || die "Can't steal STDERR: $!";
+        open( OLDERR, '>&STDERR' ) || die "Can't steal STDERR: $!";
         open( STDERR, '>'.File::Spec->devnull());
         $data = `$cmd`;
         # restore STDERR
         close( STDERR );
-        open( STDERR, '>&'.$olderr ) || die "Can't restore STDERR";;
+        open( STDERR, '>&OLDERR' ) || die "Can't restore STDERR: $!";
+        close(OLDERR);
         $exit = ( $? >> 8 );
     }
 
