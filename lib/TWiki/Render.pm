@@ -1485,21 +1485,21 @@ sub takeOutBlocks {
     my( $this, $intext, $tag, $map ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
-    return $intext unless( $intext =~ m/<$tag\b/ );
+    return $intext unless( $intext =~ m/<$tag\b/i );
 
     my $out = '';
     my $depth = 0;
     my $scoop;
     my $tagParams;
 
-    foreach my $token ( split/(<\/?$tag[^>]*>)/, $intext ) {
-    	if ($token =~ /<$tag\b([^>]*)?>/) {
+    foreach my $token ( split/(<\/?$tag[^>]*>)/i, $intext ) {
+    	if ($token =~ /<$tag\b([^>]*)?>/i) {
     		$depth++;
     		if ($depth eq 1) {
     			$tagParams = $1;
     			next;
     		}
-    	} elsif ($token =~ /<\/$tag>/) {
+    	} elsif ($token =~ /<\/$tag>/i) {
             if ($depth > 0) {
                 $depth--;
                 if ($depth eq 0) {
