@@ -14,11 +14,13 @@
 
 %TMPL:DEF{"active_edit"}%%TMPL:P{context="inactive" then="inactive_form" else="active_form"}%%TMPL:P{"sep"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?action=text&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
 
+
+
 %TMPL:DEF{"content"}%%TMPL:P{"form"}%
 <div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden"> %MAKETEXT{"Start of topic"}% | <a href="#Actions">%MAKETEXT{"Skip to actions"}%</a><hr /></div>
-<div class="patternTopic">%TEXT%<br class="twikiClear" />
+<div class="patternContent"><div class="patternTopic">%TEXT%<br class="twikiClear" />
 #TopicEnd
-</div><div class="twikiHidden"><hr />%MAKETEXT{"End of topic"}%<br /><a href="#Actions">%MAKETEXT{"Skip to actions"}%</a> | <a href="#PageTop">%MAKETEXT{"Back to top"}%</a><hr /></div>
-%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
+</div><!-- /patternTopic-->
+<div class="twikiHidden"><hr />%MAKETEXT{"End of topic"}%<br /><a href="#Actions">%MAKETEXT{"Skip to actions"}%</a> | <a href="#PageTop">%MAKETEXT{"Back to top"}%</a><hr /></div>
+%TMPL:P{"attachments"}%</div><!-- /patternContent-->%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
-
