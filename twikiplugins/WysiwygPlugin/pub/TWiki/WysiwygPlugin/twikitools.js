@@ -309,20 +309,51 @@ function TWikiTopicDrawer(elementid, web_id, topic_id, tool) {
   this.loadWeb = function(web) {
     var url = this.editor.config.view_url +
       '/TWiki/WysiwygPluginTopicLister?web='+web+
-      ';skin=kupuxml;contenttype=text/xml';
-    var list = Sarissa.getDomDocument();
-    list.async = false;
-    list.load(url);
-    var topics = new Array();
-    var select = list.firstChild;
-    for (i = 0; i < select.childNodes.length; i++) {
-      var option = select.childNodes[i].textContent;
-      if (option != "\n") {
-        var noption = document.createElement('option');
-        noption.value = option;
-        noption.appendChild(document.createTextNode(option));
-        topics.push(noption);
+      ';skin=kupuxml;contenttype=text/plain';
+
+    var req;
+    if(window.XMLHttpRequest) {
+      try {
+        req = new XMLHttpRequest();
+      } catch(e) {
+        req = false;
       }
+    } else if(window.ActiveXObject) {
+      try {
+        req = new ActiveXObject("Msxml2.XMLHTTP");
+      } catch(e) {
+        try {
+          req = new ActiveXObject("Microsoft.XMLHTTP");
+        } catch(e) {
+          req = false;
+        }
+      }
+    }
+    if (!req)
+      return;
+    
+    req.open("GET", url, false);
+    req.send("");
+    
+    var topics = req.responseText.split("\n");
+    
+    /* Hack fixes for Cairo stupidity */
+    if (topics.length && !topics[0].match(/\S/)) {
+      topics.shift();
+    }
+    if (topics.length) {
+      var e = topics[topics.length-1].indexOf('"}%');
+      if (e >= 0) {
+        topics[topics.length-1] = topics[topics.length-1].substr(0, e);
+      }
+    }
+    
+    for (i = 0; i < topics.length; i++) {
+      var option = topics[i];
+      var noption = document.createElement('option');
+      noption.value = option;
+      noption.appendChild(document.createTextNode(option));
+      topics[i] = noption;
     }
     return topics;
   }
