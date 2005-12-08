@@ -257,9 +257,12 @@ sub _populateVars {
 
     return if( $opts->{exp} );
 
+    local $recursionBlock = 1; # block calls to beforeCommonTagshandler
+
     my @exp = split(
         /\0/, TWiki::Func::expandCommonVariables(
             join("\0", @VARS), $opts->{topic}, $opts->{web} ));
+
     for my $i (0..$#VARS) {
         my $nvar = $VARS[$i];
         if($opts->{markvars}) {
@@ -292,7 +295,8 @@ sub expandVarsInURL {
 sub postConvertURL {
     my( $url, $opts ) = @_;
     #my $orig = $url; #debug
-    local $recursionBlock = 1; # override in stack below here
+
+    local $recursionBlock = 1; # block calls to beforeCommonTagshandler
 
     my $anchor = '';
     if( $url =~ s/(#.*)$// ) {
@@ -337,7 +341,8 @@ sub convertImage {
     my( $x, $opts ) = @_;
 
     return undef unless $x;
-    local $recursionBlock = 1; # override in stack below here
+
+    local $recursionBlock = 1; # block calls to beforeCommonTagshandler
 
     unless( $imgMap ) {
         $imgMap = {};
