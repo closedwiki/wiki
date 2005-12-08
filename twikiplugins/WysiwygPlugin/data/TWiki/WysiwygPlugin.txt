@@ -89,7 +89,6 @@ Lists of icons that will be available in the Kupu editor. This has to be a list 
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/yes.gif" alt="" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/no.gif" alt="" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/love.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/scull.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="" />
