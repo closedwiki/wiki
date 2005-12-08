@@ -277,18 +277,68 @@ function _removeClass(node, clazz) {
 /* Shared drawer spec used for all picklist drawers (drawers that just
  * contain a single pre-populated select
  */
-function TWikiPickListDrawer(elementid, selector_id, tool) {
-  this.varSelect = document.getElementById(selector_id);
+function TWikiTopicDrawer(elementid, web_id, topic_id, tool) {
+  this.webSelect = document.getElementById(web_id);
+  this.topicSelect = document.getElementById(topic_id);
   this.element = document.getElementById(elementid);
   this.tool = tool;
 
+  this.changeWeb = function() {
+    var web = this.webSelect.selectedIndex;
+    if (web == this.web)
+      return;
+    this.web = web;
+    if (!this.webs[web]) {
+      var webname = this.webSelect.options[web].value;
+      this.webs[web] = this.loadWeb(webname);
+    }
+    
+    this.topicSelect.selectedIndex = 0;
+    Sarissa.clearChildNodes(this.topicSelect);
+    for (var i = 0; i < this.webs[web].length; i++) {
+      this.topicSelect.appendChild(this.webs[web][i]);
+    }
+  };
+
+  if (this.webSelect) {
+    this.web = this.webSelect.selectedIndex;
+    this.webs = new Array(this.webSelect.childNodes.length);
+    addEventHandler(this.webSelect, "change", this.changeWeb, this);
+  }
+
+  this.loadWeb = function(web) {
+    var url = this.editor.config.view_url +
+      '/TWiki/WysiwygPluginTopicLister?web='+web+
+      ';skin=kupuxml;contenttype=text/xml';
+    var list = Sarissa.getDomDocument();
+    list.async = false;
+    list.load(url);
+    var topics = new Array();
+    var select = list.firstChild;
+    for (i = 0; i < select.childNodes.length; i++) {
+      var option = select.childNodes[i].textContent;
+      if (option != "\n") {
+        var noption = document.createElement('option');
+        noption.value = option;
+        noption.appendChild(document.createTextNode(option));
+        topics.push(noption);
+      }
+    }
+    return topics;
+  }
+
   this.save = function() {
     this.editor.resumeEditing();
-    this.tool.pick(this.varSelect.options[this.varSelect.selectedIndex].value);
+    var web = '';
+    if (this.webSelect) {
+      web = this.webSelect.options[this.web]+'.';
+    }
+    this.tool.pick(web +
+      this.topicSelect.options[this.topicSelect.selectedIndex].value);
   };
 };
 
-TWikiPickListDrawer.prototype = new Drawer;
+TWikiTopicDrawer.prototype = new Drawer;
 
 /* Tool for inserting the url of an attachment into the document.
  */
@@ -712,3 +762,4 @@ function TWikiRemoveElementButton(buttonid, element_name, cssclass) {
 };
 
 TWikiRemoveElementButton.prototype = new KupuButton;
+

@@ -258,9 +258,10 @@ function initKupu(iframe) {
                                               opendrawer('wikiworddrawer'));
     kupu.registerTool('wikiworddrawerbutton', wikiworddrawerbutton);
 
-    var wikiworddrawer = new TWikiPickListDrawer('twiki-wikiworddrawer',
-                                                 'twiki-wikiword-select',
-                                                 wikiwordtool);
+    var wikiworddrawer = new TWikiTopicDrawer('twiki-wikiworddrawer',
+                                              'twiki-wikiweb-select',
+                                              'twiki-wikiword-select',
+                                              wikiwordtool);
     drawertool.registerDrawer('wikiworddrawer', wikiworddrawer);
 
     // Variables select
