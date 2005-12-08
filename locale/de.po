@@ -75,9 +75,8 @@ msgid "%1 is currently logged in"
 msgstr "%1 ist gerade eingeloggt"
 
 #: templates/oopsattention.tmpl:325
-#, fuzzy
 msgid "%1 is currently set to %2"
-msgstr "%1 ist gerade eingeloggt"
+msgstr "%1 ist gerade auf %2 gesetzt"
 
 #: templates/oopsleaseconflict.tmpl:8
 msgid "%1 is editing %2."
@@ -92,9 +91,8 @@ msgid "%1 just for me"
 msgstr "%1 nur für mich"
 
 #: templates/oopsleaseconflict.tmpl:13
-#, fuzzy
 msgid "%1 may still be editing %2."
-msgstr "%1 bearbeitet %2"
+msgstr "%1 wird noch von %2 bearbeitet."
 
 #   "<nop>$fromWeb.<nop>$fromTopic",
 #   $date,
@@ -207,9 +205,8 @@ msgid "(changes)"
 msgstr "(Änderungen)"
 
 #: templates/deleteattachment.pattern.tmpl:2
-#, fuzzy
 msgid "(delete attachment)"
-msgstr "(Anhang verschieben)"
+msgstr "(Anhang löschen)"
 
 #: templates/renamedelete.pattern.tmpl:17
 #: templates/renamewebdelete.pattern.tmpl:17
@@ -245,9 +242,8 @@ msgid "(move attachment)"
 msgstr "(Anhang verschieben)"
 
 #: data/TWiki/WebTopicCreator.txt:17 data/TWiki/WebTopicCreator.txt:19
-#, fuzzy
 msgid "(no parent, orphaned topic)"
-msgstr "Kürzlich geänderte Topics"
+msgstr "(kein Ober-Topic, verwaistes Topic"
 
 #: templates/oopsaccessdenied.tmpl:3 templates/oopsleaseconflict.tmpl:3
 #: templates/oopssaveerr.tmpl:2
@@ -356,7 +352,7 @@ msgstr ""
 #: templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr ""
-"Für diese Seite <a href='%1' rel='nofollow'>Einstellungen bearbeiten</a>"
+"Für dieses Topic <a href='%1' rel='nofollow'>Einstellungen bearbeiten</a>"
 
 #: templates/renamewebbase.pattern.tmpl:71
 msgid ""
@@ -369,11 +365,11 @@ msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:23 templates/oopsmore.tmpl:23
 msgid "<em>in %1 web</em> only"
-msgstr "<em>im %1 Web</em>"
+msgstr "nur <em>im %1 Web</em>"
 
 #: templates/oopsmore.pattern.tmpl:21 templates/oopsmore.tmpl:21
 msgid "<em>in all public webs</em>"
-msgstr "<em>in allen Webs</em>"
+msgstr "<em>in allen öffentlichen Webs</em>"
 
 #: templates/preview.pattern.tmpl:42
 msgid ""
@@ -557,9 +553,8 @@ msgid "Attachment"
 msgstr "Anhang"
 
 #: templates/oopsaccessdenied.tmpl:45
-#, fuzzy
 msgid "Attachment '%1' does not exist"
-msgstr "Anhang existiert nicht."
+msgstr "Anhang '%1' existiert nicht"
 
 #: lib/TWiki/UI/Manage.pm:341
 msgid "Attachment already exists in new topic"
@@ -822,9 +817,8 @@ msgid "Could not create the new web %1"
 msgstr "Neues Web %1 konnte nicht angelegt werden"
 
 #: templates/oopsattention.tmpl:321
-#, fuzzy
 msgid "Could not find template"
-msgstr "Wählen Sie eine neue Formularvorlage"
+msgstr "Template konnte nicht gefunden werden"
 
 #: templates/oopsattention.tmpl:238
 msgid "Could not save %1."
@@ -847,9 +841,8 @@ msgid "Create New Topic"
 msgstr "Neues Topic anlegen"
 
 #: data/TWiki/WebTopicCreator.txt:5
-#, fuzzy
 msgid "Create New Topic in %1 Web"
-msgstr "Neues Topic anlegen"
+msgstr "Neues Topic im %1 Web anlegen"
 
 #: templates/attach.pattern.tmpl:96
 msgid "Create a link to the attached file"
@@ -898,7 +891,7 @@ msgstr "Hallo %1"
 
 #: templates/oopsmore.pattern.tmpl:51
 msgid "Debug"
-msgstr ""
+msgstr "Fehler beheben"
 
 #: templates/attachagain.pattern.tmpl:56
 #: templates/deleteattachment.pattern.tmpl:10
@@ -911,14 +904,12 @@ msgid "Delete"
 msgstr "Löschen"
 
 #: templates/deleteattachment.pattern.tmpl:15
-#, fuzzy
 msgid "Delete File %1"
-msgstr "Datei %1 verschieben oder löschen"
+msgstr "Datei %1 löschen"
 
 #: templates/deleteattachment.pattern.tmpl:6
-#, fuzzy
 msgid "Delete file attachment"
-msgstr "Dateianhang verschieben"
+msgstr "Dateianhang löschen"
 
 #: templates/view.pattern.tmpl:59
 msgid ""
@@ -1151,7 +1142,7 @@ msgid ""
 "TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Setting topic "
 "preferences</a>."
 msgstr ""
-"Hilfe zum konfigurieren von<a target='TWikiVariables' onclick=\"return "
+"Hilfe zum Konfigurieren von <a target='TWikiVariables' onclick=\"return "
 "launchWindow('%TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Topic "
 "Einstellungen</a>. "
 
@@ -1912,9 +1903,8 @@ msgid "Send you a confirmation of your registration by email."
 msgstr "Eine Bestätigungs für ihre Registrierung per E-Mail senden."
 
 #: templates/oopsmore.pattern.tmpl:51
-#, fuzzy
 msgid "Sequential"
-msgstr "Alles auswählen"
+msgstr "Sequenziell"
 
 #: templates/oopsmore.pattern.tmpl:30
 msgid "Set new topic parent"
@@ -1942,7 +1932,7 @@ msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:51
 msgid "Side by side"
-msgstr ""
+msgstr "Seite an Seite"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:7
 #: data/TWiki/WebTopicViewTemplate.txt:7
@@ -2321,25 +2311,23 @@ msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "Änderungen *speichern*: [Änderungen speichern] Knopf drücken."
 
 #: data/TWiki/WebTopicCreator.txt:27
-#, fuzzy
 msgid ""
 "To create a new topic, enter a %TWIKIWEB%.WikiWord for the topic name, "
 "select a topic parent and click 'create.'"
 msgstr ""
-"Um ein neues Topic anzulegen, geben Sie den Namen des Topics ein und drücken "
-"Sie 'create'."
+"Um ein neues Topic anzulegen, geben Sie ein %TWIKIWEB%.WikiWord ein, "
+"wählen Sie ein passendes Ober-Topic und drücken Sie 'anlegen'."
 
 #: templates/moveattachment.pattern.tmpl:19
 msgid "To delete an attachment move it to web %1, topic %2."
 msgstr "Um einen Anhang zu löschen, verschieben Sie es nach Web %1, Topic %2."
 
 #: templates/renameweb.pattern.tmpl:27 templates/renameweb.tmpl:10
-#, fuzzy
 msgid ""
 "To delete this web: move this web to the Trash web by renaming it to %1."
 msgstr ""
-"Verschieben Sie das Web in das Papierkorb Web, um es zu löschen (z.B. "
-"benennen Sie es in %1 um)."
+"Dieses Web löschen: Verschieben Sie das Web in das Papierkorb Web, indem "
+"Sie es in %1 umbenennen."
 
 #: data/TWiki/TWikiRegistration.txt:4
 msgid ""
@@ -2395,9 +2383,8 @@ msgid "Topic name:"
 msgstr "Topic Name:"
 
 #: data/TWiki/WebTopicCreator.txt:14
-#, fuzzy
 msgid "Topic parent:"
-msgstr "Topic Name:"
+msgstr "Ober-Topic:"
 
 #: templates/oopssaveerr.tmpl:4
 msgid "Topic save error"
@@ -2643,7 +2630,6 @@ msgid "You are trying to %1 a topic that does not exist."
 msgstr "Sie versuchen ein Topic zu %1, das nicht existiert."
 
 #: templates/oopsaccessdenied.tmpl:46
-#, fuzzy
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "Sie versuchen ein Topic zu %1, das nicht existiert."
 
@@ -2717,7 +2703,7 @@ msgid ""
 "You now need to verify your email address. You can do so by entering %1 in "
 "the form presented to you when this email was sent, or by visiting %2"
 msgstr ""
-"Sie müssen nun ihre EMaik-Adresse verifizieren. Sie können das tun, indem "
+"Sie müssen nun ihre EMail-Adresse verifizieren. Sie können das tun, indem "
 "Sie %1 in das Formular eintragen, welches ihnen mit der EMail übersand "
 "wurde, oder indem Sie auf %2 gehen"
 
@@ -2894,8 +2880,3 @@ msgstr "abgefragt um %1"
 msgid "view"
 msgstr "Ansehen"
 
-#~ msgid "Revisions:"
-#~ msgstr "Revisionen:"
-
-#~ msgid "Search the <nop>%WEB% Web for topics that link to here"
-#~ msgstr "Das <nop>%WEB% Web nach Topics durchsuchen, die hierher verweisen"
