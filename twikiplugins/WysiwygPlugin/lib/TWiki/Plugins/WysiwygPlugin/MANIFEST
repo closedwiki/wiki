@@ -5,6 +5,7 @@ lib/TWiki/Plugins/WysiwygPlugin/HTML2TML.pm Perl module
 lib/TWiki/Plugins/WysiwygPlugin.pm Perl module
 lib/TWiki/Plugins/WysiwygPlugin/TML2HTML.pm Perl module
 data/TWiki/WysiwygPlugin.txt Documentation and settings
+data/TWiki/WysiwygPluginTopicLister.txt Special AJAX topic
 pub/TWiki/WysiwygPlugin/kuputwiki.css Kupu customisation
 pub/TWiki/WysiwygPlugin/twikitools.js Kupu customisation
 pub/TWiki/WysiwygPlugin/kupuinit.js Kupu customisation
@@ -38,6 +39,7 @@ pub/TWiki/WysiwygPlugin/verbatim-watermark.png Watermark
 pub/TWiki/WysiwygPlugin/screenshot.jpg Screen shot
 pub/TWiki/WysiwygPlugin/view-source.png Button image
 templates/edit.kupu.tmpl Template for an edit using kupu
+templates/view.kupuxml.tmpl Template for AJAX data
 templates/attachtables.kupu.tmpl Attachment table rendering for editor
 templates/view.kupu.tmpl Template for a kupu skin view, used by the editor
 tools/html2tml.pl Stand-alone convertor script

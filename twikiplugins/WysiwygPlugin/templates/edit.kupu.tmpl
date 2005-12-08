@@ -222,8 +222,12 @@
    </div>
    <div id="twiki-wikiworddrawer" class="kupu-drawer">
     <h1 i18n:translate="">WikiWord Link</h1>
-    Link highlighted text to topic<br />%WEB%.
-    <select id='twiki-wikiword-select' class="kupu-toolbox-action"">
+    Link highlighted text to topic<br />
+    Web <select id='twiki-wikiweb-select' class="kupu-toolbox-action"">
+     <option value='%WEB%'>%WEB%</option>
+     %WEBLIST{"<option value='$name'>$name</option>"}%
+    </select>
+    Topic <select id='twiki-wikiword-select' class="kupu-toolbox-action"">
      %TOPICLIST{"<option value='$name'>$name</option>"}%
     </select>
     <div class="kupu-dialogbuttons">

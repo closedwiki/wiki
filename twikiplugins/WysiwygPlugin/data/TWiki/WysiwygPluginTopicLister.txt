@@ -1,0 +1,1 @@
+%TOPICLIST{format="<option>$name</option>" web="%URLPARAM{web}%"}%
