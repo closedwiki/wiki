@@ -160,7 +160,7 @@ msgid "&Printable"
 msgstr "Imprimible"
 
 #: templates/view.pattern.tmpl:104
-msgid "&Web"
+msgid "We&b"
 msgstr "&Web"
 
 #: templates/rdiff.pattern.tmpl:6
@@ -440,6 +440,14 @@ msgstr "Codigo de acceso fallido por %1"
 msgid "Access keys"
 msgstr "Teclas de acceso"
 
+#: templates/edit.pattern.tmpl:56
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
+
+#: templates/preview.pattern.tmpl:35
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, D = Discard"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
 msgid "Action"
@@ -633,8 +641,8 @@ msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 
 #: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
-msgid "Cancel"
-msgstr "Cancelar"
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Cancelar' accesskey='c'"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
@@ -725,8 +733,8 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
 #: templates/preview.pattern.tmpl:35
-msgid "Checkpoint"
-msgstr "Revición de puntos"
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Revición de puntos' accesskey='k'"
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -948,7 +956,7 @@ msgid "Difference Topic"
 msgstr "Borrar la pagina"
 
 #: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
-msgid "Discard"
+msgid "value='Discard' accesskey='d'"
 msgstr ""
 
 #: templates/attach.pattern.tmpl:107
@@ -1633,9 +1641,8 @@ msgid "Preferences for"
 msgstr "Preferencias por"
 
 #: templates/edit.pattern.tmpl:56
-#, fuzzy
-msgid "Preview"
-msgstr "(previsualizar)"
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Previsualizar' accesskey='p'"
 
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
@@ -1645,13 +1652,9 @@ msgstr ""
 msgid "Printable version of this topic"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "Quiet Save"
-msgstr "Guardar sin notificación"
-
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "QuietSave"
-msgstr "Guardar sin notificación"
+msgid "value='QuietSave' accesskey='q'"
+msgstr "value='Guardar sin notificación' accesskey='q'"
 
 #: templates/view.pattern.tmpl:100
 msgid "Raw View"
@@ -1756,8 +1759,8 @@ msgid "Revision:"
 msgstr "Revición:"
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "Save"
-msgstr "Guardar"
+msgid "value='Save' accesskey='s'"
+msgstr "value='Guardar' accesskey='s'"
 
 #: templates/preview.pattern.tmpl:32
 #, fuzzy
@@ -1780,7 +1783,7 @@ msgid "Search"
 msgstr "Buscar"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-msgid "Search %1 &Web only"
+msgid "Search %1 We&b only"
 msgstr ""
 
 #: templates/backlinksweb.pattern.tmpl:10

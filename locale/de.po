@@ -155,7 +155,7 @@ msgid "&Printable"
 msgstr "&Drucken"
 
 #: templates/view.pattern.tmpl:104
-msgid "&Web"
+msgid "We&b"
 msgstr "&Web"
 
 #: templates/rdiff.pattern.tmpl:6
@@ -441,6 +441,14 @@ msgstr "Zugriffskontrolle für %1 fehlgeschlagen"
 msgid "Access keys"
 msgstr "Funktions-Tasten"
 
+#: templates/edit.pattern.tmpl:56
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
+
+#: templates/preview.pattern.tmpl:35
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, D = Discard"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
 msgid "Action"
@@ -633,8 +641,8 @@ msgstr ""
 "Zurücksetzen des Passworts"
 
 #: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
-msgid "Cancel"
-msgstr "Abbrechen"
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Abbrechen' accesskey='c'"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
@@ -724,8 +732,8 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
 #: templates/preview.pattern.tmpl:35
-msgid "Checkpoint"
-msgstr "Zwischenspeichern"
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Zwischenspeichern' accesskey='k'"
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -945,8 +953,8 @@ msgid "Difference Topic"
 msgstr "Änderungs Topic"
 
 #: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
-msgid "Discard"
-msgstr "Verwerfen"
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Verwerfen' accesskey='d'"
 
 #: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
@@ -1682,8 +1690,8 @@ msgid "Preferences for"
 msgstr "Einstellungen für"
 
 #: templates/edit.pattern.tmpl:56
-msgid "Preview"
-msgstr "Vorschau"
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Vorschau' accesskey='p'"
 
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
@@ -1693,13 +1701,9 @@ msgstr "Vorheriger Upload"
 msgid "Printable version of this topic"
 msgstr "Druckversion von diesem Topic"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "Quiet Save"
-msgstr "Stilles Speichern"
-
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "QuietSave"
-msgstr "StillesSpeichern"
+msgid "value='QuietSave' accesskey='q'"
+msgstr "value='Stilles Speichern' accesskey='q'"
 
 #: templates/view.pattern.tmpl:100
 msgid "Raw View"
@@ -1804,8 +1808,8 @@ msgid "Revision:"
 msgstr "Revision:"
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "Save"
-msgstr "Speichern"
+msgid "value='Save' accesskey='s'"
+msgstr "value='Speichern' accesskey='s'"
 
 #: templates/preview.pattern.tmpl:32
 msgid "Save Changes"
@@ -1826,7 +1830,7 @@ msgid "Search"
 msgstr "Suchen"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-msgid "Search %1 &Web only"
+msgid "Search %1 We&b only"
 msgstr "Nur %1 Web durchsuchen"
 
 #: templates/backlinksweb.pattern.tmpl:10

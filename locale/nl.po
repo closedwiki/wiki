@@ -154,7 +154,7 @@ msgid "&Printable"
 msgstr "&Printbaar"
 
 #: templates/view.pattern.tmpl:104
-msgid "&Web"
+msgid "We&b"
 msgstr "&Web"
 
 #: templates/rdiff.pattern.tmpl:6
@@ -412,6 +412,14 @@ msgstr ""
 msgid "Access keys"
 msgstr ""
 
+#: templates/edit.pattern.tmpl:56
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
+
+#: templates/preview.pattern.tmpl:35
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, D = Discard"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
 msgid "Action"
@@ -603,12 +611,12 @@ msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 
 #: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
-msgid "Cancel"
-msgstr "Stop wijzigen"
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Stop bewerken' accesskey='c'"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
-msgstr "Stop wijzigen en gooi veranderingen weg"
+msgstr "Stop bewerken en gooi veranderingen weg"
 
 #: templates/oopsattention.tmpl:64
 msgid "Cannot create %1 because it already exists."
@@ -695,8 +703,8 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
 #: templates/preview.pattern.tmpl:35
-msgid "Checkpoint"
-msgstr ""
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Checkpoint' accesskey='k'"
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -913,8 +921,8 @@ msgid "Difference Topic"
 msgstr "Verwijder pagina"
 
 #: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
-msgid "Discard"
-msgstr "Weggooien"
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Weggooien' accesskey='d'"
 
 #: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
@@ -1588,8 +1596,8 @@ msgid "Preferences for"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:56
-msgid "Preview"
-msgstr ""
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Voorvertoning' accesskey='p'"
 
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
@@ -1599,13 +1607,9 @@ msgstr ""
 msgid "Printable version of this topic"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "Quiet Save"
-msgstr ""
-
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "QuietSave"
-msgstr ""
+msgid "value='QuietSave' accesskey='q'"
+msgstr "value='Stil Bewaren' accesskey='q'"
 
 #: templates/view.pattern.tmpl:100
 msgid "Raw View"
@@ -1734,7 +1738,7 @@ msgid "Search"
 msgstr "Zoeken"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-msgid "Search %1 &Web only"
+msgid "Search %1 We&b only"
 msgstr "Zoek alleen in %1 &web"
 
 #: templates/backlinksweb.pattern.tmpl:10

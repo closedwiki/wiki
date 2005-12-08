@@ -154,7 +154,7 @@ msgid "&Printable"
 msgstr "Im&pressão"
 
 #: templates/view.pattern.tmpl:104
-msgid "&Web"
+msgid "We&b"
 msgstr "&Web"
 
 #: templates/rdiff.pattern.tmpl:6
@@ -447,6 +447,14 @@ msgstr "Verificação de acesso a %1 falhou"
 msgid "Access keys"
 msgstr "Teclas de atalho"
 
+#: templates/edit.pattern.tmpl:56
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
+
+#: templates/preview.pattern.tmpl:35
+msgid "S = Save, Q = !QuietSave, K = Checkpoint, D = Discard"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
 msgid "Action"
@@ -643,8 +651,8 @@ msgstr ""
 "restaurar a senha)"
 
 #: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
-msgid "Cancel"
-msgstr "Cancelar"
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Cancelar' accesskey='c'"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
@@ -738,8 +746,8 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
 #: templates/preview.pattern.tmpl:35
-msgid "Checkpoint"
-msgstr "Salvar e continuar editando"
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Salvar e continuar editando' accesskey='k'"
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -958,8 +966,8 @@ msgid "Difference Topic"
 msgstr "Diferenças no tópico:"
 
 #: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
-msgid "Discard"
-msgstr "Descartar"
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Descartar' accesskey='d'"
 
 #: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
@@ -1687,8 +1695,8 @@ msgid "Preferences for"
 msgstr "Preferências para"
 
 #: templates/edit.pattern.tmpl:56
-msgid "Preview"
-msgstr "Pré-visualizar"
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Pré-visualizar' accesskey='p'"
 
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
@@ -1698,13 +1706,9 @@ msgstr "Anexação anterior"
 msgid "Printable version of this topic"
 msgstr "Versão para impressão deste tópico"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "Quiet Save"
-msgstr "Salvar sem notificar"
-
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "QuietSave"
-msgstr "Salvar sem notificar"
+msgid "value='QuietSave' accesskey='q'"
+msgstr "value='Salvar sem notificar' accesskey='q'"
 
 #: templates/view.pattern.tmpl:100
 msgid "Raw View"
@@ -1832,7 +1836,7 @@ msgid "Search"
 msgstr "Busca"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-msgid "Search %1 &Web only"
+msgid "Search %1 We&b only"
 msgstr "Procurar só na &Web %1"
 
 #: templates/backlinksweb.pattern.tmpl:10
