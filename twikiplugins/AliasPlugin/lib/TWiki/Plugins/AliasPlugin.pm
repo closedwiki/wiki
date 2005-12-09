@@ -15,17 +15,19 @@
 # http://www.gnu.org/copyleft/gpl.html
 # =========================
 package TWiki::Plugins::AliasPlugin;    # change the package name and $pluginName!!!
-# =========================
+
+use strict;
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE
-        $aliasPattern $debug $aliasWikiWordsOnly
+        %aliasRegex %aliasValue 
+	$debug $aliasWikiWordsOnly
 	%seenAliasWebTopics $wordRegex $wikiWordRegex
 	$defaultAliasTopic $foundError $isInitialized $insideAliasArea
 	%TWikiCompatibility $START $STOP
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.2';
+$RELEASE = '1.3';
 
 $START = '(?:^|(?<=[\w\b\s\,\.\;\:\!\?\)\(]))';
 $STOP = '(?:$|(?=[\w\b\s\,\.\;\:\!\?\)\(]))';
@@ -42,8 +44,7 @@ sub writeDebug {
 }
 
 # =========================
-sub initPlugin
-{
+sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
 
   # check for Plugins.pm versions
@@ -107,15 +108,13 @@ sub doInit {
 
 
 # =========================
-sub commonTagsHandler 
-{
+sub commonTagsHandler {
   # order matters. example: UNALIAS -> dump all ALIAS -> add one alias
   $_[0] =~ s/%(ALIAS|ALIASES|UNALIAS)(?:{(.*)?})?%/&handleAllAliasCmds($1, $2)/ge;
 }
 
 # =========================
-sub outsidePREHandler
-{
+sub outsidePREHandler {
 
   #writeDebug("outsidePREHandler called for '$_[0]'");
   if ($_[0] =~ /%STARTALIASAREA%/) {
@@ -169,32 +168,41 @@ sub handleAllAliasCmds {
 
 # =========================
 sub handleAliases {
-  my $args = shift;
+  my $args = shift || '';
 
-  #writeDebug("handleAliases() called");
+  writeDebug("handleAliases($args) called");
 
-  if ($args) {
-    my $doMerge = &TWiki::Func::extractNameValuePair($args, "merge") || 'off';
-    if ($doMerge eq 'on') {
-      $doMerge = 1;
-    } elsif ($doMerge eq 'off') {
-      $doMerge = 0;
-    } else {
+  my $theRegex = '';
+  my $theMerge = '';
+  my $theTopic = '';
+
+  $theTopic = &TWiki::Func::extractNameValuePair($args);
+  $theRegex = &TWiki::Func::extractNameValuePair($args, "regex");
+  $theMerge = &TWiki::Func::extractNameValuePair($args, "merge");
+
+  if ($theTopic) {
+    my $doMerge = $theMerge eq 'on'?1:0;
+    unless(&getAliases($doMerge, $theTopic)) {
       $foundError = 1;
       return '<font color="red">' .
-	     'Error in %<nop>ALIASES%: =merge= must be =on= or =off= </font>';
+	    'Error in %<nop>ALIASES%: no alias definitions found</font>';
     }
-
-    return "" if &getAliases($doMerge, &TWiki::Func::extractNameValuePair($args));
-    $foundError = 1;
-    return '<font color="red">' .
-	   'Error in %<nop>ALIASES%: no alias definitions found</font>';
   }
 
   my $text = "<noautolink>\n";
-  $text .= "| *Name* | *Value* |\n";
-  foreach my $key (sort {uc($a) cmp uc($b)} keys %aliasHash) {
-    $text .= "| <nop>$key | $aliasHash{$key} |\n";
+  if ($theRegex eq 'on') {
+    $text .= "| *Name* | *Regex* | *Value* |\n";
+    foreach my $key (sort keys %aliasRegex) {
+      my $regexText = $aliasRegex{$key};
+      $regexText =~ s/[\x01-\x09\x0b\x0c\x0e-\x1f<>"&]/'&#'.ord($&).';'/ge;
+      $regexText =~ s/\|/&#124;/go;
+      $text .= "| <nop>$key | $regexText | $aliasValue{$key} |\n";
+    }
+  } else {
+    $text .= "| *Name* | *Value* |\n";
+    foreach my $key (sort keys %aliasRegex) {
+      $text .= "| <nop>$key | $aliasValue{$key} |\n";
+    }
   }
   $text .= "</noautolink>\n";
   
@@ -207,13 +215,15 @@ sub handleAlias {
 
   #writeDebug("handleAlias() called");
 
-  my $thisKey = &TWiki::Func::extractNameValuePair($args, 'name');
-  my $thisValue = &TWiki::Func::extractNameValuePair($args, 'value');
+  my $theKey = &TWiki::Func::extractNameValuePair($args, 'name');
+  my $theValue = &TWiki::Func::extractNameValuePair($args, 'value');
+  my $theRegex = &TWiki::Func::extractNameValuePair($args, 'regex');
 
-  if ($thisKey && $thisValue) {
-    $aliasHash{$thisKey} = &getConvenientAlias($thisKey, $thisValue);
-    makeAliasPattern();
-    writeDebug("handleAlias(): added alias '$thisKey' -> '$thisValue')");
+  if ($theKey && $theValue) {
+    $theRegex =~ s/\$start/$START/go;
+    $theRegex =~ s/\$stop/$STOP/go;
+    addAliasPattern($theKey, $theValue, $theRegex);
+    writeDebug("handleAlias(): added alias '$theKey' -> '$theValue')");
     return "";
   }
 
@@ -228,17 +238,13 @@ sub handleUnAlias {
   #writeDebug("handleUnAlias() called");
 
   if ($args) {
-    my $thisKey = &TWiki::Func::extractNameValuePair($args) ||
+    my $theKey = &TWiki::Func::extractNameValuePair($args) ||
 		  &TWiki::Func::extractNameValuePair($args, 'name');
 
-    if ($thisKey) {
-      my $thisValue = $aliasHash{$thisKey};
-      if ($thisValue) {
-	delete $aliasHash{$thisKey};
-	makeAliasPattern();
-	#writeDebug("handleUnAlias(): removed alias '$thisKey' -> '$thisValue')");
-      }
-      return "";
+    if ($theKey) {
+      delete $aliasRegex{$theKey};
+      delete $aliasValue{$theKey};
+      return '';
     }
 
     $foundError = 1;
@@ -246,28 +252,35 @@ sub handleUnAlias {
   } 
 
   #writeDebug("handleUnAlias(): dumping all aliases");
-  %aliasHash = ();
+  %aliasRegex = ();
+  %aliasValue = ();
 
-  return "";
+  return '';
 }
 
 # =========================
-sub makeAliasPattern {
-  $aliasPattern = '';
-  foreach my $key (keys %aliasHash) {
-    $key =~ s/\\/\\\\/go;
-    $key =~ s/\(/\\(/go;
-    $key =~ s/\)/\\)/go;
-    $key =~ s/\./\\./go;
-    $aliasPattern .= '|' if $aliasPattern;
-    $aliasPattern .= "(?:$key)";
+sub addAliasPattern {
+  my ($key, $value, $regex) = @_;
+
+  $regex = '' unless $regex;
+
+  writeDebug("called addAliasPattern($key, $value, $regex)");
+
+  if ($regex) {
+    $aliasRegex{$key} = $regex;
+    $aliasValue{$key} = $value;
+  } else {
+    $key =~ s/([\\\(\)\.\$])/\\$1/go;
+    $value = &getConvenientAlias($key, $value);
+    $aliasRegex{$key} = '\b'.$key.'\b';
+    $aliasValue{$key} = $value;
   }
-  writeDebug("makeAliasPattern(): aliasPattern='$aliasPattern'") if $aliasPattern;
+
+  writeDebug("aliasRegex{$key}=$aliasRegex{$key} aliasValue{$key}=$aliasValue{$key}");
 }
 
 # =========================
-sub getAliases
-{
+sub getAliases {
   my ($doMerge, $thisWebTopic) = @_;
   my $thisWeb;
   my $thisTopic;
@@ -321,7 +334,8 @@ sub getAliases
 
   if (!$doMerge) {
     #writeDebug("getAliases(): dumping old aliases");
-    %aliasHash = ();
+    %aliasRegex = ();
+    %aliasValue = ();
   } else {
     #writeDebug("getAliases(): merging aliases");
   }
@@ -331,15 +345,11 @@ sub getAliases
       my $key = $1;
       my $value = $2;
       $value =~ s/\s+$//go;
-
-      $aliasHash{$key} = &getConvenientAlias($key, $value);
-
-      writeDebug("config match: key='$key', value='$aliasHash{$key}'");
+      addAliasPattern($key, $value);
     }
   }
   # handle our ALIAS commands
   commonTagsHandler($prefText);
-  makeAliasPattern();
 
   return 1;
 }
@@ -365,9 +375,11 @@ sub handleAliasArea {
 
   my $text = shift;
   return '' unless $text;
-
   &doInit(); # delayed initialization
-  return $text if $foundError || !$aliasPattern;
+
+  my @aliasKeys = keys %aliasRegex;
+  
+  return $text if $foundError || !@aliasKeys;
 
   writeDebug("handleAliasArea() called for '$text'") if $debug > 1;
 
@@ -404,14 +416,14 @@ sub handleAliasArea {
 
 	      # do the substitution
 	      if ($substr) {
-
-		if ($debug > 1) { 
-		  $substr =~ s/$START($aliasPattern)$STOP/&_debugSubstitute($1)/ge;
-		} else {
-		  $substr =~ s/$START($aliasPattern)$STOP/$aliasHash{$1}/gm;
+		foreach my $key (@aliasKeys) {
+		  if ($debug > 1) { 
+		    $substr =~ s/($aliasRegex{$key})/&_debugSubstitute($key, $1)/gme;
+		  } else {
+		    $substr =~ s/$aliasRegex{$key}/$aliasValue{$key}/gm;
+		  }
 		}
 		$result .= $substr;
-
 	      }
 	      $result .= $tail if $tail;
 	    }
@@ -429,11 +441,11 @@ sub handleAliasArea {
 }
 
 # =========================
-sub _debugSubstitute
-{
-  my ($key) = @_;
-  my $value = $aliasHash{$key};
-  writeDebug("subst '$key' -> '$value'");
+sub _debugSubstitute {
+  my ($key, $match) = @_;
+  my $regex = $aliasRegex{$key};
+  my $value = $aliasValue{$key};
+  writeDebug("'$regex' matches on '$match' -> '$value'");
   return $value; 
 }
 
