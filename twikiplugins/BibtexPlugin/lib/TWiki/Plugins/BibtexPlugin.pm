@@ -22,50 +22,34 @@ package TWiki::Plugins::BibtexPlugin;
 
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $defaultTopic $defaultSearchTemplate
+        $debug $defaultTopic $defaultSearchTemplate $pubUrlPath $hostUrl $pubDir
 	$isInitialized $currentBibWeb $currentBibTopic 
-	$cmdTemplate1 $cmdTemplate2 
-        $BIBTOOL $BIB2BIB $BIBTEX2HTML $BIBTEX
+	$cmdTemplate $sandbox
     );
 
 use strict;
-
-my $BIBTOOL = $TWiki::cfg{Plugins}{BibtexPlugin}{bibtool} ||
-    'usr/bin/bibtool';
-my $BIB2BIB = $TWiki::cfg{Plugins}{BibtexPlugin}{bib2bib} ||
-    '/usr/bin/bib2bib';
-my $BIBTEX2HTML =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex2html} ||
-    '/usr/bin/bibtex2html';
-my $BIBTEX =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
-    '/usr/bin/bibtex';
+$VERSION = '$Rev$';
+$RELEASE = '1.2';
+$pluginName = 'BibtexPlugin'; 
+$debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug("$pluginName - " . $_[0]) if $debug;
+  #&TWiki::Func::writeDebug("$pluginName - " . $_[0]) if $debug;
+  print STDERR "$pluginName - $_[0]\n" if $debug;
 }
 
-# sub writeDebugTimes {
-#   &TWiki::writeDebugTimes("$pluginName - " . $_[0]) if $debug;
-# }
-
-
-
 ###############################################################################
-sub initPlugin
-{
-  ( $topic, $web, $user, $installWeb ) = @_;
+sub initPlugin {
+  ($topic, $web, $user, $installWeb) = @_;
 
   # check for Plugins.pm versions
-  if( $TWiki::Plugins::VERSION < 1 ) {
-      TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
-      return 0;
+  if ($TWiki::Plugins::VERSION < 1) {
+    TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+    return 0;
   }
 
   $isInitialized = 0;
-
-  $VERSION = '1.100';
-  $RELEASE = 'Dakar';
-  $pluginName = 'BibtexPlugin'; 
 
   return 1;
 }
@@ -73,9 +57,26 @@ sub initPlugin
 ###############################################################################
 sub doInit {
   return if $isInitialized;
-  $isInitialized = 1;
 
-  $debug = 0;
+  unless (defined &TWiki::Sandbox::new) {
+    eval "use TWiki::Contrib::DakarContrib;";
+    $sandbox = new TWiki::Sandbox();
+  } else {
+    $sandbox = $TWiki::sharedSandbox;
+  }
+
+  writeDebug("called doInit");
+
+  # get tools
+  my $bibtoolPrg = $TWiki::cfg{Plugins}{BibtexPlugin}{bibtool} ||
+    '/usr/bin/bibtool';
+  my $bib2bibPrg = $TWiki::cfg{Plugins}{BibtexPlugin}{bib2bib} ||
+    '/usr/bin/bib2bib';
+  my $bibtex2htmlPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex2html} ||
+    '/usr/bin/bibtex2html';
+  my $bibtexPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
+    '/usr/bin/bibtex';
+
 
   # for getRegularExpression
   if ($TWiki::Plugins::VERSION < 1.020) {
@@ -88,27 +89,32 @@ sub doInit {
     "TWiki.BibtexPlugin";
   $defaultSearchTemplate = TWiki::Func::getPreferencesValue( "\U${pluginName}\E_DEFAULTSEARCHTEMPLATE" ) || 
     "TWiki.BibtexSearchTemplate";
+
+  $hostUrl = &TWiki::Func::getUrlHost();
+  $pubUrlPath = &TWiki::Func::getPubUrlPath();
+  $pubDir = &TWiki::Func::getPubDir();
+
+  $cmdTemplate = $pubDir .  '/TWiki/BibtexPlugin/render.sh ' .
+    '%MODE|U% ' .
+    '%BIBTOOLRSC|F% ' .
+    '%SELECT|U% ' .
+    '%BIBTEX2HTMLARGS|U% ' .
+    '%STDERR|F% ' .
+    '%BIBFILES|F% ';
   
-  $cmdTemplate1 = 
-    $BIBTOOL." -r %BIBTOOLRSC|F% %BIBTOOLARGS% %BIBFILES|F% 2>%BIBTOOLSTDERR|F% | " .
-    $BIB2BIB." -q -oc /dev/null %SELECT|U% 2>%BIB2BIBSTDERR|F% ";
-
-  $cmdTemplate2 = " | ".$BIBTEX2HTML.
-    "-c '".$BIBTEX." -terse -min-crossrefs=1000 2>%BIBTEXSTDERR|F% ' " .
-    "%BIBTEX2HTMLARGS|U% 2>%BIBTEX2HTMLSTDERR|F%";
-
   $currentBibWeb = "";
   $currentBibTopic = "";
 
-
   &writeDebug( "doInit( ) is OK" );
+  $isInitialized = 1;
+
+  return '';
 }
 
 
 
 ###############################################################################
-sub commonTagsHandler
-{
+sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
   $_[0] =~ s/%BIBTEX%/&handleBibtex()/ge;
@@ -119,9 +125,9 @@ sub commonTagsHandler
 }
 
 ###############################################################################
-sub handleBibtex
-{
-  &doInit();
+sub handleBibtex {
+  my $errMsg = &doInit();
+  return $errMsg if $errMsg;
 
   # get all attributes
   my $theAttributes = shift;
@@ -151,11 +157,11 @@ sub handleBibtex
 }
 
 ###############################################################################
-sub handleInlineBibtex
-{
+sub handleInlineBibtex {
   my ($theAttributes, $theBibtext) = @_;
 
-  &doInit();
+  my $errMsg = &doInit();
+  return $errMsg if $errMsg;
 
   &writeDebug("handleInlineBibtex: attributes=$theAttributes") if $theAttributes;
   #&writeDebug("handleInlineBibtex: bibtext=$theBibtext");
@@ -174,7 +180,7 @@ sub handleInlineBibtex
   my $theTotal = &TWiki::Func::extractNameValuePair($theAttributes, "total");
   my $theDisplay = &TWiki::Func::extractNameValuePair($theAttributes, "display");
 
-  $theBibtext =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $topic, $web)/ge;
+  #$theBibtext =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $topic, $web)/ge;
 
   return &bibSearch("", "", $theSelect, $theStyle, $theSort, 
 	 $theReverse, $theMixed, $theErrors, $theForm, $theAbstracts, $theKeywords, 
@@ -182,10 +188,11 @@ sub handleInlineBibtex
 }
 
 ###############################################################################
-sub handleCitation
-{
-  &doInit();
+sub handleCitation {
   my $theAttributes = shift;
+
+  my $errMsg = &doInit();
+  return $errMsg if $errMsg;
 
   my $theKey = &TWiki::Func::extractNameValuePair($theAttributes) ||
     &TWiki::Func::extractNameValuePair($theAttributes, "key");
@@ -210,26 +217,28 @@ sub bibSearch {
       $theReverse, $theMixed, $theErrors, $theForm, $theAbstracts, 
       $theKeywords, $theTotal, $theDisplay, $theBibtext) = @_;
 
+  my $errMsg = &doInit();
+  return $errMsg if $errMsg;
+
   my $result = "";
   my $code;
 
-  &doInit();
-#  &writeDebugTimes("bibSearch() called" );
+  &writeDebug("called bibSearch()" );
 
   # fallback to default values
-  $theTopic = "$web.$topic" if ! $theTopic;
-  $theStyle = "bibtool" if ! $theStyle;
-  $theSort = "year" if ! $theSort;
-  $theReverse = "on" if ! $theReverse;
-  $theMixed = "off" if ! $theMixed;
-  $theErrors = "off" if ! $theErrors;
-  $theSelect = "" if ! $theSelect;
-  $theAbstracts = "off" if ! $theAbstracts;
-  $theKeywords = "off" if ! $theKeywords;
-  $theTotal = "off" if ! $theTotal;
-  $theForm = "off" if ! $theForm;
-  $theDisplay = "on" if ! $theDisplay;
-  $theBibfile = ".*\.bib" if ! $theBibfile;
+  $theTopic = $web.'.'.$topic unless $theTopic;
+  $theStyle = 'bibtool' unless $theStyle;
+  $theSort = 'year' unless $theSort;
+  $theReverse = 'on' unless $theReverse;
+  $theMixed = 'off' unless $theMixed;
+  $theErrors = 'on' unless $theErrors;
+  $theSelect = '' unless $theSelect;
+  $theAbstracts = 'off' unless $theAbstracts;
+  $theKeywords = 'off' unless $theKeywords;
+  $theTotal = 'off' unless $theTotal;
+  $theForm = 'off' unless $theForm;
+  $theDisplay = 'on' unless $theDisplay;
+  $theBibfile = '.*\.bib' unless $theBibfile;
 
   # replace single quote with double quote in theSelect
   $theSelect =~ s/'/"/go;
@@ -267,9 +276,9 @@ sub bibSearch {
 
 
   # check for error
-  return &TWiki::showError("Error: topic '$theTopic' not found") 
+  return &showError("topic '$theTopic' not found") 
     if !$theBibtext && !&TWiki::Func::topicExists($webName, $topicName);
-  return &TWiki::showError("Error: topic '$formTemplate' not found") 
+  return &showError("topic '$formTemplate' not found") 
     if $formTemplate && !&TWiki::Func::topicExists($formWebName, $formTopicName);
 
 
@@ -287,7 +296,7 @@ sub bibSearch {
       } else {
 	($webName, $topicName) = &scanWebTopic($defaultTopic);
 	&writeDebug("... trying $webName.$topicName now");
-	return &TWiki::showError("Error: topic '$defaultTopic' not found") 
+	return &showError("topic '$defaultTopic' not found") 
 	  if !&TWiki::Func::topicExists($webName, $topicName);
 	@bibfiles = &getBibfiles($webName, $topicName, $theBibfile);
 
@@ -302,7 +311,7 @@ sub bibSearch {
 	}
       }
     }
-    return &TWiki::showError("Error: no bibtex database found.")
+    return &showError("no bibtex database found.")
       if ! @bibfiles && !$theBibtext;
 
     &writeDebug("bibfiles=<" . join(">, <",@bibfiles) . ">")
@@ -320,111 +329,77 @@ sub bibSearch {
     # generate a temporary bibfile for inline stuff
     my $tempBibfile;
     if ($theBibtext) {
-      $tempBibfile = &getTempFileName("bibfile");
+      $tempBibfile = &getTempFileName("bibfile") . '.bib';
       open (BIBFILE, ">$tempBibfile");
       print BIBFILE "$theBibtext\n";
       close BIBFILE;
       push @bibfiles, $tempBibfile;
     }
 
-    my $bibtoolStderr = &getTempFileName("bibtool");
-    my $bib2bibStderr = &getTempFileName("bib2bib");
-
-      $code = '/usr/bin/bibtool ';
-      $code .= '-r '.&TWiki::Func::getPubDir()."/TWiki/BibtexPlugin/bibtoolrsc ";
-      $code .= join(' ',@bibfiles);
-      $code .= ' 2> '.$bibtoolStderr;
-      $code .= ' | /usr/bin/bib2bib -q -oc /dev/null ';
-      $code .= $theSelect? "-c '$theSelect'" : "";
-      $code .= ' 2> '.$bib2bibStderr;
+    my $stdErrFile = &getTempFileName("BibtexPlugin");
 
     # raw mode
     if ($theStyle eq "raw") {
-#      ($result, $code) = &TWiki::readFromProcess($cmdTemplate1,
-#	BIBTOOLRSC => &TWiki::Func::getPubDir() . "/TWiki/BibtexPlugin/bibtoolrsc",
-#	BIBTOOLARGS => "",
-#	BIBFILES => \@bibfiles,
-#	BIBTOOLSTDERR => $bibtoolStderr,
-#	SELECT => $theSelect? "-c '$theSelect'" : "",
-#	BIB2BIBSTDERR => $bib2bibStderr
-#      );
-      $result = `$code`;
-      
+      &writeDebug("reading from process $cmdTemplate");
+      ($result, $code) = $sandbox->sysCommand($cmdTemplate,
+	MODE => 'raw',
+	BIBTOOLRSC => $pubDir . '/TWiki/BibtexPlugin/bibtoolrsc',
+	BIBFILES => \@bibfiles,
+	SELECT => $theSelect? "-c '$theSelect'" : "",
+	BIBTEX2HTMLARGS => '',
+	STDERR => $stdErrFile,
+      );
       &writeDebug("result code $code");
       &writeDebug("result $result");
       &processBibResult(\$result, $webName, $topicName);
       $result = "<div class=\"bibtex\"><pre>\n" . $result . "\n</pre></div>"
 	if $result;
-      $result .= &renderStderror($bibtoolStderr, $bib2bibStderr)
+      $result .= &renderStderror($stdErrFile)
 	if $theErrors eq "on";
     } else {
       # bibtex2html command
-      my $bibtexStderr = &getTempFileName("bibtex");
-      my $bibtex2htmlStderr = &getTempFileName("bibtex2html");
       my $bibtex2HtmlArgs =
-	"-nodoc -nobibsource " .
-#  	"-nokeys " .
-	"-noheader " .
-	"-q -dl -u " .
-	"-note annote ".
-        "-output -";
-#       $bibtex2HtmlArgs .= "--use-keys " if $theStyle eq "bibtool";
-#       $bibtex2HtmlArgs .= "-a " if $theSort =~ /^(author|name)$/;
-#       $bibtex2HtmlArgs .= "-d " if $theSort =~ /^(date|year)$/;
-#       $bibtex2HtmlArgs .= "-u " if $theSort !~ /^(author|name|date|year)$/;
-#       $bibtex2HtmlArgs .= "-r " if $theReverse eq "on";
-#       $bibtex2HtmlArgs .= "-single " if $theMixed eq "on";
-#       $bibtex2HtmlArgs .= "-s $theStyle " if $theStyle ne "bibtool";
-#       $bibtex2HtmlArgs .= "--no-abstract " if $theAbstracts eq "off";
-#       $bibtex2HtmlArgs .= "--no-keywords " if $theKeywords eq "off";
+	'-nodoc -nobibsource ' .
+#  	'-nokeys ' .
+	'-noheader ' .
+	'-q -dl -u ' .
+	'-note annote ';
+      $bibtex2HtmlArgs .= '--use-keys ' if $theStyle eq 'bibtool';
+      $bibtex2HtmlArgs .= '-a ' if $theSort =~ /^(author|name)$/;
+      $bibtex2HtmlArgs .= '-d ' if $theSort =~ /^(date|year)$/;
+      $bibtex2HtmlArgs .= '-u ' if $theSort !~ /^(author|name|date|year)$/;
+      $bibtex2HtmlArgs .= '-r ' if $theReverse eq 'on';
+      $bibtex2HtmlArgs .= '-single ' if $theMixed eq 'on';
+      $bibtex2HtmlArgs .= "-s $theStyle " if $theStyle ne 'bibtool';
+      $bibtex2HtmlArgs .= '--no-abstract ' if $theAbstracts eq 'off';
+      $bibtex2HtmlArgs .= '--no-keywords ' if $theKeywords eq 'off';
 
       # do it
-#     ($result, $code) = &TWiki::readFromProcess($cmdTemplate1 . $cmdTemplate2,
-# 	BIBTOOLRSC => &TWiki::Func::getPubDir() . "/TWiki/BibtexPlugin/bibtoolrsc",
-# 	BIBTOOLARGS => "",
-# 	BIBFILES => \@bibfiles,
-# 	BIBTOOLSTDERR => $bibtoolStderr,
-# 	SELECT => $theSelect? "-c '$theSelect'" : "",
-# 	BIB2BIBSTDERR => $bib2bibStderr,
-# 	BIB2BIBSTDERR => $bibtexStderr,
-# 	BIBTEX2HTMLARGS => $bibtex2HtmlArgs,
-# 	BIBTEX2HTMLSTDERR => $bibtex2htmlStderr,
-# 	BIBTEXSTDERR => $bibtexStderr
-#       );
-      # $result = system($cmdTemplate1 . $cmdTemplate2 . 
-
-      &writeDebug("code1 $code");
-      open(F,">/tmp/bibtex.bib");
-      print F `$code`;
-      close(F);
-
-       $code = " /usr/bin/bibtex2html " .
-                "-c /usr/share/texmf/bin/bibtex ";
-       $code .= $bibtex2HtmlArgs." ";
-       $code .= '/tmp/bibtex.bib';
-       $code .= ' 2>'.$bibtex2htmlStderr;
-
-      $result = `$code`;
-
+      &writeDebug("reading from process $cmdTemplate");
+      ($result, $code) = $sandbox->sysCommand($cmdTemplate,
+	MODE => 'html',
+	BIBTOOLRSC => $pubDir . "/TWiki/BibtexPlugin/bibtoolrsc",
+	BIBFILES => \@bibfiles,
+	SELECT => $theSelect? "-c '$theSelect'" : '',
+	BIBTEX2HTMLARGS => "$bibtex2HtmlArgs",
+	STDERR => $stdErrFile,
+      );
       &writeDebug("result code $code");
       &processBibResult(\$result, $webName, $topicName);
-      $result = "<div class=\"bibtex\">" . $result . "</div>"
+      $result = '<div class="bibtex">' . $result . '</div>'
 	if $result;
-      $result .= &renderStderror($bibtoolStderr, $bib2bibStderr, $bibtex2htmlStderr, $bibtexStderr)
-	if $theErrors eq "on";
+      $result .= &renderStderror($stdErrFile)
+	if $theErrors eq 'on';
 
-      unlink($bibtex2htmlStderr);
-      unlink($bibtexStderr);
-      unlink($tempBibfile) if $tempBibfile;
     }
-
-    unlink($bib2bibStderr);
-    unlink($bibtoolStderr);
 
     my $count = () = $result =~ /<dt>/g if $theTotal eq "on";
     $result = "<!-- \U$pluginName\E BEGIN --><noautolink>" .  $result;
     $result .= "<br />\n<b>Total</b>: $count<br />\n" if $theTotal eq "on";
     $result .= "<!-- \U$pluginName\E END --></noautolink>";
+
+    #unlink($stdErrFile);
+    #unlink($tempBibfile) if $tempBibfile;
   }
 
   # insert into the bibsearch form
@@ -443,9 +418,14 @@ sub bibSearch {
     $result = $text;
   }
 
+  # add style
+  my $styleUrl = TWiki::Func::getPreferencesValue("BIBTEXPLUGIN_STYLE") ||
+    $hostUrl .  $pubUrlPath . "/" . &TWiki::Func::getTwikiWebname() . 
+    "/BibtexPlugin/style.css";
+  $result .= "<style type=\"text/css\">\@import url(\"$styleUrl\");</style>\n";
 
   #&writeDebug("result='$result'");
-#  &writeDebugTimes("handleBibtex( ) done");
+  &writeDebug("handleBibtex( ) done");
   return $result;
 }
 
@@ -455,7 +435,6 @@ sub processBibResult {
   my ($result, $webName, $topicName) = @_;
   while ($$result =~ s/<\/dl>.+\n/<\/dl>/o) {}; # strip bibtex2html disclaimer
 
-  my $pubUrlPath = &TWiki::Func::getPubUrlPath();
   $$result =~ s/<dl>\s*<\/dl>//go;
   $$result =~ s/\@COMMENT.*\n//go; # bib2bib comments
   $$result =~ s/Keywords: (<b>Keywords<\/b>.*?)(<(?:b|\/dd)>)/<div class="bibkeywords">$1<\/div>$2/gso;
@@ -481,7 +460,6 @@ sub renderStderror {
   if ($errors) {
   
     # strip useless stuff
-    my $pubDir = &TWiki::Func::getPubDir();
     $errors =~ s/BibTool ERROR: //og;
     $errors =~ s/condition/select/go; # rename bib2bib condition to select
     $errors =~ s/^Fatal error.*Bad file descriptor.*$//gom;
@@ -516,7 +494,7 @@ sub getTempFileName {
   if ($count == 100) {
     return undef;
   } else {
-    return &TWiki::Sandbox::normalizeFileName($base_name);
+    return TWiki::Sandbox::normalizeFileName($base_name);
   }
 }
 
@@ -551,13 +529,13 @@ sub getBibfiles {
 
   $bibfile = ".*\.bib" if ! $bibfile;
 
-  my $pubDir = &TWiki::Func::getPubDir() . "/${webName}/${topicName}";
   my ($meta, $text) = &TWiki::Func::readTopic($webName, $topicName);
   
   my @attachments = $meta->find( 'FILEATTACHMENT' );
   foreach my $attachment (@attachments) {
     if ($attachment->{name} =~ /^$bibfile$/) {
-      push @bibfiles, &TWiki::Sandbox::normalizeFileName("$pubDir/$attachment->{name}");
+      push @bibfiles, TWiki::Sandbox::normalizeFileName(
+	"$pubDir/${webName}/${topicName}/$attachment->{name}");
     }
   }
     
@@ -565,5 +543,10 @@ sub getBibfiles {
   return @bibfiles;
 }
 
+###############################################################################
+sub showError {
+  my $msg = shift;
+  return "<span class=\"twikiAlert\">Error: $msg</span>" ;
+}
 
 1;

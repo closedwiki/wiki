@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="MichaelDaum" date="1110213120" format="1.0" version="1.26"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134144717" format="1.0" version="1.1"}%
 ---+!! %TOPIC%
+
 %TOC%
 
 ---++ Disclaimer
@@ -126,7 +127,7 @@ you get
 ---++ Syntax
 	* =%<nop>BIBTEX{&lt;attributes&gt;}%= - render a set of bibtex files attached to some topic 
 	* =%<nop>STARTBIBTEX{&lt;attributes&gt;}% ... %<nop>STOPBIBTEX%= - render an inline-bibtex database
-	* (DISABLED) =%<nop>CITE{key, topic}%= - _easy citing_: generate an anchor to a bibtex entry on some topic
+	* =%<nop>CITE{key, topic}%= - _easy citing_: generate an anchor to a bibtex entry on some topic
 
 ---++ Attributes
 All attributes for %<nop>BIBTEX% and %<nop>STARTBIBTEX% are optional. The attributes =topic= and =bibfile=
@@ -342,32 +343,27 @@ __Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTo
 	  | ==data/TWiki/BibtexSelectTemplate.txt== | expert query template |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/BibtexPlugin/sample.bib== | Plugin sample <nop>BibTeX file |
+	  | ==pub/TWiki/BibtexPlugin/style.css== | default style definitions |
 	  | ==pub/TWiki/BibtexPlugin/bibtoolrsc== | bibtool resource file |
-	  | ==bin/bibsearch== | cvi query script |
+	  | ==bin/bibsearch== | cgi query script |
+
 
 
 ---++ Plugin Info
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  16 Okt 2003: | Initial version |
-|  Plugin Version: | v20041126 |
-|  Change History: | \
-2003/10/16: renamed to BibtexPlugin, formerly known as <nop>EmbedBibPlugin <br> \
-2004/09/16: added tar ball <br> \
-2004/10/01: added cascading style sheets <br> \
-2004/11/25: allow inline databases to be queried also, added forgotten bibsearch cgi-script <br> \
-2004/11/26: added simple and expert search forms, added select option to cgi-script, \
-				added configurable default search template |
-|  Download: | [[%ATTACHURL%/BibtexPlugin-20041126.tar.gz][BibtexPlugin-20041126.tar.gz]] |
+|  Plugin Version: | v1.2 |
+|  Change History: | &nbsp; |
+|  2005/12/09: | reworked to use the DakarContrib on cairo and beijing |
+|  2004/11/26: | added simple and expert search forms, added select option to cgi-script; \
+		added configurable default search template |
+|  2004/11/25: | allow inline databases to be queried also, added forgotten bibsearch cgi-script |
+|  2004/10/01: | added cascading style sheets |
+|  2004/09/16: | added tar ball |
+|  2003/10/16: | renamed to BibtexPlugin, formerly known as <nop>EmbedBibPlugin |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTool]] and [[http://www-sop.inria.fr/epidaure/personnel/malandain/codes/bibtex2html.html][Bibtex2html]] |
+|  Other Dependencies: | [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTool]], \
+		[[http://www-sop.inria.fr/epidaure/personnel/malandain/codes/bibtex2html.html][Bibtex2html]] |
 |  Perl Version: | >=5.6.1 |
-|  Plugin Home: | http://nats-www.informatik.uni-hamburg.de/TWiki/BibtexPlugin |
-|  Feedback: | http://nats-www.informatik.uni-hamburg.de/TWiki/BibtexPluginDev |
-
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, TWikiPlugins, BibtexPluginDev
- 
-%META:FILEATTACHMENT{name="sample.bib" attr="" comment="A sample bib file" date="1064371674" path="sample.bib" size="1712" user="DonnyKurniawan" version="1.1"}%
-%META:FILEATTACHMENT{name="bibtoolrsc" attr="" comment="" date="1066314090" path="bibtoolrsc" size="1593" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="BibTexPlugin.css" attr="" comment="" date="1096644154" path="BibTexPlugin.css" size="1021" user="MichaelDaum" version="1.1"}%
-%META:FILEATTACHMENT{name="BibtexPlugin.zip" attr="" comment="" date="1110212683" path="BibtexPlugin.zip" size="18787" user="MichaelDaum" version="1.1"}%
-%META:TOPICMOVED{by="MichaelDaum" date="1066305424" from="TWiki.EmbedBibPlugin" to="TWiki.BibtexPlugin"}%
+|  Plugin Home: | TWiki:Plugins/BibtexPlugin |
+|  Feedback: | TWiki:Plugins/BibtexPluginDev |

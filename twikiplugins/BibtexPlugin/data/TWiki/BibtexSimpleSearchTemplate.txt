@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="MichaelDaum" date="1101474660" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1101474660" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="BibtexPlugin"}%
----+!! %SPACEOUT{%TOPIC%}%
+---+!! %SPACEDTOPIC%
 %STARTINCLUDE% <form action="%SCRIPTURLPATH%/bibsearch/%INCLUDINGWEB%/%INCLUDINGTOPIC%" method="post">
 <input type="hidden" name="errors" value="%BIBERRORS%" />
 <input type="hidden" name="form" value="%BIBFORM%" />

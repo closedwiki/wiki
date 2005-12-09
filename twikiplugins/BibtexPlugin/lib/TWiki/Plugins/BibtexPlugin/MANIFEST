@@ -1,0 +1,10 @@
+bin/bibsearch 0550
+data/TWiki/BibtexPlugin.txt 0440
+data/TWiki/BibtexSearchTemplate.txt 0440
+data/TWiki/BibtexSelectTemplate.txt 0440
+data/TWiki/BibtexSimpleSearchTemplate.txt 0440
+lib/TWiki/Plugins/BibtexPlugin.pm 0440
+pub/TWiki/BibtexPlugin/bibtoolrsc 0440
+pub/TWiki/BibtexPlugin/render.sh 0440
+pub/TWiki/BibtexPlugin/sample.bib 0440
+pub/TWiki/BibtexPlugin/style.css 0440
