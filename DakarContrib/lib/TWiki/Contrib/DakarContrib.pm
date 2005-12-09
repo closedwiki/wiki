@@ -57,7 +57,7 @@ this object.
 
 package TWiki::Sandbox;
 
-use vars qw($VERSION, $RELEASE);
+use vars qw($VERSION $RELEASE);
 
 use strict;
 $VERSION = '$Rev$';
