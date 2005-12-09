@@ -347,7 +347,7 @@ sub sysCommand {
             $exit = ( $? >> 8 );
         } else {
             # Child - run the command
-	    print STDERR "DakarContrib::sysCommand - executing $path @args\n";
+	    #print STDERR "DakarContrib::sysCommand - executing $path @args\n";
             open (STDERR, '>'.File::Spec->devnull()) || die "Oh dear";
             exec( $path, @args ) ||
               throw Error::Simple( 'exec failed: '.$! );
