@@ -1,0 +1,51 @@
+%META:TOPICINFO{author="TWikiContributor" date="1134156120" format="1.0" version="1.1"}%
+---+!! %TOPIC%
+
+Dakar compatibility module for use with plugins that need some of the infrastructure
+that has been established in the TWiki/Dakar release. Most notably, this is the security
+sandbox that eliminates the most common attack vectors to TWiki seen in the past.
+
+To use it in your plugin code proceed as follows.
+
+---++ Allocate a sandbox object
+<verbatim>
+  my $sandbox;
+
+  unless (defined &TWiki::Sandbox::new) {
+	 eval "use TWiki::Contrib::DakarContrib;";
+	 $sandbox = new TWiki::Sandbox();
+  } else {
+	 $sandbox = $TWiki::sharedSandbox;
+  }
+</verbatim>
+
+---++ Call an external process
+<verbatim>
+  my ($result, $errorCode) = $sandbox->sysCommand($cmdTemplate>, %params);
+</verbatim>
+
+---++ Normalize a filename
+<verbatim>
+  $fileName = TWiki::Sandbox::normalizeFilename($fileName);
+</verbatim>
+
+---++ Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: 
+	| *File:* | *Description:* |
+	| ==data/TWiki/%TOPIC%.txt== | contrib topic |
+	| ==lib/TWiki/Contrib/%TOPIC%.pm== | perl module |
+
+---++ Package Info
+
+|  Author: | TWiki:Main/MichaelDaum |
+|  Version: | v0.1 (09 Dec 2005) |
+|  Dependencies: | None |
+|  Change History: | |
+|  09 Dec 2005 | moved in sandbox code from dakar's codebase |
+|  Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+
+
+-- TWiki:Main/MichaelDaum - 09 Dec 2005
