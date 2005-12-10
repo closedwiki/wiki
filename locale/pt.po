@@ -48,7 +48,7 @@ msgstr "Autenticação de Usuário no %1"
 #: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:4
 #: data/TWiki/WebLeftBar.txt:5 data/TWiki/WebLeftBarExample.txt:2
 #: data/Trash/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:5
-#: templates/view.pattern.tmpl:68
+#: templates/view.pattern.tmpl:64
 msgid "%1 Web"
 msgstr "Web %1"
 
@@ -121,17 +121,13 @@ msgstr "O tópico %1 não existe"
 msgid "%1 web to try out TWiki"
 msgstr "Web %1 para experimentar o TWiki"
 
-#: templates/view.pattern.tmpl:54
+#: templates/view.pattern.tmpl:50
 msgid "&Attach"
 msgstr "&Anexar"
 
 #: templates/twiki.pattern.tmpl:16
 msgid "&Cancel"
 msgstr "&Cancelar"
-
-#: templates/view.pattern.tmpl:43
-msgid "&Compose"
-msgstr "&Compor"
 
 #: templates/view.pattern.tmpl:25
 msgid "&Edit"
@@ -145,17 +141,17 @@ msgstr "&Editar texto"
 msgid "&History"
 msgstr "&Histórico"
 
-#: templates/view.pattern.tmpl:59
+#: templates/view.pattern.tmpl:55
 msgid "&More topic actions"
 msgstr "&Mais ações de tópico"
 
-#: templates/view.pattern.tmpl:98
+#: templates/view.pattern.tmpl:94
 msgid "&Printable"
 msgstr "Im&pressão"
 
-#: templates/view.pattern.tmpl:104
-msgid "We&b"
-msgstr "&Web"
+#: templates/view.pattern.tmpl:26
+msgid "&WYSIWYG"
+msgstr "&WYSIWYG"
 
 #: templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
@@ -431,7 +427,7 @@ msgstr ""
 "Uma nova senha *gerada pelo sistema* para o nome de login %1 (nomewiki %2) "
 "foi enviada para %3"
 
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "A&ll Webs"
 msgstr "G&lobal"
 
@@ -446,16 +442,6 @@ msgstr "Verificação de acesso a %1 falhou"
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
 msgid "Access keys"
 msgstr "Teclas de atalho"
-
-#: templates/edit.pattern.tmpl:56
-msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr "S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar "
-"editando, P = Pré-Visualização, C = Cancelar"
-
-#: templates/preview.pattern.tmpl:35
-msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr "S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar "
-"editando, D - Descartar"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
@@ -547,11 +533,11 @@ msgstr ""
 "Quaisquer mudanças que você tenha feito no tópico antes de vir a essa página "
 "serão preservadas"
 
-#: templates/view.pattern.tmpl:55
+#: templates/view.pattern.tmpl:51
 msgid "Attach"
 msgstr "Anexar"
 
-#: templates/view.pattern.tmpl:54
+#: templates/view.pattern.tmpl:50
 msgid "Attach an image or document to this topic"
 msgstr "Anexar uma imagem ou documento neste tópico"
 
@@ -608,7 +594,7 @@ msgstr "Atributo"
 msgid "Available Information"
 msgstr "Informação disponível"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:89
 msgid "Back to top"
 msgstr "Retornar ao topo"
 
@@ -617,7 +603,7 @@ msgid "Back to topic"
 msgstr "Retornar ao tópico"
 
 #: templates/oopsmore.pattern.tmpl:19 templates/oopsmore.tmpl:19
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "Backlinks"
 msgstr "Referências"
 
@@ -650,10 +636,6 @@ msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 "Não foi possível obter um endereço de e-mail para %1 (necessário para "
 "restaurar a senha)"
-
-#: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
-msgid "value='Cancel' accesskey='c'"
-msgstr "value='Cancelar' accesskey='c'"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
@@ -744,11 +726,6 @@ msgstr ""
 "Confira seu item de configuração {TemplateDir}. Se esse não for o problema, "
 "pode ser que você tenha uma configuração =%PARAM2%= que esteja apontando "
 "para um modelo (template) que não existe."
-
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-#: templates/preview.pattern.tmpl:35
-msgid "value='Checkpoint' accesskey='k'"
-msgstr "value='Salvar e continuar editando' accesskey='k'"
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -934,7 +911,7 @@ msgstr "Remover arquivo %1"
 msgid "Delete file attachment"
 msgstr "Remover arquivo anexado"
 
-#: templates/view.pattern.tmpl:59
+#: templates/view.pattern.tmpl:55
 msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
@@ -965,10 +942,6 @@ msgstr "Você não queria [[%1][restaurar a senha de %2]]?"
 #: templates/rdiff.pattern.tmpl:18
 msgid "Difference Topic"
 msgstr "Diferenças no tópico:"
-
-#: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
-msgid "value='Discard' accesskey='d'"
-msgstr "value='Descartar' accesskey='d'"
 
 #: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
@@ -1034,7 +1007,7 @@ msgstr ""
 msgid "Each preference has the syntax"
 msgstr "Cada preferência tem a sintaxe"
 
-#: templates/view.pattern.tmpl:35
+#: templates/view.pattern.tmpl:36
 msgid "Edit"
 msgstr "Editar"
 
@@ -1051,8 +1024,8 @@ msgstr "Editar dados pessoais"
 msgid "Edit text"
 msgstr "Editar texto"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:37
-#: templates/view.pattern.tmpl:43
+#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:40
+#: templates/view.pattern.tmpl:41
 msgid "Edit this topic text"
 msgstr "Editar o texto desse tópico"
 
@@ -1064,7 +1037,7 @@ msgstr "Editar preferências do tópico"
 msgid "Email address:"
 msgstr "Endereço de e-mail:"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:89
 msgid "End of topic"
 msgstr "Final do tópico"
 
@@ -1461,7 +1434,7 @@ msgstr "Modificar busca"
 msgid "More Actions on Topic %1"
 msgstr "Mais ações sobre o tópico %1"
 
-#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:60
+#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:56
 msgid "More topic actions..."
 msgstr "Mais ações de tópico..."
 
@@ -1695,23 +1668,15 @@ msgstr "Preferências"
 msgid "Preferences for"
 msgstr "Preferências para"
 
-#: templates/edit.pattern.tmpl:56
-msgid "value='Preview' accesskey='p'"
-msgstr "value='Pré-visualizar' accesskey='p'"
-
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
 msgstr "Anexação anterior"
 
-#: templates/view.pattern.tmpl:98
+#: templates/view.pattern.tmpl:94
 msgid "Printable version of this topic"
 msgstr "Versão para impressão deste tópico"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "value='Quiet save' accesskey='q'"
-msgstr "value='Salvar sem notificar' accesskey='q'"
-
-#: templates/view.pattern.tmpl:100
+#: templates/view.pattern.tmpl:96
 msgid "Raw View"
 msgstr "Texto Puro"
 
@@ -1814,13 +1779,17 @@ msgstr "Revisão"
 msgid "Revision:"
 msgstr "Revisão:"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "Save"
-msgstr "Salvar"
+#: templates/preview.pattern.tmpl:35
+msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
+msgstr ""
+"S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar editando, D - "
+"Descartar"
 
-#: templates/preview.pattern.tmpl:32
-msgid "Save Changes"
-msgstr "Salvar alterações"
+#: templates/edit.pattern.tmpl:56
+msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
+"S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar editando, P = Pré-"
+"Visualização, C = Cancelar"
 
 #: templates/registernotifyadmin.tmpl:16
 msgid "Saved to:"
@@ -1846,16 +1815,21 @@ msgstr "Procurar em todas as Webs (globa&ll)"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 #: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:20
-#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:104
+#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:98
 msgid "Search all webs for topics that link to here"
 msgstr "Procurar em todas as webs por tópicos que façam link pra cá"
+
+#: data/TWiki/WebTopicViewTemplate.txt:8
+msgid "Search for similar topics in all public webs"
+msgstr ""
+"Procurar por tópicos semelhantes em todas as webs públicas (global)"
 
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
 msgstr "Sequência de texto da busca"
 
 #: templates/oopsmore.pattern.tmpl:22 templates/oopsmore.tmpl:22
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "Search the %1 Web for topics that link to here"
 msgstr "Procurar na web %1 por tópicos que façam link pra cá"
 
@@ -1958,9 +1932,9 @@ msgstr "Busca simples"
 msgid "Size"
 msgstr "Tamanho"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:90
-#: templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:20
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:86
+#: templates/view.pattern.tmpl:89
 msgid "Skip to actions"
 msgstr "Pular para ações"
 
@@ -1980,7 +1954,7 @@ msgstr ""
 msgid "Sort results by:"
 msgstr "Ordenar resultados por:"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:90
+#: data/Main/PatternSkinUserViewTemplate.txt:20 templates/view.pattern.tmpl:86
 msgid "Start of topic"
 msgstr "Final do tópico"
 
@@ -2525,7 +2499,7 @@ msgstr "Ver diferença"
 msgid "View previous topic revision"
 msgstr "Ver versão anterior do tópico"
 
-#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
+#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:96
 msgid "View raw text without formatting"
 msgstr "Visualizar texto puro sem formatação"
 
@@ -2536,7 +2510,7 @@ msgstr "Ver revisão"
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 #: templates/oopsleaseconflict.pattern.tmpl:16
 #: templates/oopsleaseconflict.tmpl:30 templates/rdiff.pattern.tmpl:25
-#: templates/view.pattern.tmpl:35
+#: templates/view.pattern.tmpl:36
 msgid "View topic"
 msgstr "Visualizar tópico"
 
@@ -2552,6 +2526,10 @@ msgstr "Visite %1 para aprender sobre o TWiki"
 msgid "WARNING:"
 msgstr "ATENÇÃO:"
 
+#: templates/view.pattern.tmpl:37
+msgid "WYSIWYG"
+msgstr "WYSIWYG"
+
 #: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr ""
@@ -2560,6 +2538,10 @@ msgstr ""
 #: templates/oopsalerts.tmpl:6
 msgid "Warning: Can't find topic %1"
 msgstr "Aviso: tópico %1 não encontrado"
+
+#: templates/view.pattern.tmpl:98
+msgid "We&b"
+msgstr "&Web"
 
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -2610,7 +2592,7 @@ msgstr "Você também está listado no tópico %1"
 msgid "You are denied access to the following topics in the web:"
 msgstr "Seu aceso é negado aos tópicos na web: "
 
-#: templates/view.pattern.tmpl:68
+#: templates/view.pattern.tmpl:64
 msgid "You are here"
 msgstr "Você está aqui"
 
@@ -2762,7 +2744,6 @@ msgstr ""
 "um e-mail para %1 ."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:8
-#: data/TWiki/WebTopicViewTemplate.txt:8
 msgid "[[%1][Search]] for similar topics in all public webs"
 msgstr ""
 "[[%1][Procure]] por tópicos semelhantes em todas as webs públicas (global)"
@@ -2878,9 +2859,42 @@ msgstr "pôr de volta"
 msgid "retrieved at %1"
 msgstr "obtidos em %1"
 
+#: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Cancelar' accesskey='c'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Salvar e continuar editando' accesskey='k'"
+
+#: templates/preview.pattern.tmpl:32
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Descartar' accesskey='d'"
+
+#: templates/edit.pattern.tmpl:56
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Pré-visualizar' accesskey='p'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Quiet save' accesskey='q'"
+msgstr "value='Salvar sem notificar' accesskey='q'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Save' accesskey='s'"
+msgstr "value='Salvar' accesskey='s'"
+
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "ver"
+
+#~ msgid "&Compose"
+#~ msgstr "&Compor"
+
+#~ msgid "Save"
+#~ msgstr "Salvar"
+
+#~ msgid "Save Changes"
+#~ msgstr "Salvar alterações"
 
 #~ msgid "Revisions:"
 #~ msgstr "Revisões:"

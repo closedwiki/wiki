@@ -54,7 +54,7 @@ msgstr "%1 Bruger-authentikation"
 #: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:4
 #: data/TWiki/WebLeftBar.txt:5 data/TWiki/WebLeftBarExample.txt:2
 #: data/Trash/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:5
-#: templates/view.pattern.tmpl:68
+#: templates/view.pattern.tmpl:64
 msgid "%1 Web"
 msgstr "%1 web"
 
@@ -130,17 +130,13 @@ msgstr "siden %1 eksisterer ikke"
 msgid "%1 web to try out TWiki"
 msgstr "%1 web for at prøve TWiki af"
 
-#: templates/view.pattern.tmpl:54
+#: templates/view.pattern.tmpl:50
 msgid "&Attach"
 msgstr "&Vedhæft"
 
 #: templates/twiki.pattern.tmpl:16
 msgid "&Cancel"
 msgstr "&Fortryd"
-
-#: templates/view.pattern.tmpl:43
-msgid "&Compose"
-msgstr "&Komponér"
 
 #: templates/view.pattern.tmpl:25
 msgid "&Edit"
@@ -154,17 +150,17 @@ msgstr "&Editér tekst"
 msgid "&History"
 msgstr "&Historik"
 
-#: templates/view.pattern.tmpl:59
+#: templates/view.pattern.tmpl:55
 msgid "&More topic actions"
 msgstr "&Flere muligheder med denne side"
 
-#: templates/view.pattern.tmpl:98
+#: templates/view.pattern.tmpl:94
 msgid "&Printable"
 msgstr "&Printvenlig"
 
-#: templates/view.pattern.tmpl:104
-msgid "We&b"
-msgstr "&Web"
+#: templates/view.pattern.tmpl:26
+msgid "&WYSIWYG"
+msgstr ""
 
 #: templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
@@ -438,7 +434,7 @@ msgstr ""
 "Et nyt *system-genereret* password for brugernavnet %1 (wikiname %2) er "
 "blevet sendt til %3"
 
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "A&ll Webs"
 msgstr "A&lle webs"
 
@@ -453,14 +449,6 @@ msgstr "Adgangs-kontrol til %1 fejlede"
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
 msgid "Access keys"
 msgstr "Tastatur-genveje"
-
-#: templates/edit.pattern.tmpl:56
-msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr ""
-
-#: templates/preview.pattern.tmpl:35
-msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr ""
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
@@ -546,11 +534,11 @@ msgid "Any change you made to topic before coming to this page are preserved."
 msgstr ""
 "Alle ændringer, som du har lavet før du skiftede til denne side er gemt."
 
-#: templates/view.pattern.tmpl:55
+#: templates/view.pattern.tmpl:51
 msgid "Attach"
 msgstr "Vedhæft"
 
-#: templates/view.pattern.tmpl:54
+#: templates/view.pattern.tmpl:50
 msgid "Attach an image or document to this topic"
 msgstr "Vedhæft fx et billede eller et dokument til denne side"
 
@@ -608,7 +596,7 @@ msgstr "Attribut"
 msgid "Available Information"
 msgstr "Tilgængelig information"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:89
 msgid "Back to top"
 msgstr "Til toppen"
 
@@ -617,7 +605,7 @@ msgid "Back to topic"
 msgstr "Tilbage til siden"
 
 #: templates/oopsmore.pattern.tmpl:19 templates/oopsmore.tmpl:19
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "Backlinks"
 msgstr "Referencer"
 
@@ -650,10 +638,6 @@ msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 "Kunne ikke finde e-mail-adresse for %1 (nødvendig for at kunne nulstille "
 "passwordet)"
-
-#: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
-msgid "value='Cancel' accesskey='c'"
-msgstr "value='Fortryd' accesskey='c'"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
@@ -744,11 +728,6 @@ msgstr ""
 "Check dine indstillinger for {TemplateDir}. Hvis dette ikke er årsagen til "
 "problemet, kan det være fordi du har en indstilling af parameteren =%PARAM2%"
 "= der peger på en template der ikke findes."
-
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-#: templates/preview.pattern.tmpl:35
-msgid "value='Checkpoint' accesskey='k'"
-msgstr "value='Checkpoint' accesskey='k'"
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -934,7 +913,7 @@ msgstr "Slet filen %1"
 msgid "Delete file attachment"
 msgstr "Slet vedhæftet fil"
 
-#: templates/view.pattern.tmpl:59
+#: templates/view.pattern.tmpl:55
 msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
@@ -965,10 +944,6 @@ msgstr "Ville du gerne [[%1][resette passwordet for %2]]?"
 #: templates/rdiff.pattern.tmpl:18
 msgid "Difference Topic"
 msgstr "Ændringer til siden"
-
-#: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
-msgid "value='Discard' accesskey='d'"
-msgstr "value='Fortryd' accesskey='d'"
 
 #: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
@@ -1034,7 +1009,7 @@ msgstr ""
 msgid "Each preference has the syntax"
 msgstr "Alle præferencer har syntaksen"
 
-#: templates/view.pattern.tmpl:35
+#: templates/view.pattern.tmpl:36
 msgid "Edit"
 msgstr "Editieren"
 
@@ -1051,8 +1026,8 @@ msgstr "Opdater bruger-information"
 msgid "Edit text"
 msgstr "Editér teksten"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:37
-#: templates/view.pattern.tmpl:43
+#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:40
+#: templates/view.pattern.tmpl:41
 msgid "Edit this topic text"
 msgstr "Editér sidens kildetekst"
 
@@ -1064,7 +1039,7 @@ msgstr "Editér præferencer for siden"
 msgid "Email address:"
 msgstr "E-mail-adresse:"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:89
 msgid "End of topic"
 msgstr "Bunden af siden"
 
@@ -1461,7 +1436,7 @@ msgstr "Tilpas søgning"
 msgid "More Actions on Topic %1"
 msgstr "Flere muligheder med siden %1"
 
-#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:60
+#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:56
 msgid "More topic actions..."
 msgstr "Flere muligheder med denne side..."
 
@@ -1694,23 +1669,15 @@ msgstr "Præferencer"
 msgid "Preferences for"
 msgstr "Præferencer for"
 
-#: templates/edit.pattern.tmpl:56
-msgid "value='Preview' accesskey='p'"
-msgstr "value='Vis udkast' accesskey='p'"
-
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
 msgstr "Forrige upload"
 
-#: templates/view.pattern.tmpl:98
+#: templates/view.pattern.tmpl:94
 msgid "Printable version of this topic"
 msgstr "Printervenlig version af denne side"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "value='Quiet save' accesskey='q'"
-msgstr "value='Gem (uden notifikation)' accesskey='q'"
-
-#: templates/view.pattern.tmpl:100
+#: templates/view.pattern.tmpl:96
 msgid "Raw View"
 msgstr "Kildetekst"
 
@@ -1812,13 +1779,13 @@ msgstr "Version"
 msgid "Revision:"
 msgstr "Version:"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "value='Save' accesskey='s'"
-msgstr "value='Gem' accesskey='s'"
+#: templates/preview.pattern.tmpl:35
+msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
+msgstr ""
 
-#: templates/preview.pattern.tmpl:32
-msgid "Save Changes"
-msgstr "Gem opdateringer"
+#: templates/edit.pattern.tmpl:56
+msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
 
 #: templates/registernotifyadmin.tmpl:16
 msgid "Saved to:"
@@ -1844,16 +1811,21 @@ msgstr "Søg i alle webs"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 #: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:20
-#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:104
+#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:98
 msgid "Search all webs for topics that link to here"
 msgstr "Søg i alle webs efter sider der linker til denne side"
+
+#: data/TWiki/WebTopicViewTemplate.txt:8
+#, fuzzy
+msgid "Search for similar topics in all public webs"
+msgstr "[[%1][Søg]] efter lignende sider i alle offentlige webs"
 
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
 msgstr "Søgestreng"
 
 #: templates/oopsmore.pattern.tmpl:22 templates/oopsmore.tmpl:22
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "Search the %1 Web for topics that link to here"
 msgstr "Søg i %1 webbet efter sider der linker til denne side"
 
@@ -1956,9 +1928,9 @@ msgstr "Simpel søgning"
 msgid "Size"
 msgstr "Størrelse"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:90
-#: templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:20
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:86
+#: templates/view.pattern.tmpl:89
 msgid "Skip to actions"
 msgstr "Gå til valgmuligheder"
 
@@ -1978,7 +1950,7 @@ msgstr ""
 msgid "Sort results by:"
 msgstr "Sortér resultater efter:"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:90
+#: data/Main/PatternSkinUserViewTemplate.txt:20 templates/view.pattern.tmpl:86
 msgid "Start of topic"
 msgstr "Toppen af siden"
 
@@ -2518,7 +2490,7 @@ msgstr "Vis forskel"
 msgid "View previous topic revision"
 msgstr "Vis forrige version af siden"
 
-#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
+#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:96
 msgid "View raw text without formatting"
 msgstr "Vis rå kildetekst uden formatering"
 
@@ -2529,7 +2501,7 @@ msgstr "Vis denne version"
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 #: templates/oopsleaseconflict.pattern.tmpl:16
 #: templates/oopsleaseconflict.tmpl:30 templates/rdiff.pattern.tmpl:25
-#: templates/view.pattern.tmpl:35
+#: templates/view.pattern.tmpl:36
 msgid "View topic"
 msgstr "Vis side"
 
@@ -2545,6 +2517,10 @@ msgstr "Besøg %1 for at lære mere om TWiki"
 msgid "WARNING:"
 msgstr "ADVARSEL:"
 
+#: templates/view.pattern.tmpl:37
+msgid "WYSIWYG"
+msgstr ""
+
 #: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr ""
@@ -2554,6 +2530,10 @@ msgstr ""
 #: templates/oopsalerts.tmpl:6
 msgid "Warning: Can't find topic %1"
 msgstr "Advarsel: Kan ikke finde siden %1"
+
+#: templates/view.pattern.tmpl:98
+msgid "We&b"
+msgstr "&Web"
 
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -2604,7 +2584,7 @@ msgstr "Du findes også på siden %1"
 msgid "You are denied access to the following topics in the web:"
 msgstr "Du har ikke adgang til de følgende sider i dette web:"
 
-#: templates/view.pattern.tmpl:68
+#: templates/view.pattern.tmpl:64
 msgid "You are here"
 msgstr "Du er her"
 
@@ -2756,7 +2736,6 @@ msgstr ""
 "og bed om at få dette gjort."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:8
-#: data/TWiki/WebTopicViewTemplate.txt:8
 msgid "[[%1][Search]] for similar topics in all public webs"
 msgstr "[[%1][Søg]] efter lignende sider i alle offentlige webs"
 
@@ -2871,9 +2850,39 @@ msgstr "flyt siden tilbage"
 msgid "retrieved at %1"
 msgstr "fremsøgt %1"
 
+#: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Fortryd' accesskey='c'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Checkpoint' accesskey='k'"
+
+#: templates/preview.pattern.tmpl:32
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Fortryd' accesskey='d'"
+
+#: templates/edit.pattern.tmpl:56
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Vis udkast' accesskey='p'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Quiet save' accesskey='q'"
+msgstr "value='Gem (uden notifikation)' accesskey='q'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Save' accesskey='s'"
+msgstr "value='Gem' accesskey='s'"
+
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vis"
+
+#~ msgid "&Compose"
+#~ msgstr "&Komponér"
+
+#~ msgid "Save Changes"
+#~ msgstr "Gem opdateringer"
 
 #~ msgid "Revisions:"
 #~ msgstr "Versioner:"

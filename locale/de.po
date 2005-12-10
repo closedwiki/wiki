@@ -46,7 +46,7 @@ msgstr "%1 Benutzer Authentifizierung"
 #: data/Main/WebLeftBar.txt:5 data/Sandbox/WebLeftBar.txt:4
 #: data/TWiki/WebLeftBar.txt:5 data/TWiki/WebLeftBarExample.txt:2
 #: data/Trash/WebLeftBar.txt:5 data/_default/WebLeftBar.txt:5
-#: templates/view.pattern.tmpl:68
+#: templates/view.pattern.tmpl:64
 msgid "%1 Web"
 msgstr "%1 Web"
 
@@ -122,17 +122,13 @@ msgstr "%1 Topic existiert nicht"
 msgid "%1 web to try out TWiki"
 msgstr "%1 Web zum ausprobieren von TWiki"
 
-#: templates/view.pattern.tmpl:54
+#: templates/view.pattern.tmpl:50
 msgid "&Attach"
 msgstr "&Anhang"
 
 #: templates/twiki.pattern.tmpl:16
 msgid "&Cancel"
 msgstr "&Abbrechen"
-
-#: templates/view.pattern.tmpl:43
-msgid "&Compose"
-msgstr "&Bearbeiten"
 
 #: templates/view.pattern.tmpl:25
 msgid "&Edit"
@@ -146,17 +142,17 @@ msgstr "&Text editieren"
 msgid "&History"
 msgstr "&Historie"
 
-#: templates/view.pattern.tmpl:59
+#: templates/view.pattern.tmpl:55
 msgid "&More topic actions"
 msgstr "&Mehr Aktionen"
 
-#: templates/view.pattern.tmpl:98
+#: templates/view.pattern.tmpl:94
 msgid "&Printable"
 msgstr "&Drucken"
 
-#: templates/view.pattern.tmpl:104
-msgid "We&b"
-msgstr "&Web"
+#: templates/view.pattern.tmpl:26
+msgid "&WYSIWYG"
+msgstr ""
 
 #: templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
@@ -425,7 +421,7 @@ msgstr ""
 "Ein neues vom System erzeugtes Passwort für den Login Namen %1 (Wikiname %2) "
 "wurde an %3 gesendet"
 
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "A&ll Webs"
 msgstr "A&lle Webs"
 
@@ -440,14 +436,6 @@ msgstr "Zugriffskontrolle für %1 fehlgeschlagen"
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
 msgid "Access keys"
 msgstr "Funktions-Tasten"
-
-#: templates/edit.pattern.tmpl:56
-msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr ""
-
-#: templates/preview.pattern.tmpl:35
-msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr ""
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
@@ -536,11 +524,11 @@ msgstr ""
 "Änderungen, die Sie an dem Topic vollzogen haben, bevor Sie auf diese Seite "
 "gelangten, bleiben erhalten."
 
-#: templates/view.pattern.tmpl:55
+#: templates/view.pattern.tmpl:51
 msgid "Attach"
 msgstr "Anhang"
 
-#: templates/view.pattern.tmpl:54
+#: templates/view.pattern.tmpl:50
 msgid "Attach an image or document to this topic"
 msgstr "Ein Bild oder Dokument an dieses Topic anhängen"
 
@@ -597,7 +585,7 @@ msgstr "Attribut"
 msgid "Available Information"
 msgstr "Verfügbare Information"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:89
 msgid "Back to top"
 msgstr "nach oben"
 
@@ -606,7 +594,7 @@ msgid "Back to topic"
 msgstr "Zurück zum Topic"
 
 #: templates/oopsmore.pattern.tmpl:19 templates/oopsmore.tmpl:19
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "Backlinks"
 msgstr "Querverweise"
 
@@ -639,10 +627,6 @@ msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 "E-Mail Adresse von %1 konnte nicht ermittelt werden (benötigt für das "
 "Zurücksetzen des Passworts"
-
-#: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
-msgid "value='Cancel' accesskey='c'"
-msgstr "value='Abbrechen' accesskey='c'"
 
 #: templates/edit.pattern.tmpl:56
 msgid "Cancel editing and discard changes"
@@ -729,11 +713,6 @@ msgid ""
 "problem, it may be because you have a setting of =%PARAM2%= that is pointing "
 "to a template that doesn't exist."
 msgstr ""
-
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-#: templates/preview.pattern.tmpl:35
-msgid "value='Checkpoint' accesskey='k'"
-msgstr "value='Zwischenspeichern' accesskey='k'"
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -919,7 +898,7 @@ msgstr "Datei %1 löschen"
 msgid "Delete file attachment"
 msgstr "Dateianhang löschen"
 
-#: templates/view.pattern.tmpl:59
+#: templates/view.pattern.tmpl:55
 msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
@@ -951,10 +930,6 @@ msgstr "Wollen Sie[[[_1]][%2's Passwort zurücksetzen]]?"
 #: templates/rdiff.pattern.tmpl:18
 msgid "Difference Topic"
 msgstr "Änderungs Topic"
-
-#: templates/preview.pattern.tmpl:32 templates/preview.pattern.tmpl:35
-msgid "value='Discard' accesskey='d'"
-msgstr "value='Verwerfen' accesskey='d'"
 
 #: templates/attach.pattern.tmpl:107
 msgid "Do not show attachment in table"
@@ -1020,7 +995,7 @@ msgstr ""
 msgid "Each preference has the syntax"
 msgstr "Jede Einstellung hat die Syntax"
 
-#: templates/view.pattern.tmpl:35
+#: templates/view.pattern.tmpl:36
 msgid "Edit"
 msgstr "Editieren"
 
@@ -1037,8 +1012,8 @@ msgstr "Persönlichen Daten bearbeiten"
 msgid "Edit text"
 msgstr "Text editieren"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:37
-#: templates/view.pattern.tmpl:43
+#: data/Main/PatternSkinUserViewTemplate.txt:15 templates/view.pattern.tmpl:40
+#: templates/view.pattern.tmpl:41
 msgid "Edit this topic text"
 msgstr "Topic Text editieren"
 
@@ -1050,7 +1025,7 @@ msgstr "Topic Einstellungen editieren"
 msgid "Email address:"
 msgstr "E-Mail Adresse:"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:89
 msgid "End of topic"
 msgstr "Topic Ende"
 
@@ -1453,7 +1428,7 @@ msgstr "Suche gestalten:"
 msgid "More Actions on Topic %1"
 msgstr "Mehr Aktionen für Topic %1"
 
-#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:60
+#: templates/rdiff.pattern.tmpl:27 templates/view.pattern.tmpl:56
 msgid "More topic actions..."
 msgstr "Mehr Topic Aktionen"
 
@@ -1689,23 +1664,15 @@ msgstr "Einstellungen"
 msgid "Preferences for"
 msgstr "Einstellungen für"
 
-#: templates/edit.pattern.tmpl:56
-msgid "value='Preview' accesskey='p'"
-msgstr "value='Vorschau' accesskey='p'"
-
 #: templates/attachagain.pattern.tmpl:39
 msgid "Previous upload"
 msgstr "Vorheriger Upload"
 
-#: templates/view.pattern.tmpl:98
+#: templates/view.pattern.tmpl:94
 msgid "Printable version of this topic"
 msgstr "Druckversion von diesem Topic"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "value='Quiet save' accesskey='q'"
-msgstr "value='Stilles Speichern' accesskey='q'"
-
-#: templates/view.pattern.tmpl:100
+#: templates/view.pattern.tmpl:96
 msgid "Raw View"
 msgstr ""
 
@@ -1807,13 +1774,13 @@ msgstr "Revision"
 msgid "Revision:"
 msgstr "Revision:"
 
-#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:35
-msgid "value='Save' accesskey='s'"
-msgstr "value='Speichern' accesskey='s'"
+#: templates/preview.pattern.tmpl:35
+msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
+msgstr ""
 
-#: templates/preview.pattern.tmpl:32
-msgid "Save Changes"
-msgstr "Änderungen speichern"
+#: templates/edit.pattern.tmpl:56
+msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
+msgstr ""
 
 #: templates/registernotifyadmin.tmpl:16
 msgid "Saved to:"
@@ -1839,16 +1806,21 @@ msgstr "A&lle Webs durchsuchen"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 #: templates/backlinksweb.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:20
-#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:104
+#: templates/oopsmore.tmpl:20 templates/view.pattern.tmpl:98
 msgid "Search all webs for topics that link to here"
 msgstr "Alle Webs nach Topics durchsuchen, die hierher verweisen"
+
+#: data/TWiki/WebTopicViewTemplate.txt:8
+#, fuzzy
+msgid "Search for similar topics in all public webs"
+msgstr "Nach ähnlichen Topics in allen öffentlichen Webs [[%1][suchen]]"
 
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
 msgstr "Gesuchte Zeichenkette"
 
 #: templates/oopsmore.pattern.tmpl:22 templates/oopsmore.tmpl:22
-#: templates/view.pattern.tmpl:104
+#: templates/view.pattern.tmpl:98
 msgid "Search the %1 Web for topics that link to here"
 msgstr "Das %1 Web nach Topics durchsuchen, die hierher verweisen"
 
@@ -1951,9 +1923,9 @@ msgstr "Einfache Suche"
 msgid "Size"
 msgstr "Größe"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18
-#: data/Main/PatternSkinUserViewTemplate.txt:21 templates/view.pattern.tmpl:90
-#: templates/view.pattern.tmpl:93
+#: data/Main/PatternSkinUserViewTemplate.txt:20
+#: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:86
+#: templates/view.pattern.tmpl:89
 msgid "Skip to actions"
 msgstr "Zu den Aktionen"
 
@@ -1974,7 +1946,7 @@ msgstr ""
 msgid "Sort results by:"
 msgstr "Ergebnisse sortieren nach:"
 
-#: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:90
+#: data/Main/PatternSkinUserViewTemplate.txt:20 templates/view.pattern.tmpl:86
 msgid "Start of topic"
 msgstr "Topic-Anfang"
 
@@ -2319,8 +2291,8 @@ msgid ""
 "To create a new topic, enter a %TWIKIWEB%.WikiWord for the topic name, "
 "select a topic parent and click 'create.'"
 msgstr ""
-"Um ein neues Topic anzulegen, geben Sie ein %TWIKIWEB%.WikiWord ein, "
-"wählen Sie ein passendes Ober-Topic und drücken Sie 'anlegen'."
+"Um ein neues Topic anzulegen, geben Sie ein %TWIKIWEB%.WikiWord ein, wählen "
+"Sie ein passendes Ober-Topic und drücken Sie 'anlegen'."
 
 #: templates/moveattachment.pattern.tmpl:19
 msgid "To delete an attachment move it to web %1, topic %2."
@@ -2330,8 +2302,8 @@ msgstr "Um einen Anhang zu löschen, verschieben Sie es nach Web %1, Topic %2."
 msgid ""
 "To delete this web: move this web to the Trash web by renaming it to %1."
 msgstr ""
-"Dieses Web löschen: Verschieben Sie das Web in das Papierkorb Web, indem "
-"Sie es in %1 umbenennen."
+"Dieses Web löschen: Verschieben Sie das Web in das Papierkorb Web, indem Sie "
+"es in %1 umbenennen."
 
 #: data/TWiki/TWikiRegistration.txt:4
 msgid ""
@@ -2529,7 +2501,7 @@ msgstr "Unterschied anzeigen"
 msgid "View previous topic revision"
 msgstr "Vorherige Topic Revision ansehen"
 
-#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:100
+#: templates/oopsleaseconflict.pattern.tmpl:15 templates/view.pattern.tmpl:96
 msgid "View raw text without formatting"
 msgstr "Quelltext ohne Formatierung ansehen"
 
@@ -2540,7 +2512,7 @@ msgstr "Revision ansehen"
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 #: templates/oopsleaseconflict.pattern.tmpl:16
 #: templates/oopsleaseconflict.tmpl:30 templates/rdiff.pattern.tmpl:25
-#: templates/view.pattern.tmpl:35
+#: templates/view.pattern.tmpl:36
 msgid "View topic"
 msgstr "Topic ansehen"
 
@@ -2556,6 +2528,10 @@ msgstr "Besuchen Sie %1, um mehr überr TWiki zu erfahren"
 msgid "WARNING:"
 msgstr "WARNUNG:"
 
+#: templates/view.pattern.tmpl:37
+msgid "WYSIWYG"
+msgstr ""
+
 #: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr ""
@@ -2565,6 +2541,10 @@ msgstr ""
 #: templates/oopsalerts.tmpl:6
 msgid "Warning: Can't find topic %1"
 msgstr "Warnung: Konnte Topic %1 nicht finden"
+
+#: templates/view.pattern.tmpl:98
+msgid "We&b"
+msgstr "&Web"
 
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -2611,7 +2591,7 @@ msgstr "Sie sind auch auf Topic %1 gelistet"
 msgid "You are denied access to the following topics in the web:"
 msgstr "Sie haben keinen Zugriff auf die folgenden Topics im Web:"
 
-#: templates/view.pattern.tmpl:68
+#: templates/view.pattern.tmpl:64
 msgid "You are here"
 msgstr "Sie sind hier"
 
@@ -2765,7 +2745,6 @@ msgstr ""
 "um das zu beantragen."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:8
-#: data/TWiki/WebTopicViewTemplate.txt:8
 msgid "[[%1][Search]] for similar topics in all public webs"
 msgstr "Nach ähnlichen Topics in allen öffentlichen Webs [[%1][suchen]]"
 
@@ -2880,7 +2859,36 @@ msgstr "zurück verschieben"
 msgid "retrieved at %1"
 msgstr "abgefragt um %1"
 
+#: templates/changeform.pattern.tmpl:17 templates/edit.pattern.tmpl:56
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='Abbrechen' accesskey='c'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='Zwischenspeichern' accesskey='k'"
+
+#: templates/preview.pattern.tmpl:32
+msgid "value='Discard' accesskey='d'"
+msgstr "value='Verwerfen' accesskey='d'"
+
+#: templates/edit.pattern.tmpl:56
+msgid "value='Preview' accesskey='p'"
+msgstr "value='Vorschau' accesskey='p'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Quiet save' accesskey='q'"
+msgstr "value='Stilles Speichern' accesskey='q'"
+
+#: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
+msgid "value='Save' accesskey='s'"
+msgstr "value='Speichern' accesskey='s'"
+
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
 
+#~ msgid "&Compose"
+#~ msgstr "&Bearbeiten"
+
+#~ msgid "Save Changes"
+#~ msgstr "Änderungen speichern"
