@@ -176,10 +176,20 @@ label {
 	vertical-align:middle;
 }
 
+
 /*	-----------------------------------------------------------
 	Plugin elements
 	-----------------------------------------------------------	*/
-	
+
+/* EditTablePlugin */
+.editTable .twikiTable {
+	margin:0 0 .25em 0;
+}
+.editTableInput,
+.editTableTextarea {
+	font-family:monospace;
+}
+
 /* TablePlugin */
 .twikiTable {
     border-collapse:collapse;
