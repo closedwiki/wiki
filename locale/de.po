@@ -442,11 +442,11 @@ msgid "Access keys"
 msgstr "Funktions-Tasten"
 
 #: templates/edit.pattern.tmpl:56
-msgid "S = Save, Q = !QuietSave, K = Checkpoint, P = Preview, C = Cancel"
+msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
 
 #: templates/preview.pattern.tmpl:35
-msgid "S = Save, Q = !QuietSave, K = Checkpoint, D = Discard"
+msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
 msgstr ""
 
 #: templates/attachtables.pattern.tmpl:45
@@ -1702,7 +1702,7 @@ msgid "Printable version of this topic"
 msgstr "Druckversion von diesem Topic"
 
 #: templates/edit.pattern.tmpl:56 templates/preview.pattern.tmpl:32
-msgid "value='QuietSave' accesskey='q'"
+msgid "value='Quiet save' accesskey='q'"
 msgstr "value='Stilles Speichern' accesskey='q'"
 
 #: templates/view.pattern.tmpl:100
