@@ -156,8 +156,13 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
 ---++ Style sheet classes
 This plugin uses the following CSS classes:
    * =editTable= - a div around the table
+   * =editTableEdit= - (appended class) the div when in edit mode
    * =editTableInput= - input field
    * =editTableTextarea= - textarea
+   * =editTableEditImageButton= - the image button labeled "Edit"
+   * =editTableEditButton= - the button labeled "Edit"
+   * =twikiButton= - each button at the bottom when in edit mode
+   * =twikiSubmit= - the Save button at the bottom when in edit mode
    
 ---++ License
 

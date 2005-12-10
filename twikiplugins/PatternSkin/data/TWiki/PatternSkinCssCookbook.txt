@@ -74,3 +74,7 @@ See example at: PatternSkinCssCookbookCenterPage
 ---+++ Large background image in the top bar
 
 See example at: PatternSkinCssCookbookTopBarBackgroundImage
+
+---+++ Setting !EditTablePlugin styles
+
+See example at: PatternSkinCssCookbookEditTableStyle

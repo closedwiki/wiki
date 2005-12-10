@@ -282,7 +282,11 @@ sub handleTableStart {
     }
     $text .= "$preSp<noautolink>\n" if $doEdit;
     $text .= "$preSp<a name=\"edittable$theTableNr\"></a>\n";
-    $text .= "<div class=\"editTable\">";
+    my $cssClass = 'editTable';
+    if( $doEdit ) {
+       $cssClass .= ' editTableEdit';
+    }
+    $text .= "<div class=\"".$cssClass."\">";
     $text .= "$preSp<form name=\"edittable$theTableNr\" action=\"$viewUrl\" method=\"post\">\n";
     $text .= "$preSp<input type=\"hidden\" name=\"ettablenr\" value=\"$theTableNr\" />\n";
     $text .= "$preSp<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
@@ -295,16 +299,16 @@ sub handleTableEnd {
     my $text   = "$preSp<input type=\"hidden\" name=\"etrows\"   value=\"$theRowNr\" />\n";
     if( $doEdit ) {
         # Edit mode
-        $text .= "$preSp<input type=\"submit\" name=\"etsave\"   value=\"Save table\" />\n";
+        $text .= "$preSp<input type=\"submit\" name=\"etsave\"   value=\"Save table\" class=\"twikiSubmit\" />\n";
         if( $params{'quietsave'} ) {
-            $text .= "$preSp<input type=\"submit\" name=\"etqsave\"  value=\"Quiet save\" />\n";
+            $text .= "$preSp<input type=\"submit\" name=\"etqsave\"  value=\"Quiet save\" class=\"twikiButton\" />\n";
         }
         if( $params{'changerows'} ) {
-            $text .= "$preSp<input type=\"submit\" name=\"etaddrow\" value=\"Add row\" />\n";
-            $text .= "$preSp<input type=\"submit\" name=\"etdelrow\" value=\"Delete last row\" />\n"
+            $text .= "$preSp<input type=\"submit\" name=\"etaddrow\" value=\"Add row\" class=\"twikiButton\" />\n";
+            $text .= "$preSp<input type=\"submit\" name=\"etdelrow\" value=\"Delete last row\" class=\"twikiButton\" />\n"
               unless( $params{'changerows'} =~ /^add$/oi );
         }
-        $text .= "$preSp<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
+        $text .= "$preSp<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" class=\"twikiButton\" />\n";
 
         if( $params{'helptopic'} ) {
             # read help topic and show below the table
@@ -332,7 +336,7 @@ sub handleTableEnd {
         }
     }
     $text .= "$preSp</form>\n";
-	$text .= "</div>";
+	$text .= "</div><!-- /editTable -->";
     $text .= "$preSp</noautolink>\n" if $doEdit;
     return $text;
 }
@@ -364,9 +368,9 @@ sub viewEditCell {
     }
 
     if( $img ) {
-        return "<input type=\"image\" src=\"$img\" alt=\"$value\" />";
+        return "<input class=\"editTableEditImageButton\" type=\"image\" src=\"$img\" alt=\"$value\" />";
     } else {
-        return "<input type=\"submit\" value=\"$value\" />";
+        return "<input class=\"editTableEditButton\" type=\"submit\" value=\"$value\" />";
     }
 }
 
