@@ -422,7 +422,7 @@ msgstr ""
 "wurde an %3 gesendet"
 
 #: templates/view.pattern.tmpl:98
-msgid "A&ll Webs"
+msgid "A&ll webs"
 msgstr "A&lle Webs"
 
 #: templates/oopsaccessdenied.tmpl:5
@@ -1673,7 +1673,7 @@ msgid "Printable version of this topic"
 msgstr "Druckversion von diesem Topic"
 
 #: templates/view.pattern.tmpl:96
-msgid "Raw View"
+msgid "&Raw view"
 msgstr ""
 
 #: templates/registernotify.tmpl:10

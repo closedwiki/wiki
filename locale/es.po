@@ -421,7 +421,7 @@ msgstr ""
 "(wikiname %2) sero enviado para %3"
 
 #: templates/view.pattern.tmpl:98
-msgid "A&ll Webs"
+msgid "A&ll webs"
 msgstr "Todas las webs"
 
 #: templates/oopsaccessdenied.tmpl:5
@@ -1624,7 +1624,7 @@ msgid "Printable version of this topic"
 msgstr ""
 
 #: templates/view.pattern.tmpl:96
-msgid "Raw View"
+msgid "&Raw view"
 msgstr ""
 
 #: templates/registernotify.tmpl:10

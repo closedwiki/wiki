@@ -435,7 +435,7 @@ msgstr ""
 "blevet sendt til %3"
 
 #: templates/view.pattern.tmpl:98
-msgid "A&ll Webs"
+msgid "A&ll webs"
 msgstr "A&lle webs"
 
 #: templates/oopsaccessdenied.tmpl:5
@@ -1678,7 +1678,7 @@ msgid "Printable version of this topic"
 msgstr "Printervenlig version af denne side"
 
 #: templates/view.pattern.tmpl:96
-msgid "Raw View"
+msgid "&Raw view"
 msgstr "Kildetekst"
 
 #: templates/registernotify.tmpl:10
