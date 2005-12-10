@@ -121,10 +121,16 @@ sub _twistyImpl {
     my $link = $params->{$theState.'link'} || $params->{'link'} || '';
     my $mode = $params->{'buttonmode'} || $params->{'mode'} || 'span';
     my $img = $params->{$theState.'img'} || $params->{'img'} || '';
+    my $imgright = $params->{$theState.'imgright'} || $params->{'imgright'} || '';
+    my $imgleft = $params->{$theState.'imgleft'} || $params->{'imgleft'} || '';
     $img =~ s/['\"]//go;
+    $imgright =~ s/['\"]//go;
+    $imgleft =~ s/['\"]//go;
     my $imgTag = ($img ne '') ? '<img src="'.$img.'" border="0" alt="" />' : '';
+    my $imgRightTag = ($imgright ne '') ? '<img src="'.$imgright.'" border="0" alt="" />' : '';
+    my $imgLeftTag = ($imgleft ne '') ? '<img src="'.$imgleft.'" border="0" alt="" />' : '';
     my $initialHidden = ($theState eq 'hide') ? 'twistyHidden ' : '';
-    return '<'.$mode.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeVisible"><a href="#" class="twistyTrigger"><span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.'</a></'.$mode.'>';
+    return '<'.$mode.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeVisible"><a href="#" class="twistyTrigger">'.$imgLeftTag.'<span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.$imgRightTag.'</a></'.$mode.'>';
 }
 
 

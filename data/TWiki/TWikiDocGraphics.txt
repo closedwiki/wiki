@@ -169,8 +169,9 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/go_ff.gif" alt="Go fast forward" title="Go fast forward" />  | =go_ff.gif= | Go fast forward | =%<nop>ICON{go_ff}%= |
 | <img src="%ATTACHURLPATH%/go_end.gif" alt="Go to end" title="Go to end" />  | =go_end.gif= | Go to end | =%<nop>ICON{go_end}%= |
 | <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
+| <img src="%ATTACHURLPATH%/toggleclose-small.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose-small.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose-small}%= |
 | <img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
-
+| <img src="%ATTACHURLPATH%/toggleopen-small.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen-small.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen-small}%= |
 
 ---+++ %ICON{line_ur}% Block graphics
 
@@ -401,7 +402,9 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="tip.gif" attr="" autoattached="1" comment="" date="1128927097" path="tip.gif" size="233" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="todo.gif" attr="" autoattached="1" comment="" date="1128927098" path="todo.gif" size="318" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleclose.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose.gif" size="135" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleclose-small.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose-small.gif" size="135" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleopen.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen.gif" size="138" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleopen-small.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen-small.gif" size="138" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="topicbacklinks.gif" attr="" autoattached="1" comment="" date="1128927101" path="topicbacklinks.gif" size="130" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="topicdiffs.gif" attr="" autoattached="1" comment="" date="1128927103" path="topicdiffs.gif" size="157" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="trash.gif" attr="" autoattached="1" comment="" date="1128927104" path="trash.gif" size="224" user="UnknownUser" version=""}%
