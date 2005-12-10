@@ -449,11 +449,13 @@ msgstr "Teclas de atalho"
 
 #: templates/edit.pattern.tmpl:56
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr ""
+msgstr "S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar "
+"editando, P = Pré-Visualização, C = Cancelar"
 
 #: templates/preview.pattern.tmpl:35
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr ""
+msgstr "S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar "
+"editando, D - Descartar"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
@@ -570,9 +572,8 @@ msgid "Attachment"
 msgstr "Anexo"
 
 #: templates/oopsaccessdenied.tmpl:45
-#, fuzzy
 msgid "Attachment '%1' does not exist"
-msgstr "O anexo não existe"
+msgstr "O anexo '%1' não existe"
 
 #: lib/TWiki/UI/Manage.pm:341
 msgid "Attachment already exists in new topic"
@@ -913,7 +914,7 @@ msgstr "Caro(a) %1"
 
 #: templates/oopsmore.pattern.tmpl:51
 msgid "Debug"
-msgstr ""
+msgstr "Depurar"
 
 #: templates/attachagain.pattern.tmpl:56
 #: templates/deleteattachment.pattern.tmpl:10
@@ -1913,9 +1914,8 @@ msgid "Send you a confirmation of your registration by email."
 msgstr "Enviar a você uma confirmação do seu registro por email."
 
 #: templates/oopsmore.pattern.tmpl:51
-#, fuzzy
 msgid "Sequential"
-msgstr "Selecionar todos"
+msgstr "Sequencial"
 
 #: templates/oopsmore.pattern.tmpl:30
 msgid "Set new topic parent"
@@ -1943,7 +1943,7 @@ msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:51
 msgid "Side by side"
-msgstr ""
+msgstr "Lado a lado"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:7
 #: data/TWiki/WebTopicViewTemplate.txt:7
@@ -2633,7 +2633,6 @@ msgid "You are trying to %1 a topic that does not exist."
 msgstr "Você está tentando realizar a ação %1 num tópico que não existe."
 
 #: templates/oopsaccessdenied.tmpl:46
-#, fuzzy
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "Você está tentando realizar a ação %1 num tópico que não existe."
 
