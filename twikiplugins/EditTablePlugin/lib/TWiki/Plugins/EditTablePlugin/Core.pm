@@ -282,6 +282,7 @@ sub handleTableStart {
     }
     $text .= "$preSp<noautolink>\n" if $doEdit;
     $text .= "$preSp<a name=\"edittable$theTableNr\"></a>\n";
+    $text .= "<div class=\"editTable\">";
     $text .= "$preSp<form name=\"edittable$theTableNr\" action=\"$viewUrl\" method=\"post\">\n";
     $text .= "$preSp<input type=\"hidden\" name=\"ettablenr\" value=\"$theTableNr\" />\n";
     $text .= "$preSp<input type=\"hidden\" name=\"etedit\" value=\"on\" />\n" unless $doEdit;
@@ -331,6 +332,7 @@ sub handleTableEnd {
         }
     }
     $text .= "$preSp</form>\n";
+	$text .= "</div>";
     $text .= "$preSp</noautolink>\n" if $doEdit;
     return $text;
 }
@@ -461,7 +463,7 @@ sub inputElement {
         $cols = 30 if $cols < 1;
 
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
-        $text .= "<textarea$style rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
+        $text .= "<textarea$style class=\"editTableTextarea\" rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
     } elsif( $type eq 'date' ) {
@@ -494,7 +496,7 @@ sub inputElement {
     } else { #  if( $type eq 'text')
         $size = 16 if $size < 1;
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
-        $text = "<input$style type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\"/>";
+        $text = "<input$style class=\"editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\"/>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
     }
     return $text;
@@ -753,6 +755,7 @@ sub _parseOutTables {
                             $tableNum++;
                         }
                         undef @tableMatrix;  # reset table matrix
+                        $result .= '</div>';
                     }
                 }
             }

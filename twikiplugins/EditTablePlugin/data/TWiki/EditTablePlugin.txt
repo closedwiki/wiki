@@ -153,6 +153,12 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
 	* Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
 	* Click on *[&nbsp;Edit&nbsp;table&nbsp;]*, make changes and save the table
 
+---++ Style sheet classes
+This plugin uses the following CSS classes:
+   * =editTable= - a div around the table
+   * =editTableInput= - input field
+   * =editTableTextarea= - textarea
+   
 ---++ License
 
 	* The Edit Table Plugin is released under the [[http://www.gnu.org/licenses/gpl.html][GPL]]
