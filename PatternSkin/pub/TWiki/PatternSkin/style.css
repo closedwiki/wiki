@@ -183,11 +183,14 @@ label {
 
 /* EditTablePlugin */
 .editTable .twikiTable {
-	margin:0 0 .25em 0;
+	margin:0 0 2px 0;
 }
 .editTableInput,
 .editTableTextarea {
 	font-family:monospace;
+}
+.editTableEditImageButton {
+	border:none;
 }
 
 /* TablePlugin */
