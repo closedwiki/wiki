@@ -65,6 +65,7 @@ Context identifiers are used in TWiki to label various stages of the rendering p
 | edit | in edit script (see TWikiScripts) |
 | footer_text | when the footer text is being processed in a view (useful in plugins handlers) |
 | header_text | when the header text is being processed in a view (useful in plugins handlers) |
+| i18n_enabled | when user interface I18N support is enabled (i.e., user can choose the language for UI |
 | inactive | if active links such as 'edit' and 'attach' should be disabled |
 | mirror | if this is a mirror |
 | new_topic | if the topic doesn't already exist |
