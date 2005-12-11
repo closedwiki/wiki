@@ -2762,6 +2762,22 @@ msgstr "value='Guardar' accesskey='s'"
 msgid "view"
 msgstr "vea"
 
+#: templates/attachtables.pattern.tmpl:22
+msgid "Show attachments"
+msgstr ""
+
+#: templates/attachtables.pattern.tmpl:22
+msgid "Hide attachments"
+msgstr ""
+
+#: templates/formtables.pattern.tmpl:6
+msgid "Show form"
+msgstr ""
+
+#: templates/formtables.pattern.tmpl:6
+msgid "Hide form"
+msgstr ""
+
 #, fuzzy
 #~ msgid "Save Changes"
 #~ msgstr "(cambios)"

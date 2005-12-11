@@ -135,7 +135,7 @@ msgstr "&Bron bewerken"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:11
 msgid "&Edit text"
-msgstr "&Text bewerken"
+msgstr "&Tekst bewerken"
 
 #: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
 msgid "&History"
@@ -151,11 +151,11 @@ msgstr "&Printbaar"
 
 #: templates/view.pattern.tmpl:96
 msgid "&Raw view"
-msgstr ""
+msgstr "Bron&code"
 
 #: templates/view.pattern.tmpl:26
 msgid "&WYSIWYG"
-msgstr ""
+msgstr "&WYSIWYG"
 
 #: templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
@@ -204,12 +204,12 @@ msgstr "(wijzigingen)"
 
 #: templates/deleteattachment.pattern.tmpl:2
 msgid "(delete attachment)"
-msgstr ""
+msgstr "(verwijder bijlage)"
 
 #: templates/renamedelete.pattern.tmpl:17
 #: templates/renamewebdelete.pattern.tmpl:17
 msgid "(delete)"
-msgstr ""
+msgstr "(verwijderen)"
 
 #: templates/editform.pattern.tmpl:8
 #, fuzzy
@@ -228,20 +228,19 @@ msgstr "Bewerken"
 
 #: data/TWiki/TWikiRegistration.txt:42
 msgid "(how you log in) LoginName:"
-msgstr ""
+msgstr "(hoe u inlogt) LoginName:"
 
 #: data/TWiki/TWikiRegistration.txt:37
 msgid "(identifies you to others) WikiName:"
-msgstr ""
+msgstr "(zo zien anderen u) WikiName"
 
 #: templates/oopsmore.pattern.tmpl:2
 msgid "(more)"
-msgstr ""
+msgstr "(meer)"
 
 #: templates/moveattachment.pattern.tmpl:3
-#, fuzzy
 msgid "(move attachment)"
-msgstr "(bijlage toevoegen)"
+msgstr "(bijlage verplaatsen)"
 
 #: data/TWiki/WebTopicCreator.txt:17 data/TWiki/WebTopicCreator.txt:19
 msgid "(no parent, orphaned topic)"
@@ -2220,15 +2219,15 @@ msgstr ""
 
 #: data/TWiki/WebTopicCreator.txt:14
 msgid "Topic parent:"
-msgstr ""
+msgstr "Bovenliggende pagina"
 
 #: templates/oopssaveerr.tmpl:4
 msgid "Topic save error"
-msgstr ""
+msgstr "Pagina bewaarfout"
 
 #: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:40
 msgid "Topic title"
-msgstr ""
+msgstr "Paginatitel"
 
 #: templates/oopsattention.tmpl:23
 msgid "Topic was merged"
@@ -2236,7 +2235,7 @@ msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:76
 msgid "Topics per web"
-msgstr ""
+msgstr "Pagina's per web"
 
 #: templates/renamewebbase.pattern.tmpl:55
 msgid "Topics which are currently being edited by other users in the !%1 Web:"
@@ -2260,11 +2259,11 @@ msgstr ""
 #: templates/oopsleaseconflict.pattern.tmpl:7
 #: templates/oopsleaseconflict.tmpl:34
 msgid "Try Again"
-msgstr ""
+msgstr "Probeer opnieuw"
 
 #: lib/TWiki/UI/RDiff.pm:268
 msgid "Unchanged"
-msgstr ""
+msgstr "Onveranderd"
 
 #: templates/login.pattern.tmpl:29
 msgid "Unrecognised user and/or password"
@@ -2276,7 +2275,7 @@ msgstr ""
 
 #: templates/settings.pattern.tmpl:29
 msgid "Update"
-msgstr ""
+msgstr "Update"
 
 #: templates/attachagain.pattern.tmpl:9
 msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
@@ -2383,7 +2382,7 @@ msgstr "WAARSCHUWING:"
 
 #: templates/view.pattern.tmpl:37
 msgid "WYSIWYG"
-msgstr ""
+msgstr "WYSIWYG"
 
 #: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -2391,7 +2390,7 @@ msgstr ""
 
 #: templates/oopsalerts.tmpl:6
 msgid "Warning: Can't find topic %1"
-msgstr ""
+msgstr "Waarschuwing: Kan pagina %1 niet vinden"
 
 #: templates/view.pattern.tmpl:98
 msgid "We&b"
@@ -2407,7 +2406,7 @@ msgstr "Webs"
 
 #: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
 msgid "Welcome to the %1 web"
-msgstr "Welkom bij het %1 web"
+msgstr "Welkom in het %1 web"
 
 #: data/TWiki/TWikiRegistration.txt:222
 msgid ""
@@ -2424,15 +2423,15 @@ msgstr "Wie"
 
 #: templates/oopsattention.tmpl:16
 msgid "Would you like to go to:"
-msgstr ""
+msgstr "Wilt u:"
 
 #: data/TWiki/NewUserTemplate.txt:21
 msgid "Write protect your home page: (set it to your %1)"
-msgstr ""
+msgstr "Bescherm uw homepage tegen overschrijven (zet het als uw %1)"
 
 #: templates/oopsattention.tmpl:189
 msgid "You are already registered"
-msgstr ""
+msgstr "U bent al geregistreerd"
 
 #: templates/oopsattention.tmpl:132
 msgid "You are also listed in the %1 topic"
@@ -2580,11 +2579,11 @@ msgstr "Nederlands"
 
 #: data/TWiki/WebSearchAdvanced.txt:71 data/TWiki/WebSearchAdvanced.txt:89
 msgid "about BookView"
-msgstr ""
+msgstr "over BookView"
 
 #: data/TWiki/WebSearchAdvanced.txt:59
 msgid "about regular expression search"
-msgstr ""
+msgstr "over _regular expression_ zoeken"
 
 #: lib/TWiki/Access.pm:158
 msgid "access denied on topic"
@@ -2644,13 +2643,12 @@ msgid "looking for references in _all public webs_"
 msgstr ""
 
 #: templates/attachtables.pattern.tmpl:11
-#, fuzzy
 msgid "manage"
-msgstr "Gewijzigd"
+msgstr ""
 
 #: data/Trash/WebHome.txt:6
 msgid "more..."
-msgstr ""
+msgstr "meer..."
 
 #: templates/oopsmore.pattern.tmpl:33
 #, fuzzy
@@ -2675,7 +2673,7 @@ msgstr ""
 
 #: lib/TWiki/Render.pm:199
 msgid "put it back"
-msgstr ""
+msgstr "plaats het terug"
 
 #: templates/search.pattern.tmpl:18
 msgid "retrieved at %1"
@@ -2709,6 +2707,22 @@ msgstr "value='Stop bewerken' accesskey='c'"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr ""
+
+#: templates/attachtables.pattern.tmpl:22
+msgid "Show attachments"
+msgstr "Toon bijlagen"
+
+#: templates/attachtables.pattern.tmpl:22
+msgid "Hide attachments"
+msgstr "Verberg bijlagen"
+
+#: templates/formtables.pattern.tmpl:6
+msgid "Show form"
+msgstr "Toon formulier"
+
+#: templates/formtables.pattern.tmpl:6
+msgid "Hide form"
+msgstr "Verberg formulier"
 
 #~ msgid "&Compose"
 #~ msgstr "&Bewerken"
