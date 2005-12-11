@@ -1379,7 +1379,11 @@ msgid "Name of new web is missing"
 msgstr ""
 
 #: templates/renamewebbase.pattern.tmpl:44
-msgid "New parent web:<br>(subwebs must be enabled)"
+msgid "New parent web:"
+msgstr ""
+
+#: templates/renamewebbase.pattern.tmpl:46
+msgid "Subwebs must be enabled."
 msgstr ""
 
 #: templates/oopsattention.tmpl:82
@@ -2677,6 +2681,10 @@ msgstr "value='Stop bewerken' accesskey='c'"
 
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
+msgstr ""
+
+#: lib/TWiki/UI/Manage.pm:1046
+msgid "(none)"
 msgstr ""
 
 #~ msgid "&Compose"

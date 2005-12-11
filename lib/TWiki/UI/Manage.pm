@@ -618,18 +618,18 @@ sub _renameweb {
                 my $nocontinue = '';
                 if( @{$webTopicInfo{movedenied}} ||
                       @{$webTopicInfo{movelocked}} ) {
-                    $nocontinue = 'style="display: none"';
+                    $nocontinue = 'style="display:none;"';
                 }
-                my $mvd = join(' ', @{$webTopicInfo{movedenied}} ) || 'none';
+                my $mvd = join(' ', @{$webTopicInfo{movedenied}} ) || ($session->{i18n}->maketext('(none)'));
                 $mvd = substr($mvd, 0, 300).'... (more)'
                   if( length($mvd) > 300);
-                my $mvl = join(' ', @{$webTopicInfo{movelocked}} ) || 'none';
+                my $mvl = join(' ', @{$webTopicInfo{movelocked}} ) || ($session->{i18n}->maketext('(none)'));
                 $mvl = substr($mvl, 0, 300).'... (more)'
                   if( length($mvl) > 300);
-                my $mdd = join(' ', @{$webTopicInfo{modifydenied}} ) || 'none';
+                my $mdd = join(' ', @{$webTopicInfo{modifydenied}} ) || ($session->{i18n}->maketext('(none)'));
                 $mdd = substr($mdd, 0, 300).'... (more)'
                   if( length($mdd) > 300);
-                my $mdl = join(' ', @{$webTopicInfo{modifylocked}} ) || 'none';
+                my $mdl = join(' ', @{$webTopicInfo{modifylocked}} ) || ($session->{i18n}->maketext('(none)'));
                 $mdl = substr($mdl, 0, 300).'... (more)'
                   if( length($mdl) > 300);
                 throw TWiki::OopsException(
@@ -874,7 +874,7 @@ sub _newTopicScreen {
                         $refs->{$entry} ));
         }
         unless( $search ) {
-            $search = '(none)';
+            $search = ($session->{i18n}->maketext('(none)'));
         } else {
             $search = CGI::start_table().$search.CGI::end_table();
         }
@@ -897,7 +897,7 @@ sub _newTopicScreen {
                     $refs->{$entry} ));
     }
     unless( $search ) {
-        $search = '(none)';
+        $search = ($session->{i18n}->maketext('(none)'));
     } else {
         $search = CGI::start_table().$search.CGI::end_table();
     }
@@ -995,7 +995,7 @@ sub _newWebScreen {
         }
     }
 
-    my $subWebStyle = 'style="display:none"';
+    my $subWebStyle = 'style="display:none;"';
     $subWebStyle = '' if $TWiki::cfg{EnableHierarchicalWebs};
 
     $tmpl =~ s/%SUBWEBSENABLE%/$subWebStyle/g;
@@ -1006,10 +1006,13 @@ sub _newWebScreen {
     my( $movelocked, $refdenied, $reflocked ) = ( '', '', '' );
     $movelocked = join(', ', @{$webTopicInfoRef->{movelocked}} )
       if $webTopicInfoRef->{movelocked};
+    $movelocked = ($session->{i18n}->maketext('(none)')) unless $movelocked;
     $refdenied = join(', ', @{$webTopicInfoRef->{modifydenied}} )
       if $webTopicInfoRef->{modifydenied};
+    $refdenied = ($session->{i18n}->maketext('(none)')) unless $refdenied;
     $reflocked = join(', ', @{$webTopicInfoRef->{modifylocked}} )
       if $webTopicInfoRef->{modifylocked};
+    $reflocked = ($session->{i18n}->maketext('(none)')) unless $reflocked;
 
     $tmpl =~ s/%MOVE_LOCKED%/$movelocked/;
     $tmpl =~ s/%REF_DENIED%/$refdenied/;
@@ -1043,7 +1046,7 @@ sub _newWebScreen {
                   );
     }
     unless( $search ) {
-        $search = '(none)';
+        $search = ($session->{i18n}->maketext('(none)'));
     } else {
         $search = CGI::start_table().$search.CGI::end_table();
     }
@@ -1065,7 +1068,7 @@ sub _newWebScreen {
                                  $refs->{$entry} ));
     }
     unless( $search ) {
-        $search = '(none)';
+        $search = ($session->{i18n}->maketext('(none)'));
     } else {
         $search = CGI::start_table().$search.CGI::end_table();
     }

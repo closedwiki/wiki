@@ -50,14 +50,16 @@
 </tr>
 </table>
 </div>
-
+<div class="patternSearchResultsHeader">
+%MAKETEXT{"Notices:"}%
+</div>
+<div class="patternRenameOptionsList">
 <div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="%TOPIC%, <nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
 
 <div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in any Web:" args="[[%WEB%.%TOPIC%]]"}%</div>%GLOBAL_SEARCH%</div>
 <hr />
 <input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(false);" /> %MAKETEXT{"checkboxes of referenced topics"}%
-<p />
-
+</div>
 %TMPL:P{"topicaction"}%
 </form>
 <div class="twikiHelp">

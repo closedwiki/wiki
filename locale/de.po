@@ -1463,8 +1463,12 @@ msgid "Name of new web is missing"
 msgstr "Der Names des neuen Webs fehlt"
 
 #: templates/renamewebbase.pattern.tmpl:44
-msgid "New parent web:<br>(subwebs must be enabled)"
-msgstr "Neues Ober-Web:<br>(Subwebs müssen aktiviert sein)"
+msgid "New parent web:"
+msgstr "Neues Ober-Web:"
+
+#: templates/renamewebbase.pattern.tmpl:46
+msgid "Subwebs must be enabled."
+msgstr "Subwebs müssen aktiviert sein."
 
 #: templates/oopsattention.tmpl:82
 msgid "New topic name %1 is not a %2"
@@ -2886,6 +2890,10 @@ msgstr "value='Speichern' accesskey='s'"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
+
+#: lib/TWiki/UI/Manage.pm:1046
+msgid "(none)"
+msgstr ""
 
 #~ msgid "&Compose"
 #~ msgstr "&Bearbeiten"
