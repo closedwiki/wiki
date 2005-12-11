@@ -158,6 +158,10 @@ msgstr "&Flere muligheder med denne side"
 msgid "&Printable"
 msgstr "&Printvenlig"
 
+#: templates/view.pattern.tmpl:96
+msgid "&Raw view"
+msgstr "Kildetekst"
+
 #: templates/view.pattern.tmpl:26
 msgid "&WYSIWYG"
 msgstr ""
@@ -248,6 +252,15 @@ msgstr "(flyt vedhæftet fil)"
 #: data/TWiki/WebTopicCreator.txt:17 data/TWiki/WebTopicCreator.txt:19
 msgid "(no parent, orphaned topic)"
 msgstr "(ingen forælder, forældreløse sider)"
+
+#: lib/TWiki/UI/Manage.pm:1009 lib/TWiki/UI/Manage.pm:1012
+#: lib/TWiki/UI/Manage.pm:1015 lib/TWiki/UI/Manage.pm:1049
+#: lib/TWiki/UI/Manage.pm:1071 lib/TWiki/UI/Manage.pm:623
+#: lib/TWiki/UI/Manage.pm:626 lib/TWiki/UI/Manage.pm:629
+#: lib/TWiki/UI/Manage.pm:632 lib/TWiki/UI/Manage.pm:877
+#: lib/TWiki/UI/Manage.pm:900
+msgid "(none)"
+msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:3 templates/oopsleaseconflict.tmpl:3
 #: templates/oopssaveerr.tmpl:2
@@ -365,7 +378,7 @@ msgstr ""
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "Opdatér <a href='%1' rel='nofollow'>side-præferencer</a>"
 
-#: templates/renamewebbase.pattern.tmpl:71
+#: templates/renamewebbase.pattern.tmpl:77
 msgid ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
 "%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</a>"
@@ -686,13 +699,21 @@ msgstr "Ændr fra:"
 msgid "Change language"
 msgstr "Skift sprog"
 
-#: templates/renamebase.pattern.tmpl:56
-#: templates/renamewebbase.pattern.tmpl:63
+#: templates/renamewebbase.pattern.tmpl:67
+#, fuzzy
+msgid "Change links in topics that refer to !%1 in any Web:"
+msgstr "Opdater links i sider, der peger på %1 (i alle Webs)"
+
+#: templates/renamewebbase.pattern.tmpl:65
+#, fuzzy
+msgid "Change links in topics that refer to !%1 in the %2 Web:"
+msgstr "Opdater links i sider, der peger på %1 (kun i %2 Web)"
+
+#: templates/renamebase.pattern.tmpl:59
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr "Opdater links i sider, der peger på %1 (i alle Webs)"
 
-#: templates/renamebase.pattern.tmpl:54
-#: templates/renamewebbase.pattern.tmpl:61
+#: templates/renamebase.pattern.tmpl:57
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "Opdater links i sider, der peger på %1 (kun i %2 Web)"
 
@@ -737,8 +758,8 @@ msgstr "Datter-sider i %1 webbet"
 msgid "Choose a new form template"
 msgstr "Vælg en ny formular"
 
-#: templates/renamebase.pattern.tmpl:58
-#: templates/renamewebbase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:61
+#: templates/renamewebbase.pattern.tmpl:69
 msgid "Clear all"
 msgstr "Nulstil alle"
 
@@ -1122,7 +1143,7 @@ msgstr "Formular-definition %1 mangler"
 msgid "Form definition missing"
 msgstr "Formular-definition mangler"
 
-#: templates/renamebase.pattern.tmpl:65
+#: templates/renamebase.pattern.tmpl:67
 msgid ""
 "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
 "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
@@ -1474,10 +1495,6 @@ msgstr "Navnet på det nye web mangler"
 msgid "New parent web:"
 msgstr "Nyt forælder-web:"
 
-#: templates/renamewebbase.pattern.tmpl:46
-msgid "Subwebs must be enabled."
-msgstr "Subwebs skal være aktiveret."
-
 #: templates/oopsattention.tmpl:82
 msgid "New topic name %1 is not a %2"
 msgstr "Det nye sidenavn %1 er ikke et %2"
@@ -1511,8 +1528,8 @@ msgstr ""
 "fil ikke vil virke mere efter flytningen."
 
 #: data/TWiki/TWikiRegistration.txt:6 templates/registerconfirm.tmpl:13
-#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:64
-#: templates/renamewebbase.pattern.tmpl:70 templates/settings.pattern.tmpl:47
+#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:66
+#: templates/renamewebbase.pattern.tmpl:76 templates/settings.pattern.tmpl:47
 msgid "Note:"
 msgstr "Note:"
 
@@ -1524,6 +1541,7 @@ msgstr "Noter"
 msgid "Notes:"
 msgstr "Noter:"
 
+#: templates/renamebase.pattern.tmpl:54
 #: templates/renamewebbase.pattern.tmpl:51
 msgid "Notices:"
 msgstr "Beskeder:"
@@ -1681,10 +1699,6 @@ msgstr "Forrige upload"
 msgid "Printable version of this topic"
 msgstr "Printervenlig version af denne side"
 
-#: templates/view.pattern.tmpl:96
-msgid "&Raw view"
-msgstr "Kildetekst"
-
 #: templates/registernotify.tmpl:10
 msgid ""
 "Read %1 to get a quick overview of this collaboration platform. To learn "
@@ -1750,6 +1764,10 @@ msgstr "Omdøb eller flyt side"
 msgid "Rename the file on your local machine and try uploading again."
 msgstr "Omdøb filen lokalt på din maskine, og prøv at uploade en gang til."
 
+#: data/TWiki/RenameWeb.txt:1
+msgid "Rename, move or delete this web:"
+msgstr ""
+
 #: templates/rename.pattern.tmpl:31 templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
 msgstr "Omdøb/Flyt"
@@ -1758,6 +1776,10 @@ msgstr "Omdøb/Flyt"
 #: templates/oopsmore.tmpl:14 templates/oopsmore.tmpl:16
 msgid "Rename/move topic..."
 msgstr "Omdøb/flyt side..."
+
+#: data/TWiki/RenameWeb.txt:2
+msgid "Rename/move/delete web..."
+msgstr ""
 
 #: templates/form.tmpl:1
 msgid "Replace form..."
@@ -1861,7 +1883,7 @@ msgstr "Se også den hurtigere %1"
 msgid "See also the verbose %1."
 msgstr "Se også den mere udførlige %1."
 
-#: templates/login.pattern.tmpl:48 data/TWiki/RenameWeb.txt:3
+#: data/TWiki/RenameWeb.txt:3 templates/login.pattern.tmpl:48
 msgid "See also:"
 msgstr "Se også:"
 
@@ -1869,12 +1891,12 @@ msgstr "Se også:"
 msgid "Select a new local file to update this attachment."
 msgstr "Vælg en ny lokal fil til at opdatere denne vedhæftede fil."
 
-#: templates/renamebase.pattern.tmpl:58
-#: templates/renamewebbase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:61
+#: templates/renamewebbase.pattern.tmpl:69
 msgid "Select all"
 msgstr "Vælg alle"
 
-#: templates/renamebase.pattern.tmpl:66
+#: templates/renamebase.pattern.tmpl:68
 msgid "Select the %1 Web to delete the topic."
 msgstr "Vælg %1 webbet, for at slette siden."
 
@@ -1993,6 +2015,10 @@ msgstr "Send"
 msgid "Submitted content:"
 msgstr "Tilføjet indhold:"
 
+#: templates/renamewebbase.pattern.tmpl:46
+msgid "Subwebs must be enabled."
+msgstr "Subwebs skal være aktiveret."
+
 #: data/TWiki/WebSearchAdvanced.txt:65
 msgid "Summaries"
 msgstr "Sammendrag"
@@ -2102,11 +2128,11 @@ msgstr ""
 "Det er stor sandsynlighed for, at brugeren simpelthen har navigeret væk fra "
 "siden uden at gemme ændringerne."
 
-#: templates/renamewebbase.pattern.tmpl:72
+#: templates/renamewebbase.pattern.tmpl:78
 msgid "The checkmarked topics will be updated"
 msgstr "De afkrydsede sider vil blive opdateret"
 
-#: templates/renamebase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:69
 msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
 "_eventually_ allow you to rename any topics that were locked)"
@@ -2374,18 +2400,19 @@ msgstr "Sidens kildetekst blev flettet"
 msgid "Topics per web"
 msgstr "Sider pr. web"
 
-#: templates/renamewebbase.pattern.tmpl:52
-msgid "Topics which are currently being edited by other users in the %1 Web:"
+#: templates/renamewebbase.pattern.tmpl:55
+#, fuzzy
+msgid "Topics which are currently being edited by other users in the !%1 Web:"
 msgstr "Sider som lige nu redigeres af andre brugere i %1 webbet:"
 
-#: templates/renamewebbase.pattern.tmpl:55
+#: templates/renamewebbase.pattern.tmpl:58
 msgid ""
 "Topics which refer to this web and are are currently being edited by other "
 "users:"
 msgstr ""
 "Sider, som referer til dette web, og som lige nu redigeres af andre brugere:"
 
-#: templates/renamewebbase.pattern.tmpl:57
+#: templates/renamewebbase.pattern.tmpl:61
 msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
@@ -2787,8 +2814,8 @@ msgstr "avanceret søgning"
 msgid "change, update, previous revisions, move, delete..."
 msgstr "ændr, opdatér, tidligere versioner, flyt, slet..."
 
-#: templates/renamebase.pattern.tmpl:58
-#: templates/renamewebbase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:61
+#: templates/renamewebbase.pattern.tmpl:69
 msgid "checkboxes of referenced topics"
 msgstr "flueben for sider med referencer"
 
@@ -2813,8 +2840,9 @@ msgstr "angiver obligatoriske felter"
 msgid "looking for references in _%1 web_ only"
 msgstr "finder referencer (kun i _%1 Web_)"
 
-#: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
-#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
+#: data/TWiki/RenameWeb.txt:3 templates/oopsmore.pattern.tmpl:15
+#: templates/oopsmore.pattern.tmpl:9 templates/oopsmore.tmpl:15
+#: templates/oopsmore.tmpl:9
 msgid "looking for references in _all public webs_"
 msgstr "finder referencer (i _alle offentlige webs_)"
 
@@ -2881,18 +2909,6 @@ msgstr "value='Gem' accesskey='s'"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "vis"
-
-#: lib/TWiki/UI/Manage.pm:1046
-msgid "(none)"
-msgstr ""
-
-#: data/TWiki/RenameWeb.txt:1
-msgid "Rename, move or delete this web:"
-msgstr ""
-
-#: data/TWiki/RenameWeb.txt:2
-msgid "Rename/move/delete web..."
-msgstr ""
 
 #~ msgid "&Compose"
 #~ msgstr "&Komponér"

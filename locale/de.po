@@ -150,6 +150,10 @@ msgstr "&Mehr Aktionen"
 msgid "&Printable"
 msgstr "&Drucken"
 
+#: templates/view.pattern.tmpl:96
+msgid "&Raw view"
+msgstr ""
+
 #: templates/view.pattern.tmpl:26
 msgid "&WYSIWYG"
 msgstr ""
@@ -240,6 +244,15 @@ msgstr "(Anhang verschieben)"
 #: data/TWiki/WebTopicCreator.txt:17 data/TWiki/WebTopicCreator.txt:19
 msgid "(no parent, orphaned topic)"
 msgstr "(kein Ober-Topic, verwaistes Topic"
+
+#: lib/TWiki/UI/Manage.pm:1009 lib/TWiki/UI/Manage.pm:1012
+#: lib/TWiki/UI/Manage.pm:1015 lib/TWiki/UI/Manage.pm:1049
+#: lib/TWiki/UI/Manage.pm:1071 lib/TWiki/UI/Manage.pm:623
+#: lib/TWiki/UI/Manage.pm:626 lib/TWiki/UI/Manage.pm:629
+#: lib/TWiki/UI/Manage.pm:632 lib/TWiki/UI/Manage.pm:877
+#: lib/TWiki/UI/Manage.pm:900
+msgid "(none)"
+msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:3 templates/oopsleaseconflict.tmpl:3
 #: templates/oopssaveerr.tmpl:2
@@ -350,7 +363,7 @@ msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr ""
 "Für dieses Topic <a href='%1' rel='nofollow'>Einstellungen bearbeiten</a>"
 
-#: templates/renamewebbase.pattern.tmpl:71
+#: templates/renamewebbase.pattern.tmpl:77
 msgid ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
 "%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</a>"
@@ -674,13 +687,21 @@ msgstr "Geändert von:"
 msgid "Change language"
 msgstr "Sprache wechseln"
 
-#: templates/renamebase.pattern.tmpl:56
-#: templates/renamewebbase.pattern.tmpl:63
+#: templates/renamewebbase.pattern.tmpl:67
+#, fuzzy
+msgid "Change links in topics that refer to !%1 in any Web:"
+msgstr "Verweise in Topics ändern, die auf %1 zeigen (alle Webs)"
+
+#: templates/renamewebbase.pattern.tmpl:65
+#, fuzzy
+msgid "Change links in topics that refer to !%1 in the %2 Web:"
+msgstr "Verweise in Topics ändern, die auf %1 zeigen (nur im %2 Web)"
+
+#: templates/renamebase.pattern.tmpl:59
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr "Verweise in Topics ändern, die auf %1 zeigen (alle Webs)"
 
-#: templates/renamebase.pattern.tmpl:54
-#: templates/renamewebbase.pattern.tmpl:61
+#: templates/renamebase.pattern.tmpl:57
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "Verweise in Topics ändern, die auf %1 zeigen (nur im %2 Web)"
 
@@ -722,8 +743,8 @@ msgstr "Unter-Topics im %1 Web"
 msgid "Choose a new form template"
 msgstr "Wählen Sie eine neue Formularvorlage"
 
-#: templates/renamebase.pattern.tmpl:58
-#: templates/renamewebbase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:61
+#: templates/renamewebbase.pattern.tmpl:69
 msgid "Clear all"
 msgstr "Alles abwählen"
 
@@ -1109,7 +1130,7 @@ msgstr "Formular-Definition %1 fehlt"
 msgid "Form definition missing"
 msgstr "Formular-Definition fehlt"
 
-#: templates/renamebase.pattern.tmpl:65
+#: templates/renamebase.pattern.tmpl:67
 msgid ""
 "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
 "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
@@ -1466,10 +1487,6 @@ msgstr "Der Names des neuen Webs fehlt"
 msgid "New parent web:"
 msgstr "Neues Ober-Web:"
 
-#: templates/renamewebbase.pattern.tmpl:46
-msgid "Subwebs must be enabled."
-msgstr "Subwebs müssen aktiviert sein."
-
 #: templates/oopsattention.tmpl:82
 msgid "New topic name %1 is not a %2"
 msgstr "Neuer Topic Name %1 ist kein %2"
@@ -1503,8 +1520,8 @@ msgstr ""
 "Verschieben nicht mehr funktionieren."
 
 #: data/TWiki/TWikiRegistration.txt:6 templates/registerconfirm.tmpl:13
-#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:64
-#: templates/renamewebbase.pattern.tmpl:70 templates/settings.pattern.tmpl:47
+#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:66
+#: templates/renamewebbase.pattern.tmpl:76 templates/settings.pattern.tmpl:47
 msgid "Note:"
 msgstr "Hinweis:"
 
@@ -1516,6 +1533,7 @@ msgstr "Hinweise"
 msgid "Notes:"
 msgstr "Hinweise:"
 
+#: templates/renamebase.pattern.tmpl:54
 #: templates/renamewebbase.pattern.tmpl:51
 msgid "Notices:"
 msgstr "Notizen:"
@@ -1676,10 +1694,6 @@ msgstr "Vorheriger Upload"
 msgid "Printable version of this topic"
 msgstr "Druckversion von diesem Topic"
 
-#: templates/view.pattern.tmpl:96
-msgid "&Raw view"
-msgstr ""
-
 #: templates/registernotify.tmpl:10
 msgid ""
 "Read %1 to get a quick overview of this collaboration platform. To learn "
@@ -1745,6 +1759,10 @@ msgstr ""
 "Benennen Sie die Datei auf Ihrem lokalen Rechner um und versuchen Sie den "
 "Upload erneut."
 
+#: data/TWiki/RenameWeb.txt:1
+msgid "Rename, move or delete this web:"
+msgstr ""
+
 #: templates/rename.pattern.tmpl:31 templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
 msgstr "Umbenennen/Verschieben"
@@ -1753,6 +1771,10 @@ msgstr "Umbenennen/Verschieben"
 #: templates/oopsmore.tmpl:14 templates/oopsmore.tmpl:16
 msgid "Rename/move topic..."
 msgstr "Topic umbenennen/verschieben..."
+
+#: data/TWiki/RenameWeb.txt:2
+msgid "Rename/move/delete web..."
+msgstr ""
 
 #: templates/form.tmpl:1
 msgid "Replace form..."
@@ -1856,7 +1878,7 @@ msgstr "Es gibt auch einen schnelleren %1"
 msgid "See also the verbose %1."
 msgstr "Verwenden Sie ggf. den ausführlichen %1."
 
-#: templates/login.pattern.tmpl:48 data/TWiki/RenameWeb.txt:3
+#: data/TWiki/RenameWeb.txt:3 templates/login.pattern.tmpl:48
 msgid "See also:"
 msgstr "Siehe auch:"
 
@@ -1865,12 +1887,12 @@ msgid "Select a new local file to update this attachment."
 msgstr ""
 "Wählen Sie eine neue Datei auf Ihrem Rechner, um den Anhang zu aktualisieren."
 
-#: templates/renamebase.pattern.tmpl:58
-#: templates/renamewebbase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:61
+#: templates/renamewebbase.pattern.tmpl:69
 msgid "Select all"
 msgstr "Alles auswählen"
 
-#: templates/renamebase.pattern.tmpl:66
+#: templates/renamebase.pattern.tmpl:68
 msgid "Select the %1 Web to delete the topic."
 msgstr "Wählen Sie das %1 Web, um das Topic zu löschen."
 
@@ -1989,6 +2011,10 @@ msgstr "Übermitteln"
 msgid "Submitted content:"
 msgstr "Übertragender Inhalt:"
 
+#: templates/renamewebbase.pattern.tmpl:46
+msgid "Subwebs must be enabled."
+msgstr "Subwebs müssen aktiviert sein."
+
 #: data/TWiki/WebSearchAdvanced.txt:65
 msgid "Summaries"
 msgstr "Zusammenfassungen"
@@ -2099,11 +2125,11 @@ msgstr ""
 "Die Wahrscheinlichkeit ist groß, dass einfach weiter navigiert wird ohne die "
 "Seite zu speichern."
 
-#: templates/renamewebbase.pattern.tmpl:72
+#: templates/renamewebbase.pattern.tmpl:78
 msgid "The checkmarked topics will be updated"
 msgstr "Die ausgewählten Topics werden aktualisiert"
 
-#: templates/renamebase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:69
 msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
 "_eventually_ allow you to rename any topics that were locked)"
@@ -2382,11 +2408,12 @@ msgstr "Topic wurde zusammengeführt"
 msgid "Topics per web"
 msgstr "Topics per Web"
 
-#: templates/renamewebbase.pattern.tmpl:52
-msgid "Topics which are currently being edited by other users in the %1 Web:"
+#: templates/renamewebbase.pattern.tmpl:55
+#, fuzzy
+msgid "Topics which are currently being edited by other users in the !%1 Web:"
 msgstr "Topics im %1 Web, die gerade von anderen Benutzern editiert werden:"
 
-#: templates/renamewebbase.pattern.tmpl:55
+#: templates/renamewebbase.pattern.tmpl:58
 msgid ""
 "Topics which refer to this web and are are currently being edited by other "
 "users:"
@@ -2394,7 +2421,7 @@ msgstr ""
 "Topics, die auf dieses Web referenzieren und gerade von anderen Benutzern "
 "editiert werden:"
 
-#: templates/renamewebbase.pattern.tmpl:57
+#: templates/renamewebbase.pattern.tmpl:61
 msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
@@ -2796,8 +2823,8 @@ msgstr "erweiterte Suche"
 msgid "change, update, previous revisions, move, delete..."
 msgstr "ändern, aktualisieren, vorherige Revisionen, verschieben, Löschen..."
 
-#: templates/renamebase.pattern.tmpl:58
-#: templates/renamewebbase.pattern.tmpl:67
+#: templates/renamebase.pattern.tmpl:61
+#: templates/renamewebbase.pattern.tmpl:69
 msgid "checkboxes of referenced topics"
 msgstr "Auswahlboxen von referenzierten Topics"
 
@@ -2822,8 +2849,9 @@ msgstr "kennzeichnet Pflichtfelder"
 msgid "looking for references in _%1 web_ only"
 msgstr "nach Querverweisen nur in _%1 Web_ suchen"
 
-#: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
-#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
+#: data/TWiki/RenameWeb.txt:3 templates/oopsmore.pattern.tmpl:15
+#: templates/oopsmore.pattern.tmpl:9 templates/oopsmore.tmpl:15
+#: templates/oopsmore.tmpl:9
 msgid "looking for references in _all public webs_"
 msgstr "nach Querverweisen in _allen öffentlichen Webs_ suchen"
 
@@ -2890,18 +2918,6 @@ msgstr "value='Speichern' accesskey='s'"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
-
-#: lib/TWiki/UI/Manage.pm:1046
-msgid "(none)"
-msgstr ""
-
-#: data/TWiki/RenameWeb.txt:1
-msgid "Rename, move or delete this web:"
-msgstr ""
-
-#: data/TWiki/RenameWeb.txt:2
-msgid "Rename/move/delete web..."
-msgstr ""
 
 #~ msgid "&Compose"
 #~ msgstr "&Bearbeiten"
