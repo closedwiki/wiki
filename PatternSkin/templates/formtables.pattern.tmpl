@@ -1,0 +1,23 @@
+%{ These templates define the form attached at the bottom of viewed page. }%
+
+%{ Header definition for topic attachments and top table in attach screen }%
+%TMPL:DEF{FORM:display:header}%
+<div class="twikiForm">
+<span id="formshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleopen}%<span class="twikiLinkLabel">%MAKETEXT{"Show form"}%</span></a></span><span id="formhide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleclose}%<span class="twikiLinkLabel">%MAKETEXT{"Hide form"}%</span></a></span>
+<div id="formtoggle" class="twistyMakeHidden twistyRememberSetting">
+<table class='twikiFormTable' border='1'><tr><th class='twikiFormTableHRow twikiFirstCol' colspan='2'>
+[[%A_TITLE%]]
+</th></tr>
+%TMPL:END%
+
+%{ Each row }%
+%TMPL:DEF{FORM:display:row}%
+<tr valign='top'><td class='twikiFormTableRow twikiFirstCol' align='right'>%A_TITLE%</td><td>
+%A_VALUE%
+</td></tr>
+%TMPL:END%
+
+%{ Footer }%
+%TMPL:DEF{FORM:display:footer}%
+</table></div><!-- /formtoggle --></div><!-- /twikiForm -->
+%TMPL:END%

@@ -310,13 +310,14 @@ a:visited .twistyLinkLabel {
 .patternContent .twikiForm {
 	/* form or attachment table inside topic area */
 	font-size:94%; /*S2*/
-	padding:20px; /*S5*/
+	padding:.5em 20px; /*S5*/ /* top: use less padding for the toggle link; bottom: use less space in case the table is folded in  */
 	border-width:1px 0 0 0;
 	border-style:solid;
 	margin:0;
 }
 .twikiAttachments table,
 table.twikiFormTable {
+	margin:5px 0 10px 0; /* bottom: create extra space in case the table is folded out */
 	border-collapse:collapse;
 	padding:0px;
 	border-spacing:0px;
