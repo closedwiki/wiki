@@ -1861,7 +1861,7 @@ msgstr "Se også den hurtigere %1"
 msgid "See also the verbose %1."
 msgstr "Se også den mere udførlige %1."
 
-#: templates/login.pattern.tmpl:48
+#: templates/login.pattern.tmpl:48 data/TWiki/RenameWeb.txt:3
 msgid "See also:"
 msgstr "Se også:"
 
@@ -2884,6 +2884,14 @@ msgstr "vis"
 
 #: lib/TWiki/UI/Manage.pm:1046
 msgid "(none)"
+msgstr ""
+
+#: data/TWiki/RenameWeb.txt:1
+msgid "Rename, move or delete this web:"
+msgstr ""
+
+#: data/TWiki/RenameWeb.txt:2
+msgid "Rename/move/delete web..."
 msgstr ""
 
 #~ msgid "&Compose"
