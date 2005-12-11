@@ -94,6 +94,12 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
       * .patternPrevious - attachment table of previous versions
       * .patternMoveAttachment - container for "Move or Delete attachment"
 
+   * Rename (rename, move, delete)
+      * patternRenameOptionsList - list of topics that can be updated
+
+   * More
+      * patternDiffOptions - row of revision options under "Compare revisions"
+      
    * Search results
       * .patternSearchResultsHeader
       * .patternSearchString

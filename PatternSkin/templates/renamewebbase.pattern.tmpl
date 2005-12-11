@@ -41,38 +41,42 @@
 <td class="patternMainCol patternHelpCol" colspan="2">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr %SUBWEBSENABLE%>
-<th>%MAKETEXT{"New parent web:<br>(subwebs must be enabled)"}%</th>
+<th>%MAKETEXT{"New parent web:"}%</th>
 <td class="patternMainCol">%TMPL:P{"newparentweb"}%</td>
-<td class="patternMainCol patternHelpCol" colspan="2"></td>
+<td class="patternMainCol patternHelpCol" colspan="2">%MAKETEXT{"Subwebs must be enabled."}%</td>
 </tr>
 </table>
 </div>
-
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Notices:"}%</div>
-*%MAKETEXT{"Topics which are currently being edited by other users in the [_1] Web:" args="<nop>%WEB%"}%*
+<div class="patternSearchResultsHeader">
+%MAKETEXT{"Notices:"}%
+</div>
+<div class="patternRenameOptionsList">
+<div class="patternSearchResults">
+*%MAKETEXT{"Topics which are currently being edited by other users in the ![_1] Web:" args="<nop>%WEB%"}%* %BR%
 %MOVE_LOCKED%
 
-*%MAKETEXT{"Topics which refer to this web and are are currently being edited by other users:"}%* %REF_LOCKED%
+*%MAKETEXT{"Topics which refer to this web and are are currently being edited by other users:"}%* %BR%
+%REF_LOCKED%
 
-*%MAKETEXT{"Topics which refer to this web that you do not have permission to change:"}%*
+*%MAKETEXT{"Topics which refer to this web that you do not have permission to change:"}%* %BR%
 %REF_DENIED%
 </div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="%WEB%, <nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to ![_1] in the [_2] Web:" args="%WEB%, <nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to [_1] in any Web:" args="%WEB%"}%</div>%GLOBAL_SEARCH%</div>
-<div class="patternTopicActionSecondary">
-<table>
-<tr>
-<td><input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(false);" /> %MAKETEXT{"checkboxes of referenced topics"}%</td>
-</tr></table></div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to ![_1] in any Web:" args="%WEB%"}%</div>%GLOBAL_SEARCH%</div>
+<hr />
+<input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(false);" /> %MAKETEXT{"checkboxes of referenced topics"}%
+</div>
+<p />
+<p />
+%TMPL:P{"topicaction"}%
+</form>
 <div class="twikiHelp">
 *%MAKETEXT{"Note:"}%*
    * %MAKETEXT{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Get help on managing webs</a>" args="%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingWebs"}%
    * %MAKETEXT{"The checkmarked topics will be updated"}%
 </div>
-%TMPL:P{"topicaction"}%
-</form>
 %TMPL:END%
 
 

@@ -811,6 +811,24 @@ input.patternFormFieldVerticalForm {
 	text-decoration:none;
 }
 
+.patternRenameOptionsList {
+	margin:0 0 2.5em 3em;
+}
+
+table.patternDiffOptions {
+	margin:.5em 0;
+	border:none;
+}
+table.patternDiffOptions td {
+	border:none;
+	text-align:center;
+}
+table.patternDiffOptions img {
+	padding:0 10px;
+	border-width:1px;
+	border-style:solid;
+}
+
 /* Preview page */
 
 .patternPreviewArea {

@@ -503,6 +503,9 @@ a:hover .twikiAccessKey {
 	color:#8E9195; /*T8*/
 }
 
+table.patternDiffOptions img {
+	border-color:#ccc; /*BO6*/
+}
 
 /* Edit page */
 
