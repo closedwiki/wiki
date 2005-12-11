@@ -7,6 +7,7 @@ var COOKIE_EXPIRES = 31; // days
 // SMELL should this be a <link> to another stylesheet? (probably not worth it)
 document.write("<style type='text/css'>");
 document.write(".twistyMakeHidden {display:none;}");
+document.write(".twistyMakeTransparent {visibility:hidden;}");
 document.write("<\/style>");
 
 // Asssume core javascript code is loaded via main template
@@ -61,9 +62,12 @@ function twistHide(id, toggleElem) {
 var initialiseTwistyClasses = function(e) {
     if (hasClass(e, "twistyMakeHidden")) {
         replaceClass(e, "twistyMakeHidden", "twistyHidden");
-    }
-    if (hasClass(e, "twistyMakeVisible")) {
+    } else if (hasClass(e, "twistyMakeVisible")) {
         replaceClass(e, "twistyMakeVisible", "twistyVisible");
+    } else if (hasClass(e, "twistyMakeTransparent")) {
+        replaceClass(e, "twistyMakeTransparent", "twistyTransparent");
+    } else if (hasClass(e, "twistyMakeOpaque")) {
+        replaceClass(e, "twistyMakeOpaque", "twistyOpaque");
     }
 };
 
@@ -95,10 +99,10 @@ function initialiseTwistyTriggers(e) {
 // Hiding and showing is done by adding and removing style classes to the
 // elements.
 function initTwist() {
-  // Twisty can work with spans and with divs
-  applyToAllElements( initialiseTwistyClasses, "span" );
-  applyToAllElements( initialiseTwistyClasses, "div" );
-  applyToAllElements( initialiseTwistyTriggers, "a" );
-  applyToAllElements( initialiseTwistyTriggers, "button" );
+	// Twisty can work with spans and with divs
+	applyToAllElements( initialiseTwistyClasses, "span" );
+	applyToAllElements( initialiseTwistyClasses, "div" );
+	applyToAllElements( initialiseTwistyTriggers, "a" );
+	applyToAllElements( initialiseTwistyTriggers, "button" );
 }
 
