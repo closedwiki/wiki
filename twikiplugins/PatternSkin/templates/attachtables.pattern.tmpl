@@ -8,7 +8,7 @@
 %{ Header definition for topic attachments and top table in attach screen }%
 %TMPL:DEF{ATTACH:files:header(basic)}%
 <div class="twikiAttachments">
-<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
+<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0" databg="#FFFFFF"}%-->
 %TMPL:P{ATTACH:files:header(toprow)}%%TMPL:END%
 
 %{ A basic row definition, for attachment table and attach screen }%
@@ -18,7 +18,7 @@
 %{ Header for topic attachment table }%
 %TMPL:DEF{ATTACH:files:header}%
 <div class="twikiAttachments">
-<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
+<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0" databg="#FFFFFF"}%-->
 <span id="attachmentsshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleopen}%<span class="twikiLinkLabel">%MAKETEXT{"Show attachments"}%</span></a></span><span id="attachmentshide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleclose}%<span class="twikiLinkLabel">%MAKETEXT{"Hide attachments"}%</span></a></span>
 <div id="attachmentstoggle" class="twistyMakeHidden twistyRememberSetting">
 %TMPL:P{ATTACH:files:header(toprow)}%

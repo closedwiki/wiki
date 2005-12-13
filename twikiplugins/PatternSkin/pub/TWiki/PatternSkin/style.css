@@ -358,7 +358,7 @@ table.twikiFormTable td {
 }
 .twikiAttachments td {
 	/* don't show column lines in attachment listing */
-	border-width:0;
+	border-width:0 0 1px 0;
 }
 .twikiAttachments th.twikiFirstCol,
 .twikiAttachments td.twikiFirstCol {
