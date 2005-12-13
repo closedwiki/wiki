@@ -1014,9 +1014,9 @@ my $number = qr/^[-+]?[0-9]+(\.[0-9]*)?([Ee][-+]?[0-9]+)?$/s;
 
 sub _compare {
     if( $_[0] =~ /$number/o && $_[1] =~ /$number/o ) {
-        # when sorting numbers do it largest first; this is just because
-        # this is what date comparisons need.
-        return $_[1] <=> $_[0];
+        # when sorting numbers do it smallest first; to be compatible with
+        # Cairo and sort ascending by default for all types of searches
+        return $_[0] <=> $_[1];
     } else {
         return $_[0] cmp $_[1];
     }
