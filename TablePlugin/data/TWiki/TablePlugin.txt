@@ -81,10 +81,13 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 | =valign= | Vertical alignment of cells, set to ="top"=, ="middle"=, ="bottom"= or ="baseline"= | =valign="top"= |
 | =headeralign= | Header cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings | =headeralign="left, right"= |
 | =dataalign= | Data cell alignment, one value for all columns, or a comma separated list for different alignment of individual columns. Set to ="left"=, ="center"=, ="right"= or ="justify"=. Overrides individual cell settings | =dataalign="center"= |
-| =tablewidth= | Table width: Percentage of window width, or absolute pixel value. Default is unspecified | =tablewidth="100%"= |
-| =columnwidths= | Column widths: Comma delimited list of column widths, percentage or absolute pixel value. Default is unspecified | =columnwidths="80%, 20%"= |
+| =tablewidth= | Table width: Percentage of window width, or absolute pixel value. Default is unspecified. | =tablewidth="100%"= |
+| =columnwidths= | Column widths: Comma delimited list of column widths, percentage or absolute pixel value. Default is unspecified. | =columnwidths="80%, 20%"= |
 | =headerrows= | Number of header rows to exclude from sort; default ="1"= | =headerrows="1"= |
 | =footerrows= | Number of footer rows to exclude from sort; default ="0"= | =footerrows="1"= |
+| =id= | Table identifier string. Default is unspecified. | =id="userTable"= |
+| =summary= | Table summary used by screenreaders: A summary of what the table presents. It should provide an orientation for someone who listens to the table. Default is unspecified. | =summary="List of subscribed users"= |
+| =caption= | Table caption: A title that will be displayed just above the table. Default is unspecified. | =caption="Users"= |
 
 The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings, which override the =TABLEATTRIBUTES= Plugin settings. 
 
@@ -133,6 +136,7 @@ This plugin is pre-installed with your TWiki release. You should not have to ins
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
 |  Plugin Version: | 1.014 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  13 Dec 2005 | AC: Added support for id, summary and caption |
 |  5 Mar 2005 | 1.014: Crawford Currie eliminated deprecated handlers for Dakar |
 |  01 Aug 2004: | AC: Added CSS support for first column and ascending/descending table headers |
 |  21 Mar 2004: | PTh: Internal change: Fixed reference to unofficial variable |

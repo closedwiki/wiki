@@ -366,6 +366,9 @@ table.twikiFormTable td {
 	width:26px;
 	text-align:center;
 }
+.twikiAttachments caption {
+	display:none;
+}
 table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
 	text-decoration:none;
