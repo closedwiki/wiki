@@ -558,6 +558,90 @@ sub UTF82SiteCharSet {
 
 =pod
 
+---++ ObjectMethod SiteCharSet2UTF8( $siteCharsetText ) -> $utf8
+
+Converts a string, assumed to be encoded in Site Charset, to UTF-8.
+
+=cut
+
+sub SiteCharSet2UTF8 {
+    my( $this, $text ) = @_;
+
+    # no conversion needed if $text is ascii
+    return undef if( $text =~ $regex{validAsciiStringRegex} );
+
+    # If UTF-8, no conversion required
+    return undef if( $text =~ $regex{validUtf8StringRegex} );
+
+    # If site charset is already UTF-8, there is no need to convert anything:
+    if ( $TWiki::cfg{Site}{CharSet} =~ /^utf-?8$/i ) {
+        # warn if using Perl older than 5.8
+        if( $] <  5.008 ) {
+            $this->writeWarning( 'UTF-8 not supported on Perl '.$].
+                                 ' - use Perl 5.8 or higher..' );
+        }
+
+        # SMELL: is this true yet?
+        $this->writeWarning( 'UTF-8 not yet supported as site charset -'.
+                             'TWiki is likely to have problems' );
+        return $text;
+    }
+
+    # Convert from ISO-8859-1 if it is the site charset
+    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
+        # (conversion from 'perldoc perluniintro')
+        $text =~ s/ ([\x80-\xFF])/
+          chr(0xC0|ord($1)>>6) . chr(0x80|ord($1)&0x3F)
+            /egx;
+            
+    } else {
+        # Convert from UTF-8 into some other site charset
+        if( $] >= 5.008 ) {
+            require Encode;
+            import Encode qw(:fallbacks);
+            # Map $TWiki::cfg{Site}{CharSet} into real encoding name
+            my $charEncoding =
+              Encode::resolve_alias( $TWiki::cfg{Site}{CharSet} );
+            if( not $charEncoding ) {
+                $this->writeWarning
+                  ( 'Conversion from "'.$TWiki::cfg{Site}{CharSet}.
+                    '" not supported, or name not recognised - check '.
+                    '"perldoc Encode::Supported"' );
+            } else {
+                # Convert text using Encode:
+                # - first, convert from site charset into internal
+                # Unicode characters
+                $text = Encode::decode($charEncoding, $text);    
+                # - then convert into site charset from internal UTF-8,
+                # inserting \x{NNNN} for characters that can't be converted
+                $text =
+                  Encode::encode( 'utf-8', $text,
+                                  &FB_PERLQQ() );
+            }
+        } else {
+            require Unicode::MapUTF8;    # Pre-5.8 Perl versions
+            my $charEncoding = $TWiki::cfg{Site}{CharSet};
+            if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
+                $this->writeWarning
+                  ( 'Conversion from "'.$TWiki::cfg{Site}{CharSet}.
+                    '" not supported, or name not recognised - check '.
+                    '"perldoc Unicode::MapUTF8"' );
+            } else {
+                # Convert text
+                $text =
+                  Unicode::MapUTF8::to_utf8({
+                                               -string => $text,
+                                               -charset => $charEncoding
+                                              });
+                # FIXME: Check for failed conversion?
+            }
+        }
+    }
+    return $text;
+}
+
+=pod
+
 ---++ ObjectMethod writeCompletePage( $text, $pageType, $contentType )
 
 Write a complete HTML page with basic header to the browser.
@@ -2889,7 +2973,11 @@ sub _MAKETEXT {
     $str =~ s/~\[(\*,\_(\d+),[^,]+(,([^,]+))?)~\]/ $max = $2 if ($2 > $max); "[$1]"/ge;
 
     # get the args to be interpolated.
-    my @args = split (/\s*,\s*/, $params->{args} || "") ;
+    my $argsStr = $params->{args} || "";
+    # convert inyto UTF-8, since TWiki::I18N::maketext expects UTF-8
+    $argsStr = ($this->SiteCharSet2UTF8($argsStr) || $argsStr) if ($argsStr);
+
+    my @args = split (/\s*,\s*/, $argsStr) ;
     # fill omitted args with zeros
     while ((scalar @args) < $max) {
         push(@args, 0);
