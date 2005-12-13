@@ -151,7 +151,7 @@ msgstr "Im&pressão"
 
 #: templates/view.pattern.tmpl:96
 msgid "&Raw view"
-msgstr "Texto Puro"
+msgstr "Texto Pu&ro"
 
 #: templates/view.pattern.tmpl:26
 msgid "&WYSIWYG"
@@ -1806,13 +1806,13 @@ msgstr "Revisão:"
 #: templates/preview.pattern.tmpl:35
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
 msgstr ""
-"S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar editando, D - "
+"S = Salvar, Q = Salvar sem notificar, K = Salvar e continuar editando, D - "
 "Descartar"
 
 #: templates/edit.pattern.tmpl:56
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
-"S = Salvar, Q = Salvar em silêncio, K = Salvar e continuar editando, P = Pré-"
+"S = Salvar, Q = Salvar sem notificar, K = Salvar e continuar editando, P = Pré-"
 "Visualização, C = Cancelar"
 
 #: templates/registernotifyadmin.tmpl:16
@@ -2917,19 +2917,19 @@ msgstr "ver"
 
 #: templates/attachtables.pattern.tmpl:22
 msgid "Show attachments"
-msgstr ""
+msgstr "Exibir anexos"
 
 #: templates/attachtables.pattern.tmpl:22
 msgid "Hide attachments"
-msgstr ""
+msgstr "Esconder anexos"
 
 #: templates/formtables.pattern.tmpl:6
 msgid "Show form"
-msgstr ""
+msgstr "Exibir formulário"
 
 #: templates/formtables.pattern.tmpl:6
 msgid "Hide form"
-msgstr ""
+msgstr "Esconder formulário"
 
 #~ msgid "&Compose"
 #~ msgstr "&Compor"
