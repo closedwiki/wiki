@@ -33,7 +33,7 @@ use vars qw( $translationToken
              $headerRows $footerRows
              $upchar $downchar $diamondchar $url
              @isoMonth %mon2num $initSort $initDirection
-             @rowspan $pluginAttrs $prefsAttrs );
+             @rowspan $pluginAttrs $prefsAttrs $tableId $tableSummary $tableCaption );
 
 BEGIN {
     $translationToken = "\0";
@@ -68,6 +68,9 @@ sub _setDefaults {
     $headerColor  = '';
     @dataBg       = ( "#FFFFCC", "#FFFFFF" );
     @dataColor    = ( );
+    $tableId      = '';
+    $tableSummary      = '';
+    $tableCaption      = '';
     undef $initSort;
 
     _parseParameters( $pluginAttrs );
@@ -146,7 +149,16 @@ sub _parseParameters {
 
     $tmp = $params{datacolor};
     @dataColor = split( /,\s*/, $tmp ) if( defined $tmp );
+    
+    $tmp = $params{id};
+    $tableId = $tmp if( defined $tmp );
 
+    $tmp = $params{summary};
+    $tableSummary = $tmp if( defined $tmp );
+    
+    $tmp = $params{caption};
+    $tableCaption = $tmp if( defined $tmp );
+    
     return $currTablePre.'<nop>';
 }
 
@@ -278,9 +290,11 @@ sub _shouldISortThisTable {
     my( $header ) = @_;
 
     # Attachments table?
-    if( $header->[0]->{text} =~ /FileAttachment/ ) {
-        return $sortAttachments;
-    }
+    # This code is no longer used since attachment table formatting is 
+    # done in template attachtables.tmpl -- Arthur Clemens 13 Dec 2005
+    #if( $header->[0]->{text} =~ /FileAttachment/ ) {
+    #    return $sortAttachments;
+    #}
 
     return 0 unless $sortAllTables;
 
@@ -341,10 +355,13 @@ sub emitTable {
                    border => $tableBorder,
                    cellspacing => $cellSpacing,
                    cellpadding => $cellPadding };
+    $tattrs->{id} = $tableId if( $tableId );
+    $tattrs->{summary} = $tableSummary if( $tableSummary );
     $tattrs->{frame} = $tableFrame if( $tableFrame );
     $tattrs->{rules} = $tableRules if( $tableRules );
     $tattrs->{width} = $tableWidth if( $tableWidth );
     my $text = $currTablePre.CGI::start_table( $tattrs );
+    $text .= $currTablePre.CGI::caption( $tableCaption ) if( $tableCaption );
     my $stype = '';
 
     #Flush out any remaining rowspans

@@ -2910,6 +2910,10 @@ msgstr "value='Gem' accesskey='s'"
 msgid "view"
 msgstr "vis"
 
+#: templates/attachtables.pattern.tmpl:11
+msgid "Topic attachments"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:22
 msgid "Show attachments"
 msgstr ""

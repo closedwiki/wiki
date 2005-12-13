@@ -459,22 +459,23 @@ msgstr "Geavanceerd zoeken"
 
 #: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
 msgid "All public webs"
-msgstr ""
+msgstr "Alle publieke webs"
 
 #: data/TWiki/WebSearchAdvanced.txt:89
 msgid "All topics in %1"
-msgstr ""
+msgstr "Alle pagina's in %1"
 
 #: templates/renamebase.pattern.tmpl:20
 #: templates/renamewebbase.pattern.tmpl:20
 msgid "Allow non <nop>WikiWord for the new topic name"
-msgstr ""
+msgstr "Een niet-<nop>WikiWord mag gebruikt worden als paginanaam"
 
 #: templates/oopsattention.tmpl:194
 msgid ""
 "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
 "different username."
-msgstr ""
+msgstr "Of klik op Terug naar TWiki.TWikiRegistration en kies een "
+"andere gebruikersnaam."
 
 #: templates/oopsattention.tmpl:184
 msgid ""
@@ -506,30 +507,27 @@ msgstr "&Bijlage toevoegen"
 
 #: templates/view.pattern.tmpl:50
 msgid "Attach an image or document to this topic"
-msgstr ""
+msgstr "Voeg een afbeelding of document toe aan deze pagina"
 
 #: templates/attachnew.pattern.tmpl:9
 msgid "Attach file to topic %1"
-msgstr ""
+msgstr "Voeg bestand to aan pagina %1"
 
 #: templates/attach.pattern.tmpl:24
 msgid "Attach image or document on %1"
-msgstr ""
+msgstr "Voeg afbeelding of document to aan %1"
 
 #: templates/attachnew.pattern.tmpl:14 templates/attachnew.pattern.tmpl:18
-#, fuzzy
 msgid "Attach new file"
-msgstr "De bijlage bestaat niet."
+msgstr "Voeg nieuw bestand toe"
 
 #: templates/attachtables.pattern.tmpl:7
-#, fuzzy
 msgid "Attachment"
-msgstr "&Bijlage toevoegen"
+msgstr "Bijlage"
 
 #: templates/oopsaccessdenied.tmpl:45
-#, fuzzy
 msgid "Attachment '%1' does not exist"
-msgstr "De bijlage bestaat niet."
+msgstr "Bijlage '%1' bestaat niet"
 
 #: lib/TWiki/UI/Manage.pm:341
 msgid "Attachment already exists in new topic"
@@ -538,16 +536,15 @@ msgstr ""
 #: templates/oopsattention.tmpl:57
 #, fuzzy
 msgid "Attachment delete failed"
-msgstr "De bijlage bestaat niet."
+msgstr "Verwijderen van bijlage is niet gelukt"
 
 #: lib/TWiki/UI/Manage.pm:321
-#, fuzzy
 msgid "Attachment does not exist"
-msgstr "De bijlage bestaat niet."
+msgstr "De bijlage bestaat niet"
 
 #: templates/oopsattention.tmpl:49
 msgid "Attachment move failed"
-msgstr ""
+msgstr "Verplaatsen van bijlage is niet gelukt"
 
 #: templates/attach.pattern.tmpl:109
 msgid "Attachments will not be shown in topic view page."
@@ -556,24 +553,23 @@ msgstr ""
 #: templates/oopsaccessdenied.tmpl:4 templates/oopsattention.tmpl:4
 #: templates/oopsleaseconflict.tmpl:4 templates/oopssaveerr.tmpl:3
 msgid "Attention"
-msgstr ""
+msgstr "Let op"
 
 #: templates/attachtables.pattern.tmpl:30
 msgid "Attribute"
-msgstr ""
+msgstr "Kenmerk"
 
 #: data/_default/WebHome.txt:4
 msgid "Available Information"
-msgstr ""
+msgstr "Beschikbare informatie"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:24 templates/view.pattern.tmpl:89
 msgid "Back to top"
-msgstr ""
+msgstr "Terug naar boven"
 
 #: templates/twiki.pattern.tmpl:16
-#, fuzzy
 msgid "Back to topic"
-msgstr "Eind van de pagina"
+msgstr "Terug naar pagina"
 
 #: templates/oopsmore.pattern.tmpl:19 templates/oopsmore.tmpl:19
 #: templates/view.pattern.tmpl:98
@@ -583,12 +579,12 @@ msgstr "Links naar deze pagina"
 #: templates/backlinksweb.pattern.tmpl:10
 #, fuzzy
 msgid "Backlinks to %1 in %2 Web"
-msgstr "(teruglinks in web %1)"
+msgstr "(links naar pagina in web %1)"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 #, fuzzy
 msgid "Backlinks to %1 in all Webs"
-msgstr "(teruglinks in alle webs)"
+msgstr "(links naar pagina in alle webs)"
 
 #: templates/oopsattention.tmpl:111
 msgid "Base web %1 is missing or does not exist"
@@ -648,9 +644,8 @@ msgstr "(wijzig formulier)"
 #: templates/moveattachment.pattern.tmpl:59
 #: templates/renamebase.pattern.tmpl:32
 #: templates/renamewebbase.pattern.tmpl:34
-#, fuzzy
 msgid "Change from:"
-msgstr "(wijzig formulier)"
+msgstr "Wijzig formulier:"
 
 #: data/TWiki/WebLeftBarSearch.txt:13 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
@@ -2706,7 +2701,11 @@ msgstr "value='Stop bewerken' accesskey='c'"
 
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
-msgstr ""
+msgstr "bekijken"
+
+#: templates/attachtables.pattern.tmpl:11
+msgid "Topic attachments"
+msgstr "Bijlagen bij deze pagina"
 
 #: templates/attachtables.pattern.tmpl:22
 msgid "Show attachments"
