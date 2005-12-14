@@ -95,7 +95,7 @@
 
 %TMPL:DEF{"raw"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%MAKETEXT{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%MAKETEXT{"&Raw view"}%</a>%TMPL:END%
 
-%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey="b">%MAKETEXT{"We&b"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll webs"}%</a>%TMPL:END%
+%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="%WEB%"}%' accesskey="b">%MAKETEXT{"We&b"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll webs"}%</a>%TMPL:END%
 
 %TMPL:DEF{"topicactionbuttons"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%%TMPL:P{context="WysiwygPluginEnabled" then="sep"}%%TMPL:P{"activatable_attach"}%%TMPL:P{"sep"}%%TMPL:P{"printable"}%%TMPL:P{"sep"}%%TMPL:P{"raw"}%%TMPL:P{"sep"}%%TMPL:P{"backlinks"}%%TMPL:P{"sep"}%%TMPL:P{"revisions"}%%TMPL:P{"sep"}%%TMPL:P{"activatable_more"}%%TMPL:END%
 
