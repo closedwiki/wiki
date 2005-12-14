@@ -14,10 +14,6 @@ __Related topics__
    * %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
    * %WIKIUSERSTOPIC% has a list of other <nop>%WIKITOOLNAME% users.
 
-   * Set USERTESTPREF = user test pref
-   * Set USERFINALTESTPREF = user final test pref
-   * Set OVERRIDETHISTESTPREF = Setting from user topic
-
 %META:FORM{name="UserForm"}%
 %META:FIELD{name="FirstName" attributes="" title="FirstName" value="TWiki"}%
 %META:FIELD{name="LastName" attributes="" title="LastName" value="Guest"}%
