@@ -211,6 +211,8 @@ sub _makeSquab {
         $url = &{$this->{opts}->{getViewUrl}}( $1, $2 ) . $a;
     }
 
+    $text =~ s/(?<=[\s\(])((?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}))/<nop>$1/gom;
+
     return $this->_makeLink($url, $text);
 }
 

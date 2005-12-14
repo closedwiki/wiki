@@ -906,7 +906,7 @@ EOE
           },
           {
               exec => 3,
-              name => "Web and topic",
+              name => "WebAndTopic",
               tml => "Current.TestTopic Sandbox.TestTopic [[Current.TestTopic]] [[Sandbox.TestTopic]]",
               html => <<HERE,
 <a href="$page/Current/TestTopic">Current.TestTopic</a>
@@ -927,6 +927,13 @@ HERE
               html => '<img src="'.$page.'/T-logo-16x16.gif" />',
               tml  => '<img src="'.$page.'/T-logo-16x16.gif" />',
               finaltml => '<img src=\'%SCRIPTURL{"view"}%/T-logo-16x16.gif\'></img>'
+          },
+          {
+              exec => 3,
+              name => 'Item1175',
+              tml => '[[WebCTPasswords][Resetting a WebCT Password]]',
+              html => '<a href="/DEVELOP/bin/view/Current/WebCTPasswords">Resetting a <span class="TMLnop">WebCT</span> Password</a>',
+              finaltml => '[[WebCTPasswords][Resetting a <nop>WebCT Password]]',
           },
          ];
 
