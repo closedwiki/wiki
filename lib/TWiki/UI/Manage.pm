@@ -425,7 +425,6 @@ sub _renameweb {
     my $session = shift;
 
     my $oldWeb = $session->{webName};
-    my $oldTopic = $TWiki::cfg{HomeTopicName};
     my $query = $session->{cgiQuery};
     my $user = $session->{user};
 

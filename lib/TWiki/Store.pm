@@ -1185,7 +1185,7 @@ sub webExists {
     $web =~ s#\.#/#go;
 
     return 0 unless defined $web;
-    my $handler = $this->_getHandler( $web, $TWiki::cfg{HomeTopicName} );
+    my $handler = $this->_getHandler( $web, $TWiki::cfg{WebPrefsTopicName} );
     return $handler->storedDataExists();
 }
 
@@ -1548,9 +1548,9 @@ sub createWeb {
     unless( $baseWeb ) {
         # For a web to be a web, it has to have at least one topic
         my $meta = new TWiki::Meta( $this->{session}, $newWeb,
-                                    $TWiki::cfg{HomeTopicName} );
-        $this->saveTopic( $user, $newWeb, $TWiki::cfg{HomeTopicName},
-                          "Home", $meta );
+                                    $TWiki::cfg{WebPrefsTopicName} );
+        $this->saveTopic( $user, $newWeb, $TWiki::cfg{WebPrefsTopicName},
+                          "Preferences", $meta );
         return;
     }
 
