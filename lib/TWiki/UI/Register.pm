@@ -64,6 +64,9 @@ invoked via the =TWiki::UI::run= method.
 sub register_cgi {
     my $session = shift;
 
+    # absolute URL context for email generation
+    $session->enterContext('absolute_urls');
+
     my $tempUserDir = $TWiki::cfg{RegistrationApprovals};
     # SMELL hacked name, and stores in binary format!
     my $needVerification = $TWiki::cfg{Register}{NeedVerification};    
@@ -97,6 +100,8 @@ sub register_cgi {
       registerAndNext($session, $tempUserDir);
     }
 
+    $session->leaveContext('absolute_urls');
+
     # Output of register:
     #    UnsavedUser, accessible by username.$verificationCode
 
@@ -124,6 +129,9 @@ sub passwd_cgi {
 
     my $action = $session->{cgiQuery}->param('action');
 
+    # absolute URL context for email generation
+    $session->enterContext('absolute_urls');
+
     if( $action eq 'changePassword' ) {
         changePassword( $session );
     }
@@ -136,6 +144,7 @@ sub passwd_cgi {
                                     topic => $session->{topicName},
                                     def => 'missing_action' );
     }
+    $session->leaveContext('absolute_urls');
 }
 
 # TODO: S&R {form} with {ordered}
@@ -182,6 +191,9 @@ sub bulkRegister {
     my $web = $session->{webName};
     my $userweb = $TWiki::cfg{UsersWebName};
     my $query = $session->{cgiQuery};
+
+    # absolute URL context for email generation
+    $session->enterContext('absolute_urls');
 
     my $settings = {};
     $settings->{doOverwriteTopics} =
@@ -236,6 +248,8 @@ sub bulkRegister {
     $meta->put( 'TOPICPARENT', { name => $web.'.'.$topic } );
 
     my $err = $session->{store}->saveTopic($user, $logWeb, $logTopic, $log, $meta );
+
+    $session->leaveContext('absolute_urls');
 
     $session->redirect($session->getScriptUrl($web, $logTopic, 'view'));
 }
