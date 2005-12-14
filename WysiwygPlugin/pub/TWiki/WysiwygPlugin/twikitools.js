@@ -19,7 +19,7 @@ function TWiki3StateButton(buttonid, check, command,
                            clazz) {
   /* A button that can have two states (e.g. pressed and
      not-pressed) based on CSS classes */
-  this.button = window.document.getElementById(buttonid);
+  this.button = getFromSelector(buttonid);
   this.command = command;
   this.parentcheck = parentFinder(check);
   this.childcheck = childFinder(check);
@@ -200,7 +200,7 @@ function childFinder(check) {
 // remove a class, and if the tag the class is removed from matches
 // and has no other class, remove the tag as well.
 function TWikiRemoveClassButton(buttonid, checker, tag, clazz, cssclass) {
-    this.button = window.document.getElementById(buttonid);
+    this.button = getFromSelector(buttonid);
     this.onclass = cssclass;
     this.offclass = 'invisible';
     this.pressed = false;
@@ -278,33 +278,33 @@ function _removeClass(node, clazz) {
  * contain a single pre-populated select
  */
 function TWikiTopicDrawer(elementid, web_id, topic_id, tool) {
-  this.webSelect = document.getElementById(web_id);
-  this.topicSelect = document.getElementById(topic_id);
-  this.element = document.getElementById(elementid);
+  this.webSelect = getFromSelector(web_id);
+  this.topicSelect = getFromSelector(topic_id);
+  this.element = getFromSelector(elementid);
   this.tool = tool;
+  this.web = 0;
 
   this.changeWeb = function() {
-    var web = this.webSelect.selectedIndex;
-    if (web == this.web)
+    var w = this.webSelect.selectedIndex;
+    if (w == this.web)
       return;
-    this.web = web;
-    if (!this.webs[web]) {
-      var webname = this.webSelect.options[web].value;
-      this.webs[web] = this.loadWeb(webname);
+    this.web = w;
+    if (!this.webs[w]) {
+      var webname = this.webSelect.options[w].value;
+      this.webs[w] = this.loadWeb(webname);
     }
     
     this.topicSelect.selectedIndex = 0;
     Sarissa.clearChildNodes(this.topicSelect);
-    for (var i = 0; i < this.webs[web].length; i++) {
-      this.topicSelect.appendChild(this.webs[web][i]);
+    var topics = this.webs[w];
+    for (var i = 0; i < topics.length; i++) {
+      this.topicSelect.appendChild(topics[i]);
     }
   };
 
-  if (this.webSelect) {
-    this.web = this.webSelect.selectedIndex;
-    this.webs = new Array(this.webSelect.childNodes.length);
-    addEventHandler(this.webSelect, "change", this.changeWeb, this);
-  }
+  this.web = this.webSelect.selectedIndex;
+  this.webs = new Array(this.webSelect.childNodes.length);
+  addEventHandler(this.webSelect, "change", this.changeWeb, this);
 
   this.loadWeb = function(web) {
     var url = this.editor.config.view_url +
@@ -360,12 +360,10 @@ function TWikiTopicDrawer(elementid, web_id, topic_id, tool) {
 
   this.save = function() {
     this.editor.resumeEditing();
-    var web = '';
-    if (this.webSelect) {
-      web = this.webSelect.options[this.web]+'.';
-    }
-    this.tool.pick(web +
-      this.topicSelect.options[this.topicSelect.selectedIndex].value);
+    var web = this.webSelect.options[this.web].value;
+    var topic = this.topicSelect.options[this.topicSelect.selectedIndex].value;
+    this.tool.createWikiWord(web, topic);
+    this.drawertool.closeDrawer();
   };
 };
 
@@ -406,7 +404,7 @@ function TWikiInsertAttachmentTool() {
         sel.insertNodeAtSelection(elem);
       }
     } catch(exception) {
-      alert("Something unexpected happened");
+      alert(e);
     }
   };
 }
@@ -415,8 +413,8 @@ TWikiInsertAttachmentTool.prototype = new KupuTool;
 
 /* UI for adding an attachment */
 function TWikiNewAttachmentDrawer(drawerid, formid, tool) {
-  this.element = document.getElementById(drawerid);
-  this.form = document.getElementById(formid);
+  this.element = getFromSelector(drawerid);
+  this.form = getFromSelector(formid);
   this.tool = tool;
 
   this.save = function() {
@@ -471,8 +469,8 @@ TWikiVarTool.prototype = new KupuTool;
  * The reson this is not a drawer is that it was implemented before
  * drawers existed (I think)  */
 function TWikiIconsTool(buttonid, popupid){
-  this.imgbutton = document.getElementById(buttonid);
-  this.imwindow = document.getElementById(popupid);
+  this.imgbutton = getFromSelector(buttonid);
+  this.imwindow = getFromSelector(popupid);
   
   this.initialize = function(editor) {
     /* attach events handlers and hide images' panel */
@@ -534,7 +532,7 @@ TWikiIconsTool.prototype = new KupuTool;
 /* Tool for inserting a new NOP region, around whatever is selected */
 /* if already in a region of that type, remove the region */
 function TWikiNOPTool(buttonid){
-  this.button = document.getElementById(buttonid);
+  this.button = getFromSelector(buttonid);
 
   this.initialize = function(editor) {
     /* tool initialization : nothing */
@@ -557,27 +555,13 @@ TWikiNOPTool.prototype = new KupuTool;
 
 /* Tool for inserting wikiwords */
 function TWikiWikiWordTool() {
-  this.pick = function(wikiword) {
-    var editor = this.editor;
-    var addWW = false;
-    var selection = editor.getSelection();
-    //if (selection.selection.anchorNode) {
-    var s = selection.startOffset();
-    var e = selection.endOffset();
-    var addWW = (s == e);
-    var url = editor.config.view_url+editor.config.current_web+'/'+wikiword;
-    var doc = editor.getInnerDocument();
-    var elem = doc.createElement('a');
-    elem.setAttribute('href', url);
-    elem.setAttribute('class', 'generated');
-    if (addWW)
-      elem.appendChild(doc.createTextNode(wikiword));
-    _insertNode(editor, elem);
-    editor.updateState();
+  this.createWikiWord = function(web, topic) {
+    var url = this.editor.config.view_url+web+"/"+topic;
+    this.createLink(url, null, null, null, topic);
   };
 };
 
-TWikiWikiWordTool.prototype = new KupuTool;
+TWikiWikiWordTool.prototype = new LinkTool;
 
 /*
  * A submit can come from several places; from links inside the form
@@ -588,7 +572,7 @@ TWikiWikiWordTool.prototype = new KupuTool;
  * have to be handled through the following onSubmit handler.
  */
 function TWikiHandleSubmit() {
-  var form = document.getElementById('twiki-main-form');
+  var form = getFromSelector('twiki-main-form');
   
   // don't know how else to get the kupu singleton
   var kupu = window.drawertool.editor;
@@ -631,8 +615,8 @@ function TWikiCleanForm() {
 function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
     /* the colorchooser */
     
-    this.fgcolorbutton = document.getElementById(fgcolorbuttonid);
-    this.ccwindow = document.getElementById(colorchooserid);
+    this.fgcolorbutton = getFromSelector(fgcolorbuttonid);
+    this.ccwindow = getFromSelector(colorchooserid);
     this.command = null;
 
     this.initialize = function(editor) {
@@ -723,7 +707,7 @@ TWikiColorChooserTool.prototype = new KupuTool;
 
 // only check max if max > min
 function twikiVerifyNumber(name,id,min,max) {
-  var field = window.document.getElementById(id);
+  var field = getFromSelector(id);
   var error = "";
 
   var charpos = field.value.search("[^0-9]");
@@ -751,7 +735,7 @@ function twikiVerifyNumber(name,id,min,max) {
 }
 
 function TWikiSelect(id, tool) {
-    this.selector = window.document.getElementById(id);
+    this.selector = getFromSelector(id);
     this.tool = tool;
 
     this.initialize = function(editor) {
