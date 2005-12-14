@@ -1062,7 +1062,11 @@ sub getOopsUrl {
         push( @urlParams, param1=> $PARAMS );
     }
 
-    return $this->getScriptUrl( $web, $topic, 'oops', @urlParams );
+    $this->enterContext( 'absolute_urls' );
+    $url = $this->getScriptUrl( $web, $topic, 'oops', @urlParams );
+    $this->leaveContext( 'absolute_urls' );
+
+    return $url;
 }
 
 =pod
