@@ -1063,7 +1063,7 @@ sub getOopsUrl {
     }
 
     $this->enterContext( 'absolute_urls' );
-    $url = $this->getScriptUrl( $web, $topic, 'oops', @urlParams );
+    my $url = $this->getScriptUrl( $web, $topic, 'oops', @urlParams );
     $this->leaveContext( 'absolute_urls' );
 
     return $url;
