@@ -137,6 +137,8 @@ sub oops {
                                     -default=>$query->param( $p ) );
             }
             $tmplData =~ s/%QUERYPARAMS%/$qp/g;
+        } else {
+            $tmplData =~ s/%QUERYPARAMS%//g;
         }
     }
 
