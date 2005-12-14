@@ -26,6 +26,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{note}% Document icons
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/bubble.gif" alt="Speech bubble" title="Speech bubble" />  | =bubble.gif= | Speech bubble | =%<nop>ICON{bubble}%= |
 | <img src="%ATTACHURLPATH%/days.gif" alt="Days / Calendar" title="Days / Calendar" />  | =days.gif= | Days, Calendar | =%<nop>ICON{days}%= |
@@ -57,6 +58,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{viewtopic}% Topic, %ICON{attachfile}% file, %ICON{folder}% folder icons
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/viewtopic.gif" alt="View topic" title="View topic" />  | =viewtopic.gif= | View topic | =%<nop>ICON{viewtopic}%= |
 | <img src="%ATTACHURLPATH%/printtopic.gif" alt="Print topic" title="Print topic" />  | =printtopic.gif= | Print topic | =%<nop>ICON{printtopic}%= |
@@ -82,6 +84,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{person}% Person, %ICON{group}% group, %ICON{lock}% access icons
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/person.gif" alt="Person" title="Person" />  | =person.gif= | Person | =%<nop>ICON{person}%= |
 | <img src="%ATTACHURLPATH%/persons.gif" alt="Persons" title="Persons" />  | =persons.gif= | Persons | =%<nop>ICON{persons}%= |
@@ -97,6 +100,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{changes}% Changes, %ICON{notify}% notification icons
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/changes.gif" alt="Changes" title="Changes" />  | =changes.gif= | Changes | =%<nop>ICON{changes}%= |
 | <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes" title="Changes" />  | =changes-small.gif= | Changes (small), 13x13 | =&lt;img src="%<nop>ICONPATH{changes-small}%" width="13" height="13" alt="Changes" border="0" /&gt;= |
@@ -111,6 +115,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{choice-yes}% Status, %ICON{flag}% flag, %ICON{led-box-red}% LED icons
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/new.gif" alt="NEW" title="NEW" />  | =new.gif= | NEW, 30x16 | =%<nop>N%=, =&lt;img src="%<nop>ICONPATH{new}%" width="30" height="16" alt="New" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/todo.gif" alt="TODO" title="TODO" />  | =todo.gif= | TODO, 37x16 | =&lt;img src="%<nop>ICONPATH{todo}%" width="37" height="16" alt="TODO" border="0" /&gt;= |
@@ -147,6 +152,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{home}% Navigation icons
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/home.gif" alt="Home" title="Home" />  | =home.gif= | Home | =%<nop>ICON{home}%= |
 | <img src="%ATTACHURLPATH%/arrowdot.gif" alt="Meet here (arrows to red dot)" title="Meet here (arrows to red dot)" /> | =arrowdot.gif= | Meet here (arrows to red dot) | =%<nop>ICON{arrowdot}%= |
@@ -175,6 +181,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{line_ur}% Block graphics
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/line_ld.gif" alt="" title="" />  | =line_ld.gif= | Line graph left-down | =%<nop>ICON{line_ld}%= |
 | <img src="%ATTACHURLPATH%/line_lr.gif" alt="" title="" />  | =line_lr.gif= | Line graph left-right | =%<nop>ICON{line_lr}%= |
@@ -205,6 +212,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 Filetype icons are used by the attachment table and are seldom used in topics. Write =%<nop>ICON{pdf}%= to show the %ICON{pdf}% icon.
 
+%TABLE{databg="#FFFFFF"}%
 | *&nbsp;* | *File Name* | *Name* | *Write...* |
 | <img src="%ATTACHURLPATH%/as.gif" alt="as" title="as" />  | =as.gif= | !ActionScript | =%<nop>ICON{as}%= |
 | <img src="%ATTACHURLPATH%/bat.gif" alt="bat" title="bat" />  | =bat.gif= | MS-DOS batch file | =%<nop>ICON{bat}%= |
