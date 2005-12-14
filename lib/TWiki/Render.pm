@@ -1049,6 +1049,8 @@ sub getRenderedVersion {
     # they have been escaped.
     $text =~ s/<(\/[A-Za-z]+(:[A-Za-z]+)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
     $text =~ s/<([A-Za-z]+(:[A-Za-z]+)?(\s+.*?)?(\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    # XML processing instruction only valid at start of text
+    $text =~ s/^<(\?[A-Za-z].*?\?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
 
     # entitify lone < and >, praying that we haven't screwed up :-(
     $text =~ s/</&lt\;/g;
