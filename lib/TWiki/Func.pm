@@ -320,7 +320,7 @@ sub redirectCgiQuery {
 
 ---+++ getContext() -> \%hash
 Get a hash of context identifiers representing the currently active
-context. The hash *must not* be changed.
+context.
 
 The context is a set of identifiers that are set
 during specific phases of TWiki processing. For example, each of
@@ -335,21 +335,30 @@ Context identifiers can be used to communicate between Plugins, and between
 Plugins and templates. For example, in FirstPlugin.pm, you might write:
 <verbatim>
 sub initPlugin {
-   TWiki::Func::getContext()->{'FirstPlugin'} = 1;
+   TWiki::Func::getContext()->{'MyID'} = 1;
    ...
 </verbatim>
-and in SecondPlugin.pm:
+This can be used in SecondPlugin.pm like this:
 <verbatim>
 sub initPlugin {
-   if( TWiki::Func::getContext()->{'FirstPlugin'}) {
+   if( TWiki::Func::getContext()->{'MyID'} ) {
       ...
    }
    ...
 </verbatim>
-or in a template:
+or in a template, like this:
 <verbatim>
-%TMPL:P{context="FirstPlugin", then="first plugin"}%
+%TMPL:DEF{"ON"}% Not off %TMPL:END%
+%TMPL:DEF{"OFF"}% Not on %TMPL:END%
+%TMPL:P{context="MyID" then="ON" else="OFF"}%
 </verbatim>
+or in a topic:
+<verbatim>
+%IF{"context MyID" then="MyID is ON" else="MyID is OFF"}%
+</verbatim>
+__Note__: *all* plugins have an *automatically generated* context identifier
+if they are installed and initialised. For example, if the FirstPlugin is
+working, the context ID 'FirstPlugin' will be set.
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
