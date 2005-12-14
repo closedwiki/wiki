@@ -631,10 +631,10 @@ sub searchWeb {
                 # sort by approx latest rev time
                 my @tmpList =
                   map { $_->[1] }
-                    sort {$b->[0] <=> $a->[0] }
+                    sort {$a->[0] <=> $b->[0] }
                       map { [ $store->getTopicLatestRevTime( $web, $_ ), $_ ] }
                         @topicList;
-                @tmpList = reverse( @tmpList ) if( $revSort );
+                @tmpList = reverse( @tmpList ) unless( $revSort );
 
                 # then shorten list and build the hashes for date and author
                 my $idx = $limit + $slack;
@@ -647,14 +647,14 @@ sub searchWeb {
             }
 
             $topicInfo = $this->_sortTopics( $web, \@topicList,
-                                             $sortOrder, $revSort );
+                                             $sortOrder, !$revSort );
         } elsif( $sortOrder =~ /^creat/ || # topic creation time
                    $sortOrder eq 'editby' || # author
                      $sortOrder =~ s/^formfield\((.*)\)$/$1/ # form field
                     ) {
 
             $topicInfo = $this->_sortTopics( $web, \@topicList,
-                                             $sortOrder, $revSort );
+                                             $sortOrder, !$revSort );
 
         } else {
 
