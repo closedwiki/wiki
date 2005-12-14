@@ -146,7 +146,7 @@ msgstr "&Editér"
 msgid "&Edit text"
 msgstr "&Editér tekst"
 
-#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
 msgid "&History"
 msgstr "&Historik"
 
@@ -253,12 +253,12 @@ msgstr "(flyt vedhæftet fil)"
 msgid "(no parent, orphaned topic)"
 msgstr "(ingen forælder, forældreløse sider)"
 
-#: lib/TWiki/UI/Manage.pm:1009 lib/TWiki/UI/Manage.pm:1012
-#: lib/TWiki/UI/Manage.pm:1015 lib/TWiki/UI/Manage.pm:1049
-#: lib/TWiki/UI/Manage.pm:1071 lib/TWiki/UI/Manage.pm:623
-#: lib/TWiki/UI/Manage.pm:626 lib/TWiki/UI/Manage.pm:629
-#: lib/TWiki/UI/Manage.pm:632 lib/TWiki/UI/Manage.pm:877
-#: lib/TWiki/UI/Manage.pm:900
+#: lib/TWiki/UI/Manage.pm:1008 lib/TWiki/UI/Manage.pm:1011
+#: lib/TWiki/UI/Manage.pm:1014 lib/TWiki/UI/Manage.pm:1048
+#: lib/TWiki/UI/Manage.pm:1070 lib/TWiki/UI/Manage.pm:622
+#: lib/TWiki/UI/Manage.pm:625 lib/TWiki/UI/Manage.pm:628
+#: lib/TWiki/UI/Manage.pm:631 lib/TWiki/UI/Manage.pm:876
+#: lib/TWiki/UI/Manage.pm:899
 msgid "(none)"
 msgstr ""
 
@@ -463,8 +463,8 @@ msgstr "Adgangs-kontrol til %1 fejlede"
 msgid "Access keys"
 msgstr "Tastatur-genveje"
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60 templates/changeform.pattern.tmpl:9
 msgid "Action"
 msgstr "Handling"
 
@@ -567,7 +567,7 @@ msgstr "Vedhæft billede eller dokument til %1"
 msgid "Attach new file"
 msgstr "Vedhæft ny fil"
 
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
 msgid "Attachment"
 msgstr "Vedhæftet fil"
 
@@ -592,7 +592,7 @@ msgstr "Vedhæftet fil findes ikke."
 msgid "Attachment move failed"
 msgstr "Fejl under flytning af vedhæftet fil"
 
-#: templates/attach.pattern.tmpl:109
+#: templates/attach.pattern.tmpl:115
 msgid "Attachments will not be shown in topic view page."
 msgstr "Vedhæftede filer vil ikke blive vist på siden."
 
@@ -601,7 +601,7 @@ msgstr "Vedhæftede filer vil ikke blive vist på siden."
 msgid "Attention"
 msgstr "Bemærk"
 
-#: templates/attachtables.pattern.tmpl:30
+#: templates/attachtables.pattern.tmpl:45
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -783,8 +783,8 @@ msgstr ""
 msgid "Color %1 has an invalid format"
 msgstr "Farven %1 er et ugyldigt format"
 
-#: templates/attach.pattern.tmpl:84 templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attach.pattern.tmpl:90 templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Comment"
 msgstr "Kommentar"
 
@@ -867,7 +867,7 @@ msgstr "Opret ny side"
 msgid "Create New Topic in %1 Web"
 msgstr "Opret ny side i %1-webbet"
 
-#: templates/attach.pattern.tmpl:96
+#: templates/attach.pattern.tmpl:102
 msgid "Create a link to the attached file"
 msgstr "Lav et link til den vedhæftede fil på siden"
 
@@ -903,8 +903,8 @@ msgstr ""
 msgid "Creating a suitable Form Definition topic"
 msgstr "Opretter en passende side til formular-definition"
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Date"
 msgstr "Dato"
 
@@ -966,7 +966,7 @@ msgstr "Ville du gerne [[%1][resette passwordet for %2]]?"
 msgid "Difference Topic"
 msgstr "Ændringer til siden"
 
-#: templates/attach.pattern.tmpl:107
+#: templates/attach.pattern.tmpl:113
 msgid "Do not show attachment in table"
 msgstr "Vis ikke vedhæftet fil i tabel på siden"
 
@@ -1092,7 +1092,7 @@ msgstr ""
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "Fejl: Ikke-understøttet protokol (skal være 'http://domain.tld/osv..')"
 
-#: templates/attach.pattern.tmpl:51
+#: templates/attach.pattern.tmpl:50
 msgid "Existing attachments"
 msgstr "Eksisterende vedhæftede filer"
 
@@ -1190,11 +1190,15 @@ msgstr "Hej %1!"
 msgid "Help"
 msgstr "Hjælp"
 
+#: templates/attachtables.pattern.tmpl:20
+msgid "Hide attachments"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:49
 msgid "Hide existing attachments"
 msgstr "Skjul eksisterende vedhæftede filer"
 
-#: templates/attach.pattern.tmpl:104
+#: templates/attach.pattern.tmpl:110
 msgid "Hide file"
 msgstr "Skjul fil"
 
@@ -1293,7 +1297,7 @@ msgstr "Hvis du vil oprette denne side:"
 msgid "If you would like to create this web"
 msgstr "Hvis du vil oprette dette web"
 
-#: templates/attach.pattern.tmpl:99
+#: templates/attach.pattern.tmpl:105
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr ""
 "Billeder vil blive vist direkte på siden, for andre typer vedhæftede filer "
@@ -1396,7 +1400,7 @@ msgstr "Linie: %1"
 msgid "Line: %1 to %2"
 msgstr "Linie: %1 til %2"
 
-#: templates/attach.pattern.tmpl:93
+#: templates/attach.pattern.tmpl:99
 msgid "Link"
 msgstr "Link"
 
@@ -1408,7 +1412,7 @@ msgstr "Vis alle sider i %1 webbet i alfabetisk orden"
 msgid "List topics that start with the letter:"
 msgstr "Vis alle sider der starter med bogstavet: "
 
-#: templates/attach.pattern.tmpl:73
+#: templates/attach.pattern.tmpl:79
 msgid "Local file"
 msgstr "Lokal fil"
 
@@ -1917,6 +1921,10 @@ msgstr "Vælg alle"
 msgid "Set new topic parent"
 msgstr "Vælg ny side-forælder"
 
+#: templates/attachtables.pattern.tmpl:20
+msgid "Show attachments"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
 msgstr "Vis eksisterende vedhæftede filer"
@@ -1950,7 +1958,7 @@ msgstr "Lignende sider i dette web (hvis nogen):"
 msgid "Simple search"
 msgstr "Simpel søgning"
 
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
 msgid "Size"
 msgstr "Størrelse"
 
@@ -2366,6 +2374,11 @@ msgstr "Til web:"
 msgid "Topic Save Error"
 msgstr "Fejl ved skrivning af siden"
 
+#: templates/attachtables.pattern.tmpl:10
+#: templates/attachtables.pattern.tmpl:19
+msgid "Topic attachments"
+msgstr ""
+
 #: templates/oopsattention.tmpl:261
 msgid "Topic can not be upgraded from old style category table"
 msgstr "Siden kan ikke opgraderes fra den gamle stil, 'category table'"
@@ -2453,14 +2466,15 @@ msgid "Update file %1"
 msgstr "Opdatér filen %1"
 
 #: templates/attachagain.pattern.tmpl:14
-msgid "Update image or document on %TOPIC%"
+#, fuzzy
+msgid "Update image or document on %1"
 msgstr "Opdatér billede eller dokument på %TOPIC%"
 
 #: templates/attachagain.pattern.tmpl:60 templates/attachnew.pattern.tmpl:23
 msgid "Upload file"
 msgstr "Upload fil"
 
-#: templates/attach.pattern.tmpl:79
+#: templates/attach.pattern.tmpl:85
 msgid "Upload up to %1 KB."
 msgstr "Upload op til %1 KB."
 
@@ -2505,7 +2519,7 @@ msgstr ""
 "Brugere med system-genererede passwords opfordres til snarest muligt at [[%1]"
 "[opdatere passwordet]] til et der er nemmere at huske."
 
-#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:60
 msgid "Version"
 msgstr "Version"
 
@@ -2536,7 +2550,7 @@ msgstr "Vis denne version"
 msgid "View topic"
 msgstr "Vis side"
 
-#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
 msgid "View total topic history"
 msgstr "Vis komplet historik for siden"
 
@@ -2590,8 +2604,8 @@ msgstr ""
 "aktiveringskode på det følgende skærmbillede for at aktivere dit brugernavn, "
 "eller følg linket i e-mailen. Når dit brugernavn er aktiveret, vil %1:"
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Who"
 msgstr "Hvem"
 
@@ -2810,7 +2824,7 @@ msgstr "adgang til web ikke tilladt "
 msgid "advanced search"
 msgstr "avanceret søgning"
 
-#: templates/attachtables.pattern.tmpl:11
+#: templates/attachtables.pattern.tmpl:15
 msgid "change, update, previous revisions, move, delete..."
 msgstr "ændr, opdatér, tidligere versioner, flyt, slet..."
 
@@ -2846,7 +2860,7 @@ msgstr "finder referencer (kun i _%1 Web_)"
 msgid "looking for references in _all public webs_"
 msgstr "finder referencer (i _alle offentlige webs_)"
 
-#: templates/attachtables.pattern.tmpl:11
+#: templates/attachtables.pattern.tmpl:15
 msgid "manage"
 msgstr "opdatér"
 
@@ -2906,29 +2920,9 @@ msgstr "value='Gem (uden notifikation)' accesskey='q'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='Gem' accesskey='s'"
 
-#: templates/attachtables.pattern.tmpl:50
+#: templates/attachtables.pattern.tmpl:65
 msgid "view"
 msgstr "vis"
-
-#: templates/attachtables.pattern.tmpl:11
-msgid "Topic attachments"
-msgstr ""
-
-#: templates/attachtables.pattern.tmpl:22
-msgid "Show attachments"
-msgstr ""
-
-#: templates/attachtables.pattern.tmpl:22
-msgid "Hide attachments"
-msgstr ""
-
-#: templates/formtables.pattern.tmpl:6
-msgid "Show form"
-msgstr ""
-
-#: templates/formtables.pattern.tmpl:6
-msgid "Hide form"
-msgstr ""
 
 #~ msgid "&Compose"
 #~ msgstr "&Komponér"

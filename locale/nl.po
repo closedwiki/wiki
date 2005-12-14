@@ -137,7 +137,7 @@ msgstr "&Bron bewerken"
 msgid "&Edit text"
 msgstr "&Tekst bewerken"
 
-#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
 msgid "&History"
 msgstr "&Geschiedenis"
 
@@ -246,12 +246,12 @@ msgstr "(bijlage verplaatsen)"
 msgid "(no parent, orphaned topic)"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:1009 lib/TWiki/UI/Manage.pm:1012
-#: lib/TWiki/UI/Manage.pm:1015 lib/TWiki/UI/Manage.pm:1049
-#: lib/TWiki/UI/Manage.pm:1071 lib/TWiki/UI/Manage.pm:623
-#: lib/TWiki/UI/Manage.pm:626 lib/TWiki/UI/Manage.pm:629
-#: lib/TWiki/UI/Manage.pm:632 lib/TWiki/UI/Manage.pm:877
-#: lib/TWiki/UI/Manage.pm:900
+#: lib/TWiki/UI/Manage.pm:1008 lib/TWiki/UI/Manage.pm:1011
+#: lib/TWiki/UI/Manage.pm:1014 lib/TWiki/UI/Manage.pm:1048
+#: lib/TWiki/UI/Manage.pm:1070 lib/TWiki/UI/Manage.pm:622
+#: lib/TWiki/UI/Manage.pm:625 lib/TWiki/UI/Manage.pm:628
+#: lib/TWiki/UI/Manage.pm:631 lib/TWiki/UI/Manage.pm:876
+#: lib/TWiki/UI/Manage.pm:899
 msgid "(none)"
 msgstr ""
 
@@ -420,8 +420,8 @@ msgstr ""
 msgid "Access keys"
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60 templates/changeform.pattern.tmpl:9
 msgid "Action"
 msgstr ""
 
@@ -474,8 +474,9 @@ msgstr "Een niet-<nop>WikiWord mag gebruikt worden als paginanaam"
 msgid ""
 "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
 "different username."
-msgstr "Of klik op Terug naar TWiki.TWikiRegistration en kies een "
-"andere gebruikersnaam."
+msgstr ""
+"Of klik op Terug naar TWiki.TWikiRegistration en kies een andere "
+"gebruikersnaam."
 
 #: templates/oopsattention.tmpl:184
 msgid ""
@@ -521,7 +522,7 @@ msgstr "Voeg afbeelding of document to aan %1"
 msgid "Attach new file"
 msgstr "Voeg nieuw bestand toe"
 
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
 msgid "Attachment"
 msgstr "Bijlage"
 
@@ -546,7 +547,7 @@ msgstr "De bijlage bestaat niet"
 msgid "Attachment move failed"
 msgstr "Verplaatsen van bijlage is niet gelukt"
 
-#: templates/attach.pattern.tmpl:109
+#: templates/attach.pattern.tmpl:115
 msgid "Attachments will not be shown in topic view page."
 msgstr ""
 
@@ -555,7 +556,7 @@ msgstr ""
 msgid "Attention"
 msgstr "Let op"
 
-#: templates/attachtables.pattern.tmpl:30
+#: templates/attachtables.pattern.tmpl:45
 msgid "Attribute"
 msgstr "Kenmerk"
 
@@ -731,8 +732,8 @@ msgstr ""
 msgid "Color %1 has an invalid format"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:84 templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attach.pattern.tmpl:90 templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Comment"
 msgstr "Opmerking"
 
@@ -813,7 +814,7 @@ msgstr ""
 msgid "Create New Topic in %1 Web"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:96
+#: templates/attach.pattern.tmpl:102
 msgid "Create a link to the attached file"
 msgstr ""
 
@@ -848,8 +849,8 @@ msgstr ""
 msgid "Creating a suitable Form Definition topic"
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Date"
 msgstr ""
 
@@ -914,7 +915,7 @@ msgstr ""
 msgid "Difference Topic"
 msgstr "Verwijder pagina"
 
-#: templates/attach.pattern.tmpl:107
+#: templates/attach.pattern.tmpl:113
 msgid "Do not show attachment in table"
 msgstr ""
 
@@ -1026,7 +1027,7 @@ msgstr ""
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:51
+#: templates/attach.pattern.tmpl:50
 msgid "Existing attachments"
 msgstr ""
 
@@ -1113,11 +1114,15 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
+#: templates/attachtables.pattern.tmpl:20
+msgid "Hide attachments"
+msgstr "Verberg bijlagen"
+
 #: templates/attach.pattern.tmpl:49
 msgid "Hide existing attachments"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:104
+#: templates/attach.pattern.tmpl:110
 msgid "Hide file"
 msgstr ""
 
@@ -1209,7 +1214,7 @@ msgstr ""
 msgid "If you would like to create this web"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:99
+#: templates/attach.pattern.tmpl:105
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr ""
 
@@ -1298,7 +1303,7 @@ msgstr ""
 msgid "Line: %1 to %2"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:93
+#: templates/attach.pattern.tmpl:99
 msgid "Link"
 msgstr ""
 
@@ -1310,7 +1315,7 @@ msgstr ""
 msgid "List topics that start with the letter:"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:73
+#: templates/attach.pattern.tmpl:79
 msgid "Local file"
 msgstr ""
 
@@ -1810,6 +1815,10 @@ msgstr ""
 msgid "Set new topic parent"
 msgstr "Bovenliggende pagina instellen"
 
+#: templates/attachtables.pattern.tmpl:20
+msgid "Show attachments"
+msgstr "Toon bijlagen"
+
 #: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
 msgstr ""
@@ -1841,7 +1850,7 @@ msgstr ""
 msgid "Simple search"
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
 msgid "Size"
 msgstr ""
 
@@ -2196,6 +2205,11 @@ msgstr ""
 msgid "Topic Save Error"
 msgstr ""
 
+#: templates/attachtables.pattern.tmpl:10
+#: templates/attachtables.pattern.tmpl:19
+msgid "Topic attachments"
+msgstr "Bijlagen bij deze pagina"
+
 #: templates/oopsattention.tmpl:261
 msgid "Topic can not be upgraded from old style category table"
 msgstr ""
@@ -2281,14 +2295,15 @@ msgid "Update file %1"
 msgstr ""
 
 #: templates/attachagain.pattern.tmpl:14
-msgid "Update image or document on %TOPIC%"
-msgstr ""
+#, fuzzy
+msgid "Update image or document on %1"
+msgstr "Voeg afbeelding of document to aan %1"
 
 #: templates/attachagain.pattern.tmpl:60 templates/attachnew.pattern.tmpl:23
 msgid "Upload file"
 msgstr ""
 
-#: templates/attach.pattern.tmpl:79
+#: templates/attach.pattern.tmpl:85
 msgid "Upload up to %1 KB."
 msgstr ""
 
@@ -2332,7 +2347,7 @@ msgid ""
 "[[%1][change password]] to change their password to something memorable."
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:60
 msgid "Version"
 msgstr "Versie"
 
@@ -2363,7 +2378,7 @@ msgstr "Bekijk revisie"
 msgid "View topic"
 msgstr "Bekijk pagina"
 
-#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
 msgid "View total topic history"
 msgstr "Bekijk paginageschiedenis"
 
@@ -2411,8 +2426,8 @@ msgid ""
 "account is activated, %1 will:"
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Who"
 msgstr "Wie"
 
@@ -2600,7 +2615,7 @@ msgstr ""
 msgid "advanced search"
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:11
+#: templates/attachtables.pattern.tmpl:15
 msgid "change, update, previous revisions, move, delete..."
 msgstr ""
 
@@ -2637,7 +2652,7 @@ msgstr ""
 msgid "looking for references in _all public webs_"
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:11
+#: templates/attachtables.pattern.tmpl:15
 msgid "manage"
 msgstr ""
 
@@ -2699,29 +2714,15 @@ msgstr "value='Stil Bewaren' accesskey='q'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='Stop bewerken' accesskey='c'"
 
-#: templates/attachtables.pattern.tmpl:50
+#: templates/attachtables.pattern.tmpl:65
 msgid "view"
 msgstr "bekijken"
 
-#: templates/attachtables.pattern.tmpl:11
-msgid "Topic attachments"
-msgstr "Bijlagen bij deze pagina"
+#~ msgid "Show form"
+#~ msgstr "Toon formulier"
 
-#: templates/attachtables.pattern.tmpl:22
-msgid "Show attachments"
-msgstr "Toon bijlagen"
-
-#: templates/attachtables.pattern.tmpl:22
-msgid "Hide attachments"
-msgstr "Verberg bijlagen"
-
-#: templates/formtables.pattern.tmpl:6
-msgid "Show form"
-msgstr "Toon formulier"
-
-#: templates/formtables.pattern.tmpl:6
-msgid "Hide form"
-msgstr "Verberg formulier"
+#~ msgid "Hide form"
+#~ msgstr "Verberg formulier"
 
 #~ msgid "&Compose"
 #~ msgstr "&Bewerken"

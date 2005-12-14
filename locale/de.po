@@ -138,7 +138,7 @@ msgstr "&Editieren"
 msgid "&Edit text"
 msgstr "&Text editieren"
 
-#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
 msgid "&History"
 msgstr "&Historie"
 
@@ -245,12 +245,12 @@ msgstr "(Anhang verschieben)"
 msgid "(no parent, orphaned topic)"
 msgstr "(kein Ober-Topic, verwaistes Topic"
 
-#: lib/TWiki/UI/Manage.pm:1009 lib/TWiki/UI/Manage.pm:1012
-#: lib/TWiki/UI/Manage.pm:1015 lib/TWiki/UI/Manage.pm:1049
-#: lib/TWiki/UI/Manage.pm:1071 lib/TWiki/UI/Manage.pm:623
-#: lib/TWiki/UI/Manage.pm:626 lib/TWiki/UI/Manage.pm:629
-#: lib/TWiki/UI/Manage.pm:632 lib/TWiki/UI/Manage.pm:877
-#: lib/TWiki/UI/Manage.pm:900
+#: lib/TWiki/UI/Manage.pm:1008 lib/TWiki/UI/Manage.pm:1011
+#: lib/TWiki/UI/Manage.pm:1014 lib/TWiki/UI/Manage.pm:1048
+#: lib/TWiki/UI/Manage.pm:1070 lib/TWiki/UI/Manage.pm:622
+#: lib/TWiki/UI/Manage.pm:625 lib/TWiki/UI/Manage.pm:628
+#: lib/TWiki/UI/Manage.pm:631 lib/TWiki/UI/Manage.pm:876
+#: lib/TWiki/UI/Manage.pm:899
 msgid "(none)"
 msgstr ""
 
@@ -450,8 +450,8 @@ msgstr "Zugriffskontrolle für %1 fehlgeschlagen"
 msgid "Access keys"
 msgstr "Funktions-Tasten"
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60 templates/changeform.pattern.tmpl:9
 msgid "Action"
 msgstr "Aktion"
 
@@ -557,7 +557,7 @@ msgstr "Bild oder Dokument an %1 hängen"
 msgid "Attach new file"
 msgstr "Neue Datei anhängen"
 
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
 msgid "Attachment"
 msgstr "Anhang"
 
@@ -581,7 +581,7 @@ msgstr "Anhang existiert nicht."
 msgid "Attachment move failed"
 msgstr "Verschieben des Anhangs fehlgeschlagen"
 
-#: templates/attach.pattern.tmpl:109
+#: templates/attach.pattern.tmpl:115
 msgid "Attachments will not be shown in topic view page."
 msgstr "Anhäge in der normalen Ansicht nicht angezeigen"
 
@@ -590,7 +590,7 @@ msgstr "Anhäge in der normalen Ansicht nicht angezeigen"
 msgid "Attention"
 msgstr "Achtung"
 
-#: templates/attachtables.pattern.tmpl:30
+#: templates/attachtables.pattern.tmpl:45
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -768,8 +768,8 @@ msgstr ""
 msgid "Color %1 has an invalid format"
 msgstr "Farbe %1 hat ein ungültiges Format"
 
-#: templates/attach.pattern.tmpl:84 templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attach.pattern.tmpl:90 templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Comment"
 msgstr "Kommentar"
 
@@ -852,7 +852,7 @@ msgstr "Neues Topic anlegen"
 msgid "Create New Topic in %1 Web"
 msgstr "Neues Topic im %1 Web anlegen"
 
-#: templates/attach.pattern.tmpl:96
+#: templates/attach.pattern.tmpl:102
 msgid "Create a link to the attached file"
 msgstr "Verweis auf die angehängte Datei erzeugen"
 
@@ -888,8 +888,8 @@ msgstr ""
 msgid "Creating a suitable Form Definition topic"
 msgstr "Legen Sie ein geeignetes Topic für die Formular-Definition an"
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Date"
 msgstr "Datum"
 
@@ -952,7 +952,7 @@ msgstr "Wollen Sie[[[_1]][%2's Passwort zurücksetzen]]?"
 msgid "Difference Topic"
 msgstr "Änderungs Topic"
 
-#: templates/attach.pattern.tmpl:107
+#: templates/attach.pattern.tmpl:113
 msgid "Do not show attachment in table"
 msgstr "Anhang nicht in Tabelle anzeigen"
 
@@ -1080,7 +1080,7 @@ msgstr ""
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "Fehler: Nicht unterstütztes Protokoll. (Muss 'http://domain/..' sein)"
 
-#: templates/attach.pattern.tmpl:51
+#: templates/attach.pattern.tmpl:50
 msgid "Existing attachments"
 msgstr "Existierende Anhänge"
 
@@ -1178,11 +1178,15 @@ msgstr "Halloa %1!"
 msgid "Help"
 msgstr "Hilfe"
 
+#: templates/attachtables.pattern.tmpl:20
+msgid "Hide attachments"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:49
 msgid "Hide existing attachments"
 msgstr "Existierende Anhänge verstecken"
 
-#: templates/attach.pattern.tmpl:104
+#: templates/attach.pattern.tmpl:110
 msgid "Hide file"
 msgstr "Datei verstecken"
 
@@ -1287,7 +1291,7 @@ msgstr "Wenn Sie diese Seite anlegen wollen:"
 msgid "If you would like to create this web"
 msgstr "Wenn Sie dieses Web anlegen wollen"
 
-#: templates/attach.pattern.tmpl:99
+#: templates/attach.pattern.tmpl:105
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Bilder werden angezeigt, für andere Anhänge wird ein Link erzeugt."
 
@@ -1388,7 +1392,7 @@ msgstr "Zeile: %1"
 msgid "Line: %1 to %2"
 msgstr "Zeile: %1 bis %2"
 
-#: templates/attach.pattern.tmpl:93
+#: templates/attach.pattern.tmpl:99
 msgid "Link"
 msgstr "Verweis"
 
@@ -1400,7 +1404,7 @@ msgstr "Auflistung aller Topics in dem %1 Web in alphabetischer Reihenfolge"
 msgid "List topics that start with the letter:"
 msgstr "Auflistung aller Topics beginnend mit folgenden Buchstaben:"
 
-#: templates/attach.pattern.tmpl:73
+#: templates/attach.pattern.tmpl:79
 msgid "Local file"
 msgstr "Lokale Datei"
 
@@ -1912,6 +1916,10 @@ msgstr "Sequenziell"
 msgid "Set new topic parent"
 msgstr "Neues Ober-Topic zuordnen"
 
+#: templates/attachtables.pattern.tmpl:20
+msgid "Show attachments"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
 msgstr "Existierende Anhänge anzeigen"
@@ -1945,7 +1953,7 @@ msgstr "Ähnliche Topics in diesem Web:"
 msgid "Simple search"
 msgstr "Einfache Suche"
 
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
 msgid "Size"
 msgstr "Größe"
 
@@ -2373,6 +2381,11 @@ msgstr "Nach Web:"
 msgid "Topic Save Error"
 msgstr "Topic-Speichern-Fehler"
 
+#: templates/attachtables.pattern.tmpl:10
+#: templates/attachtables.pattern.tmpl:19
+msgid "Topic attachments"
+msgstr ""
+
 #: templates/oopsattention.tmpl:261
 msgid "Topic can not be upgraded from old style category table"
 msgstr ""
@@ -2462,14 +2475,15 @@ msgid "Update file %1"
 msgstr "Datei %1 aktualisieren"
 
 #: templates/attachagain.pattern.tmpl:14
-msgid "Update image or document on %TOPIC%"
+#, fuzzy
+msgid "Update image or document on %1"
 msgstr "Bild oder Dokument an %TOPIC% aktualisieren"
 
 #: templates/attachagain.pattern.tmpl:60 templates/attachnew.pattern.tmpl:23
 msgid "Upload file"
 msgstr "Datei hochladen"
 
-#: templates/attach.pattern.tmpl:79
+#: templates/attach.pattern.tmpl:85
 msgid "Upload up to %1 KB."
 msgstr "Bis zu %1 KB hochladen."
 
@@ -2516,7 +2530,7 @@ msgstr ""
 "Benutzer mit einem automatisch erzeugten Passwort sollten mit der Funktion "
 "[[%1][Passwort ändern]] dieses in ein besser merkbares umändern."
 
-#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:60
 msgid "Version"
 msgstr "Version"
 
@@ -2547,7 +2561,7 @@ msgstr "Revision ansehen"
 msgid "View topic"
 msgstr "Topic ansehen"
 
-#: templates/twiki.pattern.tmpl:108 templates/twiki.tmpl:164
+#: templates/twiki.pattern.tmpl:109 templates/twiki.tmpl:164
 msgid "View total topic history"
 msgstr "Topic Historie ansehen"
 
@@ -2597,8 +2611,8 @@ msgid ""
 "account is activated, %1 will:"
 msgstr ""
 
-#: templates/attachtables.pattern.tmpl:45
-#: templates/attachtables.pattern.tmpl:7
+#: templates/attachtables.pattern.tmpl:6
+#: templates/attachtables.pattern.tmpl:60
 msgid "Who"
 msgstr "Wer"
 
@@ -2819,7 +2833,7 @@ msgstr "Zugriff zu diesem Web nicht gestattet"
 msgid "advanced search"
 msgstr "erweiterte Suche"
 
-#: templates/attachtables.pattern.tmpl:11
+#: templates/attachtables.pattern.tmpl:15
 msgid "change, update, previous revisions, move, delete..."
 msgstr "ändern, aktualisieren, vorherige Revisionen, verschieben, Löschen..."
 
@@ -2855,7 +2869,7 @@ msgstr "nach Querverweisen nur in _%1 Web_ suchen"
 msgid "looking for references in _all public webs_"
 msgstr "nach Querverweisen in _allen öffentlichen Webs_ suchen"
 
-#: templates/attachtables.pattern.tmpl:11
+#: templates/attachtables.pattern.tmpl:15
 msgid "manage"
 msgstr "verwalten"
 
@@ -2915,29 +2929,9 @@ msgstr "value='Stilles Speichern' accesskey='q'"
 msgid "value='Save' accesskey='s'"
 msgstr "value='Speichern' accesskey='s'"
 
-#: templates/attachtables.pattern.tmpl:50
+#: templates/attachtables.pattern.tmpl:65
 msgid "view"
 msgstr "Ansehen"
-
-#: templates/attachtables.pattern.tmpl:11
-msgid "Topic attachments"
-msgstr ""
-
-#: templates/attachtables.pattern.tmpl:22
-msgid "Show attachments"
-msgstr ""
-
-#: templates/attachtables.pattern.tmpl:22
-msgid "Hide attachments"
-msgstr ""
-
-#: templates/formtables.pattern.tmpl:6
-msgid "Show form"
-msgstr ""
-
-#: templates/formtables.pattern.tmpl:6
-msgid "Hide form"
-msgstr ""
 
 #~ msgid "&Compose"
 #~ msgstr "&Bearbeiten"
