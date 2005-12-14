@@ -76,11 +76,17 @@ sub mailNotify {
 
     $twiki ||= new TWiki( $TWiki::cfg{DefaultUserLogin} );
 
+    # absolute URL context for email generation
+    $twiki->enterContext( 'absolute_urls' );
+
     my $report = '';
     foreach my $web ( grep( /$webstr/o,
                             $twiki->{store}->getListOfWebs( 'user ') )) {
         $report .= _processWeb( $twiki, $web );
     }
+
+    $twiki->leaveContext( 'absolute_urls' );
+
     return $report;
 }
 
