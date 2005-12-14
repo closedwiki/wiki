@@ -1047,10 +1047,10 @@ sub getRenderedVersion {
     # are embedded in the values provided to other tags. The only way to
     # do this correctly is to parse the HTML (bleagh!). So we just assume
     # they have been escaped.
-    $text =~ s/<(\/[A-Za-z\d]+(:[A-Za-z\d]+)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
-    $text =~ s/<([A-Za-z\d]+(:[A-Za-z\d]+)?(\s+.*?)?(\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    $text =~ s/<(\/\w+(:\w+)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    $text =~ s/<(\w+(:\w+)?(\s+.*?)?(\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
     # XML processing instruction only valid at start of text
-    $text =~ s/^<(\?[A-Za-z\d].*?\?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    $text =~ s/^<(\?\w.*?\?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
 
     # entitify lone < and >, praying that we haven't screwed up :-(
     $text =~ s/</&lt\;/g;
