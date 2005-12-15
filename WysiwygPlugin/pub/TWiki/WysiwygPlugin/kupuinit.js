@@ -36,8 +36,8 @@ function initKupu(iframe) {
     // now we can create the controller
     var kupu = new KupuEditor(doc, conf, l);
 
-    //var contextmenu = new ContextMenu();
-    //kupu.setContextMenu(contextmenu);
+    var contextmenu = new ContextMenu();
+    kupu.setContextMenu(contextmenu);
 
     // now we can create a UI object which we can use from the UI
     var ui = new KupuUI('kupu-tb-styles');
@@ -229,7 +229,7 @@ function initKupu(iframe) {
 
     // Link drawer
 
-    var linktool = new LinkTool();
+    var linktool = new NoContextMenu( new LinkTool() );
     kupu.registerTool('linktool', linktool);
 
     var linkdrawerbutton = new KupuButton('kupu-linkdrawer-button',
@@ -240,7 +240,7 @@ function initKupu(iframe) {
     drawertool.registerDrawer('linkdrawer', linkdrawer);
 
     // Table drawer
-    var tabletool = new TableTool();
+    var tabletool = new TWikiTableTool();
     kupu.registerTool('tabletool', tabletool);
 
     var tabledrawerbutton = new KupuButton('kupu-tabledrawer-button',

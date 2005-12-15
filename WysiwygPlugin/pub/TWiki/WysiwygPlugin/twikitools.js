@@ -559,6 +559,9 @@ function TWikiWikiWordTool() {
     var url = this.editor.config.view_url+web+"/"+topic;
     this.createLink(url, null, null, null, topic);
   };
+  this.createContextMenuElements = function(selNode, event) {
+    return [];
+  };
 };
 
 TWikiWikiWordTool.prototype = new LinkTool;
@@ -706,28 +709,21 @@ function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
 TWikiColorChooserTool.prototype = new KupuTool;
 
 // only check max if max > min
-function twikiVerifyNumber(name,id,min,max) {
-  var field = getFromSelector(id);
+function twikiVerifyNumber(val,min,max) {
   var error = "";
 
-  var charpos = field.value.search("[^0-9]");
-  if (field.value.length > 0 && charpos >= 0) {
-    error = name + ": Only digits allowed\n[Error at character position " +
-      eval(charpos + 1) + "]";
-  }
-  if (error.length == 0 && isNaN(field.value)) {
+  if (error.length == 0 && isNaN(val)) {
     error = name + " is not a number";
   }
-  if (error.length == 0 && field.value < min) {
+  if (error.length == 0 && val < min) {
     error = name + " must be >= " + min;
   }
-  if (error.length == 0 && max > min && field.value > max) {
+  if (error.length == 0 && max > min && val > max) {
     error = name + " must be <= " + max;
   }
 
   if (error.length > 0) {
     alert(error);
-    field.focus();
     return false;
   };
 
@@ -778,3 +774,21 @@ function TWikiRemoveElementButton(buttonid, element_name, cssclass) {
 
 TWikiRemoveElementButton.prototype = new KupuButton;
 
+function TWikiTableTool() {
+  this.createTable = function(rows, cols, makeHeader, tableclass) {
+    if (!twikiVerifyNumber(rows,1,-1) ||
+        !twikiVerifyNumber(cols,1,-1))
+      return;
+    var args = new Array();
+    args.push(rows);
+    args.push(cols);
+    args.push(makeHeader);
+    args.push(tableclass);
+    var table = TWikiTableTool.prototype.createTable.apply(this, args);
+    table.cellspacing = 1;
+    table.cellpadding = 0;
+    table.border = 1;
+  };
+}
+
+TWikiTableTool.prototype = new TableTool;

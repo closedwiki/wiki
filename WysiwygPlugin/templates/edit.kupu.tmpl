@@ -79,12 +79,6 @@
      <strict_output>1</strict_output>
      <content_type>application/xhtml+xml</content_type>
      <compatible_singletons>1</compatible_singletons>
-     <table_classes>
-      <class>plain</class>
-      <class>listing</class>
-      <class>grid</class>
-      <class>data</class>
-     </table_classes>
      <search_images_uri> </search_images_uri>
      <search_links_uri> </search_links_uri>
     </kupuconfig>
@@ -168,7 +162,7 @@
       <select id="twiki-var-select">
        %WYSIWYGPLUGIN_TAGS%
       </select>
-      <button type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Insert / Edit a table" i18n:attributes="title">&#160;</button>
+      <button type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Insert a table" i18n:attributes="title">&#160;</button>
 <!--
       <button type="button" class="twiki-new-attachment" id="twiki-attach-button" title="Add a new attachment" i18n:attributes="title">&#160;</button> 
 -->
@@ -275,8 +269,18 @@
      </form>
     </div>
    </div>
-   <div id="kupu-tabledrawer" class="kupu-drawer">
+    <div id="kupu-tabledrawer" class="kupu-drawer">
 <!--    <h1>Table</h1> -->
+    <div style="display:none" class="kupu-tabledrawer-edittable">
+    <select style="display:none" class="kupu-tabledrawer-editclasschooser">
+     <option value="plain"></option>
+    </select>
+    </div>
+    <div style="display:none" class="kupu-tabledrawer-addtable">
+    <select style="display:none" class="kupu-tabledrawer-addclasschooser">
+     <option value="plain"></option>
+    </select>
+    </div>
     <div class="kupu-panels">
      <table width="99%">
       <tr class="kupu-panelsrow">
@@ -289,16 +293,16 @@
             <table width="100%">
              <tr>
               <td class="kupu-toolbox-label" width="50%">Rows</td>
-              <td><input type="text" id="kupu-tabledrawer-newrows" onblur="twikiVerifyNumber('Rows','kupu-tabledrawer-newrows',1,-1)"/></td>
+              <td><input type="text" class="kupu-tabledrawer-newrows"/></td>
              </tr>
              <tr>
               <td class="kupu-toolbox-label">Columns</td>
-              <td><input type="text" id="kupu-tabledrawer-newcols" onblur="twikiVerifyNumber('Columns','kupu-tabledrawer-newcols',1,-1)"/></td>
+              <td><input type="text" class="kupu-tabledrawer-newcols"/></td>
              </tr>
-             <tr style="display:none">
-              <td class="kupu-toolbox-label">Headings</td>
+             <tr>
+              <td class="kupu-toolbox-label">Header row</td>
               <td class="kupu-toolbox-label">
-               <input name="kupu-tabledrawer-makeheader" id="kupu-tabledrawer-makeheader" type="checkbox"/>
+               <input name="kupu-tabledrawer-makeheader" class="kupu-tabledrawer-makeheader" type="checkbox"/>
                <label for="kupu-tabledrawer-makeheader">Create</label>
               </td>
              </tr>
@@ -320,7 +324,7 @@
              <tr>
               <td width="50%">Current column alignment</td>
               <td>
-               <select id="kupu-tabledrawer-alignchooser" onchange="drawertool.current_drawer.tool.setColumnAlign(this.options[this.selectedIndex].value)">
+               <select class="kupu-tabledrawer-alignchooser" onchange="drawertool.current_drawer.tool.setColumnAlign(this.options[this.selectedIndex].value)">
                 <option value="left">Left</option>
                 <option value="center">Center</option>
                 <option value="right">Right</option>
@@ -367,12 +371,6 @@
    </div>
    <table id="kupu-colorchooser" cellpadding="0" cellspacing="0" style="position: fixed; border-style: solid; border-color: black; border-width: 1px;">
    </table>
-   <select id="kupu-tabledrawer-classchooser" style="display: none">
-    <option value="plain">Plain</option>
-    <option value="listing">Listing</option>
-    <option value="grid">Grid</option>
-    <option value="data">Data</option>
-   </select>
    <div class="kupu-editorframe">
     <iframe id="kupu-editor" class="kupu-editor-iframe" frameborder="1" src="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1;t=%GMTIME{"$ye$mo$day$hou$min$sec"}%" scrolling="auto">
     </iframe>
