@@ -1047,8 +1047,8 @@ sub getRenderedVersion {
     # are embedded in the values provided to other tags. The only way to
     # do this correctly is to parse the HTML (bleagh!). So we just assume
     # they have been escaped.
-    $text =~ s/<(\/\w+(:\w+)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
-    $text =~ s/<(\w+(:\w+)?(\s+.*?)?(\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    $text =~ s/<(\/?\w+(:\w+)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    $text =~ s/<(\w+(:\w+)?(\s+.*?|\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
     # XML processing instruction only valid at start of text
     $text =~ s/^<(\?\w.*?\?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
 
@@ -1173,8 +1173,6 @@ sub getRenderedVersion {
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
 
-#SMELL: this processing should not be done outside the TML section of the rendered page
-#SMELL: this definition prevents empahsising more than 2 words
     $text =~ s/${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW/_fixedFontText($1,1)/gem;
     $text =~ s/${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
     $text =~ s/${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW/<strong>$1<\/strong>/gm;
