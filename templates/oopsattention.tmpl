@@ -183,7 +183,10 @@
 ---+++ Mail Error
 %MAKETEXT{"An e-mail could not be delivered. Please notify your [_1] administrator, [_2]" args="%WIKITOOLNAME%,<a href='mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%20Mail%20Error'>%WIKIWEBMASTER%</a>"}%
 
-=%PARAM1%=
+*%MAKETEXT{"Mail to"}%*: %PARAM1%
+
+*%MAKETEXT{"Errors"}%*: %PARAM2%
+
 %TMPL:END%
 %TMPL:DEF{"already_exists"}%
 ---+++ %MAKETEXT{"You are already registered"}%

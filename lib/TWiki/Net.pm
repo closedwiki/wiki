@@ -31,6 +31,7 @@ use strict;
 use Assert;
 use TWiki::Time;
 use TWiki::Sandbox;
+use Error qw( :try );
 
 sub new {
     my ( $class, $session ) = @_;
@@ -45,35 +46,35 @@ sub new {
 
 =pod
 
----++ ObjectMethod getUrl (  $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader  ) -> $text
+---++ ObjectMethod getUrl (  $host, $port, $url, $user, $pass, $header  ) -> $text
 
 Get the text at the other end of a URL
 
 =cut
 
 sub getUrl {
-    my ( $this, $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
+    my ( $this, $host, $port, $url, $user, $pass, $header ) = @_;
     ASSERT($this->isa( 'TWiki::Net')) if DEBUG;
 
     # Run-time use of Socket module when needed
     require Socket;
     import Socket qw(:all);
 
-    if( $thePort < 1 ) {
-        $thePort = 80;
+    if( $port < 1 ) {
+        $port = 80;
     }
     my $base64;
     my $result = '';
-    $theUrl = "/" unless( $theUrl );
-    my $req = "GET $theUrl HTTP/1.0\r\n";
+    $url = "/" unless( $url );
+    my $req = "GET $url HTTP/1.0\r\n";
 
-    $req .= "Host: $theHost:$thePort\r\n";
-    if( $theUser && $thePass ) {
+    $req .= "Host: $host:$port\r\n";
+    if( $user && $pass ) {
         # Use MIME::Base64 at run-time if using outbound proxy with
         # authentication
         require MIME::Base64;
         import MIME::Base64 ();
-        $base64 = encode_base64( "$theUser:$thePass", "\r\n" );
+        $base64 = encode_base64( "$user:$pass", "\r\n" );
         $req .= "Authorization: Basic $base64";
     }
 
@@ -83,17 +84,17 @@ sub getUrl {
     my $proxyPort = $prefs->getPreferencesValue('PROXYPORT') ||
       $TWiki::cfg{PROXY}{PORT};
     if($proxyHost && $proxyPort) {
-        $req = "GET http://$theHost:$thePort$theUrl HTTP/1.0\r\n";
-        $theHost = $proxyHost;
-        $thePort = $proxyPort;
+        $req = "GET http://$host:$port$url HTTP/1.0\r\n";
+        $host = $proxyHost;
+        $port = $proxyPort;
     }
 
-    $req .= $theHeader if( $theHeader );
+    $req .= $header if( $header );
     $req .= "\r\n\r\n";
 
     my ( $iaddr, $paddr, $proto );
-    $iaddr   = inet_aton( $theHost );
-    $paddr   = sockaddr_in( $thePort, $iaddr );
+    $iaddr   = inet_aton( $host );
+    $paddr   = sockaddr_in( $port, $iaddr );
     $proto   = getprotobyname( 'tcp' );
     unless( socket( *SOCK, &PF_INET, &SOCK_STREAM, $proto ) ) {
         $this->{session}->writeWarning( "TWiki::Net::getUrl socket: $!" );
@@ -132,6 +133,7 @@ sub _installMailHandler {
             $useNetSMTP = require Net::SMTP;
         }
     }
+
     if( $useNetSMTP ) {
         $this->setMailHandler( \&_sendEmailByNetSMTP );
     } else {
@@ -159,8 +161,8 @@ sub setMailHandler {
 
 =pod
 
----++ ObjectMethod sendEmail ( $theText, $retries ) -> $error
-   * =$theText= - text of the mail, including MIME headers
+---++ ObjectMethod sendEmail ( $text, $retries ) -> $error
+   * =$text= - text of the mail, including MIME headers
    * =$retries= - number of times to retry the send (default 1)
 
 Send an email specified as MIME format content.
@@ -169,7 +171,7 @@ Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody...
 =cut
 
 sub sendEmail {
-    my( $this, $theText, $retries ) = @_;
+    my( $this, $text, $retries ) = @_;
     ASSERT($this->isa( 'TWiki::Net')) if DEBUG;
     $retries ||= 1;
 
@@ -177,68 +179,70 @@ sub sendEmail {
         $this->_installMailHandler();
     }
 
+    return ( "No mail handler" ) unless $this->{mailHandler};
+
     # Put in a Date header, mainly for Qmail
     my $dateStr = TWiki::Time::formatTime(time, '$email');
-    $theText = "Date: " . $dateStr . "\n" . $theText;
+    $text = "Date: " . $dateStr . "\n" . $text;
 
     my $errors = '';
     my $back_off = 1; # seconds, doubles on each retry
-    while ( $retries ) {
-        my $error = &{$this->{mailHandler}}( $this, $theText );
-        if( $error ) {
-            $errors .= "$error\n";
-            if ( --$retries ) {
-                sleep( $back_off );
-                $back_off *= 2;
-            } else {
-                $this->{session}->writeWarning( "Net::sendEmail: too many failures; aborting send" );
-                return $errors;
+    while ( $retries-- ) {
+        try {
+            &{$this->{mailHandler}}( $this, $text );
+            $retries = 0;
+        } catch Error::Simple with {
+            my $e = shift->stringify();
+            # be nasty to errors that we didn't throw. They may be
+            # caused by SMTP or perl, and give away info about the
+            # install that we don't want to share.
+            unless( $e =~ /^ERROR/ ) {
+                $this->{session}->writeWarning( $e );
+                $e = "Mail could not be sent - see TWiki warning log.";
             }
-        } else {
-            #$this->{session}->writeDebug( "Mailed $mail" );
-            return undef;
-        }
+            $errors .= $e."\n";
+            sleep( $back_off );
+            $back_off *= 2;
+            $errors .= "Too many failures sending mail"
+              unless $retries;
+        };
     }
-    return undef;
+    return $errors;
 }
 
 sub _fixLineLength {
-    my( $theAddrs ) = @_;
+    my( $addrs ) = @_;
     # split up header lines that are too long
-    $theAddrs =~ s/(.{60}[^,]*,\s*)/$1\n        /go;
-    $theAddrs =~ s/\n\s*$//gos;
-    return $theAddrs;
+    $addrs =~ s/(.{60}[^,]*,\s*)/$1\n        /go;
+    $addrs =~ s/\n\s*$//gos;
+    return $addrs;
 }
 
 sub _sendEmailBySendmail {
-    my( $this, $theText ) = @_;
+    my( $this, $text ) = @_;
 
     # send with sendmail
-    my ( $header, $body ) = split( "\n\n", $theText, 2 );
+    my ( $header, $body ) = split( "\n\n", $text, 2 );
     $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1.$2.$3._fixLineLength($4)/geois;
-    $theText = "$header\n\n$body";   # rebuild message
+    $text = "$header\n\n$body";   # rebuild message
 
-    # SMELL: This should use the sandbox, shouldn't it?
-    if( open( MAIL, "|-" ) || exec "$TWiki::cfg{MailProgram}" ) {
-        print MAIL $theText;
-        close( MAIL );
-        return '';
-    }
-    # SMELL: should be a TWiki::inlineAlert
-    return "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
+    open( MAIL, '|'.$TWiki::cfg{MailProgram} ) ||
+      die "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
+    print MAIL $text;
+    close( MAIL );
 }
 
 sub _sendEmailByNetSMTP {
-    my( $this, $theText ) = @_;
+    my( $this, $text ) = @_;
 
     my $from = '';
     my @to = ();
 
-    my ( $header, $body ) = split( "\n\n", $theText, 2 );
+    my ( $header, $body ) = split( "\n\n", $text, 2 );
     my @headerlines = split( /\r?\n/, $header );
     $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
     $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
-    $theText = "$header\n\n$body";   # rebuild message
+    $text = "$header\n\n$body";   # rebuild message
 
     # extract 'From:'
     my @arr = grep( /^From: /i, @headerlines );
@@ -249,7 +253,7 @@ sub _sendEmailByNetSMTP {
     }
     unless( $from ) {
         # SMELL: should be a TWiki::inlineAlert
-        return "ERROR: Can't send mail, missing 'From:'";
+        die "ERROR: Can't send mail, missing 'From:'";
     }
 
     # extract @to from 'To:', 'CC:', 'BCC:'
@@ -277,7 +281,7 @@ sub _sendEmailByNetSMTP {
     }
     if( ! ( scalar( @to ) ) ) {
         # SMELL: should be a TWiki::inlineAlert
-        return "ERROR: Can't send mail, missing recipient";
+        die "ERROR: Can't send mail, missing recipient";
     }
 
     return undef unless( scalar @to );
@@ -290,21 +294,14 @@ sub _sendEmailByNetSMTP {
         $smtp = Net::SMTP->new( $this->{MAIL_HOST} );
     }
     my $status = '';
-    if ($smtp) {
-        {
-            $smtp->mail( $from ) or last;
-            $smtp->to( @to, { SkipBad => 1 } ) or last;
-            $smtp->data( $theText ) or last;
-            $smtp->dataend() or last;
-        }
-        # SMELL: should be a TWiki::inlineAlert
-        $status = ($smtp->ok() ? '' : "ERROR: Can't send mail using Net::SMTP. " . $smtp->message );
-        $smtp->quit();
-    } else {
-        # SMELL: should be a TWiki::inlineAlert
-        $status = "ERROR: Can't send mail using Net::SMTP (can't connect to '$this->{MAIL_HOST}')";
-    }
-    return $status;
+    my $mess = "ERROR: Can't send mail using Net::SMTP. ";
+    die $mess."Can't connect to '$this->{MAIL_HOST}'" unless $smtp;
+
+    $smtp->mail( $from ) || die $mess.$smtp->message;
+    $smtp->to( @to, { SkipBad => 1 } ) || die $mess.$smtp->message;
+    $smtp->data( $text ) || die $mess.$smtp->message;
+    $smtp->dataend() || die $mess.$smtp->message;
+    $smtp->quit();
 }
 
 1;
