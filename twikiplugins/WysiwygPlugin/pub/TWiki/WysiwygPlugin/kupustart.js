@@ -49,9 +49,9 @@ function startKupu() {
 
     var navigatingAway = function () {
       if (kupu.content_changed && 
-          confirm('You have unsaved changes. If you navigate away from this page you will LOSE any changes you have made. Do you want to save before leaving this edit? (OK to SAVE, Cancel to DISCARD your changes)')) {
+          !confirm('You have unsaved changes.\nAre you sure you want to navigate away from this page?\nCancel will SAVE your changes. OK will DISCARD your changes (forever!).')) {
         kupu.config.reload_src = 0;
-        var form = document.getElementById('twiki-main-form');
+        var form = getFromSelector('twiki-main-form');
         TWikiHandleSubmit();
         form.submit();
       };
