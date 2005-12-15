@@ -634,7 +634,7 @@ sub searchWeb {
                     sort {$a->[0] <=> $b->[0] }
                       map { [ $store->getTopicLatestRevTime( $web, $_ ), $_ ] }
                         @topicList;
-                @tmpList = reverse( @tmpList ) unless( $revSort );
+                @tmpList = reverse( @tmpList ) if( $revSort );
 
                 # then shorten list and build the hashes for date and author
                 my $idx = $limit + $slack;
@@ -1018,7 +1018,7 @@ sub _compare {
         # this is what date comparisons need.
         return $_[1] <=> $_[0];
     } else {
-        return $_[0] cmp $_[1];
+        return $_[1] cmp $_[0];
     }
 }
 
