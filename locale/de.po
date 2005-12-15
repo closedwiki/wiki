@@ -152,11 +152,11 @@ msgstr "&Drucken"
 
 #: templates/view.pattern.tmpl:96
 msgid "&Raw view"
-msgstr ""
+msgstr "&Quelltext"
 
 #: templates/view.pattern.tmpl:26
 msgid "&WYSIWYG"
-msgstr ""
+msgstr "&WYSIWYG"
 
 #: templates/rdiff.pattern.tmpl:6
 msgid "(%1 vs. %2)"
@@ -252,7 +252,7 @@ msgstr "(kein Ober-Topic, verwaistes Topic"
 #: lib/TWiki/UI/Manage.pm:631 lib/TWiki/UI/Manage.pm:876
 #: lib/TWiki/UI/Manage.pm:899
 msgid "(none)"
-msgstr ""
+msgstr "(nichts)"
 
 #: templates/oopsaccessdenied.tmpl:3 templates/oopsleaseconflict.tmpl:3
 #: templates/oopssaveerr.tmpl:2
@@ -688,14 +688,12 @@ msgid "Change language"
 msgstr "Sprache wechseln"
 
 #: templates/renamewebbase.pattern.tmpl:67
-#, fuzzy
 msgid "Change links in topics that refer to !%1 in any Web:"
-msgstr "Verweise in Topics ändern, die auf %1 zeigen (alle Webs)"
+msgstr "Verweise in Topics ändern, die auf !%1 zeigen (alle Webs)"
 
 #: templates/renamewebbase.pattern.tmpl:65
-#, fuzzy
 msgid "Change links in topics that refer to !%1 in the %2 Web:"
-msgstr "Verweise in Topics ändern, die auf %1 zeigen (nur im %2 Web)"
+msgstr "Verweise in Topics ändern, die auf !%1 zeigen (nur im %2 Web)"
 
 #: templates/renamebase.pattern.tmpl:59
 msgid "Change links in topics that refer to %1 in any Web:"
@@ -1180,7 +1178,7 @@ msgstr "Hilfe"
 
 #: templates/attachtables.pattern.tmpl:20
 msgid "Hide attachments"
-msgstr ""
+msgstr "Anhänge verbergen"
 
 #: templates/attach.pattern.tmpl:49
 msgid "Hide existing attachments"
@@ -1765,7 +1763,7 @@ msgstr ""
 
 #: data/TWiki/RenameWeb.txt:1
 msgid "Rename, move or delete this web:"
-msgstr ""
+msgstr "Dieses Web umbenennen, verschieben oder löschen:"
 
 #: templates/rename.pattern.tmpl:31 templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
@@ -1778,7 +1776,7 @@ msgstr "Topic umbenennen/verschieben..."
 
 #: data/TWiki/RenameWeb.txt:2
 msgid "Rename/move/delete web..."
-msgstr ""
+msgstr "Web umbenennen/verschieben/löschen..."
 
 #: templates/form.tmpl:1
 msgid "Replace form..."
@@ -1806,11 +1804,11 @@ msgstr "Revision:"
 
 #: templates/preview.pattern.tmpl:35
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr ""
+msgstr "S = Speichern, Q = Stilles Speichern, K = Zwischenspeichern, D = Verwerfen"
 
 #: templates/edit.pattern.tmpl:56
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
-msgstr ""
+msgstr "S = Speichern, Q = Stilles Speichern, K = Zwischenspeichern, C = Abbrechen"
 
 #: templates/registernotifyadmin.tmpl:16
 msgid "Saved to:"
@@ -1828,7 +1826,7 @@ msgstr "Suchen"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Search %1 We&b only"
-msgstr "Nur %1 Web durchsuchen"
+msgstr "Nur %1 We&b durchsuchen"
 
 #: templates/backlinksweb.pattern.tmpl:10
 msgid "Search a&ll webs"
@@ -1841,9 +1839,8 @@ msgid "Search all webs for topics that link to here"
 msgstr "Alle Webs nach Topics durchsuchen, die hierher verweisen"
 
 #: data/TWiki/WebTopicViewTemplate.txt:8
-#, fuzzy
 msgid "Search for similar topics in all public webs"
-msgstr "Nach ähnlichen Topics in allen öffentlichen Webs [[%1][suchen]]"
+msgstr "Nach ähnlichen Topics in allen öffentlichen Webs suchen"
 
 #: data/TWiki/WebSearchAdvanced.txt:64
 msgid "Search string"
@@ -1918,7 +1915,7 @@ msgstr "Neues Ober-Topic zuordnen"
 
 #: templates/attachtables.pattern.tmpl:20
 msgid "Show attachments"
-msgstr ""
+msgstr "Anhänge anzeigen"
 
 #: templates/attach.pattern.tmpl:49
 msgid "Show existing attachments"
@@ -2021,7 +2018,7 @@ msgstr "Übertragender Inhalt:"
 
 #: templates/renamewebbase.pattern.tmpl:46
 msgid "Subwebs must be enabled."
-msgstr "Subwebs müssen aktiviert sein."
+msgstr "Unter-Webs müssen aktiviert sein."
 
 #: data/TWiki/WebSearchAdvanced.txt:65
 msgid "Summaries"
@@ -2384,7 +2381,7 @@ msgstr "Topic-Speichern-Fehler"
 #: templates/attachtables.pattern.tmpl:10
 #: templates/attachtables.pattern.tmpl:19
 msgid "Topic attachments"
-msgstr ""
+msgstr "Topic Anhänge"
 
 #: templates/oopsattention.tmpl:261
 msgid "Topic can not be upgraded from old style category table"
@@ -2422,9 +2419,8 @@ msgid "Topics per web"
 msgstr "Topics per Web"
 
 #: templates/renamewebbase.pattern.tmpl:55
-#, fuzzy
 msgid "Topics which are currently being edited by other users in the !%1 Web:"
-msgstr "Topics im %1 Web, die gerade von anderen Benutzern editiert werden:"
+msgstr "Topics im !%1 Web, die gerade von anderen Benutzern editiert werden:"
 
 #: templates/renamewebbase.pattern.tmpl:58
 msgid ""
@@ -2475,9 +2471,8 @@ msgid "Update file %1"
 msgstr "Datei %1 aktualisieren"
 
 #: templates/attachagain.pattern.tmpl:14
-#, fuzzy
 msgid "Update image or document on %1"
-msgstr "Bild oder Dokument an %TOPIC% aktualisieren"
+msgstr "Bild oder Dokument von %1 aktualisieren"
 
 #: templates/attachagain.pattern.tmpl:60 templates/attachnew.pattern.tmpl:23
 msgid "Upload file"
@@ -2575,7 +2570,7 @@ msgstr "WARNUNG:"
 
 #: templates/view.pattern.tmpl:37
 msgid "WYSIWYG"
-msgstr ""
+msgstr "WYSIWYG"
 
 #: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
@@ -2589,7 +2584,7 @@ msgstr "Warnung: Konnte Topic %1 nicht finden"
 
 #: templates/view.pattern.tmpl:98
 msgid "We&b"
-msgstr "&Web"
+msgstr "We&b"
 
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
@@ -2933,8 +2928,4 @@ msgstr "value='Speichern' accesskey='s'"
 msgid "view"
 msgstr "Ansehen"
 
-#~ msgid "&Compose"
-#~ msgstr "&Bearbeiten"
 
-#~ msgid "Save Changes"
-#~ msgstr "Änderungen speichern"
