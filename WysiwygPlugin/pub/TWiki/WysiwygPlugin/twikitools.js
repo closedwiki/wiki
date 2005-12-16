@@ -401,8 +401,9 @@ function TWikiInsertAttachmentTool() {
       if (sel) {
         sel.replaceWithNode(elem);
       } else {
-        sel.insertNodeAtSelection(elem);
+        sel.insertNodeAtSelection(elem, 1);
       }
+      this.editor.updateState();
     } catch(exception) {
       alert(e);
     }
@@ -792,3 +793,12 @@ function TWikiTableTool() {
 }
 
 TWikiTableTool.prototype = new TableTool;
+
+/* Invoked when a file has been uploaded, as the IFRAME finishes
+ * loading. Should be possible to make this smarter - e.g. by
+ * inspecting the result status. */
+function uploadComplete() {
+  if (drawertool && drawertool.current_drawer)
+    // close the dialog
+    drawertool.current_drawer.save();
+}
