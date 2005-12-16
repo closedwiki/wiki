@@ -481,7 +481,7 @@ pub/TWiki/WysiwygPlugin/_kupu/zope3/browser/configure.zcml 0440 Kupu 1.3.2
 pub/TWiki/WysiwygPlugin/_kupu/zope3/configure.zcml 0440 Kupu 1.3.2
 pub/TWiki/WysiwygPlugin/_kupu/zope3/field.py 0440 Kupu 1.3.2
 pub/TWiki/WysiwygPlugin/_kupu/zope3/interfaces.py 0440 Kupu 1.3.2
-pub/TWiki/WysiwygPlugin/kupu/tests/test_kupubasetools.js 0440 Kupu 1.3.2
-pub/TWiki/WysiwygPlugin/kupu/tests/test_kupueditor.js 0440 Kupu 1.3.2
-pub/TWiki/WysiwygPlugin/kupu/tests/test_kupuhelpers.js 0440 Kupu 1.3.2
-pub/TWiki/WysiwygPlugin/kupu/tests/test_kupuinit.js 0440 Kupu 1.3.2
+pub/TWiki/WysiwygPlugin/_kupu/tests/test_kupubasetools.js 0440 Kupu 1.3.2
+pub/TWiki/WysiwygPlugin/_kupu/tests/test_kupueditor.js 0440 Kupu 1.3.2
+pub/TWiki/WysiwygPlugin/_kupu/tests/test_kupuhelpers.js 0440 Kupu 1.3.2
+pub/TWiki/WysiwygPlugin/_kupu/tests/test_kupuinit.js 0440 Kupu 1.3.2
