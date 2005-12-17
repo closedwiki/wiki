@@ -802,3 +802,38 @@ function uploadComplete() {
     // close the dialog
     drawertool.current_drawer.save();
 }
+
+function PreSaveFilter() {
+  this.initialize = function(editor) {
+    this.editor = editor;
+  };
+
+  this.filter = function(ownerdoc, htmlnode) {
+    return this._filterHelper(ownerdoc, htmlnode);
+  };
+
+  this._filterHelper = function(ownerdoc, node) {
+    if (node.nodeType == 3) {
+      return node;
+    } else if (node.nodeType == 4) {
+      return node;
+    }
+    if (node.tagName.toLowerCase() == 'span') {
+      /*
+      var mess = "";
+      for (var i=0; i < node.attributes.length; i++) {
+        var attr = node.attributes[i];
+        mess = mess+" "+attr.nodeName+"="+attr.nodeValue;
+      };
+      alert("Sniffing SPAN "+mess);
+      if (!node.attributes.length) throw(0);
+      */
+    }
+    for (var i=0; i < node.childNodes.length; i++) {
+      var child = node.childNodes[i];
+      this._filterHelper(ownerdoc, child);
+    }
+    return node;
+  };
+};
+

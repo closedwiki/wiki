@@ -298,10 +298,7 @@ function initKupu(iframe) {
        drawertool.registerDrawer('newAttDrawer', newAttDrawer);
     */
 
-    /* Note: the XHTML filter is disabled, so that any non-XHTML
-     * tags imported from the source are passed back out of the
-     * editor. The expectationis that the post-processing will
-     * deal with any unrecognised tags. */
+    kupu.registerFilter(new PreSaveFilter());
 
     return kupu;
 };
