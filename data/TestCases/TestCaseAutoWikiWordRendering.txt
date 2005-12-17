@@ -2,7 +2,7 @@
 
 Description: Test case for checking the correct rendering of 'classic' wikiwords and underscore wikiwords, with variations for italic and code text, and square-bracket links.
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Arthur Clemens, Lynnwood Brown
 
@@ -21,7 +21,7 @@ WebHome
 </verbatim>
 
 <!-- expected expand 1 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebHome">WebHome</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/%WEB%/WebHome">WebHome</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -36,7 +36,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 2 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebHome">WebHome</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/%WEB%/WebHome">WebHome</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -51,7 +51,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 3 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/WebHome">TWiki.WebHome</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TWiki/WebHome">TWiki.WebHome</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -66,7 +66,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 4 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/WebHome">home</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TWiki/WebHome">home</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -141,7 +141,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 9 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/Underscore_topic">Underscore_topic</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/Underscore_topic">Underscore_topic</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -156,7 +156,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 10 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/Underscore_topic">TestCases.Underscore_topic</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/Underscore_topic">TestCases.Underscore_topic</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -171,7 +171,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 11 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/Underscore_topic">topic</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/Underscore_topic">topic</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -261,7 +261,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 17 -->
-<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/H_">H_</a>
+<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/H_">H_</a>
 <!-- /expected -->
 
 <!-- actual -->
@@ -341,7 +341,7 @@ _text with [[H_]] link_
 </verbatim>
 
 <!-- expected expand 22 -->
-<em>text with <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/H_">H_</a> link</em>
+<em>text with <a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/H_">H_</a> link</em>
 <!-- /expected -->
 
 <!-- actual -->
@@ -432,20 +432,20 @@ H_
 
 
 <!-- expected expand 28 -->
-<a target="_top" href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=http://skyloom.com/frame/frameoptions.html">Click here</a>
+<a target="_top" href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%;url2=http://skyloom.com/frame/frameoptions.html">Click here</a>
 <!-- /expected -->
 
 Actual:
 <!-- actual -->
-[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=http://skyloom.com/frame/frameoptions.html][Click here]]
+[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%;url2=http://skyloom.com/frame/frameoptions.html][Click here]]
 <!-- /actual -->
 
 Expected:
 <!-- expected expand 29 -->
-<a href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion#DisCuss" target="_top">Discuss this topic</a>
+<a href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%;url2=%SCRIPTURL{"view"}%/Sandbox/%BASETOPIC%Discussion#DisCuss" target="_top">Discuss this topic</a>
 <!-- /expected -->
 
 Actual:
 <!-- actual -->
-[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion#DisCuss][Discuss this topic]]
+[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%;url2=%SCRIPTURL{"view"}%/Sandbox/%BASETOPIC%Discussion#DisCuss][Discuss this topic]]
 <!-- /actual -->
