@@ -194,14 +194,14 @@ sub preRenderingHandler {
     $oph = 0;
 }
 
-$TWikiCompatibility{outsidePREHandler} = 1.1;
+#$TWikiCompatibility{outsidePREHandler} = 1.1;
 sub outsidePREHandler {
     # Replace the text "%outsidePREHandler%" with some
     # recognisable text.
     $_[0] =~ s/%outsidePreHandler(\d+)%/$oph++;"$1OPH${oph}_line1\n$1OPH${oph}_line2\n$1OPH${oph}_line3\n"/ge;
 }
 
-$TWikiCompatibility{insidePREHandler} = 1.1;
+#$TWikiCompatibility{insidePREHandler} = 1.1;
 sub insidePREHandler {
     # Replace the text "%insidePREHandler%" with some
     # recognisable text.
