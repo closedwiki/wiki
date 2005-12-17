@@ -367,9 +367,12 @@ msgstr ""
 "aktuelle, arbejder du i stedet på _den_ i stedet for."
 
 #: templates/attachagain.pattern.tmpl:49
+#, fuzzy
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
-"changed without uploading a file by pressing \"Change Properties\"; see %1."
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 msgstr ""
 "*Attributter:* Kommentaren og synligheden (om den vedhæftede fil er skjult) "
 "kan opdateres uden at uploade en ny fil, ved at klikke \"Opdatér kun "

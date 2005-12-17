@@ -359,11 +359,15 @@ msgstr ""
 #: templates/attachagain.pattern.tmpl:49
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
-"changed without uploading a file by pressing \"Change Properties\"; see %1."
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 msgstr ""
 "*Propriedades:* o comentário e a visibilidade (i.e. se o anexo será oculto) "
 "podem ser alterados sem a necessidade de anexar o arquivo novamente. Para "
-"essas mudanças clique em \"Apenas Alterar Propriedades\"; veja %1. "
+"essas mudanças clique em \"Apenas Alterar Propriedades\"; veja "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>Anexos Ocultos</a>."
 
 #: templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"

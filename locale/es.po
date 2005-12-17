@@ -353,9 +353,12 @@ msgstr ""
 "archivo que sera actualizado ó anexado."
 
 #: templates/attachagain.pattern.tmpl:49
+#, fuzzy
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
-"changed without uploading a file by pressing \"Change Properties\"; see %1."
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 msgstr ""
 "*Propiedades:* El comentario y visibilidad (sera la unión oculto) prodra ser "
 "cambiado sin enviar el archivo, haciendo click en \"Cambiar las Propiedades"
