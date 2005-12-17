@@ -58,21 +58,24 @@ sub init {
         push( @relations, new  TWiki::Plugins::FormQueryPlugin::Relation( $relation ));
     }
 
+    my $tables;
     foreach my $table ( split( /\s*,\s*/, $tablenames )) {
-        if ( !(TWiki::Func::topicExists( $web, $table ))) {
+        my( $tableweb,$tablename ) =
+          TWiki::Func::normalizeWebTopicName($web, $table);
+        if ( !(TWiki::Func::topicExists( $tableweb, $tablename ))) {
             TWiki::Func::writeWarning( "No such table template topic '$table'" );
         } else {
-            my $text = TWiki::Func::readTopicText( $web, $table );
+            my $text = TWiki::Func::readTopicText( $tableweb, $tablename );
             my $ttype = new  TWiki::Plugins::FormQueryPlugin::TableDef( $text );
             if ( defined( $ttype )) {
-                $this->{_tables}{$table} = $ttype;
+                $this->{_tables}{$tablename} = $ttype;
+                push(@tables, $tablename);
             } else {
                 TWiki::Func::writeWarning( "Error in table template topic '$table'" );
             }
         }
     }
-    $this->{_tableRE} = $tablenames;
-    $this->{_tableRE} =~ s/\s*,\s*/\|/go;
+    $this->{_tableRE} = join('|', @tables);
 	
     if ( defined( $hmap )) {
         if ( !(TWiki::Func::topicExists( $web, $hmap ))) {
@@ -93,8 +96,9 @@ sub readTopicLine {
 
 	my $text = $line;
 
-	while ( $line =~ s/%EDITTABLE{\s*include=\"($re)\"\s*}%//o ) {
-        my $tablename = $1;
+	while ( $line =~ s/%EDITTABLE{\s*include=\"(.*?)\"\s*}%//o ) {
+        my( $tableweb, $tablename ) =
+             TWiki::Func::normalizeWebTopicName($this->{_web},$1);
         my $ttype = $this->{_tables}{$tablename};
         if ( defined( $ttype )) {
             # TimSlidel: collapse multiple instances
