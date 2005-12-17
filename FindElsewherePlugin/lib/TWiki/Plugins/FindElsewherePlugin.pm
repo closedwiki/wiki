@@ -40,6 +40,9 @@
 #		- fixed problems with WikiWordAsWebName.WikiWord
 # 12-Aug-2005 - Crawford Currie
 #       - improved conformance to standards, incremented version #
+# 15-Dec-2005 - SteffenPoulsen
+#       - improved handling of the special case [[Main.ABBR][Some desc with a found ABBRTWO]]
+#       - is now ignored correctly, instead of breaking the link
 
 package TWiki::Plugins::FindElsewherePlugin;
 
@@ -117,7 +120,7 @@ sub _handle {
 
     # Match WikiWordAsWebName.WikiWord, WikiWords, [[wiki words]] and
     # WIK IWO RDS
-    $_[0] =~ s/(^|[\s\(])($wnre\.$wwre|$wwre|\[\[[$manre\s]+\]\]|$abbre)/$1._findTopicElsewhere($2)/geo;
+    $_[0] =~ s/(^|[\s\(])(\[\[$wnre\.($wwre|$abbre)\]\[[$manre\s]+\]\]|\[\[[$manre\s]+\]\[[$manre\s]+\]\]|$wnre\.$wwre|$wwre|\[\[[$manre\s]+\]\]|$abbre)/$1._findTopicElsewhere($2)/geo;
 }
 
 sub _makeTopicLink {
@@ -130,6 +133,11 @@ sub _findTopicElsewhere {
 
     # If we got ourselves a WikiWordAsWebName.WikiWord, we're done - return untouched info
     if ($link =~ /$wnre\.$wwre/o) {
+        return $link;
+    }
+
+    # If we got ourselves an explicit [[SOMETHING][SOMETHING]] link, let's leave it untouched
+    if ($link =~ /\[\[[$manre\s]+\]\[[$manre\s]+\]\]/o) {
         return $link;
     }
 
@@ -187,11 +195,11 @@ sub _findTopicElsewhere {
         $original =~ s/([\s\(])($wwre)/$1<nop>$2/go;
         if( scalar(@topicLinks) > 1 ) {
             return "<nop>$original<sup>(".
-              join( ',', map { "[[$_[0].$_[1]][$_[0]]]" }
+              join( ',', map { "[[$_->[0].$_->[1]][$_->[0]]]" }
                       @topicLinks ).")</sup>" ;
         } else {
             my $l = $topicLinks[0];
-            return "[[$l->[0].$l->[1]][$l->[0].$l->[1]]]";
+            return "[[$l->[0].$l->[1]][$l->[1]]]";
         }
     } else {
         print STDERR "OK $link (",join(',',@webList),"\n";
