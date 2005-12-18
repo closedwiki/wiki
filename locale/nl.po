@@ -300,6 +300,10 @@ msgstr ""
 msgid "(single character last name)"
 msgstr ""
 
+#: lib/TWiki/UI/Manage.pm:859
+msgid "(skipped)"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:44
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
@@ -353,8 +357,8 @@ msgstr ""
 
 #: templates/renamewebbase.pattern.tmpl:77
 msgid ""
-"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
-"%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</a>"
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:23 templates/oopsmore.tmpl:23
@@ -699,8 +703,8 @@ msgstr ""
 #: templates/oopsattention.tmpl:326
 msgid ""
 "Check your configuration setting for {TemplateDir}. If that's not the "
-"problem, it may be because you have a setting of =%PARAM2%= that is pointing "
-"to a template that doesn't exist."
+"problem, it may be because you have a setting of %1 that is pointing to a "
+"template that doesn't exist."
 msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
@@ -1084,8 +1088,8 @@ msgstr ""
 #: templates/renamebase.pattern.tmpl:67
 msgid ""
 "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
-"TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
-"moving topics</a>."
+"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
+"topics</a>."
 msgstr ""
 
 #: templates/settings.pattern.tmpl:48
@@ -1233,7 +1237,7 @@ msgid "Incorrect %1"
 msgstr ""
 
 #: templates/oopsattention.tmpl:205
-msgid "Incorrect %TWIKIWEB%.WikiNames:"
+msgid "Incorrect %1.WikiNames:"
 msgstr ""
 
 #: templates/oopsattention.tmpl:92
@@ -1265,10 +1269,9 @@ msgstr ""
 #: templates/rename.pattern.tmpl:22
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
-"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 
 #: templates/renameweb.pattern.tmpl:22
@@ -1559,8 +1562,8 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:83
 msgid ""
-"Please go back in your browser and chose a topic name that is a %TWIKIWEB%."
-"WikiWord or check the allow non-Wiki Word box"
+"Please go back in your browser and chose a topic name that is a %1.WikiWord "
+"or check the allow non-Wiki Word box"
 msgstr ""
 
 #: templates/oopsattention.tmpl:104 templates/oopsattention.tmpl:108
@@ -2170,8 +2173,8 @@ msgstr ""
 
 #: data/TWiki/WebTopicCreator.txt:27
 msgid ""
-"To create a new topic, enter a %TWIKIWEB%.WikiWord for the topic name, "
-"select a topic parent and click 'create.'"
+"To create a new topic, enter a %1.WikiWord for the topic name, select a "
+"topic parent and click 'create.'"
 msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:19
@@ -2297,8 +2300,9 @@ msgid "Update"
 msgstr "Update"
 
 #: templates/attachagain.pattern.tmpl:9
-msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
-msgstr ""
+#, fuzzy
+msgid "Update attachment %1 on %2"
+msgstr "Voeg afbeelding of document to aan %1"
 
 #: templates/attachagain.pattern.tmpl:19
 msgid "Update file %1"

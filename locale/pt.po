@@ -296,6 +296,10 @@ msgstr "(primeiro nome com um caractere só)"
 msgid "(single character last name)"
 msgstr "(último nome com um caractere só)"
 
+#: lib/TWiki/UI/Manage.pm:859
+msgid "(skipped)"
+msgstr "(ignorado)"
+
 #: templates/attach.pattern.tmpl:44
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
@@ -365,9 +369,9 @@ msgid ""
 msgstr ""
 "*Propriedades:* o comentário e a visibilidade (i.e. se o anexo será oculto) "
 "podem ser alterados sem a necessidade de anexar o arquivo novamente. Para "
-"essas mudanças clique em \"Apenas Alterar Propriedades\"; veja "
-"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
-"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>Anexos Ocultos</a>."
+"essas mudanças clique em \"Apenas Alterar Propriedades\"; veja <a target="
+"\"HiddenAttachment\" onclick=\"return launchWindow('%1','HiddenAttachment')"
+"\" href=\"%2\" rel='nofollow'>Anexos Ocultos</a>."
 
 #: templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
@@ -375,11 +379,11 @@ msgstr "<a href='%1' rel='nofollow'>Editar preferências</a> para este tópico"
 
 #: templates/renamewebbase.pattern.tmpl:77
 msgid ""
-"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
-"%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</a>"
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
 msgstr ""
-"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
-"%','ManagingWebs')\" href='%1' rel='nofollow'>Obtenha ajuda em como "
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Obtenha ajuda em como "
 "gerenciar webs</a>"
 
 #: templates/oopsmore.pattern.tmpl:23 templates/oopsmore.tmpl:23
@@ -742,11 +746,11 @@ msgstr "Mudanças entre r%1 e r%2"
 #: templates/oopsattention.tmpl:326
 msgid ""
 "Check your configuration setting for {TemplateDir}. If that's not the "
-"problem, it may be because you have a setting of =%PARAM2%= that is pointing "
-"to a template that doesn't exist."
+"problem, it may be because you have a setting of %1 that is pointing to a "
+"template that doesn't exist."
 msgstr ""
 "Confira seu item de configuração {TemplateDir}. Se esse não for o problema, "
-"pode ser que você tenha uma configuração =%PARAM2%= que esteja apontando "
+"pode ser que você tenha uma configuração %1 que esteja apontando "
 "para um modelo (template) que não existe."
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
@@ -1147,12 +1151,12 @@ msgstr "Faltando definição do formulário"
 #: templates/renamebase.pattern.tmpl:67
 msgid ""
 "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
-"TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
-"moving topics</a>."
+"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
+"topics</a>."
 msgstr ""
 "Obtenha ajuda de como <a target='ManagingTopics' onclick=\"return "
-"launchWindow('%TWIKIWEB%','ManagingTopics')\" href=\"%1\" "
-"rel='nofollow'>Renomear e mover tópicos</a>."
+"launchWindow('%1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renomear e "
+"mover tópicos</a>."
 
 #: templates/settings.pattern.tmpl:48
 msgid ""
@@ -1314,8 +1318,8 @@ msgid "Incorrect %1"
 msgstr "%1 incorreto(a)"
 
 #: templates/oopsattention.tmpl:205
-msgid "Incorrect %TWIKIWEB%.WikiNames:"
-msgstr "[[%TWIKIWEB%.WikiNames][NomesWiki]] incorretos:"
+msgid "Incorrect %1.WikiNames:"
+msgstr "[[%1.WikiNames][NomesWiki]] incorretos:"
 
 #: templates/oopsattention.tmpl:92
 msgid "Incorrect Password"
@@ -1351,13 +1355,12 @@ msgstr ""
 #: templates/rename.pattern.tmpl:22
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
-"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "Normalmente é melhor escolher uma <a target='WikiWord' onclick=\"return "
-"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' "
+"launchWindow('%1','WikiWord')\" href='%2' "
 "rel='nofollow'>PalavraWiki</a> para o novo nome do tópico, senão os links "
 "automáticos podem não funcionar. Caracteres não permitidos em nomes de "
 "tópicos, como espaços, serão removidos automaticamente."
@@ -1654,11 +1657,11 @@ msgstr "Por favor, volte no seu navegador e verifique de novo."
 
 #: templates/oopsattention.tmpl:83
 msgid ""
-"Please go back in your browser and chose a topic name that is a %TWIKIWEB%."
-"WikiWord or check the allow non-Wiki Word box"
+"Please go back in your browser and chose a topic name that is a %1.WikiWord "
+"or check the allow non-Wiki Word box"
 msgstr ""
 "Por favor, volte no seu navegador e escolha um nome de tópico que seja uma "
-"[[%TWIKIWEB%.WikiWord][PalavraWiki]] ou marque a opção de permitir nomes que "
+"[[%1.WikiWord][PalavraWiki]] ou marque a opção de permitir nomes que "
 "não sejam uma !PalavraWiki."
 
 #: templates/oopsattention.tmpl:104 templates/oopsattention.tmpl:108
@@ -2336,10 +2339,10 @@ msgstr ""
 
 #: data/TWiki/WebTopicCreator.txt:27
 msgid ""
-"To create a new topic, enter a %TWIKIWEB%.WikiWord for the topic name, "
-"select a topic parent and click 'create.'"
+"To create a new topic, enter a %1.WikiWord for the topic name, select a "
+"topic parent and click 'create.'"
 msgstr ""
-"Para criar um novo tópico, entre uma [[%TWIKIWEB%.WikiWord][PalavraWiki]] "
+"Para criar um novo tópico, entre uma [[%1.WikiWord][PalavraWiki]] "
 "para o nome do tópico, escolha um tópico pai e clique em 'criar'."
 
 #: templates/moveattachment.pattern.tmpl:19
@@ -2473,8 +2476,8 @@ msgid "Update"
 msgstr "Atualizar"
 
 #: templates/attachagain.pattern.tmpl:9
-msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
-msgstr "Atualizar o anexo *%FILENAME%* em *%TOPIC%*"
+msgid "Update attachment %1 on %2"
+msgstr "Atualizar o anexo %1 em %2"
 
 #: templates/attachagain.pattern.tmpl:19
 msgid "Update file %1"

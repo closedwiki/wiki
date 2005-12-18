@@ -80,7 +80,7 @@
 
 %TMPL:DEF{"rename_not_wikiword"}%
 ---+++ %MAKETEXT{"New topic name [_1] is not a [_2]" args="\"<nop>%PARAM1%\",%TWIKIWEB%.WikiWord"}%
-%MAKETEXT{"Please go back in your browser and chose a topic name that is a %TWIKIWEB%.WikiWord or check the allow non-Wiki Word box"}%
+%MAKETEXT{"Please go back in your browser and chose a topic name that is a [_1].WikiWord or check the allow non-Wiki Word box" args="%TWIKIWEB%"}%
 %TMPL:END%
 %TMPL:DEF{"rename_err"}%
 %MAKETEXT{"During rename of topic [_1] to [_2] an error ([_3]) was found. Please notify your [_4] administrator."  args="<nop>%WEB%.<nop>%TOPIC%,<nop>%PARAM2%,%PARAM1%,%WIKITOOLNAME%"}%
@@ -202,7 +202,7 @@
 ---+++ %MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.WikiName"}%
 %MAKETEXT{"The [_1] field must be your first and lastname in [_2], e.g. your capitalized first and lastname with spaces removed." args="%TWIKIWEB%.WikiName,%TWIKIWEB%.WikiNotation"}%
 
-| *%MAKETEXT{"Good examples:"}%* | *%MAKETEXT{"Incorrect %TWIKIWEB%.WikiNames:"}%* |
+| *%MAKETEXT{"Good examples:"}%* | *%MAKETEXT{"Incorrect [_1].WikiNames:" args="%TWIKIWEB%"}%* |
 | =JohnSmith= | =John M. Smith= |
 | =RjMiller= | =RJ Miller= |
 | =RickO= | =Rick O= %MAKETEXT{"(single character last name)"}% |
@@ -323,7 +323,7 @@ Your filename matched one of the following regular expressions, so it was reject
 %TMPL:DEF{no_such_template}%
 %MAKETEXT{"Could not find template"}% =%PARAM1%=
 
-%MAKETEXT{"Check your configuration setting for {TemplateDir}. If that's not the problem, it may be because you have a setting of =%PARAM2%= that is pointing to a template that doesn't exist."}%
+%MAKETEXT{"Check your configuration setting for {TemplateDir}. If that's not the problem, it may be because you have a setting of [_1] that is pointing to a template that doesn't exist." args="=%PARAM2%="}%
 
 %MAKETEXT{"[_1] is currently set to [_2]" args="=%PARAM2%=,<code><nop>%%PARAM2%%</code>"}% 
 

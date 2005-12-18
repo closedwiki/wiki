@@ -306,6 +306,10 @@ msgstr "(første bogstav i fornavn)"
 msgid "(single character last name)"
 msgstr "(første bogstav i efternavn)"
 
+#: lib/TWiki/UI/Manage.pm:859
+msgid "(skipped)"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:44
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
@@ -383,9 +387,10 @@ msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "Opdatér <a href='%1' rel='nofollow'>side-præferencer</a>"
 
 #: templates/renamewebbase.pattern.tmpl:77
+#, fuzzy
 msgid ""
-"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
-"%','ManagingWebs')\" href='%1' rel='nofollow'>Get help on managing webs</a>"
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
 msgstr ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
 "%','ManagingWebs')\" href='%1' rel='nofollow'>Hjælp til administration af "
@@ -745,10 +750,11 @@ msgid "Changes from r%1 to r%2"
 msgstr "Ændringer fra r%1 til r%2"
 
 #: templates/oopsattention.tmpl:326
+#, fuzzy
 msgid ""
 "Check your configuration setting for {TemplateDir}. If that's not the "
-"problem, it may be because you have a setting of =%PARAM2%= that is pointing "
-"to a template that doesn't exist."
+"problem, it may be because you have a setting of %1 that is pointing to a "
+"template that doesn't exist."
 msgstr ""
 "Check dine indstillinger for {TemplateDir}. Hvis dette ikke er årsagen til "
 "problemet, kan det være fordi du har en indstilling af parameteren =%PARAM2%"
@@ -1152,10 +1158,11 @@ msgid "Form definition missing"
 msgstr "Formular-definition mangler"
 
 #: templates/renamebase.pattern.tmpl:67
+#, fuzzy
 msgid ""
 "Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
-"TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
-"moving topics</a>."
+"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
+"topics</a>."
 msgstr ""
 "Hjælp til <a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB"
 "%','ManagingTopics')\" href=\"%1\" rel='nofollow'>omdøbning og flytning af "
@@ -1320,7 +1327,8 @@ msgid "Incorrect %1"
 msgstr "Forkert %1"
 
 #: templates/oopsattention.tmpl:205
-msgid "Incorrect %TWIKIWEB%.WikiNames:"
+#, fuzzy
+msgid "Incorrect %1.WikiNames:"
 msgstr "Forkert %TWIKIWEB%.WikiNames:"
 
 #: templates/oopsattention.tmpl:92
@@ -1355,12 +1363,12 @@ msgstr ""
 "du i disse, anbefales det at synkronisere først."
 
 #: templates/rename.pattern.tmpl:22
+#, fuzzy
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
-"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
-"a> for the new topic name, otherwise automatic linking may not work. "
-"Characters not allowed in topic names, such as spaces will automatically be "
-"removed."
+"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "Det anbefales at vælge et <a target='WikiWord' onclick=\"return launchWindow"
 "('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> som "
@@ -1658,9 +1666,10 @@ msgid "Please go back in your browser and check again."
 msgstr "Benyt venligst tilbage-knappen i browseren og forsøg igen."
 
 #: templates/oopsattention.tmpl:83
+#, fuzzy
 msgid ""
-"Please go back in your browser and chose a topic name that is a %TWIKIWEB%."
-"WikiWord or check the allow non-Wiki Word box"
+"Please go back in your browser and chose a topic name that is a %1.WikiWord "
+"or check the allow non-Wiki Word box"
 msgstr ""
 "Benyt venligst tilbage-knapppen i din browser, og vælg et sidenavn der er et "
 "%TWIKIWEB%.WikiWord eller afkryds non-<nop>WikiWord i afkrydsningsfeltet"
@@ -2332,9 +2341,10 @@ msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "For at *gemme* ændringerne: Klik på [Gem opdateringer] knappen."
 
 #: data/TWiki/WebTopicCreator.txt:27
+#, fuzzy
 msgid ""
-"To create a new topic, enter a %TWIKIWEB%.WikiWord for the topic name, "
-"select a topic parent and click 'create.'"
+"To create a new topic, enter a %1.WikiWord for the topic name, select a "
+"topic parent and click 'create.'"
 msgstr ""
 "For at oprette en ny side, indtast et %TWIKIWEB%.WikiWord til sidens navn, "
 "vælg en side-forælder og klik 'Opret'."
@@ -2470,7 +2480,8 @@ msgid "Update"
 msgstr "Opdatér"
 
 #: templates/attachagain.pattern.tmpl:9
-msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
+#, fuzzy
+msgid "Update attachment %1 on %2"
 msgstr "Opdatér den vedhæftede fil *%FILENAME%* på *%TOPIC%*"
 
 #: templates/attachagain.pattern.tmpl:19

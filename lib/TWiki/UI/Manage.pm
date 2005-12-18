@@ -856,7 +856,7 @@ sub _newTopicScreen {
     my @keys;
     my $search = '';
     if( $currentWebOnly ) {
-        $search = '(skipped)';
+        $search = $session->{i18n}->maketext('(skipped)');
     } else {
         $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 1 );
         @keys = sort keys %$refs;

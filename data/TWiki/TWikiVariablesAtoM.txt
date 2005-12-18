@@ -270,7 +270,7 @@ __Note:__ This topic is included by TWikiVariables
         %BR% expands to %BR%
         <em> %MAKETEXT{"Did you want to [[[_1]][reset [_2]'s password]]?" args="TWiki.ResetPassword,%WIKIUSERNAME%"}% </em>
    * __Notes:__
-      * that TWiki will translate the =string= to the current user's language _only_
+      * TWiki will translate the =string= to the current user's language _only_
         if it has such string in its translation table for that language.
       * Amperstands (<code>&amp;</code>) followed by one letter (one of a...z, A...Z)
         (say, =X=) in the translatable string will be translated to 
@@ -281,6 +281,10 @@ __Note:__ This topic is included by TWikiVariables
         be transformed in just one.
       * translatable string starting with underscores (<code>_</code>) are reserved. You
         should not use translatable phrases starting with an underscore.
+      * Make sure that the translatable string is _constant_. Specially, do *not*
+        include <code>%<nop/>VARIABLES%</code> inside the translatable strings
+        (since they will get expanded *before* the <code>%<nop/>MAKETEXT{...}%</code>
+        itself is handled).
         
 
 #VarMAINWEB
