@@ -1,12 +1,12 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"titleaction"}%%_{"(oops)"}% %TMPL:END%
-%TMPL:DEF{"webaction"}% *%_{"Attention"}%* %TMPL:END%
-%TMPL:DEF{"heading"}%%_{"Topic save error"}%%TMPL:END%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(oops)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Topic save error"}%%TMPL:END%
 %TMPL:DEF{"message"}%
-%_{"During save of file [_1] an error was found by the version control system. Please notify your [_2] administrator.", "<nop>%WEB%.<nop>%TOPIC%", "<nop>%WIKITOOLNAME%"}%
+%MAKETEXT{"During save of file [_1] an error was found by the version control system. Please notify your [_2] administrator.", "<nop>%WEB%.<nop>%TOPIC%", "<nop>%WIKITOOLNAME%"}%
 
 =%PARAM1%=
 
-%_{"Go back in your browser and save your changes locally."}% %TMPL:END%
-%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][%_{"OK"}%]] %TMPL:END%
+%MAKETEXT{"Go back in your browser and save your changes locally."}% %TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]] %TMPL:END%
 %TMPL:P{"oops"}%
