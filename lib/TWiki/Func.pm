@@ -1780,6 +1780,72 @@ sub writeDebug {
 
 ---++ Functions: System and I18N related
 
+=cut
+
+=pod=
+
+---+++ registerRESTHandler( $alias, \&fn, )
+Should only be called from initPlugin.
+
+Adds a function to the dispatch table of the REST interface 
+   * =$alias= - The name .
+   * =\&fn= - Reference to the function.
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+The handler function must be of the form:
+<verbatim>
+sub handler(\%session)
+</verbatim>
+where:
+   * =\%session= - a reference to the TWiki session object (may be ignored)
+
+From the REST interface, the name of the plugin must be used
+as the subject of the invokation.
+
+Example
+-------
+
+The EmptyPlugin has the following call in the initPlugin handler:
+<verbatim>
+   TWiki::Func::registerRESTHandler('example', \&restExample);
+</verbatim>
+
+This adds the =restExample= function to the REST dispatch table 
+for the EmptyPlugin under the 'example' alias, and allows it 
+to be invoked using the URL
+
+=http://server:port/bin/rest/EmptyPlugin/example=
+
+note that the URL
+
+=http://server:port/bin/rest/EmptyPlugin/restExample=
+
+(ie, with the name of the function instead of the alias) will not work.
+ 
+=cut
+
+sub registerRESTHandler {
+    my( $alias, $function) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    my $plugin = caller;
+    $plugin =~ s/.*:://; # strip off TWiki::Plugins:: prefix
+
+    # Use an anonymous function so it gets inlined at compile time.
+    # Make sure we don't mangle the session reference.
+    TWiki::registerRESTHandler( $plugin,
+                                $alias,
+                               sub {
+                                   my $record = $TWiki::Plugins::SESSION;
+                                   $TWiki::Plugins::SESSION = $_[0];
+                                   my $result = &$function( @_ );
+                                   $TWiki::Plugins::SESSION = $record;
+                                   return $result;
+                               }
+                             );
+}
+
+=pod
 ---+++ getRegularExpression( $name ) -> $expr
 
 Retrieves a TWiki predefined regular expression or character class.

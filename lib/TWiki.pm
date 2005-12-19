@@ -64,6 +64,7 @@ use vars qw(
             %constantTags
             %functionTags
             %contextFreeSyntax
+            %restDispatch
             $VERSION $RELEASE
             $TRUE
             $FALSE
@@ -2298,6 +2299,51 @@ sub registerTagHandler {
     if( $syntax && $syntax eq 'context-free' ) {
         $contextFreeSyntax{$tag} = 1;
     }
+}
+
+=pod=
+
+---+++ registerRESTHandler( $subject, $verb, \&fn )
+Adds a function to the dispatch table of the REST interface 
+for a given subject. See TWikiScripts#rest for more info.
+
+   * =$subject= - The subject under which the function will be registered.
+   * =$verb= - The verb under which the function will be registered.
+   * =\&fn= - Reference to the function.
+
+The handler function must be of the form:
+<verbatim>
+sub handler(\%session,$subject,$verb) -> $text
+</verbatim>
+where:
+   * =\%session= - a reference to the TWiki session object (may be ignored)
+   * =$subject= - The invoked subject (may be ignored)
+   * =$verb= - The invoked verb (may be ignored)
+
+*Since:* TWiki::Plugins::VERSION 1.1
+=cut=
+
+sub registerRESTHandler {
+   my ( $subject, $verb, $fnref) = @_;
+   $restDispatch{$subject}{$verb} = \&$fnref;
+}
+
+=pod=
+
+---+++ restDispatch( $subject, $verb) => \&fn
+Returns the handler  function associated to the given $subject and $werb,
+or undef if none is found.
+
+*Since:* TWiki::Plugins::VERSION 1.1
+=cut=
+sub restDispatch {
+   my ( $subject, $verb) = @_;
+   my $s=$restDispatch{$subject};
+   if (defined($s)) {
+       return $restDispatch{$subject}{$verb};
+   } else {
+       return undef;
+   }
 }
 
 =pod

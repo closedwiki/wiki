@@ -15,6 +15,7 @@ bin/rdiff 0550
 bin/register 0550
 bin/rename 0550
 bin/resetpasswd 0550
+bin/rest 0550
 bin/save 0550
 bin/search 0550
 bin/setlib.cfg 0550

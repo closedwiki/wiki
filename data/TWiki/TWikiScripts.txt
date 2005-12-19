@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 7555 $"}%
 ---+ TWiki CGI Scripts
 TWiki uses a set of scripts in the =bin= directory. This topic describes the interfaces to some of those scripts.
 
@@ -132,6 +133,37 @@ Used for viewing attachments. Normally, a site will publish the attachments (=pu
 
 ---++ =preview=
 This script is _deprecated_. Its functions are covered by the =save= script.
+
+
+---++ =rest=
+This script can be invoked via http in a similar way as the view script (see *Invocation Examples*, bellow) to execute a function that it's associated to a "subject" and a "verb" (see bellow). It'll print the result directly to the stream unless the =endPoint= parameter is specified, in which case the control is redirected to the given topic.
+
+The =rest= script itself uses one parameter:
+
+| =endPoint= | Where to redirect the response once the request is served, in the form "Web.Topic" |
+
+Any additional parameters are passed directly to the function (i.e: The function can get any other parameter using the CGI $query object)
+
+---+++ Invocation Examples:
+
+The =rest= script assumes that it will be called with URL in the form:
+
+=http://my.host/bin/rest/&lt;subject&gt;/&lt;verb&gt;=
+
+where &lt;subject&gt; must be the WikiWord name of the Plugin, and the &lt;verb&gt; is the alias for the function registered using the registerRESTHandler. The &lt;subject&gt; and &lt;verb&gt; are then used to lookup and call the registered function.
+
+Functions outside the plugins also can be registered, but please consider the security implications of allowing URL access, as functions can sidestep TWiki Authentication & Authorisation settings.
+
+=&lt;subject&gt;= and =&lt;verb&gt;= are checked for illegal characters exactly in the same way as the web and topic names.
+
+As an example, the EmptyPlugin has registered a function to be used with the =rest= script under the subject *EmptyPlugin* and the verb *example*. Click below to see the =rest= script in action (run as Main.TWikiGuest).
+
+[[%SCRIPTURL%/rest%SCRIPTSUFFIX%/EmptyPlugin/example?debugenableplugin=EmptyPlugin][Call the Plugin]]
+
+You can also call the function from the command line, but this will be run as the Main.TWikiAdminGroup (as it is assumed that shell access is secure) - eg: <verbatim>./rest EmptyPlugin.example</verbatim>
+
+Note that for calls to plugins, they must be enabled in =configure=.
+
 
 ---++ =configure=
 =configure= is the browser script used for inspection and configuration of the TWiki configuration. None of the parameters to this script are useable for any purpose except =configure=.

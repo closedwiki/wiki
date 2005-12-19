@@ -7,7 +7,7 @@ Description: _Verify that the ==rest== script is working properly_
 
 Click the link below. If the script is working, a page with the text "This is an example of a REST invocation" should appear.
 
-[[%SCRIPTURL%/rest%SCRIPTSUFFIX%/EmptyPlugin/restExample?debugenableplugin=EmptyPlugin][Call the Plugin]]
+[[%SCRIPTURL%/rest%SCRIPTSUFFIX%/EmptyPlugin/example?debugenableplugin=EmptyPlugin][Call the Plugin]]
 
 
 

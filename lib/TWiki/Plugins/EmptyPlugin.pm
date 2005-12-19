@@ -125,6 +125,10 @@ sub initPlugin {
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
     TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
 
+    # Allow a sub to be called from the REST interface 
+    # using the provided alias
+    TWiki::Func::registerRESTHandler('example', \&restExample);
+
     # Plugin correctly initialized
     return 1;
 }
@@ -617,7 +621,8 @@ For more information, check TWiki:TWiki.TWikiScripts#rest
 =cut
 
 sub restExample {
-   return "This is an example of a REST invocation";
+   #my ($session) = @_;
+   return "This is an example of a REST invocation\n\n";
 }
 
 1;

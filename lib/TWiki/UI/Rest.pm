@@ -45,68 +45,47 @@ use TWiki::Time;
 
 ---++ StaticMethod gateway( $session, $pluginName, $,methodName, $scriptUrl, $query )
 =rest= command handler.
-This method is designed to be invoked via the =TWiki::UI::run= method, 
-and will invoke a method in a plugin. 
-
-It'll print the result directly to the stream unless the =endPoint= parameter is specified 
-(via que $query object), in which case the control is redirected to the given topic.
-
-
-Additional parameters can be queries using the $query object.
-
----+++ Invocation Examples:
-
-=http://my.host/bin/rest/EmptyPlugin/testRest=
-
-Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and print the result directly to the stream.
-
-=http://my.host/bin/rest/EmptyPlugin/testRest?endPoint=SomeWeb.SomeTopic=
-
-Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and redirect the control to <nop>SomeWeb.SomeTopic
-
+This method is designed to be invoked via the =TWiki::UI::run= method. 
+It'll lookup in the dispatch table for a function associated with
+the given subject and verb, and execute it if one is found.
+ 
 =cut
 sub gateway {
-   my $session = shift;
-   $session->enterContext( 'rest' );
-
-   my $query = $session->{cgiQuery};
-   my $web = $session->{webName};
-   my $topic = $session->{topicName};
-
+    my $session = shift;
+    $session->enterContext( 'rest' );
+    
+    my $query = $session->{cgiQuery};
+    my $web = $session->{webName};
+    my $topic = $session->{topicName};
+    
     my $endPoint = $query->param( 'endPoint' );
-    
-	
-    my $method = $topic;
-    my $plugin = $web;
 
-	 
-    if (TWiki::isValidWikiWord($plugin)) {
-      my $class = TWiki::Sandbox::untaintUnchecked('TWiki::Plugins::'.$plugin);
-   
-      my $m = TWiki::Sandbox::untaintUnchecked($class.'::'.$method);
-      eval "use $class";
-      if( $@ ) {
-         die "$class compile failed: $@";
-      }
+    my $verb= $topic;
+    my $subject = $web;
     
-		if (defined(&$m)) {
-			no strict 'refs';
-			local $TWiki::Plugins::SESSION=$session;
-			my $result='';
-			$result=&$m($session);
-			use strict 'refs';
-			if (defined($endPoint)) {
-				$session->redirect($session->getScriptUrl( '', $endPoint, 'view' ));
-			}
-         $session->writeCompletePage( $result );
-		} else {
-			$session->writeCompletePage( 'Unknown Command'.$plugin.'::'.$method);
-		}
-   } else {
-      $session->writeCompletePage( 'Invalid Command'.$plugin.'::'.$method);
-   }
-
-   $session->leaveContext( 'rest' );
+    $session->writeLog( 'rest', $web.'.'.$topic );
+    
+    if (TWiki::isValidWikiWord($subject)) {
+        my $function=TWiki::restDispatch($subject,$verb);
+        if (defined($function)) {
+            no strict 'refs';
+            local $TWiki::Plugins::SESSION=$session;
+            my $result='';
+            $result=&$function($session,$subject,$verb);
+            use strict 'refs';
+            if (defined($endPoint)) {
+                $session->redirect($session->getScriptUrl( '', $endPoint, 'view' ));
+            } else {
+                $session->writeCompletePage( $result );
+            }
+        } else {
+            $session->writeCompletePage( 'Unknown Action '.$subject.'/'.$verb);
+        }
+    } else {
+        $session->writeCompletePage( 'Invalid Command '.$subject);
+    }
+    
+    $session->leaveContext( 'rest' );
 }
 
 1;
