@@ -1,4 +1,7 @@
 /* thin variant for base */
+.natLayoutTable {
+  width:60em;
+}
 .natPageBox {
   width:60em;
   margin-right:auto;

@@ -4,9 +4,11 @@
 .natTopBar {
   border-bottom:0px;
 }
+.natWebButtons {
+  padding-left:2em;
+  padding-right:1em;
+}
 .natWebButtonsContents {
-  margin-left:1em;
-  margin-right:1em;
   padding:5px 0px 0px 2px;
   font-size:x-small;
   font-family:arial,sans-serif;
