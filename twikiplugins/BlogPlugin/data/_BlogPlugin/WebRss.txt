@@ -1,19 +1,17 @@
 %META:TOPICINFO{author="TWikiContributor" date="1130253048" format="1.1" version="1.1"}%
 %STARTINCLUDE%<noautolink>
-%ALIAS{name="!--" value="!--"}%
-%ALIAS{name="--" value="&#38;mdash;"}%
-%ALIAS{name="(c)" value="&#38;copy;"}%
-%ALIAS{name="(r)" value="&#38;reg;"}%
-%ALIAS{name="(tm)" value="&#38;trade;"}%
-%ALIAS{name="..." value="&#38;hellip;"}%
-%ALIAS{name=",," value="&#38;bdquo;"}%
-%ALIAS{name="1/2" value="&#38;frac12;"}%
-%ALIAS{name="1/4" value="&#38;frac14;"}%
-%ALIAS{name="3/4" value="&#38;frac34;"}%
-%ALIAS{name="``" value="&#38;ldquo;"}%
-%ALIAS{name="''" value="&#38;rdquo;"}%
-%ALIAS{name="`" value="&#38;lsquo;"}%
-%ALIAS{name="'" value="&#38;rsquo;"}%
+%ALIAS{name="''" regex="$start''$stop" value="&amp;rdquo;"}%
+%ALIAS{name="``" regex="$start``$stop" value="&amp;ldquo;"}%
+%ALIAS{name="-" regex=" - " value=" &amp;ndash; "}%
+%ALIAS{name="--" regex=" -- " value=" &amp;mdash; "}%
+%ALIAS{name="(c)" regex="$start\(c\)$stop" value="&amp;copy;"}%
+%ALIAS{name="(r)" regex="$start\(r\)$stop" value="&amp;reg;"}%
+%ALIAS{name="(tm)" regex="$start\(tm\)$stop" value="&amp;trade;"}%
+%ALIAS{name="..." regex="$start\.\.\.$stop" value="&amp;hellip;"}%
+%ALIAS{name=",," regex="$start,,$stop" value="&amp;bdquo;"}%
+%ALIAS{name="1/2" regex="$start1/2$stop" value="&amp;frac12;"}%
+%ALIAS{name="1/4" regex="$start1/4$stop" value="&amp;frac14;"}%
+%ALIAS{name="3/4" regex="$start3/4$stop" value="&amp;frac34;"}%
 %STARTALIASAREA%
 <channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss">
   <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>

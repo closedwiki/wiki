@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130169940" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134585400" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
 %NOP{
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
@@ -10,7 +10,7 @@
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set SIDEBAR = Aggregation
    * Set WHITEBOARD = off
-   * Set PAGETITLE = %FORMFIELD{"Name"}%
+   * Set PAGETITLE = %FORMFIELD{"Name"}% - Aggregation
 -->
 
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131574304" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134052888" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="FrontPage"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -24,5 +24,5 @@
 
 
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, FrontPage"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
 %META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="BlogLink Aggregation"}%

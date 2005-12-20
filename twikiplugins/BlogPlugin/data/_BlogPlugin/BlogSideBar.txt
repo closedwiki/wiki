@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132702997" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134064810" format="1.1" version="1.1"}%
 ---+ Default sidebar
 <div class="alt">
 <verbatim>
@@ -23,6 +23,10 @@
 %DBCALL{"RenderBlogRoll" CAT=".*"}%
 <!-- %<nop>DBCALL{"RenderVisitors"}% -->
 %DBCALL{"RenderAdminTools" warn="off"}%
+%IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
+---+ Technorati
+<script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
+%FIDEFINED%
 %ENDSECTION{"Default"}%
 %STOPINCLUDE%
 </verbatim>
@@ -107,7 +111,8 @@
 <p/>
 </div>
 %FISKINSTATE%
-%DBCALL{"RenderArchives"}%
+%DBCALL{"RenderArchives" CAT="%URLPARAM{"cat"}%"}%
+%DBCALL{"RenderCategories"}%
 %DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Archive"}%
 </verbatim>
@@ -131,8 +136,9 @@
 %DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
 %DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
-%DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
+%DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Category"}%
 </verbatim>
