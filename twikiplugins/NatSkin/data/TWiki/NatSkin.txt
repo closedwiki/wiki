@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132762015" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1135108475" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! The Natural Skin
 NatSkin is a skin driven by cascading stylesheets. This is a rework of the 
@@ -143,7 +143,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 05 Dec 2005
+-- TWiki:Main/MichaelDaum - 20 Dec 2005
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
