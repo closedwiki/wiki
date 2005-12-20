@@ -20,6 +20,11 @@
    * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm
    * WebTopicEditTemplate
 
+<!--
+   * #Set TECHNORATICODE = 
+-->
+
+
    * Set #DENYWEBVIEW = 
    * Set #ALLOWWEBVIEW = 
    * Set #DENYWEBCHANGE = %MAINWEB%.TWikiGuest
