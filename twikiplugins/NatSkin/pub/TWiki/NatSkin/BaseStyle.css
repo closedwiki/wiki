@@ -457,6 +457,7 @@ h1, h2, h3, h4, h5, h6 {
 /* twiki forms */
 .natTopicForm {
   overflow:auto;
+  padding:1px; /* konqueror fix */
 }
 .natTopicForm .twikiFirstCol,
 .natTopicFormFirstCol {

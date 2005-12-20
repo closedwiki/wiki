@@ -61,7 +61,7 @@ The default style is hardcoded into the NatSkinPlugin.
 </style>
 
 |  Description: | Driven by cascading stylesheets, Comes with 9 alternative styles, <nop>MoveableType Look-n-Feel |
-|  Screenshot: | <div class="screenshotter"><a href="%ATTACHURL%/Clean.jpeg"><img src="%ATTACHURL%/Clean.jpeg" title="Clean"/></a></div> |
+|  Screenshot: | <div class="screenshotter" style="height:130px;overflow:hidden"><a href="%ATTACHURL%/Clean.jpeg"><img src="%ATTACHURL%/Clean.jpeg" title="Clean"/></a></div> |
 |  More Screenshots: | \
 <div class="screenshotter"><a href="%ATTACHURL%/GeorgiaBlue.jpeg"><img src="%ATTACHURL%/GeorgiaBlue.jpeg" title="GeorgiaBlue"/></a></div>\
   <div class="screenshotter"><a href="%ATTACHURL%/Gettysburg.jpeg"><img src="%ATTACHURL%/Gettysburg.jpeg" title="Gettysburg" /></a></div>\
@@ -75,8 +75,9 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.92 (2005-12-05) |
+|  Skin Version: | v2.93 (2005-12-20) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-12-20: | fixed collapsing tables in firefox &lt; 1.5 |
 |  2005-12-05: | componentized template system adding javascript and styles components; \
 		 removed inline-styles and -javascript and moved it to the respective components \
 		 being inserted into the html header properly now; \

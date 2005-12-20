@@ -236,8 +236,11 @@ label {
   background-color:#F8F4F1;
   background-color:#f8f8f8;
 }
-.natTopLeftContents, .natTopRightContents {
+.natTopRightContents {
   margin:2em 1em;
+}
+.natTopLeft {
+  padding:1em 2em;
 }
 .natTopRightContents {
   margin-top:2.8em;
@@ -621,7 +624,6 @@ html>body .twikiToc li a {
 
 /* tip of the day */
 .tipsOfTheDay {
-  margin:1.5em -1em;
   padding:0.25em 0 0.5em 1em;
   background-color:#DFEDFD;
   border-top:1px solid #ccc;
