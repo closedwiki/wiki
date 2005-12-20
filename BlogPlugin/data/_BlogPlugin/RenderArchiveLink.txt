@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130333048" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134378673" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -9,6 +9,8 @@ in the given timespan.
 ---++ Parameters
    * FROM: start of archive
    * TO: end of archive
+   * CAT: restrict to entries in this SubjectCategory
+   * TITLE: link text
 
 ---++ Implementation
 <verbatim>
@@ -17,18 +19,20 @@ in the given timespan.
 %~~ DBQUERY{
 ~~~   "TopicType=~'\bBlogEntry\b' AND
 ~~~    State='enabled' AND
+~~~    SubjectCategory=~'%IFDEFINED{"%CAT%" then="\b%CAT%\b" else=".*"}%' AND
 ~~~    createdate >= %CALC{"$TIME(%FROM%)"}% AND
 ~~~    createdate < %CALC{"$TIME(%TO%)"}%
 ~~~   "
 ~~~    separator="none" limit="1" hidenull="on"
-~~~    format="$percntCALC{\"$IF($count>0,
+~~~    format="$percntCALC{\"$IF($count>0,$SET(foundArchive,1)
 ~~~      <li>
 ~~~       <a href=\\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/BlogArchive?
 *~~        title=%ENCODE{"%TITLE%"}%;
+*~~        %IFDEFINED{"%CAT%" then="cat=%ENCODE{"%CAT%"}%;"}%
 *~~        from=%CALC{"$TIME(%FROM%)"}%;
 *~~        to=%CALC{"$TIME(%TO%)"}%;
 *~~       \\">%TITLE%</a>
-*~~       <span class=\"blogEntryCount\">$count</span>
+~~~       <span class=\"blogEntryCount\">$count</span>
 *~~      </li>
 *~~    )\"}$percnt$n*~~"
 ~~~ }%
@@ -40,7 +44,8 @@ in the given timespan.
 ---++ Test
 <div class="alt">
 <ul>
-%DBCALL{"%TOPIC%" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005"}%
+%DBCALL{"%TOPIC%" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005"}%
+%DBCALL{"%TOPIC%" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005" CAT="BlogsWorld"}%
 </ul>
 </div>
 

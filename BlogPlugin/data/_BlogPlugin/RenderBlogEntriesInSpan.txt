@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131399571" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134063319" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -6,6 +6,7 @@
 ---++ Parameters
    * FROM: starting timepoint in epoch seconds
    * TO: ending timepoint in epoch seconds
+   * CAT: only show entries in this SubjectCategory
    * TITLE: optional title
 
 ---++ Implementation
@@ -14,6 +15,7 @@
 %~~ DBQUERY{
 ~~~    "TopicType=~'\bBlogEntry\b' AND 
 ~~~     State='enabled' AND
+~~~     SubjectCategory=~'\b%CAT%\b' AND
 ~~~     createdate >= %FROM% AND
 ~~~     createdate < %TO%
 ~~~    "

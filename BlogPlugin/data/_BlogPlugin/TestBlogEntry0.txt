@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132679711" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134059532" format="1.1" version="1.1"}%
 %DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%  
 %DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%  
 %DBCALL{"RenderAddComment"}%    

@@ -10,33 +10,32 @@ see also: TWiki.WebAliases, TWiki.AliasPlugin
 Note, that you have to add urlencoded versions of your aliases to the WebRss
 if they use special characters.
 
-%ALIAS{name="!--" value="!--"}%
-%ALIAS{name="--" value="&mdash;"}%
-%ALIAS{name="(c)" value="&copy;"}%
-%ALIAS{name="(r)" value="&reg;"}%
-%ALIAS{name="(tm)" value="&trade;"}%
-%ALIAS{name="..." value="&hellip;"}%
-%ALIAS{name=",," value="&bdquo;"}%
-%ALIAS{name="1/2" value="&frac12;"}%
-%ALIAS{name="1/4" value="&frac14;"}%
-%ALIAS{name="3/4" value="&frac34;"}%
-%ALIAS{name="``" value="&ldquo;"}%
-%ALIAS{name="''" value="&rdquo;"}%
-%ALIAS{name="`" value="&lsquo;"}%
-%ALIAS{name="'" value="&rsquo;"}%
+%ALIAS{name="''" regex="$start''$stop" value="&rdquo;"}%
+%ALIAS{name="``" regex="$start``$stop" value="&ldquo;"}%
+%ALIAS{name="-" regex=" - " value=" &ndash; "}%
+%ALIAS{name="--" regex=" -- " value=" &mdash; "}%
+%ALIAS{name="(c)" regex="$start\(c\)$stop" value="&copy;"}%
+%ALIAS{name="(r)" regex="$start\(r\)$stop" value="&reg;"}%
+%ALIAS{name="(tm)" regex="$start\(tm\)$stop" value="&trade;"}%
+%ALIAS{name="..." regex="$start\.\.\.$stop" value="&hellip;"}%
+%ALIAS{name=",," regex="$start,,$stop" value="&bdquo;"}%
+%ALIAS{name="1/2" regex="$start1/2$stop" value="&frac12;"}%
+%ALIAS{name="1/4" regex="$start1/4$stop" value="&frac14;"}%
+%ALIAS{name="3/4" regex="$start3/4$stop" value="&frac34;"}%
 
-   * NatSkinPlugin: TWiki.NatSkinPlugin
-   * NatSkin: TWiki.NatSkin
-   * DBCacheContrib: TWiki.DBCacheContrib
-   * BlogPlugin: TWiki.BlogPlugin
-   * TimeSincePlugin: TWiki.TimeSincePlugin
-   * JojoWiki: [[http://jojowiki.dyndns.org][JojoWiki]]
-   * WordPress: [[http://wordpress.org][WordPress]]
-   * MovableType: [[http://www.sixapart.com/movabletype][MovableType]]
-   * MovableStyle: [[http://www.movablestyle.com][MovableStyle]]
-   * BinaryBonsai: [[http://binarybonsai.com][BinaryBonsai]]
-   * Kwiki: [[http://www.kwiki.com][Kwiki]]
+%ALIAS{name="NatSkinPlugin" value="TWiki.NatSkinPlugin"}%
+%ALIAS{name="NatSkin" value="TWiki.NatSkin"}%
+%ALIAS{name="DBCacheContrib" value="TWiki.DBCacheContrib"}%
+%ALIAS{name="BlogPlugin" value="TWiki.BlogPlugin"}%
+%ALIAS{name="TimeSincePlugin" value="TWiki.TimeSincePlugin"}%
+%ALIAS{name="JojoWiki" value="[[http://jojowiki.dyndns.org][JojoWiki]]"}%
+%ALIAS{name="WordPress" value="[[http://wordpress.org][WordPress]]"}%
+%ALIAS{name="MovableType" value="[[http://www.sixapart.com/movabletype][MovableType]]"}%
+%ALIAS{name="MovableStyle" value="[[http://www.movablestyle.com][MovableStyle]]"}%
+%ALIAS{name="BinaryBonsai" value="[[http://binarybonsai.com][BinaryBonsai]]"}%
+%ALIAS{name="Kwiki" value="[[http://www.kwiki.com][Kwiki]]"}%
 -->
+
 %ALIASES%
 </noautolink>
 %STARTALIASAREA%
