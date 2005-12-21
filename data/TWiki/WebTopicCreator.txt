@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="WebHome"}%
 <form name="new" action="%SCRIPTURL{"edit"}%/%INTURLENCODE{"%BASEWEB%"}%/">
 <!-- TODO: do we still need INTURLENCODE nastyness? -->
----+ %MAKETEXT{"Create New Topic in <nop>%BASEWEB% Web"}%
+---+ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
 <table><tr><td>
 %MAKETEXT{"Topic name:"}%
 </td><td>
@@ -24,6 +24,6 @@
 <input type="hidden" name="onlynewtopic" value="on" />
 </form>
 
-%MAKETEXT{"To create a new topic, enter a %TWIKIWEB%.WikiWord for the topic name, select a topic parent and click 'create.'"}%
+%MAKETEXT{"To create a new topic, enter a [_1].WikiWord for the topic name, select a topic parent and click 'create.'" args="%TWIKIWEB%"}%
 
 %MAKETEXT{"Once you created the topic, consider adding links in related topics to the new topic so that people can find it."}%

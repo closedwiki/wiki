@@ -1750,6 +1750,16 @@ msgstr ""
 msgid "See %1 for information about Form Definitions."
 msgstr ""
 
+#: data/TWiki/WebChanges.txt:4
+msgid ""
+"See <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</a>, <a "
+"href='%4'>800</a> most recent changes"
+msgstr ""
+
+#: data/TWiki/WebChanges.txt:5
+msgid "See <a href='%1'>all</a> changes"
+msgstr ""
+
 #: data/Sandbox/WebIndex.txt:6 data/TWiki/WebIndex.txt:4
 #: data/Trash/WebIndex.txt:5 data/_default/WebIndex.txt:5
 msgid "See also the faster %1"

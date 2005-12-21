@@ -39,7 +39,7 @@ msgstr "%*(%1,segundo) "
 
 #: templates/registernotify.tmpl:3 templates/registernotifyadmin.tmpl:3
 msgid "%1 - Registration for %2 (%3)"
-msgstr "%2 - Registro de %2 (%3)"
+msgstr "%1 - Registro de %2 (%3)"
 
 #: templates/login.pattern.tmpl:9
 msgid "%1 User Authentication"
@@ -383,8 +383,7 @@ msgid ""
 "\" href='%2' rel='nofollow'>Get help on managing webs</a>"
 msgstr ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
-"\" href='%2' rel='nofollow'>Obtenha ajuda em como "
-"gerenciar webs</a>"
+"\" href='%2' rel='nofollow'>Obtenha ajuda em como gerenciar webs</a>"
 
 #: templates/oopsmore.pattern.tmpl:23 templates/oopsmore.tmpl:23
 msgid "<em>in %1 web</em> only"
@@ -750,8 +749,8 @@ msgid ""
 "template that doesn't exist."
 msgstr ""
 "Confira seu item de configuração {TemplateDir}. Se esse não for o problema, "
-"pode ser que você tenha uma configuração %1 que esteja apontando "
-"para um modelo (template) que não existe."
+"pode ser que você tenha uma configuração %1 que esteja apontando para um "
+"modelo (template) que não existe."
 
 #: templates/oopsmore.pattern.tmpl:25 templates/oopsmore.tmpl:25
 msgid "Child topics in %1 web"
@@ -1360,10 +1359,10 @@ msgid ""
 "allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
 "Normalmente é melhor escolher uma <a target='WikiWord' onclick=\"return "
-"launchWindow('%1','WikiWord')\" href='%2' "
-"rel='nofollow'>PalavraWiki</a> para o novo nome do tópico, senão os links "
-"automáticos podem não funcionar. Caracteres não permitidos em nomes de "
-"tópicos, como espaços, serão removidos automaticamente."
+"launchWindow('%1','WikiWord')\" href='%2' rel='nofollow'>PalavraWiki</a> "
+"para o novo nome do tópico, senão os links automáticos podem não funcionar. "
+"Caracteres não permitidos em nomes de tópicos, como espaços, serão removidos "
+"automaticamente."
 
 #: templates/renameweb.pattern.tmpl:22
 msgid ""
@@ -1661,8 +1660,8 @@ msgid ""
 "or check the allow non-Wiki Word box"
 msgstr ""
 "Por favor, volte no seu navegador e escolha um nome de tópico que seja uma "
-"[[%1.WikiWord][PalavraWiki]] ou marque a opção de permitir nomes que "
-"não sejam uma !PalavraWiki."
+"[[%1.WikiWord][PalavraWiki]] ou marque a opção de permitir nomes que não "
+"sejam uma !PalavraWiki."
 
 #: templates/oopsattention.tmpl:104 templates/oopsattention.tmpl:108
 #: templates/oopsattention.tmpl:112 templates/oopsattention.tmpl:122
@@ -1891,6 +1890,18 @@ msgstr ""
 #: templates/oopsattention.tmpl:249
 msgid "See %1 for information about Form Definitions."
 msgstr "Veja %1 para informações sobre definições de formulário."
+
+#: data/TWiki/WebChanges.txt:4
+msgid ""
+"See <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</a>, <a "
+"href='%4'>800</a> most recent changes"
+msgstr ""
+"Veja as <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</a>, <a "
+"href='%4'>800</a> alterações mais recentes"
+
+#: data/TWiki/WebChanges.txt:5
+msgid "See <a href='%1'>all</a> changes"
+msgstr "Veja <a href='%1'>todas</a> as alterações"
 
 #: data/Sandbox/WebIndex.txt:6 data/TWiki/WebIndex.txt:4
 #: data/Trash/WebIndex.txt:5 data/_default/WebIndex.txt:5
@@ -2342,8 +2353,8 @@ msgid ""
 "To create a new topic, enter a %1.WikiWord for the topic name, select a "
 "topic parent and click 'create.'"
 msgstr ""
-"Para criar um novo tópico, entre uma [[%1.WikiWord][PalavraWiki]] "
-"para o nome do tópico, escolha um tópico pai e clique em 'criar'."
+"Para criar um novo tópico, entre uma [[%1.WikiWord][PalavraWiki]] para o "
+"nome do tópico, escolha um tópico pai e clique em 'criar'."
 
 #: templates/moveattachment.pattern.tmpl:19
 msgid "To delete an attachment move it to web %1, topic %2."
