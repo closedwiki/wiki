@@ -135,7 +135,7 @@ sub view {
     if( $raw ) {
         $indexableView = 0;
         $logEntry .= ' raw='.$raw;
-        if( $raw eq 'debug' ) {
+        if( $raw eq 'debug' || $raw eq 'text' ) {
             $text = $store->getDebugText( $meta, $text );
         }
     }
