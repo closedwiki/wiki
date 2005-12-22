@@ -576,11 +576,13 @@ TWikiWikiWordTool.prototype = new LinkTool;
  * have to be handled through the following onSubmit handler.
  */
 function TWikiHandleSubmit() {
-  var form = getFromSelector('twiki-main-form');
-  
   // don't know how else to get the kupu singleton
   var kupu = window.drawertool.editor;
 
+  FixBoldItalic(kupu);
+
+  var form = getFromSelector('twiki-main-form');
+  
   // use prepareForm to create the 'text' field
   kupu.prepareForm(form, 'text');
 };
@@ -803,37 +805,30 @@ function uploadComplete() {
     drawertool.current_drawer.save();
 }
 
-function PreSaveFilter() {
-  this.initialize = function(editor) {
-    this.editor = editor;
-  };
+// For some reason, the firefox implementation of Kupu filters
+// out style="font-weight: bold" and other attributes on save.
+// We convert them to b and i elements to avoid this effect.
+function FixBoldItalic(editor) {
+  var doc = editor.getInnerDocument();
+  _FixBoldItalic(doc, doc.documentElement);
+}
 
-  this.filter = function(ownerdoc, htmlnode) {
-    return this._filterHelper(ownerdoc, htmlnode);
-  };
-
-  this._filterHelper = function(ownerdoc, node) {
-    if (node.nodeType == 3) {
-      return node;
-    } else if (node.nodeType == 4) {
-      return node;
-    }
-    if (node.tagName.toLowerCase() == 'span') {
-      /*
-      var mess = "";
-      for (var i=0; i < node.attributes.length; i++) {
-        var attr = node.attributes[i];
-        mess = mess+" "+attr.nodeName+"="+attr.nodeValue;
-      };
-      alert("Sniffing SPAN "+mess);
-      if (!node.attributes.length) throw(0);
-      */
-    }
-    for (var i=0; i < node.childNodes.length; i++) {
-      var child = node.childNodes[i];
-      this._filterHelper(ownerdoc, child);
-    }
-    return node;
-  };
-};
-
+// Assume the font styles attributes will be stripped out by the
+// XHTML validation filter
+function _FixBoldItalic(doc, node) {
+  if (node.style && node.style.fontWeight == 'bold') {
+    var e = doc.createElement('b');
+    node.parentNode.replaceChild(e, node);
+    e.appendChild(node);
+    node.style.fontWeight = null;
+  }
+  if (node.style && node.style.fontStyle == 'italic') {
+    var e = doc.createElement('i');
+    node.parentNode.replaceChild(e, node);
+    e.appendChild(node);
+    node.style.fontStyle = null;
+  }
+  for (var i = 0; i < node.childNodes.length; i++) {
+    _FixBoldItalic(doc, node.childNodes[i]);
+  }
+}
