@@ -201,8 +201,8 @@ sub _findTopicElsewhere {
             my $l = $topicLinks[0];
             return "[[$l->[0].$l->[1]][$l->[1]]]";
         }
-    } else {
-        print STDERR "OK $link (",join(',',@webList),"\n";
+    #} else {
+    #    print STDERR "OK $link (",join(',',@webList),"\n";
     }
     # $link is not in any of these webs
     return $original;
