@@ -1673,7 +1673,7 @@ sub _TOC {
         } else {
             next;
         }
-        my $urlPath = $this->getScriptUrl($webPath, $topic, 'view');
+
         if( $line && $level <= $depth ) {
             # cut TOC exclude '---+ heading !! exclude this bit'
             $line =~ s/\s*$regex{headerPatternNoTOC}.+$//go;
@@ -1695,7 +1695,7 @@ sub _TOC {
         $line =~ s/<[\/]?a\b[^>]*>//gi;   
             # create linked bullet item, using a relative link to anchor
             $line = $tabs.'* '.
-              CGI::a( { href=>$urlPath.'#'.$anchor }, $line );
+              CGI::a( { href=>'#'.$anchor }, $line );
             $result .= "\n".$line;
         }
     }
