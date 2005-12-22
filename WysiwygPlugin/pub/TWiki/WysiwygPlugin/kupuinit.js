@@ -200,8 +200,10 @@ function initKupu(iframe) {
     function submitForm() {
       // can't use the TWikiHandleSubmit handler, because it doesn't
       // get called when submit() is used.
-      var form = document.getElementById('twiki-main-form');
+      // Fix bold & italic
+      FixBoldItalic(kupu);
       // use prepareForm to create the 'text' field
+      var form = document.getElementById('twiki-main-form');
       kupu.prepareForm(form, 'text');
       kupu.content_changed = 0; // choke the unload handler
       form.submit();
@@ -298,7 +300,7 @@ function initKupu(iframe) {
        drawertool.registerDrawer('newAttDrawer', newAttDrawer);
     */
 
-    kupu.registerFilter(new PreSaveFilter());
+    //kupu.registerFilter(new PreSaveFilter());
 
     return kupu;
 };

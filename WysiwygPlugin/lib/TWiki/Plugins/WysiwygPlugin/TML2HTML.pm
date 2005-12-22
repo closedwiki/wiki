@@ -134,7 +134,13 @@ sub _processTags {
                 my $nop = $1 || '';
                 my $tag = $2 . ( $3 || '' );
                 if( scalar( @stack ) == 1 && $this->{opts}->{markvars} ) {
-                    $tag = CGI::span({ class=>'TMLvariable' }, $tag );
+                    my $sz = length($tag);
+                    $sz = 80 if $sz > 80;
+                    $sz = 5 if $sz < 5;
+                    $tag = CGI::input({ type=>'text',
+                                        class=>'TMLvariable',
+                                        size => $sz,
+                                        value=>$tag } );
                 } else {
                     $tag = '%'.$tag.'%';
                 }
@@ -635,11 +641,14 @@ sub _emitTR {
             $attr->{style} = 'text-align: center';
         }
 
-        if( $cell =~ /^\s*\*(.*)\*\s*$/ ) {
-            push( @tr, { fn => \&CGI::th, attr => $attr, text => $1 });
-        } else {
+        # Removed TH to avoid problems with handling table headers. TWiki
+        # allows TH anywhere, but Kupu assumes top row only, mostly.
+        # See Item1185
+        #if( $cell =~ /^\s*\*(.*)\*\s*$/ ) {
+        #    push( @tr, { fn => \&CGI::th, attr => $attr, text => $1 });
+        #} else {
             push( @tr, { fn => \&CGI::td, attr => $attr, text => $cell });
-        }
+        #}
         $colspan = 1;
     }
 

@@ -652,6 +652,22 @@ sub _handleA {
     return (0, '');
 }
 
+sub _handleINPUT {
+    my( $this, $options ) = @_;
+    if( defined( $this->{attrs}->{class} ) &&
+          $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
+        my $text = $this->{attrs}->{value};
+        my $var = _trim($text);
+        my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
+        # don't create unnamed variables
+        $var = '%'.$nop.$var.'%' if( $var );
+        my $flags;
+        ( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+        return (0, $var.$text);
+    }
+    return (0, undef);
+}
+
 sub _handleSPAN {
     my( $this, $options ) = @_;
     if( defined( $this->{attrs}->{class} ) &&

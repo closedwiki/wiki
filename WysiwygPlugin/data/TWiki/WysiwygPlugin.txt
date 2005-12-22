@@ -67,7 +67,7 @@ Set it in a user topic to set it for one user. Set it in WebPreferences to set i
 Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
 	* Set HELPPAGE = TWiki/WysiwygPlugin
 If MARK_VARIABLES set to =on= then TWiki variables will be "marked" by the TML -> HTML translator by putting the variable name and any parameters into a span. This works well for simple variables, but can get in trouble with complex syntax or some plugins constructs. If it isn't set to =on= variables will be treated as plain text.
-	* Set MARK_VARIABLES =
+	* Set MARK_VARIABLES = on
 Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
 		* Set ICONS =
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt="" />
