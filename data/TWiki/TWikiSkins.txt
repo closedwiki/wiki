@@ -185,9 +185,9 @@ The basic skin is defined by setting the =%<nop>SKIN%= TWiki Variable:
 
    * =Set SKIN = catskin, bearskin=
 
-You can also add a parameter to the URL, such as =?skin=catskin, bearskin=. Example activation of PlainSkin that removes all page decoration:
+You can also add a parameter to the URL, such as =?skin=catskin, bearskin=. Example activation of PrintSkin that generates a printable page:
 
-   * %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=plain
+   * %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=print
 
 Setting =%<nop>SKIN%= (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
 
