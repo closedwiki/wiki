@@ -1462,7 +1462,7 @@ sub _fixIncludeLink {
     my( $theWeb, $theLink, $theLabel ) = @_;
 
     # [[...][...]] link
-    if( $theLink =~ /^($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}\:)/o ) {
+    if( $theLink =~ /^($regex{webNameRegex}\.|$regex{defaultWebNameRegex}\.|$regex{linkProtocolPattern}\:|\/)/o ) {
         if ( $theLabel ) {
             return "[[$theLink][$theLabel]]";
         } else {
