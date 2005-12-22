@@ -1073,8 +1073,8 @@ msgstr ""
 #: templates/settings.pattern.tmpl:48
 msgid ""
 "Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
-"TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Setting topic "
-"preferences</a>."
+"1','TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</"
+"a>."
 msgstr ""
 
 #: templates/oopsattention.tmpl:245

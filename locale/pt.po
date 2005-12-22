@@ -1159,12 +1159,12 @@ msgstr ""
 
 #: templates/settings.pattern.tmpl:48
 msgid ""
-"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
-"TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Setting topic "
-"preferences</a>."
+"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%1',"
+"'TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</"
+"a>."
 msgstr ""
 "Obtenha ajuda de como <a target='ManagingTopics' onclick=\"return "
-"launchWindow('%TWIKIWEB%','TWikiVariables')\" href=\"%1\" "
+"launchWindow('%1','TWikiVariables')\" href=\"%2\" "
 "rel='nofollow'>Configurar preferências do tópico</a>."
 
 #: templates/oopsattention.tmpl:245
