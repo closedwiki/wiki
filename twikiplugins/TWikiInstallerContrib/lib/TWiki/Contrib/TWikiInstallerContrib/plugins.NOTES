@@ -1,217 +1,356 @@
-#! /usr/bin/perl -w
-use strict;
-use XML::Simple;
-use Data::Dumper qw( Dumper );
+OK
+--------------------------------------------------------------------------------
+* ActionTrackerPlugin
+* AgentPlugin - works, but is a bit dated (doesn't have firefox); also missing opera and safari
+* AliasPlugin
+* AntiWikiSpamPlugin - sven's work-in-development
+* ApprovalPlugin - probably, but too hard to test...
+* BarcodePlugin - works but produces errors in error_log
+* BeautifierPlugin
+* BibliographyPlugin
+* BlackListPlugin - assume it works
+* BlogPlugin - seems to work---will test more later personally
+* BugzillaLinkPlugin
+* CalendarPlugin
+* ChartPlugin
+* ChecklistPlugin
+* ChildTopicTemplatePlugin - works as well as dakar, but doesn't handle "'s in topic name parameter or a web parameter, either (ie, a combined %WEB%.%TOPIC% (or even %WEB%/%TOPIC%) - style topic specifier) - ok, it doesn't get rendered correctly (that is, it %CHILDTOPICPARENT% *does* get rendered, but it seems to work...)
+* CommentPlugin
+* ContributorsPlugin - i think so, anyway; i think the topic's "history" has been stripped to TWikiContributor
+* CounterPlugin - arg, some *seriously* crap code
+* CpanContrib
+* DBCacheContrib
+* DBCachePlugin
+* DateFieldPlugin - (i'm assuming this works...)
+* DateTimePlugin
+* DirectedGraphPlugin
+* DirectedGraphWebMapPlugin
+* DoxygenPlugin
+* EFetchPlugin - (i think)
+* EditTablePlugin
+* EmbedFlashPlugin
+*! EmbedPDFPlugin - missing pdf.pdf, weird render of %>EMBEDPDF{ pdf }% (why the >?)
+* EmbedPlugin
+* EmbedQTPlugin
+* EmbedTopicPlugin
+*! ExifMetaDataPlugin - seems to be having a problem - errors in error_log -- also, picture.jpg is probably "corrupted" (bad CVS checkin?)
+* ExplicitNumberingPlugin
+* ExtendedSelectPlugin
+*! ExternalLinkPlugin - fails one internal test (links to non-existant topic)
+* FamilyTreePlugin
+* FilterPlugin
+* FindElsewherePlugin
+* FormFieldListPlugin -- (well, probably, anyway)
+* FormQueryPlugin - i assume...
+* GaugePlugin
+* GlobalReplacePlugin - it says it works, anyway :)
+* GluePlugin
+* GoogleSearchPlugin
+* GuidPlugin
+* HeadlinesPlugin
+* HiddenTextPlugin
+* HistoryPlugin - seems to work
+*! HolidaylistPlugin - example.gif corrupted 
+* ImageGalleryPlugin
+* IncludeIndexPlugin - works, but doesn't number correctly (has extra <p>)
+* InterwikiPlugin
+* IrcLogPlugin
+* JSCalendarContrib
+* LinkOptionsPlugin - works, but has strange interaction with (is being affected by) some other plugin
+* LocalCityTimePlugin - assuming it works (from PTh) as i don't have an internet connection atm :(
+* MacrosPlugin
+* MailerContrib
+* MrdidPlugin
+* MultiLangPlugin - probably works as well as it did with Cairo, but it's hard to tell
+* NatSkin
+* NatSkinPlugin
+* NavPlugin
+* NewTopicEventPlugin
+* OoPlugin - need _some_ "docs"
+* PageStatsPlugin
+* PatentLinkPlugin - seems to work
+* PatternSkin
+* PerlDocPlugin
+* PhotoarchivePlugin - seems to work, but why is the sample image in data/TWiki/ instead of pub/ ?
+* PreferencesPlugin
+* ProjectPlannerPlugin - i guess it works, don't include a useful sample, tho
+* PseudoXmlPlugin
+* QuickCalendarPlugin
+* RandomQuotePlugin
+* RandomTopicPlugin
+* RecursiveRenderPlugin - (i think it's used on develop.twiki.org)
+* RedDotPlugin
+* RenderListPlugin
+* RevCommentPlugin
+* RevRecoverPlugin - updated to take %SCRIPTSUFFIX% into account and to handle Dakar version numbers
+* SecurityPlugin
+* SingletonWikiWordPlugin
+* SlideShowPlugin
+*! SmiliesPlugin - missing files
+* SpacedWikiWordPlugin - (although it renders TWiki as "T Wiki")
+* SpreadSheetPlugin
+* StylePlugin - seems to work, made some fixes to topic text
+* SuggestLinksPlugin - it's a bit awkward, but it seems to work as well as it ever did (also gives dodgy InstalledPlugins info because of the way it enables itself)(so does NavPlugin)
+* SyntaxHighlightingPlugin
+* TablePlugin
+* TextSectionPlugin
+* TimeSincePlugin
+* TipsContrib
+* TocPlugin - i guess...
+* TodaysVisitorsPlugin - seems to work
+* ToolTipPlugin - missing ToolTipPhoto.gif, ToolTipBackground.jpg
+* TopicCreatePlugin - yes, but see email/patch (also, currently only works on UNIX)
+* TopicTranslationsPlugin - seems to work
+* TreePlugin
+* TwistyContrib
+* TwistyPlugin
+* UserInfoPlugin
+* VarCachePlugin
+* VotePlugin - but email MichaelDaum about: view.cgi: Argument "100%" isn't numeric in division (/) at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/VotePlugin.pm line 210.
+* WysiwygPlugin
 
-#require XML::Simple;
+108
 
-my @availPlugins = (
+
+Broken, but looking into fixes (or, still testing...)
+--------------------------------------------------------------------------------
+? BatchUploadPlugin - complained about my ZIP file (hm, so did AlbumOfSnapsPlugin...)
+?- CategoryPlugin - no plugin topic
+T EditContrib
+T ImmediateNotifyPlugin - verify docs with latest on twiki.org (or perhaps CVS)
+T- LocalTimePlugin - can't test without internet; update reference of bsdi.com/xdate; also, how does this compare to LocalCityTimePlugin?
+T MultiEditPlugin - requires EditContrib
+T NavbarPlugin - move samples from TWiki to Sandbox
+?- NetgrepPlugin - can't test without network
+T PerlSamplePlugin - need to clean up (and rename to PerlPlugin, or something like that)
+- PollPlugin - problems with TWiki::userToWikiName(), TWiki::editLockTime, TWiki::dataDir
+?- ProtocolTlaPlugin - Plugins: could not fully register ProtocolTlaPlugin, no plugin topic
+T- SablotronPlugin - need sablot installed...
+?- SlashFilenamePlugin - Plugins: could not fully register SlashFilenamePlugin, no plugin topic
+T ThreadedDiscussionPlugin - calling TWiki::Prefs directly
+?- WeatherPlugin - can't test without internet
+
+(15)
+
+
+Should test, but haven't got around to it
+--------------------------------------------------------------------------------
+? DistributionContrib
+? MailInContrib
+? TWikiShellContrib - pretty sure it works; it's in active development
+
+15(18) in limbo....
+
+
+Broken
+--------------------------------------------------------------------------------
+! AlbumOfSnapsPlugin - kinda works - view.cgi: Use of uninitialized value in concatenation (.) or string at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki.pm line 879.
+  End-of-central-directory signature not found.  Either this file is not
+  a zipfile, or it constitutes one disk of a multi-part archive.  In the
+  latter case the central directory and zipfile comment will be found on
+  the last disk(s) of this archive.
+unzip:  cannot find zipfile directory in one of testpics.zip or
+        testpics.zip.zip, and cannot find testpics.zip.ZIP, period.
+mv: cannot stat `testpics': No such file or directory
+./archive_files: line 5: syntax error near unexpected token `;'
+./archive_files: line 5: `;'
+! ControlsPlugin - TWiki::Form::getPossibleFieldValues() called
+! DiskUsagePlugin
+! EditInTablePlugin - after edit and save: Can't locate object method "_removeAutoAttachmentsFromMeta" via package "TWiki" at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Store.pm line 738.
+! EditTablerowPlugin - i couldn't get this to do anything when i clicked on the "Edit" button - File does not exist: /home/twiki/public_html/cgi-bin/twiki/pub/TWiki/EditTablerowPlugin, referer: http://localhost/~twiki/cgi-bin/twiki/bin/view.cgi/TWiki/EditTablerowPlugin
+! EmbedBibPlugin - Can't locate object method "findOne" via package "TWiki::Meta" at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/EmbedBibPlugin.pm line 146.
+! FileListPlugin - calls TWiki::formatTime and TWiki::Attach
+! FormFieldsPlugin - doesn't seem to do anything
+! GenerateSearchPlugin - calls TWiki::Form::getFormDef() directly
+! IncludeRevisionPlugin - doesn't render
+!& LatexModePlugin - viewing the page (after configuring program paths properly) yields: AccessControlException: Access to CHANGE TWiki.LatexModePlugin for TWikiGuest is denied. access not allowed on web[Sun Dec 11 17:27:09 2005] [error] [client 127.0.0.1] Premature end of script headers: view.cgi - need to move the sample to the Sandbox web
+! LoginNameAliasesPlugin - TWiki::Plugins::LoginNameAliasesPlugin::earlyInitPlugin failed: 1
+! MsOfficeAttachmentsAsHTMLPlugin - no docs, not sure what to do...
+! PhantomPlugin - no skin, probably other stuff...
+! PublishContrib - Can't locate object method "param" via package "TWikiGuest" (perhaps you forgot to load "TWikiGuest"?) at ../lib/TWiki.pm line 1044.
+! QuickSearchPlugin - sh: - : invalid option
+! RevisionLinkPlugin - Can't locate object method "_getHandler" via package "TWiki" at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Store.pm line 629.
+! SpellCheckerPlugin (still in development)
+! TopicReadersPlugin - nothing renders
+! TopicVarsPlugin - parts work, others don't [text in brackets]
+T TranslateTagPlugin - *highly unlikely* to work as it includes patches to scripts (may be made obsolete by L10N changes to Dakar?)
+! TypographyPlugin - has rendering issues (even with Cairo, more like a bad regex problem)
+! TWikiReleaseTrackerPlugin - didn't build (Can't locate FileDigest.pm in @INC...)
+! UpdateInfoPlugin - no rendering changes
+! VersionLinkPlugin - perhaps due to changes with attachments' use of viewfile ?
+! XpTrackerPlugin - installs a template web called Tracking; should be renamed _XpTrackerPlugin; also, view.cgi: Use of uninitialized value in concatenation (.) or string at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/XpTrackerPlugin.pm line 70.
+Can't call method "maketext" on an undefined value at
+        /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Access.pm line 175 (#2)
+while processing TWiki.BulkResetPassword (during (re)build of cache)
+
+26
+
+Obselete Plugins (i think...)
+--------------------------------------------------------------------------------
+- GenPDFAddOn - use PublishContrib instead
+! NewsPlugin - topic in data/Plugins/, but isn't this made obsolete by HeadlinesPlugin anyway?  (if so, "delete" from SVN)
+! ConditionalPlugin - old, and probably made obsolete by parts of Dakar and/or NatSkinPlugin
+
+
+
+Untested - don't have prerequisites
+--------------------------------------------------------------------------------
+? AddDBMGroupPlugin - not sure how to test
+? AdvertsPlugin - don't have phpadsnew
+? BugzillaQueryPlugin - can't test (sql)
+? DatabasePlugin - can't test (sql)
+? LaTeXToMathMLPlugin - need to install itex2MML
+? LDAPPasswordChangerPlugin - _looks_ like it should work
+? LdapPlugin - ??? (also references TWiki.TWikiLdapRegistration---what is that?)
+? MailReminderPlugin - can't test (mysql)
+? MathModePlugin - need latex2html
+? MessageBoardPlugin - can't test (sql)
+? MovableTypePlugin - Can't locate MT.pm
+? NotificationPlugin - too much trouble to test...
+? PeerPlugin - can't test (sql) - also, Can't locate object method "_getHandler" via package "TWiki" at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Store.pm line 556.
+? SnmpCommandPlugin - can't test
+? SourceHighlightPlugin - need GNU source-highlight binary --- merge with BeautifierPlugin
+? SvgPlugin - need librsvg-2.0
+? TouchGraphPlugin - don't have java applet
+? WebDAVPlugin (doesn't compile (missing dev headers/libraries))
+T XmlQueryPlugin - need more CPAN modules - change XMLDIR to use getWorkArea() (or whatever it's called)
+?- XmlXslPlugin - need a test sample... or something
+
+20
+
+
+Untested - Can't tell...
+--------------------------------------------------------------------------------
+? EncryptedPagesPlugin - can't really tell... seems to mostly be working...
+? FakeBasicAuthRegPlugin - too much trouble to test, probably made obsolete by Dakar, anyway
+? FlowchartPlugin - can't tell
+? FormPivotPlugin - missing Test.TestFormPivot (after finding it, move it to Sandbox!)
+? FundraisingPlugin - no sample
+? GpgkeyPlugin - can't tell
+? RedirectPlugin - can't tell, no sample
+? RollupPlugin - need sample to test
+? SearchToTablePlugin - missing sample to test
+? SoapClientPlugin (no docs, no example)
+? TWikiDrawSvgPlugin - view.cgi: Use of uninitialized value in concatenation (.) or string at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/TWikiDrawSvgPlugin.pm line 154. - problems with 
+? URLCachePlugin - no sample
+
+12
+
+
+N/A (either development tools, or in/replaced by core now)
+--------------------------------------------------------------------------------
+- BuildContrib
+- DefaultPlugin
+- HelloPlugin
+? PowerEditPlugin -- too much trouble to test - obsolete??
+NA SectionalEditPlugin - version in core
+- TestFixturePlugin
+- TWikiInstallerContrib
+
+7
+
+--- (don't care)
+--------------------------------------------------------------------------------
+- TigerSkinPlugin - didn't test; don't care
+
+1
+
+================================================================================
+================================================================================
+
+
+*** OTHER ISSUES: ***
+   * who installed the Tracking web? (ah) (it should be called _XpTrackerPlugin)
+
+   * InterWikiPlugin doesn't link this: (CPAN:HTML::Entities)
+|  CPAN Dependencies: | *required:* CPAN:Date::Calc %BR% optional: CPAN:HTML::Entities|
+but it does link this:
+|  CPAN Dependencies: | *required:* CPAN:Date::Calc %BR% optional: CPAN:HTML::Entities |
+
+   * HolidaylistPlugin has corrupted example.gif
+
+   * SmiliesPlugin has corrupted sealed.gif, thumbs.gif, yes.gif, no.gif, love.gif, skull.gif (hm, maybe there were just missing from MANIFEST?) - erm, or not checked in?
+
+   * PollPlugin is missing bin/poll
+
+   * ExifMetaDataPlugin - picture.jpg is corrupted (another bad CVS checkin?)
+
+   * missing TWiki/PluginTopicName.txt
+      * CategoryPlugin
+      * ProtocolTlaPlugin
+      * SlashFilenamePlugin
+
+   * SpreadSheetPlugin has a rendering issue in #FuncIF (rendered as =$AND(), ...)
+      * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=
+
+   * clicking "attach link" wiped out my topic text (*and* replace it with a non-functional link (using %ATTACHPUBURL%))
+
+   * in TWiki.RandomTopicPlugin topic,
+      * Set INCLUDE =  is causing things not to render properly (eg, WebLeftBar) --- whose fault is this???
+     is causing some rendering issues (webleftbar, etc. aren't showing up anymore!)
+
+   * install GNU source-highlight (to test SourceHighlightPlugin)
+
+   * TWikiTip009 isn't rendering its < >, nor in =tt= text
+
+   * TWiki/WebReferences - delete? - just put on twiki.org ??? - links from TWiki.TWikiSite and TWiki.WelcomeGuest
+
+   * FindElsewherePlugin renders [[%TWIKIWEB%.BookView][%MAKETEXT{"about BookView"}%]] incorrectly --- [[]]'s show up and link text BookView is a link :(
+
+   * TWikiContributor should be marked "no index" for spiders   
+
+   * do a pass on proper dashes: endash vs. emdash (&ndash; vs. &mdash;)
+
 ################################################################################
-# prebundled with twiki
-		    'CommentPlugin',
-		    'DefaultPlugin',	# want to delete, but gives errors 
-		    'EditTablePlugin',
-#		    'EmptyPlugin',
-		    'InterwikiPlugin',
-		    'RenderListPlugin',
-		    'SlideShowPlugin',
-		    'SmiliesPlugin',
-		    'SpreadSheetPlugin',
-		    'TablePlugin',
-
-################################################################################
-		    'BeautifierPlugin',
-		    'ChartPlugin',
-		    'GaugePlugin',
-		    'SpacedWikiWordPlugin',
-		    'RandomTopicPlugin',
-		    'PerlDocPlugin',
-		    'MacrosPlugin',
-
-		    'AgentPlugin',
-		    'BibliographyPlugin',
-		    'ConditionalPlugin',
-		    'EditInTablePlugin',
-		    'EmbedPDFPlugin',
-		    'EmbedQTPlugin',
-		    'ExifMetaDataPlugin',
-		    'ExplicitNumberingPlugin',
-		    'FindElsewherePlugin',
-		    'FormFieldListPlugin',
-		    'FormQueryPlugin',
-		    'GlobalReplacePlugin',
-		    'HiddenTextPlugin',
-		    'IncludeIndexPlugin',
-		    'NewsPlugin',
-		    'PageStatsPlugin',
-		    'ProjectPlannerPlugin',
-		    'PseudoXmlPlugin',
-		    'RandomQuotePlugin',
-		    'RecursiveRenderPlugin',
-		    'RedirectPlugin',
-		    'SectionalEditPlugin',
-		    'SessionPlugin',
-		    'SingletonWikiWordPlugin',
-		    'TextSectionPlugin',
-		    'TranslateTagPlugin',
-		    'TreePlugin',
-		    'TWikiDrawPlugin',
-		    'TWikiReleaseTrackerPlugin',
-		    'VarCachePlugin',
-
-################################################################################
-# not very good tests, so i can't really tell if it's working or not, but it seems to have installed correctly
-		    'VersionLinkPlugin',	# attachment foo.c, reference by the example, isn't included (or maybe the %META% isn't correct)
-
 ################################################################################
 
-		    'ActionTrackerPlugin',	# exists operator argument is not a HASH element at ../lib/TWiki/Plugins/ActionTrackerPlugin.pm line 213.
+in CVS, but missing from SVN ???
+   * UserCookiePlugin
+   * AbusePlugin
+   * JavaDocPlugin
+   * PdfPlugin ?
+   * PrologSamplePlugin
+   * RicherSyntaxPlugin
+   * SiteMinderPlugin
+   * WtfPlugin
 
-################################################################################
-# need cpan modules
-		    'GuidPlugin',		# CPAN:Data::UUID
-		    'LocalTimePlugin',		# CPAN:Date::Handler
-		    'PerlSamplePlugin',		# CPAN:Safe
-		    'PrologSamplePlugin',	# CPAN:Language::Prolog
-		    'SourceHighlightPlugin',	# CPAN:File::Temp (sf/perl v5.6?)
-		    'SuggestLinksPlugin',	# CPAN:List::Permutor
-		    'CalendarPlugin',		# CPAN:Date::Calc
+================================================================================
 
-# other dependencies (not cpan)
-		    'EmbedBibPlugin',		# need bibtool and bibtex2html
-		    'MathModePlugin',		# latex2html, (Not enough arguments for mkdir at ../lib/TWiki/Plugins/MathModePlugin.pm line 193, near "$path - sf)
+hm, these are missing completely...
 
-################################################################################
-# related to sourceforge restrictions (at least)
-		    'HeadlinesPlugin',
-		    'LocalCityTimePlugin',
-
-################################################################################
-# dunno? section
-		    'ChildTopicTemplatePlugin',
-		    'NavPlugin',
-		    'NavbarPlugin',
-		    'SearchToTablePlugin', 	# needs lots of cleanup from original template
-		    'StylePlugin',
-		    'UpdateInfoPlugin',
-		    'UserCookiePlugin',
-		    'TouchGraphPlugin',
-
-################################################################################
-# additional configuration required
-		    'AbusePlugin',		# ABUSEFILE_LOCATION - need to specify file location, and upload a word filter file
-		    'BlackListPlugin',		# needs additional setup (should be renamed throttler (what did i call it before??))
-		    'BugzillaQueryPlugin',	# can't rest - says "can't connect to database", which is true for the default install
-		    'CounterPlugin',		# COUNTERPLUGIN_COUNTER_FILE_PATH - /home/students/mtech03/rahulm/web/twiki/lib/TWiki/Plugins/datacount.txt!?!
-		    'MessageBoardPlugin',	# - warnings.pm (?)
-		    'PhotoarchivePlugin',	# ANYTOPNM => "/usr/bin/anytopnm" - PNMSCALE => "/usr/bin/pnmscale" - PNMTOPNG => "/usr/bin/pnmtopng" - PNMTOJPEG => "/usr/bin/pnmtojpeg"
-#PhotoarchivePlugin - ANYTOPNM => "/sw/bin/anytopnm" - PNMSCALE => "/sw/bin/pnmscale" - PNMTOPNG => "/sw/bin/pnmtopng" - PNMTOJPEG => "/sw/bin/pnmtojpeg"
-		    'TodaysVisitorsPlugin',	# configure the $TWIKILIBPATH var in lib/TWiki/Plugins/TodaysVisitorsPlugin.pm - configure the $LOGPATH var in lib/todaysvisitors.sh
-
-################################################################################
-# plain old runtime errors/bugs
-		    'DiskUsagePlugin',	# Illegal division by zero at ../lib/TWiki/Plugins/DiskUsagePlugin.pm line 158.
-		    'TopicVarsPlugin',		# gives lots of warnings...
-		    'DoxygenPlugin',		# needs help
-		    'ImageGalleryPlugin',	# (mkdir problem on sf)
-		    'IncludeRevisionPlugin',	# co: /home/groups/g/gd/gdutree/twiki/data/1/RCS/3.txt,v: No such file or directory
-		    'JavaDocPlugin',		# Unmatched right bracket at ../lib/TWiki/Plugins/JavaDocPlugin.pm line 119, at end of line syntax error at ../lib/TWiki/Plugins/JavaDocPlugin.pm line 119, near "}" - almost seems to work, tho? (tests show up right) - also, i think this left a tmp/ directory
-		    'LaTeXToMathMLPlugin',	# page rendered inside page, no math to be seen - don't know if it's a problem with this plugin, or an interaction with another one
-		    'PdfPlugin',		# nope
-		    'PhantomPlugin',		# interacts with RicherSyntaxPlugin?
-
-################################################################################
-# rendering problems
-		    'RicherSyntaxPlugin',	# not surprisingly, doesn't seem to still work (did it ever truly not interact poorly?)
-		    'TypographyPlugin',
-		    'AliasPlugin',		# []'s __everywhere__
-
-################################################################################
-# wrong directory structure, won't install
-		    'EmbedFlashPlugin',		# left EmbedFlashPlugin - wrong directory structure
-		    'FormFieldsPlugin',		# wrong directory structure
-		    'FormPivotPlugin',		# wrong directory structure#
-		    'IrcLogPlugin',		# IrcLogPlugin.txt.gz ???
-		    'RevRecoverPlugin',		# left RevRecoverPlugin in (local) root
-		    'RevisionLinkPlugin',	# left RevisionLinkPlugin in (local) root
-		    'SyntaxHighlightingPlugin',	# wrong directory structure
-		    'TocPlugin',		# left TocPlugin.xml in (local) root
-		    'XpTrackerPlugin',		# wrong directory structure
-
-################################################################################
-# untested because they're scary user authentication stuff
-		    'LDAPPasswordChangerPlugin',
-		    'LdapPlugin',
-		    'LoginNameAliasesPlugin',
-
-################################################################################
-# mail/notify - related stuff (also untested)
-		    'ImmediateNotifyPlugin',
-		    'NotificationPlugin',
-
-# can't test
-		    'MsOfficeAttachmentsAsHTMLPlugin',
-		    'DatabasePlugin', 		# need db to test it with (also look into CPAN:SQL::Lite)
-		    'MovableTypePlugin',
-		    'SiteMinderPlugin',
-		    'WebDAVPlugin',
-
-# "special" plugins
-		    'WtfPlugin',		# not a real plugin
-
-# obselete (?)
-#		    'PollPlugin',		# obseleted in favour of CommentPlugin?
-
-# addons
-#		    'SpellCheckerPlugin',	# more like an addon; has bin/ directory
-		    );
-
-
-my $xs = new XML::Simple( ForceArray => 1, KeyAttr => 1, AttrIndent => 1 ) or die $!;
-#my $xs = new XML::Simple( KeyAttr => 1, AttrIndent => 1 ) or die $!;
-#my $ref = $xs->XMLin([<xml file or string>] [, <options>]);
-#my $xml = $xs->XMLout($hashref [, <options>]);
-
-#my $xmlPlugins = $xs->XMLin( "downloads/plugins/plugins.xml" ) or die $!;
-#my $xmlPlugins = $xs->XMLin( "xxx" );
-
-my $ref;
-
-foreach my $plugin ( @availPlugins )
-{
-    push @{$ref->{plugin}}, { name => [ $plugin ] };
-}
-
-#print Data::Dumper::Dumper( $xmlPlugins );
-
-#foreach my $pluginS ( @{$xmlPlugins->{plugin}} )
-#{
-#    my $plugin = $pluginS->{name} or die "no plugin name? wtf?";
-##    print "plugin: [$plugin]\n";
-#}
-
-#print $xs->XMLout( $xmlPlugins );
-print $xs->XMLout( $ref );
-
-__END__
-
-#my $xs = XML::Simple->new( ForceArray => 1, AttrIndent => 1, KeyAttr => 1, ) or die $!;
-#print $xs->XMLout( { plugins => \@plugins } );
-
-
-__END__
-
-my @plugins;
-
-#print "<plugins>\n";
-foreach my $plugin ( @availPlugins )
-{
-    push @plugins, { plugin => { name => $plugin } };
-#    print "\t<plugin>\n";
-#    print "\t\t<name>$plugin</name>\n";
-#    print "\t</plugin>\n";
-}
-#print "</plugins>\n";
-
-my $xs = XML::Simple->new( ForceArray => 1, AttrIndent => 1, KeyAttr => 1, ) or die $!;
-print $xs->XMLout( { plugins => \@plugins } );
+CacheAddOn
+CacheChooserAddOn
+CompareRevisionsAddOn
+DolphinToTWikiAddOn
+EncryptedApplet
+FireFoxSidebarContrib
+FirefoxExtensionAddOn
+FormsAddOn
+GenericWikiToTWikiAddOn
+GetAWebAddOn
+JSPwikiToTWikiAddOn
+JavaPasteAddOn
+KwikiToTWikiAddOn
+MailPageAddOn
+MailToTWikiAddOn
+MakeCtrlTopicsListAddOn
+NamespaceManagerAddOn
+NavBarAddOn
+NotifyOnChildModificationTopic
+PhpWikiToTWikiAddOn
+PluginBenchmarkAddOn
+PluginCvsToolsAddOn
+PluginsInstaller
+PowerEditAddon
+RedirectBySubdomainAddOn
+SearchEnginePluceneAddOn
+SetVariableAddOn
+SpellCheckAddOn
+SyncContrib
+TWikiCacheAddOn
+TWikiDeploymentSpiderAddOn
+TableToolAddOn
+TopicClassificationAddOn
+UseModWikiToTWikiAddOn
+UserHomePageAddOn
+VoodooPadXmlRpcAddOn
