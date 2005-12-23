@@ -23,17 +23,12 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINVERSION2][PLUGINVERSION]]
 
 #VarPLUGINVERSION
----+++ PLUGINVERSION -- the version of the TWiki Plugin API
-   * This is the =$TWiki::Plugins::VERSION= number, also indicating the version of the Func module
-   * Syntax: =%<nop>PLUGINVERSION%=
-   * Expands to: =%PLUGINVERSION%=
-   * Related: [[#VarPLUGINVERSION2][PLUGINVERSION{"name"}]], [[#VarWIKIVERSION][WIKIVERSION]]
-
-#VarPLUGINVERSION2
----+++ PLUGINVERSION{"name"} -- the version of an installed Plugin
-   * Syntax: =%<nop>PLUGINVERSION{"name"}%=
+---+++ PLUGINVERSION -- the version of a TWiki Plugin, or the TWiki Plugins API
+   * Syntax: =%<nop>PLUGINVERSION{"name"}%= to get the version of a specific plugin
    * Example: =%<nop>PLUGINVERSION{"InterwikiPlugin"}%= expands to =%PLUGINVERSION{"InterwikiPlugin"}%=
-   * Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKIVERSION][WIKIVERSION]],  [[#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#FAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]]
+   * Syntax: =%<nop>PLUGINVERSION%= to get the version of the API
+   * Expands to: =%PLUGINVERSION%=
+   * Related: [[#VarWIKIVERSION][WIKIVERSION]], [[#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#FAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]]
 
 #VarPUBURL
 ---+++ PUBURL -- the base URL of attachments
@@ -173,9 +168,7 @@ __Note:__ This topic is included by TWikiVariables
 #VarSECTION
 ---+++ SECTION{"name"} -- marks the start of a named section
    * Syntax: =%<nop>SECTION{"name"}%=
-   * Supported parameters:
-     | *Parameter:* | *Description:* | *Default:* |
-     | ="name"= | Name of the section. Must be unique inside a topic. | Mandatory parameter without a default |
+   * ="name"= is the name of the section. It is mandatory, and must be unique within the topic.
    * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSERVERTIME
@@ -215,11 +208,23 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarSPACEDTOPIC
 ---+++ SPACEDTOPIC -- topic name, spaced and URL-encoded
-   * The current topic name with added spaces, for regular expression search of backlinks
+   * The current topic name with added URL-encoded spaces, for use in regular expressions that search for backlinks to the current topic
    * Syntax: =%<nop>SPACEDTOPIC%=
    * Expands to: =%SPACEDTOPIC%=
-   * %T% Hint: This variable is provided almost exclusively for generating URLs for searching for backlinks to topics
-   * Related: [[#VarTOPIC][TOPIC]]
+   * %X% Note: *DEPRECATED* This variable is a disgraceful hack, provided exclusively for generating URLs used for searching for backlinks to topics. It duplicates the functionality of %<nop>URLENCODE{%<nop>SPACEOUT{"%<nop>TOPIC%" sep=" *"}%}%.
+   * Related: [[#VarSPACEOUT][SPACEOUT]], [[#VarTOPIC][TOPIC]]
+
+#VarSPACEOUT
+---+++ SPACEOUT{"string"} -- renders string with spaces inserted in sensible places
+    * Inserts spaces after lower case letters that are followed by a digit or a capital letter, and after digits that are followed by a capital letter.
+	* Useful for spacing out WikiWords
+	* Syntax: =%<nop>SPACEOUT{ "%<nop>TOPIC%" }%=
+	* Expands to: =%SPACEOUT{ "%TOPIC%" }%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | =sep= | The separator to put between words e.g. %<nop>SPACEOUT{"DogsCatsBudgies" sep=","}% -> %SPACEOUT{"DogsCatsBudgies" sep=","}% | ' ' |
+	* %T% Hint: Spaced out WikiWords are not automatically linked. To SPACEOUT a WikiWord but  preserve the link use "double bracket" format. E.g. =[<nop>[WebHome][%<nop>SPACEOUT{"Web<nop>Home"}%]]= expands to [[WebHome][%SPACEOUT{"WebHome"}%]]
+	* Related: [[#VarSPACEDTOPIC][SPACEDTOPIC]]
 
 #VarSTARTINCLUDE
 ---+++ STARTINCLUDE -- start position of topic text if included
