@@ -126,7 +126,6 @@ data/TWiki/PatternSkinCssCookbookNoTopBar.txt 0660
 data/TWiki/PatternSkinCssCookbookTopBarBackgroundImage.txt 0660
 data/TWiki/PatternSkinCustomization.txt 0660
 data/TWiki/PeterThoeny.txt 0660
-data/TWiki/PlainSkin.txt 0660
 data/TWiki/PreviewBackground.txt 0660
 data/TWiki/PrintSkin.txt 0660
 data/TWiki/QuietSave.txt 0660
@@ -757,3 +756,4 @@ UpgradeTwiki 0550
 !include twikiplugins/SmiliesPlugin/lib/TWiki/Plugins/SmiliesPlugin
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
+!include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
