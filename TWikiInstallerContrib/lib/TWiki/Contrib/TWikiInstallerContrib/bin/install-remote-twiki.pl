@@ -9,7 +9,6 @@ use Data::Dumper qw( Dumper );
 #  * convert command line parameters to URI's
 #  * update man pod docs {grin}
 #  * interactive/confirmation mode
-#  * convert "rm -rf" into running the uninstall script
 
 BEGIN {
     my $dirHome = $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
@@ -71,21 +70,24 @@ pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
 # generated config variables
-#$Config->{TWikiFor} ||= 'http://twikiplugins.sourceforge.net/twiki.org.tar.bz2';
-$Config->{TWikiFor} ||= 'http://develop.twiki.org/~wnorris/twiki.org.tar.bz2';
-$Config->{cgibin} = $Config->{install_dir} . "/cgi-bin";
+$Config->{TWikiFor} ||= 'http://localhost/~twikibuilder/twiki.org.tar';
 
-# set defaults
-$Config->{extension} ||= [];    # qw( TWikiReleaseTrackerPlugin DistributionContrib GetAWebAddOn )
-$Config->{web} ||= [];
-print Dumper( $Config ) if $Config->{debug};
-
+################################################################################
 # check installation requirements
 $Config->{cgiurl} =~ m|cgi-bin/?$| or die "cgiurl must end with 'cgi-bin' (feel free to send patches;-)";
 $Config->{install_account} or die "no install_account?";
 $Config->{install_host} or die "no install_host?";
 $Config->{install_dir} or die "no install_dir?";
 $Config->{TWikiFor} or die "no TWikiFor?";
+################################################################################
+
+# (more) generated config variables
+$Config->{cgibin} = $Config->{install_dir} . "/cgi-bin";
+
+# set defaults
+$Config->{extension} ||= [];    # qw( TWikiReleaseTrackerPlugin DistributionContrib GetAWebAddOn )
+$Config->{web} ||= [];
+print Dumper( $Config ) if $Config->{debug};
 
 ################################################################################
 # install 
@@ -136,14 +138,15 @@ sub PushRemoteTWikiInstall
 	if ( $Config->{force} )
 	{	    
 	    # CAUTION: erase an existing installation
-	    logSystem(qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && [ -e uninstall.pl ] && perl ./uninstall.pl"});
+	    logSystem(qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $Config->{install_dir} && [ -e uninstall.pl ] && perl ./uninstall.pl"});
 	}
 
 	# untar the tarball from sourceforge.net, install prerequisite CPAN modules
 	$Config->{verbose} &&
-	    print "Downloading TWiki distribution and installing CPAN modules (this can take many minutes...)\n";
+	    print "Downloading TWiki distribution\n";
 	my $outfile = basename $Config->{TWikiFor};
-	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && wget -q $Config->{TWikiFor} -O $outfile && tar xjf $outfile && rm -f $outfile && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
+	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $Config->{install_dir} && wget -q '$Config->{TWikiFor}' -O $outfile && tar xf $outfile && rm -f $outfile && mkdir -p $Config->{install_dir}/cgi-bin && cp install_twiki.cgi $Config->{install_dir}/cgi-bin"} );
+#	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && wget -q '$Config->{TWikiFor}' -O $outfile && tar xjf $outfile && rm -f $outfile && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
 
 	# install the actual wiki and extensions
 	$Config->{verbose} && print "Installing TWiki and TWikiExtensions\n";
@@ -162,6 +165,8 @@ sub PushRemoteTWikiInstall
 		WIKIWEBMASTER => $parms->{WIKIWEBMASTER},
 	});
 	$Config->{debug} && print "\n$urlInstallWithConfig\n";
+
+	exit 0;
 
 	logSystem( qq{wget -O $SERVER_NAME-install.html "$urlInstallWithConfig"} );
 #	logSystem( qq{curl --silent --show-error "http://$parms->{install_host}/cgi-bin/install_twiki.cgi?${twiki_config};twiki=${kernel};install=install' -o 'TWikiInstallationReport.html"} );
@@ -186,7 +191,7 @@ install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -inst
 =over 8
 
 =item B<-TWikiFor [TWikiFor]>				TWikiFor* filename (.tar.bz2)
-    (hardwrired to use the latest development version from twikiplugins.sourceforge.net)
+    (hardwired to use the latest development version from twikiplugins.sourceforge.net)
 
 =item B<-kernel [kernel|LATEST]>			
 
