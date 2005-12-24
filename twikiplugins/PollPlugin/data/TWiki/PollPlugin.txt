@@ -95,7 +95,6 @@ The ==lineformat== parameters can contain the following arguments:
 ---++ Installation
 	* Install the module CPAN:Digest::MD5
 	* Unzip *<nop>%TOPIC%.zip* in your twiki installation dir.
-		* If you like, move the %TOPIC% topic from the Plugins to the TWiki web
 	* in the *bin* directory, add *poll* among the protected scripts (i.e. modify the ==.htaccess== file so that *poll* is protected the same way *save* is)
 <verbatim>
 <Files poll>
@@ -109,7 +108,7 @@ The ==lineformat== parameters can contain the following arguments:
 		* use the PERCFORMAT parameter
 
 ---++ Examples
-See: PollExample or SmiliesPoll 
+See: Sandbox.PollExample or Sandbox.SmiliesPoll 
 
 ---++ TODO
 	* add a deadline (only votes before date X are valid) or a CLOSED parameter
