@@ -1,7 +1,8 @@
 %META:TOPICINFO{author="guest" date="1063987680" format="1.0" version="1.1"}%
----+++ A Smiling example of the PollPlugin
+%META:TOPICPARENT{name="TWiki.PollPlugin"}%
+---+++ A Smiling example of the TWiki.PollPlugin
 
-__NOTE:__ To use this example you must install also the SmiliesPlugin.
+__NOTE:__ To use this example you must install also the Main:Plugins.SmiliesPlugin.
 
 This example shows:
 	* votes stored at the end of this topic
@@ -51,8 +52,6 @@ Are you happy?
 
 ----
 
-	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 	* Set DENYTOPICVOTE = %MAINWEB%.TWikiGuest
 
 <!--TWikiPoll-->
