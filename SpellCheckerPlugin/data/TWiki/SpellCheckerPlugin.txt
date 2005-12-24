@@ -39,8 +39,8 @@ a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%INTERWIKIPLUGIN_SHORTDE
 		* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Check that Open3 and either Ispell or Aspell is installed
-	* Edit settings in the ==spell.pl== and the ==edit.spell.tmpl== as necessary
-	* Currently there is no need to enable this plugin in TWiki.TWikiPreferences
+	* Edit settings in the ==spell== and the ==edit.spell.tmpl== as necessary
+	* Currently there is no need to enable this plugin
 	* Check to see if the installation was successful
 		1. Edit any topic
 		2. Change the URL to use the spell check skin:	==twiki/bin/edit/Web/TopicName?skin=spellcheck==
