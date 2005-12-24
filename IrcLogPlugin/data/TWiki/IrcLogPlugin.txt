@@ -15,7 +15,7 @@ other suggestions for improvements:
 
 ---++ Examples
 
-	* see SaneAsylum:Sandbox.TestTopicIrcLogPlugin
+	* see [[Sandbox.TestTopicIrcLogPlugin]]
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -25,7 +25,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set SHORTDESCRIPTION = Pretty prints IRC logs
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 	* (not functional yet)
 		* Set COLOUR_PART		 = #009
@@ -39,11 +39,13 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* move from Plugins wiki to the System wiki
+Test:
+	* see Sandbox.TestTopicIrcLogPlugin
+
 
 ---++ Plugin Info
 
-|  Plugin Author: | OWiki:People.WillNorris |
+|  Plugin Author: | TWiki:Main.WillNorris |
 |  Plugin Version: | 07 Nov 2003 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  07 Nov 2003: | Initial version |
@@ -51,11 +53,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Other Dependencies: | none |
 |  Perl Required: | 5.005? |
 |  Perl Running: | 5.8.0 |
-|  Plugin Home: | OWiki:Plugins/%TOPIC% |
-|  Feedback: | OWiki:Plugins/%TOPIC%Dev |
+|  Plugin Home: | TWiki:Plugins.%TOPIC% |
+|  Feedback: | TWiki:Plugins.%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- OWiki:People.WillNorris - 07 Nov 2003
+-- TWiki:Main.WillNorris - 07 Nov 2003
  
 
