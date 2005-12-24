@@ -85,9 +85,8 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| 11 Mar 2005 | 1.103 Fixes for: text not sticking to boxes, blank lines in text, and lost t
-ext styles |
-| 22 Nov 2004 | 1.102 Unicode fixes courtesy of Won-kyu Park |
+| | 11 Mar 2005: Fixes for: text not sticking to boxes, blank lines in text, and lost text styles |
+| | 22 Nov 2004: Unicode fixes courtesy of Won-kyu Park |
 | | 16 Aug 2004: Map support finally released |
 | | 17 Feb 2003: Bug fixes; incoporated TWiki:Main/BertrandDelacretaz's fix for too many colours in GIF. He had problems when saving images from macosx / JDK 1.3.1 and modified the applet to reduce the number of colors before converting to GIF, if needed. Without this he would sometimes get the "too many colors for a GIF" error when saving drawings. |
 | | 30 Sep 2002: Add support for URLs, EXTRA_COLORS, fixed a number of outstanding bugs |
