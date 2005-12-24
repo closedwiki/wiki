@@ -1,0 +1,58 @@
+#!/usr/bin/perl -wT
+#
+# TWiki Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
+#
+# Based on parts of Ward Cunninghams original Wiki and JosWiki.
+# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
+# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
+#
+# For licensing info read license.txt file in the TWiki root.
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+use strict;
+
+BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
+
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use TWiki::UI::Save;
+use TWiki::Contrib::EditContrib;
+
+my $query = new CGI;
+my $thePathInfo = $query->path_info(); 
+my $theRemoteUser = $query->remote_user();
+my $theUrl = $query->url;
+my $theTopic = $query->param( 'topic' );
+
+my ( $topic, $web, $dummy, $userName ) = 
+  TWiki::initialize( $thePathInfo, $theRemoteUser,
+                     $theTopic, $theUrl, $query );
+
+# This could be passed from edit template, and also leveraged
+# in bin/save, thus avoiding separate bin and preview scripts
+my $editUrl = $query->param( 'edit' );
+my $editUrlParams = $query->param( 'editparams' );
+my $randompart = &TWiki::UI::Save::randomURL();
+my $redirecturl = "$editUrl\?t=" . time() . "$editUrlParams\"|$randompart";
+
+TWiki::Contrib::EditContrib::savemulti( $web, $topic, $userName, $query, $redirecturl );
+

@@ -1,0 +1,141 @@
+%TMPL:INCLUDE{"twiki"}%
+
+
+
+%TMPL:DEF{"script"}%
+<script type="text/javascript">
+<!--HIDE
+ns4 = (document.layers)? true:false;
+ie4 = (document.all)? true:false;
+dom = (document.getElementById)?true:false;
+
+toShow=new Array();
+toHide=new Array();
+
+function initForm() {
+  document.main.text.focus();
+  for (i = 0; i < toShow.length; i++) {
+     if(dom) {
+        document.getElementById(toShow[i]).style.display="inline";
+     } else if( ie4 ) {
+        document.all[toShow[i]].style.display="inline";
+     } else if( ns4 ) {
+        document.layers[toShow[i]].style.display="inline";
+     }
+  }
+  for ( i = 0; i < toHide.length; i++) {
+    if(dom) {
+        document.getElementById(toHide[i]).style.display="none";
+    } else if( ie4 ) {
+        document.all[toHide[i]].style.display="none";
+    } else if( ns4 ) {
+        document.layers[toHide[i]].style.display="none";
+    }
+  }
+}
+function checkAll( theButton, theButtonOffset, theNum, theCheck )
+{
+  // find button element index
+  var j = 0;
+  for( var i = 0; i <= document.main.length; i++ ) {
+    if( theButton == document.main.elements[i] ) {
+      j = i;
+      break;
+    }
+  }
+  // set/clear all checkboxes
+  var last = j+theButtonOffset+theNum;
+  for( i = last-theNum; i < last; i++ ) {
+    document.main.elements[i].checked = theCheck;
+  }
+}
+function launchWindow( theWeb, theTopic, theAnchor ) {
+  if( ! theAnchor ) {
+    theAnchor = "";
+  }
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain.pattern" + theAnchor,
+              theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+  if( win ) {
+    win.focus();
+  }
+  return false;
+}
+//STOP HIDING-->
+</script> %TMPL:END%
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiNoViewPage twikiEditPage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
+
+
+
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+
+
+
+%TMPL:DEF{"simpleheader"}%
+---+ <nop>%TOPIC% (edit)
+%BR%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
+<tr class="twikiTopicActionHelp twikiGrayText">
+<td colspan="3" class="twikiTopicActionHelp twikiGrayText"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: C = Cancel, K = Checkpoint, Q = Quiet Save, S = Save, P = Preview</td>
+</tr>
+<tr class="twikiTopicActionSecondary">
+<td class="twikiCancelCol">&nbsp;</td>
+<td class="twikiSubmitCol"><div class="twikiSubmitOptions"><input type="checkbox" class="twikiCheckbox" name="unlock" id="releaselock" %RELEASEEDITLOCKCHECKBOX% /><label for="releaselock">Release edit lock</label>&nbsp;&nbsp;<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a><br />
+   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a></div></td>
+<td class="twikiAddCol">&nbsp;</td>
+</tr>
+<tr class="twikiTopicAction">
+<td class="twikiCancelCol"><a id="cancel" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" accesskey="c">Cancel</a></td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" /><label accesskey="k" for="checkpoint"></label><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" /><label accesskey="q" for="quietsave"></label><input type="submit" class="twikiSubmit" name="action" id="save" value="Save" /><label accesskey="s" for="save"></label></td>
+<td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="action" id="preview" value="Preview" /><label accesskey="p" for="preview"></label></td>
+</tr>
+</table>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder">
+%PRETEXT%
+<form name="main" action="%SCRIPTURLPATH%/savesection%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
+<div id="SECEDITBOX">
+<textarea id="topic" name="text" wrap="virtual" rows="%SECTIONEDITBOXHEIGHT%" cols="%SECTIONEDITBOXWIDTH%" style="%SECTIONEDITBOXSTYLE% onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea>
+</div>
+<input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<input type="hidden" name="cmd" value="%CMD%" /><div></div>
+<input type="hidden" name="edit" value="%EDIT%" />
+<input type="hidden" name="editparams" value="%EDITPARAMS%" />
+<input type="hidden" name="pretxt" value="%PRETEXTFIELD%">
+<input type="hidden" name="postxt" value="%POSTEXTFIELD%">
+<div class="twikiSig">
+<label for="sig" class="twikiGrayText">Your signature for easy copy and paste: </label><input name="sig" type="text" readonly="readonly" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
+%FORMFIELDS%
+%TMPL:P{"topicaction"}%
+<br />
+</form>
+%POSTEXT%
+</div><div class="twikiHelp">
+%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>%TMPL:END%
+
+
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

@@ -1,0 +1,129 @@
+%META:TOPICINFO{author="guest" date="1112872172" format="1.0" version="1.5"}%
+Provides subroutines useful in writing plugins that edit and save parts of topics.
+
+---+ Summary of Contents
+
+This contrib provides subroutines that come in handy when editing and saving parts of topics (refered to as sections).
+
+	* =passFormForEdit= supports editing a topic or parts of a topic without showing the form
+	* =savemulti= is an adaption of TWiki::UI::Save::savemulti
+	* =quoteForXml= encodes sensitive characters before using text as URL variable
+	* =edit= sets up the section for editing
+	* =finalize_edit= completes the generation of the edit topic
+	* =bin/savesection= is an adaption of =bin/save=
+	* =templates/editsection.pattern.tmpl= and =templates/editsection.tmpl= are templates supporting editing of sections.
+
+This contrib is used by TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/MultiEditPlugin, and TWiki:Plugins/ThreadedDiscussionPlugin. Examining these plugins will provide guidance of how to use these subroutines in implementing your own plugin.
+
+---+ Detailed Documentation
+
+The use of this contrib follows closely the pattern used in TWiki core when editing a topic. A plugin implementing editing of a section of a topic has to
+	* Implement code called during view which would provide appropriate controls for edting a section, and identify the section to be edited by differentiating
+		* the part of the topic before the section to be edited,
+		* the section to be edited, and
+		* the part of the topic following that section.
+	* Pass this information into the edit script in URL variables (see below) upon invocation of the edit script
+	* Implement the edit script to obtain that information from the URL variables and render the edit topic. Implementing the edit script is straightforward:
+		* Obtain the topic text, template text, etc., by invoking =edit()=.
+		* Determine the text before the section to be edited, the section to be edited, and the text after that section, as well as the rendered versions (if desired) of the pre- and post-sections.
+		* Pass these to =finalize_edit()= to generate the edit topic.
+The contrib provides the rest of the plumbing (save script, edit templates).
+
+---++ =passFormForEdit ( $web, $topic, $form, $meta, $query, @fieldsInfo )=
+
+To be used instead of =TWiki::Forms::renderForEdit= when editing a topic should not display the forms for editing. In this case, form values are passed through to the save script unchanged. This would allow, for example, separating the editing of the form from editing the text of the topic.
+
+---++ =savemulti ( $web, $topic, $user, $query, $editlink )=
+
+Works identical to =TWiki::UI::Save::savemulti= except
+	* redirects to =$editlink= when "Checkpoint" is selected (thus a custom edit script can be called)
+	* additional text can be passed via the =pretxt= and =postxt= URL parameters. These will be prepended and appended to the text coming from the edit box, respectively.
+
+---++ =quoteForXml ( $text )=
+
+Quotes characters in =$text= so that it can used for display and editing.
+
+---++ =edit ( )=
+
+Sets up a section of the topic for editing. This code is derived from =bin/edit= and =lib/TWiki/UI/Edit.pm=, but omits code related to topic creation (as the topic must exist for this function to be called).
+
+Returns the current query object, the topic, web, the topic text passed into the script, as well as the appropriate template rendered with the exception of application specific text (these template variables must be substituted for by the client function):
+
+|*Template&nbsp;variable*|*Purpose*|
+|=%TEXT%=|Text to be edited; shown in textarea  |
+|=%PRETEXT%=|Text preceding the edited section. Special characters be protected to avoid mangling by browsers (use =TWiki::Render::encodeSpecialChars=) |
+|=%POSTEXT%=|Text following the edited section. Special characters be protected to avoid mangling by browsers (use =TWiki::Render::encodeSpecialChars=) |
+|=%PRETEXTFIELD%=|Rendered text preceding the edited section, shown above the textarea  |
+|=%POSTEXTFIELD%=|Rendered text following the edited section, shown below the textarea  |
+|=%EDIT%=|URL to be invoked to edit the section (used when "Checkpoint" is selected)  |
+|=%EDITPARAMS%=|URL parameters to be passed when the section is edited  |
+
+---++ =finalize_edit ( $query, $topic, $webName, $pretxt, $sectxt, $postxt, $pretxtRender, $postxtRender, $tmpl )=
+
+Sets up the final edit topic. 
+
+=$pretxt=, =$sectxt=, =$postxt=, are the text preceding the edited section, the section to be edited, and the text following that section, respectively. =$sectxt= will be shown in the textarea for editing, and upon save the obtained edited text will be combined with =$pretxt= and =$postxt=. These will be encoded to prevent mangling by browsers and substituted for =%<nop>PRETEXT%=, =%<nop>TEXT%=, and =%POSTEXT%=.
+
+=$postxtRender= and =$pretxtRender= will be rendered for edit and displayed above and below the text area, respectively. Pass an empty string if no such text should be displayed. These will be encoded for display and substituted for =%<nop>PRETEXTFIELD%= and =%<nop>POSTEXTFIELD%=, respectively.
+
+---++ =bin/savesection=
+
+Works identical to =bin/save= except
+	* invokes =TWiki::Contrib::savemulti=
+	* constructs the edit link (see above) from the URL parameters =edit= and =editparams=. The former has to be the edit script to be invoked when "Checkpoint" is selected, the latter determines any additional URL parameters to be passed to the edit script (must include the leading =&=).
+
+---++ =templates/editsection.tmpl=, =templates/editsection.pattern.tmpl=
+
+Templates supporting the editing of a section. The =pretxt= and =postxt= URL parameters (see =savemulti=) are generated by the two variables =%<nop>PRETEXTFIELD%= and =%<nop>POSTEXTFIELD%=. The size of the edit window is controlled by preference variables (see below).
+
+
+
+---++ Settings
+
+	* Name of the perl package
+		* Set STUB = TWiki::Contrib::EditContrib
+
+Set the variables conrolling the size and style of the textara for editing in the desired preference topic, for example:
+	* Edit Box Width, Height, Style (set to width: 99% for full width, auto to disable). 
+		* Set SECTIONEDITBOXWIDTH = 70 
+		* Set SECTIONEDITBOXHEIGHT = 27 
+		* Set SECTIONEDITBOXSTYLE = width: 99%; 
+
+
+---++ Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Contrib topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Contrib topic repository |
+	  | ==lib/TWiki/Contrib/%TOPIC%.pm== | Contrib Perl module |
+	  | ==bin/savesection== | save script |
+	  | ==templates/editsection.tmpl== |  |
+	  | ==templates/editsection.pattern.tmpl== |  |
+	* Verify access and ownership settings for the new scripts.
+	* Edit your .htaccess file to require a valid user for the =savesection= script (if needed).
+
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/ThomasWeigert |
+|  Copyright &copy;: |  |
+|  License: | GPL |
+|  Dependencies: | none  |
+|  Version: | 07 Apr 2005 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  07 Apr 2005: | Fix rendering of bullets etc. in pre and post text  |
+|  21 Mar 2005: | Provide =finalize_edit= function to further simplify developing client plugins |
+|  20 Mar 2005: | Resolved problems arising from inconsistencies how various browsers treat URL parameters  |
+|  12 Mar 2005: | Added subroutine setting up section for editing.  |
+|  11 Mar 2005: | Added templates for editing sections. |
+|  08 Mar 2005: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/MultiEditPlugin, TWiki:Plugins/ThreadedDiscussionPlugin, TWiki:Plugins/EditTablerowPlugin
+
+-- TWiki:Main/ThomasWeigert 21 Mar 2005
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->

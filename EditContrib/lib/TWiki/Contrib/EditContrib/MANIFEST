@@ -1,0 +1,6 @@
+bin/savesection
+templates/editsection.pattern.tmpl
+templates/editsection.tmpl
+data/TWiki/EditContrib.txt
+lib/TWiki/Contrib/EditContrib.pm
+
