@@ -30,8 +30,6 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:File::Where 
    * CPAN:File::AnySpec 
    * CPAN:ExtUtils::CBuilder 
-</td>
-<td>
    * CPAN:ExtUtils::ParserXS 
    * CPAN:Tree::DAG_Node
    * CPAN:Carp::Assert
@@ -39,6 +37,8 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Class::ISA 
    * CPAN:Class::Virtually::Abstract
    * CPAN:Error 
+</td>
+<td>
    * CPAN:URI 
    * CPAN:HTML::Tagset 
    * CPAN:HTML::Parser 
@@ -51,8 +51,6 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:HTML::Diff
    * CPAN:Test::Builder::Tester 
    * CPAN:Test::LongString
-</td>
-<td>
    * CPAN:WWW::Mechanize 
    * CPAN:HTML::TableExtract 
    * CPAN:WWW::Mechanize::TWiki
@@ -66,13 +64,36 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Locale::Maketext::Lexicon
    * CPAN:Digest::base 
    * CPAN:Digest::SHA1
+</td>
+<td>
    * CPAN:Unicode::Map
    * CPAN:Unicode::Map8 
    * CPAN:Jcode 
    * CPAN:Unicode::String 
    * CPAN:Unicode::MapUTF8
+   * CPAN:Time::Local
+   * Time::ParseDate
+   * Barcode::Code128
+   * Bit::Vector
+   * Carp::Clan
+   * Date::Calc
+   * Data::UUID
+   * Net::LDAP
+   * Date::Handler
+   * XML::Sablotron (not really)
+   * Image::LibRSVG (not really)
+   * I18N::AcceptLanguage
+   * Weather::Com
+   * XML::LibXML::Common
+   * XML::LibXML
+   * XML::LibXSLT
+   * Text::ParseWords
+   * Cache::Cache
+   * String::CRC
+   * DBD::mysql (not really)
 </td>
 </tr></table>
+
  
 ---++ Detailed Documentation
 <!-- use %$POD% when using with Build module to automatically extract documentation -->
