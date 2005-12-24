@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="WillNorris" date="1067069700" format="1.0" version="1.1"}%
-%META:TOPICPARENT{name="SearchResult"}%
 ---+ <nop>%TOPIC%
 
 displays page statistics log (viewing and saving the page)
@@ -8,6 +7,7 @@ displays page statistics log (viewing and saving the page)
 ---++ Syntax Rules
 
 ---+++ Parameters
+| *Parameter* | *Default* |
 | web		| %<nop>WEB%	|
 | topic	 | %<nop>TOPIC% |
 | max		| all entries  |
@@ -19,11 +19,7 @@ displays page statistics log (viewing and saving the page)
 	* %<nop>PAGESTATS{ web="%<nop>INCLUDINGWEB%" topic="%<nop>INCLUDINGTOPIC%" }%
 
 ---++ Demos
-	* [[Sandbox.TestTopic%UNSPACEDTOPIC%]]
-	* http://192.168.1.99:8080/twiki/bin/view/Sandbox/TestTopic%UNSPACEDTOPIC%
-	* http://saneasylum.ath.cx:8080/twiki/bin/view/Sandbox/TestTopic%UNSPACEDTOPIC%
-
-feel free to improve the examples by editing TWiki:Plugins/%UNSPACEDTOPIC%
+	* [[Sandbox.TestTopic%TOPIC%]]
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -40,28 +36,28 @@ feel free to improve the examples by editing TWiki:Plugins/%UNSPACEDTOPIC%
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
 	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%UNSPACEDTOPIC%.zip== in your twiki installation directory. Content:
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
-	  | ==data/TWiki/%UNSPACEDTOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%UNSPACEDTOPIC%.txt,v== | Plugin topic repository |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/OoPlugin.pm== | OoPlugin Perl module base class |
-	  | ==lib/TWiki/Plugins/%UNSPACEDTOPIC%.pm== | Plugin Perl module |
-	  | ==data/Sandbox/TestTopic%UNSPACEDTOPIC%.txt== | Plugin topic test |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==data/Sandbox/TestTopic%TOPIC%.txt== | Plugin topic test |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
-		* [[Sandbox.TestTopic%UNSPACEDTOPIC%]]
+		* [[Sandbox.TestTopic%TOPIC%]]
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/WillNorris |
 |  Plugin Version: | 25 Oct 2003 (V1.000) |
-	 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  25 Oct 2003: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%UNSPACEDTOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%UNSPACEDTOPIC%Dev |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
