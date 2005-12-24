@@ -42,7 +42,7 @@ Insert a &lt;sectionbreak/&gt; tag between sections.
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.DanBoitnott |
+|  Plugin Author: | TWiki:Main.DanBoitnott |
 |  Plugin Version: | 30 Mar 2004 |
 |  Change History: | 30 Mar 2004: Added justification preference; &lt;editsections&gt; to automatically split on ---+; BGCOLOR can now be variables such as %<nop>WEBBGCOLOR%<br>09 Feb 2003: Added ability to exclude certain skins (like print) from sectioning; Added EDITBOXWIDTH, EDITBOXHEIGHT, EDITBOXSTYLE options to plugin configuration.<br> 07 Feb 2003: Wordwrap fixed in edit page<br> 06 Feb 2003: Initial version |
 |  CPAN Dependencies: | none |
@@ -51,4 +51,4 @@ Insert a &lt;sectionbreak/&gt; tag between sections.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins

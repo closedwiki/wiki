@@ -26,7 +26,7 @@ for all sub documents of a bigger manual:
 
 ----------+++ Include Strategy
 In theory, you can continue to write your pages as always
-and glue some of them to a bigger document via %INCLUDE.
+and glue some of them to a bigger document via =%<nop>INCLUDE%=.
 <br>
 In practice, you might want to change your strategy a bit,
 to make it easier to re-use pages as building blocks for large docs.
@@ -176,4 +176,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__<br>
 SectionalEditPlugin, PdfPlugin,
-%TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+%TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins

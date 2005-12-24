@@ -23,17 +23,22 @@ This is a plugin to list readers of a topic from a given date
 	* Set DEBUG = 0
 
 
+---++ Demo
+
+%READERS%
+
+
 ---++ Plugin Info
 
-|  Plugin Author: | %MAINWEB%.PatrickNomblot  |
+|  Plugin Author: | TWiki:Main.PatrickNomblot  |
 |  Plugin Version: | 1.02 |
 |  08 Dec 2003: | CGI parameters in lowercase, some code enhancements as suggested by Main.PeterThoeny |
 |  21 Nov 2003: | Initial version |
 |  Other Dependencies: |   |
 |  Perl Version: | 5.6 |
-|  Feedback: | %MAINWEB%.PatrickNomblot |
+|  Feedback: | TWiki:Main.PatrickNomblot |
 
 
 
 
--- Main.PatrickNomblot - 21 Nov 2003
+-- TWiki:Main.PatrickNomblot - 21 Nov 2003

@@ -34,7 +34,7 @@ To install plugin:
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.MartinCleaver |
+|  Plugin Author: | TWiki:Main.MartinCleaver |
 |  Plugin Version: | 12 Apr 2004 |
 |  Change History: | 14 Apr 2002 Initial version |
 |  Change History: | 12 Apr 2004 Updated for TWiki:Codev.CairoRelease |
@@ -44,7 +44,7 @@ To install plugin:
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% ( TWiki:Plugins/%TOPIC% )|
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev ( TWiki:Plugins/%TOPIC%Dev )|
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.MartinCleaver - 27 Feb 2001 <br> 
+-- TWiki:Main.MartinCleaver - 27 Feb 2001 <br> 
 

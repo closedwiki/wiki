@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="MichaelSchmidt" date="1111154151" format="1.0" version="1.2"}%
 ---+ <nop>MailToTWiki Plugin
 
-| Author  | %MAINWEB%.AlanBurlison - alan@bleaklow.com |
+| Author  | TWiki:Main.AlanBurlison - alan@bleaklow.com |
 | Version | 0.05 |
 | Date	 | 18 Mar 2005 |
 | License | This is released under the Perl Artistic license |
@@ -114,7 +114,7 @@ The Plugin can be configured by modifying the following configuration variables.
 
 ---++ Plugin Info
 
-| Plugin Author: | %MAINWEB%.AlanBurlison |
+| Plugin Author: | TWiki:Main.AlanBurlison |
 | Plugin Version: | 27 Jan 2002 (V0.03) |
 | Change History: | 18 Mar 2005 (V0.05) |
 | Version 0.05 | Modified beta version |
@@ -124,7 +124,7 @@ The Plugin can be configured by modifying the following configuration variables.
 | Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/MailToTWikiAddOn |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/MailToTWikiAddOnDev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- %MAINWEB%.AlanBurlison - 27 Jan 2003
+-- TWiki:Main.AlanBurlison - 27 Jan 2003
 

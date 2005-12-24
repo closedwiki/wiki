@@ -80,12 +80,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | %MAINWEB%.FlorianGnaegi |
+|  Plugin Author: | TWiki:Main.FlorianGnaegi |
 |  Plugin Version: | 03 Oct 2005 (V1.300) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  03 Oct 2005 | Fixes for Dakar, added BUGLISTKEY function, refactored Settings (%MAINWEB%.JoanTouzet) |
-|  08 Jul 2003 | Added MYBUGS function (%MAINWEB%.SteveKostecke), dealing with whitespace (%MAINWEB%.AlanShields) |
-|  19 Aug 2002 | Added BUGLIST function, renamed to BugzillaLinkPlugin (%MAINWEB%.AnthonPang ?) |
+|  03 Oct 2005 | Fixes for Dakar, added BUGLISTKEY function, refactored Settings (TWiki:Main.JoanTouzet) |
+|  08 Jul 2003 | Added MYBUGS function (TWiki:Main.SteveKostecke), dealing with whitespace (TWiki:Main.AlanShields) |
+|  19 Aug 2002 | Added BUGLIST function, renamed to BugzillaLinkPlugin (TWiki:Main.AnthonPang ?) |
 |  15 Aug 2002 | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | A working [[http://www.bugzilla.org][Bugzilla]] installation |
@@ -96,7 +96,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- %MAINWEB%.JoanTouzet - 03 October 2005 <br>
+-- TWiki:Main.JoanTouzet - 03 October 2005 <br>
 
 %META:FILEATTACHMENT{name="bug.gif" attr="" comment="GIF Bug large" date="1029409171" path="/home/gnaegi/bug.gif" size="166" user="FlorianGnaegi" version="1.1"}%
 %META:FILEATTACHMENT{name="bug_small.gif" attr="" comment="GIF Bug small" date="1029416770" path="/home/gnaegi/bug_small.gif" size="885" user="FlorianGnaegi" version="1.1"}%
