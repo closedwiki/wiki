@@ -102,8 +102,8 @@ sub handleVote {
   # compute the result
   my $result = "<div class=\"Vote\">";
 
-  $result .= "<form action=\"" . &TWiki::Func::getScriptUrlPath() . 
-	   "/vote/$web/$topic\" method=\"post\">\n";
+  $result .= "<form action=\"" . &TWiki::Func::getScriptUrl( $web, $topic, 'vote' )
+      . "\" method=\"post\">\n";
   $result .= "<input type=\"hidden\" name=\"id\" value=\"$theId\"/>\n";
   $result .= "<table class=\"VoteSelect\">\n";
 
