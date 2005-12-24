@@ -1,0 +1,40 @@
+@CPAN = (
+		    qw( ExtUtils::MakeMaker Storable Test::Harness Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParseXS Tree::DAG_Node 
+			Carp::Assert
+			Class::Data::Inheritable
+			Class::ISA Class::Virtually::Abstract 
+				Archive::Zip 
+			Archive::Any ),
+	qw( Module::Build ),
+		    qw( Error URI HTML::Tagset HTML::Parser LWP LWP::UserAgent XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
+#		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
+		    	qw( Test::Builder::Tester Test::LongString ),
+		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
+		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
+		    qw( CGI::Session ),
+		    qw( Encode Locale::Maketext::Lexicon ),
+		    qw( Digest::base Digest::SHA1 ),
+		    qw( Unicode::Map Unicode::Map8 Jcode Unicode::String Unicode::MapUTF8 ),
+	qw( Time::ParseDate Time::Local ),	# for BlogPlugin
+	qw( Barcode::Code128 ),		# BarcodePlugin
+	qw( Carp::Clan Bit::Vector Date::Calc ),		# CalendarPlugin, HolidaylistPlugin
+	qw( HTML::CalendarMonthSimple ),	# CalendarPlugin
+	qw( Data::UUID ),		# GuidPlugin
+#	qw( Convert::ASN1 Digest::HMAC_MD5 Authen::SASL Net::SSLeay IO::Socket::SSL Net::LDAP ),		# LDAPPasswordChangerPlugin, LdapPlugin
+	qw( Convert::ASN1 Digest::HMAC_MD5 Authen::SASL IO::Socket::SSL Net::LDAP ),		# LDAPPasswordChangerPlugin, LdapPlugin
+	qw( Date::Handler ),		# LocalTimePlugin
+	qw( XML::Sablotron ),		# SablotronPlugin
+	qw( Image::LibRSVG ),		# SvgPlugin
+	qw( I18N::AcceptLanguage ),	# TopicTranslationsPlugin
+	qw( Weather::Com ),		# WeatherPlugin
+	qw( DBD::mysql ),		# BugzillaQueryPlugin, MailReminderPlugin
+	qw( XML::LibXML::Common XML::LibXML XML::LibXSLT Text::ParseWords Cache::Cache String::CRC ),	# XmlQueryPlugin (XML::Simple above)
+	qw( List::Permutor ),		# SuggestLinkPlugin
+	qw( Image::Info ),		# LatexModePlugin
+	qw( MIME::Lite Authen::SASL XML::Stream Net::XMPP Net::Jabber ),	# optional SOAP::Lite interfaces
+	qw( SOAP::Lite ),		# SoapClientPlugin
+	qw( Font::AFM HTML::FormatText Date::Format ),	# URLCachePlugin
+);
+
+#$, = "\n";
+#print @CPAN;

@@ -12,95 +12,98 @@
 
 # Standard preamble
 BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
-    unshift @INC, $pc;
-  }
+  unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
 }
 
+use File::Find;
 use TWiki::Contrib::Build;
 
 # Declare our build package
-{ package BuildBuild;
+package BuildBuild;
+use base qw( TWiki::Contrib::Build );
 
-  @BuildBuild::ISA = ( "TWiki::Contrib::Build" );
+use File::Path qw( mkpath rmtree );
+use FindBin;
 
-  sub new {
+sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "CPANContrib" ), $class );
-  }
+    return bless( $class->SUPER::new( "CpanContrib" ), $class );
+}
 
-  # Example: Override the build target
-  sub target_build {
+
+sub target_stage {
+    my $this = shift;
+    
+    $this->SUPER::target_stage();
+    
+    $this->stage_cpan();
+}
+
+
+sub stage_cpan {
+    my $this = shift;
+
+    # copy the generated files from CPAN build directory
+
+    my $base_lib_dir = "$this->{basedir}/lib/CPAN";
+
+    $this->cd( $base_lib_dir );
+    File::Find::find( { wanted => sub { $this->cp( $_, "$this->{tmpDir}/lib/CPAN/$_" ) }, 
+			no_chdir => 1 }, 
+		      '.' );
+}
+  
+
+sub target_build {
     my $this = shift;
 
     $this->SUPER::target_build();
 
-if ( 0 )
-{
+    chdir $FindBin::Bin or die $!;
+
+    {
+	package CpanContrib::Modules;
+	use vars qw( @CPAN );		# grrr, not sure why this is needed
+	print `pwd`;
+	unless ( my $return = do "./CPAN" )
+	{ 
+	    die "unable to load CPAN module list to build: $!";
+	}
+    }
+
     # Do other build stuff here
     # get cpan minimirror up-to-date
     # create twiki mini-minicpan mirror (also publish this)
+    # only rebuild if CPAN module is newer than the already-built files! (*big* timesaver!)
 
     use Cwd;
     my $base_lib_dir = getcwd . "/../../../../lib/CPAN";
-    use File::Path qw( mkpath rmtree );
     -e $base_lib_dir && rmtree $base_lib_dir;
     mkpath $base_lib_dir or die $!;
+    # TODO: move a lot of the old CPAN support stuff into CpanContrib and out of TWikiInstallerContrib
     chdir '../../../../../TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/cpan/' or die $!;
+    ++$|;
 
-    foreach my $module (
-		    qw( ExtUtils::MakeMaker Storable Test::Harness Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node 
-			Carp::Assert
-			Class::Data::Inheritable
-			Class::ISA Class::Virtually::Abstract 
-				Archive::Zip 
-			Archive::Any ),
-		    # Module::Build
-		    qw( Error URI HTML::Tagset HTML::Parser LWP LWP::UserAgent XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
-#		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
-		    	qw( Test::Builder::Tester Test::LongString ),
-		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
-		    # Net::SSLeay IO::Socket::SSL
-		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
-		    qw( CGI::Session ),
-		    qw( Encode Locale::Maketext::Lexicon ),
-		    qw( Digest::base Digest::SHA1 ),
-		    qw( Unicode::Map Unicode::Map8 Jcode Unicode::String Unicode::MapUTF8 ),
-		    qw( Time::Local ),	# for BlogPlugin
-			)
+    foreach my $module ( @CpanContrib::Modules::CPAN )
     {
+	# clean out old build stuff (in particular, ExtUtils::MakeMaker leaves bad stuff lying around)
+	my $dirCpanBuild = "$base_lib_dir/.cpan/build/";
+	# SMELL: fixed unix-specific chmod shell call
+	system( chmod => '-R' => 'a+rwx' => $dirCpanBuild ), rmtree $dirCpanBuild if -d $dirCpanBuild;
+
 	print "Installing $module\n";
 	print "-" x 80, "\n";
-	`perl install-cpan.pl --mirror=MIRROR/MINICPAN/ --baselibdir=$base_lib_dir $module </dev/null`;
+	`perl install-cpan.pl --mirror=../../../../../../../../MIRROR/MINICPAN/ --baselibdir=$base_lib_dir $module </dev/null`;
     }
 
-      `chmod -R 777 $base_lib_dir/.cpan`;
-      rmtree "$base_lib_dir/.cpan";	# cleanup CPAN build directories
-
-# HAVE TO GENERATE THE MANIFEST FILE BY HAND ATM:
-# twikibuilder@ubuntu:~/twiki/DEVELOP/twikiplugins/CPANContrib/lib/TWiki/Contrib/CPANContrib$ pushd ../../../../ ; find lib/CPAN/ >>lib/TWiki/Contrib/CPANContrib/MANIFEST ; popd
-
-      if ( 0 ) {
-	  chomp( my @files = `find $base_lib_dir` );
-
-	  # update MANIFEST
-	  open( MANIFEST, '<', 'MANIFEST-base' ) or die $!;
-	  local $/ = undef;
-	  my @manifest = <MANIFEST>;
-	  close MANIFEST;
-	  
-	  open( MANIFEST, '>', 'MANIFEST' ) or die $!;
-	  print join( "\n", @manifest );
-	  print join( "\n", @files );
-	  close MANIFEST;
-      }
-  }
-}
+    # cleanup the intermediate CPAN build directories
+    `chmod -R 777 $base_lib_dir/.cpan`;
+    rmtree "$base_lib_dir/.cpan";
 }
 
+package main;
 # Create the build object
 $build = new BuildBuild();
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
-
