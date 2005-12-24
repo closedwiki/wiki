@@ -87,39 +87,37 @@ sub initPlugin
 # =========================
 sub commonTagsHandler
 {
-    # Let's read the words from the file in a loop ,
-    # look for these words present in the pattern and replace these then with their counter parts.	
-
     $_[0] =~ s/%COUNTER_PLUGIN%/_handleTag( )/geo;	
-
 }
+
 #-------------------------------------------------------------------------------------------------
+
 sub _handleTag()
 {
 	# increment the counter and throw up the page with this count
-	$FileLocation = &TWiki::Func::getPreferencesFlag("COUNTERPLUGIN_COUNTER_FILE_PATH");
-    	&TWiki::Func::writeDebug( "- TWiki::Plugins:CounterPlugin::Filelocation is $FileLocation" );
+	my $FileLocation = &TWiki::Func::getWorkArea( 'CounterPlugin' );
+	my $DataFile = 'visitor_count.txt';
+	my $CounterFile = "$FileLocation/$DataFile";
+    	&TWiki::Func::writeDebug( "- TWiki::Plugins:CounterPlugin::FileLocation is $FileLocation" );
 	
-	if(!open(FILE , "< /home/students/mtech03/rahulm/web/twiki/lib/TWiki/Plugins/datacount.txt"))
+	if ( open(FILE , '<', $CounterFile) )
 	{
-		# File doesnot exist
-		$Count = 0;
- 		#die "Can't open datacount.txt file";
+	    &TWiki::Func::writeDebug("Opened $DataFile file successfully");
+	    $Count = <FILE>;
+	    close FILE;
 	}
-
-
-	&TWiki::Func::writeDebug("Opened Datacount.txt file successfully");
-	$Count = <FILE>;
-	$str = " <HTML>  <H1> Visitor Count is " . $Count . " </H1> </HTML>";
-	close(FILE);
+	else
+	{
+	    # File doesn't exist
+	    $Count = 0;
+	}
 	
-	open(FILE , "> /home/students/mtech03/rahulm/web/twiki/lib/TWiki/Plugins/datacount.txt") || die "Can't open datacount.txt file";
-	#sysopen(FILE , "/home/students/mtech03/rahulm/web/twiki/lib/TWiki/Plugins/datacount.txt" , "O_WRONLY" , "0777" ) || die "Can't open datacount.txt file";
-	$Count = $Count + 1;
+	open(FILE, '>', $CounterFile) || die "Can't open $DataFile file";
+	++$Count;
 	print FILE $Count;
-	close(FILE);
+	close FILE;
 	
-	return $str;
+	return $Count;
 }
 
 1;
