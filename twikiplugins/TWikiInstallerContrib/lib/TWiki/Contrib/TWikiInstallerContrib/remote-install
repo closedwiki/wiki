@@ -1,0 +1,375 @@
+#!/usr/bin/perl -w
+# $Id: install_twiki.cgi 7202 2005-10-28 20:36:14Z WillNorris $
+# Copyright 2004,2005 Will Norris.  All Rights Reserved.
+# License: GPL
+use strict;
+++$|;
+
+################################################################################
+# CGI parameters:
+# force: force (re)installation, even if twiki/ directory is already present
+# perl: name of perl executable (autodetected, but can be manually overridden)
+# kernel: name of kernel to install (eg, TWikiKernelDEVELOP7684)
+# extension: name of extensions to install (BlogPlugin, ImageGalleryPlugin, PublishContrib)
+# TWikiFor: 
+#
+# TODO parameters:
+# administrator ($twikiAdmin)
+#	(and update Main.TWikiAdminGroup)
+# wikiwebmaster (for email about this wiki site) - 
+#	(and update TWiki.MainPreferences) - $wikiWebMaster
+#
+# other TODO?
+# 	could create a TWikiInstallationReport topic...
+################################################################################
+
+use File::Path qw( mkpath rmtree );
+use CGI qw( :standard );
+use FindBin;
+use CGI::Carp qw( fatalsToBrowser );
+use File::Copy qw( cp mv );
+use File::Basename qw( basename );
+use Data::Dumper qw( Dumper );
+#use URI;
+use Cwd qw( abs_path );
+use LWP::UserAgent;
+use HTTP::Request;
+use HTTP::Response;
+use English;
+
+mkpath "lib/CPAN/lib/";
+
+use lib qw( lib/CPAN/lib/ );
+use Archive::Zip;
+#use WWW::Mechanize::TWiki 0.08;
+#use Error qw( :try );
+
+my $q = CGI::new() or die $!;
+# object data
+my $LocalSiteCfg;
+my $twikiAdmin = $q->param('TWikiAdmin') || '';
+my $wikiWebMaster = $q->param('WIKIWEBMASTER') || $ENV{SERVER_ADMIN};
+my $TWikiFor = $q->param('TWikiFor') || 'http://localhost/~twikibuilder/twiki.org.zip';
+my $perl = $q->param( 'perl' ) || $EXECUTABLE_NAME;
+
+print $q->header(),
+    $q->start_html( -title => 'TWiki Installer',
+		    -style => { -code => <<__CSS__ },
+html, body, table, tr, td, td p  { padding:0em; margin:0em; }
+html body { background:#eeeeee; margin:0.2em 0 0.1em 0.2em; font-size:0.9em; }
+td { padding:0.1em; }
+td:hover { background:#bbbbff; }
+.kernel { }
+.extension { }
+.configuration { padding:1em 0; }
+__CSS__
+    ),
+    $q->h1( 'TWiki Installer' )
+    ;
+
+################################################################################
+
+my %plugins;	# which plugins get installed/are encountered
+my $twikiDir = "$FindBin::Bin/twiki";
+
+my ( $twikiPath ) = $ENV{SCRIPT_NAME} =~ m|(.*)/.*|;		# remove the script name from the path
+$twikiPath .= '/twiki';
+
+my ( $scriptSuffix ) = $ENV{SCRIPT_NAME} =~ m|.*/.*(\..*)$|;
+$scriptSuffix ||= '';
+
+my $localDirConfig = {
+    # SMELL: doesn't handle httpS --- what happened to $ENV{SCRIPT_URI} ???
+	DefaultUrlHost   => "http://$ENV{HTTP_HOST}" . ( $ENV{SERVER_PORT} != 80 && ":$ENV{SERVER_PORT}" || '' ),
+	ScriptUrlPath    => "$twikiPath",
+	ScriptSuffix     => $scriptSuffix,
+	PubUrlPath       => "$twikiPath/pub",
+	PubDir           => "$twikiDir/pub",
+	TemplateDir      => "$twikiDir/templates",
+	DataDir          => "$twikiDir/data",
+	LocalesDir       => "$twikiDir/locale",
+	LogDir           => "$twikiDir/data",	# ???
+    };
+
+my $mapTWikiDirs = {
+    lib => { dest => "$twikiDir/lib" },
+    pub => { dest => $localDirConfig->{PubDir} },
+    data => { dest => $localDirConfig->{DataDir} },
+    templates => { dest => $localDirConfig->{TemplateDir} },
+    bin => { dest => "$twikiDir", perms => 0755, },
+    locale => { dest => $localDirConfig->{LocalesDir} },
+#    log => ?
+};
+
+################################################################################
+# already installed?
+################################################################################
+if ( -d "$FindBin::Bin/twiki" && !$q->param( 'force' ) ) {
+    print $q->p( "TWiki is already installed! (you can ", $q->tt( 'force=1' ), " a (re)installation)" );
+    # TODO: need URI for "view"
+    print $q->p( $q->a( { -href => "/TWiki/InstalledPlugins" }, "Proceed to the wiki" ) );
+
+    exit 0;
+}
+
+################################################################################
+my $tmpInstall = "$FindBin::Bin/twiki/tmp/install/";
+mkpath $tmpInstall;
+
+my $archive_file = 'install.zip';
+unless ( -e $archive_file ) {
+    my ( $tar, $error ) = getUrl({ url => $TWikiFor, outfile => $archive_file });
+    die $error if $error;
+
+    open( TAR, '>', $archive_file ) or die $!;
+    binmode( TAR );
+    print TAR $tar;
+    close TAR;
+}
+
+unless ( -d "$tmpInstall/components/" ) {
+    my $archive = Archive::Zip->new( $archive_file ) or die "No $archive_file";
+    $archive->extractTree( '', $tmpInstall );
+}
+
+if ( ( $q->param('kernel') || '' ) =~ /^LATEST$/i ) {
+    $q->param( kernel => basename( (reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } 
+			  <$tmpInstall/components/kernel/*> )[0] ) =~ /(.*)\./ );
+}
+
+if ( grep( /^all$/i, ( $q->param('extension') ) ) ) {
+    $q->param( -name => 'extension', -value => [ sort map { basename /(.*)\./ } <$tmpInstall/components/extension/*> ] );
+}
+
+################################################################################
+# present configuration page if the install button hasn't been clicked
+################################################################################
+if ( lc( $q->param('install') || '' ) ne 'install' ) {
+    print installationMenu( $q ),
+    	$q->end_html;
+    exit 0;
+}
+
+################################################################################
+# do the INSTALLATION
+
+-d $twikiDir || mkpath $twikiDir or die qq{Couldn't create "$twikiDir" to install into!};
+foreach my $type qw( kernel extension ) {
+    map { InstallTWikiExtension( "$tmpInstall/components/$type/$_.zip" ) } ( sort $q->param($type) );
+}
+
+################################################################################
+# LocalLib.cfg
+my $fnLocalLibCfg = "$mapTWikiDirs->{bin}->{dest}/LocalLib.cfg";
+open( FH, '>', $fnLocalLibCfg ) or die "Can't open $fnLocalLibCfg: $!";
+print FH <<'__LOCALLIB_CFG__';
+use vars qw( $twikiLibPath );
+use Cwd qw( abs_path );
+( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( "lib" )) =~ /(.*)/;
+1;
+__LOCALLIB_CFG__
+close( FH ) or die "Can't close $fnLocalLibCfg: $! ???";
+
+################################################################################
+# LocalSite.cfg
+
+foreach my $plugin ( sort { lc $a cmp lc $b } keys %plugins ) {
+    $LocalSiteCfg .= "\$TWiki::cfg{Plugins}{$plugin}{Enabled} = 1;\n";
+}
+
+$LocalSiteCfg .= <<__LOCALSITE_CFG__;
+#===============================================================================
+\$TWiki::cfg{Register}{HidePasswd} = 1;
+\$TWiki::cfg{AutoAttachPubFiles} = 1;
+\$TWiki::cfg{EnableHierarchicalWebs} = 1;
+\$TWiki::cfg{LoginManager} = 'TWiki::Client::TemplateLogin';
+\$TWiki::cfg{UserInterfaceInternationalisation} = 1;
+#\$TWiki::cfg{WarningsAreErrors} = 1;
+# SMELL: blech, temp hack
+\$TWiki::cfg{Site}{CharSet} = 'iso-8859-15';
+#===============================================================================
+__LOCALSITE_CFG__
+
+foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir LocalesDir ) ) {
+    # normalise pathnames (entries ending in ...Dir) (Sandbox.pm doesn't like .. in pathnames!)
+    $localDirConfig->{ $localSiteEntry } = abs_path( $localDirConfig->{ $localSiteEntry } ) 
+	if $localSiteEntry =~ /Dir$/;
+
+    $LocalSiteCfg .= qq{\$TWiki::cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
+}
+
+my $fnLocalSiteCfg = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
+open( FH, '>', $fnLocalSiteCfg ) or die "Can't open $fnLocalSiteCfg: $!";
+print FH $LocalSiteCfg;
+close( FH ) or die "Can't close $fnLocalSiteCfg: $! ???";
+
+################################################################################
+# finish/cleanup
+
+rmtree 'tmp/';
+#unlink $0;
+#chmod 0440, $0;		# doesn't seem to be working??? ah, probably an ownership issue (but why does rm work?)
+
+#print continueToWikiText();
+
+print $q->end_html;
+
+exit 0;
+
+################################################################################
+################################################################################
+
+# parameters
+# module: module filename relative to components (eg, kernels/TWikiDEVELOP6666.zip or extension/BlogPlugin.zip)
+sub InstallTWikiExtension {
+    my ( $module ) = @_;
+
+    my $INSTALL = "$tmpInstall/INSTALL/";
+    -d $INSTALL && rmtree $INSTALL;
+    mkpath $INSTALL;
+
+    my ( $name ) = ( basename $module ) =~ /(.*)\./;
+    print STDERR "Installing $name\n";
+    my $archive = Archive::Zip->new( $module ) 
+	or warn qq{Archive::Zip new failed [$module] - can't install "$name"}, return 0;
+    print $q->h3( $name );
+    $archive->extractTree( '', $INSTALL );
+    
+    foreach my $file ( $archive->memberNames ) {
+	# TODO: rename $base to something more descriptive (like ...?)
+	next unless my ($path,$base) = $file =~ m|^([^/]+)(/.*)$|;
+
+	my $map = $mapTWikiDirs->{$path} or warn "no mapping for [$path]", next;
+	my $dirDest = $map->{dest} or die "no destination directory for [$path] " . Dumper( $map );
+
+	# handle directories (path ends with /?, if so, mirror directory structure)
+	mkpath( "$dirDest/$base" ), next if $base =~ m|/$|;
+
+	# install the file by moving it from the staging area
+	my $destFile = "$dirDest/$base";
+	mv( "$INSTALL/$file", $destFile ) or warn "$INSTALL/$file -> $destFile: $!";
+	chmod $map->{perms}, $destFile if $map->{perms};
+
+    	# only Plugins have to be enabled (i.e., Contribs and Skins are "always on")
+	if ( my ( $plugin ) = $file =~ m|^lib/TWiki/Plugins/(.+Plugin).pm$| ) {
+	    ++$plugins{$plugin};
+	}
+
+	# semi-KLUDGEy implementation to support ScriptSuffix
+	if ( $path eq 'bin' && $base !~ /\./ ) {		# process extension-less files
+	    my $origFile = $destFile;
+	    $destFile .= $localDirConfig->{ScriptSuffix};
+	    mv( $origFile, $destFile ) or die "$origFile -> $destFile: $!";
+
+	    # TODO: use an exception here!!!
+	    # patch perl path for local installation
+	    local $/ = undef;
+	    open( BIN, '<', $destFile ) or warn "unable to change perl path for $destFile: $!", next;
+	    my $bin = <BIN>;
+	    close BIN;
+	    $bin =~ s|/usr/bin/perl|$perl|;
+
+	    open( BIN, '>', $destFile ) or warn "unable to change perl path for $destFile: $!", next;
+	    print BIN $bin;
+	    close BIN;
+	}
+    }
+
+    rmtree $INSTALL;
+
+    return 1;
+}
+
+################################################################################
+
+# parameters
+# cgi: 
+sub installationMenu {
+    my $q = shift or die "no cgi?";
+    my $text = '';
+
+    $text .= $q->start_form
+	. $q->hidden( -name => 'force', -value => $q->param('force') )
+	. $q->submit( -name => 'install', -value => 'Install' );
+
+    my @kernels = sort map { basename /(.*)\./ } <$tmpInstall/components/kernel/*>;
+    $text .= $q->div( { -class => 'kernel', },
+		      $q->checkbox_group( -name => 'kernel',
+					  -values => \@kernels,
+#					  -values => [ grep { m|\.| } @kernels ],
+#					  -labels => { @kernels },
+					  -linebreak => 'true',
+					  )
+		      );
+    
+    $text .= $q->div( { -class => 'configuration' },
+		      $q->b( 'perl' ) . ' (full path): ' 
+		      . $q->textfield( -name => 'perl', -default => $perl, -size => 40 )
+		      . $q->br
+		      . $q->small( '(may also be the name of a perl accelerator, e.g,. '
+				   . $q->a( { -href => "http://www.daemoninc.com/SpeedyCGI/" }, 'SpeedyCGI' ) . ')'
+				   )
+		      . $q->br
+		      . $q->b( 'TWikiAdmin' ) . ': '
+		      . $q->textfield( -name => 'TWikiAdmin', -default => $twikiAdmin, -size => 25 )
+		      . $q->br
+		      . $q->b( 'WIKIWEBMASTER' ) . ': '
+		      . $q->textfield( -name => 'WIKIWEBMASTER', -default => $wikiWebMaster, -size => 25 )
+		      . $q->br
+		      );
+			    
+    my @extensions = sort map { basename /(.*)\./ } <$tmpInstall/components/extension/*>;
+
+    # do defaults creation/manipulation here, because CGI ...
+    if ( grep( /^all$/i, ( $q->param('extension') ) ) ) {
+	$q->param( -name => 'extension', -value => \@extensions );
+    }
+
+    $text .= $q->div( { -class => 'extension', },
+		      $q->checkbox_group( -name => 'extension',
+					  -values => \@extensions,
+#					  -values => [ grep { m|\.| } @extensions ],
+#					  -labels => { @extensions },
+					  -linebreak => 'true',
+					  -columns => 3,
+					  )
+		      );
+
+    $text .= $q->end_form;
+
+    return $text;
+}
+
+################################################################################
+
+# url: 
+sub getUrl {
+    my ( $p ) = @_;
+    my $url = $p->{url} or die qq{required parameter "url" not specified};
+
+    my $ua = LWP::UserAgent->new() or die $!;
+    $ua->agent( "TWiki remote installer v0.0.1" );
+    my $req = HTTP::Request->new( GET => $url );
+    # TODO: what about http vs. https ?
+    $req->referer( "$ENV{SERVER_NAME}:$ENV{SERVER_PORT}$ENV{SCRIPT_NAME}" );
+    my $response = $ua->request($req);
+
+    return $response->is_error() ? ( undef, $response->status_line ) : ( $response->content(), '' );
+}
+
+__END__
+################################################################################
+################################################################################
+# turn on TWikiUserAuthentication
+{
+    my $bin = $mapTWikiDirs->{bin}->{dest} or die "no bin dest?";
+    my $data = $mapTWikiDirs->{data}->{dest} or die "no data dest?";
+
+    my $text = File::Slurp::read_file( "$bin/.htaccess.txt" ) or die "$bin/.htaccess.txt: $!";
+    $text =~ s|!FILE_path_to_TWiki!/data|$data|g;
+    $text =~ s|!URL_path_to_TWiki!/bin/oops|$localDirConfig->{ScriptUrlPath}/oops$localDirConfig->{ScriptSuffix}|g;
+    $text =~ s|(<Files ")([^"\*\.]+?)(">)|$1$2$localDirConfig->{ScriptSuffix}$3|g;
+    # authentication for =configure= (for ADMIN)
+    $text =~ s|!ADMIN_users!|$administrator|g if $administrator;
+    File::Slurp::write_file( "$bin/.htaccess", $text ) or die "cannot write .htaccess: $!";
+}

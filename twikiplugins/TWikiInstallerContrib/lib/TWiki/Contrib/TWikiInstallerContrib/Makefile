@@ -5,34 +5,34 @@ MakeFor ?= twiki.org-`bin/svnrev.pl`
 
 all : help
 
-TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
+TAR_EXCLUDE = --exclude CVS --exclude .svn --exclude "*~" --exclude bak
 
-$(MakeFor).tar.bz2 : $(MakeFor).tar
-	bzip2 -f $(MakeFor).tar
+kernel : 
+	[ -e components/kernel ] || mkdir -p components/kernel
+	cd $(TWIKIDEV)/$(BRANCH)/tools/; TWIKI_LIBS=$(TWIKIDEV)/$(BRANCH)/twikiplugins/BuildContrib/lib/ perl build.pl release; cp $(TWIKIDEV)/$(BRANCH)/TWiki.zip $(TWIKIDEV)/$(BRANCH)/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/components/kernel/TWikiKernel$(BRANCH)`$(TWIKIDEV)/$(BRANCH)/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/svnrev.pl`.zip
 
-$(MakeFor).tar : 
-	tar -f $(MakeFor).tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform && find -maxdepth 1 -type f`
-	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/extensions/ downloads/kernels/TWikiKernel-$(BRANCH)-`bin/svnrev.pl`.* config/ cpan/MIRROR/TWIKI/
-	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) 
+$(MakeFor).zip : kernel 
+	zip -r $(MakeFor).zip components/extension/ components/kernel/TWikiKernel$(BRANCH)`bin/svnrev.pl`.*
+
+#	tar --file=$(MakeFor).tar --create $(TAR_EXCLUDE) components/extension/ components/kernel/TWikiKernel$(BRANCH)`bin/svnrev.pl`.*
 
 extensions : 
 	cd $(TWIKIDEV)/$(BRANCH)/tools/; TWIKI_LIBS=$(TWIKIDEV)/$(BRANCH)/twikiplugins/BuildContrib/lib/ perl build_all_extensions.pl
-	cp $(TWIKIDEV)/$(BRANCH)/twikiplugins/*/*.zip downloads/extensions
+	[ -e components/extension ] || mkdir -p components/extension
+	cp $(TWIKIDEV)/$(BRANCH)/twikiplugins/*/*.zip components/extension
 
-distro : twiki-cpan extensions $(MakeFor).tar.bz2 
+copy_extensions : 
+	[ -e components/extension ] || mkdir -p components/extension
+	cp $(TWIKIDEV)/$(BRANCH)/twikiplugins/*/*.zip components/extension
 
-test-distro : twiki-cpan extensions $(MakeFor).tar
+TWikiFor : $(MakeFor).zip
 
-minicpan :
-	cpan/mirror-cpan.pl
-
-twiki-cpan : minicpan
-	cpan/mirror-cpan.pl --twiki `bin/calc-twiki-deps.pl`
+distro : extensions $(MakeFor).zip
 
 ################################################################################
 
-publish :
-	scp $(MakeFor).tar.bz2 $(PUBLISH_TO)
+publish : 
+	scp $(MakeFor).zip $(PUBLISH_TO)/twiki.org.zip
 
 ################################################################################
 
@@ -47,15 +47,12 @@ help : print
 	@echo 
 	@echo Usage
 	@echo ================================================================================
-	@echo make [build-options] MakeFor.tar[.bz2] - bundle already-downloaded extensions + kernels into .tar[.bz2]
+	@echo make [build-options] MakeFor.zip - build and bundle extensions + kernels into .zip
 	@echo 
-	@echo make test-distro - download and bundle extensions + kernel
-	@echo make distro - test-distro + bzip2 compression
+	@echo make distro - download and bundle extensions + kernel
 	@echo 
-	@echo "make extensions - download extensions (all of plugins, contribs, addons)"
-	@echo 
-	@echo make minicpan - mirror latest version of cpan modules
-	@echo make twiki-cpan - create twiki cpan repository
+	@echo "make kernel - build TWikiKernel"
+	@echo "make extensions - build extensions (all of plugins, contribs, addons)"
 	@echo 
 	@echo make publish - upload distro
 	@echo 
