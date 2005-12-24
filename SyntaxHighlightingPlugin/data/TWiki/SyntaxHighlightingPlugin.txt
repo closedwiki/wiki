@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="TWikiPreferences"}%
 ---++ Syntax Highlighting TWiki Plugin
 
-The Syntax Highlighting Twiki Plugin is used to emphasize the rendering of your twiki text according to several languages.
+The Syntax Highlighting Twiki Plugin is used to emphasize the rendering of your wiki text according to several languages.
 
 It currently uses =enscript= to render its output.
 
@@ -124,7 +124,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This Plugin is used to emphasize the rendering of your twiki text according to several languages.
+		* Set SHORTDESCRIPTION = This Plugin is used to emphasize the rendering of your wiki text according to several languages.
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -173,10 +173,10 @@ UnmatchedWikiword :)
 MatchedWikiWord :(
 %end%
 
-Adding a newline at the end of input stops TWiki in his greedy matching, but this workaround is not an acceptable solution. Feel free to find another one ....
+Adding a newline at the end of input stops TWiki in its greedy matching, but this workaround is not an acceptable solution. Feel free to find another one ....
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.NicolasTisserand, Main.NicolasBurrus, Perceval Anichini|
+|  Plugin Author: | TWiki:Main.NicolasTisserand, TWiki:Main.NicolasBurrus, Perceval Anichini |
 |  Plugin Version: | 12 Jul 2002 |
 |  Change History: | 12 Jul 2002: Initial version |
 |  CPAN Dependencies: | none |
@@ -187,4 +187,4 @@ Adding a newline at the end of input stops TWiki in his greedy matching, but thi
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
 
--- Main.NicolasTisserand - 12 Jul 2002
+-- TWiki:Main.NicolasTisserand - 12 Jul 2002
