@@ -14,7 +14,7 @@ and %N<nop>AVBARINDEXEND% (if present, or end of topic), which creates an index 
 	* <nop>SecondSubTopic with some other text
 </pre>
 
-Indexed topics then has the tag %<nop>NAVBAR% expansed into a navigation bar.
+Indexed topics then has the tag %<nop>NAVBAR% expanded into a navigation bar.
 (of the form *Prev Up Next*, links to previous topic, index topic and next topic).
 This tag should be normally part of the skin template, you do not have to add them to your topics by hand.
 
@@ -30,7 +30,7 @@ The %<nop>NAVBAR% tag can accept options, of the form:
 <pre>
 	%<nop>NAVBAR{prefix="<i>html code...</i>" suffix="<i>html code...</i>" graphics="on"}%
 </pre>
-	* If NAVBAR is expansed, it will be prefixed and suffixed by the corresponding arguments, if any
+	* If NAVBAR is expanded, it will be prefixed and suffixed by the corresponding arguments, if any
 	* if graphics is not specified, the navbar is in text form, as <tt>Prev Up Next</tt> links.
 	  If set to on, it will use icons. Text will be striked out and icons will be greyed out
 	  When there is no previous or no next topic.
@@ -73,11 +73,12 @@ one just before the %<nop>TEXT% line, one just before the %<nop>META{"attachment
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.ColasNahaboo |
-|  Plugin Version: | v1.1 |
-|  Change History: | *v1.0*, 11 Sep 2002: Initial version |
-|| *v1.1*, 12 Sep 2002: *size* parameter, better examples |
+|  Plugin Author: | TWiki:Main.ColasNahaboo |
+|  Plugin Version: | v1.2 |
+|  Change History: | <!-- in reverse chronological order --> |
 || *v1.2*, 20 Sep 2002: Topics with numbers in their names were not indexed |
+|| *v1.1*, 12 Sep 2002: *size* parameter, better examples |
+|| *v1.0*, 11 Sep 2002: Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
@@ -100,7 +101,7 @@ one just before the %<nop>TEXT% line, one just before the %<nop>META{"attachment
 	* pub/Plugins/NavbarPlugin/nav-up.gif
 	* pub/Plugins/NavbarPlugin/nav-upi.gif inactive (greyed out) version.
 
--- Main.ColasNahaboo - 11 Sep 2002
+-- TWiki:Main.ColasNahaboo - 11 Sep 2002
 
 %META:FILEATTACHMENT{name="nav-next.gif" attr="" comment="next topic icon" date="1031736959" path="nav-next.gif" size="123" user="ColasNahaboo" version="1.1"}%
 %META:FILEATTACHMENT{name="nav-nexti.gif" attr="" comment="next topic icon (inactive)" date="1031736977" path="nav-nexti.gif" size="90" user="ColasNahaboo" version="1.1"}%

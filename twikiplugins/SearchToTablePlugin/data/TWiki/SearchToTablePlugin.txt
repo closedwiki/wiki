@@ -54,7 +54,7 @@ Performs a topic search and puts results into a table:
 
 ---+++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.KenKachnowich |
+|  Plugin Author: | TWiki:Main.KenKachnowich |
 |  Plugin Version: | 21 Dec 2001 |
 |  Change History: |  |
 |  CPAN Dependencies: | none |
@@ -63,9 +63,9 @@ Performs a topic search and puts results into a table:
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% ( TWiki:Plugins/%TOPIC% )|
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev ( TWiki:Plugins/%TOPIC%Dev )|
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- %TWIKIWEB%.KenKachnowich  -  21 Dec 2001 <br> 
+-- TWiki:Main.KenKachnowich  -  21 Dec 2001 <br> 
 
 
 

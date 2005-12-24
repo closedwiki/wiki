@@ -124,12 +124,12 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 |  Plugin Author: | TWiki:Main/ColeBeck |
 |  Plugin Version: | 24 Oct 2005 (V1.210) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  24 Oct 2005: | Incorporated areamap patch (MagnusLewisSmith)  --JoanTouzet |
+|  24 Oct 2005: | Incorporated areamap patch (TWiki:Main.MagnusLewisSmith)  -- TWiki:Main.JoanTouzet |
 |  13 Apr 2005: | Added clientside maps functionality; correctly finds pub directory |
 |  25 Mar 2005: | Cleaner code |
 |  01 Jul 2004: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
-|  CPAN Dependencies: | Digest::MD5 |
+|  CPAN Dependencies: | CPAN:Digest::MD5 |
 |  Other Dependencies: | [[http://www.graphviz.org/][Graphviz]] |
 |  Perl Version: | 5.005 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
@@ -139,7 +139,7 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.ColeBeck - 01 Jul 2004
+-- TWiki:Main.ColeBeck - 01 Jul 2004
 
 %META:FILEATTACHMENT{name="webfonts-1.0-5.noarch.rpm" attr="" comment="" date="1089131375" path="webfonts-1.0-5.noarch.rpm" size="1541639" user="ColeBeck" version="1.1"}%
 %META:FILEATTACHMENT{name="graphsample.png" attr="h" comment="" date="1112024711" path="graphsample.png" size="5197" user="ColeBeck" version="1.1"}%

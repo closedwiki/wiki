@@ -5,12 +5,12 @@
 
 This is a plugin for tracking [[http://www.c2.com/cgi/wiki?ExtremeProgramming][eXtreme Programming]] projects. The original code was
 written by TWiki:Main.RichardBennett, It was converted into this plugin by
-TWiki:Main.MartinWatt and enhanced by TWiki:Main.AndreaBacchetta, TWiki:Main.AnthonPang, TWiki:Main.AndreaSterbini, TWiki:Main.ThomasEschner and TWiki:Main.RafaelAlvarez
+TWiki:Main.MartinWatt and enhanced by TWiki:Main.AndreaBacchetta, TWiki:Main.AnthonPang, TWiki:Main.AndreaSterbini, TWiki:Main.ThomasEschner, and TWiki:Main.RafaelAlvarez
 
 See TWiki:Plugins/XpTrackerPluginHistory for a description of changes in this new version.
 
 ---++Documentation
-The documentation is hosted in the Twiki.org site, and is not being distributed with the plugin as it's a ongoing effort.
+The documentation is hosted in the Twiki.org site, and is not being distributed with the plugin as it's an ongoing effort.
 
 	* TWiki:Plugins.XpTrackerPluginManual
 	* TWiki:Plugins.ZenAndXpTracking
@@ -51,7 +51,7 @@ Plugin settings are stored as preferences variables.
 		* Set SHORTDESCRIPTION = This plugin tracks XP projects
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 	* Plugin coloring schema:
 		* Set UNSTARTEDCOLOR = #FFCCCC
@@ -158,5 +158,5 @@ Content:
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki.DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 

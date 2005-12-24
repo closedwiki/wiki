@@ -24,7 +24,7 @@ This plugin shows you the diskusage (in kb) for the current web.
 	* One line description, shown in the Text Formatting Rules topic: 
 	* Set SHORTDESCRIPTION = This plugin shows the disk usage for the current web 
 	* Whether you want debug output
-	* Set DEBUG = 1
+	* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
@@ -51,7 +51,7 @@ It could be improved on considerably. e.g.
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.MartinCleaver |
+|  Plugin Author: | TWiki:Main.MartinCleaver |
 |  Plugin Version: | 11 Mar 2004 Martin Cleaver |
 |  Change History: | 11 Mar 2004 Martin Cleaver - initial release&nbsp; |
 |  CPAN Dependencies: | none |
@@ -60,7 +60,7 @@ It could be improved on considerably. e.g.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- %TWIKIWEB%.MartinCleaver - 11 Mar 2004 <br /> 
+-- TWiki:Main.MartinCleaver - 11 Mar 2004 <br /> 
 

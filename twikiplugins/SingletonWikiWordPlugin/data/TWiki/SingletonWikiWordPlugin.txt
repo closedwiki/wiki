@@ -34,7 +34,7 @@ Test:
 
 
 ---+++ Plugin Info
-|  Plugin Author: | Main.MartinCleaver |
+|  Plugin Author: | TWiki:Main.MartinCleaver |
 |  Plugin Version: | 15 Apr 2003 |
 |  Change History: | none |
 |  CPAN Dependencies: | none |
@@ -43,7 +43,7 @@ Test:
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.MartinCleaver - 28 Nov 2001 <br> 
+-- TWiki:Main.MartinCleaver - 28 Nov 2001 <br> 
 

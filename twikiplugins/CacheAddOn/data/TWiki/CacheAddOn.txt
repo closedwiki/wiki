@@ -18,7 +18,7 @@ This is pityful, as the generated pages could make excellent navigation pages.
 Here benchmark figures for TWiki Dec2001 on a
 [[http://www.sun.com/desktop/sunblade100/][SunBlade100]]
 with few plug-ins installed
-(Plugins.DefaultPlugin Plugins.TablePlugin Plugins.EditTablePlugin Plugins.IncludeIndexPlugin Plugins.InterwikiPlugin Plugins.PdfPlugin Plugins.SpacedWikiWordPlugin Plugins.SpreadSheetPlugin Plugins.TWikiDrawPlugin Plugins.XpTrackerPlugin)
+(TWiki:Main.DefaultPlugin TWiki:Main.TablePlugin TWiki:Main.EditTablePlugin TWiki:Main.IncludeIndexPlugin TWiki:Main.InterwikiPlugin TWiki:Main.PdfPlugin TWiki:Main.SpacedWikiWordPlugin TWiki:Main.SpreadSheetPlugin TWiki:Main.TWikiDrawPlugin TWiki:Main.XpTrackerPlugin)
 
 |					  Test case | Min[s]| Avg[s]| Max[s]| URL path				|
 |	Hello-world = load+compile+init perl |	0.65|	0.75|	0.93| /twiki/benchmark?-h |

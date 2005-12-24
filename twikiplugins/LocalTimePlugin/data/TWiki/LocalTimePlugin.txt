@@ -43,7 +43,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | Main.NathanOllerenshaw |
+|  Plugin Author: | TWiki:Main.NathanOllerenshaw |
 |  Plugin Version: | 02 Jul 2003 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  02 Jul 2003: | Initial version |
@@ -55,5 +55,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/%USERNAME% - 02 Jul 2003
-%META:FILEATTACHMENT{name="LocalTimePlugin.zip" attr="" comment="LocalTimePlugin" date="1057159002" path="LocalTimePlugin.zip" size="4681" user="NathanOllerenshaw" version="1.1"}%
+-- TWiki:Main/NathanOllerenshaw - 02 Jul 2003

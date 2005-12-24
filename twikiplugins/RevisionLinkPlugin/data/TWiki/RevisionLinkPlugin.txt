@@ -51,7 +51,7 @@ Plugin settings are stored as preferences variables. The following variables are
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.RichardBaar |
+|  Plugin Author: | TWiki:Main.RichardBaar |
 |  Plugin Version: | Version 1.11 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -63,6 +63,6 @@ Plugin settings are stored as preferences variables. The following variables are
 | | 14 Aug 2003 | Version 1.1 | You can specify revision only with one number (ex. %<nop>REV{"5"}%)<br>You can use negative numbers for revision (ex. %<nop>REV{"-2"}%)<br>Enhanced syntax (added characters *[* and *'*)<br>Added variables $date, $user and $comment to format attribute |
 | | 27 Aug 2003 | Version 1.11 | Repaired link when "web" attribute specified |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 This work was sponsored by [[http://www.systinet.com][Systinet Corp.]]

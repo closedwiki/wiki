@@ -43,21 +43,21 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 
 ---++ Plugin Info
 
- |  Plugin Author: | Main.MartinCleaver and friends |
+ |  Plugin Author: | TWiki:Main.MartinCleaver and friends |
  |  Plugin Version: | 30 Mar 2005 |
  |  Change History: | <!-- specify latest version first -->&nbsp; |
- |  30 Mar 2005 [[TWiki:Main/ThomasWeigert][Thomas Weigert]]: | Removed the restriction that only one transformation could be included in a topic. Added css style sheet parameter. Made parameters follow TWiki conventions. |
- |  26 Oct 2001 [[TWiki:Main/MartinCleaver][Martin Cleaver]]: | Initial release |
+ |  30 Mar 2005 | Removed the restriction that only one transformation could be included in a topic. Added css style sheet parameter. Made parameters follow TWiki conventions.  [[TWiki:Main/ThomasWeigert][Thomas Weigert]] |
+ |  26 Oct 2001 | Initial release  [[TWiki:Main/MartinCleaver][Martin Cleaver]] |
  |  CPAN Dependencies: | none |
- |  Other Dependencies: | none |
+ |  Other Dependencies: | a browser that supports XML transformations/processing |
  |  Perl Version: | 5.0 |
  |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
  |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
  
- __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin, 
+ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
  
 
--- Main.ThomasWeigert - 30 Mar 2005
+-- TWiki:Main.ThomasWeigert - 30 Mar 2005
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->

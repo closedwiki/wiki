@@ -56,14 +56,14 @@ For example, in some versions, you get an ugly black border on the left and bott
 Some versions pad own-line equations with whitespace on the left, screwing up the centering of the image.
 Your mileage may vary, try installing a newer version of =latex2html= if you encounter these issues. 
 
-For information about where this plugin is going, visit MathModePluginDev
+For information about where this plugin is going, visit TWiki:Plugins.MathModePluginDev
 
 ---+++ Plugin Info
 
-|  Plugin Author: | %MAINWEB%.GraemeLufkin |
+|  Plugin Author: | TWiki:Main.GraemeLufkin |
 |  Plugin Version: | 05 Jun 2002: Second Release |
 |  Change History: | 03 Apr 2002: Initial version |
-|  CPAN Dependencies: | Digest::MD5 |
+|  CPAN Dependencies: | CPAN:Digest::MD5 |
 |  Other Dependencies: | A working installation of =latex2html= |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -71,7 +71,7 @@ For information about where this plugin is going, visit MathModePluginDev
 
 This plugin was created and tested on the 01 Dec 2001 version of TWiki.
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.GraemeLufkin - 05 Jun 2002
+-- TWiki:Main.GraemeLufkin - 05 Jun 2002
 %META:FILEATTACHMENT{name="twiki_l2h.init" attr="" comment="" date="1017883719" path="twiki_l2h.init" size="66" user="GraemeLufkin" version="1.2"}%
