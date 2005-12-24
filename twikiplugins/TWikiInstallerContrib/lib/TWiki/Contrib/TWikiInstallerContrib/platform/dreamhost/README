@@ -1,5 +1,0 @@
-
-twiki~ wget http://twikiplugins.sourceforge.net/twiki-dreamhost.tar.bz2 
-twiki~ tar xjf twiki-sourceforge.tar.bz2
-twiki~ ./pre-twiki.pl </dev/null
-# browse to URL provided at end of pre-twiki (something along the lines of http://hostname/config/install.html)
