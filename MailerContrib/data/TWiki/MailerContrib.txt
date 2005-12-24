@@ -8,8 +8,9 @@ This module is an add-on to the TWiki kernel that supports e-mail notification o
 ---++ <code>bin/mailnotify</code>
 The main part of the mailer module is a script, =bin/mailnotify=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard <nop>%NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
 
+<!-- Included by TWiki.WebChangesAlert -->
 %STARTINCLUDE%
-Subscribers are listed <nop>%NOTIFYTOPIC% in "bullet lists" following one of the following formats:
+Subscribers are listed in <nop>%NOTIFYTOPIC% following one of these bullet list formats:
 
 _three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ <br />
 _three spaces_ * [ _webName_ . ] _wikiName_ <br />
@@ -34,6 +35,8 @@ For example:
 A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
 
 If a _TWiki group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
+
+__%T% Tip:__ List names in alphabetical order to make it easier to find the names.
 %STOPINCLUDE%
 
 In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =bin/mailnotify= script.
