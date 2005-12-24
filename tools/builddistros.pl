@@ -29,6 +29,7 @@ chomp( my @svnInfo = `svn info .` );
 my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
 my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
 execute ( "cd distro/ ; ./build-twiki-kernel.pl --nogendocs --nozip --tempdir=/tmp --outputdir=$outputDir --outfile=TWikiKernel-$branch-$svnRev" ) or die $!;
+execute ( "perl build.pl release; mv ../TWiki.tgz $outputDir/TWikiKernel-$branch-$svnRev.tgz" );
 
 print "</verbatim>\n";
 print "<HR />\n";
