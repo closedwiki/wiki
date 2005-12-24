@@ -33,7 +33,7 @@ my $Config = {
     tempdir => '.',
     outputdir => '.',
     outfile => undef,
-    agent => "TWikiKernel Builder/v0.8.0",
+    agent => "TWikiKernel Builder/v0.7.2",
     manifest => '-',
 # output formats
     tar => 1,
@@ -109,11 +109,16 @@ mkpath( $installBase ) or die "Unable to create the new build directory: $!";
 
 my $pwdStart = cwd();
 
-my $svnExport = $Config->{svn_export} or die "no svn_export?";
-( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
-execute( qq{svn export ../.. $svnExport} ) or die $!;	# from tools/distro up to BRANCH (eg, trunk, DEVELOP)
-#die "no svn export output?" unless -d $svnExport;
-chdir( $svnExport ) or die $!;
+if ( 0 ) {	# SVN EXPORT concept on hold (i _want_ anonymous svn checkouts...)
+    my $svnExport = $Config->{svn_export} or die "no svn_export?";
+    ( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
+    execute( qq{svn export ../.. $svnExport} ) or die $!;
+#    die "no svn export output?" unless -d $svnExport;
+    chdir( $svnExport ) or die $!;
+}
+else {
+    chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
+}
 
 ###############################################################################
 # build source code docs
