@@ -7,7 +7,6 @@ var COOKIE_EXPIRES = 31; // days
 // SMELL should this be a <link> to another stylesheet? (probably not worth it)
 document.write("<style type='text/css'>");
 document.write(".twistyMakeHidden {display:none;}");
-document.write(".twistyMakeTransparent {visibility:hidden;}");
 document.write("<\/style>");
 
 // Asssume core javascript code is loaded via main template
@@ -62,14 +61,22 @@ function twistHide(id, toggleElem) {
 var initialiseTwistyClasses = function(e) {
     if (hasClass(e, "twistyMakeHidden")) {
         replaceClass(e, "twistyMakeHidden", "twistyHidden");
-    } else if (hasClass(e, "twistyMakeVisible")) {
+    }
+   	if (hasClass(e, "twistyMakeVisible")) {
         replaceClass(e, "twistyMakeVisible", "twistyVisible");
-    } else if (hasClass(e, "twistyMakeTransparent")) {
-        replaceClass(e, "twistyMakeTransparent", "twistyTransparent");
-    } else if (hasClass(e, "twistyMakeOpaque")) {
-        replaceClass(e, "twistyMakeOpaque", "twistyOpaque");
+    }
+    if (hasClass(e, "twistyMakeTransparent")) {
+        replaceClass(e, "twistyMakeTransparent", "twistyHidden");
+    }
+    if (hasClass(e, "twistyMakeOpaque")) {
+        replaceClass(e, "twistyMakeOpaque", "twistyVisible");
+    }
+    if (hasClass(e, "twistyTransparent")) {
+        replaceClass(e, "twistyTransparent", "twistyHidden");
     }
 };
+//twistyTransparent twistyMakeOpaque
+// twistyHidden twistyMakeVisible
 
 // The twistyTriggers are the links or buttons that command the toggling.
 // This script assumes that the clickable element is either a link, a
