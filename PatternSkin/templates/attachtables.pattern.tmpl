@@ -32,10 +32,7 @@
 </div></div>
 <script type="text/javascript">
 //<![CDATA[
-	// After the table has been drawn
-	var count = document.getElementById("twikiAttachmentsTable").getElementsByTagName("tr").length - 1; /* assume that one tr is used for the header */
-	new Insertion.Bottom('attachmentsshowlink', " (" + count + ")" );
-	new Insertion.Bottom('attachmentshidelink', " (" + count + ")" );
+	renderAttachmentCount("twikiAttachmentsTable");
 //]]>
 </script>
 %TMPL:END%

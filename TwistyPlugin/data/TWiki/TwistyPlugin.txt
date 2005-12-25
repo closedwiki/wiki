@@ -94,7 +94,6 @@ This renders the button as well as the toggled content section contained within 
     | *Parameter* | *Description* | *Value* |
     | all parameters supported by [[#VarTWISTYSHOW][TWISTYBUTTON]] |||
     | =mode="div/span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag.  | optional, defaults to =&lt;span&gt;= |
-    | =buttonmode="div/span"= | Specify if the Twisty link link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults =mode= value |
 	* Related [[#VarTWISTYSHOW][TWISTYBUTTON]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
 #VarENDTWISTY

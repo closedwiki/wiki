@@ -3,8 +3,8 @@
 .twistyMakeVisible { display:none; } /* initial state, and is set to visible with javascript */
 .twistyMakeHidden {} /* reserved */
 
-.twistyTransparent { visibility:hidden; } /* reserved */
-.twistyOpaque { visibility:visible; }
+.twistyTransparent { visibility:hidden; }
+.twistyOpaque {} /* reserved */
 .twistyMakeOpaque { visibility:hidden; } /* initial state, and is set to visible with javascript */
 .twistyMakeTransparent {} /* reserved */
 
