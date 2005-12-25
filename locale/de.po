@@ -362,7 +362,7 @@ msgid ""
 msgstr ""
 "*Eigenschaften:* Der Kommentar und die Sichtbarkeit des Anhangs kann, ohne "
 "erneutes Hochladen der Datei, mittels \"Eigenschaften ändern\" verändert "
-"werden; siehe <a target=\"HiddenAttachment\" onclick=\"return launchWindow('% 
+"werden; siehe <a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
 "1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 
 #: templates/oopsmore.pattern.tmpl:56
