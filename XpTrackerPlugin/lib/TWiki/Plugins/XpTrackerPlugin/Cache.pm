@@ -153,6 +153,7 @@ sub _isValidTopic {
 sub getCacheFileName {
 	my ($web, $cacheFile) = @_;
 	
+	# SMELL: update to use getWorkArea()
 	return TWiki::Func::getDataDir()."/".$web."/".$cacheFile;
 }
 
