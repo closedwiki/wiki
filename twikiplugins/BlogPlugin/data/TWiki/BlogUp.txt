@@ -3,11 +3,8 @@
 
 TODO: write docu
 
-See also: BlogPlugin, [[_blog.WebHome][BlogUp template web]]
+See also: BlogPlugin, [[_BlogPlugin.WebHome][BlogUp template web]]
 
 
 
--- Main.MichaelDaum - 04 Nov 2005
-
-
-%META:TOPICMOVED{by="MichaelDaum" date="1131113305" from="TWiki.BlogApp" to="TWiki.BlogUp"}%
+-- TWiki:Main.MichaelDaum - 04 Nov 2005
