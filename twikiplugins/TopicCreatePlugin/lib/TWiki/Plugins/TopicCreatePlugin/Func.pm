@@ -73,11 +73,16 @@ sub handleTopicCreate
         return "%TOPICCREATE{$theArgs}% ";
     }
 
+    # SMELL: shouldn't this expand all variables?  (eg, if you using something like Web.%NEWTOPIC%?)
+    # should i just expand the loaded topic or continue expanded the variables in these variables
+    # (i'm concerned about the implications of expanding the topic because this can be called recursively)
+    $topicName = TWiki::Func::expandCommonVariables( $topicName, $theTopic, $theWeb );
+    $template = TWiki::Func::expandCommonVariables( $template, $theTopic, $theWeb );
     # expand relevant twikiVariables
-    $topicName =~ s/%TOPIC%/$theTopic/go;
-    $topicName =~ s/%WEB%/$theWeb/go;
-    $template =~ s/%TOPIC%/$theTopic/go;
-    $template =~ s/%WEB%/$theWeb/go;
+#    $topicName =~ s/%TOPIC%/$theTopic/go;
+#    $topicName =~ s/%WEB%/$theWeb/go;
+#    $template =~ s/%TOPIC%/$theTopic/go;
+#    $template =~ s/%WEB%/$theWeb/go;
 
     my $topicWeb = $theWeb;
     if( $topicName =~ /^([^\.]+)\.(.*)$/ ) {
@@ -105,16 +110,20 @@ sub handleTopicCreate
     my $text = &TWiki::Func::readTopicText( $templateWeb, $template, "", 1 );
 
     # Set topic parent
+    # SMELL: should use $meta object
     $text = _setMetaData( $text, "TOPICPARENT", $theTopic );
 
+    # SMELL: replace 'gmtime' with twiki preferences variable (i think there's one defined for this...)
     my $localDate = &TWiki::Func::formatTime( time(), "\$day \$month \$year", "gmtime" );
 
+    # SMELL: replace with expandVariablesOnTopicCreation( $text );
     my $wikiUserName = &TWiki::Func::userToWikiName( $user );
     $text =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
     $text =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
     $text =~ s/%DATE%/$localDate/go;
     $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
 
+    # SMELL: see above - expandVariablesOnTopicCreation() also handles URLPARAM's
     my @param = ();
     my $temp = "";
     while (1) {
@@ -134,6 +143,7 @@ sub handleTopicCreate
         $passedPar = $1 || "";
         $text =~ s/%URLPARAM\{\"?$par\"?\}%/$passedPar/g;
     }
+    # END SMELL
 
     # Copy Attachments over
     my $pubDir = &TWiki::Func::getPubDir();
