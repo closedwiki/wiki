@@ -27,12 +27,12 @@ The format can be specified with following variables:
 *Input*
 
 <verbatim>
-%FILELIST{format="	* [[$fileUrl][$fileName]]: Submitted by $fileUser on $fileDate. Size=$fileSize. $fileComment [[$fileActionUrl][Manage this.]]" web="Sandbox" topic="TopicWithAttachment"}%
+%FILELIST{format="	* [[$fileUrl][$fileName]]: Submitted by $fileUser on $fileDate. Size=$fileSize. $fileComment [[$fileActionUrl][Manage this.]]" web="%TWIKIWEB%" topic="TWikiLogos"}%
 </verbatim>
 
 *Output - if installed*
 
-%FILELIST{format="	* [[$fileUrl][$fileName]]: Submitted by $fileUser on $fileDate. Size=$fileSize. $fileComment [[$fileActionUrl][Manage this.]]" web="Sandbox" topic="TopicWithAttachment"}%
+%FILELIST{format="	* [[$fileUrl][$fileName]]: Submitted by $fileUser on $fileDate. Size=$fileSize. $fileComment [[$fileActionUrl][Manage this.]]" web="%TWIKIWEB%" topic="TWikiLogos"}%
 
 ---++ Plugin Settings
 
