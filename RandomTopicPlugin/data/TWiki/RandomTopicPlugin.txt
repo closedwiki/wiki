@@ -8,28 +8,28 @@ _( Discussion in TWiki:Plugins/RandomTopicPluginDev )_
 
 ---++ Syntax Rules
 
-	* =%<nop>RANDOMTOPIC%= - inserts a single random topic name in it's place.
+	* =%<nop>RANDOMTOPIC%= - inserts a single random topic name in its place.
 	* =%<nop>RANDOMTOPIC{<i>params</i>}%= - inserts potentially more than one random topic, with user formatting. Parameters:
 	* topics="5" - Number of topics requested. Default is 1 topic
-	* include="^Web" - Perl regular expression. Only topics that match this expression will shown_. Default is set by RANDOMTOPICPLUGIN_INCLUDE (see below).
+	* include="^Web" - Perl regular expression. Only topics that match this expression will _be shown_. Default is set by RANDOMTOPICPLUGIN_INCLUDE (see below).
 	* exclude="^Web" - Perl regular expression. Any topics that match this expression will _never be shown_. Default is set by RANDOMTOPICPLUGIN_EXCLUDE (see below).
 	* format="<i> format string </i>" . The format string accepts 3 quoted parameters:
-	* =$t= will be expanded to =\t= (necessary for bullet lists)
-	* =$n= will be expanded to =\n= (So that things appear on separate lines - again for bullet lists
-	* =$topic= will be expanded to the randomly chosen name
-	* Default is a bullet list : "$t* $topic$n"
+		* =$t= will be expanded to =\t= (necessary for bullet lists)
+		* =$n= will be expanded to =\n= (So that things appear on separate lines - again for bullet lists)
+		* =$topic= will be expanded to the randomly chosen name
+		* Default is a bullet list : "$t* $topic$n"
 
 ---++ Examples
 
 	* =%<nop>RANDOMTOPIC{topics="5"}%= - 5 random topics as a bullet list
-	* =%<nop>RANDOMTOPIC{topics="5" format="| <nop>*<nop>$topic* | $topic|$n"}%=
-		* Provides 5 random topics.
-		* They will be formatted to look like this:
-<table border="1" cellspacing="0" cellpadding="1"> <tr><th bgcolor="#99CCCC"> <strong>TWikiMetaData</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">TWikiMetaData</a> </td></tr>
-<tr><th bgcolor="#99CCCC"> <strong>TWikiTemplates</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">TWikiTemplates</a> </td></tr>
-<tr><th bgcolor="#99CCCC"> <strong>TWikiUserAuthentication</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">TWikiUserAuthentication</a> </td></tr>
-<tr><th bgcolor="#99CCCC"> <strong>HiddenAttachment</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">HiddenAttachment</a> </td></tr>
-<tr><th bgcolor="#99CCCC"> <strong>WikiName</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">WikiName</a> </td></tr>
+        * =%<nop>RANDOMTOPIC{topics="5" format="| <nop>*<nop>$topic* | $topic |$n"}%=
+                * Provides 5 random topics.
+                * They will be formatted to look like this:
+<table border="1" cellspacing="0" cellpadding="1"><tr><th>TWikiMetaData</th><td>TWikiMetaData</td></tr>
+<tr><th>TWikiTemplates</th><td>TWikiTemplates</td></tr>
+<tr><th>TWikiUserAuthentication</th><td>TWikiUserAuthentication</td></tr>
+<tr><th>HiddenAttachment</th><td>HiddenAttachment</td></tr>
+<tr><th>WikiName</th><td>WikiName</td></tr>
 </table>
 	* =%<nop>RANDOMTOPIC{topics="10" exclude="^Web"}%= - 10 random topics, excluding any that start with "Web".
 
@@ -72,5 +72,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/MichaelSparks - 10 Jul 2003
+-- TWiki:Main/MichaelSparks - 10 Jul 2003 <br />
 -- TWiki:Main/CrawfordCurrie - %$DATE%

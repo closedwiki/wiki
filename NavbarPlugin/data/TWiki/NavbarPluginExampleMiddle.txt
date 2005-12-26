@@ -4,5 +4,5 @@ Then graphics games came along and the computer using portion of the human race 
 
 
 On this page (body and/or skin), 
-	* %NAVBAR% is expansed into %NAVBAR%
-	* and %NAVBAR{graphics="on"}% is expansed into %NAVBAR{graphics="on"}%
+	* %NAVBAR% is expanded to %NAVBAR%
+	* and %NAVBAR{graphics="on"}% is expanded to %NAVBAR{graphics="on"}%

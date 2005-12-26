@@ -5,7 +5,7 @@ TWiki benefits from the fact that every user can modify a topic instantly withou
 
 This plugin enables you to establish a complex document approval process for single topics or for the entire web in order to control the content in your TWiki. If a topic is under such document control, you can define a set of _states_ for this topic (e.g. "under revision", "waiting for approval", "approved") and _transitions_ (e.g. "revise", "approve") between these states. Furthermore, you can define users or user groups which are permitted to perform specific transistions. In this way, you can control, for instance, who is allowed to "approve" a topic and who is not. 
 
-This plugin is motivated by the WorkFlowAddOn plugin. It differs from the WorkFlowAddOn plugin in following points:
+This plugin is motivated by the TWiki:Plugins.WorkFlowAddOn plugin. It differs from the TWiki:Plugins.WorkFlowAddOn plugin in following points:
 
 	* it does not require any patch of the TWiki source code; you just need to install the plugin,
 	* the state of a topic is not stored as a form, that means you can _not_ define a different form for each state (but you can define one form which is kept through all states), 
@@ -25,15 +25,15 @@ Since the plugin needs to know who is looking at the controlled document/topic a
 
 A topic is under document control if the preference variable
 
-	* Set APPROVALWORKFLOW = YourDocumentApprocalWorkflow
+	* Set APPROVALWORKFLOW = YourDocumentApprovalWorkflow
 
-appears on its page while the topic _YourDocumentApprocalWorkflow_ describes your specific approval workflow.
+appears on its page while the topic _YourDocumentApprovalWorkflow_ describes your specific approval workflow.
 
 
 
 ---++++ Settings in the workflow description topic 
 
- Basically, the topic _YourDocumentApprocalWorkflow_ contains one state and one transition table. The state table could look like this, for example:
+ Basically, the topic _YourDocumentApprovalWorkflow_ contains one state and one transition table. The state table could look like this, for example:
 
 | State | Allow Edit | Message |
 | UNDERREVISION | Main.User1, Main.QualityGroup | This document is under revision. |
@@ -84,7 +84,7 @@ which can be used then in the controlled document.
 
 As described above the topic needs to contain the variable 
 
-	* Set APPROVALWORKFLOW = YourDocumentApprocalWorkflow
+	* Set APPROVALWORKFLOW = YourDocumentApprovalWorkflow
 
 to be under the approval workflow.
 

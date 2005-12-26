@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="JustinHickman" date="1004396028" format="1.0" version="1.2"}%
 ---++ %TOPIC%
 
-Adds to the functionality of the %INCLUDE% tag by allowing includes of revision #'s and revision Dates.
+Adds to the functionality of the =%<nop>INCLUDE%= tag by allowing includes of revision #'s and revision Dates.
 
 For an example, my department has conference calls on Mon, Wed, and Fri of every week to update the rest of the group on the lastest developments of our projects.  We all use TWiki to have a meeting agenda (the Meetings web).
 

@@ -78,7 +78,3 @@
 %FISKINSTATE%
 %STOPINCLUDE%
 </div>
-
-
-
-%META:TOPICMOVED{by="MichaelDaum" date="1125609298" from="Sandbox.TestTopic5" to="TWiki.NatSkinStyleBrowser"}%

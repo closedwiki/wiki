@@ -31,7 +31,7 @@ to render more than one form field.
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Renders a list of fields in the form attached to some topic (xtending the predefined variable [[%TWIKIWEB%.TWikiDocumentation#FORMFIELD][FORMFIELD]])
+		* Set SHORTDESCRIPTION = Renders a list of fields in the form attached to some topic (extending the predefined variable [[%TWIKIWEB%.TWikiDocumentation#FORMFIELD][FORMFIELD]])
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0

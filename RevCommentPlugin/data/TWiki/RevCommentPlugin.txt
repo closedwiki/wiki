@@ -30,7 +30,7 @@ of  the preference variable ATTACHMENT_COMMENTS (see below).
 | pre	 | Text before the first comment | &lt;ul&gt;&lt;li&gt;  |
 | post	| Text after the last comment | &lt;/li&gt;&lt;/ul&gt;  |
 | minor  | Text to print for a minor change | _(minor)_  |
-(The text for the _pre_ and _post_ parameters will only be printed, 
+(The text for the _pre_ and _post_ parameters will only be printed
 if the list of comments is not empty.)
 	* For your convenience, you can use [] instead of {} and '' instead of " 
 	  inside other parameters.

@@ -11,7 +11,7 @@
 
 ---++ Focus Box Example
 <table border="0" width="200px"><tr><td>
-%INCLUDE{TWikiTipsOfTheDayInclude}% 
+%INCLUDE{"TWikiTipsOfTheDayInclude" warn="off" }%
 </td></tr></table>
 
 -- TWiki:Main.PaulineCheung - 29 Jan 2005

@@ -164,7 +164,7 @@ Following variables are expanded in format strings:
    * $depth: distance to the given &lt;topic> (depth in which this topic was found)
    * $headline: headline of the related <nop>BlogEntry
 
-The relatedness feature here is a very naive and purely manual one.
+The relatedness feature here is a very na&iuml;ve and purely manual one.
 We'd like to semi-automate this task using some automatic classificator
 on document similarities. Making use of weights following links is an option too to
 improve the hit set quality.
@@ -205,10 +205,10 @@ And send me a patch if you've coded that into TWiki ;).
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | CPAN:Digest::MD5 |
+|  CPAN Dependencies: | CPAN:Digest::MD5, CPAN:Time::ParseDate |
 |  Other Dependencies: \
 | \
-TWiki:Plugins.DBCachePlugin, \
+TWiki:Plugins/DBCachePlugin, \
 TWiki:Plugins/ExtendedSelectionPlugin, \
 TWiki:Plugins/GluePlugin, \
 TWiki:Plugins/HeadlinesPlugin, \

@@ -166,7 +166,7 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  29 Nov 2005: | fixed CDATA handling |
 |  21 Nov 2005: | added ATOM support; \
 	          extended RSS support; \
-		  added dublion core support; \
+		  added dublin core support; \
 		  added content support; \
 		  optionally using LWP to fetch feeds to follow redirections; \
 		  corrected CPAN dependencies ; \

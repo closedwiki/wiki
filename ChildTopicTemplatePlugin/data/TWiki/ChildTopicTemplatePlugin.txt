@@ -36,7 +36,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
-		* _enter samples here_
+		* =%<nop>CHILDTOPICTEMPLATE{ %WEB%.%TOPIC% }%= %CHILDTOPICTEMPLATE{ %WEB%.%TOPIC% }%
+		* Sandbox.NewChildTopicTemplateLinkTest
+
 
 ---++ Plugin Info
 
