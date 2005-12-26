@@ -1,11 +1,13 @@
 #!/usr/bin/perl
 # Count "real code" lines in TWiki core perl modules
 # $where must be set to the root of your twiki installation
-my $where = "/home/twiki/$ARGV[0]";
+
+use FindBin;
+my $where = $ARGV[0] || "$FindBin::Bin/../..";
 
 my $pms = `find $where/lib -name '*.pm' -print | grep -v '/test/' | grep -v '/Plugins/' | grep -v 'Upgrade' | grep -v '/Contrib/' | grep -v /Algorithm/ | grep -v Error.pm`;
 
-foreach my $script ( "preview", "attach", "changes", "edit", "manage", "rename", "statistics", "upload", "oops", "rdiff", "save", "view", "viewfile", "passwd", "register", "search" ) {
+foreach my $script qw( attach changes configure edit geturl login logon manage oops passwd preview rdiff register rename resetpasswd rest save search statistics upload view viewfile ) {
     $pms .= " $where/bin/$script";
 }
 
