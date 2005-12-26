@@ -599,7 +599,7 @@ Called just before the save action
 
 sub beforeSaveHandler {
     my $this = shift;
-    #my ( $theText, $theTopic, $theWeb ) = @_;
+    #my ( $theText, $theTopic, $theWeb, $meta ) = @_;
     $this->_dispatch( 'beforeSaveHandler', @_ );
 }
 
@@ -613,7 +613,7 @@ Called just after the save action
 
 sub afterSaveHandler {
     my $this = shift;
-    #my ( $theText, $theTopic, $theWeb ) = @_;
+    #my ( $theText, $theTopic, $theWeb, $error, $meta ) = @_;
     $this->_dispatch( 'afterSaveHandler', @_ );
 }
 
