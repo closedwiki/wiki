@@ -1,0 +1,4 @@
+lib/TWiki/Plugins/ImmediateNotifyPlugin.pm
+lib/TWiki/Plugins/ImmediateNotifyPlugin/Jabber.pm
+lib/TWiki/Plugins/ImmediateNotifyPlugin/SMTP.pm
+data/TWiki/ImmediateNotifyPlugin.txt
