@@ -14,7 +14,7 @@ The module also automatically generates an installer script that manages depende
 #DevelopmentModel
 ---+++ Development Model
 The build module assumes:
-   * that you are *not* developing your plugin in a live TWiki installation (which is usually a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree, usually - but not always - a CVS checkout area.
+   * that you are *not* developing your plugin in a live TWiki installation (which is usually a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree, usually - but not always - an SVN checkout area.
    * that your module follows the standards for plugins and contribs i.e. that it
       1 has a topic in the =data/TWiki= directory
       1 has a perl module in the =lib/TWiki/Plugins= or =lib/TWiki/Contrib= directory
@@ -47,12 +47,12 @@ This should inspect the directory structure and write a best-guess MANIFEST file
 __Notes__
    * This is a _build_ module for use by developers, not an _install_ module for end users. When a release is built, an installer/uninstaller script is automatically generated that is packaged with the release. This simple script is the only part of the build system visible to end users
    * This topic and all the embedded POD documentation are generated using this build module.
-   * The build environment does _not_ assume the use of CVS, though it is highly recommended.
+   * The build environment does _not_ assume the use of SVN, though it is highly recommended.
    * The =test= target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
 ---+++ Install support
 The installer script shipped with the package is very simple. By default all it does is to check the dependencies you list, and if necessary download and install any missing TWiki and CPAN modules. Other dependencies are simply checked. In Dakar and later releases, TWiki topics shipped with the module are automatically merged into any existing local copies, ensuring histories are preserved.
 
-If you want your installer to do anything else - for example, optionally install submodules shipped with the module - then you will need to write a POSTINSTALL script. A good example of a POSTINSTALL can be found in the CVS tree for TWiki:Plugins/WysiwygPlugin.
+If you want your installer to do anything else - for example, optionally install submodules shipped with the module - then you will need to write a POSTINSTALL script. A good example of a POSTINSTALL can be found in the SVN tree for TWiki:Plugins/WysiwygPlugin.
 
 ---++ Test Fixtures
 The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
