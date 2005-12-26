@@ -9,9 +9,10 @@
 # script if you mistype the new path).
 
 use FileHandle;
+use English;
 
 my $old = "/usr/bin/perl";
-my $new = "perl";
+my $new = $EXECUTABLE_NAME;
 
 print <<END;
 
