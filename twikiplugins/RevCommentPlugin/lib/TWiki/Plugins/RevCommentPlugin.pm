@@ -54,8 +54,6 @@
 # =========================
 package TWiki::Plugins::RevCommentPlugin;    # change the package name and $pluginName!!!
 
-use Data::Dumper;
-
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
@@ -68,11 +66,9 @@ use vars qw(
     $minorMark $rlogCmd $rcsMsgCmd
 );
 
-if(defined($TWiki::rcsDir)) {
-    $rlogCmd   = "$TWiki::rcsDir/rlog %FILE%";
-    $rcsMsgCmd = "$TWiki::rcsDir/rcs -q -m:%MSG% %FILE%";
-} else {
-    # do something for Dakar
+if ( my $rcsDir = $TWiki::cfg{RCS}{BinDir} || $TWiki::rcsDir ) {
+    $rlogCmd   = "$rcsDir/rlog %FILE%";
+    $rcsMsgCmd = "$rcsDir/rcs -q -m:%MSG% %FILE%";
 }
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -108,13 +104,9 @@ sub initPlugin
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $attachmentComments =
-	TWiki::Func::getPluginPreferencesValue( "ATTACHMENT_COMMENTS" );
-    $attachmentComments = 1 unless defined $attachmentComments;
+    $attachmentComments = TWiki::Func::getPluginPreferencesValue( "ATTACHMENT_COMMENTS" ) || 1;
 
-    $useRCS =
-	TWiki::Func::getPluginPreferencesValue( "USE_RCS" );
-    $useRCS = 0 unless defined $useRCS;
+    $useRCS = TWiki::Func::getPluginPreferencesValue( "USE_RCS" ) || 0;
     $useRCS = 0;
 
     $cachedCommentWeb = '';
@@ -146,41 +138,32 @@ sub commonTagsHandler
 
 sub beforeSaveHandler
 {
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+### my ( $text, $topic, $web, $meta ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    my ( $topic, $web, $meta ) = @_[1..3];
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
 
     # This handler is called by TWiki::Store::saveTopic just before the save action.
     # New hook in TWiki::Plugins $VERSION = '1.010'
 
-    my $query = TWiki::Func::getCgiQuery;
-
-    # Extract Meta data
-
-    my $meta = new TWiki::Meta;
-    $_[0] = $meta->read( $_[0] );
+    my $query = TWiki::Func::getCgiQuery();
 
     # Get current revision
-
     my ($date, $user, $currev) = TWiki::Func::getRevisionInfo( $_[2], $_[1] );
     $currev ||= 0;
 
     my @comments = _extractComments($meta);
 
     # Set correct rev of comment
-	
     foreach my $comment ( @comments ) {
 	$comment->{rev} = $currev unless $comment->{rev} =~ /\d+/;
     }
 
     # Delete old comments
-
     @comments = grep {$_->{rev} >= $currev} @comments;
 
     # Check for new comments
-
     my $newComment;
-
     if ($commentFromUpload) {			# File upload
 	$newComment = {
 	    comment => $commentFromUpload,
@@ -199,7 +182,7 @@ sub beforeSaveHandler
 	};
     } elsif ($query->param('comment') || $query->param('dontnotify') ) {
 	my $commentFromForm = $query->param('comment') || ' ';
-	my $t = $query->param('t') || '';
+	my $t = $query->param('t') || 0;
 	my $thisComment = $newComment = {};
 	    
 	foreach my $oldComment (@comments) {
@@ -209,37 +192,30 @@ sub beforeSaveHandler
 	    }
 	}
 	$thisComment->{comment} = $commentFromForm;
-	$thisComment->{minor} = 
-	     defined( $query->param('dontnotify') ) ? 1 : 0;
+	$thisComment->{minor} = defined $query->param('dontnotify');
 	$thisComment->{t} = $t;
 	$thisComment->{rev} = undef;
     }
 
-    if ( $newComment->{comment} =~ /\S/ ||
+    if ( ($newComment->{comment} || '') =~ /\S/ ||
 	 ($newComment->{minor} && !@comments) ) {
 	push @comments, $newComment;
     }
     $meta->remove('REVCOMMENT');
     _putComments($meta,@comments);
 
-    # Put meta back
-
-    $_[0] = $meta->write( $_[0] );
-
     # Save comment for later use with rcs
     return unless $useRCS;
 
     map {$_->{comment} = $minorMark.$_->{comment} if $_->{minor} } @comments;
     $rcsComment = join("\n", map($_->{comment}, @comments) );
-    $rcsComment =~ /^(.*)$/s;
-    $rcsComment = $1;
-
+    ( $rcsComment ) =~ /^(.*)$/s;
 }
 
 # =========================
 sub afterSaveHandler
 {
-### my ( $text, $topic, $web, $error ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+### my ( $text, $topic, $web, $error, $meta ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     return unless $rcsComment; 
 
@@ -248,6 +224,8 @@ sub afterSaveHandler
     # This handler is called by TWiki::Store::saveTopic just after the save action.
     # New hook in TWiki::Plugins $VERSION = '1.020'
 
+    # SMELL: for Dakar, should use something related to the Store class
+#    $_[2] =~ s|\.|/|g;		# as this is going to be used in the filesystem, changed subweb .'s into /'s
     my $file = TWiki::Func::getDataDir() . '/' . $_[2] . '/' . $_[1] . '.txt';
     die "File does not exist ? " unless -r $file;
     my $cmd = $rcsMsgCmd;
@@ -255,7 +233,6 @@ sub afterSaveHandler
     my @cmd = split(' ',$cmd);
     map {s/%MSG%/$rcsComment/g} @cmd;
     system(@cmd);
-
 }
 
 sub beforeAttachmentSaveHandler
@@ -283,8 +260,8 @@ sub _extractComments {
     my $meta = shift;
     my @comments = ();
 
-    if (my $code = $meta->{REVCOMMENT}->[0]) {
-	for my $i (1..$code->{ncomments}) {
+    if ( my $code = $meta->get( 'REVCOMMENT' ) ) {
+	for ( my $i=1; $i <= $code->{ncomments}; ++$i ) {
 	    push @comments, {
 		    minor => $code->{'minor_'.$i},
 		    comment => $code->{'comment_'.$i},
@@ -302,24 +279,25 @@ sub _putComments {
     my $meta = shift;
     my @comments = @_;
     my %args = (
-	ncomments => $#comments+1
+	ncomments => scalar @comments,
     );
 
-    for my $i (1..$#comments+1) {
+    for ( my $i=1; $i <= scalar @comments; ++$i ) {
 	$args{'comment_'.$i} = $comments[$i-1]->{comment};
 	$args{'t_'.$i} = $comments[$i-1]->{t};
 	$args{'minor_'.$i} = $comments[$i-1]->{minor};
 	$args{'rev_'.$i} = $comments[$i-1]->{rev};
     }
 
-    $meta->put('REVCOMMENT', %args);
+    $meta->put('REVCOMMENT', \%args);
 }
 
 sub handleRevComment {
 
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::handleRevComments: Args=>$_[0]<\n") if $debug;
-    my $params = $_[0];
-    $params =~ s/\'\'/\"/g;
+    my $params = $_[0] || '';
+    # SMELL: this "convenience" should probably be removed; you can \" in Attributes
+    $params =~ s/''/"/g;
 
     my %params = TWiki::Func::extractParameters($params);
 
@@ -327,23 +305,22 @@ sub handleRevComment {
     my $topic = $params{topic} || $topic;
     my $rev = $params{rev} ||
               $params{_DEFAULT} ||
-              undef;
+              ( TWiki::Func::getRevisionInfo( $web, $topic ) )[2];
+    $rev =~ s/^1\.//;
     my $delimiter = $params{delimiter};
     $delimiter = '</li><li style="margin-left:-1em;">' unless defined($delimiter);
+    $delimiter =~ s/\\n/\n/g;
+    $delimiter =~ s/\\t/\t/g;
     my $pre = $params{pre};
     $pre = '<ul><li style="margin-left:-1em;">' unless defined($pre);
     my $post = $params{post};
     $post = '</li></ul>' unless defined($post);
     my $minor = $params{minor};
     $minor = '<i>(minor)</i> ' unless defined($minor);
-    $delimiter =~ s/\\n/\n/g;
-    $delimiter =~ s/\\t/\t/g;
 
     unless ( TWiki::Func::topicExists( $web, $topic) ) {
         return "Topic $web.$topic does not exist";
     }
-    $rev  = ( TWiki::Func::getRevisionInfo( $web, $topic ) )[2] unless $rev;
-    $rev =~ s/^1\.//;
     my @comments;
 
     if ($useRCS) {
@@ -356,9 +333,8 @@ sub handleRevComment {
 	@comments = split(/\n/, $cachedComment->[$rev] || '');
     } else {
 
-	my $text = TWiki::Func::readTopicText($web, $topic, $rev);
-	my $meta = new TWiki::Meta;
-	$meta->read($text);
+	# SMELL: doesn't respect access permissions (too bad there isn't a version that does, like readTopic() does...)
+	my ( $meta, undef ) = TWiki::Func::readTopic($web, $topic, $rev);
 
 	@comments = _extractComments($meta);
 	foreach my $comment ( @comments ) {
@@ -369,18 +345,19 @@ sub handleRevComment {
 	@comments = map {$_->{comment}} @comments;
     }
 
-    my $text =  @comments > 0 ?
+    my $text =  scalar @comments > 0 ?
 		$pre . join($delimiter, @comments) . $post :
 		'';
     $text =~ s/$minorMark/$minor/g;
     return $text;
-	
 }
 
 sub cacheComments {
 
     my ($web, $topic) = @_;
 
+    # SMELL: see Store
+#    $web =~ s|\.|/|g;		# as this is going to be used in the filesystem, changed subweb .'s into /'s
     my $file = TWiki::Func::getDataDir() . '/' . $web . '/' . $topic . '.txt';
     die "File $file does not exist ?" unless -r $file;
 
