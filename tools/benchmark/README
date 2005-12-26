@@ -6,7 +6,7 @@ Core code benchmarks for TWiki.
    * Requires the installations to be benchmarked to be at =$server/version/=
      and =$installdir/version=, where version is the local name for that
      version e.g. "beta20040816" or "beijing"
-   * Each installation has to have a 'benchmark' script installed in it's
+   * Each installation has to have a 'benchmark' script installed in its
      bin dir. This script is derived from the view script, and is therefore
      different for each major release prior to Cairo. Appropriate benchmark
      scripts are at the top level of this zip; copy the right one to the bin
