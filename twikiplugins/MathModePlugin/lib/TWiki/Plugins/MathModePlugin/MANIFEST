@@ -1,0 +1,3 @@
+./lib/TWiki/Plugins/MathModePlugin.pm
+./pub/TWiki/MathModePlugin/twiki_l2h.init
+./data/TWiki/MathModePlugin.txt
