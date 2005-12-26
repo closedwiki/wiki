@@ -58,7 +58,7 @@ Note that the header will only be added once, regardless of the number of times 
 ---++ Contrib Info
 
 |  Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
-| Version: | %$VERSION% of the Mishoo calendar |
+|  Version: | %$VERSION% of the Mishoo calendar |
 |  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
 |  License: | GNU LGPL |
 |  Dependencies: | %$DEPENDENCIES% |

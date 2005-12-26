@@ -4,7 +4,7 @@
 
 This pluging is a blantant ripoff of TWiki:Plugins.UniqueIdPlugin by [[TWiki:Main.MichaelSparks][MS]] (THANKS!!!). I wanted a <nop>UniqueID generator that would generate standard GUID/UUID type IDs (guaranteed unique across machines, etc...)
 
-I found the nice CPAN module of Data::UUID that takes care of all of this. This plugin is just a "wrapper" so that TWiki can call the perl module. You MUST have the perl module loaded first.
+I found the nice CPAN module of CPAN:Data::UUID that takes care of all of this. This plugin is just a "wrapper" so that TWiki can call the perl module. You MUST have the perl module loaded first.
 
 ---++ Syntax Rules
 
@@ -39,7 +39,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* Test if the plugin is correctly installed:
-	* (describe tests here)
+		* %<nop>GUID_ID%: %GUID_ID%
+		* %<nop>GUID_ID{type="str"}%: %GUID_ID{type="str"}%
+		* %<nop>GUID_ID{type="bin"}%: %GUID_ID{type="bin"}%
+		* %<nop>GUID_ID{type="hex"}%: %UNIQUE_ID{type="hex"}%
+		* %<nop>GUID_ID{type="b64"}%: %UNIQUE_ID{type="b64"}%
 
 ---++ Plugin Info
 
@@ -47,7 +51,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Version: | 25 Feb 2004 (V1.000) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  25 Feb 2004: | Initial version |
-|  CPAN Dependencies: | Data::UUID |
+|  CPAN Dependencies: | CPAN:Data::UUID |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |

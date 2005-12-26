@@ -81,7 +81,7 @@ Formatting is based on a template (quicksearch.tmpl) where the only fields updat
 -->
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Add quick and dirty search capability to topics. Implements small subset of regular <nop>%SEARCH% facility.
+		* Set SHORTDESCRIPTION = Add quick and dirty search capability to topics. Implements small subset of regular =%<nop>SEARCH%= facility.
 
 
 

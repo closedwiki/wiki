@@ -8,7 +8,7 @@ can be used widely.
 
 ---++ Syntax Rules
 
-	* add to your personal page the following user information. Multiple keys/fingerprints are possible by sperating with comma:
+	* add to your personal page the following user information. Multiple keys/fingerprints are possible by separating with comma:
 		* GPG Key: __your key id, like 0xDEADBEEF__
 		* GPG Fingerprint: __your key fingerprint, like FFFF FFFF FFFF ...__
 

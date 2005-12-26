@@ -45,7 +45,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Set LABEL = Edit
 	* Example image tag: ="&lt;br&gt;&lt;img src=\"". &TWiki::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\"&gt;"=
 
-	* A comma separated list of skins *NOT* to allow editing(you'll probably want the print skin here):
+	* A comma separated list of skins *NOT* to allow editing (you'll probably want the print skin here):
 	* Set SKIPSKIN = print, plain
 
 	* Placement of edit button =before= or =after= editable section

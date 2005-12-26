@@ -196,7 +196,7 @@ Version 2.000 breaks compatibility slightly with the data files if you use the o
 
 ---+++ Installation test
 
-	* If installed correctly you should see the following content between the two horizontal lines below - a title "All Projects" and a single cell table with the field containing the word "Project", and finally an html form to add a new project (dont use this form from here though!)
+	* If installed correctly you should see the following content between the two horizontal lines below - a title "All Projects" and a single cell table with the field containing the word "Project", and finally an html form to add a new project (don't use this form from here though!)
 
 <hr>
 
@@ -218,4 +218,4 @@ Version 2.000 breaks compatibility slightly with the data files if you use the o
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki.DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins

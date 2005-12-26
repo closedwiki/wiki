@@ -33,7 +33,7 @@ See JSCalendarContrib for additional settings.
 |  Version: | %$VERSION% |
 |  Copyright &copy;: | 2004 Deutsche Bank AG |
 |  License: | [[GPL][http://www.gnu.org/copyleft/gpl.html]] |
-|  Change History: <!-- Most recent first --> ||
+|  Change History: | <!-- Most recent first --> |
 |  9 Dec 2004 | 1.000 initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Home: | TWiki:Plugins/%TOPIC% |

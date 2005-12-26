@@ -42,15 +42,15 @@ To tst if the plugin is correctly installed, check the following links.
 These links must be marked with a %EXTERNALLINKPLUGIN_MARK%:
 
 	* [[http://TWiki.org][TWiki.org: TWiki's home]]
-	* [[ftp://no.where.com][Some inexistent FTP site]]
+	* [[ftp://no.where.com][Some nonexistent FTP site]]
 	* [[https://sourceforge.net][Sourceforge.net under a secure connection]]
 
 ---+++ Local links
 
-Surprisingly ;-) , ExternalLinkPlugin won't mark local links as being external. The
-following links must not be marked with a %EXTERNALLINKPLUGIN_MARK%:
+Not surprisingly, ExternalLinkPlugin won't mark local links as being external. The
+following links should not be marked with a %EXTERNALLINKPLUGIN_MARK%:
 
-	* [[%ATTACHURL%/bli.png][link to (inexistent) local attachment]]
+	* [[%ATTACHURL%/bli.png][link to (nonexistent) local attachment]]
 	* [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%][explicit link to this topic]]
 
 ---++ Plugin Info
@@ -69,6 +69,6 @@ following links must not be marked with a %EXTERNALLINKPLUGIN_MARK%:
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 

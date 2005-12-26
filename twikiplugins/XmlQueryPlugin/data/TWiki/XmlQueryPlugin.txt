@@ -1,13 +1,13 @@
 %META:TOPICINFO{author="PatrickDiamond" date="1102412524" format="1.0" version="1.38"}%
 ---++ <nop>XmlQuery TWiki Plugin
 
-This Plugin allows TWiki topics to become XML data sources that can be queried and transformed via XSLT. XML data is extracted for each table, action, form and for any metadata. This XML data is created when a topic is saved and stored separately
+This Plugin allows TWiki topics to become XML data sources that can be queried and transformed via XSLT. XML data is extracted for each table, action, form, and for any metadata. This XML data is created when a topic is saved and stored separately
 
-Additionally TWiki XML attachments and URLs which export XML can be used as XML data sources.
+Additionally, TWiki XML attachments and URLs which export XML can be used as XML data sources.
 
 ---+++ <nop>%TOPIC% Settings
 	* Short Description of the XmlQuery Plugin
-		* Set SHORTDESCRIPTION = Apply XSLT queries to Topics, XML attachments & URL's
+		* Set SHORTDESCRIPTION = Apply XSLT queries to Topics, XML attachments, and URL's
 
 	* Directory where both XML versions of topics and query results are cached. This will need to be altered on a Windows machine e.g. c:/twiki_xml. Expect the size required by this to be around 1k multiplied  by the number of topics in your TWiki.
 		* Set XMLDIR = /var/tmp/twiki_xml
@@ -109,7 +109,7 @@ __some XML__
 
 ---++ Recipes
 
-As XSLT has has a very powerful but complex syntax here are several (hopefully) useful examples. If you do create a query that could be useful to others and would like to share then please do create a Recipe similar to  the ones below and send to %TWIKIWEB%.PatrickDiamond.
+As XSLT has has a very powerful, but complex syntax, here are several (hopefully) useful examples. If you do create a query that could be useful to others and would like to share then please do create a Recipe similar to  the ones below and send it to TWiki:Main.PatrickDiamond.
 
 	* [[XmlQueryPluginRecipe1][Recipe 1]]: List all Attachments in the current Web
 	* [[XmlQueryPluginRecipe2][Recipe 2]]: Attachments Queried using parameters
@@ -120,10 +120,10 @@ As XSLT has has a very powerful but complex syntax here are several (hopefully) 
 
 ---++ Notes on Performance
 
-	* Caching is very good for performance epically when multiple topics are being referenced. Use the __benchmark__ parameter to help determine the benefits.
+	* Caching is very good for performance especially when multiple topics are being referenced. Use the __benchmark__ parameter to help determine the benefits.
 	* Accessing large XML files will consume memory on your server.
 	* A local filesystem is a good place to point __XMLDIR__.
-	* A small difference can be made by switching off access time updates on the file system where the TWiki files are and the file system that XMLDIR points to. On Unix this is controlled by the noatime mount flag. Use the __benchmark__ parameter to help determine the benefits. This will most likely only be of any significant on queries referencing hundreds of topics.
+	* A small difference can be made by switching off access time updates on the file system where the TWiki files are and the file system that XMLDIR points to. On Unix this is controlled by the =noatime= mount flag. Use the __benchmark__ parameter to help determine the benefits. This will most likely only be of any significant on queries referencing hundreds of topics.
 
 ---++Useful Tutorials
 
@@ -137,37 +137,37 @@ To learn more about XML and XSLT try the following online resources
 
 ---++Details on the operation of this Plugin
 
-	* When a topic is saved an XML version of the topic is also saved. This contains data held in TWiki tables, actions and metadata.
+	* When a topic is saved, an XML version of the topic is also saved. This contains data held in TWiki tables, actions and metadata.
 
-	* When a topic is referenced by a query the XML is checked to ensure it is up todate. If it is not up todate it is then regenerated.
-	* When a query is parsed a top level XML document is created which includes the XML generated for each referenced topic
-	* if caching is on a cache key is created from
+	* When a topic is referenced by a query the XML is checked to ensure it is up to date. If it is not up to date, it is then regenerated.
+	* When a query is parsed, a top level XML document is created which includes the XML generated for each referenced topic
+	* if caching is on, a cache key is created from:
 		* this top level xml
 		* the last modified times of each referenced topic
-		* all the arguments passed to the XSLT (alter being evaluated for TWiki variables).
-	* If caching is on the cache is checked for a result and if available it is returned. The following steps are only taken if no cached result is returned.
-	* The topic/attachment/url XML is parsed by <nop>LibXML
-	* The XSLT is parsed by <nop>LibXML
-	* <nop>LibXSLT is then passed the parsed XML and parsed XSLT
-	* If caching is on the result is cached.
-	* The result is returned.
+		* all the arguments passed to the XSLT (after being evaluated for TWiki variables).
+	* If caching is on, the cache is checked for a result and if available it is returned. The following steps are only taken if no cached result is returned.
+		* The topic/attachment/url XML is parsed by <nop>LibXML
+		* The XSLT is parsed by <nop>LibXML
+		* <nop>LibXSLT is then passed the parsed XML and parsed XSLT
+		* If caching is on the result is cached.
+		* The result is returned.
 
 *Notes on Plugin operation*
-	* The above caching schmea makes the use of TWiki variables and includes etc embedded into the XSLT a problem. If you do this it is best to switch off caching. To avoid having to do this pass the TWiki variables etc into the XSLT as parameters.
-	* The caching schema unfortunality doesn't cache the most expensive part of the XSLT processing. The parsing of the XML. What this means is that when parameters to the XSLT are changed the XML has to be reparsed :( . The reason for this is that the serialize function on <nop>LibXML gives a result which is no quicker to load than the orginal XML text.
+	* The above caching schmea makes the use of TWiki variables and includes etc embedded into the XSLT a problem. If you do this, it is best to switch off caching. To avoid having to do this, pass the TWiki variables etc into the XSLT as parameters.
+	* The caching schema unfortunality doesn't cache the most expensive part of the XSLT processing: the parsing of the XML. What this means is that when parameters to the XSLT are changed, the XML has to be reparsed :( . The reason for this is that the serialize function on <nop>LibXML gives a result which is no quicker to load than the orginal XML text.
 
 ---++ Plugin Requirements
 
-This Plugin requires some disk space to store it's cache and the XML versions of each topic. The cache size is controlled by the CACHESIZELIMIT plugin preference. The XML version of each topic takes around 1k on average.
+This Plugin requires some disk space to store its cache and the XML versions of each topic. The cache size is controlled by the CACHESIZELIMIT plugin preference. The XML version of each topic takes around 1k on average.
 
 The following Perl modules must be installed before this Plugin
 
-	* XML::LibXML
-	* XML::LibXSLT
-	* XML::Simple
-	* Text::ParseWords
-	* Cache::Cache
-	* String::CRC
+	* CPAN:XML::LibXML
+	* CPAN:XML::LibXSLT
+	* CPAN:XML::Simple
+	* CPAN:Text::ParseWords
+	* CPAN:Cache::Cache
+	* CPAN:String::CRC
 
 ---++ Plugin Installation Instructions
 
@@ -187,7 +187,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* %TOPIC%Recipe5
-	* if unsuccessful check the __data/warnings.txt__ file
+	* if unsuccessful, check the __data/warnings.txt__ file
 
 ---++ Plugin Info
 
@@ -197,7 +197,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  7th Dec 2004: | Small fix, metadata date format problem. Date fields are now being padded to correct width |
 |  10 Nov 2004: | Initial version |
 |  TWiki Dependency: | TWiki version 01 Feb 2003 or later |
-|  CPAN Dependencies: | XML::LibXML, XML::LibXSLT, XML::Simple, Text::ParseWords, Cache::Cache, String::CRC |
+|  CPAN Dependencies: | CPAN:XML::LibXML, CPAN:XML::LibXSLT, CPAN:XML::Simple, CPAN:Text::ParseWords, CPAN:Cache::Cache, CPAN:String::CRC |
 |  Other Dependencies: | |
 |  Perl Version: | 5.6 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC%Recipe4 96% |
