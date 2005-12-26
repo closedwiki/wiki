@@ -123,7 +123,7 @@ Details of DakarRelease can be found in DakarReleaseNotes
 | Fix: Several RSS readers do not show all entries seen in the !WebChanges list; repeated updates to the same topics get lost. [[http://TWiki.org/cgi-bin/view/Codev/ChangesDontShowUpInRSS][Details]] | TWiki:Main.ArthurClemens |
 | Fix: TWiki::Access::checkAccessPermission function improperly handles Main and TWiki webs. [[http://TWiki.org/cgi-bin/view/Codev/CheckAccessPermissionBrokenForMainAndTWikiWebs][Details]] | TWiki:Main.SvenDowideit |
 | Fix: Topic save returns error CI Date precedes date in revision. [[http://TWiki.org/cgi-bin/view/Codev/CiDatePrecedesDateInRevision][Details]] | TWiki:Main.PeterThoeny |
-| Fix: Double quotes got replaced by &#34; in TWiki forms. [[http://TWiki.org/cgi-bin/view/Codev/DoubleQuoteHandlingInTwikiForms][Details]] | TWiki: MS TWiki:Main.PeterThoeny |
+| Fix: Double quotes got replaced by &#34; in TWiki forms. [[http://TWiki.org/cgi-bin/view/Codev/DoubleQuoteHandlingInTwikiForms][Details]] | TWiki:Main.MichaelSparks TWiki:Main.PeterThoeny |
 | Fix: Duplicated Wiki name in .htpasswd entry for sha1 encoding. [[http://TWiki.org/cgi-bin/view/Codev/DuplicatedWikiNameInHtpasswdEntry][Details]] | TWiki:Main.PeterThoeny |
 | Fix: When viewing a previous version of a topic, the view script substitutes only one occurrence of the variable EDITTOPIC. [[http://TWiki.org/cgi-bin/view/Codev/EditTopicNotGloballySubstituted][Details]] | TWiki:Main.PeterThoeny |
 | Fix: Form default values are not working for text fields. [[http://TWiki.org/cgi-bin/view/Codev/FormDefaultNotWorkingForTextField][Details]] | TWiki:Main.ThomasWeigert TWiki:Main.SvenDowideit |

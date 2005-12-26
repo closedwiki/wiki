@@ -8,7 +8,7 @@
 
 # The first parameter will be part of the URL to your installation e.g.
 # http://my.co.uk/twiki/bin/view/...
-# The second parameter must point to the physical path on your disc. Be
+# The second parameter must point to the physical path on your disk. Be
 # careful not to lose any trailing /'s.
 
 #### Change the _second_ path to match your local installation

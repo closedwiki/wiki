@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-This page provides online help for new users of TWiki, when editing a page - the area between the horizontal lines is included just below the text input area.  You can customize this based on your site's particular needs, e.g. if there's some formatting that your users need a lot.  
+This page provides online help for new users of TWiki when editing a page.  If there's some formatting that your contributors use often, you can customize this for your site's particular needs.
 
-Keeping this help text short and simple is important since this page is aimed at new users.  It does include pop-up links for more detailed help - you will need to test these links from within the Edit page for their <nop>JavaScript code to work correctly.
+Keeping this help text short and simple is important since this page is aimed at new users.  It does include pop-up links for more detailed help.
 
 ---
 %STARTINCLUDE%
@@ -16,9 +16,5 @@ Keeping this help text short and simple is important since this page is aimed at
    * <a target="TextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURL{"view"}%/%TWIKIWEB%/TextFormattingRules">More formatting help</a> and <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURL{"view"}%/%TWIKIWEB%/GoodStyle">hints on good style</a>
 %STOPINCLUDE%
 ---
-
-
-
-
 
 

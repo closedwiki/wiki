@@ -7,7 +7,7 @@ When you type a <nop>WikiWord, you establish a hyperlink. It's as easy as that.
 !WikiWord linking is easy to use:
    * You don't have to know the full path to where the topic is stored - you just type the name
    * You don't need to write HTML
-   * Without HTML the topic text is easier to read when editing
+   * Without HTML, the topic text is easier to read when editing
    * Easy linking leads to interesting texts with links placed in context
 
 <nop>WikiWords are styled like this because:

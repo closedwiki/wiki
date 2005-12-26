@@ -5,5 +5,5 @@ Each TWiki web has an automatic email notification service that sends you an ema
 
 %INCLUDE{"MailerContrib"}%
 
-__Note for System Administrators:__ Notification is supported by an add-on to the TWiki kernel called the !MailerContrib. See the MailerContrib topic for details of how to set this service up.
+__Note for System Administrators:__ Notification is supported by an add-on to the TWiki kernel called the !MailerContrib. See the MailerContrib topic for details of how to set up this service.
 

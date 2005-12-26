@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# TWiki Plugins
 
-_Plug-in enhanced feature add-ons, with a Plugin API for developers_
+_Plug in enhanced feature add-ons, with a Plugin API for developers_
 
 ---++ Overview
 
@@ -20,9 +20,9 @@ TWiki plugins are developed and contributed by interested members of the communi
 #InstallPlugin
 ---++ Installing Plugins
 
-Each TWiki Plugin comes with its own documentation: Step-by-step installation instructions, a detailed description of any special requirements, version details, and a working example for testing. Many plugins have an install script that automates these steps for you.
+Each TWiki Plugin comes with its own documentation: step-by-step installation instructions, a detailed description of any special requirements, version details, and a working example for testing. Many plugins have an install script that automates these steps for you.
 
-*Special Requests:* Some Plugins need certain Perl modules to be preinstalled on the host system. Plugins may also use other resources, like graphics, other modules, applications, templates. You should be able to find detailed instructions are in the Plugin documentation.
+*Special Requirements:* Some Plugins need certain Perl modules to be preinstalled on the host system. Plugins may also use other resources, like graphics, other modules, applications, and templates. You should be able to find detailed instructions in the Plugin's documentation.
 
 Each Plugin has a standard release topic, located in the TWiki:Plugins web at TWiki.org. There's usually a number of other related topics, such as a developers page, and an appraisal page.
 
@@ -31,7 +31,7 @@ Each Plugin has a standard release topic, located in the TWiki:Plugins web at TW
 
 The recommended approach to testing new Plugins before making them public is to create a second local TWiki installation, and test the plugin there. You can allow selected users access to the test area. Once you are satisifed that it won't compromise your main installation, you can install it there as well.
 
-InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly and 3) what TWiki:Codev.PluginHandlers they invoke. Any failures are shown in the Errors section. The =[[TWikiVariables#VarFAILEDPLUGINS][%<nop>FAILEDPLUGINS%]]= variable can be used to debug failures. You may also want to check your webserver error log and the various TWiki log files.
+InstalledPlugins shows which Plugins are: 1) installed, 2) loading properly, and 3) what TWiki:Codev.PluginHandlers they invoke. Any failures are shown in the Errors section. The =[[TWikiVariables#VarFAILEDPLUGINS][%<nop>FAILEDPLUGINS%]]= variable can be used to debug failures. You may also want to check your webserver error log and the various TWiki log files.
 
 ---+++ Some Notes on Plugin Performance
 
@@ -42,7 +42,7 @@ The performance of the system depends to some extent on the number of Plugins in
 #ManagingPlugins
 ---++ Managing Installed Plugins
 
-Some Plugins require additional settings or offer extra options that you have to select. Also, you may want to make a Plugin available only in certain webs, or temporarily disable it. And may want to list all available Plugins in certain topics. You can handle all of these management tasks with simple procedures.
+Some Plugins require additional settings or offer extra options that you have to select. Also, you may want to make a Plugin available only in certain webs, or temporarily disable it. And may want to list all available Plugins in certain topics. You can handle all of these management tasks with simple procedures:
 
 ---+++ Enabling Plugins
 
@@ -50,9 +50,9 @@ Plugins can be enabled and disabled with the [[%SCRIPTURL{configure}%][configure
 
 ---+++ Plugin Evaluation Order
 
-By default, TWiki executes Plugins in alphabetical oder on Plugin name. It is possible to change the order, for example to evaluate a database variables before the speadsheet CALCs. This can be done with the [[%SCRIPTURL{configure}%][configure]] script.
+By default, TWiki executes Plugins in alphabetical order on Plugin name. It is possible to change the order, for example to evaluate database variables before the speadsheet CALCs. This can be done with ={PluginsOrder}= in the Plugins section of [[%SCRIPTURL{configure}%][configure]].
 
----+++ Plugin Specific Settings
+---+++ Plugin-Specific Settings
 
 Plugin-specific settings are done in individual Plugin topics. Two settings are standard for each Plugin:
    1 One line description, used to form the bullets describing the Plugins in the %TWIKIWEB%.TextFormattingRules topic:
@@ -87,9 +87,9 @@ __%X% Note:__ If you use other core functions not described in =Func.pm=, you ru
 
 ---+++ Predefined Hooks
 
-In addition to TWiki core functions, Plugins can use *predefined hooks*, or *call backs*, as described in the =lib/TWiki/Plugins/EmptyPlugin.pm= module.
+In addition to TWiki core functions, Plugins can use *predefined hooks*, or *callbacks*, as described in the =lib/TWiki/Plugins/EmptyPlugin.pm= module.
 
-   * All but the initPlugin are disabled. To enable a call back, remove =DISABLE_= from the function name.
+   * All but the initPlugin are disabled. To enable a callback, remove =DISABLE_= from the function name.
 
 TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to use.
 
