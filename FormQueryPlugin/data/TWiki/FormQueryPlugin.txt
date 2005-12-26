@@ -1,4 +1,4 @@
-vi---+!! FormQueryPlugin
+---+!! FormQueryPlugin
 
 The FormQueryPlugin provides a query interface to the [[TWiki:Plugins/DBCacheContrib][TWiki::Contrib::DBCache]] module, giving a way to present query results as formatted tables.
 
