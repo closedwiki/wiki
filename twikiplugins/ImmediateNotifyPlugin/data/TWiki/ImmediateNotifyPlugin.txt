@@ -1,0 +1,63 @@
+%META:TOPICINFO{author="EtherMage" date="1044325800" format="1.0" version="1.2"}%
+---+ Immediate Notify Plugin
+
+This is a plugin that allows users to register to be immediately notified when topics or webs are modified.
+
+---++ Syntax Rules
+
+Once the plugin is installed, users can register for notification in the Web<nop>ImmediateNotify topics by including their username as an entry in a list.  In order to recieve notifications, they must also configure their desired notification method.  Since Jabber is currently the only available method, this consists of:
+	* Adding a line ="Jabber: jabber_user@jabber_server.org"= to their topic.
+	* Adding a line ="		* Set IMMEDIATENOTIFYMETHOD = Jabber"= to their topic.
+
+---++ <nop>%TOPIC% Global Settings
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Allows immediate notification of topic changes.
+
+	* Notification method configuration:
+		* Set METHODS = Jabber
+	* Jabber method configuration:
+		* Set JABBER_USERNAME = &lt;user&gt;
+		* Set JABBER_PASSWORD = &lt;pass&gt;
+		* Set JABBER_SERVER = jabber.org
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
+
+	* Download the ZIP file and necessary patches from the Plugin web (see below)
+	* Patch your TWiki installation to add the new plugin hook:
+		* In the =lib/TWiki/= directory, run the command =patch < /path/to/afterSaveHandler.patch=
+	* Patch the Net::Jabber Perl module.
+		* Find =Jabber.pm=
+		* In the directory containing =Jabber.pm=, run the command =patch < /path/to/net_jabber_taint_fix.patch=
+	* Unzip =%TOPIC%.zip= in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | =data/TWiki/%TOPIC%.txt= | Plugin topic |
+	  | =data/TWiki/%TOPIC%.txt,v= | Plugin topic repository |
+	  | =lib/TWiki/Plugins/%TOPIC%.pm= | Plugin Perl module |
+	  | =lib/TWiki/Plugins/%TOPIC%/*.pm= | Notification method Perl modules |
+	* Set up notification methods
+		* Currently the only available method is via Jabber.
+			* Set up a Jabber account for the wiki with a standard client.
+			* Set JABBER_USERNAME, JABBER_PASSWORD, and JABBER_SERVER in the plugin topic.
+	* Create a =Web<nop>ImmediateNotify= topic in each web for users to list their names in for notification.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/WalterMundt |
+|  Plugin Version: | 03 Feb 2003 (V0.1) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  03 Feb 2003: | Initial version |
+|  CPAN Dependencies: | =XML::Stream=, =Net::Jabber= (w/patch) |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.6.1 (untested on earlier versions) |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+-- TWiki:Main/WalterMundt - 04 Feb 2003
