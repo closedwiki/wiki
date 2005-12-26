@@ -79,6 +79,13 @@ sub endRenderingHandler
     $_[0] =~ s/%TOOLTIP%/&handleToolTip("")/ge;
 }
 
+sub postRenderingHandler
+{
+    # this search and replace could be made more robust if this were ever called more than once
+    # (more than once with the </body> tag in the text, that is)
+    $_[0] =~ s|(</body>)|<script type="text/javascript" src="$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/wz_tooltip.js"></script>$1|;
+}
+
 sub handleToolTip
 {
   my $attr = shift;
