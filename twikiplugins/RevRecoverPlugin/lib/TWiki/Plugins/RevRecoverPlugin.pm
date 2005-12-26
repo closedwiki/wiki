@@ -47,30 +47,17 @@ sub commonTagsHandler
 
     &TWiki::Func::writeDebug( "- RevRecoverPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
-
-
-
-    if ( $_[0] !~ m/(?:\b(\w+)\.)?([A-Z]+[a-z]+[A-Z]\w*)\?rev=(\d+\.\d+)(\"|\&)/o ) {
-	$_[0] =~ s/(?:\b(\w+)\.)?([A-Z]+[a-z]+[A-Z]\w*)\?rev=(\d+\.\d+)\b/&handleUrl($1,$2,$3)/ego;
+    if ( $_[0] !~ m/(?:\b(\w+)\.)?([A-Z]+[a-z]+[A-Z]\w*)\?rev=(\d+\.)?(\d+)(\"|\&)/o ) {
+	$_[0] =~ s/(?:\b(\w+)\.)?([A-Z]+[a-z]+[A-Z]\w*)\?rev=(\d+\.)?(\d+)\b/&handleUrl($1,$2,$4,$_[2])/ego;
     }
 }
 
 sub handleUrl {
-    my $web = shift;
-    my $topic = shift;
-    my $rev = shift;
+    my ( $web, $topic, $rev, $webCurrent ) = @_;
 
-    if ( defined($1) ) {
-	return "<A HREF=\"%SCRIPTURL%\/view\/$web\/$topic\?rev=$rev\">$web\.$topic\?$rev<\/A>";
-    } else {
-	return "<A HREF=\"%SCRIPTURL%\/view\/%WEB%\/$topic\?rev=$rev\">$topic\?$rev<\/A>";
-    }
+    my $urlView = TWiki::Func::getScriptUrl( $web || $webCurrent, $topic, 'view' );
+    my $linkTopic = ( defined $web ? "$web." : '' ) . $topic;
+    return qq{<a href="$urlView?rev=$rev">$linkTopic\?$rev</a>};
 }
 
 1;

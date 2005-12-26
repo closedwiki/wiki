@@ -11,13 +11,13 @@ TopicName?rev=<revision_number>
 i.e.
 
 <UL>
-	=Rev<nop>RecoverPlugin<nop>?rev=1.1=
+	=Rev<nop>RecoverPlugin<nop>?rev=1=
 </UL>
 
 gives
 
 <UL>
-	RevRecoverPlugin?rev=1.1
+	RevRecoverPlugin?rev=1
 </UL>
 
 ---+++ Known Problems
@@ -38,17 +38,24 @@ Plugin settings are stored as preferences variables. The following variables are
 
 	* Unzip the =RevRecoverPlugin.zip= file into your TWiki installation.
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the installation was successful:
+		* %TOPIC%?rev=1
+		* %TOPIC%?rev=1.1
+		* %TWIKIWEB%.ATasteOfTWiki?rev=1
+		* %MAINWEB%.TWikiContributor?rev=1
 
 ---+++ Plugin Info
 
-|  Plugin Author: | Main.CrawfordCurrie, Main.PeterAlbiez |
-|  Plugin Version: | 22 Apr 2002 |
-|  Change History: | 22 Apr 2002: Initial version |
+|  Plugin Author: | TWiki:Main.CrawfordCurrie, TWiki:Main.PeterAlbiez |
+|  Plugin Version: | 10 Dec 2005 |
+|  Change History: |  |
+|  10 Dec 2005: | Updated to support Dakar-style revision numbers (TWiki:Main.WillNorris) |
+|  22 Apr 2002: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
