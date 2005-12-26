@@ -193,7 +193,7 @@ sub _handleRandomQuoteTag
 	    TWiki::Func::writeDebug( "- ${pluginName}::_handleMovableTypeTag( $line )" ) if $debug;
 	    $text .= $line;
 	} else {
-	    $text .= "\"$saying\"--$author";
+	    $text .= "\"$saying\"  -- $author";
 	}
     }
 
