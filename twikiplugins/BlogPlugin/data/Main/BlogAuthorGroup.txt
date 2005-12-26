@@ -4,7 +4,7 @@
 
 Group of Blog.BlogAuthors
 
-   * Set GROUP = Main.MichaelDaum
+   * Set GROUP = 
    * #Set ALLOWTOPICCHANGE = BlogAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
