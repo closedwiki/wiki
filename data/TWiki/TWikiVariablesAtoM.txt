@@ -169,8 +169,7 @@ __Note:__ This topic is included by TWikiVariables
 #VarICON
 ---+++ ICON{"name"} -- small documentation graphic or icon of common attachment types
    * Small graphic (commonly 16x16 pixels) used to enhance topics. Specify the name of the graphic.
-   * A set of 16x16 pixel icons of common attachment types is provided. Specify file type only, file name, or full path name.
-   * Syntax: =%<nop>ICON{"name"}%= or =%<nop>ICON{"type"}%=
+   * Syntax: =%<nop>ICON{"name"}%=
    * Graphic samples: %ICON{"arrowbright"}% =arrowbright=, %ICON{"bubble"}% =bubble=, %ICON{"choice-yes"}% =choice-yes=, %ICON{"hand"}% =hand=
    * Filetype samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
    * Example: =%<nop>ICON{"info"}%= expands to %ICON{"info"}%
@@ -179,7 +178,7 @@ __Note:__ This topic is included by TWikiVariables
 #VarICONPATH
 ---+++ ICONPATH{"name"} -- url path of small documentation graphic or icon of common attachment types
    * See [[#VarICON][ICON]]
-   * Syntax: =%<nop>ICONPATH{"name"}%= or =%<nop>ICONPATH{"type"}%=
+   * Syntax: =%<nop>ICONPATH{"name"}%=
    * Example: =%<nop>ICONPATH{"info"}%= expands to =%ICONPATH{"info"}%= which renders as %ICONPATH{"info"}%
    * Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
