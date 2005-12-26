@@ -9,16 +9,17 @@ It is based on http://www.walterzorn.com/tooltip/tooltip_e.htm
 ---++ TOOLTIP : dynamic text 
 
 
-This is an %TOOLTIP{URL="%TOPIC%" TEXT="here is the text you get when you move your mouse over"}% example %TOOLTIP%.
+This is an %TOOLTIP{URL="%TOPIC%" TEXT="here is the text you get when you move your mouse over"}% example%TOOLTIP%.
 
 The source :
-%BLOC%This is an %<nop>TOOLTIP{URL="%TOPIC%" TEXT="here is the text you get when you move your mouse over"}% example %<nop>TOOLTIP%.
-%ENDBLOC%
+<verbatim>
+This is an %TOOLTIP{URL="%TOPIC%" TEXT="here is the text you get when you move your mouse over"}% example%TOOLTIP%.
+</verbatim>
 
-You can use one or more %TOOLTIP{TEXT="there are soo many parameters..." BGCOLOR="#FF8000" FONTCOLOR="#00FF80" TITLE="PARAMETERS" SHADOWCOLOR="#ccaacc" FONTSIZE="30px"}%parameter%TOOLTIP% to get your own and nice tool tip !.
+You can use one or more %TOOLTIP{TEXT="there are so many parameters..." BGCOLOR="#FF8000" FONTCOLOR="#00FF80" TITLE="PARAMETERS" SHADOWCOLOR="#ccaacc" FONTSIZE="30px"}%parameter%TOOLTIP% to get your own and nice tool tip !.
 
 
-Note that you can also %TOOLTIP{TEXT="You can also insert <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos in your texte... this is simply HTML !" FONTCOLOR="#336699" TITLE="PHOTOS !" SHADOWCOLOR="#ccaacc" FONTSIZE="18px"}%do this%TOOLTIP% and %TOOLTIP{TEXT="you can set a bacground image so to get a nice tool tip and also add some <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos " FONTCOLOR="#336699" TITLE="Background image" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" BGIMG="%ATTACHURLPATH%/ToolTipBackground.jpg"}% this %TOOLTIP%too !.
+Note that you can also %TOOLTIP{TEXT="You can also insert <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos in your text... this is simply HTML !" FONTCOLOR="#336699" TITLE="PHOTOS !" SHADOWCOLOR="#ccaacc" FONTSIZE="18px"}%do this%TOOLTIP% and %TOOLTIP{TEXT="you can set a background image so to get a nice tool tip and also add some <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos " FONTCOLOR="#336699" TITLE="Background image" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" BGIMG="%ATTACHURLPATH%/ToolTipBackground.jpg"}% this%TOOLTIP% too!
 
 
 ---+++ Parameters :
@@ -55,30 +56,27 @@ Note that you can also %TOOLTIP{TEXT="You can also insert <img src=\'%ATTACHURLP
 ---++ General Settings
 
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = create Tool Tips from TWiki .
+		* Set SHORTDESCRIPTION = create Tool Tips from TWiki
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
 
 ---++ Plugin install
- Add :
-<verbatim>
-<SCRIPT LANGUAGE="JavaScript" SRC="%PUBURLPATH%/Plugins/ToolTipPlugin/wz_tooltip.js"></SCRIPT>
-</verbatim>
-in variable WEBCOPYRIGHT in TOPIC TWiki.TWikiPreferences or add it in your skins so this javascript code is called just before the closing body tag).
+
+
 
 ---++ Plugin Info
 
-|  Plugin Author: | %MAINWEB%.PatrickNomblot  |
+|  Plugin Author: | TWiki:Main.PatrickNomblot  |
 |  Plugin Version: | 1.2 |
 |  Change History: | 21 Nov 2003: Initial version |
 |  Change History: | 10 Sep 2004: tooltip text can comes from any TOPIC |
 |  Other Dependencies: |	|
 |  Perl Version: | 5.6 |
-|  Feedback: | %MAINWEB%.PatrickNomblot |
+|  Feedback: | TWiki:Main.PatrickNomblot |
 
 
 
--- Main.PatrickNomblot - 21 Nov 2003
+-- TWiki:Main.PatrickNomblot - 21 Nov 2003
 %META:FILEATTACHMENT{name="wz_tooltip.js" attr="" comment="The Javascript Tool Tip engine" date="1069420919" path="X:\data\twiki\pub\Trash\BesacPlugin\wz_tooltip.js" size="15526" user="pnomblot" version="1.1"}%
