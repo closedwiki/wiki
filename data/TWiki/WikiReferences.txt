@@ -10,9 +10,9 @@ Some useful articles and books around collaboration and the Wiki technology in p
 
    * Book: The Wiki Way, Quick Collaboration on the Web; by Bo Leuf and Ward Cunningham; Addison-Wesley Pub Co; ISBN:020171499X
 
-   * Book: Wiki: Web Collaboration; by Anja Ebersbach, Markus Glaser, Richard Heigl; Springer; ISBN:3540259953 (the book is about TWiki and <nop>MediaWiki; German version is [[http://www.wiki-tools.de/]["WikiTools: Kooperation im Web"]])
+   * Book: Wiki Tools: Web Collaboration; by Anja Ebersbach, Markus Glaser, Richard Heigl; Springer; ISBN:3540259953 (the book is about TWiki and <nop>MediaWiki; German version is [[http://www.wiki-tools.de/]["WikiTools: Kooperation im Web"]])
 
-   * Presentation: Wiki, a Shared Blog for the Corporate World; by Peter Thoeny; !LinuxWorld; 05 Aug 2004; http://TWiki.org/cgi-bin/view/Codev/TWikiPresentation05Aug2004
+   * Presentation: Wiki Collaboration and Wiki Applications for the Enterprise; by Peter Thoeny; !LinuxWorld; 11 Aug 2005; http://TWiki.org/cgi-bin/view/Codev/TWikiPresentation11Aug2005
 
    * Article: Team Builder - the TWiki wiki and the enterprise; by Peter Thoeny; Linux-Magazine UK; 05 May 2005; http://www.linux-magazine.com/issue/55
 
@@ -38,10 +38,13 @@ Some useful articles and books around collaboration and the Wiki technology in p
 
    * Directory: Google.com &gt; Reference &gt; Knowledge Management; http://directory.google.com/Top/Reference/Knowledge_Management/
 
+   * Book: Enabling Knowledge Creation: How to Unlock the Mystery of Tacit Knowledge and Release the Power of Innovation; by Georg von Krogh, Kazuo Ichijo, Ikujiro Nonaka; Oxford University Press; ISBN:0195126165
+
    * Book: The Knowledge Management Toolkit: Practical Techniques for Building a Knowledge Management System; by Amrit Tiwana; Prentice Hall PTR; ISBN:0130128538
 
    * Book: The Knowing-Doing Gap: How Smart Companies Turn Knowledge into Action; by Jeffrey Pfeffer and Robert I. Sutton; Harvard Business School Pr; ISBN:1578511240
 
+   * Book: Survival of the Smartest: Managing Information for Rapid Action and World-Class Performance; by Haim Mendelson, Johannes Ziegler; Wiley; ISBN:0471295604
 
 ---++ Extreme Programming
 
@@ -50,6 +53,5 @@ Some useful articles and books around collaboration and the Wiki technology in p
    * Book: Extreme Programming in Practice; by James W. Newkirk and Robert C. Martin; Addison-Wesley Pub Co; ISBN:0201709376
 
    * Book: Extreme Programming Explored; by William C. Wake and Bill Wake; Addison-Wesley Pub Co; ISBN:0201733978
-
 
 
