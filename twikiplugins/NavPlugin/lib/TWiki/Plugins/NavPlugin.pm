@@ -59,13 +59,12 @@ sub initPlugin
 	$tocTopic = $documentName.$tocNameFlag; 
 	if ( TWiki::Func::topicExists($web, $tocTopic) ){
 	    &handleNavLinks($topic, $web, $tocTopic);
-	    return 1;
 	}
 	else{
 	    $tocTopic = "";
 	}
     }
-    return 0;
+    return 1;
 }
 
 # =========================
