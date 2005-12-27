@@ -84,7 +84,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set SHORTDESCRIPTION = Display <nop>LaTeX-like equations in-line using <nop>MathML
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
@@ -98,7 +98,7 @@ server where TWiki is running.
 	  system.  The location must be somewhere that your web server can access.
 
 	* If you have it installed, disable the TWiki:Plugins/MathModePlugin by
-	 adding it to the =DISABLEDPLUGINS= line of your TWiki.TWikiPreferences
+	 adding it to the =DISABLEDPLUGINS= line of your [[%LOCALSITEPREFS%]]
 	 page.  For example:%BR%
 		* Set DISABLEDPLUGINS = <nop>MathModePlugin 
 

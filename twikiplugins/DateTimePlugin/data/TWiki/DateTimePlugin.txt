@@ -325,7 +325,7 @@ Para a internacionalização, insira os nomes dos meses e dias da semana separados
 		* Set SHORTDESCRIPTION = Extends the =%<nop>GMTIME{"format"}%= variable with more options and internationalization suport.
 
 	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ <nop>ToDo
 
