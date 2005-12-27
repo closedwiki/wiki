@@ -110,7 +110,7 @@ You just put your lips together and blow.
 </table>
 As you can see, your changes have been merged with your colleagues. The merge is done on a line-by-line basis, and if your changes do not overlap, then change marks will not be used (as is the case for the last line of the example).
 
-Merging only applies to text fields. When there are conflicts in field data in forms such as checkboxes, radio buttons and selects, the most recent change (usually your change) always wins, even if someone else has changed the form since you started editing. All changes are of course available from the topic history.
+Merging only applies to text fields. When there are conflicts in field data in forms such as checkboxes, radio buttons and selects, the most recent change (usually your change) always wins, even if someone else has changed the form since you started editing. Of course, all changes are available from the topic history.
 
 Because there are cases where you actually want to avoid overlapping edits altogether (e.g. if you are changing forms data) TWiki will *warn* if you attempt to edit a topic that someone else is editing. It will also warn if a merge was required during a save.
 
@@ -120,11 +120,11 @@ TWiki will now pick up the language you are using in your browser, and try to pr
 
 User Interface Internationalisation support is optional and enabled by the {UserInterfaceInternationalisation} setting.
 
-The translation is performed by the Perl standard internationalization framework. If you want to contribute a new language, it would be most welcome: See TWiki:Codev.UserInterfaceLocalisation for instructions on how to help.
+The translation is performed by the Perl standard internationalization framework. If you want to contribute a new language, it would be most welcome: see TWiki:Codev.UserInterfaceLocalisation for instructions on how to help.
 
 ---+++ New options on the editing screen
 
-You will notice a couple of changes to the editing screen; first, there is no switch for releasing the edit lock any more (if locks are enabled, they are always released when an edit finishes). You will also notice a new "force new revision" checkbox. TWiki normally doesn't add a new revision if the same user re-edits a topic within a certain time period; this checkbox allows you to _force_ TWiki to add a revision for every change, regardless of how small it is.
+You will notice a couple of changes to the editing screen: first, there is no switch for releasing the edit lock any more (if locks are enabled, they are always released when an edit finishes). You will also notice a new "force new revision" checkbox. TWiki normally doesn't add a new revision if the same user re-edits a topic within a certain time period; this checkbox allows you to _force_ TWiki to add a revision for every change, regardless of how small it is.
 
 ---+++ Change notification
 
@@ -213,12 +213,12 @@ The installation and configuration processes has been significantly simplified.
 The installer should now provide a file called =LocalLib.cfg= that contains local path settings. =setlib.cfg= contains documentation of what has to be done. Old =setlib.cfg= files *will not work* with Dakar.
 
 ---++++ TWiki.cfg
-=TWiki.cfg= now contains all the default configuration settings, and the installer should provide a file called =LocalSite.cfg= that contains just those settings that are different to the defaults. The syntax of the settings in the file has also changed. Old =TWiki.cfg= files *will not work* with Dakar. The !UpgradeTWiki script can be used to automate most of the necessary changes.
+=TWiki.cfg= now contains all the default configuration settings, and the installer should provide a file called =LocalSite.cfg= that contains just those settings that are different than the defaults. The syntax of the settings in the file has also changed. Old =TWiki.cfg= files *will not work* with Dakar. The !UpgradeTWiki script can be used to automate most of the necessary changes.
 
 ---++++ =testenv= / =configure=
 =testenv= has been removed, and replaced with the new =configure= interface. This interface performs all the checking functions of the old =testenv=, adds several new ones (including permissions checks) and also acts as a browser interface allowing you to do *all* TWiki configuration from the browser. =configure= is now the main installation interface for TWiki.
 
-The =configure= script can be used like the old =testenv= for public review of the configuration of the site. Saving from the interface is password-protected, using a password set in the configuration files, so to ordinary users =configure= just looks like a posh version of =testenv=. If you want to hide your configuration from public view, you can restrict access to the script webserver access controls (Apache users see the Apache documentation on the 'require' directive for more infomation on how to do this).
+The =configure= script can be used like the old =testenv= for public review of the configuration of the site. Saving from the interface is password-protected, using a password set in the configuration files, so to ordinary users =configure= just looks like a posh version of =testenv=. If you want to hide your configuration from public view, you can restrict access to the script using webserver access controls (Apache users see the Apache documentation on the 'require' directive for more infomation on how to do this).
 
 ---++++ =configure= optional features
 
@@ -236,9 +236,9 @@ Preferences are now evaluated in the following order:
    1 Web
    1 Session
    1 User
-   1 Local Site (as set in {LocalSitePreferences})
-   1 Default (as set in {SitePrefsTopic})
-this is a change from previous versions, where the User preferences were evaluated between the topic and the web.
+   1 Local Site (as set in {LocalSitePreferences}, typically =%<nop>MAINWEB%.TWikiPreferences))
+   1 Default (as set in {SitePrefsTopic}, typically =%<nop>TWIKIWEB%.TWikiPreferences))
+This is a change from previous versions, where the User preferences were evaluated between the topic and the web.
 
 Note that a user can still dictate preference values that can't be overridden, but they will now need to set those preferences as FINALPREFERENCES.
 
@@ -252,13 +252,13 @@ TWiki:Plugins.PreferencesPlugin has been included to allow more convenient editi
 
 The following standard preferences have been removed: [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPIC%25&casesensitive=on&limit=all][MAILTHISTOPIC]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPICTEXT%25&casesensitive=on&limit=all][MAILTHISTOPICTEXT]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25TOPICURL%25&casesensitive=on&limit=all][TOPICURL]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25READTOPICPREFS%25&casesensitive=on&limit=all][READTOPICPREFS]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25TOPICOVERRIDESUSER%25&casesensitive=on&limit=all][TOPICOVERRIDESUSER]]  (click on the name to search for occurrences on this site). If they are in use on your site, you can restore them to their Cairo settings by simply cutting and pasting the old definitions.
 
----++++ {SitePrefsTopicName} (was <nop>%MAINWEB%.TWikiPreferences)
+---++++ {LocalSitePreferences} (was <nop>%MAINWEB%.TWikiPreferences)
 
 Customized site preferences can now be saved in the {LocalSitePreferences} topic which will override settings in {SitePrefsTopicName}. This simplifies upgrades as you can overwrite the {SitePrefsTopicName} topic and gain any new or updated preference settings without losing your local customizations.
 
 ---++++ =FAVICON=
 
-=favicon.ico= is a small graphic that _can_ appear in a variety of places in the browser: the titlebar, the taskbar, the address bar, bookmarks/favourites, and tabs.  Each web browser has a unique user interface, and as a result uses the Favicon in different ways.  _Most_ browsers display it in _most_ of the locations listed.
+=favicon.ico= is a small graphic that _can_ appear in a variety of places in the browser: the titlebar, the taskbar, the address bar, bookmarks/favourites, and page tabs.  Each web browser has a unique user interface, and as a result uses the Favicon in different ways.  _Most_ browsers display it in _most_ of the locations listed.
 
 Out of the box, TWiki is configured to easily customise the =favicon.ico= for each web.  To switch to a new =favicon.ico=, upload it to the desired web's <nop>WebPreferences.
       * <nop>Set FAVICON = %PUBURLPATH%/%WEB%/WebPreferences/favicon.ico
@@ -268,7 +268,7 @@ To provide a single, site-wide =favicon.ico=, hardcode a specific web, for examp
 
 ---++++ =FORCENEWREVISIONCHECKBOX=
 
-Normally, if you make another edit within a one hour period (was =$editLockTime=in =lib/TWiki.cfg=, now ={ReplaceIfEditedAgainWithin}=), TWiki will fold together your changes.  This is often the "right thing to do", as it can reduce the visual clutter of diffs.
+Normally, if you make another edit within a one hour period (was =$editLockTime= in =lib/TWiki.cfg=, now ={ReplaceIfEditedAgainWithin}=), TWiki will fold together your changes.  This is often the "right thing to do", as it can reduce the visual clutter of diffs.
 
 The "Force New Revision" checkbox is a way to force it to create a separate revision each time you save.
 
@@ -288,7 +288,7 @@ To change the logo's filename, set the =WEBLOGONAME= variable.  You'll especiall
 RSS feeds have also been enhanced to use the web-specific logo.
 
 If you don't want to have custom logos on a per-web basic, but instead want to use a single, site-wide logo, hardcode a specific web in the =WEBLOGOURL= variable.  For example:
-      * <nop>Set WEBLOGOURL = %PUBURLPATH%/%MAINWEB%/WebPreferences/logo.png
+      * <nop>Set WEBLOGOURL = %<nop>PUBURLPATH%/%MAINWEB%/WebPreferences/logo.png
 
 ---++++ =WIKILOGOIMG=, =WIKILOGOURL=, =WIKILOGOALT=
 
@@ -318,7 +318,7 @@ Plugins are no longer searched for every time a TWiki script is run. Instead the
 
 ---+++ Logins, Logouts, Sessions and Passwords
 
-TWiki:Plugins.SessionPlugin and TWiki:Plugins.AuthPagePlugin have been integrated into the core. TWiki now supports cookied sessions, in the context of a much improved authentication architecture. The setup for authentication is now much simpler, and for most sites can be done entirely from the =configure= interface. There are some incompatibilities with TWiki::Plugins.SessionPlugin, with resepect to the in-line variables. See TWiki.TWikiUserAuthentication in the release for full details of how authentication works now. TWiki also now supports the concept of pluggable password managers, making the integration of corporate authentication services much simpler.
+TWiki:Plugins.SessionPlugin and TWiki:Plugins.AuthPagePlugin have been integrated into the core. TWiki now supports cookied sessions, in the context of a much improved authentication architecture. The setup for authentication is now much simpler, and for most sites can be done entirely from the =configure= interface. There are some incompatibilities with TWiki:Plugins.SessionPlugin, with resepect to the in-line variables. See TWiki.TWikiUserAuthentication in the release for full details of how authentication works now. TWiki also now supports the concept of pluggable password managers, making the integration of corporate authentication services much simpler.
 
 Administrators, especially of public sites, need to be aware of the security implications of cookied sessions, and the potential risks of cross-site scripting attacks that may be used to steal user sessions. See TWiki.TWikiUserAuthentication for more details.
 
@@ -363,7 +363,7 @@ The standard webs shipped with this release have these settings disabled. Howeve
    * #Set ALLOWWEBVIEW = 
    * _etc_
 
-%RED%Note:%ENDCOLOR% For security reasons, the[[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to %MAINWEB%.TWikiAdminGroup. 
+%RED%Note:%ENDCOLOR% For security reasons, the [[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to %MAINWEB%.TWikiAdminGroup. 
 
 ---++++ TWiki.SitePermissions
 
@@ -415,9 +415,7 @@ The main impact of this is that some TWikiApplications may cease to work if they
 Note that because the TWiki spec allows double quotes within double-quoted strings in certain variable parameters it has been impossible to make the parser 100% deterministic. There may still be pathological cases where the parser may fail. In these cases, consider how open and close curly brackets are matched up.
 
 ---+++ Encoding of form-field values
-The encoding used to escape characters in form-field values has had to change. The old encoding could very easily be confused by text strings in data values. Existing topics with the old encoding will still be loaded into TWiki as before, but if edited they will be saved with the new encoding. This should not affect you unless you have searches that look for the old encodings; specifically, the %<nop%_G_
-, %<nop>_Q_%, and %<nop>_P_% character sequences. Any such searches will not work any more, and need to be converted to search for the new encoding. Assuming they are =regex= type searches, you can use =(%<nop%_G_
-|%0A)= to match encoded newlines in field data in both old and new format topics, =(%<nop>_Q_%|%22)= to match quotes, and =(%<nop>_P_%|25)= for percent signs.
+The encoding used to escape characters in form-field values has had to change. The old encoding could very easily be confused by text strings in data values. Existing topics with the old encoding will still be loaded into TWiki as before, but if edited they will be saved with the new encoding. This should not affect you unless you have searches that look for the old encodings; specifically, the %<nop>_G_%, %<nop>_Q_%, and %<nop>_P_% character sequences. Any such searches will not work any more, and need to be converted to search for the new encoding. Assuming they are =regex= type searches, you can use =(%<nop>_G_%|%0A)= to match encoded newlines in field data in both old and new format topics, =(%<nop>_Q_%|%22)= to match quotes, and =(%<nop>_P_%|25)= for percent signs.
 
 ---+++ &lt;script&gt; tags in topics
 Previous releases of TWiki would attempt to interpret the content of &lt;script&gt; tags in topics as TWikiML, often resulting in non-functional scripts. This release protects script sections from expansion by TWiki. Note that this means that TWiki.TWikiVariables will *not* be expanded in script tags - they are passed through _verbatim_.
@@ -438,7 +436,7 @@ blah<verbatim>inside</verbatim>after
 
 ---+++ =ALL_VARIABLES=
 
-You can use =%<nop>ALL_VARIABLES%= in a topic to get a dump of all variables set in that context. Invaluable for debugging those tricksy !TWikiApplications!
+You can use =%<nop>ALL_VARIABLES%= in a topic to get a dump of all variables set in that context. Invaluable for debugging those tricky !TWikiApplications!
 
 ---+++ =IF=
 
@@ -464,7 +462,7 @@ pushes a different skin to the front of the skin search path. There is also an e
 See TWikiSkins for more information.
 
 ---+++ Supporting web names that are !WikiWords
-Although web names have been [[WebNameAsWikiName][permitted to be WikiWords]] since the CairoRelease, the base templates have been [[DefaultTemplatesSupportWebNameAsWikiWord][fixed]] for Dakar.
+Although web names have been [[TWiki:Codev.WebNameAsWikiName][permitted to be WikiWords]] since the TWiki:Codev.CairoRelease, the base templates have been [[TWiki:Codev.DefaultTemplatesSupportWebNameAsWikiWord][fixed]] for Dakar.
 
 Skins should be upgraded if they have standalone =%<nop>WEB%= variables; only standalone =%<nop>WEB%= text that potentially could be turned into a link (because of a WikiWord) needs to be escaped. Same for =%<nop>MAINWEB%= and =%<nop>TWIKIWEB%=.
 
@@ -480,7 +478,7 @@ Examples:
 Basically, any prefix other then space and parenthesis needs to be looked at. =%<nop>WEB%= in a =%<nop>SEARCH%= should not be escaped.
 
 ---+++ Deprecation of %<nop>EDITTOPIC%
-In Cairo release (and earlier) the only way to have an edit link that changed with the context was to use %<nop>EDITTOPIC%. This was only available in view templates, and had no flexibility in formatting. it was also impossible to disable other active links, such as Attach.
+In Cairo release (and earlier) the only way to have an edit link that changed with the context was to use %<nop>EDITTOPIC%. This was only available in view templates, and had no flexibility in formatting. It was also impossible to disable other active links, such as Attach.
 
 Dakar release includes new support for "context if" parameters to the %<nop>TMPL:P construct. See TWikiTemplates for details. The default templates shipped with Dakar have been modified to use this support. %<nop>EDITTOPIC has been deprecated, though it is still available as a simple edit link, defined in TWikiPreferences. Skin authors are strongly recommended to replace this link with context-if conditionals.
 
