@@ -1,0 +1,1155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>TWiki Installation Guide</title>
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  <style type="text/css" media="all">
+/* Check if style urls are valid (non-empty) */
+@import url('/pub/TWiki/PatternSkin/layout.css');
+@import url('/pub/TWiki/PatternSkin/style.css');
+@import url('/pub/TWiki/PatternSkin/colors.css');
+  </style>
+</head>
+<body class="patternViewPage patternPrintPage">
+
+<div id="patternScreen">
+<div id="patternPageShadow">
+<div id="patternPage"><a name="PageTop"></a>
+<table id="patternColumnWrapper" cellpadding="0" cellspacing="0">
+
+  <tbody>
+
+    <tr>
+
+      <td id="patternMain" valign="top">
+      <div class="patternMainContents">
+      <div class="patternContent">
+      <div class="patternTopic">
+      <h1>TWiki Installation
+Guide </h1>
+
+      <p>
+      <em>The following is installation instructions for the
+TWiki Dakar production release. See <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiInstallationGuide" title="'TWiki.TWikiInstallationGuide' on TWiki.org">TWiki:TWiki.TWikiInstallationGuide</a>
+for the latest updates to this guide, tips and supplemental information
+for installing TWiki, and additional notes for for upgrading from
+earlier versions of TWiki.</em>
+      </p>
+
+      <p><strong>Table of Contents:</strong>
+      </p>
+
+      <ul id="mozToc">
+
+<!--mozToc h1 1 h2 2 h3 3--><li><a href="#mozTocId651106">TWiki Installation Guide </a>
+          <ul>
+
+            <li><a href="#mozTocId73810">Preparing
+to install TWiki </a></li>
+
+            <li><a href="#mozTocId23243">Basic
+(Standard) Installation </a></li>
+
+            <li><a href="#mozTocId616501"> Next
+Steps (optional)
+              </a>
+              <ul>
+
+                <li><a href="#mozTocId165049">Enable
+User Authentication </a></li>
+
+                <li><a href="#mozTocId431381">Set
+TWiki Preferences </a></li>
+
+                <li><a href="#mozTocId896327">Enable
+Email Notification </a></li>
+
+                <li><a href="#mozTocId142324">Enable
+WebStatistics </a></li>
+
+                <li><a href="#mozTocId609454">Install
+Plugins </a></li>
+
+              </ul>
+
+            </li>
+
+            <li><a href="#mozTocId982047">Troubleshooting
+              </a></li>
+
+          </ul>
+
+        </li>
+
+        <li><a href="#mozTocId951724"> Appendixes
+          </a>
+          <ul>
+
+            <li><a href="#mozTocId668777">TWiki
+System Requirements </a>
+              <ul>
+
+                <li><a href="#mozTocId631717">Server
+Requirements </a></li>
+
+                <li><a href="#mozTocId321674">Required
+CPAN Modules </a></li>
+
+                <li><a href="#mozTocId514379">Optional
+CPAN Modules </a></li>
+
+                <li><a href="#mozTocId800929">Client
+Requirements </a></li>
+
+                <li><a href="#mozTocId525991">TWiki
+Plugins Requirements </a></li>
+
+              </ul>
+
+            </li>
+
+            <li><a href="#mozTocId667982">Notes on
+Installing TWiki on Non-Root Account </a></li>
+
+          </ul>
+
+        </li>
+
+      </ul>
+
+      <h2><a class="mozTocH2" name="mozTocId73810"></a><a name="Preparing_to_install_TWiki"></a>Preparing to
+install TWiki </h2>
+
+      <p>
+Before attempting to install TWiki, you are encouraged to review the <a href="http://twiki.org/cgi-bin/view/TWiki.AdminSkillsAssumptions" title="'TWiki.AdminSkillsAssumptions' on TWiki.org">TWiki:TWiki.AdminSkillsAssumptions</a>.
+This guide assumes the person installing TWiki has, <em>at a
+minimum,</em> basic knowledge of server administration and cgi
+script management on the system on which TWiki is to be installed.
+While it is <em>possible</em> to install TWiki with ftp
+access alone (for example, on a hosted site), it is tricky and may
+require additional support from your hosting service (for example, in
+setting file ownership).
+      </p>
+
+      <p>While this installation guide specifically describes
+installation on and <strong>Apache</strong> web server on&nbsp;<span style="font-weight: bold;">Linux</span>,&nbsp;TWiki should be fine with any web server and OS that meet the <a href="#SystemRequirements" class="twikiAnchorLink">system
+requirements</a>. For
+additional notes on installing TWiki on other systems, see the
+"cookbooks" list at <a href="http://twiki.org/cgi-bin/view/Codev.CategoryCookbook" title="'Codev.CategoryCookbook' on TWiki.org">TWiki:Codev.CategoryCookbook</a>.
+      </p>
+
+      <p>If you are installing TWiki without Unix/Linux root
+(administrator) privileges, see <a href="#NonRootNotes" class="twikiAnchorLink">Notes on Installing TWiki on
+Non-Root Account</a> for supplemental instructions to the basic
+steps presented below. </p>
+
+      <p>If you need help, ask a question in the <a href="http://twiki.org/cgi-bin/view/Support" title="'Support' on TWiki.org">TWiki:Support</a> web
+or on <a href="http://twiki.org/cgi-bin/view/Codev.TWikiIRC" title="'Codev.TWikiIRC' on TWiki.org">TWiki:Codev.TWikiIRC</a>
+(irc.freenode.net, channel #twiki)
+      </p>
+
+      <p><a name="StandardInstallation"></a>
+      </p>
+
+      <h2><a class="mozTocH2" name="mozTocId23243"></a><a name="Basic_Standard_Installation"></a>
+Basic (Standard) Installation </h2>
+
+      <p></p>
+
+      <ol>
+
+        <li> <strong>Download</strong> the TWiki
+distribution from <a target="_top" href="http://TWiki.org/download.html">http://TWiki.org/download.html</a>.</li>
+
+        <li> <strong>Make a directory</strong> for
+the installation and <strong>unpack the distribution</strong>
+in it.</li>
+
+        <li> <strong>Make sure</strong> the user
+that runs CGI scripts on your system can read and write all files in
+the distribution.<br>
+
+Detailed instructions on file permissions are beyond the scope of this
+guide, but in general:
+          <ul>
+
+            <li> The <code>twiki/bin</code>
+directory of TWiki must be set as a cgi-bin directory. </li>
+
+            <li> During installation and configuration, the CGI
+user needs to be able to read and write <em>everything</em>
+in the distribution,</li>
+
+            <li> Once installation and configuration is complete,
+the CGI user needs write access to everything under the <code>data</code>
+and <code>pub</code> directories and to <code>lib/LocalSite.cfg</code>.
+              <em>Everything else</em> should be read-only.</li>
+
+            <li> Everybody else should be denied access to
+everything, always.</li>
+
+          </ul>
+
+        </li>
+
+        <li> <strong>Make sure</strong> Perl 5 and
+the Perl CGI library are installed on your system. <br>
+
+The default location of Perl is <code>/usr/bin/perl</code>.
+          <strong>If it's somewhere else</strong>, change
+the path to Perl in the first line of each script in the <code>twiki/bin</code>
+directory. There is a script called <code>rewriteshebang.pl</code>
+(in the <code>tools</code> directory) that helps in fixing
+up the shebang lines in your CGI scripts. <br>
+
+          <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/help.gif" alt="HELP" title="HELP"> Some systems require a special extension on
+perl
+scripts (e.g. <code>.cgi</code> or <code>.pl</code>).
+If necessary, rename all files in <code>twiki/bin</code>
+(i.e. rename <code>view</code> to <code>view.pl</code>
+etc). If you do this, make sure you set the <code>ScriptSuffix</code>
+option in <code>configure</code> (Step 6).</li>
+
+        <li> <strong>Create the file</strong> <code>/twiki/bin/LocalLib.cfg</code>.
+          <br>
+
+There is a template for this file in <code>/twiki/bin/LocalLib.cfg.txt</code>.
+          <br>
+
+The file must contain a setting for <code>$twikiLibPath</code>,
+which must point to the absolute file path of your <code>twiki/lib</code>
+e.g. <code>/home/httpd/twiki/lib</code>. <br>
+
+          <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/help.gif" alt="HELP" title="HELP"> If you need to install additional CPAN
+modules,
+but can't update the main Perl installation files on the server, you
+can set <code>$CPANBASE</code> to point to your personal
+CPAN install. Don't forget that the webserver user has to be able to
+read those files as well.</li>
+
+        <li> <strong>Configure the webserver</strong>
+so you can execute the <code>bin/configure</code> script
+from your browser.
+          <ul>
+
+            <li> Explicit instructions for doing this are beyond
+the scope of this document, though there is a lot of advice on
+TWiki.org covering different configurations of webserver. To help you
+out, there's an example Apache <code>httpd.conf</code>
+file in <code>twiki_httpd_conf.txt</code> at the root of
+the package. This file also contains advice on securing your
+installation. </li>
+
+          </ul>
+
+        </li>
+
+        <li> Run the <code>configure</code> script
+from your browser, and resolve any errors or warnings it tells you
+about.</li>
+
+      </ol>
+
+You now have a basic, unauthenticated installation running. At this
+point you can just point your Web browser at <code>http://yourdomain.com/twiki/bin/view</code>
+and start TWiki-ing away!
+      <p></p>
+
+      <h2><a class="mozTocH2" name="mozTocId616501"></a><a name="Next_Steps_optional"></a><a name="Next_Steps_optional_"></a> Next Steps (optional)
+      </h2>
+
+Once you have TWiki installed and running, you might consider the
+following optional steps for setting up and customizing your TWiki
+site.
+      <p><a name="UserAuthentication"></a></p>
+
+      <h3><a class="mozTocH3" name="mozTocId165049"></a><a name="Enable_User_Authentication"></a>
+Enable User Authentication </h3>
+
+      <p>
+This step provides for site access control and user activity tracking
+on your TWiki site. This is particularly important for sites that are
+publicly accessible on the web. This guide describes only the most
+common of several possible authentication setups for TWiki and is
+suitable for public web sites. For information about other setups, see <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiUserAuthentication" title="'TWiki.TWikiUserAuthentication' on TWiki.org">TWiki:TWiki.TWikiUserAuthentication</a>.
+      </p>
+
+      <p>These are the steps for enabling "Template Login" which
+asks for a username and password in a web page, and processes them
+using the Apache 'htpasswd' password manager. Users can log in and log
+out.
+      </p>
+
+      <p></p>
+
+      <ol>
+
+        <li> Under the <strong>Security Settings</strong>
+pane of <code>configure</code> :
+          <ol>
+
+            <li> Select <code>TWiki::Client::TemplateLogin</code>
+for <code>{LoginManager}</code> .</li>
+
+            <li> select <code>TWiki::Users::HtPasswdUser</code>
+for <code>{PasswordManager}</code> .</li>
+
+          </ol>
+
+        </li>
+
+        <li> Register yourself in the <code>TWiki/TWikiRegistration</code>
+topic. <br>
+
+          <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/help.gif" alt="HELP" title="HELP"> Check that the password manager recognizes the
+new user. Check that a new line with the username and encrypted
+password is added to the <code>data/.htpasswd</code> file.
+If not, you probably got a path wrong, or the permissions may not allow
+the webserver user to write to that file.</li>
+
+        <li> Create a new topic to check if authentication works.</li>
+
+        <li> <strong>Edit the <code>Main/TWikiAdminGroup</code>
+topic to include users with system administrator status.</strong>
+Additional instructions are provided in that topic. <br>
+
+          <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/warning.gif" alt="ALERT!" title="ALERT!"> <strong>This is a very important step</strong>,
+as users in this group can access <em>all</em> topics,
+independent of TWiki access controls.</li>
+
+      </ol>
+
+      <p>
+You are strongly encouraged to read <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiUserAuthentication" title="'TWiki.TWikiUserAuthentication' on TWiki.org">TWiki:TWiki.TWikiUserAuthentication</a>
+for further information about managing users and security of your TWiki
+site.
+      </p>
+
+      <p><a name="SetPreferences"></a>
+      </p>
+
+      <h3><a class="mozTocH3" name="mozTocId431381"></a><a name="Set_TWiki_Preferences"></a>
+Set TWiki Preferences </h3>
+
+      <p>
+Preferences for customizing many aspects of TWiki are set by editing a
+special topic. </p>
+
+      <ul>
+
+        <li> <strong>Edit the <code>TWIKI.TWikiPreferences</code></strong>
+in the web. Read through it and set any additional settings you think
+you might need (you can click the 'Edit' button near the top to edit
+the settings in place)</li>
+
+        <li> <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/tip.gif" alt="IDEA!" title="IDEA!"> Alternately, you can <strong>copy</strong>
+any settings or variables that you want to customize from <code>TWIKI.TWikiPreferences</code>
+and <strong>paste</strong> them into <code>Main.TWikiPreferences.
+This will protect your local customizations from being overwritten in
+later upgrades. See notes at top of =TWIKI.TWikiPreferences</code>
+for more information.</li>
+
+      </ul>
+
+      <p>
+      <a name="EmailNotification"></a></p>
+
+      <h3><a class="mozTocH3" name="mozTocId896327"></a><a name="Enable_Email_Notification"></a>
+Enable Email Notification </h3>
+
+      <p>
+Each TWiki web has an automatic email notification service that sends
+you an email with links to all of the topics modified since the last
+alert. To enable this service:</p>
+
+      <ol>
+
+        <li> Confirm the <code>Mail and Proxies</code>
+settings in the <code>Configure</code> interface.</li>
+
+        <li> Confirm the <code>Email and Proxy Server
+Settings</code> in the <code>TWikiPreferences</code>
+topic.</li>
+
+        <li> Setup a <code>cron</code> job (or
+equivalent) to call the <code>bin/mailnotify</code> script
+as described in the <code>TWiki/MailerContrib</code> topic.</li>
+
+      </ol>
+
+      <p>
+      <a name="WebStatistics"></a></p>
+
+      <h3><a class="mozTocH3" name="mozTocId142324"></a><a name="Enable_WebStatistics"></a>
+Enable WebStatistics </h3>
+
+You can generate a listing manually, or on an automated schedule, of
+visits to individual pages, on a per web basis. For information on
+setting up this feature, see the <code>TWiki/TWikiSiteTools</code>
+topic.
+      <p><a name="InstallPlugins"></a></p>
+
+      <h3><a class="mozTocH3" name="mozTocId609454"></a><a name="Install_Plugins"></a>
+Install Plugins </h3>
+
+      <a href="http://twiki.org/cgi-bin/view/Plugins" title="'Plugins' on TWiki.org">TWiki:Plugins</a> is an
+extensive library of Plugins for TWiki, that enhance functionality in a
+huge number of ways. A few plugins are pre-installed in the TWiki
+distribution. Installation instructions for the other plugins can be
+found in the plugin topics on <a href="http://twiki.org/cgi-bin/view/Plugins" target="_top">TWiki.org</a>.
+      <ul>
+
+      </ul>
+
+      <p>
+      </p>
+
+      <h2><a class="mozTocH2" name="mozTocId982047"></a><a name="Troubleshooting"></a>
+Troubleshooting </h2>
+
+The first step is to re-run the <code>configure</code>
+script and make sure you have resolved all errors, and are happy that
+you understand any warnings.
+      <p>Failing that, please check the topics listed below, they
+include some important tips for HP-UX, Solaris, OS/390, and many other
+platforms.</p>
+
+      <ul>
+
+        <li> For Unix or Linux, check <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnUnix" title="'Codev/TWikiOnUnix' on TWiki.org">TWiki:Codev/TWikiOnUnix</a>
+and <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnLinux" title="'Codev/TWikiOnLinux' on TWiki.org">TWiki:Codev/TWikiOnLinux</a>.</li>
+
+        <li> For Windows, check the <a href="http://twiki.org/cgi-bin/view/Codev/WindowsInstallCookbook" title="'Codev/WindowsInstallCookbook' on TWiki.org">TWiki:Codev/WindowsInstallCookbook</a>.
+        </li>
+
+        <li> For MacOS X, check <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnMacOSX" title="'Codev/TWikiOnMacOSX' on TWiki.org">TWiki:Codev/TWikiOnMacOSX</a>.
+        </li>
+
+        <li> To install TWiki on SourceForge, for use on a
+software development project, read <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnSourceForge" title="'Codev/TWikiOnSourceForge' on TWiki.org">TWiki:Codev/TWikiOnSourceForge</a></li>
+
+        <li> For other platforms, see <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOn" title="'Codev/TWikiOn' on TWiki.org">TWiki:Codev/TWikiOn</a>,
+and search the <a href="http://twiki.org/cgi-bin/view/Codev" title="'Codev' on TWiki.org">TWiki:Codev</a> and <a href="http://twiki.org/cgi-bin/view/Support" title="'Support' on TWiki.org">TWiki:Support</a> webs
+for other installation notes.</li>
+
+      </ul>
+
+      <p>
+If you need help, ask a question in the <a href="http://twiki.org/cgi-bin/view/Support" title="'Support' on TWiki.org">TWiki:Support</a> web
+or on <a href="http://twiki.org/cgi-bin/view/Codev.TWikiIRC" title="'Codev.TWikiIRC' on TWiki.org">TWiki:Codev.TWikiIRC</a>
+(irc.freenode.net, channel #twiki)
+      </p>
+
+      <p></p>
+
+      <h1><a class="mozTocH1" name="mozTocId951724"></a><a name="Appendixes"></a> Appendixes
+      </h1>
+
+      <p>
+      <a name="SystemRequirements"></a></p>
+
+      <h2><a class="mozTocH2" name="mozTocId668777"></a><a name="TWiki_System_Requirements"></a>
+TWiki System Requirements </h2>
+
+      <p>
+Low client and server requirements are core features that keep TWiki
+widely deployable, particularly across a range of browser platforms and
+versions.
+      </p>
+
+      <p></p>
+
+      <h3><a class="mozTocH3" name="mozTocId631717"></a><a name="Server_Requirements"></a>
+Server Requirements </h3>
+
+      <p>
+TWiki is written in Perl 5, uses a number of shell commands, and
+requires <a href="http://www.gnu.org/software/rcs/rcs.html" target="_top">RCS (Revision Control System)</a>, a GNU
+Free Software package. TWiki is developed in a basic Linux/Apache
+environment. It also works with Microsoft Windows, and should have no
+problem on any other platform that meets the requirements.
+      </p>
+
+      <p>
+      <table class="twikiTable" border="0" cellpadding="1" cellspacing="1">
+
+        <tbody>
+
+          <tr>
+
+            <th class="twikiFirstCol" bgcolor="#dadada">
+            <font color="#000000">Resource</font>
+            </th>
+
+            <th bgcolor="#dadada"> <font color="#000000">Required
+Server Environment *</font> </th>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Perl </td>
+
+            <td bgcolor="#ffffff"> 5.005_03 or higher
+(5.8.4 or higher is recommended) </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+RCS </td>
+
+            <td bgcolor="#eaeaea"> 5.7 or higher
+(including GNU <code>diff</code>) <br>
+
+Optional, TWiki includes a pure perl implementation of RCS that can be
+used instead (though it's slower) </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+GNU <code>diff</code> </td>
+
+            <td bgcolor="#ffffff"> GNU <code>diff</code>
+2.7 or higher is required when not using the all-Perl RcsLite. <br>
+
+Install on PATH if not included with RCS (check version with <code>diff
+-v</code>) <br>
+
+Must be the version used by RCS, to avoid problems with binary
+attachments - RCS may have hard-coded path to <code>diff</code>
+            </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Other external programs </td>
+
+            <td bgcolor="#eaeaea"> <code>fgrep,
+egrep</code> </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Cron/scheduler </td>
+
+            <td bgcolor="#ffffff"> &bull; Unix: <code>cron</code>
+            <br>
+
+&bull; Windows: <code>cron</code> equivalents </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Web server </td>
+
+            <td bgcolor="#eaeaea"> Apache is well
+supported; for other servers, see the <a href="http://twiki.org/cgi-bin/view/Codev.CategoryCookbook" title="'Codev.CategoryCookbook' on TWiki.org">TWiki:Codev.CategoryCookbook</a>
+lists </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      </p>
+
+      <p></p>
+
+      <h3><a class="mozTocH3" name="mozTocId321674"></a><a name="Required_CPAN_Modules"></a>
+Required CPAN Modules </h3>
+
+The following Perl modules are used by TWiki:
+      <table class="twikiTable" border="0" cellpadding="1" cellspacing="1">
+
+        <tbody>
+
+          <tr>
+
+            <th class="twikiFirstCol" bgcolor="#dadada">
+            <font color="#000000">Module</font>
+            </th>
+
+            <th bgcolor="#dadada"> <font color="#000000">Preferred
+version</font> </th>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Algorithm::Diff </td>
+
+            <td bgcolor="#ffffff"> &nbsp; </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+CGI::Carp </td>
+
+            <td bgcolor="#eaeaea"> &gt;=1.26 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Config </td>
+
+            <td bgcolor="#ffffff"> &gt;=0 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Cwd </td>
+
+            <td bgcolor="#eaeaea"> &gt;=3.05 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Data::Dumper </td>
+
+            <td bgcolor="#ffffff"> &gt;=2.121 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Error </td>
+
+            <td bgcolor="#eaeaea"> &nbsp; </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+File::Copy </td>
+
+            <td bgcolor="#ffffff"> &gt;=2.06 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+File::Find </td>
+
+            <td bgcolor="#eaeaea"> &gt;=1.05 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+File::Spec </td>
+
+            <td bgcolor="#ffffff"> &gt;=3.05 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+FileHandle </td>
+
+            <td bgcolor="#eaeaea"> &gt;=2.01 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+IO::File </td>
+
+            <td bgcolor="#ffffff"> &gt;=1.10 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Text::Diff </td>
+
+            <td bgcolor="#eaeaea"> &nbsp; </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Time::Local </td>
+
+            <td bgcolor="#ffffff"> &gt;=1.11 </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p>
+      </p>
+
+      <h3><a class="mozTocH3" name="mozTocId514379"></a><a name="Optional_CPAN_Modules"></a>
+Optional CPAN Modules </h3>
+
+The following Perl modules may be used by TWiki:
+      <table class="twikiTable" border="0" cellpadding="1" cellspacing="1">
+
+        <tbody>
+
+          <tr>
+
+            <th class="twikiFirstCol" bgcolor="#dadada">
+            <font color="#000000">Module</font>
+            </th>
+
+            <th bgcolor="#dadada"> <font color="#000000">Preferred
+version</font> </th>
+
+            <th bgcolor="#dadada"> <font color="#000000">Description</font>
+            </th>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+CGI::Cookie </td>
+
+            <td bgcolor="#ffffff"> &gt;=1.24 </td>
+
+            <td bgcolor="#ffffff"> Used for session
+support </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+CGI::Session </td>
+
+            <td bgcolor="#eaeaea"> &gt;=3.95 </td>
+
+            <td bgcolor="#eaeaea"> Used for session
+support </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Digest::base </td>
+
+            <td bgcolor="#ffffff"> &nbsp; </td>
+
+            <td bgcolor="#ffffff"> &nbsp; </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Digest::SHA1 </td>
+
+            <td bgcolor="#eaeaea"> &nbsp; </td>
+
+            <td bgcolor="#eaeaea"> &nbsp; </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Jcode </td>
+
+            <td bgcolor="#ffffff"> &nbsp; </td>
+
+            <td bgcolor="#ffffff"> Used for I18N support
+with perl 5.6 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Locale::Maketext::Lexicon </td>
+
+            <td bgcolor="#eaeaea"> &gt;=0 </td>
+
+            <td bgcolor="#eaeaea"> Used for I18N support </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Net::SMTP </td>
+
+            <td bgcolor="#ffffff"> &gt;=2.29 </td>
+
+            <td bgcolor="#ffffff"> Used for sending mail </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Unicode::Map </td>
+
+            <td bgcolor="#eaeaea"> &nbsp; </td>
+
+            <td bgcolor="#eaeaea"> Used for I18N support
+with perl 5.6 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Unicode::Map8 </td>
+
+            <td bgcolor="#ffffff"> &nbsp; </td>
+
+            <td bgcolor="#ffffff"> Used for I18N support
+with perl 5.6 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+Unicode::MapUTF8 </td>
+
+            <td bgcolor="#eaeaea"> &nbsp; </td>
+
+            <td bgcolor="#eaeaea"> Used for I18N support
+with perl 5.6 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#ffffff">
+Unicode::String </td>
+
+            <td bgcolor="#ffffff"> &nbsp; </td>
+
+            <td bgcolor="#ffffff"> Used for I18N support
+with perl 5.6 </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="twikiFirstCol" bgcolor="#eaeaea">
+URI </td>
+
+            <td bgcolor="#eaeaea"> &nbsp; </td>
+
+            <td bgcolor="#eaeaea"> Used for configure </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p>
+Most of them will probably already be available in your installation.
+You can check if they are available from the command-line like this
+      </p>
+
+      <pre>perl -e 'use FileHandle; print $FileHandle::VERSION."\n"'<br></pre>
+
+      <p>
+      </p>
+
+      <h3><a class="mozTocH3" name="mozTocId800929"></a><a name="Client_Requirements"></a>
+Client Requirements </h3>
+
+      <p>
+The TWiki standard installation has relatively low browser
+requirements:
+      </p>
+
+      <p></p>
+
+      <ul>
+
+        <li> HTML 3.2 compliant</li>
+
+        <li> Cookies, if persistent sessions are required</li>
+
+      </ul>
+
+      <p>
+CSS and Javascript are used in most skins, though there is a low-fat
+skin (Classic skin) available that minimizes these requirements. Some
+skins will require more recent releases of browsers. The default skin
+(Pattern) is tested on IE 6, Safari, and Mozilla 5.0 based browsers
+(such as Firefox).
+      </p>
+
+      <p>You can easily select a balance of browser capability
+versus look and feel.
+      </p>
+
+      <p></p>
+
+      <h3><a class="mozTocH3" name="mozTocId525991"></a><a name="TWiki_Plugins_Requirements"></a>
+TWiki Plugins Requirements </h3>
+
+      <p>
+There are current no compatibility guidelines for developers of TWiki
+plugins. Plugins authors can require just about anything&mdash;
+browser-specific functions, stylesheets (CSS), Java applets, cookies,
+specific Perl modules, etcetera&mdash; so check the individual
+Plugin specs.
+      </p>
+
+      <p><a name="NonRootNotes"></a>
+      </p>
+
+      <h2><a class="mozTocH2" name="mozTocId667982"></a><a name="Notes_on_Installing_TWiki_on_Non"></a>
+Notes on Installing TWiki on Non-Root Account </h2>
+
+      <p>
+The following supplemental notes to the <a href="#StandardInstallation" class="twikiAnchorLink">Basic
+Installation</a>
+instructions apply to installing TWiki on a system where you don't have
+Unix/Linux root (administrator) privileges, for example, on a hosted
+Web account or an intranet server administered by someone else. </p>
+
+      <p>Referring to the <a href="#StandardInstallation" class="twikiAnchorLink">Basic Installation</a> steps
+presented above:</p>
+
+      <ul>
+
+        <li> <strong>Step 2:</strong> If you cannot
+unpack the TWiki distribution directly in your installation directory,
+you can unpack the distribution on your local PC and then manually
+create the directory structure on your host server and upload the files
+as follows:
+          <ul>
+
+            <li> Using the table below, create a directory
+structure on your host server</li>
+
+            <li> Upload the TWiki files by FTP (transfer as <em>text</em>
+except for the image files in <code>pub</code>)</li>
+
+            <li> <strong><em>Note:</em></strong>
+Don't worry if you are not able to put the <code>twiki/lib</code>
+directory at the same level as the <code>twiki/bin</code>
+directory (e.g. because CGI <code>bin</code> directories
+can't be under your home directory and you don't have root access). You
+can create this directory elsewhere and configure the <code>twiki/bin/setlib.cfg</code>
+file (done in Step 2)</li>
+
+          </ul>
+
+        </li>
+
+      </ul>
+
+      <blockquote>
+        <table class="twikiTable" border="0" cellpadding="1" cellspacing="1">
+
+          <tbody>
+
+            <tr>
+
+              <th class="twikiFirstCol" bgcolor="#dadada">
+              <font color="#000000">TWiki
+dir:</font> </th>
+
+              <th bgcolor="#dadada"> <font color="#000000">What
+it is:</font> </th>
+
+              <th bgcolor="#dadada"> <font color="#000000">Where
+to copy:</font> </th>
+
+              <th bgcolor="#dadada"> <font color="#000000">Example:</font>
+              </th>
+
+            </tr>
+
+            <tr>
+
+              <td class="twikiFirstCol" bgcolor="#ffffff">
+              <code>twiki</code> </td>
+
+              <td bgcolor="#ffffff"> start-up pages </td>
+
+              <td bgcolor="#ffffff"> root TWiki dir </td>
+
+              <td bgcolor="#ffffff"> <code>/home/smith/twiki/</code>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td class="twikiFirstCol" bgcolor="#eaeaea">
+              <code>twiki/bin</code> </td>
+
+              <td bgcolor="#eaeaea"> CGI bin </td>
+
+              <td bgcolor="#eaeaea"> CGI-enabled dir </td>
+
+              <td bgcolor="#eaeaea"> <code>/home/smith/twiki/bin</code>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td class="twikiFirstCol" bgcolor="#ffffff">
+              <code>twiki/lib</code> </td>
+
+              <td bgcolor="#ffffff"> library files </td>
+
+              <td bgcolor="#ffffff"> same level as <code>twiki/bin</code>
+              </td>
+
+              <td bgcolor="#ffffff"> <code>/home/smith/twiki/lib</code>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td class="twikiFirstCol" bgcolor="#eaeaea">
+              <code>twiki/pub</code> </td>
+
+              <td bgcolor="#eaeaea"> public files </td>
+
+              <td bgcolor="#eaeaea"> htdoc enabled dir </td>
+
+              <td bgcolor="#eaeaea"> <code>/home/smith/twiki/pub</code>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td class="twikiFirstCol" bgcolor="#ffffff">
+              <code>twiki/data</code> </td>
+
+              <td bgcolor="#ffffff"> topic data </td>
+
+              <td bgcolor="#ffffff"> dir secure from
+public access </td>
+
+              <td bgcolor="#ffffff"> <code>/home/smith/twiki/data</code>
+              </td>
+
+            </tr>
+
+            <tr>
+
+              <td class="twikiFirstCol" bgcolor="#eaeaea">
+              <code>twiki/templates</code> </td>
+
+              <td bgcolor="#eaeaea"> web templates </td>
+
+              <td bgcolor="#eaeaea"> dir secure from
+public access </td>
+
+              <td bgcolor="#eaeaea"> <code>/home/smith/twiki/templates</code>
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+
+      </blockquote>
+
+      <ul>
+
+        <li> <strong>Step 3:</strong> Files in the <code>pub</code>
+directory must be readable as a url. This means that directory
+permissions should be set to <code>755</code> (or <code>775</code>
+) and file permissions should be set to <code>644</code>
+(or <code>664</code> ). If you can run a <code>chmod</code>
+command, you can accomplish this in two quick steps by running these commands from the
+root direct:
+          <ol>
+
+            <li> <code>chmod -R 755 pub</code></li>
+
+            <li> <code>chmod 644 `find pub -type f -print`</code></li>
+
+          </ol>
+
+          <ul>
+
+            <li> In addition, you should create a <code>.htaccess</code>
+file in the <code>pub</code> directory, using the template
+included in the distribution entitled <code>pub-htaccess.txt</code>
+.</li>
+
+            <li> <strong><em>Note:</em></strong>
+This setup does not provide for absolute security for TWiki
+attachments. For more information, see <a href="http://twiki.org/cgi-bin/view/Codev.SecuringYourTWiki" title="'Codev.SecuringYourTWiki' on TWiki.org">TWiki:Codev.SecuringYourTWiki</a>.
+            </li>
+
+          </ul>
+
+        </li>
+
+        <li> <strong>Step 5:</strong> In order to
+run the <code>configure</code> script, create a file
+called <code>.htaccess</code> in the <code>bin</code>
+directory that includes the following single line: <code>SetHandler
+cgi-script</code> . This informs the server to treat all the perl
+scripts in the <code>bin</code> directory as scripts. </li>
+
+      </ul>
+
+      </div>
+
+      </div>
+
+      </div>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+</div>
+
+</div>
+
+<div id="patternBottomBar"><!-- /patternBottomBarContents--></div>
+
+<!-- /patternBottomBar--></div>
+
+<!--end patternScreen-->
+</body>
+</html>
