@@ -15,11 +15,9 @@ Use the following form to see the documentation of a Perl module: (this Plugin n
 Perl module name:
 <input type="text" name="qModule" VALUE="%URLPARAM{"qModule"}%" size="32" /> in
 <select name="qFormat">
-<option>%URLPARAM{"qFormat"}%</option>
-<option></option>
-<option>rendered</option>
-<option>twiki</option>
-<option>pod</option>
+<option %CALC{"$IF($EXACT(%URLPARAM{"qFormat"}%,rendered),selected='selected')"}%>rendered</option>
+<option %CALC{"$IF($EXACT(%URLPARAM{"qFormat"}%,twiki),selected='selected')"}%>twiki</option>
+<option %CALC{"$IF($EXACT(%URLPARAM{"qFormat"}%,pod),selected='selected')"}%>pod</option>
 </select> format
 <input type="submit" value="Show doc" />
 </form>
