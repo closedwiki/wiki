@@ -3,7 +3,7 @@
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite. This topic should be regarded as read-only, so that upgrades can safely overwrite it without risk to your customaisations.
 
-Preference settings local to your site should be set in %LOCALSITEPREFS% (this topic is pointed to by {LocalSitePreferences}, which is set by the admin in the =configure= interface). Settings in %LOCALSITEPREFS% will override settings in this topic, and should be used for defining custom settings and variables.
+Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (this topic is pointed to by {LocalSitePreferences}, which is set by the admin in the =configure= interface). Settings in [[%LOCALSITEPREFS%]] will override settings in this topic, and should be used for defining custom settings and variables.
 
 See [[TWikiVariables#PreferencesVariables][here]] for more information on how to set Preferences Variables.
 

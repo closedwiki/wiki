@@ -218,7 +218,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Extend TWiki with a Java 1.1 Applet based text editor.
-	* __Note__ The %<nop>POWEREDIT_CONTROLS% variable is *not* a plugin variable but a global variable. As such you have to set it in TWiki.TWikiPreferences if you want to override the default. See TWiki.TWikiVariables "Creating Custom Variables".
+	* __Note__ The %<nop>POWEREDIT_CONTROLS% variable is *not* a plugin variable but a global variable. As such you have to set it in [[%LOCALSITEPREFS%]] if you want to override the default. See TWiki.TWikiVariables "Creating Custom Variables".
 
 ---+ Installation Instructions
 

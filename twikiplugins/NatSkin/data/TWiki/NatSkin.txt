@@ -24,7 +24,7 @@ You can try alternative styles
 	  alternatively, use the NatSkinStyleBrowser
 	1 per user by setting a variable =SKINSYLE= on your %WIKIUSERNAME% homepage
 	1 per web by setting the variable =SKINSTYLE= in the WebPreferences
-	1 site-wide by setting the skinstyle in the %TWIKIWEB%.TWikiPreferences
+	1 site-wide by setting the skinstyle in the [[%LOCALSITEPREFS%]]
 
 See the NatSkinPlugin for more information on how to predefine the variants of NatSkin.
 The default style is hardcoded into the NatSkinPlugin.

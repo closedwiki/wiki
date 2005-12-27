@@ -94,7 +94,7 @@ For example, the =example= template file will be searched for in the following p
 Template names are usually derived from the name of the currently executing script; however it is also possible to override these settings in the =view= and =edit= scripts, for example when a topic-specific template is required. Two preference variables can be user to override the templates used:
    * =VIEW_TEMPLATE= sets the template to be used for viewing a topic
    * =EDIT_TEMPLATE= sets the template for editing a topic.
-If these preferences are set locally (using _Local_ instead of _Set_) for a topic, or as WebPreferences or TWiki.TWikiPreferences (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
+If these preferences are set locally (using _Local_ instead of _Set_) for a topic, in WebPreferences, in [[%LOCALSITEPREFS]], or [%TWIKIWEB%.TWikiPreferences]] (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
 
 ---++ Master Templates
 Master templates use the block definition directives (=%TMPL:DEF= and =%TMPL:END%=) to define common sections that appear in two or more other templates. ==twiki.tmpl== is the default master template.

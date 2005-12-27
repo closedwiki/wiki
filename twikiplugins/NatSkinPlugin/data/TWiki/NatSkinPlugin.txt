@@ -8,7 +8,7 @@ see the below for a full list of all provided features.
 This plugin tries
 to be maximal compatible with all past, current and upcomming TWiki releases, namely beijing,
 cairo and dakar. Therefore some mechanisms have been internalized that are only available on
-the newest dakar engine, sandbox security and html login dialogues comparable  to TWiki:Plugins/AuthPagePlugin. In addition the plugin tries to be interface-compatible to all
+the newest dakar engine, sandbox security and html login dialogues comparable to TWiki:Plugins/AuthPagePlugin. In addition, the plugin tries to be interface-compatible to all
 engines using the =Func.pm= API. In those cases where this is _not_ possible, because needed
 functions are not part of the =Func.pm= API, access functions have been added to 
 address the different implementations and incompatibilities (e.g. access to topic meta data).
@@ -91,7 +91,8 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
   (3) preference value =SKINSTYLE= set in \
 		(a) the user preferences \
 		(b) the WebPreferences or \
-		(c) %TWIKIWEB%.TWikiPreferences |
+		(c) [[%LOCALSITEPREFS%]] \
+		(d) [[%TWIKIWEB%.TWikiPreferences]] |
 | =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= \
 | conditionally returns content depending on the current skin state; \
   &lt;tests> can be \
@@ -237,19 +238,19 @@ Below are the settings which affect the behavior of the NatSkin.
 
 ---+++ Skin state configuration
 The skin state is controlled by a set of variables that are configured on the user's home topic,
-the WebPreferences or the [[%TWIKIWEB%.TWikiPreferences]] and are then loaded into the current
+the WebPreferences, [[%LOCALSITEPREFS%]] or the [[%TWIKIWEB%.TWikiPreferences]] and are then loaded into the current
 session of the user. So every setting can be changed by an url parameter to take effect for the
 duration of the user session. The default values are given below 
 
 	* switch to the given style,
-	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty, <nop>SeaGreen, Squash or Stormy, url param =style=
+	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty, <nop>SeaGreen, Squash or Stormy, url param is =style=
 		* Set SKINSTYLE = Clean
-	* switch to the given style variation (<nop>PlasticLove, Subway, <nop>OrangeTunnel etc) or none, url param =stylevariation=
+	* switch to the given style variation (<nop>PlasticLove, Subway, <nop>OrangeTunnel etc) or none, url param is =stylevariation=
 		* Set STYLEVARIATION = none
 	* change the border decoration on, off or to thin (enabling a thin blog-like page layout),
 	  url param is =styleborder=
 		* Set STYLEBORDER = off
-	* switch on/of the web buttons in the top bar of the page
+	* switch on/off the web buttons in the top bar of the page, url param is =stylebuttons=
 		* Set STYLEBUTTONS = off
 	* switch the sidebar to be displayed on the right or left side or off, url param is =stylesidebar=
 		* Set STYLESIDEBAR = left
@@ -268,7 +269,7 @@ To emulate the Kubrick style on the old
 	* Set STYLESVARIATION = none
 	* Set STYLESSEARCHBOX = pos1
 
-to your [[%TWIKIWEB%.TWikiPreferences]]. Try out other settings using the NatSkinStyleBrowser,
+to your [[%LOCALSITEPREFS%]]. Try out other settings using the NatSkinStyleBrowser,
 or even INCLUDE it in your [[%MAINWEB%.%WIKINAME%SideBar]].
 
 There are some constraints build into the NatSkin templates that try guarantee a pleasant appearance
@@ -305,7 +306,7 @@ to fool collecting web crawlers. But that is not adequate enough today as crawle
 to that is to remove every trace of a pattern that could be an email address from the html source code and regenerate
 them using javascript. Most likely, web crawlers will only parse the html and don't run a javascript interpreter 
 beforehand. Nevertheless the obfuscation feature can be switched on and off by adding the =OBFUSCATEEMAIL= variable
-to your TWiki.TWikiPreferences like
+to your [[%LOCALSITEPREFS%]] like
 
 	* Set OBFUSCATEEMAIL = on
 
@@ -313,7 +314,7 @@ to your TWiki.TWikiPreferences like
 When the TWiki:Plugins.WysiwygPlugin is installed on your <nop>%WIKITOOLNAME% installation
 the "Edit" topicaction can be enabled to start the Kupu wysiwyg html editor instead of the 
 normal TWiki textarea by setting the USEWYSIWYG variable to "on" (in your %WIKIUSERNAME% topic,
-WebPreferences or TWiki.TWikiPreferences) 
+WebPreferences, [[%LOCALSITEPREFS%]], or [[%TWIKIWEB%.TWikiPreferences]])
 
    * Set USEWYSIWYG = off
 
@@ -336,7 +337,7 @@ By default this value is set to "off"
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
+	* on [[%LOCALSITEPREFS%]] change the SKIN variable to "nat";
 	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
 	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
 
@@ -381,7 +382,7 @@ By default this value is set to "off"
 |  16 Mar 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | SpreadSheetPlugin, SessionPlugin, RedDotPlugin |
+|  Other Dependencies: | TWiki:Plugins.SpreadSheetPlugin, TWiki:Plugins.SessionPlugin, TWiki:Plugins.RedDotPlugin |
 |  Perl Version: | >=5.6 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |

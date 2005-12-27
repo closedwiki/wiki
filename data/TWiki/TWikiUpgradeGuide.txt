@@ -73,7 +73,7 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
       * You could also use softlinks to link the web directories in data and pub to the old installation area
    1 Examine your old TWiki.cfg, and for each local setting, set the corresponding value in the =configure= interface for the new install.
    *  If you can't use =configure=, then copy the *new* =TWiki.cfg= to =LocalSite.cfg=, and edit LocalSite.cfg. Remove all the settings that you didn't change in your previous install, and change the remaining settings to the values from your *old* TWiki.cfg.
-   1 Transfer any local settings from TWiki.TWikiPreferences to the topic pointed at by {LocalSitePreferences} (usually Main.TWikiPreferences). This avoids having to write over files in the distribution.
+   1 Transfer any local settings from [[%TWIKIWEB%.TWikiPreferences]] to the topic pointed at by {LocalSitePreferences} ([[%LOCALSITEPREFS%]]). This avoids having to write over files in the distribution.
    1 If you changed any of the topics in the original TWiki distribution, you will have to transfer your changes to the new install manually. There is no simple way to do this, though the following procedure may help:
       1 Install a copy of the original TWiki release you were using in a temporary directory
       1 Use 'diff' to find changed files, and transfer the changes into the new Dakar install.

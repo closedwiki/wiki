@@ -11,7 +11,7 @@ __See also: PatternSkinCssCookbook__
 ---+++ How can I change the web logo?
 
 By default the logo at the top left of each web points to the image with name =logo.gif= that is attached to each web's WebPreferences. <br />
-The default variables that cause this behavior are defined in [[%TWIKIWEB%.TWikiPreferences]]:
+The default variables that cause this behavior are defined in [[%LOCALSITEPREFS%]]:
 <pre>
       * Set <nop>WEBLOGONAME = logo.gif
       * Set <nop>WEBLOGOIMG = %<nop>PUBURLPATH%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
@@ -30,7 +30,7 @@ or:
 
 ---+++ How do I set a site-wide logo?
 
-In TWiki.TWikiPreferences, set:
+In [[%LOCALSITEPREFS%]], set:
 <pre>
    * Set <nop>WEBLOGOIMG = %<nop>WIKILOGOIMG%
 </pre>
