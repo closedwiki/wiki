@@ -51,7 +51,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>P
 		* Set SHORTDESCRIPTION = Fine grain electronic mail notification.
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Info
 

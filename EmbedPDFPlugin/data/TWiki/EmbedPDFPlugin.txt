@@ -36,12 +36,12 @@ enlarged since IE displays the PDF viewer controls within the HTML document alon
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = embed PDF document in TWiki page
+		* Set SHORTDESCRIPTION = Embed PDF document in TWiki page
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
-	* Create a link under every embedded PDF file with the specified link text if set (useful for browser that don't know how to embed PDF):
+	* Create a link under every embedded PDF file with the specified link text if set (useful for browsers that don't know how to embed PDF):
 		* Set LINKTEXT = (click here to display this PDF file by itself) 
 
 	* Check whether a prerendered image of the PDF file with the specified extension is available, and if so, embed the image rather than the PDF file itself:

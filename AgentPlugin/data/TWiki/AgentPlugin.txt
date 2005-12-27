@@ -43,7 +43,7 @@ a plugin setting write ==%&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%AGENTPLUGIN
 		* Set EXPNETSCAPE7 = Netscape/7
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 

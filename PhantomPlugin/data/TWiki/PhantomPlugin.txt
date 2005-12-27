@@ -27,7 +27,7 @@ Following variables may using in your work. You can customize each TWiki web by 
 	* Set SHORTDESCRIPTION = Text processing plugin. Custom variables, custom text formatters etc.
 
 	* Debug plugin: (See output in =data/debug.txt=)
-	* Set DEBUG = 1
+	* Set DEBUG = 0
 
 	* Content type of every server response. You can use custom content type. If you don't set skin, this variable have effect only to HTTP header. If you enable a skin, in each template was a META tag with value of this variable. To get more information about skin support, please read PhantomSkin topic. You can leave it variable with empty value, then no content type will be used. This may solve the problem of displaying some non-ISO languages encodings.
 	* Set WEBCONTENTTYPE = text/html; charset=windows-1251

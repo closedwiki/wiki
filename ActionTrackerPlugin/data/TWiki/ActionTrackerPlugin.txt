@@ -307,7 +307,7 @@ will match both of the following actions:
 
 These settings can be overridden in the Web<nop>Preferences topic of the current web (by defining ACTIONTRACKERPLUGIN_TABLEHEADER or ACTIONTRACKERPLUGIN_TABLEFORMAT etc).
 	* Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIFICATIONS{}%= and =%<nop>ACTIONTRACKERPREFS%= features.
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 	* One line description, shown in the TextFormattingRules topic
 		* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statii

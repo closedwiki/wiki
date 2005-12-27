@@ -18,7 +18,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>N
 	* Set EXECUTE = %SCRIPTURL%/save%SCRIPTSUFFIX%?topic=$1$2Dev;templatetopic=$2DevTemplate %SCRIPTURL%/save%SCRIPTSUFFIX%?topic=$1$2Appraisal;templatetopic=$2AppraisalTemplate
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Info
 

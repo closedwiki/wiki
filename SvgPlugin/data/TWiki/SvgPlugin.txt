@@ -35,7 +35,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Set SHORTDESCRIPTION = Shows SVG drawings as PNG pictures embeded in topics
 
 	* Debug plugin: (See output in =data/debug.txt=)
-	* Set DEBUG = 1
+	* Set DEBUG = 0
 
 	* My own setting:
 	* Set DEFAULTSIZE = 320x200

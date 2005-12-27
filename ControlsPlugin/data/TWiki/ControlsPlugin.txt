@@ -51,7 +51,7 @@ will expand as follows:
 		* Set SHORTDESCRIPTION = This plugin renders a control (typically used in an HTML form) based on values defined in a topic.
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
