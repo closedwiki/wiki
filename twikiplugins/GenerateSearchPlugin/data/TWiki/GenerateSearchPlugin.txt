@@ -60,7 +60,7 @@ As can be seen, fields with defined values yield a drop down menu to select the 
 		* Set SHORTDESCRIPTION = This plugin generates a form-driven search based on a TWiki.TWikiForms.
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
