@@ -2935,7 +2935,11 @@ sub _SPACEOUT {
 sub _ICON {
     my( $this, $params ) = @_;
     my $file = $params->{_DEFAULT} || '';
-    return $this->{renderer}->getIconHTML( $file );
+    # Try to map the file name to see if there is a matching filetype image
+    my $iconFileName = $this->{renderer}->getMappedFileName( $file );
+    # If no mapping could be found, use the file name that was passed
+    $iconFileName ||= $file;
+    return $this->{renderer}->getIconHTML( $iconFileName );
 }
 
 sub _ICONPATH {

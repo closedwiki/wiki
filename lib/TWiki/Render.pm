@@ -764,24 +764,42 @@ sub filenameToIcon {
     my( $this, $fileName ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
-    my @bits = ( split( /\./, $fileName ) );
+    my $picked = $this->getMappedFileName( $fileName );
+    # If no mapping was found use the default else.gif icon
+    $picked ||= 'else';
+    return $this->getIconHTML( $picked );
+}
+
+=pod
+
+---++ ObjectMethod getMappedFileName( $fileName ) -> $fileName
+
+Maps an image name from _filetypes.txt (on basis of the file extension).
+
+=cut
+
+sub getMappedFileName {
+	
+	my( $this, $fileName ) = @_;
+	
+	my @bits = ( split( /\./, $fileName ) );
     my $fileExt = lc $bits[$#bits];
-
-    # SMELL: use of direct access to PubDir violates store encapsulation
+    
+	# SMELL: use of direct access to PubDir violates store encapsulation
     my $iconDir = $TWiki::cfg{PubDir}.'/'. $this->_getIconTopicPath();
-
-    # The file _filetypes.txt should be in the same directory as the
+    
+	# The file _filetypes.txt should be in the same directory as the
     # image attachments
     my $icons = $iconDir.'/_filetypes.txt';
     my $iconList = TWiki::readFile( $icons );
-    my $picked = 'else';
+    my $picked = '';
     foreach( split( /\r?\n/, $iconList ) ) {
         if( /^$fileExt\s+(\S+)\s*$/ ) {
             $picked = $1;
             last;
         }
     }
-    return $this->getIconHTML( $picked, $fileName );
+    return $picked;
 }
 
 =pod
@@ -794,7 +812,6 @@ Creates an HTML image tag from an icon name.
 
 sub getIconHTML {
     my( $this, $iconName, $alt ) = @_;
-    $iconName ||= 'else';
     $alt ||= $iconName;
     my $url = $this->getIconURL( $iconName );
     return CGI::img( { src => $url,
