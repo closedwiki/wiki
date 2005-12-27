@@ -6,23 +6,23 @@ function jscal_selected(cal, date) {
 }
 function jscal_close(cal) {
   cal.hide();
-  calendar = null;
+  _dynarch_popupCalendar = null;
 }
 function showCalendar(id, format) {
   var el = document.getElementById(id);
-  if (calendar != null) {
-    calendar.hide();
+  if (_dynarch_popupCalendar != null) {
+    _dynarch_popupCalendar.hide();
   } else {
-    var cal = new Calendar(true, null, jscal_selected, jscal_close);
+    var cal = new Calendar(1, null, jscal_selected, jscal_close);
     cal.showsTime = false;
     cal.showsOtherMonths = true;
-    calendar = cal;
+    _dynarch_popupCalendar = cal;
     cal.setRange(1900, 2070);
     cal.create();
   }
-  calendar.setDateFormat(format);
-  calendar.parseDate(el.value);
-  calendar.sel = el;
-  calendar.showAtElement(el, "Br");
+  _dynarch_popupCalendar.setDateFormat(format);
+  _dynarch_popupCalendar.parseDate(el.value);
+  _dynarch_popupCalendar.sel = el;
+  _dynarch_popupCalendar.showAtElement(el, "Br");
   return false;
 }
