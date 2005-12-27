@@ -62,6 +62,7 @@ Note that the header will only be added once, regardless of the number of times 
 |  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
 |  License: | GNU LGPL |
 |  Dependencies: | %$DEPENDENCIES% |
+|  27/12/05 | updated to calendar version 1.0; set style for Safari to win2k-1|
 |  14/08/04 | Separated out from SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
