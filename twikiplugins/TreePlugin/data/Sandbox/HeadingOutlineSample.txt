@@ -31,4 +31,3 @@ Summary for ThreeThreeOne
 Summary for ThreeTwo
 <h2> 1.3 <a href="">TheTwo</a> </h2>
 Summary for TheTwo
-%META:TOPICMOVED{by="MartinRaabe" date="1042728240" from="Plugins.HeadingOutlineSample" to="TWiki.HeadingOutlineSample"}%

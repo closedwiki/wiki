@@ -1,13 +1,13 @@
 %META:TOPICINFO{author="MartinRaabe" date="1042732920" format="1.0" version="1.2"}%
-%META:TOPICPARENT{name="TreePlugin"}%
-Here are some ways of using TreePlugin's TREEVIEW tag.
+%META:TOPICPARENT{name="TWiki.TreePlugin"}%
+Here are some ways of using %TWIKIWEB%.TreePlugin's =%<nop>TREEVIEW%= tag.
 
 
 %TOC%
 
 
 #SampleLists
-__Note:__ The links under TreeTop (incl.) are not functional. They are only for demonstrational purpooses only. %BR%
+__Note:__ The links under <nop>TreeTop (included from HeadingOutlineSample) are not functional. They are only for demonstrational purpooses only. %BR%
 __Note:__ The children of each tree are presented in alphabetical order which is why a "Three" topic always preceeds a "Two" topic.  
 
 
@@ -378,6 +378,5 @@ formatting="imageoutline:single:/icons/ball.red.gif:<img src='$image' border=0>"
 format="$images $topic<br>"}%
 </verbatim>
 
--- Main.SlavaKozlov - 28 Feb 2002 %BR%
--- Main.MartinRaabe - 16 Jan 2003
-%META:TOPICMOVED{by="MartinRaabe" date="1042727610" from="Plugins.TreePluginSamples" to="TWiki.TreePluginSamples"}%
+-- TWiki:Main.SlavaKozlov - 28 Feb 2002 %BR%
+-- TWiki:Main.MartinRaabe - 16 Jan 2003

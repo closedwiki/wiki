@@ -29,13 +29,13 @@ Attributes:
 	* *web* - specify web
 	* *topic* - specify tree's root topic (if none, will do the entire web)
 	* *formatting* - specify the formatting method
-	* _ullist_ is a &lt;ul&gt;-list, see [[TWiki.TreePluginSamples#UlList][sample UL lists]]
-	* _ollist_ is a &lt;ol&gt;-list, see [[TWiki.TreePluginSamples#OlList][sample OL lists]]
-	* _outline_ is an outline list, see [[TWiki.TreePluginSamples#SampleOutlines][sample Outlines]]
-	* _hlist_ is a &lt;h<i>n</i>&gt;-list of section heads, see [[TWiki.TreePluginSamples#SampleHList][sample Headlines]]
-	* _coloroutline_ is an outline formatting with level values turned into colors, see [[TWiki.TreePluginSamples#SampleNestedTables][sample Nested tables]]
+	* _ullist_ is a &lt;ul&gt;-list, see [[Sandbox.TreePluginSamples#UlList][sample UL lists]]
+	* _ollist_ is a &lt;ol&gt;-list, see [[Sandbox.TreePluginSamples#OlList][sample OL lists]]
+	* _outline_ is an outline list, see [[Sandbox.TreePluginSamples#SampleOutlines][sample Outlines]]
+	* _hlist_ is a &lt;h<i>n</i>&gt;-list of section heads, see [[Sandbox.TreePluginSamples#SampleHList][sample Headlines]]
+	* _coloroutline_ is an outline formatting with level values turned into colors, see [[Sandbox.TreePluginSamples#SampleNestedTables][sample Nested tables]]
 	* _imageoutline_ is a way to incorporate images into the outline format,
-      specifically to display thread-like and fodler views, see [[TWiki.TreePluginSamples#SampleImageTrees][sample Image Trees]]
+      specifically to display thread-like and fodler views, see [[Sandbox.TreePluginSamples#SampleImageTrees][sample Image Trees]]
 	* *stoplevel* - the depth of the tree to show
 	* *header* - header output
 	* *bookview* - list topics in BookView form 
@@ -56,31 +56,27 @@ Attributes:
 	* _$children_ - the text of all the node's children (if any)
 
 
-See Plugins.TWiki.TreePluginSamples for samples usage and output.
+See Sandbox.TreePluginSamples for samples usage and output.
 
 <!-- The Plugins.<nop>TreePluginHelp topic in the installation contains complete help information. -->
 
 ---+++ Limitations and Known Issues 
-	* The parameter *web* does not work correctly. The Tree gets rendered, but the WikiWords of the topics do not contain the *web* value, but refers to the current web. Since I have limited knowledge of perl OO, I can't repair for now. -- Main.MartinRaabe - 16 Jan 2003 
+	* The parameter *web* does not work correctly. The Tree gets rendered, but the WikiWords of the topics do not contain the *web* value, but refers to the current web. Since I have limited knowledge of perl OO, I can't repair for now. -- TWiki:Main.MartinRaabe - 16 Jan 2003 
 
 ---+++ Plugin Installation Instructions
-
-<!--
-	* Set PLDIR = twiki/lib/TWiki/Plugins/
--->
 
 	* Download the ZIP file from the Plugin web (see below). %BR%
 Contents:
 
    | *File:* | *Description:* |
-   | ==data/Plugins/%TOPIC%.txt== | Plugin topic |
-   | ==data/Plugins/%TOPIC%.txt,v== | Version file of Plugin topic |
-   | ==data/Plugins/%TOPIC%Samples.txt== | Plugin Samples |
-   | ==data/Plugins/%TOPIC%Samples.txt,v== | Version file of Plugin Samples |
-   | ==data/Plugins/HeadingOutlineSample.txt== | Heading Outline Sample |
-   | ==data/Plugins/HeadingOutlineSample.txt,v== | Version file of Heading Outline Sample |
-   | ==data/Plugins/TreeBookviewOutlineSample.txt== | Tree Bookview Outline Sample |
-   | ==data/Plugins/TreeBookviewOutlineSample.txt,v== | Version file of Tree Bookview Outline Sample |
+   | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+   | ==data/TWiki/%TOPIC%.txt,v== | Version file of Plugin topic |
+   | ==data/Sandbox/%TOPIC%Samples.txt== | Plugin Samples |
+   | ==data/Sandbox/%TOPIC%Samples.txt,v== | Version file of Plugin Samples |
+   | ==data/Sandbox/HeadingOutlineSample.txt== | Heading Outline Sample |
+   | ==data/Sandbox/HeadingOutlineSample.txt,v== | Version file of Heading Outline Sample |
+   | ==data/Sandbox/TreeBookviewOutlineSample.txt== | Tree Bookview Outline Sample |
+   | ==data/Sandbox/TreeBookviewOutlineSample.txt,v== | Version file of Tree Bookview Outline Sample |
    | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
    | ==lib/TWiki/Plugins/%TOPIC%/ColorNodeFormatter.pm== | Library component |
    | ==lib/TWiki/Plugins/%TOPIC%/FormatHelper.pm== | Library component |
@@ -111,7 +107,7 @@ Contents:
 
   then installation was successful.
 
-	* If you have Wiki:PerlUnit, you can unzip the test file, chdir to test, and run TestRunner.pl.
+	* If you have Wiki:PerlUnit, you can unzip the test file, chdir to test, and run =TestRunner.pl=.
 
 <!-- Check the %TOPIC%Help topic. .-->
 <!---   * Add the following line to the "TWiki Plugins" section of %TWIKIWEB%.TextFormattingRules:
@@ -121,11 +117,11 @@ Contents:
 ---+++ Plugin Info
 
 |  One Line Description: | View Twiki topics as nodes in a tree |
-|  Plugin Author: | Main.SlavaKozlov |
+|  Plugin Author: | TWiki:Main.SlavaKozlov |
 |  Plugin Version: | 0.2 |
 |  Change History: | 08 Feb 2002 Internal (0.1) release |
 | | 15 Feb 2002 Alpha (0.2) release |
-|  CPAN Dependencies: | none _(test package relies on PerlUnit)_ |
+|  CPAN Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 _(only tested on 5.6.1 so far)_ |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -149,5 +145,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
 
--- Main.SlavaKozlov - 16 Feb 2002
-%META:TOPICMOVED{by="MartinRaabe" date="1042727857" from="Plugins.TreePlugin" to="TWiki.TreePlugin"}%
+-- TWiki:Main.SlavaKozlov - 16 Feb 2002

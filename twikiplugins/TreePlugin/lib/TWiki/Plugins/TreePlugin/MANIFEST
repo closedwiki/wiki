@@ -1,7 +1,7 @@
-data/TWiki/HeadingOutlineSample.txt NEW
-data/TWiki/TreeBookviewOutlineSample.txt NEW
+data/Sandbox/HeadingOutlineSample.txt NEW
+data/Sandbox/TreeBookviewOutlineSample.txt NEW
 data/TWiki/TreePlugin.txt NEW
-data/TWiki/TreePluginSamples.txt NEW
+data/Sandbox/TreePluginSamples.txt NEW
 lib/TWiki/Plugins/TreePlugin.pm NEW
 lib/TWiki/Plugins/TreePlugin/ColorNodeFormatter.pm NEW
 lib/TWiki/Plugins/TreePlugin/FormatHelper.pm NEW
