@@ -42,6 +42,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 13x13 | =&lt;img src="%<nop>ICONPATH{more-small}%" width="13" height="13" alt="Read more" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/move.gif" alt="Move" title="Move" />  | =move.gif= | Move | =%<nop>ICON{move}%= |
 | <img src="%ATTACHURLPATH%/note.gif" alt="Note" title="Note" />  | =note.gif= | Note | =%<nop>ICON{note}%= |
+| <img src="%ATTACHURLPATH%/parked.gif" alt="Parked" title="Parked" />  | =parked.gif= | Parked | =%<nop>ICON{parked}%= |
 | <img src="%ATTACHURLPATH%/pencil.gif" alt="Pencil / Refactor / Edit" title="Pencil / Refactor / Edit" />  | =pencil.gif= | Pencil / Refactor / Edit | =%<nop>P%=, =%<nop>ICON{pencil}%= |
 | <img src="%ATTACHURLPATH%/rfc.gif" alt="Request for comments" title="Request for comments" />  | =rfc.gif= | Request for comments | =%<nop>ICON{rfc}%= |
 | <img src="%ATTACHURLPATH%/sort.gif" alt="Sort" title="Sort" />  | =sort.gif= | Sort | =%<nop>ICON{sort}%= |
@@ -89,6 +90,8 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/person.gif" alt="Person" title="Person" />  | =person.gif= | Person | =%<nop>ICON{person}%= |
 | <img src="%ATTACHURLPATH%/persons.gif" alt="Persons" title="Persons" />  | =persons.gif= | Persons | =%<nop>ICON{persons}%= |
 | <img src="%ATTACHURLPATH%/group.gif" alt="Group" title="Group" />  | =group.gif= | Group | =%<nop>ICON{group}%= |
+| <img src="%ATTACHURLPATH%/building.gif" alt="Building" title="Building" />  | =building.gif= | Building | =%<nop>ICON{building}%= |
+| <img src="%ATTACHURLPATH%/buildings.gif" alt="Buildings" title="Buildings" />  | =buildings.gif= | Buildings | =%<nop>ICON{buildings}%= |
 | <img src="%ATTACHURLPATH%/logout.gif" alt="Log out" title="Log out" />  | =logout.gif= | Log out | =%<nop>ICON{logout}%= |
 | <img src="%ATTACHURLPATH%/key.gif" alt="Key" title="Key" />  | =key.gif= | Key | =%<nop>ICON{key}%= |
 | <img src="%ATTACHURLPATH%/lock.gif" alt="Lock" title="Lock" />  | =lock.gif= | Lock | =%<nop>ICON{lock}%= |
@@ -270,6 +273,8 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="bat.gif" attr="" autoattached="1" comment="" date="1128926958" path="bat.gif" size="377" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bmp.gif" attr="" autoattached="1" comment="" date="1128926959" path="bmp.gif" size="378" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bubble.gif" attr="" autoattached="1" comment="" date="1128926960" path="bubble.gif" size="238" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="building.gif" attr="" autoattached="1" comment="" date="1128926958" path="building.gif" size="127" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="buildings.gif" attr="" autoattached="1" comment="" date="1128926958" path="buildings.gif" size="164" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="c.gif" attr="" autoattached="1" comment="" date="1128926961" path="c.gif" size="372" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="cachetopic.gif" attr="" autoattached="1" comment="" date="1128926962" path="cachetopic.gif" size="163" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="changes-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="changes-small.gif" size="89" user="UnknownUser" version=""}%
@@ -377,6 +382,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="newtopic.gif" attr="" autoattached="1" comment="" date="1128927060" path="newtopic.gif" size="340" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="note.gif" attr="" autoattached="1" comment="" date="1128927062" path="note.gif" size="222" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="notify.gif" attr="" autoattached="1" comment="" date="1128927063" path="notify.gif" size="347" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="parked.gif" attr="" autoattached="1" comment="" date="1128927066" path="parked.gif" size="224" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="pdf.gif" attr="" autoattached="1" comment="" date="1128927064" path="pdf.gif" size="375" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="pencil.gif" attr="" autoattached="1" comment="" date="1128927066" path="pencil.gif" size="539" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="person.gif" attr="" autoattached="1" comment="" date="1128927067" path="person.gif" size="166" user="UnknownUser" version=""}%
