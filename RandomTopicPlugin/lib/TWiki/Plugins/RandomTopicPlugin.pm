@@ -35,10 +35,8 @@ $RELEASE = 'Dakar';
 sub initPlugin {
     my ( $topic, $web, $user, $installWeb ) = @_;
 
-    $defaultIncludes =
-      TWiki::Func::getPreferencesValue( "RANDOMTOPICPLUGIN_INCLUDE" );
-    $defaultExcludes =
-      TWiki::Func::getPreferencesValue( "RANDOMTOPICPLUGIN_EXCLUDE" );
+    $defaultIncludes = TWiki::Func::getPreferencesValue( "RANDOMTOPICPLUGIN_INCLUDE" );
+    $defaultExcludes = TWiki::Func::getPreferencesValue( "RANDOMTOPICPLUGIN_EXCLUDE" );
 
     @topicList = TWiki::Func::getTopicList( $web );
 
