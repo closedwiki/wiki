@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# Managing Webs
 
-_Adding webs is a web based operation; renaming and deleting webs are manual operations done directly on the server_
+_Adding webs is a web-based operation; renaming and deleting webs are manual operations done directly on the server._
 
 ---++ Overview
 
