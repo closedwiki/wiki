@@ -82,10 +82,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==templates/edit.classicWC.tmpl== | Replacement for ==edit.tmpl==, see below |
-	  | ==templates/edit.patternWC.tmpl== | Replacement for ==edit.pattern.tmpl==, see below |
-	  | ==templates/preview.classicWC.tmpl== | Replacement for ==preview.tmpl== |
-	  | ==templates/preview.patternWC.tmpl== | Replacement for ==preview.pattern.tmpl== |
 	  | ==templates/oopshistoryWC.tmpl== | see below |
 	  | ==templates/oopshistoryWCCR.tmpl== | see below |
 	  | ==data/TWiki/WebChangesWC.txt== | Replacement for ==WebChanges.txt==, see below |
@@ -110,10 +106,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* This distribution contains some templates and documents which can replace existing
 	  ones. These files have a WC ("with comments") in their name. You should backup
 	  your old files and rename these files:
-		* =templates/edit.classicWC.tmpl= --> =templates/edit.tmpl=
-		* =templates/preview.classicWC.tmpl= --> =templates/preview.tmpl=
-		* =templates/edit.patternWC.tmpl= --> =templates/edit.pattern.tmpl=
-		* =templates/preview.patternWC.tmpl= --> =templates/preview.pattern.tmpl=
 		* =data/TWiki/WebChangesWC.txt= --> =data/TWiki/WebChanges.txt=
 		* =templates/oopshistoryWC.template= --> =templates/oopshistory.tmpl=
 		 (if [[TWiki:Plugins.HistoryPlugin][HistoryPlugin]] is installed)
