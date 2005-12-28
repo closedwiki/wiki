@@ -4,7 +4,7 @@ The %IF construct gives TWiki the power to include content in topics based on th
 
 In the example above, if CONDITION evaluates to TRUE, then THEN will be included in the topic; otherwise ELSE will be included.
 
-What can be included in the THEN and ELSE parameters is obviously limited by standard TWiki syntax for parameters. The best way to use this feature is to define two TWikiVariables, one for the THEN case and the other for the ELSE case. FOr example:
+What can be included in the THEN and ELSE parameters is obviously limited by standard TWiki syntax for parameters. The best way to use this feature is to define two TWikiVariables, one for the THEN case and the other for the ELSE case. For example:
 <verbatim>
 <!--
    * Set LI = Fred is here!
@@ -77,6 +77,6 @@ Context identifiers are used in TWiki to label various stages of the rendering p
 | view | in view script (see TWikiScripts) |
 | rest | in rest script (see TWikiScripts) |
 
-In addition there is an identifier for each enabled plugin; for example, if =Gallous<nop>BreeksPlugin is installed *and enabled*, then the context ID =Gallous<nop>BreeksPluginEnabled= will be set.
+In addition there is an identifier for each enabled plugin; for example, if =Gallous<nop>BreeksPlugin= is installed *and enabled*, then the context ID =Gallous<nop>BreeksPluginEnabled= will be set.
 
 The %IF statements is kept deliberately simple. In particular, note that there is no way to conditionally execute a Set statement. If you need more sophisticated control over formatting, then consider using the SpreadSheetPlugin.
