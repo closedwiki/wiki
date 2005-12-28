@@ -19,9 +19,7 @@
 
 # Standard preamble
 BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
-    unshift @INC, $pc;
-  }
+    unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
 }
 
 use TWiki::Contrib::Build;
