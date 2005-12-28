@@ -33,7 +33,7 @@ use TWiki::Contrib::Build;
 
   sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "EditContrib", "Build" ), $class );
+    return bless( $class->SUPER::new( "EditContrib" ), $class );
   }
 
   # Example: Override the build target
