@@ -33,7 +33,7 @@ OK
 * EmbedPlugin
 * EmbedQTPlugin
 * EmbedTopicPlugin
-*! ExifMetaDataPlugin - seems to be having a problem - errors in error_log -- also, picture.jpg is probably "corrupted" (bad CVS checkin?)
+* ExifMetaDataPlugin - seems to be having a problem - errors in error_log
 * ExplicitNumberingPlugin
 * ExtendedSelectPlugin
 *! ExternalLinkPlugin - fails one internal test (links to non-existant topic)
@@ -50,9 +50,9 @@ OK
 * HeadlinesPlugin
 * HiddenTextPlugin
 * HistoryPlugin - seems to work
-*! HolidaylistPlugin - example.gif corrupted 
+* HolidaylistPlugin
 * ImageGalleryPlugin
-* IncludeIndexPlugin - works, but doesn't number correctly (has extra <p>)
+* IncludeIndexPlugin - "works", but doesn't number correctly (has extra <p>)
 * InterwikiPlugin
 * IrcLogPlugin
 * JSCalendarContrib
@@ -66,7 +66,7 @@ OK
 * NatSkinPlugin
 * NavPlugin
 * NewTopicEventPlugin
-* OoPlugin - need _some_ "docs"
+* OoPlugin - need _some_ "docs" - probably should be renamed OoPluginContrib ?
 * PageStatsPlugin
 * PatentLinkPlugin - seems to work
 * PatternSkin
@@ -74,7 +74,6 @@ OK
 * PhotoarchivePlugin - seems to work, but why is the sample image in data/TWiki/ instead of pub/ ?
 * PreferencesPlugin
 * ProjectPlannerPlugin - i guess it works, don't include a useful sample, tho
-* PseudoXmlPlugin
 * QuickCalendarPlugin
 * RandomQuotePlugin
 * RandomTopicPlugin
@@ -86,7 +85,7 @@ OK
 * SecurityPlugin
 * SingletonWikiWordPlugin
 * SlideShowPlugin
-*! SmiliesPlugin - missing files
+* SmiliesPlugin
 * SpacedWikiWordPlugin - (although it renders TWiki as "T Wiki")
 * SpreadSheetPlugin
 * StylePlugin - seems to work, made some fixes to topic text
@@ -98,7 +97,7 @@ OK
 * TipsContrib
 * TocPlugin - i guess...
 * TodaysVisitorsPlugin - seems to work
-* ToolTipPlugin - missing ToolTipPhoto.gif, ToolTipBackground.jpg
+* ToolTipPlugin
 * TopicCreatePlugin - yes, but see email/patch (also, currently only works on UNIX)
 * TopicTranslationsPlugin - seems to work
 * TreePlugin
@@ -107,15 +106,15 @@ OK
 * UserInfoPlugin
 * VarCachePlugin
 * VotePlugin - but email MichaelDaum about: view.cgi: Argument "100%" isn't numeric in division (/) at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/VotePlugin.pm line 210.
+* WeatherPlugin - can't test without internet
 * WysiwygPlugin
 
-108
+109
 
 
 Broken, but looking into fixes (or, still testing...)
 --------------------------------------------------------------------------------
 ? BatchUploadPlugin - complained about my ZIP file (hm, so did AlbumOfSnapsPlugin...)
-?- CategoryPlugin - no plugin topic
 T EditContrib
 T ImmediateNotifyPlugin - verify docs with latest on twiki.org (or perhaps CVS)
 T- LocalTimePlugin - can't test without internet; update reference of bsdi.com/xdate; also, how does this compare to LocalCityTimePlugin?
@@ -124,11 +123,15 @@ T NavbarPlugin - move samples from TWiki to Sandbox
 ?- NetgrepPlugin - can't test without network
 T PerlSamplePlugin - need to clean up (and rename to PerlPlugin, or something like that)
 - PollPlugin - problems with TWiki::userToWikiName(), TWiki::editLockTime, TWiki::dataDir
-?- ProtocolTlaPlugin - Plugins: could not fully register ProtocolTlaPlugin, no plugin topic
+* PseudoXmlPlugin - well, it *used* to work with 7?84, but is broken with latest
 T- SablotronPlugin - need sablot installed...
-?- SlashFilenamePlugin - Plugins: could not fully register SlashFilenamePlugin, no plugin topic
 T ThreadedDiscussionPlugin - calling TWiki::Prefs directly
-?- WeatherPlugin - can't test without internet
+
+Missing documentation topics to create a full plugin
+--------------------------------------------------------------------------------
+?- CategoryPlugin - no plugin topic
+?- SlashFilenamePlugin - Plugins: could not fully register SlashFilenamePlugin, no plugin topic
+?- ProtocolTlaPlugin - Plugins: could not fully register ProtocolTlaPlugin, no plugin topic
 
 (15)
 
@@ -173,7 +176,7 @@ mv: cannot stat `testpics': No such file or directory
 ! SpellCheckerPlugin (still in development)
 ! TopicReadersPlugin - nothing renders
 ! TopicVarsPlugin - parts work, others don't [text in brackets]
-T TranslateTagPlugin - *highly unlikely* to work as it includes patches to scripts (may be made obsolete by L10N changes to Dakar?)
+T TranslateTagPlugin - *highly unlikely* to work as it includes patches to scripts (maybe made obsolete by L10N changes to Dakar?)
 ! TypographyPlugin - has rendering issues (even with Cairo, more like a bad regex problem)
 ! TWikiReleaseTrackerPlugin - didn't build (Can't locate FileDigest.pm in @INC...)
 ! UpdateInfoPlugin - no rendering changes
@@ -218,7 +221,6 @@ T XmlQueryPlugin - need more CPAN modules - change XMLDIR to use getWorkArea() (
 
 20
 
-
 Untested - Can't tell...
 --------------------------------------------------------------------------------
 ? EncryptedPagesPlugin - can't really tell... seems to mostly be working...
@@ -227,6 +229,7 @@ Untested - Can't tell...
 ? FormPivotPlugin - missing Test.TestFormPivot (after finding it, move it to Sandbox!)
 ? FundraisingPlugin - no sample
 ? GpgkeyPlugin - can't tell
+? PowerEditPlugin
 ? RedirectPlugin - can't tell, no sample
 ? RollupPlugin - need sample to test
 ? SearchToTablePlugin - missing sample to test
@@ -242,12 +245,11 @@ N/A (either development tools, or in/replaced by core now)
 - BuildContrib
 - DefaultPlugin
 - HelloPlugin
-? PowerEditPlugin -- too much trouble to test - obsolete??
 NA SectionalEditPlugin - version in core
 - TestFixturePlugin
 - TWikiInstallerContrib
 
-7
+6
 
 --- (don't care)
 --------------------------------------------------------------------------------
@@ -260,46 +262,43 @@ NA SectionalEditPlugin - version in core
 
 
 *** OTHER ISSUES: ***
-   * who installed the Tracking web? (ah) (it should be called _XpTrackerPlugin)
 
-   * InterWikiPlugin doesn't link this: (CPAN:HTML::Entities)
-|  CPAN Dependencies: | *required:* CPAN:Date::Calc %BR% optional: CPAN:HTML::Entities|
-but it does link this:
-|  CPAN Dependencies: | *required:* CPAN:Date::Calc %BR% optional: CPAN:HTML::Entities |
+   * MANIFEST sucks --- eg, CpanContrib doesn't actually show any of the *real* files, because they're added
+      during the build process, but not in the actual MANIFEST file (because when i added them to the MANIFEST
+      file, that messed up pseudo-install!)
 
-   * HolidaylistPlugin has corrupted example.gif
+   * add CPAN: prefix to the new modules in CpanContrib.txt
+      * add Copyright notice to CpanContrib.txt
+      * remove comments about adding CPAN modules for all plugins (DONE)
 
-   * SmiliesPlugin has corrupted sealed.gif, thumbs.gif, yes.gif, no.gif, love.gif, skull.gif (hm, maybe there were just missing from MANIFEST?) - erm, or not checked in?
+   * who installed the Tracking web? (ah) (it should be called _XpTrackerPlugin, i think...)
 
    * PollPlugin is missing bin/poll
-
-   * ExifMetaDataPlugin - picture.jpg is corrupted (another bad CVS checkin?)
 
    * missing TWiki/PluginTopicName.txt
       * CategoryPlugin
       * ProtocolTlaPlugin
       * SlashFilenamePlugin
 
-   * SpreadSheetPlugin has a rendering issue in #FuncIF (rendered as =$AND(), ...)
-      * Related: =[[#FuncAND][$AND()]]=, =[[#FuncEXACT][$EXACT()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncOR][$OR()]]=
-
    * clicking "attach link" wiped out my topic text (*and* replace it with a non-functional link (using %ATTACHPUBURL%))
-
-   * in TWiki.RandomTopicPlugin topic,
-      * Set INCLUDE =  is causing things not to render properly (eg, WebLeftBar) --- whose fault is this???
-     is causing some rendering issues (webleftbar, etc. aren't showing up anymore!)
-
-   * install GNU source-highlight (to test SourceHighlightPlugin)
 
    * TWikiTip009 isn't rendering its < >, nor in =tt= text
 
-   * TWiki/WebReferences - delete? - just put on twiki.org ??? - links from TWiki.TWikiSite and TWiki.WelcomeGuest
+   * TWiki.WebReferences - delete? - just put on twiki.org ??? - links from TWiki.TWikiSite and TWiki.WelcomeGuest
 
    * FindElsewherePlugin renders [[%TWIKIWEB%.BookView][%MAKETEXT{"about BookView"}%]] incorrectly --- [[]]'s show up and link text BookView is a link :(
 
-   * TWikiContributor should be marked "no index" for spiders   
-
    * do a pass on proper dashes: endash vs. emdash (&ndash; vs. &mdash;)
+
+
+THINGS TO INSTALL:
+--------------------------------------------------------------------------------
+latex2html -- says non-free; not sure what to do...
+
+################################################################################
+retest:
+
+   * ExifMetaDataPlugin - picture.jpg is corrupted (another bad CVS checkin?)
 
 ################################################################################
 ################################################################################
