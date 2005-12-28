@@ -43,7 +43,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 			* Set MOVABLETYPEPLUGIN_BLOG_ID = 4
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
