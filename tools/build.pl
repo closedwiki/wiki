@@ -9,9 +9,7 @@ use strict;
 BEGIN {
     use File::Spec;
 
-    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS} || '../lib' )) {
-        unshift @INC, $pc;
-    }
+    unshift @INC, split(/:/, $ENV{TWIKI_LIBS} || '../lib' );
 
     # designed to be run within a SVN checkout area
     my @path = split( /\/+/, File::Spec->rel2abs($0) );

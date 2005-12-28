@@ -1,17 +1,14 @@
 #! /usr/bin/perl -w
 use strict;
-use Data::Dumper qw( Dumper );
 
 BEGIN {
     use File::Spec;
 
-    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS}  )) {
-        unshift @INC, $pc;
-    }
+    unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
     unshift @INC, '../lib/CPAN/lib/';
     unshift @INC, '../lib/';
 
-    # designed to be run within a SVN checkout area
+    # designed to be run from within an SVN checkout area
     my @path = split( /\/+/, File::Spec->rel2abs($0) );
     pop(@path); # the script name
 }
@@ -31,7 +28,6 @@ while ( <> ) {
 
     if ( $base{url} ) {
         $BASE = \%base;
-        #print "src [" . Dumper( $BASE) . "]\n";
         next;
     }
 
