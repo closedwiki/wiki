@@ -58,13 +58,15 @@ OK
 * JSCalendarContrib
 * LinkOptionsPlugin - works, but has strange interaction with (is being affected by) some other plugin
 * LocalCityTimePlugin - assuming it works (from PTh) as i don't have an internet connection atm :(
+* LocalTimePlugin
 * MacrosPlugin
 * MailerContrib
-* MrdidPlugin
+* MrdIdPlugin
 * MultiLangPlugin - probably works as well as it did with Cairo, but it's hard to tell
 * NatSkin
 * NatSkinPlugin
 * NavPlugin
+* NetgrepPlugin
 * NewTopicEventPlugin
 * OoPlugin - need _some_ "docs" - probably should be renamed OoPluginContrib ?
 * PageStatsPlugin
@@ -109,7 +111,7 @@ OK
 * WeatherPlugin - can't test without internet
 * WysiwygPlugin
 
-109
+111
 
 
 Broken, but looking into fixes (or, still testing...)
@@ -117,10 +119,8 @@ Broken, but looking into fixes (or, still testing...)
 ? BatchUploadPlugin - complained about my ZIP file (hm, so did AlbumOfSnapsPlugin...)
 T EditContrib
 T ImmediateNotifyPlugin - verify docs with latest on twiki.org (or perhaps CVS)
-T- LocalTimePlugin - can't test without internet; update reference of bsdi.com/xdate; also, how does this compare to LocalCityTimePlugin?
 T MultiEditPlugin - requires EditContrib
 T NavbarPlugin - move samples from TWiki to Sandbox
-?- NetgrepPlugin - can't test without network
 T PerlSamplePlugin - need to clean up (and rename to PerlPlugin, or something like that)
 - PollPlugin - problems with TWiki::userToWikiName(), TWiki::editLockTime, TWiki::dataDir
 * PseudoXmlPlugin - well, it *used* to work with 7?84, but is broken with latest
@@ -133,7 +133,7 @@ Missing documentation topics to create a full plugin
 ?- SlashFilenamePlugin - Plugins: could not fully register SlashFilenamePlugin, no plugin topic
 ?- ProtocolTlaPlugin - Plugins: could not fully register ProtocolTlaPlugin, no plugin topic
 
-(15)
+(13)
 
 
 Should test, but haven't got around to it
