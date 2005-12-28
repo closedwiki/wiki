@@ -3,15 +3,14 @@
 <head>
   <title>TWiki Installation Guide</title>
 
+   <style type="text/css" media="screen">
+	@import url(pub/TWiki/PatternSkin/layout.css);
+	@import url(pub/TWiki/PatternSkin/style.css);
+	@import url(pub/TWiki/PatternSkin/colors.css);
+   </style>
 
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
-  <style type="text/css" media="all">
-/* Check if style urls are valid (non-empty) */
-@import url('/pub/TWiki/PatternSkin/layout.css');
-@import url('/pub/TWiki/PatternSkin/style.css');
-@import url('/pub/TWiki/PatternSkin/colors.css');
-  </style>
 </head>
 <body class="patternViewPage patternPrintPage">
 
@@ -28,8 +27,7 @@
       <div class="patternMainContents">
       <div class="patternContent">
       <div class="patternTopic">
-      <h1>TWiki Installation
-Guide </h1>
+      <h1>TWiki Installation Guide </h1>
 
       <p>
       <em>The following is installation instructions for the
@@ -294,7 +292,7 @@ pane of <code>configure</code> :
             <li> Select <code>TWiki::Client::TemplateLogin</code>
 for <code>{LoginManager}</code> .</li>
 
-            <li> select <code>TWiki::Users::HtPasswdUser</code>
+            <li> Select <code>TWiki::Users::HtPasswdUser</code>
 for <code>{PasswordManager}</code> .</li>
 
           </ol>
@@ -304,10 +302,8 @@ for <code>{PasswordManager}</code> .</li>
         <li> Register yourself in the <code>TWiki/TWikiRegistration</code>
 topic. <br>
 
-          <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/help.gif" alt="HELP" title="HELP"> Check that the password manager recognizes the
-new user. Check that a new line with the username and encrypted
-password is added to the <code>data/.htpasswd</code> file.
-If not, you probably got a path wrong, or the permissions may not allow
+          <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/help.gif" alt="HELP" title="HELP"> Check that the password manager recognizes the new user. Check that a new line with the username and encrypted
+password is added to the <code>data/.htpasswd</code> file. If not, you probably got a path wrong, or the permissions may not allow
 the webserver user to write to that file.</li>
 
         <li> Create a new topic to check if authentication works.</li>
@@ -345,11 +341,7 @@ in the web. Read through it and set any additional settings you think
 you might need (you can click the 'Edit' button near the top to edit
 the settings in place)</li>
 
-        <li> <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/tip.gif" alt="IDEA!" title="IDEA!"> Alternately, you can <strong>copy</strong>
-any settings or variables that you want to customize from <code>TWIKI.TWikiPreferences</code>
-and <strong>paste</strong> them into <code>Main.TWikiPreferences.
-This will protect your local customizations from being overwritten in
-later upgrades. See notes at top of =TWIKI.TWikiPreferences</code>
+        <li> <img style="border: 0px solid ; width: 16px; height: 16px;" src="pub/TWiki/TWikiDocGraphics/tip.gif" alt="IDEA!" title="IDEA!"> Alternately, you can <strong>copy</strong> any settings or variables that you want to customize from <code>TWIKI.TWikiPreferences</code> and <strong>paste</strong> them into <code>Main.TWikiPreferences</code>. This will protect your local customizations from being overwritten in later upgrades. See notes at top of <code>TWIKI.TWikiPreferences</code>
 for more information.</li>
 
       </ul>
