@@ -5,7 +5,7 @@ Everybody can edit any page, this is scary. Doesn't that lead to chaos?
 
 ---++ Answer:
 
-<nop>%WIKITOOLNAME% is one of many WikiWikiClones, the first one was built by Ward Cunningham. Collaborating the Wiki way is different from other collaboration tools like Usenet. A distinct __Wiki culture__ forms around these tools:
+TWiki is one of many WikiWikiClones, the first one was built by Ward Cunningham. Collaborating the Wiki way is different from other collaboration tools like Usenet. A distinct __Wiki culture__ forms around these tools:
 
    * Any and all information can be deleted by anyone. Wiki pages represent nothing but discussion and consensus because it's much easier to delete flames, spam and trivia than to indulge them. What remains is naturally meaningful. 
 
@@ -17,7 +17,7 @@ Everybody can edit any page, this is scary. Doesn't that lead to chaos?
 
 (quoted from _WhyWikiWorks_ at Ward's original Wiki system, the Portland Pattern Repository, Wiki:WhyWikiWorks)
 
-__Related topics:__ TWikiSite, WelcomeGuest, GoodStyle, WikiSyntax, TWikiFAQ, WabiSabi, TWikiAccessControl
+__Related topics:__ TWikiSite, WelcomeGuest, GoodStyle, WikiSyntax, TWikiFAQ, WhatIsWikiWiki, WabiSabi, TWikiAccessControl
 
 __Back to:__ TWikiFAQ
 
