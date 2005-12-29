@@ -344,6 +344,14 @@ msgid ""
 "should contact %1 for details of the Data Protection Policy of this TWiki "
 "server before registering."
 msgstr ""
+"*Wichtig:* Die in diesem Formular angegebenen Informationen werden in "
+"einer Datenbank auf dem TWiki Server gespeichert. Auf die Datenbank hat "
+"jeder Zugriff, der Zugriff auf den Server durch das Web hat (jedoch sind "
+"die Passwörter verschlüsselt und die E-Mail Adressen sind verfremdet, um "
+"Spam abzuwenden. Ihr Land, oder das Land in dem sich der Server befindet "
+"hat möglicherweise Datenschutzrechte, die den Betrieb einer solchen "
+"Datenbank regeln. Wenn Sie Fragen zu den Datenschutzregeln auf diesem "
+"TWiki Server haben kontaktieren Sie bitte %1 bevor Sie sich registrieren."
 
 #: templates/attachagain.pattern.tmpl:51
 msgid ""
@@ -1586,6 +1594,8 @@ msgid ""
 "Once you created the topic, consider adding links in related topics to the "
 "new topic so that people can find it."
 msgstr ""
+"Nachdem Sie das Topic angelegt haben, sollten Sie Verweise von verwandten "
+"Topics auf das neue Topic hinzufügen, damit andere es finden können."
 
 #: templates/oopsaccessdenied.tmpl:16
 msgid "Only members of the %1 are allowed to perform this action."
@@ -1595,7 +1605,7 @@ msgstr "Nur Mitglieder von %1 dürfen diese Aktion durchführen."
 #: templates/edit.tmpl:21 templates/preview.pattern.tmpl:30
 #: templates/preview.pattern.tmpl:35 templates/preview.tmpl:10
 msgid "Opens page in new window"
-msgstr ""
+msgstr "In einem neuen Fenster öffnen"
 
 #: data/TWiki/TWikiRegistration.txt:203
 msgid "Other Country"
@@ -1735,7 +1745,7 @@ msgstr "Registrieren"
 
 #: data/TWiki/TWikiRegistration.txt:6
 msgid "Registered users can ChangePasswords and ResetPasswords."
-msgstr ""
+msgstr "Registrierte Benutzer können ihr Passwort [[ChangePasswords][ändern]] und [[ResetPasswords][zurücksetzen]]"
 
 #: data/TWiki/TWikiRegistration.txt:2
 msgid "Registration"
@@ -2635,6 +2645,10 @@ msgid ""
 "screen, or follow the link in the email, to activate your account. Once your "
 "account is activated, %1 will:"
 msgstr ""
+"Wenn %1 das Formular erhält, wird eine E-Mail mit einem Aktivierungs Code "
+"an die oben angegebene E-Mail Adresse versandt. Geben Sie den Aktivierungs "
+"Code auf der folgenden Seite ein oder folgen Sie dem Link in der E-Mail, "
+"um ihren Zugang zu aktivieren. Nachdem ihr Zugang aktiviert ist, wird %1:"
 
 #: templates/attachtables.pattern.tmpl:6
 #: templates/attachtables.pattern.tmpl:60
