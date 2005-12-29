@@ -92,7 +92,7 @@ sub handleToolTip
 
   my $out="";
 
-  if ( ($attr =~ /END/i) || ($attr =~ /^$/) ) 
+  if ( ($attr =~ /END/) || ($attr =~ /^$/) )
   { 
     if ( $ToolTipOpened>0 ) 
     {

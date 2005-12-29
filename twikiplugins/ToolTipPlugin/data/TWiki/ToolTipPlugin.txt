@@ -81,7 +81,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 Add :
 <verbatim>
-<script language="JavaScript" src="%PUBURLPATH%/TWiki/ToolTipPlugin/wz_tooltip.js"></script>
+<script language="JavaScript" src="%PUBURLPATH%/%TWIKIWEB%/ToolTipPlugin/wz_tooltip.js"></script>
 </verbatim>
 in variable WEBCOPYRIGHT in TOPIC TWiki.TWikiPreferences or add it in your skins so this javascript code is called just before the closing body tag). Replace =/%TWIKIWEB%/= with =/TWiki/= in case you install the Plugin in the %TWIKIWEB% web.
 
