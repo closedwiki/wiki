@@ -783,6 +783,9 @@ input.patternFormFieldVerticalForm {
 
 /* Edit page */
 
+.patternEditPage .patternTopicAction {
+	margin-top:.5em;
+}
 .twikiChangeFormButtonHolder {
 	margin:1em 0;
 	float:right;
