@@ -13,7 +13,7 @@
 
 
 
-%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" title='%MAKETEXT{"Back to topic"}%' accesskey='c' rel='nofollow'>%MAKETEXT{"&Cancel"}%</a>%TMPL:END%
+%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" title='%MAKETEXT{"Back to topic"}%' accesskey='c' rel='nofollow'>%MAKETEXT{"&Cancel"}%</a>%TMPL:END%
 
 
 
@@ -33,7 +33,7 @@
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
-		return launchTheWindow("%SCRIPTURL{"view"}%/", inWeb, inTopic, "plain.pattern");
+		return launchTheWindow("%SCRIPTURLPATH{"view"}%/", inWeb, inTopic, "plain.pattern");
 	}
 //]]>
 </script>
@@ -106,7 +106,7 @@
 
 
 
-%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS%</span>%TMPL:END%
+%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS%</span>%TMPL:END%
 
 
 

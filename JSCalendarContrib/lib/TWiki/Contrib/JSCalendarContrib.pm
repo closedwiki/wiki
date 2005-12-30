@@ -22,7 +22,7 @@ sub addHEAD {
     $setup ||= 'calendar-setup';
     my $style = $TWiki::cfg{JSCalendarContrib}{style} || 'win2k-1';
     my $lang = $TWiki::cfg{JSCalendarContrib}{lang} || 'en';
-    my $base = '%PUBURL%/%TWIKIWEB%/JSCalendarContrib';
+    my $base = '%PUBURLPATH%/%TWIKIWEB%/JSCalendarContrib';
     my $head = <<HERE;
 <style type='text/css' media='all'>
   \@import url('$base/calendar-$style.css');

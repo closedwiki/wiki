@@ -45,7 +45,7 @@ Skins can customize the color of the twisti placeholder by modifiying the =.twis
 
 ---+ Demo & Text
 
-If the contrib is properly installed (and Javascript is enabled in your browser!), then you should see some folding sections below. Look at [[%SCRIPTURL{"view"}%/%WEB%.%TOPIC%?raw=on]] to see how it's done.
+If the contrib is properly installed (and Javascript is enabled in your browser!), then you should see some folding sections below. Look at [[%SCRIPTURLPATH{"view"}%/%WEB%.%TOPIC%?raw=on]] to see how it's done.
 
 <style type="text/css" media="all">
 @import url("%PUBURLPATH%/TWiki/TwistyContrib/twist.css");

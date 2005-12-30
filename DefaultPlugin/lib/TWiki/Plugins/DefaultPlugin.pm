@@ -89,9 +89,9 @@ sub commonTagsHandler {
     # Process the filename suffixed to %ATTACHURLPATH%
     # Required for migration purposes
     my $pubUrlPath = TWiki::Func::getPubUrlPath();
-    my $attfexpr = TWiki::nativeUrlEncode( "$pubUrlPath/$_[2]/$_[1]" );
+    my $attfexpr = TWiki::urlEncode( "$pubUrlPath/$_[2]/$_[1]" );
     my $fnRE =  TWiki::Func::getRegularExpression( 'filenameRegex' );
-    $_[0] =~ s!$attfexpr/($fnRE)!"$attfexpr/".&TWiki::nativeUrlEncode($1)!ge;
+    $_[0] =~ s!$attfexpr/($fnRE)!"$attfexpr/".TWiki::urlEncode($1)!ge;
 }
 
 # Remove DISABLE_ if you uncomment any of the functionality in here

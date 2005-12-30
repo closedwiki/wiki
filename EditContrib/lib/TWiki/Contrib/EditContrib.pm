@@ -33,8 +33,9 @@ sub savemulti {
   } elsif ( $saveaction eq "quietsave" ) {
     $query->param( -name=>"dontnotify", -value=>"checked" );
   } elsif ( $saveaction eq "cancel" ) {
-    my $viewURL = TWiki::getScriptUrl( $webName, $topic, "view" );
-    TWiki::redirect( $query, "$viewURL?unlock=on" );
+    my $viewURL = TWiki::getScriptUrl( 0, 'view', $webName, $topic,
+                                       'unlock' => 'on' );
+    TWiki::redirect( $query, $viewURL );
     return;
   } elsif( $saveaction eq "preview" ) {
     my $text = $query->param( 'pretxt' ) . $query->param( 'text' ) . $query->param( 'postxt' );

@@ -56,7 +56,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
   if( ! theAnchor ) {
     theAnchor = "";
   }
-  win = open( "%SCRIPTURL{"view"}%/" + theWeb + "/" + theTopic + "?skin=plain" + theAnchor,
+  win = open( "%SCRIPTURLPATH{"view"}%/" + theWeb + "/" + theTopic + "?skin=plain" + theAnchor,
               theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
   if( win ) {
     win.focus();
@@ -335,7 +335,7 @@ function writeJavaScriptNote()
 writeToolbar("top");
 //STOP HIDING-->
 </script>
-<form name="main" action="%SCRIPTURL{"preview"}%/%WEB%/%TOPIC%" method="post">
+<form name="main" action="%SCRIPTURLPATH{"preview"}%/%WEB%/%TOPIC%" method="post">
 <div class"twikiEditTextarea">
 <textarea name="text" id="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onclick="storeCaret(this)" onKeyDown="if(window.event.keyCode==27) return false;" onKeyUp="storeCaret(this)" onselect="storeCaret(this)" >%TEXT%</textarea>
 </div>
@@ -370,7 +370,7 @@ See below for help in editing this page.
 </font>
 </div>%TMPL:END%
 %TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" value=" &nbsp; Preview Changes &nbsp; " />
-  %SEP% <a class="footerlink" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+  %SEP% <a class="footerlink" href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
 %TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
 %TMPL:DEF{"titlehelp"}% %TMPL:END%
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%

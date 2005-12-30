@@ -25,7 +25,7 @@
 
 %MAKETEXT{"Those changes have been merged with yours to create Rev [_1]. Text fields will have been merged, but other data such as form fields may have overwritten the other users changes. Please inspect the topic to make sure it is OK, especially if you made any changes to form fields.", "%PARAM3%"}%
 
-%MAKETEXT{"You can see the differences ~[~[[_1]~]~[here~]~].", "%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%"}%
+%MAKETEXT{"You can see the differences ~[~[[_1]~]~[here~]~].", "%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%"}%
 %TMPL:END%
 %TMPL:DEF{"missing_action"}%
 ---+++ %MAKETEXT{"Missing action command"}%
@@ -135,7 +135,7 @@
 %TMPL:DEF{"reset_ok"}%
 %PARAM1%
 
-%MAKETEXT{"Users with automatically generated passwords should proceed immediately to ~[~[[_1]~]~[change password~]~] to change their password to something memorable.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ChangePassword"}%
+%MAKETEXT{"Users with automatically generated passwords should proceed immediately to ~[~[[_1]~]~[change password~]~] to change their password to something memorable.", "%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ChangePassword"}%
 %TMPL:END%
 %TMPL:DEF{"password_changed"}%
 ---+++ %MAKETEXT{"Password changed successfully!"}%
@@ -147,7 +147,7 @@
 
 %MAKETEXT{"Your activation code has been sent to [_1].  Either click on the link in your email or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxx\")", "%PARAM1%"}%
 
-<form action="%SCRIPTURL{"register"}%" method=get>
+<form action="%SCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=' %MAKETEXT{"Submit"}% ' />
@@ -189,7 +189,7 @@
 ---+++ %MAKETEXT{"You are already registered"}%
 %MAKETEXT{"You cannot register twice, the name [_1] is already registered.", "'%PARAM1%'"}%
 
-%MAKETEXT{"Did you want to ~[~[[_1]~]~[reset [_2]'s password~]~]?", "%SCRIPTURL{"view"}%/TWiki.ResetPassword?username=%PARAM1%", "%PARAM1%"}%
+%MAKETEXT{"Did you want to ~[~[[_1]~]~[reset [_2]'s password~]~]?", "%SCRIPTURLPATH{"view"}%/TWiki.ResetPassword?username=%PARAM1%", "%PARAM1%"}%
 
 %MAKETEXT{"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."}%
 
@@ -221,7 +221,7 @@
 
 %MAKETEXT{"Please try again."}%
 
-<form action="%SCRIPTURL{"register"}%" method=get>
+<form action="%SCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=' %MAKETEXT{"Submit"}% ' />
@@ -254,7 +254,7 @@
 
 ---++ 2. %MAKETEXT{"The topic is in an old format"}%
 
-   * %MAKETEXT{"Click on ~[~[[_1]~]~[Debug topic text~]~].", "%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=debug"}%
+   * %MAKETEXT{"Click on ~[~[[_1]~]~[Debug topic text~]~].", "%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=debug"}%
       * %MAKETEXT{"There should be a line that includes [_1], look for [_2] (or [_3])", "=META:FORM=", "name=\"%PARAM1%.%PARAM2%\"", "name=\"%PARAM2%\""}%
       * %MAKETEXT{"If this line isn't present see _upgrade_ section below"}%
 
@@ -307,7 +307,7 @@
 %PARAM4%
 
 <div %PARAM5%>
-<a href="%SCRIPTURL{"rename"}%/%WEB%/%HOMETOPIC%?action=renameweb;confirm=continue" />%MAKETEXT{"Continue and try to rename web?"}%</a>
+<a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%HOMETOPIC%?action=renameweb;confirm=continue" />%MAKETEXT{"Continue and try to rename web?"}%</a>
 </div>
 
 %TMPL:END%

@@ -28,7 +28,7 @@ no newer comments than that.
 *~~     ---+ Comments$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt$n<ul>"
 ~~~  format="<li>[[$web.$topic][$headline]]
 ~~~    <span class=\"blogCommentCount\">
-~~~      <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web.$topic#topComment\">$percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"}$percnt</a>
+~~~      <a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/$web.$topic#topComment\">$percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"}$percnt</a>
 ~~~    </span><br/>
 ~~~    <span class=\"blogSideBarCommenter\">
 ~~~      $percntTIMESINCE{\"$date\" format=\"$time ago\"}$percnt
