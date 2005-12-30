@@ -3957,7 +3957,7 @@ unless( $path_to_localsite_cfg ) {
 my $errs;
 if( !$path_to_localsite_cfg ||
     ( $errs = _checkCanCreateFile( $path_to_localsite_cfg ))) {
-    $errs ||= 'Cannot locate LocalSite.cfg';
+    $errs ||= 'Cannot locate LocalSite.cfg. Is your setting for $twikiLibPath correct in bin/LocalLib.cfg?';
     $body .= CGI::p(WARN('Save is disabled; '.$errs));
     $update_disabled = "Cannot create $path_to_localsite_cfg - are permissions correct?";
 }
