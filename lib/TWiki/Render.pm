@@ -1653,10 +1653,10 @@ sub renderRevisionInfo {
         $un = $user->login();
     }
 
-    my $value = $format || '$rev - $time - $wikiusername';
+    my $value = $format || 'r$rev - $time - $wikiusername';
     $value =~ s/\$web/$web/gi;
     $value =~ s/\$topic/$topic/gi;
-    $value =~ s/\$rev/r$rev/gi;
+    $value =~ s/\$rev/$rev/gi;
     $value =~ s/\$time/TWiki::Time::formatTime($date)/gei;
     $value =~ s/\$date/TWiki::Time::formatTime($date, '$day $mon $year')/gei;
     $value =~ s/\$comment/$comment/gi;
