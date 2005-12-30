@@ -2,10 +2,8 @@ data/TWiki/EditTablePlugin.txt NEW
 lib/TWiki/Plugins/EditTablePlugin.pm NEW
 lib/TWiki/Plugins/EditTablePlugin/Core.pm NEW
 pub/TWiki/EditTablePlugin/EditTablePluginCalendarExample.gif NEW
-pub/TWiki/EditTablePlugin/README NEW
 pub/TWiki/EditTablePlugin/ScreenshotEditCell1.gif NEW
 pub/TWiki/EditTablePlugin/ScreenshotEditCell2.gif NEW
 pub/TWiki/EditTablePlugin/edittable.gif NEW
 pub/TWiki/EditTablePlugin/img.gif NEW
 pub/TWiki/EditTablePlugin/menuarrow.gif NEW
-pub/TWiki/EditTablePlugin/release-notes.html NEW
