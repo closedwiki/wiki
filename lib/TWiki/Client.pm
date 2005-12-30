@@ -761,7 +761,7 @@ sub _SESSION_VARIABLE {
         $this->clearSessionValue( $name );
         return '';
     } else {
-        return $this->getSessionValue( $name );
+        return $this->getSessionValue( $name ) || '';
     }
 }
 
