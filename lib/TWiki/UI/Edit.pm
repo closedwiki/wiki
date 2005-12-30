@@ -67,7 +67,6 @@ sub edit {
     my $session = shift;
 
     $session->enterContext( 'edit' );
-
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
@@ -169,7 +168,7 @@ sub edit {
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ));
+        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ));
         return;
     }
 
@@ -290,7 +289,6 @@ sub edit {
 
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
-
     # Don't want to render form fields, so this after getRenderedVersion
     my $formMeta = $meta->get( 'FORM' );
     my $form = '';

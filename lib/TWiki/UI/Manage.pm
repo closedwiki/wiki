@@ -386,7 +386,7 @@ sub rename {
 
         if( $attachment ) {
             # go back to old topic after deleting an attachment
-            $new_url = $session->getScriptUrl( $oldWeb, $oldTopic, 'view' );
+            $new_url = $session->getScriptUrl( 0, 'view', $oldWeb, $oldTopic );
 
         } else {
             # redirect to parent topic, if set
@@ -401,17 +401,16 @@ sub rename {
             if( $parentTopic &&
                 !( $parentWeb eq $oldTopic && $parentTopic eq $oldTopic ) &&
                   $store->topicExists( $parentWeb, $parentTopic ) ) {
-                $new_url = $session->getScriptUrl( $parentWeb, $parentTopic,
-                                                   'view' );
+                $new_url = $session->getScriptUrl(
+                    0, 'view', $parentWeb, $parentTopic );
             } else {
-                $new_url = $session->getScriptUrl( $oldWeb,
-                                                   $TWiki::cfg{HomeTopicName},
-                                                   'view' );
+                $new_url = $session->getScriptUrl( 0, 'view', $oldWeb,
+                                                   $TWiki::cfg{HomeTopicName});
             }
         }
     } else {
         #redirect to new topic
-        $new_url = $session->getScriptUrl( $newWeb, $newTopic, 'view' );
+        $new_url = $session->getScriptUrl( 0, 'view', $newWeb, $newTopic );
     }
 
     $session->redirect( $new_url );
@@ -645,8 +644,8 @@ sub _renameweb {
 
         if ($confirm eq 'cancel') {
             # redirect to original web
-            my $viewURL = $session->getScriptUrl(
-                $oldWeb, $TWiki::cfg{HomeTopicName}, 'view' );
+            my $viewURL = $session->getScriptUrl( 0, 'view',
+                $oldWeb, $TWiki::cfg{HomeTopicName});
             $session->redirect( $viewURL );
         } elsif( $confirm ne 'getlock' ||
                    ($confirm eq 'getlock' &&
@@ -695,17 +694,16 @@ sub _renameweb {
 
         # redirect to parent
         if( $oldParentWeb ) {
-            $new_url = $session->getScriptUrl(
-                $oldParentWeb, $TWiki::cfg{HomeTopicName}, 'view' );
+            $new_url = $session->getScriptUrl( 0, 'view',
+                $oldParentWeb, $TWiki::cfg{HomeTopicName} );
         } else {
-            $new_url = $session->getScriptUrl(
-                $TWiki::cfg{UsersWebName},
-                $TWiki::cfg{HomeTopicName}, 'view' );
+            $new_url = $session->getScriptUrl( 0, 'view',
+                $TWiki::cfg{UsersWebName}, $TWiki::cfg{HomeTopicName} );
         }
     } else {
         # redirect to new web
-        $new_url = $session->getScriptUrl(
-            $newWeb, $TWiki::cfg{HomeTopicName}, 'view' );
+        $new_url = $session->getScriptUrl( 0, 'view',
+            $newWeb, $TWiki::cfg{HomeTopicName} );
     }
 
     $session->redirect( $new_url );
@@ -1323,7 +1321,7 @@ sub _saveSettings {
                                     topic => $topic,
                                     params => shift->{-text} );
     };
-    my $viewURL = $session->getScriptUrl( $web, $topic, 'view' );
+    my $viewURL = $session->getScriptUrl( 0, 'view', $web, $topic );
     $session->redirect( $viewURL );
     return;
 

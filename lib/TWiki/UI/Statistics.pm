@@ -158,7 +158,7 @@ sub statistics {
 
     if( !$session->inContext( 'command_line' ) ) {
         $tmp = $TWiki::cfg{Stats}{TopicName};
-        my $url = $session->getScriptUrl( $destWeb, $tmp, 'view' );
+        my $url = $session->getScriptUrl( 0, 'view', $destWeb, $tmp );
         _printMsg( $session, '* Go back to '
                    . CGI::a( { href => $url,
                                rel => 'nofollow' }, $tmp) );

@@ -70,7 +70,7 @@ sub loginUrl {
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
     my $query = $twiki->{cgiQuery};
-    return $twiki->getScriptUrl( $web, $topic, 'login',
+    return $twiki->getScriptUrl( 0, 'login', $web, $topic,
                                  origurl => $query->url( -path => 1,
                                                          -query => 1 ), @_ );
 }
@@ -125,7 +125,7 @@ sub login {
             $this->userLoggedIn( $loginName );
             $cgisession->param( 'VALIDATION', $validation ) if $cgisession;
             if( !$origurl || $origurl eq $query->url() ) {
-                $origurl = $twiki->getScriptUrl( $web, $topic, 'view' );
+                $origurl = $twiki->getScriptUrl( 0, 'view', $web, $topic );
             }
             $this->redirectCgiQuery( $query, $origurl );
             return;

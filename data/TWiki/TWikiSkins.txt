@@ -97,7 +97,7 @@ The =%<nop>WEBTOPICLIST%= includes a "Go" box, also called "Jump" box, to jump t
 
 Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
 
-<form name="sample" action="%SCRIPTURL{"view"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<form name="sample" action="%SCRIPTURLPATH{"view"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
 <table border="3"><tr><td>
 <select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
  <option selected="selected" value="">Navigate...</option>
@@ -188,7 +188,7 @@ The basic skin is defined by setting the =%<nop>SKIN%= TWiki Variable:
 
 You can also add a parameter to the URL, such as =?skin=catskin, bearskin=. Example activation of PrintSkin that generates a printable page:
 
-   * %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=print
+   * %SCRIPTURLPATH{view}%/%WEB%/%TOPIC%?skin=print
 
 Setting =%<nop>SKIN%= (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
 

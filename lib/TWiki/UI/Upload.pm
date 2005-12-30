@@ -249,7 +249,7 @@ sub upload {
 
     close( $stream ) if $stream;
 
-    $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
+    $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ));
 
     # generate a message useful for those calling this script from the command line
     my $message = ( $doPropsOnly ) ?

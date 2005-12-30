@@ -104,7 +104,7 @@ sub loginUrl {
     my $twiki = $this->{twiki};
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
-    return $twiki->getScriptUrl( $web, $topic, 'logon', @_ );
+    return $twiki->getScriptUrl( 0, 'logon', $web, $topic, @_ );
 }
 
 sub getUser {

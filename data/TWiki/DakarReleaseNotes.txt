@@ -250,7 +250,7 @@ The rules for preference evaluation (whether the user setting overrides the topi
 ---++++ Preferences Plugin
 TWiki:Plugins.PreferencesPlugin has been included to allow more convenient editing of preferences. This plugin provides input controls, such as menus, radio buttons, and checkboxes to select preference settings.
 
-The following standard preferences have been removed: [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPIC%25&casesensitive=on&limit=all][MAILTHISTOPIC]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPICTEXT%25&casesensitive=on&limit=all][MAILTHISTOPICTEXT]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25TOPICURL%25&casesensitive=on&limit=all][TOPICURL]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25READTOPICPREFS%25&casesensitive=on&limit=all][READTOPICPREFS]], [[%SCRIPTURL{"search"}%?scope=text&web=all&order=topic&search=%25TOPICOVERRIDESUSER%25&casesensitive=on&limit=all][TOPICOVERRIDESUSER]]  (click on the name to search for occurrences on this site). If they are in use on your site, you can restore them to their Cairo settings by simply cutting and pasting the old definitions.
+The following standard preferences have been removed: [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPIC%25&casesensitive=on&limit=all][MAILTHISTOPIC]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25MAILTHISTOPICTEXT%25&casesensitive=on&limit=all][MAILTHISTOPICTEXT]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25TOPICURL%25&casesensitive=on&limit=all][TOPICURL]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25READTOPICPREFS%25&casesensitive=on&limit=all][READTOPICPREFS]], [[%SCRIPTURLPATH{"search"}%?scope=text&web=all&order=topic&search=%25TOPICOVERRIDESUSER%25&casesensitive=on&limit=all][TOPICOVERRIDESUSER]]  (click on the name to search for occurrences on this site). If they are in use on your site, you can restore them to their Cairo settings by simply cutting and pasting the old definitions.
 
 ---++++ {LocalSitePreferences} (was <nop>%MAINWEB%.TWikiPreferences)
 
@@ -396,7 +396,7 @@ This topic mimics TWiki.org's TWiki:Codev:WebChangesForAllWebs - i.e. it shows a
 Old versions of TWiki would consider all subdirectories of the TWiki data directory to be webs. This behaviour has changed; now only subdirectories that contain a web home topic (as identified by the =HomeTopicName=) will be considered to be webs. This may result in directories that used to return search matches no longer doing so.
 
 ---+++ Disable &lt;script&gt; tags
-In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. See the ={AllowInlineScript}= setting in the *Security* section of =[[%SCRIPTURL{"configure"}%][configure]]=.
+In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. See the ={AllowInlineScript}= setting in the *Security* section of =[[%SCRIPTURLPATH{"configure"}%][configure]]=.
 
 ---++ Notes for !TWikiApplication Developers
 
@@ -420,7 +420,7 @@ The encoding used to escape characters in form-field values has had to change. T
 ---+++ &lt;script&gt; tags in topics
 Previous releases of TWiki would attempt to interpret the content of &lt;script&gt; tags in topics as TWikiML, often resulting in non-functional scripts. This release protects script sections from expansion by TWiki. Note that this means that TWiki.TWikiVariables will *not* be expanded in script tags - they are passed through _verbatim_.
 
-In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. Check the setting of ={AllowInlineScript}= in =[[%SCRIPTURL{"configure"}%][configure]]= to see if it is allowed on your site. If not, script sections will simply disappear from topics.
+In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. Check the setting of ={AllowInlineScript}= in =[[%SCRIPTURLPATH{"configure"}%][configure]]= to see if it is allowed on your site. If not, script sections will simply disappear from topics.
 
 ---+++ &lt;verbatim&gt; tags in topics
 Previous releases required =verbatim= tags to be on their own line. Twiki can now deal with inline verbatim blocks such as
@@ -457,7 +457,7 @@ As with older releases, setting SKIN (or the =skin= parameter in the URL) replac
 
    * =Set COVER = mylocalskin=
 
-pushes a different skin to the front of the skin search path. There is also an equivalent =cover= URL parameter. For example, %SCRIPTURL{"view"}%/%WEB%/WhatIsWikiWiki?cover=print.pattern. This gives you an extra level of flexibility when defining skins.
+pushes a different skin to the front of the skin search path. There is also an equivalent =cover= URL parameter. For example, %SCRIPTURLPATH{"view"}%/%WEB%/WhatIsWikiWiki?cover=print.pattern. This gives you an extra level of flexibility when defining skins.
 
 See TWikiSkins for more information.
 
@@ -489,7 +489,7 @@ Dakar release includes new support for "context if" parameters to the %<nop>TMPL
 These two new !TWikiVariables give access to the HTTP headers sent by your browser. For example, your browser says your browser is %HTTP:{"User-Agent"}% (this will be filled in if you are running Dakar).
 
 ---+++ QUERYSTRING
-This new !TWikiVariable gives access to the full query string from the URL sent to your browser. For example, for the URL =%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?make=Reliant&model=Robin=, the query string is =?make=Reliant;model=Robin= (yes, the semicolon is correct!)
+This new !TWikiVariable gives access to the full query string from the URL sent to your browser. For example, for the URL =%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?make=Reliant&model=Robin=, the query string is =?make=Reliant;model=Robin= (yes, the semicolon is correct!)
 
 ---++ Notes for Plugin Developers
 

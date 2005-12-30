@@ -53,9 +53,9 @@ A Form Template specifies the fields in a form. A Form Template is simply a page
 =| !OsVersion | text | 16 | | blah blah... | &nbsp; |=
 
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
-| <a href="%SCRIPTURL{"view"}%/Sandbox/TopicClassification"><nop>TopicClassification</a> | select |  1  | <a href="%SCRIPTURL{"view"}%/Sandbox/NoDisclosure"><nop>NoDisclosure</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/PublicSupported"><nop>PublicSupported</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/PublicFAQ"><nop>PublicFAQ</a> | blah blah... | &nbsp; |
-| <a href="%SCRIPTURL{"view"}%/Sandbox/OperatingSystem"><nop>OperatingSystem</a> | checkbox |  3  | <a href="%SCRIPTURL{"view"}%/Sandbox/OsHPUX"><nop>OsHPUX</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/OsLinux"><nop>OsLinux</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/OsSolaris"><nop>OsSolaris</a>, <a href="%SCRIPTURL{"view"}%/Sandbox/OsWin"><nop>OsWin</a> | blah blah... | &nbsp; |
-| <a href="%SCRIPTURL{"view"}%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... | &nbsp; |
+| <a href="%SCRIPTURLPATH{"view"}%/Sandbox/TopicClassification"><nop>TopicClassification</a> | select |  1  | <a href="%SCRIPTURLPATH{"view"}%/Sandbox/NoDisclosure"><nop>NoDisclosure</a>, <a href="%SCRIPTURLPATH{"view"}%/Sandbox/PublicSupported"><nop>PublicSupported</a>, <a href="%SCRIPTURLPATH{"view"}%/Sandbox/PublicFAQ"><nop>PublicFAQ</a> | blah blah... | &nbsp; |
+| <a href="%SCRIPTURLPATH{"view"}%/Sandbox/OperatingSystem"><nop>OperatingSystem</a> | checkbox |  3  | <a href="%SCRIPTURLPATH{"view"}%/Sandbox/OsHPUX"><nop>OsHPUX</a>, <a href="%SCRIPTURLPATH{"view"}%/Sandbox/OsLinux"><nop>OsLinux</a>, <a href="%SCRIPTURLPATH{"view"}%/Sandbox/OsSolaris"><nop>OsSolaris</a>, <a href="%SCRIPTURLPATH{"view"}%/Sandbox/OsWin"><nop>OsWin</a> | blah blah... | &nbsp; |
+| <a href="%SCRIPTURLPATH{"view"}%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... | &nbsp; |
 </blockquote>
 
 You can also retrieve possible values for select, checkbox or radio types from other topics:
@@ -123,7 +123,7 @@ Forms have to be enabled for each individual web. The ==WEBFORMS== variable in W
         Boxes with a tick must be specified.
       * Example: This will add a textfield for the new topic name and a "Create"-Button to your topic. When the button is pressed, the topic editor will open with the form "MyForm" already attached to the new topic.
        <verbatim>
-    <form name="newtopic" action="%SCRIPTURL{"edit"}%/%WEB%/">
+    <form name="newtopic" action="%SCRIPTURLPATH{"edit"}%/%WEB%/">
        <input type="hidden" name="formtemplate" value="MyForm" />
        New topic name <input type="text" name="topic" size="40" />
        <input type="submit" value="Create" />

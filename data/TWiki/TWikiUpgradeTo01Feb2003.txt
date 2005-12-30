@@ -48,7 +48,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
          * Replace img tag's =alt="TWiki Home"= with =alt="%<nop>WIKILOGOALT%"=
          * Replace meta tag's =charset=iso-8859-1"= with =charset=%<nop>CHARSET%"=
          * Add =%<nop>TOPIC%= to form action of GoBox
-         * For internationalized sites, URL encode webs and topics in all form actions, e.g. replace =%<nop>SCRIPTURL{"view"}%/%<nop>WEB%/%<nop>TOPIC%"= with =%<nop>SCRIPTURL("view"}%%<nop>SCRIPTSUFFIX%/%<nop>INTURLENCODE{"%<nop>WEB%/%<nop>TOPIC%"}%=
+         * For internationalized sites, URL encode webs and topics in all form actions, e.g. replace =%<nop>SCRIPTURLPATH{"view"}%/%<nop>WEB%/%<nop>TOPIC%"= with =%<nop>SCRIPTURLPATH("view"}%/%<nop>INTURLENCODE{"%<nop>WEB%/%<nop>TOPIC%"}%=
    1. *Update script files*:
       * Overwrite all script files in =$TWIKIROOT/bin= with the new ones.
          * If necessary, change the script names to include the required extension, e.g. =.cgi=

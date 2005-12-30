@@ -199,7 +199,6 @@ sub maketext {
     my ( $this, $text, @args ) = @_;
 
     my $result = $this->SUPER::maketext($text, @args);
-
     if ($result && $this->{session}) {
         # external calls get the resultant text in the right charset:
         $result = $this->{session}->UTF82SiteCharSet($result) || $result;

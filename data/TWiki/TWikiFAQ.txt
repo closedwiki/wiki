@@ -11,7 +11,7 @@ __NOTE:__ The most recent version of this FAQ is at TWiki:TWiki/TWikiFAQ.
 
 __%RED%NOTE:%ENDCOLOR%__ The FAQs here are for frequently asked questions __including__ answers; please ask support questions in the TWiki:Support web. New FAQ topics are based on the TWikiFaqTemplate.
 
-<form action="%SCRIPTURL{"edit"}%/%INTURLENCODE{"%WEB%"}%/">
+<form action="%SCRIPTURLPATH{"edit"}%/%INTURLENCODE{"%WEB%"}%/">
 New FAQ topic: &nbsp; (Use a name in %TWIKIWEB%.WikiNotation) <br />
 <input type="text" name="topic" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value="Create Topic" />
 <input type="hidden" name="onlywikiname" value="on" />

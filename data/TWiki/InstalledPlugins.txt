@@ -6,7 +6,7 @@ Here is a list of the plugins currently installed and enabled on this TWiki site
 
 %PLUGINDESCRIPTIONS%
 
-Administrators can enable and disable plugins using [[%SCRIPTURL{"configure"}%][%ICON{"wrench"}% configure]].
+Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"}%][%ICON{"wrench"}% configure]].
 
 ---+ Plugin Diagnostics 
 %FAILEDPLUGINS%

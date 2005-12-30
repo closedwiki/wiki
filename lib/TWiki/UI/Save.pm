@@ -73,7 +73,7 @@ sub buildNewTopic {
             && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
+        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ) );
         return 0;
     }
 
@@ -359,7 +359,7 @@ sub save {
         $session->{topicName} = $topic;
     }
 
-    my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
+    my $redirecturl = $session->getScriptUrl( 1, 'view', $webName, $topic );
 
     my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
@@ -385,7 +385,7 @@ sub save {
 
     if( $saveaction eq 'checkpoint' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
-        my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );
+        my $editURL = $session->getScriptUrl( 1, 'edit', $webName, $topic );
         $redirecturl = $editURL.'?t='.time();
         $redirecturl .= '&action='.$editaction if $editaction;
         $redirecturl .= '&skin='.$query->param('skin') if $query->param('skin');
@@ -405,17 +405,17 @@ sub save {
             $store->clearLease( $webName, $topic );
         }
 
-	# redirect to a sensible place (a topic that exists)
-	my $viewURL;
-	# check that the page already exist before redirecting to it
-	if ( $store->topicExists( $webName, $topic ) ) {
-	    $viewURL = $session->getScriptUrl( $webName, $topic, 'view' ) . '?unlock=on';
-	} elsif ( $query->param( 'topicparent' ) &&
-		 $store->topicExists( $webName, $query->param('topicparent') ) ) { # go to parent
-	    $viewURL = $session->getScriptUrl( $webName, $query->param( 'topicparent' ), 'view' );
-	} else { # last resort: web home
-	    $viewURL = $session->getScriptUrl( $webName, $TWiki::cfg{HomeTopicName}, 'view' );
-	}
+        # redirect to a sensible place (a topic that exists)
+        my( $w, $t, $a ) = ( '', '', '?unlock=on' );
+        foreach $t ( $topic,
+                     $query->param( 'topicparent' ),
+                     $TWiki::cfg{HomeTopicName} ) {
+            ( $w, $t ) =
+              $session->normalizeWebTopicName( $webName, $t );
+            last if( $store->topicExists( $w, $t ));
+            $a = '';
+        }
+        my $viewURL = $session->getScriptUrl( 1, 'view', $w, $t );
         $session->redirect( $viewURL );
 
         return;

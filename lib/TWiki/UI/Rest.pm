@@ -74,7 +74,7 @@ sub gateway {
             $result=&$function($session,$subject,$verb);
             use strict 'refs';
             if (defined($endPoint)) {
-                $session->redirect($session->getScriptUrl( '', $endPoint, 'view' ));
+                $session->redirect($session->getScriptUrl( 1, 'view', '', $endPoint ));
             } else {
                 $session->writeCompletePage( $result );
             }

@@ -174,10 +174,10 @@ Return: =$url=       URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebN
 =cut
 
 sub getScriptUrl {
-#   my( $web, $topic, $script ) = @_;
+    my( $web, $topic, $script ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->getScriptUrl( @_ ); 
+    return $TWiki::Plugins::SESSION->getScriptUrl( 1, $script, $web, $topic );
 }
 
 =pod
@@ -188,14 +188,17 @@ Get script URL path
 
 Return: =$path= URL path of TWiki scripts, e.g. ="/cgi-bin"=
 
+*WARNING:* you are recommended not to use this function, as the
+{ScriptUrlPaths} URL rewriting rules will not apply to urls generated
+using it. You are recommended to use =getScriptUrl= instead.
+
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
 =cut
 
 sub getScriptUrlPath {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-
-    return $TWiki::Plugins::SESSION->{scriptUrlPath};
+    return $TWiki::Plugins::SESSION->getScriptUrl( 0, '' );
 }
 
 =pod
@@ -216,7 +219,7 @@ sub getViewUrl {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     $web ||= $TWiki::Plugins::SESSION->{webName} || $TWiki::cfg{UsersWebName};
-    return $TWiki::Plugins::SESSION->getScriptUrl( $web, $topic, 'view' );
+    return $TWiki::Plugins::SESSION->getScriptUrl( 1, 'view', $web, $topic );
 }
 
 =pod

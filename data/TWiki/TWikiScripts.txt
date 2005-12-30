@@ -116,7 +116,7 @@ Used for viewing topics.
 | =raw=text= | Shows only the source of the topic, as plain text (Content-type: text/plain). This is useful when you want to extract the source of a topic to a local file on disc. | |
 | =contenttype= | Allows you to specify a different *Content-Type:* (e.g. =contenttype=text/plain=) | |
 | =rev= | Revision to view (e.g. =rev=45=) | |
-| =template= | Allows you to specify a different skin template, overriding the 'view' template the view script would normally use. The default template is =view=. For example, you could specify [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?template=edit][%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?template=edit]]. This is mainly useful when you have specialised templates for a TWiki Application. | |
+| =template= | Allows you to specify a different skin template, overriding the 'view' template the view script would normally use. The default template is =view=. For example, you could specify [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit][%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=edit]]. This is mainly useful when you have specialised templates for a TWiki Application. | |
 %W% For historical reasons, the view script has a special interpretation of the =text= skin. If the =skin=text= parameter is given, it is used like this:
 http<nop>://.../view/MyWeb/MyTopic?skin=text&contenttype=text/plain&raw=on
 which shows the topic as plain text; useful for those who want

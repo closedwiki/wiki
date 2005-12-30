@@ -175,7 +175,7 @@ All other variables are unchanged, e.g. are carried over "as is" into the new to
 
 Here is an example for creating new topics based on a specific template topic:
 
-<form name="new" action="%SCRIPTURL{"edit"}%/%INTURLENCODE{"%WEB%"}%/">
+<form name="new" action="%SCRIPTURLPATH{"edit"}%/%INTURLENCODE{"%WEB%"}%/">
    * New example topic: 
      <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$yearx$mox$day}%" size="23" />&nbsp;<input type="submit" class="twikiSubmit" value="Create" />
      <input type="hidden" name="templatetopic" value="ExampleTopicTemplate" />
@@ -188,7 +188,7 @@ Here is an example for creating new topics based on a specific template topic:
 The above form asks for a topic name. A hidden input tag named ==templatetopic== specifies ExampleTopicTemplate as the template topic to use. Here is the HTML source of the form:
 
 <pre>
-&lt;form name="new" action="%<nop>SCRIPTURL{"edit"}%/%<nop>INTURLENCODE{"%<nop>WEB%"}%/"&gt;
+&lt;form name="new" action="%<nop>SCRIPTURLPATH{"edit"}%/%<nop>INTURLENCODE{"%<nop>WEB%"}%/"&gt;
    * New example topic: 
      &lt;input type="text" name="topic" value="ExampleTopic%<nop>SERVERTIME{$yearx$mox$day}%" size="23" /&gt;
      &lt;input type="hidden" name="templatetopic" value="ExampleTopicTemplate" /&gt;
@@ -211,7 +211,7 @@ See TWikiScripts for details of the parameters that the =edit= script understand
 If you want to make a TWiki application where you need automatically generated unique topicnames, you can use 10 X's in the edit / save URL, and they will be replaced on topic save with a count value. For example, !BugIDXXXXXXXXXX will result in topics named !BugID0, !BugID1, !BugID2 etc. 
 
 Example link to create a new topic:%BR%
-=[<nop>[%<nop>SCRIPTURL{"edit"}%/%<nop>WEB%/BugIDXXXXXXXXXX?templatetopic=BugTemplate&amp;amp;topicparent=%<nop>TOPIC%&amp;amp;t=%<nop>SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
+=[<nop>[%<nop>SCRIPTURLPATH{"edit"}%/%<nop>WEB%/BugIDXXXXXXXXXX?templatetopic=BugTemplate&amp;amp;topicparent=%<nop>TOPIC%&amp;amp;t=%<nop>SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
 
 ---++ Master Templates by Example
 
@@ -229,7 +229,7 @@ The first line declares a delimiter variable called "sep", used to separate mult
 &lt;html&gt;
 &lt;head&gt;
   &lt;title&gt; %<nop>WIKITOOLNAME% . %<nop>WEB% . %<nop>TOPIC% %.TMPL:P{"titleaction"}%&lt;/title&gt;
-  &lt;base href<nop>="%<nop>SCRIPTURL{"view"}%/%<nop>WEB%/%<nop>TOPIC%"&gt;
+  &lt;base href<nop>="%<nop>SCRIPTURLPATH{"view"}%/%<nop>WEB%/%<nop>TOPIC%"&gt;
   &lt;meta name="robots" content="noindex"&gt;
 &lt;/head&gt;
 &lt;body bgcolor="#FFFFFF"&gt;

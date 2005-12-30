@@ -195,7 +195,7 @@ sub _expandAttrs {
     }
     elsif ( $attr eq 'URL' ) {
         return $this->{session}->getScriptUrl
-          ( $web, $topic, 'viewfile',
+          ( 0, 'viewfile', $web, $topic,
             rev => $info->{version}, filename => $file );
     }
     elsif ( $attr eq 'SIZE' ) {

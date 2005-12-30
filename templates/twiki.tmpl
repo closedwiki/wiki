@@ -21,7 +21,7 @@
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
-		return launchTheWindow("%SCRIPTURL{"view"}%/", inWeb, inTopic, "plain");
+		return launchTheWindow("%SCRIPTURLPATH{"view"}%/", inWeb, inTopic, "plain");
 	}
 //]]>
 </script>
@@ -79,8 +79,8 @@
    <a href="%WEBLOGOURL%" rel='nofollow'><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a>
    </noautolink>
   </td><td>
-   <a href="%SCRIPTURL{"view"}%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a>
-   &gt; <a href="%SCRIPTURL{"view"}%/%WEB%/%HOMETOPIC%">%WEB%</a>
+   <a href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/%HOMETOPIC%">%WIKITOOLNAME%</a>
+   &gt; <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%">%WEB%</a>
    &gt; %META{"parent" nowebhome="on" suffix=" &gt;"}%
    <font size="+1"><b>%TOPIC%</b> %TMPL:P{"titleaction"}%</font>
   </td><td align="right">
@@ -161,7 +161,7 @@
 %TMPL:P{"message"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"revisions"}%<a href="%SCRIPTURL{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS% %TMPL:END%
+%TMPL:DEF{"revisions"}%<a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS% %TMPL:END%
 
 
 %TMPL:DEF{"oops"}%

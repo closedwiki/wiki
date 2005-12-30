@@ -99,12 +99,12 @@ _(Click for form-based editing of existing preferences.)_
       * Set WIKITOOLNAME = TWiki
 
    * Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
-      * Set WIKILOGOIMG = %PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-140x40-t.gif
+      * Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-140x40-t.gif
       * Set WIKILOGOURL = http://TWiki.org/
       * Set WIKILOGOALT = Powered by <nop>%WIKITOOLNAME%
 
    * Home page of this site
-      * Set WIKIHOMEURL = %SCRIPTURL{"view"}%
+      * Set WIKIHOMEURL = %SCRIPTURLPATH{"view"}%
 
    * List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
       * Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
@@ -149,7 +149,7 @@ _(Click for form-based editing of existing preferences.)_
       * Set MAILTHISTOPICTEXT = Send a link to this page
 
    * URL for current topic
-      * Set TOPICURL = %SCRIPTURL{"view"}%/%WEB%/%BASETOPIC%
+      * Set TOPICURL = %SCRIPTURLPATH{"view"}%/%WEB%/%BASETOPIC%
 
 
 ---+++ HTTP-<nop>EQUIV Settings
@@ -159,7 +159,7 @@ _(Click for form-based editing of existing preferences.)_
    * ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
 <verbatim>
       * #Set HTTP_EQUIV_ON_VIEW = 
-      * Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURL{"view"}%/%WEB%/WebRss" />
+      * Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRss" />
 </verbatim>
 
    * ==http-equiv== meta tags for ==edit== script:
@@ -198,17 +198,17 @@ _(Click for form-based editing of existing preferences.)_
 
 ---+++ Legacy support
    * Support for legacy "EDITTOPIC", used to be hard-coded, now replaced by TMPL:P conditional instantiation
-      * Set EDITURL = %SCRIPTURL{"edit%"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%
+      * Set EDITURL = %SCRIPTURLPATH{"edit%"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%
       * Set EDITTOPIC = <a href="%EDITURL%" title="Edit Topic - deprecated usage - please see release notes">Edit</a>
 
 ---++ Plugins Settings
 
 Currently activated plugins: %ACTIVATEDPLUGINS%
 
-You can enable/disable plugins using the [[%SCRIPTURL{"configure"}%][configure]] interface.
+You can enable/disable plugins using the [[%SCRIPTURLPATH{"configure"}%][configure]] interface.
    * Set DISABLEDPLUGINS = This variable is no longer supported
-   * Set INSTALLEDPLUGINS = This variable is no longer supported. You can set the plugins execution order using the [[%SCRIPTURL{"configure"}%][configure]] interface.
-   * %T% *NOTE:* You can enable/disable plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL{"view"}%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
+   * Set INSTALLEDPLUGINS = This variable is no longer supported. You can set the plugins execution order using the [[%SCRIPTURLPATH{"configure"}%][configure]] interface.
+   * %T% *NOTE:* You can enable/disable plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
    * detailed diagnostics can be found in InstalledPlugins
 
 
@@ -317,4 +317,4 @@ You can introduce new VARIABLES and use them in your topics and templates. There
    * TWiki:Plugins.PreferencesPlugin makes editing preferences a snap.
 
 __Note__: Can't edit?
-[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?raw=on][View raw topic]]
+[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on][View raw topic]]

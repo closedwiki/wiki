@@ -3,7 +3,7 @@
 Manage whole <b>%WIKITOOLNAME%</b> site from one screen.
 
    * *[[%MAINWEB%.%WIKIUSERSTOPIC%][Users]]:* [[TWikiRegistration][Register]], NewUserTemplate, UserForm, ResetPassword, ChangePassword
-   * *[[TWikiSiteTools][Site Tools]]:* [[%SCRIPTURL{"configure"}%][Configure]], %WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
+   * *[[TWikiSiteTools][Site Tools]]:* [[%SCRIPTURLPATH{"configure"}%][Configure]], %WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
    * *Managing:* [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
    * *Webs:*
 <blockquote>
@@ -72,7 +72,7 @@ Legend:
 %SEARCH{"%TOPIC%" excludetopics="%TOPIC%" nonoise="on" format="   * $web.$topic: $summary(100, noheader)"}%
 
 ---++ Plugins
-Administrators can enable and disable plugins using [[%SCRIPTURL{"configure"}%][configure]].
+Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"}%][configure]].
 %PLUGINDESCRIPTIONS%
 see also: TWikiPlugins
 

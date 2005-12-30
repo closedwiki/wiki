@@ -180,6 +180,8 @@ BEGIN {
         META              => \&_META,
         METASEARCH        => \&_METASEARCH,
         PLUGINVERSION     => \&_PLUGINVERSION,
+        PUBURL            => \&_PUBURL,
+        PUBURLPATH        => \&_PUBURLPATH,
         QUERYSTRING       => \&_QUERYSTRING,
         RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
         REMOTE_ADDR       => \&_REMOTE_ADDR,
@@ -188,6 +190,7 @@ BEGIN {
         REVINFO           => \&_REVINFO,
         SCRIPTNAME        => \&_SCRIPTNAME,
         SCRIPTURL         => \&_SCRIPTURL,
+        SCRIPTURLPATH     => \&_SCRIPTURLPATH,
         SEARCH            => \&_SEARCH,
         SERVERTIME        => \&_SERVERTIME,
         SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
@@ -283,9 +286,7 @@ BEGIN {
     $constantTags{USERWEB}         = $TWiki::cfg{UsersWebName};
     $constantTags{TRASHWEB}        = $TWiki::cfg{TrashWebName};
     $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
-    $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
     $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
-    $constantTags{SCRIPTURLPATH}   = $TWiki::cfg{ScriptUrlPath};
     $constantTags{LOCALSITEPREFS}  = $TWiki::cfg{LocalSitePreferences};
     $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
     $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
@@ -932,16 +933,16 @@ sub getSkin {
 
 =pod
 
----++ ObjectMethod getScriptUrl( $web, $topic, $script, ... ) -> $scriptURL
+---++ ObjectMethod getScriptUrl( $absolute, $script, $web, $topic, ... ) -> $scriptURL
 
 Returns the URL to a TWiki script, providing the web and topic as
 "path info" parameters.  The result looks something like this:
 "http://host/twiki/bin/$script/$web/$topic".
    * =...= - an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y#XXX?a=1&b=2</tt>
 
-Note: if the context "command_line" is set (i.e. we are *not* running a
-CGI script) then absolute URLs are *always* generated. Also, if the
-context_id "absolute_urls" is set.
+If $absolute is set, generates an absolute URL. $absolute is advisory only;
+TWiki can decide to generate absolute URLs (for example when run from the
+command-line) even when relative URLs have been requested.
 
 The default script url is taken from {ScriptUrlPath}, unless there is
 an exception defined for the given script in {ScriptUrlPaths}. Both
@@ -951,19 +952,17 @@ are relative, then they will be converted to absolute when required (e.g.
 when running from the command line, or when generating rss). If
 $script is not given, absolute URLs will always be generated.
 
-If either the web or the topic is defined, will generate a full url (including web and topic). Otherwise will generate only up to the script name.
+If either the web or the topic is defined, will generate a full url (including web and topic). Otherwise will generate only up to the script name. An undefined web will default to the main web name.
 
 =cut
 
 sub getScriptUrl {
-    my( $this, $web, $topic, $script, @params ) = @_;
+    my( $this, $absolute, $script, $web, $topic, @params ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
-
-    my $absolute = $this->inContext( 'command_line' ) ||
-      $this->inContext( 'rss' ) ||
-        $this->inContext( 'absolute_urls' ) ||
-          !$script;
+    $absolute ||= ($this->inContext( 'command_line' ) ||
+                     $this->inContext( 'rss' ) ||
+                       $this->inContext( 'absolute_urls' ));
 
     # SMELL: topics and webs that contain spaces?
 
@@ -975,7 +974,8 @@ sub getScriptUrl {
         $url = $TWiki::cfg{ScriptUrlPath};
         if( $script ) {
             $url .= '/' unless $url =~ /\/$/;
-            $url .= $script.$TWiki::cfg{ScriptSuffix};
+            $url .= $script;
+            $url .= $TWiki::cfg{ScriptSuffix} if $script;
         }
     }
 
@@ -986,28 +986,58 @@ sub getScriptUrl {
         $url = $this->{urlHost}.$url;
     }
 
-    return $url unless ( $web || $topic );
-    ( $web, $topic ) =
-      $this->normalizeWebTopicName( $web, $topic );
+    if( $web || $topic ) {
+        ( $web, $topic ) =
+          $this->normalizeWebTopicName( $web, $topic );
 
-    $web ||= '';
+        $url .= '/'.$web.'/'.$topic;
 
-    $url .= '/'.$web.'/'.$topic;
-
-    my $ps = '';
-    while( my $p = shift @params ) {
-        if( $p eq '#' ) {
-            $url .= '#' . shift( @params );
-        } else {
-            $ps .= ';' . $p.'='.urlEncode( shift( @params ));
+        my $ps = '';
+        while( my $p = shift @params ) {
+            if( $p eq '#' ) {
+                $url .= '#' . shift( @params );
+            } else {
+                $ps .= ';' . $p.'='.shift( @params );
+            }
+        }
+        if( $ps ) {
+            $ps =~ s/^;/?/;
+            $url .= $ps;
         }
     }
-    if( $ps ) {
-        $ps =~ s/^;/?/;
-        $url .= $ps;
+
+    return urlEncode( $url );
+}
+
+=pod
+
+---++ ObjectMethod getPubUrl($absolute, $web, $topic) -> $url
+
+Composes a pub url. If $absolute is set, returns an absolute URL.
+If $absolute is set, generates an absolute URL. $absolute is advisory only;
+TWiki can decide to generate absolute URLs (for example when run from the
+command-line) even when relative URLs have been requested.
+
+=cut
+
+sub getPubUrl {
+    my( $this, $absolute, $web, $topic ) = @_;
+
+    $absolute ||= ($this->inContext( 'command_line' ) ||
+                     $this->inContext( 'rss' ) ||
+                       $this->inContext( 'absolute_urls' ));
+
+    my $url = '';
+    $url = $this->{urlHost} if $absolute;
+    $url .= $TWiki::cfg{PubUrlPath};
+    if( $web || $topic ) {
+        ( $web, $topic ) =
+          $this->normalizeWebTopicName( $web, $topic );
+
+        $url .= '/'.$web.'/'.$topic;
     }
 
-    return $url;
+    return urlEncode( $url );
 }
 
 =pod
@@ -1064,7 +1094,7 @@ sub getOopsUrl {
     }
 
     $this->enterContext( 'absolute_urls' );
-    my $url = $this->getScriptUrl( $web, $topic, 'oops', @urlParams );
+    my $url = $this->getScriptUrl( 0, 'oops', $web, $topic, @urlParams );
     $this->leaveContext( 'absolute_urls' );
 
     return $url;
@@ -1290,7 +1320,6 @@ sub new {
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
     $this->{SESSION_TAGS}{ATTACHURL}      = $this->{urlHost}.'%ATTACHURLPATH%';
-    $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$TWiki::cfg{PubUrlPath};
 
     $prefs->pushPreferences(
         $TWiki::cfg{UsersWebName}, $user->wikiName(),
@@ -1934,7 +1963,7 @@ character codes.
 sub urlEncode {
     my $text = shift;
 
-    $text =~ s/([^0-9a-zA-Z-_.!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
+    $text =~ s/([^0-9a-zA-Z-_.:!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
 
     return $text;
 }
@@ -1953,39 +1982,6 @@ sub urlDecode {
     $text =~ s/%([\da-f]{2})/chr(hex($1))/gei;
 
     return $text;
-}
-
-=pod
-
----++ StaticMethod nativeUrlEncode ( $theStr, $doExtract ) -> encoded string
-
-Perform URL encoding into native charset ($TWiki::cfg{Site}{CharSet}) - for use when
-viewing attachments via browsers that generate UTF-8 URLs, on sites running
-with non-UTF-8 (Native) character sets.  Aim is to prevent UTF-8 URL
-encoding.  For mainframes, we assume that UTF-8 URLs will be translated
-by the web server to an EBCDIC character set.
-
-THIS METHOD SHOULD ONLY BE USED IF YOU ABSOLUTELY UNDERSTAND IT. It is
-most likely you were looking for =urlEncode=.
-
-=cut
-
-sub nativeUrlEncode {
-    my $theStr = shift;
-
-    my $isEbcdic = ( 'A' eq chr(193) );     # True if Perl is using EBCDIC
-
-    if( $TWiki::cfg{Site}{CharSet} eq 'utf-8' or $isEbcdic ) {
-        # SMELL: does this really work? What if non RFC-1738 characters
-        # are in the string?
-
-        # Just strip double quotes, no URL encoding - let browser encode to
-        # UTF-8 or EBCDIC based $TWiki::cfg{Site}{CharSet} as appropriate
-        $theStr =~ s/^"(.*)"$/$1/;    
-        return $theStr;
-    } else {
-        return urlEncode( $theStr );
-    }
 }
 
 =pod
@@ -2972,8 +2968,8 @@ sub _RELATIVETOPICPATH {
 }
 
 sub _ATTACHURLPATH {
-    my ( $this, $params, $theTopic, $theWeb ) = @_;
-    return nativeUrlEncode( "$TWiki::cfg{PubUrlPath}/$theWeb/$theTopic" );
+    my ( $this, $params, $topic, $web ) = @_;
+    return $this->getPubUrl(1, $web, $topic);
 }
 
 sub _USERLANGUAGE {
@@ -2988,7 +2984,7 @@ sub _LANGUAGES {
     $sep =~ s/\\n/\n/g;
 
     # $languages is a hash reference:
-    my $languages = $this->{i18n}->enabled_languages(); 
+    my $languages = $this->{i18n}->enabled_languages();
 
     my @tags = sort(keys(%{$languages}));
 
@@ -3075,7 +3071,24 @@ sub _SCRIPTURL {
     my ( $this, $params, $topic, $web ) = @_;
     my $script = $params->{_DEFAULT} || '';
 
-    return $this->getScriptUrl( undef, undef, $script );
+    return $this->getScriptUrl( 1, $script );
+}
+
+sub _SCRIPTURLPATH {
+    my ( $this, $params, $topic, $web ) = @_;
+    my $script = $params->{_DEFAULT} || '';
+
+    return $this->getScriptUrl( 0, $script );
+}
+
+sub _PUBURL {
+    my $this = shift;
+    return $this->getPubUrl(1);
+}
+
+sub _PUBURLPATH {
+    my $this = shift;
+    return $this->getPubUrl(0);
 }
 
 sub _ALL_VARIABLES {

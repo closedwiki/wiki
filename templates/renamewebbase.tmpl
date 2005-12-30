@@ -10,7 +10,7 @@
 %TMPL:END%
 
 %TMPL:DEF{"content"}%
-<form method="post" name="renameweb" action="%SCRIPTURL{"rename"}%/%WEB%">
+<form method="post" name="renameweb" action="%SCRIPTURLPATH{"rename"}%/%WEB%">
 <input type="hidden" name="action" value="renameweb" />
 <input type="hidden" name="confirm" value="getlock" />
 %TMPL:P{"simpleheader"}%
@@ -42,7 +42,7 @@
 
 __Note:__
    * Get help on
-     <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Renaming and moving webs</a>.
+     <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Renaming and moving webs</a>.
    * Select the %TRASHWEB% Web to delete the topic.
    * The checkmarked topics will be updated. 
 %TMPL:P{"topicinfo"}%

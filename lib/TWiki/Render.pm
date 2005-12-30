@@ -189,8 +189,7 @@ sub renderMoved {
                                   'Click to move topic back to previous location, with option to change references.')
                                ),
                         href => $this->{session}->getScriptUrl
-                        ($web, $topic,
-                         'rename',
+                        ( 0, 'rename', $web, $topic,
                          newweb => $fromWeb,
                          newtopic => $fromTopic,
                          confirm => 'on' ),
@@ -536,7 +535,7 @@ sub _renderExistingWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
 
     my @attrs;
-    my $href = $this->{session}->getScriptUrl($theWeb, $theTopic, 'view');
+    my $href = $this->{session}->getScriptUrl( 0, 'view', $theWeb, $theTopic );
     if( $theAnchor ) {
         my $anchor = $this->makeAnchorName( $theAnchor );
         push( @attrs, class => 'twikiAnchorLink', href => $href.'#'.$anchor );
@@ -561,10 +560,10 @@ sub _renderNonExistingWikiWord {
             next if ! $t;
             push( @posse,
                   CGI::a(
-                      { href => $this->{session}->getScriptUrl
-                          ($theWeb, $t, 'edit',
-                           topicparent => $this->{session}->{webName}.'.'.
-                             $this->{session}->{topicName} ),
+                      { href => $this->{session}->getScriptUrl(
+                          0, 'edit', $theWeb, $t,
+                          topicparent => $this->{session}->{webName}.'.'.
+                            $this->{session}->{topicName} ),
                         rel => 'nofollow',
                         title => ($this->{session}->{i18n}->maketext('Create this topic'))
                     },
@@ -573,12 +572,12 @@ sub _renderNonExistingWikiWord {
         }
         $ans .= join( ' ', @posse );
     } else {
-        $ans .= CGI::a( { href=>$this->{session}->getScriptUrl
-                      ($theWeb, $theTopic, 'edit',
-                       topicparent => $this->{session}->{webName}.'.'.
-                       $this->{session}->{topicName} ),
-                       rel=>'nofollow',
-                       title=>($this->{session}->{i18n}->maketext('Create this topic'))
+        $ans .= CGI::a( { href=>$this->{session}->getScriptUrl(
+            0, 'edit', $theWeb, $theTopic,
+            topicparent => $this->{session}->{webName}.'.'.
+              $this->{session}->{topicName} ),
+                          rel=>'nofollow',
+                          title=>($this->{session}->{i18n}->maketext('Create this topic'))
                     },
                     $this->{NEWLINKSYMBOL} );
     }

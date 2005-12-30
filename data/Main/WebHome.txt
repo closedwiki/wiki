@@ -13,7 +13,7 @@ and [[%TWIKIWEB%.TWikiPreferences]]). Replace this text with a description of yo
    * TWikiGroups: List of groups.
  
 <blockquote>
-<form action="%SCRIPTURL{"search"}%/%INTURLENCODE{"%WEB%"}%/">
+<form action="%SCRIPTURLPATH{"search"}%/%INTURLENCODE{"%WEB%"}%/">
 <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
 <br/>
 ([[WebSearchAdvanced][advanced search]])

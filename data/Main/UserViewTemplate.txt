@@ -1,6 +1,6 @@
 %TMPL:INCLUDE{"view"}%
 
-%TMPL:DEF{"active_form"}%<a href='%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?action=form&t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit personal data'>Edit personal data</a>%TMPL:END%
+%TMPL:DEF{"active_form"}%<a href='%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?action=form&t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit personal data'>Edit personal data</a>%TMPL:END%
 %TMPL:DEF{"inactive_form"}% %TMPL:END%
 
 %TMPL:DEF{"inactive_edit"}%<strike>Edit text</strike>%TMPL:END%

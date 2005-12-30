@@ -251,7 +251,7 @@ sub bulkRegister {
 
     $session->leaveContext('absolute_urls');
 
-    $session->redirect($session->getScriptUrl($web, $logTopic, 'view'));
+    $session->redirect($session->getScriptUrl( 1, 'view', $web, $logTopic ));
 }
 
 #    Process a single user, parameters passed as a hash

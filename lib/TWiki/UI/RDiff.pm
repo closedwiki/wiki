@@ -497,8 +497,8 @@ sub diff {
 
     while( $i > 0 ) {
         $revisions .= ' '.
-          CGI::a( { href=>$session->getScriptUrl($webName, $topic, 'view',
-                                                 rev => $i ),
+          CGI::a( { href=>$session->getScriptUrl( 0, 'view', $webName, $topic,
+                                                  rev => $i ),
                     rel => 'nofollow' }, 'r'.$i);
         if( $i != 1 ) {
             if( $i == $breakRev ) {
@@ -509,10 +509,9 @@ sub diff {
                 } else {
                     $j = $i - 1;
                     $revisions .= ' '.
-                      CGI::a( { href=>$session->getScriptUrl( $webName, $topic,
-                                                              'rdiff',
-                                                              rev1 => $i,
-                                                              rev2 => $j ),
+                      CGI::a( { href=>$session->getScriptUrl(
+                          0, 'rdiff', $webName, $topic,
+                          rev1 => $i, rev2 => $j ),
                                 rel => 'nofollow' },
                               $revSeperator);
                 }
@@ -525,9 +524,8 @@ sub diff {
     my $tailResult = '';
     my $revTitle   = '';
     while( $i >= $rev2) {
-        $revTitle = CGI::a( { href=>$session->getScriptUrl($webName, $topic,
-                                                           'view',
-                                                           rev => $i ),
+        $revTitle = CGI::a( { href=>$session->getScriptUrl(
+            0, 'view', $webName, $topic, rev => $i ),
                               rel => 'nofollow' },
                             $i);
         my $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, undef, $i );

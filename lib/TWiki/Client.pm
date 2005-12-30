@@ -362,10 +362,10 @@ sub _myScriptURLRE {
 
     my $s = $this->{_MYSCRIPTURL};
     unless( $s ) {
-        $s = quotemeta($this->{twiki}->getScriptUrl( $M1, $M2, $M3 ));
+        $s = quotemeta($this->{twiki}->getScriptUrl( 1, $M1, $M2, $M3 ));
         $s =~ s@\\$M1@[^/]*?@go;
-        $s =~ s@\\$M2@[^#\?/]*@go;
-        $s =~ s@\\$M3@[^/]*?@go;
+        $s =~ s@\\$M2@[^/]*?@go;
+        $s =~ s@\\$M3@[^#\?/]*@go;
         # now add alternates for the various script-specific overrides
         foreach my $v ( values %{$TWiki::cfg{ScriptUrlPaths}} ) {
             my $over = $v;
@@ -704,10 +704,10 @@ sub _LOGOUTURL {
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
 
     return $twiki->getScriptUrl(
+        0, 'view',
         $twiki->{SESSION_TAGS}{BASEWEB},
         $twiki->{SESSION_TAGS}{BASETOPIC},
-        'view',
-        ( 'logout' => 1 ) );
+        'logout' => 1 );
 }
 
 sub _LOGOUT {

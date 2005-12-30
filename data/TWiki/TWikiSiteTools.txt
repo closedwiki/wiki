@@ -16,7 +16,7 @@ Each TWiki web has an automatic email alert service that sends a list of recent 
 
 %INCLUDE{"WebChangesAlert"}%
 
-You can also use =%<nop>MAINWEB%= instead of =Main=, but this is not necessary even if you have renamed the main web by configuring ={MainWebName}= in [[%SCRIPTURL{"configure"}%][configure]].
+You can also use =%<nop>MAINWEB%= instead of =Main=, but this is not necessary even if you have renamed the main web by configuring ={MainWebName}= in [[%SCRIPTURLPATH{"configure"}%][configure]].
 
 #WebSearch
 ---++ <nop>WebSearch - search TWiki site
@@ -62,7 +62,7 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 ---+++ Configuring for automatic operation
 
    * You can automatically generate usage statistics for all webs. To enable this:
-      * Make sure variable *{Log}{view}*, *{Log}{save}* and *{Log}{upload} in are set in [[%SCRIPTURL{"configure"}%][configure]]. This will generate log file entries (see below).
+      * Make sure variable *{Log}{view}*, *{Log}{save}* and *{Log}{upload} in are set in [[%SCRIPTURLPATH{"configure"}%][configure]]. This will generate log file entries (see below).
       * The WebStatistics topic must be present in all webs where you want to have statistics. You can use the topic in the Main web as a template.
       * Call the =twiki/bin/statistics= script from a cron job, once a day is recommended. This will update the WebStatistics topics in all webs.
       * __Attention:__ The script must run as the same user as the CGI scripts are running, which is user =nobody= on many systems. Example crontab entry: %BR% =0 0 * * * (cd /path/to/twiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)=
@@ -71,22 +71,22 @@ You can generate a listing manually, or on an automated schedule, of visits to i
 ---+++ Generating statistics manually by URL
 
    * The =twiki/bin/statistics= script can also be executed as a CGI script, just enter the URL in your browser. Examples:
-      * Update current month for all webs: %BR% =%SCRIPTURL{statistics}%=
-      * Update current month for %MAINWEB% web only: %BR% =%SCRIPTURL{statistics}%/%MAINWEB%=
-      * Update January 2000 for %MAINWEB% web: %BR% =%SCRIPTURL{statistics}%/%MAINWEB%?logdate=%SERVERTIME{$year$mo}%=
+      * Update current month for all webs: %BR% =%SCRIPTURLPATH{statistics}%=
+      * Update current month for %MAINWEB% web only: %BR% =%SCRIPTURLPATH{statistics}%/%MAINWEB%=
+      * Update January 2000 for %MAINWEB% web: %BR% =%SCRIPTURLPATH{statistics}%/%MAINWEB%?logdate=%SERVERTIME{$year$mo}%=
 
 #LogFiles
 ---++ Log Files
 
 TWiki generates monthly log files which are used by the statistics script
-   * The log file is defined by the *{LogFileName}* setting in [[%SCRIPTURL{"configure"}%][configure]]
+   * The log file is defined by the *{LogFileName}* setting in [[%SCRIPTURLPATH{"configure"}%][configure]]
    * The file name is =log&lt;year&gt;&lt;month&gt;.txt=
    * Example path name: =twiki/logs/log%SERVERTIME{$year$mo}%.txt=
    * Each access gets logged as: %BR%
      =| &lt;time&gt; | &lt;wikiusername&gt; | &lt;action&gt; | &lt;web&gt;.&lt;topic&gt; | &lt;extra info&gt; | &lt;IP address&gt; |=
    * Example log entry: %BR%
      =| %SERVERTIME{$day $mon $year - $hour:$min}% | %MAINWEB%.TWikiGuest | view | %TWIKIWEB%.WebRss |  | 66.124.232.02 |=
-   * Actions are logged if enabled in [[%SCRIPTURL{"configure"}%][configure]] by the *{Log}{<i>action</i>}* flags
+   * Actions are logged if enabled in [[%SCRIPTURLPATH{"configure"}%][configure]] by the *{Log}{<i>action</i>}* flags
    * Logged actions:
      | *Script* | *Action name* | *Extra info* |
      | attach | =attach= | when viewing attach screen of previous uploaded attachment: =filename= |
@@ -118,7 +118,7 @@ The notify e-mail uses the default =changes.tmpl= template, or a skin if activat
 
 mailnotify also relies on two hidden files in each =twiki/data/Web= directory: =.changes= and =.mailnotify.= Make sure both are writable by your web server process. =.changes= contains a list of changes; go ahead and make this empty. =.mailnotify= contains a timestamp of the last time notification was done.
 
-You can use an external mail program, such as ==sendmail==, if the =Net::SMTP= module is not installed. Set the program path in =={MailProgram}== in [[%SCRIPTURL{"configure"}%][configure]].
+You can use an external mail program, such as ==sendmail==, if the =Net::SMTP= module is not installed. Set the program path in =={MailProgram}== in [[%SCRIPTURLPATH{"configure"}%][configure]].
 
    * %H% Net::SMTP can be easily disabled (if there is an installation error) by setting ==SMTPMAILHOST== in TWikiPreferences to an empty value.
 

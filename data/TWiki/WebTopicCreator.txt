@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131431859" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
-<form name="new" action="%SCRIPTURL{"edit"}%/%INTURLENCODE{"%BASEWEB%"}%/">
+<form name="new" action="%SCRIPTURLPATH{"edit"}%/%INTURLENCODE{"%BASEWEB%"}%/">
 <!-- TODO: do we still need INTURLENCODE nastyness? -->
 ---+ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
 <table><tr><td>

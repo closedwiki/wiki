@@ -19,7 +19,7 @@ System requirements are updated as follows:
 
 The following 'non-ASCII-safe' character encodings are now excluded from use as the site character set, since they interfere with TWiki markup: ISO-2022-*, HZ-*, Shift-JIS, MS-Kanji, GB2312, GBK, GB18030, Johab and UHC. However, many multi-byte character sets work fine, e.g. EUC-JP, EUC-KR, EUC-TW, and EUC-CN. In addition, UTF-8 can already be used, with some limitations, for East Asian languages where EUC character encodings are not acceptable - see TWiki:Codev.ProposedUTF8SupportForI18N.
 
-It's now possible to override the site character set defined in the ={SiteLocale}= setting in [[%SCRIPTURL{"configure"}%][configure]] - this enables you to have a slightly different spelling of the character set in the server locale (e.g. 'eucjp') and the HTTP header sent to the browser (e.g. 'euc-jp').
+It's now possible to override the site character set defined in the ={SiteLocale}= setting in [[%SCRIPTURLPATH{"configure"}%][configure]] - this enables you to have a slightly different spelling of the character set in the server locale (e.g. 'eucjp') and the HTTP header sent to the browser (e.g. 'euc-jp').
 
 This feature should also support use of Mozilla Browser with TWiki:Codev.TWikiOnMainframe (as long as mainframe web server can convert or pass through UTF-8 URLs) - however, this specific combination is not tested.  Other browser-server combinations should not have any problems.
 
@@ -43,7 +43,7 @@ The code automatically detects whether a URL is UTF-8 or not, taking care to avo
 
 The main point is that you can use TWiki with international characters in WikiWords without changing your browser setup from the default, and you can also still use TWiki using non-UTF-8 URLs.  This works on any Perl version from 5.005_03 onwards and corresponds to Phase 1 of TWiki:Codev.ProposedUTF8SupportForI18N.  You can have different users using different URL formats transparently on the same server.
 
-UTF-8 URLs are automatically converted to the current [[%SCRIPTURL{"configure"}%#Localisation][{Site}{Charset}]], using modules such as CPAN:Encode if needed.
+UTF-8 URLs are automatically converted to the current [[%SCRIPTURLPATH{"configure"}%#Localisation][{Site}{Charset}]], using modules such as CPAN:Encode if needed.
 
 TWiki generates the whole page in the site charset, e.g. ISO-8859-1 or EUC-JP, but the browser dynamically UTF-8 encodes the attachment's URL when it's used.  Since Apache serves attachment downloads without TWiki being involved, TWiki's code can't do its UTF-8 decoding trick, so TWiki URL-encodes such URLs in ISO-8859-1 or whatever when generating the page, to bypass this URL encoding, ensuring that the URLs and filenames seen by Apache remain in the site charset.  
 

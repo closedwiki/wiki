@@ -203,9 +203,10 @@ sub view {
             $revs .= 'r'.$rev;
         } else {
             $revs .= CGI::a({
-                             href=>$session->getScriptUrl( $webName,
-                                                           $topicName,
+                             href=>$session->getScriptUrl( 0,
                                                            'view',
+                                                           $webName,
+                                                           $topicName,
                                                            rev => $doingRev ),
                              rel => 'nofollow'
                             },
@@ -221,10 +222,10 @@ sub view {
         }
         if( $revsToShow ) {
             $revs .= '&nbsp;' . CGI::a
-              ( { href=>$session->getScriptUrl
-                  ( $webName, $topicName, 'rdiff',
-                    rev1 => $doingRev,
-                    rev2 => $doingRev-1 ),
+              ( { href=>$session->getScriptUrl(
+                  0, 'rdiff', $webName, $topicName,
+                  rev1 => $doingRev,
+                  rev2 => $doingRev-1 ),
                   rel => 'nofollow' },
                 '&lt;' ) . '&nbsp;';
         }
