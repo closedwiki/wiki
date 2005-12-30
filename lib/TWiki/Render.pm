@@ -487,7 +487,7 @@ sub internalLink {
     # whole link, and first of each word. TODO: Try to turn this off,
     # avoiding spaces being stripped elsewhere
     $theTopic =~ s/^(.)/\U$1/;
-    $theTopic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;    
+    $theTopic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;
 
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
@@ -691,7 +691,7 @@ sub _handleSquareBracketedLink {
     # filter out &#123; entities (legacy)
     $link =~ s/\&\#[0-9]+\;//g;
     # Filter junk
-    $link =~ s/[^$TWiki::regex{mixedAlphaNum}.\/\s_]//g;
+    $link =~ s/$TWiki::cfg{NameFilter}//g;
     # Capitalise first word
     $link =~ s/^(.)/\U$1/;
     # Collapse spaces and capitalise following letter
