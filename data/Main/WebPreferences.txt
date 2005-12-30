@@ -14,6 +14,7 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
    * Set WEBBGCOLOR = #FFEFA6
    * Set SITEMAPWHAT = Welcome to <nop>%WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]]
    * Set SITEMAPUSETO = ...see who is registered on this TWiki
+   * Set SITEMAPLIST = on
    * Set WEBFORMS = UserForm
    * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 

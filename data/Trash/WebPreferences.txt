@@ -10,7 +10,6 @@ __Preferences:__
 These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#Default_Web_Preferences][a full list of defaults]].
 
    * Set WEBBGCOLOR = #FF0099
-   * Set SITEMAPLIST = 
    * Set SITEMAPWHAT = Place for trashed topics and attachments.
    * Set SITEMAPUSETO = ...get rid of unused stuff.
    * Set NOSEARCHALL = on

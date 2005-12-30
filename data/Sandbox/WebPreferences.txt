@@ -10,6 +10,7 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
    * Set WEBBGCOLOR = #B9DAFF
    * Set SITEMAPWHAT = Sandbox test area with all features enabled. 
    * Set SITEMAPUSETO = ...experiment in an unrestricted hands-on web. 
+   * Set SITEMAPLIST = on
    * Set WEBFORMS = TestForm1 TestForm2
    * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
    * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST

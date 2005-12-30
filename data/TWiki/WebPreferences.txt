@@ -10,9 +10,8 @@ __Preferences:__
 These settings override the defaults for this web only. See %TWIKIWEB%.TWikiPreferences#Default_web_preferences for a full list of defaults.
 
    * Set WEBTOPICLIST = [[WelcomeGuest][Welcome]] %SEP% [[TWikiRegistration][Register]] %SEP% [[WebChanges][Changes]] %SEP% [[WebTopicList][Topics]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
-
    * Set WEBBGCOLOR = #FFD8AA
-
+   * Set SITEMAPLIST = on
    * Set SITEMAPWHAT = [[%WEB%.WelcomeGuest][Welcome]], [[%WEB%.TWikiRegistration][Registration]], and other %WEB%.StartingPoints; TWiki history &amp; Wiki style; All the docs...
    * Set SITEMAPUSETO = ...discover TWiki details, and how to start your own site.
    * Set WEBFORMS = TWikiPreferencesForm
