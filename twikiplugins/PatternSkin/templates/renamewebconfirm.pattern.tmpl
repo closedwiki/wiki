@@ -22,7 +22,7 @@
    * Set submit_prompt = Submit
 -->
 %TMPL:DEF{"topicactionbuttons"}%<input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" />
-<input type="submit" class="twikiSubmit" value="%RENAMEWEB_SUBMIT%" then=refresh_prompt" else="submit_prompt"}%" /> %MAKETEXT{"or"}% <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?action=renameweb&confirm=cancel">%TMPL:P{"canceltopicaction"}%</a>%TMPL:END%
+<input type="submit" class="twikiSubmit" value="%RENAMEWEB_SUBMIT%" then=refresh_prompt" else="submit_prompt"}%" /> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?action=renameweb&confirm=cancel">%TMPL:P{"canceltopicaction"}%</a>%TMPL:END%
 
 
 

@@ -15,7 +15,7 @@ The default variables that cause this behavior are defined in [[%LOCALSITEPREFS%
 <pre>
       * Set <nop>WEBLOGONAME = logo.gif
       * Set <nop>WEBLOGOIMG = %<nop>PUBURLPATH%/%<nop>BASEWEB%/%<nop>WEBPREFSTOPIC%/%<nop>WEBLOGONAME%
-      * Set <nop>WEBLOGOURL = %<nop>SCRIPTURL{"view"}%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
+      * Set <nop>WEBLOGOURL = %<nop>SCRIPTURLPATH{"view"}%/%<nop>BASEWEB%/%<nop>HOMETOPIC%
       * Set <nop>WEBLOGOALT = Home
 </pre>
 

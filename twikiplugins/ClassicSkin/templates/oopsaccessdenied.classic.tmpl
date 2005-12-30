@@ -30,14 +30,14 @@ __%MAKETEXT{"Related topics:"}%__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessC
 </blockquote>
 
 ---+++ %MAKETEXT{"If you would like to create this web"}%
-%MAKETEXT{"You can ~[~[[_1]~]~[create a new web~]~] if you have permission. Contact [_2] if you have any questions.", "%SCRIPTURL{"view"}%/%TWIKIWEB%/ManagingWebs?newweb=%WEB%;newtopic=%TOPIC%#CreateNewWeb", "%WIKIWEBMASTER%"}%
+%MAKETEXT{"You can ~[~[[_1]~]~[create a new web~]~] if you have permission. Contact [_2] if you have any questions.", "%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs?newweb=%WEB%;newtopic=%TOPIC%#CreateNewWeb", "%WIKIWEBMASTER%"}%
 %TMPL:END%
 %TMPL:DEF{"no_such_topic"}%
 ---++ %MAKETEXT{"[_1] topic does not exist", "\"%WEB%.%TOPIC%\""}%
 %MAKETEXT{"You are trying to [_1] a topic that does not exist.", "%PARAM1%"}%
 
 ---++ %MAKETEXT{"If you want to create the topic"}%
-[[%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][%MAKETEXT{"Click here"}%]].
+[[%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][%MAKETEXT{"Click here"}%]].
 
 %MAKETEXT{"Contact [_1] if you have any questions.", "%WIKIWEBMASTER%"}%
 %TMPL:END%

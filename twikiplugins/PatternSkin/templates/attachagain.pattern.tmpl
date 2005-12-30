@@ -46,14 +46,14 @@
 
 
 %TMPL:DEF{"extranotes"}%
-   * %MAKETEXT{"*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties only\"; see <a target=\"HiddenAttachment\" onclick=\"return launchWindow('[_1]','HiddenAttachment')\" href=\"[_2]\" rel='nofollow'>HiddenAttachment</a>." args="%TWIKIWEB%, %SCRIPTURL{"view"}%/%TWIKIWEB%/HiddenAttachment"}%
+   * %MAKETEXT{"*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties only\"; see <a target=\"HiddenAttachment\" onclick=\"return launchWindow('[_1]','HiddenAttachment')\" href=\"[_2]\" rel='nofollow'>HiddenAttachment</a>." args="%TWIKIWEB%, %SCRIPTURLPATH{"view"}%/%TWIKIWEB%/HiddenAttachment"}%
    * %MAKETEXT{"*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in the topic will change, but the comment shown against the attachment history will be the comment when the file was uploaded."}%
    * %MAKETEXT{"*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."}%
 %TMPL:END%
 
 
 %TMPL:DEF{"movedelete"}%
-<div class="patternMoveAttachment"><div class="patternActionButtons"><a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%ICON{move}% <span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURL{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%ICON{trash}% <span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div></div>%TMPL:END%
+<div class="patternMoveAttachment"><div class="patternActionButtons"><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%ICON{move}% <span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%ICON{trash}% <span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div></div>%TMPL:END%
 
 
 

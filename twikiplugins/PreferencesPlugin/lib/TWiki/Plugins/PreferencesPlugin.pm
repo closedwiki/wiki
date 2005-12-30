@@ -105,7 +105,7 @@ sub preRenderingHandler {
           (_generateButtons($web, $topic, 1))ge;
     }
 
-    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth' );
+    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth', 0 );
     $_[0] = CGI::start_form(-name => 'editpreferences', -method => 'post',
                             -action => $viewUrl ).
                               $_[0].
