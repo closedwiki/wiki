@@ -1,9 +1,8 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 1999-2005 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -35,67 +34,6 @@ package TWiki::I18N;
 use TWiki;
 use Assert;
 
-# ##########################################################
-# # Initizaling default language: Engligh is an AUTO lexicon
-# # please read `perldoc Locale::Maketext`
-# ##########################################################
-# package TWiki::I18N::en;
-# use base 'TWiki::I18N';
-# $TWiki::I18N::en::Lexicon{_AUTO} = 1;
-# 
-# # back to the right package
-# package TWiki::I18N;
-# ##########################################################
-
-############################################################
-# TWiki::I18N::Fallback - a fallback class for when
-# Locale::Maketext isn't available.
-############################################################
-package TWiki::I18N::Fallback;
-use base 'TWiki::I18N';
-
-sub new {
-  my $class = shift;
-  my $this = bless({}, $class);;
-  return $this;
-}
-
-sub maketext {
-  my ( $this, $text, @args ) = @_;
-  
-  return '' unless $text;
-
-  # substitute parameters:
-  $text =~ s/\[\_(\d+)\]/$args[$1-1]/ge;
-
-  # unescape escaped square brackets:
-  $text =~ s/~(\[|\])/$1/g;
-
-  #plurals:
-  $text =~ s/\[\*,\_(\d+),([^,]+)(,([^,]+))?\]/_handlePlurals($args[$1-1],$2,$4)/ge;
-  
-  return $text;
-}
-
-sub _handlePlurals {
-  my ( $number, $singular, $plural ) = @_;
-  # bad hack, but Locale::Maketext does it the same way ;)
-  return $number . ' ' . (($number == 1) ? $singular : ( $plural ? ($plural) : ($singular . 's') ) );
-}
-
-sub language {
-  return 'en';
-}
-
-sub enabled_languages {
-  my $this = shift;
-  return $this->{enabled_languages};
-}
-
-# back to the right package
-package TWiki::I18N;
-######################################################
-
 use vars qw( $initialised @initErrors );
 
 =pod
@@ -113,7 +51,7 @@ interface.
 sub available_languages {
 
     my @available ;
-    
+
     if ( opendir( DIR, $TWiki::cfg{LocalesDir} ) ) {
         my @all = grep { m/^(.*)\.po$/ } (readdir( DIR ));
         foreach my $file ( @all ) {
@@ -132,11 +70,11 @@ sub available_languages {
 # utility function: normalize language tags like ab_CD to ab-cd
 # also renove any character there is not a letter [a-z] or a hyphen.
 sub _normalize_language_tag {
-  my $tag = shift;
-  $tag = lc($tag);;
-  $tag =~ s/\_/-/g;
-  $tag =~ s/[^a-z-]//g;
-  return $tag;
+    my $tag = shift;
+    $tag = lc($tag);;
+    $tag =~ s/\_/-/g;
+    $tag =~ s/[^a-z-]//g;
+    return $tag;
 }
 
 # initialisation block
@@ -153,27 +91,27 @@ BEGIN {
 
     eval "use base 'Locale::Maketext'";
     if ( $@ ) {
-      $initialised = 0;
-      push(@initErrors, "I18N: Couldn't load required perl module Locale::Maketext: " . $@."\nInstall the module or turn off {UserInterfaceInternationalisation}");
+        $initialised = 0;
+        push(@initErrors, "I18N: Couldn't load required perl module Locale::Maketext: " . $@."\nInstall the module or turn off {UserInterfaceInternationalisation}");
     }
 
     unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
-      push(@initErrors, 'I18N: {LocalesDir} not configured. Define it or turn off {UserInterfaceInternationalisation}');
-      $initialised = 0;
+        push(@initErrors, 'I18N: {LocalesDir} not configured. Define it or turn off {UserInterfaceInternationalisation}');
+        $initialised = 0;
     }
 
     # dynamically build languages to be loaded according to admin-enabled
     # languages.
-    my $dependencies = "use Locale::Maketext::Lexicon { 'en'    => [ 'Auto' ], ";
+    my $dependencies = "use Locale::Maketext::Lexicon{'en'=>['Auto'],";
     foreach my $lang (@languages) {
-      $dependencies .= " '$lang'     => [ 'Gettext' => '$TWiki::cfg{LocalesDir}/$lang.po' ], ";
+        $dependencies .= "'$lang'=>['Gettext'=>'$TWiki::cfg{LocalesDir}/$lang.po' ], ";
     }
     $dependencies .= '};';
 
     eval $dependencies;
     if ( $@ ) {
-      $initialised = 0;
-      push(@initErrors, "I18N - Couldn't load required perl module Locale::Maketext::Lexicon: " . $@ . "\nInstall the module or turn off {UserInterfaceInternationalisation}");
+        $initialised = 0;
+        push(@initErrors, "I18N - Couldn't load required perl module Locale::Maketext::Lexicon: " . $@ . "\nInstall the module or turn off {UserInterfaceInternationalisation}");
     }
 }
 
@@ -182,7 +120,6 @@ BEGIN {
 ---++ ClassMethod get ( $session )
 
 Constructor. Gets the language object corresponding to the current user's language.
-5B
 
 =cut
 
@@ -210,29 +147,33 @@ sub get {
             $this = TWiki::I18N->get_handle();
         }
     } else {
+        require TWiki::I18N::Fallback;
+
         $this = new TWiki::I18N::Fallback();
+
         # we couldn't initialise 'optional' I18N infrastructure, warn that we
         # can only use English if I18N has been requested with configure
         $session->writeWarning('Could not load I18N infrastructure; falling back to English')
-	    if $TWiki::cfg{UserInterfaceInternationalisation};
+          if $TWiki::cfg{UserInterfaceInternationalisation};
     }
-   
+
     # keep a reference to the session object
     $this->{session} = $session;
 
     # languages we know about
     $this->{enabled_languages} = { en => 'English' };
     $this->{checked_enabled}   = undef;
-    
+
     # what to do with failed translations (only needed when already initialised
     # and language is not English);
     if ($initialised and ($this->language ne 'en')) {
         my $fallback_handle = TWiki::I18N->get_handle('en');
-        $this->fail_with (sub {
-                              my( $h, $text, @args ) = @_;
-                              return $fallback_handle->maketext($text,@args);
-                          }
-                         );
+        $this->fail_with(
+            sub {
+                shift; # get rid of the handle
+                return $fallback_handle->maketext( @_ );
+            }
+           );
     }
 
     # finally! :-p
@@ -257,12 +198,11 @@ found for thet argument.
 sub maketext {
     my ( $this, $text, @args ) = @_;
 
-    # eventually translate text:
     my $result = $this->SUPER::maketext($text, @args);
 
     if ($result && $this->{session}) {
-      # external calls get the resultant text in the right charset:
-      $result = $this->{session}->UTF82SiteCharSet($result) || $result;
+        # external calls get the resultant text in the right charset:
+        $result = $this->{session}->UTF82SiteCharSet($result) || $result;
     }
 
     return $result;
@@ -295,12 +235,11 @@ listing available languages to the user.
 =cut
 
 sub enabled_languages {
-
     my $this = shift;
 
     # don't need to check twice
     return $this->{enabled_languages} if $this->{checked_enabled};
-  
+
     foreach my $tag ( available_languages() ) {
         my $h = TWiki::I18N->get_handle($tag);
         my $name = $h->maketext("_language_name");
@@ -313,11 +252,10 @@ sub enabled_languages {
 
 }
 
-
 # private utility method: add a pair tag/language name
 sub _add_language {
-  my ( $this, $tag, $name ) = @_;  
-  ${$this->{enabled_languages}}{$tag} = $name;
+    my ( $this, $tag, $name ) = @_;  
+    ${$this->{enabled_languages}}{$tag} = $name;
 }
 
 1;

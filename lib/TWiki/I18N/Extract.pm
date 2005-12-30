@@ -1,9 +1,8 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 1999-2005 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -54,7 +53,6 @@ warnings.
 =cut
 
 sub new {
-
     my $class = shift;
     my $session = shift;
 
@@ -91,19 +89,18 @@ sub extract {
 
     my $line;
     my $doublequoted = '"(\\\"|[^"])*"';
-  
+
     # TWiki's %MAKETEXT{...}% into topics and templates :
     $line = 1; pos($_) = 0;
     my @_lines = split(/\n/,$_);
     foreach (@_lines) {
         while (m/%MAKETEXT\{\s*(string=)?($doublequoted)/gm) {
             my $str = substr($2, 1, -1);
-	    $str =~ s/\\"/"/g;
-	    $self->add_entry($str, [ $file, $line, '']);
+            $str =~ s/\\"/"/g;
+            $self->add_entry($str, [ $file, $line, '']);
         }
         $line ++;
     }
-
 }
 
 1;
