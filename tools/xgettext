@@ -43,13 +43,26 @@ close(R);
 
 # extract the strings in a new potfile.
 print("I: scanning sources, it may take some time...\n");
+
+my $progress = undef;
+eval "use Term::ProgressBar;";
+if ( $@ ) {
+    print "(You could have a nice progress bar if you had Term::ProgressBar installed.)\n";
+} else {
+    $progress = Term::ProgressBar->new (scalar(@sources));
+}
+ 
 my $extractor = new TWiki::I18N::Extract;
+die("Could not create an extractor. Is Locale::Maketext installed? (see above messages)") unless $extractor;
+my $counter = 0;
 foreach my $file (@sources) {
   if ( -e $file ) {
     $extractor->extract_file($file) ;
   } else {
     print "W: $file is listed in MANIFEST and does not exist!\n";
   }
+  $counter++;
+  $progress->update($counter) if $progress;
 }
 $extractor->compile();
 $extractor->write_po($newpotfile);
