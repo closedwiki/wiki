@@ -105,11 +105,11 @@ sub buildNewTopic {
             }
         }
     } elsif ($templatetopic) {
-	( $templateweb, $templatetopic ) =
-	  $session->normalizeWebTopicName( $templateweb, $templatetopic );
+        ( $templateweb, $templatetopic ) =
+          $session->normalizeWebTopicName( $templateweb, $templatetopic );
 
         ( $templateMeta, $templateText ) =
-          $store->readTopic( $session->{user}, $webName,
+          $store->readTopic( $session->{user}, $templateweb,
                              $templatetopic, undef );
         $templateText = '' if $query->param( 'newtopic' ); # created by edit
         $templateText =
