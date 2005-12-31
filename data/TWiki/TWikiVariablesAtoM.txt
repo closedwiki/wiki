@@ -199,7 +199,7 @@ __Note:__ This topic is included by TWikiVariables
      | ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org:80/index.html"}%=. Supported content types are =text/html= and =text/plain=. <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
      | =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
      | =rev="2"= | Include a previous topic revision; N/A for URLs | top revision |
-     | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
+     | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%<nop>INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
      | =section="name"= | Includes only the specified section, as defined in the included topic by the [[#VarSECTION][SECTION]] and [[#VarENDSECTION][ENDSECTION]] variables| |
      | =PARONE="val 1"%BR% PARTWO="val 2"= | Any other parameter will be defined as a variable within the scope of the included topic. The example parameters on the left will result in =%<nop>PARONE%= and =%<nop>PARTWO%= being defined within the included topic. | |
    * Examples: See IncludeTopicsAndWebPages
