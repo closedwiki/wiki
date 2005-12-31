@@ -231,21 +231,25 @@ See TWiki:TWiki.ShorterURLCookbook
 
 There have been some significant changes to the handling of preferences, aimed at making them more logical, consistent and easy to use.
 
-Preferences are now evaluated in the following order:
+---++++ Changes to the evaluation order
+The rules for preference evaluation (whether the user setting overrides the topic setting etc) have
+always been a bit confusing and difficult to use. For example, a topic setting would override a user setting, but
+a user setting would override a web setting, making per-web settings awkward to use. Mainly due to the introduction
+of hierarchical webs, preferences are now evaluated in the following order:
    1 Topic
    1 Web
+   1 Parent Web(s) (if appropriate. All parent webs are evaluated in bottom-up order)
    1 Session
    1 User
    1 Local Site (as set in {LocalSitePreferences}, typically =%<nop>MAINWEB%.TWikiPreferences))
    1 Default (as set in {SitePrefsTopic}, typically =%<nop>TWIKIWEB%.TWikiPreferences))
 This is a change from previous versions, where the User preferences were evaluated between the topic and the web.
 
-Note that a user can still dictate preference values that can't be overridden, but they will now need to set those preferences as FINALPREFERENCES.
+Note that a user can still dictate preference values that can't be overridden by the topic or the web
+level settings, but they will now need to set those preferences as FINALPREFERENCES.
+You can use =%<nop>ALL_VARIABLES%= in a topic to get a dump of all preferences set in that context.
 
 Permissions controls are not affected by this change.
-
----++++ Changes to the evaluation order
-The rules for preference evaluation (whether the user setting overrides the topic setting etc) have always been a bit confused.
 
 ---++++ Preferences Plugin
 TWiki:Plugins.PreferencesPlugin has been included to allow more convenient editing of preferences. This plugin provides input controls, such as menus, radio buttons, and checkboxes to select preference settings.
