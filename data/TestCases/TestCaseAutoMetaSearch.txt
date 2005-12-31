@@ -3,14 +3,14 @@
 
 Description: tests for METASEARCH tags
 
-[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 
 ---+ Search for parents
 Expected:
 <!-- expected expand -->
-<a href="%SCRIPTURL{"view"}%/TestCases/%TOPIC%">%TOPIC%</a>
+<a href="%SCRIPTURLPATH{"view"}%/TestCases/%TOPIC%">%TOPIC%</a>
 <!-- /expected -->
 Actual:
 <!-- actual -->
@@ -19,7 +19,7 @@ Actual:
 ---+ Search for moved topic
 Expected:
 <!-- expected expand -->
-Itwos <a href="%SCRIPTURL{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
+Itwos <a href="%SCRIPTURLPATH{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
 <!-- /expected -->
 Actual: 
 <!-- actual -->
@@ -28,7 +28,7 @@ Actual:
 ---+ Search for field value
 Expected:
 <!-- expected expand -->
-<a href="%SCRIPTURL{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
+<a href="%SCRIPTURLPATH{"view"}%/TestCases/DeliberatelyMoved">DeliberatelyMoved</a>
 <!-- /expected -->
 Actual: 
 <!-- actual -->

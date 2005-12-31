@@ -1,12 +1,12 @@
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
-<span class="twikiNewLink">LinkAtStart<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">LinkAtStart<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->
 
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
-[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 
@@ -215,7 +215,7 @@ class CatAnimal {
 
 ---+++ Expected
 <!-- expected expand WIKIWORDAFTER -->
-<span class="twikiNewLink">WikiWordBeforeList<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiWordBeforeList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">WikiWordBeforeList<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordBeforeList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <ol>
 <li>Things</li>
 <li>Stuff
@@ -227,7 +227,7 @@ class CatAnimal {
 <li>Something</li>
 <li>Hello kitty</li>
 </ol>
-<span class="twikiNewLink">WikiWordAfterList<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">WikiWordAfterList<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiWordAfterList?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -338,18 +338,18 @@ Note: noautolink tags will still be there, because they are not removed until im
 ---++ Wiki Word Links
 ---+++ Expected
 <!-- expected expand WIKIWORDS -->
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/WebPreferences">WebPreferences</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/WebPreferences">WebPreferences</a>
 <p />
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers">TWikiUsers</a>
 <p />
-<span class="twikiNewLink">CompleteAndUtterNothing<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">CompleteAndUtterNothing<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/CompleteAndUtterNothing?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <p />
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBox">LinkBox</a>
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBox">LinkBoxs</a>
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBoxy">LinkBoxies</a>
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBoxess">LinkBoxess</a>
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBoxess">LinkBoxesses</a>
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/TestCases/LinkBox">LinkBoxes</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBox">LinkBox</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBox">LinkBoxs</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBoxy">LinkBoxies</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBoxess">LinkBoxess</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBoxess">LinkBoxesses</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/TestCases/LinkBox">LinkBoxes</a>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -370,16 +370,16 @@ LinkBoxes
 ---++ Square Brackets
 ---+++ Expected
 <!-- expected expand SQUABS -->
-<span class="twikiNewLink">wiki syntax<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">wiki syntax<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <p />
-<a class="twikiLink" href="%SCRIPTURL{"view"}%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
+<a class="twikiLink" href="%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers">Main.TWiki users</a>
 <p />
 escaped:
 [<nop>[wiki syntax]]
 <p />
 <a href="/relative/URL" target="_top">relative url</a>
 <p />
-<span class="twikiNewLink">filter%rubbish;from'thelink<a title="Create this topic" rel="nofollow" href="%SCRIPTURL{"edit"}%/TestCases/Filterrubbishfromthelink?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
+<span class="twikiNewLink">filter%rubbish;from'thelink<a title="Create this topic" rel="nofollow" href="%SCRIPTURLPATH{"edit"}%/TestCases/FilterRubbishFromThelink?topicparent=TestCases.TestCaseAutoFormatting"><sup>?</sup></a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -398,7 +398,7 @@ escaped:
 ---++ Protocol Links
 ---+++ Expected
 <!-- expected expand PROTOCOL -->
-<span class="twikiNewLink">syntax<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">syntax<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/WikiSyntax?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <p />
 <a href="http://gnu.org" target="_top">GNU</a>
 <p />
@@ -416,9 +416,9 @@ escaped:
 ---++ Anchors
 ---+++ Expected
 <!-- expected expand ANCHOR -->
-<a class="twikiAnchorLink" href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
+<a class="twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoFormatting#NotThere">TestCaseAutoFormatting#NotThere</a>
 <p />
-<a class="twikiAnchorLink" href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
+<a class="twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TestCases/TestCaseAutoFormatting#MyAnchor">Jump</a>
 <p />
 <a name="MyAnchor"></a> To here
 <!-- /expected -->
@@ -542,8 +542,8 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 ---++ Anchor links
 ---+++ Expected
 <!-- expected expand -->
-<span class="twikiNewLink">AnchorLink#AnchorName<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
-<a class="twikiAnchorLink" href="%SCRIPTURL{"view"}%/TWiki/TWikiVariables#VarWEBLIST">TWikiVariables#VarWEBLIST</a>
+<span class="twikiNewLink">AnchorLink#AnchorName<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/AnchorLink?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<a class="twikiAnchorLink" href="%SCRIPTURLPATH{"view"}%/TWiki/TWikiVariables#VarWEBLIST">TWikiVariables#VarWEBLIST</a>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->
@@ -554,7 +554,7 @@ TWiki.TWikiVariables#VarWEBLIST
 ---++ Link at end of topic
 ---+++ Expected
 <!-- expected expand LINKATEND -->
-<span class="twikiNewLink">LinkAtEnd<a title="Create this topic" href="%SCRIPTURL{"edit"}%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<span class="twikiNewLink">LinkAtEnd<a title="Create this topic" href="%SCRIPTURLPATH{"edit"}%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->
 ---+++ Actual
 <!-- actual -->

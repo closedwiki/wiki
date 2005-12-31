@@ -59,8 +59,7 @@ my $SUMMARYLINES = 6;
 # use like \b
 #SMELL: they really limit the number of places emphasis can happen.
 my $STARTWW = qr/^|(?<=[\s\(])/m;
-my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)<])/m;
-
+my $ENDWW = qr/$|(?=[\s,.;:!?)<])/m;
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
@@ -691,7 +690,7 @@ sub _handleSquareBracketedLink {
     # filter out &#123; entities (legacy)
     $link =~ s/\&\#[0-9]+\;//g;
     # Filter junk
-    $link =~ s/$TWiki::cfg{NameFilter}//g;
+    $link =~ s/$TWiki::cfg{NameFilter}+/ /g;
     # Capitalise first word
     $link =~ s/^(.)/\U$1/;
     # Collapse spaces and capitalise following letter
@@ -1188,12 +1187,11 @@ sub getRenderedVersion {
 
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
-
-    $text =~ s/${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW/_fixedFontText($1,1)/gem;
-    $text =~ s/${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
-    $text =~ s/${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW/<strong>$1<\/strong>/gm;
-    $text =~ s/${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW/<em>$1<\/em>/gm;
-    $text =~ s/${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW/_fixedFontText($1,0)/gem;
+    $text =~ s/${STARTWW}==(\S+|\S[^\n]*\S)==$ENDWW/_fixedFontText($1,1)/gem;
+    $text =~ s/${STARTWW}__(\S+|\S[^\n]*\S)__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
+    $text =~ s/${STARTWW}\*(\S+|\S[^\n]*\S)\*$ENDWW/<strong>$1<\/strong>/gm;
+    $text =~ s/${STARTWW}_([^\s_]+|\S[^\n]*?[^\s_])_$ENDWW/<em>$1<\/em>/gm;
+    $text =~ s/${STARTWW}=([^\s=](\S*|[^\n]*?[^\s=]))=$ENDWW/_fixedFontText($1,0)/gem;
 
     # Mailto
     # Email addresses must always be 7-bit, even within I18N sites

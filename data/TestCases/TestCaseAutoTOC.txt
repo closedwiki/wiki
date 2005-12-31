@@ -2,7 +2,7 @@
 
 Description: tests for TOCs included from other topics and with funny deprecated syntaxes.
 
-[[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 
@@ -11,15 +11,15 @@ Designed by: Crawford Currie
 <!-- expected expand -->
 <div class="twikiToc">
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TocFixture#Nonsense">Nonsense</a>
+<li> <a href="#Nonsense">Nonsense</a>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TocFixture#Makes">Makes</a>
+<li> <a href="#Makes">Makes</a>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TocFixture#Content">Content</a>
+<li> <a href="#Content">Content</a>
 </li>
 </ul>
 </li>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TocFixture#Tests">Tests</a>
+<li> <a href="#Tests">Tests</a>
 </li>
 </ul>
 </li>
@@ -35,19 +35,19 @@ Designed by: Crawford Currie
 <div class="twikiToc">
 <span class="twikiTocTitle">The Top</span>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#H1_1">H1 <!--1--></a>
+<li> <a href="#H1_1">H1 <!--1--></a>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#H2">H2</a>
+<li> <a href="#H2">H2</a>
 </li>
 </ul>
 </li>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#H1_2">H1 <!--2--></a>
+<li> <a href="#H1_2">H1 <!--2--></a>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#H2">H2</a>
+<li> <a href="#H2">H2</a>
 <ul>
 <li>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#Don_t_ignore">Don't ignore</a>
+<li> <a href="#Don_t_ignore">Don't ignore</a>
 </li>
 </ul>
 </li>
@@ -55,15 +55,15 @@ Designed by: Crawford Currie
 </li>
 </ul>
 </li>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#hash_H1">hash H1</a>
+<li> <a href="#hash_H1">hash H1</a>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#H2">H2</a>
+<li> <a href="#H2">H2</a>
 </li>
 </ul>
 </li>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#hash_H1">hash H1</a>
+<li> <a href="#hash_H1">hash H1</a>
 <ul>
-<li> <a href="%SCRIPTURL{"view"}%/TestCases/TestCaseAutoTOC#normal_H2">normal H2</a>
+<li> <a href="#normal_H2">normal H2</a>
 </li>
 </ul>
 </li>
