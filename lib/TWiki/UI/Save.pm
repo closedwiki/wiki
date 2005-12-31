@@ -407,11 +407,11 @@ sub save {
 
         # redirect to a sensible place (a topic that exists)
         my( $w, $t, $a ) = ( '', '', '?unlock=on' );
-        foreach $t ( $topic,
+        foreach my $test ( $topic,
                      $query->param( 'topicparent' ),
                      $TWiki::cfg{HomeTopicName} ) {
             ( $w, $t ) =
-              $session->normalizeWebTopicName( $webName, $t );
+              $session->normalizeWebTopicName( $webName, $test );
             last if( $store->topicExists( $w, $t ));
             $a = '';
         }
