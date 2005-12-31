@@ -990,14 +990,14 @@ sub getScriptUrl {
         ( $web, $topic ) =
           $this->normalizeWebTopicName( $web, $topic );
 
-        $url .= '/'.$web.'/'.$topic;
+        $url .= urlEncode( '/'.$web.'/'.$topic );
 
         my $ps = '';
         while( my $p = shift @params ) {
             if( $p eq '#' ) {
                 $url .= '#' . shift( @params );
             } else {
-                $ps .= ';' . $p.'='.shift( @params );
+                $ps .= ';' . $p.'='.urlEncode(shift( @params ));
             }
         }
         if( $ps ) {
@@ -1006,7 +1006,7 @@ sub getScriptUrl {
         }
     }
 
-    return urlEncode( $url );
+    return $url;
 }
 
 =pod
@@ -1034,10 +1034,10 @@ sub getPubUrl {
         ( $web, $topic ) =
           $this->normalizeWebTopicName( $web, $topic );
 
-        $url .= '/'.$web.'/'.$topic;
+        $url .= urlEncode( '/'.$web.'/'.$topic );
     }
 
-    return urlEncode( $url );
+    return $url;
 }
 
 =pod
