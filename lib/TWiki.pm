@@ -161,6 +161,7 @@ BEGIN {
     # Default handlers for different %TAGS%
     %functionTags = (
         ALL_VARIABLES     => \&_ALL_VARIABLES,
+        ATTACHURL         => \&_ATTACHURL,
         ATTACHURLPATH     => \&_ATTACHURLPATH,
         DATE              => \&_DATE,
         DISPLAYTIME       => \&_DISPLAYTIME,
@@ -1028,8 +1029,13 @@ sub getPubUrl {
                        $this->inContext( 'absolute_urls' ));
 
     my $url = '';
-    $url = $this->{urlHost} if $absolute;
     $url .= $TWiki::cfg{PubUrlPath};
+    if( $absolute && $url !~ /^[a-z]+:/ ) {
+        # See http://www.ietf.org/rfc/rfc2396.txt for the definition of
+        # "absolute URI". TWiki bastardises this definition by assuming
+        # that all relative URLs lack the <authority> component as well.
+        $url = $this->{urlHost}.$url;
+    }
     if( $web || $topic ) {
         ( $web, $topic ) =
           $this->normalizeWebTopicName( $web, $topic );
@@ -1319,7 +1325,6 @@ sub new {
     $this->{SESSION_TAGS}{BASETOPIC}      = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
-    $this->{SESSION_TAGS}{ATTACHURL}      = $this->{urlHost}.'%ATTACHURLPATH%';
 
     $prefs->pushPreferences(
         $TWiki::cfg{UsersWebName}, $user->wikiName(),
@@ -2968,6 +2973,11 @@ sub _RELATIVETOPICPATH {
 }
 
 sub _ATTACHURLPATH {
+    my ( $this, $params, $topic, $web ) = @_;
+    return $this->getPubUrl(0, $web, $topic);
+}
+
+sub _ATTACHURL {
     my ( $this, $params, $topic, $web ) = @_;
     return $this->getPubUrl(1, $web, $topic);
 }
