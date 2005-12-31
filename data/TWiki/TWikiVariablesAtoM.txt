@@ -12,10 +12,10 @@ __Note:__ This topic is included by TWikiVariables
    * Expands to: %ACTIVATEDPLUGINS%
    * Related: [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINVERSION2][PLUGINVERSION]]
 
-#VarALL_VARIABLES
----+++ ALL_VARIABLES -- list of currently defined TWikiVariables
+#VarALLVARIABLES
+---+++ ALL_VARIABLES -- list of currently defined !TWikiVariables
    * Syntax: =%<nop>ALL_VARIABLES%=
-   * Expands to: a table showing all defined TWikiVariables
+   * Expands to: a table showing all defined TWikiVariables in the current context
 
 #VarATTACHURL
 ---+++ ATTACHURL -- full URL for attachments in the current topic
