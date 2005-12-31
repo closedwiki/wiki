@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-<channel rdf:about="%SCRIPTURL{"view%"}%/%WEB%">
+<channel rdf:about="%SCRIPTURL{"view"}%/%WEB%">
   <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
   <link>%SCRIPTURL{"view"}%/%WEB%</link>
   <description>The web for users, groups and offices. TWiki is a Web-Based Collaboration Platform for the Corporate World.</description>

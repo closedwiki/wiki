@@ -21,7 +21,7 @@ The WebRss topic in each web contains the following text:
 -----
 <pre>
 &lt;channel rdf:about="%<nop>SCRIPTURL{"view"}%/%<nop>INCLUDINGWEB%">
-  &lt;title>%<nop>WIKITOOLNAME%'s %<nop>INCLUDINGWEB% web&lt;/title>
+  &lt;title>%<nop>WIKITOOLNAME%'s &lt;nop>%<nop>INCLUDINGWEB% web&lt;/title>
   &lt;link>%<nop>SCRIPTURL{"view"}%/%<nop>INCLUDINGWEB%&lt;/link>
   &lt;description>(the description of the web). TWiki is a Web-Based Collaboration Platform for the Corporate World.&lt;/description>
 %<nop>INCLUDE{"%TWIKIWEB%.WebRssBase"}% &lt;!--
@@ -64,6 +64,4 @@ Below part is included by each <nop>WebRss topic:
 -----
 
 __See also__: TWiki:Codev/RichSiteSummary, TWiki:Codev/TWikiSyndication 
-
-
 
