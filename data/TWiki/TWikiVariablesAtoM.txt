@@ -155,7 +155,7 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarHTTPS
 ---+++ HTTPS -- get HTTPS headers
-   * The same as %<nop>HTTP but operates on the HTTPS environment variables present when the SSL protocol is in effect. Can be used to determine whether SSL is turned on.
+   * The same as =%<nop>HTTP%= but operates on the HTTPS environment variables present when the SSL protocol is in effect. Can be used to determine whether SSL is turned on.
    * Syntax: =%<nop>HTTPS%=
    * Syntax: =%<nop>HTTPS{'Header-name'}%=
    * Related: [[#VarHTTP][HTTP]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
@@ -168,25 +168,25 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarICON
 ---+++ ICON{"name"} -- small documentation graphic or icon of common attachment types
-   * Small graphic (commonly 16x16 pixels) used to enhance topics. Specify the name of the graphic.
+   * Small graphic images stored in TWikiDocGraphics, used to enhance topics. Also a collection of common file type icons. Specify file type only, file name, or full path name of file. Graphics typically have 16x16 pixels.
    * Syntax: =%<nop>ICON{"name"}%=
    * Graphic samples: %ICON{"arrowbright"}% =arrowbright=, %ICON{"bubble"}% =bubble=, %ICON{"choice-yes"}% =choice-yes=, %ICON{"hand"}% =hand=
-   * Filetype samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
+   * File type samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
    * Example: =%<nop>ICON{"info"}%= expands to %ICON{"info"}%
-   * Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
+   * Related: [[#VarICONPATH][ICONPATH]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
 #VarICONPATH
----+++ ICONPATH{"name"} -- url path of small documentation graphic or icon of common attachment types
-   * See [[#VarICON][ICON]]
+---+++ ICONPATH{"name"} -- url path of small documentation graphic or icon
+   * URL path of [[#VarICON][ICON]], typically used in an img tag
    * Syntax: =%<nop>ICONPATH{"name"}%=
-   * Example: =%<nop>ICONPATH{"info"}%= expands to =%ICONPATH{"info"}%= which renders as %ICONPATH{"info"}%
-   * Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
+   * Example: =%<nop>ICONPATH{"info"}%= expands to =%ICONPATH{"info"}%=
+   * Related: [[#VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
 #VarIF
 ---+++ IF{"condition" ...} -- simple conditionals
-   * Syntax: =%<nop>IF{"CONDITION" then="THEN" else="ELSE"}%=
-   * In the example above, if =CONDITION= evaluates to =TRUE=, then =THEN= will be shown; otherwise =ELSE= will be shown.
-   * Related: IfStatements has more information on how to write =%<nop>IF{}%= statements
+   * Evaluate a condition and show one text or another based on the result. See details in IfStatements
+   * Syntax: =%<nop>IF{"CONDITION" then="THEN" else="ELSE"}%= shows ="THEN"= if ="CONDITION"= evaluates to =TRUE=, otherwise ="ELSE"= will be shown
+   * Example: =%<nop>IF{"defined FUNFACTOR" then="FUNFACTOR is defined" else=" is not defined"}%= renders as =%IF{"defined FUNFACTOR" then="FUNFACTOR is defined" else=""FUNFACTOR is not defined"}%=
    * Related: [[SpreadSheetPlugin#FuncIF][$IF()]] of SpreadSheetPlugin
 
 #VarINCLUDE
@@ -236,7 +236,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ LOCALSITEPREFS -- web.topicname of site preferences topic
    * The full name of the local site preferences topic. This topic is read for preferences before %TWIKIWEB%.<nop>%TWIKIPREFSTOPIC% is read.
    * Syntax: =%<nop>LOCALSITEPREFS%=
-   * Expands to: <nop>%LOCALSITEPREFS%
+   * Expands to: =%LOCALSITEPREFS%=, renders as %LOCALSITEPREFS%
 
 #VarLOGIN
 ---+++ LOGIN -- present a full login link
@@ -253,7 +253,7 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarMAKETEXT
 ---+++ MAKETEXT -- creates text using TWiki's I18N infrastructure
-   * Syntax = =%<nop>MAKETEXT{"string" args="..."}=
+   * Syntax: =%<nop>MAKETEXT{"string" args="..."}=
    * Supported parameters:
      | *Parameter* | *Description* | *Default* |
      | ="text"= or =string="text"= | The text to be displayed. | _none_ |
