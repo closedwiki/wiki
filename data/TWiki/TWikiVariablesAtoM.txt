@@ -13,8 +13,8 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINVERSION2][PLUGINVERSION]]
 
 #VarALLVARIABLES
----+++ ALL_VARIABLES -- list of currently defined !TWikiVariables
-   * Syntax: =%<nop>ALL_VARIABLES%=
+---+++ ALLVARIABLES -- list of currently defined !TWikiVariables
+   * Syntax: =%<nop>ALLVARIABLES%=
    * Expands to: a table showing all defined TWikiVariables in the current context
 
 #VarATTACHURL

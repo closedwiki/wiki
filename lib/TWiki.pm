@@ -160,7 +160,7 @@ BEGIN {
 
     # Default handlers for different %TAGS%
     %functionTags = (
-        ALL_VARIABLES     => \&_ALL_VARIABLES,
+        ALLVARIABLES      => \&_ALLVARIABLES,
         ATTACHURL         => \&_ATTACHURL,
         ATTACHURLPATH     => \&_ATTACHURLPATH,
         DATE              => \&_DATE,
@@ -3101,7 +3101,7 @@ sub _PUBURLPATH {
     return $this->getPubUrl(0);
 }
 
-sub _ALL_VARIABLES {
+sub _ALLVARIABLES {
     return shift->{prefs}->stringify();
 }
 

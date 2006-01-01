@@ -20,7 +20,7 @@ To use a variable type its name. For example,
 __Note:__
    * To leave a variable unexpanded, precede it with an exclamation point, e.g. type =!%<nop>TOPIC%= to get =%<nop>TOPIC%=
    * Variables are expanded relative to the topic they are _used_ in, not the topic they are _defined_ in
-   * Type =%<nop>ALL_VARIABLES%= to get a full listing of all variables defined for a particular topic
+   * Type =%<nop>ALLVARIABLES%= to get a full listing of all variables defined for a particular topic
 
 
 #SettingPrefs
@@ -76,7 +76,7 @@ Certain topics (a users home topic, web site and default preferences topics) hav
 Then when they are editing any other topic, they will get a 10 high edit box. However when they are editing their home topic, they will get a 20 high edit box.
 =Local= can be used wherever a preference needs to take a different value depending on where the current operation is being performed.
 
-Use this powerful feature with great care! =%<nop>ALL_VARIABLES%= can be used to get a listing of the values of all variables in their evaluation order, so you can see variable scope if you get confused.
+Use this powerful feature with great care! =%<nop>ALLVARIABLES%= can be used to get a listing of the values of all variables in their evaluation order, so you can see variable scope if you get confused.
 
 ---+++ Frequently Used Preferences Variables
 

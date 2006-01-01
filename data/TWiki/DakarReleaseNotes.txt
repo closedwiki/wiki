@@ -247,7 +247,7 @@ This is a change from previous versions, where the User preferences were evaluat
 
 Note that a user can still dictate preference values that can't be overridden by the topic or the web
 level settings, but they will now need to set those preferences as FINALPREFERENCES.
-You can use =%<nop>ALL_VARIABLES%= in a topic to get a dump of all preferences set in that context.
+You can use =%<nop>ALLVARIABLES%= in a topic to get a dump of all preferences set in that context.
 
 Permissions controls are not affected by this change.
 
@@ -438,9 +438,9 @@ blah<verbatim>inside</verbatim>after
 
 *NOTE:* VARIABLES are still Set within verbatim tags (this is a historical peculiarity)
 
----+++ =ALL_VARIABLES=
+---+++ =ALLVARIABLES=
 
-You can use =%<nop>ALL_VARIABLES%= in a topic to get a dump of all variables set in that context. Invaluable for debugging those tricky !TWikiApplications!
+You can use =%<nop>ALLVARIABLES%= in a topic to get a dump of all variables set in that context. Invaluable for debugging those tricky !TWikiApplications!
 
 ---+++ =IF=
 
