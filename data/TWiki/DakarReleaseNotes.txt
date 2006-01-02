@@ -320,6 +320,8 @@ Plugins are no longer searched for every time a TWiki script is run. Instead the
 
 =%<nop>INSTALLEDPLUGINS%= and =%<nop>DISABLEDPLUGINS%= are no longer supported in !TWikiPreferences. If you have set =%<nop>INSTALLEDPLUGINS%= in !TWikiPreferences, you need to move that setting into the ={PluginsOrder}= configuration key, using the =configure= interface. To disable plugins, uncheck them in the =configure= interface, and save the changes.
 
+%X% Whenever you install a plugin, make sure you check TWiki.TWikiPlugins#FAILEDPLUGINS. Several handlers have been deprecated, and updates of the plugins may be required. Contact the plugin author directly to get an update if none is available on the web.
+
 ---+++ Logins, Logouts, Sessions and Passwords
 
 TWiki:Plugins.SessionPlugin and TWiki:Plugins.AuthPagePlugin have been integrated into the core. TWiki now supports cookied sessions, in the context of a much improved authentication architecture. The setup for authentication is now much simpler, and for most sites can be done entirely from the =configure= interface. There are some incompatibilities with TWiki:Plugins.SessionPlugin, with resepect to the in-line variables. See TWiki.TWikiUserAuthentication in the release for full details of how authentication works now. TWiki also now supports the concept of pluggable password managers, making the integration of corporate authentication services much simpler.

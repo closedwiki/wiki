@@ -207,14 +207,10 @@ sub registerHandlers {
     foreach my $h ( @registrableHandlers ) {
         my $sub = $p.'::'.$h;
         if( defined( &$sub )) {
-            if( $deprecated{$h} ) {
-                if( $compat && $compat->{$h} &&
-                      $compat->{$h} <= $TWiki::Plugins::VERSION ) {
-                    # Compatibility handler not required in this version
-                    next;
-                }
-                $this->{session}->writeWarning(
-                    $this->{name}.' defines deprecated '.$h );
+            if( $deprecated{$h} && $compat && $compat->{$h} &&
+                  $compat->{$h} <= $TWiki::Plugins::VERSION ) {
+                # Compatibility handler not required in this version
+                next;
             }
             $plugins->addListener( $h, $this );
         }

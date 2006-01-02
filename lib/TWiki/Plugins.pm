@@ -360,8 +360,15 @@ sub _handleFAILEDPLUGINS {
                        map{ $_->{name} }
                        @{$this->{registeredHandlers}{$handler}} );
         }
-        $text .= CGI::Tr( { valign=>'top' },
-                          CGI::td( $handler ).CGI::td( $h ) );
+        if ( $h ) {
+            if( defined( $TWiki::Plugin::deprecated{ $handler })) {
+                $h .= CGI::br() . CGI::span(
+                    { class=>'twikiAlert' },
+                    " __This handler is deprecated__ - please check for updated versions of the plugins that use it!" );
+            }
+            $text .= CGI::Tr( { valign=>'top' },
+                              CGI::td( $handler ).CGI::td( $h ) );
+        }
     }
 
     return $text.CGI::end_table()."\n*".scalar(@{$this->{plugins}}).
