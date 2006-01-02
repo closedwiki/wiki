@@ -240,6 +240,9 @@ table.twikiFormTable {
 table.twikiFormTable th.twikiFormTableHRow {
 	background-color:#fff; /*BG1*/
 }
+.twikiAttachments td {
+	background-color:#fff; /*BG1*/
+}
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
 table.twikiFormTable th.twikiFormTableHRow a:link,
