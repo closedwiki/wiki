@@ -117,8 +117,6 @@ sub stage_gendocs {
     print "Building automatic documentation to $this->{tmpDir}...";
     print `perl $this->{basedir}/tools/gendocs.pl -debug -root $this->{tmpDir}`;
     $this->cp( "$this->{tmpDir}/AUTHORS",
-               "$this->{tmpDir}/pub/Main/TWikiContributor/AUTHORS" );
-    $this->cp( "$this->{tmpDir}/AUTHORS",
                "$this->{tmpDir}/pub/TWiki/TWikiContributor/AUTHORS" );
 
     for my $script qw( view rdiff ) {
