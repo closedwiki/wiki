@@ -245,9 +245,9 @@ use vars qw( @VARS );
     '%ATTACHURLPATH%',
     '%PUBURL%',
     '%PUBURLPATH%',
-    '%SCRIPTURL{"view"}%',
-    '%SCRIPTURL%',
+    '%SCRIPTURLPATH{"view"}%',
     '%SCRIPTURLPATH%',
+    '%SCRIPTURL{"view"}%',
     '%SCRIPTSUFFIX%', # bit dodgy, this one
    );
 
