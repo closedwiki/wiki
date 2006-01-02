@@ -59,7 +59,7 @@ my $SUMMARYLINES = 6;
 # use like \b
 #SMELL: they really limit the number of places emphasis can happen.
 my $STARTWW = qr/^|(?<=[\s\(])/m;
-my $ENDWW = qr/$|(?=[\s,.;:!?)<])/m;
+my $ENDWW = qr/$|(?=[\s,.;:!?)])/m;
 
 BEGIN {
     # Do a dynamic 'use locale' for this module
@@ -234,23 +234,26 @@ sub _addListItem {
     my $depth = length( $theIndent );
 
     my $size = scalar( @{$this->{LIST}} );
+
+    # The whitespaces either side of the tags are required for the
+    # emphasis REs to work.
     if( $size < $depth ) {
         my $firstTime = 1;
         while( $size < $depth ) {
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
-            $$result .= '<'.$theElement.'>' unless( $firstTime );
-            $$result .= '<'.$theType.'>';
+            $$result .= ' <'.$theElement.'> ' unless( $firstTime );
+            $$result .= ' <'.$theType.'> ';
             $firstTime = 0;
             $size++;
         }
     } else {
         while( $size > $depth ) {
             my $tags = pop( @{$this->{LIST}} );
-            $$result .= '</'.$tags->{element}.'></'.$tags->{type}.'>';
+            $$result .= ' </'.$tags->{element}.'></'.$tags->{type}.'> ';
             $size--;
         }
         if( $size ) {
-            $$result .= '</'.$this->{LIST}->[$size-1]->{element}.'>';
+            $$result .= ' </'.$this->{LIST}->[$size-1]->{element}.'> ';
         } else {
             $$result .= "\n" if $$result;
         }
@@ -259,7 +262,7 @@ sub _addListItem {
     if ( $size ) {
         my $oldt = $this->{LIST}->[$size-1];
         if( $oldt->{type} ne $theType ) {
-            $$result .= '</'.$oldt->{type}.'><'.$theType.'>';
+            $$result .= ' </'.$oldt->{type}.'><'.$theType.">\n";
             pop( @{$this->{LIST}} );
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
         }
@@ -1187,10 +1190,10 @@ sub getRenderedVersion {
 
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
-    $text =~ s/${STARTWW}==(\S+|\S[^\n]*\S)==$ENDWW/_fixedFontText($1,1)/gem;
-    $text =~ s/${STARTWW}__(\S+|\S[^\n]*\S)__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
-    $text =~ s/${STARTWW}\*(\S+|\S[^\n]*\S)\*$ENDWW/<strong>$1<\/strong>/gm;
-    $text =~ s/${STARTWW}_([^\s_]+|\S[^\n]*?[^\s_])_$ENDWW/<em>$1<\/em>/gm;
+    $text =~ s/${STARTWW}==(\S+|\S[^\n]*?\S)==$ENDWW/_fixedFontText($1,1)/gem;
+    $text =~ s/${STARTWW}__(\S+|\S[^\n]*?\S)__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
+    $text =~ s/${STARTWW}\*([^\s*](\S*|[^\n]*?[^\s*]))\*$ENDWW/<strong>$1<\/strong>/gm;
+    $text =~ s/${STARTWW}_([^\s_](\S+|[^\n]*?[^\s_]))_$ENDWW/<em>$1<\/em>/gm;
     $text =~ s/${STARTWW}=([^\s=](\S*|[^\n]*?[^\s=]))=$ENDWW/_fixedFontText($1,0)/gem;
 
     # Mailto
