@@ -231,7 +231,7 @@ __Note:__ This topic is included by TWikiVariables
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | =format=     | format for each item. See below for variables available in the format string. | ="   * $langname"= |
-     | =sep=        | separator between items. | ="\n"= (newline) |
+     | =separator=  | separator between items. | ="\n"= (newline) |
    * =format= variables:
      | *Variable* | *Meaning* |
      | =$langname= | language's name, as informed by the translators |

@@ -2985,7 +2985,7 @@ sub _USERLANGUAGE {
 sub _LANGUAGES {
     my ( $this , $params ) = @_;
     my $format = $params->{format} || "   * \$langname";
-    my $sep = $params->{sep} || "\n";
+    my $sep = $params->{separator} || "\n";
     $sep =~ s/\\n/\n/g;
 
     # $languages is a hash reference:
