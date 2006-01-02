@@ -86,7 +86,7 @@ where
    * description is a short description of the module and where to get it.
 Perl modules also referenced in the dependencies list in the stub topic should be listed using their perl package name (e.g. TWiki::Contrib::MyContrib) and use the type 'perl'.
 
-A dependency may optionally be preceded by a condition that limits the cases where the dependency applies. The condition is specified using a line that contains <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl conditional. This is most useful for enabling dependencies only for certain versions of TWiki. For example,
+A dependency may optionally be preceded by a condition that limits the cases where the dependency applies. The condition is specified using a line that contans <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl conditional. This is most useful for enabling dependencies only for certain versions of TWiki. For example,
 <verbatim>
 TWiki::Rhinos,>=1.000,perl,Required. Download from TWiki:Plugins/RhinosContrib and install.
 ONLYIF ($TWiki::Plugins::VERSION < 1.025)
@@ -259,16 +259,6 @@ sub new {
 
     my $manifest = _findRelativeTo( $buildpldir, 'MANIFEST' );
     ($this->{files},$this->{other_modules})=readManifest($this->{basedir},'',$manifest,sub{exit(1)});
-
-    # Add the install script to the manifest, unless it is already there
-    unless( grep(/^$this->{project}_installer.pl$/,
-                 map {$_->{name}} @{$this->{files}})) {
-        push(@{$this->{files}},
-             { name => $this->{project}.'_installer.pl',
-               description => 'Install script',
-               permissions => 0440 });
-        print STDERR 'Auto-adding install script to manifest',$NL;
-    }
 
     # Generate a TWiki table representing the manifest contents
     # and a hash table representing the files
@@ -807,8 +797,8 @@ sub target_handsoff_install {
     my $twiki = $ENV{TWIKI_HOME};
     die 'TWIKI_HOME not set' unless $twiki;
     $this->cd($twiki);
-    $this->sys_action('unzip -u -o '.$this->{basedir}.'/'.
-                        $this->{project}.'.zip');
+    $this->sys_action('tar zxpf '.
+                        $this->{basedir}.'/'.$this->{project}.'.tgz');
     # kill off the module installer
     $this->rm($twiki.'/'.$this->{project}.'_installer.pl');
 }
@@ -1057,6 +1047,16 @@ this would be straightforward to do if it were required.
 
 sub target_installer {
     my $this = shift;
+
+    # Add the install script to the manifest, unless it is already there
+    unless( grep(/^$this->{project}_installer.pl$/,
+                 map {$_->{name}} @{$this->{files}})) {
+        push(@{$this->{files}},
+             { name => $this->{project}.'_installer.pl',
+               description => 'Install script',
+               permissions => 0440 });
+        print STDERR 'Auto-adding install script to manifest',$NL;
+    }
 
     # Find the template on @INC
     my $template;
