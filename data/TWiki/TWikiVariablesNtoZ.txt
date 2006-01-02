@@ -224,7 +224,7 @@ __Note:__ This topic is included by TWikiVariables
    * The current topic name with added URL-encoded spaces, for use in regular expressions that search for backlinks to the current topic
    * Syntax: =%<nop>SPACEDTOPIC%=
    * Expands to: =%SPACEDTOPIC%=
-   * __Note:__ This is a deprecated variable. It can be duplicated with =%<nop>URLENCODE{%<nop>SPACEOUT{"%<nop>TOPIC%" sep=" *"}%}%=
+   * __Note:__ This is a deprecated variable. It can be duplicated with =%<nop>URLENCODE{%<nop>SPACEOUT{"%<nop>TOPIC%" separator=" *"}%}%=
    * Related: [[#VarSPACEOUT][SPACEOUT]], [[#VarTOPIC][TOPIC]], [[#VarURLENCODE][URLENCODE]]
 
 #VarSPACEOUT
@@ -235,7 +235,7 @@ __Note:__ This topic is included by TWikiVariables
    * Expands to: =%SPACEOUT{ "%INCLUDINGTOPIC%" }%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
-     | =sep= | The separator to put between words e.g. %<nop>SPACEOUT{"DogsCatsBudgies" sep=", "}% -> %SPACEOUT{"DogsCatsBudgies" sep=", "}% | ' ' |
+     | =separator= | The separator to put between words e.g. %<nop>SPACEOUT{"DogsCatsBudgies" separator=", "}% -> %SPACEOUT{"DogsCatsBudgies" separator=", "}% | ' ' |
    * %T% Hint: Spaced out !WikiWords are not automatically linked. To SPACEOUT a !WikiWord but preserve the link use "double bracket" format. For example, =[<nop>[WebHome][%<nop>SPACEOUT{"Web<nop>Home"}%]]= expands to [[WebHome][%SPACEOUT{"WebHome"}%]]
    * Related: [[#VarSPACEDTOPIC][SPACEDTOPIC]], [[SpreadSheetPlugin#FuncPROPERSPACE][$PROPERSPACE()]] of SpreadSheetPlugin
 

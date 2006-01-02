@@ -2021,7 +2021,7 @@ sub isTrue {
 ---++ StaticMethod spaceOutWikiWord( $word, $sep ) -> $string
 
 Spaces out a wiki word by inserting a string (default: one space) between each word component.
-With parameter 'sep' any string may be used as separator between the word components; if 'sep' is undefined it defaults to a space.
+With parameter $sep any string may be used as separator between the word components; if $sep is undefined it defaults to a space.
 
 =cut
 
@@ -2920,15 +2920,10 @@ sub _SPACEDTOPIC {
     return urlEncode( $topic );
 }
 
-# ---++ routine _SPACEOUT( $topic, $sep ) -> $string
-# Returns a topic name with spaces (or another separator string) in between each word component.
-# Parameter 'topic' is the topic name to space out.
-# Parameter 'sep' is the string to separate the word components.
-# Calls spaceOutWikiWord; if no 'sep' is passed, spaceOutWikiWord assumes a space as separator.
 sub _SPACEOUT {
     my ( $this, $params ) = @_;
     my $spaceOutTopic = $params->{_DEFAULT};
-    my $sep = $params->{'sep'};
+    my $sep = $params->{'separator'};
     $spaceOutTopic = spaceOutWikiWord( $spaceOutTopic, $sep );
     return $spaceOutTopic;
 }
