@@ -37,6 +37,11 @@ sub new {
     return bless( $class->SUPER::new( "TWiki" ), $class );
 }
 
+# Overrider installer target; don't want an installer.
+sub target_installer {
+    my $this = shift;
+}
+
 sub target_stage {
     my $this = shift;
 
