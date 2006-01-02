@@ -2296,7 +2296,7 @@ msgid ""
 "This is the Trash. Here you can undelete topics; deleted attachments are in "
 "TrashAttachment."
 msgstr ""
-"Aqui é a lixeira. Aqui você pode recuparar tópicos; anexos removidos ficam "
+"Aqui é a lixeira. Aqui você pode recuperar tópicos; anexos removidos ficam "
 "em TrashAttachment."
 
 #: templates/renamedelete.pattern.tmpl:34
