@@ -97,7 +97,7 @@ sub new {
     my $first = 1;
 
     if( !$friendly && $string =~ s/^\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/$2/ ) {
-        $this->{$DEFAULTKEY} = $1
+        $this->{$DEFAULTKEY} = $1;
     }
 
     while ( $string =~ m/\S/ ) {
@@ -133,14 +133,14 @@ sub new {
             }
             # otherwise the whole string - sans padding - is the default
             else {
-                $string =~ s/^\s*(.*?)\s*$/$1/;
-                $this->{$DEFAULTKEY} = $string
-                  unless defined( $this->{$DEFAULTKEY} );
+                if( $string =~ /^\s*(.*?)\s*$/ &&
+                      !defined($this->{$DEFAULTKEY})) {
+                    $this->{$DEFAULTKEY} = $1;
+                }
                 last;
             }
-        } else {
-            $string =~ s/^\s*(.*?)\s*$/$1/;
-            $this->{$DEFAULTKEY} = $string if( $first );
+        } elsif( $string =~ /^\s*(.*?)\s*$/ ) {
+            $this->{$DEFAULTKEY} = $1 if( $first );
             last;
         }
     }
