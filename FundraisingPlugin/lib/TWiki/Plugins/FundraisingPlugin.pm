@@ -14,6 +14,8 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
+# $Revision$
+#
 # =========================
 #
 # This is an empty TWiki plugin. Use it as a template
@@ -63,7 +65,7 @@ use vars qw(
 
 use Time::Local;
 
-$VERSION = '0.1';
+$VERSION = '0.2.1';
 $pluginName = 'FundraisingPlugin';
 
 

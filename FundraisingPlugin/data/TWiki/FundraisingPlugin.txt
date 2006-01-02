@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="IntRigeri" date="1131320545" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="IntRigeri" date="1136169962" format="1.1" version="$rev$"}%
 ---+!! Fundraising Plugin
 
 This plugin defines %<nop>FUNDRAISINGMESSAGE%, using a few variables defined on <nop>FundraisingPlugin; this can be used as %<nop>BROADCASTMESSAGE% on [[%MAINWEB%.TWikiPreferences]].
@@ -13,7 +13,7 @@ This plugin defines %<nop>FUNDRAISINGMESSAGE%, using a few variables defined on 
   <div style="text-align: center">
     <div style="width: 100%; margin: 0 auto;">
       <div style="font-size: 90%">
-        <a href="http://this-ngo.org" target="_top">this-ngo.org</a> needs money :
+        <a href="http://this-ngo.org" target="_top">this-ngo.org</a> needs money:
       </div>
       <div style="width: 100%; border: 1px solid gray; background-color: #ff5050; margin: .2em auto .2em">
         <div style="width: 80%; float: left; background-color: #90ee90;">
@@ -30,7 +30,7 @@ This plugin defines %<nop>FUNDRAISINGMESSAGE%, using a few variables defined on 
         </div>
       </div>
       <div style="font-size: 90%">
-        before 2005-10-28 : <a class="twikiLink" href="http://this-ngo.org">give us money</a>
+        before 2005-10-28: <a class="twikiLink" href="http://this-ngo.org">give us money</a>
       </div>
     </div>
   </div>
@@ -63,20 +63,20 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
       * Set PLEDGED = 200
 
    * Message to display before the progress bar
-      * #Set PREMSG = %WIKITOOLNAME% a besoin d'argent :
+      * #Set PREMSG = %WIKITOOLNAME% a besoin d'argent :
       * Set PREMSG = %WIKITOOLNAME% needs money:
 
    * How to display the already pledged amount
       * Set PLEDGEDMSG = $%FUNDRAISINGPLUGIN_PLEDGED%
-      * #Set PLEDGEDMSG = %FUNDRAISINGPLUGIN_PLEDGED% euros
+      * #Set PLEDGEDMSG = %FUNDRAISINGPLUGIN_PLEDGED% €
 
    * How to display the amount to raise in the progress bar (=TOGO= will be replaced by the missing amount)
       * Set TOGOMSG = $TOGO to go
-      * #Set TOGOMSG = manque TOGO euros
+      * #Set TOGOMSG = manque TOGO €
 
    * Message to display after the progress bar
       * Set POSTMSG = before %FUNDRAISINGPLUGIN_ENDDATE%; visit http://this-ngo.org/
-      * #Set POSTMSG = avant le %FUNDRAISINGPLUGIN_ENDDATE% : http://this-ngo.org/
+      * #Set POSTMSG = avant le %FUNDRAISINGPLUGIN_ENDDATE% : http://this-ngo.org/
 
 ---++ Plugin Installation Instructions
 
@@ -93,8 +93,9 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.BenVoui |
-|  Plugin Version: | 6 Nov 2005 (0.2) |
+|  Plugin Version: | 2 Feb 2006 (0.2.1) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2 Feb 2005: | Replaced "euro" by the euro symbol. Use the non-breaking space Unicode char when needed. (0.2.1) |
 |  6 Nov 2005: | Fixed default config (0.2) |
 |  21 Aug 2005: | Initial version (0.1) |
 |  CPAN Dependencies: | none |
@@ -109,5 +110,5 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 
--- TWiki:Main.BenVoui - 06 Nov 2005
+-- TWiki:Main.BenVoui - $Date$
 
