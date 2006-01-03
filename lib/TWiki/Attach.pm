@@ -184,8 +184,12 @@ sub _expandAttrs {
         return $info->{version};
     }
     elsif ( $attr eq 'ICON' ) {
-        my $fileIcon = $this->{session}->{renderer}->filenameToIcon( $file );
-        return $fileIcon;
+        my $picked = $this->{session}->mapToIconFileName( $file );
+        my $url = $this->{session}->getIconUrl( 0, $picked );
+        return CGI::img( { src => $url, width => 16, height=>16,
+                           align => 'top',
+                           alt => $picked || '',
+                           border => 0 });
     }
     elsif ( $attr eq 'EXT' ) {
         # $fileExtension is used to map the attachment to its MIME type

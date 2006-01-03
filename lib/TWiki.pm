@@ -1011,17 +1011,20 @@ sub getScriptUrl {
 
 =pod
 
----++ ObjectMethod getPubUrl($absolute, $web, $topic) -> $url
+---++ ObjectMethod getPubUrl($absolute, $web, $topic, $attachment) -> $url
 
 Composes a pub url. If $absolute is set, returns an absolute URL.
 If $absolute is set, generates an absolute URL. $absolute is advisory only;
 TWiki can decide to generate absolute URLs (for example when run from the
 command-line) even when relative URLs have been requested.
 
+$web, $topic and $attachment are optional. A partial URL path will be
+generated if one or all is not given.
+
 =cut
 
 sub getPubUrl {
-    my( $this, $absolute, $web, $topic ) = @_;
+    my( $this, $absolute, $web, $topic, $attachment ) = @_;
 
     $absolute ||= ($this->inContext( 'command_line' ) ||
                      $this->inContext( 'rss' ) ||
@@ -1035,14 +1038,62 @@ sub getPubUrl {
         # that all relative URLs lack the <authority> component as well.
         $url = $this->{urlHost}.$url;
     }
-    if( $web || $topic ) {
+    if( $web || $topic || $attachment ) {
         ( $web, $topic ) =
           $this->normalizeWebTopicName( $web, $topic );
 
-        $url .= urlEncode( '/'.$web.'/'.$topic );
+        my $path = '/'.$web.'/'.$topic;
+        $path .= '/'.$attachment if $attachment;
+        $url .= urlEncode( $path );
     }
 
     return $url;
+}
+
+=pod
+
+---++ ObjectMethod getIconUrl( $absolute, $iconName ) -> $iconURL
+
+Map an icon name to a URL path.
+
+=cut
+
+sub getIconUrl {
+    my( $this, $absolute, $iconName ) = @_;
+
+    my $iconTopic = $this->{prefs}->getPreferencesValue( 'ICONTOPIC' );
+    my( $web, $topic) = $this->normalizeWebTopicName(
+        $this->{webName}, $iconTopic );
+    return $this->getPubUrl( $absolute, $web, $topic, $iconName.'.gif' );
+}
+
+=pod
+
+---++ ObjectMethod mapToIconFileName( $fileName, $default ) -> $fileName
+
+Maps from a filename (or just the extension) to the name of the
+file that contains the image for that file type.
+
+=cut
+
+sub mapToIconFileName {
+    my( $this, $fileName, $default ) = @_;
+	
+    my @bits = ( split( /\./, $fileName ) );
+    my $fileExt = lc $bits[$#bits];
+
+    unless( $this->{_ICONMAP} ) {
+        my $iconTopic = $this->{prefs}->getPreferencesValue( 'ICONTOPIC' );
+        my( $web, $topic) = $this->normalizeWebTopicName(
+            $this->{webName}, $iconTopic );
+        local $/ = undef;
+        my $icons = $this->{store}->getAttachmentStream(
+            undef, $web, $topic, '_filetypes.txt' );
+        %{$this->{_ICONMAP}} = split( /\s+/, <$icons> );
+        close( $icons );
+    }
+
+    return $this->{_ICONMAP}->{$fileExt} || $default || 'else';
 }
 
 =pod
@@ -2912,17 +2963,25 @@ sub _ICON {
     my( $this, $params ) = @_;
     my $file = $params->{_DEFAULT} || '';
     # Try to map the file name to see if there is a matching filetype image
-    my $iconFileName = $this->{renderer}->getMappedFileName( $file );
     # If no mapping could be found, use the file name that was passed
-    $iconFileName ||= $file;
-    return $this->{renderer}->getIconHTML( $iconFileName );
+    my $iconFileName = $this->mapToIconFileName( $file, $file );
+    return CGI::img( { src => $this->getIconUrl( 0, $iconFileName ),
+                       width => 16, height=>16,
+                       align => 'top', alt => $iconFileName, border => 0 });
 }
 
 sub _ICONURL {
     my( $this, $params ) = @_;
     my $file = ( $params->{_DEFAULT} || '' );
 
-    return $this->{renderer}->getIconURL( $file );
+    return $this->getIconUrl( 1, $file );
+}
+
+sub _ICONURLPATH {
+    my( $this, $params ) = @_;
+    my $file = ( $params->{_DEFAULT} || '' );
+
+    return $this->getIconUrl( 0, $file );
 }
 
 sub _RELATIVETOPICPATH {
