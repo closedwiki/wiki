@@ -39,7 +39,7 @@ sub main
     my $user = $query->remote_user();
     my $session = new TWiki( $user, $query );
     my $url = $session->getScriptUrl(
-        $session->{webName}, $session->{topicName}, "view" );
+        0, 'view', $session->{webName}, $session->{topicName} );
 
     $url .= ( '?' . $query->query_string() ) if $query->query_string();
 
