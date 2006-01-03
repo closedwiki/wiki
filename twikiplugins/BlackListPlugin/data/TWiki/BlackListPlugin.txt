@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1131476373" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1136327319" format="1.0" version="1.11"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -129,8 +129,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 08 Nov 2005 |
+|  Plugin Version: | 03 Jan 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Jan 2006: | Filter lines with space from spam list; fixed bug that inproperly filtered HTML from spam list; Dakar Release fix (end/postRenderingHandler issue) |
 |  08 Nov 2005: | Doc fixes; code warning fixes; allow empty local SPAMLIST and public spam list |
 |  04 Nov 2005: | Added registration protection with magic number |
 |  30 Oct 2005: | Dakar Release compatibility: Work around Dakar preferencs bug |
@@ -152,5 +153,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 08 Nov 2005
+-- TWiki:Main/PeterThoeny - 03 Jan 2006
 

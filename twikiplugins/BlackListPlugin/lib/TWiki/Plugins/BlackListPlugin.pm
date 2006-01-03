@@ -294,8 +294,8 @@ sub _getSpamListRegex
 
     # merge public and local spam list
     my $text = _getSpamMergeText() . "\n" . _handleSpamList( "read", "" );
-    $text =~ s/<[^>]*//go;      # strip <tags>
     $text =~ s/ *\#.*//go;      # strip comments
+    $text =~ s/.*?[ <>].*//go;  # remove all lines that have spaces or HTML <tags>
     $text =~ s/^[\n\r]+//os;
     $text =~ s/[\n\r]+$//os;
     $text =~ s/[\n\r]+/\|/gos;  # build regex
