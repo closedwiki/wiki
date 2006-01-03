@@ -172,7 +172,7 @@ BEGIN {
         HTTP              => \&_HTTP,
         HTTPS             => \&_HTTPS,
         ICON              => \&_ICON,
-        ICONPATH          => \&_ICONPATH,
+        ICONURL           => \&_ICONURL,
         IF                => \&_IF,
         INCLUDE           => \&_INCLUDE,
         INTURLENCODE      => \&_INTURLENCODE,
@@ -2938,7 +2938,7 @@ sub _ICON {
     return $this->{renderer}->getIconHTML( $iconFileName );
 }
 
-sub _ICONPATH {
+sub _ICONURL {
     my( $this, $params ) = @_;
     my $file = ( $params->{_DEFAULT} || '' );
 

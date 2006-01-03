@@ -12,11 +12,12 @@ There are several ways to put an image in a topic.
       * Note that =ICON{}= assumes an image of 16 x 16 pixels
    * *Really shorthand notation:* in %TWIKIWEB%.TWikiPreferences set a variable to an ICON, for example:%BR% =<nop>   * Set H = %<nop>ICON{help}%= %BR% Now you can use the icon by writing =%<nop>H%=.
    * There are other approaches as well:
-      * In any topic, write =%<nop>PUBURLPATH%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
+      * In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/help.gif= to show the %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif icon. %BR%
       * You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
       * The TWiki:Plugins.SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
    * To create an image with a link, write: =[<nop>[%HOMETOPIC%][%<nop>ICON{home}%]]= to get: [[%HOMETOPIC%][%ICON{home}%]]
-   * To get the full icon filename path, call =ICONPATH=: <code>%<nop>ICONPATH{"toggleopen"}%</code> gets you: <code>%ICONPATH{"toggleopen"}%</code> (if you paste that in a topic you will get: %ICONPATH{"toggleopen"}%)
+   * To get the full URL of the icon, use [[TWikiVariables#VarICONURL][ICONURL]]: <code>%<nop>ICONURL{"toggleopen"}%</code> gets you: <code>%ICONURL{"toggleopen"}%</code> (if you paste that in a topic you will get: %ICONURL{"toggleopen"}%)
+   * __Note:__ Most images have 16x16 pixels. For those images you can use the =%<nop>ICON{}%= syntax. Use an HTML img tag with  =%<nop>ICONURL{}%= for image with other sizes.
 
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
@@ -39,7 +40,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/info.gif" alt="Information" title="Information" />  | =info.gif= | Info | =%<nop>ICON{info}%= |
 | <img src="%ATTACHURLPATH%/hourglass.gif" alt="Hour glass (clock)" title="Hour glass (clock)" />  | =hourglass.gif= | Hour glass (clock) | =%<nop>ICON{hourglass}%= |
 | <img src="%ATTACHURLPATH%/more.gif" alt="Read more" title="Read more" />  | =more.gif= | Read more | =%<nop>ICON{more}%= |
-| <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 13x13 | =&lt;img src="%<nop>ICONPATH{more-small}%" width="13" height="13" alt="Read more" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/more-small.gif" alt="Read more" title="Read more" />  | =more-small.gif= | Read more, 13x13 | =&lt;img src="%<nop>ICONURL{more-small}%" width="13" height="13" alt="Read more" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/move.gif" alt="Move" title="Move" />  | =move.gif= | Move | =%<nop>ICON{move}%= |
 | <img src="%ATTACHURLPATH%/note.gif" alt="Note" title="Note" />  | =note.gif= | Note | =%<nop>ICON{note}%= |
 | <img src="%ATTACHURLPATH%/parked.gif" alt="Parked" title="Parked" />  | =parked.gif= | Parked | =%<nop>ICON{parked}%= |
@@ -71,7 +72,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/download.gif" alt="Download" title="Download" />  | =download.gif= | Download | =%<nop>ICON{download}%= |
 | <img src="%ATTACHURLPATH%/trash.gif" alt="Trash" title="Trash" />  | =trash.gif= | Trash | =%<nop>ICON{trash}%= |
 | <img src="%ATTACHURLPATH%/searchtopic.gif" alt="Search topic" title="Search topic" />  | =searchtopic.gif= | Search topic | =%<nop>ICON{searchtopic}%= |
-| <img src="%ATTACHURLPATH%/search-small.gif" alt="Search" title="Search" />  | =search-small.gif= | Small search button, 13x13 | =&lt;img src="%<nop>ICONPATH{search-small}%" width="13" height="13" alt="Search" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/search-small.gif" alt="Search" title="Search" />  | =search-small.gif= | Small search button, 13x13 | =&lt;img src="%<nop>ICONURL{search-small}%" width="13" height="13" alt="Search" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="Topic back-links" title="Topic back-links" />  | =topicbacklinks.gif= | Topic back-links | =%<nop>ICON{topicbacklinks}%= |
 | <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="Topic difference" title="Topic difference" />  | =topicdiffs.gif= | Topic difference | =%<nop>ICON{topicdiffs}%= |
 | <img src="%ATTACHURLPATH%/statistics.gif" alt="Statistics" title="Statistics" />  | =statistics.gif= | Statistics | =%<nop>ICON{statistics}%= |
@@ -80,7 +81,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/cachetopic.gif" alt="Cache topic" title="Cache topic" />  | =cachetopic.gif= | Cache topic | =%<nop>ICON{cachetopic}%= |
 | <img src="%ATTACHURLPATH%/folder.gif" alt="Folder" title="Folder" />  | =folder.gif= | Folder | =%<nop>ICON{folder}%= |
 | <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
-| <img src="%ATTACHURLPATH%/web-bg-small.gif" alt="Web" title="Web" />  | =web-bg-small.gif= | Web background, 13x13 | =&lt;img src="%<nop>ICONPATH{web-bg-small}%" width="13" height="13" alt="Web" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/web-bg-small.gif" alt="Web" title="Web" />  | =web-bg-small.gif= | Web background, 13x13 | =&lt;img src="%<nop>ICONURL{web-bg-small}%" width="13" height="13" alt="Web" border="0" /&gt;= |
 
 
 ---+++ %ICON{person}% Person, %ICON{group}% group, %ICON{lock}% access icons
@@ -106,13 +107,13 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 %TABLE{databg="#ffffff" headerbg="#ffffff"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | <img src="%ATTACHURLPATH%/changes.gif" alt="Changes" title="Changes" />  | =changes.gif= | Changes | =%<nop>ICON{changes}%= |
-| <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes" title="Changes" />  | =changes-small.gif= | Changes (small), 13x13 | =&lt;img src="%<nop>ICONPATH{changes-small}%" width="13" height="13" alt="Changes" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/changes-small.gif" alt="Changes" title="Changes" />  | =changes-small.gif= | Changes (small), 13x13 | =&lt;img src="%<nop>ICONURL{changes-small}%" width="13" height="13" alt="Changes" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/recentchanges.gif" alt="Recent changes" title="Recent changes" />  | =recentchanges.gif= | Recent changes | =%<nop>ICON{recentchanges}%= |
 | <img src="%ATTACHURLPATH%/mail.gif" alt="Mail" title="Mail" />  | =mail.gif= | Mail | =%<nop>ICON{mail}%= |
 | <img src="%ATTACHURLPATH%/notify.gif" alt="Notify" title="Notify" />  | =notify.gif= | Notify | =%<nop>ICON{notify}%= |
-| <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONPATH{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/rss-feed.gif" alt="RSS feed" title="RSS feed" />  | =rss-feed.gif= | RSS feed, 36x14 | =&lt;img src="%<nop>ICONURL{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/rss-small.gif" alt="RSS feed" title="RSS feed" />  | =rss-small.gif= | RSS feed | =%<nop>ICON{rss-small}%= |
-| <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | =&lt;img src="%<nop>ICONPATH{xml-feed}%" width="36" height="13" alt="XML feed" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/xml-feed.gif" alt="XML feed" title="XML feed" />  | =xml-feed.gif= | XML feed, 36x14 | =&lt;img src="%<nop>ICONURL{xml-feed}%" width="36" height="13" alt="XML feed" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/xml-small.gif" alt="XML feed" title="XML feed" />  | =xml-small.gif= | XML feed | =%<nop>ICON{xml-small}%= |
 
 
@@ -120,11 +121,11 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 %TABLE{databg="#ffffff" headerbg="#ffffff"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
-| <img src="%ATTACHURLPATH%/new.gif" alt="NEW" title="NEW" />  | =new.gif= | NEW, 30x16 | =%<nop>N%=, =&lt;img src="%<nop>ICONPATH{new}%" width="30" height="16" alt="New" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/todo.gif" alt="TODO" title="TODO" />  | =todo.gif= | TODO, 37x16 | =&lt;img src="%<nop>ICONPATH{todo}%" width="37" height="16" alt="TODO" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | =%<nop>U%=, =&lt;img src="%<nop>ICONPATH{updated}%" width="55" height="16" alt="UPDATED" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/done.gif" alt="DONE" title="DONE" />  | =done.gif= | DONE, 37x16 | =&lt;img src="%<nop>ICONPATH{done}%" width="37" height="16" alt="Done" border="0" /&gt;= |
-| <img src="%ATTACHURLPATH%/closed.gif" alt="CLOSED" title="CLOSED" />  | =closed.gif= | CLOSED, 48x16 | =&lt;img src="%<nop>ICONPATH{closed}%" width="48" height="16" alt="Closed" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/new.gif" alt="NEW" title="NEW" />  | =new.gif= | NEW, 30x16 | =%<nop>N%=, =&lt;img src="%<nop>ICONURL{new}%" width="30" height="16" alt="New" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/todo.gif" alt="TODO" title="TODO" />  | =todo.gif= | TODO, 37x16 | =&lt;img src="%<nop>ICONURL{todo}%" width="37" height="16" alt="TODO" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/updated.gif" alt="UPDATED" title="UPDATED" />  | =updated.gif= | UPDATED, 55x16 | =%<nop>U%=, =&lt;img src="%<nop>ICONURL{updated}%" width="55" height="16" alt="UPDATED" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/done.gif" alt="DONE" title="DONE" />  | =done.gif= | DONE, 37x16 | =&lt;img src="%<nop>ICONURL{done}%" width="37" height="16" alt="Done" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/closed.gif" alt="CLOSED" title="CLOSED" />  | =closed.gif= | CLOSED, 48x16 | =&lt;img src="%<nop>ICONURL{closed}%" width="48" height="16" alt="Closed" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/minus.gif" alt="Minus" title="Minus" />  | =minus.gif= | Minus | =%<nop>ICON{minus}%= |
 | <img src="%ATTACHURLPATH%/plus.gif" alt="Plus" title="Plus" />  | =plus.gif= | Plus | =%<nop>ICON{plus}%= |
 | <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="Cancel" title="Cancel" />  | =choice-cancel.gif= | Cancel | =%<nop>ICON{choice-cancel}%= |
@@ -134,7 +135,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | <img src="%ATTACHURLPATH%/checked.gif" alt="Checked checkbox" title="Checked checkbox" />  | =checked.gif= | Checked checkbox | =%<nop>ICON{checked}%= |
 | <img src="%ATTACHURLPATH%/flag.gif" alt="Flag" title="Flag" />  | =flag.gif= | Flag | =%<nop>ICON{flag}%= |
 | <img src="%ATTACHURLPATH%/flag-gray.gif" alt="Flag" title="Flag" />  | =flag-gray.gif= | Gray flag | =%<nop>ICON{flag-gray}%= |
-| <img src="%ATTACHURLPATH%/flag-gray-small.gif" alt="Flag" title="Flag" />  | =flag-gray-small.gif= | Small gray flag, 13x13 | =&lt;img src="%<nop>ICONPATH{flag-gray-small}%" width="13" height="13" alt="Flag" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/flag-gray-small.gif" alt="Flag" title="Flag" />  | =flag-gray-small.gif= | Small gray flag, 13x13 | =&lt;img src="%<nop>ICONURL{flag-gray-small}%" width="13" height="13" alt="Flag" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/led-aqua.gif" alt="Aqua led" title="Aqua led" />  | =led-aqua.gif= | Aqua led | =%<nop>ICON{led-aqua}%= |
 | <img src="%ATTACHURLPATH%/led-blue.gif" alt="Blue led" title="Blue led" />  | =led-blue.gif= | Blue led | =%<nop>ICON{led-blue}%= |
 | <img src="%ATTACHURLPATH%/led-gray.gif" alt="Gray led" title="Gray led" />  | =led-gray.gif= | Gray led | =%<nop>ICON{led-gray}%= |

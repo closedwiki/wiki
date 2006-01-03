@@ -177,14 +177,14 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>ICON{"name"}%=
    * Graphic samples: %ICON{"arrowbright"}% =arrowbright=, %ICON{"bubble"}% =bubble=, %ICON{"choice-yes"}% =choice-yes=, %ICON{"hand"}% =hand=
    * File type samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
-   * Example: =%<nop>ICON{"info"}%= expands to %ICON{"info"}%
-   * Related: [[#VarICONPATH][ICONPATH]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
+   * Example: =%<nop>ICON{"info"}%= expands to HTML img tag %ICON{"info"}%
+   * Related: [[#VarICONURL][ICONURL]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
-#VarICONPATH
----+++ ICONPATH{"name"} -- url path of small documentation graphic or icon
-   * URL path of [[#VarICON][ICON]], typically used in an img tag
-   * Syntax: =%<nop>ICONPATH{"name"}%=
-   * Example: =%<nop>ICONPATH{"info"}%= expands to =%ICONPATH{"info"}%=
+#VarICONURL
+---+++ ICONURL{"name"} -- URL of small documentation graphic or icon
+   * Generates the URL of an image, typically used in an HTML img tag (in contrast, =%<nop>ICON{"name"}%= generates the full img tag)
+   * Syntax: =%<nop>ICONURL{"name"}%=
+   * Example: =%<nop>ICONURL{"info"}%= expands to URL =%ICONURL{"info"}%=, which renders as %ICONURL{"info"}%
    * Related: [[#VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
 #VarIF
