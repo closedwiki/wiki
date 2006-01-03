@@ -663,7 +663,6 @@ sub writeCompletePage {
         # Remove <nop> and <noautolink> tags
         $text =~ s/([\t ]?)[ \t]*<\/?(nop|noautolink)\/?>/$1/gis;
         $text .= "\n" unless $text =~ /\n$/s;
-        spamProof( $text );
     }
 
     my $htmlHeader = join(
@@ -2411,25 +2410,6 @@ sub handleCommonTags {
 
     return $text;
 }
-
-=pod
-
----++ StaticMethod spamProof( $text ) -> $text
-
-Find and replace all explicit links (&lt;a etc) in $text and apply anti spam measures
-to them. This method is designed to be called on text just about to be printed to the
-browser, and needs to be very fast.
-
-Links to URLs that are escaped by $cfg{AntiSpam}{Clean} are left untouched. All
-other links have $cfg{AntiSpam}{Options} added.
-
-=cut
-
-sub spamProof {
-    return unless( defined( $TWiki::cfg{AntiSpam}{Options} ));
-    $_[0] =~ s;<a(\s+[^>]*\bhref\s*=\s*['"](?!$TWiki::cfg{AntiSpam}{Clean}));<a $TWiki::cfg{AntiSpam}{Options}$1;gio;
-}
-
 
 =pod
 
