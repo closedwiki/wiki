@@ -435,10 +435,11 @@ sub _rewriteFORM {
 =pod
 
 ---++ ObjectMethod endRenderingHandler()
-
 This handler is called by getRenderedVersion just before the plugins
 postRenderingHandler. So it is passed all HTML text just before it is
 printed.
+
+*DEPRECATED* Use postRenderingHandler instead.
 
 =cut
 

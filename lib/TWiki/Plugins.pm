@@ -490,7 +490,7 @@ foreach my $placeholder ( keys %$map ) {
 sub preRenderingHandler {
     my $this = shift;
     $this->_dispatch( 'preRenderingHandler', @_ );
-    # Apply the startRenderingHandler if any are defined
+    # Apply the startRenderingHandler (*deprecated*!) if any are defined
 }
 
 =pod
@@ -512,7 +512,9 @@ sub postRenderingHandler {
 
 Called just before the line loop
 
-*DEPRECATED*
+*DEPRECATED* Use preRenderingHandler instead. This handler correctly 
+handles verbatim and other TWiki ML block types, and exposes them to 
+the plugin.
 
 =cut
 
@@ -528,7 +530,10 @@ sub startRenderingHandler {
 
 Called in line loop outside of &lt;PRE&gt; tag
 
-*DEPRECATED*
+*DEPRECATED* Use preRenderingHandler instead. 
+This handler correctly handles pre and other 
+TWiki ML block types, and is called only once 
+instead of line-by-line.
 
 =cut
 
@@ -544,7 +549,10 @@ sub outsidePREHandler {
 
 Called in line loop inside of &lt;PRE&gt; tag
 
-*DEPRECATED*
+*DEPRECATED* Use preRenderingHandler instead. 
+This handler correctly handles pre and other 
+TWiki ML block types, and is called only once 
+instead of line-by-line.
 
 =cut
 
@@ -559,6 +567,8 @@ sub insidePREHandler {
 ---++ ObjectMethod endRenderingHandler ()
 
 Called just after the line loop
+
+*DEPRECATED* Use postRenderingHandler instead.
 
 =cut
 
@@ -704,6 +714,11 @@ sub afterAttachmentSaveHandler {
 ---++ ObjectMethod writeHeaderHandler () -> $headers
 
 Called by TWiki::writePageHeader. *DEPRECATED* do not use!
+
+*DEPRECATED* Use modifyHeaderHandler instead. it is a lot 
+more flexible, and allows you to modify existing headers 
+as well as add new ones. It also works correctly when 
+multiple plugins want to modify headers.
 
 =cut
 
