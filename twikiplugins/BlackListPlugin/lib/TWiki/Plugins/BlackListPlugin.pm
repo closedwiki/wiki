@@ -26,6 +26,7 @@ use vars qw(
         $debug %cfg
         $userScore $isBlackSheep
     );
+use vars qw( %TWikiCompatibility );
 
 BEGIN {
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -214,14 +215,25 @@ sub commonTagsHandler
 }
 
 # =========================
+
+# Stop TWiki registering the endRenderingHandler with TWiki::Plugins 1.1
+# or later
+$TWikiCompatibility{endRenderingHandler} = 1.1;
+
 sub endRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    writeDebug( "endRenderingHandler( $web.$topic )" );
-
     # This handler is called by getRenderedVersion just after the line loop, that is,
     # after almost all XHTML rendering of a topic. <nop> tags are removed after this.
+
+    writeDebug( "endRenderingHandler( $web.$topic )" );
+    postRenderingHandler( @_ );
+}
+
+# This handler will only be called by TWiki before TWiki::Plugins 1.1
+sub postRenderingHandler {
+### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
     return unless( $noFollowAge );
     $_[0] =~ s/(<a .*?href=[\"\']?)([^\"\'\s]+[\"\']?)(\s*[a-z]*)/_handleNofollowLink( $1, $2, $3 )/geoi;
