@@ -15,6 +15,8 @@ If you want to use Javascript to create other data types in form fields, you can
 ---+ Settings
 	* Description:
 	* Set SHORTDESCRIPTION = Adds a =date= type to forms
+	* #Set DATEFORMAT = %d %b %Y 
+      * Format changed to make it sortable in TWiki tables. To get the old Format like "3 April 2005" set DATEFORMAT to '%e %B %Y'
 See JSCalendarContrib for additional settings.
 
 ---+ Plugin Installation Instructions
@@ -34,6 +36,7 @@ See JSCalendarContrib for additional settings.
 |  Copyright &copy;: | 2004 Deutsche Bank AG |
 |  License: | [[GPL][http://www.gnu.org/copyleft/gpl.html]] |
 |  Change History: | <!-- Most recent first --> |
+|  03 Jan 2005 | 1.001 make outputformat configurable; changed standard format to sortable dates |
 |  9 Dec 2004 | 1.000 initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Home: | TWiki:Plugins/%TOPIC% |
