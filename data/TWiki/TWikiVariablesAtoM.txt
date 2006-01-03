@@ -182,14 +182,18 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarICONURL
 ---+++ ICONURL{"name"} -- URL of small documentation graphic or icon
-   * Generates the absolute URL of an image, typically used in an HTML img tag (contrast with =%<nop>ICON{"name"}%=, which generates the full img tag)
+   * Generates the URL of an image, typically used in an HTML img tag (contrast with =%<nop>ICON{"name"}%=, which generates the full img tag)
    * Syntax: =%<nop>ICONURL{"name"}%=
    * Example: =%<nop>ICONURL{"info"}%= expands to URL =%ICONURL{"info"}%=, which renders as %ICONURL{"info"}%
    * Related: [[#VarICONURLPATH][ICONURLPATH]], [[#VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
 #VarICONURLPATH
----+++ ICONURLPATH{"name"} -- as ICONURL, though it generates a relative URL instead of an absolute URL.
+---+++ ICONURLPATH{"name"} -- URL path  of small documentation graphic or icon
+   * Generates the URL path of an image, typically used in an HTML img tag 
+   * Syntax: =%<nop>ICONURLPATH{"name"}%=
+   * Example: =%<nop>ICONURLPATH{"info"}%= expands to =%ICONURLPATH{"info"}%=
    * Related: [[#VarICONURL][ICONURL]], [[#VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
+
 #VarIF
 ---+++ IF{"condition" ...} -- simple conditionals
    * Evaluate a condition and show one text or another based on the result. See details in IfStatements
