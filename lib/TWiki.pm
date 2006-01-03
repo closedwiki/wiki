@@ -173,6 +173,7 @@ BEGIN {
         HTTPS             => \&_HTTPS,
         ICON              => \&_ICON,
         ICONURL           => \&_ICONURL,
+        ICONURLPATH       => \&_ICONURLPATH,
         IF                => \&_IF,
         INCLUDE           => \&_INCLUDE,
         INTURLENCODE      => \&_INTURLENCODE,
