@@ -55,14 +55,14 @@ sub beforeEditHandler {
 
 sub renderFormFieldForEditHandler {
     my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
-
+    my $calendarOutputFormat = TWiki::Func::getPreferencesValue('DATEFIELDPLUGIN_DATEFORMAT') || '%d %b %Y';
     return unless $type eq "date";
 
     my $content =
       CGI::image_button(
           -name => 'calendar',
           -onclick =>
-            "return showCalendar('date_$name','%e %B %Y')",
+            "return showCalendar('date_$name','$calendarOutputFormat')",
           -src=> TWiki::Func::getPubUrlPath() . '/' .
             TWiki::Func::getTwikiWebname() .
                 '/JSCalendarContrib/img.gif',
