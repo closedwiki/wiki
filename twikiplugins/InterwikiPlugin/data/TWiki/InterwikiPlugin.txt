@@ -21,7 +21,7 @@ Plugin settings are stored as Preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
 	* One-line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Link ==ExternalSite:Page== text to external sites based on aliases defined in the %<nop>RULESTOPIC% topic
+		* Set SHORTDESCRIPTION = Link ==ExternalSite:Page== text to external sites based on aliases defined in a rules topic
 
 	* Link rules topic name: (default is %TWIKIWEB%.InterWikis)
 		* Set RULESTOPIC = 
