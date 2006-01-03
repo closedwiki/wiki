@@ -1128,11 +1128,14 @@ sub _perlifyType {
     if ($type eq 'BOOLEAN') {
         return ($val ? 1 : 0);
     } elsif ($type eq 'NUMBER') {
+        $val ||= 0;
         return 0+$val;
     } elsif ($type eq 'OCTAL') {
+        $val ||= 0;
         $val = '0'.$val unless $val =~ /^0/;
         return $val;
     } else {
+        $val ||= '';
         $val =~ s/'/\\'/g;
         return "'".$val."'";
     }
@@ -1286,14 +1289,12 @@ HERE
             next if( $type eq 'NUMBER' && $val + 1 == $def + 1 );
             next if( $type eq 'BOOLEAN' && ($val && $def || !$val && !$def));
             next if( $val eq $def );
-            $def = '0' unless $def;
-            $val = '0' unless $val;
             $output .= CGI::h3($var).
               CGI::b('old ').
-              CGI::code($def).
+              CGI::code($def||' ').
               CGI::br().
-              CGI::b('new  ').
-              CGI::code($val);
+              CGI::b('new ').
+              CGI::code($val||' ');
             $updates{$basevar} = _perlifyType($val, $type);
             $changed++;
         }
