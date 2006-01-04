@@ -78,8 +78,9 @@ See: PatternSkinCssCookbook
 
 ---++ Skin Info
 
-|  Description: | Provides a CSS based default look and feel for TWiki - flexible and W3C-compliant |
+|  Description: | TWiki's default skin; CSS based, flexible and W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this topic]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
 |  Skin Version: | 15 Oct 2005 (v2.0.0) | 
@@ -91,6 +92,7 @@ See: PatternSkinCssCookbook
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev | %STOPINCLUDE%
 |  Download: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+
 ---++ Related topics
 
    * TWikiCss
