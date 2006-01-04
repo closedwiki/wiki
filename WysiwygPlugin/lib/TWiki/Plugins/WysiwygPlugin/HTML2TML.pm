@@ -65,7 +65,8 @@ sub new {
     my $this = new HTML::Parser( start_h => [\&_openTag, 'self,tagname,attr' ],
                                  end_h => [\&_closeTag, 'self,tagname'],
                                  declaration_h => [\&_ignore, 'self'],
-                                 default_h => [\&_text, 'self,text']);
+                                 default_h => [\&_text, 'self,text'],
+                                 comment_h => [\&_comment, 'self,text'] );
 
     $this = bless( $this, $class );
 
@@ -135,11 +136,12 @@ sub _closeTag {
 
 sub _text {
     my( $this, $text ) = @_;
+    my $l = new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text );
+    $this->{stackTop}->addChild( $l );
+}
 
-    # special hack for handling %, which is pre-escaped to avoid
-    # expansion as a variable during TML -> HTML conversion
-    $text =~ s/&#37;/%/g;
-
+sub _comment {
+    my( $this, $text ) = @_;
     my $l = new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text );
     $this->{stackTop}->addChild( $l );
 }

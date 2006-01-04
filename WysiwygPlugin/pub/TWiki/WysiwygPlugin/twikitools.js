@@ -800,7 +800,7 @@ TWikiTableTool.prototype = new TableTool;
  * loading. Should be possible to make this smarter - e.g. by
  * inspecting the result status. */
 function uploadComplete() {
-  if (drawertool && drawertool.current_drawer)
+  if (typeof drawertool  != "undefined" && drawertool.current_drawer)
     // close the dialog
     drawertool.current_drawer.save();
 }

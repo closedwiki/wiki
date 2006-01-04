@@ -49,7 +49,7 @@ BEGIN {
     if( defined &TWiki::basicInitialize ) {
         TWiki::basicInitialize();
         die "ARGH" unless defined $TWiki::regex{headerPatternNoTOC};
-        $page = TWiki::getScriptUrl('Current', 'TestTopic', 'view');
+        $page = TWiki::getScriptUrl(1, 'view', 'Current', 'TestTopic');
     } else {
         my $query = new CGI("");
         $query->path_info("/Current/TestTopic");
@@ -57,7 +57,7 @@ BEGIN {
         $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
         $twiki = new TWiki(undef, $query);
         $TWiki::Plugins::SESSION = $twiki;
-        $page = $twiki->getScriptUrl('Current', 'TestTopic', 'view');
+        $page = $twiki->getScriptUrl(1, 'view', 'Current', 'TestTopic');
     }
     $page =~ s/\/Current\/TestTopic.*$//;
 
@@ -321,7 +321,7 @@ HERE
               exec => 3,
               name => 'simpleTable',
               html => <<'HERE',
-<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td class="align-center" style="text-align: center">2</td><td class="align-right" style="text-align: right">2</td></tr><tr><td>A3</td><td class="align-center" style="text-align: center">3</td><td class="align-left" style="text-align: left">3</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
+<table border="1" cellpadding="0" cellspacing="1"><tr><td><b>L</b></td><td><b>C</b></td><td><b>R</b></td></tr><tr><td>A2</td><td class="align-center" style="text-align: center">2</td><td class="align-right" style="text-align: right">2</td></tr><tr><td>A3</td><td class="align-center" style="text-align: center">3</td><td class="align-left" style="text-align: left">3</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
 HERE
               tml => <<'HERE',
 
@@ -349,7 +349,7 @@ HERE
               exec => 0,# disabled because of Kupu problems handling colspans
               name => 'tableWithSpans',
               html => <<'HERE',
-<table border="1" cellpadding="0" cellspacing="1"><tr><th> L </th><th> C </th><th> R </th></tr><tr><td> A2 </td><td class="align-center" style="text-align: center">  2  </td><td class="align-right" style="text-align: right">  2 </td></tr><tr><td> A3 </td><td class="align-center" style="text-align: center">  3  </td><td class="align-left" style="text-align: left">  3  </td></tr><tr><td colspan="3"> multi span </td></tr><tr><td> A4-6 </td><td> four </td><td> four </td></tr><tr><td>^</td><td> five</td><td>five </td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
+<table border="1" cellpadding="0" cellspacing="1"><tr><td><b> L </b></td><td><b> C </b></td><td><b> R </b></td></tr><tr><td> A2 </td><td class="align-center" style="text-align: center">  2  </td><td class="align-right" style="text-align: right">  2 </td></tr><tr><td> A3 </td><td class="align-center" style="text-align: center">  3  </td><td class="align-left" style="text-align: left">  3  </td></tr><tr><td colspan="3"> multi span </td></tr><tr><td> A4-6 </td><td> four </td><td> four </td></tr><tr><td>^</td><td> five</td><td>five </td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
 HERE
               tml => <<'HERE',
 
@@ -814,7 +814,7 @@ Outside
               exec => 3,
               name=>"TWikiTagsInHTMLParam",
               html=>'<a href="'.$page.'/Burble/Barf">Burble</a>',
-              tml => '[[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Burble/Barf][Burble]]',
+              tml => '[['.$page.'/Burble/Barf][Burble]]',
               finaltml => '[[Burble.Barf][Burble]]',
           },
           {
@@ -932,8 +932,14 @@ HERE
               exec => 3,
               name => 'Item1175',
               tml => '[[WebCTPasswords][Resetting a WebCT Password]]',
-              html => '<a href="/DEVELOP/bin/view/Current/WebCTPasswords">Resetting a <span class="TMLnop">WebCT</span> Password</a>',
+              html => '<a href="'.$page.'/Current/WebCTPasswords">Resetting a <span class="TMLnop">WebCT</span> Password</a>',
               finaltml => '[[WebCTPasswords][Resetting a <nop>WebCT Password]]',
+          },
+          {
+              exec => 3,
+              name => 'Item1259',
+              html => "Spleem<!--\n   * Set SPOG = dreep\n-->Splom",
+              tml => "Spleem<!--\n   * Set SPOG = dreep\n-->Splom",
           },
          ];
 

@@ -187,10 +187,7 @@ sub beforeCommonTagsHandler {
 # them from TWiki rendering, such as TWiki variables.
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 sub endRenderingHandler {
-    return if( $TWiki::Plugins::VERSION >= 1.1 ||
-                 $recursionBlock || !$tml2html );
-
-    return $tml2html->cleanup( @_ );
+    return postRenderingHandler( @_ );
 }
 
 # Dakar handler, replaces endRenderingHandler above

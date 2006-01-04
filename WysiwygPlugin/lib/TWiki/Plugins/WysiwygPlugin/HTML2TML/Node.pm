@@ -668,6 +668,16 @@ sub _handleINPUT {
     return (0, undef);
 }
 
+sub _handleTEXTAREA {
+    my( $this, $options ) = @_;
+    if( defined( $this->{attrs}->{class} ) &&
+        $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
+        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+        return (0, "<!--\n".$text."\n-->" );
+    }
+    return (0, undef);
+}
+
 sub _handleSPAN {
     my( $this, $options ) = @_;
     if( defined( $this->{attrs}->{class} ) &&
