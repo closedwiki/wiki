@@ -609,7 +609,7 @@ table.patternTopBarContents td {
 }
 .patternLeftBarContents input.patternFormField {
 	display:block;
-	height:12px; /* with padding and border this adds up to 16px height - same as button */
+	height:1em;
 	width:100%;
 	border-width:1px;
 	border-style:solid;
