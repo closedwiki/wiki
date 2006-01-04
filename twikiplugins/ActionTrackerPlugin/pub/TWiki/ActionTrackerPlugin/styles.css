@@ -12,7 +12,7 @@ th.atpDef {
 .atpSearch {
   border-collapse: collapse;
   border-spacing: 0px;
-  border: dotted black 1px;
+  border: solid gray 1px;
 }
 th.atpSearch {
   background-color: orange;
