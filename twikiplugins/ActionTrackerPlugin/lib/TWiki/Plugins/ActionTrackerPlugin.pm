@@ -286,10 +286,6 @@ sub beforeEditHandler {
     use TWiki::Contrib::JSCalendarContrib;
     if( $@ || !$TWiki::Contrib::JSCalendarContrib::VERSION ) {
         TWiki::Func::writeWarning('JSCalendarContrib not found '.$@);
-    } elsif( $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
-        TWiki::Func::writeWarning(
-            'JSCalendarContrib >=0.961 required, '.
-              $TWiki::Contrib::JSCalendarContrib::VERSION.' found');
     } else {
         TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
     }
