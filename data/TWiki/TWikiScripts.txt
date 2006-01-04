@@ -91,7 +91,7 @@ The =oops= script supports the following parameters:
 The =edit= scipt understands the following parameters, typically supplied by HTML input fields:
 
 | *Parameter* | *Description* | *Default* |
-| =action= | Optional. Use the <code>edit<i>action</i></code> template instead of the standard =edit=, and if =action=text=, then hide the form | |
+| =action= | Optional. Use the editaction template instead of the standard edit. If action=text, then hide the form. If action=form hide the normal text area and only edit the form. | |
 | =onlynewtopic= | If set, error if topic already exists | |
 | =onlywikiname= | If set, error if topic name is not a WikiWord | |
 | =templatetopic= | The name of the template topic, copied to get the initial content | |
