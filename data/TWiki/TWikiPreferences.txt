@@ -143,13 +143,13 @@ _(Click for form-based editing of existing preferences.)_
 ---+++ Email Link Settings
 
    * 'Mail this topic' mailto: link - can be included in topics, templates or skins
-      * Set MAILTHISTOPIC = [[mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL% %MAILTHISTOPICTEXT%]]
+      * Set MAILTHISTOPIC = <a href="mailto:?subject=%BASETOPIC%&body=%TOPICURL%">%MAILTHISTOPICTEXT%</a>
 
    * 'Mail this topic' link text
       * Set MAILTHISTOPICTEXT = Send a link to this page
 
    * URL for current topic
-      * Set TOPICURL = %SCRIPTURLPATH{"view"}%/%WEB%/%BASETOPIC%
+      * Set TOPICURL = %SCRIPTURL{"view"}%/%WEB%/%BASETOPIC%
 
 
 ---+++ HTTP-<nop>EQUIV Settings
