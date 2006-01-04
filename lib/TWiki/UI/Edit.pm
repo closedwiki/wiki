@@ -210,11 +210,18 @@ sub edit {
             ( $templateWeb, $templateTopic ) =
               $session->normalizeWebTopicName( $templateWeb, $templateTopic );
 
+            unless( $store->topicExists( $webName, $topic )) {
+                throw TWiki::OopsException( 'accessdenied',
+                                            def => 'no_such_topic',
+                                            web => $templateWeb,
+                                            topic => $templateTopic,
+                                            params => [ 'templatetopic' ] );
+            }
+
             ( $meta, $text ) =
               $store->readTopic( $session->{user}, $templateWeb,
                                         $templateTopic, undef );
-        }
-        unless( $text ) {
+        } else {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, 'WebTopicEditTemplate' );
         }
 
