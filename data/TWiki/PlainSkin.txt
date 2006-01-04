@@ -8,7 +8,7 @@ TWiki uses this skin when topics must be viewed without any TWiki controls (side
 |  Description: | View-only skin, mainly for help information |
 |  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Base Name: | plain |
-|  Skin Author: | TWiki:Main/PeterThoeny |
+|  Skin Author: | TWiki.TWikiContributor |
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIKIWEB%.TWikiSkinBrowser
 
