@@ -114,6 +114,7 @@ data/TWiki/MoveTopic.txt 0660
 data/TWiki/NewUserTemplate.txt 0660
 data/TWiki/ObjectMethod.txt 0660
 data/TWiki/PeterThoeny.txt 0660
+data/TWiki/PlainSkin.txt 0660
 data/TWiki/PreviewBackground.txt 0660
 data/TWiki/PrintSkin.txt 0660
 data/TWiki/QuietSave.txt 0660
@@ -341,6 +342,8 @@ pub/TWiki/ATasteOfTWiki/SAP_logo.gif 0660
 pub/TWiki/ATasteOfTWiki/Motorola_logo.gif 0660
 pub/TWiki/FileAttachment/Sample.txt 0660
 pub/TWiki/FileAttachment/Smile.gif 0660
+pub/TWiki/PlainSkin/fullscreen.gif 0660
+pub/TWiki/PlainSkin/screenshot.gif 0660
 pub/TWiki/PreviewBackground/blankltgraybg.gif 0660
 pub/TWiki/PreviewBackground/blankwhitebg.gif 0660
 pub/TWiki/PreviewBackground/preview2bg.gif 0660

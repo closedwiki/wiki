@@ -6,7 +6,7 @@ The classic TWiki skin is the traditional TWiki skin, as seen in previous TWiki 
 ---++ Skin Info
 
 |  Description: | The classic TWiki skin, bare bone and functional, for any browser, with a minimum of graphics |
-|  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="180" /></a> |
 |  Base Name: | classic |
 |  Skin Author: | TWiki:Main/PeterThoeny |
 |  Skin Version: | 25 Jul 2004 (v1.000) |
