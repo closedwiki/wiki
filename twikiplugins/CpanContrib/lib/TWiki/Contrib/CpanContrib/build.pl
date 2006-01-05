@@ -64,7 +64,6 @@ sub target_build {
     {
 	package CpanContrib::Modules;
 	use vars qw( @CPAN );		# grrr, not sure why this is needed
-	print `pwd`;
 	unless ( my $return = do "./CPAN" )
 	{ 
 	    die "unable to load CPAN module list to build: $!";
@@ -80,11 +79,11 @@ sub target_build {
     my $base_lib_dir = getcwd . "/../../../../lib/CPAN";
     -e $base_lib_dir && rmtree $base_lib_dir;
     mkpath $base_lib_dir or die $!;
-    # TODO: move a lot of the old CPAN support stuff into CpanContrib and out of TWikiInstallerContrib
-    chdir '../../../../../TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/cpan/' or die $!;
+    chdir 'bin' or die $!;
     ++$|;
 
-    foreach my $module ( @CpanContrib::Modules::CPAN )
+    foreach my $module ()
+#    foreach my $module ( @CpanContrib::Modules::CPAN )
     {
 	# clean out old build stuff (in particular, ExtUtils::MakeMaker leaves bad stuff lying around)
 	my $dirCpanBuild = "$base_lib_dir/.cpan/build/";
@@ -106,4 +105,4 @@ package main;
 $build = new BuildBuild();
 
 # Build the target on the command line, or the default target
-$build->build($build->{target});
+$build->build( $build->{target} );
