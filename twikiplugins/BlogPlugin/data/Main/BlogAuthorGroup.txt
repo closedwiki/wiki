@@ -5,7 +5,7 @@
 Group of Blog.BlogAuthors
 
    * Set GROUP = 
-   * #Set ALLOWTOPICCHANGE = BlogAdminGroup
+   * Set ALLOWTOPICCHANGE = BlogAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 

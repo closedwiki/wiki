@@ -3,7 +3,7 @@
 ---+!! <nop>BlogAdminGroup
 
    * Set GROUP = %MAINWEB%.TWikiAdminGroup
-   * #Set ALLOWTOPICCHANGE = BlogAdminGroup
+   * Set ALLOWTOPICCHANGE = BlogAdminGroup
 
 
 
