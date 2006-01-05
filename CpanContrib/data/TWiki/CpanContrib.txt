@@ -44,11 +44,11 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:XML::Parser 
    * CPAN:XML::Simple 
    * CPAN:Algorithm::Diff 
-</td>
-<td>
    * CPAN:Text::Diff 
    * CPAN:HTML::Diff
    * CPAN:Test::Builder::Tester 
+</td>
+<td>
    * CPAN:Test::LongString
    * CPAN:WWW::Mechanize 
    * CPAN:HTML::TableExtract 
@@ -67,14 +67,14 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Unicode::Map8 
    * CPAN:Jcode 
    * CPAN:Unicode::String 
-</td>
-<td>
    * CPAN:Unicode::MapUTF8
    * CPAN:Time::Local
    * CPAN:Time::ParseDate
    * CPAN:Barcode::Code128
    * CPAN:Bit::Vector
    * CPAN:Carp::Clan
+</td>
+<td>
    * CPAN:Date::Calc
    * CPAN:Data::UUID
    * CPAN:Net::LDAP
@@ -103,6 +103,17 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:POE::Filter::IRCD 
    * CPAN:POE::Component::Server::IRC
    * CPAN:Net::IRC
+   * CPAN:Test::More 
+   * CPAN:YAML 
+   * CPAN:SVN::Simple::Edit 
+   * CPAN:Class::Autouse 
+   * CPAN:Encode 
+   * CPAN:File::chdir 
+   * CPAN:Class::Accessor 
+   * CPAN:Data::UUID 
+   * CPAN:SVN::Mirror 
+   * CPAN:IO::Pager 
+   * CPAN:SVK
 </td>
 </tr></table>
 
