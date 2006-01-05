@@ -1,6 +1,10 @@
 TWikiShellContrib.MF NEW
 data/TWiki/CommandSet.txt NEW
 data/TWiki/TWikiShellContrib.txt NEW
+data/TWiki/TWikiShellBundledCommandSets.txt NEW
+data/TWiki/TWikiShellConfigObject.txt NEW
+data/TWiki/TWikiShellServices.txt NEW
+data/TWiki/UsingBuildContribAndTWikiShell.txt NEW
 lib/TWiki/Contrib/CommandSet/Apache.pm NEW
 lib/TWiki/Contrib/CommandSet/Apache/Conf.pm NEW
 lib/TWiki/Contrib/CommandSet/Apache/Httpd.pm NEW
