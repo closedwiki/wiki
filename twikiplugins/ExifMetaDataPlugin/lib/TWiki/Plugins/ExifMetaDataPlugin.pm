@@ -172,8 +172,6 @@ sub handleExifMetaData {
 
     my $exif = "";
 
-    my $topic = scalar $TWiki::topicName;
-    my $web = scalar $TWiki::webName;
     my ( $meta, $page ) = &TWiki::Func::readTopic( $web, $topic );
     my @attachments = $meta->find( 'FILEATTACHMENT' );
 
