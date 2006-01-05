@@ -4,7 +4,8 @@
 Key new features:
    * Much simpler install and configuration
    * Integrated session support
-   * Security sandbox blocks all possible routes for remote command excution on the server
+   * Webserver-independent login/logout
+   * Security sandbox blocks all possible routes for remote command execution on the server
    * New editing model allows freer collaboration, without fear of overwriting other people's changes
    * Multilingual UI
    * Email confirmations for registration
@@ -23,6 +24,7 @@ Other people who gave significant amounts of their time and patience to less sex
    * [[TWiki:Main.LynnwoodBrown][Lynnwood Brown]]
    * [[TWiki:Main.MichaelDaum][Michael Daum]]
    * [[http://kamaelia.org/Michael.html][Michael Sparks]]
+   * [[TWiki:Main.PeterThoeny][Peter Thoeny]]
    * [[TWiki:Main.SvenDowideit][Sven Dowideit]]
    * [[TWiki:Main.WillNorris][Will Norris]]
 There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor.
@@ -190,6 +192,9 @@ And =%<nop>INCLUDE{"SampleTopic" section="inner"}%= will produce:
 
 In the same line, overlapped sections are allowed.
 
+---+++ RSS Feeds
+RSS feeds have been enhanced to display links as links to make the feeds more useful. They also now use the web-specific logos.
+
 ---++ Notes for !TWikiAdmins and !WikiMasters
 
 ---+++ Upgrading
@@ -201,7 +206,7 @@ Dakar Release introduces the use of 'safe pipes' to prevent any malicious reques
 
 ---+++ CPAN Requirements
 
-CPAN:Text::Diff is a prerequisite for the UpgradeTWiki script only. CPAN:URI is a prerequisite for =configure=. Other new prerequisites are CPAN:CGI::Session and CPAN:CGI::Cookie, if you want to take advantage of the new session support.
+CPAN:Text::Diff is a prerequisite for the !UpgradeTWiki script only. CPAN:URI is a prerequisite for =configure=. Other new prerequisites are CPAN:CGI::Session and CPAN:CGI::Cookie, if you want to take advantage of the new session support.
 
 If you want user interface internationalization support, CPAN:Locale::Maketext::Lexicon and CPAN:Encode (in perl 5.8's core) are required, as well as perl 5.8 or higher. See TWiki:Codev.UserInterfaceLocalisation for details on TWiki internationalization support.
 
@@ -287,9 +292,7 @@ NOTE: Although this feature is being introduced in this release, it is also bein
 Each web can have its own customised logo.  The simplest way is to upload a =logo.gif= to a web's <nop>WebPreferences, and it will appear in the top-left corner.
 
 To change the logo's filename, set the =WEBLOGONAME= variable.  You'll especially need to do this if you use a different logo file format:
-      * <nop>Set WEBLOGONAME = MyLogo.jpg
-
-RSS feeds have also been enhanced to use the web-specific logo.
+      * <nop>Set WEBLOGONAME = !MyLogo.jpg
 
 If you don't want to have custom logos on a per-web basic, but instead want to use a single, site-wide logo, hardcode a specific web in the =WEBLOGOURL= variable.  For example:
       * <nop>Set WEBLOGOURL = %<nop>PUBURLPATH%/%MAINWEB%/WebPreferences/logo.png
@@ -375,21 +378,19 @@ The standard webs shipped with this release have these settings disabled. Howeve
 
 This topic gives you a quick view of the permissions on each web  - i.e. it aggregates ALLOWWEB* etc. into a handy table. It is also installed on TWiki.org as TWiki:TWiki.SitePermissions but is not in Cairo.
 
----+++ Frustrating Robots
-To help contain the growth of wiki spam, TWiki now incorporates some features to prevent robots from following links. You can constain links using the =rel='nofollow'= feature on links, which is honoured by the major search engines, to prevent spammers from gaining any ranking benefit from vandalising your site. See the *Anti-spam measures* section in =configure= for full details.
+---+++ Frustrating Robots and Spammers
+Standard TWiki incorporates some simple measures to protect e-mail addresses and control the activities of benign robots. These should be enough to handle intranet requirements. Administrators of public (internet) sites are *strongly* recommended to investigate the TWiki:Plugins/BlackListPlugin.
 
 ---+++ New User Registration 
 
 The new user registration process has been extensively reworked to improve usability and security of the registration process.
-   1 !FirstName and !LastName are taken separately and tabulated. See %MAINWEB%.UserListByLocation
+   1 !FirstName and !LastName are recorded separately and tabulated. See %MAINWEB%.UserListByLocation
    1 Sends a email that the user has to respond to; registration data is staged until this is done
    1 Populates a form in the user topic, if there is one in the !NewUserTemplate. If there is no form, then bullets are used, as in pre-Dakar TWiki.
-   1 Sends different emails to the WIKIWEBMASTER and the USER, with the user's containing the password unless {HidePasswdInRegistration} is set.
-   1 The =templates/view.pattern.tmpl= template is rearranged to show the form on the top LHS, any pictures on the top RHS (uses TWiki:Plugins.ImageGalleryPlugin if installed), and any fields not in the form (e.g. comment) in the content in the topic. 
+   1 Sends different emails to the WIKIWEBMASTER and the USER, with the users containing the password unless {HidePasswdInRegistration} is set.
    1 There is now a mechanism for bulk registration, with callbacks for augmentation (e.g. from other sources).
-
-   1 Absorbed ResetPasswordByEmail.
-   1 Obsoleted InstallPassword
+   1 Absorbed TWiki:Codev.ResetPasswordByEmail.
+   1 Obsoleted TWiki:Codev.InstallPassword
 
 ---+++ Change notification support
 The old =mailnotify= script has been retired in favour of the TWiki.MailerContrib. See TWiki.MailerContrib for information about functional changes.
@@ -416,7 +417,7 @@ In previous TWiki versions the evaluation order of =%<nop>VARIABLE%s= depended o
 
 The parser has been replaced in Dakar with a deterministic variable parser with predictable behaviour. Specifically, variables are now always evaluated left to right and inside out. For example, consider =%<nop>VAR2{ "%<nop>VAR1{ "%<nop>VAR0{ "params" }%" }%" }% %<nop>VAR3%=. Previously, the expansion order would have depended on the order of expressions in the code, so the expansion may have proceeded VAR3 - VAR0 - VAR2 - VAR1. If you were lucky, this was the intended order. In Dakar, the order is now guranteed to be VAR0 - VAR1 - VAR2 - VAR3 (i.e. inside out and left to right).
 
-The main impact of this is that some TWikiApplications may cease to work if they have been written to take advantage of the old chaotic order. There is no way to predict which will work and which will fail, so you will have to deal with this on a case-by-case basis. In most cases !TWikiApplication authors will have worked hard to do the "sensible thing" so instances of this problem should be rare.
+The main impact of this is that some !TWikiApplications may cease to work if they have been written to take advantage of the old chaotic order. There is no way to predict which will work and which will fail, so you will have to deal with this on a case-by-case basis. In most cases !TWikiApplication authors will have worked hard to do the "sensible thing" so instances of this problem should be rare.
 
 Note that because the TWiki spec allows double quotes within double-quoted strings in certain variable parameters it has been impossible to make the parser 100% deterministic. There may still be pathological cases where the parser may fail. In these cases, consider how open and close curly brackets are matched up.
 
@@ -424,7 +425,7 @@ Note that because the TWiki spec allows double quotes within double-quoted strin
 The encoding used to escape characters in form-field values has had to change. The old encoding could very easily be confused by text strings in data values. Existing topics with the old encoding will still be loaded into TWiki as before, but if edited they will be saved with the new encoding. This should not affect you unless you have searches that look for the old encodings; specifically, the %<nop>_G_%, %<nop>_Q_%, and %<nop>_P_% character sequences. Any such searches will not work any more, and need to be converted to search for the new encoding. Assuming they are =regex= type searches, you can use =(%<nop>_G_%|%0A)= to match encoded newlines in field data in both old and new format topics, =(%<nop>_Q_%|%22)= to match quotes, and =(%<nop>_P_%|25)= for percent signs.
 
 ---+++ &lt;script&gt; tags in topics
-Previous releases of TWiki would attempt to interpret the content of &lt;script&gt; tags in topics as TWikiML, often resulting in non-functional scripts. This release protects script sections from expansion by TWiki. Note that this means that TWiki.TWikiVariables will *not* be expanded in script tags - they are passed through _verbatim_.
+Previous releases of TWiki would attempt to interpret the content of &lt;script&gt; tags in topics as TWiki formatting language, often resulting in non-functional scripts. This release protects script sections from expansion by TWiki. Note that this means that TWiki.TWikiVariables will *not* be expanded in script tags - they are passed through _verbatim_.
 
 In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. Check the setting of ={AllowInlineScript}= in =[[%SCRIPTURLPATH{"configure"}%][configure]]= to see if it is allowed on your site. If not, script sections will simply disappear from topics.
 
@@ -446,7 +447,7 @@ You can use =%<nop>ALLVARIABLES%= in a topic to get a dump of all variables set 
 
 ---+++ =IF=
 
-The new =%<nop>IF()%= variable defines simple conditional statements that are evaluated at view time. This allows you to include content conditionally based on environmental factors. See ViewDEVELOP:TWiki.IfStatements for more information on usage.
+The new =%<nop>IF()%= variable defines simple conditional statements that are evaluated at view time. This allows you to include content conditionally based on environmental factors. See %TWIKIWEB%.IfStatements for more information on usage.
 
 
 ---+++ New =$count(reg-exp)= variable in TWiki.FormattedSearch
