@@ -52,8 +52,8 @@ See <nop>NavbarPluginExample at http://koala.ilog.fr/wiki/bin/view/Plugins/Navba
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. 
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed, by
-		* editing NavbarPluginExample and saving it (once) to generate the index
-		* viewing NavbarPluginExample and sub-pages
+		* editing [[Sandbox.NavbarPluginExample]] and saving it (once) to generate the index
+		* viewing [[Sandbox.NavbarPluginExample]] and sub-pages
 	* If you want to use it, modify your skin templates to include %<nop>NAVBAR% where you want
 In the standard TWiki skin, you may want to edit =templates/view.tmpl=, to add two lines:
 <pre>
