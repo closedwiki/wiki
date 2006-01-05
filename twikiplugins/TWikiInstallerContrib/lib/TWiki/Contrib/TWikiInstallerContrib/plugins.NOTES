@@ -33,7 +33,7 @@ OK
 * EmbedPlugin
 * EmbedQTPlugin
 * EmbedTopicPlugin
-* ExifMetaDataPlugin - seems to be having a problem - errors in error_log
+* ExifMetaDataPlugin - abusing TWiki globals for web and topic name (plugin still doesn't support specifying a web/topic for its target)
 * ExplicitNumberingPlugin
 * ExtendedSelectPlugin
 *! ExternalLinkPlugin - fails one internal test (links to non-existant topic)
@@ -43,6 +43,7 @@ OK
 * FormFieldListPlugin -- (well, probably, anyway)
 * FormQueryPlugin - i assume...
 * GaugePlugin
+* GetAWebAddOn
 * GlobalReplacePlugin - it says it works, anyway :)
 * GluePlugin
 * GoogleSearchPlugin
@@ -54,9 +55,10 @@ OK
 * ImageGalleryPlugin
 * IncludeIndexPlugin - "works", but doesn't number correctly (has extra <p>)
 * InterwikiPlugin
+* IrcPlugin - need more docs
 * IrcLogPlugin
 * JSCalendarContrib
-* LinkOptionsPlugin - works, but has strange interaction with (is being affected by) some other plugin
+* LinkOptionsPlugin - works, but has strange interaction with (/is being affected by) some other plugin
 * LocalCityTimePlugin - assuming it works (from PTh) as i don't have an internet connection atm :(
 * LocalTimePlugin
 * MacrosPlugin
@@ -73,6 +75,7 @@ OK
 * PatentLinkPlugin - seems to work
 * PatternSkin
 * PerlDocPlugin
+* PerlSamplePlugin - need to clean up (and rename to PerlPlugin, or something like that)
 * PhotoarchivePlugin - seems to work, but why is the sample image in data/TWiki/ instead of pub/ ?
 * PreferencesPlugin
 * ProjectPlannerPlugin - i guess it works, don't include a useful sample, tho
@@ -83,16 +86,17 @@ OK
 * RedDotPlugin
 * RenderListPlugin
 * RevCommentPlugin
-* RevRecoverPlugin - updated to take %SCRIPTSUFFIX% into account and to handle Dakar version numbers
+* RevRecoverPlugin
 * SecurityPlugin
 * SingletonWikiWordPlugin
 * SlideShowPlugin
 * SmiliesPlugin
+* SourceHighlightPlugin - (merge with BeautifierPlugin and SyntaxHighlightingPlugin)
 * SpacedWikiWordPlugin - (although it renders TWiki as "T Wiki")
 * SpreadSheetPlugin
 * StylePlugin - seems to work, made some fixes to topic text
 * SuggestLinksPlugin - it's a bit awkward, but it seems to work as well as it ever did (also gives dodgy InstalledPlugins info because of the way it enables itself)(so does NavPlugin)
-* SyntaxHighlightingPlugin
+* SyntaxHighlightingPlugin - (merge with BeautifierPlugin and SourceHighlightPlugin)
 * TablePlugin
 * TextSectionPlugin
 * TimeSincePlugin
@@ -108,24 +112,28 @@ OK
 * UserInfoPlugin
 * VarCachePlugin
 * VotePlugin - but email MichaelDaum about: view.cgi: Argument "100%" isn't numeric in division (/) at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/VotePlugin.pm line 210.
-* WeatherPlugin - can't test without internet
+* WeatherPlugin
 * WysiwygPlugin
 
-111
+114
 
 
 Broken, but looking into fixes (or, still testing...)
 --------------------------------------------------------------------------------
-? BatchUploadPlugin - complained about my ZIP file (hm, so did AlbumOfSnapsPlugin...)
-T EditContrib
+? BatchUploadPlugin - still debugging - all files now get uploaded, but they're zero size
+   * also, doesn't clean up its temporary unzip directory
 T ImmediateNotifyPlugin - verify docs with latest on twiki.org (or perhaps CVS)
-T MultiEditPlugin - requires EditContrib
-T NavbarPlugin - move samples from TWiki to Sandbox
-T PerlSamplePlugin - need to clean up (and rename to PerlPlugin, or something like that)
-- PollPlugin - problems with TWiki::userToWikiName(), TWiki::editLockTime, TWiki::dataDir
 * PseudoXmlPlugin - well, it *used* to work with 7?84, but is broken with latest
-T- SablotronPlugin - need sablot installed...
-T ThreadedDiscussionPlugin - calling TWiki::Prefs directly
+
+(3)
+
+Should test, but haven't got around to it
+--------------------------------------------------------------------------------
+? DistributionContrib
+? MailInContrib
+? TWikiShellContrib - pretty sure it works; it's in active development - where to put twikishell (it's in the root directory)??
+
+(3)
 
 Missing documentation topics to create a full plugin
 --------------------------------------------------------------------------------
@@ -133,16 +141,22 @@ Missing documentation topics to create a full plugin
 ?- SlashFilenamePlugin - Plugins: could not fully register SlashFilenamePlugin, no plugin topic
 ?- ProtocolTlaPlugin - Plugins: could not fully register ProtocolTlaPlugin, no plugin topic
 
-(13)
+(3)
 
-
-Should test, but haven't got around to it
+in CVS, but missing from SVN ???
 --------------------------------------------------------------------------------
-? DistributionContrib
-? MailInContrib
-? TWikiShellContrib - pretty sure it works; it's in active development
+UserCookiePlugin
+AbusePlugin
+JavaDocPlugin
+PdfPlugin ?
+PrologSamplePlugin
+RicherSyntaxPlugin
+SiteMinderPlugin
+WtfPlugin
 
-15(18) in limbo....
+(8)
+================================================================================
+17 in limbo....
 
 
 Broken
@@ -169,11 +183,14 @@ mv: cannot stat `testpics': No such file or directory
 !& LatexModePlugin - viewing the page (after configuring program paths properly) yields: AccessControlException: Access to CHANGE TWiki.LatexModePlugin for TWikiGuest is denied. access not allowed on web[Sun Dec 11 17:27:09 2005] [error] [client 127.0.0.1] Premature end of script headers: view.cgi - need to move the sample to the Sandbox web
 ! LoginNameAliasesPlugin - TWiki::Plugins::LoginNameAliasesPlugin::earlyInitPlugin failed: 1
 ! MsOfficeAttachmentsAsHTMLPlugin - no docs, not sure what to do...
+! NavbarPlugin - fix Colas' TWiki: name, fix parents, fix references back to (%TWIKIWEB%.)NavbarPlugin - calls TWiki::Store::saveFile()
 ! PhantomPlugin - no skin, probably other stuff...
+! PollPlugin - problems with TWiki::userToWikiName(), TWiki::editLockTime, TWiki::dataDir
 ! PublishContrib - Can't locate object method "param" via package "TWikiGuest" (perhaps you forgot to load "TWikiGuest"?) at ../lib/TWiki.pm line 1044.
 ! QuickSearchPlugin - sh: - : invalid option
 ! RevisionLinkPlugin - Can't locate object method "_getHandler" via package "TWiki" at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Store.pm line 629.
 ! SpellCheckerPlugin (still in development)
+! ThreadedDiscussionPlugin - calling TWiki::Prefs directly (also requires EditContrib, whose status is unknown)
 ! TopicReadersPlugin - nothing renders
 ! TopicVarsPlugin - parts work, others don't [text in brackets]
 T TranslateTagPlugin - *highly unlikely* to work as it includes patches to scripts (maybe made obsolete by L10N changes to Dakar?)
@@ -186,7 +203,7 @@ Can't call method "maketext" on an undefined value at
         /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Access.pm line 175 (#2)
 while processing TWiki.BulkResetPassword (during (re)build of cache)
 
-26
+29
 
 Obselete Plugins (i think...)
 --------------------------------------------------------------------------------
@@ -211,24 +228,26 @@ Untested - don't have prerequisites
 ? MovableTypePlugin - Can't locate MT.pm
 ? NotificationPlugin - too much trouble to test...
 ? PeerPlugin - can't test (sql) - also, Can't locate object method "_getHandler" via package "TWiki" at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Store.pm line 556.
+T- SablotronPlugin - need sablot installed...
 ? SnmpCommandPlugin - can't test
-? SourceHighlightPlugin - need GNU source-highlight binary --- merge with BeautifierPlugin
 ? SvgPlugin - need librsvg-2.0
 ? TouchGraphPlugin - don't have java applet
 ? WebDAVPlugin (doesn't compile (missing dev headers/libraries))
 T XmlQueryPlugin - need more CPAN modules - change XMLDIR to use getWorkArea() (or whatever it's called)
 ?- XmlXslPlugin - need a test sample... or something
 
-20
+21
 
 Untested - Can't tell...
 --------------------------------------------------------------------------------
 ? EncryptedPagesPlugin - can't really tell... seems to mostly be working...
+? EditContrib - does this also require SectionalEditPlugin and RecursiveRenderPlugin ?
 ? FakeBasicAuthRegPlugin - too much trouble to test, probably made obsolete by Dakar, anyway
 ? FlowchartPlugin - can't tell
 ? FormPivotPlugin - missing Test.TestFormPivot (after finding it, move it to Sandbox!)
 ? FundraisingPlugin - no sample
 ? GpgkeyPlugin - can't tell
+? MultiEditPlugin - does this also require SectionalEditPlugin and RecursiveRenderPlugin ? (requies EditContrib)
 ? PowerEditPlugin
 ? RedirectPlugin - can't tell, no sample
 ? RollupPlugin - need sample to test
@@ -263,13 +282,60 @@ NA SectionalEditPlugin - version in core
 
 *** OTHER ISSUES: ***
 
+   * PatternSkinHeaderArt
+
+   * TWikiPluginInstallerContrib didn't redirect to the right page after installing PatternSkin
+
+   * compare how i just implemented header art to nat skin header art stuff...
+      * should it be called PATTERNSKIN_HEADERART (gah, i hope not)
+
+   * TWiki::Func::getUrl isn't returning the http:// part (as documented)
+
+   * get docs from twiki.org for ImmediateNotifiyPlugin
+
+   * checkin TWikiPluginInstallerContrib
+      * rename to TWikiExtensionInstallerContrib
+
+   * (other renaming)
+
+   * checkin IrcPlugin
+
+   * beforeAttachmentSaveHandler - does this even bloody work ? (or is it BatchUploadPlugin? or both??? -- hm, no unit test :( )
+      * who even uses it?
+         * Store.pm
+         * RevCommentPlugin - but only modifies the comment field
+         * MsOfficeAttachmentAsHTMLPlugin - can't test...
+
+      * first case fails because a directory doesn't exist for the file to be copied to (eg, Sandbox/TestTopic0)
+         * but why is it copying it there anyway?  it hasn't been approved/digested?
+
+   * oops error messages like
+=No such file or directory at /usr/share/perl/5.8/CGI/Carp.pm line 314. CGI::Carp::re...
+      have a = at the front and end of the string as if TWiki were supposed to <tt> it
+
+   * ImageGalleryPlugin says 
+Error: can't initialize from ''
+   from a topic with an _ in it
+
+   * TablePlugin doesn't work - or interactions with the blog setup
+EXTENSIONS="--extension=BlogPlugin --extension=DBCachePlugin --extension=DBCacheContrib --extension=TimeSincePlugin --extension=CpanContrib --extension=GluePlugin --extension=ExtendedSelectPlugin --extension=HeadlinesPlugin --extension=RedDotPlugin --extension=SpreadSheetPlugin --extension=TwistyPlugin --extension=TwistyContrib --extension=NatSkinPlugin --extension=ImageGalleryPlugin --extension=TablePlugin" sh install-account xxx ---
+	or, TABLE's are in base templates (without conditional context removal)
+
+   * ManagingWebs baseweb doesn't accept a URL parameter
+tried:
+%CALC{ "$SET(base_web, %URLPARAM{"baseweb" default="_default"}%)" }%
+baseweb: %CALC{$GET(base_web)}%
+<input type="select" ... selection="%CALC{$GET(base_web)}%" ... />
+
+   * TWiki.ExtendedSelectPlugin renders +option as H1's
+
+   * TWiki/TWikiAccessControl has ^ in table header (but maybe that's just with TablePlugin?)
+
+   * TWikiGroups doesn't seem to be working (eg, showing values from TWikiAdminGroup, but not from BlogAdminGroup and BlogAuthorsGroup)
+
    * MANIFEST sucks --- eg, CpanContrib doesn't actually show any of the *real* files, because they're added
       during the build process, but not in the actual MANIFEST file (because when i added them to the MANIFEST
       file, that messed up pseudo-install!)
-
-   * add CPAN: prefix to the new modules in CpanContrib.txt
-      * add Copyright notice to CpanContrib.txt
-      * remove comments about adding CPAN modules for all plugins (DONE)
 
    * who installed the Tracking web? (ah) (it should be called _XpTrackerPlugin, i think...)
 
@@ -290,29 +356,20 @@ NA SectionalEditPlugin - version in core
 
    * do a pass on proper dashes: endash vs. emdash (&ndash; vs. &mdash;)
 
+   * review TWiki:Codev.CategoryCookbook
 
 THINGS TO INSTALL:
 --------------------------------------------------------------------------------
 latex2html -- says non-free; not sure what to do...
+ircd - 
+
+================================================================================
+################################################################################
+TODO:
+   * re-setup tinderbox
+   * re-setup twikiplugins (on net, that is)
 
 ################################################################################
-retest:
-
-   * ExifMetaDataPlugin - picture.jpg is corrupted (another bad CVS checkin?)
-
-################################################################################
-################################################################################
-
-in CVS, but missing from SVN ???
-   * UserCookiePlugin
-   * AbusePlugin
-   * JavaDocPlugin
-   * PdfPlugin ?
-   * PrologSamplePlugin
-   * RicherSyntaxPlugin
-   * SiteMinderPlugin
-   * WtfPlugin
-
 ================================================================================
 
 hm, these are missing completely...
@@ -326,7 +383,6 @@ FireFoxSidebarContrib
 FirefoxExtensionAddOn
 FormsAddOn
 GenericWikiToTWikiAddOn
-GetAWebAddOn
 JSPwikiToTWikiAddOn
 JavaPasteAddOn
 KwikiToTWikiAddOn
