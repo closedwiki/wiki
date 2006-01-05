@@ -199,10 +199,10 @@ sub generateAnchor
 {
     my $type = $_[0];
     my ($y, $vv, $dd, $d) = (
-        sprintf("%04d", $_[1]), 
-        sprintf("%02d", $_[2]), 
-        sprintf("%02d", $_[3]),
-        $_[3]);
+        sprintf("%04d", $_[1] || 0), 
+        sprintf("%02d", $_[2] || 0), 
+        sprintf("%02d", $_[3] || 0),
+        $_[3] || '');
     my $anchor;
 
     $anchor = '<a TARGET="_blank" href="' .  $This{'userHref'} . $y;
