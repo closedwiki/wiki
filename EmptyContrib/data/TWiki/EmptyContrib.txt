@@ -21,21 +21,19 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
       * Set SHORTDESCRIPTION = Add short description here of your EmptyContrib contrib
 
    * Name of the perl package
-      * Set STUB = _name of the stub, TWiki::Contrib::..._<!-- use %$STUB% when building with Build.pm -->
+      * Set STUB = %$STUB%
 
 ---++ Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+	%$DEPENDENCIES%
 
-__Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
-
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Contrib topic |
-     | ==data/TWiki/%TOPIC%.txt,v== | Contrib topic repository |
-     | ==lib/TWiki/Contrib/%TOPIC%.pm== | Contrib Perl module |
-<!-- replace table body above, keeping the header, with %$MANIFEST% when using with Build module to automatically extract MANIFEST -->
    * Test if the installation was successful:
-      * _enter samples here_
+      * __enter sample here__
+      * see also [[Sandbox.PluginTest%TOPIC%]]
 
 ---++ Contrib Info
 
@@ -53,4 +51,3 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main/%USERNAME% - %DATE%
-<!-- replace %DATE% with %$DATE% for Build module, to get build date -->
