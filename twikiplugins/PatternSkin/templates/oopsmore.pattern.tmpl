@@ -4,19 +4,19 @@
 %TMPL:DEF{"heading"}%%MAKETEXT{"More Actions on Topic [_1]" args="[[%TOPIC%]]"}%%TMPL:END%
 %TMPL:DEF{"message"}%
 
-   * *%MAKETEXT{"Delete topic"}%*
+   * %ICON{"trash"}% *%MAKETEXT{"Delete topic"}%*
       * <b><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on" rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a></b>,
         %MAKETEXT{"looking for references in _all public webs_"}% *%MAKETEXT{"(recommended)"}%*
       * <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?newweb=%TRASHWEB%&amp;nonwikiword=on&amp;currentwebonly=on" rel='nofollow'>%MAKETEXT{"Delete topic..."}%</a>,
         %MAKETEXT{"looking for references in _[_1] web_ only" args="%WEB%"}%
 
-   * *%MAKETEXT{"Rename or move topic"}%*
+   * %ICON{"move"}% *%MAKETEXT{"Rename or move topic"}%*
       * <b><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%" rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a></b>,
         %MAKETEXT{"looking for references in _all public webs_"}% *%MAKETEXT{"(recommended)"}%*
       * <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?currentwebonly=on" rel='nofollow'>%MAKETEXT{"Rename/move topic..."}%</a>,
         %MAKETEXT{"looking for references in _[_1] web_ only" args="%WEB%"}%
 
-   * *%MAKETEXT{"Backlinks"}%* <br/>
+   * %ICON{"topicbacklinks"}% *%MAKETEXT{"Backlinks"}%* <br/>
       * <b><a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs' title='%MAKETEXT{"Search all webs for topics that link to here"}%' accesskey='l'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a></b>,
         %MAKETEXT{"<em>in all public webs</em>"}%
       * <a href='%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb' title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey='w'>%MAKETEXT{"Find topics that link to [_1] ..." args="<nop>%TOPIC%"}%</a>,
