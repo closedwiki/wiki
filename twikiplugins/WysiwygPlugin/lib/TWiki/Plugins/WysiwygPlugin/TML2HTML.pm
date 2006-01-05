@@ -311,13 +311,14 @@ sub _getRenderedVersion {
     foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
-        if( $line =~ m/^(\s*)\|.*\|\s*$/ ) {
+        if( $line =~ m/^(\s*)\|(.*\|)\s*$/ ) {
             unless( $insideTABLE ) {
                 push( @result, CGI::start_table(
                     { border=>1, cellpadding=>0, cellspacing=>1 } ));
             }
-            $line =~ s/^(\s*)\|(.*)/_emitTR($1,$2)/e;
+            push( @result, _emitTR($1,$2) );
             $insideTABLE = 1;
+            next;
         } elsif( $insideTABLE ) {
             push( @result, CGI::end_table() );
             $insideTABLE = 0;
