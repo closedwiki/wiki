@@ -125,11 +125,11 @@ sub _processTags {
         if( $token eq '%' ) {
             if( $stackTop =~ /}$/ ) {
                 while( scalar( @stack) &&
-                         $stackTop !~ /^%(<nop>)?([A-Z0-9_:]+){.*}$/o ) {
+                         $stackTop !~ /^%(<nop( *\/)?>)?([A-Z0-9_:]+){.*}$/o ) {
                     $stackTop = pop( @stack ) . $stackTop;
                 }
             }
-            if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)({.*})?$/o ) {
+            if( $stackTop =~ m/^%(<nop(?: *\/)?>)?([A-Z0-9_:]+)({.*})?$/o ) {
                 my $nop = $1 || '';
                 my $tag = $2 . ( $3 || '' );
                 if( scalar( @stack ) == 1 && $this->{opts}->{markvars} ) {
@@ -144,7 +144,7 @@ sub _processTags {
                 } else {
                     $tag = '%'.$tag.'%';
                 }
-                if( $nop eq '<nop>' ) {
+                if( $nop ) {
                     $tag = CGI::span( { class=>'TMLnop' }, $tag );
                 }
                 $stackTop = pop( @stack ).$this->_liftOut( $tag );
@@ -398,7 +398,7 @@ sub _getRenderedVersion {
     # We _not_ support [[http://link text]] syntax
 
     # detect and escape nopped [[][]]
-    $text =~ s(\[<nop>(\[.*?\](?:\[.*?\])?)\])
+    $text =~ s(\[<nop(?: *\/)?>(\[.*?\](?:\[.*?\])?)\])
       ([<span class="TMLnop">$1</span>])g;
     $text =~ s(!\[(\[.*?\])(\[.*?\])?\])
       ([<span class="TMLnop">$1$2</span>])g;
@@ -411,7 +411,7 @@ sub _getRenderedVersion {
     # Handle WikiWords
     $text = _takeOutBlocks( $text, 'noautolink', $removed );
 
-    $text =~ s/<nop>($TWiki::regex{wikiWordRegex})/<span class="TMLnop">$1<\/span>/gom;
+    $text =~ s/<nop(?: *\/)?>($TWiki::regex{wikiWordRegex})/<span class="TMLnop">$1<\/span>/gom;
 
     $text =~ s/$STARTWW((?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?)/$this->_makeWikiWord($1,$2,$3,$4)/geom;
     foreach my $placeholder ( keys %$removed ) {
