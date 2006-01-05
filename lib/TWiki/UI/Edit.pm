@@ -210,7 +210,7 @@ sub edit {
             ( $templateWeb, $templateTopic ) =
               $session->normalizeWebTopicName( $templateWeb, $templateTopic );
 
-            unless( $store->topicExists( $webName, $topic )) {
+            unless( $store->topicExists( $templateWeb, $templateTopic )) {
                 throw TWiki::OopsException( 'accessdenied',
                                             def => 'no_such_topic',
                                             web => $templateWeb,
