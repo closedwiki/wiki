@@ -9,7 +9,7 @@ use Cwd;
 
 my ( $name ) = ( @ARGV, '' );
 my @types = qw( Plugin Contrib );
-print "[$name]\n";
+#print "[$name]\n";
 ( my $type = $name ) =~ s/^.*?(Plugin|Contrib)?$/$1/;
 die "'$name' must end in one of: " . join( ', ', @types ) . "\n" unless $type;
 
@@ -92,6 +92,20 @@ __MANIFEST__
     # TODO: object
     my $topic = '';
     if ( $type =~ /^Plugin/ ) {
+	open( TOPIC, '<', "../data/TWiki/EmptyPlugin.txt" ) or die $!;
+	local $/ = undef;
+	$topic = <TOPIC>;
+	close TOPIC;
+
+	$topic =~ s/EmptyPlugin/$name/g;
+	# adjust examples to use the actual topic name
+	$topic =~ s/EMPTYPLUGIN/\U$name/g;
+
+	# stick in the username as the author (hey, it's better than nothing)
+	chop( my $whoami = `whoami` );
+	$topic =~ s/(\|\s*Plugin\s+Author:\s*\|).*?(\|)/$1 TWiki:Main.$whoami $2/gs;
+	$topic =~ s/(\-\-\-\+ )Empty TWiki Plugin.*?(\-\-\-\+)/$1$name\n\nDescribe the plugin\n\n$2/gs;
+
     } elsif ( $type =~ /^Contrib/ ) {
 	open( TOPIC, '<', "EmptyContrib/data/TWiki/EmptyContrib.txt" ) or die $!;
 	local $/ = undef;
@@ -106,7 +120,71 @@ __MANIFEST__
     print TOPIC $topic;
     close TOPIC;
 
-    # TODO: make unit tests
+    ################################################################################
+    # make unit tests
+    ################################################################################
+    eval { mkpath "$name/test/unit/$name/" };
+    my $unit_test_dir;
+    if ( $type =~ /^Plugin/ ) {
+	$unit_test_dir = "EmptyContrib/test/unit/EmptyContrib";
+    } elsif ( $type =~ /^Contrib/ ) {
+	$unit_test_dir = "EmptyContrib/test/unit/EmptyContrib";
+    }
+    # *Tests.pm
+    {
+	my $template_file = "$unit_test_dir/EmptyContribTests.pm";
+	open( TEST, '<', $template_file ) or die $!;
+	local $/ = undef;
+	my $test = <TEST>;
+	close TEST;
+
+	$test =~ s/EmptyContrib/$name/g;
+	( my $output_file = $template_file ) =~ s/EmptyContrib/$name/g;
+
+	open( TEST, '>', $output_file ) or die $!;
+	print TEST $test;
+	close TEST;
+    }
+
+    # *Suite.pm
+    {
+	my $template_file = "$unit_test_dir/EmptyContribSuite.pm";
+	open( TEST, '<', $template_file ) or die $!;
+	local $/ = undef;
+	my $test = <TEST>;
+	close TEST;
+
+	$test =~ s/EmptyContrib/$name/g;
+	( my $output_file = $template_file ) =~ s/EmptyContrib/$name/g;
+
+	open( TEST, '>', $output_file ) or die $!;
+	print TEST $test;
+	close TEST;
+    }
+    
+    # Sandbox example topic
+    eval { mkpath "$name/data/Sandbox/" };
+    {
+	my $template_file = "EmptyContrib/data/Sandbox/PluginTestEmptyContrib.txt";
+	open( TEST, '<', $template_file ) or die $!;
+	local $/ = undef;
+	my $test = <TEST>;
+	close TEST;
+
+	$test =~ s/EmptyContrib/$name/g;
+	( my $output_file = $template_file ) =~ s/EmptyContrib/$name/g;
+
+	open( TEST, '>', $output_file ) or die $!;
+	print TEST $test;
+	close TEST;
+
+	# update MANIFEST
+	open( MANIFEST, '>>', "$lib_base_dir/$name/MANIFEST" ) or die $!;
+	print MANIFEST <<__MANIFEST__;
+data/Sandbox/PluginTest$name.txt  Plugin examples
+__MANIFEST__
+	close MANIFEST;
+    }
 }
 
 # replace-string EmptyPlugin $name
@@ -121,3 +199,12 @@ __USAGE__
 }
 
 ################################################################################
+
+__DATA__
+
+# create build.pl
+plugins: BuildContrib
+contribs: EmptyContrib
+
+twikiplugins/EmptyContrib
+lib/TWiki/Plugins/EmptyPlugin.pm

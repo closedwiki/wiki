@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+use strict;
 #
 # Example build class. Copy this file to the equivalent place in your
 # plugin or contrib and edit.
@@ -18,36 +19,30 @@
 #
 
 # Standard preamble
-BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
-    unshift @INC, $pc;
-  }
-}
+BEGIN { unshift @INC, split( /:/, $ENV{TWIKI_LIBS} ) }
 
 use TWiki::Contrib::Build;
 
 # Declare our build package
-{ package BuildBuild;
+package BuildBuild;
+use base qw( TWiki::Contrib::Build );
 
-  @BuildBuild::ISA = ( "TWiki::Contrib::Build" );
-
-  sub new {
+sub new {
     my $class = shift;
     return bless( $class->SUPER::new( "EmptyContrib" ), $class );
-  }
+}
 
-  # Example: Override the build target
-  sub target_build {
+# Example: Override the build target
+sub target_build {
     my $this = shift;
 
     $this->SUPER::target_build();
 
     # Do other build stuff here
-  }
 }
 
 # Create the build object
-$build = new BuildBuild();
+my $build = new BuildBuild();
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
