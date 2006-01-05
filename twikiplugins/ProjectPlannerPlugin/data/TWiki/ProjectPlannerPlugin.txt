@@ -17,9 +17,9 @@ There is a hierarchy of information in the web used by the plugin that will be u
 
 <h3>Usage</h3>
 
- Creation of pages is recursive, each page has an html form that uses a template to create child pages or a table with defined columns:
+ Creation of pages is recursive, each page has an HTML form that uses a template to create child pages or a table with defined columns:
 
-	* <b>Projects</b>. You can create a new project page using the html form on the home page for the planning web. You can add additional content to these pages if desired, but do not delete the existing content. This is used to provide high level overviews of schedule progress.
+	* <b>Projects</b>. You can create a new project page using the form on the home page for the planning web. You can add additional content to these pages if desired, but do not delete the existing content. This is used to provide high level overviews of schedule progress.
 
 	* <b>Plans</b>. Each Project page has a form for creating plans in addition to the summary of currently entered plans. The template for the Plan page has a table where tasks can be added, allocated and updated.
 
@@ -196,7 +196,7 @@ Version 2.000 breaks compatibility slightly with the data files if you use the o
 
 ---+++ Installation test
 
-	* If installed correctly you should see the following content between the two horizontal lines below - a title "All Projects" and a single cell table with the field containing the word "Project", and finally an html form to add a new project (don't use this form from here though!)
+	* If installed correctly you should see the following content between the two horizontal lines below - a title "All Projects" and a single cell table with the field containing the word "Project", and finally an form to add a new project (don't use this form from here though!)
 
 <hr>
 

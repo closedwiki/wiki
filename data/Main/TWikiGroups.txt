@@ -13,7 +13,7 @@ These groups can be used to define fine grained %TWIKIWEB%.TWikiAccessControl in
       * __Note:__ A group topic name must be a %TWIKIWEB%.WikiWord and __must__ end in =...Group=. New topics are based on TWikiGroupTemplate
 </form>
 
-*IMPORTANT NOTE:* Think twice before restricting write access to a web or a topic, because an open system where everybody can contribute is the essence of the %TWIKIWEB%.WikiCulture. Experience shows that unrestricted write access works very well because:
+*IMPORTANT NOTE:* Think twice before restricting write access to a web or a topic, because an open system where everybody can contribute is the essence of %TWIKIWEB%.WikiCulture. Experience shows that unrestricted write access works very well because:
    * There is enough peer pressure to post only appropriate content.
    * Content does not get lost because topics are under revision control.
    * A topic revision can be undone by a member of the %MAINWEB%.TWikiAdminGroup in case it needs to be.

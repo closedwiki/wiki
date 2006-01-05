@@ -5,7 +5,7 @@ CommandSets are the extension point for TWikiShellContrib. Without them, it's on
 
 ---++ Creation
 
-CommandSets are perl modules that defines one or more of the following subs:
+CommandSets are perl modules that define one or more of the following subs:
 
 | *Sub* | *Description*|
 | run | Command execution |
@@ -31,7 +31,7 @@ Check the bundled CommandSets for examples on how to implement them.
 
 ---++ Initializing CommandSet
 
-Any CommandSet that needs an special initializacion when imported can use the following hook:
+Any CommandSet that needs an special initialization when imported can use the following hook:
 
 ---+++ onImport($shell,$config)
 Called when the CommandSet is being imported.

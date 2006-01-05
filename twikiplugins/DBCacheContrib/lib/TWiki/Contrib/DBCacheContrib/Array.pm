@@ -209,7 +209,7 @@ sub contains {
 =begin text
 
 ---+++ =search($search)= -> search result
-   * =$search* =TWiki::Contrib::DBCacheContrib::Search object to use in the search
+   * =$search= - TWiki::Contrib::DBCacheContrib::Search object to use in the search
 Search the array for matches with the given object.
 values. Return a =TWiki::Contrib::DBCacheContrib::Array= of matching entries.
 

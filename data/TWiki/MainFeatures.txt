@@ -19,7 +19,7 @@
    * *Managing users:* Web-based [[TWikiRegistration][user registration]] and [[ChangePassword][change of password]].
    * *Statistics:* Create statistics of TWiki webs. Find out most popular pages and top contributors.
    * *Preferences:* Three levels of preferences: TWikiPreferences for site-level, WebPreferences for each web, and user level preferences.
-   * *Topic locking:* Users are warned if a page is being edited by another person. This is to prevent [[SimultaneousEdits][simultaneous page editing]].
+   * *[[SimultaneousEdits][simultaneous page editing]]:* 
    * *Referred-By:* Find the pages that contain links to a topic.
 
 __Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory

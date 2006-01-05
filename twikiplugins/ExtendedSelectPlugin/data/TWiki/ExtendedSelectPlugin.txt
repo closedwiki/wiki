@@ -16,11 +16,11 @@ __Note__: this version of the ExtendedSelectPlugin will _not_ work with TWiki ve
 
 When creating a form template, there are three flags that can be added to the select type, and they can be added in any order.
 
-   +multi: turns multiselect on for the select, to allow Ctrl-Click to select (or deselect) multiple items.
-   +shrink: turns on shrink, which causes the size of the select to be reduced if it is larger than the number of options for the select, though it will not reduce size below 1
-   +values: turns on values, which causes the select to allow for the value and the displayed text in a select to be different.
+   =+multi=: turns multiselect on for the select, to allow Ctrl-Click to select (or deselect) multiple items.
+   =+shrink=: turns on shrink, which causes the size of the select to be reduced if it is larger than the number of options for the select, though it will not reduce size below 1
+   =+values=: turns on values, which causes the select to allow for the value and the displayed text in a select to be different.
 
-These options are appended to the select in the type column without a space, so to turn on just multiselect, you would use select+multi instead of just select.
+These options are appended to the =select= in the type column without a space, so to turn on just multiselect, you would use =select+multi= instead of just =select=.
 
 The +values option is the only option that changes anything other than the field type.  If it is turned on, then each of the allowed values are checked individually for the presense of an unescaped = character.  If this is not found, then that allowed value behaves as if +values weren't turned on.  That is to say that the value will be used as both the display text and the value to store in the form.  If an unescaped = character is found, then the value is split on the first unescaped = character, the part of the value preceding the unescaped = character is used as the display text, and the part of the value after that is used as the value that is stored in the form.
 
@@ -60,6 +60,7 @@ Content:
 |  Plugin Author: | TWiki:Main.EricSchwertfeger |
 |  Plugin Version: | 05 Dec 2005 (V1.10) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Dec 2005: | updated topic formatting (TWiki:Main.WillNorris) |
 |  05 Dec 2005: | added value decoding. See Bugs:Item1045. (TWiki:Main.MichaelDaum) |
 |  11 Oct 2005: | V1.001, fixed editing multiple selects | 
 |  11 Oct 2005: | Initial version |
@@ -73,6 +74,6 @@ Content:
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, TWiki::Plugins/FormFieldsPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, TWiki:Plugins/FormFieldsPlugin
 
 -- TWiki:Main/EricSchwertfeger - 11 October 2005

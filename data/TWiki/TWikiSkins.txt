@@ -175,7 +175,7 @@ See TWiki:Plugins/SkinPackagingHowTo and TWiki:Plugins/SkinDeveloperFAQ
 
 ---++ Browsing Installed Skins
 
-You can try all installed skins in TWikiSkinBrowser.
+You can try out all installed skins in the TWikiSkinBrowser.
 
 ---++ Activating Skins
 
@@ -200,7 +200,7 @@ This pushes a different skin to the front of the skin search path (so for our ex
 The full skin path is built up as follows: =SKIN= setting (or =?skin= if it is set), then =COVER= setting is added, then =?cover=.
 
 #HardCodedSkins
----++ Hard Coded Skins
+---++ Hard-Coded Skins
 
 The =text= skin is reserved for TWiki internal use.
 

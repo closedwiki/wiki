@@ -118,7 +118,7 @@ To eliminate the incompatibility problems bound to arise from active open Plugin
 ---+++ Security
 
    * Badly written plugins can open huge security holes in TWiki. This is especially true if care isn't taken to prevent execution of arbitrary commands on the server.
-   * Don't allow sensitive configuration data to be edited by users. it is better to add sensitive configuration options to the TWiki::cfg hash than adding it as preferences in the plugin topic
+   * Don't allow sensitive configuration data to be edited by users. it is better to add sensitive configuration options to the =%TWiki::cfg= hash than adding it as preferences in the plugin topic
       * See TWiki:Plugins.MailInContrib for an example of this
       * TWiki:Plugins.BuildContrib can help you with this
    * Always use the TWiki::Sandbox to execute commands.
@@ -238,7 +238,7 @@ You can create a Plugin "work area" using the =TWiki::Func::getWorkArea()= funct
 
 ---+++ Web Accessible Data
 
-__Topic specific data__ such as generated images can be stored in the topics attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
+__Topic-specific data__ such as generated images can be stored in the topics attachment area, which is web accessible. Use the =TWiki::Func::saveAttachment()= function to store the data.
 
 Recommendation for file name:
    * Prefix the filename with an underscore (the leading underscore avoids a nameclash with files attached to the same topic)

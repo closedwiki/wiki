@@ -138,7 +138,7 @@ __Here's a list of topics I've been involved in recently:__
 The SEARCH variable has many more formatting options, see TWikiVariables.
 
 ---+++ Recently changed pages 
-Here, last 15 is formatted into neat table.
+Here are the last 15 changed pages, formatted into a neat table.
 
 <verbatim>
 <table>

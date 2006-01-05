@@ -22,8 +22,8 @@ It fetches pre-compiled topics or sections of it. "Glue" chars
 is minimized. DBCALL does therefore not allow to call "external" pages as INCLUDE allows.
 DBCALL's "warn" parameter can only be set to "on" and "off" and does not allow 
 alternative content in case of a warning. The "pattern" feature used to extract a fragment from
-an INCLUDEd text using regular expression  has been droppped.
-That aside DBCALLs can be called recursively as INCLUDEs can,
+an INCLUDEd text using regular expression  has been dropped.
+That aside, DBCALLs can be called recursively as INCLUDEs can,
 parametrized using key-value arguments and
 obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>SECTION{"..."}% 
 and %<nop>ENDSECTION{"..."}%.
@@ -115,10 +115,10 @@ Display the database record of a topic (usefull for debugging).
 
 ---++ Perl API
 
-The <nop>DBCachePlugin supports overloading the contained default database cache by inherriting
+The <nop>DBCachePlugin supports overloading the contained default database cache by inheriting
 from =DBCachePlugin::WebDB= being itself a =DBCacheContrib=. The only purpose of the 
 =DBCachePlugin::WebDB= is to extract the <nop>TopicFunctions contained in a topic as described
-above. You can easily extend this functionality by deriving a <nop>WebDB specific of your
+above. You can easily extend this functionality by deriving a <nop>WebDB specific to your
 own <nop>TWikiApplication. For example, the TWiki:Plugins.BlogPlugin defines a <no>WebDB of
 its own where it caches the createdate of a topic being either specified in a formfield  or
 given in the timestamp of the first revision of a topic.
@@ -132,7 +132,7 @@ to point to its implementation (example: =Set WEBDB =
 TWiki::Plugins::BlogPlugin::WebDB=). If =WEBDB= is not defined the default
 implementation =TWiki::Plugins::DBCachePlugin::WebDB= is used.  Note, that this
 way only one application-specific database cache can be loaded _per web_.  This
-is rather a design decision; otherwise each DBQUERY and DBCALL tag had to
+is rather a design decision; otherwise each DBQUERY and DBCALL tag would have to
 declare which database it operated on. So currently the rule of thumb is: one
 web one <nop>TWikiApplication making use of this plugin.
 
@@ -180,7 +180,7 @@ returns the value of the named formfield
 Plugin description:
    * Set SHORTDESCRIPTION = Lightweighted frontend to the DBCacheContrib
 
-Each web can specify an alternative implementation inherriting from DBCachePlugin::WebDB.
+Each web can specify an alternative implementation inheriting from DBCachePlugin::WebDB.
 To specify it you have to set the =WEBDB= variable in the WebPreferences. If not the
 following is the default paramenter (omitting the #)
    * #Set WEBDB = TWiki::Plugins::DBCachePlugin::WebDB

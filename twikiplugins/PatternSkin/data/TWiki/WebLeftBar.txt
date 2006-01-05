@@ -16,6 +16,7 @@
    * ATasteOfTWiki
    * TextFormattingRules
    * TWikiVariables
+   * FormattedSearch
    * TWikiDocGraphics
    * TWikiSkinBrowser
    * InstalledPlugins

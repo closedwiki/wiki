@@ -9,8 +9,8 @@ use TWiki::Contrib::DBCacheContrib::Array;
 =begin text
 
 ---++ class Map
-# Generic map object for mapping names to things. A name is defined as
-name = \w+ | \w+ "." name
+Generic map object for mapping names to things. A name is defined as
+  =name = \w+ | \w+ "." name=
 The . indicates a field reference in a sub-map.
 Objects in the map are either strings, or other objects that must
 support toString.
@@ -215,7 +215,7 @@ sub getValues {
 =begin text
 
 ---+++ =search($search)= -> search result
-   * =$search* =TWiki::Contrib::DBCacheContrib::Search object to use in the search
+   * =$search= - TWiki::Contrib::DBCacheContrib::Search object to use in the search
 Search the map for keys that match with the given object.
 values. Return a =TWiki::Contrib::DBCacheContrib::Array= of matching keys.
 

@@ -136,7 +136,7 @@ This script is _deprecated_. Its functions are covered by the =save= script.
 
 
 ---++ =rest=
-This script can be invoked via http in a similar way as the view script (see *Invocation Examples*, bellow) to execute a function that it's associated to a "subject" and a "verb" (see bellow). It'll print the result directly to the stream unless the =endPoint= parameter is specified, in which case the control is redirected to the given topic.
+This script can be invoked via http in a similar way as the view script (see *Invocation Examples*, below) to execute a function that is associated to a "subject" and a "verb" (see below). It'll print the result directly to the stream unless the =endPoint= parameter is specified, in which case the control is redirected to the given topic.
 
 The =rest= script itself uses one parameter:
 

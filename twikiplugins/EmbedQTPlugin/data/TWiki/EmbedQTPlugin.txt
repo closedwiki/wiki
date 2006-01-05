@@ -37,7 +37,7 @@ __Note:__ You need to install a <nop>QuickTime plugin on the browser to see the 
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.DonnyKurniawan |
+|  Plugin Author: | TWiki:Main.DonnyKurniawan |
 |  Plugin Version: | 6 Aug 2003 (V1.000) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  6 Aug 2003: | Initial version |
@@ -49,5 +49,5 @@ __Note:__ You need to install a <nop>QuickTime plugin on the browser to see the 
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
  
--- %TWIKIWEB%.DonnyKurniawan - 6 Aug 2003
+-- TWiki:Main.DonnyKurniawan - 6 Aug 2003
 %META:FILEATTACHMENT{name="sample.mov" attr="h" comment="A small <nop>QuickTime movie" date="1060215181" path="sample.mov" size="494658" user="DonnyKurniawan" version="1.1"}%

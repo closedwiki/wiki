@@ -174,7 +174,7 @@ Construct a new search node by parsing the passed expression.
 =begin text
 
 ---+++ =matches($object)= -> boolean
-   * -=$object= - object to test; must implement =get=
+   * =$object= - object to test; must implement =get=
 See if object matches the search. =$object= can actually be any object that provides
 the method "get" that returns a value given a string key.
 

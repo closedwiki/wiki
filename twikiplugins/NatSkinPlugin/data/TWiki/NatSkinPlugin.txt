@@ -6,7 +6,7 @@ to control different styles and variants to be switched dynamically while you ar
 see the below for a full list of all provided features.
 
 This plugin tries
-to be maximal compatible with all past, current and upcomming TWiki releases, namely beijing,
+to be maximal compatible with all past, current and upcoming TWiki releases, namely beijing,
 cairo and dakar. Therefore some mechanisms have been internalized that are only available on
 the newest dakar engine, sandbox security and html login dialogues comparable to TWiki:Plugins/AuthPagePlugin. In addition, the plugin tries to be interface-compatible to all
 engines using the =Func.pm= API. In those cases where this is _not_ possible, because needed
