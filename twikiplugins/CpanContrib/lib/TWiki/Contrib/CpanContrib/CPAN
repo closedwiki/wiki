@@ -36,6 +36,8 @@
 	qw( Font::AFM HTML::FormatText Date::Format ),	# URLCachePlugin
 	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD POE::Component::Server::IRC ),	# IrcContrib
 	qw( Net::IRC ),			# IrcPlugin
+	qw( Test::More YAML SVN::Simple::Edit Class::Autouse Encode File::chdir Class::Accessor Data::UUID SVN::Mirror IO::Pager SVK ),				   # SVK
+# also (optional for SVN::Mirror) VCP::Dest::svk (VCP?)
 );
 
 #$, = "\n";
