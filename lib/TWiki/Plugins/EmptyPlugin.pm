@@ -438,7 +438,7 @@ sub DISABLE_beforeSaveHandler {
 
 =pod
 
----++ afterSaveHandler($text, $topic, $web, $error , $meta)
+---++ afterSaveHandler($text, $topic, $web, $error, $meta )
    * =$text= - the text of the topic _excluding meta-data tags_
      (see beforeSaveHandler)
    * =$topic= - the name of the topic in the current CGI query
@@ -456,7 +456,7 @@ __Since:__ TWiki::Plugins::VERSION = '1.020'
 
 sub DISABLE_afterSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
-    ### my ( $text, $topic, $web, $error ) = @_;
+    ### my ( $text, $topic, $web, $error, $meta ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
