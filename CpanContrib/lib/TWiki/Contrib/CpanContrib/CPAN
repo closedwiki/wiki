@@ -34,6 +34,8 @@
 	qw( MIME::Lite Authen::SASL XML::Stream Net::XMPP Net::Jabber ),	# optional SOAP::Lite interfaces
 	qw( SOAP::Lite ),		# SoapClientPlugin
 	qw( Font::AFM HTML::FormatText Date::Format ),	# URLCachePlugin
+	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD POE::Component::Server::IRC ),	# IrcContrib
+	qw( Net::IRC ),			# IrcPlugin
 );
 
 #$, = "\n";

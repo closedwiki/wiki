@@ -36,8 +36,6 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Class::ISA 
    * CPAN:Class::Virtually::Abstract
    * CPAN:Error 
-</td>
-<td>
    * CPAN:URI 
    * CPAN:HTML::Tagset 
    * CPAN:HTML::Parser 
@@ -46,6 +44,8 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:XML::Parser 
    * CPAN:XML::Simple 
    * CPAN:Algorithm::Diff 
+</td>
+<td>
    * CPAN:Text::Diff 
    * CPAN:HTML::Diff
    * CPAN:Test::Builder::Tester 
@@ -63,12 +63,12 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Locale::Maketext::Lexicon
    * CPAN:Digest::base 
    * CPAN:Digest::SHA1
-</td>
-<td>
    * CPAN:Unicode::Map
    * CPAN:Unicode::Map8 
    * CPAN:Jcode 
    * CPAN:Unicode::String 
+</td>
+<td>
    * CPAN:Unicode::MapUTF8
    * CPAN:Time::Local
    * CPAN:Time::ParseDate
@@ -90,10 +90,23 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Cache::Cache
    * CPAN:String::CRC
    * CPAN:DBD::mysql (not really)
+   * CPAN:IO::Pty 
+   * CPAN:Curses 
+   * CPAN:Term::Cap 
+   * CPAN:Event 
+   * CPAN:POE 
+   * CPAN:Net::IP 
+   * CPAN:Digest::HMAC_MD5 
+   * CPAN:Net::DNS 
+   * CPAN:POE::Component::Client::DNS 
+   * CPAN:POE::Component::Client::Ident 
+   * CPAN:POE::Filter::IRCD 
+   * CPAN:POE::Component::Server::IRC
+   * CPAN:Net::IRC
 </td>
 </tr></table>
 
- 
+
 ---++ Detailed Documentation
 <!-- use %$POD% when using with Build module to automatically extract documentation -->
    * 
