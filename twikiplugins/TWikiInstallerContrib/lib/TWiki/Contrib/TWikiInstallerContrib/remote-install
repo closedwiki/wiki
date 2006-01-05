@@ -69,7 +69,7 @@ __CSS__
 
 ################################################################################
 
-my %plugins;	# which plugins get installed/are encountered
+my %installedPlugins;	# which plugins get installed/are encountered
 my $twikiDir = "$FindBin::Bin/twiki";
 
 my ( $twikiPath ) = $ENV{SCRIPT_NAME} =~ m|(.*)/.*|;		# remove the script name from the path
@@ -173,7 +173,7 @@ close( FH ) or die "Can't close $fnLocalLibCfg: $! ???";
 ################################################################################
 # LocalSite.cfg
 
-foreach my $plugin ( sort { lc $a cmp lc $b } keys %plugins ) {
+foreach my $plugin ( sort { lc $a cmp lc $b } keys %installedPlugins ) {
     $LocalSiteCfg .= "\$TWiki::cfg{Plugins}{$plugin}{Enabled} = 1;\n";
 }
 
@@ -224,58 +224,18 @@ exit 0;
 sub InstallTWikiExtension {
     my ( $module ) = @_;
 
-    my $INSTALL = "$tmpInstall/INSTALL/";
-    -d $INSTALL && rmtree $INSTALL;
-    mkpath $INSTALL;
-
-    my ( $name ) = ( basename $module ) =~ /(.*)\./;
-    print STDERR "Installing $name\n";
-    my $archive = Archive::Zip->new( $module ) 
-	or warn qq{Archive::Zip new failed [$module] - can't install "$name"}, return 0;
-    print $q->h3( $name );
-    $archive->extractTree( '', $INSTALL );
-    
-    foreach my $file ( $archive->memberNames ) {
-	# TODO: rename $base to something more descriptive (like ...?)
-	next unless my ($path,$base) = $file =~ m|^([^/]+)(/.*)$|;
-
-	my $map = $mapTWikiDirs->{$path} or warn "no mapping for [$path]", next;
-	my $dirDest = $map->{dest} or die "no destination directory for [$path] " . Dumper( $map );
-
-	# handle directories (path ends with /?, if so, mirror directory structure)
-	mkpath( "$dirDest/$base" ), next if $base =~ m|/$|;
-
-	# install the file by moving it from the staging area
-	my $destFile = "$dirDest/$base";
-	mv( "$INSTALL/$file", $destFile ) or warn "$INSTALL/$file -> $destFile: $!";
-	chmod $map->{perms}, $destFile if $map->{perms};
-
-    	# only Plugins have to be enabled (i.e., Contribs and Skins are "always on")
-	if ( my ( $plugin ) = $file =~ m|^lib/TWiki/Plugins/(.+Plugin).pm$| ) {
-	    ++$plugins{$plugin};
-	}
-
-	# semi-KLUDGEy implementation to support ScriptSuffix
-	if ( $path eq 'bin' && $base !~ /\./ ) {		# process extension-less files
-	    my $origFile = $destFile;
-	    $destFile .= $localDirConfig->{ScriptSuffix};
-	    mv( $origFile, $destFile ) or die "$origFile -> $destFile: $!";
-
-	    # TODO: use an exception here!!!
-	    # patch perl path for local installation
-	    local $/ = undef;
-	    open( BIN, '<', $destFile ) or warn "unable to change perl path for $destFile: $!", next;
-	    my $bin = <BIN>;
-	    close BIN;
-	    $bin =~ s|/usr/bin/perl|$perl|;
-
-	    open( BIN, '>', $destFile ) or warn "unable to change perl path for $destFile: $!", next;
-	    print BIN $bin;
-	    close BIN;
-	}
+    my ( $text, $success, $plugins ) = TWiki::Contrib::TWikiInstallerContrib::_InstallTWikiExtension({ 
+	module => $module,
+	tmpInstall => $tmpInstall,
+	mapTWikiDirs => $mapTWikiDirs,
+	localDirConfig => $localDirConfig,
+    });
+#    print $q->li( @$text );
+    foreach my $plugin ( sort keys %$plugins )
+    {
+	++$installedPlugins{ $plugin };
     }
-
-    rmtree $INSTALL;
+#    $installedPlugins{ sort keys %$plugins } = values %$plugins;
 
     return 1;
 }
@@ -357,19 +317,9 @@ sub getUrl {
     return $response->is_error() ? ( undef, $response->status_line ) : ( $response->content(), '' );
 }
 
-__END__
 ################################################################################
 ################################################################################
-# turn on TWikiUserAuthentication
-{
-    my $bin = $mapTWikiDirs->{bin}->{dest} or die "no bin dest?";
-    my $data = $mapTWikiDirs->{data}->{dest} or die "no data dest?";
-
-    my $text = File::Slurp::read_file( "$bin/.htaccess.txt" ) or die "$bin/.htaccess.txt: $!";
-    $text =~ s|!FILE_path_to_TWiki!/data|$data|g;
-    $text =~ s|!URL_path_to_TWiki!/bin/oops|$localDirConfig->{ScriptUrlPath}/oops$localDirConfig->{ScriptSuffix}|g;
-    $text =~ s|(<Files ")([^"\*\.]+?)(">)|$1$2$localDirConfig->{ScriptSuffix}$3|g;
-    # authentication for =configure= (for ADMIN)
-    $text =~ s|!ADMIN_users!|$administrator|g if $administrator;
-    File::Slurp::write_file( "$bin/.htaccess", $text ) or die "cannot write .htaccess: $!";
-}
+# WARNING: ../TWikiInstallerContrib.pm gets appended to the end of this file,
+#          so don't do anything silly like __DATA__ or __END__ blocks :)
+################################################################################
+################################################################################

@@ -1,8 +1,4 @@
-lib/TWiki/Contrib/TWikiInstallerContrib/bin/calc-twiki-deps.pl NEW
-lib/TWiki/Contrib/TWikiInstallerContrib/bin/download-twiki-extensions.pl NEW
-lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl NEW
-lib/TWiki/Contrib/TWikiInstallerContrib/bin/pkg-webs.pl NEW
-lib/TWiki/Contrib/TWikiInstallerContrib/config/install.html NEW
-lib/TWiki/Contrib/TWikiInstallerContrib/config/instructions.html NEW
-lib/TWiki/Contrib/TWikiInstallerContrib/cpan/install-cpan.pl NEW
-lib/TWiki/Contrib/TWikiInstallerContrib/cpan/mirror-cpan.pl NEW
+lib/TWiki/Contrib/TWikiInstallerContrib.pm
+data/TWiki/TWikiInstallerContrib.txt
+pub/TWiki/TWikiInstallerContrib/install-screenshot.png
+pub/TWiki/TWikiInstallerContrib/install-screenshot-thumb.png
