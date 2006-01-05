@@ -125,9 +125,8 @@ sub _processTags {
         if( $token eq '%' ) {
             if( $stackTop =~ /}$/ ) {
                 while( scalar( @stack) &&
-                        $stackTop !~ /^%([A-Z0-9_:]+){.*}$/o ) {
-                    my $top = $stackTop;
-                    $stackTop = pop( @stack ) . $top;
+                         $stackTop !~ /^%(<nop>)?([A-Z0-9_:]+){.*}$/o ) {
+                    $stackTop = pop( @stack ) . $stackTop;
                 }
             }
             if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)({.*})?$/o ) {
@@ -157,12 +156,9 @@ sub _processTags {
             $stackTop .= $token;
         }
     }
-
     # Run out of input. Gather up everything in the stack.
     while ( scalar( @stack )) {
-        my $expr = $stackTop;
-        $stackTop = pop( @stack );
-        $stackTop .= $expr;
+        $stackTop = pop( @stack ).$stackTop;
     }
 
     return $stackTop;
