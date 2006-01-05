@@ -27,6 +27,8 @@ __Note:__
 #PreferencesVariables
 ---++ Preferences Variables
 
+Unlike predefined variables, preferences variables can be defined by the user in various places.
+
 ---+++ Setting Preferences Variables
 You can set variables in all the following places:
    1 local site level in %LOCALSITEPREFS%
@@ -44,12 +46,12 @@ The syntax for setting Variables is the same anywhere in TWiki (on its own TWiki
    * ==<nop>Set VARIABLENAME = value==
       * ==<nop>Set VARIABLENAME = value==
 </blockquote>
-Spaces between the = sign and the value will be ignored. You can split a value over several lines by starting following lines with [multiple of 3 spaces] - as long as you don't try to use * as the first character on the following line.
+Spaces between the = sign and the value will be ignored. You can split a value over several lines by indenting following lines with spaces - as long as you don't try to use * as the first character on the following line.
 <blockquote style="background-color:#f9f9f9">
 *Example:*
 <pre>
    * <nop>Set VARIABLENAME = value starts here
-   and continues here
+     and continues here
 </pre>
 </blockquote>
 
@@ -57,8 +59,8 @@ Whatever you include in your Variable will be expanded on display, exactly as if
 
 <blockquote style="background-color:#f9f9f9">
 *Example: Create a custom logo variable* <br />
-   * To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences page, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, e.g. =LogoTopic=. Sample variable setting in WebPreferences:
-      * ==<nop>Set MYLOGO = %<nop>PUBURL%/%TWIKIWEB%/LogoTopic/mylogo.gif==
+   * To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences topic, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, e.g. =LogoTopic=. Sample variable setting in WebPreferences:
+      * ==<nop>Set MYLOGO = %<nop>PUBURL%/%<nop>WEB%/LogoTopic/mylogo.gif==
 </blockquote>
 
 You can also set preferences variables on a topic by clicking the link =Edit topic preference settings= under =More topic actions=. Preferences set in this manner are not visible in the topic text, but take effect nevertheless.

@@ -19,10 +19,11 @@ This skin is part of every TWiki distribution.
 |  Dependencies: |  |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIKIWEB%.TWikiSkinBrowser
 
-__Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, UserDocumentationCategory, AdminDocumentationCategory
+__Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB%.UserDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory
 
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1090916727" path="C:\Data\Temp\screenshot.gif" size="4040" user="TWikiContributor" version="1.1"}%

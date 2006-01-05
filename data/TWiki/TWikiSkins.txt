@@ -89,7 +89,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>REVTITLE%= | The revision title, if any, ex: =(r1.6)= |
 | =%<nop>REVINFO%= | Revision info, ex: =r1.6 - 24 Dec 2002 - 08:12 GMT - %WIKIUSERNAME%= |
 | =%<nop>WEBCOPYRIGHT%= | Copyright notice, defined in the WebPreferences |
-| =%<nop>BROADCASTMESSAGE%= | Broadcast message at the beginning of your view template, can be used to alert users of scheduled downtimes; is set in TWikiPreferences |
+| =%<nop>BROADCASTMESSAGE%= | Broadcast message at the beginning of your view template, can be used to alert users of scheduled downtimes; can be set in %MAINWEB%.TWikiPreferences |
 
 #GoBox
 ---+++ The "Go" Box and Navigation Box
@@ -183,7 +183,7 @@ TWiki uses a _skin search path_, which lets you combine skins additively. The sk
 
 TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. Each skin on the path is searched for in turn. For example, if you have set the skin path to =local,pattern= then =view.local.tmpl= will be searched for first, then =view.pattern.tmpl= and finally =view.tmpl=.
 
-The basic skin is defined by setting the =%<nop>SKIN%= TWiki Variable:
+The basic skin is defined by a =SKIN= setting:
 
    * =Set SKIN = catskin, bearskin=
 
@@ -191,13 +191,13 @@ You can also add a parameter to the URL, such as =?skin=catskin, bearskin=. Exam
 
    * %SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=print
 
-Setting =%<nop>SKIN%= (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
+Setting =SKIN= (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
 
    * =Set COVER = ruskin=
 
 This pushes a different skin to the front of the skin search path (so for our example above, that final skin path will be =ruskin, catskin, bearskin=). There is also an equivalent =cover= URL parameter.
 
-The full skin path is built up as follows: =%<nop>SKIN%= (or =?skin= if it is set), then =%<nop>COVER%= is added, then =?cover=.
+The full skin path is built up as follows: =SKIN= setting (or =?skin= if it is set), then =COVER= setting is added, then =?cover=.
 
 #HardCodedSkins
 ---++ Hard Coded Skins

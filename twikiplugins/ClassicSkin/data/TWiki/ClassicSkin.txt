@@ -5,8 +5,9 @@ The classic TWiki skin is the traditional TWiki skin, as seen in previous TWiki 
 
 ---++ Skin Info
 
-|  Description: | The classic TWiki skin, bare bone and functional, for any browser, with a minimum of graphics |
-|  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="180" /></a> |
+|  Description: | Bare bone and functional, for any browser, with a minimum of graphics |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=classic][Preview with this topic]] |
 |  Base Name: | classic |
 |  Skin Author: | TWiki:Main/PeterThoeny |
 |  Skin Version: | 25 Jul 2004 (v1.000) |
@@ -15,10 +16,11 @@ The classic TWiki skin is the traditional TWiki skin, as seen in previous TWiki 
 |  Dependencies: |  |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIKIWEB%.TWikiSkinBrowser
 
-__Related topic:__ %TWIKIWEB%.UserDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser
+__Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB%.UserDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1090796589" path="C:\Data\Temp\screenshot.gif" size="8683" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="fullscreen.gif" attr="h" comment="" date="1090796600" path="C:\Data\Temp\fullscreen.gif" size="21130" user="TWikiContributor" version="1.1"}%
