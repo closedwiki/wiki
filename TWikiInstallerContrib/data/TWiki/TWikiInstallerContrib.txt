@@ -1,0 +1,226 @@
+%META:TOPICINFO{author="WillNorris" date="1135975932" format="1.1" version="1.6"}%
+<style>
+div.fragment{
+        background : #FFFFCC;
+        border : 1px solid #CCCCCC;
+        margin-left : 2em;
+        margin-right : 2em;
+        padding : 4px;
+}
+</style>
+
+---+!! Abstract
+
+
+%TOC%
+
+---+ End-User Documentation
+
+---++ Installation
+
+Download and install %ATTACHURL%/twiki-install to a directory where you can run scripts from (eg, =~/public_html/cgi-bin=).  Depending on your webhosting server, you may need to make certain changes to the script in order for it to run.  Some example modifications include:
+   * *Give the script an extension*  This is often the =.cgi= extension.  Another possibility is =.pl=.
+   * *Change the location of the perl executable for the script to run*  The default version points to =/usr/local/bin/perl=.  If your perl interpreter is not located there, modify the line to point to your perl executable.  Some sample paths are =/usr/bin/perl= or =/opt/bin/perl=.
+
+In your web browser, browse to the URL to execute the install script.  You should see something along the lines of:
+
+<table>
+<tr><td>
+<a href="%ATTACHURLPATH%/install-screenshot.png" ><img src="%ATTACHURLPATH%/install-screenshot-thumb.png" /></a>
+</td><td>
+   1. Choose a TWikiKernel to install.  Typically, there will be only one packaged with the TWikiFor.  However, if there are multiple TWikiKernels available, newer versions are listed first.  
+   2. Set the perl executable path.  Typically, you won't need to change this.  The script either worked as-in, or you already updated the shebang line in the script.  You will want to change this if you are using a perl accelerator; specify the full path to the accelerator.
+   3. Specify an account name to automatically create.  This must be a proper WikiWord.
+   4. Specify the WIKIWEBMASTER.  [[%LOCALSITEPREFS%]] is automatically updated with this TWikiPreferenceVariable.
+   5. Optionally select additional TWikiExtensions to install.
+   6. Finally, click the "Install" button.
+</td></tr>
+</table>
+
+
+
+---+ Technical Documentation
+
+As the =twiki-install= program is running the webserver environment, it is able to autodetect pretty much all of its configuration settings.
+
+The =twiki-install= script creates a directory structure very similiar to the canonical TWiki directory layout: because =twiki-install= has been designed to run from a designated =cgi-bin= directory, =bin= has been moved up a level for nicer URL's (eg, =~account/cgi-bin/twiki/view= instead of =~account/cgi-bin/twiki/bin/view=)  (!!! there are other methods of manipulating urls, see ??? plus TWiki:Codev.ShorterURLs ? !!!)
+
+---++ Directory layout
+   * twiki
+      * (bin files)
+      * data/
+      * lib/
+      * templates/
+      * locale/
+      * pub/
+
+      * tmp/
+         * install/
+            * components/
+               * kernels/
+               * extensions/
+
+---++ Scripted Installation
+
+The following scripts provide _an_ automated solution to create a twiki installation from scratch.  It provides a specific which may be useful for many people's needs.  This script provides a solution which is most useful for people with certain types of environments, ones in which you can create users.  The setup is often found on corporate servers, home Linux boxes, and upper-tier hosting environments.   (plus virtualisation technology...)
+
+The directions written here have been developed on a Debian-based system.  Many other distributions will be substiantially similar (if not identical).  (...other systems?) 
+
+
+<span id="no_1show" class="twistyMakeVisible">
+	<a href="#" class="twistyTrigger">Expand...</a>
+	<span class="twistyPlaceholder twistyMakeVisible">=UserMod=</span>
+</span>
+<span id="no_1hide" class="twistyHidden">
+	<a href="#" class="twistyTrigger">Collapse...</a>
+</span>
+<div id="no_1toggle" class="twistyMakeHidden">
+say, something like this setup:
+%CODE%
+<IfModule mod_userdir.c>
+        UserDir public_html
+        UserDir disabled root
+
+        <Directory /home/*/public_html>
+                AllowOverride FileInfo AuthConfig Limit
+                Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+        </Directory>
+
+        <Directory /home/*/public_html/cgi-bin>
+                AllowOverride All
+                Options ExecCGI
+                AddHandler cgi-script .cgi
+        </Directory>
+</IfModule>
+%ENDCODE%
+</div>
+
+
+To install a TWiki to an account with Apache a typical configuration of =UserMod= 
+
+
+(this is often the setup for webhosting as well).  Four pieces of information need to be specified:
+   | Parameter | Description | Sample Value |
+   | ACCOUNT | Account name | =twiki= |
+   | HOST | Hostname | =localhost= |
+   | DIR | File location of the =cgi-bin= directory | =$ACCOUNT@$HOST:~/public_html/cgi-bin= |
+   | URL | URL of the =cgi-bin= directory | =http://$HOST/~$ACCOUNT/cgi-bin/twiki-install.cgi= |
+
+the =install-twiki.pl= script copies the installation script to the server, and then executes the web page by calling a URL designed to perform the installation with its configuration options (see =$TWIKIDEV/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-twiki.pl --help= for more installation configuration options).
+
+%CODE{bash}%
+ACCOUNT=twiki \
+HOST=localhost \
+DIR="$ACCOUNT@$HOST:~/public_html/cgi-bin" \
+URL="http://$HOST/~$ACCOUNT/cgi-bin/twiki-install.cgi" \
+EXTENSIONS="--extension=TWikiInstallerContrib --extension=TWikiPluginInstallerContrib" ; \
+$TWIKIDEV/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-twiki.pl \
+   --dir=$DIR --url=$URL $EXTENSIONS
+%ENDCODE%
+
+This example shows how =$URL= can specify can a required script extension (just add it to the end of =twiki-install=), and the installer modifies scripts that are installed by renaming them with the same extension and updating the perl executable location.
+
+=install-twiki.pl= creates an installation report at =./install-report.html=
+
+<verbatim>
+                                TWiki Installer
+  TWikiKernelDEVELOP8000
+  BlogPlugin
+  CpanContrib
+  DBCacheContrib
+  DBCachePlugin
+  ExtendedSelectPlugin
+  GluePlugin
+  HeadlinesPlugin
+  ImageGalleryPlugin
+  NatSkinPlugin
+  RedDotPlugin
+  SpreadSheetPlugin
+  TablePlugin
+  TimeSincePlugin
+  TwistyContrib
+  TwistyPlugin
+</verbatim>
+
+
+
+
+---+++ Debian complete account creation
+
+This script creates a new user account (if it doesn't exist), (SSH KEYS), sets up the user webspace (including =cgi-bin= directory), and finally, actually performs a TWiki installation.
+
+%CODE{bash}%
+#! /bin/sh
+
+ACCOUNT=$1
+
+if ! [ -d /home/$ACCOUNT ];
+then
+        echo Creating and initialising '$ACCOUNT' user account
+        sudo adduser --disabled-password --gecos $ACCOUNT $ACCOUNT
+        sudo usermod -G www-data $ACCOUNT;
+fi
+
+if ! [ -d /home/$ACCOUNT/.ssh ];
+then
+        echo Installing SSH keys;
+        sudo cp -r /home/twikibuilder/.ssh /home/$ACCOUNT
+        sudo chown -R $ACCOUNT.$ACCOUNT /home/$ACCOUNT/.ssh
+fi
+
+if [ -d /home/$ACCOUNT/public_html/cgi-bin ]
+then
+        echo Removing previous TWiki installation
+        sudo rm -rf /home/$ACCOUNT/public_html
+fi
+
+echo Creating web directory structure
+sudo -u $ACCOUNT mkdir -p /home/$ACCOUNT/public_html/cgi-bin
+sudo -u $ACCOUNT chmod g+w /home/$ACCOUNT/public_html/cgi-bin
+sudo chgrp -R www-data /home/$ACCOUNT/public_html;
+
+if ! [ -d /home/$ACCOUNT/public_html/cgi-bin/lib/CPAN ]
+then
+        echo "Installing dirty little secret CPAN library (for the moment...)"
+        sudo -u $ACCOUNT cp -r lib /home/$ACCOUNT/public_html/cgi-bin;
+fi
+
+echo Installing...
+time bin/install-twiki.pl \
+        --dir=$ACCOUNT@localhost:~/public_html/cgi-bin \
+        --url=http://localhost/~$ACCOUNT/cgi-bin/twiki-install.cgi \
+        $EXTENSIONS \
+%ENDCODE%
+
+the script is =install-acount.sh= in the =TWikiInstallerContrib/bin= directory.  Here is a sample 
+
+%CODE{bash}%
+
+cd $TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/
+EXTENSIONS=' \
+   --extension=TWikiInstallerContrib --extension=TWikiPluginInstallerContrib \
+   --extension=CpanContrib --extension=SpreadSheetPlugin --extension=ExtendedSelectPlugin --extension=TablePlugin \
+   --extension=CommentPlugin --extension=InterwikiPlugin --extension=TwistyPlugin --extension=TwistyContrib \
+   --extension=JSCalendarContrib --extension=DateFieldPlugin \
+   --extension=CalendarPlugin --extension=QuickCalendarPlugin \
+   --extension=MailerContrib --extension=TWikiShellContrib --extension=SmiliesPlugin \
+   --extension=RecursiveRenderPlugin \
+   --extension=FindElsewherePlugin --extension=TocPlugin --extension=GetAWebAddOn \
+\
+   --extension=GluePlugin \
+   --extension=HeadlinesPlugin --extension=ImageGalleryPlugin \
+   --extension=TimeSincePlugin \
+\
+   --extension=VotePlugin \
+   --extension=DBCachePlugin --extension=DBCacheContrib \
+   --extension=BlogPlugin --extension=RedDotPlugin --extension=UserInfoPlugin \
+   --extension=ChartPlugin \
+\
+   --extension=NatSkinPlugin \
+' bin/install-account.sh _accountName_
+%ENDCODE%
+
+
+-- TWiki:Main.WillNorris - 29 Dec 2005
+
+
