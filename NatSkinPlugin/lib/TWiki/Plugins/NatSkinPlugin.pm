@@ -82,7 +82,7 @@ sub initPlugin {
   ($currentTopic, $currentWeb, $currentUser) = @_;
 
   # check TWiki version: let's eat spagetti
-  $isDakar = (defined $TWiki::cfg{LogFileName})?1:0;
+  $isDakar = (defined $TWiki::cfg{LogDir})?1:0;
   if ($isDakar) {# dakar
     writeDebug("wikiVersion=$TWiki::VERSION (dakar)");
     $isBeijing = 0;
@@ -117,7 +117,6 @@ sub initPlugin {
     &clearSessionValue('STYLEVARIATION');
     &clearSessionValue('STYLESEARCHBOX');
     &clearSessionValue('TABLEATTRIBUTES');
-    return 0;
   }
 
   &doInit();
