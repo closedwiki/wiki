@@ -86,7 +86,7 @@ msgstr "%1 editando %2."
 
 #: templates/oopsattention.tmpl:44
 msgid "%1 is in at least one group and cannot be removed"
-msgstr "%1 esta en uno amos grupes y no puede ser remouido"
+msgstr "%1 esta en uno amos grupos y no puede ser remouido"
 
 #: data/TWiki/NewUserTemplate.txt:8
 msgid "%1 just for me"
@@ -386,7 +386,7 @@ msgstr "<em>Buscard todas las webs</em>"
 
 #: templates/preview.pattern.tmpl:42
 msgid "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
-msgstr "<span class='twikiAlert'><b>No olvidar</b></span> para guardar [tus] cambios."
+msgstr "<span class='twikiAlert'><b>No olvidar</b></span> para guardar los cambios."
 
 #: templates/oopsaccessdenied.tmpl:25
 msgid ""
@@ -1145,7 +1145,7 @@ msgstr "Buenos ejemplos:"
 
 #: data/Main/WebLeftBar.txt:7 data/TWiki/WebLeftBar.txt:7
 msgid "Groups"
-msgstr "Grupas"
+msgstr "Grupos"
 
 #: data/TWiki/WebLeftBarLogin.txt:3
 msgid "Hello %1!"
@@ -1683,7 +1683,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:46
 msgid "Remove the user from the group(s) %1 first."
-msgstr ""
+msgstr "Primero, borrar usuario del grupo %1"
 
 #: templates/rename.pattern.tmpl:9 templates/renameweb.pattern.tmpl:9
 #, fuzzy
