@@ -5,7 +5,7 @@
 
 _Server and client requirements_
 
-Low client and server base requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions.  Many [[TWiki:Plugins.Plugins][Plugins]] and [[TWiki:Plugins.Contrib][contrib modules]] exist which enhance and expand TWiki's capabilities; they may have additional requirements.
+Low client and server base requirements are core features that keep TWiki widely deployable, particularly across a range of browser platforms and versions.  Many [[TWiki:Plugins.PluginPackage][Plugins]] and [[TWiki:Plugins.ContribPackage][contrib modules]] exist which enhance and expand TWiki's capabilities; they may have additional requirements.
 
 ---++ Server Requirements
 
@@ -16,8 +16,7 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 | RCS | 5.7 or higher (including GNU =diff=) %BR% Optional, TWiki includes a pure perl implementation of RCS that can be used instead (although it's slower) |
 | GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  %BR% Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
 | Other external programs | =fgrep, egrep= |
-| Cron/scheduler | %BULLET% Unix: =cron= %BB% Windows: =cron= equivalents |
-SMELL: Macintosh version?
+| Cron/scheduler | %BULLET% Unix: =cron= %BB% Windows: =cron= equivalents <!-- SMELL: Macintosh version? --> |
 | Web server | Apache is well supported; for other servers, see the TWiki:Codev.CategoryCookbook lists |
 
 ---+++ Required CPAN Modules
@@ -53,18 +52,15 @@ The following Perl modules may be used by TWiki:
 | Unicode::String | | Used for I18N support with perl 5.6 |
 | URI | | Used for configure |
 
-
-Most of them will probably already be available in your installation.
-SMELL: you can check version numbers if configure, or if you're 
-still trying to get to that point, check from the command line...
-You can check if they are available from the command-line like this
+Most of them will probably already be available in your installation. You can check version numbers with the =configure= script, or if you're still trying to get to that point, check from the command line like this:
 <verbatim>
 perl -e 'use FileHandle; print $FileHandle::VERSION."\n"'
 </verbatim>
-
+<!--
 SMELL: perhaps put download link to TWiki:Plugins.CpanContrib? (which 
 also includes prebuilt versions of all of the CPAN modules used by 
 all of the plugins checked into SVN)
+-->
 
 #ClientRequirements
 ---++ Client Requirements
@@ -75,15 +71,15 @@ The TWiki [[TWikiInstallationGuide][standard installation]] has relatively low b
    * Cookies, if persistent sessions are required
 
 CSS and Javascript are used in most skins, although there is a low-fat skin (Classic skin) available that minimises these requirements. Some skins will require more recent releases of browsers. The default skin (Pattern) is tested on IE 6, Safari, and Mozilla 5.0 based browsers (such as Firefox).
+<!--
 SMELL: what are some actual known good version number requirements for these browsers (eg, FireFox 1.0, or 1.0.3, or 1.0.7, or ???), etc.
+-->
 
-You can easily select a balance of browser capability versus look and feel.
-SMELL: really?  tell me how...  better yet, point me there... maybe a link to %TWIKIWEB%.TWikiSkinBrowser ?
+You can easily select a balance of browser capability versus look and feel. Try the installed skins at %TWIKIWEB%.TWikiSkinBrowser and more at TWiki:Plugins.SkinPackage.
 
 ---++ Important note about TWiki Plugins
 
    * Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
-      * __%T% Note:__ Plugins included in the TWiki distribution do not add requirements.
-SMELL: well, that's not really true, because CommentPlugin (at least), requires a higher version of perl than the TWiki distribution (there may very well be other examples of other plugins having additional requirements)
+      * __%T% Note:__ Plugins included in the TWiki distribution do not add requirements, except for the CommentPlugin which requires Perl 5.6.1.
 
 __Related Topics:__ AdminDocumentationCategory
