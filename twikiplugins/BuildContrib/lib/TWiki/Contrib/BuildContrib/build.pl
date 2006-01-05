@@ -25,24 +25,24 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Declare our build package
-{ package BuildBuild;
+package BuildBuild;
+use base qw( TWiki::Contrib::Build );
 
-  @BuildBuild::ISA = ( "TWiki::Contrib::Build" );
-
-  sub new {
+sub new {
     my $class = shift;
     return bless( $class->SUPER::new( "BuildContrib", "Build" ), $class );
-  }
+}
 
-  # Example: Override the build target
-  sub target_build {
+# Example: Override the build target
+sub target_build {
     my $this = shift;
 
     $this->SUPER::target_build();
 
     # Do other build stuff here
-  }
 }
+
+package main;
 
 # Create the build object
 $build = new BuildBuild();
