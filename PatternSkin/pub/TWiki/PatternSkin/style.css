@@ -609,7 +609,6 @@ table.patternTopBarContents td {
 }
 .patternLeftBarContents input.patternFormField {
 	display:block;
-	height:1em;
 	width:100%;
 	border-width:1px;
 	border-style:solid;
