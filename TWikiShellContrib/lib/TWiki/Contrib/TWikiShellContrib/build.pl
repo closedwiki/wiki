@@ -19,9 +19,7 @@
 
 # Standard preamble
 BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
-    unshift @INC, $pc;
-  }
+    unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
 }
 
 use TWiki::Contrib::Build;
@@ -29,8 +27,10 @@ use TWiki::Contrib::Build;
 
 # Declare our build package
 { package TWikiShellBuild;
-    use File::Basename; 
   @TWikiShellBuild::ISA = ( "TWiki::Contrib::Build" );
+
+  use File::Basename; 
+  use Pod::Text;
 
   sub new {
     my $class = shift;
