@@ -204,13 +204,16 @@ sub _makeSquab {
     }
 
     unless( $text ) {
-        # forced link [[Word]]
+        # forced link [[Word]] or [[url]]
         $text = $url;
-        $url =~ s/(^| )(.)/\U$2/g;
-        if( $url =~ /^(?:($TWiki::regex{webNameRegex})\.)?(.*)$/ ) {
-            $url = &{$this->{opts}->{getViewUrl}}( $1, $2 );
-        } else {
-            $url = &{$this->{opts}->{getViewUrl}}( undef, $2 );
+        if( $url !~ /^($TWiki::regex{linkProtocolPattern}:|\/)/ ) {
+            my $wurl = $url;
+            $wurl =~ s/(^| )(.)/\U$2/g;
+            if( $wurl =~ /^(?:($TWiki::regex{webNameRegex})\.)?(.*)$/ ) {
+                $url = &{$this->{opts}->{getViewUrl}}( $1, $2 );
+            } else {
+                $url = &{$this->{opts}->{getViewUrl}}( undef, $wurl );
+            }
         }
     } elsif ($url =~ /^(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?$/) {
         # Valid wikiword expression
