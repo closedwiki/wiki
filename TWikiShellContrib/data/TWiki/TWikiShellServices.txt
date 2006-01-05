@@ -7,7 +7,7 @@ The "services" are sets of common functionality than can be reused across Comman
 
 ---+++ unzip($config,$sourceFile,$targetDir)
 
-Unzips $sourceFile to $targetDir. It's uses ==Archive::Zip== if installed, or the configured unzip program if not.
+Unzips $sourceFile to $targetDir. It uses CPAN:Archive::Zip if installed, or the configured unzip program othewise.
 
 ---++ TWiki::Contrib::TWikiShellContrib::DirHandling
 
@@ -107,7 +107,7 @@ my $doco = {
  with all the files copied.
  This is an alternative to the =mklinks -copy=  command, with the
  added value that it creates a manifest file that can be used by 
- the Package CommandSet or the BuildContrib based =build.pl= 
+ the Package CommandSet or the BuildContrib-based =build.pl= 
  script to create a release version.
 
 ",
@@ -136,7 +136,7 @@ DESCRIPTION
      with all the files copied.
      This is an alternative to the =mklinks -copy=  command, with the
      added value that it creates a manifest file that can be used by
-     the Package CommandSet or the BuildContrib based =build.pl=
+     the Package CommandSet or the BuildContrib-based =build.pl=
      script to create a release version.
 
 EXAMPLE

@@ -9,14 +9,14 @@ The config object provides a centralized place where CommandSet can store their 
 Also, the configuration will always have the following variables set:
 
 	* verbosity : Last verbosity set
- * configFileName : The name of the config file
- * debug : if debug is enabled or not.
+	* configFileName : The name of the config file
+	* debug : if debug is enabled or not.
 
-Also, unless the TWiki CommandSet is uninstalled, a hash containing the =lib=,=bin=,=pub= and =root= directories for the installation is available unther the key =TWIKI= (ie: $config->{TWIKI}{root} has the absolute path to the root of the twiki installation).
+Also, unless the TWiki CommandSet is uninstalled, a hash containing the =lib=, =bin=, =pub=, and =root= directories for the installation is available under the key =TWIKI= (ie: =$config->{TWIKI}{root}= has the absolute path to the root of the twiki installation).
 
 
-Any CommandSet that want to store a setting in the config object, must call the save method. 
+Any CommandSet that wants to store a setting in the config object must call the =save= method. 
 
 It's recommended that CommandSets using the config object to store settings must create a namespace using a hash for the settings so they won't conflict with others. Example:
 
-The ==TWiki::Contrib::TWikiReleaseTrackerCommand== may store it's settings in ==$config->{TWikiReleaseTrackerCommand}==, so it's settings accessed using ==$config->{TWikiReleaseTrackerCommand}{setting_name}==
+The ==TWiki::Contrib::TWikiReleaseTrackerCommand== may store its settings in ==$config->{TWikiReleaseTrackerCommand}==, so its settings are accessed using ==$config->{TWikiReleaseTrackerCommand}{setting_name}==

@@ -183,8 +183,8 @@ Adding a newline at the end of input stops TWiki in its greedy matching, but thi
 |  Other Dependencies: | GNU enscript 1.6.3 |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://www.lrde.epita.fr/cgi-bin/twiki/view/TWiki/SyntaxHighlightingPlugin |
-|  Feedback: | Main.NicolasTisserand |
+|  Feedback: | TWiki:Main.NicolasTisserand |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.NicolasTisserand - 12 Jul 2002

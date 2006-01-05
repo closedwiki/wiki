@@ -20,7 +20,7 @@ This will fire the shell. The following command line options are available:
 | -vv | Very Verbose mode (Verbosity level 2) |
 | -q | Quiet Operation (Verbosity level 0) |
 | -d | Turns on debugging (prints debug statements to console) |
-| $lt;command&gt; | Execute the specified command. Must be the last option in the cli. i.e: twikishell package CalendarPlugin|
+| &lt;command&gt; | Execute the specified command. Must be the last option in the cli. i.e: twikishell package CalendarPlugin|
 
 ---+ Operation
 
@@ -38,7 +38,7 @@ On a bare installation (without any CommandSets installed), you have the followi
 | quiet | Changes the verbosity level to 0 |
 | debug | Set debugging On and Off. Usage: debug [on/off] |
 
-The config file is a dump (using Data::Dumper) of the configuration object used internally
+The config file is a dump (using CPAN:Data::Dumper) of the configuration object used internally
 
 %INCLUDE{CommandSet}%
 
@@ -50,10 +50,10 @@ The config file is a dump (using Data::Dumper) of the configuration object used 
 
 ---+ Installation
 
-	* Make sure that Term::Shell is installed (either in the perl distribution or locally in twiki)
+	* Make sure that CPAN:Term::Shell is installed (either in the perl distribution or locally in twiki)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
-%MANIFEST%
+%$MANIFEST%
 
 If you have a non-standard instalation, then move the files wherever you need them to be.
 
@@ -63,10 +63,10 @@ If you have a non-standard instalation, then move the files wherever you need th
 
 ---+ Contrib Info
 
-| Authors: | TWiki:Main.MartinCleaver,TWiki:Main.RafaelAlvarez |
-| Copyright &copy;: | 2004, Crawford Currie, Rafael Alvarez and Martin Cleaver|
+| Authors: | TWiki:Main.MartinCleaver, TWiki:Main.RafaelAlvarez |
+| Copyright &copy;: | 2004,2005 Crawford Currie, Rafael Alvarez, and Martin Cleaver|
 | License: | GPL |
-| Dependencies: | Term::Shell |
+| Dependencies: | CPAN:Term::Shell |
 | 10/08/2005 | 2.0 Removed reload and register commands. Major overhaul of the code. Added new CommandSets |
 | 02/11/04 | 1.1 Added reload and register commands |
 | 21/10/04 | 1.000 Initial release, based on the work of TWiki:Main.MartinCleaver|

@@ -40,14 +40,14 @@ You can also define a default language and use the shortcut:
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SOURCEHIGHLIGHTPLUGIN_DEFAULTLANGUAGE%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-	* Set SHORTDESCRIPTION = Highlights and formats code fragments using GNU source-highlight.
-	* Set DEBUG = 0
+		* Set SHORTDESCRIPTION = Highlights and formats code fragments using GNU source-highlight.
+		* Set DEBUG = 0
 	* Full path to GNU source-highlight binary (*REQUIRED*)
-	* Set BINARY =
+		* Set BINARY = /usr/bin/source-highlight
 	* Language to use when none specified (optional); choose from one of the *Key* values in the table above
-	* Set DEFAULTLANG =
+		* Set DEFAULTLANG =
 	* CSS class to use for the =div= tag surrounding the HTML output; if undefined we use *codefragment*
-	* Set FORMATCLASS = 
+		* Set FORMATCLASS = 
 
 ---++ Plugin Installation Instructions
 
@@ -121,4 +121,4 @@ public class Thingy
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.ChrisWinters - 23 Jan 2003
+-- TWiki:Main.ChrisWinters - 23 Jan 2003

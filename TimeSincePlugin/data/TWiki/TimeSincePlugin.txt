@@ -82,7 +82,7 @@ Format strings may contain the following:
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  11 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | Time::Local |
+|  CPAN Dependencies: | CPAN:Time::Local |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |

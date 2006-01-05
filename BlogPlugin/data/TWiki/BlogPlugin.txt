@@ -5,7 +5,7 @@ This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
 It bundles some of the features found in common blogging applications 
 that are very hard or even impossible to implement using <nop>TWikiML. 
 Note, that most of the tags are tightly related to the
-data modle of BlogUp, i.e. it relies on its <nop>TopicType and <nop>TWikiForm 
+data model of BlogUp, i.e. it relies on its <nop>TopicType and <nop>TWikiForm 
 definitions. 
 
 
@@ -67,7 +67,7 @@ Following variables are expanded in format strings:
 
 
 ---+++ PREVDOC, NEXTDOC
-Display the previous/next topic in an ordered .
+Display the previous/next topic in an ordered (???).
 These tags can be used to establish a navigation within a set of related topics
 paging to the preceeding or succeeding one. A set of related topics is defined
 using a "where" and an "order" clause which the given topic is supposed to be part of.
@@ -196,7 +196,7 @@ And send me a patch if you've coded that into TWiki ;).
      | ==data/Main/BlogAuthorGroup.txt== | blog author group |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
-     | ==pub/TWiki/BlogPlugin/ExtendedSelectPlugin_pm.diff== | patch for the <nop>ExtendedSelectPlugin |
+     | ==pub/TWiki/BlogPlugin/ExtendedSelectPlugin_pm.diff== | patch for the <nop>ExtendedSelectPlugin (not required for Dakar Beta 5 or later) |
 
 ---++ Plugin Info
 
@@ -209,7 +209,7 @@ And send me a patch if you've coded that into TWiki ;).
 |  Other Dependencies: \
 | \
 TWiki:Plugins/DBCachePlugin, \
-TWiki:Plugins/ExtendedSelectionPlugin, \
+TWiki:Plugins/ExtendedSelectPlugin, \
 TWiki:Plugins/GluePlugin, \
 TWiki:Plugins/HeadlinesPlugin, \
 TWiki:Plugins/NatSkinPlugin, \

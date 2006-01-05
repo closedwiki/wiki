@@ -25,7 +25,7 @@ much faster, because it is implemented in C.
 
 ---+++ =new($file, $rw)=
    * =$file= - archive file path
-   * =$rw* - mode "r" or "w"
+   * =$rw= - mode "r" or "w"
 Create a new archive, using filename $file and
 mode $rw which must be "r" or "w". The archive will remain
 in existence (and the file remain open) until "close" is

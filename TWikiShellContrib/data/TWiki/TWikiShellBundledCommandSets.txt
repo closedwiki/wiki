@@ -2,7 +2,7 @@
 
 ---+ Bundled CommandSets
 
-TWikiShellContrib is distributed with some CommandSets aimed to the TWiki:Codev.TWikiExtension development.
+TWikiShellContrib is distributed with some CommandSets aimed at TWiki:Codev.TWikiExtension development.
 
 ---++ TWiki::Contrib::CommandSet::Dump
 
@@ -89,11 +89,11 @@ EXAMPLE
 
 ---++ TWiki::Contrib::CommandSet::TWiki
 
-This CommandSet don't have any command. It exist only to discover all the information about the TWiki installation where TWikiShell recides, and make it available through the TWikiShellConfigObject.
+This CommandSet doesn't have any commands. It exists only to discover all the information about the TWiki installation where TWikiShell resides, and make it available through the TWikiShellConfigObject.
 
 ---++ TWiki::Contrib::CommandSet::Package
 
-Generates a tarball from all the files in the  TWikiExtension directory.
+Generates a tarball from all the files in the TWikiExtension directory.
 
 | *Command* | *Description* |
 | package | Generates a tarball for the TWikiExtension|
@@ -105,7 +105,7 @@ SYNOPSIS
      package <TWikiExtension>
 
 DESCRIPTION
- Generates a tarball from all the files in the  TWikiExtension directory.
+ Generates a tarball from all the files in the TWikiExtension directory.
  
 EXAMPLE
     twikishell package TWikiShellContrib

@@ -5,7 +5,7 @@
 
 ---++ Summary
 
-Convenience plugin for TWiki:Plugins.TwistyContrib.
+Convenience plugin for TwistyContrib.
 
 It has two major features:
 	* When active, the Twisty javascript library is included in every topic. _Note: TWiki:TWiki.PatternSkin also includes this javascript library._
@@ -69,7 +69,7 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
 #VarTWISTYBUTTON
 ---+++ TWISTYBUTTON
 *Shorthand version for TWISTYSHOW &amp; TWISTYHIDE*
-This is usefull if both the show and the hide button take the same arguments. 
+This is useful if both the show and the hide button take the same arguments. 
 	* Syntax: =%<nop>TWISTYBUTTON{id="myid" ... }%=
 	* Supported parameters:
     | *Parameter* | *Description* | *Value* |
