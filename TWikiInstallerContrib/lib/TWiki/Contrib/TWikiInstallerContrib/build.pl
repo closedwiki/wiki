@@ -3,9 +3,7 @@
 # Build for TWikiInstallerContrib
 #
 BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
-    unshift @INC, $pc;
-  }
+    unshift @INC, split(/:/, $ENV{TWIKI_LIBS});
 }
 
 use TWiki::Contrib::Build;
@@ -14,5 +12,5 @@ use TWiki::Contrib::Build;
 $build = new TWiki::Contrib::Build( 'TWikiInstallerContrib' );
 
 # Build the target on the command line, or the default target
-$build->build($build->{target});
+$build->build( $build->{target} );
 
