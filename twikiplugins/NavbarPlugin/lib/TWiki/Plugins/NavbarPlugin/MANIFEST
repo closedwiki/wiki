@@ -1,8 +1,8 @@
 data/TWiki/NavbarPlugin.txt NEW
-data/TWiki/NavbarPluginExample.txt NEW
-data/TWiki/NavbarPluginExampleFirst.txt NEW
-data/TWiki/NavbarPluginExampleLast.txt NEW
-data/TWiki/NavbarPluginExampleMiddle.txt NEW
+data/Sandbox/NavbarPluginExample.txt NEW
+data/Sandbox/NavbarPluginExampleFirst.txt NEW
+data/Sandbox/NavbarPluginExampleLast.txt NEW
+data/Sandbox/NavbarPluginExampleMiddle.txt NEW
 lib/TWiki/Plugins/NavbarPlugin.pm NEW
 pub/TWiki/NavbarPlugin/nav-next.gif NEW
 pub/TWiki/NavbarPlugin/nav-nexti.gif NEW
