@@ -635,6 +635,7 @@ templates/renamewebbase.tmpl 0440
 templates/renamewebconfirm.tmpl 0440
 templates/renamewebdelete.tmpl 0440
 templates/search.tmpl 0440
+templates/search.text.tmpl 0440
 templates/searchbookview.tmpl 0440
 templates/searchformat.tmpl 0440
 templates/searchmeta.tmpl 0440
