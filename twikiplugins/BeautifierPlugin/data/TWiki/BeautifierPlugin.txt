@@ -9,6 +9,7 @@ This plugin allows you to have code fragments automatically formatted and highli
 
 <blockquote>
 | *Language* | *Syntax* |
+| bash | =%<nop>CODE{"bash"}%= ... =%ENDCODE%= |
 | C++ | =%<nop>CODE{"cpp"}%= ... =%ENDCODE%= |
 | C# | =%<nop>CODE{"csharp"}%= ... =%ENDCODE%= |
 | Java | =%<nop>CODE{"java"}%= ... =%ENDCODE%= |
@@ -20,7 +21,10 @@ This plugin allows you to have code fragments automatically formatted and highli
 | PHP3 | =%<nop>CODE{"php3"}%= ... =%ENDCODE%= |
 | Scheme | =%<nop>CODE{"scheme"}%= ... =%ENDCODE%= |
 | TCL | =%<nop>CODE{"tcl"}%= ... =%ENDCODE%= |
+| HTML | =%<nop>CODE{"html"}= ... %ENDCODE%= |
 | XML | =%<nop>CODE{"xml"}%= ... =%ENDCODE%= |
+| Verilog | =%<nop>CODE{"verilog"}%= ... =%ENDCODE%= |
+| VHDL | =%<nop>CODE{"vhdl"}%= ... =%ENDCODE%= |
 </blockquote>
 
 Additional languages can be added since the Beautifier library is flexible and can support a wide range of language families.  Other languages can be added with relative easy by downloading the full PHP dist from http://www.beautifier.org and converting the relevant language file from PHP to Perl.
@@ -57,28 +61,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* To install the Beautifier library, either install it in the Perl library folder or unpack it into the twiki directory.  For the latter, the following files are installed:
 	  | *File:* | *Description:* |
-	  | ==lib/Beautifier/Context.pm== |  |
-	  | ==lib/Beautifier/Core.pm== |  |
-	  | ==lib/Beautifier/HFile.pm== |  |
-	  | ==lib/Beautifier/Magic.pm== |  |
-	  | ==lib/Beautifier/MagicConfig.pm== |  |
-	  | ==lib/HFile/HFile_cpp.pm== |  |
-	  | ==lib/HFile/HFile_csharp.pm== | C#, courtesy of TWiki:Main/MatthewMastracci  |
-	  | ==lib/HFile/HFile_java.pm== |  |
-	  | ==lib/HFile/HFile_lua.pm== |  |
-	  | ==lib/HFile/HFile_makefile.pm== | Makefile, courtesy of Agora:Main/BruceMitchener |
-	  | ==lib/HFile/HFile_perl.pm== |  |
-	  | ==lib/HFile/HFile_php3.pm== |  |
-	  | ==lib/HFile/HFile_plsql.pm== | PL/SQL, courtesy of TWiki:Main/FranzJosefSilli |
-	  | ==lib/HFile/HFile_python.pm== |  |
-	  | ==lib/HFile/HFile_scheme.pm== |  |
-	  | ==lib/HFile/HFile_tcl.pm== |  |
-	  | ==lib/HFile/HFile_xml.pm== | XML, courtesy of TWiki:Main/FranzJosefSilli |
-	  | ==lib/Output/ANSI.pm== |  |
-	  | ==lib/Output/DocBook.pm== |  |
-	  | ==lib/Output/HTML.pm== |  |
-	  | ==lib/TWiki/Plugins== |  |
-	  | ==lib/TWiki/Plugins/BeautifierPlugin.pm== |  |
+%$MANIFEST%
+
 	* To get the doxygen-ish box around the code fragment, the following is needed in the skin's stylesheet:
 
 <blockquote>
@@ -120,6 +104,7 @@ void nWorld::StepSim()
 ---++ History
 
 | *Date* | *Change* | *Name* |
+|  1 Jan 2006 | upgraded to TWiki::Func::extractNameValuePair for better parameter parsing, upgraded TWiki:Plugins.BuildContrib support | TWiki:Main.WillNorris |
 | 26 Jul 2003 | Syntax fixes from TWiki:Main/WillNorris  | TWiki:Main/LingLo |
 | 10 Feb 2003 | Syntax fix from TWiki:Main/JoshMore  | TWiki:Main/LingLo |
 | 28 Dec 2002 | Accepts mixed case language names | TWiki:Main/LingLo |
@@ -141,6 +126,6 @@ void nWorld::StepSim()
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- Main.LingLo - 18 Dec 2002
+-- TWiki:Main.LingLo - 18 Dec 2002
 
 

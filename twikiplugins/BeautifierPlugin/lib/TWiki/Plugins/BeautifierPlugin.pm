@@ -95,7 +95,7 @@ sub commonTagsHandler
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
 
     # Find code tag and beautify
-    $_[0] =~ s/%CODE{"([a-z0-9]+)"}%(.*?)%ENDCODE%/&handleCode($1, $2)/gseo;
+    $_[0] =~ s/%CODE{(.*?)}%(.*?)%ENDCODE%/&handleCode($1, $2)/gseo;
 
     # Legacy tags
     $_[0] =~ s/%CODE_CPP{(.*?)}%/&handleCode("cpp", $1)/gseo;
@@ -107,7 +107,9 @@ sub commonTagsHandler
 
 sub handleCode
 {
-    my $lang = shift();
+    my $args = shift;
+
+    my $lang = TWiki::Func::extractNameValuePair( $args );	# || default language (eg, TWiki::Func::getPreferencesValue(uc 'BEAUTIFIERPLUGIN_LANGUAGE' ) 
     unless ($langs->{$lang})
     {
         local $SIG{__DIE__};
