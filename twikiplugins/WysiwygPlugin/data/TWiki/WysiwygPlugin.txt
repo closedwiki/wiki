@@ -4,13 +4,15 @@ Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. C
 
 <img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
 
-The plugin is a generic framework that supports editing of TWiki topics using any browser-based HTML editor, and the import of HTML from external sources such as existing web pages.
+The plugin is a generic framework that supports editing of TWiki topics using any browser-based HTML editor. It works by transforming TML (TWiki Meta Language) into HTML for the editor and then transforming HTML back into TML on save. These steps can be separated to support the import of HTML from external sources such as existing web pages.
+
+*Caveat*: WysiwygPlugin is designed for editing TWiki topics, not as a general purpose HTML editor. It will work fine on topics that contain text, TML formatting, and most HTML. However, because of the complexity of transforming TML into HTML and back, complex TML, and mixing HTML and TML may not give the results you expect. You are recommended to use the standard browser textarea editor for editing existing topics that contain mixed HTML and TML, or complex %<nop>TML%-type variables.
 
 %TOC%
 
 ---++ Features
 	* Supports the input of malformed HTML
-	* Full round-trip (TWiki syntax -> XHTML -> TWiki syntax)
+	* Full round-trip (TML -> XHTML -> TWiki syntax)
 	* Framework is editor agnostic
 	* Customised [[http://kupu.oscom.org][Kupu]] editor included
 
@@ -121,9 +123,8 @@ Some of the following known problems apply to the Kupu editor or the browser rat
 	* Incompatible with plugins that expand non-standard syntax e.g. TWiki:Plugins.MathModePlugin (WysiwygPlugin)
 		* Plugins that extend the syntax using TWiki variables, such as %MYVARIABLE%, should work fine.
 	* Overlapping styles don't work very well (WysiwygPlugin)
-	* Images cannot be resized (Kupu)
 	* Can't *undo* all functions (Kupu)
-	*  Nothing done while editing HTML source can be undone (Kupu)
+	* Nothing done while editing HTML source can be undone (Kupu)
 	* Images cannot be resized [[http://codespeak.net/issues/kupu/issue221][known Kupu bug]]
 
 ---+++ Overlapping styles
