@@ -203,11 +203,11 @@ sub postRenderingHandler {
 # DEPRECATED in Dakar (modifyHeaderHandler does the job better)
 $TWikiCompatibility{writeHeaderHandler} = 1.1;
 sub writeHeaderHandler {
-    return '' if $MODERN;
-
     my $query = shift;
-    return "Expires: 0\nCache-control: max-age=0, must-revalidate\n";
-
+    if( $query->param( 'wysiwyg_edit' )) {
+        return "Expires: 0\nCache-control: max-age=0, must-revalidate";
+    }
+    return '';
 }
 
 # Dakar modify headers.

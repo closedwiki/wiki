@@ -941,6 +941,12 @@ HERE
               html => "Spleem<!--\n   * Set SPOG = dreep\n-->Splom",
               tml => "Spleem<!--\n   * Set SPOG = dreep\n-->Splom",
           },
+          {
+              exec => 3,
+              name => 'Item1317',
+              tml => '%<nop>DISPLAYTIME{"$hou:$min"}%',
+              html => '<span class="TMLnop"><span class="TMLvariable">DISPLAYTIME{"$hou:$min"}</span></span>',
+          },
          ];
 
 
