@@ -127,7 +127,8 @@ you get
 ---++ Syntax
 	* =%<nop>BIBTEX{&lt;attributes&gt;}%= - render a set of bibtex files attached to some topic 
 	* =%<nop>STARTBIBTEX{&lt;attributes&gt;}% ... %<nop>STOPBIBTEX%= - render an inline-bibtex database
-	* =%<nop>CITE{key, topic}%= - _easy citing_: generate an anchor to a bibtex entry on some topic
+	* =%<nop>CITE{key}%= - generate an hyperlink to a bibtex entry 
+	* =%<nop>BIBTEXREF{key, topic}%= - generate a list of references based on the  declared =CITE= keys
 
 ---++ Attributes
 All attributes for %<nop>BIBTEX% and %<nop>STARTBIBTEX% are optional. The attributes =topic= and =bibfile=
@@ -159,6 +160,17 @@ tag on the same topic (see [[#Tips]]).
   <li> =formWeb.formTopic=: declare a query form to be displayed </li> \
   <li> =only=: don't start to display the complete unfiltered database, but only show the query form</li> \
   </ul> |
+
+---++ Citations and Automated Reference Lists
+
+As of release v1.3, the %TOPIC% has functionality similar to the TWiki:BibliographyPlugin.  Specifically, if a topic has =%<nop>CITE{key}%= declarations through out, the use of =%<nop>BIBTEXREF{...}%= will generate a list of references based on the citations declared.  The citation keys should refer to entries in .bib files associated with the topic as described above, and the output of the reference list is dictated by <nop>BibTex.  Thus, the HTML output can use all of the flexibility of bibtex, including custom bibtex style templates and string macros.
+
+---+++ Example
+
+<verbatim>
+%CITE{solo:more:jgr.2002}%
+%BIBTEXREF{style="IEEEbib"}%
+</verbatim>
 
 #QueryAnchor
 ---++ The Query Language
@@ -354,6 +366,7 @@ __Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTo
 |  16 Okt 2003: | Initial version |
 |  Plugin Version: | v1.2 |
 |  Change History: | &nbsp; |
+|  2006/01/06: | added code to generate automatic reference lists, based on declared citations |
 |  2005/12/09: | reworked to use the DakarContrib on cairo and beijing |
 |  2004/11/26: | added simple and expert search forms, added select option to cgi-script; \
 		added configurable default search template |

@@ -18,6 +18,11 @@
 #
 ###############################################################################
 
+### for custom .bst styles, bibtex processing needs to know where to
+### find them.  The easiest way is to use a texmf tree below 'HOME'
+$ENV{'HOME'} = $TWiki::cfg{Plugins}{BibtexPlugin}{home} ||
+    '/home/nobody';
+
 package TWiki::Plugins::BibtexPlugin;
 
 use vars qw(
@@ -25,6 +30,7 @@ use vars qw(
         $debug $defaultTopic $defaultSearchTemplate $pubUrlPath $hostUrl $pubDir
 	$isInitialized $currentBibWeb $currentBibTopic 
 	$cmdTemplate $sandbox
+        %bibliography
     );
 
 use strict;
@@ -33,10 +39,13 @@ $RELEASE = '1.2';
 $pluginName = 'BibtexPlugin'; 
 $debug = 0; # toggle me
 
+my %bibliography = ();
+my $citefile = "";
+
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug("$pluginName - " . $_[0]) if $debug;
-  print STDERR "$pluginName - $_[0]\n" if $debug;
+  &TWiki::Func::writeDebug("$pluginName - " . $_[0]) if $debug;
+  # print STDERR "$pluginName - $_[0]\n" if $debug;
 }
 
 ###############################################################################
@@ -111,17 +120,116 @@ sub doInit {
   return '';
 }
 
+sub beforeCommonTagsHandler
+{
+### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+    
+    TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[1] )" ) if $debug;
+    
+    # This handler is called by getRenderedVersion just before the line loop
+    
+    ######################################################
+
+    # mark cited entries:
+    my $i = 1;
+    $_ = $_[0];
+
+    while (m/%CITE{([^}]*)}%/mg)
+    {
+        if (not $bibliography{$1}{"cited"})
+        {
+            $bibliography{$1}{"cited"} = 1;
+            $bibliography{$1}{"order"} = $i++; # citation order
+        }
+    }
+
+}
 
 
 ###############################################################################
 sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
+  $_[0] =~ s/%CITE{(.*?)}%/&handleCitation2($1)/ge;
+
+  $_[0] =~ s/%BIBTEXREF{([^}]*)}%/&handleBibtexBibliography($1)/ge;
+
   $_[0] =~ s/%BIBTEX%/&handleBibtex()/ge;
   $_[0] =~ s/%BIBTEX{(.*?)}%/&handleBibtex($1)/ge;
   $_[0] =~ s/%STARTBIBTEX%(.*?)%STOPBIBTEX%/&handleInlineBibtex("", $1)/ges;
   $_[0] =~ s/%STARTBIBTEX{(.*?)}%(.*?)%STOPBIBTEX%/&handleInlineBibtex($1, $2)/ges;
-  $_[0] =~ s/%CITE{(.*?)}%/&handleCitation($1)/ge;
+
+}
+
+sub postRenderingHandler
+{
+
+    # need to go back and clean up the citations, to correct for cases such
+    # as when a cited bibtex entry is not found or the keys are not numeric.
+
+    foreach my $key (keys %bibliography) {
+        if ($_[0] =~ m!<a name=\"$key\">([^\<]*?)</a>!) {
+            my $newno = $1;
+            $_[0] =~ s!(<a href=\"\#$key\">)[^\<]*?(</a>)!$1$newno$2!g;
+        } else {
+            $_[0] =~ s!<a href=\"\#$key\">[^\<]*?</a>!??!g;
+        }
+    }
+    unlink($citefile) unless ($debug);
+
+}
+
+sub bibliographyOrderSort
+{
+  return $bibliography{$a}{"order"} <=> $bibliography{$b}{"order"};
+}
+
+######################################################################
+sub handleBibtexBibliography
+{
+    my ($args) = @_;
+
+    my %opts = TWiki::Func::extractParameters( $args );
+
+    my $header = "---+ References";
+
+    my $style = $opts{'style'} || 'plain';
+    my $files = $opts{'files'} || '';
+
+    my $text = $header."\n";
+
+#     $text .= "<ol> \n";
+#     foreach $key (sort bibliographyOrderSort (keys %bibliography))
+#     {
+#         $text .= "<li> ";
+#         $text .= '<a name="'.$key.'"></a>';
+#         $text .= "%BIBTEX{select=\"\$key : '$key'\"";
+#         $text .= ' style="'.$style.'"';
+#         $text .= ' files="'.$files.'"' unless ($files eq '');
+#         $text .= "}%";
+#     }
+#     $text .= "</ol> \n";
+
+    $citefile = getTempFileName("bibtex-citefile");
+    open(F,">$citefile");
+    foreach my $key (sort bibliographyOrderSort (keys %bibliography))
+    {
+        # $text .= "$key ".$bibliography{$key}{"order"}." <br>";
+        print F "$key\n";
+    }
+    close F;
+
+    $text .= '%BIBTEX{select="';
+    $text .= join(' or ', 
+                  map { "\$key : '$_'" } 
+                  (sort bibliographyOrderSort (keys %bibliography)) );
+    $text .= '"';
+    $text .= " style=\"$style\"";
+    # $text .= " files=\"$files\"";
+    $text .= '}%';
+ 
+    return($text);
+
 }
 
 ###############################################################################
@@ -186,6 +294,25 @@ sub handleInlineBibtex {
 	 $theReverse, $theMixed, $theErrors, $theForm, $theAbstracts, $theKeywords, 
 	 $theTotal, $theDisplay, $theBibtext);
 }
+
+###############################################################################
+sub handleCitation2
+{
+  my ($cit) = @_; # , %bibliography) = @_;
+  if (exists $bibliography{$cit})
+  {
+    return "[" .
+        '<a href="#'.$cit.'">'.
+        $bibliography{$cit}{"order"}.
+        "</a>".
+        "]";
+  }
+  else
+  {
+    return "[??]";
+  }
+}
+
 
 ###############################################################################
 sub handleCitation {
@@ -361,18 +488,26 @@ sub bibSearch {
       my $bibtex2HtmlArgs =
 	'-nodoc -nobibsource ' .
 #  	'-nokeys ' .
-	'-noheader ' .
-	'-q -dl -u ' .
-	'-note annote ';
-      $bibtex2HtmlArgs .= '--use-keys ' if $theStyle eq 'bibtool';
-      $bibtex2HtmlArgs .= '-a ' if $theSort =~ /^(author|name)$/;
-      $bibtex2HtmlArgs .= '-d ' if $theSort =~ /^(date|year)$/;
-      $bibtex2HtmlArgs .= '-u ' if $theSort !~ /^(author|name|date|year)$/;
-      $bibtex2HtmlArgs .= '-r ' if $theReverse eq 'on';
+	'-noheader -nofooter ' .
+	'-q ';
+        # . '-note annote '
+      $bibtex2HtmlArgs .= "-citefile $citefile " if (-f $citefile);
+
+      if ($theStyle ne 'bibtool') {
+         $bibtex2HtmlArgs .= "-s $theStyle -a ";
+      } else {
+         $bibtex2HtmlArgs .= ' -dl --use-keys ';
+         $bibtex2HtmlArgs .= '-a ' if $theSort =~ /^(author|name)$/;
+         $bibtex2HtmlArgs .= '-d ' if $theSort =~ /^(date|year)$/;
+         $bibtex2HtmlArgs .= '-u ' if $theSort !~ /^(author|name|date|year)$/;
+         $bibtex2HtmlArgs .= '-r ' if $theReverse eq 'on';
+      }
       $bibtex2HtmlArgs .= '-single ' if $theMixed eq 'on';
-      $bibtex2HtmlArgs .= "-s $theStyle " if $theStyle ne 'bibtool';
+
       $bibtex2HtmlArgs .= '--no-abstract ' if $theAbstracts eq 'off';
       $bibtex2HtmlArgs .= '--no-keywords ' if $theKeywords eq 'off';
+
+      &writeDebug("bibtex2HtmlArgs = $bibtex2HtmlArgs");
 
       # do it
       &writeDebug("reading from process $cmdTemplate");
@@ -398,8 +533,8 @@ sub bibSearch {
     $result .= "<br />\n<b>Total</b>: $count<br />\n" if $theTotal eq "on";
     $result .= "<!-- \U$pluginName\E END --></noautolink>";
 
-    #unlink($stdErrFile);
-    #unlink($tempBibfile) if $tempBibfile;
+    unlink($stdErrFile) unless ($debug);
+    unlink($tempBibfile) if ($tempBibfile and !($debug));
   }
 
   # insert into the bibsearch form
