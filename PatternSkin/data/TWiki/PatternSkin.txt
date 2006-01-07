@@ -69,7 +69,8 @@ The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
 
 ---++ Customization
 
-See: PatternSkinCssCookbook
+   * PatternSkinCustomization
+   * PatternSkinCssCookbook
 
 ---++ Further reading
 
