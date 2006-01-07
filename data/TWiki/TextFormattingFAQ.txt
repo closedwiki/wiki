@@ -121,28 +121,28 @@ See [[#VerbatimText]["Text I enter gets wrapped around..."]]
 
 ---+++ Can I include images on a page?
 
-Yes. The easiest way is to [[FileAttachment][attach]] a GIF, JPG or PNG file to a topic and then to place it with: =%<nop>ATTACHURL%/myImage.gif=. This works only for the page that the image is attached to.
+Yes. The easiest way is to [[FileAttachment][attach]] a GIF, JPG or PNG file to a topic and then to place it with: =%<nop>ATTACHURL%/myImage.gif=. This works only for the topic where the image is attached to.
 
-To place an image on any page, ther are two ways of including inline images.
+To place an image on any topic, there are two ways of including inline images.
 
 *1. Using URL ending in .gif, .jpg, .jpeg, .png*
 
 This is a simple and automatic way of including inline images. Simply write the URL of the image file, this will create the inline image for you. __NOTE:__ The images must be [[#ImgUpload][accessible]] as a URL.
 
-   * __You enter:__ <code> TWiki <nop>%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif logo.</code> <br />
-     __Result:__ TWiki %PUBURLPATH%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif logo.
+   * __You enter:__ <code> %<nop>PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif logo.</code> <br />
+     __Result:__ %PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif logo.
 
 #ImgUpload
 You can upload images directly to your server with FTP access. You can also [[FileAttachment][attach]] image files to a topic - you could even create a dedicated image topic, like =ImageLibrary= - and then link to the images directly:
    * Attach =pic.gif= to =Someweb.SomeTopic= <br />
-     Display with =<no>%PUBURLPATH%/Someweb/<nop>SomeTopic/pic.gif=
+     Display with =%<nop>PUBURL%/Someweb/SomeTopic/pic.gif=
 
 *2. Using &lt;img&gt; tag*
 
-This is a manual process where you have more control over the rendering of the image. Use the &lt;img&gt; tag of HTML to include GIF, JPG and PNG files. *Note:* The display of the topic is faster if you include the =WIDTH= and =HEIGHT= parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
+This is a manual process where you have more control over the rendering of the image. Use the &lt;img&gt; tag of HTML to include GIF, JPG and PNG files. *Note:* The rendering of the topic is faster if you include the =width= and =height= parameters that have the actual image size. http://www.htmlhelp.com/reference/wilbur/special/img.html has more on inline images.
 
-   * __You enter:__ <code>TWiki &lt;img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif" width="88" height="31" border="0" alt="logo" /&gt; logo.</code><br />
-    __Result:__ <br /> TWiki <img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/twikilogo88x31.gif" width="88" height="31" border="0" alt="logo" /> logo.
+   * __You enter:__ <code> &lt;img src="%<nop>PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" width="80" height="15" border="0" alt="logo" /&gt; logo.</code><br />
+    __Result:__ <br /> <img src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" width="80" height="15" border="0" alt="logo" /> logo.
 
 -----
 ---+++ Can I write colored text?
