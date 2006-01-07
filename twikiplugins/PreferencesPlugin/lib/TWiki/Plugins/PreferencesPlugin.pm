@@ -59,8 +59,8 @@ sub initPlugin {
     return 1;
 }
 
-sub preRenderingHandler {
-    ### my ( $text, $map ) = @_;
+sub beforeCommonTagsHandler {
+    ### my ( $text, $topic, $web ) = @_;  
     return unless ( $_[0] =~ m/%EDITPREFERENCES{(.*?)}%/ );
     my $attrs = new TWiki::Attrs( $1 );
     my($formWeb, $form ) = TWiki::Func::normalizeWebTopicName( $web, $attrs->{_DEFAULT} );
