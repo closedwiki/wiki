@@ -1,9 +1,8 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2006 Peter Thoeny, peter@thoeny.org
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 1999-2006 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -96,50 +95,49 @@ sub new {
     my $sep = ( $friendly ? "[\\s,]" : "\\s" );
     my $first = 1;
 
-    if( !$friendly && $string =~ s/^\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/$2/ ) {
+    if( !$friendly && $string =~ s/^\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/$2/s ) {
         $this->{$DEFAULTKEY} = $1;
     }
-
-    while ( $string =~ m/\S/ ) {
+    while ( $string =~ m/\S/s ) {
         # name="value" pairs
-        if ( $string =~ s/^$sep*(\w+)\s*=\s*\"(.*?)\"//i ) {
+        if ( $string =~ s/^$sep*(\w+)\s*=\s*\"(.*?)\"//is ) {
             $this->{$1} = $2;
             $first = 0;
         }
         # simple double-quoted value with no name, sets the default
-        elsif ( $string =~ s/^$sep*\"(.*?)\"//o ) {
+        elsif ( $string =~ s/^$sep*\"(.*?)\"//os ) {
             $this->{$DEFAULTKEY} = $1
               unless defined( $this->{$DEFAULTKEY} );
             $first = 0;
         }
         elsif ( $friendly ) {
             # name='value' pairs
-            if ( $string =~ s/^$sep*(\w+)\s*=\s*'(.*?)'//i ) {
+            if ( $string =~ s/^$sep*(\w+)\s*=\s*'(.*?)'//is ) {
                 $this->{$1} = $2;
             }
             # name=value pairs
-            elsif ( $string =~ s/^$sep*(\w+)\s*=\s*([^\s,\}\'\"]*)//i ) {
+            elsif ( $string =~ s/^$sep*(\w+)\s*=\s*([^\s,\}\'\"]*)//is ) {
                 $this->{$1} = $2;
             }
             # simple single-quoted value with no name, sets the default
-            elsif ( $string =~ s/^$sep*'(.*?)'//o ) {
+            elsif ( $string =~ s/^$sep*'(.*?)'//os ) {
                 $this->{$DEFAULTKEY} = $1
                   unless defined( $this->{$DEFAULTKEY} );
             }
             # simple name with no value (boolean, or _DEFAULT)
-            elsif ( $string =~ s/^$sep*([a-z]\w*)\b// ) {
+            elsif ( $string =~ s/^$sep*([a-z]\w*)\b//s ) {
                 my $key = $1;
                 $this->{$key} = 1;
             }
             # otherwise the whole string - sans padding - is the default
             else {
-                if( $string =~ /^\s*(.*?)\s*$/ &&
+                if( $string =~ m/^\s*(.*?)\s*$/s &&
                       !defined($this->{$DEFAULTKEY})) {
                     $this->{$DEFAULTKEY} = $1;
                 }
                 last;
             }
-        } elsif( $string =~ /^\s*(.*?)\s*$/ ) {
+        } elsif( $string =~ m/^\s*(.*?)\s*$/s ) {
             $this->{$DEFAULTKEY} = $1 if( $first );
             last;
         }
