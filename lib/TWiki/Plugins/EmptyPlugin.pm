@@ -45,10 +45,10 @@ the failure will be silent but the plugin will not be available.
 Check the warning log file (defined by $TWiki::cfg{WarningFileName}) for
 errors.
 
-__NOTE:__ Defining deprecated handlers will cause a warning to be output
-in the warning log file. See %TWIKIWEB%.TWikiPlugins for information on
-guarding deprecated handlers that are defined for compatibility with
-older TWiki versions.
+__NOTE:__ Defining deprecated handlers will cause the handlers to be 
+listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See %TWIKIWEB%.TWikiPlugins 
+for information on guarding deprecated handlers that are defined for 
+compatibility with older TWiki versions.
 
 =cut
 
