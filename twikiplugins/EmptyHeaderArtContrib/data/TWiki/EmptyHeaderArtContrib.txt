@@ -1,0 +1,53 @@
+---+!! EmptyHeaderArtContrib Contrib Package
+
+Add short description here of your EmptyHeaderArtContrib contrib.
+
+%TOC%
+
+---++ Summary of Contents
+   * 
+   * 
+
+---++ Detailed Documentation
+<!-- use %$POD% when using with Build module to automatically extract documentation -->
+   * 
+   * 
+
+---++ Settings
+
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>JSCALENDARCONTRIB_STUB%==
+
+   * One line description:
+      * Set SHORTDESCRIPTION = Add short description here of your EmptyHeaderArtContrib contrib
+
+   * Name of the perl package
+      * Set STUB = %$STUB%
+
+---++ Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+	%$DEPENDENCIES%
+
+   * Test if the installation was successful:
+      * __enter sample here__
+      * see also [[Sandbox.PluginTest%TOPIC%]]
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/%USERNAME% |
+|  Copyright &copy;: | <!-- e.g. "2004, SlobSoft Gmbh, All Rights Reserved" --> |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | none <!-- use %$DEPENDENCIES% with the Build Module to auotmatically extract dependencies --> |
+|  Version: | <!-- use %$VERSION% with the Build module to auto-extract from the .pm --> |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  %DATE%: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/%USERNAME% - %DATE%
