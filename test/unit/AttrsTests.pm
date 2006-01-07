@@ -243,4 +243,16 @@ sub test_compatibility4 {
     $this->detest_string( $s );
 }
 
+sub test_compatibility5 {
+    my $this = shift;
+    my $s = "\nBarf";
+    my $new = new TWiki::Attrs($s,0);
+    $s = "Barf\n";
+    $new = new TWiki::Attrs($s,0);
+    $s = "\n";
+    $new = new TWiki::Attrs($s,0);
+    $s = "\"The\nCat\" format=\"Shat\nOn\nThe\nMat\"";
+    $this->detest_string( $s );
+}
+
 1;
