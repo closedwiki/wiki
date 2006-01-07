@@ -140,6 +140,7 @@ sub _getField {
 sub _generateEditField {
     my( $web, $topic, $name, $value, $formDef ) = @_;
     $value =~ s/^\s*(.*?)\s*$/$1/ge;
+print STDERR "GEF $name=$value\n";
     my $html;
 
     if( $formDef ) {
