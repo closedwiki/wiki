@@ -1,21 +1,21 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone ($wikiversion has version info)
-#
-# Copyright (C) 2002-2004 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at
-# http://www.gnu.org/copyleft/gpl.html
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
 #
 # This is the EditTablePlugin used to edit tables in place.
-#
+
 package TWiki::Plugins::EditTablePlugin::Core;
 
 use strict;

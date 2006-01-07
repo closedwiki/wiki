@@ -1,10 +1,29 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2004 Crawford Currie
+# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# For licensing info read LICENSE file in the TWiki root.
+#
 # Comment TWiki plugin
 # Original author David Weller, reimplemented by Peter Masiar
 # and again by Crawford Currie
 #
-# This version Copyright (C) 2004 Crawford Currie
 # This version is specific to TWiki::Plugins::VERSION > 1.026
-#
+
 use strict;
 
 use TWiki;

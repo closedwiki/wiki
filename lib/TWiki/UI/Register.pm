@@ -1,6 +1,6 @@
-# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2006 Peter Thoeny, peter@thoeny.org
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -14,7 +14,6 @@
 #           (c) 2004 Martin Cleaver, Martin.Cleaver@BCS.org.uk
 #           (c) 2004 Gilles-Eric Descamps twiki at descamps.org
 #           (c) 2004 Crawford Currie c-dot.co.uk
-#
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License

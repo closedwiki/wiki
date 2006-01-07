@@ -1,8 +1,11 @@
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2001 Andrea Sterbini, a.sterbini@flashnet.it
 # Christian Schultze: debugging, relative month/year, highlight today
 # Akim Demaille <akim@freefriends.org>: handle date intervals.
+# Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
 #
+# For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -12,7 +15,9 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at
-# http://www.gnu.ai.mit.edu/copyleft/gpl.html
+# http://www.gnu.org/copyleft/gpl.html
+#
+# As per the GPL, removal of this notice is prohibited.
 #
 # =========================
 #

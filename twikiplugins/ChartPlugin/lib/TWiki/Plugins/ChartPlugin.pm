@@ -1,8 +1,9 @@
-# ChartPlugin for TWiki Collaboration Platform
+# ChartPlugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2002-2004 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2004-2006 Peter Thoeny, Peter@Thoeny.org
 # Plugin written by http://TWiki.org/cgi-bin/view/Main/TaitCyrus
 #
+# For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -13,6 +14,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
+#
+# As per the GPL, removal of this notice is prohibited.
 #
 # =========================
 #

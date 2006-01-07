@@ -1,8 +1,11 @@
 #!/usr/bin/perl -wT
 #
-# TWiki Collaboration Platform, http://TWiki.org/
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# For licensing info read license.txt file in the TWiki root.
+# Copyright (C) 1999-2006 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors.
+#
+# For licensing info read LICENSE file in the TWiki root.
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
@@ -14,6 +17,7 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
+# As per the GPL, removal of this notice is prohibited.
 
 BEGIN {
     # See the 'view' script for a description of what this does

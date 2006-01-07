@@ -1,4 +1,4 @@
-# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 1999-2005 TWiki Contributors. All Rights Reserved.
 # TWiki Contributors are listed in the AUTHORS file in the root of
@@ -16,7 +16,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-# TWiki Collaboration Platform, http://TWiki.org/
 
 =pod twiki
 

@@ -1,6 +1,25 @@
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# this will become the Upgrade class - for now its just a few common functions
-# Changes copyright (C) 2005 Sven Dowideit http://www.home.org.au
+# Copyright (C) 2005 Sven Dowideit http://www.home.org.au
+# Copyright (C) 2004-2006 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
+#
+# This will become the Upgrade class - for now its just a few 
+# common functions
 
 
 use strict;
