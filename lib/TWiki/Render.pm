@@ -422,14 +422,14 @@ sub _linkToolTipInfo {
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::Time::formatTime( $date )/ge;
-    $text =~ s/\$username/<nop>$user/g;                                     # 'jsmith'
-    $text =~ s/\$wikiname/'<nop>' . $user->wikiName()/ge;  # 'JohnSmith'
-    $text =~ s/\$wikiusername/'<nop>' . $user->webDotWikiName()/ge; # 'Main.JohnSmith'
+    $text =~ s/\$username/$user->login()/ge;       # 'jsmith'
+    $text =~ s/\$wikiname/$user->wikiName()/ge;  # 'JohnSmith'
+    $text =~ s/\$wikiusername/$user->webDotWikiName()/ge; # 'Main.JohnSmith'
     if( $text =~ /\$summary/ ) {
         my $summary = $store->readTopicRaw
           ( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
-        $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
+        $summary =~ s/[\"\']//g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
     }
     return $text;
