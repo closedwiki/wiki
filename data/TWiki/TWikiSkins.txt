@@ -117,24 +117,13 @@ Bare bones header for demo only
  
 ---++ Using Cascading Style Sheets
 
-Although work is underway at TWiki:Codev.CssClassNames, the regular templates files currently do not use style sheets.  Many skin developers, however, choose to use them; it helps in separating style from content.
+CSS is used by PatternSkin, the default TWiki skin. See that skin topic for information how CSS is used.
 
-Example: To use a style sheet for the broadcast message, add this to =view.myskin.tmpl=:
+CSS files are gererally attachments to the skin topic that are included in the the skin templates - in the case of PatternSkin in the template =css.pattern.tmpl=.
 
+Write in your main template:
 <verbatim>
-<style type="text/css">
-.broadcastmessage {
-    background: yellow; display:block;
-    border-style:solid;border-width: 2px;border-color:red;
-}
-.broadcastmessage strong {color: red}
-</style>
-</verbatim>
-
-Then add a div tag to the =%<nop>BROADCASTMESSAGE%= variable located after the =#PageTop= anchor or after the opening form tag:
-
-<verbatim>
-<div class="broadcastmessage"> %BROADCASTMESSAGE% </div>
+<style type='text/css' media='all'>@import url('%PUBURLPATH%/%TWIKIWEB%/MySkin/mystyle.css');</style>
 </verbatim>
 
 ---++ Attachment Tables
