@@ -43,7 +43,8 @@ sub main
     my ($query, $topic, $webName, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( );
 
     my $theSec = int($query->param('sec')) || 0;
-    my $editUrl = &TWiki::getScriptUrl( $webName, $topic, "editonesection" );
+    my $editUrl = &TWiki::getScriptUrl( 0, 'editonesection',
+                                        $webName, $topic );
     my $editUrlParams = "&sec=$theSec#SECEDITBOX";
     $tmpl =~ s/%EDIT%/$editUrl/go;
     $tmpl =~ s/%EDITPARAMS%/$editUrlParams/go;
