@@ -199,6 +199,7 @@ label {
     border-width:1px;
 	border-style:solid;
 	border-spacing:0px;
+	overflow:auto;
 }
 .twikiTable td,
 .twikiTable th {
@@ -310,6 +311,7 @@ a:visited .twistyLinkLabel {
 .patternContent .twikiForm {
 	/* form or attachment table inside topic area */
 	font-size:94%; /*S2*/
+	overflow:auto;
 	padding:.5em 20px; /*S5*/ /* top: use less padding for the toggle link; bottom: use less space in case the table is folded in  */
 	border-width:1px 0 0 0;
 	border-style:solid;
@@ -482,6 +484,7 @@ a:hover .twikiAccessKey {
 }
 .patternMainContents {
 	padding:0 2em 1em 2em;
+	overflow:auto;
 }
 
 /* Top bar */
@@ -536,7 +539,6 @@ table.patternTopBarContents td {
 	font-size:94%; /*S2*/
 	margin-bottom:1em;
 }	
-.patternWebIndicator {}
 .patternMetaNav {
 	font-size:85%; /*S3*/
 }
@@ -564,6 +566,16 @@ table.patternTopBarContents td {
 	border-width:0 1px 0 0;
 	border-style:solid;
 	overflow:hidden;
+}
+#patternLeftBar .patternWebIndicator {
+	font-size:94%; /*S2*/
+	line-height:1.4em;
+	padding:0.4em 0;
+	text-align:center;
+}
+#patternLeftBar .patternWebIndicator a:link,
+#patternLeftBar .patternWebIndicator a:visited {
+	text-decoration:none;
 }
 .patternLeftBarContents {
 	padding:0 0 1.5em 1em; /*S6*/
@@ -609,6 +621,7 @@ table.patternTopBarContents td {
 }
 .patternLeftBarContents input.patternFormField {
 	display:block;
+	height:12px; /* with padding and border this adds up to 16px height - same as button */
 	width:100%;
 	border-width:1px;
 	border-style:solid;
@@ -782,9 +795,6 @@ input.patternFormFieldVerticalForm {
 
 /* Edit page */
 
-.patternEditPage .patternTopicAction {
-	margin-top:.5em;
-}
 .twikiChangeFormButtonHolder {
 	margin:1em 0;
 	float:right;
