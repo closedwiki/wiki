@@ -46,6 +46,7 @@
 	BO6 neutral gray border															#ccc
 	BO7 light neutral gray															#ddd
 	BO9 alert border																#f00
+	BO10 dark gray (same as BG11)													#8E9195
 
 	---------------------------------------------------------------------------------------	*/
  
@@ -349,9 +350,6 @@ a:hover .twikiAccessKey {
 .patternHelpCol {
 	color:#8E9195; /*T8*/
 }
-.patternWebIndicator {
-	background-color:#fff;
-}
 #patternColumnWrapper {
 	border-color:#E2DCC8; /*BO4*/
 }
@@ -383,6 +381,17 @@ a:hover .twikiAccessKey {
 	/*background-color:#FBF7E8;*/
 	border-color:#E2DCC8; /*BO4*/
 }
+#patternLeftBar .patternWebIndicator {
+	background-color:#efefef; /* color variable WEBBGGCOLOR is set in css.pattern.tmpl */
+	color:#000; /*T1*/
+}
+#patternLeftBar .patternWebIndicator a:link,
+#patternLeftBar .patternWebIndicator a:visited {
+	color:#000; /*T1*/
+}
+#patternLeftBar .patternWebIndicator a:hover {
+	color:#FBF7E8; /*T3*/
+}
 #patternLeftBar hr {
 	color:#E2DCC8; /*BO4*/
 	background-color:#E2DCC8; /*BO4*/
@@ -409,8 +418,8 @@ a:hover .twikiAccessKey {
 	color:#8E9195; /*T8*/
 }
 .patternLeftBarPersonal {
-	background-color:#E8EEF7;
-	border-color:#E2DCC8; /*BO4*/
+	background-color:#E8EEF7; /*BG5*/
+	border-color:#E2DCC8 #ccc #ccc #ccc;
 }
 .patternLeftBarPersonal a:link,
 .patternLeftBarPersonal a:visited {
