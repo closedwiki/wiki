@@ -570,7 +570,7 @@ table.patternTopBarContents td {
 #patternLeftBar .patternWebIndicator {
 	font-size:94%; /*S2*/
 	line-height:1.4em;
-	padding:0.4em 0;
+	padding:.6em 1em .6em 1em; /*S6*/
 	text-align:center;
 }
 #patternLeftBar .patternWebIndicator a:link,
@@ -621,7 +621,6 @@ table.patternTopBarContents td {
 }
 .patternLeftBarContents input.patternFormField {
 	display:block;
-	height:12px; /* with padding and border this adds up to 16px height - same as button */
 	width:100%;
 	border-width:1px;
 	border-style:solid;
