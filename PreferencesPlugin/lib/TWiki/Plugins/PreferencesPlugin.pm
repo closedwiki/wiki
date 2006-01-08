@@ -88,7 +88,7 @@ sub beforeCommonTagsHandler {
     } elsif ( $action eq 'save' ) {
 
         my $text = TWiki::Func::readTopicText( $web, $topic );
-        $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=(.*)$)
+        $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=\s(.*)$)
           ($1._saveSet($web, $topic, $2, $3, $formDef))mgeo;
 
         my $error = TWiki::Func::saveTopicText( $web, $topic, $text, '' );
