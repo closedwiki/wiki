@@ -23,8 +23,8 @@ pre {
 	.patternBookViewList .twikiTopRow {
 		background-color:%WEBBGCOLOR%;
 	}
-	%IF{ 'defined HEADERART' then='#patternTopBar { background-image:url("%HEADERART%"); background-repeat:no-repeat;}'}%
-	%IF{ 'defined HEADERBGCOLOR' then='#patternTopBar { background-color:%HEADERBGCOLOR%;}'}%
+	%IF{ 'defined WEBHEADERIMAGE' then='#patternTopBar { background-image:url("%WEBHEADERIMAGE%"); background-repeat:no-repeat;}'}%
+	%IF{ 'defined WEBHEADERBGCOLOR' then='#patternTopBar { background-color:%WEBHEADERBGCOLOR%;}'}%
 	.twikiHelp,
 	.patternAccessKeyInfo {
 		background:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/striped_blue.gif");
