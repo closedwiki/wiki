@@ -11,7 +11,7 @@ Key new features:
    * Email confirmations for registration
    * Hierarchical sub-webs
 
-Most of the redesign, refactoring and documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
+Most of the redesign, refactoring and new documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
    * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - internationalization framework
    * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - templates
    * [[TWiki:Main.FlorianWeimer][Florian Weimer]] - security sandbox
@@ -27,7 +27,14 @@ Other people who gave significant amounts of their time and patience to less sex
    * [[TWiki:Main.PeterThoeny][Peter Thoeny]]
    * [[TWiki:Main.SvenDowideit][Sven Dowideit]]
    * [[TWiki:Main.WillNorris][Will Norris]]
-There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor.
+Translations were sourced by the following polyglots:
+   * [[TWiki:Main.AndreUlrich][Andre Ulrich]] - German
+   * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - Portuguese
+   * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - Dutch
+   * [[TWiki:Main.BenVoui][Ben Voui]]- French
+   * [[TWiki:Main.SteffenPoulsen][Steffen Poulsen]] - Danish
+   * [[TWiki:Main.WillNorris][Will Norris]] - Spanish
+There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor. See personal topics on twiki.org for details of individual contributions.
 
 Note: In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
 
