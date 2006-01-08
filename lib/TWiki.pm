@@ -1882,66 +1882,6 @@ sub expandVariablesOnTopicCreation {
     return $text;
 }
 
-sub _webOrTopicList {
-    my( $this, $isWeb, $params ) = @_;
-    my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
-    $format .= '$name' unless( $format =~ /\$name/ );
-    my $separator = $params->{separator} || "\n";
-    my $web = $params->{web} || '';
-    my $webs = $params->{webs} || 'public';
-    my $selection = $params->{selection} || '';
-    $selection =~ s/\,/ /g;
-    $selection = ' '.$selection.' ';
-    my $marker    = $params->{marker} || 'selected="selected"';
-    $web =~ s#\.#/#go;
-
-    my @list = ();
-    if( $isWeb ) {
-        my @webslist = split( /,\s?/, $webs );
-        foreach my $aweb ( @webslist ) {
-            if( $aweb eq 'public' ) {
-                push( @list, $this->{store}->getListOfWebs( 'user,public,allowed' ) );
-            } elsif( $aweb eq 'webtemplate' ) {
-                push( @list, $this->{store}->getListOfWebs( 'template,allowed' ));
-            } else{
-                push( @list, $aweb ) if( $this->{store}->webExists( $aweb ) );
-            }
-        }
-    } else {
-        $web = $this->{webName} if( ! $web );
-        my $hidden =
-          $this->{prefs}->getWebPreferencesValue( 'NOSEARCHALL', $web );
-        if( ( $web eq $this->{webName} ) || ( !$hidden )) {
-            @list = $this->{store}->getTopicNames( $web );
-        }
-    }
-    my $text = '';
-    my $item = '';
-    my $line = '';
-    my $mark = '';
-    foreach $item ( @list ) {
-        $line = $format;
-        $line =~ s/\$web\b/$web/goi;
-        $line =~ s/\$name\b/$item/goi;
-	    if($isWeb) {
-      		my $indenteditem=$item;
-      		$indenteditem=~s/\/$//go;
-      		my $indentedstyle=CGI::span({class=>'twikiWebIndent'});
-      		$indenteditem =~ s/\w+\//$indentedstyle/go;
-      		my $webindent=$indenteditem;
-      		$webindent =~ s/[A-Z]+.*//go;
-      		$line =~ s/\$webindent/$webindent/goi;
-     		$line =~ s/\$indentedname/$indenteditem/goi;
-    	}
-        $line =~ s/\$qname/"$item"/goi;
-        $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
-        $line =~ s/\$marker/$mark/goi;
-        $text .= $line.$separator;
-    }
-    $text =~ s/$separator$//s;  # remove last separator
-    return $text;
-}
-
 =pod
 
 ---++ StaticMethod entityEncode( $text ) -> $encodedText
@@ -2871,13 +2811,71 @@ sub _SEARCH {
 }
 
 sub _WEBLIST {
-    my $this = shift;
-    return $this->_webOrTopicList( 1, @_ );
+    my( $this, $params ) = @_;
+    my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
+    # SMELL: inherited from Cairo; if $name not present, append it
+    # Probably means $format ||= '$name'
+    $format .= '$name' unless( $format =~ /\$name/ );
+    my $separator = $params->{separator} || "\n";
+    my $web = $params->{web} || '';
+    my $webs = $params->{webs} || 'public';
+    my $selection = $params->{selection} || '';
+    $selection =~ s/\,/ /g;
+    $selection = " $selection ";
+    my $marker = $params->{marker} || 'selected="selected"';
+    $web =~ s#\.#/#go;
+
+    my @list = ();
+    my @webslist = split( /,\s*/, $webs );
+    foreach my $aweb ( @webslist ) {
+        if( $aweb eq 'public' ) {
+            push( @list, $this->{store}->getListOfWebs( 'user,public,allowed' ) );
+        } elsif( $aweb eq 'webtemplate' ) {
+            push( @list, $this->{store}->getListOfWebs( 'template,allowed' ));
+        } else{
+            push( @list, $aweb ) if( $this->{store}->webExists( $aweb ) );
+        }
+    }
+
+    my @items;
+    my $indent = CGI::span({class=>'twikiWebIndent'},'');
+    foreach my $item ( @list ) {
+        my $line = $format;
+        $line =~ s/\$web\b/$web/g;
+        $line =~ s/\$name\b/$item/g;
+        $line =~ s/\$qname/"$item"/g;
+        my $indenteditem = $item;
+        $indenteditem =~ s#/$##g;
+        $indenteditem =~ s#\w+/#$indent#g;
+        $line =~ s/\$indentedname/$indenteditem/g;
+        my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
+        $line =~ s/\$marker/$mark/g;
+        push(@items, $line);
+    }
+    return join( $separator, @items);
 }
 
 sub _TOPICLIST {
-    my $this = shift;
-    return $this->_webOrTopicList( 0, @_ );
+    my( $this, $params ) = @_;
+    my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
+    # SMELL: inherited from Cairo; if $name not present, append it
+    # Probably means $format ||= '$name'
+    $format .= '$name' unless( $format =~ /\$name/ );
+    my $separator = $params->{separator} || "\n";
+    my $web = $params->{web} || $this->{webName};
+    $web =~ s#\.#/#go;
+
+    return '' if
+      $this->{prefs}->getWebPreferencesValue( 'NOSEARCHALL', $web );
+
+    my @items;
+    foreach my $item ( $this->{store}->getTopicNames( $web ) ) {
+        my $line = $format;
+        $line =~ s/\$web\b/$web/goi;
+        $line =~ s/\$name\b/$item/goi;
+        push( @items, $line );
+    }
+    return join( $separator, @items );
 }
 
 sub _QUERYSTRING {
