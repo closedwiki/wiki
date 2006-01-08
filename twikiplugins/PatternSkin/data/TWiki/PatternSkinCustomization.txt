@@ -30,7 +30,8 @@ or:
 
 ---+++ How do I set a site-wide logo?
 
-In [[%LOCALSITEPREFS%]], set:
+There is a bunch of site-wide logo variables in [[%LOCALSITEPREFS%]]: =WIKILOGOIMG=, =WIKILOGOURL= and =WIKILOGOALT=.
+To change only the web logo image to site-wide, in [[%LOCALSITEPREFS%]] set:
 <pre>
    * Set <nop>WEBLOGOIMG = %<nop>WIKILOGOIMG%
 </pre>
@@ -54,7 +55,7 @@ The top bar is 64 pixels high by default. If you have a bigger logo you might wa
 
 You can change these numbers in [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] directly, or create a new stylesheet, attach it to a topic and point =USERLAYOUTURL= to that topic attachment. See %TWIKIWEB%.PatternSkinCssCookbook about creating custom styles.
 
----+++ If you want to change the white space above and below the logo
+---+++ I want to change the white space above and below the logo
 
 The logo is centered vertically be default. If you want to align it to the top, change the style in [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css][style.css]].
 
