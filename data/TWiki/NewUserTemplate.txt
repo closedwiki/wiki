@@ -9,7 +9,10 @@ __%MAKETEXT{"My Links"}%__
    * 
    * 
 
-__%MAKETEXT{"Personal Preferences (details in [_1])" args="%TWIKIWEB%.TWikiVariables"}%__
+__%MAKETEXT{"Personal Preferences"}%__
+
+_%MAKETEXT{"Uncomment preference variables to make them active (remove the #-sign). Help and details on variables are available in [_1]." args="%TWIKIWEB%.TWikiVariables"}%_
+
    * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off: (see details in [_2])" args="%TWIKIWEB%.WikiWord,%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
       * #Set LINKTOOLTIPINFO = off
    * %MAKETEXT{"Horizontal size of text edit box:"}%
