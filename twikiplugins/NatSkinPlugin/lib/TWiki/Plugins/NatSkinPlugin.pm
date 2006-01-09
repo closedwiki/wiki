@@ -1,7 +1,7 @@
 ###############################################################################
 # NatSkinPlugin.pm - Plugin handler for the NatSkin.
 # 
-# Copyright (C) 2003-2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2003-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # Based on GnuSkin Copyright (C) 2001 Dresdner Kleinwort Wasserstein
 # 
@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.93';
+$RELEASE = '2.94';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -109,7 +109,7 @@ sub initPlugin {
   my $skin = TWiki::Func::getSkin();
 
   # clear NatSkinPlugin traces from session
-  unless ($skin =~ /\bnat\b/) {
+  unless ($skin =~ /\b(nat|plain)\b/) {
     &clearSessionValue('SKINSTYLE');
     &clearSessionValue('STYLEBORDER');
     &clearSessionValue('STYLEBUTTONS');
@@ -117,6 +117,7 @@ sub initPlugin {
     &clearSessionValue('STYLEVARIATION');
     &clearSessionValue('STYLESEARCHBOX');
     &clearSessionValue('TABLEATTRIBUTES');
+    return 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
   }
 
   &doInit();
@@ -599,6 +600,7 @@ sub endRenderingHandler {
   # so that they are remove from the NatSkin templates
   $_[0] =~ s/%STARTALIASAREA%//go;
   $_[0] =~ s/%STOPALIASAREA%//go;
+  $_[0] =~ s/%ALIAS{.*?}%//go;
   $_[0] =~ s/%REDDOT{.*?}%//go;
 
 }
@@ -1049,14 +1051,22 @@ sub ifDefinedImpl {
 	$theVariable = &TWiki::Func::expandCommonVariables($theVariable, $currentTopic, $currentWeb);
 	$theThen =~ s/%$varName%/$theVariable/g;# SMELL: do we need to backport topic vars?
       } else {
-	return $before.$theElse.$after unless $theElsIfArgs;
 	$theVariable = '';
       }
     }
-    return $before.$theThen.$after if $theVariable ne ''; # variable is defined
+    if ($theVariable ne '') {# variable is defined
+      if ($theThen =~ s/\$nop//go) {
+	$theThen = TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
+      }
+      return $before.$theThen.$after;
+    }
   }
   
   return $before."%IFDEFINEDTHEN{$theElsIfArgs}%$theElse%FIDEFINED%".$after if $theElsIfArgs;
+
+  if ($theElse =~ s/\$nop//go) {
+    $theElse = TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
+  }
   return $before.$theElse.$after; # variable is empty
 }
 

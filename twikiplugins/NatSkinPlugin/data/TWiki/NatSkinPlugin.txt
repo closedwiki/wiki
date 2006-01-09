@@ -8,7 +8,8 @@ see the below for a full list of all provided features.
 This plugin tries
 to be maximal compatible with all past, current and upcoming TWiki releases, namely beijing,
 cairo and dakar. Therefore some mechanisms have been internalized that are only available on
-the newest dakar engine, sandbox security and html login dialogues comparable to TWiki:Plugins/AuthPagePlugin. In addition, the plugin tries to be interface-compatible to all
+the newest dakar engine, sandbox security and html login dialogues comparable to TWiki:Plugins/AuthPagePlugin. 
+In addition, the plugin tries to be interface-compatible to all
 engines using the =Func.pm= API. In those cases where this is _not_ possible, because needed
 functions are not part of the =Func.pm= API, access functions have been added to 
 address the different implementations and incompatibilities (e.g. access to topic meta data).
@@ -31,7 +32,7 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
 		* IFSKINSTATE: render skin differently depending on the current skin state
 		* IFACCESS: render different content or include topics depending on access rights
 		* IFDEFINED: render content based on twiki variables being defined or not (compare to the
-		  <nop>IfStatement of the upcomming dakar release)
+		  <nop>IfStatement of the upcoming dakar release)
 	* skin style control: infrastructure to get, set and display the skin style that
 	  is currently active using the NatSkinStyleBrowser
 	* WebSideBar: a configurable navigation bar on the 
@@ -49,7 +50,6 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
 	* marking external links: add a nice icon to offsite links
 	* FORMATLIST: render list items according a format parameter (will be externalized into
 	  a separate plugin asap).
-	* Sandbox security: backport of the dakar sandbox
 
 ---++ Syntax Rules
 | *Tag* | *Desciption* |
@@ -91,8 +91,7 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
   (3) preference value =SKINSTYLE= set in \
 		(a) the user preferences \
 		(b) the WebPreferences or \
-		(c) [[%LOCALSITEPREFS%]] \
-		(d) [[%TWIKIWEB%.TWikiPreferences]] |
+		(c) %TWIKIWEB%.TWikiPreferences |
 | =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= \
 | conditionally returns content depending on the current skin state; \
   &lt;tests> can be \
@@ -190,16 +189,9 @@ Besides the NOSEARCHALL feature of every web that excludes a web from search the
 | =NATSEARCHINCLUDETOPIC= | a regular expression that must match a topic in the hit set |
 | =NATSEARCHEXCLUDETOPIC= | a regular expression that excludes a topic from the hit set |
 
-Furthermore, the variable =NATSEARCHTOPICSUMMARY= can be set to a <nop>TopicFunction that
-returns a summary text that is to be displayed when a topic matches the search. The <nop>TopicFunction
-is called by using a parametriced INCLUDE of the form
-<verbatim>
-%INCLUDE{"<topic-function>" THISWEB="<web>" THISTOPIC="<topic>"}%
-</verbatim>
-where =&lt;web>.&lt;topic>= is the current hit to be summarized. The returned text is 
-used instead of the normal text summary of TWiki which extracts the text from the whiteboard area of
-a topic. This feature is usefull for <nop>TWikiApplications where the data of a topic is stored
-in TWikiForms instead.
+Furthermore, the variable =NATSEARCHTEMPLATE= can be set to a template topic that
+is used instead of the skin's =search= template. This can be used in <nop>TWikiApplications to
+define a customized look of search results.
 
 Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible search parameters
 (TODO: maby move that stuff in here).
@@ -238,26 +230,30 @@ Below are the settings which affect the behavior of the NatSkin.
 
 ---+++ Skin state configuration
 The skin state is controlled by a set of variables that are configured on the user's home topic,
-the WebPreferences, [[%LOCALSITEPREFS%]] or the [[%TWIKIWEB%.TWikiPreferences]] and are then loaded into the current
+the WebPreferences or the [[%TWIKIWEB%.TWikiPreferences]] and are then loaded into the current
 session of the user. So every setting can be changed by an url parameter to take effect for the
 duration of the user session. The default values are given below 
 
 	* switch to the given style,
-	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty, <nop>SeaGreen, Squash or Stormy, url param is =style=
+	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty, <nop>SeaGreen, Squash or Stormy, 
+	  url param is =style=
 		* Set SKINSTYLE = Clean
 	* switch to the given style variation (<nop>PlasticLove, Subway, <nop>OrangeTunnel etc) or none, url param is =stylevariation=
 		* Set STYLEVARIATION = none
 	* change the border decoration on, off or to thin (enabling a thin blog-like page layout),
 	  url param is =styleborder=
 		* Set STYLEBORDER = off
-	* switch on/off the web buttons in the top bar of the page, url param is =stylebuttons=
+	* switch on/of the web buttons in the top bar of the page, 
+	  url param is =stylebuttons=
 		* Set STYLEBUTTONS = off
-	* switch the sidebar to be displayed on the right or left side or off, url param is =stylesidebar=
+	* switch the sidebar to be displayed on the right or left side or off, 
+	  url param is =stylesidebar=
 		* Set STYLESIDEBAR = left
-	* switch the searchbox to be displayed in the topbar (top), at the top of the sidebar (pos1), in the middle of the sidebar (pos2), at the bottom of the sidebar (pos3) or off, url param is =stylessearchbox=
+	* switch the searchbox to be displayed in the topbar (top), at the top of the sidebar (pos1), in the middle of the sidebar (pos2), at the bottom of the sidebar (pos3) or off, 
+	  url param is =stylessearchbox=
 		* Set STYLESSEARCHBOX = top
 
-In addition there's a url parameter =togglesidebar= that disables the sidebar for this request
+In addition, there's a url parameter =togglesidebar= that disables the sidebar for this request
 only. 
 
 To emulate the Kubrick style on the old
@@ -269,7 +265,7 @@ To emulate the Kubrick style on the old
 	* Set STYLESVARIATION = none
 	* Set STYLESSEARCHBOX = pos1
 
-to your [[%LOCALSITEPREFS%]]. Try out other settings using the NatSkinStyleBrowser,
+to your [[%TWIKIWEB%.TWikiPreferences]]. Try out other settings using the NatSkinStyleBrowser,
 or even INCLUDE it in your [[%MAINWEB%.%WIKINAME%SideBar]].
 
 There are some constraints build into the NatSkin templates that try guarantee a pleasant appearance
@@ -306,7 +302,7 @@ to fool collecting web crawlers. But that is not adequate enough today as crawle
 to that is to remove every trace of a pattern that could be an email address from the html source code and regenerate
 them using javascript. Most likely, web crawlers will only parse the html and don't run a javascript interpreter 
 beforehand. Nevertheless the obfuscation feature can be switched on and off by adding the =OBFUSCATEEMAIL= variable
-to your [[%LOCALSITEPREFS%]] like
+to your %TWIKIWEB%.TWikiPreferences like
 
 	* Set OBFUSCATEEMAIL = on
 
@@ -314,7 +310,7 @@ to your [[%LOCALSITEPREFS%]] like
 When the TWiki:Plugins.WysiwygPlugin is installed on your <nop>%WIKITOOLNAME% installation
 the "Edit" topicaction can be enabled to start the Kupu wysiwyg html editor instead of the 
 normal TWiki textarea by setting the USEWYSIWYG variable to "on" (in your %WIKIUSERNAME% topic,
-WebPreferences, [[%LOCALSITEPREFS%]], or [[%TWIKIWEB%.TWikiPreferences]])
+WebPreferences or %TWIKIWEB%.TWikiPreferences) 
 
    * Set USEWYSIWYG = off
 
@@ -333,11 +329,10 @@ By default this value is set to "off"
 	  | ==data/TWiki/MySideBar.txt== | plugin to customize a personalized sidebar |
 	  | ==data/TWiki/MySideBarTemplate.txt== | topic template for MySideBar |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm== | security module |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* on [[%LOCALSITEPREFS%]] change the SKIN variable to "nat";
+	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
 	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
 	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
 
@@ -345,8 +340,13 @@ By default this value is set to "off"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.93 (2005-12-06) |
+|  Plugin Version: | v2.94 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Jan 2006: | removed local sandbox; added dependency on <nop>DakarContrib; \
+		  added variable expansion to IFDEFINED; \
+		  added cleanup code if the <nop>AliasPlugin is not installed; \
+		  improved natsearch customization; \
+		  w3c fixes in the <nop>MySideBarTemplate |
 |  06 Dec 2005: | switching off the plugin if the skin is not NatSkin |
 |  05 Dec 2005: | skin state variables respect FINALPREFERENCES settings; \
                   added WEBCOMPONENT |
@@ -382,7 +382,10 @@ By default this value is set to "off"
 |  16 Mar 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Plugins.SpreadSheetPlugin, TWiki:Plugins.SessionPlugin, TWiki:Plugins.RedDotPlugin |
+|  Other Dependencies: | TWiki:Plugins.SpreadSheetPlugin, \
+  TWiki:Plugins.SessionPlugin, \
+  TWiki:Plugins.RedDotPlugin, \
+  TWiki:Plugins.DakarContrib |
 |  Perl Version: | >=5.6 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
@@ -392,5 +395,5 @@ By default this value is set to "off"
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 06 Dec 2005 
+-- TWiki:Main.MichaelDaum - 09 Jan 2006 
 

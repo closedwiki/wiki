@@ -4,25 +4,36 @@
 
 %STARTINCLUDE%
 ---+ [[%WEB%.%TOPIC%][MySidebar]]%REDDOT{"%WEB%.%TOPIC%"}%
-   * %TWISTY{id="mylinks" link="Links" remember="on"}%
-      * 
-      * 
-      * 
-      * %ENDTWISTY% 
-   * %TWISTY{id="mydocu" link="Documentation" remember="on"}%
-      * [[%TWIKIWEB%.WelcomeGuest][Welcome Guest]]
-      * [[%TWIKIWEB%.TWikiUsersGuide][User's Guide]]
-      * [[%TWIKIWEB%.TWikiReferenceManual][Reference Manual]]
-      * [[%TWIKIWEB%.GoodStyle][Good Style]]
-      * [[%TWIKIWEB%.TWikiFAQ][FAQs]]
-      * %TWIKIWEB%.TWikiVariables
-      * %TWIKIWEB%.TWikiForms
-      * %TWIKIWEB%.FormattedSearch
-      * %TWIKIWEB%.FileAttachment%ENDTWISTY% 
-   * %TWISTY{id="myplugins" link="Plugins" remember="on"}%
-%FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="      * $1" sort="on"}%%ENDTWISTYTOGGLE% 
-   * %TWISTYBUTTON{id="mystyles" link="Skin Styles"}%
-%TWISTYTOGGLE{id="mystyles" mode="span" remember="on"}% 
+<ul>
+  <li> %TWISTY{id="mylinks" link="Links" remember="on" mode="div"}%
+    <ul>
+      <li> ... </li>
+      <li> ... </li>
+      <li> ... </li>
+      <li> ... </li>
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTY{id="mydocu" link="Documentation" remember="on" mode="div"}%
+    <ul>
+      <li> [[%TWIKIWEB%.WelcomeGuest][Welcome Guest]] </li>
+      <li> [[%TWIKIWEB%.TWikiUsersGuide][User's Guide]] </li>
+      <li> [[%TWIKIWEB%.TWikiReferenceManual][Reference Manual]] </li>
+      <li> [[%TWIKIWEB%.GoodStyle][Good Style]] </li>
+      <li> [[%TWIKIWEB%.TWikiFAQ][FAQs]] </li>
+      <li> %TWIKIWEB%.TWikiVariables </li>
+      <li> %TWIKIWEB%.TWikiForms </li>
+      <li> %TWIKIWEB%.FormattedSearch </li>
+      <li> %TWIKIWEB%.FileAttachment </li>
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTY{id="myplugins" link="Plugins" remember="on" mode="div"}%
+    <ul>
+      %FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="<li> $1 </li>" sort="on"}%
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTYBUTTON{id="mystyles" link="Skin Styles"}% </li>
+</ul>
+%TWISTYTOGGLE{id="mystyles" remember="on" mode="div"}% 
 %INCLUDE{"TWiki.NatSkinStyleBrowser"}%
 %ENDTWISTYTOGGLE% 
 %STOPINCLUDE%

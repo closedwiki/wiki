@@ -1,7 +1,7 @@
 ###############################################################################
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamurg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamurg.de>
 #
 # Based on photonsearch
 # Copyright (C) 2001 Esteban Manchado Velázquez, zoso@foton.es
@@ -22,21 +22,29 @@ package TWiki::Plugins::NatSkinPlugin::Search;
 
 use strict;
 use vars qw($isInitialized $debug $includeWeb $excludeWeb 
-            $includeTopic $excludeTopic $renderTopicSummary);
+            $includeTopic $excludeTopic
+	    $sandbox);
 use URI::Escape;
 use TWiki::Plugins::NatSkinPlugin;
-use TWiki::Plugins::NatSkinPlugin::Sandbox;
+$debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug("- NatSkinPlugin::Search - " . $_[0]) if $debug;
+  #&TWiki::Func::writeDebug("- NatSkinPlugin::Search - " . $_[0]) if $debug;
+  print STDERR "NatSkinPlugin::Search - $_[0]\n" if $debug;
 }
 
 ##############################################################################
 sub doInit {
   return if $isInitialized;
   $isInitialized = 1;
-  $debug = 0; # toggle me
+
+  unless (defined &TWiki::Sandbox::new) {
+    eval "use TWiki::Contrib::DakarContrib;";
+    $sandbox = new TWiki::Sandbox();
+  } else {
+    $sandbox = $TWiki::sharedSandbox;
+  }
 
   &TWiki::Plugins::NatSkinPlugin::doInit();
   writeDebug("done init()");
@@ -55,18 +63,25 @@ sub natSearch {
   my $theWeb = $query->param('web') || '';
   my $theIgnoreCase = $query->param('ignorecase') || '';
   my $origSearch = $theSearchString;
+  my $searchTemplate;
 
   # get web preferences
   $includeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDEWEB', $theWeb) || '';
   $excludeWeb = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDEWEB', $theWeb) || '';
   $includeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHINCLUDETOPIC', $theWeb) || '';
   $excludeTopic = &TWiki::Func::getPreferencesValue('NATSEARCHEXCLUDETOPIC', $theWeb) || '';
-  $renderTopicSummary = &TWiki::Func::getPreferencesValue('NATSEARCHTOPICSUMMARY', $theWeb) || '';
+  $searchTemplate = &TWiki::Func::getPreferencesValue('NATSEARCHTEMPLATE', $theWeb) || '';
   $includeWeb =~ s/^\s*(.*)\s*$/$1/o;
   $excludeWeb =~ s/^\s*(.*)\s*$/$1/o;
   $includeTopic =~ s/^\s*(.*)\s*$/$1/o;
   $excludeTopic =~ s/^\s*(.*)\s*$/$1/o;
-  $renderTopicSummary =~ s/^\s*(.*)\s*$/$1/o;
+
+  if ($searchTemplate) {
+    $searchTemplate = &TWiki::Func::readTemplate($searchTemplate);
+  } else {
+    $searchTemplate =  &TWiki::Func::readTemplate('search');
+  }
+  $searchTemplate =~ s/^\s*(.*)\s*$/$1/o;
 
   writeDebug("search=$theSearchString");
   writeDebug("wikiUserName=$wikiUserName");
@@ -169,10 +184,8 @@ sub natSearch {
 
   # Else, print them
   &TWiki::Func::writeHeader($query);
-  my $tmpl = &TWiki::Func::readTemplate('search');
   my ($tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail) = 
-    split(/%SPLIT%/,$tmpl);
-
+    split(/%SPLIT%/,$searchTemplate);
   $tmplHead = &TWiki::Func::expandCommonVariables($tmplHead, $topic);
   $tmplHead = &TWiki::Func::renderText($tmplHead);
   $tmplHead =~ s|</*nop/*>||goi;
@@ -180,10 +193,6 @@ sub natSearch {
   $tmplHead =~ s/%SEARCHSTRING%/$origSearch/go;
 
   print $tmplHead;
-
-  #$tmplSearch = &TWiki::Func::expandCommonVariables($tmplSearch, $topic);
-  #$tmplNumber = &TWiki::Func::expandCommonVariables($tmplNumber, $topic);
-
   if ($nrHits) {
     _natPrintSearchResult($tmplTable, $results, $theSearchString);
   } else {
@@ -225,7 +234,7 @@ sub natTopicSearch
   my $dataDir = &TWiki::Func::getDataDir();
   foreach my $thisWebName (@$theWebList) {
     # get all topics
-    my $webDir = &normalizeFileName("$dataDir/$thisWebName");
+    my $webDir = TWiki::Sandbox::normalizeFileName("$dataDir/$thisWebName");
     opendir(DIR, $webDir) || die "can't opendir $webDir: $!";
     my @topics = 
       map {s/\.txt$//; $_} grep {/\.txt$/} readdir(DIR);
@@ -236,6 +245,8 @@ sub natTopicSearch
     # filter topics
     foreach my $searchTerm (@searchTerms) {
       my $pattern = $searchTerm;
+      $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
+      writeDebug("pattern=$pattern");
       eval {
 	if ($pattern =~ s/^-//) {
 	  if ($doIgnoreCase) {
@@ -286,7 +297,7 @@ sub natContentsSearch {
     writeDebug("theWebList=" . join(" ", @$theWebList));
   }
 
-  my $cmdTemplate = "/bin/egrep -l$doIgnoreCase %PATTERN|E% %FILES|F%";
+  my $cmdTemplate = "/bin/egrep -l$doIgnoreCase %PATTERN|U% %FILES|F%";
   my $dataDir = &TWiki::Func::getDataDir();
   my $results = {};
   my $nrHits = 0;
@@ -302,7 +313,7 @@ sub natContentsSearch {
     writeDebug("searching in $thisWebName");
 
     # get all topics
-    my $webDir = &normalizeFileName("$dataDir/$thisWebName");
+    my $webDir = TWiki::Sandbox::normalizeFileName("$dataDir/$thisWebName");
     opendir(DIR, $webDir) || die "can't opendir $webDir: $!";
     my @bag = grep {/\.txt$/} readdir(DIR);
     @bag = grep(/$includeTopic/, @bag) if $includeTopic;
@@ -317,13 +328,13 @@ sub natContentsSearch {
 
       # can't modify $searchTerm directly
       my $pattern = $searchTerm;
-
+      $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
       writeDebug("pattern=$pattern");
 
       if ($pattern =~ s/^-//) {
 	my @notfiles = "";
 	eval {
-	  my ($result, $code) = &readFromProcess($cmdTemplate,
+	  my ($result, $code) = $sandbox->sysCommand($cmdTemplate,
 	    PATTERN => $pattern, FILES => \@bag);
 	  @notfiles = split(/\r?\n/, $result);
 	};
@@ -342,7 +353,7 @@ sub natContentsSearch {
       } else {
 	eval {
 	  my ($result, $code) = 
-	    &readFromProcess($cmdTemplate, PATTERN => $pattern, FILES => \@bag); 
+	    $sandbox->sysCommand($cmdTemplate, PATTERN => $pattern, FILES => \@bag); 
 	  @bag = split(/\r?\n/, $result);
 	  writeDebug("code=$code, result=$result");
 	};
@@ -407,10 +418,11 @@ sub _natPrintSearchResult
       $revDate = &TWiki::Func::formatTime($revDate) 
 	unless $TWiki::Plugins::NatSkinPlugin::isBeijing;
 
+
       # insert the topic information into the template
       $tempVal =~ s/%WEB%/$thisWeb/go;
-      $tempVal =~ s/%TOPICNAME%/$thisTopic/go;
       $tempVal =~ s/%TIME%/$revDate/go;
+      $tempVal =~ s/%TOPICNAME%/$thisTopic/go;
       if ($revNum > 1) {
 	$revNum = "r1.$revNum";
       } else {
@@ -427,10 +439,6 @@ sub _natPrintSearchResult
       $text =~ s/([A-Za-z0-9\.\+\-\_]+)\@([A-Za-z0-9\.\-]+\..+?)/$1$noSpamPadding$2/go;
 
       # render search hit
-      if ($renderTopicSummary) {
-	$text = '%INCLUDE{"'.$renderTopicSummary.'" THISTOPIC="'.$thisTopic.'" THISWEB="'.$thisWeb.'" warn="off"}%';
-	$text = &TWiki::Func::expandCommonVariables($text, $thisTopic, $thisWeb);
-      }
       my @searchTerms = _getSearchTerms($theSearchString);
       my $summary = _getTopicSummary($text, $thisTopic, $thisWeb, @searchTerms);
       
