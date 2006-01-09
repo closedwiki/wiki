@@ -3,8 +3,6 @@
 %STARTINCLUDE%
 ---+!! TWiki Installation Guide
 
-_Installation instructions for the TWiki Dakar production release_
-
 Please review the AdminSkillsAssumptions before you install TWiki.
 
 TWiki should be fine with any web server and OS that meet the [[TWikiSystemRequirements][system requirements]]. See the cookbooks list at TWiki:Codev.CategoryCookbook for guidance for your particular platform.
@@ -39,6 +37,13 @@ Once you have your TWiki running, you can move on to customise it for your users
    * *Enable authentication*, if required. Read TWikiUserAuthentication..
    * *Enable email notification* (WebChangesAlerts). Read TWikiSiteTools.
    * *Install Plugins*. TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. Installation instructions for the other plugins can be found in the plugin topics on [[TWiki:Plugins][TWiki.org]].
+
+---+ Ongoing maintenance
+TWiki ships with two cron scripts that you may want to enable:
+   * =tools/tick_twiki.pl= - removes expired sessions and lease files.
+      * Read the top of the script for more information.
+   * =bin/mailnotify= - generates change notification mails.
+      * See MailerContrib for more details.
 
 ---+ Troubleshooting
 The first step is to re-run the =configure= script and make sure you have resolved all errors, and are happy that you understand any warnings.
