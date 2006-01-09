@@ -24,10 +24,10 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
     | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
     | =link="Link Text"= | The text to be used in the Twisty Show link  | optional |
     | =mode="div/span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
-    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
-    | =imgleft="image url"= | Specify the url of an image that will be displayed at the left side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
-    | =imgright="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
-	* Example: =%<nop>TWISTYSHOW{id="demo" link=" Click to Unfold " imgleft="%<nop>ICONPATH{toggleopen}%"}%= expands to: <br /> 
+    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+    | =imgleft="image url"= | Specify the url of an image that will be displayed at the left side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+    | =imgright="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+	* Example: =%<nop>TWISTYSHOW{id="demo" link=" Click to Unfold " imgleft="%<nop>ICONURLPATH{toggleopen}%"}%= expands to: <br /> 
 	=&lt;span id="demoshow" class="twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt;&lt;img src="http://visiblearea.com/devtwiki/pub/TWiki/TWikiDocGraphics/toggleopen.gif" alt="" /&gt;&lt;span class="twikiLinkLabel"&gt; Click to Unfold &lt;/span&gt;&lt;/a&gt;&lt;/span&gt;=
 	* Related: [[#VarTWISTYHIDE][TWISTYHIDE]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
@@ -40,8 +40,8 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
     | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
     | =link="Link Text"= | The text to be used in the Twisty Hide link  | optional |
     | =mode="div/span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
-    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
-	* Example: =%<nop>TWISTYHIDE{id="demo" link=" Click to Fold " imgleft="%<nop>ICONPATH{toggleclose}%"}%= expands to: <br /> 
+    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+	* Example: =%<nop>TWISTYHIDE{id="demo" link=" Click to Fold " imgleft="%<nop>ICONURLPATH{toggleclose}%"}%= expands to: <br /> 
 	=&lt;span id="demohide" class="twistyHidden twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt;&lt;img src="http://visiblearea.com/devtwiki/pub/TWiki/TWikiDocGraphics/toggleclose.gif" alt="" /&gt;&lt;span class="twikiLinkLabel"&gt; Click to Fold &lt;/span&gt;&lt;/a&gt;&lt;/span&gt;=
 	* Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
@@ -78,9 +78,9 @@ This is useful if both the show and the hide button take the same arguments.
     | =hidelink="Link Text"= | The text to be used in the Twisty hide link  | optional |
     | =showlink="Link Text"= | The text to be used in the Twisty show link  | optional |
     | =mode="div/span"= | Specify if the Twisty link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag  | optional, defaults to =&lt;span&gt;= |
-    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
-    | =imgleft="image url"= | Specify the url of an image that will be displayed at the left side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
-    | =imgright="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONPATH][ICONPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+    | =img="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+    | =imgleft="image url"= | Specify the url of an image that will be displayed at the left side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
+    | =imgright="image url"= | Specify the url of an image that will be displayed at the right side of the link. <br />You may use [[%TWIKIWEB%.TWikiVariables#VarICONURLPATH][ICONURLPATH]] to display one of the %TWIKIWEB%.TWikiDocGraphics icons. Alternatively use an image attached to the topic. | optional, defaults to no image |
     | =hideimg="image url"= | Specify the image to be show in the Twisty hide link | optiona, defaults to =img= value |
     | =showimg="image url"= | Specify the image to be show in the Twisty show link | optional, defaults to =img= value |
 	* Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYHIDE][TWISTYHIDE]]
@@ -106,7 +106,7 @@ complements the opening TWISTY tag. See [[#VarENDTWISTYTOGGLE][ENDTWISTYTOGGLE]]
  If the plugin is properly installed, you should see the Twisty effect below:
 
 
-%TWISTYSHOW{id="demo" link="Click to show" imgleft="%ICONPATH{toggleopen}%" }% %TWISTYHIDE{id="demo" link="Click to hide" imgleft="%ICONPATH{'toggleclose'}%"}% 
+%TWISTYSHOW{id="demo" link="Click to show" imgleft="%ICONURLPATH{toggleopen}%" }% %TWISTYHIDE{id="demo" link="Click to hide" imgleft="%ICONURLPATH{'toggleclose'}%"}% 
 ---
 %TWISTYTOGGLE{id="demo" mode="div" remember="on"}% 
 *TwistyPlugin is properly installed!*

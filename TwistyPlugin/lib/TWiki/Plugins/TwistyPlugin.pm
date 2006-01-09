@@ -125,9 +125,9 @@ sub _twistyImpl {
     $img =~ s/['\"]//go;
     $imgright =~ s/['\"]//go;
     $imgleft =~ s/['\"]//go;
-    my $imgTag = ($img ne '') ? '<img src="'.$img.'" border="0" alt="" />' : '';
-    my $imgRightTag = ($imgright ne '') ? '<img src="'.$imgright.'" border="0" alt="" />' : '';
-    my $imgLeftTag = ($imgleft ne '') ? '<img src="'.$imgleft.'" border="0" alt="" />' : '';
+    my $imgTag = ($img ne '') ? '<img src="'.$img.'" border="0" alt="" align="center" />' : '';
+    my $imgRightTag = ($imgright ne '') ? '<img src="'.$imgright.'" border="0" alt="" align="center" />' : '';
+    my $imgLeftTag = ($imgleft ne '') ? '<img src="'.$imgleft.'" border="0" alt="" align="center" />' : '';
     my $initialHidden = ($theState eq 'hide') ? 'twistyTransparent ' : '';
     return '<span'.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeOpaque"><a href="#" class="twistyTrigger">'.$imgLeftTag.'<span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.$imgRightTag.'</a></span>';
 }
