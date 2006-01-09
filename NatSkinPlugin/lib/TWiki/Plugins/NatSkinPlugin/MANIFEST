@@ -4,6 +4,5 @@ data/TWiki/NatSkinPlugin.txt 0440
 data/TWiki/MySideBar.txt 0440
 data/TWiki/MySideBarTemplate.txt 0440
 lib/TWiki/Plugins/NatSkinPlugin.pm 0440
-lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm 0440
 lib/TWiki/Plugins/NatSkinPlugin/Search.pm 0440
 lib/TWiki/Plugins/NatSkinPlugin/Auth.pm 0440
