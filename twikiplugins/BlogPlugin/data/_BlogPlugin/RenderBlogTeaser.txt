@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131380648" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1136310298" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -23,13 +23,15 @@ see also: RenderFullTeaser
 <verbatim>
 %SECTION{"format"}%
 *~~ <div class=\"blogEntry\">
-~~~   <h2 class=\"blogHeadline\">
+~~~   <table class=\"blogHeadline\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
+~~~   <tr><td>
+~~~   <h2>
 ~~~     [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
-~~~     <span class=\"blogCommentCount\">
-~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" 
-~~~       format=\"[[$web.$topic#topComment][$dollarcount]]\"}$percnt
-~~~     </span>
-~~~   </h2>$n
+~~~   </h2></td>
+~~~   <td class=\"blogCommentCount\">
+~~~     $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" 
+~~~     format=\"[[$web.$topic#topComment][$dollarcount]]\"}$percnt
+~~~   </td></tr></table>$n
 ~~~   <div class=\"blogInfo\">
 ~~~     <span class=\"blogDate\">
 ~~~       $percntTIMESINCE{

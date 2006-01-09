@@ -1,0 +1,55 @@
+%META:TOPICINFO{author="TWikiContributor" date="1135168169" format="1.1" version="1.1"}%
+%TMPL:INCLUDE{"searchbase"}% 
+<!-- template: <nop>NatSkinSearchViewTemplate -->
+%TMPL:DEF{"content"}% %SPLIT%
+<table class="natSearchTable" cellpadding="0" cellspacing="0">
+<tr class="natSearchTableTitle">
+  <th width="50%" class="natSearchTarget">Name</th>
+  <th width="30%" class="natSearchRevision">Author</th>
+  <th width="20%" class="natSearchAuthor">Date</th>
+</tr>
+%REPEAT%
+<tr class="natSearchHit">
+  <th width="50%" class="natSearchTarget">
+    <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">
+<noautolink>
+%~~ DBQUERY{topic="%TOPICNAME%" web="%WEB%" 
+~~~   format="$expand(Headline or TopicDescription or Name or name)"
+~~~ }%
+</noautolink>
+    </a>
+  </th>
+  <th width="20%" class="natSearchAuthor">
+    %AUTHOR% 
+  </th>
+  <th width="30%" class="natSearchRevision">
+    <a style="white-space:pre"href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME% - %REVISION%</a>
+  </th>
+</tr>
+<tr class="natSearchHit">
+  <td colspan="3">
+<noautolink>
+%~~ DBQUERY{topic="%TOPICNAME%" web="%WEB%" 
+~~~   format="$expand(Teaser or Text)"
+~~~ }%
+</noautolink>
+  <!-- guard-->
+  </td>
+</tr>
+%REPEAT%
+</table> 
+%SPLIT% 
+%TMPL:END%
+
+%NOP{
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = nosidebar
+   * Set STYLESIDEBAR = off
+-->
+}%
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicView"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="View for natsearch"}%

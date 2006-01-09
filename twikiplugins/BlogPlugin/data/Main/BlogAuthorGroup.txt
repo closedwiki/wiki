@@ -2,10 +2,8 @@
 %META:TOPICPARENT{name="TWikiGroups"}%
 ---+!! <nop>BlogAuthorGroup
 
-Group of Blog.BlogAuthors
-
    * Set GROUP = 
    * Set ALLOWTOPICCHANGE = BlogAdminGroup
 
-__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl, BlogAdminGroup
 

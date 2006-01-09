@@ -267,7 +267,8 @@ sub handleRecentComments {
     next if $seen{$baseRefName};
     $seen{$baseRefName} = 1;
 
-    my $text = $theSeparator if $result && $theSeparator ne 'none';
+    my $text = '';
+    $text = $theSeparator if $result && $theSeparator ne 'none';
     $text .= $theFormat;
 
     # get variables
@@ -427,8 +428,8 @@ sub inlineError {
 ###############################################################################
 # static
 sub writeDebug {
-  #&TWiki::Func::writeDebug('- BlogPlugin - ' . $_[0]) if $debug;
-  print STDERR "DEBUG - BlogPlugin - $_[0]\n" if $debug;
+  &TWiki::Func::writeDebug('- BlogPlugin - ' . $_[0]) if $debug;
+  #print STDERR "DEBUG - BlogPlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130260729" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1135112682" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -10,9 +10,11 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
+<noautolink>
 %~~ DBQUERY{topic="%THISTOPIC%" web="%THISWEB%"
-~~~   format="$expand(Headline or TopicDescription) $expand(Teaser or Text)"
+~~~   format="$expand(Teaser or Text)"
 ~~~ }%
+</noautolink>
 %STOPINCLUDE%
 </verbatim>
 

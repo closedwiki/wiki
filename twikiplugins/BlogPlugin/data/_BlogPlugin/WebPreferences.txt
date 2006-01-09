@@ -13,7 +13,7 @@
    * Set NATSEARCHEXCLUDEWEB = 
    * Set NATSEARCHINCLUDETOPIC = (BlogEntry|BlogComment)\d+.*
    * Set NATSEASRCHEXCLUDETOPIC = 
-   * Set NATSEARCHTOPICSUMMARY = RenderTopicSummary
+   * Set NATSEARCHTEMPLATE = SearchView
    * Set STYLESEARCHBOX = pos2
    
    * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
@@ -23,7 +23,6 @@
 <!--
    * #Set TECHNORATICODE = 
 -->
-
 
    * Set #DENYWEBVIEW = 
    * Set #ALLOWWEBVIEW = 

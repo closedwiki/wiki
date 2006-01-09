@@ -67,7 +67,7 @@ Following variables are expanded in format strings:
 
 
 ---+++ PREVDOC, NEXTDOC
-Display the previous/next topic in an ordered (???).
+Display the previous/next topic in an ordered set.
 These tags can be used to establish a navigation within a set of related topics
 paging to the preceeding or succeeding one. A set of related topics is defined
 using a "where" and an "order" clause which the given topic is supposed to be part of.
@@ -185,8 +185,6 @@ And send me a patch if you've coded that into TWiki ;).
 
    * Download and install all additionally required plugins listed in the
      [[#Plugin_Info][dependencies information]] below
-   * patch the TWiki:Plugins.ExtendedSelectPlugin using the provided 
-     [[%ATTACHURL%/ExtendedSelectPlugin_pm.diff][patch]].
    * Download the BlogPlugin ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
@@ -196,12 +194,11 @@ And send me a patch if you've coded that into TWiki ;).
      | ==data/Main/BlogAuthorGroup.txt== | blog author group |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
-     | ==pub/TWiki/BlogPlugin/ExtendedSelectPlugin_pm.diff== | patch for the <nop>ExtendedSelectPlugin (not required for Dakar Beta 5 or later) |
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 20 Dec 2005 (v0.43) |
+|  Plugin Version: | v0.44 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  ?? ??? 200?: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
