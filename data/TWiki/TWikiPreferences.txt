@@ -87,7 +87,7 @@ _(Click for form-based editing of existing preferences.)_
    * Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab and ==\n== to linefeed (3 spaces for bullets).
 
-      * Set ATTACHEDIMAGEFORMAT = \t* $comment: <br />\n<img src="%ATTACHURLPATH%/$name" alt="$name" $size />
+      * Set ATTACHEDIMAGEFORMAT = \t* $comment: <br />\n <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
 
 ---++ TWiki Platform Settings
 
