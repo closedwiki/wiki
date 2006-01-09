@@ -38,7 +38,7 @@ sub preview {
     my $user = $session->{user};
 
     my( $meta, $text, $saveOpts, $merged ) =
-      TWiki::UI::Save::buildNewTopic($session);
+      TWiki::UI::Save::buildNewTopic($session, 'preview');
 
     # Note: param(formtemplate) has already been decoded by buildNewTopic
     # so the $meta entry reflects if it was used.

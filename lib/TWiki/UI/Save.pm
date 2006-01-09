@@ -44,7 +44,7 @@ use Assert;
 
 # Used by save and preview
 sub buildNewTopic {
-    my $session = shift;
+    my( $session, $script ) = @_;
 
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
@@ -126,29 +126,43 @@ sub buildNewTopic {
 
     # Determine the new text
     my $newText = $query->param( 'text' );
+
     # HTTP uses CRLF, so remove the CRs
     $newText =~ s/\r//g if $newText;
 
+    my $forceNewRev = $query->param( 'forcenewrevision' );
+    $saveOpts->{forcenewrevision} = $forceNewRev;
+    my $newParent = $query->param( 'topicparent' );
+
     if( defined( $newText) ) {
-        # text from the query
+        # text is defined in the query, save that text
+
     } elsif( defined $templateText ) {
+        # no text in the query, but we have a templatetopic
         $newText = $templateText;
         $originalrev = 0; # disable merge
-    } elsif( defined $prevText ) {
-        $newText = $prevText;
-        $originalrev = 0; # disable merge
+
     } else {
         $newText = '';
+        # no text in the query, and there is no template text
+        # we must be up to something else; check
+        unless( defined $forceNewRev || defined $newParent ||
+                  defined $templatetopic ) {
+            # insufficient parameters to save
+            throw TWiki::OopsException( 'attention',
+                                        def => 'bad_script_parameters',
+                                        web => $session->{webName},
+                                        topic => $session->{topicName},
+                                        params => [ $script ]);
+        }
+        if( defined $prevText ) {
+            $newText = $prevText;
+            $originalrev = 0; # disable merge
+        }
     }
 
-    # note: always force a new rev if the topic is empty, in case this
-    # is a mistake.
-    $saveOpts->{forcenewrevision} = 1
-      if( $query->param( 'forcenewrevision' ) || !$newText );
-
-    my $newParent = $query->param( 'topicparent' ) || '';
     my $mum;
-    if( $newParent ) {
+    if( defined $newParent ) {
         if( $newParent ne 'none' ) {
             $mum = { 'name' => $newParent };
         }
@@ -228,96 +242,6 @@ sub buildNewTopic {
     return( $newMeta, $newText, $saveOpts, $merged );
 }
 
-# Private - do not call outside this module!
-# Returns 1 if caller should redirect to view when done
-# 0 otherwise (redirect has already been handled)
-sub _save {
-    my $session = shift;
-
-    $session->enterContext( 'save' );
-
-    my $query = $session->{cgiQuery};
-    my $webName = $session->{webName};
-    my $topic = $session->{topicName};
-    my $store = $session->{store};
-
-    my $saveCmd = $query->param( 'cmd' ) || 0;
-    if ( $saveCmd && ! $session->{user}->isAdmin()) {
-        throw TWiki::OopsException( 'accessdenied', def => 'only_group',
-                                    web => $webName, topic => $topic,
-                                    params => $TWiki::cfg{UsersWebName}.
-                                      '.'.$TWiki::cfg{SuperAdminGroup} );
-    }
-
-    my $user = $session->{user};
-
-    if( $saveCmd eq 'delRev' ) {
-        # delete top revision
-        try {
-            $store->delRev( $user, $webName, $topic );
-        } catch Error::Simple with {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'save_error',
-                                        web => $webName,
-                                        topic => $topic,
-                                        params => shift->{-text} );
-        };
-
-        return 1;
-    }
-
-    if( $saveCmd eq 'repRev' ) {
-        # replace top revision with the text from the query, trying to
-        # make it look as much like the original as possible. The query
-        # text is expected to contain %META as well as text.
-        my $textQueryParam = $query->param( 'text' );
-        my $meta = new TWiki::Meta( $session, $webName, $topic );
-        $store->extractMetaData( $meta, \$textQueryParam );
-        my $saveOpts = { timetravel => 1 };
-        try {
-            $store->repRev( $user, $webName, $topic,
-                            $textQueryParam, $meta, $saveOpts );
-        } catch Error::Simple with {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'save_error',
-                                        web => $webName,
-                                        topic => $topic,
-                                        params => shift->{-text} );
-        };
-
-        return 1;
-    }
-
-    my( $newMeta, $newText, $saveOpts, $merged ) =
-      TWiki::UI::Save::buildNewTopic($session);
-
-    try {
-        $store->saveTopic( $user, $webName, $topic,
-                           $newText, $newMeta, $saveOpts );
-    } catch Error::Simple with {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'save_error',
-                                    web => $webName,
-                                    topic => $topic,
-                                    params => shift->{-text} );
-    };
-
-    my $lease = $store->getLease( $webName, $topic );
-    # clear the lease, if (and only if) we own it
-    if( $lease && $lease->{user}->equals( $user )) {
-        $store->clearLease( $webName, $topic );
-    }
-
-    if( $merged ) {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'merge_notice',
-                                    web => $webName, topic => $topic,
-                                    params => $merged );
-    }
-
-    return 1;
-}
-
 =pod
 
 ---++ StaticMethod save($session)
@@ -337,10 +261,12 @@ sub save {
     my $session = shift;
 
     my $query = $session->{cgiQuery};
-    my $webName = $session->{webName};
+    my $web = $session->{webName};
     my $topic = $session->{topicName};
     my $store = $session->{store};
     my $user = $session->{user};
+
+    $session->enterContext( 'save' );
 
     #
     # Allow for dynamic topic creation by replacing strings of at least
@@ -350,16 +276,16 @@ sub save {
     if ( $topic =~ /X{10}/ ) {
 		my $n = 0;
 		my $baseTopic = $topic;
-		$store->clearLease( $webName, $baseTopic );
+		$store->clearLease( $web, $baseTopic );
 		do {
 			$topic = $baseTopic;
 			$topic =~ s/X{10}X*/$n/e;
 			$n++;
-		} while( $store->topicExists( $webName, $topic ));
+		} while( $store->topicExists( $web, $topic ));
         $session->{topicName} = $topic;
     }
 
-    my $redirecturl = $session->getScriptUrl( 1, 'view', $webName, $topic );
+    my $redirecturl = $session->getScriptUrl( 1, 'view', $web, $topic );
 
     my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
@@ -381,28 +307,10 @@ sub save {
         $saveaction = 'replaceform' if ( $saveaction eq 'replace form...');
     }
 
-    my $editaction = lc($query->param( 'editaction' )) || '';
-
-    if( $saveaction eq 'checkpoint' ) {
-        $query->param( -name=>'dontnotify', -value=>'checked' );
-        my $editURL = $session->getScriptUrl( 1, 'edit', $webName, $topic );
-        $redirecturl = $editURL.'?t='.time();
-        $redirecturl .= '&action='.$editaction if $editaction;
-        $redirecturl .= '&skin='.$query->param('skin') if $query->param('skin');
-        $redirecturl .= '&cover='.$query->param('cover') if $query->param('cover');
-        my $lease = $store->getLease( $webName, $topic );
+    if( $saveaction eq 'cancel' ) {
+        my $lease = $store->getLease( $web, $topic );
         if( $lease && $lease->{user}->equals( $user )) {
-            $store->setLease( $webName, $topic, $user,
-                              $TWiki::cfg{LeaseLength} );
-        }
-
-    } elsif( $saveaction eq 'quietsave' ) {
-        $query->param( -name=>'dontnotify', -value=>'checked' );
-
-    } elsif( $saveaction eq 'cancel' ) {
-        my $lease = $store->getLease( $webName, $topic );
-        if( $lease && $lease->{user}->equals( $user )) {
-            $store->clearLease( $webName, $topic );
+            $store->clearLease( $web, $topic );
         }
 
         # redirect to a sensible place (a topic that exists)
@@ -411,7 +319,7 @@ sub save {
                      $query->param( 'topicparent' ),
                      $TWiki::cfg{HomeTopicName} ) {
             ( $w, $t ) =
-              $session->normalizeWebTopicName( $webName, $test );
+              $session->normalizeWebTopicName( $web, $test );
             last if( $store->topicExists( $w, $t ));
             $a = '';
         }
@@ -419,33 +327,129 @@ sub save {
         $session->redirect( $viewURL );
 
         return;
+    }
 
-    } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
-        # hidden, largely undocumented functions, used by administrators for
-        # reverting spammed topics. These functions constitute editing
-        # history, in a Joe Stalin kind of way. The should be replaced with
-        # mechanisms for hiding revisions, but are retained purely for
-        # compatibility with Cairo.
-        $query->param( -name => 'cmd', -value => $saveaction );
-
-    } elsif( $saveaction eq 'addform' ||
-               $saveaction eq 'replaceform' ||
-                 $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
-        require TWiki::UI::ChangeForm;
-        $session->writeCompletePage
-          ( TWiki::UI::ChangeForm::generate( $session, $webName,
-                                             $topic, $editaction ) );
-        return;
-
-    } elsif( $saveaction eq 'preview' ) {
+    if( $saveaction eq 'preview' ) {
         require TWiki::UI::Preview;
         TWiki::UI::Preview::preview( $session );
         return;
     }
 
-    if ( _save( $session )) {
-        $session->redirect( $redirecturl );
+    my $editaction = lc($query->param( 'editaction' )) || '';
+
+    if( $saveaction eq 'addform' ||
+          $saveaction eq 'replaceform' ||
+            $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
+        require TWiki::UI::ChangeForm;
+        $session->writeCompletePage
+          ( TWiki::UI::ChangeForm::generate( $session, $web,
+                                             $topic, $editaction ) );
+        return;
     }
+
+    if( $saveaction eq 'checkpoint' ) {
+        $query->param( -name=>'dontnotify', -value=>'checked' );
+        my $editURL = $session->getScriptUrl( 1, 'edit', $web, $topic );
+        $redirecturl = $editURL.'?t='.time();
+        $redirecturl .= '&action='.$editaction if $editaction;
+        $redirecturl .= '&skin='.$query->param('skin') if $query->param('skin');
+        $redirecturl .= '&cover='.$query->param('cover') if $query->param('cover');
+        my $lease = $store->getLease( $web, $topic );
+        if( $lease && $lease->{user}->equals( $user )) {
+            $store->setLease( $web, $topic, $user, $TWiki::cfg{LeaseLength} );
+        }
+        # drop through
+    }
+
+    if( $saveaction eq 'quietsave' ) {
+        $query->param( -name=>'dontnotify', -value=>'checked' );
+        # drop through
+    }
+
+    if( $saveaction =~ /^(del|rep)Rev$/ ) {
+        # hidden, largely undocumented functions, used by administrators for
+        # reverting spammed topics. These functions support rewriting
+        # history, in a Joe Stalin kind of way. They should be replaced with
+        # mechanisms for hiding revisions.
+        $query->param( -name => 'cmd', -value => $saveaction );
+        # drop through
+    }
+
+    my $saveCmd = $query->param( 'cmd' ) || 0;
+    if ( $saveCmd && ! $session->{user}->isAdmin()) {
+        throw TWiki::OopsException( 'accessdenied', def => 'only_group',
+                                    web => $web, topic => $topic,
+                                    params => $TWiki::cfg{UsersWebName}.
+                                      '.'.$TWiki::cfg{SuperAdminGroup} );
+    }
+
+    if( $saveCmd eq 'delRev' ) {
+        # delete top revision
+        try {
+            $store->delRev( $user, $web, $topic );
+        } catch Error::Simple with {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'save_error',
+                                        web => $web,
+                                        topic => $topic,
+                                        params => shift->{-text} );
+        };
+
+        $session->redirect( $redirecturl );
+        return;
+    }
+
+    if( $saveCmd eq 'repRev' ) {
+        # replace top revision with the text from the query, trying to
+        # make it look as much like the original as possible. The query
+        # text is expected to contain %META as well as text.
+        my $textQueryParam = $query->param( 'text' );
+        my $meta = new TWiki::Meta( $session, $web, $topic );
+        $store->extractMetaData( $meta, \$textQueryParam );
+        my $saveOpts = { timetravel => 1 };
+        try {
+            $store->repRev( $user, $web, $topic,
+                            $textQueryParam, $meta, $saveOpts );
+        } catch Error::Simple with {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'save_error',
+                                        web => $web,
+                                        topic => $topic,
+                                        params => shift->{-text} );
+        };
+
+        $session->redirect( $redirecturl );
+        return;
+    }
+
+    my( $newMeta, $newText, $saveOpts, $merged ) =
+      TWiki::UI::Save::buildNewTopic($session, 'save');
+
+    try {
+        $store->saveTopic( $user, $web, $topic,
+                           $newText, $newMeta, $saveOpts );
+    } catch Error::Simple with {
+        throw TWiki::OopsException( 'attention',
+                                    def => 'save_error',
+                                    web => $web,
+                                    topic => $topic,
+                                    params => shift->{-text} );
+    };
+
+    my $lease = $store->getLease( $web, $topic );
+    # clear the lease, if (and only if) we own it
+    if( $lease && $lease->{user}->equals( $user )) {
+        $store->clearLease( $web, $topic );
+    }
+
+    if( $merged ) {
+        throw TWiki::OopsException( 'attention',
+                                    def => 'merge_notice',
+                                    web => $web, topic => $topic,
+                                    params => $merged );
+    }
+
+    $session->redirect( $redirecturl );
 }
 
 1;
