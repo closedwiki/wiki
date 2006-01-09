@@ -64,19 +64,12 @@ hr {
   padding-top:10px;
   font-size:xx-large;
 }
-.natWebLocator {
-  font-size:small;
-}
 
 .natTopRightContents {
-  font-size:0.7em;
   line-height:120%;
 }
 .natTopRightContents, .natWebSlogan {
   font-family:'Trebuchet MS', arial, sans-serif;
-}
-.natWebSlogan {
-  padding-left:5px;
 }
 
 .natSearchBox input {
@@ -84,7 +77,7 @@ hr {
   background:#B22222;
   color:white;
   border:1px dotted white;
-  font-size:x-small;
+  width:15em;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,

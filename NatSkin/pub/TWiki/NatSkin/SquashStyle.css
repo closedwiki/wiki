@@ -112,8 +112,7 @@ hr { border-bottom: 1px solid #999999; }
   letter-spacing: .1em;
   vertical-align:middle;
 }
-.natSearchTable tr:nth-child(4n),
-.natSearchTable tr:nth-child(4n+1) {
+.natSearchTable table:nth-child(2n+1) {
   background:#f0f0f0;
 }
 .natSearchEvenHit {
@@ -170,7 +169,7 @@ hr { border-bottom: 1px solid #999999; }
   text-transform:none;
 }
 .natWebLocator {
-  font-size:small;
+  font-size:16px;
 }
 
 .natTopLeft,
@@ -188,9 +187,8 @@ hr { border-bottom: 1px solid #999999; }
   font:normal small 'Trebuchet MS', arial, sans-serif;
 }
 
-.natSearchBox,
 .natSearchBox input {
-  font-size:x-small;
+  width:15em;
 }
 .natSearchBoxTop input {
   background:#E7AA5C;
@@ -204,11 +202,7 @@ hr { border-bottom: 1px solid #999999; }
   color:#666666;
   font-weight:bold;
 }
-.natTopRightContents {
-  font-size:small;
-}
 .natTopicActions {
-  font-size:0.8em;
   line-height:110%;
 }
 

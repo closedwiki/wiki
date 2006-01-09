@@ -152,7 +152,8 @@ hr {
 
 .natSearchBox input {
   border:1px dotted white;
-  font-size:x-small;
+  width:13em;
+  _width:10em; /* IE hack */
 }
 .natSearchBoxTop {
   margin-top:10px;

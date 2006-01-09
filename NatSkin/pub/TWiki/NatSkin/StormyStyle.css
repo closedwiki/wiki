@@ -47,6 +47,7 @@ hr {
 .natTopRight,
 .natSideBar {
   width:15em;
+  _width:17em; /* IE hack */
 }
 
 /* twiki styles */
@@ -127,8 +128,7 @@ hr {
   border-bottom:1px #aaaaaa solid;
 }
 .natSearchEvenHit,
-.natSearchTable tr:nth-child(4n),
-.natSearchTable tr:nth-child(4n+1) {
+.natSearchTable table:nth-child(2n+1) {
   background:#444444;
 }
 
@@ -167,14 +167,9 @@ hr {
 .natSearchBox {
   font-weight:bold;
 }
-.natSearchBox,
-.natSearchBox input {
-  font-size:x-small;
-}
 .natSearchBoxTop input {
   color:white;
   background:black;
-  width:11em;
   border:1px solid #99ccff;
 }
 
@@ -185,11 +180,7 @@ hr {
 .natWebLocator {
   font-size:small;
 }
-.natTopRightContents {
-  font-size:small;
-}
 .natTopicActions {
-  font-size:0.8em;
   line-height:110%;
 }
 

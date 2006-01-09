@@ -56,6 +56,12 @@ hr {
   border-bottom: 2px solid #6699CC;
   color:white;
 }
+.natTopLeftContents,
+.natTopRightContents,
+.natWebSlogan,
+.natTopicActions {
+  font-size:12px;
+}
 .natTopBar a:hover {
   color:#669966;
   text-decoration:underline;
@@ -71,9 +77,6 @@ hr {
   text-transform: none;
   padding-top:10px;
 }
-.natWebLocator {
-  font-size:small;
-}
 
 .natTopLeft,
 .natTopRight,
@@ -88,14 +91,11 @@ hr {
   font:normal small 'Trebuchet MS', arial, sans-serif;
 }
 
-.natSearchBox,
-.natSearchBox input {
-  font-size:x-small;
-}
 .natSearchBoxTop input {
   background:#99cc66;
   color:white;
   border:1px dotted white;
+  width:15em;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,
@@ -113,7 +113,6 @@ hr {
   font-size:small;
 }
 .natTopicActions {
-  font-size:0.8em;
   line-height:110%;
 }
 
@@ -348,8 +347,7 @@ hr {
   color:white;
 }
 
-.natSearchTable tr:nth-child(4n),
-.natSearchTable tr:nth-child(4n+1) {
+.natSearchTable table:nth-child(2n+1) {
   background:#f0f0f0;
 }
 .natSearchEvenHit {

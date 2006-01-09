@@ -72,7 +72,7 @@ h1, h2, h3, h4, h5, h6 {
   width:16em;
   min-width:16em;
   max-width:16em;
-  _width:16em; /* IE hack */
+  _width:17em; /* IE hack */
 }
 .natSideBar {
   padding-bottom:5px;
@@ -91,27 +91,32 @@ h1, h2, h3, h4, h5, h6 {
   min-height:50em;
   overflow:hidden;
 }
-.natTopBarSizer {
-  border:1px solid transparent; /* konqueror fix */
-}
 
+.natTopBar > .natTopBarSizer { /* konqueror fix, but not IE */
+  border:1px solid transparent; 
+}
 /* topbar */
 .natHeaderArt {
   background-repeat:no-repeat;
 }
+
 .natTopLeftContents,
-.natTopRightContents,
-.natSearchBox input {
-  font-size:x-small;
+.natTopRightContents {
+  font-size:12px;
 }
+
 .natTopRight form {
   padding:0px;
   margin:0px;
   margin-bottom:5px;
 }
-
 .natSearchBox {
   font-weight:bold;
+}
+
+.natSearchBox,
+.natSearchBox input {
+  font-size:12px;
 }
 
 .natSearchBox input {
@@ -120,6 +125,7 @@ h1, h2, h3, h4, h5, h6 {
   margin:0px;
   padding:0px;
   width:13em;
+  _width:12em; /* IE hack */
 }
 
 .natWebTitle {
@@ -274,29 +280,25 @@ h1, h2, h3, h4, h5, h6 {
   text-align:left;
   vertical-align:top;
 }
+.natSearchHit,
 .natSearchTable {
   width:100%;
   border-collapse:collapse;
-  margin-top:1px; /* gecko fix against forgetting the top border on border-collapsed */
-  margin-bottom:10px;
 }
-.natSearchTable th,
-.natSearchTable td {
+.natSearchTable th {
   padding-left:5px;
   padding-right:5px;
 }
+.natSearchHit th,
 .natSearchTable th {
   text-align:left;
 }
 .natSearchTable td {
   vertical-align:top;
 }
-.natSearchHit th {
-  padding-top:10px;
-}
+.natSearchHit th,
 .natSearchHit td {
-  padding-top:5px;
-  padding-bottom:5px;
+  padding:5px;
 }
 .natSearchTotal {
   margin-top:10px;
