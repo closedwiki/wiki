@@ -13,11 +13,11 @@ __%MAKETEXT{"Personal Preferences (details in [_1])" args="%TWIKIWEB%.TWikiVaria
    * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off: (see details in [_2])" args="%TWIKIWEB%.WikiWord,%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
       * #Set LINKTOOLTIPINFO = off
    * %MAKETEXT{"Horizontal size of text edit box:"}%
-      * Set EDITBOXWIDTH = 70
+      * #Set EDITBOXWIDTH = 70
    * %MAKETEXT{"Vertical size of text edit box:"}%
-      * Set EDITBOXHEIGHT = 22
+      * #Set EDITBOXHEIGHT = 22
    * %MAKETEXT{"Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable."}%
-      * Set EDITBOXSTYLE = width: 99%
+      * #Set EDITBOXSTYLE = width: 99%
    * %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%TWIKIWEB%.WikiName"}%
       * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
