@@ -66,7 +66,7 @@ _(Click for form-based editing of existing preferences.)_
       * Set EDITBOXWIDTH = 70
 
    * Vertical size of text edit box: (can be overwritten by user preferences)
-      * Set EDITBOXHEIGHT = 15
+      * Set EDITBOXHEIGHT = 22
 
    * Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
       * Set EDITBOXSTYLE = width: 99%
