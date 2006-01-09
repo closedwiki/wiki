@@ -11,7 +11,7 @@ __%MAKETEXT{"My Links"}%__
 
 __%MAKETEXT{"Personal Preferences (details in [_1])" args="%TWIKIWEB%.TWikiVariables"}%__
    * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off: (see details in [_2])" args="%TWIKIWEB%.WikiWord,%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
-      * Set LINKTOOLTIPINFO = off
+      * #Set LINKTOOLTIPINFO = off
    * %MAKETEXT{"Horizontal size of text edit box:"}%
       * Set EDITBOXWIDTH = 70
    * %MAKETEXT{"Vertical size of text edit box:"}%
