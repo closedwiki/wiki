@@ -372,7 +372,6 @@ hr {
   font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .natSearchTableTitle th {
-  border-bottom:1px solid #ddd;
   color:#444444;
   background:white;
   font-size:1.1em;
@@ -381,23 +380,18 @@ hr {
 .natSearchHit {
   font-size:1.0em;
   line-height:140%;
+  border-top:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+}
+.natSearchHit th {
+  border-top:1px solid #ddd;
 }
 .natSearchHit td {
   padding-bottom:10px;
-  border-bottom:1px solid #ddd;
 }
-.natSearchTable tr:nth-child(4n+3),
-.natSearchTable tr:nth-child(4n+2) {
+.natSearchHit:nth-child(2n+1) {
   background:#f0f0f0;
 }
-/*
-.natSearchTable tr:nth-child(4n+2) {
-  border-top:1px solid #ddd;
-}
-.natSearchTable tr:nth-child(4n+3) {
-  border-bottom:1px solid #ddd;
-}
-*/
 
 .natSearchOddHit {
   background:#f0f0f0;
@@ -549,14 +543,13 @@ hr {
   text-decoration:none;
 }
 .blogCommentCount {
-  margin-left:10px;
-  font-size:0.9em;
-  float:right;
-  width:2em;
   text-align:right;
 }
 .blogComments .blogCommentCount {
   color:#444444;
+}
+.blogHeadline .blogCommentCount {
+  font-size:1.6em;
 }
 .blogSubComments {
   padding:5px;
@@ -604,7 +597,6 @@ hr {
   margin-left:0.5em;
 }
 .blogEntryCount {
-  float:right;
   font-size:0.9em;
   color:#959596;
 }

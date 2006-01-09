@@ -97,6 +97,8 @@ hr {
   color:#333333;
   border-top:5px #aaaaaa solid;
   border-bottom:1px #aaaaaa dotted;
+}
+.natTopLeftContents, .natTopRightContents {
   font-family:arial,sans-serif;
 }
 .natWebTitle {
@@ -104,21 +106,16 @@ hr {
   letter-spacing:1px;
 }
 .natWebLocator, .natWebLocator a {
-  font:bold small arial,sans-serif;
+  font-family:arial,sans-serif;
+  font-weight:bold;
   text-transform:none;
   letter-spacing:2px;
 }
 .natWebSlogan {
-  font:normal small arial,sans-serif;
+  font-family:arial,sans-serif;
+  font-weight:bold;
   color:#333333;
 }
-.natTopLeftContents,
-.natTopRightContents,
-.natSearchBox input,
-.natWebSlogan {
-  font-size:x-small;
-}
-
 .natSearchBox input {
   background:white;
 }
@@ -126,7 +123,8 @@ hr {
 /* sidebar */
 .natSideBarContents {
   color:#003366;
-  font:normal small arial,sans-serif;
+  font-family:arial,sans-serif;
+  font-weight:normal;
   line-height:140%;
 }
 .natSideBar h1,
@@ -248,21 +246,22 @@ hr {
 
 /* search tables */
 .natSearchTable {
-  border:1px #aaaaaa solid;
+  border-top:1px #aaaaaa solid;
+  border-bottom:1px #aaaaaa solid;
 }
 
 .natSearchTableTitle th {
   background:#eeeeee;
   border-bottom:1px #aaaaaa solid;
   border-left:1px #aaaaaa solid;
+  border-right:1px #aaaaaa solid;
 }
-.natSearchHit td {
-  border-bottom:1px #aaaaaa solid;
+.natSearchHit {
+  border:1px #aaaaaa solid;
 }
 
 .natSearchEvenHit,
-.natSearchTable tr:nth-child(4n),
-.natSearchTable tr:nth-child(4n+1) {
+.natSearchHit:nth-child(2n) {
   background:#fafafa;
 }
 
@@ -323,7 +322,6 @@ hr {
 .blogCommentCount {
   color:#777;
   margin-left:10px;
-  font-size:80%;
 }
 .blogSubComments {
   padding:5px;

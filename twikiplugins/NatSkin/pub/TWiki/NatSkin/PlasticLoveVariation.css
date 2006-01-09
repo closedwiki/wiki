@@ -73,6 +73,7 @@
 
 /* forms 'n tables */
 .twikiToc,
+.natTopicForm,
 .natTopicEditForm,
 .twikiPageForm th,
 .natTopicForm td {
@@ -84,15 +85,15 @@
 .natTopicEditForm th,
 .natTopicEditForm td,
 .natTopicForm table th a,
-.natTopicForm td,
-.natTopicForm th {
+.natTopicForm td {
   background:transparent;
   border:0px;
 }
 
+.natTopicForm table,
+.natTopicForm table th,
 .twikiTable th {
   background:transparent;
-  border:0px;
   border:1px solid #d9d6e7;
 }
 .twikiToc,

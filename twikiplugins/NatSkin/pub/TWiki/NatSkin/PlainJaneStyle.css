@@ -22,8 +22,8 @@ a:hover {
 
 .natTopRightContents,
 .natTopLeftContents {
-  padding-top:2em;
-  padding-bottom:2em;
+  padding-top:1em;
+  padding-bottom:1em;
   margin-left:10px;
   margin-right:10px;
 }
@@ -127,13 +127,6 @@ a:hover {
 
 
 /* top */
-.natHeaderArt {
-}
-.natWebButtons a,
-.natTopBar a,
-.natTopBar {
-/*  color:#ffffff;*/
-}
 .natTopBar a:hover {
   text-decoration:none;
   background:#3f59bb;
@@ -151,16 +144,6 @@ a:hover {
   margin:0px;
 }
 
-.natTopicActions,
-.natTopLeftContents,
-.natTopRightContents,
-.natSearchBoxTop input {
-  font-size:x-small;
-}
-.natTopicActions {
-  font-size:0.99em;
-}
-
 .natSearchBox input, 
 .natSearchBox {
   color:#666666;
@@ -171,7 +154,7 @@ a:hover {
 }
 
 .natWebSlogan {
-  padding-left:15px;
+  padding-left:0px;
   color:#3f59bb;
 }
 .natWebLocator {

@@ -175,29 +175,20 @@ hr {
   color:#ffcc66;
 }
 
-.natSearchBox,
-.natSearchBox input {
-  font-size:0.8em;
-}
 .natSearchBox input {
   background:#003366;
   color:white;
   border:1px dotted white;
 }
 .natSearchBoxTop input {
-  width:16em;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,
 .natSearchBoxPos3 input {
   color:#333333;
   background:#999999;
-  font-size:1em;
 }
 
-.natTopRightContents {
-  font-size:small;
-}
 .natSearchBoxPos1 {
   margin-top:10px;
 }
@@ -209,13 +200,6 @@ hr {
   font-weight:bold;
 }
 
-.natWebSlogan,
-.natWebLocator {
-  font-size:x-small;
-}
-.natTopicActions {
-  font-size:0.8em;
-}
 /* sidebar */
 .natSideBar {
   color:#333333;

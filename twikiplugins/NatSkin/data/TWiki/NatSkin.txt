@@ -24,7 +24,7 @@ You can try alternative styles
 	  alternatively, use the NatSkinStyleBrowser
 	1 per user by setting a variable =SKINSYLE= on your %WIKIUSERNAME% homepage
 	1 per web by setting the variable =SKINSTYLE= in the WebPreferences
-	1 site-wide by setting the skinstyle in the [[%LOCALSITEPREFS%]]
+	1 site-wide by setting the skinstyle in the %TWIKIWEB%.TWikiPreferences
 
 See the NatSkinPlugin for more information on how to predefine the variants of NatSkin.
 The default style is hardcoded into the NatSkinPlugin.
@@ -75,8 +75,11 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.93 (2005-12-20) |
+|  Skin Version: | v2.94 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-01-09: | more IE fixes; \
+                 fixed search template: every hit must be a table of its own :(; \
+		 fontsize fixes |
 |  2005-12-20: | fixed collapsing tables in firefox &lt; 1.5 |
 |  2005-12-05: | componentized template system adding javascript and styles components; \
 		 removed inline-styles and -javascript and moved it to the respective components \
@@ -143,7 +146,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 20 Dec 2005
+-- TWiki:Main/MichaelDaum - 09 Jan 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
