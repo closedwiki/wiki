@@ -1,6 +1,7 @@
 # Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
+# Copyright (C) 2001-2006 Peter Thoeny.
 # Copyright (C) 2001-2006 TWiki Contributors.
 # All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
