@@ -1573,9 +1573,9 @@ Generate a (max 3 line) summary of the differences between the revs.
 
 If there is only one rev, a topic summary will be returned.
 
-If =$plain= is set, all HTML will be removed.
+If =$tml= is not set, all HTML will be removed.
 
-In plain, lines are truncated to 70 characters. Differences are shown using + and - to indicate added and removed text.
+In non-tml, lines are truncated to 70 characters. Differences are shown using + and - to indicate added and removed text.
 
 =cut
 
@@ -1648,7 +1648,7 @@ sub summariseChanges {
         $summary = $this->makeTopicSummary( $ntext, $topic, $web );
     }
 
-    if( $tml ) {
+    if( ! $tml ) {
         $summary = $this->protectPlainText( $summary );
     }
     return $summary;
