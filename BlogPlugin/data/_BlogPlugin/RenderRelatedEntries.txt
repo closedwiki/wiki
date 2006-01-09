@@ -13,9 +13,9 @@
 ~~~   depth="2"
 ~~~   header="
 ~~~     <div class=\"blogSideBarSection blogSideBarRelated\">
-~~~     $n---+ Related$n" 
-~~~   format="   * <span class=\"blogRelated$depth\">[[$web.$topic][$headline]]</span>"
-~~~   footer="</div>"
+~~~     $n---+ Related$n<ul>" 
+~~~   format="<li class=\"blogRelated$depth\">[[$web.$topic][$headline]]</li>"
+~~~   footer="</ul></div>"
 ~~~ }%
 %STOPINCLUDE%
 </verbatim>

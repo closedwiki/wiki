@@ -22,7 +22,8 @@
   padding-bottom:20px;
 }
 
-.blogHeadline {
+.blogHeadline h1,
+.blogHeadline h2 {
   margin:0px;
   padding:0px;
   margin-bottom:0px;
@@ -34,6 +35,7 @@
 
 .blogText {
   text-align:justify;
+  width:100%;
 }
 .blogTeaser {
   margin-bottom:1em;
@@ -74,7 +76,10 @@
   margin-top:20px;
 }
 .blogCommentCount {
-  margin-left:5px;
+  margin-left:10px;
+}
+.blogEntryCount {
+  text-align:right;
 }
 .blogComment {
   padding:5px;

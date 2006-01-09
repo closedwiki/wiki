@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1134378673" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1136312947" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -21,20 +21,19 @@ in the given timespan.
 ~~~    State='enabled' AND
 ~~~    SubjectCategory=~'%IFDEFINED{"%CAT%" then="\b%CAT%\b" else=".*"}%' AND
 ~~~    createdate >= %CALC{"$TIME(%FROM%)"}% AND
-~~~    createdate < %CALC{"$TIME(%TO%)"}%
-~~~   "
+~~~    createdate < %CALC{"$TIME(%TO%)"}%"
 ~~~    separator="none" limit="1" hidenull="on"
-~~~    format="$percntCALC{\"$IF($count>0,$SET(foundArchive,1)
-~~~      <li>
-~~~       <a href=\\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/BlogArchive?
+~~~    format="$n*~~ $percntCALC{\"$IF($count>0,$SET(foundArchive,1))\"}$percnt$n*~~
+~~~      <tr><td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
+~~~       <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/BlogArchive?
 *~~        title=%ENCODE{"%TITLE%"}%;
 *~~        %IFDEFINED{"%CAT%" then="cat=%ENCODE{"%CAT%"}%;"}%
 *~~        from=%CALC{"$TIME(%FROM%)"}%;
 *~~        to=%CALC{"$TIME(%TO%)"}%;
-*~~       \\">%TITLE%</a>
-~~~       <span class=\"blogEntryCount\">$count</span>
-*~~      </li>
-*~~    )\"}$percnt$n*~~"
+*~~       \">%TITLE%</a>
+~~~       </li></ul></td>
+~~~       <td valign=\"top\" class=\"blogEntryCount\">$count</td>
+~~~      </tr>$n*~~"
 ~~~ }%
 *~~
 %STOPINCLUDE%
@@ -43,10 +42,10 @@ in the given timespan.
 <!-- interrupt above glue -->
 ---++ Test
 <div class="alt">
-<ul>
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
 %DBCALL{"%TOPIC%" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005"}%
-%DBCALL{"%TOPIC%" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005" CAT="BlogsWorld"}%
-</ul>
+%DBCALL{"%TOPIC%" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005 in <nop>BlogsWorld" CAT="BlogsWorld"}%
+</table>
 </div>
 
 <!-- interrupt above glue -->

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129746360" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1136824970" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -7,15 +7,18 @@ A BlogComment is linked to the commented topic by the BlogRef field.
 
 See also: %TOPIC%Template, BlogCommentForm, RenderBlogComment
 
+<noautolink>
 | *Name* | *Nr* | *On* | *Author* | *Created* |
 %~~ DBQUERY{"TopicType=~'\bBlogComment\b'" order="createdate" reverse="on"
-~~~ format="| $topic 
+~~~ format="| [[$web.$topic][$topic]]
 ~~~         | $expand(Nr) 
-~~~         | $expand(@BlogRef.Headline) 
+~~~         | $percntIFDEFINED{\"$expand(@BlogRef.Headline)\"
+~~~             then=\"[[$web.$formfield(BlogRef)][$expand(@BlogRef.Headline)]]\"}$percnt
 ~~~         | $expand(Name)
 ~~~         | <nobr>$formatTime(createdate)</nobr>
 ~~~         |"
 ~~~ }%
+</noautolink>
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

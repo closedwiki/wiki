@@ -36,8 +36,8 @@
 *~~                 </span>
 *~~                 $expand(': ' and Headline)
 ~~~               \"
-~~~              showimg=\"$percntICONPATH{\"toggleopen\"}$percnt\"
-~~~              hideimg=\"$percntICONPATH{\"toggleclose\"}$percnt\"
+~~~              showimg=\"$percntICONURLPATH{\"toggleopen2\"}$percnt\"
+~~~              hideimg=\"$percntICONURLPATH{\"toggleclose\"}$percnt\"
 ~~~            }$percnt$n
 ~~~            <noautolink>
 ~~~            <div class=\"blogCommentText\">

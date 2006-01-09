@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129895826" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1136307790" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -12,16 +12,19 @@ NONE
 ---+ Categories%REDDOT{"%WEB%.%TOPIC%"}%
 <noautolink>
 %~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
-~~~         format="   * <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
-~~~                         title=\"$formfield(TopicDescription)\">$topic</a>
-~~~         <span class=\"blogEntryCount\">
-~~~         $percntDBQUERY{\"TopicType='BlogEntry' AND 
-~~~                          SubjectCategory=~'\b$topic\b' AND
-~~~                          State='enabled'\"
-~~~            hidenull=\"on\" format=\"none\" header=\"$dollarcount\"
-~~~         }$percnt
-~~~         </span>
-~~~         "
+~~~   header="<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
+~~~   format="<tr><td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
+~~~     <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
+~~~       title=\"$formfield(TopicDescription)\">$topic
+~~~     </a></li></ul></td>
+~~~     <td valign=\"top\" class=\"blogEntryCount\">
+~~~       $percntDBQUERY{\"TopicType='BlogEntry' AND 
+~~~         SubjectCategory=~'\b$topic\b' AND
+~~~         State='enabled'\"
+~~~         hidenull=\"on\" format=\"none\" header=\"$dollarcount\"
+~~~       }$percnt
+~~~     </td></tr>"
+~~~   footer="</table>"
 ~~~ }%
 </noautolink>
 </div>

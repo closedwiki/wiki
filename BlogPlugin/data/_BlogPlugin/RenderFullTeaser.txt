@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131380029" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1136310710" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -23,41 +23,43 @@ see also: RenderBlogTeaser
 ---+++ Format
 <verbatim>
 %SECTION{"format"}%
-*~~ <div class=\"blogEntry\">
-~~~   <h1 class=\"blogHeadline\">$n
-~~~     <noautolink>$n
-~~~     [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
-~~~     <span class=\"blogCommentCount\">
-~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"
-~~~         format=\"[[$web.$topic#topComment][$dollarcount]]\"}$percnt
-~~~     </span>$n
-~~~   </noautolink>$n
-~~~   </h1>$n
-~~~   <div class=\"blogInfo\">
-~~~     <span class=\"blogDate\">
-~~~       $percntTIMESINCE{
-~~~         \"$expand(createdate)\"
-~~~         format=\"$time ago\" 
-~~~         null=\"about now\"
-~~~       }$percnt
-~~~     </span>
-~~~     in 
-~~~     <span class=\"blogCategory\"> 
-~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
-~~~     </span>
-~~~     <span class=\"blogAuthor\"> 
-~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
-~~~     </span>
-~~~   </div>$n
-~~~   <noautolink>$n
-~~~   <div class=\"blogText\">
-~~~        <div class=\"blogTeaser\">
-~~~          $formfield(Teaser)
-~~~        </div>
-~~~      $formfield(Text)
-~~~      <div class=\"blogMore\"> ... [[$web.$topic][more]]</div>
-~~~   </div>$n
-~~~   </noautolink>$n
+*~~ <div class=\"blogEntry\">$n
+~~~ <noautolink>
+~~~ <table class=\"blogHeadline\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
+~~~   <tr><td>
+~~~   <h1>[[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt</h1>$n
+~~~   </td>
+~~~   <td class=\"blogCommentCount\">
+~~~     $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"
+~~~       format=\"[[$web.$topic#topComment][$dollarcount]]\"}$percnt
+~~~   </td></tr>
+~~~  </table>$n
+~~~  </noautolink>
+~~~  <div class=\"blogInfo\">
+~~~    <span class=\"blogDate\">
+~~~      $percntTIMESINCE{
+~~~        \"$expand(createdate)\"
+~~~        format=\"$time ago\" 
+~~~        null=\"about now\"
+~~~      }$percnt
+~~~    </span>
+~~~    in 
+~~~    <span class=\"blogCategory\"> 
+~~~      $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~    </span>
+~~~    <span class=\"blogAuthor\"> 
+~~~      by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
+~~~    </span>
+~~~  </div>$n
+~~~  <noautolink>$n
+~~~  <div class=\"blogText\">
+~~~    <div class=\"blogTeaser\">
+~~~      $formfield(Teaser)
+~~~    </div>
+~~~    $formfield(Text)
+~~~    <div class=\"blogMore\"> ... [[$web.$topic][more]]</div>
+~~~  </div>$n
+~~~  </noautolink>
 ~~~ </div>
 *~~ 
 %ENDSECTION{"format"}%

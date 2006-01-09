@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1135104127" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1136309227" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -25,17 +25,21 @@ no newer comments than that.
 ~~~  category="%CAT%"
 ~~~  header="$n<noautolink>$n
 *~~     <div class=\"blogSideBarSection blogSideBarComments\">$n
-*~~     ---+ Comments$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt$n<ul>"
-~~~  format="<li>[[$web.$topic][$headline]]
-~~~    <span class=\"blogCommentCount\">
+*~~     ---+ Comments$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt$n
+~~~  <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
+~~~  format="<tr>
+~~~    <td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
+~~~      [[$web.$topic][$headline]] <br/>
+~~~      <span class=\"blogSideBarCommenter\">
+~~~        $percntTIMESINCE{\"$date\" format=\"$time ago\"}$percnt
+~~~        $commenter replied
+~~~      </span></li></ul>
+~~~    </td>
+~~~    <td valign=\"top\" class=\"blogCommentCount\">
 ~~~      <a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/$web.$topic#topComment\">$percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"}$percnt</a>
-~~~    </span><br/>
-~~~    <span class=\"blogSideBarCommenter\">
-~~~      $percntTIMESINCE{\"$date\" format=\"$time ago\"}$percnt
-~~~      $commenter replied
-~~~    </span></li>"
+~~~    </td></tr>"
 ~~~  limit="%LIMIT%" age="2592000"
-~~~  footer="</ul></div>$n</noautolink>"
+~~~  footer="</table></div>$n</noautolink>"
 ~~~ }%%STOPINCLUDE%
 </verbatim>
 
