@@ -199,7 +199,6 @@ label {
     border-width:1px;
 	border-style:solid;
 	border-spacing:0px;
-	overflow:auto;
 }
 .twikiTable td,
 .twikiTable th {
@@ -304,14 +303,12 @@ a:visited .twistyLinkLabel {
 .twikiAttachments,
 .twikiForm {
 	margin:1em 0;
-	overflow:auto;
 	padding:1px; /* fixes disappearing borders because of overflow:auto; in twikiForm */
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
 	/* form or attachment table inside topic area */
 	font-size:94%; /*S2*/
-	overflow:auto;
 	padding:.5em 20px; /*S5*/ /* top: use less padding for the toggle link; bottom: use less space in case the table is folded in  */
 	border-width:1px 0 0 0;
 	border-style:solid;
@@ -478,13 +475,11 @@ a:hover .twikiAccessKey {
 	font-size:100%;
 }
 #patternColumnWrapper {
-	table-layout:fixed;
 	border-width:1px 0;
 	border-style:solid;
 }
 .patternMainContents {
 	padding:0 2em 1em 2em;
-	overflow:auto;
 }
 
 /* Top bar */
@@ -567,16 +562,6 @@ table.patternTopBarContents td {
 	border-style:solid;
 	overflow:hidden;
 }
-#patternLeftBar .patternWebIndicator {
-	font-size:94%; /*S2*/
-	line-height:1.4em;
-	padding:.6em 1em .6em 1em; /*S6*/
-	text-align:center;
-}
-#patternLeftBar .patternWebIndicator a:link,
-#patternLeftBar .patternWebIndicator a:visited {
-	text-decoration:none;
-}
 .patternLeftBarContents {
 	padding:0 0 1.5em 1em; /*S6*/
 	font-size:94%; /*S2*/
@@ -637,8 +622,18 @@ table.patternTopBarContents td {
 	margin:0 2em 0 0; /*S6*/ /*needed for proper wrapping: 1em is left margin, 1em is right margin*/
 	font-size:85%; /*S3*/
 }
+#patternLeftBar .patternWebIndicator {
+	margin:0 0 0 -1em; /*S6*/
+	line-height:1.4em;
+	padding:.55em 1em .55em 1em; /*S6*/
+	text-align:center;
+}
+#patternLeftBar .patternWebIndicator a:link,
+#patternLeftBar .patternWebIndicator a:visited {
+	text-decoration:none;
+}
 .patternLeftBarPersonal {
-	margin:-1px 0 .7em -1em; /*S6*/
+	margin:0 0 .7em -1em; /*S6*/
 	padding:.25em 1em .25em 1em; /*S6*/
 	border-width:1px 0;
 	border-style:solid;

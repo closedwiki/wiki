@@ -27,8 +27,9 @@
 
 
 
-%TMPL:DEF{"leftbar"}%<td id="patternLeftBar" valign="top"><div class="patternWebIndicator"><b>[[%WEB%.%HOMETOPIC%][%MAKETEXT{"[_1] Web" args="%WEB%"}%]]</b></div>
+%TMPL:DEF{"leftbar"}%<td id="patternLeftBar" valign="top">
 <div class="patternLeftBarContents">
+<div class="patternWebIndicator"><b><nop>[[%WEB%.%HOMETOPIC%][%WEB%]]</b></div>
 %INCLUDE{"%WEB%.WebLeftBar"}%</div><!-- /patternLeftBarContents--></td><!-- /patternLeftBar-->%TMPL:END%
 
 
