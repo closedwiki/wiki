@@ -325,7 +325,7 @@ sub flatten {
   $text =~ s/&lt;/</g;
   $text =~ s/&gt;/>/g;
 
-  $text =~ s/\<[^\>]+\/?\>/XXX/g;
+  $text =~ s/\<[^\>]+\/?\>//g;
   $text =~ s/<\!\-\-.*?\-\->//gs;
   $text =~ s/\&[a-z]+;/ /g;
   $text =~ s/[ \t]+/ /gs;
