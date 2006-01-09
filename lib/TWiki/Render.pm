@@ -1084,9 +1084,9 @@ sub getRenderedVersion {
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
     $text =~ s/${STARTWW}==(\S+|\S[^\n]*?\S)==$ENDWW/_fixedFontText($1,1)/gem;
     $text =~ s/${STARTWW}__(\S+|\S[^\n]*?\S)__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
-    $text =~ s/${STARTWW}\*([^\s*](\S*|[^\n]*?[^\s*]))\*$ENDWW/<strong>$1<\/strong>/gm;
-    $text =~ s/${STARTWW}_([^\s_](\S+|[^\n]*?[^\s_]))_$ENDWW/<em>$1<\/em>/gm;
-    $text =~ s/${STARTWW}=([^\s=](\S*|[^\n]*?[^\s=]))=$ENDWW/_fixedFontText($1,0)/gem;
+    $text =~ s/${STARTWW}\*([^\s*](\S+|[^\n]*?[^\s]))\*$ENDWW/<strong>$1<\/strong>/gm;
+    $text =~ s/${STARTWW}_([^\s_](\S+|[^\n]*?[^\s]))_$ENDWW/<em>$1<\/em>/gm;
+    $text =~ s/${STARTWW}=([^\s=](\S+|[^\n]*?[^\s]))=$ENDWW/_fixedFontText($1,0)/gem;
 
     # Mailto
     # Email addresses must always be 7-bit, even within I18N sites
