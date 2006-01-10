@@ -2,7 +2,7 @@
 %SPLIT%
    * %KEY%: %VALUE%%SPLIT%
 
----++ MAKETEXT{"My Links"}%
+---++ %MAKETEXT{"My Links"}%
 
    * %MAKETEXT{"[_1] - view a short introductory presentation on TWiki for beginners" args="%TWIKIWEB%.ATasteOfTWiki"}%
    * %MAKETEXT{"[_1] - starting points on TWiki" args="%TWIKIWEB%.WelcomeGuest"}%
