@@ -2,16 +2,19 @@
 %SPLIT%
    * %KEY%: %VALUE%%SPLIT%
 
-__%MAKETEXT{"My Links"}%__
-   * %MAKETEXT{"Visit [_1] to learn about TWiki" args="%TWIKIWEB%.WelcomeGuest"}%
-   * %MAKETEXT{"[_1] web to try out TWiki" args="Sandbox.%HOMETOPIC%"}%
-   * %MAKETEXT{"[_1] just for me" args="Sandbox.%TOPIC%Sandbox"}%
+---++ MAKETEXT{"My Links"}%
+
+   * %MAKETEXT{"[_1] - view a short introductory presentation on TWiki for beginners" args="%TWIKIWEB%.ATasteOfTWiki"}%
+   * %MAKETEXT{"[_1] - starting points on TWiki" args="%TWIKIWEB%.WelcomeGuest"}%
+   * %MAKETEXT{"[_1] - complete TWiki documentation, Quick Start to Reference" args="%TWIKIWEB%.TWikiUsersGuide"}%
+   * %MAKETEXT{"[_1] - try out TWiki on your own" args="Sandbox.%HOMETOPIC%"}%
+   * %MAKETEXT{"[_1] - just for me" args="Sandbox.%TOPIC%Sandbox"}%
    * 
    * 
 
-__%MAKETEXT{"Personal Preferences"}%__
+---++ %MAKETEXT{"Personal Preferences"}%
 
-_%MAKETEXT{"Uncomment preference variables to make them active (remove the #-sign). Help and details on variables are available in [_1]." args="%TWIKIWEB%.TWikiVariables"}%_
+_%MAKETEXT{"Uncomment preferences variables to activate them (remove the #-sign). Help and details on variables are available in [_1]." args="%TWIKIWEB%.TWikiVariables"}%_
 
    * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off: (see details in [_2])" args="%TWIKIWEB%.WikiWord,%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
       * #Set LINKTOOLTIPINFO = off
@@ -24,11 +27,12 @@ _%MAKETEXT{"Uncomment preference variables to make them active (remove the #-sig
    * %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%TWIKIWEB%.WikiName"}%
       * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
-__%MAKETEXT{"Related Topics:"}%__
-   * %TWIKIWEB%.ChangePassword
-   * %MAKETEXT{"[_1] has a list of other TWiki users." args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
-   * %TWIKIWEB%.UserDocumentationCategory
-   * %TWIKIWEB%.UserToolsCategory
+---++ %MAKETEXT{"Related Topics"}%
+
+   * %MAKETEXT{"[_1] for changing your password" args="%TWIKIWEB%.ChangePassword"}%
+   * %MAKETEXT{"[_1] has a list of other TWiki users" args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
+   * %MAKETEXT{"[_1] is a list of TWiki user documentation" args="%TWIKIWEB%.UserDocumentationCategory"}%
+   * %MAKETEXT{"[_1] lists all TWiki user tools" args="%TWIKIWEB%.UserToolsCategory"}%
 
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%
