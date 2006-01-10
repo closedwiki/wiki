@@ -671,11 +671,7 @@ sub _handleSquareBracketedLink {
             # match, not a CAPWORD match?
             $text =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
         }
-        # SMELL: Can't use CGI::a here, because it encodes ampersands in
-        # the link, and those have already been encoded once in the
-        # rendering loop (they are identified as "stand-alone"). One
-        # encoding works; two is too many. None would be better for everyone!
-        return '<a href="'.$link.'" target="_top">'.$text.'</a>';
+        return $this->_externalLink( $link, $text );
     }
 
     # Extract '#anchor'
@@ -708,46 +704,35 @@ sub _handleSquareBracketedLink {
 # (as indicated by the file type), then use an img tag, otherwise
 # generate a link.
 sub _externalLink {
-    my( $this, $pre, $url ) = @_;
+    my( $this, $url, $text ) = @_;
 
     if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
-        return $pre.CGI::img( { src => $url, alt => $filename } );
+        return CGI::img( { src => $url, alt => $filename } );
     }
-    return $pre.CGI::a( { href => $url, target => '_top' }, $url );
-}
-
-sub _unprotectedMailLink {
-    my( $this, $addr, $text ) = @_;
-    $text ||= $addr;
-    return CGI::a( { href=>'mailto:'.$addr }, $text );
-}
-
-sub _spamProtectedMailLink {
-    my( $this, $theAccount, $theSubDomain, $theTopDomain, $text ) = @_;
-
-    my $addr = $theAccount.'@'.$theSubDomain.
-      $TWiki::cfg{AntiSpam}{EmailPadding}.'.'.$theTopDomain;
-
-    return $this->_unprotectedMailLink( $addr, $text );
-}
-
-# Handle [[mailto:...]]
-sub _handleMailto {
-    my ( $this, $text ) = @_;
-    if ( $text =~ /^([^\s\@]+)\s+(.+)$/ ) {
-        # e.g. mailto:fred
-        return $this->_unprotectedMailLink( $1, $2 );
-
-    } elsif ( $text =~ /^([\w\-\_\.\+]+)\@([\w\-\_\.]+)\.(.+?)(\s+|\]\[)(.*)$/ ) {
-        # [[mailto:... ]] link including '@'
-        # '[[mailto:string display text]]' link
-        return $this->_spamProtectedMailLink( $1, $2, $3, $5 );
+    my $opt = '';
+    if( $url =~ /^mailto:/i ) {
+        # inject anti-spam padding
+        $url =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
     } else {
-        # format not matched
-        return '::mailto:'.$text.'::';
+        $opt = ' target="_top"';
     }
+    $text ||= $url;
+    # SMELL: Can't use CGI::a here, because it encodes ampersands in
+    # the link, and those have already been encoded once in the
+    # rendering loop (they are identified as "stand-alone"). One
+    # encoding works; two is too many. None would be better for everyone!
+    return '<a href="'.$url.'"'.$opt.'>'.$text.'</a>';
+}
+
+# Generate a "mailTo" link
+sub _mailLink {
+    my( $this, $text ) = @_;
+
+    my $url = $text;
+    $url = 'mailto:'.$url unless $url =~ /^mailto:/i;
+    return $this->_externalLink( $url, $text );
 }
 
 =pod
@@ -969,7 +954,7 @@ sub getRenderedVersion {
     $text =~ s/}$TWiki::TranslationToken/>/go;
 
     # standard URI
-    $text =~ s/(^|[-*\s(|])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<|]))/$this->_externalLink($1,$2)/geo;
+    $text =~ s/(^|[-*\s(|])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<|]))/$1.$this->_externalLink($2)/geo;
 
     # other entities
     $text =~ s/&(\w+);/$TWiki::TranslationToken$1;/g;      # "&abc;"
@@ -1091,15 +1076,8 @@ sub getRenderedVersion {
     # Mailto
     # Email addresses must always be 7-bit, even within I18N sites
 
-    # FIXME: check security...
-    # Explicit [[mailto:... ]] link without an '@' - hence no 
-    # anti-spam padding needed.
-    # '[[mailto:string display text]]' link (no '@' in 'string'):
-    $text =~ s/\[\[mailto:(.*?)\]\]/$this->_handleMailto($1)/geo;
-
     # Normal mailto:foo@example.com ('mailto:' part optional)
-    # FIXME: Should be '?' after the 'mailto:'...
-    $text =~ s/$STARTWW(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)$ENDWW/$this->_spamProtectedMailLink( $1, $2, $3 )/gem;
+    $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/$this->_mailLink( $1 )/gem;
 
     # Handle [[][] and [[]] links
     # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
@@ -1207,8 +1185,8 @@ sub TML2PlainText {
     }
 
     # Format e-mail to add spam padding (HTML tags removed later)
-    $text =~ s/(?<=[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$this->_spamProtectedMailLink( $1, $2, $3 )/ge;
-    $text =~ s/<\!\-\-.*?\-\->//gs;     # remove all HTML comments
+    $text =~ s/$STARTWW((mailto\:)?[a-zA-Z0-9-_.+]+@[a-zA-Z0-9-_.]+\.[a-zA-Z0-9-_]+)$ENDWW/$this->_mailLink( $1 )/gem;
+    $text =~ s/<!--.*?-->//gs;     # remove all HTML comments
     $text =~ s/<[^>]*>//g;              # remove all HTML tags
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
     if( $opts =~ /nohead/ ) {

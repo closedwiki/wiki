@@ -362,7 +362,7 @@ BEGIN {
     # book at http://regex.info/. 
 
     $regex{linkProtocolPattern} =
-      '(file|ftp|gopher|https|http|irc|news|nntp|telnet)';
+      '(file|ftp|gopher|https|http|irc|news|nntp|telnet|mailto)';
 
     # Header patterns based on '+++'. The '###' are reserved for numbered
     # headers
