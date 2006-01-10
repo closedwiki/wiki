@@ -39,14 +39,15 @@ if ( $#ARGV > -1 ) {
 if ( ( $#ARGV >= 1 ) && ($mode eq 'moveTopics') ) { # must be 2 parameters
         $newCfgFile = $ARGV[1] || die "missing parameter1\n\n"; 
 } elsif ( ($mode eq 'upgradeTopics') && ($#ARGV == 4)) {
-        $newCfgFile = $ARGV[1] || die "missing newCfgFile\n\n"; 
+        $oldCfgFile = $ARGV[1] || die "missing newCfgFile\n\n"; 
         $newDataDir = $ARGV[2] || die "missing newDataDir\n\n"; 
         $oldDataDir = $ARGV[3] || die "missing oldDataDir\n\n"; 
         $outputDir = $ARGV[4] || die "missing outputDir\n\n"; 
-} elsif ( (($mode eq 'cairo') || ($mode eq 'dakar')) && ($#ARGV == 3)) {
-        $newCfgFile = $ARGV[1] || die "missing newCfgFile\n\n"; 
-        $oldDataDir = $ARGV[2] || die "missing oldDataDir\n\n"; 
-        $outputDir = $ARGV[3] || die "missing outputDir\n\n"; 
+	$newCfgFile = './bin/setlib.cfg';
+} elsif ( (($mode eq 'cairo') || ($mode eq 'dakar')) && ($#ARGV == 2)) {
+        $oldCfgFile = $ARGV[1] || die "missing oldSetLigFile / oldCfgFile\n\n"; 
+        $outputDir = $ARGV[2] || die "missing outputDir\n\n"; 
+	$newCfgFile = './bin/setlib.cfg';
 } elsif ( ($mode eq '') && ($#ARGV == 1)) {		#do dakar & upgradeTopics
         $oldCfgFile = $ARGV[0] || die "missing oldCfgFile\n\n"; 
         $outputDir = $ARGV[1] || die "missing outputDir\n\n"; 
@@ -57,13 +58,12 @@ if ( ( $#ARGV >= 1 ) && ($mode eq 'moveTopics') ) { # must be 2 parameters
 }
 
 #set up the new libpath using the setlib.cfg file
-	my ( $newCfgFileDir ) = '.';
-	if ( $newCfgFile =~ /^(.+)\/[^\/]+$/ ) {
-		$newCfgFileDir = $1;
-	}
+    my ( $newCfgFileDir ) = '.';
+    if ( $newCfgFile =~ /^(.+)\/[^\/]+$/ ) {
+        $newCfgFileDir = $1;
+    }
     # Set library paths in @INC
-    unshift @INC, $newCfgFileDir;
-    unshift @INC, $newCfgFileDir.'/../lib';	#TODO: make sure its not a relative path
+    unshift @INC, File::Spec->rel2abs( $newCfgFileDir );
     {
         use Cwd;
         my $current = cwd();
@@ -74,7 +74,7 @@ if ( ( $#ARGV >= 1 ) && ($mode eq 'moveTopics') ) { # must be 2 parameters
 
 	eval 'use TWiki';
 	if ( $@ ) {
-		die "Error finding TWiki.pm, please check your setlib.cfg file points to the lib dir using absolute paths\n";
+		die "Error finding TWiki.pm, please check your setlib.cfg file points to the lib dir using absolute paths\n\@INC contains: @INC\n";
 	}
 	print "\nLoaded TWiki version: $TWiki::VERSION\n";
 
@@ -85,6 +85,7 @@ $outputDir = File::Spec->rel2abs( $outputDir ) ."/";
 $oldCfgFile = File::Spec->rel2abs( $oldCfgFile );
 $newCfgFile = File::Spec->rel2abs( $newCfgFile );
 
+#TODO: this totally breaks the attempt to call the cairo upgrade code, as there was not setlib.cfg then
 my $oldSetlibPath = $oldCfgFile;
 if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
     $oldSetlibPath = $1;
@@ -95,7 +96,7 @@ if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
 die "ERROR: old TWiki's setlib.cfg file not found at ($oldCfgFile)\n" unless (-e $oldCfgFile);
 
 
-print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile = ($newCfgFile), outputDir = ($outputDir)\n";
+print "\nUpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile = ($newCfgFile), outputDir = ($outputDir)\n";
 
 if ( $mode eq '' ) 
 {
@@ -118,13 +119,16 @@ if ( $mode eq '' )
 } 
 elsif ( $mode eq 'dakar' ) 
 {
-	eval 'use TWiki::Upgrade::UpgradeToDakar';
-	if ( $@ ) {
-		print "error: $@ \n";
-		return;
-	}
-	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($oldSetlibPath, $outputDir);
-	TWiki::Upgrade::UpgradeToDakar::RemainingSteps($outputDir);
+        eval 'use TWiki::Upgrade';
+        die "ERROR: $@" if ( $@ );
+        my $upgradeObj = TWiki::Upgrade->new($outputDir);
+
+        eval 'use TWiki::Upgrade::UpgradeToDakar';
+        die "ERROR: $@" if ( $@ );
+        my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($upgradeObj, $oldSetlibPath, $outputDir);
+        $oldDataDir = File::Spec->rel2abs( $oldDataDir );
+        $oldPubDir = File::Spec->rel2abs( $oldPubDir );
+        my $newTWikiDir = File::Spec->rel2abs( '.' );
 }
 elsif ( $mode eq 'cairo' ) 
 {
@@ -138,8 +142,11 @@ elsif ( $mode eq 'upgradeTopics' )
 		print "\nnewDataDir & oldDataDir must exist\n";
 		exit;
 	}
+	eval 'use TWiki::Upgrade';
+	die "ERROR: $@" if ( $@ ); 
+	my $upgradeObj = TWiki::Upgrade->new($outputDir);
 	eval 'use TWiki::Upgrade::UpdateTopics';
-	TWiki::Upgrade::UpdateTopics::UpdateTopics($newDataDir, $oldDataDir, $outputDir);
+	TWiki::Upgrade::UpdateTopics::UpdateTopics($upgradeObj, $newDataDir, $oldDataDir, $outputDir);
 }
 elsif ( $mode eq 'moveTopics' ) 
 {
@@ -180,27 +187,28 @@ elsif ( $mode eq 'moveTopics' )
 sub printUsage {
 	print <<EOUSAGE;
 
-Create an upgraded twiki installation from an existing one
-and a new distribution.
+Create an upgraded twiki installation from an existing one and a new distribution.
 
-usage: UpgradeTWiki 
 usage: UpgradeTWiki <oldSetlibCfgFile> <outputDirectory>
-will run the --dakar option and then the --upgradeTopics option (transfers your existing config, and upgrades your topics and pub files into the outputDirectory (doesn not modify your existing directories)
+   will run the --dakar option and then the --upgradeTopics option (transfers your existing config, and upgrades your topics and pub files into the outputDirectory (doesn not modify your existing directories)
 
-usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
-does the CairoRelease upgrade (should end up incompatible with DakarRelease code)
+usage: UpgradeTWiki --dakar <oldSetlibCfgFile> <outputDirectory>
+   does the DakarRelease upgrade
 
-usage: UpgradeTWiki --dakar <oldSetlibCfgFile> <oldCfgFile> <outputDirectory>
-does the DakarRelease upgrade
-
-usage: UpgradeTWiki --upgradeTopics <oldSetlibCfgFile> <newDataDir> <oldDataDir> <outputDir>
-just tries to merge changes from newTopics (uses patch to merge with user changes)
-
-usage: UpgradeTWiki --moveTopics <newCfgFile>
-moves topics to the new Web layout (initially for DEVELOP) 
-WARNING: this needs to run on a functional install, and is not reversible (if it goes wrong)
+usage: UpgradeTWiki --upgradeTopics <oldSetlibCfgFile> <newDataDir> <oldDataDir> <outputDirectory>
+   just tries to merge changes from newTopics (uses patch to merge with user changes)
 
 Note: if possible, point the cfgFile parameter to setlib.cfg, if it does not exist (or you can't find it) use TWiki.cfg.
 
 EOUSAGE
 }
+
+#MOVED out of docco as they are heavily untested, and probably don't work now
+#
+#usage: UpgradeTWiki --cairo <oldCfgFile> <outputDirectory>
+#does the CairoRelease upgrade (should end up incompatible with DakarRelease code)
+#
+#usage: UpgradeTWiki --moveTopics <newCfgFile>
+#moves topics to the new Web layout (initially for DEVELOP) 
+#WARNING: this needs to run on a functional install, and is not reversible (if it goes wrong)
+

@@ -23,9 +23,6 @@
 #            put in a package and made a subroutine to work with UpgradeTWiki 
 #             by Martin "GreenAsJade" Gregory.
 
-# This version ignores symlinks in the existing wiki data: it creates a new 
-# wiki data tree updating the topics in the existing wiki data, even the
-# linked-in topics, but does not create new links like the old ones.
 
 package TWiki::Upgrade::UpdateTopics;
 
@@ -50,7 +47,12 @@ sub UpdateTopics
     $CurrentDataDir = shift or die "UpdateTopics not provided with existing data directory!\n";
     $DestinationDataDir = shift or die "DestinationDataDir not provided\n";
 
-	$upgradeObj->writeToLogAndScreen("\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n");
+    mkdir( $DestinationDataDir, 0777);
+    $TempDir = "$DestinationDataDir/tmp";
+    while (-d $TempDir ) { $TempDir .= 'p' }   # we want our own previously non-existing directory!
+    mkdir( $TempDir, 0777) or die "Uhoh - couldn't make a temporary directory called $TempDir: $!\n";
+
+    $upgradeObj->writeToLogAndScreen("\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n");
 
     my $whoCares = `which rcsdiff`;   # we should use File::Which to do this, except that would mean
                                       # getting yet another .pm into lib, which seems like hard work?
@@ -76,10 +78,6 @@ sub UpdateTopics
     $upgradeObj->writeToLogAndScreen("\t although many of these rejected chages will be discardable, 
 \t please check them to see if your configuration is still ok\n\n");
 
-    mkdir( $DestinationDataDir, 0777);
-    $TempDir = "$DestinationDataDir/tmp";
-    while (-d $TempDir ) { $TempDir .= 'p' }   # we want our own previously non-existing directory!
-    mkdir( $TempDir, 0777) or die "Uhoh - couldn't make a temporary directory called $TempDir: $!\n";
 
 	#redirect stderr into a file (rcs dumps out heaps of info)
     $RcsLogFile = $DestinationDataDir."/rcs.log";
@@ -263,7 +261,7 @@ sub getRLog
 	    system("rcs -q -l $workingFilename 2>>$RcsLogFile");
 	    # check outstanding changes in (note that -t- option should never be used, but it's there for completeness,
 	    #  and since it was in Manage.pm)
-	    system("ci -u -mUpdateTopics -t-missing_v $workingFilename 2>>RcsLogFile");
+	    system("ci -u -mUpdateTopics -t-missing_v $workingFilename 2>>$RcsLogFile");
 	}
 
     my $highestCommonRevision = findHighestCommonRevision( $workingFilename, $newFilename);
@@ -303,11 +301,11 @@ sub getRLog
             copy( $filename.",v", $destinationFilename.",v");
     }
 
-		if ( $doCiCo )
-		{
-		    unlink ($workingFilename, "$workingFilename,v") or
-			warn "Couldn't remove temporary files $workingFilename, $workingFilename,v: $! Could be trouble ahead...\n";
-		}
+	if ( $doCiCo )
+	{
+	    unlink ($workingFilename, "$workingFilename,v") or
+		warn "Couldn't remove temporary files $workingFilename, $workingFilename,v: $! Could be trouble ahead...\n";
+	}
 
     } else {
         #new file created by users
