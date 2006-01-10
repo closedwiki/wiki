@@ -2813,9 +2813,7 @@ sub _SEARCH {
 sub _WEBLIST {
     my( $this, $params ) = @_;
     my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
-    # SMELL: inherited from Cairo; if $name not present, append it
-    # Probably means $format ||= '$name'
-    $format .= '$name' unless( $format =~ /\$name/ );
+    $format ||= '$name';
     my $separator = $params->{separator} || "\n";
     my $web = $params->{web} || '';
     my $webs = $params->{webs} || 'public';
@@ -2858,9 +2856,7 @@ sub _WEBLIST {
 sub _TOPICLIST {
     my( $this, $params ) = @_;
     my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
-    # SMELL: inherited from Cairo; if $name not present, append it
-    # Probably means $format ||= '$name'
-    $format .= '$name' unless( $format =~ /\$name/ );
+    $format ||= '$name';
     my $separator = $params->{separator} || "\n";
     my $web = $params->{web} || $this->{webName};
     $web =~ s#\.#/#go;
