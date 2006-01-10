@@ -34,7 +34,40 @@ package TWikiBuild;
 
 sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "TWiki" ), $class );
+    my $name;
+
+print <<END;
+
+You are about to build TWiki. If you are not building a release, or
+this release is just for testing purposes, you can leave it unnamed.
+In this case any packages generated will be called "TWiki". Alternatively
+you can provide a name (e.g. TWiki-4.0.0).
+
+If you provide a name, TWiki.pm will be automatically edited to insert the
+new name of the release. The updated TWiki.pm will be checked in before
+the build starts.
+
+END
+    if( TWiki::Contrib::Build::ask("Do you want to name this release?")) {
+        do {
+            $name =
+              TWiki::Contrib::Build::prompt(
+                  "Enter name of this release: ", $name);
+            $name =~ s/['\\]//g;
+        } until( $name );
+        open(PM, "<../lib/TWiki.pm") || die $!;
+        local $/ = undef;
+        my $content = <PM>;
+        close(PM);
+        $content =~ s/(?<=\$RELEASE = ').*?(?:=')/$name/m;
+        open(PM, ">../lib/TWiki.pm") || die $!;
+        print PM $content;
+        close(PM);
+        #print `svn commit -m "Item000: Automatic checkin" ../lib/TWiki.pm`;
+    } else {
+        $name = 'TWiki';
+    }
+    return bless( $class->SUPER::new( $name, "TWiki" ), $class );
 }
 
 # Overrider installer target; don't want an installer.
