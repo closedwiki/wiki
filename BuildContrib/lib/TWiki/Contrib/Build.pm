@@ -367,6 +367,35 @@ sub _get_svn_version {
     return undef;
 }
 
+sub ask {
+    my $q = shift;
+    my $reply;
+    local $/ = "\n";
+
+    $q .= '?' unless $q =~ /\?\s*$/;
+
+    print $q.' [y/n] ';
+    while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
+        print "Please answer yes or no\n";
+    }
+    return ( $reply =~ /^y/i ) ? 1 : 0;
+}
+
+sub prompt {
+    my( $q, $default) = @_;
+    local $/ = "\n";
+    my $reply = '';
+    while( !$reply ) {
+        print $q;
+        print " ($default)" if defined $default;
+        print ': ';
+        $reply = <STDIN>;
+        chomp($reply);
+        $reply ||= $default;
+    }
+    return $reply;
+}
+
 =pod
 
 ---++++ cd($dir)
@@ -884,51 +913,69 @@ sub target_upload {
 
     my $to = $this->{project};
 
-    # Get the old form data and attach it to the update
-    print 'Downloading http://twiki.org/cgi-bin/view/Plugins/'.$to.' to recover form',$NL;
-    my $response = $userAgent->get( 'http://twiki.org/cgi-bin/view/Plugins/'.$to.'?raw=debug' );
+    my $web = prompt("Name of web on twiki.org to upload to", "Plugins");
 
-    die 'Failed to GET old plugins topic ', $response->request->uri,
-      ' -- ', $response->status_line, $NL.'Aborting'
-        unless $response->is_success;
+    my $topic = $to;
+    # word chars only
+    $topic =~ s/\W/_/g;
+    my $url = "http://twiki.org/cgi-bin/view/$web/$topic";
+
+    # Get the old form data and attach it to the update
+    print "Downloading $topic to recover form\n";
+    my $response = $userAgent->get( "$url?raw=debug" );
+
     my %newform;
-    foreach my $line ( split(/\n/, $response->content() )) {
-        if ( $line =~ m/META:FIELD{name="(.*?)".*?value="(.*?)"}/ ) {
-            my $val = $2;
-            if ($val && $val ne '') {
-                $newform{$1} = $val;
+    unless( $response->is_success ) {
+        print 'Failed to GET old topic ', $response->request->uri,
+          ' -- ', $response->status_line, $NL;
+    } else {
+        foreach my $line ( split(/\n/, $response->content() )) {
+            if ( $line =~ m/META:FIELD{name="(.*?)".*?value="(.*?)"}/ ) {
+                my $val = $2;
+                if ($val && $val ne '') {
+                    $newform{$1} = $val;
+                }
             }
         }
     }
     local $/ = undef; # set to read to EOF
-    open( IN_FILE, '<'.$this->{basedir}.'/'.$to.'.txt' ) or
-      die 'Failed to reopen topic: '.$@;
-    $newform{'text'} = <IN_FILE>;
-    close( IN_FILE );
+    if( open( IN_FILE, '<'.$this->{basedir}.'/'.$to.'.txt' )) {
+        print "Basing new topic on ".$this->{basedir}.'/'.$to.'.txt'."\n";
+        $newform{'text'} = <IN_FILE>;
+        close( IN_FILE );
+    } else {
+        print STDERR 'Failed to open base topic: '.$!;
+        $newform{'text'} = <<END;
+Release $to
+END
+        print "Basing new topic on some default text:\n$newform{text}\n";
+    }
 
     print 'Uploading new topic',$NL;
-    $response = $userAgent->post( 'http://twiki.org/cgi-bin/save/Plugins/'.$to,
-                                  \%newform );
+    $url =~ s./view/./save/.;
+    $response = $userAgent->post( $url, \%newform );
 
     die 'Update of topic failed ', $response->request->uri,
       ' -- ', $response->status_line, 'Aborting'
         unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
+          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
 
     print 'Uploading zip',$NL;
+    $url =~ s./save/./upload/.;
     $response =
-      $userAgent->post( 'http://twiki.org/cgi-bin/upload/Plugins/'.$to,
-                        [
-                         'filename' => $to.'.zip',
-                         'filepath' => [ $this->{basedir}.'/'.$to.'.zip' ],
-                         'filecomment' => 'unzip in the root directory of your TWiki installation and run the installer script'
-                        ],
-                        'Content_Type' => 'form-data' );
+      $userAgent->post(
+          $url,
+          [
+              'filename' => $to.'.zip',
+              'filepath' => [ $this->{basedir}.'/'.$to.'.zip' ],
+              'filecomment' => 'unzip, correct the permissions, and run the installer script, if there is one'
+             ],
+          'Content_Type' => 'form-data' );
 
     die 'Update of zip failed ', $response->request->uri,
       ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
         unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
+          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
 
     print 'Uploading tgz',$NL;
     $response =
@@ -936,14 +983,14 @@ sub target_upload {
                         [
                          'filename' => $to.'.tgz',
                          'filepath' => [ $this->{basedir}.'/'.$to.'.tgz' ],
-                         'filecomment' => 'Untar in the root directory of your TWiki installation and run the installer script'
+                         'filecomment' => 'Untar and run the installer script, if there is one'
                         ],
                         'Content_Type' => 'form-data' );
 
     die 'Update of tgz failed ', $response->request->uri,
       ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
         unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
+          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
 
     print 'Uploading md5 checksums',$NL;
     $response =
