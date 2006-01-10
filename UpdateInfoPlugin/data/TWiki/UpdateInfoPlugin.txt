@@ -1,50 +1,99 @@
-%META:TOPICINFO{author="ChrisHuebsch" date="1018861908" format="1.0" version="1.1"}%
----++ UpdateInfoPlugin
+%META:TOPICINFO{author="SteffenPoulsen" date="1136924296" format="1.1" version="1.2"}%
+%META:TOPICPARENT{}%
+---+ Update Info Plugin
 
-The UpdateInfoPlugin handels the new <nop>%ISNEW% tag after a WikiWord.
+The <nop>UpdateInfoPlugin handles the new %<nop>ISNEW% tag after a %TWIKIWEB%.WikiWord.
 
-<nop>WikiWord <nop>%ISNEW% becomes 
-	* WikiWord if the Topic is neither new nor updated
-	* WikiWord <img src="%PUBURLPATH%/TWiki/UpdateInfoPlugin/new.gif">  if the Topic is younger than five days and is revision 1.1
-	* WikiWord <img src="%PUBURLPATH%/TWiki/UpdateInfoPlugin/updated.gif"> if the Topic was changed during the last five days
+<nop/>WikiWord %<nop/>ISNEW% becomes:
 
----+++ Syntax Rules
+   * <nop>WikiWord if the topic is neither new nor updated
+   * <nop>WikiWord "yellow-new-icon" if the topic is younger than five days and is revision 1.1
+   * <nop>WikiWord "yellow-updated-icon" if the topic was changed during the last five days
 
-The <nop>%ISNEW%-Tag must be written after a WikiWord speperates by excatly one Space.
+Default "version" and "days" parameters are set sitewide in %TOPIC%#PluginSettings, but can be overridden pr. topic (or in !WebPreferences pr. web), by setting variables =UPDATEINFOVERSION= and/or =UPDATEINFODAYS=.
 
-Using full syntax <nop>%ISNEW% takes one ore two options:
+---++ Syntax Rules
 
-	* days: changes the number of days a Topic is marked as new or updated
-	* version: specifyes which revision is still considered to be new
+The %<nop>ISNEW%-tag must be written after a <nop>WikiWord separated by _exactly one space_.
 
----+++ Examples:
+Full %<nop>ISNEW% syntax takes one or two options:
 
-	* <nop>MyTopic <nop>%ISNEW%
-	* MyTopic %ISNEW%
-	* <nop>Web.ToPic <nop>%ISNEW%
-	* Web.ToPic %ISNEW%
-	* <nop>TopIc <nop>%ISNEW{days="15"}
-	* TopIc %ISNEW{days="15"}
-	* <nop>TopiC <nop>%ISNEW{days="20" version="1.4"}
-	* TopiC %ISNEW{days="20" version="1.4"}
+   * days: Changes the number of days a Topic is marked as new or updated
+   * version: Specifies which revision is still considered to be new
 
+Full syntax overrides site/topic defaults.
+
+---++ Examples:
+
+   * <nop>MyTopic %<nop/>ISNEW%
+   * <nop>Web.ToPic %<nop/>ISNEW%
+   * <nop>GrødWeb.BlåBærGrød %<nop/>ISNEW% (I18N characters in <nop>WikiWords and <nop>WebNames are matched)
+   * <nop>TopIc %<nop/>ISNEW{days="15"}%
+   * <nop>TopiC %<nop/>ISNEW{days="20" version="1.4"}%
+
+%TOPIC% supports these <nop/>TWikiML link syntaxes:
+
+   * <nop/>WikiWord 
+   * (<nop/>WikiWordAs)WebName.WikiWord 
+   * [<nop/>[WikiWord][link text]]
+   * [<nop/>[WebName.WikiWord][link text]] 
+   * [<nop/>[link text]] 
+   * [<nop/>[link-text]] (links to non-WikiWord topics, i.e. topic names containing special chars like "-")
+   * [<nop/>[singleword]] 
+   * WIK IWO RDS (abbreviations / acronyms) 
+
+(All followed by the %<nop/>ISNEW% syntax).
+
+---++ If installed ..
+
+   * UpdateInfoPlugin %ISNEW%
+   * Main.WebHome %ISNEW%
+   * TWiki.WebHome %ISNEW{days="15"}%
+   * TWiki.TWikiPreferences %ISNEW{days="20" version="1.4"}%
+   * Sandbox.UpdateInfoPluginTest %ISNEW% (Edit and save the <nop/>Sandbox.UpdateInfoPluginTest topic, and it should be highlighted with a "yellow-new-icon")
+
+#PluginSettings
 ---+++ <nop>%TOPIC% Settings
 
-none
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Add a %<nop>ISNEW% tag after a %TWIKIWEB%.WikiWord to indicate whether a topic has been created or updated recently
+
+   * Sitewide "version" default
+      * Set UPDATEINFOVERSION = 1.1
+
+   * Sitewide "days" default
+      * Set UPDATEINFODAYS = 5
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---+++ Plugin Installation Instructions
 
-	* Just unzip the package as usual.
+   * Just unzip the package as usual.
 
 ---+++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.ChrisHuebsch |
-|  Plugin Version: | 15 Apr 2002 |
-|  Change History: | 15 Apr 2002: Initial version |
+|  Plugin Author: | TWiki:Main.ChrisHuebsch |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Jan 2006: | (v1.8) - Dakar compatibility |
+|  7 Apr 2005: | (v1.7) - New variable name in plugin settings |
+|  6 Apr 2005: | (v1.6) - Fetch default "days" and "version" variables from TWiki variables |
+|  4 Apr 2005: | (v1.5) - Support for non-WikiWord topics in <nop/>TWikiML link syntaxes |
+|  2 Apr 2005: | (v1.4) - Support for more <nop/>TWikiML link syntaxes |
+|  1 Apr 2005: | (v1.3) - Plugin is now I18N-aware |
+|  30 Mar 2005: | (v1.2) - implemented changes/fixes from TWiki:Plugins.UpdateInfoPluginDev |
+|  15 Apr 2002: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.0 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% ( TWiki:Plugins/%TOPIC% )|
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev ( TWiki:Plugins/%TOPIC%Dev )|
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
--- Main.ChrisHuebsch - 12 Apr 2002
+-- TWiki:Main.ChrisHuebsch - 07 Apr 2005
+
+
+%META:FILEATTACHMENT{name="updated.gif" attr="" autoattached="1" comment="" date="1018622322" path="updated.gif" size="154" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="new.gif" attr="" autoattached="1" comment="" date="1096464800" path="new.gif" size="906" user="UnknownUser" version=""}%

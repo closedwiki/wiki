@@ -3,13 +3,32 @@
 #
 #      Written by Chris Huebsch chu@informatik.tu-chemnitz.de
 #
+# 31-Mar-2005:   SteffenPoulsen
+#                  - Updated plugin to be I18N-aware
+#  2-Apr-2005:   SteffenPoulsen
+#                  - Support for more TWikiML link syntaxes, cleaned up code, touched documentation
+#  4-Apr-2005:   SteffenPoulsen
+#                  - Support for _even more_ TWikiML link syntaxes (i.e. "-" now allowed in WikiWord)
+#  6-Apr-2005:   SteffenPoulsen (patch by DieterWeber)
+#                  - Fetch default "days" and "version" variables from TWiki variables. 
+#                  - Search web/user/topic preferences first, and then in the plugin if we can't find it
+# 10-Jan-2006:   SteffenPoulsen
+#                  - Dakar compatibility
 
-package TWiki::Plugins::UpdateInfoPlugin; 	
+package TWiki::Plugins::UpdateInfoPlugin;      
 
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
-    );
-
+            $web $topic $user $installWeb $VERSION $RELEASE $debug
+            $plural2SingularEnabled
+            $wnre
+            $wwre
+            $manre
+            $abbre
+            $smanre
+            $days
+            $version
+           );
+           
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
@@ -20,23 +39,57 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-# =========================
-sub initPlugin
-{
+BEGIN {
+    # 'Use locale' for internationalisation of Perl sorting and searching
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+        import locale ();
+    }
+} 
+
+sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
-        &TWiki::Func::writeWarning( "Version mismatch between EmptyPlugin and Plugins.pm" );
+        TWiki::Func::writeWarning( "Version mismatch between UpdateInfoPlugin and Plugins.pm" );
         return 0;
     }
 
+    # Get plugin preferences
+    $debug = &TWiki::Func::getPreferencesFlag( "UPDATEINFOPLUGIN_DEBUG" );
+
+    $days = &TWiki::Func::getPreferencesValue( "UPDATEINFODAYS" ) ||
+          &TWiki::Func::getPreferencesValue( "UPDATEINFOPLUGIN_DAYS" ) ||
+          "5";
+
+    $version = &TWiki::Func::getPreferencesValue( "UPDATEINFOVERSION" ) ||
+          &TWiki::Func::getPreferencesValue( "UPDATEINFOPLUGIN_VERSION" ) ||
+          "1.1";
+
+    $wnre = TWiki::Func::getRegularExpression('webNameRegex');
+    $wwre = TWiki::Func::getRegularExpression('wikiWordRegex');
+    $manre = TWiki::Func::getRegularExpression('mixedAlphaNum');
+    $abbre = TWiki::Func::getRegularExpression('abbrevRegex');
+    $smanre = TWiki::Func::getRegularExpression('singleMixedAlphaNumRegex');
+
+    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug; 
+    TWiki::Func::writeDebug( '- $TWiki::cfg{UseLocale}: '."$TWiki::cfg{UseLocale}" ) if $debug; 
+    
+    # Plugin correctly initialized
     return 1;
-}
+} 
 
 sub update_info
 {
   my ( $defweb, $wikiword, $opts ) = @_;
+  $opts ||= ''; # pre-define $opts to prevent error messages
+
+  # save old link (preserve [[-style links)
+  my $oldwikiword = $wikiword;
+
+  # clear [[-style formatting for [[WikiWordAsWebName.WikiWord][link text]] and [[WikiWord][link text]]
+  $wikiword =~ s/\[\[($wnre\.$wwre|$wwre)\]\[.*?\]\]/$1/o;
 
   ( $web, $topic ) = split ( /\./, $wikiword );
   if ( !$topic ) {
@@ -44,20 +97,24 @@ sub update_info
     $web = $defweb;
   }
 
-  #return " web $web topic $topic opts $opts";
-
+  # Turn spaced-out names into WikiWords - upper case first letter of
+  # whole link, and first of each word.
+  $topic =~ s/^(.)/\U$1/o;
+  $topic =~ s/\s($smanre)/\U$1/go;
+  $topic =~ s/\[\[($smanre)(.*?)\]\]/\u$1$2/o;
+ 
   ( $meta, $dummy ) = TWiki::Func::readTopic($web, $topic);
   if ( $meta ) {
 
     $opts =~ s/{(.*?)}/$1/geo;
 
-    $params{"days"}  = "5";
-    $params{"version"}  = "1.1";
+    $params{"days"}  = "$days";
+    $params{"version"}  = "$version";
 
     foreach $param (split (/ /, $opts)) {
-	($key, $val) = split (/=/, $param);
+     ($key, $val) = split (/=/, $param);
         $val =~ tr ["] [ ];
-	$params{$key} = $val;
+     $params{$key} = $val;
     }
 
     if( defined(&TWiki::Meta::findOne)) {
@@ -66,15 +123,19 @@ sub update_info
         my $r = $meta->get( "TOPICINFO" );
         return '' unless $r;
         %info = %$r;
-    }
+    } 
+
     $updated = ((time-$info{"date"})/86400) < $params{"days"}; #24*60*60
-    $new = $updated & (($info{"version"}+0) <= ($params{"version"}+0)); 
+    $new = $updated & (($info{"version"}+0) <= ($params{"version"}+0));  
 
     $r = "";
     if ( $updated )
       { $r = " <img src=\"%PUBURLPATH%/$installWeb/UpdateInfoPlugin/updated.gif\">"; }
     if ( $new )
       { $r = " <img src=\"%PUBURLPATH%/$installWeb/UpdateInfoPlugin/new.gif\">"; }
+
+    # revert to old style wikiword formatting
+    $wikiword = $oldwikiword;
 
     return $r;
 
@@ -88,9 +149,9 @@ sub commonTagsHandler
 {
     my ( $text, $topic, $web ) = @_; 
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-    $_[0] =~ s/([\w\.]+) %ISNEW(({.*?})?)%/"$1".update_info($web, $1, $2)/geo;
+   # Match WikiWordAsWebName.WikiWord, WikiWords, [[WikiWord][link text]], [[WebName.WikiWord][link text]], [[link text]], [[linktext]] or WIK IWO RDS (all followed by %ISNEW..% syntax)
+   $_[0] =~ s/($wnre\.$wwre|$wwre|\[\[$wwre\]\[.*?\]\]|\[\[$wnre}\.$wwre\]\[.*?\]\]|\[\[.*?\]\]|$abbre) %ISNEW({.*?})?%/"$1".update_info($web, $1, $2)/geo;
+
 }
 
 1;
