@@ -238,19 +238,19 @@ sub _addListItem {
         my $firstTime = 1;
         while( $size < $depth ) {
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
-            $$result .= ' <'.$theElement.'> ' unless( $firstTime );
-            $$result .= ' <'.$theType.'> ';
+            $$result .= ' <'.$theElement.">\n" unless( $firstTime );
+            $$result .= ' <'.$theType.">\n";
             $firstTime = 0;
             $size++;
         }
     } else {
         while( $size > $depth ) {
             my $tags = pop( @{$this->{LIST}} );
-            $$result .= ' </'.$tags->{element}.'></'.$tags->{type}.'> ';
+            $$result .= "\n</".$tags->{element}.'></'.$tags->{type}.'> ';
             $size--;
         }
         if( $size ) {
-            $$result .= ' </'.$this->{LIST}->[$size-1]->{element}.'> ';
+            $$result .= "\n</".$this->{LIST}->[$size-1]->{element}.'> ';
         } else {
             $$result .= "\n" if $$result;
         }
@@ -303,9 +303,9 @@ sub _emitTR {
         }
         if( /^\s*\*(.*)\*\s*$/ ) {
             push( @attr, bgcolor => '#99CCCC' );
-            $cells .= CGI::th( { @attr }, CGI::strong( $1 ));
+            $cells .= CGI::th( { @attr }, CGI::strong( " $1 " ))."\n";
         } else {
-            $cells .= CGI::td( { @attr }, " $_" );
+            $cells .= CGI::td( { @attr }, " $_ " )."\n";
         }
     }
     return $thePre.CGI::Tr( $cells );
@@ -1082,11 +1082,11 @@ sub getRenderedVersion {
 
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
-    $text =~ s/${STARTWW}==(\S+|\S[^\n]*?\S)==$ENDWW/_fixedFontText($1,1)/gem;
-    $text =~ s/${STARTWW}__(\S+|\S[^\n]*?\S)__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
-    $text =~ s/${STARTWW}\*([^\s*](\S+|[^\n]*?[^\s]))\*$ENDWW/<strong>$1<\/strong>/gm;
-    $text =~ s/${STARTWW}_([^\s_](\S+|[^\n]*?[^\s]))_$ENDWW/<em>$1<\/em>/gm;
-    $text =~ s/${STARTWW}=([^\s=](\S+|[^\n]*?[^\s]))=$ENDWW/_fixedFontText($1,0)/gem;
+    $text =~ s/${STARTWW}==(\S+?|\S[^\n]*?\S)==$ENDWW/_fixedFontText($1,1)/gem;
+    $text =~ s/${STARTWW}__(\S+?|\S[^\n]*?\S)__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
+    $text =~ s/${STARTWW}\*(\S+?|\S[^\n]*?\S)\*$ENDWW/<strong>$1<\/strong>/gm;
+    $text =~ s/${STARTWW}\_(\S+?|\S[^\n]*?\S)\_$ENDWW/<em>$1<\/em>/gm;
+    $text =~ s/${STARTWW}\=(\S+?|\S[^\n]*?\S)\=$ENDWW/_fixedFontText($1,0)/gem;
 
     # Mailto
     # Email addresses must always be 7-bit, even within I18N sites
