@@ -19,6 +19,7 @@ use File::Copy qw( cp mv );
 use File::Basename qw( basename );
 use English;
 use Scalar::Util qw( tainted );
+use Archive::Zip;
 ################################################################################
 
 # parameters
