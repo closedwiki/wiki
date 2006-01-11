@@ -46,7 +46,7 @@ __Note:__ This topic is included by TWikiVariables
 #VarQUERYSTRING
 ---+++ QUERYSTRING -- full, unprocessed string of parameters to this URL
    * String of all the URL parameters that were on the URL used to get to the current page. For example, if you add [[%SCRIPTURLPATH{"view"}%/%WEB%/%INCLUDINGTOPIC%?name=Samantha;age=24;eyes=blue#VarQUERYSTRING][?name=Samantha;age=24;eyes=blue]] to this URL you can see this in action. This string can be appended to a URL to pass parameter values on to another page.
-   * %X% Note: URLs built this way are typically restricted in length, typically to 2048 characters. If you need more space than this, you will need to use an HTML form and =%<nop>URLPARAM{}%=.
+   * __%X% Note:__ URLs built this way are typically restricted in length, typically to 2048 characters. If you need more space than this, you will need to use an HTML form and =%<nop>URLPARAM{}%=.
    * Syntax: =%<nop>QUERYSTRING%=
    * Expands to: <code> %QUERYSTRING% </code>
    * Related: [[#VarURLPARAM][URLPARAM]]
@@ -121,7 +121,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>SCRIPTURL{"script"}%=
    * Expands to: =%SCRIPTURL{"script"}%=
    * Example: To get the authenticated version of the current topic you can write  =%<nop>SCRIPTURL{"viewauth"}%/%<nop>WEB%/%<nop>TOPIC%= which expands to =%SCRIPTURL{"viewauth"}%/%WEB%/%INCLUDINGTOPIC%=
-   * __Note:__ In most cases you should use =%<nop>SCRIPTURLPATH{"script"}%= instead, as it works with URL rewriting much better
+   * __%X% Note:__ In most cases you should use =%<nop>SCRIPTURLPATH{"script"}%= instead, as it works with URL rewriting much better
    * Related: [[#VarPUBURL][PUBURL]], [[#VarSCRIPTNAME][SCRIPTNAME]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURL][SCRIPTURL]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]], [[#VarSCRIPTURLPATH2][SCRIPTURLPATH{"script"}]]
 
 #VarSCRIPTURLPATH
@@ -188,7 +188,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ SERVERTIME -- server time
    * Syntax: =%<nop>SERVERTIME%=
    * Expands to: =%SERVERTIME%=
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME2][SERVERTIME{"format"}]]
 
 #VarSERVERTIME2
@@ -196,7 +196,7 @@ __Note:__ This topic is included by TWikiVariables
    * Same format qualifiers as =%<nop>GMTIME%=
    * Syntax: =%<nop>SERVERTIME{"format"}%=
    * Example: =%<nop>SERVERTIME{"$hou:$min"}%= expands to =%SERVERTIME{"$hou:$min"}%=
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarSESSIONVARIABLE
@@ -224,8 +224,8 @@ __Note:__ This topic is included by TWikiVariables
    * The current topic name with added URL-encoded spaces, for use in regular expressions that search for backlinks to the current topic
    * Syntax: =%<nop>SPACEDTOPIC%=
    * Expands to: =%SPACEDTOPIC%=
-   * __Note:__ This is a deprecated variable. It can be duplicated with =%<nop>URLENCODE{%<nop>SPACEOUT{"%<nop>TOPIC%" separator=" *"}%}%=
-   * Related: [[#VarSPACEOUT][SPACEOUT]], [[#VarTOPIC][TOPIC]], [[#VarURLENCODE][URLENCODE]]
+   * __%X% Note:__ This is a deprecated variable. It can be duplicated with =%<nop>ENCODE{%<nop>SPACEOUT{"%<nop>TOPIC%" separator=" *"}%}%=
+   * Related: [[#VarSPACEOUT][SPACEOUT]], [[#VarTOPIC][TOPIC]], [[#VarENCODE][ENCODE]]
 
 #VarSPACEOUT
 ---+++ SPACEOUT{"string"} -- renders string with spaces inserted in sensible places
@@ -322,16 +322,17 @@ __Note:__ This topic is included by TWikiVariables
      | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
      | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (new line) |
    * Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%INCLUDINGTOPIC%?skin=print= URL
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
-   * %X% Note: There is a risk that this variable could be misused for cross-site scripting.
-   * Related: [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
+   * __%X% Note:__ URL parameters passed into HTML form fields must be entity [[#VarENCODE][ENCODEd]]
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ There is a risk that this variable could be misused for cross-site scripting.
+   * Related: [[#VarENCODE][ENCODE]], [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
 
 #VarUSERNAME
 ---+++ USERNAME -- your login username
    * TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. Un-authenticated users are all %MAINWEB%.TWikiGuest.
    * Syntax: =%<nop>USERNAME%=
    * Expands to: =%USERNAME%=
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
 
 #VarUSERLANGUAGE
@@ -378,14 +379,14 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarWIKIHOMEURL
 ---+++ WIKIHOMEURL -- site home URL
-   * %X% Note: *DEPRECATED*, use =%<nop>WIKILOGOURL%= defined in WebPreferences instead. This variables value is defined in lib/TWiki.cfg::$wikiHomeUrl which is marked deprecated. Will be removed in future versions.
+   * __%X% Note:__ *DEPRECATED*, use =%<nop>WIKILOGOURL%= defined in WebPreferences instead. This variables value is defined in lib/TWiki.cfg::$wikiHomeUrl which is marked deprecated. Will be removed in future versions.
 
 #VarWIKINAME
 ---+++ WIKINAME -- your Wiki username
    * The WikiName is the same as =%<nop>USERNAME%= if not defined in the %MAINWEB%.%WIKIUSERSTOPIC% topic
    * Syntax: =%<nop>WIKINAME%=
    * Expands to: =%WIKINAME%=
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
 
 #VarWIKIPREFSTOPIC
@@ -405,7 +406,7 @@ __Note:__ This topic is included by TWikiVariables
    * Your %<nop>WIKINAME% with %MAINWEB% web prefix, useful to point to your <nop>%WIKITOOLNAME% home page
    * Syntax: =%<nop>WIKIUSERNAME%=
    * Expands to: =%WIKIUSERNAME%=, renders as %WIKIUSERNAME%
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details
    * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]]
 
 #VarWIKIUSERSTOPIC

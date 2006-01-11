@@ -53,7 +53,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ DATE -- signature format date
    * Syntax: =%<nop>DATE%=
    * Expands to: =%DATE%=
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarDISPLAYTIME
@@ -71,10 +71,10 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarENCODE
 ---+++ ENCODE{"string"} -- encodes a string to HTML entities
-Encode "special" characters to HTML numeric entities. Encoded characters are:
-   * all non-printable ascii chars (< \x1f), except \n (\xa) and \r (\xd)
-   * HTML special characters '>', '<', '&', ''' and '"'.
-   * TWiki special characters '%', '[', ']', '@', '_', '*' and '='
+   * Encode "special" characters to HTML numeric entities. Encoded characters are:
+      * all non-printable ASCII characters below space, except newline (="\n"=) and linefeed (="\r"=)
+      * HTML special characters ="<"=, =">"=, ="&"=, single quote (='=) and double quote (="=)
+      * TWiki special characters ="%"=, ="["=, ="]"=, ="@"=, ="_"=, ="*"=, ="="= and ="|"=
    * Syntax: =%<nop>ENCODE{"string"}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
@@ -82,6 +82,7 @@ Encode "special" characters to HTML numeric entities. Encoded characters are:
      | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;= | URL encoding |
      | =type="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | (this is the default) |
    * Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
+   * __%X% Note:__ Values of HTML input fields must be entity encoded, for example:%BR% =&lt;input type="text" name="address" value="%<nop>ENCODE{ "any text" type="entity" }%" /&gt;=
    * Related: [[#VarURLPARAM][URLPARAM]]
 
 #VarENDSECTION
@@ -115,7 +116,7 @@ Encode "special" characters to HTML numeric entities. Encoded characters are:
 ---+++ GMTIME -- GM time
    * Syntax: =%<nop>GMTIME%=
    * Expands to: =%GMTIME%=
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarGMTIME2
@@ -141,7 +142,7 @@ Encode "special" characters to HTML numeric entities. Encoded characters are:
      | =$epoch= | Number of seconds since 00:00 on 1st January, 1970 | %GMTIME{"$epoch"}% |
    * Variables can be shortened to 3 characters
    * Example: =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= expands to =%GMTIME{"$day $month, $year - $hour:$min:$sec"}%=
-   * %X% Note: When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+   * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarHOMETOPIC
@@ -159,7 +160,7 @@ Encode "special" characters to HTML numeric entities. Encoded characters are:
      | =%<nop>HTTP%= | %HTTP% |
      | =%<nop>HTTP{"Accept-language"}%= | %HTTP{"Accept-language"}% |
      | =%<nop>HTTP{"User-Agent"}%= | %HTTP{"User-Agent"}% |
-   * Note: You can see the HTTP headers your browser sends to the server on a number of sites e.g. http://www.ericgiguere.com/tools/http-header-viewer.html
+   * __%X% Note:__ You can see the HTTP headers your browser sends to the server on a number of sites e.g. http://www.ericgiguere.com/tools/http-header-viewer.html
    * Related: [[#VarHTTPS][HTTPS]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
 
 #VarHTTPS
