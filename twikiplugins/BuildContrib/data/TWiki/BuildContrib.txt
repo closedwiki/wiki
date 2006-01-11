@@ -76,7 +76,7 @@ You are strongly recommended to use this Contrib to help split your code develop
 	* Unzip ==%TOPIC%.zip== in your development ($TWIKI_DEV) directory. Content:
 	| *File:* | *Description:* |
 %$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Optionally, run ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 	%$DEPENDENCIES%
 

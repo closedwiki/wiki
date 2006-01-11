@@ -17,7 +17,7 @@ This plugin is designed to create links to US Patent and US Patent Application N
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PATENTLINKPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
