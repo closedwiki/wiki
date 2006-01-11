@@ -110,6 +110,9 @@ div#twiki-icons img:active {
   font-style: italic;
   background: #9999FF;
 }
+.TMLhr {
+  background: black;
+}
 
 /*********
  * Icons *
