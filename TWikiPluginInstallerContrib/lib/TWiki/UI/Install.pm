@@ -1,15 +1,6 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
-#
-# Additional copyrights apply to some or all of the code in this
-# file as follows:
-# Based on parts of Ward Cunninghams original Wiki and JosWiki.
-# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
-# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
+# Copyright (C) 2006 Will Norris. All Rights Reserved. 
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,7 +30,6 @@ use TWiki;
 use TWiki::UI;
 use TWiki::Contrib::TWikiInstallerContrib;
 use FindBin;
-use Archive::Zip;
 use TWiki::Sandbox;
 use File::Path qw( mkpath );
 use File::Basename qw( basename );
@@ -129,7 +119,7 @@ sub install {
     close LOCALSITE_CFG;
 
     my ( $pluginTopicName ) = ( basename $moduleFilename ) =~ /(.*)\./;
-    $session->redirect( $session->getScriptUrl( $TWiki::cfg{SystemWebName}, $pluginTopicName, 'view' ) );
+    $session->redirect( $session->getScriptUrl( 1, 'view', $TWiki::cfg{SystemWebName}, $pluginTopicName ) );
 }
 
 ################################################################################
