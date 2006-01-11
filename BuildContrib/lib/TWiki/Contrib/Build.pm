@@ -125,6 +125,7 @@ use strict;
 use File::Copy;
 use File::Spec;
 use File::Find;
+use File::Path qw( rmtree );
 use POSIX;
 use CGI ( -any );
 use diagnostics;
@@ -356,6 +357,12 @@ sub new {
     return $this;
 }
 
+sub DESTROY
+{
+    my $self = shift;
+    rmtree( $self->{tmpDir} ) if $self->{tmpDir};
+}
+
 sub _get_svn_version {
     my $from = shift;
     my $ver = `svn info $from`;
@@ -441,6 +448,8 @@ Make a directory and all directories leading to it.
 
 sub makepath {
     my ($this, $to) = @_;
+
+    # SMELL: what's wrong with File::Path::mkpath ?
 
     chop($to) if ($to =~ /\n$/o);
 
