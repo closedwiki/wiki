@@ -1,21 +1,40 @@
 ---+!! <nop>TWikiPluginInstallerContrib Contrib Package
 
+<table>
+<tr><td>
+Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"}%][%ICON{"wrench"}% configure]].
+</td>
+<td rowspan="3" valign="top">
+---++ Enabled Plugins
+%ACTIVATEDPLUGINS%
+
+---++ Contrib Modules
+%SEARCH{ ".+(Contrib|AddOn)$" type="regex" scope="topic" nonoise="on" format="[[$topic]]" separator=", " }%
+</td>
+</tr>
+<tr><td>
 <form action="%SCRIPTURL{install}%">
-<input type="text" name="url" size="55" value="%URLPARAM{url}%" />
-  <input type="submit" value="Install" /><br />
-<small>Plugin URL</small><br />
+%ICON{"gear"}% <input type="text" name="url" size="60" value="%URLPARAM{url}%" />
+  <input class="twikiSubmit" type="submit" value="Install" /><br />
+<small>Extension URL</small><br />
 </form>
 
 <form>
 <input type="hidden" name="url" value="%URLPARAM{url}%" />
-<input type="text" name="repository" size="55" value='%URLPARAM{ "repository" default="http://localhost/~twikibuilder/twiki/components/extension/" }%' />
-<input type="submit" value="Change Repository" /><br />
-<small>Repository</small>
-
+%ICON{"building"}% <input type="text" name="repository" size="60" value='%URLPARAM{ "repository" default="http://localhost/~twikibuilder/twiki/components/extension/" }%' />
+<input class="twikiSubmit" type="submit" value="Change Repository" /><br />
+<small>Repository Listing</small>
+</td>
+</tr>
+<tr>
+<td>
 <div id=directoryListing>
 %INCLUDE{ %URLPARAM{ "repository" default="http://localhost/~twikibuilder/twiki/components/extension/" }% }%
 </form>
 </div>
+</td>
+</tr>
+</table>
 
 
 ----
@@ -37,7 +56,7 @@ Add short description here of your TWikiPluginInstallerContrib contrib.
 
 ---++ Settings
 
-Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>JSCALENDARCONTRIB_STUB%==
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>TWIKIPLUGININSTALLERCONTRIB_STUB%==
 
 	* One line description:
 		* Set SHORTDESCRIPTION = Install TWiki:Codev.TWikiExtensions into a running TWiki system from the web browser.
@@ -59,7 +78,6 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 	* Test if the installation was successful:
 		* __enter sample here__
 		* see also [[Sandbox.PluginTest%TOPIC%]]
-		* link to install latest version of TWikiPluginInstallerContrib from twiki.org(?) (?)
 
 ---++ Contrib Info
 
