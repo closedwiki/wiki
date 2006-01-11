@@ -33,7 +33,7 @@ Produces:
 
 ---++ <nop>%TOPIC% Global Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>RECURSIVERENDERPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = This plugin adds =&lt;render&gt;= tags and =~macros=.

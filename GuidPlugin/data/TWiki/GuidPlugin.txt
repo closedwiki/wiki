@@ -18,7 +18,7 @@ I found the nice CPAN module of CPAN:Data::UUID that takes care of all of this. 
 
 ---++ <nop>%TOPIC% Global Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>GUIDPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 	* Set SHORTDESCRIPTION = Generates GUID unique ids

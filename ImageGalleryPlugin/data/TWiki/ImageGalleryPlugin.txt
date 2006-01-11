@@ -34,7 +34,7 @@ that both take the following arguments:
 | size | the thumbnail size, the actual geometries of a size can be configured below; \
 			possible values: tiny, small, medium, large, huge  \
 			(default: medium) |
-| columns | number of thumbnais to be displayed in one row of the gallery %BR% \
+| columns | number of thumbnails to be displayed in one row of the gallery %BR% \
 				(default: 4) |
 | docrels | flag to disable/enable document relations between images; \
 			possible values are on, off, 0, 1 (default: on) |
@@ -99,12 +99,12 @@ you will get a nice image gallery (with regards to my taste) right on.
 There are several things that are customizable:
 	* customize a gallery using a compination of the arguments described above
 	* add custom cascading styles in a topic to format the gallery
-	* alter the default cascading styles in the [[%ATTACHURL%/styles.css][styles.css]]
+	* alter the default cascading styles in the [[%ATTACHURL%/style.css][style.css]]
 	  file attached to this topic
 	* customize the plugin settings below
 
 ---+++ Cascading Stylesheets
-The plugin emits the following css classes (see the comments in the [[%ATTACHURL%/styles.css][styles.css]] file):
+The plugin emits the following css classes (see the comments in the [[%ATTACHURL%/style.css][style.css]] file):
 
 <noautolink>
 | *Class* | *Description* |
@@ -155,7 +155,7 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 ---++ Plugin Installation Instructions
 
 	* Download the ZIP file from the <nop>%TOPIC% home
-	* Unzip == ImageGalleryPlugin.zip== in your twiki installation directory. Content:
+	* Unzip ==ImageGalleryPlugin.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
 	  | ==pub/TWiki/%TOPIC%/style.css== | cascading style sheets |
@@ -172,7 +172,7 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  15 June 2005 | new release |
 |  10 May 2005 | fixed igp id clash error found by TWiki:Main/MartinCleaver; \
 					  capture <nop>ImageMagick error messages; \
-					  don't trust attachment info - check for attachment existence aswell ;\
+					  don't trust attachment info - check for attachment existence as well;\
 					  added refresh query parameter to recompute images |
 |  09 May 2005 | fixed errors reported by TWiki:Main/MarcelTrap; \
 					  added support for multiple topics (proposed by TWiki:Main/MartinCleaver; \
@@ -181,7 +181,7 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  03 May 2005 | fixed thumbnail resizing; reintroduced =titles= parameter;  \
 					  support for multiple galleries per topic |
 |  27 Apr 2005 | complete rewrite |
-|	1 Aug 2003 | Updates from feedback from a Windows installation |
+|  01 Aug 2003 | Updates from feedback from a Windows installation |
 |  25 Jul 2003 | Initial version posted to TWiki.org |
 |  15 Mar 2002 | Initial (internal) version |
 |  CPAN Dependencies: | CPAN:Image::Magick |

@@ -11,7 +11,7 @@ See Main.StylePluginDetails for the detailed description.
 ---+++ <nop>%TOPIC% Settings
 
 Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>STYLEPLUGIN_SHORTDESCRIPTION%==
 	* Security
 		* Set ALLOWTOPICCHANGE = Main.TWikiAdminGroup
 		* Set ALLOWTOPICRENAME = Main.TWikiAdminGroup
