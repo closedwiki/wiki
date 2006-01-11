@@ -1,0 +1,3 @@
+data/TWiki/EmptyPlugin.txt  Plugin doc page
+lib/TWiki/Plugins/EmptyPlugin.pm  Plugin Perl module 
+data/Sandbox/PluginTestEmptyPlugin.txt  Plugin examples

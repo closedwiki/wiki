@@ -91,7 +91,6 @@ data/TWiki/DeleteOrRenameAnAttachment.txt 0660
 data/TWiki/DeveloperDocumentationCategory.txt 0660
 data/TWiki/DontNotify.txt 0660
 data/TWiki/EditDoesNotIncreaseTheRevision.txt 0660
-data/TWiki/EmptyPlugin.txt 0660
 data/TWiki/ExampleTopicTemplate.txt 0660
 data/TWiki/FileAttachment.txt 0660
 data/TWiki/FileAttribute.txt 0660
@@ -273,7 +272,6 @@ lib/TWiki/Meta.pm 0440
 lib/TWiki/Net.pm 0440
 lib/TWiki/OopsException.pm 0440
 lib/TWiki/Plugin.pm 0440
-lib/TWiki/Plugins/EmptyPlugin.pm 0440
 lib/TWiki/Plugins.pm 0440
 lib/TWiki/Plurals.pm 0440
 lib/TWiki/Prefs/Parser.pm 0440
@@ -659,6 +657,7 @@ UpgradeTwiki 0550
 !include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 !include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
+!include twikiplugins/EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin
 !include twikiplugins/HeadlinesPlugin/lib/TWiki/Plugins/HeadlinesPlugin
 !include twikiplugins/InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
