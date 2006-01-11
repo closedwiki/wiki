@@ -4,6 +4,7 @@ Customise this topic; samples and ideas available at TWiki:TWiki.WebLeftBarCookb
 %STARTINCLUDE%
 *My links:*
    * [[%WIKIUSERNAME%][My home page]]
+   * [[%SCRIPTURL{search}%/%INCLUDINGWEB%/?search=%WIKINAME%;order=modified;limit=50;reverse=on][My %INCLUDINGWEB% activities]]
    * 
 <a class="twikiSmall" href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GM%NOP%TIME{"$epoch"}%">edit</a>
 %STOPINCLUDE%
