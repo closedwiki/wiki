@@ -701,12 +701,12 @@ sub _handleSquareBracketedLink {
 }
 
 # Handle an external link typed directly into text. If it's an image
-# (as indicated by the file type), then use an img tag, otherwise
-# generate a link.
+# (as indicated by the file type), and no text is specified, then use
+# an img tag, otherwise generate a link.
 sub _externalLink {
     my( $this, $url, $text ) = @_;
 
-    if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
+    if( $url =~ /\.(gif|jpg|jpeg|png)$/i && !$text) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
         return CGI::img( { src => $url, alt => $filename } );
