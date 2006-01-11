@@ -1540,7 +1540,7 @@ sub renderRevisionInfo {
 
 =pod
 
----++ ObjectMethod summariseChanges($user, $web, $topic, $orev, $nrev, $plain) -> $text
+---++ ObjectMethod summariseChanges($user, $web, $topic, $orev, $nrev, $tml) -> $text
    * =$user= - user (null to ignore permissions)
    * =$web= - web
    * =$topic= - topic

@@ -880,14 +880,15 @@ sub searchWeb {
                     }
                 }
 
-                # output topic (or line if multiple=on)
-                unless( $inline || $format ) {
+		#don't expand if a format is specified - it breaks tables and stuff 
+                unless(  $format ) {
                     $out =
                       $renderer->getRenderedVersion( $out, $web, $topic );
-                    $out =~ s|</*nop/*>||goi;   # remove <nop> tag
                 }
 
+                # output topic (or line if multiple=on)
                 if ( defined $callback ) {
+                    $out =~ s|</*nop/*>||goi;   # remove <nop> tag
                     &$callback( $cbdata, $out );
                 } else {
                     $searchResult .= $out;
