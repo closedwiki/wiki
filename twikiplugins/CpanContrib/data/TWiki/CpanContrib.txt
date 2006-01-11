@@ -8,7 +8,7 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
 %TOC%
 
 ---++ Summary of Contents
-<table><tr>
+<table><tr valign="top">
 <td>
    * CPAN:ExtUtils::MakeMaker 
    * CPAN:Storable 
@@ -35,6 +35,7 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Class::Data::Inheritable
    * CPAN:Class::ISA 
    * CPAN:Class::Virtually::Abstract
+   * CPAN:Module::Build
    * CPAN:Error 
    * CPAN:URI 
    * CPAN:HTML::Tagset 
@@ -47,15 +48,15 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Text::Diff 
    * CPAN:HTML::Diff
    * CPAN:Test::Builder::Tester 
-</td>
-<td>
    * CPAN:Test::LongString
-   * CPAN:WWW::Mechanize 
    * CPAN:HTML::TableExtract 
+   * CPAN:WWW::Mechanize 
    * CPAN:WWW::Mechanize::TWiki
    * CPAN:Number::Compare 
    * CPAN:Text::Glob 
    * CPAN:File::Find::Rule 
+</td>
+<td>
    * CPAN:File::Slurp 
    * CPAN:File::Slurp::Tree
    * CPAN:CGI::Session
@@ -71,12 +72,15 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Time::Local
    * CPAN:Time::ParseDate
    * CPAN:Barcode::Code128
-   * CPAN:Bit::Vector
    * CPAN:Carp::Clan
-</td>
-<td>
+   * CPAN:Bit::Vector
    * CPAN:Date::Calc
+   * CPAN:HTML::CalendarMonthSimple
    * CPAN:Data::UUID
+   * CPAN:Convert::ASN1
+   * CPAN:Digest::HMAC_MD5
+   * CPAN:Authen::SASL
+   * CPAN:IO::Socket::SSL
    * CPAN:Net::LDAP
    * CPAN:Date::Handler
    * CPAN:XML::Sablotron (not really)
@@ -89,6 +93,18 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Text::ParseWords
    * CPAN:Cache::Cache
    * CPAN:String::CRC
+   * CPAN:List::Permutor
+   * CPAN:Image::Info
+   * CPAN:MIME::Types
+   * CPAN:MIME::Lite
+   * CPAN:Net::XMPP
+   * CPAN:Net::Jabber
+   * CPAN:SOAP::Lite
+   * CPAN:Font::AFM
+   * CPAN:HTML::FormatText
+</td>
+<td>
+   * CPAN:Date::Format
    * CPAN:DBD::mysql (not really)
    * CPAN:IO::Pty 
    * CPAN:Curses 
@@ -103,17 +119,34 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:POE::Filter::IRCD 
    * CPAN:POE::Component::Server::IRC
    * CPAN:Net::IRC
-   * CPAN:Test::More 
-   * CPAN:YAML 
    * CPAN:SVN::Simple::Edit 
    * CPAN:Class::Autouse 
    * CPAN:Encode 
    * CPAN:File::chdir 
    * CPAN:Class::Accessor 
    * CPAN:Data::UUID 
+   * CPAN:Sort::Versions
    * CPAN:SVN::Mirror 
    * CPAN:IO::Pager 
    * CPAN:SVK
+   * CPAN:XML::Stream
+   * CPAN:Email::Simple
+   * CPAN:Module::Pluggable
+   * CPAN:Email::FolderType
+   * CPAN:Email::Folder
+   * CPAN:Email::FolderType::Net
+   * CPAN:MIME::Base64
+   * CPAN:Email::MIME::Encodings
+   * CPAN:Email::MIME::ContentType
+   * CPAN:Email::MIME
+   * CPAN:File::Path::Expand
+   * CPAN:Email::LocalDelivery
+   * CPAN:Email::Delete
+   * CPAN:Net::POP3
+   * CPAN:Email::Folder::POP3
+   * CPAN:Net::IMAP::Simple
+   * CPAN:URI::imap
+   * CPAN:Email::Folder::IMAP
 </td>
 </tr></table>
 
@@ -125,7 +158,7 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
 
 ---++ Settings
 
-Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>JSCALENDARCONTRIB_STUB%==
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>CPANCONTRIB_STUB%==
 
    * One line description:
       * Set SHORTDESCRIPTION = Bundled CPAN Modules

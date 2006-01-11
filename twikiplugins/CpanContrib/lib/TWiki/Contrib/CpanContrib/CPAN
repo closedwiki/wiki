@@ -10,12 +10,14 @@
 #		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
 		    	qw( Test::Builder::Tester Test::LongString ),
 		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
-		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
+		    qw( Number::Compare Text::Glob File::Find::Rule ),	# also MailInContrib
+		    qw( File::Slurp File::Slurp::Tree ),
 		    qw( CGI::Session ),
 		    qw( Encode Locale::Maketext::Lexicon ),
 		    qw( Digest::base Digest::SHA1 ),
 		    qw( Unicode::Map Unicode::Map8 Jcode Unicode::String Unicode::MapUTF8 ),
-	qw( Time::ParseDate Time::Local ),	# for BlogPlugin
+	qw( Time::ParseDate ),	# for MailInContrib, BlogPlugin
+	qw( Time::Local ),	# for BlogPlugin
 	qw( Barcode::Code128 ),		# BarcodePlugin
 	qw( Carp::Clan Bit::Vector Date::Calc ),		# CalendarPlugin, HolidaylistPlugin
 	qw( HTML::CalendarMonthSimple ),	# CalendarPlugin
@@ -31,13 +33,16 @@
 	qw( XML::LibXML::Common XML::LibXML XML::LibXSLT Text::ParseWords Cache::Cache String::CRC ),	# XmlQueryPlugin (XML::Simple above)
 	qw( List::Permutor ),		# SuggestLinkPlugin
 	qw( Image::Info ),		# LatexModePlugin
+	qw( MIME::Types ),		# MailInContrib, optional SOAP::Lite interfaces
 	qw( MIME::Lite Authen::SASL XML::Stream Net::XMPP Net::Jabber ),	# optional SOAP::Lite interfaces
 	qw( SOAP::Lite ),		# SoapClientPlugin
 	qw( Font::AFM HTML::FormatText Date::Format ),	# URLCachePlugin
 	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD POE::Component::Server::IRC ),	# IrcContrib
 	qw( Net::IRC ),			# IrcPlugin
-	qw( Test::More YAML SVN::Simple::Edit Class::Autouse Encode File::chdir Class::Accessor Data::UUID SVN::Mirror IO::Pager SVK ),				   # SVK
+	qw( Test::More YAML SVN::Simple::Edit Class::Autouse File::chdir Class::Accessor Sort::Versions SVN::Mirror IO::Pager SVK ),				   # SVK (YAML, Test::More, Encode, Data::UUID already included)
 # also (optional for SVN::Mirror) VCP::Dest::svk (VCP?)
+#	qw( Authen::SASL XML::Stream Net::Jabber ),	# ImmediateNotifyPlugin (already included by SOAP::Lite for SoapClientPlugin)
+	qw( Email::Simple Module::Pluggable Email::FolderType Email::Folder Email::FolderType::Net MIME::Base64 Email::MIME::Encodings Email::MIME::ContentType Email::MIME File::Path::Expand Email::LocalDelivery Email::Delete Net::POP3 Email::Folder::POP3 Net::IMAP::Simple URI::imap Email::Folder::IMAP ),	# MailInContrib
 );
 
 #$, = "\n";
