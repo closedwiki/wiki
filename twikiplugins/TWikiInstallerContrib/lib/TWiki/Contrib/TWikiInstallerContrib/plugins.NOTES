@@ -122,7 +122,8 @@ Broken, but looking into fixes (or, still testing...)
 --------------------------------------------------------------------------------
 ? BatchUploadPlugin - still debugging - all files now get uploaded, but they're zero size
    * also, doesn't clean up its temporary unzip directory
-T ImmediateNotifyPlugin - verify docs with latest on twiki.org (or perhaps CVS)
+T ImmediateNotifyPlugin
+   * find WebImmediateNotify topic sample (and put in all of the webs, esp. including _default)
 * PseudoXmlPlugin - well, it *used* to work with 7?84, but is broken with latest
 
 (3)
@@ -130,8 +131,8 @@ T ImmediateNotifyPlugin - verify docs with latest on twiki.org (or perhaps CVS)
 Should test, but haven't got around to it
 --------------------------------------------------------------------------------
 ? DistributionContrib
-? MailInContrib
-? TWikiShellContrib - pretty sure it works; it's in active development - where to put twikishell (it's in the root directory)??
+? MailInContrib - ok, added dependencies to CpanContrib
+? TWikiShellContrib - pretty sure it works; it's in active development - but, where to put twikishell (it's in the root directory)??
 
 (3)
 
@@ -177,7 +178,6 @@ mv: cannot stat `testpics': No such file or directory
 ! EditTablerowPlugin - i couldn't get this to do anything when i clicked on the "Edit" button - File does not exist: /home/twiki/public_html/cgi-bin/twiki/pub/TWiki/EditTablerowPlugin, referer: http://localhost/~twiki/cgi-bin/twiki/bin/view.cgi/TWiki/EditTablerowPlugin
 ! EmbedBibPlugin - Can't locate object method "findOne" via package "TWiki::Meta" at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/EmbedBibPlugin.pm line 146.
 ! FileListPlugin - calls TWiki::formatTime and TWiki::Attach
-! FormFieldsPlugin - doesn't seem to do anything
 ! GenerateSearchPlugin - calls TWiki::Form::getFormDef() directly
 ! IncludeRevisionPlugin - doesn't render
 !& LatexModePlugin - viewing the page (after configuring program paths properly) yields: AccessControlException: Access to CHANGE TWiki.LatexModePlugin for TWikiGuest is denied. access not allowed on web[Sun Dec 11 17:27:09 2005] [error] [client 127.0.0.1] Premature end of script headers: view.cgi - need to move the sample to the Sandbox web
@@ -203,7 +203,7 @@ Can't call method "maketext" on an undefined value at
         /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Access.pm line 175 (#2)
 while processing TWiki.BulkResetPassword (during (re)build of cache)
 
-29
+28
 
 Obselete Plugins (i think...)
 --------------------------------------------------------------------------------
@@ -244,6 +244,7 @@ Untested - Can't tell...
 ? EditContrib - does this also require SectionalEditPlugin and RecursiveRenderPlugin ?
 ? FakeBasicAuthRegPlugin - too much trouble to test, probably made obsolete by Dakar, anyway
 ? FlowchartPlugin - can't tell
+! FormFieldsPlugin - doesn't seem to do anything
 ? FormPivotPlugin - missing Test.TestFormPivot (after finding it, move it to Sandbox!)
 ? FundraisingPlugin - no sample
 ? GpgkeyPlugin - can't tell
@@ -256,7 +257,7 @@ Untested - Can't tell...
 ? TWikiDrawSvgPlugin - view.cgi: Use of uninitialized value in concatenation (.) or string at /home/twiki/public_html/cgi-bin/twiki/lib/TWiki/Plugins/TWikiDrawSvgPlugin.pm line 154. - problems with 
 ? URLCachePlugin - no sample
 
-12
+18
 
 
 N/A (either development tools, or in/replaced by core now)
@@ -282,23 +283,48 @@ NA SectionalEditPlugin - version in core
 
 *** OTHER ISSUES: ***
 
-   * PatternSkinHeaderArt
+---+ seem to be bugs
 
-   * TWikiPluginInstallerContrib didn't redirect to the right page after installing PatternSkin
+   * BuildContrib doesn't delete its temp staging area after building a release
+      * (i have GB's of twiki staging files on my drive...)
+
+   * TWiki.ExtendedSelectPlugin renders +option as H1's
+
+   * TWiki/TWikiAccessControl has ^ in table header (that's only without the TablePlugin enabled)
+
+   * TWikiGroups doesn't seem to be working (eg, showing values from TWikiAdminGroup, but not from BlogAdminGroup and BlogAuthorsGroup)
+      * ok, it shows all of the groups now, but doesn't show any of the group members from any of the groups
+
+   * oops error messages like
+=No such file or directory at /usr/share/perl/5.8/CGI/Carp.pm line 314. CGI::Carp::re...
+      have a = at the front and end of the string as if TWiki were supposed to <tt> it
+
+   * ImageGalleryPlugin says 
+Error: can't initialize from ''
+   from a topic with an _ in it
+
+   * TablePlugin use isn't protected by %IF{ "context TablePluginEnabled" then="..." }%
+      * attachtables.pattern.tmpl, attachagain.pattern.tmpl, 
+
+   * ManagingWebs baseweb doesn't accept a URL parameter
+tried:
+%CALC{ "$SET(base_web, %URLPARAM{"baseweb" default="_default"}%)" }%
+baseweb: %CALC{$GET(base_web)}%
+<input type="select" ... selection="%CALC{$GET(base_web)}%" ... />
+
+   * are there variables for TWikiGuest?  (if so, TWiki/SitePermissions doesn't use them, who knows where else)
+
+
+---+ (my) task list
+
+   * PatternSkinHeaderArt
 
    * compare how i just implemented header art to nat skin header art stuff...
       * should it be called PATTERNSKIN_HEADERART (gah, i hope not)
 
-   * TWiki::Func::getUrl isn't returning the http:// part (as documented)
-
-   * get docs from twiki.org for ImmediateNotifiyPlugin
-
-   * checkin TWikiPluginInstallerContrib
-      * rename to TWikiExtensionInstallerContrib
+   * rename TWikiPluginInstallerContrib to TWikiExtensionInstallerContrib
 
    * (other renaming)
-
-   * checkin IrcPlugin
 
    * beforeAttachmentSaveHandler - does this even bloody work ? (or is it BatchUploadPlugin? or both??? -- hm, no unit test :( )
       * who even uses it?
@@ -309,37 +335,7 @@ NA SectionalEditPlugin - version in core
       * first case fails because a directory doesn't exist for the file to be copied to (eg, Sandbox/TestTopic0)
          * but why is it copying it there anyway?  it hasn't been approved/digested?
 
-   * oops error messages like
-=No such file or directory at /usr/share/perl/5.8/CGI/Carp.pm line 314. CGI::Carp::re...
-      have a = at the front and end of the string as if TWiki were supposed to <tt> it
-
-   * ImageGalleryPlugin says 
-Error: can't initialize from ''
-   from a topic with an _ in it
-
-   * TablePlugin doesn't work - or interactions with the blog setup
-EXTENSIONS="--extension=BlogPlugin --extension=DBCachePlugin --extension=DBCacheContrib --extension=TimeSincePlugin --extension=CpanContrib --extension=GluePlugin --extension=ExtendedSelectPlugin --extension=HeadlinesPlugin --extension=RedDotPlugin --extension=SpreadSheetPlugin --extension=TwistyPlugin --extension=TwistyContrib --extension=NatSkinPlugin --extension=ImageGalleryPlugin --extension=TablePlugin" sh install-account xxx ---
-	or, TABLE's are in base templates (without conditional context removal)
-
-   * ManagingWebs baseweb doesn't accept a URL parameter
-tried:
-%CALC{ "$SET(base_web, %URLPARAM{"baseweb" default="_default"}%)" }%
-baseweb: %CALC{$GET(base_web)}%
-<input type="select" ... selection="%CALC{$GET(base_web)}%" ... />
-
-   * TWiki.ExtendedSelectPlugin renders +option as H1's
-
-   * TWiki/TWikiAccessControl has ^ in table header (but maybe that's just with TablePlugin?)
-
-   * TWikiGroups doesn't seem to be working (eg, showing values from TWikiAdminGroup, but not from BlogAdminGroup and BlogAuthorsGroup)
-
-   * MANIFEST sucks --- eg, CpanContrib doesn't actually show any of the *real* files, because they're added
-      during the build process, but not in the actual MANIFEST file (because when i added them to the MANIFEST
-      file, that messed up pseudo-install!)
-
    * who installed the Tracking web? (ah) (it should be called _XpTrackerPlugin, i think...)
-
-   * PollPlugin is missing bin/poll
 
    * missing TWiki/PluginTopicName.txt
       * CategoryPlugin
@@ -347,8 +343,6 @@ baseweb: %CALC{$GET(base_web)}%
       * SlashFilenamePlugin
 
    * clicking "attach link" wiped out my topic text (*and* replace it with a non-functional link (using %ATTACHPUBURL%))
-
-   * TWikiTip009 isn't rendering its < >, nor in =tt= text
 
    * TWiki.WebReferences - delete? - just put on twiki.org ??? - links from TWiki.TWikiSite and TWiki.WelcomeGuest
 
@@ -358,10 +352,34 @@ baseweb: %CALC{$GET(base_web)}%
 
    * review TWiki:Codev.CategoryCookbook
 
+---+ design issues
+
+   * MANIFEST sucks --- eg, CpanContrib doesn't actually show any of the *real* files, because they're added
+      during the build process, but not in the actual MANIFEST file (because when i added them to the MANIFEST
+      file, that messed up pseudo-install!)
+
+
+FIXED (i think)
+--------------------------------------------------------------------------------
+
+   * TWiki::Func::getScriptUrl isn't returning the http:// part (as documented)
+
+   * TWikiPluginInstallerContrib didn't redirect to the right page after installing PatternSkin (it doesn't match the standard name pattern?) --- or maybe i just broke something in TWikiPluginInstallerContrib
+
+   * TWikiTip009 isn't rendering its < >, nor in =tt= text
+
+   * get docs from twiki.org for ImmediateNotifiyPlugin (ok, now merge with the SMTP additions)
+
 THINGS TO INSTALL:
 --------------------------------------------------------------------------------
+apache2-doc
+apache2-prefork-dev
+apache2-threaded-dev - which am i using? - apache2-mpm-worker (and/or plain apache2), but what does that tell me???
 latex2html -- says non-free; not sure what to do...
 ircd - 
+libapache2svn - ???
+maybe libapache-mod-speedycgi ?
+webmin-apache ?
 
 ================================================================================
 ################################################################################
