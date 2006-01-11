@@ -9,13 +9,11 @@ Add short description here of your EmptyContrib contrib.
    * 
 
 ---++ Detailed Documentation
-<!-- use %$POD% when using with Build module to automatically extract documentation -->
-   * 
-   * 
+%$POD%
 
 ---++ Settings
 
-Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>JSCALENDARCONTRIB_STUB%==
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>EMPTYCONTRIB_STUB%==
 
    * One line description:
       * Set SHORTDESCRIPTION = Add short description here of your EmptyContrib contrib
@@ -28,7 +26,7 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
 %$MANIFEST%
-	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
+	* Run ==%TOPIC%_installer.pl== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
 	%$DEPENDENCIES%
 
    * Test if the installation was successful:
@@ -40,8 +38,8 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 |  Author: | TWiki:Main/%USERNAME% |
 |  Copyright &copy;: | <!-- e.g. "2004, SlobSoft Gmbh, All Rights Reserved" --> |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Dependencies: | none <!-- use %$DEPENDENCIES% with the Build Module to auotmatically extract dependencies --> |
-|  Version: | <!-- use %$VERSION% with the Build module to auto-extract from the .pm --> |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  %DATE%: | Initial version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
