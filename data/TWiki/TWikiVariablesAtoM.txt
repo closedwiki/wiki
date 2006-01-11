@@ -70,7 +70,11 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarENCODE
----+++ ENCODE{"string"} -- encodes a string
+---+++ ENCODE{"string"} -- encodes a string to HTML entities
+Encode "special" characters to HTML numeric entities. Encoded characters are:
+   * all non-printable ascii chars (< \x1f), except \n (\xa) and \r (\xd)
+   * HTML special characters '>', '<', '&', ''' and '"'.
+   * TWiki special characters '%', '[', ']', '@', '_', '*' and '='
    * Syntax: =%<nop>ENCODE{"string"}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |

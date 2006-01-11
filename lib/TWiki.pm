@@ -1886,8 +1886,8 @@ sub expandVariablesOnTopicCreation {
 
 ---++ StaticMethod entityEncode( $text ) -> $encodedText
 
-Escape characters to HTML entities. Should handle unicode
-characters.
+Escape special characters to HTML numeric entities. This is *not* a generic
+encoding, it is tuned specifically for use in TWiki.
 
 HTML4.0 spec:
 "Certain characters in HTML are reserved for use as markup and must be
@@ -1899,19 +1899,25 @@ double quotation mark and is delimited by double quotation marks, then the
 quote should be escaped as <strong class=html>&amp;quot;</strong>.</p>
 
 Other entities exist for special characters that cannot easily be entered
-with some keyboards...
+with some keyboards..."
 
-This method encodes &lt;, &gt;, &amp;, &quot; and any non-printable ascii
+This method encodes HTML special and any non-printable ascii
 characters (except for \n and \r) using numeric entities.
+
+FURTHER this method also encodes characters that are special in TWiki
+meta-language.
 
 =cut
 
 sub entityEncode {
     my $text = shift;
 
-    # encode with entities all non-printable ascii chars (< \x1f),
-    # except \n (\xa) and \r (\xd); plus '>', '<', '&' and '"'.
-    $text =~ s/[\x01-\x09\x0b\x0c\x0e-\x1f<>"&]/'&#'.ord($&).';'/ge;
+    # encode all non-printable 7-bit chars (< \x1f),
+    # except \n (\xa) and \r (\xd)
+    # encode HTML special characters '>', '<', '&', ''' and '"'.
+    # encode TML special characters '%', '[', ']', '@', '_',
+    # '*', and '='
+    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_]/'&#'.ord($&).';'/ge;
     return $text;
 }
 
@@ -1919,8 +1925,8 @@ sub entityEncode {
 
 ---++ StaticMethod entityDecode ( $encodedText ) -> $text
 
-Revrses the encoding from =entityEncode=. _Does not_ decode
-named entities such as &amp;
+Decodes all numeric entities (e.g. &amp;#123;). _Does not_ decode
+named entities such as &amp;amp; (use HTML::Entities for that)
 
 =cut
 
