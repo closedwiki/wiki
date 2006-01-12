@@ -500,7 +500,7 @@ sub inputElement {
     } else { #  if( $type eq 'text')
         $size = 16 if $size < 1;
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
-        $text = "<input$style class=\"editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\"/>";
+        $text = "<input$style class=\"editTableInput\" type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\" />";
         $text .= saveEditCellFormat( $cellFormat, $theName );
     }
     return $text;
