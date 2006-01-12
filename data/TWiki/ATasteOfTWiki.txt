@@ -36,7 +36,7 @@ TWiki is an Open-Source development on [[http://twiki.org/][TWiki.org]]
 
 ---++ Where is it used?
 TWiki is mainly used in commercial environments, often on corporate intranets
-   * Examples: Disney, British Telecom, SAP, Wind River, Motorola, <a href="http://udn.epicgames.com/Main/WebHome">Epic Games</a><br/>
+   * Examples: Disney, British Telecom, SAP, Wind River, Motorola, <a href="http://udn.epicgames.com/Main/WebHome">Epic Games</a><br />
      <table cellspacing="20"><tr>
      <td><img src="%ATTACHURL%/Disney_logo.gif" alt="Disney logo"  width="80" height="31" /></td>
      <td><img src="%ATTACHURL%/BT_logo.gif" alt="British Telecom logo"  width="80" height="41" /></td>
@@ -57,7 +57,7 @@ TWiki builds on the original Wiki concept and adds a number of features that mak
       * customisation
       * extension
       * application integration
-</td><td align="right"><img src="%ATTACHURL%/lego.gif" alt=""/></td></tr></table>
+</td><td align="right"><img src="%ATTACHURL%/lego.gif" alt="" /></td></tr></table>
 
 ---++ Applications of basic TWiki
 Basic TWiki can be used as:

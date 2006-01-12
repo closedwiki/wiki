@@ -28,18 +28,18 @@ for ( var i = 0; i < sIn.length; i++ )
 <table border="1">
 <tr>
   <td align="right"> %MAKETEXT{"First Name:"}% </td>
-  <td><input type="text" name="Twk1FirstName" size="40" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.value)+capitalise(this.form.Twk1LastName.value)"/> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1FirstName" size="40" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.value)+capitalise(this.form.Twk1LastName.value)" /> =<font color="red">**</font>= </td>
 </tr>
 <tr>
   <td align="right"> %MAKETEXT{"Last Name:"}% </td>
-  <td><input type="text" name="Twk1LastName" size="40" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.form.Twk1FirstName.value)+capitalise(this.value)"/> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1LastName" size="40" value="" onblur="this.form.Twk1WikiName.value=capitalise(this.form.Twk1FirstName.value)+capitalise(this.value)" /> =<font color="red">**</font>= </td>
 </tr>
   <td align="right"> %MAKETEXT{"(identifies you to others) WikiName:"}% </td>
-  <td><input type="text" name="Twk1WikiName" size="40" value=""  onblur="" /> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1WikiName" size="40" value="" onblur="" /> =<font color="red">**</font>= </td>
 </tr>
 <!--
    # optional row for login name, enabled by {Register}{AllowLoginName} option in =configure=
-   * Set BESPOKE_AUTH = <tr><td align='right'> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input type='text' name='Twk1LoginName' size='40' value='%REMOTE_USER%'/> =<font color='red'>**</font>= </td></tr>
+   * Set BESPOKE_AUTH = <tr><td align="right"> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input type="text" name="Twk1LoginName" size="40" value="%REMOTE_USER%" /> =<font color='red'>**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME" then="%BESPOKE_AUTH%"}%
 <tr>

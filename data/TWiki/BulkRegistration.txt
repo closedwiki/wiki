@@ -52,12 +52,12 @@ Notes:
    2 You are responsible for ensuring that the fieldnames appear in the [[%TWIKIWEB%.UserForm]]
    3 Only members of the %MAINWEB%.TWikiAdminGroup can run this.
 
-<FORM name="bulkRegister" action="%SCRIPTURLPATH{"manage"}%/%REGISTERTOPIC%" method="post">
-<input type="hidden" name="action" value="bulkRegister"/>&nbsp;<input type="submit" class="twikiSubmit" value="Bulk Register these people" />
+<form name="bulkRegister" action="%SCRIPTURLPATH{"manage"}%/%REGISTERTOPIC%" method="post">
+<input type="hidden" name="action" value="bulkRegister" />&nbsp;<input type="submit" class="twikiSubmit" value="Bulk Register these people" />
 <input type="hidden" name="LogTopic" value="%LOGTOPIC%" />
 <input type="hidden" name="OverwriteHomeTopics" value="%OVERWRITEHOMETOPICS%" />
 <input type="hidden" name="EmailUsersWithDetails" value="0" /> <!-- warning - not actually implemented -->
-</FORM>
+</form>
 
 ---++ %REGISTERTOPIC%
 
