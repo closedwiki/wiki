@@ -8,14 +8,14 @@
 %MAKETEXT{"Access check on [_1] failed" args="<nop>%WEB%.<nop>%TOPIC%"}%.
 %MAKETEXT{"Action [_1]: [_2]." args="\"%PARAM1%\", %PARAM2%"}%
 
-%MAKETEXT{"Contact [_1] if you have any questions." args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%PARAM1%&#32;access&#32;denied&#32;for&#32;'%WEB%.%TOPIC%'\">%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"Contact [_1] if you have any questions." args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%PARAM1% access denied for '%WEB%.%TOPIC%'\""}%>%WIKIWEBMASTER%</a>"}%
 
 
 __%MAKETEXT{"Related topics:"}%__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%
 %TMPL:DEF{"only_group"}%
 %MAKETEXT{"Only members of the [_1] are allowed to perform this action." args="%PARAM1%"}%
 
-%MAKETEXT{"Contact [_1] if you have any questions." args="<a href=\"mailto:%WIKIWEBMASTER%?subject=Access&#32;Denied&#32;for&#32;'%WEB%.%TOPIC%'&#44;&#32;needs&#32;'%PARAM1%'\">%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"Contact [_1] if you have any questions." args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"Access Denied for '%WEB%.%TOPIC%', needs '%PARAM1%'"}%\">%WIKIWEBMASTER%</a>"}%
 
 
 __%MAKETEXT{"Related topics:"}%__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl

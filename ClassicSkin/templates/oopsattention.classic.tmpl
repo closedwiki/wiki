@@ -7,7 +7,7 @@
 ---+++ %MAKETEXT{"User Account [_1] Deleted" args="%PARAM1%"}%
 %MAKETEXT{"Your user name has been removed from the Authentication System."}%
 
-%MAKETEXT{"Your user topic has not been renamed. Please email [_1] to request this." args="<a href='mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Delete&#32;User&amp;body=%PARAM1%'>%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"Your user topic has not been renamed. Please email [_1] to request this." args="<a href='mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME% Delete User"}%&&body=%URLENCODE{"%PARAM1%"}%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
 %TMPL:DEF{"created_web"}%
 ---+++ %MAKETEXT{"The new web has been created"}%
@@ -73,14 +73,14 @@
 %TMPL:END%
 %TMPL:DEF{"rename_web_exists"}%
 ---+++ %MAKETEXT{"Rename failed"}%
-%MAKETEXT{"Cannot rename [_1] to [_2] because it already exists."  args="%WEB%, <nop>%PARAM1%"}%
+%MAKETEXT{"Cannot rename [_1] to [_2] because it already exists." args="%WEB%, <nop>%PARAM1%"}%
 
 %MAKETEXT{"Please go _back_ in your browser and try a new name."}%
 %TMPL:END%
 
 %TMPL:DEF{"rename_not_wikiword"}%
 ---+++ %MAKETEXT{"New topic name [_1] is not a [_2]" args="\"<nop>%PARAM1%\", "%TWIKIWEB%.WikiWord"}%
-%MAKETEXT{"Please go back in your browser and chose a topic name that is a %TWIKIWEB%.WikiWord or check the allow non-Wiki Word box"}%
+%MAKETEXT{"Please go back in your browser and chose a topic name that is a [_1].WikiWord or check the allow non-Wiki Word box" args="%TWIKIWEB%"}%
 %TMPL:END%
 %TMPL:DEF{"rename_err"}%
 %MAKETEXT{"During rename of topic [_1] to [_2] an error ([_3]) was found. Please notify your [_4] administrator." args="<nop>%WEB%.<nop>%TOPIC%, <nop>%PARAM2%, %PARAM1%, %WIKITOOLNAME%"}%
@@ -181,7 +181,7 @@
 %TMPL:END%
 %TMPL:DEF{"send_mail_error"}%
 ---+++ Mail Error
-%MAKETEXT{"An e-mail could not be delivered. Please notify your [_1] administrator, [_2]", "%WIKITOOLNAME%" args="<a href='mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%20Mail%20Error'>%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"An e-mail could not be delivered. Please notify your [_1] administrator, [_2]" args="%WIKITOOLNAME%,<a href='mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME% Send Mail Error"}%'>%WIKIWEBMASTER%</a>"}%
 
 =%PARAM1%=
 %TMPL:END%
@@ -193,7 +193,7 @@
 
 %MAKETEXT{"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."}%
 
-%MAKETEXT{"Please contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Registration&#32;Question'>%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"Please contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME% Registration Question"}%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
 %TMPL:DEF{"bad_wikiname"}%
 ---+++ %MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.WikiName"}%
