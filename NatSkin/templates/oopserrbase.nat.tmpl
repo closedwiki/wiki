@@ -6,7 +6,7 @@ Please notify your <nop>%WIKITOOLNAME% administrator and explain how to reproduc
 it:
 
 <noautolink>
-<form enctype="text/plain" method="post" name="ErrorMail" action="mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME%: %TMPL:P{"heading"}%"}%">
+<form enctype="text/plain" method="post" name="ErrorMail" action="mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME%: %TMPL:P{"heading"}%"}%">
 %TMPL:P{"formvariables"}%
 <textarea name="How to reproduce" id="description" wrap="virtual" cols="60" rows="5">... don't know, it just happended.</textarea>
 
