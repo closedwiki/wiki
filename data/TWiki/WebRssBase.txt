@@ -23,7 +23,7 @@ The WebRss topic in each web contains the following text:
 &lt;channel rdf:about="%<nop>SCRIPTURL{"view"}%/%<nop>INCLUDINGWEB%">
   &lt;title>%<nop>WIKITOOLNAME%'s &lt;nop>%<nop>INCLUDINGWEB% web&lt;/title>
   &lt;link>%<nop>SCRIPTURL{"view"}%/%<nop>INCLUDINGWEB%&lt;/link>
-  &lt;description>(the description of the web). TWiki is a Web-Based Collaboration Platform for the Corporate World.&lt;/description>
+  &lt;description>(the description of the web). TWiki is a Web-Based Collaboration Platform for the Enterprise.&lt;/description>
 %<nop>INCLUDE{"%TWIKIWEB%.WebRssBase"}% &lt;!--
    * Set <nop>SKIN = rss
 -->
@@ -42,11 +42,6 @@ Below part is included by each <nop>WebRss topic:
   <dc:publisher>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:publisher>
   <dc:creator>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:creator>
   <dc:source>%WIKITOOLNAME%</dc:source>
-  <wiki:interwiki>
-    <rdf:Description link="%SCRIPTURL{"view"}%/%INCLUDINGWEB%/">
-      <rdf:value>TWiki.%INCLUDINGWEB%</rdf:value>
-    </rdf:Description>
-  </wiki:interwiki>
   <items>
     <rdf:Seq>
 %SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="on" nototal="on" limit="16" format="      <rdf:li rdf:resource=\"%SCRIPTURL{"view"}%/$web/$topic\" />"}%
@@ -58,7 +53,7 @@ Below part is included by each <nop>WebRss topic:
   <link>%SCRIPTURL{"view"}%/%INCLUDINGWEB%</link>
   <url>%WIKILOGOIMG%</url>
 </image>
-%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="on" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL{"view"}%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL{"view"}%/$web/$topic?t=$isodate</link>$n  <description>$changes (last changed by <nop>$wikiname)</description>$n  <dc:date>$isodate</dc:date>$n  <dc:contributor>$n    <rdf:Description link=\"%SCRIPTURL{"view"}%?topic=$wikiusername\">$n      <rdf:value>$username</rdf:value>$n    </rdf:Description>$n  </dc:contributor>$n  <wiki:version>$rev</wiki:version>$n  <wiki:status>updated</wiki:status>$n  <wiki:importance>major</wiki:importance>$n  <wiki:diff>%SCRIPTURL{"rdiff"}%/$web/$topic</wiki:diff>$n  <wiki:history>%SCRIPTURL{"rdiff"}%/$web/$topic</wiki:history>$n</item>"}%
+%SEARCH{"%URLPARAM{"search" default=".*" }%" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" reverse="on" nototal="on" limit="16" format="<item rdf:about=\"%SCRIPTURL{"view"}%/$web/$topic\">$n  <title>$topic</title>$n  <link>%SCRIPTURL{"view"}%/$web/$topic?t=$isodate</link>$n  <description>$summary (last changed by <nop>$wikiname)</description>$n  <dc:date>$isodate</dc:date>$n  <dc:contributor>$n    <rdf:Description link=\"%SCRIPTURL{"view"}%?topic=$wikiusername\">$n      <rdf:value>$username</rdf:value>$n    </rdf:Description>$n  </dc:contributor>$n</item>"}%
 %STOPINCLUDE%
 </verbatim>
 -----
