@@ -144,7 +144,7 @@ Action added to action table directly above comment box
 Tablerows adding on end - TWiki:Main/FranzJosefSilli
 <verbatim>
 %TMPL:DEF{PROMPT:table}%
-<hr width="60%"/> Date: <input %DISABLED% type="text" size="40" name="comment_date" /> <br /> City: <input %DISABLED% type="text" size="40" name="comment_city" value="" /> <input %DISABLED% type="submit" value="%button|Add%" /> entry <hr width="90%"/>
+<hr width="60%" /> Date: <input %DISABLED% type="text" size="40" name="comment_date" /> <br /> City: <input %DISABLED% type="text" size="40" name="comment_city" value="" /> <input %DISABLED% type="submit" value="%button|Add%" /> entry <hr width="90%" />
 %TMPL:END%
 </verbatim>
 <verbatim>
@@ -157,7 +157,7 @@ Tablerows adding on end - TWiki:Main/FranzJosefSilli
 Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 <verbatim>
 %TMPL:DEF{PROMPT:toctalk}%
-<hr width="60%"/> Summary: <input %DISABLED% type="text" size="40" name="comment_summary" /> <br /> <textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="comment_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /> <input %DISABLED% type="submit" value="%button|Add%" /> <hr width="90%"/>
+<hr width="60%" /> Summary: <input %DISABLED% type="text" size="40" name="comment_summary" /> <br /> <textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="comment_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /> <input %DISABLED% type="submit" value="%button|Add%" /> <hr width="90%" />
 %TMPL:END%
 </verbatim>
 <verbatim>
@@ -172,7 +172,7 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 <verbatim>
 %TMPL:DEF{PROMPT:bookmark}%
-<hr width="60%"/> URL: <input %DISABLED% type="text" size="40" name="comment_url" value="http://" /> <br /> Link: <input %DISABLED% type="text" size="40" name="comment_link" /> <br /> Text: <input %DISABLED% type="text" size="40" name="comment_text" value="%MESSAGE%" /> <input %DISABLED% type="submit" value="%button|Add%" />	bookmark <hr width="90%"/>
+<hr width="60%" /> URL: <input %DISABLED% type="text" size="40" name="comment_url" value="http://" /> <br /> Link: <input %DISABLED% type="text" size="40" name="comment_link" /> <br /> Text: <input %DISABLED% type="text" size="40" name="comment_text" value="%MESSAGE%" /> <input %DISABLED% type="submit" value="%button|Add%" /> bookmark <hr width="90%" />
 %TMPL:END%
 </verbatim>
 <verbatim>
