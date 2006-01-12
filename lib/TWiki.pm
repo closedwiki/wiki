@@ -1912,9 +1912,9 @@ sub entityEncode {
     # encode all non-printable 7-bit chars (< \x1f),
     # except \n (\xa) and \r (\xd)
     # encode HTML special characters '>', '<', '&', ''' and '"'.
-    # encode TML special characters '%', '[', ']', '@', '_',
+    # encode TML special characters '%', '|', '[', ']', '@', '_',
     # '*', and '='
-    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_]/'&#'.ord($&).';'/ge;
+    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_]\|/'&#'.ord($&).';'/ge;
     return $text;
 }
 
