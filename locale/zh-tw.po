@@ -1,0 +1,3000 @@
+# TWiki translation for Traditional Chinese
+# This file is distributed under the same license as TWiki itself
+# Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
+# Translators:
+#   Che Dong chedong@gmail.com
+msgid ""
+msgstr ""
+"Project-Id-Version: TWiki $Id\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Che Dong <chedong@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. ($days)
+#: lib/TWiki/Time.pm:260
+msgid "%*(%1,day) "
+msgstr "%*(%1,天) "
+
+#. ($hours)
+#: lib/TWiki/Time.pm:263
+msgid "%*(%1,hour) "
+msgstr "%*(%1,小時) "
+
+#. ($mins)
+#: lib/TWiki/Time.pm:266
+msgid "%*(%1,minute) "
+msgstr "%*(%1,分鐘) "
+
+#. ($secs)
+#: lib/TWiki/Time.pm:269
+msgid "%*(%1,second) "
+msgstr "%*(%1,秒)"
+
+#: templates/registernotify.tmpl:3 templates/registernotifyadmin.tmpl:3
+msgid "%1 - Registration for %2 (%3)"
+msgstr "%1 - %2 (%3) 的註冊"
+
+#: data/TWiki/NewUserTemplate.txt:9
+msgid "%1 - complete TWiki documentation, Quick Start to Reference"
+msgstr ""
+
+#: data/TWiki/NewUserTemplate.txt:11
+#, fuzzy
+msgid "%1 - just for me"
+msgstr "%1就是我"
+
+#: data/TWiki/NewUserTemplate.txt:8
+#, fuzzy
+msgid "%1 - starting points on TWiki"
+msgstr "%1開始在新庫上工作"
+
+#: data/TWiki/NewUserTemplate.txt:10
+#, fuzzy
+msgid "%1 - try out TWiki on your own"
+msgstr "在%1庫上試試TWiki"
+
+#: data/TWiki/NewUserTemplate.txt:7
+msgid "%1 - view a short introductory presentation on TWiki for beginners"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:9
+msgid "%1 User Authentication"
+msgstr "%1 用戶認證"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:4
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:65
+msgid "%1 Web"
+msgstr "%1 庫"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:3
+msgid "%1 Web Home"
+msgstr "%1 首頁"
+
+#: data/TWiki/NewUserTemplate.txt:32
+#, fuzzy
+msgid "%1 for changing your password"
+msgstr "你可以通過%1修改密碼"
+
+#: data/TWiki/NewUserTemplate.txt:33
+#, fuzzy
+msgid "%1 has a list of other TWiki users"
+msgstr "%1有個其他TWiki用戶的列表"
+
+#: templates/registernotifyadmin.tmpl:10
+msgid "%1 has been registered with email %2"
+msgstr "%1已經用E-Mail %2 註冊過"
+
+#: templates/oopsattention.tmpl:20
+msgid "%1 home"
+msgstr "%1首頁"
+
+#: data/TWiki/NewUserTemplate.txt:34
+#, fuzzy
+msgid "%1 is a list of TWiki user documentation"
+msgstr "%1有個其他TWiki用戶的列表"
+
+#: templates/oopsattention.tmpl:101
+msgid "%1 is an invalid name for a new web"
+msgstr "%1是個非法的新庫名稱"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:21
+msgid "%1 is currently logged in"
+msgstr "%1已經登錄"
+
+#: templates/oopsattention.tmpl:329
+msgid "%1 is currently set to %2"
+msgstr "%1現在被設置為%2"
+
+#: templates/oopsleaseconflict.tmpl:8
+msgid "%1 is editing %2."
+msgstr "%1 正在編輯 %2"
+
+#: templates/oopsattention.tmpl:44
+msgid "%1 is in at least one group and cannot be removed"
+msgstr "%1 列在最新的組中，無法刪除"
+
+#: data/TWiki/NewUserTemplate.txt:35
+#, fuzzy
+msgid "%1 lists all TWiki user tools"
+msgstr "%1有個其他TWiki用戶的列表"
+
+#: templates/oopsleaseconflict.tmpl:13
+msgid "%1 may still be editing %2."
+msgstr "%1可能仍在編輯%2。"
+
+#   "<nop>$fromWeb.<nop>$fromTopic",
+#   $date,
+#   $by)
+#. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
+#: lib/TWiki/Render.pm:201
+msgid "%1 moved from %2 on %3 by %4"
+msgstr "%1 由 %4 從 %2 移動到 %3"
+
+#: templates/oopsattention.tmpl:19
+msgid "%1 to create another web"
+msgstr "%1 創建另外一個庫n"
+
+#: templates/oopsattention.tmpl:18
+msgid "%1 to customize the web specific preferences"
+msgstr "%1 定制庫屬性"
+
+#: templates/oopsattention.tmpl:17
+msgid "%1 to start working on the new web"
+msgstr "%1開始在新庫上工作"
+
+#: templates/oopsaccessdenied.tmpl:36
+msgid "%1 topic does not exist"
+msgstr "%1主題不存在"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:51
+msgid "&Attach"
+msgstr "附件"
+
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:16
+msgid "&Cancel"
+msgstr "放棄"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:25
+msgid "&Edit"
+msgstr "編輯"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:11
+msgid "&Edit text"
+msgstr "文本編輯"
+
+#: templates/twiki.tmpl:164
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:109
+msgid "&History"
+msgstr "歷史"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:56
+msgid "&More topic actions"
+msgstr "更多主題操作"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:95
+msgid "&Printable"
+msgstr "列印"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:26
+msgid "&WYSIWYG"
+msgstr "視覺化編輯"
+
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:6
+msgid "(%1 vs. %2)"
+msgstr "(%1 對比 %2)"
+
+#: data/TWiki/WebSearchAdvanced.txt:76
+msgid "(=all= to show all topics)"
+msgstr "(=all= 顯示所有選項)"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:18
+#: data/TWiki/WebTopicViewTemplate.txt:18
+msgid "(More options in WebSearch)"
+msgstr "(更多搜索選項)"
+
+#: data/Sandbox/WebHome.txt:10
+msgid "(Use a topic name in TWiki.WikiNotation)"
+msgstr "(在 TWiki.WikiNotation 使用一個主題名)"
+
+#: templates/oopsattention.tmpl:131
+msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
+msgstr "(__建議:__ 上傳一個關於您的主題的圖片?)"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:19
+msgid "(attach)"
+msgstr "(附件)"
+
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:5
+msgid "(backlinks in %1 Web)"
+msgstr "(在%1庫中的反向鏈結)"
+
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:5
+msgid "(backlinks in all Webs)"
+msgstr "(在所有庫中的反向鏈結)"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:5
+msgid "(change form)"
+msgstr "(變更表單)"
+
+#: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
+msgid "(change language)"
+msgstr "(變更語言)"
+
+#: twikiplugins/PatternSkin/templates/changes.pattern.tmpl:5
+msgid "(changes)"
+msgstr "(變更)"
+
+#: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:2
+msgid "(delete attachment)"
+msgstr "(刪除附件)"
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:17
+#: twikiplugins/PatternSkin/templates/renamewebdelete.pattern.tmpl:17
+msgid "(delete)"
+msgstr "(刪除)"
+
+#: twikiplugins/PatternSkin/templates/editform.pattern.tmpl:8
+msgid "(edit form)"
+msgstr "(編輯表單)"
+
+#: twikiplugins/PatternSkin/templates/edittext.pattern.tmpl:4
+msgid "(edit text)"
+msgstr "(文本編輯)"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:32
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:45
+msgid "(edit)"
+msgstr "(編輯)"
+
+#: data/TWiki/TWikiRegistration.txt:42
+msgid "(how you log in) LoginName:"
+msgstr "(如何登錄) LoginName:"
+
+#: data/TWiki/TWikiRegistration.txt:37
+msgid "(identifies you to others) WikiName:"
+msgstr "(將您識別為其他人) WikiName:"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:2
+msgid "(more)"
+msgstr "(更多)"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:3
+msgid "(move attachment)"
+msgstr "(移動附件)"
+
+#: data/TWiki/WebTopicCreator.txt:17 data/TWiki/WebTopicCreator.txt:19
+msgid "(no parent, orphaned topic)"
+msgstr "(無父主題，孤立文章)"
+
+#: lib/TWiki/UI/Manage.pm:1003 lib/TWiki/UI/Manage.pm:1006
+#: lib/TWiki/UI/Manage.pm:1009 lib/TWiki/UI/Manage.pm:1043
+#: lib/TWiki/UI/Manage.pm:1065 lib/TWiki/UI/Manage.pm:618
+#: lib/TWiki/UI/Manage.pm:621 lib/TWiki/UI/Manage.pm:624
+#: lib/TWiki/UI/Manage.pm:627 lib/TWiki/UI/Manage.pm:871
+#: lib/TWiki/UI/Manage.pm:894
+msgid "(none)"
+msgstr "(無)"
+
+#: templates/oopsaccessdenied.tmpl:3 templates/oopsleaseconflict.tmpl:3
+#: templates/oopssaveerr.tmpl:2
+msgid "(oops)"
+msgstr "(oops)"
+
+#: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
+msgid "(otherwise search %1 Web only)"
+msgstr "(否則只搜索%1庫)"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:16
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:25
+msgid "(preview)"
+msgstr "(預覽)"
+
+#: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:9
+msgid "(recommended)"
+msgstr "(建議)"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:5
+#: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:5
+msgid "(rename)"
+msgstr "(重命名)"
+
+#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:2
+msgid "(search results)"
+msgstr "(搜索結果)"
+
+#: data/TWiki/WebSearchAdvanced.txt:59
+msgid "(semicolon =;= for and)"
+msgstr "(用分號 =;= 結束)"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:15
+msgid "(set preferences)"
+msgstr "(設置屬性)"
+
+#: templates/oopsattention.tmpl:209
+msgid "(single character first name)"
+msgstr "(單字元名稱)"
+
+#: templates/oopsattention.tmpl:208
+msgid "(single character last name)"
+msgstr "(單字元姓氏)"
+
+#: lib/TWiki/UI/Manage.pm:854
+msgid "(skipped)"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:44
+msgid ""
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
+"Error\" message when you upload a file, you need to try again. It should "
+"work the second time."
+msgstr ""
+"*錯誤*: Internet Explorer 4.0 和更舊版本: 如果上傳檔時您看到\"Internal "
+"Server Error\" , 請再上傳一次，第2次就好了"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:50
+msgid ""
+"*Change comment:* If you use _Change Properties_ to change a comment, the "
+"comment shown in the topic will change, but the comment shown against the "
+"attachment history will be the comment when the file was uploaded."
+msgstr ""
+"*修改備註:* 如果使用_Change Properties_ 改變評論文章中的評論也會改變, 但附件"
+"歷史中的評論將仍然是上傳時的評論 "
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:43
+#, fuzzy
+msgid ""
+"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
+"('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
+"information about attaching files."
+msgstr ""
+"*説明:* 請參考<a target='TWikiVariables' onclick=\"return launchWindow('%"
+"TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>文件上傳</a>."
+
+#: data/TWiki/TWikiRegistration.txt:10
+msgid ""
+"*Important:* the information provided in this form will be stored in a "
+"database on the TWiki server. This database is accessible to anyone who can "
+"access the server through the web (though passwords will be encrypted, and "
+"email addresses will be obfusticated to help prevent spamming). Your "
+"country, or the country where the server is hosted, may have Data Protection "
+"laws governing the maintenance of such databases. If you are in doubt, you "
+"should contact %1 for details of the Data Protection Policy of this TWiki "
+"server before registering."
+msgstr ""
+"*重要提示:* 本表單提供的資訊將被存儲再TWiki伺服器的資料庫中，資料可以被所有 "
+"可以通過WEB訪問的用戶看到（雖然密碼經過加密），EMail位址將經過變形以避免垃圾"
+"電子郵件您的國家/或者伺服器所在國家可能由相關法律維護此類資料，如有疑問請註冊"
+"前向%1詢問關於TWiki的的資料保護策略"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:51
+msgid ""
+"*Local file:* If you select a different file in _Local file:_, it is this "
+"that will be updated or added."
+msgstr "*本地檔:* 如果您選擇了另外的 _本地檔:_ 這個檔將被更新或者添加."
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:49
+#, fuzzy
+msgid ""
+"*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
+msgstr ""
+"*屬性:* 注視和可見性可以被更改而不通過上傳檔  而通過 \"改變屬性\" 參見 %1."
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:56
+msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
+msgstr "本主題 <a href='%1' rel='nofollow'>編輯設置</a>"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:77
+#, fuzzy
+msgid ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
+msgstr ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>獲得管理庫的幫助 Webs</a>"
+
+#: templates/oopsmore.tmpl:23
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:23
+msgid "<em>in %1 web</em> only"
+msgstr "只<em>在 %1 庫</em>中"
+
+#: templates/oopsmore.tmpl:21
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:21
+msgid "<em>in all public webs</em>"
+msgstr "<em>在所有公開的庫</em>"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:43
+msgid ""
+"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
+msgstr "<span class='twikiAlert'><b>不要忘記保存</b></span>您的修改 "
+
+#: templates/oopsaccessdenied.tmpl:25
+msgid ""
+"A %1 is divided into webs; each one represents one subject, one area of "
+"collaboration. You are trying to %2 in a web that does not exist."
+msgstr "%1分成多個庫，每個庫包含一個主題/協作空間您想訪問的 %2庫不存在"
+
+#: templates/oopsattention.tmpl:282
+msgid "A =.txt= extension is appended to some filenames for security reasons"
+msgstr ""
+
+#: templates/oopsattention.tmpl:116
+msgid ""
+"A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
+"=#FFFF00=."
+msgstr "顏色以 # 標記開始 後面是個6位元16進制數字組成 例如： =#FFFF00=."
+
+#: templates/oopsattention.tmpl:133
+msgid "A confirmation e-mail has been sent to %1"
+msgstr "確認電子郵件已經被發送到 %1 "
+
+#: templates/oopsaccessdenied.tmpl:29
+msgid ""
+"A link to a topic located in another web is written like %1. Make sure that "
+"the name of the web is not spelt wrongly on the previous page; fix the link "
+"if necessary."
+msgstr ""
+"相似%1的主題的鏈結位於另外一個庫中，請確認庫名沒有拼寫錯誤，如必要請修正錯誤"
+"鏈結"
+
+#: data/Sandbox/WebHome.txt:24
+msgid ""
+"A more extensive changes list is available via the [[%1][Recent Changes]] "
+"link in the navigation menu."
+msgstr "更多擴展變更列表位於菜單的[[%1][最新修改]]中"
+
+#: templates/oopsalerts.tmpl:12
+msgid ""
+"A new *system-generated* password for login name %1 (wikiname %2) has been "
+"sent to %3"
+msgstr "系統為%1(Wikiname %2)生成的新密碼已經被發送到%3"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:99
+#, fuzzy
+msgid "A&ll Webs"
+msgstr "所有庫"
+
+#: templates/oopsaccessdenied.tmpl:5
+msgid "Access Denied"
+msgstr "禁止訪問"
+
+#: templates/oopsaccessdenied.tmpl:8
+msgid "Access check on %1 failed"
+msgstr "訪問檢查%1失敗"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:36
+msgid "Access keys"
+msgstr "訪問密鑰"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:6
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:9
+msgid "Action"
+msgstr "變更"
+
+#: templates/oopsaccessdenied.tmpl:9
+msgid "Action %1: %2."
+msgstr "變更 %1: %2."
+
+#: templates/addform.tmpl:1
+msgid "Add form"
+msgstr "添加表單"
+
+#: data/TWiki/TWikiRegistration.txt:225
+msgid "Add your name to the list of users in the %1 topic in the %2 web."
+msgstr "將您的名字添加到%2庫%1主題的用戶列表中。"
+
+#: lib/TWiki/UI/RDiff.pm:258
+msgid "Added"
+msgstr "添加完成"
+
+#: templates/oopsattention.tmpl:271
+msgid "Adding a %1 variable in WebPreferences"
+msgstr "添加 %1 參數到WebPreferences中"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:24
+msgid "Admin Maintenance"
+msgstr "管理員維護"
+
+#: data/TWiki/WebSearchAdvanced.txt:3
+msgid "Advanced Search"
+msgstr "高級搜索"
+
+#: data/TWiki/WebSearch.txt:24
+msgid "Advanced search"
+msgstr "高級搜索"
+
+#: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
+msgid "All public webs"
+msgstr "所有的公開庫"
+
+#: data/TWiki/WebSearchAdvanced.txt:89
+msgid "All topics in %1"
+msgstr "在%1中的所有主題"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:20
+msgid "Allow non <nop>WikiWord for the new topic name"
+msgstr "允許使用非<nop>WikiWord 作為新主題名稱"
+
+#: templates/oopsattention.tmpl:197
+msgid ""
+"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
+"different username."
+msgstr "另外，也可以點擊“返回”回到 TWiki.TWikiRegistration 選擇另外一個用戶名 "
+
+#: templates/oopsattention.tmpl:184
+msgid ""
+"An e-mail could not be delivered. Please notify your %1 administrator, %2"
+msgstr "一封電子郵件已經被發送，請通知您的 %1 管理員 %2"
+
+#: templates/oopsattention.tmpl:237
+msgid "An email address is required before a password can be reset."
+msgstr "在密碼重置之前：需要一個電子郵件位址"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:70
+msgid ""
+"An error page will be shown if either of the topics are locked by another "
+"user."
+msgstr "如果當前主題被另外一個用戶鎖定，會由錯誤頁面提示。"
+
+#: templates/oopsattention.tmpl:14
+msgid "And populated with topics from the base web"
+msgstr "並使用基本庫進行組裝"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:42
+msgid "Any change you made to topic before coming to this page are preserved."
+msgstr "所有您對當前主題的修改已經被保留。"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:52
+msgid "Attach"
+msgstr "附件"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:51
+msgid "Attach an image or document to this topic"
+msgstr "添加一個圖片或者文檔到這個主題"
+
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:9
+msgid "Attach file to topic %1"
+msgstr "附一個檔到%1"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
+msgid "Attach image or document on %1"
+msgstr "附圖到%1"
+
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:14
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:18
+msgid "Attach new file"
+msgstr "添加一個新檔"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:6
+msgid "Attachment"
+msgstr "附件"
+
+#: templates/oopsaccessdenied.tmpl:45
+msgid "Attachment '%1' does not exist"
+msgstr "附件'%1'不存在"
+
+#: lib/TWiki/UI/Manage.pm:338
+msgid "Attachment already exists in new topic"
+msgstr "在新主題中附件已經存在"
+
+#: templates/oopsattention.tmpl:57
+msgid "Attachment delete failed"
+msgstr "附件刪除失敗"
+
+#: lib/TWiki/UI/Manage.pm:318
+msgid "Attachment does not exist"
+msgstr "附件不存在"
+
+#: templates/oopsattention.tmpl:49
+msgid "Attachment move failed"
+msgstr "附件移動失敗"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:112
+msgid "Attachments will not be shown in topic view page."
+msgstr "附件將不在主題的查看頁中顯示"
+
+#: templates/oopsaccessdenied.tmpl:4 templates/oopsattention.tmpl:4
+#: templates/oopsleaseconflict.tmpl:4 templates/oopssaveerr.tmpl:3
+msgid "Attention"
+msgstr "注意"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:42
+msgid "Attribute"
+msgstr "屬性"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:58
+msgid "Automated notification of topic changes"
+msgstr ""
+
+#: data/_default/WebHome.txt:4
+msgid "Available Information"
+msgstr "可用資訊"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:24
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:90
+msgid "Back to top"
+msgstr "回到頂部"
+
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:16
+msgid "Back to topic"
+msgstr "回到主題"
+
+#: templates/oopsmore.tmpl:19
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:19
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:99
+msgid "Backlinks"
+msgstr "反向鏈結"
+
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:10
+msgid "Backlinks to %1 in %2 Web"
+msgstr "在%2庫中指向%1的反向鏈結"
+
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:10
+msgid "Backlinks to %1 in all Webs"
+msgstr "在所有庫中指向%1的反向鏈結"
+
+#: templates/oopsattention.tmpl:111
+msgid "Base web %1 is missing or does not exist"
+msgstr "基礎庫%1丟失或不存在"
+
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:41
+msgid "Both body and title"
+msgstr "內容和標題"
+
+#: data/Trash/WebHome.txt:7
+msgid ""
+"By default, viewing the Trash web is restricted to %MAINWEB%."
+"TWikiAdminGroup. If you would like to allow all users to view the Trash web, "
+"remove the =ALLOWWEBVIEW= restriction in WebPreferences."
+msgstr ""
+
+#: templates/oopsalerts.tmpl:10 templates/oopsattention.tmpl:39
+msgid "Can't find user %1"
+msgstr "無法找到用戶%1"
+
+#: templates/oopsattention.tmpl:236
+msgid "Can't get an email address for %1"
+msgstr "無法獲得%1的電子郵件位址"
+
+#: templates/oopsalerts.tmpl:11
+msgid "Can't get an email address for %1 (required for password reset)"
+msgstr "無法獲得%1的電子郵件位址(用於密碼重置) "
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+msgid "Cancel editing and discard changes"
+msgstr "取消編輯並撤銷更改"
+
+#: templates/oopsattention.tmpl:64
+msgid "Cannot create %1 because it already exists."
+msgstr "無法創建%1 因為已經存在"
+
+#: templates/oopsattention.tmpl:107
+msgid "Cannot create web %1 because it already exists"
+msgstr "無法創建%1庫，因為已經存在"
+
+#: templates/oopsattention.tmpl:70 templates/oopsattention.tmpl:76
+msgid "Cannot rename %1 to %2 because it already exists."
+msgstr "無法重命名%1成%2，因為已經存在"
+
+#: data/TWiki/WebSearchAdvanced.txt:58
+msgid "Case sensitive"
+msgstr "區分字母大小寫"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:32
+msgid "Categories"
+msgstr "類目"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:17
+msgid "Change form"
+msgstr "更改表單"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:59
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:32
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:34
+msgid "Change from:"
+msgstr "更改自："
+
+#: templates/oopschangelanguage.tmpl:21 templates/oopschangelanguage.tmpl:4
+#: templates/oopslanguagechanged.tmpl:4
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:13
+msgid "Change language"
+msgstr "更改語言"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:67
+msgid "Change links in topics that refer to !%1 in any Web:"
+msgstr "在所有庫中改變所有指向!%1的主題中的鏈結"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:65
+#, fuzzy
+msgid "Change links in topics that refer to !%1 in the %2 Web:"
+msgstr "更改所有指向%1主題中的鏈結(在%2庫中)"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:59
+msgid "Change links in topics that refer to %1 in any Web:"
+msgstr "在所有庫中改變所有指向%1的主題中的鏈結"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:57
+msgid "Change links in topics that refer to %1 in the %2 Web:"
+msgstr "更改所有指向%1主題中的鏈結(在%2庫中)"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:31
+msgid "Change properties only"
+msgstr "只改變屬性"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
+msgid "Change topic"
+msgstr "更改主題"
+
+#: lib/TWiki/UI/RDiff.pm:272 lib/TWiki/UI/RDiff.pm:278
+msgid "Changed"
+msgstr "更改過"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:15
+#, fuzzy
+msgid "Changed by:"
+msgstr "更改過"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:13
+#, fuzzy
+msgid "Changed:"
+msgstr "更改過"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:8
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:10
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:4
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:8
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:9
+msgid "Changes"
+msgstr "更新"
+
+#. ($r2, $r1)
+#: lib/TWiki/UI/RDiff.pm:457
+msgid "Changes from r%1 to r%2"
+msgstr "從 r%1 更改到 r%2"
+
+#: templates/oopsattention.tmpl:327
+#, fuzzy
+msgid ""
+"Check your configuration setting for {TemplateDir}. If that's not the "
+"problem, it may be because you have a setting of %1 that is pointing to a "
+"template that doesn't exist."
+msgstr ""
+"檢查在{TemplateDir}中的配置設置，如果這不是原因，可能是由於=%PARAM2%= 指向的"
+"範本不存在 "
+
+#: templates/oopsmore.tmpl:25
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:25
+msgid "Child topics in %1 web"
+msgstr "在%1庫中的子主題"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:24
+msgid "Choose a new form template"
+msgstr "W盲hlen Sie eine neue Formularvorlage"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:61
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:69
+msgid "Clear all"
+msgstr "清除所有"
+
+#: templates/oopsaccessdenied.tmpl:40
+msgid "Click here"
+msgstr "點擊這裏"
+
+#: templates/oopsattention.tmpl:260
+msgid "Click on [[%1][Debug topic text]]."
+msgstr "點擊 [[%1][調試：主題文本]]."
+
+#: lib/TWiki/Render.pm:185
+msgid ""
+"Click to move topic back to previous location, with option to change "
+"references."
+msgstr "點擊移動主題到以前的位置，包含設置的修改 "
+
+#: templates/oopsattention.tmpl:115
+msgid "Color %1 has an invalid format"
+msgstr "顏色 %1包含非法的格式"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:6
+msgid "Comment"
+msgstr "評論"
+
+#: data/TWiki/TWikiRegistration.txt:208
+msgid "Comments:"
+msgstr "評論:"
+
+#: data/TWiki/TWikiRegistration.txt:59
+msgid "Company URL: <br> (or department URL)"
+msgstr "公司 URL: <br> (或部門 URL)"
+
+#: data/TWiki/TWikiRegistration.txt:56
+msgid "Company name:"
+msgstr "公司名稱:"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:48
+msgid "Compare revisions"
+msgstr "比較版本"
+
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:9
+#: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:9
+msgid "Confirm rename or move"
+msgstr "確認重命名和移動"
+
+#: templates/oopsleaseconflict.tmpl:5
+msgid "Conflict"
+msgstr "衝突"
+
+#: data/TWiki/TWikiVariablesAtoM.txt:295 templates/oopsaccessdenied.tmpl:11
+#: templates/oopsaccessdenied.tmpl:18 templates/oopsaccessdenied.tmpl:42
+#: templates/oopsaccessdenied.tmpl:48
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:50
+msgid "Contact %1 if you have any questions."
+msgstr "如有問題，請聯繫 %1"
+
+#: templates/oopsattention.tmpl:319
+msgid "Continue and try to rename web?"
+msgstr "繼續並重命名庫？"
+
+#: data/TWiki/WebTopicViewTemplate.txt:23
+msgid "Continue to *[[%1][Create the new page]]*"
+msgstr "繼續 *[[%1][創建新頁面]]*"
+
+#: data/TWiki/TWikiPreferences.txt:39
+msgid ""
+"Copyright &&copy; by the contributing authors. All material on this "
+"collaboration platform is the property of the contributing authors."
+msgstr "版權所有 &&copy; 作者 在協作平臺上的所有資料歸於內容貢獻者所有"
+
+#: templates/oopsattention.tmpl:125
+msgid "Could not create the new web %1"
+msgstr "無法創建新庫%1"
+
+#: templates/oopsattention.tmpl:325
+msgid "Could not find template"
+msgstr "找不到範本"
+
+#: templates/oopsattention.tmpl:241
+msgid "Could not save %1."
+msgstr "無法保存%1"
+
+#: data/TWiki/TWikiRegistration.txt:62
+msgid "Country:"
+msgstr "國家:"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:24
+msgid "Cr&eate"
+msgstr "創建"
+
+#: data/Sandbox/WebHome.txt:17
+msgid "Create <nop>TestTopic###"
+msgstr "創建<nop>TestTopic###"
+
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
+msgid "Create New Topic"
+msgstr "創建新主題"
+
+#: data/TWiki/WebTopicCreator.txt:5
+msgid "Create New Topic in %1 Web"
+msgstr "Neues Topic im %1 Web anlegen"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:99
+msgid "Create a link to the attached file"
+msgstr "創建一個附件鏈結"
+
+#: data/Sandbox/WebHome.txt:16
+msgid "Create a new auto-numbered test topic:"
+msgstr "Ein neues, automatisch nummeriertes, Test Topic anlegen:"
+
+#: data/Sandbox/WebHome.txt:10
+msgid "Create a new document by name:"
+msgstr "創建一個新文檔: 名稱"
+
+#: data/Sandbox/WebHome.txt:11
+msgid "Create by Name"
+msgstr "根據名稱創建"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:11
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:4
+msgid "Create personal sidebar"
+msgstr "創建個人工具欄"
+
+#: lib/TWiki/Render.pm:567 lib/TWiki/Render.pm:579
+msgid "Create this topic"
+msgstr "創建這個主題"
+
+#: data/TWiki/TWikiRegistration.txt:224
+msgid ""
+"Create your personal %1 topic using your WikiName as topic name, and add the "
+"data you submitted to the topic."
+msgstr "根據您的WikiName創建個人%1主題 並在主題上添加資料."
+
+#: templates/oopsattention.tmpl:270
+msgid "Creating a suitable Form Definition topic"
+msgstr "創建適當的表單定義主題"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:6
+msgid "Date"
+msgstr "日期"
+
+#: templates/mailresetpassword.tmpl:5
+msgid "Dear %1"
+msgstr "尊敬的 %1"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:51
+msgid "Debug"
+msgstr "調試"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:56
+#: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/renamewebdelete.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/renamewebdelete.pattern.tmpl:43
+msgid "Delete"
+msgstr "刪除"
+
+#: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:15
+msgid "Delete File %1"
+msgstr "刪除檔 %1"
+
+#: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:6
+msgid "Delete file attachment"
+msgstr "刪除檔附件"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:56
+msgid ""
+"Delete or rename this topic; set parent topic; view and compare revisions"
+msgstr "刪除或重命名此主題，設置父主題，查看和比較版本"
+
+#: templates/oopsmore.tmpl:7
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:7
+msgid "Delete topic"
+msgstr "刪除主題"
+
+#: templates/oopsmore.tmpl:10 templates/oopsmore.tmpl:8
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:8
+msgid "Delete topic..."
+msgstr "刪除主題..."
+
+#: lib/TWiki/UI/RDiff.pm:251
+msgid "Deleted"
+msgstr "刪除完成"
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/renamewebdelete.pattern.tmpl:39
+msgid "Deleted topics will be moved to the %1 web"
+msgstr "刪除的主題將被移動到 %1庫中"
+
+#: templates/oopsattention.tmpl:195
+msgid "Did you want to [[%1][reset %2's password]]?"
+msgstr "您是否想 [[%1][重新設置%2的密碼]]?"
+
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:18
+msgid "Difference Topic"
+msgstr "主題差異"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:110
+msgid "Do not show attachment in table"
+msgstr "在表格中不顯示附件"
+
+#: data/TWiki/WebSearchAdvanced.txt:70
+msgid "Do show:"
+msgstr "Anzeigen:"
+
+#: data/TWiki/WebSearchAdvanced.txt:63
+msgid "Don't show:"
+msgstr "不要顯示:"
+
+#: templates/oopsattention.tmpl:58
+msgid ""
+"During deletion of attachment =%1= an error was found. Please notify your %2 "
+"administrator."
+msgstr "在刪除附件=%1=期間發生錯誤： 請通知%2管理員"
+
+#: templates/oopsattention.tmpl:50
+msgid ""
+"During move of attachment %1 to %2 an error was found. Please notify your %3 "
+"administrator."
+msgstr "在移動附件%1期間發成錯誤，請通知%2管理員"
+
+#: templates/oopsattention.tmpl:86
+msgid ""
+"During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
+"4 administrator."
+msgstr "在將%1重命名成%2期間發生(%3)錯誤 請通知%4管理員"
+
+#: templates/oopsattention.tmpl:89
+msgid ""
+"During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
+"administrator."
+msgstr "在將%1重命名成%2期間發生(%3)錯誤 請通知%4管理員"
+
+#: templates/oopsattention.tmpl:298
+msgid ""
+"During save of %1 an error was found by the version control system. Please "
+"notify your %2 administrator."
+msgstr "在保存%1期間，發現一個版本控制錯誤 請通知%2管理員"
+
+#: templates/oopssaveerr.tmpl:6
+msgid ""
+"During save of file %1 an error was found by the version control system. "
+"Please notify your %2 administrator."
+msgstr "在保存%1期間，發現一個版本控制錯誤 請通知%2管理員"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:49
+msgid "Each preference has the syntax"
+msgstr "每個屬性都符合語法"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
+msgid "Edit"
+msgstr "編輯"
+
+#: templates/oopsleaseconflict.tmpl:40
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:13
+msgid "Edit Anyway"
+msgstr "強制編輯"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:3
+msgid "Edit personal data"
+msgstr "編輯個人資料"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:7
+msgid "Edit text"
+msgstr "編輯文本"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:15
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:42
+msgid "Edit this topic text"
+msgstr "編輯這個主題的文本"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:55
+msgid "Edit topic preference settings"
+msgstr "編輯屬性設置"
+
+#: data/TWiki/TWikiRegistration.txt:46
+msgid "Email address:"
+msgstr "電子郵件位址:"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:24
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:90
+msgid "End of topic"
+msgstr "主題結尾"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:25
+msgid "Enter a new username and password to change identity:"
+msgstr "輸入用戶名和密碼以改變身份"
+
+#: templates/oopsattention.tmpl:178
+msgid "Error registering user %1"
+msgstr "註冊 %1 發生錯誤"
+
+#: templates/oopsattention.tmpl:297
+msgid "Error saving topic"
+msgstr "保存主題失敗"
+
+#: templates/oopsalerts.tmpl:3
+msgid "Error: File attachment at %1,%2 does not exist"
+msgstr "錯誤： 檔附件於%1, %2不存在"
+
+#: templates/oopsalerts.tmpl:5
+msgid ""
+"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
+"=text/css=)"
+msgstr ""
+"錯誤: 不支援的內容烈性: %1 (只能為 =text/html=, =text/plain= 或 =text/css=)"
+
+#: templates/oopsalerts.tmpl:4
+msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
+msgstr "錯誤: 不支援的協定 (必須為'http://domain/..')"
+
+#: templates/oopsattention.tmpl:188
+msgid "Errors"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:50
+msgid "Existing attachments"
+msgstr "已存在附件"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:41
+msgid "Existing form data will be lost! (still available in old version)"
+msgstr "目前表單中的資料將丟失(舊版本資料仍保留)"
+
+#: templates/oopsalerts.tmpl:13
+msgid "Failed to include URL %1"
+msgstr "包含URL %1 失敗"
+
+#: data/TWiki/TWikiRegistration.txt:213
+msgid "Fields marked %1 are required"
+msgstr "標記為%1的欄位必填"
+
+#: templates/oopsattention.tmpl:276
+msgid "File has been uploaded with different name"
+msgstr ""
+
+#: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:22
+msgid "Find topics that link to %1 ..."
+msgstr "找到鏈結到%1的主題..."
+
+#: data/TWiki/TWikiRegistration.txt:223
+msgid ""
+"Finish creating an account for you, so that you can start editing pages "
+"using your WikiName."
+msgstr "創建您的帳號完成，您可以開始使用您的WikiName編輯頁面"
+
+#: data/TWiki/TWikiRegistration.txt:30
+msgid "First Name:"
+msgstr "姓氏:"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:31
+msgid "Force new revision"
+msgstr "強制新版本"
+
+#: templates/oopsattention.tmpl:248
+msgid "Form Definition %1 missing"
+msgstr "表單定義%1缺失"
+
+#: templates/oopsattention.tmpl:253
+msgid "Form definition missing"
+msgstr "表單定義缺失"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:67
+#, fuzzy
+msgid ""
+"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
+"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
+"topics</a>."
+msgstr ""
+"在<a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingTopics')\" href=\"%1\" rel='nofollow'>獲得關於重命名移動主題</a>"
+"的幫助."
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:48
+#, fuzzy
+msgid ""
+"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
+"1','TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</"
+"a>."
+msgstr ""
+"在<a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB"
+"%','TWikiVariables')\" href='%1' rel='nofollow'>獲得關 於設置主題屬性</a>的幫"
+"助. "
+
+#: templates/oopsattention.tmpl:245
+msgid ""
+"Go back in your browser and insert information for all mandatory fields."
+msgstr "回到流覽器上一頁並輸入所有必填的欄位"
+
+#: templates/oopsattention.tmpl:302 templates/oopssaveerr.tmpl:10
+msgid "Go back in your browser and save your changes locally."
+msgstr "回到流覽器上一頁並本地保存所有變更"
+
+#: templates/oopsattention.tmpl:205
+msgid "Good examples:"
+msgstr "好的樣例:"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:7
+msgid "Groups"
+msgstr "群組"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+msgid "Hello %1!"
+msgstr "您好 %1!"
+
+#: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:32
+msgid "Help"
+msgstr "説明"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
+msgid "Hide attachments"
+msgstr "隱藏附件"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:49
+msgid "Hide existing attachments"
+msgstr "隱藏已存在附件"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:107
+msgid "Hide file"
+msgstr "隱藏文件"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:19
+msgid "Hide formatting help"
+msgstr "隱藏格式説明"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:32
+msgid "Hide help"
+msgstr "隱藏説明"
+
+#: twikiplugins/PatternSkin/templates/view.print.pattern.tmpl:34
+msgid "History:"
+msgstr "歷史:"
+
+#: data/TWiki/NewUserTemplate.txt:21
+msgid "Horizontal size of text edit box:"
+msgstr "編輯框高度:"
+
+#: templates/registernotify.tmpl:16
+msgid "How about attaching your photo?"
+msgstr "附上您的照片嗎?"
+
+#: templates/registerconfirm.tmpl:4
+msgid "How to activate your %1 registration"
+msgstr "如何啟動您的%1註冊"
+
+#: templates/oopsattention.tmpl:278
+msgid ""
+"However, the filename has been changed from %1 to %2. Please make a note of "
+"it."
+msgstr ""
+
+#: data/TWiki/TWikiPreferences.txt:39
+msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
+msgstr "關於%1建議，需求，問題： 請<a href='%2'>發送回饋</a>"
+
+#: templates/oopsattention.tmpl:262
+msgid "If this line isn't present see _upgrade_ section below"
+msgstr "如果這行不顯示請看下面的 _升級_ "
+
+#: templates/oopsattention.tmpl:256
+msgid "If this topic is missing create it, otherwise check it for errors."
+msgstr "如果此主題沒有創建，請創建它。否則請檢查錯誤"
+
+#: data/TWiki/WebSearch.txt:43 data/TWiki/WebSearchAdvanced.txt:86
+msgid ""
+"If you already know the name of the topic, enter the name of the topic into "
+"the [[%1][Jump box]] at the top"
+msgstr "如果已知主題的名稱，請在頂部的[[%1][跳轉框]]中輸入主題名稱"
+
+#: templates/oopsaccessdenied.tmpl:27
+msgid "If you came here by clicking on a question mark link"
+msgstr "如果您來到這裏是通過點擊一個問號鏈結"
+
+#: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
+msgid ""
+"If you got this email by mistake: Somebody (%1) registered at the %2 site "
+"using your mail address %3. Contact %4 if this is in error."
+msgstr ""
+"如果您在郵件中發現錯誤資訊：某人(%1)已經在%2網站上用電子郵件位址 %3註冊過 請"
+"聯繫%4"
+
+#: data/TWiki/TWikiRegistration.txt:233
+msgid "If you have any questions about registration, send an email to %1."
+msgstr "如果您有任何關於註冊的問題，請發送郵件給 %1."
+
+#: templates/mailresetpassword.tmpl:14
+msgid "If you have any questions, please contact %1."
+msgstr "如果您有任何問題請聯繫%1."
+
+#: templates/registernotify.tmpl:25
+msgid "If you haven't set a password yet or you want to reset it, go to: %1"
+msgstr "如果您沒有設置密碼或者想重新設置密碼，請到: %1"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:11
+#: data/TWiki/WebTopicViewTemplate.txt:11
+msgid "If you intend to do a full text search:"
+msgstr "如果您想做全文檢索:"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:4
+#: data/TWiki/WebTopicViewTemplate.txt:4
+msgid "If you used the \"Jump\" feature to jump to this page:"
+msgstr "如果您使用\"跳轉\"功能跳轉到此頁:"
+
+#: templates/oopsaccessdenied.tmpl:39
+msgid "If you want to create the topic"
+msgstr "如果您希望創建主題"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:21
+#: data/TWiki/WebTopicViewTemplate.txt:21
+msgid "If you would like to create this page:"
+msgstr "如果您希望創建此頁:"
+
+#: templates/oopsaccessdenied.tmpl:32
+msgid "If you would like to create this web"
+msgstr "如果您希望創建此庫"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
+msgid "Images will be displayed, for other attachments a link will be created."
+msgstr "圖片將被顯示，其他附件鏈結將被創建"
+
+#: data/TWiki/WebSearchAdvanced.txt:53
+msgid "In reversed order"
+msgstr "反排序"
+
+#: templates/oopsattention.tmpl:202
+msgid "Incorrect %1"
+msgstr "不正確的 %1"
+
+#: templates/oopsattention.tmpl:205
+#, fuzzy
+msgid "Incorrect %1.WikiNames:"
+msgstr "不正確的 [[%TWIKIWEB%.WikiNames][<nop>WikiName]]:"
+
+#: templates/oopsattention.tmpl:92
+msgid "Incorrect Password"
+msgstr "不正確的密碼"
+
+#: templates/oopsattention.tmpl:335
+msgid "Incorrect parameters to the =%1= script"
+msgstr ""
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:8
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:8
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:5
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:6
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:7
+msgid "Index"
+msgstr "索引"
+
+#: templates/oopsattention.tmpl:222
+msgid "Invalid Activation Code"
+msgstr "不正確的啟動碼"
+
+#: templates/oopsattention.tmpl:214
+msgid "Invalid email address"
+msgstr "不正確的電子郵件位址"
+
+#: templates/oopsleaseconflict.tmpl:23
+msgid ""
+"It is probably OK to go ahead and edit, unless you intend to change the form "
+"attached to the topic. If they _do_ save while you are editing, your changes "
+"will be merged with theirs. Form data cannot easily be merged, so in this "
+"case you are recommended to check with them first."
+msgstr ""
+"繼續保存和編輯也許沒有問題，除非您希望改變表單數據，如果他們_真的_在您編輯的"
+"時候保存，您的修改將和他們的合併，但是表單數據無法簡單合併，所以在這種情況下"
+"建議您先和他們聯繫"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:22
+#, fuzzy
+msgid ""
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
+"the new topic name, otherwise automatic linking may not work. Characters not "
+"allowed in topic names, such as spaces will automatically be removed."
+msgstr ""
+"一般情況下：使用<a target='WikiWord' onclick=\"return launchWindow('%TWIKIWEB"
+"%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a>創建一個新主題 而其他字"
+"元不被允許作為主題名稱，例如：空格將被自動刪除"
+
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:22
+msgid ""
+"It's usually best to choose a short name for the new web, as it is easier to "
+"link to them later on. Characters not allowed in web names, such as spaces "
+"will automatically be removed."
+msgstr ""
+"一般情況下最好選擇一個短名稱作為新的庫名稱，這樣比較便於以後鏈結字元不允許作"
+"為庫名稱，例如：空格將被自動刪除"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:5
+msgid "Jump"
+msgstr "跳轉"
+
+#: data/TWiki/TWikiRegistration.txt:34
+msgid "Last Name:"
+msgstr "姓氏:"
+
+#: data/TWiki/WebSearchAdvanced.txt:51
+msgid "Last editor"
+msgstr "最後編輯者"
+
+#: data/TWiki/WebSearchAdvanced.txt:50
+msgid "Last modified time"
+msgstr "最後更新時間"
+
+#: data/TWiki/WebSearchAdvanced.txt:75
+msgid "Limit results to:"
+msgstr "限制結果到:"
+
+#. ($left)
+#. ($right)
+#: lib/TWiki/UI/RDiff.pm:158 lib/TWiki/UI/RDiff.pm:160
+msgid "Line: %1"
+msgstr "行: %1"
+
+#. ($left,$right)
+#: lib/TWiki/UI/RDiff.pm:287
+msgid "Line: %1 to %2"
+msgstr "行: %1 到 %2"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:96
+msgid "Link"
+msgstr "鏈結"
+
+#: data/TWiki/WebSearch.txt:44 data/TWiki/WebSearchAdvanced.txt:87
+msgid "List all topics in the %1 web in alphabetical order"
+msgstr "按字母順序列出%1庫所有主題"
+
+#: data/TWiki/WebSearch.txt:45 data/TWiki/WebSearchAdvanced.txt:88
+msgid "List topics that start with the letter:"
+msgstr "列出所有以某個字母開頭的:"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:76
+msgid "Local file"
+msgstr "本地檔"
+
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:7
+msgid "Log In"
+msgstr "登錄"
+
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:8
+msgid "Log Out"
+msgstr "登出"
+
+#: templates/mailresetpassword.tmpl:9
+msgid "Login name %1"
+msgstr "登錄名 %1"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:44
+msgid "Logon"
+msgstr "登錄為"
+
+#: templates/oopsattention.tmpl:186
+msgid "Mail to"
+msgstr ""
+
+#: data/TWiki/WebSearchAdvanced.txt:57
+msgid "Make search:"
+msgstr "搜索:"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:6
+#: data/TWiki/WebTopicViewTemplate.txt:6
+msgid ""
+"Make sure you spelled the %1 correctly and try again. Remember, a %2 is case "
+"sensitive"
+msgstr "請確認%1拼寫正確並再試，記住搜索%2是區分大小寫的"
+
+#: templates/oopsattention.tmpl:166
+msgid "Missing Fields"
+msgstr "缺少多個欄位"
+
+#: templates/oopsattention.tmpl:31
+msgid "Missing action command"
+msgstr "缺少操作命令"
+
+#: data/TWiki/WebSearch.txt:5 data/TWiki/WebSearchAdvanced.txt:5
+msgid "Modify search"
+msgstr "修改搜索:"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:4
+msgid "More Actions on Topic %1"
+msgstr "關於主題%1的更多操作"
+
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:57
+msgid "More topic actions..."
+msgstr "更多主題操作……"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:56
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:15
+msgid "Move"
+msgstr "移動"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:7
+msgid "Move file attachment"
+msgstr "移動檔附件"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:28
+msgid "Move or Delete File %1"
+msgstr "移動或者刪除檔 %1"
+
+#: data/TWiki/NewUserTemplate.txt:5
+msgid "My Links"
+msgstr "我的鏈結"
+
+#: lib/TWiki/Search.pm:792
+msgid "NEW"
+msgstr "新"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:2
+#: data/TWiki/WebTopicViewTemplate.txt:2
+msgid "NOTE: This Wiki topic does not exist yet"
+msgstr "注意：這個Wiki主題尚不存在"
+
+#: templates/oopsattention.tmpl:98
+msgid "Name of new web is missing"
+msgstr "新庫名稱缺失"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:69
+msgid "New or changed topics in %1, since %2:"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:44
+msgid "New parent web:"
+msgstr "新的父庫:"
+
+#: templates/oopsattention.tmpl:82
+msgid "New topic name %1 is not a %2"
+msgstr "新主題名%1不是%2"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:39
+msgid "New web name:"
+msgstr "新庫名稱:"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:50
+msgid "Newer revision:"
+msgstr "更新版本："
+
+#: templates/oopsmore.tmpl:26
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:26
+msgid "No child topics"
+msgstr "無子主題"
+
+#: templates/oopsalerts.tmpl:2
+msgid "No permission to view %1"
+msgstr "無許可權查看 %1"
+
+#: templates/oopsattention.tmpl:159
+msgid "No users to reset passwords for."
+msgstr "沒有用戶重新設置密碼給."
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:71
+msgid ""
+"Note that any URLs that refer to the attachment will be broken after this "
+"move."
+msgstr "主題：任何引用此附件的URL都將斷掉"
+
+#: data/TWiki/TWikiRegistration.txt:6 templates/registerconfirm.tmpl:13
+#: templates/registernotify.tmpl:22
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:66
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:76
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:47
+msgid "Note:"
+msgstr "注意:"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:33
+msgid "Notes"
+msgstr "注意"
+
+#: data/TWiki/TWikiVariablesAtoM.txt:292
+msgid "Notes:"
+msgstr "注意:"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:54
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:51
+msgid "Notices:"
+msgstr "通知:"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:9
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:10
+msgid "Notifications"
+msgstr "佈告"
+
+#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/searchbookview.pattern.tmpl:12
+msgid "Number of topics:"
+msgstr "主題數量:"
+
+#: templates/oopsaccessdenied.tmpl:6 templates/oopsattention.tmpl:286
+#: templates/oopslanguagechanged.tmpl:5 templates/oopssaveerr.tmpl:11
+#: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:2
+#: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:5
+msgid "OK"
+msgstr "OK"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:49
+msgid "Older revision:"
+msgstr "舊版本"
+
+#: data/TWiki/TWikiRegistration.txt:231
+msgid "Once registered you can login using your %1 and password."
+msgstr "註冊後您可以使用%1和密碼登錄"
+
+#: data/TWiki/WebTopicCreator.txt:29
+#, fuzzy
+msgid ""
+"Once you have created the topic, consider adding links in related topics to "
+"the new topic so that there are more ways people can discover it."
+msgstr "您創建主題後，請在相關主題中添加鏈結以便於其他人能找到這個主題。"
+
+#: templates/oopsaccessdenied.tmpl:16
+msgid "Only members of the %1 are allowed to perform this action."
+msgstr "只有%1的成員允許進行這些操作"
+
+#: templates/edit.tmpl:21 templates/preview.tmpl:10
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:36
+msgid "Opens page in new window"
+msgstr "在新視窗打開頁面"
+
+#: data/TWiki/TWikiRegistration.txt:203
+msgid "Other Country"
+msgstr "其他國家"
+
+#: data/TWiki/WebSearch.txt:42 data/TWiki/WebSearchAdvanced.txt:85
+msgid "Other search options:"
+msgstr "其他搜索選項:"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:41
+msgid "Password"
+msgstr "密碼"
+
+#: templates/oopsattention.tmpl:141
+msgid "Password changed successfully!"
+msgstr "密碼修改成功!"
+
+#: templates/oopsattention.tmpl:158 templates/oopsattention.tmpl:162
+msgid "Password reset failed"
+msgstr "密碼重設失敗"
+
+#: templates/oopsattention.tmpl:172
+msgid "Passwords do not match"
+msgstr "密碼不匹配"
+
+#: data/TWiki/NewUserTemplate.txt:15
+#, fuzzy
+msgid "Personal Preferences"
+msgstr "個人設置(詳細的在%1)"
+
+#: templates/oopsattention.tmpl:118
+msgid "Pick one of the %1."
+msgstr "從%1挑選一個."
+
+#: data/Trash/TrashAttachment.txt:3
+msgid "Placeholder for trashed attachments"
+msgstr "丟棄附件的存放地"
+
+#: templates/oopsattention.tmpl:199 templates/oopsattention.tmpl:233
+msgid "Please contact %1 if you have any questions."
+msgstr "如有問題請聯繫%1."
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:17
+msgid "Please enter your username and password:"
+msgstr "請輸入用戶名和密碼:"
+
+#: templates/oopsattention.tmpl:66 templates/oopsattention.tmpl:72
+#: templates/oopsattention.tmpl:78
+msgid "Please go _back_ in your browser and try a new name."
+msgstr "請在流覽器中_返回_上一頁試一個新名字"
+
+#: templates/oopsattention.tmpl:290
+msgid "Please go back in your browser and check again."
+msgstr "請在流覽器中返回上一頁並重新檢查."
+
+#: templates/oopsattention.tmpl:83
+#, fuzzy
+msgid ""
+"Please go back in your browser and chose a topic name that is a %1.WikiWord "
+"or check the allow non-Wiki Word box"
+msgstr ""
+"請在流覽器中返回上一頁並選擇一個主題名符合%TWIKIWEB%.WikiWord或者選中允許非"
+"<nop>WikiWord選項"
+
+#: templates/oopsattention.tmpl:104 templates/oopsattention.tmpl:108
+#: templates/oopsattention.tmpl:112 templates/oopsattention.tmpl:122
+#: templates/oopsattention.tmpl:169 templates/oopsattention.tmpl:175
+#: templates/oopsattention.tmpl:211 templates/oopsattention.tmpl:219
+#: templates/oopsattention.tmpl:32 templates/oopsattention.tmpl:36
+#: templates/oopsattention.tmpl:54 templates/oopsattention.tmpl:95
+#: templates/oopsattention.tmpl:99
+msgid "Please go back in your browser and try again."
+msgstr "請返回上一頁再試"
+
+#: templates/oopsattention.tmpl:40
+msgid ""
+"Please make sure you spelled the %1 correctly and try again. If you get "
+"stuck, please mail %2."
+msgstr "請確認您拼寫%1正確並重試，如果仍不成功，請發郵件給%2。"
+
+#: templates/oopsattention.tmpl:225
+msgid "Please try again."
+msgstr "請再試."
+
+#: templates/mailresetpassword.tmpl:12
+msgid ""
+"Please visit %1 to change your password to something more memorable for you."
+msgstr "請訪問%1將您的密碼設置成一個容易記住的."
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:30
+msgid "Possible form templates"
+msgstr "可能的表單範本"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:13
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:11
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:13
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:12
+msgid "Preferences"
+msgstr "設置"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:19
+msgid "Preferences for"
+msgstr "設置"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:39
+msgid "Previous upload"
+msgstr "前一個上載"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:95
+msgid "Printable version of this topic"
+msgstr "本主題的列印版"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:97
+#, fuzzy
+msgid "Raw View"
+msgstr "原代碼"
+
+#: templates/registernotify.tmpl:10
+msgid ""
+"Read %1 to get a quick overview of this collaboration platform. To learn "
+"more, study the TWikiTutorial, which is accessible from the same link."
+msgstr ""
+"看一下%1，對這個協同平臺的有一個大概的瞭解，更多可以參考%TWIKIWEB%."
+"TWikiTutorial."
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:55
+msgid "Read new revision help text in new window"
+msgstr "再新視窗查看修訂幫助"
+
+#: twikiplugins/TipsContrib/data/TWiki/TWikiTipsOfTheDayInclude.txt:22
+msgid "Read on"
+msgstr ""
+
+#: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:46
+#: data/TWiki/WebSearchAdvanced.txt:90
+msgid "Recently changed topics"
+msgstr "最新更改的主題"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+msgid "Register"
+msgstr "註冊"
+
+#: data/TWiki/TWikiRegistration.txt:6
+msgid "Registered users can ChangePasswords and ResetPasswords."
+msgstr ""
+"註冊用戶可以[[ChangePasswords][修改密碼]] 和[[ResetPasswords][重設密碼]]"
+
+#: data/TWiki/TWikiRegistration.txt:2
+msgid "Registration"
+msgstr "註冊"
+
+#: data/TWiki/WebSearchAdvanced.txt:59
+msgid "Regular expression search"
+msgstr "正則運算式搜索"
+
+#: data/TWiki/NewUserTemplate.txt:30
+#, fuzzy
+msgid "Related Topics"
+msgstr "相關主題:"
+
+#: data/Main/TWikiGroupTemplate.txt:8 data/Sandbox/WebNotify.txt:10
+#: data/Trash/WebNotify.txt:9 data/_default/WebNotify.txt:8
+#: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
+msgid "Related topics:"
+msgstr "相關主題:"
+
+#: templates/oopsattention.tmpl:46
+msgid "Remove the user from the group(s) %1 first."
+msgstr "請先將用戶從 %1組刪除"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:9
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:9
+msgid "Rename"
+msgstr "重命名"
+
+#: templates/oopsattention.tmpl:69 templates/oopsattention.tmpl:75
+msgid "Rename failed"
+msgstr "重命名失敗"
+
+#: templates/oopsmore.tmpl:13
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:13
+msgid "Rename or move topic"
+msgstr "主題重命名和移動"
+
+#: data/TWiki/RenameWeb.txt:1
+msgid "Rename, move or delete this web:"
+msgstr "重命名，移動和刪除這個庫:"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+msgid "Rename/Move"
+msgstr "重命名/移動"
+
+#: templates/oopsmore.tmpl:14 templates/oopsmore.tmpl:16
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:14
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:16
+msgid "Rename/move topic..."
+msgstr "重命名/移動主題..."
+
+#: data/TWiki/RenameWeb.txt:2
+msgid "Rename/move/delete web..."
+msgstr "重命名/移動/刪除庫..."
+
+#: templates/form.tmpl:1
+msgid "Replace form..."
+msgstr "替換表單..."
+
+#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:18
+#: twikiplugins/PatternSkin/templates/searchbookview.pattern.tmpl:16
+msgid "Results from %1 web"
+msgstr "%1庫中的結果"
+
+#: data/TWiki/TWikiRegistration.txt:52
+msgid "Retype password:"
+msgstr "重新輸入密碼:"
+
+#: templates/oopsattention.tmpl:24
+msgid "Rev %1 was saved by %2, while you were still editing."
+msgstr "在您編輯期間，用戶%2的版本%1被保存"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:72
+#, fuzzy
+msgid "Review recent changes in:"
+msgstr "最新更改的主題"
+
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:47
+msgid "Revision"
+msgstr "修訂"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:42
+msgid "Revision:"
+msgstr "修訂:"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:36
+msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
+msgstr "S = 保存, Q = 安靜保存, K = 修訂點, D = 放棄"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
+msgstr "S = 保存, Q = 安靜保存, K = 修訂點, P = 預覽, C = 取消"
+
+#: templates/registernotifyadmin.tmpl:16
+msgid "Saved to:"
+msgstr "保存到:"
+
+#: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:32
+#: data/TWiki/WebTopicNonWikiTemplate.txt:15
+#: data/TWiki/WebTopicViewTemplate.txt:15 data/_default/WebHome.txt:11
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:9
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:7
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:9
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:6
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:11
+#: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:7
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:8
+msgid "Search"
+msgstr "搜索"
+
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:10
+msgid "Search %1 We&b only"
+msgstr "只搜索%1庫"
+
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:10
+msgid "Search a&ll webs"
+msgstr "搜索所有庫"
+
+#: templates/oopsmore.tmpl:20
+#: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:99
+msgid "Search all webs for topics that link to here"
+msgstr "在所有庫中搜索鏈結到這裏的主題"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:8
+#: data/TWiki/WebTopicViewTemplate.txt:8
+msgid "Search for similar topics in all public webs"
+msgstr "在所有庫中搜索相似主題"
+
+#: data/TWiki/WebSearchAdvanced.txt:64
+msgid "Search string"
+msgstr "搜索字元"
+
+#: templates/oopsmore.tmpl:22
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:22
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:99
+msgid "Search the %1 Web for topics that link to here"
+msgstr "在%1庫中搜索鏈結到這裏的主題"
+
+#: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
+msgid "Search where:"
+msgstr "搜索哪里:"
+
+#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:29
+#: twikiplugins/PatternSkin/templates/searchbookview.pattern.tmpl:6
+msgid "Searched:"
+msgstr "搜索到:"
+
+#: data/Trash/WebHome.txt:5
+msgid "Security Note:"
+msgstr ""
+
+#: templates/oopsattention.tmpl:337
+msgid "See %1 for a description of the correct parameters."
+msgstr ""
+
+#: templates/oopsattention.tmpl:42
+msgid "See %1 for a list of existing users or register as new user in %2."
+msgstr "查看%1完整用戶列表或者在%2註冊新用戶"
+
+#: templates/oopsattention.tmpl:249
+msgid "See %1 for information about Form Definitions."
+msgstr "查看%1獲得更多關於表單定義的資訊"
+
+#: data/TWiki/WebChanges.txt:4
+msgid ""
+"See <a href='%1'>100</a>, <a href='%2'>200</a>, <a href='%3'>400</a>, <a "
+"href='%4'>800</a> most recent changes"
+msgstr ""
+
+#: data/TWiki/WebChanges.txt:5
+msgid "See <a href='%1'>all</a> changes"
+msgstr ""
+
+#: data/Sandbox/WebIndex.txt:6 data/TWiki/WebIndex.txt:4
+#: data/Trash/WebIndex.txt:5 data/_default/WebIndex.txt:5
+msgid "See also the faster %1"
+msgstr "查看更快的%1"
+
+#: data/Sandbox/WebTopicList.txt:7 data/TWiki/WebTopicList.txt:5
+#: data/Trash/WebTopicList.txt:5 data/_default/WebTopicList.txt:5
+msgid "See also the verbose %1."
+msgstr "查看更全的%1."
+
+#: data/TWiki/RenameWeb.txt:3
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:48
+msgid "See also:"
+msgstr "也可查看:"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:43
+msgid "Select a new local file to update this attachment."
+msgstr "選擇一個新的本地檔更新此附件"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:61
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:69
+msgid "Select all"
+msgstr "選擇所有"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:68
+msgid "Select the %1 Web to delete the topic."
+msgstr "選擇%1庫刪除主題"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:76
+msgid "Select, copy and paste your signature text to the bottom of your entry"
+msgstr "選擇/複製/粘貼您的簽名文字到條目的底部"
+
+#: data/TWiki/TWikiRegistration.txt:226
+msgid "Send you a confirmation of your registration by email."
+msgstr "您的註冊確認已經通過郵件發送"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:51
+msgid "Sequential"
+msgstr "連續的"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:30
+msgid "Set new topic parent"
+msgstr "設置新父主題"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
+msgid "Show attachments"
+msgstr "顯示附件"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:49
+msgid "Show existing attachments"
+msgstr "顯示現存附件"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:19
+msgid "Show formatting help"
+msgstr "顯示格式幫助"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:32
+msgid "Show help"
+msgstr "顯示幫助"
+
+#: data/TWiki/NewUserTemplate.txt:19
+msgid ""
+"Show tool-tip topic info on mouse-over of %1 links, on or off: (see details "
+"in %2)"
+msgstr "當滑鼠移動到%1鏈結上時顯示幫助提示：打開/關閉 (詳細資訊在%2)"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:51
+msgid "Side by side"
+msgstr "並列"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:7
+#: data/TWiki/WebTopicViewTemplate.txt:7
+msgid "Similar topics in this web (if any):"
+msgstr "在此庫中的相關主題(如有):"
+
+#: data/TWiki/WebSearchAdvanced.txt:32
+msgid "Simple search"
+msgstr "簡單搜索"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:6
+msgid "Size"
+msgstr "大小"
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:20
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:24
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:87
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:90
+msgid "Skip to actions"
+msgstr "忽略操作"
+
+#: templates/registernotify.tmpl:15
+msgid "Some add schedule information and vacation notice."
+msgstr "某些添加計畫資訊和假期自動回復"
+
+#: templates/oopsattention.tmpl:283
+msgid "Some characters such as =~=, =$=, =@=, =%= are removed"
+msgstr ""
+
+#: templates/registernotify.tmpl:14
+msgid ""
+"Some people turn it into a personal portal with favorite links, what they "
+"work on, what help they'd like, etc."
+msgstr "某些用戶將個人麼戶變成一個收藏鏈結： 他們正在工作的和喜歡的"
+
+#: data/TWiki/WebSearchAdvanced.txt:47
+msgid "Sort results by:"
+msgstr "對結果排序:"
+
+#: templates/oopsattention.tmpl:281
+msgid "Spaces are replaced by underscores"
+msgstr ""
+
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:20
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:87
+msgid "Start of topic"
+msgstr "主題開始"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:12
+#: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:12
+#: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:11
+msgid "Statistics"
+msgstr "統計"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:31
+msgid "Step 1: Select topic parent:"
+msgstr "步驟1：選擇一個父主題："
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:36
+msgid ""
+"Step 2: Continue to <input type='submit' class='twikiButton' value='Edit' /> "
+"and save %1 to activate the new parent"
+msgstr ""
+"步驟2：繼續<input type='submit' class='twikiButton' value='Edit' />編輯並保"
+"存%1啟動主題"
+
+#: data/TWiki/NewUserTemplate.txt:25
+msgid ""
+"Style of text edit box. =width: 99%= for full window width (default), "
+"=width: auto= to disable."
+msgstr ""
+"編輯框樣式. =width: 99%= 全屏視窗寬度(缺省), 設置為： =width: auto= 關閉"
+
+#: data/TWiki/TWikiRegistration.txt:217 templates/oopsattention.tmpl:153
+#: templates/oopsattention.tmpl:230
+msgid "Submit"
+msgstr "提交"
+
+#: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
+msgid "Submitted content:"
+msgstr "提交的內容:"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:75
+msgid "Subscribe / Unsubscribe in:"
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:46
+msgid "Subwebs must be enabled."
+msgstr "子庫必須啟用."
+
+#: data/TWiki/WebSearchAdvanced.txt:65
+msgid "Summaries"
+msgstr "摘要"
+
+#: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
+msgid ""
+"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
+"=\"web service\"=, but not =\"shampoo\"=, write:"
+msgstr ""
+"巧門: 搜索所有主題包含 =\"SOAP\"=, =\"WSDL\"= =\"web service\"= 但不包含 ="
+"\"shampoo\"= 的寫, "
+
+#: templates/mailresetpassword.tmpl:3
+msgid "TWiki password reset for %1"
+msgstr "%1 TWiki密碼重設"
+
+#: templates/oopschangelanguage.tmpl:13
+msgid ""
+"TWiki's user interface is available in several languages. If you want to "
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
+msgstr ""
+"TWikis用戶介面有多種語言，如果想在本次回話中改變語言，請從以下選擇並點擊\"改"
+"變語言\".否則 \"取消\" 回到前一個主題."
+
+#: data/Sandbox/WebHome.txt:6
+msgid "Test Topics"
+msgstr "測試主題"
+
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:39
+msgid "Text body"
+msgstr "文本內容"
+
+#: templates/oopsattention.tmpl:129 templates/oopsattention.tmpl:146
+msgid "Thank you for registering"
+msgstr "謝謝您註冊"
+
+#: templates/registernotify.tmpl:8
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Please save this "
+"email for future reference."
+msgstr "謝謝您註冊 %1協作平臺，請保存這個郵件以備未來參考"
+
+#: templates/registerconfirm.tmpl:9
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Your "
+"verification code is %2."
+msgstr "謝謝您註冊%1協作平臺. 您的校驗碼為%2."
+
+#: templates/oopsattention.tmpl:203
+msgid ""
+"The %1 field must be your first and lastname in %2, e.g. your capitalized "
+"first and lastname with spaces removed."
+msgstr "第一個%1欄位必須是姓名，姓氏在%2 例如：大寫的姓名拼音 "
+
+#: templates/oopsattention.tmpl:63
+msgid "The %1 topic already exists"
+msgstr "主題%1已經存在"
+
+#: templates/oopsaccessdenied.tmpl:24
+msgid "The %1 web does not exist"
+msgstr "%1庫不存在"
+
+#: data/Sandbox/WebHome.txt:4
+msgid ""
+"The %1 web is the sandbox you can use for testing. Everybody is welcome to "
+"add or delete some stuff. It is recommended to walk through the %2 to get a "
+"jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
+"page and sign and date it with your %4."
+msgstr ""
+"%1庫是一個沙盤用於測試，歡迎任何人添加和刪除條目，建議先看看%2，並看看%3工具"
+"一條好的習慣是在頁面用您的簽名%4 姓名和時間做."
+
+#: data/Sandbox/WebRss.txt:5 data/_default/WebRss.txt:5
+msgid ""
+"The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
+"Corporate World."
+msgstr "TWiki的%1庫. TWiki是一個全球線上協作系統."
+
+#: templates/oopsattention.tmpl:223
+msgid "The activation code %1 is invalid."
+msgstr "啟動碼%1不合法."
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:69
+msgid "The attachment and any history will be moved to the new topic."
+msgstr "附件和任何歷史將移動到新主題."
+
+#: templates/oopsleaseconflict.tmpl:17
+msgid ""
+"The chances are good that they simply navigated away from the edit page "
+"without saving."
+msgstr "也許是他們的流覽到編輯頁而沒有保存"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:78
+msgid "The checkmarked topics will be updated"
+msgstr "被標記選定的主題將被更新"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:69
+msgid ""
+"The checkmarked topics will be updated (another form will appear which will "
+"_eventually_ allow you to rename any topics that were locked)"
+msgstr "被標記的主題將被更新(另外一個表格_實際上_允許您重命名任何鎖定的主題)"
+
+#: templates/oopsattention.tmpl:215
+msgid "The email address for this account is not valid."
+msgstr "這個帳號的電子郵件位址不合法."
+
+#: templates/oopsalerts.tmpl:9
+msgid "The entry for user %1 was missing in the password system."
+msgstr "用戶%1在密碼系統中缺失"
+
+#: templates/oopsattention.tmpl:277
+msgid "The file has been uploaded and attached properly to the %1 topic."
+msgstr ""
+
+#: templates/oopsattention.tmpl:309
+msgid "The following topics are locked for edit, and cannot be moved:"
+msgstr "以下主題被鎖定或正在編輯，無法被移動:"
+
+#: templates/oopsattention.tmpl:315
+msgid "The following topics refer to topics in this web, but are being edited:"
+msgstr "以下為在此庫中引用此主題的主題，但由編輯:"
+
+#: templates/oopsattention.tmpl:312
+msgid ""
+"The following topics refer to topics in this web, but you are denied access "
+"to them:"
+msgstr "以下為此庫中引用此主題的主題：但您沒有許可權訪問:"
+
+#: templates/oopsattention.tmpl:255
+msgid "The form should be defined in the topic %1"
+msgstr "表單將被在%1中定義"
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:23
+msgid "The new topic chosen must already exist."
+msgstr "選擇的新主題必須已經存在."
+
+#: templates/oopsattention.tmpl:13
+msgid "The new web has been created"
+msgstr "新庫已經被創建"
+
+#: templates/oopsattention.tmpl:93
+msgid "The password you entered in the *old password* field is incorrect."
+msgstr "在*舊密碼*欄位輸入的密碼不正確."
+
+#: templates/oopsattention.tmpl:243
+msgid "The required field %1 was not filled in."
+msgstr "必填的欄位%1沒有填寫"
+
+#: templates/oopsattention.tmpl:258
+msgid "The topic is in an old format"
+msgstr "主題是舊格式"
+
+#: templates/oopsattention.tmpl:173
+msgid "The two passwords you entered do not match."
+msgstr "2此輸入的密碼不匹配."
+
+#: data/Main/WebRss.txt:5
+msgid ""
+"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
+"Platform for the Corporate World."
+msgstr "TWiki的%1庫用於定義用戶/組/辦公室. TWiki是一個基於WEB的全球協作系統."
+
+#: templates/oopsleaseconflict.tmpl:15
+msgid "Their lease on this topic expired %1 ago."
+msgstr "他們租賃的主題已經於%1過期。"
+
+#: templates/oopsattention.tmpl:305
+msgid "There are problems with renaming this web:"
+msgstr "重命名此庫時出錯:"
+
+#: templates/oopsattention.tmpl:180
+msgid ""
+"There has been a problem adding your user id to the Password system. Please "
+"contact %1."
+msgstr "在添加您的用戶名和密碼的時候出錯，請聯繫%1."
+
+#: templates/oopsattention.tmpl:261
+msgid "There should be a line that includes %1, look for %2 (or %3)"
+msgstr "必須包含一行包含 %1 參考%2(或%3) "
+
+#: templates/oopsleaseconflict.tmpl:10
+msgid ""
+"They have been editing for %1 and their lease is still active for another %2."
+msgstr "他們已經編輯 %1 他們的租期將再延長%2."
+
+#: templates/oopsattention.tmpl:268
+msgid "This can be automatically upgraded by:"
+msgstr "這將被自動更新:"
+
+#: templates/oopsattention.tmpl:251
+msgid "This could be for several reasons:"
+msgstr "可能由很多問題引起:"
+
+#: data/Sandbox/WebNotify.txt:4 data/Trash/WebNotify.txt:3
+#: data/_default/WebNotify.txt:2
+msgid ""
+"This is a subscription service to be automatically notified by e-mail when "
+"topics change in this %1 web. This is a convenient service, so you do not "
+"have to come back and check all the time if something has changed. To "
+"subscribe, please add a bullet with your %2 in alphabetical order to this "
+"list:"
+msgstr ""
+"這是一個訂閱服務，每次 %1庫的更新都會由提醒 這是一個非常方便的服務，您不必每"
+"次回來查看更新，如果要訂閱，請將您的%2 增加一個到以下列表"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:67
+#, fuzzy
+msgid "This is an automated email from %1."
+msgstr "這是一個在%1註冊用戶的自動提醒服務"
+
+#: templates/registernotifyadmin.tmpl:8
+msgid "This is an automated email notification of user registration in %1."
+msgstr "這是一個在%1註冊用戶的自動提醒服務"
+
+#: data/Trash/WebHome.txt:2
+msgid ""
+"This is the Trash. Here you can undelete topics; deleted attachments are in "
+"TrashAttachment."
+msgstr "這是垃圾箱，這裏您可以反刪除主題，刪除在 TrashAttachment 中的附件"
+
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:34
+#: twikiplugins/PatternSkin/templates/renamewebdelete.pattern.tmpl:34
+msgid ""
+"This name has been chosen so it doesn't conflict with any other topics "
+"already in the %1 web."
+msgstr "這個名稱已經被選定，以便不會和其他在%1中的主題衝突"
+
+#: templates/oopsattention.tmpl:266
+msgid "This requires the form definition to be present."
+msgstr "這要求表單定義."
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:23
+msgid ""
+"This topic name is not recommended because it will not be linked "
+"automatically. See %1 for details"
+msgstr "主題名不被建議，因為無法自動鏈結，細節請參考：%1"
+
+#: twikiplugins/PatternSkin/templates/view.print.pattern.tmpl:32
+msgid "This topic:"
+msgstr "本主題:"
+
+#: templates/oopsattention.tmpl:26
+msgid ""
+"Those changes have been merged with yours to create Rev %1. Text fields will "
+"have been merged, but other data such as form fields may have overwritten "
+"the other users changes. Please inspect the topic to make sure it is OK, "
+"especially if you made any changes to form fields."
+msgstr ""
+"您的修改已經和版本%1的合併，文本欄位被合併，但其他資料：如表單字段也許被其他"
+"用戶覆蓋，如果您修改了表單字段，請檢查資料確認。"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:47
+msgid "To *cancel* and discard any changes: Press the [Discard] button."
+msgstr "*取消*並放棄修改 [取消] 按鈕."
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:45
+msgid "To *save* changes: Press the [Save Changes] button."
+msgstr "*保存*: 請按[保存修改]按鈕."
+
+#: data/TWiki/WebTopicCreator.txt:27
+#, fuzzy
+msgid ""
+"To create a new topic, enter a %1.WikiWord for the topic name, select a "
+"topic parent and click 'Create.'"
+msgstr ""
+"為了創建一個新主題，輸入一個%TWIKIWEB%.WikiWord 選擇一個父主題然後按'創建'."
+
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:19
+msgid "To delete an attachment move it to web %1, topic %2."
+msgstr "為了刪除一個附件，移動到%1庫, 主題 %2下."
+
+#: templates/renameweb.tmpl:10
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
+msgid ""
+"To delete this web: move this web to the Trash web by renaming it to %1."
+msgstr "刪除此庫：重命名這個庫為%1，移動這個庫到Trash庫，"
+
+#: data/TWiki/TWikiRegistration.txt:4
+msgid ""
+"To edit pages on this TWikiSite, you must have a registered user name and "
+"password."
+msgstr "為了編輯這個TWikiSite頁面，您必須註冊用戶名和密碼."
+
+#: templates/oopsleaseconflict.tmpl:27
+msgid "To edit the topic anyway, hit 'Edit Anyway'."
+msgstr "強制編輯這個主題，按'強制編輯'"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:46
+msgid "To make *more changes*: Go back in your browser."
+msgstr "為了*更多修改*，在流覽器中按上一頁."
+
+#: data/TWiki/TWikiRegistration.txt:8
+msgid "To register as a new user, simply fill out this form:"
+msgstr "為了註冊為新用戶，請填寫以下表格"
+
+#: templates/oopsleaseconflict.tmpl:25
+msgid "To see if they have finished their edit yet, click 'Try Again'."
+msgstr "檢查他們是否已經編輯完畢，請按'再試'."
+
+#: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:37
+msgid "To web:"
+msgstr "去庫:"
+
+#: templates/oopsattention.tmpl:240
+msgid "Topic Save Error"
+msgstr "主題保存錯誤"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:19
+msgid "Topic attachments"
+msgstr "主題附件"
+
+#: templates/oopsattention.tmpl:264
+msgid "Topic can not be upgraded from old style category table"
+msgstr "主題無法從舊風格的目錄表格更新"
+
+#: data/TWiki/WebSearchAdvanced.txt:49
+msgid "Topic name"
+msgstr "主題名稱"
+
+#: data/TWiki/WebTopicCreator.txt:7
+#: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:42
+msgid "Topic name:"
+msgstr "主題名稱:"
+
+#: data/TWiki/WebTopicCreator.txt:14
+msgid "Topic parent:"
+msgstr "父主題:"
+
+#: templates/oopssaveerr.tmpl:4
+msgid "Topic save error"
+msgstr "主題保存錯誤"
+
+#: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:40
+msgid "Topic title"
+msgstr "主題標題"
+
+#: templates/oopsattention.tmpl:23
+msgid "Topic was merged"
+msgstr "主題被合併"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:11
+#, fuzzy
+msgid "Topics in %1 web:"
+msgstr "在%1庫中的子主題"
+
+#: data/TWiki/WebSearchAdvanced.txt:76
+msgid "Topics per web"
+msgstr "每個庫的主題"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:55
+msgid "Topics which are currently being edited by other users in the !%1 Web:"
+msgstr "在!%1庫中，主題正在被另外一個用戶編輯:"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:58
+msgid ""
+"Topics which refer to this web and are are currently being edited by other "
+"users:"
+msgstr "引用此庫但被其他用戶編輯的主題:"
+
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:61
+msgid ""
+"Topics which refer to this web that you do not have permission to change:"
+msgstr "引用此庫但您沒有許可權改變的主題:"
+
+#: data/TWiki/WebSearchAdvanced.txt:66
+msgid "Total matches"
+msgstr "共匹配"
+
+#: templates/oopsleaseconflict.tmpl:34
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:7
+msgid "Try Again"
+msgstr "再試"
+
+#: lib/TWiki/UI/RDiff.pm:265
+msgid "Unchanged"
+msgstr "無改動"
+
+#: data/TWiki/NewUserTemplate.txt:17
+msgid ""
+"Uncomment preferences variables to activate them (remove the #-sign). Help "
+"and details on variables are available in %1."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:29
+msgid "Unrecognised user and/or password"
+msgstr "無法識別的用戶名和/或密碼"
+
+#: templates/oopsattention.tmpl:35
+msgid "Unrecognized action command %1"
+msgstr "無法識別的操作%1"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:29
+msgid "Update"
+msgstr "更新"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:9
+#, fuzzy
+msgid "Update attachment %1 on %2"
+msgstr "更新主題*%TOPIC%*的附件*%FILENAME%*"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:19
+msgid "Update file %1"
+msgstr "更新檔%1"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:14
+msgid "Update image or document on %1"
+msgstr "更新圖片或者文檔%1"
+
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:60
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:23
+msgid "Upload file"
+msgstr "上傳文件"
+
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:82
+msgid "Upload up to %1 KB."
+msgstr "上傳文件大小上限： %1 KB."
+
+#: templates/oopsattention.tmpl:289
+msgid "Uploaded file %1 does not exist or is empty"
+msgstr "上傳的檔%1不存在或者為空"
+
+#: templates/oopsattention.tmpl:294
+msgid "Uploaded file %1 exceeds limit of %2 KB"
+msgstr "上傳的文件%1大小超過了%2 KB上限"
+
+#: templates/oopsattention.tmpl:293
+msgid "Uploaded file is too big"
+msgstr "上傳的文件過大"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:14
+#: data/TWiki/WebTopicViewTemplate.txt:14
+msgid "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
+msgstr "用本頁面頂部的[[WebSearch][搜索]]或者進行簡單"
+
+#: templates/oopsattention.tmpl:7
+msgid "User Account %1 Deleted"
+msgstr "用戶帳號 %1 被刪除"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:15
+msgid "User Reference"
+msgstr "用戶屬性"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:38
+msgid "Username"
+msgstr "用戶名"
+
+#: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:6
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:6
+msgid "Users"
+msgstr "用戶"
+
+#: templates/oopsattention.tmpl:138
+msgid ""
+"Users with automatically generated passwords should proceed immediately to "
+"[[%1][change password]] to change their password to something memorable."
+msgstr "用戶使用自動生成的密碼可以到[[%1][修改密碼]]改成容易記住的密碼."
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:57
+msgid "Version"
+msgstr "版本"
+
+#: data/TWiki/NewUserTemplate.txt:23
+msgid "Vertical size of text edit box:"
+msgstr "文本框的高度:"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:52
+msgid "View difference"
+msgstr "查看差別"
+
+#: templates/oopsmore.tmpl:41
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:41
+msgid "View previous topic revision"
+msgstr "查看主題的前一個版本"
+
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:97
+msgid "View raw text without formatting"
+msgstr "查看沒有格式的源代碼"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:44
+msgid "View revision"
+msgstr "查看修訂"
+
+#: templates/oopsleaseconflict.tmpl:30
+#: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:7
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:16
+#: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:25
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:37
+msgid "View topic"
+msgstr "查看主題"
+
+#: templates/twiki.tmpl:164
+#: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:109
+msgid "View total topic history"
+msgstr "Topic Historie ansehen"
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:23
+msgid "WARNING:"
+msgstr "警告:"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:38
+msgid "WYSIWYG"
+msgstr "WYSIWYG"
+
+#: templates/oopsalerts.tmpl:7
+msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
+msgstr "警告: 不能重複包含%1， 主題已經包含了%2"
+
+#: templates/oopsalerts.tmpl:6
+msgid "Warning: Can't find topic %1"
+msgstr "警告: 無法找到主題%1"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:99
+msgid "We&b"
+msgstr "庫"
+
+#: data/TWiki/WebSearch.txt:3
+msgid "Web Search"
+msgstr "庫搜索"
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:8
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarWebsList.txt:2
+msgid "Webs"
+msgstr "庫"
+
+#: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
+msgid "Welcome to the %1 web"
+msgstr "歡迎來到%1庫"
+
+#: data/TWiki/TWikiRegistration.txt:222
+msgid ""
+"When %1 recives the form, it will mail an account activation code to the "
+"email address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the email, to activate your account. Once your "
+"account is activated, %1 will:"
+msgstr ""
+"當%1收到表單，將自動給相應用戶發送啟動碼郵件，在下以屏輸入啟動碼或者點擊電子"
+"郵件的中鏈結啟動帳號，您的帳號啟動後， %1將："
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:6
+msgid "Who"
+msgstr "誰"
+
+#: templates/oopsattention.tmpl:16
+msgid "Would you like to go to:"
+msgstr "您喜歡去:"
+
+#: data/TWiki/NewUserTemplate.txt:27
+msgid "Write protect your home page: (set it to your %1)"
+msgstr "您的主頁防寫: (設置您的 %1)"
+
+#: templates/oopsattention.tmpl:192
+msgid "You are already registered"
+msgstr "您已經註冊"
+
+#: templates/oopsattention.tmpl:132
+msgid "You are also listed in the %1 topic"
+msgstr "您也被列在了%1主題中"
+
+#: templates/oopsattention.tmpl:306
+msgid "You are denied access to the following topics in the web:"
+msgstr "在本庫中，您被禁止在以下主題訪問:"
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:65
+msgid "You are here"
+msgstr "您在這裏："
+
+#: templates/oopsattention.tmpl:102
+msgid ""
+"You are recommended to choose short names, preferably less than 10 "
+"characters, starting with an upper-case alphabetic character and using only "
+"alphanumeric characters. If you want to create a template web (a web just "
+"used as a base to create new webs) choose a name that starts with an "
+"underscore and has only alphanumeric characters."
+msgstr ""
+"建議您使用短名稱，最好少於10個字母，以大寫字母開頭：只使用英文字母，如果你想"
+"使用範本庫(用來創建新庫的庫)選擇一個名稱以下劃線和字母"
+
+#: templates/oopsaccessdenied.tmpl:37
+msgid "You are trying to %1 a topic that does not exist."
+msgstr "您在%1庫上搜索的主題不存在."
+
+#: templates/oopsaccessdenied.tmpl:46
+msgid "You are trying to %1 an attachment that does not exist."
+msgstr "您想%1的附件不存在。"
+
+#: templates/oopsaccessdenied.tmpl:33
+msgid ""
+"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
+"have any questions."
+msgstr "您如有有許可權可以 [[%1][創建一個新庫]], 如有任何問題，聯繫%2."
+
+#: templates/oopsattention.tmpl:120
+msgid ""
+"You can also use the names of the standard HTML colors (black, silver, gray, "
+"white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
+"teal, or aqua)"
+msgstr ""
+"你可以使用標準HTML顏色的名稱：(black, silver, gray, white, maroon, red, "
+"purple, fuchsia, green, lime, olive, yellow, navy, blue, teal, or aqua)"
+
+#: templates/registernotify.tmpl:24
+msgid "You can change your password at via %1"
+msgstr "你可以通過%1修改密碼"
+
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:27
+msgid "You can move the topic to a different web."
+msgstr "你可以移動主題到另外一個庫中"
+
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
+msgid "You can rename this web to a different web name."
+msgstr "你可以將這個庫重命名成另外一個庫名."
+
+#: templates/oopsattention.tmpl:130
+msgid "You can review your changes in your personal TWiki topic %1"
+msgstr "您可以在個人TWiki頁 %1 上查看您的更改"
+
+#: templates/oopsattention.tmpl:28
+msgid "You can see the differences [[%1][here]]."
+msgstr "您可以在[[%1][這裏]]查看差別"
+
+#: templates/oopschangelanguage.tmpl:8
+msgid ""
+"You can set your favourite language permanently by setting the %1 variable "
+"in your user topic."
+msgstr "您可以通過%1的變數永久設置您喜歡的語言參數"
+
+#: templates/oopsattention.tmpl:193
+msgid "You cannot register twice, the name %1 is already registered."
+msgstr "您不能註冊2次，%1已經註冊過"
+
+#: templates/oopsattention.tmpl:284
+#, fuzzy
+msgid ""
+"You may be able to get your TWiki administrator to change the settings if "
+"they are inappropriate for your environment."
+msgstr "如果您覺得環境不合適，可以讓TWiki的管理員幫助更改"
+
+#: templates/oopsattention.tmpl:143
+msgid "You need to close your browser to make this change take effect."
+msgstr "您需要關閉流覽器以便讓更改生效"
+
+#: templates/registerconfirm.tmpl:11
+msgid ""
+"You now need to verify your email address. You can do so by entering %1 in "
+"the form presented to you when this email was sent, or by visiting %2"
+msgstr "請校驗您的Email位址，當電子郵件發送後，您可以通過訪問 %2 進入 %1 "
+
+#: templates/oopsattention.tmpl:273
+msgid "You will probably have to ask your administrator, %1, to do this."
+msgstr "您也許需要問一下管理員 %1 以進行這個操作"
+
+#: templates/oopsattention.tmpl:148
+msgid ""
+"Your activation code has been sent to %1.  Either click on the link in your "
+"email or enter the code in the box below to activate your membership. (This "
+"code is of the form \"YourName.xxxx\")"
+msgstr ""
+"您的啟動碼已經被發送到 %1 點擊電子郵件中的鏈結或者在下面輸入代碼以啟動會員資"
+"格 （這個是啟動碼格式 \"YourName.xxxx\")"
+
+#: templates/oopslanguagechanged.tmpl:11
+msgid ""
+"Your language will be changed to %1 from the next screen. You will be "
+"redirected to there right now. If you aren't, [[%2][click here]] to proceed."
+msgstr ""
+"您的語言將在下一個屏中被改成 %1 您馬上將被轉向到那裏如果沒有轉向請[[%2][點擊"
+"這裏]]轉向 "
+
+#: templates/mailresetpassword.tmpl:10
+msgid "Your password has been changed to %1."
+msgstr "您的密碼已經被改成 %1"
+
+#: data/TWiki/TWikiRegistration.txt:49
+msgid "Your password:"
+msgstr "您的密碼:"
+
+#: templates/registernotify.tmpl:12
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
+msgstr "您個人的 %1位於 %2 您可以按照自己的習慣定制 "
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:76
+msgid "Your signature to copy/paste:"
+msgstr "您用於複製/粘貼的簽名"
+
+#: templates/oopsattention.tmpl:8
+msgid "Your user name has been removed from the Authentication System."
+msgstr "您的用戶名已經從認證系統中刪除。"
+
+#: templates/oopsattention.tmpl:10
+msgid "Your user topic has not been renamed. Please email %1 to request this."
+msgstr "您的主題尚未重命名 請發送電子郵件給 %1 申請"
+
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:50
+msgid ""
+"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgstr "[3個空格] * [空格] Set [空格] VARIABLENNAME [空格] = [值]"
+
+#: templates/oopsattention.tmpl:280
+msgid ""
+"__Note:__ In some cases, TWiki changes the name of the uploaded file to make "
+"it safe and accessible across all platforms:"
+msgstr ""
+
+# please enter the name of your language here (written in the native language):
+#: lib/TWiki/I18N.pm:242
+msgid "_language_name"
+msgstr "中文"
+
+#: data/TWiki/WebSearchAdvanced.txt:71 data/TWiki/WebSearchAdvanced.txt:89
+msgid "about BookView"
+msgstr "關於BookView"
+
+#: data/TWiki/WebSearchAdvanced.txt:59
+msgid "about regular expression search"
+msgstr "關於正則運算式搜索"
+
+#: lib/TWiki/Access.pm:157
+msgid "access denied on topic"
+msgstr "禁止訪問主題"
+
+#: lib/TWiki/Access.pm:185
+msgid "access denied on web"
+msgstr "禁止訪問庫"
+
+#: lib/TWiki/Access.pm:174
+msgid "access not allowed on topic"
+msgstr "不允許訪問主題"
+
+#: lib/TWiki/Access.pm:197
+msgid "access not allowed on web"
+msgstr "不允許訪問庫"
+
+#: data/_default/WebHome.txt:13
+msgid "advanced search"
+msgstr "高級搜索"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:15
+msgid "change, update, previous revisions, move, delete..."
+msgstr "變更, 更新, 前一個版本, 移動, 刪除……"
+
+#: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:61
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:69
+msgid "checkboxes of referenced topics"
+msgstr "構選相關主題"
+
+#: templates/oopsattention.tmpl:167
+msgid "fields are required."
+msgstr "欄位必填"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:53
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:31
+msgid "help"
+msgstr "説明"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:43
+msgid "in raw text format"
+msgstr "源代碼模式"
+
+#: templates/form.tmpl:3
+msgid "indicates mandatory fields"
+msgstr "指出必填欄位"
+
+#: templates/oopsmore.tmpl:11 templates/oopsmore.tmpl:17
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:11
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:17
+msgid "looking for references in _%1 web_ only"
+msgstr "查看在 _%1 庫_ 中的配置"
+
+#: data/TWiki/RenameWeb.txt:3 templates/oopsmore.tmpl:15
+#: templates/oopsmore.tmpl:9
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:9
+msgid "looking for references in _all public webs_"
+msgstr "查看 _所有庫_ 中的配置"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:15
+msgid "manage"
+msgstr "管理"
+
+#: data/Trash/WebHome.txt:10
+msgid "more..."
+msgstr "更多……"
+
+#: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:33
+msgid "none (remove topic parent)"
+msgstr "無(刪除父主題)"
+
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:13
+msgid "now %1"
+msgstr ""
+
+#: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:56
+#: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:60
+#: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:17
+#: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:10
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:15
+#: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:16
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:33
+#: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:25
+#: twikiplugins/PatternSkin/templates/renamewebdelete.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:29
+msgid "or"
+msgstr "或"
+
+#: lib/TWiki/Render.pm:194
+msgid "put it back"
+msgstr "放回"
+
+#: twikiplugins/PatternSkin/templates/search.pattern.tmpl:18
+msgid "retrieved at %1"
+msgstr "在%1檢索出"
+
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:17
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+msgid "value='Cancel' accesskey='c'"
+msgstr "value='取消' accesskey='c'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:33
+msgid "value='Checkpoint' accesskey='k'"
+msgstr "value='暫存' accesskey='k'"
+
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:33
+msgid "value='Discard' accesskey='d'"
+msgstr "value='放棄' accesskey='d'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+msgid "value='Preview' accesskey='p'"
+msgstr "value='預覽' accesskey='p'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:33
+msgid "value='Quiet save' accesskey='q'"
+msgstr "value='安靜保存' accesskey='q'"
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:33
+msgid "value='Save' accesskey='s'"
+msgstr "value='保存' accesskey='s'"
+
+#: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
+msgid "view"
+msgstr "查看"
+
+#~ msgid ""
+#~ "Certain characters are not permitted in attachment filenames, and other "
+#~ "filenames are not permitted, for security reasons."
+#~ msgstr "一些特定的字元不允許在用附件的名稱中，另外一些檔案名是因為安全原因"
+
+#~ msgid "Filename %1 is not legal for a TWiki attachment."
+#~ msgstr "檔案名%1不是一個合法的TWiki附件名"
+
+#~ msgid "Rename the file on your local machine and try uploading again."
+#~ msgstr "重命名本地檔然後再次重新上傳."
+
+#~ msgid "Change links in topics that refer to 更改!%1 in the %2 Web:"
+#~ msgstr "更改所有指向!%1主題中的鏈結(在%2庫中)"
+
+#~ msgid "Visit %1 to learn about TWiki"
+#~ msgstr "學習TWiki，訪問%1"
+
+#~ msgid "[[%1][Search]] for similar topics in all public webs"
+#~ msgstr "在所有空開的庫中[[%1][查找]]相似主題"
