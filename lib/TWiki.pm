@@ -1062,6 +1062,7 @@ sub getIconUrl {
     my $iconTopic = $this->{prefs}->getPreferencesValue( 'ICONTOPIC' );
     my( $web, $topic) = $this->normalizeWebTopicName(
         $this->{webName}, $iconTopic );
+    $iconName =~ s/^.*\.(.*?)$/$1/;
     return $this->getPubUrl( $absolute, $web, $topic, $iconName.'.gif' );
 }
 

@@ -178,25 +178,33 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarICON
 ---+++ ICON{"name"} -- small documentation graphic or icon of common attachment types
-   * Small graphic images stored in TWikiDocGraphics, used to enhance topics. Also a collection of common file type icons. Specify file type only, file name, or full path name of file. Graphics typically have 16x16 pixels.
    * Syntax: =%<nop>ICON{"name"}%=
+   * Includes one of a range of small graphic images that are attached to TWikiDocGraphics. You can select a specific image by name, or you can give a full filename, in which case the type of the file will be used to select one of a collection of common file type icons. For example:
+      * =%<nop>ICON{"flag-gray"}%= -> %ICON{"flag-gray"}%
+      * =%<nop>ICON{"pdf"}%= -> %ICON{"pdf"}%
+      * =%<nop>ICON{"smile.pdf"}%= -> %ICON{"smile.pdf"}%
+      * =%<nop>ICON{"/dont/you/dare/smile.pdf"}%= -> %ICON{"/dont/you/dare/smile.mp3"}%
    * Graphic samples: %ICON{"arrowbright"}% =arrowbright=, %ICON{"bubble"}% =bubble=, %ICON{"choice-yes"}% =choice-yes=, %ICON{"hand"}% =hand=
    * File type samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
-   * Example: =%<nop>ICON{"info"}%= expands to HTML img tag %ICON{"info"}%
    * Related: [[#VarICONURL][ICONURL]], [[#VarICONURLPATH][ICONURLPATH]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
 #VarICONURL
 ---+++ ICONURL{"name"} -- URL of small documentation graphic or icon
-   * Generates the URL of an image, typically used in an HTML img tag (contrast with =%<nop>ICON{"name"}%=, which generates the full img tag)
+   * Generates the absolute URL path  of small documentation graphic or icon. The filename is analysed to determine the file type, and an appropriate image selected. (see [[#VarICON][ICON]] for details of how icon images are determined from filenames).
    * Syntax: =%<nop>ICONURL{"name"}%=
-   * Example: =%<nop>ICONURL{"info"}%= expands to URL =%ICONURL{"info"}%=, which renders as %ICONURL{"info"}%
+   * Examples
+      * =%<nop>ICONURL{"arrowbright"}%= -> <nop>%ICONURL{"arrowbright"}%
+      * =%<nop>ICONURL{"novel.pdf"}%= -> <nop>%ICONURL{"novel.pdf"}%
+      * =%<nop>ICONURL{"/queen/boheme.mp3"}%= -> <nop>%ICONURL{"/queen/boheme.mp3"}%
    * Related: [[#VarICONURLPATH][ICONURLPATH]], [[#VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
 #VarICONURLPATH
----+++ ICONURLPATH{"name"} -- URL path  of small documentation graphic or icon
-   * Generates the URL path of an image, typically used in an HTML img tag 
+---+++ ICONURLPATH{"filename"} -- as [[#VarICONURL][ICONURL]], but generates a relative URL.
    * Syntax: =%<nop>ICONURLPATH{"name"}%=
-   * Example: =%<nop>ICONURLPATH{"info"}%= expands to =%ICONURLPATH{"info"}%=
+   * Examples
+      * =%<nop>ICONURLPATH{"locktopic"}%= -> %ICONURLPATH{"locktopic"}%
+      * =%<nop>ICONURLPATH{"eggysmell.xml"}%= -> %ICONURLPATH{"eggysmell.xml"}%
+      * =%<nop>ICONURLPATH{"/doc/xhtml.xsl"}%= -> %ICONURLPATH{"/doc/xhtml.xsl"}%
    * Related: [[#VarICONURL][ICONURL]], [[#VarICON][ICON]], %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 
 #VarIF
