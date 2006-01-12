@@ -171,7 +171,9 @@ sub upload {
     my ( $fileSize, $fileDate, $tmpFileName );
 
     my $stream;
+    # SMELL: Does $stream get closed in all throws?
     $stream = $query->upload( 'filepath' ) unless ( $doPropsOnly );
+    my $origName = $fileName;
 
     unless( $doPropsOnly ) {
         # cut path from filepath name (Windows '\' and Unix "/" format)
@@ -179,24 +181,14 @@ sub upload {
         my $filetemp = $pathz[$#pathz];
         my @pathza = ( split( '/', $filetemp ) );
         $fileName = $pathza[$#pathza];
+        $origName = $fileName;
 
-        # Check that name isn't filtered for upload
-        # Check that name doesn't contain illegal chars
-        if( $fileName =~ /$TWiki::cfg{UploadFilter}/ ||
-              $fileName =~ /$TWiki::cfg{NameFilter}/ ) {
-            my $e1 = $TWiki::cfg{UploadFilter};
-            $e1 =~ s#\(\?-xism:(.*)\)$#/$1/#;
-            my $e2 = $TWiki::cfg{NameFilter};
-            $e2 =~ s#\(\?-xism:(.*)\)$#/$1/#;
-            throw TWiki::OopsException( 'attention',
-                                        def => 'illegally_named_upload',
-                                        web => $webName,
-                                        topic => $topic,
-                                        params =>
-                                          [ $fileName,
-                                            $e1,
-                                            $e2 ] );
-        }
+        # Sanitize filename
+        # FIXME: Allow spaces and other chars by encoding them (and decoding on download)
+        # SMELL: Safer to keep only permitted chars instead of filtering out cfg{NameFilter} chars
+        $fileName =~ s/ /_/go;                                 # Change spaces to underscore
+        $fileName =~ s/$TWiki::cfg{NameFilter}//goi;           # Remove problematic chars
+        $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;  # Append .txt to some files
 
         $fileName = TWiki::Sandbox::untaintUnchecked( $fileName );
 
@@ -207,7 +199,7 @@ sub upload {
         $fileSize = $stats[7];
         $fileDate = $stats[9];
 
-        if( ! $fileSize ) {
+        if( ! $fileSize || ! $fileName ) {
             throw TWiki::OopsException( 'attention',
                                         def => 'zero_size_upload',
                                         web => $webName,
@@ -249,7 +241,15 @@ sub upload {
 
     close( $stream ) if $stream;
 
-    $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ));
+    if( $fileName eq $origName ) {
+        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ));
+    } else {
+        throw TWiki::OopsException( 'attention',
+                                    def => 'upload_name_changed',
+                                    web => $webName,
+                                    topic => $topic,
+                                    params => [ $origName, $fileName ] );
+    }
 
     # generate a message useful for those calling this script from the command line
     my $message = ( $doPropsOnly ) ?

@@ -272,17 +272,18 @@
 
 %MAKETEXT{"You will probably have to ask your administrator, [_1], to do this." args="%WIKIWEBMASTER%"}%
 %TMPL:END%
-%TMPL:DEF{"illegally_named_upload"}%
----+++ %MAKETEXT{"Filename [_1] is not legal for a TWiki attachment." args="<code>%PARAM1%</code>"}%
-%MAKETEXT{"Certain characters are not permitted in attachment filenames, and other filenames are not permitted, for security reasons."}%
+%TMPL:DEF{"upload_name_changed"}%
+---+++ %MAKETEXT{"File has been uploaded with different name"}%
+%MAKETEXT{"The file has been uploaded and attached properly to the [_1] topic." args="<nop>%TOPIC%"}%
+%MAKETEXT{"However, the filename has been changed from [_1] to [_2]. Please make a note of it." args="<b><code>%PARAM1%</code></b>,<b><code>%PARAM2%</code></b>"}%
 
-%MAKETEXT{"Rename the file on your local machine and try uploading again."}%
+%MAKETEXT{"__Note:__ In some cases, TWiki changes the name of the uploaded file to make it safe and accessible across all platforms:"}%
+   * %MAKETEXT{"Spaces are replaced by underscores"}%
+   * %MAKETEXT{"A =.txt= extension is appended to some filenames for security reasons"}%
+   * %MAKETEXT{"Some characters such as =~=, =$=, =@=, =%= are removed"}%
+%MAKETEXT{"You may be able to get your TWiki administrator to change the settings if they are inappropriate for your environment."}%
 
----+++ Technical details
-Your filename matched one of the following regular expressions, so it was rejected:"}%
-   {UploadFilter}: <code>%PARAM2%</code>
-   {NameFilter}: <code>%PARAM3%</code>
-%MAKETEXT{"You may be able to get your TWiki administrator to change these if they are inappropriate for your environment"}%
+*[[%WEB%.%TOPIC%][%MAKETEXT{"OK"}%]]*
 %TMPL:END%
 %TMPL:DEF{"zero_size_upload"}%
 ---+++ %MAKETEXT{"Uploaded file [_1] does not exist or is empty" args="<code>%PARAM1%</code>"}%
