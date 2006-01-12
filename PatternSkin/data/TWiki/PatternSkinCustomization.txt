@@ -113,7 +113,7 @@ table.patternTopBarContents {
 and change [[TWiki.WebTopBar]]:
 
 <verbatim>
-<div class="patternTopBarLogo"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a></div>
+<div class="patternTopBarLogo"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></div>
 </verbatim>
 
 to:
@@ -137,7 +137,7 @@ The !WebTopBar contents is placed inside a table that is written by =twiki.patte
 &lt;tr><br />
 &lt;td></span><br />
 &lt;span class="patternTopBarLogo"><br />
-&lt;a href="%<nop>WEBLOGOURL%">&lt;img src="%<nop>WEBLOGOIMG%" border="0" alt="%<nop>WEBLOGOALT%"/>&lt;/a><br />
+&lt;a href="%<nop>WEBLOGOURL%">&lt;img src="%<nop>WEBLOGOIMG%" border="0" alt="%<nop>WEBLOGOALT%" />&lt;/a><br />
 &lt;/span><br />
 <span class="twikiGrayText">&lt;/td><br />
 &lt;/tr><br />

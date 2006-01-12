@@ -119,11 +119,11 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 	* Default header: (variables are explained in the syntax rules)
 <verbatim>
-		* Set HEADER = <div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0"/>%BR%</div><div class="headlinesTitle">$n---+!! [[$link][$title]]</div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>
+		* Set HEADER = <div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0" />%BR%</div><div class="headlinesTitle">$n---+!! [[$link][$title]]</div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>
 </verbatim>
 	* Default format of one item: (variables are explained in the syntax rules)
 <verbatim>
-		* Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle">[[$link][$title]]</div>$n<hr/><span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>
+		* Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle">[[$link][$title]]</div>$n<hr /><span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>
 </verbatim>
 
 ---++ Style sheets
