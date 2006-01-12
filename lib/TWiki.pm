@@ -1914,7 +1914,7 @@ sub entityEncode {
     # encode HTML special characters '>', '<', '&', ''' and '"'.
     # encode TML special characters '%', '|', '[', ']', '@', '_',
     # '*', and '='
-    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_]\|/'&#'.ord($&).';'/ge;
+    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
     return $text;
 }
 
