@@ -24,22 +24,49 @@ my $newpotfile = $potfile . '.new';
 
 #####################################################################
 # driven from MANIFEST (picks up only files that are included in the release)
-my @templates;
-my @sources;
-open(R, "<tools/MANIFEST") || die "Could not open tools/MANIFEST: $!";
-foreach my $source (<R>) {
-    chomp($source);
-    my @fields = split(/\s/, $source);
-    $source = $fields[0];
-    if( $source =~ m/^bin\/[a-z]/ ||
-        ($source =~ m/^lib\/.*\.pm$/ && (! ($source =~ m/^lib\/CPAN\/.*\.pm$/))) ||
-        $source =~ m/^templates\/.*\.tmpl$/ ||
-        $source =~ m/^data\/.*\.txt$/
-        ) {
-        push(@sources, $source);
-   }
+
+sub read_MANIFEST {
+    my ( $manifest, $prefix ) = @_;
+
+    my @files;
+    open(R, $manifest) || die "Could not open tools/MANIFEST: $!";
+    foreach my $source (<R>) {
+        chomp($source);
+
+        if ($source =~ m#^!include (twikiplugins/(\w+)/.*)$#) { 
+            my $included = $2;
+            my $included_manifest = $1 . '/MANIFEST';
+            print "I: including: $included, from $included_manifest \n";
+
+            push(@files, read_MANIFEST($included_manifest, "twikiplugins/$included/"));
+        }
+        
+        my @fields = split(/\s/, $source);
+        $source = $fields[0];
+        if( $source =~ m/^bin\/[a-z]/ ||
+            ($source =~ m/^lib\/.*\.pm$/ && (! ($source =~ m/^lib\/CPAN\/.*\.pm$/))) ||
+            $source =~ m/^templates\/.*\.tmpl$/ ||
+            $source =~ m/^data\/.*\.txt$/
+            ) {
+            push(@files, $prefix . $source);
+       }
+    }
+    close(R);
+
+  return @files;
 }
-close(R);
+
+# read the top-level MANIFEST, and any other included by it
+my @sources = read_MANIFEST('tools/MANIFEST', '');
+
+# handle --list: only list files to be scanned
+if ($ARGV[0] eq '--list') {
+  foreach my $file (@sources) {
+    print $file, "\n";
+  }
+  exit 0;
+}
+
 
 # extract the strings in a new potfile.
 print("I: scanning sources, it may take some time...\n");
