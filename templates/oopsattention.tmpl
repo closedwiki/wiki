@@ -7,7 +7,7 @@
 ---+++ %MAKETEXT{"User Account [_1] Deleted" args="%PARAM1%"}%
 %MAKETEXT{"Your user name has been removed from the Authentication System."}%
 
-%MAKETEXT{"Your user topic has not been renamed. Please email [_1] to request this." args="<a href='mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME% Delete User"}%&&body=%URLENCODE{"%PARAM1%"}%'>%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"Your user topic has not been renamed. Please email [_1] to request this." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Delete User"}%&&body=%ENCODE{"%PARAM1%"}%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
 %TMPL:DEF{"created_web"}%
 ---+++ %MAKETEXT{"The new web has been created"}%
@@ -181,7 +181,7 @@
 %TMPL:END%
 %TMPL:DEF{"send_mail_error"}%
 ---+++ Mail Error
-%MAKETEXT{"An e-mail could not be delivered. Please notify your [_1] administrator, [_2]" args="%WIKITOOLNAME%,<a href='mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME% Send Mail Error"}%'>%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"An e-mail could not be delivered. Please notify your [_1] administrator, [_2]" args="%WIKITOOLNAME%,<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Send Mail Error"}%'>%WIKIWEBMASTER%</a>"}%
 
 *%MAKETEXT{"Mail to"}%*: %PARAM1%
 
@@ -196,7 +196,7 @@
 
 %MAKETEXT{"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."}%
 
-%MAKETEXT{"Please contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME% Registration Question"}%'>%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"Please contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Registration Question"}%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
 %TMPL:DEF{"bad_wikiname"}%
 ---+++ %MAKETEXT{"Incorrect [_1]" args="%TWIKIWEB%.WikiName"}%
