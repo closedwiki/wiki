@@ -334,7 +334,10 @@
 %TMPL:DEF{bad_script_parameters}%
 %MAKETEXT{"Incorrect parameters to the =[_1]= script" args="%PARAM1%"}%
 
-%MAKETEXT{"See [_1] for a description of the correct parameters." args="%TWIKIWEB%.TWikiScripts#%PARAM1%"}%
+%MAKETEXT{"If you are developing a <nop>TWikiApplication, see [_1] for a description of the correct parameters." args="%TWIKIWEB%.TWikiScripts#%PARAM1%"}%
+
+%MAKETEXT{"If you received a link to this page in an email or just want to look at the topic, ~[~[[_1]~]~[cancel save~]~] (go to [_2])." args="%WEB%.%TOPIC%, <nop>%TOPIC%"}%
+
 %TMPL:END%
 
 %TMPL:DEF{"message"}%
