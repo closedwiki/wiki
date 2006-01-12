@@ -368,9 +368,6 @@ BEGIN {
     # headers
     # '---++ Header', '---## Header'
     $regex{headerPatternDa} = qr/^---+(\++|\#+)(.*)$/m;
-    # '   ++ Header', '   + Header'
-    # SMELL: is this ever used? It's not documented AFAICT
-    $regex{headerPatternSp} = qr/^\t(\++|\#+)(.+)$/m;
     # '<h6>Header</h6>
     $regex{headerPatternHt} = qr/^<h([1-6])>(.+?)<\/h\1>/mi;
     # '---++!! Header' or '---++ Header %NOTOC% ^top'
@@ -1682,10 +1679,12 @@ sub _includeUrl {
 }
 
 #
-# SMELL: this is _not_ a tag handler in the sense of other builtin tags, because it requires
-# far more context information (the text of the topic) than any handler. It is really
-# a plugin, and since it has an interface exactly like a plugin, would be much
-# happier as a plugin. Having it here requires more code, and offers no perceptible benefit.
+# SMELL: this is _not_ a tag handler in the sense of other builtin tags,
+# because it requires far more context information (the text of the topic)
+# than any handler.
+# SMELL: as a tag handler that also semi-renders the topic to extract the
+# headings, this handler would be much better as a preRenderingHandler in
+# a plugin (where head, script and verbatim sections are already protected)
 #
 #    * $text  : ref to the text of the current topic
 #    * $topic : the topic we are in
@@ -1749,9 +1748,6 @@ sub _TOC {
         if ( $line =~ m/$regex{headerPatternDa}/o ) {
             $line = $2;
             $level = length $1;
-        } elsif ( $line =~ m/$regex{headerPatternSp}/ ) {
-            $line = $2;
-            $level = length $1;
         } elsif ( $line =~ m/$regex{headerPatternHt}/io ) {
             $line = $2;
             $level = $1;
@@ -1776,8 +1772,8 @@ sub _TOC {
             $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/go;  # 'Web.TopicName'
             $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;  # 'TopicName'
             $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
-        # Prevent manual links
-        $line =~ s/<[\/]?a\b[^>]*>//gi;   
+            # Prevent manual links
+            $line =~ s/<[\/]?a\b[^>]*>//gi;
             # create linked bullet item, using a relative link to anchor
             $line = $tabs.'* '.
               CGI::a( { href=>'#'.$anchor }, $line );

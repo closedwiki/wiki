@@ -966,8 +966,6 @@ sub getRenderedVersion {
     # Headings
     # '<h6>...</h6>' HTML rule
     $text =~ s/$TWiki::regex{headerPatternHt}/$this->_makeAnchorHeading($2,$1)/geo;
-    # '\t+++++++' rule
-    $text =~ s/$TWiki::regex{headerPatternSp}/$this->_makeAnchorHeading($2,(length($1)))/geo;
     # '----+++++++' rule
     $text =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geo;
 
