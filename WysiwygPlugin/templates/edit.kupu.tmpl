@@ -123,8 +123,8 @@
        <option value="H6">
         <span i18n:translate="heading">Heading</span> 6
        </option>
-       <option value="verbatim" i18n:translate="paragraph-formatted">
-        Formatted
+       <option value="PRE">
+        <span i18n:translate="formatted">Formatted</span>
        </option>
       </select>
       <button type="button" class="twiki-bold-button0" id="twiki-bold-button" title="bold: alt-b" i18n:attributes="title" accesskey="b">&#160;</button>
@@ -237,6 +237,7 @@
     <div class="kupu-panels">
      <form name="upload" id="twiki-upload-form" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post" target="status_line">
       <input type="hidden" id="createlink" name="createlink" />
+      <input type="hidden" name="skin" value="%URLPARAM{"skin" default="%SKIN%"}%" />
       <input type="hidden" id="hidefile" name="hidefile" value="0" value="0" />
       <input type="hidden" name="noredirect" value="1" />
       <input type="hidden" name="filename" value="" />
@@ -373,7 +374,7 @@
     <textarea class="kupu-editor-textarea" id="kupu-editor-textarea">
     </textarea>
 <!-- FORM FIELDS -->
-    <form id="twiki-main-form" name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post" onSubmit="TWikiHandleSubmit()">
+    <form id="twiki-main-form" name="main" action="%SCRIPTURL%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" onsubmit="TWikiHandleSubmit(null)" method="post">
      <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
      <input type="hidden" name="unlock" value="on" />
      <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
