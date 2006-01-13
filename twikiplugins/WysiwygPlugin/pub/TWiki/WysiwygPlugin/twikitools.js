@@ -15,6 +15,28 @@
  *  
  */
 
+function HttpRequestObject() {
+  var xmlhttp;
+  if (window.XMLHttpRequest) {
+    try {
+      xmlhttp = new XMLHttpRequest();
+    } catch(e) {
+      xmlhttp = false;
+    }
+  } else if (window.ActiveXObject) {
+    try {
+      xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+    } catch(e) {
+      try {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      } catch(e) {
+        xmlhttp = false;
+      }
+    }
+  }
+  return xmlhttp;
+}
+
 function TWiki3StateButton(buttonid, check, command,
                            clazz) {
   /* A button that can have two states (e.g. pressed and
@@ -173,12 +195,16 @@ function tagCleaner() {
 
 /* Get a function to iterate depth-first over non-text nodes below the
  * selection, and return an array of those that the "check" function
- * returned true for. */
+ * returned true for. If 'editor' is passed, then only nodes that are
+ * part of the current selection in editor are checked. */
 function childFinder(check) {
   return function(selNode, button, editor, event) {
     var c = null;
     if (!selNode) return null;
-    var sel = editor.getSelection();
+    var sel = null;
+    if (editor) {
+      sel = editor.getSelection();
+    }
     var nodeQueue = new Array(selNode);
     while (nodeQueue.length > 0) {
       var node = nodeQueue.pop();
@@ -188,7 +214,7 @@ function childFinder(check) {
       }
       for (var i = 0; i < node.childNodes.length; i++) {
         var kid = node.childNodes[i];
-        if (kid.nodeType != 3 && sel.containsNode(kid)) {
+        if (kid.nodeType != 3 && (!sel || sel.containsNode(kid))) {
           nodeQueue.push(node.childNodes[i]);
         }
       }
@@ -311,24 +337,7 @@ function TWikiTopicDrawer(elementid, web_id, topic_id, tool) {
       '/TWiki/WysiwygPluginTopicLister?web='+web+
       ';skin=kupuxml;contenttype=text/plain';
 
-    var req;
-    if(window.XMLHttpRequest) {
-      try {
-        req = new XMLHttpRequest();
-      } catch(e) {
-        req = false;
-      }
-    } else if(window.ActiveXObject) {
-      try {
-        req = new ActiveXObject("Msxml2.XMLHTTP");
-      } catch(e) {
-        try {
-          req = new ActiveXObject("Microsoft.XMLHTTP");
-        } catch(e) {
-          req = false;
-        }
-      }
-    }
+    var req = HttpRequestObject();
     if (!req)
       return;
     
@@ -574,36 +583,112 @@ TWikiWikiWordTool.prototype = new LinkTool;
  * field for all these operations. The Kupu save button is handled by
  * the 'submitForm' function declared in kupuinit.js, but the links
  * have to be handled through the following onSubmit handler.
+ *
+ * This function can be called in a number of different ways:
+ * 1. As the onSubmit handler for the form, when triggered by a click
+ *    on a type="submit" input in the form (e.g. replace form)
+ * 2. Just before a form.submit() call, such as the one done for the
+ *    save button
+
  */
-function TWikiHandleSubmit() {
-  // don't know how else to get the kupu singleton
-  var kupu = window.drawertool.editor;
+function TWikiHandleSubmit(kupu) {
+
+  if (!kupu) {
+  }
 
   FixBoldItalic(kupu);
 
   var form = getFromSelector('twiki-main-form');
-  
-  // use prepareForm to create the 'text' field
+
+  kupu.content_changed = 0; // choke the unload handler
+
+  // use Kupu to create the 'text' field in the form
   kupu.prepareForm(form, 'text');
-};
+
+  /*
+  // 'submit' should do this for us, but IE refuses
+  // to submit a form after a beforeunload handler has been fired, so we
+  // have to do the upload this horrible way.
+  var xmlhttp = HttpRequestObject();
+  if (!xmlhttp) {
+    alert("Failed to save text to server; could not create request object");
+    return;
+  }
+
+  xmlhttp.open("POST", form.action, true);
+  xmlhttp.onreadystatechange = function () {
+    // handle the response.
+    if (xmlhttp.readyState != 4) {
+      return;
+    }
+    alert("Status: "+xmlhttp.status+" "+xmlhttp.statusText+"\n"+
+          "Response: "+xmlhttp.responseText);
+    // The response contains the text of the target page
+    window.location = 
+  };
+
+  var boundary = "Boundary_" + new Date().getMilliseconds() + ";";
+  xmlhttp.setRequestHeader("Content-Type",
+                           "multipart/form-data; boundary=" +
+                           boundary+"; charset=UTF-8");
+  
+  // Set various flags
+  body += MIMEset('wysiwyg_edit', 1, boundary);
+  // Now iterate over the main form fields and include them
+  for (var i = 0; i < form.childNodes.length; i++) {
+    var item = form.childNodes[i];
+    if (item.tagName == 'input' && item.type == 'hidden' ||
+        item.tagName == 'textarea' ) {
+      body += MIMEset(item.name, item.value, boundary);
+    }
+  }
+  body += "--" + boundary;
+  
+  // Send the request
+  xmlhttp.send(body);
+  */
+  // we *do not* submit here
+  return form;
+}
+
+function MIMEset(name, value, boundary) {
+  var body = '--' + boundary + '\r\n';
+  body += 'Content-Disposition: form-data; name="' + name + '"' + '\r\n\r\n';
+  body += value + '\r\n';
+  return body;
+}
 
 function stringify(node) {
   if (!node)
     return "NULL";
-  var str = node.nodeName + "{";
   if (node.nodeName == '#text') {
-    str = str + '"' + node.nodeValue + '"';
-  } else {
-    var node = node.firstChild;
-    var n = 0;
-    while (node) {
-      if (n) str = str + ",";
-      str = str + stringify(node);
-      n++;
-      node = node.nextSibling;
+    var text = node.nodeValue;
+    var naked = '';
+    for (var i = 0; i < text.length; i++) {
+      var s = text.charAt(i);
+      if (s < ' ') {
+        naked += '%' + text.charCodeAt(i);
+      } else {
+        naked += s;
+      }
+    }
+    return naked;
+  }
+  var nn = node.nodeName;
+  var str = '<' + nn;
+  for (var i = 0; i < node.attributes.length; i++) {
+    var attr = node.attributes[i];
+    if(attr.nodeValue != null) {
+      str += ' '+attr.nodeName+'='+attr.nodeValue;
     }
   }
-  return str + "}";
+  str += '>';
+  var node = node.firstChild;
+  while (node) {
+    str = str + stringify(node);
+    node = node.nextSibling;
+  }
+  return str + '</'+nn+'>';
 }
 
 /* Hack bad buttons off the form on startup */

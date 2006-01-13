@@ -51,8 +51,8 @@ function startKupu() {
       if (kupu.content_changed && 
           !confirm('You have unsaved changes.\nAre you sure you want to navigate away from this page?\nCancel will SAVE your changes. OK will DISCARD your changes (forever!).')) {
         kupu.config.reload_src = 0;
-        var form = getFromSelector('twiki-main-form');
-        TWikiHandleSubmit();
+        // Call the submit handler, as it's not called by the submit() method
+        var form = TWikiHandleSubmit(kupu);
         form.submit();
       };
     }
