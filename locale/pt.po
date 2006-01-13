@@ -93,7 +93,8 @@ msgid "%1 has a list of other TWiki users"
 msgstr "%1 contém uma lista de outros usuários do TWiki."
 
 #: templates/registernotifyadmin.tmpl:10
-msgid "%1 has been registered with email %2"
+#, fuzzy
+msgid "%1 has been registered with e-mail %2"
 msgstr "%1 foi registrado com o e-mail %2"
 
 #: templates/oopsattention.tmpl:20
@@ -367,15 +368,16 @@ msgstr ""
 "arquivos</a> para mais informações sobre como anexar arquivos."
 
 #: data/TWiki/TWikiRegistration.txt:10
+#, fuzzy
 msgid ""
 "*Important:* the information provided in this form will be stored in a "
 "database on the TWiki server. This database is accessible to anyone who can "
-"access the server through the web (though passwords will be encrypted, and "
-"email addresses will be obfusticated to help prevent spamming). Your "
-"country, or the country where the server is hosted, may have Data Protection "
-"laws governing the maintenance of such databases. If you are in doubt, you "
-"should contact %1 for details of the Data Protection Policy of this TWiki "
-"server before registering."
+"access the server through the web (though passwords will be encrypted, and e-"
+"mail addresses will be obfusticated to help prevent spamming). Your country, "
+"or the country where the server is hosted, may have Data Protection laws "
+"governing the maintenance of such databases. If you are in doubt, you should "
+"contact %1 for details of the Data Protection Policy of this TWiki server "
+"before registering."
 msgstr ""
 "*Importante:* as informações fornecidas nesse formulário serão armazenadas "
 "num banco de dados no servidor do TWiki. Este banco de dados é acessível por "
@@ -566,17 +568,18 @@ msgstr ""
 "TWikiRegistration][Página de Registro]] e escolher um nome de usuário "
 "diferente."
 
+#: templates/oopsattention.tmpl:237
+#, fuzzy
+msgid "An e-mail address is required before a password can be reset."
+msgstr ""
+"Um endereço de e-mail é necessário para que a senha possa ser restaurada."
+
 #: templates/oopsattention.tmpl:184
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
 "Não foi possível enviar um e-mail. Por favor, notifique o administrador do %"
 "1, %2"
-
-#: templates/oopsattention.tmpl:237
-msgid "An email address is required before a password can be reset."
-msgstr ""
-"Um endereço de e-mail é necessário para que a senha possa ser restaurada."
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:70
 msgid ""
@@ -705,11 +708,13 @@ msgid "Can't find user %1"
 msgstr "Usuário %1 não encontrado"
 
 #: templates/oopsattention.tmpl:236
-msgid "Can't get an email address for %1"
+#, fuzzy
+msgid "Can't get an e-mail address for %1"
 msgstr "Não foi possível obter um endereço de e-mail para %1"
 
 #: templates/oopsalerts.tmpl:11
-msgid "Can't get an email address for %1 (required for password reset)"
+#, fuzzy
+msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
 "Não foi possível obter um endereço de e-mail para %1 (necessário para "
 "restaurar a senha)"
@@ -1099,6 +1104,11 @@ msgstr ""
 "Um erro foi encontrado pelo sistema de controle de versões ao salvar o "
 "arquivo %1. Por favor, notifique o administrador do %2."
 
+#: data/TWiki/TWikiRegistration.txt:46
+#, fuzzy
+msgid "E-mail address:"
+msgstr "Endereço de e-mail:"
+
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:49
 msgid "Each preference has the syntax"
 msgstr "Cada preferência tem a sintaxe"
@@ -1129,10 +1139,6 @@ msgstr "Editar o texto desse tópico"
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:55
 msgid "Edit topic preference settings"
 msgstr "Editar preferências do tópico"
-
-#: data/TWiki/TWikiRegistration.txt:46
-msgid "Email address:"
-msgstr "Endereço de e-mail:"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:24
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:90
@@ -1336,20 +1342,28 @@ msgstr ""
 "Se você já sabe o nome do tópico, digite o nome dele na caixa [[%1][\"Pular "
 "para:\"]] no topo"
 
+#: templates/oopsattention.tmpl:339
+msgid ""
+"If you are developing a <nop>TWikiApplication, see %1 for a description of "
+"the correct parameters."
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:27
 msgid "If you came here by clicking on a question mark link"
 msgstr "Se você chegou aqui clicando num link com uma interrogação"
 
 #: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
+#, fuzzy
 msgid ""
-"If you got this email by mistake: Somebody (%1) registered at the %2 site "
+"If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
 "using your mail address %3. Contact %4 if this is in error."
 msgstr ""
 "Se você recebeu esse e-mail por engano: alguém (%1) se registrou no sítio %2 "
 "usando seu endereço de e-mail %3. Contate %4 se isso foi um engano."
 
 #: data/TWiki/TWikiRegistration.txt:233
-msgid "If you have any questions about registration, send an email to %1."
+#, fuzzy
+msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr ""
 "Se você tiver qualquer questão sobre o registro, mande um email para %1."
 
@@ -1367,6 +1381,12 @@ msgstr ""
 #: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "If you intend to do a full text search:"
 msgstr "Se você quiser fazer um busca completa por texto:"
+
+#: templates/oopsattention.tmpl:337
+msgid ""
+"If you received a link to this topic in an e-mail or just want to look at "
+"the topic, [[%1][cancel save]] to go to %2."
+msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
@@ -1424,7 +1444,8 @@ msgid "Invalid Activation Code"
 msgstr "Código de ativação inválido"
 
 #: templates/oopsattention.tmpl:214
-msgid "Invalid email address"
+#, fuzzy
+msgid "Invalid e-mail address"
 msgstr "Endereço de e-mail inválido"
 
 #: templates/oopsleaseconflict.tmpl:23
@@ -2018,10 +2039,6 @@ msgstr "Busca:"
 msgid "Security Note:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:337
-msgid "See %1 for a description of the correct parameters."
-msgstr ""
-
 #: templates/oopsattention.tmpl:42
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr ""
@@ -2078,7 +2095,8 @@ msgstr ""
 "Selecione, copie e cole o texto da sua assinatura no final da sua entrada"
 
 #: data/TWiki/TWikiRegistration.txt:226
-msgid "Send you a confirmation of your registration by email."
+#, fuzzy
+msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Enviar a você uma confirmação do seu registro por email."
 
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:51
@@ -2251,9 +2269,10 @@ msgid "Thank you for registering"
 msgstr "Obrigado por se registrar"
 
 #: templates/registernotify.tmpl:8
+#, fuzzy
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Please save this "
-"email for future reference."
+"e-mail for future reference."
 msgstr ""
 "Obrigado por se registrar na plataforma de colaboração %1. Por favor, salve "
 "este e-mail para referência futura."
@@ -2296,9 +2315,10 @@ msgstr ""
 "com seu %4."
 
 #: data/Sandbox/WebRss.txt:5 data/_default/WebRss.txt:5
+#, fuzzy
 msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
-"Corporate World."
+"Enterprise."
 msgstr ""
 "A web %1 do TWiki. TWiki é uma plataforma colaborativa baseada na web e "
 "voltada para o mundo das organizações."
@@ -2332,7 +2352,8 @@ msgstr ""
 "_pode_ permitir você renomear tópicos que estejam travados)"
 
 #: templates/oopsattention.tmpl:215
-msgid "The email address for this account is not valid."
+#, fuzzy
+msgid "The e-mail address for this account is not valid."
 msgstr "O endereço de e-mail para essa conta não é válido."
 
 #: templates/oopsalerts.tmpl:9
@@ -2390,14 +2411,6 @@ msgstr "O tópico está no formato antigo"
 msgid "The two passwords you entered do not match."
 msgstr "As duas senhas que você digitou não coincidem."
 
-#: data/Main/WebRss.txt:5
-msgid ""
-"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-"Platform for the Corporate World."
-msgstr ""
-"A web para usuários, grupos e escritórios. O TWiki é uma plataforma "
-"colaborativa baseada na web e voltada para o mundo das organizações."
-
 #: templates/oopsleaseconflict.tmpl:15
 msgid "Their lease on this topic expired %1 ago."
 msgstr "O tempo preferencial deles(as) expirou %1 atrás."
@@ -2450,12 +2463,13 @@ msgstr ""
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:67
 #, fuzzy
-msgid "This is an automated email from %1."
+msgid "This is an automated e-mail from %1."
 msgstr ""
 "Este é um e-mail automático de notificação para usuário registrado em %1."
 
 #: templates/registernotifyadmin.tmpl:8
-msgid "This is an automated email notification of user registration in %1."
+#, fuzzy
+msgid "This is an automated e-mail notification of user registration in %1."
 msgstr ""
 "Este é um e-mail automático de notificação para usuário registrado em %1."
 
@@ -2806,11 +2820,12 @@ msgid "Welcome to the %1 web"
 msgstr "Bem-vindo(a) à web %1"
 
 #: data/TWiki/TWikiRegistration.txt:222
+#, fuzzy
 msgid ""
-"When %1 recives the form, it will mail an account activation code to the "
-"email address you gave above. Enter that activation code in the following "
-"screen, or follow the link in the email, to activate your account. Once your "
-"account is activated, %1 will:"
+"When %1 recives the form, it will mail an account activation code to the e-"
+"mail address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the e-mail, to activate your account. Once "
+"your account is activated, %1 will:"
 msgstr ""
 "Quando o %1 receber o formulário enviará um código de ativação da conta para "
 "o endereço de e-mail que você forneceu acima. Digite esse código de ativação "
@@ -2933,9 +2948,10 @@ msgstr ""
 "Você precisa fechar o seu navegador para que as mudanças tenham efeito."
 
 #: templates/registerconfirm.tmpl:11
+#, fuzzy
 msgid ""
-"You now need to verify your email address. You can do so by entering %1 in "
-"the form presented to you when this email was sent, or by visiting %2"
+"You now need to verify your e-mail address. You can do so by entering %1 in "
+"the form presented to you when this e-mail was sent, or by visiting %2"
 msgstr ""
 "Agora você precisa verificar seu endereço de e-mail. Você pode fazer isso "
 "entrando %1 no formulário apresentado a você quando esse e-mail foi enviado, "
@@ -2948,9 +2964,10 @@ msgstr ""
 "isso."
 
 #: templates/oopsattention.tmpl:148
+#, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
-"email or enter the code in the box below to activate your membership. (This "
+"e-mail or enter the code in the box below to activate your membership. (This "
 "code is of the form \"YourName.xxxx\")"
 msgstr ""
 "Seu código de ativação foi enviado para %1. Para ativar sua conta, você pode "
@@ -2989,7 +3006,8 @@ msgid "Your user name has been removed from the Authentication System."
 msgstr "Seu nome de usuário foi removido do sistema de autenticação."
 
 #: templates/oopsattention.tmpl:10
-msgid "Your user topic has not been renamed. Please email %1 to request this."
+#, fuzzy
+msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr ""
 "Seu tópico de usuário não foi renomeado. Por favor, solicite isso enviando "
 "um e-mail para %1 ."
@@ -3157,6 +3175,13 @@ msgstr "value='Salvar' accesskey='s'"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "view"
 msgstr "ver"
+
+#~ msgid ""
+#~ "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
+#~ "Platform for the Corporate World."
+#~ msgstr ""
+#~ "A web para usuários, grupos e escritórios. O TWiki é uma plataforma "
+#~ "colaborativa baseada na web e voltada para o mundo das organizações."
 
 #~ msgid ""
 #~ "Certain characters are not permitted in attachment filenames, and other "

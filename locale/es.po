@@ -91,7 +91,8 @@ msgid "%1 has a list of other TWiki users"
 msgstr "%1 tiene una lista de otros uarios de TWiki"
 
 #: templates/registernotifyadmin.tmpl:10
-msgid "%1 has been registered with email %2"
+#, fuzzy
+msgid "%1 has been registered with e-mail %2"
 msgstr "%1 esta registrado con email"
 
 #: templates/oopsattention.tmpl:20
@@ -366,12 +367,12 @@ msgstr ""
 msgid ""
 "*Important:* the information provided in this form will be stored in a "
 "database on the TWiki server. This database is accessible to anyone who can "
-"access the server through the web (though passwords will be encrypted, and "
-"email addresses will be obfusticated to help prevent spamming). Your "
-"country, or the country where the server is hosted, may have Data Protection "
-"laws governing the maintenance of such databases. If you are in doubt, you "
-"should contact %1 for details of the Data Protection Policy of this TWiki "
-"server before registering."
+"access the server through the web (though passwords will be encrypted, and e-"
+"mail addresses will be obfusticated to help prevent spamming). Your country, "
+"or the country where the server is hosted, may have Data Protection laws "
+"governing the maintenance of such databases. If you are in doubt, you should "
+"contact %1 for details of the Data Protection Policy of this TWiki server "
+"before registering."
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:51
@@ -549,17 +550,18 @@ msgstr ""
 "Alternativamente, clickear para retosceder para ir TWiki.TWikiRegistration y "
 "escoger un nombre de usuario diferente."
 
+#: templates/oopsattention.tmpl:237
+#, fuzzy
+msgid "An e-mail address is required before a password can be reset."
+msgstr ""
+"Para una cuenta de email es necesario antes una contraseña poder ser "
+"reiniciada."
+
 #: templates/oopsattention.tmpl:184
 #, fuzzy
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr "No se puede enviar email notifique a su administrador %1, %2"
-
-#: templates/oopsattention.tmpl:237
-msgid "An email address is required before a password can be reset."
-msgstr ""
-"Para una cuenta de email es necesario antes una contraseña poder ser "
-"reiniciada."
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:70
 msgid ""
@@ -690,12 +692,15 @@ msgid "Can't find user %1"
 msgstr "No se puede encontrar usario %1"
 
 #: templates/oopsattention.tmpl:236
-msgid "Can't get an email address for %1"
+msgid "Can't get an e-mail address for %1"
 msgstr ""
 
 #: templates/oopsalerts.tmpl:11
-msgid "Can't get an email address for %1 (required for password reset)"
+#, fuzzy
+msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
+"Para una cuenta de email es necesario antes una contraseña poder ser "
+"reiniciada."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
 msgid "Cancel editing and discard changes"
@@ -1067,6 +1072,10 @@ msgid ""
 "Please notify your %2 administrator."
 msgstr ""
 
+#: data/TWiki/TWikiRegistration.txt:46
+msgid "E-mail address:"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:49
 msgid "Each preference has the syntax"
 msgstr ""
@@ -1097,10 +1106,6 @@ msgstr "Editar esto texto de pagina"
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:55
 msgid "Edit topic preference settings"
 msgstr "Editar las preferencias de la pagina"
-
-#: data/TWiki/TWikiRegistration.txt:46
-msgid "Email address:"
-msgstr ""
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:24
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:90
@@ -1300,18 +1305,24 @@ msgid ""
 "the [[%1][Jump box]] at the top"
 msgstr ""
 
+#: templates/oopsattention.tmpl:339
+msgid ""
+"If you are developing a <nop>TWikiApplication, see %1 for a description of "
+"the correct parameters."
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:27
 msgid "If you came here by clicking on a question mark link"
 msgstr ""
 
 #: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
 msgid ""
-"If you got this email by mistake: Somebody (%1) registered at the %2 site "
+"If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
 "using your mail address %3. Contact %4 if this is in error."
 msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:233
-msgid "If you have any questions about registration, send an email to %1."
+msgid "If you have any questions about registration, send an e-mail to %1."
 msgstr ""
 
 #: templates/mailresetpassword.tmpl:14
@@ -1325,6 +1336,12 @@ msgstr ""
 #: data/TWiki/WebTopicNonWikiTemplate.txt:11
 #: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "If you intend to do a full text search:"
+msgstr ""
+
+#: templates/oopsattention.tmpl:337
+msgid ""
+"If you received a link to this topic in an e-mail or just want to look at "
+"the topic, [[%1][cancel save]] to go to %2."
 msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
@@ -1383,7 +1400,7 @@ msgid "Invalid Activation Code"
 msgstr ""
 
 #: templates/oopsattention.tmpl:214
-msgid "Invalid email address"
+msgid "Invalid e-mail address"
 msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:23
@@ -1947,10 +1964,6 @@ msgstr "Buscando:"
 msgid "Security Note:"
 msgstr ""
 
-#: templates/oopsattention.tmpl:337
-msgid "See %1 for a description of the correct parameters."
-msgstr ""
-
 #: templates/oopsattention.tmpl:42
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr ""
@@ -2003,7 +2016,7 @@ msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:226
-msgid "Send you a confirmation of your registration by email."
+msgid "Send you a confirmation of your registration by e-mail."
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:51
@@ -2174,7 +2187,7 @@ msgstr "Gracias para registrar"
 #: templates/registernotify.tmpl:8
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Please save this "
-"email for future reference."
+"e-mail for future reference."
 msgstr ""
 
 #: templates/registerconfirm.tmpl:9
@@ -2208,7 +2221,7 @@ msgstr ""
 #: data/Sandbox/WebRss.txt:5 data/_default/WebRss.txt:5
 msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
-"Corporate World."
+"Enterprise."
 msgstr ""
 
 #: templates/oopsattention.tmpl:223
@@ -2236,7 +2249,7 @@ msgid ""
 msgstr ""
 
 #: templates/oopsattention.tmpl:215
-msgid "The email address for this account is not valid."
+msgid "The e-mail address for this account is not valid."
 msgstr ""
 
 #: templates/oopsalerts.tmpl:9
@@ -2289,12 +2302,6 @@ msgstr ""
 msgid "The two passwords you entered do not match."
 msgstr "Los dos contraseñas no son eguales."
 
-#: data/Main/WebRss.txt:5
-msgid ""
-"The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-"Platform for the Corporate World."
-msgstr ""
-
 #: templates/oopsleaseconflict.tmpl:15
 msgid "Their lease on this topic expired %1 ago."
 msgstr ""
@@ -2337,11 +2344,11 @@ msgid ""
 msgstr ""
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:67
-msgid "This is an automated email from %1."
+msgid "This is an automated e-mail from %1."
 msgstr ""
 
 #: templates/registernotifyadmin.tmpl:8
-msgid "This is an automated email notification of user registration in %1."
+msgid "This is an automated e-mail notification of user registration in %1."
 msgstr ""
 
 #: data/Trash/WebHome.txt:2
@@ -2672,10 +2679,10 @@ msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:222
 msgid ""
-"When %1 recives the form, it will mail an account activation code to the "
-"email address you gave above. Enter that activation code in the following "
-"screen, or follow the link in the email, to activate your account. Once your "
-"account is activated, %1 will:"
+"When %1 recives the form, it will mail an account activation code to the e-"
+"mail address you gave above. Enter that activation code in the following "
+"screen, or follow the link in the e-mail, to activate your account. Once "
+"your account is activated, %1 will:"
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:57
@@ -2780,8 +2787,8 @@ msgstr ""
 
 #: templates/registerconfirm.tmpl:11
 msgid ""
-"You now need to verify your email address. You can do so by entering %1 in "
-"the form presented to you when this email was sent, or by visiting %2"
+"You now need to verify your e-mail address. You can do so by entering %1 in "
+"the form presented to you when this e-mail was sent, or by visiting %2"
 msgstr ""
 
 #: templates/oopsattention.tmpl:273
@@ -2791,7 +2798,7 @@ msgstr ""
 #: templates/oopsattention.tmpl:148
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
-"email or enter the code in the box below to activate your membership. (This "
+"e-mail or enter the code in the box below to activate your membership. (This "
 "code is of the form \"YourName.xxxx\")"
 msgstr ""
 
@@ -2824,7 +2831,7 @@ msgid "Your user name has been removed from the Authentication System."
 msgstr ""
 
 #: templates/oopsattention.tmpl:10
-msgid "Your user topic has not been renamed. Please email %1 to request this."
+msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:50
