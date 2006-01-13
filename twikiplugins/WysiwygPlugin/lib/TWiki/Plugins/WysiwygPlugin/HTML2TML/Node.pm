@@ -485,7 +485,7 @@ sub _emphasis {
     $contents = _trim( $contents );
     return (0, undef) if( $contents =~ /^</ || $contents =~ />$/ );
     return (0, '') unless( $contents =~ /\S/ );
-    return ( $flags, $WC::CHECKw.$ch.$contents.$ch.$WC::CHECKw );
+    return ( $flags, $WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2 );
 }
 
 # Performs initial cleanup of the parse tree before generation. Walks the
