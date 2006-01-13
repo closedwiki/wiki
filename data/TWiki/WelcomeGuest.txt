@@ -52,8 +52,8 @@ __Mission: &quot;TWiki is a leading-edge, web-based collaboration platform targe
    * *Search* topic names or full-text (regular expressions available)
    * *Revision control* for changes (who, what, when) for topics and attachments
    * *Access control* using users and groups
-   * *Email notification* of topic changes
-   * *File attachments* upload and download any file to any topic similar to email attachments
+   * *E-mail notification* of topic changes
+   * *File attachments* upload and download any file to any topic similar to e-mail attachments
    * *Warnings* for simultaneous topic editing
    * *Plug-in* via TWiki's flexible architecture using templates, skins, plug-ins and add-ons to customize everything
    * *Development* active with growing set of features in TWiki releases and plug-ins

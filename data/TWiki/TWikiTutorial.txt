@@ -47,7 +47,7 @@ Go to the [[Sandbox.%HOMETOPIC%][Sandbox]]. This is the sandbox web, where you c
          =This is <nop>%WIKINAME%Sandbox topic.=
       1. Preview and save the topic. The name appears, highlighted, with a linked question mark at the end. This means that the topic doesn't exist yet.
       1. Click on the question mark. Now you're in edit mode of the new topic.
-      1. Type some text, basically, like you write an email.
+      1. Type some text, basically, like you write an e-mail.
       1. A signature with your name is already entered by default. __NOTE:__ The =%MAINWEB%.= in front of your name means that you have a link from the current web to your personal topic located in the %MAINWEB% web.
       1. Preview and save the topic...
    * Learn about text formatting. You can enter text in !TWikiShorthand, a very simple markup language. Follow the TWikiShorthand link to see how, then:
@@ -57,7 +57,7 @@ Go to the [[Sandbox.%HOMETOPIC%][Sandbox]]. This is the sandbox web, where you c
 
 ---++ 7. Use your browser to upload files as page attachments...
 You can attach _any_ type of file to a topic - documents, images, programs, whatever - where they can be opened, viewed, or downloaded. 
-   * Attaching files is just like including a file with an email.
+   * Attaching files is just like including a file with an e-mail.
       1. Go back to your sandbox topic and click on the ==[Attach]== link at the bottom.
       1. Click ==[Browse]== to find a file on your PC that you'd like to attach; enter an optional comment; leave everything else unchecked.
       1. Click ==[Upload file]==, then scroll to the end of the page to see the new attachment listing.
@@ -66,15 +66,15 @@ You can attach _any_ type of file to a topic - documents, images, programs, what
       * To move the image, edit the topic and place the last line (containing =%<nop>ATTACHURL%=) anywhere on the page.
    * If you have a GIF, JPG or PNG image of yourself, your cat, your sprawling family estate...why not upload it now to personalize your account page %WIKIUSERNAME%?
 
----++ 8. Get email alerts whenever pages are changed...
-%NOTIFYTOPIC% is a subscription service that automatically notifies you by email when topics change in a TWiki web. This is a convenience service - for many people, checking email is easier than checking the Web.
+---++ 8. Get e-mail alerts whenever pages are changed...
+%NOTIFYTOPIC% is a subscription service that automatically notifies you by e-mail when topics change in a TWiki web. This is a convenience service - for many people, checking e-mail is easier than checking the Web.
    * If you're using TWiki to collaborate on a project, it's important to know when anyone on your team posts an update. If you're following a specific discussion, it's convenient to know when there's new input.
-   * Alerts are emailed as links to individual topics that've been changed in a set period: each day, every hour, whatever is configured for your system.
+   * Alerts are e-mailed as links to individual topics that've been changed in a set period: each day, every hour, whatever is configured for your system.
    * It's strongly recommended that you try out the service by subscribing to each TWiki web that's relevant to you. You can subscribe and unsubscribe instantly, on a per web basis using %NOTIFYTOPIC%. 
 </blockquote>
 That's it! You're now equipped with all the TWiki essentials. You are ready to roll.
 
-__NOTE:__ When first using TWiki, it will probably seem strange to be able to change other people's postings - we're used to _separating_ individual messages, with  email, message boards, non-Wiki collaboration platforms. __Don't worry about it.__ You can't accidentally delete important stuff - you can always check previous versions, and copy-and-paste from them if you want to undo any changes. After a short while, TWiki-style free-form communication becomes second-nature. You'll expect it everywhere!
+__NOTE:__ When first using TWiki, it will probably seem strange to be able to change other people's postings - we're used to _separating_ individual messages, with  e-mail, message boards, non-Wiki collaboration platforms. __Don't worry about it.__ You can't accidentally delete important stuff - you can always check previous versions, and copy-and-paste from them if you want to undo any changes. After a short while, TWiki-style free-form communication becomes second-nature. You'll expect it everywhere!
 
 __Related Topics:__ UserDocumentationCategory
 

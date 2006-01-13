@@ -8,7 +8,7 @@ Key new features:
    * Security sandbox blocks all possible routes for remote command execution on the server
    * New editing model allows freer collaboration, without fear of overwriting other people's changes
    * Multilingual UI
-   * Email confirmations for registration
+   * E-mail confirmations for registration
    * Hierarchical sub-webs
 
 Most of the redesign, refactoring and new documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
@@ -392,9 +392,9 @@ Standard TWiki incorporates some simple measures to protect e-mail addresses and
 
 The new user registration process has been extensively reworked to improve usability and security of the registration process.
    1 !FirstName and !LastName are recorded separately and tabulated. See %MAINWEB%.UserListByLocation
-   1 Sends a email that the user has to respond to; registration data is staged until this is done
+   1 Sends a e-mail that the user has to respond to; registration data is staged until this is done
    1 Populates a form in the user topic, if there is one in the !NewUserTemplate. If there is no form, then bullets are used, as in pre-Dakar TWiki.
-   1 Sends different emails to the WIKIWEBMASTER and the USER, with the users containing the password unless {HidePasswdInRegistration} is set.
+   1 Sends different e-mails to the WIKIWEBMASTER and the USER, with the users containing the password unless {HidePasswdInRegistration} is set.
    1 There is now a mechanism for bulk registration, with callbacks for augmentation (e.g. from other sources).
    1 Absorbed TWiki:Codev.ResetPasswordByEmail.
    1 Obsoleted TWiki:Codev.InstallPassword

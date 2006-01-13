@@ -22,7 +22,7 @@ It is not necessary to have user home pages in the TWiki system for Authenticati
 ---++ Change, Reset and Install Passwords
 
    * ChangePassword is for users who can remember their password and want to change it
-   * ResetPassword is for users who cannot remember their password; a system generated password is emailed to them
+   * ResetPassword is for users who cannot remember their password; a system generated password is e-mailed to them
    * BulkResetPassword if for administrators who want to reset many passwords at once
 
 ---++ Removing User Accounts

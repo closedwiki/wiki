@@ -34,7 +34,7 @@ For example:
 </verbatim>
 A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
 
-If a _TWiki group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
+If a _TWiki group_ is listed for notification, the group will be recursively expanded to the e-mail addresses of all members.
 
 __%T% Tip:__ List names in alphabetical order to make it easier to find the names.
 %STOPINCLUDE%

@@ -410,7 +410,7 @@ The rules described under __Forced Links__ apply for internal link references.
 <tr valign="top">
 <td>
 *Mailto Links:* %BR%
-E-mail addresses are linked automatically. To create e-mail links that have more descriptive link text, specify subject lines or message bodies, or omit the email address, you can write =[<nop>[mailto:user@domain][descriptive text]]=.
+E-mail addresses are linked automatically. To create e-mail links that have more descriptive link text, specify subject lines or message bodies, or omit the e-mail address, you can write =[<nop>[mailto:user@domain][descriptive text]]=.
 </td><td>
 <verbatim>
 a@b.com
@@ -469,7 +469,7 @@ Being able to create links without any special formatting is a core TWiki featur
    * =http://...=, =https://...=, =ftp://...=, =gopher://...=, =news://...=, =file://...=, =telnet://...=
      and =mailto:...@...= are linked automatically.
 
-   * Email addresses like =name@domain.com= are linked automatically.
+   * E-mail addresses like =name@domain.com= are linked automatically.
 
    * =[<nop>[Square bracket rules]]= let you easily create [[#SquareBrackets][non-WikiWord links]].
       * You can also write =[<nop>[http://yahoo.com Yahoo home page]]= as an easier way of doing external links with descriptive text for the link, such as [[http://yahoo.com/ Yahoo home page]].
