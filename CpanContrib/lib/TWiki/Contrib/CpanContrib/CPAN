@@ -1,5 +1,5 @@
 @CPAN = (
-		    qw( ExtUtils::MakeMaker Storable Test::Harness Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParseXS Tree::DAG_Node 
+		    qw( ExtUtils::MakeMaker Storable Test::More Test::Harness YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParseXS Tree::DAG_Node 
 			Carp::Assert
 			Class::Data::Inheritable
 			Class::ISA Class::Virtually::Abstract 
@@ -43,6 +43,7 @@
 # also (optional for SVN::Mirror) VCP::Dest::svk (VCP?)
 #	qw( Authen::SASL XML::Stream Net::Jabber ),	# ImmediateNotifyPlugin (already included by SOAP::Lite for SoapClientPlugin)
 	qw( Email::Simple Module::Pluggable Email::FolderType Email::Folder Email::FolderType::Net MIME::Base64 Email::MIME::Encodings Email::MIME::ContentType Email::MIME File::Path::Expand Email::LocalDelivery Email::Delete Net::POP3 Email::Folder::POP3 Net::IMAP::Simple URI::imap Email::Folder::IMAP ),	# MailInContrib
+	qw( Tk Devel::ptkdb ),		# for debugging
 );
 
 #$, = "\n";
