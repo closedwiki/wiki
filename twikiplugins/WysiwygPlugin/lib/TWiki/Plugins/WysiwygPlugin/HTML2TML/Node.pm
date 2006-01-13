@@ -138,13 +138,13 @@ sub rootGenerate {
     $tml =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
     $tml =~ s/([$WC::CHECKn$WC::CHECKs$WC::NBSP$WC::NBBR\s])$WC::CHECKw/$1/go;
     $tml =~ s/$WC::CHECKw([$WC::CHECKn$WC::CHECKs$WC::NBSP$WC::NBBR\s])/$1/go;
-    $tml =~ s/$WC::CHECKw/$WC::NBSP/go;
+    $tml =~ s/($WC::CHECKw)+/$WC::NBSP/go;
 
     # isolate $CHECKs and convert to $NBSP
     $tml =~ s/$WC::CHECKs$WC::CHECKs+/$WC::CHECKs/go;
     $tml =~ s/([ $WC::NBSP])$WC::CHECKs/$1/go;
     $tml =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
-    $tml =~ s/$WC::CHECKs/$WC::NBSP/go;
+    $tml =~ s/($WC::CHECKs)+/$WC::NBSP/go;
 
     # isolate $CHECKn and convert to $NBBR
     $tml =~ s/$WC::CHECKn$WC::CHECKn+/$WC::CHECKn/go;
@@ -471,9 +471,10 @@ sub _H {
         $this->{attrs}->{class} =~ /\bnotoc\b/ ) {
         $notoc = '!!';
     }
-    return ( $flags | $WC::BLOCK_TML,
-             $WC::CHECKn.'---'.('+' x $depth).$notoc.
-               $WC::CHECKw.$contents.$WC::CHECKn );
+    $contents =~ s/^\s*/ /;
+    my $res = $WC::CHECKn.'---'.('+' x $depth).$notoc.
+      $WC::CHECKs.$contents.$WC::CHECKn;
+    return ( $flags | $WC::BLOCK_TML, $res );
 }
 
 # generate an emphasis
