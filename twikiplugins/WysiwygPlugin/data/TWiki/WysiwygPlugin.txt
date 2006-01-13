@@ -29,6 +29,7 @@ Some functions require a bit more explanation:
 	* "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
 	* The rightmost drop-down will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
 	* "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
+   * Watch out for the &lt;&gt; button on the right of the toolbar. It lets you switch into an HTML view, which can be very useful when you can't get your formatting right.
 
 ---++++ Kupu Notes
 The version of Kupu shipped with this plugin is an uncustomised basic Kupu release. All the TWiki customisation is done as plugins and extensions to Kupu - the basic kupu code is shipped completely intact.
@@ -38,7 +39,7 @@ The plugin works by translating the topic text into HTML, which is then fed to t
 
 The default rendering that TWiki uses to generate HTML for browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this problem the plugin instead uses its own translation of TWiki syntax to pure XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
 
-_(before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken directly from the implementation of the rendering pipeline for the TWiki 'Dakar' release)_
+_(before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken almost directly from the implementation of the rendering pipeline for the TWiki 'Dakar' release)_
 
 Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed syntax.
 
@@ -117,17 +118,20 @@ List of TWiki variables that will be available to the Kupu editor
 		<option value="INCLUDE{...}"> Server Side Include</option>
 		<option value="SEARCH{...}"> Inline Search</option>
 		<option value="TOC"> Table of Contents</option>
+As well as defining (or redefining) the list of icons and variables above, you can also add custom icons by defining the variable WYSIWYG_ICONS, for example in your WebPreferences or in your home topic. You can also extend the list of available tags by defining WYSIWYG_TAGS. The syntax of these two variables must be exactly the same as the syntax of the ICONS and TAGS definitions above.
 
 ---++ Known Issues
-Some of the following known problems apply to the Kupu editor or the browser rather than this plugin - they have been marked as such.
-	* Incompatible with plugins that expand non-standard syntax e.g. TWiki:Plugins.MathModePlugin (WysiwygPlugin)
-		* Plugins that extend the syntax using TWiki variables, such as %MYVARIABLE%, should work fine.
-	* Overlapping styles don't work very well (WysiwygPlugin)
-	* Can't *undo* all functions (Kupu)
-	* Nothing done while editing HTML source can be undone (Kupu)
-	* Images cannot be resized [[http://codespeak.net/issues/kupu/issue221][known Kupu bug]]
+Most of the known problems with the plugin are actually problems with the Kupu editor or the browser rather than the plugin.
 
----+++ Overlapping styles
+---+++ Incompatible with "non-standard" syntax
+WysiwygPlugin is Incompatible with plugins that expand non-standard syntax e.g. TWiki:Plugins.MathModePlugin (WysiwygPlugin)
+
+Plugins that extend the syntax using TWiki variables, such as %MYVARIABLE%, should work fine.
+
+---+++ Can't *undo* all functions (Kupu + browser)
+Due to limitations in the browser support for editing, not all functions can be undone. Also, the undo buffer can be cleared unexpectedly during editing, especially when using Internet Explorer.
+
+---+++ Overlapping styles (WysiwygPlugin)
 Because TWiki uses a "best guess" approach to some formatting, it allows overlapping of tags in a way forbidden by HTML, it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
 <verbatim>
 *bold _bold-italic* italic_
@@ -143,7 +147,7 @@ which gets translated back to TML as
 which is correct by construction, but does not render correctly in TWiki. This problem is unfortunately unavoidable due to the way TWiki syntax works.
 
 ---+++ Support for PRE
-Because of the limitations in Internet Explorer, the editor does not support PRE blocks. All PRE blocks will be converted to TWiki verbatim blocks on save. This can cause some confusion, especially when editor formatting controls (such as "bold") have been used to format text in a PRE block. Users are advised to use only plain text in PRE (verbatim) blocks.
+Because of limitations in the browsers, the editor does not support PRE blocks. All PRE blocks will be converted to TWiki verbatim blocks on save. This can cause some confusion, especially when editor formatting controls (such as "bold") have been used to format text in a PRE block. Users are advised to use only plain text in PRE (verbatim) blocks.
 
 ---++ Plugin Info
 
