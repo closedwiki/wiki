@@ -460,10 +460,11 @@ sub _encodeEntities {
 # Make the html for a heading
 sub _makeHeading {
     my( $theHeading, $theLevel ) = @_;
-    my $attrs = { class => 'TML' };
+    my $class = 'TML';
     if( $theHeading =~ s/$TWiki::regex{headerPatternNoTOC}//o ) {
-        $attrs->{notoc} = 1;
+        $class .= ' notoc';
     }
+    my $attrs = { class => $class };
     my $fn = 'CGI::h'.$theLevel;
     no strict 'refs';
     return &$fn($attrs, " $theHeading ");

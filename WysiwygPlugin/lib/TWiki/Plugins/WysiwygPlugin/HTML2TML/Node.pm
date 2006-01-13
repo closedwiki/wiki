@@ -466,8 +466,14 @@ sub _H {
     my( $this, $options, $depth ) = @_;
     my( $flags, $contents ) = $this->_flatKids( $options );
     return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
+    my $notoc = '';
+    if( defined( $this->{attrs}->{class} ) &&
+        $this->{attrs}->{class} =~ /\bnotoc\b/ ) {
+        $notoc = '!!';
+    }
     return ( $flags | $WC::BLOCK_TML,
-             $WC::CHECKn.'---'.('+' x $depth).$WC::CHECKw.$contents.$WC::CHECKn );
+             $WC::CHECKn.'---'.('+' x $depth).$notoc.
+               $WC::CHECKw.$contents.$WC::CHECKn );
 }
 
 # generate an emphasis
