@@ -322,6 +322,8 @@ locale/es.po 0440
 locale/fr.po 0440
 locale/nl.po 0440
 locale/pt.po 0440
+locale/zh-cn.po 0400
+locale/zh-tw.po 0400
 LICENSE 0440
 pub/_work_areas/.htaccess 0440
 pub/_work_areas/README 0660
