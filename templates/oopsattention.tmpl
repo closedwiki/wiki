@@ -7,7 +7,7 @@
 ---+++ %MAKETEXT{"User Account [_1] Deleted" args="%PARAM1%"}%
 %MAKETEXT{"Your user name has been removed from the Authentication System."}%
 
-%MAKETEXT{"Your user topic has not been renamed. Please email [_1] to request this." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Delete User"}%&&body=%ENCODE{"%PARAM1%"}%'>%WIKIWEBMASTER%</a>"}%
+%MAKETEXT{"Your user topic has not been renamed. Please e-mail [_1] to request this." args="<a href='mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME% Delete User"}%&&body=%ENCODE{"%PARAM1%"}%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
 %TMPL:DEF{"created_web"}%
 ---+++ %MAKETEXT{"The new web has been created"}%
@@ -145,7 +145,7 @@
 %TMPL:DEF{"confirm"}%
 ---+++ %MAKETEXT{"Thank you for registering"}%
 
-%MAKETEXT{"Your activation code has been sent to [_1].  Either click on the link in your email or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxx\")" args="%PARAM1%"}%
+%MAKETEXT{"Your activation code has been sent to [_1].  Either click on the link in your e-mail or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxx\")" args="%PARAM1%"}%
 
 <form action="%SCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
@@ -211,8 +211,8 @@
 %MAKETEXT{"Please go back in your browser and try again."}%
 %TMPL:END%
 %TMPL:DEF{"bad_email"}%
----+++ %MAKETEXT{"Invalid email address"}%
-%MAKETEXT{"The email address for this account is not valid."}%
+---+++ %MAKETEXT{"Invalid e-mail address"}%
+%MAKETEXT{"The e-mail address for this account is not valid."}%
 
 %PARAM1%
 
@@ -233,8 +233,8 @@
 %MAKETEXT{"Please contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
 %TMPL:DEF{"no_email_for"}%
----+++ %MAKETEXT{"Can't get an email address for [_1]" args="%PARAM1%"}%
-%MAKETEXT{"An email address is required before a password can be reset."}%
+---+++ %MAKETEXT{"Can't get an e-mail address for [_1]" args="%PARAM1%"}%
+%MAKETEXT{"An e-mail address is required before a password can be reset."}%
 %TMPL:END%
 %TMPL:DEF{"mandatory_field"}%
 ---+++ %MAKETEXT{"Topic Save Error"}%
@@ -334,9 +334,9 @@
 %TMPL:DEF{bad_script_parameters}%
 %MAKETEXT{"Incorrect parameters to the =[_1]= script" args="%PARAM1%"}%
 
-%MAKETEXT{"If you are developing a <nop>TWikiApplication, see [_1] for a description of the correct parameters." args="%TWIKIWEB%.TWikiScripts#%PARAM1%"}%
+%MAKETEXT{"If you received a link to this topic in an e-mail or just want to look at the topic, ~[~[[_1]~]~[cancel save~]~] to go to [_2]." args="%WEB%.%TOPIC%, <nop>%TOPIC%"}%
 
-%MAKETEXT{"If you received a link to this page in an email or just want to look at the topic, ~[~[[_1]~]~[cancel save~]~] (go to [_2])." args="%WEB%.%TOPIC%, <nop>%TOPIC%"}%
+%MAKETEXT{"If you are developing a <nop>TWikiApplication, see [_1] for a description of the correct parameters." args="%TWIKIWEB%.TWikiScripts#%PARAM1%"}%
 
 %TMPL:END%
 
