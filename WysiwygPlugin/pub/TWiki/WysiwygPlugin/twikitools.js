@@ -594,17 +594,21 @@ TWikiWikiWordTool.prototype = new LinkTool;
 function TWikiHandleSubmit(kupu) {
 
   if (!kupu) {
+    // nasty hack, but I don;t know how else to do it
+    kupu = window.drawertool.editor;
   }
 
+  //alert("Fixing spans");
   FixBoldItalic(kupu);
 
   var form = getFromSelector('twiki-main-form');
 
   kupu.content_changed = 0; // choke the unload handler
-
+  //alert("Preparing form");
   // use Kupu to create the 'text' field in the form
   kupu.prepareForm(form, 'text');
 
+  //alert("Stripping");
   if (kupu.getBrowserName() == "IE") {
     // If we don;t remove ^M's, the server converts them the LFs, which
     // ends up giving us twice as many LFs as we wanted.
@@ -618,6 +622,7 @@ function TWikiHandleSubmit(kupu) {
     }
     ta.replaceChild(document.createTextNode(clean), ta.lastChild);
   }
+  //alert("Submitting");
 
   /*
   // 'submit' should do this for us, but IE refuses
