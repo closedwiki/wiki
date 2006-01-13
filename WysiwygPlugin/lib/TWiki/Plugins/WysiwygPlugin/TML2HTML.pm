@@ -412,7 +412,7 @@ sub _getRenderedVersion {
     # Handle WikiWords
     $text = _takeOutBlocks( $text, 'noautolink', $removed );
 
-    $text =~ s/<nop(?: *\/)?>($TWiki::regex{wikiWordRegex})/<span class="TMLnop">$1<\/span>/gom;
+    $text =~ s#<nop(?: */)?>($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})#<span class="TMLnop">$1</span>#gom;
 
     $text =~ s/$STARTWW((?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?)/$this->_makeWikiWord($1,$2,$3,$4)/geom;
     foreach my $placeholder ( keys %$removed ) {
