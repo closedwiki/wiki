@@ -43,25 +43,29 @@ function initKupu(iframe) {
     var ui = new KupuUI('kupu-tb-styles');
 
     // override the setTextStyle method
-    var preHunter = parentFinder(hasTag(new Array('pre')));
+    var preUp = parentFinder(hasTag(new Array('pre')));
+    var preDown = childFinder(hasTag(new Array('pre')));
 
     var superstyle = ui.setTextStyle;
     ui.setTextStyle = function(style) {
       var verbatim = false;
-      if (style == 'verbatim' ) {
-        style = "pre";
-        verbatim = true;
-      }
-      // copied almost verbatim from kupubasetools.js
+      style = style.toUpperCase();
       if (kupu.getBrowserName() == "IE") {
-        style = '<' + style + '>';
-      };
-      kupu.execCommand('formatblock', style);
-      if (verbatim) {
+        kupu.execCommand('formatblock', '<'+style+'>');
+      } else {
+        kupu.execCommand('formatblock', style);
+      }
+      if (style == 'PRE') {
+        // Add class to PRE nodes
         var selNode = kupu.getSelectedNode();
-        var preNode = preHunter(selNode);
+        var preNode = preUp(selNode);
         if (preNode) {
           preNode.className = 'TMLverbatim';
+        } else {
+          var preNodes = preDown(selNode, null, kupu);
+          for (var i = 0; i < preNodes.length; i++) {
+            preNodes[i].className = 'TMLverbatim';
+          }
         }
       }
     }
@@ -198,16 +202,10 @@ function initKupu(iframe) {
     // Save button
     var savebutton = document.getElementById('kupu-save-button');
     function submitForm() {
-      // can't use the TWikiHandleSubmit handler, because it doesn't
-      // get called when submit() is used.
-      // Fix bold & italic
-      FixBoldItalic(kupu);
-      // use prepareForm to create the 'text' field
-      var form = document.getElementById('twiki-main-form');
-      kupu.prepareForm(form, 'text');
-      kupu.content_changed = 0; // choke the unload handler
+      // Explicitly call the form submit handler; it is not called by submit()
+      var form = TWikiHandleSubmit(kupu);
       form.submit();
-    };
+    }
     addEventHandler(savebutton, 'click', submitForm, kupu);
 
     var cancelbutton = document.getElementById('twiki-cancel-button');
