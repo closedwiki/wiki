@@ -29,18 +29,9 @@ Once the plugin is installed, users can register for notification in the Web<nop
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
 	* Download the ZIP file and necessary patches from the Plugin web (see below)
-	* Patch your TWiki installation to add the new plugin hook:
-		* In the =lib/TWiki/= directory, run the command =patch < /path/to/afterSaveHandler.patch=
-	* Patch the Net::Jabber Perl module.
-		* Find =Jabber.pm=
-		* In the directory containing =Jabber.pm=, run the command =patch < /path/to/net_jabber_taint_fix.patch=
 	* Unzip =%TOPIC%.zip= in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
-	  | =data/TWiki/%TOPIC%.txt= | Plugin topic |
-	  | =data/TWiki/%TOPIC%.txt,v= | Plugin topic repository |
-	  | =lib/TWiki/Plugins/%TOPIC%.pm= | Plugin Perl module |
-	  | =lib/TWiki/Plugins/%TOPIC%/*.pm= | Notification method Perl modules |
-	  | =templates/immediatenotify-*.tmpl= | Message templates for the notification methods |
+%$MANIFEST%
 	* Set up notification methods
 		* Currently the only available methods are via SMTP and Jabber.
 			* SMTP
@@ -57,7 +48,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Change History: | <!-- specify latest version first -->&nbsp; |
 |  16 Mar 2003: | Added support for groups and SMTP |
 |  03 Feb 2003: | Initial version |
-|  CPAN Dependencies: | =XML::Stream=, =Net::Jabber= (w/patch) |
+|  CPAN Dependencies: | CPAN:XML::Stream, CPAN:Net::Jabber (2.0) |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.6.1 (untested on earlier versions) |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
