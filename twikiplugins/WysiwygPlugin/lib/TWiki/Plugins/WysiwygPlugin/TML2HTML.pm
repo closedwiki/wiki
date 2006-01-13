@@ -443,7 +443,6 @@ sub _getRenderedVersion {
     _putBackBlocks( $text, $removed, 'verbatim', 'pre',
                     \&_encodeEntities );
 
-
     return $this->_liftOut( $text );
 }
 
