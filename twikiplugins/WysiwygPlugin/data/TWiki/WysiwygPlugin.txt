@@ -128,7 +128,7 @@ Some of the following known problems apply to the Kupu editor or the browser rat
 	* Images cannot be resized [[http://codespeak.net/issues/kupu/issue221][known Kupu bug]]
 
 ---+++ Overlapping styles
-Because TWiki employs a "best guess" approach to some formatting, and allows overlapping of tags in a way forbidden by HTML, it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
+Because TWiki uses a "best guess" approach to some formatting, it allows overlapping of tags in a way forbidden by HTML, it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
 <verbatim>
 *bold _bold-italic* italic_
 </verbatim>
@@ -141,6 +141,9 @@ which gets translated back to TML as
 *bold _bold-italic_* _italic_
 </verbatim>
 which is correct by construction, but does not render correctly in TWiki. This problem is unfortunately unavoidable due to the way TWiki syntax works.
+
+---+++ Support for PRE
+Because of the limitations in Internet Explorer, the editor does not support PRE blocks. All PRE blocks will be converted to TWiki verbatim blocks on save. This can cause some confusion, especially when editor formatting controls (such as "bold") have been used to format text in a PRE block. Users are advised to use only plain text in PRE (verbatim) blocks.
 
 ---++ Plugin Info
 
