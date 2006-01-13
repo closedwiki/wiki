@@ -703,7 +703,7 @@ sub _handleSPAN {
              $this->{attrs}->{class} =~ /\bTMLnop\b/) {
         my($flags, $kids ) = $this->_flatKids( $options | $WC::NOP_ALL );
         $kids =~ s/%([A-Z0-9_:]+({.*})?)%/%<nop>$1%/g;
-        return ( $flags, $kids );
+        return ( $flags, " $kids ");
     } elsif( !scalar( %{$this->{attrs}} )) {
         # ignore the span if there are no attrs
         return $this->_flatKids( $options );

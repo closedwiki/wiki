@@ -51,6 +51,7 @@ sub generate {
     if( $options & $WC::NOP_ALL ) {
         # escape all embedded wikiwords
         $t =~ s/$WC::STARTWW($TWiki::regex{wikiWordRegex})/<nop>$1/go;
+        $t =~ s/$WC::STARTWW($TWiki::regex{abbrevRegex})/<nop>$1/go;
         $t =~ s/\[/<nop>[/g;
     }
     return (0, $t);
