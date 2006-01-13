@@ -189,6 +189,12 @@ sub _expandRef {
     return "$TT1$ref$TT1";
 }
 
+sub _expandURL {
+    my( $this, $url ) = @_;
+    return $url unless ( $this->{opts}->{expandVarsInURL} );
+    return &{$this->{opts}->{expandVarsInURL}}( $url, $this->{opts} );
+}
+
 sub _makeSquab {
     my( $this, $url, $text ) = @_;
 
@@ -249,6 +255,10 @@ sub _getRenderedVersion {
     $text =~ s/(<!--.*?-->)/$this->_liftOut($1)/ges;
 
     $text =~ s/<(.?(noautolink|nop).*?)>/$TT1($1)$TT1/gi;
+
+    # Expand selected TWiki variables in IMG tags so that images appear in the
+    # editor as images
+    $text =~ s/(<img [^>]*src=)(["'])(.*?)\2/$1.$2.$this->_expandURL($3).$2/gie;
 
     # protect HTML tags by pulling them out
     $text =~ s/(<\/?[a-z]+(\s[^>]*)?>)/ $this->_liftOut($1) /gei;
@@ -433,7 +443,6 @@ sub _getRenderedVersion {
             $removed->{$placeholder}{params}->{class} = $pm;
         }
     }
-
 
     _putBackBlocks( $text, $removed, 'noautolink', 'div' );
 
