@@ -605,6 +605,20 @@ function TWikiHandleSubmit(kupu) {
   // use Kupu to create the 'text' field in the form
   kupu.prepareForm(form, 'text');
 
+  if (kupu.getBrowserName() == "IE") {
+    // If we don;t remove ^M's, the server converts them the LFs, which
+    // ends up giving us twice as many LFs as we wanted.
+    var ta = form.lastChild;
+    var text = ta.lastChild.data;
+    var clean = '';
+    for (var i = 0; i < text.length; i++) {
+      if (text.charAt(i) != '\r') {
+        clean += text.charAt(i);
+      }
+    }
+    ta.replaceChild(document.createTextNode(clean), ta.lastChild);
+  }
+
   /*
   // 'submit' should do this for us, but IE refuses
   // to submit a form after a beforeunload handler has been fired, so we
