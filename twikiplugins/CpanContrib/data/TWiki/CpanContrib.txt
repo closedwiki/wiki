@@ -147,6 +147,8 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Net::IMAP::Simple
    * CPAN:URI::imap
    * CPAN:Email::Folder::IMAP
+   * CPAN:Tk
+   * CPAN:Devel::ptkdb
 </td>
 </tr></table>
 
