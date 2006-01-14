@@ -62,13 +62,14 @@ package TWiki::Plugins::LatexModePlugin;
 use strict;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION $debug
+use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $debug
              $default_density $default_gamma $default_scale $preamble
              $eqn $fig $tbl $use_color @EXPORT_OK
              );
 
 # number the release version of this plugin
-$VERSION = '2.100';
+$VERSION = '2.210';
+$RELEASE = 'Dakar';
 
 require Exporter;
 *import = \&Exporter::import;
@@ -80,7 +81,7 @@ use Digest::MD5 qw( md5_hex );
 
 #we use the basename() function to determine which script is running
 use File::Basename qw( basename );
-use File::Copy qw( move );
+use File::Copy qw( move copy );
 use File::Temp;
 
 # use Image::Info to identify image size.
@@ -89,7 +90,7 @@ use Image::Info qw( image_info );
 ######################################################################
 ### installation specific variables:
 
-my $pathSep = ($^O =~ m/(li|U)nux$/i) ? '/' : "\\" ; # Mac's too?
+my $pathSep = ($^O =~ m/^Win/i) ? "\\" : '/' ;
 
 my $PATHTOLATEX = $TWiki::cfg{Plugins}{LatexModePlugin}{latex} ||
     '/usr/share/texmf/bin/latex';
@@ -107,8 +108,8 @@ my $GREP =  $TWiki::cfg{Plugins}{LatexModePlugin}{fgrep} ||
 ### The variables below this line will likely not need to be changed
 ######################################################################
 
-#this is the extension of the images.  To use a different image type,
-#you need to change this AND the variable in the latex2html init file.
+# this is the extension of the generated images.  gif or jpg are other
+# possibilities.
 my $EXT = 'png';
 
 #this is the name of the latex file created by the program.  You shouldn't
@@ -209,10 +210,11 @@ sub commonTagsHandler
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
     
-    my $tmp = $_[0];
-    my $suf = 'a';
+    # handle floats first, in case of latex markup in captions.
+    $_[0] =~ s!%BEGINFIGURE{(.*?)}%(.*?)%ENDFIGURE%!&handleFloat($2,$1,'fig')!giseo;
+    $_[0] =~ s!%BEGINTABLE{(.*?)}%(.*?)%ENDTABLE%!&handleFloat($2,$1,'tbl')!giseo;
 
-    ### handle the standard syntax first
+    ### handle the standard syntax next
     $_[0] =~ s/%(\$.*?\$)%/&handleLatex($1,'inline="1"')/gseo;
     $_[0] =~ s/%(\\\[.*?\\\])%/&handleLatex($1,'inline="0"')/gseo;
     $_[0] =~ s/%MATHMODE{(.*?)}%/&handleLatex("\\[".$1."\\]",'inline="0"')/gseo;
@@ -222,10 +224,6 @@ sub commonTagsHandler
     $_[0] =~ s!%BEGINLATEX{(.*?)}%(.*?)%ENDLATEX%!&handleLatex($2,$1)!giseo;
     $_[0] =~ s!%BEGINLATEX%(.*?)%ENDLATEX%!&handleLatex($1,'inline="0"')!giseo;
     $_[0] =~ s!%BEGINLATEXPREAMBLE%(.*?)%ENDLATEXPREAMBLE%!&handlePreamble($1)!giseo;
-
-    # handle floats
-    $_[0] =~ s!%BEGINFIGURE{(.*?)}%(.*?)%ENDFIGURE%!&handleFloat($2,$1,'fig')!giseo;
-    $_[0] =~ s!%BEGINTABLE{(.*?)}%(.*?)%ENDTABLE%!&handleFloat($2,$1,'tbl')!giseo;
 
     # last, but not least, replace the references to equations with hyperlinks
     $_[0] =~ s!%REFLATEX{(.*?)}%!&handleReferences($1)!giseo;
@@ -290,25 +288,38 @@ sub handleFloat
     my @a=('0'..'9','a'..'z','A'..'Z');
     my $str = map{ $a[ int rand @a ] } (0..7);
     my %opts = ( 'label' => $str,
+                 'span'  => 'onecol',
                  'caption' => ' ' );
 
-    while ( $prefs=~ m/(.*?)=\"(.*?)\"/g ) {
-        my ($a,$b) = ($1,$2);
-        # remove leading/trailing whitespace from key names
-        $a =~ s/^\s*|\s*$//;    
-
-        $opts{$a} = $b;
-    }
+    my %opts2 = TWiki::Func::extractParameters( $prefs );
+    map { $opts{$_} = $opts2{$_} } keys %opts2;
+    # while ( $prefs=~ m/(.*?)=\"(.*?)\"/g ) {
+    #     my ($a,$b) = ($1,$2);
+    #     # remove leading/trailing whitespace from key names
+    #     $a =~ s/^\s*|\s*$//;    
+    # 
+    #     $opts{$a} = $b;
+    # }
 
     my $env = ($_[2] eq 'fig') ? "Figure" : "Table" ;
+    my $tc  = ($opts{'span'} =~ m/^twoc/) ? '*' : '' ;
 
+    # ensure that the first 4 chars of the label conform to 
+    # 'fig:' or 'tbl:' or ...
+    ( $opts{'label'} = $_[2].":".$opts{'label'} )
+        unless ( substr($opts{'label'},0,4) eq $_[2].':' );
+        
     my $txt2 = "";
-    if( $latexout ) {
-        ## for genpdflatex
+    if( $latexout ) {           ## for genpdflatex
+        # in Cairo (at least) latex new-lines, '\\', get translated to 
+        # spaces, '\', but if they appear at the end of the line. 
+        # So pad in a few spaces to protect them...
+        $input =~ s!\n!  \n!g;
+
         $txt2 = '<latex>';
-        $txt2 .= "\n\\begin{".lc($env)."}\\centering\n";
+        $txt2 .= "\n\\begin{".lc($env).$tc."}\\centering\n";
         $txt2 .= $input."\n\\caption{".$opts{'caption'}."}\n";
-        $txt2 .= '\label{'.$opts{'label'}."}\n\\end{".lc($env)."}";
+        $txt2 .= '\label{'.$opts{'label'}."}\n\\end{".lc($env).$tc."}";
         $txt2 .= '</latex>';
         
     } else {
@@ -316,11 +327,6 @@ sub handleFloat
         my $infrmt = '<tr><td align="center">%s</td></tr>';
         my $cpfrmt = '<tr><td align="center" style="lmp-caption"> *%s %d*: %s</td></tr>';
 
-        # ensure that the first 4 chars of the label conform to 
-        # 'fig:' or 'tbl:' or ...
-        ( $opts{'label'} = $_[2].":".$opts{'label'} )
-            unless ( substr($opts{'label'},0,4) eq $_[2].':' );
-        
         if ($_[2] eq 'fig') {
             $fig++;
             
@@ -374,10 +380,13 @@ sub handleLatex
                  'scale' => $default_scale,
                  'color' => 'black' );
 
-    while ( $prefs=~ m/(.*?)=\"(.*?)\"/g ) {
-        my ($a,$b) = ($1,$2);
+    my %opts2 = TWiki::Func::extractParameters( $prefs );
+    # map { $opts{$_} = $opts2{$_} } keys %opts2;
+    foreach my $k (keys %opts2) {
+        my $b = $opts2{$k};
+
         # remove leading/trailing whitespace from key names
-        $a =~ s/^\s*|\s*$//;
+        (my $a = $k) =~ s/^\s*|\s*$//;
 
         # scrub the inputs, since this gets passed to 'convert' (in
         # particular, sheild against 'density=166|cat%20/etc/passwd'
@@ -440,12 +449,31 @@ COLORS
             $math_string =~ s!\\\[|\\\]!!g; 
             $math_string =~ s!\\(begin|end)\{displaymath\}!!g;
 
-            $math_string = "\n\\begin{equation}\n".
-                '    \label{'.$opts{'label'}."}"."\n".
-                "    ".$math_string."\n".
-                "\\end{equation}\n";
-        }
+            if ($math_string =~ m/eqnarray(\*?)/) {
 
+                # try to handle equation arrays.
+                if ($1 eq '*') {
+                    $math_string =~ s/eqnarray\*/eqnarray/g;
+                    
+                    # leave no numbers ...
+                    $math_string =~ s!\\\\!\\nonumber \\\\!g;
+                    # except for the last one
+                }
+                # slip the label in..
+                my $lbl = '\label{'.$opts{'label'}.'}';
+                $math_string =~ s/(begin\{.*?\})/$1$lbl/;
+
+            } else {
+                $math_string = "\n\\begin{equation}\n".
+                    '    \label{'.$opts{'label'}."}"."\n".
+                    "    ".$math_string."\n".
+                    "\\end{equation}\n";
+            }
+        }
+        # in Cairo (at least) latex new-lines, '\\', get translated to 
+        # spaces, '\', if they appear at the end of the line.
+        # So protect them here...
+        $math_string =~ s!\n!  \n!g;
         $txt = '<latex>'.$math_string.'</latex>';
 
         
@@ -455,7 +483,8 @@ COLORS
         # and the declared options.
         my $hash_code = md5_hex( $math_string . 
                                  join('; ', map{"$_=>$opts{$_}"} keys(%opts)) );
-        
+        $math_string = '\fbox{ ' . $math_string . 
+            '\vphantom{$\| j^I \|$} }' if ($opts{'inline'} eq 1);
         #store the string in a hash table, indexed by the MD5 hash
         $hashed_math_strings{$hash_code} = $math_string;
         
@@ -484,7 +513,8 @@ COLORS
         if( ($opts{'inline'} eq 1) or 
             ($opts{'inline'} eq "on") or 
             ($opts{'inline'} eq "true") ) {
-            my $algn = ($escaped =~ m/[\_\}\{]|[yjgpq]/) ? 'middle' : 'bottom' ;
+            my $algn = 'middle';
+            # my $algn = ($escaped =~ m/[\_\}\{]|[yjgpq]/) ? 'middle' : 'bottom' ;
             $txt = "<img align=\"$algn\" $str src=\"$image_name\" alt=\"$escaped\" />"; 
         } elsif( exists($opts{'label'}) ) {
             $eqn++;
@@ -547,7 +577,7 @@ sub postRenderingHandler
         # Dakar interface
         my ( $meta, undef ) = TWiki::Func::readTopic( $web, $topic );
         my %h2 = %{$meta};
-        @extfiles = @{$h2{FILEATTACHMENT}};
+        @extfiles = @{$h2{FILEATTACHMENT}} if defined($h2{FILEATTACHMENT});
     } else {
         # Cairo interface
         $path = &TWiki::Func::getPubDir() . "/$web/$topic";
@@ -646,9 +676,10 @@ sub postRenderingHandler
                                   ) if ($debug);
         
         print MATHOUT "\\clearpage\n";
+        print MATHOUT "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
         print MATHOUT '\textcolor{'.$opts{'color'}.'}{'
             unless ($opts{'color'} eq 'black');
-        print MATHOUT " $value % $LATEXBASENAME.$EXT.$image_number --> $key \n";
+        print MATHOUT " $value ";
         print MATHOUT '}'
             unless ($opts{'color'} eq 'black');
 
@@ -668,23 +699,79 @@ sub postRenderingHandler
     }
 
     if ( -f $LATEXBASENAME.".dvi" ) {
+
 	#generate image files based on the hash code
 	while( (my $key, my $value) = each( %hash_code_mapping ) ) {
-
 	    # restore (again) the rendering options
 	    my %opts = %{$markup_opts{$key}};
+
+            # calculate point-to-pixel mapping (1pt/72dpi*density) 
+            # == 1.61 for density=116
+            my $ptsz = ($opts{'density'}/72); 
 	    
 	    my $num = $hash_code_mapping{$key};
-	    system("$PATHTODVIPS -pp $num -o $LATEXBASENAME.$num.ps $LATEXBASENAME.dvi >> $LATEXLOG 2>&1 ");
+	    system("$PATHTODVIPS -E -pp $num -o $LATEXBASENAME.$num.eps $LATEXBASENAME.dvi >> $LATEXLOG 2>&1 ");
 	    
             my $outimg = "latex$key.$EXT";
 
-	    my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.ps  -antialias -trim -gamma $opts{'gamma'} -transparent white  $outimg";
+	    my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.eps  -antialias "; 
+            $cmd .= "-shave ".round(2*$ptsz)."x".round(2*$ptsz)." " 
+                if ($markup_opts{$key}{'inline'} ne 0);
+            $cmd .= "-gamma $opts{'gamma'} -transparent white  $outimg";
 	    system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG");
 	    system("$PATHTOCONVERT $cmd");
 
             if (-f $outimg) {
                 my $img = image_info($outimg);
+                
+                if ($markup_opts{$key}{'inline'} ne 0) {
+                    my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
+                    
+                    system("$PATHTOCONVERT $outimg -trim $tmpfile");
+                    my $img2 = image_info($tmpfile);
+
+                    my ($nw,$nh) = ( $img2->{width}, $img->{height} );
+                    $nw = $1 if ($nw =~ m/(\d+)/); # untaint
+                    $nh = $1 if ($nh =~ m/(\d+)/); # untaint
+                    my ($sh,$sh2) = ( ( $img->{width} - $img2->{width} )/2, 
+                                      round(2*$ptsz) );
+                    $sh = $1 if ($sh =~ m/(\d+)/); # untaint
+                    $sh2 = $1 if ($sh2 =~ m/(\d+)/); # untaint
+
+                    my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 $outimg";
+                    # my $cmd = " -shave ".$maxshave.'x'.$maxshave." $outimg";
+                    copy($outimg,$tmpfile);
+                    system("echo \"$PATHTOCONVERT $tmpfile $cmd\" >> $LATEXLOG");
+                    system("$PATHTOCONVERT $tmpfile $cmd");
+                    unlink("$tmpfile") unless ($debug);
+
+                    # refresh the image info
+                    $img = image_info($outimg);
+
+                    ## Another strategy: trim gives better horizontal
+                    ## results but is too aggressive vertically.
+                    ##    * convert ps --> 1.png (with a border)
+                    ##    * shave 1.png by border size 
+                    ##    * copy 1.png --> 2.png
+                    ##    * trim 2.png
+                    ##    * extract off image and page size using identify
+                    ##      (this gives crop coordinates).
+                    ##    * crop 1.png, using width-coordinates from
+                    ##      trim and hieght coordinates from shave
+
+### EXAMPLE:
+# /usr/X11R6/bin/convert -density 116 twiki_math.4.ps  -antialias -trim -gamma 0.6 -transparent white  t1.png
+# cp t1.png t2.png
+# mogrify -shave 2x2 t2.png
+# identify t2.png
+# "t2.png PNG 35x24+2+2 PseudoClass 256c 8-bit 365.0 0.000u 0:01"
+# mogrify -trim t2.png
+# identify t2.png
+# "tmp.png PNG 11x11+8+6 PseudoClass 256c 8-bit 306.0 0.000u 0:01"
+# mogrify -crop 11x24+10+3 t1.png
+# 
+                }
+
                 my $str = sprintf("width=\"%d.0\" height=\"%d.0\"",
                                   ($opts{'scale'} * $img->{width}),
                                   ($opts{'scale'} * $img->{height}) );
@@ -746,6 +833,17 @@ sub postRenderingHandler
     $LATEXWDIR = undef;
     # move back to the previous directory.
     # chdir($saveddir) if ( $saveddir );
+}
+
+sub round {
+    
+    my ($i) = @_;
+    
+    # my $a = ( ($i - int($i)) > 0.5 ) ? int($i) : int($i) + 1;
+    my $a = int($i);
+    $a = $a + 1 if ( ($i - int($i)) > 0.5 );
+
+    return($a);
 }
 
 # =========================
