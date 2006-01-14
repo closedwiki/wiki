@@ -62,4 +62,14 @@ sub enabled_languages {
     return $this->{enabled_languages};
 }
 
+sub fromSiteCharSet {
+    my ( $this, $text ) = @_;
+    return $text;
+}
+
+sub toSiteCharSet {
+    my ( $this, $text ) = @_;
+    return $text;
+}
+
 1;
