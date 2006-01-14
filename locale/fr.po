@@ -409,6 +409,11 @@ msgstr ""
 "voir <a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
 "1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 
+#: lib/TWiki/I18N/Extract.pm:104
+#, fuzzy
+msgid "..."
+msgstr "la suite..."
+
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "<a href='%1' rel='nofollow'>Modifier les paramètres</a> de cette page"
@@ -2540,6 +2545,12 @@ msgstr ""
 #: templates/oopsattention.tmpl:266
 msgid "This requires the form definition to be present."
 msgstr "Pour cela, le formulaire doit être défini."
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:9
+#, fuzzy
+msgid "This topic has moved to %1."
+msgstr "Chercher les pages qui contiennent un lien pointant vers %1..."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:23
 msgid ""

@@ -398,6 +398,11 @@ msgid ""
 msgstr ""
 "*属性:* 注视和可见性可以被更改而不通过上传文件  而通过 \"改变属性\" 参见 %1."
 
+#: lib/TWiki/I18N/Extract.pm:104
+#, fuzzy
+msgid "..."
+msgstr "更多……"
+
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "本主题 <a href='%1' rel='nofollow'>编辑设置</a>"
@@ -2363,6 +2368,12 @@ msgstr "这个名称已经被选定，以便不会和其他在%1中的主题冲�
 #: templates/oopsattention.tmpl:266
 msgid "This requires the form definition to be present."
 msgstr "这要求表单定义."
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:9
+#, fuzzy
+msgid "This topic has moved to %1."
+msgstr "找到链接到%1的主题..."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:23
 msgid ""

@@ -417,6 +417,11 @@ msgstr ""
 "onclick=\"return launchWindow('%1','HiddenAttachment')\" href=\"%2\" "
 "rel='nofollow'>HiddenAttachment</a>."
 
+#: lib/TWiki/I18N/Extract.pm:104
+#, fuzzy
+msgid "..."
+msgstr "mere..."
+
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "Opdatér <a href='%1' rel='nofollow'>side-præferencer</a>"
@@ -2496,6 +2501,12 @@ msgstr ""
 #: templates/oopsattention.tmpl:266
 msgid "This requires the form definition to be present."
 msgstr "Dette kræver at formular-definitionen er tilgængelig."
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:9
+#, fuzzy
+msgid "This topic has moved to %1."
+msgstr "Find sider der refererer til %1 ..."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:23
 msgid ""

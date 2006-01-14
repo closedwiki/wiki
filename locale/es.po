@@ -395,6 +395,11 @@ msgstr ""
 "cambiado sin enviar el archivo, haciendo click en \"Cambiar las Propiedades"
 "\"; vea %1."
 
+#: lib/TWiki/I18N/Extract.pm:104
+#, fuzzy
+msgid "..."
+msgstr "mas..."
+
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "<a href='%1' rel='nofollow'>Editar preferencias</a> para esta pagina"
@@ -2366,6 +2371,11 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:266
 msgid "This requires the form definition to be present."
+msgstr ""
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:9
+msgid "This topic has moved to %1."
 msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:23

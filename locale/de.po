@@ -410,6 +410,11 @@ msgstr ""
 "werden; siehe <a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
 "1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 
+#: lib/TWiki/I18N/Extract.pm:104
+#, fuzzy
+msgid "..."
+msgstr "mehr..."
+
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr ""
@@ -2510,6 +2515,12 @@ msgstr ""
 #: templates/oopsattention.tmpl:266
 msgid "This requires the form definition to be present."
 msgstr "Dazu wird die Forumalr Definition benötigt."
+
+#: data/TWiki/WebTopicNonWikiTemplate.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:9
+#, fuzzy
+msgid "This topic has moved to %1."
+msgstr "Topics finden die auf %1 verweisen ..."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:23
 msgid ""
