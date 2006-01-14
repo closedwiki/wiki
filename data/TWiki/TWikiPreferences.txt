@@ -127,16 +127,13 @@ _(Click for form-based editing of existing preferences.)_
    * Stop words, e.g., common words and characters to exclude from a keyword search:
       * Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
 
----+++ E-mail and Proxy Server Settings
+---+++ E-mail Settings
 
    * TWiki webmaster e-mail address:
       * Set WIKIWEBMASTER = webmaster
 
    * TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
       * Set WIKIWEBMASTERNAME = TWiki Administrator
-
-
----+++ E-mail Link Settings
 
    * 'Mail this topic' mailto: link - can be included in topics, templates or skins
       * Set MAILTHISTOPIC = <a href="mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL%">%MAILTHISTOPICTEXT%</a>
