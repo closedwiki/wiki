@@ -4,49 +4,7 @@
 %TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
 %TMPL:DEF{"heading"}%%MAKETEXT{"Access Denied"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}% [[%MAINWEB%.%HOMETOPIC%][%MAKETEXT{"OK"}%]] %TMPL:END%
-%TMPL:DEF{"topic_access"}%
-%MAKETEXT{"Access check on [_1] failed" args="<nop>%WEB%.<nop>%TOPIC%"}%.
-%MAKETEXT{"Action [_1]: [_2]." args="\"%PARAM1%\", %PARAM2%"}%
-
-%MAKETEXT{"Contact [_1] if you have any questions." args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%PARAM1% access denied for '%WEB%.%TOPIC%'\""}%>%WIKIWEBMASTER%</a>"}%
-
-
-__%MAKETEXT{"Related topics:"}%__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl %TMPL:END%
-%TMPL:DEF{"only_group"}%
-%MAKETEXT{"Only members of the [_1] are allowed to perform this action." args="%PARAM1%"}%
-
-%MAKETEXT{"Contact [_1] if you have any questions." args="<a href=\"mailto:%WIKIWEBMASTER%?subject=%ENCODE{"Access Denied for '%WEB%.%TOPIC%', needs '%PARAM1%'"}%\">%WIKIWEBMASTER%</a>"}%
-
-
-__%MAKETEXT{"Related topics:"}%__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl
-%TMPL:END%
-%TMPL:DEF{"no_such_web"}%
----++ %MAKETEXT{"The [_1] web does not exist" args="\"%WEB%\""}%
-%MAKETEXT{"A [_1] is divided into webs; each one represents one subject, one area of collaboration. You are trying to [_2] in a web that does not exist." args="%TWIKIWEB%.TWikiSite, '%PARAM1%'"}%
-
----+++ %MAKETEXT{"If you came here by clicking on a question mark link"}%
-<blockquote>
-%MAKETEXT{"A link to a topic located in another web is written like [_1]. Make sure that the name of the web is not spelt wrongly on the previous page; fix the link if necessary." args="*Otherweb.<nop>TopicName*"}%
-</blockquote>
-
----+++ %MAKETEXT{"If you would like to create this web"}%
-%MAKETEXT{"You can ~[~[[_1]~]~[create a new web~]~] if you have permission. Contact [_2] if you have any questions." args="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs?newweb=%WEB%;newtopic=%TOPIC%#CreateNewWeb, %WIKIWEBMASTER%"}%
-%TMPL:END%
-%TMPL:DEF{"no_such_topic"}%
----++ %MAKETEXT{"[_1] topic does not exist" args="\"%WEB%.%TOPIC%\""}%
-%MAKETEXT{"You are trying to [_1] a topic that does not exist." args="%PARAM1%"}%
-
----++ %MAKETEXT{"If you want to create the topic"}%
-[[%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][%MAKETEXT{"Click here"}%]].
-
-%MAKETEXT{"Contact [_1] if you have any questions." args="%WIKIWEBMASTER%"}%
-%TMPL:END%
-%TMPL:DEF{"no_such_attachment"}%
----++ %MAKETEXT{"Attachment '[_1]' does not exist" args="%PARAM2%"}%
-%MAKETEXT{"You are trying to [_1] an attachment that does not exist." args="%PARAM1%"}%
-
-%MAKETEXT{"Contact [_1] if you have any questions." args="%WIKIWEBMASTER%"}%
-%TMPL:END%
+%TMPL:INCLUDE{"messages"}%
 %TMPL:DEF{"message"}%
 %INSTANTIATE%
 %TMPL:END%

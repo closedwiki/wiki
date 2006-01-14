@@ -127,7 +127,7 @@ sub edit {
                     if( $TWiki::cfg{LeaseLengthLessForceful} < 0 ||
                           $t < $lease->{expires} +
                             $TWiki::cfg{LeaseLengthLessForceful} ) {
-                        $def = 'old';
+                        $def = 'lease_old';
                         $past = TWiki::Time::formatDelta(
                             $t - $lease->{expires}, $session->{i18n} );
                         $future = '';
@@ -135,7 +135,7 @@ sub edit {
                 }
                 else {
                     # The lease is active
-                    $def = 'active';
+                    $def = 'lease_active';
                     $past = TWiki::Time::formatDelta(
                         $t - $lease->{taken}, $session->{i18n} );
                     $future = TWiki::Time::formatDelta(

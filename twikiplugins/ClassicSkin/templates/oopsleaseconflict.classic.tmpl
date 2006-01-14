@@ -4,23 +4,11 @@
 %TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
 %TMPL:DEF{"heading"}%%MAKETEXT{"Conflict"}%%TMPL:END%
 %TMPL:DEF{"topicaction"}%%TMPL:END%
-%TMPL:DEF{"active"}%
-%MAKETEXT{"[_1] is editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
-
-%MAKETEXT{"They have been editing for [_1] and their lease is still active for another [_2]." args="%PARAM2%, %PARAM3%"}%
-%TMPL:END%
-%TMPL:DEF{"old"}%
-%MAKETEXT{"[_1] may still be editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
-
-%MAKETEXT{"Their lease on this topic expired [_1] ago." args="%PARAM2%"}%
-
-%MAKETEXT{"The chances are good that they simply navigated away from the edit page without saving."}%
-%TMPL:END%
+%{ Include the default template to get the messages }%
+%TMPL:INCLUDE{"messages"}%
 %TMPL:DEF{"message"}%
 
 %INSTANTIATE%
-
-%MAKETEXT{"It is probably OK to go ahead and edit, unless you intend to change the form attached to the topic. If they _do_ save while you are editing, your changes will be merged with theirs. Form data cannot easily be merged, so in this case you are recommended to check with them first."}%
 
 %MAKETEXT{"To see if they have finished their edit yet, click 'Try Again'."}%
 
