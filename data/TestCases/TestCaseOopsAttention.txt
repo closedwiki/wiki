@@ -84,8 +84,8 @@ Skin: <input name="skin" value="%URLPARAM{"skin" default="%SKIN%}%" />
 %INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=mandatory_field;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%"}%
 ---++ =oopsattention no_form_def=
 %INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=no_form_def;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%"}%
----++ =oopsattention illegally_named_upload=
-%INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=illegally_named_upload;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%"}%
+---++ =oopsattention upload_name_changed=
+%INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=upload_name_changed;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%"}%
 ---++ =oopsattention zero_size_upload=
 %INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=zero_size_upload;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%"}%
 ---++ =oopsattention oversized_upload=
