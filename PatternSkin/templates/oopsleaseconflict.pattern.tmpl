@@ -1,16 +1,29 @@
 %{ Templates for lease conflict messages. One DEF is selected and inserted at %INSTANTIATE }%
-%TMPL:INCLUDE{"oopsleaseconflict.tmpl"}%
+%{ Templates for lease conflict messages. One DEF is selected and inserted at %INSTANTIATE }%
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(oops)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% *%MAKETEXT{"Attention"}%* %TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Conflict"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}%%TMPL:END%
+%TMPL:INCLUDE{"messages"}%
+%TMPL:DEF{"message"}%
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> 
+%{ Instantiate either lease_active or lease_old }%
+%INSTANTIATE%
+
 <form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
-%QUERYPARAMS% 
+%QUERYPARAMS%
+%MAKETEXT{"To see if they have finished their edit yet, click "}%
 <input type="submit" value='%MAKETEXT{"Try Again"}%' />
 </form>
-%TMPL:P{"sep"}%
 <form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+%MAKETEXT{"To edit the topic anyway, click "}%
 <input type="hidden" name="breaklock" value="on" />
-%QUERYPARAMS% 
-<input type="submit" value='%MAKETEXT{"Edit Anyway"}%' />
-</form>
-%MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">%MAKETEXT{"View raw text without formatting"}%</a>
+%QUERYPARAMS% <input type="submit" value='%MAKETEXT{"Edit Anyway"}%' />
+</form> 
+%TMPL:END%
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> 
+<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">%MAKETEXT{"View raw text without formatting"}%</a>
 %MAKETEXT{"or"}% [[%WEB%.%TOPIC%][%MAKETEXT{"View topic"}%]]</span></div>%TMPL:END%
+
+%TMPL:P{"oops"}%

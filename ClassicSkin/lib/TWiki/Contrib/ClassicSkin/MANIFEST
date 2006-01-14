@@ -30,7 +30,6 @@ templates/oopschangelanguage.classic.tmpl 0440
 templates/oopslanguagechanged.classic.tmpl 0440
 templates/oopsleaseconflict.classic.tmpl  0440
 templates/oopsmore.classic.tmpl  0440
-templates/oopssaveerr.classic.tmpl  0440
 templates/preview.classic.tmpl  0440
 templates/rdiff.classic.tmpl  0440
 templates/registerconfirm.classic.tmpl 0440
