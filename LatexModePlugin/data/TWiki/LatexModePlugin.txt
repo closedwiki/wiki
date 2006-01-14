@@ -56,10 +56,13 @@ HTML references to Latex equations with a defined =&lt;label&gt;= can be generat
 ---+++ Tables, Figures, and back-references
 
 To round out the functionality available in standard <nop>LaTeX, the automatic generation of Figure and Table reference links is also available.  These are declared using
-	* %<nop>BEGINFIGURE{label="fig:label" caption="this is a figure"}% ... %<nop>ENDFIGURE%, and
-	* %<nop>BEGINTABLE{label="tbl:label" caption="this is a table"}% ... %<nop>ENDTABLE%. 
+	* %<nop>BEGINFIGURE{label="fig:label" caption="this is a figure" span="twocolumn"}% ... %<nop>ENDFIGURE%, and
+	* %<nop>BEGINTABLE{label="tbl:label" caption="this is a table" span="twocolumn"}% ... %<nop>ENDTABLE%. 
 These commands will create an HTML table with a numbered caption either above (TABLE) or below (FIGURE) the included text.  Back-references to these declared environments can be accessed through %<nop>REFLATEX{&lt;label&gt;}%.
-To keep the counters/back-references seperate for each of the three types of references, use =eqn:=, =fig:=, and =tbl:= as the first four characters in any declared label.
+To keep the counters/back-references seperate for each of the three types of references, use =eqn:=, =fig:=, and =tbl:= as the first four characters in any declared label.  
+
+The =span= option is used only by TWiki:Plugins.GenPDFLatex, giving the ability to use designate the width of a table or figure in two-column styles. (e.g. for Figures, it expands to =\begin{figure*} ... \end{figure*}=.)  The default span is one-column. 
+
 
 ---+++ Font Color 
 
@@ -144,7 +147,7 @@ Both DENSITY and SCALE alter the rendered image size and quality. For example, i
 
 For regular browser viewing, the SCALE parameter sould be set to 1.0.  However, one can use these parameters to improve print quality when printing a topic.  To do this, increase the DENSITY setting (a value of 300 will give roughly 300dpi) and then set the SCALE setting below 1.0.
 
----++Plugin Settings
+---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference
 these plugin settings write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>LATEXMODEPLUGIN_SHORTDESCRIPTION%==
@@ -167,12 +170,12 @@ these plugin settings write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<
 	* Uncomment the following to define a site-wide custom color, <nop>DarkBlue.
 		* #Set PREAMBLE = \usepackage{color} \definecolor{DarkBlue}{rgb}{0,0.1,0.43} 
 
-	* In addition, the following parameters are available at the *topic* level, =EQN=, =FIG=, =TBL=, to override counter reset.  (i.e. if =&nbsp;&nbsp;&nbsp;*&nbsp;Set&nbsp;EQN&nbsp;=&nbsp;3= is declared in a topic, the first labeled equation will be given the number =4=.)
+	* In addition, the following parameters are available at the *topic* level, =EQN=, =FIG=, =TBL=, to override the counter reset.  (i.e. if =&nbsp;&nbsp;&nbsp;*&nbsp;Set&nbsp;EQN&nbsp;=&nbsp;3= is declared in a topic, the first labeled equation will be given the number =4=.)
 
 ---+++ Plugin Installation Instructions
 
 First, confirm that the external software needed by the plugin is installed on the TWiki server.  This includes:
-	* The =Digest::MD5= perl module.
+	* The =Digest::MD5= and =Image::Info= perl modules.
 	* A working <nop>LaTeX implementation ([[http://www.tug.org/tetex/][tetex]] and <nop>[[http://www.miktex.org/][MikTeX]] are two popular choices)
 	* the [[http://www.cs.wisc.edu/~ghost/][Ghostscript]] package
 	* the 'convert' executable from either <nop>[[http://www.imagemagick.org/][ImageMagick]] or <nop>[[http://www.graphicsmagick.org/][GraphicsMagick]]
@@ -186,7 +189,11 @@ Second,
 		| ==pub/TWiki/LatexModePlugin/expl-v1.4.png== | example image of rendered latex |
 
 Finally,
-	* customize the installation-specific variables to point to the local location of =latex=, =dvips= and =convert=
+	* customize the installation-specific variables to point to the local location of =latex=, =dvips= and =convert=.  This can be done by adding the following lines to =lib/LocalSite.cfg= or =lib/TWiki.cfg=.
+		*  $TWiki::cfg{Plugins}{LatexModePlugin}{latex} = '/usr/bin/latex';
+		*  $TWiki::cfg{Plugins}{LatexModePlugin}{dvips} = '/usr/bin/dvips';
+		*  $TWiki::cfg{Plugins}{LatexModePlugin}{convert} = '/usr/X11R6/bin/convert';
+
 
 ---++ More Details
 
@@ -206,8 +213,10 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin created b
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 14 Oct 2005 (v 2.1) |
+|  Plugin Version: | Jan 2006 (v 2.21) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  Jan 2006 (v 2.21) | minor bug fixes: $pathSep changes, now uses &TWiki::Func::extractParameters() |
+|  11 Nov 2005 (v 2.2) | more mods for TWiki:Plugin.GenPDFLatexAddOn: protect newlines, moved float handler, moved float label checker |
 |  14 Oct 2005 (v 2.1) | minor modifications for TWiki:Plugins.GenPDFLatexAddOn support |
 |  unreleased  (v 2.0) | Major rewrite for Dakar |
 |  30 Sep 2005 (v 1.41) | relaxed the scrubing a little bit... previous version caused problems with REFLATEX |
