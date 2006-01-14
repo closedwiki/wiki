@@ -915,7 +915,7 @@ msgstr "创建一个附件链接"
 
 #: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
-msgstr "Ein neues, automatisch nummeriertes, Test Topic anlegen:"
+msgstr ""
 
 #: data/Sandbox/WebHome.txt:10
 msgid "Create a new document by name:"
