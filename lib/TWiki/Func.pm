@@ -2044,12 +2044,12 @@ sub searchInWebContent {
 
 =pod
 
----++ Functions: Email
+---++ Functions: E-mail
 
 ---++ sendEmail ( $text, $retries ) -> $error
    * =$text= - text of the mail, including MIME headers
    * =$retries= - number of times to retry the send (default 1)
-Send an email specified as MIME format content. To specify MIME
+Send an e-mail specified as MIME format content. To specify MIME
 format mails, you create a string that contains a set of header
 lines that contain field definitions and a message body such as:
 <verbatim>
@@ -2082,8 +2082,8 @@ sub sendEmail {
 
 ---+++ wikiToEmail( $wikiName ) -> $email
    * =$wikiName= - wiki name of the user
-Get the email address(es) of the named user. If the user has multiple
-email addresses (for example, the user is a group), then the list will
+Get the e-mail address(es) of the named user. If the user has multiple
+e-mail addresses (for example, the user is a group), then the list will
 be comma-separated.
 
 *Since:* TWiki::Plugins::VERSION 1.1
