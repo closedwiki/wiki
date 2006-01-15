@@ -531,19 +531,24 @@ sub _renderWikiWord {
 }
 
 sub _renderExistingWikiWord {
-    my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
+    my ($this, $web, $topic, $text, $anchor) = @_;
 
     my @attrs;
-    my $href = $this->{session}->getScriptUrl( 0, 'view', $theWeb, $theTopic );
-    if( $theAnchor ) {
-        my $anchor = $this->makeAnchorName( $theAnchor );
+    my $href = $this->{session}->getScriptUrl( 0, 'view', $web, $topic );
+    if( $anchor ) {
+        $anchor = $this->makeAnchorName( $anchor );
         push( @attrs, class => 'twikiAnchorLink', href => $href.'#'.$anchor );
     } else {
         push( @attrs, class => 'twikiLink', href => $href );
     }
-    my $tooltip = $this->_linkToolTipInfo( $theWeb, $theTopic );
-    push( @attrs, title => $tooltip ) if $tooltip;
-    return CGI::a( { @attrs }, $theLinkText );
+    my $tooltip = $this->_linkToolTipInfo( $web, $topic );
+    push( @attrs, title => $tooltip ) if( $tooltip );
+    my $link = CGI::a( { @attrs }, $text );
+    # When we pass the tooltip text to CGI::a it may contain
+    # <nop>s, and CGI::a will convert the < to &lt;. This is a
+    # basic problem with <nop>.
+    $link =~ s/&lt;nop&gt;/<nop>/g;
+    return $link;
 }
 
 sub _renderNonExistingWikiWord {
