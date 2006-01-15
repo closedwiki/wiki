@@ -3,7 +3,6 @@ bin/attach 0550
 bin/changes 0550
 bin/configure 0550
 bin/edit 0550
-bin/geturl 0550
 bin/.htaccess.txt 0640
 bin/login 0550
 bin/logon 0550
@@ -648,6 +647,7 @@ templates/view.print.tmpl 0440
 templates/view.rss.tmpl 0440
 templates/view.text.tmpl 0440
 templates/view.tmpl 0440
+tools/geturl.pl 0550
 tools/rewriteshbang.pl 0550
 tools/tick_twiki.pl 0550
 twiki_httpd_conf.txt 0660
