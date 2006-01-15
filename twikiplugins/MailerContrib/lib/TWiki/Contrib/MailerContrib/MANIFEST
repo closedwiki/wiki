@@ -6,6 +6,6 @@ lib/TWiki/Contrib/MailerContrib/UpData.pm
 lib/TWiki/Contrib/MailerContrib/build.pl
 lib/TWiki/Contrib/Mailer.pm
 data/TWiki/MailerContrib.txt
-bin/mailnotify
+tools/mailnotify
 templates/mailnotify.tmpl
 
