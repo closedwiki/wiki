@@ -11,7 +11,7 @@ This is the place to learn about TWiki features and perform TWiki system mainten
 
 ---++ TWiki Documentation and Configuration
 <div style="float:right;width:255px;padding:1em;">%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%</div>
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<form action="%SCRIPTURLPATH{search}%/%WEB%/">
    * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
    * [[DakarReleaseNotes][Dakar Release Notes]]: Describes what's new in this release of TWiki.
    * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial

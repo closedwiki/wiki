@@ -206,7 +206,7 @@ Functions outside the Plugins also can be registered, but please consider the se
 
 As an example, the EmptyPlugin has registered a function to be used with the =rest= script under the subject *EmptyPlugin* and the verb *example*. Click below to see the =rest= script in action (run as Main.TWikiGuest).
 
-[[%SCRIPTURL%/rest%SCRIPTSUFFIX%/EmptyPlugin/example?debugenableplugin=EmptyPlugin][Call the Plugin]]
+[[%SCRIPTURL{rest}%/EmptyPlugin/example?debugenableplugin=EmptyPlugin][Call the Plugin]]
 
 You can also call the function from the command line, but this will be run as the Main.TWikiAdminGroup (as it is assumed that shell access is secure) - eg: <verbatim>./rest EmptyPlugin.example</verbatim>
 
