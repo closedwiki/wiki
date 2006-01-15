@@ -277,7 +277,7 @@ sub _link {
     $string =~ s/[\[\]]//go;
 
     $topic ||= $string;
-    $tooltip ||= 'Click to see details in separate window';
+    $tooltip ||= $this->{session}->{i18n}->maketext('Click to see details in separate window');
 
     my $web;
     ( $web, $topic ) =
@@ -296,10 +296,13 @@ sub _link {
                                                        $web, $topic ),
                 rel => 'nofollow'
                }, $string );
-    } elsif ( $tooltip ) {
-        $link = CGI::span( { title=>$tooltip }, $string );
     } else {
-        $link = $string;
+        my $expanded = $this->{session}->handleCommonTags( $string, $web, $topic );
+        if ( $tooltip ) {
+            $link = CGI::span ( { title => $tooltip }, $expanded );
+        } else {
+            $link = $expanded;
+        }
     }
 
     return $link;
