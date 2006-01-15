@@ -2,6 +2,21 @@
 %SPLIT%
    * %KEY%: %VALUE%%SPLIT%
 
+<!--
+   NOTE
+
+   '%MAKETEXT' below is used below where a string has been included in
+   the translation database, so that the string will be shown in your
+   selected language when you view the topic.
+
+   When you edit this topic for your own purposes, you are advised not to
+   touch the MAKETEXT calls. If you want to change the text of one of the
+   MAKETEXTed strings, just delete the call completely and replace it with
+    your own text e.g. instead of:
+      ---++ %MAKETEXT{"Personal Preferences"}%
+   put:
+      ---++ My Own Setup
+-->
 ---++ %MAKETEXT{"My Links"}%
 
    * %MAKETEXT{"[_1] - view a short introductory presentation on TWiki for beginners" args="%TWIKIWEB%.ATasteOfTWiki"}%
