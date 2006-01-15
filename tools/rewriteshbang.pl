@@ -67,7 +67,7 @@ foreach my $file (grep { -f && /^\w+$/ } readdir D) {
     my $contents = <F>;
     close F;
 
-    if( $contents =~ s/^#!\s*\S+/#! $new/s ) {
+    if( $contents =~ s/^#!\s*\S+/#!$new/s ) {
         open(F, ">$file") || die $!;
         print F $contents;
         close F;
