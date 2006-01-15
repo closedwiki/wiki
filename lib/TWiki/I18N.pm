@@ -280,7 +280,7 @@ sub fromSiteCharSet {
                                              -charset => $encoding
                                             });
         } else {
-          $this->session->writeWarning
+          $this->{session}->writeWarning
             ( 'Conversion from $encoding no supported, '.
               'or name not recognised - check perldoc Unicode::MapUTF8' );
           return $text;
@@ -291,7 +291,7 @@ sub fromSiteCharSet {
         import Encode;
         my $encoding = Encode::resolve_alias ( $TWiki::cfg{Site}{CharSet} );
         if ( not $encoding ) {
-            $this->writeWarning
+            $this->{session}->writeWarning
               ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
                 '" not supported, or name not recognised - check '.
                 '"perldoc Encode::Supported"' );
