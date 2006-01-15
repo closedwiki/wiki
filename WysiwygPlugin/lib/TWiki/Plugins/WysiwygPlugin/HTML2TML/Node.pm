@@ -198,7 +198,7 @@ sub generate {
         if( $this->{tag} && $WC::BREAK_BEFORE{$this->{tag}} ) {
             $brats = "\n".$brats;
         }
-        return $brats;
+        return ( 0, $brats );
     }
 
     if( $options & $WC::NO_TML ) {
