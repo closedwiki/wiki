@@ -1009,8 +1009,6 @@ sub _checkAndBuildValueGrabber {
     my $mandatory = ($opts =~ /\sM\s/);
     # field id
     my $id = $keys;
-    $id =~ s/}{/_/g;
-    $id =~ s/[{}\[\]]//g;
     $output .= CGI::hidden( 'TYPEOF:'.$id, $type ). "\n";
     my $checker = '_CHECKVAR_'.$id;
     if( defined &$checker ) {
@@ -1076,6 +1074,7 @@ sub _showLanguages {
   foreach my $file ( grep { /^.*\.po$/ } readdir DIR ) {
     $file =~ m/^(.*)\.po$/;
     my $lang = $1;
+    $lang = "'$lang'" if $lang =~ /\W/;
     $block .= _checkAndBuildValueGrabber ( 'BOOLEAN', '', 'Enable the language <strong>' . $lang . '</strong>', '{Languages}{' . $lang . '}{Enabled}' );
   }
   closedir( DIR );
@@ -1095,19 +1094,17 @@ sub setConfig {
         close(F);
     }
 
-    foreach my $config ( keys %$updates ) {
-        # kill the old settings if any are there
-        $txt =~ s/\$TWiki::cfg\{$config\}\s*=.*?;\s*\n//s;
-    }
-    $txt =~ s/^1;$//gm;
+    $txt =~ s/^\s*1;\s*$//gm;
 
     open(F, ">$path") ||
       die "Failed to open $path for write";
-    print F $txt if $txt;
+
     foreach my $config ( keys %$updates ) {
-        print F '$TWiki::cfg{',$config,'} = ',$updates->{$config},";\n";
+        # kill the old settings if any are there
+        $txt =~ s/\$TWiki::cfg$config\s*=.*?;\s*\n//s;
+        $txt .= '$TWiki::cfg'.$config.' = '.$updates->{$config}.";\n";
     }
-    print F "1;\n";
+    print F $txt,"1;\n";
     close(F);
 
     if( defined( $TWiki::cfg{ConfigurationLogName} ) &&
@@ -1280,8 +1277,7 @@ HERE
         my $type = $query->param( $param );
         $param =~ s/^TYPEOF:(.*)$/$1/;
         my $basevar = $1;
-        $basevar =~ s/_/}{/g;
-        my $var = '$TWiki::cfg{'.$basevar.'}';
+        my $var = '$TWiki::cfg'.$basevar;
         my $val = $query->param( $param );
         my $def;
         eval "\$def = defined( $var );";
@@ -1319,9 +1315,7 @@ sub calculateChanges {
         next unless $param =~ /^^TYPEOF:(.*)/;
         my $type = $query->param( $param );
         $param =~ s/^TYPEOF:(.*$)/$1/;
-        my $basevar = $1;
-        $basevar =~ s/_/}{/g;
-        my $var = '$TWiki::cfg{'.$basevar.'}';
+        my $var = '$TWiki::cfg'.$1;
         my $val = $query->param( $param );
         my $def;
         eval "\$def = defined( $var );";
