@@ -2,7 +2,7 @@
 .atpDef {
   border-collapse: collapse;
   border-spacing: 0px;
-  border: dotted black 1px;
+  border: solid gray 1px;
 }
 th.atpDef {
   background-color: #cccccc;
@@ -21,12 +21,12 @@ th.atpSearch {
 
 /* Action changes table (in mail) */)
 .atpChanges {
-  border: dotted black 1px;
+  border: solid gray 1px;
 }
 
 /* Action edit */
 .atpEdit {
-  border: dotted black 1px;
+  border: solid gray 1px;
 }
 
 /* Error style */
