@@ -430,7 +430,6 @@ sub _linkToolTipInfo {
           ( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']//g;       # remove quotes (not allowed in title attribute)
-        $summary =~ s|</*nop/*>||goi;   # remove <nop> tag
         $text =~ s/\$summary/$summary/g;
     }
     return $text;
