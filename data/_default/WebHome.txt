@@ -7,7 +7,7 @@
    * ...
  
 <blockquote>
-<form action="%SCRIPTURLPATH{"search"}%/%WEB%/">
+<form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
 <input type="text" name="search" size="22" /><input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' />
 <br/>
 ([[WebSearchAdvanced][%MAKETEXT{"advanced search"}%]])
