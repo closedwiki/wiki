@@ -19,9 +19,11 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# THIS SCRIPT IS DESIGNED TO BE RUN FROM YOUR bin DIRECTORY.
-# This is so it can pick up the right TWiki environment from
-# setlib.cfg.
+# The TWiki 'bin' directory must be on your include path when you run
+# this script. This is so it can pick up the right TWiki environment
+# from setlib.cfg.
+# You can add a directory to your include path using the -I option
+# to the perl command e.g. perl -I /usr/local/twiki/bin tick_twiki.pl
 #
 # It executes a number of non-essential regular administration
 # tasks that will help keep your TWiki healthy and happy.

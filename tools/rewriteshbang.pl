@@ -1,65 +1,81 @@
 #! perl -w
-
-# Rewrite "/usr/bin/perl" shebang lines to "perl"
-# SMELL: This script would not be necessary if there was a CommonFrontEndCgiScript
-# i.e. use of the bin/twiki script
 #
-# bug/limitation: it can't be used more than once, it only makes changes
-# if the existing path is "/usr/bin/perl" (e.g. you can't just re-run the 
-# script if you mistype the new path).
+# TWiki Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 2005-2006 TWiki Contributors.
+# All Rights Reserved. TWiki Contributors are listed in
+# the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# For licensing info read license.txt file in the TWiki root.
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+#
+# HELP
+print <<'END';
+Change the "shebang" lines of all perl scripts found in the current
+directory.
 
-use FileHandle;
-use English;
+"shebang" lines tell the shell what interpreter to use for running
+scripts. By default the TWiki bin scripts are set to user the
+"/usr/bin/perl" interpreter, which is where perl lives on most
+UNIX-like platforms. On some platforms you will need to change this line
+to run a different interpreter e.g. "D:\indigoperl\bin\perl"
+or "/usr/bin/speedy"
 
-my $old = "/usr/bin/perl";
-my $new = $EXECUTABLE_NAME;
+This script will change the "shebang" lines of all scripts found in
+the directory where the script is run from.
 
-print <<END;
-
-Rewrite #!/usr/bin/perl shebang lines to your local installation of perl.
-This script will rewrite the first lines of all your TWiki cgi scripts so
-they use a different shebang line. Use it if your perl is in a non-standard
-location, or you want to use a different interpreter (such as 'speedy')
-
+Note: the path to the interpreter *must not* contain any spaces.
 END
 
-unless (-d "bin") {
-  die "This must be run in the top level of your TWiki installation";
-}
+use strict;
 
-chdir "bin" || die "Can't cd into the bin dir";
+my $new = 'perl';
+$/ = "\n";
 
 while (1) {
-    print "Enter path to perl executable [hit enter to choose '$new']: ";
+    print "Enter path to interpreter [hit enter to choose '$new']: ";
     my $n = <>;
     chomp $n;
     last if( !$n );
     $new = $n;
 };
 
-opendir(D, ".") || die "Can't open bin dir";;
+unless( -x $new ) {
+    print "Warning: I could not find an executable at $new
+Are you sure you want to use this path (y/n)? ";
+    my $n = <>;
+    die "Aborted" unless $n =~ /^y/i;
+}
+
+my $changed = 0;
+my $scanned = 0;
+opendir(D, ".") || die $!;
 foreach my $file (grep { -f && /^\w+$/ } readdir D) {
-   replaceLine($file, $old, $new);
+    $scanned++;
+    $/ = undef;
+    open(F, "<$file") || die $!;
+    my $contents = <F>;
+    close F;
+
+    if( $contents =~ s/^#!\s*\S+/#! $new/s ) {
+        open(F, ">$file") || die $!;
+        print F $contents;
+        close F;
+        print "$file modified\n";
+        $changed++;
+    } else {
+        print "$file modified\n";
+    }
 }
 closedir(D);
-
-sub replaceLine {
-  my ($file, $old, $new) = @_;
-  
-  my $fh = new FileHandle("<$file") || die "Can't open $file";
-  local $/; undef $/;
-  my $contents = <$fh>;
-  close $fh;
-
-  $replacementMade = ($contents =~ s/$old/$new/);
-
-  if ($replacementMade) {
-    my $fh = new FileHandle(">$file") || die "Can't open $file for writing";
-    print $fh $contents;
-    close $fh;   
-    print "$file modified\n";
-  } else {
-    print "$file unmodified\n";
-  }
-
-}
+print "$changed of $scanned files changed\n";
