@@ -38,8 +38,8 @@
 %TMPL:DEF{"inactive_wysiwyg"}%%TMPL:P{"sep"}%<span class="patternButton"><strike>%MAKETEXT{"WYSIWYG"}%</strike></span>%TMPL:END%
 
 
-%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?skin=pattern&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
-%TMPL:DEF{"edit_wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?skin=kupu,pattern&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="W">%TMPL:P{context="new_topic" then="create_topic" else="wysiwyg_topic"}%</a></span>%TMPL:END%
+%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
+%TMPL:DEF{"edit_wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=kupu&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="W">%TMPL:P{context="new_topic" then="create_topic" else="wysiwyg_topic"}%</a></span>%TMPL:END%
 
 %TMPL:DEF{"activatable_raw_edit"}%%TMPL:P{context="inactive" then="inactive_edit" else="editraw"}%%TMPL:END%
 %TMPL:DEF{"activatable_edit_wysiwyg"}%%TMPL:P{context="inactive" then="inactive_wysiwyg" else="edit_wysiwyg"}%%TMPL:END%
@@ -92,7 +92,7 @@
 %TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern,pattern%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
+%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?cover=print.pattern%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
 
 %TMPL:DEF{"raw"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="%MAKETEXT{"View raw text without formatting"}%" accesskey="R" rel="nofollow">%MAKETEXT{"Raw View"}%</a>%TMPL:END%
 
