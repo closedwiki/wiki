@@ -191,14 +191,23 @@ sub generate {
     my $flags;
     my $text;
 
+    my $tag = uc( $this->{tag} );
+    if( $options & $WC::NO_HTML ) {
+        # NO_HTML implies NO_TML
+        my $brats = $this->_flatKids( $options );
+        if( $this->{tag} && $WC::BREAK_BEFORE{$this->{tag}} ) {
+            $brats = "\n".$brats;
+        }
+        return $brats;
+    }
+
     if( $options & $WC::NO_TML ) {
         return ( 0, $this->stringify() );
     }
 
     # make the names of the function versions
-    my $tag = $this->{tag};
     $tag =~ s/!//; # DOCTYPE
-    my $tmlFn = '_handle'.uc( $this->{tag} );
+    my $tmlFn = '_handle'.$tag;
 
     # See if we have a TML translation function for this tag
     # the translation functions will work out the rendering
@@ -229,6 +238,8 @@ sub _flatKids {
     foreach my $kid ( @{$this->{children}} ) {
         my( $f, $t ) = $kid->generate( $options );
         if( $text && $text =~ /\w$/ && $t =~ /^\w/ ) {
+            # if the last child ends in a \w and this child
+            # starts in a \w, we need to insert a space
             $text .= ' ';
         }
         $text .= $t;
@@ -438,6 +449,10 @@ sub _isConvertableTableRow {
                 return 0;
             }
         }
+        $text = '' if $text =~ /%SPAN%/;
+        # tidy up whitespace, including \ns. We user [\0- ] to catch
+        # all the WC:: special characters as well.
+        $text =~ s/^[\0- ]*(.+?)[\0- ]*$/ $1 /;
         push( @row, $text );
     }
     return \@row;
@@ -733,7 +748,7 @@ sub _handlePRE {
 
 sub _handleVERBATIM {
     my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatKids( $WC::NO_TML );
+    my( $flags, $text ) = $this->_flatKids( $WC::NO_TML | $WC::NO_HTML );
 
     $text =~ s!<br( /)?>!$WC::NBBR!gi;
     $text =~ s!<p( /)?>!$WC::NBBR!gi;

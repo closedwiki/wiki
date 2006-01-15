@@ -30,6 +30,7 @@ Some functions require a bit more explanation:
 	* The rightmost drop-down will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
 	* "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
    * Watch out for the &lt;&gt; button on the right of the toolbar. It lets you switch into an HTML view, which can be very useful when you can't get your formatting right.
+   * In TWiki, a totally empty table cell causes the cell to be merged with the cell immediately to the left. To make this effect more transparent in the editor, these empty cells are shown with the text "%<nop>SPAN%" in them. In Kupu, if you add %<nop>SPAN% to a table cell, then all the rest of the content will be thrown away and the cell will be converted to an empty table cell. Note that this only applies to tables that are converted to TWiki syntax.
 
 ---++++ Kupu Notes
 The version of Kupu shipped with this plugin is an uncustomised basic Kupu release. All the TWiki customisation is done as plugins and extensions to Kupu - the basic kupu code is shipped completely intact.

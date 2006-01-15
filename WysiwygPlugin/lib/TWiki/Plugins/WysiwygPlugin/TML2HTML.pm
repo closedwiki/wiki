@@ -321,12 +321,12 @@ sub _getRenderedVersion {
     foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
-        if( $line =~ m/^(\s*)\|(.*\|)\s*$/ ) {
+        if( $line =~ m/^(\s*\|.*\|\s*)$/ ) {
             unless( $insideTABLE ) {
                 push( @result, CGI::start_table(
                     { border=>1, cellpadding=>0, cellspacing=>1 } ));
             }
-            push( @result, _emitTR($1,$2) );
+            push( @result, _emitTR($1) );
             $insideTABLE = 1;
             next;
         } elsif( $insideTABLE ) {
@@ -608,28 +608,23 @@ sub _addListItem {
 }
 
 sub _emitTR {
-    my ( $pre, $row ) = @_;
+    my $row = shift;
 
     $row =~ s/\t/   /g;  # change tabs to space
-    $row =~ s/^\s*\|(.*)\|\s*$/$1/;
+    $row =~ s/^(\s*)\|//;
+    my $pre = $1;
 
     my @tr;
-    my $colspan = 1;
 
-    foreach my $cell ( split( /(\|)/, $row ) ) {
-        # have to do this or we lose || at the end of row
-        next if $cell eq '|';
+    while( $row =~ s/^(.*?)\|// ) {
+        my $cell = $1;
 
         # make sure there's something there in empty cells. Otherwise
-        # the editor will compress it to nothing.
-        $cell =~ s/^\s+$/ &nbsp; /;
+        # the editor will compress it to (visual) nothing.
+        $cell =~ s/\s/&nbsp;/g;
 
-        if( $cell eq '' && scalar(@tr)) {
-            if( $tr[$#tr]->{colspan}) {
-                $tr[$#tr]->{colspan}++;
-            } else {
-                $tr[$#tr]->{colspan} = 1;
-            }
+        if( $cell eq '' ) {
+            $cell = '%SPAN%';
         }
 
         my $attr = {};
@@ -654,16 +649,9 @@ sub _emitTR {
         # Removed TH to avoid problems with handling table headers. TWiki
         # allows TH anywhere, but Kupu assumes top row only, mostly.
         # See Item1185
-        #if( $cell =~ /^\s*\*(.*)\*\s*$/ ) {
-        #    push( @tr, { fn => \&CGI::th, attr => $attr, text => $1 });
-        #} else {
-            push( @tr, { fn => \&CGI::td, attr => $attr, text => $cell });
-        #}
-        $colspan = 1;
+        push( @tr, CGI::td( $attr, $cell ));
     }
-
-    return CGI::Tr( join(
-        '', map { &{$_->{fn}}($_->{attr}, $_->{text}) } @tr));
+    return $pre.CGI::Tr( join( '', @tr));
 }
 
 1;
