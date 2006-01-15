@@ -9,7 +9,7 @@ _Skins overlay regular templates to give different looks and feels to TWiki scre
 
 TWiki uses TWikiTemplates files as the basis of all the screens it uses to interact with users. Each screen has an associated template file that contains the basic layout of the screen. This is then filled in by the code to generate what you see in the browser.
 
-TWiki ships with a default set of template files that give a basic look-and-feel. TWiki also includes support for _skins_ that can be selected to give different, more sophisticated, look and feels. A default TWiki insstallation will usually start up with =pattern= skin already selected. Skins may also be defined by third parties and loaded into a TWiki installation to give more options. To see how TWiki looks when *no* skin is selected, click to [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=not_a_skin][view this topic with a non-existant skin]].
+TWiki ships with a default set of template files that give a basic look-and-feel. TWiki also includes support for _skins_ that can be selected to give different, more sophisticated, look and feels. A default TWiki installation will usually start up with the PatternSkin already selected. Skins may also be defined by third parties and loaded into a TWiki installation to give more options. To see how TWiki looks when *no* skin is selected, [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=not_a_skin][view this topic with a non-existant skin]].
 
 Topic text is not affected by the choice of skin, though a skin can be defined to use a CSS (Cascading Style Sheet), which can sometimes give a radically different appearance to the text.
 
@@ -65,7 +65,7 @@ The following template files are used for TWiki screens, and are referenced in t
    * =view= - used by the =view= CGI script
 =twiki.tmpl= is a master template conventionally used by other templates, but not used directly by code.
 
-__%X% Note:__ You are strongly recommended *not* to =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin. If you do, then you run the risk that the included file might change, and you will then be stuck.
+__%X% Note:__ You are strongly recommended *not* to =TMPL:INCLUDE= the default templates, or templates from other skins, when you are defining your own skin. If you do, you run the risk that the included file might change and break your skin.
 
 ---++ Variables in Skins
 

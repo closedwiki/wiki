@@ -22,7 +22,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
       1. [[TWikiMetaData][TWiki MetaData]]
       1. [[TWikiPlugins][TWiki Plugins]]
       1. [[TWikiFuncDotPm][TWiki::Func Module]]
-      1. [[TWikiScripts][CGI Scripts]]
+      1. [[TWikiScripts][TWiki CGI and Command Line Scripts]]
       1. [[TWikiSiteTools][TWiki Site Tools]] 
       1. [[ManagingTopics][Managing Topics]] 
       1. [[ManagingWebs][Managing Webs]]
