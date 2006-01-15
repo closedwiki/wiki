@@ -138,7 +138,7 @@ You will notice a couple of changes to the editing screen: first, there is no sw
 
 ---+++ Change notification
 
-You now have much more control over _which_ topics in a web you are interested in changes to. You can choose to receive notifications about topics selected by name, or by their parent relationship. See %TWIKIWEB%.MailerContrib for more details.
+You now have much more control over _which_ topics in a web you are interested in changes to. You can choose to receive notifications about topics selected by name, or by their parent relationship. See %TWIKIWEB%.MailerContrib for more details. Note that the =mailnotify= cron script has moved out of the =bin= directory and into the =tools= directory.
 
 ---+++ Parameterised Includes
 =%<nop>INCLUDE{}%= variables have a predefined set of parameters. In the past, any parameters not in this set were simply ignored. With Dakar, these parameters are now defined as TWikiVariables within the included topic - for example,
