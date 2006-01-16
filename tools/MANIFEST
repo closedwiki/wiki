@@ -656,7 +656,6 @@ UpgradeTwiki 0550
 !include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
 !include twikiplugins/EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin
-!include twikiplugins/HeadlinesPlugin/lib/TWiki/Plugins/HeadlinesPlugin
 !include twikiplugins/InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
 !include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
