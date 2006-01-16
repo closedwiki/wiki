@@ -2,19 +2,57 @@
 %SPLIT%
    * %KEY%: %VALUE%%SPLIT%
 
-<!--
-   NOTE
+---++ My Links
 
-   '%MAKETEXT' below is used below where a string has been included in
-   the translation database, so that the string will be shown in your
-   selected language when you view the topic.
+   * %TWIKIWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
+   * %TWIKIWEB%.WelcomeGuest - starting points on TWiki
+   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation, Quick Start to Reference
+   * Sandbox.%HOMETOPIC% - try out TWiki on your own
+   * Sandbox.%TOPIC%Sandbox - just for me
+   * 
+   * 
+
+---++ Personal Preferences
+
+Uncomment preferences variables to activate them (remove the #-sign). Help and details on preferences variables are available in %TWIKIWEB%.%WIKIPREFSTOPIC%.
+
+   * Show tool-tip topic info on mouse-over of %TWIKIWEB%.WikiWord links, on or off:
+      * #Set LINKTOOLTIPINFO = off
+   * Horizontal size of text edit box:
+      * #Set EDITBOXWIDTH = 70
+   * Vertical size of text edit box:
+      * #Set EDITBOXHEIGHT = 22
+   * Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable.
+      * #Set EDITBOXSTYLE = width: 99%
+   * Write protect your home page: (set it to your %TWIKIWEB%.WikiName)
+      * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+
+---++ Related Topics
+
+   * %TWIKIWEB%.ChangePassword for changing your password
+   * %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users
+   * %TWIKIWEB%.UserDocumentationCategory is a list of TWiki user documentation
+   * %TWIKIWEB%.UserToolsCategory lists all TWiki user tools
+
+%NOP{
+Note to TWiki Administrator:
+
+Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from "%NOP" to "End NOP section" after you are done.)
+
+Text for multilingual wiki community, copy from here to "End NOP section":
+
+<!--
+   NOTE:
+
+   Text enclosed in '%MAKETEXT' below will be shown in your selected language 
+   when you view the topic.
 
    When you edit this topic for your own purposes, you are advised not to
    touch the MAKETEXT calls. If you want to change the text of one of the
    MAKETEXTed strings, just delete the call completely and replace it with
-    your own text e.g. instead of:
+   your own text e.g. instead of:
       ---++ %MAKETEXT{"Personal Preferences"}%
-   put:
+   write:
       ---++ My Own Setup
 -->
 ---++ %MAKETEXT{"My Links"}%
@@ -24,14 +62,14 @@
    * %MAKETEXT{"[_1] - complete TWiki documentation, Quick Start to Reference" args="%TWIKIWEB%.TWikiUsersGuide"}%
    * %MAKETEXT{"[_1] - try out TWiki on your own" args="Sandbox.%HOMETOPIC%"}%
    * %MAKETEXT{"[_1] - just for me" args="Sandbox.%TOPIC%Sandbox"}%
-   * 
-   * 
+   *
+   *
 
 ---++ %MAKETEXT{"Personal Preferences"}%
 
-_%MAKETEXT{"Uncomment preferences variables to activate them (remove the #-sign). Help and details on variables are available in [_1]." args="%TWIKIWEB%.TWikiVariables"}%_
+%MAKETEXT{"Uncomment preferences variables to activate them (remove the #-sign). Help and details on preferences variables are available in [_1]." args="%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
 
-   * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off: (see details in [_2])" args="%TWIKIWEB%.WikiWord,%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
+   * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off:" args="%TWIKIWEB%.WikiWord"}%
       * #Set LINKTOOLTIPINFO = off
    * %MAKETEXT{"Horizontal size of text edit box:"}%
       * #Set EDITBOXWIDTH = 70
@@ -48,6 +86,8 @@ _%MAKETEXT{"Uncomment preferences variables to activate them (remove the #-sign)
    * %MAKETEXT{"[_1] has a list of other TWiki users" args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
    * %MAKETEXT{"[_1] is a list of TWiki user documentation" args="%TWIKIWEB%.UserDocumentationCategory"}%
    * %MAKETEXT{"[_1] lists all TWiki user tools" args="%TWIKIWEB%.UserToolsCategory"}%
+
+<!-- End NOP section -->}%
 
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%
