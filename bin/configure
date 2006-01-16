@@ -382,7 +382,7 @@ sub _checkBinDir {
     foreach my $script (grep { -f "$dir/$_" && /^\w+(\.\w+)?$/ } readdir D) {
         next if( $ext && $script !~ /\.$ext$/ );
         if( $TWiki::cfg{OS} !~ /^Windows$/i && !-x "$dir/$script" ) {
-            $errs .= WARN($script . ' may not be executable');
+            $errs .= WARN($script . ' might not be an executable script - please check it (and its permissions) manually');
         }
     }
     closedir(D);
