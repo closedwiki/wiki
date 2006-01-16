@@ -118,7 +118,7 @@ sub preRenderingHandler {
     # ref in [[ref]] or [[ref][
     $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[| )/_link($1,$2,$3,$4)/geo;
     # ref in text
-    $_[0] =~ s/(^|[\s\-\*\(])$sitePattern:$pagePattern(?=[\s\.\,\;\:\!\?\)]*(\s|$))/_link($1,$2,$3)/geo;
+    $_[0] =~ s/(^|[\s\-\*\(])$sitePattern:$pagePattern(?=[\s\.\,\;\:\!\?\)\|]*(\s|$))/_link($1,$2,$3)/geo;
 }
 
 sub _link {
