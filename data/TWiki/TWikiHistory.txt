@@ -390,7 +390,7 @@ Details of DakarRelease can be found in DakarReleaseNotes
    * *10 Jan 2000* - TWiki:Main.PeterThoeny
       * No more escaping for '%' percent characters. (Number of consecutive '%' entered and displayed is identical.) 
    * *03 Oct 1999* - TWiki:Main.PeterThoeny
-      * Limit the number of revisions shown at the bottom of the topic. Example <br> Topic <nop>%TOPIC% . { .....   <A href="../../rdiff/%WEB%/%TOPIC%">Diffs</A>   r1.10   <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.10&rev2=1.9">&gt;</A>   <A href="../../view/%WEB%/%TOPIC%?rev=1.9">r1.9</A>   <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.9&rev2=1.8">&gt;</A>   <A href="../../view/%WEB%/%TOPIC%?rev=1.8">r1.8</A>   <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.8&rev2=1.7">&gt;</A>   <A href="../../view/%WEB%/%TOPIC%?rev=1.7">r1.7</A>   <A href="../../oops/%WEB%/%TOPIC%?template=oopsrev&param1=1.10">&gt;...</A> } <br> Additional revisions can be selected by pressing the =>...= link.  
+      * Limit the number of revisions shown at the bottom of the topic. Example %BR% Topic <nop>%TOPIC% . { .....   <A href="../../rdiff/%WEB%/%TOPIC%">Diffs</A>   r1.10   <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.10&rev2=1.9">&gt;</A>   <A href="../../view/%WEB%/%TOPIC%?rev=1.9">r1.9</A>   <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.9&rev2=1.8">&gt;</A>   <A href="../../view/%WEB%/%TOPIC%?rev=1.8">r1.8</A>   <A href="../../rdiff/%WEB%/%TOPIC%?rev1=1.8&rev2=1.7">&gt;</A>   <A href="../../view/%WEB%/%TOPIC%?rev=1.7">r1.7</A>   <A href="../../oops/%WEB%/%TOPIC%?template=oopsrev&param1=1.10">&gt;...</A> } %BR% Additional revisions can be selected by pressing the =>...= link.  
 
 ---++ 01-Sep-1999 Release
 
@@ -432,7 +432,7 @@ Details of DakarRelease can be found in DakarReleaseNotes
    * *09 Feb 1999* - TWiki:Main.PeterThoeny
       * No new topic revision is created if the _same_ person saves a topic again within _one_ hour. 
    * *03 Feb 1999* - TWiki:Main.PeterThoeny
-      * Possible to view complete revision history of a topic on one page. Access at the linked date in the Changes page, or the <code>Diffs</code> link at the bottom of each topic, e.g. <br> <code> Topic <nop>TWikiHistory . { Edit   Ref-By   Diffs   r1.3   >   r1.2   >   r1.1 } <br> Revision r1.3 1998/11/10 01:34 by <nop>PeterThoeny </code> 
+      * Possible to view complete revision history of a topic on one page. Access at the linked date in the Changes page, or the <code>Diffs</code> link at the bottom of each topic, e.g. %BR% <code> Topic <nop>TWikiHistory . { Edit   Ref-By   Diffs   r1.3   >   r1.2   >   r1.1 } %BR% Revision r1.3 1998/11/10 01:34 by <nop>PeterThoeny </code> 
    * *04 Jan 1999* - TWiki:Main.PeterThoeny
       * Fixed bug when viewing differences between topic revisions that include HTML table tags like &lt;table&gt;, &lt;tr&gt;, &lt;td&gt;. 
 
@@ -447,11 +447,11 @@ Details of DakarRelease can be found in DakarReleaseNotes
    * *10 Nov 1998* - TWiki:Main.PeterThoeny
       * The e-mail notification and the Changes topic have now a topic date that is linked. Clicking on the link will show the difference between the two most recent topic revisions. 
    * *10 Nov 1998* - TWiki:Main.PeterThoeny
-      * View differences between topic revisions. Each topic has a list of revisions (e.g. <code>r1.3</code>) and differences thereof (e.g. <code>&gt;</code>) at the bottom <br> <code> Topic <nop>TWikiHistory . { Edit   Ref-By   r1.3   >   r1.2   >   r1.1 } <br> Revision r1.3 1998/11/10 01:34 by TWiki:Main.PeterThoeny </code> 
+      * View differences between topic revisions. Each topic has a list of revisions (e.g. <code>r1.3</code>) and differences thereof (e.g. <code>&gt;</code>) at the bottom %BR% <code> Topic <nop>TWikiHistory . { Edit   Ref-By   r1.3   >   r1.2   >   r1.1 } %BR% Revision r1.3 1998/11/10 01:34 by TWiki:Main.PeterThoeny </code> 
    * *26 Oct 1998* - TWiki:Main.PeterThoeny
       * Added preview of topic changes before saving the topic. This was necessary to prevent unneeded revisions. 
    * *26 Oct 1998* - TWiki:Main.PeterThoeny
-      * Added revision control using RCS. Each topic has now a list of revisions at the bottom and a revision info, e.g. <br> <code> Topic <nop>TWikiHistory . { Edit   Ref-By   r1.3   r1.2   r1.1 } <br> Revision r1.3 1998/10/26 01:34:00 by TWiki:Main.PeterThoeny </code> 
+      * Added revision control using RCS. Each topic has now a list of revisions at the bottom and a revision info, e.g. %BR% <code> Topic <nop>TWikiHistory . { Edit   Ref-By   r1.3   r1.2   r1.1 } %BR% Revision r1.3 1998/10/26 01:34:00 by TWiki:Main.PeterThoeny </code> 
    * *14 Oct 1998* - TWiki:Main.PeterThoeny
       * Refered-By Find out which topics have a link to the current topic. Each topic has a  Ref-By  link for that. Note Only references from the current web are shown, not references from other webs. 
    * *13 Oct 1998* - TWiki:Main.PeterThoeny

@@ -24,7 +24,7 @@ Slide template for ATasteOfTWiki presentation
    <font size="-1" color="black">
     %SLIDENAVFIRST% %SLIDENAVPREV%
     Slide %SLIDENUM% of %SLIDEMAX%
-    %SLIDENAVNEXT% %SLIDENAVLAST% <br>
+    %SLIDENAVNEXT% %SLIDENAVLAST% %BR%
    Copyright &copy; %SERVERTIME{$year}% by the contributing authors</font>
   </td>
  </tr>

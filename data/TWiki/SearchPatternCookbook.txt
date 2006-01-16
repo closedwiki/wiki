@@ -261,7 +261,7 @@ So a search for a form field could look like:
 
 Now the original file format of the category table (the predecessor of the TWiki forms) looks like this:
 <verbatim>
-<td valign="top" align="right"> OperatingSystem:  <br></td><td>  OsWin </td>
+<td valign="top" align="right"> OperatingSystem:  </td><td>  OsWin </td>
 </verbatim>
 The following search finds topics in the old and new format:
 <pre>

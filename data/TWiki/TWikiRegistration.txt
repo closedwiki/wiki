@@ -56,7 +56,7 @@ for ( var i = 0; i < sIn.length; i++ )
   <td align="right"> %MAKETEXT{"Company name:"}% </td>
   <td><input type="text" name="Twk0CompanyName" size="40" value="" /></td>
 </tr><tr>
-  <td align="right"> %MAKETEXT{"Company URL: <br> (or department URL)"}% &nbsp; </td>
+  <td align="right"> %MAKETEXT{"Company URL: %BR% (or department URL)"}% &nbsp; </td>
   <td><input type="text" name="Twk0CompanyURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
 </tr><tr>
   <td align="right"> %MAKETEXT{"Country:"}% </td>
