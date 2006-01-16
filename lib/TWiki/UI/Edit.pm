@@ -87,9 +87,7 @@ sub edit {
     # apptype is undocumented legacy
     my $cgiAppType = $query->param( 'contenttype' ) ||
       $query->param( 'apptype' ) || 'text/html';
-    my $skin = $query->param( 'skin' ) ||
-      $session->{prefs}->getPreferencesValue('EDIT_SKIN') ||
-        $session->getSkin();
+    my $skin = $session->getSkin();
     my $theParent = $query->param( 'topicparent' ) || '';
     my $ptext = $query->param( 'text' );
     my $store = $session->{store};
@@ -326,7 +324,7 @@ sub edit {
                                                  $getValuesFromFormTopic );
         }
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
-        $formText = $session->{templates}->readTemplate( "addform", $session->getSkin() );
+        $formText = $session->{templates}->readTemplate( "addform", $skin );
         $formText = $session->handleCommonTags( $formText, $webName, $topic );
     }
     $tmpl =~ s/%FORMFIELDS%/$formText/g;
