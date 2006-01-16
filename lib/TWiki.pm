@@ -2982,8 +2982,6 @@ sub _MAKETEXT {
 
     # get the args to be interpolated.
     my $argsStr = $params->{args} || "";
-    # convert into "internal representation" as expected by TWiki::I18N::maketext
-    $argsStr = ($this->{i18n}->fromSiteCharSet($argsStr)) if ($argsStr);
 
     my @args = split (/\s*,\s*/, $argsStr) ;
     # fill omitted args with zeros

@@ -196,6 +196,10 @@ found for thet argument.
 sub maketext {
     my ( $this, $text, @args ) = @_;
 
+    # these can be user-supplied data. They can be in {Site}{CharSet}. Convert
+    # into "internal representation" as expected by TWiki::I18N::maketext
+    @args = map { $this->fromSiteCharSet($_) } @args;
+
     my $result = $this->SUPER::maketext($text, @args);
     if ($result && $this->{session}) {
         # external calls get the resultant text in the right charset:
