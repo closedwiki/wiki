@@ -125,11 +125,11 @@ sub _processTags {
         if( $token eq '%' ) {
             if( $stackTop =~ /}$/ ) {
                 while( scalar( @stack) &&
-                         $stackTop !~ /^%(<nop( *\/)?>)?([A-Z0-9_:]+){.*}$/o ) {
+                         $stackTop !~ /^%(<nop(result| *\/)?>)?([A-Z0-9_:]+){.*}$/o ) {
                     $stackTop = pop( @stack ) . $stackTop;
                 }
             }
-            if( $stackTop =~ m/^%(<nop(?: *\/)?>)?([A-Z0-9_:]+)({.*})?$/o ) {
+            if( $stackTop =~ m/^%(<nop(?:result| *\/)?>)?([A-Z0-9_:]+)({.*})?$/o ) {
                 my $nop = $1 || '';
                 my $tag = $2 . ( $3 || '' );
                 if( scalar( @stack ) == 1 && $this->{opts}->{markvars} ) {
@@ -145,7 +145,8 @@ sub _processTags {
                     $tag = '%'.$tag.'%';
                 }
                 if( $nop ) {
-                    $tag = CGI::span( { class=>'TMLnop' }, $tag );
+                    $nop =~ s/[<>]//g;
+                    $tag = CGI::span( { class=>'TML'.$nop }, $tag );
                 }
                 $stackTop = pop( @stack ).$this->_liftOut( $tag );
             } else {
@@ -251,18 +252,23 @@ sub _getRenderedVersion {
     # change !%XXX to %<nop>XXX
     $text =~ s/!%(?=[A-Z]+({|%))/%<nop>/g;
 
+    # change <nop>%XXX to %<nopresult>XXX. A nop before th % indicates
+    # that the result of the tag expansion is to be nopped
+    $text =~ s/<nop>%(?=[A-Z]+({|%))/%<nopresult>/g;
+
     # Pull comments
     $text =~ s/(<!--.*?-->)/$this->_liftOut($1)/ges;
 
-    $text =~ s/<(.?(noautolink|nop).*?)>/$TT1($1)$TT1/gi;
+    # Remove TML pseudo-tags so they don't get protected like HTML tags
+    $text =~ s/<(.?(noautolink|nop|nopresult).*?)>/$TT1($1)$TT1/gi;
 
     # Expand selected TWiki variables in IMG tags so that images appear in the
     # editor as images
     $text =~ s/(<img [^>]*src=)(["'])(.*?)\2/$1.$2.$this->_expandURL($3).$2/gie;
-
     # protect HTML tags by pulling them out
     $text =~ s/(<\/?[a-z]+(\s[^>]*)?>)/ $this->_liftOut($1) /gei;
 
+    # Replace TML pseudo-tags
     $text =~ s/$TT1\((.*?)\)$TT1/<$1>/go;
 
     # Convert TWiki tags to spans outside parameters
@@ -451,6 +457,10 @@ sub _getRenderedVersion {
     # replace verbatim with pre in the final output
     _putBackBlocks( $text, $removed, 'verbatim', 'pre',
                     \&_encodeEntities );
+
+    # There shouldn't be any lingering <nopresult>s, but just
+    # in case there are, convert them to <nop>s so they get removed.
+    $text =~ s/<nopresult>/<nop>/g;
 
     return $this->_liftOut( $text );
 }
