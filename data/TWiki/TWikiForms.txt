@@ -90,17 +90,18 @@ when used in the value field of the form definition, will take the set of field 
 
 
 *Notes:*
-   * A very few field names are reserved. if you try to use one of these names, TWiki will automatically append an underscore to the name when the form is used.
-   * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For label, text, and text area fields that value may also contain commas. Checkbox fields cannot be initialized through the form template.
+   * A very few field names are reserved. If you try to use one of these names, TWiki will automatically append an underscore to the name when the form is used.
+   * The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For =label=, =text=, and =textarea= fields the value may also contain commas. =checkbox= fields cannot be initialized through the form template.
+   * If a =label= field has no name (blank first column in the form definition) it will *not* be shown when the form is *viewed*, only when it is *edited*.
    * The topic definition is not read when a topic is viewed.
-   * Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a select, checkbox or radio field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links. This notation can also be used when referencing another topic to obtain field values, but one wants to use a name other than the topic name as the name of the field. 
+   * Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a =select=, =checkbox= or =radio= field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links. This notation can also be used when referencing another topic to obtain field values, but a name other than the topic name is required as the name of the field. 
    * Field names have to be unique. If the same name is necessary (as when the field values for several fields are obtained from the same topic), an alternative name must be assigned using the ==[<nop>[...]]== notation.
    * The topic defining field values can also be generated through a %TWIKIWEB%.FormattedSearch, which must yield a suitable table as the result.
    * Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
    * The ==Tooltip message== column is used as a tooltip for the field name (only if field name is a %TWIKIWEB%.WikiName) - you only see the tooltip in edit view.
    * The ==Attributes== column is used to define special behavior for that form field (multiple attributes can be entered, with or without separators):
       * An attribute =H= indicates that this field should not be shown in view mode. However, the field is available for editing and storing information.
-      * An attribute =M= indicates that this field is mandatory. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an oops page. Mandatory fields are indicated by an asteriks next to the field name. 
+      * An attribute =M= indicates that this field is mandatory. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an =oops= page. Mandatory fields are indicated by an asterisks next to the field name. 
 </blockquote>
 
 #EnablingForms
