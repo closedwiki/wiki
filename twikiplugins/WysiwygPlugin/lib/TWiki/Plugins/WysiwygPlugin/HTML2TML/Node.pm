@@ -553,6 +553,12 @@ sub _handleNOP {
     return ($flags, '<nop>'.$text);
 }
 
+sub _handleNOPRESULT {
+    my( $this, $options ) = @_;
+    my( $flags, $text ) = $this->_flatKids( $options );
+    return ($flags, '<nop>'.$text);
+}
+
 # tags we ignore completely (contents as well)
 sub _handleDOCTYPE { return ( 0, '' ); }
 sub _handleHEAD { return ( 0, '' ); }
@@ -711,14 +717,18 @@ sub _handleSPAN {
         $var = '%'.$nop.$var.'%' if( $var );
         return (0, $var);
     } elsif( defined( $this->{attrs}->{class} ) &&
-        $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
+               $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
         my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
         return (0, '<!--'.$text.'-->' );
-    } elsif (defined( $this->{attrs}->{class} ) &&
-             $this->{attrs}->{class} =~ /\bTMLnop\b/) {
-        my($flags, $kids ) = $this->_flatKids( $options | $WC::NOP_ALL );
+    } elsif( defined( $this->{attrs}->{class} ) &&
+               $this->{attrs}->{class} =~ /\bTMLnop\b/) {
+        my( $flags, $kids ) = $this->_flatKids( $options | $WC::NOP_ALL );
         $kids =~ s/%([A-Z0-9_:]+({.*})?)%/%<nop>$1%/g;
         return ( $flags, " $kids ");
+    } elsif( defined( $this->{attrs}->{class} ) &&
+               $this->{attrs}->{class} =~ /\bTMLnopresult\b/) {
+        my( $flags, $kids ) = $this->_flatKids( $options );
+        return ( $flags, '<nop>'.$kids );
     } elsif( !scalar( %{$this->{attrs}} )) {
         # ignore the span if there are no attrs
         return $this->_flatKids( $options );

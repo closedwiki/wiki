@@ -104,7 +104,10 @@ div#twiki-icons img:active {
   background: url('verbatim-watermark.png')
 }
 .TMLnop {
-  border: thick solid red;
+  border: thin solid red;
+}
+.TMLnopresult {
+  border: thin solid orange;
 }
 .TMLcomment { 
   font-style: italic;
