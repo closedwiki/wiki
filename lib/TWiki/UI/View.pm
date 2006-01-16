@@ -135,7 +135,7 @@ sub view {
     if( $raw ) {
         $indexableView = 0;
         $logEntry .= ' raw='.$raw;
-        if( $raw eq 'debug' || $raw eq 'text' ) {
+        if( $raw eq 'debug' || $raw eq 'all' ) {
             $text = $store->getDebugText( $meta, $text );
         }
     }
@@ -257,7 +257,7 @@ sub view {
     } elsif( $skin =~ /\brss/ ) {
         $contentType = 'text/xml';
         $minimalist = 1;
-    } elsif( $raw eq 'text' ) {
+    } elsif( $raw eq 'text' || $raw eq 'all' ) {
         $contentType = 'text/plain';
     } else {
         $contentType = 'text/html'
@@ -279,7 +279,7 @@ sub view {
     # to download plain text for the topic. So when the skin is 'text'
     # we do _not_ want to create a textarea.
     # raw=on&skin=text is deprecated; use raw=text instead.
-    if( $raw eq 'text' || ( $raw && $skin eq 'text' )) {
+    if( $raw eq 'text' || $raw eq 'all' || ( $raw && $skin eq 'text' )) {
         # use raw text
         $page = $text;
     } else {
