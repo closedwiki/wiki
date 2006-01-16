@@ -391,7 +391,7 @@ sub rename {
               $store->readTopic( undef, $newWeb, $newTopic, undef );
             my $parent = $meta->get( 'TOPICPARENT' );
             my( $parentWeb, $parentTopic );
-            if( $parent ) {
+            if( $parent && defined $parent->{name} ) {
                 ( $parentWeb, $parentTopic ) =
                   $session->normalizeWebTopicName( '', $parent->{name} );
             }
