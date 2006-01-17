@@ -31,7 +31,7 @@ my $testtext1 = <<'HERE';
 %META:FIELD{name="Issue3" attributes="" title="Issue 3" value="Defect, None"}%
 %META:FIELD{name="Issue4" attributes="" title="Issue 4" value="Defect"}%
 %META:FIELD{name="State" attributes="H" title="State" value="Invisible"}%
-%META:FIELD{name="Anothertopic" attributes="" title="Another topic" value=":-) "}%
+%META:FIELD{name="Anothertopic" attributes="" title="Another topic" value="GRRR "}%
 HERE
 
 sub new {
@@ -49,9 +49,8 @@ sub set_up {
 
     $twiki->{store}->createWeb($user, $testweb);
 
-    $twiki->{store}->saveTopic( $user, $testweb, $testtopic ,$testtext1, undef );
-
     $TWiki::Plugins::SESSION = $twiki;
+    TWiki::Func::saveTopicText( $testweb, $testtopic, $testtext1, 1, 1 );
 }
 
 sub tear_down {
@@ -64,8 +63,8 @@ sub tear_down {
 sub test_TML_in_forms {
     my $this = shift;
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
-    my $render = new TWiki::Render($twiki);
     my $res = TWiki::Form::renderForDisplay($twiki->{templates},$meta);
+    my $render = $twiki->{renderer};
     $res = $render->getRenderedVersion($res, $testweb, $testtopic);
 
     eval 'use HTML::TreeBuilder; use HTML::Element;';
@@ -82,7 +81,7 @@ sub test_TML_in_forms {
     @children = $children[0]->content_list();
     # Now we have 8 rows
     $text = (($children[0]->content_list())[0]->content_list())[0]->as_HTML();
-    $this->assert_str_equals('<span class="twikiNewLink">InitializationForm<a href="' . $twiki->getScriptUrl( $testweb, "InitializationForm", 'edit' ) . '?topicparent=Main.WebHome" rel="nofollow" title="Create this topic"><sup>?</sup> </a></span>
+    $this->assert_str_equals('<span class="twikiNewLink">InitializationForm<a href="' .$twiki->getScriptUrl( 0, "edit", $testweb, "InitializationForm" ) . '?topicparent=Main.WebHome" rel="nofollow" title="Create this topic"><sup>?</sup></a></span>
 ', $text);
     $text = (($children[1]->content_list())[1]->content_list())[0]->as_HTML();
     $this->assert_str_equals('<em>An issue</em>
@@ -100,7 +99,7 @@ sub test_TML_in_forms {
     $text = (($children[6]->content_list())[1]->content_list())[0];
     $this->assert_str_equals(' Defect ', $text);
     $text = (($children[7]->content_list())[1]->content_list())[0];
-    $this->assert_str_equals(' :-) ', $text);
+    $this->assert_str_equals(' GRRR ', $text);
     $tree->delete;
 }
 

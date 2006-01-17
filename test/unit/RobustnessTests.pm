@@ -7,7 +7,7 @@ require 5.008;
 use TWiki;
 use TWiki::Sandbox;
 use TWiki::Time;
-use Error qw(:try);
+use Error qw( :try );
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;

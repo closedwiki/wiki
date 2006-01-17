@@ -49,12 +49,85 @@ sub test_SCRIPTURL {
         "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}", $result);
 
     $result = $twiki->handleCommonTags(
-        "%SCRIPTURL{view}%", $testWeb, $testTopic);
+        "%SCRIPTURLPATH{view}%", $testWeb, $testTopic);
     $this->assert_str_equals("$TWiki::cfg{ScriptUrlPath}/view.dot", $result);
 
     $result = $twiki->handleCommonTags(
-        "%SCRIPTURL{snarf}%", $testWeb, $testTopic);
+        "%SCRIPTURLPATH{snarf}%", $testWeb, $testTopic);
     $this->assert_str_equals("sausages", $result);
+}
+
+sub test_NOP {
+    my $this = shift;
+
+    my $result = $twiki->handleCommonTags("%NOP%", $testWeb, $testTopic);
+    $this->assert_equals('<nop>', $result);
+
+    $result = $twiki->handleCommonTags("%NOP{   ignore me   }%", $testWeb, $testTopic);
+    $this->assert_equals("   ignore me   ", $result);
+
+    $result = $twiki->handleCommonTags("%NOP{%SWINE%}%", $testWeb, $testTopic);
+    $this->assert_equals("%SWINE%", $result);
+
+    $result = $twiki->handleCommonTags("%NOP{%WEB%}%", $testWeb, $testTopic);
+    $this->assert_equals($testWeb, $result);
+
+    $result = $twiki->handleCommonTags("%NOP{%FLEEB{}%}%", $testWeb, $testTopic);
+    $this->assert_equals("%FLEEB{}%", $result);
+
+    $result = $twiki->handleCommonTags("%NOP{%WEB{}%}%", $testWeb, $testTopic);
+    $this->assert_equals($testWeb, $result);
+
+    $result = $twiki->expandVariablesOnTopicCreation("%NOP%");
+    $this->assert_equals('', $result);
+
+    $result = $twiki->expandVariablesOnTopicCreation("%NOP{   ignore me   }%");
+    $this->assert_equals('', $result);
+}
+
+sub test_SEP {
+    my $this = shift;
+    my $a = $twiki->handleCommonTags("%TMPL:P{sep}%", $testWeb, $testTopic);
+    my $b = $twiki->handleCommonTags("%SEP%", $testWeb, $testTopic);
+    $this->assert_str_equals($a,$b);
+}
+
+sub test_embeddedExpansions {
+    my $this = shift;
+    $twiki->{prefs}->pushPreferenceValues(
+        'TOPIC',
+        { EGGSAMPLE => 'Egg sample',
+          A => 'EGG',
+          B => 'SAMPLE',
+          C => '%%A%',
+          D => '%B%%',
+          E => '%EGG',
+          F => 'SAMPLE%',
+          PA => 'A',
+          SB => 'B',
+          EXEMPLAR => 'Exem plar',
+          XA => 'EXEM',
+          XB => 'PLAR',
+      });
+
+    my $result = $twiki->handleCommonTags("%%A%%B%%", $testWeb, $testTopic);
+    $this->assert_equals('Egg sample', $result);
+
+    $result = $twiki->handleCommonTags("%C%%D%", $testWeb, $testTopic);
+    $this->assert_equals('Egg sample', $result);
+
+    $result = $twiki->handleCommonTags("%E%%F%", $testWeb, $testTopic);
+    $this->assert_equals('Egg sample', $result);
+
+    $result = $twiki->handleCommonTags("%%XA{}%%XB{}%%", $testWeb, $testTopic);
+    $this->assert_equals('Exem plar', $result);
+
+    $result = $twiki->handleCommonTags("%%XA%%XB%{}%", $testWeb, $testTopic);
+    $this->assert_equals('Exem plar', $result);
+
+    $result = $twiki->handleCommonTags("%%%PA%%%%SB{}%%%", $testWeb, $testTopic);
+    $this->assert_equals('Egg sample', $result);
+
 }
 
 1;

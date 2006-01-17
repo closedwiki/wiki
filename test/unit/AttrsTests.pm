@@ -255,4 +255,11 @@ sub test_compatibility5 {
     $this->detest_string( $s );
 }
 
+sub test_raw {
+    my $this = shift;
+    my $s = "   Barf";
+    my $new = new TWiki::Attrs($s,0);
+    $this->assert_str_equals($s, $new->{_RAW});
+}
+
 1;

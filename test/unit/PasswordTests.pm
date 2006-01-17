@@ -18,6 +18,9 @@ sub set_up {
     $this->SUPER::set_up();
 
     $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
+    open(F, ">$TWiki::cfg{Htpasswd}{FileName}") || die $!;
+    print F "";
+    close F;
 }
 
 sub tear_down {

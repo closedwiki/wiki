@@ -102,6 +102,7 @@ sub test_XXXXXXXXXX {
     my $this = shift;
     my $query = new CGI({
         action => [ 'save' ],
+        text => [ 'nowt' ],
     });
     $query->path_info( $testweb.'.TestTopicXXXXXXXXXX' );
     $twiki = new TWiki( $testuser1, $query );
@@ -132,8 +133,9 @@ sub test_XXXXXXXXXX {
 sub test_XXXXXXXXX {
     my $this = shift;
     my $query = new CGI({
-                         action => [ 'save' ],
-                        });
+        action => [ 'save' ],
+        text => [ 'nowt' ],
+    });
     $query->path_info("$testweb/TestTopicXXXXXXXXX");
     $this->assert(
         !$twiki->{store}->topicExists($testweb,'TestTopic0'));
@@ -155,8 +157,9 @@ sub test_XXXXXXXXX {
 sub test_XXXXXXXXXXX {
     my $this = shift;
     my $query = new CGI({
-                         action => [ 'save' ],
-                        });
+        action => [ 'save' ],
+        text => [ 'nowt' ],
+    });
     $query->path_info("/$testweb/TestTopicXXXXXXXXXXX");
     $twiki = new TWiki( $testuser1, $query );
     $this->capture( \&TWiki::UI::Save::save, $twiki);
@@ -174,9 +177,9 @@ sub test_XXXXXXXXXXX {
 sub test_emptySave {
     my $this = shift;
     my $query = new CGI({
-                         action => [ 'save' ],
-                         topic => [ $testweb.'.EmptyTestSaveScriptTopic' ]
-                        });
+        action => [ 'save' ],
+        topic => [ $testweb.'.EmptyTestSaveScriptTopic' ]
+       });
     $twiki = new TWiki( $testuser1, $query );
     $this->capture( \&TWiki::UI::Save::save, $twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
@@ -188,10 +191,10 @@ sub test_emptySave {
 sub test_simpleTextSave {
     my $this = shift;
     my $query = new CGI({
-                         text => [ 'CORRECT' ],
-                         action => [ 'save' ],
-                         topic => [ $testweb.'.DeleteTestSaveScriptTopic' ]
-                        });
+        text => [ 'CORRECT' ],
+        action => [ 'save' ],
+        topic => [ $testweb.'.DeleteTestSaveScriptTopic' ]
+       });
     $twiki = new TWiki( $testuser1, $query );
     $this->capture( \&TWiki::UI::Save::save, $twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
@@ -203,17 +206,17 @@ sub test_simpleTextSave {
 sub test_templateTopicTextSave {
     my $this = shift;
     my $query = new CGI({
-                         text => [ 'Template Topic' ],
-                         action => [ 'save' ],
-                         topic => [ $testweb.'.TemplateTopic' ]
-                        });
+        text => [ 'Template Topic' ],
+        action => [ 'save' ],
+        topic => [ $testweb.'.TemplateTopic' ]
+       });
     $twiki = new TWiki( $testuser1, $query);
     $this->capture( \&TWiki::UI::Save::save, $twiki);
     $query = new CGI({
-                         templatetopic => [ 'TemplateTopic' ],
-                         action => [ 'save' ],
-                         topic => [ $testweb.'.TemplateTopic' ]
-                        });
+        templatetopic => [ 'TemplateTopic' ],
+        action => [ 'save' ],
+        topic => [ $testweb.'.TemplateTopic' ]
+       });
     $twiki = new TWiki( $testuser1, $query );
     $this->capture( \&TWiki::UI::Save::save, $twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, 'TemplateTopic');
@@ -243,7 +246,7 @@ sub test_prevTopicTextSave {
     $this->assert_null($meta->get('FORM'));
 }
 
-# Save over existing topic with no text (get defult from prev topic)
+# Save over existing topic with no text
 sub test_prevTopicEmptyTextSave {
     my $this = shift;
     my $query = new CGI({

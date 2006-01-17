@@ -16,11 +16,11 @@ Designed by: Crawford Currie
 <!-- expected FIRST TEST -->
 <font color="purple"> Before Verbatim </font>
 <pre>
-&lt;%EGG%&gt; In outer verbatim &lt;%ENDBREAKFAST%&gt;
+&lt;&#37;EGG&#37;&gt; In outer verbatim &lt;&#37;ENDBREAKFAST&#37;&gt;
 &lt;verbatim&gt;
 In inner verbatim with &lt;text in angle braces&gt;
 &lt;/verbatim&gt;
-&lt;%EGG%&gt; In outer verbatim again &lt;%ENDBREAKFAST%&gt;
+&lt;&#37;EGG&#37;&gt; In outer verbatim again &lt;&#37;ENDBREAKFAST&#37;&gt;
 </pre>
 <font color="purple"> After Verbatim </font>
 <!-- /expected -->
@@ -42,11 +42,11 @@ In inner verbatim with <text in angle braces>
 <!-- expected SECOND TEST -->
 Function is
 <pre>
----++ sub marine() =&gt; dive dive dive
+---++ sub marine() &#61;&gt; dive dive dive
 Admire the pretty fishes.
 Usage:
 &lt;verbatim&gt;
-	 my $fishes = _marine();
+	 my $fishes &#61; &#95;marine();
 	 if ( $fishes-&gt;{&#34;big mouth rass&#34;} ) {
 &lt;/verbatim&gt;
 </pre>

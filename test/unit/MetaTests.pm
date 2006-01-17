@@ -263,8 +263,12 @@ sub test_deindexKeyed {
     my $meta = TWiki::Meta->new($session, $web, $topic);
 
     my @unkeyedActual = TWiki::Meta::deindexKeyed(%$keyed);
-    use Data::Dumper;
-    print Dumper($unkeyed, \@unkeyedActual);
+
+# SMELL: THIS IS A BLOODY USELESS TEST! Manual checking of prints is
+# *not* acceptable in an automated test suite!
+
+#    use Data::Dumper;
+#    print Dumper($unkeyed, \@unkeyedActual);
 #    $this->assert_deep_equals(@$unkeyed, @unkeyedActual);
 # You can't know the order of the output but there is no unordered test
 

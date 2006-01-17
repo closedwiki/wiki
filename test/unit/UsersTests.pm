@@ -148,7 +148,7 @@ sub testAddUsers {
     close(F);
     $this->assert_matches(qr/Aaron.*George.*Zebediah/s, $text);
 #    unlink($ttpath);
-    print $ttpath."\n";
+    #print $ttpath."\n";
 }
 
 sub testLoad {
