@@ -66,21 +66,12 @@ sub initPlugin
 }
 
 # =========================
-sub endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just after the line loop, that is,
-    # after almost all XHTML rendering of a topic. <nop> tags are removed after this.
-
-    $_[0] =~ s/%TOOLTIP{(.*?)}%/&handleToolTip($1)/ge;
-    $_[0] =~ s/%TOOLTIP%/&handleToolTip("")/ge;
-}
-
 sub postRenderingHandler
 {
+	TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $web.$topic )" ) if $debug;
+	$_[0] =~ s/%TOOLTIP{(.*?)}%/&handleToolTip($1)/ge;
+    $_[0] =~ s/%TOOLTIP%/&handleToolTip("")/ge;
+    
     # this search and replace could be made more robust if this were ever called more than once
     # (more than once with the </body> tag in the text, that is)
     $_[0] =~ s|(</body>)|<script type="text/javascript" src="$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{PubUrlPath}/$TWiki::cfg{SystemWebName}/$pluginName/wz_tooltip.js"></script>$1|;
@@ -106,10 +97,10 @@ sub handleToolTip
   }
   else
   {
-    my $theText   = &TWiki::Func::extractNameValuePair( "$attr", "TEXT" )      || ""; 
-    my $TextInclude = &TWiki::Func::extractNameValuePair( "$attr", "INCLUDE" ) || ""; 
-    my $theURL    = &TWiki::Func::extractNameValuePair( "$attr", "URL" )       || "javascript:void(0);"; 
-    my $theTARGET = &TWiki::Func::extractNameValuePair( "$attr", "TARGET" )    || ""; 
+    my $theText     = &TWiki::Func::extractNameValuePair( "$attr", "TEXT" )      || ""; 
+    my $TextInclude = &TWiki::Func::extractNameValuePair( "$attr", "INCLUDE" )   || ""; 
+    my $theURL      = &TWiki::Func::extractNameValuePair( "$attr", "URL" )       || "javascript:void(0);"; 
+    my $theTARGET   = &TWiki::Func::extractNameValuePair( "$attr", "TARGET" )    || ""; 
 
 
     $attr =~ s/INCLUDE\s*=\s*\"([^\"]*)\"//g;
