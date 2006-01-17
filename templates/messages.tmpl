@@ -348,19 +348,19 @@
 %TMPL:DEF{"lease_active"}%
 %MAKETEXT{"[_1] is editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
 
-%MAKETEXT{"They have been editing for [_1] and their lease is still active for another [_2]." args="%PARAM2%, %PARAM3%"}%
+%MAKETEXT{"[_1] has been editing the topic for [_2] and the lease is still active for another [_3]." args="%PARAM1%, %PARAM2%, %PARAM3%"}%
 
-%MAKETEXT{"It is probably OK to go ahead and edit, unless you intend to change the form attached to the topic. If they _do_ save while you are editing, your changes will be merged with theirs. Form data cannot easily be merged, so in this case you are recommended to check with them first."}%
+%MAKETEXT{"It is probably OK to go ahead and edit - unless you intend to change data in a form attached to the topic. If [_1] actually _does_ save the topic while you are editing, your changes will be merged, and nothing will be lost. Form data cannot easily be merged though, so in this case you are recommended to check with [_1] first." args="%PARAM1%"}%
 
 %TMPL:END%
 %TMPL:DEF{"lease_old"}%
 %MAKETEXT{"[_1] may still be editing [_2]." args="%PARAM1%, %WEB%.%TOPIC%"}%
 
-%MAKETEXT{"Their lease on this topic expired [_1] ago." args="%PARAM2%"}%
+%MAKETEXT{"The lease on this topic expired [_1] ago." args="%PARAM2%"}%
 
-%MAKETEXT{"The chances are good that they simply navigated away from the edit page without saving."}%
+%MAKETEXT{"The chances are good that [_1] has simply navigated away from the edit page without saving." args="%PARAM1%"}%
 
-%MAKETEXT{"It is probably OK to go ahead and edit, unless you intend to change the form attached to the topic. If they _do_ save while you are editing, your changes will be merged with theirs. Form data cannot easily be merged, so in this case you are recommended to check with them first."}%
+%MAKETEXT{"You are encouraged to go ahead and edit - unless you intend to change data in a form attached to the topic. If [_1] actually _does_ save while you are editing, your changes will be merged, and nothing will be lost. Form data cannot easily be merged though, so in this case you are recommended to check with [_1] first." args="%PARAM1%"}%
 
 %TMPL:END%
 
