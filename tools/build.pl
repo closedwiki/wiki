@@ -36,25 +36,42 @@ sub new {
     my $class = shift;
     my $name;
 
+    if( scalar(@ARGV) > 1) {
+        $name = pop( @ARGV );
+    }
+
 print <<END;
 
 You are about to build TWiki. If you are not building a release, or
 this release is just for testing purposes, you can leave it unnamed.
 In this case any packages generated will be called "TWiki". Alternatively
-you can provide a name (e.g. TWiki-4.0.0).
+you can provide a name (e.g. 4.0.0-beta6).
 
 If you provide a name, TWiki.pm will be automatically edited to insert the
 new name of the release. The updated TWiki.pm will be checked in before
 the build starts.
 
+The release *must* be named according to the standard scheme i.e
+major.minor.patch[-qualifier]
+where -qualifier is optional.
+
+This will be translated to appropriate package and topic names.
+
+(The package name can optionally be passed in a *second* parameter
+to the script e.g. perl build.pl release 4.6.5)
+
+
 END
-    if( TWiki::Contrib::Build::ask("Do you want to name this release?")) {
-        do {
+    if( $name ||
+          TWiki::Contrib::Build::ask("Do you want to name this release?")) {
+        while( $name !~ /^\d\.\d+\.\d+(-\w+)?$/ ) {
             $name =
               TWiki::Contrib::Build::prompt(
                   "Enter name of this release: ", $name);
-            $name =~ s/['\\]//g;
-        } until( $name );
+        }
+        # SMELL: should really check that the name actually *follows* the
+        # last name generated
+        $name = 'TWiki-'.$name;
         open(PM, "<../lib/TWiki.pm") || die $!;
         local $/ = undef;
         my $content = <PM>;

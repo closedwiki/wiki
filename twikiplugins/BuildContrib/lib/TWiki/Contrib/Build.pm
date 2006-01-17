@@ -696,6 +696,10 @@ in the MANIFEST.
 sub target_release {
     my $this = shift;
 
+    print "Building a release\n";
+    print 'Package name will be ',$this->{project},$NL;
+    print 'Topic name will be ',$this->_getTopicName(),$NL;
+
     $this->build('build');
     $this->build('installer');
     $this->build('stage');
@@ -898,6 +902,20 @@ sub target_uninstall {
     }
 }
 
+sub _getTopicName {
+    my $this = shift;
+    my $topicname = $this->{project};
+
+    # Append 'Release' to first (word) part of name if followed by -
+    $topicname =~ s/^(\w+)\-/${1}Release/;
+    $topicname =~ s/(\d+)/sprintf("%0.2i",$1)/ge;
+    # replace . with x
+    $topicname =~ s/\./x/g;
+    # remove - and uppercase next char
+    $topicname =~ s/\-(\w)(\w+)$/uc($1).$2/e;
+    return $topicname;
+}
+
 =pod
 
 ---++++ target_upload
@@ -924,9 +942,7 @@ sub target_upload {
 
     my $web = prompt("Name of web on twiki.org to upload to", "Plugins");
 
-    my $topic = $to;
-    # word chars only
-    $topic =~ s/\W/_/g;
+    my $topic = $this->_getTopicName();
     my $url = "http://twiki.org/cgi-bin/view/$web/$topic";
 
     # Get the old form data and attach it to the update
