@@ -181,6 +181,7 @@ BEGIN {
         MAKETEXT          => \&_MAKETEXT,
         META              => \&_META,
         METASEARCH        => \&_METASEARCH,
+        NOP               => \&_NOP,
         PLUGINVERSION     => \&_PLUGINVERSION,
         PUBURL            => \&_PUBURL,
         PUBURLPATH        => \&_PUBURLPATH,
@@ -194,6 +195,7 @@ BEGIN {
         SCRIPTURL         => \&_SCRIPTURL,
         SCRIPTURLPATH     => \&_SCRIPTURLPATH,
         SEARCH            => \&_SEARCH,
+        SEP               => \&_SEP,
         SERVERTIME        => \&_SERVERTIME,
         SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
         SPACEOUT          => \&_SPACEOUT,
@@ -1106,7 +1108,7 @@ sub normalizeWebTopicName {
     }
     $web ||= $cfg{UsersWebName};
     $topic ||= $cfg{HomeTopicName};
-    $web =~ s/^%((MAIN|TWIKI)WEB)%$/$this->_expandTag( $1 )/e;
+    $web =~ s/^%((MAIN|TWIKI)WEB)%$/$this->_expandTagOnTopicRendering($1)||''/e;
     $web =~ s#\.#/#go;
     return( $web, $topic );
 }
@@ -1754,15 +1756,7 @@ sub inlineAlert {
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
 
-The expanded variables are:
-| =%<nop>DATE%= | Signature-format date |
-| =%<nop>SERVERTIME%= | Server time |
-| =%<nop>GMTIME%= | GM time |
-| =%<nop>USERNAME%= | Base login name |
-| =%<nop>WIKINAME%= | Wiki name |
-| =%<nop>WIKIUSERNAME%= | Wiki name with prepended web |
-| =%<nop>URLPARAM%= | Parameters to the current CGI query |
-| =%<nop>NOP%= | No-op |
+# SMELL: no plugin handler
 
 =cut
 
@@ -1773,26 +1767,7 @@ sub expandVariablesOnTopicCreation {
     $user ||= $this->{user};
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
-    # Must do URLPARAM first
-    $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(new TWiki::Attrs($1))/ge;
-
-    $text =~ s/%DATE%/$this->_DATE()/ge;
-    $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;
-    $text =~ s/%GMTIME(?:{(.*?)})?%/$this->_GMTIME(new TWiki::Attrs($1))/ge;
-
-    $text =~ s/%USERNAME%/$user->login()/ge;
-    $text =~ s/%WIKINAME%/$user->wikiName()/ge;
-    $text =~ s/%WIKIUSERNAME%/$user->webDotWikiName()/ge;
-
-    # Remove template-only text and variable protection markers. These
-    # are normally expanded to their content during topic display, but
-    # are filtered out during template topic instantiation. They are typically
-    # used for establishing topic protections over the template topics that
-    # are not inherited by the instantiated topic.
-    # See TWiki.TWikiTemplates for details.
-    $text =~ s/%NOP{.*?}%//gs;
-    $text =~ s/%NOP%//g;
-    return $text;
+    return $this->_processTags( $text, \&_expandTagOnTopicCreation, 16 );
 }
 
 =pod
@@ -1972,27 +1947,17 @@ sub _expandAllTags {
     # Escape ' !%VARIABLE%'
     $$text =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
 
-    # Remove NOP tag in template topics but show content. Used in template
-    # _topics_ (not templates, per se, but topics used as templates for new
-    # topics)
-    $$text =~ s/%NOP{(.*?)}%/$1/gs;
-    $$text =~ s/%NOP%/<nop>/g;
-
-    # SMELL: this is crap, a hack, and should go. It should be handled with
-    # %TMPL:P{"sep"}% or a built-in.
-    my $sep = $this->{templates}->expandTemplate('sep');
-    $$text =~ s/%SEP%/$sep/g;
-
     # NOTE TO DEBUGGERS
     # The depth parameter in the following call controls the maximum number
     # of levels of expansion. If it is set to 1 then only tags in the
     # topic will be expanded; tags that they in turn generate will be
     # left unexpanded. If it is set to 2 then the expansion will stop after
     # the first recursive inclusion, and so on. This is incredible useful
-    # when debugging The default is set to 16
+    # when debugging. The default is set to 16
     # to match the original limit on search expansion, though this of
     # course applies to _all_ tags and not just search.
-    $$text = $this->_processTags( $$text, 16, @_ );
+    $$text = $this->_processTags( $$text, \&_expandTagOnTopicRendering,
+                                  16, @_ );
 
     # restore previous context
     $this->{SESSION_TAGS}{TOPIC}   = $memTopic;
@@ -2008,6 +1973,7 @@ sub _expandAllTags {
 sub _processTags {
     my $this = shift;
     my $text = shift;
+    my $tagf = shift;
 
     return '' unless defined( $text );
 
@@ -2018,14 +1984,17 @@ sub _processTags {
     unless ( $depth ) {
         my $mess = "Max recursive depth reached: $text";
         $this->writeWarning( $mess );
-	$text =~ s/%.*?%//go; # prevent recursive expansions 
-                              # that just has been detected
+        # prevent recursive expansion that just has been detected
+        # from happening in the error message
+        $text =~ s/%(.*?)%/$1/go;
         return $text;
     }
 
-     my $verbatim = {};
+    my $verbatim = {};
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                                $verbatim);
+
+    my $percent = ($TranslationToken x 3).'%'.($TranslationToken x 3);
 
     my @queue = split( /(%)/, $text );
     my @stack;
@@ -2034,6 +2003,7 @@ sub _processTags {
     # should be considered to be $stack[$#stack]
 
     #my $tell = 1; # uncomment all tell lines set this to 1 to print debugging
+
     while ( scalar( @queue )) {
         my $token = shift( @queue );
         #print STDERR ' ' x $tell,"PROCESSING $token \n" if $tell;
@@ -2056,35 +2026,41 @@ sub _processTags {
                 }
             }
             # /s so you can have newlines in parameters
-            if ( $stackTop =~ m/^%($regex{tagNameRegex})(?:{(.*)})?$/so ) {
-                my( $tag, $args ) = ( $1, $2 );
+            if ( $stackTop =~ m/^%(($regex{tagNameRegex})(?:{(.*)})?)$/so ) {
+                my( $expr, $tag, $args ) = ( $1, $2, $3 );
                 #print STDERR ' ' x $tell,"POP $tag\n" if $tell;
-                my $e = $this->{prefs}->getPreferencesValue( $tag );
-                unless( defined( $e )) {
-                    $e = $this->{SESSION_TAGS}{$tag};
-                    unless( defined( $e )) {
-                        $e = $constantTags{$tag};
-                    }
-                    if( !defined( $e ) && defined( $functionTags{$tag} )) {
-                        $e = &{$functionTags{$tag}}
-                          ( $this, new TWiki::Attrs(
-                              $args, $contextFreeSyntax{$tag} ), @_ );
-                    }
-                }
+                my $e = &$tagf( $this, $tag, $args, @_ );
 
                 if ( defined( $e )) {
                     #print STDERR ' ' x $tell--,"EXPANDED $tag -> $e\n" if $tell;
                     $stackTop = pop( @stack );
-                    # Choice: can either tokenise and push the expanded
-                    # tag, or can recursively expand the tag. The
-                    # behaviour is different in each case.
-                    #unshift( @queue, split( /(%)/, $e ));
-		    $stackTop .=
-		       $this->_processTags($e, $depth-1, @_ );
+                    # Recursively expand tags in the expansion of $tag
+                    $stackTop .= $this->_processTags($e, $tagf, $depth-1, @_ );
                 } else { # expansion failed
                     #print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
-                    push( @stack, $stackTop );
-                    $stackTop = '%'; # push a new context
+                    # Argh, horrible, horrible TML syntax. For compatibility
+                    # reasons, we have to handle the %VAR% case differently
+                    # to the %VAR{}% case when a variable expansion fails.
+                    # This is so that recursively define variables e.g.
+                    # %A%B%D% expand correctly, but at the same time we ensure
+                    # that a mismatched }% can't accidentally close a context
+                    # that was left open when a tag expansion failed.
+
+                    if( $stackTop =~ /}$/ ) {
+                        # %VAR{...}% case
+                        # We need to push the unexpanded expression back
+                        # onto the stack, but we don't want it to match the
+                        # tag expression again. So we protect the %'s
+                        $stackTop = $percent.$expr.$percent;
+                    } else {
+                        # %VAR% case.
+                        # In this case we *do* want to match the tag expression
+                        # again, as an embedded %VAR% may have expanded to
+                        # create a valid outer expression. This is directly
+                        # at odds with the %VAR{...}% case.
+                        push( @stack, $stackTop );
+                        $stackTop = '%'; # open new context
+                    }
                 }
             } else {
                 push( @stack, $stackTop );
@@ -2103,36 +2079,60 @@ sub _processTags {
         $stackTop .= $expr;
     }
 
+    $stackTop =~ s/$percent/%/go;
+
     $this->{renderer}->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
+
+    #print STDERR "FINAL $stackTop\n" if $tell;
 
     return $stackTop;
 }
 
-# Handle expansion of an internal tag (as against preference tags)
+# Handle expansion of a tag during topic rendering
 # $tag is the tag name
 # $args is the bit in the {} (if there are any)
 # $topic and $web should be passed for dynamic tags (not needed for
 # session or constant tags
-sub _expandTag {
+sub _expandTagOnTopicRendering {
     my $this = shift;
     my $tag = shift;
     my $args = shift;
     # my( $topic, $web ) = @_;
 
-    my $res;
     my $e = $this->{prefs}->getPreferencesValue( $tag );
-    if( defined( $e )) {
-        $res = $e;
-    } elsif ( defined( $this->{SESSION_TAGS}{$tag} )) {
-        $res = $this->{SESSION_TAGS}{$tag};
-    } elsif ( defined( $constantTags{$tag} )) {
-        $res = $constantTags{$tag};
-    } elsif ( defined( $functionTags{$tag} )) {
-        my $params = new TWiki::Attrs( $args, $contextFreeSyntax{$tag} );
-        $res = &{$functionTags{$tag}}( $this, $params, @_ );
+    unless( defined( $e )) {
+        $e = $this->{SESSION_TAGS}{$tag};
+        unless( defined( $e )) {
+            $e = $constantTags{$tag};
+        }
+        if( !defined( $e ) && defined( $functionTags{$tag} )) {
+            $e = &{$functionTags{$tag}}
+              ( $this, new TWiki::Attrs(
+                  $args, $contextFreeSyntax{$tag} ), @_ );
+        }
     }
+    return $e;
+}
 
-    return $res || '';
+# Handle expansion of a tag during new topic creation. When creating a
+# new topic from a template we only expand a subset of the available legal
+# tags, and we expand %NOP% differently.
+sub _expandTagOnTopicCreation {
+    my $this = shift;
+    # my( $tag, $args, $topic, $web ) = @_;
+
+    # Remove template-only text and variable protection markers. These
+    # are normally expanded to their content during topic display, but
+    # are filtered out during template topic instantiation. They are typically
+    # used for establishing topic protections over the template topics that
+    # are not inherited by the instantiated topic.
+    # See TWiki.TWikiTemplates for details.
+    return '' if $_[0] eq 'NOP';
+
+    # only expand a subset of legal tags
+    return undef unless $_[0] =~ /^(URLPARAM|DATE|(SERVER|GM)TIME|(USER|WIKI)NAME|WIKIUSERNAME)$/;
+
+    return $this->_expandTagOnTopicRendering( @_ );
 }
 
 =pod
@@ -2305,7 +2305,8 @@ sub handleCommonTags {
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $memW;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $memT;
 
-    # 'Special plugin tag' TOC hack
+    # 'Special plugin tag' TOC hack, must be done after all other expansions
+    # are complete, and has to reprocess the entire topic.
     $text =~ s/%TOC(?:{(.*?)})?%/$this->_TOC($text, $theTopic, $theWeb, $1)/ge;
 
     # Codev.FormattedSearchWithConditionalOutput: remove <nop> lines,
@@ -2511,7 +2512,7 @@ sub _INCLUDE {
     # See Codev.FailedIncludeWarning for the history.
     unless( $this->{store}->topicExists($includedWeb, $includedTopic)) {
         if( $warn eq 'on' ) {
-            return $this->inlineAlert( 'alerts', 'no_such_topic', $includedTopic );
+            return $this->inlineAlert( 'alerts', 'topic_not_found', $includedTopic );
         } elsif( isTrue( $warn )) {
             $includedTopic =~ s/\//\./go;
             $warn =~ s/\$includingTopic/$includedTopic/go;
@@ -3076,6 +3077,23 @@ sub _META {
     }
 
     return '';
+}
+
+# Remove NOP tag in template topics but show content. Used in template
+# _topics_ (not templates, per se, but topics used as templates for new
+# topics)
+sub _NOP {
+    my ( $this, $params, $topic, $web ) = @_;
+
+    return '<nop>' unless $params->{_RAW};
+
+    return $params->{_RAW};
+}
+
+# Shortcut to %TMPL:P{"sep"}%
+sub _SEP {
+    my $this = shift;
+    return $this->{templates}->expandTemplate('sep');
 }
 
 1;

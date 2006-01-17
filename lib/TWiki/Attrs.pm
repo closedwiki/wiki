@@ -51,8 +51,11 @@ package TWiki::Attrs;
 use strict;
 use Assert;
 
-my $ERRORKEY = '_ERROR';
-my $DEFAULTKEY = '_DEFAULT';
+use vars qw( $ERRORKEY $DEFAULTKEY $RAWKEY );
+
+$ERRORKEY   = '_ERROR';
+$DEFAULTKEY = '_DEFAULT';
+$RAWKEY     = '_RAW';
 
 =pod
 
@@ -63,7 +66,8 @@ my $DEFAULTKEY = '_DEFAULT';
 Parse a standard attribute string containing name=value pairs and create a new
 attributes object. The value may be a word or a quoted string. If there is an
 error during parsing, the parse will complete but $attrs->{_ERROR} will be
-set in the new object.
+set in the new object. $attrs->{_RAW} will always contain the full unprocessed
+$string.
 
 Extended syntax example:
 <verbatim>
@@ -87,6 +91,8 @@ else)
 sub new {
     my ( $class, $string, $friendly ) = @_;
     my $this = bless( {}, $class );
+
+    $this->{$RAWKEY} = $string;
 
     return $this unless defined( $string );
 
@@ -160,7 +166,10 @@ sub isEmpty {
 
   ASSERT( $this->isa( 'TWiki::Attrs' )) if DEBUG;
 
-  return !scalar(%$this);
+  foreach my $k ( keys %$this ) {
+      return 0 if $k ne $RAWKEY;
+  }
+  return 1;
 }
 
 =pod
@@ -195,7 +204,7 @@ sub stringify {
   my $key;
   my @ss;
   foreach $key ( sort keys %$this ) {
-	if ( $key ne $ERRORKEY ) {
+	if ( $key ne $ERRORKEY && $key ne $RAWKEY ) {
 	  my $es = ( $key eq $DEFAULTKEY ) ? '' : $key.'=';
 	  my $val = $this->{$key};
       $val =~ s/"/\\"/g;
