@@ -84,7 +84,7 @@ END
         # Note; the commit is unconditional, because we *must* update
         # TWiki.pm before building.
         my $tim = 'BUILD '.$name.' at '.gmtime().' GMT';
-        my $cmd = "svn propset LASTBUILD '$tim'.../lib/TWiki.pm";
+        my $cmd = "svn propset LASTBUILD '$tim' ../lib/TWiki.pm";
         print `$cmd`;
         #print "$cmd\n";
         die $@ if $@;
