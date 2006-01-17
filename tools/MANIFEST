@@ -514,8 +514,10 @@ pub/TWiki/TWikiDocGraphics/tip.gif 0660
 pub/TWiki/TWikiDocGraphics/todo.gif 0660
 pub/TWiki/TWikiDocGraphics/toggleclose.gif 0660
 pub/TWiki/TWikiDocGraphics/toggleclose-small.gif 0660
+pub/TWiki/TWikiDocGraphics/togglecloseleft-small.gif 0660
 pub/TWiki/TWikiDocGraphics/toggleopen.gif 0660
 pub/TWiki/TWikiDocGraphics/toggleopenleft.gif 0660
+pub/TWiki/TWikiDocGraphics/toggleopen-small.gif 0660
 pub/TWiki/TWikiDocGraphics/topicbacklinks.gif 0660
 pub/TWiki/TWikiDocGraphics/topicdiffs.gif 0660
 pub/TWiki/TWikiDocGraphics/trash.gif 0660
@@ -615,6 +617,7 @@ templates/formtables.tmpl 0440
 templates/login.tmpl 0440
 templates/mailresetpassword.tmpl 0440
 templates/moveattachment.tmpl 0440
+templates/messages.tmpl 0440
 templates/oopsaccessdenied.tmpl 0440
 templates/oopsalerts.tmpl 0440
 templates/oopsattention.tmpl 0440
