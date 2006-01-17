@@ -906,13 +906,17 @@ sub _getTopicName {
     my $this = shift;
     my $topicname = $this->{project};
 
+    # Example input:  TWiki-4.0.0-beta6
+    # Example output: TWikiRelease04x00x00beta06
+
     # Append 'Release' to first (word) part of name if followed by -
     $topicname =~ s/^(\w+)\-/${1}Release/;
+    # Zero-pad numbers to two digits
     $topicname =~ s/(\d+)/sprintf("%0.2i",$1)/ge;
     # replace . with x
     $topicname =~ s/\./x/g;
-    # remove - and uppercase next char
-    $topicname =~ s/\-(\w)(\w+)$/uc($1).$2/e;
+    # remove dashes
+    $topicname =~ s/\-//g;
     return $topicname;
 }
 
