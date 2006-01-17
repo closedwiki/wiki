@@ -244,7 +244,7 @@ The parameters are interpreted in according to the following rules.
    1 When the action is =save=, =checkpoint=, =quietsave=, or =preview=:
       1 The new text is taken from the =text= parameter, if it is defined,
          * otherwise it is taken from the =templatetopic=, if it is defined,
-         * otherwise it is an error unless =formtemplate= or =topicparent= is defined
+         * otherwise it is taken from the previous version of the topic, if any,
       1 The name of the new form is taken from the =formtemplate=, if defined
          * otherwise it is taken from the =templatetopic=, if defined,
          * otherwise it is taken from the previous version of the topic, if any,
