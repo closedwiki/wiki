@@ -77,14 +77,21 @@ END
         my $content = <PM>;
         close(PM);
         $content =~ /\$RELEASE\s*=\s*'(.*?)'/;
-        if( $1 ne $name ) {
-            $content =~ s/(\$RELEASE\s*=\s*').*?(')/$1$name$2/;
-            open(PM, ">../lib/TWiki.pm") || die $!;
-            print PM $content;
-            close(PM);
-            print `svn commit -m 'Item000: automatic checkin' ../lib/TWiki.pm`;
-            die $@ if $@;
-        }
+        $content =~ s/(\$RELEASE\s*=\s*').*?(')/$1$name$2/;
+        open(PM, ">../lib/TWiki.pm") || die $!;
+        print PM $content;
+        close(PM);
+        # Note; the commit is unconditional, because we *must* update
+        # TWiki.pm before building.
+        my $tim = 'BUILD '.$name.' at '.gmtime().' GMT';
+        my $cmd = "svn propset LASTBUILD '$tim'.../lib/TWiki.pm";
+        print `$cmd`;
+        #print "$cmd\n";
+        die $@ if $@;
+        $cmd = "svn commit -m 'Item000: $tim' ../lib/TWiki.pm";
+        print `$cmd`;
+        #print "$cmd\n";
+        die $@ if $@;
     } else {
         $name = 'TWiki';
     }
