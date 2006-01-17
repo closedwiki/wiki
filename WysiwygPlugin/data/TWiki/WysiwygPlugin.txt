@@ -1,6 +1,6 @@
 ---+!! Wysiwyg Plugin
 
-Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. Comes bundled with a complete integration of the feature-rich [[http://kupu.osqom.org][Kupu]] editor.
+Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. Comes bundled with a complete integration of the feature-rich [[http://kupu.oscom.org][Kupu]] editor.
 
 <img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
 
@@ -22,7 +22,7 @@ The package includes the following pieces:
 	* TML (TWiki syntax) to HTML translator
 	* HTML to TML translator (with stand-alone script)
 	* Generic TWiki plugin for automating the translation during editing
-	* [[http://kupu.osqom.org][Kupu]] editor integration, implemented as a TWiki skin
+	* [[http://kupu.oscom.org][Kupu]] editor integration, implemented as a TWiki skin
 ---+++ How to use the editor
 Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
 Some functions require a bit more explanation:
