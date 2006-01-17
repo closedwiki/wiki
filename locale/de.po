@@ -91,7 +91,6 @@ msgid "%1 has a list of other TWiki users"
 msgstr "Auf %1 gibt es eine Liste anderer TWiki Benutzer."
 
 #: templates/registernotifyadmin.tmpl:10
-#, fuzzy
 msgid "%1 has been registered with e-mail %2"
 msgstr "%1 wurde mit der E-Mail %2 registriert"
 
@@ -100,9 +99,8 @@ msgid "%1 home"
 msgstr "%1 Startseite"
 
 #: data/TWiki/NewUserTemplate.txt:34
-#, fuzzy
 msgid "%1 is a list of TWiki user documentation"
-msgstr "Auf %1 gibt es eine Liste anderer TWiki Benutzer."
+msgstr "%1 ist eine Liste von Dokumenten der TWiki Benutzer-Dokumentation."
 
 #: templates/oopsattention.tmpl:101
 msgid "%1 is an invalid name for a new web"
@@ -125,9 +123,8 @@ msgid "%1 is in at least one group and cannot be removed"
 msgstr "%1 ist in mindestens einer Gruppe und konnte nicht gelöscht werden"
 
 #: data/TWiki/NewUserTemplate.txt:35
-#, fuzzy
 msgid "%1 lists all TWiki user tools"
-msgstr "Auf %1 gibt es eine Liste anderer TWiki Benutzer."
+msgstr "%1 listet alle TWiki Werkzeuge für Benutzer."
 
 #: templates/oopsleaseconflict.tmpl:13
 msgid "%1 may still be editing %2."
@@ -264,7 +261,7 @@ msgstr "(Wie Sie eingeloggt sind) LoginName:"
 
 #: data/TWiki/TWikiRegistration.txt:37
 msgid "(identifies you to others) WikiName:"
-msgstr "Identifiziert Sie gegenüber anderen) WikiName:"
+msgstr "(Identifiziert Sie gegenüber anderen) WikiName:"
 
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:2
 msgid "(more)"
@@ -276,7 +273,7 @@ msgstr "(Anhang verschieben)"
 
 #: data/TWiki/WebTopicCreator.txt:17 data/TWiki/WebTopicCreator.txt:19
 msgid "(no parent, orphaned topic)"
-msgstr "(kein Ober-Topic, verwaistes Topic"
+msgstr "(kein Ober-Topic, verwaistes Topic)"
 
 #: lib/TWiki/UI/Manage.pm:1003 lib/TWiki/UI/Manage.pm:1006
 #: lib/TWiki/UI/Manage.pm:1009 lib/TWiki/UI/Manage.pm:1043
@@ -370,7 +367,6 @@ msgstr ""
 "1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a>."
 
 #: data/TWiki/TWikiRegistration.txt:10
-#, fuzzy
 msgid ""
 "*Important:* the information provided in this form will be stored in a "
 "database on the TWiki server. This database is accessible to anyone who can "
@@ -411,9 +407,8 @@ msgstr ""
 "1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 
 #: lib/TWiki/I18N/Extract.pm:104
-#, fuzzy
 msgid "..."
-msgstr "mehr..."
+msgstr "..."
 
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:56
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
@@ -455,7 +450,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:282
 msgid "A =.txt= extension is appended to some filenames for security reasons"
-msgstr ""
+msgstr "Aus Sicherheitsgrünnden wird an manchen Dateinamen eine =.txt= Endung angehängt"
 
 #: templates/oopsattention.tmpl:116
 msgid ""
@@ -497,7 +492,6 @@ msgstr ""
 "wurde an %3 gesendet"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:99
-#, fuzzy
 msgid "A&ll Webs"
 msgstr "A&lle Webs"
 
@@ -574,7 +568,6 @@ msgstr ""
 "anderen Benutzernamen zu wählen."
 
 #: templates/oopsattention.tmpl:237
-#, fuzzy
 msgid "An e-mail address is required before a password can be reset."
 msgstr "Eine E-Mail Adresse ist erforderlich, um das Passwort zurückzusetzen."
 
@@ -663,7 +656,7 @@ msgstr "Attribut"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:58
 msgid "Automated notification of topic changes"
-msgstr ""
+msgstr "Automatische Benachrichtigung bei Änderung des Topics"
 
 #: data/_default/WebHome.txt:4
 msgid "Available Information"
@@ -706,18 +699,20 @@ msgid ""
 "TWikiAdminGroup. If you would like to allow all users to view the Trash web, "
 "remove the =ALLOWWEBVIEW= restriction in WebPreferences."
 msgstr ""
+"Standardmäßig ist der Zugriff auf das Trash-Web der "
+"%MAINWEB%.TWikiAdminGroup vorbehalten. Wenn Sie allen Benutzern "
+"den Zugriff erlauben wollen entfernen Sie die =ALLOWWEBVIEW= "
+"Restriktion in den WebPreferences."
 
 #: templates/oopsalerts.tmpl:10 templates/oopsattention.tmpl:39
 msgid "Can't find user %1"
 msgstr "Benutzer %1 konnte nicht gefunden werden"
 
 #: templates/oopsattention.tmpl:236
-#, fuzzy
 msgid "Can't get an e-mail address for %1"
 msgstr "E-Mail Adresse von %1 konnte nicht ermittelt werden"
 
 #: templates/oopsalerts.tmpl:11
-#, fuzzy
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
 "E-Mail Adresse von %1 konnte nicht ermittelt werden (benötigt für das "
@@ -792,14 +787,12 @@ msgid "Changed"
 msgstr "Geändert"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:15
-#, fuzzy
 msgid "Changed by:"
-msgstr "Geändert"
+msgstr "Geändert von:"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:13
-#, fuzzy
 msgid "Changed:"
-msgstr "Geändert"
+msgstr "Geändert:"
 
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:8
@@ -1110,7 +1103,6 @@ msgstr ""
 "System. Bitte informieren Sie Ihren %2 Administrator."
 
 #: data/TWiki/TWikiRegistration.txt:46
-#, fuzzy
 msgid "E-mail address:"
 msgstr "E-Mail Adresse:"
 
@@ -1203,7 +1195,7 @@ msgstr "Die mit %1 gekennzeichneten sind Pflichtfelder"
 
 #: templates/oopsattention.tmpl:276
 msgid "File has been uploaded with different name"
-msgstr ""
+msgstr "Die Datei wurde mit einem anderen Namen hochgeladen"
 
 #: templates/oopsmore.tmpl:20 templates/oopsmore.tmpl:22
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:20
@@ -1326,6 +1318,7 @@ msgid ""
 "However, the filename has been changed from %1 to %2. Please make a note of "
 "it."
 msgstr ""
+"Bitte beachten Sie, dass der Dateiname von %1 auf %2 geändert wurde."
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
@@ -1357,13 +1350,14 @@ msgid ""
 "If you are developing a <nop>TWikiApplication, see %1 for a description of "
 "the correct parameters."
 msgstr ""
+"Wenn Sie eine <nop>TWikiApplication entwickeln, finden Sie unter %1 eine "
+"Beschreibung der korrekten Parameter.
 
 #: templates/oopsaccessdenied.tmpl:27
 msgid "If you came here by clicking on a question mark link"
 msgstr "Wenn Sie durch einen Klick auf ein Fragezeichen hierher gekommen sind"
 
 #: templates/registerconfirm.tmpl:14 templates/registernotify.tmpl:23
-#, fuzzy
 msgid ""
 "If you got this e-mail by mistake: Somebody (%1) registered at the %2 site "
 "using your mail address %3. Contact %4 if this is in error."
@@ -1373,9 +1367,8 @@ msgstr ""
 "sich mit %4 in Verbindung, wenn dies ein Fehler ist."
 
 #: data/TWiki/TWikiRegistration.txt:233
-#, fuzzy
 msgid "If you have any questions about registration, send an e-mail to %1."
-msgstr "Wenn Sie Fragen zur Registrierung senden Sie eine E-Main an %1."
+msgstr "Wenn Sie Fragen zur Registrierung senden Sie eine E-Mail an %1."
 
 #: templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
@@ -1397,6 +1390,8 @@ msgid ""
 "If you received a link to this topic in an e-mail or just want to look at "
 "the topic, [[%1][cancel save]] to go to %2."
 msgstr ""
+"Wenn Sie einen Link auf diese Seite erhalten haben oder nur das Topic "
+"ansehen wollen: [[%1][speichern abbrechen]] um nach %2 zu gehen."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
@@ -1440,7 +1435,7 @@ msgstr "Inkorrektes Passwort"
 
 #: templates/oopsattention.tmpl:335
 msgid "Incorrect parameters to the =%1= script"
-msgstr ""
+msgstr "Inkorrekte Parameter für das =%1= Skript"
 
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:8
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
@@ -1456,7 +1451,6 @@ msgid "Invalid Activation Code"
 msgstr "Ungültiger Aktivierungs-Code"
 
 #: templates/oopsattention.tmpl:214
-#, fuzzy
 msgid "Invalid e-mail address"
 msgstr "Ungültige E-Mail Adresse"
 
@@ -1628,7 +1622,7 @@ msgstr "Der Names des neuen Webs fehlt"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:69
 msgid "New or changed topics in %1, since %2:"
-msgstr ""
+msgstr "Neue oder geänderte Topics in %1, seit %2:"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:44
 msgid "New parent web:"
@@ -1718,13 +1712,13 @@ msgstr ""
 "einloggen."
 
 #: data/TWiki/WebTopicCreator.txt:29
-#, fuzzy
 msgid ""
 "Once you have created the topic, consider adding links in related topics to "
 "the new topic so that there are more ways people can discover it."
 msgstr ""
 "Nachdem Sie das Topic angelegt haben, sollten Sie Verweise von verwandten "
-"Topics auf das neue Topic hinzufügen, damit andere es finden können."
+"Topics auf das neue Topic hinzufügen, damit andere mehr Möglichkeiten haben "
+"es zu finden."
 
 #: templates/oopsaccessdenied.tmpl:16
 msgid "Only members of the %1 are allowed to perform this action."
@@ -1765,9 +1759,8 @@ msgid "Passwords do not match"
 msgstr "Passwörter stimmen nicht überein"
 
 #: data/TWiki/NewUserTemplate.txt:15
-#, fuzzy
 msgid "Personal Preferences"
-msgstr "Persönliche Einstellung (Details in %1)"
+msgstr "Persönliche Einstellungen"
 
 #: templates/oopsattention.tmpl:118
 msgid "Pick one of the %1."
@@ -1859,9 +1852,8 @@ msgid "Printable version of this topic"
 msgstr "Druckversion von diesem Topic"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:97
-#, fuzzy
 msgid "Raw View"
-msgstr "&Quelltext"
+msgstr "Quelltext"
 
 #: templates/registernotify.tmpl:10
 msgid ""
@@ -1877,7 +1869,7 @@ msgstr "Lesen Sie den Hilfetext zu neuen Revision in einem neuen Fenster"
 
 #: twikiplugins/TipsContrib/data/TWiki/TWikiTipsOfTheDayInclude.txt:22
 msgid "Read on"
-msgstr ""
+msgstr "Weiter lesen"
 
 #: data/Sandbox/WebHome.txt:20 data/TWiki/WebSearch.txt:46
 #: data/TWiki/WebSearchAdvanced.txt:90
@@ -1903,15 +1895,14 @@ msgid "Regular expression search"
 msgstr "Mit regulären Ausdrücke suchen"
 
 #: data/TWiki/NewUserTemplate.txt:30
-#, fuzzy
 msgid "Related Topics"
-msgstr "Zugehörige Topics:"
+msgstr "Verwandte Topics"
 
 #: data/Main/TWikiGroupTemplate.txt:8 data/Sandbox/WebNotify.txt:10
 #: data/Trash/WebNotify.txt:9 data/_default/WebNotify.txt:8
 #: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
 msgid "Related topics:"
-msgstr "Zugehörige Topics:"
+msgstr "Verwandte Topics"
 
 #: templates/oopsattention.tmpl:46
 msgid "Remove the user from the group(s) %1 first."
@@ -1968,9 +1959,8 @@ msgid "Rev %1 was saved by %2, while you were still editing."
 msgstr "Rev %1 wurde von %2 gespeichert, während Sie noch editierten."
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:72
-#, fuzzy
 msgid "Review recent changes in:"
-msgstr "Kürzlich geänderte Topics"
+msgstr "Änderungen ansehen in:"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:47
 msgid "Revision"
@@ -2049,7 +2039,7 @@ msgstr "Gesucht:"
 
 #: data/Trash/WebHome.txt:5
 msgid "Security Note:"
-msgstr ""
+msgstr "Sicherheitshinweis:"
 
 #: templates/oopsattention.tmpl:42
 msgid "See %1 for a list of existing users or register as new user in %2."
@@ -2190,7 +2180,7 @@ msgstr "Ergebnisse sortieren nach:"
 
 #: templates/oopsattention.tmpl:281
 msgid "Spaces are replaced by underscores"
-msgstr ""
+msgstr "Leerzeichen werden durch Unterstriche ersetzt"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:20
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:87
@@ -2236,7 +2226,7 @@ msgstr "Übertragender Inhalt:"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:75
 msgid "Subscribe / Unsubscribe in:"
-msgstr ""
+msgstr "Abonnieren / Abbestellen in:"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:46
 msgid "Subwebs must be enabled."
@@ -2284,7 +2274,6 @@ msgid "Thank you for registering"
 msgstr "Vielen Dank für Ihre Registrierung"
 
 #: templates/registernotify.tmpl:8
-#, fuzzy
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Please save this "
 "e-mail for future reference."
@@ -2330,7 +2319,6 @@ msgstr ""
 "mit Datum und dem %4 zu hinterlassen."
 
 #: data/Sandbox/WebRss.txt:5 data/_default/WebRss.txt:5
-#, fuzzy
 msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
 "Enterprise."
@@ -2368,7 +2356,6 @@ msgstr ""
 "gesperrt sind)"
 
 #: templates/oopsattention.tmpl:215
-#, fuzzy
 msgid "The e-mail address for this account is not valid."
 msgstr "Die E-Mail Adresse für diesen Zugang ist ungültig."
 
@@ -2378,7 +2365,7 @@ msgstr "Der Eintrag für Benutzer %1 fehlt im Passwort System."
 
 #: templates/oopsattention.tmpl:277
 msgid "The file has been uploaded and attached properly to the %1 topic."
-msgstr ""
+msgstr "Die Datei wurde hochgeladen und ordnungsgemäß an das %1 angehängt."
 
 #: templates/oopsattention.tmpl:309
 msgid "The following topics are locked for edit, and cannot be moved:"
@@ -2481,14 +2468,11 @@ msgstr ""
 "zu dieser Liste hinzu."
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:67
-#, fuzzy
 msgid "This is an automated e-mail from %1."
 msgstr ""
-"Dies ist eine automatisierte E-Mail Benachrichtung über die Benutzer "
-"Registrierung in %1"
+"Dies ist eine automatisierte E-Mail von %1."
 
 #: templates/registernotifyadmin.tmpl:8
-#, fuzzy
 msgid "This is an automated e-mail notification of user registration in %1."
 msgstr ""
 "Dies ist eine automatisierte E-Mail Benachrichtung über die Benutzer "
@@ -2518,9 +2502,8 @@ msgstr "Dazu wird die Forumalr Definition benötigt."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:9
 #: data/TWiki/WebTopicViewTemplate.txt:9
-#, fuzzy
 msgid "This topic has moved to %1."
-msgstr "Topics finden die auf %1 verweisen ..."
+msgstr "Dieses Topic wurde nach %1 verschoben."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:23
 msgid ""
@@ -2557,7 +2540,6 @@ msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "Änderungen *speichern*: [Änderungen speichern] Knopf drücken."
 
 #: data/TWiki/WebTopicCreator.txt:27
-#, fuzzy
 msgid ""
 "To create a new topic, enter a %1.WikiWord for the topic name, select a "
 "topic parent and click 'Create.'"
@@ -2653,9 +2635,8 @@ msgid "Topic was merged"
 msgstr "Topic wurde zusammengeführt"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:11
-#, fuzzy
 msgid "Topics in %1 web:"
-msgstr "Unter-Topics im %1 Web"
+msgstr "Topics im %1 Web:"
 
 #: data/TWiki/WebSearchAdvanced.txt:76
 msgid "Topics per web"
@@ -2698,6 +2679,9 @@ msgid ""
 "Uncomment preferences variables to activate them (remove the #-sign). Help "
 "and details on variables are available in %1."
 msgstr ""
+"Entfernen Sie das #-Zeichen vor den Einstellungs-Variablen, um sie zu "
+"aktivieren. Hilfe und Details zu den Variablen stehen unter %1 zur "
+"Verfügung" 
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:29
 msgid "Unrecognised user and/or password"
@@ -2968,26 +2952,24 @@ msgstr ""
 "registriert."
 
 #: templates/oopsattention.tmpl:284
-#, fuzzy
 msgid ""
 "You may be able to get your TWiki administrator to change the settings if "
 "they are inappropriate for your environment."
 msgstr ""
-"Eventuell bekommen Sie ihren TWiki Administrator dazu Änderungen "
-"vorzunehmen, die besser für Umgebung passen."
+"Eventuell bekommen Sie ihren TWiki Administrator dazu Änderungen an den "
+"Einstellungen vorzunehmen, die besser für ihre Umgebung passen."
 
 #: templates/oopsattention.tmpl:143
 msgid "You need to close your browser to make this change take effect."
 msgstr "Sie müssen Ihren Browser schließen, um diese Änderung zu aktivieren"
 
 #: templates/registerconfirm.tmpl:11
-#, fuzzy
 msgid ""
 "You now need to verify your e-mail address. You can do so by entering %1 in "
 "the form presented to you when this e-mail was sent, or by visiting %2"
 msgstr ""
-"Sie müssen nun ihre EMail-Adresse verifizieren. Sie können das tun, indem "
-"Sie %1 in das Formular eintragen, welches ihnen mit der EMail übersand "
+"Sie müssen nun ihre E-Mail Adresse verifizieren. Sie können das tun, indem "
+"Sie %1 in das Formular eintragen, welches ihnen mit der E-Mail übersand "
 "wurde, oder indem Sie auf %2 gehen"
 
 #: templates/oopsattention.tmpl:273
@@ -2996,14 +2978,13 @@ msgstr ""
 "Sie müssen wahrscheinlich Ihren Administrator, %1, fragen, um das zu tun."
 
 #: templates/oopsattention.tmpl:148
-#, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "e-mail or enter the code in the box below to activate your membership. (This "
 "code is of the form \"YourName.xxxx\")"
 msgstr ""
 "Ihr Aktivierungs-Code wurde nach %1 gesendet. Entweder klicken Sie auf den "
-"Verweis in Ihrer Mail oder Sie fügen den Code in die Box unten ein, um Ihre "
+"Verweis in Ihrer E-Mail oder Sie fügen den Code in die Box unten ein, um Ihre "
 "Mitgliedschaft zu aktivieren.(Dieser Code ist von der Form \"IhrName.xxxx\")"
 
 #: templates/oopslanguagechanged.tmpl:11
@@ -3039,10 +3020,9 @@ msgid "Your user name has been removed from the Authentication System."
 msgstr "Ihr Benutzername wurde von dem Authentifizierungssystem gelöscht."
 
 #: templates/oopsattention.tmpl:10
-#, fuzzy
 msgid "Your user topic has not been renamed. Please e-mail %1 to request this."
 msgstr ""
-"Ihre Heimatseite wurde nicht umbenannt. Bitte schicken Sie %1 eine E-Mail, "
+"Ihre Benutzer Topic wurde nicht umbenannt. Bitte schicken Sie %1 eine E-Mail, "
 "um das zu beantragen."
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:50
@@ -3057,6 +3037,8 @@ msgid ""
 "__Note:__ In some cases, TWiki changes the name of the uploaded file to make "
 "it safe and accessible across all platforms:"
 msgstr ""
+"__Hinweis:__ In manchen Fällen ändert TWiki den Namen der hochgeladenen Datei, "
+"um sie sicher und plattformübergreifend zugreifbar zu halten:"
 
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:242
@@ -3146,7 +3128,7 @@ msgstr "keiner (Ober-Topic Verknüpfung entfernen)"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:13
 msgid "now %1"
-msgstr ""
+msgstr "nun %1"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:56
@@ -3209,30 +3191,3 @@ msgstr "value='Speichern' accesskey='s'"
 msgid "view"
 msgstr "Ansehen"
 
-#~ msgid ""
-#~ "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
-#~ "Platform for the Corporate World."
-#~ msgstr ""
-#~ "Das %1 Web von TWiki. TWiki ist eine webbasierte Kollaborations-Plattform "
-#~ "für die Unternehmenswelt."
-
-#~ msgid ""
-#~ "Certain characters are not permitted in attachment filenames, and other "
-#~ "filenames are not permitted, for security reasons."
-#~ msgstr ""
-#~ "Bestimmte Zeichen sind für Dateienamen aus Sicherheitsgründen nicht "
-#~ "erlaubt."
-
-#~ msgid "Filename %1 is not legal for a TWiki attachment."
-#~ msgstr "Dateiname %1 ist nicht für TWiki Anhänge erlaubt."
-
-#~ msgid "Rename the file on your local machine and try uploading again."
-#~ msgstr ""
-#~ "Benennen Sie die Datei auf Ihrem lokalen Rechner um und versuchen Sie den "
-#~ "Upload erneut."
-
-#~ msgid "Visit %1 to learn about TWiki"
-#~ msgstr "Besuchen Sie %1, um mehr überr TWiki zu erfahren"
-
-#~ msgid "[[%1][Search]] for similar topics in all public webs"
-#~ msgstr "Nach ähnlichen Topics in allen öffentlichen Webs [[%1][suchen]]"
