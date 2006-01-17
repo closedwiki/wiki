@@ -76,11 +76,15 @@ END
         local $/ = undef;
         my $content = <PM>;
         close(PM);
-        $content =~ s/(?<=\$RELEASE = ').*?(?:=')/$name/m;
-        open(PM, ">../lib/TWiki.pm") || die $!;
-        print PM $content;
-        close(PM);
-        #print `svn commit -m "Item000: Automatic checkin" ../lib/TWiki.pm`;
+        $content =~ /\$RELEASE\s*=\s*'(.*?)'/;
+        if( $1 ne $name ) {
+            $content =~ s/(\$RELEASE\s*=\s*').*?(')/$1$name$2/;
+            open(PM, ">../lib/TWiki.pm") || die $!;
+            print PM $content;
+            close(PM);
+            print `svn commit -m 'Item000: automatic checkin' ../lib/TWiki.pm`;
+            die $@ if $@;
+        }
     } else {
         $name = 'TWiki';
     }
