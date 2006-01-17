@@ -1010,7 +1010,10 @@ sub _checkAndBuildValueGrabber {
     # field id
     my $id = $keys;
     $output .= CGI::hidden( 'TYPEOF:'.$id, $type ). "\n";
+
     my $checker = '_CHECKVAR_'.$id;
+    $checker =~ s/}{/_/g;
+    $checker =~ s/[}{]//g;
     if( defined &$checker ) {
         no strict 'refs';
         my $check = &$checker();
@@ -1069,7 +1072,8 @@ sub _showPlugins {
 }
 
 sub _showLanguages {
-  opendir ( DIR, $TWiki::cfg{LocalesDir}) or die ('Couldn\'t read TWiki locales/ directory!' );
+  opendir( DIR, $TWiki::cfg{LocalesDir}) or
+      return 'Couldn\'t read TWiki {LocalesDir}!';
   my $block = '';
   foreach my $file ( grep { /^.*\.po$/ } readdir DIR ) {
     $file =~ m/^(.*)\.po$/;
