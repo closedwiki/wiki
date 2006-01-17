@@ -51,6 +51,15 @@ sub buildNewTopic {
     my $topic = $session->{topicName};
     my $store = $session->{store};
 
+    unless( scalar($query->param()) ) {
+        # insufficient parameters to save
+        throw TWiki::OopsException( 'attention',
+                                    def => 'bad_script_parameters',
+                                    web => $session->{webName},
+                                    topic => $session->{topicName},
+                                    params => [ $script ]);
+    }
+
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'save' );
 
@@ -144,17 +153,6 @@ sub buildNewTopic {
 
     } else {
         $newText = '';
-        # no text in the query, and there is no template text
-        # we must be up to something else; check
-        unless( defined $forceNewRev || defined $newParent ||
-                  defined $templatetopic ) {
-            # insufficient parameters to save
-            throw TWiki::OopsException( 'attention',
-                                        def => 'bad_script_parameters',
-                                        web => $session->{webName},
-                                        topic => $session->{topicName},
-                                        params => [ $script ]);
-        }
         if( defined $prevText ) {
             $newText = $prevText;
             $originalrev = 0; # disable merge
