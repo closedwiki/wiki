@@ -1780,7 +1780,7 @@ sub expandVariablesOnTopicCreation {
 
 =pod
 
----++ StaticMethod entityEncode( $text ) -> $encodedText
+---++ StaticMethod entityEncode( $text, $extras ) -> $encodedText
 
 Escape special characters to HTML numeric entities. This is *not* a generic
 encoding, it is tuned specifically for use in TWiki.
@@ -1803,17 +1803,22 @@ characters (except for \n and \r) using numeric entities.
 FURTHER this method also encodes characters that are special in TWiki
 meta-language.
 
+$extras is an optional param that may be used to include *additional*
+characters in the set of encoded characters. It should be a string
+containing the additional chars.
+
 =cut
 
 sub entityEncode {
-    my $text = shift;
+    my( $text, $extra) = @_;
+    $extra ||= '';
 
     # encode all non-printable 7-bit chars (< \x1f),
     # except \n (\xa) and \r (\xd)
     # encode HTML special characters '>', '<', '&', ''' and '"'.
     # encode TML special characters '%', '|', '[', ']', '@', '_',
     # '*', and '='
-    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+    $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|$extra]/'&#'.ord($&).';'/ge;
     return $text;
 }
 

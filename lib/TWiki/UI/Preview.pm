@@ -99,7 +99,8 @@ sub preview {
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
 
     # SMELL: this should be done using CGI::hidden
-    $text = TWiki::entityEncode( $text );
+    $text = TWiki::entityEncode( $text, "\n" );
+
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
 
     $tmpl =~ s/<\/?(nop|noautolink)\/?>//gis;
