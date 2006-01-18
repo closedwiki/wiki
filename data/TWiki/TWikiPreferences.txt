@@ -178,9 +178,9 @@ _(Click for form-based editing of existing preferences.)_
       * Set TWIKISTYLEURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css
       * Set TWIKICOLORSURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css
    * Custom overriding styles (remove the # to enable)
-      *# Set USERLAYOUTURL = 
-      *# Set USERSTYLEURL = 
-      *# Set USERCOLORSURL = 
+      * #Set USERLAYOUTURL = 
+      * #Set USERSTYLEURL = 
+      * #Set USERCOLORSURL = 
 
 ---+++ Skin icons
 
