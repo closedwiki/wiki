@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# TWiki Skins
 
-_Skins overlay regular templates to give different looks and feels to TWiki screens._
+*Skins overlay regular templates to give different looks and feels to TWiki screens.*
 
 ---++ Overview
 
@@ -12,6 +12,10 @@ TWiki uses TWikiTemplates files as the basis of all the screens it uses to inter
 TWiki ships with a default set of template files that give a basic look-and-feel. TWiki also includes support for _skins_ that can be selected to give different, more sophisticated, look and feels. A default TWiki installation will usually start up with the PatternSkin already selected. Skins may also be defined by third parties and loaded into a TWiki installation to give more options. To see how TWiki looks when *no* skin is selected, [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=not_a_skin][view this topic with a non-existant skin]].
 
 Topic text is not affected by the choice of skin, though a skin can be defined to use a CSS (Cascading Style Sheet), which can sometimes give a radically different appearance to the text.
+
+---++ Changing the default TWiki skin
+
+TWiki default ships with the skin PatternSkin activated. If you want to modify the layout, colors or even the templates to suit your own needs, have a look first at the topics PatternSkinCustomization and PatternSkinCssCookbook.
 
 ---++ Defining Skins
 
