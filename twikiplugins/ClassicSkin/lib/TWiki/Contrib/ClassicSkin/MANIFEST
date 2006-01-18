@@ -1,4 +1,5 @@
 data/TWiki/ClassicSkin.txt  0660
+data/TWiki/ClassicSkinLogin.txt  0660
 pub/TWiki/ClassicSkin/screenshot.gif 0440
 pub/TWiki/ClassicSkin/fullscreen.gif 0440
 lib/TWiki/Contrib/ClassicSkin.pm 0440
