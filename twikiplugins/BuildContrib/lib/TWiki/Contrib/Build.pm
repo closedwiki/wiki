@@ -125,7 +125,7 @@ use strict;
 use File::Copy;
 use File::Spec;
 use File::Find;
-use File::Path qw( rmtree );
+use File::Path;
 use POSIX;
 use CGI ( -any );
 use diagnostics;
@@ -360,7 +360,7 @@ sub new {
 sub DESTROY
 {
     my $self = shift;
-    rmtree( $self->{tmpDir} ) if $self->{tmpDir};
+    File::Path::rmtree( $self->{tmpDir} ) if $self->{tmpDir};
 }
 
 sub _get_svn_version {
@@ -405,26 +405,48 @@ sub prompt {
 
 =pod
 
----++++ cd($dir)
+---++++ pushd($dir)
   Change to the given directory
 
 =cut
 
-sub cd {
+sub pushd {
     my ($this, $file) = @_;
 
     if ($this->{-v} || $this->{-n}) {
-        print 'cd '.$file.$NL;
+        print 'pushd '.$file.$NL;
     }
     if (!$this->{-n}) {
-        chdir($file) || die 'Failed to cd to '.$file;
+        push( @{$this->{dirStack}}, Cwd::cwd());
+        chdir($file) || die 'Failed to pushd to '.$file;
+    }
+}
+
+=pod
+
+---++++ popd()
+  Pop a dir level, previously pushed by pushd
+
+=cut
+
+sub popd {
+    my $this = shift;
+
+    die unless scalar(@{$this->{dirStack}});
+
+    my $dir = pop( @{$this->{dirStack}} );
+    if ($this->{-v} || $this->{-n}) {
+        print 'popd '.$dir.$NL;
+    }
+    if (!$this->{-n}) {
+        chdir($dir) || die 'Failed to popd to '.$dir;
     }
 }
 
 =pod
 
 ---++++ rm($file)
-Remove the given file
+Remove the given file (or directory)
 
 =cut
 
@@ -435,7 +457,11 @@ sub rm {
         print 'rm '.$file.$NL;
     }
     if (-e $file && !$this->{-n}) {
-        unlink($file) || warn 'WARNING: Failed to delete '.$file;
+        if( -d $file ) {
+            File::Path::rmtree( $file );
+        } else {
+            unlink($file) || warn 'WARNING: Failed to delete '.$file;
+        }
     }
 }
 
@@ -596,8 +622,9 @@ sub target_test {
     my $testdir = $tests;
     $testdir =~ s/\/[^\/]*$//;
     print "Running tests in $tests\n";
-    $this->cd($testdir);
+    $this->pushd($testdir);
     $this->sys_action('perl -w -I'.$inc.' '.$testrunner.' '.$tests);
+    $this->popd();
     shift( @INC );
 }
 
@@ -722,13 +749,16 @@ sub target_stage {
 
     $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir});
     foreach my $file (@{$this->{files}}) {
+        my $txt;
         if ($file->{name} =~ /\.txt$/) {
-            my $txt = $file->{name};
-            $this->filter_txt($this->{basedir}.'/'.$txt, $this->{tmpDir}.'/'.$txt);
+            $txt = $file->{name};
+            $this->filter_txt($this->{basedir}.'/'.$txt,
+                              $this->{tmpDir}.'/'.$txt);
         } elsif (
             $file->{name} =~ /\.pm$/) {
-            my $txt = $file->{name};
-            $this->filter_pm($this->{basedir}.'/'.$txt, $this->{tmpDir}.'/'.$txt);
+            $txt = $file->{name};
+            $this->filter_pm($this->{basedir}.'/'.$txt,
+                             $this->{tmpDir}.'/'.$txt);
         }
     }
     if( -e $this->{tmpDir}.'/'.$this->{data_twiki_module}.'.txt' ) {
@@ -761,18 +791,21 @@ sub target_archive {
     die 'no project set' unless defined ($project);
     die 'tmpDir ('.$this->{tmpDir}.') not found' unless ( -e $this->{tmpDir} );
 
-    $this->cd($this->{tmpDir});
+    $this->pushd($this->{tmpDir});
+
     $this->sys_action('zip -r -q '.$project.'.zip *');
-    $this->perl_action('File::Copy::move("'.$this->{tmpDir}.'/'.$project.'.zip", "'.
+    $this->perl_action('File::Copy::move("'.$project.'.zip", "'.
                          $this->{basedir}.'/'.$project.'.zip");');
+
     $this->sys_action('tar czpf '.$project.'.tgz *');
-    $this->perl_action('File::Copy::move("'.$this->{tmpDir}.'/'.$project.'.tgz", "'.
+    $this->perl_action('File::Copy::move("'.$project.'.tgz", "'.
                          $this->{basedir}.'/'.$project.'.tgz")');
+
+    $this->popd();
 
     $this->sys_action('md5sum '.$this->{basedir}.'/'.$project.'.tgz '.
                         $this->{basedir}.'/'.$project.'.zip > '.
                         $this->{basedir}.'/'.$project.'.md5');
-
 
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
     print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
@@ -838,11 +871,12 @@ sub target_handsoff_install {
 
     my $twiki = $ENV{TWIKI_HOME};
     die 'TWIKI_HOME not set' unless $twiki;
-    $this->cd($twiki);
+    $this->pushd($twiki);
     $this->sys_action('tar zxpf '.
                         $this->{basedir}.'/'.$this->{project}.'.tgz');
     # kill off the module installer
     $this->rm($twiki.'/'.$this->{project}.'_installer.pl');
+    $this->popd();
 }
 
 =pod
@@ -873,8 +907,9 @@ sub target_uninstall {
     my $this = shift;
     my $twiki = $ENV{TWIKI_HOME};
     die 'TWIKI_HOME not set' unless $twiki;
-    $this->cd($twiki);
+    $this->pushd($twiki);
     $this->sys_action('perl '.$this->{project}.'_installer.pl uninstall');
+    $this->popd();
 }
 
 {   package TWiki::Contrib::Build::UserAgent;
@@ -1040,11 +1075,11 @@ END
 
 sub _unhtml {
     my $html = shift;
-    
+
     $html =~ s/<[^<>]*>//og;
-    $html =~ s/&\w+;//go;
+    $html =~ s/&#?\w+;//go;
     $html =~ s/\s//go;
-    
+
     return $html;
 }
 

@@ -183,6 +183,7 @@ sub stage_gendocs {
     for my $script qw( view rdiff ) {
         $this->cp( "$this->{tmpDir}/bin/$script",
                    "$this->{tmpDir}/bin/${script}auth" );
+        $this->prot( "0550", "$this->{tmpDir}/bin/${script}auth");
     }
 
     print `cd $this->{basedir}/bin ; ./view TWiki.TWikiDocumentation skin plain | $this->{basedir}/tools/fix_local_links.pl > $this->{tmpDir}/TWikiDocumentation.html`;
@@ -200,18 +201,20 @@ sub stage_rcsfiles() {
     #do a ci
     #if there was no existing ,v file, make one and ci
 
-    my $lastReleaseDir = '/tmp/lastRel'.($$ +1);
+    my $lastReleaseDir = $this->{tmpDir}.'/lastRel'.($$ +1);
 
     $this->makepath($lastReleaseDir);
-    $this->cd($lastReleaseDir);
+    $this->pushd($lastReleaseDir);
     print 'Checking out last release to '.$lastReleaseDir."\n";
     `svn co http://svn.twiki.org:8181/svn/twiki/tags/twiki-20040902-release/ .`;
+    $this->popd();
     print "Creating ,v files.\n";
     $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'data',
                        sub { return shift =~ /\.txt$/ } );
 
     $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'pub',
                        sub { return -f shift; } );
+    $this->rm( $lastReleaseDir );
 }
 
 # Create the build object
