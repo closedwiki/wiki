@@ -31,6 +31,7 @@ package TWiki::I18N;
 
 use TWiki;
 use Assert;
+use Error qw( :try );
 
 use vars qw( $initialised @initErrors );
 
@@ -200,12 +201,18 @@ sub maketext {
     # into "internal representation" as expected by TWiki::I18N::maketext
     @args = map { $this->fromSiteCharSet($_) } @args;
 
-    my $result = $this->SUPER::maketext($text, @args);
-    if ($result && $this->{session}) {
-        # external calls get the resultant text in the right charset:
-        $result = $this->toSiteCharSet($result);
-    }
-
+    my $result;
+    try {
+        $result = $this->SUPER::maketext($text, @args);
+        if ($result && $this->{session}) {
+            # external calls get the resultant text in the right charset:
+            $result = $this->toSiteCharSet($result);
+        }
+    } catch Error::Simple with {
+        # died while maketexting; fall back to English
+        ASSERT(0);
+        $result = $text;
+    };
     return $result;
 }
 
