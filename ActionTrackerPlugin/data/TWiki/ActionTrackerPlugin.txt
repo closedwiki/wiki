@@ -165,10 +165,10 @@ The frequency with which actions are notified depends on how you set up your cro
 
 The =actionnotify= script interprets its parameters as a search expression of the same type as that used in %<nop>ACTIONSEARCH%. All actions which match that expression will be notified to their owners. For example, you could set up the cron jobs as follows:
 <pre>
-0 * * * * /home/twiki/bin/actionnotify "state=\"late\""
-0 8,16 * * * /home/twiki/bin/actionnotify "state=\"open\" within=\"3\""
-0 0 * * * /home/twiki/bin/actionnotify "state=\"open\" within=\"7\"
-0 0 * * 1 /home/twiki/bin/actionnotify "state=\"open\" within=\"30\"
+0 * * * * /home/twiki/tools/actionnotify "state=\"late\""
+0 8,16 * * * /home/twiki/tools/actionnotify "state=\"open\" within=\"3\""
+0 0 * * * /home/twiki/tools/actionnotify "state=\"open\" within=\"7\"
+0 0 * * 1 /home/twiki/tools/actionnotify "state=\"open\" within=\"30\"
 </pre>
 (If you don't know cron, the first 5 fields are minute, hour, day of month, month and day of week. * means 'every'). This crontab will notify actions according to the schedule:
 	1 Actions that are late will be notified every hour, on the hour
@@ -215,7 +215,7 @@ changedsince="3 days ago"
 
 Obviously you have to be careful to synchronise your =changedsince= expression with the activation of your cron job. The ideal is to specify the same delta as the gap between cron activations. For example,
 <pre>
-0 0 * * * /home/twiki/bin/actionnotify 'web="News" changedsince="yesterday"'
+0 0 * * * /home/twiki/tools/actionnotify 'web="News" changedsince="yesterday"'
 </pre>
 will notify registered users of action changes that occurred in the last 24 hours. Note the use of single quotes to prevent expansion in the shell.
 
