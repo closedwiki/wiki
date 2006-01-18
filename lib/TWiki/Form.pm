@@ -486,16 +486,14 @@ sub renderFieldForEdit {
         if( $type eq 'checkbox+buttons' ) {
             my $boxes = scalar( @$options );
             $extra = CGI::br();
-            # SMELL: localisation - this should be from a template
             $extra .= CGI::button
               ( -class => 'twikiEditFormCheckboxButton',
-                -value => 'Set',
+                -value => $session->{i18n}->maketext('Set all'),
                 -onClick => 'checkAll(this,2,'.$boxes.',true)' );
             $extra .= '&nbsp;';
-            # SMELL: localisation - this should be from a template
             $extra .= CGI::button
               ( -class => 'twikiEditFormCheckboxButton',
-                -value => 'Clear',
+                -value => $session->{i18n}->maketext('Clear all'),
                 -onClick => 'checkAll(this,1,'.$boxes.',false)');
         }
         foreach $item ( @$options ) {
