@@ -204,8 +204,11 @@ BEGIN {
         URLENCODE         => \&_ENCODE,
         URLPARAM          => \&_URLPARAM,
         USERLANGUAGE      => \&_USERLANGUAGE,
+        USERNAME          => \&_USERNAME,
         VAR               => \&_VAR,
         WEBLIST           => \&_WEBLIST,
+        WIKINAME          => \&_WIKINAME,
+        WIKIUSERNAME      => \&_WIKIUSERNAME,
        );
     $contextFreeSyntax{IF} = 1;
 
@@ -1285,9 +1288,6 @@ sub new {
     # pointless. Could get rid of the SESSION_TAGS hash, might be
     # the easiest thing to do, but then that would allow other
     # upper-case named fields in the object to be accessed as well...
-    $this->{SESSION_TAGS}{USERNAME}       = $user->login();
-    $this->{SESSION_TAGS}{WIKINAME}       = $user->wikiName();
-    $this->{SESSION_TAGS}{WIKIUSERNAME}   = $user->webDotWikiName();
     $this->{SESSION_TAGS}{BASEWEB}        = $this->{webName};
     $this->{SESSION_TAGS}{BASETOPIC}      = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
@@ -1767,7 +1767,15 @@ sub expandVariablesOnTopicCreation {
     $user ||= $this->{user};
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
-    return $this->_processTags( $text, \&_expandTagOnTopicCreation, 16 );
+    # Note: it may look dangerous to override the user this way, but
+    # it's actually quite safe, because only a subset of tags are
+    # expanded during topic creation. if the set of tags expanded is
+    # extended, then the impact has to be considered.
+    my $safe = $this->{user};
+    $this->{user} = $user;
+    $text = $this->_processTags( $text, \&_expandTagOnTopicCreation, 16 );
+    $this->{user} = $safe;
+    return $text;
 }
 
 =pod
@@ -2126,10 +2134,13 @@ sub _expandTagOnTopicCreation {
     # are filtered out during template topic instantiation. They are typically
     # used for establishing topic protections over the template topics that
     # are not inherited by the instantiated topic.
-    # See TWiki.TWikiTemplates for details.
     return '' if $_[0] eq 'NOP';
 
-    # only expand a subset of legal tags
+    # Only expand a subset of legal tags. Warning: $this->{user} may be
+    # overridden during this call, when a new user topic is being created.
+    # This is what we want to make sure new user templates are populated
+    # correctly, but you need to think about this if you extend the set of
+    # tags expanded here.
     return undef unless $_[0] =~ /^(URLPARAM|DATE|(SERVER|GM)TIME|(USER|WIKI)NAME|WIKIUSERNAME)$/;
 
     return $this->_expandTagOnTopicRendering( @_ );
@@ -3094,6 +3105,21 @@ sub _NOP {
 sub _SEP {
     my $this = shift;
     return $this->{templates}->expandTemplate('sep');
+}
+
+sub _USERNAME {
+    my $this = shift;
+    return $this->{user}->login();
+}
+
+sub _WIKINAME {
+    my $this = shift;
+    return $this->{user}->wikiName();
+}
+
+sub _WIKIUSERNAME {
+    my $this = shift;
+    return $this->{user}->webDotWikiName();
 }
 
 1;

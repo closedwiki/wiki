@@ -130,4 +130,28 @@ sub test_embeddedExpansions {
 
 }
 
+sub test_topicCreationExpansions {
+    my $this = shift;
+    my $user = new TWiki::User($twiki, "fnurgle", "FrankNurgle");
+    $this->assert_str_equals('fnurgle', $user->login());
+    $this->assert_str_equals('FrankNurgle', $user->wikiName());
+
+    my $text = <<END;
+%USERNAME%
+%WIKINAME%
+%MAINWEB%
+%WIKIUSERNAME%
+%WEBCOLOR%
+END
+    my $result = $twiki->expandVariablesOnTopicCreation($text, $user);
+    my $xpect = <<END;
+fnurgle
+FrankNurgle
+%MAINWEB%
+Main.FrankNurgle
+%WEBCOLOR%
+END
+    $this->assert_str_equals($xpect, $result);
+}
+
 1;
