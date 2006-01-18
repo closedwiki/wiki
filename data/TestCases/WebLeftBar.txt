@@ -19,6 +19,7 @@ function toggleShowHide( e )
 }
 </script>
 <a href="void:" onclick="javascript:toggleShowHide(document.getElementById('toggle_toc')); return false;"><b>Table of Contents</b></a>
+%INCLUDE{%TWIKIWEB%.WebLeftBarSearch}%
 <div id="toggle_toc">
 %TOC{ "%BASETOPIC%" depth="2" }%
 </div>
