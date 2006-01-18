@@ -38,6 +38,7 @@ that both take the following arguments:
 				(default: 4) |
 | docrels | flag to disable/enable document relations between images; \
 			possible values are on, off, 0, 1 (default: on) |
+| limit | maximum number of images to display (default: 0, meaning no limit). |
 | maxwidth | maximal display width of an image; images are scaled not to exceed this limit \
 			 while preserving aspect ratio %BR% \
 			 (default: 640) |

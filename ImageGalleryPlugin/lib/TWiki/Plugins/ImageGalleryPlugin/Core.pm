@@ -194,6 +194,11 @@ sub init {
     $this->{doThumbTitles} = $this->{doTitles};
   }
 
+  $this->{limit} = &TWiki::Func::extractNameValuePair($args, "limit");
+  unless ($this->{limit}) {
+    $this->{limit} = 0;
+  }
+
   my $refresh = $this->{query}->param("refresh") || '';
   $this->{doRefresh} = ($refresh eq 'on')?1:0;
 
@@ -392,6 +397,10 @@ sub renderThumbnails {
   my @rowOfImages = ();
   foreach my $image (@{$this->{images}}) {
     $this->computeImageSize($image);
+
+    if ($this->{limit} && $imageNr >= $this->{limit}) {
+      last;
+    }
 
     if ($this->{doThumbTitles}) {
       push @rowOfImages, $image;
