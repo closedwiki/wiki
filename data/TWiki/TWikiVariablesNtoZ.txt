@@ -9,6 +9,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>NOP%=
    * Syntax: =%<nop>NOP{...}%=
    * Available in template topics only. See TWikiTemplates#HtmlTemplates for details. In normal topic text, simply expands to whatever is in the curly braces (if anything).
+   * __%X% Note:__ due to historical limitations of TWiki formatting, =%NOP= *will not work correctly* if there are any parameterised tags inside the NOP that are not valid built-ins. For example, =%<nop>NOP{ %<nop>FLEEB{}% }%= will not work as expected, because =FLEEB= is not a valid built-in tag.
 
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic

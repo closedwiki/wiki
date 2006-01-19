@@ -2007,7 +2007,8 @@ sub _processTags {
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                                $verbatim);
 
-    my $percent = ($TranslationToken x 3).'%'.($TranslationToken x 3);
+    # See Item1442
+    #my $percent = ($TranslationToken x 3).'%'.($TranslationToken x 3);
 
     my @queue = split( /(%)/, $text );
     my @stack;
@@ -2051,21 +2052,25 @@ sub _processTags {
                     $stackTop .= $this->_processTags($e, $tagf, $depth-1, @_ );
                 } else { # expansion failed
                     #print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
-                    # Argh, horrible, horrible TML syntax. For compatibility
-                    # reasons, we have to handle the %VAR% case differently
+                    # Argh, horrible, horrible TML syntax. To handle %NOP
+                    # correctly, we have to handle the %VAR% case differently
                     # to the %VAR{}% case when a variable expansion fails.
                     # This is so that recursively define variables e.g.
                     # %A%B%D% expand correctly, but at the same time we ensure
                     # that a mismatched }% can't accidentally close a context
                     # that was left open when a tag expansion failed.
+                    # However Cairo didn't do this, so for compatibility
+                    # we have to accept that %NOP can never be fixed. if it
+                    # could, then we could uncomment the following:
 
-                    if( $stackTop =~ /}$/ ) {
-                        # %VAR{...}% case
-                        # We need to push the unexpanded expression back
-                        # onto the stack, but we don't want it to match the
-                        # tag expression again. So we protect the %'s
-                        $stackTop = $percent.$expr.$percent;
-                    } else {
+                    #if( $stackTop =~ /}$/ ) {
+                    #    # %VAR{...}% case
+                    #    # We need to push the unexpanded expression back
+                    #    # onto the stack, but we don't want it to match the
+                    #    # tag expression again. So we protect the %'s
+                    #    $stackTop = $percent.$expr.$percent;
+                    #} else
+                    {
                         # %VAR% case.
                         # In this case we *do* want to match the tag expression
                         # again, as an embedded %VAR% may have expanded to
@@ -2092,7 +2097,7 @@ sub _processTags {
         $stackTop .= $expr;
     }
 
-    $stackTop =~ s/$percent/%/go;
+    #$stackTop =~ s/$percent/%/go;
 
     $this->{renderer}->putBackBlocks( \$stackTop, $verbatim, 'verbatim' );
 

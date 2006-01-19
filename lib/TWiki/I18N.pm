@@ -138,7 +138,9 @@ sub get {
     my $this;
     if ($initialised) {
         $session->enterContext( 'i18n_enabled' );
-        my $userLanguage = _normalize_language_tag($session->{prefs}->getPreferencesValue('LANGUAGE'));
+        my $userLanguage = _normalize_language_tag(
+            $session->{cgiQuery}->param( 'language' ) ||
+            $session->{prefs}->getPreferencesValue('LANGUAGE'));
         if ($userLanguage) {
             $this = TWiki::I18N->get_handle($userLanguage);
         } else {
