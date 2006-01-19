@@ -75,22 +75,26 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 
 
 *Notes and hints:*
-	* At least one space character have to stay before and after a seperator ('-'). This allows you to use a '-' in names, locations or icons,
-	  e.g. if you have a composite name like Eva-Maria.
+	* At least one space character have to stay before and after a seperator ('-'). This allows you to use a '-' in names, locations or icons, e.g. if you have a composite name like Eva-Maria.
 	* If you enable the compatmode (see [[#AttriButes][Attributes]]) you can use all event types of the TWiki:Plugins.CalendarPlugin
 	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including TWiki:Plugins.CalendarPlugin event types).
-	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can
-	  use it for your entries (including TWiki:Plugins.CalendarPlugin event types).
+	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including TWiki:Plugins.CalendarPlugin event types).
 	* You can hide all calendar entries if you put them into HTML comments, e.g:
-	  <verbatim>
-	  %HOLIDAYLIST%
-	  <!--
-		  * 24 Dec 2005 - Sam - @home
-	  -->
-	  </verbatim>  
-	  or if you put the entries to another topic and use the topic attribute, e.g: 
-	  <verbatim> %<nop>HOLIDAYLIST{topic="TimeTableDataTopic" tablecaption="Planned Holidays (see TimeTableDataTopic)"}% </verbatim>
-	* You can hide '@all' in an entry if you put it into HTML comments, e.g: <verbatim>&nbsp;* 25 Dec 2005 - Christmas Day &lt;!--@all--&gt;</verbatim>
+<verbatim>
+		%HOLIDAYLIST%
+		<!--
+			* 24 Dec 2005 - Sam - @home
+		-->
+</verbatim>
+	* You can put the entries to another topic and use the topic attribute, e.g:
+<verbatim>
+		%HOLIDAYLIST{topic="TimeTableDataTopic" tablecaption="Planned Holidays (see TimeTableDataTopic)"}%=
+</verbatim>
+	* You can hide '@all' in an entry if you put it into HTML comments, e.g: 
+<verbatim>
+		* 25 Dec 2005 - Christmas Day <!--@all-->
+</verbatim>
+
 #AttriButes
 ---++ Attributes
 
@@ -169,23 +173,23 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* Days to show (default: 30)
 		* # Set DAYS = 30
 
-	* Language (default: English - *see manuale page of Date::Calc perl module, e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...). 
+	* Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Fran&ccedil;ais, Espa&ntilde;ol, Nederlands, Dansk, suomi, ...). 
 		* # Set LANG = Deutsch
 
 	* Content of the first cell (default: Name):
 		* # Set NAME = Name
 
-	* Set work icon (default: &amp;nbsp; - old behavior: <verbatim>:mad:</verbatim>):
+	* Set work icon (default: &amp;nbsp; - old behavior: =:<nop>mad:= ):
 		* # Set WORKICON = :mad:
 
-	* Set compatibility mode (default: 0; disables all TWiki:Plugins.CalendarPlugin event types) and icon (default: <verbatim>8-)</verbatim>)
+	* Set compatibility mode (default: 0; disables all TWiki:Plugins.CalendarPlugin event types) and icon (default: =8<nop>-)=)
 		* # Set COMPATMODE = 1
 		* # Set COMPATMODEICON = 8-)
 
-	* Set unknown parameter message (default: <verbatim>%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% &lt;br/&gt; Allowed parameters are (see TWiki.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%</verbatim>)
+	* Set unknown parameter message (default: =%<nop>RED% Sorry, some parameters are unknown: %<nop>UNKNOWNPARAMSLIST% %<nop>ENDCOLOR% &lt;br/&gt; Allowed parameters are (see !TWiki.HolidaylistPlugin topic for more details): %<nop>KNOWNPARAMSLIST%=)
 		* # Set UNKNOWNPARAMSMSG = %RED% Following parameter(s) is/are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR%
 
-	* Enable/Disable public holiday support (default: 1; public holiday support is enabled), show public holidays as separate lines in table (default: 0; public holidays are not shown as separate rows in table); public holiday icon (default: <verbatim>:-)</verbatim>)
+	* Enable/Disable public holiday support (default: 1; public holiday support is enabled), show public holidays as separate lines in table (default: 0; public holidays are not shown as separate rows in table); public holiday icon (default: =<nop>:-)=)
 		* # Set ENABLEPUBHOLIDAYS = 1
 		* # Set SHOWPUBHOLIDAYS = 0
 		* # Set PUBHOLIDAYICON = :-)
@@ -193,16 +197,15 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 *Note:* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
 ---++ Plugin Installation Instructions
-	
-	* Install required CPAN modules (e.g. <verbatim>perl -MCPAN -e "install Date::Calc"</verbatim> and <verbatim>perl -MCPAN -e "install HTML::Entities"</verbatim>)
+
+	* Install required CPAN modules (e.g. =perl -MCPAN -e "install Date::Calc"= and =perl -MCPAN -e "install HTML::Entities"=)
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==pub/TWiki/%TOPIC%/example.gif== | Example image |
-	* Test if the plugin is correctly installed: Copy the example above into a new topic and change
-	  the year number to the current year.
+| *File:* | *Description:* |
+| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+| ==pub/TWiki/%TOPIC%/example.gif== | Example image |
+	* Test if the plugin is correctly installed: Copy the example above into a new topic and change the year number to the current year.
 
 
 ---++ Plugin Info
@@ -216,7 +219,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 |  v1.010 (5 Jul 2005): | TWiki:Main.DanielRohde: added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation |
 |  v1.009 (29 Jun 2005): | TWiki:Main.DanielRohde: fixed major bug (!WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering |
 |  v1.008 (23 Jun 2005): | TWiki:Main.DanielRohde: added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute  |
-|  v1.007 (17 Jun 2005):  | TWiki:Main.DanielRohde: personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug |
+|  v1.007 (17 Jun 2005): | TWiki:Main.DanielRohde: personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug |
 |  v1.006 (16 Jun 2005): | TWiki:Main.DanielRohde: added new features (location support; today(fg/bg)color) |
 |  v1.005 (16 Jun 2005): | TWiki:Main.DanielRohde: added new features (start date support; weekendbgcolor); fixed documentation bugs; |
 |  v1.004 (14 Jun 2005): | TWiki:Main.DanielRohde: some performance improvements; code cleanup; documentation |
