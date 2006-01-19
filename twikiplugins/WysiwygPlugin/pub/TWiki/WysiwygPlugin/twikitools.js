@@ -300,9 +300,6 @@ function _removeClass(node, clazz) {
   }
 }
 
-/* Shared drawer spec used for all picklist drawers (drawers that just
- * contain a single pre-populated select
- */
 function TWikiTopicDrawer(elementid, web_id, topic_id, tool) {
   this.webSelect = getFromSelector(web_id);
   this.topicSelect = getFromSelector(topic_id);
@@ -495,6 +492,8 @@ function TWikiStringTool(buttonid, selectid, popupid){
     this.editor.updateState();
   };
 }
+
+TWikiStringTool.prototype = new KupuTool;
 
 /* Tool for inserting smilies. The smilies are collected in a div, which
  * is shown and hidden as required to give the effect of a popup panel.
@@ -858,24 +857,6 @@ function twikiVerifyNumber(val,min,max) {
 
   return true;
 }
-
-function TWikiSelect(id, tool) {
-    this.selector = getFromSelector(id);
-    this.tool = tool;
-
-    this.initialize = function(editor) {
-        this.editor = editor;
-        this._fixTabIndex(this.selector);
-        addEventHandler(this.selector, 'click', this.execCommand, this);
-    };
-
-    this.execCommand = function() {
-        this.tool.pick(this.selector.options[this.selector.selectedIndex].value);
-        this.editor.focusDocument();
-    };
-}
-
-TWikiSelect.prototype = new KupuTool;
 
 function TWikiRemoveElementButton(buttonid, element_name, cssclass) {
     this.button = getFromSelector(buttonid);
