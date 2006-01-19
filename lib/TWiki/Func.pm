@@ -400,6 +400,9 @@ Return: =%params=  Hash containing all parameters. The nameless parameter is sto
 sub extractParameters {
     my( $theAttr ) = @_;
     my $params = new TWiki::Attrs( $theAttr );
+    # take out _RAW and _ERROR (compatibility)
+    undef $params->{_RAW};
+    undef $params->{_ERROR};
     return %$params;
 }
 
