@@ -447,32 +447,54 @@ function TWikiNewAttachmentDrawer(drawerid, formid, tool) {
 
 TWikiNewAttachmentDrawer.prototype = new Drawer;
 
-/* Tool for inserting TWiki variables. The variables are in a select */
-function TWikiVarTool(){
+/* Tool for inserting strings. */
+function TWikiStringTool(buttonid, selectid, popupid){
+  this.strbutton = getFromSelector(buttonid);
+  this.strwindow = getFromSelector(popupid);
+  this.strselect = getFromSelector(selectid);
+
   this.initialize = function(editor) {
-    /* tool initialization : nothing */
+    /* attach events handlers and hide images' panel */
     this.editor = editor;
+    addEventHandler(this.strbutton, "click", this.openStringChooser, this);
+    addEventHandler(this.strselect, "change", this.chooseString, this);
+    this.hide();
   };
- 
-  this.pick = function(name) {
+
+  this.updateState = function(selNode) {
+    /* update state of the chooser */
+    this.hide();
+  };
+
+  this.openStringChooser = function() {
+    /* open the chooser pane */
+    this.show();
+  };
+  
+  this.show = function() {
+    /* show the chooser */
+    this.strselect.selectedIndex = 0;
+    this.strwindow.style.display = "block";
+  };
+
+  this.hide = function() {
+    /* hide the chooser */
+    this.strwindow.style.display = "none";
+  };
+  
+  this.chooseString = function(evt) {
+    // event handler for choosing the string
+    var string = this.strselect.options[this.strselect.selectedIndex].value;
     var doc = this.editor.getInnerDocument();
     var elem;
 
-    // if using spans for variables
-    //    elem = doc.createElement('span');
-    //    elem.setAttribute('class', 'TMLvariable');
-    //    elem.appendChild(doc.createTextNode(name));
-    // else
-          elem = doc.createTextNode('%'+name+'%');
-    // endif
+    elem = doc.createTextNode(string);
 
     // stomp anything already selected
     this.editor.insertNodeAtSelection(elem);
     this.editor.updateState();
   };
 }
-
-TWikiVarTool.prototype = new KupuTool;
 
 /* Tool for inserting smilies. The smilies are collected in a div, which
  * is shown and hidden as required to give the effect of a popup panel.
@@ -844,7 +866,7 @@ function TWikiSelect(id, tool) {
     this.initialize = function(editor) {
         this.editor = editor;
         this._fixTabIndex(this.selector);
-        addEventHandler(this.selector, 'change', this.execCommand, this);
+        addEventHandler(this.selector, 'click', this.execCommand, this);
     };
 
     this.execCommand = function() {
@@ -934,5 +956,17 @@ function _FixBoldItalic(doc, node) {
   }
   for (var i = 0; i < node.childNodes.length; i++) {
     _FixBoldItalic(doc, node.childNodes[i]);
+  }
+}
+
+function twikiTwist(id, show) {
+  var off = getFromSelector(id+'_off');
+  var on = getFromSelector(id+'_on');
+  if (show) {
+    on.style.display = 'block';
+    off.style.display = 'none';
+  } else {
+    on.style.display = 'none';
+    off.style.display = 'block';
   }
 }

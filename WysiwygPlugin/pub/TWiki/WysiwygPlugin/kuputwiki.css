@@ -147,6 +147,7 @@ div#twiki-icons img:active {
 .twiki-cancel-button { background-image: url("cancel.png"); }
 .twiki-insert-icon { background-image: url("smiley.png"); }
 .twiki-help {background-image: url("help.png");}
+.twiki-insert-string {background-image: url("strings.png");}
 .twiki-remove-var-button {
   background-color: white;
   background: url("remove.png");

@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="kupu">
 <!--
+ Created by Crawford Currie http://c-dot.co.uk
  Copyright (C) ILOG
  Portions Copyright (C) 2004 Damien Mandrioli and Romain Raugi
  Portions Copyright (c) 2003-2004, Kupu Contributors.
@@ -101,7 +102,7 @@
       <button type="button" class="kupu-redo" id="kupu-redo-button" title="redo: alt-y" i18n:attributes="title" accesskey="y">&#160;</button>
      </span>
      <span class="kupu-tb-buttongroup" id="kupu-bg-basicmarkup">
-      <select id="kupu-tb-styles">
+      <select id="kupu-tb-styles" title="Set the style of the selected block">
        <option value="P" i18n:translate="paragraph-normal">
         Normal
        </option>
@@ -129,51 +130,37 @@
       </select>
       <button type="button" class="twiki-bold-button0" id="twiki-bold-button" title="bold: alt-b" i18n:attributes="title" accesskey="b">&#160;</button>
       <button type="button" class="twiki-italic-button0" id="twiki-italic-button" title="italic: alt-i" i18n:attributes="title" accesskey="i">&#160;</button>
-<!-- Uncomment to enable  fixed-width text button
-      <button type="button" class="twiki-code-button0" id="twiki-code-button" title="fixed: alt-=" i18n:attributes="title" accesskey="=">&#160;</button>
--->
       <button type="button" class="kupu-forecolor" id="kupu-forecolor-button" title="text color: alt-f" i18n:attributes="title" accesskey="f">&#160;</button>
      </span>
      <span class="kupu-tb-buttongroup" id="kupu-bg-list">
       <button type="button" class="kupu-insertorderedlist" title="numbered list: alt-#" id="kupu-list-ol-addbutton" i18n:attributes="title" accesskey="#">&#160;</button>
       <button type="button" class="kupu-insertunorderedlist" title="unordered list: alt-*" id="kupu-list-ul-addbutton" i18n:attributes="title" accesskey="*">&#160;</button>
-<!--
-      <button type="button" class="kupu-insertdefinitionlist" title="definition list: alt-=" id="kupu-list-dl-addbutton" i18n:attributes="title" accesskey="=">&#160;</button>
--->
      </span>
      <span class="kupu-tb-buttongroup" id="kupu-bg-indent">
       <button type="button" class="kupu-outdent" id="kupu-outdent-button" title="outdent: alt-&lt;" i18n:attributes="title" accesskey="&lt;">&#160;</button>
       <button type="button" class="kupu-indent" id="kupu-indent-button" title="indent: alt-&gt;" i18n:attributes="title" accesskey="&gt;">&#160;</button>
      </span>
      <span class="kupu-tb-buttongroup">
-      <button type="button" class="kupu-exthyperlink" id="kupu-linkdrawer-button" title="Insert a link to the internet" i18n:attributes="title">&#160;</button>
+      <button type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Insert a table" i18n:attributes="title">&#160;</button>
+     </span>
+     <span class="kupu-tb-buttongroup">
       <button type="button" class="kupu-inthyperlink" id="twiki-wikiworddrawer-button" title="Insert a link to a wiki topic" i18n:attributes="title">&#160;</button>
-<!--
-      <button type="button" class="twiki-insert-attachment" id="twiki-insert-attachment" title="Insert a link to an attachment" i18n:attributes="title">&#160;</button> 
--->
+      <button type="button" class="kupu-exthyperlink" id="kupu-linkdrawer-button" title="Insert a link to the internet" i18n:attributes="title">&#160;</button>
      <button type="button" class="kupu-removelink" style="display:none" id="kupu-removelink-button" title="Remove link" i18n:attributes="title">&#160;</button>
      </span>
      <span class="kupu-tb-buttongroup">
       <button id="twiki-icons-button" class="twiki-insert-icon" title="Insert a TWiki Icon" i18n:attributes="title">&#160;</button>
-      <button id="twiki-nop-button" class="twiki-nop-button0" title="Define No-Op Region" i18n:attributes="title">&#160;</button>
-<!--
-      <button id="twiki-verbatim-button" class="twiki-verbatim-button" title="Insert Verbatim block" i18n:attributes="title">&#160;</button>
--->
-      <select id="twiki-var-select">
-       %WYSIWYGPLUGIN_TAGS%
-       %WYSIWYG_TAGS%
-      </select>
-      <button type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Insert a table" i18n:attributes="title">&#160;</button>
-<!--
-      <button type="button" class="twiki-new-attachment" id="twiki-attach-button" title="Add a new attachment" i18n:attributes="title">&#160;</button> 
--->
       <button type="button" class="twiki-new-image" id="twiki-image-button" title="Add a new image" i18n:attributes="title">&#160;</button> 
-     </span>
     </span>
-    <select id="kupu-ulstyles" class="invisible">
+    <span class="kupu-tb-buttongroup">
+      <button id="twiki-strings-button" class="twiki-insert-string" title="Insert a standard string" i18n:attributes="title">&#160;</button>
+     <button id="twiki-nop-button" class="twiki-nop-button0" title="Define No-Op Region" i18n:attributes="title">&#160;</button>
+    </span>
+    <!-- these have to be kept because Kupu core code refers to them -->
+    <select id="kupu-ulstyles" style="display:none" class="invisible">
      <option value="disc" i18n:translate="list-disc">&bull;</option>
     </select>
-    <select id="kupu-olstyles" class="invisible">
+    <select id="kupu-olstyles" style="display:none" class="invisible">
      <option value="decimal" i18n:translate="list-decimal">1</option>
      <option value="upper-roman" i18n:translate="list-upperroman">I</option>
      <option value="lower-roman" i18n:translate="list-lowerroman">i</option>
@@ -181,6 +168,7 @@
      <option value="lower-alpha" i18n:translate="list-loweralpha">a</option>
     </select>
    </div>
+<!-- END OF TOOLBAR -->
    <div style="display:block;">
     <div id="kupu-librarydrawer" class="kupu-drawer">
     </div>
@@ -363,11 +351,18 @@
 <!-- ICONS POPUP -->
    <div id="twiki-icons">
     %WYSIWYGPLUGIN_ICONS%
-    %WYSIWYG_ICONS%
    </div>
 <!-- COLORS POPUP -->
    <table id="kupu-colorchooser" cellpadding="0" cellspacing="0" style="position: fixed; border-style: solid; border-color: black; border-width: 1px;">
    </table>
+<!-- STRINGS popup -->
+   <div id="twiki-strings" class="kupu-drawer" style="display:none">
+     Select string to insert:
+     <select id="twiki-strings-select" title="Insert standard text">
+      <option value=''>none</option>
+      %WYSIWYGPLUGIN_STRINGS%
+     </select>
+   </div>
 <!-- EDITOR IFRAME -->
    <div class="kupu-editorframe">
     <iframe id="kupu-editor" class="kupu-editor-iframe" frameborder="1" src="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1;t=%GMTIME{"$ye$mo$day$hou$min$sec"}%" scrolling="auto">
@@ -395,9 +390,14 @@
     </div>
    </div>
   </div>
+<!-- HELP (better done as twisty? -->
+  <div>
+%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalHelp" warn="off"}%
+  </div>
 <!-- STATUS LINE -->
   <iframe name="status_line" style="display: block" width="70%" height="25px" onload="uploadComplete()">
-    <!-- frame used as target for output generated by uploads -->
+   <!-- frame used as target for output generated by uploads -->
   </iframe>
+  %INCLUDE{"%TWIKIWEB%.WyswiygPluginLocalHelp" warn="off"}%
  </body>
 </html>
