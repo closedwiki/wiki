@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="SteffenPoulsen" date="1137695951" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{}%
 ---+!! Global Replace Plugin
 
@@ -79,7 +79,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/PaulineCheung |
 |  Plugin Version: | 03 Nov 2004 (V1.002) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  31 Oct 2005: | Main.MikkoLaakso: Added some examples, tested on W2K. |
+|  31 Oct 2005: | TWiki:Main.MikkoLaakso: Added some examples, tested on W2K. |
 |  03 Nov 2004: | TWiki:Main/PeterThoeny: Added $topic to replace string |
 |  16 Mar 2004: | Fixed bug where topics with underlines did not get handled properly |
 |  07 Feb 2004: | Initial version |
