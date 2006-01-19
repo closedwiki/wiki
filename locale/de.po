@@ -43,26 +43,23 @@ msgstr "%1 - Registrierung von %2 (%3)"
 
 #: data/TWiki/NewUserTemplate.txt:62
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
-msgstr ""
+msgstr "%1 - komplette TWiki Dokumentation, Schnell-Start bis Referenz"
 
 #: data/TWiki/NewUserTemplate.txt:64
-#, fuzzy
 msgid "%1 - just for me"
-msgstr "%1 nur für mich"
+msgstr "%1 - nur für mich"
 
 #: data/TWiki/NewUserTemplate.txt:61
-#, fuzzy
 msgid "%1 - starting points on TWiki"
-msgstr "%1 um im neuen Web anzufangen zu arbeiten"
+msgstr "%1 - Einstiegspunkte für TWiki"
 
 #: data/TWiki/NewUserTemplate.txt:63
-#, fuzzy
 msgid "%1 - try out TWiki on your own"
-msgstr "%1 Web zum ausprobieren von TWiki"
+msgstr "%1 - probieren Sie TWiki selbst aus"
 
 #: data/TWiki/NewUserTemplate.txt:60
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
-msgstr ""
+msgstr "%1 - eine kurze Einführungs-Präsentation für TWiki Anfänger ansehen"
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:9
 msgid "%1 User Authentication"
@@ -83,23 +80,20 @@ msgid "%1 Web Home"
 msgstr "%1 Startseite"
 
 #: data/TWiki/NewUserTemplate.txt:85
-#, fuzzy
 msgid "%1 for changing your password"
-msgstr "Sie können ihr Passwort über %1 ändern"
+msgstr "% um ihr Passwort zu ändern"
 
 #: data/TWiki/NewUserTemplate.txt:86
-#, fuzzy
 msgid "%1 has a list of other TWiki users"
 msgstr "Auf %1 gibt es eine Liste anderer TWiki Benutzer."
 
 #: templates/messages.tmpl:352
-#, fuzzy
 msgid ""
 "%1 has been editing the topic for %2 and the lease is still active for "
 "another %3."
 msgstr ""
-"Die Bearbeitung dauert seit %1 und die Ausleihung ist noch aktiv für weitere "
-"%2."
+"%1 bearbeitet das Topic seit %2 und die Ausleihung ist noch aktiv für weitere "
+"%3."
 
 #: templates/registernotifyadmin.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotifyadmin.classic.tmpl:10
@@ -886,7 +880,7 @@ msgstr ""
 
 #: lib/TWiki/Form.pm:280
 msgid "Click to see details in separate window"
-msgstr ""
+msgstr "Anklicken, um Details in einem separaten Fenster anzusehen"
 
 #: templates/messages.tmpl:118
 msgid "Color %1 has an invalid format"
@@ -903,9 +897,8 @@ msgid "Comments:"
 msgstr "Kommentare:"
 
 #: data/TWiki/TWikiRegistration.txt:59
-#, fuzzy
 msgid "Company URL: %BR% (or department URL)"
-msgstr "Unternehmen URL: <br> (oder Abteilungs URL)"
+msgstr "Unternehmen URL: %BR% (oder Abteilungs URL)"
 
 #: data/TWiki/TWikiRegistration.txt:56
 msgid "Company name:"
@@ -938,9 +931,8 @@ msgid "Continue and try to rename web?"
 msgstr "Wollen Sie weitermachen und versuchen, das Web umzubenennen?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
-#, fuzzy
 msgid "Continue to *[[%1][create topic: %TOPIC%]]*"
-msgstr "Weiter um eine *[[%1][neue Seite]]* anzulegen"
+msgstr "Weiter das *[[%1][neue Topic: %TOPIC%]]* anzulegen"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid ""
@@ -971,9 +963,8 @@ msgid "Cr&eate"
 msgstr "A&nlegen"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:26
-#, fuzzy
 msgid "Create (&WYSIWYG)"
-msgstr "&WYSIWYG"
+msgstr "Anlegen (&WYSIWYG)"
 
 #: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
@@ -1486,12 +1477,11 @@ msgid "In reversed order"
 msgstr "In umgekehrter Reihenfolge"
 
 #: templates/messages.tmpl:284
-#, fuzzy
 msgid ""
 "In some cases, TWiki changes the name of the uploaded file to make it safe "
 "and accessible across all platforms:"
 msgstr ""
-"__Hinweis:__ In manchen Fällen ändert TWiki den Namen der hochgeladenen "
+"In manchen Fällen ändert TWiki den Namen der hochgeladenen "
 "Datei, um sie sicher und plattformübergreifend zugreifbar zu halten:"
 
 #: templates/messages.tmpl:205
@@ -1528,7 +1518,6 @@ msgid "Invalid e-mail address"
 msgstr "Ungültige E-Mail Adresse"
 
 #: templates/messages.tmpl:354
-#, fuzzy
 msgid ""
 "It is probably OK to go ahead and edit - unless you intend to change data in "
 "a form attached to the topic. If %1 actually _does_ save the topic while you "
@@ -1537,9 +1526,10 @@ msgid ""
 "check with %1 first."
 msgstr ""
 "Normaler Weise können Sie einfach editieren, solange Sie nicht das "
-"angehängte Formular ändern wollen. Innerhalb des Textfeldes können "
-"Änderungen zusammengeführt werden, sobald die Bearbeiter speichern, was mit "
-"Formularfeldern nicht so einfach möglich ist."
+"angehängte Formular ändern wollen. Wenn %1 das Topic speichert während Sie es "
+"bearbeiten, werden ihre Änderungen zusammengeführt ohne das etwas verloren geht. "
+"Formulardaten können jedoch nicht so einfach zusammengeführt werden, so dass "
+"sie sich in einem solchen Fall vorher mit %1 absprechen sollten."
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:22
 msgid ""
@@ -2197,7 +2187,6 @@ msgid "Sequential"
 msgstr "Sequenziell"
 
 #: lib/TWiki/Form.pm:491
-#, fuzzy
 msgid "Set all"
 msgstr "Alles auswählen"
 
@@ -2222,11 +2211,10 @@ msgid "Show help"
 msgstr "Hilfe anzeigen"
 
 #: data/TWiki/NewUserTemplate.txt:72
-#, fuzzy
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr ""
-"Tool-Tip Informationen für Topics beim Rüberfahren des Mauszeigers, an- oder "
-"ausschalten: Detailinformationen dazu in %2)"
+"Tool-Tip Informationen für Topics beim Überfahren des Mauszeigers über %1 links, an- oder "
+"ausschalten:"
 
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:51
 msgid "Side by side"
@@ -2437,12 +2425,11 @@ msgid "The attachment and any history will be moved to the new topic."
 msgstr "Anhänge und die Änderungshistorie wird zu dem neuen Topic verschoben."
 
 #: templates/messages.tmpl:362
-#, fuzzy
 msgid ""
 "The chances are good that %1 has simply navigated away from the edit page "
 "without saving."
 msgstr ""
-"Die Wahrscheinlichkeit ist groß, dass einfach weiter navigiert wird ohne die "
+"Die Wahrscheinlichkeit ist groß, dass %1 einfach weitergesurft ist ohne die "
 "Seite zu speichern."
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:78
@@ -2495,7 +2482,6 @@ msgid "The form should be defined in the topic %1"
 msgstr "Das Formular sollte in Topic %1 definiert werden"
 
 #: templates/messages.tmpl:360
-#, fuzzy
 msgid "The lease on this topic expired %1 ago."
 msgstr "Die Leihfrist von diesem Topic endete vor %1."
 
@@ -2667,9 +2653,8 @@ msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:19
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:20
-#, fuzzy
 msgid "To edit the topic anyway, click "
-msgstr "Um das Topic trotzdem zu bearbeiten drücken Sie 'Trotzdem bearbeiten'."
+msgstr "Um das Topic trotzdem zu bearbeiten drücken Sie "
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:15
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
@@ -2687,17 +2672,14 @@ msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:15
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:16
-#, fuzzy
 msgid "To see if %1 has finished editing yet, click "
 msgstr ""
-"Um zu sehen, ob die Person ihre Bearbeitung abgeschlossen hat drücken Sie "
-"'Nochmal versuchen'."
+"Um zu sehen, ob %1 die Bearbeitung abgeschlossen hat drücken Sie "
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:13
-#, fuzzy
 msgid "To see if %1 has finished editing yet, click 'Try Again'."
 msgstr ""
-"Um zu sehen, ob die Person ihre Bearbeitung abgeschlossen hat drücken Sie "
+"Um zu sehen, ob %1 die Bearbeitung abgeschlossen jetzt hat drücken Sie "
 "'Nochmal versuchen'."
 
 #: twikiplugins/PatternSkin/templates/deleteattachment.pattern.tmpl:21
@@ -2790,7 +2772,6 @@ msgid "Unchanged"
 msgstr "Unverändert"
 
 #: data/TWiki/NewUserTemplate.txt:70
-#, fuzzy
 msgid ""
 "Uncomment preferences variables to activate them (remove the #-sign). Help "
 "and details on preferences variables are available in %1."
@@ -2992,7 +2973,6 @@ msgid "You are denied access to the following topics in the web:"
 msgstr "Sie haben keinen Zugriff auf die folgenden Topics im Web:"
 
 #: templates/messages.tmpl:364
-#, fuzzy
 msgid ""
 "You are encouraged to go ahead and edit - unless you intend to change data "
 "in a form attached to the topic. If %1 actually _does_ save while you are "
@@ -3001,9 +2981,10 @@ msgid ""
 "with %1 first."
 msgstr ""
 "Normaler Weise können Sie einfach editieren, solange Sie nicht das "
-"angehängte Formular ändern wollen. Innerhalb des Textfeldes können "
-"Änderungen zusammengeführt werden, sobald die Bearbeiter speichern, was mit "
-"Formularfeldern nicht so einfach möglich ist."
+"angehängte Formular ändern wollen. Wenn %1 das Topic speichert während Sie es "
+"bearbeiten, werden ihre Änderungen zusammengeführt ohne das etwas verloren geht. "
+"Formulardaten können jedoch nicht so einfach zusammengeführt werden, so dass "
+"sie sich in einem solchen Fall vorher mit %1 absprechen sollten."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:66
 msgid "You are here"
