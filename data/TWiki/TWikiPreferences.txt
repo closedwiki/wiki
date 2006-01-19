@@ -177,10 +177,11 @@ _(Click for form-based editing of existing preferences.)_
       * Set TWIKILAYOUTURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css
       * Set TWIKISTYLEURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css
       * Set TWIKICOLORSURL = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css
-   * Custom overriding styles (remove the # to enable)
-      * #Set USERLAYOUTURL = 
-      * #Set USERSTYLEURL = 
-      * #Set USERCOLORSURL = 
+
+   * Custom overriding styles (enabled pr. default but empty, to prevent browsers from fetching %<nop>USERLAYOUTURL%-style URLs)
+      * Set USERLAYOUTURL = 
+      * Set USERSTYLEURL = 
+      * Set USERCOLORSURL = 
 
 ---+++ Skin icons
 
