@@ -325,4 +325,19 @@ sub test_workarea {
     unlink $dir;
 }
 
+sub test_extractParameters {
+    my $this = shift;
+
+    my $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+
+    my %attrs = TWiki::Func::extractParameters('"a" b="c"');
+    my %expect = ( _DEFAULT=>"a", b=>"c" );
+    foreach my $a (keys %attrs) {
+        $this->assert($expect{$a},$a);
+        $this->assert_str_equals($expect{$a}, $attrs{$a}, $a);
+        delete $expect{$a};
+    }
+}
+
 1;

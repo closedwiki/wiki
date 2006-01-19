@@ -401,8 +401,8 @@ sub extractParameters {
     my( $theAttr ) = @_;
     my $params = new TWiki::Attrs( $theAttr );
     # take out _RAW and _ERROR (compatibility)
-    undef $params->{_RAW};
-    undef $params->{_ERROR};
+    delete $params->{_RAW};
+    delete $params->{_ERROR};
     return %$params;
 }
 
