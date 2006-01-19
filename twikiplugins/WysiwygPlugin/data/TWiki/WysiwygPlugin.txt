@@ -74,52 +74,32 @@ If MARK_VARIABLES set to =on= then TWiki variables will be "marked" by the TML -
 	* Set MARK_VARIABLES =
 Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
 		* Set ICONS =
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/cool.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/indifferent.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/frown.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/redface.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/biggrin.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/wink.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/tongue.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/rolleyes.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/mad.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/eek.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/confused.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/devil.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/devilwink.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/sealed.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/thumbs.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/yes.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/no.gif" alt="" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/love.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="" />
-List of TWiki variables that will be available to the Kupu editor
-		* Set TAGS =
-		<option value="TOPIC">Current Topic</option>
-		<option value="WEB">Current Web</option>
-		<option value="DATE"> Today's Date</option>
-		<option value="WIKIVERSION"> Wiki Version</option>
-		<option value="USERNAME"> Login User Name</option>
-		<option value="WIKIUSERNAME"> Wiki User Name</option>
-		<option value="MAINWEB"> Main Web</option>
-		<option value="TWIKIWEB"> TWiki Web</option>
-		<option value="HOMETOPIC"> Home Topic Name</option>
-		<option value="NOTIFYTOPIC"> Notify Topic Name</option>
-		<option value="WIKIUSERSTOPIC"> User List Topic Name</option>
-		<option value="STATISTICSTOPIC"> Statistics Topic Name</option>
-		<option value="INCLUDE{...}"> Server Side Include</option>
-		<option value="SEARCH{...}"> Inline Search</option>
-		<option value="TOC"> Table of Contents</option>
-As well as defining (or redefining) the list of icons and variables above, you can also add custom icons by defining the variable WYSIWYG_ICONS, for example in your WebPreferences or in your home topic. You can also extend the list of available tags by defining WYSIWYG_TAGS. The syntax of these two variables must be exactly the same as the syntax of the ICONS and TAGS definitions above.
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" />
+		%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalTags" warn="off"}%
+The list of icons above automatically includes a topic in this web called WysiwygPluginLocalIcons. This topic doesn't exist by default, but you can create it and add a list of additional icons in the same format as above (don't forget the indentation!).
+
+List of strings that will be available in the drop-down on the toolbar
+		* Set STRINGS =
+ 		<option value='-- <nop>%WIKIUSERNAME% - %DATE%'>Signature</option>
+		<option value="%<nop>WIKINAME%">Wiki name (variable)</option>
+		<option value='%<nop>SEARCH{"search for"}%'>Inline search (variable)</option>
+		<option value='%<nop>INCLUDE{"topic or url"}%'>Include (variable)</option>
+		<option value="%<nop>TOC%"> Table of Contents (variable)</option>
+		<option value="%<nop>TOPIC%">Topic (variable)</option>
+		<option value="%<nop>WEB%">Web (variable)</option>
+		<option value="%<nop>DATE%"> Date (variable)</option>
+		%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalStrings" warn="off"}%
+The list of strings above automatically includes a topic in this web called WysiwygPluginLocalStrings. This topic doesn't exist by default, but you can create it and add a list of additional strings in the same format as above (don't forget the indentation!).
+
+The edit template also automatically includes a topic called %TWIKIWEB%.WysiwygPluginLocalHelp. This topic doesn't exist by default, but if it exists the contents will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
 ---++ Known Issues
 Most of the known problems with the plugin are actually problems with the Kupu editor or the browser rather than the plugin.
@@ -166,88 +146,3 @@ This plugin is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the auth
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/CrawfordCurrie - %$DATE%
-
-<!-- Other icons, not supported because they don't have a corresponding
-     shortcut
-
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_ff.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_end.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/wip.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/rfc.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/days.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/hourglass.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/watch.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/globe.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/group.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/person.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/persons.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/lock.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/folder.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/lockfolder.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/lockfoldergray.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/locktopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/locktopicgray.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/refreshtopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/viewtopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/edittopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/topicdiffs.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/topicbacklinks.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/newtopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/searchtopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/cachetopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/printtopic.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/attachfile.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/recentchanges.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/changes.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/notify.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/mail.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/trash.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/rss-feed.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/xml-feed.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/empty.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ud.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_lr.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_udlr.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ur.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_rd.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ld.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ul.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_udr.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_lrd.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_udl.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ulr.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ud.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_lr.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udlr.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ur.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_rd.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ld.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ul.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udr.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_lrd.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udl.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/note.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/bubble.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stop.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/target.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/gear.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/wrench.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-no.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-cancel.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stargold.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/hand.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowleft.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowup.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdown.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbleft.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbright.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbup.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbdown.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdot.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_start.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_fb.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_back.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_forward.gif" alt="" />
--->
-

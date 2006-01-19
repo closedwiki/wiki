@@ -118,21 +118,16 @@ function initKupu(iframe) {
                                           'twiki-nop-button');
     kupu.registerTool('nopbutton', nopbutton);
 
-    /*
-      var verbcheck = parentFinder(hasClass('TMLverbatim'));
-      var verbcover = coverSelection('pre', 'TMLverbatim');
-      var verbbutton = new KupuStateButton('twiki-verbatim-button', 
-                                         verbexec, verbcheck,
-                                         'twiki-verbatim-button',
-                                         'twiki-verbatim-button-pressed');
-      kupu.registerTool('verbbutton', verbbutton);
-    */
-
-    // Icons tool
+    // Icon picker
     var twikiiconstool = new TWikiIconsTool('twiki-icons-button', 
                                             'twiki-icons');
     kupu.registerTool('twikiicons', twikiiconstool);
 
+    // String picker
+    var twikistringtool = new TWikiStringTool('twiki-strings-button', 
+                                              'twiki-strings-select',
+                                              'twiki-strings');
+    kupu.registerTool('twikistringtool', twikistringtool);
 
     var execCommand = function(c) {
       return function(button, editor) {
@@ -264,13 +259,6 @@ function initKupu(iframe) {
                                               wikiwordtool);
     drawertool.registerDrawer('wikiworddrawer', wikiworddrawer);
 
-    // Variables select
-    var twikivartool = new TWikiVarTool();
-    kupu.registerTool('twikivartool', twikivartool);
-
-    var twikivarselect = new TWikiSelect('twiki-var-select', twikivartool);
-    kupu.registerTool('twikivarselect', twikivarselect);
-    
     // Attachments drawer
     var newImageTool = new TWikiInsertAttachmentTool();
     kupu.registerTool('insertImage', newImageTool);
