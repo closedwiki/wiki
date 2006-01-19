@@ -2803,6 +2803,7 @@ sub _TOPICLIST {
     $web =~ s#\.#/#go;
 
     return '' if
+      $web ne $this->{webName} &&
       $this->{prefs}->getWebPreferencesValue( 'NOSEARCHALL', $web );
 
     my @items;
