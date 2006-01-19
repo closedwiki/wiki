@@ -36,6 +36,6 @@ th.atpSearch {
 }
 
 /* Warning style (e.g. late action) */
-).atpWarn {
+.atpWarn {
   background-color: yellow;
 }
