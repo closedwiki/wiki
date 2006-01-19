@@ -3,9 +3,9 @@
 %STARTINCLUDE%
 ---# TWiki Development Timeline
 
----++ Dakar Release
+---++ TWiki-4.0.0 Release
 
-Details of DakarRelease can be found in DakarReleaseNotes
+Details can be found in TWikiReleaseNotes04x00x00
 
 ---++ 01-Sep-2004 Release (Cairo)
 

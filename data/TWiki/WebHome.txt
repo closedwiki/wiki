@@ -13,7 +13,7 @@ This is the place to learn about TWiki features and perform TWiki system mainten
 <div style="float:right;width:255px;padding:1em;">%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%</div>
 <form action="%SCRIPTURLPATH{search}%/%WEB%/">
    * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
-   * [[DakarReleaseNotes][Dakar Release Notes]]: Describes what's new in this release of TWiki.
+   * [[TWikiReleaseNotes04x00x00][TWiki-4.0.0 Release Notes]]: Describes what's new in this release of TWiki.
    * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial
    * [[TWikiFAQ][Frequently Asked Questions]]: about TWiki
    * [[TWikiReferenceManual][Reference Manual]]: Documentation for webmasters and system administrators
