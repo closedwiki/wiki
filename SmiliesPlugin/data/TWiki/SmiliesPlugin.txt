@@ -71,7 +71,9 @@ This plugin is installed by default with a TWiki release. You should not need to
 |  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
 |  Plugin Version: | 1.004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  5 Mar 2005 | 1.004 Crawford Currie prepared for Dakar |
+|  16 Mar 2005: | Fixed typo "scull" |
+|  5 Mar 2005   | 1.004 Crawford Currie prepared for Dakar |
+|  21 Nov 2004: | Added benchmarks (no code changes) |
 |  21 Aug 2004: | Fixed tooltip for Netscape; added "sealed lips", "thumbs up", "yes" "no", "in love", "skull" |
 |  16 Feb 2004: | Added "devil" and "devilwink" smilies (by TWiki:Main.CrawfordCurrie) |
 |  26 Feb 2003: | Added "indifferent" smilie |
@@ -83,8 +85,10 @@ This plugin is installed by default with a TWiki release. You should not need to
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 96%, %TWIKIWEB%.FormattedSearch 98%, SmiliesPlugin 96% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
