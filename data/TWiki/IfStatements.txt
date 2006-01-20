@@ -32,7 +32,7 @@ atom ::= context identifier, TWiki variable name, single-quoted string
 | &lt;, &gt;, &lt;=, &gt;= | Number comparison (there is no explicit numeric =) |
 | context | True if the current context is set (see below) |
 | defined | True if a preference variable or url parameter of this name is defined. |
-| $ | expands a URL parameter or TWikiVariable. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The quoted string may *not* contain quotes (' or "). |
+| $ | expands a URL parameter or [[TWikiVariables][TWikiVariable]]. Plugin handlers *are not called*. Built-in variables and user-defined preferences are supported. You can pass a limited subset of parameters to TWiki variables by enclosing the variable name in single quotes; for example, =$ 'VARIABLE{value}'=. The quoted string may *not* contain quotes (' or "). |
 examples:
 <verbatim>
 %IF{"defined WIKINAME" then="WIKINAME is defined" else="WIKINAME is not defined"}%
