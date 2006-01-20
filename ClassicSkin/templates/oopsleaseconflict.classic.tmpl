@@ -10,22 +10,22 @@
 
 %INSTANTIATE%
 
-<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
-%QUERYPARAMS%
-%MAKETEXT{"To see if they have finished their edit yet, click "}%
-<input type="submit" value='%MAKETEXT{"Try Again"}%' />
-</form>
+%MAKETEXT{"To see if [_1] has finished editing yet, click 'Try Again'." args="%PARAM1%"}%
 
-<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
-%MAKETEXT{"To edit the topic anyway, click "}%
-<input type="hidden" name="breaklock" value="on" />
-%QUERYPARAMS% <input type="submit" value='%MAKETEXT{"Edit Anyway"}%' />
-</form> 
-
+%MAKETEXT{"To edit the topic anyway, hit 'Edit Anyway'."}%
 %TMPL:END%
 %TMPL:DEF{"topicaction"}%
 [[%WEB%.%TOPIC%][%MAKETEXT{"View topic"}%]] %TMPL:P{"sep"}%
-<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a>
+<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a> %TMPL:P{"sep"}%
+<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+%QUERYPARAMS% 
+<input type="submit" value='%MAKETEXT{"Try Again"}%' />
+</form>
 %TMPL:P{"sep"}%
+<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
+<input type="hidden" name="breaklock" value="on" />
+%QUERYPARAMS% 
+<input type="submit" value='%MAKETEXT{"Edit Anyway"}%' />
+</form> %TMPL:END%
 
 %TMPL:P{"oops"}%
