@@ -94,10 +94,10 @@ For example, the =example= template file will be searched for in the following p
 Template names are usually derived from the name of the currently executing script; however it is also possible to override these settings in the =view= and =edit= scripts, for example when a topic-specific template is required. Two preference variables can be user to override the templates used:
    * =VIEW_TEMPLATE= sets the template to be used for viewing a topic
    * =EDIT_TEMPLATE= sets the template for editing a topic.
-If these preferences are set locally (using _Local_ instead of _Set_) for a topic, in WebPreferences, in [[%LOCALSITEPREFS]], or [%TWIKIWEB%.TWikiPreferences]] (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
+If these preferences are set locally (using _Local_ instead of _Set_) for a topic, in WebPreferences, in [[%LOCALSITEPREFS%]], or [[%TWIKIWEB%.TWikiPreferences]] (using _Set_), the indicated templates will be chosen for =view= and =edit= respectively. The template search order is as specified above.
 
 ---++ Master Templates
-Master templates use the block definition directives (=%TMPL:DEF= and =%TMPL:END%=) to define common sections that appear in two or more other templates. ==twiki.tmpl== is the default master template.
+Master templates use the block definition directives (=%<nop>TMPL:DEF= and =%<nop>TMPL:END%=) to define common sections that appear in two or more other templates. ==twiki.tmpl== is the default master template.
 <blockquote>
 | *Template variable:* | *Defines:* |
 | %<nop>TMPL:DEF{"sep"}% | "&#124;" separator |
@@ -145,7 +145,7 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>GMTIME%= | Date/time. See TWikiVariables#VarGMTIME |
 | =%<nop>GMTIME{...}%= | Formatted date/time. See TWikiVariables#VarGMTIME2 |
 | =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |
-| =%<nop>TEMPLATEONLY%..%<nop>ENDTEMPLATEONLY%= | Text that gets removed when a new topic based on the template is created. See notes below. |
+| =%<nop>TEMPLATEONLY%%BR%...%BR%%<nop>ENDTEMPLATEONLY%= | Text that gets removed when a new topic based on the template is created. See notes below. |
 | =%<nop>SERVERTIME%= | Date/time. See TWikiVariables#VarSERVERTIME |
 | =%<nop>SERVERTIME{...}%= | Formatted date/time. See TWikiVariables#VarSERVERTIME2 |
 | =%<nop>USERNAME%= | Login name of user who is instantiating the new topic, e.g. %USERNAME% |
@@ -163,7 +163,7 @@ This template can only be changed by:
 </verbatim>
 This will restrict who can edit the template, but will get removed when a topic based on the template is created.
 
-=%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g. =%<nop>%NOP%SERVERTIME%=.
+=%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g.i escape =%nop>SERVERTIME%= with =%<nop>SER%<nop>NOP%VERTIME%=.
 
 All other variables are unchanged, e.g. are carried over "as is" into the new topic.
 
@@ -173,7 +173,7 @@ Here is an example for creating new topics based on a specific template topic:
 
 <form name="new" action="%SCRIPTURLPATH{edit}%/%WEB%/">
    * New example topic: 
-     <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$yearx$mox$day}%" size="23" />&nbsp;<input type="submit" class="twikiSubmit" value="Create" />
+     <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$yearx$mox$day}%" size="26" />&nbsp;<input type="submit" class="twikiSubmit" value="Create" />
      <input type="hidden" name="templatetopic" value="ExampleTopicTemplate" />
      <input type="hidden" name="topicparent" value="%TOPIC%" />
      <input type="hidden" name="onlywikiname" value="on" />
@@ -186,7 +186,7 @@ The above form asks for a topic name. A hidden input tag named ==templatetopic==
 <pre>
 &lt;form name="new" action="%<nop>SCRIPTURLPATH{edit}%/%<nop>WEB%/"&gt;
    * New example topic: 
-     &lt;input type="text" name="topic" value="ExampleTopic%<nop>SERVERTIME{$yearx$mox$day}%" size="23" /&gt;
+     &lt;input type="text" name="topic" value="ExampleTopic%<nop>SERVERTIME{$yearx$mox$day}%" size="26" /&gt;
      &lt;input type="hidden" name="templatetopic" value="ExampleTopicTemplate" /&gt;
      &lt;input type="hidden" name="topicparent" value="%<nop>TOPIC%" /&gt;
      &lt;input type="hidden" name="onlywikiname" value="on" /&gt;
@@ -207,11 +207,13 @@ See TWikiScripts for details of the parameters that the =edit= script understand
 If you want to make a TWiki application where you need automatically generated unique topicnames, you can use 10 X's in the edit / save URL, and they will be replaced on topic save with a count value. For example, !BugIDXXXXXXXXXX will result in topics named !BugID0, !BugID1, !BugID2 etc. 
 
 Example link to create a new topic:%BR%
-=[<nop>[%<nop>SCRIPTURLPATH{"edit"}%/%<nop>WEB%/BugIDXXXXXXXXXX?templatetopic=BugTemplate&amp;amp;topicparent=%<nop>TOPIC%&amp;amp;t=%<nop>SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
+<verbatim>
+[[%SCRIPTURLPATH{"edit"}%/%WEB%/BugIDXXXXXXXXXX?templatetopic=BugTemplate&amp;topicparent=%TOPIC%&amp;t=%SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
+</verbatim>
 
 ---++ Master Templates by Example
 
-Attached is an example of an oops based template =oopsbase.tmpl= and an example oops dialog =oopstest.tmpl= based on the base template. %A% *NOTE:* This isn't the release version, just a quick, simple demo.
+Attached is an example of an oops based template =oopsbase.tmpl= and an example oops dialog =oopstest.tmpl= based on the base template. %T% *NOTE:* This isn't the release version, just a quick, simple demo.
 
 ---+++ Base template oopsbase.tmpl
 
@@ -291,7 +293,7 @@ Test =topicaction=:
 %<nop>TMPL:INCLUDE{"oopsbase"}%
 </pre>
 </td></tr>
-</table >
+</table>
 </blockquote>
 
 ---+++ Sample screen shot of oopstest.tmpl
