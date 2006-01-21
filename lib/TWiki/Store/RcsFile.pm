@@ -38,6 +38,8 @@ use strict;
 
 use File::Copy;
 use File::Spec;
+use File::Path;
+use File::Basename;
 use Assert;
 use TWiki::Time;
 use TWiki::Sandbox;
@@ -103,22 +105,15 @@ sub init {
 # Make any missing paths on the way to this file
 # SMELL: duplicates CPAN File::Tree::mkpath
 sub _mkPathTo {
+
     my $file = shift;
 
-    my @components = split( /(\/+)/, $file );
-    pop( @components );
-    my $path = '';
-    for my $dir ( @components ) {
-        if( $dir =~ /\/+/ ) {
-            $path .= '/';
-        } else {
-            $path .= $dir;
-            # use -e rather than -d for speed
-            if( $path && !-e $path ) {
-                mkdir( $path, $TWiki::cfg{RCS}{dirPermission} ) ||
-                  throw Error::Simple('RCS: failed to create '.$path.': '.$!);
-            }
-        }
+    my $path = File::Basename::dirname($file);
+    eval {
+        File::Path::mkpath($path, 0, $TWiki::cfg{RCS}{dirPermission});
+    };
+    if ($@) {
+       throw Error::Simple("RCS: failed to create ${path}: $!");
     }
 }
 
