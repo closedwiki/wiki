@@ -344,7 +344,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>USERNAME%=
    * Expands to: =%USERNAME%=
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
-   * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
+   * Related: [[#VarEMAILS][EMAILS]], [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
 
 #VarUSERLANGUAGE
 ---+++ USERLANGUAGE -- current user's language
@@ -398,7 +398,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>WIKINAME%=
    * Expands to: =%WIKINAME%=
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.
-   * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
+   * Related: [[#VarEMAILS][EMAILS]], [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
 
 #VarWIKIPREFSTOPIC
 ---+++ WIKIPREFSTOPIC -- name of site-wide preferences topic
@@ -418,7 +418,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>WIKIUSERNAME%=
    * Expands to: =%WIKIUSERNAME%=, renders as %WIKIUSERNAME%
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details
-   * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]]
+   * Related: [[#VarEMAILS][EMAILS]], [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]]
 
 #VarWIKIUSERSTOPIC
 ---+++ WIKIUSERSTOPIC -- name of topic listing all registers users

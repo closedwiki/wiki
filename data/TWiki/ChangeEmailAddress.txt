@@ -1,0 +1,38 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 8235 $"}%
+---+ Change E-mail Address
+%STARTINCLUDE%
+
+%MAINWEB%.TWikiUsers has a full list of user names.
+
+This form is used to change your registered e-mail addresses. Your registered e-mails are used by TWiki for sending you e-mails, include notifications of password changes. The addresses you register via this form are kept secret and will *not* be published anywhere on this site.
+
+%X% __Security Note__: You really ought to register a valid e-mail address. If TWiki can't find a registered e-mail for you in the secret database, it will look in your user topic for a line like this:
+<verbatim>
+   * Set Email = user@example.com
+</verbatim>
+If your user topic is not protected from changes by other people, and you don't register an e-mail address using this form, then your user account could be hijacked by someone else.
+
+If your old e-mail addresses are all invalid (you can't receive mail there any more) and you have forgotten your password, please contact %WIKIWEBMASTER%.
+
+E-mails for user =%USERNAME%=: %IF{ "$ EMAILS=''" then="(none)" else="%EMAILS%" }%
+
+<form name="passwd" action="%SCRIPTURLPATH{"passwd"}%/%WEB%/%TOPIC%" method="post">
+|  Your %TWIKIWEB%.LoginName: | <input type="text" name="username" value="%URLPARAM{"username" default="%USERNAME%"}%" size="40" /> =<font color="red">**</font>= |
+|  Password: | <input type="password" name="oldpassword" value="%URLPARAM{oldpassword}%" size="40" /> =<font color="red">**</font>= |
+|  New e-mails (space-separated list): | <input type="text" name="email" size="40" /> =<font color="red">**</font>= |
+| <input type="submit" class="twikiSubmit" value="Change e-mail address" /> &nbsp;&nbsp; (Fields marked =<font color="red">**</font>= are required) ||
+<input type="hidden" name="TopicName" value="%TOPIC%" />
+<input type="hidden" name="action" value="changePassword" />
+</form>
+
+After submitting this form your e-mail will be changed, and you will be returned to this form.
+
+If you have questions please contact the TWiki administrator %WIKIWEBMASTER%.
+
+%STOPINCLUDE%
+
+<table bgcolor="yellow"><tr><td>
+__Note to administrator:__ This form applies only if TWiki uses  a {PasswordManager} that supports storing e-mails (e.g. TWiki::Users::HtPasswdUser). Otherwise replace this topic with a note describing how to change registered e-mail in your organization).
+</td></tr></table>
+
+__Related Topics:__ ChangePassword, AdminToolsCategory, UserToolsCategory

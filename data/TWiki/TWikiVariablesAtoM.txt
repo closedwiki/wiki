@@ -71,9 +71,10 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarEMAILS
 ---+++ EMAILS -- show list of e-mail addresses for logged-in user
-   * Shows a list of registered e-mail addresses for the logged-in user. You can register e-mail addresses by visiting ChangeEMailAddress.
+   * You can register e-mail addresses by visiting ChangeEmailAddress.
    * Syntax: =%<nop>EMAILS%=
    * Expands to: =%EMAILS%=
+   * [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], ChangeEmailAddress
 
 #VarENCODE
 ---+++ ENCODE{"string"} -- encodes a string to HTML entities

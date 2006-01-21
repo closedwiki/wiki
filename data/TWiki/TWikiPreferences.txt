@@ -129,10 +129,10 @@ _(Click for form-based editing of existing preferences.)_
 
 ---+++ E-mail Settings
 
-   * TWiki webmaster e-mail address:
+   * TWiki administrator e-mail address:
       * Set WIKIWEBMASTER = webmaster@example.com
 
-   * TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
+   * TWiki administrator name (first name and last name, e.g. =Fred Smith=):
       * Set WIKIWEBMASTERNAME = TWiki Administrator
 
    * 'Mail this topic' mailto: link - can be included in topics, templates or skins
@@ -300,7 +300,7 @@ You can introduce new VARIABLES and use them in your topics and templates. There
    * Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs: ==%==. Example:
       * When you write variable ==%WEB<nop>BGCOLOR%==, it gets expanded to =%WEBBGCOLOR%= .
 
-   * %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the webmaster e-mail address.
+   * %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the TWiki administrator e-mail address.
    * %X% In order to protect your custom variables from being overwritten when upgrading the [[%TWIKIWEB%.%TOPIC%]] topic, it is recommended that custom variables are defined in [[%MAINWEB%.%TOPIC%]].
 
 

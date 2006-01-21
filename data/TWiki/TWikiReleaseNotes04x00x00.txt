@@ -24,9 +24,9 @@ Other people who gave significant amounts of their time and patience to less sex
    * [[TWiki:Main.LynnwoodBrown][Lynnwood Brown]]
    * [[TWiki:Main.MichaelDaum][Michael Daum]]
    * [[http://kamaelia.org/Michael.html][Michael Sparks]]
-   * [[TWiki:Main.PeterThoeny][Peter Thoeny]]
+   * [[TWiki:Main.PeterThoeny][Peter Thoeny]] - documentation, quality, testing, compatibility
    * [[TWiki:Main.SvenDowideit][Sven Dowideit]]
-   * [[TWiki:Main.WillNorris][Will Norris]]
+   * [[TWiki:Main.WillNorris][Will Norris]] - Plugin updates
 Translations were sourced by the following polyglots:
    * [[TWiki:Main.AndreUlrich][Andre Ulrich]] - German
    * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - Portuguese
@@ -141,7 +141,7 @@ You will notice a couple of changes to the editing screen: first, there is no sw
 You now have much more control over _which_ topics in a web you are interested in changes to. You can choose to receive notifications about topics selected by name, or by their parent relationship. See %TWIKIWEB%.MailerContrib for more details. Note that the =mailnotify= cron script has moved out of the =bin= directory and into the =tools= directory.
 
 ---+++ E-mail addresses
-In this release of TWiki, user e-mail addresses are no longer stored in user topics. Instead, the e-mail address new users provide during registration is stored so that is not visible to other users. If (and only if) TWiki can't find a registered e-mail address for you in the secret database, it will still look in your user topic. If your user topic is not protected from changes by other people, then your user account could be hijacked by someone else. All users should register a valid e-mail address at ChangeEMailAddress.
+In this release of TWiki, user e-mail addresses are no longer stored in user topics. Instead, the e-mail address new users provide during registration is stored so that is not visible to other users. If (and only if) TWiki can't find a registered e-mail address for you in the secret database, it will still look in your user topic. If your user topic is not protected from changes by other people, then your user account could be hijacked by someone else. All users should register a valid e-mail address at ChangeEmailAddress.
 
 ---+++ Parameterised Includes
 =%<nop>INCLUDE{}%= variables have a predefined set of parameters. In the past, any parameters not in this set were simply ignored. With Dakar, these parameters are now defined as TWikiVariables within the included topic - for example,
@@ -316,7 +316,7 @@ These variables are now more closely associated with =WIKITOOLNAME=.  If you cha
 
 The =FINALPREFERENCES= setting prevents particular preference settings from being over-ridden at a lower level. The hierarchy of how =FINALPREFERENCES= settings are applied has been clarified/formalized as reflected in the following chart:
 | *Level* | *Set By* | *Local site examples* |
-| default site | !TWiki.TWikiPreferences or !%WIKIPREFSTOPIC%  | %TWIKIWEB%.%WIKIPREFSTOPIC% | 
+| default site | !%TWIKIWEB%.TWikiPreferences or !%WIKIPREFSTOPIC%  | %TWIKIWEB%.%WIKIPREFSTOPIC% | 
 | local site | !%MAINWEB%.TWikiPreferences or !%LOCALSITEPREFS%  | %LOCALSITEPREFS% |
 | web | !WebPreferences  | %WEB%.%WEBPREFSTOPIC% |
 | user | In one's user topic  | %WIKIUSERNAME% |
@@ -334,13 +334,13 @@ Plugins are no longer searched for every time a TWiki script is run. Instead the
 
 =%<nop>INSTALLEDPLUGINS%= and =%<nop>DISABLEDPLUGINS%= are no longer supported in !TWikiPreferences. If you have set =%<nop>INSTALLEDPLUGINS%= in !TWikiPreferences, you need to move that setting into the ={PluginsOrder}= configuration key, using the =configure= interface. To disable plugins, uncheck them in the =configure= interface, and save the changes.
 
-%X% Whenever you install a plugin, make sure you check TWiki.TWikiPlugins#FAILEDPLUGINS. Several handlers have been deprecated, and updates of the plugins may be required. Contact the plugin author directly to get an update if none is available on the web.
+%X% Whenever you install a plugin, make sure you check %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. Several handlers have been deprecated, and updates of the plugins may be required. Contact the plugin author directly to get an update if none is available on the web.
 
 ---+++ Logins, Logouts, Sessions and Passwords
 
-TWiki:Plugins.SessionPlugin and TWiki:Plugins.AuthPagePlugin have been integrated into the core. TWiki now supports cookied sessions, in the context of a much improved authentication architecture. The setup for authentication is now much simpler, and for most sites can be done entirely from the =configure= interface. There are some incompatibilities with TWiki:Plugins.SessionPlugin, with resepect to the in-line variables. See TWiki.TWikiUserAuthentication in the release for full details of how authentication works now. TWiki also now supports the concept of pluggable password managers, making the integration of corporate authentication services much simpler.
+TWiki:Plugins.SessionPlugin and TWiki:Plugins.AuthPagePlugin have been integrated into the core. TWiki now supports cookied sessions, in the context of a much improved authentication architecture. The setup for authentication is now much simpler, and for most sites can be done entirely from the =configure= interface. There are some incompatibilities with TWiki:Plugins.SessionPlugin, with resepect to the in-line variables. See %TWIKIWEB%.TWikiUserAuthentication in the release for full details of how authentication works now. TWiki also now supports the concept of pluggable password managers, making the integration of corporate authentication services much simpler.
 
-Administrators, especially of public sites, need to be aware of the security implications of cookied sessions, and the potential risks of cross-site scripting attacks that may be used to steal user sessions. See TWiki.TWikiUserAuthentication for more details.
+Administrators, especially of public sites, need to be aware of the security implications of cookied sessions, and the potential risks of cross-site scripting attacks that may be used to steal user sessions. See %TWIKIWEB%.TWikiUserAuthentication for more details.
 
 ---+++ Protections
 
@@ -385,9 +385,9 @@ The standard webs shipped with this release have these settings disabled. Howeve
 
 %RED%Note:%ENDCOLOR% For security reasons, the [[Trash.WebHome][Trash]] web is shipped with =ALLOWWEBVIEW= set to %MAINWEB%.TWikiAdminGroup. 
 
----++++ TWiki.SitePermissions
+---++++ Site Permissions Overview
 
-This topic gives you a quick view of the permissions on each web  - i.e. it aggregates ALLOWWEB* etc. into a handy table. It is also installed on TWiki.org as TWiki:TWiki.SitePermissions but is not in Cairo.
+The %TWIKIWEB%.SitePermissions topic gives you a quick view of the permissions on each web  - i.e. it aggregates ALLOWWEB* etc. into a handy table. It is also installed on TWiki.org as TWiki:TWiki.SitePermissions.
 
 ---+++ Frustrating Robots and Spammers
 Standard TWiki incorporates some simple measures to protect e-mail addresses and control the activities of benign robots. These should be enough to handle intranet requirements. Administrators of public (internet) sites are *strongly* recommended to investigate the TWiki:Plugins/BlackListPlugin.
@@ -414,14 +414,14 @@ The script =tools/upgrade_emails.pl= can be used to extract e-mail addresses for
    * It will not modify existing personal topics.
    * The script will tell you if any users are found that don't have an e-mail. 
    * You can re-run the script as many times as you like; once the password manager has an e-mail for a user, the e-mail in their personal topic is ignored.
-You should also advise all your registered users to make sure they have a valid e-mail. They can do this by logging in and visiting ChangeEMailAddress.
+You should also advise all your registered users to make sure they have a valid e-mail. They can do this by logging in and visiting ChangeEmailAddress.
 
 ---+++ Change notification support
-The old =mailnotify= script has been retired in favour of the TWiki.MailerContrib. See TWiki.MailerContrib for information about functional changes.
+The old =mailnotify= script has been retired in favour of the %TWIKIWEB%.MailerContrib. See %TWIKIEB%.MailerContrib for information about functional changes.
 
----+++ TWiki.SiteChanges
+---+++ Site Changes Summary
 
-This topic mimics TWiki.org's TWiki:Codev:WebChangesForAllWebs - i.e. it shows a WebChanges view across a whole site. It's name was chosen to parallel !TWiki.SiteMap; at some point you can expect the arrival of !TWiki.SiteStatistics too.
+The %TWIKIWEB%.SiteChanges topic mimics TWiki.org's TWiki:Codev:WebChangesForAllWebs - i.e. it shows a WebChanges view across a whole site. It's name was chosen to parallel !SiteMap; at some point you can expect the arrival of !SiteStatistics too.
 
 ---+++ What's a Web
 Old versions of TWiki would consider all subdirectories of the TWiki data directory to be webs. This behaviour has changed; now only subdirectories that contain a web home topic (as identified by the =HomeTopicName=) will be considered to be webs. This may result in directories that used to return search matches no longer doing so.
@@ -449,7 +449,7 @@ Note that because the TWiki spec allows double quotes within double-quoted strin
 The encoding used to escape characters in form-field values has had to change. The old encoding could very easily be confused by text strings in data values. Existing topics with the old encoding will still be loaded into TWiki as before, but if edited they will be saved with the new encoding. This should not affect you unless you have searches that look for the old encodings; specifically, the %<nop>_G_%, %<nop>_Q_%, and %<nop>_P_% character sequences. Any such searches will not work any more, and need to be converted to search for the new encoding. Assuming they are =regex= type searches, you can use =(%<nop>_G_%|%0A)= to match encoded newlines in field data in both old and new format topics, =(%<nop>_Q_%|%22)= to match quotes, and =(%<nop>_P_%|25)= for percent signs.
 
 ---+++ &lt;script&gt; tags in topics
-Previous releases of TWiki would attempt to interpret the content of &lt;script&gt; tags in topics as TWiki formatting language, often resulting in non-functional scripts. This release protects script sections from expansion by TWiki. Note that this means that TWiki.TWikiVariables will *not* be expanded in script tags - they are passed through _verbatim_.
+Previous releases of TWiki would attempt to interpret the content of &lt;script&gt; tags in topics as TWiki formatting language, often resulting in non-functional scripts. This release protects script sections from expansion by TWiki. Note that this means that %TWIKIWEB%.TWikiVariables will *not* be expanded in script tags - they are passed through _verbatim_.
 
 In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. Check the setting of ={AllowInlineScript}= in =[[%SCRIPTURLPATH{"configure"}%][configure]]= to see if it is allowed on your site. If not, script sections will simply disappear from topics.
 
@@ -474,8 +474,9 @@ You can use =%<nop>ALLVARIABLES%= in a topic to get a dump of all variables set 
 The new =%<nop>IF()%= variable defines simple conditional statements that are evaluated at view time. This allows you to include content conditionally based on environmental factors. See %TWIKIWEB%.IfStatements for more information on usage.
 
 
----+++ New =$count(reg-exp)= variable in TWiki.FormattedSearch
-This new variable for TWiki.FormattedSearch returns the number of instances a specified TWiki.RegularExpression occur in a topic. This is useful for such things as counting the number of comments on a page (assuming they are marked my a unique heading level).
+---+++ New =$count(reg-exp)= variable in Formatted Search
+
+This new variable for %TWIKIWEB%.FormattedSearch returns the number of instances a specified %TWIKIWEB%.RegularExpression occur in a topic. This is useful for such things as counting the number of comments on a page (assuming they are marked my a unique heading level).
 
 ---++ Notes for Skin Developers
 
