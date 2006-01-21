@@ -431,6 +431,61 @@ sub inputElement {
         $text .= " </select>";
         $text .= saveEditCellFormat( $cellFormat, $theName );
 
+    } elsif( $type eq "radio" ) {
+        my $expandedValue = &TWiki::Func::expandCommonVariables( $theValue, $theTopic, $theWeb );
+        $size = 1 if $size < 1;
+        my $elements = ( @bits - 2 );
+        my $lines = $elements / $size;
+        $lines = ($lines == int($lines)) ? $lines : int($lines + 1);
+        $text .= "<table><tr><td valign=\"top\">" if( $lines > 1 );
+        $i = 2;
+        while( $i < @bits ) {
+            $val  = $bits[$i] || "";
+            $valExpanded  = $bitsExpanded[$i] || "";
+            $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
+            $text .= " checked=\"checked\"" if( $valExpanded eq $expandedValue );
+            $text .= " /> $val";
+            if( $lines > 1 ) {
+                if( ($i-1) % $lines ) {
+                    $text .= " <br />";
+                } elsif( $i-1 < $elements ) {
+                    $text .= "</td><td valign=\"top\">";
+                }
+            }
+            $i++;
+        }
+        $text .= "</td></tr></table>" if( $lines > 1 );
+        $text .= saveEditCellFormat( $cellFormat, $theName );
+
+     } elsif( $type eq "checkbox" ) {
+        my $expandedValue = &TWiki::Func::expandCommonVariables( $theValue, $theTopic, $theWeb );
+        $size = 1 if $size < 1;
+        my $elements = ( @bits - 2 );
+        my $lines = $elements / $size;
+        my $names = "Chkbx:";
+        $lines = ($lines == int($lines)) ? $lines : int($lines + 1);
+        $text .= "<table><tr><td valign=\"top\">" if( $lines > 1 );
+        $i = 2;
+        while( $i < @bits ) {
+            $val  = $bits[$i] || "";
+            $valExpanded  = $bitsExpanded[$i] || "";
+            $names .= " ${theName}x$i";
+            $text .= " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
+            $text .= " checked=\"checked\"" if( $expandedValue =~ /(^|, )\Q$valExpanded\E(,|$)/ );
+            $text .= " /> $val";
+            if( $lines > 1 ) {
+                if( ($i-1) % $lines ) {
+                    $text .= " <br />";
+                } elsif( $i-1 < $elements ) {
+                    $text .= "</td><td valign=\"top\">";
+                }
+            }
+            $i++;
+        }
+        $text .= "</td></tr></table>" if( $lines > 1 );
+        $text .= " <input type=\"hidden\" name=\"$theName\" value=\"$names\" />";
+        $text .= saveEditCellFormat( $cellFormat, $theName );
+
     } elsif( $type eq 'row' ) {
         $size = $size + $theRowNr;
         $text = "$size<input type=\"hidden\" name=\"$theName\" value=\"$size\" />";
@@ -526,11 +581,24 @@ sub handleTableRow {
             $col += 1;
             $cellDefined = 0;
             $val = $query->param( "etcell${theRowNr}x$col" );
+            if( $val && $val =~ /^Chkbx: (etcell.*)/ ) {
+                # Multiple checkboxes, val has format "Chkbx: etcell4x2x2 etcell4x2x3 ..."
+                my $chkBoxeNames = $1;
+                my $chkBoxVals = "";
+                foreach( split( /\s/, $chkBoxeNames ) ) {
+                    $val = $query->param( $_ );
+                    $chkBoxVals .= "$val, " if( defined $val );
+                }
+                $chkBoxVals =~ s/, $//;
+                $val = $chkBoxVals;
+            }
             $cellFormat = $query->param( "etformat${theRowNr}x$col" );
             $val .= " %EDITCELL{$cellFormat}%" if( $cellFormat );
             if( defined $val ) {
                 # change any new line character sequences to <br />
                 $val =~ s/(\n\r?)|(\r\n?)+/<br \/>/gos;
+                # escape "|" to HTML entity
+                $val =~ s/\|/\&\#124;/gos;
                 $cellDefined = 1;
                 # Expand %-vars
                 $cell = $val;
