@@ -2285,8 +2285,8 @@ msgstr ""
 
 #: templates/messages.tmpl:206
 msgid ""
-"The %1 field must be your first and lastname in %2, e.g. your capitalized "
-"first and lastname with spaces removed."
+"The %1 field must be your first and last name in %2, e.g. your capitalized "
+"first and last name with spaces removed."
 msgstr ""
 
 #: templates/messages.tmpl:66
@@ -2625,13 +2625,14 @@ msgid ""
 "and details on preferences variables are available in %1."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:29
-msgid "Unrecognised user and/or password"
-msgstr "No reconocido usuario y/o contraseña"
-
 #: templates/messages.tmpl:38
 msgid "Unrecognized action command %1"
 msgstr ""
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:29
+#, fuzzy
+msgid "Unrecognized user and/or password"
+msgstr "No reconocido usuario y/o contraseña"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:29
 #, fuzzy
@@ -2783,7 +2784,7 @@ msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:222
 msgid ""
-"When %1 recives the form, it will mail an account activation code to the e-"
+"When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
 "screen, or follow the link in the e-mail, to activate your account. Once "
 "your account is activated, %1 will:"
@@ -2880,9 +2881,10 @@ msgid "You can see the differences [[%1][here]]."
 msgstr ""
 
 #: templates/oopschangelanguage.tmpl:8
+#, fuzzy
 msgid ""
-"You can set your favourite language permanently by setting the %1 variable "
-"in your user topic."
+"You can set your favorite language permanently by setting the %1 variable in "
+"your user topic."
 msgstr ""
 "Puede definir su idioma favorito asignando la variable %1 en su página de "
 "usuario"

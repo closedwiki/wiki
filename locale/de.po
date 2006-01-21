@@ -2388,9 +2388,10 @@ msgstr ""
 "Verifizierungs-Code lautet %2."
 
 #: templates/messages.tmpl:206
+#, fuzzy
 msgid ""
-"The %1 field must be your first and lastname in %2, e.g. your capitalized "
-"first and lastname with spaces removed."
+"The %1 field must be your first and last name in %2, e.g. your capitalized "
+"first and last name with spaces removed."
 msgstr ""
 "Das Feld %1 muß Ihr Vor- und Nachname %2 sein, z.B. Ihr groß geschriebener "
 "Vor- und Nachname ohne Leerzeichen."
@@ -2786,13 +2787,14 @@ msgstr ""
 "Entfernen Sie das #-Zeichen vor den Einstellungs-Variablen, um sie zu "
 "aktivieren. Hilfe und Details zu den Variablen stehen unter %1 zur Verfügung"
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:29
-msgid "Unrecognised user and/or password"
-msgstr "Benutzer und/oder Passwort nicht erkannt"
-
 #: templates/messages.tmpl:38
 msgid "Unrecognized action command %1"
 msgstr "Aktions Befehl nicht erkannt"
+
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:29
+#, fuzzy
+msgid "Unrecognized user and/or password"
+msgstr "Benutzer und/oder Passwort nicht erkannt"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:29
 msgid "Update"
@@ -2944,7 +2946,7 @@ msgstr "Willkommen im %1 Web"
 #: data/TWiki/TWikiRegistration.txt:222
 #, fuzzy
 msgid ""
-"When %1 recives the form, it will mail an account activation code to the e-"
+"When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
 "screen, or follow the link in the e-mail, to activate your account. Once "
 "your account is activated, %1 will:"
@@ -3061,9 +3063,10 @@ msgid "You can see the differences [[%1][here]]."
 msgstr "Sie können Unterschiede [[%1][here]] sehen."
 
 #: templates/oopschangelanguage.tmpl:8
+#, fuzzy
 msgid ""
-"You can set your favourite language permanently by setting the %1 variable "
-"in your user topic."
+"You can set your favorite language permanently by setting the %1 variable in "
+"your user topic."
 msgstr ""
 "Sie können ihre Sprache dauerhaft setzen, indem Sie die %1 Variable in ihrem "
 "Benutzer Topic definieren."

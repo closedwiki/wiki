@@ -454,7 +454,7 @@ Previous releases of TWiki would attempt to interpret the content of &lt;script&
 In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. Check the setting of ={AllowInlineScript}= in =[[%SCRIPTURLPATH{"configure"}%][configure]]= to see if it is allowed on your site. If not, script sections will simply disappear from topics.
 
 ---+++ &lt;verbatim&gt; tags in topics
-Previous releases required =verbatim= tags to be on their own line. Twiki can now deal with inline verbatim blocks such as
+Previous releases required =verbatim= tags to be on their own line. TWiki can now deal with inline verbatim blocks such as
 
 <pre>
 blah&lt;verbatim&gt;inside&lt;/verbatim&gt;after
