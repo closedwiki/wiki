@@ -178,7 +178,7 @@ sub rootGenerate {
     $tml =~ s/$WC::CHECK2/ /go;
 
     # Top and tail, and terminate with a single newline
-    $tml =~ s/^\s*//s;
+    $tml =~ s/^\n*//s;
     $tml =~ s/\s*$/\n/s;
 
     return $tml;
