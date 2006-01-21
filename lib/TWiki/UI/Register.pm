@@ -885,6 +885,10 @@ sub _getKeyValuePairsAsTopicForm {
         # from no key at all.
         if ( $name eq 'Comment' ) {
             $leftoverText .= "\t* $name: $value\n"; #SMELL - tab not 3 spaces
+        } elsif ( $name eq 'Email' ) {
+            $value =~ s/(^.*?)@(.*?$)/$1 at $2/go;     # Naive approach on obfuscating the e-mail address
+            $value =~ s/\./ dot /go;                   # http://www.cdt.org/speech/spam/030319spamreport.shtml says it'll work
+            $leftoverText .= "\t* E-mail: " . TWiki::entityEncode( $value ) . "\n";
         } else {
             $meta->putKeyed( 'FIELD',
                         { name => $name, value => $value, title => $title } );
