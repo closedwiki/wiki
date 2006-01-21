@@ -562,7 +562,7 @@ sub _resetUsersPassword {
 
 ---++ StaticMethod changePassword( $session )
 
-Change the user's password. Details of the user and password
+Change the user's password and/or email. Details of the user and password
 are passed in CGI parameters.
 
    1 Checks required fields have values
@@ -582,9 +582,12 @@ sub changePassword {
     my $webName = $session->{webName};
     my $query = $session->{cgiQuery};
 
+    my $oldpassword = $query->param( 'oldpassword' );
     my $username = $query->param( 'username' );
     my $passwordA = $query->param( 'password' );
     my $passwordB = $query->param( 'passwordA' );
+    my $email = $query->param( 'email' );
+
     my $topicName = $query->param( 'TopicName' );
 
     # check if required fields are filled in
@@ -593,15 +596,7 @@ sub changePassword {
                                     web => $webName,
                                     topic => $topic,
                                     def => 'missing_fields',
-                                    params => 'username' );
-    }
-
-    unless( $passwordA ) {
-        throw TWiki::OopsException( 'attention',
-                                    web => $webName,
-                                    topic => $topic,
-                                    def => 'missing_fields',
-                                    params => 'password' );
+                                    params => [ 'username' ] );
     }
 
     my $user = $session->{users}->findUser( $username );
@@ -614,47 +609,67 @@ sub changePassword {
                                     $username );
     }
 
-    # check if passwords are identical
-    if( $passwordA ne $passwordB ) {
-        throw TWiki::OopsException( 'attention',
-                                    web => $webName,
-                                    topic => $topic,
-                                    def => 'password_mismatch' );
+    my $changePass = 0;
+    if( defined $passwordA || defined $passwordB ) {
+        unless( defined $passwordA ) {
+            throw TWiki::OopsException( 'attention',
+                                        web => $webName,
+                                        topic => $topic,
+                                        def => 'missing_fields',
+                                        params => [ 'password' ] );
+        }
+
+        # check if passwords are identical
+        if( $passwordA ne $passwordB ) {
+            throw TWiki::OopsException( 'attention',
+                                        web => $webName,
+                                        topic => $topic,
+                                        def => 'password_mismatch' );
+        }
+        $changePass = 1;
     }
 
-    # c h a n g e
-    my $oldpassword = $query->param( 'oldpassword' );
-
     # check if required fields are filled in
-    if( ! $oldpassword ) {
+    if( ! defined $oldpassword ) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'missing_fields',
-                                    params => 'oldpassword' );
+                                    params => [ 'oldpassword' ] );
     }
 
-    unless( $user->checkPassword( $oldpassword )) {
+    unless( $user->checkPassword( $oldpassword)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'wrong_password');
     }
 
-    # OK - password may be changed
-    if ($user->changePassword( $oldpassword, $passwordA )) {
-
-      $session->writeLog('changepasswd', $user->stringify());
-      #recording the email would be nice
-
-      # OK - password changed
-      throw TWiki::OopsException( 'attention',
-				  web => $webName, topic => $topic,
-				  def => 'password_changed' );
-    } else {
-      $session->writeLog('changepasswd', $user->stringify(), 'FAILED');
-      die 'Problem resetting password';
+    if( $email ) {
+        $user->setEmails( split(/\s+/, $email) );
     }
+
+    # OK - password may be changed
+    if( $changePass ) {
+        if ($user->changePassword( $oldpassword, $passwordA )) {
+
+            $session->writeLog('changepasswd', $user->stringify());
+            #recording the email would be nice
+
+        } else {
+            $session->writeLog('changepasswd', $user->stringify(), 'FAILED');
+            die 'Problem resetting password';
+        }
+        # OK - password changed
+        throw TWiki::OopsException( 'attention',
+                                    web => $webName, topic => $topic,
+                                    def => 'password_changed' );
+    }
+
+    # must be just email
+    $session->redirect($session->getScriptUrl( 1, 'view',
+                                               $session->{webName},
+                                               $session->{topicName} ));
 }
 
 =pod
@@ -1076,15 +1091,17 @@ sub _addUserToPasswordSystem {
         throw Error::Simple( 'No API to install crypted password' );
         #	$success = $session->{users}->installCryptedPassword($p->{LoginName},
         #						   $p->{CryptPassword});
-    } else {
-        my $password = $p->{Password};
-        unless ($password) {
-            $password = TWiki::User::randomPassword();
-            $session->writeWarning('No password specified for '.$p->{LoginName}.' - using random='.$password);
-        }
-        $success = $user->addPassword( $password );
     }
-    return $success;
+    my $password = $p->{Password};
+    unless ($password) {
+        $password = TWiki::User::randomPassword();
+        $session->writeWarning('No password specified for '.$p->{LoginName}.' - using random='.$password);
+    }
+    if( $user->addPassword( $password )) {
+        $user->setEmails( $p->{Email} );
+        return 1;
+    }
+    return 0;
 }
 
 # sends $p->{template} to $p->{Email} with a bunch of substitutions.

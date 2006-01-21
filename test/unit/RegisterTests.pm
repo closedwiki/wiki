@@ -126,7 +126,7 @@ sub sentMail {
 # fixture
 sub registerAccount {
     my $this = shift;
-    $this->test_registerVerifyOk();
+    $this->registerVerifyOk();
 
     my $query = new CGI({
                          'code' => [
@@ -170,7 +170,7 @@ sub registerAccount {
     };
 }
 
-sub test_userTopic {
+sub detest_userTopic {
     my $this = shift;
     $this->registerAccount();
     my( $meta, $text ) = $session->{store}->readTopic(
@@ -189,7 +189,7 @@ sub test_userTopic {
 
 #Register a user, and then verify it
 #Assumes the verification code is foo
-sub test_registerVerifyOk {
+sub registerVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
@@ -282,7 +282,7 @@ sub test_registerVerifyOk {
 }
 
 #Register a user, then give a bad verification code. It should barf.
-sub test_registerBadVerify {
+sub detest_registerBadVerify {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
@@ -373,7 +373,7 @@ sub test_registerBadVerify {
 
 # Register a user with verification explicitly switched off
 # (SUPER's tear_down will take care for re-installing %TWiki::cfg)
-sub test_registerNoVerifyOk {
+sub detest_registerNoVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     my $query = new CGI ({
@@ -492,7 +492,7 @@ sub test_resetPasswordOkay {
     $this->assert_matches(qr/To: .*\b$testUserEmail/,$mess);
 }
 
-sub test_resetPasswordNoSuchUser {
+sub detest_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -532,7 +532,7 @@ sub test_resetPasswordNoSuchUser {
 }
 
 
-sub test_resetPasswordNeedPrivilegeForMultipleReset {
+sub detest_resetPasswordNeedPrivilegeForMultipleReset {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -575,7 +575,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
 # This test is supposed to ensure that the system can reset passwords for a user
 # currently absent from .htpasswd
-sub test_resetPasswordNoPassword {
+sub detest_resetPasswordNoPassword {
     my $this = shift;
 
     $this->registerAccount();
@@ -645,7 +645,7 @@ Create an incomplete registration, and try to finish it off.
 Once complete, try again - the second attempt at completion should fail.
 =cut
 
-sub test_UnregisteredUser {
+sub detest_UnregisteredUser {
     my $this = shift;
 
     TWiki::UI::Register::_putRegDetailsByCode($regSave, $TWiki::cfg{RegistrationApprovals});
@@ -670,7 +670,7 @@ sub test_UnregisteredUser {
     $this->assert_equals(0, scalar(@mails));
 }
 
-sub test_missingElements {
+sub detest_missingElements {
     my $this = shift;
     my @present = ("one","two","three");
     my @required = ("one","two","six");
@@ -680,7 +680,7 @@ sub test_missingElements {
     $this->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
 }
 
-sub test_bulkRegister {
+sub detest_bulkRegister {
     my $this = shift;
 
     my $testReg = <<'EOM';
@@ -738,7 +738,7 @@ EOM
     $this->assert_equals(0, scalar(@mails));
 }
 
-sub test_buildRegistrationEmail {
+sub detest_buildRegistrationEmail {
     my ($this) = shift;
 
     my %data = (

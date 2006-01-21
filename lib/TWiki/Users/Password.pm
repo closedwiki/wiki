@@ -148,4 +148,54 @@ sub error {
     return '';
 }
 
+=pod
+
+---++ ObjectMethod getEmails($user) -> @emails
+
+Fetch the email address(es) for the given username. Default behaviour
+is to look up the users' personal topic.
+
+=cut
+
+sub getEmails {
+    my( $this, $login ) = @_;
+
+    my $user = $this->{session}->{users}->findUser( $login, undef, 1 );
+    return () unless $user;
+
+    my ($meta, $text) =
+      $this->{session}->{store}->readTopic(
+          undef, $TWiki::cfg{UsersWebName}, $user->wikiName() );
+
+    my @addresses;
+
+    # Try the form first
+    my $entry = $meta->get('FIELD', 'Email');
+    if ($entry) {
+        push( @addresses, $entry->{value} );
+    } else {
+        # Now try the topic text
+        foreach my $l (split ( /\r?\n/, $text  )) {
+            if ($l =~ /^\s+\*\s+E-?mail:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/i) {
+                push @addresses, $1;
+            }
+        }
+    }
+
+    return @addresses;
+}
+
+=pod
+
+---++ ObjectMethod setEmails($user, @emails)
+
+Set the email address(es) for the given username
+
+=cut
+
+sub setEmails {
+    # SMELL: Cannot set email in the default setup, though this
+    # could be implemented to save the email in the personal topic
+}
+
 1;

@@ -165,6 +165,7 @@ BEGIN {
         ATTACHURLPATH     => \&_ATTACHURLPATH,
         DATE              => \&_DATE,
         DISPLAYTIME       => \&_DISPLAYTIME,
+        EMAILS            => \&_EMAILS,
         ENCODE            => \&_ENCODE,
         FORMFIELD         => \&_FORMFIELD,
         GMTIME            => \&_GMTIME,
@@ -3121,6 +3122,11 @@ sub _SEP {
 sub _USERNAME {
     my $this = shift;
     return $this->{user}->login();
+}
+
+sub _EMAILS {
+    my ( $this, $params ) = @_;
+    return join(' ', $this->{user}->emails());
 }
 
 sub _WIKINAME {

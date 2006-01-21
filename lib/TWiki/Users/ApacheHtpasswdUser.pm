@@ -22,10 +22,11 @@ use Apache::Htpasswd;
 use Assert;
 use strict;
 use TWiki::Users::Password;
+use Error qw( :try );
 
 @TWiki::Users::ApacheHtpasswdUser::ISA = qw( TWiki::Users::Password );
 
-=begin twiki
+=pod
 
 ---+ package TWiki::Users::ApacheHtpasswdUser
 
@@ -46,6 +47,7 @@ sub new {
     my $this = bless( $class->SUPER::new( $session ), $class );
     $this->{apache} = new Apache::Htpasswd
       ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
+    $this->{error} = undef;
 
     return $this;
 }
@@ -53,29 +55,61 @@ sub new {
 sub fetchPass {
     my( $this, $login ) = @_;
     ASSERT( $login ) if DEBUG;
-
-    return $this->{apache}->fetchPass( $login );
+    my $r = $this->{apache}->fetchPass( $login );
+    $this->{error} = undef;
+    return $r;
 }
 
 sub checkPassword {
     my( $this, $login, $passU ) = @_;
     ASSERT( $login ) if DEBUG;
 
-    return $this->{apache}->htCheckPassword( $login, $passU );
+    my $r = $this->{apache}->htCheckPassword( $login, $passU );
+    $this->{error} = $this->{apache}->error();
+    return $r;
 }
 
 sub deleteUser {
     my( $this, $login ) = @_;
     ASSERT( $login ) if DEBUG;
 
-    return $this->{apache}->htDelete( $login );
+    $this->{error} = undef;
+    my $r;
+    try {
+        $r = $this->{apache}->htDelete( $login );
+    } catch Error::Simple with {
+        $this->{error} = $this->{apache}->error();
+    };
+    return $r;
 }
 
 sub passwd {
     my( $this, $user, $newPassU, $oldPassU ) = @_;
     ASSERT( $user ) if DEBUG;
 
-    return $this->{apache}->htpasswd( $user, $newPassU, $oldPassU );
+    if( defined($oldPassU)) {
+        my $ok = 0;
+        try {
+            $ok = $this->{apache}->htCheckPassword( $user, $oldPassU );
+        } catch Error::Simple with {
+        };
+        unless( $ok ) {
+            $this->{error} = "Wrong password";
+            return 0;
+        }
+    }
+
+    my $added = 0;
+    try {
+        $added = $this->{apache}->htpasswd( $user, $newPassU, $oldPassU );
+        $this->{error} = undef;
+    } catch Error::Simple with {
+        $this->{error} = $this->{apache}->error();
+        $this->{error} = undef if
+          $this->{error} && $this->{error} =~ /assword not changed/;
+    };
+
+    return $added;
 }
 
 sub encrypt {
@@ -87,13 +121,30 @@ sub encrypt {
         my $epass = $this->fetchPass( $user );
         $salt = substr( $epass, 0, 2 ) if ( $epass );
     }
-    return $this->{apache}->CryptPasswd( $passwordU, $salt );
+    my $r = $this->{apache}->CryptPasswd( $passwordU, $salt );
+    $this->{error} = $this->{apache}->error();
+    return $r;
 }
 
 sub error {
     my $this = shift;
+    return $this->{error} || undef;
+}
 
-    return $this->{apache}->error();
+# emails are stored in extra info field as a ; separated list
+sub getEmails {
+    my( $this, $login) = @_;
+    my @r = split(/;/, $this->{apache}->fetchInfo($login));
+    $this->{error} = $this->{apache}->error() || undef;
+    return @r;
+}
+
+sub setEmails {
+    my $this = shift;
+    my $login = shift;
+    my $r = $this->{apache}->writeInfo($login, join(';', @_));
+    $this->{error} = $this->{apache}->error() || undef;
+    return $r;
 }
 
 1;

@@ -25,7 +25,7 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
    * Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable.
       * #Set EDITBOXSTYLE = width: 99%
    * Write protect your home page: (set it to your %TWIKIWEB%.WikiName)
-      * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+      * #Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 ---++ Related Topics
 
@@ -83,6 +83,7 @@ Text for multilingual wiki community, copy from here to "End NOP section":
 ---++ %MAKETEXT{"Related Topics"}%
 
    * %MAKETEXT{"[_1] for changing your password" args="%TWIKIWEB%.ChangePassword"}%
+   * %MAKETEXT{"[_1] for changing your email address" args="%TWIKIWEB%.ChangeEMail"}%
    * %MAKETEXT{"[_1] has a list of other TWiki users" args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
    * %MAKETEXT{"[_1] is a list of TWiki user documentation" args="%TWIKIWEB%.UserDocumentationCategory"}%
    * %MAKETEXT{"[_1] lists all TWiki user tools" args="%TWIKIWEB%.UserToolsCategory"}%

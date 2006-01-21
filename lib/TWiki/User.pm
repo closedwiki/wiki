@@ -314,33 +314,30 @@ sub emails {
                 push( @{$this->{emails}}, $member->emails() );
             }
         } else {
-            @{$this->{emails}} =
-              $this->_getEmailsFromUserTopic();
+            my $passwordHandler = $this->{session}->{users}->{passwords};
+            @{$this->{emails}} = $passwordHandler->getEmails($this->{login});
         }
     }
 
     return @{$this->{emails}};
 }
 
-sub _getEmailsFromUserTopic {
-    my $this = shift;
-    my $store = $this->{session}->{store};
+=pod
 
-    my ($meta, $text) =
-      $store->readTopic( undef, $this->{web}, $this->{wikiname}, undef );
-    my @fieldValues;
-    my $entry = $meta->get('FIELD', 'Email');
-    if ($entry) {
-        push(@fieldValues, $entry->{value});
-    } else {
-        foreach my $l (split ( /\r?\n/, $text  )) {
-            if ($l =~ /^\s+\*\s+E-?mail:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/i) {
-                push @fieldValues, $1;
-            }
-        }
-    }
-    return @fieldValues;
+---++ ObjectMethod setEmails($user, @emails)
+
+Fetch the email address(es) for the given username
+
+=cut
+
+sub setEmails {
+    my $this = shift;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
+    return if $this->isGroup();
+    my $passwordHandler = $this->{session}->{users}->{passwords};
+    return $passwordHandler->setEmails($this->{login}, @_);
 }
+
 
 =pod
 

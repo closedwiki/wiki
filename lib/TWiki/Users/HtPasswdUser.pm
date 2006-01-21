@@ -71,25 +71,41 @@ sub _readPasswd {
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" ) ||
       throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.' open failed: '.$! );
     local $/ = undef;
-    my $data = <IN_FILE>;
+    my $data = {};
+    foreach my $line ( split(/\r?\n/, <IN_FILE>) ) {
+        if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {
+            $data->{$1}->{pass} = $2;
+            $data->{$1}->{emails} = $3 || '';
+        }
+    }
     close( IN_FILE );
     return $data;
 }
 
+sub _dumpPasswd {
+    my $db = shift;
+    my $s = '';
+    foreach ( sort keys %$db ) {
+        $s .= $_.':'.$db->{$_}->{pass}.':'.$db->{$_}->{emails}."\n";
+    }
+    return $s;
+}
+
 sub _savePasswd {
-    my $text = shift;
+    my $db = shift;
 
     umask( 077 );
     open( FILE, ">$TWiki::cfg{Htpasswd}{FileName}" ) ||
       throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.
                              ' open failed: '.$! );
 
-    print FILE $text;
+    print FILE _dumpPasswd($db);
     close( FILE);
 }
 
 sub encrypt {
     my ( $this, $user, $passwd, $fresh ) = @_;
+
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     if( $TWiki::cfg{Htpasswd}{Encoding} eq 'sha1') {
@@ -131,9 +147,9 @@ sub fetchPass {
 
     if( $user ) {
         try {
-            my $text = _readPasswd();
-            if( $text =~ m/^$user\:(\S+)\s*$/m ) {
-                return $1;
+            my $db = _readPasswd();
+            if( exists $db->{$user} ) {
+                return $db->{$user}->{pass};
             }
             $this->{error} = 'Login invalid';
             return 0;
@@ -155,21 +171,16 @@ sub passwd {
         unless( $oldUserPassword eq '1') {
             return 0 unless $this->checkPassword( $user, $oldUserPassword );
         }
-    } else {
-        if( $this->fetchPass( $user )) {
-            $this->{error} = $user.' already exists';
-            return 0;
-        }
+    } elsif( $this->fetchPass( $user )) {
+        $this->{error} = $user.' already exists';
+        return 0;
     }
+
     try {
-        my $text = '';
-        if( -e $TWiki::cfg{Htpasswd}{FileName} ) {
-            $text = _readPasswd();
-        }
-        $text =~ s/^$user:.*?\r?\n//m;
-        $text .= $user.':'.
-          $this->encrypt( $user, $newUserPassword, 1 )."\n";
-        _savePasswd( $text );
+        my $db = _readPasswd();
+        $db->{$user}->{pass} = $this->encrypt( $user, $newUserPassword, 1 );
+        $db->{$user}->{emails} ||= '';
+        _savePasswd( $db );
     } catch Error::Simple with {
         $this->{error} = $!;
         return undef;
@@ -186,11 +197,12 @@ sub deleteUser {
     $this->{error} = undef;
 
     try {
-        my $text = _readPasswd();
-        unless( $text =~ s/^$user:.*?\r?\n//m ) {
+        my $db = _readPasswd();
+        unless( $db->{$user} ) {
             $this->{error} = 'No such user '.$user;
         } else {
-            _savePasswd( $text );
+            delete $db->{$user};
+            _savePasswd( $db );
             $result = 1;
         }
     } catch Error::Simple with {
@@ -202,13 +214,13 @@ sub deleteUser {
 sub checkPassword {
     my ( $this, $user, $password ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
-
     my $encryptedPassword = $this->encrypt( $user, $password );
 
     $this->{error} = undef;
 
     my $pw = $this->fetchPass( $user );
     return 1 if( defined($pw) && ($encryptedPassword eq $pw) );
+    return 1 if (!$pw && $password eq '' );
 
     $this->{error} = 'Invalid user/password';
     return 0;
@@ -218,6 +230,36 @@ sub error {
     my $this = shift;
 
     return $this->{error};
+}
+
+sub getEmails {
+    my( $this, $user ) = @_;
+
+    # first try the mapping cache
+    my $db = _readPasswd();
+    if( $db->{$user}->{emails}) {
+        return split(/;/, $db->{$user}->{emails});
+    }
+
+    # fall back to the default approach
+    return $this->SUPER::getEmails( $user );
+}
+
+sub setEmails {
+    my $this = shift;
+    my $user = shift;
+    die unless ($user);
+
+    my $db = _readPasswd();
+    unless ($db->{$user}) {
+        $db->{$user}->{pass} = '';
+    }
+    if( scalar(@_) ) {
+        $db->{$user}->{emails} = join(';', @_);
+    } else {
+        $db->{$user}->{emails} = '';
+    }
+    _savePasswd($db);
 }
 
 1;

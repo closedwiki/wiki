@@ -140,6 +140,9 @@ You will notice a couple of changes to the editing screen: first, there is no sw
 
 You now have much more control over _which_ topics in a web you are interested in changes to. You can choose to receive notifications about topics selected by name, or by their parent relationship. See %TWIKIWEB%.MailerContrib for more details. Note that the =mailnotify= cron script has moved out of the =bin= directory and into the =tools= directory.
 
+---+++ E-mail addresses
+In this release of TWiki, user email addresses are no longer stored in user topics. Instead, the email address new users provide during registration is stored so that is not visible to other users. If (and only if) TWiki can't find a registered email address for you in the secret database, it will still look in your user topic. If your user topic is not protected from changes by other people, then your user account could be hijacked by someone else. All users should register a valid email address at ChangeEMail.
+
 ---+++ Parameterised Includes
 =%<nop>INCLUDE{}%= variables have a predefined set of parameters. In the past, any parameters not in this set were simply ignored. With Dakar, these parameters are now defined as TWikiVariables within the included topic - for example,
 <verbatim>
@@ -220,7 +223,7 @@ If you want user interface internationalization support, CPAN:Locale::Maketext::
 
 ---+++ Installation and configuration
 
-The installation and configuration processes has been significantly simplified. 
+The installation and configuration processes have been simplified. 
 
 ---++++ setlib.cfg
 The installer should now provide a file called =LocalLib.cfg= that contains local path settings. =setlib.cfg= contains documentation of what has to be done. Old =setlib.cfg= files *will not work* with Dakar.
@@ -399,6 +402,12 @@ The new user registration process has been extensively reworked to improve usabi
    1 There is now a mechanism for bulk registration, with callbacks for augmentation (e.g. from other sources).
    1 Absorbed TWiki:Codev.ResetPasswordByEmail.
    1 Obsoleted TWiki:Codev.InstallPassword
+
+---+++ E-mail addresses
+
+E-mail addresses for new users are no longer stored in home topics. Instead, the password manager API has been extended to support storing e-mails.
+
+The default password manager stores e-mails in the =.htpasswd= file - you can safely edit this file with a text editor to modify the info field that contains the e-mail addresses (the format of each line in this file is =username>:<password>:<info>=, and TWiki expects the info field to be a ;-separated list of e-mail addresses). Password managers for other systems e.g. LDAP can esily be extended to support the new API. If the password manager does not have an e-mail address for a user, then TWiki will still look in the users' personal topic. 
 
 ---+++ Change notification support
 The old =mailnotify= script has been retired in favour of the TWiki.MailerContrib. See TWiki.MailerContrib for information about functional changes.
