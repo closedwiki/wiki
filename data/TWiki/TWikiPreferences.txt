@@ -183,6 +183,10 @@ _(Click for form-based editing of existing preferences.)_
       * Set USERSTYLEURL = 
       * Set USERCOLORSURL = 
 
+   * *PatternSkin header settings*
+      * Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/TWiki_header.gif
+      * Set WEBHEADERBGCOLOR = 
+      
 ---+++ Skin icons
 
    * Topic containing the icon graphics library. Icons can easily be rendered with =%<nop>ICON{name}%=.
