@@ -70,8 +70,8 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarEMAILS
----+++ EMAILS -- show list of email addresses for logged-in user
-   * Shows a list of registered email addresses for the logged-in user. You can register email addresses by visitin ChangeEMailAddress.
+---+++ EMAILS -- show list of e-mail addresses for logged-in user
+   * Shows a list of registered e-mail addresses for the logged-in user. You can register e-mail addresses by visiting ChangeEMailAddress.
    * Syntax: =%<nop>EMAILS%=
    * Expands to: =%EMAILS%=
 
