@@ -178,10 +178,14 @@ Used for renaming topics.
 | =nonwikiword= | if defined, a non-wikiword is acceptable for the new topic name | |
 
 ---+++ =resetpasswd=
-Reset a password.
+Reset the password for a single or multiple users
 | *Parameter* | *Description* | *Default* |
-| =LoginName= | *list* of usernames to reset | none |
-| =Introduction= | ? | '' |
+| =LoginName= | *list* of usernames to reset | none - error if not set |
+| =Introduction= | *message to be sent alongside the reset, most often used to announce to the user that they have been given an account.  | '' |
+
+This is used by BulkResetPassword and ResetPassword. Only users belonging to the %MAINWEB%.TWikiAdminGroup can provide a list of LoginNames, non-admins can only provide a single LoginName. 
+
+BulkRegister provides the means to create multiple accounts but it does not announce those accounts to the users who own them. BulkResetPassword is used to assign the passwords, the Introduction is used to explain why they are receiving the mail.
 
 ---+++ =rest=
 This REST ([[http://en.wikipedia.org/wiki/REST][Representational State Transfer]]) script can be invoked via http in a similar way as the view script (see *Invocation Examples*, below) to execute a function that is associated to a "subject" and a "verb" (see below). It'll print the result directly to the stream unless the =endPoint= parameter is specified, in which case the control is redirected to the given topic.
