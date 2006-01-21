@@ -109,4 +109,5 @@ Text for multilingual wiki community, copy from here to %<nop>ENDTEMPLATEONLY%
 %META:FIELD{name="AolInstantMessenger" attributes="" title="<nop>AolInstantMessenger" value=""}%
 %META:FIELD{name="GoogleTalk" attributes="" title="<nop>GoogleTalk" value=""}%
 %META:FIELD{name="ICQ" attributes="" title="<nop>ICQ" value=""}%
+%META:FIELD{name="Comment" attributes="" title="Comment" value=""}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%

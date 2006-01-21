@@ -17,3 +17,4 @@
 | <nop>AolInstantMessenger | text | 40 | | |
 | <nop>GoogleTalk | text | 40 | | |
 | <nop>ICQ | text | 40 | | |
+| Comment | textarea | 60x12 | | |
