@@ -5,11 +5,14 @@ __Note:__ This topic is included by TWikiVariables
 -----
 %STARTINCLUDE%
 #VarNOP
----+++ NOP -- template text not to be expanded in instantiated topics 
+---+++ NOP -- template text not to be expanded in instantiated topics
    * Syntax: =%<nop>NOP%=
-   * Syntax: =%<nop>NOP{...}%=
-   * Available in template topics only. See TWikiTemplates#HtmlTemplates for details. In normal topic text, simply expands to whatever is in the curly braces (if anything).
-   * __%X% Note:__ due to historical limitations of TWiki formatting, =%NOP= *will not work correctly* if there are any parameterised tags inside the NOP that are not valid built-ins. For example, =%<nop>NOP{ %<nop>FLEEB{}% }%= will not work as expected, because =FLEEB= is not a valid built-in tag.
+      * In normal topic text, expands to &lt;nop>, which prevents expansion of adjacent variables and wikiwords
+      * When the topic containing this is used as a template for another topic, it is removed.
+   * Syntax: =%<nop>NOP{...}%= *deprecated*
+      * In normal topic text, expands to whatever is in the curly braces (if anything).
+      * __%X% Note:__ This is deprecated. Do not use it. Use [[#VarTEMPLATEONLY][TEMPLATEONLY]] instead (see TWikiTemplates for more details).
+   * Related: [[#VarTEMPLATEONLY][TEMPLATEONLY]]
 
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic
@@ -221,7 +224,7 @@ __Note:__ This topic is included by TWikiVariables
    * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarSPACEDTOPIC
----+++ SPACEDTOPIC -- topic name, spaced and URL-encoded
+---+++ SPACEDTOPIC -- topic name, spaced and URL-encoded *deprecated*
    * The current topic name with added URL-encoded spaces, for use in regular expressions that search for backlinks to the current topic
    * Syntax: =%<nop>SPACEDTOPIC%=
    * Expands to: =%SPACEDTOPIC%=
@@ -259,6 +262,13 @@ __Note:__ This topic is included by TWikiVariables
    * If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself.
    * Syntax: =%<nop>STOPINCLUDE%=
    * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
+
+#VarTEMPLATEONLY
+---+++ TEMPLATEONLY -- text to be removed when a template topic is used
+   * Syntax =%<nop>TEMPLATEONLY%...%<nop>ENDTEMPLATEONLY%=
+   * Used to embed text that you _do not_ want expanded when a new topic based on the template is created. See TWikiTemplates for more information.
+   * When used in normal topic text, =%<nop>TEMPLATEONLY%= and =%<nop>ENDTEMPLATEONLY%= are ignored.
+   * Related: [[#VarNOP][NOP]]
 
 #VarTOC
 ---+++ TOC -- table of contents of current topic
@@ -379,8 +389,8 @@ __Note:__ This topic is included by TWikiVariables
    * Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarWIKIPREFSTOPIC][WIKIPREFSTOPIC]], [[#VarVAR][VAR]]
 
 #VarWIKIHOMEURL
----+++ WIKIHOMEURL -- site home URL
-   * __%X% Note:__ *DEPRECATED*, use =%<nop>WIKILOGOURL%= defined in WebPreferences instead. This variables value is defined in lib/TWiki.cfg::$wikiHomeUrl which is marked deprecated. Will be removed in future versions.
+---+++ WIKIHOMEURL -- site home URL *deprecated*
+   * __%X% Note:__ use =%<nop>WIKILOGOURL%= defined in WebPreferences instead.
 
 #VarWIKINAME
 ---+++ WIKINAME -- your Wiki username

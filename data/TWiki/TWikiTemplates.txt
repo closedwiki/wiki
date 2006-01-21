@@ -145,7 +145,7 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>GMTIME%= | Date/time. See TWikiVariables#VarGMTIME |
 | =%<nop>GMTIME{...}%= | Formatted date/time. See TWikiVariables#VarGMTIME2 |
 | =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |
-| =%<nop>NOP{ ... }%= | Text that gets removed when a new topic based on the template is created. See notes below. |
+| =%<nop>TEMPLATEONLY%..%<nop>ENDTEMPLATEONLY%= | Text that gets removed when a new topic based on the template is created. See notes below. |
 | =%<nop>SERVERTIME%= | Date/time. See TWikiVariables#VarSERVERTIME |
 | =%<nop>SERVERTIME{...}%= | Formatted date/time. See TWikiVariables#VarSERVERTIME2 |
 | =%<nop>USERNAME%= | Login name of user who is instantiating the new topic, e.g. %USERNAME% |
@@ -154,20 +154,16 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>WIKIUSERNAME%= | User name of user who is instantiating the new tpoic, e.g. <nop>%WIKIUSERNAME% |
 </blockquote>
 
-The =NOP= tag is used to embed text that you _do not_ want expanded when a new topic based on the template is created. For example, you might want to write in the template:
+=TEMPLATEONLY= sections are used to embed text that you _do not_ want expanded when a new topic based on the template is created. For example, you might want to write in the template:
 <verbatim>
-%NOP{
+%TEMPLATEONLY%
 This template can only be changed by:
    * Set ALLOWTOPICCHANGE = WikiMastersGroup
-}%
+%ENDTEMPLATEONLY%
 </verbatim>
 This will restrict who can edit the template, but will get removed when a topic based on the template is created.
 
-=%<nop>NOP%= (or =%<nop>NOP{}%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g. =%<nop>%NOP%SERVERTIME%=.
-
-__Notes:__
-   * =%<nop>NOP{ ... }%= can span multiple lines. 
-   * The scan for the closing =}%= pattern is "non-greedy", that is, it stops at the first occurence. That means you have to protect variables with parameters located inside =%<nop>NOP{ ... }%=. To do this, insert a =%<nop>NOP%= between =}= and =%=. Example: =%<nop>NOP{ %<nop>GMTIME{"$year"}%<nop>NOP%% }%=.
+=%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g. =%<nop>%NOP%SERVERTIME%=.
 
 All other variables are unchanged, e.g. are carried over "as is" into the new topic.
 

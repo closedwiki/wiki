@@ -216,10 +216,12 @@ BEGIN {
     # Constant tag strings _not_ dependent on config
     %constantTags = (
         ENDSECTION      => '',
+        ENDTEMPLATEONLY => '',
         WIKIVERSION     => $VERSION,
         SECTION         => '',
         STARTINCLUDE    => '',
         STOPINCLUDE     => '',
+        TEMPLATEONLY    => '',
        );
 
     unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
@@ -1767,6 +1769,10 @@ sub expandVariablesOnTopicCreation {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     $user ||= $this->{user};
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
+
+    # Chop out %TEMPLATEONLY%...%ENDTEMPLATEONLY% sections
+    # (may not be nested)
+    $text =~ s/%TEMPLATEONLY%.*?%ENDTEMPLATEONLY%//gs;
 
     # Note: it may look dangerous to override the user this way, but
     # it's actually quite safe, because only a subset of tags are

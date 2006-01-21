@@ -34,12 +34,12 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
    * %TWIKIWEB%.UserDocumentationCategory is a list of TWiki user documentation
    * %TWIKIWEB%.UserToolsCategory lists all TWiki user tools
 
-%NOP{
+%TEMPLATEONLY%
 Note to TWiki Administrator:
 
-Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from "%NOP" to "End NOP section" after you are done.)
+Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from "%TEMPLATEONLY" to "ENDTEMPLATEONLY%" when you are done)
 
-Text for multilingual wiki community, copy from here to "End NOP section":
+Text for multilingual wiki community, copy from here to %<nop>ENDTEMPLATEONLY%
 
 <!--
    NOTE:
@@ -88,7 +88,7 @@ Text for multilingual wiki community, copy from here to "End NOP section":
    * %MAKETEXT{"[_1] is a list of TWiki user documentation" args="%TWIKIWEB%.UserDocumentationCategory"}%
    * %MAKETEXT{"[_1] lists all TWiki user tools" args="%TWIKIWEB%.UserToolsCategory"}%
 
-<!-- End NOP section -->}%
+%ENDTEMPLATEONLY%
 
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%
