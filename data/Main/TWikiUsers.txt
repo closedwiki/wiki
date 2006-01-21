@@ -23,7 +23,6 @@ Note that there are four default system users:
    * D - <a name="D">- - - -</a>
    * E - <a name="E">- - - -</a>
    * F - <a name="F">- - - -</a>
-	* FlobbaDob - FlobbaDob - 21 Jan 2006
    * G - <a name="G">- - - -</a>
    * H - <a name="H">- - - -</a>
    * I - <a name="I">- - - -</a>
