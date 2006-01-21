@@ -20,5 +20,5 @@
 
 ---+++ %MAKETEXT{"If you would like to create this page:"}%
 
-   * %MAKETEXT{"Continue to *[[[_1]][create topic: %TOPIC%]]*" args="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%"}%
+   * %MAKETEXT{"Continue to *~[~[[_1]~]~[create topic: [_2]~]~]*" args="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%, %TOPIC%"}%
 
