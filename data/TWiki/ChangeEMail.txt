@@ -5,7 +5,7 @@
 
 This form is used to change your registered email addresses. Your registered emails are used by TWiki for sending you emails, include notifications of password changes. The addresses you register via this form are kept secret and will *not* be published anywhere on this site.
 
-%W% __Security Note__: You really ought to register a valid email address. If TWiki can't find a registered email for you in the secret database, it will look in your user topic for a line like this:
+%X% __Security Note__: You really ought to register a valid email address. If TWiki can't find a registered email for you in the secret database, it will look in your user topic for a line like this:
 <verbatim>
    * Set Email = user@example.com
 </verbatim>

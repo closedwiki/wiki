@@ -1,9 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | 
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
 | <nop>FirstName | text | 40 | | |
 | <nop>LastName | text | 40 | | |
 | Organization | text | 40 | | |
-| Email | text | 40 | | |
 | Profession | text | 40 | | |
 | Address | text | 40 | | |
 | Location | text | 40 | | |
@@ -17,6 +16,3 @@
 | <nop>AolInstantMessenger | text | 40 | | |
 | <nop>GoogleTalk | text | 40 | | |
 | <nop>ICQ | text | 40 | | |
-
-
-
