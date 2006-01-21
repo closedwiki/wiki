@@ -529,7 +529,7 @@ sub inputElement {
         my $ifFormat = '';
         $ifFormat = $bits[3] if( @bits > 3 );
         $ifFormat ||= '%e %B %Y';
-        $size = 10 if $size < 1;
+        $size = 10 if( !$size || $size < 1 );
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
         $text .= CGI::textfield(
             { name => $theName,
