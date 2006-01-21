@@ -409,6 +409,13 @@ E-mail addresses for new users are no longer stored in home topics. Instead, the
 
 The default password manager stores e-mails in the =.htpasswd= file - you can safely edit this file with a text editor to modify the info field that contains the e-mail addresses (the format of each line in this file is =username>:<password>:<info>=, and TWiki expects the info field to be a ;-separated list of e-mail addresses). Password managers for other systems e.g. LDAP can esily be extended to support the new API. If the password manager does not have an e-mail address for a user, then TWiki will still look in the users' personal topic. 
 
+The script =tools/upgrade_emails.pl= can be used to extract email addresses for existing TWiki users from personal topics, and add them to the password manager.
+   * You are strongly recommended to run this script if you are running a public site.
+   * It will not modify existing personal topics.
+   * The script will tell you if any users are found that don't have an email. 
+   * You can re-run the script as many times as you like; once the password manager has an e-mail for a user, the e-mail in their personal topic is ignored.
+You should also advise all your registered users to make sure they have a valid email. They can do this by logging in and visiting ChangeEMail.
+
 ---+++ Change notification support
 The old =mailnotify= script has been retired in favour of the TWiki.MailerContrib. See TWiki.MailerContrib for information about functional changes.
 
