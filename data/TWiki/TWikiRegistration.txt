@@ -219,7 +219,7 @@ for ( var i = 0; i < sIn.length; i++ )
 </table>
 </form>
 </div>
-%MAKETEXT{"When [_1] recives the form, it will mail an account activation code to the e-mail address you gave above. Enter that activation code in the following screen, or follow the link in the e-mail, to activate your account. Once your account is activated, [_1] will:" args="%WIKITOOLNAME%"}%
+%MAKETEXT{"When [_1] receives the form, it will mail an account activation code to the e-mail address you gave above. Enter that activation code in the following screen, or follow the link in the e-mail, to activate your account. Once your account is activated, [_1] will:" args="%WIKITOOLNAME%"}%
    * %MAKETEXT{"Finish creating an account for you, so that you can start editing pages using your WikiName."}%
    * %MAKETEXT{"Create your personal [_1] topic using your WikiName as topic name, and add the data you submitted to the topic." args="<nop>%WIKITOOLNAME%"}%
    * %MAKETEXT{"Add your name to the list of users in the [_1] topic in the [_2] web." args="%MAINWEB%.%WIKIUSERSTOPIC%,%MAINWEB%"}%
