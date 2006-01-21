@@ -1781,6 +1781,8 @@ sub expandVariablesOnTopicCreation {
     my $safe = $this->{user};
     $this->{user} = $user;
     $text = $this->_processTags( $text, \&_expandTagOnTopicCreation, 16 );
+    # kill markers used to prevent variable expansion
+    $text =~ s/%NOP%//g;
     $this->{user} = $safe;
     return $text;
 }
@@ -2151,7 +2153,6 @@ sub _expandTagOnTopicCreation {
     # are filtered out during template topic instantiation. They are typically
     # used for establishing topic protections over the template topics that
     # are not inherited by the instantiated topic.
-    return '' if $_[0] eq 'NOP';
 
     # Only expand a subset of legal tags. Warning: $this->{user} may be
     # overridden during this call, when a new user topic is being created.
