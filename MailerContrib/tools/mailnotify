@@ -20,8 +20,9 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-# Mail notification script. Must -I the TWiki bin dir for this
-# script, so it can find the rets of TWiki.
+# Mail notification script. You must add the TWiki bin dir to the
+# search path for this script, so it can find the rest of TWiki e.g.
+# perl -I /usr/local/twiki/bin /usr/local/twiki/tools/mailnotify
 
 BEGIN {
     require 'setlib.cfg';
