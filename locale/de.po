@@ -80,9 +80,8 @@ msgid "%1 Web Home"
 msgstr "%1 Startseite"
 
 #: data/TWiki/NewUserTemplate.txt:87
-#, fuzzy
 msgid "%1 for changing your email address"
-msgstr "% um ihr Passwort zu ändern"
+msgstr "%1 um ihre E-Mail zu ändern"
 
 #: data/TWiki/NewUserTemplate.txt:86
 msgid "%1 for changing your password"
@@ -2186,7 +2185,6 @@ msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr "Fügen Sie Ihre Signatur unter dem Text ein, indem Sie sie kopieren."
 
 #: data/TWiki/TWikiRegistration.txt:226
-#, fuzzy
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Eine Bestätigungs für ihre Registrierung per E-Mail senden."
 
@@ -2255,7 +2253,7 @@ msgstr "Einen Zeitplan und Urlaubsnotizen."
 
 #: templates/messages.tmpl:287
 msgid "Some characters such as =~=, =$=, =@=, =%= are removed"
-msgstr ""
+msgstr "Manche Zeichen wie =~=, =$=, =@=, =%= werden entfernt"
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -2388,7 +2386,6 @@ msgstr ""
 "Verifizierungs-Code lautet %2."
 
 #: templates/messages.tmpl:206
-#, fuzzy
 msgid ""
 "The %1 field must be your first and last name in %2, e.g. your capitalized "
 "first and last name with spaces removed."
@@ -2789,10 +2786,9 @@ msgstr ""
 
 #: templates/messages.tmpl:38
 msgid "Unrecognized action command %1"
-msgstr "Aktions Befehl nicht erkannt"
+msgstr "Aktions Befehl %1 nicht erkannt"
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:29
-#, fuzzy
 msgid "Unrecognized user and/or password"
 msgstr "Benutzer und/oder Passwort nicht erkannt"
 
@@ -2944,7 +2940,6 @@ msgid "Welcome to the %1 web"
 msgstr "Willkommen im %1 Web"
 
 #: data/TWiki/TWikiRegistration.txt:222
-#, fuzzy
 msgid ""
 "When %1 receives the form, it will mail an account activation code to the e-"
 "mail address you gave above. Enter that activation code in the following "
@@ -3063,12 +3058,11 @@ msgid "You can see the differences [[%1][here]]."
 msgstr "Sie können Unterschiede [[%1][here]] sehen."
 
 #: templates/oopschangelanguage.tmpl:8
-#, fuzzy
 msgid ""
 "You can set your favorite language permanently by setting the %1 variable in "
 "your user topic."
 msgstr ""
-"Sie können ihre Sprache dauerhaft setzen, indem Sie die %1 Variable in ihrem "
+"Sie können ihre bevorzugte Sprache dauerhaft setzen, indem Sie die %1 Variable in ihrem "
 "Benutzer Topic definieren."
 
 #: templates/messages.tmpl:196
