@@ -7,7 +7,7 @@
 
 This contrib packages in a convenient way the Javascript library and the CSS file needed to implement TWisty Sections.
 
-To use the libraries, you must place the following scriplet either in the head section of the page (by modifying the Twiki.TWikiSkins) or putting it somewhere in the topic:
+To use the libraries, you must place the following scriplet either in the head section of the page (by modifying the %TWIKIWEB%.TWikiSkins) or putting it somewhere in the topic:
 
 <verbatim>
 <style type="text/css" media="all">
