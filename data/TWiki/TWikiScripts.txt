@@ -181,7 +181,7 @@ Used for renaming topics.
 Reset the password for a single or multiple users
 | *Parameter* | *Description* | *Default* |
 | =LoginName= | *list* of usernames to reset | none - error if not set |
-| =Introduction= | *message to be sent alongside the reset, most often used to announce to the user that they have been given an account.*  | '' |
+| =Introduction= | message to be sent alongside the reset, most often used to announce to the user that they have been given an account.  | '' |
 
 This is used by BulkResetPassword and ResetPassword. Only users belonging to the %MAINWEB%.TWikiAdminGroup can provide a list of LoginNames, non-admins can only provide a single LoginName. 
 
