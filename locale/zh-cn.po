@@ -41,26 +41,26 @@ msgstr "%*(%1,秒)"
 msgid "%1 - Registration for %2 (%3)"
 msgstr "%1 - %2 (%3) 的注册"
 
-#: data/TWiki/NewUserTemplate.txt:62
+#: data/TWiki/NewUserTemplate.txt:63
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
 msgstr "%1 - 完整的TWiki文档，快速参考"
 
-#: data/TWiki/NewUserTemplate.txt:64
+#: data/TWiki/NewUserTemplate.txt:65
 #, fuzzy
 msgid "%1 - just for me"
 msgstr "%1就是我"
 
-#: data/TWiki/NewUserTemplate.txt:61
+#: data/TWiki/NewUserTemplate.txt:62
 #, fuzzy
 msgid "%1 - starting points on TWiki"
 msgstr "%1开始在新目录上工作"
 
-#: data/TWiki/NewUserTemplate.txt:63
+#: data/TWiki/NewUserTemplate.txt:64
 #, fuzzy
 msgid "%1 - try out TWiki on your own"
 msgstr "在%1目录上试试TWiki"
 
-#: data/TWiki/NewUserTemplate.txt:60
+#: data/TWiki/NewUserTemplate.txt:61
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr "%1 - 查看一个为TWiki新用户做的简短介绍"
 
@@ -82,12 +82,17 @@ msgstr "%1 目录"
 msgid "%1 Web Home"
 msgstr "%1 首页"
 
-#: data/TWiki/NewUserTemplate.txt:85
+#: data/TWiki/NewUserTemplate.txt:87
+#, fuzzy
+msgid "%1 for changing your email address"
+msgstr "你可以通过%1修改密码"
+
+#: data/TWiki/NewUserTemplate.txt:86
 #, fuzzy
 msgid "%1 for changing your password"
 msgstr "你可以通过%1修改密码"
 
-#: data/TWiki/NewUserTemplate.txt:86
+#: data/TWiki/NewUserTemplate.txt:88
 #, fuzzy
 msgid "%1 has a list of other TWiki users"
 msgstr "%1有个其他TWiki用户的列表"
@@ -109,7 +114,7 @@ msgstr "%1已经用E-Mail %2 注册过"
 msgid "%1 home"
 msgstr "%1首页"
 
-#: data/TWiki/NewUserTemplate.txt:87
+#: data/TWiki/NewUserTemplate.txt:89
 #, fuzzy
 msgid "%1 is a list of TWiki user documentation"
 msgstr "%1有个其他TWiki用户的列表"
@@ -134,7 +139,7 @@ msgstr "%1 正在编辑 %2"
 msgid "%1 is in at least one group and cannot be removed"
 msgstr "%1 列在最新的组中，无法删除"
 
-#: data/TWiki/NewUserTemplate.txt:88
+#: data/TWiki/NewUserTemplate.txt:90
 #, fuzzy
 msgid "%1 lists all TWiki user tools"
 msgstr "%1有个其他TWiki用户的列表"
@@ -184,7 +189,7 @@ msgid "&Edit text"
 msgstr "文本编辑"
 
 #: templates/twiki.tmpl:164
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:164
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:166
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:109
 msgid "&History"
 msgstr "历史"
@@ -897,7 +902,7 @@ msgstr "确认重命名和移动"
 msgid "Conflict"
 msgstr "冲突"
 
-#: data/TWiki/TWikiVariablesAtoM.txt:295 templates/messages.tmpl:391
+#: data/TWiki/TWikiVariablesAtoM.txt:301 templates/messages.tmpl:391
 #: templates/messages.tmpl:398 templates/messages.tmpl:422
 #: templates/messages.tmpl:428
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:50
@@ -1275,6 +1280,7 @@ msgstr "好的样例:"
 msgid "Groups"
 msgstr "群组"
 
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Hello %1!"
 msgstr "您好 %1!"
@@ -1307,7 +1313,7 @@ msgstr "隐藏帮助"
 msgid "History:"
 msgstr "历史:"
 
-#: data/TWiki/NewUserTemplate.txt:74
+#: data/TWiki/NewUserTemplate.txt:75
 msgid "Horizontal size of text edit box:"
 msgstr "编辑框高度:"
 
@@ -1610,7 +1616,7 @@ msgstr "移动文件附件"
 msgid "Move or Delete File %1"
 msgstr "移动或者删除文件 %1"
 
-#: data/TWiki/NewUserTemplate.txt:58
+#: data/TWiki/NewUserTemplate.txt:59
 msgid "My Links"
 msgstr "我的链接"
 
@@ -1681,7 +1687,7 @@ msgstr "注意:"
 msgid "Notes"
 msgstr "注意"
 
-#: data/TWiki/TWikiVariablesAtoM.txt:292
+#: data/TWiki/TWikiVariablesAtoM.txt:298
 msgid "Notes:"
 msgstr "注意:"
 
@@ -1765,7 +1771,7 @@ msgstr "密码重设失败"
 msgid "Passwords do not match"
 msgstr "密码不匹配"
 
-#: data/TWiki/NewUserTemplate.txt:54 data/TWiki/NewUserTemplate.txt:68
+#: data/TWiki/NewUserTemplate.txt:55 data/TWiki/NewUserTemplate.txt:69
 #, fuzzy
 msgid "Personal Preferences"
 msgstr "个人设置(详细的在%1)"
@@ -1880,6 +1886,7 @@ msgstr "阅读"
 msgid "Recently changed topics"
 msgstr "最新更改的主题"
 
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
 msgstr "注册"
@@ -1897,7 +1904,7 @@ msgstr "注册"
 msgid "Regular expression search"
 msgstr "正则表达式搜索"
 
-#: data/TWiki/NewUserTemplate.txt:83
+#: data/TWiki/NewUserTemplate.txt:84
 #, fuzzy
 msgid "Related Topics"
 msgstr "相关主题:"
@@ -2137,7 +2144,7 @@ msgstr "显示格式帮助"
 msgid "Show help"
 msgstr "显示帮助"
 
-#: data/TWiki/NewUserTemplate.txt:72
+#: data/TWiki/NewUserTemplate.txt:73
 #, fuzzy
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr "当鼠标移动到%1链接上时显示帮助提示：打开/关闭 (详细信息在%2)"
@@ -2214,7 +2221,7 @@ msgstr ""
 "步骤2：继续<input type='submit' class='twikiButton' value='Edit' />编辑并保"
 "存%1激活主题"
 
-#: data/TWiki/NewUserTemplate.txt:78
+#: data/TWiki/NewUserTemplate.txt:79
 msgid ""
 "Style of text edit box. =width: 99%= for full window width (default), "
 "=width: auto= to disable."
@@ -2645,7 +2652,7 @@ msgstr "再试"
 msgid "Unchanged"
 msgstr "无改动"
 
-#: data/TWiki/NewUserTemplate.txt:70
+#: data/TWiki/NewUserTemplate.txt:71
 #, fuzzy
 msgid ""
 "Uncomment preferences variables to activate them (remove the #-sign). Help "
@@ -2730,7 +2737,7 @@ msgstr "用户使用自动生成的密码可以到[[%1][修改密码]]改成容�
 msgid "Version"
 msgstr "版本"
 
-#: data/TWiki/NewUserTemplate.txt:76
+#: data/TWiki/NewUserTemplate.txt:77
 msgid "Vertical size of text edit box:"
 msgstr "文本框的高度:"
 
@@ -2763,7 +2770,7 @@ msgid "View topic"
 msgstr "查看主题"
 
 #: templates/twiki.tmpl:164
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:164
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:166
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:109
 msgid "View total topic history"
 msgstr "主题完整修订历史"
@@ -2822,7 +2829,7 @@ msgstr "谁"
 msgid "Would you like to go to:"
 msgstr "您喜欢去:"
 
-#: data/TWiki/NewUserTemplate.txt:80
+#: data/TWiki/NewUserTemplate.txt:81
 msgid "Write protect your home page: (set it to your %1)"
 msgstr "您的主页写保护: (设置您的 %1)"
 
@@ -3089,6 +3096,7 @@ msgstr "无(删除父主题)"
 msgid "now %1"
 msgstr "现在 %1"
 
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:56
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:60

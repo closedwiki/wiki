@@ -41,23 +41,23 @@ msgstr ""
 msgid "%1 - Registration for %2 (%3)"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:62
+#: data/TWiki/NewUserTemplate.txt:63
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:64
+#: data/TWiki/NewUserTemplate.txt:65
 msgid "%1 - just for me"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:61
+#: data/TWiki/NewUserTemplate.txt:62
 msgid "%1 - starting points on TWiki"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:63
+#: data/TWiki/NewUserTemplate.txt:64
 msgid "%1 - try out TWiki on your own"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:60
+#: data/TWiki/NewUserTemplate.txt:61
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr ""
 
@@ -79,11 +79,15 @@ msgstr ""
 msgid "%1 Web Home"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:85
-msgid "%1 for changing your password"
+#: data/TWiki/NewUserTemplate.txt:87
+msgid "%1 for changing your email address"
 msgstr ""
 
 #: data/TWiki/NewUserTemplate.txt:86
+msgid "%1 for changing your password"
+msgstr ""
+
+#: data/TWiki/NewUserTemplate.txt:88
 msgid "%1 has a list of other TWiki users"
 msgstr ""
 
@@ -102,7 +106,7 @@ msgstr ""
 msgid "%1 home"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:87
+#: data/TWiki/NewUserTemplate.txt:89
 msgid "%1 is a list of TWiki user documentation"
 msgstr ""
 
@@ -126,7 +130,7 @@ msgstr ""
 msgid "%1 is in at least one group and cannot be removed"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:88
+#: data/TWiki/NewUserTemplate.txt:90
 msgid "%1 lists all TWiki user tools"
 msgstr ""
 
@@ -172,7 +176,7 @@ msgid "&Edit text"
 msgstr ""
 
 #: templates/twiki.tmpl:164
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:164
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:166
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:109
 msgid "&History"
 msgstr ""
@@ -852,7 +856,7 @@ msgstr ""
 msgid "Conflict"
 msgstr ""
 
-#: data/TWiki/TWikiVariablesAtoM.txt:295 templates/messages.tmpl:391
+#: data/TWiki/TWikiVariablesAtoM.txt:301 templates/messages.tmpl:391
 #: templates/messages.tmpl:398 templates/messages.tmpl:422
 #: templates/messages.tmpl:428
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:50
@@ -1218,6 +1222,7 @@ msgstr ""
 msgid "Groups"
 msgstr ""
 
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Hello %1!"
 msgstr ""
@@ -1250,7 +1255,7 @@ msgstr ""
 msgid "History:"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:74
+#: data/TWiki/NewUserTemplate.txt:75
 msgid "Horizontal size of text edit box:"
 msgstr ""
 
@@ -1533,7 +1538,7 @@ msgstr ""
 msgid "Move or Delete File %1"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:58
+#: data/TWiki/NewUserTemplate.txt:59
 msgid "My Links"
 msgstr ""
 
@@ -1604,7 +1609,7 @@ msgstr ""
 msgid "Notes"
 msgstr ""
 
-#: data/TWiki/TWikiVariablesAtoM.txt:292
+#: data/TWiki/TWikiVariablesAtoM.txt:298
 msgid "Notes:"
 msgstr ""
 
@@ -1687,7 +1692,7 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:54 data/TWiki/NewUserTemplate.txt:68
+#: data/TWiki/NewUserTemplate.txt:55 data/TWiki/NewUserTemplate.txt:69
 msgid "Personal Preferences"
 msgstr ""
 
@@ -1795,6 +1800,7 @@ msgstr ""
 msgid "Recently changed topics"
 msgstr ""
 
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
 msgstr ""
@@ -1811,7 +1817,7 @@ msgstr ""
 msgid "Regular expression search"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:83
+#: data/TWiki/NewUserTemplate.txt:84
 msgid "Related Topics"
 msgstr ""
 
@@ -2045,7 +2051,7 @@ msgstr ""
 msgid "Show help"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:72
+#: data/TWiki/NewUserTemplate.txt:73
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr ""
 
@@ -2119,7 +2125,7 @@ msgid ""
 "and save %1 to activate the new parent"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:78
+#: data/TWiki/NewUserTemplate.txt:79
 msgid ""
 "Style of text edit box. =width: 99%= for full window width (default), "
 "=width: auto= to disable."
@@ -2525,7 +2531,7 @@ msgstr ""
 msgid "Unchanged"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:70
+#: data/TWiki/NewUserTemplate.txt:71
 msgid ""
 "Uncomment preferences variables to activate them (remove the #-sign). Help "
 "and details on preferences variables are available in %1."
@@ -2608,7 +2614,7 @@ msgstr ""
 msgid "Version"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:76
+#: data/TWiki/NewUserTemplate.txt:77
 msgid "Vertical size of text edit box:"
 msgstr ""
 
@@ -2641,7 +2647,7 @@ msgid "View topic"
 msgstr ""
 
 #: templates/twiki.tmpl:164
-#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:164
+#: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:166
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:109
 msgid "View total topic history"
 msgstr ""
@@ -2697,7 +2703,7 @@ msgstr ""
 msgid "Would you like to go to:"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:80
+#: data/TWiki/NewUserTemplate.txt:81
 msgid "Write protect your home page: (set it to your %1)"
 msgstr ""
 
@@ -2947,6 +2953,7 @@ msgstr ""
 msgid "now %1"
 msgstr ""
 
+#: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:56
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:60
