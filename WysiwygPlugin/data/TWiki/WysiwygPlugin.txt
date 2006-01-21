@@ -101,6 +101,8 @@ The list of strings above automatically includes a topic in this web called Wysi
 
 The edit template also automatically includes a topic called %TWIKIWEB%.WysiwygPluginLocalHelp. This topic doesn't exist by default, but if it exists the contents will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
+__Note__: if you are using this plugin with TWiki-4.0.0 or later, the %<nop>COMPOSER% global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
+
 ---++ Known Issues
 Most of the known problems with the plugin are actually problems with the Kupu editor or the browser rather than the plugin.
 
