@@ -145,7 +145,7 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>GMTIME%= | Date/time. See TWikiVariables#VarGMTIME |
 | =%<nop>GMTIME{...}%= | Formatted date/time. See TWikiVariables#VarGMTIME2 |
 | =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |
-| =%<nop>TEMPLATEONLY%%BR%...%BR%%<nop>ENDTEMPLATEONLY%= | Text that gets removed when a new topic based on the template is created. See notes below. |
+| =%<nop>STARTTEMPLATEONLY%%BR%...%BR%%<nop>STOPTEMPLATEONLY%= | Text that gets removed when a new topic based on the template is created. See notes below. |
 | =%<nop>SERVERTIME%= | Date/time. See TWikiVariables#VarSERVERTIME |
 | =%<nop>SERVERTIME{...}%= | Formatted date/time. See TWikiVariables#VarSERVERTIME2 |
 | =%<nop>USERNAME%= | Login name of user who is instantiating the new topic, e.g. %USERNAME% |
@@ -154,14 +154,14 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>WIKIUSERNAME%= | User name of user who is instantiating the new tpoic, e.g. <nop>%WIKIUSERNAME% |
 </blockquote>
 
-=TEMPLATEONLY= sections are used to embed text that you _do not_ want expanded when a new topic based on the template is created. For example, you might want to write in the template:
+=STARTTEMPLATEONLY= .. =STOPTEMPLATEONLY= sections are used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. For example, you might want to write in the template topic:
 <verbatim>
-%TEMPLATEONLY%
+%STARTTEMPLATEONLY%
 This template can only be changed by:
-   * Set ALLOWTOPICCHANGE = WikiMastersGroup
-%ENDTEMPLATEONLY%
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+%STOPTEMPLATEONLY%
 </verbatim>
-This will restrict who can edit the template, but will get removed when a topic based on the template is created.
+This will restrict who can edit the template topic, but will get removed when a new topic based on that template topic is created.
 
 =%<nop>NOP%= can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g.i escape =%nop>SERVERTIME%= with =%<nop>SER%<nop>NOP%VERTIME%=.
 

@@ -11,8 +11,8 @@ __Note:__ This topic is included by TWikiVariables
       * When the topic containing this is used as a template for another topic, it is removed.
    * Syntax: =%<nop>NOP{...}%= *deprecated*
       * In normal topic text, expands to whatever is in the curly braces (if anything).
-      * __%X% Note:__ This is deprecated. Do not use it. Use [[#VarTEMPLATEONLY][TEMPLATEONLY]] instead (see TWikiTemplates for more details).
-   * Related: [[#VarTEMPLATEONLY][TEMPLATEONLY]]
+      * __%X% Note:__ This is deprecated. Do not use it. Use =%<nop>STARTTEMPLATEONLY%= and =%<nop>STOPTEMPLATEONLY%= instead (see TWikiTemplates for more details).
+   * Related: [[#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]], [[#VarSTOPTEMPLATEONLY][STOPTEMPLATEONLY]], TWikiTemplates
 
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic
@@ -251,6 +251,12 @@ __Note:__ This topic is included by TWikiVariables
       * If param does not expand to a non-zero integer, then nothing will be included.
    * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
+#VarSTARTTEMPLATEONLY
+---+++ STARTTEMPLATEONLY -- start position of text to be removed when a template topic is used
+   * Used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. When used in normal topic text, =%<nop>STARTTEMPLATEONLY%= is ignored. See TWikiTemplates for more information.
+   * Syntax =%<nop>STARTTEMPLATEONLY% ... %<nop>STOPTEMPLATEONLY%=
+   * Related: [[#VarNOP][NOP]], [[#VarSTOPTEMPLATEONLY][STOPTEMPLATEONLY]], TWikiTemplates
+
 #VarSTATISTICSTOPIC
 ---+++ STATISTICSTOPIC -- name of statistics topic
    * Syntax: =%<nop>STATISTICSTOPIC%=
@@ -263,12 +269,11 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>STOPINCLUDE%=
    * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
 
-#VarTEMPLATEONLY
----+++ TEMPLATEONLY -- text to be removed when a template topic is used
-   * Syntax =%<nop>TEMPLATEONLY%...%<nop>ENDTEMPLATEONLY%=
-   * Used to embed text that you _do not_ want expanded when a new topic based on the template is created. See TWikiTemplates for more information.
-   * When used in normal topic text, =%<nop>TEMPLATEONLY%= and =%<nop>ENDTEMPLATEONLY%= are ignored.
-   * Related: [[#VarNOP][NOP]]
+#VarSTOPTEMPLATEONLY
+---+++ STOPTEMPLATEONLY -- end position of text to be removed when a template topic is used
+   *  When used in normal topic text, =%<nop>STOPTEMPLATEONLY%= is ignored. See [[#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]] for details.
+   * Syntax =%<nop>STARTTEMPLATEONLY% ... %<nop>STOPTEMPLATEONLY%=
+   * Related: [[#VarNOP][NOP]], [[#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]], TWikiTemplates
 
 #VarTOC
 ---+++ TOC -- table of contents of current topic
