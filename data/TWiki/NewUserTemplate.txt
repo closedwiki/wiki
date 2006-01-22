@@ -62,8 +62,8 @@ Text for multilingual wiki community, copy from here to STOPTEMPLATEONLY%
    * %MAKETEXT{"[_1] - complete TWiki documentation, Quick Start to Reference" args="%TWIKIWEB%.TWikiUsersGuide"}%
    * %MAKETEXT{"[_1] - try out TWiki on your own" args="Sandbox.%HOMETOPIC%"}%
    * %MAKETEXT{"[_1] - just for me" args="Sandbox.%TOPIC%Sandbox"}%
-   *
-   *
+   * 
+   * 
 
 ---++ %MAKETEXT{"Personal Preferences"}%
 

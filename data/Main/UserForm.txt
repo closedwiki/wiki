@@ -11,6 +11,6 @@
 | Location | text | 40 | | |
 | Telephone | text | 40 | | |
 | <nop>VoIP | text | 40 | | |
-| <nop>InstantMessaging (IM) | text | 40 | | |
+| <nop>InstantMessaging (IM) | textarea | 60x6 | | (One account pr. line, if several) |
 | <nop>HomePage | text | 40 | | |
 | Comment | textarea | 60x12 | | |
