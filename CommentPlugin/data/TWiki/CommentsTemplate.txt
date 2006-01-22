@@ -6,7 +6,7 @@ While this topic can be viewed as a TWiki topic, it is used by the CommentPlugin
 
 *WARNING: THIS FILE WILL BE OVERWRITTEN WHEN YOU UPGRADE THE COMMENT PLUGIN*
 
-Put your local templates into %TWIKIWEB%.UserTemplates.
+Put your local templates into %TWIKIWEB%.UserCommentsTemplate.
 *LOCAL TEMPLATES WILL OVERRIDE TEMPLATES DEFINED IN THIS FILE*
 
 %TOC%
@@ -181,12 +181,17 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 %TMPL:END%
 </verbatim>
 
----+ Include TWiki.UserTemplates
-Note: UserTemplates is included from the TWiki web for backward compatibility only. It should not be used - add user templates to UserCommentsTemplate instead
+---+ Include !UserTemplates
+__Note:__ !UserTemplates is included from the TWiki web for backward compatibility only. It should not be used - add user templates to %TWIKIWEB%.UserCommentsTemplate instead.
 
-%TMPL:INCLUDE{"TWiki.UserTemplates"}%
+Including %TWIKIWEB%.UserTemplates:
 
----+ Include UserCommentsTemplate
-%TMPL:INCLUDE{UserComments}%
+%TMPL:INCLUDE{"%TWIKIWEB%.UserTemplates"}%
+
+---+ Include !UserCommentsTemplate
+
+Including %TWIKIWEB%.UserCommentsTemplate:
+
+%TMPL:INCLUDE{"%TWIKIWEB%.UserCommentsTemplate"}%
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
