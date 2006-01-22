@@ -8,7 +8,7 @@ This module is an add-on to the TWiki kernel that supports e-mail notification o
 ---++ <code>tools/mailnotify</code>
 The main part of the mailer module is a script, =tools/mailnotify=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard <nop>%NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line or a cron job.
 
-<!-- Included by TWiki.WebChangesAlert -->
+<!-- Included by %TWIKIWEB%.WebChangesAlert -->
 %STARTINCLUDE%
 Subscribers are listed in <nop>%NOTIFYTOPIC% following one of these bullet list formats:
 
