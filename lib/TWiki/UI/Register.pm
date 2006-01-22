@@ -552,8 +552,7 @@ sub _resetUsersPassword {
     $$pMess .= $session->inlineAlert( 'alerts',
                                       'new_sys_pass',
                                       $user->login(),
-                                      $user->wikiName(),
-                                      $email );
+                                      $user->wikiName() );
 
     return 1;
 }
