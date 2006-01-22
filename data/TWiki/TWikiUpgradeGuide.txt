@@ -3,32 +3,34 @@
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
 
-Upgrade from the previous TWiki Sep-2004 "Cairo" production release to TWiki "Dakar"
+Upgrade from the previous TWiki20040904 production release to TWiki-4.0.0
 
 ---++ Overview
 
-Dakar is a major new release. You can chose between an automated upgrade using a script or a manual update.
+TWiki-4.0.0 is a major new release. You can chose between an automated upgrade using a script or a manual update.
 
 ---++ Upgrade Requirements
 
    * Please review the AdminSkillsAssumptions before you upgrade TWiki
-   * To upgrade from a Cairo standard installation to the latest Dakar Production Release, follow the instructions below
-   * __NOTE:__ To upgrade from a *pre-Cairo* TWiki, start with %TWIKIWEB%.TWikiUpgradeToCairo
-   * To upgrade from a Beta of the new release, or if you made custom modifications, read through all new reference documentation, then use the procedure below as a guideline
-   * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but will not be able to write. Make sure you take a backup!
-   * Not all Cairo plugins are supported with Dakar. Make sure the plugins you use can be upgraded as well!
+   * Review TWiki:Codev.TWikiUpgradeTo04x00x00 for latest information and experience notes.
+   * To upgrade from a *pre-20040904* TWiki, start with http://twiki.org/cgi-bin/view/TWiki/TWikiUpgradeToCairo
+   * To upgrade from a TWiki20040904 standard installation to the latest TWiki-4.0.0 Production Release, follow the instructions below
+   * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but should not be used to write. Make sure you take a backup!
+   * Not all 20040904 plugins are fully supported with Dakar. Make sure the plugins you use can be upgraded as well!
 
----++ Major Changes Compared to TWiki Cairo
+---++ Major Changes Compared to TWiki 20040904
 
-SEE TWiki:Codev.DakarReleaseNotes FOR NOW
+See TWikiReleaseNotes04x00x00.
 
 ---++ Automated Upgrade Procedure
 
-If you would prefer to do things manually, skip to the [[#ManualUpgradeProcedure][manual upgrade procedure]] below.
+If you would prefer to do things manually, *or if you made custom modifications to distributed files* (except topics), then skip to the [[#ManualUpgradeProcedure][manual upgrade procedure]] below.
 
-The upgrade script is called ="UpgradeTwiki"=, and is found in the root of the distribution. It can be run by any user, though you will need to make sure you correct permissions so the webserver user can write all files in the new installation when you have finished. The upgrade script does *not* write to your existing installation.
+The upgrade script is called ="UpgradeTwiki"=, and is found in the root of the distribution. It can be run by any user, though you will need to make sure you correct the permissions so that the webserver user can write all files in the new installation when you have finished. The upgrade script does *not* write to your existing installation.
 
 The upgrade script will upgrade the *TWiki core only*. Plugins will need to be upgraded separately.
+
+Note: To upgrade from a Beta, *do not* use !UpgradeTWiki. Instead follow the steps outlined in [[#Upgrading_a_Beta][Upgrading a Beta]], below.
 
 It will:
 
@@ -72,7 +74,7 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
    1 Copy your local webs over to the data and pub directories of the new install
       * You could also use softlinks to link the web directories in data and pub to the old installation area
    1 Examine your old TWiki.cfg, and for each local setting, set the corresponding value in the =configure= interface for the new install.
-   *  If you can't use =configure=, then copy the *new* =TWiki.cfg= to =LocalSite.cfg=, and edit LocalSite.cfg. Remove all the settings that you didn't change in your previous install, and change the remaining settings to the values from your *old* TWiki.cfg.
+      *  If you can't use =configure=, then copy the *new* =TWiki.cfg= to =LocalSite.cfg=, and edit =LocalSite.cfg=. Remove all the settings that you didn't change in your previous install, and change the remaining settings to the values from your *old* TWiki.cfg.
    1 Transfer any local settings from [[%TWIKIWEB%.TWikiPreferences]] to the topic pointed at by {LocalSitePreferences} ([[%LOCALSITEPREFS%]]). This avoids having to write over files in the distribution.
    1 If you changed any of the topics in the original TWiki distribution, you will have to transfer your changes to the new install manually. There is no simple way to do this, though the following procedure may help:
       1 Install a copy of the original TWiki release you were using in a temporary directory
@@ -81,6 +83,14 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
    1 Point your webserver at the new install.
 
 You are *highly* recommended *not* to change any distributed files if you can avoid it, to simplify future upgrades!
+
+---++ Upgrading a Beta
+*If* you followed the recommendations and avoided modifying any distributed files, then this is quite straightforward:
+   1 Follow the installation instructions, and install the new release in a new directory.
+   1 Copy your local webs over to the data and pub directories of the new install
+   1 Copy over your =bin/setlib.cfg= and =lib/LocalLib.cfg= files
+   1 Point your webserver at the new install.
+*If* you changed any of the distributed files, you will have to continue from Step 5 above.
 
 %STOPINCLUDE%
 
