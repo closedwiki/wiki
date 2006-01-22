@@ -110,7 +110,7 @@ table.patternTopBarContents {
 }		
 </verbatim>
 
-and change [[TWiki.WebTopBar]]:
+and change [[%TWIKIWEB%.WebTopBar]]:
 
 <verbatim>
 <div class="patternTopBarLogo"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></div>

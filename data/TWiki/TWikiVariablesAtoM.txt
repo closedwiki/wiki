@@ -300,7 +300,7 @@ __Note:__ This topic is included by TWikiVariables
       * =%<nop>MAKETEXT{"Contact [_1] if you have any questions." args="%<nop>WIKIWEBMASTER%"}%=
         %BR% expands to %BR%
         <em> %MAKETEXT{"Contact [_1] if you have any questions." args="%WIKIWEBMASTER%"}% </em>
-      * =%<nop>MAKETEXT{"Did you want to [<nop>[<nop>[<nop>_1]<nop>]<nop>[reset [_2]'s password]<nop>]<nop>?" args="TWiki.ResetPassword,%<nop>WIKIUSERNAME%"}%=
+      * =%<nop>MAKETEXT{"Did you want to [<nop>[<nop>[<nop>_1]<nop>]<nop>[reset [_2]'s password]<nop>]<nop>?" args="%<nop>TWIKIWEB%.ResetPassword,%<nop>WIKIUSERNAME%"}%=
         %BR% expands to %BR%
         <em> %MAKETEXT{"Did you want to [[[_1]][reset [_2]'s password]]?" args="TWiki.ResetPassword,%WIKIUSERNAME%"}% </em>
    * __Notes:__

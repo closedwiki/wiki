@@ -113,7 +113,7 @@ Which expands to this: (here limited to all Z* users because TWiki.org has so ma
 <input type="submit" value="Go" />
 </form>
 
-This searches all topics in the Main web that contain "Name", "Email" and "Country" bullets. Alternatively, do a TWiki.FormattedSearch with =multiple="on"= on the [[%MAINWEB%.TWikiUsers]] topic.
+This searches all topics in the Main web that contain "Name", "Email" and "Country" bullets. Alternatively, do a %TWIKIWEB%.FormattedSearch with =multiple="on"= on the [[%MAINWEB%.TWikiUsers]] topic.
 
 ---++ Pattern 3b: listbox with all user names - select multiple names
 
