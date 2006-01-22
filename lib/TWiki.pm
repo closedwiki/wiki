@@ -2621,7 +2621,14 @@ sub _INCLUDE {
     # right context
     # SMELL: This is a hack.
     if( $includedWeb ne $includingWeb ) {
-	    my $removed = {};    
+	    my $removed = {};
+
+        # Must handle explicit [[]] before noautolink
+        # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
+        $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1 )/geo;
+        # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
+        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1, $2 )/geo;
+
 	    unless( TWiki::isTrue( $this->{prefs}->getPreferencesValue('NOAUTOLINK')) ) {
 	        # Handle WikiWords
 	        $text = $this->{renderer}->takeOutBlocks( $text, 'noautolink', $removed );
@@ -2631,10 +2638,6 @@ sub _INCLUDE {
         $text =~ s/(^|[\s(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
         $text =~ s/(^|[\s(])($regex{wikiWordRegex})/$1$includedWeb\.$2/go;
         $text =~ s/(^|[\s(])$TranslationToken/$1/go;
-        # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
-        $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1 )/geo;
-        # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
-        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $includedWeb, $1, $2 )/geo;
 
         $this->{renderer}->putBackBlocks( \$text, $removed, 'noautolink' );
     }
