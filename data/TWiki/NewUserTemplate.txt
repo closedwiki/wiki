@@ -92,20 +92,16 @@ Text for multilingual wiki community, copy from here to STOPTEMPLATEONLY%
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:FIELD{name="FirstName" attributes="" title="<nop>FirstName" value=""}%
 %META:FIELD{name="LastName" attributes="" title="<nop>LastName" value=""}%
-%META:FIELD{name="CompanyName" attributes="" title="<nop>CompanyName" value=""}%
-%META:FIELD{name="CompanyURL" attributes="" title="<nop>CompanyURL" value=""}%
-%META:FIELD{name="Organization" attributes="" title="Organization" value=""}%
+%META:FIELD{name="OrganisationName" attributes="" title="<nop>OrganisationName" value=""}%
+%META:FIELD{name="OrganisationURL" attributes="" title="<nop>OrganisationURL" value=""}%
 %META:FIELD{name="Profession" attributes="" title="Profession" value=""}%
 %META:FIELD{name="Country" attributes="" title="Country" value=""}%
 %META:FIELD{name="State" attributes="" title="State" value=""}%
 %META:FIELD{name="Address" attributes="" title="Address" value=""}%
 %META:FIELD{name="Location" attributes="" title="Location" value=""}%
 %META:FIELD{name="Telephone" attributes="" title="Telephone" value=""}%
+%META:FIELD{name="VoIP" attributes="" title="<nop>VoIP" value=""}%
+%META:FIELD{name="InstantMessagingIM" attributes="" title="<nop>InstantMessaging (IM)" value=""}%
 %META:FIELD{name="HomePage" attributes="" title="<nop>HomePage" value=""}%
-%META:FIELD{name="YahooMessenger" attributes="" title="<nop>YahooMessenger" value=""}%
-%META:FIELD{name="MsnMessenger" attributes="" title="<nop>MsnMessenger" value=""}%
-%META:FIELD{name="AolInstantMessenger" attributes="" title="<nop>AolInstantMessenger" value=""}%
-%META:FIELD{name="GoogleTalk" attributes="" title="<nop>GoogleTalk" value=""}%
-%META:FIELD{name="ICQ" attributes="" title="<nop>ICQ" value=""}%
 %META:FIELD{name="Comment" attributes="" title="Comment" value=""}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%

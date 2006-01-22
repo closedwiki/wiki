@@ -2,19 +2,15 @@
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
 | <nop>FirstName | text | 40 | | |
 | <nop>LastName | text | 40 | | |
-| <nop>CompanyName | text | 40 | | |
-| <nop>CompanyURL | text | 40 | | |
-| Organization | text | 40 | | |
+| <nop>OrganisationName | text | 40 | | |
+| <nop>OrganisationURL | text | 40 | | |
 | Profession | text | 40 | | |
 | Country | text | 40 | | |
 | State | text | 40 | | |
 | Address | text | 40 | | |
 | Location | text | 40 | | |
 | Telephone | text | 40 | | |
+| <nop>VoIP | text | 40 | | |
+| <nop>InstantMessaging (IM) | text | 40 | | |
 | <nop>HomePage | text | 40 | | |
-| <nop>YahooMessenger | text | 40 | | |
-| <nop>MsnMessenger | text | 40 | | |
-| <nop>AolInstantMessenger | text | 40 | | |
-| <nop>GoogleTalk | text | 40 | | |
-| <nop>ICQ | text | 40 | | |
 | Comment | textarea | 60x12 | | |

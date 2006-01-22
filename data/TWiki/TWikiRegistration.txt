@@ -53,11 +53,11 @@ for ( var i = 0; i < sIn.length; i++ )
   <td><input type="password" name="Twk1Confirm" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr>
 <tr>
-  <td align="right"> %MAKETEXT{"Company name:"}% </td>
-  <td><input type="text" name="Twk0CompanyName" size="40" value="" /></td>
+  <td align="right"> %MAKETEXT{"Organisation name:"}% </td>
+  <td><input type="text" name="Twk0OrganisationName" size="40" value="" /></td>
 </tr><tr>
-  <td align="right"> %MAKETEXT{"Company URL: <br /> (or department URL)"}% &nbsp; </td>
-  <td><input type="text" name="Twk0CompanyURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
+  <td align="right"> %MAKETEXT{"Organisation URL:"}% &nbsp; </td>
+  <td><input type="text" name="Twk0OrganisationURL" size="40" onBlur="if(this.value=='http://') { this.value='' }" onFocus="if(this.value=='') { this.value='http://' }" /></td>
 </tr><tr>
   <td align="right"> %MAKETEXT{"Country:"}% </td>
   <td>
@@ -205,7 +205,7 @@ for ( var i = 0; i < sIn.length; i++ )
   </td>
 </tr>
 <tr>
-  <td valign="top" align="right"> %MAKETEXT{"Comments:"}% <br /> (optional) &nbsp; </td>
+  <td valign="top" align="right"> %MAKETEXT{"Comments:"}% <br /> %MAKETEXT{"(optional)"}% &nbsp; </td>
   <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
 </tr>
 <tr>
