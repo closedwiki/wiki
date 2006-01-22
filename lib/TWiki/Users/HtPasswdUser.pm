@@ -219,8 +219,13 @@ sub checkPassword {
     $this->{error} = undef;
 
     my $pw = $this->fetchPass( $user );
-    return 1 if( defined($pw) && ($encryptedPassword eq $pw) );
-    return 1 if (!$pw && $password eq '' );
+    # $pw will be 0 if there is no pw
+
+    return 1 if( $pw && ($encryptedPassword eq $pw) );
+    # pw may validly be '', and must match an unencrypted ''. This is
+    # to allow for sysadmins removing the password field in .htpasswd in
+    # order to reset the password.
+    return 1 if ( $pw eq '' && $password eq '' );
 
     $this->{error} = 'Invalid user/password';
     return 0;
