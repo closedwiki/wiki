@@ -78,6 +78,9 @@ sub test_NOP {
     $result = $twiki->expandVariablesOnTopicCreation("%NOP%");
     $this->assert_equals('', $result);
 
+    $result = $twiki->expandVariablesOnTopicCreation("%GM%NOP%TIME%");
+    $this->assert_equals('%GMTIME%', $result);
+
     $result = $twiki->expandVariablesOnTopicCreation("%NOP{   ignore me   }%");
     $this->assert_equals('', $result);
 

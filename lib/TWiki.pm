@@ -1774,9 +1774,6 @@ sub expandVariablesOnTopicCreation {
     # (may not be nested)
     $text =~ s/%STARTTEMPLATEONLY%.*?%STOPTEMPLATEONLY%//gs;
 
-    # Restored %NOP{...}% for Cairo compatibility
-    $text =~ s/%NOP{.*?}%//gs;
-
     # Note: it may look dangerous to override the user this way, but
     # it's actually quite safe, because only a subset of tags are
     # expanded during topic creation. if the set of tags expanded is
@@ -2151,11 +2148,13 @@ sub _expandTagOnTopicCreation {
     my $this = shift;
     # my( $tag, $args, $topic, $web ) = @_;
 
-    # Remove template-only text and variable protection markers. These
-    # are normally expanded to their content during topic display, but
-    # are filtered out during template topic instantiation. They are typically
-    # used for establishing topic protections over the template topics that
-    # are not inherited by the instantiated topic.
+    # Required for Cairo compatibility. Ignore %NOP{...}%
+    # %NOP% is *not* ignored until all variable expansion is complete,
+    # otherwise them inside-out rule would remove it too early e.g.
+    # %GM%NOP%TIME -> %GMTIME -> 12:00. So we ignore it here and scrape it
+    # out later. We *have* to remove %NOP{...}% because it can foul up
+    # brace-matching.
+    return '' if $_[0] eq 'NOP' && defined $_[1];
 
     # Only expand a subset of legal tags. Warning: $this->{user} may be
     # overridden during this call, when a new user topic is being created.
