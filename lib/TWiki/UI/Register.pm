@@ -644,7 +644,7 @@ sub changePassword {
                                     def => 'wrong_password');
     }
 
-    if( $email ) {
+    if( defined $email ) {
         $user->setEmails( split(/\s+/, $email) );
     }
 
@@ -666,9 +666,11 @@ sub changePassword {
     }
 
     # must be just email
-    $session->redirect($session->getScriptUrl( 1, 'view',
-                                               $session->{webName},
-                                               $session->{topicName} ));
+    throw TWiki::OopsException( 'attention',
+                                 web => $webName, topic => $topic,
+                                 def => 'email_changed',
+                                 params => $email );
+
 }
 
 =pod

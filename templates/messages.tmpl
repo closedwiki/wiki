@@ -145,6 +145,15 @@
 
 %MAKETEXT{"You need to close your browser to make this change take effect."}%
 %TMPL:END%
+%TMPL:DEF{"email_changed"}%
+---+++ %MAKETEXT{"E-mail changed successfully!"}%
+
+%MAKETEXT{"Remember to update your user topic if you want your e-mail change to be reflected there as well."}%
+
+%MAKETEXT{"Your registered e-mail address(es) are updated to: [_1]." args="%PARAM1%"}%
+
+%MAKETEXT{"Return to [_1]." args="%TWIKIWEB%.ChangeEmailAddress"}%
+%TMPL:END%
 %TMPL:DEF{"confirm"}%
 ---+++ %MAKETEXT{"Thank you for registering"}%
 
