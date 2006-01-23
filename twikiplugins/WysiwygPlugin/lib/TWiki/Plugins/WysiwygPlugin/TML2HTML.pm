@@ -132,18 +132,7 @@ sub _processTags {
             if( $stackTop =~ m/^%(<nop(?:result| *\/)?>)?([A-Z0-9_:]+)({.*})?$/o ) {
                 my $nop = $1 || '';
                 my $tag = $2 . ( $3 || '' );
-                if( scalar( @stack ) == 1 && $this->{opts}->{markvars} ) {
-                    # my $sz = length($tag);
-                    # $sz = 80 if $sz > 80;
-                    # $sz = 5 if $sz < 5;
-                    # $tag = CGI::input({ type=>'text',
-                    # class=>'TMLvariable',
-                    # size => $sz,
-                    # value=>$tag } );
-                    $tag = CGI::span( { class=>'TMLvariable' }, $tag );
-                } else {
-                    $tag = '%'.$tag.'%';
-                }
+                $tag = '%'.$tag.'%';
                 if( $nop ) {
                     $nop =~ s/[<>]//g;
                     $tag = CGI::span( { class=>'TML'.$nop }, $tag );

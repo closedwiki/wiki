@@ -66,30 +66,29 @@ An example stand-alone convertor script for HTML to TWiki is included in the ins
    * <nop>Set EDIT_SKIN = kupu
 Set it in a user topic to set it for one user. Set it in WebPreferences to set it for a single web. Or set it in your global TWiki preferences to set it for your whole site!
 
----++ Settings
+---++ Plugin Configuration Settings
 	* Set SHORTDESCRIPTION = Translator framework and WYSIWYG editor for TWiki topics
-Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
-	* Set HELPPAGE = TWiki/WysiwygPlugin
-If MARK_VARIABLES set to =on= then TWiki variables will be "marked" by the TML -> HTML translator by putting the variable name and any parameters into a span. This works well for simple variables, but can get in trouble with complex syntax or some plugins constructs. If it isn't set to =on= variables will be treated as plain text.
-	* Set MARK_VARIABLES =
+	* The name of the skin used to invoke a Wysiwyg editor.
+		* Set SKIN = kupu
+Web/Topic name of a help page. Change this to point to your local version of the help page.
+		* Set HELPPAGE = TWiki/WysiwygPlugin
 Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
-		* Set ICONS =
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" />
-		%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalTags" warn="off"}%
-The list of icons above automatically includes a topic in this web called WysiwygPluginLocalIcons. This topic doesn't exist by default, but you can create it and add a list of additional icons in the same format as above (don't forget the indentation!).
-
-List of strings that will be available in the drop-down on the toolbar
-		* Set STRINGS =
- 		<option value='-- <nop>%WIKIUSERNAME% - %DATE%'>Signature</option>
-		<option value="%<nop>WIKINAME%">Wiki name (variable)</option>
+			* Set ICONS =
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" />
+			<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" />
+			%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalTags" warn="off"}%
+	 * The list of icons above automatically includes a topic in this web called WysiwygPluginLocalIcons. This topic doesn't exist by default, but you can create it and add a list of additional icons in the same format as above (don't forget the indentation!).
+	* List of strings that will be available in the drop-down on the toolbar
+			* Set STRINGS =
+	 		<option value='-- <nop>%WIKIUSERNAME% - %DATE%'>Signature</option>
+			<option value="%<nop>WIKINAME%">Wiki name (variable)</option>
 		<option value='%<nop>SEARCH{"search for"}%'>Inline search (variable)</option>
 		<option value='%<nop>INCLUDE{"topic or url"}%'>Include (variable)</option>
 		<option value="%<nop>TOC%"> Table of Contents (variable)</option>
@@ -97,11 +96,16 @@ List of strings that will be available in the drop-down on the toolbar
 		<option value="%<nop>WEB%">Web (variable)</option>
 		<option value="%<nop>DATE%"> Date (variable)</option>
 		%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalStrings" warn="off"}%
-The list of strings above automatically includes a topic in this web called WysiwygPluginLocalStrings. This topic doesn't exist by default, but you can create it and add a list of additional strings in the same format as above (don't forget the indentation!).
+	* The list of strings above automatically includes a topic in this web called WysiwygPluginLocalStrings. This topic doesn't exist by default, but you can create it and add a list of additional strings in the same format as above (don't forget the indentation!).
 
 The edit template also automatically includes a topic called %TWIKIWEB%.WysiwygPluginLocalHelp. This topic doesn't exist by default, but if it exists the contents will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
 __Note__: if you are using this plugin with TWiki-4.0.0 or later, the %<nop>COMPOSER% global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
+
+---++ Other Settings
+
+The global TWikiVariable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if some or all of HTML tags (e.g. &lt;br />), or simple variables (e.g. %<nop>VAR%) or calls (e.g. %VARIABLE{...}%), are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, e.g.
+   * =Set WYSIWYG_EXCLUDE = variables,calls=
 
 ---++ Known Issues
 Most of the known problems with the plugin are actually problems with the Kupu editor or the browser rather than the plugin.
