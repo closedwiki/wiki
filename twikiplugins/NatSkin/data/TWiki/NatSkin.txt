@@ -75,8 +75,12 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.94 |
+|  Skin Version: | v2.95 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-01-23: | added forgotten IE decorations; \
+                 fixed layout problems in the WebButtons; \
+		 replaced ICONPATH with ICONURL; \
+		 added email_changed oopsattention message |
 |  2006-01-09: | more IE fixes; \
                  fixed search template: every hit must be a table of its own :(; \
 		 fontsize fixes |
