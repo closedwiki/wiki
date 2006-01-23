@@ -5,10 +5,11 @@
 
 ---++ TWiki Release 4.0.0 (Dakar), 01 Feb 2006
 %SECTION{"Dakar"}%
+   * __Note:__ many, many people worked on TWiki-4.0.0. The credits below only list the people who did the bulk of the work on individual enhancements.
    * *Installation & configuration:*
-      * Much simpler install and configuration -- TWiki:Main.UweWahser, TWiki:Main.CrawfordCurrie, TWiki:Main.LynnwoodBrown, TWiki:Main.ArthurClemens
+      * Much simpler install and configuration -- TWiki:Main.CrawfordCurrie, TWiki:Main.LynnwoodBrown, TWiki:Main.ArthurClemens
    * *Security:*
-      * Security sandbox blocking exploits for remote command execution on the server -- [[http://www.enyo.de/fw/][Florian Weimer]]
+      * Security sandbox blocking exploits for remote command execution on the server -- [[http://www.enyo.de/fw/][Florian Weimer]], TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit
    * *Internationalization & localization:*
       * [[TWiki:Codev.UserInterfaceInternationalisation][User Interface Internationalisation]] -- TWiki:Main.AntonioTerceiro
       * Chinese translation -- TWiki:Main.CheDong
@@ -34,20 +35,22 @@
       * [[TWiki:Codev.AllowDynamicTopicNameCreation][Create topic names with consecutive numbers]] -- TWiki:Main.SvenDowideit
       * [[TWiki:Codev.ParameterizedIncludes][Parameterized includes]] -- TWiki:Main.CrawfordCurrie
       * [[TWiki:Codev.DynamicFormOptionDefinitions][Dynamic form option definitions]] of TWikiForms with FormattedSearch -- TWiki:Main.MartinCleaver
-      * SEARCH enhancements with new parameters =excludeweb=, =newline=, =noempty=, =nofinalnewline=, =nonoise=, =recurse=, =zeroresults= -- TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert
-      * FormattedSearch enhancements with =$changes=, =$count=, =$formfield(name, 30, ...)=, =$summary(expandvar)=, =$summary(noheaders)=, =$summary(showvarnames)= -- TWiki:Main.ColasNahaboo, TWiki:Main.PeterThoeny, TWiki:Main.SvenDowideit
-      * New TWikiVariables ACTIVATEDPLUGINS, ALLVARIABLES, AUTHREALM, EMAILS, ENDSECTION, FAILEDPLUGINS, HTTP, HTTPS, ICONURL, ICONURLPATH, IF, LANGUAGES, LOCALSITEPREFS, LOGIN, LOGOUT, MAKETEXT, META, PLUGINDESCRIPTIONS, QUERYSTRING, SECTION, SESSION_VARIABLE, SESSIONID, SESSIONVAR, SPACEOUT, STARTTEMPLATEONLY, STOPTEMPLATEONLY, USERLANGUAGE, WIKIHOMEURL -- TWiki:Main.ArthurClemens, TWiki:Main.AntonioTerceiro, TWiki:Main.CrawfordCurrie, TWiki:Main.GregAbbas, TWiki:Main.PeterThoeny, TWiki:Main.SvenDowideit, TWiki:Main.WillNorris
+      * SEARCH enhancements with new parameters =excludeweb=, =newline=, =noempty=, =nofinalnewline=, =nonoise=, =recurse=, =zeroresults= -- TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert
+      * FormattedSearch enhancements with =$changes=, =$count=, =$formfield(name, 30, ...)=, =$summary(expandvar)=, =$summary(noheaders)=, =$summary(showvarnames)= -- TWiki:Main.ColasNahaboo, TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny, TWiki:Main.SvenDowideit
+      * New TWikiVariables [[TWikiVariables#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[TWikiVariables#VarALLVARIABLES][ALLVARIABLES]], [[TWikiVariables#VarAUTHREALM][AUTHREALM]], [[TWikiVariables#VarEMAILS][EMAILS]], [[TWikiVariables#VarENDSECTION][ENDSECTION]], [[TWikiVariables#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[TWikiVariables#VarHTTP][HTTP]], [[TWikiVariables#VarHTTPS][HTTPS]], [[TWikiVariables#VarICONURL][ICONURL]], [[TWikiVariables#VarICONURLPATH][ICONURLPATH]], [[TWikiVariables#VarIF][IF]], [[TWikiVariables#VarLANGUAGES][LANGUAGES]], [[TWikiVariables#VarLOCALSITEPREFS][LOCALSITEPREFS]], [[TWikiVariables#VarLOGIN][LOGIN]], [[TWikiVariables#VarLOGOUT][LOGOUT]], [[TWikiVariables#VarMAKETEXT][MAKETEXT]], [[TWikiVariables#VarMETA][META]], [[TWikiVariables#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[TWikiVariables#VarQUERYSTRING][QUERYSTRING]], [[TWikiVariables#VarSECTION][SECTION]], [[TWikiVariables#VarSESSION_VARIABLE][SESSION_VARIABLE]], [[TWikiVariables#VarSESSIONID][SESSIONID]], [[TWikiVariables#VarSESSIONVAR][SESSIONVAR]], [[TWikiVariables#VarSPACEOUT][SPACEOUT]], [[TWikiVariables#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]], [[TWikiVariables#VarSTOPTEMPLATEONLY][STOPTEMPLATEONLY]], [[TWikiVariables#VarUSERLANGUAGE][USERLANGUAGE]], [[TWikiVariables#VarWIKIHOMEURL][WIKIHOMEURL]] -- many
       * [[TWiki:Codev.TWikiFormWithHiddenType][TWiki form with hidden type]] and other form enhancements -- TWiki:Main.LynnwoodBrown, TWiki:Main.ThomasWeigert
       * [[TWiki:Codev.SupportTopicSpecificTemplates][Support topic-specific templates]] for TWiki applications -- TWiki:Main.ThomasWeigert
       * Direct save feature for one-click template-based topic creation -- TWiki:Main.LynnwoodBrown, TWiki:Main.CrawfordCurrie, TWiki:Main.ThomasWeigert
       * Rename, move or delete webs -- TWiki:Main.PeterNixon
       * Hierarchical subwebs (beta) -- TWiki:Main.PeterNixon
    * *New features for Plugin developers:*
-      * REST (representational state transfer) interface for Plugins -- TWiki:Main.SvenDowideit
+      * REST (representational state transfer) interface for Plugins -- TWiki:Main.SvenDowideit, TWiki:Main.RafaelAlvarez
+      * Several new and improved Plugins APIs -- TWiki:Main.CrawfordCurrie
    * *Enhancements in TWiki engine room:*
       * Major redesign and refactoring of codebase -- TWiki:Main.CrawfordCurrie
-      * mod_perl safe code for better performance -- TWiki:Main.CrawfordCurrie
-      * Reworked access premission model -- TWiki:Main.CrawfordCurrie
+      * =mod_perl= safe code for better performance -- TWiki:Main.CrawfordCurrie
+      * Reworked access permission model -- TWiki:Main.CrawfordCurrie
+      * Extensive test suite, unit tests and testcases -- TWiki:Main.CrawfordCurrie
    * *Documentation, logo artwork, skins:*
       * Documentation -- TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny and others
       * Design of TWikiLogos with big "T" in a speech bubble -- TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny
