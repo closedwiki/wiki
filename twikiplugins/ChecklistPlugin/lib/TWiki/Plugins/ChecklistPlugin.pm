@@ -61,6 +61,7 @@ use vars qw(
 	$defaultsInitialized 
     	%globalDefaults %namedDefaults @renderedOptions @flagOptions @filteredOptions @listOptions
 	%namedIds $idMapRef $query
+	%itemStatesRead 
 	%options  @unknownParams $name
     	$resetDone $stateChangeDone
     );
@@ -78,7 +79,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'NovemberEdition';
 
-$REVISION = '1.010'; #dro# fixed URL parameter bugs (preserve URL parameters; URL encoding); used CGI module to generate HTML; fixed table sorting bug in a ChecklistItemState topic
+$REVISION = '1.011'; #dro# fixed documentation; fixed reset bug (that comes with URL parameter bug fix); added statetopic attribute
+#$REVISION = '1.010'; #dro# fixed URL parameter bugs (preserve URL parameters; URL encoding); used CGI module to generate HTML; fixed table sorting bug in a ChecklistItemState topic
 #$REVISION = '1.009'; #dro# fixed stateicons handling; fixed TablePlugin sorting problem
 #$REVISION = '1.008'; #dro# fixed docs; changed default text positioning (text attribute); allowed common variable usage in stateicons attribute; fixed multiple checklists bugs
 #$REVISION = '1.007'; #dro# added new feature (CHECKLISTSTART/END tags, attributes: clipos, pos); fixed bugs
@@ -155,17 +157,18 @@ sub initDefaults() {
 		'unknownparamsmsg' => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.ChecklistPlugin topic for more details): %KNOWNPARAMSLIST%',
 		'useforms' => 0,
 		'clipos'=> 'right',
-		'pos'=>'bottom'
+		'pos'=>'bottom',
+		'statetopic'=> $topic.'ChecklistItemState'
 	);
 
 	@listOptions = ('states','stateicons');
-	@renderedOptions = ( 'text', 'stateicons', 'reset');
+	@renderedOptions = ( 'text', 'stateicons', 'reset' );
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
 	@flagOptions = ('showlegend', 'anchors', 'useforms' );
 
-	$idMapRef = &readChecklistItemStateTopic();
+	$idMapRef = { };
 
 	$query = TWiki::Func::getCgiQuery();
 
@@ -252,6 +255,13 @@ sub initOptions() {
 		} else {
 			$options{$option}=&substIllegalChars($options{$option});
 		}
+	}
+
+
+	# read item states:
+	if (! $itemStatesRead{$name}) {
+		&readChecklistItemStateTopic($idMapRef);
+		$itemStatesRead{$name} = 1;
 	}
 
 	return 1;
@@ -442,28 +452,28 @@ sub getNextState {
 }
 # =========================
 sub doChecklistItemStateReset {
-	my ($name, $state) = @_;
-	TWiki::Func::writeDebug("doChecklistItemStateReset($name,$state)") if $debug;
+	my ($n, $state) = @_;
+	TWiki::Func::writeDebug("doChecklistItemStateReset($n,$state)") if $debug;
 	if (!defined $state) {
 		my @states=split /\|/, $options{'states'};
 		$state=$states[0];
 	}
-	foreach my $id (keys %{$$idMapRef{$name}}) {
-		$$idMapRef{$name}{$id}=$state;
+	foreach my $id (keys %{$$idMapRef{$n}}) {
+		$$idMapRef{$n}{$id}=$state;
 	}
-	&saveChecklistItemStateTopic();
+	&saveChecklistItemStateTopic($n);
 }
 # =========================
 sub doChecklistItemStateChange {
-	my ($id, $name, $lastState) = @_;
-	TWiki::Func::writeDebug("doChecklistItemStateChange($id,$name,$lastState)") if $debug;
+	my ($id, $n, $lastState) = @_;
+	TWiki::Func::writeDebug("doChecklistItemStateChange($id,$n,$lastState)") if $debug;
 
 	# reload?
-	return if ((defined $$idMapRef{$name}{$id})&&($$idMapRef{$name}{$id} ne $lastState));
+	return if ((defined $$idMapRef{$n}{$id})&&($$idMapRef{$n}{$id} ne $lastState));
 
-	$$idMapRef{$name}{$id}=&getNextState($name, $$idMapRef{$name}{$id});
+	$$idMapRef{$n}{$id}=&getNextState($n, $$idMapRef{$n}{$id});
 
-	&saveChecklistItemStateTopic();
+	&saveChecklistItemStateTopic($n);
 }
 # =========================
 sub renderChecklistItem {
@@ -476,7 +486,7 @@ sub renderChecklistItem {
 	my @states = split /\|/, $options{'states'};
 	my @icons = split /\|/, $options{'stateicons'};
 
-	TWiki::Func::writeDebug("stateicons=".$options{'stateicons'}) if $debug;
+	### TWiki::Func::writeDebug("stateicons=".$options{'stateicons'}) if $debug;
 
 	my $state = (defined $$idMapRef{$name}{$tId}) ? $$idMapRef{$name}{$tId} : $states[0];
 	my $icon = $icons[0];
@@ -514,7 +524,7 @@ sub renderChecklistItem {
 	my %queryVars = $query->Vars();
 	foreach my $p (keys %queryVars) {
 		$action.="&$p=".&urlEncode($queryVars{$p}) 
-			unless ($p =~ /^(clp.*|contenttype|)$/i)||(!$queryVars{$p});
+			unless ($p =~ /^(clp.*|clreset.*|contenttype|)$/i)||(!$queryVars{$p});
 	}
 	$action.="#$stId" if $options{'anchors'};
 
@@ -603,8 +613,10 @@ sub getImageSrc {
 
 # =========================
 sub readChecklistItemStateTopic {
+	my ($idMapRef) = @_;
 	TWiki::Func::writeDebug("readChecklistItemStateTopic($topic,$web)") if $debug;
-	my $clisTopicName = "${topic}ChecklistItemState";
+	my $clisTopicName = $options{'statetopic'};
+	TWiki::Func::writeDebug("readChecklistItemStateTopic($topic, $web): $clisTopicName") if $debug;
 
 	my $clisTopic = TWiki::Func::readTopicText($web, $clisTopicName);
 
@@ -613,17 +625,17 @@ sub readChecklistItemStateTopic {
 		return;
 	}
 
-	my %idMap;
 	foreach my $line (split /[\r\n]+/, $clisTopic) {
 		if ($line =~ /^\s*\|\s*([^\|\*]*)\s*\|\s*([^\|\*]*)\s*\|\s*([^\|]*)\s*\|\s*$/) {
-			$idMap{$1}{$2}=$3;
+			$$idMapRef{$1}{$2}=$3;
 		}
 	}
-	return \%idMap;
 }
 # =========================
 sub saveChecklistItemStateTopic {
-	my $clisTopicName = "${topic}ChecklistItemState";
+	my ($name) = @_;
+	my $clisTopicName = $options{'statetopic'};
+
 	TWiki::Func::writeDebug("saveChecklistItemStateTopic($topic, $web): $clisTopicName") if $debug;
 	my $oopsUrl = TWiki::Func::setTopicEditLock($web, $clisTopicName, 1);
 	if ($oopsUrl) {
@@ -633,17 +645,18 @@ sub saveChecklistItemStateTopic {
 	my $topicText = "";
 	$topicText.="%RED% WARNING! THIS TOPIC IS GENERATED BY $installWeb.$pluginName PLUGIN. DO NOT EDIT THIS TOPIC (except table data)!%ENDCOLOR%\n";
 	$topicText.=qq@%BR%Back to the \[\[$web.$topic\]\[checklist topic $topic\]\].\n\n@;
-	foreach my $name ( sort keys %{ $idMapRef } ) {
-		my $statesel = join ", ",  (split /\|/, ($namedDefaults{$name}{'states'}?$namedDefaults{$name}{'states'}:$globalDefaults{'states'}));
+	foreach my $n ( sort keys %{ $idMapRef } ) {
+		next if ($clisTopicName ne $globalDefaults{'statetopic'})&&($clisTopicName ne $namedDefaults{$n}{'statetopic'});
+		my $statesel = join ", ",  (split /\|/, ($namedDefaults{$n}{'states'}?$namedDefaults{$n}{'states'}:$globalDefaults{'states'}));
 		$topicText.="\n";
-		$topicText.=qq@%EDITTABLE{format="|text,20,$name|text,10,|select,1,$statesel|"}%\n@;
+		$topicText.=qq@%EDITTABLE{format="|text,20,$n|text,10,|select,1,$statesel|"}%\n@;
 		$topicText.=qq@%TABLE{footerrows="1"}%\n@;
 		$topicText.="|*context*|*id*|*state*|\n";
 		
-		foreach my $id (sort keys %{ $$idMapRef{$name}}) {
-			$topicText.="|$name|".&htmlEncode($id)."|".&htmlEncode($$idMapRef{$name}{$id})."|\n";
+		foreach my $id (sort keys %{ $$idMapRef{$n}}) {
+			$topicText.="|$n|".&htmlEncode($id)."|".&htmlEncode($$idMapRef{$n}{$id})."|\n";
 		}
-		$topicText.=qq@| *$name* | *statistics:* | * %CALC{"\$COUNTITEMS(R2:C\$COLUMN()..R\$ROW(-1):C\$COLUMN())"}% * |\n@;
+		$topicText.=qq@| *$n* | *statistics:* | * %CALC{"\$COUNTITEMS(R2:C\$COLUMN()..R\$ROW(-1):C\$COLUMN())"}% * |\n@;
 	}
 	$topicText.="\n-- $installWeb.$pluginName - ".&TWiki::Func::formatTime(time(), "rcs")."\n";
 	TWiki::Func::saveTopicText($web, $clisTopicName, $topicText);
