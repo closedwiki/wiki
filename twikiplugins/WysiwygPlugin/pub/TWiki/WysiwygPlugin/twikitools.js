@@ -625,6 +625,15 @@ function TWikiHandleSubmit(kupu) {
   var form = getFromSelector('twiki-main-form');
 
   kupu.content_changed = 0; // choke the unload handler
+
+  // the default filterContent calls xhtmlvalid, which does all
+  // sorts of naughties, such as stripping comments. Because the editor
+  // should only be generating valid HTML, and TWiki only generates
+  // valid XHTML (hah!) we can ignore this cleanup step.
+  kupu._filterContent = function (doc) {
+    return doc;
+  };
+
   //alert("Preparing form");
   // use Kupu to create the 'text' field in the form
   kupu.prepareForm(form, 'text');
