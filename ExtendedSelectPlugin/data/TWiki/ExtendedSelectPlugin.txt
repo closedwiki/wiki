@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="EricS" date="1129048562" format="1.1" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributors" date="1129048562" format="1.1" version="1.4"}%
 ---+!! <nop>ExtendedSelectPlugin
 
 Adds flags to the select field form type to allow the following features:
