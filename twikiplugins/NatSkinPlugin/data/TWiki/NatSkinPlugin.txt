@@ -340,8 +340,10 @@ By default this value is set to "off"
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.94 |
+|  Plugin Version: | v2.95 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Jan 2006: | fixed natlogn; \
+                  fixed FORMATLIST to expandCommonVariables of the format result |
 |  09 Jan 2006: | removed local sandbox; added dependency on <nop>DakarContrib; \
 		  added variable expansion to IFDEFINED; \
 		  added cleanup code if the <nop>AliasPlugin is not installed; \
@@ -395,5 +397,5 @@ By default this value is set to "off"
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 09 Jan 2006 
+-- TWiki:Main.MichaelDaum - 23 Jan 2006 
 
