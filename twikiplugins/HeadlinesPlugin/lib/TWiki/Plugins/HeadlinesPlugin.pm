@@ -1,7 +1,7 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2002-2006 Peter Thoeny, peter@thoeny.org
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 # Copyright (C) 2005 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ use Digest::MD5 qw(md5_hex);
 
 
 $VERSION = '$Rev$';
-$RELEASE = '1.95';
+$RELEASE = '2.00';
 
 $debug = 0; # toggle me
 
