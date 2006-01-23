@@ -52,7 +52,7 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE $MODERN $MARKVARS );
+use vars qw( $VERSION $RELEASE $MODERN $SKIN );
 use vars qw( $html2tml $tml2html $recursionBlock $imgMap $cairoCalled );
 use vars qw( %TWikiCompatibility );
 
@@ -76,12 +76,47 @@ sub initPlugin {
         $cairoCalled = 0;
     }
 
-    my $mv = TWiki::Func::getPreferencesValue(
-        'WYSIWYGPLUGIN_MARK_VARIABLES' );
-    $MARKVARS = ( $mv && $mv eq 'on' );
+    $SKIN = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_SKIN' );
 
     # Plugin correctly initialized
     return 1;
+}
+
+# This handler is used to determine whether the topic is editable by
+# Wysiwyg or not. The only thing it does is to redirect to a normal edit
+# url if the skin is set to $SKIN and nasty content is found.
+sub beforeEditHandler {
+    #my( $text, $topic, $web, $meta ) = @_;
+    return unless $SKIN;
+
+    if( TWiki::Func::getSkin() =~ /\b$SKIN\b/o ) {
+        my $exclusions = TWiki::Func::getPreferencesValue(
+            'WYSIWYG_EXCLUDE' );
+        return unless $exclusions;
+        if(( $exclusions =~ /\bcalls\b/
+               && $_[0] =~ /%[A-Z_]+{.*?}%/s )
+             || ( $exclusions =~ /\bvariables\b/ &&
+                    $_[0] =~ /%[A-Z_]+%/s)
+               || ( $exclusions =~ /\bhtml\b/ &&
+                      $_[0] =~ /<\/?(?!verbatim|noautolink|nop)\w+/ )) {
+            # redirect
+            my $query = TWiki::Func::getCgiQuery();
+            foreach my $p qw( skin cover ) {
+                my $arg = $query->param( $p );
+                if( $arg && $arg =~ s/\b$SKIN\b//o ) {
+                    if( $arg =~ /^[\s,]*$/ ) {
+                        $query->delete( $p );
+                    } else {
+                        $query->param( -name=>$p, -value=>$arg );
+                    }
+                }
+            }
+            my $url = $query->url( -full=>1, -path=>1, -query=>1 );
+            TWiki::Func::redirectCgiQuery( $query, $url );
+            # Bring this session to an untimely end
+            exit 0;
+        }
+    }
 }
 
 # Invoked when the selected skin is in use to convert HTML to
@@ -177,7 +212,6 @@ sub beforeCommonTagsHandler {
             topic => $_[1],
             getViewUrl => \&getViewUrl,
             expandVarsInURL => \&expandVarsInURL,
-            markvars => $MARKVARS,
         }
        );
 }
