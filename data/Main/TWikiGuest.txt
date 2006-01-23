@@ -17,4 +17,4 @@ __Related topics__
    * %WIKIUSERSTOPIC% has a list of other <nop>%WIKITOOLNAME% users.
 
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%
-%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="Main.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="TWikiAdminGroup"}%
