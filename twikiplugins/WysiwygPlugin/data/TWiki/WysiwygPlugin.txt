@@ -100,12 +100,12 @@ Lists of icons that will be available in the Kupu editor. This has to be a list 
 
 The edit template also automatically includes a topic called %TWIKIWEB%.WysiwygPluginLocalHelp. This topic doesn't exist by default, but if it exists the contents will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
-__Note__: if you are using this plugin with TWiki-4.0.0 or later, the %<nop>COMPOSER% global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
-
 ---++ Other Settings
 
 The global TWikiVariable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if some or all of HTML tags (e.g. &lt;br />), or simple variables (e.g. %<nop>VAR%) or calls (e.g. %VARIABLE{...}%), are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, e.g.
    * =Set WYSIWYG_EXCLUDE = variables,calls=
+
+If you are using this plugin with TWiki-4.0.0 or later with =pattern= skin, the %<nop>COMPOSER% global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
 
 ---++ Known Issues
 Most of the known problems with the plugin are actually problems with the Kupu editor or the browser rather than the plugin.
