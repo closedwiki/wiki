@@ -17,8 +17,8 @@
       * Dutch translation -- TWiki:Main.ArthurClemens
       * French translation -- TWiki:Main.BenVoui
       * German translation -- TWiki:Main.AndreUlrich
-      * Portuguese translation -- TWiki:Main.AntonioTerceiro
-      * Spanish translation -- TWiki:Main.WillNorris
+      * Portuguese translation -- TWiki:Main.AntonioTerceiro and TWiki:Main.CarlinhosCecconi
+      * Spanish translation -- TWiki:Main.WillNorris and TWiki:Main.MiguelABayona
    * *New features for users:*
       * Edit conflict resolution with automatic merge -- TWiki:Main.CrawfordCurrie
       * Fine grained change notification on page level and parent/child relationship -- TWiki:Main.CrawfordCurrie

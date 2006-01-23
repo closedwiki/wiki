@@ -32,7 +32,9 @@ Translations were sourced by the following polyglots:
    * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - Portuguese
    * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - Dutch
    * [[TWiki:Main.BenVoui][Ben Voui]] - French
+   * [[TWiki:Main.CarlinhosCecconi][Carlinhos Cecconi]] - Portuguese
    * [[TWiki:Main.CheDong][Che Dong]] - Chinese
+   * [[TWiki:Main.MiguelABayona][Miguel Bayona]] - Spanish
    * [[TWiki:Main.SteffenPoulsen][Steffen Poulsen]] - Danish
    * [[TWiki:Main.WillNorris][Will Norris]] - Spanish
 There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor. See personal topics on twiki.org for details of individual contributions.
