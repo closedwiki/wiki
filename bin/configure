@@ -569,10 +569,11 @@ sub _PROMPT_FOR_SELECT {
     $opts =~ s/^\s+//;
     $opts =~ s/\s.*$//;
     my $sopts = '';
+    if ( defined($value) ) {
+    	$sopts .= '<option selected="selected">'.$value.'</option>';
+    }
     foreach my $opt (split( /\s*,\s*/, $opts)) {
-        if( $opt eq $value ) {
-            $sopts .= '<option selected="selected">'.$opt.'</option>';
-        } else {
+        if( $opt ne $value ) {
             $sopts .= '<option>'.$opt.'</option>';
         }
     }
