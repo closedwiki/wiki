@@ -39,7 +39,7 @@ for ( var i = 0; i < sIn.length; i++ )
 </tr>
 <!--
    # optional row for login name, enabled by {Register}{AllowLoginName} option in =configure=
-   * Set BESPOKE_AUTH = <tr><td align="right"> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input type="text" name="Twk1LoginName" size="40" value="%REMOTE_USER%" /> =<font color='red'>**</font>= </td></tr>
+   * Set BESPOKE_AUTH = <tr><td align=\"right\"> %MAKETEXT{"(how you log in) LoginName:"}% </td><td><input type=\"text\" name=\"Twk1LoginName\" size=\"40\" value=\"%REMOTE_USER%\" /> =<font color='red'>**</font>= </td></tr>
 -->
 %IF{"$ ALLOWLOGINNAME" then="%BESPOKE_AUTH%"}%
 <tr>
