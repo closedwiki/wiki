@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.94';
+$RELEASE = '2.95';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -525,7 +525,6 @@ sub initSkinState {
 # $_[1] - The topic
 # $_[2] - The web
 sub commonTagsHandler {
-  writeDebug("commonTagsHandler called");
   &initSkinState(); # this might already be too late but there is no
                     # handler between initPlugin and beforeCommonTagsHandler
 		    # which only matters if you've got a SessionPlugin and the 
@@ -589,7 +588,6 @@ sub commonTagsHandler {
   $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
   $_[0] =~ s/%WEBCOMPONENT{(.*?)}%/&renderWebComponent($1)/geo;
   $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
-
 }
 
 ###############################################################################
@@ -1508,8 +1506,8 @@ sub renderFormatList {
 
   my $result = join($theSeparator, @result);
   &escapeParameter($result);
-
-  #writeDebug("result=$result");
+  $result = &TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
+  $result =~ s/\s+$//go; # SMELL what the hell: where do the linefeeds come from
 
   return $result;
 }

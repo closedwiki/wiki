@@ -1,7 +1,7 @@
 ###############################################################################
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamurg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamurg.de>
 #
 # Based on photonsearch
 # Copyright (C) 2001 Esteban Manchado Velázquez, zoso@foton.es
@@ -161,9 +161,9 @@ sub _checkPasswd {
 
   # dakar
   if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
-    require TWiki::Users::HtPasswdUser;
-    my $htPasswdUser = new TWiki::Users::HtPasswdUser($TWiki::Plugins::SESSION);
-    return $htPasswdUser->checkPassword($theUser, $thePasswd);
+    my $user = $TWiki::Plugins::SESSION->{users}->findUser($theUser);
+    return 0 unless $user;
+    return $user->checkPassword($thePasswd);
   }
   
   # well ... cairo ?
