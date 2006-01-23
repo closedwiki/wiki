@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131456524" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131456584" format="1.0" version="$Rev$"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -211,8 +211,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.013 (8 Nov 2005) |
+|  Plugin Version: | v1.014 (23 Jan 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.014 (23 Jan 2006) | TWiki:Main.DanielRohde: incorporated documentation fixes by TWiki:Main.KennethLavrsen (Bugs:Item1440) | 
 |  v1.013 (8 Nov 2005) | TWiki:Main.DanielRohde: added Perl strict pragma; | 
 |  v1.012 (5 Sep 2005): | TWiki:Main.DanielRohde: added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli |
 |  v1.011 (11 Jul 2005): | TWiki:Main.DanielRohde: improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg |
