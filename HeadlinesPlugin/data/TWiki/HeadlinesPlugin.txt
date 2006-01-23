@@ -159,8 +159,9 @@ defining the default CSS properties  (indentation illustrates enclosure).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Plugin Version: | 05 Dec 2005 (v1.95) |
+|  Plugin Version: | v2.00 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  23 Jan 2006: | released v2.00 | 
 |  05 Dec 2005: | internal feed urls must be absolute |
 |  02 Dec 2005: | added <nop>web.topic shorthand for internal feeds |
 |  29 Nov 2005: | fixed CDATA handling |
@@ -188,6 +189,6 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.PeterThoeny - 11 May 2005 %BR%
--- TWiki:Main.MichaelDaum - 05 Dec 2005
+-- TWiki:Main.MichaelDaum - 23 Jan 2006
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%
