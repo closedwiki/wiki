@@ -439,7 +439,7 @@ sub _getTopList
 sub _printMsg {
     my( $session, $msg ) = @_;
 
-    if( $session->{command_line} ) {
+    if( $session->inContext('command_line') ) {
         $msg =~ s/&nbsp;/ /go;
     } else {
         if( $msg =~ s/^\!// ) {
