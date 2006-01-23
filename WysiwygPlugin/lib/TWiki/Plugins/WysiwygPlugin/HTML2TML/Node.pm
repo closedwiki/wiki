@@ -512,12 +512,20 @@ sub _emphasis {
 # class with an empty value
 sub cleanNode {
     my $this = shift;
-    if( defined( $this->{attrs}->{lang} )) {
-        delete $this->{attrs}->{lang};
+    my $a;
+
+    # Always delete these attrs
+    foreach $a qw( lang _moz_dirty ) {
+        delete $this->{attrs}->{$a}
+          if( defined( $this->{attrs}->{$a} ));
     }
-    if( defined( $this->{attrs}->{class} ) &&
-        $this->{attrs}->{class} !~ /\S/ ) {
-        delete $this->{attrs}->{class};
+
+    # Delete these attrs if their value is empty
+    foreach $a qw( class style ) {
+        if( defined( $this->{attrs}->{$a} ) &&
+              $this->{attrs}->{$a} !~ /\S/ ) {
+            delete $this->{attrs}->{$a};
+        }
     }
 }
 
