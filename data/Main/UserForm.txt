@@ -12,5 +12,6 @@
 | Telephone | text | 40 | | |
 | <nop>VoIP | text | 40 | | |
 | <nop>InstantMessaging (IM) | textarea | 60x6 | | (One account pr. line, if several) |
+| Email | text | 40 | | |
 | <nop>HomePage | text | 40 | | |
 | Comment | textarea | 60x12 | | |
