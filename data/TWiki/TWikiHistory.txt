@@ -50,7 +50,7 @@
 | Rename, move or delete webs | [[TWiki:Main.PeterNixon][PeterNixon]] |
 | Hierarchical subwebs (beta) | [[TWiki:Main.PeterNixon][PeterNixon]] |
 | *New features for Plugin developers*  ||
-| REST (representational state transfer) interface for Plugins | [[TWiki:Main.SvenDowideit][SvenDowideit]], [[TWiki:Main.RafaelAlvarez][RafaelAlvarez]] |
+| REST (representational state transfer) interface for Plugins | [[TWiki:Main.RafaelAlvarez][RafaelAlvarez]], [[TWiki:Main.MartinCleaver]], [[TWiki:Main.SvenDowideit][SvenDowideit]] |
 | New and improved Plugins APIs | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.ThomasWeigert][ThomasWeigert]] |
 | *Imporovements in the TWiki engine room*  ||
 | Major OO redesign and refactoring of codebase | [[http://c-dot.co.uk][Crawford Currie]] |
