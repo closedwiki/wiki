@@ -366,10 +366,9 @@ msgid "(skipped)"
 msgstr "(忽略)"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:44
-#, fuzzy
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
-"Error\\\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
+"Error\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 "*错误*: Internet Explorer 4.0 和更旧版本: 如果上传文件时您看到\"Internal "
@@ -387,9 +386,9 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:43
 #, fuzzy
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
-"('%1','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</a> for "
-"more information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
+"('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
+"information about attaching files."
 msgstr ""
 "*帮助:* 请参考<a target='TWikiVariables' onclick=\"return launchWindow('%"
 "TWIKIWEB%','FileAttachment')\" href='' rel='nofollow'>文件上传</a>."
@@ -421,10 +420,9 @@ msgstr "*本地文件:* 如果您选择了另外的 _本地文件:_ 这个文件
 #, fuzzy
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
-"changed without uploading a file by pressing \\\"Change Properties only\\\"; "
-"see <a target=\\\"HiddenAttachment\\\" onclick=\\\"return launchWindow('%"
-"1','HiddenAttachment')\\\" href=\\\"%2\\\" rel='nofollow'>HiddenAttachment</"
-"a>."
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 msgstr ""
 "*属性:* 注视和可见性可以被更改而不通过上传文件  而通过 \"改变属性\" 参见 %1."
 
@@ -440,8 +438,8 @@ msgstr "本主题 <a href='%1' rel='nofollow'>编辑设置</a>"
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:77
 #, fuzzy
 msgid ""
-"<a target='ManagingWebs' onclick=\\\"return launchWindow('%1','ManagingWebs')"
-"\\\" href='%2' rel='nofollow'>Get help on managing webs</a>"
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
 msgstr ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
 "%','ManagingWebs')\" href='%1' rel='nofollow'>获得管理目录的帮助 Webs</a>"
@@ -1247,8 +1245,8 @@ msgstr "表单定义缺失"
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:67
 #, fuzzy
 msgid ""
-"Get help on <a target='ManagingTopics' onclick=\\\"return launchWindow('%"
-"1','ManagingTopics')\\\" href=\\\"%2\\\" rel='nofollow'>Renaming and moving "
+"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
+"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
 "topics</a>."
 msgstr ""
 "在<a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB"
@@ -1258,8 +1256,8 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:48
 #, fuzzy
 msgid ""
-"Get help on <a target='TWikiVariables' onclick=\\\"return launchWindow('%"
-"1','TWikiVariables')\\\" href='%2' rel='nofollow'>Setting topic preferences</"
+"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
+"1','TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</"
 "a>."
 msgstr ""
 "在<a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB"
@@ -1407,8 +1405,7 @@ msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-#, fuzzy
-msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
+msgid "If you used the \"Jump\" feature to jump to this page:"
 msgstr "如果您使用\"跳转\"功能跳转到此页:"
 
 #: templates/messages.tmpl:428
@@ -1491,8 +1488,8 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:22
 #, fuzzy
 msgid ""
-"It's usually best to choose a <a target='WikiWord' onclick=\\\"return "
-"launchWindow('%1','WikiWord')\\\" href='%1' rel='nofollow'>WikiWord</a> for "
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
 "the new topic name, otherwise automatic linking may not work. Characters not "
 "allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
@@ -2276,10 +2273,9 @@ msgid "Summaries"
 msgstr "摘要"
 
 #: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
-#, fuzzy
 msgid ""
-"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
-"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
+"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
+"=\"web service\"=, but not =\"shampoo\"=, write:"
 msgstr ""
 "巧门: 搜索所有主题包含 =\"SOAP\"=, =\"WSDL\"= =\"web service\"= 但不包含 ="
 "\"shampoo\"= 的写, "
@@ -2290,12 +2286,11 @@ msgid "TWiki password reset for %1"
 msgstr "%1 TWiki密码重设"
 
 #: templates/oopschangelanguage.tmpl:13
-#, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit \\"
-"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
-"bottom of the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
 msgstr ""
 "TWikis用户界面有多种语言，如果想在本次回话中改变语言，请从以下选择并点击\"改"
 "变语言\".否则 \"取消\" 回到前一个主题."
@@ -2352,7 +2347,8 @@ msgstr ""
 "%1目录是一个沙盘用于测试，欢迎任何人添加和删除条目，建议先看看%2，并看看%3工"
 "具一条好的习惯是在页面用您的签名%4 姓名和时间做."
 
-#: data/Sandbox/WebRss.txt:5 data/_default/WebRss.txt:5
+#: data/Sandbox/WebRss.txt:5 data/_default/WebAtom.txt:3
+#: data/_default/WebRss.txt:5
 #, fuzzy
 msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
@@ -2988,7 +2984,7 @@ msgstr "您也许需要问一下管理员 %1 以进行这个操作"
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "e-mail or enter the code in the box below to activate your membership. (This "
-"code is of the form \\\"YourName.xxxx\\\")"
+"code is of the form \"YourName.xxxxxxxxxx\")"
 msgstr ""
 "您的激活码已经被发送到 %1 点击电子邮件中的链接或者在下面输入代码以激活会员资"
 "格 （这个是激活码格式 \"YourName.xxxx\")"

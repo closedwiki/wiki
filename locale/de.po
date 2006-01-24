@@ -359,10 +359,9 @@ msgid "(skipped)"
 msgstr "(übersprungen)"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:44
-#, fuzzy
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
-"Error\\\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
+"Error\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 "*Fehler*: Internet Explorer 4.0 oder früher: When Sie die Fehlermeldung "
@@ -381,11 +380,10 @@ msgstr ""
 "bestehen."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:43
-#, fuzzy
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
-"('%1','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</a> for "
-"more information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
+"('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
+"information about attaching files."
 msgstr ""
 "*Hilfe:* Für mehr Informationen über den Umgang mit Dateianhängen lesen Sie "
 "bitte <a target='TWikiVariables' onclick=\"return launchWindow('%"
@@ -420,13 +418,11 @@ msgstr ""
 "_Lokale Datei:_ angegeben hochladen, wird diese als neue Datei hinzugefügt."
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:49
-#, fuzzy
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
-"changed without uploading a file by pressing \\\"Change Properties only\\\"; "
-"see <a target=\\\"HiddenAttachment\\\" onclick=\\\"return launchWindow('%"
-"1','HiddenAttachment')\\\" href=\\\"%2\\\" rel='nofollow'>HiddenAttachment</"
-"a>."
+"changed without uploading a file by pressing \"Change Properties only\"; see "
+"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
+"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 msgstr ""
 "*Eigenschaften:* Der Kommentar und die Sichtbarkeit des Anhangs kann, ohne "
 "erneutes Hochladen der Datei, mittels \"Eigenschaften ändern\" verändert "
@@ -443,10 +439,9 @@ msgstr ""
 "Für dieses Topic <a href='%1' rel='nofollow'>Einstellungen bearbeiten</a>"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:77
-#, fuzzy
 msgid ""
-"<a target='ManagingWebs' onclick=\\\"return launchWindow('%1','ManagingWebs')"
-"\\\" href='%2' rel='nofollow'>Get help on managing webs</a>"
+"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
+"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
 msgstr ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
 "\" href='%2' rel='nofollow'>Hilfe für das Verwalten von Webs</a>"
@@ -1292,10 +1287,9 @@ msgid "Form definition missing"
 msgstr "Formular-Definition fehlt"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:67
-#, fuzzy
 msgid ""
-"Get help on <a target='ManagingTopics' onclick=\\\"return launchWindow('%"
-"1','ManagingTopics')\\\" href=\\\"%2\\\" rel='nofollow'>Renaming and moving "
+"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
+"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
 "topics</a>."
 msgstr ""
 "Hilfe für das <a target='ManagingTopics' onclick=\"return launchWindow('%"
@@ -1303,10 +1297,9 @@ msgstr ""
 "von Topics</a>."
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:48
-#, fuzzy
 msgid ""
-"Get help on <a target='TWikiVariables' onclick=\\\"return launchWindow('%"
-"1','TWikiVariables')\\\" href='%2' rel='nofollow'>Setting topic preferences</"
+"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
+"1','TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</"
 "a>."
 msgstr ""
 "Hilfe zum Konfigurieren von <a target='TWikiVariables' onclick=\"return "
@@ -1467,8 +1460,7 @@ msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-#, fuzzy
-msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
+msgid "If you used the \"Jump\" feature to jump to this page:"
 msgstr ""
 "Wenn Sie die \"Sprung\" Funktion benutzt haben um auf diese Seite zu "
 "gelangen:"
@@ -1551,10 +1543,9 @@ msgstr ""
 "sollten."
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:22
-#, fuzzy
 msgid ""
-"It's usually best to choose a <a target='WikiWord' onclick=\\\"return "
-"launchWindow('%1','WikiWord')\\\" href='%1' rel='nofollow'>WikiWord</a> for "
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
 "the new topic name, otherwise automatic linking may not work. Characters not "
 "allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
@@ -2362,10 +2353,9 @@ msgid "Summaries"
 msgstr "Zusammenfassungen"
 
 #: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
-#, fuzzy
 msgid ""
-"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
-"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
+"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
+"=\"web service\"=, but not =\"shampoo\"=, write:"
 msgstr ""
 "TIPP: Um nach Topics zu suchen die =\"SOAP\"=, =\"WSDL\"= und den Begriff ="
 "\"web service\"= beinhalten, in denen aber nicht =\"shampoo\"= vorkommt, "
@@ -2377,12 +2367,11 @@ msgid "TWiki password reset for %1"
 msgstr "TWiki Passwort zurücksetzen für %1"
 
 #: templates/oopschangelanguage.tmpl:13
-#, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit \\"
-"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
-"bottom of the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
 msgstr ""
 "TWikis Benutzeroberfläche ist in vielen Sprachen verfügbar. Wenn Sie für "
 "diese Sitzung die Sprache wechseln möchten wählen Sie eine der folgenden aus "
@@ -2448,7 +2437,8 @@ msgstr ""
 "bekommen. Es gehört zum guten Ton am Ende eines Kommentars seine Signatur "
 "mit Datum und dem %4 zu hinterlassen."
 
-#: data/Sandbox/WebRss.txt:5 data/_default/WebRss.txt:5
+#: data/Sandbox/WebRss.txt:5 data/_default/WebAtom.txt:3
+#: data/_default/WebRss.txt:5
 msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
 "Enterprise."
@@ -3141,7 +3131,7 @@ msgstr ""
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "e-mail or enter the code in the box below to activate your membership. (This "
-"code is of the form \\\"YourName.xxxx\\\")"
+"code is of the form \"YourName.xxxxxxxxxx\")"
 msgstr ""
 "Ihr Aktivierungs-Code wurde nach %1 gesendet. Entweder klicken Sie auf den "
 "Verweis in Ihrer E-Mail oder Sie fügen den Code in die Box unten ein, um "
