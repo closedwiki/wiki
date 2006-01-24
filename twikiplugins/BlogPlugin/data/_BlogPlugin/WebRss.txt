@@ -22,7 +22,7 @@
   <dc:rights>%WEBRSSCOPYRIGHT%</dc:rights>
   <dc:publisher>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:publisher>
   <dc:creator>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:creator>
-  <dc:source>%WIKITOOLNAME%</dc:source>
+  <dc:source><nop>%WIKITOOLNAME%</dc:source>
   <items>
     <rdf:Seq>
 %~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled' OR TopicType=~'BlogComment'" web="%INCLUDINGWEB%"
