@@ -315,6 +315,8 @@ sub _registerSingleBulkUser {
       $session->{users}->addUserToTWikiUsersTopic( $user,
                                                    $session->{user} );
 
+    $user->setEmails( $row->{Email} );
+
     #if ($TWiki::cfg{EmailUserDetails}) {
         # If you want it, write it.
         # _sendEmail($session, 'registernotifybulk', $data );
@@ -779,6 +781,8 @@ sub finish {
 
     my $userTopic = $session->{users}->addUserToTWikiUsersTopic( $user, $agent);
 
+    $user->setEmails( $data->{Email} );
+
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
         $session->writeLog( 'register', $data->{webName}.'.'.$data->{WikiName},
@@ -1100,7 +1104,6 @@ sub _addUserToPasswordSystem {
         $session->writeWarning('No password specified for '.$p->{LoginName}.' - using random='.$password);
     }
     if( $user->addPassword( $password )) {
-        $user->setEmails( $p->{Email} );
         return 1;
     }
     return 0;
