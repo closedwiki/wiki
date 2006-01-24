@@ -209,7 +209,9 @@ sub setEmails {
         # use the form if there is one
         $meta->putKeyed( 'FIELD',
                          { name => 'Email',
-                           value => $mails, title => 'Email', attrs=> 'h' } );
+                           value => $mails,
+                           title => 'Email',
+                           attributes=> 'h' } );
     } else {
         # otherwise use the topic text
         unless( $text =~ s/^(\s+\*\s+E-?mail:\s*).*$/$1$mails/mi ) {
