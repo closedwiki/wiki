@@ -15,8 +15,10 @@ use strict;
 my $admin_email = 'webmaster@example.com';
 $/ = "\n";
 
+print "Enter admin e-mail address to use as default, enter to confirm.\n";
+
 while (1) {
-    print "Enter admin e-mail address [hit enter to choose '$admin_email']: ";
+    print "Admin e-mail address ['$admin_email']: ";
     my $n = <>;
     chomp $n;
     last if( !$n );
