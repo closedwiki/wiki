@@ -411,6 +411,7 @@ sub _linkToolTipInfo {
     my( $this, $theWeb, $theTopic ) = @_;
     return '' unless( $this->{LINKTOOLTIPINFO} );
     return '' if( $this->{LINKTOOLTIPINFO} =~ /^off$/i );
+    return '' unless( $this->{session}->inContext( 'view' ));
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my $store = $this->{session}->{store};
@@ -541,11 +542,9 @@ sub _renderExistingWikiWord {
     } else {
         push( @attrs, class => 'twikiLink', href => $href );
     }
-    # If this is a simple view, do tooltips
-    if( $this->{session}->inContext( 'view' )) {
-        my $tooltip = $this->_linkToolTipInfo( $web, $topic );
-        push( @attrs, title => $tooltip ) if( $tooltip );
-    }
+    my $tooltip = $this->_linkToolTipInfo( $web, $topic );
+    push( @attrs, title => $tooltip ) if( $tooltip );
+
     my $link = CGI::a( { @attrs }, $text );
     # When we pass the tooltip text to CGI::a it may contain
     # <nop>s, and CGI::a will convert the < to &lt;. This is a
