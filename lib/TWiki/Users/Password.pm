@@ -172,12 +172,12 @@ sub getEmails {
     # Try the form first
     my $entry = $meta->get('FIELD', 'Email');
     if ($entry) {
-        push( @addresses, $entry->{value} );
+        push( @addresses, split( /;/, $entry->{value} ) );
     } else {
         # Now try the topic text
         foreach my $l (split ( /\r?\n/, $text  )) {
-            if ($l =~ /^\s+\*\s+E-?mail:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/i) {
-                push @addresses, $1;
+            if ($l =~ /^\s+\*\s+E-?mail:\s*(.*)$/mi) {
+                push @addresses, split( /;/, $1 );
             }
         }
     }
@@ -189,13 +189,36 @@ sub getEmails {
 
 ---++ ObjectMethod setEmails($user, @emails)
 
-Set the email address(es) for the given username
+Set the email address(es) for the given username in the user topic.
 
 =cut
 
 sub setEmails {
-    # SMELL: Cannot set email in the default setup, though this
-    # could be implemented to save the email in the personal topic
+    my $this = shift;
+    my $login = shift;
+    my $mails = join( ';', @_ );
+
+    my $user = $this->{session}->{users}->findUser( $login, undef, 1 );
+    return () unless $user;
+
+    my ($meta, $text) =
+      $this->{session}->{store}->readTopic(
+          undef, $TWiki::cfg{UsersWebName}, $user->wikiName() );
+
+    if ($meta->get('FORM')) {
+        # use the form if there is one
+        $meta->putKeyed( 'FIELD',
+                         { name => 'Email',
+                           value => $mails, title => 'Email', attrs=> 'h' } );
+    } else {
+        # otherwise use the topic text
+        unless( $text =~ s/^(\s+\*\s+E-?mail:\s*).*$/$1$mails/mi ) {
+            $text .= "\n   * Email: $mails\n";
+        }
+    }
+
+    $this->{session}->{store}->saveTopic( $user, $TWiki::cfg{UsersWebName},
+                                  $user->wikiName(), $text, $meta );
 }
 
 1;
