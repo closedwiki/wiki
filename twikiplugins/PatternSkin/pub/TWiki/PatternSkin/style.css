@@ -605,8 +605,6 @@ table.patternTopBarContents td {
 	width:16px;
 }
 .patternLeftBarContents input.patternFormField {
-	display:block;
-	width:100%;
 	border-width:1px;
 	border-style:solid;
 	font-size:85%; /*S3*/
