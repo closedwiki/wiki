@@ -41,26 +41,26 @@ msgstr "%*(%1,seconde) "
 msgid "%1 - Registration for %2 (%3)"
 msgstr "%1 - Inscription de %2 (%3)"
 
-#: data/TWiki/NewUserTemplate.txt:63
+#: data/TWiki/NewUserTemplate.txt:62
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:65
+#: data/TWiki/NewUserTemplate.txt:64
 #, fuzzy
 msgid "%1 - just for me"
 msgstr "%1 seulement pour moi"
 
-#: data/TWiki/NewUserTemplate.txt:62
+#: data/TWiki/NewUserTemplate.txt:61
 #, fuzzy
 msgid "%1 - starting points on TWiki"
 msgstr "%1 pour commencer à travailler sur ce nouveau web"
 
-#: data/TWiki/NewUserTemplate.txt:64
+#: data/TWiki/NewUserTemplate.txt:63
 #, fuzzy
 msgid "%1 - try out TWiki on your own"
 msgstr "le web %1, pour essayer TWiki"
 
-#: data/TWiki/NewUserTemplate.txt:61
+#: data/TWiki/NewUserTemplate.txt:60
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr ""
 
@@ -82,22 +82,22 @@ msgstr "Web %1"
 msgid "%1 Web Home"
 msgstr "Page d'accueil du web %1"
 
-#: data/TWiki/NewUserTemplate.txt:87
+#: data/TWiki/NewUserTemplate.txt:86
 #, fuzzy
 msgid "%1 for changing your email address"
 msgstr "Vous pouvez changer de mot de passe via %1"
 
-#: data/TWiki/NewUserTemplate.txt:86
+#: data/TWiki/NewUserTemplate.txt:85
 #, fuzzy
 msgid "%1 for changing your password"
 msgstr "Vous pouvez changer de mot de passe via %1"
 
-#: data/TWiki/NewUserTemplate.txt:88
+#: data/TWiki/NewUserTemplate.txt:87
 #, fuzzy
 msgid "%1 has a list of other TWiki users"
 msgstr "La liste des autres utilisateurs et utilisatrices est sur %1."
 
-#: templates/messages.tmpl:352
+#: templates/messages.tmpl:361
 #, fuzzy
 msgid ""
 "%1 has been editing the topic for %2 and the lease is still active for "
@@ -116,7 +116,7 @@ msgstr "%1 s'est inscrit·e avec pour adresse e-mail %2"
 msgid "%1 home"
 msgstr "Page d'accueil de %1"
 
-#: data/TWiki/NewUserTemplate.txt:89
+#: data/TWiki/NewUserTemplate.txt:88
 #, fuzzy
 msgid "%1 is a list of TWiki user documentation"
 msgstr "La liste des autres utilisateurs et utilisatrices est sur %1."
@@ -129,11 +129,11 @@ msgstr "%1 est un nom de web invalide"
 msgid "%1 is currently logged in"
 msgstr "%1 est actuellement connecté·e"
 
-#: templates/messages.tmpl:333
+#: templates/messages.tmpl:342
 msgid "%1 is currently set to %2"
 msgstr "%1 vaut actuellement %2"
 
-#: templates/messages.tmpl:350
+#: templates/messages.tmpl:359
 msgid "%1 is editing %2."
 msgstr "%2 est en cours de modification par %1."
 
@@ -141,12 +141,12 @@ msgstr "%2 est en cours de modification par %1."
 msgid "%1 is in at least one group and cannot be removed"
 msgstr "%1 fait partie d'au moins un groupe et ne peut donc être supprimé"
 
-#: data/TWiki/NewUserTemplate.txt:90
+#: data/TWiki/NewUserTemplate.txt:89
 #, fuzzy
 msgid "%1 lists all TWiki user tools"
 msgstr "La liste des autres utilisateurs et utilisatrices est sur %1."
 
-#: templates/messages.tmpl:358
+#: templates/messages.tmpl:367
 msgid "%1 may still be editing %2."
 msgstr "%2 est peut-être toujours en cours de modification par %1."
 
@@ -167,7 +167,7 @@ msgstr "%1 pour modifier la configuration de ce web"
 msgid "%1 to start working on the new web"
 msgstr "%1 pour commencer à travailler sur ce nouveau web"
 
-#: templates/messages.tmpl:416
+#: templates/messages.tmpl:425
 msgid "%1 topic does not exist"
 msgstr "La page %1 n'existe pas"
 
@@ -312,6 +312,10 @@ msgstr "(aucun)"
 msgid "(oops)"
 msgstr "(argh)"
 
+#: data/TWiki/TWikiRegistration.txt:208
+msgid "(optional)"
+msgstr ""
+
 #: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
 msgid "(otherwise search %1 Web only)"
 msgstr "(sinon, chercher seulement sur le Web %1)"
@@ -348,11 +352,11 @@ msgstr "(point-virgule =;= signifie ET)"
 msgid "(set preferences)"
 msgstr "(enregistrer les options)"
 
-#: templates/messages.tmpl:212
+#: templates/messages.tmpl:221
 msgid "(single character first name)"
 msgstr "(un seul caractère pour le prénom)"
 
-#: templates/messages.tmpl:211
+#: templates/messages.tmpl:220
 msgid "(single character last name)"
 msgstr "(un seul caractère pour le nom de famille)"
 
@@ -361,9 +365,10 @@ msgid "(skipped)"
 msgstr "(ignoré)"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:44
+#, fuzzy
 msgid ""
-"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
-"Error\" message when you upload a file, you need to try again. It should "
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \\\"Internal Server "
+"Error\\\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
 "*Bug :* Internet Explorer 4.0 et précédents : Si le message \"Internal "
@@ -382,10 +387,11 @@ msgstr ""
 "fichier attaché sera celui fourni lors de l'envoi du fichier."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:43
+#, fuzzy
 msgid ""
-"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow"
-"('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more "
-"information about attaching files."
+"*Help:* Please see <a target='TWikiVariables' onclick=\\\"return launchWindow"
+"('%1','FileAttachment')\\\" href='' rel='nofollow'>FileAttachment</a> for "
+"more information about attaching files."
 msgstr ""
 "*Aide :* Veuillez consulter <a target='TWikiVariables' onclick=\"return "
 "launchWindow('%1','FileAttachment')\" href='' rel='nofollow'>FileAttachment</"
@@ -423,11 +429,13 @@ msgstr ""
 "ajouté."
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:49
+#, fuzzy
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
-"changed without uploading a file by pressing \"Change Properties only\"; see "
-"<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%"
-"1','HiddenAttachment')\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
+"changed without uploading a file by pressing \\\"Change Properties only\\\"; "
+"see <a target=\\\"HiddenAttachment\\\" onclick=\\\"return launchWindow('%"
+"1','HiddenAttachment')\\\" href=\\\"%2\\\" rel='nofollow'>HiddenAttachment</"
+"a>."
 msgstr ""
 "*Propriétés :* Vous pouvez modifier le commentaire et la visibilité (c'est-à-"
 "dire, le fait que le fichier attaché soit dissimulé ou non), sans envoyer le "
@@ -445,9 +453,10 @@ msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "<a href='%1' rel='nofollow'>Modifier les paramètres</a> de cette page"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:77
+#, fuzzy
 msgid ""
-"<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
-"\" href='%2' rel='nofollow'>Get help on managing webs</a>"
+"<a target='ManagingWebs' onclick=\\\"return launchWindow('%1','ManagingWebs')"
+"\\\" href='%2' rel='nofollow'>Get help on managing webs</a>"
 msgstr ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
 "\" href='%2' rel='nofollow'>Obtenir de l'aide sur la gestion des webs</a>"
@@ -471,7 +480,7 @@ msgstr ""
 "<span class='twikiAlert'><b>N'oubliez pas</b></span> d'enregistrer vos "
 "modifications."
 
-#: templates/messages.tmpl:405
+#: templates/messages.tmpl:414
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %2 in a web that does not exist."
@@ -480,7 +489,7 @@ msgstr ""
 "sphère de coopération. Vous tentez actuellement de %2 dans un web qui "
 "n'existe pas."
 
-#: templates/messages.tmpl:286
+#: templates/messages.tmpl:295
 msgid "A =.txt= extension is appended to some filenames for security reasons"
 msgstr ""
 
@@ -496,7 +505,7 @@ msgstr ""
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "Un message de confirmation a été envoyé à %1"
 
-#: templates/messages.tmpl:409
+#: templates/messages.tmpl:418
 msgid ""
 "A link to a topic located in another web is written like %1. Make sure that "
 "the name of the web is not spelt wrongly on the previous page; fix the link "
@@ -514,10 +523,12 @@ msgstr ""
 "Une liste plus détaillée des modifications est disponible via le lien [[%1]"
 "[Modifications récentes]] dans le menu de navigation."
 
-#: templates/messages.tmpl:381
+#: templates/messages.tmpl:390
+#, fuzzy
 msgid ""
-"A new *system-generated* password for login name %1 (wikiname %2) has been "
-"sent to %3"
+"A new *system-generated* password for your login name %1 (<nop>WikiName %2) "
+"has been sent to your registered e-mail address. If your e-mail address is "
+"no longer valid, please contact %3"
 msgstr ""
 "Un nouveau mot de passe a été *généré par TWiki*, pour l'utilisateur ou "
 "l'utilisatrice %1 (nom wiki : %2), et a été envoyé à %3"
@@ -533,7 +544,7 @@ msgstr "Tous &les webs"
 msgid "Access Denied"
 msgstr "Accès refusé"
 
-#: templates/messages.tmpl:388
+#: templates/messages.tmpl:397
 msgid "Access check on %1 failed"
 msgstr "L'accès à %1 a été refusé"
 
@@ -548,7 +559,7 @@ msgstr "Raccourcis clavier"
 msgid "Action"
 msgstr "Action"
 
-#: templates/messages.tmpl:389
+#: templates/messages.tmpl:398
 msgid "Action %1: %2."
 msgstr "Action %1 : %2."
 
@@ -567,7 +578,7 @@ msgstr ""
 msgid "Added"
 msgstr "Ajouté"
 
-#: templates/messages.tmpl:274
+#: templates/messages.tmpl:283
 msgid "Adding a %1 variable in WebPreferences"
 msgstr "Ajoutant une variable %1 sur la page WebPreferences"
 
@@ -598,7 +609,7 @@ msgstr ""
 "Forcer le choix, pour cette page, d'un nom qui n'est pas un <nop>MotWiki "
 "(<nop>WikiWord)"
 
-#: templates/messages.tmpl:200
+#: templates/messages.tmpl:209
 msgid ""
 "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
 "different username."
@@ -606,14 +617,14 @@ msgstr ""
 "Sinon, appuyez sur _Page précédente_ pour retourner à la page TWiki."
 "TWikiRegistration et y choisir un nom de connexion différent."
 
-#: templates/messages.tmpl:240
+#: templates/messages.tmpl:249
 #, fuzzy
 msgid "An e-mail address is required before a password can be reset."
 msgstr ""
 "Une adresse e-mail est nécessaire pour qu'un mot de passe puisse être "
 "réinitialisé."
 
-#: templates/messages.tmpl:187
+#: templates/messages.tmpl:196
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
@@ -663,7 +674,7 @@ msgstr "Attacher un nouveau fichier"
 msgid "Attachment"
 msgstr "Fichier attaché"
 
-#: templates/messages.tmpl:425
+#: templates/messages.tmpl:434
 msgid "Attachment '%1' does not exist"
 msgstr "Le fichier attaché '%1' n'existe pas"
 
@@ -744,21 +755,21 @@ msgstr "Dans le titre et dans le texte"
 
 #: data/Trash/WebHome.txt:7
 msgid ""
-"By default, viewing the Trash web is restricted to %MAINWEB%."
-"TWikiAdminGroup. If you would like to allow all users to view the Trash web, "
-"remove the =ALLOWWEBVIEW= restriction in WebPreferences."
+"By default, viewing the Trash web is restricted to %1. If you would like to "
+"allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction "
+"in WebPreferences."
 msgstr ""
 
-#: templates/messages.tmpl:379 templates/messages.tmpl:42
+#: templates/messages.tmpl:388 templates/messages.tmpl:42
 msgid "Can't find user %1"
 msgstr "L'utilisateur ou l'utilisatrice %1 est introuvable"
 
-#: templates/messages.tmpl:239
+#: templates/messages.tmpl:248
 #, fuzzy
 msgid "Can't get an e-mail address for %1"
 msgstr "L'adresse e-mail de %1 est introuvable"
 
-#: templates/messages.tmpl:380
+#: templates/messages.tmpl:389
 #, fuzzy
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
@@ -857,7 +868,7 @@ msgstr "Modifications"
 msgid "Changes from r%1 to r%2"
 msgstr "Modifications entre r%1 et r%2"
 
-#: templates/messages.tmpl:331
+#: templates/messages.tmpl:340
 msgid ""
 "Check your configuration setting for {TemplateDir}. If that's not the "
 "problem, it may be because you have a setting of %1 that is pointing to a "
@@ -882,11 +893,11 @@ msgstr "Choisissez un nouveau modèle de formulaire"
 msgid "Clear all"
 msgstr "Désélectionner toutes"
 
-#: templates/messages.tmpl:420
+#: templates/messages.tmpl:429
 msgid "Click here"
 msgstr "Cliquez ici"
 
-#: templates/messages.tmpl:263
+#: templates/messages.tmpl:272
 msgid "Click on [[%1][Debug topic text]]."
 msgstr "Consultez les [[%1][informations de debug de la page]]."
 
@@ -916,15 +927,6 @@ msgstr "Commentaire"
 msgid "Comments:"
 msgstr "Commentaires :"
 
-#: data/TWiki/TWikiRegistration.txt:59
-#, fuzzy
-msgid "Company URL: %BR% (or department URL)"
-msgstr "Site de l'organisation : <br> (ou de la branche)"
-
-#: data/TWiki/TWikiRegistration.txt:56
-msgid "Company name:"
-msgstr "Nom de l'organisation :"
-
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:48
 msgid "Compare revisions"
 msgstr "Comparer les versions"
@@ -940,20 +942,20 @@ msgstr "Confirmer le renommage ou le déplacement"
 msgid "Conflict"
 msgstr "Conflit"
 
-#: data/TWiki/TWikiVariablesAtoM.txt:301 templates/messages.tmpl:391
-#: templates/messages.tmpl:398 templates/messages.tmpl:422
-#: templates/messages.tmpl:428
+#: data/TWiki/TWikiVariablesAtoM.txt:302 templates/messages.tmpl:400
+#: templates/messages.tmpl:407 templates/messages.tmpl:431
+#: templates/messages.tmpl:437
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:50
 msgid "Contact %1 if you have any questions."
 msgstr "Contactez %1 si vous avez des questions."
 
-#: templates/messages.tmpl:323
+#: templates/messages.tmpl:332
 msgid "Continue and try to rename web?"
 msgstr "Continuer et essayer de renommer le web ?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
 #, fuzzy
-msgid "Continue to *[[%1][create topic: %TOPIC%]]*"
+msgid "Continue to *[[%1][create topic %2]]*"
 msgstr "Continuer à *[[%1][Créer la nouvelle page]]*"
 
 #: data/TWiki/TWikiPreferences.txt:39
@@ -968,11 +970,11 @@ msgstr ""
 msgid "Could not create the new web %1"
 msgstr "Impossible de créer le web %1"
 
-#: templates/messages.tmpl:329
+#: templates/messages.tmpl:338
 msgid "Could not find template"
 msgstr "Impossible de trouver le template"
 
-#: templates/messages.tmpl:244
+#: templates/messages.tmpl:253
 msgid "Could not save %1."
 msgstr "Impossible d'enregistrer %1."
 
@@ -1035,7 +1037,7 @@ msgstr ""
 "Créer votre page %1 personnelle, dont le nom sera votre <nop>NomWiki, et y "
 "insérer les informations que vous avez fourni sur la page actuelle."
 
-#: templates/messages.tmpl:273
+#: templates/messages.tmpl:282
 msgid "Creating a suitable Form Definition topic"
 msgstr "Créant une page correcte de définition de formulaire"
 
@@ -1101,7 +1103,7 @@ msgstr "Supprimé"
 msgid "Deleted topics will be moved to the %1 web"
 msgstr "Les pages supprimées sont en réalité déplacées vers le web %1"
 
-#: templates/messages.tmpl:198
+#: templates/messages.tmpl:207
 msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr "Souhaitiez-vous [[%1][réinitialiser le mot de passe de %2]] ?"
 
@@ -1153,7 +1155,7 @@ msgstr ""
 "Une erreur (%3) est survenue lors du renommage du web %1 en %2. Merci d'en "
 "informer les administrateurs et administratrices de %4."
 
-#: templates/messages.tmpl:302
+#: templates/messages.tmpl:311
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
@@ -1176,6 +1178,11 @@ msgstr ""
 #, fuzzy
 msgid "E-mail address:"
 msgstr "Adresse e-mail :"
+
+#: templates/messages.tmpl:149
+#, fuzzy
+msgid "E-mail changed successfully!"
+msgstr "Mot de passe changé avec succès !"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:49
 msgid "Each preference has the syntax"
@@ -1221,19 +1228,19 @@ msgstr ""
 "Pour changer d'identité, entrez un nouveau nom de connexion ainsi que son "
 "mot de passe."
 
-#: templates/messages.tmpl:181
+#: templates/messages.tmpl:190
 msgid "Error registering user %1"
 msgstr "Erreur lors de l'inscription de l'utilisateur ou utilisatrice %1"
 
-#: templates/messages.tmpl:301
+#: templates/messages.tmpl:310
 msgid "Error saving topic"
 msgstr "Erreur lors de l'enregistrement de la page"
 
-#: templates/messages.tmpl:372
+#: templates/messages.tmpl:381
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr "Erreur : Le fichier attaché à %1,%2 n'existe pas"
 
-#: templates/messages.tmpl:374
+#: templates/messages.tmpl:383
 msgid ""
 "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
 "=text/css=)"
@@ -1241,11 +1248,11 @@ msgstr ""
 "Erreur : Type de contenu non supporté : %1 (types supportés : =text/html=, "
 "=text/plain= et =text/css=)"
 
-#: templates/messages.tmpl:373
+#: templates/messages.tmpl:382
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "Erreur : Protocole non supporté. (Doit être 'http://domaine/...')"
 
-#: templates/messages.tmpl:191
+#: templates/messages.tmpl:200
 msgid "Errors"
 msgstr "Erreurs "
 
@@ -1259,7 +1266,7 @@ msgstr ""
 "Les données actuelles du formulaire seront perdues ! (mais toujours "
 "disponibles dans les anciennes versions)"
 
-#: templates/messages.tmpl:382
+#: templates/messages.tmpl:391
 msgid "Failed to include URL %1"
 msgstr "Échec de l'insertion de l'URL %1"
 
@@ -1267,7 +1274,7 @@ msgstr "Échec de l'insertion de l'URL %1"
 msgid "Fields marked %1 are required"
 msgstr "Il est nécessaire de remplir les champs marqués par %1"
 
-#: templates/messages.tmpl:279
+#: templates/messages.tmpl:288
 msgid "File has been uploaded with different name"
 msgstr ""
 
@@ -1296,18 +1303,19 @@ msgstr "Prénom :"
 msgid "Force new revision"
 msgstr "Forcer le passage à une nouvelle version"
 
-#: templates/messages.tmpl:251
+#: templates/messages.tmpl:260
 msgid "Form Definition %1 missing"
 msgstr "La définition du formulaire %1 fait défaut"
 
-#: templates/messages.tmpl:256
+#: templates/messages.tmpl:265
 msgid "Form definition missing"
 msgstr "La définition du formulaire fait défaut"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:67
+#, fuzzy
 msgid ""
-"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
-"1','ManagingTopics')\" href=\"%2\" rel='nofollow'>Renaming and moving "
+"Get help on <a target='ManagingTopics' onclick=\\\"return launchWindow('%"
+"1','ManagingTopics')\\\" href=\\\"%2\\\" rel='nofollow'>Renaming and moving "
 "topics</a>."
 msgstr ""
 "Obtenir de l'aide sur <a target='ManagingTopics' onclick=\"return "
@@ -1315,29 +1323,30 @@ msgstr ""
 "renommage et le déplacement de pages</a>."
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:48
+#, fuzzy
 msgid ""
-"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
-"1','TWikiVariables')\" href='%2' rel='nofollow'>Setting topic preferences</"
+"Get help on <a target='TWikiVariables' onclick=\\\"return launchWindow('%"
+"1','TWikiVariables')\\\" href='%2' rel='nofollow'>Setting topic preferences</"
 "a>."
 msgstr ""
 "Obtenir de l'aide sur <a target='TWikiVariables' onclick=\"return "
 "launchWindow('%1','TWikiVariables')\" href='%2' rel='nofollow'>les "
 "paramètres des pages</a>."
 
-#: templates/messages.tmpl:248
+#: templates/messages.tmpl:257
 msgid ""
 "Go back in your browser and insert information for all mandatory fields."
 msgstr ""
 "Retournez à la page précédente et remplissez tous les champs nécessaires."
 
-#: templates/messages.tmpl:306 templates/oopssaveerr.tmpl:15
+#: templates/messages.tmpl:315 templates/oopssaveerr.tmpl:15
 #: twikiplugins/PatternSkin/templates/oopssaveerr.pattern.tmpl:15
 msgid "Go back in your browser and save your changes locally."
 msgstr ""
 "Retournez à la page précédente et enregistrez vos modifications localement "
 "(c'est-à-dire, dans l'ordinateur que vous utilisez présentement)."
 
-#: templates/messages.tmpl:208
+#: templates/messages.tmpl:217
 msgid "Good examples:"
 msgstr "Exemples corrects :"
 
@@ -1379,7 +1388,7 @@ msgstr "Dissimuler l'aide"
 msgid "History:"
 msgstr "Historique :"
 
-#: data/TWiki/NewUserTemplate.txt:75
+#: data/TWiki/NewUserTemplate.txt:74
 msgid "Horizontal size of text edit box:"
 msgstr "Largeur du cadre d'édition de texte :"
 
@@ -1393,7 +1402,7 @@ msgstr "Il est possible d'attacher votre photo"
 msgid "How to activate your %1 registration"
 msgstr "Comment valider votre inscription sur %1"
 
-#: templates/messages.tmpl:281
+#: templates/messages.tmpl:290
 msgid ""
 "However, the filename has been changed from %1 to %2. Please make a note of "
 "it."
@@ -1405,13 +1414,13 @@ msgstr ""
 "Des idées, requêtes ou problèmes concernant %1 ? <a href='%2'>Écrivez-nous</"
 "a>"
 
-#: templates/messages.tmpl:265
+#: templates/messages.tmpl:274
 msgid "If this line isn't present see _upgrade_ section below"
 msgstr ""
 "Si cette ligne n'apparaît pas, lisez le paragraphe concernant la mise à jour "
 "(_upgrade_), ci-dessous"
 
-#: templates/messages.tmpl:259
+#: templates/messages.tmpl:268
 msgid "If this topic is missing create it, otherwise check it for errors."
 msgstr ""
 "Si cette page n'existe pas, créez-la ; sinon, vérifiez qu'elle ne contient "
@@ -1425,13 +1434,13 @@ msgstr ""
 "Si vous connaissez déjà le nom de la page, entrez son nom dans le cadre "
 "intitulé [[%1][Aller à]], tout en haut"
 
-#: templates/messages.tmpl:343
+#: templates/messages.tmpl:352
 msgid ""
 "If you are developing a <nop>TWikiApplication, see %1 for a description of "
 "the correct parameters."
 msgstr ""
 
-#: templates/messages.tmpl:407
+#: templates/messages.tmpl:416
 msgid "If you came here by clicking on a question mark link"
 msgstr ""
 "Si vous êtes arrivé·e ici en cliquant sur un lien en forme de point "
@@ -1473,7 +1482,7 @@ msgstr ""
 msgid "If you intend to do a full text search:"
 msgstr "Si vous souhaitez chercher dans l'intégralité du texte :"
 
-#: templates/messages.tmpl:341
+#: templates/messages.tmpl:350
 msgid ""
 "If you received a link to this topic in an e-mail or just want to look at "
 "the topic, [[%1][cancel save]] to go to %2."
@@ -1481,11 +1490,12 @@ msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-msgid "If you used the \"Jump\" feature to jump to this page:"
+#, fuzzy
+msgid "If you used the \\\"Jump\\\" feature to jump to this page:"
 msgstr ""
 "Si vous avez utilisé la fonction \"Aller à\" pour arriver sur cette page :"
 
-#: templates/messages.tmpl:419
+#: templates/messages.tmpl:428
 msgid "If you want to create the topic"
 msgstr "Si vous souhaitez créer cette page"
 
@@ -1494,7 +1504,7 @@ msgstr "Si vous souhaitez créer cette page"
 msgid "If you would like to create this page:"
 msgstr "Si vous souhaitez créer cette page :"
 
-#: templates/messages.tmpl:412
+#: templates/messages.tmpl:421
 msgid "If you would like to create this web"
 msgstr "Si vous souhaitez créer ce web"
 
@@ -1508,17 +1518,17 @@ msgstr ""
 msgid "In reversed order"
 msgstr "En ordre inverse"
 
-#: templates/messages.tmpl:284
+#: templates/messages.tmpl:293
 msgid ""
 "In some cases, TWiki changes the name of the uploaded file to make it safe "
 "and accessible across all platforms:"
 msgstr ""
 
-#: templates/messages.tmpl:205
+#: templates/messages.tmpl:214
 msgid "Incorrect %1"
 msgstr "%1 incorrect"
 
-#: templates/messages.tmpl:208
+#: templates/messages.tmpl:217
 msgid "Incorrect %1.WikiNames:"
 msgstr "!MotsWiki (%1.WikiNames) incorrects :"
 
@@ -1526,7 +1536,7 @@ msgstr "!MotsWiki (%1.WikiNames) incorrects :"
 msgid "Incorrect Password"
 msgstr "Mot de passe erroné"
 
-#: templates/messages.tmpl:339
+#: templates/messages.tmpl:348
 msgid "Incorrect parameters to the =%1= script"
 msgstr ""
 
@@ -1539,16 +1549,16 @@ msgstr ""
 msgid "Index"
 msgstr "Index"
 
-#: templates/messages.tmpl:225
+#: templates/messages.tmpl:234
 msgid "Invalid Activation Code"
 msgstr "Code de validation erroné"
 
-#: templates/messages.tmpl:217
+#: templates/messages.tmpl:226
 #, fuzzy
 msgid "Invalid e-mail address"
 msgstr "Adresse e-mail invalide"
 
-#: templates/messages.tmpl:354
+#: templates/messages.tmpl:363
 #, fuzzy
 msgid ""
 "It is probably OK to go ahead and edit - unless you intend to change data in "
@@ -1565,9 +1575,10 @@ msgstr ""
 "ce cas, de commencer par vérifier avec ces personnes."
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:22
+#, fuzzy
 msgid ""
-"It's usually best to choose a <a target='WikiWord' onclick=\"return "
-"launchWindow('%1','WikiWord')\" href='%1' rel='nofollow'>WikiWord</a> for "
+"It's usually best to choose a <a target='WikiWord' onclick=\\\"return "
+"launchWindow('%1','WikiWord')\\\" href='%1' rel='nofollow'>WikiWord</a> for "
 "the new topic name, otherwise automatic linking may not work. Characters not "
 "allowed in topic names, such as spaces will automatically be removed."
 msgstr ""
@@ -1653,7 +1664,7 @@ msgstr "Nom d'utilisateur ou d'utilisatrice %1"
 msgid "Logon"
 msgstr "Connexion"
 
-#: templates/messages.tmpl:189
+#: templates/messages.tmpl:198
 msgid "Mail to"
 msgstr "Écrivez à "
 
@@ -1670,7 +1681,7 @@ msgstr ""
 "Veuillez vérifier que vous avez écrit le %1 correctement, et réessayez. "
 "Rappel : un %2 est sensible à la casse (majuscules/minuscules)"
 
-#: templates/messages.tmpl:169
+#: templates/messages.tmpl:178
 msgid "Missing Fields"
 msgstr "Champs manquants"
 
@@ -1704,7 +1715,7 @@ msgstr "Déplacer le fichier attaché"
 msgid "Move or Delete File %1"
 msgstr "Déplacer ou effacer le fichier %1"
 
-#: data/TWiki/NewUserTemplate.txt:59
+#: data/TWiki/NewUserTemplate.txt:58
 msgid "My Links"
 msgstr "Mes liens"
 
@@ -1747,11 +1758,11 @@ msgstr "Nouvelle version :"
 msgid "No child topics"
 msgstr "Pas de pages filles"
 
-#: templates/messages.tmpl:371
+#: templates/messages.tmpl:380
 msgid "No permission to view %1"
 msgstr "Vous n'avez pas la permission d'accéder à %1"
 
-#: templates/messages.tmpl:162
+#: templates/messages.tmpl:171
 msgid "No users to reset passwords for."
 msgstr ""
 "Aucun nom d'utilisateur ou d'utilisatrice fourni pour la réinitialisation "
@@ -1765,7 +1776,7 @@ msgstr ""
 "Sachez que tout lien pointant vers ce fichier attaché ne fonctionnera plus "
 "après ce déplacement."
 
-#: data/TWiki/TWikiRegistration.txt:6 templates/messages.tmpl:283
+#: data/TWiki/TWikiRegistration.txt:6 templates/messages.tmpl:292
 #: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:22
@@ -1779,7 +1790,7 @@ msgstr "Note :"
 msgid "Notes"
 msgstr "Notes"
 
-#: data/TWiki/TWikiVariablesAtoM.txt:298
+#: data/TWiki/TWikiVariablesAtoM.txt:299
 msgid "Notes:"
 msgstr "Notes :"
 
@@ -1800,7 +1811,7 @@ msgstr "Abonnement"
 msgid "Number of topics:"
 msgstr "Nombre de pages :"
 
-#: templates/messages.tmpl:290 templates/oopsaccessdenied.tmpl:6
+#: templates/messages.tmpl:299 templates/oopsaccessdenied.tmpl:6
 #: templates/oopslanguagechanged.tmpl:5 templates/oopssaveerr.tmpl:16
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
 #: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:6
@@ -1828,7 +1839,7 @@ msgstr ""
 "pages traitant du même sujet, des liens pointant vers elle, afin que les "
 "autres personnes soient en mesure de la trouver."
 
-#: templates/messages.tmpl:396
+#: templates/messages.tmpl:405
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "Seul·e·s les membres du %1 sont autorisé·e·s à faire ça."
 
@@ -1843,6 +1854,14 @@ msgstr "Seul·e·s les membres du %1 sont autorisé·e·s à faire ça."
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:36
 msgid "Opens page in new window"
 msgstr "Ouvre la page dans une nouvelle fenêtre"
+
+#: data/TWiki/TWikiRegistration.txt:59
+msgid "Organisation URL:"
+msgstr ""
+
+#: data/TWiki/TWikiRegistration.txt:56
+msgid "Organisation name:"
+msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:203
 msgid "Other Country"
@@ -1860,15 +1879,15 @@ msgstr "Mot de passe"
 msgid "Password changed successfully!"
 msgstr "Mot de passe changé avec succès !"
 
-#: templates/messages.tmpl:161 templates/messages.tmpl:165
+#: templates/messages.tmpl:170 templates/messages.tmpl:174
 msgid "Password reset failed"
 msgstr "Échec de la réinitialisation du mot de passe"
 
-#: templates/messages.tmpl:175
+#: templates/messages.tmpl:184
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne concordent pas"
 
-#: data/TWiki/NewUserTemplate.txt:55 data/TWiki/NewUserTemplate.txt:69
+#: data/TWiki/NewUserTemplate.txt:54 data/TWiki/NewUserTemplate.txt:68
 #, fuzzy
 msgid "Personal Preferences"
 msgstr "Options personnelles (pour plus de détails, voir %1)"
@@ -1881,7 +1900,7 @@ msgstr "Choisissez l'un des %1."
 msgid "Placeholder for trashed attachments"
 msgstr "Emplacement où seront déplacés les fichiers attachés supprimés"
 
-#: templates/messages.tmpl:202 templates/messages.tmpl:236
+#: templates/messages.tmpl:211 templates/messages.tmpl:245
 msgid "Please contact %1 if you have any questions."
 msgstr "Veuillez contacter %1 si vous avez des questions."
 
@@ -1894,7 +1913,7 @@ msgstr "Veuillez entrer votre nom de connexion, ainsi que votre mot de passe :"
 msgid "Please go _back_ in your browser and try a new name."
 msgstr "Veuillez retourner à la page précédente, pour essayer un nouveau nom."
 
-#: templates/messages.tmpl:294
+#: templates/messages.tmpl:303
 msgid "Please go back in your browser and check again."
 msgstr "Veuillez retourner à la page précédente et vérifier."
 
@@ -1909,9 +1928,9 @@ msgstr ""
 
 #: templates/messages.tmpl:102 templates/messages.tmpl:107
 #: templates/messages.tmpl:111 templates/messages.tmpl:115
-#: templates/messages.tmpl:125 templates/messages.tmpl:172
-#: templates/messages.tmpl:178 templates/messages.tmpl:214
-#: templates/messages.tmpl:222 templates/messages.tmpl:35
+#: templates/messages.tmpl:125 templates/messages.tmpl:181
+#: templates/messages.tmpl:187 templates/messages.tmpl:223
+#: templates/messages.tmpl:231 templates/messages.tmpl:35
 #: templates/messages.tmpl:39 templates/messages.tmpl:57
 #: templates/messages.tmpl:98
 msgid "Please go back in your browser and try again."
@@ -1925,7 +1944,7 @@ msgstr ""
 "Veuillez vérifier que vous avez écrit le %1 correctement, et réessayez. Si "
 "ça ne fonctionne toujours pas, veuillez en informer %2."
 
-#: templates/messages.tmpl:228
+#: templates/messages.tmpl:237
 msgid "Please try again."
 msgstr "Veuillez réessayer."
 
@@ -2008,16 +2027,22 @@ msgstr "Inscription"
 msgid "Regular expression search"
 msgstr "Recherche par expression rationnelle"
 
-#: data/TWiki/NewUserTemplate.txt:84
+#: data/TWiki/NewUserTemplate.txt:83
 #, fuzzy
 msgid "Related Topics"
 msgstr "Pages liées :"
 
 #: data/Main/TWikiGroupTemplate.txt:8 data/Sandbox/WebNotify.txt:10
 #: data/Trash/WebNotify.txt:9 data/_default/WebNotify.txt:8
-#: templates/messages.tmpl:394 templates/messages.tmpl:401
+#: templates/messages.tmpl:403 templates/messages.tmpl:410
 msgid "Related topics:"
 msgstr "Pages liées :"
+
+#: templates/messages.tmpl:151
+msgid ""
+"Remember to update your user topic if you want your e-mail change to be "
+"reflected there as well."
+msgstr ""
 
 #: templates/messages.tmpl:49
 msgid "Remove the user from the group(s) %1 first."
@@ -2069,6 +2094,10 @@ msgstr "Remplacer le formulaire..."
 #: twikiplugins/PatternSkin/templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
 msgstr "Résultats dans le web %1"
+
+#: templates/messages.tmpl:155
+msgid "Return to %1."
+msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:52
 msgid "Retype password:"
@@ -2176,7 +2205,7 @@ msgstr ""
 "Pour consulter la liste des utilisateurs et utilisatrices, consultez %1. "
 "Pour créer votre propre compte, inscrivez-vous sur %2. "
 
-#: templates/messages.tmpl:252
+#: templates/messages.tmpl:261
 msgid "See %1 for information about Form Definitions."
 msgstr ""
 "Pour plus d'informations à propos des définitions de formulaires, consultez %"
@@ -2264,7 +2293,7 @@ msgstr "Afficher l'aide au formatage"
 msgid "Show help"
 msgstr "Afficher l'aide"
 
-#: data/TWiki/NewUserTemplate.txt:73
+#: data/TWiki/NewUserTemplate.txt:72
 #, fuzzy
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr ""
@@ -2303,7 +2332,7 @@ msgstr ""
 "Certaines personnes y incluent quelques informations publiques sur leur "
 "emploi du temps."
 
-#: templates/messages.tmpl:287
+#: templates/messages.tmpl:296
 msgid "Some characters such as =~=, =$=, =@=, =%= are removed"
 msgstr ""
 
@@ -2320,7 +2349,7 @@ msgstr ""
 msgid "Sort results by:"
 msgstr "Trier les résultats par :"
 
-#: templates/messages.tmpl:285
+#: templates/messages.tmpl:294
 msgid "Spaces are replaced by underscores"
 msgstr ""
 
@@ -2348,7 +2377,7 @@ msgstr ""
 "Étape 2 : Continuez de <input type='submit' class='twikiButton' "
 "value='Modifier' /> et enregistrez %1 pour activer la nouvelle page mère"
 
-#: data/TWiki/NewUserTemplate.txt:79
+#: data/TWiki/NewUserTemplate.txt:78
 msgid ""
 "Style of text edit box. =width: 99%= for full window width (default), "
 "=width: auto= to disable."
@@ -2357,8 +2386,8 @@ msgstr ""
 "largeur de la fenêtre (ce qui est le paramètre par défaut), =width: auto= "
 "pour désactiver cette option."
 
-#: data/TWiki/TWikiRegistration.txt:217 templates/messages.tmpl:156
-#: templates/messages.tmpl:233
+#: data/TWiki/TWikiRegistration.txt:217 templates/messages.tmpl:165
+#: templates/messages.tmpl:242
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -2381,9 +2410,10 @@ msgid "Summaries"
 msgstr "Les résumés"
 
 #: data/TWiki/WebSearch.txt:25 data/TWiki/WebSearchAdvanced.txt:33
+#, fuzzy
 msgid ""
-"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
-"=\"web service\"=, but not =\"shampoo\"=, write:"
+"TIP: to search for all topics that contain =\\\"SOAP\\\"=, =\\\"WSDL\\\"=, a "
+"literal =\\\"web service\\\"=, but not =\\\"shampoo\\\"=, write:"
 msgstr ""
 "Astuce : pour chercher les pages contenant =\"SOAP\"=, =\"WSDL\"=, et =\"web "
 "service\"= litérallement, mais pas =\"shampoo\"=, écrivez :"
@@ -2394,11 +2424,12 @@ msgid "TWiki password reset for %1"
 msgstr "Réinitialisation du mot de passe de %1"
 
 #: templates/oopschangelanguage.tmpl:13
+#, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
-"change the language for this session, choose one of the following and hit "
-"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
-"the page to return to the previous topic."
+"change the language for this session, choose one of the following and hit \\"
+"\"Change language\\\". Otherwise, follow the \\\"Cancel\\\" link on the "
+"bottom of the page to return to the previous topic."
 msgstr ""
 "L'interface de TWiki est disponible en plusieurs langues. Si vous souhaitez "
 "changer de langue pour cette session, choisissez l'une de celles qui sont "
@@ -2413,7 +2444,7 @@ msgstr "Pages de test"
 msgid "Text body"
 msgstr "Corps du texte"
 
-#: templates/messages.tmpl:132 templates/messages.tmpl:149
+#: templates/messages.tmpl:132 templates/messages.tmpl:158
 msgid "Thank you for registering"
 msgstr "Merci de vous être inscrit·e"
 
@@ -2436,7 +2467,7 @@ msgstr ""
 "Merci de vous être inscrit·e sur la plate-forme collaborative %1. Votre code "
 "de vérification est %2."
 
-#: templates/messages.tmpl:206
+#: templates/messages.tmpl:215
 #, fuzzy
 msgid ""
 "The %1 field must be your first and last name in %2, e.g. your capitalized "
@@ -2449,7 +2480,7 @@ msgstr ""
 msgid "The %1 topic already exists"
 msgstr "La page %1 existe déjà"
 
-#: templates/messages.tmpl:404
+#: templates/messages.tmpl:413
 msgid "The %1 web does not exist"
 msgstr "Le web %1 n'existe pas"
 
@@ -2473,7 +2504,7 @@ msgid ""
 "Enterprise."
 msgstr "Le web %1 de TWiki. TWiki est une plate-forme internet collaborative."
 
-#: templates/messages.tmpl:226
+#: templates/messages.tmpl:235
 msgid "The activation code %1 is invalid."
 msgstr "Le code de validation %1 est invalide."
 
@@ -2482,7 +2513,7 @@ msgid "The attachment and any history will be moved to the new topic."
 msgstr ""
 "Le fichier attaché et son historique seront déplacés vers la nouvelle page."
 
-#: templates/messages.tmpl:362
+#: templates/messages.tmpl:371
 #, fuzzy
 msgid ""
 "The chances are good that %1 has simply navigated away from the edit page "
@@ -2504,34 +2535,34 @@ msgstr ""
 "s'afficher, pour que vous puissiez renommer les pages qui étaient "
 "verrouillées)"
 
-#: templates/messages.tmpl:218
+#: templates/messages.tmpl:227
 #, fuzzy
 msgid "The e-mail address for this account is not valid."
 msgstr "L'adresse e-mail de ce compte est invalide."
 
-#: templates/messages.tmpl:378
+#: templates/messages.tmpl:387
 msgid "The entry for user %1 was missing in the password system."
 msgstr ""
 "Le système de mot de passe ne contenait pas l'enregistrement de "
 "l'utilisateur ou de l'utilisatrice %1."
 
-#: templates/messages.tmpl:280
+#: templates/messages.tmpl:289
 msgid "The file has been uploaded and attached properly to the %1 topic."
 msgstr ""
 
-#: templates/messages.tmpl:313
+#: templates/messages.tmpl:322
 msgid "The following topics are locked for edit, and cannot be moved:"
 msgstr ""
 "Les pages suivantes sont bloquées parce qu'en cours de modification ; elles "
 "ne peuvent donc être déplacées."
 
-#: templates/messages.tmpl:319
+#: templates/messages.tmpl:328
 msgid "The following topics refer to topics in this web, but are being edited:"
 msgstr ""
 "Les pages listées ci-dessous contiennent des liens pointant vers des pages "
 "de ce web, mais sont en cours d'édition :"
 
-#: templates/messages.tmpl:316
+#: templates/messages.tmpl:325
 msgid ""
 "The following topics refer to topics in this web, but you are denied access "
 "to them:"
@@ -2539,11 +2570,11 @@ msgstr ""
 "Les pages listées ci-dessous contiennent des liens pointant vers des pages "
 "de ce web, mais vous n'avez pas le droit d'y accéder :"
 
-#: templates/messages.tmpl:258
+#: templates/messages.tmpl:267
 msgid "The form should be defined in the topic %1"
 msgstr "Le formulaire devrait être défini sur la page %1"
 
-#: templates/messages.tmpl:360
+#: templates/messages.tmpl:369
 #, fuzzy
 msgid "The lease on this topic expired %1 ago."
 msgstr "Leur verrou sur cette page a expiré il y a %1."
@@ -2561,23 +2592,23 @@ msgid "The password you entered in the *old password* field is incorrect."
 msgstr ""
 "Le mot de passe que vous avez entré dans le champ *old password* est erroné."
 
-#: templates/messages.tmpl:246
+#: templates/messages.tmpl:255
 msgid "The required field %1 was not filled in."
 msgstr "Le champ %1, qui est nécessaire, n'a pas été rempli."
 
-#: templates/messages.tmpl:261
+#: templates/messages.tmpl:270
 msgid "The topic is in an old format"
 msgstr "La page est dans un format obsolète."
 
-#: templates/messages.tmpl:176
+#: templates/messages.tmpl:185
 msgid "The two passwords you entered do not match."
 msgstr "Les deux mots de passe que vous avez entrés ne concordent pas."
 
-#: templates/messages.tmpl:309
+#: templates/messages.tmpl:318
 msgid "There are problems with renaming this web:"
 msgstr "Des problèmes se posent pour le renommage de ce web :"
 
-#: templates/messages.tmpl:183
+#: templates/messages.tmpl:192
 msgid ""
 "There has been a problem adding your user id to the Password system. Please "
 "contact %1."
@@ -2585,16 +2616,20 @@ msgstr ""
 "L'enregistrement de votre compte dans le système de mots de passe a échoué. "
 "Veuillez contactez %1."
 
-#: templates/messages.tmpl:264
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:82
+msgid "There is no size limit for uploaded files."
+msgstr ""
+
+#: templates/messages.tmpl:273
 msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr ""
 "Il devrait y avoir une ligne incluant %1, essayez de trouver %2 (ou %3)"
 
-#: templates/messages.tmpl:271
+#: templates/messages.tmpl:280
 msgid "This can be automatically upgraded by:"
 msgstr "La mise à jour peut être effectée en :"
 
-#: templates/messages.tmpl:254
+#: templates/messages.tmpl:263
 msgid "This could be for several reasons:"
 msgstr "Plusieurs raisons peuvent expliquer ça"
 
@@ -2645,7 +2680,7 @@ msgstr ""
 "Ce nom a été choisi de telle sorte qu'il ne rentre pas en conflit avec les "
 "pages déjà existantes dans le web %1."
 
-#: templates/messages.tmpl:269
+#: templates/messages.tmpl:278
 msgid "This requires the form definition to be present."
 msgstr "Pour cela, le formulaire doit être défini."
 
@@ -2764,7 +2799,7 @@ msgstr ""
 msgid "To web:"
 msgstr "Vers le web :"
 
-#: templates/messages.tmpl:243
+#: templates/messages.tmpl:252
 msgid "Topic Save Error"
 msgstr "Erreur lors de l'enregistrement de la page"
 
@@ -2773,7 +2808,7 @@ msgstr "Erreur lors de l'enregistrement de la page"
 msgid "Topic attachments"
 msgstr "Fichiers attachés"
 
-#: templates/messages.tmpl:267
+#: templates/messages.tmpl:276
 msgid "Topic can not be upgraded from old style category table"
 msgstr "Le tableau de catégories de cette page ne peut être mis à jour"
 
@@ -2848,7 +2883,7 @@ msgstr "Réessayer"
 msgid "Unchanged"
 msgstr "Inchangé"
 
-#: data/TWiki/NewUserTemplate.txt:71
+#: data/TWiki/NewUserTemplate.txt:70
 msgid ""
 "Uncomment preferences variables to activate them (remove the #-sign). Help "
 "and details on preferences variables are available in %1."
@@ -2888,15 +2923,15 @@ msgstr "Envoyer le fichier"
 msgid "Upload up to %1 KB."
 msgstr "Taille limite d'un fichier attaché : %1 Ko."
 
-#: templates/messages.tmpl:293
+#: templates/messages.tmpl:302
 msgid "Uploaded file %1 does not exist or is empty"
 msgstr "Le fichier %1 n'existe pas, ou est vide"
 
-#: templates/messages.tmpl:298
+#: templates/messages.tmpl:307
 msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr "La taille du fichier %1 dépasse la limite de %2 Ko"
 
-#: templates/messages.tmpl:297
+#: templates/messages.tmpl:306
 msgid "Uploaded file is too big"
 msgstr "Ce fichier est trop gros"
 
@@ -2937,7 +2972,7 @@ msgstr ""
 msgid "Version"
 msgstr "Version"
 
-#: data/TWiki/NewUserTemplate.txt:77
+#: data/TWiki/NewUserTemplate.txt:76
 msgid "Vertical size of text edit box:"
 msgstr "Hauteur du cadre d'édition de texte :"
 
@@ -2984,13 +3019,13 @@ msgstr "ATTENTION :"
 msgid "WYSIWYG"
 msgstr "WYSIWYG"
 
-#: templates/messages.tmpl:376
+#: templates/messages.tmpl:385
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
 msgstr ""
 "Attention : la page %1 est déjà insérée. Vous ne pouvez utiliser INCLUDE à "
 "plusieurs reprises sur cette page. %2"
 
-#: templates/messages.tmpl:375
+#: templates/messages.tmpl:384
 msgid "Warning: Can't find topic %1"
 msgstr "Attention : la page %1 est introuvable"
 
@@ -3034,13 +3069,13 @@ msgstr "Qui"
 msgid "Would you like to go to:"
 msgstr "Souhaitez vous aller :"
 
-#: data/TWiki/NewUserTemplate.txt:81
+#: data/TWiki/NewUserTemplate.txt:80
 msgid "Write protect your home page: (set it to your %1)"
 msgstr ""
 "Protégez en écriture votre page personnelle : (donnez la valeur %1 à cette "
 "option) "
 
-#: templates/messages.tmpl:195
+#: templates/messages.tmpl:204
 msgid "You are already registered"
 msgstr "Vous êtes déjà inscrit·e"
 
@@ -3048,11 +3083,11 @@ msgstr "Vous êtes déjà inscrit·e"
 msgid "You are also listed in the %1 topic"
 msgstr "Vous figurez sur la page %1"
 
-#: templates/messages.tmpl:310
+#: templates/messages.tmpl:319
 msgid "You are denied access to the following topics in the web:"
 msgstr "Dans ce web, l'accès aux pages suivantes vous est refusé :"
 
-#: templates/messages.tmpl:364
+#: templates/messages.tmpl:373
 #, fuzzy
 msgid ""
 "You are encouraged to go ahead and edit - unless you intend to change data "
@@ -3087,15 +3122,15 @@ msgstr ""
 "choisissez un nom qui commence par un underscore (_), et ne contenant à part "
 "ça que des caractères alphanumériques."
 
-#: templates/messages.tmpl:417
+#: templates/messages.tmpl:426
 msgid "You are trying to %1 a topic that does not exist."
 msgstr "Vous tentez de %1 une page qui n'existe pas."
 
-#: templates/messages.tmpl:426
+#: templates/messages.tmpl:435
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "Vous tentez de %1 un fichier attaché qui n'existe pas."
 
-#: templates/messages.tmpl:413
+#: templates/messages.tmpl:422
 msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
@@ -3143,12 +3178,12 @@ msgstr ""
 "Vous pouvez définir votre langue préférée en réglant la variable %1 sur "
 "votre page personnelle."
 
-#: templates/messages.tmpl:196
+#: templates/messages.tmpl:205
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr ""
 "Vous ne pouvez pas vous inscrire deux fois, et le nom %1 est déjà utilisé."
 
-#: templates/messages.tmpl:288
+#: templates/messages.tmpl:297
 #, fuzzy
 msgid ""
 "You may be able to get your TWiki administrator to change the settings if "
@@ -3175,18 +3210,18 @@ msgstr ""
 "cela, vous pouvez entrer %1 dans le formulaire affiché lors de l'envoi de "
 "cet e-mail, ou bien vous rendre sur la page %2"
 
-#: templates/messages.tmpl:276
+#: templates/messages.tmpl:285
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr ""
 "Vous devrez probablement demander aux administrateurs et administratrices, %"
 "1, de faire ça."
 
-#: templates/messages.tmpl:151
+#: templates/messages.tmpl:160
 #, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "e-mail or enter the code in the box below to activate your membership. (This "
-"code is of the form \"YourName.xxxx\")"
+"code is of the form \\\"YourName.xxxx\\\")"
 msgstr ""
 "Votre code de validation a été envoyé à %1. Pour terminer la création de "
 "votre compte, vous pouvez entrer ce code ci-dessous, ou bien suivre le lien "
@@ -3219,6 +3254,10 @@ msgstr ""
 "Votre page personnelle sur %1 est %2. Vous pouvez la modifier selon vos "
 "souhaits :"
 
+#: templates/messages.tmpl:153
+msgid "Your registered e-mail address(es) are updated to: %1."
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:76
 msgid "Your signature to copy/paste:"
 msgstr "Votre signature, prête à être copiée/collée :"
@@ -3246,7 +3285,8 @@ msgid "_language_name"
 msgstr "Français"
 
 #: data/TWiki/WebSearchAdvanced.txt:71 data/TWiki/WebSearchAdvanced.txt:89
-msgid "about BookView"
+#, fuzzy
+msgid "about !BookView"
 msgstr "à propos de BookView"
 
 #: data/TWiki/WebSearchAdvanced.txt:59
@@ -3282,7 +3322,7 @@ msgstr "remplacer, mettre à jour, versions précédentes, déplacer, effacer...
 msgid "checkboxes of referenced topics"
 msgstr "les pages référencées"
 
-#: templates/messages.tmpl:170
+#: templates/messages.tmpl:179
 msgid "fields are required."
 msgstr "sont des champs devant être remplis."
 
@@ -3397,6 +3437,13 @@ msgstr "value='Enregistrer' accesskey='s'"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "view"
 msgstr "Visualiser"
+
+#, fuzzy
+#~ msgid "Company URL: %BR% (or department URL)"
+#~ msgstr "Site de l'organisation : <br> (ou de la branche)"
+
+#~ msgid "Company name:"
+#~ msgstr "Nom de l'organisation :"
 
 #~ msgid ""
 #~ "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
