@@ -208,7 +208,7 @@ label {
 /* main */
 .natMainFooter,
 .natMain {
-  padding:1em 2em;
+  padding:1em 2em 1em 1.5em;
   background-color:white;
   border-left:1px solid #ddd;
   border-right:1px solid #ddd;
@@ -218,6 +218,12 @@ label {
 }
 .natMainFooter {
   border-bottom:1px solid #ddd;
+}
+.natMainContents {
+  padding:0.7em;
+}
+.natMainContents h2 {
+  margin-left:-0.7em;
 }
 .natMainContents select,
 .natMainContents input,
@@ -239,7 +245,7 @@ label {
 .natTopRightContents {
   margin:2em 1em;
 }
-.natTopLeft {
+.natTopLeftContents {
   padding:1em 2em;
 }
 .natTopRightContents {
