@@ -23,7 +23,7 @@ This is the place to learn about TWiki features and perform TWiki system mainten
 </form>
 
 ---++ Disclaimer
-   * TWiki&trade;, the [[TWikiLogos][TWiki logo]] and the "Collaborate with TWiki" tagline are trademarks of [[%MAINWEB%.PeterThoeny][Peter Thoeny]]
+   * TWiki&trade;, the [[TWikiLogos][TWiki logo]] and the "Collaborate with TWiki" tagline are trademarks of [[http://twiki.org/cgi-bin/view/Main/PeterThoeny][Peter Thoeny]]
    * __Note__: Twiki (with a lower case "w") is a robot character from the _Buck Rogers&trade; in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
