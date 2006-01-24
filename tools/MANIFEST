@@ -48,6 +48,7 @@ data/Main/UserListByDateJoined.txt 0660
 data/Main/UserListByLocation.txt 0660
 data/Main/UserListByPhotograph.txt 0660
 data/Main/UserViewTemplate.txt 0660
+data/Main/WebAtom.txt 0660
 data/Main/WebChanges.txt 0660
 data/Main/WebHome.txt 0660
 data/Main/WebIndex.txt 0660
@@ -58,6 +59,7 @@ data/Main/WebSearch.txt 0660
 data/Main/WebSearchAdvanced.txt 0660
 data/Main/WebStatistics.txt 0660
 data/Main/WebTopicList.txt 0660
+data/Sandbox/WebAtom.txt 0660
 data/Sandbox/WebChanges.txt 0660
 data/Sandbox/WebHome.txt 0660
 data/Sandbox/WebIndex.txt 0660
@@ -179,6 +181,8 @@ data/TWiki/UserDocumentationCategory.txt 0660
 data/TWiki/UserForm.txt 0660
 data/TWiki/UserToolsCategory.txt 0660
 data/TWiki/WabiSabi.txt 0660
+data/TWiki/WebAtom.txt 0660
+data/TWiki/WebAtomBase.txt 0660
 data/TWiki/WebChanges.txt 0660
 data/TWiki/WebChangesAlert.txt 0660
 data/TWiki/WebHome.txt 0660
@@ -221,6 +225,7 @@ data/Trash/WebStatistics.txt 0660
 data/Trash/WebTopicList.txt 0660
 data/_empty 0755
 data/_empty/WebPreferences.txt 0660
+data/_default/WebAtom.txt 0660
 data/_default/WebChanges.txt 0660
 data/_default/WebHome.txt 0660
 data/_default/WebIndex.txt 0660
@@ -644,6 +649,7 @@ templates/twiki.tmpl 0440
 templates/view.plain.tmpl 0440
 templates/view.print.tmpl 0440
 templates/view.rss.tmpl 0440
+templates/view.rssatom.tmpl 0440
 templates/view.text.tmpl 0440
 templates/view.tmpl 0440
 tools/geturl.pl 0550

@@ -186,8 +186,8 @@ sub formatTime  {
         $formatString = '$wday, $day $month $year $hour:$min:$sec $tz';
     } elsif ( $formatString =~ /iso/i ) {
         # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
-        # e.g. "2002-12-31T19:30Z"
-        $formatString = '$year-$mo-$dayT$hour:$min';
+        # e.g. "2002-12-31T19:30:12Z"
+        $formatString = '$year-$mo-$dayT$hour:$min:$sec';
         if( $outputTimeZone eq 'gmtime' ) {
             $formatString = $formatString.'Z';
         } else {
