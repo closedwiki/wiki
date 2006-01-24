@@ -48,7 +48,7 @@ use vars qw( $password );
 
 # STATIC function that returns a random password
 sub randomPassword {
-    return $password || int( rand(9999) );
+    return $password || int( rand(9999999999) );
 }
 
 =pod
