@@ -293,7 +293,6 @@ BEGIN {
     $constantTags{AUTHREALM}       = $TWiki::cfg{AuthRealm};
     $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
     $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
-    $constantTags{USERWEB}         = $TWiki::cfg{UsersWebName};
     $constantTags{TRASHWEB}        = $TWiki::cfg{TrashWebName};
     $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
     $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
