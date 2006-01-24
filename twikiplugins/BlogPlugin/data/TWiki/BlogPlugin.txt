@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132852112" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1138111772" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
@@ -31,7 +31,7 @@ Format a link to another <nop>BlogEntry displaying its headline and date.
 ---+++ COUNTCOMMENTS
 Count the <nop>BlogComments that refer to a given topic recursively, that is
 the number of <nop>BlogComment topics that refer to a given <nop>BlogEntry and 
-each <nop>BlogComment refering to the <nop>BlogComment found so far. Reference
+each <nop>BlogComment referring to the <nop>BlogComment found so far. Reference
 is expressed by the <nop>BlogRef formfield in the <nop>BlogCommentForm.
 
 *Syntax:*
@@ -69,7 +69,7 @@ Following variables are expanded in format strings:
 ---+++ PREVDOC, NEXTDOC
 Display the previous/next topic in an ordered set.
 These tags can be used to establish a navigation within a set of related topics
-paging to the preceeding or succeeding one. A set of related topics is defined
+paging to the preceding or succeeding one. A set of related topics is defined
 using a "where" and an "order" clause which the given topic is supposed to be part of.
 
 *Syntax:*
@@ -85,7 +85,7 @@ using a "where" and an "order" clause which the given topic is supposed to be pa
 
 ---+++ RECENTCOMMENTS
 Display an ordered list of most recent <nop>BlogComments, grouped by the
-refered <nop>BlogEntry.
+referred <nop>BlogEntry.
 
 *Syntax:*
 | *%<nop>RECENTCOMMENTS{"&lt;format>" ...}%* ||
@@ -102,7 +102,7 @@ refered <nop>BlogEntry.
   defaults to "0" which means unlimited |
 | =category="..."= \
 | pattern that limits comments to those whose <nop>BlogEntries match the \
-  <nop>SubjectCategory; \ defaults to ".*" |
+  <nop>SubjectCategory; defaults to ".*" |
 
 (Each <nop>BlogEntry that is found given the above search parameters and limits
 is called a hit.)
@@ -114,17 +114,15 @@ Following variables are expanded in format strings:
    * $t: tab
    * $nop: "empty string"
    * $count: the number of comments on the given <nop>BlogEntry
-   * $topic: the topic name of the refering <nop>BlogEntry, e.g. <nop>BlogEntry0
+   * $topic: the topic name of the referring <nop>BlogEntry, e.g. <nop>BlogEntry0
    * $web: the web where the hit was found
-   * $headline: the headline of the refering <nop>BlogEntry 
+   * $headline: the headline of the referring <nop>BlogEntry 
    * $commenter: a list of links to the comments in the format \
       [<nop>[BlogEntry0#BlogComment1][&lt;author>]],... (author: name of
       commenter)
    * $date: date of the most recent comment on the current hit.
 
 See also the interface <nop>TopicFunction "RenderRecentComments". 
-
-%RED%TODO: link to BlogUp docu%ENDCOLOR%
 
 ---+++ RELATEDENTRIES
 Display a list of <nop>BlogEntries related to a given one. The Relationship
@@ -151,7 +149,7 @@ to C1 and B CN is related to B.
 Note, that large "depth" values will very soon include your complete blog archive.
 The hit set also depends on the amount of direct relationships that you add to your
 <nop>BlogEntries. So either use a low "depth" value and add more direct relations based on
-your own judgement, or just specify one related entry and use a "depth" value of up to
+your own judgment, or just specify one related entry and use a "depth" value of up to
 3 for good results.
 
 Following variables are expanded in format strings:
@@ -194,13 +192,15 @@ And send me a patch if you've coded that into TWiki ;).
      | ==data/Main/BlogAuthorGroup.txt== | blog author group |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
+   * Create a new Blog web using the _BlogPlugin template web
+   * Edit the Main.BlogAdminGroup and the Main.BlogAuthorGroup to match your needs.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Plugin Version: | v0.44 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  ?? ??? 200?: | Initial version |
+|  24 Jan 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Digest::MD5, CPAN:Time::ParseDate |
 |  Other Dependencies: \
@@ -224,7 +224,4 @@ TWiki:Plugins/TwistyPlugin \
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.MichaelDaum - 06 Dec 2005
-
-
-%META:FILEATTACHMENT{name="ExtendedSelectPlugin_pm.diff" attachment="ExtendedSelectPlugin_pm.diff" attr="" comment="against 11 Oct 2005 (V1.001)" date="1132669136" path="ExtendedSelectPlugin_pm.diff" size="461" stream="ExtendedSelectPlugin_pm.diff" user="TWikiContributor" version="1.1"}%
+-- TWiki:Main.MichaelDaum - 24 Jan 2005
