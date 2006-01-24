@@ -6,7 +6,22 @@
 # setting the email in the secret DB. This will *not* modify the
 # user topics.
 #
+# A default admin e-mail address will be used for users without an 
+# e-mail address currently in their user topic.
+#
+
 use strict;
+
+my $admin_email = 'webmaster@example.com';
+$/ = "\n";
+
+while (1) {
+    print "Enter admin e-mail address [hit enter to choose '$admin_email']: ";
+    my $n = <>;
+    chomp $n;
+    last if( !$n );
+    $admin_email = $n;
+};
 
 BEGIN {
     require 'setlib.cfg';
@@ -30,11 +45,13 @@ foreach my $line ( split( /\r?\n/, $text )) {
 
         if( $uo ) {
             my @em = $uo->emails();
+
             if( scalar( @em )) {
                 print "Secreting ",$uo->stringify()," ",join(';',@em),"\n";
                 $uo->setEmails( @em );
             } else {
-                print STDERR "*** No emails found for user $un:$wn\n";
+                print "No email address found for user $un:$wn, using $admin_email\n";
+                $uo->setEmails( "$admin_email" );
             }
         } else {
             print STDERR "$un:$wn is not a real user\n";
