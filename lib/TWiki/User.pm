@@ -352,9 +352,14 @@ sub isAdmin {
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     unless( $this->{isKnownAdmin} ) {
-        my $sag = $this->{session}->{users}->findUser( $TWiki::cfg{SuperAdminGroup} );
-        ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
-        $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers());
+        $this->{isKnownAdmin} =
+          $TWiki::cfg{SuperAdminGroup} =~ /\b$this->{wikiname}$/;
+        unless( $this->{isKnownAdmin} ) {
+            my $sag = $this->{session}->{users}->findUser(
+                $TWiki::cfg{SuperAdminGroup} );
+            ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
+            $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers() );
+        }
     }
     return $this->{isKnownAdmin};
 }
