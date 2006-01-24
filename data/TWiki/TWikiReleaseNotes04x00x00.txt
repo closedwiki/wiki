@@ -11,34 +11,6 @@ Key new features:
    * E-mail confirmations for registration
    * Hierarchical sub-webs
 
-Most of the redesign, refactoring and new documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
-   * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - internationalization framework
-   * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - templates
-   * [[TWiki:Main.FlorianWeimer][Florian Weimer]] - security sandbox
-   * [[TWiki:Main.GregAbbas][Greg Abbas]] - integration of !SessionPlugin
-   * [[TWiki:Main.MartinCleaver][Martin Cleaver]] - registration process, and automatic attachments
-   * [[TWiki:Main.PeterNixon][Peter Nixon]] - hierarchical subwebs support
-   * [[TWiki:Main.ThomasWeigert][Thomas Weigert]] - preferences handling and form enhancements
-Other people who gave significant amounts of their time and patience to less sexy aspects of the work, or were pivotal in the design process, are:
-   * [[TWiki:Main.AntonAylward][Anton Aylward]]
-   * [[TWiki:Main.LynnwoodBrown][Lynnwood Brown]]
-   * [[TWiki:Main.MichaelDaum][Michael Daum]]
-   * [[http://kamaelia.org/Michael.html][Michael Sparks]]
-   * [[TWiki:Main.PeterThoeny][Peter Thoeny]] - documentation, quality, testing, compatibility
-   * [[TWiki:Main.SvenDowideit][Sven Dowideit]]
-   * [[TWiki:Main.WillNorris][Will Norris]] - Plugin updates
-Translations were sourced by the following polyglots:
-   * [[TWiki:Main.AndreUlrich][Andre Ulrich]] - German
-   * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - Portuguese
-   * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - Dutch
-   * [[TWiki:Main.BenVoui][Ben Voui]] - French
-   * [[TWiki:Main.CarlinhosCecconi][Carlinhos Cecconi]] - Portuguese
-   * [[TWiki:Main.CheDong][Che Dong]] - Chinese
-   * [[TWiki:Main.MiguelABayona][Miguel Bayona]] - Spanish
-   * [[TWiki:Main.SteffenPoulsen][Steffen Poulsen]] - Danish
-   * [[TWiki:Main.WillNorris][Will Norris]] - Spanish
-There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor. See personal topics on twiki.org for details of individual contributions.
-
 Note: In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
 
 %TOC%

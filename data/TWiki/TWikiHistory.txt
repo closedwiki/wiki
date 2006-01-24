@@ -3,58 +3,64 @@
 %STARTINCLUDE%
 ---# TWiki Development Timeline
 
----++ TWiki Release 4.0.0 (Dakar), 01 Feb 2006
+---++ TWiki Release 4.0.0 (Dakar), Feb 2006
 %SECTION{"Dakar"}%
-   * __%X% Note:__ Many, many people worked on TWiki-4.0.0. The credits below only list the people who did the bulk of the work on individual enhancements. If you find an omission please fix it at TWiki:TWiki.%TOPIC%. There were many other contributors; for a full list, visit TWikiContributor.
-   * *Installation & configuration:*
-      * Much simpler install and configuration -- TWiki:Main.CrawfordCurrie, TWiki:Main.LynnwoodBrown, TWiki:Main.ArthurClemens
-   * *Security:*
-      * Security sandbox blocking exploits for remote command execution on the server -- [[http://www.enyo.de/fw/][Florian Weimer]], TWiki:Main.CrawfordCurrie, TWiki:Main.SvenDowideit
-   * *Internationalization & localization:*
-      * [[TWiki:Codev.UserInterfaceInternationalisation][User Interface Internationalisation]] -- TWiki:Main.AntonioTerceiro
-      * Chinese translation -- TWiki:Main.CheDong
-      * Danish translation -- TWiki:Main.SteffenPoulsen
-      * Dutch translation -- TWiki:Main.ArthurClemens
-      * French translation -- TWiki:Main.BenVoui
-      * German translation -- TWiki:Main.AndreUlrich
-      * Portuguese translation -- TWiki:Main.AntonioTerceiro, TWiki:Main.CarlinhosCecconi
-      * Spanish translation -- TWiki:Main.WillNorris, TWiki:Main.MiguelABayona
-   * *New features for users:*
-      * Edit conflict resolution with automatic merge -- TWiki:Main.CrawfordCurrie
-      * Fine grained change notification on page level and parent/child relationship -- TWiki:Main.CrawfordCurrie
-      * WYSIWYG editor (beta) -- TWiki:Main.CrawfordCurrie
-      * Integrated session support -- TWiki:Main.GregAbbas, TWiki:Main.CrawfordCurrie
-      * Webserver-independent login/logout -- TWiki:Main.CrawfordCurrie
-      * Registration process with e-mail confirmation -- TWiki:Main.MartinCleaver
-      * [[TWiki:Codev.TipOfTheDayFeatureRequest][Tip of the Day box in TWiki Home]] -- TWiki:Main.PaulineCheung, TWiki:Main.PeterThoeny, TWiki:Main.AntonAylward
-      * [[TWiki:Codev.AutomaticAttachments][Automatic attachments]] -- TWiki:Main.MartinCleaver
-      * [[TWiki:Codev.ForceNewRevisionCheckBox]["Force New Revision" check box for topic save]] -- TWiki:Main.WillNorris, TWiki:Main.CrawfordCurrie
-   * *New features for TWiki administrators and wiki application developers:*
-      * Improved preferences handling -- TWiki:Main.ThomasWeigert, TWiki:Main.CrawfordCurrie
-      * Named include sections -- TWiki:Main.RafaelAlvarez
-      * [[TWiki:Codev.AllowDynamicTopicNameCreation][Create topic names with consecutive numbers]] -- TWiki:Main.SvenDowideit
-      * [[TWiki:Codev.ParameterizedIncludes][Parameterized includes]] -- TWiki:Main.CrawfordCurrie
-      * [[TWiki:Codev.DynamicFormOptionDefinitions][Dynamic form option definitions]] of TWikiForms with FormattedSearch -- TWiki:Main.MartinCleaver
-      * SEARCH enhancements with new parameters =excludeweb=, =newline=, =noempty=, =nofinalnewline=, =nonoise=, =recurse=, =zeroresults= -- TWiki:Main.ArthurClemens, TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny, TWiki:Main.ThomasWeigert
-      * FormattedSearch enhancements with =$changes=, =$count=, =$formfield(name, 30, ...)=, =$summary(expandvar)=, =$summary(noheaders)=, =$summary(showvarnames)= -- TWiki:Main.ColasNahaboo, TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny, TWiki:Main.SvenDowideit
-      * New TWikiVariables [[TWikiVariables#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[TWikiVariables#VarALLVARIABLES][ALLVARIABLES]], [[TWikiVariables#VarAUTHREALM][AUTHREALM]], [[TWikiVariables#VarEMAILS][EMAILS]], [[TWikiVariables#VarENDSECTION][ENDSECTION]], [[TWikiVariables#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[TWikiVariables#VarHTTP][HTTP]], [[TWikiVariables#VarHTTPS][HTTPS]], [[TWikiVariables#VarICONURL][ICONURL]], [[TWikiVariables#VarICONURLPATH][ICONURLPATH]], [[TWikiVariables#VarIF][IF]], [[TWikiVariables#VarLANGUAGES][LANGUAGES]], [[TWikiVariables#VarLOCALSITEPREFS][LOCALSITEPREFS]], [[TWikiVariables#VarLOGIN][LOGIN]], [[TWikiVariables#VarLOGOUT][LOGOUT]], [[TWikiVariables#VarMAKETEXT][MAKETEXT]], [[TWikiVariables#VarMETA][META]], [[TWikiVariables#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[TWikiVariables#VarQUERYSTRING][QUERYSTRING]], [[TWikiVariables#VarSECTION][SECTION]], [[TWikiVariables#VarSESSION_VARIABLE][SESSION_VARIABLE]], [[TWikiVariables#VarSESSIONID][SESSIONID]], [[TWikiVariables#VarSESSIONVAR][SESSIONVAR]], [[TWikiVariables#VarSPACEOUT][SPACEOUT]], [[TWikiVariables#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]], [[TWikiVariables#VarSTOPTEMPLATEONLY][STOPTEMPLATEONLY]], [[TWikiVariables#VarUSERLANGUAGE][USERLANGUAGE]], [[TWikiVariables#VarWIKIHOMEURL][WIKIHOMEURL]] -- TWiki:Main.ArthurClemens, TWiki:Main.AntonioTerceiro, TWiki:Main.CrawfordCurrie, TWiki:Main.GregAbbas, TWiki:Main.PeterThoeny, TWiki:Main.SvenDowideit, TWiki:Main.WillNorris and many more
-      * [[TWiki:Codev.TWikiFormWithHiddenType][TWiki form with hidden type]] and other form enhancements -- TWiki:Main.LynnwoodBrown, TWiki:Main.ThomasWeigert
-      * [[TWiki:Codev.SupportTopicSpecificTemplates][Support topic-specific templates]] for TWiki applications -- TWiki:Main.ThomasWeigert
-      * Direct save feature for one-click template-based topic creation -- TWiki:Main.LynnwoodBrown, TWiki:Main.CrawfordCurrie, TWiki:Main.ThomasWeigert
-      * Rename, move or delete webs -- TWiki:Main.PeterNixon
-      * Hierarchical subwebs (beta) -- TWiki:Main.PeterNixon
-   * *New features for Plugin developers:*
-      * REST (representational state transfer) interface for Plugins -- TWiki:Main.SvenDowideit, TWiki:Main.RafaelAlvarez
-      * Several new and improved Plugins APIs -- TWiki:Main.CrawfordCurrie
-   * *Enhancements in TWiki engine room:*
-      * Major redesign and refactoring of codebase -- TWiki:Main.CrawfordCurrie
-      * =mod_perl= safe code for better performance -- TWiki:Main.CrawfordCurrie
-      * Reworked access permission model -- TWiki:Main.CrawfordCurrie
-      * Extensive test suite, unit tests and testcases -- TWiki:Main.CrawfordCurrie
-   * *Documentation, logo artwork, skins:*
-      * Documentation -- TWiki:Main.CrawfordCurrie, TWiki:Main.PeterThoeny and others
-      * Design of TWikiLogos with big "T" in a speech bubble -- TWiki:Main.ArthurClemens, TWiki:Main.PeterThoeny
-      * Improved templates and PatternSkin -- TWiki:Main.ArthurClemens %ENDSECTION{"Dakar"}%
+   * __Note:__ Many, many people worked on TWiki-4.0.0. The credits in the table below only list the people who worked on individual enhancements. If you find an omission please fix it at TWiki:TWiki.%TOPIC%. There were many other contributors; for a full list, visit TWikiContributor.
+      * Most of the redesign, refactoring and new documentation work in Dakar release was done by [[http://c-dot.co.uk][Crawford Currie]]
+      * A special note of thanks goes to [[http://kamaelia.org/Michael.html][Michael Sparks]]. Michaels O'Wiki was the ideas engine and proof of concept for several of the major features and improvements below.
+      * Other people who gave _large_ amounts of their time and patience to less sexy aspects of the work, such as testing and infrastructure, are [[TWiki:Main.AntonAylward][AntonAylward]], [[TWiki:Main.KennethLavrsen][KennethLavrsen]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.MichaelDaum][MichaelDaum]], [[TWiki:Main.SvenDowideit][SvenDowideit]], [[TWiki:Main.WillNorris][WillNorris]].
+
+| *Installation & configuration*  ||
+| Much simpler install and configuration | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.ArthurClemens][ArthurClemens]] |
+| =mod_perl= safe code for better performance | [[http://c-dot.co.uk][Crawford Currie]] |
+| *Security* ||
+| Security sandbox blocking exploits for remote command execution on the server | [[http://www.enyo.de/fw/][Florian Weimer]], [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.SvenDowideit][SvenDowideit]] |
+| Reworked access permission model | [[http://c-dot.co.uk][Crawford Currie]] |
+| *Internationalization & localization*  ||
+| [[TWiki:Codev.UserInterfaceInternationalisation][User Interface Internationalisation]] | [[TWiki:Main.AntonioTerceiro][AntonioTerceiro]] |
+| Chinese translation | [[TWiki:Main.CheDong][CheDong]] |
+| Danish translation | [[TWiki:Main.SteffenPoulsen][SteffenPoulsen]] |
+| Dutch translation | [[TWiki:Main.ArthurClemens][ArthurClemens]] |
+| French translation | [[TWiki:Main.BenVoui][BenVoui]] |
+| German translation | [[TWiki:Main.AndreUlrich][AndreUlrich]] |
+| Portuguese translation | [[TWiki:Main.AntonioTerceiro][AntonioTerceiro]], [[TWiki:Main.CarlinhosCecconi][CarlinhosCecconi]] |
+| Spanish translation | [[TWiki:Main.WillNorris][WillNorris]], [[TWiki:Main.MiguelABayona][MiguelABayona]] |
+| *New features for users*  ||
+| Edit conflict resolution with automatic merge | [[http://c-dot.co.uk][Crawford Currie]] |
+| Fine grained change notification on page level and parent/child relationship | [[http://c-dot.co.uk][Crawford Currie]] |
+| WYSIWYG editor | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.ColasNahaboo][ColasNahaboo]], [[TWiki:Main.DamienMandrioli][DamienMandrioli]], [[TWiki:Main.RomainRaugi][RomainRaugi]] |
+| Integrated session support | [[TWiki:Main.GregAbbas][GregAbbas]], [[http://c-dot.co.uk][Crawford Currie]] |
+| Webserver-independent login/logout | [[http://c-dot.co.uk][Crawford Currie]] |
+| Registration process with e-mail confirmation | [[TWiki:Main.MartinCleaver][MartinCleaver]] |
+| [[TWiki:Codev.TipOfTheDayFeatureRequest][Tip of the Day box in TWiki Home]] | [[TWiki:Main.PaulineCheung][PaulineCheung]], [[TWiki:Main.PeterThoeny][PeterThoeny]], [[TWiki:Main.AntonAylward][AntonAylward]] |
+| [[TWiki:Codev.AutomaticAttachments][Automatic attachments]] | [[TWiki:Main.MartinCleaver][MartinCleaver]] |
+| [[TWiki:Codev.ForceNewRevisionCheckBox]["Force New Revision" check box for topic save]] | [[TWiki:Main.WillNorris][WillNorris]] |
+| *New features for TWiki administrators and wiki application developers*  ||
+| Improved preferences handling | [[TWiki:Main.ThomasWeigert][ThomasWeigert]], [[http://c-dot.co.uk][Crawford Currie]] |
+| Named include sections | [[TWiki:Main.RafaelAlvarez][RafaelAlvarez]] |
+| [[TWiki:Codev.AllowDynamicTopicNameCreation][Create topic names with consecutive numbers]] | [[TWiki:Main.SvenDowideit][SvenDowideit]] |
+| [[TWiki:Codev.ParameterizedIncludes][Parameterized includes]] | [[http://c-dot.co.uk][Crawford Currie]] |
+| [[TWiki:Codev.DynamicFormOptionDefinitions][Dynamic form option definitions]] of TWikiForms with FormattedSearch | [[TWiki:Main.MartinCleaver][MartinCleaver]] |
+| SEARCH enhancements with new parameters =excludeweb=, =newline=, =noempty=, =nofinalnewline=, =nonoise=, =recurse=, =zeroresults= | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.ArthurClemens][ArthurClemens]], [[TWiki:Main.PeterThoeny][PeterThoeny]], [[TWiki:Main.ThomasWeigert][ThomasWeigert]] |
+| FormattedSearch enhancements with =$changes=, =$count=, =$formfield(name, 30, ...)=, =$summary(expandvar)=, =$summary(noheaders)=, =$summary(showvarnames)= | [[TWiki:Main.ColasNahaboo][ColasNahaboo]], [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.PeterThoeny][PeterThoeny]], [[TWiki:Main.SvenDowideit][SvenDowideit]] |
+| New TWikiVariables [[TWikiVariables#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[TWikiVariables#VarALLVARIABLES][ALLVARIABLES]], [[TWikiVariables#VarAUTHREALM][AUTHREALM]], [[TWikiVariables#VarEMAILS][EMAILS]], [[TWikiVariables#VarFAILEDPLUGINS][FAILEDPLUGINS]], [[TWikiVariables#VarHTTP][HTTP]], [[TWikiVariables#VarHTTPS][HTTPS]], [[TWikiVariables#VarICONURL][ICONURL]], [[TWikiVariables#VarICONURLPATH][ICONURLPATH]], [[TWikiVariables#VarIF][IF]], [[TWikiVariables#VarLANGUAGES][LANGUAGES]], [[TWikiVariables#VarLOCALSITEPREFS][LOCALSITEPREFS]], [[TWikiVariables#VarLOGIN][LOGIN]], [[TWikiVariables#VarLOGOUT][LOGOUT]], [[TWikiVariables#VarMAKETEXT][MAKETEXT]], [[TWikiVariables#VarMETA][META]], [[TWikiVariables#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[TWikiVariables#VarQUERYSTRING][QUERYSTRING]], [[TWikiVariables#VarSECTION][SECTION]]/[[TWikiVariables#VarENDSECTION][ENDSECTION]], [[TWikiVariables#VarSESSION_VARIABLE][SESSION_VARIABLE]], [[TWikiVariables#VarSESSIONID][SESSIONID]], [[TWikiVariables#VarSESSIONVAR][SESSIONVAR]], [[TWikiVariables#VarSPACEOUT][SPACEOUT]], [[TWikiVariables#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]]/[[TWikiVariables#VarSTOPTEMPLATEONLY][STOPTEMPLATEONLY]], [[TWikiVariables#VarUSERLANGUAGE][USERLANGUAGE]], [[TWikiVariables#VarWIKIHOMEURL][WIKIHOMEURL]] | [[TWiki:Main.ArthurClemens][ArthurClemens]], [[TWiki:Main.AntonioTerceiro][AntonioTerceiro]], [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.GregAbbas][GregAbbas]], [[TWiki:Main.PeterThoeny][PeterThoeny]], [[TWiki:Main.SvenDowideit][SvenDowideit]], [[TWiki:Main.WillNorris][WillNorris]] and many more |
+| [[TWiki:Codev.TWikiFormWithHiddenType][TWiki form with hidden type]] and other form enhancements | [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.ThomasWeigert][ThomasWeigert]] |
+| [[TWiki:Codev.SupportTopicSpecificTemplates][Support topic-specific templates]] for TWiki applications | [[TWiki:Main.ThomasWeigert][ThomasWeigert]] |
+| Direct save feature for one-click template-based topic creation | [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.ThomasWeigert][ThomasWeigert]] |
+| Rename, move or delete webs | [[TWiki:Main.PeterNixon][PeterNixon]] |
+| Hierarchical subwebs (beta) | [[TWiki:Main.PeterNixon][PeterNixon]] |
+| *New features for Plugin developers*  ||
+| REST (representational state transfer) interface for Plugins | [[TWiki:Main.SvenDowideit][SvenDowideit]], [[TWiki:Main.RafaelAlvarez][RafaelAlvarez]] |
+| New and improved Plugins APIs | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.ThomasWeigert][ThomasWeigert]] |
+| *Imporovements in the TWiki engine room*  ||
+| Major OO redesign and refactoring of codebase | [[http://c-dot.co.uk][Crawford Currie]] |
+| Automatic build system | [[http://c-dot.co.uk][Crawford Currie]] |
+| Extensive test suite, unit tests and testcases | [[http://c-dot.co.uk][Crawford Currie]] |
+| *Documentation, logo artwork, skins:*  ||
+| Documentation | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.PeterThoeny][PeterThoeny]] and others |
+| Design of TWikiLogos with big "T" in a speech bubble | [[TWiki:Main.ArthurClemens][ArthurClemens]], [[TWiki:Main.PeterThoeny][PeterThoeny]] |
+| Improved templates and PatternSkin | [[TWiki:Main.ArthurClemens][ArthurClemens]] |
+%ENDSECTION{"Dakar"}%
    * See more details at TWikiReleaseNotes04x00x00
 
 ---++ 01-Sep-2004 Release (Cairo)
