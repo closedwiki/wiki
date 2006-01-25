@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-01-24 22:30+0100\n"
+"PO-Revision-Date: 2006-01-26 00:26+0100\n"
 "Last-Translator: Steffen Poulsen <N/A>\n"
 "Language-Team: Danish <N/A>\n"
 "MIME-Version: 1.0\n"
@@ -926,7 +926,7 @@ msgstr "Fortsæt med at omdøbe webbet?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
 msgid "Continue to *[[%1][create topic %2]]*"
-msgstr "Fortsæt med at *[[%1][oprette topic %2]]*"
+msgstr "Gå videre: *[[%1][opret siden %2]]*"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid ""
@@ -1621,7 +1621,7 @@ msgid ""
 "Make sure you spelled the %1 correctly and try again. Remember, a %2 is case "
 "sensitive"
 msgstr ""
-"Kontrollér at du har stavet %1 korrekt, og prøv igen. Husk, et %2 er case-"
+"Kontrollér at du har stavet sidens %1 korrekt, og prøv igen. Husk, et %2 er case-"
 "sensitivt (forskel på STORE og små bogstaver)."
 
 #: templates/messages.tmpl:178
@@ -1794,7 +1794,7 @@ msgstr "Åbner siden i et nyt vindue"
 
 #: data/TWiki/TWikiRegistration.txt:59
 msgid "Organisation URL:"
-msgstr "Organisation URL:"
+msgstr "Organisationens <br />hjemmeside:"
 
 #: data/TWiki/TWikiRegistration.txt:56
 msgid "Organisation name:"
@@ -1915,7 +1915,7 @@ msgstr "Printvenlig version af denne side"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:98
 msgid "Raw View"
-msgstr "Kildetekst (R)"
+msgstr "Kildetekst (&R)"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
