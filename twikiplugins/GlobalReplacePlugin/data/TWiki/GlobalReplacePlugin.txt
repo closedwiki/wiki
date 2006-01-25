@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 ---+!! Global Replace Plugin
 
 %TOC%
@@ -89,6 +88,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
