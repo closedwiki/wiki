@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
----+!! TWiki Installation Guide
+---# TWiki Installation Guide
 
 Please review the AdminSkillsAssumptions before you install TWiki.
 
@@ -10,7 +10,7 @@ TWiki should be fine with any web server and OS that meet the [[TWikiSystemRequi
 If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWikiIRC (irc.freenode.net, channel #twiki)
 
 #StandardInstallation
----+ Basic Installation
+---++ Basic Installation
 
    1 *Download* the TWiki distribution from http://TWiki.org/download.html.
    1 *Make a directory* for the installation and *unpack the distribution* in it.
@@ -32,7 +32,7 @@ If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWik
 You now have a basic, unauthenticated installation running. At this point you can just point your Web browser at =http://yourdomain.com/twiki/bin/view= and start TWiki-ing away!
 
 #AuthenticationOfUsers
----+ Next Steps
+---++ Next Steps
 Once you have your TWiki running, you can move on to customise it for your users.
    * *Review TWikiPreferences settings* - read through it and set any additional settings you think you might need (you can click the 'Edit' button near the top to edit the settings in place)
       * %I% It is recommended to *copy* any settings or variables that you want to customize from [[%TWIKIWEB%.TWikiPreferences]] and *paste* them into [[%MAINWEB%.TWikiPreferences]]. This will protect your local customizations from being overwritten in later upgrades. See notes at top of [[%TWIKIWEB%.TWikiPreferences]] for more information.
@@ -43,7 +43,7 @@ Once you have your TWiki running, you can move on to customise it for your users
    * *Automate removal of expired sessions and lease files* - read TWikiScripts#tick_twiki_pl.
    * *Install Plugins* if needed - TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few Plugins are pre-installed in the TWiki distribution. Installation instructions for the other Plugins can be found in the Plugin topics on [[TWiki:Plugins][TWiki.org]].
 
----+ Troubleshooting
+---++ Troubleshooting
 The first step is to re-run the =configure= script and make sure you have resolved all errors, and are happy that you understand any warnings.
 
 Failing that, please check the topics listed below, they include some important tips for HP-UX, Solaris, OS/390, and many other platforms.

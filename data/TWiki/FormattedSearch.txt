@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
----# TWiki Formatted Search Results
+---# TWiki Formatted Search
 
 _Inline search feature allows flexible formatting of search result_
 

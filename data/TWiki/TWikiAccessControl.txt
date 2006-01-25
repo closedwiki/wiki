@@ -8,10 +8,6 @@ _Restricting read and write access to topics and webs, by Users and groups_
 
 TWikiAccessControl allows you restrict access to single topics and entire webs, by individual user and by user Groups. Access control, combined with TWikiUserAuthentication, lets you easily create and manage an extremely flexible, fine-grained privilege system.
 
-%INCLUDE{SitePermissions}%
-
-_This table comes from SitePermissions_
-
 ---++ An Important Control Consideration
 
 Open, freeform editing is the essence of WikiCulture - what makes TWiki different and often more effective than other collaboration tools. For that reason, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with great care - the more restrictions, the less Wiki in the mix. Experience shows that _unrestricted write access_ works very well because:
@@ -23,6 +19,11 @@ Open, freeform editing is the essence of WikiCulture - what makes TWiki differen
 As a *collaboration guideline*:
    * Create broad-based Groups (for more and varied input), and...
    * Avoid creating view-only Users (if you can read it, you should be able to contribute to it).
+
+---++ Permissions settings of the webs on this TWiki site
+%INCLUDE{SitePermissions}%
+
+__Note:__ Above table comes from SitePermissions
 
 ---++ Authentication vs. Access Control
 

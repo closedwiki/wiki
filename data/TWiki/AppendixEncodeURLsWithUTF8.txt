@@ -2,9 +2,11 @@
 %TOC%
 %STARTINCLUDE%
 #EncodeURLsUTF8
----# Appendix C: Encode URLs With UTF8 
+---# Appendix B: Encode URLs With UTF8 
 
-_This page addresses implemented UTF-8 support for URLs only. The overall plan for UTF-8 support for TWiki is described in TWiki:Codev.ProposedUTF8SupportForI18N ._
+_Use internationalised characters within !WikiWords and attachment names_
+
+This topic addresses implemented UTF-8 support for URLs only. The overall plan for UTF-8 support for TWiki is described in TWiki:Codev.ProposedUTF8SupportForI18N.
 
 ---++ Current Status
 

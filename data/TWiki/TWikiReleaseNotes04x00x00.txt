@@ -1,7 +1,7 @@
 ---+!! TWiki Release 4.0 (Dakar)
 'Dakar' is the first major release of the TWiki Enterprise Collaboration Platform in over a year. The focus of this release has been on refactoring the code in the interests of *security*, *efficiency* and *maintainability*, though a range of powerful new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
 
-Key new features:
+__Major New Features__
    * Much simpler install and configuration
    * Integrated session support
    * Webserver-independent login/logout
@@ -9,9 +9,12 @@ Key new features:
    * New editing model allows freer collaboration, without fear of overwriting other people's changes
    * Multilingual UI
    * E-mail confirmations for registration
+   * WYSIWYG editor
    * Hierarchical sub-webs
 
-Note: In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
+&nbsp; &nbsp; %M% See feature list at TWikiHistory#DakarRelease.
+
+__Note:__ In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
 
 %TOC%
 

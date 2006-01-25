@@ -1,16 +1,28 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
----# TWiki Development Timeline
+---# Appendix A: TWiki Development Timeline
 
----++ TWiki Release 4.0.0 (Dakar), Feb 2006
-%SECTION{"Dakar"}%
-   * __Note:__ Many, many people worked on TWiki-4.0.0. The credits in the table below only list the people who worked on individual enhancements. If you find an omission please fix it at TWiki:TWiki.%TOPIC%. There were many other contributors; for a full list, visit TWikiContributor.
-      * Most of the redesign, refactoring and new documentation work in Dakar release was done by [[http://c-dot.co.uk][Crawford Currie]]
-      * A special note of thanks goes to [[http://kamaelia.org/Michael.html][Michael Sparks]]. Michaels O'Wiki was the ideas engine and proof of concept for several of the major features and improvements below.
-      * Other people who gave _large_ amounts of their time and patience to less sexy aspects of the work, such as testing and infrastructure, are [[TWiki:Main.AntonAylward][AntonAylward]], [[TWiki:Main.KennethLavrsen][KennethLavrsen]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.MichaelDaum][MichaelDaum]], [[TWiki:Main.SvenDowideit][SvenDowideit]], [[TWiki:Main.WillNorris][WillNorris]].
+#DakarRelease
+---++ TWiki Release 4.0.0 (Dakar), 01 Feb 2006
 
-| *Installation & configuration*  ||
+__Major New Features__
+   * Much simpler install and configuration
+   * Integrated session support
+   * Webserver-independent login/logout
+   * Security sandbox blocking exploits for remote command execution on the server
+   * Edit conflict resolution with automatic merge
+   * Multilingual UI
+   * E-mail confirmations for registration
+   * WYSIWYG editor (beta)
+   * Hierarchical sub-webs (beta)
+
+Many, many people worked on TWiki-4.0.0. The credits in the table below only list the people who worked on individual enhancements. If you find an omission please fix it at TWiki:TWiki.%TOPIC%. There were many other contributors; for a full list, visit TWikiContributor.
+
+Most of the redesign, refactoring and new documentation work in Dakar release was done by [[http://c-dot.co.uk][Crawford Currie]]. [[http://kamaelia.org/Michael.html][Michael Sparks]] provided ideas and proof of concept for several improvements. Other people who gave _large_ amounts of their time and patience to less sexy aspects of the work, such as testing, infrastructure and documentation, are [[TWiki:Main.AntonAylward][AntonAylward]], [[TWiki:Main.KennethLavrsen][KennethLavrsen]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.MichaelDaum][MichaelDaum]], [[TWiki:Main.PeterThoeny][PeterThoeny]], [[TWiki:Main.SvenDowideit][SvenDowideit]], [[TWiki:Main.WillNorris][WillNorris]].
+
+%TABLE{ headeralign="left" sort="off" }%
+| *Installation & configuration*  | *Contributor* |
 | Much simpler install and configuration | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.ArthurClemens][ArthurClemens]] |
 | =mod_perl= safe code for better performance | [[http://c-dot.co.uk][Crawford Currie]] |
 | *Security* ||
@@ -52,17 +64,18 @@
 | *New features for Plugin developers*  ||
 | REST (representational state transfer) interface for Plugins | [[TWiki:Main.RafaelAlvarez][RafaelAlvarez]], [[TWiki:Main.MartinCleaver]], [[TWiki:Main.SvenDowideit][SvenDowideit]] |
 | New and improved Plugins APIs | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.ThomasWeigert][ThomasWeigert]] |
-| *Imporovements in the TWiki engine room*  ||
+| *Improvements in the TWiki engine room*  ||
 | Major OO redesign and refactoring of codebase | [[http://c-dot.co.uk][Crawford Currie]] |
 | Automatic build system | [[http://c-dot.co.uk][Crawford Currie]] |
 | Extensive test suite, unit tests and testcases | [[http://c-dot.co.uk][Crawford Currie]] |
 | *Documentation, logo artwork, skins:*  ||
-| Documentation | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.PeterThoeny][PeterThoeny]] and others |
+| Documentation | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.PeterThoeny][PeterThoeny]] and others |
 | Design of TWikiLogos with big "T" in a speech bubble | [[TWiki:Main.ArthurClemens][ArthurClemens]], [[TWiki:Main.PeterThoeny][PeterThoeny]] |
 | Improved templates and PatternSkin | [[TWiki:Main.ArthurClemens][ArthurClemens]] |
-%ENDSECTION{"Dakar"}%
-   * See more details at TWikiReleaseNotes04x00x00
 
+See more details at TWikiReleaseNotes04x00x00
+
+#CairoRelease
 ---++ 01-Sep-2004 Release (Cairo)
 
 __Major New Features__
@@ -247,6 +260,7 @@ __Major New Features__
 | Fix: Clean up the !WebRssBase INCLUDES to use VARIABLES set in !TWikiPreferences. [[http://TWiki.org/cgi-bin/view/Codev/WebRssBaseDcFieldsWrong][Details]] | TWiki:Main.SvenDowideit |
 | Fix: Resolving variables in included topics. [[http://TWiki.org/cgi-bin/view/Codev/WrongInternalTagOrder][Details]] | TWiki:Main.OliverKrueger TWiki:Main.SvenDowideit |
 
+#BeijingRelease
 ---++ 01-Feb-2003 Release (Beijing)
 
    * *18 Jan 2003* - TWiki:Main.PeterThoeny
@@ -306,6 +320,7 @@ __Major New Features__
    * *09 Jan 2002* - TWiki:Main.JohnTalintyre
       * Variables inside =&lt;verbatim&gt;= tags are no longer expanded
 
+#AthensRelease
 ---++ 01-Dec-2001 Release (Athens)
 
    * *25 Oct 2001* - TWiki:Main.PeterThoeny

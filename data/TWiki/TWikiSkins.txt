@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# TWiki Skins
 
-*Skins overlay regular templates to give different looks and feels to TWiki screens.*
+_Skins overlay regular templates to give different looks and feels to TWiki screens._
 
 ---++ Overview
 
