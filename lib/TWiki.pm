@@ -2609,7 +2609,7 @@ sub _INCLUDE {
        my $in = 0;
        my $blocked = 0;
        my $ntext = '';
-       foreach my $bit (split(/(%(START|END)BLOCK{\s*"?include"?\s*}%)/, $text )) {
+       foreach my $bit (split(/(%(?:START|END)BLOCK{\s*"?include"?\s*}%)/, $text )) {
            if( $bit =~ /^%STARTBLOCK{\s*"?include"?\s*}%$/ ) {
                $in = 1;
                $blocked = 1;
