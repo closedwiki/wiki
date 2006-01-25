@@ -12,60 +12,23 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   earlyInitPlugin         ( )                                     1.020
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   beforeCommonTagsHandler ( $text, $topic, $web )                 1.024
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   afterCommonTagsHandler  ( $text, $topic, $web )                 1.024
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
 package TWiki::Plugins::ApprovalPlugin;    # change the package name and $pluginName!!!
 
 # =========================
 use vars qw(
-	    $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-	    $debug 
-	    $prefApprovalWorkflow
-	    $prefNeedsApproval
-	    $globWorkflow
-	    $globWebName
-	    $globCurrentState
-	    $globApprovalMessage $globAllowEdit
-	    $CalledByMyself 
-	    %globPreferences
-	    );
+            $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+            $debug 
+            $prefApprovalWorkflow
+            $prefNeedsApproval
+            $globWorkflow
+            $globWebName
+            $globCurrentState
+            $globApprovalMessage $globAllowEdit
+            $CalledByMyself 
+            %globPreferences
+           );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -80,16 +43,15 @@ $RELEASE = 'Dakar';
 $pluginName = 'ApprovalPlugin';  # Name of this Plugin
 
 # =========================
-sub initPlugin
-{
+sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
-    
+
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.021 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
-	  return 0;
-      }
-    
+        return 0;
+    }
+
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
     $debug =1;
@@ -99,20 +61,20 @@ sub initPlugin
     my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-#    $prefApprovalWorkflow = TWiki::Func::getPluginPreferencesValue( "APPROVALWORKFLOW" ) || "Lopt nicht";
+    #    $prefApprovalWorkflow = TWiki::Func::getPluginPreferencesValue( "APPROVALWORKFLOW" ) || "Lopt nicht";
     if (($prefApprovalWorkflow = TWiki::Func::getPreferencesValue( "APPROVALWORKFLOW" )) &&
-	&TWiki::Func::topicExists( $globWebName, $prefApprovalWorkflow)) {
+          &TWiki::Func::topicExists( $globWebName, $prefApprovalWorkflow)) {
 
-	# get preferences
-	$prefNeedsApproval=1;
+        # get preferences
+        $prefNeedsApproval=1;
 
-	$globCurrentState=getApprovalState($meta);
-	Debug("initPlugin State in the document: '$globCurrentState'");
-	($globWorkflow, $globCurrentState, $globApprovalMessage, $globAllowEdit) = 
-	    parseApprovalWorkflow($prefApprovalWorkflow,$user,$globCurrentState);
-	
+        $globCurrentState=getApprovalState($meta);
+        Debug("initPlugin State in the document: '$globCurrentState'");
+        ($globWorkflow, $globCurrentState, $globApprovalMessage, $globAllowEdit) = 
+          parseApprovalWorkflow($prefApprovalWorkflow,$user,$globCurrentState);
+
     } else {
-	$prefNeedsApproval=0;
+        $prefNeedsApproval=0;
     }
 
     # Plugin correctly initialized
@@ -122,9 +84,8 @@ sub initPlugin
 
 
 # =========================
-sub commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+sub commonTagsHandler {
+    ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
@@ -133,154 +94,141 @@ sub commonTagsHandler
 
     # do custom extension rule, like for example:
     # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-      # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
+    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 
-      
-      if (NeedsApproval() && (my $query = TWiki::Func::getCgiQuery())) {
-	  my $action = $query->param( 'APPROVALACTION' );
-	  my $state = $query->param( 'APPROVALSTATE' );
-	  
-	  # find out if the user is allowed to perform the action 
-	  if ($action && ($state eq $globCurrentState->{state}) && defined($$globWorkflow{$action})) {
-	      # store new status as meta data
-	      changeApprovalState($$globWorkflow{$action});
-	      
-	      # we need to parse the workflow again since the state of the document has
-	      # changed which will effect the actions the user can do now. 
-	      ($globWorkflow, $globCurrentState, $globApprovalMessage, $globAllowEdit) = 
-		  parseApprovalWorkflow($prefApprovalWorkflow,$user,$globCurrentState);
-	      
-	  }
-	  
-	  
+    if (NeedsApproval() && (my $query = TWiki::Func::getCgiQuery())) {
+        my $action = $query->param( 'APPROVALACTION' );
+        my $state = $query->param( 'APPROVALSTATE' );
 
+        # find out if the user is allowed to perform the action 
+        if ($action && ($state eq $globCurrentState->{state}) && defined($$globWorkflow{$action})) {
+            # store new status as meta data
+            changeApprovalState($$globWorkflow{$action});
 
-	  # replace edit tag
-	  if ($globAllowEdit) {
-	      $_[0] =~ s!%APPROVALEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
-	  } else {
-	      $_[0] =~ s!%APPROVALEDITTOPIC%! <strike>Edit<\/strike> !g;
-	  }
+            # we need to parse the workflow again since the state of the document has
+            # changed which will effect the actions the user can do now. 
+            ($globWorkflow, $globCurrentState, $globApprovalMessage, $globAllowEdit) = 
+              parseApprovalWorkflow($prefApprovalWorkflow,$user,$globCurrentState);
+        }
+
+        # replace edit tag
+        if ($globAllowEdit) {
+            $_[0] =~ s!%APPROVALEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
+        } else {
+            $_[0] =~ s!%APPROVALEDITTOPIC%! <strike>Edit<\/strike> !g;
+        }
 
 
-	  # show all tags defined by the preferences
-	  foreach my $key (keys %globPreferences) {
-	      if ($key =~ /^APPROVAL/) {
-		  $_[0] =~ s!%$key%!$globPreferences{$key}!g;
-	      }
-	  }
-	  
-	  # show last version tags
-	  foreach my $key (keys %{$globCurrentState}) {
-	      if ($key =~ /^LASTVERSION_/) {
-		  my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
-		  my $foo = "<a href='$url'?rev=".$globCurrentState->{$key}.">revision ".
-		      $globCurrentState->{$key}."</a>";
-		  $_[0] =~ s!%APPROVAL$key%!$foo!g;
-	      }
-	  }
-	  
-	  # show last time tags
-	  foreach my $key (keys %{$globCurrentState}) {
-	      if ($key =~ /^LASTTIME_/) {
-		  $_[0] =~ s!%APPROVAL$key%!$globCurrentState->{$key}!g;
-	      }
-	  }
+        # show all tags defined by the preferences
+        foreach my $key (keys %globPreferences) {
+            if ($key =~ /^APPROVAL/) {
+                $_[0] =~ s!%$key%!$globPreferences{$key}!g;
+            }
+        }
 
-	  # display the message for current status
-	  $_[0] =~ s!%APPROVALSTATEMESSAGE%!$globApprovalMessage!g;
+        # show last version tags
+        foreach my $key (keys %{$globCurrentState}) {
+            if ($key =~ /^LASTVERSION_/) {
+                my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
+                my $foo = "<a href='$url'?rev=".$globCurrentState->{$key}.">revision ".
+                  $globCurrentState->{$key}."</a>";
+                $_[0] =~ s!%APPROVAL$key%!$foo!g;
+            }
+        }
 
-	  #
-	  # Build the button to change the current status
-	  #
-	  my @actions = keys(%{$globWorkflow});
-	  my $NumberOfActions = scalar(@actions);
-	  if ($NumberOfActions > 0) {
-	      my $button;
-	      my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
+        # show last time tags
+        foreach my $key (keys %{$globCurrentState}) {
+            if ($key =~ /^LASTTIME_/) {
+                $_[0] =~ s!%APPROVAL$key%!$globCurrentState->{$key}!g;
+            }
+        }
 
-	      if ($NumberOfActions == 1) {
-		  $button = '<table><tr><td><div class="twikiChangeFormButton twikiSubmit ">'.
-		      ' <a href="'.$url.'?APPROVALACTION='.$actions[0].
-		      '&APPROVALSTATE='.$globCurrentState->{state}.'">'.$actions[0].'</a>'.
-		      '</div></td></tr></table>';
-#		  $button = ' <a href="'.$url.'?APPROVALACTION='.$actions[0].
-#		      '&APPROVALSTATE='.$globCurrentState->{state}.' class="twikiChangeFormButton twikiSubmit ">'.
-#		      $actions[0].'</a>';
-	      } else {
-		  my $select="";
-		  foreach my $key (@actions) {
-		      $select .= "<option value='$key'> $key </option>";
-		  }
-		  $button = "<FORM METHOD=POST ACTION='$url'>".
-		      "<input type='hidden' name='APPROVALSTATE' value='$globCurrentState->{state}'>".
-		      "<select name='APPROVALACTION'>$select</select> ".
-		      "<input type='submit' value='Change status' class='twikiChangeFormButton twikiSubmit '/>".
-		      "</FORM>";
-	      }
-	      
-	      # build the final form
-#	      my $form = '<div style="text-align:right;">'.
-#		  '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder">'.
-#		  '<tr>'.
-#		  "<td align='right'>".$globPreferences{"TEXTBEFORECHANGEBUTTON"}." &nbsp; </td>".
-#		  '<td align="right"> '.$button .' </td></tr></table></div>';
-	      $_[0] =~ s!%APPROVALTRANSITION%!$button!g;
-	  }
+        # display the message for current status
+        $_[0] =~ s!%APPROVALSTATEMESSAGE%!$globApprovalMessage!g;
 
+        #
+        # Build the button to change the current status
+        #
+        my @actions = keys(%{$globWorkflow});
+        my $NumberOfActions = scalar(@actions);
+        if ($NumberOfActions > 0) {
+            my $button;
+            my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
 
+            if ($NumberOfActions == 1) {
+                $button = '<table><tr><td><div class="twikiChangeFormButton twikiSubmit ">'.
+                  ' <a href="'.$url.'?APPROVALACTION='.$actions[0].
+                    '&APPROVALSTATE='.$globCurrentState->{state}.'">'.$actions[0].'</a>'.
+                      '</div></td></tr></table>';
+                #		  $button = ' <a href="'.$url.'?APPROVALACTION='.$actions[0].
+                #		      '&APPROVALSTATE='.$globCurrentState->{state}.' class="twikiChangeFormButton twikiSubmit ">'.
+                #		      $actions[0].'</a>';
+            } else {
+                my $select="";
+                foreach my $key (@actions) {
+                    $select .= "<option value='$key'> $key </option>";
+                }
+                $button = "<FORM METHOD=POST ACTION='$url'>".
+                  "<input type='hidden' name='APPROVALSTATE' value='$globCurrentState->{state}'>".
+                    "<select name='APPROVALACTION'>$select</select> ".
+                      "<input type='submit' value='Change status' class='twikiChangeFormButton twikiSubmit '/>".
+                        "</FORM>";
+            }
 
+            # build the final form
+            #	      my $form = '<div style="text-align:right;">'.
+            #		  '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder">'.
+            #		  '<tr>'.
+            #		  "<td align='right'>".$globPreferences{"TEXTBEFORECHANGEBUTTON"}." &nbsp; </td>".
+            #		  '<td align="right"> '.$button .' </td></tr></table></div>';
+            $_[0] =~ s!%APPROVALTRANSITION%!$button!g;
+        }
 
+    } else {
+        $_[0] =~ s!%APPROVALEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
+    }
 
+    # delete all tags which start with the word APPROVAL
+    $_[0] =~ s!%APPROVAL([a-zA-Z_]*)%!!g;
 
-
-      } else {
-	  $_[0] =~ s!%APPROVALEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
-      }
-
-      # delete all tags which start with the word APPROVAL
-      $_[0] =~ s!%APPROVAL([a-zA-Z_]*)%!!g;
-      
-#	  $_[0] =~ s!%APPROVALMESSAGE%!This document needs approval ($prefApprovalWorkflow)!g;
+    #	  $_[0] =~ s!%APPROVALMESSAGE%!This document needs approval ($prefApprovalWorkflow)!g;
 }
 
 
 # =========================
-sub beforeEditHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+sub beforeEditHandler {
+    ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
 
     # This handler is called by the edit script just before presenting the edit text
     # in the edit box. Use it to process the text before editing.
-      
-      if (NeedsApproval()) {
-	  if (! $globAllowEdit) {
-	      TWiki::UI::oops( $web, $topic, "accesschange");
-		return 0;
-	    }
-      }
 
-
+    if (NeedsApproval()) {
+        if (! $globAllowEdit) {
+            my $url = TWiki::Func::getOopsUrl($web, $topic, "accesschange");
+            TWiki::Func::redirectCgiQuery(undef, $url);
+            return 0;
+        }
+    }
 }
 
 # =========================
-sub beforeSaveHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+sub beforeSaveHandler {
+    ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
 
     # This handler is called by TWiki::Store::saveTopic just before the save action.
 
-      if (NeedsApproval()) {
-	  Debug("---------- beforeSaveHandler");
-	  if (! $globAllowEdit && !$CalledByMyself) {
-	      TWiki::UI::oops( $web, $topic, "accesschange");
-		return 0;
+    if (NeedsApproval()) {
+        Debug("---------- beforeSaveHandler");
+        if (! $globAllowEdit && !$CalledByMyself) {
+            my $url = TWiki::Func::getOopsUrl($web, $topic, "accesschange");
+            TWiki::Func::redirectCgiQuery(undef, $url);
+            return 0;
 	    }
-      }
+    }
 }
 
 
@@ -297,17 +245,17 @@ sub DocumentIsApproved {
 
 sub Timestamp {
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
-	= localtime(time);
+      = localtime(time);
     return sprintf("%d-%02d-%02d %02d:%02d:%02d", 
-		   1900+$year, $mon, $mday, $hour, $min, $sec);
+                   1900+$year, $mon, $mday, $hour, $min, $sec);
 }
 
 sub changeApprovalState {
     my $state = shift;
 
     my ($meta, $text) = &TWiki::Func::readTopic( $web, $topic );
-    $text = TWiki::expandVariablesOnTopicCreation( $text );
-    $version = TWiki::Store::getRevisionInfoFromMeta( $web, $topic, $meta );
+    $text = TWiki::Func::expandVariablesOnTopicCreation( $text );
+    $version = $meta->getRevision();
 
     Debug("changeApprovalState from $globCurrentState->{state} to $state");
 
@@ -317,21 +265,23 @@ sub changeApprovalState {
 
     $meta->remove( "APPROVAL" );
     $meta->put( "APPROVAL", %{$globCurrentState});
-    
+
     my $unlock=1;
     my $dontNotify=1;
     $CalledByMyself=1;
-    my $error = TWiki::Store::saveTopic( $web, $topic, $text, $meta, "", $unlock, $dontNotify );
+    my $error = TWiki::Func::saveTopic( $web, $topic, $meta, $text,
+                                        { minor => $dontNotify } );
     if( $error ) {
-	TWiki::UI::oops( $web, $topic, "saveerr", $error );
-	  return 0;
-      }
+        my $url = TWiki::Func::oops( $web, $topic, "saveerr", $error );
+        TWiki::Func::redirectCgiQuery(undef, $url);
+        return 0;
+    }
 }
 
 sub getApprovalState {
     my $meta = shift;
     if (my $foo = $meta->{"APPROVAL"} ) {
-	return $foo->[0] if defined($foo->[0]);
+        return $foo->[0] if defined($foo->[0]);
     }
     return undef;
 }
@@ -360,64 +310,62 @@ sub parseApprovalWorkflow {
 
     # Read topic that defines the statemachine
     if( &TWiki::Func::topicExists( $globWebName, $WorkflowTopic ) ) {
-	my( $meta, $text ) = &TWiki::Func::readTopic( $globWebName, $WorkflowTopic );
+        my( $meta, $text ) = &TWiki::Func::readTopic( $globWebName, $WorkflowTopic );
 
-	my $inBlock = 0;
-	# | *Current form* | *Next form* | *Next state* | *Action* |
-	foreach( split( /\n/, $text ) ) {
-	    if ( /^\s*\|.*State[^|]*\|.*Action[^|]*\|.*Next State[^|]*\|.*Allowed[^|]*\|/ ) {
-		# from now on, we are in the TRANSITION table
-		$inBlock = 1;
-	    } elsif ( /^\s*\|.*State[^|]*\|.*Allow Edit[^|]*\|.*Message[^|]*\|/ ) {
-		# from now on, we are in the STATE table
-		$inBlock = 2;
-		
-	    } elsif ( /^(\t+\*\sSet\s)([A-Za-z]+)(\s\=\s*)(.*)$/ ) {
-		# store preferences
-		$globPreferences{$2}=$4;
-	    } elsif( ($inBlock == 1) && s/^\s*\|//o ) {
-		# read row in TRANSITION table
-		my( $state, $action, $next, $allowed) = split( /\s*\|\s*/ );
-		$state = _cleanField($state);
-		if (UserIsAllowed($User, $allowed) && ($state eq $CurrentState->{state})) { 
-		    # store the transition in user's workflow 
-		    $workflow{$action} = $next;
-		}
+        my $inBlock = 0;
+        # | *Current form* | *Next form* | *Next state* | *Action* |
+        foreach( split( /\n/, $text ) ) {
+            if ( /^\s*\|.*State[^|]*\|.*Action[^|]*\|.*Next State[^|]*\|.*Allowed[^|]*\|/ ) {
+                # from now on, we are in the TRANSITION table
+                $inBlock = 1;
+            } elsif ( /^\s*\|.*State[^|]*\|.*Allow Edit[^|]*\|.*Message[^|]*\|/ ) {
+                # from now on, we are in the STATE table
+                $inBlock = 2;
 
-	    } elsif( ($inBlock == 2) && s/^\s*\|//o ) {
-		# read row in STATE table
-		my( $state, $allowedit, $message) = split( /\s*\|\s*/ );
-		$state = _cleanField($state);
-		Debug("STATE: '$state', $allowedit, $message  CurrentState: '$CurrentState->{state}'");
-		
-		# the first state in the table defines the default state
-		if (!defined($defaultState)) {
-		    $defaultState=$state;
-		    $CurrentState->{state} = $state unless defined($CurrentState->{state});
-		}
-		
-		if ($state eq $CurrentState->{state}) {
-		    $CurrentStateIsValid=1;
-		    $ApprovalMessage=$message;
-		    if (UserIsAllowed($User, $allowedit)) { 
-			$AllowEdit = 1;
-		    }
-		}
-		
-	    } else {
-		$inBlock = 0;
-	    }
-	}
+            } elsif ( /^(\t+\*\sSet\s)([A-Za-z]+)(\s\=\s*)(.*)$/ ) {
+                # store preferences
+                $globPreferences{$2}=$4;
+            } elsif( ($inBlock == 1) && s/^\s*\|//o ) {
+                # read row in TRANSITION table
+                my( $state, $action, $next, $allowed) = split( /\s*\|\s*/ );
+                $state = _cleanField($state);
+                if (UserIsAllowed($User, $allowed) && ($state eq $CurrentState->{state})) { 
+                    # store the transition in user's workflow 
+                    $workflow{$action} = $next;
+                }
 
-	# we need to treat the case that the workflow states have changed and that the 
-	# status written in the document is not valid anymore. In this case we go back to 
-	# the default status!
-	if (!$CurrentStateIsValid && defined($defaultState)) {
-	    $CurrentState->{state}=$defaultState;
-	    return parseApprovalWorkflow($WorkflowTopic, $User, $CurrentState);
-	}
+            } elsif( ($inBlock == 2) && s/^\s*\|//o ) {
+                # read row in STATE table
+                my( $state, $allowedit, $message) = split( /\s*\|\s*/ );
+                $state = _cleanField($state);
+                Debug("STATE: '$state', $allowedit, $message  CurrentState: '$CurrentState->{state}'");
+
+                # the first state in the table defines the default state
+                if (!defined($defaultState)) {
+                    $defaultState=$state;
+                    $CurrentState->{state} = $state unless defined($CurrentState->{state});
+                }
+                if ($state eq $CurrentState->{state}) {
+                    $CurrentStateIsValid=1;
+                    $ApprovalMessage=$message;
+                    if (UserIsAllowed($User, $allowedit)) { 
+                        $AllowEdit = 1;
+                    }
+                }
+            } else {
+                $inBlock = 0;
+            }
+        }
+
+        # we need to treat the case that the workflow states have changed and that the 
+        # status written in the document is not valid anymore. In this case we go back to 
+        # the default status!
+        if (!$CurrentStateIsValid && defined($defaultState)) {
+            $CurrentState->{state}=$defaultState;
+            return parseApprovalWorkflow($WorkflowTopic, $User, $CurrentState);
+        }
     } else {
-	# FIXME - do what if there is an error?
+        # FIXME - do what if there is an error?
     }
 
     return ( \%workflow, $CurrentState, $ApprovalMessage, $AllowEdit );
@@ -428,35 +376,135 @@ sub UserIsAllowed {
     my ($User, $allow) = @_;
 
     if ($allow) {
-	my @allowed = split(/\s*\,\s*/, $allow);
-	my $wikiName = TWiki::userToWikiName( $User, 1 );  # i.e. "JonDoe"
-	foreach my $name (@allowed) {
-	    $name = _cleanField( $name );
-	    $name =~ s/${TWiki::mainWebname}\.(.*)/$1/;
-	    if (&TWiki::Access::userIsInGroup($wikiName, $name)) {
-		# user IS allowed!
-		return 1;
-	    }
-	}
+        my @allowed = split(/\s*\,\s*/, $allow);
+        my $wikiName = TWiki::Func::userToWikiName( $User, 1 );  # i.e. "JonDoe"
+        foreach my $name (@allowed) {
+            $name = _cleanField( $name );
+            $name =~ s/${TWiki::mainWebname}\.(.*)/$1/;
+            if (userIsInGroup($wikiName, $name)) {
+                # user IS allowed!
+                return 1;
+            }
+        }
     } else {
-	# user IS allowed!
-	return 1;
+        # user IS allowed!
+        return 1;
     }
     # user IS NOT allowed!
     return 0;
 }
 
-sub _cleanField
-{
-   my( $text ) = @_;
-   $text = "" if( ! $text );
-   $text =~ s/^\s*//go;
-   $text =~ s/\s*$//go;
-   $text =~ s/[^A-Za-z0-9_\.]//go; # Need do for web.topic
-   return $text;
+sub _cleanField {
+    my( $text ) = @_;
+    $text = "" if( ! $text );
+    $text =~ s/^\s*//go;
+    $text =~ s/\s*$//go;
+    $text =~ s/[^A-Za-z0-9_\.]//go; # Need do for web.topic
+    return $text;
 }
 
+sub getWebTopicName {
+    my( $theWebName, $theTopicName ) = @_;
+    $theTopicName =~ s/%MAINWEB%/$theWebName/go;
+    $theTopicName =~ s/%TWIKIWEB%/$theWebName/go;
+    if( $theTopicName =~ /[\.]/ ) {
+        $theWebName = "";  # to suppress warning
+    } else {
+        $theTopicName = "$theWebName\.$theTopicName";
+    }
+    return $theTopicName;
+}
 
+sub userIsInGroup {
+    my( $theUserName, $theGroupTopicName ) = @_;
 
+    my $usrTopic = getWebTopicName( TWiki::Func::getMainWebname(), $theUserName );
+    my $grpTopic = getWebTopicName( TWiki::Func::getMainWebname(), $theGroupTopicName );
+    my @grpMembers = ();
+
+    if( $grpTopic !~ /.*Group$/ ) {
+        # not a group, so compare user to user
+        push( @grpMembers, $grpTopic );
+    } elsif( ( %allGroups ) && ( exists $allGroups{ $grpTopic } ) ) {
+        # group is allready known
+        @grpMembers = @{ $allGroups{ $grpTopic } };
+    } else {
+        @grpMembers = getGroup( $grpTopic, 1 );
+    }
+
+    my $isInGroup = grep { /^$usrTopic$/ } @grpMembers;
+    return $isInGroup;
+}
+
+sub getGroup {
+    my( $theGroupTopicName, $theFirstCall ) = @_;
+
+    my @resultList = ();
+    # extract web and topic name
+    my $topic = $theGroupTopicName;
+    my $web = TWiki::Func::getMainWebname();
+    $topic =~ /^([^\.]*)\.(.*)$/;
+    if( $2 ) {
+        $web = $1;
+        $topic = $2;
+    }
+    ##TWiki::writeDebug( "Web is $web, topic is $topic" );
+
+    if( $topic !~ /.*Group$/ ) {
+        # return user, is not a group
+        return ( "$web.$topic" );
+    }
+
+    # check if group topic is already processed
+    if( $theFirstCall ) {
+        # FIXME: Get rid of this global variable
+        @processedGroups = ();
+    } elsif( grep { /^$web\.$topic$/ } @processedGroups ) {
+        # do nothing, already processed
+        return ();
+    }
+    push( @processedGroups, "$web\.$topic" );
+
+    # read topic
+    my ($meta, $text ) = &TWiki::Func::readTopic( $web, $topic );
+
+    # reset variables, defensive coding needed for recursion
+    (my $baz = "foo") =~ s/foo//;
+
+    # extract users
+    my $user = "";
+    my @glist = ();
+    foreach( split( /\n/, $text ) ) {
+        if( /^\s+\*\sSet\sGROUP\s*\=\s*(.*)/ ) {
+            if( $1 ) {
+                my $theItems = $1;
+                $theItems =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
+                @glist = map { getWebTopicName( TWiki::Func::getMainWebname(), $_ ) }
+                  split( /[\,\s]+/, $theItems );
+            }
+        }
+    }
+    foreach( @glist ) {
+        if( /.*Group$/ ) {
+            # $user is actually a group
+            my $group = $_;
+            if( ( %allGroups ) && ( exists $allGroups{ $group } ) ) {
+                # allready known, so add to list
+                push( @resultList, @{ $allGroups{ $group } } );
+            } else {
+                # call recursively
+                my @userList = getGroup( $group, 0 );
+                # add group to allGroups hash
+                $allGroups{ $group } = [ @userList ];
+                push( @resultList, @userList );
+            }
+        } else {
+            # add user to list
+            push( @resultList, $_ );
+        }
+    }
+
+    return @resultList;
+}
 
 1;
