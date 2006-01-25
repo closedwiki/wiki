@@ -230,7 +230,7 @@ msgstr "(vedhæft)"
 
 #: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:5
 msgid "(backlinks in %1 Web)"
-msgstr "(referencer i %1 webbet)"
+msgstr "(referencer i %1-webbet)"
 
 #: twikiplugins/PatternSkin/templates/backlinksallwebs.pattern.tmpl:5
 msgid "(backlinks in all Webs)"
@@ -852,7 +852,7 @@ msgstr ""
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:25
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:25
 msgid "Child topics in %1 web"
-msgstr "Datter-sider i %1 webbet"
+msgstr "Datter-sider i %1-webbet"
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:24
 msgid "Choose a new form template"
@@ -1069,7 +1069,7 @@ msgstr "Slettet"
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:39
 #: twikiplugins/PatternSkin/templates/renamewebdelete.pattern.tmpl:39
 msgid "Deleted topics will be moved to the %1 web"
-msgstr "Slettede sider bliver flyttet til %1 webbet"
+msgstr "Slettede sider bliver flyttet til %1-webbet"
 
 #: templates/messages.tmpl:207
 msgid "Did you want to [[%1][reset %2's password]]?"
@@ -1580,7 +1580,7 @@ msgstr "Link"
 
 #: data/TWiki/WebSearch.txt:44 data/TWiki/WebSearchAdvanced.txt:87
 msgid "List all topics in the %1 web in alphabetical order"
-msgstr "Vis alle sider i %1 webbet i alfabetisk orden"
+msgstr "Vis alle sider i %1-webbet i alfabetisk orden"
 
 #: data/TWiki/WebSearch.txt:45 data/TWiki/WebSearchAdvanced.txt:88
 msgid "List topics that start with the letter:"
@@ -2023,7 +2023,7 @@ msgstr "Udskift formular..."
 #: twikiplugins/PatternSkin/templates/search.pattern.tmpl:18
 #: twikiplugins/PatternSkin/templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
-msgstr "Søgeresultater fra %1 webbet"
+msgstr "Søgeresultater fra %1-webbet"
 
 #: templates/messages.tmpl:155
 msgid "Return to %1."
@@ -2173,7 +2173,7 @@ msgstr "Vælg alle"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:68
 msgid "Select the %1 Web to delete the topic."
-msgstr "Vælg %1 webbet for at slette siden."
+msgstr "Vælg %1-webbet for at slette siden."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:76
 msgid "Select, copy and paste your signature text to the bottom of your entry"
@@ -2391,7 +2391,7 @@ msgstr "Siden %1 eksisterer allerede"
 
 #: templates/messages.tmpl:413
 msgid "The %1 web does not exist"
-msgstr "Webbet %1 eksisterer ikke"
+msgstr "%1-webbet eksisterer ikke"
 
 #: data/Sandbox/WebHome.txt:4
 msgid ""
@@ -2400,7 +2400,7 @@ msgid ""
 "jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
 "page and sign and date it with your %4."
 msgstr ""
-"Dette %1-web er en såkaldt sandkasse, som må bruges til alle former for "
+"%1-webbet er en såkaldt sandkasse, som må bruges til alle former for "
 "eksperimenter. Alle er velkomne til at tilføje eller slette det, de måtte "
 "have lyst til. Du opfordres til at læse %2 for at få et overblik over %3 "
 "værktøjet. En god tommelfingerregel er, at tilføje i bunden af en side, og "
@@ -2543,7 +2543,7 @@ msgid ""
 "list:"
 msgstr ""
 "Dette er en abonnementsservice, som tilbyder automatisk notifikation via e-"
-"mail når noget ændres i dette web (%1 webbet). Dette er tænkt som en "
+"mail når noget ændres i dette web (%1-webbet). Dette er tænkt som en "
 "belejlig service, således at du slipper for at være nødsaget til at komme "
 "tilbage og selv tjekke om noget er blevet ændret. For at skrive dig op, "
 "tilføj venligst en prik med dit %2 i alfabetisk orden til denne liste."
@@ -2624,7 +2624,7 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:19
 msgid "To delete an attachment move it to web %1, topic %2."
-msgstr "Ønsker du at slette en vedhæftet fil, flyt den da til siden %2 i %1 webbet."
+msgstr "Ønsker du at slette en vedhæftet fil, flyt den da til siden %2 i %1-webbet."
 
 #: templates/renameweb.tmpl:10
 #: twikiplugins/ClassicSkin/templates/renameweb.classic.tmpl:10
@@ -2723,7 +2723,7 @@ msgstr "Sider pr. web"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:55
 msgid "Topics which are currently being edited by other users in the !%1 Web:"
-msgstr "Sider som lige nu redigeres af andre brugere i !%1 webbet:"
+msgstr "Sider som lige nu redigeres af andre brugere i !%1-webbet:"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:58
 msgid ""
