@@ -95,6 +95,8 @@ AFTER');
 
     $TWiki::cfg{HtpasswdFileName} = "/tmp/htpasswd";
     $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
+    $TWiki::cfg{Register}{NeedVerification} = 1;
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
 
     $Error::Debug = 1;
 
@@ -480,7 +482,7 @@ sub test_resetPasswordOkay {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template});
-        $this->assert_str_equals("reset_ok", $e->{def});
+        $this->assert_str_equals("reset_ok", $e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {

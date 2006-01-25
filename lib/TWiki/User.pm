@@ -309,13 +309,14 @@ sub emails {
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     unless( defined $this->{emails} ) {
+        @{$this->{emails}} = ();
         if ( $this->isGroup() ) {
             foreach my $member ( @{$this->groupMembers()} ) {
                 push( @{$this->{emails}}, $member->emails() );
             }
         } else {
             my $passwordHandler = $this->{session}->{users}->{passwords};
-            @{$this->{emails}} = $passwordHandler->getEmails($this->{login});
+            push(@{$this->{emails}}, $passwordHandler->getEmails($this->{login}));
         }
     }
 

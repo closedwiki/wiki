@@ -3137,7 +3137,8 @@ sub _USERNAME {
 
 sub _EMAILS {
     my ( $this, $params ) = @_;
-    return join(' ', $this->{user}->emails());
+    my @list = ( $this->{user}->emails() );
+    return join(' ', @list);
 }
 
 sub _WIKINAME {

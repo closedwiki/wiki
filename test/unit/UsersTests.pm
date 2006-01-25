@@ -35,7 +35,7 @@ sub set_up {
     $TWiki::cfg{UsersWebName} = $testUsersWeb;
     $TWiki::cfg{SystemWebName} = $testSysWeb;
     $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
-
+    $TWiki::cfg{MapUserToWikiName} = 1;;
     $topicquery = new CGI( "" );
     $topicquery->path_info("/$testNormalWeb/$testTopic");
     try {
@@ -174,7 +174,7 @@ sub testLoad {
     $twiki->{users}->addUserToTWikiUsersTopic($user3, $me);
     # find a nonexistent user to force a cache read
     $twiki = new TWiki();
-    $twiki->{users}->findUser("hogwash");
+    $twiki->{users}->lookupLoginName("hogwash");
     my $k = join(",",sort keys %{$twiki->{users}->{W2U}});
     $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.AaronUser,//,$k);
     $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.AttilaTheHun,//,$k);
