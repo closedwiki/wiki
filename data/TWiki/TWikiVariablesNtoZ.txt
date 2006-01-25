@@ -11,8 +11,8 @@ __Note:__ This topic is included by TWikiVariables
       * When the topic containing this is used as a template for another topic, it is removed.
    * Syntax: =%<nop>NOP{...}%= *deprecated*
       * In normal topic text, expands to whatever is in the curly braces (if anything).
-      * __%X% Note:__ This is deprecated. Do not use it. Use =%<nop>STARTTEMPLATEONLY%= and =%<nop>STOPTEMPLATEONLY%= instead (see TWikiTemplates for more details).
-   * Related: [[#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]], [[#VarSTOPTEMPLATEONLY][STOPTEMPLATEONLY]], TWikiTemplates
+      * __%X% Note:__ This is deprecated. Do not use it. Use =%<nop>STARTBLOCK{"templateonly"}%= .. =%<nop>ENDBLOCK{"templateonly"}%= instead (see TWikiTemplates for more details).
+   * Related: [[#VarSTARTBLOCK][STARTBLOCK]], TWikiTemplates
 
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic
@@ -179,13 +179,24 @@ __Note:__ This topic is included by TWikiVariables
    * %H% Hint: If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
    * Related: [[#VarMETASEARCH][METASEARCH]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEBLIST][WEBLIST]], FormattedSearch
 
-#VarSECTION
----+++ SECTION{"name"} -- marks the start of a named section
-   * Section boundaries are defined with =%<nop>SECTION{"name"}%= and =%<nop>ENDSECTION{"name"}%=; named sections can be included with  =%<nop>INCLUDE{ "Topic" section="name" }%=
-   * Syntax: =%<nop>SECTION{"name"}%=
+#VarSTARTBLOCK
+---+++ STARTBLOCK{"type"} -- marks the start of a typed section
+   * Block boundaries are defined with =%<nop>STARTBLOCK{"type}%= and =%<nop>ENDBLOCK{"type"}%=. Available block types are:
+   * =templateonly= - start position of text to be removed when a template topic is used. This is used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. See TWikiTemplates for more information.
+   * =include= - like %<nop>STARTINCLUDE%..%<nop>STOPINCLUDE% except that you can have as many include blocks as you want (%<nop>STATINCLUDE is restricted to one).
+   * Syntax: =%<nop>STARTBLOCK{"name"}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
-     | ="name"= | Name of the section. Must be unique inside a topic, and must have a matching %<nop>ENDSECTION% variable. | Mandatory parameter without a default |
+     | ="name"= | Name of the section. Must be unique inside a topic, and must have a matching %<nop>ENDSECTION%. | Mandatory parameter without a default |
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
+
+#VarSTARTSECTION
+---+++ STARTSECTION{"name"} -- marks the start of a named section
+   * Section boundaries are defined with =%<nop>STARTSECTION{"name"}%= and =%<nop>ENDSECTION{"name"}%=. Named sections are generic containers, but are currently only used by =%<nop>INCLUDE{ "Topic" section="name" }%=
+   * Syntax: =%<nop>STARTSECTION{"name"}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="name"= | Name of the section. Must be unique inside a topic, and must have a matching %<nop>ENDSECTION%. | Mandatory parameter without a default |
    * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSERVERTIME
@@ -249,13 +260,8 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>STARTINCLUDE%=
    * Syntax: =%<nop>STARTINCLUDE{param}%=
       * If param does not expand to a non-zero integer, then nothing will be included.
-   * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
-
-#VarSTARTTEMPLATEONLY
----+++ STARTTEMPLATEONLY -- start position of text to be removed when a template topic is used
-   * Used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. When used in normal topic text, =%<nop>STARTTEMPLATEONLY%= is ignored. See TWikiTemplates for more information.
-   * Syntax =%<nop>STARTTEMPLATEONLY% ... %<nop>STOPTEMPLATEONLY%=
-   * Related: [[#VarNOP][NOP]], [[#VarSTOPTEMPLATEONLY][STOPTEMPLATEONLY]], TWikiTemplates
+Note: if you want more than one part of the topic included, use =%<nop>STARTBLOCK{"include"}%= instead.
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTSECTION][STARTSECTION]], [[#VarSTARTBLOCK][STARTBLOCK]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSTATISTICSTOPIC
 ---+++ STATISTICSTOPIC -- name of statistics topic
@@ -267,13 +273,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ STOPINCLUDE -- end position of topic text if included
    * If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself.
    * Syntax: =%<nop>STOPINCLUDE%=
-   * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
-
-#VarSTOPTEMPLATEONLY
----+++ STOPTEMPLATEONLY -- end position of text to be removed when a template topic is used
-   *  When used in normal topic text, =%<nop>STOPTEMPLATEONLY%= is ignored. See [[#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]] for details.
-   * Syntax =%<nop>STARTTEMPLATEONLY% ... %<nop>STOPTEMPLATEONLY%=
-   * Related: [[#VarNOP][NOP]], [[#VarSTARTTEMPLATEONLY][STARTTEMPLATEONLY]], TWikiTemplates
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
 
 #VarTOC
 ---+++ TOC -- table of contents of current topic

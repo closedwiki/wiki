@@ -2,14 +2,14 @@
 %META:TOPICPARENT{name="TestCaseSectionalInclude"}%
 This is outside any section 
 
-%SECTION{"first"}%
+%STARTSECTION{"first"}%
 This is the first section
 %ENDSECTION{"first"}%
 
-%SECTION{"outer"}%
+%STARTSECTION{"outer"}%
 This is the start of the outer section
 
-%SECTION{"inner"}%
+%STARTSECTION{"inner"}%
 This is the whole content of the inner section
 
 %ENDSECTION{"inner"}%
@@ -18,9 +18,9 @@ This is the end of the outer section
 
 This is outside any section 
 
-%SECTION{"firstoverlap"}%
+%STARTSECTION{"firstoverlap"}%
 This is between begining of first and second overlap
-%SECTION{"secondoverlap"}%
+%STARTSECTION{"secondoverlap"}%
 This is between begining of secondoverlap and end of firstoverlap
 %ENDSECTION{"firstoverlap"}%
 This is after firstoverlap

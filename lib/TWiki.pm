@@ -212,13 +212,14 @@ BEGIN {
 
     # Constant tag strings _not_ dependent on config
     %constantTags = (
+        ENDBLOCK          => '',
         ENDSECTION        => '',
         WIKIVERSION       => $VERSION,
-        SECTION           => '',
+        STARTBLOCK        => '',
+        STARTSECTION      => '',
+
         STARTINCLUDE      => '',
-        STARTTEMPLATEONLY => '',
         STOPINCLUDE       => '',
-        STOPTEMPLATEONLY  => '',
        );
 
     unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
@@ -1766,9 +1767,9 @@ sub expandVariablesOnTopicCreation {
     $user ||= $this->{user};
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
-    # Chop out %STARTTEMPLATEONLY%...%STOPTEMPLATEONLY% sections
+    # Chop out templateonly sections
     # (may not be nested)
-    $text =~ s/%STARTTEMPLATEONLY%.*?%STOPTEMPLATEONLY%//gs;
+    $text =~ s/%STARTBLOCK{\s*"?templateonly"?\s*}%.*?%ENDBLOCK{\s*"?templateonly"?\s*}%//gs;
 
     # Note: it may look dangerous to override the user this way, but
     # it's actually quite safe, because only a subset of tags are
@@ -2599,11 +2600,26 @@ sub _INCLUDE {
 
     # remove everything before and after the selected include block
     if( $section ) {
-        $text =~ s/.*?%SECTION{[^\}]*\"$section\"[^\}]*}%//s;
-        $text =~ s/%ENDSECTION{[^\}]*\"$section\"[^\}]*}%.*//s;
+        $text =~ s/.*?%STARTSECTION{\s*"?$section"?\s*}%//s;
+        $text =~ s/%ENDSECTION{\s*"?$section"?\s*}%.*//s;
     } else {
        $text =~ s/.*?%STARTINCLUDE%//s;
        $text =~ s/%STOPINCLUDE%.*//s;
+
+       my $in = 0;
+       my $blocked = 0;
+       my $ntext = '';
+       foreach my $bit (split(/(%(START|END)BLOCK{\s*"?include"?\s*}%)/, $text )) {
+           if( $bit =~ /^%STARTBLOCK{\s*"?include"?\s*}%$/ ) {
+               $in = 1;
+               $blocked = 1;
+           } elsif( $bit =~ /^%ENDBLOCK{\s*"?include"?\s*}%$/ ) {
+               $in = 0;
+           } elsif( $in ) {
+               $ntext .= $bit;
+           }
+       }
+       $text = $ntext if $blocked;
     }
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 

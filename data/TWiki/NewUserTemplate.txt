@@ -34,12 +34,12 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
    * %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users
    * %TWIKIWEB%.UserDocumentationCategory is a list of TWiki user documentation
    * %TWIKIWEB%.UserToolsCategory lists all TWiki user tools
-%STARTTEMPLATEONLY%
+%STARTBLOCK{"templateonly"}%
 Note to TWiki Administrator:
 
-Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from "%STARTTEMPLATEONLY" to "STOPTEMPLATEONLY%" when you are done)
+Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from =%<nop>STARTBLOCK{"templateonly"}%= to =%<nop>ENDBLOCK{"templateonly"}%= when you are done)
 
-Text for multilingual wiki community, copy from here to STOPTEMPLATEONLY%
+Text for multilingual wiki community, copy from here to %<nop>ENDBLOCK{"templateonly"}%
 
 <!--
    NOTE:
@@ -88,7 +88,7 @@ Text for multilingual wiki community, copy from here to STOPTEMPLATEONLY%
    * %MAKETEXT{"[_1] is a list of TWiki user documentation" args="%TWIKIWEB%.UserDocumentationCategory"}%
    * %MAKETEXT{"[_1] lists all TWiki user tools" args="%TWIKIWEB%.UserToolsCategory"}%
 
-%STOPTEMPLATEONLY%
+%ENDBLOCK{"templateonly"}%
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:FIELD{name="FirstName" attributes="" title="<nop>FirstName" value=""}%
 %META:FIELD{name="LastName" attributes="" title="<nop>LastName" value=""}%

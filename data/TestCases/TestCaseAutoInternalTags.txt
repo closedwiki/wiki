@@ -119,14 +119,14 @@ Designed by: Crawford Currie
   <td><!-- actual -->STOPINCLUDE %STOPINCLUDE%<!-- /actual --></td>
  </tr>
  <tr>
-  <td>SECTION{""}</td>
-  <td><!-- expected -->SECTION <!-- /expected --></td>
-  <td><!-- actual -->SECTION %SECTION{""}%<!-- /actual --></td>
+  <td>STARTSECTION{""}</td>
+  <td><!-- expected -->STARTSECTION <!-- /expected --></td>
+  <td><!-- actual -->STARTSECTION %STARTSECTION{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>SECTION{}</td>
-  <td><!-- expected -->SECTION <!-- /expected --></td>
-  <td><!-- actual -->SECTION %SECTION{}%<!-- /actual --></td>
+  <td><!-- expected -->STARTSECTION <!-- /expected --></td>
+  <td><!-- actual -->STARTSECTION %STARTSECTION{}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ENDSECTION</td>
