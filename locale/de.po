@@ -308,7 +308,7 @@ msgstr "(Achtung)"
 
 #: data/TWiki/TWikiRegistration.txt:208
 msgid "(optional)"
-msgstr ""
+msgstr "(Optional)"
 
 #: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:43
 msgid "(otherwise search %1 Web only)"
@@ -511,14 +511,14 @@ msgstr ""
 "Änderungen]] Verweis im Navigations Menu zur Verfügung."
 
 #: templates/messages.tmpl:390
-#, fuzzy
 msgid ""
 "A new *system-generated* password for your login name %1 (<nop>WikiName %2) "
 "has been sent to your registered e-mail address. If your e-mail address is "
 "no longer valid, please contact %3"
 msgstr ""
-"Ein neues vom System erzeugtes Passwort für den Login Namen %1 (Wikiname %2) "
-"wurde an %3 gesendet"
+"Ein neues vom System erzeugtes Passwort für den Login Namen %1 (<nop>Wikiname %2) "
+"wurde an ihre registrierte E-Mail gesendet. Falls ihre E-Mail Adresse nicht "
+"länger gültig ist, setzen Sie sich bitte mit %3 in Kontakt"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:100
 msgid "A&ll Webs"
@@ -733,14 +733,13 @@ msgid "Both body and title"
 msgstr "Beides, Text und Titel"
 
 #: data/Trash/WebHome.txt:7
-#, fuzzy
 msgid ""
 "By default, viewing the Trash web is restricted to %1. If you would like to "
 "allow all users to view the Trash web, remove the =ALLOWWEBVIEW= restriction "
 "in WebPreferences."
 msgstr ""
-"Standardmäßig ist der Zugriff auf das Trash-Web der %MAINWEB%."
-"TWikiAdminGroup vorbehalten. Wenn Sie allen Benutzern den Zugriff erlauben "
+"Standardmäßig ist der Zugriff auf das Trash-Web der %1 "
+"vorbehalten. Wenn Sie allen Benutzern den Zugriff erlauben "
 "wollen entfernen Sie die =ALLOWWEBVIEW= Restriktion in den WebPreferences."
 
 #: templates/messages.tmpl:388 templates/messages.tmpl:42
@@ -934,9 +933,8 @@ msgid "Continue and try to rename web?"
 msgstr "Wollen Sie weitermachen und versuchen, das Web umzubenennen?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
-#, fuzzy
 msgid "Continue to *[[%1][create topic %2]]*"
-msgstr "Weiter das *[[%1][neue Topic: %TOPIC%]]* anzulegen"
+msgstr "Weiter das *[[%1][neue Topic: %2]]* anzulegen"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid ""
@@ -1156,9 +1154,8 @@ msgid "E-mail address:"
 msgstr "E-Mail Adresse:"
 
 #: templates/messages.tmpl:149
-#, fuzzy
 msgid "E-mail changed successfully!"
-msgstr "Passwort erfolgreich geändert!"
+msgstr "E-Mail erfolgreich geändert!"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:49
 msgid "Each preference has the syntax"
@@ -1819,11 +1816,11 @@ msgstr "In einem neuen Fenster öffnen"
 
 #: data/TWiki/TWikiRegistration.txt:59
 msgid "Organisation URL:"
-msgstr ""
+msgstr "Organisation URL:"
 
 #: data/TWiki/TWikiRegistration.txt:56
 msgid "Organisation name:"
-msgstr ""
+msgstr "Organisation Name:"
 
 #: data/TWiki/TWikiRegistration.txt:203
 msgid "Other Country"
@@ -2003,6 +2000,8 @@ msgid ""
 "Remember to update your user topic if you want your e-mail change to be "
 "reflected there as well."
 msgstr ""
+"Vergessen Sie nicht auch ihr Benutzer-Topic mit der neuen E-Mail zu "
+"aktualisieren." 
 
 #: templates/messages.tmpl:49
 msgid "Remove the user from the group(s) %1 first."
@@ -2056,7 +2055,7 @@ msgstr "Ergebnisse vom %1 web"
 
 #: templates/messages.tmpl:155
 msgid "Return to %1."
-msgstr ""
+msgstr "Zurück nach %1."
 
 #: data/TWiki/TWikiRegistration.txt:52
 msgid "Retype password:"
@@ -2554,7 +2553,7 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:82
 msgid "There is no size limit for uploaded files."
-msgstr ""
+msgstr "Es gibt keine Begrenzung für die Größe hochzuladener Dateien."
 
 #: templates/messages.tmpl:273
 msgid "There should be a line that includes %1, look for %2 (or %3)"
@@ -3127,7 +3126,6 @@ msgstr ""
 "Sie müssen wahrscheinlich Ihren Administrator, %1, fragen, um das zu tun."
 
 #: templates/messages.tmpl:160
-#, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "e-mail or enter the code in the box below to activate your membership. (This "
@@ -3166,7 +3164,8 @@ msgstr ""
 
 #: templates/messages.tmpl:153
 msgid "Your registered e-mail address(es) are updated to: %1."
-msgstr ""
+msgstr "Ihre registrierten E-Mail Adresse(n) wurden wie folgt "
+"aktualisiert: %1."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:76
 msgid "Your signature to copy/paste:"
@@ -3195,9 +3194,8 @@ msgid "_language_name"
 msgstr "Deutsch"
 
 #: data/TWiki/WebSearchAdvanced.txt:71 data/TWiki/WebSearchAdvanced.txt:89
-#, fuzzy
 msgid "about !BookView"
-msgstr "Infos zur BookView"
+msgstr "Infos zur !BookView"
 
 #: data/TWiki/WebSearchAdvanced.txt:59
 msgid "about regular expression search"
@@ -3345,9 +3343,3 @@ msgstr "value='Speichern' accesskey='s'"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:62
 msgid "view"
 msgstr "Ansehen"
-
-#~ msgid "Company URL: %BR% (or department URL)"
-#~ msgstr "Unternehmen URL: %BR% (oder Abteilungs URL)"
-
-#~ msgid "Company name:"
-#~ msgstr "Unternehmens Name:"
