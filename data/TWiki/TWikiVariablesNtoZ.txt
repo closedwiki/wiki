@@ -343,6 +343,16 @@ __Note:__ This topic is included by TWikiVariables
    * __%X% Note:__ There is a risk that this variable could be misused for cross-site scripting.
    * Related: [[#VarENCODE][ENCODE]], [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
 
+---++ USERINFO - retrieve details about the logged in user
+   * By default, the retrieved info will be formatted as a comma-separated list comprising the login name, web, wiki name, and emails.
+   * Syntax: =%<nop>USERINFO%=
+   * Expands to: =%USERINFO%=
+   * you can also use the =format= parameter to get different formatted results:
+   * Syntax: =%<nop>USERINFO{format="$login is really $wikiname"}%=
+   * Expands to =%USERINFO{format="$login is really $wikiname"}%=
+   * The tokens =$emails=, =$login=, =$wikiname=, and =$web= are available for use in the format string. =$web= is the web where the user topic is defined (usually %<nop>MAINWEB%)
+   * Related: [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
+
 #VarUSERNAME
 ---+++ USERNAME -- your login username
    * TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. Un-authenticated users are all %MAINWEB%.TWikiGuest.

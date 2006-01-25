@@ -165,7 +165,6 @@ BEGIN {
         ATTACHURLPATH     => \&_ATTACHURLPATH,
         DATE              => \&_DATE,
         DISPLAYTIME       => \&_DISPLAYTIME,
-        EMAILS            => \&_EMAILS,
         ENCODE            => \&_ENCODE,
         FORMFIELD         => \&_FORMFIELD,
         GMTIME            => \&_GMTIME,
@@ -204,12 +203,10 @@ BEGIN {
         TOPICLIST         => \&_TOPICLIST,
         URLENCODE         => \&_ENCODE,
         URLPARAM          => \&_URLPARAM,
-        USERLANGUAGE      => \&_USERLANGUAGE,
-        USERNAME          => \&_USERNAME,
+        LANGUAGE          => \&_LANGUAGE,
+        USERINFO          => \&_USERINFO,
         VAR               => \&_VAR,
         WEBLIST           => \&_WEBLIST,
-        WIKINAME          => \&_WIKINAME,
-        WIKIUSERNAME      => \&_WIKIUSERNAME,
        );
     $contextFreeSyntax{IF} = 1;
 
@@ -2160,7 +2157,7 @@ sub _expandTagOnTopicCreation {
     # This is what we want to make sure new user templates are populated
     # correctly, but you need to think about this if you extend the set of
     # tags expanded here.
-    return undef unless $_[0] =~ /^(URLPARAM|DATE|(SERVER|GM)TIME|(USER|WIKI)NAME|WIKIUSERNAME)$/;
+    return undef unless $_[0] =~ /^(URLPARAM|DATE|(SERVER|GM)TIME|(USER|WIKI)NAME|WIKIUSERNAME|USERINFO)$/;
 
     return $this->_expandTagOnTopicRendering( @_ );
 }
@@ -2965,7 +2962,7 @@ sub _ATTACHURL {
     return $this->getPubUrl(1, $web, $topic);
 }
 
-sub _USERLANGUAGE {
+sub _LANGUAGE {
     my $this = shift;
     return $this->{i18n}->language();
 }
@@ -3130,25 +3127,24 @@ sub _SEP {
     return $this->{templates}->expandTemplate('sep');
 }
 
-sub _USERNAME {
-    my $this = shift;
-    return $this->{user}->login();
-}
-
-sub _EMAILS {
+sub _USERINFO {
     my ( $this, $params ) = @_;
-    my @list = ( $this->{user}->emails() );
-    return join(' ', @list);
-}
+    my $format = $params->{format} || '$login,$web.$wikiname,$emails';
 
-sub _WIKINAME {
-    my $this = shift;
-    return $this->{user}->wikiName();
-}
+    my $user = $this->{user};
 
-sub _WIKIUSERNAME {
-    my $this = shift;
-    return $this->{user}->webDotWikiName();
+    my $info = $format;
+    my $un = $user->login();
+    $info =~ s/\$login\b/$un/g;
+    my $wn = $user->wikiName();
+    $info =~ s/\$wikiname\b/$wn/g;
+    my $web = $user->webDotWikiName();
+    $web =~ s/\..*//;
+    $info =~ s/\$web\b/$web/g;
+    my $em = join(',', $user->emails());
+    $info =~ s/\$emails\b/$em/g;
+
+    return $info;
 }
 
 1;

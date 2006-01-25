@@ -89,6 +89,11 @@ _(Click for form-based editing of existing preferences.)_
 
       * Set ATTACHEDIMAGEFORMAT = \n   * $comment: <br />\n     <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
 
+   * Shortcuts to user information
+      * Set WIKINAME = %USERINFO{format="$wikiname"}%
+      * Set USERNAME = %USERINFO{format="$login"}%
+      * Set WIKIUSERNAME = %USERINFO{format="$web.$wikiname"}%
+
 ---++ TWiki Platform Settings
 
    * TWiki site name:
@@ -314,4 +319,3 @@ You can introduce new VARIABLES and use them in your topics and templates. There
 
 __Note__: Can't edit?
 [[%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on][View raw topic]]
-

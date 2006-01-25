@@ -138,23 +138,56 @@ sub test_embeddedExpansions {
 sub test_topicCreationExpansions {
     my $this = shift;
     my $user = new TWiki::User($twiki, "fnurgle", "FrankNurgle");
+    $user->setEmails('frank@nurgle.org','mad@sad.com');
     $this->assert_str_equals('fnurgle', $user->login());
     $this->assert_str_equals('FrankNurgle', $user->wikiName());
 
-    my $text = <<END;
+    my $text = <<'END';
 %USERNAME%
 %WIKINAME%
 %MAINWEB%
 %WIKIUSERNAME%
 %WEBCOLOR%
+%USERINFO%
+%USERINFO{format="$emails,$login,$wikiname,$web"}%
 END
     my $result = $twiki->expandVariablesOnTopicCreation($text, $user);
-    my $xpect = <<END;
+    my $xpect = <<'END';
 fnurgle
 FrankNurgle
 %MAINWEB%
 Main.FrankNurgle
 %WEBCOLOR%
+fnurgle,Main.FrankNurgle,frank@nurgle.org,mad@sad.com
+frank@nurgle.org,mad@sad.com,fnurgle,FrankNurgle,Main
+END
+    $this->assert_str_equals($xpect, $result);
+}
+
+sub test_userExpansions {
+    my $this = shift;
+    my $user = new TWiki::User($twiki, "fnurgle", "FrankNurgle");
+    $user->setEmails('frank@nurgle.org','mad@sad.com');
+    $this->assert_str_equals('fnurgle', $user->login());
+    $this->assert_str_equals('FrankNurgle', $user->wikiName());
+
+    my $text = <<'END';
+%USERNAME%
+%WIKINAME%
+%MAINWEB%
+%WIKIUSERNAME%
+%USERINFO%
+%USERINFO{format="$emails,$login,$wikiname,$web"}%
+END
+    $twiki->{user} = $user;
+    my $result = $twiki->handleCommonTags($text, $testWeb, $testTopic);
+    my $xpect = <<'END';
+fnurgle
+FrankNurgle
+Main
+Main.FrankNurgle
+fnurgle,Main.FrankNurgle,frank@nurgle.org,mad@sad.com
+frank@nurgle.org,mad@sad.com,fnurgle,FrankNurgle,Main
 END
     $this->assert_str_equals($xpect, $result);
 }
