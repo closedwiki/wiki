@@ -19,7 +19,8 @@
 
 =pod
 
----+ TWiki::Func Perl Package Documentation
+%STARTINCLUDE%
+---# TWiki::Func Perl Package Documentation
 
 _Official list of stable TWiki functions for Plugin developers_
 
