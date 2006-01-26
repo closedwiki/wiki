@@ -1264,7 +1264,7 @@ HERE
             my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
             my $salt = $saltchars[int(rand($#saltchars+1))] .
               $saltchars[int(rand($#saltchars+1)) ];
-            $updates{Password} =
+            $updates{'{Password}'} =
               _perlifyType(
                            crypt( $query->param( 'newCfgP' ), $salt ),
                            'STRING' );
