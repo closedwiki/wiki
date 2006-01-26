@@ -1328,7 +1328,7 @@ msgstr "Gruppen"
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Hello %1!"
-msgstr "Halloa %1!"
+msgstr "Hallo %1!"
 
 #: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:32
 msgid "Help"
