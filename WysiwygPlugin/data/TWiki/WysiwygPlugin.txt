@@ -6,6 +6,8 @@ Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. C
 
 The plugin is a generic framework that supports editing of TWiki topics using any browser-based HTML editor. It works by transforming TML (TWiki Meta Language) into HTML for the editor and then transforming HTML back into TML on save. These steps can be separated to support the import of HTML from external sources such as existing web pages.
 
+The plugin should operate with TWiki20040904 as well as TWiki-4.0.0 and later.
+
 *Caveat*: WysiwygPlugin is designed for editing TWiki topics, not as a general purpose HTML editor. It will work fine on topics that contain text, TML formatting, and most HTML. However, because of the complexity of transforming TML into HTML and back, complex TML, and mixing HTML and TML may not give the results you expect. You are recommended to use the standard browser textarea editor for editing existing topics that contain mixed HTML and TML, or complex %<nop>TML%-type variables.
 
 %TOC%
@@ -69,40 +71,46 @@ Set it in a user topic to set it for one user. Set it in WebPreferences to set i
 ---++ Plugin Configuration Settings
 	* Set SHORTDESCRIPTION = Translator framework and WYSIWYG editor for TWiki topics
 	* The name of the skin used to invoke a Wysiwyg editor.
-		* Set SKIN = kupu
-Web/Topic name of a help page. Change this to point to your local version of the help page.
+		* Set WYSIWYGSKIN = kupu
+	* Web/Topic name of a help page. Change this to point to your local version of the help page, which is brought up when the .
 		* Set HELPPAGE = TWiki/WysiwygPlugin
-Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
-			* Set ICONS =
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" />
-			<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" />
-			%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalTags" warn="off"}%
-	 * The list of icons above automatically includes a topic in this web called WysiwygPluginLocalIcons. This topic doesn't exist by default, but you can create it and add a list of additional icons in the same format as above (don't forget the indentation!).
-	* List of strings that will be available in the drop-down on the toolbar
-			* Set STRINGS =
-	 		<option value='-- <nop>%WIKIUSERNAME% - %DATE%'>Signature</option>
-			<option value="%<nop>WIKINAME%">Wiki name (variable)</option>
-		<option value='%<nop>SEARCH{"search for"}%'>Inline search (variable)</option>
-		<option value='%<nop>INCLUDE{"topic or url"}%'>Include (variable)</option>
-		<option value="%<nop>TOC%"> Table of Contents (variable)</option>
-		<option value="%<nop>TOPIC%">Topic (variable)</option>
-		<option value="%<nop>WEB%">Web (variable)</option>
-		<option value="%<nop>DATE%"> Date (variable)</option>
-		%INCLUDE{"%TWIKIWEB%.WysiwygPluginLocalStrings" warn="off"}%
-	* The list of strings above automatically includes a topic in this web called WysiwygPluginLocalStrings. This topic doesn't exist by default, but you can create it and add a list of additional strings in the same format as above (don't forget the indentation!).
-
-The edit template also automatically includes a topic called %TWIKIWEB%.WysiwygPluginLocalHelp. This topic doesn't exist by default, but if it exists the contents will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
 ---++ Other Settings
 
-The global TWikiVariable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if some or all of HTML tags (e.g. &lt;br />), or simple variables (e.g. %<nop>VAR%) or calls (e.g. %VARIABLE{...}%), are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, e.g.
+The editor template includes a number of files that can be used for other settings. These files are *not* defined in the distribution, so that you can create your own local content.
+
+---+++ %TWIKIWEB%.<nop>WysiwygPluginIcons
+You can define a list of icons that will be available in the Kupu editor when the %ATTACHURL%/smiley.png toolbar button is pressed. This topic has to contain a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML. Example:
+<verbatim>
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" />
+	<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" />
+</verbatim>
+
+---+++ %TWIKIWEB%.<nop>WysiwygPluginStrings
+You can also define a list of strings that will be available for insertion in topics using the %ATTACHURL%/strings.png toolbar button. This topic has to contain a list of HTML 'option' tags. Example:
+<verbatim>
+	<option value='-- <nop>%WIKIUSERNAME% - %DATE%'>Signature</option>
+	<option value="%<nop>WIKINAME%">Wiki name (variable)</option>
+	<option value='%<nop>SEARCH{"search for"}%'>Inline search (variable)</option>
+	<option value='%<nop>INCLUDE{"topic or url"}%'>Include (variable)</option>
+	<option value="%<nop>TOC%"> Table of Contents (variable)</option>
+	<option value="%<nop>TOPIC%">Topic (variable)</option>
+	<option value="%<nop>WEB%">Web (variable)</option>
+	<option value="%<nop>DATE%"> Date (variable)</option>
+</verbatim>
+The bit between the &gt; &lt; =value= defines text in the drop-down box in the editor, and the =value= defines the actual string inserted in the topic.			
+---+++ %TWIKIWEB%.<nop>WysiwygPluginLocalHelp
+If it exists, the contents of this topic will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
+
+---+++ Editor control
+The global TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if some or all of HTML tags (e.g. &lt;br />), or simple variables (e.g. %<nop>VAR%) or calls (e.g. %VARIABLE{...}%), are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, e.g.
    * =Set WYSIWYG_EXCLUDE = variables,calls=
 
 If you are using this plugin with TWiki-4.0.0 or later with =pattern= skin, the %<nop>COMPOSER% global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.

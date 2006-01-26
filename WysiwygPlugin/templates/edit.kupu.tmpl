@@ -91,7 +91,7 @@
      <span class="kupu-tb-buttongroup kupu-source-span" style="float: right" id="kupu-source">
       <button class="kupu-source" id="kupu-source-button" title="edit HTML code" i18n:attributes="title">&#160;</button>
       <button class="kupu-zoom" id="kupu-zoom-button" i18n:attributes="title" title="zoom: alt-x" accesskey="x">&#160;</button>
-      <button class="twiki-help" title="Help" accesskey="k" onclick="window.open('%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WYSIWYGPLUGIN_HELPPAGE%');">&#160;</button>
+      <button class="twiki-help" title="Help" accesskey="k" onclick="window.open('%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WYSIWYGPLUGIN_HELPPAGE%', '_blank');">&#160;</button>
      </span>
      <span class="kupu-tb-buttongroup">
       <button class="kupu-save" id="kupu-save-button" title="save: alt-s" i18n:attributes="title" accesskey="s">&#160;</button>
@@ -226,7 +226,7 @@
     <div class="kupu-panels">
      <form name="upload" id="twiki-upload-form" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post" target="status_line">
       <input type="hidden" id="createlink" name="createlink" />
-      <input type="hidden" name="skin" value="%URLPARAM{"skin" default="%SKIN%"}%" />
+      <input type="hidden" name="skin" value="%WYSIWYGPLUGIN_WYSIWYGSKIN%" />
       <input type="hidden" id="hidefile" name="hidefile" value="0" value="0" />
       <input type="hidden" name="noredirect" value="1" />
       <input type="hidden" name="filename" value="" />
@@ -350,7 +350,7 @@
    </div>
 <!-- ICONS POPUP -->
    <div id="twiki-icons">
-    %WYSIWYGPLUGIN_ICONS%
+    %INCLUDE{"%TWIKIWEB%.WysiwygPluginIcons" warn="off"}%
    </div>
 <!-- COLORS POPUP -->
    <table id="kupu-colorchooser" cellpadding="0" cellspacing="0" style="position: fixed; border-style: solid; border-color: black; border-width: 1px;">
@@ -360,7 +360,7 @@
      Select string to insert:
      <select id="twiki-strings-select" title="Insert standard text">
       <option value=''>none</option>
-      %WYSIWYGPLUGIN_STRINGS%
+      %INCLUDE{"%TWIKIWEB%.WysiwygPluginStrings" warn="off"}%
      </select>
    </div>
 <!-- EDITOR IFRAME -->
@@ -375,7 +375,7 @@
      <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
      <input type="hidden" name="unlock" value="on" />
      <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-     <input type="hidden" name="skin" value="%URLPARAM{"skin" default="%SKIN%"}%" />
+     <input type="hidden" name="skin" value="%WYSIWYGPLUGIN_WYSIWYGSKIN%" />
      <input type="hidden" name="wysiwyg_edit" value="1" />
      <input type="hidden" name="cmd" value="%CMD%" /><div></div>
      %FORMFIELDS%
