@@ -337,8 +337,8 @@ HERE
               finaltml => <<'HERE',
 
 | *L* | *C* | *R* |
-| A2 | 2 |  2 |
-| A3 | 3 | 3  |
+| A2 |  2  |  2 |
+| A3 |  3  | 3  |
 | A4-6 | four | four |
 | ^ | five | five |
 
@@ -461,10 +461,10 @@ LinkBox LinkBoxs LinkBoxies LinkBoxess LinkBoxesses LinkBoxes',
               exec => 3,
               name => 'squabsWithVars',
               html => '<a href="'.$page.'/Current/WikiSyntax">wiki syntax</a>[[%MAINWEB%.TWiki users]] escaped: [<span class="TMLnop">[wiki syntax]</span>]',
-              tml => '[[wiki syntax]] [[%MAINWEB%.TWiki users]]
+              tml => '[[wiki syntax]][[%MAINWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]',
-              finaltml => '[[WikiSyntax][wiki syntax]] [[%MAINWEB%.TWiki users]] escaped: [<nop>[wiki syntax]]',
+              finaltml => '[[WikiSyntax][wiki syntax]][[%MAINWEB%.TWiki users]] escaped: [<nop>[wiki syntax]]',
           },
           {
               exec => 3,
