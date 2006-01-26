@@ -255,10 +255,8 @@ You must have a matching %<nop>ENDBLOCK{}%
 
 #VarSTARTINCLUDE
 ---+++ STARTINCLUDE -- start position of topic text if included
-   * If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everything exept the =%<nop>STARTINCLUDE%= variable itself. An optional parameter can be used to control whether the content is expanded.
+   * If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everything exept the =%<nop>STARTINCLUDE%= variable itself.
    * Syntax: =%<nop>STARTINCLUDE%=
-   * Syntax: =%<nop>STARTINCLUDE{param}%=
-      * If param does not expand to a non-zero integer, then nothing will be included.
 Note: if you want more than one part of the topic included, use =%<nop>STARTBLOCK{"include"}%= instead.
    * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTSECTION][STARTSECTION]], [[#VarSTARTBLOCK][STARTBLOCK]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
