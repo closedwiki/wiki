@@ -68,10 +68,13 @@ sub new {
 }
 
 sub _readPasswd {
+    my $data = {};
+    if ( ! -e $TWiki::cfg{Htpasswd}{FileName} ) {
+        return $data;
+    }
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" ) ||
       throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.' open failed: '.$! );
     local $/ = undef;
-    my $data = {};
     foreach my $line ( split(/\r?\n/, <IN_FILE>) ) {
         if( $line =~ /^(.*?):(.*?)(?::(.*))?$/ ) {
             $data->{$1}->{pass} = $2;
