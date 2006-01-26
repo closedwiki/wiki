@@ -226,10 +226,10 @@ h1, h2, h3, h4, h5, h6 {
 /* headings */
 .natMain h1 {font-size:32px;}
 .natMain h2 {font-size:24px;}
-.natMain h3 {font-size:18px;}
-.natMain h4 {font-size:16px;}
-.natMain h5 {font-size:16px;}
-.natMain h6 {font-size:16px; margin-top:5px}
+.natMain h3 {font-size:20px;}
+.natMain h4 {font-size:16px; margin-top:10px}
+.natMain h5 {font-size:16px; margin-top:10px}
+.natMain h6 {font-size:16px; margin-top:10px}
 
 .natMain h1 .twikiEmulatedLink,
 .natMain h2 .twikiEmulatedLink,
@@ -504,6 +504,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* external link */
 
+.natExternalLink {
+  white-space:nowrap;
+}
+
 /* see also page.nat.tmpl */
 .natMiddle .natExternalLink:after {
   margin-left:3px;
@@ -688,4 +692,13 @@ img.alignleft {
 .headlinesTeaser .natExternalLink:after {
   content:"";
   margin-left:0px;
+}
+
+/* twisty plugin */
+.twistyTrigger img {
+  padding:0px;
+  margin:0px;
+  vertical-align:middle;
+  position:relative;
+  bottom:2px;
 }

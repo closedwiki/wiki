@@ -114,6 +114,7 @@ hr {
 
 /* sidebar */
 .natMiddleRight {
+  background-color: white;
   /*border-left:1px solid #ddd;*/
 }
 .natSideBarContents {
@@ -221,9 +222,9 @@ hr {
   font-weight:normal;
 }
 .natMain h1 {font-size:2.0em}
-.natMain h2 {font-size:1.6em}
+.natMain h2 {font-size:1.7em}
 .natMain h3 {font-size:1.5em}
-.natMain h4 {font-size:1.4em}
+.natMain h4 {font-size:1.3em}
 .natMain h5 {font-size:1.2em}
 .natMain h6 {font-size:1.1em}
 
@@ -240,7 +241,6 @@ hr {
   font-family: 'Century Gothic', 'Lucida Grande', 'Trebuchet MS', Verdana, sans-serif;
   letter-spacing:-1px;
 }
-
 
 .natMainContents pre {
   border-left:5px solid #ddd;
@@ -591,6 +591,11 @@ hr {
   font-size:0.9em;
 }
 .blogSideBarSection {
+  margin-bottom:20px;
+  margin-top:20px;
+}
+.blogAuthorButtons {
+  margin-top:20px;
   margin-bottom:20px;
 }
 .blogSideBarSection ol {

@@ -344,3 +344,12 @@ hr {
 .blogSideBarComments li {
   margin-bottom:0.5em;
 }
+.blogAdminButtons,
+.blogAuthorButtons {
+  background:#555555;
+  border:1px solid #999999;
+}
+.blogAdminButtons input[type="text"],
+.blogAuthorButtons input[type="text"] {
+  border:1px solid #555555;
+}

@@ -16,7 +16,7 @@
 <div style="width:450px">
 | *&nbsp;* |  *Web:* | *&nbsp;Topic:* |
 |  *From:* |    %WEB% | &nbsp;%TOPIC% |
-|  *To:* |  <select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> | &nbsp;<input type="text" name="newtopic" value="%TOPIC%" /> |
+|  *To:* |  <select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> | &nbsp;<input type="text" name="newtopic" value="%TOPIC%" /> |
 <input type="hidden" name="attachment" value="%FILENAME%" />
 <input type="hidden" name="changeRefs" value="0" />
 <center>
