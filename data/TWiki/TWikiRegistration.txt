@@ -45,13 +45,13 @@ for ( var i = 0; i < sIn.length; i++ )
 <tr>
   <td align="right"> %MAKETEXT{"E-mail address:"}% </td>
   <td><input type="text" name="Twk1Email" size="40" value="" /> =<font color="red">**</font>= </td>
-</tr><tr>
-  <td align="right"> %MAKETEXT{"Your password:"}% </td>
-  <td><input type="password" name="Twk1Password" size="40" value="" /> =<font color="red">**</font>= </td>
-</tr><tr>
-  <td align="right"> %MAKETEXT{"Retype password:"}% </td>
-  <td><input type="password" name="Twk1Confirm" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr>
+<!--
+   # optional rows for password, enabled by {Register}{AllowLoginName} option in =configure=, we assume that login name means that TWiki does not handle passwords
+   * Set BESPOKE_PASSWORD = <tr><td align=\"right\"> %MAKETEXT{"Your password:"}% </td><td><input type=\"password\" name=\"Twk1Password\" size=\"40\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>\
+     <tr><td align=\"right\"> %MAKETEXT{"Retype password:"}% </td><td><input type=\"password\" name=\"Twk1Confirm\" size=\"40\" value=\"\" /> =<font color=\"red\">**</font>= </td></tr>
+-->
+%IF{"$ ALLOWLOGINNAME < 1" then="%BESPOKE_PASSWORD%"}%
 <tr>
   <td align="right"> %MAKETEXT{"Organisation name:"}% </td>
   <td><input type="text" name="Twk0OrganisationName" size="40" value="" /></td>
