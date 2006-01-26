@@ -9,7 +9,7 @@
 <form name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <tr>
   <td style="padding-left:20px"> <select name="topicparent"><option value="">Select...</option>
-     %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
+     %TOPICLIST{"<option value='$name'>$name</option>" separator=" "}%
      </select>&nbsp;
   <td><input type="submit" style="color:green;width:5em" value="Ok"/><br/>
   </td>

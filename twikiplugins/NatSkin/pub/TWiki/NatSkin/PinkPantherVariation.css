@@ -23,8 +23,9 @@
 }
 
 .natWebSlogan,
+.natWebButtons a,
 .natWebButtons {
-  color:white;
+  color:white !important;
 }
 .natTopBar {
   border-top:0px;
@@ -50,11 +51,11 @@
 }
 .natWebButtons ul li.current a {
   background:white;
-  color:black;
+  color:black !important;
 }
 .natWebButtons ul li a:hover {
   background:#FC7ABA;
-  color:black;
+  color:black !important;
 }
 
 /* twiki table variation */

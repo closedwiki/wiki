@@ -203,7 +203,7 @@ hr {
 .natSideBar h2 {
   padding:2px 5px 2px 15px;
 }
-.natWebLink a,
+.natSideBar .natWebLink a,
 .natSideBar h2,
 .natSideBar h2 a {
   background:#eeeeee;

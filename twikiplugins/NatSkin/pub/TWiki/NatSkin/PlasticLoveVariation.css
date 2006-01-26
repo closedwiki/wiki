@@ -1,5 +1,6 @@
 /* header art variation */
 .natHeaderArt {
+  background:white;
   background-image:url(PlasticLoveBar.jpg); 
   background-repeat:no-repeat;
   background-position:top left;
@@ -121,7 +122,6 @@
 
 .twikiPageForm {
   background:#f4f4f4;
-  border:0px;
   padding:5px;
   border:1px solid #d9d6e7;
   margin-bottom:1em;
@@ -129,7 +129,6 @@
 .twikiPageForm table {
   background:transparent;
   margin:0px;
-  margin-top:-1em;
   border:0px;
 }
 .twikiPageForm form {

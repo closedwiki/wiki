@@ -329,3 +329,7 @@ hr {
 .blogSideBarSection ol {
   padding-left:2em;
 }
+.natSideBar .blogAdminButtons,
+.natSideBar .blogAuthorButtons {
+  background:#888888;
+}
