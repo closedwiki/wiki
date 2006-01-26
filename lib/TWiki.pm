@@ -2781,6 +2781,7 @@ sub _WEBLIST {
     my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
     $format ||= '$name';
     my $separator = $params->{separator} || "\n";
+    $separator =~ s/\$n/\n/;
     my $web = $params->{web} || '';
     my $webs = $params->{webs} || 'public';
     my $selection = $params->{selection} || '';
@@ -2824,7 +2825,12 @@ sub _TOPICLIST {
     my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
     $format ||= '$name';
     my $separator = $params->{separator} || "\n";
+    $separator =~ s/\$n/\n/;
     my $web = $params->{web} || $this->{webName};
+    my $selection = $params->{selection} || '';
+    $selection =~ s/\,/ /g;
+    $selection = " $selection ";
+    my $marker = $params->{marker} || 'selected="selected"';
     $web =~ s#\.#/#go;
 
     return '' if
@@ -2834,8 +2840,11 @@ sub _TOPICLIST {
     my @items;
     foreach my $item ( $this->{store}->getTopicNames( $web ) ) {
         my $line = $format;
-        $line =~ s/\$web\b/$web/goi;
-        $line =~ s/\$name\b/$item/goi;
+        $line =~ s/\$web\b/$web/g;
+        $line =~ s/\$name\b/$item/g;
+        $line =~ s/\$qname/"$item"/g;
+        my $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
+        $line =~ s/\$marker/$mark/g;
         push( @items, $line );
     }
     return join( $separator, @items );
