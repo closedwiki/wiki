@@ -1,21 +1,27 @@
 %META:TOPICINFO{author="TWikiContributor" date="1132762223" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
+This is the supplemental plugin for the NatSkin. Its main purpose is to supply
+"skin states" to control different styles and variants to be switched
+dynamically while you are online. But see the below for a full list of all
+provided features.
 
-This is the supplemental plugin for the NatSkin. Its main purpose is to supply "skin states"
-to control different styles and variants to be switched dynamically while you are online. But
-see the below for a full list of all provided features.
+This plugin tries to be maximal compatible with all past, current and upcoming
+TWiki releases, namely beijing, cairo and dakar (aka TWiki-4.x). Therefore some
+mechanisms have been internalized that are only available since TWiki-4.0.0.
+Some mechanisms in the newer engines are not used deliberately (eg. %IF,
+<nop>LoginManager) as similar techniques (e.g. %IFDEFINED, %IFACCESS) have already been
+part of the NatSkinPlugin for some time now and are available to the older
+platforms.  The plugin tries to be interface-compatible to all engines using
+the =Func.pm= API. In those cases where this is _not_ possible, because needed
+functions are not part of the =Func.pm= API, access functions have been added
+to address the different implementations and incompatibilities (e.g. access to
+topic meta data). In the future a sensible part of that will be moved over to
+the DakarContrib package and be used by the NatSkinPlugin and similar.
 
-This plugin tries
-to be maximal compatible with all past, current and upcoming TWiki releases, namely beijing,
-cairo and dakar. Therefore some mechanisms have been internalized that are only available on
-the newest dakar engine, sandbox security and html login dialogues comparable to TWiki:Plugins/AuthPagePlugin. 
-In addition, the plugin tries to be interface-compatible to all
-engines using the =Func.pm= API. In those cases where this is _not_ possible, because needed
-functions are not part of the =Func.pm= API, access functions have been added to 
-address the different implementations and incompatibilities (e.g. access to topic meta data).
 
-This plugin is inspired
-by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/PhotonSkin by TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
+This plugin is inspired by the TWiki:Plugins/GnuSkin by
+TWiki:Main/JoachimNilsson and the TWiki:Plugins/PhotonSkin by
+TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
 
 %TOC%
 
@@ -32,7 +38,7 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
 		* IFSKINSTATE: render skin differently depending on the current skin state
 		* IFACCESS: render different content or include topics depending on access rights
 		* IFDEFINED: render content based on twiki variables being defined or not (compare to the
-		  <nop>IfStatement of the upcoming dakar release)
+		  IfStatements of the upcoming dakar release)
 	* skin style control: infrastructure to get, set and display the skin style that
 	  is currently active using the NatSkinStyleBrowser
 	* WebSideBar: a configurable navigation bar on the 
@@ -52,132 +58,236 @@ by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/
 	  a separate plugin asap).
 
 ---++ Syntax Rules
-| *Tag* | *Desciption* |
-| =%<nop>WEBSIDEBAR%= \
-| displays the left navigation menu using the WebSideBar topic (deprecated, use WEBCOMPONENT) |
-| =%<nop>MYSIDEBAR%= \
-| display a personalized WebSideBar for the user currently logged in |
-| =%<nop>WEBCOMPONENT{"name"}%= \
-| display a web component found in the current web or, if not present, in the %TWIKIWEB%, \
-  e.g. use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to replace the deprecated =%<nop>WEBSIDEBAR%= \
-  tag; use %<nop>WEBCOMPONENT{"WebButtons"}% to display the WebButtons respectively |
-| =%<nop>WEBLINK{web="..." name="..."}%= \
-| display a link to a WebHome with the given name and add the SITEMAPUSEDTO description to \
-  to the hover balloon |
-| =%<nop>NATLOGON%= \
-| displays =Logon&#124;Register= for <nop>TWikiGuest, and \
-  =%WIKINAME%&#124;Logout= otherewise |
-| =%<nop>USERACTIONS%= \
-| display =Edit&#124;Attach&#124;Move&#124;Raw&#124;Diffs&#124;More= when \
-  logged in and an empty string for <nop>TWikiGuest |
-| =%<nop>GROUPSUMMARY%= \
-| display list of group members in a %MAINWEB%.TWikiGroups nicely \
-  by extracting the =GROUP= and =ALLOWTOPICCHANGE= variables of \
-  a group topic and adds links "Contact all members" and "Contact all maintainters"; \
-  by definition maintainers of a group are those listed in the =ALLOWTOPICCHANGE= \
-  variable of the group topic |
-| =%<nop>ALLUSERS%= \
-| display a list of all registered users generated from the %MAINWEB%.TWikiUsers topic; \
-  this is usefull for specific access configurations on beijing and cairo engines \
-  (obsolete on dakar) |
-| =%<nop>KNOWNSKINSTYLES%= \
-| render a list of all known skin styles being attachted to the NatSkin topic |
-| =%<nop>KNOWNVARIATIONS%= \
-| render a list of all known styles variations being attachted to the NatSkin topic |
-| =%<nop>GETSKINSTYLE%= \
-| get the current skin style; the priority is \
-  (1) urlparam =style=&lt;name>=, \
-  (2) value of the session variable =NATSKIN_STYLE= and \
-  (3) preference value =SKINSTYLE= set in \
-		(a) the user preferences \
-		(b) the WebPreferences or \
-		(c) %TWIKIWEB%.TWikiPreferences |
-| =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= \
-| conditionally returns content depending on the current skin state; \
-  &lt;tests> can be \
-  <ul> \
-	 <li> =style="&lt;name>"=: test if the current style is &lt;name> </li> \
-	 <li> =variation="&lt;name>"=: test if the style variation is &lt;name> </li> \
-	 <li> =border="on,off,thin"=: test if the current border is on, off or "thin" </li> \
-	 <li> =buttons="on,off"=: test if the web buttons are currently on or off </li> \
-	 <li> =sidebar="left,right,off"=: \
-			test if the sidebar is currently on the right, left or off </li> \
-	 <li> =searchbox="top,pos1,pos2,pos3,off"=: \
-			test if the searchbox is currently on given position or off </li> \
-	 <li> =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on\
-			is beijing, cairo or dakar </li>\
-	 <li> =action="view,edit,preview,..."=: test the current topic action </li> \
-	 <li> =glue="on,off"=: control wether to eat surrounding whitespaces or not </li> \
-	 <li> =final="&lt;name>=": test if a skin state variable \
-	      called &lt;name> is set to be changeable \
-	      or not using the the FINALPREFERENCES setting; \
-	      known names are are "style", "sidebar", "buttons", "border", "variation" or "searchbox"; \
-	      "all" tests wether you can vary the skin at all; "switches" tests of you can change at least one \
-	      of "sidebar", "buttons", "border" or "searchbox" \
-	 </li> \
-  </ul> \
-  The tag will render the "then" content if all tests evaluate to true and \
-  the "else" content otherwise. Tested strings can be regular expressions. |
-| =%<nop>IFSKINSTATETHEN{&lt;tests>}% <br/>\
-  &lt;then content> <br/> \
-[%<nop>ELSIFSKINSTATE{&lt;tests>}% <br/>\
-  &lt;elsif content>]* <br/> \
-[%<nop>ELSESKINSTATE% <br/>\
-  &lt;else content>]? <br/> \
-%<nop>FISKINSTATE%= \
-| This is the multi-line version if %<nop>IFSKINSTATE{}%\
-  that uses the same tests as above but takes the content from between the sections; thus, \
-  arbitrary <nop>TWikiML might be rendered conditionaly. Note, that IFSKINSTATETHENs can be \
-  nested safely |
-| =%<nop>IFDEFINED{"&lt;<nop>TWikiML>" \
-  [action="view,edit,preview,..."]? \
-  then="..." else="..." glue="on,off"}%= \
-| returns "then" or "else" depeinding on the &lt;<nop>TWikiML> expression expanding to the \
-  emtpy string or not and \
-  the current topic action matching the given one; this tag works similar to the <nop>IfStatement\
-  in dakar but is backwards compatible to beijing and cairo and omits the overhead of an expression\
-  parser |
-| =%<nop>IFDEFINEDTHEN{"&lt;<nop>TWikiML>" [action="view,edit,preview,..."]?}% <br/> \
-  &lt;then content> <br/> \
-[%<nop>ELSIFDEFINED{...}% <br/> \
-  &lt;elsif content>]* <br/> \
-[%<nop>ELSEDEFINED% <br/> \
-  &lt;else content>]? <br/> \
-%<nop>FIDEFINED%= \
-| This is the multi-line version if %<nop>IFSDEFINED{}%; \
-  IFDEFINEDTHENs can be nested safely |
-| =%<nop>WIKIRELEASENAME%= \
-| returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin is installed on |
-| =%<nop>IFACCESS{"&lt;topic>" action="" then="..." else="..." mode="" [then_]args="..." else_args="..."}%= \
-| display content in =then= or =else= argument depending on the access rights of the current user\
-  to the topic =&lt;topic>; \
-  =action= can be =view=, =change= or =rename= \
-  specifying the requested access mode;\
-  =mode= can be =text= or =include= where =text= conditionally renders the text in  \
-  the =then= and =else= arguments and =text= includes the topic in =then= or =else=; \
-  if =then= is not specified in =include= mode then =&lt;topic>= is included if access \
-  is granted; example: %<nop>IFACCESS{"<nop>AdminSideBar" mode="include"}% includes the \
-  <nop>AdminSideBar if the current user has view access to this topic |
-| =%<nop>NATREVISIONS%= | substitute for the =%<nop>REVISIONS%= tag which only works on \
-  the TWiki:Plugins/PatternSkin (todo: fix REVISIONS) |
-| =%<nop>NATMAXREV%= | substitute for =%<nop>MAXREV%= which differes on beijing, cairo and dakar |
-| =%<nop>PREVREV%= | returns the previous topic revision taking =NumberOfRevisions= into account |
-| =%<nop>CURREV%= | returns the current topic revision (compatible among all TWiki engines) |
+---+++ ALLUSERS
+*Syntax*: =%<nop>ALLUSERS%= 
 
+display a list of all registered users generated from the %MAINWEB%.TWikiUsers topic; 
+this is usefull for specific access configurations on beijing and cairo engines 
+(%RED%obsolete on dakar%ENDCOLOR%) 
+
+---+++ CURREV
+*Syntax*: =%<nop>CURREV%= 
+
+returns the current topic revision (compatible among all TWiki engines)
+
+see also: 
+[[#NATMAXREV][NATMAXREV]], 
+[[#NATREVISIONS][NATREVISIONS]]
+[[#PREVREV][PREVREV]], 
+
+---+++ GROUPSUMMARY
+*Syntax*: =%<nop>GROUPSUMMARY%= 
+
+display list of group members in a %MAINWEB%.TWikiGroups nicely 
+by extracting the =GROUP= and =ALLOWTOPICCHANGE= variables of 
+a group topic and adds links "Contact all members" and "Contact all maintainters"; 
+by definition maintainers of a group are those listed in the =ALLOWTOPICCHANGE= 
+variable of the group topic 
+(%RED% TODO: needs a rewrite for dakar%ENDCOLOR%)
+
+---+++ GETSKINSTYLE
+*Syntax*: =%<nop>GETSKINSTYLE%= 
+
+get the current skin style; the priority is 
+	1 urlparam =style=&lt;name>=, 
+	2 value of the session variable =NATSKIN_STYLE= and 
+	3 preference value =SKINSTYLE= set in 
+		(a) the user preferences 
+		(b) the WebPreferences or 
+		(c) %TWIKIWEB%.TWikiPreferences 
+
+---+++ IFACCESS
+*Syntax*: 
+<verbatim>
+%IFACCESS{"<topic>" 
+  action="..." 
+  then="..." 
+  else="..." 
+  mode="..." 
+  [then_]args="..." 
+  else_args="..."}%
+</verbatim>
+
+display the =then= or =else= argument depending on the access rights of the current user
+to the topic =&lt;topic>=.
+=action= can be =view=, =change= or =rename= 
+specifying the requested access mode;
+=mode= can be =text= or =include= where =text= conditionally renders the text in  
+the =then= and =else= arguments and =text= includes the topic in =then= or =else=; 
+if =then= is not specified in =include= mode then =&lt;topic>= is included if access 
+is granted; 
+
+Example: %<nop>IFACCESS{"<nop>AdminSideBar" mode="include"}% includes the 
+<nop>AdminSideBar if the current user has view access to this topic 
+
+---+++ IFDEFINED
+*Syntax*: 
+<verbatim>
+%IFDEFINED{"<TWikiML>" 
+  [action="view,edit,preview,..."]? 
+  then="..." 
+  else="..." 
+  glue="on,off"}%
+</verbatim>
+
+returns the "then" or "else" content depeinding on the &lt;<nop>TWikiML>
+expression expanding to the emtpy string or not. Optionally the current topic
+action is checked to match the given one.  This tag works similar to the
+IfStatements in dakar but is backwards compatible to beijing and cairo
+and omits the overhead of an expression parser.
+
+---+++ IFDEFINEDTHEN, ELSIFDEFINED, ELSEDEFINED, FIDEFINED
+*Syntax*:
+<verbatim>
+%IFDEFINEDTHEN{"<TWikiML>" [action="view,edit,preview,..."]?}% 
+  <then content> 
+[%ELSIFDEFINED{...}% 
+  <elsif content>]* 
+[%ELSEDEFINED%
+  <else content>]?
+%FIDEFINED%
+</verbatim>
+
+This is the multi-line version of [[#IFSDEFINED][IFSDEFINED]].
+IFDEFINEDTHEN expressions can be nested safely.  Within a single IFDEFINEDTHEN
+the ELSIFDEFINED parts can be repeated arbitrarily.  Before rendering the
+=&lt;then|elsif|else condition>= any =$nop= string will be removed first.
+Thereby nested <nop>TWikiML expressions can be prevented from being expanded in
+advance.
+
+---+++ IFSKINSTATE
+*Syntax*: =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= 
+
+conditionally returns content depending on the current skin state; 
+&lt;tests> can be 
+
+	* =style="&lt;name>"=: test if the current style is &lt;name> 
+	* =variation="&lt;name>"=: test if the style variation is &lt;name> 
+	* =border="on,off,thin"=: test if the current border is on, off or "thin" 
+	* =buttons="on,off"=: test if the web buttons are currently on or off 
+	* =sidebar="left,right,off"=: 
+	 test if the sidebar is currently on the right, left or off 
+	* =searchbox="top,pos1,pos2,pos3,off"=: 
+	 test if the searchbox is currently on given position or off
+	* =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on
+		      is beijing, cairo or dakar
+	* =action="view,edit,preview,..."=: test the current topic action
+	* =glue="on,off"=: control wether to eat surrounding whitespaces or not
+	* =final="&lt;name>"=: test if a skin state variable
+	    called &lt;name> is set to be changeable
+	    or not using the the FINALPREFERENCES setting;
+	    known names are are "style", "sidebar", "buttons", "border", "variation" or "searchbox";
+	    "all" tests wether you can vary the skin at all; "switches" tests of you can change at least one
+	    of "sidebar", "buttons", "border" or "searchbox"
+
+The tag will render the "then" content if all tests evaluate to true and 
+the "else" content otherwise. Tested strings can be regular expressions. 
+
+---+++ IFSKINSTATETHEN, ELSIFSKINSTATE, ELSESKINSTATE, FISKINSTATE
+*Syntax*: 
+<verbatim>
+%IFSKINSTATETHEN{<tests>}% 
+  <then content> 
+[%ELSIFSKINSTATE{<tests>}% 
+  <elsif content>]* 
+[%ELSESKINSTATE% 
+  <else content>]?
+%FISKINSTATE%
+</verbatim>
+
+This is the multi-line version of [[#IFSKINSTATE][IFSKINSTATE]] that uses the
+same tests as above but takes the content from between the sections; thus,
+arbitrary <nop>TWikiML might be rendered conditionaly. IFSKINSTATETHEN
+expressions can be nested safely.  Within a single IFSKINSTATETHEN the
+ELSIFSKINSTATE parts can be repeated arbitrarily.  Before rendering the
+=&lt;then|elsif|else condition>= any =$nop= string will be removed first.
+Thereby nested <nop>TWikiML expressions can be prevented from being expanded in
+advance.
+
+---+++ KNOWNSKINSTYLES
+*Syntax*: =%<nop>KNOWNSKINSTYLES%= 
+
+render a list of all known skin styles being attachted to the NatSkin topic 
+
+---+++ KNOWNVARIATIONS
+*Syntax*: =%<nop>KNOWNVARIATIONS%= 
+
+render a list of all known styles variations being attachted to the NatSkin topic 
+
+---+++ MYSIDEBAR
+*Syntax*: =%<nop>MYSIDEBAR%=
+
+display a personalized WebSideBar for the user currently logged in. This is
+%MAINWEB%.%WIKINAME%SideBar for you now. Use the MySideBar to create a new
+sidebar based on the MySideBarTemplate.
+
+see also: [[#WEBCOMPONENT][WEBCOMPONENT]]
+
+---+++ NATLOGON
+*Syntax*: =%<nop>NATLOGON%=
+
+displays =Logon&#124;Register= for <nop>TWikiGuest, and
+=%WIKINAME%&#124;Logout= otherewise
+
+---+++ NATMAXREV
+*Syntax*: =%<nop>NATMAXREV%= 
+
+substitute for =%<nop>MAXREV%= which differes all too much on beijing, cairo
+and dakar. This version grants to behave the same.
+
+---+++ NATREVISIONS
+*Syntax*: =%<nop>NATREVISIONS%= 
+
+substitute for the =%<nop>REVISIONS%= tag which only works on 
+the TWiki:Plugins/PatternSkin.
+
+---+++ PREVREV
+*Syntax*: =%<nop>PREVREV%= 
+
+returns the previous topic revision taking =NumberOfRevisions= into account 
+
+---+++ USERACTIONS
+*Syntax*: =%<nop>USERACTIONS%= 
+
+display =Edit&#124;Attach&#124;Move&#124;Raw&#124;Diffs&#124;More= when 
+logged in and an empty string for <nop>TWikiGuest
+
+---+++ WEBCOMPONENT
+*Syntax*: =%<nop>WEBCOMPONENT{"name"}%=
+
+display a web component found in the current web or, if not present, in the
+%TWIKIWEB%, e.g. use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to replace the
+deprecated =%<nop>WEBSIDEBAR%= tag; use %<nop>WEBCOMPONENT{"WebButtons"}% to
+display the WebButtons respectively 
+
+see also: 
+[[#MYSIDEBAR][MYSIDEBAR]]
+
+---+++  WEBSIDEBAR
+*Syntax*: =%<nop>WEBSIDEBAR%=
+
+displays the left navigation menu using the WebSideBar topic (deprecated, use
+WEBCOMPONENT)
+
+see also:
+[[#MYSIDEBAR][MYSIDEBAR]],
+[[#WEBCOMPONENT][WEBCOMPONENT]]
+
+---+++ WEBLINK
+*Syntax*: =%<nop>WEBLINK{web="..." name="..."}%=
+
+display a link to a WebHome with the given name and add the SITEMAPUSEDTO description to 
+to the hover balloon 
+
+---+++ WIKIRELEASENAME
+*Syntax*: =%<nop>WIKIRELEASENAME%= 
+
+returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin is installed on 
 
 ---++ About <nop>NatSearch
-
 This is a cgi-script that is heavily based on the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
 So =natsearch= is basically a fork of that including fixes to similar security flaws that 
-hit the WebSearch those days also. Here's the list of differences:
-
-	* replaced the =a= flag with =g= to indicate global search
-	* obey the =NOSEARCHALL= flag for global search
-	* remember the original search string and insert it back into the input field
-	* added perl's =use strict= and fixed all warnings
-	* fixed several mod-perl issues
-	* add friendly message when nothing's been found
-	* light weighted google-like hit colorization
+hit the WebSearch those days also. 
 
 <nop>NatSearch can be further reduced to certain webs and topics by setting WebPreferences.
 Besides the NOSEARCHALL feature of every web that excludes a web from search the following variables
@@ -197,7 +307,6 @@ Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible searc
 (TODO: maby move that stuff in here).
 
 ---++ About the WebSideBar
-
 The WebSideBar is used to generate a navigation appearing next to 
 the main topic area. Each web in your <nop>%WIKITOOLNAME% might optionaly have a 
 separate WebSideBar. The default [[%TWIKIWEB%.WebSideBar]] can be used to add a default 
@@ -209,7 +318,6 @@ easier appended to the different parts that make up the complete sidebar. These 
 you don't have write access to the respective topic fragments.
 
 ---++ About the WebButtons
-
 The WebButtons are used to render the button toolbar at the top of the page when the =STYLEBUTTONS=
 setting is set to ="on"=.
 The WebButtons are an unordered list of
@@ -220,7 +328,6 @@ default one will be used displaying a set of links to all public webs in your <n
 installation.
 
 ---++ About Logon &amp; Logout
-
 =LOGONTOPIC=
 
 ---++ Plugin Settings
@@ -317,7 +424,6 @@ WebPreferences or %TWIKIWEB%.TWikiPreferences)
 By default this value is set to "off"
 
 ---++ Plugin Installation Instructions
-
 	* Install the plugins this one depends on (see below) of not done so already.
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -338,10 +444,10 @@ By default this value is set to "off"
 
 
 ---++ Plugin Info
-
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.95 |
+|  Plugin Version: | v2.96 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Jan 2006: | docu fixes |
 |  23 Jan 2006: | fixed natlogn; \
                   fixed FORMATLIST to expandCommonVariables of the format result |
 |  09 Jan 2006: | removed local sandbox; added dependency on <nop>DakarContrib; \
@@ -397,5 +503,5 @@ By default this value is set to "off"
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 23 Jan 2006 
+-- TWiki:Main.MichaelDaum - 26 Jan 2006 
 

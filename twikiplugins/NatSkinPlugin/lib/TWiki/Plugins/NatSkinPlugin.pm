@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.95';
+$RELEASE = '2.96';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -109,7 +109,7 @@ sub initPlugin {
   my $skin = TWiki::Func::getSkin();
 
   # clear NatSkinPlugin traces from session
-  unless ($skin =~ /\b(nat|plain)\b/) {
+  unless ($skin =~ /\b(nat|plain|rss)\b/) {
     &clearSessionValue('SKINSTYLE');
     &clearSessionValue('STYLEBORDER');
     &clearSessionValue('STYLEBUTTONS');
@@ -117,6 +117,8 @@ sub initPlugin {
     &clearSessionValue('STYLEVARIATION');
     &clearSessionValue('STYLESEARCHBOX');
     &clearSessionValue('TABLEATTRIBUTES');
+
+    TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
     return 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
   }
 
@@ -1682,8 +1684,6 @@ sub renderExternalLink
 {
   my ($thePrefix, $theUrl) = @_;
 
-
-
   my $addClass = 0;
   my $text = $thePrefix.$theUrl;
   my $httpsUrlHost = $urlHost;
@@ -1695,13 +1695,9 @@ sub renderExternalLink
   $thePrefix =~ /class="natExternalLink"/ && ($addClass = 0); # prevent adding it twice
 
   if ($addClass) {
-#    writeDebug("called renderExternalLink()");
-#    writeDebug("thePrefix=$thePrefix");
-#    writeDebug("theUrl=$theUrl");
+    #writeDebug("called renderExternalLink($thePrefix, $theUrl)");
     $text = "class=\"natExternalLink\" target=\"_blank\" $thePrefix$theUrl";
-#    writeDebug("got external link '$text'");
-#  } else {
-#    writeDebug("no external link '$text'");
+    #writeDebug("text=$text");
   }
 
   return $text;
