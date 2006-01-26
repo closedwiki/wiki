@@ -401,7 +401,7 @@ The old =mailnotify= script has been retired in favour of the %TWIKIWEB%.MailerC
 The %TWIKIWEB%.SiteChanges topic mimics TWiki.org's TWiki:Codev:WebChangesForAllWebs - i.e. it shows a WebChanges view across a whole site. It's name was chosen to parallel !SiteMap; at some point you can expect the arrival of !SiteStatistics too.
 
 ---+++ What's a Web
-Old versions of TWiki would consider all subdirectories of the TWiki data directory to be webs. This behaviour has changed; now only subdirectories that contain a web home topic (as identified by the =HomeTopicName=) will be considered to be webs. This may result in directories that used to return search matches no longer doing so.
+Old versions of TWiki would consider all subdirectories of the TWiki data directory to be webs. This behaviour has changed; now only subdirectories that contain a web preferences topic (=WebPreferences.txt=) will be considered to be webs. This may result in directories that used to return search matches no longer doing so.
 
 ---+++ Disable &lt;script&gt; tags
 In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. See the ={AllowInlineScript}= setting in the *Security* section of =[[%SCRIPTURLPATH{"configure"}%][configure]]=.
