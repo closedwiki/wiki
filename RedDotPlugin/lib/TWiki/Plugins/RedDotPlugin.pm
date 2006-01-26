@@ -27,7 +27,7 @@ use vars qw(
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 $VERSION = '$Rev$';
-$RELEASE = '1.29';
+$RELEASE = '1.30';
 
 $debug = 0; # toggle me
 
@@ -231,7 +231,6 @@ sub renderRedDot {
   $result .= "style=\"$theStyle\" " if $theStyle;
   $result .=
     "title=\"Edit&nbsp;<nop>$theWeb.$theTopic\" " .
-    "alt=\"Edit&nbsp;<nop>$theWeb.$theTopic\"" .
     ">$theText</a></span>";
 
   return $result;
