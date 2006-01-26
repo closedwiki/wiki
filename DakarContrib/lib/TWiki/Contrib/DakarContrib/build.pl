@@ -8,15 +8,9 @@ BEGIN {
 
 use TWiki::Contrib::Build;
 
-package DakarBuild;
+# Create the build object
+$build = new TWiki::Contrib::Build( 'DakarContrib' );
 
-@DakarBuild::ISA = ( "TWiki::Contrib::Build" );
-
-sub new {
-  my $class = shift;
-  return bless( $class->SUPER::new( "DakarContrib" ), $class );
-}
-
-$build = new DakarBuild();
-
+# Build the target on the command line, or the default target
 $build->build($build->{target});
+
