@@ -292,7 +292,7 @@ sub _link {
               { target => $topic,
                 onclick => 'return launchWindow("'.$web.'","'.$topic.'")',
                 title => $tooltip,
-                href =>$this->{session}->getScriptUrl( 0, 'viewfile',
+                href =>$this->{session}->getScriptUrl( 0, 'view',
                                                        $web, $topic ),
                 rel => 'nofollow'
                }, $string );
