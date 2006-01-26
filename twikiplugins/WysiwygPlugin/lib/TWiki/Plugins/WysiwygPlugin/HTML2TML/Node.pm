@@ -399,7 +399,7 @@ sub _isConvertableTable {
     my( $this, $options, $table ) = @_;
     my @process = ( @{$this->{children}} );
     foreach my $kid ( @{$this->{children}} ) {
-        if( $kid->{tag} =~ /^(colgroup|thead|tbody|tfoot|col)$/ ) {
+        if( $kid->{tag} =~ /^(colgroup|thead|tbody|tfoot|col)$/i ) {
             return 0 unless( $kid->_isConvertableTable( $options, $table ));
         } elsif( !$kid->{tag} ) {
             next;
@@ -436,12 +436,16 @@ sub _isConvertableTableRow {
             return 0;
         }
         return 0 if( $flags & $WC::BLOCK_TML );
+        $text = '' if $text =~ /%SPAN%/;
+        # tidy up whitespace, including \ns. We user [\0- ] to catch
+        # all the WC:: special characters as well.
+        $text =~ s/^[\0- ]*(.+?)[\0- ]*$/ $1 /;
         if( $kid->{attrs} ) {
             my $a = _deduceAlignment( $kid );
             if( $text && $a eq 'right' ) {
                 $text = ' '.$text;
             } elsif( $text && $a eq 'center' ) {
-                #text = '  '.$text.'  ';
+                $text = ' '.$text.' ';
             } elsif( $text && $a eq 'left' ) {
                 $text .= ' ';
             }
@@ -449,10 +453,6 @@ sub _isConvertableTableRow {
                 return 0;
             }
         }
-        $text = '' if $text =~ /%SPAN%/;
-        # tidy up whitespace, including \ns. We user [\0- ] to catch
-        # all the WC:: special characters as well.
-        $text =~ s/^[\0- ]*(.+?)[\0- ]*$/ $1 /;
         push( @row, $text );
     }
     return \@row;

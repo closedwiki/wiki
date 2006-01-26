@@ -643,7 +643,7 @@ sub _emitTR {
 
         # make sure there's something there in empty cells. Otherwise
         # the editor will compress it to (visual) nothing.
-        $cell =~ s/\s/&nbsp;/g;
+        $cell =~ s/^\s*$/&nbsp;/g;
 
         # Removed TH to avoid problems with handling table headers. TWiki
         # allows TH anywhere, but Kupu assumes top row only, mostly.
