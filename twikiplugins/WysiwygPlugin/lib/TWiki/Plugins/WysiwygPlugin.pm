@@ -76,7 +76,7 @@ sub initPlugin {
         $cairoCalled = 0;
     }
 
-    $SKIN = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_SKIN' );
+    $SKIN = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
 
     # Plugin correctly initialized
     return 1;
