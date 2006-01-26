@@ -38,6 +38,10 @@ Once you have your TWiki running, you can move on to customise it for your users
       * %I% It is recommended to *copy* any settings or variables that you want to customize from [[%TWIKIWEB%.TWikiPreferences]] and *paste* them into [[%MAINWEB%.TWikiPreferences]]. This will protect your local customizations from being overwritten in later upgrades. See notes at top of [[%TWIKIWEB%.TWikiPreferences]] for more information.
    * *Customize user home pages* - read and change NewUserTemplate.
    * *Enable authentication* - read TWikiUserAuthentication.
+   * *Clear admin notes* - some pages are meant to be customized after choice of authentication - check and update these topics (remove notice):
+      * %TWIKIWEB%.ChangePassword
+      * %TWIKIWEB%.ResetPassword
+      * %TWIKIWEB%.ChangeEmailAddress
    * *Enable e-mail notification* - read TWikiSiteTools#WebNotify to get WebChangesAlerts.
    * *Automate update of site statistics* - read TWikiSiteTools#WebStatistics
    * *Automate removal of expired sessions and lease files* - read TWikiScripts#tick_twiki_pl.

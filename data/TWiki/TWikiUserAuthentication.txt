@@ -142,15 +142,21 @@ This points ==<nop>WikiUser== to the %MAINWEB% web, where user registration page
 
 If your {PasswordManager} supports password changing, you can change and reset passwords using forms on regular pages.
 
-   * The ChangePassword form ( ==TWiki/ChangePassword== ):
-   * The ResetPassword form ( ==TWiki/ResetPassword== ):
+   * The ChangePassword form ( ==TWiki/ChangePassword== )
+   * The ResetPassword form ( ==TWiki/ResetPassword== )
+
+#ChangingEmails
+---++ Changing E-mail Addresses
+
+If the active {PasswordManager} supports storage and retrieval of user e-mail addresses, you can change your e-mail using a regular page. As shipped, this is true only for the Apache 'htpasswd' password manager.
+
+   * The ChangeEmailAddress form ( ==TWiki/ChangeEmailAddress== )
 
 #IndividualScripts
 ---++ Controlling access to individual scripts
 You may want to add or remove scripts from the list of scripts that require authentication. The method for doing this is different for each of Template Login and Apache Login.
    * For Template Login, update the {AuthScripts} list using =configure=
-   * For Apache Login, add/remove the script from =
-.htaccess=
+   * For Apache Login, add/remove the script from =.htaccess=
 #HowTo
 ---++ How to choose an authentication method
 
