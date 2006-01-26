@@ -618,10 +618,6 @@ sub _emitTR {
     while( $row =~ s/^(.*?)\|// ) {
         my $cell = $1;
 
-        # make sure there's something there in empty cells. Otherwise
-        # the editor will compress it to (visual) nothing.
-        $cell =~ s/\s/&nbsp;/g;
-
         if( $cell eq '' ) {
             $cell = '%SPAN%';
         }
@@ -644,6 +640,10 @@ sub _emitTR {
             $attr->{class} = 'align-center';
             $attr->{style} = 'text-align: center';
         }
+
+        # make sure there's something there in empty cells. Otherwise
+        # the editor will compress it to (visual) nothing.
+        $cell =~ s/\s/&nbsp;/g;
 
         # Removed TH to avoid problems with handling table headers. TWiki
         # allows TH anywhere, but Kupu assumes top row only, mostly.

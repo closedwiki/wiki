@@ -732,7 +732,7 @@ sub _handleSPAN {
                $this->{attrs}->{class} =~ /\bTMLnop\b/) {
         my( $flags, $kids ) = $this->_flatKids( $options | $WC::NOP_ALL );
         $kids =~ s/%([A-Z0-9_:]+({.*})?)%/%<nop>$1%/g;
-        return ( $flags, " $kids ");
+        return ( $flags, $kids );
     } elsif( defined( $this->{attrs}->{class} ) &&
                $this->{attrs}->{class} =~ /\bTMLnopresult\b/) {
         my( $flags, $kids ) = $this->_flatKids( $options );
