@@ -392,7 +392,7 @@ HERE
               exec => 2,
               name => 'noppedVariable',
               html => <<'HERE',
-<span class="TMLnop"><span class="TMLvariable">MAINWEB</span></nop>
+<span class="TMLnop">%MAINWEB%</nop>
 HERE
               tml => '%<nop>MAINWEB%'
              },
@@ -429,7 +429,7 @@ HERE
           {
               exec => 3,
               name => 'variousWikiWords',
-              html => '<a href="'.$page.'/Current/WebPreferences">WebPreferences</a><p /><span class="TMLvariable">MAINWEB</span>.TWikiUsers<p /><a href="'.$page.'/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a><p /><a href="'.$page.'/Current/LinkBox">LinkBox</a><a href="'.$page.'/Current/LinkBoxs">LinkBoxs</a><a href="'.$page.'/Current/LinkBoxies">LinkBoxies</a><a href="'.$page.'/Current/LinkBoxess">LinkBoxess</a><a href="'.$page.'/Current/LinkBoxesses">LinkBoxesses</a><a href="'.$page.'/Current/LinkBoxes">LinkBoxes</a>',
+              html => '<a href="'.$page.'/Current/WebPreferences">WebPreferences</a><p />%MAINWEB%.TWikiUsers<p /><a href="'.$page.'/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a><p /><a href="'.$page.'/Current/LinkBox">LinkBox</a><a href="'.$page.'/Current/LinkBoxs">LinkBoxs</a><a href="'.$page.'/Current/LinkBoxies">LinkBoxies</a><a href="'.$page.'/Current/LinkBoxess">LinkBoxess</a><a href="'.$page.'/Current/LinkBoxesses">LinkBoxesses</a><a href="'.$page.'/Current/LinkBoxes">LinkBoxes</a>',
               tml => 'WebPreferences
 
 %MAINWEB%.TWikiUsers
@@ -454,13 +454,13 @@ LinkBox LinkBoxs LinkBoxies LinkBoxess LinkBoxesses LinkBoxes',
           {
               exec => 2,
               name => 'variousWikiWordsNopped',
-              html => '<span class="TMLnop"><a href="'.$page.'/Current/WebPreferences">WebPreferences</a> <span class="TMLvariable">MAINWEB</span>.TWikiUsers <a href="'.$page.'/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a>',
+              html => '<span class="TMLnop"><a href="'.$page.'/Current/WebPreferences">WebPreferences</a> %MAINWEB%.TWikiUsers <a href="'.$page.'/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a>',
               tml => '<nop>WebPreferences %<nop>MAINWEB%.TWikiUsers <nop>CompleteAndUtterNothing',
           },
           {
               exec => 3,
               name => 'squabsWithVars',
-              html => '<a href="'.$page.'/Current/WikiSyntax">wiki syntax</a>[[<span class="TMLvariable">MAINWEB</span>.TWiki users]] escaped: [<span class="TMLnop">[wiki syntax]</span>]',
+              html => '<a href="'.$page.'/Current/WikiSyntax">wiki syntax</a>[[%MAINWEB%.TWiki users]] escaped: [<span class="TMLnop">[wiki syntax]</span>]',
               tml => '[[wiki syntax]] [[%MAINWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]',
@@ -481,171 +481,171 @@ escaped:
           {
               exec => 3,
               name => 'plingedVarOne',
-              html => '<span class="TMLnop"><span class="TMLvariable">MAINWEB</span></span>nowt',
+              html => '<span class="TMLnop">%MAINWEB%</span>nowt',
               tml => '!%MAINWEB%nowt',
               finaltml => '%<nop>MAINWEB%nowt'
              },
           {
               exec => 3,
               name => 'plingedVarTwo',
-              html => 'nowt<span class="TMLnop"><span class="TMLvariable">MAINWEB</span></span>',
+              html => 'nowt<span class="TMLnop">%MAINWEB%</span>',
               tml => 'nowt!%MAINWEB%',
               finaltml => 'nowt%<nop>MAINWEB%',
           },
           {
               exec => 3,
               name => 'WEBvar',
-              html => '<span class="TMLvariable">WEB</span>',
+              html => '%WEB%',
               tml => '%WEB%'
              },
           {
               exec => 3,
               name => 'ICONvar1',
-              html => '<span class="TMLvariable">ICON{}</span>',
+              html => '%ICON{}%',
               tml => '%ICON{}%'
              },
           {
               exec => 3,
               name => 'ICONvar2',
-              html => '<span class="TMLvariable">ICON{""}</span>',
+              html => '%ICON{""}%',
               tml => '%ICON{""}%'
              },
           {
               exec => 3,
               name => 'ICONvar3',
-              html => '<span class="TMLvariable">ICON{"Fleegle"}</span>',
+              html => '%ICON{"Fleegle"}%',
               tml => '%ICON{"Fleegle"}%'
              },
           {
               exec => 3,
               name => 'URLENCODEvar',
-              html => '<span class="TMLvariable">URLENCODE{""}</span>',
+              html => '%URLENCODE{""}%',
               tml => '%URLENCODE{""}%'
              },
           {
               exec => 3,
               name => 'ENCODEvar',
-              html => '<span class="TMLvariable">ENCODE{""}</span>',
+              html => '%ENCODE{""}%',
               tml => '%ENCODE{""}%'
              },
           {
               exec => 3,
               name => 'INTURLENCODEvar',
-              html => '<span class="TMLvariable">INTURLENCODE{""}</span>',
+              html => '%INTURLENCODE{""}%',
               tml => '%INTURLENCODE{""}%'
              },
           {
               exec => 3,
               name => 'MAINWEBvar',
-              html => '<span class="TMLvariable">MAINWEB</span>',
+              html => '%MAINWEB%',
               tml => '%MAINWEB%'
              },
           {
               exec => 3,
               name => 'TWIKIWEBvar',
-              html => '<span class="TMLvariable">TWIKIWEB</span>',
+              html => '%TWIKIWEB%',
               tml => '%TWIKIWEB%'
              },
           {
               exec => 3,
               name => 'HOMETOPICvar',
-              html => '<span class="TMLvariable">HOMETOPIC</span>',
+              html => '%HOMETOPIC%',
               tml => '%HOMETOPIC%'
              },
           {
               exec => 3,
               name => 'WIKIUSERSTOPICvar',
-              html => '<span class="TMLvariable">WIKIUSERSTOPIC</span>',
+              html => '%WIKIUSERSTOPIC%',
               tml => '%WIKIUSERSTOPIC%'
              },
           {
               exec => 3,
               name => 'WIKIPREFSTOPICvar',
-              html => '<span class="TMLvariable">WIKIPREFSTOPIC</span>',
+              html => '%WIKIPREFSTOPIC%',
               tml => '%WIKIPREFSTOPIC%'
              },
           {
               exec => 3,
               name => 'WEBPREFSTOPICvar',
-              html => '<span class="TMLvariable">WEBPREFSTOPIC</span>',
+              html => '%WEBPREFSTOPIC%',
               tml => '%WEBPREFSTOPIC%'
              },
           {
               exec => 3,
               name => 'NOTIFYTOPICvar',
-              html => '<span class="TMLvariable">NOTIFYTOPIC</span>',
+              html => '%NOTIFYTOPIC%',
               tml => '%NOTIFYTOPIC%'
              },
           {
               exec => 3,
               name => 'STATISTICSTOPICvar',
-              html => '<span class="TMLvariable">STATISTICSTOPIC</span>',
+              html => '%STATISTICSTOPIC%',
               tml => '%STATISTICSTOPIC%'
              },
           {
               exec => 3,
               name => 'STARTINCLUDEvar',
-              html => '<span class="TMLvariable">STARTINCLUDE</span>',
+              html => '%STARTINCLUDE%',
               tml => '%STARTINCLUDE%'
              },
           {
               exec => 3,
               name => 'STOPINCLUDEvar',
-              html => '<span class="TMLvariable">STOPINCLUDE</span>',
+              html => '%STOPINCLUDE%',
               tml => '%STOPINCLUDE%'
              },
           {
               exec => 3,
               name => 'SECTIONvar',
-              html => '<span class="TMLvariable">SECTION{""}</span>',
+              html => '%SECTION{""}%',
               tml => '%SECTION{""}%'
              },
           {
               exec => 3,
               name => 'ENDSECTIONvar',
-              html => '<span class="TMLvariable">ENDSECTION</span>',
+              html => '%ENDSECTION%',
               tml => '%ENDSECTION%'
              },
           {
               exec => 3,
               name => 'FORMFIELDvar1',
-              html => '<span class="TMLvariable">FORMFIELD{"" topic="" alttext="" default="" format="$value"}</span>',
+              html => '%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%',
               tml => '%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%',
           },
           {
               exec => 3,
               name => 'FORMFIELDvar2',
-              html => '<span class="TMLvariable">FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}</span>',
+              html => '%FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}%',
               tml => '%FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}%',
           },
           {
               exec => 3,
               name => 'SPACEDTOPICvar',
-              html => '<span class="TMLvariable">SPACEDTOPIC</span>',
+              html => '%SPACEDTOPIC%',
               tml => '%SPACEDTOPIC%'
              },
           {
               exec => 3,
               name => 'RELATIVETOPICPATHvar1',
-              html => '<span class="TMLvariable">RELATIVETOPICPATH{}</span>',
+              html => '%RELATIVETOPICPATH{}%',
               tml => '%RELATIVETOPICPATH{}%'
              },
           {
               exec => 3,
               name => 'RELATIVETOPICPATHvar2',
-              html => '<span class="TMLvariable">RELATIVETOPICPATH{Sausage}</span>',
+              html => '%RELATIVETOPICPATH{Sausage}%',
               tml => '%RELATIVETOPICPATH{Sausage}%'
              },
           {
               exec => 3,
               name => 'RELATIVETOPICPATHvar3',
-              html => '<span class="TMLvariable">RELATIVETOPICPATH{"Chips"}</span>',
+              html => '%RELATIVETOPICPATH{"Chips"}%',
               tml => '%RELATIVETOPICPATH{"Chips"}%'
              },
           {
               exec => 3,
               name => 'SCRIPTNAMEvar',
-              html => '<span class="TMLvariable">SCRIPTNAME</span>',
+              html => '%SCRIPTNAME%',
               tml => '%SCRIPTNAME%'
              },
           {
@@ -866,13 +866,13 @@ HERE
           {
               exec => 3,
               name => 'twikiWebSnarf',
-              html => '[[<span class="TMLvariable">TWIKIWEB</span>.TopicName][bah]]',
+              html => '[[%TWIKIWEB%.TopicName][bah]]',
               tml  => '[[%TWIKIWEB%.TopicName][bah]]',
           },
           {
               exec => 3,
               name => 'mainWebSnarf',
-              html => '[[<span class="TMLvariable">MAINWEB</span>.TopicName][bah]]',
+              html => '[[%MAINWEB%.TopicName][bah]]',
               tml  => '[[%MAINWEB%.TopicName][bah]]',
           },
           {
@@ -884,9 +884,8 @@ HERE
           {
               exec => 3,
               name => "Item871",
-              tml => "[[Test]] Entry [[Test Page]]\n",
               tml => "[[Test]] Entry [[TestPage][Test Page]]\n",
-              html => '<a href="'.$page.'/Current/Test">Test</a>Entry<a href="'.$page.'/Current/TestPage">Test Page</a>',
+              html => '<a href="'.$page.'/Current/Test">Test</a> Entry<a href="'.$page.'/Current/TestPage">Test Page</a>',
           },
           {
               exec => 0,
@@ -901,7 +900,7 @@ EOE
           {
               exec => 3,
               name => 'Item945',
-              html => '<span class="TMLvariable">SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}</span>',
+              html => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
               tml  => '%SEARCH{"ReqNo" scope="topic" regex="on" nosearch="on" nototal="on" casesensitive="on" format="$percntCALC{$IF($NOT($FIND(%TOPIC%,$formfield(ReqParents))), <nop>, [[$topic]] - $formfield(ReqShortDescript) %BR% )}$percnt"}%',
           },
           {
@@ -945,7 +944,7 @@ HERE
               exec => 3,
               name => 'Item1317',
               tml => '%<nop>DISPLAYTIME{"$hou:$min"}%',
-              html => '<span class="TMLnop"><span class="TMLvariable">DISPLAYTIME{"$hou:$min"}</span></span>',
+              html => '<span class="TMLnop">%DISPLAYTIME{"$hou:$min"}%</span>',
           },
          ];
 
@@ -1093,7 +1092,6 @@ sub compareTML_HTML {
             web => 'Current', topic => 'TestTopic',
             getViewUrl => \&TWiki::Plugins::WysiwygPlugin::getViewUrl,
             expandVarsInURL => \&TWiki::Plugins::WysiwygPlugin::expandVarsInURL,
-            markvars => 1,
         });
     $txer->cleanup($tx);
     $this->_compareHTML($args->{html}, $tx, 1);
