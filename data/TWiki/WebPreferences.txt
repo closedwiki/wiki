@@ -7,7 +7,7 @@ The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%
 
 __Preferences:__
 
-These settings override the defaults for this web only. See %TWIKIWEB%.TWikiPreferences#Default_web_preferences for a full list of defaults.
+These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#Default_Web_Preferences][a full list of defaults]].
 
    * Set WEBTOPICLIST = [[WelcomeGuest][Welcome]] %SEP% [[TWikiRegistration][Register]] %SEP% [[WebChanges][Changes]] %SEP% [[WebTopicList][Topics]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
    * Set WEBBGCOLOR = #FFD8AA
