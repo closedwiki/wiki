@@ -342,7 +342,7 @@ Note: if you want more than one part of the topic included, use =%<nop>STARTBLOC
    * __%X% Note:__ There is a risk that this variable could be misused for cross-site scripting.
    * Related: [[#VarENCODE][ENCODE]], [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
 
----++ USERINFO - retrieve details about the logged in user
+---+++ USERINFO - retrieve details about the logged in user
    * By default, the retrieved info will be formatted as a comma-separated list comprising the login name, web, wiki name, and emails.
    * Syntax: =%<nop>USERINFO%=
    * Expands to: =%USERINFO%=
