@@ -155,10 +155,10 @@ sub expandPlain {
 
     # URL-encode topic names for use of I18N topic names in plain text
     my $scriptUrl =
-      $this->{SESSION}->getScriptUrl
-        ( URI::Escape::uri_escape( $this->{WEB} ),
-          URI::Escape::uri_escape( $this->{TOPIC}),
-          'view' );
+      $this->{SESSION}->getScriptUrl(
+          1, 'view',
+          URI::Escape::uri_escape( $this->{WEB} ),
+          URI::Escape::uri_escape( $this->{TOPIC}));
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
     $template =~ s/%TOPICNAME%/$this->{TOPIC}/g;
     $template =~ s/%AUTHOR%/$this->{AUTHOR}/g;
