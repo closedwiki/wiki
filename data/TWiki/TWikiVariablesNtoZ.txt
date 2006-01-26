@@ -301,14 +301,16 @@ Note: if you want more than one part of the topic included, use =%<nop>STARTBLOC
 
 #VarTOPICLIST
 ---+++ TOPICLIST{"format"} -- topic index of a web
-   * The "format" defines the format of one topic item. It may include variables: The =$name= variable gets expanded to the topic name; the =$web= variable gets expanded to the name of the web.
+   * List of all topics in a web. The "format" defines the format of one topic item. It may include variables: The =$name= variable gets expanded to the topic name, =$qname= to double quoted name, =$marker= to =marker= parameter where topic matches =selection=, and =$web= to the name of the web.
    * Syntax: =%<nop>TOPICLIST{"format" ...}%=
    * Supported parameters:
-    | *Parameter:* | *Description:* | *Default:* |
-    | ="format"= | Format of one line, may include =$name= and =$web= variables | ="$name"= |
-    | =format="format"= | (Alternative to above) | ="$name"= |
-    | =separator=", "= | line separator | ="\n"= (new line) |
-    | =web="Name"= | Name of web | Current web |
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="format"= | Format of one line, may include =$web= (name of web), =$name= (name of the topic), =$qname= (name of topic in double quotes), =$marker= (which expands to =marker= for the item matching =selection= only) | ="$name"= |
+     | =format="format"= | (Alternative to above) | ="$name"= |
+     | =separator=", "= | line separator | ="$n"= (new line) |
+     | =marker="selected"= | Text for =$marker= if the item matches =selection= | ="selected"= |
+     | =selection="TopicA, !TopicB"= | Current value to be selected in list | =(none)= |
+     | =web="Name"= | Name of web | Current web |
    * Example: =%<nop>TOPICLIST{"   * $web.$name"}%= creates a bullet list of all topics
    * Example: =%<nop>TOPICLIST{separator=", "}%= creates a comma separated list of all topics
    * Example: =%<nop>TOPICLIST{" &lt;option&gt;$name&lt;/option&gt;"}%= creates an option list (for drop down menus)
@@ -380,18 +382,18 @@ Note: if you want more than one part of the topic included, use =%<nop>STARTBLOC
 
 #VarWEBLIST
 ---+++ WEBLIST{"format"} -- index of all webs
-   * List of all webs. Hidden webs are excluded, e.g. webs with a =NOSEARCHALL=on= preference variable. The ="format"= defines the format of one web item. The =$name= variable gets expanded to the name of the web, =$qname= gets expanded to double quoted name, =$marker= to =marker= where web matches =selection=.
+   * List of all webs. Hidden webs are excluded, e.g. webs with a =NOSEARCHALL = on= preference variable. The ="format"= defines the format of one web item. The =$name= variable gets expanded to the name of the web, =$qname= gets expanded to double quoted name, =$marker= to =marker= where web matches =selection=.
    * Syntax: =%<nop>WEBLIST{"format" ...}%=
    * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | ="format"= | Format of one line, may include =$name= (the name of the web), $qname (the name of the web in double quotes), =$indentedname= (the name of the web with parent web names replaced by indents, for use in indented lists), and =$marker= (which expands to =marker= for the item matching =selection= only) | ="$name"= |
      | =format="format"= | (Alternative to above) | ="$name"= |
-     | =separator=", "= | line separator | ="\n"= (new line) |
-     | =webs="public"=   | comma sep list of Web, public expands to all non-hidden | ="public"= |
+     | =separator=", "= | line separator | ="$n"= (new line) |
+     | =webs="public"=   | comma separated list of webs, =public= expands to all non-hidden | ="public"= |
      | =marker="selected"= | Text for =$marker= if the item matches =selection= | ="selected"= |
      | =selection="%<nop>WEB%"= | Current value to be selected in list | =section="%<nop>WEB%"= |
    * Example: =%<nop>WEBLIST{"   * [<nop>[$name.%HOMETOPIC%]]"}%= creates a bullet list of all webs.
-   * Example: =%<nop>WEBLIST{"&lt;option $marker value=$qname&gt;$name&lt;/option&gt;" webs="Trash,public" selection="%WEB%" separator=" "}%= Dropdown of all public Webs + Trash Web, current Web highlighted.
+   * Example: =%<nop>WEBLIST{"&lt;option $marker value=$qname&gt;$name&lt;/option&gt;" webs="Trash, public" selection="%WEB%" separator=" "}%= creates a dropdown of all public webs + Trash web, with the current web highlighted.
    * Related: [[#VarTOPICLIST][TOPICLIST]], [[#VarSEARCH][SEARCH]]
 
 #VarWEBPREFSTOPIC
