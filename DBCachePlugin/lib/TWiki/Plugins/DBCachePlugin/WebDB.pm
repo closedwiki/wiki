@@ -60,7 +60,11 @@ sub onReload {
     $topic->set('_sectiondefault', $defaultSection);
 
     # get named sections
-    while($text =~ s/%SECTION{[^}]*?"(.*?)"}%(.*?)%ENDSECTION{[^}]*?"(.*?)"}%//s) {
+
+    # CAUTION: %SECTION will be deleted in the near future. 
+    # so please convert all %SECTION to %STARTSECTION
+
+    while($text =~ s/%(?:START)?SECTION{[^}]*?"(.*?)"}%(.*?)%ENDSECTION{[^}]*?"(.*?)"}%//s) {
       my $name = $1;
       my $sectionText = $2;
       applyGlue($sectionText);

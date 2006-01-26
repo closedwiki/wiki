@@ -17,7 +17,7 @@ package TWiki::Plugins::DBCachePlugin;
 use strict;
 use vars qw( 
   $VERSION $RELEASE $debug $pluginName %webDB 
-  $wikiWordRegex 
+  $wikiWordRegex $webNameRegex $defaultWebNameRegex $linkProtocolPattern
   $currentWeb $currentTopic $currentUser $installWeb
 );
 
@@ -26,7 +26,7 @@ use TWiki::Contrib::DBCacheContrib::Search;
 use TWiki::Plugins::DBCachePlugin::WebDB;
 
 $VERSION = '$Rev$';
-$RELEASE = '0.91';
+$RELEASE = '0.92';
 $pluginName = 'DBCachePlugin';
 $debug = 0; # toggle me
 
@@ -47,6 +47,9 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
 
   $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
+  $webNameRegex = TWiki::Func::getRegularExpression('webNameRegex');
+  $defaultWebNameRegex = TWiki::Func::getRegularExpression('defaultWebNameRegex');
+  $linkProtocolPattern = TWiki::Func::getRegularExpression('linkProtocolPattern');
 
   #writeDebug("initialized");
   return 1;
@@ -158,10 +161,11 @@ sub _DBQUERY {
 sub _DBCALL {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("called _DBCALL");
-
   # remember args for the key before mangling the params
   my $args = $params->stringify();
+
+  #writeDebug("called _DBCALL($args)");
+
   my $section = $params->remove('section') || 'default';
   my $warn = $params->remove('warn') || 'on';
   $warn = ($warn eq 'on')?1:0;
@@ -215,10 +219,6 @@ sub _DBCALL {
   $session->{dbcalls}->{$key} = 1;
 
   # substitute variables
-  $sectionText =~ s/%INCLUDINGWEB%/$theWeb/g;
-  $sectionText =~ s/%INCLUDINGTOPIC%/$theTopic/g;
-  $sectionText =~ s/%WEB%/$thisWeb/g;
-  $sectionText =~ s/%TOPIC%/$thisTopic/g;
   foreach my $key (keys %$params) {
     $sectionText =~ s/%$key%/$params->{$key}/g;
   }
@@ -226,11 +226,51 @@ sub _DBCALL {
   # expand
   $sectionText = TWiki::Func::expandCommonVariables($sectionText, $thisTopic, $thisWeb);
 
+  # from TWiki::_INCLUDE
+  if($thisWeb ne $theWeb) {
+    my $removed = {};
+
+    # Must handle explicit [[]] before noautolink
+    # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
+    $sectionText =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1)/geo;
+    # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
+    $sectionText =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1, $2)/geo;
+
+    $sectionText = $session->{renderer}->takeOutBlocks($sectionText, 'noautolink', $removed);
+
+    # 'TopicName' to 'Web.TopicName'
+    $sectionText =~ s/(^|[\s(])($webNameRegex\.$wikiWordRegex)/$1$TWiki::TranslationToken$2/go;
+    $sectionText =~ s/(^|[\s(])($wikiWordRegex)/$1$thisWeb\.$2/go;
+    $sectionText =~ s/(^|[\s(])$TWiki::TranslationToken/$1/go;
+
+    $session->{renderer}->putBackBlocks( \$sectionText, $removed, 'noautolink');
+  }
+
+
   # cleanup
   delete $session->{dbcalls}->{$key};
 
   return $sectionText;
-  #return '<verbatim>'.$sectionText.'</verbatim>';
+  #return "<verbatim>\n$sectionText\n</verbatim>";
+}
+
+###############################################################################
+# from TWiki::_fixIncludeLink
+sub _fixIncludeLink {
+  my( $theWeb, $theLink, $theLabel ) = @_;
+
+  # [[...][...]] link
+  if($theLink =~ /^($webNameRegex\.|$defaultWebNameRegex\.|$linkProtocolPattern\:|\/)/o) {
+    if ( $theLabel ) {
+      return "[[$theLink][$theLabel]]";
+    } else {
+      return "[[$theLink]]";
+    }
+  } elsif ( $theLabel ) {
+    return "[[$theWeb.$theLink][$theLabel]]";
+  } else {
+    return "[[$theWeb.$theLink][$theLink]]";
+  }
 }
 
 ###############################################################################

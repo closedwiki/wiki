@@ -200,8 +200,10 @@ following is the default paramenter (omitting the #)
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 01 Dec 2005 (v0.91) |
+|  Plugin Version: | v0.92 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Jan 2006: | fixed internal links in DBCALL; \
+                  support for STARTSECTION, old SECTION being deprecated |
 |  24 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
@@ -213,6 +215,6 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 01 Dec 2005
+-- TWiki:Main.MichaelDaum - 26 Jan 2005
 
 
