@@ -1,8 +1,8 @@
-﻿# TWiki translation for <Language>
+# TWiki translation for Dutch
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   <add-yourself-here>
+#   Arthur Clemens
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"
@@ -359,9 +359,8 @@ msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 "Error\" message when you upload a file, you need to try again. It should "
 "work the second time."
-msgstr ""
 msgstr "*Programmafout:* Internet Explorer 4.0 of eerder: als je een \"Internal "
-Server Error\" bericht krijgt wanneer je een bijlage upload, probeer het dan "
+"Server Error\" bericht krijgt wanneer je een bijlage upload, probeer het dan "
 "opnieuw. De tweede keer zou het moeten werken."
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:50
@@ -924,7 +923,7 @@ msgstr "Doorgaan om het web te hernoemen?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
 msgid "Continue to *[[%1][create topic %2]]*"
-msgstr "Ga verder met *[[%1][pagina %2 aanmaken]]*""
+msgstr "Ga verder met *[[%1][pagina %2 aanmaken]]*"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid ""
@@ -1207,7 +1206,7 @@ msgid ""
 "=text/css=)"
 msgstr ""
 "Foutmelding: Content type wordt niet ondersteund: %1 (Moet zijn =text/html=, "
-=text/plain= of =text/css=)"
+"=text/plain= of =text/css=)"
 
 #: templates/messages.tmpl:382
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
@@ -2292,7 +2291,7 @@ msgid ""
 "=width: auto= to disable."
 msgstr ""
 "Stijl van het tekstvak. =breedte: 99%= voor een venstervullende vakbreedte "
-"(standaard), "=width: auto= om dit te deactiveren."
+"(standaard), =width: auto= om dit te deactiveren."
 
 #: data/TWiki/TWikiRegistration.txt:217 templates/messages.tmpl:165
 #: templates/messages.tmpl:242
@@ -2399,7 +2398,7 @@ msgstr ""
 "Iedereen is welkom om toe te voegen of te verwijderen. We kunnen je aanbevelen "
 "om %2 te doorlopen om een overzicht van de %3 tool te krijgen. Een goede "
 "vuistregel is om toe te voegen aan het einde van de pagina en te signeren en "
-"dateren met je %4".
+"dateren met je %4."
 
 #: data/Sandbox/WebRss.txt:5 data/_default/WebAtom.txt:3
 #: data/_default/WebRss.txt:5
