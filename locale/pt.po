@@ -1350,7 +1350,7 @@ msgstr "Como ativar seu registro no %1"
 msgid ""
 "However, the filename has been changed from %1 to %2. Please make a note of "
 "it."
-msgstr "Entratanto, o nome do arquivo foi alterado de %1 para %2. Por favor, "
+msgstr "Entretanto, o nome do arquivo foi alterado de %1 para %2. Por favor, "
 "lembre-se disto."
 
 #: data/TWiki/TWikiPreferences.txt:39
@@ -2062,7 +2062,7 @@ msgstr "Procurar só na &Web %1"
 
 #: twikiplugins/PatternSkin/templates/backlinksweb.pattern.tmpl:10
 msgid "Search a&ll webs"
-msgstr "Procurar em todas as Webs (globa&ll)"
+msgstr "Procurar em todas as Webs (globa&l)"
 
 #: templates/oopsmore.tmpl:20
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:20
@@ -2272,7 +2272,7 @@ msgid ""
 "=width: auto= to disable."
 msgstr ""
 "Estilo da caixa de edição de texto. =with: 99%= para largura total da tela "
-"(padrão), =with: auto= para desabilitar."
+"(padrão), =width: auto= para desabilitar."
 
 #: data/TWiki/TWikiRegistration.txt:217 templates/messages.tmpl:165
 #: templates/messages.tmpl:242
@@ -2618,7 +2618,7 @@ msgstr ""
 #: templates/oopsleaseconflict.tmpl:19
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:20
 msgid "To edit the topic anyway, click "
-msgstr "Para editar o tópico asim mesmo, clique."
+msgstr "Para editar o tópico assim mesmo, clique."
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:15
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
