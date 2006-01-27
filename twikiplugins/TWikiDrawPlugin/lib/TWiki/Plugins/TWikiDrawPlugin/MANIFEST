@@ -58,3 +58,4 @@ pub/TWiki/TWikiDrawPlugin/URL3.gif
 pub/TWiki/TWikiDrawPlugin/screenshot.png
 pub/TWiki/TWikiDrawPlugin/twikidraw.jar JAR file for applet
 templates/twikidraw.tmpl Template for drawing editor
+templates/twikidraw.pattern.tmpl Template for drawing editor, pattern skin
