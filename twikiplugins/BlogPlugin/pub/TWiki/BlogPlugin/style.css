@@ -15,7 +15,7 @@
 
 .blogAbout {
   text-align:justify; 
-  font-size:0.9em; 
+  font-size:95%; 
   margin-bottom:1.5em;
 }
 .blogEntry {
@@ -139,6 +139,23 @@
 .blogFeedCategory { 
   margin-top:5px;
   margin-bottom:5px;
+}
+
+.blogSideBarSection {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+.blogAdminButtons,
+.blogAuthorButtons {
+  margin-bottom:10px !important;
+  padding:10px;
+  border:1px solid #E2DCC8;
+  background:#f4f4f4;
+  text-align:center;
+}
+.blogAdminButtons input[type="text"],
+.blogAuthorButtons input[type="text"] {
+  border:1px solid #E2DCC8;
 }
 
 /* pattern skin specific settings */

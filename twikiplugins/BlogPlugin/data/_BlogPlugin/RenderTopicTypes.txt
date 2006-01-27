@@ -9,15 +9,23 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
----+ %NAME%%REDDOT{"%WEB%.%TOPIC%"}%
-<div class="blogSideBarSection blogSideBarTopicType">
-<noautolink>
-%~~ DBQUERY{"TopicType=~'\b%NAME%\b'" 
-~~~   format="   1 <a href=\"%SCRIPTURLPATH%/view/$web/$topic\" 
-~~~                    title=\"$formfield(TopicDescription)\">$topic</a>"
-~~~ }%
-</noautolink>
-</div>
+*~~ <div class="blogSideBarSection blogSideBarTopicType">
+~~~   <h1> %NAME%%REDDOT{"%WEB%.%TOPIC%"}%</h1>
+~~~   <noautolink>
+~~~   <ol>
+%~~     DBQUERY{"TopicType=~'\b%NAME%\b'" 
+~~~       separator=" "
+~~~       format="<li> 
+~~~         <a href=\"%SCRIPTURLPATH%/view/$web/$topic\" 
+~~~            title=\"$formfield(TopicDescription)\"
+~~~            style=\"$percntCALC{\"$IF($EXACT($web.$topic,%BASEWEB%.%BASETOPIC%),color:red)\"}$percnt\">
+~~~           $topic
+~~~         </a></li>"
+~~~    }%
+~~~   </ol>
+~~~   </noautolink>
+~~~ </div>
+*~~
 %STOPINCLUDE%
 </verbatim>
 

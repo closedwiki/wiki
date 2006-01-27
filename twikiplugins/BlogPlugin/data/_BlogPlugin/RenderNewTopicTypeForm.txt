@@ -9,7 +9,8 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-<div class="twikiPageForm">
+~~~
+<div class="twikiPageForm blogAdminButtons">
 <form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/" method="post">
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="%NAME%Template" />
@@ -17,9 +18,10 @@
 <input type="hidden" name="TopicDescription" value="" />
 <input type="hidden" name="topicparent" value="%NAME%" />
 <input type="submit" value="New <nop>%NAME%" class="blogSubmitButton" />
-<input type="text" name="topic" size="40"/>
+<input type="text" name="topic" size="40" />
 </form> 
 </div>
+~~~
 %STOPINCLUDE%
 </verbatim>
 

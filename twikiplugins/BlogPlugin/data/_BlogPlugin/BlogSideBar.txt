@@ -3,7 +3,7 @@
 <div class="alt">
 <verbatim>
 %STARTINCLUDE%
-%SECTION{"Default"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+%STARTSECTION{"Default"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %DBCALL{"BlogAbout" section="Default"}%
 </div>
@@ -13,16 +13,14 @@
 <p/>
 </div>
 %FISKINSTATE%
-%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderAuthorTools" warn="off"}%
 %DBCALL{"RenderRecentComments" LIMIT="5" CAT=".*"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10"}%
 %DBCALL{"RenderArchives"}%
 %DBCALL{"RenderCategories"}%
 %DBCALL{"RenderBlogRoll" CAT=".*"}%
+%DBCALL{"RenderAdminTools" warn="off"}% 
 <!-- %<nop>DBCALL{"RenderVisitors"}% -->
-%DBCALL{"RenderAdminTools" warn="off"}%
 %IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
 ---+ Technorati
 <script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
@@ -35,7 +33,7 @@
 ---+ Admin sidebar
 <div class="alt">
 <verbatim>
-%SECTION{"Admin"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+%STARTSECTION{"Admin"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %DBCALL{"BlogAbout" section="Admin"}%
 </div>
@@ -47,6 +45,7 @@
 %FISKINSTATE%
 %DBCALL{"RenderNewTopicTypeForm"
          NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%" warn="off"}%
+%DBCALL{"RenderValidateButton" TEXT="Validate Html"}%
 %DBCALL{"RenderTopicTypes" 
          NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%"}%
 %ENDSECTION{"Admin"}%
@@ -56,7 +55,7 @@
 ---+ BlogEntry sidebar
 <div class="alt">
 <verbatim>
-%SECTION{"BlogEntry"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+%STARTSECTION{"BlogEntry"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %DBCALL{"BlogAbout" section="Default"}%
 </div>
@@ -66,10 +65,8 @@
 <p/>
 </div>
 %FISKINSTATE%
-%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
-%DBCALL{"RenderRelatedEntries" NAME="%BASETOPIC%"}%
+%DBCALL{"RenderAuthorTools" warn="off"}%
+%DBCALL{"RenderRelatedEntries" NAME="%BASETOPIC%"}% 
 %DBCALL{"RenderRecentPostings" LIMIT="10"}%
 %DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"BlogEntry"}%
@@ -79,7 +76,7 @@
 ---+ Aggregation sidebar
 <div class="alt">
 <verbatim>
-%SECTION{"Aggregation"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+%STARTSECTION{"Aggregation"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %DBCALL{"BlogAbout" section="Aggregation"}%
 </div>
@@ -89,9 +86,7 @@
 <p/>
 </div>
 %FISKINSTATE%
-%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderAuthorTools" warn="off"}%
 %DBCALL{"RenderBlogRoll" CAT=".*"}%
 %DBCALL{"RenderAdminTools" warn="off"}%
 %ENDSECTION{"Aggregation"}%
@@ -101,7 +96,7 @@
 ---+ Archive sidebar
 <div class="alt">
 <verbatim>
-%SECTION{"Archive"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+%STARTSECTION{"Archive"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %DBCALL{"BlogAbout" section="Archive"}%
 </div>
@@ -121,7 +116,7 @@
 ---+ Category sidebar
 <div class="alt">
 <verbatim>
-%SECTION{"Category"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
+%STARTSECTION{"Category"}%---+ About%REDDOT{"%WEB%.BlogAbout"}%%REDDOT{"%WEB%.BlogSideBar"}%
 <div class="blogAbout">
 %DBCALL{"BlogAbout" section="Category"}%
 </div>
@@ -131,9 +126,7 @@
 <p/>
 </div>
 %FISKINSTATE%
-%DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
-%DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
-%DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderAuthorTools" warn="off"}%
 %DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
@@ -148,7 +141,7 @@
 ---+ Nosidebar sidebar
 <div class="alt">
 <verbatim>
-%SECTION{"nosidebar"}%
+%STARTSECTION{"nosidebar"}%
 %ENDSECTION{"nosidebar"}%
 </verbatim>
 </div>

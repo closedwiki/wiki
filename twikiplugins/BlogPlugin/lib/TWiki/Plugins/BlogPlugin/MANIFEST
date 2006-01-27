@@ -33,6 +33,7 @@ data/_BlogPlugin/HiddenFormViewTemplate.txt 0440
 data/_BlogPlugin/NatSkinSearchViewTemplate.txt 0440
 data/_BlogPlugin/NewsFeeds.txt 0440
 data/_BlogPlugin/RenderAddComment.txt 0440
+data/_BlogPlugin/RenderAuthorTools.txt 0440
 data/_BlogPlugin/RenderAdminTools.txt 0440
 data/_BlogPlugin/RenderArchiveLink.txt 0440
 data/_BlogPlugin/RenderArchives.txt 0440
@@ -58,6 +59,7 @@ data/_BlogPlugin/RenderFunctionCallers.txt 0440
 data/_BlogPlugin/RenderNewBlogEntryButton.txt 0440
 data/_BlogPlugin/RenderNewBlogLinkButton.txt 0440
 data/_BlogPlugin/RenderNewCategoryButton.txt 0440
+data/_BlogPlugin/RenderValidateButton.txt 0440
 data/_BlogPlugin/RenderNewTopicTypeForm.txt 0440
 data/_BlogPlugin/RenderNextCommentNr.txt 0440
 data/_BlogPlugin/RenderPageNavigation.txt 0440

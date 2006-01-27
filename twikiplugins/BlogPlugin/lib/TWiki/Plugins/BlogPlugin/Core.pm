@@ -49,8 +49,8 @@ sub handleCiteBlog {
     unless $theTopic;
 
   my $theDB = TWiki::Plugins::DBCachePlugin::getDB($theWeb);
-
-  my $text = "[[$theWeb.$theTopic][$theTopic]]";
+  my $viewUrl = TWiki::Func::getViewUrl($theWeb, $theTopic);
+  my $text = "<a href=\"$viewUrl\" title=\"permalink to <nop>$theTopic\">$theTopic</a>";
 
   my $topicObj = $theDB->fastget($theTopic);
   return $text unless $topicObj;
@@ -65,7 +65,7 @@ sub handleCiteBlog {
     $form->fastget('Name') ||
     $theTopic;
   my $createDate = TWiki::Func::formatTime($topicObj->fastget('createdate'), '$day $mon $year');
-  return "[[$theWeb.$theTopic][$displayText ($createDate)]]";
+  return "<a href=\"$viewUrl\" title=\"permalink to <nop>$theTopic\">$displayText ($createDate)</a>";
 }
 
 ###############################################################################

@@ -9,6 +9,7 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
+~~~
 <noautolink>
 %~~ DBQUERY{"TopicType=~'\bBlogLink\b' AND SubjectCategory=~'\b%CAT%\b'" web="%WEB%"
 ~~~   order="Name" hidenull="on"
@@ -27,6 +28,7 @@
 ~~~ }%
 *~~
 </noautolink>
+~~~
 %STOPINCLUDE%
 </verbatim>
 
