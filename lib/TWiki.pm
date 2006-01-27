@@ -1748,14 +1748,18 @@ sub inlineAlert {
 
 # Generic parser for sections within a topic. Sections are delimited
 # by STARTSECTION and ENDSECTION, which may be nested, overlapped or
-# otherwise abused. the only requirement is that the 
-# Extract the text as a chain of sections. The result is an array of
-# section blocks. Each section contains:
+# otherwise abused. The parser builds an array of sections, which is
+# ordered by the order of the STARTSECTION within the topic. It also
+# removes all the SECTION tags from the text, and returns the text
+# and the array of sections.
+# Each section is a TWiki::Attrs object, which contains the attributes
 # {type, name, start, end}
 # where start and end are character offsets in the
 # string *after all section tags have been removed*. All sections
 # are required to be uniquely named; if a section is unnamed, it
 # will be given a generated name. Sections may overlap or nest.
+# See test/unit/VariablesTests.pm for detailed testcases that
+# round out the spec.
 sub _parseSections {
     #my( $text _ = @_;
     my %sections;
