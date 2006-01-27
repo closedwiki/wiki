@@ -78,6 +78,10 @@
 .blogCommentCount {
   margin-left:10px;
 }
+.blogHeadline .blogCommentCount {
+  font-size:2em;
+  text-align:right;
+}
 .blogEntryCount {
   text-align:right;
 }
@@ -144,6 +148,11 @@
 .blogSideBarSection {
   margin-top:10px;
   margin-bottom:10px;
+}
+.blogSideBarSection ul,
+.blogSideBarSection ol {
+  margin-top:0px;
+  margin-bottom:0px;
 }
 .blogAdminButtons,
 .blogAuthorButtons {
