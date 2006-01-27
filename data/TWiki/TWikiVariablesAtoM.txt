@@ -85,22 +85,20 @@ __Note:__ This topic is included by TWikiVariables
    * __%X% Note:__ Values of HTML input fields must be entity encoded, for example:%BR% =&lt;input type="text" name="address" value="%<nop>ENCODE{ "any text" type="entity" }%" /&gt;=
    * Related: [[#VarURLPARAM][URLPARAM]]
 
-#VarENDSECTION
----+++ ENDSECTION{"name"} -- marks the end of a generic named section within the toic
-   * Syntax: =%<nop>ENDSECTION{"name"}%=
-   * Supported parameters:
-     | *Parameter:* | *Description:* | *Default:* | 
-     | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous %<nop>STARTSECTION% variable. | Mandatory parameter without a default |
-Named sections are currently only used for [[#VarINCLUDE][INCLUDE]], though they are generic enough to be used for more than that in the future.
-   * Related: [[#VarSTARTSECTION][STARTSECTION]], [[#VarSTARTBLOCK][STARTBLOCK]]
-
 #VarENDBLOCK
----+++ ENDBLOCK{"type"} -- marks the end of a generic typed section within the toic
+---+++ ENDBLOCK{"type"} -- marks the end of a block within a topic
    * Syntax: =%<nop>ENDBLOCK{"type"}%=
-   * Supported parameters:
-     | *Parameter:* | *Description:* | *Default:* | 
-     | ="type"= | Type of the section, =include= or =templateonly=. Must match with a previous %<nop>STARTBLOCK% | Mandatory parameter without a default |
-Named sections are currently only used for [[#VarINCLUDE][INCLUDE]], though they are generic enough to be used for more than that in the future.
+   * Supported parameter:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="type"= | Type of the section, =include= or =templateonly=. Must match with a previous =%<nop>STARTBLOCK{"type"}%= | Mandatory parameter without a default |
+   * Related: [[#VarSTARTBLOCK][STARTBLOCK]], [[#VarSTARTSECTION][STARTSECTION]]
+
+#VarENDSECTION
+---+++ ENDSECTION{"name"} -- marks the end of a named section within a topic
+   * Syntax: =%<nop>ENDSECTION{"name"}%=
+   * Supported parameter:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous =%<nop>STARTSECTION{"name"}%= variable. | Mandatory parameter without a default |
    * Related: [[#VarSTARTBLOCK][STARTBLOCK]], [[#VarSTARTSECTION][STARTSECTION]]
 
 #VarFAILEDPLUGINS
