@@ -34,10 +34,10 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
    * %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users
    * %TWIKIWEB%.UserDocumentationCategory is a list of TWiki user documentation
    * %TWIKIWEB%.UserToolsCategory lists all TWiki user tools
-%STARTBLOCK{"templateonly"}%
+%STARTSECTION{type="templateonly"}%
 Note to TWiki Administrator:
 
-Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from =%<nop>STARTBLOCK{"templateonly"}%= to =%<nop>ENDBLOCK{"templateonly"}%= when you are done)
+Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from =%<nop>STARTSECTION{type="templateonly"}%= to =%<nop>ENDSECTION{type="templateonly"}%= when you are done)
 
 Text for multilingual wiki community, copy from here to %<nop>ENDBLOCK{"templateonly"}%
 

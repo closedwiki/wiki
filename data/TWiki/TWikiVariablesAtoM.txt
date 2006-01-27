@@ -85,21 +85,15 @@ __Note:__ This topic is included by TWikiVariables
    * __%X% Note:__ Values of HTML input fields must be entity encoded, for example:%BR% =&lt;input type="text" name="address" value="%<nop>ENCODE{ "any text" type="entity" }%" /&gt;=
    * Related: [[#VarURLPARAM][URLPARAM]]
 
-#VarENDBLOCK
----+++ ENDBLOCK{"type"} -- marks the end of a block within a topic
-   * Syntax: =%<nop>ENDBLOCK{"type"}%=
-   * Supported parameter:
-     | *Parameter:* | *Description:* | *Default:* |
-     | ="type"= | Type of the section, =include= or =templateonly=. Must match with a previous =%<nop>STARTBLOCK{"type"}%= | Mandatory parameter without a default |
-   * Related: [[#VarSTARTBLOCK][STARTBLOCK]], [[#VarSTARTSECTION][STARTSECTION]]
-
 #VarENDSECTION
 ---+++ ENDSECTION{"name"} -- marks the end of a named section within a topic
    * Syntax: =%<nop>ENDSECTION{"name"}%=
    * Supported parameter:
-     | *Parameter:* | *Description:* | *Default:* |
-     | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous =%<nop>STARTSECTION{"name"}%= variable. | Mandatory parameter without a default |
-   * Related: [[#VarSTARTBLOCK][STARTBLOCK]], [[#VarSTARTSECTION][STARTSECTION]]
+     | *Parameter:* | *Description:* |
+     | ="name"= | Name of the section. |
+     | =type="type" | Type of the section being terminated. |
+   * If the =STARTSECTION= is named, the corresponding =ENDSECTION= must also be named with the same name. If the =STARTSECTION= specifies a type, then the corresponding =ENDSECTION= must also specify the same type. If the section is unnamed, =ENDSECTION= will match with the nearest unnamed =%<nop>STARTSECTION%= *of the same type* above it. 
+   * Related: [[#VarSTARTSECTION][STARTSECTION]]
 
 #VarFAILEDPLUGINS
 ---+++ FAILEDPLUGINS -- debugging for plugins that failed to load, and handler list

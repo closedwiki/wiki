@@ -3,7 +3,7 @@
 __Note:__ This topic is included by TWikiVariables
 
 -----
-%STARTBLOCK{"include"}%
+%STARTSECTION{type="include"}%
 #VarNOP
 ---+++ NOP -- template text not to be expanded in instantiated topics
    * Syntax: =%<nop>NOP%=
@@ -11,8 +11,8 @@ __Note:__ This topic is included by TWikiVariables
       * When the topic containing this is used as a template for another topic, it is removed.
    * Syntax: =%<nop>NOP{...}%= *deprecated*
       * In normal topic text, expands to whatever is in the curly braces (if anything).
-      * __%X% Note:__ This is deprecated. Do not use it. Use =%<nop>STARTBLOCK{"templateonly"}%= .. =%<nop>ENDBLOCK{"templateonly"}%= instead (see TWikiTemplates for more details).
-   * Related: [[#VarSTARTBLOCK][STARTBLOCK]], TWikiTemplates
+      * __%X% Note:__ This is deprecated. Do not use it. Use =%<nop>STARTSECTION{type="templateonly"}%= .. =%<nop>ENDSECTION{type="templateonly"}%= instead (see TWikiTemplates for more details).
+   * Related: [[#VarSTARTSECTION][STARTSECTION]], TWikiTemplates
 
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic
@@ -234,32 +234,28 @@ __Note:__ This topic is included by TWikiVariables
    * %T% Hint: Spaced out !WikiWords are not automatically linked. To SPACEOUT a !WikiWord but preserve the link use "double bracket" format. For example, =[<nop>[WebHome][%<nop>SPACEOUT{"Web<nop>Home"}%]]= expands to [[WebHome][%SPACEOUT{"WebHome"}%]]
    * Related: [[#VarSPACEDTOPIC][SPACEDTOPIC]], [[SpreadSheetPlugin#FuncPROPERSPACE][$PROPERSPACE()]] of SpreadSheetPlugin
 
-#VarSTARTBLOCK
----+++ STARTBLOCK{"type"} -- marks the start of a block within a topic
-   * Block boundaries are defined with =%<nop>STARTBLOCK{"type}%= and =%<nop>ENDBLOCK{"type"}%=. They must come in pairs. Two types are supported: ="include"= and ="templateonly"=
-   * Syntax: =%<nop>STARTBLOCK{"include"}%= ... =%<nop>ENDBLOCK{"include"}%=
-   * Syntax: =%<nop>STARTBLOCK{"templateonly"}%= ... =%<nop>ENDBLOCK{"templateonly"}%=
-   * Supported parameter:
-     | *Parameter:* | *Description:* | *Default:* |
-     | ="type"= | Type of the section, =include= or =templateonly=. | Mandatory parameter without a default |
-   * =include= - like =%<nop>STARTINCLUDE%= ... =%<nop>STOPINCLUDE%= except that you can have as many include blocks as you want (=%<nop>STARTINCLUDE%= is restricted to one).
-   * =templateonly= - start position of text to be removed when a template topic is used. This is used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. See TWikiTemplates for more information.
-   * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
-
 #VarSTARTINCLUDE
 ---+++ STARTINCLUDE -- start position of topic text if included
    * If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everything exept the =%<nop>STARTINCLUDE%= variable itself.
-   * __Note:__ If you want more than one part of the topic included, use =%<nop>STARTBLOCK{"include"}%= instead
+   * __Note:__ If you want more than one part of the topic included, use =%<nop>STARTSECTION{type="include"}%= instead
    * Syntax: =%<nop>STARTINCLUDE%=
-   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTSECTION][STARTSECTION]], [[#VarSTARTBLOCK][STARTBLOCK]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTSECTION][STARTSECTION]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSTARTSECTION
----+++ STARTSECTION{"name"} -- marks the start of a named section within a topic
-   * Section boundaries are defined with =%<nop>STARTSECTION{"name"}%= and =%<nop>ENDSECTION{"name"}%=. Named sections are generic containers. Include named sections with =%<nop>INCLUDE{ "TopicName" section="name" }%=
-   * Syntax: =%<nop>STARTSECTION{"name"}%=
-   * Supported parameter:
-     | *Parameter:* | *Description:* | *Default:* |
-     | ="name"= | Name of the section. Must be unique inside a topic, and must have a matching =%<nop>ENDSECTION{"name"}%=. | Mandatory parameter without a default |
+---+++ STARTSECTION -- marks the start of a section within a topic
+   * Section boundaries are defined with =%<nop>STARTSECTION%= and =%<nop>ENDSECTION%=.
+   * Syntax: =%<nop>STARTSECTION%=
+   * Syntax: =%<nop>STARTSECTION{ _parameters_ }%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default* |
+     | ="name"= | Name of the section. Must be unique inside a topic. | Generated name |
+     | =type="type"= | Type of the section. | =section= |
+   * Sections may be given a name to help identify them, and/or a type, which changes how they are used.
+      * =type="section" - the default, used for a generic section, such as a named section used by [[#VarINCLUDE][INCLUDE]]..
+      * =type="include"= - like =%<nop>STARTINCLUDE%= ... =%<nop>STOPINCLUDE%= except that you can have as many include blocks as you want (=%<nop>STARTINCLUDE%= is restricted to only one).
+      * =type="templateonly"= - start position of text to be removed when a template topic is used. This is used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. See TWikiTemplates for more information.
+   * If a section is not given a name, it will be assigned one. unnamed sections are assigned names starting with =_SECTION0= for the first unnamed section in the topic, =_SECTION1= for the second, etc..
+   * You can define a section inside another section, or overlap sections freely. Use named sections to make sure that the correct START and ENDs are matched. Section markers are *not* displayed when a topic is viewed.
    * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSTATISTICSTOPIC

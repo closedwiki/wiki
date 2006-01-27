@@ -212,10 +212,8 @@ BEGIN {
 
     # Constant tag strings _not_ dependent on config
     %constantTags = (
-        ENDBLOCK          => '',
         ENDSECTION        => '',
         WIKIVERSION       => $VERSION,
-        STARTBLOCK        => '',
         STARTSECTION      => '',
 
         STARTINCLUDE      => '',
@@ -1748,6 +1746,85 @@ sub inlineAlert {
     return $text;
 }
 
+# Generic parser for sections within a topic. Sections are delimited
+# by STARTSECTION and ENDSECTION, which may be nested, overlapped or
+# otherwise abused. the only requirement is that the 
+# Extract the text as a chain of sections. The result is an array of
+# section blocks. Each section contains:
+# {type, name, start, end}
+# where start and end are character offsets in the
+# string *after all section tags have been removed*. All sections
+# are required to be uniquely named; if a section is unnamed, it
+# will be given a generated name. Sections may overlap or nest.
+sub _parseSections {
+    #my( $text _ = @_;
+    my %sections;
+    my @list = ();
+
+    my $seq = 0;
+    my $ntext = '';
+    my $offset = 0;
+    foreach my $bit (split(/(%(?:START|END)SECTION(?:{.*?})?%)/, $_[0] )) {
+        if( $bit =~ /^%STARTSECTION(?:{(.*)})?%$/) {
+            my $attrs = new TWiki::Attrs( $1 );
+            $attrs->{type} ||= 'section';
+            $attrs->{name} = $attrs->{_DEFAULT} || $attrs->{name} ||
+              '_SECTION'.$seq++;
+            delete $attrs->{_DEFAULT};
+            my $id = $attrs->{type}.':'.$attrs->{name};
+            if( $sections{$id} ) {
+                # error, this named section already defined, ignore
+                next;
+            }
+            # close open unnamed sections of the same type
+            foreach my $s ( @list ) {
+                if( $s->{end} < 0 && $s->{type} eq $attrs->{type} &&
+                      $s->{name} =~ /^_SECTION\d+$/ ) {
+                    $s->{end} = $offset;
+                }
+            }
+            $attrs->{start} = $offset;
+            $attrs->{end} = -1; # open section
+            $sections{$id} = $attrs;
+            push( @list, $attrs );
+        } elsif( $bit =~ /^%ENDSECTION(?:{(.*)})?%$/ ) {
+            my $attrs = new TWiki::Attrs( $1 );
+            $attrs->{type} ||= 'section';
+            $attrs->{name} = $attrs->{_DEFAULT} || $attrs->{name} || '';
+            delete $attrs->{_DEFAULT};
+            unless( $attrs->{name} ) {
+                # find the last open unnamed section of this type
+                foreach my $s ( reverse @list ) {
+                    if( $s->{end} == -1 &&
+                          $s->{type} eq $attrs->{type} &&
+                         $s->{name} =~ /^_SECTION\d+$/ ) {
+                        $attrs->{name} = $s->{name};
+                        last;
+                    }
+                }
+                # ignore it if no matching START found
+                next unless $attrs->{name};
+            }
+            my $id = $attrs->{type}.':'.$attrs->{name};
+            if( !$sections{$id} || $sections{$id}->{end} >= 0 ) {
+                # error, no such open section, ignore
+                next;
+            }
+            $sections{$id}->{end} = $offset;
+        } else {
+            $ntext .= $bit;
+            $offset = length( $ntext );
+        }
+    }
+
+    # close open sections
+    foreach my $s ( @list ) {
+        $s->{end} = $offset if $s->{end} < 0;
+    }
+
+    return( $ntext, \@list );
+}
+
 =pod
 
 ---++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user ) -> $text
@@ -1768,8 +1845,19 @@ sub expandVariablesOnTopicCreation {
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     # Chop out templateonly sections
-    # (may not be nested)
-    $text =~ s/%STARTBLOCK{\s*"?templateonly"?\s*}%.*?%ENDBLOCK{\s*"?templateonly"?\s*}%//gs;
+    my( $ntext, $sections ) = _parseSections( $text );
+
+    if( scalar( @$sections )) {
+        # chop out templateonly sections. Note that if named
+        # templateonly sections overlap, the behaviour is undefined.
+        foreach my $s ( reverse @$sections ) {
+            if( $s->{type} eq 'templateonly' ) {
+                $ntext = substr($ntext, 0, $s->{start}).
+                  substr($ntext, $s->{end}, length($ntext));
+            }
+        }
+        $text = $ntext;
+    }
 
     # Note: it may look dangerous to override the user this way, but
     # it's actually quite safe, because only a subset of tags are
@@ -2599,28 +2687,33 @@ sub _INCLUDE {
     }
 
     # remove everything before and after the selected include block
-    if( $section ) {
-        $text =~ s/.*?%STARTSECTION{\s*"?$section"?\s*}%//s;
-        $text =~ s/%ENDSECTION{\s*"?$section"?\s*}%.*//s;
-    } else {
+    if( !$section ) {
        $text =~ s/.*?%STARTINCLUDE%//s;
        $text =~ s/%STOPINCLUDE%.*//s;
-
-       my $in = 0;
-       my $blocked = 0;
-       my $ntext = '';
-       foreach my $bit (split(/(%(?:START|END)BLOCK{\s*"?include"?\s*}%)/, $text )) {
-           if( $bit =~ /^%STARTBLOCK{\s*"?include"?\s*}%$/ ) {
-               $in = 1;
-               $blocked = 1;
-           } elsif( $bit =~ /^%ENDBLOCK{\s*"?include"?\s*}%$/ ) {
-               $in = 0;
-           } elsif( $in ) {
-               $ntext .= $bit;
-           }
-       }
-       $text = $ntext if $blocked;
     }
+
+    # handle sections
+    my( $ntext, $sections ) = _parseSections( $text );
+
+    my $interesting = 0;
+    if( scalar( @$sections )) {
+        # Rebuild the text from the sections
+        $text = '';
+        foreach my $s ( @$sections ) {
+            if( $section && $s->{type} eq 'section' &&
+                  $s->{name} eq $section) {
+                $text .= substr( $ntext, $s->{start}, $s->{end}-$s->{start} );
+                $interesting = 1;
+                last;
+            } elsif( $s->{type} eq 'include' && !$section ) {
+                $text .= substr( $ntext, $s->{start}, $s->{end}-$s->{start} );
+                $interesting = 1;
+            }
+        }
+    }
+    # If there were no interesting sections, restore the whole text
+    $text = $ntext unless $interesting;
+
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
     $this->_expandAllTags( \$text, $includedTopic, $includedWeb );
