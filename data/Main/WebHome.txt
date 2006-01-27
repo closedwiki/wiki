@@ -6,17 +6,18 @@ permissions for each web on your site match your access control policies (see TW
 and [[%TWIKIWEB%.TWikiPreferences]]). Replace this text with a description of your new
 %IF{"defined WIKITOOLNAME" then="<nop>%WIKITOOLNAME%" else="TWiki"}% site. 
 
----++ Available Information
-   * %TWIKIWEB%.WelcomeGuest: for first time visitors
-   * [[%TWIKIWEB%.TWikiRegistration][Registration]]: become a <nop>%WIKITOOLNAME% user
-   * %WIKIUSERSTOPIC%: List of users of this <nop>%WIKITOOLNAME% site
-   * TWikiGroups: List of groups used for access control
- 
-<blockquote>
+---++ <nop>%WEB% Web Utilities
 <form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
-<input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />
-<br/>
-([[WebSearchAdvanced][advanced search]])
-</form>   
-</blockquote>
+   * %TWIKIWEB%.WelcomeGuest - for first time visitors
+   * [[%TWIKIWEB%.TWikiRegistration][Registration]] - become a <nop>%WIKITOOLNAME% user
+   * %WIKIUSERSTOPIC% - list of users of this <nop>%WIKITOOLNAME% site
+   * TWikiGroups - list of groups used for access control
+   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
+   * WebTopicList - all topics in alphabetical order
+   * WebChanges - recent topic changes in this web
+   * WebNotify - subscribe to an e-mail alert sent when topics change
+   * WebRss, WebAtom - RSS and ATOM news feeds of topic changes
+   * WebStatistics - listing popular topics and top contributors
+   * WebPreferences - preferences of this web
+</form>
 

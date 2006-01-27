@@ -5,21 +5,29 @@
 </div>
 ---+!! Welcome to the %WEB% Web
 
-*Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
+_The place to learn about TWiki features and perform TWiki system maintenance._
 
-This is the place to learn about TWiki features and perform TWiki system maintenance.
+TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
 ---++ TWiki Documentation and Configuration
 <div style="float:right;width:255px;padding:1em;">%INCLUDE{ "TWikiTipsOfTheDayInclude" warn="off" }%</div>
-<form action="%SCRIPTURLPATH{search}%/%WEB%/">
-   * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
-   * [[TWikiReleaseNotes04x00x00][TWiki-4.0.0 Release Notes]]: Describes what's new in this release of TWiki.
-   * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial
-   * [[TWikiFAQ][Frequently Asked Questions]]: about TWiki
-   * [[TWikiReferenceManual][Reference Manual]]: Documentation for webmasters and system administrators
-   * [[AdminToolsCategory][Admin Tools]]: manage the <nop>%WIKITOOLNAME% site
-   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" />%BR%
-     ([[WebSearchAdvanced][advanced search]])
+   * [[WelcomeGuest][Welcome Guest]] - look here first
+   * [[TWikiTutorial][Tutorial]] - 20 minutes TWiki tutorial
+   * [[TWikiUsersGuide][User's Guide]] - documentation for TWiki users
+   * [[TWikiFAQ][Frequently Asked Questions]] - about TWiki
+   * [[TWikiReferenceManual][Reference Manual]] - documentation for system administrators
+   * [[AdminToolsCategory][Admin Tools]] - manage the TWiki site
+   * [[TWikiReleaseNotes04x00x00][TWiki-4.0.0 Release Notes]] - describes what's new in this release
+
+---++ <nop>%WEB% Web Utilities
+<form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
+   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
+   * WebTopicList - all topics in alphabetical order
+   * WebChanges - recent topic changes in this web
+   * WebNotify - subscribe to an e-mail alert sent when topics change
+   * WebRss, WebAtom - RSS and ATOM news feeds of topic changes
+   * WebStatistics - listing popular topics and top contributors
+   * WebPreferences - preferences of this web
 </form>
 
 ---++ Disclaimer
