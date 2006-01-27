@@ -251,10 +251,10 @@ __Note:__ This topic is included by TWikiVariables
      | ="name"= | Name of the section. Must be unique inside a topic. | Generated name |
      | =type="type"= | Type of the section. | =section= |
    * Sections may be given a name to help identify them, and/or a type, which changes how they are used.
-      * =type="section" - the default, used for a generic section, such as a named section used by [[#VarINCLUDE][INCLUDE]]..
+      * =type="section"= - the default, used for a generic section, such as a named section used by [[#VarINCLUDE][INCLUDE]]..
       * =type="include"= - like =%<nop>STARTINCLUDE%= ... =%<nop>STOPINCLUDE%= except that you can have as many include blocks as you want (=%<nop>STARTINCLUDE%= is restricted to only one).
       * =type="templateonly"= - start position of text to be removed when a template topic is used. This is used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. See TWikiTemplates for more information.
-   * If a section is not given a name, it will be assigned one. unnamed sections are assigned names starting with =_SECTION0= for the first unnamed section in the topic, =_SECTION1= for the second, etc..
+   * If a section is not given a name, it will be assigned one. Unnamed sections are assigned names starting with =_SECTION0= for the first unnamed section in the topic, =_SECTION1= for the second, etc..
    * You can define a section inside another section, or overlap sections freely. Use named sections to make sure that the correct START and ENDs are matched. Section markers are *not* displayed when a topic is viewed.
    * Related: [[#VarENDSECTION][ENDSECTION]], [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
@@ -443,7 +443,7 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>WIKIVERSION%=
    * Expands to: =%WIKIVERSION%=
    * Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKITOOLNAME][WIKITOOLNAME]]
-%ENDBLOCK{"include"}%
+%ENDSECTION{type="include"}%
 
 
 __Related Topics:__ UserDocumentationCategory

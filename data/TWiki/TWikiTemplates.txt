@@ -153,12 +153,12 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>WIKIUSERNAME%= | User name of user who is instantiating the new tpoic, e.g. <nop>%WIKIUSERNAME% |
 </blockquote>
 
-=%<nop>STARTSECTION{type="templateonly"}%%BR%...%BR%%<nop>ENDBLOCK{"templateonly"}%= markers are used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. For example, you might want to write in the template topic:
+=%<nop>STARTSECTION{type="templateonly"}%%BR%...%BR%%<nop>ENDSECTION{type="templateonly"}%= markers are used to embed text that you _do not_ want expanded when a new topic based on the template topic is created. For example, you might want to write in the template topic:
 <verbatim>
 %STARTSECTION{type="templateonly"}%
 This template can only be changed by:
    * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-%ENDBLOCK{"templateonly"}%
+%ENDSECTION{type="templateonly"}%
 </verbatim>
 This will restrict who can edit the template topic, but will get removed when a new topic based on that template topic is created.
 
