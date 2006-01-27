@@ -118,7 +118,9 @@ You will notice a couple of changes to the editing screen: first, there is no sw
 You now have much more control over _which_ topics in a web you are interested in changes to. You can choose to receive notifications about topics selected by name, or by their parent relationship. See %TWIKIWEB%.MailerContrib for more details. Note that the =mailnotify= cron script has moved out of the =bin= directory and into the =tools= directory - active crontab entries needs to be updated accordingly.
 
 ---+++ E-mail addresses
-In this release of TWiki, user e-mail addresses are no longer stored in user topics. Instead, the e-mail address new users provide during registration is stored so that is not visible to other users. If (and only if) TWiki can't find a registered e-mail address for you in the secret database, it will still look in your user topic. If your user topic is not protected from changes by other people, then your user account could be hijacked by someone else. All users should register a valid e-mail address at ChangeEmailAddress.
+Because of the security risks inherent in publishing e-mail addresses in personal topics, the storage of user's emails has been moved to the password manager. For sites that use the =.htpasswd= password manager, e-mail addresses that new users provide during registration are stored in the =.htpasswd= file. To aid in migration, if TWiki can't find a registered e-mail address in =.htpasswd=, it will still look in the personal topic. All users should register a valid e-mail address at ChangeEmailAddress.
+
+If a different password manager is in use (e.g. LDAP, or 'none'), user e-mails will still be stored in personal topics. Sites that use other password systems (such as LDAP) should consider implementing a TWiki password manager, so that TWiki can look up email addresses, rather than storing them in personal topics.
 
 ---+++ Parameterised Includes
 =%<nop>INCLUDE{}%= variables have a predefined set of parameters. In the past, any parameters not in this set were simply ignored. With Dakar, these parameters are now defined as TWikiVariables within the included topic - for example,
@@ -136,7 +138,7 @@ My favourite bugs are Damsel Flies
 
 ---+++ Named Section Include
 
-The =%<nop>INCLUDE{}%= variable allows to include only a named section of the included topic. These sections are defined in the included topic using the =%<nop>SECTION%= and =%<nop>ENDSECTION%= variables. For example, if the included topic has:
+The =%<nop>INCLUDE{}%= variable allows to include only a named section of the included topic. These sections are defined in the included topic using the =%<nop>STARTSECTION%= and =%<nop>ENDSECTION%= variables. For example, if the included topic has:
 
 <verbatim>
 ---+ News
@@ -178,7 +180,7 @@ And =%<nop>INCLUDE{"SampleTopic" section="inner"}%= will produce:
    * Inner Text
 </verbatim>
 
-In the same line, overlapped sections are allowed.
+Overlapped sections are also allowed.
 
 ---+++ RSS Feeds
 RSS feeds have been enhanced to display links as links to make the feeds more useful. They also now use the web-specific logos.
