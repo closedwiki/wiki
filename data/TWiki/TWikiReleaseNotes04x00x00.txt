@@ -492,7 +492,7 @@ In Cairo release (and earlier) the only way to have an edit link that changed wi
 Dakar release includes new support for "context if" parameters to the =%<nop>TMPL:P%= construct. See TWikiTemplates for details. The default templates shipped with Dakar have been modified to use this support. %<nop>EDITTOPIC has been deprecated, though it is still available as a simple edit link, defined in TWikiPreferences. Skin authors are strongly recommended to replace this link with context-if conditionals.
 
 ---+++ Template Parameters
-=%<nop>TMPL:P%= now accepts parameters. Values passed in these parameters will be expanded when the =%TMPL:DEF%= is instantiated. See http://develop.twiki.org/~develop/cgi-bin/view/TWiki/TWikiTemplates for full details. (Remember, this happens at template expansion time, which is usually very early in the rendering process.)
+=%<nop>TMPL:P%= now accepts parameters. Values passed in these parameters will be expanded when the =%TMPL:DEF%= is instantiated. See TWikiTemplates for full details. (Remember, this happens at template expansion time, which is usually very early in the rendering process.)
 
 ---+++ HTTP and HTTPS
 These two new !TWikiVariables give access to the HTTP headers sent by your browser. For example, your browser says your browser is %HTTP:{"User-Agent"}% (this will be filled in if you are running Dakar).
