@@ -213,11 +213,13 @@ data/TWiki/WikiWikiClones.txt 0660
 data/TWiki/WikiWord.txt 0660
 data/TWiki/YouAreHere.txt 0660
 data/Trash/TrashAttachment.txt 0660
+data/Trash/WebAtom.txt 0660
 data/Trash/WebChanges.txt 0660
 data/Trash/WebHome.txt 0660
 data/Trash/WebIndex.txt 0660
 data/Trash/WebNotify.txt 0660
 data/Trash/WebPreferences.txt 0660
+data/Trash/WebRss.txt 0660
 data/Trash/WebSearch.txt 0660
 data/Trash/WebSearchAdvanced.txt 0660
 data/Trash/WebStatistics.txt 0660
