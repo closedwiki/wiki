@@ -851,7 +851,10 @@ sub _writeRegistrationDetailsToTopic {
 
     $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 
-    $session->{store}->saveTopic($user, $data->{webName},
+    my $agent = $session->{users}->findUser( $twikiRegistrationAgent,
+                                             $twikiRegistrationAgent);
+
+    $session->{store}->saveTopic($agent, $data->{webName},
                                  $data->{WikiName}, $text, $meta );
     return $log;
 }
