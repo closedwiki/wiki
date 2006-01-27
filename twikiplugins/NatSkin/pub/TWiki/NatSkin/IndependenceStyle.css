@@ -86,6 +86,7 @@ hr {
   color: #666666;
   font-weight:bold;
   border:1px dotted #B22222;
+  width:99%;
 }
 
 .natAction {
@@ -357,11 +358,54 @@ hr {
 }
 
 /* blogging */
+.blogSideBarSection {
+  line-height:1.3em;
+}
 .blogSideBarSection ul {
   padding-left:1.3em;
 }
-.blogSideBarSection ul li {
-}
 .blogSideBarSection ol {
   padding-left:2em;
+}
+.blogHeadline h1,
+.blogHeadline h2,
+.blogHeadline a {
+  text-decoration:none;
+  border:0px;
+}
+.blogHeadline {
+  border-bottom:1px solid #B22222;
+  margin-bottom:0px;
+}
+.blogHeadline .blogCommentCount {
+  font-size:1.5em;
+}
+.blogEntry {
+  margin-bottom:1em;
+}
+.blogAbout {
+  font-size:0.9em;
+  line-height:1.3em;
+}
+.blogInfo {
+  font-size:0.9em;
+  margin-bottom:0.5em;
+  margin-top:0px;
+}
+.blogCommentOdd {
+  background:#eee;
+}
+.natSideBar .blogAuthorButtons,
+.natSideBar .blogAdminButtons {
+  background:white;
+  border:0px;
+}
+.blogNavigation {
+  font-size:0.9em;
+}
+.blogNavigation a {
+  text-decoration:none;
+}
+.blogCommentNr {
+  color:#B22222;
 }

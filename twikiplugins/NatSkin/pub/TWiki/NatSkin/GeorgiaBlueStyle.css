@@ -151,6 +151,7 @@ hr {
 }
 .natSearchBoxTop {
   margin-top:10px;
+  width:13em;
 }
 .natTopRightContents {
   font-family:arial,sans-serif;
@@ -158,8 +159,6 @@ hr {
 .natSearchBox input {
   background:#336699;
   color:#99ccff;
-}
-.natTopicActions {
 }
 
 /* sidebar */
@@ -169,15 +168,23 @@ hr {
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos3 input {
-  background:white;
+  background:#fafafa;
   color:#999966;
+  border:1px solid #999999;
+  width:99%;
 }
 .natSearchBoxPos2 input {
-  width:95%;
-  background:#eeeeee;
-  color:#666;
+  background:#fafafa;
+  color:#999966;
   padding:2px 5px;
   font-weight:bold;
+  width:99%;
+}
+.natSearchBoxPos1,
+.natSearchBoxPos2,
+.natSearchBoxPos3 {
+  margin-left:15px;
+  width:auto;
 }
 
 .natMiddleLeft {
@@ -309,13 +316,10 @@ hr {
 
 /* blogging */
 .blogAbout {
-  padding:0px 0px 0px 15px;
-  font-size:0.8em;
-  line-height:1.1em;
+  padding-left:15px;
 }
 .blogSideBar {
   color:#444444;
-  line-height:1.2em;
 }
 .blogSideBar a {
   color:#336699;
@@ -331,7 +335,6 @@ hr {
   list-style-type:none;
 }
 .blogSideBar ul li {
-  margin-bottom:0.4em;
 }
 .blogInfo {
   font-size:0.9em;
@@ -342,8 +345,8 @@ hr {
 }
 .blogCommentOdd {
   background:#fafafa;
-  border-bottom:1px #eeeeee solid;
-  border-top:1px #eeeeee solid;
+  border-bottom:1px #aaaaaa solid;
+  border-top:1px #aaaaaa solid;
 }
 .blogComment .blogDate {
   font-size:0.8em;
@@ -357,12 +360,8 @@ hr {
 .blogCommentCount {
   color:#666;
   font-size:0.9em;
-  float:right;
   width:2em;
   text-align:right;
-}
-.blogHeadline .blogCommentCount {
-  font-size:0.7em;
 }
 .blogSubComments {
   padding:5px;
@@ -383,4 +382,35 @@ hr {
 .blogArchiveDescription {
   margin-bottom:20px;
   font-size:0.9em;
+}
+.blogSideBarSection {
+  margin-top:1em;
+  margin-bottom:1em;
+}
+.blogSideBarSection ul,
+.blogSideBarSection ol {
+  margin-top:0px;
+}
+.blogAuthorButtons,
+.blogAdminButtons {
+  border:1px #aaaaaa solid;
+  background:#fafafa;
+}
+.blogSideBarRelated ul,
+.blogSideBarLatest ul {
+  margin-left:15px;
+}
+.blogSideBarRelated li,
+.blogSideBarLatest li {
+  list-style:disc;
+  color:#999999;
+}
+.natSideBar .blogAuthorButtons,
+.natSideBar .blogAdminButtons {
+  margin-left:15px;
+  width:auto;
+}
+.natSideBar .blogAuthorButtons input,
+.natSideBar .blogAdminButtons  input {
+  width:70%;
 }

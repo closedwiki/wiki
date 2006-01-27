@@ -201,6 +201,7 @@ hr { border-bottom: 1px solid #999999; }
   border:1px dotted #CC6600;
   color:#666666;
   font-weight:bold;
+  width:99%;
 }
 .natTopicActions {
   line-height:110%;
@@ -335,9 +336,16 @@ hr { border-bottom: 1px solid #999999; }
 .alt {
   color:#CC6600;
 }
+.blogAbout {
+  font-size:0.9em;
+  line-height:1.3em;
+}
 
 .blogSideBar {
   line-height:100%;
+}
+.blogSideBarSection {
+  margin-bottom:1em;
 }
 .blogSideBarSection ul {
   padding-left:0px;
@@ -345,4 +353,38 @@ hr { border-bottom: 1px solid #999999; }
 }
 .blogSideBarSection ul li {
   padding-bottom:2px;
+}
+.blogHeadline h1,
+.blogHeadline h2,
+.blogHeadline a {
+  text-decoration:none;
+  border:0px;
+}
+.blogHeadline {
+  border-bottom:1px solid #CC6600;
+}
+.blogHeadline .blogCommentCount {
+  padding-top:2px;
+  font-size:1.5em;
+}
+.blogEntry {
+  margin-bottom:1em;
+}
+.blogInfo {
+  font-size:0.9em;
+  margin-bottom:0.5em;
+}
+.blogSideBarSection ol {
+  padding-left:2em;
+}
+.blogCommentOdd {
+  background:#f0f0f0;
+}
+.blogSubComment {
+  border-top:1px solid #ddd;
+  padding-left:0px;
+}
+.blogCommentNr {
+  font-weight:bold;
+  margin-right:0.5em;
 }
