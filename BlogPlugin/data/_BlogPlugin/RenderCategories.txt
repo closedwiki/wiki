@@ -8,9 +8,9 @@ NONE
 
 ---++ Implementation
 %STARTINCLUDE%
-<div class="blogSideBarSection blogSideBarCategories">
----+ Categories%REDDOT{"%WEB%.%TOPIC%"}%
-<noautolink>
+~~~ <div class="blogSideBarSection blogSideBarCategories">
+~~~   <h1>Categories%REDDOT{"%WEB%.%TOPIC%"}%</h1>
+~~~   <noautolink>
 %~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
 ~~~   header="<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
 ~~~   format="<tr><td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
@@ -26,8 +26,9 @@ NONE
 ~~~     </td></tr>"
 ~~~   footer="</table>"
 ~~~ }%
-</noautolink>
-</div>
+~~~ </noautolink>
+~~~ </div>
+~~~ 
 %STOPINCLUDE%
 
 %DBCALL{"RenderFunctionCallers"}%

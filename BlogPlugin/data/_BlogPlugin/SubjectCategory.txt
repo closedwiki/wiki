@@ -22,21 +22,6 @@ See also: %TOPIC%Template, FrontPage
 %DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 %DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%
 
-
----++ Categories in the Wild
-   *  CommunityDevelopment
-   *  FamilyAndFriends
-   *  KnowledgeManagement 
-   *  NewAcousticMusic 
-   *  OpenSource
-   *  PatternLanguage
-   *  SundryTangents
-   *  ToolBox
-   *  WebDesign
-   *  WikiWorld
- 
-
-
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
    * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup

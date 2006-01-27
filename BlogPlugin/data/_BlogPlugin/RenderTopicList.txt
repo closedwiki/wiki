@@ -10,11 +10,15 @@
 <verbatim>
 %STARTINCLUDE%
 ---++ List of all topics of type '%NAME%'
+<div class="tableModDiv">
 | *Name* | *Description* | 
 %~~ DBQUERY{"TopicType=~'\b%NAME%\b'" order="Name or name"
 ~~~        format="| [[$web.$topic][$expand(Name or name)]] | $expand(TopicDescription or Headline) |"
 ~~~ }%
-*~~ 
+</div>
+~~~ <style type="text/css">
+~~~   .tableModDiv .twikiTable td { vertical-align:top; }
+~~~ </style>
 %STOPINCLUDE%
 </verbatim>
 

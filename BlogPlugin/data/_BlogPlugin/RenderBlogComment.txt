@@ -18,24 +18,33 @@ see also: RenderDocNavigation
 ---+++ Main
 <verbatim>
 %STARTINCLUDE%
-%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
-%~~ DBQUERY{topics="%NAME%" 
+%~~ DBCALL{"RenderDocNavigation" 
+~~~   NAME="%NAME%" 
+~~~   WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"
+~~~ }%
+%~~ DBQUERY{topic="%NAME%" 
 ~~~  format="
 *~~     <div class=\"blogRef\">
-~~~     $n%STOPALIASAREA%$n
+~~~     $n%STOPALIASAREA%$n<noautolink>
 ~~~        <h2>On 
-~~~            [[$web.$expand(BaseRef)][\"$expand(@BaseRef.Headline or BaseRef)\"
-~~~            <span class=\"blogDate\">
-~~~              ($formatTime(@BaseRef.createdate, '$day, $mon $year'))
-~~~            </span>]]
+~~~            <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$expand(BaseRef)\" 
+~~~              title=\"permalink to <nop>$expand(BaseRef)\">
+~~~              \"$expand(@BaseRef.Headline or BaseRef)\"
+~~~              <span class=\"blogDate\">
+~~~                ($formatTime(@BaseRef.createdate, '$day, $mon $year'))
+~~~              </span>
+~~~            </a>
 ~~~        </h2>
-~~~     $n%STARTALIASAREA%$n
+~~~     </noautolink>$n%STARTALIASAREA%$n
 ~~~     </div>
 ~~~     <div class=\"blogComment\">
 ~~~     %DBCALL{"%TOPIC%" section="format"}%
 ~~~     </div>"
 ~~~ }% 
-%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"}%
+%~~ DBCALL{"RenderDocNavigation" 
+~~~   NAME="%NAME%" 
+~~~   WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"
+~~~ }%
 %STOPINCLUDE%
 </verbatim>
 
@@ -44,17 +53,22 @@ see also: RenderDocNavigation
 
 ---+++ Format
 <verbatim>
-%SECTION{"format"}%
+%STARTSECTION{"format"}%
 *~~ <h3 style=\"margin-bottom:0px;padding-bottom:0px\">
 ~~~   <a name=\"$topic\"></a><a name=\"$expand(Nr)\"></a>
 ~~~   <span class=\"blogCommentNr\">$expand(Nr)</span>
 ~~~   $percntIFDEFINEDTHEN{\"$expand(Url)\"}$percnt
-~~~     [[$expand(Url)][$expand(Name)]] [[$web.$topic][
+~~~     [[$expand(Url)][$expand(Name)]] 
+~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\"
+~~~        title=\"permalink to <nop>$topic\">
 ~~~   $percntELSEDEFINED$percnt
 ~~~      $percntCALC{
 ~~~        \"$dollarIF($dollarEXISTS(%MAINWEB%.$expand(Name)),
-~~~          [[%MAINWEB%.$expand(Name)][$expand(Name)]] [[$web.$topic][,
-~~~         [[$web.$topic][$expand(Name))\"
+~~~          [[%MAINWEB%.$expand(Name)][$expand(Name)]] 
+~~~          <a href=\\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\\"
+~~~             title=\\"permalink to <nop>$topic\">,
+~~~          <a href=\\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\\"
+~~~             title=\\"permalink to <nop>$topic\\">$expand(Name))\"
 ~~~      }$percnt
 ~~~   $percntFIDEFINED%
 ~~~   <span class=\"blogDate\">
@@ -65,7 +79,7 @@ see also: RenderDocNavigation
 ~~~        format=\"$time after the incident\"
 ~~~        null=\"immediately\"
 ~~~      }$percnt
-~~~   </span>]]
+~~~   </span></a>
 *~~   $percntREDDOT{\"$web.$topic\" grant=\"MichaelDaum\"}$percnt 
 ~~~ </h3>$n
 ~~~ <noautolink>$n
@@ -74,7 +88,9 @@ see also: RenderDocNavigation
 ~~~    $percntFIDEFINED$percnt$n
 ~~~ <div class=\"blogCommentText\">$n
 ~~~    $expand(Text)
-~~~    ...&nbsp;[[$web.$topic#bottomComment][reply]]
+~~~    ...&nbsp;
+*~~   <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic#bottomComment\"
+~~~      title=\"comment on <nop>$topic\">reply</a>
 ~~~ </div>$n
 ~~~ </noautolink>
 *~~ 

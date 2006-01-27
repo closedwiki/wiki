@@ -9,16 +9,21 @@ NONE
 
 ---++ Implementation
 %STARTINCLUDE%
-<noautolink>
-<div class="blogSideBarSection blogSideBarAdmin">
----+ AdminTools%REDDOT{"%WEB%.%TOPIC%"}%
-%~~ DBQUERY{"TopicType='AdminTool|TopicType'"
-~~~    format="   1 <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
-~~~                         title=\"$formfield(TopicDescription)\">$topic</a>"
-~~~ }%
-   %CALC{"$IF($EXISTS(_BlogPlugin/WebHome),1 [[%SCRIPTURLPATH{"view"}%/_BlogPlugin/WebHome][BlogTemplateWeb]])"}%
-</div>
-</noautolink>
+~~~ <div class="blogSideBarSection blogSideBarAdmin">
+~~~   <h1>Admin Tools%REDDOT{"%WEB%.%TOPIC%"}%</h1>
+~~~   <noautolink>
+~~~   <ol>
+%~~   DBQUERY{"TopicType='AdminTool|TopicType'"
+~~~      format="<li><a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
+~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
+~~~   }%
+%~~   CALC{"$IF($EXISTS(_BlogPlugin/WebHome),
+~~~     <li><a href=\"%SCRIPTURLPATH{"view"}%/_BlogPlugin/WebHome\">BlogTemplateWeb</a></li>)"
+~~~   }%
+~~~   </ol>
+~~~   </noautolink>
+~~~ </div> 
+~~~
 %STOPINCLUDE%
 
 %DBCALL{"RenderFunctionCallers"}%

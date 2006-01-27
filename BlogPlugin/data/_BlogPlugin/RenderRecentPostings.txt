@@ -10,7 +10,7 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-<div class="blogSideBarSection blogSideBarLatest">
+~~~ <div class="blogSideBarSection blogSideBarLatest">
 ---+ Latest%REDDOT{"%WEB%.%TOPIC%"}%
 %~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND
 ~~~          State='enabled'
@@ -22,7 +22,8 @@
 ~~~           $percntCALC{\"$dollarIF($count==0,display:none)\"}$percnt
 ~~~           } </style>"
 ~~~ }%
-</div>
+~~~ </div>
+~~~
 %STOPINCLUDE%
 </verbatim>
 

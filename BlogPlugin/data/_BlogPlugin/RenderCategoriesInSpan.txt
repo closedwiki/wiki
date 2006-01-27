@@ -33,7 +33,7 @@
 
 ---+++ Subquery
 <verbatim>
-%SECTION{"subquery"}% %~~ DBQUERY{
+%STARTSECTION{"subquery"}% %~~ DBQUERY{
 ~~~   "TopicType='BlogEntry' AND 
 ~~~    SubjectCategory=~'\b%CAT%\b' AND 
 ~~~    State='enabled' AND

@@ -42,7 +42,9 @@
 ~~~            <noautolink>
 ~~~            <div class=\"blogCommentText\">
 ~~~              $formfield(Text)
-~~~              ...&nbsp;[[$web.$topic#$topic][reply]]
+~~~              ...&nbsp;<a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic#$topic\"
+~~~                          title=\"comment on <nop>$topic\">
+*~~              reply</a>
 ~~~            </div>$n
 ~~~            </noautolink>
 ~~~            $percntENDTWISTY$percnt

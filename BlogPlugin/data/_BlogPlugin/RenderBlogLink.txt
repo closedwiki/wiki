@@ -47,7 +47,7 @@ if the linked site has a nice rss feed.
 
 ---+++ Header format
 <verbatim>
-%SECTION{"header"}%
+%STARTSECTION{"header"}%
 *~~        <div class=\"headlinesChannel\">
 *~~          <div class=\"headlinesLogo\">
 *~~            <img src=\"$imageurl\" alt=\"$imagetitle\" border=\"0\"/><br/>
@@ -78,7 +78,7 @@ if the linked site has a nice rss feed.
 
 ---+++ Article format
 <verbatim>
-%SECTION{"article"}%
+%STARTSECTION{"article"}%
 *~~ <div class=\"headlinesArticle\">
 *~~   <div class=\"headlinesTitle\">
 *~~      <a href=\"$link\" target=\"_blank\">$title</a>

@@ -21,16 +21,22 @@ see also: RenderFullTeaser
 
 ---+++ Format
 <verbatim>
-%SECTION{"format"}%
+%STARTSECTION{"format"}%
 *~~ <div class=\"blogEntry\">
 ~~~   <table class=\"blogHeadline\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
 ~~~   <tr><td>
 ~~~   <h2>
-~~~     [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
+~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
+~~~       title=\"permalink to <nop>$topic\">
+~~~       $formfield(Headline)
+~~~     </a>$percntREDDOT{\"$web.$topic\"}$percnt
 ~~~   </h2></td>
 ~~~   <td class=\"blogCommentCount\">
 ~~~     $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" 
-~~~     format=\"[[$web.$topic#topComment][$dollarcount]]\"}$percnt
+~~~       format=\"<a href=\\"$dollarpercntSCRIPTURL{\\"view\\"}$dollarpercnt/
+*~~         $web/$topic#topComment\\" title=\\"comments on <nop>$topic\\">
+~~~         $dollarcount</a>\"
+~~~     }$percnt
 ~~~   </td></tr></table>$n
 ~~~   <div class=\"blogInfo\">
 ~~~     <span class=\"blogDate\">
@@ -41,7 +47,8 @@ see also: RenderFullTeaser
 ~~~       }$percnt
 ~~~     </span> in
 ~~~     <span class=\"blogCategory\"> 
-~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" 
+~~~         sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
 ~~~     </span>
 ~~~     <span class=\"blogAuthor\"> 
 ~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
@@ -50,7 +57,10 @@ see also: RenderFullTeaser
 ~~~   <div class=\"blogText\">$n
 ~~~      <noautolink>$n
 ~~~      $formfield(Teaser)
-~~~      <div class=\"blogMore\"> ... [[$web.$topic][more]]</div>$n
+~~~      <div class=\"blogMore\"> ...&nbsp;
+*~~        <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
+~~~           title=\"permalink to <nop>$topic\">more</a>
+~~~      </div>
 ~~~      </noautolink>$n
 ~~~   </div>
 ~~~ </div>
