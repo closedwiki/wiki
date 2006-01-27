@@ -121,7 +121,6 @@ hr {
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
   font-size: small;
-  line-height:120%;
 }
 .natSideBar h1 {
   /*border-bottom: 2px solid #6699cc;*/
@@ -149,6 +148,9 @@ hr {
 .natSideBar ul {
   padding-left:38px;
   color:#666666;
+}
+.natSideBar ul ul {
+  padding-left:28px;
 }
 
 .natNotes {
@@ -178,6 +180,9 @@ hr {
 }
 .natMainContents pre {
   border-left:5px solid #6699cc;
+  padding-left:5px;
+  font-size:0.9em;
+  line-height:1.3em;
 }
 
 .natMain h1 .twikiEmulatedLink,
@@ -371,6 +376,53 @@ hr {
 }
 
 /* blogging */
+.blogAbout {
+  font-size:0.9em;
+  line-height:1.3em;
+}
+.blogSideBarSection {
+  margin-bottom:1em;
+}
 .blogSideBarSection ul {
   padding-left:1.5em;
+}
+.blogHeadline h1,
+.blogHeadline h2,
+.blogHeadline a {
+  text-decoration:none;
+  border:0px;
+}
+.blogHeadline {
+  border-bottom:2px solid #6699cc;
+  margin-bottom:0.5em;
+}
+.blogInfo {
+  font-size:0.9em;
+  margin-bottom:0.5em;
+}
+.blogEntry {
+  margin-bottom:1em;
+}
+.blogHeadline .blogCommentCount {
+  font-size:1.6em;
+  padding-top:3px;
+}
+.blogComment {
+  background:#f4f4f4;
+  border:2px solid #6699CC;
+  margin-bottom:2em;
+  padding:0.7em;
+}
+.blogSubComment {
+  padding-left:0px;
+  border-top:1px solid #ddd;
+}
+.blogComment h3 {
+  border-bottom:2px solid #99cc66; 
+}
+.blogNavigation {
+  font-size:0.9em;
+}
+.blogNavigation a {
+  text-decoration:none;
 }

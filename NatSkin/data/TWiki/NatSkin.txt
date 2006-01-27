@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1135108475" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="TWikiContributor" date="1138358580" format="1.1" version="1.1"}%
 ---+!! The Natural Skin
 NatSkin is a skin driven by cascading stylesheets. This is a rework of the 
 TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
@@ -75,8 +74,9 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.96 |
+|  Skin Version: | v2.97 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-01-27: | fixed blog css for all styles |
 |  2006-01-26: | lots of css fixes |
 |  2006-01-23: | added forgotten IE decorations; \
                  fixed layout problems in the WebButtons; \
@@ -151,7 +151,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 09 Jan 2006
+-- TWiki:Main/MichaelDaum - 27 Jan 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%

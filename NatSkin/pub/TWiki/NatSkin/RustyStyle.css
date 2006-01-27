@@ -168,6 +168,7 @@ hr {
   background:#ff9831;
   color:#9C3300;
   font-weight:bold;
+  width:99%;
 }
 
 .natWebTitle a {
@@ -315,9 +316,54 @@ hr {
 }
 
 /* blogging */
+.blogSideBarSection {
+  margin-bottom:1em;
+}
 .blogSideBarSection ul {
   margin:0px;
 }
 .blogSideBarComments li {
   margin-bottom:0.5em;
+}
+.blogAbout {
+  font-size:0.9em;
+  line-height:1.3em;
+}
+.blogHeadline h1,
+.blogHeadline a,
+.blogHeadline {
+}
+.blogHeadline .blogCommentCount {
+  padding-top:8px;
+  font-size:1.8em;
+}
+.blogEntry {
+  margin-bottom:1em;
+}
+.blogInfo {
+  font-size:0.9em;
+  line-height:1.3em;
+  margin-bottom:1em;
+}
+.natSideBar .blogAdminButtons,
+.natSideBar .blogAuthorButtons {
+  border:0px;
+  background:#ff9831;
+}
+.natSideBar .blogSubmitButton {
+  background:#ffefb9;
+}
+.natSideBar .blogAdminButtons input[type="text"],
+.natSideBar .blogAuthorButtons input[type="text"] {
+  border:1px dotted #9C3300;
+}
+.blogCommentOdd {
+  background:#ffefb9;
+  background:#efefef;
+}
+.blogSubComments {
+  padding:1px;
+}
+.blogSubComment {
+  border-left:2px solid #9C3300;
 }

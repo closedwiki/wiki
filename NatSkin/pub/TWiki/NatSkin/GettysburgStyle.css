@@ -135,7 +135,7 @@ hr {
   background:#003366;
 }
 .natTopBar {
-  border-bottom:1px solid #ffffff;
+  border-bottom:1px solid white;
   border-top:0px;
   color:#ffffff;
 }
@@ -206,7 +206,8 @@ hr {
   background:#999999;
 }
 .natSideBarContents {
-  font:normal x-small georgia,serif;
+  font-family:georgia,serif;
+  font-size:0.9em;
 }
 
 .natSideBar h1 {
@@ -240,8 +241,11 @@ hr {
 
 .natSideBar ul {
   color:#003366;
-  padding-left:35px;
-  font:normal small arial,sans-serif;
+  margin-left:10px;
+  padding-left:25px;
+}
+.natSideBar ul ul {
+  margin-left:0px;
 }
 
 .natNotes {
@@ -323,13 +327,43 @@ hr {
 }
 
 /* blogging */
-.blogSideBarSection ul {
-  padding-left:1.2em;
-}
-.blogSideBarSection ol {
-  padding-left:2em;
-}
 .natSideBar .blogAdminButtons,
 .natSideBar .blogAuthorButtons {
   background:#888888;
+}
+.blogAbout {
+  font-size:0.9em;
+  margin:0px 10px;
+}
+.blogHeadline .blogCommentCount {
+  font-size:24px; /* h2 */
+  text-align:right;
+}
+.blogSideBarSection ul {
+  margin-top:10px;
+  padding-left:1.2em;
+}
+.blogSideBarSection ol {
+  margin-top:10px;
+  padding-left:2em;
+}
+.blogCommentOdd {
+  background: #eeeeee;
+}
+.blogSubComment {
+  padding-left:0px;
+  border-top:1px solid #aaaaaa;
+}
+.blogCommentNr {
+  color:#003366;
+}
+.blogInfo {
+  font-size:0.9em;
+  margin-bottom:1.0em;
+}
+.blogHeadline h1 {
+  padding-bottom:0px;
+}
+.blogEntry {
+  margin-bottom:1.0em;
 }

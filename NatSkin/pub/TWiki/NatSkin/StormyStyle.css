@@ -246,7 +246,7 @@ hr {
 .natMiddle input,
 .natMiddle select,
 .natMiddle textarea {
-  background:#333333;
+  background:#555555;
   color:#cccccc;
   border:1px solid #cccccc;
 }
@@ -332,8 +332,17 @@ hr {
   font-weight:bold;
 }
 /* blogging */
+.blogAbout {
+  font-size:0.9em;
+}
 .blogSideBar {
   color:#cccccc;
+}
+.blogSideBarSection {
+  margin-bottom:1em;
+}
+.blogSideBarSection ol {
+  padding-left:2em;
 }
 .blogSideBarSection ul {
   margin:0px;
@@ -347,9 +356,32 @@ hr {
 .blogAdminButtons,
 .blogAuthorButtons {
   background:#555555;
-  border:1px solid #999999;
+  border:1px solid #cccccc;
 }
 .blogAdminButtons input[type="text"],
 .blogAuthorButtons input[type="text"] {
   border:1px solid #555555;
+}
+.blogHeadline .blogCommentCount {
+  font-size:1.5em;
+}
+.blogEntry {
+  margin-bottom:1em;
+}
+.blogInfo {
+  font-size:0.9em;
+  margin-bottom:0.5em;
+}
+.blogCommentOdd {
+  background:#555555;
+  border:1px solid #cccccc;
+}
+.blogSubComment {
+  border-left:2px solid #99ff66;
+}
+.blogComment h3 {
+  border-bottom:2px solid #cccccc;
+}
+.blogCommentOdd h3 {
+  border-bottom:2px solid black;
 }

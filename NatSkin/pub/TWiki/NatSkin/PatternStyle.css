@@ -338,19 +338,21 @@ label {
   margin:0;
   padding:1em 1em 1.7em 1em;
 }
-.natSideBar ul {
-  padding:0;
-  margin:0;
-}
 .natSideBar strong a:link,
 .natSideBar strong a:visited {
   font-weight:bold;
 }
+.natSideBar ul {
+  padding:0;
+  margin:0;
+}
 .natSideBar ul li {
   display:block;
+/*
   list-style:none;
   width:100%;
   color:#880000;
+  */
 }
 .natSideBar ul li ul li {
   margin-left:1em;
@@ -673,4 +675,25 @@ html>body .twikiToc li a {
 }
 .blogSubComment {
   border-left:2px solid #ddd;
+}
+.blogHeadline .blogCommentCount {
+  padding-top:5px;
+}
+.blogAbout {
+  font-size:0.9em;
+  line-height:1.3em;
+}
+.blogSideBarSection {
+  margin-bottom:20px;
+}
+.blogSideBarRelated ul,
+.blogSideBarLatest ul {
+  padding-left:0.5em;
+  margin-left:1.0em;
+  list-style:outside;
+  list-style-image:url(../PatternSkin/bullet-down.gif);
+}
+.blogSideBarRelated ul li,
+.blogSideBarLatest ul li {
+  display:list-item;
 }

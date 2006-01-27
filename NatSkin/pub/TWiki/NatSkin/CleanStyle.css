@@ -290,12 +290,20 @@ hr {
 
 /* blogging */
 .blogAbout {
-  line-height:120%;
-}
-.blogSideBar {
+  font-size:0.9em;
   line-height:1.3em;
 }
+.blogSideBar {
+  line-height:1.4em;
+}
+.blogSideBarSection {
+  margin-bottom:1em;
+}
+.blogSideBarSection ol {
+  margin-top:0px;
+}
 .blogSideBarSection ul {
+  margin-top:0px;
   margin-left:0px;
 }
 .blogInfo {
@@ -316,12 +324,16 @@ hr {
   font-weight:normal;
 }
 .blogCommentNr {
-  color:#aaaaaa;
+  color:#444444;
   margin-right:10px;
 }
 .blogCommentCount {
   color:#777;
   margin-left:10px;
+  text-align:right;
+}
+.blogHeadline .blogCommentCount {
+  font-size:24px;
 }
 .blogSubComments {
   padding:5px;
@@ -337,4 +349,12 @@ hr {
 .blogArchiveDescription {
   margin-bottom:20px;
   font-size:0.9em;
+}
+.blogAdminButtons,
+.blogAuthorButtons {
+  background:#fafafa;
+  border:1px #eeeeee solid;
+}
+.blogSideBarSection ol {
+  padding-left:2em;
 }

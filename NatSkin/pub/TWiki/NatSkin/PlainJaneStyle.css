@@ -165,7 +165,6 @@ a:hover {
 .natSideBarContents {
   color:#666666;
   font-size:small;
-  line-height:110%;
 }
 .natSideBar h1 a,
 .natSideBar h1 {
@@ -282,6 +281,9 @@ a:hover {
 }
 
 /* blogging */
+.blogSideBarSection {
+  margin-bottom:1.3em;
+}
 .blogSideBarSection li a {
   display:inline;
   margin:0px;
@@ -300,10 +302,10 @@ a:hover {
   margin-left:25px;
 }
 .blogAbout {
-  margin-left:10px;
+  font-size:0.9em;
+  line-height:1.3em;
 }
 .blogCommentCount {
-  float:right;
   width:2em;
   text-align:right;
   font-size:0.9em;
@@ -336,3 +338,17 @@ a:hover {
   margin-bottom:20px;
   font-size:0.9em;
 }
+.blogHeadline h1,
+.blogHeadline h2,
+.blogHeadline a {
+  text-decoration:none;
+  border:0px;
+}
+.blogHeadline {
+  border-bottom:2px solid #3f59bb;
+  margin-bottom:7px;
+}
+.blogEntry {
+  margin-bottom:1em;
+}
+.blogSideBarSection
