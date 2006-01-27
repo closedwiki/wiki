@@ -3154,20 +3154,20 @@ sub _SEP {
 
 sub _USERINFO {
     my ( $this, $params ) = @_;
-    my $format = $params->{format} || '$login,$web.$wikiname,$emails';
+    my $format = $params->{format} || '$username, $wikiusername, $emails';
 
     my $user = $this->{user};
 
     my $info = $format;
-    my $un = $user->login();
-    $info =~ s/\$login\b/$un/g;
-    my $wn = $user->wikiName();
-    $info =~ s/\$wikiname\b/$wn/g;
-    my $web = $user->webDotWikiName();
-    $web =~ s/\..*//;
-    $info =~ s/\$web\b/$web/g;
-    my $em = join(',', $user->emails());
-    $info =~ s/\$emails\b/$em/g;
+    my $username = $user->login();
+    my $wikiname = $user->wikiName();
+    my $wikiusername = $user->webDotWikiName();
+    my $emails = join(',', $user->emails());
+
+    $info =~ s/\$username\b/$username/g;
+    $info =~ s/\$wikiname\b/$wikiname/g;
+    $info =~ s/\$wikiusername\b/$wikiusername/g;
+    $info =~ s/\$emails\b/$emails/g;
 
     return $info;
 }

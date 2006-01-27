@@ -91,8 +91,8 @@ _(Click for form-based editing of existing preferences.)_
 
    * Shortcuts to user information
       * Set WIKINAME = %USERINFO{format="$wikiname"}%
-      * Set USERNAME = %USERINFO{format="$login"}%
-      * Set WIKIUSERNAME = %USERINFO{format="$web.$wikiname"}%
+      * Set USERNAME = %USERINFO{format="$username"}%
+      * Set WIKIUSERNAME = %USERINFO{format="$wikiusername"}%
 
 ---++ TWiki Platform Settings
 

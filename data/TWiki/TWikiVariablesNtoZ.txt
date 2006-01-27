@@ -343,13 +343,13 @@ Note: if you want more than one part of the topic included, use =%<nop>STARTBLOC
    * Related: [[#VarENCODE][ENCODE]], [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
 
 ---+++ USERINFO - retrieve details about the logged in user
-   * By default, the retrieved info will be formatted as a comma-separated list comprising the login name, web, wiki name, and emails.
+   * By default, the retrieved info will be formatted as a comma-separated list comprising the username, wikiusername, and emails.
    * Syntax: =%<nop>USERINFO%=
    * Expands to: =%USERINFO%=
    * you can also use the =format= parameter to get different formatted results:
-   * Syntax: =%<nop>USERINFO{format="$login is really $wikiname"}%=
-   * Expands to =%USERINFO{format="$login is really $wikiname"}%=
-   * The tokens =$emails=, =$login=, =$wikiname=, and =$web= are available for use in the format string. =$web= is the web where the user topic is defined (usually %<nop>MAINWEB%)
+   * Syntax: =%<nop>USERINFO{format="$username is really $wikiname"}%=
+   * Expands to =%USERINFO{format="$username is really $wikiname"}%=
+   * The tokens =$emails=, =$username=, =$wikiname=, and =$wikiusername= are available for use in the format string. 
    * Related: [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication, ChangeEmailAddress
 
 #VarUSERNAME
