@@ -198,14 +198,15 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | v0.45 |
+|  Plugin Version: | v0.46 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  27 Jan 2007: | added permalink tooltips ;\
                   nicer autor and admin buttons; \
 		  renamed SECTIONs to STARTSECTIONs; \
 		  highlight current <nop>TopicFunction in sidebar list; \
 		  added button to easily w3c validate a <nop>TopicFunction; \
-		  lots of w3c fixes, mostly superfluous &lt;p>s in the wrong place |
+		  lots of w3c fixes, mostly superfluous &lt;p>s in the wrong place; \
+		  css improvements |
 |  24 Jan 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Digest::MD5, CPAN:Time::ParseDate |

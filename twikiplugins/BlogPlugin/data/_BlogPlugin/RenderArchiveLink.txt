@@ -15,6 +15,7 @@ in the given timespan.
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
+*~~
 %~~ DBQUERY{
 ~~~   "TopicType=~'\bBlogEntry\b' AND
 ~~~    State='enabled' AND
@@ -22,6 +23,7 @@ in the given timespan.
 ~~~    createdate >= %CALC{"$TIME(%FROM%)"}% AND
 ~~~    createdate < %CALC{"$TIME(%TO%)"}%"
 ~~~    header="<!-- entries: $count -->"
+~~~    separator="none"
 ~~~    limit="1"
 ~~~    format="$percntCALC{\"$IF($count>0,$SET(foundArchive,1))\"}$percnt
 ~~~      <tr><td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
@@ -33,8 +35,9 @@ in the given timespan.
 *~~       \">%TITLE%</a>
 ~~~       </li></ul></td>
 ~~~       <td valign=\"top\" class=\"blogEntryCount\">$count</td>
-~~~      </tr>"
+~~~      </tr>$n*~~ "
 ~~~ }%
+*~~
 %STOPINCLUDE%
 </verbatim>
 
