@@ -69,13 +69,6 @@ __Note:__ This topic is included by TWikiVariables
    * Example: =%<nop>DISPLAYTIME{"$hou:$min"}%= expands to =%DISPLAYTIME{"$hou:$min"}%=
    * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
-#VarEMAILS
----+++ EMAILS -- show list of e-mail addresses for logged-in user
-   * You can register e-mail addresses by visiting ChangeEmailAddress.
-   * Syntax: =%<nop>EMAILS%=
-   * Expands to: =%EMAILS%=
-   * [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], ChangeEmailAddress
-
 #VarENCODE
 ---+++ ENCODE{"string"} -- encodes a string to HTML entities
    * Encode "special" characters to HTML numeric entities. Encoded characters are:

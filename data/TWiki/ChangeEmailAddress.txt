@@ -14,7 +14,7 @@ If your user topic is not protected from changes by other people, and you don't 
 
 If your old e-mail addresses are all invalid (you can't receive mail there any more) and you have forgotten your password, please contact %WIKIWEBMASTER%.
 
-E-mails for user =%USERNAME%=: %IF{ "$ EMAILS=''" then="(none)" else="%EMAILS%" }%
+Registered e-mail addresses for currently logged in user (=%USERINFO{format="$wikiname"}%=): %USERINFO{format="$emails"}% 
 
 <form name="passwd" action="%SCRIPTURLPATH{"passwd"}%/%WEB%/%TOPIC%" method="post">
 |  Your %TWIKIWEB%.LoginName: | <input type="text" name="username" value="%URLPARAM{"username" default="%USERNAME%"}%" size="40" /> =<font color="red">**</font>= |

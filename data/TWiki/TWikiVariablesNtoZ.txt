@@ -350,7 +350,7 @@ Note: if you want more than one part of the topic included, use =%<nop>STARTBLOC
    * Syntax: =%<nop>USERINFO{format="$login is really $wikiname"}%=
    * Expands to =%USERINFO{format="$login is really $wikiname"}%=
    * The tokens =$emails=, =$login=, =$wikiname=, and =$web= are available for use in the format string. =$web= is the web where the user topic is defined (usually %<nop>MAINWEB%)
-   * Related: [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
+   * Related: [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication, ChangeEmailAddress
 
 #VarUSERNAME
 ---+++ USERNAME -- your login username
