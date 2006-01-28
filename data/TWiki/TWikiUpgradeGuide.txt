@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
 
-Upgrade from the previous TWiki20040904 production release to TWiki-4.0.0
+_Upgrade from the previous TWiki 01-Sep-2004 Prodcution Release to TWiki-4.0.0_
 
 ---++ Overview
 
@@ -13,12 +13,12 @@ TWiki-4.0.0 is a major new release. You can chose between an automated upgrade u
 
    * Please review the AdminSkillsAssumptions before you upgrade TWiki
    * Review TWiki:Codev.TWikiUpgradeTo04x00x00 for latest information and experience notes.
-   * To upgrade from a *pre-20040904* TWiki, start with http://twiki.org/cgi-bin/view/TWiki/TWikiUpgradeToCairo
-   * To upgrade from a TWiki20040904 standard installation to the latest TWiki-4.0.0 Production Release, follow the instructions below
+   * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki.UpgradingTWiki
+   * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-4.0.0 Production Release, follow the instructions below
    * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but should not be used to write. Make sure you take a backup!
-   * Not all 20040904 plugins are fully supported with Dakar. Make sure the plugins you use can be upgraded as well!
+   * Not all Plugins written for TWiki Release 01-Sep-2004 are fully supported with Dakar. Make sure the Plugins you use can be upgraded as well!
 
----++ Major Changes Compared to TWiki 20040904
+---++ Major Changes Compared to TWiki Release 01-Sep-2004
 
 See TWikiReleaseNotes04x00x00.
 
@@ -94,5 +94,5 @@ You are *highly* recommended *not* to change any distributed files if you can av
 
 %STOPINCLUDE%
 
-__Related Topics:__ AdminDocumentationCategory
+__Related Topics:__ AdminDocumentationCategory, TWiki:TWiki.UpgradingTWiki
 
