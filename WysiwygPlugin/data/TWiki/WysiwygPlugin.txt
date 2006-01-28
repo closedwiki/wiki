@@ -144,6 +144,9 @@ which is correct by construction, but does not render correctly in TWiki. This p
 ---+++ Support for PRE
 Because of limitations in the browsers, the editor does not support PRE blocks. All PRE blocks will be converted to TWiki verbatim blocks on save. This can cause some confusion, especially when editor formatting controls (such as "bold") have been used to format text in a PRE block. Users are advised to use only plain text in PRE (verbatim) blocks.
 
+---+++ HTML Comments stripped in IE
+The Internet Explorer implementation strips out HTML comments on save. This should not be a problem for most users, but you should take care not to edit commented pages using IE.
+
 ---++ Plugin Info
 
 This plugin is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the authors of that add-on are therefore also credited as authors of this plugin.
