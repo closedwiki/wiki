@@ -549,7 +549,7 @@ sub checkin {
     my $err = 1;
     if( $twiki ) {
         my $user =
-          $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
+          $twiki->{users}->findUser($TWiki::cfg{AdminUserWikiName});
         if( $file ) {
             $err = $twiki->{store}->saveAttachment
               ( $web, $topic, $file, $user,
