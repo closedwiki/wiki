@@ -163,7 +163,7 @@ msgstr "pagina %1 bestaat niet"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:52
 msgid "&Attach"
-msgstr "Best&and bijvoegen"
+msgstr "Bij&lage"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:16
 msgid "&Cancel"
@@ -211,7 +211,7 @@ msgstr "(Meer opties in WebSearch)"
 
 #: data/Sandbox/WebHome.txt:10
 msgid "(Use a topic name in TWiki.WikiNotation)"
-msgstr "(Gebruik een paginanaam in [[%TWIKIWEB%.WikiNotation][Wiki notatie]])"
+msgstr "(Gebruik een paginanaam in [[%TWIKIWEB%.WikiNotation][Wikinotatie]])"
 
 #: templates/messages.tmpl:134
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
@@ -359,7 +359,7 @@ msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 "Error\" message when you upload a file, you need to try again. It should "
 "work the second time."
-msgstr "*Programmafout:* Internet Explorer 4.0 of eerder: als je een \"Internal "
+msgstr "*Internet Explorer* 4.0 of eerder: als je een \"Internal "
 "Server Error\" bericht krijgt wanneer je een bijlage upload, probeer het dan "
 "opnieuw. De tweede keer zou het moeten werken."
 
@@ -499,8 +499,7 @@ msgid ""
 "A more extensive changes list is available via the [[%1][Recent Changes]] "
 "link in the navigation menu."
 msgstr ""
-"Een meer uitgebreide lijst van wijzigingen is te zien via de "
-"[[%1][Wijzigingen]] link in het menu."
+"Een meer uitgebreide lijst van wijzigingen is te zien in [[%1][Wijzigingen]]."
 
 #: templates/messages.tmpl:390
 msgid ""
@@ -665,7 +664,7 @@ msgstr "Verplaatsen van bijlage is niet gelukt"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:112
 msgid "Attachments will not be shown in topic view page."
-msgstr "Bijlage zal niet worden getoond in de bijlagetabel op de pagina."
+msgstr "Bijlage zal niet worden getoond in de lijst van bijlagen op de pagina."
 
 #: templates/oopsaccessdenied.tmpl:4 templates/oopsattention.tmpl:4
 #: templates/oopsleaseconflict.tmpl:4 templates/oopssaveerr.tmpl:8
@@ -828,7 +827,7 @@ msgstr "Gewijzigd:"
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:8
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:9
 msgid "Changes"
-msgstr "Recente wijzigingen"
+msgstr "Wijzigingen"
 
 #. ($r2, $r1)
 #: lib/TWiki/UI/RDiff.pm:457
@@ -959,12 +958,12 @@ msgstr "Aanmaken (&WYSIWYG)"
 
 #: data/Sandbox/WebHome.txt:17
 msgid "Create <nop>TestTopic###"
-msgstr "<nop>TestTopic### aanmaken"
+msgstr "<nop>Testpagina### aanmaken"
 
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
 msgid "Create New Topic"
-msgstr "Nieuwe pagina aanmaken"
+msgstr "Nieuwe pagina"
 
 #: data/TWiki/WebTopicCreator.txt:4
 msgid "Create New Topic in %1 Web"
@@ -976,7 +975,7 @@ msgstr "Maak een link naar de bijlage"
 
 #: data/Sandbox/WebHome.txt:16
 msgid "Create a new auto-numbered test topic:"
-msgstr "Maak een nieuw automatisch genummerde testpagina aan:"
+msgstr "Maak een nieuwe automatisch genummerde testpagina aan:"
 
 #: data/Sandbox/WebHome.txt:10
 msgid "Create a new document by name:"
@@ -989,7 +988,7 @@ msgstr "Pagina aanmaken"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:11
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:4
 msgid "Create personal sidebar"
-msgstr "Persoonlijk menu aanmaken"
+msgstr "Creëer persoonlijk menu"
 
 #: lib/TWiki/Render.pm:572 lib/TWiki/Render.pm:584
 msgid "Create this topic"
@@ -1331,7 +1330,7 @@ msgstr "Verberg lijst met bijlagen"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:107
 msgid "Hide file"
-msgstr "Verberg bestand"
+msgstr "Verbergen"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:19
 msgid "Hide formatting help"
@@ -1460,8 +1459,8 @@ msgstr "Als je dit web wilt aanmaken"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:102
 msgid "Images will be displayed, for other attachments a link will be created."
-msgstr "Afbeeldingen worden getoond in de pagina; voor andere bijlagen wordt "
-"een link in de pagina opgenomen."
+msgstr "Afbeeldingen worden getoond in de pagina; voor anderssoortige bestanden "
+"wordt een link aangemaakt."
 
 #: data/TWiki/WebSearchAdvanced.txt:53
 msgid "In reversed order"
@@ -1578,7 +1577,7 @@ msgstr "Link"
 
 #: data/TWiki/WebSearch.txt:44 data/TWiki/WebSearchAdvanced.txt:87
 msgid "List all topics in the %1 web in alphabetical order"
-msgstr "Vermeld alle pagina's in %1 web in alfabetische volgorde"
+msgstr "Toon alle pagina's in het %1 web in alfabetische volgorde"
 
 #: data/TWiki/WebSearch.txt:45 data/TWiki/WebSearchAdvanced.txt:88
 msgid "List topics that start with the letter:"
@@ -1586,15 +1585,15 @@ msgstr "Vermeld alle pagina's die beginnen met de letter:"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:76
 msgid "Local file"
-msgstr "Lokale bijlage"
+msgstr "Lokaal bestand"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:7
 msgid "Log In"
-msgstr "Inloggen"
+msgstr "Log in"
 
 #: twikiplugins/PatternSkin/templates/twiki.pattern.tmpl:8
 msgid "Log Out"
-msgstr "Uitloggen"
+msgstr "Log uit"
 
 #: templates/mailresetpassword.tmpl:9
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:9
@@ -1743,7 +1742,7 @@ msgstr "Kennisgevingen:"
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:10
 msgid "Notifications"
-msgstr "Kennisgevingen"
+msgstr "Blijf op de hoogte"
 
 #: twikiplugins/PatternSkin/templates/search.pattern.tmpl:24
 #: twikiplugins/PatternSkin/templates/searchbookview.pattern.tmpl:12
@@ -1773,7 +1772,7 @@ msgid ""
 "the new topic so that there are more ways people can discover it."
 msgstr ""
 "Wanneer je de pagina hebt aangemaakt zou je links naar gerelateerde pagina's "
-"kunnen toevoegen zodat er meer manieren zijn om deze pagina te ontdekken."
+"kunnen toevoegen. Dan zijn er meer manieren om deze pagina te ontdekken."
 
 #: templates/messages.tmpl:405
 msgid "Only members of the %1 are allowed to perform this action."
@@ -1943,7 +1942,7 @@ msgstr "Recent gewijzigd"
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
-msgstr "Registreren"
+msgstr "Meld je aan"
 
 #: data/TWiki/TWikiRegistration.txt:6
 msgid "Registered users can ChangePasswords and ResetPasswords."
@@ -2336,10 +2335,10 @@ msgid ""
 "\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
 "the page to return to the previous topic."
 msgstr ""
-"TWikis gebruikersinterface is beschikbaar in meerdere talen. Als je de taal "
-"voor dit bezoek wilt veranderen, kies een van de volgende en druk op "
-"\"Taal wijzigen\". Om terug te gaan naar de vorige pagina, klik op \"Cancel\""
-"onderaan de pagina."
+"TWiki's gebruikersinterface is beschikbaar in meerdere talen. Als je de taal "
+"voor dit bezoek wilt veranderen, kies een van de volgende beschikbare talen "
+"en druk op \"Taal wijzigen\". Om terug te gaan naar de vorige pagina, klik op "
+"\"Afbreken\" onderaan de pagina."
 
 #: data/Sandbox/WebHome.txt:6
 msgid "Test Topics"
@@ -2394,8 +2393,8 @@ msgid ""
 "jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
 "page and sign and date it with your %4."
 msgstr ""
-"Het %1 web is de zogenaamde zandbak die je kan gebruiken om uit te proberen. "
-"Iedereen is welkom om toe te voegen of te verwijderen. We kunnen je aanbevelen "
+"Het %1 web is de zogenaamde speeltuin die je kan gebruiken om uit te proberen. "
+"Iedereen is welkom om toe te voegen of te verwijderen. We raden je aan "
 "om %2 te doorlopen om een overzicht van de %3 tool te krijgen. Een goede "
 "vuistregel is om toe te voegen aan het einde van de pagina en te signeren en "
 "dateren met je %4."
@@ -2619,8 +2618,8 @@ msgid ""
 "To create a new topic, enter a %1.WikiWord for the topic name, select a "
 "topic parent and click 'Create.'"
 msgstr ""
-"Om een nieuwe pagina aan te maken, voer een [[%1.WikiWord][Wikiwoord]] in als "
-"paginanaam, kies een bovenliggende pagina en klik op 'Aanmaken.'"
+"Om een nieuwe pagina aan te maken, voer je een [[%1.WikiWord][Wikiwoord]] in "
+"als paginanaam. Kies eventueel een bovenliggende pagina en klik op 'Aanmaken.'"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:19
 msgid "To delete an attachment move it to web %1, topic %2."
@@ -2712,7 +2711,7 @@ msgstr "Pagina bewaarfout"
 
 #: data/TWiki/WebSearch.txt:31 data/TWiki/WebSearchAdvanced.txt:40
 msgid "Topic title"
-msgstr "Paginatitel"
+msgstr "Titel"
 
 #: templates/messages.tmpl:26
 msgid "Topic was merged"
@@ -2973,7 +2972,7 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:66
 msgid "You are here"
-msgstr "je bent hier"
+msgstr "Je bent hier"
 
 #: templates/messages.tmpl:105
 msgid ""
@@ -3041,7 +3040,7 @@ msgid ""
 "You can set your favorite language permanently by setting the %1 variable in "
 "your user topic."
 msgstr ""
-"Je kunt je favoriete taal permanent instellen door de %1 variabele in te "
+"Je kunt de taal van je keuze blijvend instellen door de %1 variabele in te "
 "stellen op je persoonlijke pagina."
 
 #: templates/messages.tmpl:205
