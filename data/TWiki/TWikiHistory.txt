@@ -43,7 +43,7 @@ Most of the redesign, refactoring and new documentation work in Dakar release wa
 | WYSIWYG editor | [[http://c-dot.co.uk][Crawford Currie]], [[TWiki:Main.ColasNahaboo][ColasNahaboo]], [[TWiki:Main.DamienMandrioli][DamienMandrioli]], [[TWiki:Main.RomainRaugi][RomainRaugi]] |
 | Integrated session support | [[TWiki:Main.GregAbbas][GregAbbas]], [[http://c-dot.co.uk][Crawford Currie]] |
 | Webserver-independent login/logout | [[http://c-dot.co.uk][Crawford Currie]] |
-| Registration process with e-mail confirmation | [[TWiki:Main.MartinCleaver][MartinCleaver]] |
+| [[TWiki:Codev.RegisterCgiScriptRewrite][Registration process with e-mail confirmation]] | [[TWiki:Main.MartinCleaver][MartinCleaver]] |
 | [[TWiki:Codev.TipOfTheDayFeatureRequest][Tip of the Day box in TWiki Home]] | [[TWiki:Main.PaulineCheung][PaulineCheung]], [[TWiki:Main.PeterThoeny][PeterThoeny]], [[TWiki:Main.AntonAylward][AntonAylward]] |
 | [[TWiki:Codev.AutomaticAttachments][Automatic attachments]] | [[TWiki:Main.MartinCleaver][MartinCleaver]] |
 | [[TWiki:Codev.ForceNewRevisionCheckBox]["Force New Revision" check box for topic save]] | [[TWiki:Main.WillNorris][WillNorris]] |
