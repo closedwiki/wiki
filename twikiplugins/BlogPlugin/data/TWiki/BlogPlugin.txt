@@ -198,8 +198,10 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | v0.46 |
+|  Plugin Version: | v0.47 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  30 Jan 2007: | replaced NOPs with STARSECTIONs; \
+                  fixed customized search view |
 |  27 Jan 2007: | added permalink tooltips ;\
                   nicer autor and admin buttons; \
 		  renamed SECTIONs to STARTSECTIONs; \

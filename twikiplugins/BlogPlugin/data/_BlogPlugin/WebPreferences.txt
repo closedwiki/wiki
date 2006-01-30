@@ -15,6 +15,7 @@
    * Set NATSEASRCHEXCLUDETOPIC = 
    * Set NATSEARCHTEMPLATE = SearchView
    * Set STYLESEARCHBOX = pos2
+   * Set STYLEBUTTONS = on
    
    * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
    * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm
@@ -38,5 +39,3 @@
 __Related Topics__:
    * [[%LOCALSITEPREFS%]]
    * [[%TWIKIWEB%.TWikiPreferences]]
-
-
