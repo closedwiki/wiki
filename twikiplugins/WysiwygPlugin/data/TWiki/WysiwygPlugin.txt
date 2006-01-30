@@ -110,10 +110,18 @@ The bit between the &gt; &lt; =value= defines text in the drop-down box in the e
 If it exists, the contents of this topic will be included and shown on the edit screen below the status bar. It is intended to be used for site-specific quick help information.
 
 ---+++ Editor control
-The global TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if some or all of HTML tags (e.g. &lt;br />), or simple variables (e.g. %<nop>VAR%) or calls (e.g. %VARIABLE{...}%), are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, e.g.
-   * =Set WYSIWYG_EXCLUDE = variables,calls=
+The global TWiki Variable =WYSIWYG_EXCLUDE= can be set to make the plugin sensitive to what is in a topic before allowing it to be edited. You can set it up to refuse to edit if 
 
-If you are using this plugin with TWiki-4.0.0 or later with =pattern= skin, the %<nop>COMPOSER% global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
+   * some or all of HTML tags (e.g. =&lt;br /&gt;= or =&lt;div&gt;=), or 
+   * simple variables (e.g. =%<nop>VAR%=) or 
+   * calls (e.g. =%VARIABLE{...}%=)
+   * PRE blocks (=&lt;pre&gt;=)
+   * HTML comments (=&lt;!--= ... =--&gt;=)
+   
+are used in the topic. If the plugin detects an excluded construct in the topic, it will redirect to the default editor. Comma-separated list of one or more of =html=, =variables=, =calls=, =pre= or =comments= e.g.
+   * =Set WYSIWYG_EXCLUDE = variables,calls= (inactive; you need to remove monospacing from this setting to enable it)
+
+If you are using this plugin with TWiki-4.0.0 or later with =pattern= skin, the =%<nop>COMPOSER%= global TWiki variable is used to control the skin used for the WYSIWYG editor link. You can define this variable to the empty string to disable WYSIWYG editing on a site, per-web, per-user or per-topic basis.
 
 ---++ Known Issues
 Most of the known problems with the plugin are actually problems with the Kupu editor or the browser rather than the plugin.
@@ -121,7 +129,7 @@ Most of the known problems with the plugin are actually problems with the Kupu e
 ---+++ Incompatible with "non-standard" syntax
 WysiwygPlugin is Incompatible with plugins that expand non-standard syntax e.g. TWiki:Plugins.MathModePlugin (WysiwygPlugin)
 
-Plugins that extend the syntax using TWiki variables, such as %MYVARIABLE%, should work fine.
+Plugins that extend the syntax using TWiki variables, such as =%MYVARIABLE%=, should work fine.
 
 ---+++ Can't *undo* all functions (Kupu + browser)
 Due to limitations in the browser support for editing, not all functions can be undone. Also, the undo buffer can be cleared unexpectedly during editing, especially when using Internet Explorer.

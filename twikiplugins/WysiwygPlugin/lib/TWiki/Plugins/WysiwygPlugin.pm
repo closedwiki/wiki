@@ -97,8 +97,13 @@ sub beforeEditHandler {
                && $_[0] =~ /%[A-Z_]+{.*?}%/s )
              || ( $exclusions =~ /\bvariables\b/ &&
                     $_[0] =~ /%[A-Z_]+%/s)
-               || ( $exclusions =~ /\bhtml\b/ &&
-                      $_[0] =~ /<\/?(?!verbatim|noautolink|nop)\w+/ )) {
+             || ( $exclusions =~ /\bhtml\b/ &&
+                    $_[0] =~ /<\/?(?!verbatim|noautolink|nop|br)\w+/ )
+             || ( $exclusions =~ /\bcomments\b/ &&
+                    $_[0] =~ /<[!]--/ )
+             || ( $exclusions =~ /\bpre\b/ &&
+                    $_[0] =~ /<pre\w/ )
+	  ) {
             # redirect
             my $query = TWiki::Func::getCgiQuery();
             foreach my $p qw( skin cover ) {
