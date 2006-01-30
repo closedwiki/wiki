@@ -1,6 +1,6 @@
 #patternLeftBar {
-   display:none;
+	display:none;
 }
-#patternMain {
-   padding-left:0;
+#patternColumnWrapper {
+	width:100%;
 }
