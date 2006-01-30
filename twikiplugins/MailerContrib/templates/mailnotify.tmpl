@@ -45,9 +45,10 @@
 --------------------------------
 %TMPL:DEF{PLAIN:before}%%TMPL:END%
 --------------------------------
-%TMPL:DEF{PLAIN:middle}%- %TOPICNAME% (%AUTHOR%, %TIME%) %REVISION%
+%TMPL:DEF{PLAIN:middle}%
+- %TOPICNAME% (%AUTHOR%, %TIME%) %REVISION%
 %URL%
-%TEXTHEAD%
+
 %TMPL:END%
 --------------------------------
 %TMPL:DEF{PLAIN:after}%%TMPL:END%
@@ -67,8 +68,8 @@ Content-Transfer-Encoding: 7bit
 %MAKETEXT{"This is an automated e-mail from [_1]." args="%WIKITOOLNAME%"}%
 
 %MAKETEXT{"New or changed topics in [_1], since [_2]:" args="%WIKITOOLNAME%.%WEB%,%LASTDATE%"}%
-%PLAIN_TEXT%
 
+%PLAIN_TEXT%
 %MAKETEXT{"Review recent changes in:"}%
   %SCRIPTURL{"view"}%/%WEB%/WebChanges
 
