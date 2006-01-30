@@ -78,6 +78,7 @@ sub new {
       $session->normalizeWebTopicName( $TWiki::cfg{UsersWebName}, $wikiname );
     $this->{web} = $web;
     $this->{wikiname} = $topic;
+    $this->{groups} = [];
     return $this;
 }
 
