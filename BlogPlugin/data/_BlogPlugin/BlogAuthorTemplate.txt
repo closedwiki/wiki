@@ -1,8 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131556335" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
-%NOP{
+%STARTSECTION{type="templateonly"}%
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-}%
+%ENDSECTION{type="templateonly"}%
 %DBCALL{"RenderBlogEntriesOfAuthor" NAME="%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%"}%
 
 <!--
