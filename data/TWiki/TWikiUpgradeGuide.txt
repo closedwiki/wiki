@@ -12,7 +12,7 @@ TWiki-4.0.0 is a major new release. You can chose between an automated upgrade u
 ---++ Upgrade Requirements
 
    * Please review the AdminSkillsAssumptions before you upgrade TWiki
-   * Review TWiki:Codev.TWikiUpgradeTo04x00x00 for latest information and experience notes.
+   * Review TWiki:TWiki.TWikiUpgradeTo04x00x00 for latest information and experience notes.
    * To upgrade from a release prior to TWiki Release 01-Sep-2004, start with TWiki:TWiki.UpgradingTWiki on TWiki.org
    * To upgrade from a standard TWiki Release 01-Sep-2004 to the latest TWiki-4.0.0 Production Release, follow the instructions below
    * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but should not be used to write. Make sure you take a backup!
@@ -55,6 +55,8 @@ To perform the upgrade, you need to:
 
 Assuming all goes well, =UpgradeTwiki= will give you the final instructions.
 
+Visit TWiki:Codev.KnownIssuesOfTWiki04x00x00 and fix known issues that apply to you.
+
 There are a few points worth noting:
 
    * =UpgradeTwiki= may not be able to merge all the changes you made in your existing TWiki into the new installation, but it will tell you which ones it couldn't deal with
@@ -81,6 +83,7 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
       1 Use 'diff' to find changed files, and transfer the changes into the new Dakar install.
       1 Install updated plugins into your new area.
    1 Point your webserver at the new install.
+   1 Visit TWiki:Codev.KnownIssuesOfTWiki04x00x00 and fix known issues that apply to you.
 
 You are *highly* recommended *not* to change any distributed files if you can avoid it, to simplify future upgrades!
 
