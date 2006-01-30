@@ -377,6 +377,15 @@ sub getGroups {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
+	#because we lazy load the groups, we can't make this conditional on 
+	#  the existance of some groups in the array.
+	my @groupList = $this->{session}->{users}->_getListOfGroups();
+	foreach my $g (@groupList) {
+		my $groupObject = $this->{session}->{users}->findUser($g);
+		#simply calling isInList() will make sure the group added to $this->{groups}
+		$this->isInList( $groupObject->groupMembers() ); 
+	}
+
     return @{$this->{groups}};
 }
 
@@ -434,7 +443,7 @@ sub isGroup {
 
 ---++ ObjectMethod groupMembers() -> @members
 
-Return a list of members of this group. Should only be
+Return a list of  user objects that are members of this group. Should only be
 called on groups.
 
 =cut

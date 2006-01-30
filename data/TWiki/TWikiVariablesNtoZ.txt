@@ -347,7 +347,7 @@ __Note:__ This topic is included by TWikiVariables
    * you can also use the =format= parameter to get different formatted results:
    * Syntax: =%<nop>USERINFO{format="$username is really $wikiname"}%=
    * Expands to =%USERINFO{format="$username is really $wikiname"}%=
-   * The tokens =$emails=, =$username=, =$wikiname=, and =$wikiusername= are available for use in the format string. 
+   * The tokens =$emails=, =$username=, =$wikiname=, =$wikiusername=, and =$groups= are available for use in the format string. 
    * Related: [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication, ChangeEmailAddress
 
 #VarUSERNAME

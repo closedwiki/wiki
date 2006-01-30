@@ -3260,11 +3260,14 @@ sub _USERINFO {
     my $wikiname = $user->wikiName();
     my $wikiusername = $user->webDotWikiName();
     my $emails = join(',', $user->emails());
+    my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
+    my $groups = join(', ', @groupNames);
 
     $info =~ s/\$username\b/$username/g;
     $info =~ s/\$wikiname\b/$wikiname/g;
     $info =~ s/\$wikiusername\b/$wikiusername/g;
     $info =~ s/\$emails\b/$emails/g;
+    $info =~ s/\$groups\b/$groups/g;
 
     return $info;
 }
