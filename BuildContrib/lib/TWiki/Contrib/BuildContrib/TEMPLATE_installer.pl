@@ -565,10 +565,15 @@ DONE
           my $tmp = new File::Temp( UNLINK => 1 );
           my $tmpfilename = $tmp->filename;
           copy($origfile, $tmpfilename) or die "$origfile could no be copied to tmp dir ($tmpfilename).";
+          my @stats = stat $origfile;
+          my $fileSize = $stats[7];
+          my $fileDate = $stats[9]; 
           $err = $twiki->{store}->saveAttachment
             ( $web, $topic, $file, $user,
 	           { comment => 'Saved by install script',
-	             file => $tmpfilename } );
+	             file => $tmpfilename, 
+                filesize => $fileSize,
+                filedate => $fileDate } );
             # Logic in Store.pm unfortunately returns two different codes for attachments and topics
             $err = !$err;
         } else {
