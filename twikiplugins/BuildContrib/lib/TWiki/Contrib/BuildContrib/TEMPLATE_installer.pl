@@ -561,13 +561,14 @@ DONE
           use File::Copy;
           require File::Temp;
           use File::Temp ();
+  		    my $origfile = $TWiki::cfg{PubDir} . '/' . $web . '/' . $topic . '/' . $file;
           my $tmp = new File::Temp( UNLINK => 1 );
-  		    my $origfile = $TWiki::cfg{PubDir}.'/TWiki/ActionTrackerPlugin/'.$file;
-          copy($origfile, $tmp->filename) or die "$origfile could no be copied to tmp dir ($tmp->filename).";
+          my $tmpfilename = $tmp->filename;
+          copy($origfile, $tmpfilename) or die "$origfile could no be copied to tmp dir ($tmpfilename).";
           $err = $twiki->{store}->saveAttachment
             ( $web, $topic, $file, $user,
-                { comment => 'Saved by install script',
-                  file => $tmp->filename } );
+	           { comment => 'Saved by install script',
+	             file => $tmpfilename } );
             # Logic in Store.pm unfortunately returns two different codes for attachments and topics
             $err = !$err;
         } else {
