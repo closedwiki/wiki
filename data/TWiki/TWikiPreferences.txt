@@ -190,7 +190,7 @@ _(Click for form-based editing of existing preferences.)_
 
    * *PatternSkin header settings*
       * Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/PatternSkin/TWiki_header.gif
-      * Set WEBHEADERBGCOLOR = 
+      * Set WEBHEADERBGCOLOR = #ffffff
       
 ---+++ Skin icons
 
