@@ -13,6 +13,16 @@
 %SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
 <div class="twikiGrayText">Click to view full screenshot</div>-->
 
+---++ Creating your own look
+
+It is easy to tune the look and feel of !PatternSkin by changing the color and space (margin, padding) settings in the Style Sheet files. 
+
+You may also choose to radically change the look and create a !PatternSkin-based new skin. This is easier than to create a skin by writing new template files; you can concentrate on how things should look instead of what elements should get displayed.
+
+   * PatternSkinCustomization - how to configure page elements
+   * PatternSkinCssCookbook - how to redesign
+   * PatternSkinCss - a list of CSS classes
+
 ---++ Supported browsers
 
 !PatternSkin has been tested successfully on the following browsers:
@@ -20,7 +30,7 @@
       * Internet Explorer 6.0, 5.5 (note: Explorer 5.0 is *not* supported: will function but shows visual quirks)
       * Mozilla/Firefox
    * Mac OS X
-      * Safari 1.2
+      * Safari 2.0.3
       * Mozilla/Firefox
    * *nix
       * Mozilla/Firefox
@@ -58,25 +68,6 @@ If this still does not work, contact the administrator who installs skins.
 
 For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Report bugs in the [[TWiki:Support/WebHome][Support web]].
 
----++ Creating your own look
-
-It is easy to tune the look and feel of !PatternSkin by changing the color and space (margin, padding) settings in the Style Sheet files. 
-
-You may also choose to radically change the look and create a !PatternSkin-based new skin. This is easier than to create a skin by writing new template files; you can concentrate on how things should look instead of what elements should get displayed.
-
-See for practical details: PatternSkinCssCookbook %BR%
-The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
-
----++ Customization
-
-   * PatternSkinCustomization
-   * PatternSkinCssCookbook
-
----++ Further reading
-
-   * PatternSkinCssCookbook - Practical information on how to change the looks of !PatternSkin
-   * PatternSkinCss - A reference to used CSS classes
-
 ---++ Skin Info
 
 |  Description: | TWiki's default skin; CSS based, flexible and W3C-compliant |
@@ -84,9 +75,9 @@ The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this topic]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 15 Oct 2005 (v2.0.0) | 
+|  Skin Version: | 31 Jan 2006 (v2.0.0) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
-|  28 Aug 2004: | v.2.0.0 - DAKAR RELEASE VERSION |
+|  31 Jan 2006: | v.2.0.0 - DAKAR RELEASE VERSION |
 |  28 Aug 2004: | v.1.0.9 - CAIRO RELEASE VERSION |
 |  08 Aug 2004: | Initial version (v1.0.0) |
 |  Dependencies: | TWiki:Plugins/TwistyContrib (automatically supported by Dakar) |
@@ -97,11 +88,24 @@ The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
 ---++ Related topics
 
    * TWikiCss
+   * PatternSkinCss
+   * PatternSkinCssCookbook
+   * PatternSkinCssCookbookCenterPage
+   * PatternSkinCssCookbookEditTableStyle
+   * PatternSkinCssCookbookFonts
+   * PatternSkinCssCookbookNoLeftBar
+   * PatternSkinCssCookbookNoTopBar
+   * PatternSkinCustomization
+   * PatternSkinHeaderArt
+   * PatternSkinJavascripts
    * WebBottomBar
    * WebLeftBar
-   * WebLeftBarExample
-   * WebLeftBarPersonalTemplate
    * WebLeftBarCookbook
+   * WebLeftBarExample
+   * WebLeftBarLogin
+   * WebLeftBarPersonalTemplate
+   * WebLeftBarSearch
+   * WebLeftBarWebsList
    * WebTopBar
    * AdminDocumentationCategory
 

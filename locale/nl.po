@@ -3251,7 +3251,7 @@ msgstr "terugplaatsen"
 
 #: twikiplugins/PatternSkin/templates/search.pattern.tmpl:18
 msgid "retrieved at %1"
-msgstr "teruggevonden op %1"
+msgstr "gevonden om %1"
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:17
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
