@@ -1,10 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1129333294" format="1.1" version="$Rev$"}%
 
-__See also: PatternSkinCustomization__
 
 ---+!! %TWIKIWEB%.PatternSkin CSS Cookbook
 
-This topic describes how to customize the default look of TWiki for your own needs by changing the default style sheets.
+*Questions and answers on how to customize the default look of TWiki for your own needs, using style sheets.* For configuring page elements, see PatternSkinCustomization.
 
 %TOC%
 
