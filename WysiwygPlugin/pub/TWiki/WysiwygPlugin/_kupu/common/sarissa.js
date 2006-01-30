@@ -460,8 +460,13 @@ if(window.XMLSerializer){
     if((Sarissa.getDomDocument("","foo", null)).xml){
         // see non-IE version
         Sarissa.serialize = function(oDoc) {
+	    // MM - IE seems to have a problem here, oDoc.xml is "undefined"
             // TODO: check for HTML document and return innerHTML instead
-            return oDoc.xml;
+	    // consider it done; kupu doesn't work in IE 6 coz .xml is undefined -- mmoretti
+	    if (oDoc.xml) {
+		return(oDoc.xml);
+	    }
+	    return "<" + oDoc.tagName + ">" + oDoc.innerHTML + "</" + oDoc.tagName + ">";
         };
         /**
          * Utility class to serialize DOM Node objects to XML strings
@@ -473,7 +478,11 @@ if(window.XMLSerializer){
          * @param oNode the DOM Node to serialize
          */
         XMLSerializer.prototype.serializeToString = function(oNode) {
-            return oNode.xml;
+	    // MM - IE seems to have a problem here, oNode.xml is "undefined"
+	    if (oNode.xml) {
+		return(oNode.xml);
+	    }
+	    return "<" + oNode.nodeName + ">" + oNode.innerHTML + "</" + oNode.nodeName + ">";
         };
     };
 };

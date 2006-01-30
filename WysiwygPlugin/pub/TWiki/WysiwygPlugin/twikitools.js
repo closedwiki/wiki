@@ -630,14 +630,9 @@ function TWikiHandleSubmit(kupu) {
   // sorts of naughties, such as stripping comments. Because the editor
   // should only be generating valid HTML, and TWiki only generates
   // valid XHTML (hah!) we can ignore this cleanup step.
-  if( !_SARISSA_IS_IE ) {
-    // Evil, evil IE. This works with Moz (and I assume Safari) but
-    // not with IE, so we have to live with IE stripping comments
-    // until there is a solution to that problem.
-    kupu._filterContent = function (doc) {
-      return doc;
-    };
-  }
+  kupu._filterContent = function (doc) {
+    return doc;
+  };
 
   //alert("Preparing form");
   // use Kupu to create the 'text' field in the form
