@@ -549,18 +549,38 @@ sub checkin {
     my $err = 1;
     if( $twiki ) {
         my $user =
-          $twiki->{users}->findUser($TWiki::cfg{AdminUserWikiName});
+          $twiki->{users}->findUser($TWiki::cfg{AdminUserWikiName}, $TWiki::cfg{AdminUserWikiName});
         if( $file ) {
-            $err = $twiki->{store}->saveAttachment
-              ( $web, $topic, $file, $user,
-                { comment => 'Saved by installer' } );
+	       print <<DONE;
+##########################################################
+Adding file: $file to installation ....
+(attaching it to $web.$topic)
+DONE
+          # Need copy of file to upload it, use temporary location
+          require File::Copy;
+          use File::Copy;
+          require File::Temp;
+          use File::Temp ();
+          my $tmp = new File::Temp( UNLINK => 1 );
+  		    my $origfile = $TWiki::cfg{PubDir}.'/TWiki/ActionTrackerPlugin/'.$file;
+          copy($origfile, $tmp->filename) or die "$origfile could no be copied to tmp dir ($tmp->filename).";
+          $err = $twiki->{store}->saveAttachment
+            ( $web, $topic, $file, $user,
+                { comment => 'Saved by install script',
+                  file => $tmp->filename } );
+            # Logic in Store.pm unfortunately returns two different codes for attachments and topics
+            $err = !$err;
         } else {
+	         print <<DONE;
+##########################################################
+Adding topic: $web.$topic to installation ....
+DONE
             # read the topic to recover meta-data
             my( $meta, $text ) =
               $twiki->{store}->readTopic( $user, $web, $topic );
             $err = $twiki->{store}->saveTopic
               ( $user, $web, $topic, $text, $meta,
-                { comment => 'Saved by installer' } );
+                { comment => 'Saved by install script' } );
         }
     }
     return ( !$err );
