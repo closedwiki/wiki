@@ -9,11 +9,19 @@
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 
 ---
+
 ---+++++ Setup Note: 
-   a. Verify that user authentication is working, 
-   a. set the members of TWiki Administrator Group in GROUP, 
-   a. enable the ALLOWTOPICCHANGE variable by removing # sign, 
-   a. set the ALLOWTOPICHANGE in %TWIKIWEB%.TWikiPreferences to this group 
-   a. remove this note after you have done the setup
+   a. Verify that user authentication is working
+   a. Edit this group topic page (click Edit)
+   a. Enable the GROUP variable by removing the # sign
+   a. Insert wanted %MAINWEB%.TWikiUsers in the TWiki Administrator Group by listing them in the GROUP variable %BR%
+      (please remove the demonstration user 'ATWikiUser' as well)
+   a. Save this topic
+   a. Verify that new members show up properly in the group listing at %MAINWEB%.TWikiGroups
+   a. Enable the ALLOWTOPICCHANGE variable by removing # sign 
+   a. Save this topic again - <nop>TWikiAdminGroup is now locked to allow editing only by listed users in GROUP
+   a. Suggestion: Add the ALLOWTOPICHANGE variable to %TWIKIWEB%.TWikiPreferences and set it to this group (<nop>TWikiAdminGroup), %BR%
+      restricting edit of site-wide preferences to the TWiki Administrator Group
+   a. Remove this setup note after you have finished setup
 
-
+*NOTE:* If you happen to lock yourself out of <nop>TWikiAdminGroup during setup activities, you can edit this group topic at file system level using any text file editor (as a last resort).
