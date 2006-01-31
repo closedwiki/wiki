@@ -17,7 +17,7 @@ Everything to do with TWiki Plugins - demos, new releases, downloads, developmen
 
 TWiki Plugins are developed and contributed by interested members of the community. Plugins are provided on an 'as is' basis; they are not a part of TWiki, but are independently developed and maintained.
 
-__%T% Tip:__ TWiki:TWiki.TWikiPluginsSupplement has supplemental documentation on TWiki Plugins.
+__%T% Tip:__ TWiki:TWiki.TWikiPluginsSupplement on TWiki.org has supplemental documentation on TWiki Plugins.
 
 #InstallPlugin
 ---++ Installing Plugins
