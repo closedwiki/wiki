@@ -370,7 +370,7 @@ sub viewfile {
     print $query->header(
         -type => _suffixToMimeType( $session, $fileName ),
         -Content_length => length( $fileContent ),
-        -Content_Disposition => 'inline;filename='.$fileName);
+        -Content_Disposition => 'attachment;filename='.$fileName);
     print $fileContent;
 }
 
