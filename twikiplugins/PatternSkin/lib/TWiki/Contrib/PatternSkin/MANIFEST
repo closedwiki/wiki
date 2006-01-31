@@ -60,10 +60,6 @@ pub/TWiki/PatternSkinCssCookbookNoLeftBar/hideleftbar_Cairo.css 0660
 pub/TWiki/PatternSkinCssCookbookNoLeftBar/hideleftbar_Dakar.css 0660
 pub/TWiki/PatternSkinCssCookbookNoTopBar/notopbar.css 0660
 pub/TWiki/PatternSkinCustomization/LowRes.css 0660
-pub/TWiki/PatternSkinPalette/PatternSkinPalette.css 0660
-pub/TWiki/PatternSkinPalette/filterColours.pl.txt 0660
-pub/TWiki/PatternSkinPalette/makeColourTable.pl.txt 0660
-pub/TWiki/PatternSkinPalette/textmask.gif 0660
 templates/attach.pattern.tmpl 0440
 templates/attachagain.pattern.tmpl 0440
 templates/attachnew.pattern.tmpl 0440
