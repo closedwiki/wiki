@@ -37,6 +37,14 @@ use Error qw( :try );
 
 my $debug = 0;
 
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+        import locale();
+    }
+}
+
 =pod
 
 ---++ StaticMethod statistics( $session )
@@ -239,7 +247,7 @@ sub _collectLogData {
         # ignore minor changes - not statistically helpful
         next if( $notes && $notes =~ /(minor|dontNotify)/ );
 
-        if( $opName && $webTopic =~ /(\w+)\.(\w+)/ ) {
+        if( $opName && $webTopic =~ /($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})/ ) {
             my $webName = $1;
             my $topicName = $2;
 
@@ -259,7 +267,7 @@ sub _collectLogData {
 
             } elsif( $opName eq 'rename' ) {
                 # Pick up the old and new topic names
-                $notes =~/moved to (\w+)\.(\w+)/o;
+                $notes =~/moved to ($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})/o;
                 my $newTopicWeb = $1;
                 my $newTopicName = $2;
 
