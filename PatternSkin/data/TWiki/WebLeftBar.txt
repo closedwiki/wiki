@@ -22,6 +22,7 @@
    * InstalledPlugins
 ---
    * <b>%MAKETEXT{"Admin Maintenance"}%</b>
+   * [[TWikiReferenceManual][Reference Manual]]
    * AdminToolsCategory
    * InterWikis
    * ManagingWebs
