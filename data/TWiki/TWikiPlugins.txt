@@ -254,7 +254,22 @@ Recommendation for file names in Plugin attachment area:
    * Use only alphanumeric characters, underscores, dashes and periods to avoid platform dependency issues and URL issues
    * Example: =_Main_roundedge-ul.gif=
 
----++ Handling deprecated functions
+#MaintainPlugins
+---++ Maintaining Plugins
+
+---+++ Discussions and Feedback on Plugins
+
+Each published Plugin has a Plugin development topic on TWiki.org. Plugin development topics are named after your Plugin and end in =Dev=, such as =MyFirstPluginDev=. The Plugin development topic is a great resource to discuss feature enhancements and to get feedback from the TWiki community.
+
+---+++ Maintaining Compatibility with Earlier TWiki Versions
+
+The Plugin interface (TWikiFuncDotPm functions and handlers) evolve over time. TWiki 4.0 introduced new API functions to address the needs of Plugin authors. It also deprecated some functions. Some Plugins written for earlier TWiki releases using unofficial TWiki internal functions no longer work on the TWiki 4.0 codebase. All this means that some Plugins need to be updated to work on the TWiki 4.0 codebase.
+
+Organizations typically do not upgrade to the latest TWiki for many month. However, many administrators still would like to install the latest versions of a Plugin on their older TWiki installation. This need is fullfilled if Plugins are maintained in a compatible manner. 
+
+__%T% Tip:__ Plugins can be written to be compatible with older and newer TWiki releases. This can be done also for Plugins using unofficial TWiki internal functions of an earlier release that no longer work on the latest TWiki codebase. TWiki:TWiki.TWikiPluginsSupplement#MaintainPlugins has more.
+
+---+++ Handling deprecated functions
 
 From time-to-time, the TWiki developers will add new functions to the interface (either to TWikiFuncDotPm, or new handlers). Sometimes these improvements mean that old functions have to be deprecated to keep the code manageable. When this happens, the deprecated functions will be supported in the interface for at least one more TWiki release, and probably longer, though this cannot be guaranteed.
 
@@ -272,3 +287,5 @@ $TWikiCompatibility{endRenderingHandler} = 1.1;
 If the currently-running TWiki version is 1.1 _or later_, then the _handler will not be called_ and _the warning will not be issued_. TWiki with versions of =TWiki::Plugins= before 1.1 will still call the handler as required.
 
 __Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory
+
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.AndreaSterbini, TWiki:MainMikeMannix, TWiki:CrawfordCurrie
