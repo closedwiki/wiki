@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev:$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Webs
 
-_Adding, renaming and deleting webs are all now web-based operations; in previous versions this had to be done manually._
+_Adding, renaming and deleting webs are all web-based operations._
 
 ---++ Overview
 
