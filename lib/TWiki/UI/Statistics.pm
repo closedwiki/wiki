@@ -247,7 +247,10 @@ sub _collectLogData {
         # ignore minor changes - not statistically helpful
         next if( $notes && $notes =~ /(minor|dontNotify)/ );
 
-        if( $opName && $webTopic =~ /($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})/ ) {
+        # ignore searches for now - idea: make a "top search phrase list" 
+        next if( $opName && $opName =~ /(search)/ );
+
+        if( $opName && $webTopic =~ /($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}|\w+)/ ) {
             my $webName = $1;
             my $topicName = $2;
 
@@ -267,7 +270,7 @@ sub _collectLogData {
 
             } elsif( $opName eq 'rename' ) {
                 # Pick up the old and new topic names
-                $notes =~/moved to ($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})/o;
+                $notes =~/moved to ($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}|\w+)/o;
                 my $newTopicWeb = $1;
                 my $newTopicName = $2;
 
@@ -285,7 +288,7 @@ sub _collectLogData {
                 }
             }
         } else {
-            $session->writeDebug('Bad logfile line '.$line);
+            $session->writeDebug('WebStatistics: Bad logfile line '.$line);
         }
     }
 
