@@ -185,6 +185,7 @@ You're no doubt familiar or better with HTML, JS, and "webmastering". Without ge
 Customize the contents of the WebLeftBar for each web to include important topics for that web, or to link to an important topic for the overall site. Each web has its own WebLeftBar page. (This is specific to the PatternSkin.) 
 
 ----
+%T% __NOTE:__ Feel free to add your own tips to TWiki:%WEB%.%TOPIC% as quick notes at the end of the list, following the existing format!
 
 __Related Topics:__ AdminDocumentationCategory
 
