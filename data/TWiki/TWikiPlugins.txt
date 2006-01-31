@@ -17,6 +17,8 @@ Everything to do with TWiki Plugins - demos, new releases, downloads, developmen
 
 TWiki Plugins are developed and contributed by interested members of the community. Plugins are provided on an 'as is' basis; they are not a part of TWiki, but are independently developed and maintained.
 
+__%T% Tip:__ TWiki:TWiki.TWikiPluginsSupplement has supplemental documentation on TWiki Plugins.
+
 #InstallPlugin
 ---++ Installing Plugins
 
@@ -286,6 +288,7 @@ $TWikiCompatibility{endRenderingHandler} = 1.1;
 </verbatim>
 If the currently-running TWiki version is 1.1 _or later_, then the _handler will not be called_ and _the warning will not be issued_. TWiki with versions of =TWiki::Plugins= before 1.1 will still call the handler as required.
 
-__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory
+%STOPINCLUDE%
+__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory, TWiki:TWiki.TWikiPluginsSupplement
 
 -- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.AndreaSterbini, TWiki:MainMikeMannix, TWiki:CrawfordCurrie

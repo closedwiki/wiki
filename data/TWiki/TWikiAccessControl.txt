@@ -6,7 +6,9 @@
 
 _Restricting read and write access to topics and webs, by Users and groups_
 
-TWikiAccessControl allows you restrict access to single topics and entire webs, by individual user and by user Groups. Access control, combined with TWikiUserAuthentication, lets you easily create and manage an extremely flexible, fine-grained privilege system.
+TWiki Access Control allows you restrict access to single topics and entire webs, by individual user and by user Groups. Access control, combined with TWikiUserAuthentication, lets you easily create and manage an extremely flexible, fine-grained privilege system.
+
+__%T% Tip:__ TWiki:TWiki.TWikiAccessControlSupplement has additional documentation on access control.
 
 ---++ An Important Control Consideration
 
@@ -48,26 +50,23 @@ The default visitor name is %MAINWEB%.TWikiGuest. This is the non-authenticated 
 #ManagingGroups
 ---+++ Managing Groups
 
-Groups are defined by group topics created in the ==%MAINWEB%== web, like the %MAINWEB%.TWikiAdminGroup. To create a new group:
-   1. ==Edit== %MAINWEB%.TWikiGroups by entering a new topic with a name that ends in ==Group==. Example:
-      * ==<nop>SomeGroup==
-   1. Define two TWikiVariables in the new group topic:
-      * ==Set <nop>GROUP = &lt; list of Users and/or Groups &gt;==
-      * ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and/or Groups &gt;==
-      * The GROUP variable is a comma-separated list of Users and/or other Groups. Example:
-         * ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
-      * ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of Users and Groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents Users not in the Group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
-      * ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
-   1. These are summarised on SitePermissions
+Groups are defined by group topics located in the ==%MAINWEB%== web, such as the %MAINWEB%.TWikiAdminGroup. To create a new group, visit  %MAINWEB%.TWikiGroups and enter the name of the new group ending in ==Group== into the "new group" form field. This will create a new group topic with two important settings:
+   * ==Set <nop>GROUP = &lt; list of Users and/or Groups &gt;==
+   * ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and/or Groups &gt;==
+
+The GROUP setting is a comma-separated list of users and/or other groups. Example:
+   * ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
+
+The ALLOWTOPICCHANGE setting defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents users not in the group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
+   * ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
 
 __%X% Note:__ TWiki has strict formatting rules. Make sure you have three spaces, an asterisk, and an extra space in front of any access control rule.
 
 #SuperAdminGroup
----+++ The <nop>SuperAdminGroup
+---+++ The Super Admin Group
 
-By mistyping a user or group name in the settings, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, you can create *superusers*:
-   * Edit the ==SuperAdminGroup== as described above and add the wikinames of a group of Users who are always allowed to edit/view topics e.g.
-      * ==Set <nop>GROUP= %MAINWEB%.ElizabethWindsor,%MAINWEB%.TonyBlair==
+By mistyping a user or group name in the settings, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, add the WikiNames of registered administrators to the super admin group topic called ==TWikiAdminGroup==. The name of this topic is defined by the {SuperAdminGroup} configure setting. Example group setting:
+   * ==Set <nop>GROUP= <nop>%MAINWEB%.ElizabethWindsor, <nop>%MAINWEB%.TonyBlair==
 
 ---++ Restricting Access
 
@@ -203,4 +202,6 @@ __%T% Tip:__ To hide access control settings from normal browser viewing, place 
 
 %STOPINCLUDE%
 
-__Related Topics:__ AdminDocumentationCategory
+__Related Topics:__ AdminDocumentationCategory, TWikiUserAuthentication, TWiki:TWiki.TWikiAccessControlSupplement
+
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie
