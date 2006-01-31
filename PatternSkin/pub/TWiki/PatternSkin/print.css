@@ -55,11 +55,16 @@ td.patternToolBar,
 #patternLeftBar {
 	display:none;
 }
+#patternMain {
+	border:0px;
+}
 .patternMainContents {
 	padding-left:0;
 	padding-right:0;
 }
-.patternContent .twikiAttachments,
+.patternContent .twikiAttachments {
+	display:none;
+}
 .patternContent .twikiForm {
 	padding-left:1px;
 	padding-right:0;
@@ -76,11 +81,27 @@ html>body pre {
 	margin-left:3%;
 	margin-right:3%;
 }
+a:link,
+a:visited {
+	text-decoration:none;
+	border-width:0 0 1px 0;
+	border-style:solid;
+}
 
 /* Colors */
 body {
 	background-color:#fff;
 }
+a:link,
+a:visited,
+.patternTopic a:visited {
+	color:#06c;
+	border-color:#B7CDED;
+}
+.patternTopic a:hover {
+	color:#FBF7E8;
+}
+
 #patternBottomBar {
 	background:#fff;
 	color:#000;

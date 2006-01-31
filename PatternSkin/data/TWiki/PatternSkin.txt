@@ -20,8 +20,8 @@ It is easy to tune the look and feel of !PatternSkin by changing the color and s
 You may also choose to radically change the look and create a !PatternSkin-based new skin. This is easier than to create a skin by writing new template files; you can concentrate on how things should look instead of what elements should get displayed.
 
    * PatternSkinCustomization - how to configure page elements
-   * PatternSkinCssCookbook - how to redesign
-   * PatternSkinCss - a list of CSS classes
+   * PatternSkinCssCookbook - how to customize the default look of TWiki
+   * PatternSkinCss - documentation of !PatternSkin CSS classes
 
 ---++ Supported browsers
 
@@ -96,7 +96,6 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
    * PatternSkinCssCookbookNoLeftBar
    * PatternSkinCssCookbookNoTopBar
    * PatternSkinCustomization
-   * PatternSkinHeaderArt
    * PatternSkinJavascripts
    * WebBottomBar
    * WebLeftBar
@@ -108,8 +107,6 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
    * WebLeftBarWebsList
    * WebTopBar
    * AdminDocumentationCategory
-
-See also [[%TOPIC%#Further_reading][Further reading]] on this page.
 
 Other skins:
    * TWikiSkins

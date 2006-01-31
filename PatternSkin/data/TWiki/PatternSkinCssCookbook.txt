@@ -66,13 +66,13 @@ See example at: PatternSkinCssCookbookFonts
 
 See example at: PatternSkinCssCookbookNoTopBar
 
----+++ Centered page (a border around the page)
+---+++ Centered page
 
 See example at: PatternSkinCssCookbookCenterPage
 
----+++ Large background image in the top bar
+---+++ Centered page (with a border around the page)
 
-See example at: PatternSkinCssCookbookTopBarBackgroundImage
+See example at: PatternSkinCssCookbookCenterPageBorder
 
 ---+++ Setting !EditTablePlugin styles
 
