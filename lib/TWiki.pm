@@ -205,8 +205,11 @@ BEGIN {
         URLPARAM          => \&_URLPARAM,
         LANGUAGE          => \&_LANGUAGE,
         USERINFO          => \&_USERINFO,
+        USERNAME          => \&_USERNAME_deprecated,
         VAR               => \&_VAR,
         WEBLIST           => \&_WEBLIST,
+        WIKINAME          => \&_WIKINAME_deprecated,
+        WIKIUSERNAME          => \&_WIKIUSERNAME_deprecated
        );
     $contextFreeSyntax{IF} = 1;
 
@@ -3247,6 +3250,40 @@ sub _NOP {
 sub _SEP {
     my $this = shift;
     return $this->{templates}->expandTemplate('sep');
+}
+
+#depercated functionality, now implemented using %USERINFO%
+#move to compatibility plugin in TWiki5
+sub _WIKINAME_deprecated {
+    my ( $this, $params ) = @_;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
+    
+    $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKINAME' ) || 
+            '%USERINFO{format="$wikiname"}%';
+    
+    return $this->_USERINFO($params);
+}
+#depercated functionality, now implemented using %USERINFO%
+#move to compatibility plugin in TWiki5
+sub _USERNAME_deprecated {
+    my ( $this, $params ) = @_;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
+
+    $params->{format} = $this->{prefs}->getPreferencesValue( 'USERNAME' ) || 
+        '%USERINFO{format="$username"}%';
+    
+    return $this->_USERINFO($params);
+}
+#depercated functionality, now implemented using %USERINFO%
+#move to compatibility plugin in TWiki5
+sub _WIKIUSERNAME_deprecated {
+    my ( $this, $params ) = @_;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
+
+    $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKIUSERNAME' ) || 
+            '%USERINFO{format="$wikiusername"}%';
+    
+    return $this->_USERINFO($params);
 }
 
 sub _USERINFO {
