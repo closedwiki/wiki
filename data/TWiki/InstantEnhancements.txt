@@ -12,9 +12,9 @@ This may spark your imagination to *really* customize your site so that it's opt
 %TOC%
 
 ---
----++ Tips using TWikiVariables
+---++ Tips using TWiki Variables
 
-You need to know what is the variable name, and in what page is/should be defined.
+TWikiVariables are a great resource to customize your site. You need to know the variable name and decide where to put it.
 
 ---+++ Change Colors of Page Header/Footer
 
@@ -37,9 +37,9 @@ It's just as easy to refine later on, so you're not locked in, just looking bett
 
 Without getting into the TWikiTemplates system yet, you can easily edit the ==view.tmpl== (in the =templates= directory). In the HTML at the top, the body tag has the page background hardcoded to white ==bgcolor="#ffffff"==. You can change that color value to new variable. First, define a new preferences variable in the site-level [[%LOCALSITEPREFS%]], e.g. =* Set =PAGEBGCOLOR = #d0d0d0=, then edit the ==view.tmpl== template file and change ==bgcolor="#ffffff"== to ==bgcolor="%<nop>PAGEBGCOLOR%"==. If you want, you can set the page background color individually per web, simple add a =* Set =PAGEBGCOLOR = #d0d0d0= bullet to the WebPreferences to overload the site-level preferences. (Without font color control, you'll have to stick to light colors.)
 
----+++ Titles-Only Topic List - WebTopicList
+---+++ Titles-Only Topic List - !WebTopicList
 
-__A good first navigation tool for new users,__ a fast-loading linked list (page titles only) of a web's topics is a quick and easy way see what's available. By default, slower, but more powerful WebIndex is used. 
+WebTopicList is a __good first navigation tool for new users,__ a fast-loading linked list (page titles only) of a web's topics is a quick and easy way see what's available. By default, slower, but more powerful WebIndex is used. 
 
 Without explaining what WEBTOPICLIST is, just try it: 
 
@@ -179,6 +179,13 @@ You're no doubt familiar or better with HTML, JS, and "webmastering". Without ge
 
 %X% Depending on what you load up, you may change the overall cross-browser compatibility - however be careful that your site does not look beat up in various other browsers. The scripts you choose will determine compatibility.
 
+---
+---++ Customize The Left Navigation Bar
+
+Customize the contents of the WebLeftBar for each web to include important topics for that web, or to link to an important topic for the overall site. Each web has its own WebLeftBar page. (This is specific to the PatternSkin.) 
+
 ----
 
 __Related Topics:__ AdminDocumentationCategory
+
+-- __Contributors:__ TWiki:Main.GrantBow, TWiki:Main.LynnwoodBrown, TWiki:Main.MikeMannix, TWiki:Main.PeterMasiar, TWiki:Main.PeterThoeny, TWiki:Main.MattWilkie, TWiki:Main.AmandaSmith
