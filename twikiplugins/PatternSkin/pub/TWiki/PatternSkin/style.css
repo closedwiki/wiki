@@ -475,7 +475,11 @@ a:hover .twikiAccessKey {
 	font-size:100%;
 }
 #patternColumnWrapper {
-	border-width:1px 0;
+	border-width:0 0 1px 0;
+	border-style:solid;
+}
+#patternMain {
+	border-width:1px 0 0 1px;
 	border-style:solid;
 }
 .patternMainContents {
@@ -558,7 +562,7 @@ table.patternTopBarContents td {
 
 /* Left bar */
 #patternLeftBar {
-	border-width:0 1px 0 0;
+	border-width:1px 0 0 0;
 	border-style:solid;
 	overflow:hidden;
 }
@@ -586,17 +590,10 @@ table.patternTopBarContents td {
 }
 .patternLeftBarContents .patternFormHolder {
 	margin:1em 0;
-	width:100%;
-}
-.patternLeftBarContents .patternFormHolder table {
-	width:100%;
 }
 .patternLeftBarContents .patternFormHolder th {
 	padding:0 0 2px 0;
 	vertical-align:middle;
-}
-.patternLeftBarContents .patternFormHolder th.patternInputHolder {
-	width:100%;
 }
 .patternLeftBarContents .patternFormHolder th.patternFormSpacer {
 	width:1px;

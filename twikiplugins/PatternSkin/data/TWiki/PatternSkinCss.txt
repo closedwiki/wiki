@@ -121,7 +121,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 
 ---+++ View template
 
-<img src="%ATTACHURLPATH%/CSS_element_layout_view.pattern.tmpl.png" alt="CSS layout in View template" style="border:1px solid #ddd;" width="560" height="713"  />
+<img src="%ATTACHURLPATH%/CSS_element_layout_view.pattern.tmpl.png" alt="CSS layout in View template" style="border:1px solid #ddd;" width="586" height="746"  />
 
 __Related Topics:__ TWikiSkins, AdminDocumentationCategory
 
