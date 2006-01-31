@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131718988" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131718988" format="1.1" version="$Rev:$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -14,7 +14,7 @@ __%T% Tip:__ TWiki:TWiki.TWikiAccessControlSupplement on TWiki.org has additiona
 
 Open, freeform editing is the essence of WikiCulture - what makes TWiki different and often more effective than other collaboration tools. For that reason, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with great care - the more restrictions, the less Wiki in the mix. Experience shows that _unrestricted write access_ works very well because:
    * *Peer influence* is enough to ensure that only relevant content is posted.
-   * *Peer editing* - the ability for anyone to rearrange all content on a page - keeps topics focussed.
+   * *Peer editing* - the ability for anyone to rearrange all content on a page - keeps topics focused.
    * In TWiki, content is transparently preserved under *revision control*:
       * Edits can be undone by the %MAINWEB%.TWikiAdminGroup (the default administrators group; see [[#ManagingGroups]]).
       * Users are encouraged to edit and refactor (condense a long topic), since there's a safety net.
@@ -95,7 +95,7 @@ You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web.
 
 *Be careful* with empty values for any of these. In older versions of TWiki,
    * ==Set <nop>ALLOWWEBVIEW = <nop>==
-meant the same as not setting it at all. However since TWiki Dakar release, it means _allow no-one access_ i.e. prevent anyone from viewing the web. Similarly
+meant the same as not setting it at all. However since TWiki Dakar release, it means _allow noone access_ i.e. prevent anyone from viewing the web. Similarly
    * ==Set <nop>DENYWEBVIEW = <nop>==
 now means _do not deny anyone the right to view this web_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
 

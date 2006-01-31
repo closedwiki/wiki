@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev:$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Webs
 
-_Adding webs is a web-based operation; renaming and deleting webs are manual operations done directly on the server._
+_Adding, renaming and deleting webs are all now web-based operations; in previous versions this had to be done manually._
 
 ---++ Overview
 
@@ -23,7 +23,7 @@ In either case you will want to be sure to verify that your new web has all the 
 
 <form name="admin" action="%SCRIPTURLPATH{manage}%/%WEB%/%TOPIC%" method="post">
 Create a new web by filling out this form.%BR%
-__%X% Note:__ *Keep the mumber of webs to a minimum!* It is not recommended to create a new web for each little project. You can organize content within a web using categories, TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
+__%X% Note:__ *Keep the number of webs to a minimum!* It is not recommended to create a new web for each little project. You can organize content within a web using categories, TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
 |  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | The name must start with an upper case letter, followed by upper or lower case letters or numbers. Specify a short name to avoid long URLs. |
 |  *Based on web:* | <select name="baseweb"> %WEBLIST{ "<option $marker>$name</option>" webs="webtemplate,public" selection="_default" separator=" "}% </select> | Select a TemplateWeb |
 |  *Web color:* | <input name="webbgcolor" type="text" value="#D0D0D0" size="16" /> | Enter a StandardColors code for the web |
