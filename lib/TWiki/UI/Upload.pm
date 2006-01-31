@@ -161,6 +161,8 @@ sub upload {
     $fileComment =~ s/\s+/ /go;
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
+    $fileName =~ s/\s*$//o;
+    $filePath =~ s/\s*$//o;
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'attach files to' );

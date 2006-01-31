@@ -378,7 +378,7 @@ sub _suffixToMimeType {
     my( $session, $theFilename ) = @_;
 
     my $mimeType = 'text/plain';
-    if( $theFilename =~ /\.(.+)$/ ) {
+    if( $theFilename =~ /\.([^.]+)$/ ) {
         my $suffix = $1;
         my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/i }
           map{ $_.' ' }
