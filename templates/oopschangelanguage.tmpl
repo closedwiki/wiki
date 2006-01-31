@@ -15,7 +15,7 @@
 <center>
 <form action="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%" method="get">
   <select name="language">
-    %LANGUAGES{format="<option value='$langtag'>$langname</option>"}%
+    %LANGUAGES{format="<option $marker value='$langtag'>$langname</option>" selection="%LANGUAGE%"}%
   </select>
   <input type="hidden" name="template" value="oopslanguagechanged"/>
   <input type="submit" class="twikiSubmit" value=' %MAKETEXT{"Change language"}% ' />

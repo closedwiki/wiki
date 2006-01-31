@@ -3095,8 +3095,12 @@ sub _LANGUAGE {
 sub _LANGUAGES {
     my ( $this , $params ) = @_;
     my $format = $params->{format} || "   * \$langname";
-    my $sep = $params->{separator} || "\n";
-    $sep =~ s/\\n/\n/g;
+    my $separator = $params->{separator} || "\n";
+    $separator =~ s/\\n/\n/g;
+    my $selection = $params->{selection} || '';
+    $selection =~ s/\,/ /g;
+    $selection = " $selection ";
+    my $marker = $params->{marker} || 'selected="selected"';
 
     # $languages is a hash reference:
     my $languages = $this->{i18n}->enabled_languages();
@@ -3110,7 +3114,9 @@ sub _LANGUAGES {
          my $name = ${$languages}{$lang};
          $item =~ s/\$langname/$name/g;
          $item =~ s/\$langtag/$lang/g;
-         $result .= $sep if $i;
+         my $mark = ( $selection =~ / \Q$lang\E / ) ? $marker : '';
+         $item =~ s/\$marker/$mark/g;
+         $result .= $separator if $i;
          $result .= $item;
          $i++;
     }

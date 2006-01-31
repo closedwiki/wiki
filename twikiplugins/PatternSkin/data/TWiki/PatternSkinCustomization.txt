@@ -140,7 +140,7 @@ If you want to have the language selection more prominent, you can put a languag
 <div class="twikiRight" style="margin-right:2em;">
 <form id="topBarChangeLanguage" action="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%" method="get">
 <select name="language" onchange="document.getElementById('topBarChangeLanguage').submit()">
-%LANGUAGES{format="<option value='$langtag'>$langname</option>" }%
+%LANGUAGES{format="<option $marker value='$langtag'>$langname</option>" selection="%LANGUAGE%"}%
 </select>
 <input type="hidden" name="template" value="oopslanguagechanged" />
 <noscript>
@@ -152,12 +152,13 @@ If you want to have the language selection more prominent, you can put a languag
 
 This will render:
 
-<div style="padding:1em 0 1em 1em; border:1px solid #ddd;">
-<span class="patternTopBarLogo twikiLeft"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></span><!-- /patternTopBarLogo-->
+<div style="padding:10px 0 10px 10px; border:1px solid #ddd; height=64px;">
+<table class="patternTopBarContents" border="0" cellpadding="0" cellspacing="0"><tr><td>
+<span class="patternTopBarLogo twikiLeft"><a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%" /></a></span>
 <div class="twikiRight" style="margin-right:2em;">
 <form id="topBarChangeLanguage" action="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%" method="get">
 <select name="language" onchange="document.getElementById('topBarChangeLanguage').submit()">
-%LANGUAGES{format="<option value='$langtag'>$langname</option>" }%
+%LANGUAGES{format="<option $marker value='$langtag'>$langname</option>" marker="selected=\"selected\"" selection="%LANGUAGE%"}%
 </select>
 <input type="hidden" name="template" value="oopslanguagechanged" />
 <noscript>
@@ -165,7 +166,7 @@ This will render:
 </noscript>
 </form>
 </div>
-<br class="twikiClear" />
+</td></tr></table>
 </div>
 
 ---+++ I want to hide the top bar
