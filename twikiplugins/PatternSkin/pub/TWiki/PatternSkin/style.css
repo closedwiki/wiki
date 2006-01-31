@@ -564,11 +564,11 @@ table.patternTopBarContents td {
 #patternLeftBar {
 	border-width:1px 0 0 0;
 	border-style:solid;
-	overflow:hidden;
 }
 .patternLeftBarContents {
 	padding:0 0 1.5em 1em; /*S6*/
 	font-size:94%; /*S2*/
+	overflow:hidden;
 }
 .patternLeftBarContents a img {
 	margin:1px 0 0 0;
