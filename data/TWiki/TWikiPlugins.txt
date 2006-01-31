@@ -265,7 +265,7 @@ Each published Plugin has a Plugin development topic on TWiki.org. Plugin develo
 
 The Plugin interface (TWikiFuncDotPm functions and handlers) evolve over time. TWiki 4.0 introduced new API functions to address the needs of Plugin authors. It also deprecated some functions. Some Plugins written for earlier TWiki releases using unofficial TWiki internal functions no longer work on the TWiki 4.0 codebase. All this means that some Plugins need to be updated to work on the TWiki 4.0 codebase.
 
-Organizations typically do not upgrade to the latest TWiki for many month. However, many administrators still would like to install the latest versions of a Plugin on their older TWiki installation. This need is fullfilled if Plugins are maintained in a compatible manner. 
+Organizations typically do not upgrade to the latest TWiki for many months. However, many administrators still would like to install the latest versions of a Plugin on their older TWiki installation. This need is fullfilled if Plugins are maintained in a compatible manner. 
 
 __%T% Tip:__ Plugins can be written to be compatible with older and newer TWiki releases. This can be done also for Plugins using unofficial TWiki internal functions of an earlier release that no longer work on the latest TWiki codebase. TWiki:TWiki.TWikiPluginsSupplement#MaintainPlugins has more.
 
