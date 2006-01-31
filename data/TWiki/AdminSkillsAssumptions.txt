@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev:$"}%
 %META:TOPICPARENT{name="TWikiInstallationGuide"}%
 ---+ Administrator Skills Assumptions
 
@@ -15,6 +15,8 @@ Although the TWikiInstallationGuide is quite complete, there will on occasion be
 
 There are many excellent resources for learning how to administer your OS and web server, including books, web sites, web forums, IM and e-mail lists.   The TWiki:Support web must *not* be depended on as a resource for this purpose - in other words, it is not there to answer basic questions about operating system and web server administration.  Asking and answering questions is time consuming for all concerned and is best used for specific _TWiki related_ issues, rather than helping you learn the OS and web server.
 
-To get started with Linux, visit http://linuxbasics.org/. LinuxBasics.org offers Linux tutorials, a mailing-list and an IRC-channel to answer questions, and links to sites with information to install and use Linux. A nice tool for people migrating from Windows is http://www.MidnightCommander.org/. It is already installed on Linux systems: try ==mc -ac== and ==ESC 1== to get help.
+r.
+
+To get started with Linux, visit http://linuxbasics.org/. <nop>LinuxBasics.org offers Linux tutorials, a mailing-list and an IRC-channel to answer questions, and links to sites with information to install and use Linux. A nice tool for people migrating from Windows is http://www.MidnightCommander.org/. It is already installed on Linux systems: try ==mc -ac== and ==ESC 1== to get help.
 
 __Related Topics:__ AdminDocumentationCategory
