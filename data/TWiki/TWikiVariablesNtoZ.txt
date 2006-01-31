@@ -312,6 +312,7 @@ __Note:__ This topic is included by TWikiVariables
    * Example: =%<nop>TOPICLIST{"   * $web.$name"}%= creates a bullet list of all topics
    * Example: =%<nop>TOPICLIST{separator=", "}%= creates a comma separated list of all topics
    * Example: =%<nop>TOPICLIST{" &lt;option&gt;$name&lt;/option&gt;"}%= creates an option list (for drop down menus)
+   * Example: =&lt;select&gt;%<nop>TOPICLIST{" &lt;option $marker value='$name'&gt;$name&lt;/option&gt;" separator=" " marker="selected=\"selected\"" selection="%<nop>TOPIC%"}%&lt;/select&gt;= creates an option list with the current topic selected
    * Related: [[#VarSEARCH][SEARCH]], [[#VarWEBLIST][WEBLIST]]
 
 #VarTWIKIWEB
