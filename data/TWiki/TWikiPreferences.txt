@@ -13,6 +13,7 @@ Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (th
 _(Click for form-based editing of existing preferences.)_
 %TOC%
 
+#DefaultWebPreferences
 ---++ Default Web Preferences
 
 %X% *NOTE:* These are just defaults; don't change them here. Instead, add them to the !WebPreferences topic in each web

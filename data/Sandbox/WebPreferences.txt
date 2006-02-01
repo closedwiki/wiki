@@ -1,37 +1,42 @@
 %META:TOPICINFO{author="TWikiContributor" date="1127401408" format="1.1" version="$Rev$"}%
----++ <nop>%WEB% Web Preferences
+---+!! <nop>%WEB% Web Preferences
 
-The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
 
-__Preferences:__
+%TOC%
 
-These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#Default_Web_Preferences][a full list of defaults]].
+---++ Web Preferences Settings
 
-   * Set WEBBGCOLOR = #B9DAFF
-   * Set SITEMAPWHAT = Sandbox test area with all features enabled. 
-   * Set SITEMAPUSETO = ...experiment in an unrestricted hands-on web. 
-   * Set SITEMAPLIST = on
-   * Set WEBFORMS = TestForm1 TestForm2
-   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
-   * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST
+These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#DefaultWebPreferences][full list of defaults with explanation]].
 
-__Notes:__
-   * A preference is defined as: <br /> =6 spaces * Set NAME = value= <br /> Example:
-      * S<nop>et WEBBGCOLOR = #FFFFC0
-   * Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs. Example:
-      * When you write variable =%WEB<nop>BGCOLOR%= , it gets expanded to =%WEBBGCOLOR%= .
-   * The sequential order of the preference settings is significant. Define preferences that use other preferences first, i.e. set =<nop>WEBCOPYRIGHT= before =<nop>WIKIWEBMASTER= since =%<nop>WEBCOPYRIGHT%= uses the =%<nop>WIKIWEBMASTER%= variable.
-   * You can introduce new preferences variables and use them in your topics and templates. There is no need to change the <nop>%WIKITOOLNAME% engine (Perl scripts).
+   * Web Settings:
+      * Set WEBBGCOLOR = #B9DAFF
+      * Set SITEMAPWHAT = Sandbox test area with all features enabled. 
+      * Set SITEMAPUSETO = ...experiment in an unrestricted hands-on web. 
+      * Set SITEMAPLIST = on
 
-__Related Topics:__
-   * %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences.
-   * %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
-   * %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
-   * %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
+   * Default template for *new topics* for this web:
+      * WebTopicEditTemplate: Default template for new topics in this web. (Site-level is used if topic does not exist)
+      * [[%TWIKIWEB%.WebTopicEditTemplate]]: Site-level default topic template
 
-__Tools:__
-%INCLUDE{"TWiki.RenameWeb"}%
+   * Comma separated list of *forms* that can be attached to topics in this web. See %TWIKIWEB%.TWikiForms for more information.
+      * Set WEBFORMS = 
 
+   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
+      * #Set DENYWEBVIEW = 
+      * #Set ALLOWWEBVIEW = 
+      * #Set DENYWEBCHANGE = 
+      * #Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
+      * #Set DENYWEBRENAME = 
+      * #Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
 
+   * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
+      * #Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+
+   * Web preferences that are *not* allowed to be overridden by user or topic preferences:
+      * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
+
+%INCLUDE{"%TWIKIWEB%.WebPreferencesHelp"}%
 %META:FILEATTACHMENT{name="logo.gif" attr="" comment="" date="1126793019" path="logo.png" size="3362" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1125867877" path="favicon.ico" size="1750" user="TWikiContributor" version=""}%

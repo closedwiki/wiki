@@ -1,35 +1,44 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+---+!! <nop>%WEB% Web Preferences
 
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
 
----++ <nop>%WEB% Web Preferences
+%TOC%
 
-The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
+---++ Web Preferences Settings
 
-__Preferences:__
+These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#DefaultWebPreferences][full list of defaults with explanation]].
 
-These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#Default_Web_Preferences][a full list of defaults]].
+   * Web settings:
+      * Set WEBTOPICLIST = [[WelcomeGuest][Welcome]] %SEP% [[TWikiRegistration][Register]] %SEP% [[WebChanges][Changes]] %SEP% [[WebTopicList][Topics]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
+      * Set WEBBGCOLOR = #FFD8AA
+      * Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/%WEBPREFSTOPIC%/Dakar.gif
+      * Set SITEMAPLIST = on
+      * Set SITEMAPWHAT = [[%WEB%.WelcomeGuest][Welcome]], [[%WEB%.TWikiRegistration][Registration]], and other %WEB%.StartingPoints; TWiki history &amp; Wiki style; All the docs...
+      * Set SITEMAPUSETO = ...discover TWiki details, and how to start your own site.
 
-   * Set WEBTOPICLIST = [[WelcomeGuest][Welcome]] %SEP% [[TWikiRegistration][Register]] %SEP% [[WebChanges][Changes]] %SEP% [[WebTopicList][Topics]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
-   * Set WEBBGCOLOR = #FFD8AA
-   * Set WEBHEADERART = %PUBURLPATH%/%TWIKIWEB%/%WEBPREFSTOPIC%/Dakar.gif
-   * Set SITEMAPLIST = on
-   * Set SITEMAPWHAT = [[%WEB%.WelcomeGuest][Welcome]], [[%WEB%.TWikiRegistration][Registration]], and other %WEB%.StartingPoints; TWiki history &amp; Wiki style; All the docs...
-   * Set SITEMAPUSETO = ...discover TWiki details, and how to start your own site.
-   * Set WEBFORMS = TWikiPreferencesForm
+   * Default template for *new topics* for this web:
+      * WebTopicEditTemplate: Site-level default topic template
 
-   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
+   * Comma separated list of *forms* that can be attached to topics in this web. See %TWIKIWEB%.TWikiForms for more information.
+      * Set WEBFORMS = TWikiPreferencesForm
+
+   * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl).
       * #Set DENYWEBVIEW = 
       * #Set ALLOWWEBVIEW = 
       * #Set DENYWEBCHANGE = 
       * Set ALLOWWEBCHANGE = %MAINWEB%.TWikiAdminGroup
       * #Set DENYWEBRENAME = 
       * Set ALLOWWEBRENAME = %MAINWEB%.TWikiAdminGroup
+
+   * Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
       * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+
    * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
       * #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
-   * Web preferences that are *not* allowed to be overridden by user preferences:
+   * Web preferences that are *not* allowed to be overridden by user or topic preferences:
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME, ALLOWWEBMANAGE, DENYWEBMANAGE
 
 %INCLUDE{%TWIKIWEB%.WebPreferencesHelp}%

@@ -1,24 +1,25 @@
 %META:TOPICINFO{author="TWikiContributor" date="1092626473" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
----++ <nop>%WEB% Web Preferences
+---+!! <nop>%WEB% Web Preferences
 
-The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
 
+%TOC%
 
-__Preferences:__
+---++ Web Preferences Settings
 
-These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#Default_Web_Preferences][a full list of defaults]].
+These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPreferences#DefaultWebPreferences][full list of defaults with explanation]].
 
    * Set WEBBGCOLOR = #FF0099
    * Set SITEMAPWHAT = Place for trashed topics and attachments.
    * Set SITEMAPUSETO = ...get rid of unused stuff.
    * Set NOSEARCHALL = on
 
-   * Restricted to %MAINWEB%.TWikiAdminGroup so that deleted topics
-     can't be viewed by spies.
+   * Restricted to %MAINWEB%.TWikiAdminGroup so that deleted topics can't be viewed by spies.
       * Set ALLOWWEBVIEW = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+
    * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
 
 %INCLUDE{%TWIKIWEB%.WebPreferencesHelp}%
