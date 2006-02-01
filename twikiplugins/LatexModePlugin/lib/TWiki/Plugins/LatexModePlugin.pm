@@ -249,7 +249,7 @@ sub handleReferences
 ### my ( $math_string ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
     my $ref = $_[0];	
-    my ($backref,$txt); 
+    my ($backref,$txt) = ("",""); 
 
     if ($latexout) {
         $txt = '<latex>\ref{'.$ref.'}</latex>';
@@ -484,7 +484,7 @@ COLORS
         my $hash_code = md5_hex( $math_string . 
                                  join('; ', map{"$_=>$opts{$_}"} keys(%opts)) );
         $math_string = '\fbox{ ' . $math_string . 
-            '\vphantom{$\| j^I \|$} }' if ($opts{'inline'} eq 1);
+            '\vphantom{$\{ \}^\mathrm{th}$} }' if ($opts{'inline'} eq 1);
         #store the string in a hash table, indexed by the MD5 hash
         $hashed_math_strings{$hash_code} = $math_string;
         
@@ -714,7 +714,7 @@ sub postRenderingHandler
 	    
             my $outimg = "latex$key.$EXT";
 
-	    my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.eps  -antialias "; 
+	    my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.eps  -antialias -trim "; 
             $cmd .= "-shave ".round(2*$ptsz)."x".round(2*$ptsz)." " 
                 if ($markup_opts{$key}{'inline'} ne 0);
             $cmd .= "-gamma $opts{'gamma'} -transparent white  $outimg";
@@ -730,10 +730,10 @@ sub postRenderingHandler
                     system("$PATHTOCONVERT $outimg -trim $tmpfile");
                     my $img2 = image_info($tmpfile);
 
-                    my ($nw,$nh) = ( $img2->{width}, $img->{height} );
+                    my ($nw,$nh) = ( $img2->{width}+4, $img->{height} );
                     $nw = $1 if ($nw =~ m/(\d+)/); # untaint
                     $nh = $1 if ($nh =~ m/(\d+)/); # untaint
-                    my ($sh,$sh2) = ( ( $img->{width} - $img2->{width} )/2, 
+                    my ($sh,$sh2) = ( ( $img->{width} - $nw )/2 , 
                                       round(2*$ptsz) );
                     $sh = $1 if ($sh =~ m/(\d+)/); # untaint
                     $sh2 = $1 if ($sh2 =~ m/(\d+)/); # untaint
