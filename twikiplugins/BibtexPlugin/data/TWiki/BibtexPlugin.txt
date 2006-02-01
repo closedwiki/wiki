@@ -119,16 +119,26 @@ you get
 
 You type
 <verbatim>
-%CITE{SolomatovMoresi02}%
+%CITE{bai:jgr.1999}%
 </verbatim>
 you get
-%CITE{SolomatovMoresi02}%
+%CITE{bai:jgr.1999}%
+
+You type
+<verbatim>
+%BIBTEXREF{style="alpha" file="sample.bib"}%
+</verbatim>
+you get
+<table width=400 border=1><tr><td>
+%BIBTEXREF{style="alpha" file="sample.bib"}%
+</table>
+
 
 ---++ Syntax
 	* =%<nop>BIBTEX{&lt;attributes&gt;}%= - render a set of bibtex files attached to some topic 
 	* =%<nop>STARTBIBTEX{&lt;attributes&gt;}% ... %<nop>STOPBIBTEX%= - render an inline-bibtex database
 	* =%<nop>CITE{key}%= - generate an hyperlink to a bibtex entry 
-	* =%<nop>BIBTEXREF{key, topic}%= - generate a list of references based on the  declared =CITE= keys
+	* =%<nop>BIBTEXREF{style="..."}%= - generate a list of references based on the  declared =CITE= keys, formated according to .bst style.
 
 ---++ Attributes
 All attributes for %<nop>BIBTEX% and %<nop>STARTBIBTEX% are optional. The attributes =topic= and =bibfile=
@@ -163,14 +173,8 @@ tag on the same topic (see [[#Tips]]).
 
 ---++ Citations and Automated Reference Lists
 
-As of release v1.3, the %TOPIC% has functionality similar to the TWiki:BibliographyPlugin.  Specifically, if a topic has =%<nop>CITE{key}%= declarations through out, the use of =%<nop>BIBTEXREF{...}%= will generate a list of references based on the citations declared.  The citation keys should refer to entries in .bib files associated with the topic as described above, and the output of the reference list is dictated by <nop>BibTex.  Thus, the HTML output can use all of the flexibility of bibtex, including custom bibtex style templates and string macros.
+As of release v1.3, the %TOPIC% has functionality similar to the TWiki:BibliographyPlugin.  Specifically, if a topic has =%<nop>CITE{key}%= declarations through out, the use of =%<nop>BIBTEXREF{...}%= will generate a list of references based on the citations declared.  The citation keys must be entries in .bib files associated with the topic as described above---modification of keys in the bibrsc file may confuse the rendering, and the output of the reference list is dictated by <nop>BibTex.  Thus, the HTML output can use all of the flexibility of bibtex, including custom bibtex style templates and string macros.
 
----+++ Example
-
-<verbatim>
-%CITE{solo:more:jgr.2002}%
-%BIBTEXREF{style="IEEEbib"}%
-</verbatim>
 
 #QueryAnchor
 ---++ The Query Language
@@ -268,9 +272,9 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 	* Selecting entries of a given year
 		* select only entries that appeared in 1999 : <b><tt>select="year=1999"</tt></b>
 		* select references appearing after and/or before a given year, e.g. references after 1997: %BR%
-		 <b><tt>select="year>1997"</tt></b>
+		 <b><tt>select="year&gt;1997"</tt></b>
 		* references between 1990 and 1995: %BR%
-		 <b><tt>select="year>=1990 and year<=1995"</tt></b>
+		 <b><tt>select="year&gt;=1990 and year&lt;=1995"</tt></b>
 
 	* Selecting references of a given author
 		* select only entries whose (co)author is Donald Knuth: %BR%
@@ -380,3 +384,9 @@ __Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTo
 |  Perl Version: | >=5.6.1 |
 |  Plugin Home: | TWiki:Plugins/BibtexPlugin |
 |  Feedback: | TWiki:Plugins/BibtexPluginDev |
+
+%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1134157744" path="style.css" size="1221" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="render.sh" attr="" autoattached="1" comment="" date="1136505116" path="render.sh" size="1351" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="bibtoolrsc" attr="" autoattached="1" comment="" date="1136505651" path="bibtoolrsc" size="1905" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="sample.bib" attr="" autoattached="1" comment="" date="1066305348" path="sample.bib" size="1713" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="render.pl" attr="" autoattached="1" comment="" date="1136687640" path="render.pl" size="1677" user="UnknownUser" version=""}%

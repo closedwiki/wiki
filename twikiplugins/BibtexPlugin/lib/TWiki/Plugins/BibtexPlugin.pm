@@ -30,17 +30,21 @@ use vars qw(
         $debug $defaultTopic $defaultSearchTemplate $pubUrlPath $hostUrl $pubDir
 	$isInitialized $currentBibWeb $currentBibTopic 
 	$cmdTemplate $sandbox
-        %bibliography
+        %bibliography $script
+        $bibtexPrg $citeno
     );
+
+use File::Basename;
 
 use strict;
 $VERSION = '$Rev$';
-$RELEASE = '1.2';
+$RELEASE = '1.3';
 $pluginName = 'BibtexPlugin'; 
 $debug = 0; # toggle me
 
 my %bibliography = ();
 my $citefile = "";
+my $citeno = 1;
 
 ###############################################################################
 sub writeDebug {
@@ -57,6 +61,8 @@ sub initPlugin {
     TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
     return 0;
   }
+
+  $script = basename( $0 );
 
   $isInitialized = 0;
 
@@ -76,15 +82,15 @@ sub doInit {
 
   writeDebug("called doInit");
 
-  # get tools
-  my $bibtoolPrg = $TWiki::cfg{Plugins}{BibtexPlugin}{bibtool} ||
-    '/usr/bin/bibtool';
-  my $bib2bibPrg = $TWiki::cfg{Plugins}{BibtexPlugin}{bib2bib} ||
-    '/usr/bin/bib2bib';
-  my $bibtex2htmlPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex2html} ||
-    '/usr/bin/bibtex2html';
-  my $bibtexPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
-    '/usr/bin/bibtex';
+  # get tools (moved to render script)
+  # my $bibtoolPrg = $TWiki::cfg{Plugins}{BibtexPlugin}{bibtool} ||
+  #   '/usr/bin/bibtool';
+  # my $bib2bibPrg = $TWiki::cfg{Plugins}{BibtexPlugin}{bib2bib} ||
+  #   '/usr/bin/bib2bib';
+  # my $bibtex2htmlPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex2html} ||
+  #   '/usr/bin/bibtex2html';
+  # my $bibtexPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
+  #   '/usr/bin/bibtex';
 
 
   # for getRegularExpression
@@ -130,18 +136,7 @@ sub beforeCommonTagsHandler
     
     ######################################################
 
-    # mark cited entries:
-    my $i = 1;
-    $_ = $_[0];
-
-    while (m/%CITE{([^}]*)}%/mg)
-    {
-        if (not $bibliography{$1}{"cited"})
-        {
-            $bibliography{$1}{"cited"} = 1;
-            $bibliography{$1}{"order"} = $i++; # citation order
-        }
-    }
+    &doInit() if ($_[0]=~m/%BIBTEXREF{.*?}%/);
 
 }
 
@@ -161,6 +156,13 @@ sub commonTagsHandler {
 
 }
 
+sub endRenderingHandler
+{
+    # for backwards compatibility with Cairo
+    postRenderingHandler($_[0]);
+}
+	
+# =========================
 sub postRenderingHandler
 {
 
@@ -172,19 +174,45 @@ sub postRenderingHandler
             my $newno = $1;
             $_[0] =~ s!(<a href=\"\#$key\">)[^\<]*?(</a>)!$1$newno$2!g;
         } else {
-            $_[0] =~ s!<a href=\"\#$key\">[^\<]*?</a>!??!g;
+            $_[0] =~ s!<a href=\"\#$key\">[^\<]*?</a>!?? $key not found ??!g;
         }
     }
     unlink($citefile) unless ($debug);
 
 }
 
+######################################################################
+#
+# the next three functions are derived from the BibliographyPlugin 
+# by Antonio Terceiro, adapted to use bibtex data sources
+# 
+######################################################################
+sub handleCitation2
+{
+  my ($cit) = @_;
+  $bibliography{$cit}{"cited"} = 1;
+  $bibliography{$cit}{"order"} = $citeno++
+      unless defined( $bibliography{$cit}{"order"} );
+
+  # print STDERR "found CITE:$cit\n";
+  if ($script =~ m/genpdflatex/) {
+      return "<latex>\\cite{$cit}</latex>";
+  } else {
+      return "[" .
+          '<a href="#'.$cit.'">'.
+          $bibliography{$cit}{"order"}.
+          "</a>".
+          "]";
+  }
+
+}
+
+
 sub bibliographyOrderSort
 {
   return $bibliography{$a}{"order"} <=> $bibliography{$b}{"order"};
 }
 
-######################################################################
 sub handleBibtexBibliography
 {
     my ($args) = @_;
@@ -194,9 +222,11 @@ sub handleBibtexBibliography
     my $header = "---+ References";
 
     my $style = $opts{'style'} || 'plain';
-    my $files = $opts{'files'} || '';
+    my $files = $opts{'file'} || '.*\.bib';
 
-    my $text = $header."\n";
+    my $text = "";
+
+    my @cites = sort bibliographyOrderSort (keys %bibliography);
 
 #     $text .= "<ol> \n";
 #     foreach $key (sort bibliographyOrderSort (keys %bibliography))
@@ -210,27 +240,74 @@ sub handleBibtexBibliography
 #     }
 #     $text .= "</ol> \n";
 
-    $citefile = getTempFileName("bibtex-citefile");
-    open(F,">$citefile");
-    foreach my $key (sort bibliographyOrderSort (keys %bibliography))
-    {
-        # $text .= "$key ".$bibliography{$key}{"order"}." <br>";
-        print F "$key\n";
-    }
-    close F;
+    if ($script =~ m/genpdflatex/) {
+        my $bibtexPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
+            '/usr/bin/bibtex';
 
-    $text .= '%BIBTEX{select="';
-    $text .= join(' or ', 
-                  map { "\$key : '$_'" } 
-                  (sort bibliographyOrderSort (keys %bibliography)) );
-    $text .= '"';
-    $text .= " style=\"$style\"";
-    # $text .= " files=\"$files\"";
-    $text .= '}%';
- 
+        my $errMsg = &doInit();
+        return $errMsg if $errMsg;
+
+        $currentBibWeb = $web unless ($currentBibWeb);
+        $currentBibTopic = $topic unless ($currentBibTopic);
+
+        my @bibfiles = &getBibfiles($currentBibWeb, $currentBibTopic, $files);
+
+        my $auxfile = getTempFileName("bib").'.aux';
+        open(T,">$auxfile");
+        print T "\\relax\n\\bibstyle{$style}\n";
+        print T map {"\\citation{$_}\n"} @cites;
+        print T "\\bibdata{".join(',',@bibfiles)."}\n";
+        close(T);
+
+        # print STDERR ``;
+        my ($result, $code);
+        ($result, $code) = $sandbox->sysCommand( "$bibtexPrg %BIBFILE|F%",
+                                                 BIBFILE => $auxfile ),
+        &writeDebug("result code $code");
+
+        $auxfile =~ s/\.aux$/.bbl/;
+        if (-f $auxfile) {
+            $text .= "<latex>\n";
+            open(F,"$auxfile");
+            while (<F>) {
+                $text .= $_;
+            }
+            close(F);
+            $text .= "</latex>\n";
+        } else {
+            $text .= "<pre>error in bibtex generation\n$auxfile\n$result</pre>";
+        }
+
+        $auxfile =~ s/\.bbl$//;
+        foreach my $c ('.aux','.bbl','.blg') {
+            unlink($auxfile.$c) unless ($debug);
+        }
+
+    } else {
+
+        $text .= $header."\n";
+        
+        $citefile = getTempFileName("bibtex-citefile");
+        open(F,">$citefile");
+        foreach my $key (@cites)
+        {
+            # $text .= "$key ".$bibliography{$key}{"order"}." <br>";
+            print F "$key\n";
+        }
+        close F;
+
+        $text .= '%BIBTEX{select="';
+        $text .= join(' or ', map { "\$key : '$_'" } @cites );
+        $text .= '"';
+        $text .= " style=\"$style\"";
+        $text .= " file=\"$files\"" if ($files);
+        $text .= " citefile=\"on\"";
+        $text .= '}%';
+    }
     return($text);
 
 }
+###############################################################################
 
 ###############################################################################
 sub handleBibtex {
@@ -258,10 +335,11 @@ sub handleBibtex {
     &TWiki::Func::extractNameValuePair($theAttributes, "keyword");
   my $theTotal = &TWiki::Func::extractNameValuePair($theAttributes, "total");
   my $theDisplay = &TWiki::Func::extractNameValuePair($theAttributes, "display");
-  
+  my $usecites = &TWiki::Func::extractNameValuePair($theAttributes, "citefile");
+ 
   return &bibSearch($theTopic, $theBibfile, $theSelect, $theStyle, $theSort, 
 	 $theReverse, $theMixed, $theErrors, $theForm, $theAbstracts, $theKeywords, 
-	 $theTotal, $theDisplay);
+	 $theTotal, $theDisplay,$usecites);
 }
 
 ###############################################################################
@@ -292,25 +370,7 @@ sub handleInlineBibtex {
 
   return &bibSearch("", "", $theSelect, $theStyle, $theSort, 
 	 $theReverse, $theMixed, $theErrors, $theForm, $theAbstracts, $theKeywords, 
-	 $theTotal, $theDisplay, $theBibtext);
-}
-
-###############################################################################
-sub handleCitation2
-{
-  my ($cit) = @_; # , %bibliography) = @_;
-  if (exists $bibliography{$cit})
-  {
-    return "[" .
-        '<a href="#'.$cit.'">'.
-        $bibliography{$cit}{"order"}.
-        "</a>".
-        "]";
-  }
-  else
-  {
-    return "[??]";
-  }
+	 $theTotal, $theDisplay, "", $theBibtext);
 }
 
 
@@ -342,7 +402,7 @@ sub handleCitation {
 sub bibSearch {
   my ($theTopic, $theBibfile, $theSelect, $theStyle, $theSort, 
       $theReverse, $theMixed, $theErrors, $theForm, $theAbstracts, 
-      $theKeywords, $theTotal, $theDisplay, $theBibtext) = @_;
+      $theKeywords, $theTotal, $theDisplay, $usecites, $theBibtext) = @_;
 
   my $errMsg = &doInit();
   return $errMsg if $errMsg;
@@ -365,6 +425,7 @@ sub bibSearch {
   $theTotal = 'off' unless $theTotal;
   $theForm = 'off' unless $theForm;
   $theDisplay = 'on' unless $theDisplay;
+  $usecites = 'off' unless $usecites;
   $theBibfile = '.*\.bib' unless $theBibfile;
 
   # replace single quote with double quote in theSelect
@@ -383,6 +444,7 @@ sub bibSearch {
   &writeDebug("theTotal=$theTotal");
   &writeDebug("theDisplay=$theDisplay");
   &writeDebug("theBibfile=$theBibfile");
+  &writeDebug("usecites=$usecites");
 
 
   # extract webName and topicName
@@ -410,9 +472,10 @@ sub bibSearch {
 
 
   # get bibtex database
-  my @bibfiles;
+  my @bibfiles = ();
   if (!$theBibtext) {
     @bibfiles = &getBibfiles($webName, $topicName, $theBibfile);
+    &writeDebug("@bibfiles = getBibfiles($webName, $topicName, $theBibfile);");
     if (!@bibfiles) {
       &writeDebug("no bibfiles found at $webName.$topicName");
       &writeDebug("... trying inlined $webName.$topicName now");
@@ -491,7 +554,8 @@ sub bibSearch {
 	'-noheader -nofooter ' .
 	'-q ';
         # . '-note annote '
-      $bibtex2HtmlArgs .= "-citefile $citefile " if (-f $citefile);
+      $bibtex2HtmlArgs .= "-citefile $citefile " 
+         if ( (-f $citefile) and ($usecites eq 'on') );
 
       if ($theStyle ne 'bibtool') {
          $bibtex2HtmlArgs .= "-s $theStyle -a ";
@@ -511,14 +575,17 @@ sub bibSearch {
 
       # do it
       &writeDebug("reading from process $cmdTemplate");
-      ($result, $code) = $sandbox->sysCommand($cmdTemplate,
+      my %h = (
 	MODE => 'html',
 	BIBTOOLRSC => $pubDir . "/TWiki/BibtexPlugin/bibtoolrsc",
 	BIBFILES => \@bibfiles,
 	SELECT => $theSelect? "-c '$theSelect'" : '',
 	BIBTEX2HTMLARGS => "$bibtex2HtmlArgs",
-	STDERR => $stdErrFile,
-      );
+	STDERR => $stdErrFile );
+      &writeDebug(join("\n\t", map {"$_ => $h{$_}"} keys %h));
+
+      ($result, $code) = $sandbox->sysCommand($cmdTemplate, %h);
+
       &writeDebug("result code $code");
       &processBibResult(\$result, $webName, $topicName);
       $result = '<div class="bibtex">' . $result . '</div>'
