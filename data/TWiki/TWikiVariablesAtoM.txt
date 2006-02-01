@@ -88,10 +88,11 @@ __Note:__ This topic is included by TWikiVariables
 #VarENDSECTION
 ---+++ ENDSECTION{"name"} -- marks the end of a named section within a topic
    * Syntax: =%<nop>ENDSECTION{"name"}%=
+   * Syntax: =%<nop>ENDSECTION{type="include"}%=
    * Supported parameter:
      | *Parameter:* | *Description:* |
      | ="name"= | Name of the section. |
-     | =type="type" | Type of the section being terminated. |
+     | =type="..."= | Type of the section being terminated; supported types ="section"=, ="include"=, ="templateonly"=. |
    * If the =STARTSECTION= is named, the corresponding =ENDSECTION= must also be named with the same name. If the =STARTSECTION= specifies a type, then the corresponding =ENDSECTION= must also specify the same type. If the section is unnamed, =ENDSECTION= will match with the nearest unnamed =%<nop>STARTSECTION%= *of the same type* above it. 
    * Related: [[#VarSTARTSECTION][STARTSECTION]]
 
@@ -157,7 +158,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ HTTP -- get HTTP headers
    * Called with the name of an HTTP header field, returns its value. Capitalization and the use of hyphens versus underscores are not significant.
    * Syntax: =%<nop>HTTP%=
-   * Syntax: =%<nop>HTTP{'Header-name'}%=
+   * Syntax: =%<nop>HTTP{"Header-name"}%=
    * Examples:
      | =%<nop>HTTP%= | %HTTP% |
      | =%<nop>HTTP{"Accept-language"}%= | %HTTP{"Accept-language"}% |
@@ -169,7 +170,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ HTTPS -- get HTTPS headers
    * The same as =%<nop>HTTP%= but operates on the HTTPS environment variables present when the SSL protocol is in effect. Can be used to determine whether SSL is turned on.
    * Syntax: =%<nop>HTTPS%=
-   * Syntax: =%<nop>HTTPS{'Header-name'}%=
+   * Syntax: =%<nop>HTTPS{"Header-name"}%=
    * Related: [[#VarHTTP][HTTP]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
 
 #VarHTTPHOST
