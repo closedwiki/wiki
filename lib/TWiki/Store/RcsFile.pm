@@ -108,6 +108,7 @@ sub _mkPathTo {
 
     my $file = shift;
 
+    $file = TWiki::Sandbox::untaintUnchecked( $file ); 
     my $path = File::Basename::dirname($file);
     eval {
         File::Path::mkpath($path, 0, $TWiki::cfg{RCS}{dirPermission});
