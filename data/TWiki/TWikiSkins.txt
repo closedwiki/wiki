@@ -13,6 +13,8 @@ TWiki ships with a default set of template files that give a basic look-and-feel
 
 Topic text is not affected by the choice of skin, though a skin can be defined to use a CSS (Cascading Style Sheet), which can sometimes give a radically different appearance to the text.
 
+__%T% Tip:__ TWiki:TWiki.TWikiSkinsSupplement on TWiki.org has supplemental documentation on TWiki Skins.
+
 ---++ Changing the default TWiki skin
 
 TWiki default ships with the skin PatternSkin activated. If you want to modify the layout, colors or even the templates to suit your own needs, have a look first at the topics PatternSkinCustomization and PatternSkinCssCookbook.
@@ -203,4 +205,6 @@ The =text= skin is reserved for TWiki internal use.
 
 Skin names starting with =rss= also have a special meaning; if one or more of the skins in the skin path starts with 'rss' then 8-bit characters will be encoded as XML entities in the output, and the =content-type= header will be forced to =text/xml=.
 
-__Related Topics:__ AdminDocumentationCategory, DeveloperDocumentationCategory
+__Related Topics:__ TWikiSkinBrowser, AdminDocumentationCategory, DeveloperDocumentationCategory, TWiki:TWiki.TWikiSkinsSupplement
+
+-- __Contributors:__ TWiki:Main.PeterThoeny, TWiki:Main.MikeMannix, TWiki:Main.CrawfordCurrie
