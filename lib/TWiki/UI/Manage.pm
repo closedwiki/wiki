@@ -166,8 +166,18 @@ sub _createWeb {
     my $noSearchAll = $query->param( 'nosearchall' ) || '';
 
     # check permission, user authorized to create webs?
-    TWiki::UI::checkAccess( $session, $webName, $topicName,
-                            'MANAGE', $session->{user} );
+#    TWiki::UI::checkAccess( $session, $webName, $topicName,
+#                            'MANAGE', $session->{user} );
+    #hack due to late realisation of hacking possibility
+    unless($session->{user}->isAdmin()) { 
+        throw TWiki::OopsException( 'accessdenied',
+                                    def => 'topic_access',
+                                    web => $webName,
+                                    topic => $topicName,
+                                    params =>
+                                    [ 'MANAGE',
+                                      $session->{i18n}->maketext('access not allowed on web')]);
+    }
 
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {

@@ -121,6 +121,7 @@ _(Click for form-based editing of existing preferences.)_
       * #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.</div>
 
    * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
+   * *This has been disabled for the TWiki-4.0.0 release due to a potential security hole - you must be in the TWikiAdminGroup to create a web*
       * Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
 ---+++ Search Settings
