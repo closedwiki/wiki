@@ -5,12 +5,6 @@ Below is a list of users with accounts. If you want to edit topics or see protec
 
 If you forget your password, %TWIKIWEB%.ResetPassword will get a new one sent to you.
 
-Note that there are four default system users:
-   * !TWikiContributor is a placeholder for a TWiki developer, and is used in TWiki documentation
-   * !TWikiGuest is a guest user. This is used as a fallback if the user can't be identified.
-   * !TWikiRegistrationAgent is a special user used during the new user registration process.
-   * !UnknownUser is used where the author of a previously stored piece of data can't be determined.
-
 %INCLUDE{"UserListHeader"}%
 
 ----
@@ -48,9 +42,12 @@ Note that there are four default system users:
    * Y - <a name="Y">- - - -</a>
    * Z - <a name="Z">- - - -</a>
 
+__%X% Note:__ There are four default system users:
+   * *TWikiContributor* - placeholder for a TWiki developer, and is used in TWiki documentation
+   * *TWikiGuest* - guest user, used as a fallback if the user can't be identified
+   * *TWikiRegistrationAgent* - special user used during the new user registration process
+   * *UnknownUser* - used where the author of a previously stored piece of data can't be determined
 
-
-
-<!--
+__Access Control:__
    * Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
--->
+
