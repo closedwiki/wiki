@@ -119,180 +119,181 @@ sub genfile() {
         TWiki::initialize( $thePathInfo, $theRemoteUser,
                            $theTopic, $theUrl, $query );
 
-my $action = $query->param('output') || "";
+    my $action = $query->param('output') || "";
 
-$debug = 0;
- 
-if ( $action eq 'latex' ) {
+    $debug = 0;
 
-    my $tex = _genlatex( $webName, $topic, $userName, $query );
+    if ( $action eq 'latex' ) {
 
-    if (length($tex) > 0) {
-        print $query->header( -TYPE => "text/html",
-                              -attachment=>"$topic.tex" );
-        print $tex;
-    } else {
-        print $query->header( -TYPE => "text/html" );
-        
-        print "GenPDFLatex error:  No latex file generated.";
-    }
+        my $tex = _genlatex( $webName, $topic, $userName, $query );
 
-} elsif ($action eq 'pdf') {
-
-    my $tex = _genlatex( $webName, $topic, $userName, $query );
-
-    # create a temporary working directory
-    my $WDIR = File::Temp::tempdir();
-    `chmod a+rwx $WDIR` if ($debug);
-
-    my $latexfile = $WDIR.'/lmp_content.tex';
-
-    open(F,">$latexfile");
-    print F $tex;
-    close(F);
-
-    my ($base,$path,$extension) = fileparse($latexfile,'\.tex');
-    my $texrel  = "$base$extension";   #relative name of the tex file
-    my $logfile = "$path$base.log";
-    my $pdffile = "$path$base.pdf";
-
-    # change to working directory for latex processing
-    use Cwd;
-    my $SDIR = getcwd();
-    $SDIR = $1 if ( ($SDIR) and ($SDIR =~ m/^(.*)$/) );
-
-    chdir($path);
-    my $flag = 0;
-    my $ret = "";
-    do {
-        $ret = `$pdflatex -interaction=nonstopmode $texrel`;
-        $flag++ unless ($ret =~ m/Warning.*?Rerun/i);
-    } while ($flag < 2);
-
-    my @errors = grep /^!/, $ret;
-    if(@errors){
-        print $query->header( -TYPE => "text/html" );
-        print "<html><body>";
-        print "pdflatex reported " . scalar(@errors) . " errors while creating PDF:";
-        
-        print map {"<br>$_ "} @errors;
-
-        print "</html></body>";
-
-    } elsif (-f $pdffile) {
-
-        print $query->header( -TYPE => "application/pdf",
-                              -attachment=>"$topic.pdf" );
-
-        open(F,"$pdffile");
-        while (<F>) {
-            print;
+        if (length($tex) > 0) {
+            print $query->header( -TYPE => "text/html",
+                                  -attachment=>"$topic.tex" );
+            print $tex;
+        } else {
+            print $query->header( -TYPE => "text/html" );
+            
+            print "GenPDFLatex error:  No latex file generated.";
         }
+
+    } elsif ($action eq 'pdf') {
+
+        my $tex = _genlatex( $webName, $topic, $userName, $query );
+
+        # create a temporary working directory
+        my $WDIR = File::Temp::tempdir();
+        `chmod a+rwx $WDIR` if ($debug);
+
+        my $latexfile = $WDIR.'/lmp_content.tex';
+
+        open(F,">$latexfile");
+        print F $tex;
         close(F);
-    }
 
-    do {
-        # clean up the working directory
-        opendir(D,$WDIR) || print STDERR "genpdflatex: Can't open $WDIR: $!\n";
-        foreach my $t ( grep(/$base/, readdir(D)) ) {
-            $t =~ m/^(.*?)$/;
-            $t = $1;            # untaint it
-            unlink("$t") || print STDERR "genpdflatex: Can't remove $t: $!\n";
+        my ($base,$path,$extension) = fileparse($latexfile,'\.tex');
+        my $texrel  = "$base$extension";   #relative name of the tex file
+        my $logfile = "$path$base.log";
+        my $pdffile = "$path$base.pdf";
+
+        # change to working directory for latex processing
+        use Cwd;
+        my $SDIR = getcwd();
+        $SDIR = $1 if ( ($SDIR) and ($SDIR =~ m/^(.*)$/) );
+
+        chdir($path);
+        my $flag = 0;
+        my $ret = "";
+        do {
+            $ret = `$pdflatex -interaction=nonstopmode $texrel`;
+            $flag++ unless ($ret =~ m/Warning.*?Rerun/i);
+        } while ($flag < 2);
+
+        my @errors = grep /^!/, $ret;
+        if(@errors){
+            print $query->header( -TYPE => "text/html" );
+            print "<html><body>";
+            print "pdflatex reported " . scalar(@errors) . " errors while creating PDF:";
+            
+            print map {"<br>$_ "} @errors;
+
+            print "</html></body>";
+
+        } elsif (-f $pdffile) {
+
+            print $query->header( -TYPE => "application/pdf",
+                                  -attachment=>"$topic.pdf" );
+
+            open(F,"$pdffile");
+            while (<F>) {
+                print;
+            }
+            close(F);
         }
-        close(D);
 
-        chdir($SDIR) if ($SDIR ne "");
-        rmdir($WDIR) || print STDERR "genpdflatex: Can't remove $WDIR: $!\n";
-        $WDIR = undef;
-    } unless ($debug);
-    
-} else {
+        do {
+            # clean up the working directory
+            opendir(D,$WDIR) || print STDERR "genpdflatex: Can't open $WDIR: $!\n";
+            foreach my $t ( grep(/$base/, readdir(D)) ) {
+                $t =~ m/^(.*?)$/;
+                $t = $1;            # untaint it
+                unlink("$t") || print STDERR "genpdflatex: Can't remove $t: $!\n";
+            }
+            close(D);
 
-    my $optpg = &TWiki::Func::getPreferencesValue( "GENPDFLATEX_OPTIONSPAGE" );
-
-    my $text = "";
-    if ( $optpg ne "" ) {
-        # if an options page is defined
+            chdir($SDIR) if ($SDIR ne "");
+            rmdir($WDIR) || print STDERR "genpdflatex: Can't remove $WDIR: $!\n";
+            $WDIR = undef;
+        } unless ($debug);
         
-        my ($optWeb,$optTopic) = ($1,$2) if $optpg =~ /(.*)[\.\/](.*)/ ;
-        # print STDERR "$optWeb . $optTopic \n";
-        if ($optTopic eq "") { 
-            $optTopic = $optWeb;
-            $optWeb = $webName;
+    } else {
+
+        my $optpg = &TWiki::Func::getPreferencesValue( "GENPDFLATEX_OPTIONSPAGE" ) || "";
+
+        my $text = "";
+        if ( $optpg ne "" ) {
+            # if an options page is defined
+            
+            my ($optWeb,$optTopic) = ($1,$2) if $optpg =~ /(.*)[\.\/](.*)/ ;
+            # print STDERR "$optWeb . $optTopic \n";
+            if ($optTopic eq "") { 
+                $optTopic = $optWeb;
+                $optWeb = $webName;
+            }
+            $optWeb = $webName if ($optWeb eq "");
+            
+            if (TWiki::UI::webExists( $optWeb, $optTopic ) ) {
+                
+                my $skin = "plain"; # $query->param( "skin" );
+                my $tmpl = &TWiki::Store::readTemplate( "view", $skin );
+                
+                $text = TWiki::Func::readTopicText($optWeb, $optTopic, undef );
+                
+                $tmpl =~ s/%TEXT%/$text/;
+                $tmpl =~ s/%META:\w+{.*?}%//gs;
+                
+                $tmpl .= "<p>(edit the $optpg topic to modify this form.)";
+                
+                $text = TWiki::Func::expandCommonVariables($tmpl, $optTopic, $optWeb);
+                $text = TWiki::Func::renderText($text);
+                
+                $text =~ s/%.*?%//g;    # clean up any spurious TWiki tags
+            }
+        } 
+
+        # if (0) {
+        #     ### I was hoping to render the form inside the default template,
+        #     ### but it didn't look as nice as I'd hoped...
+        #
+        #     my ($optWeb,$optTopic) = ($1,$2) if $optpg =~ /(.*)[\.\/](.*)/ ;
+        #     print STDERR "$optWeb . $optTopic \n";
+        #     if ($optTopic eq "") { 
+        #         $optTopic = $optWeb;
+        #         $optWeb = $webName;
+        #     }
+        #     $optWeb = $webName if ($optWeb eq "");
+        # 
+        #     my $stdout = tie *STDOUT, 'Redirect';
+        #     
+        #     # TWiki::Func::redirectCgiQuery( $query, $optpg );
+        #     TWiki::UI::View::view( $optWeb, $optTopic, $userName, $query );
+        # 
+        #     my $text = join('',@{ $stdout });
+        # 
+        #     $stdout = undef;
+        #     untie(*STDOUT);
+        # }
+
+        if (length($text) == 0) {
+            # if optpg is undefined, or points to a non-existent topic, then
+            # use the default form defined below.
+            while (<DATA>) {
+                $text .= $_;
+            }
         }
-        $optWeb = $webName if ($optWeb eq "");
 
-        if (TWiki::UI::webExists( $optWeb, $optTopic ) ) {
+        $text =~ s/\$scriptUrlPath/$scriptUrlPath/g;
+        $text =~ s/\$topic/$topic/g;
+        $text =~ s/\$web/$webName/g;
 
-            my $skin = "plain"; # $query->param( "skin" );
-            my $tmpl = &TWiki::Store::readTemplate( "view", $skin );
+        $text =~ s!<title>.*?</title>!<title>TWiki genpdflatex: $webName/$topic</title>!;
+
+        foreach my $c ($query->param()) {
+            my $o = $query->param($c);
+            $text =~ s/\$$c/$o/g;
             
-            $text = TWiki::Func::readTopicText($optWeb, $optTopic, undef );
-            
-            $tmpl =~ s/%TEXT%/$text/;
-            $tmpl =~ s/%META:\w+{.*?}%//gs;
-            
-            $tmpl .= "<p>(edit the $optpg topic to modify this form.)";
-            
-            $text = TWiki::Func::expandCommonVariables($tmpl, $optTopic, $optWeb);
-            $text = TWiki::Func::renderText($text);
-            
-            $text =~ s/%.*?%//g;    # clean up any spurious TWiki tags
+            $text .= "<br>$c = ".$query->param($c) if ($debug);
         }
-    } 
 
-    # if (0) {
-    #     ### I was hoping to render the form inside the default template,
-    #     ### but it didn't look as nice as I'd hoped...
-    #
-    #     my ($optWeb,$optTopic) = ($1,$2) if $optpg =~ /(.*)[\.\/](.*)/ ;
-    #     print STDERR "$optWeb . $optTopic \n";
-    #     if ($optTopic eq "") { 
-    #         $optTopic = $optWeb;
-    #         $optWeb = $webName;
-    #     }
-    #     $optWeb = $webName if ($optWeb eq "");
-    # 
-    #     my $stdout = tie *STDOUT, 'Redirect';
-    #     
-    #     # TWiki::Func::redirectCgiQuery( $query, $optpg );
-    #     TWiki::UI::View::view( $optWeb, $optTopic, $userName, $query );
-    # 
-    #     my $text = join('',@{ $stdout });
-    # 
-    #     $stdout = undef;
-    #     untie(*STDOUT);
-    # }
+        # elliminate style lines and packages if the options are not declared. 
+        $text =~ s/\n.*?\$style.*?\n/\n/g;
+        $text =~ s/\$packages//g;
 
-    if (length($text) == 0) {
-        # if optpg is undefined, or points to a non-existent topic, then
-        # use the default form defined below.
-        while (<DATA>) {
-            $text .= $_;
-        }
+        print $query->header;
+        print $text;
+        
     }
-
-    $text =~ s/\$scriptUrlPath/$scriptUrlPath/g;
-    $text =~ s/\$topic/$topic/g;
-    $text =~ s/\$web/$webName/g;
-
-    $text =~ s!<title>.*?</title>!<title>TWiki genpdflatex: $webName/$topic</title>!;
-
-    foreach my $c ($query->param()) {
-        my $o = $query->param($c);
-        $text =~ s/\$$c/$o/g;
-
-        $text .= "<br>$c = ".$query->param($c) if ($debug);
-    }
-
-    $text =~ s/\n.*?\$style.*?\n/\n/g; # elliminate style lines if the
-                                   # option is not declared. 
-
-    print $query->header;
-    print $text;
-
-}
-
+    
 }
 
 sub _list_possible_classes {
@@ -386,17 +387,32 @@ sub _genlatex {
 
     # add <p> tags to all paragraph breaks
     # while ($text =~ s!\n\n!\n<p />\n!gs) {}
-    ## strip out all <p> tags from within <latex></latex>
-    # while ($text =~ s!(<latex>.*?)\n?<p\s?\/?>(.*?</latex>)!$1$2!igs) {}
 
-    # print STDERR '-'x70;
-    # print STDERR "\n";
+    ## strip out all <p> tags from within <latex></latex>
     my $t2 = $text;
-    while ($text =~ m!<latex>(.*?)</latex>!gs) {
-        my $t = $1;
-        (my $u = $t) =~ s!\n?<p\s?\/?>!!gs;
-        # print STDERR $t."\n".$u."\nxxxxxx\n";
-        $t2 =~ s/\Q$t\E/$u/s;
+    # while ($text =~ m!<latex>(.*?)</latex>!gs) {
+    #     my $t = $1;
+    #     (my $u = $t) =~ s!\n?<p\s?\/?>!!gs;
+    #     # print STDERR $t."\n".$u."\nxxxxxx\n";
+    #     $t2 =~ s/\Q$t\E/$u/s;
+    # }
+    {                           # catch all nested <latex> tags!
+        my $c = 0;
+        my $txt = '';
+        while ($text =~ m!\G(.*?<(/?)latex>)!gs) {
+            if ($2 eq '/') {
+                $c = $c - 1;
+                $txt .= $1;
+                if ($c == 0) {
+                    (my $n = $txt) =~ s!\n?<p\s?\/?>|\n\n!!gs;
+                    $t2 =~ s/\Q$txt\E/$n/;
+                    $txt = '';
+                }
+            } else { 
+                $txt .= $1 if ($c > 0);
+                $c = $c + 1;
+            }
+        }
     }
 
     $text = "<html><body>".$t2."</body></html>";
