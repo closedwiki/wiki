@@ -249,6 +249,14 @@ __Note:__ This topic is included by TWikiVariables
    * Syntax: =%<nop>INCLUDINGWEB%=
    * Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
+#VarLANGUAGE
+---+++ LANGUAGE -- current user's language
+   * Returns the language code for the language used as the current user. This is the language actually used by TWiki Internationalization (e.g. in user interface).
+   * The language is detected from the user's browser, unless some site/web/user/session-defined setting overrides it:
+      * If the =LANGUAGE= preference is set, it's used as user's language instead of any language detected from the browser.
+      * Avoid defining =LANGUAGE= at a non per-user way, so each user can choose his/her preferred language.
+   * Related: [[#VarLANGUAGES][LANGUAGES]]
+
 #VarLANGUAGES
 ---+++ LANGUAGES -- list available TWiki languages
    * List the languages available (as =PO= files) to TWiki.
