@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
+<!-- version="$Rev$" -->
 <head>
   <title>TWiki Installation Guide</title>
 
@@ -174,11 +175,12 @@ These are the steps for enabling "Template Login" which asks for a username and 
 </li>
 </ol>
 </li>
-
+<li> Create an empty file called <code>.htpasswd</code> in the <code>data</code> directory.
+</li>
 <li> Register yourself using the <code>TWiki.TWikiRegistration</code> topic.
      <br /> <img src="pub/TWiki/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" /> Check that the password manager recognizes the new user. Check that a new line with the username and encrypted password is added to the <code>data/.htpasswd</code> file. If not, you probably got a path wrong, or the permissions may not allow the webserver user to write to that file.
 </li>
-<li> Create a new topic to check if authentication works.
+<li> Edit a topic (by clicking on the <code>Edit</code> link at beginning or end of topic) to check if authentication works.
 </li>
 <li> Edit the <code>Main/TWikiAdminGroup</code> topic to include users with system administrator status. Additional instructions are provided in that topic.
      <br /> <img src="pub/TWiki/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" /> This is a very important step, as users in this group can access all topics, independent of TWiki access controls.
@@ -197,9 +199,9 @@ for further information about managing users and security of your TWiki site.
 <p />
 Preferences for customizing many aspects of TWiki are set simply by editing a special topic with TWiki.
 <ul>
-<li> Edit <code>TWIKI.TWikiPreferences</code>. Read through it and set any additional settings you think you might need. (You can click the 'Edit' button near the top to edit the settings in place).
+<li> Edit <code>TWiki.TWikiPreferences</code>. Read through it and set any additional settings you think you might need. (You can click the 'Edit' button near the top to edit the settings in place).
 </li>
-<li> <img src="pub/TWiki/TWikiDocGraphics/tip.gif" border="0" alt="IDEA!" width="16" height="16" /> Alternately, you can copy any settings or variables that you want to customize from <code>TWIKI.TWikiPreferences</code> and paste them into <code>Main.TWikiPreferences</code>. This will protect your local customizations from being overwritten in later upgrades. See notes at top of <code>TWIKI.TWikiPreferences</code> for more information.
+<li> <img src="pub/TWiki/TWikiDocGraphics/tip.gif" border="0" alt="IDEA!" width="16" height="16" /> Alternately, you can copy any settings or variables that you want to customize from <code>TWiki.TWikiPreferences</code> and paste them into <code>Main.TWikiPreferences</code>. This will protect your local customizations from being overwritten in later upgrades. See notes at top of <code>TWiki.TWikiPreferences</code> for more information.
 
 </li>
 </ul>
