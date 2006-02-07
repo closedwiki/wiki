@@ -208,7 +208,7 @@ sub stage_rcsfiles() {
     $this->makepath($lastReleaseDir);
     $this->pushd($lastReleaseDir);
     print 'Checking out last release to '.$lastReleaseDir."\n";
-    `svn co http://svn.twiki.org:8181/svn/twiki/tags/twiki-20040902-release/ .`;
+    `svn co http://svn.twiki.org:8181/svn/twiki/tags/TWikiRelease04x00x00/ .`;
     $this->popd();
     print "Creating ,v files.\n";
     $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'data',
