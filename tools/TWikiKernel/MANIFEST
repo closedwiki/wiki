@@ -646,5 +646,6 @@ templates/view.text.tmpl 0440
 templates/view.tmpl 0440
 tools/rewriteshbang.pl 0550
 tools/expire_sessions.pl 0550
+tools/upgrade_emails.pl 0550
 twiki_httpd_conf.txt 0660
 UpgradeTwiki 0550
