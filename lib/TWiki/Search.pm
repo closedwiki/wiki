@@ -821,7 +821,7 @@ sub searchWeb {
                     $out =~ s/\$changes(?:\(([^\)]*)\))?/$renderer->summariseChanges($ru,$web,$topic,$1,$revNum)/ges;
                     $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
                     $out =~ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
-                    $out =~ s/\$parent/$meta->getParent()/ges;;
+                    $out =~ s/\$parent/$meta->getParent()/ges;
                     $out =~ s/\$formname/$meta->getFormName()/ges;
                     $out =~ s/\$count\((.*?\s*\.\*)\)/_countPattern( $text, $1 )/ges;
                     # FIXME: Allow all regex characters but escape them
