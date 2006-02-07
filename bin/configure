@@ -381,7 +381,7 @@ sub _checkBinDir {
     opendir(D, $dir) or return ERROR("Cannot open $dir for read - check it exists, and that permissions are correct");
     foreach my $script (grep { -f "$dir/$_" && /^\w+(\.\w+)?$/ } readdir D) {
         next if( $ext && $script !~ /\.$ext$/ );
-        if( $TWiki::cfg{OS} !~ /^Windows$/i && !-x "$dir/$script" ) {
+        if( $TWiki::cfg{OS} !~ /^Windows$/i && $script !~ /\.cfg$/ && !-x "$dir/$script" ) {
             $errs .= WARN($script . ' might not be an executable script - please check it (and its permissions) manually');
         }
     }
