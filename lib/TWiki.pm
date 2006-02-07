@@ -3299,18 +3299,28 @@ sub _USERINFO {
     my $user = $this->{user};
 
     my $info = $format;
-    my $username = $user->login();
-    my $wikiname = $user->wikiName();
-    my $wikiusername = $user->webDotWikiName();
-    my $emails = join(',', $user->emails());
-    my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
-    my $groups = join(', ', @groupNames);
+    if ($info =~ /\$username/) {
+        my $username = $user->login();
+        $info =~ s/\$username\b/$username/g;
+    }
+    if ($info =~ /\$wikiname/) {
+        my $wikiname = $user->wikiName();
+        $info =~ s/\$wikiname\b/$wikiname/g;
+    }
+    if ($info =~ /\$wikiusername/) {
+        my $wikiusername = $user->webDotWikiName();
+        $info =~ s/\$wikiusername\b/$wikiusername/g;
+    }
+    if ($info =~ /\$emails/) {
+        my $emails = join(',', $user->emails());
+        $info =~ s/\$emails\b/$emails/g;
+    }
+    if ($info =~ /\$groups/) {
+        my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
+        my $groups = join(', ', @groupNames);
+        $info =~ s/\$groups\b/$groups/g;
+    }
 
-    $info =~ s/\$username\b/$username/g;
-    $info =~ s/\$wikiname\b/$wikiname/g;
-    $info =~ s/\$wikiusername\b/$wikiusername/g;
-    $info =~ s/\$emails\b/$emails/g;
-    $info =~ s/\$groups\b/$groups/g;
 
     return $info;
 }
