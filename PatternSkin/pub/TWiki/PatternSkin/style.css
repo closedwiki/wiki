@@ -775,6 +775,7 @@ input.patternFormFieldVerticalForm {
 .patternNoViewPage #patternMain {
 	padding-top:2em;
 	padding-bottom:4em;
+	border-left:0;
 }
 .patternNoViewPage #patternBottomBar {
 	/* same margins as #patternPage in layout.css */
