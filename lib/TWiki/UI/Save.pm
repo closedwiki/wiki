@@ -160,7 +160,7 @@ sub buildNewTopic {
     }
 
     my $mum;
-    if( defined $newParent ) {
+    if( $newParent ) {
         if( $newParent ne 'none' ) {
             $mum = { 'name' => $newParent };
         }
