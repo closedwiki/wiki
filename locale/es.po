@@ -2885,7 +2885,7 @@ msgstr "value='Punto de control' accesskey='k'"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:33
 msgid "value='Discard' accesskey='d'"
-msgstr "valor=Descartar' tecla de acceso= 'd'"
+msgstr "valor=Descartar' accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
 msgid "value='Preview' accesskey='p'"
