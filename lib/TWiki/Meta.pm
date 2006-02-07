@@ -558,6 +558,8 @@ sub getParent {
     my $value = '';
     my $parent = $this->get( 'TOPICPARENT' );
     $value = $parent->{name} if( $parent );
+    # Return empty string (not undef), if TOPICPARENT meta is broken
+    $value = '' if (!defined $value);
     return $value;
 }
 
