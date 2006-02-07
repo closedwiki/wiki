@@ -35,14 +35,14 @@ You now have a basic, unauthenticated installation running. At this point you ca
 ---++ Next Steps
 Once you have your TWiki running, you can move on to customise it for your users.
    * *Review TWikiPreferences settings* - read through it and set any additional settings you think you might need (you can click the 'Edit' button near the top to edit the settings in place)
-      * %I% It is recommended to *copy* any settings or variables that you want to customize from [[%TWIKIWEB%.TWikiPreferences]] and *paste* them into [[%MAINWEB%.TWikiPreferences]]. This will protect your local customizations from being overwritten in later upgrades. See notes at top of [[%TWIKIWEB%.TWikiPreferences]] for more information.
+      * %I% It is recommended to *copy* any settings or variables that you want to customize from [[%TWIKIWEB%.TWikiPreferences]] and *paste* them into [[%LOCALSITEPREFS%]]. This will protect your local customizations from being overwritten in later upgrades. See notes at top of [[%TWIKIWEB%.TWikiPreferences]] for more information.
    * *Customize user home pages* - read and change NewUserTemplate.
    * *Enable authentication* - read TWikiUserAuthentication.
    * *Clear admin notes* - some pages are meant to be customized after choice of authentication - check and update these topics (remove notice):
-      * %TWIKIWEB%.ChangePassword
-      * %TWIKIWEB%.ResetPassword
-      * %TWIKIWEB%.ChangeEmailAddress
-      * %TWIKIWEB%.TWikiRegistration fields can be customzied to the needs of your organization
+      * ChangePassword
+      * ResetPassword
+      * ChangeEmailAddress
+      * TWikiRegistration fields can be customzied to the needs of your organization
       * %MAINWEB%.TWikiAdminGroup
    * *Enable e-mail notification* - read TWikiSiteTools#WebNotify to get WebChangesAlerts.
    * *Automate update of site statistics* - read TWikiSiteTools#WebStatistics
