@@ -262,21 +262,21 @@ sub _sendEmailByNetSMTP {
     if( scalar( @arr ) ) {
         $tmp = $arr[0];
         $tmp =~ s/^To:\s*//io;
-        @arr = split( /[,]+/, $tmp );
+        @arr = split( /,\s*/, $tmp );
         push( @to, @arr );
     }
     @arr = grep( /^CC: /i, @headerlines );
     if( scalar( @arr ) ) {
         $tmp = $arr[0];
         $tmp =~ s/^CC:\s*//io;
-        @arr = split( /[,]+/, $tmp );
+        @arr = split( /,\s*/, $tmp );
         push( @to, @arr );
     }
     @arr = grep( /^BCC: /i, @headerlines );
     if( scalar( @arr ) ) {
         $tmp = $arr[0];
         $tmp =~ s/^BCC:\s*//io;
-        @arr = split( /[,]+/, $tmp );
+        @arr = split( /,\s*/, $tmp );
         push( @to, @arr );
     }
     if( ! ( scalar( @to ) ) ) {
