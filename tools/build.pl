@@ -140,15 +140,27 @@ sub _checkInFile {
     } else {
         # create rcs file, and ci
     }
-    #set revision number #TODO: what about topics with no META DATA?
-    my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
-    `$cmd`;
 
-    #check in
-    `ci -mbuildrelease -wTWikiContributor -t-new-topic $new/$file 2>&1`;
-    #get a copy of the latest revsion, no lock
-    `co -u -M $new/$file 2>&1`;
-    print "\n";
+    #only do a checkin, if the files are different (fake the rev number to be the same)
+    my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision).'\"$2/\' '.$new.'/'.$file;
+    `$cmd`;
+    my $different = `rcsdiff -q $new/$file`;
+    chomp($different);
+ 
+    if (defined($different) && ($different ne '')) {
+	    #set revision number #TODO: what about topics with no META DATA?
+	    my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
+	    `$cmd`;
+	    #check in
+    	`ci -mbuildrelease -wTWikiContributor -t-new-topic $new/$file 2>&1`;
+    	#get a copy of the latest revsion, no lock
+    	`co -u -M $new/$file 2>&1`;
+    	print "\n";
+    } else {
+        #force unlock
+        `rcs -u -M $new/$file,v 2>&1`;
+    	print "nochange to $new/$file\n";
+    }
 }
 
 # recursively check in files to RCS
