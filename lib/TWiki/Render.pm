@@ -661,7 +661,26 @@ sub _handleSquareBracketedLink {
     $link =~ s/^\s*//;
     $link =~ s/\s*$//;
 
-    # Spot full URLs
+    # Be friendly to file:-links, never alter them no matter what
+    if( $link =~ /^file\:/ ) {
+          # Prevent automatic WikiWord or CAPWORD linking in explicit links
+          $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+          $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+          return $this->_externalLink( $link, $text );
+    }
+    
+    # Spot other full explicit URLs
+    # (explicit external [[$link][$text]]-style, that can be handled directly)
+    if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
+        if (!($link eq $text)) {
+          # Prevent automatic WikiWord or CAPWORD linking in explicit links
+          $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+          $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+          return $this->_externalLink( $link, $text );
+        }
+    }
+
+    # Spot URLs
     if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ||
           $link =~ /^\// ) {
         # URL, absolute or relative
@@ -673,10 +692,7 @@ sub _handleSquareBracketedLink {
             # '[[Web.odd wiki word#anchor][display text]]' link:
             # '[[Web.odd wiki word#anchor]]' link:
             # External link: add <nop> before WikiWord and ABBREV
-            # inside link text, to prevent double links
-            # SMELL - why regex{upperAlpha} here - surely this is a web
-            # match, not a CAPWORD match?
-            $text =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
+            $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
         }
         return $this->_externalLink( $link, $text );
     }
