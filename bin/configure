@@ -492,10 +492,13 @@ sub _warnAboutWindowsBackSlashes {
 # generate an input field for string types
 sub _PROMPT_FOR_STRING {
     my( $id, $opts, $value, $keys ) = @_;
-    my $size = 60;
+    my $size = "55%";
     if( $opts =~ /\s(\d+)\s/ ) {
         $size = $1;
+        # These numbers are somewhat arbitrary..
+        if($size>25) { $size="55%"; }
     }
+
     # support upgrade from old configuration, where LowerNational and UpperNational
     # were stored as REGEX'es (now they are STRING's):
     if ( $id eq "LowerNational" || $id eq "UpperNational" ) { 
@@ -511,21 +514,21 @@ sub _PROMPT_FOR_STRING {
 # This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_URL {
     my( $id, $opts, $value, $keys ) = @_;
-    return CGI::textfield( -name => $id, -size=>60, -default=>$value );
+    return CGI::textfield( -name => $id, -size=>"55%", -default=>$value );
 }
 
 # generate an input field for URLPATH types
 # This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_URLPATH {
     my( $id, $opts, $value, $keys ) = @_;
-    return CGI::textfield( -name => $id, -size=>60, -default=>$value );
+    return CGI::textfield( -name => $id, -size=>"55%", -default=>$value );
 }
 
 # generate an input field for PATH types
 # This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_PATH {
     my( $id, $opts, $value, $keys ) = @_;
-    return CGI::textfield( -name => $id, -size=>60, -default=>$value );
+    return CGI::textfield( -name => $id, -size=>"55%", -default=>$value );
 }
 
 # generate an input field for BOOLEAN types
@@ -539,14 +542,14 @@ sub _PROMPT_FOR_BOOLEAN {
 # This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_REGEX {
     my( $id, $opts, $value, $keys ) = @_;
-    return CGI::textfield( -name => $id, -size=>60, -default=>$value );
+    return CGI::textfield( -name => $id, -size=>"55%", -default=>$value );
 }
 
 # generate an input field for COMMAND types
 # This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_COMMAND {
     my( $id, $opts, $value, $keys ) = @_;
-    return CGI::textfield( -name => $id, -size=>60, -default=>$value );
+    return CGI::textfield( -name => $id, -size=>"55%", -default=>$value );
 }
 
 # generate an input field for NUMBER types
