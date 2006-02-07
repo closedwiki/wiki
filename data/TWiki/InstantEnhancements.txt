@@ -54,7 +54,7 @@ This should be enabled, see the "Miscellaneous Settings" in the TWikiPreferences
 
 Icons can do a lot to enhance scannability of topics. For instance, on *HELP* pages, most people tend to jump around looking for answers rather than reading through - icons help point out the most important bits.
 
-%TWIKIWEB%.TWikiDocGraphics has a whole collection of ready icon images. You can use these images in any topic by referring to their name. For example, !TWikiDocGraphics has an image attachment called =days.gif=. To show this image in a topic, write =%<nop>ICON{"days"}%= to get %ICON{"days"}%.
+TWikiDocGraphics has a whole collection of ready icon images. You can use these images in any topic by referring to their name. For example, !TWikiDocGraphics has an image attachment called =days.gif=. To show this image in a topic, write =%<nop>ICON{"days"}%= to get %ICON{"days"}%.
 
 *Creating image variables*
 
@@ -71,9 +71,9 @@ Or if you have a custom image to use, attach this to [[%LOCALSITEPREFS%]] and wr
    * Set DOWN = <img src="%ATTACHURL%/my_image.gif" border="0" alt="DOWN" width="16" height="16" />
 </verbatim>
 
-Most images in %TWIKIWEB%.TWikiDocGraphics are 16 x 16 pixels.
+Most images in TWikiDocGraphics are 16 x 16 pixels.
 
-   * __Related:__ There are other approaches for creating more extensive TWiki icon libraries. This is a simply and quick way to get started. See %TWIKIWEB%.TWikiDocGraphics for more info.
+   * __Related:__ There are other approaches for creating more extensive TWiki icon libraries. This is a simply and quick way to get started. See TWikiDocGraphics for more info.
 
 ---+++ Use TOC variable to create table of content
 
@@ -161,8 +161,8 @@ If you want to change the logo per TWiki web, simply attach a new logo.gif to th
 
 Other cusomtisations are possible using =WEBLOGOIMG=, =WEBLOGOURL=, and =WEBLOGOALT= (they mirror the =WIKILOGO*= TWiki variables, but are applied to each web, rather than to the %<nop>WIKITOOLNAME%-based references)
 
-If you'd like to have the same customised logo for all the webs, make these changes in %TWIKIWEB%.TWikiPreferences instead of each web's <nop>WebPreferences, e.g.,
-   * =Set WEBLOGOIMG = %<nop>PUBURLPATH%/%TWIKIWEB%/WebPreferences/mylogo.gif=
+If you'd like to have the same customised logo for all the webs, make these changes in %LOCALSITEPREFS% instead of each web's <nop>WebPreferences, e.g.,
+   * =Set WEBLOGOIMG = %<nop>PUBURLPATH%/%MAINWEB%/WebPreferences/mylogo.gif=
 
 ----
 ---++ Customize Topic Classification Forms
