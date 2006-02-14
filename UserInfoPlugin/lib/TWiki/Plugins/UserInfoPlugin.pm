@@ -15,17 +15,18 @@
 #
 
 package TWiki::Plugins::UserInfoPlugin;
-use Date::Parse; # for str2time
 use strict;
 
 ###############################################################################
 use vars qw(
-	$web $topic $user $installWeb $VERSION $RELEASE $debug @currentVisitors 
-	$isDakar $twikiGuest @isoMonth
-	$ignoreHosts $isInitialized $sessionDir
+	$web $topic $user $installWeb $VERSION $RELEASE $debug 
+	$twikiGuest 
+	$isInitialized $sessionDir
 );
+require TWiki::Plugins::UserInfoPlugin::Render ;
+require TWiki::Plugins::UserInfoPlugin::Get ;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
+# This should always be $Rev: 8773$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
@@ -33,8 +34,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '1.3';
-
+$RELEASE = '2.0 Dakar Specific';
 
 ###############################################################################
 sub writeDebug {
@@ -66,442 +66,24 @@ sub initPlugin {
 }
 
 ###############################################################################
-sub doInit {
-
-  return if $isInitialized;
-  $isInitialized = 1;
-
-  # figure out where the sessions are
-  if ($TWiki::cfg{SessionDir}) {
-    $sessionDir = $TWiki::cfg{SessionDir};
-  } else {
-    $sessionDir = &TWiki::Func::getDataDir() . "/.session"; 
-  }
-  if (! -e $sessionDir) {
-    &writeDebug("sessionDir '$sessionDir' not found ... falling back to /tmp");
-    $sessionDir = '/tmp';
-  }
-  
-  # find out if we run dakar or not
-  $isDakar = (defined $TWiki::cfg{MimeTypesFileName})?1:0;
-
-  # get twiki guest string
-  $twikiGuest = &TWiki::Func::getDefaultUserName();
-  $twikiGuest = &TWiki::Func::userToWikiName($twikiGuest, 1);
-
-  # init globals
-  @isoMonth = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'); 
-  @currentVisitors = ();
-
-  # get spiders
-  $ignoreHosts = TWiki::Func::getPreferencesValue("USERINFOPLUGIN_IGNOR_HOSTS") || '';
-  $ignoreHosts = join('|', split(/,\s?/, $ignoreHosts));
-
-  writeDebug("doInit() done");
-}
-
-###############################################################################
 sub commonTagsHandler {
 
-  $_[0] =~ s/%VISITORS%/&renderCurrentVisitors()/ge;
-  $_[0] =~ s/%VISITORS{(.*?)}%/&renderCurrentVisitors($1)/ge;
-  $_[0] =~ s/%NRVISITORS%/&getNrVisitors()/ge;
+	
+  $_[0] =~ s/%VISITORS%/&TWiki::Plugins::UserInfoPlugin::Render::renderCurrentVisitors()/ge;
+  $_[0] =~ s/%VISITORS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Render::renderCurrentVisitors($1)/ge;
+  $_[0] =~ s/%NRVISITORS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrVisitors()/ge;
 
-  $_[0] =~ s/%LASTVISITORS%/&renderLastVisitors()/ge;
-  $_[0] =~ s/%LASTVISITORS{(.*?)}%/&renderLastVisitors($1)/ge;
-  $_[0] =~ s/%NRLASTVISITORS%/&getNrLastVisitors()/ge;
-  $_[0] =~ s/%NRLASTVISITORS{(.*?)}%/&getNrLastVisitors($1)/ge;
+  $_[0] =~ s/%LASTVISITORS%/&TWiki::Plugins::UserInfoPlugin::Render::renderLastVisitors()/ge;
+  $_[0] =~ s/%LASTVISITORS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Render::renderLastVisitors($1)/ge;
+  $_[0] =~ s/%NRLASTVISITORS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrLastVisitors()/ge;
+  $_[0] =~ s/%NRLASTVISITORS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Get::getNrLastVisitors($1)/ge;
 
-  $_[0] =~ s/%NRUSERS%/&getNrUsers()/ge;
-  $_[0] =~ s/%NRGUESTS%/&getNrGuests()/ge;
+  $_[0] =~ s/%NRUSERS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrUsers()/ge;
+  $_[0] =~ s/%NRGUESTS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrGuests()/ge;
 
-  $_[0] =~ s/%NEWUSERS%/&renderNewUsers()/ge;
-  $_[0] =~ s/%NEWUSERS{(.*?)}%/&renderNewUsers($1)/ge;
+  $_[0] =~ s/%NEWUSERS%/&TWiki::Plugins::UserInfoPlugin::Render::renderNewUsers()/ge;
+  $_[0] =~ s/%NEWUSERS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Render::renderNewUsers($1)/ge;
 
-}
-
-###############################################################################
-# SMELL: this only works for htpasswd authenticated installations
-sub getNrUsers {
-
-  &doInit();
-  
-  my $htpasswdFilename = &TWiki::Func::getDataDir() . "/.htpasswd";
-  my $passwds = &TWiki::Func::readFile($htpasswdFilename);
-  my @lines = grep {!/$twikiGuest/} split("\n", $passwds);
-  return scalar(@lines);
-}
-
-###############################################################################
-sub getNrVisitors {
-  &doInit();
-
-  writeDebug("getNrVisitors()");
-  my ($visitors) = &getVisitorsFromSessionStore(undef, $twikiGuest);
-  return scalar @$visitors;
-}
-
-###############################################################################
-sub getNrGuests {
-  &doInit();
-
-  writeDebug("getNrGuests()");
-  my (undef, $guests) = &getVisitorsFromSessionStore($twikiGuest);
-  return scalar @$guests;
-}
-
-###############################################################################
-sub getNrLastVisitors {
-  my $attributes = shift;
-
-  $attributes = '' unless $attributes;
-  &doInit();
-
-  writeDebug("getNrLastVisitors($attributes)");
-
-  my $theDays = TWiki::Func::extractNameValuePair($attributes, "days") || 1;
-  my $visitors = &getVisitors($theDays, undef, undef, $twikiGuest);
-
-  return scalar @$visitors;
-}
-
-###############################################################################
-sub renderCurrentVisitors {
-  my $attributes = shift;
-
-  $attributes = '' unless $attributes;
-
-  writeDebug("renderCurrentVisitors($attributes)");
-  
-  &doInit();
-
-  my $theFormat = &TWiki::Func::extractNameValuePair($attributes, "format") ||
-    "\t* \$wikiusername";
-  my $theSep = &TWiki::Func::extractNameValuePair($attributes, "sep") || '$n';
-  my $theMax = &TWiki::Func::extractNameValuePair($attributes, "max") || 0;
-  $theMax = 0 if $theMax eq "unlimited";
-  
-  my $result = "";
-  my $isFirst = 1;
-  my $n = $theMax;
-  my $counter = 1;
-  my ($visitors) = &getVisitorsFromSessionStore(undef, $twikiGuest);
-  return "" if !@$visitors;
-  $visitors = join('|', @$visitors);
-  $visitors = &getVisitors(1, undef, $visitors, $twikiGuest);
-  foreach my $visitor (sort {$a->{wikiname} cmp $b->{wikiname}} @$visitors) {
-    last if --$n == 0;
-    my $text;
-    if ($isFirst) {
-      $isFirst = 0;
-      $text = $theFormat;
-    } else {
-      $text = $theSep . $theFormat;
-    }
-    $result .= &replaceVars($text, {
-      'counter'=>$counter++,
-      'wikiname'=>$visitor->{wikiname}, 
-      'date'=>$visitor->{date},
-      'time'=>$visitor->{time},
-      'host'=>$visitor->{host},
-      'topic'=>$visitor->{topic},
-    });
-  }
-  
-  return $result;
-}
-
-###############################################################################
-# renderNewUsers: render list of 10 most recently registered users.
-# this information is extracted from %MAINWEB%.TWikiUsers
-sub renderNewUsers
-{
-  my $attributes = shift;
-
-  $attributes = '' unless $attributes;
-  &doInit();
-
-  my $theFormat = &TWiki::Func::extractNameValuePair($attributes, "format") ||
-    "\t* \$date: \$wikiusername";
-  my $theSep = &TWiki::Func::extractNameValuePair($attributes, "sep") || '$n';
-  my $theMax = &TWiki::Func::extractNameValuePair($attributes, "max") || 10;
-  $theMax = 0 if $theMax eq "unlimited";
-
-  my $wikiUsersTopicname = ($isDakar)?$TWiki::cfg{UsersTopicName}:$TWiki::wikiUsersTopicname;
-  writeDebug("wikiUsersTopicname=$wikiUsersTopicname");
-
-  my(undef, $topicText) = 
-    &TWiki::Func::readTopic(&TWiki::Func::getMainWebname(), $wikiUsersTopicname);
-
-  my %users = ();
-  foreach my $line ( split( /\n/, $topicText) ) {
-    #writeDebug("line=$line");
-    next unless $line =~ m/[\t|(?: {3})]\*\s([A-Z][a-zA-Z0-9]+)\s\-\s(?:(.*)\s\-\s)?(.*)/;
-    my $name = $1;
-    my $date = $3;
-    next if $name eq $twikiGuest;
-    next if $name eq 'ListOfWikiNames'; # dakar hack
-    push @{$users{$date}}, $name;
-  }
-  
-  my $n = $theMax;
-  my $counter = 1;
-  my $result = "";
-  my $isFirst = 1;
-  foreach my $date (reverse sort { str2time($a) <=> str2time($b)} keys %users) {
-    foreach my $wikiName (sort @{$users{$date}}) {
-      last if --$n == 0;
-      my $text;
-      if ($isFirst) {
-	$isFirst = 0;
-	$text = $theFormat;
-      } else {
-	$text = $theSep . $theFormat;
-      }
-      $result .= &replaceVars($text, {
-        counter=>$counter++,
-	wikiname=>$wikiName, 
-	date=>$date,
-      });
-    }
-    last if $n == 0;
-  }
-
-  return $result;
-}
-
-###############################################################################
-# get list of users that stil have a session object
-# this is the number of session objects
-sub getVisitorsFromSessionStore {
-
-  my ($includeNames, $excludeNames) = @_;
-
-  writeDebug("getVisitorsFromSessionStore()");
-  writeDebug("includeNames=$includeNames") if $includeNames;
-  writeDebug("excludeNames=$excludeNames") if $excludeNames;
-
-  # get session directory
-
-  # get wikinames of current visitors
-  my %users = ();
-  my %guests = ();
-  my @sessionFiles = reverse glob "$sessionDir/cgisess_*";
-  foreach my $sessionFile (@sessionFiles) {
-
-    #writeDebug("reading $sessionFile");
-  
-    my $dump = &TWiki::Func::readFile($sessionFile);
-    next if ! $dump;
-
-    my $wikiName;
-    my $host;
-
-    $wikiName = $twikiGuest;
-    if ($dump =~ /"AUTHUSER" => "(.*?)"/) {
-      $wikiName = $1;
-    }
-    if ($dump =~ /"_SESSION_REMOTE_ADDR" => "(.*?)"/) {
-      $host = $1;
-    }
-
-    if ($host) {
-      next if $host =~ /$ignoreHosts/;
-      $guests{$host} = 1 if $wikiName eq $twikiGuest;
-    }
-
-    next if $users{$wikiName};
-    next if $excludeNames && $wikiName =~ /$excludeNames/;
-    writeDebug("found $wikiName");
-    next if $includeNames && $wikiName !~ /$includeNames/;
-
-    $users{$wikiName} = 1;
-  }
-
-  my @users = keys %users;
-  my @guests = keys %guests;
-
-  return (\@users, \@guests);
-}
-
-###############################################################################
-sub getVisitors {
-
-  my ($theDays, $theMax, $includeNames, $excludeNames) = @_;
-
-  $theMax = 0 unless $theMax;
-
-  writeDebug("getVisitors()");
-  #writeDebug("theDays=$theDays") if $theDays;
-  writeDebug("theMax=$theMax") if $theMax;
-  writeDebug("includeNames=$includeNames") if $includeNames;
-  writeDebug("excludeNames=$excludeNames") if $excludeNames;
-  
-
-  # get the logfile mask
-  my $logFileGlob = ($isDakar)?$TWiki::cfg{LogFileName}:$TWiki::logFilename;
-
-  $logFileGlob =~ s/%DATE%/*/g;
-  
-  # go through the logfiles and collect visitor data
-  my $isDone = 0;
-  my $days = 0;
-  my $n = $theMax;
-  my $currentDate = '';
-  my @logFiles = reverse glob $logFileGlob;
-  my @lastVisitors = ();
-  foreach my $logFilename (@logFiles) {
-    writeDebug("reading $logFilename");
-
-    # read one logfile
-    my $fileContents = TWiki::Func::readFile($logFilename);
-    
-    # analysis
-    my %seen = ();
-    my $nrVisitors = 0;
-    foreach my $line (reverse split(/\n/, $fileContents)) {
-      my @fields = split(/\|/, $line);
-      if (!$fields[2]) {
-	writeDebug("Hm, line '$line' has no wikiName");
-	next;
-      }
-
-      # wikiname
-      my $wikiName = $fields[2];
-      $wikiName =~ s/^\s+//g;
-      $wikiName =~ s/\s+$//g;
-      next unless $wikiName;
-      next if $wikiName =~ /^TWiki/o; # exclude default user
-
-      $wikiName =~ s/^.*?\.(.*)$/$1/g;
-      
-      next if $excludeNames && $wikiName =~ /$excludeNames/;
-      next if $includeNames && $wikiName !~ /$includeNames/;
-
-      # date
-      my $date = substr($fields[1], 1, 11);
-      $date =~ s/^\s+//g;
-      $date =~ s/\s+$//g;
-      if ($currentDate ne $date) {
-	$currentDate = $date;
-	$days++;
-      }
-
-      # termination criteria
-      if (--$n == 0 || ($theDays && $days > $theDays)) {
-	$isDone = 1;
-	last;
-      }
-
-      # host
-      my $host = $fields[6];
-      $host =~ s/^\s+//g;
-      $host =~ s/\s+$//g;
-      next if $host =~ /$ignoreHosts/;
-      next if $seen{"$wikiName"};
-
-      # topic
-      my $thisTopic = $fields[4];
-      $thisTopic =~ s/^\s+//g;
-      $thisTopic =~ s/\s+$//g;
-
-      # date, time
-      my $time = substr($fields[1], 15, 5);
-      my $timeMark = 
-	$days * 24 +
-	substr($fields[1], 15, 2) * 60 + 
-	substr($fields[1], 18, 2);
-
-      # create visitor struct
-      my $visitor = {
-	'wikiname'=>$wikiName,
-	'date'=>$date,
-	'time'=>$time,
-	'host'=>$host,
-	'topic'=>$thisTopic,
-      };
-
-      # store
-      push @lastVisitors, $visitor;
-      $seen{"$wikiName"} = 1;
-      $nrVisitors++;
-    }
-    writeDebug("found $nrVisitors visitors in file $logFilename");
-
-    last if $isDone;
-  }
-
-  return \@lastVisitors;
-}
-
-###############################################################################
-sub renderLastVisitors {
-  my $attributes = shift;
-
-  $attributes = '' unless $attributes;
-  &doInit();
-
-  writeDebug("renderLastVisitors($attributes)");
-
-  my $theFormat = TWiki::Func::extractNameValuePair($attributes, "format" ) ||
-    "\t* \$date: \$wikiusername";
-  my $theSep = TWiki::Func::extractNameValuePair($attributes, "sep" ) || '$n';
-  my $theMax = TWiki::Func::extractNameValuePair($attributes, "max") || 0;
-  $theMax = 0 if $theMax eq "unlimited";
-  my $theDays = TWiki::Func::extractNameValuePair($attributes, "days") || 1;
-
-  my $visitors = &getVisitors($theDays, $theMax, undef, $twikiGuest);
-
-  # garnish the collected data
-  my $result = '';
-  my $isFirst = 1;
-  my $counter = 1;
-  foreach my $visitor (sort {$a->{wikiname} cmp $b->{wikiname}} @$visitors) {
-    my $text;
-    if ($isFirst) {
-      $isFirst = 0;
-      $text = $theFormat;
-    } else {
-      $text = $theSep . $theFormat;
-    }
-    $result .= &replaceVars($text, {
-      'counter'=>$counter++,
-      'wikiname'=>$visitor->{wikiname}, 
-      'date'=>$visitor->{date},
-      'time'=>$visitor->{time},
-      'host'=>$visitor->{host},
-      'topic'=>$visitor->{topic},
-    });
-  }
-  
-  return $result;
-}
-
-###############################################################################
-sub replaceVars {
-  my ($format, $data) = @_;
-
-  #writeDebug("replaceVars($format, data)");
-
-  if (defined $data) {
-    if (defined $data->{wikiname}) {
-      $data->{username} = &TWiki::Func::wikiToUserName($data->{wikiname});
-      $data->{wikiusername} = &TWiki::Func::userToWikiName($data->{wikiname});
-    }
-
-    foreach my $key (keys %$data) {
-      $format =~ s/\$$key/$data->{$key}/g;
-    }
-  }
-
-  $format =~ s/\$n\b/\n/g;
-  $format =~ s/\$quot\b/\"/gos;
-  $format =~ s/\$percnt\b/\%/gos;
-  $format =~ s/\$dollar\b/\$/gos;
-
-  #writeDebug("returns '$format'");
-
-  return $format;
 }
 
 

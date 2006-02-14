@@ -1,2 +1,4 @@
 lib/TWiki/Plugins/UserInfoPlugin.pm 0440
+lib/TWiki/Plugins/UserInfoPlugin/Render.pm 0440
+lib/TWiki/Plugins/UserInfoPlugin/Get.pm 0440
 data/TWiki/UserInfoPlugin.txt 0440
