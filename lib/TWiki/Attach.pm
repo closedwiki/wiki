@@ -78,7 +78,7 @@ sub renderMetaData {
 
     my $showAll = $attrs->{all};
     my $showAttr = $showAll ? 'h' : '';
-	my $a = ( $showAttr ) ? ':A' : '';
+	my $A = ( $showAttr ) ? ':A' : '';
     my $title = $attrs->{title} || '';
 
 	my @attachments = $meta->find( 'FILEATTACHMENT' );
@@ -88,8 +88,8 @@ sub renderMetaData {
     $templates->readTemplate('attachtables');
 
 	my $rows = '';
-    my $row = $templates->expandTemplate('ATTACH:files:row'.$a);
-    foreach my $attachment ( @attachments ) {
+    my $row = $templates->expandTemplate('ATTACH:files:row'.$A);
+    foreach my $attachment ( sort { $a->{date} <=> $b->{date} } @attachments ) {
         my $attrAttr = $attachment->{attr};
 
         if( ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ )) {
@@ -100,8 +100,8 @@ sub renderMetaData {
     my $text = '';
 
     if( $showAll || $rows ne '' ) {
-        my $header = $templates->expandTemplate('ATTACH:files:header'.$a);
-        my $footer = $templates->expandTemplate('ATTACH:files:footer'.$a);
+        my $header = $templates->expandTemplate('ATTACH:files:header'.$A);
+        my $footer = $templates->expandTemplate('ATTACH:files:footer'.$A);
 
         $text = $header.$rows.$footer;
     }
