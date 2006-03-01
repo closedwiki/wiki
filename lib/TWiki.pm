@@ -1866,6 +1866,9 @@ sub expandVariablesOnTopicCreation {
         $text = $ntext;
     }
 
+    # Make sure func works, for registered tag handlers
+    $TWiki::Plugins::SESSION = $this;
+
     # Note: it may look dangerous to override the user this way, but
     # it's actually quite safe, because only a subset of tags are
     # expanded during topic creation. if the set of tags expanded is
@@ -2060,6 +2063,9 @@ sub _expandAllTags {
 
     # Escape ' !%VARIABLE%'
     $$text =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
+
+    # Make sure func works, for registered tag handlers
+    $TWiki::Plugins::SESSION = $this;
 
     # NOTE TO DEBUGGERS
     # The depth parameter in the following call controls the maximum number
