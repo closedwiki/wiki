@@ -64,8 +64,8 @@ There are a few points worth noting:
       * Clearly you need to point it to a location where there is enough space
       * If you have symlinks under your =data/= directory in your existing installation, these are reproduced as actual directories in the new structure.   It is up to you to pull these sub-directories out again and re-symlink as needed
    * =UpgradeTwiki= doesn't deal with custom templates or Plugins, you will have to reinstall these in the new installation.
+   * If you are using the Htpasswd login manager, then note that email addresses for users have moved out of user topics and into the password database. There is a script that performs this extra upgrade step for you - see =tools/upgrade_emails.pl=.
 
-If you use it, and would be kind enough to add your experiences to TWiki:Codev.UpgradeTWiki, it would be much appreciated.  The report of your experience will help to make =UpgradeTwiki= more robust.
 
 #ManualUpgradeProcedure
 ---++ Manual Upgrade Procedure
@@ -87,6 +87,7 @@ The following steps are a rough guide to upgrading only. It is impossible to giv
       1 Install updated plugins into your new area.
    1 Point your webserver at the new install.
    1 Visit TWiki:Codev.KnownIssuesOfTWiki04x00x00 and fix known issues that apply to you.
+   1 If you are using the Htpasswd login manager, then note that email addresses for users have moved out of user topics and into the password database. There is a script that performs this extra upgrade step for you - see =tools/upgrade_emails.pl=.
 
 You are *highly* recommended *not* to change any distributed files if you can avoid it, to simplify future upgrades!
 
