@@ -51,7 +51,7 @@ To perform the upgrade, you need to:
    * Choose a directory for the new installation.  I will call this =new_twiki=.  This directory must not already exist.
    * Change directory to =distro/= and run: %BR%
      =./UpgradeTwiki &lt;full path to existing_twiki's setlib.cfg&gt; &lt;full path to new_twiki&gt;=
-   * confirm your system settings by pointing your browser to =cgi-bin/configure=
+   * confirm your system settings by pointing your browser to the =configure= script
 
 Assuming all goes well, =UpgradeTwiki= will give you the final instructions.
 
