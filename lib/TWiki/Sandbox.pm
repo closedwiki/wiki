@@ -313,7 +313,7 @@ sub sysCommand {
             $exit = ( $? >> 8 );
         } else {
             # Child - run the command
-            open (STDERR, '>'.File::Spec->devnull()) || die "Oh dear";
+            open (STDERR, '>'.File::Spec->devnull()) || die "Can't kill STDERR: '$!'";
             exec( $path, @args ) ||
               throw Error::Simple( 'exec failed: '.$! );
             # can never get here
