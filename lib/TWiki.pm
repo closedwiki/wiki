@@ -1855,12 +1855,20 @@ sub expandVariablesOnTopicCreation {
     my( $ntext, $sections ) = _parseSections( $text );
 
     if( scalar( @$sections )) {
-        # chop out templateonly sections. Note that if named
-        # templateonly sections overlap, the behaviour is undefined.
+        # Note that if named templateonly sections overlap, the behaviour is undefined.
         foreach my $s ( reverse @$sections ) {
             if( $s->{type} eq 'templateonly' ) {
                 $ntext = substr($ntext, 0, $s->{start}).
                   substr($ntext, $s->{end}, length($ntext));
+            } else {
+                # put back non-templateonly sections
+                my $start = $s->remove('start');
+                my $end = $s->remove('end');
+                $ntext = substr($ntext, 0, $start).
+                  '%STARTSECTION{'.$s->stringify().'}%'.
+                    substr($ntext, $start, $end - $start).
+                      '%ENDSECTION{'.$s->stringify().'}%'.
+                        substr($ntext, $end, length($ntext));
             }
         }
         $text = $ntext;
