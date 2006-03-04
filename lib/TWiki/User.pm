@@ -283,11 +283,17 @@ sub resetPassword {
 
     my $password = randomPassword();
 
+    # removePassword will probably remove current e-mail addresses, cache a copy
+    my @tempEmails = $this->emails();
+
     if( $this->passwordExists() ) {
         $this->removePassword();
     }
 
     $this->addPassword( $password );
+
+    # push cached e-mail addresses back on account
+    $this->setEmails( @tempEmails );
 
     return $password;
 }
