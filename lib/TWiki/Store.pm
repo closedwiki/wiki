@@ -756,13 +756,22 @@ sub saveTopic {
     # Semantics inherited from Cairo. See
     # TWiki:Codev.BugBeforeSaveHandlerBroken
     if( $plugins->haveHandlerFor( 'beforeSaveHandler' )) {
+        my $before = '';
         if( $meta ) {
+            # write the meta into the topic text. Nasty compatibility
+            # requirement.
             $text = _writeMeta( $meta, $text );
+            $before = $meta->stringify();
         }
         $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
-        # remove meta again and throw it away (!)
-        my $trash = new TWiki::Meta( $this->{session}, $web, $topic);
-        $this->extractMetaData( $trash, \$text );
+        # remove meta again
+        my $after = new TWiki::Meta( $this->{session}, $web, $topic);
+        $this->extractMetaData( $after, \$text );
+        # If there are no changes in the $meta object, take the meta
+        # from the text. Nasty compatibility requirement.
+        if( !$meta || $meta->stringify() eq $before ){
+            $meta = $after;
+        }
     }
     my $error;
     try {
