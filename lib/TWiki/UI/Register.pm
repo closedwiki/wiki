@@ -200,7 +200,7 @@ sub bulkRegister {
     $settings->{doEmailUserDetails} =
       $query->param('EmailUsersWithDetails') || 0;
 
-    unless( $session->{user}->isAdmin() ) {
+    unless( $user->isAdmin() ) {
         throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $web, topic => $topic,
                                     params => $TWiki::cfg{UsersWebName}.'.'.
@@ -465,7 +465,7 @@ sub resetPassword {
     if ( $isBulk ) {
         # Only admin is able to reset more than one password or
         # another user's password.
-        unless( $session->{user}->isAdmin()) {
+        unless( $user->isAdmin()) {
             throw TWiki::OopsException
               ( 'accessdenied', def => 'only_group',
                 web => $web, topic => $topic,
@@ -572,7 +572,9 @@ are passed in CGI parameters.
    4 TWiki::User::updateUserPassword
    5 'oopschangepasswd'
 
-The NoPasswdUser case is not handled
+The NoPasswdUser case is not handled.
+
+An admin user can change other user's passwords.
 
 =cut
 
@@ -582,6 +584,7 @@ sub changePassword {
     my $topic = $session->{topicName};
     my $webName = $session->{webName};
     my $query = $session->{cgiQuery};
+    my $requestUser = $session->{user};
 
     my $oldpassword = $query->param( 'oldpassword' );
     my $username = $query->param( 'username' );
@@ -631,7 +634,7 @@ sub changePassword {
     }
 
     # check if required fields are filled in
-    if( ! defined $oldpassword ) {
+    unless( defined $oldpassword || $requestUser->isAdmin()) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
@@ -639,7 +642,7 @@ sub changePassword {
                                     params => [ 'oldpassword' ] );
     }
 
-    unless( $user->checkPassword( $oldpassword)) {
+    unless( $requestUser->isAdmin() || $user->checkPassword( $oldpassword)) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
@@ -1078,13 +1081,9 @@ sub _validateRegistration {
     }
 }
 
-=pod
-
- generate user entry
- If a password exists (either in Data{PasswordA} or data{CryptPassword}, use it.
- Otherwise generate a random one, and store it back in the user record.
-
-=cut
+# generate user entry
+# If a password exists (either in Data{PasswordA} or data{CryptPassword}, use it.
+# Otherwise generate a random one, and store it back in the user record.
 
 #SMELL - when should they get notified of the password?
 sub _addUserToPasswordSystem {
