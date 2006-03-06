@@ -32,6 +32,7 @@ By default, the resulting build script will interpret the targets described
 below, and the following options:
 | -n | Do nothing |
 | -v | Be verbose |
+| -topiconly | with target 'upload', only upload the topic (not the zip) |
 
 ---+++ Targets
 
@@ -140,7 +141,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'TWiki-4';
 
 my $NL = "\n";
 
@@ -202,6 +203,11 @@ sub new {
     my ( $class, $project, $rootModule ) = @_;
     my $this = bless({}, $class);
 
+    # Constants with internet paths
+    $this->{TWIKIORGPUB} = 'http://www.twiki.org/p/pub';
+    $this->{TWIKIORGSCRIPT} = 'http://twiki.org/cgi-bin';
+    $this->{BUGSURL} = 'http://develop.twiki.org/~develop/cgi-bin/view/Bugs';
+
     $this->{project} = $project;
     $this->{target} = 'test';
 
@@ -259,14 +265,15 @@ sub new {
     # Read the manifest
 
     my $manifest = _findRelativeTo( $buildpldir, 'MANIFEST' );
-    ($this->{files},$this->{other_modules})=readManifest($this->{basedir},'',$manifest,sub{exit(1)});
+    ($this->{files},$this->{other_modules}) =
+      readManifest($this->{basedir},'',$manifest,sub{exit(1)});
 
     # Generate a TWiki table representing the manifest contents
     # and a hash table representing the files
     my $mantable = '';
     my $hashtable = '';
     foreach my $file (@{$this->{files}}) {
-        $mantable .= "\t| ==" . $file->{name} . '== | ' .
+        $mantable .= "   | ==" . $file->{name} . '== | ' .
           $file->{description} . ' |'.$NL;
         $hashtable .= "'$file->{name}'=>$file->{permissions},";
     }
@@ -304,25 +311,6 @@ sub new {
     }
     close(PF);
 
-    my $version = 'Unknown';
-    if (open(PF,'<'.$this->{pm})) {
-        my $text = '';
-        while (my $line = <PF>) {
-            $line =~ s/\s+//g;
-            $text .= $line.$NL;
-        }
-        if ($text =~ /^\$VERSION\s*=(.*?);$/m) {
-            $version = $1;
-            if ($version =~ /\$Rev/ ) {
-                $version = _get_svn_version($this->{pm});
-            }
-        }
-    } else {
-        warn 'WARNING: '.$this->{pm}.
-          ' not found; cannot extract VERSION';
-    }
-    close(PF);
-
     my $deptable = '';
     my $a = ' align="left"';
     foreach my $dep (@{$this->{dependencies}}) {
@@ -331,6 +319,7 @@ sub new {
         $v =~ s/>/&gt;/go;
         $v =~ s/</&lt;/go;
         my $cells = CGI::td({align=>'left'}, $dep->{name} ).
+           CGI::td({align=>'left'}, $v ).
           CGI::td({align=>'left'}, $dep->{description});
         $deptable .= CGI::Tr( $cells );
     }
@@ -340,7 +329,8 @@ sub new {
         $this->{DEPENDENCIES} =
           CGI::table({ border=>1}, CGI::Tr($cells).$deptable );
     }
-    $this->{VERSION} = $version;
+
+    $this->{VERSION} = $this->_get_svn_version();
     $this->{DATE} = POSIX::strftime('%T %d %B %Y', localtime);
 
     local $/ = undef;
@@ -357,21 +347,26 @@ sub new {
     return $this;
 }
 
-sub DESTROY
-{
+sub DESTROY {
     my $self = shift;
     File::Path::rmtree( $self->{tmpDir} ) if $self->{tmpDir};
 }
 
 sub _get_svn_version {
-    my $from = shift;
-    my $ver = `svn info $from`;
-    unless (!$ver ) {
-        if( $ver =~ /Revision: (\d+)/s ) {
-            return $1;
+    my $this = shift;
+    unless( $this->{VERSION} ) {
+        # svn info all the files in the manifest
+        my $files = join(" ", map { "$this->{basedir}/$_->{name}" } @{$this->{files}});
+        my $log = `svn info $files`;
+        my $max = 0;
+        foreach my $line ( split(/\n/, $log )) {
+            if( $line =~ /^Last Changed Rev: (.*)$/ ) {
+                $max = $1 if $1 > $max;
+            }
         }
+        $this->{VERSION} = $max;
     }
-    return undef;
+    return $this->{VERSION};
 }
 
 sub ask {
@@ -642,6 +637,9 @@ Expands tokens. The following tokens are supported:
    * %$POSTINSTALL% - inserts script from POSTINSTALL
    * %$PREUNINSTALL% - inserts script from PREUNINSTALL
    * %$POSTUNINSTALL% - inserts script from POSTINSTALL
+   * %$TWIKIORGSCRIPT% - URL of twiki.org scripts dir
+   * %$TWIKIORGPUB% - URL of twiki.org pub dir
+   * %$BUGSURL% - URL of bugs web
 Three spaces is automatically translated to tab.
 
 The filter is used in the generation of documentation topics and the installer
@@ -658,7 +656,6 @@ sub filter_txt {
     my $text = <IF>;
     close(IF);
     $text =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
-    $text =~ s/ {3}/\t/g;
 
     unless ($this->{-n}) {
         open(OF, '>'.$to) || die 'No dest topic '.$to.' for filter';
@@ -686,7 +683,8 @@ sub _expand {
 
 ---++++ filter_pm($from, $to)
 Filters expanding SVN rev number with correct version from repository
-
+Note: unlike subversion, this puts in the version number of the whole
+repository, not just this file.
 =cut
 
 sub filter_pm {
@@ -697,11 +695,7 @@ sub filter_pm {
     my $text = <IF>;
     close(IF);
 
-    my $ver = _get_svn_version($from);
-    if( $ver ) {
-        if( $text =~ s/\$Rev(: \d+)?\$/\$Rev: $ver\$/gso ) {
-        }
-    }
+    $text =~ s/\$Rev(: \d+)?\$/\$Rev: $this->{VERSION}\$/gso;
 
     unless ($this->{-n}) {
         open(OF, '>'.$to) || die 'Bad dest topic '.$to.' for filter:'.$!;
@@ -724,6 +718,7 @@ sub target_release {
     my $this = shift;
 
     print "Building a release\n";
+    print "Version $this->{VERSION} of $this->{project}\n";
     print 'Package name will be ',$this->{project},$NL;
     print 'Topic name will be ',$this->_getTopicName(),$NL;
 
@@ -921,17 +916,27 @@ sub target_uninstall {
         my($self, $realm, $uri) = @_;
         unless ( $knownUser ) {
             local $/ = "\n";
-            print 'Logon to ',$uri->host_port,$NL;
-            print 'Enter ',$realm,': ';
-            $knownUser = <STDIN>;
-            chomp($knownUser);
-            return (undef, undef) unless length $knownUser;
-            print 'Password on ',$uri->host_port,': ';
-            system('stty -echo');
-            $knownPass = <STDIN>;
-            system('stty echo');
-            print $NL;  # because we disabled echo
-            chomp($knownPass);
+            if( open(F, '<'.$ENV{HOME}.'/.buildcontriblogin')) {
+                $knownUser = <F>; chomp($knownUser);
+                $knownPass = <F>; chomp($knownPass);
+                close(F);
+            } else {
+                print 'Logon to ',$uri->host_port,$NL;
+                print 'Enter ',$realm,': ';
+                $knownUser = <STDIN>;
+                chomp($knownUser);
+                return (undef, undef) unless length $knownUser;
+                print 'Password on ',$uri->host_port,': ';
+                system('stty -echo');
+                $knownPass = <STDIN>;
+                system('stty echo');
+                print $NL;  # because we disabled echo
+                chomp($knownPass);
+                if( open(F, '>'.$ENV{HOME}.'/.buildcontriblogin')) {
+                    print F "$knownUser\n$knownPass\n";
+                    close(F);
+                }
+            }
         }
         return ($knownUser, $knownPass);
     }
@@ -982,7 +987,7 @@ sub target_upload {
     my $web = prompt("Name of web on twiki.org to upload to", "Plugins");
 
     my $topic = $this->_getTopicName();
-    my $url = "http://twiki.org/cgi-bin/view/$web/$topic";
+    my $url = $this->{TWIKIORGSCRIPT}."/view/$web/$topic";
 
     # Get the old form data and attach it to the update
     print "Downloading $topic to recover form\n";
@@ -1024,6 +1029,8 @@ END
         unless $response->is_redirect &&
           $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
 
+    return if($this->{-topiconly});
+
     print 'Uploading zip',$NL;
     $url =~ s./save/./upload/.;
     $response =
@@ -1043,7 +1050,7 @@ END
 
     print 'Uploading tgz',$NL;
     $response =
-      $userAgent->post( 'http://twiki.org/cgi-bin/upload/Plugins/'.$to,
+      $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/Plugins/'.$to,
                         [
                          'filename' => $to.'.tgz',
                          'filepath' => [ $this->{basedir}.'/'.$to.'.tgz' ],
@@ -1058,7 +1065,7 @@ END
 
     print 'Uploading md5 checksums',$NL;
     $response =
-      $userAgent->post( 'http://twiki.org/cgi-bin/upload/Plugins/'.$to,
+      $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/Plugins/'.$to,
                         [
                          'filename' => $to.'.md5',
                          'filepath' => [ $this->{basedir}.'/'.$to.'.md5' ],
@@ -1165,7 +1172,7 @@ sub target_installer {
         push(@{$this->{files}},
              { name => $this->{project}.'_installer.pl',
                description => 'Install script',
-               permissions => 0440 });
+               permissions => 0640 });
         print STDERR 'Auto-adding install script to manifest',$NL;
     }
 
@@ -1290,6 +1297,142 @@ sub _manicollect {
         $n =~ s/$rootdir\/?//;
         $manilist{$n} = 'NEW' unless exists $manilist{$n};
     }
+}
+
+=pod
+
+#HistoryTarget
+Updates the history in the plugin/contrib topic from the subversion checkin history.
+   * Requires a line like | Change History:| NNNN: descr | in the topic, where NNN is an SVN rev no and descr is the description of the checkin.
+   * Automatically changes ItemNNNN references to links to the bugs web.
+   * Must be run in a subversion checkout area!
+This target works in the current checkout area; it still requires a checkin of the updated plugin. Note that history items checked in against Item000 are *ignored* (not included in the history).
+
+=cut
+
+sub target_history {
+    my $this = shift;
+
+    my $f = $this->{basedir}.'/'.$this->{data_twiki_module}.'.txt';
+
+    my $cmd = "cd $this->{basedir} && svn status";
+    print STDERR "Checking status using $cmd\n";
+    my $log = join("\n", grep { !/^\?/ } split(/\n/, `$cmd`));
+    print STDERR "WARNING:\n$log\n" if $log;
+
+    open(IN, "<$f") or die "Could not open $f: $!";
+    # find the table
+    my $in_history = 0;
+    my @history;
+    my $pre = '';
+    my $post;
+    local $/ = "\n";
+    while( my $line = <IN> ) {
+        if( $line =~ /^\s*\|\s*Change(\s+|&nbsp;)History:.*?\|\s*(.*?)\s*\|\s*$/i ) {
+            $in_history = 1;
+            push( @history, [ "?1'$1'", $1 ] ) if( $1 && $1 !~ /^\s*$/ );
+        } elsif( $in_history ) {
+            # | NNNN | desc |
+            if( $line =~ /^\s*\|\s*(\d+)\s*\|\s*(.*?)\s*\|\s*$/) {
+                push( @history, [ $1, $2 ] );
+            }
+
+            # | date | desc |
+            elsif( $line =~ /^\s*\|\s*(\d+[-\s\/]+\w+[-\s+\/]\d+)\s*\|\s*(.*?)\s*\|\s*$/) {
+                push( @history, [ $1, $2 ] );
+            }
+
+            # | verno | desc |
+            elsif( $line =~ /^\s*\|\s*([\d.]+)\s*\|\s*(.*?)\s*\|\s*$/) {
+                push( @history, [ $1, $2 ] );
+            }
+
+            # | | date: desc |
+            elsif( $line =~ /^\s*\|\s*\|\s*(\d+\s+\w+\s+\d+):\s*(.*?)\s*\|\s*$/) {
+                push( @history, [ $1. $2 ] );
+            }
+
+            # | | verno: desc |
+            elsif( $line =~ /^\s*\|\s*\|\s*([\d.]+):\s*(.*?)\s*\|\s*$/) {
+                push( @history, [ $1, $2 ] );
+            }
+
+            # | | desc |
+            elsif( $line =~ /^\s*\|\s*\|\s*(.*?)\s*\|\s*$/) {
+                push( @history, [ "?". $1 ] );
+            }
+
+            else {
+                $post = $line;
+                last;
+            }
+        } else {
+            $pre .= $line;
+        }
+    }
+    die "No | Change History: | ... | found" unless $in_history;
+    $/ = undef;
+    $post .= <IN>;
+    close(IN);
+    # Determine the most recent history item
+    my $base = 0;
+    if( scalar(@history) && $history[0]->[0] =~ /^(\d+)$/ ) {
+        $base = $1;
+    }
+    print STDERR "Refreshing history since $base\n";
+    $cmd = "cd $this->{basedir} && svn info -R";
+    print STDERR "Recovering version info using $cmd...\n";
+    $log = `$cmd`;
+    # find files with revs more recent than $base
+    my $curpath;
+    my @revs;
+    foreach my $line ( split(/\n/, $log )) {
+        if( $line =~ /^Path: (.*)$/) {
+            $curpath = $1;
+        } elsif( $line =~ /^Last Changed Rev: (.*)$/ ) {
+            die unless $curpath;
+            if( $1 > $base ) {
+                print STDERR "$curpath $1\n";
+                push(@revs, $curpath);
+            }
+            $curpath = undef;
+        }
+    }
+
+    unless( scalar(@revs) ) {
+        print STDERR "History is up to date with svn log\n";
+        return;
+    }
+
+    # Update the history
+    $cmd = "cd $this->{basedir} && svn log ".join(' ', @revs);
+    print STDERR "Updating history using $cmd...\n";
+    $log = `$cmd`;
+    my %new;
+    foreach my $line ( split(/^----+\s*/m, $log)) {
+        if( $line =~ /^r(\d+)\s*\|\s*(\w+)\s*\|\s*.*?\((.+?)\)\s*\|.*?\n\s*(.+?)\s*$/ ) {
+            # Ignore the history item we already have
+            next if $1 == $base;
+            my $rev = $1;
+            next if $rev <= $base;
+            my $when = "$2 $3 ";
+            my $mess = $4;
+            # Ignore Item000: checkins
+            next if $mess =~ /^Item0+:/;
+            $mess =~ s/</&lt;/g;
+            $mess =~ s/\|/!/g;
+            $mess =~ s#^Item(\d+):#<a rel='nofollow' href='$this->{BUGSURL}/Item$1'>Item$1</a> #gm;
+            $mess =~ s/\r?\n/ /g;
+            $new{$rev} = [ $rev, $mess ];
+        }
+    }
+    unshift(@history, map { $new{$_} } sort { $b <=> $a } keys(%new));
+    open(OUT, ">$f") || die "Could not open $f for write: $!";
+    print OUT $pre;
+    print OUT "| Change&nbsp;History: | |\n";
+    print OUT join("\n", map { "|  $_->[0] | $_->[1] |" } @history);
+    print OUT "\n$post";
+    close(OUT);
 }
 
 1;
