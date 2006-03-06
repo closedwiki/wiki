@@ -1,7 +1,18 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121939551" format="1.1" version="$Rev$"}%
 ---+!! Action Tracker Plugin
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+-->
 
 This plugin provides support for tracking actions embedded in [[http://en.wikipedia.org/wiki/Minutes][meeting minutes]]. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live".
+
+*WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.60][here]]*
 
 Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'. The action tracker can also be used for private reminders, for example TODO lists and diary entries, and has been successfully applied to functions as diverse as risk management and bug tracking.
 
@@ -163,12 +174,16 @@ ActionTrackerPlugin comes with a notifier script, like the =mailnotify= script u
 
 The frequency with which actions are notified depends on how you set up your cron (or equivalent) jobs on the server.
 
-The =actionnotify= script interprets its parameters as a search expression of the same type as that used in %<nop>ACTIONSEARCH%. All actions which match that expression will be notified to their owners. For example, you could set up the cron jobs as follows:
+The =actionnotify= script interprets its parameters as a search expression of the same type as that used in %<nop>ACTIONSEARCH%. All actions which match that expression will be notified to their owners.
+
+Note that the =actionnotify= script must be run from the =bin= directory. This is so it can pick up the TWiki path configuration file, =setlib.cfg=.
+
+For example, you could set up the cron jobs as follows:
 <pre>
-0 * * * * /home/twiki/tools/actionnotify "state=\"late\""
-0 8,16 * * * /home/twiki/tools/actionnotify "state=\"open\" within=\"3\""
-0 0 * * * /home/twiki/tools/actionnotify "state=\"open\" within=\"7\"
-0 0 * * 1 /home/twiki/tools/actionnotify "state=\"open\" within=\"30\"
+0 * * * * cd /home/twiki/bin && ../tools/actionnotify "state=\"late\""
+0 8,16 * * * cd /home/twiki/bin && ../tools/actionnotify "state=\"open\" within=\"3\""
+0 0 * * * cd /home/twiki/bin && ../tools/actionnotify "state=\"open\" within=\"7\"
+0 0 * * 1 cd /home/twiki/bin && ../tools/actionnotify "state=\"open\" within=\"30\"
 </pre>
 (If you don't know cron, the first 5 fields are minute, hour, day of month, month and day of week. * means 'every'). This crontab will notify actions according to the schedule:
 	1 Actions that are late will be notified every hour, on the hour
@@ -179,7 +194,7 @@ A rather aggressive schedule!
 
 __Note:__ At Wind River they notify folks three times a week on Mon, Wed and Fri for open action items due within 8 days.
 Crontab entry for geeks:<font size="-2"><pre>
-0 0 * * 1,3,5 (cd /twiki1/httpd/twiki-bin; ./actionnotify state=open within=8 'web=<nop>[CEIMPSW].*' &gt; /twiki1/httpd/htdocs/pub/actionnotify.txt 2&gt;&amp;1)
+0 0 * * 1,3,5 (cd .../bin; ../tools/actionnotify state=open within=8 'web=<nop>[CEIMPSW].*' &gt; .../logs/actionnotify.txt 2&gt;&amp;1)
 </pre></font>
 
 You can configure the fields which are scanned to detect state changes; see [[#SettingsNotify][Settings]].
@@ -215,7 +230,7 @@ changedsince="3 days ago"
 
 Obviously you have to be careful to synchronise your =changedsince= expression with the activation of your cron job. The ideal is to specify the same delta as the gap between cron activations. For example,
 <pre>
-0 0 * * * /home/twiki/tools/actionnotify 'web="News" changedsince="yesterday"'
+0 0 * * * cd /home/twiki/bin && ../tools/actionnotify 'web="News" changedsince="yesterday"'
 </pre>
 will notify registered users of action changes that occurred in the last 24 hours. Note the use of single quotes to prevent expansion in the shell.
 
@@ -384,8 +399,12 @@ The mechanism for defining notification groups as lists of "EMail" lines in a to
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | |
-| 21 July 2005 | 2.100 Dakar version. Removed config module. |
+| Change History: | |
+| 8385 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1443'>Item1443</a>  style sheet bug makes yellow warning not show |
+| 8372 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1434'>Item1434</a>  moved actionnotify from bin into tools |
+| 8304 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  removing dotted style from AT. Looks horrible in IE |
+| 8090 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1304'>Item1304</a>  removed unnecessary warning that may be breaking some sites |
+| 8089 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  changed dotted to solid gray, as requested |
 | 26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. Added relative date specs to searches. |
 | 8 Feb 2005 | 2.021 Documentation fixes. |
 | 19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
@@ -399,7 +418,6 @@ The mechanism for defining notification groups as lists of "EMail" lines in a to
 | 14 Feb 2002 | Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
 | 11 Jan 2002 | Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
 | 9 Jan 2002 | Bugfix version |
-|  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.8 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |

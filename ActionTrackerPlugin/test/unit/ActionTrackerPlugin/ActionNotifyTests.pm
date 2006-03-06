@@ -12,7 +12,7 @@ use Time::ParseDate;
 use TWiki::Attrs;
 use TWiki::Store::RcsLite;
 
-my $testweb = "ActionTrackerPluginTestWeb";
+my $testWeb = "ActionTrackerPluginTestWeb";
 my $peopleWeb = "ActionTrackerPluginTestPeopleWeb";
 my $twiki;
 my $savePeople;
@@ -36,7 +36,7 @@ sub set_up {
     $TWiki::Plugins::SESSION = $twiki;
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
 
-    $twiki->{store}->createWeb($twiki->{user}, $testweb);
+    $twiki->{store}->createWeb($twiki->{user}, $testWeb);
     $twiki->{store}->createWeb($twiki->{user}, $peopleWeb);
 
     $twiki->{net}->setMailHandler(\&sentMail);
@@ -115,7 +115,7 @@ More garbage
    * $peopleWeb.ActorSix
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$testweb, "WebNotify", <<"HERE"
+    $twiki->{store}->saveTopic($twiki->{user},$testWeb, "WebNotify", <<"HERE"
    * $peopleWeb.ActorEight - actor-8\@correct.address
 HERE
                               );
@@ -124,11 +124,11 @@ HERE
 HERE
                               );
 
-    $twiki->{store}->saveTopic($twiki->{user},$testweb, "Topic1", <<'HERE'
+    $twiki->{store}->saveTopic($twiki->{user},$testWeb, "Topic1", <<'HERE'
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,ActorSeven,ActorEight" due="3 Jan 02" state=open}% A1: ontime
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$testweb, "Topic2", <<'HERE'
+    $twiki->{store}->saveTopic($twiki->{user},$testWeb, "Topic2", <<'HERE'
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7@seven.net,ActorEight" due="2 Jan 02" state=closed}% A2: closed
 HERE
                               );
@@ -143,7 +143,7 @@ HERE
 HERE
                               );
 
-    my $rcs = new TWiki::Store::RcsLite($twiki, $testweb, "ActionChanged" );
+    my $rcs = new TWiki::Store::RcsLite($twiki, $testWeb, "ActionChanged" );
     my $t1 = Time::ParseDate::parsedate("21 Jun 2001");
     $rcs->addRevisionFromText(<<HERE,
 %META:TOPICINFO{author="guest" date="$t1" format="1.0" version="1.1"}%
@@ -170,7 +170,7 @@ HERE
 sub tear_down {
     my $this = shift;
     $this->SUPER::tear_down();
-    $twiki->{store}->removeWeb($twiki->{user}, $testweb);
+    $twiki->{store}->removeWeb($twiki->{user}, $testWeb);
     $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
 }
 
@@ -219,7 +219,7 @@ sub test_A_AddressExpansion {
     TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify($peopleWeb,\%ma);
     $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
     $this->assert_str_equals( "actor5\@correct.address", $who);
-    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify($testweb,\%ma);
+    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify($testWeb,\%ma);
     $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
     $this->assert_str_equals( "actor-8\@correct.address", $who);
 }
@@ -230,7 +230,7 @@ sub test_B_NotifyLate {
 
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
 
-    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications($twiki->{webName}, "late" );
+    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications($twiki->{webName}, "web='($testWeb|$peopleWeb)' late" );
     if(scalar(@mails!= 8)) {
         my $mess = scalar(@mails)." mails:\n";
         while ( $html = shift(@mails)) {
@@ -323,7 +323,7 @@ sub test_B_NotifyLate {
     $this->assert_matches(qr/H/, $ok);
 }
 
-sub detest_C_ChangedSince {
+sub test_C_ChangedSince {
     my $this = shift;
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
     TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications(
