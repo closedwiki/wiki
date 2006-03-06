@@ -1884,7 +1884,8 @@ sub renderFormFieldArg {
     foreach my $field ( @fields ) {
         my $title = $field->{title} || $field->{name};
         if( $name =~ /^($field->{name}|$title)$/ ) {
-            $value = $field->{value} || '';
+            $value = $field->{value};
+            $value = '' unless defined( $value );
             $value =~ s/^\s*(.*?)\s*$/$1/go;
             $value = breakName( $value, $breakArgs );
 
