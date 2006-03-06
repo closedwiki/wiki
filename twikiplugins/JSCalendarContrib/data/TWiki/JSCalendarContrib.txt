@@ -1,3 +1,12 @@
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+-->
 [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
 
 ---+ Summary of Contents
@@ -62,8 +71,13 @@ Note that the header will only be added once, regardless of the number of times 
 |  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
 |  License: | GNU LGPL |
 |  Dependencies: | %$DEPENDENCIES% |
-|  27/12/05 | updated to calendar version 1.0; set style for Safari to win2k-1|
-|  14/08/04 | Separated out from SharedCode module |
+| Change History: | |
+| 6634 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item453'>Item453</a>  removed EditTablePlugins private copy of the Mishoo JS calendar, and made sure it works with JSCalendarContrib. Improved the documentation of the JSCalendar while I was there. |
+| 6626 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item468'>Item468</a>  updated docs for Dakar release |
+| 5048 | Cairo readiness |
+| 5039 | Split from SharedCode |
+|  27 Dec 2005 | updated to calendar version 1.0; set style for Safari to win2k-1|
+|  14 Aug 2004 | Separated out from SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
