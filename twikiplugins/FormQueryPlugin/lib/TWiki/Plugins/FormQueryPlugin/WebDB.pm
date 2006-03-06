@@ -58,7 +58,7 @@ sub init {
         push( @relations, new  TWiki::Plugins::FormQueryPlugin::Relation( $relation ));
     }
 
-    my $tables;
+    my @tables;
     foreach my $table ( split( /\s*,\s*/, $tablenames )) {
         my( $tableweb,$tablename ) =
           TWiki::Func::normalizeWebTopicName($web, $table);
