@@ -378,7 +378,7 @@ sub _updateCache {
 
     if ( $readFromFile || $removed ) {
         # refresh relations
-        $this->onReload( \@readTopic );
+        $this->_onReload( \@readTopic );
     }
 
     return ( $readFromCache, $readFromFile, $removed );

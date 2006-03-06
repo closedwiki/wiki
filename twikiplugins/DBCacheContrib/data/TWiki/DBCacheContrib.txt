@@ -1,4 +1,15 @@
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+-->
 Reusable code that treats TWiki forms data as if it were a database
+
+*WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.9][here]]*
 
 ---+ Summary of Contents
 
@@ -73,7 +84,28 @@ Clients use the DBCache by defining a subclass of the =TWiki::Contrib::DBCache= 
 |  Copyright &copy;: | This code is based on an original development of Motorola Inc. and is protected by the following copyrights: <br>Copyright @copy 2002-2003 Motorola Inc. All Rights Reserved. <br>Portions copyright &copy; 2004. Crawford Currie http://www.c-dot.co.uk |
 |  License: | As required for the publication of all extensions to TWiki, this software is published under the terms of the GNU General Public License. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details, published at http://www.gnu.org/copyleft/gpl.html |
 |  Version: | %$VERSION% |
-|  Change History: | 8 Jul 2004: Initial version, split out from FormQueryPlugin |
+| Change History: | |
+| 8682 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1580'>Item1580</a>  one-char fix that makes the difference |
+| 8110 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item663'>Item663</a>  formatting and text fixes |
+| 7552 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item997'>Item997</a>  test update |
+| 7274 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item719'>Item719</a>  onReload() is not a static method. |
+| 7262 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item719'>Item719</a>  MichaelDaum's patch (almost) to correct parameters to onReload |
+| 7260 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item727'>Item727</a>  made it clean the form name using normaliseWebTopicName |
+| 6353 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item380'>Item380</a>  do as the man says; make all $/ local |
+| 5720 | Updated tests |
+| 5719 | Fix for correct handling of parent relations |
+| 5229 | Small improvement to the way it handles errors from Storable and Archive |
+| 5223 | Documentation fixes, adding gifs. |
+| 5048 | Cairo readiness |
+| 5036 | Split from SharedCode |
+| 5031 | Moving to new name |
+| 5030 | About to rename |
+| 5019 | Improved topic data model, cleaned up tests |
+| 5008 | Added extended access syntax, [?], [*] etc. |
+| 5006 | Doc fixes |
+| 5005 | Poddified documentation |
+| 5003 | Initial version |
+| 8 Jul 2004 | Initial version, split out from FormQueryPlugin |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
