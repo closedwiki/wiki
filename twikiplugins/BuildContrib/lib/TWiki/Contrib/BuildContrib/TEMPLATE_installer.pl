@@ -8,6 +8,9 @@
 use strict;
 use Socket;
 
+# The root of package URLs
+my $PACKAGES_URL = "%$TWIKIORGPUB%/Plugins/";
+
 my $noconfirm = 0;
 my $twiki;
 my $NL = "\n";
@@ -155,7 +158,7 @@ DONE
             $packname .= $pack if( $pack eq 'Contrib' && $packname !~ /Contrib$/);
             my $reply = ask('Would you like me to try to download and install the latest version of '.$packname.' from twiki.org?');
             if( $reply ) {
-                $result = getPlugin( $packname );
+                $result = installPackage( "$PACKAGES_URL/$packname/", $packname );
             }
         } elsif ( $dep->{type} eq 'cpan' && $available{CPAN} ) {
             print <<'DONE';
@@ -332,6 +335,7 @@ sub setConfig {
         undef $/;
         $txt = <F>;
         close(F);
+        $txt =~ s/\n+1;\s*//gs;
         # kill the old settings (and previous comment) if any are there
         foreach my $setting ( keys %keys ) {
             if( $key ) {
@@ -341,6 +345,7 @@ sub setConfig {
             }
         }
     }
+    $txt .= "\n" unless $txt =~ /\n$/s;
     open(F, ">lib/LocalSite.cfg") ||
       die "Failed to open lib/LocalSite.cfg for write";
     print F $txt if $txt;
@@ -352,6 +357,7 @@ sub setConfig {
         }
         print F $keys{$setting}, ";\n";
     }
+    print F "1;\n";
     close(F);
 
     # is this Cairo or earlier? If it is, we need to include
@@ -372,50 +378,55 @@ sub setConfig {
 }
 
 # Try and download an archive from a URI
-# Return undef if the download failed
+# Return undef if the download failed, or the local filename otherwise
 sub getArchive {
-    my $pack = shift;
+    my( $url, $archive ) = @_;
 
     foreach my $type ( @archTypes ) {
-        my $f = $pack.'.'.$type;
+        my $f = $archive.'.'.$type;
 
         if( -e $f ) {
             my $ans = ask( 'An existing '.$f.
                         ' exists; would you like me to use it?' );
             return $f if $ans;
-        }
-        unless ( unlink( $f )) {
-            print STDERR 'Could not remove old '.$f.$NL;
+
+            unless ( unlink( $f )) {
+                print STDERR 'Could not remove old '.$f.$NL;
+            }
         }
     }
 
     my $response;
     foreach my $type ( @archTypes ) {
-        $response = $lwp->get( $pack.'.'.$type );
+        $response = $lwp->get( $url.$archive.'.'.$type );
 
-        if( $response->is_success ) {
-            return $response->content();
+        if( $response->is_success() ) {
+            my $f = "$archive.$type";
+            open(F, ">$f" ) || die "Failed to open $f for write: $!";
+            print F $response->content();
+            close(F);
+            return $f;
         }
     }
 
-    print STDERR 'Failed to download ', $pack,
-      ' -- ', $response->status_line, $NL;
+    print STDERR 'Failed to download ', $archive,
+      "\n", $response->status_line, $NL;
 
     return undef;
 }
 
-# Download the zip file for the given plugin package from twiki.org.
-sub getPlugin {
-    my $packname = shift;
+# install a package from the given url
+sub installPackage {
+    my( $url, $package ) = @_;
 
-    my $data = getArchive( 'http://www.twiki.org/p/pub/Plugins/$pack/$pack' );
+    my $file = getArchive( $url, $package );
 
-    return 0 unless unpackArchive( $data );
+    return 0 unless $file && unpackArchive( $file );
 
-    if( -e $packname.'_installer.pl' ) {
-        print `perl ${packname}_installer.pl install`;
+    if( -e $package.'_installer.pl' ) {
+        print `perl ${package}_installer.pl -a install`;
         if ( $? ) {
-            print STDERR 'Installation of ',$packname,' failed',$NL;
+            print STDERR 'Installation of ',$package,' failed',$NL;
             return 0;
         }
     }
@@ -757,9 +768,6 @@ if( $action eq 'uninstall' ) {
 }
 
 if( $action eq 'upgrade' ) {
-    my $zip = '%$MODULE%.zip';
-
-    return 0 unless getArchive( '%$MODULE%' );
 
     print <<DONE;
 I would like to uninstall %$MODULE% before upgrading, to
@@ -778,8 +786,5 @@ DONE
         exit unless $reply;
     }
 
-    if( unzip( $zip )) {
-        # Recursively invoke the (new) installer
-        print `perl %$MODULE%_installer.pl install`;
-    }
+    installPackage( "$PACKAGES_URL/%$MODULE%/", '%$MODULE%' );
 }
