@@ -1,4 +1,16 @@
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+-->
 ---+!! <nop>Web<nop>DAV for TWiki
+
+*WARNING: TWiki-3.0 only. This plugin has not yet been ported to TWiki-4.0*
+If you would like to sponsor the port, or sponsor a port to Apache 2, please contact http://c-dot.co.uk
 
 <nop>Web<nop>DAV stands for "Web-based Distributed Authoring and Versioning". It is a set of extensions to the HTTP protocol which allows users to collaboratively edit and manage files on remote web servers.
 
@@ -123,7 +135,27 @@ Note that if you have non-default permissions set in your TWiki, then you *must*
 ---++ Plugin Info
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Plugin Version: | %$VERSION% build %$DATE% |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| Change History: | |
+| 5248 | Improved debug and documentation, and added tab conversion |
+| 5048 | Cairo readiness |
+| 5023 | Udates for Cairo, bug fixes grokked from WRS installation |
+| 5001 | Corner-case bugfixes |
+| 5000 | Merging changes made in live sites |
+| 4991 | Documentation fixes |
+| 4990 | Added back .exp and other PC build files. Added yet more tests. Updated documentation. |
+| 4989 | Range of tests for topic handling |
+| 4988 | Added first version of topic manipulation |
+| 4982 | Minor correction |
+| 4981 | Added curl-based server tests, and extended documentation. Renamed recache.pl to dav_recache. |
+| 4974 | Fixed rename, and respected locks |
+| 4973 | Cured nasty bug when drag-dropping to DAV dirs in Konqueror |
+| 4970 | Depends on shared |
+| 4958 | Changed tests to use shared fixtures |
+| 4949 | Changed to use shared code build process |
+| 4948 | Moved build process to SharedCode |
+| 4940 | Fixes for drag and drop, and checkin script. Tidied up debugging and added more tests. |
+| 4939 | Fixes for minor probs and docs |
+| 4937 | Added protections mechanism and tests |
 |  15 Sep 2004 | Improved authentication handling |
 |  16 Aug 2004 | Minor bugfixes |
 |  22 May 2004 | Support for topics added. Production release. |

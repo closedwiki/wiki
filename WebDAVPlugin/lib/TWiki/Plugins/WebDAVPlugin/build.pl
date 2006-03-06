@@ -16,43 +16,46 @@ package WebDAVPluginBuild;
 @WebDAVPluginBuild::ISA = ( "TWiki::Contrib::Build" );
 
 sub new {
-  my $class = shift;
-  return bless( $class->SUPER::new( "WebDAVPlugin" ), $class );
+    my $class = shift;
+    return bless( $class->SUPER::new( "WebDAVPlugin" ), $class );
 }
 
 # override to build C program in test dir
 sub target_test {
-  my $this = shift;
-  $this->cd("$this->{basedir}/test/unit/WebDAVPlugin");
-  $this->sys_action("gcc access_check.c -I ../lib/twiki_dav -g -o accesscheck -ltdb");
-  $this->SUPER::target_test;
+    my $this = shift;
+    $this->pushd("$this->{basedir}/test/unit/WebDAVPlugin");
+    $this->sys_action("gcc access_check.c -I ../lib/twiki_dav -g -o accesscheck -ltdb");
+    $this->popd();
+    $this->SUPER::target_test;
 }
 
 # Override the build target to build the twiki_dav C code
 sub target_build {
-  my $this = shift;
+    my $this = shift;
 
-  $this->SUPER::target_build();
+    $this->SUPER::target_build();
 
-  $this->cd($this->{basedir}."/lib/twiki_dav");
-  if (! -f 'Makefile') {
-	$this->sys_action("./configure");
-  }
-  $this->sys_action("make");
+    $this->pushd($this->{basedir}."/lib/twiki_dav");
+    if (! -f 'Makefile') {
+        $this->sys_action("./configure");
+    }
+    $this->sys_action("make");
+    $this->popd();
 }
 
 # Override the install target to install twiki_dav
 sub target_install {
-  my $this = shift;
+    my $this = shift;
 
-  $this->SUPER::target_install();
+    $this->SUPER::target_install();
 
-  if (-w "/usr/lib/apache/libdav.so") {
-	$this->cd($this->{basedir}."/lib/twiki_dav");
-	$this->sys_action("make install");
-  } else {
-	warn "No privilege to make install";
-  }
+    if (-w "/usr/lib/apache/libdav.so") {
+        $this->pushdd($this->{basedir}."/lib/twiki_dav");
+        $this->sys_action("make install");
+        $this->popd();
+    } else {
+        warn "No privilege to make install";
+    }
 }
 
 $build = new WebDAVPluginBuild();

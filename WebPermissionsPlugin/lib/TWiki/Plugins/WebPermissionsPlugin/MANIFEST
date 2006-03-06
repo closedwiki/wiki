@@ -1,0 +1,4 @@
+lib/TWiki/Plugins/WebPermissionsPlugin.pm
+data/TWiki/WebPermissionsPlugin.txt
+pub/TWiki/WebPermissionsPlugin/CHANGE.gif
+pub/TWiki/WebPermissionsPlugin/VIEW.gif

@@ -188,11 +188,14 @@ sub _expandURL {
 sub _makeSquab {
     my( $this, $url, $text ) = @_;
 
+    my $save = $url;
     $url =~ s/$TT1([0-9]+)$TT1/$this->_expandRef($1)/ge;
     if( $url =~ /[<>"\x00-\x1f]/ ) {
         # we didn't manage to expand some variables in the url
         # path. Give up.
-        return defined($text) ? "[[$url][$text]]" : "[[$url]]";
+        # If we can't completely expand the URL, then don't expand
+        # *any* of it (hence $save)
+        return defined($text) ? "[[$save][$text]]" : "[[$save]]";
     }
 
     unless( $text ) {

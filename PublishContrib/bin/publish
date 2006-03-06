@@ -36,6 +36,6 @@ BEGIN {
     require 'setlib.cfg';
 }
 
+use TWiki::UI;
 use TWiki::Contrib::Publish;
-
-TWiki::Contrib::Publish::main();
+TWiki::UI::run( \&TWiki::Contrib::Publish::publish );
