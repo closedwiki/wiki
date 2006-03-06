@@ -365,10 +365,13 @@ sub isAdmin {
         unless( $this->{isKnownAdmin} ) {
             my $sag = $this->{session}->{users}->findUser(
                 $TWiki::cfg{SuperAdminGroup}, undef, 1 );
-            if (defined($sag)) {    #don't mess up the isKnownAdmin, we lazy load groups
-                ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
-                $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers() );
+            if (!defined($sag)) {    #force a lazy load groups
+                $this->{session}->{users}->getAllGroups();
+                $sag = $this->{session}->{users}->findUser(
+                    $TWiki::cfg{SuperAdminGroup} ); #must be undefined - create it
             }
+            ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
+            $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers() );
         }
     }
     return $this->{isKnownAdmin};
