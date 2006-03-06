@@ -2,11 +2,18 @@
 
 ---+!! Comment Plugin
 
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+-->
 This plugin allows users to quickly post comments to a page without an edit/preview/save cycle. 
 
-_( Discussion in TWiki:Plugins/CommentPluginDev )_
-
-__Note: this version of the CommentPlugin will _not_ work with TWiki versions released prior to June 2005__
+*WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.57][here]]*
 
 %TOC%
 ---+ Features
@@ -84,7 +91,7 @@ Customisation of the comment plugin requires
 
 To define a comment type, you have to provide two simple template definitions in the template file; one for the prompt box, and one for the generated output. If we have a template type "mytype", these are named =PROMPT:mytype= and =OUTPUT:mytype= respectively. See =comments.tmpl= in the templates directory for examples.
 
-The plugin picks up these template definitions from a standard TWiki template file, =templates/comments.tmpl=. This allows different templates to be defined for different TWiki skins. By default, this template includes the topic %TWIKIWEB%.CommentsTemplate, which contains all the shipped standard templates and in turn includes %TWIKIWEB%.<nop>UserCommentsTemplate. This allows for several levels of customisation:
+The plugin picks up these template definitions from a standard TWiki template file, =templates/comments.tmpl=. This allows different templates to be defined for different TWiki skins. By default, this template includes the topic %TWIKIWEB%.CommentPluginTemplate, which contains all the shipped standard templates and in turn includes %TWIKIWEB%.<nop>UserCommentsTemplate. This allows for several levels of customisation:
    1 To override all default templates, everywhere, change =comments.tmpl= to include a different topic (this customisation will be lost next time you upgrade, though).
    1 To add site-wide local template customisations, add them to %TWIKIWEB%.<nop>UserCommentsTemplate. You can redefine the standard templates here if you want, and your definitions will override the standard definitions.
    1 To override templates on a web-by-web basis, add a topic !UserCommentsTemplate to the web (this will replace %TWIKIWEB%.<nop>UserCommentsTemplate)
@@ -147,8 +154,24 @@ All the usual TWikiVariables that can be used in a topic template can also be us
       * Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 ---+ Plugin Info
 |  Plugin Author: | TWiki:Main.DavidWeller, TWiki:Main.PeterMasiar, TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-| Change History: | Please refer to the TWiki Subversion repository for a complete change history of this plugin. |
-|  Dependencies: | %$DEPENDENCIES% |
+| Change History: | |
+| 8788 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Item1577: reverted 8433 to fix inclusion of correct user templates |
+| 8787 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1573'>Item1573</a>  renamed standard templates topic to avoid naming clash on Windows, where filenames are case-insensitive |
+| 8433 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Fix 'TWiki.' to '%TWIKIEB%.'; also fixed include 'UserComments' to 'UserCommentsTemplate' (at least that is what the doc suggests) |
+| 7427 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item845'>Item845</a>  removed duplicate date in default comments; stick with server time |
+| 7251 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item810'>Item810</a>  fix for user template inclusion; reorganised templates to make customisation easier |
+| 5906 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item143'>Item143</a>  apache warning from comment plugin when CommentsTmpl.txt not foudn |
+| 5519 | CommentPluginOnAnchorsBroken: incorporated JacobEisinger's fix |
+| 5518 | CommentPluginOnAnchorsBroken: incorporated OlivierBerger's fix |
+| 5455 | On Niels Kodslo's prompting, removed the global recursion prevention that I believe is no longer needed. |
+| 5280 | Removed templates, and some minor fixes |
+| 5250 | Removed newlines from prompt box |
+| 4902 | Changed to use viewauth. Moved templates into user topics. |
+| 4901 | Added templates in user webs support |
+| 4897 | Fixes for disabling during preview; re-enabled old legacy parameters |
+| 4889 | Chopped down from PeterMasiar version, removing several parameters, savecomment script, changing way templates are done. Major rewrite, atcherly. |
+| 4882 | Update from PeterMasiar's 2.0 version, plus documentation and small code improvements. |
+| 4745 | 06Mar 2002 initial commit |
 |  Perl Version: | >= 5.6.1 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |

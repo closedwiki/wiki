@@ -136,7 +136,7 @@ Action added to action table directly above comment box
 %TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:action}%%POS:BEFORE%%ACTION{who="%URLPARAM{"who"}%" due="%URLPARAM{"due"}%"}% %URLPARAM{"comment" newline="<br />"}%<br />- Created by %WIKIUSERNAME%, %SERVERTIME%
+%TMPL:DEF{OUTPUT:action}%%POS:BEFORE%%AC%NOP%TION{who="%URLPARAM{"who"}%" due="%URLPARAM{"due"}%"}% %URLPARAM{"comment" newline="<br />"}%<br />- Created by %WIKIUSERNAME%, %SERVERTIME%
 %TMPL:END%
 </verbatim>
 ----------------------------------------------------------------------------
@@ -181,17 +181,10 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 %TMPL:END%
 </verbatim>
 
----+ Include !UserTemplates
-__Note:__ !UserTemplates is included from the TWiki web for backward compatibility only. It should not be used - add user templates to %TWIKIWEB%.UserCommentsTemplate instead.
-
-Including %TWIKIWEB%.UserTemplates:
-
-%TMPL:INCLUDE{"%TWIKIWEB%.UserTemplates"}%
-
 ---+ Include !UserCommentsTemplate
 
-Including %TWIKIWEB%.UserCommentsTemplate:
+Including UserCommentsTemplate:
 
-%TMPL:INCLUDE{"%TWIKIWEB%.UserCommentsTemplate"}%
+%TMPL:INCLUDE{"UserComments"}%
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
