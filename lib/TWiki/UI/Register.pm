@@ -834,8 +834,10 @@ sub _writeRegistrationDetailsToTopic {
     # TODO - there should be some way of overwriting meta without
     # blatting the content.
 
-    $text ||= "%SPLIT%\n\t* %KEY%: %VALUE%%SPLIT%\n\t* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%\n";
-    my ( $before, $repeat, $after ) = split( /%SPLIT%/, $text );
+    my( $before, $repeat, $after ) = split( /%SPLIT%/, $text, 3 );
+    $before = '' unless defined( $before );
+    $repeat = "\n".'   * %KEY%: %VALUE%' unless defined( $repeat );
+    $after = "\n".'   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%'."\n" unless defined( $after );
 
     my $log;
     my $addText;
