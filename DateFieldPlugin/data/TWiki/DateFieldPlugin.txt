@@ -1,6 +1,17 @@
 ---+!! Date Field Plugin
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+-->
 
 Provides support for a new type, =date=, in form fields. When a form field is set to this type it will no longer be editable by normal means, but only through a date selection popup.
+
+*WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.5][here]]*
 
 ---+ Usage
 
@@ -35,7 +46,11 @@ See JSCalendarContrib for additional settings.
 |  Version: | %$VERSION% |
 |  Copyright &copy;: | 2004 Deutsche Bank AG |
 |  License: | [[GPL][http://www.gnu.org/copyleft/gpl.html]] |
-|  Change History: | <!-- Most recent first --> |
+| Change History: | |
+| 7265 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  removed pointless, outdated dependency check from DateFieldPlugin |
+| 6653 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  removed spurious documentation. JSCalendarContrib is now used, and there is no longer any plugin-specific setup for the calendar |
+| 5958 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  modernised DateFieldPlugin, and made mklinks.sh link in contribs. Also added a copy option, for people like Anton who want to make local dists for upload to remote servers |
+| 5451 | Initial revision |
 |  03 Jan 2005 | 1.001 make outputformat configurable; changed standard format to sortable dates |
 |  9 Dec 2004 | 1.000 initial version |
 |  Dependencies: | %$DEPENDENCIES% |
