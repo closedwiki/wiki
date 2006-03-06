@@ -1,5 +1,3 @@
-package TWiki::Contrib::Publish;
-
 #
 #  Publish site (generate static HTML)
 #
@@ -28,19 +26,15 @@ package TWiki::Contrib::Publish;
 # http://www.gnu.org/copyleft/gpl.html
 #
 
-use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
-use CGI::Carp qw(fatalsToBrowser);
-use CGI;
-use File::Copy;
-use File::Path;
-use lib ('.');
-use lib ('../lib');
+package TWiki::Contrib::Publish;
+
 use TWiki;
 use TWiki::Func;
+use Error qw( :try );
 
 use strict;
 
-use vars qw( $ZipPubUrl $VERSION $RELEASE $session );
+use vars qw( $VERSION $RELEASE );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -52,71 +46,101 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
+{   package TWiki::Contrib::Publish::Zipper;
+
+    sub new {
+        my( $class, $path, $web ) = @_;
+        my $this = bless( {}, $class );
+        $this->{path} = $path;
+        $this->{web} = $web;
+
+        eval "use Archive::Zip qw( :ERROR_CODES :CONSTANTS )";
+        die $@ if $@;
+        $this->{zip} = Archive::Zip->new();
+        my $tmp = TWiki::Func::formatTime(time());
+        $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
+        $this->{id} = TWiki::Func::getWikiName()."_".$this->{web}."_".$tmp.".zip";
+
+        return $this;
+    }
+
+    sub addDirectory {
+        my( $this, $dir ) = @_;
+        $this->{zip}->addDirectory( $dir );
+    }
+
+    sub addString {
+        my( $this, $string, $file ) = @_;
+        $this->{zip}->addString( $string, $file );
+    }
+
+    sub addFile {
+        my( $this, $from, $to ) = @_;
+        $this->{zip}->addFile( $from, $to );
+    }
+
+    sub close {
+        my $this = shift;
+        $this->{zip}->writeToFileNamed( "$this->{path}/$this->{id}" );
+    }
+};
+
+{   package  TWiki::Contrib::Publish::Filer;
+
+    sub new {
+        my( $class, $path, $web ) = @_;
+        my $this = bless( {}, $class );
+        $this->{path} = $path;
+        $this->{web} = $web;
+        $this->{id} = $web;
+
+        eval "use File::Copy;use File::Path;";
+        die $@ if $@;
+
+        File::Path::mkpath("$this->{path}/$web");
+
+        return $this;
+    }
+
+    sub addDirectory {
+        my( $this, $name ) = @_;
+        my $d = "$this->{web}/$name";
+        File::Path::mkpath("$this->{path}/$d")
+      }
+
+    sub addString {
+        my( $this, $string, $file) = @_;
+        my $f = "$this->{web}/$file";
+        open(F, ">$this->{path}/$f") || die "Cannot write $f: $!";
+        print F $string;
+        close(F);
+    }
+
+    sub addFile {
+        my( $this, $from, $to ) = @_;
+        File::Copy::copy( $from, "$this->{path}/$this->{web}/$to" );
+    }
+
+    sub close {
+    }
+}
+
 #  Main rendering loop.
-sub main {
+sub publish {
+    my $session = shift;
 
-    # Read command-line arguments and make 
-
-    # Fill in default environment variables if invoked from command-line.
-
-    $ENV{HTTP_USER_AGENT} = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)" unless(exists $ENV{HTTP_USER_AGENT});
-    $ENV{HTTP_HOST} = "localhost" unless(exists $ENV{HTTP_HOST});
-    $ENV{REMOTE_ADDR} = "127.0.0.1" unless(exists $ENV{REMOTE_ADDR});
-    $ENV{REMOTE_PORT} = "2509" unless(exists $ENV{REMOTE_PORT});
-    $ENV{REMOTE_USER} = "TWikiGuest" unless(exists $ENV{REMOTE_USER});
-    $ENV{REQUEST_METHOD} = "GET" unless(exists $ENV{REQUEST_METHOD});
-    $ENV{QUERY_STRING} = "" unless(exists $ENV{QUERY_STRING});
-
-    # Tweak environment variables depending on command-line arguments.
-
-    foreach my $arg (@ARGV) {
-        if ($arg =~ /^\-/) {
-            if ($arg eq "-y") {
-                if ($ENV{QUERY_STRING}) {
-                    $ENV{QUERY_STRING} .= "&goAhead=yes";
-                } else {
-                    $ENV{QUERY_STRING} = "goAhead=yes";
-                }
-            } else {
-                die "Unknown command-line option $arg\n";
-            }
-        } else {
-            $ENV{PATH_INFO} = "/$arg" unless(exists $ENV{PATH_INFO});
-        }
+    unless ( defined $TWiki::cfg{PublishContrib}{Dir} ) {
+        die "{PublishContrib}{Dir} not defined; run install script";
+    }
+    unless( -d $TWiki::cfg{PublishContrib}{Dir}) {
+        die "{PublishContrib}{Dir} $TWiki::cfg{PublishContrib}{Dir} does not exist";
     }
 
-    # Now do normal CGI init.
+    my $query = $session->{cgiQuery};
+    my $web = $query->param( 'web' ) || $session->{webName};
+    $session->{webName} = $web;
 
-    my $query = new CGI;
-
-    $| = 0;
-
-    my $pi = $query->path_info();
-    if( $query->param('web')) {
-        $pi = '/'.$query->param('web');
-    }
-
-    my ($topic, $web, $wikiName);
-
-    if( defined &TWiki::new ) {
-        $session = new TWiki($pi, $query->remote_user(), '',
-                            $query->url(), $query);
-        $TWiki::Plugins::SESSION = $session;
-        $topic = $session->{topicName};
-        $web = $session->{webName};
-        $wikiName = $session->{user}->wikiName();
-    } else {
-        my( $userName, $scriptUrlPath, $dataDir );
-        ($topic, $web, $scriptUrlPath, $userName, $dataDir) =
-          TWiki::initialize($pi, $query->remote_user(), '', # COMPATIBILITY
-                            $query->url(), $query);
-        $wikiName = TWiki::Func::userToWikiName($userName);
-    }
-
-    unless ( defined $TWiki::cfg{PublishContrib}{Dir} &&
-             defined $TWiki::cfg{PublishContrib}{Dir}) {
-        die "Configuration is missing; run install script";
-    }
+    $TWiki::Plugins::SESSION = $session;
 
     my ($inclusions, $exclusions, $topicsearch, $skin);
     my $notify="off";
@@ -127,15 +151,15 @@ sub main {
         unless( TWiki::Func::topicExists($web, $configtopic) ) {
             die "Specified configuration topic does not exist in $web!\n";
         }
-        my $text = TWiki::Func::readTopicText($web, $configtopic);
-        unless( TWiki::Func::checkAccessPermission( "VIEW", $wikiName,
-                                                    $text, $configtopic,
+        my $cfgt = TWiki::Func::readTopicText($web, $configtopic);
+        unless( TWiki::Func::checkAccessPermission( "VIEW", TWiki::Func::getWikiName(),
+                                                    $cfgt, $configtopic,
                                                     $web)) {
             die "Access to $configtopic denied";
         }
-        $text =~ s/\r//g;
+        $cfgt =~ s/\r//g;
 
-        while ( $text =~ s/^\s+\*\s+Set\s+([A-Z]+)\s*=(.*?)$//m ) {
+        while ( $cfgt =~ s/^\s+\*\s+Set\s+([A-Z]+)\s*=(.*?)$//m ) {
             my $k = $1;
             my $v = $2;
             $v =~ s/^\s*(.*?)\s*$/$1/go;
@@ -175,7 +199,7 @@ sub main {
 
     my $ok = 1;
     if ( ! -d $TWiki::cfg{PublishContrib}{Dir} &&
-         ! -e $TWiki::cfg{PublishContrib}{Dir}) {
+           ! -e $TWiki::cfg{PublishContrib}{Dir}) {
         mkdir($TWiki::cfg{PublishContrib}{Dir}, 0777);
         $ok = !($!);
     }
@@ -184,7 +208,6 @@ sub main {
 
     my $tmp = TWiki::Func::formatTime(time());
     $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
-    my $zipfilename = $wikiName . "_" . $web . "_" . $tmp .".zip";
 
     # Has user selected topic(s) yet?
 
@@ -192,13 +215,14 @@ sub main {
     if (!$goAhead) {
         # redirect to the "publish" topic
         my $url = TWiki::Func::getScriptUrl('TWiki', 'PublishContrib', "view");
-        $url .= '?publishweb='.$web.'&publishtopic='.$topic;
+        $url .= '?publishweb='.$web.'&publishtopic='.$session->{topicName};
         TWiki::Func::redirectCgiQuery($query, $url);
     } else {
         TWiki::Func::writeHeader($query);
         my $tmpl = TWiki::Func::readTemplate("view", "print.pattern");
         $tmpl =~ s/%META{.*?}%//g;
         my($header, $footer) = split(/%TEXT%/, $tmpl);
+        my $topic = $query->param('publishtopic') || $session->{topicName};
         $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
         $header = TWiki::Func::renderText( $header, $web );
         print $header;
@@ -209,11 +233,24 @@ sub main {
         print "<b>Inclusions: </b>$inclusions<br />\n";
         print "<b>Exclusions: </b>$exclusions<br />\n";
         print "<b>Content Filter: </b>$topicsearch<p />\n";
-        my $succeeded = publishWeb($web, $topic, $wikiName, $inclusions,
-                                   $exclusions, $skin, $topicsearch,
-                                   "$TWiki::cfg{PublishContrib}{Dir}/$zipfilename");
 
-        my $text = "Published at $TWiki::cfg{PublishContrib}{URL}/$zipfilename";
+        my $archive;
+
+        if( $query->param( 'compress' ) ) {
+            $archive = new TWiki::Contrib::Publish::Zipper(
+                $TWiki::cfg{PublishContrib}{Dir}, $web );
+        } else {
+            $archive = new TWiki::Contrib::Publish::Filer(
+                $TWiki::cfg{PublishContrib}{Dir}, $web);
+        }
+
+        publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
+                   $exclusions, $skin, $topicsearch, $archive);
+
+        my $text = "Published at $TWiki::cfg{PublishContrib}{URL}/".$archive->{id};
+
+        $archive->close();
+
         $text = TWiki::Func::expandCommonVariables( $text, $topic, $web );
         $text = TWiki::Func::renderText( $text, $web );
         print $text;
@@ -224,16 +261,15 @@ sub main {
 }
 
 #  Publish the contents of one web.
-#
-#  @param $web which web to publish
-#  @param $topic topic that was selected
-#  @param $inclusions REs describing which topics to include
-#  @param $exclusions REs describing which topics to exclude
-#
-#  @return 1 if succeeded; 0 if failed (will have redirected to error page)
+#   * =$web= - which web to publish
+#   * =$inclusions= - REs describing which topics to include
+#   * =$exclusions= - REs describing which topics to exclude
+#   * =$skin= -
+#   * =$topicsearch= -
+#   * =$archive= - archiver
 
 sub publishWeb {
-    my ($web, $topic, $wikiName, $inclusions, $exclusions, $skin, $topicsearch, $destZip) = @_;
+    my ($web, $wikiName, $inclusions, $exclusions, $skin, $topicsearch, $archive) = @_;
 
     # Get list of topics from this web.
     my @topics = TWiki::Func::getTopicList($web);
@@ -241,8 +277,6 @@ sub publishWeb {
     # Choose template.
     my $tmpl = TWiki::Func::readTemplate("view", $skin);
     die "Couldn't find template\n" if(!$tmpl);
-
-    my $zip = Archive::Zip->new();
 
     # Attempt to render each included page.
     my %copied;
@@ -253,27 +287,26 @@ sub publishWeb {
         } elsif( $exclusions && $topic =~ /^($exclusions)$/ ) {
             print "<span class='twikiAlert'>excluded</span>";
         } else {
-            publishTopic($web, $topic, $wikiName, $skin, $tmpl,
-                         \%copied,
-                         $topicsearch, $zip);
-            print "published";
+            try {
+                publishTopic($web, $topic, $wikiName, $skin, $tmpl,
+                             \%copied, $topicsearch, $archive);
+                print "published";
+            } catch Error::Simple with {
+                my $e = shift;
+                print "not published: ".$e->{-text};
+            };
         }
         print "<br />\n";
     }
-
-    $zip->writeToFileNamed( $destZip );
-
-    return 1;
 }
 
 #  Publish one topic from web.
-#
-#  @param $web which web to publish
-#  @param $topic which topic to publish
-#  @param $skin which skin to use
-#  @param \%copied map of copied resources to new locations
+#   * =$web= - which web to publish
+#   * =$topic= - which topic to publish
+#   * =$skin= - which skin to use
+#   * =\%copied= - map of copied resources to new locations
 sub publishTopic {
-    my ($web, $topic, $wikiName, $skin, $tmpl, $copied, $topicsearch, $zip) = @_;
+    my ($web, $topic, $wikiName, $skin, $tmpl, $copied, $topicsearch, $archive) = @_;
 
     # Read topic data.
     my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
@@ -290,62 +323,63 @@ sub publishTopic {
     }
 
     my ($revdate, $revuser, $maxrev);
-    if( $session ) {
-        ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
-        $revuser = $revuser->wikiName();
-    } else {
-        TWiki::Store::getRevisionInfoFromMeta( # COMPATIBILITY
-            $web, $topic, $meta, 'isoFormat' );
-        $revuser = TWiki::userToWikiName($revuser); # COMPATIBILITY
-    }
+    ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
+    $revuser = $revuser->wikiName();
 
     # Handle standard formatting.
     $text = TWiki::Func::expandCommonVariables($text, $topic, $web);
     $text = TWiki::Func::renderText($text);
 
     $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
-    unless( $session ) {
-        $tmpl = TWiki::handleMetaTags($web, $topic, $tmpl, $meta, 1); # COMPATIBILITY
-    }
-    $tmpl = TWiki::Func::renderText($tmpl, "", $meta); ## better to use meta rendering?
+    $tmpl = TWiki::Func::renderText($tmpl, "", $meta);
 
-    $tmpl =~ s/%TEXT%/$text/go;
-    $tmpl =~ s/<nopublish>.*?<\/nopublish>//gos;
-    $tmpl =~ s/%MAXREV%/1.$maxrev/go;
-    $tmpl =~ s/%CURRREV%/1.$maxrev/go;
-    $tmpl =~ s/%REVTITLE%//go;
+    $tmpl =~ s/%TEXT%/$text/g;
+    $tmpl =~ s/<nopublish>.*?<\/nopublish>//gs;
+    $tmpl =~ s/%MAXREV%/$maxrev/g;
+    $tmpl =~ s/%CURRREV%/$maxrev/g;
+    $tmpl =~ s/%REVTITLE%//g;
     $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
+
     # Strip unsatisfied WikiWords.
-    my $ult = getUnsatisfiedLinkTemplate($web);
-    $tmpl =~ s/$ult/$1/g;
+    $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/_handleNewLink($1)/ge;
+
     # Copy files from pub dir to rsrc dir in static dir.
-    my $pub = "(?:http://$ENV{HTTP_HOST})?".TWiki::Func::getPubUrlPath();
-    $tmpl =~ s!$pub/([^"']+)!&copyResource($web, $1, $copied, $zip)!ge;
-    # Modify internal links.
+    my $pub = TWiki::Func::getPubUrlPath();
+    $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$ENV{HTTP_HOST})?$pub/(.*?)\1!$1._copyResource($web, $3, $copied, $archive).$1!ge;
     my $ilt;
-    $ilt = TWiki::Func::getViewUrl('NOISE', 'NOISE');
-    $ilt =~ s!/NOISE.*!!;
-    # link to this web
-    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!go;
-    # link to another web
-    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!go;
+
+    # Modify relative links
+    $ilt = $TWiki::Plugins::SESSION->getScriptUrl(0, 'view', 'NOISE', 'NOISE');
+    $ilt =~ s!/NOISE/NOISE.*!!;
+    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
+
+    # Modify absolute internal view links.
+    $ilt = $TWiki::Plugins::SESSION->getScriptUrl(1, 'view', 'NOISE', 'NOISE');
+    $ilt =~ s!/NOISE/NOISE.*!!;
+    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
+
     # Remove base tag  - DZA
     $tmpl =~ s/<base[^>]+\/>//;
+
     # Handle SlideShow plugin urls
     $tmpl =~ s/\bhref=(.*?)\?slideshow=on\&amp;skin=\w+/href=$1/g;
-    $tmpl =~ s/\bhref="([A-Za-z0-9_]+)((\#[^"]+)?)"/href="$1.html$2"/go;
+    $tmpl =~ s/\bhref="([A-Za-z0-9_]+)((\#[^"]+)?)"/href="$1.html$2"/g;
+
+    $tmpl =~ s/<nop>//g;
+
     # Write the resulting HTML.
-    $zip->addString( $tmpl, "$topic.html" );
+    $archive->addString( $tmpl, "$topic.html" );
 }
 
 #  Copy a resource (image, style sheet, etc.) from twiki/pub/%WEB% to
 #   static HTML's rsrc directory.
-#
-#   @param $web name of web
-#   @param $rsrcName name of resource (relative to pub/%WEB%)
-#   @param \%copied map of copied resources to new locations
-sub copyResource {
-    my ($web, $rsrcName, $copied, $zip) = @_;
+#   * =$web= - name of web
+#   * =$rsrcName= - name of resource (relative to pub/%WEB%)
+#   * =\%copied= - map of copied resources to new locations
+sub _copyResource {
+    my ($web, $rsrcName, $copied, $archive) = @_;
     # See if we've already copied this resource.
     unless (exists $copied->{$rsrcName}) {
         # Nope, it's new. Gotta copy it to new location.
@@ -360,13 +394,14 @@ sub copyResource {
         # Copy resource to rsrc directory.
         my $TWikiPubDir = TWiki::Func::getPubDir();
         if ( -f "$TWikiPubDir/$rsrcName" ) {
-            $zip->addDirectory( "rsrc/$path" );
-            $zip->addFile( "$TWikiPubDir/$rsrcName" , "rsrc/$path/$file" );
+            $archive->addDirectory( "rsrc" );
+            $archive->addDirectory( "rsrc/$path" );
+            $archive->addFile( "$TWikiPubDir/$rsrcName" , "rsrc/$path/$file" );
         }
         # Record copy so we don't duplicate it later.
         my $destURL = "rsrc/$path/$file";
-        $destURL =~ s(//)(/)go;
-        $copied->{$rsrcName} = "$destURL";
+        $destURL =~ s!//!/!g;
+        $copied->{$rsrcName} = $destURL;
     }
     return $copied->{$rsrcName};
 }
@@ -374,23 +409,11 @@ sub copyResource {
 # Returns a pattern that will match the HTML used by TWiki to represent an
 # unsatisfied link. THIS IS NASTY, but I don't know how else to do it.
 # SMELL: another case for a WysiwygPlugin-style rendering engine
-sub getUnsatisfiedLinkTemplate {
-    my ($web) = @_;
-    my $t = "!£%^&*(){}";# must _not_ exist!
-    my $linkFmt;
-    if( $session ) {
-        $linkFmt = $session->{renderer}->_renderNonExistingWikiWord($web, $t, "TheLink");
-    } else {
-        $linkFmt = TWiki::Render::internalLink("", $web, $t, "TheLink", undef, 1); # COMPATIBILITY
-    }
-    $linkFmt =~ s/\//\\\//go;
-    my $pre = $linkFmt;
-    $pre =~ s/TheLink.*//o;
-    my $post = $linkFmt;
-    $post =~ s/.*TheLink//o;
-    $post =~ s/\"[^\"]*\"/\"[^\"]*\"/o;
-    $post =~ s/\?/\\?/o;
-    return $pre . "(.*?)" . $post;
+sub _handleNewLink {
+    my $link = shift;
+    $link =~ s!<a .*?>!!gi;
+    $link =~ s!</a>!!gi;
+    return $link;
 }
 
 1;

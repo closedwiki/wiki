@@ -4,8 +4,7 @@
    for each  change), and footer. The result is embedded in MailNotifyBody
 }%
 --------------------------------
-%TMPL:DEF{HTML:before}%
-<h2>%MAKETEXT{"This is an automated e-mail from [_1]." args="%WIKITOOLNAME%"}%</h2>
+%TMPL:DEF{HTML:before}%<h2>%MAKETEXT{"This is an automated e-mail from [_1]." args="%WIKITOOLNAME%"}%</h2>
 <p>
 <em>%MAKETEXT{"New or changed topics in [_1], since [_2]:" args="%WIKITOOLNAME%.%WEB%,%LASTDATE%"}%</em>
 </p>
@@ -21,8 +20,7 @@
 </tr>
 %TMPL:END%
 --------------------------------
-%TMPL:DEF{HTML:middle}%
-<tr>
+%TMPL:DEF{HTML:middle}%<tr>
   <td width="50%">
     <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
   </td><td width="30%">
@@ -41,8 +39,7 @@
 </tr>
 %TMPL:END%
 --------------------------------
-%TMPL:DEF{HTML:after}%
-</table>
+%TMPL:DEF{HTML:after}%</table>
 <br clear="all" />
 <p>%MAKETEXT{"Review recent changes in:"}%
   <a href="%SCRIPTURL{"view"}%/%WEB%/WebChanges">%SCRIPTURL{"view"}%/%WEB%/WebChanges</a> </p>
@@ -53,16 +50,14 @@
 --------------------------------
 %TMPL:DEF{PLAIN:before}%%TMPL:END%
 --------------------------------
-%TMPL:DEF{PLAIN:middle}%
-- %TOPICNAME% (%AUTHOR%, %TIME%) %REVISION%
+%TMPL:DEF{PLAIN:middle}%- %TOPICNAME% (%AUTHOR%, %TIME%) %REVISION%
 %URL%
 
 %TMPL:END%
 --------------------------------
 %TMPL:DEF{PLAIN:after}%%TMPL:END%
 --------------------------------
-%TMPL:DEF{MailNotifyBody}%
-From: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
+%TMPL:DEF{MailNotifyBody}%From: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
 To: %EMAILTO%
 Subject: %WIKITOOLNAME%.%WEB% - %MAKETEXT{"Automated notification of topic changes"}%
 MIME-Version: 1.0

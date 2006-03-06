@@ -208,12 +208,20 @@ sub beforeCommonTagsHandler {
 
     # Have to re-read the topic because verbatim blocks have already been
     # lifted out, and we need them.
-    my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
+    my $web = $_[2];
+    my( $meta, $text );
+    my $altText = $query->param( 'templatetopic' );
+    if( $altText && TWiki::Func::topicExists( $web, $altText )) {
+        my( $w, $t ) = TWiki::Func::normalizeWebTopicName( $web, $altText );
+        ( $meta, $text ) = TWiki::Func::readTopicText( $w, $t );
+    } else {
+        ( $meta, $text ) = TWiki::Func::readTopic( $web, $_[1] );
+    }
 
     $_[0] = $tml2html->convert(
         $text,
         {
-            web => $_[2],
+            web => $web,
             topic => $_[1],
             getViewUrl => \&getViewUrl,
             expandVarsInURL => \&expandVarsInURL,
@@ -239,15 +247,16 @@ sub postRenderingHandler {
     return $tml2html->cleanup( @_ );
 }
 
+# Commented out because of Bugs:Item1176
 # DEPRECATED in Dakar (modifyHeaderHandler does the job better)
-$TWikiCompatibility{writeHeaderHandler} = 1.1;
-sub writeHeaderHandler {
-    my $query = shift;
-    if( $query->param( 'wysiwyg_edit' )) {
-        return "Expires: 0\nCache-control: max-age=0, must-revalidate";
-    }
-    return '';
-}
+#$TWikiCompatibility{writeHeaderHandler} = 1.1;
+#sub writeHeaderHandler {
+#    my $query = shift;
+#    if( $query->param( 'wysiwyg_edit' )) {
+#        return "Expires: 0\nCache-control: max-age=0, must-revalidate";
+#    }
+#    return '';
+#}
 
 # Dakar modify headers.
 sub modifyHeaderHandler {

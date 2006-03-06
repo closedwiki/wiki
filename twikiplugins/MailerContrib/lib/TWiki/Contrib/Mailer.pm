@@ -77,7 +77,10 @@ sub mailNotify {
     $webstr = '*' unless ( $webstr );
     $webstr =~ s/\*/\.\*/g;
 
-    $twiki ||= new TWiki( $TWiki::cfg{DefaultUserLogin} );
+    if (!defined $twiki) {
+      $twiki = new TWiki( $TWiki::cfg{DefaultUserLogin} );
+      $twiki->enterContext( 'command_line' );
+    }
 
     # absolute URL context for email generation
     $twiki->enterContext( 'absolute_urls' );

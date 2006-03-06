@@ -27,9 +27,9 @@ sub target_build {
 
   $this->SUPER::target_build();
 
-
-  $this->cd($this->{basedir}."/lib/TWiki/Plugins/TWikiDrawPlugin");
+  $this->pushd($this->{basedir}."/lib/TWiki/Plugins/TWikiDrawPlugin");
   $this->sys_action("ant -f build.xml build");
+  $this->popd();
 }
 
 # Create the build object

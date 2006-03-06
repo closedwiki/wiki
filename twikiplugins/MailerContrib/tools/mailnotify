@@ -33,7 +33,7 @@ my $verbose = 1;
 my @webs = ();
 
 # Called from the command line
-foreach $arg ( @ARGV ) {
+foreach my $arg ( @ARGV ) {
     if ( $arg eq "-q" ) {
         $verbose = 0;
     } else {
