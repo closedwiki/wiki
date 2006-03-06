@@ -1,7 +1,18 @@
 ---+!! FormQueryPlugin
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+-->
 
 The FormQueryPlugin provides a query interface to the [[TWiki:Plugins/DBCacheContrib][TWiki::Contrib::DBCache]] module, giving a way to present query results as formatted tables.
 
+*WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.20][here]]*
+ 
 When using the plugin each topic is treated as a container for data fields. These fields can be the fields in the form attached to the topic, or can be parsed out of the topic. The database is managed by the [[TWiki:Plugins/DBCacheContrib][TWiki::Contrib::DBCache]] module, which must be installed for this plugin to work.
 
 The tutorial section of this topic gives an introduction to formulating and formatting queries using this plugin, and is a good place to start.
@@ -316,9 +327,23 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |
-|  Change History: | |
-| | Added option to switch on/off "Undefined" messages for undefined field values |
-| | Expanded fields no longer have spaces around them. This is more correct, but requires care in =format= definitions. |
+| Change History: | |
+| 6277 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  updates to FQP, including minor core bugfixes found while testing, and extension to registerTagHandler to allow registration of handlers using alternate parameter syntax. Also enabled the table plugins by default. |
+| 5517 | Corrected path to module |
+| 5267 | doc changes, and efficiency improvements |
+| 5223 | Documentation fixes, adding gifs. |
+| 5048 | Cairo readiness |
+| 5020 | Moved a lot of stuff out to DBCachePlugin |
+| 4959 | Switched over to centralise fixtures for tests and changed to perl build methodology |
+| 4917 | Patches from TimSlidel for autocreate, collapsing tables and mod_perl |
+| 4899 | Maintenance updates |
+| 4877 | Bugfixes and minor enhancements |
+| 4858 | Bugfixes and optimised cache |
+| 4855 | Range of fixes |
+| 4850 | Missing tests and fixes to locking |
+| 4849 | Initial checkin |
+| 16 Jul 2004 | Added option to switch on/off "Undefined" messages for undefined field values |
+| 16 Jul 2004 | Expanded fields no longer have spaces around them. This is more correct, but requires care in =format= definitions. |
 | 16 Jul 2004 | Split into sub-components |
 | 02 Apr 2004 | SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
 |  05 Feb 2004 | Bugfix version |
