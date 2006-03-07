@@ -53,7 +53,7 @@
 
 
 %TMPL:DEF{"movedelete"}%
-<div class="patternMoveAttachment"><div class="patternActionButtons"><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%ICON{move}% <span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%FILENAME%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%ICON{trash}% <span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div></div>%TMPL:END%
+<div class="patternMoveAttachment"><div class="patternActionButtons"><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%ENCODE{"%FILENAME%"}%" rel='nofollow'>%ICON{move}% <span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%ENCODE{"%FILENAME%"}%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%ICON{trash}% <span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div></div>%TMPL:END%
 
 
 
