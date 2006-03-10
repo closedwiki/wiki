@@ -49,6 +49,7 @@ use strict;
 use Assert;
 use Error qw( :try );
 use TWiki;
+use TWiki::Sandbox;
 
 BEGIN {
     # suppress stupid warning in CGI::Cookie
@@ -195,7 +196,8 @@ sub loadSession {
             { Directory => $TWiki::cfg{Sessions}{Dir} } );
     }
 
-    $authUser ||= $cgisession->param( 'AUTHUSER' );
+    $authUser ||= TWiki::Sandbox::untaintUnchecked(
+	$cgisession->param( 'AUTHUSER' ));
 
     # if we couldn't get the login manager or the http session to tell
     # us who the user is, then let's use the CGI "remote user"
