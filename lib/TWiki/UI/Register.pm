@@ -515,7 +515,7 @@ sub _resetUsersPassword {
     unless( $user ) {
         # couldn't work out who they are, its neither loginName nor
         # wikiName.
-        $$pMess .= $session->inlineAlert( 'alerts', 'notwikiuser', $userName );
+        $$pMess .= $session->inlineAlert( 'alerts', 'bad_user', $userName );
         return 0;
     }
     my @em = $user->emails();

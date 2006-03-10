@@ -246,10 +246,6 @@
 
 %MAKETEXT{"Please contact [_1] if you have any questions." args="<a href='mailto:%WIKIWEBMASTER%'>%WIKIWEBMASTER%</a>"}%
 %TMPL:END%
-%TMPL:DEF{"no_email_for"}%
----+++ %MAKETEXT{"Can't get an e-mail address for [_1]" args="%PARAM1%"}%
-%MAKETEXT{"An e-mail address is required before a password can be reset."}%
-%TMPL:END%
 %TMPL:DEF{"mandatory_field"}%
 ---+++ %MAKETEXT{"Topic Save Error"}%
 %MAKETEXT{"Could not save [_1]." args="%WEB%.%TOPIC%"}%
@@ -380,14 +376,14 @@ __%MAKETEXT{"Note:"}%__
     Messages for oopsalerts
 }%
 %TMPL:DEF{"access_denied"}%      %MAKETEXT{"No permission to view [_1]" args="%PARAM1%"}% %TMPL:END%
-%TMPL:DEF{"no_such_attachment"}% %MAKETEXT{"Error: File attachment at [_1],[_2] does not exist" args="%PARAM1%, %PARAM2%"}% %TMPL:END%
+%TMPL:DEF{"bad_attachment"}%     %MAKETEXT{"Error: File attachment at [_1],[_2] does not exist" args="%PARAM1%, %PARAM2%"}% %TMPL:END%
 %TMPL:DEF{"bad_protocol"}%       %MAKETEXT{"Error: Unsupported protocol. (Must be 'http://domain/...')"}% %TMPL:END%
 %TMPL:DEF{"bad_content"}%        %MAKETEXT{"Error: Unsupported content type: [_1] (Must be =text/html=, =text/plain= or =text/css=)" args="%PARAM1%"}% %TMPL:END%
 %TMPL:DEF{"topic_not_found"}%    %MAKETEXT{"Warning: Can't find topic [_1]" args="<nop>%PARAM1%"}% %TMPL:END%
 %TMPL:DEF{"already_included"}%   %MAKETEXT{"Warning: Can't INCLUDE [_1] repeatedly, topic is already included. [_2]" args="<nop>%PARAM1%.<nop>%PARAM2%, %PARAM3%"}% %TMPL:END%
 %TMPL:DEF{"generic"}%            %PARAM1% %PARAM2% %PARAM3% %PARAM4%<br /> %TMPL:END%
 %TMPL:DEF{"missing_user"}%       %MAKETEXT{"The entry for user [_1] was missing in the password system." args="%PARAM1%"}%<br /> %TMPL:END%
-%TMPL:DEF{"notwikiuser"}%        %MAKETEXT{"Can't find user [_1]" args="%PARAM1%"}%<br /> %TMPL:END%
+%TMPL:DEF{"bad_user"}%           %MAKETEXT{"Can't find user [_1]" args="%PARAM1%"}%<br /> %TMPL:END%
 %TMPL:DEF{"no_email_for"}%       %MAKETEXT{"Can't get an e-mail address for [_1] (required for password reset)" args="%PARAM1%"}%<br /> %TMPL:END%
 %TMPL:DEF{"new_sys_pass"}%       %MAKETEXT{"A new *system-generated* password for your login name [_1] (<nop>WikiName [_2]) has been sent to your registered e-mail address. If your e-mail address is no longer valid, please contact [_3]" args="%PARAM1%, %MAINWEB%.%PARAM2%, <a href=\"mailto:%WIKIWEBMASTER%?subject=%ENCODE{"Reset password request for <nop>%PARAM1%/<nop>%PARAM2%\""}%>%WIKIWEBMASTER%</a>"}%<br /> %TMPL:END%
 %TMPL:DEF{"geturl_failed"}%      %MAKETEXT{"Failed to include URL [_1]" args="%PARAM1%"}%%TMPL:END%

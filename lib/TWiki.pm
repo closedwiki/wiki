@@ -1530,7 +1530,7 @@ sub _includeUrl {
         if( $attname =~ m/\.(txt|html?)$/i ) {
             unless( $this->{store}->attachmentExists( $web, $topic,
                                                       $attname )) {
-                return $this->inlineAlert( 'alerts', 'no_such_attachment',
+                return $this->inlineAlert( 'alerts', 'bad_attachment',
                                            $theUrl );
             }
             if( $web ne $theWeb || $topic ne $theTopic ) {
