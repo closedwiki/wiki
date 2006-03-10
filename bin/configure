@@ -542,7 +542,8 @@ sub _PROMPT_FOR_BOOLEAN {
 # This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_REGEX {
     my( $id, $opts, $value, $keys ) = @_;
-    return CGI::textfield( -name => $id, -size=>"55%", -default=>$value );
+    $value =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+    return '<input name="'.$id.'" type="text" size="55%" value="'.$value.'" />';
 }
 
 # generate an input field for COMMAND types
