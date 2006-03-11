@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="kupu">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:domain="kupu">
 <!--
  Created by Crawford Currie http://c-dot.co.uk
  Copyright (C) ILOG
@@ -19,16 +19,20 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Cache-Control" content="no-cache" />
   <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%"/>
-  <style>
-   @import url("%TWIKILAYOUTURL%");
-   @import url("%TWIKISTYLEURL%");
-   @import url("%USERLAYOUTURL%");
-   @import url("%USERSTYLEURL%");
+  <style type="text/css">
+	%IF{ "$ TWIKILAYOUTURL" then="@import url('%TWIKILAYOUTURL%');"}%
+	%IF{ "$ TWIKISTYLEURL"  then="@import url('%TWIKISTYLEURL%');"}%
+	%IF{ "$ USERLAYOUTURL" then="@import url('%USERLAYOUTURL%');"}%
+	%IF{ "$ USERSTYLEURL"  then="@import url('%USERSTYLEURL%');"}%
+	body {
+		text-align:left;
+	}
   </style>
   <link href="%PUBURLPATH%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupustyles.css" rel="stylesheet" type="text/css"/>
   <link href="%PUBURLPATH%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupudrawerstyles.css" rel="stylesheet" type="text/css"/>
   <link href="%PUBURLPATH%/%TWIKIWEB%/WysiwygPlugin/kuputwiki.css" rel="stylesheet" type="text/css"/>
   <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/sarissa.js">
+  </script>
   <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/sarissa_ieemu_xpath.js">
   </script>
   <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupuhelpers.js">
