@@ -19,6 +19,6 @@ function renderAttachmentCount (inTableId) {
 	if (table) {
 		count = table.getElementsByTagName("tr").length - 1; /* assume that one tr is used for the header */
 	}
-	new Insertion.Bottom('attachmentsshowlink', " (" + count + ")" );
-	new Insertion.Bottom('attachmentshidelink', " (" + count + ")" );
+	new Insertion.Bottom('attachmentsshowlink', "&nbsp;(" + count + ")" );
+	new Insertion.Bottom('attachmentshidelink', "&nbsp;(" + count + ")" );
 }
