@@ -453,7 +453,6 @@ table.twikiFormTable th.twikiFormTableHRow a:visited {
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
-	display:inline;
 	font-size:115%;
 	border:none;
 	margin:0;
@@ -784,21 +783,21 @@ h4.patternSearchResultsHeader {
 	padding-bottom:.3em;
 	font-weight:normal;
 }
-.patternSearchResults .twikiTopRow {
+.patternSearchResult .twikiTopRow {
 	padding-top:.2em;
 }
-.patternSearchResults .twikiBottomRow {
+.patternSearchResult .twikiBottomRow {
 	padding-bottom:.25em;
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
-.patternSearchResults .twikiAlert {
+.patternSearchResult .twikiAlert {
 	font-weight:bold;
 }
-.patternSearchResults .twikiSummary .twikiAlert {
+.patternSearchResult .twikiSummary .twikiAlert {
 	font-weight:normal;
 }
-.patternSearchResults .twikiNew {
+.patternSearchResult .twikiNew {
 	border-width:1px;
 	border-style:solid;
 	font-size:85%; /*S3*/
@@ -811,11 +810,11 @@ h4.patternSearchResultsHeader {
 	padding:.1em 5px;
 	margin:1em -5px .35em -5px;
 }
-.patternSearchResults .twikiSRAuthor {
+.patternSearchResult .twikiSRAuthor {
 	width:15%;
 	text-align:left;
 }
-.patternSearchResults .twikiSRRev {
+.patternSearchResult .twikiSRRev {
 	width:30%;
 	text-align:left;
 }
@@ -823,7 +822,6 @@ h4.patternSearchResultsHeader {
 	margin:0 0 3em 0;
 }
 .patternSearched {
-	font-size:135%; /* size of h4 */
 }
 
 /* Search results in book view format */
