@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.993';
+$RELEASE = '2.994';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -147,15 +147,15 @@ sub doInit {
 
   $useSpamObfuscator = &TWiki::Func::getPreferencesFlag('OBFUSCATEEMAIL');
   if ($useSpamObfuscator) {
-    if ($isScripted) { # are we in cgi mode?
+    if ($isScripted || !$query) { # are we in cgi mode?
       $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
       #writeDebug("no query ... batch mode");
     } else {
       # disable during register context
-      my $theAction = $query->url(-relative=>1) || ''; # cannot use skinState yet, we are in initPlugin
+      my $theAction = $ENV{'SCRIPT_NAME'} || '';
       my $theSkin = $query->param('skin') || TWiki::Func::getSkin();
       my $theContentType = $query->param('contenttype');
-      #writeDebug("theAction=$theAction");
+      $theAction =~ s/^.*\///o;
       if (!$theAction || $theAction =~ /^(register|mailnotif)/ || 
 	  $theSkin =~ /^rss/ ||
 	  $theContentType) {
@@ -405,6 +405,8 @@ sub initSkinState {
   $theStyleSideBar = $defaultStyleSideBar
     if $theStyleSideBar !~ /$knownStyleSidebars/;
   $skinState{'sidebar'} = $theStyleSideBar;
+  $theToggleSideBar = undef
+    if $theToggleSideBar && $theToggleSideBar !~ /$knownStyleSidebars/;
 
   # handle searchbox
   my $prefStyleSearchBox = &TWiki::Func::getPreferencesValue('STYLESEARCHBOX') ||
@@ -492,7 +494,8 @@ sub initSkinState {
 
   # handle action
   if ($query) { # are we in cgi mode?
-    $skinState{'action'} = $query->url(-relative=>1) || ''; 
+    $skinState{'action'} = $ENV{'SCRIPT_NAME'} || '';
+    $skinState{'action'} =~ s/^.*\///o;
   }
 
   # store sticky state into session
@@ -515,6 +518,7 @@ sub initSkinState {
   $theToggleSideBar = 'off' if $skinState{'border'} eq 'thin' && 
     $skinState{'action'} =~ /^(edit|manage|rdiff|natsearch|changes|search)$/;
     # SMELL get away with this hardcode
+print STDERR "action='$skinState{'action'}', border='$skinState{'border'}'\n";
 
   $skinState{'sidebar'} = $theToggleSideBar 
     if $theToggleSideBar && $theToggleSideBar ne '';
@@ -539,7 +543,7 @@ sub commonTagsHandler {
   while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/&renderIfSkinStateThen($2, $3, $1, $4)/geos) {
     # nop
   }
-  $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;
+  $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;# deprecated
   $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
   $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
@@ -578,9 +582,7 @@ sub commonTagsHandler {
     }
     $useSpamObfuscator = $oldUseSpamObfuscator;
   }
-  $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo; # deprecated
   $_[0] =~ s/%WEBCOMPONENT{(.*?)}%/&renderWebComponent($1)/geo;
-  $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
 }
 
 ###############################################################################
@@ -610,6 +612,7 @@ sub postRenderingHandler {
 }
 
 ###############################################################################
+# deprecated
 sub renderIfAccess {
   my $args = shift;
 
@@ -618,7 +621,7 @@ sub renderIfAccess {
     &TWiki::Func::extractNameValuePair($args, 'topic') || '';
 
   my $theAction = 
-    &TWiki::Func::extractNameValuePair($args, 'action') || 'VIEW';
+    &TWiki::Func::extractNameValuePair($args, 'action') || 'view';
 
   my $theThen =
     &TWiki::Func::extractNameValuePair($args, 'then') || $theWebTopic;
@@ -926,47 +929,6 @@ sub renderUserActions {
 }
 
 ###############################################################################
-sub renderMySideBar {
-  
-  #writeDebug("called renderMySideBar");
-
-  my $wikiName = &TWiki::Func::getWikiName();
-  my $mySideBar = $wikiName . 'SideBar';
-  my $mainWeb  = &TWiki::Func::getMainWebname();
-
-  # get personal sidebar
-  if (!&TWiki::Func::topicExists($mainWeb, $mySideBar)) {
-    return '';
-  }
-
-  my ($meta, $text) =
-    &TWiki::Func::readTopic($mainWeb, $mySideBar);
-    
-  # extract INCLUD area
-  if ($text =~ /%STARTINCLUDE%(.*?)%STOPINCLUDE%/gs) {
-    $text = $1;
-  }
-  $text =~ s/^\s*//;
-  $text =~ s/\s*$//;
-
-  #writeDebug("text='$text'");
-  $text = &TWiki::Func::expandCommonVariables($text, $currentTopic, $currentWeb);
-  $text = &TWiki::Func::renderText($text, $currentWeb);
-
-  # ignore permission warnings here ;)
-  $text =~ s/No permission to read.*//g;
-
-  return $text;
-}
-
-###############################################################################
-# deprecated: use WEBCOMPONENT instread
-sub renderWebSideBar {
-  return '' if $skinState{'sidebar'} eq 'off';
-  return getWebComponent('WebSideBar')."\n"; # extra linefeed
-}
-
-###############################################################################
 sub renderWebComponent {
   my $args = shift;
 
@@ -983,31 +945,56 @@ sub renderWebComponent {
 }
 
 ###############################################################################
+# search path 
+# 1. search TheComponent in current web
+# 2. search TWikiTheComponent in Main web
+# 3. search TWikiTheComponent in TWiki web
+# 4. search TheComponent in TWiki web
+# (like: TheComponent = WebSideBar)
 sub getWebComponent {
   my $component = shift;
 
   #writeDebug("called getWebComponent($component)");
 
-  # get sidebar for web
-  my $text;
-  my $meta;
-  my $theWeb;
-  if (&TWiki::Func::topicExists($currentWeb, $component)) {
-    ($meta, $text) = &TWiki::Func::readTopic($currentWeb, $component);
-    $theWeb = $currentWeb;
+  # get component for web
+  my $text = '';
+  my $meta = '';
+  my $mainWeb = &TWiki::Func::getMainWebname();
+  my $twikiWeb = &TWiki::Func::getTwikiWebname();
+
+  my $theWeb = $currentWeb;
+  my $theComponent = $component;
+  if (&TWiki::Func::topicExists($theWeb, $theComponent)) { # current
+    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
   } else {
-    $theWeb = &TWiki::Func::getTwikiWebname ();
-    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $component);
+    $theWeb = $mainWeb;
+    $theComponent = 'TWiki'.$component;
+    if (&TWiki::Func::topicExists($theWeb, $theComponent)) { # main
+      ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
+    } else {
+      $theWeb = $twikiWeb;
+      #$theComponent = 'TWiki'.$component;
+      if (&TWiki::Func::topicExists($theWeb, $theComponent)) { # twiki
+	($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
+      } else {
+	$theWeb = $twikiWeb;
+	$theComponent = $component;
+	if (&TWiki::Func::topicExists($theWeb, $theComponent)) {
+	  ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
+	} else {
+	  return ''; # not found
+	}
+      }
+    }
   }
 
   # extract INCLUDE area
   if ($text =~ /%STARTINCLUDE%(.*?)%STOPINCLUDE%/gs) {
     $text = $1;
   }
-  $text =~ s/^\s*//;
-  $text =~ s/\s*$//;
-  $text = &TWiki::Func::expandCommonVariables($text, $component, $currentWeb);
-  $text = &TWiki::Func::renderText($text, $currentWeb, $component);
+  $text =~ s/^\s*//o;
+  $text =~ s/\s*$//o;
+  $text = &TWiki::Func::expandCommonVariables($text, $component, $theWeb);
 
   # ignore permission warnings here ;)
   $text =~ s/No permission to read.*//g;
