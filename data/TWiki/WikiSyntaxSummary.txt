@@ -5,15 +5,14 @@ Keeping this help text short and simple is important since this page is aimed at
 
 ---
 %STARTINCLUDE%
-*Formatting help:*
-   * *bold* put word/phrase in asterisks: =<nop>*your phrase*=
-   * *bullet list* 3 spaces, asterisk, 1 space: =&nbsp;&nbsp;&nbsp;*&nbsp;your text=
-   * *headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&nbsp;Your Heading=
-   * *italic* put word/phrase in underscores: =_<nop>your words_=
-   * *links* use topic name or URL: =%HOMETOPIC%=, =http://yahoo.com=, or =[<nop>[http://yahoo.com/][link to Yahoo]]=
-   * *monospaced* put word/phrase in equal signs: =<nop>=your words==
-   * *paragraphs* separate with blank line
-   * <a target="TextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TextFormattingRules">More formatting help</a> and <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/GoodStyle">hints on good style</a>
+%MAKETEXT{"*Formatting help:*"}%
+   * %MAKETEXT{"*bold* put word/phrase in asterisks: =<nop>*your phrase*="}%
+   * %MAKETEXT{"*bullet list* 3 spaces, asterisk, 1 space: =&&nbsp;&&nbsp;&&nbsp;*&&nbsp;your text="}%
+   * %MAKETEXT{"*headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&&nbsp;Your Heading="}%
+   * %MAKETEXT{"*italic* put word/phrase in underscores: =_<nop>your words_="}%
+   * %MAKETEXT{"*links* use topic name or URL: =[_1]=, =http://yahoo.com=, or =~[<nop>~[http://yahoo.com/~]~[link to Yahoo~]~]=" args="%HOMETOPIC%"}%
+   * %MAKETEXT{"*monospaced* put word/phrase in equal signs: =<nop>=your words=="}%
+   * %MAKETEXT{"*paragraphs* separate with blank line"}%
+   * <a target="TextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TextFormattingRules">%MAKETEXT{"More formatting help"}%</a> %MAKETEXT{"and"}% <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/GoodStyle">%MAKETEXT{"hints on good style"}%</a>
 %STOPINCLUDE%
 ---
-
