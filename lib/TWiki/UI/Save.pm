@@ -23,7 +23,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
+=pod
 
 ---+ package TWiki::UI::Save
 
@@ -233,7 +233,7 @@ sub buildNewTopic {
                 $newMeta->merge( $prevMeta, $formDef );
             }
 
-            $merged = [ $originalrev, $author->stringify(), $rev ];
+            $merged = [ $originalrev, $author->wikiName(), $rev ];
         }
     }
 
