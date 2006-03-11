@@ -444,11 +444,12 @@ sub renderFieldForEdit {
         # necessarily identical to what is in the form? If we can
         # take it from the text, we must be sure it cannot be
         # changed through the URL?
+        # Pth: Changed labels through the URL is a feature for TWiki applications
         my $renderedValue = $session->{renderer}->getRenderedVersion
           ( $session->handleCommonTags( $value, $web, $topic ));
         $value = CGI::hidden( -name => $name,
                               -class => 'twikiEditFormLabelField',
-                              -value => $renderedValue );
+                              -value => $value );
         $value .= CGI::div( { class => 'twikiEditFormLabelField' },
                             $renderedValue );
 
