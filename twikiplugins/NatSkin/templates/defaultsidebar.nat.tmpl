@@ -2,9 +2,9 @@
 %TMPL:DEF{"defaultsidebar"}% 
 %IFSKINSTATETHEN{style="Pattern" release="^[^b]"}%
 <div class="natSideBarTitle">
-<h1 style="background-color:%WEBBGCOLOR%">%WEB%</h1>
+  <h1 style="background:%WEBBGCOLOR%">%BASEWEB%</h1>
 </div>
-%$nopINCLUDE{"%WEB%.WebLeftBar"}%
+%$nopWEBCOMPONENT{"WebLeftBar"}%
 %ELSESKINSTATE%
 %$nopWEBCOMPONENT{"WebSideBar"}% 
 %FISKINSTATE%

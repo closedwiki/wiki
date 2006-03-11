@@ -30,18 +30,20 @@
 }
 .natWebTitle,
 .natWebTitle a {
+  color:white;
   color:#2BAFFA;
   color:#FE1C70;
 }
-/*
 .natWebSlogan {
   color:#2BAFFA;
+  color:#FE1C70;
+  font-weight:bold;
 }
+/*
 .natWebTitle a {
   text-decoration:underline;
 }
 */
-.natWebSlogan,
 .natWebLocator {
   display:none;
 }

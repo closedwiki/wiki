@@ -1,13 +1,98 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139388698" format="1.1" version="1.1"}%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
+-->
 ---+!! The Natural Skin
+%TOC%
+
+---++ Description
 NatSkin is a skin driven by cascading stylesheets which is shipped with 12
-predefined styles and 10 style variations that can be applied to each. Most of these
-are inspired by the
+predefined styles and 10 style variations that can be applied to each. Most of
+these are inspired by the
 [[http://www.movabletype.org][MovableType]] and
 [[http://wordpress.org][WordPress]] among others a port of the Kubrick style by
 [[http://binarybonsai.com][Michael Heilemann]] and thus can provide a blog-like layout.
 This includes a PatternSkin style that emulates the look&amp;feel of the PatternSkin
-in the TWiki/Cairo release.
+as it is known from the TWiki/Cairo release.
+
+---++ Features
+	* Skin state: an internal representation of different ways to render the NatSkin concerning
+		* the skin style,
+		* style variants,
+		* the sidebar location,
+		* the page border decoration,
+		* the web buttons in the topbar and
+		* the positioning of the search box
+	* Conditional content: 
+		* USERACTIONS, NATLOGON: display topic actions depending on the user being logged in or not
+		* IFSKINSTATE: render skin differently depending on the current skin state
+		* IFACCESS: render different content or include topics depending on access rights
+	* skin style control: infrastructure to get, set and display the skin style that
+	  is currently active using the NatSkinStyleBrowser
+	* [[TWikiWebSideBar][WebSideBar]]: a configurable navigation bar
+	* MySideBar: every user can extend the sidebar with a personalized navigation
+	* <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
+	* Login page: independent implementation of a login page for
+	  maximal compatibility with old TWiki releases; this is similar to the <nop>TemplateLogin
+	  authentication mechanism in Dakar but only provides htpasswd based authentication
+	* email address obfuscation: all email addresses in topic texts are obfuscated by the use
+	  of dynamic html; so mailto links are still clickable while the pure html text does not
+	  allow to extract the addresses by respective web crawlers.
+	* marking external links: add a nice icon to offsite links
+
+---++ <nop>NatSearch
+This is a cgi-script that is heavily based on the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
+So =natsearch= is basically a fork of that including fixes to similar security flaws that 
+hit the WebSearch those days also. 
+
+<nop>NatSearch can be further reduced to certain webs and topics by setting WebPreferences.
+Besides the NOSEARCHALL feature of every web that excludes a web from search the following variables
+ restrict the hit set:
+
+| *Name* | *Description* |
+| =NATSEARCHINCLUDEWEB= | a regular expression that must match webs to be considered |
+| =NATSEARCHEXCLUDEWEB= | a regular expression that must not match a web |
+| =NATSEARCHINCLUDETOPIC= | a regular expression that must match a topic in the hit set |
+| =NATSEARCHEXCLUDETOPIC= | a regular expression that excludes a topic from the hit set |
+
+Furthermore, the variable =NATSEARCHTEMPLATE= can be set to a template topic that
+is used instead of the skin's =search= template. This can be used in <nop>TWikiApplications to
+define a customized look of search results.
+
+Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible search parameters
+(TODO: maby move that stuff in here).
+
+---++ About the WebSideBar
+The WebSideBar is used to generate a navigation appearing next to 
+the main topic area. Each web in your <nop>%WIKITOOLNAME% might optionaly have a 
+separate WebSideBar. The default [[%TWIKIWEB%.WebSideBar]] can be used to add a default 
+section common to all WebSideBars.
+If the WebSideBar isn't defined the default [[%TWIKIWEB%.WebSideBar]] 
+is used. Each user might define a personalized WebSideBar called =%<nop>WIKINAME%SideBar= that is
+appended to the WebSideBar. The TWiki:Plugins/RedDotPlugin is used to make customizing the WebSideBar
+easier appended to the different parts that make up the complete sidebar. These are hidden if
+you don't have write access to the respective topic fragments.
+
+---++ About the WebButtons
+The WebButtons are used to render the button toolbar at the top of the page when the =STYLEBUTTONS=
+setting is set to ="on"=.
+The WebButtons are an unordered list of
+those links that should be visible there. There exists one WebButtons topic by default in the 
+%TWIKIWEB% web. You can define a WebButtons topic per web overwriting the settings in the
+<nop>%TWIKIWEB%.WebButtons topic. If you do not define a WebButtons topic in a web then the
+default one will be used displaying a set of links to all public webs in your <nop>%WIKITOOLNAME%
+installation.
+
+---++ About Logon &amp; Logout
+=LOGONTOPIC=
+
+
 
 The layout of the NatSkin can be configured online using the NatSkinStyleBrowser
 	* by selecting one of the predefined styles;
@@ -75,7 +160,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.992 |
+|  Skin Version: | v2.994 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -92,9 +177,12 @@ The default style is hardcoded into the NatSkinPlugin.
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-03-11: | reworked sidebar using the new WEBCOMPONET logic; \
+                 docu restructuring - more needed; \
+		 using messages.tmpl as far as possible |
 |  2006-03-01: | fixed <nop>TWikiForm not showing certain row values (uuh); \
                  added more css for the most recent stuff added to the <nop>BlogPlugin; \
-		 removed html from mailnotification; \ 
+		 removed html from mailnotification; \
 		 replaced SCRIPTURL{} with SCRIPTURL+SCRIPTSUFFIX again for legacy platforms; \
 		 minor css fixes |
 |  2006-02-20: | removed empty lines in templates; \
@@ -189,7 +277,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 01 Mar 2006
+-- TWiki:Main/MichaelDaum - 11 Mar 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
