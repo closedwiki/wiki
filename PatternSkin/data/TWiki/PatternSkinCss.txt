@@ -105,6 +105,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
    * Search results
       * .patternSearchResults - container
       * .patternSearchResultsHeader - horizontal bar with the web color
+      * .patternSearchResults - block of one result
       * .patternSearchResultCount - the number of results
       * .patternSearched - feedback on the string used to search
 

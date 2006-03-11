@@ -541,16 +541,16 @@ h4.patternSearchResultsHeader {
 .patternNoViewPage h4.patternSearchResultsHeader {
 	color:#a00; /*T5*/
 }
-.patternSearchResults .twikiBottomRow {
+.patternSearchResult .twikiBottomRow {
 	border-color:#ddd; /*BO8*/
 }
-.patternSearchResults .twikiAlert {
+.patternSearchResult .twikiAlert {
 	color:#f00; /*T9*/
 }
-.patternSearchResults .twikiSummary .twikiAlert {
+.patternSearchResult .twikiSummary .twikiAlert {
 	color:#900; /*C5*/
 }
-.patternSearchResults .twikiNew {
+.patternSearchResult .twikiNew {
 	background-color:#ECFADC; /*BG10*/
 	border-color:#049804; /*T10*/
 	color:#049804; /*T10*/
