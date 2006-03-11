@@ -1,0 +1,28 @@
+%META:TOPICINFO{author="TWikiContributor" date="1128145536" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+
+---++!! !WebLogs Regarding <nop>%URLPARAM{"subject" default="All Subjects" }%
+%STARTSIDEBAR%
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic?type=%BASETOPIC%][Create New !WebLog]]
+<br>See also: %BASEWEB%.WebLogLinkList.
+<hr align=\"left\">
+*Filter by !SubjectArea* %BR%
+<form name="selectSubject" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/" >
+<select name="subject" size="1" onchange="document.location=this.value;"> <option value='#'><Nop>Select...</option><option value=''>All</option>%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%BASEWEB%" regex= "on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option value='%BASETOPIC%?subject=$topic'>$topic</option>" }% </select>
+</form>
+
+<form name="browseTypes" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/" >
+*View other !TopicTypes:* <br />
+<select name="TopicTypes" size="1" onchange="document.location=this.value;"> <option value='#'><Nop>Select...</option>%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" nosearch="on" nosummary="on" noheader="on" nototal="on" order="topic" format= "<option>$topic</option>"}% </select>
+</form>
+
+<a href="%SCRIPTURL%/view/%WEB%/WebRss?skin=rss&search='[T]opicType.*value\=.*[W]ebLog;[S]ubjectArea.*value\=.*%URLPARAM{subject}%'" title="RSS 1.0 Feed" ><img src="%ICONPATH{rss-feed}%" width="36" height="14" alt="RSS feed" border="0" /></a> _Includes current !SubjectArea filter._
+%STOPSIDEBAR% 
+
+%SEARCH{"[T]opicType.*value\=.*[W]ebLog;[S]ubjectArea.*value\=.*%URLPARAM{subject}%" regex="on" casesensitive="on" noheader="on" nosearch="on" web="%BASEWEB%" nosearch="on" order="created" format="<h1 style=\"font-size:1.6em;color:#222222;margin:0em;line-height:1.2em;padding-bottom:1px;border-bottom:1px #000000 dotted; \" > <br /><noautolink>$formfield(TopicHeadline)</noautolink> <a href=\"$percntSCRIPTURL{view}$percnt/$web/$topic\" title=\"permalink\"> <img src=\"$percntICONPATH{more-small}$percnt\" style=\"vertical-align:middle;\" width=\"13\" height=\"13\" alt=\"permalink\" border=\"0\" /> </a></h1> $n() <span class=\"twikiSmall\" > <noautolink>$formfield(SubjectArea)</noautolink> | $count(.*?(---[+][+][+][+]) .*) Comments </span> <p />  <a href=\"$formfield(Url)\">$formfield(Title)</a>$percntXL$percnt <br /> $pattern(^.*?start_introtext-->(.*?)<!--end_introtext.*$) test<span class=\"twikiSmall\"> _[[$web.$topic][Read more...]]_ <br /> <span class=\"twikiRight\"> _&#151; $wikiusername on $date_ </span></span> $n() $n()" }%
+
+
+_For more information on content organization within the <nop>%BASEWEB% web, see %BASEWEB%.TopicClassification._
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

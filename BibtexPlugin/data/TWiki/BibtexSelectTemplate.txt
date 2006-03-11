@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1101475243" format="1.0" version="1.1"}%
----+!! %SPACEDTOPIC%
+---+!! <nop>%TOPIC%
 %STARTINCLUDE% <form action="%SCRIPTURLPATH%/bibsearch/%INCLUDINGWEB%/%INCLUDINGTOPIC%" method="post">
 <input type="hidden" name="errors" value="%BIBERRORS%" />
 <input type="hidden" name="form" value="%BIBFORM%" />

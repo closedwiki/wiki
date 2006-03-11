@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1133979431" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139390324" format="1.1" version="1.1"}%
 ---+!! <nop>VotePlugin
 
 This plugin might be used to establish an online-voting system. Votes are
@@ -58,7 +58,9 @@ The plugin will count only you latest vote. You might only vote once a day.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v1.22 (2005-12-07) |
+|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v1.22 |
 |  Change History: | &nbsp; | 
 |  2005-12-07 | added gif bar; removed debug flag |
 |  2005-10-09 | fixed invocation of normalizeFileName |
@@ -73,7 +75,6 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | >=5.6.1 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/VotePlugin |
 |  Feedback: | TWiki:Plugins/VotePluginDev |

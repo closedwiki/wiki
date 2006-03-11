@@ -43,8 +43,6 @@ sub smry {
     return $doco->{'SMRY'};
 }
 
-
-
 sub run {
     my $shell=shift;
     my $config=shift;

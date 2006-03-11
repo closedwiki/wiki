@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,7 +30,60 @@ sub new {
   $cacheName = '_DBCachePluginDB' unless $cacheName;
 
   my $this = bless($class->SUPER::new($web, $cacheName), $class);
+  $this->{_loadTime} = '';
   return $this;
+}
+
+###############################################################################
+# cache time we loaded the cacheFile
+sub load {
+  my $this = shift;
+  
+  # first load
+  my $result = $this->SUPER::load();
+
+  # then get the time stamp
+  $this->{_loadTime} = $this->_getModificationTime();
+
+  return $result;
+}
+
+###############################################################################
+sub _getCacheFile {
+  my $this = shift;
+
+  return TWiki::Func::getDataDir() . '/' . 
+    $this->{_web} . '/' .  $this->{_cachename};
+}
+
+###############################################################################
+sub _getModificationTime {
+  my $this = shift;
+  
+  my @stat = stat($this->_getCacheFile());
+
+  return $stat[8] || $stat[9] || $stat[10];
+}
+
+###############################################################################
+sub touch {
+  my $this = shift;
+
+  my $atime = time;
+  my $mtime = $atime;
+  return utime $atime, $mtime, $this->_getCacheFile();
+}
+
+###############################################################################
+sub isModified {
+  my $this = shift;
+
+  if (!defined $this->{_loadTime} || 
+    $this->_getModificationTime() != $this->{_loadTime}) {
+    return 1;
+  } 
+  
+  return 0;
 }
 
 ###############################################################################
@@ -56,7 +109,7 @@ sub onReload {
     my $defaultSection = $text;
     $defaultSection =~ s/.*?%STARTINCLUDE%//s;
     $defaultSection =~ s/%STOPINCLUDE%.*//s;
-    applyGlue($defaultSection);
+    #applyGlue($defaultSection);
     $topic->set('_sectiondefault', $defaultSection);
 
     # get named sections
@@ -67,7 +120,7 @@ sub onReload {
     while($text =~ s/%(?:START)?SECTION{[^}]*?"(.*?)"}%(.*?)%ENDSECTION{[^}]*?"(.*?)"}%//s) {
       my $name = $1;
       my $sectionText = $2;
-      applyGlue($sectionText);
+      #applyGlue($sectionText);
       $topic->set("_section$name", $sectionText);
     }
   }
@@ -101,15 +154,15 @@ sub getFormField {
 
 ###############################################################################
 sub dbQuery {
-  my ($this, $theSearch, $theTopics, $theOrder, $theReverse, $theInclude, $theExclude) = @_;
+  my ($this, $theSearch, $theTopics, $theSort, $theReverse, $theInclude, $theExclude) = @_;
 
 # TODO return empty result on an emtpy topics list
 
-  $theOrder ||= '';
+  $theSort ||= '';
   $theReverse ||= '';
   $theSearch ||= '';
 
-  #print STDERR "DEBUG: called dbQuery($theSearch, $theTopics, $theOrder, $theReverse) in $this->{_web}\n";
+  #print STDERR "DEBUG: called dbQuery($theSearch, $theTopics, $theSort, $theReverse) in $this->{_web}\n";
 
   # get max hit set
   my @topicNames;
@@ -144,19 +197,19 @@ sub dbQuery {
   # sort
   @topicNames = keys %hits;
   if (@topicNames > 1) {
-    if ($theOrder eq 'name') {
+    if ($theSort eq 'name') {
       @topicNames = sort {$a cmp $b} @topicNames;
-    } elsif ($theOrder =~ /^created/) {
+    } elsif ($theSort =~ /^created/) {
       @topicNames = sort {
 	$this->expandPath($hits{$a}, 'createdate') <=> $this->expandPath($hits{$b}, 'createdate')
       } @topicNames;
-    } elsif ($theOrder =~ /^modified/) {
+    } elsif ($theSort =~ /^modified/) {
       @topicNames = sort {
 	$this->expandPath($hits{$a}, 'info.date') <=> $this->expandPath($hits{$b}, 'info.date')
       } @topicNames;
     } else {
       @topicNames = sort {
-	$this->expandPath($hits{$a}, $theOrder) cmp $this->expandPath($hits{$b}, $theOrder)
+	$this->expandPath($hits{$a}, $theSort) cmp $this->expandPath($hits{$b}, $theSort)
       } @topicNames;
     }
     @topicNames = reverse @topicNames if $theReverse eq 'on';
@@ -201,7 +254,7 @@ sub expandPath {
     my $root = $theRoot->fastget($first);
     unless ($root) {
       # try form
-      # TODO: try form FIRST
+      # SMELL: try form _first_
       my $form = $theRoot->fastget('form');
       if ($form) {
 	$form = $theRoot->fastget($form);

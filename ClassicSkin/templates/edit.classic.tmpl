@@ -1,17 +1,13 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"focus"}%
-try { document.main.text.focus(); } catch (er) {}
+%TMPL:DEF{"focus"}%try { document.main.text.focus(); } catch (er) {}
 %TMPL:END%
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
 %TMPL:END%
-%TMPL:DEF{"bodystart"}%
-<body bgcolor="#ffffff" onload="initForm()">
+%TMPL:DEF{"bodystart"}%<body bgcolor="#ffffff" onload="initForm()">
 #PageTop
 %TMPL:END%
 
-%TMPL:DEF{"footernote"}%
-<div class="TWikiFooterNote">
+%TMPL:DEF{"footernote"}%<div class="TWikiFooterNote">
 &nbsp; &nbsp;
 </td><td valign="top">
 %IF{ "context RevCommentPluginEnabled" then="&nbsp; &nbsp; <label for='comment'>Summary of changes: </label> <sup>(<a target='RevComment' onclick='return launchWindow(\"%TWIKIWEB%\",\"RevComment\")' href='#%MAKETEXT{Opens page in new window}%' >%MAKETEXT{help}%</a>)</sup> <input type='hidden' name='t' value='%URLPARAM{t}%' /><input class='twikiEditComment' type='text' name='comment' value='%URLPARAM{comment}%'><br />" }%
@@ -26,9 +22,7 @@ try { document.main.text.focus(); } catch (er) {}
  </div>%TMPL:END%
 
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
-<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
 <div class"twikiEditTextarea">
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea><br />
 </div>
@@ -50,9 +44,7 @@ See below for help in editing this page.
 %TMPL:P{"topicinfo"}%</form>%TMPL:END%
 
  
-%TMPL:DEF{"topicaction"}%
-	<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
-	<input type="submit" class="twikiSubmit" name="action_checkpoint" value="Checkpoint" id="checkpoint" />
+%TMPL:DEF{"topicaction"}%	<input type="submit" class="twikiSubmit" name="action_cancel" value="Cancel" id="cancel" />%TMPL:P{"sep"}%	<input type="submit" class="twikiSubmit" name="action_checkpoint" value="Checkpoint" id="checkpoint" />
 	<input type="submit" class="twikiSubmit" name="action_quietsave" value="QuietSave" id="quietsave" />
     <input type="submit" class="twikiSubmit" name="action_save" value="Save" id="save" />%TMPL:P{"sep"}% 
 	<input type="submit" class="twikiSubmit" name="action_preview" value="Preview" id="preview" />%TMPL:END%

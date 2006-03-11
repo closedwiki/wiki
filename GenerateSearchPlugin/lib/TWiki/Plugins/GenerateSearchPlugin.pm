@@ -1,7 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2005 Thomas Weigert - thomas.weigert@motorolaSTOPSPAM.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -87,24 +86,13 @@ sub initPlugin
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
     #$exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
+    
+    TWiki::Func::registerTagHandler( 'GENERATESEARCH', \&_GENERATESEARCH );
+    TWiki::Func::registerRESTHandler('search', \&restSearch);
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
-}
-
-# =========================
-sub commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    $_[0] =~ s/%GENERATESEARCH{(.*?)}%/handleGenSearch( $_[2], $_[1], $1 )/ge;
 }
 
 # ============================
@@ -117,54 +105,65 @@ Not yet documented.
 
 =cut
 
-sub handleGenSearch
-{
-    my( $theWeb, $theTopic, $theArgs ) = @_;
+#sub handleGenSearch
+#{
+#    my( $theWeb, $theTopic, $theArgs ) = @_;
+sub _GENERATESEARCH {
+    my($session, $params, $theTopic, $theWeb) = @_;
 
-    my %params = TWiki::Func::extractParameters( $theArgs );
+    my $topicregex = $params->{"_DEFAULT"} || $params{"topic"} || "";
+    my $webs   = $params->{"web"} || $theWeb;
+    my $form   = $params->{"form"} || $theTopic;
+    my $title  = $params->{"title"} || "";
+    my $message= $params->{"message"} || "";
+    my $size   = $params->{"size"} || 1;
+    my $init   = $params->{"initial"} || "";
+    my $all    = $params->{"all"} || "on";
+    my $inline = $params->{"inline"} || "off";
+    my $show   = $params->{"show"} || "";
+    my $filter = $params->{"filter"} || "";
 
-    my $topicregex = $params{"_DEFAULT"} || $params{"topic"} || "";
-    my $webs   = $params{"web"} || $theWeb;
-    my $form   = $params{"form"} || $theTopic;
-    my $title  = $params{"title"} || "";
-    my $message= $params{"message"} || "";
-    my $size   = $params{"size"} || 1;
-    my $init   = $params{"initial"} || "";
-    my $all    = $params{"all"} || "on";
-
-
-    return generate_interactive_search( $webs, $topicregex, $theWeb, $form, $title, $message, $size, $init, $all );
+    if ($inline eq 'on') {  #SMELL: how is it supposed to check for true, on, ON etc..
+       return generate_search($webs, $theWeb, $theTopic, $session->{cgiQuery}, $session, $form, $title, $message, $topicregex, $init, 0, 0, $show, $filter);#($show eq '')?0:$all
+    } else {
+        return generate_interactive_search( $webs, $topicregex, $theWeb, $form, $title, $message, $size, $init, $all, $show, $filter);
+    }
 }
 
 
 sub generate_interactive_search {
-  my( $searchwebs, $topicregex, $webName, $form, $title, $message, $size, $init, $all ) = @_;
+  my( $searchwebs, $topicregex, $webName, $form, $title, $message, $size, $init, $all, $showlist, $filterlist ) = @_;
 
-  my @fieldsInfo = TWiki::Form::getFormDef( $webName, $form );
+  my $twikiForm = new TWiki::Form($TWiki::Plugins::SESSION, $webName, $form );
 
-  my $result = "<form method=POST action=\"%SCRIPTURLPATH%/gensearch%SCRIPTSUFFIX%/%WEB%/$topic\">";
+  my $result = "<form method=POST action=\"%SCRIPTURL{\"rest\"}%/GenerateSearchPlugin/search\">";
   $result .= "<input type=\"hidden\" name=\"topicregex\" value=\"$topicregex\" />";
   $result .= "<input type=\"hidden\" name=\"form\" value=\"$form\" />";
   $result .= "<input type=\"hidden\" name=\"title\" value=\"$title\" />";
   $result .= "<input type=\"hidden\" name=\"message\" value=\"$message\" />";
   $result .= "<input type=\"hidden\" name=\"init\" value=\"$init\" />";
+  $result .= "<input type=\"hidden\" name=\"baseweb\" value=\"$webName\" />";
+  $result .= "<input type=\"hidden\" name=\"basetopic\" value=\"$topic\" />";
+  $result .= "<input type=\"hidden\" name=\"showlist\" value=\"$showlist\" />";
+  $result .= "<input type=\"hidden\" name=\"filterlist\" value=\"$filterlist\" />";
   $result .= "<table border=\"0\">\n";
 
   $result .= "<tr><td>Field</td><td>Show</td><td>Filter</td></tr>";
 
   my $ct = 0;
-  foreach my $c ( @fieldsInfo ) {
-    my @fieldInfo = @$c;
-    my $fieldName = shift @fieldInfo;
+  foreach my $fieldDef ( @{$twikiForm->{fields}}  ) {
+    my $fieldName = $fieldDef->{name};
     my $name = $fieldName;
-    my $title = shift @fieldInfo;
-    my $type = shift @fieldInfo;
-    my $size = shift @fieldInfo;
-    my $tooltip = shift @fieldInfo;
-    my $attributes = shift @fieldInfo;
+    my $title = $fieldDef->{title};
+    my $type = $fieldDef->{type};
+    my $size = $fieldDef->{size};
+    my $tooltip = $fieldDef->{tooltip};
+    my $attributes = $fieldDef->{attributes};
+    my $checkshow  = ($showlist =~ /$name/)?'checked':'';
+    my $checkfilter  = ($filterlist =~ /$name/)?'checked':'';
 
-    $result .= "<tr><td>$title</td><td><input type=\"checkbox\" name=\"show$name\" value=\"$name\" \></td>";
-    $result .= "<td><input type=\"checkbox\" name=\"filter$name\" value=\"$name\"  /></td></tr>";
+    $result .= "<tr><td>$title</td><td><input type=\"checkbox\" name=\"show$name\" value=\"$name\" $checkshow \></td>";
+    $result .= "<td><input type=\"checkbox\" name=\"filter$name\" value=\"$name\"  $checkfilter /></td></tr>";
     
     $ct++;
   }
@@ -204,9 +203,21 @@ sub generate_interactive_search {
   return $result;
 }
 
+# call using %SCRIPTURL{"edit"}%/GenerateSearchPlugin/search
+sub restSearch {
+   my ($session) = @_;
+   
+my $query = $session->{cgiQuery};   
+my $topic = $query->param( 'basetopic' );
+my $webName = $query->param( 'baseweb' );
+my $searchWeb = $query->param( 'searchweb' );
+   
+   TWiki::Plugins::GenerateSearchPlugin::search( $searchWeb, $webName, $topic, $query, $session);
+}
+
+#called using the generatesearch cgi script
 sub search {
-  my ( $searchWeb, $webName, $topic, $query ) = @_;
-  my $cgiAppType = $query->param( 'contenttype' ) || $query->param( 'apptype' ) || "text/html";
+  my ( $searchWeb, $webName, $topic, $query, $session ) = @_;
   my $form = $query->param( 'form' ) || "";
   my $heading = $query->param( 'title' ) || "";
   my $message = $query->param( 'message' ) || "";
@@ -214,7 +225,32 @@ sub search {
   my $init = $query->param( 'init' ) || "";
   my $allshow = $query->param( 'allshow' ) || "";
   my $allfilter = $query->param( 'allfilter' ) || "";
-  my @fieldsInfo = TWiki::Form::getFormDef( $webName, $form );
+  my $showlist = $query->param( 'showlist' ) || "";
+  my $filterlist = $query->param( 'filterlist' ) || "";
+
+  my $result = generate_search($searchWeb, $webName, $topic, $query, $session, $form, $heading, $message, $topicregex, $init, $allshow, $allfilter, $showlist, $filterlist);
+
+  #SMELL: THIS IS VERY VERY BAD
+  $session->{webName} = $webName; 
+  $session->{topicName} = $topic;
+
+  my $tmpl = &TWiki::Func::readTemplate( "oopsgensearch" );
+  $tmpl =~ s/%PARAM1%/$heading/go;
+  $tmpl =~ s/%PARAM2%/$message/go;
+  $tmpl =~ s/%PARAM3%/$result/go;
+
+  $tmpl = &TWiki::Func::expandCommonVariables( $tmpl, "" );
+  $tmpl = $TWiki::Plugins::SESSION->{renderer}->getRenderedVersion($tmpl);
+
+  TWiki::Func::writeHeader( $query );
+  print $tmpl;
+}
+
+sub generate_search() {
+  my ($searchWeb, $webName, $topic, $query, $session, $form, $heading, $message, $topicregex, $init, $allshow, $allfilter, $showlist, $filterlist) = @_;
+
+  my $twikiForm = new TWiki::Form($TWiki::Plugins::SESSION,  $webName, $form );
+  my @fieldsInfo = @{$twikiForm->{fields}};
 
   my $header = "|*View, edit:*|";
   my $filter = "|*<input type=\"submit\" value=\"Filter\" />*|";
@@ -223,20 +259,19 @@ sub search {
   my $hidden = "";
 
   my $textsize = 30;
-
-  foreach my $c ( @fieldsInfo ) {
-    my @fieldInfo = @$c;
-    my $fieldName = shift @fieldInfo;
+  my $thereIsAFilter;
+  
+  foreach my $fieldDef ( @fieldsInfo ) {
+    my $fieldName = $fieldDef->{name};
     my $name = $fieldName;
-    my $title = shift @fieldInfo;
-    my $type = shift @fieldInfo;
-    my $size = shift @fieldInfo;
-    my $tooltip = shift @fieldInfo;
-    my $attributes = shift @fieldInfo;
-    # now @fieldInfo holds list of possible values
+    my $title = $fieldDef->{title};
+    my $type = $fieldDef->{type};
+    my $size = $fieldDef->{size};
+    my $tooltip = $fieldDef->{tooltip};
+    my $attributes = $fieldDef->{attributes};
 
-    my $qshow = ($query->param( "show$name" ) || $allshow);
-    my $qfilter = ($query->param( "filter$name" ) || $allfilter);
+    my $qshow = (($showlist =~ /$name/) || $query->param( "show$name" ) || $allshow);
+    my $qfilter = (($filterlist =~ /$name/) || $query->param( "filter$name" ) || $allfilter);
     if ( $qshow || $qfilter ) {
       $header .= "*$title*|";
       $format .= " \$formfield($name) |";
@@ -249,20 +284,21 @@ sub search {
     if ( ! $qfilter ) {
       $filter .= "*&nbsp;*|" if $qshow;
     } else {
+      $thereIsAFilter=1;
       # This will depend on the values possible
       $hidden .= "<input type=\"hidden\" name=\"filter$name\" value=\"$name\" />";
       if ($#fieldInfo == -1) {
-	$filter .= "*<input type=\"text\" name=\"q$name\" value=\"" . $query->param( "q$name" ) . "\" size=\"$textsize\" />*|";
+    	$filter .= "*<input type=\"text\" name=\"q$name\" value=\"" . ($query->param( "q$name" )||'') . "\" size=\"$textsize\" />*|";
       } else {
-	if (($type eq "select")||($type =~ "^checkbox")||($type eq "radio")) {
-	  $filter .= "*<select name=\"q$name\" size=\"1\"> <option>" .
-	    $query->param( "q$name" ) . "</option> <option></option>";
-	  foreach my $item ( @fieldInfo ) {
-	    $item =~ s/<nop/&lt\;nop/go;
-	    $filter .= " <option>$item</option>" if $item;
-	  }
-	  $filter .= " </select>*|";
-	} else {
+    	if (($type eq "select")||($type =~ "^checkbox")||($type eq "radio")) {
+	     $filter .= "*<select name=\"q$name\" size=\"1\"> <option>" .
+	       $query->param( "q$name" ) . "</option> <option></option>";
+	     foreach my $item ( @fieldInfo ) {
+	       $item =~ s/<nop/&lt\;nop/go;
+	       $filter .= " <option>$item</option>" if $item;
+	     }
+	     $filter .= " </select>*|";
+	   } else {
 	  # ($type eq "text")||($type eq "label")||($type eq "date")||($type eq "textarea")
 	  $filter .= "*<input type=\"text\" name=\"q$name\" value=\"" . $query->param( "q$name" ) . "\" size=\"$textsize\" />*|";
 	}
@@ -277,29 +313,26 @@ sub search {
   } else {
     $search = "." if ($init ne "off");
   }
-
-  my $result = "<form method=POST action=\"%SCRIPTURLPATH%/gensearch%SCRIPTSUFFIX%/$webName/%TOPIC%\">\n";
+  
+  my $result = "<form method=POST action=\"%SCRIPTURL{\"rest\"}%/GenerateSearchPlugin/search\">";
   $result .= "<input type=\"hidden\" name=\"searchweb\" value=\"$searchWeb\" />";
   $result .= "<input type=\"hidden\" name=\"topicregex\" value=\"$topicregex\" />";
   $result .= "<input type=\"hidden\" name=\"form\" value=\"$form\" />";
   $result .= "<input type=\"hidden\" name=\"title\" value=\"$heading\" />";
   $result .= "<input type=\"hidden\" name=\"message\" value=\"$message\" />";
+  $result .= "<input type=\"hidden\" name=\"baseweb\" value=\"$webName\" />";
+  $result .= "<input type=\"hidden\" name=\"basetopic\" value=\"$topic\" />";
+  $result .= "<input type=\"hidden\" name=\"showlist\" value=\"$showlist\" />";
+  $result .= "<input type=\"hidden\" name=\"filterlist\" value=\"$filterlist\" />";
   $result .= $hidden . "\n";
-  $result .= $header . "\n" . $filter . "\n%SEARCH{ search=\"" . $search . "\"";
+  $result .= $header . "\n";
+  $result .= $filter . "\n" if $thereIsAFilter;
+  $result .= "%SEARCH{ search=\"" . $search . "\"";
   $result .= " topic=\"$topicregex\"" if $topicregex;
   $result .= " web=\"$searchWeb\" nosearch=\"on\" nototal=\"on\" regex=\"on\" noheader=\"on\" terminator=\"on\" format=\"";
   $result .= $format . "\" }%\n</form>";
 
-  my $tmpl = &TWiki::Func::readTemplate( "oopsgensearch" );
-  $tmpl =~ s/%PARAM1%/$heading/go;
-  $tmpl =~ s/%PARAM2%/$message/go;
-  $tmpl =~ s/%PARAM3%/$result/go;
-
-  $tmpl = &TWiki::Func::expandCommonVariables( $tmpl, "" );
-  $tmpl = &TWiki::handleMetaTags( $webName, "", $tmpl );
-
-  TWiki::writeHeader( $query );
-  print $tmpl;
+  return $result;
 }
 
 1;

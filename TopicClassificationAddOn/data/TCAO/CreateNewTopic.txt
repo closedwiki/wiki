@@ -1,0 +1,51 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1141360516" format="1.1" version="1.2"}%
+%META:TOPICPARENT{}%
+_This is the MasterTopic for all CreateNewTopic topics across the TCAO installation._
+---
+%STARTINCLUDE%
+---+++ Create A New Topic
+_For more information about how topics are organized within the <nop>%BASEWEB% web, see %BASEWEB%.TopicClassification._
+---+++ Step 1: Select %BASEWEB%.TopicType and %BASEWEB%.SubjectArea for your new topic:
+<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%TOPIC%"> 
+*TopicType:* &nbsp;<select name="type" ><option value="%URLPARAM{"type" default=""}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option>
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="<option>$topic</option>"}%</select> &nbsp;&nbsp;&nbsp;
+*SubjectArea:* &nbsp;<select name="subject" ><option value="%URLPARAM{"subject" default=""}%">%URLPARAM{"subject" default="Select..."}%</option><option value="#" > none </option>
+%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}%</select>&nbsp;<input type=checkbox name=par  value=subj %CALC{ "$IF($EXACT(%URLPARAM{par}%,subj), checked, )" }% > _Also set as parent._ 
+<p>
+_Optional: Skip the "edit" step?_ &nbsp;  <input type="checkbox" name="save"  value="save" %CALC{ "$IF($EXACT(%URLPARAM{save}%,save), checked, )" }% >&nbsp; _Yes, directly save topic after setting options._
+<p>
+<input name="step" type="hidden" value="two">
+<input type="hidden" name="parent" value="<nop>%URLPARAM{parent}%" />
+<input type="submit" value="%CALC{$IF($EXACT(%URLPARAM{step}%,two), Refresh Step 1 Selections, Click Here to Proceed to Step 2 )}%" />
+</form>
+
+<div style="%IF{"'%URLPARAM{"step"}%' = 'two'" then="" else="display:none"}%"> 
+
+---+++ Step 2: Enter <nop>%URLPARAM{"type"}% Topic Information
+
+<form name="newTopic" action='%SCRIPTURL%/%URLPARAM{"save" default="edit"}%%SCRIPTSUFFIX%/%BASEWEB%/'>
+%INCLUDE{ %IF{ "%URLPARAM{type}%='blank'" then='"%TCAOWEB%.CreateNewTopicElements" section="name"' else='"%BASEWEB%.%URLPARAM{type}%" section="new"' }% }%
+<input type="hidden" name="SubjectArea" value="%URLPARAM{subject}%" >
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="%IF{ "defined par" then="subjectparent" else="selectparent" }%" }%
+<p />
+---+++ Step 3: Create Topic
+<p />Click: <input type="submit" value="  Create topic  "> 
+</form>
+
+---
+
+#ExistingTopics
+<br>
+---+++ List of Existing <nop>%URLPARAM{"type"}% Topics  
+
+%SEARCH{"[T]opicType.*value\=.*%URLPARAM{"type"}%" web="%BASEWEB%" regex="on" casesensitive="on" noheader="on" nosearch="on" format="	* $web.$topic - $formfield(TopicHeadline)<br />"}%
+
+</div>
+%STOPINCLUDE%
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="HelpTopic"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoUse"}%
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="The master topic for creating new topics with TCAO"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

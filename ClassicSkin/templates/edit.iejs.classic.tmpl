@@ -1,9 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"focus"}%
-  document.main.text.focus();
+%TMPL:DEF{"focus"}%  document.main.text.focus();
 %TMPL:END%
-%TMPL:DEF{"script"}%
-<style>
+%TMPL:DEF{"script"}%<style>
 A.editButton:link {
   text-decoration:none;
   color:black;
@@ -323,14 +321,11 @@ function writeJavaScriptNote()
 // =================
 //STOP HIDING-->
 </script>%TMPL:END%
-%TMPL:DEF{"bodystart"}%
-<body bgcolor="#ffffff" onLoad="initForm()">
+%TMPL:DEF{"bodystart"}%<body bgcolor="#ffffff" onLoad="initForm()">
 #PageTop
 %TMPL:END%
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
-<script type="text/javascript">
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%<script type="text/javascript">
 <!--HIDE
 writeToolbar("top");
 //STOP HIDING-->
@@ -363,8 +358,7 @@ See below for help in editing this page.
 </table>
 %FORMFIELDS%
 %TMPL:P{"topicinfo"}%</form>%TMPL:END%
-%TMPL:DEF{"footernote"}%
-<div class="TWikiFooterNote">
+%TMPL:DEF{"footernote"}%<div class="TWikiFooterNote">
 <font color="#333333" size="-1">
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
 </font>

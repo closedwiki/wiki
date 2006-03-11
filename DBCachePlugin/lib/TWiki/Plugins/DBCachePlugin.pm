@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,379 +16,97 @@ package TWiki::Plugins::DBCachePlugin;
 
 use strict;
 use vars qw( 
-  $VERSION $RELEASE $debug $pluginName %webDB 
-  $wikiWordRegex $webNameRegex $defaultWebNameRegex $linkProtocolPattern
-  $currentWeb $currentTopic $currentUser $installWeb
+  $VERSION $RELEASE $currentWeb $currentTopic $currentUser $isInitialized
 );
 
-use TWiki::Contrib::DBCacheContrib;
-use TWiki::Contrib::DBCacheContrib::Search;
-use TWiki::Plugins::DBCachePlugin::WebDB;
-
 $VERSION = '$Rev$';
-$RELEASE = '0.92';
-$pluginName = 'DBCachePlugin';
-$debug = 0; # toggle me
+$RELEASE = '0.99';
 
 ###############################################################################
-sub writeDebug {
-  #&TWiki::Func::writeDebug('- '.$pluginName.' - '.$_[0]) if $debug;
-  print STDERR "DEBUG: - $pluginName - $_[0]\n" if $debug;
-}
-
-###############################################################################
+# plugin initializer
 sub initPlugin {
-  ($currentTopic, $currentWeb, $currentUser, $installWeb) = @_;
+  ($currentTopic, $currentWeb, $currentUser) = @_;
 
-  %webDB = ();
-
+  # check for Plugins.pm versions
+  if ($TWiki::Plugins::VERSION < 1.1) {
+    return 0;
+  }
+  
   TWiki::Func::registerTagHandler('DBQUERY', \&_DBQUERY);
   TWiki::Func::registerTagHandler('DBCALL', \&_DBCALL);
+  TWiki::Func::registerTagHandler('DBSTATS', \&_DBSTATS);
   TWiki::Func::registerTagHandler('DBDUMP', \&_DBDUMP); # for debugging
 
-  $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
-  $webNameRegex = TWiki::Func::getRegularExpression('webNameRegex');
-  $defaultWebNameRegex = TWiki::Func::getRegularExpression('defaultWebNameRegex');
-  $linkProtocolPattern = TWiki::Func::getRegularExpression('linkProtocolPattern');
+  $isInitialized = 0;
 
-  #writeDebug("initialized");
   return 1;
 }
 
 ###############################################################################
-sub getDB {
-  my $theWeb = shift;
+sub initCore {
+  return if $isInitialized;
+  $isInitialized = 1;
 
-#  writeDebug("called getDB($theWeb)");
+  eval 'use TWiki::Plugins::DBCachePlugin::Core;';
+  die $@ if $@;
 
-  unless ($webDB{$theWeb}) {
-    my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb) 
-      || 'TWiki::Plugins::DBCachePlugin::WebDB';
-    $impl =~ s/^\s*(.*?)\s*$/$1/o;
-    $webDB{$theWeb} = new $impl($theWeb);
-    $webDB{$theWeb}->load();
+  my $isScripted = &TWiki::Func::getContext()->{'command_line'};
+  unless ($isScripted) {
+    my $query = &TWiki::Func::getCgiQuery();
+    my $theAction = $ENV{'SCRIPT_NAME'} || '';
+    if ($theAction =~ /^.*\/(save|rename|attach|upload)/) {
+      # force reload
+      %TWiki::Plugins::DBCachePlugin::Core::webDB = ();
+    }
   }
 
-  return $webDB{$theWeb};
+  # We don't initialize the webDB hash on every request, see getDB()!
+  #%TWiki::Plugins::DBCachePlugin::Core::webDB = ();# uncomment if you don't trust 
+
+  %TWiki::Plugins::DBCachePlugin::Core::webDBIsModified = ();
+
+  $TWiki::Plugins::DBCachePlugin::Core::wikiWordRegex = 
+    TWiki::Func::getRegularExpression('wikiWordRegex');
+  $TWiki::Plugins::DBCachePlugin::Core::webNameRegex = 
+    TWiki::Func::getRegularExpression('webNameRegex');
+  $TWiki::Plugins::DBCachePlugin::Core::defaultWebNameRegex = 
+    TWiki::Func::getRegularExpression('defaultWebNameRegex');
+  $TWiki::Plugins::DBCachePlugin::Core::linkProtocolPattern = 
+    TWiki::Func::getRegularExpression('linkProtocolPattern');
 }
 
 ###############################################################################
+# twiki handlers
+sub afterSaveHandler {
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::afterSaveHandler(@_);
+}
+
+###############################################################################
+# tags
 sub _DBQUERY {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-  
-  #writeDebug("called _DBQUERY(" . $params->stringify() . ")");
-
-  # params
-  my $theSearch = $params->{_DEFAULT} || $params->{search};
-  my $theTopics = $params->{topics} || $params->{topic};
-  
-  return '' if $theTopics && $theTopics eq 'none';
-
-  my $theFormat = $params->{format} || '$topic';
-  my $theHeader = $params->{header} || '';
-  my $theFooter = $params->{footer} || '';
-  my $theInclude = $params->{include};
-  my $theExclude = $params->{exclude};
-  my $theOrder = $params->{order} || 'name';
-  my $theReverse = $params->{reverse} || 'off';
-  my $theSep = $params->{separator} || '$n';
-  my $theLimit = $params->{limit} || '';
-  my $theSkip = $params->{skip} || 0;
-  my $theHideNull = $params->{hidenull} || 'off';
-  $theWeb = $params->{web} || $theWeb;
-
-  my $theDB = getDB($theWeb);
-
-  # get topics
-  my @topicNames = ();
-  if ($theTopics) {
-    @topicNames = split(/, /, $theTopics);
-  }
-
-  # normalize 
-  $theSkip =~ s/[^-\d]//go;
-  $theSkip = 0 if $theSkip eq '';
-  $theSkip = 0 if $theSkip < 0;
-  $theFormat = '' if $theFormat eq 'none';
-  $theSep = '' if $theSep eq 'none';
-
-  my ($topicNames, $hits, $msg) = $theDB->dbQuery($theSearch, 
-    \@topicNames, $theOrder, $theReverse, $theInclude, $theExclude);
-  #print STDERR "DEBUG: got topicNames=@$topicNames\n";
-
-  return &inlineError($msg) if $msg;
-
-  $theLimit =~ s/[^\d]//go;
-  $theLimit = scalar(@$topicNames) if $theLimit eq '';
-  $theLimit += $theSkip;
-
-
-  my $count = scalar(@$topicNames);
-  return '' if ($count <= $theSkip) && $theHideNull eq 'on';
-
-  # format
-  my $text = '';
-  if ($theFormat && $theLimit) {
-    my $index = 0;
-    my $isFirst = 1;
-    foreach my $topicName (@$topicNames) {
-      $index++;
-      next if $index <= $theSkip;
-      my $topicObj = $hits->{$topicName};
-      my $topicWeb = $topicObj->fastget('web');
-      my $format = '';
-      $format = $theSep unless $isFirst;
-      $isFirst = 0;
-      $format .= $theFormat;
-      $format =~ s/\$formfield\((.*?)\)/$theDB->getFormField($topicName, $1)/geo;
-      $format =~ s/\$expand\((.*?)\)/$theDB->expandPath($topicObj, $1)/geo;
-      $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
-      #$format =~ s/\$dbcall\((.*?)\)/dbCall($1)/ge; ## TODO
-      $format = expandVariables($format, topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
-      $text .= $format;
-      last if $index == $theLimit;
-    }
-  }
-
-  $theHeader = expandVariables($theHeader.$theSep, count=>$count, web=>$theWeb) if $theHeader;
-  $theFooter = expandVariables($theSep.$theFooter, count=>$count, web=>$theWeb) if $theFooter;
-
-  $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", $currentTopic, $theWeb);
-  return $text;
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::handleDBQUERY(@_);
 }
-
-###############################################################################
 sub _DBCALL {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-
-  # remember args for the key before mangling the params
-  my $args = $params->stringify();
-
-  #writeDebug("called _DBCALL($args)");
-
-  my $section = $params->remove('section') || 'default';
-  my $warn = $params->remove('warn') || 'on';
-  $warn = ($warn eq 'on')?1:0;
-  my $thisTopic = $params->remove('_DEFAULT') || '';
-  my $thisWeb = $theWeb;
-  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
-
-  #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic");
-
-  # get web and topic
-  my $thisDB = getDB($thisWeb);
-  my $topicObj = $thisDB->fastget($thisTopic);
-  unless ($topicObj) {
-    if ($warn) {
-      return inlineError("ERROR: DBCALL can't find topic <nop>$thisTopic in <nop>$thisWeb");
-    } else {
-      return '';
-    }
-  }
-
-  # check access rights
-  my $wikiUserName = TWiki::Func::getWikiUserName();
-  unless (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $thisTopic, $thisWeb)) {
-    if ($warn) {
-      return inlineError("ERROR: DBCALL access to '$thisWeb.$thisTopic' denied");
-    } 
-    return '';
-  }
-
-
-  # get section
-  my $sectionText = $topicObj->fastget("_section$section") if $topicObj;
-  if (!$sectionText) {
-    if($warn) {
-      return inlineError("ERROR: DBCALL can't find section '$section' in topic '$thisWeb.$thisTopic'");
-    } else {
-      return '';
-    }
-  }
-
-  # prevent recursive calls
-  my $key = $thisWeb.'.'.$thisTopic;
-  my $count = grep($key, keys %{$session->{dbcalls}});
-  $key .= $args;
-  if ($session->{dbcalls}->{$key} || $count > 99) {
-    if($warn) {
-      return inlineError("ERROR: DBCALL reached max recursion at '$thisWeb.$thisTopic'");
-    }
-    return '';
-  }
-  $session->{dbcalls}->{$key} = 1;
-
-  # substitute variables
-  foreach my $key (keys %$params) {
-    $sectionText =~ s/%$key%/$params->{$key}/g;
-  }
-
-  # expand
-  $sectionText = TWiki::Func::expandCommonVariables($sectionText, $thisTopic, $thisWeb);
-
-  # from TWiki::_INCLUDE
-  if($thisWeb ne $theWeb) {
-    my $removed = {};
-
-    # Must handle explicit [[]] before noautolink
-    # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
-    $sectionText =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1)/geo;
-    # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
-    $sectionText =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink($thisWeb, $1, $2)/geo;
-
-    $sectionText = $session->{renderer}->takeOutBlocks($sectionText, 'noautolink', $removed);
-
-    # 'TopicName' to 'Web.TopicName'
-    $sectionText =~ s/(^|[\s(])($webNameRegex\.$wikiWordRegex)/$1$TWiki::TranslationToken$2/go;
-    $sectionText =~ s/(^|[\s(])($wikiWordRegex)/$1$thisWeb\.$2/go;
-    $sectionText =~ s/(^|[\s(])$TWiki::TranslationToken/$1/go;
-
-    $session->{renderer}->putBackBlocks( \$sectionText, $removed, 'noautolink');
-  }
-
-
-  # cleanup
-  delete $session->{dbcalls}->{$key};
-
-  return $sectionText;
-  #return "<verbatim>\n$sectionText\n</verbatim>";
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::handleDBCALL(@_);
 }
-
-###############################################################################
-# from TWiki::_fixIncludeLink
-sub _fixIncludeLink {
-  my( $theWeb, $theLink, $theLabel ) = @_;
-
-  # [[...][...]] link
-  if($theLink =~ /^($webNameRegex\.|$defaultWebNameRegex\.|$linkProtocolPattern\:|\/)/o) {
-    if ( $theLabel ) {
-      return "[[$theLink][$theLabel]]";
-    } else {
-      return "[[$theLink]]";
-    }
-  } elsif ( $theLabel ) {
-    return "[[$theWeb.$theLink][$theLabel]]";
-  } else {
-    return "[[$theWeb.$theLink][$theLink]]";
-  }
+sub _DBSTATS {
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::handleDBSTATS(@_);
 }
-
-###############################################################################
 sub _DBDUMP {
-  my ($session, $params, $theTopic, $theWeb) = @_;
-
-  #writeDebug("called _DBDUMP");
-
-  my $thisTopic = $params->{_DEFAULT} || $theTopic;
-  my $thisWeb = $params->{web} || $theWeb;
-  ($thisWeb, $thisTopic) = TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
-  my $theDB = getDB($thisWeb);
-
-  my $topicObj = $theDB->fastget($thisTopic) || '';
-  my $result = "\n<noautolink>\n";
-  $result .= "---++ [[$thisWeb.$thisTopic]]\n$topicObj\n";
-
-  # read all keys
-  $result .= "<table class=\"twikiTable\">\n";
-  foreach my $key (sort $topicObj->getKeys()) {
-    my $value = $topicObj->fastget($key);
-    $result .= "<tr><th>$key</th>\n<td><verbatim>\n$value\n</verbatim></td></tr>\n";
-  }
-  $result .= "</table>\n";
-
-  # read info
-  my $topicInfo = $topicObj->fastget('info');
-  $result .= "<p/>\n---++ Info = $topicInfo\n";
-  $result .= "<table class=\"twikiTable\">\n";
-  foreach my $key (sort $topicInfo->getKeys()) {
-    my $value = $topicInfo->fastget($key);
-    $result .= "<tr><th>$key</th><td>$value</td></tr>\n" if $value;
-  }
-  $result .= "</table>\n";
-
-  # read form
-  my $topicForm = $topicObj->fastget('form');
-  if ($topicForm) {
-    $result .= "<p/>\n---++ Form = $topicForm\n";
-    $result .= "<table class=\"twikiTable\">\n";
-    $topicForm = $topicObj->fastget($topicForm);
-    foreach my $key (sort $topicForm->getKeys()) {
-      my $value = $topicForm->fastget($key);
-      $result .= "<tr><th>$key</th><td>$value</td>\n" if $value;
-    }
-    $result .= "</table>\n";
-  }
-
-  return $result."\n</noautolink>\n";
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::handleDBDUMP(@_);
 }
 
 ###############################################################################
-sub expandVariables {
-  my ($theFormat, %params) = @_;
-
-  return '' unless $theFormat;
-  
-  foreach my $key (keys %params) {
-    if($theFormat =~ s/\$$key/$params{$key}/g) {
-      #print STDERR "DEBUG: expanding $key->$params{$key}\n";
-    }
-  }
-  $theFormat =~ s/\$percnt/\%/go;
-  $theFormat =~ s/\$dollar/\$/go;
-  $theFormat =~ s/\$n/\n/go;
-  $theFormat =~ s/\$t\b/\t/go;
-  $theFormat =~ s/\$nop//g;
-  $theFormat =~ s/\$flatten\((.*)\)/&flatten($1)/ges;
-  $theFormat =~ s/\$encode\((.*)\)/&encode($1)/ges;
-
-  return $theFormat;
+# perl api
+sub getDB {
+  initCore();
+  return TWiki::Plugins::DBCachePlugin::Core::getDB(@_);
 }
-
-###############################################################################
-sub encode {
-  my $text = shift;
-
-  $text = "\n<noautolink>\n$text\n</noautolink>\n";
-  $text = &TWiki::Func::expandCommonVariables($text);
-  $text = &TWiki::Func::renderText($text);
-  $text =~ s/[\n\r]+/ /go;
-  $text =~ s/\n*<\/?noautolink>\n*//go;
-  $text = &TWiki::entityEncode($text);
-  $text =~ s/^\s*(.*?)\s*$/$1/gos;
-
-  return $text;
-}
-###############################################################################
-sub flatten {
-  my $text = shift;
-
-  $text =~ s/&lt;/</g;
-  $text =~ s/&gt;/>/g;
-
-  $text =~ s/\<[^\>]+\/?\>//g;
-  $text =~ s/<\!\-\-.*?\-\->//gs;
-  $text =~ s/\&[a-z]+;/ /g;
-  $text =~ s/[ \t]+/ /gs;
-  $text =~ s/%//gs;
-  $text =~ s/_[^_]+_/ /gs;
-  $text =~ s/\&[a-z]+;/ /g;
-  $text =~ s/\&#[0-9]+;/ /g;
-  $text =~ s/[\r\n\|]+/ /gm;
-  $text =~ s/\[\[//go;
-  $text =~ s/\]\]//go;
-  $text =~ s/\]\[//go;
-  $text = &TWiki::entityEncode($text);
-  $text =~ s/(https?)/<nop>$1/go;
-  $text =~ s/\b($wikiWordRegex)\b/<nop>$1/g;
-
-  return $text;
-}
-
-###############################################################################
-sub inlineError {
-  return "<div class=\"twikiAlert\">$_[0]</div>";
-}
-
 
 ###############################################################################
 1;

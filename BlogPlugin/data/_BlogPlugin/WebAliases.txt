@@ -1,15 +1,18 @@
-%META:TOPICINFO{author="TWikiContributor" date="1133814987" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1140617669" format="1.1" version="1.1"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 see also: TWiki.WebAliases, TWiki.AliasPlugin
 
 %STOPALIASAREA%
+%UNALIAS%
 <noautolink>
 <!--
-Note, that you have to add urlencoded versions of your aliases to the WebRss
+Note, that you have to add urlencoded versions of your aliases to the RenderRss
 if they use special characters.
 
+%STARTSECTION{"textiles"}%
+*~~
 %ALIAS{name="''" regex="$start''$stop" value="&rdquo;"}%
 %ALIAS{name="``" regex="$start``$stop" value="&ldquo;"}%
 %ALIAS{name="-" regex=" - " value=" &ndash; "}%
@@ -22,11 +25,15 @@ if they use special characters.
 %ALIAS{name="1/2" regex="$start1/2$stop" value="&frac12;"}%
 %ALIAS{name="1/4" regex="$start1/4$stop" value="&frac14;"}%
 %ALIAS{name="3/4" regex="$start3/4$stop" value="&frac34;"}%
+*~~
+%ENDSECTION{"textiles"}%
 
 %ALIAS{name="NatSkinPlugin" value="TWiki.NatSkinPlugin"}%
 %ALIAS{name="NatSkin" value="TWiki.NatSkin"}%
+%ALIAS{name="PatternSkin" value="TWiki.PatternSkin"}%
 %ALIAS{name="DBCacheContrib" value="TWiki.DBCacheContrib"}%
 %ALIAS{name="BlogPlugin" value="TWiki.BlogPlugin"}%
+%ALIAS{name="BlogUp" value="TWiki.BlogUp"}%
 %ALIAS{name="TimeSincePlugin" value="TWiki.TimeSincePlugin"}%
 %ALIAS{name="JojoWiki" value="[[http://jojowiki.dyndns.org][JojoWiki]]"}%
 %ALIAS{name="WordPress" value="[[http://wordpress.org][WordPress]]"}%

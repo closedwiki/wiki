@@ -1,18 +1,35 @@
-%META:TOPICINFO{author="TWikiContributor" date="1138358580" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139388698" format="1.1" version="1.1"}%
 ---+!! The Natural Skin
-NatSkin is a skin driven by cascading stylesheets. This is a rework of the 
+NatSkin is a skin driven by cascading stylesheets which is shipped with 12
+predefined styles and 10 style variations that can be applied to each. Most of these
+are inspired by the
+[[http://www.movabletype.org][MovableType]] and
+[[http://wordpress.org][WordPress]] among others a port of the Kubrick style by
+[[http://binarybonsai.com][Michael Heilemann]] and thus can provide a blog-like layout.
+This includes a PatternSkin style that emulates the look&amp;feel of the PatternSkin
+in the TWiki/Cairo release.
+
+The layout of the NatSkin can be configured online using the NatSkinStyleBrowser
+	* by selecting one of the predefined styles;
+	* by selectiong one of the predefined variations;
+	* the sidebar can be displayed on the left or right;
+	* the page border can be toggled on and off;
+	* there are so-called WebButtons that can be switched on and off displaying webs as tabs;
+	* the position of the search box can be set to one of four predefined positions.
+
+The result can be configured per session, user, web or for the complete site.
+The screenshots below only display a limitted set of all possible combinations.
+
+This skin includes an enhanced navigation mechanism named WebSideBar.  This
+combines the best of the old <nop>WebMenu idea from the <nop>GnuSkin and the
+<nop>WebLeftBar known from the TWiki:Plugins/PatternSkin by providing all the
+flexibility of the <nop>WebLeftBar including the MySideBar feature and an
+enhanced navigation scheme. 
+
+This is a rework of the 
 TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
 [[http://nats-www.informatik.uni-hamburg.de/Main/WebHome][Natural Language Systems Division]] 
 (NATS) of the University of Hamburg, Germany. 
-The NatSkin comes with 12 predefined styles that are inspired by the 
-[[http://www.movabletype.org][MovableType]] and 
-[[http://wordpress.org][WordPress]] among others a port of the Kubrick style by 
-[[http://binarybonsai.com][Michael Heilemann]].
-
-The NatSkin includes an enhanced navigation mechanism named WebSideBar.
-This combines the best of the old <nop>WebMenu idea from the <nop>GnuSkin and the <nop>WebLeftBar known from the TWiki:Plugins/PatternSkin by providing all the flexibility of the <nop>WebLeftBar
-including the MySideBar feature and an enhanced navigation scheme. See the NatSkinPlugin
-documentation for more information.
 
 %TOC%
 
@@ -35,13 +52,9 @@ The default style is hardcoded into the NatSkinPlugin.
 	* NatSkinCss
 
 ---++ Installation
-	* Get the TWiki:Plugins.NatSkinPlugin supplementary package and install it.
-	* If you are installing on TWiki/Cairo then consider applying the patches 
-		* [[%ATTACHURL%/Cairo_UI_pm.diff][Cairo_UI_pm.diff]]: fixes a bug in =UI.pm=
-		* [[%ATTACHURL%/TablePlugin_pm.diff][TablePlugin_pm.diff]]: adds full CSS support
-		  to the TablePlugin supported by the NatSkin of course; this patch is against
-		  the current version uploaded to TWiki.org and not suitable otherwise, i.e. not
-		  needed if you run a TWiki/dakar engine.
+	* Get the TWiki:Plugins/NatSkinPlugin supplementary package and install it.
+	* If you are installing on TWiki/Cairo then consider applying this patch:
+          [[%ATTACHURL%/Cairo_UI_pm.diff][Cairo_UI_pm.diff]]
 	* Download the ZIP file from the Skin Home page (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory
 	* Test if installed: [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
@@ -59,7 +72,13 @@ The default style is hardcoded into the NatSkinPlugin.
 }
 </style>
 
-|  Description: | Driven by cascading stylesheets, Comes with 9 alternative styles, <nop>MoveableType Look-n-Feel |
+|  Skin Author: | TWiki:Main/MichaelDaum |
+|  Copyright &copy;: | 2003-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Skin Version: | v2.992 |
+|  Dependencies: | TWiki:Plugins/NatSkinPlugin |
+|  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
+|  Base Name: | nat |
 |  Screenshot: | <div class="screenshotter" style="height:130px;overflow:hidden"><a href="%ATTACHURL%/Clean.jpeg"><img src="%ATTACHURL%/Clean.jpeg" title="Clean"/></a></div> |
 |  More Screenshots: | \
 <div class="screenshotter"><a href="%ATTACHURL%/GeorgiaBlue.jpeg"><img src="%ATTACHURL%/GeorgiaBlue.jpeg" title="GeorgiaBlue"/></a></div>\
@@ -72,10 +91,30 @@ The default style is hardcoded into the NatSkinPlugin.
 	<div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
-|  Base Name: | nat |
-|  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.97 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-03-01: | fixed <nop>TWikiForm not showing certain row values (uuh); \
+                 added more css for the most recent stuff added to the <nop>BlogPlugin; \
+		 removed html from mailnotification; \ 
+		 replaced SCRIPTURL{} with SCRIPTURL+SCRIPTSUFFIX again for legacy platforms; \
+		 minor css fixes |
+|  2006-02-20: | removed empty lines in templates; \
+                 css fixes for lists in the sidebar; \
+		 unified font size in attachment tables; \
+		 using percentage instead of em size for the thin page layout |
+|  2006-02-14: | added variable %<nop>WEBSYNDICATION%; \
+                 removed <nop>TablePlugin patch; \
+		 made <nop>BaseStyle usable; \
+		 added syndiation feeds; \
+		 don't use dotted lines on IE; \
+		 don't use transparent borders on IE; \
+		 added gif version for cite background for IE; \
+		 fixed content area of <nop>PatterStyle on IE; \
+		 don't use Lucida Grande in <nop>KubrickStyle; \
+		 added rss feed icons; \
+		 added plain view template |
+|  2006-02-03: | compute even/odd search hits for WebSearch using CALC so \
+                 that css-2.1 expressions aren't needed anymore; \
+                 lots of css font and size fixes, i.e. blog related |
 |  2006-01-27: | fixed blog css for all styles |
 |  2006-01-26: | lots of css fixes |
 |  2006-01-23: | added forgotten IE decorations; \
@@ -118,31 +157,30 @@ The default style is hardcoded into the NatSkinPlugin.
 |  2005-10-18: | workaround crash due to recursive accessdenied-exceptions |
 |  2005-10-13: | preliminary css support for header art; added some default headers |
 |  2005-10-10: | added skin style cycling to the NatSkinStyleBrowser; \
-					  fixed way how the oops dialogues switch off the sidebar |
+		 fixed way how the oops dialogues switch off the sidebar |
 |  2005-10-09: | new release NatSkin-2.51: \
-					  reinvention of the NatSkinStyleBrowser; \
-					  reworked the standard WebSideBar; \
-					  extensive usage of the new conditional content tags \
-					  interfacing the skin state machine, i.e. switch the \
-					  sidebar from the left to the right etc.; \
-					  removed hard-coded links to a _Support_ web; \
-					  lots of fixes to catch up with the evolving dakar engine; \
-					  support for the TWiki:Plugins.TwistyPlugin; \
-					  support for the TWiki:Plugins.AliasPlugin; \
-					  skin state support for the TWiki:Plugins.TablePlugin; \
-					  new webbuttons in the topbar; \
-					  componentized style sheets for different skin states; \
-					  improved css of forms and tables; \
-					  better support for the upcomming <nop>BlogPlugin in every skin style; \
-					  plus the usual small css fixes |
+                 reinvention of the NatSkinStyleBrowser; \
+		 reworked the standard WebSideBar; \
+                 extensive usage of the new conditional content tags \
+                 interfacing the skin state machine, i.e. switch the \
+                 sidebar from the left to the right etc.; \
+                 removed hard-coded links to a _Support_ web; \
+                 lots of fixes to catch up with the evolving dakar engine; \
+                 support for the TWiki:Plugins.TwistyPlugin; \
+                 support for the TWiki:Plugins.AliasPlugin; \
+                 skin state support for the TWiki:Plugins.TablePlugin; \
+                 new webbuttons in the topbar; \
+                 componentized style sheets for different skin states; \
+                 improved css of forms and tables; \
+                 better support for the upcomming <nop>BlogPlugin in every skin style; \
+                 plus the usual small css fixes |
 |  2005-08-30: | lots of css fixes for IE and Opera; \
-					  fixed topicactions for IE; \
-					  different cancel actions per engine |
+                 fixed topicactions for IE; \
+                 different cancel actions per engine |
 |  2005-08-26: | final NatSkin-2.0 |
 |  2005-07-12: | first round of pre-releases numbered 1.91 upwards |
 |  2005-06-24: | rewritten the templates, renamed the CSS classes |
 |  2003-07-25: | Initial version |
-|  Dependencies: | NatSkinPlugin, SessionPlugin, RedDotPlugin |
 |  Skin Home: | TWiki:Plugins/NatSkin |
 |  Feedback: | TWiki:Plugins/NatSkinDev |
 |  Appraisal: | TWiki:Plugins/NatSkinAppraisal |
@@ -151,13 +189,12 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 27 Jan 2006
+-- TWiki:Main/MichaelDaum - 01 Mar 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="previewbg.png" attr="" comment="" date="1114174051" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="Cairo_UI_pm.diff" attr="" comment="" date="1120239647" path="Cairo_UI_pm.diff" size="413" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="TablePlugin_pm.diff" attr="" comment="" date="1120239660" path="TablePlugin_pm.diff" size="3205" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="Independence.jpeg" attr="h" comment="" date="1124706583" path="Independence.jpeg" size="53113" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="Squash.jpeg" attr="h" comment="" date="1124706784" path="Squash.jpeg" size="50940" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="Kubrick.jpeg" attr="h" comment="" date="1124706654" path="Kubrick.jpeg" size="35719" user="TWikiContributor" version="1.1"}%

@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="TWikiContributor" date="1117810513" format="1.0" version="$Rev: $"}%
+%META:TOPICPARENT{name="TopicClassification"}%
+__This topic is included as a master template in SubjectArea topics within the specific webs where TopicClassification is used. Changes to this topic will be applied throughout the site.__
+
+%STARTINCLUDE%
+<div style="float:right;width:30%;border:2px dotted %WEBBGCOLOR%;padding:1em;margin:0.5em;">
+*Filter by TopicType* %BR%
+<form name="filterProject" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%/" >
+<select name="type" size="1"> <option value='#'><Nop>%URLPARAM{ "type" default="Select..."}%</option><option value=''>All</option>%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}% </select>
+*Filter by: SubjectArea:*  %BR%
+<select name="subject" size="1"> <option value=''>%URLPARAM{ "subject" default="Select..."}%</option><option value=''>All</option>%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%BASEWEB%" regex= "on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>" }% </select><br />
+<input type="submit" value=" Apply Filters ">
+</form>
+
+*View other ProjectTopics* %BR%
+<form name="browseSubjects" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/" >
+<select name="subject" size="1" onchange="document.location=this.value;"> <option value='%INCLUDINGWEB%'><Nop>Select...</option>%SEARCH{ "[T]opicType.*value\=.*[P]rojectTopic" web="%BASEWEB%" regex= "on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>" }% </select>
+</form>
+</div> 
+
+---+!! %INCLUDINGWEB%.%INCLUDINGTOPIC% %URLPARAM{ "type" default="All Topic" }%s Regarding %URLPARAM{ "subject" default="All Subject" }%s
+
+%SEARCH{"[P]rojectTopic.*\=.*%INCLUDINGTOPIC%\";[T]opicType.*value\=.*%URLPARAM{type}%;[S]ubjectArea.*value\=.*%URLPARAM{subject}%" regex="on" casesensitive="on" web="%INCLUDINGWEB%" nosearch="on"  format="	* $web.$topic <font face=\"arial,helvetica\" size=\"1\"> _($formfield(TopicType))_ </font> - $formfield(TopicHeadline) <font face=\"arial,helvetica\" size=\"1\"> _(Modified by $wikiusername on $date)_ </font>" sort="modified" reverse="on"}%
+
+_For more information on content organization within the *%BASEWEB%* web, see %BASEWEB%.TopicClassification._
+%STOPINCLUDE%
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

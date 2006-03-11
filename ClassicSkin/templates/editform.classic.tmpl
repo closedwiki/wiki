@@ -4,9 +4,7 @@
 %TMPL:DEF{"titleaction"}%(edit form)%TMPL:END%
 %TMPL:DEF{"footernote"}% %TMPL:END%
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
-<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
 <input type="hidden" id="topic" name="text" value="%TEXT%" />
 <input type="hidden" name="editaction" value="form" />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />

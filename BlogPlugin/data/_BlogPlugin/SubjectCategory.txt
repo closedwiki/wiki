@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1134053096" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139335204" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TWikiFormAttribute"}%
 ---++ %TOPIC% 
 %FORMFIELD{"TopicDescription"}%
@@ -6,7 +6,7 @@
 See also: %TOPIC%Template, FrontPage
 
 <noautolink>
-<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/" method="post">
+<form action="%SCRIPTURL{"edit"}%/%WEB%/" method="post">
 <!--input type="hidden" name="onlywikiname" value="off" /-->
 <input type="hidden" name="templatetopic" value="%TOPIC%Template" />
 <input type="hidden" name="TopicType" value="%TOPIC%, FrontPage" />
@@ -33,5 +33,5 @@ See also: %TOPIC%Template, FrontPage
 
 
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TopicType, TWikiFormAttribute"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicType, TWikiFormAttribute"}%
 %META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType and TWikiFormAttribute that describes BlogEntry categories"}%

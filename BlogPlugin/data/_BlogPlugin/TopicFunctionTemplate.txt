@@ -3,7 +3,7 @@
 %STARTSECTION{type="templateonly"}%
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 %ENDSECTION{type="templateonly"}%
----+ Function: %TOPIC%
+---+!! Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
@@ -14,6 +14,8 @@
 %STARTINCLUDE%
 %STOPINCLUDE%
 </verbatim>
+
+<!-- interrupt glue -->
 
 ---++ Test
 <div class="alt">

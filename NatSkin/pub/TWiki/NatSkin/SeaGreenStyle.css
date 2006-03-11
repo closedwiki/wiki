@@ -16,6 +16,10 @@ hr {
 }
 
 /* basics */
+.natBody {
+  margin:0;
+  padding:0;
+}
 .natBodyContents {
   font-family:arial, sans-serif;
 }
@@ -40,11 +44,14 @@ hr {
 .natTopRightContents {
   margin-left:20px;
   margin-right:20px;
-  margin-top:30px;
+  margin-top:20px;
   margin-bottom:30px
 }
 .natTopRightContents {
-  margin-top:45px;
+  margin-top:30px;
+}
+.natTopBarSizer {
+  height:130px;
 }
 
 /* top */
@@ -94,7 +101,8 @@ hr {
 .natSearchBoxTop input {
   background:#99cc66;
   color:white;
-  border:1px dotted white;
+  border:1px dotted white; 
+  _border:1px solid white; /* IE hack */
   width:15em;
 }
 .natSearchBoxPos1 input,
@@ -120,11 +128,7 @@ hr {
 /* sidebar */
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
-  font-size: small;
-}
-.natSideBar h1 {
-  /*border-bottom: 2px solid #6699cc;*/
-  padding: 3px;
+  font-size:0.9em;
 }
 .natSideBar h1 a,
 .natSideBar h1 {
@@ -136,21 +140,24 @@ hr {
   letter-spacing: .3em;
 }
 
-.natSideBar h2 {
-  padding-left:3px;
-}
 .natSideBar h2,
 .natSideBar h2 a {
   font-size: small;
   color: #003366;
 }
 
+.natSideBar ol,
 .natSideBar ul {
-  padding-left:38px;
+  margin-left:20px;
+  padding-left:15px;
   color:#666666;
 }
+.natSideBar ol {
+  margin-left:25px;
+}
+
 .natSideBar ul ul {
-  padding-left:28px;
+  padding-left:0px;
 }
 
 .natNotes {
@@ -200,13 +207,13 @@ hr {
   font-family: 'Trebuchet MS', sans-serif;
 }
 .natMain h1 {font-size:24px;}
-.natMain h2 {font-size:18px;}
-.natMain h3 {font-size:16px;}
-.natMain h4 {font-size:small;}
+.natMain h2 {font-size:20px;}
+.natMain h3 {font-size:18px;}
+.natMain h4 {font-size:16px;}
 .natMain h5 {font-size:small;}
 .natMain h6 {font-size:small; margin-top:5px}
 
-.natMain h1 {
+.natMain h2 {
   border-bottom:2px solid #6699cc;
 }
 
@@ -333,29 +340,31 @@ hr {
 /* search table */
 .natSearchTable {
   border:1px solid #669966;
-  font-size:x-small;
+  font-size:0.9em;
+  margin-top:2em;
 }
-.natSearchHit th {
-  padding-top:5px;
-}
-.natSearchHit td {
-  padding-top:0px;
-  line-height:140%;
+.natSearchTable:first-child {
+  margin-top:0em;
 }
 .natSearchTableTitle th {
   background:#99cc66;
   font-family: 'Trebuchet MS', sans-serif;
-  font-size:x-small;
   letter-spacing: .3em;
   vertical-align:middle;
   border:1px dotted white;
   color:white;
 }
 
-.natSearchTable table:nth-child(2n+1) {
-  background:#f0f0f0;
+.natSearchHit {
+  font-size:0.9em;
 }
-.natSearchEvenHit {
+.natSearchHit th {
+  padding:0.5em 0.5em 0em 0.5em;
+}
+.natSearchHit td {
+  padding:0em 0.5em 0.5em 0.5em;
+}
+.natSearchHitEven {
   background:#f0f0f0;
 }
 
@@ -381,10 +390,12 @@ hr {
   line-height:1.3em;
 }
 .blogSideBarSection {
-  margin-bottom:1em;
+  line-height:1.3em;
+  margin-bottom:1.5em;
 }
+.blogSideBarSection ol,
 .blogSideBarSection ul {
-  padding-left:1.5em;
+  padding-left:0px;
 }
 .blogHeadline h1,
 .blogHeadline h2,

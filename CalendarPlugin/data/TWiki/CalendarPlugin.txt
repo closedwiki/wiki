@@ -1,161 +1,16 @@
-%META:TOPICINFO{author="TWikiContributer" date="1131032162" format="1.0" version="$Rev$"}%
----++!! Calendar Plugin (version 1.018)
+%META:TOPICINFO{author="TWikiContributor" date="1139433752" format="1.0" version="1.8"}%
+---+!! Calendar Plugin (version 1.020)
 
-The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page. Multiple topics can be specified as the source of the events, and these can be in any web.
-
-Moreover, the Calendar highlights dates corresponding to a list of Events.
+The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a
+monthly calendar in the page. Multiple topics can be specified as the source
+of the events, and these can be in any web.  The calendar marks dates
+corresponding to the events.
 
 NB. This Plugin does not, and has never, observed topic permissions.
 
 %TOC%
 
----++ Usage example
-
-<table border=1 width="80%">
-<tr><th>You type:</th><th>You get:</th><th>If correctly installed:</th></tr>
-<tr><td>
-A list of Events is just a bullet list like this:
-	* 2 Feb - Andrea's birthday
-	* A 7 Mar 1966 - Nicoletta's birthday
-	* 29 May 1996 - Maria Teresa is born!
-	* 29 Sep 1998 - Davide is born!
-
-%<nop>CALENDAR{month="2" year="2002" bgcolor="cyan"}%
-%<nop>CALENDAR{month="3" year="2002" showweekdayheaders="1"}%
-
-</td><td align=center>
-
-<table border="0" cellpadding="0" cellspacing="0">
-<tr valign="top" align="left">
-<td align="left" valign="top" bgcolor="black"><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td colspan=7 bgcolor="pink"><center><font size=+2>February 2002</font></center></td></tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">1&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">2 <br /> Andrea's birthday&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">3&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">4&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">5&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">6&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">7&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">8&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">9&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">10&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">11&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">12&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">13&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">14&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">15&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">16&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">17&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">18&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">19&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">20&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">21&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">22&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">23&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">24&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">25&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">26&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">27&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">28&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-<p />
-<table border="0" cellpadding="0" cellspacing="0">
-<tr valign="top" align="left">
-<td align="left" valign="top" bgcolor="black"><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td colspan=7 bgcolor="pink"><center><font size=+2>March 2002</font></center></td></tr>
-<tr>
-<th bgcolor="white">Sunday</th>
-<th bgcolor="white">Monday</th>
-<th bgcolor="white">Tuesday</th>
-<th bgcolor="white">Wednesday</th>
-<th bgcolor="white">Thursday</th>
-<th bgcolor="white">Friday</th>
-<th bgcolor="white">Saturday</th>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">1&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">2&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">3&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">4&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">5&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">6&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">7 <br /> Nicoletta's birthday (36)&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">8&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">9&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">10&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">11&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">12&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">13&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">14&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">15&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">16&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">17&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">18&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">19&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">20&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">21&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">22&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">23&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">24&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">25&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">26&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">27&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">28&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">29&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">30&nbsp;</td>
-</tr>
-<TR>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">31&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
-<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-
-</td><td align=center>
-%CALENDAR{month="2" year="2002" bgcolor="cyan"}%
-%CALENDAR{month="3" year="2002" showweekdayheaders="1"}%
-</td></tr>
-</table>
-
----++ Syntax
+---++ Syntax Rules
 | *You type* | *you get* |
 | %<nop>CALENDAR% | a monthly calendar for the current month/year, with events taken from the current topic |
 | %<nop>CALENDAR{&lt;attributes>}% | is the full syntax |
@@ -202,7 +57,7 @@ A list of Events is just a bullet list like this:
 | ==aslist== | Controls whether events displayed in calendar style (=aslist=0=) or list style (=aslist=1=). Note that specifying =aslist=1= forces =showdatenumbers=1=.  This is done to ensure that the date number is formatted according to =datenumberformat= and that only the days that have an event are listed. | 0 |
 | ==days== | Specifies how many days of calendar data to list. Only valid if =aslist=1=. | 1 |
 | ==months== | Specifies how many months of calendars to display. Only valid if =aslist=0=. | 1 |
-| ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | '$day' (if =aslist=0=)%BR%'   * $day $mon $year' (if =aslist=1=) |
+| ==datenumberformat== | Specifies formatting for the date number in each cell. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | '$day' (if =aslist=0=)%BR%'	* $day $mon $year' (if =aslist=1=) |
 | ==todaydatenumberformat== | Specifies formatting for the date number for the current day (today) in the calendar. The formatting codes accepted are the same as those for the ==%<nop>GMTIME%== variable. | ==datenumberformat== |
 | ==multidayformat== | Specifies formatting of the description for multi-day events. See [[%TOPIC%#MultiDayFormatting][Multi-Day Event Formatting]] for details. | ==$description== |
 
@@ -218,6 +73,7 @@ Events are defined by bullets with the following syntax:
 |^| ==&nbsp;&nbsp; * L DDD MMM - description== | L Mon May - The last Monday of May |
 |^| ==&nbsp;&nbsp; * A dd MMM yyyy - description== | A 20 Jul 1969 - First moon landing%BR%This style will mark anniversaries of an event that occurred on the given date. The description will have " (x)" appended to it, where "x" indicates how many years since the occurence of the first date. The first date is not annotated. |
 | *Monthly*: | ==&nbsp;&nbsp; * w DDD - description== | 1 Fri - Every 1st Friday of the month |
+|^| ==&nbsp;&nbsp; * L DDD - description== | L Mon - The last Monday of each month |
 |^| ==&nbsp;&nbsp; * dd - description== | 14 - The 14th of every month |
 | *Weekly*: | ==&nbsp;&nbsp; * E DDD - description== | E Wed - Every Wednesday |
 | ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005 |
@@ -226,31 +82,27 @@ Events are defined by bullets with the following syntax:
 | ^ | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - dd MMM yyyy - description== </nobr> | E3 12 Apr 2005 - 31 Dec 2005 - Every three days from 12 Apr 2005 through 31 Dec 2005 (inclusive) |
 | *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
 
+
+
 #EventFormatting
 ---+++ Event formatting
 
-For a table-style calendar, if an event falls in the selected month then the corresponding day is (by default):
-	* highlighted (font size +2)
-	* linked to the topic containing the event list
-	* marked with an icon whose ALT string is the event's description
-I.e. ==format== is:
+For a table-style calendar, each day which has one or more events will have a
+list of the descriptions of those events. Each event description will be set
+in a small font.  In other words, ==format== is:
 <verbatim>
-$old<font size="+2"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">
-<img alt="$description" SRC="%PUBURLPATH%/$installWeb/CalendarPlugin/exclam.gif" /></a></font>
+$old<br /><small>$description</small>
 </verbatim>
 
-For a list-style calendar, if an event falls in the selected time period, then it is displayed (by default):
-	* As a bullet item
-	* With the date as dd Mmm yyyy
-	* Linked to the topic containing the event list
-In other words, ==datenumberformat== is:
+For a list-style calendar, if an event falls in the selected time period, then
+it is displayed (by default) as a bullet item with the date as dd Mmm yyyy In
+other words, ==datenumberformat== is:
 <verbatim>
 	* $day $mon $year
 </verbatim>
 and ==format== is:
 <verbatim>
-$old - <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">
-$description</a>
+$old - $description
 </verbatim>
 
 This displays the events in a form very similar to that in which they are specified (although specific to a particular date).
@@ -323,16 +175,176 @@ will be displayed.
 
 The default format is to simply display the description of the event.
 
----++ Default settings
-	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin shows a monthly calendar with highlighted events
+---++ Examples
+
+<table border=1 width="80%">
+<tr><th>You type:</th><th>You get:</th><th>If correctly installed:</th></tr>
+<tr><td>
+A list of Events is just a bullet list like this:
+	* 2 Feb - Andrea's birthday
+	* A 7 Mar 1966 - Nicoletta's birthday
+	* 29 May 1996 - Maria Teresa is born!
+	* 29 Sep 1998 - Davide is born!
+
+%<nop>CALENDAR{month="2" year="2002" bgcolor="cyan"}%
+%<nop>CALENDAR{month="3" year="2002" showweekdayheaders="1"}%
+
+</td><td align=center>
+<!-- First calendar -->
+<table border="0" width="0" cellpadding="0" cellspacing="0">
+<tr valign="top" align="left">
+<td align="left" valign="top" bgcolor="black"><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td colspan="7" bgcolor="#FFD8AA"><center><font size="+2">February 2002</font></center></td></tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">01</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">02<br /><small>Andrea's birthday</small></td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">03</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">04</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">05</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">06</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">07</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">08</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">09</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">10</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">11</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">12</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">13</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">14</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">15</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">16</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">17</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">18</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">19</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">20</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">21</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">22</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">23</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">24</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">25</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">26</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">27</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">28</td>
+<td width="14" valign="center" align="center" bgcolor="cyan" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p />
+<p />
+<!-- Second calendar -->
+<table border="0" width="0" cellpadding="0" cellspacing="0">
+<tr valign="top" align="left">
+<td align="left" valign="top" bgcolor="black"><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td colspan="7" bgcolor="#FFD8AA"><center><font size="+2">March 2002</font></center></td></tr>
+<tr>
+<th bgcolor="white">Sunday</th>
+<th bgcolor="white">Monday</th>
+<th bgcolor="white">Tuesday</th>
+<th bgcolor="white">Wednesday</th>
+<th bgcolor="white">Thursday</th>
+<th bgcolor="white">Friday</th>
+<th bgcolor="white">Saturday</th>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">01</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">02</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">03</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">04</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">05</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">06</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">07<br /><small>Nicoletta's birthday (36)</small></td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">08</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">09</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">10</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">11</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">12</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">13</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">14</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">15</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">16</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">17</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">18</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">19</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">20</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">21</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">22</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">23</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">24</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">25</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">26</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">27</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">28</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">29</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">30</td>
+</tr>
+<tr>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">31</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="white" bordercolor="black">&nbsp;</td>
+<td width="14" valign="center" align="center" bgcolor="lightgrey" bordercolor="black">&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<p />
+<p />
+<!-- End of calendars -->
+
+</td><td align=center>
+<!-- First calendar -->
+%CALENDAR{month="2" year="2002" bgcolor="cyan"}%
+<!-- Second calendar -->
+%CALENDAR{month="3" year="2002" showweekdayheaders="1"}%
+<!-- End of calendars -->
+</td></tr>
+</table>
+
+---++ Plugin Settings
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Show a monthly calendar with highlighted events
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
 	* How the cell content is formatted 
 <verbatim>
 		* #Set FORMAT = $old<br /><small>$description</small>
 </verbatim>
 	* __Note:__ You can add settings of any of the recognized attributes (in upper case like SHOWWEEKDAYHEADERS). Examples are shown below:
-		* Set CELLALIGNMENT = center
-		* Set VCELLALIGNMENT = center
+		* #Set CELLALIGNMENT = center
+		* #Set VCELLALIGNMENT = center
 		* #Set WIDTH = 100%
 		* #Set GMTOFFSET = +10
 		* #Set SHOWWEEKDAYHEADERS = 0
@@ -357,14 +369,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==pub/TWiki/%TOPIC%/exclam.gif== | Image file |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
-		* You should see two calendars near the Event list above
+		* You should see two calendars near the Event list above and a current month calendar below:
 %CALENDAR%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AndreaSterbini |
-|  Plugin Version: | V1.018 (3 Nov 2005) |
+|  Plugin Version: | V1.020 (6 Mar 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| V1.020: | TWiki:Main.DavidBright: Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list. |
+| V1.019: | TWiki:Main.DavidBright: Added support for monthly repeaters specified as "L Fri" (last Friday in all months). |
 |  V1.018: | TWiki:Main.DavidBright: Added capability to display multiple months in one call, display events in a list, and provided for more extensive formatting of date and description of events. |
 |  V1.017: | TWiki:Main.DanielRohde: Added start and end date support for periodic repeaters; Added initlang patch by TWiki:Main.JensKloecker; Changed 'my' to 'local' so exceptions working again; Removed fetchxmap debug message; Fixed illegal date bug; Allowed month abbreviations in month attribute |
 |  V1.016: | TWiki:Main/DavidBright: Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0 |
@@ -383,20 +397,24 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  V1.002: | TWiki:Main/ChristianSchultze: highlight today, relative month/year and debugging (thanks!) |
 |  V1.001: | delayed load of used packages |
 |  V1.000: | first release using only HTML::CalendarMonth |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.010 |
 |  CPAN Dependencies: | CPAN:HTML::CalendarMonthSimple >= v1.23, CPAN:Date::Calc |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.000 and up |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 95%, %TWIKIWEB%.FormattedSearch 97%, %TOPIC% 88% with installed Plugin |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/AndreaSterbini - 27 Feb 2001 <br />
 -- TWiki:Main/PeterThoeny - 15 Jan 2004 <br />
 -- TWiki:Main.NathanKerr - 28 Jan 2005 <br />
--- TWiki:Main/DavidBright - 11 Mar 2005 <br />
+-- TWiki:Main/DavidBright - 11 Mar 2005, 8 Feb 2006 <br />
 -- TWiki:Main.DanielRohde - 21 Jun 2005 <br />	 
+
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
 %META:FILEATTACHMENT{name="exclam.gif" attr="" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="PeterThoeny" version="1.1"}%

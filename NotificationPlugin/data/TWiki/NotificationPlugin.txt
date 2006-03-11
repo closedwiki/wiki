@@ -8,25 +8,27 @@ This plugin allows you to send fine grained notifications of topics you are inte
 
 ---++ Syntax Rules
 
-You have to create topic *%Your_user_name%NotifyList* in *Main* web from template NotificationPluginListTemplate. Fill it with desired topics, webs and regexps and enjoy...
+You have to create topic *%Your_user_name%NotifyList* in *Main* web from template Main.NotificationPluginListTemplate. Fill it with desired topics, webs and regexps and enjoy...
+
+%ICON{edittopic}% <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WIKIUSERNAME%NotifyList?templatetopic=Main.NotificationPluginListTemplate"><strong>Create <nop>%WIKIUSERNAME%NotifyList now!</strong></a>.
 
 ---+++ NTF variable
-For adding _fast switching_ to notifications you can use %<nop>NTF{}% variable:
+For adding _fast switching_ to notifications you can use =%<nop>NTF{}%= variable:
 
-You should add this variable to view.tmpl (you can use view.tmpl bundled in <nop>NotificationPlugin.zip). The buttons are JavaScript-ed so you need to have JavaScript enabled in your browser.
+You should add this variable to =view.tmpl= (you can use view.tmpl bundled in <nop>NotificationPlugin.zip). The buttons are !JavaScript-ed so you need to have !JavaScript enabled in your browser.
 
-You can use these attributes in %<nop>NTF{}% variable:
-	* popup - if displays button which opens new window with support of changing notifications
-	* tin - it displays button for changing 'Topic immediate notifications'
-	* win - it displays button for changing 'Web immediate notifications'
-	* tn - it displays button for changing 'Topic notifications'
-	* wn - it displays button for changing 'Web notifications'
+You can use these attributes in =%<nop>NTF{}%= variable:
+	* =popup= - if displays button which opens new window with support of changing notifications
+	* =tin= - it displays button for changing 'Topic immediate notifications'
+	* =win= - it displays button for changing 'Web immediate notifications'
+	* =tn= - it displays button for changing 'Topic notifications'
+	* =wn= - it displays button for changing 'Web notifications'
 
 Default values for all these attributes are "on". You can set it "off" to hide buttons.
 
 ---++++ NTF examples
-	* %<nop>NTF{}% - displays all four buttons
-	* %<nop>NTF{win="off" wn="off"}% - displays only buttons for topic immediate notification and regular topic notification
+	* =%<nop>NTF{}%= - displays all four buttons
+	* =%<nop>NTF{win="off" wn="off"}%= - displays only buttons for topic immediate notification and regular topic notification
 
 ---++ Description of <nop>NotifyList topics
 

@@ -64,12 +64,12 @@ use strict;
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $debug
              $default_density $default_gamma $default_scale $preamble
-             $eqn $fig $tbl $use_color @EXPORT_OK
+             $eqn $fig $tbl $use_color @norender $tweakinline @EXPORT_OK
              );
 
 # number the release version of this plugin
-$VERSION = '2.210';
-$RELEASE = 'Dakar';
+$VERSION = '$Rev$';
+$RELEASE = '2.4';
 
 require Exporter;
 *import = \&Exporter::import;
@@ -98,12 +98,19 @@ my $PATHTODVIPS = $TWiki::cfg{Plugins}{LatexModePlugin}{dvips} ||
     '/usr/share/texmf/bin/dvips';
 my $PATHTOCONVERT = $TWiki::cfg{Plugins}{LatexModePlugin}{convert} ||
     '/usr/X11R6/bin/convert';
+my $PATHTODVIPNG = $TWiki::cfg{Plugins}{LatexModePlugin}{dvipng} ||
+    '/usr/share/texmf/bin/dvipng';
+
+my $DISABLE = $TWiki::cfg{Plugins}{LatexModePlugin}{donotrenderlist} ||
+    'input,include';
+my @norender = split(',',$DISABLE);
+
+my $tweakinline = $TWiki::cfg{Plugins}{LatexModePlugin}{tweakinline} || 
+    0;
 
 my $GREP =  $TWiki::cfg{Plugins}{LatexModePlugin}{fgrep} ||
     $TWiki::fgrepCmd ||
     '/usr/bin/fgrep';
-
-
 
 ### The variables below this line will likely not need to be changed
 ######################################################################
@@ -348,7 +355,7 @@ sub handleFloat
             $txt2 .= $input;
         }
         $txt2 = '<a name="'.$opts{'label'}.'"></a>' .
-            '<table width="%100" border=0>'."\n" .
+            '<table width="100%" border=0>'."\n" .
             $txt2 .
             '</table>';
         
@@ -483,8 +490,11 @@ COLORS
         # and the declared options.
         my $hash_code = md5_hex( $math_string . 
                                  join('; ', map{"$_=>$opts{$_}"} keys(%opts)) );
-        $math_string = '\fbox{ ' . $math_string . 
-            '\vphantom{$\{ \}^\mathrm{th}$} }' if ($opts{'inline'} eq 1);
+
+        if ( ($opts{'inline'} eq 1) and ($tweakinline) ) {
+            $math_string = '\fbox{ ' . $math_string . 
+                '\vphantom{$\sqrt{\{ \}^{T^T}}$} }'; 
+        }
         #store the string in a hash table, indexed by the MD5 hash
         $hashed_math_strings{$hash_code} = $math_string;
         
@@ -495,7 +505,8 @@ COLORS
         #remove any quotes in the string, so the alt tag doesn't break
         $escaped =~ s/\"/&quot;/gso;
         $escaped =~ s/\n/ /gso;
-        
+        $escaped =~ s!(\u\w\l\w+\u\w)!<nop>$1!g;
+
         my $image_name = "$pubUrlPath/latex$hash_code.$EXT";
         
         # if image currently exists, get its dimensions
@@ -513,14 +524,20 @@ COLORS
         if( ($opts{'inline'} eq 1) or 
             ($opts{'inline'} eq "on") or 
             ($opts{'inline'} eq "true") ) {
-            my $algn = 'middle';
-            # my $algn = ($escaped =~ m/[\_\}\{]|[yjgpq]/) ? 'middle' : 'bottom' ;
-            $txt = "<img align=\"$algn\" $str src=\"$image_name\" alt=\"$escaped\" />"; 
+
+            my $algn;
+            if ($tweakinline) {
+                $algn = 'middle';
+            } else {
+                $algn = ($escaped =~ m/[\_\}\{]|[yjgpq]/) ? 'middle' : 'bottom' ;
+            }
+            $txt = "<img style=\"vertical-align:$algn;\" align=\"$algn\" $str src=\"$image_name\" alt=\"$escaped\" />"; 
+
         } elsif( exists($opts{'label'}) ) {
             $eqn++;
             
             $txt = '<a name="'.$opts{'label'}.'"></a>'.
-                '<table width="%100" border=0><tr>'."\n".
+                '<table width="100%" border=0><tr>'."\n".
                 '<td width=10>&nbsp;</td>'.
                 '<td width="100%" align="center">'.
                 "<img src=\"$image_name\" $str alt=\"$escaped\" /></td>".
@@ -613,12 +630,12 @@ sub postRenderingHandler
                         # Dakar interface
                         TWiki::Func::moveAttachment( $web, $topic, $fn, 
                                                      $TWiki::cfg{TrashWebName},
-                                                     'TrashAttachment', $fn );
+                                                     'TrashAttachment', $fn )
+                            if (-f $fn);
                     } else {
                         # Cairo interface
-                        unlink( $path.$pathSep.$fn );
-                    }
-                }
+                        unlink( $path.$pathSep.$fn ) if (-f $fn);
+                    }                }
             }
         }
     }
@@ -634,7 +651,7 @@ sub postRenderingHandler
     ### create the temporary Latex Working Directory...
     #does the topic's attachment directory exist?
     if( -e $LATEXWDIR ) {
-        #if it's not really a directory, we can't do anything
+        #if it's not really a directory, we can't do anything        
         return unless ( -d $LATEXWDIR );
 
         # FIXME: this section should never be called, but should
@@ -664,11 +681,23 @@ sub postRenderingHandler
     do { $_[0] .= "<BR>can't write $LATEXFILENAME: $!\n"; 
          return; } unless open( MATHOUT, ">$LATEXFILENAME" );
 
+    # disable commands flagged as 'do not render'
+    # e.g. lock-out the inclusion of other files via input/include
+    foreach my $c (@norender) {
+        $preamble =~ s!\\$c\b!\\verb-\\-$c!g;
+    }
+
     print MATHOUT "\\documentclass{article}\n".$preamble."\n\\begin{document}\n\\pagestyle{empty}\n";
     while( (my $key, my $value) = each( %hashed_math_strings ) ) {
         
         # restore the declared rendering options
         my %opts = %{$markup_opts{$key}};
+
+        # disable commands flagged as 'do not render'
+        # e.g. lock-out the inclusion of other files via input/include
+        foreach my $c (@norender) {
+            $value =~ s!\\$c\b!\\verb-\\-$c!g;
+        }
 
         &TWiki::Func::writeDebug( "LatexModePlugin: ".
                                   $value . " :: " .
@@ -710,52 +739,74 @@ sub postRenderingHandler
             my $ptsz = ($opts{'density'}/72); 
 	    
 	    my $num = $hash_code_mapping{$key};
+
+            my $outimg = "latex$key.$EXT";
+            
+            if (-x $PATHTODVIPNG) {
+                # if dvipng is installed ...
+                $EXT = lc($EXT);
+                my $cmd = "$PATHTODVIPNG -D ".$opts{'density'}." -T tight".
+                    " --".$EXT.
+                    " -gamma ".($opts{'gamma'}+1.0).
+                    " -bg transparent ".
+                    " -pp $num -o $outimg ".$LATEXBASENAME.".dvi >> $LATEXLOG 2>&1";
+                system($cmd);
+            } else {
+                # OTW, use dvips/convert ...
+
 	    system("$PATHTODVIPS -E -pp $num -o $LATEXBASENAME.$num.eps $LATEXBASENAME.dvi >> $LATEXLOG 2>&1 ");
 	    
-            my $outimg = "latex$key.$EXT";
+	    my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.eps ";
+            $cmd .= "-antialias -trim -gamma ".$opts{'gamma'}." ";
+            $cmd .= " -transparent white " 
+                unless ( ($markup_opts{$key}{'inline'} ne 0) and
+                         ($tweakinline ne 0) );
+            $cmd .= $outimg;
 
-	    my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.eps  -antialias -trim "; 
-            $cmd .= "-shave ".round(2*$ptsz)."x".round(2*$ptsz)." " 
-                if ($markup_opts{$key}{'inline'} ne 0);
-            $cmd .= "-gamma $opts{'gamma'} -transparent white  $outimg";
 	    system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG");
 	    system("$PATHTOCONVERT $cmd");
-
+            }
             if (-f $outimg) {
-                my $img = image_info($outimg);
                 
-                if ($markup_opts{$key}{'inline'} ne 0) {
+                if ( ($markup_opts{$key}{'inline'} ne 0) 
+                     and ($tweakinline) 
+                     and (-x $PATHTOCONVERT) 
+                     ) {
                     my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
-                    
-                    system("$PATHTOCONVERT $outimg -trim $tmpfile");
-                    my $img2 = image_info($tmpfile);
+                    move($outimg,$tmpfile);
 
-                    my ($nw,$nh) = ( $img2->{width}+4, $img->{height} );
+                    system("$PATHTOCONVERT $tmpfile -shave ".
+                           round(1*$ptsz)."x".round(1*$ptsz)." ".
+                           $outimg);
+                    
+                    my $img2 = image_info($outimg);
+
+                    my ($nw,$nh) = ( $img2->{width}-round(8*$ptsz), 
+                                      $img2->{height} );
                     $nw = $1 if ($nw =~ m/(\d+)/); # untaint
                     $nh = $1 if ($nh =~ m/(\d+)/); # untaint
-                    my ($sh,$sh2) = ( ( $img->{width} - $nw )/2 , 
-                                      round(2*$ptsz) );
+                    $nh = round(15*$ptsz)
+                        if ($nh < round(15*$ptsz) ); # set a minimum height
+
+                    my ($sh,$sh2) = ( round(3.1*$ptsz), round(2.25*$ptsz) );
                     $sh = $1 if ($sh =~ m/(\d+)/); # untaint
                     $sh2 = $1 if ($sh2 =~ m/(\d+)/); # untaint
-
-                    my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 $outimg";
-                    # my $cmd = " -shave ".$maxshave.'x'.$maxshave." $outimg";
-                    copy($outimg,$tmpfile);
-                    system("echo \"$PATHTOCONVERT $tmpfile $cmd\" >> $LATEXLOG");
+                     
+                    my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 -transparent white $outimg";
+                    
+                    move($outimg,$tmpfile);
                     system("$PATHTOCONVERT $tmpfile $cmd");
                     unlink("$tmpfile") unless ($debug);
 
-                    # refresh the image info
-                    $img = image_info($outimg);
-
                     ## Another strategy: trim gives better horizontal
                     ## results but is too aggressive vertically.
-                    ##    * convert ps --> 1.png (with a border)
+                    ##    * convert eps --> 1.png (with a border)
                     ##    * shave 1.png by border size 
                     ##    * copy 1.png --> 2.png
                     ##    * trim 2.png
                     ##    * extract off image and page size using identify
                     ##      (this gives crop coordinates).
+                    ##      UPDATE: unfortunately, this is not robust.
                     ##    * crop 1.png, using width-coordinates from
                     ##      trim and hieght coordinates from shave
 
@@ -771,6 +822,8 @@ sub postRenderingHandler
 # mogrify -crop 11x24+10+3 t1.png
 # 
                 }
+
+                my $img = image_info($outimg);
 
                 my $str = sprintf("width=\"%d.0\" height=\"%d.0\"",
                                   ($opts{'scale'} * $img->{width}),

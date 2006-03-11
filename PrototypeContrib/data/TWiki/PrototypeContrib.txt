@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="ArthurClemens" date="1126490512" format="1.1" version="1.2"}%
+---+!! !Prototype Javascript framework Contrib
+
+---++ Summary
+
+This contrib packages the third-party =prototype= Javascript framework, available from http://prototype.conio.net.
+
+Prototype is freely distributable under the terms of an MIT-style license.
+For details, see the Prototype web site.
+
+---++ Contrib Info
+
+| Author: | Contrib packaged by  TWiki:Main.ArthurClemens |
+| Copyright: | &copy; 2005 Sam Stephenson &lt;sam@conio.net&gt; |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Dependencies: | %$DEPENDENCIES% |
+| 15 Feb 2006 | 1.000 First Version. Included prototype version: 1.5.0_pre0 |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences

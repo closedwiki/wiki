@@ -4,12 +4,12 @@
 .twikiEmulatedLink,
 a, a:link {
   text-decoration:none; 
-  color:blue;
+  color:#0065CD;
 }
 .twikiEmulatedLink:hover,
 a:hover { 
   text-decoration:underline; 
-  color:blue;
+  color:#777;
 }
 
 hr {
@@ -48,8 +48,6 @@ h1, h2, h3, h4, h5, h6 {
 /* layout */
 .natBody {
   background:#ffffff;
-  margin:0;
-  padding:0;
   text-align:center;
 }
 .natBodyContents {
@@ -94,6 +92,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .natTopBar > .natTopBarSizer { /* konqueror fix, but not IE */
   border:1px solid transparent; 
+}
+.natTopBarSizer {
+  height:110px;
 }
 /* topbar */
 .natHeaderArt {
@@ -164,10 +165,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .natSideBar ul {
   list-style-type:square;
-  margin-left:0px; 
+  margin-left:0px;
   margin-top:5px;
   margin-bottom:5px;
 }
+
 
 .natNotes a:hover,
 .natNotes a {
@@ -181,6 +183,9 @@ h1, h2, h3, h4, h5, h6 {
 .natMiddle {
   background:white;
 }
+.natMiddleLeft {
+  padding-right:10px;
+}
 .natMainContents,
 .natMainFooterContents { 
   font-weight:normal;
@@ -193,11 +198,16 @@ h1, h2, h3, h4, h5, h6 {
   text-align:right;
   font-size:x-small;
 }
+.natTopicAttachments {
+  font-size:x-small;
+}
 .natMainContents pre {
   width:99%;
   padding-bottom:.25em;
   overflow-x:auto;
   overflow-y:visible;
+  font-size:0.9em;
+  line-height:1.3em;
 }
 .natMainContents > pre { /* hide from IE */
   /*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
@@ -227,7 +237,7 @@ h1, h2, h3, h4, h5, h6 {
 .natMain h1 {font-size:32px;}
 .natMain h2 {font-size:24px;}
 .natMain h3 {font-size:20px;}
-.natMain h4 {font-size:16px; margin-top:10px}
+.natMain h4 {font-size:18px; margin-top:10px}
 .natMain h5 {font-size:16px; margin-top:10px}
 .natMain h6 {font-size:16px; margin-top:10px}
 
@@ -396,10 +406,6 @@ h1, h2, h3, h4, h5, h6 {
 .natTopicAttachments table {
   width:100%;
 }
-.natTopicAttachments th,
-.natTopicAttachments td {
-  font-size:x-small;
-}
 .natSideBarContents .natSkinStyleBrowser ul {
   padding-left:0px;
   margin-top:5px;
@@ -411,6 +417,28 @@ h1, h2, h3, h4, h5, h6 {
 
 .natSkinStyleBrowser td > select { /* IE freaks on that */
   width:100%;
+}
+
+.natSideBar a.natFeedIcon:hover,
+a.natFeedIcon:hover {
+  background:#eee url("feed-icon-12x12.gif") 3px center no-repeat;
+  text-decoration:none !important;
+  color:#444 !important;
+}
+a.natFeedIcon {
+  background:url("feed-icon-12x12-gray.gif") 3px center no-repeat;
+  text-decoration:none !important;
+  color:#444;
+  font-size:10px;
+  padding:1px 3px 0px 18px;
+}
+.natSideBar a.natFeedIcon {
+  background:none;
+  margin-right:-3px;
+  /*padding:1px 3px;*/
+  padding:1px 3px 0px 18px;
+  font-size:0.9em;
+  color:#444;
 }
 
 /* twiki styles */
@@ -455,6 +483,10 @@ h1, h2, h3, h4, h5, h6 {
   font-weight:bold;
   text-align:left;
 }
+.twikiAttachments {
+  overflow:auto;
+  padding:1px;
+}
 
 /* twiki forms */
 .natTopicForm {
@@ -495,17 +527,15 @@ h1, h2, h3, h4, h5, h6 {
   padding-left:3px;
   padding-right:3px;
 }
+.natTopicFormLabel {
+  margin-top:3px;
+  margin-bottom:3px;
+}
 
 /* CAIRO-HACK to use the FORMBUTTON of the NatSkin */
 .natTopicForm .twikiChangeFormButtonHolder,
 .natTopicForm .twikiChangeFormButton {
   display:none;
-}
-
-/* external link */
-
-.natExternalLink {
-  white-space:nowrap;
 }
 
 /* see also page.nat.tmpl */

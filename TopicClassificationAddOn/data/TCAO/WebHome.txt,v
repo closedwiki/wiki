@@ -1,0 +1,49 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2005.12.10.05.31.44;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.1
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1134192704" format="1.1" version="1.2"}%
+---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
+
+This web is for holding template topics used in TopicClassificationAddOn. %RED%Note:%ENDCOLOR% *No topics in this web should be modified locally. Contact Main.LynnwoodBrown for questions and requested modifications.*
+
+*List of organizing topics available for the %WIKITOOLNAME% site:*
+   * *TopicTypes:*
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%WEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="      * $topics - $formfield(TopicHeadline)<br>"}% 
+   * *SubjectAreas:*
+%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%WEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="      * $topic - $formfield(TopicHeadline)<br>"}% 
+
+*15 most recently changed classified topics:* 
+%SEARCH{"[F]ORM.name.*[W]ebForm" web="%WEB%" regex="on" noheader="on" nosearch="on" order="modified" limit="15" nototal="on" format="	* $topic - $formfield(TopicHeadline) <font class=twikiSmall> _(Modified on $date by $wikiusername)_  </font>" }%
+   * _[[WebChanges][See more recent changes...]]_
+   * _See also: TWiki.SiteChanges_
+
+<blockquote>
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<input type="text" name="search" size="22" />
+<input type="submit" value='%MAKETEXT{"Search"}%' />
+<br/>
+([[WebSearchAdvanced][%MAKETEXT{"advanced search"}%]])
+</form>	
+</blockquote>
+
+@

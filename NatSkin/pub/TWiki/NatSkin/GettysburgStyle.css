@@ -18,6 +18,8 @@ hr {
 }
 
 .natBody {
+  margin:0;
+  padding:0;
   background:#eeeeee; 
 }
 .natBodyContents {
@@ -45,6 +47,10 @@ hr {
 .natWebTitle,
 .natWebTitle a {
   line-height:100%;
+}
+
+.natTopBarSizer {
+  height:140px;
 }
 
 /* twiki table */
@@ -116,7 +122,11 @@ hr {
 /* search */
 .natSearchTable {
   border:1px #aaaaaa solid;
-  font-size:x-small;
+  font-size:0.9em;
+  margin-top:1em;
+}
+.natSearchTable:first-child {
+  margin-top:0em;
 }
 .natSearchTableTitle {
   border-bottom:1px #aaaaaa solid;
@@ -124,10 +134,23 @@ hr {
   background: #eeeeee;
 }
 .natSearchHit {
-  line-height:140%;
+  font-size:0.9em;
+  border:1px #aaaaaa solid;
+}
+.natSearchHit th {
+  padding-top:0.5em;
+  padding-left:0.5em;
+  padding-right:0.5em;
+  padding-bottom:0px;
 }
 .natSearchHit td {
-  border-bottom:1px #aaaaaa solid;
+  padding-top:0px;
+  padding-left:0.5em;
+  padding-right:0.5em;
+  padding-bottom:0.5em;
+}
+.natSearchHitEven {
+  background: #eeeeee;
 }
 
 /* top */
@@ -179,6 +202,7 @@ hr {
   background:#003366;
   color:white;
   border:1px dotted white;
+  _border:1px solid white; /* IE only */
 }
 .natSearchBoxTop input {
 }
@@ -212,6 +236,7 @@ hr {
 
 .natSideBar h1 {
   border-bottom:1px dotted #ffffff;
+  _border-bottom:1px solid #ffffff; /* IE only */
 }
 .natSideBar h1 a,
 .natSideBar h1 {
@@ -339,12 +364,17 @@ hr {
   font-size:24px; /* h2 */
   text-align:right;
 }
+.blogSideBarSection {
+  font-size:0.9em;
+  margin-bottom:1.5em;
+  line-height:1.5em;
+}
 .blogSideBarSection ul {
-  margin-top:10px;
+  margin-top:0.5em;
   padding-left:1.2em;
 }
 .blogSideBarSection ol {
-  margin-top:10px;
+  margin-top:0.5em;
   padding-left:2em;
 }
 .blogCommentOdd {

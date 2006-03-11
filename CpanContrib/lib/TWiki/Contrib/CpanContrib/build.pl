@@ -13,6 +13,7 @@
 # Standard preamble
 BEGIN {
   unshift @INC, split( /:/, $ENV{TWIKI_LIBS} );
+  unshift @INC, '../../../CPAN/lib';
 }
 
 use TWiki::Contrib::Build;
@@ -47,7 +48,7 @@ sub stage_cpan {
 
     my $base_lib_dir = "$this->{basedir}/lib/CPAN";
 
-    $this->cd( $base_lib_dir );
+    chdir $base_lib_dir;
     File::Find::find( { wanted => sub { $this->cp( $_, "$this->{tmpDir}/lib/CPAN/$_" ) }, 
 			no_chdir => 1 }, 
 		      '.' );
@@ -75,7 +76,7 @@ sub target_build {
     # create twiki mini-minicpan mirror (also publish this)
 
     use Cwd;
-    my $base_lib_dir = getcwd . "/../../../../lib/CPAN";
+    my $base_lib_dir = getcwd . "/../../../CPAN";
     # to keep "old" builds so that everything doesn't need to be built from scratch (for reasonable build times)
 #    -e $base_lib_dir && rmtree $base_lib_dir;
     -e $base_lib_dir || mkpath $base_lib_dir or die $!;
@@ -98,7 +99,7 @@ sub target_build {
     {
 	# clean out old build stuff (in particular, ExtUtils::MakeMaker leaves bad stuff lying around)
 	my $dirCpanBuild = "$base_lib_dir/.cpan/build/";
-	# SMELL: fixed unix-specific chmod shell call
+	# SMELL: fix unix-specific chmod shell call
 	system( chmod => '-R' => 'a+rwx' => $dirCpanBuild ), rmtree $dirCpanBuild if -d $dirCpanBuild;
 
 	if ( _upToDate( $build_cache, $module ) )

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131380875" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139489620" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TWikiGroups"}%
 ---+!! <nop>BlogAuthorGroup
 
@@ -6,4 +6,3 @@
    * Set ALLOWTOPICCHANGE = BlogAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl, BlogAdminGroup
-

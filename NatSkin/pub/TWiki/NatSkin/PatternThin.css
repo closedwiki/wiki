@@ -1,10 +1,6 @@
 /* thin variant for clean */
 @import url("BaseThin.css");
 
-.natLayoutTable,
-.natPageBox {
-  width:70em;
-}
 .natWebButtons,
 .natMiddleRight,
 .natTopRight {

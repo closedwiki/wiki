@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ use vars qw(
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 $VERSION = '$Rev$';
-$RELEASE = '1.30';
+$RELEASE = '1.33';
 
 $debug = 0; # toggle me
 
@@ -81,11 +81,16 @@ sub initRedirector {
 
   writeDebug("called initRedirector");
 
+  if (defined $TWiki::RELEASE) {
+    return if defined TWiki::Func::getContext()->{'command_line'};
+  }
+
   $query = &TWiki::Func::getCgiQuery();
   return unless $query;
 
-  my $theAction = $query->url(-relative=>1); 
-  writeDebug("theAction=$theAction");
+  my $theAction = $ENV{'SCRIPT_NAME'} || '';
+  $theAction =~ s/^.*\///o;
+  #writeDebug("theAction=$theAction");
 
   my $sessionKey = "REDDOT_REDIRECT_$web.$topic";
 
@@ -100,7 +105,7 @@ sub initRedirector {
     }
   }
 
-  # exectute redirect
+  # execute redirect
   if ($theAction =~ /^(view|save)/) {
     my $theRedirect;
     if ($theAction =~ /^view/) {
@@ -115,13 +120,20 @@ sub initRedirector {
       writeDebug("found theRedirect=$theRedirect");
       my $toWeb = $web;
       my $toTopic = $theRedirect;
+      my $toAnchor = '';
       if ($theRedirect =~ /(.*)\.(.*)/) {
 	$toWeb = $1;
 	$toTopic = $2;
       } 
-      my $tmp = &TWiki::Func::getViewUrl($toWeb,$toTopic);
+      if ($toTopic =~ /^(.*)(#.*?)$/) {
+	$toTopic = $1;
+	$toAnchor = $2;
+	writeDebug("found anchor $toAnchor");
+      }
+      my $tmp = &TWiki::Func::getViewUrl($toWeb,$toTopic) . $toAnchor;
       if ($tmp ne &TWiki::Func::getViewUrl($web,$topic)) {
 	$redirectUrl = $tmp; # doit in the redirectCgiQueryHandler
+	writeDebug("redirectUrl=$redirectUrl");
       } else {
 	$redirectUrl = '';
       }
@@ -180,7 +192,7 @@ sub renderRedDot {
   my $theWeb;
   my $theTopic;
   my $hasEditAccess = 0;
-  my $wikiName = &TWiki::Func::getWikiName();
+  my $wikiName = &TWiki::Func::getWikiUserName();
 
   foreach my $webTopic (split(/, /, $theWebTopics)) {
     #writeDebug("testing webTopic=$webTopic");

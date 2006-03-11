@@ -30,7 +30,7 @@ use base qw( TWiki::Contrib::Build );
 
 sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "IrcPlugin", "Build" ), $class );
+    return bless( $class->SUPER::new( 'IrcPlugin' ), $class );
 }
 
 # Example: Override the build target

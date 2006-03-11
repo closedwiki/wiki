@@ -1,0 +1,6 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1132939885" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="WebLog"}%
+%INCLUDE{%TCAOWEB%.%TOPIC%}%
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%

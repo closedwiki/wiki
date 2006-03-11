@@ -47,7 +47,7 @@ sub doInit {
   }
 
   &TWiki::Plugins::NatSkinPlugin::doInit();
-  writeDebug("done init()");
+  #writeDebug("done init()");
 }
 
 ##############################################################################
@@ -56,7 +56,7 @@ sub natSearch {
 
   &doInit();
 
-  writeDebug("called natSearch()");
+  #writeDebug("called natSearch()");
 
   my $wikiUserName = &TWiki::Func::getWikiUserName();
   my $theSearchString = $query->param('search') || '';
@@ -76,21 +76,23 @@ sub natSearch {
   $includeTopic =~ s/^\s*(.*)\s*$/$1/o;
   $excludeTopic =~ s/^\s*(.*)\s*$/$1/o;
 
+  #writeDebug("searchTemplate name =$searchTemplate");
+
   if ($searchTemplate) {
     $searchTemplate = &TWiki::Func::readTemplate($searchTemplate);
   } else {
     $searchTemplate =  &TWiki::Func::readTemplate('search');
   }
-  $searchTemplate =~ s/^\s*(.*)\s*$/$1/o;
-
-  writeDebug("search=$theSearchString");
-  writeDebug("wikiUserName=$wikiUserName");
-  writeDebug("theWeb=$theWeb");
-  writeDebug("theIgnoreCase=$theIgnoreCase");
-  writeDebug("includeWeb=$includeWeb");
-  writeDebug("excludeWeb=$excludeWeb");
-  writeDebug("includeTopic=$includeTopic");
-  writeDebug("excludeTopic=$excludeTopic");
+  $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
+  #writeDebug("searchTemplate='$searchTemplate'");
+  #writeDebug("search=$theSearchString");
+  #writeDebug("wikiUserName=$wikiUserName");
+  #writeDebug("theWeb=$theWeb");
+  #writeDebug("theIgnoreCase=$theIgnoreCase");
+  #writeDebug("includeWeb=$includeWeb");
+  #writeDebug("excludeWeb=$excludeWeb");
+  #writeDebug("includeTopic=$includeTopic");
+  #writeDebug("excludeTopic=$excludeTopic");
   
   # separate and process options
   my $options = "";
@@ -99,7 +101,7 @@ sub natSearch {
   }
 
   my $doIgnoreCase = ($options =~ /u/ || $theIgnoreCase) ? '' : 'i';
-  writeDebug("options=$options");
+  #writeDebug("options=$options");
 
   # construct the list of webs to search in
   my @webList;
@@ -111,7 +113,7 @@ sub natSearch {
     @webList = grep (!/^$excludeWeb$/, @webList) if $excludeWeb;
   }
   $theWeb ||= $web;
-  writeDebug("webList=" . join(',', @webList));
+  #writeDebug("webList=" . join(',', @webList));
 
   # redirect according to the look of the string
   # (1) the string starts with an uppercase letter: 
@@ -134,7 +136,7 @@ sub natSearch {
     if (&TWiki::Func::topicExists($theWeb, $theSearchString)) {
       my $viewUrl = &TWiki::Func::getViewUrl($theWeb, $theSearchString);
       &TWiki::Func::redirectCgiQuery($query, $viewUrl);
-      writeDebug("done");
+      #writeDebug("done");
       return;
     } 
     
@@ -178,7 +180,7 @@ sub natSearch {
     my $resultTopic = $results->{$resultWeb}[0];
     my $viewUrl = &TWiki::Func::getViewUrl($resultWeb, $resultTopic);
     &TWiki::Func::redirectCgiQuery($query, $viewUrl);
-    writeDebug("done");
+    #writeDebug("done");
     return;
   }
 
@@ -186,6 +188,14 @@ sub natSearch {
   &TWiki::Func::writeHeader($query);
   my ($tmplHead, $tmplSearch, $tmplTable, $tmplNumber, $tmplTail) = 
     split(/%SPLIT%/,$searchTemplate);
+
+
+  #writeDebug("tmplHead='$tmplHead'");
+  #writeDebug("tmplSearch='$tmplSearch'");
+  #writeDebug("tmplTable='$tmplTable'");
+  #writeDebug("tmplNumber='$tmplNumber'");
+  #writeDebug("tmplTail='$tmplTail'");
+
   $tmplHead = &TWiki::Func::expandCommonVariables($tmplHead, $topic);
   $tmplHead = &TWiki::Func::renderText($tmplHead);
   $tmplHead =~ s|</*nop/*>||goi;
@@ -206,7 +216,7 @@ sub natSearch {
   $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
   print $tmplTail;
 
-  writeDebug("done natSearch()");
+  #writeDebug("done natSearch()");
 }
 
 ##############################################################################
@@ -218,13 +228,13 @@ sub natTopicSearch
   my $results = {};
 
   if ($debug) {
-    writeDebug("called natTopicSearch()");
-    writeDebug("doIgnoreCase=$doIgnoreCase");
-    writeDebug("theWebList=" . join(" ", @$theWebList));
+    #writeDebug("called natTopicSearch()");
+    #writeDebug("doIgnoreCase=$doIgnoreCase");
+    #writeDebug("theWebList=" . join(" ", @$theWebList));
   }
 
   if ($theSearchString eq '') {
-    writeDebug("empty search string");
+    #writeDebug("empty search string");
     return ($results, $nrHits);
   }
 
@@ -246,7 +256,7 @@ sub natTopicSearch
     foreach my $searchTerm (@searchTerms) {
       my $pattern = $searchTerm;
       $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
-      writeDebug("pattern=$pattern");
+      #writeDebug("pattern=$pattern");
       eval {
 	if ($pattern =~ s/^-//) {
 	  if ($doIgnoreCase) {
@@ -277,13 +287,13 @@ sub natTopicSearch
     if (@topics) {
       $nrHits += scalar @topics;
       $results->{$thisWebName} = [@topics] ;
-      writeDebug("in $thisWebName: found topics " . join(", ", @topics));
+      #writeDebug("in $thisWebName: found topics " . join(", ", @topics));
     } else {
-      writeDebug("nothing found in $thisWebName");
+      #writeDebug("nothing found in $thisWebName");
     }
   }
 
-  writeDebug("done natTopicSearch()");
+  #writeDebug("done natTopicSearch()");
   return ($results, $nrHits);
 }
 
@@ -292,9 +302,9 @@ sub natContentsSearch {
   my ($theSearchString, $theWebList, $doIgnoreCase, $theUser) = @_;
 
   if ($debug) {
-    writeDebug("called natContentsSearch()");
-    writeDebug("doIgnoreCase=$doIgnoreCase");
-    writeDebug("theWebList=" . join(" ", @$theWebList));
+    #writeDebug("called natContentsSearch()");
+    #writeDebug("doIgnoreCase=$doIgnoreCase");
+    #writeDebug("theWebList=" . join(" ", @$theWebList));
   }
 
   my $cmdTemplate = "/bin/egrep -l$doIgnoreCase %PATTERN|U% %FILES|F%";
@@ -310,7 +320,7 @@ sub natContentsSearch {
   # Collect the results for each web, put them in $results->{}
   foreach my $thisWebName (@$theWebList) {
 
-    writeDebug("searching in $thisWebName");
+    #writeDebug("searching in $thisWebName");
 
     # get all topics
     my $webDir = TWiki::Sandbox::normalizeFileName("$dataDir/$thisWebName");
@@ -324,12 +334,12 @@ sub natContentsSearch {
     # grep files in bag
     foreach my $searchTerm (@searchTerms) {
       next unless $searchTerm;
-      writeDebug("before bag=@bag");
+      #writeDebug("before bag=@bag");
 
       # can't modify $searchTerm directly
       my $pattern = $searchTerm;
       $pattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
-      writeDebug("pattern=$pattern");
+      #writeDebug("pattern=$pattern");
 
       if ($pattern =~ s/^-//) {
 	my @notfiles = "";
@@ -355,7 +365,7 @@ sub natContentsSearch {
 	  my ($result, $code) = 
 	    $sandbox->sysCommand($cmdTemplate, PATTERN => $pattern, FILES => \@bag); 
 	  @bag = split(/\r?\n/, $result);
-	  writeDebug("code=$code, result=$result");
+	  #writeDebug("code=$code, result=$result");
 	};
 	if ($@) {
 	  &TWiki::Func::writeWarning("natsearch: pattern=$pattern files=@bag - $@");
@@ -364,7 +374,7 @@ sub natContentsSearch {
 	chomp(@bag);
       }
     }
-    writeDebug("after bag=@bag");
+    #writeDebug("after bag=@bag");
 
     # strip ".txt" extension
     @bag = map { s/\.txt$//; $_ } @bag;
@@ -380,7 +390,7 @@ sub natContentsSearch {
     }
   }
 
-  writeDebug("done natContentsSearch()");
+  #writeDebug("done natContentsSearch()");
   return ($results, $nrHits);
 }
 
@@ -413,7 +423,7 @@ sub _natPrintSearchResult
       # get topic information
       my ($meta, $text) = &TWiki::Func::readTopic($thisWeb, $thisTopic);
       my ($revDate, $revUser, $revNum) = &getRevisionInfoFromMeta($thisWeb, $thisTopic, $meta); 
-      writeDebug("revDate=$revDate, revUser=$revUser, revNum=$revNum");
+      #writeDebug("revDate=$revDate, revUser=$revUser, revNum=$revNum");
       $revUser = &TWiki::Func::userToWikiName($revUser);
       $revDate = &TWiki::Func::formatTime($revDate) 
 	unless $TWiki::Plugins::NatSkinPlugin::isBeijing;

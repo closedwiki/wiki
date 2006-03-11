@@ -10,7 +10,7 @@
 %TMPL:DEF{"locator"}%<span class="natWebLocator"> 
 <span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]
 </span>%TMPL:END%
-%TMPL:DEF{"content"}%
+%TMPL:DEF{"content"}% <!-- -->
 <form name="EditFormular" method="post" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 %IFSKINSTATETHEN{release="Dakar"}% %$nopTEXT% %ELSESKINSTATE% <input type="hidden" name="text" value="%$nopTEXT%" /> %FISKINSTATE%

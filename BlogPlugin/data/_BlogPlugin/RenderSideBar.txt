@@ -1,0 +1,168 @@
+%META:TOPICINFO{author="TWikiContributor" date="1139240378" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+See also BlogHelpText
+
+%TOC%
+
+
+---++ Parameters
+   * SIDEBAR: kind of sidebar to display
+   * SIDEBARARG: extra parameter for the admin sidebar
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+*~~
+<div class="blogSideBar">
+---+ About
+*~~ %REDDOT{"%WEB%.BlogAbout"}%
+<div class="blogAbout">
+%IFDEFINEDTHEN{"%SIDEBAR%"}%
+%$nopDBCALL{"BlogHelpText" section="%SIDEBAR%"}%
+%ELSEDEFINED%
+%$nopDBCALL{"BlogHelpText" section="Default"}%
+%FIDEFINED%
+</div>
+
+%IFDEFINEDTHEN{"%CALC{"$IF($EXACT(%SKIN%,pattern),true)"}%"}%
+%$nopINCLUDE{"%TWIKIWEB%.WebLeftBarSearch"}%
+%ELSEDEFINED%
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<div class="natSearchBox natSearchBoxPos2">
+%$nopTMPL:P{"searchbox"}%
+<p />
+</div>
+%FISKINSTATE%
+%FIDEFINED%
+
+%IFDEFINEDTHEN{"%SIDEBAR%"}%
+%$nopDBCALL{"%TOPIC%" section="%SIDEBAR%"}%
+%ELSEDEFINED%
+%$nopDBCALL{"%TOPIC%" section="Default"}%
+%FIDEFINED%
+
+<!-- todo move it to somewhere else -->
+<style type="text/css">
+.natRevision,
+.natWebLocator {
+   display:none;
+}
+</style>
+*~~
+</div>
+%STOPINCLUDE%
+</verbatim>
+
+---++ Default sidebar
+<verbatim>
+%STARTSECTION{"Default"}%
+*~~
+%DBCALL{"RenderAuthorTools" warn="off"}%
+%DBCALL{"RenderAdminTools" warn="off"}% 
+%DBCALL{"RenderRecentComments" LIMIT="5" CAT=".*"}%
+%DBCALL{"RenderRecentPostings" LIMIT="10"}%
+%DBCALL{"RenderPages" CAT=".*"}%
+%DBCALL{"RenderArchives"}%
+%DBCALL{"RenderCategories"}%
+%DBCALL{"RenderBlogRoll" CAT=".*"}%
+%DBCALL{"RenderVisitors"}%
+%IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
+---+ Technorati
+<script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
+%FIDEFINED%
+%ENDSECTION{"Default"}%
+</verbatim>
+
+---++ Page sidebar
+<verbatim>
+%STARTSECTION{"Page"}%
+*~~
+%DBCALL{"RenderAuthorTools" warn="off"}%
+%DBCALL{"RenderAdminTools" warn="off"}% 
+%DBCALL{"RenderRelatedEntries" NAME="%BASETOPIC%"}% 
+%ENDSECTION{"Page"}%
+</verbatim>
+
+---++ Admin sidebar
+<verbatim>
+%STARTSECTION{"Admin"}%
+*~~
+%DBCALL{"RenderNewTopicTypeForm"
+         NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%" 
+	 TEMPLATE="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%Template" else="%INCLUDINGTOPIC%Template"}%"
+	 warn="off"}%
+%DBCALL{"RenderValidateButton" TEXT="Validate Html" warn="off"}%
+%DBCALL{"RenderTopicTypes" 
+         NAME="%IFDEFINED{"%SIDEBARARG%" then="%SIDEBARARG%" else="%INCLUDINGTOPIC%"}%"}%
+%ENDSECTION{"Admin"}%
+</verbatim>
+
+---++ Entry sidebar
+<verbatim>
+%STARTSECTION{"Entry"}%
+*~~
+%DBCALL{"RenderAuthorTools" warn="off"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderRelatedEntries" NAME="%BASETOPIC%"}% 
+%DBCALL{"RenderRecentPostings" LIMIT="10"}%
+%ENDSECTION{"Entry"}%
+</verbatim>
+
+---++ Aggregation sidebar
+<verbatim>
+%STARTSECTION{"Aggregation"}%
+*~~
+%DBCALL{"RenderAuthorTools" warn="off"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderBlogRoll" CAT=".*"}%
+%ENDSECTION{"Aggregation"}%
+</verbatim>
+
+---++ Archive sidebar
+<verbatim>
+%STARTSECTION{"Archive"}%
+*~~
+%DBCALL{"RenderAuthorTools" warn="off"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
+%DBCALL{"BlogHelpText" section="Archive2"}%
+%ENDSECTION{"Archive"}%
+</verbatim>
+
+---++ Category sidebar
+<verbatim>
+%STARTSECTION{"Category"}%
+*~~
+%DBCALL{"RenderAuthorTools" warn="off"}%
+%DBCALL{"RenderAdminTools" warn="off"}%
+%DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderPages" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderCategories"}%
+%DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%
+%ENDSECTION{"Category"}%
+</verbatim>
+
+
+---++ Nosidebar sidebar
+<verbatim>
+%STARTSECTION{"Nosidebar"}% 
+*~~
+%ENDSECTION{"Nosidebar"}%
+</verbatim>
+
+%DBCALL{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the sidebar navigation"}%

@@ -32,4 +32,9 @@
   text-decoration: none;
   color:#9C3300;
   background:#ff9831;
+  border:0px;
+}
+.natTopBarSizer {
+  height:120px;
+  max-height:120px;
 }

@@ -2,19 +2,16 @@
 
 
 
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_attach.js"></script>
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_attach.js"></script>
 %TMPL:END%
 
 
 
-%TMPL:DEF{"bodystart"}%
-<body bgcolor="#ffffff">
+%TMPL:DEF{"bodystart"}%<body bgcolor="#ffffff">
 #PageTop
 %TMPL:END%
 
-%TMPL:DEF{"notes"}%
-__Notes:__
+%TMPL:DEF{"notes"}%__Notes:__
 
    * *Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','FileAttachment')\" href='[_1]' rel='nofollow'>FileAttachment</a> for more information about attaching files.
    * *File size:* You can upload files up to %ATTACHFILESIZELIMIT% KB in size.
@@ -25,14 +22,11 @@ __Notes:__
      message when you upload a file, you need to try again. It should work the second time.
 %TMPL:END%
 
-%TMPL:DEF{"existingattachments"}%
----++ Existing attachments for <nop>%TOPIC%
+%TMPL:DEF{"existingattachments"}%---++ Existing attachments for <nop>%TOPIC%
 %META{"attachments" all="on"}%
 %TMPL:END%
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%WEB%/%TOPIC%" method="post">
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"existingattachments"}%
 %TMPL:P{"previousdetails"}%
 <table width="100%">
@@ -71,9 +65,7 @@ __Notes:__
 %TMPL:P{"extranotes"}%
 %TMPL:P{"topicinfo"}%</form>%TMPL:END%
 
-%TMPL:DEF{"attach"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
+%TMPL:DEF{"attach"}%%TMPL:P{"htmldoctype"}%%TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
 %TMPL:P{"bodyend"}%

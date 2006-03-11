@@ -1,0 +1,76 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1141365018" format="1.1" version="1.2"}%
+%META:TOPICPARENT{}%
+__This topic contains form elements used in or releated to CreateNewTopic.__
+
+FixMe: Add additional information about how to use the various form elements.
+---
+%TOC%
+
+---++ Topic Name
+---+++ Topic name form element
+<verbatim>
+%STARTSECTION{"name"}%
+*Topic Name:*  <input type="text" name="topic" size=32 style="background-color: #E3F0FF ;" onchange="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if((ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ñ') { ch = 'n'; } if( (ch=='ò')||(ch=='ó')||(ch=='ô') ) { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( (ch=='ù')||(ch=='ú')||(ch=='û') ) { ch = 'o'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) || ((ch>='0') && (ch<='9')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.topic.value=sOut;" on="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if((ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ñ') { ch = 'n'; } if( (ch=='ò')||(ch=='ó')||(ch=='ô') ) { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( (ch=='ù')||(ch=='ú')||(ch=='û') ) { ch = 'o'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) || ((ch>='0') && (ch<='9')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.topic.value=sOut;" language="Javascript1.2" /> _Use a TWiki.WikiWord._ <br /> _If the topic exists already, you will be sent to its edit page. See pre-existing <nop>%URLPARAM{"type"}% topics below._ <br />
+<input type="hidden" name="onlywikiname" value="on" />
+<p />
+%ENDSECTION{"name"}%
+</verbatim>
+
+---+++ Auto-name topic
+<verbatim>
+%STARTSECTION{"autoname"}%
+<input type="hidden" name="topic" value="%URLPARAM{type}%XXXXXXXXXXX" /> *Topic will be named automatically.*
+%ENDSECTION{"autoname"}%
+</verbatim>
+
+---++ TopicHeadline
+<verbatim>
+%STARTSECTION{"headline"}%
+*TopicHeadline:* <br /> <input type="text" name="TopicHeadline" size="50" /><br />
+%ENDSECTION{"headline"}%
+</verbatim>
+
+---++ Standard hidden elements
+<verbatim>
+%STARTSECTION{"templates"}%
+<input type="hidden" name="formtemplate" value="%BASEWEB%.WebForm" />
+<input type="hidden" name="templatetopic" value="%TCAOWEB%.%URLPARAM{type}%Template" />
+<input type="hidden" name="TopicType" value="%URLPARAM{type}%" />
+%ENDSECTION{"templates"}%
+</verbatim>
+
+---++ Parentage elements
+---+++ !SubjectArea is Parent
+<verbatim>
+%STARTSECTION{"subjectparent"}%
+<input type="hidden" name="topicparent" value="%URLPARAM{subject}%" >
+%ENDSECTION{"subjectparent"}%
+</verbatim>
+
+---+++ Select Parent
+<verbatim>
+%STARTSECTION{"selectparent"}%
+*Topic Parent:*  <select name="topicparent" size="1" ><option value="<nop>%URLPARAM{parent}%"> <nop>%URLPARAM{"parent" default="..."}% </option>%TOPICLIST{" <option>$name</option>" web="%BASEWEB%"}%</select> <br />
+_(Optional) Assign different parent to new topic. %BR%%ICON{tip}% Topic "parentage" defines the hierarchy in TopicTree._
+<p />
+%ENDSECTION{"selectparent"}%
+</verbatim>
+
+---++ !CreateNewTopic Drop-down
+<verbatim>
+%STARTSECTION{"dropdown"}%
+---+++ Create New Topic
+
+To create a new topic, select the %BASEWEB%.TopicType you'd like to create from dropdown menu below: <br />
+<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic">
+*Create New:*  <select name="type" onchange="this.form.submit()">
+  <option value="%URLPARAM{"type" default=""}%">%URLPARAM{"type" default="Select..."}%</option><option value="blank" >blank topic</option>
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" nosearch="on" nosummary="on" noheader="on" nototal="on" order="topic" format= "<option>$topic</option>"}%</select> 
+</form>
+%ENDSECTION{"dropdown"}%
+</verbatim>
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="MasterTopic"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoAdmin"}%
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Reusable form elements for CreateNewTopic"}%

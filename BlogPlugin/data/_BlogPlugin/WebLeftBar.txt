@@ -2,15 +2,13 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-See also: RenderAdminTools, WebSideBar
+See also: RenderAdminTools, RenderSideBar, WebSideBar
 
 <div class="natSideBar">
 <div class="natSideBarContents">
-
 %STARTINCLUDE%
-%DBCALL{"WebSideBar"}%
+%DBCALL{"RenderSideBar"}%
 %STOPINCLUDE%
-
 </div>
 </div>
 

@@ -21,4 +21,4 @@
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicTemplate to create a TopicTemplate"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Template to create a TopicTemplate"}%

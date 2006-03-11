@@ -276,17 +276,56 @@ NA SectionalEditPlugin - version in core
 - TigerSkinPlugin - didn't test; don't care
 
 1
-
+ 
 ================================================================================
 ================================================================================
+things to install on the new computers:
+   * =rcs= (DONE)
+   * server - Tk (i guess) for perl ptkdb(?)
+   * perlmagick
+   * (other debian perl packges?)
+   * SVN::Core (grrr, need to install SVN from source (or something...))
 
+redeploy all webs (with appropriate permissions)
+   * (although RcsWrap scares me...)
+
+(recreate) tinderbox - done, i think...
+
+(recreate) plugins testing area - in-progress
+
+download the real debian
+   * maybe try out vmware player on these computers? (cpu instruction issue with other box)
+
+* how to install debian from the network (should be trivial with http, i'd guess)
+* -how to get a list of installed packages-
+(also /var/lib/dpkg/status)
+* how to create a repository (and sources.list)
+* how to do a partial mirror of other repositories
+* how to master a cd (/publish cd definitions)
+* reinstall server with debian (keep user machine as kubuntu)
+
+(other stuff)
+apt-key
+
+
+* update GetAWebAddOn to support saving to .zip
+   * (and/or update TWikiPluginInstallerContrib/TWikiInstallerContrib to support install from .tar/.tar.gz)
+* update TWikiPluginInstallerContrib/TWikiInstallerContrib to support installation from raw TWikiFor files
+
+(svn add pub/TWiki/TWikiDocGraphics/twiki.gif)
+
+does %TOPICLIS% support metadata extraction (eg, formfield?)
+should WebTopicList be implementing using %SEARCH% instead?
+
+================================================================================
+* Registration of Main.WebHome could go away when someone is already logged in!
+
+   * rebuild twiki system again from scratch (with minimal cpan modules, to bootstrap)
+      * did a lot of work last system move/reinstall, but there's still more work to do (but the end _is_ in sight ;-) )
 
 *** OTHER ISSUES: ***
 
 ---+ seem to be bugs
-
-   * BuildContrib doesn't delete its temp staging area after building a release
-      * (i have GB's of twiki staging files on my drive...)
 
    * TWiki.ExtendedSelectPlugin renders +option as H1's
 
@@ -317,14 +356,35 @@ baseweb: %CALC{$GET(base_web)}%
 
 ---+ (my) task list
 
-   * PatternSkinHeaderArt
+   * install project tracking software!!!
 
-   * compare how i just implemented header art to nat skin header art stuff...
-      * should it be called PATTERNSKIN_HEADERART (gah, i hope not)
+   * develop twiki outline editor!!!
+      * (and topic/web refactoring, too!)
+
+   * convert TWikiPluginInstallerContrib to a TWikiShellContribExtension?
+
+   * TWiki 4.1
+      * bug fixes (esp. including security fixes)
+      * TWikiShellContrib
+      * TWikiExtensionInstallerContrib
+      * tinderbox (but would be nice for Dakar, otherwise first thing for Edinburgh)
+      * 
+
+   * review development processes
+      * pth's document editting issues - subversive storage backend, i think?
+      * wow, we really need more test cases (esp. including for bug fixes!)
+      * 
+
+   * see README in test/tinderbox
 
    * rename TWikiPluginInstallerContrib to TWikiExtensionInstallerContrib
+      * (can't until below issues are resolved)
+   * move TWikiInstallerContrib.pm to TWikiPluginInstallerContrib
+      * (can't until TWikiInstallerContrib.pm's changes are committed)
 
-   * (other renaming)
+   * (other renaming?)
+
+   * DakarReleaseNotes - occurences or occurances? (a, right?)
 
    * beforeAttachmentSaveHandler - does this even bloody work ? (or is it BatchUploadPlugin? or both??? -- hm, no unit test :( )
       * who even uses it?
@@ -362,7 +422,9 @@ baseweb: %CALC{$GET(base_web)}%
 FIXED (i think)
 --------------------------------------------------------------------------------
 
-   * TWiki::Func::getScriptUrl isn't returning the http:// part (as documented)
+   * XML::RSS demonstrates the MAN copy problem that sometimes occurs
+      * (/usr/local/man/man3: permission denied...)
+      * FIXED: was INSTALLSITEMAN3DIR, etc.
 
    * TWikiPluginInstallerContrib didn't redirect to the right page after installing PatternSkin (it doesn't match the standard name pattern?) --- or maybe i just broke something in TWikiPluginInstallerContrib
 
@@ -380,6 +442,15 @@ ircd -
 libapache2svn - ???
 maybe libapache-mod-speedycgi ?
 webmin-apache ?
+perl-tk libdevel-ptkdb-perl (locally installed in twikibuilder atm (well, i hope, anyway))
+mozilla-firefox-dev ???
+??? debconf-doc
+??? doc-linux-html
+??? dkpg-doc
+transcode-doc
+??? kicker-applets
+squid, squid-common
+htdig (to search kde (and everything else) help)
 
 ================================================================================
 ################################################################################

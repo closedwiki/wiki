@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128882335" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139592171" format="1.1" version="1.1"}%
 ---+!! <nop>AliasPlugin
 %TOC%
 
@@ -63,21 +63,21 @@ non-alphabetic characters. Textile example:
 The aliases in the topic =DEFAULT_ALIASES= can be either defined using the %<nop>ALIAS{}%
 macro or listed in the following way:
 <verbatim>
-	* <name1>: <value1>
-	* <name2>: <value2>
-	* <name3>: <value3>
-	...
+   * <name1>: <value1>
+   * <name2>: <value2>
+   * <name3>: <value3>
+   ...
 </verbatim>
 
 ---++ Plugin Settings
 
-	* Set SHORTDESCRIPTION = Define aliases which will be replaced with arbitrary strings automatically
+   * Set SHORTDESCRIPTION = Define aliases which will be replaced with arbitrary strings automatically
 
-	* restrict aliases to TWiki.WikiWords
-		* Set ALIAS_WIKI_WORDS_ONLY = 0
+   * restrict aliases to TWiki.WikiWords
+      * Set ALIAS_WIKI_WORDS_ONLY = 0
 
-	* Set the topic holding some default aliases
-		* Set DEFAULT_ALIASES = WebAliases
+   * Set the topic holding some default aliases
+      * Set DEFAULT_ALIASES = WebAliases
 
 ---++ Defined Aliases
 %ALIAS{name="rtfm" value="read the fine manual"}%
@@ -87,41 +87,41 @@ macro or listed in the following way:
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
+   * Download the ZIP file from the Plugin web (see below)
 
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/WebAliases.txt== | definition of site-wide aliases |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/WebAliases.txt== | definition of site-wide aliases |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 
-	* On TWiki/Dakar:
-	  Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	  You might add %<nop>STARTALIASAREA% and %<nop>STOPALIASAREA% surrounding the %<nop>TEXT% tag
-	  of the view and preview templates of your TWiki.TWikiSkins 
-	  (e.g. =view.pattern.tmpl= and =preview.pattern.tmpl=) 
-	  to enable the AliasPlugin sitewide.
+   * On TWiki/Dakar:
+     Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+     You might add %<nop>STARTALIASAREA% and %<nop>STOPALIASAREA% surrounding the %<nop>TEXT% tag
+     of the view and preview templates of your TWiki.TWikiSkins 
+     (e.g. =view.pattern.tmpl= and =preview.pattern.tmpl=) 
+     to enable the AliasPlugin sitewide.
 
-	* On TWiki/Beijing:
-	  add the line marked with %RED% =+= %ENDCOLOR% to the script =bin/view= (a similar
-	  change must be added to the =bin/preview= script):
+   * On TWiki/Beijing:
+     add the line marked with %RED% =+= %ENDCOLOR% to the script =bin/view= (a similar
+     change must be added to the =bin/preview= script):
 <verbatim>
-	if( $viewRaw ) {
-		$text = &TWiki::Store::readTopicRaw( $webName, $topic );
-	} else {
-		( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+   if( $viewRaw ) {
+      $text = &TWiki::Store::readTopicRaw( $webName, $topic );
+   } else {
+      ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
 </verbatim> 
 %RED%
 <verbatim>
-+	  $text = "%STARTALIASAREA% $text %STOPALIASAREA%";
-	}
++     $text = "%STARTALIASAREA% $text %STOPALIASAREA%";
+   }
 </verbatim>
-		
+      
 %ENDCOLOR%
 
-	* On TWiki/Cairo: either of both might work (can someone confirm?)
+   * On TWiki/Cairo: either of both might work (can someone confirm?)
 
-	
+   
 
 
 
@@ -154,16 +154,21 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/OthelloMaurer, TWiki:Main/MichaelDaum |
-|  Plugin Version: | v1.3 (09 Dec 2005) |
+|  Copyright &copy;: | 2003, Othello Maurer; 2003-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Version: | v1.32 |
 |  Change History: | &nbsp; |
-|  09 Dec 2005 | added explicite regex parameter for ALIAS |
-|  06 Dec 2005 | fixed deprecation warning on a dakar install; \
+|  10 Feb 2006: | fixed use of uninitialized value (outch) |
+|  03 Feb 2006: | prevent nested alias expansion; \
+                  support convenience aliases for anchors on the same page |
+|  09 Dec 2005: | added expl icite regex parameter for ALIAS |
+|  06 Dec 2005: | fixed deprecation warning on a dakar install; \
                  added support for non-alphabetical aliases; \
-		 fixed use of uninitialized values due to special chars in alias patterns; \
-		 the ALIAS tag in WebAliases can be used to define global aliases now |
-|  27 Apr 2005 | always read site aliases and then merge in web aliases |
-|  07 Apr 2005 | TWiki:Main/MichaelDaum: major rewrite |
-|  30 Mar 2005 | TWiki:Main/MichaelDaum: added alias area |
+       fixed use of uninitialized values due to special chars in alias patterns; \
+       the ALIAS tag in WebAliases can be used to define global aliases now |
+|  27 Apr 2005: | always read site aliases and then merge in web aliases |
+|  07 Apr 2005: | TWiki:Main/MichaelDaum: major rewrite |
+|  30 Mar 2005: | TWiki:Main/MichaelDaum: added alias area |
 | &nbsp; | added fix to honor order of alias/unalias commands in a topic |
 |  23 Mar 2005: | TWiki:Main/MichaelDaum: added list of test-cases |
 |  &nbsp; | rewrite of substitution code |
@@ -182,5 +187,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
--- TWiki:Main/OthelloMaurer - 09 Oct 2003
--- TWiki:Main/MichaelDaum - 09 Dec 2005
+-- TWiki:Main/OthelloMaurer - 09 Oct 2003 %BR%
+-- TWiki:Main/MichaelDaum - 03 Feb 2006
+

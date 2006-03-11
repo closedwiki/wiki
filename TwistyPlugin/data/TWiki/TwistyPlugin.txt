@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="MichaelDaum" date="1130850299" format="1.1" version="1.2"}%
----+!! %TOPIC%
+%META:TOPICINFO{author="TWikiContributors" date="1130850299" format="1.1" version="1.2"}%
+---+!! <nop>%TOPIC%
 
 %TOC%
 
 ---++ Summary
 
-Convenience plugin for TwistyContrib.
+Create twisty areas that show/hide content dynamically. This is a convenience plugin for TWiki:Plugins.TwistyContrib.
 
 It has two major features:
 	* When active, the Twisty javascript library is included in every topic. _Note: TWiki:TWiki.PatternSkin also includes this javascript library._
@@ -118,10 +118,7 @@ complements the opening TWISTY tag. See [[#VarENDTWISTYTOGGLE][ENDTWISTYTOGGLE]]
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWISTYPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 	* Set SHORTDESCRIPTION = Twisty section javascript library to open/close content dynamically
-
-	* Debug plugin: (See output in =data/debug.txt=)
 	* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
@@ -145,5 +142,3 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 | Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 | Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
-
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup

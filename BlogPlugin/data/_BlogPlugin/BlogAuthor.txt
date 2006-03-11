@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132096839" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139335181" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" TEMPLATE="%TOPIC%Template" warn="off"}%
 %DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 %DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%
 
@@ -17,5 +17,5 @@ See also: %TOPIC%Template, %MAINWEB%.BlogAuthorGroup
 
 
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TopicType, TWikiFormAttribute"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicType, TWikiFormAttribute"}%
 %META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="TopicType used in BlogEntryForm to collect all BlogEntries of one author"}%

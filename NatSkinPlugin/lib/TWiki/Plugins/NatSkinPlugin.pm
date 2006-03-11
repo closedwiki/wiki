@@ -28,7 +28,7 @@ use TWiki::Plugins;
 ###############################################################################
 use vars qw(
         $currentWeb $currentTopic $currentUser $VERSION $RELEASE $debug
-        $isGuest $defaultWikiUserName
+        $isGuest $defaultWikiUserName $isEnabled
 	$useSpamObfuscator $isBeijing $isDakar $isCairo
 	$maxRev $query $urlHost
 	$defaultSkin $defaultVariation $defaultStyleSearchBox
@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.96';
+$RELEASE = '2.993';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -68,23 +68,18 @@ $knownStyleSearchBox = '^(top|pos1|pos2|pos3|off)$';
 
 ###############################################################################
 sub writeDebug {
-  #&TWiki::Func::writeDebug("- NatSkinPlugin - " . $_[0]) if $debug;
-  print STDERR "DEBUG: NatSkinPlugin - " . $_[0] . "\n" if $debug;
+  &TWiki::Func::writeDebug("- NatSkinPlugin - " . $_[0]) if $debug;
+  #print STDERR "DEBUG: NatSkinPlugin - " . $_[0] . "\n" if $debug;
 }
 
 
 ###############################################################################
-# initPlugin: 
-#
-#  Called for all plugins.
-#
 sub initPlugin {
   ($currentTopic, $currentWeb, $currentUser) = @_;
 
   # check TWiki version: let's eat spagetti
-  $isDakar = (defined $TWiki::cfg{LogDir})?1:0;
+  $isDakar = (defined $TWiki::RELEASE)?1:0;
   if ($isDakar) {# dakar
-    writeDebug("wikiVersion=$TWiki::VERSION (dakar)");
     $isBeijing = 0;
     $isCairo = 0;
   } else {# non-dakar
@@ -93,23 +88,18 @@ sub initPlugin {
     if ($wikiVersion =~ /^01 Feb 2003/) {
       $isBeijing = 1; # beijing
       $isCairo = 0;
-      eval "use TWiki::Access;";
-      writeDebug("wikiVersion=$wikiVersion (beijing)");
     } else {
       $isBeijing = 0; # cairo
       $isCairo = 1;
-      eval "use TWiki::User;";
-      writeDebug("wikiVersion=$wikiVersion (cairo)");
     }
   }
-
   writeDebug("isDakar=$isDakar isBeijing=$isBeijing isCairo=$isCairo");
   
   # check skin
   my $skin = TWiki::Func::getSkin();
 
   # clear NatSkinPlugin traces from session
-  unless ($skin =~ /\b(nat|plain|rss)\b/) {
+  unless ($skin =~ /\b(nat|plain|rss|rssatom|atom)\b/) {
     &clearSessionValue('SKINSTYLE');
     &clearSessionValue('STYLEBORDER');
     &clearSessionValue('STYLEBUTTONS');
@@ -118,8 +108,10 @@ sub initPlugin {
     &clearSessionValue('STYLESEARCHBOX');
     &clearSessionValue('TABLEATTRIBUTES');
 
-    TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
-    return 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
+    #TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
+    $isEnabled = 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
+  } else {
+    $isEnabled = 1;
   }
 
   &doInit();
@@ -145,23 +137,30 @@ sub doInit {
   $isGuest = ($wikiUserName eq $defaultWikiUserName)?1:0;
   #writeDebug("defaultWikiUserName=$defaultWikiUserName, wikiUserName=$wikiUserName, isGuest=$isGuest");
 
+  my $isScripted;
   $query = &TWiki::Func::getCgiQuery();
+  if ($isDakar) {
+    $isScripted = &TWiki::Func::getContext()->{'command_line'};
+  } else {
+    $isScripted = defined $query;
+  }
+
   $useSpamObfuscator = &TWiki::Func::getPreferencesFlag('OBFUSCATEEMAIL');
   if ($useSpamObfuscator) {
-    if ($query) { # are we in cgi mode?
+    if ($isScripted) { # are we in cgi mode?
+      $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
+      #writeDebug("no query ... batch mode");
+    } else {
       # disable during register context
-      my $theAction = $query->url(-relative=>1); # cannot use skinState yet, we are in initPlugin
-      my $theSkin = $query->param('skin') || '';
+      my $theAction = $query->url(-relative=>1) || ''; # cannot use skinState yet, we are in initPlugin
+      my $theSkin = $query->param('skin') || TWiki::Func::getSkin();
       my $theContentType = $query->param('contenttype');
       #writeDebug("theAction=$theAction");
-      if ($theAction =~ /^(register|mailnotif|feed)/ || 
-	  $theSkin eq 'rss' ||
+      if (!$theAction || $theAction =~ /^(register|mailnotif)/ || 
+	  $theSkin =~ /^rss/ ||
 	  $theContentType) {
 	$useSpamObfuscator = 0;
       }
-    } else {
-      $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
-      #writeDebug("no query ... batch mode");
     }
   }
   $nrEmails = 0;
@@ -310,7 +309,7 @@ sub initSkinState {
     writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
     writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
     writeDebug("urlparam stylevariation=$theStyleVariation") if $theStyleVariation;
-    writeDebug("urlparam stylevariation=$theStyleSearchBox") if $theStyleSearchBox;
+    writeDebug("urlparam stylesearchbox=$theStyleSearchBox") if $theStyleSearchBox;
     writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
     writeDebug("urlparam switchvariation=$theSwitchVariation") if $theSwitchVariation;
   }
@@ -493,7 +492,7 @@ sub initSkinState {
 
   # handle action
   if ($query) { # are we in cgi mode?
-    $skinState{'action'} = $query->url(-relative=>1); 
+    $skinState{'action'} = $query->url(-relative=>1) || ''; 
   }
 
   # store sticky state into session
@@ -527,26 +526,19 @@ sub initSkinState {
 # $_[1] - The topic
 # $_[2] - The web
 sub commonTagsHandler {
+  return unless $isEnabled;
+
   &initSkinState(); # this might already be too late but there is no
                     # handler between initPlugin and beforeCommonTagsHandler
 		    # which only matters if you've got a SessionPlugin and the 
 		    # TablePlugin installed which most probably is only the 
 		    # case on a cairo installation
 
-  # caution: order of tags matters
-
-  $_[0] =~ s/\%FORMATLIST{(.*?)}%/&renderFormatList($1)/geo; # SMELL: be a plugin
-
   # conditional content
   $_[0] =~ s/(\s*)%IFSKINSTATE{(.*?)}%(\s*)/&renderIfSkinState($2, $1, $3)/geos;
   while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/&renderIfSkinStateThen($2, $3, $1, $4)/geos) {
     # nop
   }
-  $_[0] =~ s/(\s*)%IFDEFINED{(.*?)}%(\s*)/&renderIfDefined($2, $1, $3)/geos;
-  while ($_[0] =~ s/(\s*)%IFDEFINEDTHEN{(?!.*%IFDEFINEDTHEN)(.*?)}%\s*(.*?)\s*%FIDEFINED%(\s*)/&renderIfDefinedThen($2, $3, $1, $4)/geos) {
-    # nop
-  }
-
   $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;
   $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
@@ -554,12 +546,11 @@ sub commonTagsHandler {
   $_[0] =~ s/%USERACTIONS%/&renderUserActions/geo;
   $_[0] =~ s/%FORMBUTTON%/&renderFormButton()/geo;
   $_[0] =~ s/%FORMBUTTON{(.*?)}%/&renderFormButton($1)/geo;
+  
   $_[0] =~ s/%WIKIRELEASENAME%/&getReleaseName()/geo;
   $_[0] =~ s/%GETSKINSTYLE%/&renderGetSkinStyle()/geo;
   $_[0] =~ s/%KNOWNSTYLES%/&renderKnownStyles()/geo;
   $_[0] =~ s/%KNOWNVARIATIONS%/&renderKnownVariations()/geo;
-  $_[0] =~ s/%GROUPSUMMARY%/&renderGroupSummary($_[0])/geo; # SMELL: be a plugin, broken on dakar
-  $_[0] =~ s/%ALLUSERS%/&renderAllUsers()/geo;
 
   # REVISIONS only worked properly for the PatternSkin :(
   # REVARG is expanded for templates only :(
@@ -587,13 +578,15 @@ sub commonTagsHandler {
     }
     $useSpamObfuscator = $oldUseSpamObfuscator;
   }
-  $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
+  $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo; # deprecated
   $_[0] =~ s/%WEBCOMPONENT{(.*?)}%/&renderWebComponent($1)/geo;
   $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
 }
 
 ###############################################################################
 sub endRenderingHandler {
+  return unless $isEnabled;
+
   $_[0] =~ s/<a\s+([^>]*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
 
   # remove leftover tags of supported plugins if they are not installed
@@ -606,6 +599,7 @@ sub endRenderingHandler {
 }
 ###############################################################################
 sub postRenderingHandler { 
+  return unless $isEnabled;
   
   endRenderingHandler(@_); 
 
@@ -614,8 +608,6 @@ sub postRenderingHandler {
   &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
   $useSpamObfuscator = $oldUseSpamObfuscator;
 }
-
-
 
 ###############################################################################
 sub renderIfAccess {
@@ -670,9 +662,11 @@ sub renderIfAccess {
   }
   
   if ($hasAccess) {
-    return $theThen;
+    &escapeParameter($theThen);
+    return TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
   } else {
-    return $theElse;
+    &escapeParameter($theElse);
+    return TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
   }
 }
 
@@ -810,13 +804,11 @@ sub renderIfSkinState {
 
 ###############################################################################
 sub renderKnownStyles {
-
   return join(', ', sort {$a cmp $b} keys %knownStyles);
 }
 
 ###############################################################################
 sub renderKnownVariations {
-
   return join(', ', sort {$a cmp $b} keys %knownVariations);
 }
 
@@ -970,7 +962,6 @@ sub renderMySideBar {
 ###############################################################################
 # deprecated: use WEBCOMPONENT instread
 sub renderWebSideBar {
-
   return '' if $skinState{'sidebar'} eq 'off';
   return getWebComponent('WebSideBar')."\n"; # extra linefeed
 }
@@ -1027,96 +1018,6 @@ sub getWebComponent {
 }
 
 ###############################################################################
-sub ifDefinedImpl {
-  my ($theVariable, $theAction, $theThen, $theElse, $theElsIfArgs, $before, $after, $theGlue) = @_;
-
-  #writeDebug("called ifDefinedImpl()");
-  #writeDebug("theVariable='$theVariable'");
-  #writeDebug("theAction='$theAction'");
-  #writeDebug("theThen='$theThen'");
-  #writeDebug("theElse='$theElse'");
-  #writeDebug("theElsIfArgs='$theElsIfArgs'") if $theElsIfArgs;
-  
-  $before = '' if ($theGlue eq 'on') || !$before;
-  $after = '' if ($theGlue eq 'on') || !$after;
-
-  if (!$theAction || $skinState{'action'} =~ /$theAction/) {
-    if ($theVariable =~ /^%([A-Z]+)%$/) {
-      my $varName = $1;
-      if ($isBeijing) {
-	my $topicText = &TWiki::Func::readTopic($currentWeb, $currentTopic);
-	$theVariable = &_getValueFromTopic($currentWeb, $currentTopic, $varName, $topicText);
-	$theVariable =~ s/^\s+//;
-	$theVariable =~ s/\s+$//;
-	$theVariable = &TWiki::Func::expandCommonVariables($theVariable, $currentTopic, $currentWeb);
-	$theThen =~ s/%$varName%/$theVariable/g;# SMELL: do we need to backport topic vars?
-      } else {
-	$theVariable = '';
-      }
-    }
-    if ($theVariable ne '') {# variable is defined
-      if ($theThen =~ s/\$nop//go) {
-	$theThen = TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
-      }
-      return $before.$theThen.$after;
-    }
-  }
-  
-  return $before."%IFDEFINEDTHEN{$theElsIfArgs}%$theElse%FIDEFINED%".$after if $theElsIfArgs;
-
-  if ($theElse =~ s/\$nop//go) {
-    $theElse = TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
-  }
-  return $before.$theElse.$after; # variable is empty
-}
-
-###############################################################################
-sub renderIfDefined {
-
-  my ($args, $before, $after) = @_;
-
-  $args = '' unless $args;
-
-  #writeDebug("called renderIfDefined($args)");
-  
-  my $theVariable = &TWiki::Func::extractNameValuePair($args);
-  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
-  my $theThen = &TWiki::Func::extractNameValuePair($args, 'then') || $theVariable;
-  my $theElse = &TWiki::Func::extractNameValuePair($args, 'else') || '';
-  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
-
-  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, undef, $before, $after, $theGlue);
-}
-
-###############################################################################
-sub renderIfDefinedThen {
-  my ($args, $text, $before, $after) = @_;
-
-  $args = '' unless $args;
-
-  #writeDebug("called renderIfDefinedThen($args)");
-
-  my $theThen = $text; 
-  my $theElse = '';
-  my $elsIfArgs = '';
-
-  if ($text =~ /^(.*?)\s*%ELSIFDEFINED{(.*?)}%\s*(.*)\s*$/gos) {
-    $theThen = $1;
-    $elsIfArgs = $2;
-    $theElse = $3;
-  } elsif ($text =~ /^(.*?)\s*%ELSEDEFINED%\s*(.*)\s*$/gos) {
-    $theThen = $1;
-    $theElse = $2;
-  }
-
-  my $theVariable = &TWiki::Func::extractNameValuePair($args);
-  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
-  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
-
-  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, $elsIfArgs, $before, $after, $theGlue);
-}
-
-###############################################################################
 sub renderWebLink {
   my $args = shift || '';
 
@@ -1138,104 +1039,6 @@ sub renderWebLink {
   }
 
   $result .= ">$theName</a></span>";
-
-  return $result;
-}
-
-###############################################################################
-# renderGroupSummary: render variable %GROUPSUMMARY%
-sub renderGroupSummary
-{
-  my $result = "";
-  my $text = shift;
-
-  #writeDebug("called renderGroupSummary()");
-
-  my %usersEmail;
-  my @emailAddrs;
-  my @users = &TWiki::Access::getUsersOfGroup($currentTopic); # FIXME on dakar
-
-  if ("@users" =~ /%ALLUSERS%/) {
-    @users = getAllUsers();
-  }
-
-  #writeDebug("users=" . join(',', @users));
-  foreach my $user (@users) {
-    $user =~ s/^.*\.//;	
-    next if $usersEmail{$user};
-    my ($email) = &TWiki::getEmailOfUser($user); # FIXME on dakar
-    $usersEmail{$user} = $email;
-    if ($email) {
-      push @emailAddrs, $email if $email;
-    }
-  }
-
-  my %adminsEmail;
-  my @adminAddrs;
-  my $value = _getValueFromTopic($currentWeb, $currentTopic, "ALLOWTOPICCHANGE", $text);
-  foreach my $admin (split(/[\,\s]+/, $value)) {
-    if ($admin =~ /Group$/) {
-      foreach my $admin (&TWiki::Access::getUsersOfGroup($admin)) { # FIXME on dakar
-	$admin =~ s/^.*\.//;	
-	next if $adminsEmail{$admin};
-	my ($email) = &TWiki::getEmailOfUser($admin); # FIXME on dakar
-	$adminsEmail{"$admin"} = $email;
-	push @adminAddrs, $email if $email;
-      }
-    } else {
-      next if $adminsEmail{$admin};
-      my ($email) = &TWiki::getEmailOfUser($admin); # FIXME on dakar
-      $adminsEmail{"$admin"} = $email;
-      push @adminAddrs, $email if $email;
-    }
-  }
-
-  # render members
-  $result .= "---++ Members \n";
-  foreach my $user (sort keys %usersEmail) {
-    my $email = $usersEmail{$user};
-    if ($email) {
-      $result .= "\t1 $user: $email \n";
-    } else {
-      $result .= "\t1 $user\n";
-    }
-  }
-  if (@emailAddrs) {
-    $result .= "Contact " . 
-      &renderEmailAddrs(\@emailAddrs, 'all members') .
-      ".<br>\n";
-  }
-
-  $result .= "---++ Maintainer\n";
-
-  # render maintainers
-  if (@adminAddrs > 1) {
-    foreach my $admin (sort keys %adminsEmail) {
-      my $email = $adminsEmail{$admin};
-      if ($email) {
-	$result .= "\t1 $admin: $email \n";
-      } else {
-	$result .= "\t1 $admin\n";
-      }
-    }
-    $result .= "Contact " . 
-      &renderEmailAddrs(\@emailAddrs, 'all maintainers') .
-      ".<br>\n";
-  } else {
-    my $email;
-    my $admin;
-    foreach $admin (keys %adminsEmail) {
-      $email = $adminsEmail{$admin};
-      if ($email) {
-	$result .= "$admin: $email <br>\n";
-	last;
-      }
-    }
-    if (!$email) {
-      ($admin) = keys %adminsEmail;
-      $result .= "$admin <br/>\n" if $admin;
-    }
-  }
 
   return $result;
 }
@@ -1293,8 +1096,7 @@ sub renderLogon {
 
 ###############################################################################
 # _getValue: my version to get the value of a variable in a topic
-sub _getValueFromTopic
-{
+sub _getValueFromTopic {
   my ($theWeb, $theTopic, $theKey, $text) = @_;
 
   if ($isDakar) {
@@ -1317,207 +1119,6 @@ sub _getValueFromTopic
   }
 
   return '';
-}
-
-
-###############################################################################
-sub registrationHandler
-{
-### my ($web, $wikiName, $loginName, $formData) = @_;   # do not uncomment, use $_[0], $_[1]... instead
- # $formData is a reference to a %formData which contains formName,formValue pairs 
-
-  writeDebug("starting registrationHandler");
-
-  if (! $_[3]) {
-    &TWiki::Func::writeDebug("NatSkinPlugin: WARNING: no formData submitted by registrationHander");
-    &TWiki::Func::writeDebug("NatSkinPlugin: WARNING: no confirmation email willl be send to maintainers");
-    return;
-  }
-    
-  # extract register form data
-  my $formData = $_[3];
-  my $firstLastName = $formData->{"Name"} || '';
-  my $wikiName = $formData->{"Wiki Name"} || '';
-  my $emailAdress = $formData->{"Email"} || '';
-  my $group = $formData->{"Group"} || '';
-  my $comment = $formData->{"Comment"} || '';
-
-  # get maintainers of the group
-  my %adminsEmail;
-  my @adminAddrs;
-  my $value = _getValueFromTopic("User", $group, "ALLOWTOPICCHANGE");
-  foreach my $admin (split(/[\,\s]+/, $value)) {
-    if ($admin =~ /Group$/) {
-      foreach my $admin (&TWiki::Access::getUsersOfGroup($admin)) { # FIXME on dakar
-	$admin =~ s/^.*\.//;	
-	my ($email) = &TWiki::getEmailOfUser($admin); # FIXME on dakar
-	$adminsEmail{"$admin"} = $email;
-	push @adminAddrs, $email if $email;
-      }
-    } else {
-      my ($email) = &TWiki::getEmailOfUser($admin); # FIXME on dakar
-      $adminsEmail{"$admin"} = $email;
-      push @adminAddrs, $email if $email
-    }
-  }
-
-  # create recipients string
-  my $recipients = join(', ', @adminAddrs);
-  $recipients =~ s/\r//g; #remove carriage returns
-  
-  writeDebug("group maintainers are: @adminAddrs");
-  
-  my $text = <<EOM;
-From: %WIKIWEBMASTER%
-To: $recipients
-Subject: Fwd: %WIKITOOLNAME% - Registration for $wikiName to group $group
-MIME-Version: 1.0
-Content-Type: text/plain; charset=%CHARSET%
-Content-Transfer-Encoding: 7bit
-
-You are receiving this Email because you are a maintainer 
-of the $group.
-
-A new user registered to %WIKITOOLNAME% and requested for 
-participating the $group.
-
-User Details:
-
-Name: $firstLastName
-WikiName: $wikiName
-Email Adress: $emailAdress
-
-You may add the user to the $group topic at
-%SCRIPTURL%/view%SCRIPTSUFFIX%/User/$group 
-EOM
-
-  $useSpamObfuscator = 0; # temporarily disable it
-  my $mainWeb = &TWiki::Func::getMainWebname();
-  $text = &TWiki::Func::expandCommonVariables($text, $wikiName, $mainWeb);
- 
-  writeDebug("This Email will be send:\n$text");
-  my $senderr = &TWiki::Net::sendEmail($text); # FIXME on dakar
-  if ($senderr) {
-    writeDebug("notification mail to administrators could not be sent. return code: $senderr.");
-  } else {
-    writeDebug("notification mail to administrators sent.");
-  }
-
-  $useSpamObfuscator = 1; # enabling it again
-  return;
-}
-
-###############################################################################
-sub getAllUsers {
-
-  #writeDebug("called getAllUsers");
-
-  my $wikiUsersTopicname = ($isDakar)?$TWiki::cfg{UsersTopicName}:$TWiki::wikiUsersTopicname;
-  my $mainWeb = &TWiki::Func::getMainWebname();
-
-  my (undef, $topicText) = 
-    &TWiki::Func::readTopic($mainWeb, $wikiUsersTopicname);
-
-  my @users;
-  foreach my $line (split(/\n/, $topicText)) {
-    my $isList = ($line =~ /^\t\*\s([A-Z][a-zA-Z0-9]*)\s\-/go);
-    next if ! $isList;
-    next if $1 =~ /^.$/;
-    push @users, $1;
-  }
-
-  #writeDebug("result=" . join(',', @users));
-
-  return @users;
-}
-
-###############################################################################
-sub renderAllUsers {
-  return join(', ', getAllUsers());
-}
-
-###############################################################################
-sub renderFormatList {
-  my $args = shift;
-
-  #writeDebug("renderFormatList($args)");
-
-  my $theList = &TWiki::Func::extractNameValuePair($args) ||
-    &TWiki::Func::extractNameValuePair($args, 'list') || '';
-  my $thePattern = &TWiki::Func::extractNameValuePair($args, 'pattern') || '\s*(.*)\s*';
-  my $theFormat = &TWiki::Func::extractNameValuePair($args, 'format') || '$1';
-  my $theSplit = &TWiki::Func::extractNameValuePair($args, 'split') || ',';
-  my $theSeparator = &TWiki::Func::extractNameValuePair($args, 'separator') || ', ';
-  my $theLimit = &TWiki::Func::extractNameValuePair($args, 'limit') || -1;
-  my $theSort = &TWiki::Func::extractNameValuePair($args, 'sort') || 'off';
-  my $theUnique = &TWiki::Func::extractNameValuePair($args, 'unique') ||'';
-  my $theExclude = &TWiki::Func::extractNameValuePair($args, 'exclude') || '';
-
-  &escapeParameter($theList);
-  $theList = &TWiki::Func::expandCommonVariables($theList, $currentTopic, $currentWeb);
-
-  #writeDebug("thePattern='$thePattern'");
-  #writeDebug("theFormat='$theFormat'");
-  #writeDebug("theSplit='$theSplit'");
-  #writeDebug("theSeparator='$theSeparator'");
-  #writeDebug("theLimit='$theLimit'");
-  #writeDebug("theSort='$theSort'");
-  #writeDebug("theUnique='$theUnique'");
-  #writeDebug("theExclude='$theExclude'");
-  #writeDebug("theList='$theList'");
-
-  my %seen = ();
-  my @result;
-  foreach my $item (split /$theSplit/, $theList, $theLimit) {
-    #writeDebug("found '$item'");
-    next if $theExclude && $item =~ /($theExclude)/;
-    $item =~ m/$thePattern/;
-    my $arg1 = $1 || '';
-    my $arg2 = $2 || '';
-    my $arg3 = $3 || '';
-    my $arg4 = $4 || '';
-    my $arg5 = $5 || '';
-    my $arg6 = $6 || '';
-    my $item = $theFormat;
-    $item =~ s/\$1/$arg1/g;
-    $item =~ s/\$2/$arg2/g;
-    $item =~ s/\$3/$arg3/g;
-    $item =~ s/\$4/$arg4/g;
-    $item =~ s/\$5/$arg5/g;
-    $item =~ s/\$6/$arg6/g;
-    #writeDebug("after susbst '$item'");
-    if ($theUnique) {
-      next if $seen{$item};
-      $seen{$item} = 1;
-    }
-    next if $item eq '';
-    push @result, $item;
-  }
-
-  if ($theSort ne 'off') {
-    if ($theSort eq 'alpha' || $theSort eq 'on') {
-      @result = sort {$a cmp $b} @result;
-    } elsif ($theSort eq 'revalpha') {
-      @result = sort {$b cmp $a} @result;
-    } elsif ($theSort eq 'num') {
-      @result = sort {$a <=> $b} @result;
-    } elsif ($theSort eq 'revnum') {
-      @result = sort {$b <=> $a} @result;
-    }
-  }
-
-  my $result = join($theSeparator, @result);
-  &escapeParameter($result);
-  $result = &TWiki::Func::expandCommonVariables($result, $currentTopic, $currentWeb);
-  $result =~ s/\s+$//go; # SMELL what the hell: where do the linefeeds come from
-
-  return $result;
-}
-
-###############################################################################
-sub showError {
-  my ($errormessage) = @_;
-  return "<font size=\"-1\" color=\"#FF0000\">$errormessage</font>" ;
 }
 
 ###############################################################################
@@ -1561,8 +1162,7 @@ sub renderFormButton {
 }
 
 ###############################################################################
-sub renderEmailAddrs
-{
+sub renderEmailAddrs {
   my ($emailAddrs, $linkText) = @_;
 
   $linkText = '' unless $linkText;
@@ -1680,8 +1280,7 @@ sub renderRevisions {
 
 ###############################################################################
 # reused code from the BlackListPlugin
-sub renderExternalLink
-{
+sub renderExternalLink {
   my ($thePrefix, $theUrl) = @_;
 
   my $addClass = 0;

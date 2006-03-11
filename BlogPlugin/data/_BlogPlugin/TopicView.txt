@@ -3,7 +3,7 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/" method="post">
+<form action="%SCRIPTURL{"edit"}%/%WEB%/" method="post">
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="%TOPIC%Template" />
 <input type="hidden" name="TopicType" value="%TOPIC%" />

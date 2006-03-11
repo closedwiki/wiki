@@ -23,6 +23,7 @@ see also: RenderFullTeaser
 <verbatim>
 %STARTSECTION{"format"}%
 *~~ <div class=\"blogEntry\">
+~~~ %STOPALIASAREA%
 ~~~   <table class=\"blogHeadline\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
 ~~~   <tr><td>
 ~~~   <h2>
@@ -48,12 +49,15 @@ see also: RenderFullTeaser
 ~~~     </span> in
 ~~~     <span class=\"blogCategory\"> 
 ~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" 
-~~~         sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~         sort=\"on\" 
+~~~         format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
+~~~       }$percnt
 ~~~     </span>
 ~~~     <span class=\"blogAuthor\"> 
 ~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
 ~~~     </span>
 ~~~   </div>
+~~~   %STARTALIASAREA%
 ~~~   <div class=\"blogText\">$n
 ~~~      <noautolink>$n
 ~~~      $formfield(Teaser)
@@ -63,6 +67,7 @@ see also: RenderFullTeaser
 ~~~      </div>
 ~~~      </noautolink>$n
 ~~~   </div>
+~~~   %STOPALIASAREA%
 ~~~ </div>
 *~~ 
 %ENDSECTION{"format"}%

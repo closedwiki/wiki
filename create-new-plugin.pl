@@ -6,13 +6,14 @@ use FindBin;
 use Cwd;
 
 ################################################################################
+my @types = qw( Plugin Contrib HeaderArtContrib );
 
 my ( $name ) = ( @ARGV, '' );
-my @types = qw( Plugin Contrib HeaderArtContrib );
-( my $type = $name ) =~ s/^.*?(Plugin|(HeaderArt)?Contrib)?$/$1/;
-die "'$name' must end in one of: " . join( ', ', @types ) . "\n" unless $type;
-
 usage(), exit 0 unless $name;
+
+( my $type = $name ) =~ s/^.*?(Plugin|(HeaderArt)?Contrib)?$/$1/;
+usage(), exit 0 unless $type;
+
 
 ################################################################################
 
@@ -29,7 +30,7 @@ my $extension = TWiki::Builder::Extension::Factory::new( $type, $name );
 # could have command-line switches to optionally not generate various bits
 $extension->generateMinimalExtension();
 $extension->generateBuildContrib();
-$extension->generateSample();
+#$extension->generateSample();
 $extension->generateUnitTests();
 
 ################################################################################
@@ -38,6 +39,7 @@ sub usage
 {
     print STDERR <<__USAGE__;
 Usage: create-new-extension.pl ExtensionName
+\t where ExtensionName must end in one of: @types 
 __USAGE__
 }
 
@@ -58,7 +60,7 @@ sub generateMinimalExtension
 
     # Plugin.pm
     my $pm = '';
-
+    
     open( PM, '<', $self->{module_template} ) or die $!;
     local $/ = undef;
     $pm = <PM>;
@@ -147,7 +149,8 @@ sub generateSample
     # Sandbox example topic
     eval { mkpath "$name/data/Sandbox/" };
     {
-	my $template_file = "EmptyContrib/data/Sandbox/PluginTestEmptyContrib.txt";
+	my $template_file = "EmptyContrib/data/TWiki/EmptyContrib.txt";
+
 	open( TEST, '<', $template_file ) or die $!;
 	local $/ = undef;
 	my $test = <TEST>;

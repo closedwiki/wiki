@@ -2,6 +2,7 @@ package TWiki::Contrib::CommandSet::Build;
 
 use TWiki::Contrib::TWikiShellContrib::Help qw{assembleHelp};
 use TWiki::Contrib::TWikiShellContrib::DirHandling;
+use TWiki::Contrib::TWikiShellContrib::Common;
 
 use File::Copy;
 
@@ -47,6 +48,8 @@ sub run {
       $targetDir.='Contrib';
    } 
    $targetDir.='/'.$plugin;
+   $targetDir=findRelativeTo($targetDir,'build.pl');
+   $targetDir=~s/build\.pl//;
 
    cd($targetDir);
    system("perl build.pl $target");

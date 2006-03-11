@@ -197,7 +197,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  7th Dec 2004: | Small fix, metadata date format problem. Date fields are now being padded to correct width |
 |  10 Nov 2004: | Initial version |
 |  TWiki Dependency: | TWiki version 01 Feb 2003 or later |
-|  CPAN Dependencies: | CPAN:XML::LibXML, CPAN:XML::LibXSLT, CPAN:XML::Simple, CPAN:Text::ParseWords, CPAN:Cache::Cache, CPAN:String::CRC |
+|  CPAN Dependencies: | CPAN:DBI, CPAN:XML::LibXML, CPAN:XML::LibXSLT, CPAN:XML::Simple, CPAN:Text::ParseWords, CPAN:Cache::Cache, CPAN:String::CRC, CPAN:LWP::UserAgent |
 |  Other Dependencies: | |
 |  Perl Version: | 5.6 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 98%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC%Recipe4 96% |

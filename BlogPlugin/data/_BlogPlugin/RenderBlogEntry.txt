@@ -11,12 +11,23 @@
 <verbatim>
 %STARTINCLUDE%
 *~~
-%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"}%
+~~~ %STOPALIASAREA%
+%~~ DBCALL{"RenderDocNavigation" 
+~~~   NAME="%NAME%" 
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~   REVERSE="on"
+~~~ }%
+<a name="%WEB%_%NAME%"></a>
 %~~ DBQUERY{topic="%NAME%" web="%WEB%"
 ~~~    format="%DBCALL{"RenderBlogEntry" section="format"}%"
 ~~~ }%
-%DBCALL{"RenderDocNavigation" NAME="%NAME%" WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"}%
+%~~ DBCALL{"RenderDocNavigation" 
+~~~   NAME="%NAME%" 
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~   REVERSE="on"
+~~~ }%
 %DBCALL{"RenderBlogAuthorSwitch"}%
+~~~ %STARTALIASAREA%
 *~~
 %STOPINCLUDE%
 </verbatim>
@@ -38,14 +49,25 @@
 ~~~     <span class=\"blogDate\">
 ~~~       $formatTime(createdate, '$day $mon $year - $hour:$minute')
 ~~~     </span>
-~~~     in 
-~~~     <span class=\"blogCategory\">
-~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\"
-~~~         format=\"[[$web.$1][$1]]\"}$percnt
-~~~     </span>
+~~~     $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\"
+~~~       header=\"in <span class=\\"blogCategory\\">\"
+~~~       format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
+~~~       footer=\"</span>\"
+~~~     }$percnt
+~~~     $percntTAGCLOUD{\"$formfield(BlogTag)\" sort=\"on\"
+~~~       split=\"[\s,]+\"
+~~~       sort=\"weight\" 
+~~~       warn=\"off\"
+~~~       header=\"tagged <span class=\\"blogTag\\">\"
+~~~       separator=\", \"
+~~~       format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/BlogArchive?mode=tag;search=$term\\" 
+~~~                   rel=\\"tag\\">$term</a>\"
+~~~       footer=\"</span>\"
+~~~     }$percnt
 ~~~     <span class=\"blogAuthor\">by $formfield(BlogAuthor) </span> 
 ~~~     $n
 ~~~   </div>
+~~~   %STARTALIASAREA%
 ~~~   <div class=\"blogText\">
 ~~~      $n<noautolink>$n
 ~~~      <div class=\"blogTeaser\">
@@ -54,6 +76,7 @@
 ~~~      $formfield(Text)
 ~~~      $n</noautolink>$n
 ~~~   </div>
+~~~   %STOPALIASAREA%
 ~~~ </div>
 *~~ 
 %ENDSECTION{"format"}%
@@ -61,7 +84,7 @@
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="TestBlogEntry0"}%
+%DBCALL{"%TOPIC%" NAME="BlogEntry0"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

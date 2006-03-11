@@ -21,12 +21,13 @@ see also: RenderDocNavigation
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%" 
 ~~~   WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"
+~~~   ORDER="created"
 ~~~ }%
 %~~ DBQUERY{topic="%NAME%" 
 ~~~  format="
 *~~     <div class=\"blogRef\">
-~~~     $n%STOPALIASAREA%$n<noautolink>
-~~~        <h2>On 
+~~~     %STOPALIASAREA%$n<noautolink>
+~~~        <h3>On 
 ~~~            <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$expand(BaseRef)\" 
 ~~~              title=\"permalink to <nop>$expand(BaseRef)\">
 ~~~              \"$expand(@BaseRef.Headline or BaseRef)\"
@@ -34,7 +35,7 @@ see also: RenderDocNavigation
 ~~~                ($formatTime(@BaseRef.createdate, '$day, $mon $year'))
 ~~~              </span>
 ~~~            </a>
-~~~        </h2>
+~~~        </h3>
 ~~~     </noautolink>$n%STARTALIASAREA%$n
 ~~~     </div>
 ~~~     <div class=\"blogComment\">
@@ -44,6 +45,7 @@ see also: RenderDocNavigation
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%" 
 ~~~   WHERE="BlogRef='%DBQUERY{topic="%NAME%" format="$formfield(BlogRef)"}%'"
+~~~   ORDER="created"
 ~~~ }%
 %STOPINCLUDE%
 </verbatim>
@@ -86,12 +88,14 @@ see also: RenderDocNavigation
 ~~~    $percntIFDEFINEDTHEN{\"$expand(Headline)\" glue=\"off\"}$percnt$n
 ~~~       <h4>$expand(Headline)</h4>$n
 ~~~    $percntFIDEFINED$percnt$n
+~~~ %STARTALIASAREA%$n
 ~~~ <div class=\"blogCommentText\">$n
 ~~~    $expand(Text)
 ~~~    ...&nbsp;
 *~~   <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic#bottomComment\"
 ~~~      title=\"comment on <nop>$topic\">reply</a>
 ~~~ </div>$n
+~~~ %STOPALIASAREA%$n
 ~~~ </noautolink>
 *~~ 
 %ENDSECTION{"format"}%

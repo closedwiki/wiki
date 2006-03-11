@@ -1,13 +1,16 @@
 %TMPL:INCLUDE{"searchbase"}% 
 <!-- template: search.nat.tmpl -->
 %TMPL:DEF{"content"}% %SPLIT%<b>Search</b>: <span class="natSearchString">%SEARCHSTRING%</span> 
-%SPLIT% <table class="natSearchTable" cellpadding="0" cellspacing="0">
+%SPLIT% 
+%CALC{"$SET(incr, 0)"}% <!-- CALC incr = 0 -->
+<table class="natSearchTable" cellpadding="0" cellspacing="0">
 <tr class="natSearchTableTitle">
   <th width="50%" class="natSearchTarget">%WEB% Web</th>
   <th width="30%" class="natSearchRevision">Changed</th>
   <th width="20%" class="natSearchAuthor">Changed by</th>
 </tr>
-</table> %REPEAT% <table class="natSearchHit" width="100%" border="0" cellspacing="0" cellpadding="0">
+</table> %REPEAT% %CALC{"$SETM(incr, +1)"}% <!-- CALC incr++ -->
+<table class="natSearchHit %CALC{"$IF($ODD($GET(incr)),natSearchHitOdd,natSearchHitEven)"}%" width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <th width="50%" class="natSearchTarget">
       <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TOPICNAME%</a>
@@ -23,4 +26,3 @@
   </tr> 
 </table>%REPEAT% %SPLIT%<div class="natSearchTotal">Number of topics: <span>%NTOPICS%</span></div>%SPLIT%
 %TMPL:END%
-

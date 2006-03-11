@@ -1,0 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1107277590" format="1.0" version="$Rev$"}%
+---++!! %FORMFIELD{"TopicHeadline" topic="%BASEWEB%.%BASETOPIC%" }%
+%SEARCH{"%INCLUDINGTOPIC%" scope="topic" web="%BASEWEB%" regex="on" limit="1" format="<font face=\"arial,helvetica\" size=\"1\"><b>Posted on $createdate by $createwikiusername</b> </font> <br>" nosearch="on" noheader="on" nototal="on" }%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

@@ -9,7 +9,7 @@
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.main.filepath.focus();%TMPL:END%
-%TMPL:DEF{"content"}%
+%TMPL:DEF{"content"}% <!-- -->
 %TMPL:P{"previousdetails"}%
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 <table width="100%" style="padding-top:20px">
@@ -52,6 +52,4 @@
 </form>
 <h2>Existing attachments for <nop>%TOPIC%</h2>
 <div class="natTopicAttachments" style="padding:0px;margin:0px"> %META{"attachments" all="on"}% </div>
-
 %TMPL:END%
-

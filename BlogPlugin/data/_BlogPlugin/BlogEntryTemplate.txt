@@ -10,8 +10,8 @@
 
 <!--
    * Set WHITEBOARD = off
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
-   * Set SIDEBAR = BlogEntry
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup, %WIKIUSERNAME%
+   * Set SIDEBAR = Entry
 -->
 
 %META:FORM{name="TopicForm"}%

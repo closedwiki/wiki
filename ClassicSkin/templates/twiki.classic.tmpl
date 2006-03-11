@@ -6,8 +6,7 @@
 
 
 
-%TMPL:DEF{"htmldoctype"}%
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+%TMPL:DEF{"htmldoctype"}%<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%"> %TMPL:END%
 
 
@@ -16,8 +15,7 @@
 
 
 
-%TMPL:DEF{"script"}%
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+%TMPL:DEF{"script"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	function launchWindow(inWeb, inTopic) {
@@ -34,14 +32,11 @@
 
 
 
-%TMPL:DEF{"twikistyle"}%
-%TMPL:INCLUDE{"css.tmpl"}%
-%TMPL:END%
+%TMPL:DEF{"twikistyle"}%%TMPL:INCLUDE{"css.tmpl"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"head"}%
-<head>
+%TMPL:DEF{"head"}%<head>
  %TMPL:P{"windowtitle"}%
 	<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
 	<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
@@ -60,8 +55,7 @@
 
 
 
-%TMPL:DEF{"bodystart"}%
-<body bgcolor="#ffffff">
+%TMPL:DEF{"bodystart"}%<body bgcolor="#ffffff">
 #PageTop
 %TMPL:END%
 
@@ -71,8 +65,7 @@
 
 
 
-%TMPL:DEF{"standardheader"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+%TMPL:DEF{"standardheader"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
    <noautolink>
@@ -96,8 +89,7 @@
   </td>
  </tr>
 </table>%TMPL:END%
-%TMPL:DEF{"simpleheader"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
+%TMPL:DEF{"simpleheader"}%<table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
   <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
    <noautolink>
@@ -114,13 +106,11 @@
   </td>
  </tr>
 </table>%TMPL:END%
-%TMPL:DEF{"copyright"}%
-<div class="TWikiCopyright">
+%TMPL:DEF{"copyright"}%<div class="TWikiCopyright">
 <font size="-2">%WEBCOPYRIGHT%</font>
 </div>%TMPL:END%
 %TMPL:DEF{"footernote"}% %TMPL:END%
-%TMPL:DEF{"standardfooter"}%
-#PageBottom %TMPL:END%
+%TMPL:DEF{"standardfooter"}%#PageBottom %TMPL:END%
 
 
 
@@ -128,14 +118,11 @@
 
 
 
-%TMPL:DEF{"main"}%
-%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%%TMPL:END%
+%TMPL:DEF{"main"}%%TMPL:P{"content"}%%TMPL:P{"standardfooter"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicinfo"}%
-%BR%
+%TMPL:DEF{"topicinfo"}%%BR%
 <br clear="all" />
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr bgcolor="%WEBBGCOLOR%">
@@ -156,9 +143,7 @@
  </tr>
 </table>%TMPL:END%
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
----+ %TMPL:P{"heading"}%
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%---+ %TMPL:P{"heading"}%
 %BR%
 %TMPL:P{"message"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
@@ -166,9 +151,7 @@
 %TMPL:DEF{"revisions"}%<a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>: %REVISIONS% %TMPL:END%
 
 
-%TMPL:DEF{"oops"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
+%TMPL:DEF{"oops"}%%TMPL:P{"htmldoctype"}%%TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
 %TMPL:P{"bodyend"}%

@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131111976" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139339192" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 %TOPICLIST{"	1 [[$name]]"}%
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

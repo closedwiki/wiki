@@ -34,4 +34,9 @@
   text-decoration: none;
   background:#555555;
   color:#eeeeee;
+  border:0px;
 }
+.natTopBarSizer {
+  height:110px;
+}
+

@@ -1,0 +1,3 @@
+data/TWiki/ImgPlugin.txt  Plugin doc page
+lib/TWiki/Plugins/ImgPlugin.pm  Plugin Perl module 
+data/Sandbox/PluginTestImgPlugin.txt  Plugin examples

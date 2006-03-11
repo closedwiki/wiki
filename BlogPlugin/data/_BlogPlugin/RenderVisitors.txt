@@ -8,10 +8,15 @@ NONE
 
 ---++ Implementation
 %STARTINCLUDE%
-<div class="blogSideBarSection blogSideBarVisitors" style="%<nop>CALC{"$IF(%NRLASTVISITORS% == 0,display:none)"}%">
----+ Visitors Today%REDDOT{"%WEB%.%TOPIC%"}%
-%LASTVISITORS{format="   * $wikiusername"}%
-</div>
+*~~
+%~~ LASTVISITORS{
+~~~    header="<div class=\"blogSideBarSection blogSideBarVisitors\">
+~~~      <h1>Visitors$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
+~~~    format="<li><a href=\"%SCRIPTURL{"view"}%/%MAINWEB%/$wikiname\"
+~~~      title=\"last seen $time\">$wikiname</a></li>"
+~~~    footer="</ul></div>"
+~~~ }%
+*~~
 %STOPINCLUDE%
 
 %DBCALL{"RenderFunctionCallers"}%
@@ -25,4 +30,4 @@ NONE
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the visitors for the BlogSideBar"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the visitors for the sidebar"}%

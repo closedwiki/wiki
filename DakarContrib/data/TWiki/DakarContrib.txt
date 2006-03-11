@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1138272230" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139388295" format="1.1" version="1.1"}%
 %META:TOPICPARENT{}%
 ---+!! %TOPIC%
 
 Dakar compatibility module for use with plugins that need some of the infrastructure
-that has been established since TWiki-4.0.0 (dakar). Most notably, this is the security
+that has been established since TWiki-4.0 (Dakar). Most notably, this is the security
 sandbox that eliminates the most common attack vectors to TWiki seen in the past.
 
 %TOC%
@@ -33,6 +33,13 @@ To use it in your plugin code proceed as follows.
   $fileName = TWiki::Sandbox::normalizeFilename($fileName);
 </verbatim>
 
+---+++ Settings
+   * One line description: 
+      * Set SHORTDESCRIPTION = Dakar compatibility module for Plugins that need some of the
+        TWiki-4.0 infrastructure on Cairo codebase 
+   * Name of the perl package 
+      * Set STUB = TWiki::Contrib::DakarContrib 
+
 ---++ Installation Instructions
 
    * Download the ZIP file from the Plugin web (see below)
@@ -44,20 +51,13 @@ To use it in your plugin code proceed as follows.
 ---++ Contrib Info
 
 |  Author: | TWiki:Main/MichaelDaum |
-|  Version: | v0.1 (09 Dec 2005) |
-|  Dependencies: | None |
-|  Change History: | |
-|  09 Dec 2005 | moved in sandbox code from dakar's codebase |
-|  Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
-
-|  Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Dependencies: | none  |
-|  Version: | v0.1 |
-|  Change History: | &nbsp; |
+|  Version: | v0.1 (26 Jan 2006) |
+|  Dependencies: | None |
+|  Change History: | |
 |  26 Jan 2006: | Initial version |
+|  09 Dec 2005: | moved in sandbox code from dakar's codebase |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |

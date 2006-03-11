@@ -22,7 +22,7 @@ package TWiki::Plugins::BatchUploadPlugin;
 # Modified by ZacharyHamm, JohannesMartin, DiabJerius 
 # Converted to a plugin by MartinCleaver 
 
-use Data::Dumper;
+use Data::Dumper qw( Dumper );
 use strict;
 use Archive::Zip qw(:ERROR_CODES :CONSTANTS :PKZIP_CONSTANTS);
 use warnings;
@@ -44,7 +44,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$pluginName = 'ArchiveUploadPlugin';  # Name of this Plugin
+$pluginName = 'BatchUploadPlugin';  # Name of this Plugin
 
 # =========================
 sub initPlugin
@@ -225,7 +225,7 @@ sub openZipSanityCheck
     my $zip = Archive::Zip->new ();
     my (@memberNames, $mName, $member, %dupCheck, $sizeLimit, $size);
 
-    if ( $zip->read ("$archive") != AZ_OK ) {
+    if ( $zip->read( $archive ) != AZ_OK ) {
          return "Zip read error or not a zip file. ". $archive ;
     }
 

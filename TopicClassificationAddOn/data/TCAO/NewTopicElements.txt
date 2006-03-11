@@ -1,0 +1,116 @@
+%META:TOPICINFO{author="TWikiContributor" date="1106195403" format="1.0" version="$Rev$"}%
+---+!! %TOPIC%
+The following topic elements are displayed in a banner at the top of new !TopicTypes and !SubjectAreas when they are first created. It offers a list of likely follow-up actions and additional instructions for using the particular !TopicType or !SubjectArea.
+
+*Note on creating new =INSTRUCTIONS= messages:* The INSTRUCTIONS variable must be defined in the template topic (taken from the %TCAOWEB%/Installs.WebHome web) for the !TopicType or !SubjectAreas. If there are no additional instructions, set it to "no". If there are additional instructions for installing or using the particular !TopicType, then define a section in this topic and set the INSTRUCTIONS variable to the name of that section.
+
+%TOC%
+
+---++ !TopicClassificationAddOn Install Message
+This message is displayed after installing !TopicClassificationAddOn core components from form in [[%TWIKIWEB%.TopicClassificationAddOn]].
+<verbatim>
+%STARTSECTION{"TCAO_install"}%
+<table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow">
+<blockquote>
+---+++ _Congradulations! TopicClassification components added to %BASEWEB% web!_
+
+To complete the installation process, you need to manually edit %BASEWEB%.WebPreferences and:
+   1 Copy and paste =WebForm,= =TopicTypeForm= to "Set WEBFORMS = " .
+   1 Copy and paste the following custom preference section:
+<verbatim>
+	* Variables for %TWIKIWEB%.TopicClassificationAddOn:
+		* Set XL = <img src="%PUBURL%/%TCAOWEB%/TopicClassificationAddOnGraphics/link-outside.gif" alt="External link" title="Link to external site" width='13' height='12' />
+		* Set sidebar style:
+<verbatim>
+			* Set STARTSIDEBAR = <div style="position:relative;float:right;width:30%;background-color:white;border:2px dotted %WEBBGCOLOR%;padding:1em;margin:0.5em;display:inline;">
+			* Set STOPSIDEBAR = </div>
+</verbatim>
+</verbatim>
+
+---+++ Optional Setup Steps 
+   * Copy the following text and paste it into the %BASEWEB%.WebHome topic to provide a useful summary of your classification setup there: <verbatim>%INCLUDE{%TCAOWEB%.TopicClassWebHomeIntro}%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="dropdown" }%</verbatim>
+   * Copy and paste the following text into the %BASEWEB%.WebLeftBar for quick access to features from all topics in the web:
+<verbatim>   * [[%SCRIPTURL{view}%/%WEB%/TopicTree?root=%BASETOPIC%][%ICON{indexlist}% <nop>TopicTree]]
+   * [[%SCRIPTURL{view}%/%WEB%/CreateNewTopic?parent=%BASETOPIC%][%ICON{"newtopic"}% <nop>Create New Topic]]</verbatim>
+
+---+++ _You're Ready to Start Adding TopicTypes and SubjectAreas!_
+Once these steps are completed, you can get started developing your classification setup. To understand the basic framework, read the information provided below. After that, proceed to %BASEWEB%.TopicClassificationSetUp and start adding new *TopicTypes* and *SubjectAreas.*
+
+_This instructional banner only displays for approximately 20 minutes after this topic is created. After that time, reload the topic and the banner will disappear._
+</blockquote>
+</td></tr></table>
+%ENDSECTION{"TCAO_install"}%
+</verbatim>
+
+---++ Success message for adding new classes
+
+This section is diplayed in newly created !TopicTypes and !SubjectAreas. 
+
+<verbatim>
+%STARTSECTION{"successmsg"}%
+<table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow">
+<blockquote>
+---+++ %Y% _Congradulations - <noP>%BASETOPIC% %BASEWEB%.%FORMFIELD{"TopicType" topic="%BASEWEB%.%BASETOPIC%" }% has been created!_
+
+%INCLUDE{"%IF{ "'%INSTRUCTIONS%' = 'no'" then="" else="%TCAOWEB%.NewTopicElements" }%" warn="off" section="%INSTRUCTIONS%" }%
+   * What would you like to do next?
+      * Return to %BASEWEB%.TopicClassificationSetUp.
+      * [[%SCRIPTURL{view}%/%BASEWEB%/CreateNewTopic?%TYPE%=%BASETOPIC%][CreateNewTopic]] with a <nop>%FORMFIELD{"TopicType" topic="%BASEWEB%.%BASETOPIC%" }% of <nop>%BASETOPIC%.
+      * Return to %BASEWEB%.WebHome
+
+_This instructional banner is only displayed the first time you view this topic. Reload the page to remove it._
+</blockquote>
+</td></tr></table>
+%ENDSECTION{"successmsg"}%
+</verbatim>
+
+---++ !WebLog instructions
+This section is displayed in newly added !WebLog !TopicType.
+<verbatim>
+%STARTSECTION{"WebLog"}%
+   * %ICON{warning}% *Remember to enable the %BASEWEB%.WebLogForm in %BASEWEB%.WebPreferences.* 
+   * In additional to the !WebLog topic, the following topics have automatically been added: %BASEWEB%.WebLogLinkList, %BASEWEB%.WebLogForm, and %BASEWEB%.CreateNewWebLog.
+   * *Optional:* For quick & easy blogging of web sites you visit with !FireFox browser, read %TCAOWEB%.JustBlogItInstallation.
+%ENDSECTION{"WebLog"}%
+</verbatim>
+
+---++ New !TopicType instructions
+This section is displayed in newly created !TopicType topics.
+<verbatim>
+%STARTSECTION{"topictype"}%
+   * %ICON{warning}% Remember to define %BASEWEB%.%BASETOPIC%Template for your new <nop>%BASETOPIC% topics.
+%ENDSECTION{"topictype"}%
+</verbatim>
+
+---++ !ProjectTopic instructions
+This section is displayed in newly added !ProjectTopic !TopicType.
+<verbatim>
+%STARTSECTION{"project"}%
+   * %ICON{warning}% *Remember to enable the %BASEWEB%.ProjectForm in %BASEWEB%.WebPreferences.* 
+%ENDSECTION{"project"}%
+</verbatim>
+
+---++ !ProjectTask instructions
+This section is displayed in newly added !ProjectTask !TopicType.
+<verbatim>
+%STARTSECTION{"projecttask"}%
+   * %ICON{warning}% *Remember to enable the %BASEWEB%.ProjectTaskForm in %BASEWEB%.WebPreferences.* 
+%ENDSECTION{"projecttask"}%
+</verbatim>
+
+---++ !NewsItem instructions
+This section is displayed in newly added !NewItem !TopicType.
+<verbatim>
+%STARTSECTION{"newsitem"}%
+   * In addition to the *NewsItem* topic, the following topics have been automatically installed: %BASEWEB%.RecentNews, %BASEWEB%.AllNews
+   * *Optional:* To add a news summary right-sidebar to your %BASEWEB%.WebHome, copy and paste the following text to the first line of that topic:
+<verbatim>
+%INCLUDE{%TCAOWEB%.WebHomeRightSideBar}%
+</verbatim>
+%ENDSECTION{"newsitem"}%
+</verbatim>
+
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

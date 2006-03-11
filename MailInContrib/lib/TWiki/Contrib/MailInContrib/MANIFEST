@@ -1,3 +1,4 @@
-bin/mailincron command-line perl script
+tools/mailincron command-line perl script
 data/TWiki/MailInContrib.txt this topic
+data/TWiki/MailInContribTemplate.txt file of templates
 lib/TWiki/Contrib/MailInContrib.pm perl module

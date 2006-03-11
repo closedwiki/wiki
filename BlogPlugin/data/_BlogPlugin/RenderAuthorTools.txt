@@ -14,6 +14,8 @@ NONE
 %DBCALL{"RenderNewBlogEntryButton" TEXT="New Posting" warn="off"}%
 %DBCALL{"RenderNewCategoryButton" TEXT="New Category" warn="off"}%
 %DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
+%DBCALL{"RenderNewBlogPageButton" TEXT="New Page" warn="off"}%
+%DBCALL{"RenderNewTWikiTopicButton" TEXT="New Topic" warn="off"}%
 </div>
 ~~~
 %STOPINCLUDE%

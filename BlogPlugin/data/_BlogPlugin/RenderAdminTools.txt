@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1133819563" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139489595" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+ Function %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -8,23 +9,72 @@ See also: WebSideBar
 NONE
 
 ---++ Implementation
+<div class="natSideBar">
+<div class="natSideBarContents">
+<div class="blogSideBar">
 %STARTINCLUDE%
 ~~~ <div class="blogSideBarSection blogSideBarAdmin">
-~~~   <h1>Admin Tools%REDDOT{"%WEB%.%TOPIC%"}%</h1>
-~~~   <noautolink>
-~~~   <ol>
-%~~   DBQUERY{"TopicType='AdminTool|TopicType'"
-~~~      format="<li><a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
+<h1>Admin%REDDOT{"%WEB%.%TOPIC%"}%</h1>
+  <noautolink>
+  <ul>
+    <li>%TWISTY{id="admintools" remember="on" link="Tools"}%
+      <ol>
+%~~   DBQUERY{"TopicType=~'\bAdminTool\b'"
+~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%
+        <li> [[WebPreferences]] </li>
+        <li> [[%MAINWEB%.BlogAdminGroup][BlogAdminGroup]] </li>
+        <li> [[%MAINWEB%.BlogAuthorGroup][BlogAuhorGroup]] </li>
+      </ol>%ENDTWISTY%
+    </li>
+    <li>%TWISTY{id="topictypes" remember="on" link="TopicTypes"}%
+      <ol>
+%~~   DBQUERY{"TopicType=~'\bTopicType\b'"
+~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
+~~~   }%
+      </ol>%ENDTWISTY%
+    </li>
+    <li>%TWISTY{id="twikiforms" remember="on" link="TWikiForms"}%
+      <ol>
+%~~   DBQUERY{"TopicType=~'\bTWikiForm\b'"
+~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
+~~~   }%
+      </ol>%ENDTWISTY%
+    </li>
+    <li>%TWISTY{id="topictemplates" remember="on" link="TopicTemplates"}%
+      <ol>
+%~~   DBQUERY{"TopicType=~'\bTopicTemplate\b'"
+~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
+~~~   }%
+      </ol>%ENDTWISTY%
+    </li>
+    <li>%TWISTY{id="topicfunctions" remember="on" link="TopicFunctions"}%
+      <ol>
+%~~   DBQUERY{"TopicType=~'\bTopicFunction\b'"
+~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
+~~~   }%
+      </ol>%ENDTWISTY%
+    </li>
+  </ul>
+  </noautolink>
+</div> 
+~~~
+%STOPINCLUDE%
+</div>
+</div>
+</div>
+
+<!-- 
 %~~   CALC{"$IF($EXISTS(_BlogPlugin/WebHome),
 ~~~     <li><a href=\"%SCRIPTURLPATH{"view"}%/_BlogPlugin/WebHome\">BlogTemplateWeb</a></li>)"
 ~~~   }%
-~~~   </ol>
-~~~   </noautolink>
-~~~ </div> 
-~~~
-%STOPINCLUDE%
+
+-->
 
 %DBCALL{"RenderFunctionCallers"}%
 

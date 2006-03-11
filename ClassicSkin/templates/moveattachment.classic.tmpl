@@ -6,13 +6,11 @@
 
 %TMPL:DEF{"webaction"}% *Move file attachment* %TMPL:END%
 
-%TMPL:DEF{"topicaction"}%
- <input type="submit" class="twikiSubmit" value=" Move " />
+%TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" value=" Move " />
  %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
 
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%
 <form method="post" name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 ---+ Move or Delete File <code>%FILENAME%</code>
 

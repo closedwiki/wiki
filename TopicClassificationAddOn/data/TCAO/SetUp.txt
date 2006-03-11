@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="TWikiContributor" date="1132179423" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicClassification"}%
+---++ Topic Classification Set-up for the <nop>%BASEWEB% web
+Use this topic to add %BASEWEB%.TopicTypes or %BASEWEB%.SubjectAreas to the <nop>%BASEWEB% web. You can either add a predefined classification or define a new, custom classfication. 
+
+---+++ Step 1: Select !TopicClassification to create
+<form name="selectType" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
+*Type of !TopicClassification you want to create:* <select name="type" size="1" ><option>%URLPARAM{"type" default="SubjectArea"}%</option><option>SubjectArea</option><option>TopicType</option></select>
+<p />
+<input type="hidden" name="step" value="Two" >
+<input type="submit" value=" Proceed to Step 2 " /><p />
+</form>
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

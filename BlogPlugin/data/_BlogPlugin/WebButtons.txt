@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="TWikiContributor" date="1139387346" format="1.1" version="1.1"}%
+%STARTINCLUDE%
+<ul>
+  <li class="%WEBBUTTONSCLASS_HOME%">[[WebHome][Home]]</li>
+  <li>[[%MAINWEB%.WebHome][Wiki]]</li>
+  <li class="%WEBBUTTONSCLASS_NEWS%">[[NewsFeeds][News]]</li>
+  <li class="%WEBBUTTONSCLASS_ARCHIVE%">[[BlogArchive][Archive]]</li>
+  <li class="%WEBBUTTONSCLASS_ABOUT%">[[BlogAbout][About]]</li>
+  <!-- li>[[%TWIKIWEB%.WebHome][System]]</li -->
+</ul>
+%STOPINCLUDE%
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Set the buttons in the horizontal navigation bar"}%

@@ -3,7 +3,7 @@
 ---+ %WIKIUSERNAME%'s sidebar
 
 %STARTINCLUDE%
----+ [[%WEB%.%TOPIC%][MySidebar]]%REDDOT{"%WEB%.%TOPIC%"}%
+---+ [[%MAINWEB%.%WIKINAME%SideBar][MySidebar]]%REDDOT{"%MAINWEB%.%WIKINAME%SideBar"}%
 <ul>
   <li> %TWISTY{id="mylinks" link="Links" remember="on" mode="div"}%
     <ul>

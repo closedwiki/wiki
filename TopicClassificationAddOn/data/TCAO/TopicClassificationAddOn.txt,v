@@ -1,0 +1,128 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.01.10.23.48.56;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.12.10.05.46.12;	author LynnwoodBrown;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.2
+log
+@none
+@
+text
+@%META:TOPICINFO{author="LynnwoodBrown" date="1136936935" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="TWikiApplications"}%
+---+!! %TOPIC%
+%TOC%
+
+%RED% What follows is the "official TWiki add-on topic format that I has been posted on TWiki.org. For local discussion of on-going development of this add-on, see %TOPIC%Dev %ENDCOLOR%
+#AddOn
+---+ Topic Classification Add-On 
+
+<b> %TOPIC% (aka TCAO) helps you content in your wiki.  by classifying topics according to their _function_ and/or _subject matter._ </b> It also provides a user-friendly interface for creating new topics that automatically incorporates this classification system. Together, these basic elements provide a platform that allow you to create any number of simple TWikiApplications.
+
+%TOPIC% organizes topics using two primary classifications:
+   * *TopicTypes* group topics according to their __function or purpose.__ Some examples of <nop>TopicTypes include <nop>WebLog, <nop>MeetingNote, <nop>DiscussionTopic, or <nop>ReferenceNote. Oftentimes, <nop>TopicType have a characteristic structure which can be defined by a "[[TWiki.TWikiTemplates#Template_Topics][template topic]]".
+   * *SubjectAreas* group topics according to __the subject matter__ of the topic. Examples might include <nop>FamilyAndFriends, <nop>WorldPolitics, <nop>WebDesign, or <nop>OpenSourceMovement. 
+
+A special topic called *<nop>CreateNewTopic* provides a simple interface for creating new topics using this topic classification scheme and draws in special form elements relevant to the particular <nop>TopicType the user chooses from a drop-down menu. It also displays a list of all the topics of the particular <nop>TopicType the user selects to help reduce chances of creating two topics with nearly identical names.
+
+The TopicClassificationAddOn installation includes some special topics which facilitate the creation of new <nop>TopicTypes and <nop>SubjectAreas and can serve as examples for developing your own classifications and simple TWiki:Codev.TWikiApplications. These include:
+   * *<nop>TopicClassification* offers an overview of the TopicClassificationAddOn for the particular web in which it's used, including a list of all the <nop>TopicTypes and <nop>SubjectAreas.
+   * *<nop>TopicTypeTemplate* that's automatically assigned to new <nop>TopicTypes. It includes ability to filter that <nop>TopicType but <nop>SubjectArea. For example, you could see all <nop>ReferenceTopics related to <nop>WebDesign.
+   * Likewise there's a *<nop>SubjectAreaTemplate* that's assigned to new <nop>SubjectArea topics that offers ability to filter by <nop>TopicType.
+   * One <nop>TopicType that is almost universally useful, <nop>ReferenceTopic, is included as an example <nop>TopicType.
+   * A *<nop>WebFormWithClassification* topic that you can use as a template for your <nop>WebForm.
+   * *<nop>TopicHeadline* explains this field that is used in <nop>WebFormWithClassification for displaying summaries of topics.
+
+---++ Usage
+
+   * The <nop>TopicClassification topic provides an entry-point for the topic classification system as applied in the particular web where it's installed.
+   * The <nop>TopicType topic is really the core of the TopicClassificationAddOn. From here you can:
+      * Define new <nop>TopicTypes using the "Create New <nop>TopicType" form near the bottom of the page. 
+      * List your <nop>TopicTypes in a form at the beginning of the topic which populates the <nop>TopicType field in WebForm. Note: Since TWiki can not yet generate these forms dynamically, you need to manually add new <nop>TopicTypes to this form.
+      * After you have created a new <nop>TopicType, there a a couple additional options for customizing how it's used:
+         * On your new TopicType topic, notice there is link to define a template for that TopicType. If you create this template, any new topics you assign to this <nop>TopicType will automatically incorporate this template.
+         * If you edit your new TopicType topic, you will see there are some hidden html-form elements. When you select this <nop>TopicType from the drop-down menu in <nop>CreateNewTopic, these form elements will be displayed there for additional user input. You can modify these or add new form elements to match the template for your new <nop>TopicType. For more information about how to insert data entered in an html-form into a TWiki topic template, see TWiki/TWikiTemplates#Template_Topics_in_Action.
+   * <nop>SubjectAreas are actually just another <nop>TopicType, however they have special status as a secondary classification scheme. New <nop>SubjectAreas can be created from the <nop>CreateNewTopic topic.
+   * The <nop>CreateNewTopic is used to, you guessed it, create new topics using the classification system. It includes a drop down menu of all the <nop>TopicTypes which, upon selecting a <nop>TopicType, will add any special form elements you have defined for that particular <nop>TopicType. If you place ==%<nop>INCLUDE{CreateNewTopic}%== within another topic or skin or navigation menu, it will display the same drop down menu of <nop>TopicTypes which, upon selecting a <nop>TopicType, will jump you to the <nop>CreateNewTopic topic with all the appropriate form elements for that <nop>TopicType displayed.
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running.
+
+   * Download the ZIP file from the Add-on Home (see below)
+   * Unpack the Add-on archive in the root of your TWiki installation.
+   * There are two options for enabling TopicClassificationAddOn in a particular web:
+      * Create a new Web using the =_defaultTCAO= template web.
+      * Use the TCAO installer form below to add the core TopicClassificationAddOn components to an existing web using the following form:
+
+---+++ TCAO Installer 
+<form name="installTCAO" action="%SCRIPTURL{save}%/">
+<blockquote>
+| Replace "Web" in the following textbox with the name of web where you want to install !TopicClassificationAddOn __(but leave ".TopicClassification")__ : <input type="text" name="topic" size="20" value="Web.TopicClassification" /> <input type="hidden" name="templatetopic" value="TCAO/Installs.TopicClassification" /> | 
+| Click: <input type="submit" value=" Install !TopicClassificationAddOn to web " /> <br /> _You will be sent immediately to the !TopicClassification topic in the choosen web and presented further instructions for setting up TCAO within the web._  |
+</blockquote>
+</form>
+
+   * Test if the installation was successful:
+      1 Go to <nop>TopicClassification within the web where you've unzipped the %TOPIC% archive. See if it lists the following <nop>TopicTypes: <nop>SubjectArea, <nop>TopicType, <nop>ReferenceTopic.
+      1 *Important:* Go to <nop>WebFormWithClassification and edit WebForm to include pertinant elements from this template, or if there is no existing WebForm topic, simply rename this topic to WebForm. Make sure you have enabled the the WebForm in WebPreferences.
+      1 Go to <nop>CreateNewTopic and create your first <nop>SubjectArea topic.  
+
+---++ Add-On Info
+
+|  Add-on Author: | TWiki:Main/LynnwoodBrown |
+|  Add-on Version: | 02 Oct 2004 (v1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Oct 2004: | 1.0 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Demo url: | http://skyloom.com/Demo/TopicClassification |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/%USERNAME% - 10 Oct 2004
+
+---   
+   
+---++ Misc reminders
+   * Create WebFormWithClassification as example template for web form.
+
+
+%META:TOPICMOVED{by="LynnwoodBrown" date="1074535734" from="Dev.TopicClassificationSystem" to="Dev.TopicClassificationAddOn"}%
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1134193572" format="1.1" version="1.2"}%
+d10 1
+a10 1
+<b> %TOPIC% (aka TCAO) helps you organize content in your wiki by classifying topics according to their _function_ and/or _subject matter._ </b> It also provides a user-friendly interface for creating new topics that automatically incorporates this classification system. Together, these basic elements provide a platform that allow you to create any number of simple TWikiApplications.
+@

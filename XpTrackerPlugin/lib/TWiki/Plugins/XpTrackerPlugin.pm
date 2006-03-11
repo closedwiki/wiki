@@ -604,6 +604,7 @@ sub xpSavePage()
 
     # check the user has entered a non-null string
     my $title = $query->param( 'topic' );
+    
     if($title eq "") {
         TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "XpNewPageError" ) );
         return;
@@ -618,7 +619,7 @@ sub xpSavePage()
     TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::xpSavePage check topic does not already exist" ) if $debug;
 
     # check the user has entered a WIKI name
-    if(!TWiki::isWikiName($title)) {
+    if(!TWiki::isValidWikiWord($title)) {
         TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "XpNewPageError" ) );
         return;
     }
@@ -644,6 +645,8 @@ sub xpSavePage()
     # save new page and open in browser
     TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::xpSavePage Saving topic") if $debug;
 
+		#If we get this far, we can be sure that $title is safe
+	  $title= TWiki::Sandbox::untaintUnchecked($title);
     my $error = &TWiki::Func::saveTopicText( $web, $title, $text);
 
     if( $error ) {

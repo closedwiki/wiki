@@ -1,0 +1,41 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1131308074" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="CommentPlugin"}%
+
+*This topic is for defining custom CommentPlugin templates for %WIKITOOLNAME%. For more information about defining templates, see CommentPlugin#Customisation. To see the "default" templates, see CommentsTemplate.*
+---------------------------------------------------------------------------
+---+++ discuss
+Comments, signed and dated, added immediately before anchor
+<verbatim>
+%TMPL:DEF{PROMPT:discuss}%%TMPL:P{promptbox}%
+%TMPL:END%
+</verbatim>
+<verbatim>
+%TMPL:DEF{OUTPUT:discuss}%%POS:BEFORE%%TMPL:P{outputoneliner}%
+%TMPL:END%
+</verbatim>
+
+---------------------------------------------------------------------------
+---+++ codetalk
+Post verbatim code & comment using TOC adding on end - TWiki:Main/LynnwoodBrown
+<verbatim>
+%TMPL:DEF{PROMPT:codetalk}%
+<hr width="60%"/> *Headline:* (This will posted as a heading.)  <br />
+<input %DISABLED% type="text" size="40" name="comment_summary" /> <br /> 
+*Post Code:* (This will be posted between =verbatim= tags.) <br />
+<textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="verbatim_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /> 
+*Add Comment:* (Optional.) <br />
+<textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="comment_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /><input %DISABLED% type="submit" value="%button|Add%" /> <hr width="90%"/>
+%TMPL:END%
+</verbatim>
+<verbatim>
+%TMPL:DEF{OUTPUT:codetalk}%
+%POS:BEFORE%---
+---+++ %URLPARAM{"comment_summary"}% <font size=-2> _Posted by %WIKIUSERNAME% - %GMTIME%_ </font>
+<verbatim>
+%POS:BEFORE%%URLPARAM{"verbatim_text" }%
+</verbatim>
+%POS:BEFORE%%URLPARAM{"comment_text" }%
+%POS:BEFORE%
+%TMPL:END%
+</verbatim>
+%META:TOPICMOVED{by="LynnwoodBrown" date="1131308074" from="TWiki.UserTemplates" to="TWiki.UserCommentTemplate"}%

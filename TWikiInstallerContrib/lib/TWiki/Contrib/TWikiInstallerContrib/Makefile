@@ -9,7 +9,7 @@ TAR_EXCLUDE = --exclude CVS --exclude .svn --exclude "*~" --exclude bak
 
 kernel : 
 	[ -e components/kernel ] || mkdir -p components/kernel
-	cd $(TWIKIDEV)/$(BRANCH)/tools/; TWIKI_LIBS=$(TWIKIDEV)/$(BRANCH)/twikiplugins/BuildContrib/lib/ perl build.pl release; cp $(TWIKIDEV)/$(BRANCH)/TWiki.zip $(TWIKIDEV)/$(BRANCH)/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/components/kernel/TWikiKernel$(BRANCH)`$(TWIKIDEV)/$(BRANCH)/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/svnrev.pl`.zip
+	cd $(TWIKIDEV)/$(BRANCH)/tools/; TWIKI_LIBS=$(TWIKIDEV)/$(BRANCH)/twikiplugins/BuildContrib/lib/ echo "n" | perl build.pl release; cp $(TWIKIDEV)/$(BRANCH)/TWiki.zip $(TWIKIDEV)/$(BRANCH)/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/components/kernel/TWikiKernel$(BRANCH)`$(TWIKIDEV)/$(BRANCH)/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/svnrev.pl`.zip
 
 $(MakeFor).zip : kernel 
 	zip -r $(MakeFor).zip components/extension/ components/kernel/TWikiKernel$(BRANCH)`bin/svnrev.pl`.*
@@ -45,6 +45,13 @@ publish_kernels :
 	scp -r components/kernel $(PUBLISH_TO)/twiki/components
 
 publish_components : publish_distro publish_kernels publish_extensions
+
+################################################################################
+
+clean :
+	-rm *.zip
+	-rm -rf components/
+	-rm install-report.html
 
 ################################################################################
 

@@ -10,19 +10,31 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-~~~ <div class="blogSideBarSection blogSideBarLatest">
----+ Latest%REDDOT{"%WEB%.%TOPIC%"}%
+~~~ %STOPALIASAREA%
 %~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND
-~~~          State='enabled'
-~~~         %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'"}%
-~~~         "
-~~~         order="createdate" reverse="on" limit="%LIMIT%"
-~~~         format="   * [[$topic][$formfield(Headline)]]"
-~~~         footer="<style type=\"text/css\">.blogSideBarLatest {
-~~~           $percntCALC{\"$dollarIF($count==0,display:none)\"}$percnt
-~~~           } </style>"
+~~~   State='enabled'
+~~~   %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'"}%"
+~~~  order="createdate" reverse="on" limit="%LIMIT%" 
+~~~  hidenull="on"
+~~~  header="<div class=\"blogSideBarSection blogSideBarLatest\">
+~~~    <table class=\"blogSideBarHeader\" 
+~~~           border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">
+~~~      <tr><td>
+~~~        <h1>
+*~~          Latest$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt
+*~~        </h1>
+*~~      </td><td align=\"right\">
+*~~        <a class=\"natFeedIcon\"
+~~~           title=\"RSS Feed for the Entries on this Site\"
+~~~           href=\"%SCRIPTURL{"view"}%/%WEB%/WebRss\">RSS</a>
+*~~      </td></tr>
+*~~    </table><ul style=\"margin-top:0px;margin-bottom:0px;\"><noautolink>"
+~~~  format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~            title=\"permalink to <nop>$topic\">
+*~~            $formfield(Headline)</a></li>"
+~~~  footer="</noautolink></ul></div>"
 ~~~ }%
-~~~ </div>
+~~~ %STARTALIASAREA%
 ~~~
 %STOPINCLUDE%
 </verbatim>

@@ -14,7 +14,7 @@ See also: BlogLink, RenderNewBlogEntryButton, BlogLinkForm, BlogLinkTemplate
 ---++ Implementation
 %STARTINCLUDE%
 *~~
-<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/" method="post">
+<form action="%SCRIPTURL{"edit"}%/%WEB%/BlogLinkXXXXXXXXXX" method="post">
 <input type="hidden" name="onlywikiname" value="off" />
 <input type="hidden" name="templatetopic" value="BlogLinkTemplate" />
 <input type="hidden" name="formtemplate" value="BlogLinkForm" />

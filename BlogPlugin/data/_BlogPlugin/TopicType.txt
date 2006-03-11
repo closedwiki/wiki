@@ -3,7 +3,7 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" TEMPLATE="%TOPIC%Template" warn="off"}%
 %DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 %DBCALL{"RenderTopicList" NAME="%TOPIC%, TWikiFormAttribute"}%
 %DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%

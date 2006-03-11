@@ -18,36 +18,52 @@ hr {
 .natBody {
   background:#6c6457;
   font-family:verdana,arial,sans-serif;
+  margin:0;
+  padding:0;
 }
-.natTopBar {
+.natTopBar { 
+  border-top:1px solid white;
+}
+.natTopBar { 
   border-top:1px dotted white;
+  _border-top:1px solid white; /* IE only */
 }
-.natWebButtons,
+.natWebButtons, 
 .natTopLeft {
   border-left:1px dotted white;
+  _border-left:1px solid white; /* IE only */
+}
+.natWebButtons, 
+.natTopLeft {
+  border-left:1px dotted white;
+  _border-left:1px solid white; /* IE only */
 }
 .natWebButtons,
 .natTopRight{
   border-right:1px dotted white;
+  _border-right:1px solid white; /* IE only */
 }
 .natTopBarSizer {
-  height:130px;
-  max-height:130px;
+  height:140px;
+  max-height:140px;
 }
 .natTopLeftContents,
 .natTopRightContents {
-  margin-top:30px;
+  margin-top:20px;
   margin-left:20px;
   margin-right:20px;
 }
 .natTopRightContents {
-  margin-top:50px;
+  margin-top:40px;
 }
 
 .natMiddle {
   border-bottom:1px dotted white;
   border-left:1px dotted white;
   border-right:1px dotted white;
+  _border-bottom:1px solid white; /* IE only */
+  _border-left:1px solid white; /* IE only */
+  _border-right:1px solid white; /* IE only */
 }
 .natSideBarContents,
 .natMainContents,
@@ -122,19 +138,34 @@ hr {
 /* search table */
 .natSearchTable {
   border:1px #ff9831 solid;
-  font-size:x-small;
+  font-size:0.9em;
+  margin-top:1.5em;
+}
+.natSearchTable:first-child {
+  margin-top:0em;
 }
 
 .natSearchTableTitle th {
   background:#ff9831;
   color:white;
   font-weight:bold;
-  font-size:x-small;
   line-height:140%;
   text-transform:uppercase;
 }
+.natSearchHit {
+  border:1px #ff9831 solid;
+  font-size:0.9em;
+  line-height:140%;
+}
 .natSearchHit th {
-  padding-top:5px;
+  padding:0.5em 0.5em 0em 0.5em;
+}
+.natSearchHit td {
+  padding:0em 0.5em 0.5em 0.5em;
+}
+
+.natSearchHitEven {
+  background:#ffefb9;
 }
 
 /* top */
@@ -150,10 +181,11 @@ hr {
   color:#ffcc66;
 }
 
-.natSearchBox input {
+.natSearchBox input { 
   border:1px dotted white;
   width:13em;
-  _width:10em; /* IE hack */
+  _border:1px solid white; /* IE only */
+  _width:10em; /* IE only */
 }
 .natSearchBoxTop {
   margin-top:10px;
@@ -234,6 +266,9 @@ hr {
 }
 .natSideBar h1 {
   border-bottom:1px dotted white;
+  _border-bottom:1px solid white; /* IE only */
+}
+.natSideBar h1 {
   text-align:center;
 }
 
@@ -241,9 +276,17 @@ hr {
   padding-left:15px;
 }
 
+.natSideBar ol {
+  margin-left:15px;
+  padding-left:10px;
+}
+
 .natSideBar ul {
   margin-left:15px;
   padding-left:20px;
+}
+.natSideBar ul ul {
+  margin-left:0px;
 }
 
 .natWebLink a,
@@ -276,6 +319,10 @@ hr {
 .natMain h2 a:hover, .natMain h3 a:hover, .natMain h4 a:hover,
 .natMain h5 a:hover, .natMain h6 a:hover {
   color:#444444;
+}
+
+.natMain h2 {
+  border-bottom:2px solid #ff9831;
 }
 
 .natMain a:hover {
@@ -355,7 +402,7 @@ hr {
 }
 .natSideBar .blogAdminButtons input[type="text"],
 .natSideBar .blogAuthorButtons input[type="text"] {
-  border:1px dotted #9C3300;
+  border:1px dotted #9C3300; /* non-IE */
 }
 .blogCommentOdd {
   background:#ffefb9;

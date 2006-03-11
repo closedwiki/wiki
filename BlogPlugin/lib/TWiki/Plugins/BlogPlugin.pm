@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ use vars qw(
 use TWiki::Plugins::BlogPlugin::WebDB; # must be compiled in advance
 
 $VERSION = '$Rev$';
-$RELEASE = '0.47';
+$RELEASE = '0.61';
 
 ###############################################################################
 sub initPlugin {
@@ -37,7 +37,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('NEXTDOC', \&handleNextDoc);
   TWiki::Func::registerTagHandler('PREVDOC', \&handlePrevDoc);
   TWiki::Func::registerTagHandler('RECENTCOMMENTS', \&handleRecentComments);
-  TWiki::Func::registerTagHandler('RELATEDENTRIES', \&handleRelatedEntries);
+  TWiki::Func::registerTagHandler('RELATEDTOPICS', \&handleRelatedTopics);
 
   return 1;
 }
@@ -58,8 +58,8 @@ sub handlePrevDoc {
 sub handleRecentComments { 
   newCore()->handleRecentComments(@_);
 }
-sub handleRelatedEntries { 
-  newCore()->handleRelatedEntries(@_);
+sub handleRelatedTopics { 
+  newCore()->handleRelatedTopics(@_);
 }
 
 ###############################################################################
@@ -83,7 +83,10 @@ sub commonTagsHandler {
     my $link = 
       '<link rel="stylesheet" '.
       'href="%PUBURL%/%TWIKIWEB%/BlogPlugin/style.css" '.
-      'type="text/css" media="all" />';
+      'type="text/css" media="all" />' . "\n" .
+      '<script type="text/javascript" ' .
+      'src="%PUBURL%/%TWIKIWEB%/BlogPlugin/blogplugin.js">' .
+      '</script>';
     if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$link\n/o) {
       $doneHeader = 1;
     }

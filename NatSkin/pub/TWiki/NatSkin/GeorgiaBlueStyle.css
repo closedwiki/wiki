@@ -89,6 +89,8 @@ hr {
 
 /* page layout */
 .natBody {
+  margin:0;
+  padding:0;
   background:#efefef;
   text-align: center;
 }
@@ -125,6 +127,10 @@ hr {
 }
 .natWebTitle {
   font:bold xx-large "Century Schoolbook l", georgia, "Times New Roman", serif;
+  line-height:110%;
+}
+.natTopBarSizer {
+  height:130px;
 }
 
 .natWebLocator, .natWebLocator a, .natWebLocator a:hover {
@@ -188,14 +194,17 @@ hr {
 }
 
 .natMiddleLeft {
-  border-right:1px dotted #999999;
+  border-right:1px dotted #999999; 
+  _border-right:1px solid #cccccc;  /* IE only */
 }
+
 .natSideBar a:hover {
   color:#99cc66;
 }
 
 .natSideBar h1 {
   border-bottom:1px dotted #999999;
+  _border-bottom:1px solid #cccccc; /* IE only */
   padding-left:15px;
 }
 .natSideBar h1 a,
@@ -222,13 +231,18 @@ hr {
 .natSideBar ol,
 .natSideBar ul {
   font:normal x-small/150% verdana,arial,sans-serif;
+  padding-left:20px;
 }
 .natSideBar ul {
   font-weight:bold;
   text-align:left;
   list-style-type:circle;
   text-transform:none;
-  padding-left:35px;
+  margin-left:15px;
+}
+.natSideBar ul ul {
+  margin-left:0px;
+  padding-left:20px;
 }
 
 /* main area */
@@ -277,6 +291,10 @@ hr {
 .natSearchTable {
   border:1px #aaaaaa solid;
   font-size:0.9em;
+  margin-top:1em;
+}
+.natSearchTable:first-child {
+  margin-top:0em;
 }
 .natSearchTableTitle {
   background:#f0f0f0;
@@ -287,15 +305,31 @@ hr {
   border-bottom:1px #aaaaaa solid;
   font-size:0.9em;
 }
+.natSearchHit {
+  border:1px #aaaaaa solid;
+  font-size:0.9em;
+}
+.natSearchHit th {
+  padding-bottom:0px;
+}
+.natSearchHit td {
+  padding-top:0px;
+}
+.natSearchHitEven {
+  background:#f0f0f0;
+}
 
 /* custom styles */
 .alt {
   background:#f0f0f0;
   border-top:1px dotted #999999;
   border-bottom:1px dotted #999999;
+  _border-top:1px solid #cccccc; /* IE only */
+  _border-bottom:1px solid #cccccc; /* IE only */
 }
 .border {
   border:1px dotted #999999;
+  _border:1px solid #cccccc; /* IE only */
 }
 
 /* supported plugins */
@@ -307,11 +341,13 @@ hr {
   text-align:center;
   text-transform:uppercase;
   border-bottom:1px dotted #aaaaaa;
+  _border-bottom:1px dotted #aaaaaa; /* IE only */
 }
 
 .bibsearch,
 .bibtex {
   border:1px dotted #aaaaaa; 
+  _border:1px dotted #aaaaaa;  /* IE only */
 }
 
 /* blogging */

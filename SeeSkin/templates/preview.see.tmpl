@@ -17,7 +17,9 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body>
 #PageTop
-%TMPL:P{"simpleheader"}%
+<div id="topsection">
+	<h1 class="nocss">%LOGOCHAR% %INTURLENCODE{"%TOPIC%"}% %TMPL:P{"titleaction"}%</h1>
+</div>
 <div id="content" style="background-image:%PREVIEWBGIMAGE%;">%TEXT%
 	<div id="meta">
 		%META{"form"}% 

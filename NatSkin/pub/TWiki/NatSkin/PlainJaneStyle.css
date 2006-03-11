@@ -11,6 +11,10 @@ a:hover {
 }
 
 /* layout */
+.natBody {
+  margin:0;
+  padding:0;
+}
 .natBodyContents {
   padding:10px;
   background:white;
@@ -26,6 +30,10 @@ a:hover {
   padding-bottom:1em;
   margin-left:10px;
   margin-right:10px;
+}
+.natTopRightContents,
+.natMiddleRight {
+  padding-left:10px;
 }
 
 .natMainContents,
@@ -112,6 +120,11 @@ a:hover {
 /* search table */
 .natSearchTable {
   border:1px #aaaaaa solid;
+  font-size:0.9em;
+  margin-top:30px;
+}
+.natSearchTable:first-child {
+  margin-top:0em;
 }
 .natSearchTableTitle th {
   color:#666666;
@@ -119,9 +132,14 @@ a:hover {
   border-bottom:1px #aaaaaa solid;
 }
 .natSearchHit {
-  font-size:x-small;
+  font-size:0.9em;
+  border:1px #aaaaaa solid;
+}
+.natSearchHit th {
+  padding:0.5em 0.5em 0em 0.5em;
 }
 .natSearchHit td {
+  padding:0em 0.5em 0.5em 0.5em;
   border-bottom:1px #aaaaaa solid;
 }
 
@@ -166,7 +184,15 @@ a:hover {
   color:#666666;
   font-size:small;
 }
-.natSideBar h1 a,
+.natSideBar h1 a {
+  color:#3f59bb;
+  font-weight:bold;
+  text-decoration:none;
+}
+.natSideBar h1 a:hover {
+  color:#ffffff;
+  background:#3f59bb;
+}
 .natSideBar h1 {
   color:#3f59bb;
   font-weight:bold;
@@ -177,6 +203,7 @@ a:hover {
   font-size:1em;
 }
 .natSideBar ul {
+  margin-left:0px;
   padding-left:0px;
   list-style-type:none;
 }
@@ -231,21 +258,23 @@ a:hover {
 .natMain h1 a, .natMain h2 a, .natMain h3 a, .natMain h4 a,
 .natMain h5 a, .natMain h6 a,
 .natMain h1 a:link, .natMain h2 a:link, .natMain h3 a:link,
-.natMain h4 a:link, .natMain h5 a:link, .natMain h6 a:link,
+.natMain h4 a:link, .natMain h5 a:link, .natMain h6 a:link {
+  color:#666666;
+}
 .natMain h1 a:hover, .natMain h2 a:hover, .natMain h3 a:hover,
 .natMain h4 a:hover, .natMain h5 a:hover, .natMain h6 a:hover {
-  color:#666666;
-  background:transparent;
+  color:white;
 }
-.natMain h1 {
+.natMain h2 {
   border-bottom:2px solid #3f59bb;
+  margin-bottom:0.5em;
 }
 .natMain h1 {font-size:30px;}
-.natMain h2 {font-size:20px;}
-.natMain h3 {font-size:14px;}
-.natMain h4 {font-size:small;}
-.natMain h5 {font-size:small;}
-.natMain h6 {font-size:small; margin-top:5px}
+.natMain h2 {font-size:24px;}
+.natMain h3 {font-size:20px;}
+.natMain h4 {font-size:18px;}
+.natMain h5 {font-size:16px;}
+.natMain h6 {font-size:16px; margin-top:5px}
 .natMainFooterContents {
   font-size:x-small;
 }
@@ -281,8 +310,13 @@ a:hover {
 }
 
 /* blogging */
+.blogAbout {
+  font-size:0.9em;
+  line-height:1.3em;
+}
 .blogSideBarSection {
   margin-bottom:1.3em;
+  font-size:1.0em;
 }
 .blogSideBarSection li a {
   display:inline;
@@ -300,10 +334,6 @@ a:hover {
 }
 .blogSideBarSection ol li {
   margin-left:25px;
-}
-.blogAbout {
-  font-size:0.9em;
-  line-height:1.3em;
 }
 .blogCommentCount {
   width:2em;
@@ -351,4 +381,6 @@ a:hover {
 .blogEntry {
   margin-bottom:1em;
 }
-.blogSideBarSection
+.blogNavigation a {
+  text-decoration:none;
+}

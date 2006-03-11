@@ -1,0 +1,49 @@
+%META:TOPICINFO{author="MeredithLesly" date="1141487699" format="1.1" version="1.2"}%
+---+ !AddMetaPlugin
+
+This plugin is designed to be used in template topics, to give them a way to add meta data at the time of topic creation
+
+
+---++ Syntax Rules
+
+   * %<nop>ADDMETA{type="type" key="key" value="value"}%</verbatim>
+   * %<nop>ADDMETA{type="type" value="value"}%</verbatim>
+
+In the latter case, key defaults to =keyh=
+
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>ADDMETAPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Allows template topics to add (simple) meta data to topics based on them
+
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MeredithLesly |
+|  Copyright: | &copy; 2001-2006, %TWIKIWEB%.TWikiContributor |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 01 Feb 2006 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  03 Mar 2006: | Original version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- Main.MeredithLesly - 03 Mar 2006

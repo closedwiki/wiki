@@ -156,25 +156,24 @@ sub _renderIconList {
         $text .= '<table border="0" cellspacing="0" cellpadding="0"><tr>' . "\n";
         $level = $tree[$i]->{level};
         for( my $l = $start; $l < $level; $l++ ) {
-            my $ike = $listIcon[$l] || '';
             if( $l == $level - 1 ) {
-                $ike = $listIcon[$l] = $iconSp;
+                $listIcon[$l] = $iconSp;
                 for( my $x = $i + 1; $x < scalar( @tree ); $x++ ) {
                     last if( $tree[$x]->{level} < $level );
                     if( $tree[$x]->{level} <= $level && $tree[$x]->{type} ne " " ) {
-                        $ike = $iconI;
+                        $listIcon[$l] = $iconI;
                         last;
                     }
                 }
                 if( $tree[$i]->{type} eq " " ) {
-                   $text .= "<td valign=\"top\">$ike</td>\n";
-                } elsif( $ike eq $iconSp ) {
+                   $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
+                } elsif( $listIcon[$l] eq $iconSp ) {
                    $text .= "<td valign=\"top\">$iconL</td>\n";
                 } else {
                    $text .= "<td valign=\"top\">$iconT</td>\n";
                 }
             } else {
-                $text .= "<td valign=\"top\">$ike</td>\n";
+                $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
             }
         }
         if( $theType eq 'icon' ) {

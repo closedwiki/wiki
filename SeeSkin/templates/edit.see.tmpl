@@ -37,7 +37,7 @@ function launchWindow( theWeb, theTopic ) {
 </head>
 <body onLoad="initForm()">
 #PageTop
-%TMPL:P{"simpleheader"}%
+<h1>%LOGOCHAR% <span class="deem">%TMPL:P{"titleaction"}%</span> %INTURLENCODE{"%TOPIC%"}%</h1>
 <form name="main" action="%SCRIPTURLPATH%/savemulti%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post" id="editcont">
 <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
@@ -56,7 +56,7 @@ This is your signature for easy copy &amp; paste operation
 %TMPL:P{"help"}%
 <div id="menu">
 	<dl>
-		<dd>%TMPL:P{"titleaction"}%
+		<dd>(%TMPL:P}"titleaction"%)
 	</dl>
 </div>
 #PageBottom

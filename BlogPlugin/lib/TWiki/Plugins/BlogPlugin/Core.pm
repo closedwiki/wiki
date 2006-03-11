@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -78,6 +78,7 @@ sub handlePrevDoc {
   my $theFormat = $params->{format} || '$topic';
   my $theWhere = $params->{where};
   my $theOrder = $params->{order} || 'created';
+  my $theReverse = $params->{reverse} || 'off';
   $theWeb = $params->{web} || $theWeb;
 
   return &inlineError("ERROR: PREVDOC has no \"where\" argument") unless $theWhere;
@@ -88,7 +89,8 @@ sub handlePrevDoc {
   #writeDebug('theWhere='. $theWhere) if $theWhere;
   
   my $theDB = TWiki::Plugins::DBCachePlugin::getDB($thisWeb);
-  my ($prevTopic, $nextTopic) = $this->getPrevNextTopic($theDB, $thisWeb, $thisTopic, $theWhere, $theOrder);
+  my ($prevTopic, $nextTopic) = $this->getPrevNextTopic(
+    $theDB, $thisWeb, $thisTopic, $theWhere, $theOrder, $theReverse);
   if ($prevTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$prevTopic, web=>$thisWeb);
   }
@@ -105,6 +107,7 @@ sub handleNextDoc {
   my $theFormat = $params->{format} || '$topic';
   my $theWhere = $params->{where};
   my $theOrder = $params->{order} || 'created';
+  my $theReverse = $params->{reverse} || 'off';
   $theWeb = $params->{web} || $theWeb;
 
   return &inlineError("ERROR: NEXTDOC has no \"where\" argument") unless $theWhere;
@@ -115,7 +118,8 @@ sub handleNextDoc {
   #writeDebug('theWhere='. $theWhere) if $theWhere;
 
   my $theDB = TWiki::Plugins::DBCachePlugin::getDB($thisWeb);
-  my ($prevTopic, $nextTopic) = $this->getPrevNextTopic($theDB, $thisWeb, $thisTopic, $theWhere, $theOrder);
+  my ($prevTopic, $nextTopic) = $this->getPrevNextTopic(
+    $theDB, $thisWeb, $thisTopic, $theWhere, $theOrder, $theReverse);
   if ($nextTopic ne '_notfound') {
     return &expandVariables($theFormat, topic=>$nextTopic, web=>$thisWeb);
     return $theFormat;
@@ -125,10 +129,10 @@ sub handleNextDoc {
 
 ###############################################################################
 sub getPrevNextTopic {
-  my ($this, $theDB, $theWeb, $theTopic, $theWhere, $theOrder) = @_;
+  my ($this, $theDB, $theWeb, $theTopic, $theWhere, $theOrder, $theReverse) = @_;
 
   #writeDebug("getPrevNextTopic($theWeb, $theTopic, $theWhere) called");
-  my $key = $theWeb.'.'.$theTopic.':'.$theWhere.':'.$theOrder;
+  my $key = $theWeb.'.'.$theTopic.':'.$theWhere.':'.$theOrder.':'.$theReverse;
   my $prevTopic = $this->{prevTopicCache}{$key};
   my $nextTopic = $this->{nextTopicCache}{$key};
 
@@ -137,7 +141,7 @@ sub getPrevNextTopic {
     return ($prevTopic, $nextTopic);
   }
 
-  my ($resultList) = $theDB->dbQuery($theWhere, undef, $theOrder);
+  my ($resultList) = $theDB->dbQuery($theWhere, undef, $theOrder, $theReverse);
   my $state = 0;
   foreach my $t (@$resultList) {
     if ($state == 1) {
@@ -278,12 +282,15 @@ sub handleRecentComments {
     # get commenter
     my @commenter;
     my %seenAuthor;
+    my $viewUrl = TWiki::Func::getViewUrl($theWeb, $baseRefName);
     foreach my $blogCommentName (@{$baseRefs{$baseRefName}{comments}}) {
       my $author = $blogComments{$blogCommentName}{author};
       next if $seenAuthor{$author};
       $seenAuthor{$author} = 1;
       $commenter .= ', ' if $commenter;
-      $commenter .= "[[$baseRefName#$blogCommentName][$author]]";
+      $commenter .= "<a href=\"$viewUrl#$blogCommentName\" "
+	. "title=\"$author replied on '$headline'\">"
+	. "$author</a>";
     }
     $commenter = '<noautolink>'.$commenter.'</noautolink>';
 
@@ -314,6 +321,8 @@ sub handleCountComments {
 
   my $theBlogRef = $params->{_DEFAULT} || $params->{topic};
   my $theFormat = $params->{format} || '$count';
+  my $theHeader = $params->{header} || '';
+  my $theFooter = $params->{footer} || '';
   my $theSingle = $params->{single} || $theFormat;
   my $theHideNull = $params->{hidenull} || 'off';
   my $theNullString = $params->{null} || '0';
@@ -346,6 +355,7 @@ sub handleCountComments {
   return '' if $theHideNull eq 'on' && $nrTopics == 0;
   $nrTopics = $theNullString if $theNullString && $nrTopics == 0;
   my $text = ($nrTopics == 1)?$theSingle:$theFormat;
+  $text = $theHeader.$text.$theFooter;
   $text = expandVariables($text,count=>$nrTopics);
 
   #writeDebug("text=$text");
@@ -354,10 +364,10 @@ sub handleCountComments {
 }
 
 ###############################################################################
-sub handleRelatedEntries {
+sub handleRelatedTopics {
   my ($this, $session, $params, $theTopic, $theWeb) = @_;
 
-  #writeDebug("handleRelatedEntries() called");
+  #writeDebug("handleRelatedTopics() called");
 
   $theTopic = $params->{_DEFAULT} || $params->{topic};
   my $theFormat = $params->{format} || '$topic';
@@ -365,16 +375,24 @@ sub handleRelatedEntries {
   my $theFooter = $params->{footer} || '';
   my $theSeparator = $params->{separator} || '$n';
   my $theDepth = $params->{depth} || 2;
+  my $theFilter = $params->{filter} || '';
   $theWeb = $params->{web} || $theWeb;
 
-  return &inlineError("ERROR: RELATEDENTRIES has no topic argument") 
+  return &inlineError("ERROR: RELATEDTOPICS has no topic argument") 
     unless $theTopic;
 
+  my $theFilterObj;
+  if ($theFilter) {
+    $theFilterObj = new TWiki::Contrib::DBCacheContrib::Search($theFilter);
+    return &inlineError("ERROR: can't parse query $theFilter")
+      unless $theFilterObj;
+  }
+  
   my $theDB = TWiki::Plugins::DBCachePlugin::getDB($theWeb);
 
   # get direct related
   my %relatedTopics;
-  &getRelatedEntries($theDB, $theTopic, $theDepth, \%relatedTopics);
+  &getRelatedTopics($theDB, $theTopic, $theDepth, $theFilter, $theFilterObj, \%relatedTopics);
   delete $relatedTopics{$theTopic};
   foreach my $key (keys %relatedTopics) {
     $relatedTopics{$key} = $theDepth - $relatedTopics{$key};
@@ -428,8 +446,8 @@ sub inlineError {
 ###############################################################################
 # static
 sub writeDebug {
-  &TWiki::Func::writeDebug('- BlogPlugin - ' . $_[0]) if $debug;
-  #print STDERR "DEBUG - BlogPlugin - $_[0]\n" if $debug;
+  #&TWiki::Func::writeDebug('- BlogPlugin - ' . $_[0]) if $debug;
+  print STDERR "DEBUG - BlogPlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################
@@ -478,10 +496,10 @@ sub countBlogRefs {
 
 ###############################################################################
 # static
-sub getRelatedEntries {
-  my ($theDB, $theTopic, $theDepth, $theRelatedTopics) = @_;
+sub getRelatedTopics {
+  my ($theDB, $theTopic, $theDepth, $theFilter, $theFilterObj, $theRelatedTopics) = @_;
 
-  #writeDebug("getRelatedEntries($theTopic, $theDepth) called");
+  writeDebug("getRelatedTopics($theTopic, $theDepth, $theFilter) called");
   $theDepth = 1 unless defined $theDepth;
   $theRelatedTopics->{$theTopic} = $theDepth;
   return $theRelatedTopics unless $theDepth > 0;
@@ -494,29 +512,35 @@ sub getRelatedEntries {
   } else {
     foreach my $related (split(/, /, $relatedTopics)) {
       next if $theRelatedTopics && $theRelatedTopics->{$related};
-      my $state = $theDB->getFormField($related, 'State');
-      next unless $state eq 'enabled';
+      if ($theFilterObj) {
+	my $relatedObj = $theDB->fastget($related);
+	next unless $relatedObj;
+	next unless $theFilterObj->matches($relatedObj);
+      }
       $relatedTopics{$related} = $theDepth;
       #writeDebug("found related $related");
     }
   }
 
   # get related topics that refer to us
-  my ($revRelatedTopics) = $theDB->dbQuery('Related=~\'\b' . $theTopic . '\b\' AND State=\'enabled\'');
+  my $queryString = 'Related=~\'\b'.$theTopic.'\b\'';
+  $queryString .= " AND $theFilter" if $theFilter;
+  writeDebug("queryString=$queryString");
+  my ($revRelatedTopics) = $theDB->dbQuery($queryString);
   foreach my $related (@$revRelatedTopics) {
     next if $theRelatedTopics && $theRelatedTopics->{$related};
     $relatedTopics{$related} = $theDepth;
-    #writeDebug("found rev related $related");
+    writeDebug("found rev related $related");
   }
 
   # get transitive related
-  #writeDebug("get trans related of $theTopic");
+  writeDebug("get trans related of $theTopic");
   foreach my $related (keys %relatedTopics) {
     next if $theRelatedTopics && $theRelatedTopics->{$related};
-    &getRelatedEntries($theDB, $related, $relatedTopics{$related}-1, $theRelatedTopics);
+    &getRelatedTopics($theDB, $related, $relatedTopics{$related}-1, $theFilter, $theFilterObj, $theRelatedTopics);
   }
   
-  #writeDebug("theRelatedTopics=" . join(",", sort keys %$theRelatedTopics) . " ... $theTopic in depth $theDepth");
+  writeDebug("theRelatedTopics=" . join(",", sort keys %$theRelatedTopics) . " ... $theTopic in depth $theDepth");
   return $theRelatedTopics;
 }
 
