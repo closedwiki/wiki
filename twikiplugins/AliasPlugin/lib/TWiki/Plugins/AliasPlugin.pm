@@ -56,7 +56,6 @@ sub initPlugin {
     return 0;
   }
 
-
   # more in doInit if we actually have an alias area
   $isInitialized = 0;
   %seenAliasWebTopics = ();
@@ -85,7 +84,7 @@ sub doInit {
   $aliasWikiWordsOnly = 
     TWiki::Func::getPreferencesFlag("ALIASPLUGIN_ALIAS_WIKIWORDS_ONYL");
   $defaultAliasTopic = 
-    TWiki::Func::getPreferencesValue("ALIASPLUGIN_DEFAULT_ALIASES");
+    TWiki::Func::getPreferencesValue("ALIASPLUGIN_DEFAULT_ALIASES") || 'WebAliases';
   
   # decide on how to match alias words
   $wikiWordRegex = &TWiki::Func::getRegularExpression('wikiWordRegex');
@@ -301,7 +300,7 @@ sub getAliases {
     $thisTopic = $2;
   }
 
-  #writeDebug("getAliases($doMerge, $thisWeb.$thisTopic) called");
+  writeDebug("getAliases($doMerge, $thisWeb.$thisTopic) called");
 
 
   # find topic with alias definitions
