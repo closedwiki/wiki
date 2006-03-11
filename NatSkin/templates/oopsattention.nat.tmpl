@@ -1,7 +1,8 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsattension.nat.tmpl -->
+%TMPL:INCLUDE{"messages"}%
 %TMPL:DEF{"heading"}%Attention%TMPL:END%
-%TMPL:DEF{"remove_user_done"}%<!-- -->
+%TMPL:DEF{"remove_user_done"}%<!-- removes contact note -->
 ---+++ The account <nop>%PARAM1% has been deleted.
 Your user name has been removed from the Authentication System.
 
@@ -12,81 +13,48 @@ Please email
 to request this.
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
-%TMPL:DEF{"created_web"}%<!-- -->
----+++ The new web has been created.
-And populated with topics from the base web
-
-Would you like to go to:
-	* %HOMETOPIC% to start working on the new web
-	* %WEBPREFSTOPIC% to customize the web specific preferences
-	* %TWIKIWEB%.ManagingWebs to create another web
-	* [[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] home
-%TMPL:END%
-%TMPL:DEF{"merge_notice"}%<!-- -->
----+++ Topic was merged.
-Rev %PARAM1% was saved by %PARAM2%, while you were still editing.
-
-Those changes have been merged with yours to create Rev %PARAM3%. 
-Text fields will have been merged, but other data such as form 
-fields may have overwritten the other users changes. 
-Please inspect the topic to make sure it is OK, especially if you 
-made any changes to form fields.
-
-You can see the differences
-[[%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%][here]].
-%TMPL:END%
-%TMPL:DEF{"missing_action"}%<!-- -->
+%TMPL:DEF{"missing_action"}%<!-- uses goback template -->
 ---+++ Missing action command
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"unrecognized_action"}%<!-- -->
+%TMPL:DEF{"unrecognized_action"}%<!-- uses goback def -->
 ---+++ Unrecognized action command '%PARAM1%'
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"notwikiuser"}%<!-- -->
----+++ Can't find user <nop>%PARAM1%.
+%TMPL:DEF{"notwikiuser"}%<!-- fixes duplicate definition of notwikiuser in messages.tmpl -->
+---+++ Can't find user "<nop>%PARAM1%".
 Please make sure you spelled the %TWIKIWEB%.LoginName correctly and try again. 
 If you get stuck, please mail %WIKIWEBMASTER%.
 
 See %MAINWEB%.TWikiUsers for a list of existing users or register as new user in
-%TWIKIWEB%.TWikiRegistration. %TMPL:END%
-%TMPL:DEF{"in_a_group"}%<!-- -->
----+++ %PARAM1% is in at least one group and cannot be removed.
-Remove the user from the group(s) %PARAM2% first.
+%TWIKIWEB%.TWikiRegistration. 
 %TMPL:END%
-%TMPL:DEF{"move_err"}%<!-- -->
----+++ Attachment move failed
-During move of attachment %PARAM3% to <nop>%PARAM1%.<nop>%PARAM2% an error 
-was found. Please notify your <nop>%WIKITOOLNAME% webmaster %WIKIWEBMASTER%.
-
-%PARAM4%
-%TMPL:END%
-%TMPL:DEF{"topic_exists"}%<!-- -->
+%TMPL:DEF{"topic_exists"}%<!-- uses goback def -->
 ---+++ The "%TOPIC%" topic already exists
 Cannot create %TOPIC% because it already exists.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"rename_topic_exists"}%<!-- -->
+%TMPL:DEF{"rename_topic_exists"}%<!-- uses goback def -->
 ---+++ Rename failed
 Cannot rename %TOPIC% to <nop>%PARAM1%.<nop>%PARAM2% because it already exists.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"rename_web_exists"}%<!-- -->
+%TMPL:DEF{"rename_web_exists"}%<!-- uses goback def -->
 ---+++ Rename failed
 Cannot rename %WEB% to <nop>%PARAM1% because it already exists.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"rename_not_wikiword"}%<!-- -->
+%TMPL:DEF{"rename_not_wikiword"}%<!-- uses goback def -->
 ---+++ New topic name "<nop>%PARAM1%" is not a %TWIKIWEB%.WikiWord
 Chose a topic name that is a 
 %TWIKIWEB%.WikiWord or check the allow non-Wiki Word box.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"rename_err"}%<!-- -->
+%TMPL:DEF{"rename_err"}%<!-- removes contact -->
 During rename of topic <nop>%WEB%.<nop>%TOPIC% to <nop>%PARAM2%.<nop>%PARAM3% 
 an error (%PARAM1%) was found. 
 
@@ -94,7 +62,7 @@ Please notify your <nop>%WIKITOOLNAME%
 administrator %WIKIWEBMASTER%.
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
-%TMPL:DEF{"rename_web_err"}%<!-- -->
+%TMPL:DEF{"rename_web_err"}%<!-- removes contact -->
 During rename of web <nop>%WEB% to <nop>%PARAM2% 
 an error (%PARAM1%) was found. 
 
@@ -102,17 +70,17 @@ Please notify your <nop>%WIKITOOLNAME%
 administrator %WIKIWEBMASTER%.
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
-%TMPL:DEF{"wrong_password"}%<!-- -->
+%TMPL:DEF{"wrong_password"}%<!-- uses goback def -->
 ---+++ Incorrect Password
 The password you entered in the *old password* field is incorrect.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"web_missing"}%<!-- -->
+%TMPL:DEF{"web_missing"}%<!-- uses goback def -->
 ---+++ Name of new web is missing
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"invalid_web_name"}%<!-- -->
+%TMPL:DEF{"invalid_web_name"}%<!-- uses goback def -->
 ---+++ "%PARAM1%" is an invalid name for a new web.
 You are recommended to choose short names, preferably less than 10 characters,
 starting with an upper-case alphabetic character and using only alphanumeric
@@ -122,15 +90,15 @@ alphanumeric characters.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"web_exists"}%<!-- -->
+%TMPL:DEF{"web_exists"}%<!-- uses goback def -->
 ---+++ Cannot create web "%PARAM1%" because it already exists.
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"base_web_missing"}%<!-- -->
+%TMPL:DEF{"base_web_missing"}%<!-- uses goback def -->
 ---+++ Base web %PARAM1% is missing or does not exist.
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"invalid_web_color"}%<!-- -->
+%TMPL:DEF{"invalid_web_color"}%<!-- uses goback def -->
 ---+++ Color ='%PARAM1%'= has an invalid format
 A color starts with a # sign, followed by 6 hexadecimal
 numbers, e.g. =#FFFF00=.
@@ -142,33 +110,14 @@ white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, tea
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"web_creation_error"}%<!-- -->
----+++ Could not create the new web %PARAM1%
-%PARAM2%
-
-%TMPL:END%
-%TMPL:DEF{"thanks"}%<!-- -->
----+++ Thank you for registering
-	* You can review your changes in your personal <nop>%WIKITOOLNAME% topic %TOPIC%.
-          (__Suggestion:__ How about uploading your picture to your topic?)
-	* You are also listed in the %MAINWEB%.%WIKIUSERSTOPIC% topic.
-	* A confirmation e-mail has been sent to %PARAM1%.
-%TMPL:END%
-%TMPL:DEF{"reset_ok"}%<!-- -->
-%PARAM1%
-
-Users with automatically generated passwords should proceed immediately 
-to [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ChangePassword][change password]] 
-to change their password to something memorable.
-%TMPL:END%
-%TMPL:DEF{"password_changed"}%<!-- -->
+%TMPL:DEF{"password_changed"}%<!-- huh -->
 ---+++ Password changed successfully!
 
 <form action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%WIKIUSERNAME%">
-<input type="submit" value="OK" />
+<input type="submit" style="color:green" value="OK" />
 </form>
 %TMPL:END%
-%TMPL:DEF{"confirm"}%<!-- -->
+%TMPL:DEF{"confirm"}%<!-- BlackListPlugin support -->
 ---+++ Thank you for registering
 Your activation code has been sent to %PARAM1%.  Either click on the
 link in your email or enter the code in the box below to activate your membership.
@@ -182,44 +131,44 @@ link in your email or enter the code in the box below to activate your membershi
 </form>
 
 %TMPL:END%
-%TMPL:DEF{"no_users_to_reset"}%<!-- -->
----+++ Password reset failed!
-No users to reset passwords for.
-%TMPL:END%
-%TMPL:DEF{"reset_bad"}%<!-- -->
----+++ Password reset failed!
-%PARAM1%
-%TMPL:END%
-%TMPL:DEF{"missing_fields"}%<!-- -->
----+++ Missing Fields
-Fields with a =<font color="red">**</font>= mark are required.
+%TMPL:DEF{"missing_fields"}%<!-- better dialog, uses goback def -->
+---+++ Missing Fields =<font color="red">**</font>= 
+The required field *%PARAM1%* was not filled in.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"password_mismatch"}%<!-- -->
+%TMPL:DEF{"password_mismatch"}%<!-- uses goback def -->
 ---+++ Passwords do not match
 The two passwords you entered do not match.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"problem_adding"}%<!-- -->
+%TMPL:DEF{"problem_adding"}%<!-- removes contact -->
 ---+++ Error registering user <nop>%PARAM1%
 
 There has been a problem adding your user id to the Password system. 
 Please notify your <nop>%WIKITOOLNAME% webmaster %WIKIWEBMASTER%.
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
-%TMPL:DEF{"send_mail_error"}%<!-- -->
+%TMPL:DEF{"send_mail_error"}%<!-- better dialog, removes contact -->
 ---+++ Mail Error
-An e-mail could not be delivered. Please notify your <nop>%WIKITOOLNAME%
-administrator, <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%20Mail%20Error">%WIKIWEBMASTER%</a>
+An e-mail could not be delivered. 
 
-<pre>
+*Mail to*:
+<verbatim>
 %PARAM1%
-</pre>
+</verbatim>
+
+*Errors*: 
+<verbatim>
+%PARAM2%
+</verbatim>
+
+Please notify your <nop>%WIKITOOLNAME%
+administrator, <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%20Mail%20Error">%WIKIWEBMASTER%</a>
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
-%TMPL:DEF{"already_exists"}%<!-- -->
+%TMPL:DEF{"already_exists"}%<!-- only one contact message -->
 ---+++ You are already registered
 You cannot register twice, the name '%PARAM1%' is already registered.
 
@@ -228,7 +177,7 @@ Did you want to [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%.ResetPassword?us
 Alternatively go <a href="javascript:history.back()">back</a> in your browser
 and choose a different username.
 %TMPL:END%
-%TMPL:DEF{"bad_wikiname"}%<!-- -->
+%TMPL:DEF{"bad_wikiname"}%<!-- uses goback def -->
 ---+++ Incorrect %TWIKIWEB%.WikiName
 The %TWIKIWEB%.WikiName field must be your first and lastname in
 %TWIKIWEB%.WikiNotation, e.g. your capitalized first and lastname
@@ -242,7 +191,7 @@ with spaces removed.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"bad_email"}%<!-- -->
+%TMPL:DEF{"bad_email"}%<!-- uses goback def -->
 ---+++ Invalid email address
 The email address for this account is not valid.
 
@@ -250,103 +199,108 @@ The email address for this account is not valid.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"no_ver_file"}%<!-- -->
----+++ Invalid Activation Code
-The activation code ==%PARAM1%== is invalid. No verification file %PARAM2%.
-
-Please try again.
-
-<form action="%SCRIPTURLPATH%/register%SCRIPTSUFFIX%" method=get>
-<input type="hidden" name="action" value="verify" size="20" />
-<input type="text" name="code" size="20" />
-<input type="submit" value=" Submit " />
-</form>
-%TMPL:END%
-%TMPL:DEF{"bad_ver_code"}%<!-- -->
+%TMPL:DEF{"bad_ver_code"}%<!-- BlackListPlugin support -->
 ---+++ Invalid Activation Code
 The activation code ==%PARAM1%== is invalid. %PARAM2%
 
 Please try again.
 
 <form action="%SCRIPTURLPATH%/register%SCRIPTSUFFIX%" method=get>
+<input type="hidden" name="rx" value="%BLACKLISTPLUGIN{action="magic"}%" />
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
 <input type="submit" value=" Submit " />
 </form>
 %TMPL:END%
-%TMPL:DEF{"no_email_for"}%<!-- -->
+%TMPL:DEF{"no_email_for"}%<!-- better dialog -->
 ---+++ Can't get an email address for %PARAM1%
 An email address is required before a password can be reset.
 %TMPL:END%
-%TMPL:DEF{"mandatory_field"}%<!-- -->
+%TMPL:DEF{"mandatory_field"}%<!-- uses goback def, duplicate missing_fields -->
 ---+++ Topic Save Error
 Could not save  <nop>%WEB%.%TOPIC%.
 
-The required field *%PARAM1%* was not filled in.
+The required field =<font color="red">**</font>= *%PARAM1%* was not filled in.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"no_form_def"}%<!-- -->
----+++ Form Definition %PARAM1%.<nop>%PARAM2% missing.
-See %TWIKIWEB%.TWikiForms for information about Form Definitions.
-
-This could be for several reasons:
-
----++ 1. Form definition missing
-<ul>
-  <li> The form should be defined in the topic %PARAM1%.%PARAM2%</li>
-  <li> If this topic is missing create it, otherwise check it for errors.</li>
-</ul>
-
----++ 2. The topic is in an old format
-<ul>
-  <li> Click on [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug][Debug topic text]].
-  <ul>
-    <li>There should be a line that includes =META:FORM=, look for name="%PARAM1%.%PARAM2%" (or name="%PARAM2%")</li>
-    <li>If this line isn't present see _upgrade_ section below.</li>
-  </ul>
-</ul>
-
----++ 3. Topic can not be upgraded from old style category table
-This requires the form definition to be present.
-
-This can be automatically upgraded by:
-<ul>
-  <li> Creating a suitable Form Definition topic</li>
-  <li> Adding a =WEBFORMS= variable in WebPreferences </li>
-</ul>
-
-You will probably have to ask your <nop>%WIKITOOLNAME% administrator to do this.
-%TMPL:END%
-%TMPL:DEF{"zero_size_upload"}%<!-- -->
+%TMPL:DEF{"zero_size_upload"}%<!-- uses goback def -->
 ---+++ Uploaded file "<nop>%PARAM1%" does not exist or is empty.
 %TMPL:P{"goback"}%
 %TMPL:END%
-%TMPL:DEF{"oversized_upload"}%<!-- -->
----+++ Uploaded file is too big
-Uploaded file "<nop>%PARAM1%" exceeds limit of %PARAM2% KB
-%TMPL:END%
-%TMPL:DEF{"save_error"}%<!-- -->
+%TMPL:DEF{"save_error"}%<!-- better dialog -->
 ---+++ Error saving topic
 During save of <nop>%WEB%.<nop>%TOPIC% an error was found by the
-version control system. Please notify your <nop>%WIKITOOLNAME%
-administrator %WIKIWEBMASTER%.
+version control system. 
 
-<pre>
+<verbatim>
 %PARAM1%
-</pre>
+</verbatim>
+
+Please notify your <nop>%WIKITOOLNAME% administrator %WIKIWEBMASTER%.
 
 Go <a href="javascript:history.back()">back</a> in your browser and save your changes locally.
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
-%TMPL:DEF{"email_changed"}%<!-- -->
----+++ E-mail changed successfully!
+%TMPL:DEF{"delete_err"}%<!-- better dialog, removes contact -->
+---+++ Attachment delete failed
+During deletion of attachment =%URLPARAM{attachment}%= an error was found. 
 
-Remember to update your user topic if you want your e-mail change to be reflected there as well.
+<verbatim>
+%PARAM4%
+</verbatim>
 
-Your registered e-mail address(es) are updated to: %PARAM1%"
+Please notify your <nop>%WIKITOOLNAME% 
+<a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Delete&#32;Error&amp;body=%PARAM4%">%WIKIWEBMASTER%</a>.
+<style type="text/css">.natContact {display:none}</style>
+%TMPL:END%
+%TMPL:DEF{"upload_name_changed"}%<!-- uses goback def -->
+---+++ File has been uploaded with different name
+The file has been uploaded and attached properly to the <nop>%TOPIC% topic."
+However, the filename has been changed from <b><code>%PARAM1%</code></b> to
+<b><code>%PARAM2%</code></b>. Please make a note of it.
 
-Return to %TWIKIWEB%.ChangeEmailAddress
+Note:
+In some cases, TWiki changes the name of the uploaded file to make it safe and accessible across all platforms:
+   * Spaces are replaced by underscores
+   * "A =.txt= extension is appended to some filenames for security reasons"
+   * Some characters such as =~=, =$=, =@=, =%= are removed"
+You may be able to get your TWiki administrator to change the settings if they are inappropriate for your environment.
+
+%TMPL:P{"goback"}%
+%TMPL:END%
+%TMPL:DEF{"rename_web_prerequisites"}%<!-- better buttons -->
+---+++ There are problems with renaming this web:
+   1. You are denied access to the following topics in the web: %BR%
+   %PARAM1%
+   2. The following topics are locked for edit, and cannot be moved: %BR%
+   %PARAM2%
+   3. The following topics refer to topics in this web, but you are denied access to them: %BR%
+   %PARAM3%
+   4. The following topics refer to topics in this web, but are being edited: %BR%
+   %PARAM4%
+
+<div %PARAM5%>
+Do you want to continue and try to rename the web?
+
+<form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%HOMETOPIC%">
+  <input type="hidden" name="action" value="renameweb">
+  <input type="hidden" name="confirm" value="continue">
+  <input type="submit" style="color:green" value="Ok">&nbsp;
+  <input type="button" style="color:red" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%'">
+</form> 
+</div>
+%TMPL:END%
+%TMPL:DEF{no_such_template}%<!-- better layout -->
+---+++ Could not find template =%PARAM1%=
+
+Check your configuration setting for {TemplateDir}. If that's not the problem,
+it may be because you have a setting of =%PARAM2%= that is pointing to a
+template that doesn't exist.
+
+=%PARAM2%= is currently set to <code><nop>%PARAM1%</code> 
+
+(don't forget to check your Topic Settings)
 %TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
 %INSTANTIATE%

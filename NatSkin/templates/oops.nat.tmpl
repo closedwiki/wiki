@@ -1,19 +1,17 @@
 %TMPL:INCLUDE{"page"}%
 <!-- template: oops.nat.tmpl -->
-%TMPL:INCLUDE{"oopsbody"}%
-%TMPL:INCLUDE{"oopstopicactions"}%
-%TMPL:INCLUDE{"oopssidebar"}%
-%TMPL:INCLUDE{"oopsjavascript"}%
-%TMPL:INCLUDE{"oopsstyles"}%
+<!-- -->%TMPL:INCLUDE{"oopsbody"}%
+<!-- -->%TMPL:INCLUDE{"oopstopicactions"}%
+<!-- -->%TMPL:INCLUDE{"oopssidebar"}%
+<!-- -->%TMPL:INCLUDE{"oopsjavascript"}%
+<!-- -->%TMPL:INCLUDE{"oopsstyles"}%
 %TMPL:DEF{"title"}%%TOPIC% (oops)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"locator"}% %TMPL:END%
 %TMPL:DEF{"headingstyle"}%natOopsHeading%TMPL:END%
-%TMPL:DEF{"contact"}%<div class="natContact">
----
+%TMPL:DEF{"contact"}% <hr />
 Contact <a href="mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME%: Request for support"}%&&body=%ENCODE{"Hello, i've got a question ..."}%">%WIKIWEBMASTER%</a> 
 if you have any questions.
-</div>
 %TMPL:END%
 %TMPL:DEF{"goback"}%Please go <a href="javascript:history.back()">back</a> in your browser and try again.
 
@@ -29,7 +27,9 @@ if you have any questions.
 %FISKINSTATE%
 <div style="margin-top:20px">
 <h1 class="%TMPL:P{"headingstyle"}%">%TMPL:P{"heading"}%</h1>
-%TMPL:P{"message"}%
-%TMPL:P{"contact"}%
+%TMPL:P{"message"}% 
+<div class="natContact"> 
+  %TMPL:P{"contact"}% 
+</div>
 </div>
 %TMPL:END%

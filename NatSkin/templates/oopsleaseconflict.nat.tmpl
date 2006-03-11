@@ -1,25 +1,36 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsleaseconflict.nat.tmpl -->
 %TMPL:DEF{"heading"}%Conflict%TMPL:END%
-%TMPL:DEF{"active"}%<!-- -->
-They have been editing for %PARAM2% and their lease is still active for another
-%PARAM3%.
-%TMPL:END%
-%TMPL:DEF{"old"}%<!-- -->
-Their lease on this topic expired %PARAM2% ago.
+%TMPL:DEF{"lease_active"}%<!-- -->
+%PARAM1% is editing %WEB%.%TOPIC%.
 
-The chances are good that they simply navigated away from the edit page without
-saving.
+%PARAM1% has been editing the topic for %PARAM2% and the lease is still active for 
+another %PARAM3%.
+
+It is probably OK to go ahead and edit - unless you intend to change data in a
+form attached to the topic. If %PARAM1% actually _does_ save the topic while
+you are editing, your changes will be merged, and nothing will be lost. Form
+data cannot easily be merged though, so in this case you are recommended to
+check with %PARAM1% first.
+
+%TMPL:END%
+%TMPL:DEF{"lease_old"}% <!-- -->
+%PARAM1% may still be editing %WEB%.%TOPIC%.
+
+The lease on this topic expired %PARAM2% ago.
+
+The chances are good that %PARAM1% has simply navigated away from the edit page
+without saving.
+
+You are encouraged to go ahead and edit - unless you intend to change data in a
+form attached to the topic. If %PARAM1% actually _does_ save while you are editing,
+your changes will be merged, and nothing will be lost. Form data cannot easily
+be merged though, so in this case you are recommended to check with %PARAM1%
+first.
 %TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
-%PARAM1% is editing [[%WEB%.%TOPIC%]].
-
+%{ Instantiate either lease_active or lease_old }%
 %INSTANTIATE%
-
-It is probably OK to go ahead and edit, unless you intend to change the form
-attached to the topic.  If they _do_ save while you are editing, your changes
-will be merged with theirs. Form data cannot easily be merged, so in this case
-you are recommended to check with them first.
 
 <ul>
   <li> To edit the topic anyway, hit 'Edit&nbsp;Anyway'. </li>

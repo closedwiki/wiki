@@ -78,3 +78,7 @@
 %FISKINSTATE%
 %STOPINCLUDE%
 </div>
+
+<!--
+	* Set SKIN = nat
+-->
