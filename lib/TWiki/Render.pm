@@ -395,14 +395,33 @@ sub makeAnchorName {
     if ( !$compatibilityMode ) {
         $anchorName =~ s/^[\s\#\_]*//;  # no leading space nor '#', '_'
     }
-    $anchorName =~ s/^(.{32})(.*)$/$1/; # limit to 32 chars - FIXME: Use Unicode chars before truncate
     if ( !$compatibilityMode ) {
         $anchorName =~ s/[\s\_]*$//;    # no trailing space, nor '_'
     }
+    # Truncate to 32 characters
+    $anchorName = truncateString( $anchorName, 32 );
 
     # No need to encode 8-bit characters in anchor due to UTF-8 URL support
 
     return $anchorName;
+}
+
+=pod
+
+---++ StaticMethod truncateString($s, $lim) -> $string
+Truncate $s to a maximum of =$lim= characters. 
+
+=cut
+
+sub truncateString {
+    my( $str, $lim ) = @_;
+    if( $TWiki::cfg{UseLocale} ) {
+        # Convert whole string to unicode to avoid
+        # truncating halfway through a character.
+        $str = pack( 'U0C*', unpack( 'C*', $str ));
+    }
+    $str =~ s/^(.{$lim})(.*)$/$1/;
+    return $str;
 }
 
 # Returns =title='...'= tooltip info in case LINKTOOLTIPINFO perferences variable is set. 
@@ -1576,7 +1595,7 @@ If there is only one rev, a topic summary will be returned.
 
 If =$tml= is not set, all HTML will be removed.
 
-In non-tml, lines are truncated to 70 characters. Differences are shown using + and - to indicate added and removed text.
+In non-tml, lines are truncated. Differences are shown using + and - to indicate added and removed text.
 
 =cut
 
@@ -1613,7 +1632,7 @@ sub summariseChanges {
             my $block = shift( @$blocks );
             next unless $block =~ /\S/;
             my $trim = length($block) > $trunc;
-            $block =~ s/^(.{$trunc}).*$/$1/ if( $trim );
+            $block = truncateString( $block, $trunc ) if( $trim );
             if ( $block =~ m/^[-+]/ ) {
                 if( $tml ) {
                     $block =~ s/^-(.*)$/CGI::del( $1 )/se;
