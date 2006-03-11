@@ -187,10 +187,12 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 | <img src="%ATTACHURLPATH%/monospace.gif" alt="Monospace" title="Monospace" />  | =monospace.gif= | Monospace | =%<nop>ICON{monospace}%= |
 | <img src="%ATTACHURLPATH%/proportional.gif" alt="Proportional" title="Proportional" />  | =proportional.gif= | Proportional | =%<nop>ICON{proportional}%= |
-| <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
-| <img src="%ATTACHURLPATH%/toggleclose-small.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose-small.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose-small}%= |
 | <img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
+| <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
 | <img src="%ATTACHURLPATH%/toggleopen-small.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen-small.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen-small}%= |
+| <img src="%ATTACHURLPATH%/toggleclose-small.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose-small.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose-small}%= |
+| <img src="%ATTACHURLPATH%/toggleopen-mini.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen-mini.gif= | Open toggle, Twisty open toggle | =&lt;img src="%<nop>ICONURL{toggleopen-mini}%" width="7" height="9" alt="Open" border="0" /&gt;= |
+| <img src="%ATTACHURLPATH%/toggleclose-mini.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose-mini.gif= | Close toggle, Twisty close toggle | =&lt;img src="%<nop>ICONURL{toggleclose-mini}%" width="7" height="9" alt="Close" border="0" /&gt;= |
 | <img src="%ATTACHURLPATH%/toggleopenleft.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopenleft.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopenleft}%= |
 | <img src="%ATTACHURLPATH%/toggleopenleft-small.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopenleft-small.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopenleft-small}%= |
 | <img src="%ATTACHURLPATH%/web-bg.gif" alt="Web" title="Web" />  | =web-bg.gif= | Web background, used in %TWIKIWEB%.WebLeftBarWebsList | =%<nop>ICON{web-bg}%= |
@@ -434,6 +436,8 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="toggleclose.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose.gif" size="135" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleclose-small.gif" attr="" autoattached="1" comment="" date="1128927099" path="toggleclose-small.gif" size="135" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleopen.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen.gif" size="138" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleopen-mini.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen-mini.gif" size="51" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="toggleclose-mini.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleclose-mini.gif" size="51" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleopen-small.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopen-small.gif" size="138" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleopenleft.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopenleft.gif" size="138" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="toggleopenleft-small.gif" attr="" autoattached="1" comment="" date="1128927100" path="toggleopenleft-small.gif" size="138" user="UnknownUser" version=""}%

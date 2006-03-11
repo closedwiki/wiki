@@ -58,21 +58,19 @@
 %TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%MAKETEXT{"More topic actions..."}%</strike></span>%TMPL:END%
 %TMPL:DEF{"activatable_more"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
 
-%TMPL:DEF{toolbar_buttons}%<div class="patternToolBarButtons">%TMPL:P{"activatable_raw_edit"}%%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%<span class="patternButton">%TMPL:P{"activatable_attach"}%</span><span class="patternButton">%TMPL:P{"printable"}%</span></div>%TMPL:END%
+%TMPL:DEF{toolbar_buttons}%<div class="patternToolBarButtons">
+<span class="patternToggleButton"><span id="revInfoshow" class="patternButton twistyMakeVisible"><a href="#" title='%REVINFO{"r$rev - $time - !$wikiname"}%' class="twistyTrigger"><span class="twikiLinkLabel">r%REVINFO{"$rev"}%</span><img alt="toggleopen-mini"  src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/toggleopen-mini.gif" height="9" width="7" border="0" /></a></span></span><span class="patternToggleButton"><span id="revInfohide" class="twistyHidden patternButton twistyMakeVisible"><a href="#" class="twistyTrigger" ><span class="twikiLinkLabel">r%REVINFO{"$rev"}%</span><img alt="toggleopen-mini" src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/toggleclose-mini.gif" height="9" width="7" border="0" /></a></span></span>
+%TMPL:P{"activatable_raw_edit"}%%TMPL:P{context="WysiwygPluginEnabled" then="activatable_edit_wysiwyg"}%<span class="patternButton">%TMPL:P{"activatable_attach"}%</span><span class="patternButton">%TMPL:P{"printable"}%</span>
+</div>%TMPL:END%
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
-<table cellpadding="0" cellspacing="0" border="0">
-<tr>
-<td class="patternHomePath"><span class="patternHomePathTitle">%MAKETEXT{"You are here"}%: </span>[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] <span class="twikiSeparator">&gt;</span> <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> %MAKETEXT{"[_1] Web" args="<nop/>%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></td>
-<td class="patternRevInfo"><span class="patternRevision">%REVINFO%</span></td></tr>
-<tr>
-<td class="patternToolBar" colspan="2">
+<div class="patternHomePath"><span class="patternHomePathTitle">%MAKETEXT{"You are here"}%: </span>[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] <span class="twikiSeparator">&rarr;</span> <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> %MAKETEXT{"[_1] Web" args="<nop/>%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&rarr;</span> " suffix=""}% <span class="twikiSeparator">&rarr;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></div>
+<div class="patternToolBar">
 %TMPL:P{"toolbar_buttons"}%
-</td>
-</tr>
-</table>
 </div>
 <div class="patternToolBarBottom"></div>
+<div id="revInfotoggle" class="twistyMakeHidden twistyRememberSetting"><div class="patternRevInfo twikiRight">%REVINFO%</div><br class="twikiClear" /></div>
+</div>
 %TMPL:END%
 
 
