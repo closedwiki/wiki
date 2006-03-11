@@ -32,7 +32,7 @@ insert a topic by processing its content.
 substitute text given inline. see [[#SUBST][SUBST]].
 
 ---+++ EXTRACT
-*Syntax*:=%EXTRACT{topic="..."  ...}%= 
+*Syntax*:=%<nop>EXTRACT{topic="..."  ...}%= 
 
 extract text from a topic. see [[#SUBST][SUBST]].
 

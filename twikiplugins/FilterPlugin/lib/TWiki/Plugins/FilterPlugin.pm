@@ -130,7 +130,7 @@ sub handleFilter {
   } elsif ($theMode == 1) {
     # substitution mode
     my $hits = $theMaxHits;
-    while($text =~ /$thePattern/gmsi) {
+    while($text =~ /$thePattern/gsi) {
       my $arg1 = $1 || '';
       my $arg2 = $2 || '';
       my $arg3 = $3 || '';
@@ -171,7 +171,7 @@ sub handleFormatList {
   my $theFormat = &TWiki::Func::extractNameValuePair($args, 'format') || '$1';
   my $theHeader = &TWiki::Func::extractNameValuePair($args, 'header') || '';
   my $theFooter = &TWiki::Func::extractNameValuePair($args, 'footer') || '';
-  my $theSplit = &TWiki::Func::extractNameValuePair($args, 'split') || ',';
+  my $theSplit = &TWiki::Func::extractNameValuePair($args, 'split') || '[,\s]+';
   my $theSeparator = &TWiki::Func::extractNameValuePair($args, 'separator') || ', ';
   my $theLimit = &TWiki::Func::extractNameValuePair($args, 'limit') || -1;
   my $theSort = &TWiki::Func::extractNameValuePair($args, 'sort') || 'off';
@@ -198,6 +198,7 @@ sub handleFormatList {
   foreach my $item (split /$theSplit/, $theList, $theLimit) {
     #writeDebug("found '$item'");
     next if $theExclude && $item =~ /($theExclude)/;
+    next if $item =~ /^$/; # skip empty elements
     $item =~ m/$thePattern/;
     my $arg1 = $1 || '';
     my $arg2 = $2 || '';
