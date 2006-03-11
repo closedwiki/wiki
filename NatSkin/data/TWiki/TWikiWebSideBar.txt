@@ -1,0 +1,42 @@
+%META:TOPICINFO{author="TWikiContributor" date="1132161897" format="1.1" version="1.1"}%
+%STARTINCLUDE%
+<div class="natSideBarTitle">
+  <h1>Navigation%REDDOT{"%TWIKIWEB%.TWikiWebSideBar"}%</h1>
+</div>
+<style type="text/css">
+%IFSKINSTATETHEN{style="Pattern"}%
+%$nopFORMATLIST{"%$nopWEBLIST{"$name" separator=" "}% TestCases" split=" " separator="$n" format="h2.navButton$1 a {background:$percntVAR{\"WEBBGCOLOR\" web=\"$1\"}$percnt;}"}%
+%FISKINSTATE%
+.navButton {%IFSKINSTATE{buttons="on" then="display:none"}%}
+.navButton%BASEWEB% {display:block}
+</style>
+<h2 class="navButton navButtonMain">%WEBLINK{"Main"}%</h2>
+%IFDEFINEDTHEN{"%BASEWEB%" as="Main"}%
+<ul>
+  %$nopWEBCOMPONENT{"WebLinks"}%
+</ul>
+%FIDEFINED%
+%FORMATLIST{"%WEBLIST{webs="public" separator=" "}%" exclude="Main|TWiki|Trash" split=" " separator="$n" format="<h2 class=\"navButton navButton$1\">$percntWEBLINK{\"$1\"}$percnt</h2><ul style=\"$percntIFDEFINED{\"$percntBASEWEB$percnt\" as=\"$1\" else=\"display:none\"}$percnt\">$percntWEBCOMPONENT{\"WebLinks\"}$percnt</ul>"}%
+%IFDEFINEDTHEN{"%BASEWEB%" as="Trash"}%
+<h2 class="navButton navButtonTrash">%WEBLINK{"Trash"}%</h2>
+<ul>
+  <li> [[Trash.TrashAttachment][Attachments]] </li>
+  %$nopWEBCOMPONENT{"WebLinks"}%
+</ul>
+%FIDEFINED%
+<h2 class="navButton navButton%TWIKIWEB%">%WEBLINK{web="%TWIKIWEB%" name="System"}%</h2>
+%IFDEFINEDTHEN{"%BASEWEB%" as="TWiki"}%
+<ul>
+  %$nopWEBCOMPONENT{"WebLinks"}%
+</ul>
+%FIDEFINED%
+%IFSKINSTATETHEN{searchbox="pos2"}%
+<p/>
+<div class="natSearchBox natSearchBoxPos2">
+%TMPL:P{"searchbox"}%
+</div>
+%FISKINSTATE%
+<div class="natSideBarPersonal">
+%INCLUDE{"%CALC{"$IF($EXISTS(%MAINWEB%.%WIKINAME%SideBar),%MAINWEB%.%WIKINAME%SideBar,%TWIKIWEB%.MySideBar)"}%"}%
+</div>
+%STOPINCLUDE%

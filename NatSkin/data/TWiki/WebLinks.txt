@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1132161897" format="1.1" version="1.1"}%
+<ul>
+%STARTINCLUDE%
+  <li> [[%TWIKIWEB%.InstalledPlugins][Plugins]] </li>
+  %WEBCOMPONENT{"TWikiWebLinks"}%
+  <li> [[%TWIKIWEB%.TWikiPreferences][SitePreferences]] </li>
+%STOPINCLUDE%
+</ul>
