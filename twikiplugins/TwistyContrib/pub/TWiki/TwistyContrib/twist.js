@@ -17,6 +17,7 @@ addLoadEvent(initTwist, true);
 
 function twist(id) {
     var toggleElem = document.getElementById(id+'toggle');
+    if (!toggleElem) return;
     var state;
     if (toggleElem.twisted) {
         twistHide(id, toggleElem);
@@ -91,9 +92,10 @@ function initialiseTwistyTriggers(e) {
         };
         var twistId = e.parentNode.id.slice(0,-4);
         var toggleElem = document.getElementById(twistId + 'toggle');
+		if (!toggleElem) return;
         var cookie  = readCookie(COOKIE_PREFIX + twistId);
         if (cookie == "1")
-          twistShow(twistId, toggleElem);
+			twistShow(twistId, toggleElem);
         else if (cookie == "0")
           twistHide(twistId, toggleElem);
     }
