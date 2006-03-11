@@ -19,7 +19,8 @@ hr {
 /* layout */
 .natBody {
   background:#333333;
-  margin:0px 0px 10px 0px
+  margin:0;
+  padding:0;
 }
 .natBodyContents {
   font-family:arial,sans-serif;
@@ -29,11 +30,11 @@ hr {
 .natTopLeftContents{
   margin-left:20px;
   margin-right:20px;
-  margin-top:20px;
+  margin-top:25px;
   margin-bottom:20px;
 }
 .natTopRightContents {
-  margin-top:30px;
+  margin-top:35px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -48,6 +49,10 @@ hr {
 .natSideBar {
   width:15em;
   _width:17em; /* IE hack */
+}
+
+.natTopBarSizer {
+  height:130px;
 }
 
 /* twiki styles */
@@ -115,7 +120,11 @@ hr {
 /* search tables */
 .natSearchTable {
   border:1px #aaaaaa solid;
-  font-size:x-small;
+  font-size:0.9em;
+  margin-top:20px;
+}
+.natSearchTable:first-child {
+  margin-top:0px;
 }
 .natSearchTableTitle th {
   color:#cccccc;
@@ -124,11 +133,17 @@ hr {
   padding-top:2px;
   padding-bottom:2px;
 }
-.natSearchHit td {
-  border-bottom:1px #aaaaaa solid;
+.natSearchHit {
+  font-size:0.9em;
+  border:1px #aaaaaa solid;
 }
-.natSearchEvenHit,
-.natSearchTable table:nth-child(2n+1) {
+.natSearchHit th {
+  padding:0.5em 0.5em 0em 0.5em;
+}
+.natSearchHit td {
+  padding:0em 0.5em 0.5em 0.5em;
+}
+.natSearchHitEven {
   background:#444444;
 }
 
@@ -202,6 +217,7 @@ hr {
   font-size:small;
 }
 .natSideBar ul {
+  margin-left:0px;
   padding-left:20px;
 }
 
@@ -241,6 +257,8 @@ hr {
 .natMain h1 a, .natMain h2 a, .natMain h3 a,
 .natMain h4 a, .natMain h5 a, .natMain h6 a {
   color:#cccccc;
+}
+.natMain h2 {
 }
 
 .natMiddle input,
@@ -339,7 +357,7 @@ hr {
   color:#cccccc;
 }
 .blogSideBarSection {
-  margin-bottom:1em;
+  margin-bottom:1.5em;
 }
 .blogSideBarSection ol {
   padding-left:2em;

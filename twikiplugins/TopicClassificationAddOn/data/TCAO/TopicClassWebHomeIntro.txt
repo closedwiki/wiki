@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130441530" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="WebHome"}%
+
+---+++ %BASEWEB%.TopicClassification within the <nop>%BASEWEB% Web
+
+Content within the *%BASEWEB% web* is organizated by %BASEWEB%.SubjectArea and %BASEWEB%.TopicTypes.
+
+*10 most recently changed classified topics:* 
+%SEARCH{"[T]opicType.*title\=.*[T]opicType" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" order="modified" reverse="on" limit="10" nototal="on" format="	* $web.$topic - $formfield(TopicHeadline) <font class=twikiSmall> _(Modified on $date by $wikiusername)_  </font>" }%
+
+*Browse by:*
+   * %BASEWEB%.TopicType
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" nonoise="on" nosummary="on" nototal="on" order="topic" format="      * $web.$topics - $formfield(TopicHeadline)<br>"}% 
+   * %BASEWEB%.SubjectArea
+%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%BASEWEB%" regex="on" nonoise="on" nosummary="on" nototal="on" order="topic" format="      * $web.$topic - $formfield(TopicHeadline)<br>"}% 
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

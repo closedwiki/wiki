@@ -1,11 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1134144717" format="1.0" version="1.1"}%
----+!! %TOPIC%
+%META:TOPICINFO{author="TWikiGuest" date="1137100620" format="1.1" version="1.2"}%
+---+!! <nop>%TOPIC%
 
 %TOC%
 
 ---++ Disclaimer
-This plugin is formerly known as the <nop>EmbedBibPlugin by TWiki:Main/DonnyKurniawan. As it has bee rewritten in 
-major parts the stuff has been renamed. Btw the new name seems more appropriate.
+This plugin is formerly known as the <nop>EmbedBibPlugin by TWiki:Main/DonnyKurniawan. As it has been rewritten in major parts and stuff has been renamed.   BTW, the new name seems more appropriate.
 
 ---++ Synopsis
 This is a plugin that you can use to embed <nop>BibTeX entries in TWiki webs. It uses [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTool]], [[http://www.lri.fr/~filliatr/bibtex2html/][Bib2bib and Bibtex2html]]
@@ -119,28 +118,23 @@ you get
 
 You type
 <verbatim>
-%CITE{bai:jgr.1999}%
+%CITE{BahrSimpson02}%
 </verbatim>
 you get
-%CITE{bai:jgr.1999}%
+%CITE{BahrSimpson02}%
 
-You type
-<verbatim>
-%BIBTEXREF{style="alpha" file="sample.bib"}%
-</verbatim>
-you get
-<table width=400 border=1><tr><td>
-%BIBTEXREF{style="alpha" file="sample.bib"}%
-</table>
+The text within the citation is dictated by the results of the %<nop>BIBTEXREF% declaration in the topic (see below).
 
+_Note: The %<nop>CITE% macro is also defined by the TWiki:BibliographyPlugin.  If both plugins are also installed, one must use the alternate declaration, %!BIBCITE{...}%, to access the !BibtexPlugin functionality._
 
 ---++ Syntax
 	* =%<nop>BIBTEX{&lt;attributes&gt;}%= - render a set of bibtex files attached to some topic 
 	* =%<nop>STARTBIBTEX{&lt;attributes&gt;}% ... %<nop>STOPBIBTEX%= - render an inline-bibtex database
-	* =%<nop>CITE{key}%= - generate an hyperlink to a bibtex entry 
-	* =%<nop>BIBTEXREF{style="..."}%= - generate a list of references based on the  declared =CITE= keys, formated according to .bst style.
+	* =%<nop>CITE{key}%= (or =%<nop>BIBCITE%=) - generate an hyperlink to a bibtex entry 
+	* =%<nop>BIBTEXREF{key, topic}%= - generate a list of references based on the declared =CITE= keys
 
 ---++ Attributes
+
 All attributes for %<nop>BIBTEX% and %<nop>STARTBIBTEX% are optional. The attributes =topic= and =bibfile=
 are not valid in the %<nop>STARBIBTEX% tag as the bibtex database is given inline and not as an attachment.
 %<nop>CITE% has one obligatory attribute, that is =key= refering to the bibtex entry that is to be
@@ -173,8 +167,27 @@ tag on the same topic (see [[#Tips]]).
 
 ---++ Citations and Automated Reference Lists
 
-As of release v1.3, the %TOPIC% has functionality similar to the TWiki:BibliographyPlugin.  Specifically, if a topic has =%<nop>CITE{key}%= declarations through out, the use of =%<nop>BIBTEXREF{...}%= will generate a list of references based on the citations declared.  The citation keys must be entries in .bib files associated with the topic as described above---modification of keys in the bibrsc file may confuse the rendering, and the output of the reference list is dictated by <nop>BibTex.  Thus, the HTML output can use all of the flexibility of bibtex, including custom bibtex style templates and string macros.
+As of release v1.3, the %TOPIC% has functionality similar to the TWiki:BibliographyPlugin.  Specifically, if a topic has =%<nop>CITE{key}%= declarations through out, the use of =%<nop>BIBTEXREFS{...}%= will generate a list of references based on the citations declared.  The output of the reference list is dictated by <nop>BibTex.  Thus, the HTML output can use all of the flexibility of bibtex, including custom bibtex style templates and string macros.
 
+The citation keys _must refer to the output_ key produced by this plugin, which may differ from the entries in the associated .bib files according to the bibtool resource file in use.  Simply use the output key produced by [[#SearchTemplates][<nop>BibtexPlugin search template]] query results.
+
+Again, if both the TWiki:BibliographyPlugin and TWiki:BibtexPlugin are installed, one must use %<nop>BIBCITE{...}% inplace of %<nop>CITE% for the <nop>BibtexPlugin functionality to work.
+
+---+++ Example
+
+You type
+
+<verbatim>
+<table border=1><tr><td>
+     %BIBTEXREF{style="alpha"}%
+</table>
+</verbatim>
+
+you get
+
+<table border=1><tr><td>
+%BIBTEXREF{style="alpha"}%
+</table>
 
 #QueryAnchor
 ---++ The Query Language
@@ -241,8 +254,18 @@ Here's the list of used styles:
 | biboptions | class of the options table in the BibtexSearchTemplate |
 See [[#Tips]] for an example on how to modify the look easily.
 
----+++ BibtexPlugin search templates
-%RED% elaborate %ENDCOLOR%
+#SearchTemplates
+---+++ !BibtexPlugin search templates
+
+The !BibteXPlugin search templates provide an interactive query interface to
+the bibtex files present on a wiki.  As an example of their use, one can declare
+<verbatim>
+   %BIBTEX{form="only"}%
+</verbatim>
+in a topic to which .bib files are attached.  The resulting rendered form
+(defined by DEFAULTSEARCHTEMPLATE above) can then be used to query the .bib
+files.
+
 	* Available search templates
 		* TWiki.BibtexSearchTemplate
 		* TWiki.BibtexSimpleSearchTemplate
@@ -272,9 +295,9 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 	* Selecting entries of a given year
 		* select only entries that appeared in 1999 : <b><tt>select="year=1999"</tt></b>
 		* select references appearing after and/or before a given year, e.g. references after 1997: %BR%
-		 <b><tt>select="year&gt;1997"</tt></b>
+		 <b><tt>select="year>1997"</tt></b>
 		* references between 1990 and 1995: %BR%
-		 <b><tt>select="year&gt;=1990 and year&lt;=1995"</tt></b>
+		 <b><tt>select="year>=1990 and year<=1995"</tt></b>
 
 	* Selecting references of a given author
 		* select only entries whose (co)author is Donald Knuth: %BR%
@@ -340,7 +363,7 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 		* Set SHORTDESCRIPTION = Embeds <nop>BibTeX entries in a TWiki page
 
 	* Default topic name for <nop>BibTeX files:
-		* Set DEFAULTTOPIC = Main.NatsPublications 
+		* Set DEFAULTTOPIC = TWiki.BibtexPlugin
 
 	* Default search template
 		* Set DEFAULTSEARCHTEMPLATE = TWiki.BibtexSearchTemplate
@@ -363,15 +386,21 @@ __Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTo
 	  | ==pub/TWiki/BibtexPlugin/bibtoolrsc== | bibtool resource file |
 	  | ==bin/bibsearch== | cgi query script |
 
-
+If TWiki access control is managed at the web-server level, be sure to add
+=bibsearch= to the authorization list. E.g., for Apache, add the following
+lines to the .htaccess file: 
+<verbatim>
+<Files "bibsearch">
+       require valid-user
+</Files>
+</verbatim>
 
 ---++ Plugin Info
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  16 Okt 2003: | Initial version |
 |  Plugin Version: | v1.2 |
 |  Change History: | &nbsp; |
-|  2006/01/06: | added code to generate automatic reference lists, based on declared citations |
-|  2005/12/09: | reworked to use the DakarContrib on cairo and beijing |
+|  2005/12/09: | reworked to use the TWiki:DakarContrib on cairo and beijing |
 |  2004/11/26: | added simple and expert search forms, added select option to cgi-script; \
 		added configurable default search template |
 |  2004/11/25: | allow inline databases to be queried also, added forgotten bibsearch cgi-script |

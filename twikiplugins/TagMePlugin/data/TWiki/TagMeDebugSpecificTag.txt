@@ -1,0 +1,21 @@
+%META:TOPICINFO{author="PeterThoeny" date="1141438207" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TagMeDebugViewTags"}%
+---+ Tag-me: Debug Specific Tag
+
+<noautolink>
+<form action="%SCRIPTURL%/view/%WEB%/%TOPIC%">
+|  web: | <input name="qweb" value="%URLPARAM{ "qweb" encode="entity" }%" size="80" /> |
+|  topic: | <input name="qtopic" value="%URLPARAM{ "qtopic" encode="entity" }%" size="80" /> |
+|  tag: | <input name="qtag" value="%URLPARAM{ "qtag" encode="entity" }%" size="80" /> |
+|  by: | <input name="qby" value="%URLPARAM{ "qby" encode="entity" }%" size="80" /> |
+|	| <input type="submit" /> |
+</form>
+</noautolink>
+
+__Result:__
+%TAGME{ tpaction="query" web="%URLPARAM{qweb}%" topic="%URLPARAM{qtopic}%" tag="%URLPARAM{qtag}%" by="%URLPARAM{qby}%" }%
+
+__See also:__ TagMePlugin, TagMeViewAllTags, TagMeViewMyTags, TagMeViewSpecificTag, TagMeDebugViewTags
+
+-- TWiki:Main.PeterThoeny - 03 Mar 2006
+

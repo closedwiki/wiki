@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132324333" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TopicFunction"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139168397" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 ... displayed as a form gathering all information about this link or an aggregation
@@ -13,13 +13,19 @@ if the linked site has a nice rss feed.
 ---+++ Main
 <verbatim>
 %STARTINCLUDE%
-%DBCALL{"RenderBlogLinkNavigation" NAME="%NAME%"}%
+%~~ DBCALL{"RenderDocNavigation" 
+~~~   NAME="%NAME%"
+~~~   WHERE="TopicType=~'\bBlogLink\b'"
+~~~   ORDER="Name"
+~~~ }%
 <noautolink>
 %~~ DBQUERY{topic="%NAME%"
 ~~~   format="
 ~~~      $percntIFDEFINEDTHEN{\"$formfield(Feed)\" glue=\"off\"}$percnt
 ~~~      <div class=\"blogSubjectCategory\">
-~~~      $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt
+~~~      $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" 
+~~~        format=\"[[$web.$1][$1]]\"
+~~~      }$percnt
 ~~~      </div>
 ~~~      <div> $formfield(Url) <p/>$formfield(Comment)</div>
 ~~~      $percntHEADLINES{
@@ -41,7 +47,11 @@ if the linked site has a nice rss feed.
 ~~~ }%
 
 </noautolink>
-%DBCALL{"RenderBlogLinkNavigation" NAME="%NAME%"}%
+%~~ DBCALL{"RenderDocNavigation" 
+~~~   NAME="%NAME%"
+~~~   WHERE="TopicType=~'\bBlogLink\b'"
+~~~   ORDER="Name"
+~~~ }%
 %STOPINCLUDE%
 </verbatim>
 
@@ -67,6 +77,9 @@ if the linked site has a nice rss feed.
 *~~          <div class=\"headlinesDescription\">
 *~~             $description
 *~~          </div>
+*~~          <div class=\"headlinesRight\">
+*~~            $rights
+*~~          </div>
 *~~        </div>
 *~~
 %ENDSECTION{"header"}%
@@ -84,9 +97,9 @@ if the linked site has a nice rss feed.
 *~~      <a href=\"$link\" target=\"_blank\">$title</a>
 *~~   </div>
 *~~   <hr/>
-*~~   $percntIFDEFINEDTHEN{\"$itemdate\"}$percnt
+*~~   $percntIFDEFINEDTHEN{\"$date\"}$percnt
 *~~   <div class=\"headlinesDate\">
-*~~     $percntCALC{\"$FORMATGMTIME($TIME($itemdate),
+*~~     $percntCALC{\"$FORMATGMTIME($TIME($date),
 ~~~       $wday, $day $mon $year, $hour:$minute)\"
 *~~     }$percnt
 *~~   </div>

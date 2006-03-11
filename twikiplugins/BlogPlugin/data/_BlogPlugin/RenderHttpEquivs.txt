@@ -1,0 +1,66 @@
+%META:TOPICINFO{author="TWikiContributor" date="1139175338" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
+---+ Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+This TopicFunction is used to set the HTTP_EQUIV_ON_VIEW variable which is added
+to the html header section of a page in the <nop>%WEB% web. 
+
+---++ Parameters
+NONE
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<meta name="keywords" 
+~~~ content="twiki blog natskin blogplugin" />
+<link rel="alternate" 
+~~~ type="application/rss+xml" 
+~~~ title="rss" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRss" />
+<link rel="alternate" 
+~~~ type="application/rss+xml" 
+~~~ title="rss (combined)" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssCombined" />
+<link rel="alternate" 
+~~~ type="application/rss+xml" 
+~~~ title="rss (comments)" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssComments" />
+<link rel="alternate" 
+~~~ type="application/rss+xml" 
+~~~ title="rss (teaser)" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssTeaser" />
+
+<link rel="alternate" 
+~~~ type="application/atom+xml" 
+~~~ title="atom" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtom" />
+<link rel="alternate" 
+~~~ type="application/atom+xml" 
+~~~ title="atom (combined)" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomCombined" />
+<link rel="alternate" 
+~~~ type="application/atom+xml" 
+~~~ title="atom (comments)" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomComments" />
+<link rel="alternate" 
+~~~ type="application/atom+xml" 
+~~~ title="atom (teaser)" 
+~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomTeaser" />
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+%DBCALL{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a set of links to alternative formats for the current html page"}%

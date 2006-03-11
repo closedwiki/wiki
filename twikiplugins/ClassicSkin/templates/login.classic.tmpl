@@ -7,16 +7,13 @@
 %TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
 %TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
 
-%TMPL:DEF{"topbar"}%
-<div class="twikiTopBar">
+%TMPL:DEF{"topbar"}%<div class="twikiTopBar">
  <div class="twikiTopBarContents">
   <img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/>
  </div>
 </div>%TMPL:END%
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
----+ %BANNER%
+%TMPL:DEF{"content"}%%TMPL:P{"simpleheader"}%---+ %BANNER%
 %NOTE%
 %AUTHREALM%
 <form action='%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%' method='post'>

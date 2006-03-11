@@ -11,6 +11,7 @@
    * Set SIDEBAR = Aggregation
    * Set WHITEBOARD = off
    * Set PAGETITLE = %FORMFIELD{"Name"}% - Aggregation
+   * Set WEBBUTTONSCLASS_NEWS = current
 -->
 
 

@@ -1,11 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129737361" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TopicType"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139335266" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-See also: %TOPIC%Template, WebPreferences, TWikiFormAttributes
+TWikiForms add structured information to twiki topics. 
 
-%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" warn="off"}%
+See also: %TOPIC%Template, WebPreferences, TWikiFormAttributes, %TWIKIWEB%.TWikiForms
+
+%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" TEMPLATE="%TOPIC%Template" warn="off"}%
 %DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 
 

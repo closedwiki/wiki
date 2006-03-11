@@ -9,14 +9,21 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-%~~ RELATEDENTRIES{"%NAME%"
+~~~
+%STOPALIASAREA%
+%~~ RELATEDTOPICS{"%NAME%"
 ~~~   depth="2"
-~~~   header="
+~~~   filter="State='enabled'"
+~~~   header="<noautolink>
 ~~~     <div class=\"blogSideBarSection blogSideBarRelated\">
-~~~     $n---+ Related$n<ul>" 
-~~~   format="<li class=\"blogRelated$depth\">[[$web.$topic][$headline]]</li>"
-~~~   footer="</ul></div>"
+~~~     <h1>Related$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>" 
+~~~   format="<li class=\"blogRelated$depth\">
+*~~     <a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~        title=\"permalink to $topic\">$headline</a></li>"
+~~~   footer="</ul></div></noautolink>"
 ~~~ }%
+%STARTALIASAREA%
+~~~
 %STOPINCLUDE%
 </verbatim>
 

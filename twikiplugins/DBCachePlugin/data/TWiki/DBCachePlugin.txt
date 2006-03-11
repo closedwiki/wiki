@@ -1,4 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132858289" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139587822" format="1.1" version="1.1"}%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
+-->
 ---+!! <nop>%TOPIC%
 
 %TOC%
@@ -25,12 +34,12 @@ alternative content in case of a warning. The "pattern" feature used to extract 
 an INCLUDEd text using regular expression  has been dropped.
 That aside, DBCALLs can be called recursively as INCLUDEs can,
 parametrized using key-value arguments and
-obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>SECTION{"..."}% 
+obeys to %<nop>STARTINCLUDE%, %<nop>STOPINCLUDE%, %<nop>STARTSECTION{"..."}% 
 and %<nop>ENDSECTION{"..."}%.
 
 Using the <nop>DBCacheContrib topic sections are stored into the topic object of the database.
 The section between %<nop>STARTINCLUDE% ... %<nop>STOPINCLUDE% is called 
-=_sectiondefault= whereas all sections between %<nop>SECTION{"&lt;name>"}% .... 
+=_sectiondefault= whereas all sections between %<nop>STARTSECTION{"&lt;name>"}% .... 
 %<nop>ENDSECTION{"&lt;name>"}% are called =_section&lt;name>= and are stored accordingly.
 
 
@@ -103,11 +112,47 @@ Fetch topic content or a section of it from the database store.
             every occurence of &lt;key> is substituted with &lt;value> |
 | =warn="on,off"= | enable/suppress error warnings |
 
+---+++ DBSTATS
+Compute and format a statistics on the database.
+
+*Syntax:*
+| *%<nop>DBSTATS{"&lt;search>" ...}%* ||
+| ="&lt;search>"= | query string that defines a search, see DBCacheContrib |
+| =web="..."= | the web where to search in (default: current web) |
+| =field(s)="..."= | name of one or more formfields to be extracted (default: "text") |
+| =pattern="..."= | regex pattern to extract keys from the formfield(s); \
+                    you must provide a group ("(...)") in the pattern string that \
+		    encloses the key to be extracted (default: "(\w+)") |
+| =header="..."= | header format string to be prepended to the output |
+| =format="..."= | format string used for each key in the output |
+| =sep(arator)="..."= | separator to put between formatted keys |
+| =footer="..."= | footer format string to be appended to the output |
+| =sort="alpha,created"= | order of keys in the output |
+| =reverse="on,off"= | sort keys descending or ascending |
+| =limit="..."= | maximum number of keys to be formated in the output |
+
+The DBSTATS searches for all topics in given web and reads the given form fields.
+It then uses the =pattern= to extract any key in the data and counts their occurrence.
+The result is rendered using the =format= parameter for each token found, separating them
+by =sep=, prepend the =header= and append the =footer=. Results can be sorted alphabetically
+or by createdate.
+
+Format strings (=header=, =format=, =footer=) can use the following variables to insert
+the computed statistics:
+   * $key: the found key, this must match the first group in the pattern argument
+   * $count: the number of occurences of the key
+   * $index: index of the key within the sorted result set
+   * $min: minimum count found in the search
+   * $max: maximum count found in the search
+   * $mean: mean occurence of a key in the result set
+   * $keys: total number of keys found
+   * $web: the web we search in
+
 ---+++ DBDUMP
 Display the database record of a topic (usefull for debugging).
 
 *Syntax:*
-| *%<nop>DBDUMP{"&lt;topic" ... }%* ||
+| *%<nop>DBDUMP{"&lt;topic>" ... }%* ||
 | ="&lt;topic>"= | topic that we'd like to debug |
 | =web="..."= | name of the web to look for the given topic; \
   note that you can use the dot-notation in specifying the <nop>web.topic also |
@@ -195,26 +240,37 @@ following is the default paramenter (omitting the #)
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
      | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | v0.92 |
+|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v0.99 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Mar 2006: | use ENV instead of the CGI object to detect the current cgi action |
+|  02 Mar 2006: | fixed bad init error showing up on speedy/mod_perl |
+|  01 Mar 2006: | added DBSTATS tag; \
+                  modularized the plugin for delayed compilation |
+|  15 Feb 2006: | don't use the query object in scripted mode |
+|  14 Feb 2006: | forcing to reload the database after a save |
+|  10 Feb 2006: | more performance on mod_perl/speedy_cgi: \
+                  don't reload the topic cache if it hasn't changed |
+|  03 Jan 2006: | fixed INCLUDING(WEB,TOPIC) in DBCALL; \
+                  don't apply glue in advance anymore when storing topic sections, \
+		  it's serving a better purpose when done during a DBCALL |
 |  26 Jan 2006: | fixed internal links in DBCALL; \
                   support for STARTSECTION, old SECTION being deprecated |
 |  24 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Contrib.DBCacheContrib |
-|  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Other Dependencies: | TWiki:Plugins/DBCacheContrib |
+|  Perl Version: | 5.8 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 26 Jan 2005
-
-
+-- TWiki:Main.MichaelDaum - 10 Mar 2006

@@ -1,0 +1,26 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130018315" format="1.1" version="$Rev$"}%
+
+---++ Topic Classification Set-up for the <nop>%BASEWEB% web
+Use this topic to add %BASEWEB%.TopicTypes or %BASEWEB%.SubjectAreas to the <nop>%BASEWEB% web. You can either add a predefined classification or define a new, custom classfication. 
+
+---+++ Step 1: Select !TopicClassification to create
+
+<form name="selectType" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
+*Type of !TopicClassification you want to create:* <select name="type" size="1" ><option value="%URLPARAM{type}%">  %URLPARAM{"type"}% </option><option>SubjectArea</option><option>TopicType</option></select>
+<p />
+<input type="hidden" name="step" value="Two" >
+<input type="submit" value=" Refresh Step 1 Selection " /><p />
+</form>
+
+---+++ Step 2: Create a pre-defined or new <nop>%URLPARAM{type}%?
+
+Existing <nop>%URLPARAM{type}%s in the <nop>%BASEWEB% web:  %SEARCH{ "[T]opicType.*value\=.*%URLPARAM{type}%" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" separator=", " format="$web.$topic"}%
+
+<form name="selectPre" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" >
+<input type="radio" name="step" value="New" checked="on"> Create a new <nop>%URLPARAM{type}% <br>
+<input type="radio" name="step" value="Predefined" > Use a pre-defined <nop>%URLPARAM{type}%: <select name="selection" size="1" > %SEARCH{ "[T]opicType.*value\=.*%URLPARAM{type}%" web="%TCAOWEB%/Installs" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}% </select> 
+<input type="hidden" name="type" value="%URLPARAM{type}%" >
+<p />
+<input type="submit" value=" Proceed to Step 3 " >
+</form>
+

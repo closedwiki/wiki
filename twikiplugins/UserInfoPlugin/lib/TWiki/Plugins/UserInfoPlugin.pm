@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -15,77 +15,68 @@
 #
 
 package TWiki::Plugins::UserInfoPlugin;
+
 use strict;
+use vars qw( $VERSION $RELEASE $uipCore );
 
-###############################################################################
-use vars qw(
-	$web $topic $user $installWeb $VERSION $RELEASE $debug 
-	$twikiGuest 
-	$isInitialized $sessionDir
-);
-require TWiki::Plugins::UserInfoPlugin::Render ;
-require TWiki::Plugins::UserInfoPlugin::Get ;
-
-# This should always be $Rev: 8773$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.0 Dakar Specific';
-
-###############################################################################
-sub writeDebug {
-  &TWiki::Func::writeDebug("- UserInfoPlugin - " . $_[0]) if $debug;
-}
-
-###############################################################################
-sub writeWarning {
-  &TWiki::Func::writeWarning("- UserInfoPlugin - " . $_[0]);
-}
+$RELEASE = '1.50';
 
 ###############################################################################
 sub initPlugin {
-  ($topic, $web, $user, $installWeb) = @_;
+  #($topic, $web, $user, $installWeb) = @_;
 
-  # check for Plugins.pm versions
   if ($TWiki::Plugins::VERSION < 1) {
     &TWiki::Func::writeWarning ("Version mismatch between UserInfoPlugin and Plugins.pm");
     return 0;
   }
 
-  $debug = 0;
-  $isInitialized = 0;
-
-  # plugin correctly initialized
-  &writeDebug("initPlugin ($web.$topic) is OK");
-
+  $uipCore = undef;
   return 1;
 }
 
 ###############################################################################
 sub commonTagsHandler {
-
-	
-  $_[0] =~ s/%VISITORS%/&TWiki::Plugins::UserInfoPlugin::Render::renderCurrentVisitors()/ge;
-  $_[0] =~ s/%VISITORS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Render::renderCurrentVisitors($1)/ge;
-  $_[0] =~ s/%NRVISITORS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrVisitors()/ge;
-
-  $_[0] =~ s/%LASTVISITORS%/&TWiki::Plugins::UserInfoPlugin::Render::renderLastVisitors()/ge;
-  $_[0] =~ s/%LASTVISITORS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Render::renderLastVisitors($1)/ge;
-  $_[0] =~ s/%NRLASTVISITORS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrLastVisitors()/ge;
-  $_[0] =~ s/%NRLASTVISITORS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Get::getNrLastVisitors($1)/ge;
-
-  $_[0] =~ s/%NRUSERS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrUsers()/ge;
-  $_[0] =~ s/%NRGUESTS%/&TWiki::Plugins::UserInfoPlugin::Get::getNrGuests()/ge;
-
-  $_[0] =~ s/%NEWUSERS%/&TWiki::Plugins::UserInfoPlugin::Render::renderNewUsers()/ge;
-  $_[0] =~ s/%NEWUSERS{(.*?)}%/&TWiki::Plugins::UserInfoPlugin::Render::renderNewUsers($1)/ge;
-
+  $_[0] =~ s/%NR(VISITORS|USERS|GUESTS)%/&handleSimpleTags($1)/ge;
+  $_[0] =~ s/%(VISITORS|LASTVISITORS|NRLASTVISITORS|NEWUSERS)(?:{(.*?)})?%/&handleTags($1, $2)/ge;
 }
 
+###############################################################################
+sub getCore {
+  return $uipCore if $uipCore;
+
+  eval 'use TWiki::Plugins::UserInfoPlugin::Core;';
+  die $@ if $@;
+
+  $uipCore = new TWiki::Plugins::UserInfoPlugin::Core;
+
+  return $uipCore;
+}
+
+###############################################################################
+sub handleSimpleTags {
+  my $mode = shift;
+
+  my $core = getCore();
+
+  return $core->handleNrVisitors() if $mode eq 'VISITORS';
+  return $core->handleNrUsers() if $mode eq 'USERS';
+  return $core->handleNrGuests()#; if $mode eq 'GUESTS';
+}
+
+###############################################################################
+sub handleTags {
+  my $mode = shift;
+
+  my $core = getCore();
+
+  return $core->handleNrLastVisitors(@_) if $mode eq 'NRLASTVISITORS';
+  return $core->handleCurrentVisitors(@_) if $mode eq 'VISITORS';
+  return $core->handleLastVisitors(@_) if $mode eq 'LASTVISITORS';
+  return $core->handleNewUsers(@_);# if $mode eq 'NEWUSERS';
+}
+
+###############################################################################
 
 1;
 

@@ -1,0 +1,67 @@
+%META:TOPICINFO{author="MeredithLesly" date="1139344613" format="1.1" version="1.2"}%
+%META:TOPICPARENT{}%
+---+!! <nop>%TOPIC%
+
+This implements a workflow model. The workflow is (currently) contains two tables:
+   * a state table containing tuples of (statename, permissions, message)
+   * a transition table containing tuples of (statename, action, nextstate, permissions).
+
+The main problem at the moment is that the control for changing states is in the topic text, and it really needs to be outside of it. Also, the general edit button should reflect the workflow edit permissions, and it doesn't
+
+%TOC%
+
+------
+
+---++ Syntax Rules
+
+   * %WORKFLOWSTATEMESSAGE% is replaced by the current state's message
+   * %WORKFLOWTRANSITION% is replaced by a control allowing one to change to a permissible next state
+   * %WORKFLOWEDITTOPIC% is replaced by either an edit link or a crossed out edit. 
+
+---++ Examples
+
+   * 
+   * 
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = _one line description here_
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * Test if the installation was successful:
+      * _enter samples here_
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MeredithLesly |
+|  Plugin Version: | 26 Jan 2006 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Jan 2006: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main.MeredithLesly - 26 Jan 2006

@@ -1,4 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131731534" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139390200" format="1.1" version="1.1"}%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
+-->
 ---+!! <nop>RedDotPlugin
 
 This plugin renders a clickable red dot (<a style="color:red; font-weight:bold; padding-left:2px; padding-right:2px; line-height:100%; font-size:18px; text-decoration:none" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%">.</a>) to ease the edit access to
@@ -61,8 +70,15 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | v1.30 |
+|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v1.33 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Mar 2006: | use ENV instead of the CGI object to detect the current cgi action |
+|  15 Feb 2006: | don't initialize the redirector in scripted mode |
+|  14 Feb 2006: | fixed redirects to anchors; \
+                  fixed permission check on old twiki releases;\
+		  fixed use of uninitialised variables on perl 5.8.8 |
 |  26 Jan 2006: | w3c fixes |
 |  01 Dec 2005: | fixed deprecation warnings on dakar |
 |  09 Nov 2005: | fix use of uninitialized variable |
@@ -75,13 +91,12 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | TWiki:Plugins/SessionPlugin (not needed on TWiki/Dakar) |
 |  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 26 Jan 2005
+-- TWiki:Main.MichaelDaum - 10 Mar 2006
 
 
 

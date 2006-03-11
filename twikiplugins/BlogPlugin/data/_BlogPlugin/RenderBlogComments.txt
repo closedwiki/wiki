@@ -12,18 +12,32 @@
 *~~
 <div class="blogComments">
 <a name="topComment"></a>
-<h2>
+<div class="blogScroll">
+~~~ <a href="#bottomComment" title="scroll down">&darr;</a>
+~~~ <a href="#%WEB%_<nop>%NAME%" title="scroll up">&uarr;</a>
+~~~ </div>
 %~~ COUNTCOMMENTS{"%WEB%.%NAME%"
-~~~                hidenull="on"
-~~~                single="One Comment" format="$count Comments"}%
-</h2>
-~~~ %CALC{"$SET(incr, 0)"}%
+~~~   hidenull="on"
+~~~   header="<h2>"
+~~~   single="One Comment" 
+~~~   format="$count Comments"
+~~~   footer="</h2>$n"
+~~~ }%
+<div class="blogEntryFeed">
+~~~  <a class="natFeedIcon blogFeedIcon" 
+~~~     title="RSS Feed for the Comments of this Entry"
+~~~     href="%SCRIPTURL{"view"}%/%WEB%/WebRssComments?name=%NAME%">RSS</a>
+*~~  <a class="natFeedIcon blogFeedIcon" 
+~~~     title="ATOM Feed for the Comments of this Entry"
+~~~     href="%SCRIPTURL{"view"}%/%WEB%/WebAtomComments?name=%NAME%">ATOM</a>
+</div>
+~~~ <!-- %CALC{"$SET(commentCounter, 0)"}% -->
 %~~ DBQUERY{"TopicType='BlogComment' AND BlogRef='%NAME%'"
 ~~~        order="createdate"
-~~~        format="$percntCALC{\"$dollarSETM(incr, +1)\"}$percnt
+~~~        format="<!-- $percntCALC{\"$dollarSETM(commentCounter, +1)\"}$percnt -->
 ~~~                <div class=\"blogComment
 ~~~                $percntCALC{\"$dollarIF(
-~~~                              $dollarODD($dollarGET(incr)),
+~~~                              $dollarODD($dollarGET(commentCounter)),
 ~~~                              blogCommentOdd,
 ~~~                              blogCommentEven)\"}$percnt\">
 ~~~               %DBCALL{"RenderBlogComment" section="format"}%
@@ -32,7 +46,16 @@
 ~~~               </div>
 ~~~               </div>"
 ~~~ }%
+~~~
 <a name="bottomComment"></a>
+<div class="blogScroll">
+~~~ <a href="#topComment" title="scroll up">&uarr;</a>
+~~~ </div>
+<style type="text/css">
+.blogScroll { 
+%~~ CALC{"$IF($NOT($GET(commentCounter)),display:none)"}%;
+}
+</style>
 </div>
 *~~ 
 %STOPINCLUDE%

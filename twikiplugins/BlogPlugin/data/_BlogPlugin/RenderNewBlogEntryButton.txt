@@ -6,7 +6,8 @@
 Note, that this button has view access for the %MAINWEB%.BlogAuthorGroup only.
 So this button will only be displayed for users in this group.
 
-See also: RenderNewBlogLinkButton, RenderNewCategoryButton
+See also: RenderNewBlogLinkButton, RenderNewCategoryButton,
+RenderNewBlogPageButton, RenderNewTWikiTopicButton
 
 ---++ Parameters
    * TEXT: text to be displayed on the button
@@ -14,7 +15,7 @@ See also: RenderNewBlogLinkButton, RenderNewCategoryButton
 ---++ Implementation
 %STARTINCLUDE% 
 *~~
-<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/" method="post">
+<form action="%SCRIPTURL{"edit"}%/%WEB%/BlogEntryXXXXXXXXXX" method="post">
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="BlogEntryTemplate" />
 <input type="hidden" name="formtemplate" value="BlogEntryForm" />

@@ -3,6 +3,7 @@
 # Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
+#use Data::Dumper qw( Dumper );
 ++$|;
 
 ################################################################################
@@ -23,24 +24,17 @@ use strict;
 # 	could create a TWikiInstallationReport topic...
 ################################################################################
 
+BEGIN {
+#    mkpath "lib/CPAN/lib/";
+    use lib qw( lib/CPAN/lib/ lib/CPAN/lib/arch/ );
+};
+
 use File::Path qw( mkpath rmtree );
 use CGI qw( :standard );
 use FindBin;
-use CGI::Carp qw( fatalsToBrowser );
-use File::Copy qw( cp mv );
 use File::Basename qw( basename );
-use Data::Dumper qw( Dumper );
-#use URI;
 use Cwd qw( abs_path );
-use LWP::UserAgent;
-use HTTP::Request;
-use HTTP::Response;
 use English;
-
-mkpath "lib/CPAN/lib/";
-
-use lib qw( lib/CPAN/lib/ );
-use Archive::Zip;
 #use WWW::Mechanize::TWiki 0.08;
 #use Error qw( :try );
 
@@ -49,19 +43,29 @@ my $q = CGI::new() or die $!;
 my $LocalSiteCfg;
 my $twikiAdmin = $q->param('TWikiAdmin') || '';
 my $wikiWebMaster = $q->param('WIKIWEBMASTER') || $ENV{SERVER_ADMIN};
-my $TWikiFor = $q->param('TWikiFor') || 'http://localhost/~twikibuilder/twiki.org.zip';
+my $TWikiFor = $q->param('TWikiFor');
+#my $TWikiFor = $q->param('TWikiFor') || 'http://localhost/~twikibuilder/twiki.org.zip';
 my $perl = $q->param( 'perl' ) || $EXECUTABLE_NAME;
+
+################################################################################
 
 print $q->header(),
     $q->start_html( -title => 'TWiki Installer',
 		    -style => { -code => <<__CSS__ },
 html, body, table, tr, td, td p  { padding:0em; margin:0em; }
-html body { background:#eeeeee; margin:0.2em 0 0.1em 0.2em; font-size:0.9em; }
+html body { background:#FAFAF0; margin:0.2em 0 0.1em 0.2em; font-size:0.9em; }
 td { padding:0.1em; }
-td:hover { background:#bbbbff; }
+.configuration { padding:1em 0; }
+h1 { font-size:1.5em; }
 .kernel { }
 .extension { }
-.configuration { padding:1em 0; }
+
+body { background-color:#D6000F; color:#222222; }
+h1 { color:#ff6900; }
+td:hover { background-color:#aa0000; }
+a:link { color:#F4C000; }
+a:hover:link { background-color:#F4C000; }
+a:hover:link, td:hover { color:#FBF7E8; }
 __CSS__
     ),
     $q->h1( 'TWiki Installer' )
@@ -92,12 +96,12 @@ my $localDirConfig = {
     };
 
 my $mapTWikiDirs = {
-    lib => { dest => "$twikiDir/lib" },
-    pub => { dest => $localDirConfig->{PubDir} },
-    data => { dest => $localDirConfig->{DataDir} },
-    templates => { dest => $localDirConfig->{TemplateDir} },
-    bin => { dest => "$twikiDir", perms => 0755, },
-    locale => { dest => $localDirConfig->{LocalesDir} },
+    lib       => { perms => 0440, dest => "$twikiDir/lib", },
+    pub       => { perms => 0660, dest => $localDirConfig->{PubDir}, },
+    data      => { perms => 0660, dest => $localDirConfig->{DataDir}, },
+    templates => { perms => 0440, dest => $localDirConfig->{TemplateDir}, },
+    bin       => { perms => 0550, dest => "$twikiDir", },
+    locale    => { perms => 0440, dest => $localDirConfig->{LocalesDir}, },
 #    log => ?
 };
 
@@ -106,13 +110,36 @@ my $mapTWikiDirs = {
 ################################################################################
 if ( -d "$FindBin::Bin/twiki" && !$q->param( 'force' ) ) {
     print $q->p( "TWiki is already installed! (you can ", $q->tt( 'force=1' ), " a (re)installation)" );
-    # TODO: need URI for "view"
-    print $q->p( $q->a( { -href => "/TWiki/InstalledPlugins" }, "Proceed to the wiki" ) );
+
+    print $q->p( $q->a( { -href => continueToWikiUrl() }, "Proceed to the wiki" ) );
 
     exit 0;
 }
 
 ################################################################################
+
+sub continueToWikiUrl
+{
+    # TODO: need URI for "view"
+    do "twiki/lib/TWiki.cfg";
+    do "twiki/lib/LocalSite.cfg";
+    my $url = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath} 
+    . '/view'.$TWiki::cfg{ScriptSuffix}
+    . '/TWiki/InstalledPlugins';
+
+    return $url;
+}
+
+
+################################################################################
+
+unless ( $TWikiFor )
+{
+    print twikiForMenu( $q ),
+    	$q->end_html;
+    exit 0;
+}
+
 my $tmpInstall = "$FindBin::Bin/twiki/tmp/install/";
 mkpath $tmpInstall;
 
@@ -127,27 +154,43 @@ unless ( -e $archive_file ) {
     close TAR;
 }
 
+# SMELL: remove unless (but test speed; unzip with some option? (like refresh)
 unless ( -d "$tmpInstall/components/" ) {
-    my $archive = Archive::Zip->new( $archive_file ) or die "No $archive_file";
+    my $archive = Archive::Zip::CommandLine->new( $archive_file ) or die "No $archive_file";
     $archive->extractTree( '', $tmpInstall );
 }
 
 if ( ( $q->param('kernel') || '' ) =~ /^LATEST$/i ) {
-    $q->param( kernel => basename( (reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } 
-			  <$tmpInstall/components/kernel/*> )[0] ) =~ /(.*)\./ );
+    $q->param( kernel => basename( (reverse sort { 
+	( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } 
+				    <$tmpInstall/components/kernel/*> )[0] 
+				   ) =~ /(.*)\./ );
 }
 
 if ( grep( /^all$/i, ( $q->param('extension') ) ) ) {
-    $q->param( -name => 'extension', -value => [ sort map { basename /(.*)\./ } <$tmpInstall/components/extension/*> ] );
+    $q->param( -name => 'extension', 
+	       -value => [ sort map { basename /(.*)\./ } <$tmpInstall/components/extension/*> ],
+	       );
 }
 
-################################################################################
-# present configuration page if the install button hasn't been clicked
-################################################################################
+# set KERNEL and EXTENSION
 if ( lc( $q->param('install') || '' ) ne 'install' ) {
-    print installationMenu( $q ),
+    if ( $q->param('customise') ) {
+	# present configuration page if customised setup has been chosen
+	print installationMenu( $q ),
     	$q->end_html;
-    exit 0;
+	exit 0;
+    }
+    else {
+	# set the defaults for a completely automated install
+	$q->param( kernel => basename( (reverse sort { 
+	    ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } 
+					<$tmpInstall/components/kernel/*> )[0] 
+				       ) =~ /(.*)\./ );
+	$q->param( -name => 'extension', 
+		   -value => [ qw( CpanContrib TWikiInstallerContrib TWikiPluginInstallerContrib ) ],
+		   );
+    }
 }
 
 ################################################################################
@@ -179,7 +222,6 @@ foreach my $plugin ( sort { lc $a cmp lc $b } keys %installedPlugins ) {
 
 $LocalSiteCfg .= <<__LOCALSITE_CFG__;
 #===============================================================================
-\$TWiki::cfg{Register}{HidePasswd} = 1;
 \$TWiki::cfg{AutoAttachPubFiles} = 1;
 \$TWiki::cfg{EnableHierarchicalWebs} = 1;
 \$TWiki::cfg{LoginManager} = 'TWiki::Client::TemplateLogin';
@@ -190,6 +232,7 @@ $LocalSiteCfg .= <<__LOCALSITE_CFG__;
 #===============================================================================
 __LOCALSITE_CFG__
 
+# generate LocalSite.cfg entries for variable entries (url/path,...)
 foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir LocalesDir ) ) {
     # normalise pathnames (entries ending in ...Dir) (Sandbox.pm doesn't like .. in pathnames!)
     $localDirConfig->{ $localSiteEntry } = abs_path( $localDirConfig->{ $localSiteEntry } ) 
@@ -198,6 +241,7 @@ foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUr
     $LocalSiteCfg .= qq{\$TWiki::cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
 }
 
+# write out LocalSite.cfg
 my $fnLocalSiteCfg = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
 open( FH, '>', $fnLocalSiteCfg ) or die "Can't open $fnLocalSiteCfg: $!";
 print FH $LocalSiteCfg;
@@ -210,7 +254,7 @@ rmtree 'tmp/';
 #unlink $0;
 #chmod 0440, $0;		# doesn't seem to be working??? ah, probably an ownership issue (but why does rm work?)
 
-#print continueToWikiText();
+print $q->p( $q->a( { -href => continueToWikiUrl() }, "Proceed to the wiki" ) );
 
 print $q->end_html;
 
@@ -235,9 +279,32 @@ sub InstallTWikiExtension {
     {
 	++$installedPlugins{ $plugin };
     }
-#    $installedPlugins{ sort keys %$plugins } = values %$plugins;
+#    $installedPlugins{ keys %$plugins } = values %$plugins;
 
     return 1;
+}
+
+################################################################################
+
+# parameters
+# cgi: 
+sub twikiForMenu {
+    my $q = shift or die "no cgi?";
+    my $text = '';
+
+    $text .= $q->start_form
+	. $q->hidden( -name => 'force', -value => $q->param('force') )
+	. 'TWikiFor: '
+	. $q->textfield( -name => 'TWikiFor', -size => 50, -value => 'http://TWikiFor.twiki.org/~twikibuilder/twiki.org.zip' ) 
+	. $q->br
+	. $q->checkbox( -name => 'customise', -label => 'Configure & select individual components' )
+	. $q->br
+	. $q->submit( -name => 'install', -value => 'Next...' )
+	. $q->br;
+
+    $text .= $q->end_form;
+
+    return $text;
 }
 
 ################################################################################
@@ -249,6 +316,7 @@ sub installationMenu {
     my $text = '';
 
     $text .= $q->start_form
+	. $q->hidden( -name => 'TWikiFor', -value => $q->param('TWikiFor') )
 	. $q->hidden( -name => 'force', -value => $q->param('force') )
 	. $q->submit( -name => 'install', -value => 'Install' );
 
@@ -302,20 +370,52 @@ sub installationMenu {
 
 ################################################################################
 
-# url: 
-sub getUrl {
-    my ( $p ) = @_;
-    my $url = $p->{url} or die qq{required parameter "url" not specified};
+use Socket;
+sub getUrl
+{
+    my $p = shift;
 
-    my $ua = LWP::UserAgent->new() or die $!;
-    $ua->agent( "TWiki remote installer v0.0.1" );
-    my $req = HTTP::Request->new( GET => $url );
-    # TODO: what about http vs. https ?
-    $req->referer( "$ENV{SERVER_NAME}:$ENV{SERVER_PORT}$ENV{SCRIPT_NAME}" );
-    my $response = $ua->request($req);
+    my ( $theHost, $theUrl ) = $p->{url} =~ m|http://(.*?)(/.*)|;
+    my $thePort = 80;
+    my $theHeader = '';
 
-    return $response->is_error() ? ( undef, $response->status_line ) : ( $response->content(), '' );
+    my $result = '';
+    my $req = "GET $theUrl HTTP/1.0\r\n$theHeader\r\n\r\n";
+    my ( $iaddr, $paddr, $proto );
+    $iaddr   = inet_aton( $theHost );
+    $paddr   = sockaddr_in( $thePort, $iaddr );
+    $proto   = getprotobyname( 'tcp' );
+    socket( SOCK, PF_INET, SOCK_STREAM, $proto )  or die "socket: $!";
+    connect( SOCK, $paddr ) or die "connect: $!";
+    select SOCK; $| = 1;
+    print SOCK $req;
+    while( <SOCK> ) { $result .= $_; }
+    close( SOCK )  or die "close: $!";
+    select STDOUT;
+    return ( $result, 0 );
 }
+
+################################################################################
+
+# url: 
+#use LWP::UserAgent;
+#use HTTP::Request;
+#use HTTP::Response;
+#sub getUrl {
+#    my ( $p ) = @_;
+#    my $url = $p->{url} or die qq{required parameter "url" not specified};
+#
+#    my $ua = LWP::UserAgent->new() or die $!;
+#    $ua->agent( "TWiki remote installer v0.0.1" );
+#    my $req = HTTP::Request->new( GET => $url );
+#    # TODO: what about http vs. https ?
+#    die unless $req;
+#    $req->referer( "$ENV{SERVER_NAME}:$ENV{SERVER_PORT}$ENV{SCRIPT_NAME}" );
+#    my $response = $ua->request($req);
+#    die if $response->is_error();
+#
+#    return $response->is_error() ? ( undef, $response->status_line ) : ( $response->content(), '' );
+#}
 
 ################################################################################
 ################################################################################

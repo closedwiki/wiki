@@ -35,4 +35,8 @@
   text-decoration: none;
   background:#669966;
   color:white;
+  border:0px;
+}
+.natTopBarSizer {
+  height:110px;
 }

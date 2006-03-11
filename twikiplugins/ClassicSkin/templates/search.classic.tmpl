@@ -7,11 +7,9 @@
 
 %TMPL:DEF{"footernote"}% %TMPL:END%
 
-%TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%
-<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>%TMPL:END%
+%TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>%TMPL:END%
 
-%TMPL:DEF{"repeatedsearchblock"}%
-%TABLE%
+%TMPL:DEF{"repeatedsearchblock"}%%TABLE%
 <table width="100%" border="0" cellpadding="0" cellspacing="4">
 	<tr bgcolor="%WEBBGCOLOR%">
 		<td width="50%"><b>Topics in <nop>%WEB% web:</b></td>
@@ -32,14 +30,12 @@
 	</tr>
 </table>%REPEAT%<br clear="all" />%TMPL:END%
 
-%TMPL:DEF{"content"}%
-%SPLIT%Search: <b> %SEARCHSTRING% </b>
+%TMPL:DEF{"content"}%%SPLIT%Search: <b> %SEARCHSTRING% </b>
 <p />%TMPL:P{"searchbody"}%
 <p />%SPLIT%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"main"}%
-<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
+%TMPL:DEF{"main"}%<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
 %TMPL:P{"standardheader"}%
 </form>
 %TMPL:P{"content"}%%TMPL:END%

@@ -2,25 +2,15 @@
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-See also: RenderAdminTools, WebLeftBar, BlogSideBar
+See also: RenderAdminTools, RenderSideBar, WebLeftBar
 
 <div class="natSideBar">
 <div class="natSideBarContents">
-
-%STARTINCLUDE%<div class="blogSideBar">
-%DBCALL{"BlogSideBar" section="%IFDEFINED{"%SIDEBAR%" then="%SIDEBAR%" else="Default"}%"}%
-<style type="text/css">
-.natRevision,
-.natWebLocator {
-   display:none;
-}
-</style>
-</div>
+%STARTINCLUDE%
+%DBCALL{"RenderSideBar"}%
 %STOPINCLUDE%
-
 </div>
 </div>
-
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

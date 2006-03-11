@@ -1,0 +1,3 @@
+data/TWiki/WorkflowPlugin.txt  Plugin doc page
+lib/TWiki/Plugins/WorkflowPlugin.pm  Plugin Perl module 
+data/Sandbox/PluginTestWorkflowPlugin.txt  Plugin examples

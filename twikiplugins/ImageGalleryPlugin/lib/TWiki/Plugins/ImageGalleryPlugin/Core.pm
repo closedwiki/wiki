@@ -20,6 +20,10 @@ package TWiki::Plugins::ImageGalleryPlugin::Core;
 
 use strict;
 
+use vars qw($debug);
+
+$debug = 0; # toggle me
+
 # =========================
 # constructor
 sub new {
@@ -31,19 +35,25 @@ sub new {
   # init
   $this->{id} = $id;
   $this->{query} = &TWiki::Func::getCgiQuery();
-  $this->{debug} = 0;
   $this->{mage} = new Image::Magick;
-  $this->{isDakar} = defined $TWiki::cfg{MimeTypesFileName};
+  $this->{isDakar} = defined $TWiki::RELEASE;
   $this->{topic} = $topic;
   $this->{web} = $web;
   $this->{doRefresh} = 0;
   $this->{errorMsg} = ''; # from image mage
+
+  $this->{wikiUserName} = &TWiki::Func::getWikiUserName();
+  $this->{pubDir} = &TWiki::Func::getPubDir();
+  $this->{pubUrlPath} = &TWiki::Func::getPubUrlPath();
+  $this->{topicRegex} = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
+  $this->{webRegex} = &TWiki::Func::getRegularExpression('webNameRegex');
+  $this->{twikiWebName} = &TWiki::Func::getTwikiWebname();
   
   # get style url
   my $hostUrl = ($this->{isDakar})? $TWiki::cfg{DefaultUrlHost}:$TWiki::defaultUrlHost;
     
   $this->{styleUrl} = TWiki::Func::getPreferencesValue("IMAGEGALLERYPLUGIN_STYLE") ||
-    $hostUrl .  &TWiki::Func::getPubUrlPath() . "/" . &TWiki::Func::getTwikiWebname() . 
+    $hostUrl .  $this->{pubUrlPath} . "/" . $this->{twikiWebName} . 
     "/ImageGalleryPlugin/style.css";
 
   # get image mimes
@@ -61,35 +71,19 @@ sub new {
     }
   }
 
-  my $topicPubDir = $this->normalizeFileName(&TWiki::Func::getPubDir() . "/$web/$topic");
+  my $topicPubDir = $this->normalizeFileName($this->{pubDir} . "/$web/$topic");
   mkdir $topicPubDir unless -d $topicPubDir;
 
   if ($this->{id}) {
-    $this->{igpDir} = $this->normalizeFileName("$topicPubDir/igp$this->{id}");
+    $this->{igpDir} = $this->normalizeFileName("$topicPubDir/_igp$this->{id}");
     mkdir $this->{igpDir} unless -d $this->{igpDir};
 
-    $this->{igpPubUrl} = &TWiki::Func::getPubUrlPath() .
-      "/$this->{web}/$this->{topic}/igp$this->{id}";
+    $this->{igpPubUrl} = $this->{pubUrlPath} .
+      "/$this->{web}/$this->{topic}/_igp$this->{id}";
     $this->{infoFile} = $this->normalizeFileName("$this->{igpDir}/info.txt");
   }
 
   return $this;
-}
-
-# =========================
-sub debug {
-  my $this = shift;
-
-  $this->{debug} = shift if @_;
-  return $this->{debug};
-}
-
-# =========================
-# debug logger
-sub writeDebug {
-  my $this = shift;
-  return unless $this->{debug};
-  &TWiki::Func::writeDebug("ImageGallery - $_[0]");
 }
 
 # =========================
@@ -110,7 +104,7 @@ sub init {
   my ($this, $args) = @_;
 
   $args = '' unless $args;
-  $this->writeDebug("init($args) called");
+  #writeDebug("init($args) called");
   
   # read attributes
   $this->{size} = &TWiki::Func::extractNameValuePair($args, "size") || 'medium';
@@ -131,7 +125,7 @@ sub init {
   $this->{thumbwidth} = $thumbwidth;
   $this->{thumbheight} = $thumbheight;
 
-  $this->writeDebug("size=$this->{size} thumbsize=$thumbsize thumbwidth=$thumbwidth thumbheight=$thumbheight");
+  #writeDebug("size=$this->{size} thumbsize=$thumbsize thumbwidth=$thumbwidth thumbheight=$thumbheight");
   
   my $topics = 
     &TWiki::Func::extractNameValuePair($args) 
@@ -142,27 +136,25 @@ sub init {
   $this->{topics} = undef;
   
   # normalize topic names
-  my $topicRegex = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
-  my $webRegex = &TWiki::Func::getRegularExpression('webNameRegex');
   foreach my $theTopic (split(/,\s*/, $topics)) {
     my $theWeb;
-    if ($theTopic =~ /^($webRegex)\.($topicRegex)$/) {
+    if ($theTopic =~ /^($this->{webRegex})\.($this->{topicRegex})$/) {
       $theWeb = $1;
       $theTopic = $2;
-    } elsif ($theTopic =~ /^($topicRegex)$/) {
+    } elsif ($theTopic =~ /^($this->{topicRegex})$/) {
       $theWeb = $this->{web};
     } else {
-      $this->writeDebug("oops, skipping $theTopic");
+      #writeDebug("oops, skipping $theTopic");
       next;
     }
     push @{$this->{topics}}, "$theWeb.$theTopic";
   }
 
   if (!$this->{topics}) {
-    $this->writeDebug("oops, no topics found");
+    #writeDebug("oops, no topics found");
     return 0;
   }
-  $this->writeDebug("topics=" . join(", ", @{$this->{topics}}));
+  #writeDebug("topics=" . join(", ", @{$this->{topics}}));
 
 
   $this->{columns} = &TWiki::Func::extractNameValuePair($args, "columns") || 4;
@@ -201,6 +193,14 @@ sub init {
 
   my $refresh = $this->{query}->param("refresh") || '';
   $this->{doRefresh} = ($refresh eq 'on')?1:0;
+
+  $this->{include} = &TWiki::Func::extractNameValuePair($args, "include") || '';
+  $this->{exclude} = &TWiki::Func::extractNameValuePair($args, "exclude") || '';
+  $this->{field} = &TWiki::Func::extractNameValuePair($args, "field") || 'name';
+
+  if ($this->{field} !~ /^(name|comment)$/) {
+    $this->{field} = 'name';
+  }
 
   return 1;
 }
@@ -250,7 +250,7 @@ sub render {
       $this->{info}{thumbheight}{value} ne $this->{thumbheight} ||
       join(', ', $this->{info}{topics}{value}) ne join(', ', @{$this->{topics}});
 
-  my $result = "<div class=\"igp\"><a name=\"igp$this->{id}\"/>";
+  my $result = "<div class=\"igp\"><a name=\"igp$this->{id}\"></a>";
 
   # get filename query string
   my $filename = $this->{query}->param("filename");
@@ -276,7 +276,7 @@ sub render {
 sub renderImage {
   my ($this, $filename) = @_;
 
-  $this->writeDebug("renderImage($filename)");
+  #writeDebug("renderImage($filename)");
 
   my $result = '';
 
@@ -383,11 +383,11 @@ sub renderThumbnails {
 
   my $this = shift;
 
-  $this->writeDebug("renderThumbnails()");
+  #writeDebug("renderThumbnails()");
 
   if (!@{$this->{images}}) {
     my $msg = "no images found";
-    $this->writeDebug($msg);
+    #writeDebug($msg);
     return &renderError($msg); 
   }
 
@@ -477,53 +477,50 @@ sub renderRedDot {
 sub getImages {
   my $this = shift;
 
-  $this->writeDebug("getImages(" . join(', ', @{$this->{topics}}) . ") called");
+  #writeDebug("getImages(" . join(', ', @{$this->{topics}}) . ") called");
 
   # collect images from all topics
-  my $wikiUserName = &TWiki::Func::getWikiUserName();
-  my $pubDir = &TWiki::Func::getPubDir();
-  my $pubUrl = &TWiki::Func::getPubUrlPath();
-  my $topicRegex = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
-  my $webRegex = &TWiki::Func::getRegularExpression('webNameRegex');
   my @images;
   my $imgnr = 1;
   foreach (@{$this->{topics}}) {
     my $webtopic= $_;
     my $theWeb;
     my $theTopic;
-    if ($webtopic =~ /^($webRegex)\.($topicRegex)$/) {
+    if ($webtopic =~ /^($this->{webRegex})\.($this->{topicRegex})$/) {
       $theWeb = $1;
       $theTopic = $2;
     } else {
-      $this->writeDebug("oops, skipping $webtopic");
+      #writeDebug("oops, skipping $webtopic");
       next;
     }
-    $this->writeDebug("reading from $theWeb.$theTopic}");
+    #writeDebug("reading from $theWeb.$theTopic}");
 
-    my $viewAccessOK = &TWiki::Func::checkAccessPermission("view", $wikiUserName, '', 
+    my $viewAccessOK = &TWiki::Func::checkAccessPermission("view", $this->{wikiUserName}, '', 
       $theTopic, $theWeb);
 
     if (!$viewAccessOK) {
-      $this->writeDebug("no view access to ... skipping");
+      #writeDebug("no view access to ... skipping");
       next;
     }
 
     my ($meta, undef) = &TWiki::Func::readTopic($theWeb, $theTopic);
 
-    foreach my $attachment ($meta->find('FILEATTACHMENT')) {
-      next unless $this->isImage($attachment);
-      my $image = $attachment;
+    foreach my $image ($meta->find('FILEATTACHMENT')) {
+      next unless $this->isImage($image);
+
+      next if $this->{exclude} && $image->{$this->{field}} =~ /$this->{exclude}/;
+      next if $this->{include} && $image->{$this->{field}} !~ /$this->{include}/;
 
       $image->{IGP_comment} = &getImageTitle($image);
       $image->{IGP_sizeK} = sprintf("%dk", $image->{size} / 1024);
       $image->{IGP_natnr} = $imgnr;
       $image->{IGP_topic} = $theTopic;
       $image->{IGP_web} = $theWeb;
+
       $image->{IGP_filename} = $this->normalizeFileName(
-	$pubDir . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}");
+	$this->{pubDir} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}");
       $image->{IGP_url} = 
-	$pubUrl . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}";
-      $imgnr++;
+	$this->{pubUrlPath} . "/$image->{IGP_web}/$image->{IGP_topic}/$image->{name}";
       if ($image->{IGP_comment} =~ /^([0-9]+)\s*-\s*(.*)$/) {
 	$image->{IGP_imgnr} = $1;
 	$image->{IGP_comment} = $2;
@@ -536,6 +533,8 @@ sub getImages {
 	  "no such file '$image->{IGP_filename}'");
 	next;
       }
+
+      $imgnr++;
       
       push @images, $image;
     }
@@ -589,20 +588,20 @@ sub getImages {
 sub computeImageSize {
   my ($this, $image) = @_;
   
-  $this->writeDebug("computeImageSize($image->{name})");
+  #writeDebug("computeImageSize($image->{name})");
 
   my $entry = $this->{info}{$image->{name}};
   if (!$this->{doRefresh} && $entry) {
     
     # look up igp info
-    $this->writeDebug("found cached info");
+    #writeDebug("found cached info");
     $image->{IGP_origwidth} = $entry->{origwidth};
     $image->{IGP_origheight} = $entry->{origheight};
     
   } else {
     
     # compute
-    $this->writeDebug("consulting image mage on $image->{IGP_filename}");
+    #writeDebug("consulting image mage on $image->{IGP_filename}");
     ($image->{IGP_origwidth}, $image->{IGP_origheight}, undef, undef) = 
       $this->{mage}->Ping($image->{IGP_filename});
 
@@ -635,7 +634,7 @@ sub computeImageSize {
   $image->{IGP_width} = int($width+0.5);
   $image->{IGP_height} = int($height+0.5);
 
-  #$this->writeDebug("minwidth=$this->{minwidth}, minheight=$this->{minheight}, width=$width, height=$height");
+  #writeDebug("minwidth=$this->{minwidth}, minheight=$this->{minheight}, width=$width, height=$height");
 
   # compute max thumnail width and height
   $width = $image->{IGP_origwidth};
@@ -723,7 +722,7 @@ sub replaceVars {
 sub createImg {
   my ($this, $image, $thumbMode) = @_;
   
-  #$this->writeDebug("createImg($image->{name}) called");
+  #writeDebug("createImg($image->{name}) called");
   
   my $prefix = ($thumbMode)?'thumb_':'';
 
@@ -738,7 +737,7 @@ sub createImg {
   # read
   my $error = $this->{mage}->Read($image->{IGP_filename});
   if ($error =~ /(\d+)/) {
-    $this->writeDebug("Read(): error=$error");
+    #writeDebug("Read(): error=$error");
     $this->{errorMsg} = " $error";
     return 0 if $1 >= 400;
   }
@@ -752,7 +751,7 @@ sub createImg {
       $this->{mage}->Scale(geometry=>"$image->{IGP_width}x$image->{IGP_height}");
   }
   if ($error =~ /(\d+)/) {
-    $this->writeDebug("Scale(): error=$error");
+    #writeDebug("Scale(): error=$error");
     $this->{errorMsg} .= " $error";
     return 0 if $1 >= 400;
   }
@@ -760,12 +759,12 @@ sub createImg {
   # write
   $error = $this->{mage}->Write($target);
   if ($error =~ /(\d+)/) {
-    $this->writeDebug("Write(): error=$error");
+    #writeDebug("Write(): error=$error");
     $this->{errorMsg} .= " $error";
     return 0 if $1 >= 400;
   }
 
-  $this->writeDebug("writing target '$target'");
+  #writeDebug("writing target '$target'");
 
   # forget
   my $mage = $this->{mage};
@@ -803,7 +802,7 @@ sub formatTime {
 sub normalizeFileName {
   my ($this, $fileName) = @_;
 
-  #$this->writeDebug("normalizeFileName($fileName)");
+  #writeDebug("normalizeFileName($fileName)");
 
   if (defined &TWiki::Sandbox::normalizeFileName) {
     return &TWiki::Sandbox::normalizeFileName($fileName);
@@ -843,7 +842,7 @@ sub getImageTitle {
 sub readInfo {
   my $this = shift;
 
-  $this->writeDebug("readInfo() called");
+  writeDebug("readInfo() called");
 
   $this->{infoChanged} = 1;
   return unless -e $this->{infoFile};
@@ -881,7 +880,7 @@ sub readInfo {
 sub writeInfo {
   my $this = shift;
 
-  $this->writeDebug("writeInfo() called");
+  writeDebug("writeInfo() called");
 
   return unless $this->{infoChanged};
 
@@ -902,10 +901,18 @@ sub writeInfo {
       "\n";
   }
 
-  $this->writeDebug("writing infoFile=$this->{infoFile}");
+  writeDebug("writing infoFile=$this->{infoFile}");
 
   &TWiki::Func::saveFile($this->{infoFile}, $text);
 }
+
+# =========================
+# static
+sub writeDebug {
+  return unless $debug;
+  &TWiki::Func::writeDebug("ImageGalleryPlugin - $_[0]");
+}
+
 
 
 1;

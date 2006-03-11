@@ -92,6 +92,11 @@ sub initPlugin
         $magic = "" unless( $magic =~ s/.*?([0-9]+).*/$1/s );
         my $expire = TWiki::Func::getPreferencesValue( "\U$pluginName\E_REGEXPIRE" ) || 0;
         $expire = 0 unless( $expire =~ s/.*?([0-9]+).*/$1/s );
+        if( $TWiki::Plugins::VERSION >= 1.1 ) {
+            # look at magic number only for register, not for verify, resetPassword or approve
+            my $regAction = $cgiQuery->param('action') || "";
+            $expire = 0 if( $regAction =~ /^(verify|resetPassword|approve)$/ );
+        }
         if( $expire > 0 ) {
             $expire *= 60;
             $expire = time() - $expire;

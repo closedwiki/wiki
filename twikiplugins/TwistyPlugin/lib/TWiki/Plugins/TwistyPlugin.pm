@@ -30,7 +30,7 @@ package TWiki::Plugins::TwistyPlugin;    # change the package name and $pluginNa
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $pluginName $debug @modes);
+use vars qw( $VERSION $RELEASE $pluginName $debug @modes $doneHeader);
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -57,15 +57,8 @@ sub initPlugin {
     # Get plugin preferences, variables defined by:
     #   * Set EXAMPLE = ...
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
-    my $header=<<'EOF'; 
-<style type="text/css" media="all">
-@import url("%PUBURL%/TWiki/TwistyContrib/twist.css");
-</style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
-EOF
 
-    TWiki::Func::addToHEAD('TWISTYPLUGIN_TWISTY',$header);
+    $doneHeader = 0;
     TWiki::Func::registerTagHandler('TWISTYSHOW',\&_TWISTYSHOW);
     TWiki::Func::registerTagHandler('TWISTYHIDE',\&_TWISTYHIDE);
     TWiki::Func::registerTagHandler('TWISTYBUTTON',\&_TWISTYBUTTON);
@@ -77,6 +70,20 @@ EOF
     return 1;
 }
 
+sub _addHeader {
+    return if $doneHeader;
+    $doneHeader = 1;
+
+    my $header=<<'EOF'; 
+<style type="text/css" media="all">
+@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
+</style>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
+EOF
+
+  TWiki::Func::addToHEAD('TWISTYPLUGIN_TWISTY',$header)
+}
 
 sub _TWISTYSHOW {
     return _twistyImpl(@_, 'show');
@@ -129,6 +136,7 @@ sub _twistyImpl {
     my $imgRightTag = ($imgright ne '') ? '<img src="'.$imgright.'" border="0" alt="" align="center" />' : '';
     my $imgLeftTag = ($imgleft ne '') ? '<img src="'.$imgleft.'" border="0" alt="" align="center" />' : '';
     my $initialHidden = ($theState eq 'hide') ? 'twistyTransparent ' : '';
+    _addHeader();
     return '<span'.' id="'.$id.$theState.'" class="'.$initialHidden.'twistyMakeOpaque"><a href="#" class="twistyTrigger">'.$imgLeftTag.'<span class="twikiLinkLabel">'.$link.'</span>'.$imgTag.$imgRightTag.'</a></span>';
 }
 

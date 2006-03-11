@@ -22,6 +22,8 @@ hr {
 
 /* local basics */
 .natBody {
+  margin:0;
+  padding:0;
   background:#eee;
   background:#d5d6d7;
   text-align: center;
@@ -31,7 +33,7 @@ hr {
   text-align:left;
   /*border: 1px solid #959596;*/
   font-size: 65.5%;
-  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .natSideBar,
 .natTopRight {
@@ -42,6 +44,10 @@ hr {
 .natMainFooterContents,
 .natMainContents {
   padding:15px;
+}
+
+.natMiddleLeft {
+  padding-right:0px;
 }
 
 .natTopLeft, .natTopRight {
@@ -58,8 +64,7 @@ hr {
   margin-top:5.2em;
 }
 .natTopBarSizer {
-  height:140px;
-  max-height:140px;
+  height:160px;
 }
 .natSearchBox input {
   width:13em;
@@ -151,19 +156,24 @@ hr {
 .natSideBar a:hover {
   text-decoration:underline;
 }
+/*
 .natSideBar ol {
   padding-left:2em;
 }
-.natSideBar ul {
+*/
+html>body .natSideBar ul { /* hide from IE */
+  margin-left:0px;
   padding-left:2ex;
   list-style-type: none;
   text-indent:-2ex;
 }
-.natSideBar ul li:before {
+html>body .natSideBar ol { /* hide from IE */
+  text-indent:-1ex;
+}
+.natSideBar ul > li:before { /* does not compute on IE */
   content: "\00BB \0020";
   color:#777;
 }
-
 .natSideBarContents .natSkinStyleBrowser ul li {
   padding-left:10px;
 }
@@ -181,6 +191,9 @@ hr {
   margin-top:1em;
   margin-bottom:1em;
 }
+.natSideBar a.natFeedIcon {
+  color:#959596;
+}
 .natSearchBox .natSideBarSearch input {
   background:white;
   color: #444;
@@ -191,7 +204,6 @@ hr {
   font-family:arial,sans-serif;
   font-size:1.2em;
 }
-
 /* main */
 .natMiddle {
   background-color: white;
@@ -201,7 +213,7 @@ hr {
 .natMainContents {
   /*color:#777;*/
   line-height:1.5em;
-  font: 1.2em/1.5em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+  font: 1.2em/1.5em Verdana, Arial, Sans-Serif;
 }
 .natMainFooterContents {
   text-align:left;
@@ -238,7 +250,7 @@ hr {
 .natMain h4,
 .natMain h5,
 .natMain h6 {
-  font-family: 'Century Gothic', 'Lucida Grande', 'Trebuchet MS', Verdana, sans-serif;
+  font-family: 'Trebuchet MS', Verdana, sans-serif;
   letter-spacing:-1px;
 }
 
@@ -303,7 +315,7 @@ hr {
   border-bottom:2px solid #ffd324;
   border-left:0px;
   border-right:0px;
-  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .natTopicForm {
   padding:5px;
@@ -349,7 +361,7 @@ hr {
 .natTopicForm table input {
   border:1px solid #d9d6e7;
   margin:2px;
-  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   font-size:small;
   color:#444;
   padding:2px;
@@ -368,39 +380,32 @@ hr {
 
 /* search tables */
 .natSearchTable {
-  font-size:x-small;
-  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-size:1em;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  margin-top:1em;
+}
+.natSearchTable:first-child {
+  margin-top:0em;
 }
 .natSearchTableTitle th {
   color:#444444;
-  background:white;
-  font-size:1.1em;
+  background:#fff6bf;
+  border-top:1px solid #ddd;
 }
 
 .natSearchHit {
-  font-size:1.0em;
-  line-height:140%;
-  border-top:1px solid #ddd;
+  font-size:0.9em;
   border-bottom:1px solid #ddd;
 }
 .natSearchHit th {
   border-top:1px solid #ddd;
+  padding:0.5em 0.5em 0em 0.5em;
 }
 .natSearchHit td {
-  padding-bottom:10px;
+  padding:0 0.5em 0.5em 0.5em;
 }
-.natSearchHit:nth-child(2n+1) {
+.natSearchHitEven {
   background:#f0f0f0;
-}
-
-.natSearchOddHit {
-  background:#f0f0f0;
-}
-.natSearchOddHit th {
-  border-top:1px solid #ddd;
-}
-.natSearchOddHit td {
-  border-bottom:1px solid #ddd;
 }
 
 /* table of contents */
@@ -493,6 +498,8 @@ hr {
 /* blogging */
 .blogHeadline {
   border-bottom:1px solid #ddd;
+  margin-bottom:5px;
+  font-size:95%;
 }
 .blogInfo {
   font-size:0.8em;
@@ -564,18 +571,18 @@ hr {
 .blogNavigation {
   padding-top:2px;
 }
+.blogEntryFeed a,
+.blogScroll,
+.blogScroll a,
 .blogNavigation,
 .blogNavigation a {
-  color:#aaa;
-}
-.blogAddComment {
-  margin-top:30px;
+  color:#959596;
 }
 .blogAddComment textarea,
 .blogAddComment input {
   border:1px solid #aaa;
   color:#444;
-  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   font-size:small;
   padding:2px;
 }
@@ -598,8 +605,8 @@ hr {
   margin-top:20px;
   margin-bottom:20px;
 }
-.blogSideBarSection ol {
-  margin-left:0.5em;
+.blogSideBarSection ul ol {
+  padding-left:2.5em;
 }
 .blogEntryCount {
   font-size:0.9em;
@@ -609,15 +616,14 @@ hr {
 .blogSideBarSection .blogCommentCount {
   text-align:right;
 }
-.blogSideBarSection li,
-.blogSideBarCategories li {
+.blogSideBarSection ul > li,
+.blogSideBarCategories ul > li {
   padding-right:0px;
 }
 
 .blogSideBarComments .blogEntryCount,
 .blogSideBarComments .blogCommentCount {
   margin-left:2em;
-  margin-right:0px;
 }
 /*
 .blogRelated1 a {
@@ -634,10 +640,26 @@ hr {
 .blogText cite {
   display:block;
   margin: 10px 0;
-  padding: 0 10px 0 50px;
-  background: url('quote.png') 10px top no-repeat;
+  padding: 0 25px 0 50px;
+  background: url("quote.gif") 10px top no-repeat; /* IE */
   border: none;
   font-style:normal;
+}
+.blogText > cite {
+  background: url("quote.png") 10px top no-repeat; /* non-IE */
+}
+.blogArchiveModes a.current,
+.blogArchiveYear a.current,
+.blogArchiveMonth a.current,
+.blogArchiveLexMins a.current,
+.blogArchiveTagCloud a.current {
+  border-bottom:2px solid #0066cc;
+  text-decoration:none;
+  color:#0066cc!important;
+}
+.blogArchiveTagCloud a:hover {
+  color:#0a3993!important;
+  text-decoration:none;
 }
 
 /* BlackListPlugin */

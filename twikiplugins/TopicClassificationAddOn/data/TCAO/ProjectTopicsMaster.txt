@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130441730" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+
+__This topic is included in the template for !ProjectTopic topics within the specific webs where TopicClassification is used. Changes to this topic will be applied throughout the site.__
+
+%STARTSECTION{"type"}%
+---++ %BASETOPIC%s within the <nop>%BASEWEB% Web.
+
+The %BASETOPIC% %BASEWEB%.TopicType has a special status within the %BASEWEB% web because it is used as primary classification that is included in %BASEWEB%.WebForm. The following table automatically populates the dropdown %BASETOPIC% form field. 
+%ENDSECTION{"type"}%
+
+__The following form element is included in CreateNewTopic in webs where ProjectTopics are used.__ 
+
+%STARTSECTION{"formelement"}%
+<p />
+*Project:* &nbsp;<select name="project" ><option value="%URLPARAM{"project" default=""}%">%URLPARAM{"project" default="Select..."}%</option> %SEARCH{ "[T]opicType.*value\=.*[P]rojectTopic" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="<option>$topic</option>"}%</select> %BR%
+_(Optional) Assign this topic with a specific project._
+<p />
+%ENDSECTION{"formelement"}%
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

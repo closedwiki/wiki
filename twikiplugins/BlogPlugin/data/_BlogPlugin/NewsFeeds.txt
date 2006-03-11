@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1134052888" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="FrontPage"}%
+%META:TOPICINFO{author="TWikiContributor" date="1140023540" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -20,9 +20,10 @@
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set SIDEBAR = Aggregation
+   * Set WEBBUTTONSCLASS_NEWS = current
 -->
 
 
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="BlogLink Aggregation"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogPage, TWikiTopic"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="News Aggregation"}%

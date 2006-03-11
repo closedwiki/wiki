@@ -5,13 +5,17 @@
 
 ---++ Parameters
    * SKIP: topic offset
+   * LIMIT: number of hits per page
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
 *~~
 %~~ DBQUERY{
-~~~    order="modified" limit="10" reverse="on" skip="%SKIP%"
+~~~    order="modified" 
+~~~    limit="%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="10"}%" 
+~~~    reverse="on" 
+~~~    skip="%SKIP%"
 ~~~    header="<noautolink>$n
 ~~~      | *&nbsp;* | *Topic* | *Type* | *Changed* | *Author* |"
 ~~~    format="
@@ -25,7 +29,7 @@
 %~~ DBCALL{"RenderPageNavigation" 
 ~~~   SKIP="%SKIP%" 
 ~~~   MAX="%CALC{"$GET(nrTopics)"}%"
-~~~   INCR="10"
+~~~   LIMIT="%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="10"}%"
 ~~~ }%
 *~~
 %STOPINCLUDE%
@@ -33,7 +37,7 @@
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%"}%
+%DBCALL{"%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%" LIMIT="5"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

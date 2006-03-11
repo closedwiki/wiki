@@ -2,7 +2,7 @@
 ---++ <nop>%WEB% Web Preferences
 %FORMFIELD{"TopicDescription"}%
 
-   * Set WEBBGCOLOR = #eeeeee
+   * Set WEBBGCOLOR = #E2DCC8
    * Set SITEMAPLIST = on
    * Set SITEMAPWHAT = Decent Blogging using TWiki
    * Set SITEMAPUSETO = Decent Blogging using TWiki
@@ -16,10 +16,31 @@
    * Set NATSEARCHTEMPLATE = SearchView
    * Set STYLESEARCHBOX = pos2
    * Set STYLEBUTTONS = on
+
+   * Set WEBBUTTONSCLASS_HOME =
+   * Set WEBBUTTONSCLASS_NEWS =
+   * Set WEBBUTTONSCLASS_ARCHIVE =
+   * Set WEBBUTTONSCLASS_ABOUT =
+
+   * Set USERSTYLEURL = %PUBURLPATH%/%TWIKIWEB%/BlogPlugin/patternstyle.css
+
+   * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
+   * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>
+   * Set WEBRSSCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssComments" title="RSS Feed for the Comments on this Site">RSS COMMENTS</a>
+   * Set WEBRSSCOMBINED = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssCombined" title="RSS Feed for Site">RSS COMBINED</a>
+   * Set WEBATOM = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtom" title="ATOM Feed for the Entries on this Site">ATOM</a>
+   * Set WEBATOMTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomTeaser" title="ATOM Feed for the Teasers on this Site">ATOM TEASER</a>
+   * Set WEBATOMCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomComments" title="ATOM Feed for the Comments on this Site">ATOM COMMENTS</a>
+   * Set WEBATOMCOMBINED = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomCombined" title="ATOM Feed for this Site">ATOM COMBINED</a>
+   * Set WEBSYNDICATION = [[%WEB%.WebSyndication][Syndicate]] this site %WEBRSS%%WEBRSSCOMMENTS%%WEBATOM%%WEBATOMCOMMENTS%
    
    * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
-   * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm
+   * Set WEBFORMS = BlogCommentForm, BlogEntryForm, BlogLinkForm, BlogPageForm, TopicForm 
    * WebTopicEditTemplate
+
+<verbatim>
+   * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"RenderHttpEquivs"}%
+</verbatim>
 
 <!--
    * #Set TECHNORATICODE = 

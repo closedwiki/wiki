@@ -48,7 +48,7 @@ sub run {
 #    a.2) Is a directory
 #    a.3) Both
 # b) A .pm ($test=TWikiShellContrib/SomeTest.pm) 
-#    This is the compatible Support
+#    This is the compatible Support, and the only case covered
 #
    my $unitTests=$config->{RUNTEST}{dir};
    my $bin=$config->{TWIKI}{bin};
@@ -56,8 +56,8 @@ sub run {
 
    foreach my $arg (@argv) {
       if ($arg=~ m!(.+)/([^/]+.pm)!) {
-         unshift @INC, "$unitTests/".$1;
-      }
+         unshift @INC, $unitTests.'/'.$1;
+      } 
    }
    unshift @INC, "$unitTests";
    unshift @INC, "$bin";
@@ -69,8 +69,8 @@ sub run {
    if (defined $ENV{TWIKI_ASSERTS} ) {
      print "TWIKI_ASSERTS is defined, overriding twikishell configuration\n";
    }
-
-   $ENV{TWIKI_ASSERTS}=$ENV{TWIKI_ASSERTS}||$config->{RUNTEST}{assert};
+   
+   $ENV{TWIKI_ASSERTS}=$ENV{TWIKI_ASSERTS} || $config->{RUNTEST}{asserts};
 
    if ($ENV{TWIKI_ASSERTS} == 1) {
      print "Assert checking on\n";

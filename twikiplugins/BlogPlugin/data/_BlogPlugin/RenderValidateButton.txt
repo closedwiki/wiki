@@ -7,7 +7,7 @@
 %STARTINCLUDE%
 ~~~
 <div class="twikiPageForm blogAdminButtons">
-<form action="http://validator.w3.org/check/referer">
+<form action="http://validator.w3.org/check/referer" target="_blank">
 <input type="hidden" name="ss" value="1" />
 <input type="submit" class="blogSubmitButton" value="%TEXT%" />
 </form>
@@ -15,7 +15,8 @@
 ~~~
 %STOPINCLUDE%
 
-<!-- -->
+<!-- interrupt glue -->
+
 ---++ Test
 <div class="alt">
 %DBCALL{"%TOPIC%" TEXT="Validate Html"}%

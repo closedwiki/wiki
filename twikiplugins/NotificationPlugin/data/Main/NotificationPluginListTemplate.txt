@@ -16,4 +16,3 @@
 
 ---++ Regex notifications
 
--- Main.RichardBaar - 14 Jan 2004

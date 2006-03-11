@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="TWikiContributor" date="1095459780" format="1.0" version="$Rev$"}%
+---+ %TOPIC% for the %WEB% web
+
+| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* |
+| TopicType | select | 1 |  | Classify a topic by function |
+| SubjectArea | checkbox | 3 |  | Classify a topic by subject |
+| TopicHeadline	| text	| 50  |	| Short summary or headline of topic  |
+
+Related Topic: TopicClassification, WebPreferences, %TWIKIWEB%.TWikiForms
+
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+For more information about how you can use form to organize topics or create simple database applications, see TWiki.TWikiForms.
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

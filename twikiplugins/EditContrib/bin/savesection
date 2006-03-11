@@ -37,7 +37,32 @@ use CGI;
 use TWiki::UI::Save;
 use TWiki::Contrib::EditContrib;
 
-my $query = new CGI;
+if( $TWiki::Plugins::VERSION >= 1.1 ) {
+    # Dakar interface
+    TWiki::UI::run( \&starthere );
+} else {
+    # Cairo interface
+    &starthere();
+}
+
+sub starthere {
+    my $query;
+
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+        # Dakar interface
+        my $session = shift;
+
+        die unless defined($session);
+
+        $query = $session->{cgiQuery};
+
+        $TWiki::Plugins::SESSION = $session;
+
+    } else {
+        # Cairo interface
+        $query = new CGI;
+    }
+
 my $thePathInfo = $query->path_info(); 
 my $theRemoteUser = $query->remote_user();
 my $theUrl = $query->url;
@@ -51,8 +76,9 @@ my ( $topic, $web, $dummy, $userName ) =
 # in bin/save, thus avoiding separate bin and preview scripts
 my $editUrl = $query->param( 'edit' );
 my $editUrlParams = $query->param( 'editparams' );
-my $randompart = &TWiki::UI::Save::randomURL();
+my $randompart = &TWiki::Contrib::EditContrib::randomURL();
 my $redirecturl = "$editUrl\?t=" . time() . "$editUrlParams\"|$randompart";
 
 TWiki::Contrib::EditContrib::savemulti( $web, $topic, $userName, $query, $redirecturl );
 
+}

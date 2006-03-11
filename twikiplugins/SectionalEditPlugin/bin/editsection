@@ -2,7 +2,7 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
@@ -20,267 +20,110 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 
-# A thought on design.  Information is passed to the preview script via various form variables.
-# Much of the meta data could have been passed by an extra hidden field, instead individual items such
-# as parent information is passed by individual form variables, hopefully giving a clear "API".
-
-# Set library paths in @INC, at compile time
-BEGIN { unshift @INC, '.'; require 'setlib.cfg'; }
-
-use CGI;
-use CGI::Carp qw(fatalsToBrowser);
-use TWiki;
+BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
 
 use strict;
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use TWiki;
+use TWiki::Contrib::EditContrib;
 
-&main();
 
-# Uncomment the body of either routine to enable debugging
-sub writeDebug
-{
-    my( $text ) = @_;
-    #TWiki::writeDebug( $text );
+if( $TWiki::Plugins::VERSION >= 1.1 ) {
+    # Dakar interface
+    TWiki::UI::run( \&starthere );
+} else {
+    # Cairo interface
+    &starthere();
 }
 
-sub writeDebugTimes
-{
-    my( $text ) = @_;
-    #TWiki::writeDebugTimes( $text );
-}
+sub starthere {
 
-sub quoteForXml {
-    my ($text) = @_;
-    $text =~ s/&/&amp\;/go;
-    $text =~ s/\"/&quot;/g;
-    $text =~ s/</&lt\;/go;
-    $text =~ s/>/&gt\;/go;
-    $text =~ s/\t/   /go;
-    return $text;
-}
+    my $query;
 
-sub getPref {
-    my ($pref1, $pref2, $pref3, $webName) = @_;
-    
-    return TWiki::Prefs::getPreferencesValue( $pref1, $webName ) || 
-	TWiki::Prefs::getPreferencesValue( $pref2 ) || 
-	TWiki::Prefs::getPreferencesValue( $pref3, $webName );
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+        # Dakar interface
+        my $session = shift;
+
+        die unless defined($session);
+
+        $query = $session->{cgiQuery};
+
+        $TWiki::Plugins::SESSION = $session;
+
+    } else {
+        # Cairo interface
+        $query = new CGI;
+    }
+
+    &main( $query );
 }
 
 sub main
 {
-    my $query = new CGI;
+    my $query = shift;
 
-    my $thePathInfo = $query->path_info(); 
-    my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param( 'topic' ) || "";
-    my $theUrl = $query->url;
+    my (undef, $topic, $webName, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( $query );
+
     my $theSec = int($query->param('sec')) || 0;
-
-    my( $topic, $webName, $dummy, $userName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
-    $dummy = "";  # to suppress warning
-
-    my $breakLock = $query->param( 'breaklock' ) || "";
-    my $tmpl = "";
-    my $text = "";
-    my $meta = "";
-    my $extra = "";
-    my $wikiUserName = &TWiki::userToWikiName( $userName );
-
-    if( ! &TWiki::Store::webExists( $webName ) ) {
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
-        TWiki::redirect( $query, $url );
-        return;
-    }
-
-    my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
-    if( $mirrorSiteName ) {
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
-        print $query->redirect( $url );
-        return;
-    }
-
-    # Read topic 
-    if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-        ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
-    } else {
-	my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmissing" );
-        print $query->redirect( $url );
-        return;
-    }
-
-    # Check access controls
-    if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
-        # user has not permission to change the topic
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
-        TWiki::redirect( $query, $url );
-        return;
-    }
-
-    # Check for locks
-    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
-    if( ( ! $breakLock ) && ( $lockUser ) ) {
-        # warn user that other person is editing this topic
-        $lockUser = &TWiki::userToWikiName( $lockUser );
-        use integer;
-        $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-        my $editLock = $TWiki::editLockTime / 60;
-        # PTh 20 Jun 2000: changed to getOopsUrl
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopslocked",
-            $lockUser, $editLock, $lockTime );
-        TWiki::redirect( $query, $url );
-        return;
-    }
-    &TWiki::Store::lockTopic( $topic );
-
-    my $formTemplate  = $query->param( "formtemplate" ) || "";
-    my $templateTopic = $query->param( "templatetopic" ) || "";
-    my $templateWeb = $webName;
-
-    # Get edit template, standard or a different skin
-    my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    $tmpl = &TWiki::Store::readTemplate( "editsection", $skin );
-    if( ! &TWiki::Store::topicExists( $webName, $topic ) ) {
-        if( $templateTopic ) {
-            if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
-                # is "Webname.SomeTopic"
-                $templateWeb   = $1;
-                $templateTopic = $2;
-            }
-            ( $meta, $text ) = &TWiki::Store::readTopic( $templateWeb, $templateTopic );
-        }
-        if( ! $text ) {
-            ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicEditTemplate" );
-        }
-        $extra = "(not exist)";
-
-        # If present, instantiate form
-        if( ! $formTemplate ) {
-            my %args = $meta->findOne( "FORM" );
-            $formTemplate = $args{"name"};
-        }
-
-        my $foo = &TWiki::getGmDate();
-        $text =~ s/%DATE%/$foo/go;
-        $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
-        $text =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;  # expand URL parameters
-        $text =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
-        $text =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
-    }
-    
-    # parent setting
-    my $theParent = $query->param( 'topicparent' ) || "";
-    if( $theParent ) {
-        if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
-            my $parentWeb = $1;
-            if( $1 eq $webName ) {
-               $theParent = $2;
-            }
-        }
-        $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
-    }
-    $tmpl =~ s/%TOPICPARENT%/$theParent/;
-    
-    # Processing of formtemplate - comes directly from query parameter formtemplate , 
-    # or indirectly from webtopictemplate parameter.
-    my $oldargsr;
-    if( $formTemplate ) {
-       my @args = ( name => $formTemplate );
-       $meta->remove( "FORM" );
-       if( $formTemplate ne "none" ) {
-          $meta->put( "FORM", @args );
-       } else {
-          $meta->remove( "FORM" );
-       }
-       $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
-       my $ptext = $query->param( 'text' );
-       if( defined $ptext ) {
-           $text = $ptext;
-           $text = &TWiki::decodeSpecialChars( $text );
-       }
-    }
-
-    if( $TWiki::doLogTopicEdit ) {
-        # write log entry
-        &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );
-    }
-
-    $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
-    $tmpl = &TWiki::getRenderedVersion( $tmpl );
-
-    # Don't want to render form fields, so this after getRenderedVersion
-    my %formMeta = $meta->findOne( "FORM" );
-    my $form = "";
-    $form = $formMeta{"name"} if( %formMeta );
-    if( $form ) {
-       my @fieldDefs = &TWiki::Form::getFormDef( $templateWeb, $form );
-       
-       if( ! @fieldDefs ) {
-            my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoformdef" );
-            TWiki::redirect( $query, $url );
-            return;
-       }
-       my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, @fieldDefs );
-       $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } elsif( TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
-       $form = '<table width="100%"><tr><td align="right">'
-             . &TWiki::Form::chooseFormButton( "Add form" )
-             . '</dt></tr></table>';
-       $tmpl =~ s/%FORMFIELDS%/$form/go;
-    } else {
-       $tmpl =~ s/%FORMFIELDS%//go;
-    }
-    
-    $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
-    $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
-
-    # Table
-
-    my $width = getPref("SECTIONEDITBOXWIDTH", "SECTIONALEDITPLUGIN_EDITBOXWIDTH", "EDITBOXWIDTH", $webName);
-    my $height = getPref("SECTIONEDITBOXHEIGHT", "SECTIONALEDITPLUGIN_EDITBOXHEIGHT", "EDITBOXHEIGHT", $webName);
-    my $style = getPref("SECTIONEDITBOXSTYLE", "SECTIONALEDITPLUGIN_EDITBOXSTYLE","EDITBOXSTYLE", $webName);
-    $tmpl =~ s/%SECTIONEDITBOXWIDTH%/$width/go;
-    $tmpl =~ s/%SECTIONEDITBOXHEIGHT%/$height/go;
-    $tmpl =~ s/%SECTIONEDITBOXSTYLE%/$style/go;
-
-    # EditSection Main Code
-
+    my $theEditUrl = &TWiki::Func::getScriptUrl( $webName, $topic, "editsection" );
+    my $theEditUrlParams = "&sec=$theSec#SECEDITBOX";
+    $tmpl =~ s/%EDIT%/$theEditUrl/go;
+    $tmpl =~ s/%EDITPARAMS%/$theEditUrlParams/go;
     my $sectxt = "";
     my $pretxt = "";
     my $postxt = "";
     my $pos = 0;
+    my $editsections = 0;
 
     # Get rid of CRs (we only want to deal with LFs)
     $text =~ s/\r//g;
 
-    if ( $text =~ m/<editsections\/>/i) {
-	my @sections = split(m/^---\+/m, $text);
-	foreach my $s (@sections) {
-	    if ($pos == 0 && $theSec == 0) {
-		$sectxt = $s;
-	    }
-	    elsif ($pos == $theSec) {
-		$sectxt = "---+" . $s;
-	    }
-	    elsif ($pos < $theSec) {
-		$pretxt .= "---+" unless ($pos == 0);
-		$pretxt .= $s;
-	    }
-	    elsif ($pos > $theSec) {
-		$postxt .= "---+";
-		$postxt .= $s;
-	    }
+    if ( $TWiki::Plugins::SectionalEditPlugin::alwayssection || ($editsections = $text =~ m/<editsections\s*\/>/i) ) {
+	my $lastmark = "";
+	my $lastpos = 0;
+        while ( $text =~ m/^---\+{1,$TWiki::Plugins::SectionalEditPlugin::sectiondepth}[^+]/mg ) {
+	  if ( $pos == $theSec ) {
+	    $postxt = $&.$';
+	    $sectxt = $lastmark.substr($text,$lastpos,(pos $text) - length($&) - $lastpos);
 	    $pos++;
+	    last;
+	  } elsif ( $pos == ($theSec - 1) ) {
+	    $lastmark = $&;
+	    $lastpos = pos $text;
+	    $pretxt = $`;
+	  }
+	  $pos++;
+	}
+	if ( $pos == $theSec ) {
+	  # The target section was the last section
+	  #$postxt = "";
+	  $sectxt = $lastmark.substr($text,$lastpos);
+	}
+	if ( $editsections ) {
+	  # move the <editsections/> command into $pretxt
+	  if ( $sectxt =~ s|<editsections\s*\/>||i ) {
+	    $pretxt = "<editsections\/>\n$pretxt";
+	  }
 	}
         # Move the end of line to the beginning of postxt
         # So that sections aren't accidentally collapsed
-        if ($sectxt =~ s/\n$//s) {
-	    $postxt = "\n" . $postxt;
+	# (by user deleting the trailing newline in section)
+        if ($sectxt =~ s/[\n\r]$//s) {
+	  $postxt = "\n" . $postxt;
         }
     }
-    elsif ( $text =~ m/<sectionbreak\/?>/i ) {    
-	my @sections = split(/<sectionbreak\/?>/i, $text);
+    elsif ( $text =~ m/<sectionbreak\s*\/?>/i ) {    
+	my @sections = split(/<sectionbreak\s*\/?>/i, $text);
+	# The following does not honor the literal spelling of the <sectionbreak/> tag
 	foreach my $s (@sections) {
 	    if ($pos < $theSec) {
 		unless ($pretxt eq "") {
@@ -296,45 +139,26 @@ sub main
 	    $pos++;
 	}
 	unless ($pretxt eq "") {
-	    $pretxt .= "<sectionbreak/>";
+	    $pretxt .= "<sectionbreak/>\n";
 	}
     }
-    elsif ( $text =~ m/<\/?sectionedit>/i ) { 
-	my @sections = split(/(<\/?sectionedit>)/i, $text); 
+    elsif ( $text =~ m/<\/?sectionedit.*?>/i ) { 
+	my @sections = split(/(<\/?sectionedit.*?>)/i, $text); 
 	foreach my $s (@sections) {
 	    if ($pos < $theSec) {
-		if ( $s =~ m/<(\/?)sectionedit>/ ) { $pretxt .= "<$1sectionedit>"; next; }
+		if ( $s =~ m/<(\/?)sectionedit(.*?)>/ ) { $pretxt .= "<$1sectionedit$2>"; next; }
 		$pretxt .= $s;
 	    } elsif ($pos > $theSec) {
-		if ( $s =~ m/<(\/?)sectionedit>/ ) { $postxt .= "<$1sectionedit>"; next; }
+		if ( $s =~ m/<(\/?)sectionedit(.*?)>/ ) { $postxt .= "<$1sectionedit$2>"; next; }
 		$postxt .= $s;
 	    } else {
-		if ( $s =~ m/<(\/?)sectionedit>/ ) { $pretxt .= "<$1sectionedit>"; next; }
+		if ( $s =~ m/<(\/?)sectionedit(.*?)>/ ) { $pretxt .= "<$1sectionedit$2>"; next; }
 		$sectxt = $s;
 	    }
 	    $pos++;
 	}
     }
-    
-    $pretxt = quoteForXml($pretxt);
-    $postxt = quoteForXml($postxt);
-    
-    ##AS added hook for plugins that want to do heavy stuff
-    #TWiki::Plugins::beforeEditHandler( $pretxt, $topic, $webName );
-    #TWiki::Plugins::beforeEditHandler( $postxt, $topic, $webName );
-    ##/AS
 
-    $tmpl =~ s/%PRETEXTFIELD%/$pretxt/go;
-    $tmpl =~ s/%TEXT%/$sectxt/go;
-    $tmpl =~ s/%POSTEXTFIELD%/$postxt/go;
+    TWiki::Contrib::EditContrib::finalize_edit ($query, $topic, $webName, $pretxt, $sectxt, $postxt, $pretxt, $postxt, $tmpl);
     
-    my $nl = "\n";
-    $pretxt =~ s/$nl/<br>/g;
-    $postxt =~ s/$nl/<br>/g;
-    $tmpl =~ s/%PRETEXT%/$pretxt/go;
-    $tmpl =~ s/%POSTEXT%/$postxt/go;   
-    
-    TWiki::writeHeaderFull ( $query, 'edit', 'text/html', length($tmpl) );
-
-    print $tmpl;
 }

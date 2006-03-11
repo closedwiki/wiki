@@ -1,3 +1,5 @@
-TWiki::Contrib::DakarContrib,>=0.1,perl,Required
-TWiki::Plugins::RedDotPlugin,>=1.27,perl,Required
-TWiki::Plugins::SpreadSheetPlugin,>=1.001,perl,Required
+TWiki::Plugins::SpreadSheetPlugin,>=1.018,perl,Required. Download and install from the TWiki:Plugins/SpreadSheetPlugin code library.
+TWiki::Plugins::RedDotPlugin,>=1.25,perl,Recommended; Download from TWiki:Plugins/RedDotPlugin repository.
+TWiki::Plugins::FilterPlugin,>=0.94,perl,Required; Download from TWiki:Plugins/FilterPlugin repository.
+TWiki::Plugins::IfDefinedPlugin,>=0.90,perl,Required; Download from TWiki:Plugins/IfDefinedPlugin repository.
+TWiki::Contrib::DakarContrib,>=0.1,perl,Required; Download from TWiki:Plugins/DakarContrib repository.

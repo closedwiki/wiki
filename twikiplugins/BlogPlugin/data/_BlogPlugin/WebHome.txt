@@ -1,10 +1,16 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131556405" format="1.1" version="1.1"}%
-%DBCALL{"RenderFrontPage" SKIP="%URLPARAM{"skip" default=" 0"}%" CAT=".*" AUTHOR=".*"}%
+%~~ DBCALL{"RenderFrontPage" 
+~~~   SKIP="%URLPARAM{"skip"}%" 
+~~~   LIMIT="%URLPARAM{"limit"}%" 
+~~~   CAT="%URLPARAM{"cat"}%" 
+~~~   AUTHOR="%URLPARAM{"author" default=".*"}%" 
+~~~ }%
 
 <!--
-   * Set ALLOWTOPICCHANGE = BlogAdminGroup
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set PAGETITLE = %FORMFIELD{"TopicDescription"}%
    * Set WHITEBOARD = off
+   * Set WEBBUTTONSCLASS_HOME = current
 -->
 
 <style type="text/css">

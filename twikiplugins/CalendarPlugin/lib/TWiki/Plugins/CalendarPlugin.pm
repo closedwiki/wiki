@@ -29,6 +29,8 @@ package TWiki::Plugins::CalendarPlugin;
 
 # use strict;
 use Time::Local;
+#use Date::Calc;
+#use HTML::CalendarMonthSimple;
 
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
@@ -36,6 +38,8 @@ use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
 $VERSION   = '$Rev$';
 $RELEASE = 'Dakar';
 
+#$VERSION   = '1.020'; #dab# Bug fix from TWiki:Main.MarcLangheinrich for multiday events that were not properly displayed because the first day occurred in the current month, but before the first day included in the list.
+#$VERSION   = '1.019'; #dab# Added support for monthly repeaters specified as "L Fri" (last Friday in all months).
 #$VERSION   = '1.018'; #dab# Added support displaying calendars for multiple months; added support for displaying events as a list
 #$VERSION   = '1.017';  #dro# Added start and end date support for periodic repeaters; Added initlang patch by TWiki:Main.JensKloecker; Changed 'my' to 'local' so exceptions working again; Removed fetchxmap debug message; Fixed illegal date bug; Allowed month abbreviations in month attribute
 #VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
@@ -272,14 +276,14 @@ sub handleCalendar
 		       );
 
     # lazy load of needed libraries
-    if (   $libsError  ) { return '';  }
+    if (   $libsError  ) { die 'missing Date::Calc';  }
     if ( ! $libsLoaded ) {
 	eval 'require HTML::CalendarMonthSimple';
 	if ( defined( $HTML::CalendarMonthSimple::VERSION ) ) {
 	    $libsLoaded = 1;
 	} else	{
 	    $libsError = 1;
-	    return '';
+	    die 'missing HTML::CalendarMonthSimple';
 	}
     }
     initDefaults() unless( $defaultsInitialized );
@@ -377,7 +381,7 @@ sub handleCalendar
     # if showdatenumber is 0, the calendar initialization code below
     # will put date numbers into the contents of each day. Then, when
     # displaying the list, every day will be included in the list
-    # because the contents is not "empty." This would produce an ugly
+    # because the contents are not "empty." This would produce an ugly
     # list. In contrast, if HTML::CalendarSimple is told to put the
     # date numbers on the calendar, this will be done outside of the
     # content. Therefore, we can later display only those days that
@@ -387,12 +391,15 @@ sub handleCalendar
 
 	$options{showdatenumbers} = 1;
 	if (!$options{format}) {
-	    $options{format} = '$old - <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic">$description</a>$n';
+	    $options{format} = '$old - $description<br />$n';
 	}
 	if (!$options{datenumberformat}) {
 	    $options{datenumberformat} = '	* $day $mon $year';
 	}
     } else {
+	if (!$options{format}) {
+	    $options{format} = '$old<br /><small> $description </small>';
+	}
 	if (!$options{datenumberformat}) {
 	    $options{datenumberformat} = '$day';
 	}
@@ -535,7 +542,7 @@ sub handleCalendar
 	local $wdays_rx = join ('|', keys %wdays);
 	local $years_rx = '[12][0-9][0-9][0-9]';
 	local $date_rx = "($days_rx)\\s+($months_rx)";
-	local $monthly_rx = "([1-6])\\s+($wdays_rx)";
+	local $monthly_rx = "([1-6L])\\s+($wdays_rx)";
 	local $full_date_rx = "$date_rx\\s+($years_rx)";
 	local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
 	local $weekly_rx = "E\\s+($wdays_rx)";
@@ -565,7 +572,12 @@ sub handleCalendar
 		}
 		my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
 		my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
-		for my $d (1 .. Days_in_Month ($y, $m)) {
+
+		# Process events starting at the first day to be included in
+		# the list, or the first day of the month, whichever is
+		# appropriate 
+
+		for my $d ((defined $listStartDay ? $listStartDay : 1) .. Days_in_Month ($y, $m)) {
 		    my $date = Date_to_Days ($y, $m, $d);
 		    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
 			&highlightMultiDay($cal, $d, $descr, $date1, $date2, $date,
@@ -592,7 +604,12 @@ sub handleCalendar
 		}
 		my $date1 = Date_to_Days ($y, $months{$mm1}, $dd1);
 		my $date2 = Date_to_Days ($y, $months{$mm2}, $dd2);
-		for my $d (1 .. Days_in_Month ($y, $m)) {
+
+		# Process events starting at the first day to be included in
+		# the list, or the first day of the month, whichever is
+		# appropriate 
+
+		for my $d ((defined $listStartDay ? $listStartDay : 1) .. Days_in_Month ($y, $m)) {
 		    my $date = Date_to_Days ($y, $m, $d);
 		    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
 			&highlightMultiDay($cal, $d, $descr, $date1, $date2, $date,
@@ -667,7 +684,15 @@ sub handleCalendar
 		} else {
 		    @xmap = &emptyxmap($y, $m);
 		}
-		$hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, $nn);
+		if ($nn eq 'L') {
+		    $nn = 6;
+		    do {
+			$nn--;
+			$hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, $nn);
+		    } until ($hd);
+		} else {
+		    $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, $nn);
+		}
 		if ($hd <= Days_in_Month($y, $m) && $xmap[$hd]) {
 		    &highlightDay( $cal, $hd, $descr, %options );
 		}
@@ -979,7 +1004,7 @@ sub formatDate
 		      Day_of_Year
 		      Month_to_Text);
 
-    &TWiki::Func::writeDebug("formatDate: $format, $date") if $debug;
+    &TWiki::Func::writeDebug("formatDate: $formatString, $date") if $debug;
     my $outputTimeZone = 'gmtime'; # FIXME: Should be configurable
     my $value = '';	# Return value for the function
     my ($year, $mon, $day) = Add_Delta_Days(1, 1, 1, $date - 1);
@@ -990,7 +1015,7 @@ sub formatDate
     # Set a value for seconds since the epoch
     my $epochSeconds = timegm($sec, $min, $hour, $day, $mon-1, $year);
 
-    # Set to format to empty string if undefined to avoid possible warnings
+    # Set format to empty string if undefined to avoid possible warnings
     $formatString ||= '';
 
     # Unfortunately, there is a disconnect between the TWiki
@@ -1037,7 +1062,7 @@ sub formatDate
     $value =~ s/\$dow/$wday/gi;
     $value =~ s/\$week/_weekNumber($day,$mon-1,$year,$wday)/egi;
     $value =~ s/\$mont?h?/$monthAbbr/gi;
-    $value =~ s/\$mo/sprintf('%.2u',$mon+1)/gei;
+    $value =~ s/\$mo/sprintf('%.2u',$mon)/gei;
     $value =~ s/\$year?/sprintf('%.4u',$year)/gei;
     $value =~ s/\$ye/sprintf('%.2u',$year%100)/gei;
     $value =~ s/\$epoch/$epochSeconds/gi;

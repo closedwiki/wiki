@@ -99,6 +99,7 @@ templates/searchtopicactions.nat.tmpl 0440
 templates/settings.nat.tmpl 0440
 templates/settingstopicactions.nat.tmpl 0440
 templates/view.nat.tmpl 0440
+templates/view.plain.nat.tmpl 0440
 templates/view.print.nat.tmpl 0440
 templates/viewtopicactions.nat.tmpl 0440
 templates/defaultjavascript.nat.tmpl 0440
@@ -191,9 +192,10 @@ pub/TWiki/NatSkin/StormyRight.css 0440
 pub/TWiki/NatSkin/StormyStyle.css 0440
 pub/TWiki/NatSkin/StormyThin.css 0440
 pub/TWiki/NatSkin/StormyThin.jpeg 0440
-pub/TWiki/NatSkin/TablePlugin_pm.diff 0440
 pub/TWiki/NatSkin/external.png 0440
 pub/TWiki/NatSkin/favicon.ico 0440
+pub/TWiki/NatSkin/feed-icon-12x12.gif 0440
+pub/TWiki/NatSkin/feed-icon-12x12-gray.gif 0440
 pub/TWiki/NatSkin/previewbg.png 0440
 pub/TWiki/NatSkin/BlueFieldBar.jpg 0440
 pub/TWiki/NatSkin/BlueFieldVariation.css 0440
@@ -219,6 +221,7 @@ pub/TWiki/NatSkin/PatternBorder.css 0440
 pub/TWiki/NatSkin/PatternButtons.css 0440
 pub/TWiki/NatSkin/PatternStyle.css 0440
 pub/TWiki/NatSkin/PatternThin.css 0440
+pub/TWiki/NatSkin/quote.gif 0440
 pub/TWiki/NatSkin/quote.png 0440
 pub/TWiki/NatSkin/Border.png 0440
 pub/TWiki/NatSkin/BorderLine.png 0440

@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -102,8 +102,8 @@ sub handleVote {
   # compute the result
   my $result = "<div class=\"Vote\">";
 
-  $result .= "<form action=\"" . &TWiki::Func::getScriptUrl( $web, $topic, 'vote' )
-      . "\" method=\"post\">\n";
+  $result .= "<form action=\"" . &TWiki::Func::getScriptUrl($web, $topic, 'vote') 
+    . "\" method=\"post\">\n";
   $result .= "<input type=\"hidden\" name=\"id\" value=\"$theId\"/>\n";
   $result .= "<table class=\"VoteSelect\">\n";
 

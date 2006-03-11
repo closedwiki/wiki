@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130732832" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicType"}%
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - %GMTIME{"$epoch"}% ) < 60, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="successmsg" INSTRUCTIONS="no" TYPE="type" }% 
+%INCLUDE{%TCAOWEB%.TopicTypeMaster}%
+
+<!-- Hidden include for CreateNewTopic
+%STARTSECTION{"new"}%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="name" }%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
+%ICON{tip}% _Use TopicHeadline to summarize the meeting purpose or focus._
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="templates" }%
+%ENDSECTION{"new"}%%
+-->
+
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+%META:FORM{name="TopicTypeForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicType"}%
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Notes on meetings"}%

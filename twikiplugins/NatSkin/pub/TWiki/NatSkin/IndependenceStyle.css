@@ -15,6 +15,10 @@ hr {
 }
 
 /* layout */
+.natBody {
+  margin:0;
+  padding:0;
+}
 .natBodyContents {
   line-height: 140%;
   padding: 0px;
@@ -35,6 +39,10 @@ hr {
 }
 .natTopRightContents {
   margin-top:35px;
+}
+
+.natTopBarSizer {
+  height:130px;
 }
 
 /* top */
@@ -77,6 +85,7 @@ hr {
   background:#B22222;
   color:white;
   border:1px dotted white;
+  _border:1px solid white; /* IE only */
   width:15em;
 }
 .natSearchBoxPos1 input,
@@ -86,6 +95,7 @@ hr {
   color: #666666;
   font-weight:bold;
   border:1px dotted #B22222;
+  _border:1px solid #B22222; /* IE only */
   width:99%;
 }
 
@@ -97,8 +107,8 @@ hr {
 /* sidebar */
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
-  font-size: small;
-  line-height:120%;
+  font-size: 0.9em;
+  line-height:1.4em;
 }
 
 .natSideBar h1 {
@@ -125,7 +135,7 @@ hr {
 }
 
 .natSideBar ul {
-  padding-left:38px;
+  padding-left:20px;
 }
 
 .natNotes {
@@ -154,9 +164,6 @@ hr {
   padding-left:5px;
 }
 
-.natMainContents {
-}
-
 .natMain h1 .twikiEmulatedLink,
 .natMain h2 .twikiEmulatedLink,
 .natMain h3 .twikiEmulatedLink,
@@ -177,7 +184,7 @@ hr {
 .natMain h5 {font-size:small;}
 .natMain h6 {font-size:small; margin-top:5px}
 
-.natMain h1 {
+.natMain h2 {
   border-bottom:1px solid #B22222;
 }
 
@@ -237,6 +244,7 @@ hr {
 }
 .twikiTable th {
   border:1px dotted white;
+  _border:1px solid white; /* IE only */
 }
 .twikiTable td {
   border:1px ridge #999;
@@ -277,6 +285,7 @@ hr {
 }
 .natTopicForm th {
   border:1px dotted white;
+  _border:1px solid white; /* IE only */
 }
 .natTopicForm td {
   border:1px ridge #999;
@@ -308,6 +317,7 @@ hr {
 }
 .twikiPageForm th {
   border:1px dotted white;
+  _border:1px solid white; /* IE only */
 }
 .twikiPageForm td {
   border:1px ridge #999;
@@ -316,28 +326,32 @@ hr {
 /* search table */
 .natSearchTable {
   border:1px #B22222 solid;
-  margin-bottom:15px;
+  margin-top:1em;
+}
+.natSearchTable:first-child {
+  margin-top:0em;
 }
 .natSearchTableTitle th {
   color:white;
   background:#B22222;
   font-family: 'Trebuchet MS', sans-serif;
-  font-size:x-small;
+  font-size:0.9em;
   letter-spacing: .3em;
   vertical-align:middle;
 }
 .natSearchHit {
+  border:1px #B22222 solid;
   font-size:0.9em;
   line-height:140%;
 }
-/*
-.natSearchHit td,
 .natSearchHit th {
-  padding-top:0px;
-  padding-bottom:0px;
+  padding:0.5em 0.5em 0 0.5em;
 }
-*/
-.natSearchEvenHit {
+.natSearchHit td {
+  padding:0 0.5em 0.5em 0.5em;
+}
+
+.natSearchHitEven {
   background:#f0f0f0;
 }
 
@@ -358,8 +372,12 @@ hr {
 }
 
 /* blogging */
-.blogSideBarSection {
+.blogAbout {
+  font-size:0.8em;
   line-height:1.3em;
+}
+.blogSideBarSection {
+  line-height:1.4em;
 }
 .blogSideBarSection ul {
   padding-left:1.3em;
@@ -382,10 +400,6 @@ hr {
 }
 .blogEntry {
   margin-bottom:1em;
-}
-.blogAbout {
-  font-size:0.9em;
-  line-height:1.3em;
 }
 .blogInfo {
   font-size:0.9em;

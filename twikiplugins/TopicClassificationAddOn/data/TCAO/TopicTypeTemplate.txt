@@ -1,0 +1,25 @@
+%META:TOPICINFO{author="TWikiContributor" date="1141196201" format="1.1" version="$Rev"}%
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - %GMTIME{"$epoch"}% ) < 60, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="successmsg" INSTRUCTIONS="topictype" TYPE="type" }% 
+%INCLUDE{%TCAOWEB%.TopicTypeMaster}%
+
+<!-- Hidden include for CreateNewTopic
+%STARTSECTION{"new"}%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="name" }%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
+<p />
+%ICON{tip}% _If useful, offer tips about creating this TopicType. If not, you can delete this line._
+<input type="hidden" name="formtemplate" value="%WEB%.WebForm" />
+<input type="hidden" name="templatetopic" value="%TOPIC%Template" />
+<input type="hidden" name="TopicType" value="%TOPIC%" />
+%ENDSECTION{"new"}%
+-->
+New %TOPIC% topics will use the %TOPIC%Template if there is one defined. 
+
+<!-- Topic Permissions
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%2525MAINWEB%2525.TWikiAdminGroup"}%

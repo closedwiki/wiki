@@ -1,8 +1,7 @@
-#
-# TWiki WikiClone ($wikiversion has version info)
+# Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2002-2003 Will Norris. All Rights Reserved. (wbniv@saneasylumstudios.com)
-# Copyright (C) 2005 Michael Daum <micha@nats.informatik.uni-hamurg.de>
+# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamurg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -24,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.1';
+$RELEASE = '3.3';
 
 # =========================
 sub initPlugin {
@@ -80,7 +79,6 @@ sub renderImageGallery {
   }
 
   my $igp = TWiki::Plugins::ImageGalleryPlugin::Core->new($id, $topic, $web);
-  $igp->debug(0);
   return $igp->render($args);
 }
 
@@ -96,7 +94,6 @@ sub renderNrImages {
   }
 
   my $igp = TWiki::Plugins::ImageGalleryPlugin::Core->new(undef, $topic, $web);
-  $igp->debug(0);
   if ($igp->init($args)) {
     return scalar @{$igp->getImages()};
   } else {

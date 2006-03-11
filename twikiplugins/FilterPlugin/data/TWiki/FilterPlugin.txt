@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131731482" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139389799" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This plugin allows to substitute and extract information from content by
@@ -8,27 +8,69 @@ using regular expressions.
 
 ---++ Syntax Rules
 
-| *Tag* | *Description* |
-| =%<nop>SUBST{topic="..." _parameters_ }%= \
-| insert a topic by processing its content |
-| =%<nop>STARTSUBST{ _parameters_ }% ... %STOPSUBST%= \
-| process text given inline |
-| =%<nop>EXTRACT{ _parameters_ }%= | extract text from a topic |
-| =%<nop>STARTEXTRACT{ _parameters_ }% ... %STOPEXTRACT%= \
-| extract content given inline  |
+---+++ SUBST
+*Syntax*: =%<nop>SUBST{topic="..." ...}%= 
 
-| *Parameter* | *Description* |
-| =topic="..."= \
-| name of the topic text to be processed |
-| =pattern="..."= \
-| pattern to be extracted or substituted |
-| =format="..."= \
-| format expression or pattern substitute |
-| =hits="&lt;n>"= \
-| number of occurences to extract or substitute counted from the \
-  start of the text (defaults to =0= aka all hits) |
-| =expand="on,off"= | toggle on/off expansion of TWiki markup before filtering \
-  (defaults to =on=) |
+insert a topic by processing its content.
+
+   * =topic="..."=: name of the topic text to be processed 
+   * =pattern="..."=: pattern to be extracted or substituted 
+   * =format="..."=: format expression or pattern substitute 
+   * =hits="&lt;n>"= number of occurences to extract or substitute counted from the 
+     start of the text (defaults to =0= aka all hits) 
+   * =expand="on,off"=: toggle expansion of TWiki markup before filtering
+     (defaults to =on=) 
+
+---+++ STARTSUBST, STOPSUBST
+*Syntax*:
+<verbatim>
+%STARTSUBST{...}% 
+... 
+%STOPSUBST%
+</verbatim>
+
+substitute text given inline. see [[#SUBST][SUBST]].
+
+---+++ EXTRACT
+*Syntax*:=%EXTRACT{topic="..."  ...}%= 
+
+extract text from a topic. see [[#SUBST][SUBST]].
+
+---+++ STARTEXTRACT, STOPEXTRACT
+*Syntax*:
+<verbatim>
+%STARTEXTRACT{...}% 
+... 
+%STOPEXTRACT%
+</verbatim>
+
+extract content given inline. see [[#SUBST][SUBST]].
+
+
+---+++ FORMATLIST
+*Syntax*: =%<nop>FORMATLIST{"&lt;list>" ...}%
+
+formats a list of items. The &lt;list> argument is separated into items by using
+a split expression; each item is matched agains a pattern and then formatted
+using a format string while being separated by a separator string; the result is
+prepended with a header and appended with a footer in case the list is not empty.
+	* &lt;list>: the list 
+	* split="...": the split expression (default ",")
+	* pattern="...": pattern applied to each item (default "\s(.*)\s")
+	* format="...": the format string for each item (default "$1")
+	* header="...": header string
+	* footer="...": footer string
+	* separator="...": string to be inserted between list items
+	* limit="...": max number of items to be taken out of the list (default "-1")
+	* sort="on,off,alpha,num" order of the formatted items (default "off")
+	* reverse="on,off": reverse the sortion of the list
+	* unique="on,off": remove dupplicates from the list
+	* exclude="...": remove list items that match this regular expression
+The pattern string shall group matching substrings in the list item to which you can refer to by 
+using $1, $2, ... in the format string. Any format string (=format=, =header=, =footer=) may
+contain variables =$percnt$=, =$nop=, =$dollar= and =$n=. The variable
+=$index= referse to the position number within the list being formatted; using =$count= in the
+footer or header argument refers to the total number of list elements.
 
 
 ---++ Examples
@@ -76,8 +118,12 @@ This is a second comment.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 06 Dec 2005 (v0.93) |
+|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v0.94 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Feb 2006: | moved in FORMATLIST from the TWiki:Plugins/NatSkinPlugin;\
+                  added escape variables to format strings |
 |  06 Dec 2005: | fixed SUBST not to cut off the rest of the text |
 |  09 Nov 2005: | fixed deep recursion using =expand="on"= |
 |  22 Aug 2005: | Initial version; added =expand= toggle |
@@ -85,10 +131,9 @@ This is a second comment.
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 06 Dec 2005
+-- TWiki:Main.MichaelDaum - 14 Feb 2006

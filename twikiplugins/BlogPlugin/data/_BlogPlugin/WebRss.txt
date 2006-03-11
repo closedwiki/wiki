@@ -1,63 +1,17 @@
 %META:TOPICINFO{author="TWikiContributor" date="1130253048" format="1.1" version="1.1"}%
-%STARTINCLUDE%<noautolink>
-%ALIAS{name="''" regex="$start''$stop" value="&amp;rdquo;"}%
-%ALIAS{name="``" regex="$start``$stop" value="&amp;ldquo;"}%
-%ALIAS{name="-" regex=" - " value=" &amp;ndash; "}%
-%ALIAS{name="--" regex=" -- " value=" &amp;mdash; "}%
-%ALIAS{name="(c)" regex="$start\(c\)$stop" value="&amp;copy;"}%
-%ALIAS{name="(r)" regex="$start\(r\)$stop" value="&amp;reg;"}%
-%ALIAS{name="(tm)" regex="$start\(tm\)$stop" value="&amp;trade;"}%
-%ALIAS{name="..." regex="$start\.\.\.$stop" value="&amp;hellip;"}%
-%ALIAS{name=",," regex="$start,,$stop" value="&amp;bdquo;"}%
-%ALIAS{name="1/2" regex="$start1/2$stop" value="&amp;frac12;"}%
-%ALIAS{name="1/4" regex="$start1/4$stop" value="&amp;frac14;"}%
-%ALIAS{name="3/4" regex="$start3/4$stop" value="&amp;frac34;"}%
-%STARTALIASAREA%
-<channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss">
-  <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
-  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%</link>
-  <description>%SITEMAPWHAT%</description>
-<image rdf:resource="%WEBLOGOIMG%" />
-  <dc:language>en-us</dc:language>
-  <dc:rights>%WEBRSSCOPYRIGHT%</dc:rights>
-  <dc:publisher>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:publisher>
-  <dc:creator>%WIKIWEBMASTERNAME% [%WIKIWEBMASTER%]</dc:creator>
-  <dc:source><nop>%WIKITOOLNAME%</dc:source>
-  <items>
-    <rdf:Seq>
-%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled' OR TopicType=~'BlogComment'" web="%INCLUDINGWEB%"
-~~~   order="created"  reverse="on" limit="20" 
-~~~   format="  <rdf:li rdf:resource=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\" />"
-~~~ }%
-    </rdf:Seq>
-  </items>
-</channel>
-<image rdf:about="%WEBLOGOIMG%">
-  <title>TWiki/NatSkin</title>
-  <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%INCLUDINGWEB%</link>
-  <url>%WEBLOGOIMG%</url>
-</image>
-%~~ DBQUERY{"(TopicType=~'\bBlogEntry\b' AND State='enabled') OR TopicType=~'BlogComment'" web="%INCLUDINGWEB%"
-~~~   order="created" reverse="on" limit="20" separator="$n"
-~~~   format="
-*~~   <item rdf:about=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic\">$n
-~~~      <title>$expand(Headline or Name)</title>$n
-~~~      <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic</link>$n
-~~~      <description>
-~~~        $encode($percntCALC{\"$IF($EXACT(BlogComment,$expand(TopicType)),$expand(Name) replies on \\"[[$expand(BaseRef)][$expand(@BaseRef.Headline)]]\\":)\"}$percnt
-~~~        $expand(Teaser)<p/>$expand(Text))
-~~~      </description>$n
-~~~      <dc:creator>$expand(BlogAuthor or Name)</dc:creator>$n
-~~~      <dc:date>$formatTime(createdate, '$year-$mo-$dayT$hour:$minute+02:00')</dc:date>$n
-~~~      <dc:subject>$expand(SubjectCategory)</dc:subject>
-~~~      <dc:contributor>$n
-~~~        <rdf:Description link=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/$expand(info.author)\">$n
-~~~          <rdf:value>$expand(info.author)</rdf:value>$n
-~~~        </rdf:Description>$n
-~~~      </dc:contributor>$n
-~~~   </item>
-~~~ "}%
-%STOPALIASAREA%</noautolink>%STOPINCLUDE%
+
+%STARTINCLUDE%
+*~~
+<noautolink> %STARTALIASAREA%
+*~~
+%~~ DBCALL{"RenderRss" 
+~~~   SEARCH="TopicType=~'\bBlog(Entry|Page)\b' AND State='enabled'"
+~~~   LIMIT="20"
+~~~   TITLE="<nop>%WIKITOOLNAME% <nop>%WEB%"
+~~~ }% %STOPALIASAREA% </noautolink>
+*~~
+%STOPINCLUDE%
+
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SKIN = rss

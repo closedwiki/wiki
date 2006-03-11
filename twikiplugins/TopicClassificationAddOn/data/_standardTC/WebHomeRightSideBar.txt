@@ -1,0 +1,33 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1130437338" format="1.1" version="1.3"}%
+%STARTINCLUDE%
+%STARTSIDEBAR%
+---+++!! <font  FACE="arial,helvetica"> Recent News for the %BASEWEB% web: </font>
+%SEARCH{"[T]opicType.*value\=.*[N]ewsItem" web="%BASEWEB%" regex="on" casesensitive="on" nonoise="on" order="created" reverse="on" limit="5" format="<font size=-2>   &bull; *$formfield(TopicHeadline)* (Posted by $createwikiusername)  _[[$web.$topic][Read more...]]_ </font><br>"}%
+---+++!! <font  FACE="arial,helvetica"> Recent News for the other webs: </font>
+%SEARCH{"[T]opicType.*value\=.*[N]ewsItem" web="all -%BASEWEB%" regex="on" casesensitive="on" nonoise="on" order="created" reverse="on" limit="5" format="<font size=-2>   &bull; $web: *$formfield(TopicHeadline)* (Posted by $createwikiusername)  _[[$web.$topic][Read more...]]_ </font><br>"}%
+---+++!! <font  FACE="arial,helvetica"> 5 most recented changed topics: </font>
+%SEARCH{".*" web="%BASEWEB%" format="<font size=-2>   &bull; $web.$topic - $date <br></font>" regex="on" nosearch="on" order="modified" limit="5" nototal="on"}%
+_See also: [[%BASEWEB%.WebChanges][Recent changes]]._
+---+++!! <font  FACE="arial,helvetica"> Create a new topic:</font>
+Select TopicType for new topic:
+<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic">
+<select name="type" onchange="this.form.submit()">
+  <option>Select...</option><option value="" >blank topic</option>
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}%</select> <br />
+</form>
+
+_See also: %BASEWEB%.TopicClassification._
+%STOPSIDEBAR%
+%STOPINCLUDE%
+
+---+ %TOPIC%
+__This topic provides a general-utility right-hand "sidebar" for including in WebHome topics.__
+
+To use this sidebar, simply copy the following code and paste it into the first line of the WebHome topic:
+<verbatim>
+%INCLUDE{%TEMPLWEB%.WebHomeRightSideBar}%
+</verbatim>
+
+
+-- Main.LynnwoodBrown - 07 Aug 2003
+

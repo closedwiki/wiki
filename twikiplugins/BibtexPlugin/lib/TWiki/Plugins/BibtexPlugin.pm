@@ -31,7 +31,7 @@ use vars qw(
 	$isInitialized $currentBibWeb $currentBibTopic 
 	$cmdTemplate $sandbox
         %bibliography $script
-        $bibtexPrg $citeno
+        $bibtexPrg $citeno $bibcite
     );
 
 use File::Basename;
@@ -45,6 +45,9 @@ $debug = 0; # toggle me
 my %bibliography = ();
 my $citefile = "";
 my $citeno = 1;
+
+eval "use TWiki::Plugins::BibliographyPlugin;";
+my $bibcite = ($TWiki::Plugins::BibliographyPlugin::VERSION) ? 1 : 0;
 
 ###############################################################################
 sub writeDebug {
@@ -145,7 +148,11 @@ sub beforeCommonTagsHandler
 sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-  $_[0] =~ s/%CITE{(.*?)}%/&handleCitation2($1)/ge;
+  if ($bibcite) {
+      $_[0] =~ s/%BIBCITE{(.*?)}%/&handleCitation2($1)/ge;
+  } else {
+      $_[0] =~ s/%CITE{(.*?)}%/&handleCitation2($1)/ge;
+  }
 
   $_[0] =~ s/%BIBTEXREF{([^}]*)}%/&handleBibtexBibliography($1)/ge;
 
@@ -189,22 +196,28 @@ sub postRenderingHandler
 ######################################################################
 sub handleCitation2
 {
-  my ($cit) = @_;
-  $bibliography{$cit}{"cited"} = 1;
-  $bibliography{$cit}{"order"} = $citeno++
-      unless defined( $bibliography{$cit}{"order"} );
+  my ($input) = @_;
 
-  # print STDERR "found CITE:$cit\n";
-  if ($script =~ m/genpdflatex/) {
-      return "<latex>\\cite{$cit}</latex>";
-  } else {
-      return "[" .
-          '<a href="#'.$cit.'">'.
+  my $txt = '[';
+  foreach my $cit ( split(/,/,$input) ) { 
+      $bibliography{$cit}{"cited"} = 1;
+      $bibliography{$cit}{"order"} = $citeno++
+          unless defined( $bibliography{$cit}{"order"} );
+      
+      
+      # print STDERR "found CITE:$cit\n";
+      $txt .= (length($txt) > 1) ? ',' : '';
+      $txt .= '<a href="#'.$cit.'">'.
           $bibliography{$cit}{"order"}.
-          "</a>".
-          "]";
+          "</a>";
   }
+  $txt .= ']';
 
+  if ($script =~ m/genpdflatex/) {
+      return("<latex>\\cite{$input}</latex>");
+  } else {
+      return($txt);
+  }
 }
 
 
@@ -223,24 +236,14 @@ sub handleBibtexBibliography
 
     my $style = $opts{'style'} || 'plain';
     my $files = $opts{'file'} || '.*\.bib';
+    my $reqtopic = $opts{'topic'} || $topic;
 
     my $text = "";
 
     my @cites = sort bibliographyOrderSort (keys %bibliography);
 
-#     $text .= "<ol> \n";
-#     foreach $key (sort bibliographyOrderSort (keys %bibliography))
-#     {
-#         $text .= "<li> ";
-#         $text .= '<a name="'.$key.'"></a>';
-#         $text .= "%BIBTEX{select=\"\$key : '$key'\"";
-#         $text .= ' style="'.$style.'"';
-#         $text .= ' files="'.$files.'"' unless ($files eq '');
-#         $text .= "}%";
-#     }
-#     $text .= "</ol> \n";
-
     if ($script =~ m/genpdflatex/) {
+
         my $bibtexPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
             '/usr/bin/bibtex';
 
@@ -248,32 +251,67 @@ sub handleBibtexBibliography
         return $errMsg if $errMsg;
 
         $currentBibWeb = $web unless ($currentBibWeb);
-        $currentBibTopic = $topic unless ($currentBibTopic);
+        $currentBibTopic = $reqtopic unless ($currentBibTopic);
 
         my @bibfiles = &getBibfiles($currentBibWeb, $currentBibTopic, $files);
+        if (!@bibfiles) {
+            my ($webName, $topicName) = &scanWebTopic($defaultTopic);
+            &writeDebug("... trying $webName.$topicName now");
+            return &showError("topic '$defaultTopic' not found") 
+                if !&TWiki::Func::topicExists($webName, $topicName);
+            @bibfiles = &getBibfiles($webName, $topicName, $files);
+        }
 
+        my $stdErrFile = &getTempFileName("BibtexPlugin");
+        
+
+        ### need to process the .bib files through bibtool before
+        ### inclusion in the latex file
+        my $theSelect = join(' or ', map { "(\$key : \"$_\")" } @cites );
+
+        my ($result, $code) = 
+            $sandbox->sysCommand($cmdTemplate,
+                                 MODE => 'raw',
+                                 BIBTOOLRSC => $pubDir . '/TWiki/BibtexPlugin/bibtoolrsc',
+                                 BIBFILES => \@bibfiles,
+                                 SELECT => $theSelect? "-c '$theSelect'" : "",
+                                 BIBTEX2HTMLARGS => '',
+                                 STDERR => $stdErrFile,
+                                 );
+        &writeDebug("bib2bib: result code $code");
+
+        # output result to a temporary bibtex file...
+        my $tmpbib = getTempFileName("bib").'.bib';
+        print STDERR $tmpbib . "\n";
+        open(T,">$tmpbib");
+        print T $result;
+        close(T);
+
+        # construct temporary .aux file
         my $auxfile = getTempFileName("bib").'.aux';
         open(T,">$auxfile");
         print T "\\relax\n\\bibstyle{$style}\n";
         print T map {"\\citation{$_}\n"} @cites;
-        print T "\\bibdata{".join(',',@bibfiles)."}\n";
+        # print T "\\bibdata{".join(',',@bibfiles)."}\n";
+        print T "\\bibdata{".$tmpbib."}\n";
         close(T);
 
-        # print STDERR ``;
-        my ($result, $code);
-        ($result, $code) = $sandbox->sysCommand( "$bibtexPrg %BIBFILE|F%",
-                                                 BIBFILE => $auxfile ),
-        &writeDebug("result code $code");
-
+        # run bibtex
+        if (-f $auxfile) {
+            ($result, $code) = 
+                $sandbox->sysCommand( "$bibtexPrg %BIBFILE|F%",
+                                      BIBFILE => $auxfile ),
+                &writeDebug("result code $code");
+        }
         $auxfile =~ s/\.aux$/.bbl/;
         if (-f $auxfile) {
-            $text .= "<latex>\n";
+            $text .= "<noautolink><latex>\n";
             open(F,"$auxfile");
             while (<F>) {
                 $text .= $_;
             }
             close(F);
-            $text .= "</latex>\n";
+            $text .= "</latex></noautolink>\n";
         } else {
             $text .= "<pre>error in bibtex generation\n$auxfile\n$result</pre>";
         }
@@ -282,9 +320,10 @@ sub handleBibtexBibliography
         foreach my $c ('.aux','.bbl','.blg') {
             unlink($auxfile.$c) unless ($debug);
         }
+        unlink($tmpbib) unless ($debug);
+        unlink($stdErrFile) unless ($debug);
 
     } else {
-
         $text .= $header."\n";
         
         $citefile = getTempFileName("bibtex-citefile");
@@ -301,6 +340,7 @@ sub handleBibtexBibliography
         $text .= '"';
         $text .= " style=\"$style\"";
         $text .= " file=\"$files\"" if ($files);
+        $text .= " topic=\"$reqtopic\"" if ($reqtopic);
         $text .= " citefile=\"on\"";
         $text .= '}%';
     }
@@ -453,6 +493,10 @@ sub bibSearch {
     $formTemplate = "";
   } elsif ($theForm eq "on") {
     $formTemplate = $defaultSearchTemplate;
+  } elsif ($theForm eq "only") {
+    $formTemplate = $defaultSearchTemplate;
+    $theSelect = '(author : "(null)")';
+    $theErrors = "off";
   } else {
     $formTemplate = $theForm;
   }
@@ -469,7 +513,6 @@ sub bibSearch {
     if !$theBibtext && !&TWiki::Func::topicExists($webName, $topicName);
   return &showError("topic '$formTemplate' not found") 
     if $formTemplate && !&TWiki::Func::topicExists($formWebName, $formTopicName);
-
 
   # get bibtex database
   my @bibfiles = ();

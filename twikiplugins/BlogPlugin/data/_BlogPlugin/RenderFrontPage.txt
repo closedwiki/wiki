@@ -7,6 +7,7 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 
 ---++ Parameters
    * SKIP: offset into the archive
+   * LIMIT: number of postings to show maximal
    * CAT: categories to extract
    * AUTHOR: extract postings of this author
 
@@ -15,32 +16,21 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 %STARTINCLUDE%
 ~~~
 %~~ DBQUERY{
-~~~   "TopicType=~'\bBlogEntry\b' AND
-~~~    SubjectCategory=~'\b%CAT%\b' AND
-~~~    State='enabled' AND
-~~~    BlogAuthor='%AUTHOR%'
+~~~   "TopicType=~'\bBlogEntry\b' AND State='enabled' 
+~~~    %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'" glue="off"}%
+~~~    %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%
 ~~~   "
-~~~   limit="5" skip="%SKIP%" 
+~~~   limit="%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="5"}%" 
+~~~   skip="%IFDEFINED{"%SKIP%" then="%SKIP%" else="0"}%" 
 ~~~   order="created" reverse="on" web="%WEB%" 
 ~~~   format="%DBCALL{"RenderFullTeaser" section="format" NAME="$topic"}%"
-~~~ }%
-<!--
-%~~  CALC{"
-~~~   $SET(nrPostings,
-*~~
-%~~   DBQUERY{
-~~~      "TopicType=~'\bBlogEntry\b' AND
-~~~       SubjectCategory=~'\b%CAT%\b' AND
-~~~       State='enabled' AND
-~~~       BlogAuthor='%AUTHOR%'
-~~~      "
-~~~      format="none" header="$count" separator="none"
-~~~      web="%WEB%"
-~~~   }%)"}%
--->
-%~~ DBCALL{"%WEB%.RenderPageNavigation" 
-~~~    SKIP="%SKIP%" INCR="5"
-~~~    MAX="%CALC{"$GET(nrPostings)"}%"
+~~~   footer="
+*~~      $percntDBCALL{\"$web.RenderPageNavigation\"
+~~~        LIMIT=\"%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="5"}%\" 
+~~~        SKIP=\"%IFDEFINED{"%SKIP%" then="%SKIP%" else="0 "}%\" 
+~~~        MAX=\"$count\"
+~~~      }$percnt
+*~~   "
 ~~~ }%
 ~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
 ~~~
@@ -49,7 +39,7 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" SKIP="0" CAT="BlogDev" AUTHOR=".*"}%
+%DBCALL{"%TOPIC%" SKIP="%URLPARAM{"skip"}%" CAT="BlogDev" LIMIT="1"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

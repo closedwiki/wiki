@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1133298417" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{name="TopicClassification"}%
+
+
+_This topic is for storing unique graphics used by %TWIKIWEB%.TopicClassificationAddOn._
+	* Icon for external links: <img src="%ATTACHURLPATH%/link-outside.gif" alt="Icon for external links" width='13' height='12' />
+
+
+
+
+%META:FILEATTACHMENT{name="link-outside.gif" attachment="link-outside.gif" attr="" comment="Icon for external links" date="1133298346" path="link-outside.gif" size="65" stream="link-outside.gif" user="Main.LynnwoodBrown" version="1"}%
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

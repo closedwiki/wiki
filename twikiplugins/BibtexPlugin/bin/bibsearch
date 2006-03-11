@@ -27,30 +27,56 @@ if ($ENV{GATEWAY_INTERFACE} !~ /^CGI-Perl/) {
   use CGI::Carp qw( fatalsToBrowser );
   use CGI;
   use TWiki;
+  use TWiki::UI::View;
 }
+
+package bibsearch;
 
 use strict;
 our $debug = 0;
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::writeDebug("bibsearch - " . $_[0]) if $debug;
+  &TWiki::Func::writeDebug("bibsearch - " . $_[0]) if $debug;
 }
 
 sub writeDebugTimes {
-  &TWiki::writeDebugTimes("bibsearch - " . $_[0]) if $debug;
+  &TWiki::Func::writeDebugTimes("bibsearch - " . $_[0]) if $debug;
 }
 
 
-&main();
+if( $TWiki::Plugins::VERSION >= 1.1 ) { 
+    # Dakar interface 
+    TWiki::UI::run( \&main );
+} else { 
+    # Cairo interface
+    &main();
+}
+
 
 ###############################################################################
 sub main
 {
-  my $query = new CGI;
-  my $thePathInfo = $query->path_info(); 
-  my $theRemoteUser = $query->remote_user();
-  my $theUrl = $query->url;
+    my ($query); # , $webName, $topic, $scriptUrlPath, $userName );
+    
+    if( $TWiki::Plugins::VERSION >= 1.1 ) { 
+        # Dakar interface 
+        my $session = shift;
+
+        $TWiki::Plugins::SESSION = $session;
+        # my $store = $session->{store};
+        # return unless ( $store->topicExists( $webName, $topic ) );
+        
+        $query = $session->{cgiQuery};
+
+    } else {
+        # Cairo interface
+        $query = new CGI;
+    }
+
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theUrl = $query->url;
 
   &writeDebug("starting");
 
@@ -157,12 +183,20 @@ sub main
   ##
   # get the view template
   ##
-  my $skin = $query->param("skin") || &TWiki::Prefs::getPreferencesValue("SKIN");
+  my $skin = $query->param("skin") || &TWiki::Func::getPreferencesValue("SKIN");
   my ($meta, $text) = &TWiki::Func::readTopic($web, $topic);
   my $tmpl = &TWiki::Func::readTemplate("view", $skin);
-  $tmpl = &TWiki::handleCommonTags($tmpl, $topic, $web);
-  $tmpl = &TWiki::handleMetaTags($web, $topic, $tmpl, $meta, 1);
-  $tmpl = &TWiki::getRenderedVersion($tmpl, "", $meta ); ## better to use meta rendering?
+
+  $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
+  if( $TWiki::Plugins::VERSION >= 1.1 ) { 
+    # Dakar interface 
+  } else { 
+    # Cairo interface
+    $tmpl = &TWiki::handleMetaTags($web, $topic, $tmpl, $meta, 1);
+  }
+    
+  $tmpl = TWiki::Func::renderText($tmpl);
+    
   $tmpl =~ s/%SEARCHSTRING%//go;
   $tmpl =~ s/%REVINFO%//go;
   $tmpl =~ s/%REVTITLE%/search/go;
@@ -173,17 +207,26 @@ sub main
   # call the plugin
   ##
   my $result = &TWiki::Plugins::BibtexPlugin::bibSearch($theTopic, 
-    $theBibfile, $theSelect, $style, $theSort, $theReverse, $mixed, $theErrors, 
+    $theBibfile, $theSelect, $style, $theSort, $theReverse, $mixed, 
+    $theErrors, 
     $theForm, $theAbstracts, $theKeywords, $theTotal, $theDisplay);
 
   ##
   # put the topic text into the view template
   ##
+  $text =~ s/%BIBTEXRESULT%/$result/g;
   $text =~ s/%BIBTEX%/$result/g;
   $text =~ s/%BIBTEX{[^}]*}%/$result/g;
   $text =~ s/%STARTBIBTEX.*?%.*?%STOPBIBTEX%/$result/gs;
-  $text = &TWiki::handleCommonTags($text, $topic);
-  $text = &TWiki::getRenderedVersion($text);
+
+  $text = TWiki::Func::expandCommonVariables($text, $topic, $web);
+  $text = TWiki::Func::renderText($text);
+
+  if (0) { 
+      # Cairo interface
+      $text = &TWiki::handleCommonTags($text, $topic);
+      $text = &TWiki::getRenderedVersion($text);
+  }
   $tmpl =~ s/%TEXT%/$text/go;
 
   ##
@@ -203,10 +246,14 @@ sub main
     }
   }
 
+  # remove edit and revisions tags:
+  $tmpl =~ s/%EDITTOPIC%//g;
+  $tmpl =~ s/%REVISIONS%/ -- /g;
+
   ##
   # finaly, print out
   ##
-  &TWiki::writeHeader($query);
+  &TWiki::Func::writeHeader($query);
   print $tmpl;
   &writeDebug("done");
 }

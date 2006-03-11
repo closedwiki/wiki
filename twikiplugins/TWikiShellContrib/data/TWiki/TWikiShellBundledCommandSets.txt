@@ -93,7 +93,8 @@ This CommandSet doesn't have any commands. It exists only to discover all the in
 
 ---++ TWiki::Contrib::CommandSet::Package
 
-Generates a tarball from all the files in the TWikiExtension directory.
+Generates a tarball from all the files in the TWikiExtension directory. *ONLY WORKS ON LINUX*
+Use the TWiki::Contrib::CommandSet::Build package to do a proper packaging for release.
 
 | *Command* | *Description* |
 | package | Generates a tarball for the TWikiExtension|
@@ -172,13 +173,36 @@ EXAMPLE
 
 ---+++ =plugin putback=
 
+SYNOPSIS
+     plugin putback <Plugin/Contrib>
 
+DESCRIPTION
+     This command will copy the files listed in the <PLUGINNAME>.MF file
+     back to the twikiplugins/<PLUGINNAME> directory, to be able to
+     update the sources in the repository and/or run the build.pl
+     script from there.
 
+EXAMPLE
+     twikishell plugin putback TWikiShellContrib
 
+        Will copy all the files listed in TWikiShellContrib.MF to
+        the from twikiplugins/TWihiShellContrib directory.
 
+---++ TWiki::Contrib::CommandSet::Build
 
+---+++ =build=
 
+SYNOPSIS
+     build <TExtension> <target>  -
+        executes build.pl for the given plugin passing the specified <target>
 
+DESCRIPTION
+     This command provides an interface to the build.pl script. It assumes
+    that the script is somewhere along the following path:
+
+    ${TROOT}/twikiplugins/<TExtension>/lib/TWiki/[Plugin|Contrib]/<TExtension>
+
+    The parameter <target> can be any valid target for the build.pl script.
 
 
 

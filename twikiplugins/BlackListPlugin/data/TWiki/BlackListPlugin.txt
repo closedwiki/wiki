@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1136327319" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1139349663" format="1.0" version="1.12"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -118,7 +118,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==templates/oopsblacklist.tmpl== | Generic oops message |
 	* Write protect this Plugin topics by removing the # hash sign from the ALLOWTOPICCHANGE setting
 	* Make sure =pub/TWiki/%TOPIC%/= is writable by the CGI user (typically =nobody=)
-	* Dakar release only: Run the configure utility in your browser to enable the Plugin
+	* Add the hidden form field to the registration form as described in the "Registration protection settings" section
+	* From TWiki 4.0 release on: Run the configure utility in your browser to enable the Plugin
 	* Test if the installation was successful:
 		1 Using above form, add the IP address of one of your workstations to the BANLIST
 		1 Access TWiki from that workstation
@@ -129,8 +130,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 03 Jan 2006 |
+|  Plugin Version: | 08 Feb 2006 (r8745) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  07 Feb 2006: | TWiki Release 4.0 fix to allow registration with e-mail verification, reset password and approve |
 |  03 Jan 2006: | Filter lines with space from spam list; fixed bug that inproperly filtered HTML from spam list; Dakar Release fix (end/postRenderingHandler issue) |
 |  08 Nov 2005: | Doc fixes; code warning fixes; allow empty local SPAMLIST and public spam list |
 |  04 Nov 2005: | Added registration protection with magic number |
@@ -153,5 +155,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 03 Jan 2006
+-- TWiki:Main/PeterThoeny - 08 Feb 2006
 

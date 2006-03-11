@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1090047252" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1141669952" format="1.0" version="1.4"}%
 ---+ Variable Cache Plugin 
 
 This Plugin caches TWiki variables in selected topics for faster page rendering.
@@ -54,7 +54,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the Plugin on the TWiki server. 
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -65,7 +65,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%Test.txt,v== | Plugin test topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/cachetopic.gif== | Cache icon 16x16 |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure%SCRIPTSUFFIX%]] script to enable the Plugin
 	* Test if the installation was successful:
 		* Visit the %TOPIC%Test topic, it contains a nested search
 		* Click on the <u>refresh</u> link or append a =?varcache=refresh= parameter to the URL
@@ -73,8 +73,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 16 Jul 2004 (V1.000) |
+|  Copyright: | &copy; 2004-2006, [[http://www.structuredwikis.com/][Peter Thoeny]] |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 06 Jan 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  06 Jan 2006: | Small fix for TWiki 4.0 |
 |  16 Jul 2004: | Doc improvements (no code change) |
 |  15 Jul 2004: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 (15 Jul 2004) |
@@ -84,9 +87,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC%Test 208% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/PeterThoeny - 16 Jul 2004
+-- TWiki:Main/PeterThoeny - 06 Jan 2006
 
 %META:FILEATTACHMENT{name="cachetopic.gif" attr="h" comment="Cache icon 16x16 pixel" date="1089949592" path="cachetopic.gif" size="935" user="PeterThoeny" version="1.1"}%

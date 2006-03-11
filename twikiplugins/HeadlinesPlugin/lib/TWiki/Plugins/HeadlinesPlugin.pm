@@ -38,7 +38,7 @@ use Digest::MD5 qw(md5_hex);
 
 
 $VERSION = '$Rev$';
-$RELEASE = '2.00';
+$RELEASE = '2.02';
 
 $debug = 0; # toggle me
 
@@ -581,7 +581,7 @@ sub parseRssFeed {
     $line =~ s/\$(rights|coverage|relation|language|source|identifier|format|date|contributor|creator|title|subject|description)//go;
     $text .= $line if ($ok);
     $count++;
-    last if $count > $limit;
+    last if $count >= $limit;
   }
 
   # fix relative img urls
@@ -708,7 +708,7 @@ sub parseAtomFeed {
       $line =~ s/\$(rights|coverage|relation|language|source|identifier|format|contributor|creator|subject)//go;
       $text .= $line if ($ok);
       $count++;
-      last if $count > $limit;
+      last if $count >= $limit;
     }
   }
 
@@ -727,7 +727,9 @@ sub recode {
     $text =~ s/&lt;/</go;
     $text =~ s/&gt;/>/go;
     $text =~ s/&amp;/&/go;
+    $text =~ s/&quot;/"/go;
   }
+
 
   $text =~ s/&#xD;/\n/go;
 

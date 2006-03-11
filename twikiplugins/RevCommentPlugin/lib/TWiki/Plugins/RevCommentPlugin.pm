@@ -1,7 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2005 by TWiki:Main.JChristophFuchs
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,45 +13,12 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   earlyInitPlugin         ( )                                     1.020
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   beforeCommonTagsHandler ( $text, $topic, $web )                 1.024
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   afterCommonTagsHandler  ( $text, $topic, $web )                 1.024
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 # =========================
-package TWiki::Plugins::RevCommentPlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::RevCommentPlugin;
+use strict;
+
+use TWiki::Func;
 
 # =========================
 use vars qw(
@@ -61,15 +27,8 @@ use vars qw(
     );
 
 use vars qw(
-    $commentFromUpload $attachmentComments $useRCS $rcsComment
-    $cachedComment $cachedCommentWeb $cachedCommentTopic
-    $minorMark $rlogCmd $rcsMsgCmd
+    $commentFromUpload $attachmentComments $cachedCommentWeb $cachedCommentTopic $minorMark
 );
-
-if ( my $rcsDir = $TWiki::cfg{RCS}{BinDir} || $TWiki::rcsDir ) {
-    $rlogCmd   = "$rcsDir/rlog %FILE%";
-    $rcsMsgCmd = "$rcsDir/rcs -q -m:%MSG% %FILE%";
-}
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -81,7 +40,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$pluginName = 'RevCommentPlugin';  # Name of this Plugin
+$pluginName = 'RevCommentPlugin';
 
 $minorMark = '%MINOR%';
 
@@ -96,8 +55,6 @@ sub initPlugin
         return 0;
     }
 
-    return 0 unless defined( $rlogCmd );
-
     $commentFromUpload = undef;
 
     # Get plugin debug flag
@@ -105,9 +62,6 @@ sub initPlugin
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
     $attachmentComments = TWiki::Func::getPluginPreferencesValue( "ATTACHMENT_COMMENTS" ) || 1;
-
-    $useRCS = TWiki::Func::getPluginPreferencesValue( "USE_RCS" ) || 0;
-    $useRCS = 0;
 
     $cachedCommentWeb = '';
     $cachedCommentTopic = '';
@@ -126,10 +80,6 @@ sub commonTagsHandler
 
     # This is the place to define customized tags and variables
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 
     $_[0] =~ s/%REVCOMMENT%/&handleRevComment()/ge;
     $_[0] =~ s/%REVCOMMENT{(.*?)}%/&handleRevComment($1)/ge;
@@ -203,37 +153,8 @@ sub beforeSaveHandler
     }
     $meta->remove('REVCOMMENT');
     _putComments($meta,@comments);
-
-    # Save comment for later use with rcs
-    return unless $useRCS;
-
-    map {$_->{comment} = $minorMark.$_->{comment} if $_->{minor} } @comments;
-    $rcsComment = join("\n", map($_->{comment}, @comments) );
-    ( $rcsComment ) =~ /^(.*)$/s;
 }
 
-# =========================
-sub afterSaveHandler
-{
-### my ( $text, $topic, $web, $error, $meta ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    return unless $rcsComment; 
-
-    TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::Store::saveTopic just after the save action.
-    # New hook in TWiki::Plugins $VERSION = '1.020'
-
-    # SMELL: for Dakar, should use something related to the Store class
-#    $_[2] =~ s|\.|/|g;		# as this is going to be used in the filesystem, changed subweb .'s into /'s
-    my $file = TWiki::Func::getDataDir() . '/' . $_[2] . '/' . $_[1] . '.txt';
-    die "File does not exist ? " unless -r $file;
-    my $cmd = $rcsMsgCmd;
-    $cmd =~ s/%FILE%/$file/g;
-    my @cmd = split(' ',$cmd);
-    map {s/%MSG%/$rcsComment/g} @cmd;
-    system(@cmd);
-}
 
 sub beforeAttachmentSaveHandler
 {
@@ -323,16 +244,6 @@ sub handleRevComment {
     }
     my @comments;
 
-    if ($useRCS) {
-
-	if ($web ne $cachedCommentWeb ||
-	    $topic ne $cachedCommentTopic) {
-
-	    cacheComments($web, $topic);
-	}
-	@comments = split(/\n/, $cachedComment->[$rev] || '');
-    } else {
-
 	# SMELL: doesn't respect access permissions (too bad there isn't a version that does, like readTopic() does...)
 	my ( $meta, undef ) = TWiki::Func::readTopic($web, $topic, $rev);
 
@@ -343,7 +254,6 @@ sub handleRevComment {
 	@comments = grep {$_->{rev} == $rev} @comments;
 	map {$_->{comment} = $minorMark.$_->{comment} if $_->{minor} } @comments;
 	@comments = map {$_->{comment}} @comments;
-    }
 
     my $text =  scalar @comments > 0 ?
 		$pre . join($delimiter, @comments) . $post :
@@ -351,46 +261,5 @@ sub handleRevComment {
     $text =~ s/$minorMark/$minor/g;
     return $text;
 }
-
-sub cacheComments {
-
-    my ($web, $topic) = @_;
-
-    # SMELL: see Store
-#    $web =~ s|\.|/|g;		# as this is going to be used in the filesystem, changed subweb .'s into /'s
-    my $file = TWiki::Func::getDataDir() . '/' . $web . '/' . $topic . '.txt';
-    die "File $file does not exist ?" unless -r $file;
-
-    my $pid = open(KID_TO_READ, "-|");
-
-     if ($pid) {   # parent
-	$cachedComment = [];
-	while (<KID_TO_READ>) {
-	    next if 1../^-+\s*$/;
-	    /revision\s+1.(\d+)/;
-	    my $rev = $1;
-	    $_=<KID_TO_READ>;
-	    while (<KID_TO_READ>) {
-		last if /^-+\s*$/ || /^=+\s*$/;
-		$cachedComment->[$rev] .= $_;
-	    }
-	    chomp($cachedComment->[$rev]);
-	    last if /^=+\s*$/;
-	}
-	close(KID_TO_READ) || warn "kid exited $?";
-
-     } else {      # child
-	($EUID, $EGID) = ($UID, $GID); # suid only
-	my $cmd = $rlogCmd;
-	$cmd =~ s/%FILE%/$file/g;
-	exec(split(' ',$cmd))
-	     || die "can't exec $rlogCmd: $!";
-	# NOTREACHED
-     }
-
-     $chchedCommentWeb = $web;
-     $cachedCommentTopic = $topic;
-}
-
 
 1;

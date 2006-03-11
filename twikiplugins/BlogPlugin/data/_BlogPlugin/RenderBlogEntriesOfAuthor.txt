@@ -5,24 +5,35 @@
 
 ---++ Parameters
    * NAME: name of a BlogAuthor
+   * LIMIT: number of postings per page
    * SKIP: offset into the archive
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
 *~~
-<h1 style="margin-bottom:0px;padding-bottom:0px">[[%MAINWEB%.%NAME%][%SPACEOUT{"%NAME%"}%]]</h1>
+<h1 style="margin-bottom:0px;padding-bottom:0px">
+~~~ [[%MAINWEB%.%NAME%][%SPACEOUT{"%NAME%"}%]]
+</h1>
 <div class="blogArchiveDescription">
    %DBQUERY{topic="%NAME%" format="$expand(TopicDescription)"}% 
 </div>
-%DBCALL{"RenderFrontPage" SKIP="%SKIP%" CAT=".*" AUTHOR="%NAME%"}%
+%~~ DBCALL{"RenderFrontPage" 
+~~~   %IFDEFINED{"%SKIP%" then="SKIP=\"%SKIP%\"" glue="off"}%  
+~~~   %IFDEFINED{"%LIMIT%" then="LIMIT=\"%LIMIT%\"" glue="off"}%  
+~~~   AUTHOR="%NAME%"
+~~~ }%
 *~~ 
 %STOPINCLUDE%
 </verbatim>
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="MichaelDaum"}%
+%~~ DBCALL{"%TOPIC%" 
+~~~   NAME="MichaelDaum" 
+~~~   LIMIT="%URLPARAM{"limit" default="2"}%"
+~~~   SKIP="%URLPARAM{"skip" default="0"}%"
+~~~ }%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

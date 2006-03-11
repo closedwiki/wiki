@@ -1,7 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript">
+%TMPL:DEF{"templatescript"}%<script type="text/javascript">
 //<![CDATA[
 	var pageElem = document.renameweb;
 //]]>
@@ -9,8 +8,7 @@
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
 %TMPL:END%
 
-%TMPL:DEF{"content"}%
-<form method="post" name="renameweb" action="%SCRIPTURLPATH{"renameweb"}%/%WEB%">
+%TMPL:DEF{"content"}%<form method="post" name="renameweb" action="%SCRIPTURLPATH{"renameweb"}%/%WEB%">
 %TMPL:P{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% <code>%WEB%</code>
 
@@ -46,9 +44,7 @@ __Note:__
 %TMPL:P{"topicinfo"}%
 </form>%TMPL:END%
 
-%TMPL:DEF{"renameweb"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
+%TMPL:DEF{"renameweb"}%%TMPL:P{"htmldoctype"}%%TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
 %TMPL:P{"main"}%
 %TMPL:P{"bodyend"}%

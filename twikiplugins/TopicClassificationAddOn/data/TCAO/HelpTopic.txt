@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1141357399" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicType"}%
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - 1141357399 ) < 60, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="successmsg" INSTRUCTIONS="no" TYPE="type" }% 
+%INCLUDE{%TCAOWEB%.TopicTypeMaster}%
+
+<!-- Hidden include for CreateNewTopic
+%STARTSECTION{name="new" type="section"}%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="name" }%
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
+%ICON{tip}% _Use *TopicHeadline* to summarize the question being asked or the answer offered._
+%INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="templates" }%
+%ENDSECTION{name="new" type="section"}%
+-->
+
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+%META:FORM{name="TopicTypeForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicType"}%
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Help and how-tos related to TCAO."}%

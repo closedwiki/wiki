@@ -7,16 +7,25 @@
 
 ---++ List of all BlogEntries
 <noautolink>
-| *Name* | *Headline* | *Author* | *Comments*| *Date* | 
+<div class="tableModDiv">
+| *Date* | *Headline* | *Category* | *Tag* |
 %~~ DBQUERY{"TopicType='BlogEntry'" order="createdate" reverse="on"
-~~~   format="| [[$web.$topic][$topic]]$percntREDDOT{\"$web.$topic\"}$percnt
-~~~           | $expand(Headline)
-~~~           | [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
-~~~           | $percntDBQUERY{\"BaseRef='$topic'\" hidenull=\"on\"
-~~~             separator=\"none\" format=\"none\" header=\"$dollarcount\"}$percnt
+~~~   format="
 ~~~           | <nobr>$formatTime(createdate)</nobr>
+~~~           | [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
+~~~           | $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" 
+~~~               format=\"[[$web.$1][$1]]\" sort=\"on\"
+~~~             }$percnt
+~~~           | $percntFORMATLIST{\"$formfield(BlogTag)\" sort=\"on\" 
+~~~               split=\"[,\s:\d]+\" exclude=\"^$\"
+~~~               format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/BlogArchive?mode=tag;search=$1\\">$1</a>\"
+~~~             }$percnt
 ~~~           |"
 ~~~ }%
+</div>
+~~~ <style type="text/css">
+~~~   .tableModDiv .twikiTable td { vertical-align:top; }
+~~~ </style>
 </noautolink>
 
 See also: %TOPIC%Template, BlogEntryForm

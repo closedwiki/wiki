@@ -22,79 +22,119 @@ if($configs && scalar(@$configs)) {
     $x = "some more";
 }
 
+my %desc = (
+    folder => <<'HERE',
+#   * folder - name of the mail folder
+#     Note: support for POP3 requires that the Email::Folder::POP3
+#     module is installed. Support for IMAP requires
+#     Email::Folder::IMAP etc.
+#     Folder names are as described in the documentation for the
+#     relevant Email::Folder type e.g. for POP3, the folder name might be:
+#     pop://me:123@mail.isp.com:110/
+HERE
+
+    user => <<'HERE',
+#   * user - name of the default user.
+#     The From: in the mail is parsed to extract the senders email
+#     address. This is then be looked up in the TWiki users database
+#     to find the wikiname. If the user is not found, then this default
+#     user will be used. If the default user is left blank, then the
+#     user *must* be found from the mail.
+#     The identity of the sending user is important for access controls.
+#     This must be a user *login* name.e.g. 'guest'
+HERE
+
+    topicPath => <<'HERE',
+#   * topicPath - where you want TWiki to look for the name of the target topic
+#     (comma-separated list of options)
+#     Available options:
+#      * to - look in the To: e.g. Web.TopicName@example.com or
+#             "Web TopicName" <web.topicname@example.com>
+#      * subject - look in the Subject: e.g "Web.TopicName: mail for TWiki"
+#     If "to" and "subject" are both enabled, but a valid topic name is not
+#     found in the To:, the Subject: will still be parsed to try and get the
+#     topic.
+HERE
+
+    defaultWeb => <<'HERE',
+#     * defaultWeb - name of the web to save mails in if the web name isn't specified in the mail
+#     If this is undefined or left blank, then mails must contain a full web.topicname
+#     or the mail will be rejected.
+HERE
+
+    onSuccess => <<'HERE',
+#   * onSuccess - what  you want TWiki to do with messages that have been successfully added to a TWiki topic
+#    (comma-separated list of options)
+#    Available options:
+#       * reply - reply to the sender
+#       * delete - delete the mail from the inbox
+HERE
+
+    onError => <<'HERE',
+#   * onError - what you want TWiki to do if an error occurs while processing a mail
+#    (comma-separated list of options)
+#    Available options:
+#      * reply - reply to the sender
+#      * delete - delete the mail from the inbox
+#      * log - log the error to the TWiki warning log
+#    Note: if you don't specify delete, TWiki will continue to try to process the
+#    mail each time the cron job runs.
+HERE
+
+    onNoTopic => <<'HERE',
+#   * onNoTopic - what do you want TWiki to do if it can't find a valid topic name
+#    in the mail (one option)
+#    Available options:
+#      * error - treat this as an error (overrides all other options)
+#      * spam - save the mail in the spambox topic
+#    Note: if you clear this, then TWiki will simply ignore the mail..
+HERE
+
+    spambox => <<'HERE',
+#   * spambox - optional required of onNoTopic = spam. Name of the topic where you want to save mails that don't have a valid web.topic. You must specify a full web.topicname
+HERE
+   );
+
 while (ask("Would you like to configure $x mailboxes")) {
     my $cfg = {};
 
-    print <<'THIS';
- * Enter the name of this mail folder
- * Note: support for POP3 requires that the Email::Folder::POP3
- * module is installed. Support for IMAP requires
- * Email::Folder::IMAP etc.
- * Folder names are as described in the documentation for the
- * relevant Email::Folder type e.g. for POP3, the folder name might be:
- * pop://me:123@mail.isp.com:110/
-THIS
+    print $desc{folder};
     $cfg->{folder} = prompt('Mail folder');
     $cfg->{folder} =~ s/'//g;
 
-    print <<'THIS';
- * Enter the Wikiname of the user who will be "logged in"
- * when messages from this folder are added. The user is important
- * for access controls, and must be a registered TWiki user.
- * Example: TWikiGuest
-THIS
-    $cfg->{user} = prompt('User');
+    print $desc{user};
+    $cfg->{user} = prompt('User', '');
     $cfg->{user} =~ s/\W//g;
 
-    print <<'THIS';
- * Do you want ALL messages removed from the folder after
- * processing, even if they were not recognised as being for TWiki,
- * or had failures? If you are going to set this, you are advised
- * to also set ReplyOnError.
- * (recommend NO)
-THIS
-    $cfg->{deleteall} = ask('Delete ALL messages');
+    print $desc{topicPath};
+    $cfg->{topicPath} = prompt('Where to look for the topic name', 'subject');
 
-    if( $cfg->{deleteall} ) {
-        $cfg->{delete} = 0;
-    } else {
-        print <<'THIS';
- * Do you want to delete messages from the folder that have been
- * successfully added to TWiki? Requires Email::Delete to be installed.
- * (recommend YES)
-THIS
-        $cfg->{delete} = ask('Delete READ messages');
+    print $desc{defaultWeb};
+    $cfg->{defaultWeb} = prompt('Name of default web', '');
+
+    print $desc{onSuccess};
+    $cfg->{onSuccess} = prompt('Action on no valid topic', 'delete');
+
+    print $desc{onError};
+    $cfg->{onError} = prompt('Action on error', 'reply,delete');
+
+    print $desc{onNoTopic};
+    $cfg->{onNoTopic} = prompt('Action on no valid topic', 'error');
+
+    if( $cfg->{onNoTopic} =~ /\bspam\b/ ) {
+        print $desc{spambox};
+        $cfg->{spambox} = prompt('Full name of spambox topic');
     }
-
-    print <<'THIS';
- * Do you want to send replies to mails if there is an
- * error when they are processed? Reply mails are sent using the
- * standard TWiki notification mechanism, which must be configured
- * for this to work. Error messages will be written to the TWiki
- * warning log if replyonerror is false.
- * (recommend YES)
-THIS
-    $cfg->{replyonerror} = ask('Reply on error');
-
-    print <<'THIS';
- * Do you want to send replies to mails if the submission succeeds?
- * Reply mails are sent using the standard TWiki notification
- * mechanism, which must be configured for this to work.
- * (recommend NO)
-THIS
-    $cfg->{replyonsuccess} = ask('Reply on success');
-
-    print <<'THIS';
- * Name of the topic where you want to save mails that don't have
- * a valid web.topic on the Subject: line. If you don't specify this,
- * these mails will simply be ignored.
- * You must specify a full web.topic name (recommend LEAVE BLANK)
-THIS
-    $cfg->{spambox} = prompt('Full name of spambox topic');
 
     push(@$configs, $cfg);
     $x = "another";
-
 }
 
-setConfig(MailIn => $toast->($configs));
+my $comment = '# **[{'.join('|', sort keys %desc)."}]**\n".<<HERE;
+# Configuration for the MailInContrib
+# The configuration is in the form of an array of mailbox specifications. Each
+# specification defines a number of fields:
+HERE
+$comment .= join("\n", map{ $desc{$_} } keys %desc);
+commentConfig($comment);
+setConfig(MailInContrib => $toast->($configs));

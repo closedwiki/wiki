@@ -1,37 +1,72 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129837152" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TopicFunction"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139169536" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
-   * NAME: topic name of a BlogComment or BlogEntry to which the prev-next doc navigation is displayed
+   * NAME: topic name of a BlogComment, BlogEntry or BlogLink 
+           to which the prev-next doc navigation is displayed
    * WHERE: search parameter to restrict the linked documents
+   * SORT: criterion how to sort set of documents (created, name, ...)
+   * REVERSE: invert the sorting order (on, off)
+
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-*~~
+*~~ 
 <div class="blogNavigation">
+<noautolink>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr>
   <td valign="top">
-    %IFDEFINED{"%PREVDOC{"%NAME%" web="%WEB%" where="%WHERE%"}%" then="&#171;" else="&nbsp;"}%
+*~~
+%~~ PREVDOC{"%NAME%" web="%WEB%" 
+~~~   where="%WHERE%" 
+~~~   order="%IFDEFINED{"%ORDER%" then="%ORDER%"}%"
+~~~   reverse="%IFDEFINED{"%REVERSE%" then="%REVERSE%"}%"
+~~~   format="&#171;"
+~~~ }%
+*~~
   </td>
   <td valign="top" class="blogPrev">
+~~~
 %~~ PREVDOC{"%NAME%" web="%WEB%"
-~~~   format="[[$web.$topic][$percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" format=\"$expand(Headline or Name)\"}$percnt]]"
-~~~   where="%WHERE%"
+~~~   where="%WHERE%" 
+~~~   order="%IFDEFINED{"%ORDER%" then="%ORDER%"}%"
+~~~   reverse="%IFDEFINED{"%REVERSE%" then="%REVERSE%"}%"
+~~~   format="<a href=\"%SCRIPTURL{"view"}%/$web/$topic\" 
+~~~     accesskey=\"b\"
+~~~     $percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" 
+~~~       format=\"title=\\"$expand(Headline)\\">$expand(Name or Headline)\"
+~~~     }$percnt</a>"
 ~~~ }% 
+~~~
   </td>
   <td valign="top" class="blogNext"> 
+~~~
 %~~ NEXTDOC{"%NAME%" web="%WEB%"
-~~~   format="[[$web.$topic][$percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" format=\"$expand(Headline or Name)\"}$percnt]]"
-~~~   where="%WHERE%"
+~~~   where="%WHERE%" 
+~~~   order="%IFDEFINED{"%ORDER%" then="%ORDER%"}%"
+~~~   reverse="%IFDEFINED{"%REVERSE%" then="%REVERSE%"}%"
+~~~   format="<a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~     accesskey=\"n\"
+~~~     $percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" 
+~~~       format=\"title=\\"$expand(Headline)\\">$expand(Name or Headline)\"
+~~~     }$percnt</a>"
 ~~~ }% 
+~~~
   </td>
   <td valign="top">
-    %IFDEFINED{"%NEXTDOC{"%NAME%" where="%WHERE%" web="%WEB%"}%" then="&#187;" else="&nbsp;"}%
-</td>
+*~~
+%~~ NEXTDOC{"%NAME%" web="%WEB%" 
+~~~   where="%WHERE%" 
+~~~   order="%IFDEFINED{"%ORDER%" then="%ORDER%"}%"
+~~~   reverse="%IFDEFINED{"%REVERSE%" then="%REVERSE%"}%"
+~~~   format="&#187;"
+~~~ }%
+*~~
+  </td>
 </tr>
 </table>
 </div>
@@ -39,9 +74,44 @@
 %STOPINCLUDE%
 </verbatim>
 
+<!-- interrut glue -->
+
 ---++ Test
+---+++ BlogEntries
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="BlogEntry2" WHERE="TopicType='BlogEntry'"}%
+%~~ DBCALL{"%TOPIC%" 
+~~~   NAME="BlogEntry0" 
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~ }%
+</div>
+
+---+++ BlogLinks
+<div class="alt">
+%~~ DBCALL{"%TOPIC%" 
+~~~   NAME="BlogLink0"
+~~~   WHERE="TopicType=~'\bBlogLink\b'"
+~~~   ORDER="Name"
+~~~ }%
+</div>
+
+---+++ BlogLinks (reverse)
+<div class="alt">
+%~~ DBCALL{"%TOPIC%" 
+~~~   NAME="BlogLink0"
+~~~   WHERE="TopicType=~'\bBlogLink\b'"
+~~~   ORDER="Name"
+~~~   REVERSE="on"
+~~~ }%
+</div>
+
+---+++ BlogComments
+<div class="alt">
+%~~ DBCALL{"%TOPIC%" 
+~~~   NAME="BlogComment1"
+~~~   WHERE="BlogRef='%DBQUERY{topic="BlogComment1" format="$formfield(BlogRef)"}%'"
+~~~   ORDER="created"
+~~~ }%
+<noautolink>
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

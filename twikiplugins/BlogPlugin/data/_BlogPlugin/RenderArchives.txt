@@ -1,13 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1136311069" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TopicFunction"}%
+%META:TOPICINFO{author="TWikiContributor" date="1138816487" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
-
-%RED%Note%ENDCOLOR%: you need to edit this TopicFunction to display newer archives than
-December 2005. You can disable some calles to RenderArchiveLink below if your blog starts
-later than July 2005. This would have been automated _if_ that did not harm performance.
-
-See also: RenderArchiveLink, RenderBlogEntriesInSpan, RenderCategoriesInSpan
 
 ---++ Parameters
    * CAT: render archive links in this SubjectCategory
@@ -15,31 +9,28 @@ See also: RenderArchiveLink, RenderBlogEntriesInSpan, RenderCategoriesInSpan
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-~~~ <div class="blogSideBarSection blogSideBarArchive">
+*~~ <div class="blogSideBarSection blogSideBarArchive">
 ~~~   <h1> Archive%REDDOT{"%WEB%.%TOPIC%"}%</h1>
 ~~~   <table width="100%" cellspacing="0" cellpadding="0" border="0">
-*~~
-%~~     DBCALL{"RenderArchiveLink" FROM="1 Jan 2006" TO="1 Feb 2006" TITLE="January 2006" CAT="%CAT%"}%
-*~~
-%~~     DBCALL{"RenderArchiveLink" FROM="1 Dec 2005" TO="1 Jan 2006" TITLE="December 2005" CAT="%CAT%"}%
-*~~
-%~~     DBCALL{"RenderArchiveLink" FROM="1 Nov 2005" TO="1 Dec 2005" TITLE="November 2005" CAT="%CAT%"}%
-*~~
-%~~     DBCALL{"RenderArchiveLink" FROM="1 Oct 2005" TO="1 Nov 2005" TITLE="October 2005" CAT="%CAT%"}%
-*~~
-%~~     DBCALL{"RenderArchiveLink" FROM="1 Sep 2005" TO="1 Oct 2005" TITLE="September 2005" CAT="%CAT%"}%
-*~~
-%~~     DBCALL{"RenderArchiveLink" FROM="1 Aug 2005" TO="1 Sep 2005" TITLE="August 2005" CAT="%CAT%"}%
-*~~
-%~~     DBCALL{"RenderArchiveLink" FROM="1 Jul 2005" TO="1 Aug 2005" TITLE="July 2005" CAT="%CAT%"}% 
-*~~
+%~~     DBSTATS{"TopicType=~'\bBlogEntry\b' AND  State='enabled' AND 
+~~~              SubjectCategory=~'%IFDEFINED{"%CAT%" then="\b%CAT%\b" else=".*"}%'"
+~~~       field="Date"
+~~~       sort="created" reverse="on"
+~~~       pattern="(\w+ \d\d\d\d)"
+~~~       format="
+~~~         <tr><td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
+~~~           <a href=\"%SCRIPTURL{"view"}%/%WEB%/BlogArchive?mode=chron;
+*~~                month=$percntENCODE{\"$key\"}$percnt\"
+~~~              title=\"Archive of
+~~~                %IFDEFINED{"%CAT%" then="<nop>%CAT% in" glue="off"}% $key\"
+~~~              style=\"$percntCALC{\"$IF($EXACT(%URLPARAM{"month"}%,$key),color:red)\"}$percnt\">
+~~~             $key
+~~~           </a></li></ul></td>
+~~~           <td valign=\"top\" class=\"blogEntryCount\">$count</td>
+~~~         </tr>"
+~~~     }%
 ~~~   </table>
 ~~~ </div>
-~~~ <style type="text/css">
-~~~ .blogSideBarArchive {display:none}
-~~~ %CALC{"$IF($GET(foundArchive),.blogSideBarArchive {display:block})"}%
-~~~ </style>
-~~~ 
 %STOPINCLUDE%
 </verbatim>
 

@@ -55,8 +55,6 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Number::Compare 
    * CPAN:Text::Glob 
    * CPAN:File::Find::Rule 
-</td>
-<td>
    * CPAN:File::Slurp 
    * CPAN:File::Slurp::Tree
    * CPAN:CGI::Session
@@ -70,6 +68,8 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Unicode::String 
    * CPAN:Unicode::MapUTF8
    * CPAN:Time::Local
+</td>
+<td>
    * CPAN:Time::ParseDate
    * CPAN:Barcode::Code128
    * CPAN:Carp::Clan
@@ -101,9 +101,8 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Net::Jabber
    * CPAN:SOAP::Lite
    * CPAN:Font::AFM
+   * CPAN:HTML::Element
    * CPAN:HTML::FormatText
-</td>
-<td>
    * CPAN:Date::Format
    * CPAN:DBD::mysql (not really)
    * CPAN:IO::Pty 
@@ -129,6 +128,8 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:SVN::Mirror 
    * CPAN:IO::Pager 
    * CPAN:SVK
+</td>
+<td>
    * CPAN:XML::Stream
    * CPAN:Email::Simple
    * CPAN:Module::Pluggable
@@ -149,9 +150,44 @@ Provides pure-perl and precompiled CPAN modules in a handy bundle
    * CPAN:Email::Folder::IMAP
    * CPAN:Tk
    * CPAN:Devel::ptkdb
+   * CPAN:Test::Manifest 
+   * CPAN:XML::RSS
+   * CPAN:Class::Inner 
+   * CPAN:Devel::Symdump 
+   * CPAN:Test::Unit
+   * CPAN:Bit::Vector::Minimal
+   * CPAN:IO::Scalar
+   * CPAN:Lingua::GL::Stemmer
+   * CPAN:Lingua::PT::Stemmer
+   * CPAN:Lingua::Stem::Fr
+   * CPAN:Lingua::Stem::It
+   * CPAN:Lingua::Stem::Ru
+   * CPAN:Lingua::Stem::Snowball::Da
+   * CPAN:Lingua::Stem::Snowball::No
+   * CPAN:Lingua::Stem::Snowball::Se
+   * CPAN:Text::German
+   * CPAN:Lingua::Stem::En
+   * CPAN:Tie::Array::Sorted
+   * CPAN:Time::Piece
+   * CPAN:Plucene
+   * CPAN:Plucene-SearchEngine-1.1 (not really)
+   * CPAN:Class::Factory 
+   * CPAN:Class::Observable 
+   * CPAN:DBI 
+   * CPAN:DBD::Mock 
+   * CPAN:Params::Validate 
+   * CPAN:DateTime::Locale 
+   * CPAN:Class::Singleton 
+   * CPAN:DateTime::TimeZone 
+   * CPAN:DateTime
+   * CPAN:DateTime::Format::Strptime 
+   * CPAN:Devel::StackTrace
+   * CPAN:Exception::Class 
+   * CPAN:Log::Dispatch 
+   * CPAN:Log::Log4perl 
+   * CPAN:Workflow
 </td>
 </tr></table>
-
 
 ---++ Detailed Documentation
 <!-- use %$POD% when using with Build module to automatically extract documentation -->

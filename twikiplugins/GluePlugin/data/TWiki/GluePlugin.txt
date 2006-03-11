@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128882431" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139389832" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 %TOC%
 ---++ Description
@@ -26,8 +26,8 @@ anatomy of writing a TWiki tag using the GluePlugin is exemplified by
 <verbatim>
 %~~ TAG{
 ~~~ key="
-*~~		hello
-~~~		world
+*~~      hello
+~~~      world
 *~~ "
 ~~~ }%
 </verbatim>
@@ -113,10 +113,10 @@ Oranges
 <tr><td>
 <verbatim>
 %~~ SEARCH{"GluePlugin"
-~~~		  nosearch="on" nosummary="on" nototal="on"
-~~~		  separator=", "
-~~~		  scope="topic"
-~~~		  format="$topic"
+~~~        nosearch="on" nosummary="on" nototal="on"
+~~~        separator=", "
+~~~        scope="topic"
+~~~        format="$topic"
 ~~~ }%
 </verbatim>
 </td></tr>
@@ -127,19 +127,19 @@ Oranges
 <tr><th>You get if installed:</th></tr>
 <tr><td>
 %~~ SEARCH{"GluePlugin"
-~~~		  nosearch="on" nosummary="on" nototal="on"
-~~~		  separator=", "
-~~~		  scope="topic"
-~~~		  format="$topic"
+~~~        nosearch="on" nosummary="on" nototal="on"
+~~~        separator=", "
+~~~        scope="topic"
+~~~        format="$topic"
 ~~~ }%
 </td></tr>
 </table>
 <style type="text/css">
 .twikiTable {
-	width:100%;
+   width:100%;
 }
 .twikiTable th {
-	text-align:left;
+   text-align:left;
 }
 .twikiTable pre {
   margin:0px;
@@ -147,18 +147,18 @@ Oranges
 </style>
 
 ---++ Plugin Settings
-	* Set SHORTDESCRIPTION = Enable <nop>TWikiML to span multiple lines
+   * Set SHORTDESCRIPTION = Enable <nop>TWikiML to span multiple lines
 
 ---++ Plugin Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* If the plugin is installed correctly then the following two fruits
-	  will appear joined on one line: Apples
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * If the plugin is installed correctly then the following two fruits
+     will appear joined on one line: Apples
 
 ~~~ and Oranges
 
@@ -166,20 +166,21 @@ Oranges
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
+|  Copyright &copy;: | 2005-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 28 Aug 2005 (V1.5) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  28 Aug 2005: | changed glue syntax; added glue escape sequence to \
-						work arround tags been interpreted before lines are \
-						recombined |
+                  work arround tags been interpreted before lines are \
+                  recombined |
 |  16 Aug 2005: | properly support internal tags; \
-			 performance improvements;\
-		  fixed use if uninitialized value | 
+          performance improvements;\
+        fixed use if uninitialized value | 
 |  15 Aug 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |

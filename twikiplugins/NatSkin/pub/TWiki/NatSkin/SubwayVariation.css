@@ -25,7 +25,7 @@
 .natWebTitle a,
 .natWebButtons,
 .natWebButtons a {
-  color:white !important;
+  color:white;
 }
 .natWebLocator {
   display:none;

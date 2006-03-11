@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1138111772" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139389084" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
@@ -81,6 +81,8 @@ using a "where" and an "order" clause which the given topic is supposed to be pa
 | search clause, see documentation of the DBCacheContrib |
 | =order="..."= \
 | document property used to sort the hit set; defaults to "created" |
+| =reverse="on,off"= \
+| if set to on the sorting will be reversed, that is the logic of PREV and NEXT is inverted |
 
 
 ---+++ RECENTCOMMENTS
@@ -198,11 +200,59 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | v0.47 |
+|  Copyright &copy;: | 2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Version: | v0.61 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  30 Jan 2007: | replaced NOPs with STARSECTIONs; \
+|  03 Mar 2006: | added easy way to add/remove tags in the <nop>BlogEntryForm; \
+                  tags are displayed using a mini-tag cloud on the blog entry pages to \
+		  sort them by weight and name (btw. you can weight each tag like =mytag:2=) |
+|  01 Mar 2006: | grand rework of the <nop>BlogArchive; \
+                  added <nop>BlogTags for <nop>BlogEntries; \
+                  added dependency on TWiki:Plugins/TagCloudPlugin; \
+		  added rel="tag" to links to tags and categories to make technorati happy; \
+		  reworked category and archive in sidebar using the new DBSTATS tag of the \
+		  recent <nop>DBCachePlugin resulting in a drastic speed improvement on the front pages; \
+                  removed unused <nop>TopicFunctions |
+|  22 Feb 2006: | tighter control of alias substitution; \
+                  removed % in <nop>RenderBlogEntryButton; |
+|  21 Feb 2006: | removed dependency on the <nop>NatSkin; \
+                  added dependency on the <nop>IfDefinedPlugin; \
+		  added PatternSkin specific styles for the blog web; \
+		  lots of minor <nop>TopicFunction tweaks |
+|  14 Feb 2006: | added and diverse rss and atom feeds; \
+		  added comment syndication per blog entry; \
+		  added <nop>TopicTypes <nop>BlogPage and <nop>TWikiTopic; \
+		  added descriptive tooltips to all links; \
+                  added =reverse= argument to PREVDOC, NEXTDOC; \
+	          added =header=, =footer= arguments to COUNTCOMMENTS; \
+		  renamed RELATEDENTRIES to RELATEDTOPICS to handle <nop>BlogPages \
+		  with it too; \
+		  added a =filter= argument to RELATEDTOPICS for more flexibility; \
+                  preliminary <nop>BlogUp documentation and screenshots; \
+		  reworked sidebar generation by removing <nop>BlogSideBar and adding; \
+		  a proper <nop>RenderSideBar <nop>TopicFunction for it; \
+		  added <nop>WebButtons to navigate inside the blog application;\
+		  added nice rss feed icons everywhere; \
+		  added scroll helper to blog entries (need more); \
+		  moved most of the descriptive text in <nop>BlogAbout into a \
+		  <nop>BlogHelpText and reuse the <nop>BlogAbout for a free-form \
+		  "About" page that is added to the <nop>WebButtons; \
+		  speed improvements rendering the front page by simplifying the \
+		  navigation renderer; \
+		  added a dedicated <nop>TopicFunction to render http-equivs, \
+		  i.e. to list the feeds; \
+		  added w3c validation button to the <nop>TWikiWorkbench; \
+		  added example <nop>WebAggregation by rendering own feeds using \
+		  the HeadlinesPlugin; \
+		  added dependency to TWiki:Plugins/FilterPlugin for the FORMATLIST tag; \
+		  unified redundant navigation renderer; \
+		  improved admin tools using twisties; \
+		  postings are owned by the author by default now; \
+                  fixed print view to popup the print dialogue |
+|  30 Jan 2006: | replaced NOPs with STARSECTIONs; \
                   fixed customized search view |
-|  27 Jan 2007: | added permalink tooltips ;\
+|  27 Jan 2006: | added permalink tooltips ;\
                   nicer autor and admin buttons; \
 		  renamed SECTIONs to STARTSECTIONs; \
 		  highlight current <nop>TopicFunction in sidebar list; \
@@ -211,26 +261,27 @@ And send me a patch if you've coded that into TWiki ;).
 		  css improvements |
 |  24 Jan 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | CPAN:Digest::MD5, CPAN:Time::ParseDate |
+|  CPAN Dependencies: | CPAN:Time::Local |
 |  Other Dependencies: \
 | \
+TWiki:Plugins/AliasPlugin, \
 TWiki:Plugins/DBCachePlugin, \
 TWiki:Plugins/ExtendedSelectPlugin, \
+TWiki:Plugins/FilterPlugin \
 TWiki:Plugins/GluePlugin, \
 TWiki:Plugins/HeadlinesPlugin, \
-TWiki:Plugins/NatSkinPlugin, \
+TWiki:Plugins/IfDefinedPlugin, \
 TWiki:Plugins/RedDotPlugin, \
-TWiki:Plugins/SpreadSheetPlugin \
+TWiki:Plugins/SpreadSheetPlugin, \
+TWiki:Plugins/TagCloudPlugin, \
 TWiki:Plugins/TimeSincePlugin, \
-TWiki:Plugins/TwistyPlugin \
+TWiki:Plugins/TwistyPlugin, \
+TWiki:Plugins/UserInfoPlugin (optional) \
 |
-|  Perl Version: | 5.005 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Perl Version: | 5.8 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.MichaelDaum - 27 Jan 2006
+-- TWiki:Main.MichaelDaum - 03 Mar 2006

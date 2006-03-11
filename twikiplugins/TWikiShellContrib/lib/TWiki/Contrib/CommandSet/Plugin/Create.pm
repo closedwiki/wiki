@@ -130,7 +130,7 @@ sub _createTWikiTopic {
 
 sub _buildFromTemplate {
    my ($inFile,$outFile,$transform)=@_;
-
+   
    open IN,"<$inFile";
    my @content=<IN>;
    close IN;

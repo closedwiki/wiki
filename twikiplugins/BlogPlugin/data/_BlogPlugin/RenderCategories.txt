@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1136307790" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TopicFunction"}%
+%META:TOPICINFO{author="TWikiContributor" date="1138883148" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -8,29 +8,26 @@ NONE
 
 ---++ Implementation
 %STARTINCLUDE%
-~~~ <div class="blogSideBarSection blogSideBarCategories">
-~~~   <h1>Categories%REDDOT{"%WEB%.%TOPIC%"}%</h1>
-~~~   <noautolink>
-%~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
-~~~   header="<table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
-~~~   format="<tr><td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
-~~~     <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/$web/$topic\"
-~~~       title=\"$formfield(TopicDescription)\">$topic
-~~~     </a></li></ul></td>
+*~~
+%~~ DBSTATS{"TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~   field="SubjectCategory"
+~~~   header="
+~~~     <div class=\"blogSideBarSection blogSideBarCategories\">
+~~~       <h1>Categories$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1>
+~~~       <noautolink>
+~~~       <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
+~~~   format="
+*~~     <tr><td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
+~~~       <a href=\"%SCRIPTURL{"view"}%/%WEB%/$key\">$key</a></li></ul></td>
 ~~~     <td valign=\"top\" class=\"blogEntryCount\">
-~~~       $percntDBQUERY{\"TopicType='BlogEntry' AND 
-~~~         SubjectCategory=~'\b$topic\b' AND
-~~~         State='enabled'\"
-~~~         hidenull=\"on\" format=\"none\" header=\"$dollarcount\"
-~~~       }$percnt
+~~~       $count
 ~~~     </td></tr>"
-~~~   footer="</table>"
+~~~   footer="</table></noautolink></div>"
 ~~~ }%
-~~~ </noautolink>
-~~~ </div>
-~~~ 
+*~~
 %STOPINCLUDE%
 
+<!-- -->
 %DBCALL{"RenderFunctionCallers"}%
 
 <!--
@@ -42,5 +39,4 @@ NONE
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the list of SubjectCategories in the BlogSideBar"}%
-%META:TOPICMOVED{by="MichaelDaum" date="1129818691" from="Blog.RenderCategoryList" to="Blog.RenderCategories"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render the list of SubjectCategories in the sidebar"}%

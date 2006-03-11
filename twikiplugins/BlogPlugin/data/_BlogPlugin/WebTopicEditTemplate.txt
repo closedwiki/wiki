@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130240189" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TopicTemplate"}%
+%META:TOPICINFO{author="TWikiContributor" date="1138892223" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 %STARTSECTION{type="templateonly"}%
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
 %ENDSECTION{type="templateonly"}%
@@ -7,12 +7,13 @@
 %FORMFIELD{"TopicDescription"}%
 
 
-<!--
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
-   * Set SIDEBAR = Default
+
 
 -- %WIKIUSERNAME% - %DATE%
 
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup, %WIKIUSERNAME%
+   * Set SIDEBAR = Default
 -->
 
 %META:FORM{name="TopicForm"}%

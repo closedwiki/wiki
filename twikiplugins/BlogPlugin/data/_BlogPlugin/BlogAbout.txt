@@ -1,54 +1,50 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130320796" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134754113" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="AdminTool"}%
----+!! %TOPIC%
-%FORMFIELD{"TopicDescription"}%
-
-%TOC{depth="2"}%
-
-The about field at the top of the sidebar will display different content
-depending on the level of the blog which you currently reached.
-
-see also: WebSideBar, BlogSideBar, WebLeftBar
-
----++ Default sidebar
+---++ About the author
+<!-- note: this section is included in the about section in the sidebar of the front page -->
 %STARTINCLUDE%
-%SECTION{"Default"}%
-%RED%Enter blog description%ENDCOLOR%
-%ENDSECTION{"Default"}%
+%RED%TODO: Edit the [[%WEB%.%TOPIC%][%TOPIC%]] page. %ENDCOLOR%
 %STOPINCLUDE%
 
----++ Admin sidebar
-%SECTION{"Admin"}%
-You are at the administrative and implementation level of this Blog which the 
-%BASETOPIC% topic is part of. To explore this level you might start at the TopicTypes or the
-AdminTools.
-%ENDSECTION{"Admin"}%
+---++ About this site
+%RED%TODO%ENDCOLOR%
 
----++ Aggregation sidebar
-%SECTION{"Aggregation"}%
-You are in the aggregations section, lots of [[NewsFeeds][nice feeds]]. Note, that you have to visit the syndicated sites to comment. Maybe we will find a way to bring news and blogs closer to
-each other inside <nop>%WIKITOOLNAME%.
-%ENDSECTION{"Aggregation"}%
+---++ News Feeds
+%DBCALL{"WebSyndication"}%
 
----++ Archive sidebar
-%SECTION{"Archive"}%
-You are in the <nop>BlogArchive. This is the complete collection of all articles that have been
-posted to this blog.
-%ENDSECTION{"Archive"}%
+---++ Email Notification
+This blog offers a subscription service to be automatically notified by e-mail
+when topics change in this blog.  This is a convenient service, so you do not
+have to come back and check all the time if something has changed.  To
+subscribe, please click 
+%REDDOT{"WebNotify" text="here" style="margin:0;padding:0;font-size:100%;"}% 
+and add your e-mail address or your <nop>%WIKITOOLNAME% username if you are a 
+[[%MAINWEB%.TWikiUsers][registered user]].
 
----++ Category sidebar
-%SECTION{"Category"}%
-You are visiting this blog by category, that is all postings here are filed into the %BASETOPIC%
-category.
-%ENDSECTION{"Category"}%
+---++ Contact
+%STARTINCLUDE%
+%RED%TODO%ENDCOLOR%
+%STOPINCLUDE%
+
+---++ Copyright
+%WEBCOPYRIGHT%
+
+<style type="text/css">
+ .natTopicForm { display:none; }
+</style>
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-   * Set SIDEBAR = Admin
-   * Set SIDEBARARG = AdminTool
+   * #Set STYLESIDEBAR = off
+   * Set SIDEBAR = Page
+   * Set WEBBUTTONSCLASS_ABOUT = current
 -->
 
-
-%META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Describes your blog"}%
+%META:FORM{name="BlogPageForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogPage"}%
+%META:FIELD{name="BlogAuthor" attributes="M" title="BlogAuthor" value="MichaelDaum"}%
+%META:FIELD{name="Date" attributes="M" title="Date" value="15 Feb 2006 - 17:02"}%
+%META:FIELD{name="Headline" attributes="M" title="Headline" value="About the %25WIKITOOLNAME%25 Blog"}%
+%META:FIELD{name="SubjectCategory" attributes="" title="SubjectCategory" value=""}%
+%META:FIELD{name="Related" attributes="" title="Related" value="BlogPage0"}%
+%META:FIELD{name="State" attributes="" title="State" value="enabled"}%

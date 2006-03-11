@@ -1,6 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132326420" format="1.0" version="1.1"}%
----+!! Headlines Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1140520819" format="1.0" version="1.1"}%
+<!--
 
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
+-->
+---+!! Headlines Plugin
 %TOC%
 
 ---++ Description
@@ -14,7 +22,7 @@ __Note:__ Syndic8.com ( http://www.syndic8.com/ ) is a good site listing many RS
 
 | *Parameter* | *Explanation* | *Default* |
 | ="..."= | source of RSS feed; this can be an url (starting with http) \
-            or a <nop>web.topic location for internal feeds \
+				or a <nop>web.topic location for internal feeds \
 | None; is required |
 | =href="..."= | (Alternative to above) | N/A |
 | =refresh="60"= | Refresh rate in minutes for caching feed; ="0"= for no caching | Global =REFRESH= setting |
@@ -119,11 +127,11 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 	* Default header: (variables are explained in the syntax rules)
 <verbatim>
-		* Set HEADER = <div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0" />%BR%</div><div class="headlinesTitle">$n---+!! [[$link][$title]]</div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>
+		* Set HEADER = <div class="headlinesChannel"><div class="headlinesLogo"><img src="$imageurl" alt="$imagetitle" border="0" />%BR%</div><div class="headlinesTitle">$n---+!! <a href="$link">$title</a></div><div class="headlinesDate">$date</div><div class="headlinesDescription">$description</div><div class="headlinesRight">$rights</div></div>
 </verbatim>
 	* Default format of one item: (variables are explained in the syntax rules)
 <verbatim>
-		* Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle">[[$link][$title]]</div>$n<hr /><span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>
+		* Set FORMAT = <div class="headlinesArticle"><div class="headlinesTitle"><a href="$link">$title</a></div>$n<hr /><span class="headlinesDate">$date</span> <span class="headlinesCreator"> $creator</span> <span class="headlinesSubject"> $subject </span>$n<div class="headlinesText"> $description</div></div>
 </verbatim>
 
 ---++ Style sheets
@@ -151,22 +159,33 @@ defining the default CSS properties  (indentation illustrates enclosure).
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==pub/TWiki/%TOPIC%/style.css== | default css |
-	  | ==lib/TWiki//%TOPIC%.pm== | Plugin Perl module |
-	* Test if the plugin is correctly installed:
+	  | ==lib/TWiki/%TOPIC%.pm== | Plugin Perl module |
 	  Check if above examples show a news feed instead of variable.
+	* Optionally, run ==%TOPIC%_installer.pl== to automatically check and
+	  install other TWiki modules that this module depends on. You can also do
+	  this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table
+	  below are resolved.
+	  %$DEPENDENCIES%
 
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
-|  Plugin Version: | v2.00 |
+|  Copyright &copy;: | 2002-2006, Peter Thoeny; 2005-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v2.02 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  10 Feb 2006: | packaged using the TWiki:Plugins/BuildContrib; \
+                  minor fixes |
+|  03 Feb 2006: | off-by-one: limit="n" returned n+1 articles; \
+		  make FORMAT and HEADER format strings more robust |
 |  23 Jan 2006: | released v2.00 | 
 |  05 Dec 2005: | internal feed urls must be absolute |
 |  02 Dec 2005: | added <nop>web.topic shorthand for internal feeds |
 |  29 Nov 2005: | fixed CDATA handling |
 |  21 Nov 2005: | added ATOM support; \
-	          extended RSS support; \
+		  extended RSS support; \
 		  added dublin core support; \
 		  added content support; \
 		  optionally using LWP to fetch feeds to follow redirections; \
@@ -180,15 +199,13 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  29 Oct 2004: | Fixed issue of external caching if mod_perl or <nop>SpeedyCGI is used |
 |  02 Aug 2002: | Implemented caching of feeds, thanks to TWiki:Main/RobDuarte |
 |  11 Jun 2002: | Initial version (V1.000) |
-|  CPAN Dependencies: | CPAN:LWP::UserAgent, CPAN:Digest::MD5 |
-|  Other Dependencies: | none |
-|  Perl Version: | 5.004 |
+|  Perl Version: | 5.8 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 99.5%, %TOPIC% 94% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.PeterThoeny - 11 May 2005 %BR%
--- TWiki:Main.MichaelDaum - 23 Jan 2006
+-- TWiki:Main.MichaelDaum - 10 Mar 2006
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%

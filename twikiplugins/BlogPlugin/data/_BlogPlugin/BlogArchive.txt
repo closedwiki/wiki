@@ -1,31 +1,341 @@
-%META:TOPICINFO{author="TWikiContributor" date="1134063748" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1141256863" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="AdminTool"}%
+<div class="blogArchiveModes">
+<span class="blogArchiveMode blogArchiveModeChron">
+~~~ <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=chron" 
+~~~    title="Browse the Archive in Chronological Order"
+~~~    class="%CALC{"$IF($EXACT(%URLPARAM{"mode" default="chron"}%,chron),$SET(CHRON_MODE,on)current)"}%">
+*~~   Chron
+*~~ </a>
+</span> 
+<span class="blogArchiveMode blogArchiveModeCat">
+~~~ <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=cat" 
+~~~    title="Browse the Archive by Category"
+~~~    class="%CALC{"$IF($EXACT(%URLPARAM{"mode"}%,cat),$SET(CAT_MODE,on)current)"}%">Cat</a>
+</span> 
+<span class="blogArchiveMode blogArchiveModeTag">
+~~~ <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=tag" 
+~~~    title="Browse the Archive by Tag"
+~~~    class="%CALC{"$IF($EXACT(%URLPARAM{"mode"}%,tag),$SET(TAG_MODE,on)current)"}%">Tag</a>
+</span> 
+<span class="blogArchiveMode blogArchiveModeLex">
+~~~ <a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex" 
+~~~    title="Browse the Archive by Lexical Analysis"
+~~~    class="%CALC{"$IF($EXACT(%URLPARAM{"mode"}%,lex),$SET(LEX_MODE,on)current)"}%">Lex</a>
+</span> 
+</div>
+
+%STOPALIASAREA%
+%IFDEFINEDTHEN{"%CALC{"$GET(CAT_MODE)"}%"}%
+
+%~~ $nopTAGCLOUD{"
+%~~   $nopDBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~     format="$formfield(SubjectCategory)" separator=", "
+~~~   }%"
+~~~   buckets="30"
+~~~   offset="9"
+~~~   split="[,\s]+"
+~~~   header="<div class=\"blogArchiveTagCloud\">"
+~~~   format="<span style=\"font-size:$weightpx;line-height:90%;margin:0;padding:0;\">
+~~~     <a href=\"%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=cat;search=$term\"
+~~~        title=\"$count\"
+~~~        style=\"color:$fadeRGB(124,164,204,0,102,204);\"
+~~~        class=\"$percntCALC{\"$IF($EXACT(%$nopURLPARAM{"search"}%,$term),current)\"}$percnt\"
+~~~     >$term</a></span>"
+~~~   footer="</div>"
+~~~ }%
+
+%$nopIFDEFINEDTHEN{"%URLPARAM{"search"}%"}%
+<div class="blogArchiveHitList">
+<a name="hits"></a>
 <noautolink>
----+ %URLPARAM{"cat"}% Archive %IFDEFINED{"%URLPARAM{"title"}%" then="%URLPARAM{"title"}%" glue="off"}%
+%~~ $nopDBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"search"}%" then="AND SubjectCategory=~'\b%$nopURLPARAM{"search"}%'" glue="off"}%
+~~~   "
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"skip"}%" then="skip=\"%$nopURLPARAM{"skip"}%\""}%
+~~~   limit="15"
+~~~   order="created" reverse="on"
+~~~   hidenull="on"
+~~~   header="<div style=\"text-align:center;padding:2em;\"><table border=\"0\">"
+~~~   format="<tr>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> $index </td>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> <nobr>$formatTime(createdate,'$day $mon $year')</nobr> </td>
+~~~     <td style=\"padding-left:1em;\" align=\"left\" width=\"100%\"> [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt 
+~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" format=\"($dollarcount)\"}$percnt </td>
+~~~     </tr>"
+~~~   footer="</table>$percnt$nopDBCALL{\"RenderPageNavigation\" 
+~~~      SKIP=\"%$nopURLPARAM{"skip" default=" 0"}%\" 
+~~~      MAX=\"$count\"
+~~~      LIMIT=\"15\"
+~~~      PARAMS=\"
+*~~        mode=%$nopURLPARAM{"mode" default="cat"}%;
+*~~        search=%$nopURLPARAM{"search" default=".*"}%
+*~~      \"
+~~~   }$percnt</div>"
+~~~ }%
 </noautolink>
+</div>
+%$nopFIDEFINED%
 
-%~~ DBCALL{"RenderBlogEntriesInSpan"
-~~~   FROM="%IFDEFINED{"%URLPARAM{"from"}%" then="%URLPARAM{"from"}%" else="1"}%"
-~~~   TO="%IFDEFINED{"%URLPARAM{"to"}%" then="%URLPARAM{"to"}%" else="9999999999"}%"
-~~~   CAT="%URLPARAM{"cat" default=".*"}%"
+%ELSIFDEFINED{"%CALC{"$GET(TAG_MODE)"}%"}%
+
+%~~ $nopTAGCLOUD{"
+%~~   $nopDBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~     format="$formfield(BlogTag)" separator=", "
+~~~   }%"
+~~~   buckets="40"
+~~~   offset="9"
+~~~   split="[,\s]+"
+~~~   header="<div class=\"blogArchiveTagCloud\">"
+~~~   format="<span style=\"font-size:$weightpx;line-height:90%;margin:0;padding:0;\">
+~~~     <a href=\"%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=tag;search=$term\"
+~~~        title=\"$count\"
+~~~        style=\"color:$fadeRGB(124,164,204,0,102,204);\"
+~~~        class=\"$percntCALC{\"$IF($EXACT(%$nopURLPARAM{"search"}%,$term),current)\"}$percnt\"
+~~~     >$term</a></span>"
+~~~   footer="</div>"
 ~~~ }%
 
-%IFDEFINEDTHEN{"%URLPARAM{"cat"}%"}%
+%$nopIFDEFINEDTHEN{"%URLPARAM{"search"}%"}%
+<div class="blogArchiveHitList">
+<a name="hits"></a>
+<noautolink>
+%~~ $nopDBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"search"}%" then="AND BlogTag=~'\b%$nopURLPARAM{"search"}%'" glue="off"}%
+~~~   "
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"skip"}%" then="skip=\"%$nopURLPARAM{"skip"}%\""}%
+~~~   limit="15"
+~~~   order="created" reverse="on"
+~~~   hidenull="on"
+~~~   header="<div style=\"text-align:center;padding:2em;\"><table>"
+~~~   format="<tr>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> $index </td>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> <nobr>$formatTime(createdate,'$day $mon $year')</nobr> </td>
+~~~     <td style=\"padding-left:1em;\" align=\"left\" width=\"100%\"> [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt 
+~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" format=\"($dollarcount)\"}$percnt </td>
+~~~     </tr>"
+~~~   footer="</table>$percnt$nopDBCALL{\"RenderPageNavigation\" 
+~~~      SKIP=\"%$nopURLPARAM{"skip" default=" 0"}%\" 
+~~~      MAX=\"$count\"
+~~~      LIMIT=\"15\"
+~~~      PARAMS=\"
+*~~        mode=%$nopURLPARAM{"mode" default="cat"}%;
+*~~        search=%$nopURLPARAM{"search" default=".*"}%
+*~~      \"
+~~~   }$percnt</div>"
+~~~ }%
+</noautolink>
+</div>
+%$nopFIDEFINED%
+
+%ELSIFDEFINED{"%CALC{"$GET(LEX_MODE)"}%"}%
+
+<div class="blogArchiveLexMins">
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=1" 
+~~~    title="every occurrence" 
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,1),current)"}%">1</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=2" 
+~~~    title="at least two ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,2),current)"}%">2</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=3" 
+~~~    title="at least three ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,3),current)"}%">3</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=4" 
+~~~    title="at least four ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,4),current)"}%">4</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=5" 
+~~~    title="at least five ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min" default="5"}%,5),current)"}%">5</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=6" 
+~~~    title="at least six ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,6),current)"}%">6</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=7" 
+~~~    title="at least seven ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,7),current)"}%">7</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=8" 
+~~~    title="at least eight ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,8),current)"}%">8</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=9" 
+~~~    title="at least nine ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,9),current)"}%">9</a>
+  </span>
+  <span class="blogArchiveLexMin">
+    <a rel="nofollow" href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=lex;min=10" 
+~~~    title="at least ten ocurrences"
+~~~    class="%$nopCALC{"$IF($EXACT(%$nopURLPARAM{"min"}%,10),current)"}%">10</a>
+  </span>
+</div>
+%~~ $nopTAGCLOUD{"
+%~~   $nopDBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~     "
+~~~     format="$flatten($formfield(Headline) $formfield(Teaser) $formfield(Text))" separator=", "
+~~~   }%"
+~~~   header="<div class=\"blogArchiveTagCloud\">"
+~~~   format="<span style=\"font-size:$weightpx;line-height:90%;margin:0;padding:0;\">
+~~~     <a href=\"%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?
+*~~          mode=lex;
+*~~          search=$term;
+*~~          min=%$nopURLPARAM{"min" default="5"}%
+*~~          #hits
+*~~       \"
+~~~        class=\"$percntCALC{\"$IF($EXACT(%$nopURLPARAM{"search"}%,$term),current)\"}$percnt\"
+~~~        style=\"color:$fadeRGB(124,164,204,0,102,204);\"
+~~~        title=\"$count\">$term</a></span>"
+~~~   footer="</div>"
+~~~   min="%URLPARAM{"min" default="5"}%"
+~~~   buckets="40"
+~~~   offset="9"
+~~~   stopwords="on"
+~~~   plural="off"
+~~~   exclude="http.*|citeblog.*|xxxxxxxxxx|www.*|WebPreferences|WebHome|MAINWEB|com"
+~~~   map="twiki=TWiki"
+~~~ }%
+
+%$nopIFDEFINEDTHEN{"%URLPARAM{"search"}%"}%
+<div class="blogArchiveHitList">
+<a name="hits"></a>
+<noautolink>
+%~~ $nopDBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled' AND
+~~~   ( Headline=~'%URLPARAM{"search" default=".*"}%' OR
+~~~     Teaser=~'%URLPARAM{"search" default=".*"}%' OR
+~~~     Text=~'%URLPARAM{"search" default=".*"}%'
+~~~   )
+~~~   "
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"skip"}%" then="skip=\"%$nopURLPARAM{"skip"}%\""}%
+~~~   limit="15"
+~~~   order="created" reverse="on"
+~~~   hidenull="on"
+~~~   header="<div style=\"text-align:center;padding:2em;\"><table>"
+~~~   format="<tr>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> $index </td>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> <nobr>$formatTime(createdate,'$day $mon $year')</nobr> </td>
+~~~     <td style=\"padding-left:1em;\" align=\"left\" width=\"100%\"> [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt 
+~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" format=\"($dollarcount)\"}$percnt </td>
+~~~     </tr>"
+~~~   footer="</table>$percnt$nopDBCALL{\"RenderPageNavigation\" 
+~~~      SKIP=\"%$nopURLPARAM{"skip" default=" 0"}%\" 
+~~~      MAX=\"$count\"
+~~~      LIMIT=\"15\"
+~~~      PARAMS=\"
+*~~        mode=%$nopURLPARAM{"mode" default="cat"}%;
+*~~        min=%$nopURLPARAM{"min" default="5"}%;
+*~~        search=%$nopURLPARAM{"search" default=".*"}%
+*~~        #hits
+*~~      \"
+~~~   }$percnt</div>"
+~~~ }%
+</noautolink>
+</div>
+%$nopFIDEFINED%
+
 %ELSEDEFINED%
-%~~ $nopDBCALL{"RenderCategoriesInSpan" 
-~~~   FROM="%IFDEFINED{"%URLPARAM{"from"}%" then="%URLPARAM{"from"}%" else="1"}%"
-~~~   TO="%IFDEFINED{"%URLPARAM{"to"}%" then="%URLPARAM{"to"}%" else="9999999999"}%"
+
+<div class="blogArchiveDateSelect">
+<div class="blogArchiveYears">
+%~~ $nopDBSTATS{"TopicType=~'\bBlogEntry\b' AND  State='enabled'
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"year"}%" then="AND Date=~'%$nopURLPARAM{"year"}%'" glue="off"}%
+~~~   "
+~~~   field="Date" sort="created" 
+~~~   pattern="(\d\d\d\d)"
+~~~   format="
+~~~     <span class=\"blogArchiveYear\">
+~~~       <a href=\"%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?mode=chron;year=$key
+~~~          %$nopIFDEFINED{"%$nopURLPARAM{"month"}%" then=";month=%$nopURLPARAM{"month"}%"}%
+~~~          \"
+~~~          class=\"$percntCALC{\"$IF($EXACT(%$nopURLPARAM{"year"}%,$key),current)\"}$percnt\"
+~~~       >$key</a>
+~~~     </span>"
 ~~~ }%
+</div>
+<div class="blogArchiveMonths">
+%~~ $nopDBSTATS{"TopicType=~'\bBlogEntry\b' AND  State='enabled'
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"year"}%" then="AND Date=~'%$nopURLPARAM{"year"}%'" glue="off"}%
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"month"}%" then="AND Date=~'%$nopURLPARAM{"month"}%'" glue="off"}%
+~~~   "
+~~~   field="Date" sort="created" 
+~~~   pattern="(\w+) \d\d\d\d"
+~~~   format="
+~~~     <span class=\"blogArchiveMonth\">
+~~~       <a href=\"%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?
+*~~          mode=chron;month=$key;year=%URLPARAM{"year" default=".*"}%\"
+~~~          class=\"$percntCALC{\"$IF($EXACT(%$nopURLPARAM{"month"}%,$key),current)\"}$percnt\"
+~~~       >$key</a>
+~~~     </span>"
+~~~ }%
+</div>
+</div>
+<div class="blogArchiveHitList">
+<a name="hits"></a>
+<noautolink>
+%~~ $nopDBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"year"}%" then="AND Date=~'%$nopURLPARAM{"year"}%'" glue="off"}%
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"month"}%" then="AND Date=~'%$nopURLPARAM{"month"}%'" glue="off"}%
+~~~   "
+~~~   %$nopIFDEFINED{"%$nopURLPARAM{"skip"}%" then="skip=\"%$nopURLPARAM{"skip"}%\""}%
+~~~   limit="15"
+~~~   order="created" 
+~~~   reverse="on"
+~~~   hidenull="on"
+~~~   header="<div style=\"text-align:center;padding:2em;\"><table>"
+~~~   format="<tr>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> $index </td>
+~~~     <td style=\"padding-left:1em;\" align=\"right\"> <nobr>$formatTime(createdate,'$day $mon $year')</nobr> </td>
+~~~     <td style=\"padding-left:1em;\" align=\"left\" width=\"100%\"> [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt 
+~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" format=\"($dollarcount)\"}$percnt </td>
+~~~     </tr>"
+~~~   footer="</table>$percnt$nopDBCALL{\"RenderPageNavigation\" 
+~~~      SKIP=\"%$nopURLPARAM{"skip" default=" 0"}%\" 
+~~~      MAX=\"$count\"
+~~~      LIMIT=\"15\"
+~~~      PARAMS=\"
+*~~        mode=%$nopURLPARAM{"mode" default="chron"}%;
+*~~        month=%$nopURLPARAM{"month" default=".*"}%;
+*~~        year=%$nopURLPARAM{"year" default=".*"}%
+*~~      \"
+~~~   }$percnt</div>"
+~~~ }%
+</noautolink>
+</div>
+
 %FIDEFINED%
-<style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
+
+
+<style type="text/css">
+  .natTopicForm, .twikiForm {
+    display:none
+  }
+</style>
+
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Archive
    * Set PAGETITLE = %FORMFIELD{"TopicDescription"}%
    * Set WHITEBOARD = on
+   * Set WEBBUTTONSCLASS_ARCHIVE = current
 -->
 
-
-%META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Blog Archive"}%
+%META:FORM{name="BlogPageForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogPage"}%
+%META:FIELD{name="BlogAuthor" attributes="M" title="BlogAuthor" value="MichaelDaum"}%
+%META:FIELD{name="Date" attributes="M" title="Date" value="27 Feb 2006 - 18:43"}%
+%META:FIELD{name="Headline" attributes="M" title="Headline" value="Blog Archive"}%
+%META:FIELD{name="SubjectCategory" attributes="" title="SubjectCategory" value=""}%
+%META:FIELD{name="Related" attributes="" title="Related" value=""}%
+%META:FIELD{name="State" attributes="" title="State" value="disabled"}%

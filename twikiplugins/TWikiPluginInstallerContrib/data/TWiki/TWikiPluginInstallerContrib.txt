@@ -21,9 +21,29 @@ Administrators can enable and disable plugins using [[%SCRIPTURLPATH{"configure"
 
 <form>
 <input type="hidden" name="url" value="%URLPARAM{url}%" />
-%ICON{"building"}% <input type="text" name="repository" size="60" value='%URLPARAM{ "repository" default="http://localhost/~twikibuilder/twiki/components/extension/" }%' />
-<input class="twikiSubmit" type="submit" value="Change Repository" /><br />
-<small>Repository Listing</small>
+%ICON{"building"}% <input type="text" name="repository" size="60" value='%URLPARAM{ "repository" }%' />
+  <input class="twikiSubmit" type="submit" value="Change Repository" /><br />
+<small>Repository Listing</small><br />
+<span id="no_1show" class="twistyMakeVisible">
+	<a href="#" class="twistyTrigger">%ICON{toggleclose-small}%%ICON{building}% More repositories...</a>
+<div></div>
+</span>
+<span id="no_1hide" class="twistyHidden">
+	<a href="#" class="twistyTrigger">%ICON{toggleopen-small}% Hide repositories...</a>
+</span>
+<div id="no_1toggle" class="twistyMakeHidden">
+<!--
+   * Set REPOSITORIES = http://localhost/~twikibuilder/twiki/components/extension/, http://localhost/~twikibuilder/twiki/components/kernel/, http://TWikiFor.twiki.org/components/
+-->
+<style>
+#repositories li { list-style-image:url(%ICONURLPATH{"building"}%); }
+</style>
+<div id="repositories">
+   * %CALC{"$LISTJOIN($n   * ,$LISTMAP([[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?repository=$item][$item]],%REPOSITORIES%))"}%
+<div>
+</div>
+
+----
 </td>
 </tr>
 <tr>
@@ -51,8 +71,14 @@ Add short description here of your TWikiPluginInstallerContrib contrib.
 
 ---++ Detailed Documentation
 <!-- use  when using with Build module to automatically extract documentation -->
-	* 
-	* 
+Repositories directory layout:
+   * twiki/
+      * twiki.org.zip
+      * components/
+         * extension/
+         * kernel/
+      * wikis/
+         * webName.wiki.tar
 
 ---++ Settings
 

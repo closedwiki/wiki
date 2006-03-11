@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="TWikiContributor" date="1117754976" format="1.0" version="$Rev$"}%
+---+ %TOPIC% for the <nop>%WEB% web
+
+| *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* |
+| TopicType | select | 1 | Select..., TopicType, SubjectArea  | Classify the topic by function. |
+| TopicHeadline	| text	| 50  |	| Short summary or headline of topic.  |
+
+Related Topic: TopicClassification, WebPreferences, %TWIKIWEB%.TWikiForms
+
+For more information about how you can use form to organize topics or create simple database applications, see TWiki.TWikiForms.
+
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+

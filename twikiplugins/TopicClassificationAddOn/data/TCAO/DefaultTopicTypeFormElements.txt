@@ -1,0 +1,17 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1141364605" format="1.1" version="1.2"}%
+%META:TOPICPARENT{}%
+The following are standard HTML form elements used in CreateNewTopic for many TopicTypes. Specifically, it is used in the following topics in %WIKITOOLNAME%: %SEARCH{"INCLUDE.*?%TOPIC%\} " scope="text" type="regex" recurse="on" nonoise="on" web="all" separator=", " format="[[$web.$topic]]" }%.
+
+FixMe: Is this topic used? If so, why aren't any topics showing up in search for INCLUDE?
+---
+<verbatim>
+%STARTINCLUDE%
+<input type="hidden" name="formtemplate" value="%BASEWEB%.WebForm" />
+<input type="hidden" name="templatetopic" value="%TCAOWEB%.%URLPARAM{type}%Template" />
+<input type="hidden" name="TopicType" value="%URLPARAM{type}%" />
+%STOPINCLUDE%
+</verbatim>
+
+
+%META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
+%META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

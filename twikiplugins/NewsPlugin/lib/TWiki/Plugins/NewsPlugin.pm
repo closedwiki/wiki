@@ -23,6 +23,7 @@
 # line of the item and saves them as html <li>s
 
 # history:
+# 1.5: 07 Feb 2005 added "pattern" parameter
 # 1.4: 20 Feb 2003 trims ending punctuation: .,:;
 # 1.3: 19 Feb 2003 warning corrected
 # 1.2: 14 Feb 2003 parameters
@@ -96,18 +97,18 @@ sub beforeSaveHandler
     $postsep = "\n" unless $postsep;
     my $trim = &TWiki::Func::extractNameValuePair( $args, "trim" );
     $trim = "yes" unless $trim;
+    my $pattern = &TWiki::Func::extractNameValuePair( $args, "pattern" );
+    $pattern = '(\t|   )\*\s' unless $pattern;
 
     $buffer .= $prefix;
     # look for each bullet list 
     foreach( split( /\n/, $_[0] ) ) {
-      next unless /^\s\*\s(.+)/;
+      next unless /^${pattern}/;
+      my $headline = $';
       if ( $trim eq "yes" ) {
-	my $headline = $1;
-	$headline =~ s/[.,:;]\r?$//;
-	$buffer .= "$presep$headline$postsep";
-      } else {
-	$buffer .= "$presep$1$postsep";
+	$headline =~ s/[.,:;]+\r?$//;
       }
+      $buffer .= "$presep$headline$postsep";
       $occurs = $occurs +1;
       if ( $occurs >= $count ) {
 	last;

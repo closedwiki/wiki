@@ -6,17 +6,13 @@
 %TMPL:DEF{"topicaction"}%%TMPL:END%
 %{ Include the default template to get the messages }%
 %TMPL:INCLUDE{"messages"}%
-%TMPL:DEF{"message"}%
-
-%INSTANTIATE%
+%TMPL:DEF{"message"}%%INSTANTIATE%
 
 %MAKETEXT{"To see if [_1] has finished editing yet, click 'Try Again'." args="%PARAM1%"}%
 
 %MAKETEXT{"To edit the topic anyway, hit 'Edit Anyway'."}%
 %TMPL:END%
-%TMPL:DEF{"topicaction"}%
-[[%WEB%.%TOPIC%][%MAKETEXT{"View topic"}%]] %TMPL:P{"sep"}%
-<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a> %TMPL:P{"sep"}%
+%TMPL:DEF{"topicaction"}%[[%WEB%.%TOPIC%][%MAKETEXT{"View topic"}%]] %TMPL:P{"sep"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on">View raw text without formatting</a> %TMPL:P{"sep"}%
 <form action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%" method="post">
 %QUERYPARAMS% 
 <input type="submit" value='%MAKETEXT{"Try Again"}%' />

@@ -5,6 +5,7 @@
 
 ---++ Parameters
    * NAME: name of a SubjectCategory
+   * LIMIT: number of postings per page
    * SKIP: offset into the archive
 
 ---++ Implementation
@@ -13,15 +14,24 @@
 *~~
 <h1 style="margin-bottom:0px;padding-bottom:0px">%NAME%</h1>
 <div class="blogArchiveDescription">
-    %DBQUERY{topics="%NAME%" format="$expand(TopicDescription)"}% 
+  %DBQUERY{topics="%NAME%" format="$expand(TopicDescription)"}% 
 </div>
-%DBCALL{"RenderFrontPage" SKIP="%SKIP%" CAT="%NAME%" AUTHOR=".*"}%
-*~~ %STOPINCLUDE%
+%~~ DBCALL{"RenderFrontPage" 
+~~~   %IFDEFINED{"%SKIP%" then="SKIP=\"%SKIP%\"" glue="off"}%  
+~~~   %IFDEFINED{"%LIMIT%" then="LIMIT=\"%LIMIT%\"" glue="off"}%  
+~~~   CAT="%NAME%"
+~~~ }%
+*~~ 
+%STOPINCLUDE%
 </verbatim>
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="BlogDev"}%
+%~~ DBCALL{"%TOPIC%" 
+~~~   NAME="BlogDev" 
+~~~   LIMIT="%URLPARAM{"limit" default="2"}%"
+~~~   SKIP="%URLPARAM{"skip" default="0"}%"
+~~~ }%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

@@ -1,17 +1,17 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsleaseconflict.nat.tmpl -->
 %TMPL:DEF{"heading"}%Conflict%TMPL:END%
-%TMPL:DEF{"active"}%
+%TMPL:DEF{"active"}%<!-- -->
 They have been editing for %PARAM2% and their lease is still active for another
 %PARAM3%.
 %TMPL:END%
-%TMPL:DEF{"old"}%
+%TMPL:DEF{"old"}%<!-- -->
 Their lease on this topic expired %PARAM2% ago.
 
 The chances are good that they simply navigated away from the edit page without
 saving.
 %TMPL:END%
-%TMPL:DEF{"message"}%
+%TMPL:DEF{"message"}%<!-- -->
 %PARAM1% is editing [[%WEB%.%TOPIC%]].
 
 %INSTANTIATE%
@@ -48,4 +48,3 @@ you are recommended to check with them first.
 </form>
 </tr></table>
 %TMPL:END%
-

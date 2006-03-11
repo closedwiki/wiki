@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="TWikiContributor" date="1130441523" format="1.1" version="$Rev$"}%
+%TOPICCRE%NOP%ATE{ topic="CreateNewTopic" template="%TCAOWEB%/Installs.CreateNewTopic" }%
+%TOPICCRE%NOP%ATE{ topic="TopicHeadline" template="%TCAOWEB%/Installs.TopicHeadline" }%
+%TOPICCRE%NOP%ATE{ topic="TopicClassificationSetUp" template="%TCAOWEB%/Installs.TopicClassificationSetUp" }%
+%TOPICCRE%NOP%ATE{ topic="TopicTree" template="%TCAOWEB%/Installs.TopicTree" }%
+%TOPICCRE%NOP%ATE{ topic="TopicTypeForm" template="%TCAOWEB%/Installs.TopicTypeForm" }%
+%TOPICCRE%NOP%ATE{ topic="WebForm" template="%TCAOWEB%/Installs.WebForm" }%
+%TOPICCRE%NOP%ATE{ topic="SubjectArea" template="%TCAOWEB%/Installs.SubjectArea" }%
+%TOPICCRE%NOP%ATE{ topic="TopicType" template="%TCAOWEB%/Installs.TopicType" }%
+%INCLUDE{ "%CALC{ $IF( $EVAL( $TIME() - %GMTIME{"$epoch"}% ) < 1200, %TCAOWEB%.NewTopicElements, ) }%" warn="off" section="TCAO_install"}% 
+%INCLUDE{%TCAOWEB%.%TOPIC%}%
+
+
+<!-- Topic Permissions
+	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+

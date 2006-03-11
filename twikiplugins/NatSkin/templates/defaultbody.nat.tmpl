@@ -45,7 +45,12 @@
 	    <nop>%WIKIVERSION%
 	  </div>
 	  <div class="natSyndicate">
-	    [[%WEB%.WebRss][Syndicate this site <img src="%ICONURL{rss-feed}%" alt="rss-feed" align="top" border="0"/>]]
+	    %IFDEFINEDTHEN{"%WEBSYNDICATION%"}%
+	      %WEBSYNDICATION%
+	    %ELSEDEFINED%
+	      Syndicate this site 
+	      <a class="natFeedIcon" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss">RSS</a><a class="natFeedIcon" href="%SCRIPTURL%/view/%SCRIPTSUFFIX%/%WEB%/WebAtom">ATOM</a>
+	    %FIDEFINED%
 	  </div>
 	</div>
       </div>

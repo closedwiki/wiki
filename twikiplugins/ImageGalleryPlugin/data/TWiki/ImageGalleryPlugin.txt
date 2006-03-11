@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128882495" format="1.0" version="1.1"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="TWikiContributor" date="1140533279" format="1.0" version="1.1"}%
 ---+!! <nop>ImageGalleryPlugin
 %TOC%
+
 ---++ Description
 This plugin helps you in viewing pictures that are attached to a topic in a nice thumbnail 
 gallery. Clicking on a thumbnail zooms the image. You might navigate within your images using
@@ -15,11 +15,8 @@ The image gallery is highly customizable using cascading stylesheets and html fo
 below).
 
 ---++ Example
-%IMAGEGALLERY{"TWiki.TWikiLogos"}%
-There are %NRIMAGES{"TWiki.TWikiLogos"}% images at TWiki.TWikiLogos.
-<style type="text/css">
-.igp { border:1px dashed gray; margin:0 auto;}
-</style>
+%IMAGEGALLERY{"%TWIKIWEB%.TWikiDocGraphics" columns="3" limit="12" exclude="arrow"}%
+There are %NRIMAGES{"%TWIKIWEB%.TWikiDocGraphics"}% images at %TWIKIWEB%.TWikiDocGraphics.
 
 ---++ Syntax
 ---+++ Arguments
@@ -31,6 +28,11 @@ that both take the following arguments:
 | *Argument* | *Description* |
 | topic | comma separated list of topics whose attachments should be displayed %BR% \
 			 (default: the current topic) |
+| limit | maximum number of images to display (default: 0, meaning no limit). |
+| include | regular expression an image must match to be part of the gallery |
+| exclude | regular expression an image must _not_ match to be part of the gallery |
+| field | specify which property of the image has to match using =include= or =exclude=; \
+			 possible values: name, comment (default: name) |
 | size | the thumbnail size, the actual geometries of a size can be configured below; \
 			possible values: tiny, small, medium, large, huge  \
 			(default: medium) |
@@ -38,7 +40,6 @@ that both take the following arguments:
 				(default: 4) |
 | docrels | flag to disable/enable document relations between images; \
 			possible values are on, off, 0, 1 (default: on) |
-| limit | maximum number of images to display (default: 0, meaning no limit). |
 | maxwidth | maximal display width of an image; images are scaled not to exceed this limit \
 			 while preserving aspect ratio %BR% \
 			 (default: 640) |
@@ -166,9 +167,13 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v3.1 (14 Sep 2005) |
+|  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNoris |
+|  Copyright &copy;: | 2002-2003, Will Noris; 2005-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v3.31 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 Feb 2006 | added =include=, =exclude= and =field= argument |
+|  16 Feb 2006 | renamed thumbnail so that it does not interfer with auto-attachment |
 |  14 Sep 2005 | don't strictly depend on normalizeFilename() |
 |  15 June 2005 | new release |
 |  10 May 2005 | fixed igp id clash error found by TWiki:Main/MartinCleaver; \
@@ -187,9 +192,11 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  15 Mar 2002 | Initial (internal) version |
 |  CPAN Dependencies: | CPAN:Image::Magick |
 |  Other Dependencies: |  |
-|  Perl Version: | 5 something ? (not sure--i'm using 5.8.0) |
+|  Perl Version: | 5.8 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main.MichaelDaum - 14 Sep 2005
+-- TWiki:Main.MichaelDaum - 21 Feb 2006
+
+
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="TWikiContributor" version="1.1"}%

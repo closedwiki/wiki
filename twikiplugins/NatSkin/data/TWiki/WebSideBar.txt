@@ -36,7 +36,7 @@
 </div>
 </div>
 %IFSKINSTATETHEN{buttons="off"}%
-%FORMATLIST{"%WEBLIST{webs="public" separator=" "}%" exclude="Main|TWiki|Sandbox|TestCases|Trash" split=" " separator="$n" format="<h2>$percntWEBLINK{\"$1\"}$percnt</h2>"}%
+%FORMATLIST{"%WEBLIST{webs="public" separator=" "}%" exclude="Main|TWiki|Sandbox|User|TestCases|Trash" split=" " separator="$n" format="<h2>$percntWEBLINK{\"$1\"}$percnt</h2>"}%
 %FISKINSTATE%
 <div class="navUserSection %IFSKINSTATE{buttons="on" glue="off" then="navUser"}%">
 ---++ %WEBLINK{"User"}%

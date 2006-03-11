@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2003 Othello Maurer <maurer@nats.informatik.uni-hamburg.de>
-# Copyright (C) 2003-2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2003-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,18 +19,21 @@ package TWiki::Plugins::AliasPlugin;    # change the package name and $pluginNam
 use strict;
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE
-        %aliasRegex %aliasValue 
+        %aliasRegex %aliasValue %substHash
 	$debug $aliasWikiWordsOnly
-	%seenAliasWebTopics $wordRegex $wikiWordRegex
+	%seenAliasWebTopics $wordRegex $wikiWordRegex $topicRegex $webRegex
+	$defaultWebNameRegex
 	$defaultAliasTopic $foundError $isInitialized $insideAliasArea
+	$TranslationToken
 	%TWikiCompatibility $START $STOP
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.3';
+$RELEASE = '1.32';
 
 $START = '(?:^|(?<=[\w\b\s\,\.\;\:\!\?\)\(]))';
 $STOP = '(?:$|(?=[\w\b\s\,\.\;\:\!\?\)\(]))';
+$TranslationToken= "\0\1\0";
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 $TWikiCompatibility{outsidePREHandler} = 1.1;
@@ -75,7 +78,7 @@ sub doInit {
   # for getRegularExpression
   if ($TWiki::Plugins::VERSION < 1.020) {
     eval 'use TWiki::Contrib::CairoContrib;';
-    writeDebug("reading in CairoContrib");
+    #writeDebug("reading in CairoContrib");
   }
 
   # get plugin flags
@@ -86,6 +89,9 @@ sub doInit {
   
   # decide on how to match alias words
   $wikiWordRegex = &TWiki::Func::getRegularExpression('wikiWordRegex');
+  $topicRegex = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
+  $webRegex = &TWiki::Func::getRegularExpression('webNameRegex');
+  $defaultWebNameRegex = &TWiki::Func::getRegularExpression('defaultWebNameRegex');
   if ($aliasWikiWordsOnly) {
     $wordRegex = $wikiWordRegex;
   } else {
@@ -93,9 +99,6 @@ sub doInit {
   }
 
   # init globals
-  my $topicRegex = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
-  my $webRegex = &TWiki::Func::getRegularExpression('webNameRegex');
-
   if ($defaultAliasTopic =~ /^($topicRegex)$/) {
     my $twikiWeb = &TWiki::Func::getTwikiWebname();
     &getAliases(0, "$twikiWeb.$defaultAliasTopic");
@@ -170,7 +173,7 @@ sub handleAllAliasCmds {
 sub handleAliases {
   my $args = shift || '';
 
-  writeDebug("handleAliases($args) called");
+  #writeDebug("handleAliases($args) called");
 
   my $theRegex = '';
   my $theMerge = '';
@@ -215,7 +218,8 @@ sub handleAlias {
 
   #writeDebug("handleAlias() called");
 
-  my $theKey = &TWiki::Func::extractNameValuePair($args, 'name');
+  my $theKey = &TWiki::Func::extractNameValuePair($args) || 
+	       &TWiki::Func::extractNameValuePair($args, 'name');
   my $theValue = &TWiki::Func::extractNameValuePair($args, 'value');
   my $theRegex = &TWiki::Func::extractNameValuePair($args, 'regex');
 
@@ -223,7 +227,7 @@ sub handleAlias {
     $theRegex =~ s/\$start/$START/go;
     $theRegex =~ s/\$stop/$STOP/go;
     addAliasPattern($theKey, $theValue, $theRegex);
-    writeDebug("handleAlias(): added alias '$theKey' -> '$theValue')");
+    #writeDebug("handleAlias(): added alias '$theKey' -> '$theValue')");
     return "";
   }
 
@@ -264,7 +268,7 @@ sub addAliasPattern {
 
   $regex = '' unless $regex;
 
-  writeDebug("called addAliasPattern($key, $value, $regex)");
+  #writeDebug("called addAliasPattern($key, $value, $regex)");
 
   if ($regex) {
     $aliasRegex{$key} = $regex;
@@ -276,7 +280,7 @@ sub addAliasPattern {
     $aliasValue{$key} = $value;
   }
 
-  writeDebug("aliasRegex{$key}=$aliasRegex{$key} aliasValue{$key}=$aliasValue{$key}");
+  #writeDebug("aliasRegex{$key}=$aliasRegex{$key} aliasValue{$key}=$aliasValue{$key}");
 }
 
 # =========================
@@ -286,9 +290,6 @@ sub getAliases {
   my $thisTopic;
 
   # extract web and topic name
-  my $topicRegex = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
-  my $webRegex = &TWiki::Func::getRegularExpression('webNameRegex');
-
   $thisWebTopic = $defaultAliasTopic unless $thisWebTopic;
   $thisWebTopic =~ s/^\s+//o;
   $thisWebTopic =~ s/\s+$//o;
@@ -300,7 +301,7 @@ sub getAliases {
     $thisTopic = $2;
   }
 
-  writeDebug("getAliases($doMerge, $thisWeb.$thisTopic) called");
+  #writeDebug("getAliases($doMerge, $thisWeb.$thisTopic) called");
 
 
   # find topic with alias definitions
@@ -321,11 +322,11 @@ sub getAliases {
   }
   # have we alread red these aliaes
   if (defined $seenAliasWebTopics{"$thisWeb.$thisTopic"}) {
-    writeDebug("bailing out on $thisWeb.$thisTopic");
+    #writeDebug("bailing out on $thisWeb.$thisTopic");
     return 1;
   }
   $seenAliasWebTopics{"$thisWeb.$thisTopic"} = 1;
-  writeDebug("reading aliases from $thisWeb.$thisTopic");
+  #writeDebug("reading aliases from $thisWeb.$thisTopic");
 
   # parse the plugin preferences lines
   my $prefText = TWiki::Func::readTopicText($thisWeb, $thisTopic);
@@ -361,7 +362,7 @@ sub getConvenientAlias {
   #writeDebug("getConvenientAlias($key, $value) called");
 
   # convenience for wiki-links
-  if ($value =~ /([^.]+)\.$wikiWordRegex/) {
+  if ($value =~ /^($webRegex\.|$defaultWebNameRegex\.|#)$topicRegex/) {
     $value = "\[\[$value\]\[$key\]\]";
   }
 
@@ -381,7 +382,7 @@ sub handleAliasArea {
   
   return $text if $foundError || !@aliasKeys;
 
-  writeDebug("handleAliasArea() called for '$text'") if $debug > 1;
+  #writeDebug("handleAliasArea() called for '$text'") if $debug > 1;
 
   my $result = '';
 
@@ -416,11 +417,17 @@ sub handleAliasArea {
 
 	      # do the substitution
 	      if ($substr) {
+		%substHash = ();
+		my $counter = 0;
 		foreach my $key (@aliasKeys) {
-		  if ($debug > 1) { 
-		    $substr =~ s/($aliasRegex{$key})/&_debugSubstitute($key, $1)/gme;
+		  $substr =~ s/$aliasRegex{$key}/&_doSetSubst(\$counter, $key)/gme;
+		}
+		if ($counter) {
+		  if ($debug) {
+		    $substr =~ s/$TranslationToken(\d+)$TranslationToken/&_doPutSubst($1)/gme;
+		    writeDebug("### done subst");
 		  } else {
-		    $substr =~ s/$aliasRegex{$key}/$aliasValue{$key}/gm;
+		    $substr =~ s/$TranslationToken(\d+)$TranslationToken/$substHash{$1}/gm;
 		  }
 		}
 		$result .= $substr;
@@ -436,17 +443,31 @@ sub handleAliasArea {
   }
   $result =~ s/NOPTOKEN/<nop>/g;
 
-  writeDebug("result is '$result'") if $debug > 1;
+  #writeDebug("result is '$result'") if $debug > 1;
   return $result;
 }
 
 # =========================
-sub _debugSubstitute {
-  my ($key, $match) = @_;
-  my $regex = $aliasRegex{$key};
-  my $value = $aliasValue{$key};
-  writeDebug("'$regex' matches on '$match' -> '$value'");
-  return $value; 
+sub _doSetSubst {
+  my ($counter, $key) = @_;
+  
+  $$counter++;
+  $substHash{$$counter} = $aliasValue{$key};
+  writeDebug("set counter=$$counter for $key=$aliasValue{$key}");
+
+  return $TranslationToken."$$counter".$TranslationToken; 
+}
+# =========================
+sub _doPutSubst {
+  my $counter = shift;
+
+  if (defined $substHash{$counter}) {
+    writeDebug("put counter=$counter for $substHash{$counter}");
+    return $substHash{$counter};
+  } else {
+    writeDebug("oops, got no value for counter=$counter");
+    return 'ERROR ERROR'; # never reach
+  }
 }
 
 1;

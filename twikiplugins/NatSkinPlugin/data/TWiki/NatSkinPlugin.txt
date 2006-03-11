@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132762223" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1139390158" format="1.1" version="1.1"}%
 ---+!! The Natural Skin Plugin
 This is the supplemental plugin for the NatSkin. Its main purpose is to supply
 "skin states" to control different styles and variants to be switched
@@ -7,11 +7,8 @@ provided features.
 
 This plugin tries to be maximal compatible with all past, current and upcoming
 TWiki releases, namely beijing, cairo and dakar (aka TWiki-4.x). Therefore some
-mechanisms have been internalized that are only available since TWiki-4.0.0.
-Some mechanisms in the newer engines are not used deliberately (eg. %IF,
-<nop>LoginManager) as similar techniques (e.g. %IFDEFINED, %IFACCESS) have already been
-part of the NatSkinPlugin for some time now and are available to the older
-platforms.  The plugin tries to be interface-compatible to all engines using
+mechanisms have been internalized that are only available since TWiki-4.0.
+The plugin tries to be interface-compatible to all engines using
 the =Func.pm= API. In those cases where this is _not_ possible, because needed
 functions are not part of the =Func.pm= API, access functions have been added
 to address the different implementations and incompatibilities (e.g. access to
@@ -37,8 +34,6 @@ TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
 		* USERACTIONS, NATLOGON: display topic actions depending on the user being logged in or not
 		* IFSKINSTATE: render skin differently depending on the current skin state
 		* IFACCESS: render different content or include topics depending on access rights
-		* IFDEFINED: render content based on twiki variables being defined or not (compare to the
-		  IfStatements of the upcoming dakar release)
 	* skin style control: infrastructure to get, set and display the skin style that
 	  is currently active using the NatSkinStyleBrowser
 	* WebSideBar: a configurable navigation bar on the 
@@ -47,23 +42,14 @@ TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
 	* <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
 	* Login page: independent implementation of a login page (see ) for
 	  maximal compatibility with old TWiki releases
-	* GROUPSUMMARY: render %MAINWEB%.TWikiGroups nicely
 	* Group based subsription: generate an automated email notification if a new TWiki
 	  user want's to join a TWiki Group
 	* email address obfuscation: all email addresses in topic texts are obfuscated by the use
 	  of dynamic html; so mailto links are still clickable while the pure html text does not
 	  allow to extract the addresses by respective web crawlers.
 	* marking external links: add a nice icon to offsite links
-	* FORMATLIST: render list items according a format parameter (will be externalized into
-	  a separate plugin asap).
 
 ---++ Syntax Rules
----+++ ALLUSERS
-*Syntax*: =%<nop>ALLUSERS%= 
-
-display a list of all registered users generated from the %MAINWEB%.TWikiUsers topic; 
-this is usefull for specific access configurations on beijing and cairo engines 
-(%RED%obsolete on dakar%ENDCOLOR%) 
 
 ---+++ CURREV
 *Syntax*: =%<nop>CURREV%= 
@@ -74,16 +60,6 @@ see also:
 [[#NATMAXREV][NATMAXREV]], 
 [[#NATREVISIONS][NATREVISIONS]]
 [[#PREVREV][PREVREV]], 
-
----+++ GROUPSUMMARY
-*Syntax*: =%<nop>GROUPSUMMARY%= 
-
-display list of group members in a %MAINWEB%.TWikiGroups nicely 
-by extracting the =GROUP= and =ALLOWTOPICCHANGE= variables of 
-a group topic and adds links "Contact all members" and "Contact all maintainters"; 
-by definition maintainers of a group are those listed in the =ALLOWTOPICCHANGE= 
-variable of the group topic 
-(%RED% TODO: needs a rewrite for dakar%ENDCOLOR%)
 
 ---+++ GETSKINSTYLE
 *Syntax*: =%<nop>GETSKINSTYLE%= 
@@ -119,41 +95,6 @@ is granted;
 
 Example: %<nop>IFACCESS{"<nop>AdminSideBar" mode="include"}% includes the 
 <nop>AdminSideBar if the current user has view access to this topic 
-
----+++ IFDEFINED
-*Syntax*: 
-<verbatim>
-%IFDEFINED{"<TWikiML>" 
-  [action="view,edit,preview,..."]? 
-  then="..." 
-  else="..." 
-  glue="on,off"}%
-</verbatim>
-
-returns the "then" or "else" content depeinding on the &lt;<nop>TWikiML>
-expression expanding to the emtpy string or not. Optionally the current topic
-action is checked to match the given one.  This tag works similar to the
-IfStatements in dakar but is backwards compatible to beijing and cairo
-and omits the overhead of an expression parser.
-
----+++ IFDEFINEDTHEN, ELSIFDEFINED, ELSEDEFINED, FIDEFINED
-*Syntax*:
-<verbatim>
-%IFDEFINEDTHEN{"<TWikiML>" [action="view,edit,preview,..."]?}% 
-  <then content> 
-[%ELSIFDEFINED{...}% 
-  <elsif content>]* 
-[%ELSEDEFINED%
-  <else content>]?
-%FIDEFINED%
-</verbatim>
-
-This is the multi-line version of [[#IFSDEFINED][IFSDEFINED]].
-IFDEFINEDTHEN expressions can be nested safely.  Within a single IFDEFINEDTHEN
-the ELSIFDEFINED parts can be repeated arbitrarily.  Before rendering the
-=&lt;then|elsif|else condition>= any =$nop= string will be removed first.
-Thereby nested <nop>TWikiML expressions can be prevented from being expanded in
-advance.
 
 ---+++ IFSKINSTATE
 *Syntax*: =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= 
@@ -394,13 +335,13 @@ using these settings will be changed accordingly.
 	* Set CLEANTABLEATTRIBUTES = headercolor="#444444"
 	* Set GEORGIABLUETABLEATTRIBUTES = headercolor="#999966"
 	* Set GETTYSBURGTABLEATTRIBUTES = headercolor="#03366"
-	* Set INDEPENDENCETABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
+	* Set INDEPENDENCETABLEATTRIBUTES = databg="white #f0f0f0" headercolor="white"
 	* Set KUBRICKTABLEATTRIBUTES = databg="#f4f4f4, white" headercolor="#0055aa"
 	* Set PLAINJANETABLEATTRIBUTES = headercolor="#666666"
 	* Set RUSTYTABLEATTRIBUTES = headercolor="white"
 	* Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
 	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black", headerbg="black"
+	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black" headerbg="black"
 	* Set PATTERNTABLEATTRIBUTES =  databg="#f0f0f0, white" headercolor="#444444"
 
 ---+++ Email Obfuscation
@@ -414,7 +355,7 @@ to your %TWIKIWEB%.TWikiPreferences like
 	* Set OBFUSCATEEMAIL = on
 
 ---+++ <nop>WysiwygPlugin support
-When the TWiki:Plugins.WysiwygPlugin is installed on your <nop>%WIKITOOLNAME% installation
+When the TWiki:Plugins/WysiwygPlugin is installed on your <nop>%WIKITOOLNAME% installation
 the "Edit" topicaction can be enabled to start the Kupu wysiwyg html editor instead of the 
 normal TWiki textarea by setting the USEWYSIWYG variable to "on" (in your %WIKIUSERNAME% topic,
 WebPreferences or %TWIKIWEB%.TWikiPreferences) 
@@ -425,6 +366,9 @@ By default this value is set to "off"
 
 ---++ Plugin Installation Instructions
 	* Install the plugins this one depends on (see below) of not done so already.
+	* If you are installing this plugin on a TWiki release prior TWiki-4.0, then
+	  you need the TWiki:Plugins/SessionPlugin too.
+	* Optionally install the TWiki:Plugins/RedDotPlugin to ease editing the sidebar navigation
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 
@@ -445,8 +389,26 @@ By default this value is set to "off"
 
 ---++ Plugin Info
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.96 |
+|  Copyright &copy;: | 2003-2006, Michael Daum |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | v2.993 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  22 Feb 2006: | removed GROUPSUMMARY, ALLUSERS and registrationHandle \
+                  which where only used on the <nop>NatsWiki installation, moved into \
+		  a plugin of its own; \
+		  fixed initPlugin not to return 0, disable the plugin if not used with thet NatSkin \
+		  on a per handler base |
+|  21 Feb 2006: | externalized the IFDEFINED family into a plugin of its own and \
+                  added a new dependency for it |
+|  15 Feb 2006: | properly detect scripted mode on dakar |
+|  14 Feb 2006: | moved FORMATLIST to TWiki:Plugins/FilterPlugin; \
+                  added dependency on it; \
+                  fixed uninitialized variables with perl-5.8.8; \
+		  added escape chars to IFDEFINED; \
+		  don't switch off using an atom skin |
+|  03 Feb 2006: | added escape chars (percnt, dollar) to IFACCESS to make it more useful;\
+                  fixed detection of a dakar engine; \
+		  fixed default REDDOT in the MySideBarTemplate |
 |  26 Jan 2006: | docu fixes |
 |  23 Jan 2006: | fixed natlogn; \
                   fixed FORMATLIST to expandCommonVariables of the format result |
@@ -478,30 +440,28 @@ By default this value is set to "off"
 |  20 Oct 2005: | improved external link detection |
 |  10 Oct 2005: | added switchstyle feature to cycle thru all installed skin styles|
 |  09 Oct 2005: | rewrite of skin state: support switching border, \
-						sidebar, webbuttons and style independently; \
-						rewrite of the email obfuscator; \
-						improved skin style browser |
+		  sidebar, webbuttons and style independently; \
+		  rewrite of the email obfuscator; \
+		  improved skin style browser |
 |  27 Sep 2005: | added conditional content tags IFSKINSTATE and IFDEFINED; \
 						added web button support |
 |  30 Aug 2005: | added external link detection; fixed IFSKINSTYLE; \
-						added style support for the TWiki:Plugins.TablePlugin |
+                  added style support for the TWiki:Plugins/TablePlugin |
 |  26 Aug 2005: | new NatSkin-2.0 release |
 |  28 Apr 2005: | pre-release to fix installation on TWiki/Cairo |
 |  16 Mar 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki:Plugins.SpreadSheetPlugin, \
-  TWiki:Plugins.SessionPlugin, \
-  TWiki:Plugins.RedDotPlugin, \
-  TWiki:Plugins.DakarContrib |
+|  Other Dependencies: | TWiki:Plugins/DakarContrib, \
+  TWiki:Plugins/FilterPlugin, \
+  TWiki:Plugins/IfDefinedPlugin, \
+  TWiki:Plugins/SpreadSheetPlugin |
 |  Perl Version: | >=5.6 |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | TWiki:Plugins.NatSkinPlugin |
-|  Feedback: | TWiki:Plugins.NatSkinPluginDev  |
-|  Appraisal: | TWiki:Plugins.%TOPIC%Appraisal |
+|  Plugin Home: | TWiki:Plugins/NatSkinPlugin |
+|  Feedback: | TWiki:Plugins/NatSkinPluginDev  |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 26 Jan 2006 
+-- TWiki:Main/MichaelDaum - 22 Feb 2006 
 

@@ -1,23 +1,8 @@
+TWiki::Plugins,>=1.1,,This module requires TWiki-4
+TWiki::Contrib::FuncUsersContrib,>=8986,perl,Required for TWiki-4
 Time::ParseDate,>=2003.0211,cpan,Required. Available from the CPAN:Time::ParseDate archive.
 Error,>=0.15,cpan,Required. Available from the CPAN:Error archive.
 Email::Folder,>=0.84,cpan,Required. Available from the CPAN:Email::Folder archive.
-Email::FolderType,,cpan,Required. Available from the CPAN:Email::FolderType archive.
 Email::FolderType::Net,>=1.02,cpan,Required. Available from the CPAN:Email::FolderType::Net archive.
-MIME::Base64,,cpan,Required for Email::MIME::Encodings. Available from the CPAN:MIME::Base64 archive.
-Email::MIME::Encodings,,cpan,Required for Email::MIME. Available from the CPAN:Email::MIME::Encodings archive.
-Email::MIME::ContentType,,cpan,Required for Email::MIME. Available from the CPAN:Email::MIME::ContentType archive.
-MIME::Types,,cpan,Required for Email::MIME. Available from the CPAN:MIME::Types archive.
 Email::MIME,>=1.82,cpan,Required. Available from the CPAN:Email::MIME archive.
 Email::Delete,>=1.02,cpan,Optional, recommended. Available from the CPAN:Email::Delete archive.
-Module::Pluggable,,cpan,Required for Email::FolderType. Available from the CPAN:Module::Pluggable archive.
-Email::Simple,,cpan,Required. Available from the CPAN:Email::Simple archive.
-Net::POP3,,cpan,Optional. Available from the CPAN:Net::POP3 archive.
-Email::Folder::POP3,,cpan,Optional. Available from the CPAN:Email::Folder::POP3 archive.
-Net::IMAP::Simple,,cpan,Optional. Available from the CPAN:Net::IMAP::Simple archive.
-URI::imap,,cpan,Optional. Available from the CPAN:URI::imap archive.
-Email::Folder::IMAP,,cpan,Optional. Available from the CPAN:Email::Folder::IMAP archive.
-File::Find::Rule,,cpan,Optional, recommended. Required for Email::Delete. Available from CPAN:File::Find::Rule
-Email::LocalDelivery,,cpan,Optional, recommended. Required for Email::Delete. Available from CPAN:Email::LocalDelivery
-Number::Compare,,cpan,Optional, recommended. Required for Email::Delete. Available from CPAN:Number::Compare
-Text::Glob,,cpan,Optional, recommended. Required for Email::Delete. Available from CPAN:Text::Glob
-File::Path::Expand,,cpan,Optional, recommended. Required for Email::LocalDelivery (required for Email::Delete). Available from CPAN:File::Path::Expand

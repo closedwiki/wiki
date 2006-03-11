@@ -14,7 +14,7 @@ NONE
 ~~~
 %~~   DBQUERY{"TopicType=~'\bBlogAuthor\b'" web="%WEB%" limit="1" 
 ~~~      header="$count" format="none" separator="none"
-~~~   }%<=1" then="<style type=\"text/css\">.blogAuthor {display:none;}</style>"
+~~~   }%<=1" then="<style type=\"text/css\">.blogAuthor, .blogAuthorSwitch {display:none;}</style>"
 ~~~ }%
 *~~
 %STOPINCLUDE%

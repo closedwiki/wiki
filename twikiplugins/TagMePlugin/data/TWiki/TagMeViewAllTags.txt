@@ -1,0 +1,24 @@
+%META:TOPICINFO{author="PeterThoeny" date="1141451103" format="1.0" version="1.3"}%
+%META:TOPICPARENT{name="TagMePlugin"}%
+---+ Tag-me: View All Tags
+
+%STARTINCLUDE%
+<table border="0" cellpadding="3" cellspacing="0"><tr>
+<td>&nbsp; &nbsp;</td>
+<td bgcolor="#DDDDCC">&nbsp; *All Tags* &nbsp;</td>
+<td>&nbsp;</td>
+<td bgcolor="#EEEEDD">&nbsp; [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/TagMeViewMyTags][My Tags]] &nbsp;</td>
+<td>&nbsp;</td>
+<td bgcolor="#EEEEDD">&nbsp; [[TagMeViewSpecificTag][Specific Tag]] &nbsp;</td>
+</tr></table>
+<table border="0" cellpadding="5" cellspacing="0" style="width:100%;">
+<tr bgcolor="#DDDDCC"><td style="width:100%;"></dr></tr>
+<tr bgcolor="#EEEEDD"><td style="width:100%;">
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeViewSpecificTag?tag=$tag\" style=\"font-size:$size%\">$tag</a>" separator=", " }%
+</td></tr></table>
+%STOPINCLUDE%
+
+__See also:__ TagMePlugin, TagMeViewSpecificTag, TagMeViewMyTags
+
+-- TWiki:Main.PeterThoeny - 23 Feb 2006
+

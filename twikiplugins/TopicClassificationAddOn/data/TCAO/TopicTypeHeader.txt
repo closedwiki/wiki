@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1130741524" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="%25TOPICPARENT%25"}%
+---+!! %BASETOPIC%
+
+Content within the <nop>%BASEWEB% web is organized according to *TopicType* and *SubjectArea.* *"TopicType"* is used to group topics that share a common purpose and structure. For more information about how topics are organized within the <nop>%BASEWEB% web, see TopicClassification.
+
+---++ %BASETOPIC% Table for use in %TWIKIWEB%.TWikiForms
+
+The table below lists available %BASETOPIC%s in the <nop>%BASEWEB% web, which can be used to classify topics that include the %BASETOPIC% form field. (See %SEARCH{"| %BASETOPIC% |" nosummary="on" web="%BASEWEB%" nosearch="on" nototal="on" separator=", " format="$web.$topic"}%.)

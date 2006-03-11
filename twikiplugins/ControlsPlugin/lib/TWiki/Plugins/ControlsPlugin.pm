@@ -88,6 +88,10 @@ sub initPlugin
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
     #$exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
 
+
+    TWiki::Func::registerTagHandler( 'CONTROL', \&_CONTROL );
+    TWiki::Func::registerTagHandler( 'CONTROLS', \&_CONTROLS );
+
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
@@ -104,7 +108,38 @@ sub commonTagsHandler
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
     # do custom extension rule, like for example:
-    $_[0] =~ s/%CONTROL{(.*?)}%/handleControls( $_[2], $_[1], $1 )/ge;
+#    $_[0] =~ s/%CONTROL{(.*?)}%/handleControls( $_[2], $_[1], $1 )/ge;
+}
+
+=pod
+
+---++ sub handleGenSearch ( $theWeb, $theTopic, $theArgs )
+
+Not yet documented.
+
+=cut
+
+sub _CONTROLS {
+    my($session, $params, $theTopic, $theWeb) = @_;
+    
+    my $form    = $params->{"form"} || "$theTopic.$theWeb";
+    my $createtopic    = $params->{"createtopic"};
+    
+   my $twikiForm = new TWiki::Form($session, $theWeb, $form );
+   return "" unless $twikiForm;
+   my $meta = new TWiki::Meta($session, $theWeb, $form );
+   
+   my $formEdit = $twikiForm->renderForEdit( $theWeb, $theTopic, $meta );
+   if (defined($createtopic)) {
+   	$formEdit = '<form name="newTopic" action="http://t42p/cgi-bin/DEVELOP/bin/edit/%WEB%/">'.
+	'<input type="hidden" name="formtemplate" value="'.$form.'" />'.
+	'<input type="hidden" name="templatetopic" value="'.$form.'" />'.
+	'<input type="hidden" name="action" value="form" />'.
+	'<input type="hidden" name="topic" value="CalendarEntryXXXXXXXXXXX" />'.
+	$formEdit.
+	'<input type="submit" value="  Create topic  "> </form>';
+   }
+   return $formEdit;
 }
 
 =pod
@@ -116,18 +151,16 @@ sub commonTagsHandler
 
 =cut
 
-sub handleControls
+sub _CONTROL
 {
-    my( $theWeb, $theTopic, $theArgs ) = @_;
+    my($session, $params, $theTopic, $theWeb) = @_;
 
-    my %params = TWiki::Func::extractParameters( $theArgs );
-
-    my $name   = $params{"_DEFAULT"} || $params{"name"} || "";
-    my $web    = $params{"web"}   || $theWeb;
-    my $topic  = $params{"topic"} || $theTopic;
-    my $size   = $params{"size"} || 1;
-    my $type   = $params{"type"} || "select";
-    my $url   = $params{"urlparam"} || "off";
+    my $name   = $params->{"_DEFAULT"} || $params{"name"} || "";
+    my $web    = $params->{"web"}   || $theWeb;
+    my $topic  = $params->{"topic"} || $theTopic;
+    my $size   = $params->{"size"} || 1;
+    my $type   = $params->{"type"} || "select";
+    my $url   = $params->{"urlparam"} || "off";
 
     return getListOfFieldValues($web, $topic, $name, $type, $size, $url );
 }
@@ -147,17 +180,17 @@ sub getListOfFieldValues
 {
     my( $webName, $topic, $name, $type, $size ) = @_;
     
+    #SMELL: shouldn't this be normalize?
     if( $topic =~ /^(.*)\.(.*)$/ ) {
         $webName = $1;
         $topic = $2;
     }
     my @posValues = ();
-
     if( &TWiki::Func::topicExists( $webName, $topic ) ) {
       my( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
       # Processing of SEARCHES for Lists
       $text =~ s/%SEARCH{(.*?)}%/&TWiki::handleSearchWeb($1)/geo;
-      @posValues = &TWiki::Form::getPossibleFieldValues( $text );
+      @posValues = &TWiki::Form::_getPossibleFieldValues( $text );
     }
 
     my $value = "";
@@ -165,7 +198,14 @@ sub getListOfFieldValues
     $size = $size || 1;
 
     if( $type eq "select" ) {
-      my $val = ($url eq "on")?"<option>%URLPARAM{\"$name\"}%</option>":"";
+    
+    
+      my $val = 
+#        ($url eq "on")
+#        ?
+        "<option>%URLPARAM{\"$name\"}%</option>"
+#        :""
+;
       foreach my $item (@posValues) {
 	$item =~ s/<nop/&lt\;nop/go;
 	$val .= "   <option>$item</option>";

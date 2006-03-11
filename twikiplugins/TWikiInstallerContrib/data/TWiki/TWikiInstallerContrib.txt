@@ -26,22 +26,34 @@ In your web browser, browse to the URL to execute the install script.  You shoul
 
 <table>
 <tr><td>
-<a href="%ATTACHURLPATH%/install-screenshot.png" ><img src="%ATTACHURLPATH%/install-screenshot-thumb.png" /></a>
-</td><td>
-   1. Choose a TWikiKernel to install.  Typically, there will be only one packaged with the TWikiFor.  However, if there are multiple TWikiKernels available, newer versions are listed first.  
-   2. Set the perl executable path.  Typically, you won't need to change this.  The script either worked as-in, or you already updated the shebang line in the script.  You will want to change this if you are using a perl accelerator; specify the full path to the accelerator.
-   3. Specify an account name to automatically create.  This must be a proper WikiWord.
-   4. Specify the WIKIWEBMASTER.  [[%LOCALSITEPREFS%]] is automatically updated with this TWikiPreferenceVariable.
-   5. Optionally select additional TWikiExtensions to install.
-   6. Finally, click the "Install" button.
+<a href="%ATTACHURLPATH%/snapshot1.png" ><img src="%ATTACHURLPATH%/snapshot1-thumb.png" /></a><br />
+</td>
+<td>
+   1. Specify a TWikiFor distribution.  Click "Next".
+</td>
+</tr>
+<tr>
+<td>
+<a href="%ATTACHURLPATH%/snapshot1.png" ><img src="%ATTACHURLPATH%/snapshot2-thumb.png" /></a><br />
+</td>
+<td>
+   2. Choose a TWikiKernel to install.  Typically, there will be only one packaged with the TWikiFor.  However, if there are multiple TWikiKernels available, newer versions are listed first.  
+   3. Set the perl executable path.  Typically, you won't need to change this.  The script either worked as-in, or you already updated the perl path in the script.  You will want to change this if you are using a perl accelerator; specify the full path to the accelerator.
+   4. Specify an account name to automatically create.  This must be a proper WikiWord.
+   5. Specify the WIKIWEBMASTER.  [[%LOCALSITEPREFS%]] is automatically updated with this TWikiPreferenceVariable.
+   6. Optionally select additional TWikiExtensions to install.
+   7. Finally, click the "Install" button.
 </td></tr>
 </table>
 
+<a href="%ATTACHURLPATH%/snapshot1.png" ><img src="%ATTACHURLPATH%/snapshot3-thumb.png" /></a><br />
+
+<a href="%ATTACHURLPATH%/snapshot1.png" ><img src="%ATTACHURLPATH%/snapshot4-thumb.png" /></a><br />
 
 
 ---+ Technical Documentation
 
-As the =twiki-install= program is running the webserver environment, it is able to autodetect pretty much all of its configuration settings.
+As the =twiki-install= program is running under the webserver environment, it is able to autodetect pretty much all of its configuration settings.
 
 The =twiki-install= script creates a directory structure very similiar to the canonical TWiki directory layout: because =twiki-install= has been designed to run from a designated =cgi-bin= directory, =bin= has been moved up a level for nicer URL's (eg, =~account/cgi-bin/twiki/view= instead of =~account/cgi-bin/twiki/bin/view=)  (!!! there are other methods of manipulating urls, see ??? plus TWiki:Codev.ShorterURLs ? !!!)
 
@@ -118,7 +130,7 @@ $TWIKIDEV/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerCon
    --dir=$DIR --url=$URL $EXTENSIONS
 %ENDCODE%
 
-This example shows how =$URL= can specify can a required script extension (just add it to the end of =twiki-install=), and the installer modifies scripts that are installed by renaming them with the same extension and updating the perl executable location.
+This example shows how =$URL= can specify a required script extension (just add it to the end of =twiki-install=), and the installer modifies scripts that are installed by renaming them with the same extension and updating the perl executable location.
 
 =install-twiki.pl= creates an installation report at =./install-report.html=
 
@@ -163,27 +175,24 @@ fi
 
 if ! [ -d /home/$ACCOUNT/.ssh ];
 then
-        echo Installing SSH keys;
-        sudo cp -r /home/twikibuilder/.ssh /home/$ACCOUNT
-        sudo chown -R $ACCOUNT.$ACCOUNT /home/$ACCOUNT/.ssh
+	echo Installing SSH keys;
+	sudo mkdir /home/$ACCOUNT/.ssh
+	sudo chmod 700 /home/$ACCOUNT/.ssh
+	sudo cp ~/.ssh/id_dsa.pub /home/$ACCOUNT/.ssh/authorized_keys
+	sudo chmod 600 /home/$ACCOUNT/.ssh/authorized_keys
+	sudo chown -R $ACCOUNT.$ACCOUNT /home/$ACCOUNT/.ssh
 fi
 
-if [ -d /home/$ACCOUNT/public_html/cgi-bin ]
+if [ -d /home/$ACCOUNT/public_html/cgi-bin/twiki/ ]
 then
         echo Removing previous TWiki installation
-        sudo rm -rf /home/$ACCOUNT/public_html
+        sudo rm -rf /home/$ACCOUNT/public_html/cgi-bin/twiki/
 fi
 
 echo Creating web directory structure
 sudo -u $ACCOUNT mkdir -p /home/$ACCOUNT/public_html/cgi-bin
 sudo -u $ACCOUNT chmod g+w /home/$ACCOUNT/public_html/cgi-bin
 sudo chgrp -R www-data /home/$ACCOUNT/public_html;
-
-if ! [ -d /home/$ACCOUNT/public_html/cgi-bin/lib/CPAN ]
-then
-        echo "Installing dirty little secret CPAN library (for the moment...)"
-        sudo -u $ACCOUNT cp -r lib /home/$ACCOUNT/public_html/cgi-bin;
-fi
 
 echo Installing...
 time bin/install-twiki.pl \

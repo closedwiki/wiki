@@ -19,7 +19,8 @@ use File::Copy qw( cp mv );
 use File::Basename qw( basename );
 use English;
 use Scalar::Util qw( tainted );
-use Archive::Zip;
+use Data::Dumper qw( Dumper );
+#use Archive::Zip;
 ################################################################################
 
 # parameters
@@ -47,17 +48,17 @@ sub _InstallTWikiExtension {
     my ( $name ) = ( basename $module ) =~ /(.*)\./;
     die "name is tainted" if tainted $name;
 
-    print STDERR "Installing $name\n";
+    print STDERR "TWikiInstallerContrib: Installing $name\n";
     my $q = CGI->new() or die $!;
     push @text, $q->b( $name );
 
 #    $ENV{TMPDIR} =~ /(.*)/;
 #    $ENV{TMPDIR} = $1;
 
-    my $archive = Archive::Zip->new( $module ) 
-	or warn qq{Archive::Zip new failed [$module] - can't install "$name"}, return 0;
+    my $archive = Archive::Zip::CommandLine->new( $module ) 
+	or warn qq{Archive::Zip::CommandLine new failed [$module] - can't install "$name"}, return 0;
     $archive->extractTree( '', $INSTALL );
-    
+
     foreach my $file ( $archive->memberNames ) {
 	# TODO: rename $base to something more descriptive (like ...?)
 	next unless my ($path,$base) = $file =~ m|^([^/]+)(/.*)$|;
@@ -75,7 +76,7 @@ sub _InstallTWikiExtension {
 	mv( "$INSTALL/$file", $destFile ) or warn "$INSTALL/$file -> $destFile: $!";
 	chmod $map->{perms}, $destFile if $map->{perms};
 
-    	# only Plugins have to be enabled (i.e., Contribs and Skins are "always on")
+	# only Plugins have to be enabled (i.e., Contribs and Skins are "always on")
 	if ( my ( $plugin ) = $file =~ m|^lib/TWiki/Plugins/(.+Plugin).pm$| ) {
 	    ++$plugins->{$plugin};
 	}
@@ -104,5 +105,58 @@ sub _InstallTWikiExtension {
 
     return ( \@text, 1, $plugins );
 }
+
+################################################################################
+################################################################################
+package Archive::Zip::CommandLine;
+
+use constant AZ_OK           => 0;
+use constant AZ_ERROR        => 2;
+
+sub new
+{
+    my $class = shift;
+    my $self = bless( {
+	'fileName'                    => ''
+	},
+		      $class
+		      );
+#    $self->{'members'} = [];
+    if (@_)
+    {
+	my $status = $self->read(@_);
+	return $status == AZ_OK ? $self : undef;
+    }
+    return $self;
+}
+
+sub read
+{
+    my ( $self, $filename ) = @_;
+    $self->{fileName} = Cwd::abs_path( $filename );
+    return
+	-e $filename
+	? AZ_OK
+	: AZ_ERROR;
+}
+
+sub extractTree
+{
+    my ( $self, undef, $tmpInstall ) = @_;
+
+    $self->{extractedDir} = $tmpInstall;
+    system( 'unzip', '-qq', $self->{fileName}, '-d' => $self->{extractedDir} );
+}
+
+sub memberNames
+{
+    my ( $self ) = @_;
+    chomp( my @a = grep { !/^\.$/ } `cd $self->{extractedDir}; find .` );
+    @a = map { $_ .= '/' if -d "$self->{extractedDir}/$_"; $_ } @a;
+    @a = map { s|^(\./)||; $_ } @a;
+    return @a;
+}
+
+################################################################################
 
 1;

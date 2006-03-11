@@ -10,16 +10,21 @@ Background: I often found myself defining the possible values for a field of a T
 
 ---++ Syntax Rules
 
+	* Syntax: =%<nop>CONTROL{form="name"}%=
+	* can be used to automatically create a HTML form to enter TWikiForm data
+	* Supported parameters:
+	| *Parameter:* | *Description:* | *Default:* |
+	| =form="..."= | The topic containing the form definition (resultes in nothing if there is no form in that topic)  | Current topic |
+	| =createtopic="..."= | name of topic to create using this form (the 10 X syntax can be used very well for the (eg ControlXXXXXXXXXX)) | undefined |
+
 	* Syntax: =%<nop>CONTROLS{"name" ...}%=
 	* Supported parameters:
 	| *Parameter:* | *Description:* | *Default:* |
-	| ="name"= | The name of the control to be generated, i.e. =%<nop>CONTROL{"address"}%= | required |
 	| =topic="..."= | The topic defining the field values  | Current topic |
 	| =web="..."= | The web from which the topic is taken | Current web |
 	| =type="..."= | The control to be rendered. Possible values are =select=, =radio=, or =checkbox= | =select= |
 	| =size="..."= | The size parameter for the control. | =1= |
 	| =urlparam="..."= | Generates a select option to be passed as URL parameter (valid only with =type="select"= ). Possible values are =on=, =off=  | =off= |
-
 ---++ Example
 
 Below is the definition of the field values for <nop>TopicClassifications from TWiki.TWikiForms:
@@ -72,6 +77,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
 |  Plugin Version: | 20 Feb 2005 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  07 Mar 2006: | updated to Dakar, added CONTROLS html form generation - TWiki:Main.SvenDowideit |
 |  20 Feb 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |

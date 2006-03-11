@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1129746599" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="TopicFunction"}%
+%META:TOPICINFO{author="TWikiContributor" date="1138882812" format="1.1" version="1.1"}%
+%META:TOPICPARENT{}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -12,8 +12,11 @@
 ---++ List of all topics of type '%NAME%'
 <div class="tableModDiv">
 | *Name* | *Description* | 
-%~~ DBQUERY{"TopicType=~'\b%NAME%\b'" order="Name or name"
-~~~        format="| [[$web.$topic][$expand(Name or name)]] | $expand(TopicDescription or Headline) |"
+%~~ DBQUERY{"TopicType=~'\b%NAME%\b'" 
+~~~   web="%WEB%"
+~~~   order="Name or name"
+~~~   format="| [[$web.$topic][$expand(Name or name)]] 
+~~~           | $expand(TopicDescription or Headline) |"
 ~~~ }%
 </div>
 ~~~ <style type="text/css">

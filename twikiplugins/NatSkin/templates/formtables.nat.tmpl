@@ -1,21 +1,16 @@
 %{ These templates define the form attached at the bottom of viewed page. }%
-
 %{ Header definition for topic attachments and top table in attach screen }%
-%TMPL:DEF{FORM:display:header}%
+%TMPL:DEF{FORM:display:header}% <!-- -->
 <div class="natTopicForm">
 <table class='twikiTable'><tr><th class='natTopicFormTitle' colspan='2'>
 [[%A_TITLE%]]
-</th></tr>
+</th></tr> 
 %TMPL:END%
-
-%{ Each row }%
-%TMPL:DEF{FORM:display:row}%
+%{ Each row }% 
+%TMPL:DEF{FORM:display:row}% <!-- -->
 <tr valign='top'><td class='natTopicFormFirstCol'> %A_TITLE%: </td><td>
 %A_VALUE%
-</td></tr>
+</td></tr> 
 %TMPL:END%
-
-%{ Footer }%
-%TMPL:DEF{FORM:display:footer}%
-</table></div>
+%{ Footer }% %TMPL:DEF{FORM:display:footer}% </table></div> 
 %TMPL:END%

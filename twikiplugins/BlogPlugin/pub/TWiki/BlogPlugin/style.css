@@ -14,7 +14,7 @@
 */
 
 .blogAbout {
-  text-align:justify; 
+  /*text-align:justify; */
   font-size:95%; 
   margin-bottom:1.5em;
 }
@@ -37,6 +37,9 @@
   text-align:justify;
   width:100%;
 }
+.blogText cite {
+  text-align:left;
+}
 .blogTeaser {
   margin-bottom:1em;
 }
@@ -54,6 +57,22 @@
 .blogNavigation table {
   width:100%;
   line-height:110%;
+}
+.blogScroll {
+  font-family:arial,helvetica;
+  font-size:1em;
+  line-height:100%;
+  margin-top:0;
+  margin-top:1em;
+  margin-bottom:1em;
+  font-weight:bold;
+}
+.blogScroll a,
+.blogScroll a:hover {
+  text-decoration:none !important;
+}
+.blogScroll a:hover {
+  color:red;
 }
 .blogPrev {
   text-align:left;
@@ -85,11 +104,18 @@
 .blogEntryCount {
   text-align:right;
 }
+.blogSideBar .blogEntryCount,
+.blogSideBar .blogCommentCount {
+  font-family:arial,sans-serif;
+}
 .blogComment {
   padding:5px;
 }
 .blogComments {
   margin-top:20px;
+}
+.blogRef {
+  padding-left:5px;
 }
 .blogRef h2 a:hover,
 .blogComment h3 a:hover,
@@ -97,9 +123,6 @@
   text-decoration:underline;
 }
 
-.blogAddComment {
-  margin-top:10px;
-}
 .blogComment h4 {
   margin-top:5px;
   margin-bottom:5px;
@@ -144,7 +167,6 @@
   margin-top:5px;
   margin-bottom:5px;
 }
-
 .blogSideBarSection {
   margin-top:10px;
   margin-bottom:10px;
@@ -167,18 +189,50 @@
   border:1px solid #E2DCC8;
 }
 
-/* pattern skin specific settings */
-.patternLeftBarContents .blogSideBar {
-  margin-right:2em;
-  line-height:120%;
+
+.blogArchiveModes {
+  font-size:1.2em;
 }
-.patternLeftBarContents .blogSideBar ul li {
-  margin-bottom:0.5em;
-  line-height:120%;
+.blogArchiveMode {
+  text-transform:uppercase;
+  margin:0 0.5em;
+  font-size:1.2em;
 }
-.patternMainContents .blogSubComments {
-  padding:5px;
+.blogArchiveModes a:hover {
+  border-bottom:2px solid #0066cc;
+  text-decoration:none;
 }
-.patternMainContents .blogSubComment {
-  border-left:5px solid #E2DCC8;
+.blogArchiveLexMins,
+.blogArchiveModes,
+.blogArchiveYears,
+.blogArchiveMonths {
+  text-align:center;
+  margin:1em 0;
+}
+.blogArchiveYear,
+.blogArchiveMonth {
+  margin:10px;
+  font-size:1em;
+}
+.blogArchiveHitList .blogNavigation {
+  margin:5px 0;
+}
+.blogArchiveHitList table td,
+.blogArchiveHitList table th {
+  vertical-align:top;
+  background:white;
+  padding-left:1em;
+}
+.blogArchiveHitList .twikiFirstCol {
+  width:2em;
+}
+.blogArchiveTagCloud {
+  text-align:center; 
+  padding:20px 20px 15px 20px;
+  line-height:200%;
+}
+.blogArchiveLexMin a {
+  margin:10px 0;
+  font-size:1em;
+  padding:0 5px;
 }

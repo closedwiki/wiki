@@ -1,8 +1,8 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopslogonbase.tmpl -->
 %TMPL:DEF{"onloadscript"}%document.LogonFormular.username.focus();%TMPL:END%
-%TMPL:DEF{"logon"}%
-<form name="LogonFormular" action="%SCRIPTURLPATH%/natlogon%SCRIPTSUFFIX%" method="post">
+%TMPL:DEF{"logon"}%<!-- -->
+<form name="LogonFormular" action="https://%HTTP_HOST%%SCRIPTURLPATH%/natlogon%SCRIPTSUFFIX%" method="post">
 <table border="0"> 
 <tr> 
   <td>Login: </td>
@@ -26,4 +26,3 @@
   <td>&nbsp;</td>
 </tr>
 </table> </form> %TMPL:END%
-
