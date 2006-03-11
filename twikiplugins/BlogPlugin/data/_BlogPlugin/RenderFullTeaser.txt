@@ -28,7 +28,8 @@ see also: RenderBlogTeaser
 ~~~ <table class=\"blogHeadline\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
 ~~~   <tr><td>
 ~~~   <h1>
-~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
+~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic
+*~~       %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\" 
 ~~~       title=\"permalink to <nop>$topic\">
 ~~~       $formfield(Headline)
 ~~~     </a>$percntREDDOT{\"$web.$topic\"}$percnt
@@ -69,8 +70,9 @@ see also: RenderBlogTeaser
 ~~~    </div>
 ~~~    $formfield(Text)
 ~~~    <div class=\"blogMore\">...&nbsp;
-*~~      <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
-~~~         title=\"permalink to <nop>$topic\">more</a>
+*~~      <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic
+*~~        %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\" 
+~~~        title=\"permalink to <nop>$topic\">more</a>
 ~~~    </div>
 ~~~  </div>$n
 ~~~  %STOPALIASAREA%

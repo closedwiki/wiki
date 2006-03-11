@@ -26,9 +26,8 @@ See also BlogHelpText
 %$nopDBCALL{"BlogHelpText" section="Default"}%
 %FIDEFINED%
 </div>
-
-%IFDEFINEDTHEN{"%CALC{"$IF($EXACT(%SKIN%,pattern),true)"}%"}%
-%$nopINCLUDE{"%TWIKIWEB%.WebLeftBarSearch"}%
+%IFDEFINEDTHEN{"%SKIN%" as="pattern"}%
+<!-- %<nop>INCLUDE{"%TWIKIWEB%.WebLeftBarSearch"}% -->
 %ELSEDEFINED%
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">

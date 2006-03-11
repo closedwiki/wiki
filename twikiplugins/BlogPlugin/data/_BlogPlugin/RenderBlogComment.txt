@@ -29,7 +29,7 @@ see also: RenderDocNavigation
 ~~~     %STOPALIASAREA%$n<noautolink>
 ~~~        <h3>On 
 ~~~            <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$expand(BaseRef)\" 
-~~~              title=\"permalink to <nop>$expand(BaseRef)\">
+~~~              title=\"link to <nop>$expand(BaseRef)\">
 ~~~              \"$expand(@BaseRef.Headline or BaseRef)\"
 ~~~              <span class=\"blogDate\">
 ~~~                ($formatTime(@BaseRef.createdate, '$day, $mon $year'))
@@ -62,15 +62,15 @@ see also: RenderDocNavigation
 ~~~   $percntIFDEFINEDTHEN{\"$expand(Url)\"}$percnt
 ~~~     [[$expand(Url)][$expand(Name)]] 
 ~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\"
-~~~        title=\"permalink to <nop>$topic\">
+~~~        title=\"link to <nop>$topic\">
 ~~~   $percntELSEDEFINED$percnt
 ~~~      $percntCALC{
 ~~~        \"$dollarIF($dollarEXISTS(%MAINWEB%.$expand(Name)),
 ~~~          [[%MAINWEB%.$expand(Name)][$expand(Name)]] 
 ~~~          <a href=\\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\\"
-~~~             title=\\"permalink to <nop>$topic\">,
+~~~             title=\\"link to <nop>$topic\">,
 ~~~          <a href=\\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\\"
-~~~             title=\\"permalink to <nop>$topic\\">$expand(Name))\"
+~~~             title=\\"link to <nop>$topic\\">$expand(Name))\"
 ~~~      }$percnt
 ~~~   $percntFIDEFINED%
 ~~~   <span class=\"blogDate\">

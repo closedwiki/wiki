@@ -10,6 +10,7 @@
 ~~~            TopicType=~'\bBlogComment\b'"
 ~~~   LIMIT="20"
 ~~~   TITLE="<nop>%WIKITOOLNAME% <nop>%WEB% (combined)"
+~~~ }%
 ~~~ </noautolink>
 *~~
 %STOPINCLUDE%

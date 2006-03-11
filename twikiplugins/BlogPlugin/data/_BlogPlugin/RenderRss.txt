@@ -53,10 +53,17 @@ See also: RenderAtom, WebSyndication
 ~~~       <link>%SCRIPTURL{"view"}%/$web/$topic</link>$n
 ~~~       <description>
 ~~~        $encode(
-*~~          $percntCALC{\"$IF($EXACT(BlogComment,$expand(TopicType)),$expand(Name) 
-~~~                replies on \\"[[$expand(BaseRef)][$expand(@BaseRef.Headline)]]\\":)\"}$percnt
-~~~          $percntCALC{\"$IF($EXACT(TWikiTopic,$expand(TopicType)),$expand(TopicDescription))\"}$percnt
-~~~          $expand(Teaser)%IFDEFINED{"%TEASEONLY%" then=" " else="<p />$expand(Text)"}%)
+*~~          $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"BlogComment\" glue=\"off\"}$percnt
+~~~            $expand(Name) replies on 
+~~~            \"<a href=\"%SCRIPTURL{"view"}%/view/$web/$expand(BaseRef)\">
+~~~              $expand(@BaseRef.Headline)
+~~~            </a>\":
+~~~          $percntFIDEFINED$percnt
+~~~          $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"TWikiTopic\" glue=\"off\"}$percnt
+~~~            $expand(TopicDescription)
+~~~          $percntFIDEFINED$percnt
+~~~          $expand(Teaser)
+~~~          %IFDEFINED{"%TEASEONLY%" then=" " else="<p />$expand(Text)"}%)
 ~~~      </description>$n
 ~~~      <dc:creator>$expand(BlogAuthor or Name)</dc:creator>$n
 ~~~      <dc:date>$formatTime(createdate, '$year-$mo-$dayT$hour:$minute:$secondZ')</dc:date>$n

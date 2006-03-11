@@ -8,8 +8,8 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 ---++ Parameters
    * SKIP: offset into the archive
    * LIMIT: number of postings to show maximal
-   * CAT: categories to extract
-   * AUTHOR: extract postings of this author
+   * CAT: categories to extract (optional)
+   * AUTHOR: extract postings of this author (optional)
 
 ---++ Implementation
 <verbatim>
@@ -23,7 +23,9 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 ~~~   limit="%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="5"}%" 
 ~~~   skip="%IFDEFINED{"%SKIP%" then="%SKIP%" else="0"}%" 
 ~~~   order="created" reverse="on" web="%WEB%" 
-~~~   format="%DBCALL{"RenderFullTeaser" section="format" NAME="$topic"}%"
+~~~   format="%DBCALL{"RenderFullTeaser" section="format" 
+~~~     NAME="$topic" 
+~~~     PARAMS="%IFDEFINED{"%CAT%" then="cat=%CAT%"}%"}%"
 ~~~   footer="
 *~~      $percntDBCALL{\"$web.RenderPageNavigation\"
 ~~~        LIMIT=\"%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="5"}%\" 

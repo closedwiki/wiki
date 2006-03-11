@@ -6,27 +6,48 @@
 ---++ Parameters
    * NAME: BlogEntry topic name
 
+---++ Urlparams
+   * cat: SubjectCategory which this BlogEntry is part of; navigation between
+     BlogEntries is restricted to this category (optional)
+
 ---++ Implementation
 ---+++ Main
 <verbatim>
 %STARTINCLUDE%
 *~~
 ~~~ %STOPALIASAREA%
+~~~
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%" 
-~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~     AND SubjectCategory=~'\b%URLPARAM{"cat" default=".*"}%\b'"
 ~~~   REVERSE="on"
+~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
 ~~~ }%
-<a name="%WEB%_%NAME%"></a>
-%~~ DBQUERY{topic="%NAME%" web="%WEB%"
-~~~    format="%DBCALL{"RenderBlogEntry" section="format"}%"
+~~~ <a name="%WEB%_%NAME%"></a>
+~~~
+%~~ DBQUERY{%IFDEFINED{"%WIKINAME%" as="TWikiGuest" then="\"State='enabled'\""}%
+~~~   topic="%NAME%" web="%WEB%"
+~~~   format="%DBCALL{"RenderBlogEntry" section="format"
+~~~     PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
+~~~   }%"
 ~~~ }%
+~~~
+%~~ DBQUERY{"State='disabled'" topic="%NAME%" 
+~~~   format="$percntDBCALL{\"BlogHelpText\" 
+~~~     section=\"Unpublished\"
+~~~     NAME=\"posting\"}$percnt"
+~~~ }%
+~~~
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%" 
-~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~     AND SubjectCategory=~'\b%URLPARAM{"cat" default=".*"}%\b'"
 ~~~   REVERSE="on"
+~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
 ~~~ }%
-%DBCALL{"RenderBlogAuthorSwitch"}%
+~~~
+%~~ DBCALL{"RenderBlogAuthorSwitch"}%
 ~~~ %STARTALIASAREA%
 *~~
 %STOPINCLUDE%
@@ -39,7 +60,8 @@
 ~~~   $n<noautolink>$n
 ~~~   <div class=\"blogHeadline\">
 ~~~   <h1>
-~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
+~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic
+*~~        %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\" 
 ~~~        title=\"permalink to <nop>$topic\">
 ~~~       $formfield(Headline)
 ~~~     </a>$percntREDDOT{\"$web.$topic\"}$percnt

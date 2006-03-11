@@ -19,7 +19,7 @@
 ~~~     <h1>Related$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>" 
 ~~~   format="<li class=\"blogRelated$depth\">
 *~~     <a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
-~~~        title=\"permalink to $topic\">$headline</a></li>"
+~~~        title=\"link to $topic\">$headline</a></li>"
 ~~~   footer="</ul></div></noautolink>"
 ~~~ }%
 %STARTALIASAREA%

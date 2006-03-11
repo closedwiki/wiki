@@ -30,7 +30,7 @@
 *~~      </td></tr>
 *~~    </table><ul style=\"margin-top:0px;margin-bottom:0px;\"><noautolink>"
 ~~~  format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
-~~~            title=\"permalink to <nop>$topic\">
+~~~            title=\"link to <nop>$topic\">
 *~~            $formfield(Headline)</a></li>"
 ~~~  footer="</noautolink></ul></div>"
 ~~~ }%

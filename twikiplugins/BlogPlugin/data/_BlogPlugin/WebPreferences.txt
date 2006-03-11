@@ -1,28 +1,30 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131360652" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134573535" format="1.1" version="1.1"}%
 ---++ <nop>%WEB% Web Preferences
 %FORMFIELD{"TopicDescription"}%
 
+
    * Set WEBBGCOLOR = #E2DCC8
    * Set SITEMAPLIST = on
-   * Set SITEMAPWHAT = Decent Blogging using TWiki
-   * Set SITEMAPUSETO = Decent Blogging using TWiki
+   * Set SITEMAPWHAT = 
+   * Set SITEMAPUSETO =
    * Set NOSEARCHALL = 
    * Set NOAUTOLINK = 
+   * Set TECHNORATICODE = 
+
+   * Set USERSTYLEURL = %PUBURLPATH%/%TWIKIWEB%/BlogPlugin/patternstyle.css
+   * Set SKINSTYLE = Kubrick
+   * Set STYLESIDEBAR = right
+   * Set STYLEBORDER= thin
+   * Set STYLEBUTTONS = on
+   * #Set STYLEVARIATION = 
+   * Set STYLESEARCHBOX = pos2
 
    * Set NATSEARCHINCLUDEWEB = _BlogPlugin
    * Set NATSEARCHEXCLUDEWEB = 
    * Set NATSEARCHINCLUDETOPIC = (BlogEntry|BlogComment)\d+.*
    * Set NATSEASRCHEXCLUDETOPIC = 
    * Set NATSEARCHTEMPLATE = SearchView
-   * Set STYLESEARCHBOX = pos2
-   * Set STYLEBUTTONS = on
-
-   * Set WEBBUTTONSCLASS_HOME =
-   * Set WEBBUTTONSCLASS_NEWS =
-   * Set WEBBUTTONSCLASS_ARCHIVE =
-   * Set WEBBUTTONSCLASS_ABOUT =
-
-   * Set USERSTYLEURL = %PUBURLPATH%/%TWIKIWEB%/BlogPlugin/patternstyle.css
+   * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
 
    * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
    * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>
@@ -33,25 +35,25 @@
    * Set WEBATOMCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomComments" title="ATOM Feed for the Comments on this Site">ATOM COMMENTS</a>
    * Set WEBATOMCOMBINED = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomCombined" title="ATOM Feed for this Site">ATOM COMBINED</a>
    * Set WEBSYNDICATION = [[%WEB%.WebSyndication][Syndicate]] this site %WEBRSS%%WEBRSSCOMMENTS%%WEBATOM%%WEBATOMCOMMENTS%
+
+   * Set WEBBUTTONSCLASS_HOME =
+   * Set WEBBUTTONSCLASS_NEWS =
+   * Set WEBBUTTONSCLASS_ARCHIVE =
+   * Set WEBBUTTONSCLASS_ABOUT =
    
-   * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
-   * Set WEBFORMS = BlogCommentForm, BlogEntryForm, BlogLinkForm, BlogPageForm, TopicForm 
-   * WebTopicEditTemplate
+   * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm, BlogPageForm, SubjectCategoryForm
 
 <verbatim>
    * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"RenderHttpEquivs"}%
 </verbatim>
 
-<!--
-   * #Set TECHNORATICODE = 
--->
-
    * Set #DENYWEBVIEW = 
    * Set #ALLOWWEBVIEW = 
-   * Set #DENYWEBCHANGE = %MAINWEB%.TWikiGuest
+   * Set DENYWEBCHANGE = %MAINWEB%.TWikiGuest
    * Set #ALLOWWEBCHANGE = %MAINWEB%.BlogAuthorGroup
-   * Set #DENYWEBRENAME = 
+   * Set DENYWEBRENAME = %MAINWEB%.TWikiGuest
    * Set ALLOWWEBRENAME = %MAINWEB%.BlogAuthorGroup
+
    * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
    * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
@@ -60,3 +62,7 @@
 __Related Topics__:
    * [[%LOCALSITEPREFS%]]
    * [[%TWIKIWEB%.TWikiPreferences]]
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Preferences of the %25WEB%25 web"}%

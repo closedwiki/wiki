@@ -17,6 +17,7 @@ NONE
 %DBCALL{"RenderNewBlogPageButton" TEXT="New Page" warn="off"}%
 %DBCALL{"RenderNewTWikiTopicButton" TEXT="New Topic" warn="off"}%
 </div>
+%DBCALL{"RenderUnpublishedBlogEntries" warn="off"}%
 ~~~
 %STOPINCLUDE%
 </verbatim>

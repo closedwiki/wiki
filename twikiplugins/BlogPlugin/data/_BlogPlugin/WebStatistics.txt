@@ -1,13 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1140002624" format="1.1" version="1.1"}%
-%META:TOPICPARENT{}%
+%META:TOPICINFO{author="TWikiContributor" date="1130239958" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%WEB% Web
 
 | *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
-| Nov 2005 |  3038 |  130 |  0 | 513 [[WebRss]]<br />391 [[WebHome]]<br />133 [[TestTopic1]]<br />115 [[TestBlogEntry0]]<br />105 [[BlogLink21]]<br />104 [[BlogComment29]]<br />&nbsp;97 [[BlogEntry20]]<br />&nbsp;65 [[BlogEntry18]]<br />&nbsp;64 [[RenderSubComments]]<br />&nbsp;60 [[TestTopic2]]<br />&nbsp;57 [[BlogEntry6]] | 130 Main.MichaelDaum |
 
 __Notes:__
-	* Do not edit this topic, it is updated automatically. (You can also <a href="%SCRIPTURL{"statistics"}%/%WEB%">force</a> an update)
+	* Do not edit this topic, it is updated automatically. (You can also <a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/%WEB%">force</a> an update)
 	* %TWIKIWEB%.TWikiDocumentation tells you how to enable the automatic updates of the statistics.
 	* Suggestion: You could archive this topic once a year and delete the previous year's statistics from the table.
 
@@ -18,6 +17,7 @@ __Notes:__
    * Set SIDEBARARG = AdminTool
 -->
 
+
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TWikiTopic"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
 %META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Statistics on the %25WEB%25 web"}%

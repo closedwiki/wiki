@@ -1,5 +1,15 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139389084" format="1.1" version="1.1"}%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
 ---+!! <nop>%TOPIC%
+%TOC%
 
 This is the supplemental plugin for the BlogUp <nop>TWikiApplication.
 It bundles some of the features found in common blogging applications 
@@ -7,9 +17,6 @@ that are very hard or even impossible to implement using <nop>TWikiML.
 Note, that most of the tags are tightly related to the
 data model of BlogUp, i.e. it relies on its <nop>TopicType and <nop>TWikiForm 
 definitions. 
-
-
-%TOC%
 
 ---++ Syntax Rules
 
@@ -196,14 +203,33 @@ And send me a patch if you've coded that into TWiki ;).
      | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
    * Create a new Blog web using the _BlogPlugin template web
    * Edit the Main.BlogAdminGroup and the Main.BlogAuthorGroup to match your needs.
+   * Optionally, run ==%TOPIC%_installer.pl== to automatically check and
+     install other TWiki modules that this module depends on. You can also do
+     this step manually.
+   * Alternatively, manually make sure the dependencies listed in the table
+     below are resolved.
+     %$DEPENDENCIES%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.61 |
+|  Version: | v0.70 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Mar 2006: | css fixes to catch up with the recent changes to the PatternSkin; \
+                  replaced css based way to hide topic forms with VIEW_TEMPLATEs; \
+		  added comments field to <nop>SubjectCategories; \
+		  replaced CALF{IF(EXACT())} with new IFDEFINED{"" as=""}; \
+		  hide postings for guests if they are not published yet; \
+		  browsing postings coming from a <nop>SubjectCategory frontpage will \
+		  propagate down the category so that pagination will be restricted to \
+		  that category only; added mechanisms to propagate urlparams; \
+		  componentized the <nop>BlogArchive: no need for CALC variables anymore; \
+		  listing unpublished/unfinished postings in the sidebar for authors; \
+		  packaging using the <nop>BuildContrib; \
+		  CAUTION on upgrade: you need to add "Set VIEW_TEMPLATE = <nop>HiddenViewTemplate \
+		  in your previous postings, links and categories (sorry) |
 |  03 Mar 2006: | added easy way to add/remove tags in the <nop>BlogEntryForm; \
                   tags are displayed using a mini-tag cloud on the blog entry pages to \
 		  sort them by weight and name (btw. you can weight each tag like =mytag:2=) |
@@ -261,27 +287,10 @@ And send me a patch if you've coded that into TWiki ;).
 		  css improvements |
 |  24 Jan 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | CPAN:Time::Local |
-|  Other Dependencies: \
-| \
-TWiki:Plugins/AliasPlugin, \
-TWiki:Plugins/DBCachePlugin, \
-TWiki:Plugins/ExtendedSelectPlugin, \
-TWiki:Plugins/FilterPlugin \
-TWiki:Plugins/GluePlugin, \
-TWiki:Plugins/HeadlinesPlugin, \
-TWiki:Plugins/IfDefinedPlugin, \
-TWiki:Plugins/RedDotPlugin, \
-TWiki:Plugins/SpreadSheetPlugin, \
-TWiki:Plugins/TagCloudPlugin, \
-TWiki:Plugins/TimeSincePlugin, \
-TWiki:Plugins/TwistyPlugin, \
-TWiki:Plugins/UserInfoPlugin (optional) \
-|
 |  Perl Version: | 5.8 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 03 Mar 2006
+-- TWiki:Main.MichaelDaum - 11 Mar 2006
