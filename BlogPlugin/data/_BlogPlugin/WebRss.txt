@@ -15,6 +15,7 @@
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SKIN = rss
+   * Set VIEW_TEMPLATE = RssView
 -->
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%

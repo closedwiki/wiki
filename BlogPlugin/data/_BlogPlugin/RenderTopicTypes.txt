@@ -18,7 +18,7 @@
 ~~~       format="<li> 
 ~~~         <a href=\"%SCRIPTURLPATH%/view/$web/$topic\" 
 ~~~            title=\"$formfield(TopicDescription)\"
-~~~            style=\"$percntCALC{\"$IF($EXACT($web.$topic,%BASEWEB%.%BASETOPIC%),color:red)\"}$percnt\">
+~~~            style=\"$percntIFDEFINED{\"$web.$topic\" as=\"%BASEWEB%.%BASETOPIC%\" then=\"color:red\"}$percnt\">
 ~~~           $topic
 ~~~         </a></li>"
 ~~~    }%

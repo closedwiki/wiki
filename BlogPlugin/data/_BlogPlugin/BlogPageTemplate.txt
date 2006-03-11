@@ -1,8 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139326968" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142072713" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
-%STARTSECTION{type="templateonly"}%
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-%ENDSECTION{type="templateonly"}%
 %DBCALL{"RenderBlogPage" NAME="%TOPIC%"}%
 
 
@@ -26,7 +23,13 @@
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup, %WIKIUSERNAME%
    * Set SIDEBAR = Page
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
+%STARTSECTION{type="templateonly"}%
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+-->
+%ENDSECTION{type="templateonly"}%
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%

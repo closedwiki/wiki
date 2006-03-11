@@ -1,19 +1,16 @@
 %META:TOPICINFO{author="TWikiContributor" date="1127328587" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicView"}%
-%STARTSECTION{type="templateonly"}%
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-%ENDSECTION{type="templateonly"}%
 %TMPL:INCLUDE{"view"}%
-
-%TMPL:DEF{"content"}% %STARTALIASAREA% %TEXT% %STOPALIASAREA% %TMPL:END%
-
-%{
+%TMPL:DEF{"content"}% %STARTALIASAREA%
+%TEXT% 
+%STOPALIASAREA% %TMPL:END%
+%STARTSECTION{type="templateonly"}%
+<!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin
    * Set SIDEBARARG = TopicView
-}%
-
-
+-->
+%ENDSECTION{type="templateonly"}%
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicView"}%
 %META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="View to hide  %25TWIKIWEB%25.TWikiForms"}%

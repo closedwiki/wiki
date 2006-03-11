@@ -1,17 +1,17 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139652449" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
-%STARTSECTION{type="templateonly"}%
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-%ENDSECTION{type="templateonly"}%
 %DBCALL{"RenderBlogComment" NAME="%TOPIC%"}%
 %DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
 %DBCALL{"RenderAddComment"}%
-<style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
-
 <!-- 
    * Set WHITEBOARD = off
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
-
+%STARTSECTION{type="templateonly"}%
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+-->
+%ENDSECTION{type="templateonly"}%
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%

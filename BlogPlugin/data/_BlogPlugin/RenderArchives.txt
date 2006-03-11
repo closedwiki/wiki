@@ -22,8 +22,7 @@
 ~~~           <a href=\"%SCRIPTURL{"view"}%/%WEB%/BlogArchive?mode=chron;
 *~~                month=$percntENCODE{\"$key\"}$percnt\"
 ~~~              title=\"Archive of
-~~~                %IFDEFINED{"%CAT%" then="<nop>%CAT% in" glue="off"}% $key\"
-~~~              style=\"$percntCALC{\"$IF($EXACT(%URLPARAM{"month"}%,$key),color:red)\"}$percnt\">
+~~~                %IFDEFINED{"%CAT%" then="<nop>%CAT% in" glue="off"}% $key\">
 ~~~             $key
 ~~~           </a></li></ul></td>
 ~~~           <td valign=\"top\" class=\"blogEntryCount\">$count</td>

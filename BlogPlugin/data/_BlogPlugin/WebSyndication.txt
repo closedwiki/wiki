@@ -26,12 +26,8 @@ Please contact one of your [[%MAINWEB%.BlogAdminGroup][BlogAdmins]] in case that
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = nosidebar
    * Set STYLESIDEBAR = off
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
-
-<style type="text/css">
-.natTopicForm {display:none}
-</style>
-
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool, TWikiTopic"}%

@@ -9,6 +9,7 @@
    * WHERE: search parameter to restrict the linked documents
    * SORT: criterion how to sort set of documents (created, name, ...)
    * REVERSE: invert the sorting order (on, off)
+   * PARAMS: additional url parameters (optional)
 
 
 ---++ Implementation
@@ -35,7 +36,8 @@
 ~~~   where="%WHERE%" 
 ~~~   order="%IFDEFINED{"%ORDER%" then="%ORDER%"}%"
 ~~~   reverse="%IFDEFINED{"%REVERSE%" then="%REVERSE%"}%"
-~~~   format="<a href=\"%SCRIPTURL{"view"}%/$web/$topic\" 
+~~~   format="<a href=\"%SCRIPTURL{"view"}%/$web/$topic
+*~~     %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\"
 ~~~     accesskey=\"b\"
 ~~~     $percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" 
 ~~~       format=\"title=\\"$expand(Headline)\\">$expand(Name or Headline)\"
@@ -49,7 +51,8 @@
 ~~~   where="%WHERE%" 
 ~~~   order="%IFDEFINED{"%ORDER%" then="%ORDER%"}%"
 ~~~   reverse="%IFDEFINED{"%REVERSE%" then="%REVERSE%"}%"
-~~~   format="<a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~   format="<a href=\"%SCRIPTURL{"view"}%/$web/$topic
+*~~     %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\"
 ~~~     accesskey=\"n\"
 ~~~     $percntDBQUERY{topic=\"$topic\" web=\"%WEB%\" 
 ~~~       format=\"title=\\"$expand(Headline)\\">$expand(Name or Headline)\"

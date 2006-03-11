@@ -5,7 +5,7 @@ TWiki::Plugins::ExtendedSelectionPlugin,>=1.10,perl,Required
 TWiki::Plugins::FilterPlugin,>=0.94,perl,Required
 TWiki::Plugins::GluePlugin,>=1.5,perl,Required
 TWiki::Plugins::HeadlinesPlugin,>=1.91,perl,Required
-TWiki::Plugins::IfDefinedPlugin,>0.90,perl,Required
+TWiki::Plugins::IfDefinedPlugin,>0.91,perl,Required
 TWiki::Plugins::RedDotPlugin,>=1.32,perl,Required
 TWiki::Plugins::SpreadSheetPlugin,>=1.001,perl,Required
 TWiki::Plugins::TagCloudPlugin,>=0.20,perl,Required

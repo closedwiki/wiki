@@ -1,8 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1127293510" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
-%STARTSECTION{type="templateonly"}%
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-%ENDSECTION{type="templateonly"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -29,7 +26,6 @@
    * Set SIDEBAR = Admin
    * Set SIDEBARARG = TopicFunction
 -->
-
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%

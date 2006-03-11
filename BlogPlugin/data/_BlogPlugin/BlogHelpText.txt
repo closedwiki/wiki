@@ -1,43 +1,44 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139251413" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1141985800" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 See also: BlogAbout
 
-%TOC{depth="2"}%
+%TOC%
 
----++ Default section 
+---++ Sidebar descriptions
+---+++ Default section 
 <verbatim>
 %STARTSECTION{"Default"}% %DBCALL{"BlogAbout"}% %ENDSECTION{"Default"}%
 </verbatim>
 
----++ Entry section 
+---+++ Entry section 
 <verbatim>
 %STARTSECTION{"Entry"}% %DBCALL{"BlogAbout"}% %ENDSECTION{"Entry"}%
 </verbatim>
 
----++ Page section 
+---+++ Page section 
 %STARTSECTION{"Page"}%
 You are in the page section consisting of all the [[BlogPages]] that 
 exist outside the chronological sortion of BlogEntries but are special
 TWikiTopics with respect to this application
 %ENDSECTION{"Page"}%
 
----++ Admin section
+---+++ Admin section
 %STARTSECTION{"Admin"}%
 You are in the administrative and implementation section of this Blog which the 
 %BASETOPIC% topic is part of. To explore this level you might start at the
 TopicTypes, TopicFunctions or the AdminTools.
 %ENDSECTION{"Admin"}%
 
----++ Aggregation section
+---+++ Aggregation section
 %STARTSECTION{"Aggregation"}%
 You are in the aggregations section, lots of [[NewsFeeds][nice feeds]].  Note,
 that you have to visit the syndicated sites to comment. 
 %ENDSECTION{"Aggregation"}%
 
----++ Archive section
+---+++ Archive section
 %STARTSECTION{"Archive"}%
 You are in the archive section. This is the complete collection of all
 articles that have been posted here.
@@ -54,19 +55,26 @@ way the data is made accessible:
    * *CAT*: use the CAT mode to list postings in each <nop>SubjectCategory
    * *TAG*: list postings by exploring their <nop>BlogTags
    * *LEX*: retrieve postings by exploring most frequently used words
-The CAT, TAG, and LEX modes use <nop>TagClouds to visualize the frequency of the
+The CAT, TAG, and LEX modes use tag clouds to visualize the frequency of the
 cateogries, tags and words respectively.
 </div>
 %ENDSECTION{"Archive2"}%
 
----++ Category section
+---+++ Category section
 %STARTSECTION{"Category"}%
 You are visiting this blog by category, that is all postings here are filed
 into the %BASETOPIC% category.
 %ENDSECTION{"Category"}%
 
----++ Nosidebar section
+---+++ Nosidebar section
 %STARTSECTION{"Nosidebar"}% %ENDSECTION{"Nosidebar"}%
+
+---++ Messages
+
+---+++ Unpublished
+*Parameter*:
+   * NAME: the item which is unpublished
+%STARTSECTION{"Unpublished"}% %RED%This %NAME% is unpubblished.%ENDCOLOR% %ENDSECTION{"Unpublished"}%
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

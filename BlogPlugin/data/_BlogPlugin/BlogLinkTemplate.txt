@@ -1,10 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1134585400" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
-%STARTSECTION{type="templateonly"}%
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-%ENDSECTION{type="templateonly"}%
 %DBCALL{"RenderBlogLink" NAME="%TOPIC%" LIMIT="%FORMFIELD{"Limit"}%"}%
-<style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
@@ -12,7 +8,13 @@
    * Set WHITEBOARD = off
    * Set PAGETITLE = %FORMFIELD{"Name"}% - Aggregation
    * Set WEBBUTTONSCLASS_NEWS = current
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
+%STARTSECTION{type="templateonly"}%
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+-->
+%ENDSECTION{type="templateonly"}%
 
 
 %META:FORM{name="TopicForm"}%

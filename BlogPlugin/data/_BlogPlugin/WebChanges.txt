@@ -4,13 +4,11 @@
 ~~~   SKIP="%URLPARAM{"skip" default=" 0"}%"
 ~~~   LIMIT="%URLPARAM{"limit" default="10"}%"
 ~~~ }%
-<style type="text/css">
-.natTopicForm {display:none}
-</style>
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set STYLESIDEBAR = off
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
 
 

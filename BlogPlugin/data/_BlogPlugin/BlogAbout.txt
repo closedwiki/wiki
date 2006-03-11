@@ -29,15 +29,12 @@ and add your e-mail address or your <nop>%WIKITOOLNAME% username if you are a
 ---++ Copyright
 %WEBCOPYRIGHT%
 
-<style type="text/css">
- .natTopicForm { display:none; }
-</style>
-
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * #Set STYLESIDEBAR = off
    * Set SIDEBAR = Page
    * Set WEBBUTTONSCLASS_ABOUT = current
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
 
 %META:FORM{name="BlogPageForm"}%

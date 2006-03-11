@@ -43,7 +43,7 @@ no newer comments than that.
 ~~~   format="<tr>
 ~~~     <td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
 ~~~       <a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
-~~~          title=\"permalink to <nop>$topic\">$headline</a> <br/>
+~~~          title=\"link to <nop>$topic\">$headline</a> <br/>
 ~~~       <span class=\"blogSideBarCommenter\">
 ~~~         $percntTIMESINCE{\"$date\" format=\"$time ago\"}$percnt
 ~~~         $commenter replied

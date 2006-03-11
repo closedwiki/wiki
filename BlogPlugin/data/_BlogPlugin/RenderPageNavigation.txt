@@ -28,7 +28,7 @@
 ~~~ </a>
 </td>
 <td class="blogNext">
-~~~ <a style="%CALC{"$IF($GET(theNextSkip)>%MAX%,display:none)"}%" 
+~~~ <a style="%CALC{"$IF($GET(theNextSkip)>=%MAX%,display:none)"}%" 
 ~~~    href="?skip=%CALC{"$GET(theNextSkip)"}%;limit=%LIMIT%
 *~~    %IFDEFINED{"%PARAMS%" then=";%PARAMS%"}%">
 *~~    next page&nbsp;&#187;

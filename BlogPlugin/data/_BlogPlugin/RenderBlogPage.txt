@@ -12,7 +12,6 @@
 %~~ DBQUERY{topic="%NAME%" web="%WEB%"
 ~~~   format="%DBCALL{"RenderBlogPage" section="format"}%"
 ~~~ }%
-<style type="text/css">.natTopicForm, .twikiForm {display:none}</style>
 %DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%
 </verbatim>
@@ -52,6 +51,7 @@
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin
    * Set SIDEBARARG = TopicFunction
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
 
 

@@ -11,12 +11,8 @@
    * Set PAGETITLE = %FORMFIELD{"TopicDescription"}%
    * Set WHITEBOARD = off
    * Set WEBBUTTONSCLASS_HOME = current
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->
-
-<style type="text/css">
-  .natTopicForm, .twikiForm {display:none}
-</style>
-
 
 
 %META:FORM{name="TopicForm"}%
