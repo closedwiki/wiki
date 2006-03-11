@@ -1,16 +1,13 @@
 /* Content */
 /* show url for links */
-a:link:after,
-a:visited:after {
+/* disabled to make the topic readable again */
+/*
+.patternTopic a:link:after,
+.patternTopic a:visited:after {
 	content: " (" attr(href) ") ";
 	font-weight:normal;
-	font-size:85%; /*S3*/
+	font-size:86%;
 }
-/* ... except for bits of the gui */
-.patternRevInfo a:link:after,
-.patternRevInfo a:visited:after,
-#patternBottomBar a:link:after,
-#patternBottomBar a:visited:after,
 .twikiAttachments a:link:after,
 .twikiAttachments a:visited:after,
 .twikiForm a:link:after,
@@ -21,97 +18,38 @@ table a:link:after,
 table a:visited:after {
 	content:"";
 }
+*/
+
 .patternHomePath img,
 .patternHomePathTitle {
 	display:none;
-}
-
-/* Layout */
-
-#patternScreen,
-#patternPageShadow, 
-#patternPage {
-	margin:0;
-	padding:0;
-	top:0;
-}
-.patternPrintPage #patternScreen {
-	padding:1cm;
-}
-body html {
-	margin:0;
-	padding:0;
-}
-#patternMain {
-	padding-bottom:1em;
-	width:100%;
-}
-
-/* Style */
-
-/* hide bits of the gui */
-.patternTopicAction,
-td.patternToolBar,
-#patternLeftBar {
-	display:none;
-}
-#patternMain {
-	border:0px;
-}
-.patternMainContents {
-	padding-left:0;
-	padding-right:0;
-}
-.patternContent .twikiAttachments {
-	display:none;
-}
-.patternContent .twikiForm {
-	padding-left:1px;
-	padding-right:0;
-}
-pre,
-html>body pre {
-	overflow:visible;
-}
-.patternTopicFooter {
-	font-size:94%;
-	margin:1em 0;
-}
-.patternBottomBar {
-	margin-left:3%;
-	margin-right:3%;
-}
-a:link,
-a:visited {
-	text-decoration:none;
-	border-width:0 0 1px 0;
-	border-style:solid;
 }
 
 /* Colors */
 body {
 	background-color:#fff;
 }
-a:link,
-a:visited,
-.patternTopic a:visited {
-	color:#06c;
-	border-color:#B7CDED;
-}
-.patternTopic a:hover {
-	color:#FBF7E8;
-}
-
-#patternBottomBar {
-	background:#fff;
-	color:#000;
-}
-h2 {
+h2, h3, h4, h5, h6 {
 	background-color:transparent;
 }
+.twikiAttachments,
 .patternContent .twikiAttachments,
+.twikiForm,
 .patternContent .twikiForm {
-	background:#fff;
+	background-color:#fff;
+}
+.patternRevInfo,
+.twikiGrayText {
+	color:#666; /*T7*/
+}
+.patternRevInfo a:link,
+.patternRevInfo a:visited
+.twikiGrayText a:link,
+.twikiGrayText a:visited {
+	color:#666; /*T7*/
+}
+.twikiGrayText a:hover {
+	color:#FBF7E8; /*T7*/
 }
 
 /* define custom print styles here */

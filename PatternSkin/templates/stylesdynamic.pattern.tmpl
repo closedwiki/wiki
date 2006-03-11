@@ -1,0 +1,65 @@
+%TMPL:DEF{"stylesdynamic"}%<style type="text/css" media="all">
+	/* Styles that are set using variables */
+	.twikiInputField {
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/background_input.gif");
+		background-repeat:repeat-x;
+	}
+	.twikiButton {
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/background_button.gif");
+		background-repeat:repeat-x;
+	}
+	.patternToolBarButtons .patternButton a {
+		/*
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/background_button.gif");
+		background-repeat:repeat-x;
+		*/
+	}
+	.twikiSubmit {
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/background_submit.gif");
+		background-repeat:repeat-x;
+	}
+	.twikiToc li {
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/bullet-down.gif");
+		background-repeat:no-repeat;
+	}
+	#patternLeftBar .patternWebIndicator,
+	.patternBookView .twikiTopRow {
+		background-color:%WEBBGCOLOR%;
+	}
+	%IF{ 'defined WEBHEADERART' then='#patternTopBar { background-image:url("%WEBHEADERART%"); background-repeat:no-repeat;}'}%
+	%IF{ 'defined WEBHEADERBGCOLOR' then='#patternTopBar { background-color:%WEBHEADERBGCOLOR%;}'}%
+	/*
+	.twikiHelp,
+	.patternAccessKeyInfo {
+		background:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/striped_blue.gif");
+	}
+	*/
+	.patternBookView {
+		border-color:%WEBBGCOLOR%;
+	}
+	#twikiLogin,
+	#patternLeftBarContents .tipsOfTheDayContents {
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/gradient_blue.gif");
+		background-repeat:repeat-x;
+	}
+	#patternOuter {
+		/* gradient yellow of left bar and main */
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/gradient_yellow.gif");
+		background-repeat:repeat-x;
+	}
+	.patternPrintPage #patternOuter {
+		background:#fff;
+	}
+	.twikiPageForm table {
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/form_gradient.gif");
+		background-repeat:repeat-x;
+	}
+	#patternLeftBarContents .patternLeftBarPersonal li {
+		background-image:url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/bullet-blue.gif");
+		background-repeat:no-repeat;
+		background-position:0 .5em;
+	}
+	.patternPreviewPage #patternMain {
+		background-image:url(%PREVIEWBGIMAGE%);
+	}
+</style>%TMPL:END%

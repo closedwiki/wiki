@@ -1,13 +1,131 @@
-
-/*	-----------------------------------------------------------
-	LAYOUT
-	positioning of page elements
-	-----------------------------------------------------------	*/
-
-html body {
-	margin:0;
+html, body {
+	margin:0; /*** Do NOT set anything other than a left margin for the page
+as this will break the design ***/
 	padding:0;
+	border:0;
+/* \*/
+	height:100%;
+/* Last height declaration hidden from Mac IE 5.x */
 }
+body {
+	background:#fff;
+	min-width:100%; /*** This is needed for moz. Otherwise, the header and patternBottomBar will
+slide off the left side of the page if the screen width is narrower than the design.
+Not seen by IE. Left Col + Right Col + Center Col + Both Inner Borders + Both Outer Borders ***/
+	text-align:center; /*** IE/Win (not IE/MAC) alignment of page ***/
+}
+.clear {
+	clear:both;
+	/*** these next attributes are designed to keep the div
+	height to 0 pixels high, critical for Safari and Netscape 7 ***/
+	height:0px;
+	overflow:hidden;
+	line-height:1%;
+	font-size:0px;
+}
+
+#patternWrapper {
+	min-height:100%; /*** moz uses this to make full height design. As this #patternWrapper
+is inside the #patternPage which is 100% height, moz will not inherit heights
+further into the design inside this container, which you should be able to do with
+use of the min-height style. Instead, Mozilla ignores the height:100% or
+min-height:100% from this point inwards to the center of the design - a nasty bug.
+If you change this to height:100% moz won't expand the design if content grows.
+Aaaghhh. I pulled my hair out over this for days. ***/
+/* \*/
+	height:100%;
+/* Last height declaration hidden from Mac IE 5.x */
+/*** Fixes height for non moz browsers, to full height ***/
+}
+#patternWrapp\65	r{ /*** for Opera and Moz (and some others will see it, but NOT Safari) ***/
+	height:auto; /*** For moz to stop it fixing height to 100% ***/
+}
+/* \*/
+* html #patternWrapper{
+	height:100%;
+}
+
+#patternPage {
+	margin-left:auto; /*** Mozilla/Opera/Mac IE 5.x alignment of page ***/
+	margin-right:auto; /*** Mozilla/Opera/Mac IE 5.x alignment of page ***/
+	text-align:left; /*** IE Win re-alignment of page if page is centered ***/
+	position:relative;
+	width:100%; /*** Needed for Moz/Opera to keep page from sliding to left side of
+page when it calculates auto margins above. Can't use min-width. Note that putting
+width in #patternPage shows it to IE and causes problems, so IE needs a hack
+to remove this width. Left Col + Right Col + Center Col + Both Inner Border + Both Outer Borders ***/
+/* \*/
+	height:100%;
+/* Last height declaration hidden from Mac IE 5.x */
+/*** Needed for Moz to give full height design if page content is
+too small to fill the page ***/
+}
+/* Last style with height declaration hidden from Mac IE 5.x */
+/*** Fixes height for IE, back to full height,
+from esc tab hack moz min-height solution ***/
+#patternOuter {
+	height:100%;
+/* Last height declaration hidden from Mac IE 5.x */
+/*** Needed for full height inner borders in Win IE ***/
+}
+
+#patternFloatWrap {
+	width:100%;
+	float:left;
+	display:inline;
+}
+
+#patternLeftBar {
+	/* Left bar width is defined in viewleftbar.pattern.tmpl */
+	float:left;
+	display:inline;
+	position:relative; /* IE needs this or the contents won't show
+outside the parent container. */
+	overflow:hidden;
+}
+#patternLeftBarContents {
+	left:-1px;
+	position:relative;
+	/* for margins and paddings use style.css */
+}
+#patternMain {
+	width:100%;
+	float:right;
+	display:inline;
+}
+#patternTopBar {
+	/* Top bar height is defined in viewtopbar.pattern.tmpl */
+	z-index:1; /*** Critical value for Moz/Opera Background Column colors fudge to work ***/
+	position:absolute;
+	top:0px;
+	width:100%;
+}
+#patternTopBarContents {
+	height:1%; /* or Win IE won't display a background */
+	/* for margins/paddings use style.css */
+}
+#patternBottomBar {
+	z-index:1; /* Critical value for Moz/Opera Background Column colors fudge to work */
+	clear:both;
+	width:100%;
+}
+
+/* Pages that are not view */
+
+.patternNoViewPage #patternOuter {
+	/* no left bar, margin at both sides */
+	margin-left:4%;
+	margin-right:4%;
+}
+
+/* edit.pattern.tmpl */
+
+.patternEditPage #patternOuter,
+.patternPreviewPage #patternOuter {
+	margin-left:0;
+	margin-right:0;
+}
+
 .twikiLeft {
 	float:left;
 	position:relative;
@@ -17,7 +135,6 @@ html body {
 	float:right;
 	display:inline;
 	margin:0;
-	text-align:right;
 }
 .twikiClear {
 	/* to clean up floats */
@@ -31,66 +148,7 @@ html body {
 .twikiHidden {
 	display:none;
 }
-
-
-/*	---------------------------------------------------------------------------------------
-	CONSTANTS
-	
-	Sizes
-	----------------------------------------
-	C1 left bar width																13em
-	C2 top bar height																64px
-	---------------------------------------------------------------------------------------	*/
-
-/*	-----------------------------------------------------------
-	Positioning of layout blocks
-	-----------------------------------------------------------	*/
-
-#patternScreen {
+.twikiLast,
+.patternTopic .twikiLast {
+	border-width:0px;
 }
-#patternPageShadow {
-}
-#patternPage {
-}
-#patternColumnWrapper {
-}
-#patternMain {
-	width:100%;
-}
-#patternLeftBar,
-.patternLeftBarContents {
-	width:13em; /*C1*/
-}
-#patternTopBar,
-#patternTopBar table.patternTopBarContents {
-	height:64px; /*C2*/
-}
-
-/*	-----------------------------------------------------------
-	Pages that are not view
-	-----------------------------------------------------------	*/
-
-.patternNoViewPage #patternColumnWrapper {
-	width:100%;
-}
-.patternNoViewPage #patternPage {
-	margin-left:3%;
-	margin-right:3%;
-	/* padding in style.css */
-}
-.patternEditPage #patternPage,
-.patternPreviewPage #patternPage{
-	margin-left:0;
-	margin-right:0;
-	/* padding in style.css */
-}
-
-/* Plain */
-
-.patternPlainPage #patternPage {
-	margin-left:0px;
-	margin-right:0px;
-	/* padding in style.css */
-}
-
-

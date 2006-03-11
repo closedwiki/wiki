@@ -1,0 +1,22 @@
+%TMPL:DEF{"searched"}%<p><span class="patternSearched">%MAKETEXT{"Searched:"}% <b><nop>%SEARCHSTRING%</b></span><br />%TMPL:P{"modifysearch"}%</p>%TMPL:END%
+
+
+
+%TMPL:DEF{"modifysearch"}%%IF{" '%URLPARAM{search}%' = '' " then="" else='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;">%MAKETEXT{"Modify search"}%</a>'}%%TMPL:END%
+
+
+
+%TMPL:DEF{"count"}%<div class="patternSearchResultCount">Number of topics: <b>%NTOPICS%</b></div><!--/patternSearchResultCount-->%TMPL:END%
+
+
+
+%TMPL:DEF{"header"}%<h4 class="patternSearchResultsHeader" %TMPL:P{"header:style:backgroundcolor"}%><span class="twikiLeft">%TMPL:P{"header:left"}%</span><span class="twikiRight">%TMPL:P{"header:right"}%</span><br class="twikiClear" /></h4>%TMPL:END%
+
+
+%TMPL:DEF{"header:left"}%<b>%MAKETEXT{"Results from [_1] web" args="<nop>%WEB%"}%</b> %MAKETEXT{"retrieved at [_1]" args="%DISPLAYTIME{"$hour:$min ($tz)"}%"}%%TMPL:END%
+
+
+%TMPL:DEF{"header:right"}%%TMPL:END%
+
+
+%TMPL:DEF{"header:style:backgroundcolor"}%%TMPL:END%

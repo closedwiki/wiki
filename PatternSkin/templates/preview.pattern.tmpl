@@ -1,20 +1,11 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"page"}%
+%TMPL:INCLUDE{"viewtoolbar"}%
+%TMPL:INCLUDE{"viewtopicactionbuttons"}%
+%TMPL:INCLUDE{"viewbottombar"}%
 
 
 
-
-%TMPL:DEF{"templatecustomstyle"}%
-<style type="text/css" media="all">
-.patternPreviewPage #patternMain {
-	background-image:url(%PREVIEWBGIMAGE%);
-}
-</style>%TMPL:END%
-
-
-
-%TMPL:DEF{"simpleheader"}%
----+ <nop>%TOPIC% %MAKETEXT{"(preview)"}%
-%TMPL:END%
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle"><nop>%TOPIC% %MAKETEXT{"(preview)"}%</h1>%TMPL:END%
 
 
 
@@ -26,12 +17,7 @@
 
 
 
-%TMPL:DEF{"simplewikilogo"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
-%IF{ "context RevCommentPluginEnabled" then="<label for='comment'>Summary of changes: </label> <a target='RevComment' onclick='return launchWindow(\"%TWIKIWEB%\",\"RevComment\")' href='#%MAKETEXT{"Opens page in new window"}%' >%MAKETEXT{"help"}%</a> <input type='hidden' name='t' value='%URLPARAM{t}%' /><input class='twikiEditComment' type='text' style='width:50%' name='comment' value='%URLPARAM{comment}%'><br />" }%
+%TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">%IF{ "context RevCommentPluginEnabled" then="<label for='comment'>Summary of changes: </label> <a target='RevComment' onclick='return launchWindow(\"%TWIKIWEB%\",\"RevComment\")' href='#%MAKETEXT{"Opens page in new window"}%' >%MAKETEXT{"help"}%</a> <input type='hidden' name='t' value='%URLPARAM{t}%' /><input class='twikiEditComment' type='text' style='width:50%' name='comment' value='%URLPARAM{comment}%'><br />" }%
 <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label>&nbsp;&nbsp;<a href="#%MAKETEXT{"Opens page in new window"}%" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" rel='nofollow'>%MAKETEXT{"help"}%</a></span></div>
 <div class="patternActionButtons">
 <input type="submit" id="save" class="twikiSubmit" %MAKETEXT{"value='Save' accesskey='s'"}% />%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" %MAKETEXT{"value='Quiet save' accesskey='q'"}% />%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" %MAKETEXT{"value='Checkpoint' accesskey='k'"}% /> %MAKETEXT{"or"}% <input id="discard" type="submit" class="twikiButton" name="action_cancel" %MAKETEXT{"value='Discard' accesskey='d'"}% />
@@ -41,8 +27,7 @@
 
 
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%
+%TMPL:DEF{"content"}%%TMPL:P{"pagetitle"}%
 <div class="twikiHelp">
 %MAKETEXT{"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."}%
 <ul>
@@ -56,7 +41,7 @@
 <div class="patternTopic">
 %TEXT%
 </div>
-%META{"form"}%%META{"attachments"}%
+%META{"form"}%
 </div>
 </div>
 <form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
@@ -67,7 +52,3 @@
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 %TMPL:P{"topicaction"}%
 </form>%TMPL:END%
-
-
-
-%TMPL:P{"page"}%

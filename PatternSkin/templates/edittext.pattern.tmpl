@@ -1,5 +1,10 @@
 %TMPL:INCLUDE{"edit"}%
-%TMPL:DEF{"simpleheader"}%
-<input type="hidden" name="editaction" value="text" />
----+ %TOPIC% %MAKETEXT{"(edit text)"}%
-%TMPL:END%
+
+
+
+%TMPL:DEF{"formaction"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"pagetitle"}%<input type="hidden" name="editaction" value="text" />
+<h1 class="patternTemplateTitle"><nop>%TOPIC% %MAKETEXT{"(edit text)"}%</h1>%TMPL:END%

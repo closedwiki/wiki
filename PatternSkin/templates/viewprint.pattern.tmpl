@@ -1,21 +1,17 @@
-%TMPL:INCLUDE{"twiki.pattern"}%
+%TMPL:INCLUDE{"page"}%
+%TMPL:INCLUDE{"viewbottombar"}%
 
 
 
-%TMPL:DEF{"bodyclassname"}%patternViewPage patternPrintPage%TMPL:END%
-
-
-
-%TMPL:DEF{"templatecustomstyle"}%
-<style type="text/css" media="all">
-	@import url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/print.css");
-</style>
+%TMPL:DEF{"styles"}%
+%TMPL:P{"stylestwist"}%
+%TMPL:P{"stylesscreen"}%
+%TMPL:P{"stylesprint"}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"leftbar"}%%TMPL:END%
-%TMPL:DEF{"topbar"}%%TMPL:END%
+%TMPL:DEF{"bodyclassname"}%patternViewPage patternPrintPage%TMPL:END%
 
 
 
@@ -39,11 +35,3 @@
 %TEXT%</div>
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%</div>
 %TMPL:P{"topicinfo"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"standardfooter"}%%TMPL:END%
-
-
-
-%TMPL:P{"page"}%

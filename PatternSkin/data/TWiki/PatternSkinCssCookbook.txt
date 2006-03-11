@@ -11,7 +11,7 @@
 
 !PatternSkin uses 3 style sheets (attached to %TWIKIWEB%.PatternSkin):
    * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/layout.css][layout.css]] - the positioning of main page elements (blocks), widths and heights
-   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css][stylestyle.css]] - fonts, sizes, margins and paddings
+   * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/style.css][style.css]] - fonts, sizes, margins and paddings
    * [[%PUBURLPATH%/%TWIKIWEB%/PatternSkin/colors.css][colors.css]] - border colors, text colors and background colors
 
 When customizing your TWiki installation, you can either choose to completely rewrite all css styles, or to selectively override some styles. The latter option is by far less time consuming, but all depends on your graphical wishes.

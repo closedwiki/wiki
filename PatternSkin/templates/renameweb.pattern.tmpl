@@ -10,26 +10,26 @@
 
 
 
-%TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="36" />%TMPL:END%
+%TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="20" />%TMPL:END%
+
+
+%TMPL:DEF{"newweb"}%<p><input name="newweb" size="20" /></p>%TMPL:END%
+
+
+%TMPL:DEF{"newparentweb"}%<select class="twikiSelect" name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
 
 
 
-%TMPL:DEF{"newparentweb"}%<select name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value='$name'>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
+%TMPL:DEF{"namehelp"}%<p>%MAKETEXT{"It's usually best to choose a short name for the new web, as it is easier to link to them later on. Characters not allowed in web names, such as spaces will automatically be removed."}%</p>%TMPL:END%
 
 
 
-%TMPL:DEF{"namehelp"}%
-%MAKETEXT{"It's usually best to choose a short name for the new web, as it is easier to link to them later on. Characters not allowed in web names, such as spaces will automatically be removed."}%
-%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%<p>%MAKETEXT{"You can give this web a different name."}% <br />%MAKETEXT{"To delete this web: move this web to the Trash web by renaming it to [_1]." args="%TRASHWEB%/%WEB%"}%</p>%TMPL:END%
 
 
 
-%TMPL:DEF{"movewebhelp"}%%MAKETEXT{"You can rename this web to a different web name."}% <br />%MAKETEXT{"To delete this web: move this web to the Trash web by renaming it to [_1]." args="%TRASHWEB%/%WEB%"}% %TMPL:END%
+%TMPL:DEF{"updatenote"}%<blockquote>%MAKETEXT{"Checked topics will be updated to point to the new web name."}% <b>%MAKETEXT{"Not recommended when deleting a web."}%</b></blockquote>%TMPL:END%
 
 
 
 %TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Rename/Move"}%' /> %MAKETEXT{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
-
-
-
-%TMPL:P{"renameweb"}%
