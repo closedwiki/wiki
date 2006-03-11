@@ -420,7 +420,7 @@ sub truncateString {
         # truncating halfway through a character.
         $str = pack( 'U0C*', unpack( 'C*', $str ));
     }
-    $str =~ s/^(.{$lim})(.*)$/$1/;
+    $str = substr($str, 0, $lim) if length($str) > $lim;
     return $str;
 }
 
