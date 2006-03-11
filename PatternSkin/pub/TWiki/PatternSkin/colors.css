@@ -469,6 +469,9 @@ a:hover .twikiAccessKey {
 .patternTop .patternHomePath {
 	color:#000; /*T1*/
 }
+.patternHomePath .twikiSeparator {
+	color:#000;
+}
 .patternTop .patternRevInfo,
 .patternTop .patternRevInfo a:link,
 .patternTop .patternRevInfo a:visited {
@@ -490,7 +493,7 @@ a:hover .twikiAccessKey {
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike {
-	color:#8E9195; /*T8*/
+	color:#ccc;
 	border-color:#e0e0e0;
 	background-color:#fff; /*BG1*/
 }
@@ -499,6 +502,16 @@ a:hover .twikiAccessKey {
 	color:#FBF7E8; /*C3*/
 	border-color:#D6000F; /*T4*/
 }
+.patternToolBar .patternToggleButton .patternButton a:link,
+.patternToolBar .patternToggleButton .patternButton a:visited {
+	background-color:transparent;
+}
+.patternToolBar .patternToggleButton .patternButton a:hover {
+	background-color:#D6000F; /*BG2*/
+}
+.patternToolBar .patternButton img {
+	background-color:transparent;
+}	
 .patternToolBarBottom {
 	border-color:#E2DCC8; /*BO4*/
 }

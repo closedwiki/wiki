@@ -670,31 +670,18 @@ table.patternTopBarContents td {
 /* Topic text */
 .patternTopic {
 	padding:0 0 1.5em 0;
-	margin:0 0 1px 0;
+	margin:-.25em 0 1px 0;
 }
 
 .patternTop {
+	padding:.3em 0 0 0;
 	font-size:94%; /*S2*/
 }
-.patternTop table {
-	border:none;
-	width:100%;
-}
-.patternTop td {
-	vertical-align:top;
-}
-.patternTop td.patternHomePath,
-.patternTop td.patternRevInfo {
-	padding:.25em .5em .25em 0;
-	line-height:1.25em;
-}
-.patternTop td.patternHomePath {
+.patternTop .patternHomePath {
+	float:left;
 	text-align:left;
-	width:auto;
 }
-.patternTop td.patternRevInfo {
-	text-align:right;
-	width:40%;
+.patternTop .patternRevInfo {
 }
 .patternTop .patternHomePath a:link,
 .patternTop .patternHomePath a:visited,
@@ -705,17 +692,13 @@ table.patternTopBarContents td {
 
 /* Button tool bar */
 .patternToolBar {
-	padding:.25em .5em 0 .5em;
+	float:right;
+	padding:0 .5em 0 0;
 	line-height:100%;
-}
-td.patternToolBar {
-	vertical-align:bottom;
 }
 .patternToolBar a:link,
 .patternToolBar a:visited {
-	text-decoration:none;}
-.patternToolBarButtons {
-	float:right;
+	text-decoration:none;
 }
 .patternToolBarButtons .twikiSeparator {
 	display:none;
@@ -736,7 +719,7 @@ td.patternToolBar {
 	position:relative;
 	z-index:0;
 	*/
-	padding:.35em .6em;
+	padding:.4em .6em;
 }
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
@@ -750,12 +733,20 @@ td.patternToolBar {
 	text-decoration:none;
 	/*z-index:3;*/
 }
+.patternToolBar .patternToggleButton .patternButton a:link,
+.patternToolBar .patternToggleButton .patternButton a:visited {
+	padding-left:.2em;
+	padding-right:.2em;
+	border:0px;
+	margin-top:1px;
+}
 .patternToolBarBottom {
 	position:relative;
 	border-width:1px 0 0 0;
 	border-style:solid;
-	margin:0 0 .5em 0;
+	margin:0 0 .3em 0;
 	z-index:2;
+	clear:both;
 }
 
 .patternSimpleLogo {
