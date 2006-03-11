@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1132161897" format="1.1" version="1.1"}%
+<ul>
+%STARTINCLUDE%
+  <li> [[%TWIKIWEB%.WelcomeGuest][Welcome]] </li>
+  <li> [[%TWIKIWEB%.TWikiRegistration][Registration]] </li>
+  <li> [[%MAINWEB%.TWikiUsers][Users]] </li>
+  <li> [[%MAINWEB%.TWikiGroups][Groups]] </li>
+  <li> [[%TWIKIWEB%.ChangePassword][Password]] </li>
+  %WEBCOMPONENT{"TWikiWebLinks"}%
+%STOPINCLUDE%
+</ul>
