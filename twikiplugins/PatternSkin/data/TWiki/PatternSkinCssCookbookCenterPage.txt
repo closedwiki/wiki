@@ -2,7 +2,7 @@
 
 ---+!! PatternSkinCssCookbook Recipe: Center the page
 
-*This recipe shows how center the page horizontally.*
+*This recipe shows how center the page horizontally and vertically.*
 
 <div class="twikiHelp">
 This line loads the extra style definition:

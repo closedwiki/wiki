@@ -1,62 +1,46 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"rename"}%
 
 
 
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript">
-//<![CDATA[
-	var pageElem = null;
-	addLoadEvent(setPageElem);
-	function setPageElem() {
-		pageElem = document.rename;
-	}
-//]]>
-</script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_renamebase.js"></script>
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%TMPL:P{"webaction"}% <nop>%WEB%</h1>%TMPL:END%
+
+
+
+%TMPL:DEF{"towebtitle"}%---+++ %MAKETEXT{"New web name:"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"parentwebtitle"}%---+++ %MAKETEXT{"New parent web:"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"parentweb"}%<div class="twikiFormStep twikiLast" %SUBWEBSENABLE%>
+%TMPL:P{"parentwebtitle"}%
+
+%TMPL:P{"newparentweb"}%
+
+%MAKETEXT{"Subwebs must be enabled."}%
+</div><!--/twikiFormStep-->%TMPL:END%
+
+
+
+%TMPL:DEF{"notes"}%   * %MAKETEXT{"<a target='ManagingWebs' onclick=\"return launchWindow('[_1]','ManagingWebs')\" href='[_2]' rel='nofollow'>Get help on managing webs</a>" args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs"}%
+   * %MAKETEXT{"The checkmarked topics will be updated"}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternRenamePage%TMPL:END%
+%TMPL:DEF{"renameformsteps"}%<div class="twikiFormSteps">
+%TMPL:P{"toweb"}%
+%TMPL:P{"parentweb"}%
+</div><!-- /twikiFormSteps-->%TMPL:END%
 
 
 
-%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label>%TMPL:END%
-
-%TMPL:DEF{"simpleheader"}%
----+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
-
-
-%TMPL:DEF{"content"}%
-<form method="post" name="renameweb" action="%SCRIPTURLPATH{"rename"}%/%WEB%">
-<input type="hidden" name="action" value="renameweb" />
-<input type="hidden" name="confirm" value="getlock" />
-%TMPL:P{"simpleheader"}%
-<div class="patternVersatileTable">
-<table>
-<tr>
-<th width="20%">%MAKETEXT{"Change from:"}%</th>
-<td class="patternOldCol" colspan="2"><b><nop>%WEB%</b></td>
-<td class="patternOldCol patternHelpCol"></td>
-</tr>
-<tr>
-<th>%MAKETEXT{"New web name:"}%</th>
-<td class="patternMainCol">%TMPL:P{"newsubweb"}%</td>
-<td class="patternMainCol patternHelpCol" colspan="2">%TMPL:P{"movewebhelp"}%</td>
-</tr>
-<tr %SUBWEBSENABLE%>
-<th>%MAKETEXT{"New parent web:"}%</th>
-<td class="patternMainCol">%TMPL:P{"newparentweb"}%</td>
-<td class="patternMainCol patternHelpCol" colspan="2">%MAKETEXT{"Subwebs must be enabled."}%</td>
-</tr>
-</table>
-</div>
-<div class="patternSearchResultsHeader">
-%MAKETEXT{"Notices:"}%
-</div>
-<div class="patternRenameOptionsList">
-<div class="patternSearchResults">
-*%MAKETEXT{"Topics which are currently being edited by other users in the ![_1] Web:" args="<nop>%WEB%"}%* %BR%
+%TMPL:DEF{"searchresults"}%<div class="patternSearchResults">
+---+++ %MAKETEXT{"Notices:"}%
+%TMPL:P{"updatenote"}%<blockquote>
+*%MAKETEXT{"Topics which are currently being edited by other users in the [_1] Web:" args="<nop>%WEB%"}%* %BR%
 %MOVE_LOCKED%
 
 *%MAKETEXT{"Topics which refer to this web and are are currently being edited by other users:"}%* %BR%
@@ -64,27 +48,14 @@
 
 *%MAKETEXT{"Topics which refer to this web that you do not have permission to change:"}%* %BR%
 %REF_DENIED%
-</div>
-
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to ![_1] in the [_2] Web:" args="%WEB%, <nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
-
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">%MAKETEXT{"Change links in topics that refer to ![_1] in any Web:" args="%WEB%"}%</div>%GLOBAL_SEARCH%</div>
-<hr />
-<input type="button" class="twikiButton" value='%MAKETEXT{"Select all"}%' onclick="checkAll(true);" />&nbsp;<input type="button" class="twikiButton" value='%MAKETEXT{"Clear all"}%' onclick="checkAll(false);" /> %MAKETEXT{"checkboxes of referenced topics"}%
-</div>
-<p />
-<p />
-%TMPL:P{"topicaction"}%
-</form>
-<div class="twikiHelp">
-*%MAKETEXT{"Note:"}%*
-   * %MAKETEXT{"<a target='ManagingWebs' onclick=\"return launchWindow('[_1]','ManagingWebs')\" href='[_2]' rel='nofollow'>Get help on managing webs</a>" args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs"}%
-   * %MAKETEXT{"The checkmarked topics will be updated"}%
-</div>
-%TMPL:END%
-
-
-
-%TMPL:DEF{"renameweb"}%
-%TMPL:P{"page"}%
-%TMPL:END%
+</blockquote>
+<blockquote>
+---++++ %MAKETEXT{"Change links in topics that refer to ![_1] in the [_2] Web:" args="%WEB%, <nop>%WEB%"}%
+%LOCAL_SEARCH%
+</blockquote>
+<blockquote>
+---++++ %MAKETEXT{"Change links in topics that refer to ![_1] in any Web:" args="%WEB%"}%
+%GLOBAL_SEARCH%
+%TMPL:P{"checkuncheck"}%
+</blockquote>
+</div><!--/patternSearchResults-->%TMPL:END%

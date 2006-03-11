@@ -1,1 +1,4 @@
-checkAll(false);
+addLoadEvent(uncheckAll);
+function uncheckAll() {
+	checkAll(false);
+}

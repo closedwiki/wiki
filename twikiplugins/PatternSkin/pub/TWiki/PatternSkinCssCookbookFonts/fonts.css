@@ -1,9 +1,9 @@
-html body {
-	font-family: "Trebuchet MS", "Tahoma", Geneva, Arial, sans-serif;
+#patternPage {
+	font-family: "georgia", "verdana", Geneva, Arial, sans-serif;
 	color:#000;
 }
 h1, h2, h3, h4, h5, h6 {
-	font-family: "georgia", "verdana", Geneva, Arial, sans-serif;
+	font-family: "times", serif;
 }
 .patternTopic {
 	background-color:#E2D7B9;

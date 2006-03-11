@@ -16,7 +16,7 @@ There are several ways to put an image in a topic.
       * You are not restricted to use the !TWikiDocGraphics topic - in a similar way you can show attached images by replacing =TWikiDocGraphics= with the topic name.
       * The TWiki:Plugins.SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
    * To create an image with a link, write: =[<nop>[%HOMETOPIC%][%<nop>ICON{home}%]]= to get: [[%HOMETOPIC%][%ICON{home}%]]
-   * To get the full URL of the icon, use [[TWikiVariables#VarICONURL][ICONURL]]: <code>%<nop>ICONURL{"toggleopen"}%</code> gets you: <code>%ICONURL{"toggleopen"}%</code> (if you paste that in a topic you will get: %ICONURL{"toggleopen"}%)
+   * To get the full URL of the icon, use [[VarICONURL][ICONURL]]: <code>%<nop>ICONURL{"toggleopen"}%</code> gets you: <code>%ICONURL{"toggleopen"}%</code> (if you paste that in a topic you will get: %ICONURL{"toggleopen"}%)
    * __Note:__ Most images have 16x16 pixels. For those images you can use the =%<nop>ICON{}%= syntax. Use an HTML img tag with  =%<nop>ICONURL{}%= for image with other sizes.
 
 __Related Topics:__ TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
@@ -274,6 +274,12 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 | <img src="%ATTACHURLPATH%/xsl.gif" alt="xsl" title="xsl" />  | =xsl.gif= | XSL (XML style sheet) | =%<nop>ICON{xsl}%= |
 | <img src="%ATTACHURLPATH%/zip.gif" alt="zip" title="zip" />  | =zip.gif= | Compressed Zip archive | =%<nop>ICON{zip}%= |
 
+---+++ %ICON{twiki}% TWiki icons
+
+%TABLE{databg="#ffffff" headerbg="#ffffff"}%
+| *&nbsp;* | *File Name* | *Description* | *Write...* |
+| <img src="%ATTACHURLPATH%/twiki.gif" alt="TWiki" title="TWiki" />  | =twiki.gif= | TWiki logo | =%<nop>ICON{twiki}%= |
+
 %META:FILEATTACHMENT{name="arrowbdown.gif" attr="" autoattached="1" comment="" date="1128926947" path="arrowbdown.gif" size="101" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrowbleft.gif" attr="" autoattached="1" comment="" date="1128926948" path="arrowbleft.gif" size="98" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrowbright.gif" attr="" autoattached="1" comment="" date="1128926949" path="arrowbright.gif" size="97" user="UnknownUser" version=""}%
@@ -445,6 +451,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="topicdiffs.gif" attr="" autoattached="1" comment="" date="1128927103" path="topicdiffs.gif" size="157" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="trash.gif" attr="" autoattached="1" comment="" date="1128927104" path="trash.gif" size="224" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="ttf.gif" attr="" autoattached="1" comment="" date="1128927105" path="ttf.gif" size="378" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="twiki.gif" attr="" autoattached="1" comment="" date="1128927106" path="twiki.gif" size="585" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="txt.gif" attr="" autoattached="1" comment="" date="1128927106" path="txt.gif" size="375" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="up.gif" attr="" autoattached="1" comment="" date="1128927108" path="up.gif" size="193" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="updated.gif" attr="" autoattached="1" comment="" date="1128927109" path="updated.gif" size="401" user="UnknownUser" version=""}%

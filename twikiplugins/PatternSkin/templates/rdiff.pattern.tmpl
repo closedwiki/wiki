@@ -1,5 +1,8 @@
-%TMPL:INCLUDE{"twiki"}%
-%TMPL:INCLUDE{"search"}%
+%TMPL:INCLUDE{"searchbase"}%
+%TMPL:INCLUDE{"page"}%
+%TMPL:INCLUDE{"viewtopicactionbuttons"}%
+%TMPL:INCLUDE{"viewbottombar"}%
+%TMPL:INCLUDE{"logo"}%
 
 
 
@@ -11,37 +14,30 @@
 
 
 
-%TMPL:DEF{"leftbar"}%%TMPL:END%
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%MAKETEXT{"Difference:"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%TOPIC%</a> %TMPL:P{"titleaction"}%</h1>%TMPL:END%
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<div class="patternSearchResults"><div class="patternSearchResultsHeader">&nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; %MAKETEXT{"Difference Topic"}%
-      <b><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%TOPIC%</a></b>
-      (<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?rev=%REVTITLE1%" rel='nofollow'>%REVTITLE1%</a> - %REVINFO1%)</div>
-%TEXT%</div>%REPEAT%%TMPL:END%
+
+%TMPL:DEF{"header:left"}%<b><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?rev=%REVTITLE1%" rel='nofollow'>%MAKETEXT{"Revision"}% %REVTITLE1%</a></b>%TMPL:END%
+
+%TMPL:DEF{"header:right"}%%REVINFO1%%TMPL:END%
+
+
+%TMPL:DEF{"result"}%<div class="patternDiff"><div class="patternSearchResults">%TMPL:P{"header"}%
+%TEXT%</div><!--/patternSearchResults--></div><!--/patternDiff-->%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%MAKETEXT{"View topic"}%</a>
+%TMPL:DEF{"topicactionbuttons"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%MAKETEXT{"View topic"}%</a>
  %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
- %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>%MAKETEXT{"More topic actions..."}%</a></span></div>%TMPL:END%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>%MAKETEXT{"More topic actions..."}%</a>%TMPL:END%
 
 
 
-%TMPL:DEF{"searchbody"}%%TMPL:P{"repeatedsearchblock"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"main"}%<table id="patternColumnWrapper" cellspacing="0" cellpadding="0"><tr>
-<td id="patternMain" valign="top"><div class="patternMainContents">
-%TMPL:P{"simplewikilogo"}%
-%TMPL:P{"content"}%
-</div><!-- /patternMainContents--></td></tr></table><!-- /patternColumnWrapper-->%TMPL:END%
-
-
-
-%TMPL:DEF{"content"}%%TMPL:P{"searchbody"}%%TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"topicinfo"}%<div class="patternTopicInfo"><span class="patternRevInfo twikiGrayText">%TAIL%</span></div>%TMPL:END%%REPEAT%%MAKETEXT{"Revision"}% %REVTITLE% - %REVINFO%<br />%TMPL:END%
+%TMPL:DEF{"content"}%<div class="patternTopic">
+%TMPL:P{"pagetitle"}%
+<div class="patternSearchResults">
+%REPEAT%%TMPL:P{"result"}%%REPEAT%
+</div><!--/patternSearchResults-->
+%TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%</div><!--/patternTopic-->%TMPL:END%

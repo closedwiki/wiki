@@ -1,14 +1,13 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"page"}%
+%TMPL:INCLUDE{"logo"}%
+%TMPL:INCLUDE{"viewtoolbar"}%
+%TMPL:INCLUDE{"viewtopicactionbuttons"}%
+%TMPL:INCLUDE{"viewbottombar"}%
 
 
 
-%TMPL:DEF{"templatescript"}%
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_attach.js"></script>
+%TMPL:DEF{"templatescript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_attach.js"></script>
 %TMPL:END%
-
-
-
-%TMPL:DEF{"templatecustomstyle"}%%TMPL:END%
 
 
 
@@ -20,105 +19,65 @@
 
 
 
-%TMPL:DEF{"simpleheader"}%
----+ %MAKETEXT{"Attach image or document on [_1]" args="%TOPIC%"}% %TMPL:END%
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle"> %TMPL:P{"pagetitlecontents"}% </h1>%TMPL:END%
+
+%TMPL:DEF{"pagetitlecontents"}%%MAKETEXT{"Attach image or document on [_1]" args="[[%TOPIC%]]"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"toolbar"}%<div class="patternTop">
-<span id="attachhelpshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleopen-small}%<span class="twikiLinkLabel">%MAKETEXT{"Show help"}%</span></a></span><span id="attachhelphide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleclose-small}%<span class="twikiLinkLabel">%MAKETEXT{"Hide help"}%</span></a></span>
-<div class="patternToolBarBottom"></div>
-</div>
-%TMPL:END%
+%TMPL:DEF{"help"}%<div class="patternTop"><div class="twikiLeft"><span id="attachhelpshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleopen-small}%<span class="twikiLinkLabel">%MAKETEXT{"Show help"}%</span></a></span><span id="attachhelphide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleclose-small}%<span class="twikiLinkLabel">%MAKETEXT{"Hide help"}%</span></a></span></div><div class="twikiRight"></div><br class="twikiClear" /></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"notes"}%
-   * %MAKETEXT{"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow('[_1]','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files." args="%TWIKIWEB%"}%
+%TMPL:DEF{"notes"}%   * %MAKETEXT{"*Help:* Please see <a target='TWikiVariables' onclick=\"return launchWindow('[_1]','FileAttachment')\" href='' rel='nofollow'>FileAttachment</a> for more information about attaching files." args="%TWIKIWEB%"}%
    * %MAKETEXT{"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server Error\" message when you upload a file, you need to try again. It should work the second time."}% %TMPL:END%
 
 
 
-%TMPL:DEF{"existingattachments"}%
-<span class="twikiSmallish"><span id="attachexistingshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleopen-small}%<span class="twikiLinkLabel" id="attachmentsshowlink">%MAKETEXT{"Show existing attachments"}%</span></a></span><span id="attachexistinghide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleclose-small}%<span class="twikiLinkLabel" id="attachmentshidelink">%MAKETEXT{"Hide existing attachments"}%</span></a></span></span>
-<h2 class="twistyMakeHidden">%MAKETEXT{"Existing attachments"}%</h2>
-<div id="attachexistingtoggle" class="twistyMakeHidden twistyRememberSetting">
-%META{"attachments" all="on"}% <script type="text/javascript">
-//<![CDATA[
-	renderAttachmentCount("twikiAttachmentsTable");
-//]]>
-</script></div>%TMPL:END%
+%TMPL:DEF{"existingattachments"}%%META{"attachments" all="on" title="<h3>%MAKETEXT{"Other attachments of [_1]" args="<nop>%TOPIC%"}%</h3>"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"changepropertiesaction"}%%TMPL:END%
-%TMPL:DEF{"movedelete"}%%TMPL:END%
 
-
-%TMPL:DEF{"content"}%
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
-%TMPL:P{"simpleheader"}%
-%TMPL:P{"toolbar"}%
+%TMPL:DEF{"content"}%<div class="patternTopic"><form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH{"upload"}%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+%TMPL:P{"pagetitle"}%%TMPL:P{"actionheader"}%
+%TMPL:P{"help"}%
 <div id="attachhelptoggle" class="twikiHelp twistyHidden twistyRememberSetting">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div>
-%TMPL:P{"previousdetails"}%
-<div class="patternVersatileTable">
-<table width="100%">%TMPL:P{"previous"}% 
-	<tr>
-		<th class="patternMainCol">
-			%MAKETEXT{"Local file"}%
-		</th>
-		<td class="patternMainCol">
-			<input type="hidden" name="filename" value="%FILENAME%" /><input type="file" name="filepath" value="%FILEPATH%" size="30" /> 
-		</td>
-		<td class="patternHelpCol patternMainCol">
-%IF{"$ATTACHFILESIZELIMIT > 0" then="%MAKETEXT{"Upload up to [_1] KB." args="%ATTACHFILESIZELIMIT%"}%" else="%MAKETEXT{"There is no size limit for uploaded files."}%"}%
-		</td>
-	</tr>
-	<tr>
-		<th>
-			%MAKETEXT{"Comment"}%
-		</th>
-		<td>
-			<input type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="50" /> 
-		</td>
-		<td class="patternHelpCol"></td>
-	</tr>
-	<tr>
-		<th>
-			%MAKETEXT{"Link"}%
-		</th>
-		<td>
-			<input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink" %ATTACHLINKBOX% /><label for="createlink">%MAKETEXT{"Create a link to the attached file"}%</label>
-		</td>
-		<td class="patternHelpCol">
-%MAKETEXT{"Images will be displayed, for other attachments a link will be created."}%
-		</td>
-	</tr>
-	<tr>
-		<th>
-			%MAKETEXT{"Hide file"}%
-		</th>
-		<td>
-			<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">%MAKETEXT{"Do not show attachment in table"}%</label>
-		</td>
-		<td class="patternHelpCol">%MAKETEXT{"Attachments will not be shown in topic view page."}%</td>
-	</tr>%TMPL:P{"changepropertiesaction"}%
-</table>
-</div>
+<div class="patternAttachForm">
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+---+++ %MAKETEXT{"Attach new file"}%
+
+%TMPL:P{"previous"}%%IF{"$ATTACHFILESIZELIMIT > 0" then="%MAKETEXT{"Upload up to [_1] KB." args="%ATTACHFILESIZELIMIT%"}%" else="%MAKETEXT{"There is no size limit for uploaded files."}%"}%
+
+<input class="twikiInputField" type="file" name="filepath" value="%FILEPATH%" size="30" /><input type="hidden" name="filename" value="%FILENAME%" />
+</div><!-- /twikiFormStep-->
+<div class="twikiFormStep">
+---+++ %MAKETEXT{"Comment"}%
+
+%MAKETEXT{"Describe the file so other people know what it is."}%
+
+<input class="twikiInputField" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="50" />
+</div><!-- /twikiFormStep-->
+<div class="twikiFormStep twikiLast">
+---+++ %MAKETEXT{"Properties"}%
+
+<input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink" %ATTACHLINKBOX% /><label for="createlink">%MAKETEXT{"Create a link to the attached file"}%</label> <span class="twikiGrayText">%MAKETEXT{"Images will be displayed, for other attachments a link will be created."}%</span>
+
+<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">%MAKETEXT{"Do not show attachment in table"}%</label> <span class="twikiGrayText">%MAKETEXT{"Attachments will not be shown in topic view page."}%</span>
+%TMPL:P{"changepropertiesaction"}%
+</div><!-- /twikiFormStep-->
+</div><!-- /twikiFormSteps-->
 %TMPL:P{"topicaction"}%
 %TMPL:P{"movedelete"}%
-</form>
 <div class="twikiHelp twistyMakeHidden">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%
 </div>
-%TMPL:P{"existingattachments"}%
-%TMPL:P{"standardfooter"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"attach"}%
-%TMPL:P{"page"}%
-%TMPL:END%
+</div><!-- /patternAttachForm-->
+</form>
+</div><!-- /patternTopic-->
+%TMPL:P{"versions"}%
+%TMPL:P{"existingattachments"}%%TMPL:END%

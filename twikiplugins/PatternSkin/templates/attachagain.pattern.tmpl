@@ -2,46 +2,20 @@
 
 
 
-%TMPL:DEF{"headerhelp"}% %TMPL:END%
+%TMPL:DEF{"pagetitlecontents"}%%MAKETEXT{"Update attachment [_1] on [_2]" args="[[%ATTACHURLPATH%/%ENCODE{"%FILENAME%"}%][%FILENAME%]],[[%TOPIC%]]"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}% %MAKETEXT{"Update attachment [_1] on [_2]" args="*%FILENAME%*,*%TOPIC%*"}% %TMPL:END%
+%TMPL:DEF{"versions"}%---+++ %MAKETEXT{"Version history of [_1]" args="%FILENAME%"}%
+<div class="twikiAttachments">%ATTACHTABLE%</div><!-- /twikiAttachments-->%TMPL:END%
 
 
 
-%TMPL:DEF{"simpleheader"}%
----+ %MAKETEXT{"Update image or document on [_1]" args="%TOPIC%"}% %TMPL:END%
+%TMPL:DEF{"changepropertiesaction"}%<br /><input type="submit" class="twikiButton" name="changeproperties" value='%MAKETEXT{"Change properties only"}%' />%TMPL:END%
 
 
 
-%TMPL:DEF{"previousdetails"}%
----+++ %MAKETEXT{"Update file [_1]" args="%FILENAME%"}%
-
-<div class="patternPrevious"><div class="twikiAttachments">
-%ATTACHTABLE% </div></div>
-%TMPL:END%
-
-
-
-%TMPL:DEF{"changepropertiesaction"}%
-<tr>
-	<th> </th>
-	<td colspan="2">
-		<input type="submit" class="twikiButton" name="changeproperties" value='%MAKETEXT{"Change properties only"}%' />
-	</td>
-</tr>%TMPL:END%
-
-
-
-%TMPL:DEF{"previous"}%
-  <tr>
-  <th class="patternOldCol">%MAKETEXT{"Previous upload"}%</th>
-  <td class="patternOldCol">
-   <code>%FILEPATH%</code> <span class="twikiGrayText">%TMPL:P{"fileuser"}%</span>
-  </td>
-  <td class="patternHelpCol">%MAKETEXT{"Select a new local file to update this attachment."}%</td>
- </tr>%TMPL:END%
+%TMPL:DEF{"previous"}%%MAKETEXT{"Select a new local file to update attachment"}% <code>%FILEPATH%</code> <span class="twikiGrayText">%TMPL:P{"fileuser"}%</span><br />%TMPL:END%
 
 
 
@@ -52,8 +26,8 @@
 %TMPL:END%
 
 
-%TMPL:DEF{"movedelete"}%
-<div class="patternMoveAttachment"><div class="patternActionButtons"><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%ENCODE{"%FILENAME%"}%" rel='nofollow'>%ICON{move}% <span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?attachment=%ENCODE{"%FILENAME%"}%&web=%TRASHWEB%&template=deleteattachment" rel='nofollow'>%ICON{trash}% <span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div></div>%TMPL:END%
+
+%TMPL:DEF{"movedelete"}%<div class="patternMoveAttachment"><a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?template=moveattachment&attachment=%ENCODE{"%FILENAME%"}%" rel='nofollow'><span class="twikiLinkLabel">%MAKETEXT{"Move"}%</span></a> %MAKETEXT{"or"}% <a href="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?web=%TRASHWEB%&template=renameattachmentdelete&attachment=%ENCODE{"%FILENAME%"}%" rel='nofollow'><span class="twikiLinkLabel">%MAKETEXT{"Delete"}%</span></a> =%FILENAME%= </div>%TMPL:END%
 
 
 

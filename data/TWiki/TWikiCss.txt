@@ -87,6 +87,8 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiSeparator  | |
 |.twikiAccessKey  | |
 |.twikiLinkLabel  | |
+|.twikiFormSteps  |container around a form, such as the attach form: attach.tmpl |
+|.twikiFormStep  |form row |
 
 ---+++ TWiki Styles in topics
 

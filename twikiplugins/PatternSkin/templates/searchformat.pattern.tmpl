@@ -1,3 +1,7 @@
 %TMPL:INCLUDE{"search"}%
 
 
+
+%TMPL:DEF{"content"}%%SPLIT%Search: <b> %SEARCHSTRING% </b><p />
+%SPLIT%%REPEAT%%REPEAT%%SPLIT%Number of topics: <b>%NTOPICS%</b><p />
+%SPLIT%%TMPL:END%
