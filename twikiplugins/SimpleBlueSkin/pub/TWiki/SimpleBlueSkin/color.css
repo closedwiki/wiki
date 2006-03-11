@@ -1,0 +1,137 @@
+/*
+ * TWkiki SimpleBlueSkin - Color Informationen
+ */
+ 
+body {
+  background-color: #b9b9b9;
+}
+
+a {
+  color: #35377c;
+}
+ 
+#simpleBlueContentBook {
+  background-color: #e9e9f5;
+  border-color: #797979;
+}
+
+#simpleBlueHeader {
+  background-color: #ffffff;
+  border-color: #797979;
+}
+
+#simpleBlueHeader a {
+  color: #000000;
+}
+
+#simpleBlueNavigationArea {
+  background-color: #e9e9f5;
+}
+
+#simpleBlueNavigationArea a {
+  color: #000000;
+}
+
+#simpleBlueNaviBoxHeader {
+  color: #35377c;
+  border-color: #35377c;
+}
+
+#simpleBlueContentArea {
+  background-color: #ffffff;
+  border-color: #797979;
+}
+
+#simpleBlueContentArea h1 {
+  color: #35377c;
+  border-color: #35377c;
+}
+
+#simpleBlueContentArea h2 {
+  color: #35377c;
+  border-color: #35377c;
+}
+
+#simpleBlueContentArea h3 {
+  color: #35377c;
+}
+
+#simpleBlueContentArea h4 {
+  color: #35377c;
+}
+
+#simpleBlueActionBarTop {
+  color: #5e5e5e;
+  border-color: #797979;
+}
+
+#simpleBlueInfosActionBar a {
+  color: #5e5e5e;
+}
+
+#simpleBlueContentNotes {
+  border-color: #797979;	   
+}
+
+#simpleBlueActionBarBottom {
+  color: #5e5e5e;
+  border-color: #797979;
+}
+
+#simpleBlueCopyright {
+  color: #5e5e5e;
+}
+
+#simpleBlueFooter {
+  border-color: #797979;
+  background-color: #ffffff;
+}
+
+#simpleBlueFooter a {
+  color: #000000;
+}
+
+#simpleBlueContentArea .twikiNewLink {
+  color: #d9d9d9;
+  background-color: transparent;
+}
+
+#simpleBlueContentArea table th {
+  border-color: #35377c;
+  background-color:#e9e9f5;
+}
+
+#simpleBlueContentArea table td {
+  border-color: #35377c;
+  background-color: #ffffff;
+}
+
+#simpleBlueContentArea table font {
+  color:#000000;
+}
+
+#simpleBlueContentArea table th a:link,
+#simpleBlueContentArea table th a:visited {
+  color: #35377c;
+}
+
+#simpleBlueContentArea table th a:hover {
+   background-color: transparent;
+}
+
+#simpleBlueSearchResults {
+  border-color: #35377c;
+}
+
+#simpleBlueGrayText {
+  color: #5e5e5e;
+}
+
+#simpleBlueGrayText a {
+  color: #5e5e5e;
+}
+
+#simpleBlueContentArea pre {
+  background-color: #e9e9e9; 
+  border-color: #797979;
+}
