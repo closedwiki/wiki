@@ -33,7 +33,7 @@
 %TMPL:DEF{"toweb"}%
 <tr>
 <th>%MAKETEXT{"To web:"}%</th>
-<td class="patternMainCol"><select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%WEB%" separator=" "}%  </select></td>
+<td class="patternMainCol"><select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="%TRASHWEB%,public" selection="%WEB%" separator=" "}%  </select></td>
 <td class="patternMainCol patternHelpCol">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 %TMPL:END%
