@@ -20,7 +20,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
+=pod
 
 ---+ package TWiki::UI::Upload
 
@@ -116,6 +116,7 @@ sub attach {
     $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
     $tmpl =~ s/%FILENAME%/$fileName/go;
     $tmpl =~ s/%FILEPATH%/$args->{path}/go;
+    $args->{comment} = TWiki::entityEncode( $args->{comment} );
     $tmpl =~ s/%FILECOMMENT%/$args->{comment}/go;
 
     $session->writeCompletePage( $tmpl );
@@ -261,3 +262,4 @@ sub upload {
 }
 
 1;
+
