@@ -921,8 +921,8 @@ msgid "Continue and try to rename web?"
 msgstr "Doorgaan om het web te hernoemen?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
-msgid "Continue to *[[%1][create topic %2]]*"
-msgstr "Ga verder met *[[%1][pagina %2 aanmaken]]*"
+msgid "Continue to *[[%1][create topic !%2]]*"
+msgstr "Ga verder met *[[%1][pagina !%2 aanmaken]]*"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid ""

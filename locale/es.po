@@ -838,8 +838,8 @@ msgid "Continue and try to rename web?"
 msgstr "¿Continuo e intento renombrar la web?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
-msgid "Continue to *[[%1][create topic %2]]*"
-msgstr "Continuar con *[[%1][crear página %2]]*"
+msgid "Continue to *[[%1][create topic !%2]]*"
+msgstr "Continuar con *[[%1][crear página !%2]]*"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid "Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors."

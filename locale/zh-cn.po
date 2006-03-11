@@ -839,8 +839,8 @@ msgid "Continue and try to rename web?"
 msgstr "继续并重命名目录？"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
-msgid "Continue to *[[%1][create topic %2]]*"
-msgstr "继续 *[[%1][创建新主题 %2]]*"
+msgid "Continue to *[[%1][create topic !%2]]*"
+msgstr "继续 *[[%1][创建新主题 !%2]]*"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid "Copyright &&copy; by the contributing authors. All material on this collaboration platform is the property of the contributing authors."

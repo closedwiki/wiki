@@ -912,8 +912,8 @@ msgid "Continue and try to rename web?"
 msgstr "Continuer et essayer de renommer le web ?"
 
 #: data/TWiki/WebTopicViewTemplate.txt:23
-msgid "Continue to *[[%1][create topic %2]]*"
-msgstr "Continuer à *[[%1][créer la page %2]]*"
+msgid "Continue to *[[%1][create topic !%2]]*"
+msgstr "Continuer à *[[%1][créer la page !%2]]*"
 
 #: data/TWiki/TWikiPreferences.txt:39
 msgid ""
