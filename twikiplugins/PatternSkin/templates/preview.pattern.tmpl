@@ -26,6 +26,10 @@
 
 
 
+%TMPL:DEF{"simplewikilogo"}%%TMPL:END%
+
+
+
 %TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
 %IF{ "context RevCommentPluginEnabled" then="<label for='comment'>Summary of changes: </label> <a target='RevComment' onclick='return launchWindow(\"%TWIKIWEB%\",\"RevComment\")' href='#%MAKETEXT{"Opens page in new window"}%' >%MAKETEXT{"help"}%</a> <input type='hidden' name='t' value='%URLPARAM{t}%' /><input class='twikiEditComment' type='text' style='width:50%' name='comment' value='%URLPARAM{comment}%'><br />" }%
 <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label>&nbsp;&nbsp;<a href="#%MAKETEXT{"Opens page in new window"}%" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" rel='nofollow'>%MAKETEXT{"help"}%</a></span></div>

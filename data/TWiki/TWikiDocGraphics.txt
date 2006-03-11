@@ -185,8 +185,8 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 
 ---+++ %ICON{toggleclose}% Interface icons
 
-| <img src="%ATTACHURLPATH%/monotype.gif" alt="Monotype" title="Monotype" />  | =monotype.gif= | Monotype | =%<nop>ICON{monotype}%= |
-| <img src="%ATTACHURLPATH%/naturaltype.gif" alt="Naturaltype" title="Naturaltype" />  | =naturaltype.gif= | Naturaltype | =%<nop>ICON{naturaltype}%= |
+| <img src="%ATTACHURLPATH%/monospace.gif" alt="Monospace" title="Monospace" />  | =monospace.gif= | Monospace | =%<nop>ICON{monospace}%= |
+| <img src="%ATTACHURLPATH%/proportional.gif" alt="Proportional" title="Proportional" />  | =proportional.gif= | Proportional | =%<nop>ICON{proportional}%= |
 | <img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
 | <img src="%ATTACHURLPATH%/toggleclose-small.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />  | =toggleclose-small.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose-small}%= |
 | <img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
@@ -393,7 +393,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="mov.gif" attr="" autoattached="1" comment="" date="1128927058" path="mov.gif" size="379" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="move.gif" attr="" autoattached="1" comment="" date="1128926976" path="move.gif" size="209" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="mp3.gif" attr="" autoattached="1" comment="" date="1128927114" path="mp3.gif" size="377" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="naturalspace.gif" attr="" autoattached="1" comment="" date="1128927059" path="naturalspace.gif" size="159" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="proportional.gif" attr="" autoattached="1" comment="" date="1128927059" path="proportional.gif" size="159" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="new.gif" attr="" autoattached="1" comment="" date="1128927059" path="new.gif" size="298" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="newtopic.gif" attr="" autoattached="1" comment="" date="1128927060" path="newtopic.gif" size="340" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="note.gif" attr="" autoattached="1" comment="" date="1128927062" path="note.gif" size="222" user="UnknownUser" version=""}%

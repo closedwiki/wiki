@@ -78,6 +78,12 @@ html body {
 	margin-right:3%;
 	/* padding in style.css */
 }
+.patternEditPage #patternPage,
+.patternPreviewPage #patternPage{
+	margin-left:0;
+	margin-right:0;
+	/* padding in style.css */
+}
 
 /* Plain */
 
