@@ -619,8 +619,8 @@ table.patternTopBarContents td {
 }
 #patternLeftBar .patternWebIndicator {
 	margin:0 0 0 -1em; /*S6*/
-	line-height:1.4em;
 	padding:.55em 1em .55em 1em; /*S6*/
+	line-height:1.4em;
 	text-align:center;
 }
 #patternLeftBar .patternWebIndicator a:link,
@@ -773,7 +773,7 @@ input.patternFormFieldVerticalForm {
 	padding-left:0;
 }
 .patternNoViewPage #patternMain {
-	padding-top:2em;
+	padding-top:1.5em;
 	padding-bottom:4em;
 	border-left:0;
 }
@@ -783,10 +783,25 @@ input.patternFormFieldVerticalForm {
 	margin-right:3%;
 }
 
+/* Edit page + Preview page */
+
+.patternEditPage #patternMain,
+.patternPreviewPage #patternMain {
+	/* maximize screen estate, so remove top logo
+	and no need for additional top padding */
+	padding-top:.5em;
+}
+	
 /* Edit page */
 
+.twikiEditboxStyleMono {
+	font-family:"Courier New", courier, monaco, monospace;
+}
+.twikiEditboxStyleProportional {
+	font-family:"Lucida Grande", verdana, arial, sans-serif;
+}
 .twikiChangeFormButtonHolder {
-	margin:1em 0;
+	margin:.5em 0;
 	float:right;
 }
 .patternFormHolder { /* constrains the textarea */
@@ -799,10 +814,10 @@ input.patternFormFieldVerticalForm {
 	border:none;
 	text-decoration:underline;
 }
-.patternSig {
+.patternSigLine {
 	margin:.25em 0 .5em 0;
+	padding:0 .5em 0 0;
 }
-
 .patternAccessKeyInfo {
 	margin-top:1em;
 	padding:.25em .5em;
