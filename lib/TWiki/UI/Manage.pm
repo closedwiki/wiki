@@ -109,7 +109,7 @@ sub _removeUser {
                                            @groups ) ] );
     }
 
-    unless( $user->checkPasswd( $password ) ) {
+    unless( $user->checkPassword( $password ) ) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
