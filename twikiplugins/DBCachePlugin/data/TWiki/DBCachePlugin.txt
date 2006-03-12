@@ -130,6 +130,7 @@ Compute and format a statistics on the database.
 | =sort="alpha,created"= | order of keys in the output |
 | =reverse="on,off"= | sort keys descending or ascending |
 | =limit="..."= | maximum number of keys to be formated in the output |
+| =hidenull="..."= | flag to indicate that an empty hit set should not be displayed |
 
 The DBSTATS searches for all topics in given web and reads the given form fields.
 It then uses the =pattern= to extract any key in the data and counts their occurrence.
@@ -248,8 +249,9 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.99 |
+|  Plugin Version: | v1.00 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  12 Mar 2006: | added hidenull to DBSTATS |
 |  10 Mar 2006: | use ENV instead of the CGI object to detect the current cgi action |
 |  02 Mar 2006: | fixed bad init error showing up on speedy/mod_perl |
 |  01 Mar 2006: | added DBSTATS tag; \
@@ -273,4 +275,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 10 Mar 2006
+-- TWiki:Main.MichaelDaum - 12 Mar 2006
