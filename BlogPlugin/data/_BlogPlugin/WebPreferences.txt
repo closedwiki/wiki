@@ -41,7 +41,7 @@
    * Set WEBBUTTONSCLASS_ARCHIVE =
    * Set WEBBUTTONSCLASS_ABOUT =
    
-   * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm, BlogPageForm, SubjectCategoryForm
+   * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm, BlogPageForm, SubjectCategoryForm, BlogAuthorForm
 
 <verbatim>
    * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"RenderHttpEquivs"}%

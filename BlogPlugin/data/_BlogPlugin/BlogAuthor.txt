@@ -1,13 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139335181" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142175686" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicType"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" TEMPLATE="%TOPIC%Template" warn="off"}%
+%DBCALL{"RenderNewTopicTypeForm" NAME="%TOPIC%" TEMPLATE="%TOPIC%Template" warn="off" FORM="BlogAuthorForm"}%
 %DBCALL{"RenderTopicList" NAME="%TOPIC%"}%
 %DBCALL{"RenderTWikiFormList" ATTR="%TOPIC%"}%
 
-See also: %TOPIC%Template, %MAINWEB%.BlogAuthorGroup
+See also: %TOPIC%Template, %MAINWEB%.BlogAuthorGroup, %TOPIC%Form
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

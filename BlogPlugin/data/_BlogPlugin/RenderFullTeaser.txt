@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1136310710" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142179127" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -15,7 +15,6 @@ see also: RenderBlogTeaser
 %~~ DBQUERY{topic="%NAME%"
 ~~~   format="%DBCALL{"RenderFullTeaser" section="format"}%"}%
 ~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
-*~~
 %STOPINCLUDE%
 </verbatim>
 
@@ -47,7 +46,7 @@ see also: RenderBlogTeaser
 ~~~  <div class=\"blogInfo\">
 ~~~    <span class=\"blogDate\">
 ~~~      $percntTIMESINCE{
-~~~        \"$expand(createdate)\"
+~~~        \"$expand(Date)\"
 ~~~        format=\"$time ago\" 
 ~~~        null=\"about now\"
 ~~~      }$percnt
@@ -78,7 +77,6 @@ see also: RenderBlogTeaser
 ~~~  %STOPALIASAREA%
 ~~~  </noautolink>
 ~~~ </div>
-*~~ 
 %ENDSECTION{"format"}%
 </verbatim>
 

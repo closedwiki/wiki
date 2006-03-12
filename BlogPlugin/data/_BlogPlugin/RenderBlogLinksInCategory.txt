@@ -1,17 +1,18 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131397249" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142170784" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
-   * NAME: name of a SubjectCategory
+   * CAT: name of a SubjectCategory
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-%~~ DBQUERY{"TopicType='BlogLink' AND SubjectCategory=~'\b%NAME%\b'"
+%~~ DBQUERY{"TopicType='BlogLink' 
+~~~        %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'"}%"
 ~~~        separator="$n" hidenull="on"
-~~~        header="| *%NAME% links* ||"
+~~~        header="%IFDEFINED{"%CAT%" then="| *%CAT% links* ||"}%"
 ~~~        format="| [[$web.$topic][$formfield(Name)]] | $formfield(Headline) |"
 ~~~ }% 
 %STOPINCLUDE%
@@ -19,7 +20,7 @@
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="WikiWorld"}%
+%DBCALL{"%TOPIC%"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

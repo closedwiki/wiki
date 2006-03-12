@@ -1,16 +1,20 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139234485" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142179710" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
-   * CAT: reduce the blogroll to BlogLinks in the given SubjectCategory
+   * CAT: reduce the blogroll to BlogLinks in the given SubjectCategory (optional)
+   * AUTHOR: display the blogroll of the given author (optional)
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
 ~~~
-%~~ DBQUERY{"TopicType=~'\bBlogLink\b' AND SubjectCategory=~'\b%CAT%\b'" web="%WEB%"
+%~~ DBQUERY{"TopicType=~'\bBlogLink\b' 
+~~~     %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'" glue="off"}%
+~~~     %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
+~~~   web="%WEB%"
 ~~~   order="Name" hidenull="on"
 ~~~   header="<div class=\"blogSideBarSection blogSideBarAggregations\"><noautolink>
 ~~~     <h1>Blogroll$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"

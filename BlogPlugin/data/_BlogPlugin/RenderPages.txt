@@ -1,16 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1140023808" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142177377" format="1.1" version="1.1"}%
 %META:TOPICPARENT{}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
-   * CAT: extract BlogPages matching the given SubjectCategory 
+   * AUTHOR: restrict list to pages done by this author (optional)
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
 ~~~ %STOPALIASAREA%
-%~~ DBQUERY{"TopicType=~'\bBlogPage\b' AND (form!='Blog(Page|Entry)Form' OR State='enabled')"
+%~~ DBQUERY{"TopicType=~'\bBlogPage\b' AND (form!='Blog(Page|Entry)Form' OR State='enabled')
+~~~      %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
 ~~~   hidenull="on"
 ~~~   header="<noautolink><div class=\"blogSideBarSection blogSideBarPages\">$n
 ~~~           <h1>Pages$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
