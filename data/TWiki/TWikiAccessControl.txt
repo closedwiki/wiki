@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131718988" format="1.1" version="$Rev:$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1131718988" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 
@@ -10,6 +10,7 @@ TWiki Access Control allows you restrict access to single topics and entire webs
 
 __%T% Tip:__ TWiki:TWiki.TWikiAccessControlSupplement on TWiki.org has additional documentation on access control.
 
+#ImportantConsideration
 ---++ An Important Control Consideration
 
 Open, freeform editing is the essence of WikiCulture - what makes TWiki different and often more effective than other collaboration tools. For that reason, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with great care - the more restrictions, the less Wiki in the mix. Experience shows that _unrestricted write access_ works very well because:
@@ -166,7 +167,7 @@ Another way of hiding webs is to keep them hidden by not publishing the URL and 
 
 This setup can be useful to hide a new web until content its ready for deployment, or to hide view access restricted webs.
 
-__%X% Note:__ Obfuscating a web without view access control is very insecure, as anyone who knows the URL can access the web.
+__%X% Note:__ Obfuscating a web without view access control is *very* insecure, as anyone who knows the URL can access the web.
 
 ---+++ Authenticate all Webs and Restrict Selected Webs
 
@@ -176,8 +177,6 @@ Use the following setup to authenticate users for topic viewing in all webs and 
       * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
       * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
-   1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
-      * ==Set <nop>NOSEARCHALL = on==
 
 ---+++ Authenticate and Restrict Selected Webs Only
 
@@ -187,8 +186,6 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
       * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
       * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
-   1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
-      * ==Set <nop>NOSEARCHALL = on==
 
 ---+++ Hide Control Settings
 

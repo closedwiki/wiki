@@ -30,7 +30,7 @@ Regular expression search searches for a set of regular expression patterns:
 
 ---++ Formatted Searches
 
-You can embed a nicely [[FormattedSearch][formatted search]] in a topic by using the =%<nop>SEARCH{}%= variable described in TWikiVariables#VarSEARCH.
+You can embed a nicely [[FormattedSearch][formatted search]] in a topic by using the =%<nop>SEARCH{}%= variable described in VarSEARCH.
 
 ---++ Search Preferences
 

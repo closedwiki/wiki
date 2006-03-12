@@ -1,0 +1,25 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiVariables"}%
+#VarREVINFO2
+
+---+++ REVINFO{"format"} -- formatted revision information of topic
+   * Syntax: =%<nop>REVINFO{"format"}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="format"= | Format of revision information, see supported variables below | ="r1.$rev - $date - $wikiusername"= |
+     | =web="..."= | Name of web | Current web |
+     | =topic="..."= | Topic name | Current topic |
+     | =rev="1.5"= | Specific revison number | Latest revision |
+   * Supported variables in format:
+     | *Variable:* | *Unit:* | *Example* |
+     | =$web= | Name of web | Current web |
+     | =$topic= | Topic name | Current topic |
+     | =$rev= | Revison number. Prefix =r1.= to get the usual =r1.5= format | =5= |
+     | =$date= | Revision date | =11 Jul 2004= |
+     | =$time= | Revision time | =23:24:25= |
+     | =$username= | Login username of revision | =jsmith= |
+     | =$wikiname= | WikiName of revision | =JohnSmith= |
+     | =$wikiusername= | <nop>WikiName with %MAINWEB% web prefix | =%MAINWEB%.JohnSmith= |
+   * Example: =%<nop>REVINFO{"$date - $wikiusername" rev="1.1"}%= returns revision info of first revision
+   * Related: [[#VarREVINFO][REVINFO]]
+

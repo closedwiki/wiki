@@ -1,0 +1,28 @@
+%META:TOPICINFO{author="MeredithLesly" date="1141756590" format="1.1" version="1.1"}%
+---++ TWiki Variables
+
+%STARTINCLUDE%
+
+TWiki Variables are names that are enclosed in percent signs =%= that are expanded on the fly.
+
+   * =%<nop>TOC%= : Automatically generates a table of contents based on headings in a topic - see the top of this page for an example.
+
+   * =%<nop>WEB%= : The current web, is <b><nop>%WEB%</b>.
+
+   * =%<nop>TOPIC%= : The current topic name, is <b>%TOPIC%</b>.
+
+   * =%<nop>ATTACHURL%= : The attachment URL of the current topic. Example usage: If you attach a file to a topic you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= to show the URL of the file or the image in your text.
+
+   * =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, includes another topic. The current web is the default web. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%</b>=
+
+   * =%<nop>SEARCH{"sushi"}%= : Inline search showing the search result embedded in a topic. FormattedSearch gives you control over formatting, useful for creating web-based applications.
+
+   * TWikiPreferences defines some site-wide variables. Among others:
+      * *Line break:* Write =%<nop>BR%= to start a new line.
+      * *Colored text:* Write: =%<nop>RED% Red %<nop>ENDCOLOR% and %<nop>BLUE% blue %<nop>ENDCOLOR% colors= to get: %RED% Red %ENDCOLOR% and %BLUE% blue %ENDCOLOR% colors.
+      * *Documentation Graphics:* Write: =%<nop>H% Help, %<nop>T% Tip, %<nop>X% Alert= to get: %H% Help, %T% Tip, %X% Alert. For more info see TWikiDocGraphics.
+
+   * There are many more variables, see *[[TWikiVariables]]*.
+
+   * To "escape" a variable, prefix it with an exclamation mark. Write: =!%<nop>SOMEVARIABLE%= to get: !%SOMEVARIABLE%.
+%STOPINCLUDE%

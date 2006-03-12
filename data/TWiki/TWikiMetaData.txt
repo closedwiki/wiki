@@ -132,7 +132,7 @@ Meta Data is rendered with the %<nop>META% variable. This is mostly used in the 
 
 You can render form fields in topic text by using the FORMFIELD variable. Example:%BR%
 =%<nop>FORMFIELD{"TopicClassification"}%= %BR%
-For details, see TWikiVariables#VarFORMFIELD.
+For details, see VarFORMFIELD.
 
 Current support covers:
 

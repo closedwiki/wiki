@@ -6,7 +6,7 @@
 
 _Inline search feature allows flexible formatting of search result_
 
-The default output format of a =[[TWikiVariables#VarSEARCH][%<nop>SEARCH{...}%]]= is a table consisting of topic names and topic summaries. Use the =format="..."= parameter to customize the search result. The format parameter typically defines a bullet or a table row containing variables, such as =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=.
+The default output format of a =[[VarSEARCH][%<nop>SEARCH{...}%]]= is a table consisting of topic names and topic summaries. Use the =format="..."= parameter to customize the search result. The format parameter typically defines a bullet or a table row containing variables, such as =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=. See =[[VarSEARCH][%<nop>SEARCH{...}%]]= for other search parameters, such as =separator=""=.
 
 ---++ Syntax
 

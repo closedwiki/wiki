@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
-%STARTINCLUDE%
+%STARTSECTION{type="include"}%
 ---# TWiki Variables
 
 _Special text strings expand on the fly to display user data or system info_
@@ -113,10 +113,16 @@ Most predefined variables return values that were either set in the configuratio
 
 This version of TWiki - %WIKIVERSION% - predefines the following variables:
 
-%INCLUDE{"TWikiVariablesAtoM"}%
-%INCLUDE{"TWikiVariablesNtoZ"}%
+%SEARCH{
+    "^Var[A-Z_0-9]+$"
+    casesensitive="on"
+    type="regex"
+    scope="topic"
+    format="$percntINCLUDE{$web.$topic}$percnt"
+    nonoise="on"
+}%
 
-%STOPINCLUDE%
+%ENDSECTION{type="include"}%
 
 __Related Topics:__ UserDocumentationCategory
 

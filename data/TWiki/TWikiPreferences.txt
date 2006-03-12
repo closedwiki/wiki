@@ -44,7 +44,7 @@ _(Click for form-based editing of existing preferences.)_
    * Simplified Copyright notice for the WebRss feed (don't use any special characters, html tags, entities, wiki markup or WikiWords)
       * Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
 
-   * Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
+   * Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences) __Note__ it is much better to use TWikiAccessControls in individual webs to control who can and can't view the contents of a web. NOSEARCHALL is retained for compatibility, but you should avoid using it.
       * Set NOSEARCHALL = 
    * Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
       * Set NOAUTOLINK = 

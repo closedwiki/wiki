@@ -11,7 +11,7 @@ Use the =%<nop>INCLUDE{...}%= variable to embed the content of another topic or 
 
 The =pattern= parameter is optional and allows you to extract some parts of a web page. Specify a %TWIKIWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., =pattern="^.*?(from here.*?to here).*"=. You need to make sure that the integrity of a web page is not compromised; for example, if you include a table, make sure to include everything including the table end tag.
 
-TWikiVariables#VarINCLUDE explains the other parameters.
+VarINCLUDE explains the other parameters.
 
 __Note:__ All text of a topic is included unless it contains a =%<nop>STARTINCLUDE%= and =%<nop>STOPINCLUDE%=, or you specify a =section= parameter and/or a =pattern= parameter. A pattern will only search between =%<nop>STARTINCLUDE%= and =%<nop>STOPINCLUDE%=.
 
@@ -37,5 +37,5 @@ __Note:__ All text of a topic is included unless it contains a =%<nop>STARTINCLU
    * You get:
       * Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
 
-__Related Topics:__ TWikiVariables#VarINCLUDE, UserDocumentationCategory
+__Related Topics:__ VarINCLUDE, UserDocumentationCategory
 
