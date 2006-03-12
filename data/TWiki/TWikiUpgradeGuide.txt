@@ -95,7 +95,9 @@ You are *highly* recommended *not* to change any distributed files if you can av
 *If* you followed the recommendations and avoided modifying any distributed files, then this is quite straightforward:
    1 Follow the installation instructions, and install the new release in a new directory.
    1 Copy your local webs over to the data and pub directories of the new install
+      * Be careful to copy over the user topics and TWikiUsers.txt in the Main web
    1 Copy over your =bin/LocalLib.cfg= and =lib/LocalSite.cfg= files
+   1 Copy over any local files you created (such as .htpasswd and .htaccess files)
    1 Point your webserver at the new install.
 *If* you changed any of the distributed files, you will have to continue from Step 5 above.
 
