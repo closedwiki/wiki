@@ -1,9 +1,9 @@
-data/TWiki/TagMeDebugSpecificTag.txt NEW
+data/TWiki/TagMeDebugSearch.txt NEW
 data/TWiki/TagMeDebugViewTags.txt NEW
 data/TWiki/TagMePlugin.txt NEW
+data/TWiki/TagMeSearch.txt NEW
 data/TWiki/TagMeViewAllTags.txt NEW
 data/TWiki/TagMeViewMyTags.txt NEW
-data/TWiki/TagMeViewSpecificTag.txt NEW
 lib/TWiki/Plugins/TagMePlugin.pm NEW
 pub/TWiki/TagMePlugin/alltagcloud.gif NEW
 pub/TWiki/TagMePlugin/tag_add.gif NEW

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1141693445" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1142122143" format="1.0" version="1.6"}%
 ---+!! Tag-me Plugin
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
@@ -60,7 +60,7 @@ A never before used tag needs to be added to the system before a topic can be ta
 	  <input type="submit" value="Add" /> (use only alphanumeric characters and underscore) %BR%
 	  %TAGME{ tpaction="%URLPARAM{"newaction" default="nop"}%" tag="%URLPARAM{newtag}%" }%%BR%
 	  %URLPARAM{to}%
-	* Existing tags: %TAGME{ tpaction="showalltags" }%
+	* Existing tags: %TAGME{ tpaction="showalltags" format="[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TagMeSearch?tag=$tag][$tag]]" separator=", " }%
 </form>
 </noautolink>
 
@@ -75,16 +75,16 @@ Once a new tag is created, it can be added in the tag list of the topic
 Screenshot of tag cloud in the list all tags view: <br />
 <img src="%ATTACHURLPATH%/alltagcloud.gif" alt="Screenshot of view all tags tag cloud" width="598" height="168"  />
 
-__%T% Tip:__ In a <nop>%HOMETOPIC% of a web you can show a tag cloud of all tagged topics in that web with this variable:%BR% =%<nop>TAGME{ tpaction="showalltags" web="%<nop>WEB%" format="&lt;a href=\"%<nop>SCRIPTURL%/view%<nop>SCRIPTSUFFIX%/%<nop>TWIKIWEB%/TagMeViewSpecificTag?tag=$tag;qweb=%<nop>WEB%\" style=\"font-size:$size%\"&gt;$tag&lt;/a&gt;" }%=
+__%T% Tip:__ In a <nop>%HOMETOPIC% of a web you can show a tag cloud of all tagged topics in that web with this variable:%BR% =%<nop>TAGME{ tpaction="showalltags" web="%<nop>WEB%" format="&lt;a href=\"%<nop>SCRIPTURL%/view%<nop>SCRIPTSUFFIX%/%<nop>TWIKIWEB%/TagMeSearch?tag=$tag;qweb=%<nop>WEB%\" style=\"font-size:$size%\"&gt;$tag&lt;/a&gt;" }%=
 
 
 ---+++ List My Tags
 
 %TWIKIWEB%.TagMeViewMyTags shows all tags used by logged-in user. The font size indicates the overall tag count of a tag.
 
----+++ List Specific Tags
+---+++ Tag Search
 
-%TWIKIWEB%.TagMeViewSpecificTag shows a list of topics that are tagged with a specific tag, sorted by relevance. Topics with a high tag count are shown first.
+%TWIKIWEB%.TagMeSearch shows a list of topics that are tagged with a specific tag, sorted by relevance. Topics with a high tag count are shown first.
 
 ---+++ Plugin Variable
 
@@ -109,6 +109,11 @@ The Plugin handles a =%<nop>TAGME{}%= variable that performs different actions:
 	  | =web="%<nop>WEB%"= | Limit query to a web | current web |
 	  | =topic="*Plugin"= | Limit query to a topic, or a comma-space delimited list of topics with optional asterisk wildcards | all topics |
 	  | =tag="..."= | Name of tag | (required) |
+	  | =sort="web"= | Sorting of tagged topics: ="tagcount"= by tag count (relevance), ="web"= by web then topic name, ="topic"= by topic name | ="tagcount"= |
+	  | =norelated="..."= | Do not show the list of "related tags" | (show related tags) |
+	  | =nototal="..."= | Do not show total number of topics found | (show total) |
+	  | =format="..."= | Format of a topic, any token of %TWIKIWEB%.FormattedSearch can be used, such as =$web=, =$topic=, =$summary=, =$rev=, =$n=. In addition, =$taglist= expands to the tag list of the topic.  | (nice formatting) |
+	  | =separator=", "= | Separator between tags, =$n= or =$n()= can be used for newlines | ="$n"= |
 
 	* =%<nop>TAGME{ tpaction="newtag" ... }%= - create new tag
 	  | *Parameter* | *Comment* | *Default* |
@@ -145,7 +150,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%ViewAllTags.txt== | Supporting topic to view all tags |
 	  | ==data/TWiki/%TOPIC%ViewMyTags.txt== | Supporting topic to view my tags |
-	  | ==data/TWiki/%TOPIC%ViewSpecificTags.txt== | Supporting topic to view a specific tag |
+	  | ==data/TWiki/%TOPIC%Search.txt== | Supporting topic to search for tagged topics |
 	  | ==data/TWiki/%TOPIC%Debug*.txt== | Supporting topics for debug |
 	  | ==data/TWiki/%TOPIC%*.txt,v== | Topic repository files |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
@@ -167,8 +172,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny |
 |  Copyright: | &copy; 2006, [[http://www.structuredwikis.com/][Peter Thoeny]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 06 Mar 2006 (V1.005) |
+|  Plugin Version: | 11 Mar 2006 (V1.006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Mar 2006: | !TagMeSearch with =sort=, =norelated=, =nototal=, =format= and =separator= paramters; linked tags in create new tag section; renamed !TagMeViewSpecificTag to a shorter !TagMeSearch; workaround for Dakar Bugs:Item1838 to fix broken links in top bar |
 |  06 Mar 2006: | Remove my tag vote; added exclude="", minsize="" and maxsize="" parameters; more intuitive icons; in default view, sort tags alphabetically instead of sort by tag vote |
 |  03 Mar 2006: | Allow underscore in tags (and convert space and dash to underscore); added web="" and topic="" parameters; fixed font size issue in tag cloud with disproportional counts |
 |  28 Feb 2006: | Use tabs in all/my/specific tags view; show related tags in specific tags view; check if topic exists when adding tags; |
@@ -183,9 +189,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TagMeViewAllTags, %TWIKIWEB%.TagMeViewMyTags, %TWIKIWEB%.TagMeViewSpecificTag, %TWIKIWEB%.TagMeDebugViewTags, %TWIKIWEB%.TagMeDebugSpecificTag, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %TWIKIWEB%.TagMeViewAllTags, %TWIKIWEB%.TagMeViewMyTags, %TWIKIWEB%.TagMeSearch, %TWIKIWEB%.TagMeDebugViewTags, %TWIKIWEB%.TagMeDebugSearch, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main.PeterThoeny - 06 Mar 2006
+-- TWiki:Main.PeterThoeny - 11 Mar 2006
 
 %META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="" date="1141691885" path="tag_add.gif" size="857" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="tag_ok.gif" attr="h" comment="" date="1141691901" path="tag_ok.gif" size="869" user="PeterThoeny" version="1.2"}%
