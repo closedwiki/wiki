@@ -306,5 +306,17 @@ sub isInGroup {
     return $TWiki::Plugins::SESSION->{user}->isInList( $group );
 }
 
+sub getTopicPreferenceValue {
+    my ($web, $topic, $prefName) = @_;
+
+    # This should really be calling TWiki::Func::readMeta, but it doesn't bloody exist!
+    my( $meta, $text ) = TWiki::Func::readTopic($web, $topic);
+
+    if (my $prefhash = $meta->get($prefName)) {
+	return $prefhash->{value};
+    }
+    return 0;
+}
+
 
 1;
