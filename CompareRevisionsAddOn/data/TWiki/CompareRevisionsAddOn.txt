@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="jcf" date="1109775449" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="jcf" date="1141040906" format="1.0" version="1.9"}%
 ---+ Compare Revisions Add-On
 
 This add-on compares the renderd HTML output of two revisions and shows the differences broken down to the word-by-word level if necessary. The output can be formatted by templates and skins.
@@ -141,17 +141,36 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	  | ==templates/compare.pattern.tmpl== | Same for pattern skin |
 	  | ==templates/interweave.tmpl==	| Template for interwoven output |
 	  | ==templates/interweave.pattern.tmpl== | Same for pattern skin |
+	  | _The following files are only in the distribution for the Dakar (4.0.x) release_ ||
+	  | ==lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm== | Helper plugin (Dakar only) |
+	  | ==data/TWiki/CompareRevisionsAddonPlugin.txt== | Plugin topic (Dakar only) |
+	  | ==data/TWiki/CompareRevisionsAddonPlugin.txt,v== | Plugin topic repository (Dakar only) |
+	  | ==templates/view_cra.tmpl== | Replacement for view.tmpl (Dakar only) |
+	  | ==templates/view_cra.pattern.tmpl== | Replacement for view.pattern.tmpl (Dakar only) |
 	* Test if the installation was successful:%BR%
 	  Call ==%<nop>SCRIPTURL%/compare/Web/Topic== with
 	  some existing topic.
 	* Add links to the _compare_ script in your templates for viewing a topic 
 	  (or replace the links to _rdiff_ with links to _compare_)
+	  (but see below for Dakar release) 
+
+The following instructions apply only for the Dakar (4.0.x) release of TWiki:
+
+	* Enable the helper plugin CompareRevisionsAddonPlugin with the configure script
+	* If you want to replace the links to _rdiff_  by links to _compare_, either replace
+	  the view.tmpl by the provided view_cra.tmpl, and view.pattern.tmpl by view_cra.pattern.tmpl,
+	  or include a line <br>
+	  ==SET VIEW_TEMPLATE = view_cra==
+	  in TWiki.TWikiPreferences
+	  (These templates will also support the HistoryPlugin, if it is enabled)
+
 
 ---++ Add-On Info
 
 |  Add-on Author: | TWiki:Main/JChristophFuchs |
-|  Add-on Version: | 03 Mar 2005 (v1.3) |
+|  Add-on Version: | 03 Mar 2005 (Twiki Sep 2004 release) / 26 Feb 2006 (Twiki 4.0.x release) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Feb 2006: | Updated for Dakar |
 |  02 Mar 2005: | Corrected bug concerning uninitialized elements |
 |  03 Feb 2005: | Removed blank paragraphs before comparing |
 |  20 Jan 2005: | Initial version |
@@ -168,6 +187,8 @@ __Related Topic:__ %TWIKIWEB%.TWikiAddOns
 -- TWiki:Main/JChristophFuchs - 20 Jan 2005
 
 
-%META:FILEATTACHMENT{name="CompareRevisionsAddOn.zip" attr="" comment="zip file containing all files of the distribution" date="1106231566" path="CompareRevisionsAddOn.zip" size="16112" user="jcf" version="1.1"}%
+%META:FILEATTACHMENT{name="CompareRevisionsAddOn.zip" attr="" comment="zip file containing all files of the distribution (Sep 2004 release)" date="1109775619" path="CompareRevisionsAddOn.zip" size="17278" user="jcf" version="1.2"}%
 %META:FILEATTACHMENT{name="interweave.png" attr="" comment="Screenshot of interwoven output" date="1106231658" path="interweave.png" size="4375" user="jcf" version="1.1"}%
 %META:FILEATTACHMENT{name="sidebyside.png" attr="" comment="Screenshot of side-by-side output" date="1106231695" path="sidebyside.png" size="6359" user="jcf" version="1.1"}%
+%META:FILEATTACHMENT{name="CompareRevisionsAddOn.Dakar.zip" attr="" comment="Addon for Dakar (4.0.x) release" date="1141041191" path="CompareRevisionsAddOn.Dakar.zip" size="27843" user="jcf" version="1.1"}%
+%META:REVCOMMENT{comment_1="Attached file !CompareRevisionsAddOn.Dakar.zip" comment_2="Changed properties for attachment !CompareRevisionsAddOn.zip" comment_3="Changed properties for attachment !CompareRevisionsAddOn.Dakar.zip" minor_1="0" minor_2="0" minor_3="0" ncomments="3" rev_1="9" rev_2="9" rev_3="9" t_1="Upload1141041192" t_2="PropChanged1141041306" t_3="PropChanged1141041333"}%

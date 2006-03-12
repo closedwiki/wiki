@@ -14,6 +14,8 @@
 #  3 Feb 2005 - JChristophFuchs - remove blank paragraphs before comparing
 #  2 Mar 2005 = JChristophFuchs - corrected bug in _compareText with
 #                                 uninitialized elements from sdiff
+# 14 Sep 2005 - JChristophFuchs - Fix for Codev.SecurityAlertExecuteCommandsWithRev
+# 26 Feb 2006 - JChristophFuchs - Updated for Dakar
 ########################################################################
 package TWiki::UI::Compare;
 
@@ -21,8 +23,11 @@ use strict;
 
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
-use TWiki;
+
+use TWiki::UI;
 use TWiki::Func;
+use TWiki::Plugins;
+
 use HTML::TreeBuilder;
 use Algorithm::Diff;
 use Data::Dumper;
@@ -37,8 +42,13 @@ my $context;
 my $scripturl;
 
 sub compare {
+    my $session = shift;
 
-    my ( $webName, $topic, $userName, $query ) = @_;
+    $TWiki::Plugins::SESSION = $session;
+
+    my $query   = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic   = $session->{topicName};
 
     unless ( TWiki::Func::topicExists( $webName, $topic) ) {
 	TWiki::Func::redirectCgiQuery( $query, 
@@ -66,37 +76,56 @@ sub compare {
     my $maxrev = (TWiki::Func::getRevisionInfo($webName, $topic) )[2];
     my $rev2 = $query->param('rev2') || $maxrev;
     $rev2 =~ s/^1\.// if $rev2;
+    # Fix for Codev.SecurityAlertExecuteCommandsWithRev
+    $rev2 = $maxrev unless( $rev2 =~ s/.*?([0-9]+).*/$1/o );
     $rev2 = $maxrev if $rev2 > $maxrev;
     $rev2 = 1       if $rev2 < 1;
     my $rev1 = $query->param('rev1') || $rev2-1;
     $rev1 =~ s/^1\.// if $rev1;
+    # Fix for Codev.SecurityAlertExecuteCommandsWithRev
+    $rev1 = $maxrev unless( $rev1 =~ s/.*?([0-9]+).*/$1/o );
     $rev1 = $maxrev if $rev1 > $maxrev;
     $rev1 = 1       if $rev1 < 1;
 
     ($rev1, $rev2) = ($rev2, $rev1) if $rev1 > $rev2;
 
+    # Set skin temporarily to classic, so attachments and forms
+    # are not rendered with twisty tables
+
+    my $savedskin = $query->param( 'skin' );
+    $query->param( 'skin', 'classic' );
+
     # Get the HTML trees of the specified versions
 
-    my $tree2 = _getTree($webName, $topic, $rev2);
+    my $tree2 = _getTree($session, $webName, $topic, $rev2);
     if ($tree2 =~ /^http:.*oops/) {
 	TWiki::Func::redirectCgiQuery( $query, $tree2);
     }
-    my $tree1 = _getTree($webName, $topic, $rev1);
+    my $tree1 = _getTree($session, $webName, $topic, $rev1);
     if ($tree1 =~ /^http:.*oops/) {
 	TWiki::Func::redirectCgiQuery( $query, $tree1);
     }
 
+    # Reset the skin
+
+    if ($savedskin) {
+	$query->param( 'skin', $savedskin );
+    } 
+    else {
+	$query->delete( 'skin' );
+    }
+
+    # Get revision info for the two revisions
+
     my $revinfo1 = getRevInfo($webName, $rev1, $topic);
     my $revinfo2 = getRevInfo($webName, $rev2, $topic);
-    my $revtitle1 = 'r1.'.$rev1;
-    my $revtitle2 = 'r1.'.$rev2;
+    my $revtitle1 = 'r'.$rev1;
+    my $revtitle2 = 'r'.$rev2;
 
     # get and process templates
 
-    my $skin = $query->param( "skin" );
-    $skin = &TWiki::Func::getPreferencesValue( "SKIN" ) unless ( $skin );
     my $tmpl = TWiki::Func::readTemplate
-	       ($interweave ? 'interweave' : 'compare',$skin);
+	       ($interweave ? 'interweave' : 'compare');
 
     $tmpl=~ s/\%META{.*?\}\%\s*//g;	# Meta data already processed
 					# in _getTree
@@ -205,21 +234,23 @@ sub compare {
     my $revisions = " | <a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$rev1&amp;rev2=$rev2&amp;render=" 
 		  . ($interweave ? 'sidebyside' : 'interweave')
 		  . '&amp;context='.$context
-		  . ($skin ? "&amp;skin=$skin" : '' )
+		  . ($query->param('skin') ? 
+			'&amp;skin='.$query->param('skin') 
+		      :	'' )
 		  . '">' 
 		  . ($interweave ? 'Side-by-side' : 'Interweave')
-		  . '</a>';
+		  . '</a> |';
 
     while( $i > 0 ) {
-	$revisions .= " | <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
+	$revisions .= "  <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
 
 	last if $i==1 || 
-		 ($TWiki::numberOfRevisions > 0 && 
-		  $i == $maxrev - $TWiki::numberOfRevisions +1) ;
+		 ($TWiki::cfg{NumberOfRevisions} > 0 && 
+		  $i == $maxrev - $TWiki::cfg{NumberOfRevisions} +1) ;
 	if( $i == $rev2 && $i-1 == $rev1 ) {
-	  $revisions .= " | &gt;";
+	  $revisions .= "  &lt;";
 	} else {
-	  $revisions .= " | <a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.".($i-1).'">&gt;</a>';
+	  $revisions .= "  <a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.".($i-1).($query->param('skin')?'&amp;skin='.$query->param('skin'):'').'&amp;render='.$renderStyle.'">&lt;</a>';
 	}
 	$i--; 
     }
@@ -245,23 +276,17 @@ sub _getTree {
 
     # Purpose: Get the rendered version of a document as HTML tree
 
-    my ($webName, $topic, $rev) = @_;
+    my ($session, $webName, $topicName, $rev) = @_;
 
     # Read document
 
-    my $text = TWiki::Func::readTopicText(
-		$webName, $topic, $rev, 0);
-    return $text if ($text =~ /^http:.*oops/);
+    my ($meta, $text) = TWiki::Func::readTopic($webName, $topicName, $rev);
+    $text .= "\n" . '%META{"form"}%';
+    $text .= "\n" . '%META{"attachments"}%';
 
-    # Process Meta data
-
-    my $meta = new TWiki::Meta;
-    $text = $meta->read($text);
-    $text .= '%META{"form"}%';# if $text =~ /%META:FORM/;
-    $text .= '%META{"attachments"}%';#if $text =~ /%META:FILEATTACHMENT/;
-    $text =~ s/\%META:[A-Z]+\{.*?\}\%\s*//g;
-
-    $text = TWiki::handleMetaTags($webName,$topic,$text,$meta,0);
+    $session->enterContext( 'can_render_meta', $meta );
+    $text = TWiki::Func::expandCommonVariables( $text, $topicName, $webName );
+    $text = TWiki::Func::renderText($text, $webName);
 
     $text =~ s/^\s*//;
     $text =~ s/\s*$//;
@@ -486,34 +511,15 @@ sub _getTextFromAction {
     return ($text1 || '', $text2 || '');
 }
 
-# Copied from TWiki::UI::RDiff
-=pod
-
----+++ getRevInfo( $web, $rev, $topic, $short ) ==> $revInfo
-
-| Description: | gets a displayable date and user string |
-| Parameter: =$web= | topic webname |
-| Parameter: =$rev= | revision number of the topic |
-| Parameter: =$topic= | topic name |
-| Parameter: =$short= | use a shortened version of the date string |
-| Return: =$text= | date - wikiusername |
-| TODO: | move to Render.pm |
-
-=cut
-# -------------------------
 sub getRevInfo
 {
     my( $web, $rev, $topic, $short ) = @_;
 
-    my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev");
-    $user = TWiki::Render::getRenderedVersion( TWiki::userToWikiName( $user ) );
-    if ( $short ) {
-            $date = TWiki::formatTime( $date, "\$day \$month \$year" );
-        # eliminate white space to prevent wrap around in HR table:
-        $date =~ s/ /\&nbsp\;/go;
-    } else {
-        $date = TWiki::formatTime( $date );
-        }
+    my( $date, $user ) = TWiki::Func::getRevisionInfo( $web, $topic, $rev);
+    my $mainweb = TWiki::Func::getMainWebname();
+    $user = "$mainweb.$user";
+#    $user = TWiki::Render::getRenderedVersion( TWiki::userToWikiName( $user ) );
+    $date = TWiki::Func::formatTime( $date );
 
     my $revInfo = "$date - $user";
     $revInfo =~ s/[\n\r]*//go;
