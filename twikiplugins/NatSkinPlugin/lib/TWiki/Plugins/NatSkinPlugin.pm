@@ -518,7 +518,6 @@ sub initSkinState {
   $theToggleSideBar = 'off' if $skinState{'border'} eq 'thin' && 
     $skinState{'action'} =~ /^(edit|manage|rdiff|natsearch|changes|search)$/;
     # SMELL get away with this hardcode
-print STDERR "action='$skinState{'action'}', border='$skinState{'border'}'\n";
 
   $skinState{'sidebar'} = $theToggleSideBar 
     if $theToggleSideBar && $theToggleSideBar ne '';
