@@ -182,6 +182,7 @@ sub handleRecentComments {
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
   my $theCategory = $params->{category} || '.*';
+  my $theAuthor = $params->{author} || '.*';
   $theAge =~ s/[^\d]+//go;
   $theWeb = $params->{web} || $theWeb;
 
@@ -226,6 +227,8 @@ sub handleRecentComments {
     next unless $state eq 'enabled';
     my $category = $baseRefForm->fastget('SubjectCategory');
     next unless $category =~ /$theCategory/;
+    my $author = $baseRefForm->fastget('BlogAuthor');
+    next unless $author =~ /$theAuthor/;
 
     # found
     $theLimit-- unless $baseRefs{$baseRefName};

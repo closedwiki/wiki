@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131747476" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142193963" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -14,9 +14,9 @@
 <a name="topComment"></a>
 <div class="blogScroll">
 ~~~ <a href="#bottomComment" title="scroll down">&darr;</a>
-~~~ <a href="#%WEB%_<nop>%NAME%" title="scroll up">&uarr;</a>
+~~~ <a href="#%BASEWEB%_<nop>%NAME%" title="scroll up">&uarr;</a>
 ~~~ </div>
-%~~ COUNTCOMMENTS{"%WEB%.%NAME%"
+%~~ COUNTCOMMENTS{"%BASEWEB%.%NAME%"
 ~~~   hidenull="on"
 ~~~   header="<h2>"
 ~~~   single="One Comment" 
@@ -26,10 +26,10 @@
 <div class="blogEntryFeed">
 ~~~  <a class="natFeedIcon blogFeedIcon" 
 ~~~     title="RSS Feed for the Comments of this Entry"
-~~~     href="%SCRIPTURL{"view"}%/%WEB%/WebRssComments?name=%NAME%">RSS</a>
+~~~     href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRssComments?name=%NAME%">RSS</a>
 *~~  <a class="natFeedIcon blogFeedIcon" 
 ~~~     title="ATOM Feed for the Comments of this Entry"
-~~~     href="%SCRIPTURL{"view"}%/%WEB%/WebAtomComments?name=%NAME%">ATOM</a>
+~~~     href="%SCRIPTURL{"view"}%/%BASEWEB%/WebAtomComments?name=%NAME%">ATOM</a>
 </div>
 ~~~ <!-- %CALC{"$SET(commentCounter, 0)"}% -->
 %~~ DBQUERY{"TopicType='BlogComment' AND BlogRef='%NAME%'"

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142072750" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142171497" format="1.1" version="1.1"}%
 %META:TOPICPARENT{}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -11,7 +11,7 @@
 
 <div class="feeds">
 %~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
-~~~         format="$percntDBCALL{\"RenderBlogLinksInCategory\" NAME=\"$topic\"}$percnt"
+~~~         format="$percntDBCALL{\"RenderBlogLinksInCategory\" CAT=\"$topic\"}$percnt"
 ~~~ }%
 </div>
 

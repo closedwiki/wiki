@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131560463" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142176497" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -6,6 +6,7 @@
 ---++ Parameters
    * LIMIT: maximal number of BlogEntries to list
    * CAT: optionally render restrict list to this category
+   * AUTHOR: optionally restrict list to this autor
 
 ---++ Implementation
 <verbatim>
@@ -13,7 +14,8 @@
 ~~~ %STOPALIASAREA%
 %~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND
 ~~~   State='enabled'
-~~~   %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'"}%"
+~~~   %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'"}%
+~~~   %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'"}%"
 ~~~  order="createdate" reverse="on" limit="%LIMIT%" 
 ~~~  hidenull="on"
 ~~~  header="<div class=\"blogSideBarSection blogSideBarLatest\">

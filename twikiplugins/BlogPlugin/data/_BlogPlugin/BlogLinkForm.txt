@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1138907213" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142179531" format="1.1" version="1.1"}%
 %META:TOPICPARENT{}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -12,6 +12,7 @@
 | Limit | text | 4 | | maximum number of articles in feed to display | |
 | Refresh | text | 4 | | feed refresh rate in minutes for caching feed; "0" for no caching | |
 | SubjectCategory | checkbox | 3 | %DBQUERY{"TopicType=~'\bSubjectCategory\b'" separator=", "}% | BlogLink categories | |
+| BlogAuthor | text | 78 | | user of this BlogLink |
 | Comment | textarea | 80x4 | | informal description | |
 
 

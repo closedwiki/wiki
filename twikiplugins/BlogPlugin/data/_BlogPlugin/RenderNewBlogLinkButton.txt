@@ -21,6 +21,7 @@ See also: BlogLink, RenderNewBlogEntryButton, BlogLinkForm, BlogLinkTemplate
 <input type="hidden" name="topicparent" value="WebHome" />
 <input type="hidden" name="topic" value="BlogLinkXXXXXXXXXX" />
 <input type="hidden" name="TopicType" value="BlogLink" />
+<input type="hidden" name="BlogAuthor" value="%WIKINAME%" />
 <input type="hidden" name="action" value="form" />
 <input type="submit" class="blogSubmitButton" value="%TEXT%" />
 </form> 

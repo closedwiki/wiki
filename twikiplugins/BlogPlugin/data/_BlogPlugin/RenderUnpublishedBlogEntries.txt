@@ -1,15 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141985181" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142177586" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
-NONE
+   * AUTHOR: only list unpublished stuff by the given author (optional)
 
 ---++ Implementation
+<verbatim>
 %STARTINCLUDE%
 *~~
-%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='disabled' AND name=~'^\bBlog'"
+%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='disabled' AND name=~'^\bBlog'
+~~~     %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
 ~~~   order="created" reverse="on"
 ~~~   hidenull="on"
 ~~~   header="
@@ -25,8 +27,14 @@ NONE
 ~~~ }%
 *~~
 %STOPINCLUDE%
+</verbatim>
 
 <!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%"}%
+</div>
 
 %DBCALL{"RenderFunctionCallers"}%
 

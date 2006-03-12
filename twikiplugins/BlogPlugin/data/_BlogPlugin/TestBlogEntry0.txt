@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141986065" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142193664" format="1.1" version="1.1"}%
 %DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
 %DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%  
 %DBCALL{"RenderAddComment"}%    
@@ -6,6 +6,7 @@
    * Set WHITEBOARD = off
    * Set SIDEBAR = Entry
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup  
+   * Set VIEW_TEMPLATE = HiddenFormView
 -->  
 
 

@@ -112,6 +112,9 @@ referred <nop>BlogEntry.
 | =category="..."= \
 | pattern that limits comments to those whose <nop>BlogEntries match the \
   <nop>SubjectCategory; defaults to ".*" |
+| =author="..."= \
+| pattern that limits comments to those on <nop>BlogEntries from the given author \
+  defaults to ".*" |
 
 (Each <nop>BlogEntry that is found given the above search parameters and limits
 is called a hit.)
@@ -215,8 +218,20 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.70 |
+|  Version: | v0.80 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  12 Mar 2006: | better separation of multiple authors: each <nop>BlogAuthor page \
+                  renders a dedicated About info now taken from the new <nop>BlogAuthorForm; \
+		  the sidebar renders the items that belong to the author only using \
+		  the new Author section in <nop>RenderSideBar; \
+		  unpublished postings are listed per author only; \
+		  added RenderAuthors to the sidebar - disabled on a single-author blog;\
+		  added <nop>BlogAuthor to <nop>BlogLinks so that every author can have \
+		  his own sidebar as well as share parts with other authors; \
+		  added AUTHOR to a couple of <nop>TopicTunctions to make them author-aware; \
+		  added HOME parameter to <nop>RenderBlogEntriesOfAuthor link to a \
+		  different topic than the default <nop>Main.AuthorName one; \
+                  added author argument to RECENTCOMMENTS |
 |  11 Mar 2006: | css fixes to catch up with the recent changes to the PatternSkin; \
                   replaced css based way to hide topic forms with VIEW_TEMPLATEs; \
 		  added comments field to <nop>SubjectCategories; \

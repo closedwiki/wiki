@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131556405" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142193717" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TestBlogEntry0"}%
 %~~ DBCALL{"RenderFrontPage" 
 ~~~   SKIP="%URLPARAM{"skip"}%" 
 ~~~   LIMIT="%URLPARAM{"limit"}%" 
@@ -14,7 +15,6 @@
    * Set VIEW_TEMPLATE = HiddenFormView
 -->
 
-
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="FrontPage"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogComment"}%
 %META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="%25SITEMAPUSETO%25"}%

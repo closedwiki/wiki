@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139240378" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142181049" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+!! Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -17,11 +17,15 @@ See also BlogHelpText
 %STARTINCLUDE%
 *~~
 <div class="blogSideBar">
----+ About
+---+!! About
 *~~ %REDDOT{"%WEB%.BlogAbout"}%
 <div class="blogAbout">
 %IFDEFINEDTHEN{"%SIDEBAR%"}%
+%IFDEFINEDTHEN{"%SIDEBAR%" as="Author"}%
+%$nopDBQUERY{topic="%BASETOPIC%" format="$formfield(About)"}%
+%ELSEDEFINED%
 %$nopDBCALL{"BlogHelpText" section="%SIDEBAR%"}%
+%FIDEFINED%
 %ELSEDEFINED%
 %$nopDBCALL{"BlogHelpText" section="Default"}%
 %FIDEFINED%
@@ -61,18 +65,38 @@ See also BlogHelpText
 *~~
 %DBCALL{"RenderAuthorTools" warn="off"}%
 %DBCALL{"RenderAdminTools" warn="off"}% 
-%DBCALL{"RenderRecentComments" LIMIT="5" CAT=".*"}%
+%DBCALL{"RenderRecentComments" LIMIT="5"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10"}%
-%DBCALL{"RenderPages" CAT=".*"}%
+%DBCALL{"RenderPages"}%
+%DBCALL{"RenderAuthors"}%
 %DBCALL{"RenderArchives"}%
 %DBCALL{"RenderCategories"}%
-%DBCALL{"RenderBlogRoll" CAT=".*"}%
+%DBCALL{"RenderBlogRoll"}%
 %DBCALL{"RenderVisitors"}%
 %IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
----+ Technorati
+---+!! Technorati
 <script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
 %FIDEFINED%
 %ENDSECTION{"Default"}%
+</verbatim>
+
+<verbatim>
+%STARTSECTION{"Author"}%
+*~~
+%DBCALL{"RenderAuthorTools" warn="off" AUTHOR="%BASETOPIC%"}%
+%DBCALL{"RenderAdminTools" warn="off"}% 
+%DBCALL{"RenderRecentComments" LIMIT="5" AUTHOR="%BASETOPIC%"}%
+%DBCALL{"RenderRecentPostings" LIMIT="10" AUTHOR="%BASETOPIC%"}%
+%DBCALL{"RenderPages" AUTHOR="%BASETOPIC%"}%
+%DBCALL{"RenderArchives" AUTHOR="%BASETOPIC%"}%
+%DBCALL{"RenderCategories"}%
+%DBCALL{"RenderBlogRoll" AUTHOR="%BASETOPIC%"}%
+%DBCALL{"RenderVisitors"}%
+%IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
+---+!! Technorati
+<script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
+%FIDEFINED%
+%ENDSECTION{"Author"}%
 </verbatim>
 
 ---++ Page sidebar
@@ -116,7 +140,7 @@ See also BlogHelpText
 *~~
 %DBCALL{"RenderAuthorTools" warn="off"}%
 %DBCALL{"RenderAdminTools" warn="off"}%
-%DBCALL{"RenderBlogRoll" CAT=".*"}%
+%DBCALL{"RenderBlogRoll"}%
 %ENDSECTION{"Aggregation"}%
 </verbatim>
 
@@ -138,13 +162,12 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}%
 %DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
-%DBCALL{"RenderPages" CAT="%BASETOPIC%"}%
+%DBCALL{"RenderPages"}%
 %DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
 %DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%
 %ENDSECTION{"Category"}%
 </verbatim>
-
 
 ---++ Nosidebar sidebar
 <verbatim>

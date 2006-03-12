@@ -1,10 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131556010" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142176094" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
    * NAME: name of a BlogAuthor
+   * HOME: home topic of the author, defaults to the one in the %MAINWEB%
    * LIMIT: number of postings per page
    * SKIP: offset into the archive
 
@@ -13,10 +14,10 @@
 %STARTINCLUDE%
 *~~
 <h1 style="margin-bottom:0px;padding-bottom:0px">
-~~~ [[%MAINWEB%.%NAME%][%SPACEOUT{"%NAME%"}%]]
+~~~ [[%IFDEFINED{"%HOME%" then="%HOME%" else="%MAINWEB%.%NAME%"}%][%SPACEOUT{"%NAME%"}%]]
 </h1>
 <div class="blogArchiveDescription">
-   %DBQUERY{topic="%NAME%" format="$expand(TopicDescription)"}% 
+   %DBQUERY{topic="%NAME%" format="$expand(TopicDescription)"}%
 </div>
 %~~ DBCALL{"RenderFrontPage" 
 ~~~   %IFDEFINED{"%SKIP%" then="SKIP=\"%SKIP%\"" glue="off"}%  

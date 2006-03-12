@@ -24,10 +24,12 @@ pub/TWiki/BlogUp/BlogPluginSnap8.jpg 0644
 pub/TWiki/BlogUp/BlogPluginSnap9.jpg 0644
 data/_BlogPlugin/AdminTool.txt 0644
 data/_BlogPlugin/AdminToolTemplate.txt 0644
+data/_BlogPlugin/AtomViewTemplate.txt 0644
 data/_BlogPlugin/BaseRef.txt 0644
 data/_BlogPlugin/BlogAbout.txt 0644
 data/_BlogPlugin/BlogArchive.txt 0644
 data/_BlogPlugin/BlogAuthor.txt 0644
+data/_BlogPlugin/BlogAuthorForm.txt 0644
 data/_BlogPlugin/BlogAuthorTemplate.txt 0644
 data/_BlogPlugin/BlogComment.txt 0644
 data/_BlogPlugin/BlogCommentForm.txt 0644
@@ -55,6 +57,7 @@ data/_BlogPlugin/RenderAdminTools.txt 0644
 data/_BlogPlugin/RenderArchives.txt 0644
 data/_BlogPlugin/RenderAtom.txt 0644
 data/_BlogPlugin/RenderAuthorTools.txt 0644
+data/_BlogPlugin/RenderAuthors.txt 0644
 data/_BlogPlugin/RenderBlogArchive.txt 0644
 data/_BlogPlugin/RenderBlogArchiveCat.txt 0644
 data/_BlogPlugin/RenderBlogArchiveChron.txt 0644
@@ -102,6 +105,7 @@ data/_BlogPlugin/RenderUnpublishedBlogEntries.txt 0644
 data/_BlogPlugin/RenderValidateButton.txt 0644
 data/_BlogPlugin/RenderVisitors.txt 0644
 data/_BlogPlugin/RenderWebChanges.txt 0644
+data/_BlogPlugin/RssViewTemplate.txt 0644
 data/_BlogPlugin/SubjectCategory.txt 0644
 data/_BlogPlugin/SubjectCategoryForm.txt 0644
 data/_BlogPlugin/SubjectCategoryTemplate.txt 0644

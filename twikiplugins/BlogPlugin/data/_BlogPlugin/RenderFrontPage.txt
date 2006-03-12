@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1133291260" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142179225" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -35,7 +35,6 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 *~~   "
 ~~~ }%
 ~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
-~~~
 %STOPINCLUDE%
 </verbatim>
 

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1136310298" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142179174" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -15,7 +15,6 @@ see also: RenderFullTeaser
 *~~
 %~~ DBQUERY{topic="%NAME%" web="%WEB%"
 ~~~   format="%DBCALL{"RenderBlogTeaser" section="format"}%"}%
-*~~
 %STOPINCLUDE%
 </verbatim>
 
@@ -23,7 +22,7 @@ see also: RenderFullTeaser
 <verbatim>
 %STARTSECTION{"format"}%
 *~~ <div class=\"blogEntry\">
-~~~ %STOPALIASAREA%
+~~~ %STOPALIASAREA% <noautolink>
 ~~~   <table class=\"blogHeadline\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
 ~~~   <tr><td>
 ~~~   <h2>
@@ -57,7 +56,7 @@ see also: RenderFullTeaser
 ~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
 ~~~     </span>
 ~~~   </div>
-~~~   %STARTALIASAREA%
+~~~   </noautolink> %STARTALIASAREA%
 ~~~   <div class=\"blogText\">$n
 ~~~      <noautolink>$n
 ~~~      $formfield(Teaser)
@@ -68,14 +67,13 @@ see also: RenderFullTeaser
 ~~~      </noautolink>$n
 ~~~   </div>
 ~~~   %STOPALIASAREA%
-~~~ </div>
-*~~ 
+</div>
 %ENDSECTION{"format"}%
 </verbatim>
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="TestBlogEntry0"}%
+%DBCALL{"%TOPIC%" NAME="BlogEntry32"}%
 </div>
 
 

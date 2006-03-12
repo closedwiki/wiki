@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139653270" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142193857" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -13,14 +13,14 @@ NONE
 <div class="blogAddComment">
 ---++ Leave a Reply
 
-<form name="AddCommentForm" action="%SCRIPTURL{"save"}%/%WEB%/BlogCommentXXXXXXXXXX" method="post">
+<form name="AddCommentForm" action="%SCRIPTURL{"save"}%/%BASEWEB%/BlogCommentXXXXXXXXXX" method="post">
 <input type="hidden" name="redirect" value="%BASETOPIC%#bottomComment" />
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="BlogCommentTemplate" />
 <input type="hidden" name="formtemplate" value="BlogCommentForm" />
 <input type="hidden" name="TopicType" value="BlogComment" />
 <input type="hidden" name="BlogRef" value="%BASETOPIC%" />
-<input type="hidden" name="BaseRef" value="%DBQUERY{topic="%BASETOPIC%" format="$expand(BaseRef or name)"}%" />
+<input type="hidden" name="BaseRef" value="%DBQUERY{web="%BASEWEB%" topic="%BASETOPIC%" format="$expand(BaseRef or name)"}%" />
 <input type="hidden" name="topicparent" value="%BASETOPIC%" />
 <input type="hidden" name="Nr" value="%DBCALL{"RenderNextCommentNr" NAME="%BASETOPIC%"}%" />
 <input type="hidden" name="topic" value="BlogCommentXXXXXXXXXX" />
@@ -56,7 +56,6 @@ NONE
 </table>
 </form> 
 </div> 
-*~~
 %STOPINCLUDE%
 
 
