@@ -249,6 +249,7 @@ sub handleDBSTATS {
   my $theSort = $params->{sort} || $params->{order} || 'alpha';
   my $theReverse = $params->{reverse} || 'off';
   my $theLimit = $params->{limit} || 0;
+  my $theHideNull = $params->{hidenull} || 'off';
   $theLimit =~ s/[^\d]//go;
 
   #writeDebug("theSearch=$theSearch");
@@ -320,6 +321,7 @@ sub handleDBSTATS {
   my $numkeys = scalar(keys %statistics);
   my $mean = 0;
   $mean = (($sum+0.0) / $numkeys) if $numkeys;
+  return '' if $theHideNull eq 'on' && $numkeys == 0;
 
   # format output
   my $result = '';
