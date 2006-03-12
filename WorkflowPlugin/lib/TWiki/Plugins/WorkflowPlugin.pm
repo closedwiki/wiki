@@ -85,8 +85,9 @@ sub initPlugin {
 
     $globWebName = $web;
 
-    # This should really be a pair (web, topic), but we'll leave it like this for now
     $workflowTopic = getWorkflowTopic($web, $topic);
+
+    TWiki::Func::writeDebug(" workflow topic is $workflowTopic") if $debug;
 
     TWiki::Func::writeDebug(" $pluginName - initPlugin ") if $debug;
 
@@ -101,11 +102,21 @@ sub initPlugin {
 	    parseWorkflow($workflowTopic, $user, $theCurrentState);
 
 	TWiki::Func::registerTagHandler("WORKFLOW", \&_WORKFLOW);
+	TWiki::Func::registerTagHandler("WORKFLOWNAME", \&_WORKFLOWNAME);
 	TWiki::Func::registerTagHandler("WORKFLOWSTATEMESSAGE", \&_WORKFLOWSTATEMESSAGE);
 	TWiki::Func::registerTagHandler("WORKFLOWTRANSITION", \&_WORKFLOWTRANSITION);
 	TWiki::Func::registerTagHandler("WORKFLOWEDITTOPIC", \&_WORKFLOWEDITTOPIC);
     }
     return 1;
+}
+
+#
+# $session - a reference to the TWiki session object (may be ignored)
+# %params - a reference to a TWiki::Attrs object containing parameters.
+# $topic - name of the topic in the query
+# $web - name of the web in the query
+sub _WORKFLOWNAME {
+    return 
 }
 
 #
@@ -139,7 +150,7 @@ sub _WORKFLOW {
             # store new status as meta data
             changeWorkflowState($web, $topic, $$globWorkflow{$action});
 
-	    TWiki::Func::writeDebug("After changeWorkflowState");
+	    TWiki::Func::writeDebug("After changeWorkflowState") if $debug;
 
             ($globWorkflow, $theCurrentState, $globWorkflowMessage, $globAllowEdit) = 
 		parseWorkflow($workflowTopic, $user, $theCurrentState);
@@ -183,8 +194,15 @@ sub getWorkflowTopic {
 
     if ($theCurrentState = $meta->get('WORKFLOW')) {
 	return $theCurrentState->{'workflow'};
-    } elsif ($wft = getWorkflowFromCGI()) {
-	$meta->put("WORKFLOW", { workflow => $wft });
+    } 
+
+    $wft = getWorkflowFromCGI();
+    $wft ||= TWiki::Contrib::FuncUsersContrib->getTopicPreferenceValue($web, $topic, "WORKFLOW");
+    my $prefHash = $meta->get('PREFERENCE', "WORKFLOW");
+    $wft ||= $prefHash->{value};
+
+    if ($wft) {
+	$meta->put("WORKFLOW", { 'workflow' => $wft } );
 	return $wft;
     }
     return 0;
@@ -266,7 +284,7 @@ sub Timestamp {
 sub changeWorkflowState {
     my ($web, $topic, $state) = @_;
 
-    TWiki::Func::writeDebug(" web: $web, topic: $topic, state: $state");
+    TWiki::Func::writeDebug(" web: $web, topic: $topic, state: $state") if $debug;
     my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
     $text = TWiki::Func::expandVariablesOnTopicCreation( $text );
     my ($dat, $author, $version, $comment) = $meta->getRevisionInfo();
@@ -396,7 +414,7 @@ sub userIsAllowed {
     }
 
     if ($allow) {
-	#TWiki::Func::writeDebug("Allow: $allow");
+	TWiki::Func::writeDebug("Allow: $allow") if $debug;
         my @allowed = split(/\s*\,\s*/, $allow);
         #my $wikiName = TWiki::Func::userToWikiName( $user, 1 );  # i.e. "JonDoe"
 
