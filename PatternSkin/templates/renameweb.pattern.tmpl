@@ -9,11 +9,7 @@
 %TMPL:DEF{"webaction"}%%MAKETEXT{"Rename"}%%TMPL:END%
 
 
-
-%TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="20" />%TMPL:END%
-
-
-%TMPL:DEF{"newweb"}%<p><input name="newweb" size="20" /></p>%TMPL:END%
+%TMPL:DEF{"newweb"}%<p><input name="newsubweb" size="20" /><input type="hidden" name="action" value="renameweb" /><input type="hidden" name="confirm" value="getlock" /></p>%TMPL:END%
 
 
 %TMPL:DEF{"newparentweb"}%<select class="twikiSelect" name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
