@@ -31,9 +31,9 @@ You may also choose to radically change the look and create a !PatternSkin-based
       * Mozilla/Firefox
    * Mac OS X
       * Safari 2.0.3
-      * Mozilla/Firefox
+      * Mozilla/Firefox 1.5 (note: Firefox 1.0 will show visual quirks)
    * *nix
-      * Mozilla/Firefox
+      * Mozilla/Firefox 1.5 (note: Firefox 1.0 will show visual quirks)
 
 ---++ Installation
 
