@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1141451131" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1142121665" format="1.0" version="1.5"}%
 %META:TOPICPARENT{name="TagMeViewAllTags"}%
 ---+ Tag-me: View My Tags
 
@@ -9,16 +9,16 @@
 <td>&nbsp;</td>
 <td bgcolor="#DDDDCC">&nbsp; *My Tags* &nbsp;</td>
 <td>&nbsp;</td>
-<td bgcolor="#EEEEDD">&nbsp; [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeViewSpecificTag?by=%URLPARAM{ "by" default="me" }%][Specific Tag]] &nbsp;</td>
+<td bgcolor="#EEEEDD">&nbsp; [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeSearch?by=%URLPARAM{ "by" default="me" }%][Tag Search]] &nbsp;</td>
 </tr></table>
 <table border="0" cellpadding="5" cellspacing="0" style="width:100%;">
 <tr bgcolor="#DDDDCC"><td style="width:100%;"></dr></tr>
 <tr bgcolor="#EEEEDD"><td style="width:100%;">
-%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeViewSpecificTag?tag=$tag;by=%URLPARAM{ "by" default="me" }%\" style=\"font-size:$size%\">$tag</a>" separator=", " by="%URLPARAM{ "by" default="me" }%" }%
+%TAGME{ tpaction="showalltags" format="<a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/TagMeSearch?tag=$tag;by=%URLPARAM{ "by" default="me" }%\" style=\"font-size:$size%\">$tag</a>" separator=", " by="%URLPARAM{ "by" default="me" }%" }%
 </td></tr></table>
 %STOPINCLUDE%
 
-__See also:__ TagMePlugin, TagMeViewSpecificTag, TagMeViewAllTags
+__See also:__ TagMePlugin, TagMeViewAllTags, TagMeSearch
 
--- TWiki:Main.PeterThoeny - 23 Feb 2006
+-- TWiki:Main.PeterThoeny - 11 Mar 2006
 

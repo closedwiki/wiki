@@ -23,10 +23,10 @@ package TWiki::Plugins::TagMePlugin;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName $debug
-        $initialized $attachDir $attachUrl $logAction $tagLinkFormat
+        $initialized $attachDir $attachUrl $logAction $tagLinkFormat $tagQueryFormat
     );
 
-$VERSION = '1.005';
+$VERSION = '1.006';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
 
@@ -57,8 +57,21 @@ sub initialize
     $attachDir = TWiki::Func::getPubDir()     . "/$installWeb/$pluginName";
     $attachUrl = TWiki::Func::getPubUrlPath() . "/$installWeb/$pluginName";
     $logAction = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_LOGACTION" );
-    $tagLinkFormat = '[[%SCRIPTURL%/view%SCRIPTSUFFIX%/' . $installWeb
-                   . '/TagMeViewSpecificTag?tag=$tag;by=$by][$tag]]';
+    $tagLinkFormat = '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/' . $installWeb
+                   . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
+    $tagQueryFormat = 
+          '<table style="width:100%;" border="0" cellspacing="0" cellpadding="2"><tr>$n'
+        . '<td style="width:50%;" bgcolor="#EEEEDD"> <b>[[$web.$topic][$topic]]</b> '
+        . '<font size="-1" color="#666666">in $web web</font></td>$n'
+        . '<td style="width:30%;" bgcolor="#EEEEDD">'
+        . '[[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]] - r$rev </td>$n'
+        . '<td style="width:20%;" bgcolor="#EEEEDD"> $wikiusername </td>$n'
+        . '</tr></table>$n'
+        . '<table style="width:100%;" border="0" cellspacing="0" cellpadding="2"><tr>$n'
+        . '<td>&nbsp;</td>$n'
+        . '<td style="width:99%;"><font size="-1" color="#666666">$n'
+        . '$summary %BR% Tags: $taglist </font></td>$n'
+        . '</tr><tr><td></td></tr></table>';
 
     $initialized = 1;
 }
@@ -82,21 +95,9 @@ sub handleTagMe
     if( $action eq 'show' ) {
         $text = showDefault();
     } elsif( $action eq 'showalltags' ) {
-        my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
-        my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
-        my $exclude   = TWiki::Func::extractNameValuePair( $attr, 'exclude' );
-        my $separator = TWiki::Func::extractNameValuePair( $attr, 'separator' );
-        my $format    = TWiki::Func::extractNameValuePair( $attr, 'format' );
-        my $by        = TWiki::Func::extractNameValuePair( $attr, 'by' );
-        my $minSize   = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
-        my $maxSize   = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
-        $text = showAllTags( $qWeb, $qTopic, $exclude, $format, $separator, $by, $minSize, $maxSize );
+        $text = showAllTags( $attr );
     } elsif( $action eq 'query' ) {
-        my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
-        my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
-        my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-        my $by  = TWiki::Func::extractNameValuePair( $attr, 'by' );
-        $text = queryTag( $qWeb, $qTopic, $tag, $by );
+        $text = queryTag( $attr );
     } elsif( $action eq 'newtag' ) {
         my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
         $text = newTag( $tag );
@@ -150,7 +151,8 @@ sub showDefault
         }
     }
     $text .= join( ', ', map{ $seen{$_} } sort keys( %seen ) );
-    $text .= ', <select name="tag"> <option></option> ';
+    $text .= ', ' if( scalar %seen );
+    $text .= '<select name="tag"> <option></option> ';
     my @allTags = readAllTags();
     foreach( @allTags ) {
         $text .= "<option>$_</option> " unless($seen{$_});
@@ -159,8 +161,8 @@ sub showDefault
     $text .= '<input type="hidden" name="tpaction" value="add" />';
     $text .= '<input type="image" src="' . $attachUrl . '/tag_addnew.gif" name="add" alt="Add" '
            . 'value="Select tag and add to topic" title="Select tag and add to topic" />, ';
-    $text .= " [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/$pluginName?"
-           . "from=$web.$topic#AddNewTag][create new tag]]";
+    $text .= " <a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/$pluginName?"
+           . "from=$web.$topic#AddNewTag\">create new tag</a>";
     $text .= '</form>';
     return $text;
 }
@@ -168,7 +170,16 @@ sub showDefault
 # =========================
 sub showAllTags
 {
-    my( $qWeb, $qTopic, $exclude, $format, $separator, $by, $minSize, $maxSize ) = @_;
+    my( $attr ) = @_;
+    my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
+    my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
+    my $exclude   = TWiki::Func::extractNameValuePair( $attr, 'exclude' );
+    my $by        = TWiki::Func::extractNameValuePair( $attr, 'by' );
+    my $format    = TWiki::Func::extractNameValuePair( $attr, 'format' );
+    my $separator = TWiki::Func::extractNameValuePair( $attr, 'separator' );
+    my $minSize   = TWiki::Func::extractNameValuePair( $attr, 'minsize' );
+    my $maxSize   = TWiki::Func::extractNameValuePair( $attr, 'maxsize' );
+
     my $topicsRegex = '';
     if( $qTopic ) {
         $topicsRegex = $qTopic;
@@ -260,7 +271,16 @@ sub showAllTags
 # =========================
 sub queryTag
 {
-    my( $qWeb, $qTopic, $qTag, $qBy ) = @_;
+    my( $attr ) = @_;
+    my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
+    my $qTopic    = TWiki::Func::extractNameValuePair( $attr, 'topic' );
+    my $qTag      = TWiki::Func::extractNameValuePair( $attr, 'tag' );
+    my $qBy       = TWiki::Func::extractNameValuePair( $attr, 'by' );
+    my $noRelated = TWiki::Func::extractNameValuePair( $attr, 'norelated' );
+    my $noTotal   = TWiki::Func::extractNameValuePair( $attr, 'nototal' );
+    my $sort      = TWiki::Func::extractNameValuePair( $attr, 'sort' ) || 'tagcount';
+    my $format    = TWiki::Func::extractNameValuePair( $attr, 'format' ) || $tagQueryFormat;
+    my $separator = TWiki::Func::extractNameValuePair( $attr, 'separator' ) || "\n";
 
     return '__Note:__ Please select a tag' unless( $qTag );
 
@@ -275,6 +295,9 @@ sub queryTag
     $qBy = '' if( $qBy eq 'all' );
     my $by = $qBy;
     $by = $user if( $by eq 'me' );
+    $format =~ s/([^\\])\"/$1\\\"/go;
+    $separator =~ s/\$n\b/\n/go;
+    $separator =~ s/\$n\(\)/\n/go;
 
     # SMELL: Quick hack, should be done with nice data structure
     my $text = '';
@@ -314,48 +337,51 @@ sub queryTag
     return "__Note:__ No topics found tagged with \"$qTag\"" unless( scalar keys( %tagVotes ) );
 
     # related tags
-    $text .= "__Related tags:__ "
-           . join( ', ',
-                   map{ printTagLink( $_, $qBy ) }
-                   grep{ !/^$qTag$/ }
-                   sort keys( %related )
-                 )
-           . "\n\n";
-
-    # Sort & display topics by tag count
-    my @topics = sort{ $tagVotes{$b} <=> $tagVotes{$a} } keys( %tagVotes );
-    foreach $webTopic ( @topics ) {
-        $text .= printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy );
+    unless( $noRelated ) {
+        $text .= "__Related tags:__ "
+               . join( ', ',
+                       map{ printTagLink( $_, $qBy ) }
+                       grep{ !/^$qTag$/ }
+                       sort keys( %related )
+                     )
+               . "\n\n";
     }
-    $text .= "\nNumber of topics: " . scalar( keys( %tagVotes ) );
+
+    my @topics = ();
+    if( $sort eq 'tagcount' ) {
+        # Sort topics by tag count
+        @topics = sort{ $tagVotes{$b} <=> $tagVotes{$a} } keys( %tagVotes );
+    } elsif( $sort eq 'topic' ) {
+        # Sort topics by topic name
+        @topics = sort{ substr($a, rindex($a, '.')) cmp substr($b, rindex($b, '.')) }
+                  keys( %tagVotes );
+    } else {
+        # Sort topics by web, then topic
+        @topics = sort keys( %tagVotes );
+    }
+    foreach $webTopic ( @topics ) {
+        $text .= printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy, $format );
+        $text .= $separator;
+    }
+    $text =~ s/\Q$separator\E$//s;
+    $text .= "\nNumber of topics: " . scalar( keys( %tagVotes ) ) unless( $noTotal );
     return $text;
 }
 
 # =========================
 sub printWebTopic
 {
-    my( $webTopic, $tagsRef, $qBy ) = @_;
+    my( $webTopic, $tagsRef, $qBy, $format ) = @_;
     $webTopic =~ /^(.*)\.(.*)$/;
     my $qWeb = $1;
     my $qTopic = $2;
     my $text = '%SEARCH{ '
         . "\"$qTopic\" scope=\"topic\" web=\"$qWeb\" topic=\"$qTopic\" "
         . 'limit="1" nosearch="on" nototal="on" '
-        . 'format="<table style=\"width:100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\"><tr>$n'
-        . '<td style=\"width:50%;\" bgcolor=\"#EEEEDD\">$n'
-        . '<b>[[$web.$topic][$topic]]</b> <font size=\"-1\" color=\"#666666\">in $web web</font>$n'
-        . '</td><td style=\"width:30%;\" bgcolor=\"#EEEEDD\">$n'
-        . '[[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]] - r$rev$n'
-        . '</td><td style=\"width:20%;\" bgcolor=\"#EEEEDD\">$n'
-        . ' $wikiusername$n'
-        . '</td>$n</tr>$n</table>'
-        . '<table style=\"width:100%;\" border=\"0\" cellspacing=\"0\" cellpadding=\"2\"><tr>$n'
-        . '<td>&nbsp;</td>$n<td style=\"width:99%;\">$n'
-        . '<font size=\"-1\" color=\"#666666\">$n'
-        . '$summary %BR% Tags: %TMPTAGS%$n'
-        . '</font>$n</td>$n</tr><tr><td></td></tr></table>" }%';
+        . "format=\"$format\""
+        . ' }%';
     $text = TWiki::Func::expandCommonVariables( $text, $qTopic, $qWeb );
-    $text =~ s/%TMPTAGS%/join( ', ', map{ printTagLink( $_, $qBy ) } @{$tagsRef} )/geo;
+    $text =~ s/\$taglist/join( ', ', map{ printTagLink( $_, $qBy ) } @{$tagsRef} )/geo;
     return $text;
 }
 
