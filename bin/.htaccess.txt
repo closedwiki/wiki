@@ -1,19 +1,17 @@
 # bin/.htaccess.txt
 #
 # Controls access to TWiki scripts - to make Apache use it, rename this
-# file to '.htaccess' and REPLACE THE FOLLOWING STRINGS WITH PATHS
-# SPECIFIC TO YOUR INSTALLATION. Most required values can be seen in the
-# Path Settings section of =configure=.
+# file to '.htaccess' and REPLACE THE FOLLOWING STRINGS WHEREVER YOU SEE
+# THEM IN THIS FILE WITH PATHS SPECIFIC TO YOUR INSTALLATION.
+# Most required values can be seen in the Path Settings section of
+# =configure=.
 #
-# {DataDir}
-#    Get the value from =configure=
-# {DefaultUrlHost}
-#    Get the value from =configure=
-# {ScriptUrlPath}
-#    Get the value from =configure=
-# {Administrators}
-#    Space-separated list of the login name(s) of the person(s) allowed
-#    to run the configure script
+# Replace {DataDir} with the value from =configure=
+# Replace {DefaultUrlHost} with the value from =configure=
+# Replace {ScriptUrlPath} with the value from =configure=
+# Replace {Administrators} with a space-separated list of the login
+# name(s) of the person(s) allowed to run the configure script
+# e.g. admin root superhero
 
 # Use CGI & Perl to handle all files in 'bin' directory, i.e. run as scripts
 # - this should remove the need to rename files to end in '.pl' etc,
