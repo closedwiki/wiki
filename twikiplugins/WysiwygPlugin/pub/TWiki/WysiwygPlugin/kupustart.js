@@ -48,13 +48,7 @@ function startKupu() {
     kupu.registerContentChanger(getFromSelector('kupu-editor-textarea'));
 
     var navigatingAway = function () {
-      if (kupu.content_changed && 
-          confirm('You have unsaved changes.\nAre you sure you want to navigate away from this page?\nCancel will DISCARD your changes (forever!). OK will SAVE your changes.')) {
-        kupu.config.reload_src = 0;
-        // Call the submit handler, as it's not called by the submit() method
-        var form = TWikiHandleSubmit(kupu);
-        form.submit();
-      };
+      TWikiVetoIfChanged(kupu, true);
     }
 
     if (kupu.getBrowserName() == 'IE') {
@@ -74,8 +68,6 @@ function startKupu() {
 
     // and now we can initialize...
     kupu.initialize();
-
-    TWikiCleanForm();
 
     return kupu;
 };
