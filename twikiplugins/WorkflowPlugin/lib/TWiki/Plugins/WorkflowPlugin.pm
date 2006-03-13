@@ -87,7 +87,6 @@ sub initPlugin {
 
     $workflowTopic = getWorkflowTopic($web, $topic);
 
-    TWiki::Func::writeDebug(" workflow topic is $workflowTopic") if $debug;
 
     TWiki::Func::writeDebug(" $pluginName - initPlugin ") if $debug;
 
@@ -106,6 +105,7 @@ sub initPlugin {
 	TWiki::Func::registerTagHandler("WORKFLOWSTATEMESSAGE", \&_WORKFLOWSTATEMESSAGE);
 	TWiki::Func::registerTagHandler("WORKFLOWTRANSITION", \&_WORKFLOWTRANSITION);
 	TWiki::Func::registerTagHandler("WORKFLOWEDITTOPIC", \&_WORKFLOWEDITTOPIC);
+    } else {
     }
     return 1;
 }
@@ -323,6 +323,9 @@ sub myDebug {
 # return a hash table representing the actions allowed by
 # the current user. The hash-key is the possible action
 # while the value is the next state.
+#
+# Note: this code is lifted directly from ApprovalPlugin. I guess I'm responsible for
+# maintaining it now, but I'm not responsible for how it's coded.
 #
 sub parseWorkflow {
     my ($WorkflowTopic, $user, $CurrentState) = @_;
