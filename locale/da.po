@@ -872,7 +872,7 @@ msgid "Change password"
 msgstr "Skift password"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:14
-msgid "Change properties only"
+msgid "Change comment and properties only"
 msgstr "Opdatér kun attributter"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26

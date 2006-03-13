@@ -880,7 +880,7 @@ msgid "Change password"
 msgstr "Modifier le formulaire"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:14
-msgid "Change properties only"
+msgid "Change comment and properties only"
 msgstr "Modifier seulement les propriétés"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26

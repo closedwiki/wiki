@@ -841,7 +841,7 @@ msgid "Change password"
 msgstr "更改表單"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:14
-msgid "Change properties only"
+msgid "Change comment and properties only"
 msgstr "只改變屬性"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26
