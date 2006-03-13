@@ -7,7 +7,8 @@ I use it for our systems diary here. Works quite well.
 
 ---++ Syntax Rules
 
-Add a %<nop>LOCALTIME% tag to your text to show the current time. You can specify the location or timezone such as "Asia/Tokyo" or "GMT" with %<nop>LOCALTIME{location}%, where _location_ is a location mentioned on http://www.bsdi.com/xdate/, or a timezone code such as "JST".
+Add a %<nop>LOCALTIME% tag to your text to show the current time. You can specify the location or timezone such as "Asia/Tokyo" or "GMT" with %<nop>LOCALTIME{location}%, where _location_ is a location mentioned at http://twiki.org/cgi-bin/xtra/tzdate, or a timezone code such as "JST".
+   * see http://www.twinsun.com/tz/tz-link.htm for more information
 
 *Warning: it does not take care of daylight savings time*
 
