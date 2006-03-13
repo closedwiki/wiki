@@ -759,6 +759,7 @@ table#twikiSearchTable td.first {
 	-----------------------------------------------------------	*/
 
 .patternSearchResults {
+	/* no longer used in search.pattern.tmpl, but remains in rename templates */
 	margin:0 0 1em 0;
 }
 .patternSearchResults blockquote {
@@ -776,6 +777,7 @@ h4.patternSearchResultsHeader {
 	font-size:115%; /* same as twikiFormStep */
 	margin:0;
 	padding:.5em 20px;
+	font-weight:bold;
 }
 h4.patternSearchResultsHeader {
 	font-size:100%;
@@ -819,7 +821,7 @@ h4.patternSearchResultsHeader {
 	text-align:left;
 }
 .patternSearchResultCount {
-	margin:0 0 3em 0;
+	margin:1em 0 3em 0;
 }
 .patternSearched {
 }

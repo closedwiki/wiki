@@ -103,7 +103,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
       * patternDiffOptions - row of revision options under "Compare revisions"
       
    * Search results
-      * .patternSearchResults - container
+      * .patternSearchResults - container on rename pages (no longer used on actual search results 'view' pages)
       * .patternSearchResultsHeader - horizontal bar with the web color
       * .patternSearchResults - block of one result
       * .patternSearchResultCount - the number of results

@@ -13,11 +13,11 @@
 
 
 %TMPL:DEF{"textcontent"}%%SPLIT%%TMPL:P{"searched"}%
-%SPLIT%<div class="patternSearchResults">%TMPL:P{"header"}%
+%SPLIT%%TMPL:P{"header"}%
 %REPEAT%
 %TMPL:P{"result"}%
 %REPEAT%
-%SPLIT%%TMPL:P{"count"}%</div><!--/patternSearchResults-->%SPLIT%%TMPL:END%
+%SPLIT%%TMPL:P{"count"}%%SPLIT%%TMPL:END%
 
 
 

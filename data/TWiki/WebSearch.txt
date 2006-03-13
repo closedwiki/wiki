@@ -2,8 +2,6 @@
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
-%IF{"defined search" then='<a href="#" style="text-decoration:none;" onclick="location.hash=\'twikiSearchForm\'; return false;">%ICON{down}% <span class="patternLinkLabel">%MAKETEXT{"Modify search"}%</span></a>'}%
-
 %SEARCH{ 
 "%URLPARAM{search}%" 
 type="keyword" 
@@ -19,9 +17,9 @@ zeroresults="off%URLPARAM{search}%"
 <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%">
 <table id="twikiSearchTable" border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td colspan="2" class="first"><div class="twikiLeft">
-  <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
-  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /></div><div class="twikiLeft"><span class="twikiSmall">&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][%MAKETEXT{"Advanced search"}%]] | [[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span></div><br class="twikiClear" />
+<td colspan="2" class="first">
+  <input type="text" class="twikiInputField" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
+  <input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' /><span class="twikiSmall">&nbsp;&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][%MAKETEXT{"Advanced search"}%]] | [[%TWIKIWEB%.SearchHelp][%MAKETEXT{"Help"}%]]</span>
 <div class="twikiSmall" style="padding:1em 0 0 0;">%MAKETEXT{"TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal =\"web service\"=, but not =\"shampoo\"=, write:"}% <code>soap wsdl "web service" -shampoo</code></div>
 </td>
 </tr>
