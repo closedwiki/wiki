@@ -375,11 +375,13 @@
     <textarea class="kupu-editor-textarea" id="kupu-editor-textarea">
     </textarea>
 <!-- FORM FIELDS -->
-    <form id="twiki-main-form" name="main" action="%SCRIPTURL%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" onsubmit="TWikiHandleSubmit(null)" method="post">
+<noautolink>
+    <form id="twiki-main-form" name="main" action="%SCRIPTURL%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" onsubmit="return TWikiVetoIfChanged(null,false)" method="post">
+</noautolink>
      <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
      <input type="hidden" name="unlock" value="on" />
      <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-     <input type="hidden" name="skin" value="%WYSIWYGPLUGIN_WYSIWYGSKIN%" />
+     <input type="hidden" name="cover" value="%WYSIWYGPLUGIN_WYSIWYGSKIN%" />
      <input type="hidden" name="wysiwyg_edit" value="1" />
      <input type="hidden" name="cmd" value="%CMD%" /><div></div>
      %FORMFIELDS%

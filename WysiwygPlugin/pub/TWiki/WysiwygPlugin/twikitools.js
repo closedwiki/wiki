@@ -597,28 +597,7 @@ function TWikiWikiWordTool() {
 
 TWikiWikiWordTool.prototype = new LinkTool;
 
-/*
- * A submit can come from several places; from links inside the form
- * (replace form and add form) and from the Kupu save button, which is
- * redirected to the form. We need to create the 'text'
- * field for all these operations. The Kupu save button is handled by
- * the 'submitForm' function declared in kupuinit.js, but the links
- * have to be handled through the following onSubmit handler.
- *
- * This function can be called in a number of different ways:
- * 1. As the onSubmit handler for the form, when triggered by a click
- *    on a type="submit" input in the form (e.g. replace form)
- * 2. Just before a form.submit() call, such as the one done for the
- *    save button
-
- */
 function TWikiHandleSubmit(kupu) {
-
-  if (!kupu) {
-    // nasty hack, but I don;t know how else to do it
-    kupu = window.drawertool.editor;
-  }
-
   //alert("Fixing spans");
   FixBoldItalic(kupu);
 
@@ -654,50 +633,54 @@ function TWikiHandleSubmit(kupu) {
   }
   //alert("Submitting");
 
-  /*
-  // 'submit' should do this for us, but IE refuses
-  // to submit a form after a beforeunload handler has been fired, so we
-  // have to do the upload this horrible way.
-  var xmlhttp = HttpRequestObject();
-  if (!xmlhttp) {
-    alert("Failed to save text to server; could not create request object");
-    return;
-  }
-
-  xmlhttp.open("POST", form.action, true);
-  xmlhttp.onreadystatechange = function () {
-    // handle the response.
-    if (xmlhttp.readyState != 4) {
-      return;
-    }
-    alert("Status: "+xmlhttp.status+" "+xmlhttp.statusText+"\n"+
-          "Response: "+xmlhttp.responseText);
-    // The response contains the text of the target page
-    window.location = 
-  };
-
-  var boundary = "Boundary_" + new Date().getMilliseconds() + ";";
-  xmlhttp.setRequestHeader("Content-Type",
-                           "multipart/form-data; boundary=" +
-                           boundary+"; charset=UTF-8");
-  
-  // Set various flags
-  body += MIMEset('wysiwyg_edit', 1, boundary);
-  // Now iterate over the main form fields and include them
-  for (var i = 0; i < form.childNodes.length; i++) {
-    var item = form.childNodes[i];
-    if (item.tagName == 'input' && item.type == 'hidden' ||
-        item.tagName == 'textarea' ) {
-      body += MIMEset(item.name, item.value, boundary);
-    }
-  }
-  body += "--" + boundary;
-  
-  // Send the request
-  xmlhttp.send(body);
-  */
   // we *do not* submit here
   return form;
+}
+
+/*
+ * A submit can come from several places; from links inside the form
+ * (replace form and add form) and from the Kupu save button, which is
+ * redirected to the form. We need to create the 'text'
+ * field for all these operations.
+ *
+ * This function can be called in a number of different ways:
+ * 1. As the onSubmit handler for the form, when triggered by a click
+ *    on a type="submit" input in the form (e.g. replace form)
+ * 2. Just before a form.submit() call, such as the one done for the
+ *    save button
+ */
+function TWikiVetoIfChanged(kupu, isSave) {
+  if (!kupu) {
+    // nasty hack, but I don't know how else to do it
+    kupu = window.drawertool.editor;
+  }
+  var ok;
+  var msg = 'You have unsaved changes.\n'+
+    'Are you sure you want to navigate away from this page?\n';
+  if( isSave ) {
+    kupu.config.reload_src = 0;
+    ok = false;
+    if( kupu.content_changed ) {
+      // Form submission will *save* the topic
+      msg += 'Cancel will DISCARD your changes (forever!).\n'+
+        'OK will SAVE your changes.';
+      ok = confirm(msg);
+    }
+  } else {
+    // Form submission will *discard* the changes
+    ok = true;
+    if( kupu.content_changed ) {
+      msg += 'OK will DISCARD your changes.';
+      ok = confirm(msg);
+    }
+  }
+  if (ok) {
+    // Call the submit handler, as it's not called by the submit() method
+    var form = TWikiHandleSubmit(kupu);
+    form.submit();
+  }
+  // always return false to veto the submit, if it came from a form button
+  return false;
 }
 
 function MIMEset(name, value, boundary) {
@@ -738,18 +721,6 @@ function stringify(node) {
     node = node.nextSibling;
   }
   return str + '</'+nn+'>';
-}
-
-/* Hack bad buttons off the form on startup */
-function TWikiCleanForm() {
-  var elems = document.getElementsByName('submitChangeForm');
-  for (var i = 0; i < elems.length; i++) {
-    if (elems[i].nodeName.toLowerCase() == 'input' &&
-        elems[i].type.toLowerCase() == 'submit' ) {
-      elems[i].parentNode.removeChild(elems[i]);
-      // should replace with _nice_ button?
-    }
-  }
 }
 
 function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
