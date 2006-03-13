@@ -68,14 +68,14 @@ define a customized look of search results.
 Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible search parameters
 (TODO: maby move that stuff in here).
 
----++ About the WebSideBar
-The WebSideBar is used to generate a navigation appearing next to 
+---++ About the <nop>WebSideBar
+The <nop>WebSideBar is used to generate a navigation appearing next to 
 the main topic area. Each web in your <nop>%WIKITOOLNAME% might optionaly have a 
-separate WebSideBar. The default [[%TWIKIWEB%.WebSideBar]] can be used to add a default 
-section common to all WebSideBars.
-If the WebSideBar isn't defined the default [[%TWIKIWEB%.WebSideBar]] 
-is used. Each user might define a personalized WebSideBar called =%<nop>WIKINAME%SideBar= that is
-appended to the WebSideBar. The TWiki:Plugins/RedDotPlugin is used to make customizing the WebSideBar
+separate <nop>WebSideBar. The default [[%TWIKIWEB%.WebSideBar]] can be used to add a default 
+section common to all <nop>WebSideBars.
+If the <nop>WebSideBar isn't defined the default [[%TWIKIWEB%.WebSideBar]] 
+is used. Each user might define a personalized <nop>WebSideBar called =%<nop>WIKINAME%SideBar= that is
+appended to the <nop>WebSideBar. The TWiki:Plugins/RedDotPlugin is used to make customizing the <nop>WebSideBar
 easier appended to the different parts that make up the complete sidebar. These are hidden if
 you don't have write access to the respective topic fragments.
 
@@ -105,7 +105,7 @@ The layout of the NatSkin can be configured online using the NatSkinStyleBrowser
 The result can be configured per session, user, web or for the complete site.
 The screenshots below only display a limitted set of all possible combinations.
 
-This skin includes an enhanced navigation mechanism named WebSideBar.  This
+This skin includes an enhanced navigation mechanism named <nop>WebSideBar.  This
 combines the best of the old <nop>WebMenu idea from the <nop>GnuSkin and the
 <nop>WebLeftBar known from the TWiki:Plugins/PatternSkin by providing all the
 flexibility of the <nop>WebLeftBar including the MySideBar feature and an
@@ -160,7 +160,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.994 |
+|  Skin Version: | v2.995 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -177,6 +177,8 @@ The default style is hardcoded into the NatSkinPlugin.
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-03-13: | fixed <nop>WebLinks components; \
+                 fixed atom feed link at the page bottom |
 |  2006-03-11: | reworked sidebar using the new WEBCOMPONET logic; \
                  docu restructuring - more needed; \
 		 using messages.tmpl as far as possible |
@@ -220,7 +222,7 @@ The default style is hardcoded into the NatSkinPlugin.
 		 removed absolute urls; removed EDITURL; \
 		 fixed sidebar help for cairo and beijing; \
 		 fixed squeezed main page; \
-		 added the concept of <nop>WebComponents, that is the WebSideBar and the WebButtons; \
+		 added the concept of <nop>WebComponents, that is the <nop>WebSideBar and the WebButtons; \
 		 the <nop>WebButtons are customizable the way the <nop>WebSideBar already is |
 |  2005-12-01: | added transparent borders and corners to the Kubrick style; \
                  improved <nop>PlasticLoveVariation; \
@@ -248,7 +250,7 @@ The default style is hardcoded into the NatSkinPlugin.
 		 fixed way how the oops dialogues switch off the sidebar |
 |  2005-10-09: | new release NatSkin-2.51: \
                  reinvention of the NatSkinStyleBrowser; \
-		 reworked the standard WebSideBar; \
+		 reworked the standard <nop>WebSideBar; \
                  extensive usage of the new conditional content tags \
                  interfacing the skin state machine, i.e. switch the \
                  sidebar from the left to the right etc.; \
@@ -277,7 +279,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 11 Mar 2006
+-- TWiki:Main/MichaelDaum - 13 Mar 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
