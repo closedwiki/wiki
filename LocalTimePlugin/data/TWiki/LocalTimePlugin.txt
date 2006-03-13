@@ -10,8 +10,6 @@ I use it for our systems diary here. Works quite well.
 Add a %<nop>LOCALTIME% tag to your text to show the current time. You can specify the location or timezone such as "Asia/Tokyo" or "GMT" with %<nop>LOCALTIME{location}%, where _location_ is a location mentioned at http://twiki.org/cgi-bin/xtra/tzdate, or a timezone code such as "JST".
    * see http://www.twinsun.com/tz/tz-link.htm for more information
 
-*Warning: it does not take care of daylight savings time*
-
    * The =unnamed=, or =DEFAULT= parameter is the timezone to output
    * =dateGMT= must be a datetime string that TWiki can parse (see Time::TWiki::parseTime), but assumes GMT
       * 31 Dec 2001 - 23:59
@@ -24,11 +22,13 @@ Add a %<nop>LOCALTIME% tag to your text to show the current time. You can specif
       * 2001-12-31T23:59Z
       * 2001-12-31T23:59+01:00
    * =format= is the same as for the format specifier in http://t42p/cgi-bin/DEVELOP/bin/view/TWiki/TWikiVariables#VarGMTIME
+   * fromtopic="web.topic" - the plugin tries to use the timezone set in the variable TIMEZONE on the topic selected
 
 ---++ Examples
 | | you type | if installed you get |
 | Time in Tokyo now | %<nop>LOCALTIME{Asia/Tokyo}% | %LOCALTIME{Asia/Tokyo}% |
 | Time in London now | %<nop>LOCALTIME{Europe/London}% | %LOCALTIME{Europe/London}% |
+| Time in your TIMEZONE (if you've set the TIMEZONE VAR) now | %<nop>LOCALTIME{fromtopic="$percntWIKIUSERNAME$percnt"}% | %LOCALTIME{fromtopic="$percntWIKIUSERNAME$percnt"}% |
 | 05 Apr 2006, 15:43:50 GMT in Sydney/Australia | %<nop>LOCALTIME{"Australia/Sydney" dateGMT="05 Apr 2006 - 15:43:50"}% | %LOCALTIME{"Australia/Sydney" dateGMT="05 Apr 2006 - 15:43:50"}% |
 | 05 Apr 2006, 15:43:50 GMT in Sydney/Australia (format as iso) | %<nop>LOCALTIME{"Australia/Sydney" dateGMT="05 Apr 2006 - 15:43:50" format="iso"}% | %LOCALTIME{"Australia/Sydney" dateGMT="05 Apr 2006 - 15:43:50" format="iso"}% |
 
