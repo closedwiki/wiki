@@ -2742,6 +2742,11 @@ sub _INCLUDE {
     # 4th parameter tells plugin that its called for an included file
     $this->{plugins}->commonTagsHandler( $text, $includedTopic,
                                          $includedWeb, 1 );
+
+    # We have to expand tags again, because a plugin may have inserted additional
+    # tags.
+    $this->_expandAllTags( \$text, $includedTopic, $includedWeb );
+
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
     # right context
     # SMELL: This is a hack.
