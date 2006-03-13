@@ -778,10 +778,12 @@ function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
 
     this.createColorchooser = function(table) {
         /* create the colorchooser table */
-      var cols = new Array( "black", "gray", "silver", "white",
-                            "maroon", "purple", "red", "fuschia",
-                            "green", "olive", "lime", "yellow",
-                            "navy", "teal", "blue", "aqua" );
+        var cols = new Array( 
+ "black", "red", "orange", "yellow", "greenyellow", "lime", "aquamarine", "cyan", "blue", "blueviolet", "fuchsia", "hotpink",
+ "dimgray", "firebrick", "darkorange", "gold", "yellowgreen", "green", "turquoise", "deepskyblue", "mediumblue", "darkviolet", "violetred", "deeppink",
+ "darkgray", "lightcoral", "goldenrod", "lightyellow", "olivedrab", "limegreen", "mediumturquoise", "lightskyblue", "darkslateblue", "thistle", "orchid", "palevioletred",
+ "silver", "rosybrown", "darkkhaki", "khaki", "olive", "darkgreen", "lightseagreen", "steelblue", "navy", "indigo", "purple", "crimson"
+        );
         table.setAttribute('id', 'kupu-colorchooser-table');
         table.style.borderWidth = '2px';
         table.style.borderStyle = 'solid';
@@ -793,8 +795,8 @@ function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
 
         for (var i=0; i < 4; i++) {
             var tr = document.createElement('tr');
-            for (var j = 0; j < 4; j++) {
-              var color = cols[i * 4 + j];;
+            for (var j = 0; j < 12; j++) {
+              var color = cols[i * 12 + j];;
               var td = document.createElement('td');
               td.setAttribute('bgColor', color);
               td.style.borderWidth = '1px';
