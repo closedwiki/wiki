@@ -338,8 +338,9 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.994 |
+|  Plugin Version: | v2.995 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Mar 2006: | dont remove leading and trailing whitespaces from web components |
 |  11 Mar 2006: | removed MYSIDEBAR tag; \
                   new web component search path; \
 		  new sidebar construction logic using <nop>WebLinks; \

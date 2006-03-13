@@ -21,6 +21,7 @@ use strict;
 use vars qw($isInitialized $debug $defaultWikiUserName);
 use TWiki::Plugins::NatSkinPlugin;
 
+$debug = 0; # toggle me
 ###############################################################################
 sub writeDebug {
   TWiki::Func::writeDebug("- NatSkinPlugin::Auth - " . $_[0]) if $debug;
@@ -30,7 +31,6 @@ sub writeDebug {
 sub doInit {
   return if $isInitialized;
   $isInitialized = 1;
-  $debug = 0; # toggle me
 
   writeDebug("called doInit");
 
@@ -58,7 +58,7 @@ sub logon {
   if (!$theUser && !$thePasswd) {
     $theUrl = &TWiki::Func::getOopsUrl($theWeb, $theTopic, "oopslogon");
     &TWiki::Func::redirectCgiQuery($query, $theUrl);
-    writeDebug("redirecting to oopslogon");
+    writeDebug("redirecting to oopslogon ($theUrl)");
     return;
   }
   

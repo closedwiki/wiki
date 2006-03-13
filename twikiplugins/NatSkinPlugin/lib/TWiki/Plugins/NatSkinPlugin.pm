@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.994';
+$RELEASE = '2.995';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -991,8 +991,8 @@ sub getWebComponent {
   if ($text =~ /%STARTINCLUDE%(.*?)%STOPINCLUDE%/gs) {
     $text = $1;
   }
-  $text =~ s/^\s*//o;
-  $text =~ s/\s*$//o;
+  #$text =~ s/^\s*//o;
+  #$text =~ s/\s*$//o;
   $text = &TWiki::Func::expandCommonVariables($text, $component, $theWeb);
 
   # ignore permission warnings here ;)
