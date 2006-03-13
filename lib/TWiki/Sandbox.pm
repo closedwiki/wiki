@@ -378,6 +378,8 @@ sub sysCommand {
         open( STDERR, '>&OLDERR' ) || die "Can't restore STDERR: $!";
         close(OLDERR);
         $exit = ( $? >> 8 );
+        # Do *not* return the error message; it contains sensitive path info.
+	print STDERR "$cmd failed: $!" if $exit;
     }
 
     if( $this->{TRACE} ) {
