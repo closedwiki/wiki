@@ -79,16 +79,25 @@ sub commonTagsHandler
 sub handleLocalTime {
     my($session, $params, $theTopic, $theWeb) = @_;
 
-
     my $tz = $params->{_DEFAULT} || $timezone;
     my $formatString = $params->{format};
+    my $fromtopic = $params->{fromtopic};
     my $specifieddateGMT = $params->{dateGMT};
+
+    if (defined($fromtopic)) {
+        #TODO: normalise topic
+        my( $web, $topic ) = $session->normalizeWebTopicName( $theWeb, $fromtopic );
+        my $zone = $session->{prefs}->getTopicPreferencesValue('TIMEZONE', $web, $topic);
+        $tz = $zone if defined($zone);
+    }
+
     my $date;
     if (defined ($specifieddateGMT)) {
         $date = new Date::Handler({ date => TWiki::Time::parseTime($specifieddateGMT), time_zone => $tz });
     } else {
         $date = new Date::Handler({ date => time, time_zone => $tz });
     }
+    
 
 #swiped from TWiki::Time::formatTime
 #SMELL: should combine this code into TWiki::Time, or abstract out and reuse..
