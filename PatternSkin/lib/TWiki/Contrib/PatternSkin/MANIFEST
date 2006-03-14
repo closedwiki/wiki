@@ -84,6 +84,7 @@ templates/moveattachment.pattern.tmpl 0440
 templates/oops.pattern.tmpl 0440
 templates/oopsaccessdenied.pattern.tmpl 0440
 templates/oopsattention.pattern.tmpl 0440
+templates/oopslanguagechanged.pattern.tmpl 0440
 templates/oopsleaseconflict.pattern.tmpl 0440
 templates/oopsmore.pattern.tmpl 0440
 templates/oopsmorebacklinks.pattern.tmpl 0440
