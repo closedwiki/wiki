@@ -18,7 +18,9 @@
 %TMPL:DEF{"inactive_wysiwyg"}%%TMPL:P{"sep"}%<span class="patternButton"><strike>%MAKETEXT{"WYSIWYG"}%</strike></span>%TMPL:END%
 
 
-%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
+%TMPL:DEF{"editaction"}%%IF{"defined EDITACTION" then="&action=%EDITACTION%" else=""}%%TMPL:END%
+
+%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%TMPL:P{"editaction"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
 %TMPL:DEF{"edit_wysiwyg"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?cover=%COMPOSER%&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="W">%TMPL:P{context="new_topic" then="wysiwyg_create_topic" else="wysiwyg_edit_topic"}%</a></span>%TMPL:END%
 
 
