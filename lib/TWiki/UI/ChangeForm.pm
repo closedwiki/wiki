@@ -101,5 +101,4 @@ sub generate {
 
     return $page;
 }
-
 1;
