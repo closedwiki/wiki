@@ -1,10 +1,4 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
-#
-# Copyright (c) 2006 Meredith Lesly <msnomer@spamcop.net>
-# Based in large part on ApprovalPlugin by Thomas Hartkens <thomas@hartkens.de>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/ # # Copyright (c) 2006 Meredith Lesly <msnomer@spamcop.net> # Based in large part on ApprovalPlugin by Thomas Hartkens <thomas@hartkens.de> # # This program is free software; you can redistribute it and/or # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
 # of the License, or (at your option) any later version.
 #
@@ -87,7 +81,6 @@ sub initPlugin {
 
     $workflowTopic = getWorkflowTopic($web, $topic);
 
-
     TWiki::Func::writeDebug(" $pluginName - initPlugin ") if $debug;
 
     #
@@ -100,13 +93,17 @@ sub initPlugin {
 	($globWorkflow, $theCurrentState, $globWorkflowMessage, $globAllowEdit) = 
 	    parseWorkflow($workflowTopic, $user, $theCurrentState);
 
-	TWiki::Func::registerTagHandler("WORKFLOW", \&_WORKFLOW);
-	TWiki::Func::registerTagHandler("WORKFLOWNAME", \&_WORKFLOWNAME);
+	print STDERR "uses work flow";
+
+	#my( $meta, $text ) = TWiki::Func::readTopic($web, $topic);
+	#putWorkflowState($meta, $theCurrentState->{state} );
+
+	TWiki::Func::registerTagHandler("WORKFLOWTRANSIT", \&_WORKFLOWTRANSIT);
 	TWiki::Func::registerTagHandler("WORKFLOWSTATEMESSAGE", \&_WORKFLOWSTATEMESSAGE);
 	TWiki::Func::registerTagHandler("WORKFLOWTRANSITION", \&_WORKFLOWTRANSITION);
 	TWiki::Func::registerTagHandler("WORKFLOWEDITTOPIC", \&_WORKFLOWEDITTOPIC);
-    } else {
     }
+
     return 1;
 }
 
@@ -115,32 +112,27 @@ sub initPlugin {
 # %params - a reference to a TWiki::Attrs object containing parameters.
 # $topic - name of the topic in the query
 # $web - name of the web in the query
-sub _WORKFLOWNAME {
-    return 
-}
-
-#
-# $session - a reference to the TWiki session object (may be ignored)
-# %params - a reference to a TWiki::Attrs object containing parameters.
-# $topic - name of the topic in the query
-# $web - name of the web in the query
-sub _WORKFLOW {
+sub _WORKFLOWTRANSIT {
     my ($session, $params, $topic, $web) = @_;
-    $debug = 1;
+    my $debug = 1;
 
+    print STDERR "In _WORKFLOW";
     my $action = $params->{'wfpaction'};
     my $state = $params->{'wfpstate'};
 
     my $query = TWiki::Func::getCgiQuery();
     if ($query) {
-	TWiki::Func::writeDebug("- got query ");
+	print STDERR "- got query";
+	TWiki::Func::writeDebug("- got query ") if $debug;
 
 	$action = $query->param('wfpaction');
 	$state = $query->param('wfpstate');
+    } else {
+	return "";
     }
 
     TWiki::Func::writeDebug("_WORKFLOW ") if $debug;
-    TWiki::Func::writeDebug("- action is $action, state is $state");
+    TWiki::Func::writeDebug("- action is $action, state is $state") if $debug;
 
     if ($action) {
         # find out if the user is allowed to perform the action 
@@ -186,22 +178,35 @@ sub _WORKFLOWEDITTOPIC {
     }
 }
 
+#
+# Obviously we need to get the name of the workflow topic
+# This function looks in several places
+#
 sub getWorkflowTopic {
     my( $web, $topic ) = @_;
     my $wft;
 
     my( $meta, $text ) = TWiki::Func::readTopic($web, $topic);
 
+    # First look into the topic that's being managed
     if ($theCurrentState = $meta->get('WORKFLOW')) {
 	return $theCurrentState->{'workflow'};
     } 
 
+    # Next look at the CGI query
     $wft = getWorkflowFromCGI();
+    $wft ||= TWiki::Func::getPreferencesValue('WORKFLOWTOPIC');
+    # Next look at the topic preferences
+    $wft ||= TWiki::Contrib::FuncUsersContrib->getTopicPreferenceValue($web, $topic, "WORKFLOWTOPIC");
+    # This is a fossil which will get removed after a demo. (Don't feel like breaking things right now)
     $wft ||= TWiki::Contrib::FuncUsersContrib->getTopicPreferenceValue($web, $topic, "WORKFLOW");
+    my $prefHash = $meta->get('PREFERENCE', "WORKFLOWTOPIC");
+    $wft ||= $prefHash->{value};
     my $prefHash = $meta->get('PREFERENCE', "WORKFLOW");
     $wft ||= $prefHash->{value};
 
     if ($wft) {
+	# Yay! Found the topic!
 	$meta->put("WORKFLOW", { 'workflow' => $wft } );
 	return $wft;
     }
@@ -298,8 +303,7 @@ sub changeWorkflowState {
     $meta->remove( "WORKFLOW" );
     $meta->put("WORKFLOW", { state => $state, workflow => $theCurrentState->{workflow} });
 
-    $meta->remove("WORKFLOWSTATE", $state);
-    $meta->put("WORKFLOWSTATE", { name => $state, lasttime => Timestamp(), version => "1.$version" });
+    putWorkflowState($meta, $state);
 
     my $unlock = 1;
     my $dontNotify = 1;
@@ -312,6 +316,17 @@ sub changeWorkflowState {
         return 0;
     }
 }
+
+
+sub putWorkflowState {
+    my ($meta, $state) = @_;
+
+    my ($dat, $author, $version, $comment) = $meta->getRevisionInfo();
+
+    $meta->remove("WORKFLOWSTATE", { name => $state } );
+    $meta->put("WORKFLOWSTATE", { name => $state, lasttime => Timestamp(), version => "1.$version" });
+}
+
 
 
 sub myDebug {
@@ -372,7 +387,7 @@ sub parseWorkflow {
                 # read row in STATE table
                 my( $state, $allowedit, $message) = split( /\s*\|\s*/ );
                 $state = _cleanField($state);
-                myDebug("STATE: '$state', $allowedit, $message  CurrentState: '$CurrentState->{state}'");
+                #myDebug("STATE: '$state', $allowedit, $message  CurrentState: '$CurrentState->{state}'");
 
                 # the first state in the table defines the default state
                 if (!defined($defaultState)) {
@@ -424,10 +439,10 @@ sub userIsAllowed {
         foreach my $name (@allowed) {
             $name = _cleanField( $name );
             $name =~ s/$mainWeb\.(.*)/$1/;
-	    #TWiki::Func::writeDebug("wikiName: $wikiName;  Name: $name");
-	    #TWiki::Func::writeDebug("Checking if user is in $name");
+	    #TWiki::Func::writeDebug("wikiName: $wikiName;  Name: $name") if $debug;
+	    #TWiki::Func::writeDebug("Checking if user is in $name") if $debug;
 	    if (TWiki::Contrib::FuncUsersContrib::isInGroup($name)) {
-		#TWiki::Func::writeDebug("User is allowed");
+		#TWiki::Func::writeDebug("User is allowed") if $debug;
 
             #if (userIsInGroup($wikiName, $name) || userIsAdmin($wikiName)) {
                 # user IS allowed!
@@ -486,8 +501,8 @@ sub userIsInGroup {
         @grpMembers = getGroup( $grpTopic, 1 );
     }
 
-    #TWiki::Func::writeDebug("grpMembers: @grpMembers");
-    #TWiki::Func::writeDebug("usrTopic: $usrTopic");
+    #TWiki::Func::writeDebug("grpMembers: @grpMembers") if $debug;
+    #TWiki::Func::writeDebug("usrTopic: $usrTopic") if $debug;
 
     my $isInGroup = grep { /^$usrTopic$/ } @grpMembers;
     return $isInGroup;
@@ -505,7 +520,7 @@ sub getGroup {
         $web = $1;
         $topic = $2;
     }
-    ##TWiki::writeDebug( "Web is $web, topic is $topic" );
+    ##TWiki::writeDebug( "Web is $web, topic is $topic" ) if $debug;
 
     if( $topic !~ /.*Group$/ ) {
         # return user, is not a group
