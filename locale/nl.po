@@ -844,7 +844,7 @@ msgstr "Wijzig van:"
 #: templates/oopschangelanguage.tmpl:26 templates/oopschangelanguage.tmpl:4
 #: templates/oopslanguagechanged.tmpl:16
 msgid "Change language"
-msgstr "Taal wijzigen"
+msgstr "Taal gewijzigd"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:57
 msgid "Change links in topics that refer to !%1 in any Web:"
@@ -3256,8 +3256,8 @@ msgid ""
 "Your language will be changed to %1 from the next screen. You will be "
 "redirected to there right now. If you aren't, [[%2][click here]] to proceed."
 msgstr ""
-"Je taalinstelling wordt veranderd in %1 vanaf het volgende scherm. Je zal nu "
-"daarheen worden geleid. Zo niet, [[%2][klik hier]] om door te gaan."
+"Vanaf het volgende scherm wordt je taalinstelling gewijzigd in %1. Je wordt "
+"nu daarheen geleid - zo niet, [[%2][klik hier]] om door te gaan."
 
 #: templates/mailresetpassword.tmpl:10
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:10
