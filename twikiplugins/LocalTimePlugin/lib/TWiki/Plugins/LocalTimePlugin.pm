@@ -128,13 +128,13 @@ sub handleLocalTime {
     $value =~ s/\$hour?s?/sprintf('%.2u',$date->Hour())/gei;
     $value =~ s/\$day/sprintf('%.2u',$date->Day())/gei;
     $value =~ s/\$wday/$TWiki::Time::WEEKDAY[$date->WeekDay()]/gi;
-    $value =~ s/\$dow/$date->WeekDay()/gi;
+    $value =~ s/\$dow/$date->WeekDay()/gei;
     $value =~ s/\$week/TWiki::Time::_weekNumber($date->Day(),$date->Month()-1,$date->Year(),$date->WeekDay())/egi;
     $value =~ s/\$mont?h?/$TWiki::Time::ISOMONTH[$date->Month()-1]/gi;
     $value =~ s/\$mo/sprintf('%.2u',$date->Month())/gei;
     $value =~ s/\$year?/sprintf('%.4u',$date->Year())/gei;
     $value =~ s/\$ye/sprintf('%.2u',$date->Year()%100)/gei;
-    $value =~ s/\$epoch/$date->Epoch()/gi;
+    $value =~ s/\$epoch/$date->Epoch()/gei;
     $value =~ s/\$tz/$date->TimeZone()/gei;
 
     return $value;
