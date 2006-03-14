@@ -3549,8 +3549,8 @@ msgstr "value='Abandonner' accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
 #, fuzzy
-msgid "value='Go back' accesskey='c'"
-msgstr "value='Annuler' accesskey='c'"
+msgid "Go back"
+msgstr "Annuler"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"

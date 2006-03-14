@@ -3437,8 +3437,8 @@ msgid "value='Discard' accesskey='d'"
 msgstr "value='Discard' accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
-msgid "value='Go back' accesskey='c'"
-msgstr "value='Go back' accesskey='c'"
+msgid "Go back"
+msgstr "Go back"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"
