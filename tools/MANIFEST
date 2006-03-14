@@ -170,6 +170,7 @@ data/TWiki/TWikiUpgradeGuide.txt 0660
 data/TWiki/TWikiUserAuthentication.txt 0660
 data/TWiki/TWikiUsersGuide.txt 0660
 data/TWiki/TWikiVariables.txt 0660
+data/TWiki/TWikiVariablesQuickStart.txt 0660
 data/TWiki/TWikiWebsTable.txt 0660
 data/TWiki/TemplateWeb.txt 0660
 data/TWiki/TextEditor.txt 0660
@@ -177,8 +178,10 @@ data/TWiki/TextFormattingFAQ.txt 0660
 data/TWiki/TextFormattingRules.txt 0660
 data/TWiki/TimBernersLee.txt 0660
 data/TWiki/TimeInterval.txt 0660
+data/TWiki/TWikiEditingShorthand.txt 0660
 data/TWiki/UserDocumentationCategory.txt 0660
 data/TWiki/UserToolsCategory.txt 0660
+data/TWiki/UsingHTML.txt 0660
 data/TWiki/VarQUERYSTRING.txt 0660
 data/TWiki/VarWIKIVERSION.txt 0660
 data/TWiki/VarPUBURL.txt 0660
