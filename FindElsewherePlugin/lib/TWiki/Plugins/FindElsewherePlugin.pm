@@ -43,6 +43,9 @@
 # 15-Dec-2005 - SteffenPoulsen
 #       - improved handling of the special case [[Main.ABBR][Some desc with a found ABBRTWO]]
 #       - is now ignored correctly, instead of breaking the link
+# 14-Mar-2006 - MichaeDaum
+#       - repsects <noautolink> ... </noautolink> blocks as well as the
+#         NOAUTOLINK preference flag
 
 package TWiki::Plugins::FindElsewherePlugin;
 
@@ -53,6 +56,7 @@ use vars qw(
             $wwre
             $manre
             $abbre
+	    $noAutolink
            );
 use vars qw( %TWikiCompatibility );
 
@@ -93,6 +97,7 @@ sub initPlugin {
     $manre = TWiki::Func::getRegularExpression('mixedAlphaNum');
     $abbre = TWiki::Func::getRegularExpression('abbrevRegex');
 
+    $noAutolink = TWiki::Func::getPreferencesFlag('NOAUTOLINK');
     # Plugin correctly initialized
     return 1;
 }
@@ -106,11 +111,12 @@ sub preRenderingHandler {
 $TWikiCompatibility{startRenderingHandler} = 1.1;
 sub startRenderingHandler {
     #my ( $text, \%map ) = @_;
+    # SMELL: why is there another call th _handle() here
     _handle( @_ );
 }
 
 sub _handle {
-    return if $lookElsewhereDisabled;
+    return if $lookElsewhereDisabled && $noAutolink;
 
     # Find instances of WikiWords not in this web, but in the otherWeb(s)
     # If the WikiWord is found in theWeb, put the word back unchanged
@@ -118,9 +124,19 @@ sub _handle {
     # [[otherWeb.WikiWord]]
     # If it isn't found there either, put the word back unchnaged
 
+    my $text = $_[0];
+    my $removed = {};
+
+    # SMELL: taking out blocks should be in Func.pm
+    my $renderer = $TWiki::Plugins::SESSION->{renderer};
+    $text = $renderer->takeOutBlocks( $text, 'noautolink', $removed );
+
     # Match WikiWordAsWebName.WikiWord, WikiWords, [[wiki words]] and
     # WIK IWO RDS
-    $_[0] =~ s/(^|[\s\(])(\[\[$wnre\.($wwre|$abbre)\]\[[$manre\s]+\]\]|\[\[[$manre\s]+\]\[[$manre\s]+\]\]|$wnre\.$wwre|$wwre|\[\[[$manre\s]+\]\]|$abbre)/$1._findTopicElsewhere($2)/geo;
+    $text =~ s/(^|[\s\(])(\[\[$wnre\.($wwre|$abbre)\]\[[$manre\s]+\]\]|\[\[[$manre\s]+\]\[[$manre\s]+\]\]|$wnre\.$wwre|$wwre|\[\[[$manre\s]+\]\]|$abbre)/$1._findTopicElsewhere($2)/geo;
+
+    $renderer->putBackBlocks( \$text, $removed, 'noautolink' );
+    $_[0] = $text;
 }
 
 sub _makeTopicLink {

@@ -27,6 +27,7 @@ __New functionality, single hit__
 | Found singular  elsewhere	  | <nop>TWikiAdminGroups | TWikiAdminGroups | [[%MAINWEB%.TWikiAdminGroup][TWikiAdminGroups]] | 
 | Found elsewhere, spaced wiki word | [<nop/>[TWiki admin group]] | [[TWiki admin group]] | [[%MAINWEB%.TWikiAdminGroup][TWiki admin group]] |
 | Found elsewhere, abbrev | <nop/>ACRONYM | ACRONYM | (If <nop/>ACRONYM is a topic defined in one of the LOOKELSEWHERE webs, a link to it should show up) |
+| Not found, not linked	  | &lt;noautolink> <nop>TWikiAdminGroup &lt;/noautolink> | <noautolink> TWikiAdminGroup </noautolink> | <nop>TWikiAdminGroup |
 
 __New functionality, multiple hits__
 
@@ -98,6 +99,7 @@ __Don't break other types of links__
 |  Plugin Author: | TWiki:Main.MikeBarton |
 | Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Mar 2006: | repsects <noautolink> ... </noautolink> blocks as well as the  NOAUTOLINK preference flag |
 |  08 Apr 2005: | (v1.7) - Negated vars =DISABLELOOKELSEWHERE= and =DISABLEPLURALTOSINGULAR= can now be set per web (!WebPreferences) or per topic. |
 |  05 Apr 2005: | (v1.6) - Bugfix: Preambles for ACRONYMS were doubled. |
 |  04 Apr 2005: | (v1.5) - Plugin less greedy - now leaves linktext in [<nop/>[WikiWord][long links with <nop/>ACRONYMS or <nop/>WikiWords]] alone |
