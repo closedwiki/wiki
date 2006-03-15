@@ -162,5 +162,5 @@ outside the parent container. */
 }
 .twikiLast,
 .patternTopic .twikiLast {
-	border-width:0px;
+	border-bottom:0px;
 }
