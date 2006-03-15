@@ -1,12 +1,18 @@
-%TMPL:DEF{"searched"}%<p><span class="patternSearched">%MAKETEXT{"Searched:"}% <b><nop>%SEARCHSTRING%</b></span><br />%TMPL:P{"modifysearch"}%</p>%TMPL:END%
+%TMPL:DEF{"searched"}%<span class="patternSearched">%MAKETEXT{"Searched:"}% <b><nop>%SEARCHSTRING%</b></span><span id="twikiNumberOfResultsContainer"></span><span id="twikiModifySearchContainer"></span>%TMPL:END%
 
 
 
-%TMPL:DEF{"modifysearch"}%%IF{" '%URLPARAM{search}%' = '' " then="" else='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;">%MAKETEXT{"Modify search"}%</a>'}%%TMPL:END%
-
-
-
-%TMPL:DEF{"count"}%<div class="patternSearchResultCount">%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b></div><!--/patternSearchResultCount-->%TMPL:END%
+%TMPL:DEF{"count"}%<div class="patternSearchResultCount" id="twikiBottomResultCount">%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b></div><!--/patternSearchResultCount-->
+<script type="text/javascript">
+// write results at the top
+//<![CDATA[
+	writeHtml('<br />%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b>', 'twikiNumberOfResultsContainer');
+	var count = %NTOPICS%;
+	if (count < 10) {
+		writeHtml('', 'twikiBottomResultCount');
+	}
+//]]>
+</script>%TMPL:END%
 
 
 

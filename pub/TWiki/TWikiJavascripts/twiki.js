@@ -54,6 +54,16 @@ function launchTheWindow(inPath, inWeb, inTopic, inSkin, inTemplate) {
 	return false;
 }
 
+/** 
+Writes html inside container with id inId.
+*/
+function writeHtml (inHtml, inId) {
+	var elem = document.getElementById(inId);
+	if (elem) {
+		elem.innerHTML = inHtml;
+	}
+}
+
 // Remove the given class from an element, if it is there
 function removeClass(element, classname) {
 	var classes = getClassList(element);
