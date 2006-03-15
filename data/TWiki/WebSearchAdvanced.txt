@@ -22,7 +22,7 @@ zeroresults="off%URLPARAM{search}%"
 <script type="text/javascript">
 //<![CDATA[
 	var linkText='<a href="#" onclick="location.hash=\'twikiSearchForm\'; return false;"><span class="patternLinkLabel twikiSmallish">%MAKETEXT{"Modify search"}%</span></a>';
-	%IF{"defined search" then="writeHtml('&nbsp;&nbsp;' + linkText, 'twikiModifySearchContainer');"}%
+	%IF{"defined search" then="insertHtml('&nbsp;&nbsp;' + linkText, 'twikiModifySearchContainer');"}%
 //]]>
 </script>
 

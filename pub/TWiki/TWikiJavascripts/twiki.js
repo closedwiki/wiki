@@ -57,7 +57,7 @@ function launchTheWindow(inPath, inWeb, inTopic, inSkin, inTemplate) {
 /** 
 Writes html inside container with id inId.
 */
-function writeHtml (inHtml, inId) {
+function insertHtml (inHtml, inId) {
 	var elem = document.getElementById(inId);
 	if (elem) {
 		elem.innerHTML = inHtml;

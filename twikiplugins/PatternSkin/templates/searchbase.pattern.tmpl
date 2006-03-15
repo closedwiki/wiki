@@ -6,10 +6,10 @@
 <script type="text/javascript">
 // write results at the top
 //<![CDATA[
-	writeHtml('<br />%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b>', 'twikiNumberOfResultsContainer');
+	insertHtml('<br />%MAKETEXT{"Number of topics:"}% <b>%NTOPICS%</b>', 'twikiNumberOfResultsContainer');
 	var count = %NTOPICS%;
 	if (count < 10) {
-		writeHtml('', 'twikiBottomResultCount');
+		insertHtml('', 'twikiBottomResultCount');
 	}
 //]]>
 </script>%TMPL:END%
