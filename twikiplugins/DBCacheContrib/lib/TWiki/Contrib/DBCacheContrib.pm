@@ -154,13 +154,16 @@ sub _readCache {
 # PRIVATE load a single topic from the given data directory. This
 # ought to be replaced by TWiki::Func::readTopic -> {$meta, $text) but
 # this implementation is more efficient for just now.
+# returns 1 if the topic was loaded successfully, 0 otherwise
 sub _loadTopic {
     my ( $this, $dataDir, $topic ) = @_;
     my $filename = "$dataDir/$topic.txt";
 	my $fh;
 
-    open( $fh, "<$filename" )
-      or die "Failed to open $dataDir/$topic.txt";
+    unless (open( $fh, "<$filename" )) {
+      print STDERR "WARNING: Failed to open $dataDir/$topic.txt\n";
+      return 0;
+    }
     my $meta = new TWiki::Contrib::DBCacheContrib::Map();
     $meta->set( "name", $topic );
     $meta->set( "topic", $topic );
@@ -216,6 +219,8 @@ sub _loadTopic {
     $text =~ s/\n$//s if $tailMeta;
     $meta->set( "text", $text );
     $this->set( $topic, $meta );
+
+    return 1;
 }
 
 =begin text
@@ -314,9 +319,10 @@ sub load {
     if ( !$cache ) {
         my @readTopic;
         foreach my $topic ( @topics ) {
-            $this->_loadTopic( $dataDir, $topic );
-            $readFromFile++;
-            push( @readTopic, $topic );
+            if ($this->_loadTopic( $dataDir, $topic )) {
+	      $readFromFile++;
+	      push( @readTopic, $topic );
+	    }
         }
         $this->_onReload( \@readTopic );
         $writeCache = 1;
@@ -369,9 +375,10 @@ sub _updateCache {
     # load topics that are missing from the cache
     foreach $topic ( @$topics ) {
         if ( !defined( $cache->fastget( $topic ))) {
-            $cache->_loadTopic( $dataDir, $topic );
-            $readFromFile++;
-            push( @readTopic, $topic );
+            if ($cache->_loadTopic( $dataDir, $topic )) {
+	      $readFromFile++;
+	      push( @readTopic, $topic );
+	    }
         }
     }
     $this->{keys} = $cache->{keys};
