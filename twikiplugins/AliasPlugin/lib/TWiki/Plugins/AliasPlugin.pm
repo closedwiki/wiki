@@ -82,7 +82,7 @@ sub doInit {
 
   # get plugin flags
   $aliasWikiWordsOnly = 
-    TWiki::Func::getPreferencesFlag("ALIASPLUGIN_ALIAS_WIKIWORDS_ONYL");
+    TWiki::Func::getPreferencesFlag("ALIASPLUGIN_ALIAS_WIKIWORDS_ONLY");
   $defaultAliasTopic = 
     TWiki::Func::getPreferencesValue("ALIASPLUGIN_DEFAULT_ALIASES") || 'WebAliases';
   
