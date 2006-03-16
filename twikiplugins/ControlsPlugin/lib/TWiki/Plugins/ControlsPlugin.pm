@@ -131,7 +131,7 @@ sub _CONTROLS {
    
    my $formEdit = $twikiForm->renderForEdit( $theWeb, $theTopic, $meta );
    if (defined($createtopic)) {
-   	$formEdit = '<form name="newTopic" action="http://t42p/cgi-bin/DEVELOP/bin/edit/%WEB%/">'.
+   	$formEdit = '<form name="newTopic" action="%SCRIPTURL{edit}%/%WEB%/">'.
 	'<input type="hidden" name="formtemplate" value="'.$form.'" />'.
 	'<input type="hidden" name="templatetopic" value="'.$form.'" />'.
 	'<input type="hidden" name="action" value="form" />'.
