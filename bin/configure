@@ -346,12 +346,13 @@ sub _checkRCSProgram {
         my $version = `$prog -V` || '';
         if( $@ ) {
             $err .= ERROR($prog.' returned an error: '.$@ );
-        } elsif ( $version ne '' ) {
-            $version =~ /(\d+(\.\d+)+)/;
+        }
+        if ( $version && $version =~ /(\d+(\.\d+)+)/ ) {
             $version = $1;
             $mess .= " ($prog is version $version)";
         } else {
             $err .= ERROR($prog.' did not return a version number (or might not exist..)');
+            $version = -1;
         }
         if( defined( $cygwinRcsVerNum )) {
             $mess .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)";
