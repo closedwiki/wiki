@@ -22,7 +22,6 @@ for ( var i = 0; i < sIn.length; i++ ) {
  var ch = sIn.charAt( i );
  var chVal = ch.charCodeAt(0);
  var ch2 = '';
- if( chVal==115) { ch = 's'; ch2 = 's'; }
  if( (chVal==192) || (chVal==193) || (chVal==194) || (chVal==195) ) { ch = 'A'; }
  if( chVal==196) { ch = 'A'; ch2 = 'E'; }
  if( chVal==197) { ch = 'A'; ch2 = 'A'; }
