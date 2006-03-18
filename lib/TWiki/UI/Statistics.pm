@@ -250,7 +250,11 @@ sub _collectLogData {
         # ignore searches for now - idea: make a "top search phrase list" 
         next if( $opName && $opName =~ /(search)/ );
 
-        if( $opName && $webTopic =~ /($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}|\w+)/ ) {
+        # ignore "renamed web" log lines
+        next if( $opName && $opName =~ /(renameweb)/ );
+
+        # .+ is used because topics name can contain stuff like !, (, ), =, -, _ and they should have stats anyway
+        if( $opName && $webTopic =~ /(^$TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex}$|$TWiki::regex{abbrevRegex}|.+)/ ) {
             my $webName = $1;
             my $topicName = $2;
 
