@@ -27,6 +27,8 @@ foreach my $e ( grep { -d "$pr/$_" && !/^\./ } sort readdir D) {
         build( $e, "Plugins");
     } elsif( $e =~ /Contrib$/ ) {
         build( $e, "Contrib" );
+    } elsif( $e =~ /AddOn$/ ) {
+        build( $e, "AddOn" );
     } elsif( $e =~ /Skin/ ) {
         unless( build( $e, "Contrib" )) {
             just_zip( $e );
