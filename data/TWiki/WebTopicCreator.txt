@@ -1,11 +1,23 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131431859" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
-<form name="new" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/">
+<script language="JavaScript">
+<!--
+function capitalize(value) {
+ var sIn = value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); if( ch!=' ' ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } } sOut+=ch; if( ch==' ' ) { chgUpper = true; } else { chgUpper = false; }} return sOut; 
+}
+function canSubmit(form) {
+ form.topic.value=capitalize(form.topic.value);
+ return true;
+}
+//-->
+</script>
+<form name="new" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onSubmit="return canSubmit(this);">
 ---+ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
 <table><tr><td>
 %MAKETEXT{"Topic name:"}%
 </td><td>
-<input type="text" name="topic" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); if( ch!=' ' ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } } sOut+=ch; if( ch==' ' ) { chgUpper = true; } else { chgUpper = false; }} this.form.topic.value=sOut;" />
+
+<input type="text" name="topic" size="40" value="" onBlur="this.value=capitalize(this.value);" />
 <!-- TODO: move JS to a separate file and make it callable on click of the button too -->
 <!-- TODO: blank out all the irrelevant links: Edit, Compose, Attach, Printable, ... Raw text, versions, History, More topic actions: could this be a CSS? -->
 &nbsp;<input type="submit" class="twikiSubmit" value="Create" />
