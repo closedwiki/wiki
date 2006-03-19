@@ -67,12 +67,16 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
+    try {
+        $this->assert_str_equals($original, $TWiki::cfg{SystemWebName});
+        $twiki->{store}->removeWeb($twiki->{user}, $testUsersWeb);
+        $twiki->{store}->removeWeb($twiki->{user}, $testSysWeb);
+        $twiki->{store}->removeWeb($twiki->{user}, $testNormalWeb);
+        $this->assert($original, $TWiki::cfg{SystemWebName});
+    } catch Error::Simple with {
+    }
+
     $this->SUPER::tear_down();
-    $this->assert_str_equals($original, $TWiki::cfg{SystemWebName});
-    $twiki->{store}->removeWeb($twiki->{user}, $testUsersWeb);
-    $twiki->{store}->removeWeb($twiki->{user}, $testSysWeb);
-    $twiki->{store}->removeWeb($twiki->{user}, $testNormalWeb);
-    $this->assert($original, $TWiki::cfg{SystemWebName});
 }
 
 sub new {

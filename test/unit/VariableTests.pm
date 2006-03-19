@@ -149,20 +149,28 @@ sub test_topicCreationExpansions {
 
     my $text = <<'END';
 %USERNAME%
+%STARTSECTION{type="templateonly"}%
+Kill me
+%ENDSECTION{type="templateonly"}%
 %WIKINAME%
 %WIKIUSERNAME%
 %WEBCOLOR%
+%STARTSECTION{name="fred" type="section"}%
 %USERINFO%
 %USERINFO{format="$emails,$username,$wikiname,$wikiusername"}%
+%ENDSECTION{name="fred" type="section"}%
 END
     my $result = $twiki->expandVariablesOnTopicCreation($text, $user);
     my $xpect = <<'END';
 fnurgle
+
 FrankNurgle
 TemporaryTesUsersUsersWeb.FrankNurgle
 %WEBCOLOR%
+%STARTSECTION{name="fred" type="section"}%
 fnurgle, TemporaryTesUsersUsersWeb.FrankNurgle, frank@nurgle.org,mad@sad.com
 frank@nurgle.org,mad@sad.com,fnurgle,FrankNurgle,TemporaryTesUsersUsersWeb.FrankNurgle
+%ENDSECTION{name="fred" type="section"}%
 END
     $this->assert_str_equals($xpect, $result);
 }

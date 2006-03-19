@@ -136,6 +136,8 @@ sub test_CreateSimpleMetaTopic {
     $readText =~ s/\s*$//s;
 
 	$this->assert_equals($text, $readText);
+    # remove topicinfo, useless for test
+    $readMeta->remove('TOPICINFO');
 	$this->assert_deep_equals($meta, $readMeta);
 }
 
@@ -157,6 +159,8 @@ sub test_CreateSimpleCompoundTopic {
     $readText =~ s/\s*$//s;
 
 	$this->assert_equals($text, $readText);
+    # remove topicinfo, useless for test
+    $readMeta->remove('TOPICINFO');
 	$this->assert_deep_equals($meta, $readMeta);
 }
 
@@ -234,6 +238,117 @@ sub test_leases {
     $twiki->{store}->clearLease( $web, $testtopic );
     $lease = $twiki->{store}->getLease($web, $testtopic);
     $this->assert_null($lease);
+}
+
+# Handler used in next test
+sub beforeSaveHandler {
+    my( $text, $topic, $web, $meta ) = @_;
+    if( $text =~ /CHANGETEXT/ ) {
+        $_[0] =~ s/fieldvalue/text/;
+    }
+    if( $text =~ /CHANGEMETA/ ) {
+        $meta->putKeyed('FIELD', {name=>'fieldname', value=>'meta'});
+    }
+}
+
+use TWiki::Plugin;
+
+sub test_beforeSaveHandlerChangeText {
+    my $this = shift;
+    my $args = {
+        name => "fieldname",
+        value  => "fieldvalue",
+       };
+
+	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
+	$this->assert( $twiki->{store}->webExists($web) );
+	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	
+    # inject a handler directly into the plugins object
+    push(@{$twiki->{plugins}->{registeredHandlers}{beforeSaveHandler}},
+        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+
+	my $text = 'CHANGETEXT';
+	my $meta = new TWiki::Meta($twiki, $web, $topic);
+    $meta->putKeyed( "FIELD", $args );
+
+	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
+	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	
+	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+    # ignore whitspace at end of data
+    $readText =~ s/\s*$//s;
+
+	$this->assert_equals($text, $readText);
+    # remove topicinfo, useless for test
+    $readMeta->remove('TOPICINFO');
+    # set expected meta
+    $meta->putKeyed('FIELD', {name=>'fieldname', value=>'text'});
+	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
+}
+
+sub test_beforeSaveHandlerChangeMeta {
+    my $this = shift;
+    my $args = {
+        name => "fieldname",
+        value  => "fieldvalue",
+       };
+
+	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
+	$this->assert( $twiki->{store}->webExists($web) );
+	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	
+    # inject a handler directly into the plugins object
+    push(@{$twiki->{plugins}->{registeredHandlers}{beforeSaveHandler}},
+        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+
+	my $text = 'CHANGEMETA';
+	my $meta = new TWiki::Meta($twiki, $web, $topic);
+    $meta->putKeyed( "FIELD", $args );
+
+	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
+	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	
+	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+    # ignore whitspace at end of data
+    $readText =~ s/\s*$//s;
+
+	$this->assert_equals($text, $readText);
+    # set expected meta
+    $meta->putKeyed('FIELD', {name=>'fieldname', value=>'meta'});
+	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
+}
+
+sub test_beforeSaveHandlerChangeBoth {
+    my $this = shift;
+    my $args = {
+        name => "fieldname",
+        value  => "fieldvalue",
+       };
+
+	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
+	$this->assert( $twiki->{store}->webExists($web) );
+	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
+	
+    # inject a handler directly into the plugins object
+    push(@{$twiki->{plugins}->{registeredHandlers}{beforeSaveHandler}},
+        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+
+	my $text = 'CHANGEMETA CHANGETEXT';
+	my $meta = new TWiki::Meta($twiki, $web, $topic);
+    $meta->putKeyed( "FIELD", $args );
+
+	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
+	$this->assert( $twiki->{store}->topicExists($web, $topic) );
+	
+	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+    # ignore whitspace at end of data
+    $readText =~ s/\s*$//s;
+
+	$this->assert_equals($text, $readText);
+    # set expected meta
+    $meta->putKeyed('FIELD', {name=>'fieldname', value=>'meta'});
+	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
 }
 
 1;
