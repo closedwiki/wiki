@@ -108,9 +108,9 @@ AFTER');
 sub tear_down {
     my $this = shift;
 
-    $session->{store}->removeWeb($session->{user},$testWeb);
-    $session->{store}->removeWeb($session->{user},$peopleWeb);
-    $session->{store}->removeWeb($session->{user},$systemWeb);
+    $this->removeWebFixture($session,$testWeb);
+    $this->removeWebFixture($session,$peopleWeb);
+    $this->removeWebFixture($session,$systemWeb);
     File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
     unlink($TWiki::cfg{HtpasswdFileName});
     @mails = ();
@@ -172,7 +172,7 @@ sub registerAccount {
     };
 }
 
-sub detest_userTopic {
+sub test_userTopic {
     my $this = shift;
     $this->registerAccount();
     my( $meta, $text ) = $session->{store}->readTopic(
@@ -284,7 +284,7 @@ sub registerVerifyOk {
 }
 
 #Register a user, then give a bad verification code. It should barf.
-sub detest_registerBadVerify {
+sub test_registerBadVerify {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  1;
     my $query = new CGI ({
@@ -375,7 +375,7 @@ sub detest_registerBadVerify {
 
 # Register a user with verification explicitly switched off
 # (SUPER's tear_down will take care for re-installing %TWiki::cfg)
-sub detest_registerNoVerifyOk {
+sub test_registerNoVerifyOk {
     my $this = shift;
     $TWiki::cfg{Register}{NeedVerification}  =  0;
     my $query = new CGI ({
@@ -494,7 +494,7 @@ sub test_resetPasswordOkay {
     $this->assert_matches(qr/To: .*\b$testUserEmail/,$mess);
 }
 
-sub detest_resetPasswordNoSuchUser {
+sub test_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -534,7 +534,7 @@ sub detest_resetPasswordNoSuchUser {
 }
 
 
-sub detest_resetPasswordNeedPrivilegeForMultipleReset {
+sub test_resetPasswordNeedPrivilegeForMultipleReset {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
@@ -577,7 +577,7 @@ sub detest_resetPasswordNeedPrivilegeForMultipleReset {
 
 # This test is supposed to ensure that the system can reset passwords for a user
 # currently absent from .htpasswd
-sub detest_resetPasswordNoPassword {
+sub test_resetPasswordNoPassword {
     my $this = shift;
 
     $this->registerAccount();
@@ -647,7 +647,7 @@ Create an incomplete registration, and try to finish it off.
 Once complete, try again - the second attempt at completion should fail.
 =cut
 
-sub detest_UnregisteredUser {
+sub test_UnregisteredUser {
     my $this = shift;
 
     TWiki::UI::Register::_putRegDetailsByCode($regSave, $TWiki::cfg{RegistrationApprovals});
@@ -672,7 +672,7 @@ sub detest_UnregisteredUser {
     $this->assert_equals(0, scalar(@mails));
 }
 
-sub detest_missingElements {
+sub test_missingElements {
     my $this = shift;
     my @present = ("one","two","three");
     my @required = ("one","two","six");
@@ -682,7 +682,7 @@ sub detest_missingElements {
     $this->assert_deep_equals( [TWiki::UI::Register::_missingElements(\@present, \@present)], []);
 }
 
-sub detest_bulkRegister {
+sub test_bulkRegister {
     my $this = shift;
 
     my $testReg = <<'EOM';
@@ -740,7 +740,7 @@ EOM
     $this->assert_equals(0, scalar(@mails));
 }
 
-sub detest_buildRegistrationEmail {
+sub test_buildRegistrationEmail {
     my ($this) = shift;
 
     my %data = (

@@ -51,9 +51,9 @@ THIS
 
 sub tear_down {
     my $this = shift;
+    $this->removeWebFixture($twiki, $peopleWeb);
+    $this->removeWebFixture($twiki, $testWeb);
     $this->SUPER::tear_down();
-    $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
-    $twiki->{store}->removeWeb($twiki->{user}, $testWeb);
 }
 
 sub DENIED {

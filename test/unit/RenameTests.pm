@@ -88,9 +88,9 @@ THIS
 
 sub tear_down {
     my $this = shift;
+    $this->removeWebFixture($twiki,$oldweb);
+    $this->removeWebFixture($twiki,$newweb);
     $this->SUPER::tear_down();
-    $twiki->{store}->removeWeb($twiki->{user},$oldweb);
-    $twiki->{store}->removeWeb($twiki->{user},$newweb);
 }
 
 sub check {

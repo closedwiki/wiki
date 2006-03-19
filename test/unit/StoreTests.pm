@@ -47,11 +47,11 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+
+    $this->removeWebFixture($twiki, $web)
+      if( $twiki->{store}->webExists( $web ));
+
     $this->SUPER::tear_down();
-    try {
-        $twiki->{store}->removeWeb($twiki->{user}, $web);
-    } catch Error::Simple with {
-    };
 }
 
 #===============================================================================
@@ -66,6 +66,7 @@ sub test_CreateEmptyWeb {
 	$this->assert( $twiki->{store}->webExists($web) );
 	my @topics = $twiki->{store}->getTopicNames($web);
 	$this->assert_equals( 1, scalar(@topics), join(" ",@topics) );#we expect there to be only the home topic
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_CreateWeb {
@@ -81,6 +82,7 @@ sub test_CreateWeb {
 	my @defaultTopics = $twiki->{store}->getTopicNames('_default');
 	$this->assert_equals( $#topics, $#defaultTopics,
                           join(",",@topics)." != ".join(',',@defaultTopics));
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_CreateWebWithNonExistantBaseWeb {
@@ -117,6 +119,7 @@ sub test_CreateSimpleTopic {
     $readText =~ s/\s*$//s;
 
 	$this->assert_equals($text, $readText);
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_CreateSimpleMetaTopic {
@@ -138,7 +141,9 @@ sub test_CreateSimpleMetaTopic {
 	$this->assert_equals($text, $readText);
     # remove topicinfo, useless for test
     $readMeta->remove('TOPICINFO');
+    @{$meta->{FILEATTACHMENT}} = () unless $meta->{FILEATTACHMENT};
 	$this->assert_deep_equals($meta, $readMeta);
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_CreateSimpleCompoundTopic {
@@ -161,7 +166,9 @@ sub test_CreateSimpleCompoundTopic {
 	$this->assert_equals($text, $readText);
     # remove topicinfo, useless for test
     $readMeta->remove('TOPICINFO');
-	$this->assert_deep_equals($meta, $readMeta);
+    @{$meta->{FILEATTACHMENT}} = () unless $meta->{FILEATTACHMENT};
+    $this->assert_deep_equals($meta, $readMeta);
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_getRevisionInfo {
@@ -189,6 +196,7 @@ sub test_getRevisionInfo {
 	
 	#TODO
 	#getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  ) -> \@diffArray
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_moveTopic {
@@ -211,7 +219,8 @@ sub test_moveTopic {
 	
 	#compare number of refering topics?
 	#compare list of references to moved topic
-	
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
+
 }
 
 sub test_leases {
@@ -238,6 +247,7 @@ sub test_leases {
     $twiki->{store}->clearLease( $web, $testtopic );
     $lease = $twiki->{store}->getLease($web, $testtopic);
     $this->assert_null($lease);
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 # Handler used in next test
@@ -285,6 +295,7 @@ sub test_beforeSaveHandlerChangeText {
     # set expected meta
     $meta->putKeyed('FIELD', {name=>'fieldname', value=>'text'});
 	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_beforeSaveHandlerChangeMeta {
@@ -317,6 +328,7 @@ sub test_beforeSaveHandlerChangeMeta {
     # set expected meta
     $meta->putKeyed('FIELD', {name=>'fieldname', value=>'meta'});
 	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 sub test_beforeSaveHandlerChangeBoth {
@@ -349,6 +361,7 @@ sub test_beforeSaveHandlerChangeBoth {
     # set expected meta
     $meta->putKeyed('FIELD', {name=>'fieldname', value=>'meta'});
 	$this->assert_str_equals($meta->stringify(), $readMeta->stringify());
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
 1;

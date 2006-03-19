@@ -67,13 +67,10 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
-    try {
-        $twiki->{store}->removeWeb($twiki->{user}, $testUsersWeb);
-        $twiki->{store}->removeWeb($twiki->{user}, $testSysWeb);
-        $twiki->{store}->removeWeb($twiki->{user}, $testNormalWeb);
-    } finally {
-        $this->SUPER::tear_down();
-    }
+    $this->removeWebFixture($twiki, $testUsersWeb);
+    $this->removeWebFixture($twiki, $testSysWeb);
+    $this->removeWebFixture($twiki, $testNormalWeb);
+    $this->SUPER::tear_down();
 }
 
 sub new {

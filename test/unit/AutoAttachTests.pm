@@ -59,8 +59,8 @@ sub set_up_topic {
 
 sub tear_down {
     my $this = shift;
+    $this->removeWebFixture($session, $testweb);
     $this->SUPER::tear_down();
-    $session->{store}->removeWeb($session->{user}, $testweb);
 }
 
 # We create a topic with a missing attachment

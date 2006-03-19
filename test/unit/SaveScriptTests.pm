@@ -93,8 +93,8 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    $this->removeWebFixture($twiki, $testweb);
     $this->SUPER::tear_down();
-    $twiki->{store}->removeWeb($twiki->{user}, $testweb);
 }
 
 # 10X

@@ -9,11 +9,13 @@ use TWiki;
 
 sub set_up {
     # Set up test fixture; e.g. create webs, topics
+    # See EmptyTests for an example
 }
 
 sub tear_down {
     # Remove fixtures created in set_up
     # Do *not* leave fixtures lying around!
+    # See EmptyTests for an example
 }
 
 # Example of a test method.

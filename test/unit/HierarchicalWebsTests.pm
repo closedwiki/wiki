@@ -42,7 +42,7 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
-    $twiki->{store}->removeWeb( $twiki->{user}, $webSubWeb );
+    $this->removeWebFixture( $twiki, $webSubWeb );
 
     $this->SUPER::tear_down();
 }

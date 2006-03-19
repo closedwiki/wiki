@@ -186,4 +186,16 @@ sub capture {
     return ( $text, $result );
 }
 
+sub removeWebFixture {
+    my( $this, $twiki, $web ) = @_;
+
+    try {
+        $twiki->{store}->removeWeb($twiki->{user}, $web);
+    } otherwise {
+        my $e = shift;
+        print STDERR "Unexpected exception while removing web $web\n";
+        print STDERR $e->stringify(),"\n" if $e;
+    };
+}
+
 1;

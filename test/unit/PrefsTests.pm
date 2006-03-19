@@ -63,12 +63,10 @@ sub set_up {
 sub tear_down {
     my $this = shift;
 
+    $this->removeWebFixture($twiki, $testUsersWeb);
+    $this->removeWebFixture($twiki, $testSysWeb);
+    $this->removeWebFixture($twiki, $testNormalWeb);
     $this->SUPER::tear_down();
-    $this->assert_str_equals($original, $TWiki::cfg{SystemWebName});
-    $twiki->{store}->removeWeb($twiki->{user}, $testUsersWeb);
-    $twiki->{store}->removeWeb($twiki->{user}, $testSysWeb);
-    $twiki->{store}->removeWeb($twiki->{user}, $testNormalWeb);
-    $this->assert($original, $TWiki::cfg{SystemWebName});
 }
 
 sub _set {
