@@ -2550,8 +2550,11 @@ sub readFile {
 }
 
 sub _FORMFIELD {
-    my $this = shift;
-    return $this->{renderer}->renderFORMFIELD( @_ );
+    my ( $this, $params, $topic, $web ) = @_;	
+    my $cgiQuery = $this->{cgiQuery};
+    my $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
+    $params->{rev} = $cgiRev;
+    return $this->{renderer}->renderFORMFIELD( $params, $topic, $web );
 }
 
 sub _TMPLP {

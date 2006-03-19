@@ -793,6 +793,7 @@ sub renderFORMFIELD {
     my $formTopic = $params->{topic};
     my $altText   = $params->{alttext};
     my $default   = $params->{default};
+    my $rev       = $params->{rev};
     my $format    = $params->{'format'};
 
     unless ( $format ) {
@@ -824,7 +825,7 @@ sub renderFORMFIELD {
     unless ( $meta ) {
         my $dummyText;
         ( $meta, $dummyText ) =
-          $store->readTopic( $this->{session}->{user}, $formWeb, $formTopic, undef );
+          $store->readTopic( $this->{session}->{user}, $formWeb, $formTopic, $rev );
         $this->{ffCache}{$formWeb.'.'.$formTopic} = $meta;
     }
 
