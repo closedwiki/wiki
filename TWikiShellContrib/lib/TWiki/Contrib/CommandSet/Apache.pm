@@ -112,7 +112,10 @@ sub smry_add {
 
 
 sub onImport {
-    configure(@_);
+   # Not all users who have this module installed will want to use it
+   # Tell them what to do to do so.
+   print "module loaded - run configure to use it\n";
+#    configure(@_);
 }
 
 1;

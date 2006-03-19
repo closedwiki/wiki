@@ -2,6 +2,16 @@ package TWiki::Contrib::TWikiShellContrib::Standard;
 
 use FileHandle;
 
+sub smry_overview {
+    return "Type 'help overview': outlines the purpose of the twikishell and where to find up-to-date help\n";
+}
+
+sub help_overview {
+    return <<"HERE";
+The twikishell is an extensible command line for TWiki.\nPlugins can add their own commands by creating suitably named classes which are 'imported' into the shell.\nThese can be invoked as scripts.\nSee http://twiki.org/cgi-bin/view/Plugins/TWikiShellContrib for details.\n
+HERE
+}
+
 ##############################
 # set verbosity
 ##############################
@@ -100,7 +110,7 @@ sub undefined_smry {
 }
 
 sub undefined_help {
-    return "No help available\n";
+    return "undocumented - no help available\n";
 }
 
 sub run_shorcuts {
