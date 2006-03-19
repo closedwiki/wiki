@@ -13,7 +13,7 @@ use strict;
 use base qw(Term::Shell);
 use vars qw {$VERSION $config $prefix $prefixPath};
 
-$VERSION = "2.00";
+$VERSION = "2.01";
 
 my @systemModules =qw (TWiki::Contrib::TWikiShellContrib::Standard);
 
@@ -43,7 +43,7 @@ sub new {
 
 sub splash {
    print "TWiki Interactive Shell v$VERSION
-Oct 2005 - written by Rafael Alvarez based on MartinCleaver work
+Oct 2005 - written by Rafael Alvarez based on a prototype by MartinCleaver
 Type \"help\" for a list of available commands
 
 ";
@@ -367,7 +367,7 @@ sub dispatch {
 
  my ( $class, @remainingArgs ) = $self->findTargetClassForString(@args);
  unless ($class) {
-    print "Couldn't resolve your request\n";
+    print "Couldn't resolve your request; type 'help' to show commands available\n";
     return;
  }
  
@@ -398,7 +398,7 @@ sub findTargetClassForString {
       @remainingParameters = @cli_args[ $argsSeparator + 1 .. $#cli_args ];
       $remainingParameters =join( " ", @remainingParameters );
     
-      #print "Trying $prefix" . "::" . $classToTry . " '$remainingParameters'\n";
+      printDebug("Trying $prefix" . "::" . $classToTry . " '$remainingParameters'\n");
       if ( classExists($classToTry) ) {
        last;
       }
@@ -458,7 +458,7 @@ sub _discover {
           &$method($self,$config);
           $self->printVeryVerbose("CommandSet $file initialized\n");
        } else {
-          $self->printVeryVerbose("CommandSet $file don't have an onImport method\n");
+          $self->printVeryVerbose("CommandSet $file does not have an onImport method\n");
        }
        $self->importCommand($config,$module);
     }
