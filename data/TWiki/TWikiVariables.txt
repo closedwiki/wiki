@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142799790" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTSECTION{type="include"}%
@@ -22,6 +22,10 @@ __Note:__
    * Variables are expanded relative to the topic they are _used_ in, not the topic they are _defined_ in
    * Type =%<nop>ALLVARIABLES%= to get a full listing of all variables defined for a particular topic
 
+---++ Variable Names
+Variable names must start with a letter. The following characters can be letters, numbers and the underscore '_'. You can use both upper-case and lower-case letters and you can mix the characteres. E.g. =%<nop>MYVAR%=, =%<nop>MyVar%=, =%<nop>My2ndVar%=, and =%<nop>My_Var%= are all valid variable names. Variables are case sensitive. =%<nop>MyVAR%= and =%<nop>MYVAR%= are not the same variable.
+
+By convention all settings, predefined variables and variables used by plugins are always UPPER-CASE.
 
 #SettingPrefs
 #PreferencesVariables
