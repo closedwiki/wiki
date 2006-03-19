@@ -102,9 +102,6 @@ Reads the given version of a topic and it's meta-data. If the version
 is undef, then read the most recent version. The version number must be
 an integer, or undef for the latest version.
 
-Earlier argument syntax for $version; 1.x (Cairo and earlier) 
-is also supported, but is to be deprecated.
-
 if $user is defined, view permission will be required for the topic
 read to be successful.  Access control violations are flagged by a
 TWiki::AccessControlException. Permissions are checked for the user
@@ -123,9 +120,8 @@ sub readTopic {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $web =~ s#\.#/#go;
 
-    # Cairo compatibility for rev="1.x"-style arguments in %INCLUDEs
     if (defined $version) {
-    	$version =~ s/^1\.//go;
+    	$version = $this->cleanUpRevID( $version );
     }
 
     my $text = $this->readTopicRaw( $user, $web, $topic, $version );
