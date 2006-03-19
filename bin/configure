@@ -346,13 +346,12 @@ sub _checkRCSProgram {
         my $version = `$prog -V` || '';
         if( $@ ) {
             $err .= ERROR($prog.' returned an error: '.$@ );
-        }
-        if ( $version && $version =~ /(\d+(\.\d+)+)/ ) {
+        } elsif ( $version ne '' ) {
+            $version =~ /(\d+(\.\d+)+)/;
             $version = $1;
             $mess .= " ($prog is version $version)";
         } else {
             $err .= ERROR($prog.' did not return a version number (or might not exist..)');
-            $version = -1;
         }
         if( defined( $cygwinRcsVerNum )) {
             $mess .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)";
@@ -873,7 +872,7 @@ sub _CHECKVAR_Site_Locale {
 Unable to set locale to '$locale'. The actual locale is '$currentLocale'
 - please test your locale settings. This warning can be ignored if you are
 not planning to use locales (e.g. your site uses English only) - or you can
-set  {Site}{Locale} to <code>C</code>, which should always work.
+set  {Site}{Locale} to 'C', which should always work.
 HERE
                    );
     }
@@ -1845,6 +1844,9 @@ use vars qw ( $setlibAvail $brokenLocalSiteError $brokenTWikiCfgError
 # Try to use setlib.cfg, use default path if missing
 if ( -r './setlib.cfg' ) {
     require './setlib.cfg';
+    $setlibAvail = 1;
+} elsif ( -r '../conf/setlib.cfg' ) {
+    require '../conf/setlib.cfg';
     $setlibAvail = 1;
 } else {
     unshift @INC, '../lib';
