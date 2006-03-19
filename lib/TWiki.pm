@@ -1696,7 +1696,7 @@ sub _TOC {
             $line =~ s/<[\/]?a\b[^>]*>//gi;
             # create linked bullet item, using a relative link to anchor
             $line = $tabs.'* '.
-              CGI::a( { href=>'#'.$anchor }, $line );
+              CGI::a( { href=>$this->getScriptUrl( 0, 'view', $web, $topic, '#'=>$anchor ) }, $line );
             $result .= "\n".$line;
         }
     }
