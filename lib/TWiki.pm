@@ -398,7 +398,7 @@ BEGIN {
     $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
 
     # %TAG% name
-    $regex{tagNameRegex} = qr/[$regex{upperAlpha}][$regex{upperAlphaNum}_:]*/o;
+    $regex{tagNameRegex} = qr/[$regex{mixedAlpha}][$regex{mixedAlpha}_:]*/o;
 
     # Set statement in a topic
     $regex{bulletRegex} = qr/^(?:\t|   )+\*/;
