@@ -855,9 +855,10 @@ sub saveAttachment {
             $attrs = {
                 attachment => $attachment,
                 stream => $opts->{stream},
-                comment => $opts->{comment},
                 user => $user->webDotWikiName()
                };
+               
+            $attrs->{comment} = $opts->{comment} if (defined($opts->{comment}));               
 
             my $handler = $this->_getHandler( $web, $topic, $attachment );
 
@@ -910,9 +911,9 @@ sub saveAttachment {
             my $fileVersion = $this->getRevisionNumber( $web, $topic,
                                                         $attachment );
             $attrs->{version} = $fileVersion;
-            $attrs->{path} = $opts->{filepath},;
-            $attrs->{size} = $opts->{filesize};
-            $attrs->{date} = $opts->{filedate};
+            $attrs->{path} = $opts->{filepath} if (defined($opts->{filepath}));
+            $attrs->{size} = $opts->{filesize} if (defined($opts->{filesize}));
+            $attrs->{date} = $opts->{filedate} if (defined($opts->{filedate}));
             $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
 
             $meta->putKeyed( 'FILEATTACHMENT', $attrs );
@@ -920,7 +921,7 @@ sub saveAttachment {
             $attrs = $meta->get( 'FILEATTACHMENT', $attachment );
             $attrs->{name} = $attachment;
             $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
-            $attrs->{comment} = $opts->{comment};
+            $attrs->{comment} = $opts->{comment} if (defined($opts->{comment}));
             $meta->putKeyed( 'FILEATTACHMENT', $attrs );
         }
 
