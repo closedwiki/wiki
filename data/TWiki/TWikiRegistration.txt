@@ -3,7 +3,7 @@
 
 %MAKETEXT{"To edit pages on this TWikiSite, you must have a registered user name and password."}%
 
-   * %H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can ChangePasswords and ResetPasswords."}%
+%H% *%MAKETEXT{"Note:"}%* %MAKETEXT{"Registered users can [[[_1]][change]] and [[[_2]][reset]] their passwords." args="%TWIKIWEB%.ChangePassword,%TWIKIWEB%.ResetPassword"}%
 
 %MAKETEXT{"To register as a new user, simply fill out this form:"}%
 
