@@ -77,6 +77,7 @@ sub deleteUser {
     my $r;
     try {
         $r = $this->{apache}->htDelete( $login );
+        $this->{error} = $this->{apache}->error() unless (defined($r));        
     } catch Error::Simple with {
         $this->{error} = $this->{apache}->error();
     };
