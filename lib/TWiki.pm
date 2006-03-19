@@ -2655,7 +2655,7 @@ sub _INCLUDE {
             return $this->inlineAlert( 'alerts', 'topic_not_found', $includedTopic );
         } elsif( isTrue( $warn )) {
             $includedTopic =~ s/\//\./go;
-            $warn =~ s/\$includingTopic/$includedTopic/go;
+            $warn =~ s/\$topic/$includedTopic/go;
             return $warn;
         } # else fail silently
         return '';
