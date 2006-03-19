@@ -63,7 +63,6 @@ sub getUrl {
     if( $port < 1 ) {
         $port = 80;
     }
-    my $base64;
     my $result = '';
     $url = "/" unless( $url );
     my $req = "GET $url HTTP/1.0\r\n";
@@ -74,7 +73,7 @@ sub getUrl {
         # authentication
         require MIME::Base64;
         import MIME::Base64 ();
-        $base64 = encode_base64( "$user:$pass", "\r\n" );
+        my $base64 = encode_base64( "$user:$pass", "\r\n" );
         $req .= "Authorization: Basic $base64";
     }
 
