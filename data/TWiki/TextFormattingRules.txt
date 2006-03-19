@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MeredithLesly" date="1141756708" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1141756708" format="1.1" version="$Rev$"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -40,7 +40,7 @@ Being able to create links without any special formatting is a core TWiki featur
 
 ---++ TWiki Variables
 
-%INCLUDE{"TWikiVariables101"}%
+%INCLUDE{"TWikiVariablesQuickStart"}%
 
 ---++ <nop>TWikiPlugin Formatting Extensions
 
