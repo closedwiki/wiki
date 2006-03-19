@@ -1567,7 +1567,7 @@ sub renderRevisionInfo {
         $un = $user->login();
     }
 
-    my $value = $format || 'r$rev - $time - $wikiusername';
+    my $value = $format || 'r$rev - $date - $time - $wikiusername';
     $value =~ s/\$web/$web/gi;
     $value =~ s/\$topic/$topic/gi;
     $value =~ s/\$rev/$rev/gi;
