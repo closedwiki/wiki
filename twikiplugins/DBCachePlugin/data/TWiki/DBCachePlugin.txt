@@ -249,8 +249,9 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.00 |
+|  Plugin Version: | v1.01 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 Mar 2006: | using TWiki::Attrs to parse section names |
 |  12 Mar 2006: | added hidenull to DBSTATS |
 |  10 Mar 2006: | use ENV instead of the CGI object to detect the current cgi action |
 |  02 Mar 2006: | fixed bad init error showing up on speedy/mod_perl |
