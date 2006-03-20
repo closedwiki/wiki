@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.995';
+$RELEASE = '2.996';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';

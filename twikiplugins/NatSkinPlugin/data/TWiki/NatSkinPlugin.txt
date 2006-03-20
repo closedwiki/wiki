@@ -338,8 +338,15 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.995 |
+|  Plugin Version: | v2.996 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 Mar 2006: | multiple errors in natsearch: \
+                  always first look into the current web, even for a global search; \
+		  default to local search, was global before, use g: to switch to \
+		  global search explicitely; \
+		  GO function searches in all webs; \
+		  display number of hits; \
+		  sort hit results in reverse chronological order |
 |  13 Mar 2006: | dont remove leading and trailing whitespaces from web components |
 |  11 Mar 2006: | removed MYSIDEBAR tag; \
                   new web component search path; \
@@ -410,5 +417,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 11 Mar 2006 
+-- TWiki:Main/MichaelDaum - 20 Mar 2006 
 
