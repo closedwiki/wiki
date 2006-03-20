@@ -971,7 +971,7 @@ sub _noHandlersSave {
     }
 
     if( $meta ) {
-        $meta->addTOPICINFO( $nextRev, time(), $user );
+        addTOPICINFO( $meta, $nextRev, time(), $user, 0 );
         $text = _writeMeta( $meta, $text );
     }
 
@@ -1028,7 +1028,7 @@ sub repRev {
     my( $revdate, $revuser, $rev ) = $meta->getRevisionInfo();
 
     # RCS requires a newline for the last line,
-    $text =~ s/([^\n\r])$/$1\n/os;
+    $text .= "\n" unless $text =~ /\n$/s;
 
     if( $options->{timetravel} ) {
         # We are trying to force the rev to be saved with the same date
@@ -1043,7 +1043,8 @@ sub repRev {
         $revdate = time();
         $revuser = $user;
     }
-    $meta->addTOPICINFO( $rev, $revdate, $revuser );
+    addTOPICINFO( $meta, $rev, $revdate, $revuser, 1 );
+
     $text = _writeMeta( $meta, $text );
 
     $this->lockTopic( $user, $web, $topic );
@@ -1405,6 +1406,34 @@ sub readMetaData {
 
     my $handler = $this->_getHandler( $web );
     return $handler->readMetaData( $name );
+}
+
+# Add TOPICINFO type data to the object, as specified by the parameters.
+#    * =$rev= - the revision number
+#    * =$time= - the time stamp
+#    * =$user= - the user object
+# SMELL: Duplicate rev control info in the topic
+sub addTOPICINFO {
+    my( $meta, $rev, $time, $user, $repRev ) = @_;
+    $rev = 1 if $rev < 1;
+
+    my %options =
+      (
+          # compatibility; older versions of the code use
+          # RCS rev numbers save with them so old code can
+          # read these topics
+          version => '1.'.$rev,
+          date    => $time,
+          author  => $user->wikiName(),
+          format  => $TWiki::Store::STORE_FORMAT_VERSION,
+         );
+    # if this is a reprev, then store the revision that was affected.
+    # Required so we can tell when a merge is based on something that
+    # is *not* the original rev where another users' edit started.
+    # See Bugs:Item1897.
+    $options{reprev} = '1.'.$rev if $repRev;
+
+    $meta->put( 'TOPICINFO', \%options );
 }
 
 =pod

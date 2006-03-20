@@ -1,5 +1,6 @@
 # Copyright (C) 2005 Greg Abbas
 require 5.006;
+
 package MergeTests;
 
 use base qw(TWikiTestCase);
@@ -9,7 +10,7 @@ use strict;
 use Assert;
 use Error qw( :try );
 
-use TWiki::Merge3;
+use TWiki::Merge;
 
 #-----------------------------------------------------------------------------
 
@@ -18,33 +19,47 @@ sub new {
     return $self;
 }
 
+use vars qw( $info @mudge );
+
 sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
-}
 
-sub tear_down {
-    my $this = shift;
-    $this->SUPER::tear_down();
+    @mudge = ();
 }
 
 #-----------------------------------------------------------------------------
 # helper methods
 
-sub _writeConflict {
-    my($out, $aconf, $bconf, $cconf, $arev, $brev, $crev, $sep, $info) = @_;
-    push @$out, "[";
-    push @$out, $arev."{", grep( $_, @$aconf ), "} ";
-    push @$out, $brev."{", grep( $_, @$bconf ), "} ";
-    push @$out, $crev."{", grep( $_, @$cconf ), "}";
-    push @$out, "]";
+{
+    package HackJob;
+
+    sub new {
+        return bless( {}, shift );
+    }
+
+    sub mergeHandler {
+        my($this, $c, $a, $b, $i) = @_;
+
+        die "$i.$MergeTests::info" unless $i eq $MergeTests::info;
+        push( @MergeTests::mudge, "$c#$a#$b" );
+        return undef;
+    }
 }
+
+my $session = { plugins => new HackJob() };
+$info = { argle => "bargle" };
 
 sub _merge {
     my ( $ia, $ib, $ic ) = @_;
-    return TWiki::Merge3::merge(
-        $ia, $ib, $ic, "a", "b", "c", " ", \&_writeConflict );
+    return TWiki::Merge::merge3(
+        'a', $ia,
+        'b', $ib,
+        'c', $ic,
+        ' ',
+        $session,
+        $info );
 }
 
 sub _readfile {
@@ -58,49 +73,107 @@ sub _readfile {
 #-----------------------------------------------------------------------------
 # tests
 
-sub test_shortStrings {
-    
+sub test_shortStrings1 {
     my $this = shift;
     my ( $a, $b, $c, $d );
-    
     $a = "";
     $b = "";
     $c = "1 2 3 4 5 ";
     $d = _merge($a, $b, $c);
     $this->assert_str_equals( $c, $d );
-    
+    $this->assert_str_equals(
+        ' ##: #1 #1 : ##: #2 #2 : ##: #3 #3 : ##: #4 #4 : ##: #5 #5 ',
+        join(':', @mudge ));
+}
+
+sub test_shortStrings2 {
+    my $this = shift;
+    my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 2 3 4 5 ";
     $c = "";
     $d = _merge($a, $b, $c);
     $this->assert_str_equals( $c, $d );
-    
+}
+
+sub test_shortStrings3 {
+    my $this = shift;
+    my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 b 2 3 4 5 ";
     $c = "1 2 3 4 c 5 ";
     $d = _merge($a, $b, $c);
     $this->assert_str_equals( "1 b 2 3 4 c 5 ", $d );
-    
-    $c = "1 c 2 3 4 c 5 ";
-    $d = _merge($a, $b, $c);
-    $this->assert_str_equals( "1 [a{} b{b } c{c }]2 3 4 c 5 ", $d );
+}
 
+sub test_shortStrings4 {
+    my $this = shift;
+    my ( $a, $b, $c, $d );
+    $a = "1 2 3 4 5 ";
+    $b = "1 b 2 3 4 5 ";
+    $c = "1 c 2 3 4 c 5 ";
+    $d = _merge($a, $b, $c)."\n";
+
+    $this->assert_str_equals( <<'END',
+1 <div class="twikiConflict"><b>CONFLICT</b> version b:</div>
+b <div class="twikiConflict"><b>CONFLICT</b> version c:</div>
+c <div class="twikiConflict"><b>CONFLICT</b> end</div>
+2 3 4 c 5 
+END
+                              $d );
+    $this->assert_str_equals(
+        ' ##: #1 #1 : ##:c#b #c : ##: #4 #4 : ##: #c #c : ##: #5 #5 ',
+        join(':', @mudge ));
+}
+
+sub test_shortStrings5 {
+    my $this = shift;
+    my ( $a, $b, $c, $d );
+    $a = "1 2 3 4 5 ";
     $b = "1 3 4 5 6 ";
     $c = "1 2 3 ";
     $d = _merge($a, $b, $c);
     $this->assert_str_equals( "1 3 6 ", $d );
-    
-    $b = $c = "1 2 4 5 ";
+}
+
+sub test_shortStrings6 {
+    my $this = shift;
+    my ( $a, $b, $c, $d );
+    $a = "1 2 3 4 5 ";
+    $b = "1 2 4 5 ";
+    $c = $b;
     $d = _merge($a, $b, $c);
     $this->assert_str_equals( "1 2 4 5 ", $d );
-    
-    $b = $c = "1 2 change 4 5 ";
+}
+
+sub test_shortStrings7 {
+    my $this = shift;
+    my ( $a, $b, $c, $d );
+    $a = "1 2 3 4 5 ";
+    $b = "1 2 change 4 5 ";
+    $c = $b;
     $d = _merge($a, $b, $c);
     $this->assert_str_equals( "1 2 change 4 5 ", $d );
-    
+}
+
+sub test_shortStrings8 {
+    my $this = shift;
+    my ( $a, $b, $c, $d );
+    $a = "1 2 3 4 5 ";
+    $b = "1 2 change 4 5 ";
     $c = "1 2 other 4 5 ";
-    $d = _merge($a, $b, $c);
-    $this->assert_str_equals( "1 2 [a{3 } b{change } c{other }]4 5 ", $d );
+    $d = _merge($a, $b, $c)."\n";
+    $this->assert_str_equals( <<'END',
+1 2 <div class="twikiConflict"><b>CONFLICT</b> original a:</div>
+3 <div class="twikiConflict"><b>CONFLICT</b> version b:</div>
+change <div class="twikiConflict"><b>CONFLICT</b> version c:</div>
+other <div class="twikiConflict"><b>CONFLICT</b> end</div>
+4 5 
+END
+                              $d );
+    $this->assert_str_equals(
+        ' ##: #1 #1 : ##: #2 #2 : ##:c#change #other ',
+        join(':', @mudge ));
 }
 
 sub test_text {
@@ -134,9 +207,10 @@ New text in version "b".<br>
 Very nice.<br>
 EOF
 
-    $d = TWiki::Merge3::merge($a, $b, $c, "r1", "r2", "r3");
+    $d = TWiki::Merge::merge3("r1", $a, "r2", $b, "r3", $c, '\n',
+                             $session, $info);
     $this->assert_str_equals( $e, $d );
-    
+
     $c = <<"EOF";
 Some text.<br>
 The first version.<br>
@@ -155,7 +229,8 @@ Alternatively, new text in version "c".<br>
 Very nice.<br>
 EOF
 
-    $d = TWiki::Merge3::merge($a, $b, $c, "r1", "r2", "r3");
+    $d = TWiki::Merge::merge3("r1", $a, "r2", $b, "r3", $c, '\n',
+                              $session, $info);
     $this->assert_str_equals( $e, $d );
 }
 

@@ -469,14 +469,18 @@ sub test_merge {
     my $oldmeta = new TWiki::Meta( $twiki, $testweb, 'MergeSave');
     my $oldtext = $testtext1;
     $twiki->{store}->extractMetaData( $oldmeta, \$oldtext );
-    $twiki->{store}->saveTopic( $testuser1, $testweb, 'MergeSave',
+    $twiki->{store}->saveTopic( $testuser2, $testweb, 'MergeSave',
                                 $testform1, $oldmeta );
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
+                                                  'MergeSave');
+    my( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    my $original = "${orgRev}_$orgDate";
 
     my $query1 = new CGI(
         {
             action => [ 'save' ],
             text   => [ "Soggy bat" ],
-            originalrev => 1,
+            originalrev => $original,
             formtemplate => [ 'TestForm1' ],
             TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
             TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
@@ -488,11 +492,14 @@ sub test_merge {
     $twiki = new TWiki( $testuser1->login(), $query1);
     $this->capture( \&TWiki::UI::Save::save, $twiki);
 
+    ($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
+                                                  'MergeSave');
+    ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
     my $query2 = new CGI(
         {
             action => [ 'save' ],
             text   => [ "Wet rat" ],
-            originalrev => 1,
+            originalrev => $original,
             formtemplate => [ 'TestForm1' ],
             TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
             TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
@@ -508,13 +515,31 @@ sub test_merge {
         my $e = shift;
         $this->assert_str_equals('merge_notice', $e->{def});
     } otherwise {
-        $this->assert(0);
+        $this->assert(0, shift);
     };
-
-    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
+    ($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
                                                   'MergeSave');
-    #print $text;
-    #print $meta->stringify();
+    my $e = <<'END';
+<div class="twikiConflict"><b>CONFLICT</b> original 1:</div>
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+<div class="twikiConflict"><b>CONFLICT</b> version 2:</div>
+Soggy bat
+<div class="twikiConflict"><b>CONFLICT</b> version new:</div>
+Wet rat
+<div class="twikiConflict"><b>CONFLICT</b> end</div>
+END
+    $this->assert_str_equals($e, $text);
+
+    my $v = $meta->get('FIELD', 'Select');
+    $this->assert_str_equals('Value_2', $v->{value});
+    $v = $meta->get('FIELD', 'Radio');
+    $this->assert_str_equals('3', $v->{value});
+    $v = $meta->get('FIELD', 'Checkbox');
+    $this->assert_str_equals('red', $v->{value});
+    $v = $meta->get('FIELD', 'CheckboxandButtons');
+    $this->assert_str_equals('hamster', $v->{value});
+    $v = $meta->get('FIELD', 'Textfield');
+    $this->assert_str_equals('<del>Bat</del><ins>Rat</ins>', $v->{value});
 }
 
 # test interaction with reprev. Testcase:
@@ -541,18 +566,23 @@ sub test_1897 {
 
     # First, user A saves to create rev 1
     $twiki->{store}->saveTopic( $testuser1, $testweb, 'MergeSave',
-                                "Smelly cat", $oldmeta );
+                                "Smelly\ncat", $oldmeta );
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
                                                   'MergeSave');
-    $this->assert_equals(1.1, $meta->{TOPICINFO}[0]{version});
-    $this->assert_str_equals("Smelly cat", $text);
+    my( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+
+    $this->assert_equals(1, $orgRev);
+    $this->assert_str_equals("Smelly\ncat", $text);
+
+    my $original = "${orgRev}_$orgDate";
+    sleep(1); # tick the clock to ensure the date changes
 
     # A saves again, reprevs to create rev 1 again
     $query = new CGI(
         {
             action => [ 'save' ],
-            text   => [ "Soggy bat" ],
-            originalrev => 1,
+            text   => [ "Sweaty\ncat" ],
+            originalrev => $original,
             topic  => [ $testweb.'.MergeSave' ]
            });
     $twiki = new TWiki( $testuser1->login(), $query);
@@ -561,15 +591,16 @@ sub test_1897 {
     # make sure it's still rev 1 as expected
     ($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
                                                 'MergeSave');
-    $this->assert_equals(1.1, $meta->{TOPICINFO}[0]{version});
-    $this->assert_str_equals("Soggy bat\n", $text);
+    ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    $this->assert_equals(1, $orgRev);
+    $this->assert_str_equals("Sweaty\ncat\n", $text);
 
     # User B saves; make sure we get a merge notice.
     $query = new CGI(
         {
             action => [ 'save' ],
-            text   => [ "Wet rat" ],
-            originalrev => 1,
+            text   => [ "Smelly\nrat" ],
+            originalrev => $original,
             topic  => [ $testweb.'.MergeSave' ]
            });
     $twiki = new TWiki( $testuser2->login(), $query);
@@ -579,13 +610,14 @@ sub test_1897 {
         my $e = shift;
         $this->assert_str_equals('merge_notice', $e->{def});
     } otherwise {
-        $this->assert(0);
+        $this->assert(0, shift);
     };
 
     ($meta, $text) = $twiki->{store}->readTopic(undef, $testweb,
                                                 'MergeSave');
-    $this->assert_equals(1.2, $meta->{TOPICINFO}[0]{version});
-    $this->assert_str_equals("", $text);
+    ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+    $this->assert_equals(2, $orgRev);
+    $this->assert_str_equals("<del>Sweaty\n</del><ins>Smelly\n</ins><del>cat\n</del><ins>rat\n</ins>", $text);
 }
 
 1;

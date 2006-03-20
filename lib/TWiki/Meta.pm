@@ -371,35 +371,6 @@ sub count {
 
 =pod
 
----++ ObjectMethod addTOPICINFO( $rev, $time, $user )
-   * =$rev= - the revision number
-   * =$time= - the time stamp
-   * =$user= - the user object
-
-Add TOPICINFO type data to the object, as specified by the parameters.
-
-=cut
-
-sub addTOPICINFO {
-    my( $this, $rev, $time, $user ) = @_;
-    $rev = 1 if $rev < 1;
-    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
-    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
-
-    $this->put( 'TOPICINFO',
-                {
-                 # compatibility; older versions of the code use
-                 # RCS rev numbers save with them so old code can
-                 # read these topics
-                 version => '1.'.$rev,
-                 date    => $time,
-                 author  => $user->wikiName(),
-                 format  => $TWiki::Store::STORE_FORMAT_VERSION
-                } );
-}
-
-=pod
-
 ---++ ObjectMethod getRevisionInfo($fromrev) -> ( $date, $author, $rev, $comment )
 
 Try and get revision info from the meta information, or, if it is not
@@ -461,8 +432,8 @@ sub merge {
             my $thisD = $this->get( 'FIELD', $otherD->{name} );
             if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
                 if( $formDef->isTextMergeable( $thisD->{name} )) {
-                    my $merged = TWiki::Merge::insDelMerge(
-                        $otherD->{value}, $thisD->{value},
+                    my $merged = TWiki::Merge::merge2(
+                        'A', $otherD->{value}, 'B', $thisD->{value},
                         qr/(\s+)/,
                         $this->{_session},
                         $formDef->getField( $thisD->{name} ) );
@@ -502,8 +473,9 @@ sub stringify {
     foreach my $type ( grep { /$types/ } keys %$this ) {
         foreach my $item ( @{$this->{$type}} ) {
             $s .= "$type: " .
-              join(' ', map{ "$_='$item->{$_}'" } sort keys %$item ) .
-                "\n";
+              join(' ', map{ "$_='".($item->{$_}||'')."'" }
+                     sort keys %$item ) .
+                       "\n";
         }
     }
     return $s;

@@ -244,11 +244,11 @@ sub edit {
     # override with parameter if set
     $text = $ptext if defined $ptext;
 
-    # Insert the rev number we are editing. This will be boolean false if
+    # Insert the rev number/date we are editing. This will be boolean false if
     # this is a new topic.
     if( $topicExists ) {
         my ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
-        $tmpl =~ s/%ORIGINALREV%/$orgRev/g;
+        $tmpl =~ s/%ORIGINALREV%/${orgRev}_$orgDate/g;
     } else {
         $tmpl =~ s/%ORIGINALREV%/0/g;
     }
