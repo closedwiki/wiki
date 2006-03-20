@@ -769,5 +769,5 @@ templates/view.tmpl 0440
 tools/geturl.pl 0550
 tools/rewriteshbang.pl 0550
 tools/tick_twiki.pl 0550
-tools/upgrade_emails.txt 0550
+tools/upgrade_emails.pl 0550
 twiki_httpd_conf.txt 0440
