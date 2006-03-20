@@ -211,14 +211,32 @@ sub buildNewTopic {
     }
     if( $formDef ) {
         # override with values from the query
-        $formDef->getFieldValuesFromQuery( $query, $newMeta, 1 );
+        my( $seen, $missing ) =
+          $formDef->getFieldValuesFromQuery( $query, $newMeta, 0 );
+        if( $seen && @$missing ) {
+            # chuck up if there is at least one field value defined in the
+            # query and a mandatory field was not defined in the
+            # query or by an existing value.
+            throw TWiki::OopsException(
+                'attention',
+                def=>'mandatory_field',
+                web => $session->{webName},
+                topic => $session->{topicName},
+                params => [ join( ' ', @$missing ) ] );
+        }
     }
 
     my $merged;
     # assumes rev numbers start at 1
     if( $originalrev ) {
-        my( $orev, $odate ) = split(/_/,$originalrev, 2);
-        $orev ||= $originalrev || '0';
+        my( $orev, $odate );
+        if( $originalrev =~ /^(\d+)_(\d+)$/ ) {
+            ( $orev, $odate ) = ( $1, $2 );
+        } elsif( $originalrev =~ /^\d+$/ ) {
+            $orev = $originalrev;
+        } else {
+            $orev = 0;
+        }
         my( $date, $author, $rev, $comment ) = $newMeta->getRevisionInfo();
         # If the last save was by me, don't merge
         if(( $orev ne $rev ||
@@ -247,7 +265,7 @@ sub buildNewTopic {
             if( $formDef && $prevMeta ) {
                 $newMeta->merge( $prevMeta, $formDef );
             }
-            $merged = [ $orev, $author->wikiName(), $rev ];
+            $merged = [ $orev, $author->wikiName(), $rev||1 ];
         }
     }
 

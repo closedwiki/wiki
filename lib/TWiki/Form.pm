@@ -603,22 +603,25 @@ sub cgiName {
 
 =pod
 
----++ ObjectMethod getFieldValuesFromQuery($query, $metaObject, $handleMandatory) -> $metaObject
+---++ ObjectMethod getFieldValuesFromQuery($query, $metaObject, $initialiseMissing) -> ( $seen, \@missing )
 Extract new values for form fields from a query.
    * =$query= - the query
    * =$metaObject= - the meta object that is storing the form values
-   * =$handleMandatory= - if set, will throw an OopsException if any mandatory fields are absent from the query.
+   * =$initialiseMissing= - if true, will cause fields that are in the form but have no value in the query or in the meta to be initialised to ''.
 
 For each field, if there is a value in the query, use it.
 Otherwise if there is already entry for the field in the meta, keep it.
-Otherwise, if $handleMandatory, initialise the field to '' and set it in the meta.
+
+Returns the number of fields which had values provided by the query, and a references to an array of the names of mandatory fields that were missing from the query.
 
 =cut
 
 sub getFieldValuesFromQuery {
-    my( $this, $query, $meta, $handleMandatory ) = @_;
+    my( $this, $query, $meta, $initialiseMissing ) = @_;
     ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
+    my @missing;
+    my $seen = 0;
 
     foreach my $fieldDef ( @{$this->{fields}} ) {
         next unless $fieldDef->{name};
@@ -626,6 +629,8 @@ sub getFieldValuesFromQuery {
         my $param = $this->cgiName( $fieldDef->{name} );
 
         my $value = $query->param( $param );
+
+        $seen++ if defined( $value );
 
         # checkbox and multi both allow multiple values
         if( $fieldDef->{type} =~ /^checkbox|\+multi/ ) {
@@ -636,30 +641,21 @@ sub getFieldValuesFromQuery {
             }
         }
 
-        # SMELL: This is really independent of $handleMandatory, but happens
-        # to coincide with usage (to be proper, should introduce additional flag)
-        if ( $handleMandatory ) {
-            unless( defined( $value )) {
-                # Note: In Cairo, meta data is overwritten by empty query parameter
-                unless( defined( $meta->get( 'FIELD', $fieldDef->{name} ))) {
-                    $value = '';
-                }
-            }
+        my $preDef = $meta->get( 'FIELD', $fieldDef->{name} );
+
+        if( $initialiseMissing && !defined( $value ) && !defined( $preDef )) {
+            $value = '';
         }
 
-        # NOTE: title and name are stored in the topic so that it can be
-        # viewed without reading in the form definition
-
-        my $mandatory = ($fieldDef->{attributes} =~ /M/)?1:0;
-        if ( $handleMandatory && $mandatory && !$value ) {
-            throw TWiki::OopsException( 'attention',
-                                        def=>'mandatory_field',
-                                        web => $this->{session}->{webName},
-                                        topic => $this->{session}->{topicName},
-                                        params => [ $fieldDef->{title} ] );
+        if( $fieldDef->{attributes} =~ /M/ && !$value &&
+              ( !$preDef || !$preDef->{value} ) ) {
+            # Remember missing mandatory fields
+            push( @missing, $fieldDef->{title} || "unnamed field" );
         }
 
         if( defined( $value ) ) {
+            # NOTE: title and name are stored in the topic so that it can be
+            # viewed without reading in the form definition
             my $args =
               {
                   name =>  $fieldDef->{name},
@@ -671,7 +667,7 @@ sub getFieldValuesFromQuery {
         }
     }
 
-    return $meta;
+    return ( $seen, \@missing );
 }
 
 =pod

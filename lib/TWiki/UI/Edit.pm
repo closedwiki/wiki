@@ -314,7 +314,7 @@ sub edit {
                                         topic => $session->{topicName},
                                         params => [ $templateWeb, $form ] );
         }
-        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 0 );
+        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 1 );
         # and render them for editing
         if ( $editaction eq "text" ) {
             $formText = $formDef->renderHidden( $meta,
