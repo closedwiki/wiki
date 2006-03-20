@@ -422,7 +422,12 @@ sub DISABLE_afterEditHandler {
 
 This handler is called each time a topic is saved.
 
-__NOTE:__ meta-data is embedded in $text (using %META: tags)
+__NOTE:__ meta-data is embedded in =$text= (using %META: tags). If you modify
+the =$meta= object, then it will override any changes to the meta-data
+embedded in the text. Modify *either* the META in the text *or* the =$meta=
+object, never both. You are recommended to modify the =$meta= object rather
+than the text, as this approach is proof against changes in the embedded
+text format.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
