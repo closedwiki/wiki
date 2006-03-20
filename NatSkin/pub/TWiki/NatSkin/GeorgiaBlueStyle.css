@@ -354,6 +354,16 @@ hr {
 .blogAbout {
   padding-left:15px;
 }
+.blogSideBarLatest h1,
+.blogSideBarComments h1 {
+  border-bottom:0px;
+  margin-bottom:0px;
+}
+.blogSideBarHeader {
+  border-bottom:1px dotted #999999;
+  _border-bottom:1px solid #cccccc; /* IE only */
+  margin-bottom:5px;
+}
 .blogSideBar {
   color:#444444;
 }

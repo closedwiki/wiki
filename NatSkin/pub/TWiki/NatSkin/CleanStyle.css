@@ -302,6 +302,16 @@ hr {
   font-size:0.9em;
   line-height:1.3em;
 }
+.blogSideBarLatest h1,
+.blogSideBarComments h1 {
+  border-bottom:0px;
+  margin-bottom:0px;
+}
+.blogSideBarHeader {
+  border-bottom:1px dotted #444444;
+  _border-bottom:1px solid #aaaaaa; /* IE only */
+  margin-bottom:5px;
+}
 .blogSideBar {
   line-height:1.4em;
 }
@@ -366,15 +376,4 @@ hr {
 }
 .blogSideBarSection ol {
   padding-left:2em;
-}
-.blogSideBarLatest h1,
-.blogSideBarComments h1 {
-  border-bottom:0px;
-  padding:0px;
-  margin:0px;
-}
-.blogSideBarHeader {
-  border-bottom:1px dotted #444444;
-  _border-bottom:1px solid #aaaaaa; /* IE only */
-  margin-bottom:5px;
 }

@@ -149,7 +149,6 @@ h1, h2, h3, h4, h5, h6 {
   font-size:small;
 }
 .natSideBarPersonal {
-  padding-top:20px;
 }
 .natSideBar h1 {
   margin-top:0px;
@@ -387,13 +386,36 @@ h1, h2, h3, h4, h5, h6 {
   text-transform:capitalize;
   font-weight:bold;
 }
+.natCurrentAction {
+  font-weight:bold;
+}
+.natBottomTopicActions {
+  margin-top:1em;
+  margin-bottom:1em;
+}
+.natBottomTopicActions a:hover {
+  text-decoration:none;
+  border:1px solid red;
+}
+.natCurrentAction,
+.natEditAction a,
+.natPreviewAction a,
+.natSaveAction a,
+.natQuitAction a,
+.natFormAction a,
+.natUndoAction a,
+.natCancelAction a {
+  border:1px solid #cccccc;
+  margin:2px 5px 2px 0;
+  padding:2px 5px;
+}
+
 
 .natSignature {
   white-space:nowrap;
   float:right;
 }
 .natSignature, .natSubmitOptions {
-  padding-top:10px;
   padding-right:10px;
   vertical-align:top;
 }
@@ -493,6 +515,7 @@ a.natFeedIcon {
 /* twiki forms */
 .natTopicForm {
   overflow:auto;
+  margin-top:1em;
   padding:1px; /* konqueror fix */
 }
 .natTopicForm .twikiFirstCol,
@@ -734,3 +757,4 @@ img.alignleft {
   position:relative;
   bottom:2px;
 }
+
