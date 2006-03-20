@@ -350,6 +350,8 @@ sub userLoggedIn {
         } else {
             # if we are not authenticated, expire any existing session
             $cgisession->clear( [ 'AUTHUSER' ] );
+            # flush the session, to try to fix Item1820
+            $cgisession->flush();
             $twiki->leaveContext( 'authenticated' );
         }
 
