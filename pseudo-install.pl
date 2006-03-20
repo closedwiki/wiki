@@ -32,6 +32,19 @@ EOM
 
 }
 
+sub findRelativeTo {
+    my( $startdir, $name ) = @_;
+
+    my @path = split( /\/+/, $startdir );
+
+    while (scalar(@path) > 0) {
+        my $found = join( '/', @path).'/'.$name;
+        return $found if -e $found;
+        pop( @path );
+    }
+    return undef;
+}
+
 sub installModule {
     my $module = shift;
     print "Processing $module\n";
@@ -44,7 +57,8 @@ sub installModule {
         return;
     }
 
-    my $manifest = $moduleDir."lib/TWiki/$subdir/$module/".'/MANIFEST';
+    my $manifest = findRelativeTo($moduleDir."lib/TWiki/$subdir/$module/",'MANIFEST');
+    
     if( -e "$manifest" ) {
         open( F, "<$manifest" ) || die $!;
         foreach my $file ( <F> ) {
