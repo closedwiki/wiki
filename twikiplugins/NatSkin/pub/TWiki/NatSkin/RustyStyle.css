@@ -300,6 +300,10 @@ hr {
   padding-right:5px;
 }
 
+.natSideBar a.natFeedIcon {
+  color:white;
+}
+
 
 /* main area */
 .natMain, .natMainFooter {
@@ -363,6 +367,16 @@ hr {
 }
 
 /* blogging */
+.blogSideBarLatest h1,
+.blogSideBarComments h1 {
+  border-bottom:0px;
+  margin-bottom:0px;
+}
+.blogSideBarHeader {
+  border-bottom:1px dotted white;
+  _border-bottom:1px solid white; /* IE only */
+  margin-bottom:5px;
+}
 .blogSideBarSection {
   margin-bottom:1em;
 }

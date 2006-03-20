@@ -364,6 +364,15 @@ hr {
   font-size:24px; /* h2 */
   text-align:right;
 }
+.blogSideBarLatest h1,
+.blogSideBarComments h1 {
+  border-bottom:0px;
+  margin-bottom:0px;
+}
+.blogSideBarHeader {
+  border-bottom:1px dotted #ffffff;
+  _border-bottom:1px solid #ffffff; /* IE only */
+}
 .blogSideBarSection {
   font-size:0.9em;
   margin-bottom:1.5em;

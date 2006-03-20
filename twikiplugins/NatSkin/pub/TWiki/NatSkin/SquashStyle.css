@@ -378,6 +378,11 @@ hr { border-bottom: 1px solid #999999; }
   padding-top:2px;
   font-size:1.5em;
 }
+.blogSideBar .blogCommentCount {
+  padding-top:0.4em;
+  font-size:0.9em;
+}
+
 .blogEntry {
   margin-bottom:1em;
 }

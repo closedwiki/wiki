@@ -8,7 +8,7 @@
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% - (edit)%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.EditFormular.text.focus();%TMPL:END%
-%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>" suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%%TOPIC%%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span><b>%TOPIC%</b>%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <div class="natEdit">
 <form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
@@ -32,12 +32,26 @@
   <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
 </div>
 %FORMFIELDS%
-<div class="natSignature">-- <nop>%WIKIUSERNAME% - %DATE%</div>
-<div class="natSubmitOptions">
-  <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
-  <label for="dontnotify">Minor changes</label>
+%TMPL:P{"bottomtopicactions"}%
+</form>
+%TMPL:END%
+%TMPL:DEF{"bottomtopicactions"}%
+<div class="natBottomTopicActions">
+  <span class="natEditAction natCurrentAction">Edit</span><!-- 
+  --><span class="natPreviewAction"><a href="javascript:submitEditFormular('preview','preview');" accesskey="p" title="Preview your changes">Preview</a></span><!--
+  -->%FORMBUTTON{"<span class='natFormAction'>$1</span>"}%<!--
+  --><span class="natUndoAction"><a href="javascript:self.location.reload();" accesskey="u" title="Abandon your changes but continue editing">Undo</a></span><!--
+  -->%IFSKINSTATETHEN{release="beijing"}%<!--
+  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title="Save and exit">Save</a></span><!--
+  -->%ELSESKINSTATE%<!--
+  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title="Save and continue editing">Save</a></span><!--
+  --><span class="natQuitAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="q" title="Save and exit">Quit</a></span><!--
+  -->%FISKINSTATE%<!--
+  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a></span>
 </div>
 <div class="natSubmitOptions">
+  <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
+  <label for="dontnotify">Minor changes</label> <!-- -->
 %IFSKINSTATETHEN{release="dakar"}%
   <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
   <label for="forcenewrevision">Force new revision</label>
@@ -45,5 +59,4 @@
   <input type="checkbox" id="unlock" name="unlock" %RELEASEEDITLOCKCHECKBOX% /><label for="unlock">Release edit lock</label>
 %FISKINSTATE%
 </div>
-</form>
 %TMPL:END%

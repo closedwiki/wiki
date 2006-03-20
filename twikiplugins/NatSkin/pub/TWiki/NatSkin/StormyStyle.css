@@ -227,6 +227,10 @@ hr {
   font-size:small;
 }
 
+.natSideBar a.natFeedIcon {
+  color:#cccccc;
+}
+
 /* main */
 .natMiddle {
   background:#333333;

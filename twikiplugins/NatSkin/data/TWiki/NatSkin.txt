@@ -47,11 +47,52 @@ as it is known from the TWiki/Cairo release.
 	* marking external links: add a nice icon to offsite links
 
 ---++ <nop>NatSearch
-This is a cgi-script that is heavily based on the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
-So =natsearch= is basically a fork of that including fixes to similar security flaws that 
-hit the WebSearch those days also. 
+<nop>NatSearch unifies the Seach and the Jump box known from the standard TWiki. You can 
+use one input field to either jump to a topic or start a content query.
 
-<nop>NatSearch can be further reduced to certain webs and topics by setting WebPreferences.
+---+++ Usage
+This basically works in three modes: 
+	1 GO: go to the named topic
+	2 topic search: search a topic whose name matches the search string
+	3 content search: search a topic whose content matches the search string
+<nop>NatSearch proceeds along the following lines:
+	1 the search string starts with an uppercase letter: 
+		1 try a GO
+		2 fallback to a topic search when 1.1 fails
+		3 fallback to content search when 1.2 fails
+	2 the string starts with a /: %BR%
+	  normal content search
+	3 the string does not start with an upper case letter or /
+		1 try a topic search
+		2 fallback to content search
+
+If only one topic was found then <nop>NatSearch jumps to that topic directly.
+
+---+++ Options
+The search string may be prepended with a set of options that are separated from the
+rest of the search string with a colon(:). Known options are:
+| *Option* | *Description* |
+| g | global search (default is local) |
+| l | local search |
+| u | case-sensitive search (default is to ignore case) |
+
+A search string may consist of a list of terms that are retrieved. If a term shall contain
+spaces it can be surrounded by double quotes. Each term may be preceded with a minus (-) to
+exclude this term from the hit set.
+
+---+++ Examples
+| *Search* | *Description* |
+| <nop>TWikiUsers | if the current web is the %MAINWEB% go to the <nop>TWikiUsers  |
+|                 | if the current web is the %TWIKIWEB% go to the <nop>TWikiUsersGuide |
+| g:twikiusers | list all topics in all webs whose name match "twikiusers" |
+| /<nop>TWikiUsers | list all topics that contain the word "<nop>TWikiUsers" |
+| gu:copyright | list all topics that contain the word "copyright" in lowercase |
+| g:copyright -webpref | list all topics that contain the word "copyright" but not "webpref" |
+| g:"Good morning" -natskin | list all topics that contain the term "Good morning" but not "natskin" |
+
+
+---+++ Customization
+<nop>NatSearch can be restricted to certain webs and topics by setting WebPreferences.
 Besides the NOSEARCHALL feature of every web that excludes a web from search the following variables
  restrict the hit set:
 
@@ -61,12 +102,12 @@ Besides the NOSEARCHALL feature of every web that excludes a web from search the
 | =NATSEARCHINCLUDETOPIC= | a regular expression that must match a topic in the hit set |
 | =NATSEARCHEXCLUDETOPIC= | a regular expression that excludes a topic from the hit set |
 
-Furthermore, the variable =NATSEARCHTEMPLATE= can be set to a template topic that
+Furthermore, the WebPreferences variable =NATSEARCHTEMPLATE= can be set to a template topic that
 is used instead of the skin's =search= template. This can be used in <nop>TWikiApplications to
 define a customized look of search results.
 
-Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible search parameters
-(TODO: maby move that stuff in here).
+---+++ Disclamer
+<nop>NatSearch is heavily inspired by the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
 
 ---++ About the <nop>WebSideBar
 The <nop>WebSideBar is used to generate a navigation appearing next to 
@@ -116,8 +157,6 @@ TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the
 [[http://nats-www.informatik.uni-hamburg.de/Main/WebHome][Natural Language Systems Division]] 
 (NATS) of the University of Hamburg, Germany. 
 
-%TOC%
-
 ---++ Selecting Styles
 You can try alternative styles
 
@@ -160,7 +199,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.995 |
+|  Skin Version: | v2.996 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -177,6 +216,10 @@ The default style is hardcoded into the NatSkinPlugin.
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-03-20: | several blog css fixes; \
+                 added bottom topic actions to edit and preview; \
+		 only display web.topic in the web locator no recursive parents anymore; \
+		 natsearch docu |
 |  2006-03-13: | fixed <nop>WebLinks components; \
                  fixed atom feed link at the page bottom |
 |  2006-03-11: | reworked sidebar using the new WEBCOMPONET logic; \
@@ -279,7 +322,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 13 Mar 2006
+-- TWiki:Main/MichaelDaum - 20 Mar 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%

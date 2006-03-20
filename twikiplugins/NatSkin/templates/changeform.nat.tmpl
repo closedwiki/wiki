@@ -7,16 +7,13 @@
 <!-- -->%TMPL:INCLUDE{"changeformstyles"}%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (edit)%TMPL:END%
-%TMPL:DEF{"locator"}%<span class="natWebLocator"> 
-<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]
-</span>%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <form name="EditFormular" method="post" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 %IFSKINSTATETHEN{release="Dakar"}% %$nopTEXT% %ELSESKINSTATE% <input type="hidden" name="text" value="%$nopTEXT%" /> %FISKINSTATE%
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
----+ Choose a new form template
+---+ Choose a new form for [[%TOPIC%]]
 <ul>
 %FORMLIST%
 </ul>
