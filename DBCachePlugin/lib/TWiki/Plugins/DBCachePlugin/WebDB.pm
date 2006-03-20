@@ -20,6 +20,7 @@ package TWiki::Plugins::DBCachePlugin::WebDB;
 use strict;
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Plugins::DBCachePlugin;
+use TWiki::Attrs;
 
 @TWiki::Plugins::DBCachePlugin::WebDB::ISA = ("TWiki::Contrib::DBCacheContrib");
 
@@ -117,24 +118,15 @@ sub onReload {
     # CAUTION: %SECTION will be deleted in the near future. 
     # so please convert all %SECTION to %STARTSECTION
 
-    while($text =~ s/%(?:START)?SECTION{[^}]*?"(.*?)"}%(.*?)%ENDSECTION{[^}]*?"(.*?)"}%//s) {
-      my $name = $1;
+    while($text =~ s/%(?:START)?SECTION{(.*?)}%(.*?)%ENDSECTION{[^}]*?"(.*?)"}%//s) {
+      my $attrs = new TWiki::Attrs($1);
+      my $name = $attrs->{name} || $attrs->{_DEFAULT} || '';
       my $sectionText = $2;
-      #applyGlue($sectionText);
       $topic->set("_section$name", $sectionText);
     }
   }
 
   #print STDERR "DEBUG: DBCachePlugin::WebDB - done onReload()\n";
-}
-
-###############################################################################
-# local copy from GluePlugin
-sub applyGlue {
-
-  $_[0] =~ s/%~~\s+([A-Z]+{)/%$1/gos;  # %~~
-  $_[0] =~ s/\s*[\n\r]+~~~\s+/ /gos;   # ~~~
-  $_[0] =~ s/\s*[\n\r]+\*~~\s+//gos;   # *~~
 }
 
 ###############################################################################
