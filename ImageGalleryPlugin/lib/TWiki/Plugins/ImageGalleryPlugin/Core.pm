@@ -202,6 +202,13 @@ sub init {
     $this->{field} = 'name';
   }
 
+  $this->{sort} = &TWiki::Func::extractNameValuePair($args, 'sort') || 'date';
+  $this->{sort} = 'date' unless $this->{sort} =~ /^date|name|comment|size$/;
+
+  $this->{reverse} = &TWiki::Func::extractNameValuePair($args, 'rev') ||
+    &TWiki::Func::extractNameValuePair($args, 'reverse') || 'off';
+  $this->{reverse} = 'off' unless $this->{reverse} =~ /^on|off$/;
+
   return 1;
 }
 
@@ -481,9 +488,7 @@ sub getImages {
 
   # collect images from all topics
   my @images;
-  my $imgnr = 1;
-  foreach (@{$this->{topics}}) {
-    my $webtopic= $_;
+  foreach my $webtopic (@{$this->{topics}}) {
     my $theWeb;
     my $theTopic;
     if ($webtopic =~ /^($this->{webRegex})\.($this->{topicRegex})$/) {
@@ -513,7 +518,6 @@ sub getImages {
 
       $image->{IGP_comment} = &getImageTitle($image);
       $image->{IGP_sizeK} = sprintf("%dk", $image->{size} / 1024);
-      $image->{IGP_natnr} = $imgnr;
       $image->{IGP_topic} = $theTopic;
       $image->{IGP_web} = $theWeb;
 
@@ -534,14 +538,30 @@ sub getImages {
 	next;
       }
 
-      $imgnr++;
-      
       push @images, $image;
     }
   }
 
   # order images
   my @sortedImages;
+  
+  # pre sort
+  if ($this->{sort} eq 'date') {
+    @images = sort {$a->{date} <=> $b->{date}} @images;
+  } elsif ($this->{sort} eq 'name') {
+    @images = sort {lc($a->{name}) cmp lc($b->{name})} @images;
+  } elsif ($this->{sort} eq 'comment') {
+    @images = sort {lc($a->{comment}) cmp lc($b->{comment})} @images;
+  } elsif ($this->{sort} eq 'size') {
+    @images = sort {$a->{size} <=> $b->{size}} @images;
+  }
+  @images = reverse @images if $this->{reverse} eq 'on';
+
+  # set natural order
+  my $imgnr = 1;
+  foreach my $image (@images) {
+    $image->{IGP_natnr} = $imgnr++;
+  }
 
   # obey explicite image positioning
   foreach my $image (@images) {
@@ -655,6 +675,7 @@ sub computeImageSize {
   # update image info
   my $imgChanged = 0;
   if (!$entry ||
+      $entry->{version} ne $image->{version} ||
       $entry->{width} ne $image->{IGP_width} ||
       $entry->{height} ne $image->{IGP_height} ||
       $entry->{origwidth} ne $image->{IGP_origwidth} ||
@@ -666,6 +687,7 @@ sub computeImageSize {
   }
 
   $entry->{name} = $image->{name};
+  $entry->{version} = $image->{version};
   $entry->{type} = 'image';
   $entry->{width} = $image->{IGP_width};
   $entry->{height} = $image->{IGP_height};
@@ -850,16 +872,17 @@ sub readInfo {
   my $text = &TWiki::Func::readFile($this->{infoFile});
   foreach my $line (split(/\n/, $text)) {
     my $entry;
-    if ($line =~ /^name=(.*), origwidth=(.*), origheight=(.*), width=(.*), height=(.*), thumbwidth=(.*), thumbheight=(.*)$/) {
+    if ($line =~ /^name=(.*), version=(.*), origwidth=(.*), origheight=(.*), width=(.*), height=(.*), thumbwidth=(.*), thumbheight=(.*)$/) {
       $entry = {
 	name=>$1,
+	version=>$2,
 	type=>'image',
-	origwidth=>$2,
-	origheight=>$3,
-	width=>$4,
-	height=>$5,
-	thumbwidth=>$6,
-	thumbheight=>$7,
+	origwidth=>$3,
+	origheight=>$4,
+	width=>$5,
+	height=>$6,
+	thumbwidth=>$7,
+	thumbheight=>$8,
       };
     } elsif ($line =~ /^(thumbwidth|thumbheight|topics|web)=(.*)$/) {
       $entry = {
@@ -880,7 +903,7 @@ sub readInfo {
 sub writeInfo {
   my $this = shift;
 
-  writeDebug("writeInfo() called");
+  #writeDebug("writeInfo() called");
 
   return unless $this->{infoChanged};
 
@@ -892,6 +915,7 @@ sub writeInfo {
     next if $entry->{type} eq 'global';
     $text .= 
       "name=$entry->{name}, " .
+      "version=$entry->{version}, " .
       "origwidth=$entry->{origwidth}, " .
       "origheight=$entry->{origheight}, " .
       "width=$entry->{width}, " .
