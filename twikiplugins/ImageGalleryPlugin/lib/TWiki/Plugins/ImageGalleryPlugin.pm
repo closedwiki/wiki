@@ -23,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '3.3';
+$RELEASE = '3.4';
 
 # =========================
 sub initPlugin {

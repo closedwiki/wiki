@@ -1,4 +1,13 @@
 %META:TOPICINFO{author="TWikiContributor" date="1140533279" format="1.0" version="1.1"}%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
 ---+!! <nop>ImageGalleryPlugin
 %TOC%
 
@@ -15,7 +24,7 @@ The image gallery is highly customizable using cascading stylesheets and html fo
 below).
 
 ---++ Example
-%IMAGEGALLERY{"%TWIKIWEB%.TWikiDocGraphics" columns="3" limit="12" exclude="arrow"}%
+%IMAGEGALLERY{"%TWIKIWEB%.TWikiDocGraphics" columns="3" limit="12" exclude="arrow" sort="name"}%
 There are %NRIMAGES{"%TWIKIWEB%.TWikiDocGraphics"}% images at %TWIKIWEB%.TWikiDocGraphics.
 
 ---++ Syntax
@@ -55,6 +64,8 @@ that both take the following arguments:
 			 (default: $comment ($imgnr/$nrimgs)&nbsp;$reddot) |
 | thumbtitle  | html format of a thumbnail title; "off" will hide the thumbnail's title %BR% \
 			 (default: $comment&nbsp;$reddot) |
+| sort | set the initial order of the images, can be name, date, size or comment (default:date) |
+| reverse | invert the initial order of the images, can be on or off (default:off) |
 
 Note, that only =topic= is meaningful to %<nop>NRIMAGES%.
 
@@ -170,9 +181,11 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNoris |
 |  Copyright &copy;: | 2002-2003, Will Noris; 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.31 |
+|  Plugin Version: | v3.40 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  20 Feb 2006 | added =include=, =exclude= and =field= argument |
+|  20 Mar 2006 | added =sort= and =reverse= arguments; \
+                 fixed updating thumbnails when a new image version is created |
+|  20 Feb 2006 | added =include=, =exclude= and =field= arguments |
 |  16 Feb 2006 | renamed thumbnail so that it does not interfer with auto-attachment |
 |  14 Sep 2005 | don't strictly depend on normalizeFilename() |
 |  15 June 2005 | new release |
@@ -196,7 +209,7 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main.MichaelDaum - 21 Feb 2006
+-- TWiki:Main.MichaelDaum - 20 Mar 2006
 
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="TWikiContributor" version="1.1"}%
