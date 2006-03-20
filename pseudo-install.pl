@@ -49,7 +49,7 @@ sub installModule {
     my $module = shift;
     print "Processing $module\n";
     my $subdir = 'Plugins';
-    $subdir = 'Contrib' if $module =~ /(Contrib|Skin)$/;
+    $subdir = 'Contrib' if $module =~ /(Contrib|Skin|AddOn)$/;
     my $moduleDir = "twikiplugins/$module/";
 
     unless (-d $moduleDir) {
@@ -72,7 +72,7 @@ sub installModule {
         }
         close(F);
     } else {
-        print STDERR "---> No MANIFEST in $module\n";
+        print STDERR "---> No MANIFEST in $module (at $manifest)\n";
     }
 }
 
