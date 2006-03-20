@@ -997,7 +997,7 @@ msgstr ""
 msgid "Create personal sidebar"
 msgstr ""
 
-#: lib/TWiki/Render.pm:593 lib/TWiki/Render.pm:605
+#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr ""
 
@@ -1040,7 +1040,6 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
-#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:13
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
 msgid "Delete"
@@ -2006,6 +2005,7 @@ msgid "Rename, move or delete this web:"
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
 msgstr ""
@@ -2915,6 +2915,10 @@ msgid ""
 "editing, your changes will be merged, and nothing will be lost. Form data "
 "cannot easily be merged though, so in this case you are recommended to check "
 "with %1 first."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
+msgid "You are here"
 msgstr ""
 
 #: templates/messages.tmpl:107

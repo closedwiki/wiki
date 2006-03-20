@@ -1087,7 +1087,7 @@ msgstr "Opret med sidenavn"
 msgid "Create personal sidebar"
 msgstr "Opret personlig venstre-menu"
 
-#: lib/TWiki/Render.pm:593 lib/TWiki/Render.pm:605
+#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr "Opret denne side"
 
@@ -1132,7 +1132,6 @@ msgstr "Debug"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
-#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:13
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
 msgid "Delete"
@@ -2182,6 +2181,7 @@ msgid "Rename, move or delete this web:"
 msgstr "Omdøb, flyt eller slet dette web:"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
 msgstr "Omdøb/flyt"
@@ -3189,6 +3189,10 @@ msgstr ""
 "formular-data bliver ikke flettet, så ændrer du i disse, anbefales det at "
 "synkronisere med %1 først."
 
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
+msgid "You are here"
+msgstr "Du er her"
+
 #: templates/messages.tmpl:107
 msgid ""
 "You are recommended to choose short names, preferably less than 10 "
@@ -3576,6 +3580,3 @@ msgstr ""
 
 #~ msgid "Update"
 #~ msgstr "Opdatér"
-
-#~ msgid "You are here"
-#~ msgstr "Du er her"

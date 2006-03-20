@@ -1071,7 +1071,7 @@ msgstr "Crear por Nombre"
 msgid "Create personal sidebar"
 msgstr "Crear menu (sidebar) personal"
 
-#: lib/TWiki/Render.pm:593 lib/TWiki/Render.pm:605
+#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr "Crear esta página"
 
@@ -1118,7 +1118,6 @@ msgstr "Depurar"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
-#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:13
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
 msgid "Delete"
@@ -2175,6 +2174,7 @@ msgid "Rename, move or delete this web:"
 msgstr "Renombre, mueva o borre esta web:"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
 msgstr "Renombrar/Mover"
@@ -3183,6 +3183,10 @@ msgstr ""
 "forma sencilla, por lo que, si este es el caso, le recomendamos que lo "
 "compruebe primero con %1."
 
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
+msgid "You are here"
+msgstr "Esta aqui"
+
 #: templates/messages.tmpl:107
 msgid ""
 "You are recommended to choose short names, preferably less than 10 "
@@ -3567,9 +3571,6 @@ msgstr ""
 
 #~ msgid "Update"
 #~ msgstr "Actualizar"
-
-#~ msgid "You are here"
-#~ msgstr "Esta aqui"
 
 #~ msgid "%1 User Authentication"
 #~ msgstr "Autentificación de usuario %1"

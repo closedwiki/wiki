@@ -1086,7 +1086,7 @@ msgstr "Durch Namen anlegen"
 msgid "Create personal sidebar"
 msgstr "Persönliche Seitenleiste anlegen"
 
-#: lib/TWiki/Render.pm:593 lib/TWiki/Render.pm:605
+#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr "Dieses Topic anlegen"
 
@@ -1131,7 +1131,6 @@ msgstr "Fehler beheben"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
-#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:13
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
 msgid "Delete"
@@ -2194,6 +2193,7 @@ msgid "Rename, move or delete this web:"
 msgstr "Dieses Web umbenennen, verschieben oder löschen:"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
 msgstr "Umbenennen/Verschieben"
@@ -3216,6 +3216,10 @@ msgstr ""
 "werden, so dass sie sich in einem solchen Fall vorher mit %1 absprechen "
 "sollten."
 
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
+msgid "You are here"
+msgstr "Sie sind hier"
+
 #: templates/messages.tmpl:107
 msgid ""
 "You are recommended to choose short names, preferably less than 10 "
@@ -3607,9 +3611,6 @@ msgstr ""
 
 #~ msgid "Update"
 #~ msgstr "Aktualisieren"
-
-#~ msgid "You are here"
-#~ msgstr "Sie sind hier"
 
 #~ msgid "%1 User Authentication"
 #~ msgstr "%1 Benutzer Authentifizierung"

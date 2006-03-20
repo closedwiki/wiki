@@ -1036,7 +1036,7 @@ msgstr "根据名称创建"
 msgid "Create personal sidebar"
 msgstr "创建个人工具栏"
 
-#: lib/TWiki/Render.pm:593 lib/TWiki/Render.pm:605
+#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr "创建这个主题"
 
@@ -1081,7 +1081,6 @@ msgstr "调试"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
-#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:13
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
 msgid "Delete"
@@ -2088,6 +2087,7 @@ msgid "Rename, move or delete this web:"
 msgstr "重命名，移动和删除这个目录:"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Rename/Move"
 msgstr "重命名/移动"
@@ -3032,6 +3032,10 @@ msgstr ""
 "时候保存，您的修改将和他们的合并，但是表单数据无法简单合并，所以在这种情况下"
 "建议您先和 %1 联系。"
 
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
+msgid "You are here"
+msgstr "您在这里："
+
 #: templates/messages.tmpl:107
 msgid ""
 "You are recommended to choose short names, preferably less than 10 "
@@ -3395,9 +3399,6 @@ msgstr ""
 
 #~ msgid "Update"
 #~ msgstr "更新"
-
-#~ msgid "You are here"
-#~ msgstr "您在这里："
 
 #~ msgid "%1 User Authentication"
 #~ msgstr "%1 用户认证"
