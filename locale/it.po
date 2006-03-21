@@ -2,6 +2,7 @@
 # translation of it.po to
 # translation of it.po to
 # translation of it.po to
+# translation of it.po to
 # TWiki translation for <Language>
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
@@ -13,7 +14,7 @@ msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-03-19 07:09+0100\n"
+"PO-Revision-Date: 2006-03-19 12:28+0100\n"
 "Last-Translator: m.mancini <mmancini@iol.it>\n"
 "Language-Team:  <it@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -180,7 +181,7 @@ msgstr "&Allegato"
 
 #: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
 msgid "&Cancel"
-msgstr "&Cancella operazione"
+msgstr "Rinun&cia"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:7
 msgid "&Edit"
@@ -706,7 +707,7 @@ msgstr "Allegato"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:34
 msgid "Attach an image or document to this topic"
-msgstr "Allega unímmagine o un documento a queta pagina"
+msgstr "Allega un'immagine o un documento a queta pagina"
 
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:5
 #, fuzzy
@@ -715,7 +716,7 @@ msgstr "Allega un file alla pagina %1"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
 msgid "Attach image or document on %1"
-msgstr "Allega unímmagine o un documento a %1"
+msgstr "Allega un'immagine o un documento a %1"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:51
 msgid "Attach new file"
@@ -1428,10 +1429,6 @@ msgstr "Aiuto"
 msgid "Hide attachments"
 msgstr "Nascondi allegato"
 
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Hide form"
-msgstr "Nascondi form"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Hide formatting help"
 msgstr "Nascondi láiuto sulla formattazione"
@@ -1545,7 +1542,7 @@ msgid ""
 "the topic, [[%1][cancel save]] to go to %2."
 msgstr ""
 "Se hai ricevuto un link a questa pagina via e-mail o vuoi solo gurdare la "
-"pagina,  [[%1][annulla salva]] per andare a %2."
+"pagina,  [[%1][rinuncia salva]] per andare a %2."
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
@@ -1989,7 +1986,7 @@ msgstr "Password"
 
 #: templates/messages.tmpl:146
 msgid "Password changed successfully!"
-msgstr "Password ccambiata con successo!"
+msgstr "Password cambiata con successo!"
 
 #: templates/messages.tmpl:172 templates/messages.tmpl:176
 msgid "Password reset failed"
@@ -2251,8 +2248,8 @@ msgstr "S = Salva, Q = Salva senza notifica, K = Checkpoint, D = Rinuncia"
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
-"S = Salva, Q = Salva senza notifica, K = Checkpoint, P = Amteprima, C = "
-"Annulla"
+"S = Salva, Q = Salva senza notifica, K = Checkpoint, P = Anteprima, C = "
+"Rinuncia"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:28
 #, fuzzy
@@ -2400,10 +2397,6 @@ msgstr "Definisci la nuova pagina genitore"
 msgid "Show attachments"
 msgstr "Mostra gli allegati"
 
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Show form"
-msgstr "Mostra form"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Show formatting help"
 msgstr "Mostra l'aiuto sulla formattazione"
@@ -2540,7 +2533,7 @@ msgid ""
 msgstr ""
 "L'interfaccai utente TWiki è disponibile in diverse lingue. Se vuoi cambiare "
 "la lingua per questa sessione scegli una delle seguenti e premi \"Cambia "
-"lingua\". Altrimenti il link \"Annulla\" in fondo alla pagina per ritornare "
+"lingua\". Altrimenti il link \"Rinuncia\" in fondo alla pagina per ritornare "
 "alla pagina precedente."
 
 #: data/Sandbox/WebHome.txt:6
@@ -2777,7 +2770,7 @@ msgid ""
 "This is the Trash. Here you can undelete topics; deleted attachments are in "
 "TrashAttachment."
 msgstr ""
-"Ecco il cestino. Qui puoi recuperare le pagine cancellte. Per gli allegati "
+"Ecco il cestino. Qui puoi recuperare le pagine cancellate. Per gli allegati "
 "guarda invece in TrashAttachment."
 
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:37
@@ -2829,7 +2822,7 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:34
 msgid "To *save* changes: Press the [Save Changes] button."
-msgstr "Per *salvare* i cambiamenti: oremi il pulsante [Salva cambiamenti]"
+msgstr "Per *salvare* i cambiamenti: premi il pulsante [Salva cambiamenti]"
 
 #: data/TWiki/WebTopicCreator.txt:37
 msgid ""
@@ -2863,7 +2856,7 @@ msgstr "Per editare la pagina comunqure, premi 'Edit comunque'."
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:35
 msgid "To make *more changes*: Go back in your browser."
-msgstr "Per effettuare *ulteriori cambiamenti*: Tora indietro nel browser."
+msgstr "Per effettuare *ulteriori cambiamenti*: Torna indietro nel browser."
 
 #: data/TWiki/TWikiRegistration.txt:8
 msgid "To register as a new user, simply fill out this form:"
@@ -3508,7 +3501,7 @@ msgstr "per vedere se %1 ha già finito di editare."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Cancel' accesskey='c'"
-msgstr "value='Annulla' accesskey='a'"
+msgstr "value='Rinuncia' accesskey='c'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
@@ -3517,7 +3510,7 @@ msgstr "value='Checkpoint' accesskey='k'"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
 msgid "value='Discard' accesskey='d'"
-msgstr "value='Rinuncia' accesskey='r'"
+msgstr "value='Rinuncia' accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "value='Preview' accesskey='p'"
@@ -3559,13 +3552,19 @@ msgstr ""
 #~ msgstr "Non trovo un indirizzo email per %1"
 
 #~ msgid "Cancel"
-#~ msgstr "Annulla"
+#~ msgstr "Rinuncia"
 
 #~ msgid "Didn't forget your password?"
 #~ msgstr "Non è che hai dimenticato la password?"
 
+#~ msgid "Hide form"
+#~ msgstr "Nascondi form"
+
 #~ msgid "If you continue to have problems, please e-mail %1 for help."
 #~ msgstr "Se i problemi persistono per favore richiedi aiuto via e-mail a %1."
+
+#~ msgid "Show form"
+#~ msgstr "Mostra form"
 
 #~ msgid "Update"
 #~ msgstr "Aggiorna"
