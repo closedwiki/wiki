@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MeredithLesly" date="1142019543" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MeredithLesly" date="1142470431" format="1.1" version="1.2"}%
 %STARTCACHE{"sampletext.txt"}%
 
 If this plugin is installed correctly, there will be an attachment named sampletext.txt which contains the contents between the tags. The attachment will be updated every time the topic is edited and saved.
@@ -8,4 +8,4 @@ If this plugin is installed correctly, there will be an attachment named samplet
 This content will not be in the attachment, however.
 
 
-%META:FILEATTACHMENT{name="sampletext.txt" attachment="sampletext.txt" attr="" comment="" date="" path="" size="" stream="GLOB(0x8a5e570)" user="Main.MeredithLesly" version="2"}%
+%META:FILEATTACHMENT{name="sampletext.txt" attachment="sampletext.txt" attr="" comment="" date="" path="" size="" stream="GLOB(0x89c7360)" user="Main.MeredithLesly" version="1"}%
