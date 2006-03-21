@@ -3,17 +3,25 @@
 %TMPL:INCLUDE{"viewtopicactionbuttons.pattern"}%
 %TMPL:INCLUDE{"viewbottombar.pattern"}%
 
+
+
 %TMPL:DEF{"templatejavascript"}%
 <script type="text/javascript">
-function setfocus() {
-	document.loginform.username.focus();
-}
-</script>
-%TMPL:END%
+//<![CDATA[
+	addLoadEvent(setfocus);
+	function setfocus() {
+		document.loginform.username.focus();
+	}
+//]]>
+</script>%TMPL:END%
+
+
 
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage%TMPL:END%
 
-%TMPL:DEF{"body"}%<body class="%TMPL:P{"bodyclassname"}%" onLoad="setfocus()"><a name="PageTop"></a>
+
+
+%TMPL:DEF{"body"}%<body class="%TMPL:P{"bodyclassname"}%"><a name="PageTop"></a>
 <div id="patternScreen">
 <div id="patternPageShadow">
 <div id="patternPage">
