@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="MeredithLesly" date="1141062228" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="MeredithLesly" date="1142453581" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
-This plugin puts any text between a =%<nop>STARTCACHE{"filename"}%= and =%<nop>ENDCACHE%= into an attachment with the given filename.
+This plugin puts any text between a =%<nop>STARTCACHE{"filename"}%= and =%<nop>ENDCACHE%= into an attachment with the given filename. If a topic and/or web is specified, the file will be attached to that instead.
 
 The current version only refreshes the attachment when the topic is saved. Obviously this means that the attachment can get out of synch if, for example, it explicitly or implicitly refers to other topics.
 
-I wrote this plugin specifically to be able to put my css into topic(s) and still be able to have efficient stylesheets: i.e., without the overhead of TWiki processing. There seem to be a number of other needs, however, and I'm happy to try and accomodate them!
+I wrote this plugin specifically to be able to put my css into topic(s) and still be able to have efficient stylesheets; i.e., without the overhead of TWiki processing. There seem to be a number of other needs, however, and I'm happy to try and accomodate them!
 
 %TOC%
 
@@ -13,12 +13,20 @@ I wrote this plugin specifically to be able to put my css into topic(s) and stil
 
 ---++ Syntax Rules
 
-Pretty simple. Just put in a =%<nop>STARTCACHE{"filename"}%= before content you want cached, and =%<nop>ENDCACHE%= after it, and the contents in between will
-be attached to the topic, for easy reference by other pages.
+Pretty simple. Just put in a =%<nop>STARTCACHE{"filename"}%= before content you want cached, and =%<nop>ENDCACHE%= after it, and the contents in between will be attached to the topic, for easy reference by other pages. You can optionally put in a topic and/or web.
 
 ---++ Examples
 
-To come...
+<verbatim>
+%STARTCACHE{"style.css"}%
+table.patternTopBarContents { padding:0; }
+%ENDCACHE
+
+%STARTCACHE{"style.css" topic="StyleSheet"}%
+table.patternTopBarContents { padding:0; }
+%ENDCACHE
+</verbatim>
+
 
 
 ---++ Plugin Settings
@@ -66,3 +74,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main.MeredithLesly - 09 Feb 2006
+
