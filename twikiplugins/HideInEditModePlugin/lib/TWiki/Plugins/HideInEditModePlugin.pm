@@ -24,7 +24,8 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '$REV$';
+
+$VERSION = '$Rev$';
 $pluginName = 'HideInEditModePlugin';  # Name of this Plugin
 
 # =========================
@@ -51,19 +52,7 @@ sub commonTagsHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    my $context = TWiki::Func::getContext();
-    if ($context->{'view'}) {
-	if (my $query = TWiki::Func::getCgiQuery()) {
-	   if ($query->param('raw')) {
-		TWiki::Func::writeDebug("In raw mode") if $debug;
-	    }
-	}
-    }
-    $_[0] =~ s/%STARTHIDDEN(\{"(.*?)"\})?%(.*?)%ENDHIDDEN%/$3/sg;
-    # New feature: allowing top and bottom hidden areas. 
+    $_[0] =~ s/%STARTHIDDEN%(.*?)%ENDHIDDEN%/$1/sg;
 }
 
 # =========================
@@ -78,41 +67,31 @@ sub beforeEditHandler {
     # in the edit box. Use it to process the text before editing.
     # New hook in TWiki::Plugins $VERSION = '1.010'
 
-    # New feature: allowing top and bottom hidden areas. 
-    if ($_[0] =~ /%STARTHIDDEN(\{"top"\})?%(.*?)%ENDHIDDEN%/s) {
-	saveHiddenPortion($_[0], $topic, $web, "top");
-    }
-    if ($_[0] =~ /%STARTHIDDEN\{"bottom"\}%(.*?)%ENDHIDDEN%/s) {
-	saveHiddenPortion($_[0], $topic, $web, "bottom");
+    my $wikiUser = TWiki::Func::getWikiUserName();	
+    if (!TWiki::Func::checkAccessPermission("HIDDEN", $wikiUser, $_[0], $topic, $web)) {
+	# Shouldn't see hidden portion in edit mode
+	if ($_[0] =~ s/%STARTHIDDEN%(.*?)%ENDHIDDEN%//s) {
+	    saveHiddenPortion($topic, $web, $1);
+	}
     }
 }
 
 sub saveHiddenPortion {
-    #my ($text, $topic, $web, $arg) = @_;
-    $topic = $_[1];
-    $web = $_[2];
-    $arg = $_[3];
+    my ($topic, $web, $hide) = @_;
 
     my $wikiUser = TWiki::Func::getWikiUserName();	
-    if (!TWiki::Func::checkAccessPermission("HIDDEN", $wikiUser, $_[0], $topic, $web)) {
-	TWiki::Func::writeDebug("No access");
-	$_[0] =~ s/%STARTHIDDEN(\{"(.*?)"\})?%(.*?)%ENDHIDDEN%//s;
-	my $storage = $2;
-	$storage =~ s/&amp\;/&/go;    
-	$storage =~ s/&lt\;/</go;
-	$storage =~ s/&gt\;/>/go;
-	my $workArea = TWiki::Func::getWorkArea($pluginName);
-	my $filename = "$workArea/tmp.$web.$topic";
-	if ($arg) {
-	    $fileName .= ".$arg";
-	}
-	TWiki::Func::saveFile($filename, $storage);
-    }
+    $hide =~ s/&amp\;/&/go;    
+    $hide =~ s/&lt\;/</go;
+    $hide =~ s/&gt\;/>/go;
+    $filename = $wikiUser . '.' . time();
+    TWiki::Func::setSessionValue("hideineditmode", $filename);
+    TWiki::Contrib::MoreFuncContrib::saveWorkFile("HideInEditModePlugin", "$filename", $hide);
 }
 
 # =========================
-sub afterEditHandler {
+sub beforeSaveHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
     my $topic = $_[1];
     my $web = $_[2];
 
@@ -120,20 +99,14 @@ sub afterEditHandler {
 
     # This handler is called by the preview script just before presenting the text.
     # New hook in TWiki::Plugins $VERSION = '1.010'
+    if ($filename =	TWiki::Func::getSessionValue("hideineditmode")) {
+	TWiki::Func::clearSessionValue("hideineditmode");
+	$storage = TWiki::Contrib::MoreFuncContrib::readWorkFile("HideInEditModePlugin", "$filename");
+	TWiki::Contrib::MoreFuncContrib::deleteWorkFile("HideInEditModePlugin", "$filename");
 
-    my $workArea = TWiki::Func::getWorkArea($pluginName);
-    my $prefix = "$workArea/tmp.$web.$topic";
-    if ( -e "$prefix.top") {
-	my $storage = TWiki::Func::readFile("$prefix.top");
-	$_[0] = "$storage $_[0]";
-    }
-    if ( -e "$prefix.bottom") {
-	my $storage = TWiki::Func::readFile("$prefix.bottom");
-	$_[0] = "$_[0] $storage";
-    }
-    if ( -e $prefix ) {
-	my $storage = TWiki::Func::readFile($prefix);
-	$_[0] = "$storage $_[0]";
+	if ($storage) {
+	    $_[0] = "$storage\n$_[0]";
+	}
     }
 }
 
