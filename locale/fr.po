@@ -1430,11 +1430,6 @@ msgstr "Aide"
 msgid "Hide attachments"
 msgstr "Dissimuler des fichiers attachés"
 
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-#, fuzzy
-msgid "Hide form"
-msgstr "Ajouter le formulaire"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Hide formatting help"
 msgstr "Dissimuler l'aide au formatage"
@@ -2453,11 +2448,6 @@ msgstr "Choisissez la nouvelle page mère"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Show attachments"
 msgstr "Afficher les fichiers attachés"
-
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-#, fuzzy
-msgid "Show form"
-msgstr "Afficher l'aide au formatage"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Show formatting help"
@@ -3632,6 +3622,14 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Hide form"
+#~ msgstr "Ajouter le formulaire"
+
+#, fuzzy
+#~ msgid "Show form"
+#~ msgstr "Afficher l'aide au formatage"
 
 #, fuzzy
 #~ msgid "(changed language)"

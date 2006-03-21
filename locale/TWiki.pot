@@ -1310,10 +1310,6 @@ msgstr ""
 msgid "Hide attachments"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Hide form"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Hide formatting help"
 msgstr ""
@@ -2223,10 +2219,6 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Show attachments"
-msgstr ""
-
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Show form"
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14

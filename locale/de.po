@@ -1432,10 +1432,6 @@ msgstr "Hilfe"
 msgid "Hide attachments"
 msgstr "Anhänge verbergen"
 
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Hide form"
-msgstr "Formular ausblenden"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Hide formatting help"
 msgstr "Formatierungshilfe ausblenden"
@@ -2420,10 +2416,6 @@ msgstr "Neues Ober-Topic zuordnen"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Show attachments"
 msgstr "Anhänge anzeigen"
-
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Show form"
-msgstr "Formular anzeigen"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Show formatting help"
@@ -3590,6 +3582,12 @@ msgstr ""
 "Sie *müssen* zumindest eine gültige E-Mail registriert haben, um ihr "
 "Passwort zurücksetzen zu können. Falls keine ihrer E-Mail Adressen gültig "
 "ist und Sie ihr Passwort vergessen haben kontaktieren Sie %1."
+
+#~ msgid "Hide form"
+#~ msgstr "Formular ausblenden"
+
+#~ msgid "Show form"
+#~ msgstr "Formular anzeigen"
 
 #~ msgid "(changed language)"
 #~ msgstr "(Sprache gewechselt)"

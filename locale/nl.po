@@ -1419,10 +1419,6 @@ msgstr "Help"
 msgid "Hide attachments"
 msgstr "Verberg bijlagen"
 
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Hide form"
-msgstr "Formulier verbergen"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Hide formatting help"
 msgstr "Verberg opmaakhelp"
@@ -2399,10 +2395,6 @@ msgstr "Bovenliggende pagina instellen"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Show attachments"
 msgstr "Toon bijlagen"
-
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-msgid "Show form"
-msgstr "Formulier tonen"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Show formatting help"
@@ -3556,6 +3548,12 @@ msgstr ""
 "wachtwoord opnieuw te kunnen instellen. Als geen van je geregistreerde e-"
 "mailadressen geldig zijn, en je je wachtwoord bent vergeten, neem dan "
 "contact op met %1."
+
+#~ msgid "Hide form"
+#~ msgstr "Formulier verbergen"
+
+#~ msgid "Show form"
+#~ msgstr "Formulier tonen"
 
 #~ msgid "(changed language)"
 #~ msgstr "(taal gewijzigd)"

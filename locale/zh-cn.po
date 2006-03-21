@@ -1360,11 +1360,6 @@ msgstr "帮助"
 msgid "Hide attachments"
 msgstr "隐藏附件"
 
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-#, fuzzy
-msgid "Hide form"
-msgstr "添加表单"
-
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Hide formatting help"
 msgstr "隐藏格式帮助"
@@ -2315,11 +2310,6 @@ msgstr "设置新父主题"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:20
 msgid "Show attachments"
 msgstr "显示附件"
-
-#: twikiplugins/PatternSkin/templates/formtables.pattern.tmpl:7
-#, fuzzy
-msgid "Show form"
-msgstr "显示格式帮助"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:14
 msgid "Show formatting help"
@@ -3380,6 +3370,14 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr ""
+
+#, fuzzy
+#~ msgid "Hide form"
+#~ msgstr "添加表单"
+
+#, fuzzy
+#~ msgid "Show form"
+#~ msgstr "显示格式帮助"
 
 #, fuzzy
 #~ msgid "(changed language)"
