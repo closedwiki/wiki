@@ -377,7 +377,6 @@ lib/TWiki/I18N/Extract.pm 0440
 lib/TWiki/I18N/Fallback.pm 0440
 lib/TWiki/If.pm 0440
 lib/TWiki/Merge.pm 0440
-lib/TWiki/Merge3.pm 0440
 lib/TWiki/Meta.pm 0440
 lib/TWiki/Net.pm 0440
 lib/TWiki/OopsException.pm 0440
