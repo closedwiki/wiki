@@ -19,7 +19,7 @@ __Major New Features__
 
 Many, many people worked on TWiki-4.0.0. The credits in the table below only list the people who worked on individual enhancements. If you find an omission please fix it at TWiki:TWiki.%TOPIC%. There were many other contributors; for a full list, visit TWikiContributor.
 
-Most of the redesign, refactoring and new documentation work in Dakar release was done by [[http://c-dot.co.uk][Crawford Currie]]. [[http://kamaelia.org/Michael.html][Michael Sparks]] provided ideas and proof of concept for several improvements. Other people who gave _large_ amounts of their time and patience to less sexy aspects of the work, such as testing, infrastructure and documentation, are [[TWiki:Main.AntonAylward][AntonAylward]], [[TWiki:Main.KennethLavrsen][KennethLavrsen]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.MichaelDaum][MichaelDaum]], [[http://www.structuredwikis.com/][Peter Thoeny]], [[http://www.home.org.au][Sven Dowideit]], [[TWiki:Main.WillNorris][WillNorris]].
+Most of the redesign, refactoring and new documentation work in Dakar release was done by [[http://c-dot.co.uk][Crawford Currie]]. [[http://kamaelia.org/Michael.html][Michael Sparks]] provided ideas and proof of concept for several improvements. Other people who gave _large_ amounts of their time and patience to less sexy aspects of the work, such as testing, infrastructure and documentation, are [[TWiki:Main.AntonAylward][AntonAylward]], [[TWiki:Main.KennethLavrsen][KennethLavrsen]], [[TWiki:Main.LynnwoodBrown][LynnwoodBrown]], [[TWiki:Main.MichaelDaum][MichaelDaum]], [[http://www.structuredwikis.com/][Peter Thoeny]], [[TWiki:Main.SteffenPoulsen][SteffenPoulsen]], [[http://www.home.org.au][Sven Dowideit]], [[TWiki:Main.WillNorris][WillNorris]].
 
 %TABLE{ headeralign="left" sort="off" }%
 | *Installation & configuration*  | *Contributor* |
@@ -35,6 +35,7 @@ Most of the redesign, refactoring and new documentation work in Dakar release wa
 | Dutch translation | [[TWiki:Main.ArthurClemens][ArthurClemens]] |
 | French translation | [[TWiki:Main.BenVoui][BenVoui]] |
 | German translation | [[TWiki:Main.AndreUlrich][AndreUlrich]] |
+| Italian translation | [[TWiki:Main.MassimoMancini][MassimoMancini]] |
 | Portuguese translation | [[TWiki:Main.AntonioTerceiro][AntonioTerceiro]], [[TWiki:Main.CarlinhosCecconi][CarlinhosCecconi]] |
 | Spanish translation | [[TWiki:Main.WillNorris][WillNorris]], [[TWiki:Main.MiguelABayona][MiguelABayona]] |
 | *New features for users*  ||
