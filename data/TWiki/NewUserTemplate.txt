@@ -2,9 +2,15 @@
 %SPLIT%
    * %KEY%: %VALUE%%SPLIT%
 
----++ About me
+---++ My Links
 
-   * Replace this text with an introduction about yourself
+   * %TWIKIWEB%.ATasteOfTWiki - view a short introductory presentation on TWiki for beginners
+   * %TWIKIWEB%.WelcomeGuest - starting points on TWiki
+   * %TWIKIWEB%.TWikiUsersGuide - complete TWiki documentation, Quick Start to Reference
+   * Sandbox.%HOMETOPIC% - try out TWiki on your own
+   * Sandbox.%TOPIC%Sandbox - just for me
+   * 
+   * 
 
 ---++ Personal Preferences
 
@@ -21,6 +27,68 @@ Uncomment preferences variables to activate them (remove the #-sign). Help and d
    * Write protect your home page: (set it to your %TWIKIWEB%.WikiName)
       * #Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
+---++ Related Topics
+
+   * %TWIKIWEB%.ChangePassword for changing your password
+   * %TWIKIWEB%.ChangeEmailAddress for changing your email address
+   * %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users
+   * %TWIKIWEB%.UserDocumentationCategory is a list of TWiki user documentation
+   * %TWIKIWEB%.UserToolsCategory lists all TWiki user tools
+%STARTSECTION{type="templateonly"}%
+Note to TWiki Administrator:
+
+Above text is for English speaking users. If you have a multilingual wiki community you can replace the "My Links", "Personal Preferences" and "Related Topics" sections above with the localized text below. Text enclosed in %MAKETEXT will be shown in the language selected by the user. Please note that the %MAKETEXT can be quite intimidating to new users. Consider translating above text to your own language if your community uses a non-English language. (Remove all text from =%<nop>STARTSECTION{type="templateonly"}%= to =%<nop>ENDSECTION{type="templateonly"}%= when you are done)
+
+Text for multilingual wiki community, copy from here to %<nop>ENDSECTION{type="templateonly"}%
+
+<!--
+   NOTE:
+
+   Text enclosed in '%MAKETEXT' below will be shown in your selected language 
+   when you view the topic.
+
+   When you edit this topic for your own purposes, you are advised not to
+   touch the MAKETEXT calls. If you want to change the text of one of the
+   MAKETEXTed strings, just delete the call completely and replace it with
+   your own text e.g. instead of:
+      ---++ %MAKETEXT{"Personal Preferences"}%
+   write:
+      ---++ My Own Setup
+-->
+---++ %MAKETEXT{"My Links"}%
+
+   * %MAKETEXT{"[_1] - view a short introductory presentation on TWiki for beginners" args="%TWIKIWEB%.ATasteOfTWiki"}%
+   * %MAKETEXT{"[_1] - starting points on TWiki" args="%TWIKIWEB%.WelcomeGuest"}%
+   * %MAKETEXT{"[_1] - complete TWiki documentation, Quick Start to Reference" args="%TWIKIWEB%.TWikiUsersGuide"}%
+   * %MAKETEXT{"[_1] - try out TWiki on your own" args="Sandbox.%HOMETOPIC%"}%
+   * %MAKETEXT{"[_1] - just for me" args="Sandbox.%TOPIC%Sandbox"}%
+   * 
+   * 
+
+---++ %MAKETEXT{"Personal Preferences"}%
+
+%MAKETEXT{"Uncomment preferences variables to activate them (remove the #-sign). Help and details on preferences variables are available in [_1]." args="%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
+
+   * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off:" args="%TWIKIWEB%.WikiWord"}%
+      * #Set LINKTOOLTIPINFO = off
+   * %MAKETEXT{"Horizontal size of text edit box:"}%
+      * #Set EDITBOXWIDTH = 70
+   * %MAKETEXT{"Vertical size of text edit box:"}%
+      * #Set EDITBOXHEIGHT = 22
+   * %MAKETEXT{"Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable."}%
+      * #Set EDITBOXSTYLE = width: 99%
+   * %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%TWIKIWEB%.WikiName"}%
+      * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+
+---++ %MAKETEXT{"Related Topics"}%
+
+   * %MAKETEXT{"[_1] for changing your password" args="%TWIKIWEB%.ChangePassword"}%
+   * %MAKETEXT{"[_1] for changing your email address" args="%TWIKIWEB%.ChangeEmailAddress"}%
+   * %MAKETEXT{"[_1] has a list of other TWiki users" args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
+   * %MAKETEXT{"[_1] is a list of TWiki user documentation" args="%TWIKIWEB%.UserDocumentationCategory"}%
+   * %MAKETEXT{"[_1] lists all TWiki user tools" args="%TWIKIWEB%.UserToolsCategory"}%
+
+%ENDSECTION{type="templateonly"}%
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:FIELD{name="FirstName" attributes="" title="<nop>FirstName" value=""}%
 %META:FIELD{name="LastName" attributes="" title="<nop>LastName" value=""}%
