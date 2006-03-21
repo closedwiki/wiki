@@ -46,23 +46,23 @@ msgstr "%*(%1,segundo) "
 msgid "%1 - Registration for %2 (%3)"
 msgstr "%1 - Registro de %2 (%3)"
 
-#: data/Main/UserViewTemplate.txt:17
+#: data/TWiki/NewUserTemplate.txt:62
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
 msgstr "%1 - completar documentación de TWiki, Inicio Rápido para Referencia"
 
-#: data/Main/UserViewTemplate.txt:19
+#: data/TWiki/NewUserTemplate.txt:64
 msgid "%1 - just for me"
 msgstr "%1 - solo para mi"
 
-#: data/Main/UserViewTemplate.txt:16
+#: data/TWiki/NewUserTemplate.txt:61
 msgid "%1 - starting points on TWiki"
 msgstr "%1 - puntos de partida en TWiki"
 
-#: data/Main/UserViewTemplate.txt:18
+#: data/TWiki/NewUserTemplate.txt:63
 msgid "%1 - try out TWiki on your own"
 msgstr "%1 - web para probar TWiki"
 
-#: data/Main/UserViewTemplate.txt:15
+#: data/TWiki/NewUserTemplate.txt:60
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr "%1 - ver una presentación corta de TWiki para principiantes "
 
@@ -80,15 +80,15 @@ msgstr "Web %1"
 msgid "%1 Web Home"
 msgstr "Pagina de inicio de la web %1"
 
-#: data/Main/UserViewTemplate.txt:33
+#: data/TWiki/NewUserTemplate.txt:86
 msgid "%1 for changing your email address"
 msgstr "%1 para cambiar la dirección de correo"
 
-#: data/Main/UserViewTemplate.txt:32
+#: data/TWiki/NewUserTemplate.txt:85
 msgid "%1 for changing your password"
 msgstr "%1 para cambiar la contraseña"
 
-#: data/Main/UserViewTemplate.txt:34
+#: data/TWiki/NewUserTemplate.txt:87
 msgid "%1 has a list of other TWiki users"
 msgstr "%1 tiene una lista de otros usuarios de TWiki"
 
@@ -115,7 +115,7 @@ msgstr "%1 está registrado con correo %2"
 msgid "%1 home"
 msgstr "Página de inicio de %1"
 
-#: data/Main/UserViewTemplate.txt:35
+#: data/TWiki/NewUserTemplate.txt:88
 msgid "%1 is a list of TWiki user documentation"
 msgstr "%1 es una lista de documentación de usuario de TWiki"
 
@@ -143,7 +143,7 @@ msgstr "%1 esta en al menos un grupo y no puede ser borrado"
 msgid "%1 is the default topic for deleted attachments."
 msgstr ""
 
-#: data/Main/UserViewTemplate.txt:36
+#: data/TWiki/NewUserTemplate.txt:89
 msgid "%1 lists all TWiki user tools"
 msgstr "%1  lista todas las herraminetas de usuario de TWiki"
 
@@ -1434,7 +1434,7 @@ msgstr "Ocultar ayuda"
 msgid "History:"
 msgstr "Historia:"
 
-#: data/Main/UserViewTemplate.txt:25
+#: data/TWiki/NewUserTemplate.txt:74
 msgid "Horizontal size of text edit box:"
 msgstr "Tamaño horizontal de la caja de editar texto:"
 
@@ -1795,6 +1795,10 @@ msgstr "A la web:"
 msgid "Move topic to web:"
 msgstr "&Más acciones"
 
+#: data/TWiki/NewUserTemplate.txt:58
+msgid "My Links"
+msgstr "Mis Enlaces"
+
 #: lib/TWiki/Search.pm:792
 msgid "NEW"
 msgstr "NUEVO"
@@ -1996,6 +2000,10 @@ msgstr "Falló inicializar contraseña"
 msgid "Passwords do not match"
 msgstr "Las contraseñas no son iguales"
 
+#: data/TWiki/NewUserTemplate.txt:54 data/TWiki/NewUserTemplate.txt:68
+msgid "Personal Preferences"
+msgstr "Preferencias Personales"
+
 #: templates/messages.tmpl:123
 msgid "Pick one of the %1."
 msgstr "Escoja una de %1."
@@ -2125,7 +2133,7 @@ msgstr "Registro"
 msgid "Regular expression search"
 msgstr "Búsqueda por expresion regular"
 
-#: data/Main/UserViewTemplate.txt:30
+#: data/TWiki/NewUserTemplate.txt:83
 msgid "Related Topics"
 msgstr "Páginas Relacionadas"
 
@@ -2413,7 +2421,7 @@ msgstr "Mostrar ayuda de formato"
 msgid "Show help"
 msgstr "Mostrar ayuda"
 
-#: data/Main/UserViewTemplate.txt:24
+#: data/TWiki/NewUserTemplate.txt:72
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr ""
 "Mostrar información de uso (tool-tip) cuando el ratón entra y sale de los %1 "
@@ -2486,7 +2494,7 @@ msgstr ""
 "Paso 2: Continuar con <input type='submit' class='twikiButton' "
 "value='Editar' /> y salvar %1 para activar el nuevo padre"
 
-#: data/Main/UserViewTemplate.txt:27
+#: data/TWiki/NewUserTemplate.txt:78
 msgid ""
 "Style of text edit box. =width: 99%= for full window width (default), "
 "=width: auto= to disable."
@@ -2966,7 +2974,7 @@ msgstr "Tratar otro vez"
 msgid "Unchanged"
 msgstr "Sin cambios"
 
-#: data/Main/UserViewTemplate.txt:22
+#: data/TWiki/NewUserTemplate.txt:70
 msgid ""
 "Uncomment preferences variables to activate them (remove the #-sign). Help "
 "and details on preferences variables are available in %1."
@@ -3059,7 +3067,7 @@ msgstr "Version"
 msgid "Version history of %1"
 msgstr ""
 
-#: data/Main/UserViewTemplate.txt:26
+#: data/TWiki/NewUserTemplate.txt:76
 msgid "Vertical size of text edit box:"
 msgstr "Tamaño vertical de la caja de editar texto"
 
@@ -3153,7 +3161,7 @@ msgstr "Quien"
 msgid "Would you like to go to:"
 msgstr "Si quiere ir a:"
 
-#: data/Main/UserViewTemplate.txt:28
+#: data/TWiki/NewUserTemplate.txt:80
 msgid "Write protect your home page: (set it to your %1)"
 msgstr "Proteger de escritura su página inicial: (configurarla como su %1)"
 
@@ -3562,12 +3570,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Didn't forget your password?"
 #~ msgstr "%1 para cambiar la contraseña"
-
-#~ msgid "My Links"
-#~ msgstr "Mis Enlaces"
-
-#~ msgid "Personal Preferences"
-#~ msgstr "Preferencias Personales"
 
 #~ msgid "Update"
 #~ msgstr "Actualizar"
