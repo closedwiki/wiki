@@ -1,4 +1,5 @@
 # Copyright (C) 2005 Greg Abbas
+# Copyright (C) 2006 Crawford Currie http://c-dot.co.uk
 require 5.006;
 
 package MergeTests;
@@ -41,7 +42,8 @@ sub set_up {
 
     sub mergeHandler {
         my($this, $c, $a, $b, $i) = @_;
-
+        $a = 'undef' unless defined $a;
+        $b = 'undef' unless defined $b;
         die "$i.$MergeTests::info" unless $i eq $MergeTests::info;
         push( @MergeTests::mudge, "$c#$a#$b" );
         return undef;
@@ -51,12 +53,22 @@ sub set_up {
 my $session = { plugins => new HackJob() };
 $info = { argle => "bargle" };
 
-sub _merge {
+sub _merge3 {
     my ( $ia, $ib, $ic ) = @_;
     return TWiki::Merge::merge3(
         'a', $ia,
         'b', $ib,
         'c', $ic,
+        ' ',
+        $session,
+        $info );
+}
+
+sub _merge2 {
+    my( $ia, $ib ) = @_;
+    return TWiki::Merge::merge2(
+        'a', $ia,
+        'b', $ib,
         ' ',
         $session,
         $info );
@@ -73,46 +85,46 @@ sub _readfile {
 #-----------------------------------------------------------------------------
 # tests
 
-sub test_shortStrings1 {
+sub test_M3_shortStrings1 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "";
     $b = "";
     $c = "1 2 3 4 5 ";
-    $d = _merge($a, $b, $c);
+    $d = _merge3($a, $b, $c);
     $this->assert_str_equals( $c, $d );
     $this->assert_str_equals(
         ' ##: #1 #1 : ##: #2 #2 : ##: #3 #3 : ##: #4 #4 : ##: #5 #5 ',
         join(':', @mudge ));
 }
 
-sub test_shortStrings2 {
+sub test_M3_shortStrings2 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 2 3 4 5 ";
     $c = "";
-    $d = _merge($a, $b, $c);
+    $d = _merge3($a, $b, $c);
     $this->assert_str_equals( $c, $d );
 }
 
-sub test_shortStrings3 {
+sub test_M3_shortStrings3 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 b 2 3 4 5 ";
     $c = "1 2 3 4 c 5 ";
-    $d = _merge($a, $b, $c);
+    $d = _merge3($a, $b, $c);
     $this->assert_str_equals( "1 b 2 3 4 c 5 ", $d );
 }
 
-sub test_shortStrings4 {
+sub test_M3_shortStrings4 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 b 2 3 4 5 ";
     $c = "1 c 2 3 4 c 5 ";
-    $d = _merge($a, $b, $c)."\n";
+    $d = _merge3($a, $b, $c)."\n";
 
     $this->assert_str_equals( <<'END',
 1 <div class="twikiConflict"><b>CONFLICT</b> version b:</div>
@@ -126,43 +138,43 @@ END
         join(':', @mudge ));
 }
 
-sub test_shortStrings5 {
+sub test_M3_shortStrings5 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 3 4 5 6 ";
     $c = "1 2 3 ";
-    $d = _merge($a, $b, $c);
+    $d = _merge3($a, $b, $c);
     $this->assert_str_equals( "1 3 6 ", $d );
 }
 
-sub test_shortStrings6 {
+sub test_M3_shortStrings6 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 2 4 5 ";
     $c = $b;
-    $d = _merge($a, $b, $c);
+    $d = _merge3($a, $b, $c);
     $this->assert_str_equals( "1 2 4 5 ", $d );
 }
 
-sub test_shortStrings7 {
+sub test_M3_shortStrings7 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 2 change 4 5 ";
     $c = $b;
-    $d = _merge($a, $b, $c);
+    $d = _merge3($a, $b, $c);
     $this->assert_str_equals( "1 2 change 4 5 ", $d );
 }
 
-sub test_shortStrings8 {
+sub test_M3_shortStrings8 {
     my $this = shift;
     my ( $a, $b, $c, $d );
     $a = "1 2 3 4 5 ";
     $b = "1 2 change 4 5 ";
     $c = "1 2 other 4 5 ";
-    $d = _merge($a, $b, $c)."\n";
+    $d = _merge3($a, $b, $c)."\n";
     $this->assert_str_equals( <<'END',
 1 2 <div class="twikiConflict"><b>CONFLICT</b> original a:</div>
 3 <div class="twikiConflict"><b>CONFLICT</b> version b:</div>
@@ -176,7 +188,7 @@ END
         join(':', @mudge ));
 }
 
-sub test_text {
+sub test_M3_text {
 
     my $this = shift;
     my ( $a, $b, $c, $d, $e );
@@ -234,3 +246,17 @@ EOF
     $this->assert_str_equals( $e, $d );
 }
 
+sub test_M2_simple {
+    my $this = shift;
+    my $a = 'A B';
+    my $b = 'B C';
+    my $c = _merge2($a, $b);
+    my $d = 'A B C';
+    $this->assert_str_equals( $d, $c );
+
+    $this->assert_str_equals(
+        ' #A#undef: # #undef: #B#undef: # #undef: #C#undef',
+        join(':', @mudge ));
+}
+
+1;

@@ -31,6 +31,7 @@ Support for merging strings
 package TWiki::Merge;
 
 use Assert;
+use CGI qw( :html );
 
 =pod
 
@@ -96,14 +97,15 @@ sub _acceptA {
 
     ASSERT($session->isa('TWiki')) if DEBUG;
 
+    #print STDERR "From A: '$ai->[$a]'\n";
     # accept text from the old version without asking for resolution
-    my $merged = $session->{plugins}->mergeHandler( ' ',  $ai->[$a], undef, $info );
+    my $merged = $session->{plugins}->mergeHandler(
+        ' ',  $ai->[$a], undef, $info );
     if( defined $merged ) {
         push( @$out, $merged );
     } else {
-        push( @$out, $bi->[$b] );
+        push( @$out, $ai->[$a] );
     }
-    push( @$out, $ai->[$a] );
 }
 
 sub _acceptB {
@@ -111,7 +113,9 @@ sub _acceptB {
 
     ASSERT($session->isa('TWiki')) if DEBUG;
 
-    my $merged = $session->{plugins}->mergeHandler( ' ',  $bi->[$b], undef, $info );
+    #print STDERR "From B: '$bi->[$b]'\n";
+    my $merged = $session->{plugins}->mergeHandler(
+        ' ',  $bi->[$b], undef, $info );
     if( defined $merged ) {
         push( @$out, $merged );
     } else {
@@ -152,6 +156,7 @@ sub _change {
         # inserting new
         $merged = $session->{plugins}->mergeHandler(
             '+',  $ai->[$a], $bi->[$b], $info );
+        #print STDERR "From B: '$bi->[$b]'\n";
         if( defined $merged ) {
             push( @$out, $merged );
         } else {
@@ -159,6 +164,7 @@ sub _change {
         }
     } else {
         # otherwise this insert is not replacing anything
+        #print STDERR "From B: '$bi->[$b]'\n";
         $merged = $session->{plugins}->mergeHandler(
             ' ',  $ai->[$a], $bi->[$b], $info );
         if( defined $merged ) {
@@ -453,6 +459,10 @@ sub merge3 {
     return join('', @out);
 }
 
+my $conflictAttrs = { class=> 'twikiConflict' };
+# SMELL: internationalisation?
+my $conflictB = CGI::b('CONFLICT');
+
 sub _handleConflict {
     my( $out, $aconf, $bconf, $cconf, $arev, $brev, $crev,
         $sep, $session, $info ) = @_;
@@ -467,18 +477,22 @@ sub _handleConflict {
         push( @$out, $merged );
     } else {
         if(@a) {
-            push @$out, "<div class=\"twikiConflict\"><b>CONFLICT</b> original $arev:</div>\n";
-            push @$out, @a;
+            push( @$out, CGI::div( $conflictAttrs,
+                                   "$conflictB original $arev:" )."\n");
+            push( @$out, @a);
         }
         if(@b) {
-            push @$out, "<div class=\"twikiConflict\"><b>CONFLICT</b> version $brev:</div>\n";
-            push @$out, @b;
+            push( @$out, CGI::div( $conflictAttrs,,
+                                   "$conflictB version $brev:" )."\n");
+            push( @$out, @b);
         }
         if(@c) {
-            push @$out, "<div class=\"twikiConflict\"><b>CONFLICT</b> version $crev:</div>\n";
-            push @$out, @c;
+            push( @$out, CGI::div( $conflictAttrs,,
+                                   "$conflictB version $crev:" )."\n");
+            push( @$out, @c);
         }
-        push @$out, "<div class=\"twikiConflict\"><b>CONFLICT</b> end</div>\n";
+        push( @$out, CGI::div( $conflictAttrs,,
+                               "$conflictB end" )."\n");
     }
 }
 
