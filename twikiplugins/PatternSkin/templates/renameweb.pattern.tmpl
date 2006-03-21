@@ -9,10 +9,10 @@
 %TMPL:DEF{"webaction"}%%MAKETEXT{"Rename"}%%TMPL:END%
 
 
-%TMPL:DEF{"newweb"}%<p><input name="newsubweb" size="20" /><input type="hidden" name="action" value="renameweb" /><input type="hidden" name="confirm" value="getlock" /></p>%TMPL:END%
+%TMPL:DEF{"newweb"}%<p><input class="twikiInputField" value="%WEB%" name="newsubweb" size="20" /><input type="hidden" name="action" value="renameweb" /><input type="hidden" name="confirm" value="getlock" /></p>%TMPL:END%
 
 
-%TMPL:DEF{"newparentweb"}%<select class="twikiSelect" name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
+%TMPL:DEF{"newparentweb"}%<p><select class="twikiSelect" name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select></p>%TMPL:END%
 
 
 
@@ -20,7 +20,11 @@
 
 
 
-%TMPL:DEF{"movewebhelp"}%<p>%MAKETEXT{"You can give this web a different name."}% <br />%MAKETEXT{"To delete this web: move this web to the Trash web by renaming it to [_1]." args="%TRASHWEB%/%WEB%"}%</p>%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%<p>%MAKETEXT{"You can give this web a different name."}%</p>%TMPL:END%
+
+
+
+%TMPL:DEF{"parentwebhelp"}%<p>%MAKETEXT{"Subwebs must be enabled."}%</p>%TMPL:END%
 
 
 
