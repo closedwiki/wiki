@@ -3,11 +3,33 @@
 %TMPL:INCLUDE{"viewtopicactionbuttons.pattern"}%
 %TMPL:INCLUDE{"viewbottombar.pattern"}%
 
-
+%TMPL:DEF{"templatejavascript"}%
+<script type="text/javascript">
+function setfocus() {
+	document.loginform.username.focus();
+}
+</script>
+%TMPL:END%
 
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage%TMPL:END%
 
-
+%TMPL:DEF{"body"}%<body class="%TMPL:P{"bodyclassname"}%" onLoad="setfocus()"><a name="PageTop"></a>
+<div id="patternScreen">
+<div id="patternPageShadow">
+<div id="patternPage">
+%TMPL:P{"startleftbarwrapper"}%<div id="patternOuter">
+<div id="patternFloatWrap">
+<div id="patternMain">%TMPL:P{"topbarspacer"}%
+<div id="patternMainContents">%TMPL:P{"logo"}%%TMPL:P{"content"}%
+</div><!-- /patternMainContents-->
+</div><!-- /patternMain-->%TMPL:P{"leftbar"}%
+</div><!-- /patternFloatWrap-->
+<div class="clear">&nbsp;</div>
+</div><!-- /patternOuter-->%TMPL:P{"endleftbarwrapper"}%%TMPL:P{"topbar"}%%TMPL:P{"bottombar"}%
+</div><!-- /patternPage-->
+</div><!-- /patternPageShadow-->
+</div><!-- /patternScreen-->
+</body></html>%TMPL:END%
 
 %TMPL:DEF{"LOG_IN_BANNER"}%%MAKETEXT{"Please enter your username and password:"}% %TMPL:END%
 
@@ -49,7 +71,7 @@
 
 
 %TMPL:DEF{"content"}%<div class="patternTopic"><div id="twikiLogin">
-<form action="%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%" method="post">
+<form name="loginform" action="%SCRIPTURLPATH{"login"}%/%WEB%/%TOPIC%" method="post">
 <div class="twikiFormSteps">
 <div class="twikiFormStep">
 %TMPL:P{"pagetitle"}%%TMPL:P{"pagenote"}%
@@ -57,13 +79,13 @@
 <div class="twikiFormStep">
 ---+++ %MAKETEXT{"Username"}%
 
-%ICON{"person"}% <input class="twikiInputField" type="text" size="30" name="username" value="%URLPARAM{"username"}%" />
+%ICON{"person"}% <input class="twikiInputField" type="text" size="30" name="username" value="%URLPARAM{"username"}%" tabindex="1" />
 %TMPL:P{"authenticationnote"}%
 </div><!-- /twikiFormStep-->
 <div class="twikiFormStep">
 ---+++ %MAKETEXT{"Password"}%
 
-%ICON{"key"}% <input class="patternFormFieldVerticalForm" type="password" size="30" name="password" value="" /><input type="hidden" name="origurl" value="%ORIGURL%" />%TMPL:P{"forgotpasswordnote"}%
+%ICON{"key"}% <input class="patternFormFieldVerticalForm" type="password" size="30" name="password" value="" tabindex="2" /><input type="hidden" name="origurl" value="%ORIGURL%" />%TMPL:P{"forgotpasswordnote"}%
 </div><!-- /twikiFormStep-->
 <div class="twikiFormStep twikiLast">
 <input class="twikiSubmit" type="submit" value='%MAKETEXT{"Logon"}%' />
