@@ -1,4 +1,8 @@
 %META:TOPICINFO{author="TWikiAdminGroup" date="1142879833" format="1.1" version="1.2"}%
+---+!! <nop>MailInContrib for TWiki
+
+This Contrib supports the submission of content to TWiki topics via e-mail.
+
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -6,11 +10,8 @@
    It is automatically generated from the subversion repository, and any changes
    you make will simply be overwritten the next time a release is generated.
 
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
----+!! <nop>MailInContrib for TWiki
-
-This Contrib supports the submission of content to TWiki topics via e-mail.
 
 *WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please see [[%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?rev=1.12][here]]*
 
@@ -104,6 +105,7 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | |
+| 9427 | Added Email::Delete::POP3 and Email::Delete::IMAP implementations, and solved a curious problem with IMAP folders, where the MIME parser couldn't parse messages coming from them. |
 | 8969 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1665'>Item1665</a>  Item1666: Now configurable to accept mail only from registered users. Automatically maps the user and signs the contribution. Also configurable to parse the topic from the To: line. Also improved error reporting and recovery. |
 | 7205 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item788'>Item788</a>  updated CPAN dependencies for MailInContrib |
 | 7196 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item784'>Item784</a>  Added POP3 support for delete. Don't understand why it was working before; though I suspect it must have been using MailDir |
