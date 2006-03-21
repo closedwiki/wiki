@@ -3256,8 +3256,8 @@ msgstr ""
 "est préférable, dans ce cas, de vous coordonner avec %1."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
-msgstr "Vous êtes ici"
+msgid "You are here:"
+msgstr "Vous êtes ici:"
 
 #: templates/messages.tmpl:107
 msgid ""

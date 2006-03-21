@@ -3192,8 +3192,8 @@ msgstr ""
 "te checken met %1."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
-msgstr ""
+msgid "You are here:"
+msgstr "Je bent hier"
 
 #: templates/messages.tmpl:107
 msgid ""

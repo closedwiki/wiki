@@ -3193,8 +3193,8 @@ msgstr ""
 "synkronisere med %1 først."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
-msgstr "Du er her"
+msgid "You are here:"
+msgstr "Du er her:"
 
 #: templates/messages.tmpl:107
 msgid ""

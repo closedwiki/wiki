@@ -2976,8 +2976,8 @@ msgid ""
 msgstr "Vai pure avanti con l'edit ameno che tu non voglia modificare i dati contenuti nel form allegato alla pagina. Se %1 ha realmente _salvato_ mentre stavi editando, i tuoi cambiamenti verranno comunque inclusi e niente verrà perso. I dati del form invece non possono essere facilmente mantenuti. così in questo caso ti raccomando di controllare per prima cosa con %1"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
-msgstr "Sei qui"
+msgid "You are here:"
+msgstr "Sei qui:"
 
 #: templates/messages.tmpl:107
 msgid ""

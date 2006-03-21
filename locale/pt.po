@@ -3200,8 +3200,8 @@ msgstr ""
 "é recomendável que você verifique com %1 primeiro."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
-msgstr "Você está aqui"
+msgid "You are here:"
+msgstr "Você está aqui:"
 
 #: templates/messages.tmpl:107
 msgid ""

@@ -3091,8 +3091,8 @@ msgstr "Normaler Weise können Sie einfach editieren, solange Sie nicht das "
 "sollten."
 
 #:twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
-msgstr "Sie sind hier"
+msgid "You are here:"
+msgstr "Sie sind hier:"
 
 #:templates/messages.tmpl:107
 msgid ""

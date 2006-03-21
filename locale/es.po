@@ -3182,8 +3182,8 @@ msgstr ""
 "compruebe primero con %1."
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
-msgstr "Esta aqui"
+msgid "You are here:"
+msgstr "Esta aqui:"
 
 #: templates/messages.tmpl:107
 msgid ""

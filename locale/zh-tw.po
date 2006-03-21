@@ -3030,7 +3030,7 @@ msgstr ""
 "建議您先和 %1 聯繫。"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
+msgid "You are here:"
 msgstr "您在這裏："
 
 #: templates/messages.tmpl:107

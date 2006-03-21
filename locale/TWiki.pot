@@ -2918,7 +2918,7 @@ msgid ""
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
+msgid "You are here:"
 msgstr ""
 
 #: templates/messages.tmpl:107

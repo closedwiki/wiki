@@ -3031,7 +3031,7 @@ msgstr ""
 "建议您先和 %1 联系。"
 
 #: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
-msgid "You are here"
+msgid "You are here:"
 msgstr "您在这里："
 
 #: templates/messages.tmpl:107
