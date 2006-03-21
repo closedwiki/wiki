@@ -26,6 +26,7 @@ use TWiki;
 use Email::Folder;
 use Email::FolderType::Net;
 use Email::MIME;
+use Email::Delete;
 use Time::ParseDate;
 use TWiki::Contrib::FuncUsersContrib;
 use Error qw( :try );
@@ -105,6 +106,7 @@ sub processInbox {
     print STDERR "Process $ftype folder $box->{folder}\n" if $this->{debug};
 
     my $folder = new Email::Folder( $box->{folder} );
+
     my $user;
     my %kill;
 
@@ -123,7 +125,22 @@ sub processInbox {
     my $num = -1; # message number
     while( ($mail = $folder->next_message()) ) {
         $num++;
-        $mail = new Email::MIME( $mail->as_string() );
+
+        my $received = 0;
+        foreach my $receipt ($mail->header('Received')) {
+            if( $receipt =~ /; (.*?)$/ ) {
+                $receipt = Time::ParseDate::parsedate( $1 );
+                $received = $receipt if $receipt > $received;
+            }
+        }
+        $received ||= time();
+        # remove the Received: headers, which foul up the MIME
+        # parser for unknown reasons :-(
+        $mail->header_set('Received', '');
+
+        my $s = $mail->as_string();
+        $mail = new Email::MIME( $s );
+
         # Try to get the target topic by
         #    1. examining the "To" address to see if it is a valid web.wikiname (if
         #       enabled in config)
@@ -138,6 +155,7 @@ sub processInbox {
         print STDERR "Message ",$mail->header('Subject'),"\n" if $this->{debug};
 
         my $from = $mail->header('From');
+
         $from =~ s/^.*<(.*)>.*$/$1/;
         $user = TWiki::Contrib::FuncUsersContrib::lookupUser( email => $from );
 
@@ -193,14 +211,6 @@ sub processInbox {
             next unless $topic;
         }
 
-        # scalar context gives first in list
-        my $received = $mail->header('Received');
-        if( $received ) {
-            $received =~ s/^.*; (.*?)$/$1/;
-            $received = Time::ParseDate::parsedate( $received ) || time();
-        } else {
-            $received = time();
-        }
         if( $received > $this->{lastMailIn} ) {
             my $err = '';
             unless( $this->{session}->{store}->webExists( $web )) {
@@ -210,6 +220,7 @@ sub processInbox {
 
                 my @attachments = ();
                 my $body = '';
+
                 _extract( $mail, \$body, \@attachments );
 
                 print "Received mail from $sender for $web.$topic\n";
@@ -238,36 +249,22 @@ sub processInbox {
         }
     }
 
-    if( $ftype eq 'POP3' ) {
-        # HACK to overcome lack of Email::Delete::POP3 - it would be smarter
-        # to give CPAN an impl of Email::Delete::POP3, but this is quicker.
-        # It's a hack because _folder is Not public.
-        foreach my $id ( reverse sort values %kill ) {
-            $folder->{_folder}->{_server}->delete( $id );
-        }
-        # must quit, otherwise the object will go out of scope and the
-        # folder will be reset before the connection is closed.
-        $folder->{_folder}->{_server}->quit();
-        $folder->{_folder}->{_server} = undef; # to reopen if needed again
+    eval 'use Email::Delete';
+    if( $@ ) {
+        TWiki::writeWarning( "Cannot delete from inbox: $@\n" );
     } else {
-        eval 'use Email::Delete';
-        if( $@ ) {
-            TWiki::writeWarning( "Cannot delete from inbox: $@\n" );
-        } else {
-            # fall back to Email::Delete (which doesn't support POP3)
-            Email::Delete::delete_message
-                ( from => $box->{folder},
-                  matching =>
-                    sub {
-                        my $test = shift;
-                        if( defined $kill{$test->header('Message-ID')} ) {
-                            print STDERR "Delete ",$test->header('Message-ID'),"\n"
-                              if $this->{debug};
-                            return 1;
-                        }
-                        return 0;
-                    } );
-        }
+        Email::Delete::delete_message
+            ( from => $box->{folder},
+              matching =>
+                sub {
+                    my $test = shift;
+                    if( defined $kill{$test->header('Message-ID')} ) {
+                        print STDERR "Delete ",$test->header('Message-ID'),"\n"
+                          if $this->{debug};
+                        return 1;
+                    }
+                    return 0;
+                } );
     }
 }
 
