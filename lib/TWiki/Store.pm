@@ -576,10 +576,10 @@ sub getWorkArea {
 
 =pod
 
----++ ObjectMethod getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  ) -> \@diffArray
+---++ ObjectMethod getRevisionDiff ( $user, $web, $topic, $rev1, $rev2, $contextLines  ) -> \@diffArray
 
 Return reference to an array of [ diffType, $right, $left ]
-
+   * =$user= - the user object, or undef to suppress access control checks
    * =$web= - the web
    * =$topic= - the topic
    * =$rev1= Integer revision number
@@ -589,9 +589,41 @@ Return reference to an array of [ diffType, $right, $left ]
 =cut
 
 sub getRevisionDiff {
-    my( $this, $web, $topic, $rev1, $rev2, $contextLines ) = @_;
+    my( $this, $user, $web, $topic, $rev1, $rev2, $contextLines ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($contextLines)) if DEBUG;
+    if( $user ) {
+        my $r1;
+        try {
+            # Make sure both revs are readable.
+            $r1 = $this->readTopicRaw( $user, $web, $topic, $rev1 );
+        } catch TWiki::AccessControlException with {
+            $r1 = undef;
+        };
+        my $r2;
+        try {
+            $r2 = $this->readTopicRaw( $user, $web, $topic, $rev2 );
+        } catch TWiki::AccessControlException with {
+            $r2 = undef;
+        };
+        my $rd;
+        if( !defined( $r1 )) {
+            $rd = [[ '-', " *Revision $rev1 is unreadable* ", '' ]];
+            if( !defined( $r2 )) {
+                push( @$rd, [ '+', '', " *Revision $rev2 is unreadable* " ] );
+            } else {
+                foreach ( split( /\r?\n/, $r2 )) {
+                    push( @$rd, [ '+', '', $_ ] );
+                }
+            }
+        } elsif( !defined( $r2 )) {
+            $rd = [[ '+', '', " *Revision $rev2 is unreadable* " ]];
+            foreach ( split( /\r?\n/, $r1 )) {
+                push( @$rd, [ '-', $_, '' ] );
+            }
+        }
+        return $rd if $rd;
+    }
 
     my $rcs = $this->_getHandler( $web, $topic );
     return $rcs->revisionDiff( $rev1, $rev2, $contextLines );

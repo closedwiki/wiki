@@ -268,8 +268,8 @@ sub getTopicPreferencesValue {
 =pod
 
 ---++ getTextPreferencesValue( $key, $text, $web, $topic ) -> $value
-Get a preference value from the settings in the text. The parsed
-values are cached against the web, topic.
+Get a preference value from the settings in the text. The values are
+*not* cached.
 
 =cut
 
@@ -280,12 +280,11 @@ sub getTextPreferencesValue {
 
     my $wtn = $web.'.'.$topic;
 
-    unless( $this->{TEXT}{$wtn} ) {
-        $this->{TEXT}{$wtn} =
-          new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC' );
-        $this->{TEXT}{$wtn}->loadPrefsFromText( $text, $web, $topic );
-    }
-    return $this->{TEXT}{$wtn}->{values}{$key};
+    my $cache = 
+      new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC' );
+    $cache->loadPrefsFromText( $text, $web, $topic );
+
+    return $cache->{values}{$key};
 }
 
 =pod

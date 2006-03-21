@@ -1584,6 +1584,7 @@ In non-tml, lines are truncated to 70 characters. Differences are shown using + 
 sub summariseChanges {
     my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
+    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
     my $summary = '';
     my $store = $this->{session}->{store};
 

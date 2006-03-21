@@ -452,23 +452,23 @@ sub diff {
     do {
         my $diff = $difftmpl;
         $diff =~ s/%REVTITLE1%/$r1/go;
+
         my $rInfo = '';
+        my $text;
         if ( $r1 > $r2 + 1) {
-        	$rInfo = $session->{i18n}->maketext("Changes from r[_1] to r[_2]", $r2, $r1);
+            $rInfo = $session->{i18n}->maketext(
+                "Changes from r[_1] to r[_2]", $r2, $r1);
         } else {
-	        $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, undef, $r1, '$date - $wikiusername' );
+            $rInfo = $session->{renderer}->renderRevisionInfo(
+                $webName, $topic, undef, $r1, '$date - $wikiusername' );
         }
         # eliminate white space to prevent wrap around in HR table:
         $rInfo =~ s/\s+/&nbsp;/g;
+        my $diffArrayRef = $session->{store}->getRevisionDiff(
+            $session->{user}, $webName, $topic, $r2, $r1, $contextLines );
+        $text = _renderRevisionDiff( $session, $webName, $topic,
+                                     $diffArrayRef, $renderStyle );
         $diff =~ s/%REVINFO1%/$rInfo/go;
-        my $diffArrayRef = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
-        # $text = $session->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
-        # if ( $renderStyle eq "raw" ) {
-        #     $text = CGI::code($text);
-        # } else {
-        #    my $diffArray = parseRevisionDiff( $text );
-        my $text = _renderRevisionDiff( $session, $webName, $topic, $diffArrayRef, $renderStyle );
-        #            }
         $diff =~ s/%TEXT%/$text/go;
         $page .= $diff;
         $r1 = $r1 - 1;

@@ -34,6 +34,7 @@ use TWiki::UI;
 use TWiki::Merge;
 use TWiki::Time;
 use Assert;
+use Error qw( :try );
 
 # Command handler for changes command
 sub changes {
@@ -69,30 +70,30 @@ sub changes {
         my( $changedTopic, $login, $time, $rev ) = split( /\t/, $change );
         unless( $done{$changedTopic} ) {
             next unless $session->{store}->topicExists( $webName, $changedTopic );
-            my $thisChange = $eachChange;
-            $thisChange =~ s/%TOPICNAME%/$changedTopic/go;
-            my $wikiuser = '';
-            my $u = $session->{users}->findUser( $login );
-            $wikiuser = $u->webDotWikiName() if $u;
-            $thisChange =~ s/%AUTHOR%/$wikiuser/go;
-            $time = TWiki::Time::formatTime( $time );
-            $rev = 1 unless $rev;
-            my $srev = 'r' . $rev;
-            if( $rev == 1 ) {
-                $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
-            }
-            $thisChange =~ s/%TIME%/$time/g;
-            $thisChange =~ s/%REVISION%/$srev/go;
-            $thisChange = $session->{renderer}->getRenderedVersion
-              ( $thisChange, $webName, $changedTopic );
 
-            #had to remove the diff's as it was causing problems with unmatched html tags
-            my $summary = 
-              $session->{renderer}->summariseChanges( $query->{user},
-                                                      $webName, $changedTopic,
-                                                      $rev );
-            $thisChange =~ s/%TEXTHEAD%/$summary/go;
-            $page .= $thisChange;
+            try {
+                my $summary = $session->{renderer}->summariseChanges(
+                    $session->{user}, $webName, $changedTopic, $rev );
+                my $thisChange = $eachChange;
+                $thisChange =~ s/%TOPICNAME%/$changedTopic/go;
+                my $u = $session->{users}->findUser( $login );
+                my $wikiuser = $u ? $u->webDotWikiName() : '';
+                $thisChange =~ s/%AUTHOR%/$wikiuser/go;
+                $time = TWiki::Time::formatTime( $time );
+                $rev = 1 unless $rev;
+                my $srev = 'r' . $rev;
+                if( $rev == 1 ) {
+                    $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
+                }
+                $thisChange =~ s/%TIME%/$time/g;
+                $thisChange =~ s/%REVISION%/$srev/go;
+                $thisChange = $session->{renderer}->getRenderedVersion
+                  ( $thisChange, $webName, $changedTopic );
+                $thisChange =~ s/%TEXTHEAD%/$summary/go;
+                $page .= $thisChange;
+            } catch TWiki::AccessControlException with {
+                # ignore changes we can't see
+            };
             $done{$changedTopic} = 1;
         }
     }
