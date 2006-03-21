@@ -23,6 +23,7 @@ package TWiki::Plugins::CacheContentPlugin;
 
 # Always use strict to enforce variable scoping
 use strict;
+use warnings;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
@@ -85,15 +86,20 @@ sub afterSaveHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 
-    $_[0] =~ s/%STARTCACHE{"(.*?)"}%(.*?)%ENDCACHE%/&handleCache($1, $2, $_[2], $_[1])/ges;
+    $_[0] =~ s/%STARTCACHE{(.*)}%(.*?)%ENDCACHE%/&handleCache($1, $2, $_[2], $_[1])/ges;
     $savedAlready = 0;
 }
 
 sub handleCache {
-    my ($fileName, $content, $web, $topic) = @_;
+    my ($attr, $content, $web, $topic) = @_;
     my $workArea = TWiki::Func::getWorkArea($pluginName);
-    my $fullName = $workArea . '/' . $fileName;
 
+    my %params = TWiki::Func::extractParameters($attr);
+    my $filename = $params{_DEFAULT} || $params{filename};
+    my $saveTopic = $params{saveTopic} || $topic;
+    my $saveWeb = $params{saveWeb} || $web;
+
+    my $fullName = $workArea . '/' . $filename;
     $content = TWiki::Func::expandCommonVariables($content, $topic, $web);
     unless ($keepPars) {
 	$content =~ s/<p\s*\/>/\r/;
@@ -103,7 +109,7 @@ sub handleCache {
 
     TWiki::Func::saveFile($fullName, $content);
 
-    TWiki::Func::saveAttachment($web, $topic, $fileName, { file => $fullName });
+    TWiki::Func::saveAttachment($saveWeb, $saveTopic, $filename, { file => $fullName });
     return "";
 }
 
