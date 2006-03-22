@@ -658,7 +658,7 @@ msgstr "Alle pagina's in %1"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
 msgid "Allow non <nop>WikiWord for the new topic name"
-msgstr "Een niet-<nop>WikiWord mag gebruikt worden als paginanaam"
+msgstr "Sta een niet-<nop>WikiWord toe als paginanaam"
 
 #: templates/messages.tmpl:211
 msgid ""
@@ -1052,7 +1052,7 @@ msgstr "Nieuwe pagina"
 
 #: data/TWiki/WebTopicCreator.txt:15
 msgid "Create New Topic in %1 Web"
-msgstr "Nieuwe pagina in %1 Web aanmaken"
+msgstr "Maak nieuwe pagina aan in %1 Web"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:67
 msgid "Create a link to the attached file"
@@ -1077,7 +1077,7 @@ msgstr "Creëer persoonlijk menu"
 
 #: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
 msgid "Create this topic"
-msgstr "Maak deze pagina ana"
+msgstr "Maak deze pagina aan"
 
 #: data/TWiki/TWikiRegistration.txt:275
 msgid ""
@@ -2243,12 +2243,12 @@ msgstr "Revisie:"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:26
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
-msgstr "B = Bewaren, S = Stil bewaren, D = Bewaren en doorgaan, W = Weggooien"
+msgstr "B = Bewaren, S = Stil bewaren, D = Bewaren en verder bewerken, W = Weggooien"
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
-"B = Bewaren, S = Stil bewaren, D = Bewaren en doorgaan, V = Voorvertoning, A "
+"B = Bewaren, S = Stil bewaren, D = Bewaren en verder bewerken, V = Voorvertoning, A "
 "= Afbreken"
 
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:28
@@ -2711,7 +2711,7 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:53
 msgid "There is no size limit for uploaded files."
-msgstr "Er is geen uploadlimiet."
+msgstr "Er is geen upload limiet."
 
 #: templates/messages.tmpl:271
 msgid "There should be a line that includes %1, look for %2 (or %3)"
@@ -3514,7 +3514,7 @@ msgstr "value='Afbreken' accesskey='a'"
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
 msgid "value='Checkpoint' accesskey='k'"
-msgstr "value='Bewaren en doorgaan' accesskey='d'"
+msgstr "value='Bewaren en verder bewerken' accesskey='d'"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
 msgid "value='Discard' accesskey='d'"
