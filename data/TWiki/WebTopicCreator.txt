@@ -1,39 +1,79 @@
 %META:TOPICINFO{author="TWikiContributor" date="1131431859" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
-<script language="JavaScript">
-<!--
-function capitalize(value) {
- var sIn = value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); if( ch!=' ' ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } } sOut+=ch; if( ch==' ' ) { chgUpper = true; } else { chgUpper = false; }} return sOut; 
+<script type="text/javascript">
+//<![CDATA[
+function capitalize(inForm, inValue) {
+  // only capitalize if user wants a WikiWord
+  if (inForm.nonwikiword.checked == true) {
+    return removeSpaces(inValue);
+  }
+  var sIn = inValue;
+  var sOut = '';
+  var chgUpper = true;
+  for ( var i = 0; i < sIn.length; i++ ) {
+    var ch = sIn.charAt( i );
+    if( ch!=' ' ) {
+      if( chgUpper ) {
+        ch = ch.toUpperCase();
+        chgUpper = false;
+      }
+    }
+    if( ch==' ' ) {
+      chgUpper = true;
+    } else {
+      chgUpper = false;
+    }
+    sOut += ch;
+  }
+  return removeSpaces(sOut); 
 }
-function canSubmit(form) {
- form.topic.value=capitalize(form.topic.value);
- return true;
+function removeSpaces(inValue) {
+  var sIn = inValue;
+  var sOut = '';
+  for ( var i = 0; i < sIn.length; i++ ) {
+    var ch = sIn.charAt( i );
+    if( ch==' ' ) {
+      chgUpper = true;
+      continue;
+    }
+    sOut += ch;
+  }
+  return sOut;
 }
-//-->
+function canSubmit(inForm) {
+  inForm.topic.value = capitalize(inForm, inForm.topic.value);
+  // Use the negative value of the checkbox. This is the ugly way but must be used until edit script parameter =allowsnonwikiword= is implemented.
+  inForm.onlywikiname.value = (inForm.nonwikiword.checked == true) ? "off" : "on";
+  return true;
+}
+//]]>
 </script>
-<form name="new" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onSubmit="return canSubmit(this);">
+<form name="newtopic" action="%SCRIPTURLPATH{edit}%/%BASEWEB%/" onsubmit="return canSubmit(this);">
 ---+ %MAKETEXT{"Create New Topic in [_1] Web" args="<nop>%BASEWEB%"}%
-<table><tr><td>
-%MAKETEXT{"Topic name:"}%
-</td><td>
-
-<input type="text" name="topic" size="40" value="" onBlur="this.value=capitalize(this.value);" />
+<div class="twikiFormSteps">
+<div class="twikiFormStep">
+---+++ %MAKETEXT{"Topic name:"}%
+<p><input type="text" class="twikiInputField" name="topic" size="40" value="" onblur="this.value=capitalize(this.form, this.value);" />
 <!-- TODO: move JS to a separate file and make it callable on click of the button too -->
 <!-- TODO: blank out all the irrelevant links: Edit, Compose, Attach, Printable, ... Raw text, versions, History, More topic actions: could this be a CSS? -->
-&nbsp;<input type="submit" class="twikiSubmit" value="Create" />
-</td></tr><tr><td>
-%MAKETEXT{"Topic parent:"}%
-</td><td>
+</p>
+<p><input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label></p>
+</div><!--/twikiFormStep-->
+<div class="twikiFormStep">
+---+++ %MAKETEXT{"Topic parent:"}%
 <select name="topicparent" size="10">
-<option value="%URLPARAM{ "parent" default="" }%" selected="selected">%URLPARAM{ "parent" default="%MAKETEXT{"(no parent, orphaned topic)"}%" }%</option>
-%SEARCH{ "\.*" regex="on" scope="topic" nosearch="on" nototal="on" format="<option>$topic</option>" }%
+%TOPICLIST{"<option $marker value='$name'>$name</option>" separator=" " selection="%URLPARAM{ "parent" default="%MAKETEXT{"(no parent, orphaned topic)"}%" }%"}%
 <option value="">%MAKETEXT{"(no parent, orphaned topic)"}%</option>
 </select>
-</td></tr></table>
-<input type="hidden" name="onlywikiname" value="on" />
+</div><!--/twikiFormStep-->
+<div class="twikiFormStep twikiLast">
+<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create"}%' />
+</div><!--/twikiFormStep-->
+</div><!--/twikiFormSteps-->
+<input type="hidden" name="onlywikiname" value="off" />
 <input type="hidden" name="onlynewtopic" value="on" />
 </form>
-
-%MAKETEXT{"To create a new topic, enter a [_1].WikiWord for the topic name, select a topic parent and click 'Create.'" args="%TWIKIWEB%"}%
-
-%MAKETEXT{"Once you have created the topic, consider adding links in related topics to the new topic so that there are more ways people can discover it."}%
+%BR%
+<div class="twikiHelp">
+%ICON{info}% %MAKETEXT{"Once you have created the topic, consider adding links in related topics to the new topic so that there are more ways people can discover it."}%
+</div>
