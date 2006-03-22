@@ -103,7 +103,7 @@ sub buildNewTopic {
 
     if( $topicExists ) {
         ( $prevMeta, $prevText ) =
-          $store->readTopic( undef, $webName, $topic, undef );
+          $store->readTopic( $user, $webName, $topic, undef );
         if( $prevMeta ) {
             foreach my $k ( keys %$prevMeta ) {
                 unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
@@ -117,7 +117,7 @@ sub buildNewTopic {
           $session->normalizeWebTopicName( $templateweb, $templatetopic );
 
         ( $templateMeta, $templateText ) =
-          $store->readTopic( $session->{user}, $templateweb,
+          $store->readTopic( $user, $templateweb,
                              $templatetopic, undef );
         $templateText = '' if $query->param( 'newtopic' ); # created by edit
         $templateText =
