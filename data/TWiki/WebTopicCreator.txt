@@ -58,6 +58,7 @@ function canSubmit(inForm) {
 <!-- TODO: blank out all the irrelevant links: Edit, Compose, Attach, Printable, ... Raw text, versions, History, More topic actions: could this be a CSS? -->
 </p>
 <p><input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" /><label for="nonwikiword">%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%</label></p>
+<p class="twikiGrayText">%MAKETEXT{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('[_1]','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new topic name, otherwise automatic linking may not work. Characters not allowed in topic names, such as spaces will automatically be removed." args="%TWIKIWEB%,%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/WikiWord"}%</p>
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep">
 ---+++ %MAKETEXT{"Topic parent:"}%
