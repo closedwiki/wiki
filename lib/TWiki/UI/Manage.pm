@@ -131,27 +131,6 @@ sub _isValidHTMLColor {
 
 }
 
-=pod
-
----++ StaticMethod rename( $session )
-
-| =action= | one of =createweb=, =bulkRegister=, =deleteUserAccount=, =editSettings=, =saveSettings= | _none_ |
-
-| =*createweb*= |||
-| =newweb= |
-| =baseweb= |
-| =newtopic= |
-| =webbgcolor= |
-| =sitemapwhat= |
-| =sitemapuseto= |
-| =nosearchall= |
-
-| =topicName= |||
-| =webName= |||
-| =user= |||
-
-=cut
-
 sub _createWeb {
     my $session = shift;
 
@@ -368,6 +347,9 @@ sub rename {
 
     # Has user selected new name yet?
     if( ! $newTopic || $confirm ) {
+        # Must be able to view the source to rename it
+        TWiki::UI::checkAccess( $session, $oldWeb, $oldTopic,
+                                'view', $session->{user} );
         _newTopicScreen( $session,
                          $oldWeb, $oldTopic,
                          $newWeb, $newTopic,
