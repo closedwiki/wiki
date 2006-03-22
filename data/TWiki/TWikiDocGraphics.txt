@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1127433585" format="1.1" version="$Rev$"}%
 ---+!! TWiki Documentation Graphics and Filetype icons
 
 This is the TWiki icon library. The graphics can be used in topics and by web applications. 
@@ -157,6 +158,7 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 %TABLE{databg="#eaeaea, #ffffff" headerbg="#ffffff" headeralign="left"}%
 | *&nbsp;* | *File Name* | *Description* | *Write...* |
 | *<img src="%ATTACHURLPATH%/home.gif" alt="Home" title="Home" />*  | =home.gif= | Home | =%<nop>ICON{home}%= |
+| *<img src="%ATTACHURLPATH%/external.gif" alt="External site" title="External site" />*  | =external.gif= | External site | =%<nop>ICON{external}%= |
 | *<img src="%ATTACHURLPATH%/arrowdot.gif" alt="Meet here (arrows to red dot)" title="Meet here (arrows to red dot)" />* | =arrowdot.gif= | Meet here (arrows to red dot) | =%<nop>ICON{arrowdot}%= |
 | *<img src="%ATTACHURLPATH%/left.gif" alt="Left" title="Left" />*  | =left.gif= | Left | =%<nop>ICON{left}%= |
 | *<img src="%ATTACHURLPATH%/right.gif" alt="Right" title="Right" />*  | =right.gif= | Right | =%<nop>ICON{right}%= |
@@ -176,12 +178,6 @@ __Contributors:__ The icons on this page were originally designed by TWiki:Main.
 | *<img src="%ATTACHURLPATH%/go_forward.gif" alt="Go forward" title="Go forward" />*  | =go_forward.gif= | Go forward | =%<nop>ICON{go_forward}%= |
 | *<img src="%ATTACHURLPATH%/go_ff.gif" alt="Go fast forward" title="Go fast forward" />*  | =go_ff.gif= | Go fast forward | =%<nop>ICON{go_ff}%= |
 | *<img src="%ATTACHURLPATH%/go_end.gif" alt="Go to end" title="Go to end" />*  | =go_end.gif= | Go to end | =%<nop>ICON{go_end}%= |
-| *<img src="%ATTACHURLPATH%/toggleclose.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />*  | =toggleclose.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose}%= |
-| *<img src="%ATTACHURLPATH%/toggleclose-small.gif" alt="Close toggle, Twisty close toggle" title="Close toggle, Twisty close toggle" />*  | =toggleclose-small.gif= | Close toggle, Twisty close toggle | =%<nop>ICON{toggleclose-small}%= |
-| *<img src="%ATTACHURLPATH%/toggleopen.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />*  | =toggleopen.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen}%= |
-| *<img src="%ATTACHURLPATH%/toggleopen-small.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />*  | =toggleopen-small.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopen-small}%= |
-| *<img src="%ATTACHURLPATH%/toggleopenleft.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />*  | =toggleopenleft.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopenleft}%= |
-| *<img src="%ATTACHURLPATH%/toggleopenleft-small.gif" alt="Open toggle, Twisty open toggle" title="Open toggle, Twisty open toggle" />*  | =toggleopenleft-small.gif= | Open toggle, Twisty open toggle | =%<nop>ICON{toggleopenleft-small}%= |
 
 ---+++ %ICON{toggleclose}% Interface icons
 
@@ -329,6 +325,7 @@ Filetype icons are used by the attachment table and are seldom used in topics. W
 %META:FILEATTACHMENT{name="eml.gif" attr="" autoattached="1" comment="" date="1128926988" path="eml.gif" size="359" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="empty.gif" attr="" autoattached="1" comment="" date="1128926990" path="empty.gif" size="100" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="exe.gif" attr="" autoattached="1" comment="" date="1128926991" path="exe.gif" size="372" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="external.gif" attr="" autoattached="1" comment="" date="1128926991" path="external.gif" size="79" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="fla.gif" attr="" autoattached="1" comment="" date="1128926994" path="fla.gif" size="378" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="flag-gray-small.gif" attr="" autoattached="1" comment="" date="1128926976" path="flag-gray-small.gif" size="148" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="flag-gray.gif" attr="" autoattached="1" comment="" date="1128926976" path="flag-gray.gif" size="125" user="UnknownUser" version=""}%
