@@ -80,8 +80,8 @@ sub edit {
     my $editaction = lc($query->param( 'action' )) || "";
 
     my $saveCmd = $query->param( 'cmd' ) || '';
-    my $onlyWikiName = $query->param( 'onlywikiname' ) || '';
-    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
+    my $onlyWikiName = TWiki::isTrue( $query->param( 'onlywikiname' ));
+    my $onlyNewTopic = TWiki::isTrue( $query->param( 'onlynewtopic' ));
     my $formTemplate  = $query->param( 'formtemplate' ) || '';
     my $templateTopic = $query->param( 'templatetopic' ) || '';
     # apptype is undocumented legacy
