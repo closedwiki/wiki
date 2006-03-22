@@ -68,7 +68,7 @@ function canSubmit(inForm) {
 </select>
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep twikiLast">
-<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create"}%' />
+<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create this topic"}%' />
 </div><!--/twikiFormStep-->
 </div><!--/twikiFormSteps-->
 <input type="hidden" name="onlywikiname" value="off" />
