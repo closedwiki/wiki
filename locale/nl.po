@@ -529,8 +529,7 @@ msgstr ""
 #: templates/messages.tmpl:293
 msgid "A =.txt= extension is appended to some filenames for security reasons"
 msgstr ""
-"Een <code>.txt</code>-extensie is bijgevoegd aan enkele bestandsnamen om "
-"veiligheidsredenen"
+"Een <code>.txt</code>-extensie is om veiligheidsredenen aan enkele " "bestandsnamen toegevoegd"
 
 #: templates/messages.tmpl:121
 msgid ""
