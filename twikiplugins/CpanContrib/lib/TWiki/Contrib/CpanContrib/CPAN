@@ -51,7 +51,9 @@
 	qw( Tie::Array::Sorted Time::Piece ),
 	qw( Plucene Plucene-SearchEngine-1.1 ),		# SearchEnginePluceneAddOn
 	qw( Class::Factory Class::Observable DBI DBD::Mock Params::Validate DateTime::Locale Class::Singleton DateTime::TimeZone DateTime DateTime::Format::Strptime Devel::StackTrace Exception::Class Log::Dispatch Log::Log4perl Workflow ),
-	# (DBD::CSV or SQL::Statement for Log::Log4perl tests)
+		# (DBD::CSV or SQL::Statement for Log::Log4perl tests)
+	qw( DBD::SQLite Math::Units Parse::RecDescent URI::Find POE::Component::IRC Date::Parse ),	# PipSqueek
+		# (Class::Accessor, DBI, POE already installed) 
 );
 
 #$, = "\n";
