@@ -1521,6 +1521,20 @@ sub _includeUrl {
     my $user = '';
     my $pass = '';
 
+    return $this->inlineAlert( 'alerts', 'urls_not_allowed' )
+      unless $TWiki::cfg{INCLUDE}{AllowURLs};
+
+    require URI;
+
+    # Do not permit a recursive include of the URL we are processing! This
+    # is not a complete solution, just a sanity check. Use URI to perform
+    # a canonical comparison.
+    my $from = URI->new($this->{cgiQuery}->url().$this->{cgiQuery}->path_info());
+    my $incl = URI->new($theUrl);
+    if( $incl->eq( $from )) {
+        return $this->inlineAlert( 'alerts', 'self_ref_url', $theUrl );
+    }
+
     # For speed, read file directly if URL matches an attachment directory
     if( $theUrl =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
         my $web = $1;
