@@ -4,8 +4,16 @@
 
 %TMPL:DEF{"leftbar"}%<div id="patternLeftBar"><div id="patternClearHeaderLeft"></div>
 <div id="patternLeftBarContents">
-<div class="patternWebIndicator"><b><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><nop>%WEB%</a></b></div>
-%INCLUDE{"%WEB%.WebLeftBar"}%</div><!-- /patternLeftBarContents--></div><!-- /patternLeftBar-->%TMPL:END%
+%TMPL:P{"webleftbarindicator"}%
+%TMPL:P{"webleftbar"}%</div><!-- /patternLeftBarContents--></div><!-- /patternLeftBar-->%TMPL:END%
+
+
+
+%TMPL:DEF{"webleftbarindicator"}%<div class="patternWebIndicator"><b><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><nop>%WEB%</a></b></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"webleftbar"}%%INCLUDE{"%WEB%.WebLeftBar"}%%TMPL:END%
 
 
 
