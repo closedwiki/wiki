@@ -240,14 +240,13 @@ sub view {
 
     # extract header and footer from the template, if there is a
     # %TEXT% tag marking the split point
-    my $start = '<div id="twikiTopicHTML">';
-    my $end = '</div>';
+    my( $start, $end );
     if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
-        $start = $1.$start;
-        $end = $end.$2;
+        $start = $1;
+        $end = $2;
     } else {
-        $start = $tmpl.$start;
-#        $end = '';
+        $start = $tmpl;
+        $end = '';
 	$text = '';
     }
 
