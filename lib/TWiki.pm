@@ -1434,7 +1434,7 @@ sub _writeReport {
 sub _removeNewlines {
     my( $theTag ) = @_;
     #$theTag =~ s/[\r\n]+//gso;
-    $theTag =~ tr/[\r\n]+//d;
+    $theTag =~ tr/\r\n//;
     return $theTag;
 }
 
@@ -1756,9 +1756,9 @@ sub inlineAlert {
         }
 
     } else {
-        $text = CGI::h1('TWiki Installation Error')
-          . 'Template "'.$template.'" not found.'.CGI::p()
-            . 'Check the configuration setting for {TemplateDir}';
+        $text = join "", CGI::h1('TWiki Installation Error'),
+          'Template "', $template, '" not found.', CGI::p(),
+           'Check the configuration setting for {TemplateDir}';
     }
 
     return $text;
