@@ -67,7 +67,7 @@ sub statistics {
     # web to redirect to after finishing
     my $destWeb = $TWiki::cfg{UsersWebName};
     my $logDate = $session->{cgiQuery}->param( 'logdate' ) || '';
-    $logDate =~ s/[^0-9]//g;  # remove all non numerals
+    $logDate =~ s/[\D]//go;  # remove all non numerals
     $debug = $session->{cgiQuery}->param( 'debug' );
 
     unless( $session->inContext( 'command_line' )) {
@@ -87,7 +87,7 @@ sub statistics {
 
     my $logMonth;
     my $logYear;
-    if ( $logDate =~ /^(\d\d\d\d)(\d\d)$/ ) {
+    if ( $logDate =~ /^(\d\d\d\d)(\d\d)$/o ) {
         $logYear = $1;
         $logMonth = $TWiki::Time::ISOMONTH[ ( $2 % 12 ) - 1 ];
     } else {
@@ -99,7 +99,7 @@ sub statistics {
     _printMsg( $session, "* Statistics for $logMonthYear" );
 
     my $logFile = $TWiki::cfg{LogFileName};
-    $logFile =~ s/%DATE%/$logDate/g;
+    $logFile =~ s/%DATE%/$logDate/g;o
 
     unless( -e $logFile ) {
         _printMsg( $session, "!Log file $logFile does not exist; aborting" );
@@ -330,7 +330,7 @@ sub _processWeb {
     my $statTopContributors = '';
     if( @topViews ) {
         $statTopViews = join( CGI::br(), @topViews );
-        $topViews[0] =~ s/[\[\]]*//g;
+        $topViews[0] =~ tr/[]//;
         _printMsg( $session, '  - top view: '.$topViews[0] );
     }
     if( @topContribs ) {
