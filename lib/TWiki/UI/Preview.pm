@@ -74,12 +74,12 @@ sub preview {
     my $saveCmd = $query->param( 'cmd' ) || '';
     $tmpl =~ s/%CMD%/$saveCmd/go;
 
-    $tmpl =~ s/%FORMTEMPLATE%/$form/g;
+    $tmpl =~ s/%FORMTEMPLATE%/$form/go;
 
     my $parent = $meta->get('TOPICPARENT');
     $parent = $parent->{name} if( $parent );
     $parent ||= '';
-    $tmpl =~ s/%TOPICPARENT%/$parent/g;
+    $tmpl =~ s/%TOPICPARENT%/$parent/go;
 
     $session->enterContext( 'can_render_meta', $meta );
 
