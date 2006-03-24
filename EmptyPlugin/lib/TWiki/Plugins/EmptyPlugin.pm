@@ -33,11 +33,8 @@ without prior warning, and your plugin may suddenly stop
 working.
 
 For increased performance, all handlers except initPlugin are
-disabled below. *To enable a handler* remove the leading DISABLE_ from
-the function name. For efficiency and clarity, you should comment out or
-delete the whole of handlers you don't use before you release your
-plugin (or you can put __END__ on a line of it's own and move dead
-code below that line; Perl ignores anything after __END__).
+in the documentation instead of inline.  *To enable a handler* 
+move the =cut to above the function instead of below it.
 
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
@@ -111,6 +108,15 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
+    return 1;
+}
+
+=pod
+
+    #
+    # Example code of how to get a preference value, register a tag handler
+    # and register a RESTHandler
+    #
 
     # Get plugin preferences, variables defined by:
     #   * Set EXAMPLE = ...
@@ -131,6 +137,7 @@ sub initPlugin {
     # Plugin correctly initialized
     return 1;
 }
+=cut
 
 # The function used to handle the %EXAMPLETAG{...}% tag
 # You would have one of these for each tag you want to process.
@@ -153,6 +160,8 @@ sub _EXAMPLETAG {
 
 =cut
 
+=pod
+
 ---++ earlyInitPlugin()
 
 May be used by a plugin that requires early initialization. This handler
@@ -160,11 +169,11 @@ is called before any other handler.
 
 If it returns a non-null error string, the plugin will be disabled.
 
-=cut
 
-sub DISABLE_earlyInitPlugin {
+sub earlyInitPlugin {
     return undef;
 }
+=cut
 
 =pod
 
@@ -180,14 +189,14 @@ This handler is called very early, immediately after =earlyInitPlugin=.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
-=cut
 
-sub DISABLE_initializeUserHandler {
+sub initializeUserHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $loginName, $url, $pathInfo ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -200,14 +209,15 @@ Called when a new user registers with this TWiki.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
-=cut
 
-sub DISABLE_registrationHandler {
+sub registrationHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $web, $wikiName, $loginName ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
 }
+
+=cut
 
 =pod
 
@@ -235,9 +245,8 @@ still present).
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
 
-=cut
 
-sub DISABLE_commonTagsHandler {
+sub commonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
@@ -247,6 +256,7 @@ sub DISABLE_commonTagsHandler {
     # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
     # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 }
+=cut
 
 =pod
 
@@ -268,7 +278,7 @@ handler.
 
 =cut
 
-sub DISABLE_beforeCommonTagsHandler {
+sub beforeCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
@@ -292,14 +302,14 @@ rendering of a topic.
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
 
-=cut
 
-sub DISABLE_afterCommonTagsHandler {
+sub afterCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -339,12 +349,12 @@ handler.
 
 Since TWiki::Plugins::VERSION = '1.026'
 
-=cut
 
-sub DISABLE_preRenderingHandler {
+sub preRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my( $text, $pMap ) = @_;
 }
+=cut
 
 =pod
 
@@ -358,12 +368,12 @@ handler.
 
 Since TWiki::Plugins::VERSION = '1.026'
 
-=cut
 
-sub DISABLE_postRenderingHandler {
+sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my $text = shift;
 }
+=cut
 
 =pod
 
@@ -378,14 +388,14 @@ __NOTE__: meta-data may be embedded in the text passed to this handler (using %M
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
-=cut
 
-sub DISABLE_beforeEditHandler {
+sub beforeEditHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -403,14 +413,14 @@ handler.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
-=cut
 
-sub DISABLE_afterEditHandler {
+sub afterEditHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -431,14 +441,14 @@ text format.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
-=cut
 
-sub DISABLE_beforeSaveHandler {
+sub beforeSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -456,14 +466,14 @@ __NOTE:__ meta-data is embedded in $text (using %META: tags)
 
 __Since:__ TWiki::Plugins::VERSION = '1.020'
 
-=cut
 
-sub DISABLE_afterSaveHandler {
+sub afterSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web, $error, $meta ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -481,13 +491,13 @@ will include at least the following attributes:
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
 
-=cut
 
-sub DISABLE_beforeAttachmentSaveHandler {
+sub beforeAttachmentSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ###   my( $attrHashRef, $topic, $web ) = @_;
     TWiki::Func::writeDebug( "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -504,13 +514,13 @@ will include at least the following attributes:
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
 
-=cut
 
-sub DISABLE_afterAttachmentSaveHandler {
+sub afterAttachmentSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ###   my( $attrHashRef, $topic, $web ) = @_;
     TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -536,10 +546,10 @@ If any merges are left unresolved after all plugins have been given a chance to 
 
 The merge handler is called whenever a topic is saved, and a merge is required to resolve concurrent edits on a topic.
 
-=cut
 
-sub DISABLE_mergeHandler {
+sub mergeHandler {
 }
+=cut
 
 =pod
 
@@ -560,13 +570,13 @@ using the =TWiki::Func::addToHEAD= method.
 
 __Since:__ TWiki::Plugins::VERSION 1.026
 
-=cut
 
-sub DISABLE_modifyHeaderHandler {
+sub modifyHeaderHandler {
     my ( $headers, $query ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::modifyHeaderHandler()" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -582,14 +592,14 @@ the others will be ignored.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
-=cut
 
-sub DISABLE_redirectCgiQueryHandler {
+sub redirectCgiQueryHandler {
     # do not uncomment, use $_[0], $_[1] instead
     ### my ( $query, $url ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
 }
+=cut
 
 =pod
 
@@ -604,10 +614,10 @@ This handler is called before built-in types are considered. It generates the HT
    * =$possibleValues= - the values defined as options for form field, if any. May be a scalar (one legal value) or a ref to an array (several legal values)
 Return HTML text that renders this field. If false, form rendering continues by considering the built-in types.
 
-=cut
 
-sub DISABLE_renderFormFieldForEditHandler {
+sub renderFormFieldForEditHandler {
 }
+=cut
 
 
 =pod
