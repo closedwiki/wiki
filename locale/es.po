@@ -8,12 +8,16 @@
 # Will Norris, 2005.
 # Miguel A. Bayona, mabayona@yahoo.com, 2006.
 # Will Norris, 2006.
+# Will Norris, 2006.
+# Will Norris, 2006.
+# Will Norris, 2006.
+# Will Norris, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-03-22 22:19-0800\n"
+"PO-Revision-Date: 2006-03-23 17:42-0800\n"
 "Last-Translator: Will Norris\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -228,7 +232,7 @@ msgstr "(=todas= para mostrar todas las páginas)"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:18
 #: data/TWiki/WebTopicViewTemplate.txt:18
 msgid "(More options in WebSearch)"
-msgstr "(Mas opciones en WebSearch)"
+msgstr "(Más opciones en WebSearch)"
 
 #: data/Sandbox/WebHome.txt:9
 msgid "(Use a topic name in TWiki.WikiNotation)"
@@ -294,7 +298,7 @@ msgstr "(Le identifica cara a los demás) WikiName:"
 
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:12
 msgid "(more)"
-msgstr "(mas)"
+msgstr "(más)"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:5
 msgid "(move attachment)"
@@ -396,9 +400,8 @@ msgstr ""
 "por la historia delaurión sera el comentario cuando el archivo sea enviado."
 
 #: data/TWiki/WikiSyntaxSummary.txt:8
-#, fuzzy
 msgid "*Formatting help:*"
-msgstr "Ocultar ayuda de formato"
+msgstr "*Ayuda de formato*"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:32
 msgid ""
@@ -1154,9 +1157,8 @@ msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr "¿Quiere [[%1][reiniciar la contraseña de %2]]?"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:17
-#, fuzzy
 msgid "Difference:"
-msgstr "Página con diferencias"
+msgstr "Diferencias:"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:69
 msgid "Do not show attachment in table"
@@ -1337,9 +1339,8 @@ msgid "Force new revision"
 msgstr "Forzar nueva revisión"
 
 #: data/TWiki/ChangePassword.txt:5
-#, fuzzy
 msgid "Forgotten your password?"
-msgstr "%1 para cambiar la contraseña"
+msgstr "¿Olvide tu contraseña?"
 
 #: templates/messages.tmpl:258
 msgid "Form Definition %1 missing"
@@ -1370,9 +1371,8 @@ msgstr ""
 "página</a>."
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
-#, fuzzy
 msgid "Go back"
-msgstr "Cancelar"
+msgstr "Regresar"
 
 #: templates/messages.tmpl:255
 msgid "Go back in your browser and insert information for all mandatory fields."
@@ -1443,9 +1443,8 @@ msgstr ""
 "nota de ello."
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:40
-#, fuzzy
 msgid "I forgot my password"
-msgstr "%1 para cambiar la contraseña"
+msgstr "Olvidé mi contraseña"
 
 #: data/TWiki/TWikiPreferences.txt:42
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
@@ -1737,17 +1736,16 @@ msgstr "Modificar búsqueda"
 
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
 msgid "More Actions on Topic %1"
-msgstr "Mas aciones en la página %1"
+msgstr "Más aciones en la página %1"
 
 #: data/TWiki/WikiSyntaxSummary.txt:16
-#, fuzzy
 msgid "More formatting help"
-msgstr "Ocultar ayuda de formato"
+msgstr "Más ayuda de formato"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 msgid "More topic actions..."
-msgstr "Mas acciones de página:"
+msgstr "Más acciones de página:"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:47
@@ -1755,23 +1753,20 @@ msgid "Move"
 msgstr "Mover"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:13
-#, fuzzy
 msgid "Move attachment"
-msgstr "(mover archivo adjunto)"
+msgstr "Mover archivo adjunto"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:29
-#, fuzzy
 msgid "Move attachment to web:"
-msgstr "(mover archivo adjunto)"
+msgstr "Mover archivo adjunto a la web:"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:9
 msgid "Move file attachment"
 msgstr "Mover archivo adjunto"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
-#, fuzzy
 msgid "Move to web:"
-msgstr "A la web:"
+msgstr "Mover a la web:"
 
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:25
 #, fuzzy
@@ -1809,9 +1804,8 @@ msgid "New parent web:"
 msgstr "Nueva web padre"
 
 #: data/TWiki/ChangePassword.txt:15
-#, fuzzy
 msgid "New password"
-msgstr "Reintroduzca contraseña"
+msgstr "Contraseña nueva"
 
 #: templates/messages.tmpl:87
 msgid "New topic name %1 is not a %2"
@@ -2069,7 +2063,7 @@ msgstr "Versión imprimible de esta página"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:65
 msgid "Properties"
-msgstr ""
+msgstr "Propiedades"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2348,9 +2342,8 @@ msgid "See also:"
 msgstr "Ver también:"
 
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
-#, fuzzy
 msgid "Select"
-msgstr "Seleccionar todo"
+msgstr "Seleccionar"
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:22
 #, fuzzy
@@ -2845,9 +2838,8 @@ msgid "To register as a new user, simply fill out this form:"
 msgstr "Rellene este formulario para registrarse como nuevo usuario:"
 
 #: templates/oopsleaseconflict.tmpl:15
-#, fuzzy
 msgid "To see if %1 has finished editing yet, click "
-msgstr "Para ver si %1 ya acabado de editar, pulse 'Intertarlo de Nuevo'"
+msgstr "Para ver si %1 ya acabado de editar, pulse "
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:11
 msgid "To see if %1 has finished editing yet, click 'Try Again'."
@@ -3375,7 +3367,7 @@ msgstr "búsqueda avanzada"
 
 #: data/TWiki/WikiSyntaxSummary.txt:16
 msgid "and"
-msgstr ""
+msgstr "y"
 
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:14
 msgid "change, update, previous revisions, move, delete..."
@@ -3432,7 +3424,7 @@ msgstr "administrar"
 
 #: data/Trash/WebHome.txt:10
 msgid "more..."
-msgstr "mas..."
+msgstr "más..."
 
 #: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:8
 msgid "none (remove topic parent)"
