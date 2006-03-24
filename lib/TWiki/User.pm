@@ -443,7 +443,7 @@ sub isGroup {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
-    return $this->wikiName() =~ /Group$/;
+    return $this->wikiName() =~ /Group$/o;
 }
 
 =pod
