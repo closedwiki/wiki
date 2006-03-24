@@ -404,7 +404,7 @@ sub searchWeb {
     my $recurse =       $params{'recurse'} || '';
     my $finalTerm =     $inline ? ( $params{nofinalnewline} || 0 ) : 0;
 
-    $baseWeb =~ s/\./\//go;
+    $baseWeb =~ tr#.#/#;
 
     my $session = $this->{session};
     my $renderer = $session->{renderer};
@@ -449,7 +449,7 @@ sub searchWeb {
 
     if( $webName ) {
         foreach my $web ( split( /[\,\s]+/, $webName ) ) {
-            $web =~ s#\.#/#go;
+            $web =~ tr#.#/#;
             # the web processing loop filters for valid web names,
             # so don't do it here.
             if ( $web =~ s/^-// ) {
