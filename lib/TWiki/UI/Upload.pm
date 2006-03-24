@@ -189,7 +189,7 @@ sub upload {
         # Sanitize filename
         # FIXME: Allow spaces and other chars by encoding them (and decoding on download)
         # SMELL: Safer to keep only permitted chars instead of filtering out cfg{NameFilter} chars
-        $fileName =~ s/ /_/go;                                 # Change spaces to underscore
+        $fileName =~ tr/ /_/;                                 # Change spaces to underscore
         $fileName =~ s/$TWiki::cfg{NameFilter}//goi;           # Remove problematic chars
         $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;  # Append .txt to some files
 
