@@ -1538,7 +1538,8 @@ sub getListOfWebs {
         @webList = grep { /(?:^_|\/_)/, } @webList;
     }
 
-    if( $filter =~ /\bpublic\b/ ) {
+    my $user = $this->{session}->{user};
+    if( $filter =~ /\bpublic\b/ && !$user->isAdmin()) {
         my $prefs = $this->{session}->{prefs};
         my $wn = $this->{session}->{webName};
         @webList =
@@ -1550,7 +1551,6 @@ sub getListOfWebs {
 
     if( $filter =~ /\ballowed\b/ ) {
         my $security = $this->{session}->{security};
-        my $user = $this->{session}->{user};
         @webList =
           grep {
               $security->checkAccessPermission( 'view', $user, undef, undef, $_ )
