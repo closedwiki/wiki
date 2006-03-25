@@ -98,7 +98,7 @@ sub _getHandler {
 
 ---++ ObjectMethod readTopic($user, $web, $topic, $version) -> ($metaObject, $text)
 
-Reads the given version of a topic and its meta-data. If the version
+Reads the given version of a topic and it's meta-data. If the version
 is undef, then read the most recent version. The version number must be
 an integer, or undef for the latest version.
 
@@ -132,34 +132,6 @@ sub readTopic {
 	$meta = $this->_extractMetaDataAutoAttachments($user, $web, $topic, $version, $meta );
 
     return( $meta, $text );
-}
-
-=pod
-
----++ ObjectMethod readMeta($user, $web, $topic, $version) -> $metaObject
-
-Reads the given version of a topic and its meta-data. If the version
-is undef, then read the most recent version. The version number must be
-an integer, or undef for the latest version.
-
-if $user is defined, view permission will be required for the topic
-read to be successful.  Access control violations are flagged by a
-TWiki::AccessControlException. Permissions are checked for the user
-name passed in.
-
-If the topic contains a web specification (is of the form Web.Topic) the
-web specification will override whatever is passed in $web.
-
-The metadata is return in TWiki::Meta object.
-
-Note: this allows for doing meta better; i.e., not inline with the text
-
-=cut
-
-sub readMeta {
-    my( $this, $user, $web, $topic, $version ) = @_;
-    my ($meta, $text) = $this->readTopic($user, $web, $topic, $version);
-    return $meta;
 }
 
 =pod
