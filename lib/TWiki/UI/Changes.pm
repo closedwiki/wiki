@@ -85,7 +85,7 @@ sub changes {
                 if( $rev == 1 ) {
                     $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
                 }
-                $thisChange =~ s/%TIME%/$time/go;
+                $thisChange =~ s/%TIME%/$time/g;
                 $thisChange =~ s/%REVISION%/$srev/go;
                 $thisChange = $session->{renderer}->getRenderedVersion
                   ( $thisChange, $webName, $changedTopic );

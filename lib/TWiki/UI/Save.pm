@@ -141,8 +141,8 @@ sub buildNewTopic {
 
     if( defined( $newText) ) {
         # text is defined in the query, save that text
-        $newText =~ tr/\r//;
-        $newText .= "\n" unless $newText =~ /\n$/so;
+        $newText =~ s/\r//g;
+        $newText .= "\n" unless $newText =~ /\n$/s;
 
     } elsif( defined $templateText ) {
         # no text in the query, but we have a templatetopic
@@ -230,9 +230,9 @@ sub buildNewTopic {
     # assumes rev numbers start at 1
     if( $originalrev ) {
         my( $orev, $odate );
-        if( $originalrev =~ /^(\d+)_(\d+)$/o ) {
+        if( $originalrev =~ /^(\d+)_(\d+)$/ ) {
             ( $orev, $odate ) = ( $1, $2 );
-        } elsif( $originalrev =~ /^\d+$/o ) {
+        } elsif( $originalrev =~ /^\d+$/ ) {
             $orev = $originalrev;
         } else {
             $orev = 0;
@@ -303,7 +303,7 @@ sub save {
     # 10 x's XXXXXX with a next-in-sequence number.
     # http://twiki.org/cgi-bin/view/Codev/AllowDynamicTopicNameCreation
     #
-    if ( $topic =~ /X{10}/o ) {
+    if ( $topic =~ /X{10}/ ) {
 		my $n = 0;
 		my $baseTopic = $topic;
 		$store->clearLease( $web, $baseTopic );

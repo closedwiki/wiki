@@ -917,7 +917,7 @@ sub _getRegFormAsTopicContent {
         my $title = $name;
         $title =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;    # Spaced
         my $value = $fd->{value};
-        $value =~ tr/\n\r//;
+        $value =~ s/[\n\r]//go;
         $text .= "\t* $title\: $value\n";    # SMELL - tabs but stored as tabs.
     }
     return $text;
@@ -1206,7 +1206,7 @@ sub _reloadUserContext {
 # Returns undef if no problem, else returns what's wrong
 sub _validateUserContext {
     my ($code, $tmpDir ) = @_;
-    my ($name) = $code =~ /^([^.]+)\./o;
+    my ($name) = $code =~ /^([^.]+)\./;
     my %data   = %{ _getRegDetailsByCode( $code, $tmpDir ) };    #SMELL - expensive?
     return 'Invalid activation code' unless $code eq $data{VerificationCode};
     return 'Name in activation code does not match'
@@ -1218,7 +1218,7 @@ sub _validateUserContext {
 sub _deleteUserContext {
     my $code = shift;
     my $tmpDir = TWiki::Sandbox::untaintUnchecked( shift );
-    $code =~ s/^([^.]+)\.//o;
+    $code =~ s/^([^.]+)\.//;
     my $name = TWiki::Sandbox::untaintUnchecked( $1 );
 
     foreach (<$tmpDir/$name.*>) {

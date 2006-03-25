@@ -498,7 +498,7 @@ sub _renameweb {
         my $lease_ref;
         foreach my $ref (sort keys %refs) {
             if(defined($ref) && $ref ne "") {
-                $ref =~ tr#.#/#;
+                $ref =~ s/\./\//go;
                 my (@path) = split(/\//,$ref);
                 my $webTopic = pop(@path);
                 my $webIter = join("/",@path);
@@ -668,7 +668,7 @@ sub _renameweb {
 
     # also remove lease on all referring topics
     foreach my $ref (@$refs) {
-        $ref =~ tr#.#/#;
+        $ref =~ s/\./\//go;
         my (@path)=split(/\//,$ref);
         my $webTopic=pop(@path);
         $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
@@ -912,8 +912,8 @@ sub _moveWeb {
     my( $session, $oldWeb, $newWeb, $refs ) = @_;
     my $store = $session->{store};
 
-    $oldWeb =~ tr#.#/#;
-    $newWeb =~ tr#.#/#;
+    $oldWeb =~ s/\./\//go;
+    $newWeb =~ s/\./\//go;
 
     my $user = $session->{user};
 
@@ -1093,7 +1093,7 @@ sub getReferringTopics {
     my( $session, $web, $topic, $allWebs ) = @_;
     my $store = $session->{store};
     my $renderer = $session->{renderer};
-    $web =~ tr#.#/#;
+    $web =~ s#\.#/#go;
     my @webs = ( $web );
 
     if( $allWebs ) {

@@ -241,7 +241,7 @@ sub view {
     # extract header and footer from the template, if there is a
     # %TEXT% tag marking the split point
     my( $start, $end );
-    if( $tmpl =~ m/^(.*)%TEXT%(.*)$/so ) {
+    if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
         $start = $1;
         $end = $2;
     } else {
@@ -253,8 +253,8 @@ sub view {
     # If minimalist is set, images and anchors will be stripped from text
     my $minimalist = 0;
     if( $contentType ) {
-        $minimalist = ( $skin =~ /\brss/o );
-    } elsif( $skin =~ /\brss/o ) {
+        $minimalist = ( $skin =~ /\brss/ );
+    } elsif( $skin =~ /\brss/ ) {
         $contentType = 'text/xml';
         $minimalist = 1;
     } elsif( $raw eq 'text' || $raw eq 'all' ) {
@@ -266,7 +266,7 @@ sub view {
     $session->{SESSION_TAGS}{CURRREV} = $rev;
 
     # Set page generation mode to RSS if using an RSS skin
-    $session->enterContext( 'rss' ) if $skin =~ /\brss/o;
+    $session->enterContext( 'rss' ) if $skin =~ /\brss/;
 
     # Set the meta-object that contains the rendering info
     # SMELL: hack to get around not having a proper topic object model
@@ -322,9 +322,9 @@ sub _prepare {
     $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
     if( $minimalist ) {
-        $text =~ s/<img [^>]*>//gio;  # remove image tags
-        $text =~ s/<a [^>]*>//gio;    # remove anchor tags
-        $text =~ s/<\/a>//gio;        # remove anchor tags
+        $text =~ s/<img [^>]*>//gi;  # remove image tags
+        $text =~ s/<a [^>]*>//gi;    # remove anchor tags
+        $text =~ s/<\/a>//gi;        # remove anchor tags
     }
 
     return $text;

@@ -235,11 +235,11 @@ sub edit {
         }
 
         $text = $session->expandVariablesOnTopicCreation( $text, $user );
-        $tmpl =~ s/%NEWTOPIC%/1/o;
+        $tmpl =~ s/%NEWTOPIC%/1/;
     } else {
-        $tmpl =~ s/%NEWTOPIC%//o;
+        $tmpl =~ s/%NEWTOPIC%//;
     }
-    $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/o;
+    $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/;
 
     # override with parameter if set
     $text = $ptext if defined $ptext;
@@ -248,9 +248,9 @@ sub edit {
     # this is a new topic.
     if( $topicExists ) {
         my ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
-        $tmpl =~ s/%ORIGINALREV%/${orgRev}_$orgDate/go;
+        $tmpl =~ s/%ORIGINALREV%/${orgRev}_$orgDate/g;
     } else {
-        $tmpl =~ s/%ORIGINALREV%/0/go;
+        $tmpl =~ s/%ORIGINALREV%/0/g;
     }
 
     # parent setting
@@ -265,7 +265,7 @@ sub edit {
         }
         $meta->put( 'TOPICPARENT', { name => $theParent } );
     }
-    $tmpl =~ s/%TOPICPARENT%/$theParent/o;
+    $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
     if( $formTemplate ) {
         $meta->remove( 'FORM' );
@@ -274,7 +274,7 @@ sub edit {
         } else {
             $meta->remove( 'FORM' );
         }
-        $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/goo;
+        $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
     }
 
     if( $saveCmd ) {
@@ -327,15 +327,15 @@ sub edit {
         $formText = $session->{templates}->readTemplate( "addform", $skin );
         $formText = $session->handleCommonTags( $formText, $webName, $topic );
     }
-    $tmpl =~ s/%FORMFIELDS%/$formText/go;
+    $tmpl =~ s/%FORMFIELDS%/$formText/g;
 
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
     my $p = $session->{prefs};
 
-    $tmpl =~ s/%UNENCODED_TEXT%/$text/go;
+    $tmpl =~ s/%UNENCODED_TEXT%/$text/g;
 
     $text = TWiki::entityEncode( $text );
-    $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s/%TEXT%/$text/g;
 
     $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
 

@@ -468,7 +468,7 @@ sub diff {
                 $webName, $topic, undef, $r1, '$date - $wikiusername' );
         }
         # eliminate white space to prevent wrap around in HR table:
-        $rInfo =~ s/\s+/&nbsp;/go;
+        $rInfo =~ s/\s+/&nbsp;/g;
         my $diffArrayRef = $session->{store}->getRevisionDiff(
             $session->{user}, $webName, $topic, $r2, $r1, $contextLines );
         $text = _renderRevisionDiff( $session, $webName, $topic,
