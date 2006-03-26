@@ -3126,7 +3126,7 @@ msgstr "[multiplo di 3 spazi]*[spazio] Set [spazio]NOMEVARIABILE [spazio] = [val
 
 #: lib/TWiki/I18N.pm:255
 msgid "_language_name"
-msgstr "_nome_lingua"
+msgstr "Italiano"
 
 #: data/TWiki/WebSearchAdvanced.txt:76 data/TWiki/WebSearchAdvanced.txt:94
 msgid "about !BookView"
