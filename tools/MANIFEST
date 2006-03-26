@@ -62,6 +62,7 @@ data/Main/TWikiRegistrationAgent.txt 0660
 data/Main/TWikiUsers.txt 0660
 data/Main/UnknownUser.txt 0660
 data/Main/UserForm.txt 0660
+data/Main/UserHomepageHeader.txt 0660
 data/Main/UserList.txt 0660
 data/Main/UserListByDateJoined.txt 0660
 data/Main/UserListByLocation.txt 0660
