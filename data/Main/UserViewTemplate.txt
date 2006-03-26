@@ -9,6 +9,7 @@
 %TMPL:DEF{"active_edit"}%<a href='%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?action=text&t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a>%TMPL:END%
 
 %TMPL:DEF{"content"}%
+%INCLUDE{%MAINWEB%.UserHomepageHeader}%
 %TEXT%
 #TopicEnd
 %TMPL:P{"form"}%
