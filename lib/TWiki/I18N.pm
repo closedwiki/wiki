@@ -50,16 +50,10 @@ sub available_languages {
 
     my @available ;
 
-    if ( opendir( DIR, $TWiki::cfg{LocalesDir} ) ) {
-        my @all = grep { m/^(.*)\.po$/ } (readdir( DIR ));
-        foreach my $file ( @all ) {
-            $file =~ m/^(.*)\.po$/;
-            my $lang = $1;
-            if ($TWiki::cfg{Languages}{$lang}{Enabled}) {
-                push(@available, _normalize_language_tag($lang));
-            }
-        }
-        closedir( DIR );
+    while ( my ( $langCode, $langOptions ) = each %{$TWiki::cfg{Languages}} ) {
+        #if ( $langOptions->{Enabled} ) {
+            push(@available, _normalize_language_tag($langCode));
+        #}
     }
 
     return @available;
@@ -247,20 +241,44 @@ listing available languages to the user.
 sub enabled_languages {
     my $this = shift;
 
-    # don't need to check twice
-    return $this->{enabled_languages} if $this->{checked_enabled};
-
-    foreach my $tag ( available_languages() ) {
-        my $h = TWiki::I18N->get_handle($tag);
-        my $name = $h->maketext("_language_name");
-        $name = $this->toSiteCharSet($name); 
-        $this->_add_language($tag, $name);
+    unless ($this->{checked_enabled}) {
+        $this->_discover_languages();
     }
 
     $this->{checked_enabled} = 1;
     return $this->{enabled_languages};
 
 }
+
+
+# discovers the available language.
+sub _discover_languages {
+    my $this = shift;
+
+    #use the cache, if available
+    if ( open LANGUAGE,"<$TWiki::cfg{LocalesDir}/languages.cache"  ) {
+    foreach my $line (<LANGUAGE>) {
+            my ($key,$name)=split('=',$line);
+             chop($name);
+            $this->_add_language($key,$name);
+        }
+    } else {
+        #TODO: if the cache file don't exist, perhaps a warning should be issued to the logs?
+        open LANGUAGE,">$TWiki::cfg{LocalesDir}/languages.cache";
+        foreach my $tag ( available_languages() ) {
+            my $h = TWiki::I18N->get_handle($tag);
+            my $name = $h->maketext("_language_name");
+            $name = $this->toSiteCharSet($name); 
+            $this->_add_language($tag, $name);
+            print LANGUAGE "$tag=$name\n";
+        }
+    }
+
+    close LANGUAGE;
+    $this->{checked_enabled} = 1;
+
+}
+
 
 =pod
 
