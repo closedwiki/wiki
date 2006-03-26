@@ -21,6 +21,18 @@ ScriptAlias /twiki/bin/ "/home/httpd/twiki/bin/"
 #### Change the path to match your local installation
 Alias /twiki/ "/home/httpd/twiki/"
 
+
+# We set an environment variable called anonymous_spider
+# Setting a BrowserMatchNoCase to ^$ is important. It prevents TWiki from
+# including its own topics as URLs and also prevents other TWikis from
+# doing the same. This is important to prevent the most obvious
+# Denial of Service attacks.
+# You can expand this by adding more BrowserMatchNoCase statements to
+# block evil browser agents trying the impossible task of mirroring a twiki
+# Example:
+# BrowserMatchNoCase ^SiteSucker anonymous_spider
+BrowserMatchNoCase ^$ anonymous_spider
+
 # This specifies the options on the TWiki scripts directory. The ExecCGI
 # and SetHandler tell apache that it contains scripts. "Allow from all"
 # lets any IP address access this URL.
@@ -29,7 +41,9 @@ Alias /twiki/ "/home/httpd/twiki/"
 <Directory "/home/httpd/twiki/bin">
 	 Options +ExecCGI FollowSymLinks
 	 SetHandler cgi-script
+	 Order Allow,Deny
 	 Allow from all
+	 Deny from env=anonymous_spider
 </Directory>
 
 # This sets the options on the pub directory, which contains attachments and
@@ -62,4 +76,12 @@ Alias /twiki/ "/home/httpd/twiki/"
 
 <Directory "/home/httpd/twiki/lib">
 	 deny from all
+</Directory>
+
+<Directory "/home/httpd/twiki/tools">
+	 deny from all
+</Directory>
+
+<Directory "/home/httpd/twiki/locale">
+	deny from all
 </Directory>

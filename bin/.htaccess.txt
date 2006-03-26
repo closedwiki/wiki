@@ -13,6 +13,22 @@
 # name(s) of the person(s) allowed to run the configure script
 # e.g. admin root superhero
 
+# We set an environment variable called anonymous_spider
+# Setting a BrowserMatchNoCase to ^$ is important. It prevents TWiki from
+# including its own topics as URLs and also prevents other TWikis from
+# doing the same. This is important to prevent the most obvious
+# Denial of Service attacks.
+# You can expand this by adding more BrowserMatchNoCase statements to
+# block evil browser agents trying the impossible task of mirroring a twiki
+# Example:
+# BrowserMatchNoCase ^SiteSucker anonymous_spider
+BrowserMatchNoCase ^$ anonymous_spider
+
+# Now set default access rights.
+Order Allow,Deny
+Allow from all
+Deny from env=anonymous_spider
+
 # Use CGI & Perl to handle all files in 'bin' directory, i.e. run as scripts
 # - this should remove the need to rename files to end in '.pl' etc,
 # if your web hosting provider permits this.  Remove if using mod_perl.
@@ -73,8 +89,4 @@ Options -Indexes
 
 <FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|.*auth).*">
        require valid-user
-</FilesMatch>
-
-<FilesMatch ".*">
-       allow from all
 </FilesMatch>
