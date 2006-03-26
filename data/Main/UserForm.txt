@@ -1,7 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 ---+ User Form
 
-This form defines the form of the home pages of registered TWiki users listed in TWikiUsers.
+__Note:__ This is a maintenance topic, used by the TWiki administrator.
+
+This form defines the form of the home pages of registered TWiki users listed in %WIKIUSERSTOPIC%.
 
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
 | <nop>FirstName | text | 40 | | |
@@ -22,5 +24,5 @@ This form defines the form of the home pages of registered TWiki users listed in
 
 __%X% Note:__ Please keep the %TWIKIWEB%.TWikiRegistration form and this form definition in sync. When you update this form you need to edit/save the %TWIKIWEB%.NewUserTemplate topic. This ensures that the fields are in the right order.
 
-__Related topics:__ TWikiUsers, %TWIKIWEB%.TWikiForms, %TWIKIWEB%.TWikiRegistration
+__Related topics:__ %WIKIUSERSTOPIC%, UserViewTemplate, %TWIKIWEB%.NewUserTemplate, UserHomepageHeader, %TWIKIWEB%.TWikiForms, %TWIKIWEB%.TWikiRegistration
 
