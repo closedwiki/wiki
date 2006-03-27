@@ -166,7 +166,7 @@ msgstr "%1 定制目录属性"
 msgid "%1 to start working on the new web"
 msgstr "%1 开始在新目录上工作"
 
-#: templates/messages.tmpl:423
+#: templates/messages.tmpl:424
 msgid "%1 topic does not exist"
 msgstr "%1 主题不存在"
 
@@ -296,16 +296,16 @@ msgstr "(更多)"
 msgid "(move attachment)"
 msgstr "(移动附件)"
 
-#: data/TWiki/WebTopicCreator.txt:28 data/TWiki/WebTopicCreator.txt:30
+#: data/TWiki/WebTopicCreator.txt:66 data/TWiki/WebTopicCreator.txt:67
 msgid "(no parent, orphaned topic)"
 msgstr "(无父主题，孤立文章)"
 
-#: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
-#: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:1075 lib/TWiki/UI/Manage.pm:628
-#: lib/TWiki/UI/Manage.pm:631 lib/TWiki/UI/Manage.pm:634
-#: lib/TWiki/UI/Manage.pm:637 lib/TWiki/UI/Manage.pm:881
-#: lib/TWiki/UI/Manage.pm:904
+#: lib/TWiki/UI/Manage.pm:1001 lib/TWiki/UI/Manage.pm:1035
+#: lib/TWiki/UI/Manage.pm:1057 lib/TWiki/UI/Manage.pm:610
+#: lib/TWiki/UI/Manage.pm:613 lib/TWiki/UI/Manage.pm:616
+#: lib/TWiki/UI/Manage.pm:619 lib/TWiki/UI/Manage.pm:863
+#: lib/TWiki/UI/Manage.pm:886 lib/TWiki/UI/Manage.pm:995
+#: lib/TWiki/UI/Manage.pm:998
 msgid "(none)"
 msgstr "(无)"
 
@@ -367,7 +367,7 @@ msgstr "(单字符名称)"
 msgid "(single character last name)"
 msgstr "(单字符姓氏)"
 
-#: lib/TWiki/UI/Manage.pm:864
+#: lib/TWiki/UI/Manage.pm:846
 msgid "(skipped)"
 msgstr "(忽略)"
 
@@ -504,7 +504,7 @@ msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr "<span class='twikiAlert'><b>不要忘记保存</b></span>您的修改 "
 
-#: templates/messages.tmpl:412
+#: templates/messages.tmpl:413
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %2 in a web that does not exist."
@@ -524,7 +524,7 @@ msgstr "颜色以 # 标记开始 后面是个6位16进制数字组成 例如： 
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "确认电子邮件已经被发送到 %1 "
 
-#: templates/messages.tmpl:416
+#: templates/messages.tmpl:417
 msgid ""
 "A link to a topic located in another web is written like %1. Make sure that "
 "the name of the web is not spelt wrongly on the previous page; fix the link "
@@ -558,7 +558,7 @@ msgstr "所有目录"
 msgid "Access Denied"
 msgstr "禁止访问"
 
-#: templates/messages.tmpl:395
+#: templates/messages.tmpl:396
 msgid "Access check on %1 failed"
 msgstr "访问检查%1失败"
 
@@ -573,7 +573,7 @@ msgstr "访问快捷键"
 msgid "Action"
 msgstr "变更"
 
-#: templates/messages.tmpl:396
+#: templates/messages.tmpl:397
 msgid "Action %1: %2."
 msgstr "变更 %1: %2."
 
@@ -633,6 +633,7 @@ msgstr "所有的公开目录"
 msgid "All topics in %1"
 msgstr "在%1中的所有主题"
 
+#: data/TWiki/WebTopicCreator.txt:60
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "允许使用非<nop>WikiWord 作为新主题名称"
@@ -686,11 +687,11 @@ msgstr "添加一个新文件"
 msgid "Attachment"
 msgstr "附件"
 
-#: templates/messages.tmpl:432
+#: templates/messages.tmpl:433
 msgid "Attachment '%1' does not exist"
 msgstr "附件'%1'不存在"
 
-#: lib/TWiki/UI/Manage.pm:348
+#: lib/TWiki/UI/Manage.pm:327
 msgid "Attachment already exists in new topic"
 msgstr "在新主题中附件已经存在"
 
@@ -698,7 +699,7 @@ msgstr "在新主题中附件已经存在"
 msgid "Attachment delete failed"
 msgstr "附件删除失败"
 
-#: lib/TWiki/UI/Manage.pm:328
+#: lib/TWiki/UI/Manage.pm:307
 msgid "Attachment does not exist"
 msgstr "附件不存在"
 
@@ -866,7 +867,7 @@ msgid "Changes"
 msgstr "更新"
 
 #. ($r2, $r1)
-#: lib/TWiki/UI/RDiff.pm:460
+#: lib/TWiki/UI/RDiff.pm:465
 msgid "Changes from r%1 to r%2"
 msgstr "从 r%1 更改到 r%2"
 
@@ -908,7 +909,7 @@ msgstr "从表单模板中选择一个新的"
 msgid "Clear all"
 msgstr "清除所有"
 
-#: templates/messages.tmpl:427
+#: templates/messages.tmpl:428
 msgid "Click here"
 msgstr "点击这里"
 
@@ -955,8 +956,8 @@ msgstr "确认重命名和移动"
 msgid "Conflict"
 msgstr "冲突"
 
-#: templates/messages.tmpl:398 templates/messages.tmpl:405
-#: templates/messages.tmpl:429 templates/messages.tmpl:435
+#: templates/messages.tmpl:399 templates/messages.tmpl:406
+#: templates/messages.tmpl:430 templates/messages.tmpl:436
 msgid "Contact %1 if you have any questions."
 msgstr "如有问题，请联系 %1"
 
@@ -1007,7 +1008,7 @@ msgstr "创建<nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "创建新主题"
 
-#: data/TWiki/WebTopicCreator.txt:15
+#: data/TWiki/WebTopicCreator.txt:52
 msgid "Create New Topic in %1 Web"
 msgstr "Neues Topic im %1 Web anlegen"
 
@@ -1032,7 +1033,8 @@ msgstr "根据名称创建"
 msgid "Create personal sidebar"
 msgstr "创建个人工具栏"
 
-#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
+#: data/TWiki/WebTopicCreator.txt:71 lib/TWiki/Render.pm:574
+#: lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr "创建这个主题"
 
@@ -1411,7 +1413,7 @@ msgid ""
 "the correct parameters."
 msgstr "如果你开发一个TWikiApplication 请参考%1查找适当的参数说明"
 
-#: templates/messages.tmpl:414
+#: templates/messages.tmpl:415
 msgid "If you came here by clicking on a question mark link"
 msgstr "如果您来到这里是通过点击一个问号链接"
 
@@ -1464,7 +1466,7 @@ msgstr ""
 msgid "If you used the \"Jump\" feature to jump to this page:"
 msgstr "如果您使用\"跳转\"功能跳转到此页:"
 
-#: templates/messages.tmpl:426
+#: templates/messages.tmpl:427
 msgid "If you want to create the topic"
 msgstr "如果您希望创建主题"
 
@@ -1473,7 +1475,7 @@ msgstr "如果您希望创建主题"
 msgid "If you would like to create this page:"
 msgstr "如果您希望创建此页:"
 
-#: templates/messages.tmpl:419
+#: templates/messages.tmpl:420
 msgid "If you would like to create this web"
 msgstr "如果您希望创建此目录"
 
@@ -1553,6 +1555,7 @@ msgstr ""
 "候保存，您的修改将和他们的合并，，没有任何数据会丢失。但是表单数据无法简单地"
 "合并，所以在这种情况下建议您先和 %1 联系。"
 
+#: data/TWiki/WebTopicCreator.txt:61
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:33
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
@@ -1828,14 +1831,14 @@ msgstr "旧版本"
 msgid "Once registered you can login using your %1 and password."
 msgstr "注册后您可以使用%1和密码登录"
 
-#: data/TWiki/WebTopicCreator.txt:39
+#: data/TWiki/WebTopicCreator.txt:79
 msgid ""
 "Once you have created the topic, consider adding links in related topics to "
 "the new topic so that there are more ways people can discover it."
 msgstr ""
 "您创建主题后，请在主题中添加相关链接以便于其他人能通过更多途径找到这个主题。"
 
-#: templates/messages.tmpl:403
+#: templates/messages.tmpl:404
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "只有%1的成员允许进行这些操作"
 
@@ -2032,8 +2035,8 @@ msgstr "相关主题："
 #: data/Main/TWikiGroupTemplate.txt:10 data/Sandbox/WebNotify.txt:10
 #: data/TWiki/ChangeEmailAddress.txt:35 data/TWiki/ChangePassword.txt:28
 #: data/TWiki/ResetPassword.txt:28 data/Trash/WebNotify.txt:9
-#: data/_default/WebNotify.txt:8 templates/messages.tmpl:401
-#: templates/messages.tmpl:408
+#: data/_default/WebNotify.txt:8 templates/messages.tmpl:402
+#: templates/messages.tmpl:409
 msgid "Related topics:"
 msgstr "相关主题:"
 
@@ -2326,8 +2329,8 @@ msgid "Some add schedule information and vacation notice."
 msgstr "某些添加计划信息和假期自动回复"
 
 #: templates/messages.tmpl:294
-msgid "Some characters such as =~=, =$=, =@=, =%= are removed"
-msgstr "一些类似于 =~=, =$=, =@=, =%= 已经删除"
+msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
+msgstr "一些类似于 =&#126;=, =$=, =@=, =%= 已经删除"
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -2453,7 +2456,7 @@ msgstr "%1 字段必须是姓名，姓氏在 %2 ，例如：大写的姓氏拼�
 msgid "The %1 topic already exists"
 msgstr "主题%1已经存在"
 
-#: templates/messages.tmpl:411
+#: templates/messages.tmpl:412
 msgid "The %1 web does not exist"
 msgstr "%1目录不存在"
 
@@ -2672,13 +2675,6 @@ msgstr "*取消*并放弃修改 [取消] 按钮."
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "*保存*: 请按[保存修改]按钮."
 
-#: data/TWiki/WebTopicCreator.txt:37
-msgid ""
-"To create a new topic, enter a %1.WikiWord for the topic name, select a "
-"topic parent and click 'Create.'"
-msgstr ""
-"为了创建一个新主题，输入一个%1.WikiWord 主题名，选择一个父主题然后按'创建'。"
-
 #: templates/renameweb.tmpl:10
 msgid ""
 "To delete this web: move this web to the Trash web by renaming it to %1."
@@ -2741,11 +2737,11 @@ msgstr "主题无法从旧风格的目录表格更新"
 msgid "Topic name"
 msgstr "主题名称"
 
-#: data/TWiki/WebTopicCreator.txt:17
+#: data/TWiki/WebTopicCreator.txt:55
 msgid "Topic name:"
 msgstr "主题名称:"
 
-#: data/TWiki/WebTopicCreator.txt:25
+#: data/TWiki/WebTopicCreator.txt:64
 msgid "Topic parent:"
 msgstr "父主题:"
 
@@ -2941,6 +2937,10 @@ msgstr "警告: 不能重复包含%1， 主题已经包含了%2"
 msgid "Warning: Can't find topic %1"
 msgstr "警告: 无法找到主题%1"
 
+#: templates/messages.tmpl:390
+msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "We&b"
 msgstr "目录"
@@ -3021,15 +3021,15 @@ msgstr ""
 "建议您使用短名称，最好少于10个字母，以大写字母开头：只使用英文字母，如果你想"
 "使用模板目录(用来创建新目录的目录)选择一个名称以下划线和字母"
 
-#: templates/messages.tmpl:424
+#: templates/messages.tmpl:425
 msgid "You are trying to %1 a topic that does not exist."
 msgstr "您在%1目录上搜索的主题不存在."
 
-#: templates/messages.tmpl:433
+#: templates/messages.tmpl:434
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "您想%1的附件不存在。"
 
-#: templates/messages.tmpl:420
+#: templates/messages.tmpl:421
 msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
@@ -3167,7 +3167,7 @@ msgid ""
 msgstr "[3个空格] * [空格] Set [空格] VARIABLENNAME [空格] = [值]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:255
+#: lib/TWiki/I18N.pm:271
 msgid "_language_name"
 msgstr "简体中文"
 
@@ -3191,7 +3191,7 @@ msgstr "禁止访问目录"
 msgid "access not allowed on topic"
 msgstr "不允许访问主题"
 
-#: lib/TWiki/Access.pm:197 lib/TWiki/UI/Manage.pm:179
+#: lib/TWiki/Access.pm:197 lib/TWiki/UI/Manage.pm:158
 msgid "access not allowed on web"
 msgstr "不允许访问目录"
 
@@ -3345,6 +3345,13 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr "您必须"
+
+#~ msgid ""
+#~ "To create a new topic, enter a %1.WikiWord for the topic name, select a "
+#~ "topic parent and click 'Create.'"
+#~ msgstr ""
+#~ "为了创建一个新主题，输入一个%1.WikiWord 主题名，选择一个父主题然后按'创"
+#~ "建'。"
 
 #~ msgid "(changed language)"
 #~ msgstr "(变更后的语言)"

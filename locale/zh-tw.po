@@ -119,7 +119,7 @@ msgstr "%1 有TWiki用戶文檔列表"
 msgid "%1 is an invalid name for a new web"
 msgstr "%1 是個非法的新目錄名稱"
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:16
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:46
 msgid "%1 is currently logged in"
 msgstr "%1 已經登錄"
 
@@ -167,7 +167,7 @@ msgstr "%1 定制目錄屬性"
 msgid "%1 to start working on the new web"
 msgstr "%1 開始在新目錄上工作"
 
-#: templates/messages.tmpl:423
+#: templates/messages.tmpl:424
 msgid "%1 topic does not exist"
 msgstr "%1 主題不存在"
 
@@ -299,16 +299,16 @@ msgstr "(更多)"
 msgid "(move attachment)"
 msgstr "(移動附件)"
 
-#: data/TWiki/WebTopicCreator.txt:28 data/TWiki/WebTopicCreator.txt:30
+#: data/TWiki/WebTopicCreator.txt:66 data/TWiki/WebTopicCreator.txt:67
 msgid "(no parent, orphaned topic)"
 msgstr "(無父主題，孤立文章)"
 
-#: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
-#: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:1075 lib/TWiki/UI/Manage.pm:628
-#: lib/TWiki/UI/Manage.pm:631 lib/TWiki/UI/Manage.pm:634
-#: lib/TWiki/UI/Manage.pm:637 lib/TWiki/UI/Manage.pm:881
-#: lib/TWiki/UI/Manage.pm:904
+#: lib/TWiki/UI/Manage.pm:1001 lib/TWiki/UI/Manage.pm:1035
+#: lib/TWiki/UI/Manage.pm:1057 lib/TWiki/UI/Manage.pm:610
+#: lib/TWiki/UI/Manage.pm:613 lib/TWiki/UI/Manage.pm:616
+#: lib/TWiki/UI/Manage.pm:619 lib/TWiki/UI/Manage.pm:863
+#: lib/TWiki/UI/Manage.pm:886 lib/TWiki/UI/Manage.pm:995
+#: lib/TWiki/UI/Manage.pm:998
 msgid "(none)"
 msgstr "(無)"
 
@@ -370,7 +370,7 @@ msgstr "(單字元名稱)"
 msgid "(single character last name)"
 msgstr "(單字元姓氏)"
 
-#: lib/TWiki/UI/Manage.pm:864
+#: lib/TWiki/UI/Manage.pm:846
 msgid "(skipped)"
 msgstr "(忽略)"
 
@@ -480,7 +480,7 @@ msgstr "…"
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "本主題 <a href='%1' rel='nofollow'>編輯設置</a>"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:25
 msgid ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
 "\" href='%2' rel='nofollow'>Get help on managing webs</a>"
@@ -505,7 +505,7 @@ msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr "<span class='twikiAlert'><b>不要忘記保存</b></span>您的修改 "
 
-#: templates/messages.tmpl:412
+#: templates/messages.tmpl:413
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %2 in a web that does not exist."
@@ -525,7 +525,7 @@ msgstr "顏色以 # 標記開始 後面是個6位元16進制數位組成 例如�
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "確認電子郵件已經被發送到 %1 "
 
-#: templates/messages.tmpl:416
+#: templates/messages.tmpl:417
 msgid ""
 "A link to a topic located in another web is written like %1. Make sure that "
 "the name of the web is not spelt wrongly on the previous page; fix the link "
@@ -559,7 +559,7 @@ msgstr "所有目錄"
 msgid "Access Denied"
 msgstr "禁止訪問"
 
-#: templates/messages.tmpl:395
+#: templates/messages.tmpl:396
 msgid "Access check on %1 failed"
 msgstr "訪問檢查%1失敗"
 
@@ -574,7 +574,7 @@ msgstr "訪問快捷鍵"
 msgid "Action"
 msgstr "變更"
 
-#: templates/messages.tmpl:396
+#: templates/messages.tmpl:397
 msgid "Action %1: %2."
 msgstr "變更 %1: %2."
 
@@ -632,6 +632,7 @@ msgstr "所有的公開目錄"
 msgid "All topics in %1"
 msgstr "在%1中的所有主題"
 
+#: data/TWiki/WebTopicCreator.txt:60
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "允許使用非<nop>WikiWord 作為新主題名稱"
@@ -686,11 +687,11 @@ msgstr "添加一個新檔"
 msgid "Attachment"
 msgstr "附件"
 
-#: templates/messages.tmpl:432
+#: templates/messages.tmpl:433
 msgid "Attachment '%1' does not exist"
 msgstr "附件'%1'不存在"
 
-#: lib/TWiki/UI/Manage.pm:348
+#: lib/TWiki/UI/Manage.pm:327
 msgid "Attachment already exists in new topic"
 msgstr "在新主題中附件已經存在"
 
@@ -698,7 +699,7 @@ msgstr "在新主題中附件已經存在"
 msgid "Attachment delete failed"
 msgstr "附件刪除失敗"
 
-#: lib/TWiki/UI/Manage.pm:328
+#: lib/TWiki/UI/Manage.pm:307
 msgid "Attachment does not exist"
 msgstr "附件不存在"
 
@@ -821,11 +822,11 @@ msgstr "更改自："
 msgid "Change language"
 msgstr "更改語言"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:55
 msgid "Change links in topics that refer to !%1 in any Web:"
 msgstr "在所有目錄中改變所有指向!%1的主題中的鏈結"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:53
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:51
 msgid "Change links in topics that refer to !%1 in the %2 Web:"
 msgstr "更改所有指向非 %1 主題中的鏈結(在 %2 目錄中)"
 
@@ -868,7 +869,7 @@ msgid "Changes"
 msgstr "更新"
 
 #. ($r2, $r1)
-#: lib/TWiki/UI/RDiff.pm:457
+#: lib/TWiki/UI/RDiff.pm:465
 msgid "Changes from r%1 to r%2"
 msgstr "從 r%1 更改到 r%2"
 
@@ -891,7 +892,7 @@ msgstr ""
 msgid "Checked topics will be updated to point to the new topic location."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 #, fuzzy
 msgid "Checked topics will be updated to point to the new web name."
 msgstr "刪除的主題將被移動到 %1目錄中"
@@ -911,7 +912,7 @@ msgstr "從表單範本中選擇一個新的"
 msgid "Clear all"
 msgstr "清除所有"
 
-#: templates/messages.tmpl:427
+#: templates/messages.tmpl:428
 msgid "Click here"
 msgstr "點擊這裏"
 
@@ -958,8 +959,8 @@ msgstr "確認重命名和移動"
 msgid "Conflict"
 msgstr "衝突"
 
-#: templates/messages.tmpl:398 templates/messages.tmpl:405
-#: templates/messages.tmpl:429 templates/messages.tmpl:435
+#: templates/messages.tmpl:399 templates/messages.tmpl:406
+#: templates/messages.tmpl:430 templates/messages.tmpl:436
 msgid "Contact %1 if you have any questions."
 msgstr "如有問題，請聯繫 %1"
 
@@ -1010,7 +1011,7 @@ msgstr "創建<nop>TestTopic###"
 msgid "Create New Topic"
 msgstr "創建新主題"
 
-#: data/TWiki/WebTopicCreator.txt:15
+#: data/TWiki/WebTopicCreator.txt:52
 msgid "Create New Topic in %1 Web"
 msgstr "Neues Topic im %1 Web anlegen"
 
@@ -1035,7 +1036,8 @@ msgstr "根據名稱創建"
 msgid "Create personal sidebar"
 msgstr "創建個人工具欄"
 
-#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
+#: data/TWiki/WebTopicCreator.txt:71 lib/TWiki/Render.pm:574
+#: lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr "創建這個主題"
 
@@ -1220,7 +1222,7 @@ msgstr "編輯屬性設置"
 msgid "Enlarge edit box"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:50
 msgid "Enter a new username and password to change identity:"
 msgstr "輸入用戶名和密碼以改變身份"
 
@@ -1392,7 +1394,7 @@ msgid ""
 "it."
 msgstr "檔已經從 %1 命名成 %2 請加上備註"
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:70
 #, fuzzy
 msgid "I forgot my password"
 msgstr "你可以通過 %1 修改密碼"
@@ -1421,7 +1423,7 @@ msgid ""
 "the correct parameters."
 msgstr "如果你開發一個TWikiApplication 請參考%1查找適當的參數說明"
 
-#: templates/messages.tmpl:414
+#: templates/messages.tmpl:415
 msgid "If you came here by clicking on a question mark link"
 msgstr "如果您來到這裏是通過點擊一個問號鏈結"
 
@@ -1447,7 +1449,7 @@ msgstr "如果您有任何關於註冊的問題請發送郵件給 %1。"
 #: data/TWiki/ResetPassword.txt:24 data/TWiki/VarMAKETEXT.txt:17
 #: templates/mailresetpassword.tmpl:14
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:76
 msgid "If you have any questions, please contact %1."
 msgstr "如果您有任何問題請聯繫%1."
 
@@ -1474,7 +1476,7 @@ msgstr ""
 msgid "If you used the \"Jump\" feature to jump to this page:"
 msgstr "如果您使用\"跳轉\"功能跳轉到此頁:"
 
-#: templates/messages.tmpl:426
+#: templates/messages.tmpl:427
 msgid "If you want to create the topic"
 msgstr "如果您希望創建主題"
 
@@ -1483,7 +1485,7 @@ msgstr "如果您希望創建主題"
 msgid "If you would like to create this page:"
 msgstr "如果您希望創建此頁:"
 
-#: templates/messages.tmpl:419
+#: templates/messages.tmpl:420
 msgid "If you would like to create this web"
 msgstr "如果您希望創建此目錄"
 
@@ -1559,6 +1561,7 @@ msgstr ""
 "候保存，您的修改將和他們的合併，，沒有任何資料會丟失。但是表單數據無法簡單地"
 "合併，所以在這種情況下建議您先和 %1 聯繫。"
 
+#: data/TWiki/WebTopicCreator.txt:61
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:33
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
@@ -1638,7 +1641,7 @@ msgstr "登出"
 msgid "Login name %1"
 msgstr "登錄名 %1"
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:69
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr "登錄為"
 
@@ -1777,7 +1780,7 @@ msgstr "沒有用戶重新設置密碼給."
 msgid "Not recommended when deleting a topic."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Not recommended when deleting a web."
 msgstr ""
 
@@ -1808,7 +1811,7 @@ msgid "Notes:"
 msgstr "注意:"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:90
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:39
 msgid "Notices:"
 msgstr "通知:"
 
@@ -1841,14 +1844,14 @@ msgstr "舊版本"
 msgid "Once registered you can login using your %1 and password."
 msgstr "註冊後您可以使用%1和密碼登錄"
 
-#: data/TWiki/WebTopicCreator.txt:39
+#: data/TWiki/WebTopicCreator.txt:79
 msgid ""
 "Once you have created the topic, consider adding links in related topics to "
 "the new topic so that there are more ways people can discover it."
 msgstr ""
 "您創建主題後，請在主題中添加相關鏈結以便於其他人能通過更多途徑找到這個主題。"
 
-#: templates/messages.tmpl:403
+#: templates/messages.tmpl:404
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr "只有%1的成員允許進行這些操作"
 
@@ -1899,7 +1902,7 @@ msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr ""
 
 #: data/TWiki/ChangeEmailAddress.txt:24
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:64
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "密碼"
 
@@ -1931,7 +1934,7 @@ msgstr "丟棄附件的存放地"
 msgid "Please contact %1 if you have any questions."
 msgstr "如有問題請聯繫%1."
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:12
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
 msgid "Please enter your username and password:"
 msgstr "請輸入用戶名和密碼:"
 
@@ -2049,8 +2052,8 @@ msgstr "相關主題："
 #: data/Main/TWikiGroupTemplate.txt:10 data/Sandbox/WebNotify.txt:10
 #: data/TWiki/ChangeEmailAddress.txt:35 data/TWiki/ChangePassword.txt:28
 #: data/TWiki/ResetPassword.txt:28 data/Trash/WebNotify.txt:9
-#: data/_default/WebNotify.txt:8 templates/messages.tmpl:401
-#: templates/messages.tmpl:408
+#: data/_default/WebNotify.txt:8 templates/messages.tmpl:402
+#: templates/messages.tmpl:409
 msgid "Related topics:"
 msgstr "相關主題:"
 
@@ -2090,7 +2093,7 @@ msgstr "重命名，移動和刪除這個目錄:"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
 #: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:35
 msgid "Rename/Move"
 msgstr "重命名/移動"
 
@@ -2268,7 +2271,7 @@ msgid "See also the verbose %1."
 msgstr "查看更全的%1."
 
 #: data/TWiki/RenameWeb.txt:3
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:75
 msgid "See also:"
 msgstr "也可查看:"
 
@@ -2351,8 +2354,9 @@ msgid "Some add schedule information and vacation notice."
 msgstr "某些添加計畫資訊和假期自動回復"
 
 #: templates/messages.tmpl:294
-msgid "Some characters such as =~=, =$=, =@=, =%= are removed"
-msgstr "一些類似於 =~=, =$=, =@=, =%= 已經刪除"
+#, fuzzy
+msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
+msgstr "一些類似於 =&#126;=, =$=, =@=, =%= 已經刪除"
 
 #: templates/registernotify.tmpl:14
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:14
@@ -2411,7 +2415,7 @@ msgstr "提交的內容:"
 msgid "Subscribe / Unsubscribe in:"
 msgstr "訂閱/退訂"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:22
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
 msgid "Subwebs must be enabled."
 msgstr "子目錄必須啟用."
 
@@ -2478,7 +2482,7 @@ msgstr "%1 欄位必須是姓名，姓氏在 %2 ，例如：大寫的姓氏拼�
 msgid "The %1 topic already exists"
 msgstr "主題%1已經存在"
 
-#: templates/messages.tmpl:411
+#: templates/messages.tmpl:412
 msgid "The %1 web does not exist"
 msgstr "%1目錄不存在"
 
@@ -2513,7 +2517,7 @@ msgid ""
 "without saving."
 msgstr "如果是 %1 流覽到編輯頁而沒有保存，這種情況還是沒有問題的。"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:26
 msgid "The checkmarked topics will be updated"
 msgstr "被標記選定的主題將被更新"
 
@@ -2693,15 +2697,7 @@ msgstr "*取消*並放棄修改 [取消] 按鈕."
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr "*保存*: 請按[保存修改]按鈕."
 
-#: data/TWiki/WebTopicCreator.txt:37
-msgid ""
-"To create a new topic, enter a %1.WikiWord for the topic name, select a "
-"topic parent and click 'Create.'"
-msgstr ""
-"為了創建一個新主題，輸入一個%1.WikiWord 主題名，選擇一個父主題然後按'創建'。"
-
 #: templates/renameweb.tmpl:10
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:23
 msgid ""
 "To delete this web: move this web to the Trash web by renaming it to %1."
 msgstr "刪除此目錄：重命名這個目錄為%1，移動這個目錄到Trash目錄，"
@@ -2764,11 +2760,11 @@ msgstr "主題無法從舊風格的目錄表格更新"
 msgid "Topic name"
 msgstr "主題名稱"
 
-#: data/TWiki/WebTopicCreator.txt:17
+#: data/TWiki/WebTopicCreator.txt:55
 msgid "Topic name:"
 msgstr "主題名稱:"
 
-#: data/TWiki/WebTopicCreator.txt:25
+#: data/TWiki/WebTopicCreator.txt:64
 msgid "Topic parent:"
 msgstr "父主題:"
 
@@ -2793,18 +2789,18 @@ msgstr "在 %1 目錄中的主題："
 msgid "Topics per web"
 msgstr "每個目錄的主題"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:41
 #, fuzzy
 msgid "Topics which are currently being edited by other users in the %1 Web:"
 msgstr "在!%1目錄中，主題正在被另外一個用戶編輯:"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:44
 msgid ""
 "Topics which refer to this web and are are currently being edited by other "
 "users:"
 msgstr "引用此目錄但被其他用戶編輯的主題:"
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:49
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:47
 msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr "引用此目錄但您沒有許可權改變的主題:"
@@ -2833,7 +2829,7 @@ msgstr "請將注釋符號 # 刪除以啟用相應參數設置，更多參數說
 msgid "Unrecognized action command %1"
 msgstr "無法識別的操作%1"
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:54
 msgid "Unrecognized user and/or password"
 msgstr "無法識別的用戶名/密碼"
 
@@ -2887,7 +2883,7 @@ msgstr "用戶帳號 %1 被刪除"
 msgid "User Reference"
 msgstr "用戶屬性"
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:58
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr "用戶名"
 
@@ -2964,6 +2960,10 @@ msgstr "警告: 不能重複包含%1， 主題已經包含了%2"
 #: templates/messages.tmpl:382
 msgid "Warning: Can't find topic %1"
 msgstr "警告: 無法找到主題%1"
+
+#: templates/messages.tmpl:390
+msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
+msgstr ""
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "We&b"
@@ -3044,15 +3044,15 @@ msgstr ""
 "建議您使用短名稱，最好少於10個字母，以大寫字母開頭：只使用英文字母，如果你想"
 "使用範本目錄(用來創建新目錄的目錄)選擇一個名稱以下劃線和字母"
 
-#: templates/messages.tmpl:424
+#: templates/messages.tmpl:425
 msgid "You are trying to %1 a topic that does not exist."
 msgstr "您在%1目錄上搜索的主題不存在."
 
-#: templates/messages.tmpl:433
+#: templates/messages.tmpl:434
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr "您想%1的附件不存在。"
 
-#: templates/messages.tmpl:420
+#: templates/messages.tmpl:421
 msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
@@ -3190,7 +3190,7 @@ msgid ""
 msgstr "[3個空格] * [空格] Set [空格] VARIABLENNAME [空格] = [值]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:255
+#: lib/TWiki/I18N.pm:271
 msgid "_language_name"
 msgstr "繁體中文"
 
@@ -3214,7 +3214,7 @@ msgstr "禁止訪問目錄"
 msgid "access not allowed on topic"
 msgstr "不允許訪問主題"
 
-#: lib/TWiki/Access.pm:197 lib/TWiki/UI/Manage.pm:179
+#: lib/TWiki/Access.pm:197 lib/TWiki/UI/Manage.pm:158
 msgid "access not allowed on web"
 msgstr "不允許訪問目錄"
 
@@ -3310,7 +3310,7 @@ msgstr "現在 %1"
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:35
 #: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:28
 msgid "or"
@@ -3369,6 +3369,13 @@ msgid ""
 "your password. If none of your registered e-mail addresses is valid, and you "
 "have forgotten your password, contact %1."
 msgstr ""
+
+#~ msgid ""
+#~ "To create a new topic, enter a %1.WikiWord for the topic name, select a "
+#~ "topic parent and click 'Create.'"
+#~ msgstr ""
+#~ "為了創建一個新主題，輸入一個%1.WikiWord 主題名，選擇一個父主題然後按'創"
+#~ "建'。"
 
 #, fuzzy
 #~ msgid "Hide form"

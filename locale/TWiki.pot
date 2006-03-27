@@ -115,7 +115,7 @@ msgstr ""
 msgid "%1 is an invalid name for a new web"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:16
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:46
 msgid "%1 is currently logged in"
 msgstr ""
 
@@ -160,7 +160,7 @@ msgstr ""
 msgid "%1 to start working on the new web"
 msgstr ""
 
-#: templates/messages.tmpl:423
+#: templates/messages.tmpl:424
 msgid "%1 topic does not exist"
 msgstr ""
 
@@ -290,16 +290,16 @@ msgstr ""
 msgid "(move attachment)"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:28 data/TWiki/WebTopicCreator.txt:30
+#: data/TWiki/WebTopicCreator.txt:66 data/TWiki/WebTopicCreator.txt:67
 msgid "(no parent, orphaned topic)"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:1013 lib/TWiki/UI/Manage.pm:1016
-#: lib/TWiki/UI/Manage.pm:1019 lib/TWiki/UI/Manage.pm:1053
-#: lib/TWiki/UI/Manage.pm:1075 lib/TWiki/UI/Manage.pm:628
-#: lib/TWiki/UI/Manage.pm:631 lib/TWiki/UI/Manage.pm:634
-#: lib/TWiki/UI/Manage.pm:637 lib/TWiki/UI/Manage.pm:881
-#: lib/TWiki/UI/Manage.pm:904
+#: lib/TWiki/UI/Manage.pm:1001 lib/TWiki/UI/Manage.pm:1035
+#: lib/TWiki/UI/Manage.pm:1057 lib/TWiki/UI/Manage.pm:610
+#: lib/TWiki/UI/Manage.pm:613 lib/TWiki/UI/Manage.pm:616
+#: lib/TWiki/UI/Manage.pm:619 lib/TWiki/UI/Manage.pm:863
+#: lib/TWiki/UI/Manage.pm:886 lib/TWiki/UI/Manage.pm:995
+#: lib/TWiki/UI/Manage.pm:998
 msgid "(none)"
 msgstr ""
 
@@ -361,7 +361,7 @@ msgstr ""
 msgid "(single character last name)"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:864
+#: lib/TWiki/UI/Manage.pm:846
 msgid "(skipped)"
 msgstr ""
 
@@ -456,7 +456,7 @@ msgstr ""
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:25
 msgid ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
 "\" href='%2' rel='nofollow'>Get help on managing webs</a>"
@@ -479,7 +479,7 @@ msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
 
-#: templates/messages.tmpl:412
+#: templates/messages.tmpl:413
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %2 in a web that does not exist."
@@ -499,7 +499,7 @@ msgstr ""
 msgid "A confirmation e-mail has been sent to %1"
 msgstr ""
 
-#: templates/messages.tmpl:416
+#: templates/messages.tmpl:417
 msgid ""
 "A link to a topic located in another web is written like %1. Make sure that "
 "the name of the web is not spelt wrongly on the previous page; fix the link "
@@ -529,7 +529,7 @@ msgstr ""
 msgid "Access Denied"
 msgstr ""
 
-#: templates/messages.tmpl:395
+#: templates/messages.tmpl:396
 msgid "Access check on %1 failed"
 msgstr ""
 
@@ -544,7 +544,7 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: templates/messages.tmpl:396
+#: templates/messages.tmpl:397
 msgid "Action %1: %2."
 msgstr ""
 
@@ -602,6 +602,7 @@ msgstr ""
 msgid "All topics in %1"
 msgstr ""
 
+#: data/TWiki/WebTopicCreator.txt:60
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr ""
@@ -655,11 +656,11 @@ msgstr ""
 msgid "Attachment"
 msgstr ""
 
-#: templates/messages.tmpl:432
+#: templates/messages.tmpl:433
 msgid "Attachment '%1' does not exist"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:348
+#: lib/TWiki/UI/Manage.pm:327
 msgid "Attachment already exists in new topic"
 msgstr ""
 
@@ -667,7 +668,7 @@ msgstr ""
 msgid "Attachment delete failed"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:328
+#: lib/TWiki/UI/Manage.pm:307
 msgid "Attachment does not exist"
 msgstr ""
 
@@ -787,11 +788,11 @@ msgstr ""
 msgid "Change language"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:55
 msgid "Change links in topics that refer to !%1 in any Web:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:53
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:51
 msgid "Change links in topics that refer to !%1 in the %2 Web:"
 msgstr ""
 
@@ -833,7 +834,7 @@ msgid "Changes"
 msgstr ""
 
 #. ($r2, $r1)
-#: lib/TWiki/UI/RDiff.pm:457
+#: lib/TWiki/UI/RDiff.pm:465
 msgid "Changes from r%1 to r%2"
 msgstr ""
 
@@ -854,7 +855,7 @@ msgstr ""
 msgid "Checked topics will be updated to point to the new topic location."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Checked topics will be updated to point to the new web name."
 msgstr ""
 
@@ -873,7 +874,7 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
-#: templates/messages.tmpl:427
+#: templates/messages.tmpl:428
 msgid "Click here"
 msgstr ""
 
@@ -920,8 +921,8 @@ msgstr ""
 msgid "Conflict"
 msgstr ""
 
-#: templates/messages.tmpl:398 templates/messages.tmpl:405
-#: templates/messages.tmpl:429 templates/messages.tmpl:435
+#: templates/messages.tmpl:399 templates/messages.tmpl:406
+#: templates/messages.tmpl:430 templates/messages.tmpl:436
 msgid "Contact %1 if you have any questions."
 msgstr ""
 
@@ -972,7 +973,7 @@ msgstr ""
 msgid "Create New Topic"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:15
+#: data/TWiki/WebTopicCreator.txt:52
 msgid "Create New Topic in %1 Web"
 msgstr ""
 
@@ -997,7 +998,8 @@ msgstr ""
 msgid "Create personal sidebar"
 msgstr ""
 
-#: lib/TWiki/Render.pm:574 lib/TWiki/Render.pm:586
+#: data/TWiki/WebTopicCreator.txt:71 lib/TWiki/Render.pm:574
+#: lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr ""
 
@@ -1178,7 +1180,7 @@ msgstr ""
 msgid "Enlarge edit box"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:20
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:50
 msgid "Enter a new username and password to change identity:"
 msgstr ""
 
@@ -1343,7 +1345,7 @@ msgid ""
 "it."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:70
 msgid "I forgot my password"
 msgstr ""
 
@@ -1371,7 +1373,7 @@ msgid ""
 "the correct parameters."
 msgstr ""
 
-#: templates/messages.tmpl:414
+#: templates/messages.tmpl:415
 msgid "If you came here by clicking on a question mark link"
 msgstr ""
 
@@ -1395,7 +1397,7 @@ msgstr ""
 #: data/TWiki/ResetPassword.txt:24 data/TWiki/VarMAKETEXT.txt:17
 #: templates/mailresetpassword.tmpl:14
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:14
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:76
 msgid "If you have any questions, please contact %1."
 msgstr ""
 
@@ -1420,7 +1422,7 @@ msgstr ""
 msgid "If you used the \"Jump\" feature to jump to this page:"
 msgstr ""
 
-#: templates/messages.tmpl:426
+#: templates/messages.tmpl:427
 msgid "If you want to create the topic"
 msgstr ""
 
@@ -1429,7 +1431,7 @@ msgstr ""
 msgid "If you would like to create this page:"
 msgstr ""
 
-#: templates/messages.tmpl:419
+#: templates/messages.tmpl:420
 msgid "If you would like to create this web"
 msgstr ""
 
@@ -1502,6 +1504,7 @@ msgid ""
 "check with %1 first."
 msgstr ""
 
+#: data/TWiki/WebTopicCreator.txt:61
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:33
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
@@ -1574,7 +1577,7 @@ msgstr ""
 msgid "Login name %1"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:69
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr ""
 
@@ -1707,7 +1710,7 @@ msgstr ""
 msgid "Not recommended when deleting a topic."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
 msgid "Not recommended when deleting a web."
 msgstr ""
 
@@ -1738,7 +1741,7 @@ msgid "Notes:"
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:90
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:41
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:39
 msgid "Notices:"
 msgstr ""
 
@@ -1771,13 +1774,13 @@ msgstr ""
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:39
+#: data/TWiki/WebTopicCreator.txt:79
 msgid ""
 "Once you have created the topic, consider adding links in related topics to "
 "the new topic so that there are more ways people can discover it."
 msgstr ""
 
-#: templates/messages.tmpl:403
+#: templates/messages.tmpl:404
 msgid "Only members of the %1 are allowed to perform this action."
 msgstr ""
 
@@ -1826,7 +1829,7 @@ msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr ""
 
 #: data/TWiki/ChangeEmailAddress.txt:24
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:64
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr ""
 
@@ -1858,7 +1861,7 @@ msgstr ""
 msgid "Please contact %1 if you have any questions."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:12
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
 msgid "Please enter your username and password:"
 msgstr ""
 
@@ -1970,8 +1973,8 @@ msgstr ""
 #: data/Main/TWikiGroupTemplate.txt:10 data/Sandbox/WebNotify.txt:10
 #: data/TWiki/ChangeEmailAddress.txt:35 data/TWiki/ChangePassword.txt:28
 #: data/TWiki/ResetPassword.txt:28 data/Trash/WebNotify.txt:9
-#: data/_default/WebNotify.txt:8 templates/messages.tmpl:401
-#: templates/messages.tmpl:408
+#: data/_default/WebNotify.txt:8 templates/messages.tmpl:402
+#: templates/messages.tmpl:409
 msgid "Related topics:"
 msgstr ""
 
@@ -2010,7 +2013,7 @@ msgstr ""
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
 #: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:35
 msgid "Rename/Move"
 msgstr ""
 
@@ -2181,7 +2184,7 @@ msgid "See also the verbose %1."
 msgstr ""
 
 #: data/TWiki/RenameWeb.txt:3
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:45
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:75
 msgid "See also:"
 msgstr ""
 
@@ -2262,7 +2265,7 @@ msgid "Some add schedule information and vacation notice."
 msgstr ""
 
 #: templates/messages.tmpl:294
-msgid "Some characters such as =~=, =$=, =@=, =%= are removed"
+msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
 msgstr ""
 
 #: templates/registernotify.tmpl:14
@@ -2319,7 +2322,7 @@ msgstr ""
 msgid "Subscribe / Unsubscribe in:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:22
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:27
 msgid "Subwebs must be enabled."
 msgstr ""
 
@@ -2382,7 +2385,7 @@ msgstr ""
 msgid "The %1 topic already exists"
 msgstr ""
 
-#: templates/messages.tmpl:411
+#: templates/messages.tmpl:412
 msgid "The %1 web does not exist"
 msgstr ""
 
@@ -2415,7 +2418,7 @@ msgid ""
 "without saving."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:28
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:26
 msgid "The checkmarked topics will be updated"
 msgstr ""
 
@@ -2591,14 +2594,7 @@ msgstr ""
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:37
-msgid ""
-"To create a new topic, enter a %1.WikiWord for the topic name, select a "
-"topic parent and click 'Create.'"
-msgstr ""
-
 #: templates/renameweb.tmpl:10
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:23
 msgid ""
 "To delete this web: move this web to the Trash web by renaming it to %1."
 msgstr ""
@@ -2658,11 +2654,11 @@ msgstr ""
 msgid "Topic name"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:17
+#: data/TWiki/WebTopicCreator.txt:55
 msgid "Topic name:"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:25
+#: data/TWiki/WebTopicCreator.txt:64
 msgid "Topic parent:"
 msgstr ""
 
@@ -2687,17 +2683,17 @@ msgstr ""
 msgid "Topics per web"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:41
 msgid "Topics which are currently being edited by other users in the %1 Web:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:46
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:44
 msgid ""
 "Topics which refer to this web and are are currently being edited by other "
 "users:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:49
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:47
 msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
@@ -2726,7 +2722,7 @@ msgstr ""
 msgid "Unrecognized action command %1"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:54
 msgid "Unrecognized user and/or password"
 msgstr ""
 
@@ -2780,7 +2776,7 @@ msgstr ""
 msgid "User Reference"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:58
+#: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr ""
 
@@ -2858,6 +2854,10 @@ msgstr ""
 msgid "Warning: Can't find topic %1"
 msgstr ""
 
+#: templates/messages.tmpl:390
+msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "We&b"
 msgstr ""
@@ -2930,15 +2930,15 @@ msgid ""
 "underscore and has only alphanumeric characters."
 msgstr ""
 
-#: templates/messages.tmpl:424
+#: templates/messages.tmpl:425
 msgid "You are trying to %1 a topic that does not exist."
 msgstr ""
 
-#: templates/messages.tmpl:433
+#: templates/messages.tmpl:434
 msgid "You are trying to %1 an attachment that does not exist."
 msgstr ""
 
-#: templates/messages.tmpl:420
+#: templates/messages.tmpl:421
 msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
@@ -3065,7 +3065,7 @@ msgid ""
 "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
 
-#: lib/TWiki/I18N.pm:255
+#: lib/TWiki/I18N.pm:271
 msgid "_language_name"
 msgstr ""
 
@@ -3089,7 +3089,7 @@ msgstr ""
 msgid "access not allowed on topic"
 msgstr ""
 
-#: lib/TWiki/Access.pm:197 lib/TWiki/UI/Manage.pm:179
+#: lib/TWiki/Access.pm:197 lib/TWiki/UI/Manage.pm:158
 msgid "access not allowed on web"
 msgstr ""
 
@@ -3184,7 +3184,7 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
 #: twikiplugins/PatternSkin/templates/renamedelete.pattern.tmpl:49
-#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:31
+#: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:35
 #: twikiplugins/PatternSkin/templates/renamewebconfirm.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/settings.pattern.tmpl:28
 msgid "or"
