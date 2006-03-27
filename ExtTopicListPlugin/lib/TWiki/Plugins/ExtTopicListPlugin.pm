@@ -109,12 +109,11 @@ sub _EXTTOPICLIST {
     # For example, %EXTTOPICLIST{'hamburger' sideorder="onions"}%
     # $params->{_DEFAULT} will be 'hamburger'
     # $params->{sideorder} will be 'onions'
-    my( $this, $params ) = @_;
     my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
     $format ||= '$name';
     my $separator = $params->{separator} || "\n";
     $separator =~ s/\$n/\n/;
-    my $web = $params->{web} || $this->{webName};
+    my $web = $params->{web} || $session->{webName};
     my $selection = $params->{selection} || '';
     $selection =~ s/\,/ /g;
     $selection = " $selection ";
@@ -125,11 +124,11 @@ sub _EXTTOPICLIST {
     $web =~ s#\.#/#go;
 
     return '' if
-        $web ne $this->{webName} &&
-        $this->{prefs}->getWebPreferencesValue( 'NOSEARCHALL', $web );
+        $web ne $session->{webName} &&
+        $session->{prefs}->getWebPreferencesValue( 'NOSEARCHALL', $web );
 
     my @items;
-    foreach my $item ( $this->{store}->getTopicNames( $web ) ) {
+    foreach my $item ( $session->{store}->getTopicNames( $web ) ) {
 	unless ($item =~ $excludetopic) {
 	    my $line = $format;
 	    $line =~ s/\$web\b/$web/g;
