@@ -151,15 +151,18 @@ sub beforeSaveHandler {
         $_[0] =~ s/\t/   /g;
     }
 
-    $_[0] = $html2tml->convert(
-        $_[0],
-        {
-            web => $_[2],
-            topic => $_[1],
-            convertImage => \&convertImage,
-            rewriteURL => \&postConvertURL,
-        }
-       );
+    my $opts = {
+        web => $_[2],
+        topic => $_[1],
+        convertImage => \&convertImage,
+        rewriteURL => \&postConvertURL,
+        very_clean => 1, # aggressively polish saved HTML
+    };
+
+    # Let's just set this and see what happens....
+    $opts->{very_clean} = 1;
+
+    $_[0] = $html2tml->convert( $_[0], $opts );
 
     unless( $MODERN ) {
         # redo the munging

@@ -971,12 +971,12 @@ HERE
     opendir( D, "test_html" ) or die;
     foreach my $file (grep { /^.*\.html$/i } readdir D ) {
         $file =~ s/\.html$//;
-        next unless -e "result_tml/$file.txt";
         my $test = { name => $file };
         open(F, "<test_html/$file.html");
         undef $/;
         $test->{html} = <F>;
         close(F);
+        next unless -e "result_tml/$file.txt";
         open(F, "<result_tml/$file.txt");
         undef $/;
         $test->{finaltml} = <F>;

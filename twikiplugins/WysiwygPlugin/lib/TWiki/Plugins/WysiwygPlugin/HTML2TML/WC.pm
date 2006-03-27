@@ -37,6 +37,7 @@ package WC;
 | $NO_BLOCK_TML | Flag that gets passed _down_ into generator functions. Don't generate block TML e.g. tables, lists |
 | $NOP_ALL | Flag that gets passed _down_ into generator functions. NOP all variables and WikiWords. |
 | $BLOCK_TML | Flag passed up from generator functions; set if expansion includes block TML |
+| $VERY_CLEAN | Flag passed to indicate that HTML must be aggressively cleaned (unrecognised or unuseful tags stripped out) |
 
 =cut
 
@@ -46,6 +47,7 @@ $NO_HTML      = 1 << 0;
 $NO_TML       = 1 << 1;
 $NO_BLOCK_TML = 1 << 2;
 $NOP_ALL      = 1 << 3;
+$VERY_CLEAN   = 1 << 4;
 
 $BLOCK_TML    = $NO_BLOCK_TML;
 
@@ -205,17 +207,17 @@ sub cleanNode {
 }
 
 sub cleanParseTree {
-    my $this = shift;
+    my( $this, $opts ) = @_;
 
-    $this->cleanNode();
+    $this->cleanNode($opts);
 
-    # thread siblings within a node
+    # thread siblings and parents
     my $prev;
     foreach my $kid (@{$this->{children}}) {
         $kid->{parent} = $this;
         $kid->{prev} = $prev;
         $prev->{next} = $kid if $prev;
-        $kid->cleanParseTree($this);
+        $kid->cleanParseTree($opts);
         $prev = $kid;
     }
 }

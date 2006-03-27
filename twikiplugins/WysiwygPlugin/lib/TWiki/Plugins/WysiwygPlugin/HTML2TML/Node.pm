@@ -74,7 +74,7 @@ sub new {
 
 # debug
 sub stringify {
-    my $this = shift;
+    my( $this, $shallow ) = @_;
     my $r = '';
     if( $this->{tag} ) {
         $r .= '<'.$this->{tag};
@@ -83,8 +83,12 @@ sub stringify {
         }
         $r .= '>';
     }
-    foreach my $kid ( @{$this->{children}} ) {
-        $r .= $kid->stringify();
+    if( $shallow ) {
+        $r .= '...';
+    } else {
+        foreach my $kid ( @{$this->{children}} ) {
+            $r .= $kid->stringify();
+        }
     }
     if( $this->{tag} ) {
         $r .= '</'.$this->{tag}.'>';
@@ -117,7 +121,7 @@ sub _trim {
 
 =pod
 
----++ ObjectMethod rootGenerate( ) -> $text
+---++ ObjectMethod rootGenerate($opts) -> $text
 
 Generates TML from this HTML node. The generation is done
 top down and bottom up, so that higher level nodes can make
@@ -125,14 +129,18 @@ decisions on whether to allow TML conversion in lower nodes,
 and lower level nodes can constrain conversion in higher level
 nodes.
 
+$opts is a bitset. $WC::VERY_CLEAN will cause the generator
+to drop unrecognised HTML (e.g. divs and spans that don't
+generate TML)
+
 =cut
 
 sub rootGenerate {
-    my $this = shift;
+    my( $this, $opts ) = @_;
 
     $this->cleanParseTree();
 
-    my( $f, $tml ) = $this->generate(0);
+    my( $f, $tml ) = $this->generate($opts);
 
     # isolate whitespace checks and convert to $NBSP
     $tml =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
@@ -194,7 +202,7 @@ sub generate {
     my $tag = uc( $this->{tag} );
     if( $options & $WC::NO_HTML ) {
         # NO_HTML implies NO_TML
-        my $brats = $this->_flatKids( $options );
+        my $brats = $this->_flatten( $options );
         if( $this->{tag} && $WC::BREAK_BEFORE{$this->{tag}} ) {
             $brats = "\n".$brats;
         }
@@ -221,7 +229,7 @@ sub generate {
     }
 
     # No translation, so we need the text of the children
-    ( $flags, $text ) = $this->_flatKids( $options );
+    ( $flags, $text ) = $this->_flatten( $options );
 
     # just return the text if there is no tag name
     return ( $flags, $text ) unless $this->{tag};
@@ -230,7 +238,7 @@ sub generate {
 }
 
 # Return the children flattened out subject to the options
-sub _flatKids {
+sub _flatten {
     my( $this, $options ) = @_;
     my $text = '';
     my $flags = 0;
@@ -274,7 +282,7 @@ sub _htmlParams {
 # generate the default representation of an HTML tag
 sub _defaultTag {
     my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatKids( $options );
+    my( $flags, $text ) = $this->_flatten( $options );
     my $tag = lc( $this->{tag} );
     my $p = _htmlParams( $this->{attrs} );
     if( $text =~ /^\s+$/ ) {
@@ -310,7 +318,7 @@ sub _convertList {
         next unless $kid->{tag} =~ m/^(dt|dd|li)$/i;
         if( $isdl && ( lc( $kid->{tag} ) eq 'dt' )) {
             # DT, set the bullet type for subsequent DT
-            $basebullet = $kid->_flatKids( $WC::NO_BLOCK_TML ).':';
+            $basebullet = $kid->_flatten( $WC::NO_BLOCK_TML ).':';
             $basebullet =~ s/$WC::CHECKn/ /g;
             if( $basebullet =~ /[$WC::CHECKw ]/ ) {
                 $basebullet = "\$ $basebullet";
@@ -422,11 +430,11 @@ sub _isConvertableTableRow {
     my @row;
     foreach my $kid ( @{$this->{children}} ) {
         if( lc( $kid->{tag} ) eq 'th' ) {
-            ( $flags, $text ) = $kid->_flatKids( $options );
+            ( $flags, $text ) = $kid->_flatten( $options );
             $text = _trim( $text );
             $text = ' *'._trim( $text ).'* ' if $text;
         } elsif(lc( $kid->{tag} ) eq 'td' ) {
-            ( $flags, $text ) = $kid->_flatKids( $options );
+            ( $flags, $text ) = $kid->_flatten( $options );
             $text = _trim( $text );
             $text = ' '.$text.' ' if $text;
         } elsif( !$kid->{tag} ) {
@@ -479,11 +487,11 @@ sub _deduceAlignment {
 # convert a heading tag
 sub _H {
     my( $this, $options, $depth ) = @_;
-    my( $flags, $contents ) = $this->_flatKids( $options );
+    my( $flags, $contents ) = $this->_flatten( $options );
     return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
     my $notoc = '';
-    if( defined( $this->{attrs}->{class} ) &&
-        $this->{attrs}->{class} =~ /\bnotoc\b/ ) {
+    if( $this->{attrs}->{class} &&
+          $this->{attrs}->{class} =~ /\bnotoc\b/ ) {
         $notoc = '!!';
     }
     $contents =~ s/^\s*/ /;
@@ -495,7 +503,7 @@ sub _H {
 # generate an emphasis
 sub _emphasis {
     my( $this, $options, $ch ) = @_;
-    my( $flags, $contents ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+    my( $flags, $contents ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
     return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
     $contents = _trim( $contents );
     return (0, undef) if( $contents =~ /^</ || $contents =~ />$/ );
@@ -503,15 +511,54 @@ sub _emphasis {
     return ( $flags, $WC::CHECKw.$ch.$contents.$ch.$WC::CHECK2 );
 }
 
+# pseudo-tags that may leak through in TWikiVariables
+# We have to handle this to avoid a matching close tag </nop>
+sub _handleNOP {
+    my( $this, $options ) = @_;
+    my( $flags, $text ) = $this->_flatten( $options );
+    return ($flags, '<nop>'.$text);
+}
+
+sub _handleNOPRESULT {
+    my( $this, $options ) = @_;
+    my( $flags, $text ) = $this->_flatten( $options );
+    return ($flags, '<nop>'.$text);
+}
+
+# tags we ignore completely (contents as well)
+sub _handleDOCTYPE { return ( 0, '' ); }
+
+sub _handleVERBATIM {
+    my( $this, $options ) = @_;
+    my( $flags, $text ) = $this->_flatten( $WC::NO_TML | $WC::NO_HTML );
+
+    $text =~ s!<br( /)?>!$WC::NBBR!gi;
+    $text =~ s!<p( /)?>!$WC::NBBR!gi;
+    $text =~ s!</(p|br)>!!gi;
+    $text = HTML::Entities::decode_entities( $text );
+    $text =~ s/ /$WC::NBSP/g;
+    $text =~ s/$WC::CHECKn/$WC::NBBR/g;
+    my $p = _htmlParams( $this->{attrs}, 'TMLverbatim' );
+    return ( $WC::BLOCK_TML,
+             "$WC::CHECKn<verbatim$p>$WC::CHECKn".$text."$WC::CHECKn</verbatim>$WC::CHECKn" );
+}
+
+sub _LIST {
+    my( $this, $options ) = @_;
+    if( ( $options & $WC::NO_BLOCK_TML ) ||
+        !$this->_isConvertableList( $options | $WC::NO_BLOCK_TML )) {
+        return ( 0, undef );
+    }
+    return ( $WC::BLOCK_TML, $this->_convertList( "   " ));
+}
+
 # Performs initial cleanup of the parse tree before generation. Walks the
 # tree, making parent links and removing attributes that don't add value.
-# This simplifies determining
-# whether a node is to be kept, or flattened out.
-# Attributes that don't add value are:
-# lang
-# class with an empty value
+# This simplifies determining whether a node is to be kept, or flattened
+# out.
+# $opts may include $WC::VERY_CLEAN
 sub cleanNode {
-    my $this = shift;
+    my( $this, $opts ) = @_;
     my $a;
 
     # Always delete these attrs
@@ -530,121 +577,27 @@ sub cleanNode {
 }
 
 ######################################################
-# Handlers for different tag types. Each handler returns
+# Handlers for different HTML tag types. Each handler returns
 # a pair (flags,text) containing the result of the expansion.
-# Any of these handlers may return (0,undef) at any point,
-# which will cause the tag to be generated as HTML tags.
-
-# synonyms
-sub _handleH1 { return _H( @_, 1 ); }
-sub _handleH2 { return _H( @_, 2 ); }
-sub _handleH3 { return _H( @_, 3 ); }
-sub _handleH4 { return _H( @_, 4 ); }
-sub _handleH5 { return _H( @_, 5 ); }
-sub _handleH6 { return _H( @_, 6 ); }
-sub _handleOL { return _handleLIST( @_ ); }
-sub _handleDL { return _handleLIST( @_ ); }
-sub _handleUL { return _handleLIST( @_ ); }
-sub _handleB  { return _handleSTRONG( @_ ); }
-sub _handleI  { return _handleEM( @_ ); }
-sub _handleTT { return _handleCODE( @_ ); }
-
-# tags where we just expand the content, ignoring the actual tag itself
-sub _handleHTML { return _flatKids( @_ ); }
-sub _handleBODY { return _flatKids( @_ ); }
-
-# pseudo-tags that may leak through in TWikiVariables
-# We have to handle this to avoid a matching close tag </nop>
-sub _handleNOP {
-    my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatKids( $options );
-    return ($flags, '<nop>'.$text);
-}
-
-sub _handleNOPRESULT {
-    my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatKids( $options );
-    return ($flags, '<nop>'.$text);
-}
-
-# tags we ignore completely (contents as well)
-sub _handleDOCTYPE { return ( 0, '' ); }
-sub _handleHEAD { return ( 0, '' ); }
-sub _handleBASE { return ( 0, '' ); }
-sub _handleBASEFONT { return ( 0, '' ); }
-sub _handleMETA { return ( 0, '' ); }
-
-sub _handleSTRONG {
-    my( $this, $options ) = @_;
-    if( scalar( @{$this->{children}} ) == 1 ) {
-        if( $this->{children}->[0]->{tag} =~ /^(i|em)$/i ) {
-            return _emphasis( $this->{children}->[0], $options, '__' );
-        } elsif( $this->{children}->[0]->{tag} =~ /^(code|tt)$/i ) {
-            return _emphasis( $this->{children}->[0], $options, '==' );
-        }
-    }
-    return _emphasis( @_, '*' );
-}
-
-sub _handleEM {
-    my( $this, $options ) = @_;
-    if( scalar( @{$this->{children}} ) == 1 &&
-        $this->{children}->[0]->{tag} =~ /^(b|strong)$/i ) {
-        return _emphasis( $this->{children}->[0], $options, '__' );
-    }
-    return _emphasis( @_, '_' );
-}
-
-sub _handleCODE {
-    my( $this, $options ) = @_;
-    if( scalar( @{$this->{children}} ) == 1 &&
-        $this->{children}->[0]->{tag} =~ /^(b|strong)$/i ) {
-        return _emphasis( $this->{children}->[0], $options, '==' );
-    }
-    return _emphasis( @_, '=' );
-}
-
-sub _handleBR {
-    my( $this, $options ) = @_;
-    my($f, $kids ) = $this->_flatKids( $options );
-    if( ( $options & $WC::NO_BLOCK_TML ) ||
-        $this->{prev} && !$this->{prev}->{tag} &&
-        $this->{prev}->{text} =~ /\S/ &&
-        $this->{next} && !$this->{next}->{tag} &&
-        $this->{prev}->{text} =~ /\S/ ) {
-        my $reason = '';
-#        if ( $options & $WC::NO_BLOCK_TML ) {
-#            $reason = 'A';
-#        } else {
-#            $reason = 'B'.$this->{prev}->{text}.';'.$this->{next}->{text};
-#        }
-        # Special case; if the immediately siblings are text
-        # nodes, then we have to use a <br>
-        return (0, '<br '.$reason.'/>'.$kids);
-    }
-    return ($f, $WC::NBBR.$kids);
-}
-
-sub _handleHR {
-    my( $this, $options ) = @_;
-
-    my( $f, $kids ) = $this->_flatKids( $options );
-    return ($f, '<hr />'.$kids) if( $options & $WC::NO_BLOCK_TML );
-    return ( $f | $WC::BLOCK_TML, $WC::CHECKn.'---'.$WC::CHECKn.$kids);
-}
-
-sub _handleP {
-    my( $this, $options ) = @_;
-
-    my( $f, $kids ) = $this->_flatKids( $options );
-    return ($f, '<p />'.$kids) if( $options & $WC::NO_BLOCK_TML );
-    return ($f | $WC::BLOCK_TML, $WC::NBBR.$WC::NBBR.$kids);
-}
-
+#
+# There are four ways of handling a tag:
+# 1. Return (0,undef) which will cause the tag to be output
+#    as HTML tags.
+# 2. Return _flatten which will cause the tag to be ignored,
+#    but the content expanded
+# 3. Return (0, '') which will cause the tag not to be output
+# 4. Something else more complex
+#
+# Note that tags like TFOOT and DT are handled inside the table
+# and list processors.
+# They only have handler methods in case the tag is seen outside
+# the content of a table or list. In this case they are usually
+# simply removed from the output.
+#
 sub _handleA {
     my( $this, $options ) = @_;
 
-    my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+    my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
     if( $text && $text =~ /\S/ && $this->{attrs}->{href}) {
         # there's text and an href
         my $href = $this->{attrs}->{href};
@@ -688,61 +641,180 @@ sub _handleA {
     return (0, '');
 }
 
-sub _handleINPUT {
+sub _handleABBR { return _flatten( @_ ); };
+sub _handleACRONYM { return _flatten( @_ ); };
+sub _handleADDRESS { return _flatten( @_ ); };
+sub _handleAPPLET { return( 0, '' ); };
+sub _handleAREA { return( 0, '' ); };
+
+sub _handleB { return _handleSTRONG( @_ ); }
+sub _handleBASE { return ( 0, '' ); }
+sub _handleBASEFONT { return ( 0, '' ); }
+sub _handleBDO { return( 0, '' ); };
+sub _handleBIG { return( 0, '' ); };
+# BLOCKQUOTE
+sub _handleBODY { return _flatten( @_ ); }
+# BUTTON
+
+sub _handleBR {
+    my( $this, $options ) = @_;
+    my($f, $kids ) = $this->_flatten( $options );
+    if( ( $options & $WC::NO_BLOCK_TML ) ||
+        $this->{prev} && !$this->{prev}->{tag} &&
+        $this->{prev}->{text} =~ /\S/ &&
+        $this->{next} && !$this->{next}->{tag} &&
+        $this->{prev}->{text} =~ /\S/ ) {
+        my $reason = '';
+#        if ( $options & $WC::NO_BLOCK_TML ) {
+#            $reason = 'A';
+#        } else {
+#            $reason = 'B'.$this->{prev}->{text}.';'.$this->{next}->{text};
+#        }
+        # Special case; if the immediately siblings are text
+        # nodes, then we have to use a <br>
+        return (0, '<br '.$reason.'/>'.$kids);
+    }
+    return ($f, $WC::NBBR.$kids);
+}
+
+# CAPTION
+# CENTER
+# CITE
+
+sub _handleCODE {
+    my( $this, $options ) = @_;
+    if( scalar( @{$this->{children}} ) == 1 &&
+        $this->{children}->[0]->{tag} =~ /^(b|strong)$/i ) {
+        return _emphasis( $this->{children}->[0], $options, '==' );
+    }
+    return _emphasis( @_, '=' );
+}
+
+sub _handleCOL { return _flatten( @_ ); };
+sub _handleCOLGROUP { return _flatten( @_ ); };
+sub _handleDD { return _flatten( @_ ); };
+sub _handleDEL { return _flatten( @_ ); };
+sub _handleDFN { return _flatten( @_ ); };
+# DIR
+
+sub _handleDIV {
     my( $this, $options ) = @_;
     if( defined( $this->{attrs}->{class} ) &&
+          $this->{attrs}->{class} =~ /\bTMLnoautolink\b/ ) {
+        my( $flags, $text ) = $this->_flatten( $options );
+        my $p = _htmlParams( $this->{attrs}, 'TMLnoautolink' );
+        return ($WC::BLOCK_TML, "$WC::CHECKn<noautolink$p>$WC::CHECKn".$text.
+                "$WC::CHECKn</noautolink>$WC::CHECKn");
+    }
+    if( $options & $WC::VERY_CLEAN ) {
+        return $this->_flatten( $options );
+    }
+    return (0, undef);
+}
+
+sub _handleDL { return _LIST( @_ ); }
+sub _handleDT { return _flatten( @_ ); };
+
+sub _handleEM {
+    my( $this, $options ) = @_;
+    if( scalar( @{$this->{children}} ) == 1 &&
+        $this->{children}->[0]->{tag} =~ /^(b|strong)$/i ) {
+        return _emphasis( $this->{children}->[0], $options, '__' );
+    }
+    return _emphasis( @_, '_' );
+}
+
+sub _handleFIELDSET { return _flatten( @_ ); };
+sub _handleFONT     { return _flatten( @_ ); };
+# FORM
+sub _handleFRAME    { return _flatten( @_ ); };
+sub _handleFRAMESET { return _flatten( @_ ); };
+sub _handleHEAD     { return ( 0, '' ); }
+
+sub _handleHR {
+    my( $this, $options ) = @_;
+
+    my( $f, $kids ) = $this->_flatten( $options );
+    return ($f, '<hr />'.$kids) if( $options & $WC::NO_BLOCK_TML );
+    return ( $f | $WC::BLOCK_TML, $WC::CHECKn.'---'.$WC::CHECKn.$kids);
+}
+
+sub _handleHTML   { return _flatten( @_ ); }
+sub _handleH1     { return _H( @_, 1 ); }
+sub _handleH2     { return _H( @_, 2 ); }
+sub _handleH3     { return _H( @_, 3 ); }
+sub _handleH4     { return _H( @_, 4 ); }
+sub _handleH5     { return _H( @_, 5 ); }
+sub _handleH6     { return _H( @_, 6 ); }
+sub _handleI      { return _handleEM( @_ ); }
+sub _handleIFRAME { return( 0, '' ); };
+
+sub _handleIMG {
+    my( $this, $options ) = @_;
+
+    if( $this->{context} && $this->{context}->{rewriteURL} ) {
+        my $href = $this->{attrs}->{src};
+        $href = &{$this->{context}->{rewriteURL}}(
+            $href, $this->{context} );
+        $this->{attrs}->{src} = $href;
+    }
+
+    return (0, undef) unless $this->{context} &&
+      $this->{context}->{convertImage};
+
+    my $alt = &{$this->{context}->{convertImage}}(
+        $this->{attrs}->{src},
+        $this->{context} );
+    if( $alt ) {
+        return (0, " $alt ");
+    }
+    return ( 0, undef );
+}
+
+sub _handleINPUT {
+    my( $this, $options ) = @_;
+    if( $this->{attrs}->{class} &&
           $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
-        my $text = $this->{attrs}->{value};
+        my $text = $this->{attrs}->{value} || '';
         my $var = _trim($text);
         my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
         # don't create unnamed variables
         $var = '%'.$nop.$var.'%' if( $var );
         my $flags;
-        ( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+        ( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
         return (0, $var.$text);
     }
-    return (0, undef);
-}
-
-sub _handleTEXTAREA {
-    my( $this, $options ) = @_;
-    if( defined( $this->{attrs}->{class} ) &&
-        $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
-        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
-        return (0, "<!--\n".$text."\n-->" );
+    if( $options & $WC::VERY_CLEAN ) {
+        return $this->_flatten( $options );
     }
     return (0, undef);
 }
 
-sub _handleSPAN {
+# INS
+sub _handleISINDEX  { return( 0, '' ); };
+sub _handleKBD      { return _handleTT( @_ ); }
+sub _handleLABEL    { return( 0, '' ); };
+# LI
+sub _handleLINK     { return( 0, '' ); };
+# MAP
+# MENU
+sub _handleMETA     { return ( 0, '' ); }
+sub _handleNOFRAMES { return ( 0, '' ); }
+sub _handleNOSCRIPT { return ( 0, '' ); }
+sub _handleOBJECT   { return ( 0, '' ); }
+sub _handleOL       { return _LIST( @_ ); }
+# OPTGROUP
+# OPTION
+
+sub _handleP {
     my( $this, $options ) = @_;
-    if( defined( $this->{attrs}->{class} ) &&
-        $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
-        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
-        my $var = _trim($text);
-        my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
-        # don't create unnamed variables
-        $var = '%'.$nop.$var.'%' if( $var );
-        return (0, $var);
-    } elsif( defined( $this->{attrs}->{class} ) &&
-               $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
-        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
-        return (0, '<!--'.$text.'-->' );
-    } elsif( defined( $this->{attrs}->{class} ) &&
-               $this->{attrs}->{class} =~ /\bTMLnop\b/) {
-        my( $flags, $kids ) = $this->_flatKids( $options | $WC::NOP_ALL );
-        $kids =~ s/%([A-Z0-9_:]+({.*})?)%/%<nop>$1%/g;
-        return ( $flags, $kids );
-    } elsif( defined( $this->{attrs}->{class} ) &&
-               $this->{attrs}->{class} =~ /\bTMLnopresult\b/) {
-        my( $flags, $kids ) = $this->_flatKids( $options );
-        return ( $flags, '<nop>'.$kids );
-    } elsif( !scalar( %{$this->{attrs}} )) {
-        # ignore the span if there are no attrs
-        return $this->_flatKids( $options );
-    }
-    return (0, undef);
+
+    my( $f, $kids ) = $this->_flatten( $options );
+    return ($f, '<p />'.$kids) if( $options & $WC::NO_BLOCK_TML );
+    return ($f | $WC::BLOCK_TML, $WC::NBBR.$WC::NBBR.$kids);
 }
+
+sub _handlePARAM { return ( 0, '' ); }
 
 sub _handlePRE {
     my( $this, $options ) = @_;
@@ -755,7 +827,7 @@ sub _handlePRE {
     # can't use CGI::pre because it wont put the newlines that
     # twiki needs in
     unless( $options & $WC::NO_BLOCK_TML ) {
-        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+        my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
         my $p = _htmlParams( $this->{attrs} );
         $text =~ s/<br( \/)?>/$WC::NBBR/g;
         return ($WC::BLOCK_TML, "$WC::CHECKn<pre$p>$WC::CHECKn".$text.
@@ -764,40 +836,74 @@ sub _handlePRE {
     return ( 0, undef );
 }
 
-sub _handleVERBATIM {
-    my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatKids( $WC::NO_TML | $WC::NO_HTML );
+sub _handleQ    { return _flatten( @_ ); };
+# S
+sub _handleSAMP { return _handleTT( @_ ); };
+# SCRIPT
+# SELECT
+# SMALL
 
-    $text =~ s!<br( /)?>!$WC::NBBR!gi;
-    $text =~ s!<p( /)?>!$WC::NBBR!gi;
-    $text =~ s!</(p|br)>!!gi;
-    $text = HTML::Entities::decode_entities( $text );
-    $text =~ s/ /$WC::NBSP/g;
-    $text =~ s/$WC::CHECKn/$WC::NBBR/g;
-    my $p = _htmlParams( $this->{attrs}, 'TMLverbatim' );
-    return ( $WC::BLOCK_TML,
-             "$WC::CHECKn<verbatim$p>$WC::CHECKn".$text."$WC::CHECKn</verbatim>$WC::CHECKn" );
-}
-
-sub _handleDIV {
+sub _handleSPAN {
     my( $this, $options ) = @_;
-    if( $this->{attrs}->{class} =~ /\bTMLnoautolink\b/ ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        my $p = _htmlParams( $this->{attrs}, 'TMLnoautolink' );
-        return ($WC::BLOCK_TML, "$WC::CHECKn<noautolink$p>$WC::CHECKn".$text.
-                "$WC::CHECKn</noautolink>$WC::CHECKn");
+    if( defined( $this->{attrs}->{class} )) {
+        if( $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
+            my( $flags, $text ) = $this->_flatten(
+                $options | $WC::NO_BLOCK_TML );
+            my $var = _trim($text);
+            my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
+            # don't create unnamed variables
+            $var = '%'.$nop.$var.'%' if( $var );
+            return (0, $var);
+        }
+
+        if( $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
+            my( $flags, $text ) = $this->_flatten(
+                $options | $WC::NO_BLOCK_TML );
+            return (0, '<!--'.$text.'-->' );
+        }
+
+        if( $this->{attrs}->{class} =~ /\bTMLnop\b/) {
+            my( $flags, $kids ) = $this->_flatten(
+                $options | $WC::NOP_ALL );
+            $kids =~ s/%([A-Z0-9_:]+({.*})?)%/%<nop>$1%/g;
+            return ( $flags, $kids );
+        }
+
+        if( $this->{attrs}->{class} =~ /\bTMLnopresult\b/) {
+            my( $flags, $kids ) = $this->_flatten( $options );
+            return ( $flags, '<nop>'.$kids );
+        }
+
+        delete $this->{attrs}->{class};
     }
+
+    # ignore the span if there are no attrs, or if we are
+    # being very clean
+    if( !scalar( %{$this->{attrs}}) ||
+          $options & $WC::VERY_CLEAN ) {
+        return $this->_flatten( $options );
+    }
+
     return (0, undef);
 }
 
-sub _handleLIST {
+# STRIKE
+
+sub _handleSTRONG {
     my( $this, $options ) = @_;
-    if( ( $options & $WC::NO_BLOCK_TML ) ||
-        !$this->_isConvertableList( $options | $WC::NO_BLOCK_TML )) {
-        return ( 0, undef );
+    if( scalar( @{$this->{children}} ) == 1 ) {
+        if( $this->{children}->[0]->{tag} =~ /^(i|em)$/i ) {
+            return _emphasis( $this->{children}->[0], $options, '__' );
+        } elsif( $this->{children}->[0]->{tag} =~ /^(code|tt)$/i ) {
+            return _emphasis( $this->{children}->[0], $options, '==' );
+        }
     }
-    return ( $WC::BLOCK_TML, $this->_convertList( "   " ));
+    return _emphasis( @_, '*' );
 }
+
+sub _handleSTYLE { return ( 0, '' ); }
+# SUB
+# SUP
 
 sub _handleTABLE {
     my( $this, $options ) = @_;
@@ -831,26 +937,31 @@ sub _handleTABLE {
     return ( $WC::BLOCK_TML, $text );
 }
 
-sub _handleIMG {
+sub _handleTBODY { return _flatten( @_ ); }
+sub _handleTD { return _flatten( @_ ); }
+
+sub _handleTEXTAREA {
     my( $this, $options ) = @_;
-
-    if( $this->{context} && $this->{context}->{rewriteURL} ) {
-        my $href = $this->{attrs}->{src};
-        $href = &{$this->{context}->{rewriteURL}}(
-            $href, $this->{context} );
-        $this->{attrs}->{src} = $href;
+    if( $this->{attrs}->{class} &&
+        $this->{attrs}->{class} =~ /\bTMLcomment\b/ ) {
+        my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
+        return (0, "<!--\n".$text."\n-->" );
     }
 
-    return (0, undef) unless $this->{context} &&
-      $this->{context}->{convertImage};
-
-    my $alt = &{$this->{context}->{convertImage}}(
-        $this->{attrs}->{src},
-        $this->{context} );
-    if( $alt ) {
-        return (0, " $alt ");
+    if( $options & $WC::VERY_CLEAN ) {
+        return $this->_flatten( $options );
     }
-    return ( 0, undef );
+    return (0, undef);
 }
+
+sub _handleTFOOT { return _flatten( @_ ); }
+sub _handleTH    { return _flatten( @_ ); }
+sub _handleTHEAD { return _flatten( @_ ); }
+sub _handleTITLE { return (0, '' ); }
+sub _handleTR    { return _flatten( @_ ); }
+sub _handleTT    { return _handleCODE( @_ ); }
+# U
+sub _handleUL    { return _LIST( @_ ); }
+sub _handleVAR   { return ( 0, '' ); }
 
 1;
