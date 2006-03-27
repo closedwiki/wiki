@@ -33,8 +33,11 @@ without prior warning, and your plugin may suddenly stop
 working.
 
 For increased performance, all handlers except initPlugin are
-in the documentation instead of inline.  *To enable a handler* 
-move the =cut to above the function instead of below it.
+disabled below. *To enable a handler* remove the leading DISABLE_ from
+the function name. For efficiency and clarity, you should comment out or
+delete the whole of handlers you don't use before you release your
+plugin (or you can put __END__ on a line of it's own and move dead
+code below that line; Perl ignores anything after __END__).
 
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
@@ -93,10 +96,15 @@ installation from working safely, this handler may use 'die', which
 will be trapped and reported in the browser.
 
 You may also call =TWiki::Func::registerTagHandler= here to register
-a function to handle tags that have standard TWiki syntax - for example,
+a function to handle variables that have standard TWiki syntax - for example,
 =%MYTAG{"my param" myarg="My Arg"}%. You can also override internal
-TWiki tag handling functions this way, though this practice is unsupported
+TWiki variable handling functions this way, though this practice is unsupported
 and highly dangerous!
+
+__Note:__ Please align variables names with the Plugin name, e.g. if 
+your Plugin is called FooBarPlugin, name variables FOOBAR and/or 
+FOOBARSOMETHING. This avoids namespace issues.
+
 
 =cut
 
@@ -108,15 +116,9 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
-    return 1;
-}
 
-=pod
-
-    #
-    # Example code of how to get a preference value, register a tag handler
-    # and register a RESTHandler
-    #
+    # Example code of how to get a preference value, register a variable handler
+    # and register a RESTHandler. (remove code you do not need)
 
     # Get plugin preferences, variables defined by:
     #   * Set EXAMPLE = ...
@@ -137,10 +139,9 @@ sub initPlugin {
     # Plugin correctly initialized
     return 1;
 }
-=cut
 
-# The function used to handle the %EXAMPLETAG{...}% tag
-# You would have one of these for each tag you want to process.
+# The function used to handle the %EXAMPLETAG{...}% variable
+# You would have one of these for each variable you want to process.
 sub _EXAMPLETAG {
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
@@ -151,14 +152,12 @@ sub _EXAMPLETAG {
     #             parameter.
     # $theTopic - name of the topic in the query
     # $theWeb   - name of the web in the query
-    # Return: the result of processing the tag
+    # Return: the result of processing the variable
 
     # For example, %EXAMPLETAG{'hamburger' sideorder="onions"}%
     # $params->{_DEFAULT} will be 'hamburger'
     # $params->{sideorder} will be 'onions'
 }
-
-=cut
 
 =pod
 
@@ -169,11 +168,11 @@ is called before any other handler.
 
 If it returns a non-null error string, the plugin will be disabled.
 
+=cut
 
-sub earlyInitPlugin {
+sub DISABLE_earlyInitPlugin {
     return undef;
 }
-=cut
 
 =pod
 
@@ -189,14 +188,14 @@ This handler is called very early, immediately after =earlyInitPlugin=.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
+=cut
 
-sub initializeUserHandler {
+sub DISABLE_initializeUserHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $loginName, $url, $pathInfo ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -209,15 +208,14 @@ Called when a new user registers with this TWiki.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
+=cut
 
-sub registrationHandler {
+sub DISABLE_registrationHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $web, $wikiName, $loginName ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
 }
-
-=cut
 
 =pod
 
@@ -231,11 +229,11 @@ a topic is being rendered.
 
 Plugins that want to implement their own %TAGS% with non-trivial
 additional syntax should implement this function. Internal TWiki
-tags (and any tags declared using =TWiki::Func::registerTagHandler=)
+variables (and any variables declared using =TWiki::Func::registerTagHandler=)
 are expanded _before_, and then again _after_, this function is called
 to ensure all %TAGS% are expanded.
 
-For tags with trivial syntax it is far more efficient to use
+For variables with trivial syntax it is far more efficient to use
 =TWiki::Func::registerTagHandler= (see =initPlugin=).
 
 __NOTE:__ when this handler is called, &lt;verbatim> blocks have been
@@ -245,8 +243,9 @@ still present).
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
 
+=cut
 
-sub commonTagsHandler {
+sub DISABLE_commonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
@@ -256,7 +255,6 @@ sub commonTagsHandler {
     # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
     # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 }
-=cut
 
 =pod
 
@@ -265,7 +263,7 @@ sub commonTagsHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
 This handler is called before TWiki does any expansion of it's own
-internal tags. It is designed for use by cache plugins. Note that
+internal variables. It is designed for use by cache plugins. Note that
 when this handler is called, &lt;verbatim> blocks are still present
 in the text.
 
@@ -278,7 +276,7 @@ handler.
 
 =cut
 
-sub beforeCommonTagsHandler {
+sub DISABLE_beforeCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
@@ -302,14 +300,14 @@ rendering of a topic.
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
 
+=cut
 
-sub afterCommonTagsHandler {
+sub DISABLE_afterCommonTagsHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -318,11 +316,16 @@ sub afterCommonTagsHandler {
    * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
 
 Handler called immediately before TWiki syntax structures (such as lists) are
-processed, but after all variables have been expanded. Use this handler to process special syntax only recognised by your plugin.
+processed, but after all variables have been expanded. Use this handler to 
+process special syntax only recognised by your plugin.
 
-Placeholders are text strings constructed using the tag name and a sequence number e.g. 'pre1', "verbatim6", "head1" etc. Placeholders are inserted into the text inside &lt;!--!marker!--&gt; characters so the text will contain &lt;!--!pre1!--&gt; for placeholder pre1.
+Placeholders are text strings constructed using the tag name and a 
+sequence number e.g. 'pre1', "verbatim6", "head1" etc. Placeholders are 
+inserted into the text inside &lt;!--!marker!--&gt; characters so the 
+text will contain &lt;!--!pre1!--&gt; for placeholder pre1.
 
-Each removed block is represented by the block text and the parameters passed to the tag (usually empty) e.g. for
+Each removed block is represented by the block text and the parameters 
+passed to the tag (usually empty) e.g. for
 <verbatim>
 <pre class='slobadob'>
 XYZ
@@ -332,7 +335,8 @@ the map will contain:
 $removed->{'pre1'}{text}:   XYZ
 $removed->{'pre1'}{params}: class="slobadob"
 </pre>
-Iterating over blocks for a single tag is easy. For example, to prepend a line number to every line of every pre block you might use this code:
+Iterating over blocks for a single tag is easy. For example, to prepend a 
+line number to every line of every pre block you might use this code:
 <verbatim>
 foreach my $placeholder ( keys %$map ) {
     if( $placeholder =~ /^pre/i ) {
@@ -342,38 +346,40 @@ foreach my $placeholder ( keys %$map ) {
 }
 </verbatim>
 
-__NOTE__: This handler is called once for each rendered block of text i.e. it may be called several times during the rendering of a topic.
+__NOTE__: This handler is called once for each rendered block of text i.e. 
+it may be called several times during the rendering of a topic.
 
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
 
 Since TWiki::Plugins::VERSION = '1.026'
 
+=cut
 
-sub preRenderingHandler {
+sub DISABLE_preRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my( $text, $pMap ) = @_;
 }
-=cut
 
 =pod
 
 ---++ postRenderingHandler( $text )
    * =$text= - the text that has just been rendered. May be modified in place.
 
-__NOTE__: This handler is called once for each rendered block of text i.e. it may be called several times during the rendering of a topic.
+__NOTE__: This handler is called once for each rendered block of text i.e. 
+it may be called several times during the rendering of a topic.
 
 __NOTE:__ meta-data is _not_ embedded in the text passed to this
 handler.
 
 Since TWiki::Plugins::VERSION = '1.026'
 
+=cut
 
-sub postRenderingHandler {
+sub DISABLE_postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my $text = shift;
 }
-=cut
 
 =pod
 
@@ -384,18 +390,19 @@ sub postRenderingHandler {
 This handler is called by the edit script just before presenting the edit text
 in the edit box. It is called once when the =edit= script is run.
 
-__NOTE__: meta-data may be embedded in the text passed to this handler (using %META: tags)
+__NOTE__: meta-data may be embedded in the text passed to this handler 
+(using %META: tags)
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
+=cut
 
-sub beforeEditHandler {
+sub DISABLE_beforeEditHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -413,14 +420,14 @@ handler.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
+=cut
 
-sub afterEditHandler {
+sub DISABLE_afterEditHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterEditHandler( $_[2].$_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -441,14 +448,14 @@ text format.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
+=cut
 
-sub beforeSaveHandler {
+sub DISABLE_beforeSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -466,14 +473,14 @@ __NOTE:__ meta-data is embedded in $text (using %META: tags)
 
 __Since:__ TWiki::Plugins::VERSION = '1.020'
 
+=cut
 
-sub afterSaveHandler {
+sub DISABLE_afterSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ### my ( $text, $topic, $web, $error, $meta ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -491,13 +498,13 @@ will include at least the following attributes:
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
 
+=cut
 
-sub beforeAttachmentSaveHandler {
+sub DISABLE_beforeAttachmentSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ###   my( $attrHashRef, $topic, $web ) = @_;
     TWiki::Func::writeDebug( "- ${pluginName}::beforeAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -514,42 +521,60 @@ will include at least the following attributes:
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
 
+=cut
 
-sub afterAttachmentSaveHandler {
+sub DISABLE_afterAttachmentSaveHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     ###   my( $attrHashRef, $topic, $web ) = @_;
     TWiki::Func::writeDebug( "- ${pluginName}::afterAttachmentSaveHandler( $_[2].$_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
 ---++ mergeHandler( $diff, $old, $new, \%info ) -> $text
-Try to resolve a difference encountered during merge. The =differences= array is an array of hash references, where each hash contains the following fields:
+Try to resolve a difference encountered during merge. The =differences= 
+array is an array of hash references, where each hash contains the 
+following fields:
    * =$diff= => one of the characters '+', '-', 'c' or ' '.
       * '+' - =new= contains text inserted in the new version
       * '-' - =old= contains text deleted from the old version
-      * 'c' - =old= contains text from the old version, and =new= text from the version being saved
-      * ' ' - =new= contains text common to both versions, or the change only involved whitespace
+      * 'c' - =old= contains text from the old version, and =new= text
+        from the version being saved
+      * ' ' - =new= contains text common to both versions, or the change
+        only involved whitespace
    * =$old= => text from version currently saved
    * =$new= => text from version being saved
-   * =\%info= is a reference to the form field description { name, title, type, size, value, tooltip, attributes, referenced }. It must _not_ be wrtten to. This parameter will be undef when merging the body text of the topic.
+   * =\%info= is a reference to the form field description { name, title,
+     type, size, value, tooltip, attributes, referenced }. It must _not_
+     be wrtten to. This parameter will be undef when merging the body
+     text of the topic.
 
-Plugins should try to resolve differences and return the merged text. For example, a radio button field where we have ={ diff=>'c', old=>'Leafy', new=>'Barky' }= might be resolved as ='Treelike'=. If the plugin cannot resolve a difference it should return undef.
+Plugins should try to resolve differences and return the merged text. 
+For example, a radio button field where we have 
+={ diff=>'c', old=>'Leafy', new=>'Barky' }= might be resolved as 
+='Treelike'=. If the plugin cannot resolve a difference it should return 
+undef.
 
-The merge handler will be called several times during a save; once for each difference that needs resolution.
+The merge handler will be called several times during a save; once for 
+each difference that needs resolution.
 
-If any merges are left unresolved after all plugins have been given a chance to intercede, the following algorithm is used to decide how to merge the data:
-   1 =new= is taken for all =radio=, =checkbox= and =select= fields to resolve 'c' conflicts
-   1 '+' and '-' text is always included in the the body text and text fields
-   1 <del>conflict</del> <ins>markers</ins> are used to mark 'c' merges in text fields
+If any merges are left unresolved after all plugins have been given a 
+chance to intercede, the following algorithm is used to decide how to 
+merge the data:
+   1 =new= is taken for all =radio=, =checkbox= and =select= fields to 
+     resolve 'c' conflicts
+   1 '+' and '-' text is always included in the the body text and text
+     fields
+   1 =&lt;del>conflict&lt;/del> &lt;ins>markers&lt;/ins>= are used to 
+     mark 'c' merges in text fields
 
-The merge handler is called whenever a topic is saved, and a merge is required to resolve concurrent edits on a topic.
+The merge handler is called whenever a topic is saved, and a merge is 
+required to resolve concurrent edits on a topic.
 
-
-sub mergeHandler {
-}
 =cut
+
+sub DISABLE_mergeHandler {
+}
 
 =pod
 
@@ -570,13 +595,13 @@ using the =TWiki::Func::addToHEAD= method.
 
 __Since:__ TWiki::Plugins::VERSION 1.026
 
+=cut
 
-sub modifyHeaderHandler {
+sub DISABLE_modifyHeaderHandler {
     my ( $headers, $query ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::modifyHeaderHandler()" ) if $debug;
 }
-=cut
 
 =pod
 
@@ -592,36 +617,40 @@ the others will be ignored.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
+=cut
 
-sub redirectCgiQueryHandler {
+sub DISABLE_redirectCgiQueryHandler {
     # do not uncomment, use $_[0], $_[1] instead
     ### my ( $query, $url ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
 }
-=cut
 
 =pod
 
 ---++ renderFormFieldForEditHandler($name, $type, $size, $value, $attributes, $possibleValues) -> $html
 
-This handler is called before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers.
+This handler is called before built-in types are considered. It generates 
+the HTML text rendering this form field, or false, if the rendering 
+should be done by the built-in type handlers.
    * =$name= - name of form field
    * =$type= - type of form field
    * =$size= - size of form field
    * =$value= - value held in the form field
    * =$attributes= - attributes of form field 
-   * =$possibleValues= - the values defined as options for form field, if any. May be a scalar (one legal value) or a ref to an array (several legal values)
-Return HTML text that renders this field. If false, form rendering continues by considering the built-in types.
+   * =$possibleValues= - the values defined as options for form field, if
+     any. May be a scalar (one legal value) or a ref to an array
+     (several legal values)
 
+Return HTML text that renders this field. If false, form rendering 
+continues by considering the built-in types.
 
-sub renderFormFieldForEditHandler {
-}
 =cut
 
+sub DISABLE_renderFormFieldForEditHandler {
+}
 
 =pod
-
 
 ---++ restExample($session) -> $text
 
