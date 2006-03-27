@@ -1,17 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1124201102" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1142931550" format="1.1" version="1.2"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"content"}%
 %TEXT%
 %<nop>META{"form"}%
-%TMPL:END%
-%STARTSECTION{type="templateonly"}%
+%TMPL:END% %{
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin
    * Set SIDEBARARG = TopicView
 -->
-%ENDSECTION{type="templateonly"}%
+}%
+
 %META:FORM{name="TopicForm"}%
-%META:FIELD{name="TopicType" attributes="" title="TopicType" value="TopicTemplate"}%
-%META:FIELD{name="TopicDescription" attributes="" title="TopicDescription" value="Template to create TopicViews"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Template to create TopicViews"}%

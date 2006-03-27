@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142193963" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1143024652" format="1.1" reprev="1.20" version="1.20"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -9,7 +9,7 @@
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-*~~
+*~~ <!-- %CALC{"$SET(commentCounter, 0)"}% -->
 <div class="blogComments">
 <a name="topComment"></a>
 <div class="blogScroll">
@@ -31,7 +31,6 @@
 ~~~     title="ATOM Feed for the Comments of this Entry"
 ~~~     href="%SCRIPTURL{"view"}%/%BASEWEB%/WebAtomComments?name=%NAME%">ATOM</a>
 </div>
-~~~ <!-- %CALC{"$SET(commentCounter, 0)"}% -->
 %~~ DBQUERY{"TopicType='BlogComment' AND BlogRef='%NAME%'"
 ~~~        order="createdate"
 ~~~        format="<!-- $percntCALC{\"$dollarSETM(commentCounter, +1)\"}$percnt -->
@@ -45,17 +44,18 @@
 ~~~                  $percntDBCALL{\"RenderSubComments\" NAME=\"$topic\"}$percnt
 ~~~               </div>
 ~~~               </div>"
+~~~        footer="<style type=\"text/css\">
+~~~          .blogScroll { 
+~~~            $percntCALC{
+~~~              \"$dollarIF($dollarNOT($dollarGET(commentCounter)),display:none)\"
+~~~            }$percnt;
+~~~           </style>"
 ~~~ }%
 ~~~
 <a name="bottomComment"></a>
 <div class="blogScroll">
 ~~~ <a href="#topComment" title="scroll up">&uarr;</a>
 ~~~ </div>
-<style type="text/css">
-.blogScroll { 
-%~~ CALC{"$IF($NOT($GET(commentCounter)),display:none)"}%;
-}
-</style>
 </div>
 *~~ 
 %STOPINCLUDE%

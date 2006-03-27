@@ -43,8 +43,8 @@ no newer comments than that.
 *~~     </table>
 ~~~     <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
 ~~~   format="<tr>
-~~~     <td><ul style=\"margin-top:0px;margin-bottom:0px;\"><li>
-~~~       <a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~     <td valign=\"top\"><ul style=\"margin-top:0px;margin-bottom:0px;padding-top:0px;\">
+~~~       <li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
 ~~~          title=\"link to <nop>$topic\">$headline</a> <br/>
 ~~~       <span class=\"blogSideBarCommenter\">
 ~~~         $percntTIMESINCE{\"$date\" format=\"$time ago\"}$percnt

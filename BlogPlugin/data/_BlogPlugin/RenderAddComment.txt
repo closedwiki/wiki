@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142193857" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1142935996" format="1.1" version="1.16"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -31,7 +31,7 @@ NONE
   </td>
 </tr>
 <tr>
-  <td><input type="text" id="email" name="EMail" style="width:60%"/>
+  <td><input type="text" id="email" name="EMail" value="%USERINFO{format="$emails"}%" style="width:60%"/>
       <label for="email">EMail <span style="color:red;font-size:0.8em">**</span></label>
   </td>
 </tr>
