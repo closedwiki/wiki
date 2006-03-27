@@ -14,6 +14,7 @@
      | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%<nop>INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
      | =section="name"= | Includes only the specified named section, as defined in the included topic by the [[#VarSTARTSECTION][STARTSECTION]] and [[#VarENDSECTION][ENDSECTION]] variables| |
      | =PARONE="val 1"%BR% PARTWO="val 2"= | Any other parameter will be defined as a variable within the scope of the included topic. The example parameters on the left will result in =%<nop>PARONE%= and =%<nop>PARTWO%= being defined within the included topic. | |
+   * __Note:__ !JavaScript in included webpages are filtered out
    * Examples: See IncludeTopicsAndWebPages
    * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]], [[#VarSTARTSECTION][STARTSECTION]], [[#VarENDSECTION][ENDSECTION]]
 
