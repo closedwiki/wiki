@@ -26,3 +26,13 @@
 </div>
 %FISKINSTATE%
 %TMPL:END%
+%TMPL:DEF{"leftsidebar"}% 
+%IFSKINSTATETHEN{sidebar="both"}%
+%$nopTMPL:P{"sidebar"}% 
+%FISKINSTATE%
+%TMPL:END%
+%TMPL:DEF{"rightsidebar"}%  
+%IFSKINSTATETHEN{sidebar="both"}%
+%$nopWEBCOMPONENT{"WebRightBar"}%
+%FISKINSTATE%
+%TMPL:END%

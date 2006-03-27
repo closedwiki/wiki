@@ -1,0 +1,43 @@
+%META:TOPICINFO{author="TWikiContributor" date="1133357180" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="MySideBar"}%
+---+ %WIKIUSERNAME%'s sidebar
+
+%STARTINCLUDE%
+---+ [[%MAINWEB%.%WIKINAME%SideBar][MySidebar]]%REDDOT{"%MAINWEB%.%WIKINAME%SideBar"}%
+<ul>
+  <li> %TWISTY{id="mylinks" link="Links" remember="on" mode="div"}%
+    <ul>
+      <li> ... </li>
+      <li> ... </li>
+      <li> ... </li>
+      <li> ... </li>
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTY{id="mydocu" link="Documentation" remember="on" mode="div"}%
+    <ul>
+      <li> [[%TWIKIWEB%.WelcomeGuest][Welcome Guest]] </li>
+      <li> [[%TWIKIWEB%.TWikiUsersGuide][User's Guide]] </li>
+      <li> [[%TWIKIWEB%.TWikiReferenceManual][Reference Manual]] </li>
+      <li> [[%TWIKIWEB%.GoodStyle][Good Style]] </li>
+      <li> [[%TWIKIWEB%.TWikiFAQ][FAQs]] </li>
+      <li> %TWIKIWEB%.TWikiVariables </li>
+      <li> %TWIKIWEB%.TWikiForms </li>
+      <li> %TWIKIWEB%.FormattedSearch </li>
+      <li> %TWIKIWEB%.FileAttachment </li>
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTY{id="myplugins" link="Plugins" remember="on" mode="div"}%
+    <ul>
+      %FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="<li> $1 </li>" sort="on"}%
+    </ul> %ENDTWISTY% 
+  </li>
+  <li> %TWISTYBUTTON{id="mystyles" link="Skin Styles"}% </li>
+</ul>
+%TWISTYTOGGLE{id="mystyles" remember="on" mode="div"}% 
+%INCLUDE{"TWiki.NatSkinStyleBrowser"}%
+%ENDTWISTYTOGGLE% 
+%STOPINCLUDE%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+-->
