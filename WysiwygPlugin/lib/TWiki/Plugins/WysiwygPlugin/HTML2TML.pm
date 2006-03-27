@@ -97,17 +97,20 @@ sub convert {
 
     $this->{opts} = $options;
 
+    my $opts = 0;
+    $opts = $WC::VERY_CLEAN
+      if ( $options->{very_clean} );
+
     # SMELL: ought to convert to site charset
 
     # get rid of nasties
     $text =~ s/\r//g;
     $text =~ s/\t/ /g;
-
     $this->_resetStack();
     $this->parse( $text );
     $this->eof();
     $this->_apply( undef );
-    return $this->{stackTop}->rootGenerate();
+    return $this->{stackTop}->rootGenerate( $opts );
 }
 
 # Support autoclose of the tags that are most typically incorrectly
