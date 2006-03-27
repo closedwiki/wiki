@@ -156,6 +156,7 @@ This plugin is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the auth
 | Copyright | &copy; ILOG 2005 http://www.ilog.fr |
 |  Plugin Version: | %$VERSION% |
 | Change History: | |
+| 9565 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1890'>Item1890</a> <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1041'>Item1041</a> <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item944'>Item944</a> Much more aggressive cleanup of HTML pasted in from external sources. Excessively verbose HTML (e.g. from Outlook) was causing apparent infinite looing behaviour. |
 | 8867 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1176'>Item1176</a>  commented out Cairo version of header handler |
 | 8780 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1625'>Item1625</a>  disable expansion of twiki variables in urls where there are other twiki variables that can't be expanded |
 | 8779 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1530'>Item1530</a>  support for templatetopic when editing new topics |
