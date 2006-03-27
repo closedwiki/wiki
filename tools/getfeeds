@@ -10,9 +10,10 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
-# VERSION: v0.01
+# VERSION: $Rev$
+# RELEASE: v0.02
 #
-# Requirements: mod_rewrite, realpath, dirname, date, wget, sed, egrep
+# Requirements: mod_rewrite, date, sed, egrep, (wget)
 #
 # Installation:
 #   1. store this file into a sensible location, e.g.
@@ -79,12 +80,16 @@
 #  
 
 # debug
-set -x
+#set -x
 
 if test ! -f "$1"; then
    echo "ERROR: please specify the full path and filename of the config file"
    exit 1
 fi
+
+# read the config file
+CONFIG_FILE=$1
+test -f $CONFIG_FILE && . $CONFIG_FILE
 
 EGREP_PRG=`which egrep`
 if test -z "$EGREP_PRG"; then
@@ -98,10 +103,13 @@ if test -z "$DATE_PRG"; then
    exit 1
 fi
 
-WGET_PRG=`which wget`
-if test -z "$WGET_PRG"; then
-   echo "ERROR: wget not found"
-   exit 1
+test -z "$USE_WGET" && USE_WGET=true
+if test "$USE_WGET" == "true"; then
+  WGET_PRG=`which wget`
+  if test -z "$WGET_PRG"; then
+     echo "ERROR: wget not found"
+     exit 1
+  fi
 fi
 
 SED_PRG=`which sed`
@@ -114,17 +122,11 @@ function writeInfo () {
   $DATE_PRG +"*** %Y-%m-%d %k:%M:%S - $*"
 }
 
-# read the config file
-#GETFEEDS_PRG=`$REALPATH_PRG $0`
-#GETFEEDS_DIR=`$DIRNAME_PRG $GETFEEDS_PRG`
-CONFIG_FILE=$1
-test -f $CONFIG_FILE && . $CONFIG_FILE
-
 # default values
 test -z "$ENABLED" && ENABLED=true
 test -z "$VIEW_URL" && VIEW_URL="http://localhost/cgi-bin/twiki/view"
-test -z "$FEEDS_DIR" && FEEDS_DIR="$HOME/public_html/feeds"
 test -z "$TWIKI_DIR" && TWIKI_DIR="$HOME/twiki"
+test -z "$FEEDS_DIR" && FEEDS_DIR="$HOME/public_html/feeds"
 test -z "$LOG_FILE" && LOG_FILE="$TWIKI_DIR/data/getfeeds.log"
 test -z "$EXCLUDE_WEBS_PATTERN" && EXCLUDE_WEBS_PATTERN='Trash|Attic|TestCases|mime.types|RegistrationApprovals'
 test -z "$EXCLUDE_TOPICS_PATTERN" && EXCLUDE_TOPICS_PATTERN="Base.txt"
@@ -144,9 +146,15 @@ test -z "$SLEEP" && SLEEP=10
       OUT_FILE="$FEEDS_DIR/$WEB$TOPIC.xml"
       TMP_FILE="/tmp/$WEB$TOPIC.xml"
       echo "*** fetching $WEB.$TOPIC into $OUT_FILE"
-      $WGET_PRG -q -O $TMP_FILE $VIEW_URL/$WEB/$TOPIC?t=`$DATE_PRG +"%s"` && mv $TMP_FILE $OUT_FILE && chmod go+r $OUT_FILE
+      (
+	if test "$USE_WGET" == "true"; then
+	  $WGET_PRG -q -O $TMP_FILE $VIEW_URL/$WEB/$TOPIC?t=`$DATE_PRG +"%s"` 
+	else 
+	  cd $TWIKI_DIR/bin && ./view $WEB/$TOPIC > $TMP_FILE
+	fi
+      ) && mv $TMP_FILE $OUT_FILE && chmod go+r $OUT_FILE
       sleep $SLEEP
     done
   done
   writeInfo "done $GETFEEDS_PRG"
-) #>> $LOG_FILE 2>&1
+) >> $LOG_FILE 2>&1
