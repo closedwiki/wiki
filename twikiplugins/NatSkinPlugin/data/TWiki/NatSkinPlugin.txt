@@ -305,41 +305,52 @@ WebPreferences or %TWIKIWEB%.TWikiPreferences)
 By default this value is set to "off"
 
 ---++ Plugin Installation Instructions
-	* Install the plugins this one depends on (see below) of not done so already.
-	* If you are installing this plugin on a TWiki release prior TWiki-4.0, then
-	  you need the TWiki:Plugins/SessionPlugin too.
-	* Optionally install the TWiki:Plugins/RedDotPlugin to ease editing the sidebar navigation
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-
 	  | *File:* | *Description:* |
 	  | ==bin/natlogon== | logon cgi script |
 	  | ==bin/natsearch== | search cgi script |
 	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
-	  | ==data/TWiki/MySideBar.txt== | plugin to customize a personalized sidebar |
-	  | ==data/TWiki/MySideBarTemplate.txt== | topic template for MySideBar |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
-	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
-	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
+	* If you are installing this plugin on a TWiki release prior to TWiki-4.0, then
+	  you need the TWiki:Plugins/SessionPlugin too.
 	* Optionally, run ==%TOPIC%_installer.pl== to automatically check and
 	  install other TWiki modules that this module depends on. You can also do
 	  this step manually.
 	* Alternatively, manually make sure the dependencies listed in the table
 	  below are resolved.
-
 %$DEPENDENCIES%
+	* Optionally install the TWiki:Plugins/RedDotPlugin to ease editing the sidebar navigation
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
+	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
+	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
+	* to enable the NatSkin's logon scheme disable TWiki's <nop>LoginManager
+	  and remove all lines containing "require valid-user" (except for the =configure= cgi script)
+	  from the file =bin/.htaccess=
+	* make sure that the scripts =natlogon= and =natsearch= are recognized as cgi scripts
+	  in your server configuration
+	* if you have set up ssl for your server add the following variable to your <nop>TWikiPreferences:
+	  <verbatim> * Set HTTPSLOGON = on </verbatim>
+	  This will prevent passwords being sent in clear-text over a possibly insecure net.
+	* to enable ssl as soon as you logged in use the following rewrite rules in =bin/.htaccess=:
+	  <verbatim>
+ RewriteEngine On
+ RewriteCond %{SERVER_PORT} !443
+ RewriteCond %{QUERY_STRING} template=oopslogon
+ RewriteRule ^(.*)$ https://%{HTTP_HOST}/bin/$1 [R,L] </verbatim>
+	  Note, that you might need to accommodate the =/bin= url path above to your installation!
 
 
 ---++ Plugin Info
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.996 |
+|  Plugin Version: | v2.997 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 Mar 2006: | moved <nop>MySideBar tempaltes to <nop>NatSkin; added docu for HTTPSLOGON |
 |  20 Mar 2006: | multiple errors in natsearch: \
                   always first look into the current web, even for a global search; \
 		  default to local search, was global before, use g: to switch to \
