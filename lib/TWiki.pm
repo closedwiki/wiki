@@ -1513,7 +1513,7 @@ sub applyPatternToIncludedText {
 
 # Fetch content from a URL for inclusion by an INCLUDE
 sub _includeUrl {
-    my( $this, $theUrl, $thePattern, $theWeb, $theTopic ) = @_;
+    my( $this, $theUrl, $thePattern, $theWeb, $theTopic, $theRaw ) = @_;
     my $text = '';
     my $host = '';
     my $port = 80;
@@ -1547,7 +1547,7 @@ sub _includeUrl {
             $text = $this->{store}->readAttachment( undef, $web, $topic,
                                                     $attname );
             $text = _cleanupIncludedHTML( $text, $this->{urlHost},
-                                          $TWiki::cfg{PubUrlPath} );
+                                          $TWiki::cfg{PubUrlPath} ) unless $theRaw;
             $text = applyPatternToIncludedText( $text, $thePattern )
               if( $thePattern );
             return $text;
@@ -1584,7 +1584,7 @@ sub _includeUrl {
             if( $port != 80 ) {
                 $host .= ":$port";
             }
-            $text = _cleanupIncludedHTML( $text, $host, $path );
+            $text = _cleanupIncludedHTML( $text, $host, $path ) unless $theRaw;
         } elsif( $contentType =~ /^text\/(plain|css)/ ) {
             # do nothing
         } else {
@@ -2616,12 +2616,13 @@ sub _INCLUDE {
     my $pattern = $params->remove('pattern');
     my $rev = $params->remove('rev');
     my $section = $params->remove('section');
+    my $raw = $params->remove('raw') || '';
     my $warn = $params->remove('warn')
       || $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
 
     if( $path =~ /^https?\:/ ) {
         # include web page
-        return $this->_includeUrl( $path, $pattern, $includingWeb, $includingTopic );
+        return $this->_includeUrl( $path, $pattern, $includingWeb, $includingTopic, $raw );
     }
 
     $path =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious

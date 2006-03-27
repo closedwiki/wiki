@@ -11,10 +11,11 @@
      | ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org:80/index.html"}%=. Supported content types are =text/html= and =text/plain=. <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
      | =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
      | =rev="2"= | Include a previous topic revision; N/A for URLs | top revision |
+     | =raw="on"= | When a page is included, normally %WIKITOOLNAME% will process it, doing the following: 1) Alter relative links to point back to originating host, 2) Remove some basic HTML tags (html, head, body, script) and finally 3) Remove newlines from tags spanning multiple lines. If you prefer to include _exactly_ what is in the source of the originating page set this to =on=. | disabled |
      | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%<nop>INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
      | =section="name"= | Includes only the specified named section, as defined in the included topic by the [[#VarSTARTSECTION][STARTSECTION]] and [[#VarENDSECTION][ENDSECTION]] variables| |
      | =PARONE="val 1"%BR% PARTWO="val 2"= | Any other parameter will be defined as a variable within the scope of the included topic. The example parameters on the left will result in =%<nop>PARONE%= and =%<nop>PARTWO%= being defined within the included topic. | |
-   * __Note:__ !JavaScript in included webpages is filtered out as a security precaution
+   * __Note:__ !JavaScript in included webpages is filtered out as a security precaution per default (disable filter with =raw= parameter)
    * Examples: See IncludeTopicsAndWebPages
    * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]], [[#VarSTARTSECTION][STARTSECTION]], [[#VarENDSECTION][ENDSECTION]]
 
