@@ -335,6 +335,7 @@ sub _guessColumnType {
 # Remove HTML from text so it can be sorted
 sub _stripHtml {
     my( $text ) = @_;
+    $text ||= '';
     $text =~ s/\&nbsp;/ /go;                     # convert space
     $text =~ s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/go; # extract label from [[...][...]] link
     $text =~ s/<[^>]+>//go;                      # strip HTML
