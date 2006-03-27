@@ -18,6 +18,7 @@
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SKIN = rssatom
+   * Set VIEW_TEMPLATE = AtomView
 -->
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
