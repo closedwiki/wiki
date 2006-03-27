@@ -21,6 +21,11 @@
 
 %TMPL:DEF{"formattop"}%
 %INCLUDE{%MAINWEB%.UserHomepageHeader}%%TMPL:END%
-%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:P{context="inactive" then="inactive_form" else="active_form"}%
 
-%TMPL:END%
+
+
+%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
+
+
+
+%TMPL:DEF{FORM:display:footer:editlink}%%TMPL:P{context="inactive" then="inactive_form" else="active_form"}%%TMPL:END%
