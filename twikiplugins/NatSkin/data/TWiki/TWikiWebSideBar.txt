@@ -39,7 +39,5 @@
 </div>
 %FISKINSTATE%
 
-<div class="natSideBarPersonal">
-%INCLUDE{"%CALC{"$IF($EXISTS(%MAINWEB%.%WIKINAME%SideBar),%MAINWEB%.%WIKINAME%SideBar,%TWIKIWEB%.MySideBar)"}%"}%
-</div>
+<div class="natSideBarPersonal"> %INCLUDE{"%CALC{"$IF($EXISTS(%MAINWEB%.%WIKINAME%SideBar),%MAINWEB%.%WIKINAME%SideBar,%TWIKIWEB%.MySideBar)"}%"}% </div>
 %STOPINCLUDE%

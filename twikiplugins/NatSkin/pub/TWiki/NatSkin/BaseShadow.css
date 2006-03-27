@@ -1,6 +1,6 @@
 /* basic page shadows */
 
-/* debug */
+/* debug 
 
 .natPageBox,
 .natBoxBorderTopLeft,
@@ -11,6 +11,7 @@
 .natBoxBorderLeft {
   order:1px solid red;
 }
+*/
 
 .natBodyContents {
   background:white;

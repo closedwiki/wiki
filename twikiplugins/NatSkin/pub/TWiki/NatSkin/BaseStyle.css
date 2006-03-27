@@ -53,14 +53,14 @@ h1, h2, h3, h4, h5, h6 {
 .natBodyContents {
   text-align:left;
 }
+.natLayoutTable {
+  table-layout:fixed;
+  width:100%;
+}
 .natBoxBorderRight,
 .natBoxBorderTopRight,
 .natBoxBorderBottomRight {
   width:1px;
-}
-.natLayoutTable {
-  table-layout:fixed;
-  width:100%;
 }
 .natBottomBarContents {
   text-align:center;
@@ -149,6 +149,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size:small;
 }
 .natSideBarPersonal {
+  margin-top:1em;
 }
 .natSideBar h1 {
   margin-top:0px;
@@ -180,7 +181,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* main area */
 .natMiddle {
-  background:white;
+  /*background:white;*/
 }
 .natMiddleLeft {
   padding-right:10px;
@@ -573,7 +574,7 @@ a.natFeedIcon {
 
 /* custom styles */
 .alt {
-  background-color: #f8f8f8;
+  background: #f8f8f8;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   margin: 0;

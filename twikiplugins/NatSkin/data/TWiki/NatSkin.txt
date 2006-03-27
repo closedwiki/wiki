@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139388698" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1143130240" format="1.1" reprev="1.2" version="1.2"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -199,7 +199,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.996 |
+|  Skin Version: | v2.997 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -216,6 +216,12 @@ The default style is hardcoded into the NatSkinPlugin.
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-03-27: | moved <nop>MySideBar templates from plugin into the skin; \
+                 fixed page layout of Kubrick style using borders for geckos; \
+		 added HTTPSLOGON variable to get around install hassle on non-ssl servers; \
+                 enabled edit and preview upper right topic actions again; \
+		 added support for three-column layout using STYLESIDEBAR = both; \
+		 fixed html error in topbar |
 |  2006-03-20: | several blog css fixes; \
                  added bottom topic actions to edit and preview; \
 		 only display web.topic in the web locator no recursive parents anymore; \

@@ -1,0 +1,5 @@
+%META:TOPICINFO{author="MichaelDaum" date="1134493768" format="1.1" version="1.5"}%
+%STARTINCLUDE%
+%STOPINCLUDE%
+
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup

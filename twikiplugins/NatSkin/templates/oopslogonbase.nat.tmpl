@@ -2,7 +2,7 @@
 <!-- template: oopslogonbase.tmpl -->
 %TMPL:DEF{"onloadscript"}%document.LogonFormular.username.focus();%TMPL:END%
 %TMPL:DEF{"logon"}%<!-- -->
-<form name="LogonFormular" action="https://%HTTP_HOST%%SCRIPTURLPATH%/natlogon%SCRIPTSUFFIX%" method="post">
+<form name="LogonFormular" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%SCRIPTURLPATH%/natlogon%SCRIPTSUFFIX%" method="post">
 <table border="0"> 
 <tr> 
   <td>Login: </td>
