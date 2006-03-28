@@ -19,12 +19,11 @@
 
 
 
-%TMPL:DEF{"formattop"}%
-%INCLUDE{%MAINWEB%.UserHomepageHeader}%%TMPL:END%
+%TMPL:DEF{"formattop"}%%TMPL:P{"form"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"formatbottom"}%%TMPL:P{"form"}%%TMPL:END%
+%TMPL:DEF{"formatbottom"}%%TMPL:END%
 
 
 
