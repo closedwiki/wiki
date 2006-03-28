@@ -224,6 +224,15 @@ textarea {
 	Plugin elements
 	-----------------------------------------------------------	*/
 
+/* TagMePlugin */
+.tagMePlugin select {
+	font-size:.86em; /* use em instead of % for consistent size */
+	margin:0 .25em 0 0;
+}
+.tagMePlugin input { 
+	border:0px;
+}
+
 /* EditTablePlugin */
 .editTable .twikiTable {
 	margin:0 0 2px 0;
