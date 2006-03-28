@@ -100,13 +100,13 @@ sub new {
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
             @posValues = split( /,/, $fieldDef->{value} );
             my $topic = $fieldDef->{definingTopic} || $fieldDef->{name};
-            if( (!scalar( @posValues ) || scalar(@posValues) == 0)) {
+            if (!scalar(@posValues)) {
                 # If no values are defined, see if we can get them from
                 # the topic of the same name as the field
 		my $tWeb = $web;
 		my $tTopic = $topic;
 		# This probably isn't the right way to do this, but I'm not getting any help
-		if ($topic =~ /([^.]+).([^.]+)/) {
+		if ($topic =~ /^(.*?)\.([^.]+)$/) {
 		    $tWeb = $1;
 		    $tTopic = $2;
 		}
