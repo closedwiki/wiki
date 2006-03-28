@@ -100,16 +100,24 @@ sub new {
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
             @posValues = split( /,/, $fieldDef->{value} );
             my $topic = $fieldDef->{definingTopic} || $fieldDef->{name};
-            if( !scalar( @posValues ) &&
-                  $store->topicExists( $web, $topic ) ) {
+            if( (!scalar( @posValues ) || scalar(@posValues) == 0)) {
                 # If no values are defined, see if we can get them from
                 # the topic of the same name as the field
-                my( $meta, $text ) =
-                  $store->readTopic( $session->{user}, $web, $topic, undef );
-                # Add processing of SEARCHES for Lists
-                $text = $this->{session}->handleCommonTags($text,$this->{web},$this->{topic});
-                @posValues = _getPossibleFieldValues( $text );
-                $fieldDef->{type} ||= 'select';  #FIXME keep?
+		my $tWeb = $web;
+		my $tTopic = $topic;
+		# This probably isn't the right way to do this, but I'm not getting any help
+		if ($topic =~ /([^.]+).([^.]+)/) {
+		    $tWeb = $1;
+		    $tTopic = $2;
+		}
+                if ( $store->topicExists( $tWeb, $tTopic ) ) {
+		    my( $meta, $text ) =
+			$store->readTopic( $session->{user}, $tWeb, $tTopic, undef );
+		    # Add processing of SEARCHES for Lists
+		    $text = $this->{session}->handleCommonTags($text,$this->{web},$this->{topic});
+		    @posValues = _getPossibleFieldValues( $text );
+		    $fieldDef->{type} ||= 'select';  #FIXME keep?
+		}
             }
             #FIXME duplicates code in _getPossibleFieldValues?
             @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
@@ -327,6 +335,7 @@ sub renderForEdit {
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my $session = $this->{session};
 
+
     if( $this->{mandatoryFieldsPresent} ) {
         $session->enterContext( 'mandatoryfields' );
     }
@@ -426,6 +435,7 @@ sub renderFieldForEdit {
 
     $name = $this->cgiName( $name );
 
+    # Give plugin field types a chance first
     my $output = $session->{plugins}->renderFormFieldForEditHandler
       ( $name, $type, $size, $value, $attributes, $fieldDef->{value} );
 
