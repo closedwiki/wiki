@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1141771402" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1141771402" format="1.1" version="$Rev$"}%
 
 ---+!! PatternSkinCssCookbook Recipe: Center the page with a border
 
