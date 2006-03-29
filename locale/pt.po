@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-03-28 01:52-0300\n"
+"PO-Revision-Date: 2006-03-29 01:38-0300\n"
 "Last-Translator: carlinhos cecconi <carlinux@terra.com.br>\n"
 "Language-Team: português brasileiro <twikibr@listas.softwarelivre.org>\n"
 "MIME-Version: 1.0\n"
@@ -477,7 +477,7 @@ msgstr "para *espaçamento uniforme* coloque a palavra/frase entre sinais de igu
 
 #: data/TWiki/WikiSyntaxSummary.txt:15
 msgid "*paragraphs* separate with blank line"
-msgstr "para *parágrafos* separe-os com uma linha em branco"
+msgstr "para *parágrafos*, separe-os com uma linha em branco"
 
 #: lib/TWiki/I18N/Extract.pm:104
 msgid "..."
@@ -531,7 +531,7 @@ msgid ""
 "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
 "=#FFFF00=."
 msgstr ""
-"Uma cor começa com um sinal #, seguido de 6 números hexadecimais, e.g. "
+"Uma cor começa com um sinal #, seguido de 6 números hexadecimais, p.ex. "
 "=#FFFF00=."
 
 #: templates/messages.tmpl:138
@@ -619,7 +619,7 @@ msgstr "Manutenção Administrativa"
 
 #: data/TWiki/WebSearchAdvanced.txt:3
 msgid "Advanced Search"
-msgstr "Busca avançada"
+msgstr "Busca Avançada"
 
 #: data/TWiki/WebSearch.txt:29
 msgid "Advanced search"
@@ -665,9 +665,7 @@ msgstr ""
 
 #: templates/messages.tmpl:198
 msgid "An e-mail could not be delivered. Please notify your %1 administrator, %2"
-msgstr ""
-"Não foi possível enviar um e-mail. Por favor, notifique o administrador do %"
-"1, %2"
+msgstr "Não foi possível enviar um e-mail. Por favor, notifique o administrador do %1, %2"
 
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:42
 msgid ""
@@ -696,7 +694,6 @@ msgid "Attach an image or document to this topic"
 msgstr "Anexar uma imagem ou documento neste tópico"
 
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:5
-
 msgid "Attach file to %1"
 msgstr "Anexar um arquivo ao tópico %1"
 
@@ -814,7 +811,7 @@ msgstr "Cancelar edição e descartar alterações"
 
 #: templates/messages.tmpl:69
 msgid "Cannot create %1 because it already exists."
-msgstr "Não foi possível criar %1, pois %1 já existe."
+msgstr "Não foi possível criar %1, pois ele já existe."
 
 #: templates/messages.tmpl:112
 msgid "Cannot create web %1 because it already exists"
@@ -1039,11 +1036,11 @@ msgstr "Criar <nop>TopicoTeste###"
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:4
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:4
 msgid "Create New Topic"
-msgstr "Criar novo tópico"
+msgstr "Criar Novo Tópico"
 
 #: data/TWiki/WebTopicCreator.txt:52
 msgid "Create New Topic in %1 Web"
-msgstr "Criar novo Tópico na Web %1"
+msgstr "Criar Novo Tópico na Web %1"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:67
 msgid "Create a link to the attached file"
@@ -1059,7 +1056,7 @@ msgstr "Criar um novo tópico pelo nome:"
 
 #: data/Sandbox/WebHome.txt:10
 msgid "Create by Name"
-msgstr "Criar por nome"
+msgstr "Criar por Nome"
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:11
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:4
@@ -1790,7 +1787,7 @@ msgstr "Nome da nova web faltando"
 
 #: data/TWiki/ChangeEmailAddress.txt:25
 msgid "New e-mails (space-separated list)"
-msgstr "Novos e-mailS (lista separada com espaços)"
+msgstr "Novos e-mails (lista separada com espaços)"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:73
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:9
@@ -2072,8 +2069,7 @@ msgid ""
 "more, study the TWikiTutorial, which is accessible from the same link."
 msgstr ""
 "Leia %1 para obter uma visão geral rápida sobre essa plataforma de "
-"colaboração. Para aprender mais, leia o TWikiTutorial, que é acessível a "
-"partir do mesmo link."
+"colaboração. Para aprender mais, leia o TWikiTutorial, que é acessível a partir do mesmo link."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
 msgid "Read new revision help text in new window"
@@ -2150,7 +2146,7 @@ msgstr "Renomear ou mover tópico"
 
 #: data/TWiki/RenameWeb.txt:1
 msgid "Rename, move or delete this web:"
-msgstr "Renomar, mover ou remover essa web:"
+msgstr "Renomear, mover ou remover essa web:"
 
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
 #: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
@@ -3062,7 +3058,7 @@ msgstr "WYSIWYG"
 
 #: templates/messages.tmpl:383
 msgid "Warning: Can't INCLUDE %1 repeatedly, topic is already included. %2"
-msgstr "Aviso: Não é possível incluir %1 mais de uma vez, o tópico já foi incluído."
+msgstr "Aviso: Não é possível incluir %1 mais de uma vez, o tópico já foi incluído. %2"
 
 #: templates/messages.tmpl:382
 msgid "Warning: Can't find topic %1"
@@ -3255,7 +3251,7 @@ msgstr ""
 #: data/TWiki/ChangeEmailAddress.txt:23 data/TWiki/ChangePassword.txt:13
 #: data/TWiki/ResetPassword.txt:16
 msgid "Your %1.LoginName"
-msgstr "Seu %1.LoginName"
+msgstr "Seu [[%1.LoginName][Nome de Login]]"
 
 #: templates/messages.tmpl:162
 msgid ""
@@ -3379,7 +3375,7 @@ msgstr "ajuda"
 
 #: data/TWiki/WikiSyntaxSummary.txt:16
 msgid "hints on good style"
-msgstr "dicas par um bom estilo"
+msgstr "dicas para um bom estilo"
 
 #: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:5
 msgid "in raw text format"
