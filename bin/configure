@@ -1292,6 +1292,7 @@ sub handleUpdate {
     }
 
     $output .= CGI::h2('Updating configuration');
+    my $languageChanged=0;
     foreach $param ( $query->param ) {
         next unless $param =~ /^^TYPEOF:(.*)/;
         my $type = $query->param( $param );
@@ -1314,11 +1315,20 @@ sub handleUpdate {
               CGI::strong('new ').
               CGI::code($val||' ');
             $updates{$basevar} = _perlifyType($val, $type);
+            #SMELL: Not elegant, but works
+            if ($basevar=~/\{Languages\}/) {
+                $languageChanged=1;
+            }
             $changed++;
         }
     }
     $output .= CGI::p();
     setConfig($path, \%updates);
+    if ($languageChanged) {
+        if ( -f "$TWiki::cfg{LocalesDir}/languages.cache" ) {
+            unlink "$TWiki::cfg{LocalesDir}/languages.cache";
+        }
+    }
     my $itemText = ($changed == 1) ? 'item' : 'items';
     $output .= CGI::hr();
     $output .= CGI::p(CGI::strong($changed.' configuration ' . $itemText . ' changed. '));

@@ -51,9 +51,9 @@ sub available_languages {
     my @available ;
 
     while ( my ( $langCode, $langOptions ) = each %{$TWiki::cfg{Languages}} ) {
-        #if ( $langOptions->{Enabled} ) {
+        if ( $langOptions->{Enabled} ) {
             push(@available, _normalize_language_tag($langCode));
-        #}
+        }
     }
 
     return @available;
