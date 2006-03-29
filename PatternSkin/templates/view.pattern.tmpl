@@ -49,14 +49,14 @@
 
 
 
-%TMPL:DEF{"beforetext"}%<div class="twikiBeforeText"></div>%TMPL:END%
+%TMPL:DEF{"beforetext"}%<div class="twikiBeforeText">Show tagging</div>%TMPL:END%
 %TMPL:DEF{"aftertext"}%<div class="twikiAfterText"></div>%TMPL:END%
 
 
 
 %TMPL:DEF{"content"}%%TMPL:P{"toolbar"}%
 %TMPL:P{"topicpathinfo"}%
-%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"beforetext"}%%TMPL:P{"textcontent"}%
+%TMPL:P{"beforetext"}%%TMPL:P{"formattop"}%%TMPL:P{"attachmentsattop"}%<div class="patternContent">%TMPL:P{"textcontent"}%
 %TMPL:P{"aftertext"}%%TMPL:P{"formatbottom"}%%TMPL:P{"attachmentsatbottom"}%</div><!-- /patternContent-->
 %TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%%TMPL:END%
 
