@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1134249079" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1134249079" format="1.1" version="$Rev$"}%
 
 ---+!! PatternSkinCssCookbook Recipe: [[TWiki:Plugins.EditTablePlugin][EditTable]] style
 
