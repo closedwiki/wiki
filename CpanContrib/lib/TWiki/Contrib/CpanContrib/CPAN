@@ -30,7 +30,7 @@
 	qw( I18N::AcceptLanguage ),	# TopicTranslationsPlugin
 	qw( Weather::Com ),		# WeatherPlugin
 	qw( DBD::mysql ),		# BugzillaQueryPlugin, MailReminderPlugin
-	qw( XML::LibXML::Common XML::LibXML XML::LibXSLT Text::ParseWords Cache::Cache String::CRC ),	# XmlQueryPlugin (XML::Simple above)
+	qw( XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML XML::LibXSLT Text::ParseWords Cache::Cache String::CRC ),	# XmlQueryPlugin (XML::Simple above)
 	qw( List::Permutor ),		# SuggestLinkPlugin
 	qw( Image::Info ),		# LatexModePlugin
 	qw( MIME::Types ),		# MailInContrib, optional SOAP::Lite interfaces
@@ -39,7 +39,9 @@
 	qw( Font::AFM HTML::Element HTML::FormatText Date::Format ),	# URLCachePlugin
 	qw( IO::Pty Curses Term::Cap Event POE Net::IP Digest::HMAC_MD5 Net::DNS POE::Component::Client::DNS POE::Component::Client::Ident POE::Filter::IRCD POE::Component::Server::IRC ),	# IrcContrib
 	qw( Net::IRC ),			# IrcPlugin
-	qw( Test::More YAML SVN::Simple::Edit Class::Autouse File::chdir Class::Accessor Sort::Versions SVN::Mirror IO::Pager SVK ),				   # SVK (YAML, Test::More, Encode, Data::UUID already included)
+	qw( Test::More YAML SVN::Simple::Edit Class::Autouse File::chdir Class::Accessor Sort::Versions Term::ReadKey SVN::Mirror IO::Pager ),
+		qw( Algorithm::Annotate Clone Data::Hierarchy File::Type PerlIO PerlIO::eol PerlIO::via::symlink PerlIO::via::dynamic IO::Digest Pod::Escapes Pod::Simple Regexp::Shellish ),
+	qw( SVK ),				   # SVK (YAML, Test::More, Encode, Data::UUID already included)
 # also (optional for SVN::Mirror) VCP::Dest::svk (VCP?)
 #	qw( Authen::SASL XML::Stream Net::Jabber ),	# ImmediateNotifyPlugin (already included by SOAP::Lite for SoapClientPlugin)
 	qw( Email::Simple Module::Pluggable Email::FolderType Email::Folder Email::FolderType::Net MIME::Base64 Email::MIME::Encodings Email::MIME::ContentType Email::MIME File::Path::Expand Email::LocalDelivery Email::Delete Net::POP3 Email::Folder::POP3 Net::IMAP::Simple URI::imap Email::Folder::IMAP ),	# MailInContrib
@@ -50,7 +52,7 @@
 		qw( Lingua::GL::Stemmer Lingua::PT::Stemmer Lingua::Stem::Fr Lingua::Stem::It Lingua::Stem::Ru Lingua::Stem::Snowball::Da Lingua::Stem::Snowball::No Lingua::Stem::Snowball::Se Text::German Lingua::Stem::En ),
 	qw( Tie::Array::Sorted Time::Piece ),
 	qw( Plucene Plucene-SearchEngine-1.1 ),		# SearchEnginePluceneAddOn
-	qw( Class::Factory Class::Observable DBI DBD::Mock Params::Validate DateTime::Locale Class::Singleton DateTime::TimeZone DateTime DateTime::Format::Strptime Devel::StackTrace Exception::Class Log::Dispatch Log::Log4perl Workflow ),
+	qw( Class::Factory Class::Observable DBI DBI::DBD DBD::Mock Params::Validate DateTime::Locale Class::Singleton DateTime::TimeZone DateTime DateTime::Format::Strptime Devel::StackTrace Exception::Class Log::Dispatch Log::Log4perl Workflow ),
 		# (DBD::CSV or SQL::Statement for Log::Log4perl tests)
 	qw( DBD::SQLite Math::Units Parse::RecDescent URI::Find POE::Component::IRC Date::Parse ),	# PipSqueek
 		# (Class::Accessor, DBI, POE already installed) 
