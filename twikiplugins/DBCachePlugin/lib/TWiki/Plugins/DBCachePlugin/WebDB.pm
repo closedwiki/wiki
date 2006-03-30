@@ -103,6 +103,10 @@ sub onReload {
 
     #print STDERR "DEBUG: reloading $topicName\n";
 
+    # createdate
+    my ($createDate) = &TWiki::Func::getRevisionInfo($this->{_web}, $topicName, 1);
+    $topic->set('createdate', $createDate);
+
     # stored procedures
     my $text = $topic->fastget('text');
 
