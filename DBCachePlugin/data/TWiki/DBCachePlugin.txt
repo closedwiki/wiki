@@ -88,6 +88,7 @@ Following variables are expanded in format strings:
       &lt;formfield-accessor>
    * $encode(...): encode entities so that the text can be included in an rss feed
    * $flatten(...): remove any special markup producing a flattened text representation
+   * $trunc(...,length): truncate a string to the given length
 
 *Formfield accessors:*
 
@@ -249,8 +250,11 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.01 |
+|  Plugin Version: | v1.20 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  30 Mar 2006: | added <nop>WebDB property createdate formerly only known by the <nop>BlogPlugin;\
+                  dont choke twiki if DBDUMPing a non-existing topic; |
+|  27 Mar 2006: | added $trunc() |
 |  20 Mar 2006: | using TWiki::Attrs to parse section names |
 |  12 Mar 2006: | added hidenull to DBSTATS |
 |  10 Mar 2006: | use ENV instead of the CGI object to detect the current cgi action |
@@ -276,4 +280,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 12 Mar 2006
+-- TWiki:Main.MichaelDaum - 30 Mar 2006

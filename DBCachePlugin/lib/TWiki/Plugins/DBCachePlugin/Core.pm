@@ -377,6 +377,9 @@ sub handleDBDUMP {
   my $theDB = getDB($thisWeb);
 
   my $topicObj = $theDB->fastget($thisTopic) || '';
+  unless ($topicObj) {
+    return _inlineError("$thisWeb.$thisTopic not found");
+  }
   my $result = "\n<noautolink>\n";
   $result .= "---++ [[$thisWeb.$thisTopic]]\n$topicObj\n";
 
@@ -493,6 +496,7 @@ sub _expandVariables {
   $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$flatten\((.*)\)/&_flatten($1)/ges;
   $theFormat =~ s/\$encode\((.*)\)/&_encode($1)/ges;
+  $theFormat =~ s/\$trunc\((.*),\s*(\d+)\)/substr($1,0,$2)/ges;
 
   return $theFormat;
 }
