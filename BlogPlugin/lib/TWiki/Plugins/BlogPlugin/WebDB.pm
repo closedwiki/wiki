@@ -60,25 +60,16 @@ sub onReload {
   foreach my $topicName (@$topics) {
     my $topic = $this->fastget($topicName);
 
-    #print STDERR "DEBUG: reloading $topicName\n";
-
-    # createdate
+    # override the createdate with the Date formfield
     my $form = $topic->fastget('form');
-    my $dateField;
     if ($form) {
       $form = $topic->fastget($form);
-      $dateField = $form->fastget('Date');
+      my $dateField = $form->fastget('Date');
+      if ($dateField) {
+	my $createDate = parseTime($dateField);
+	$topic->set('createdate', $createDate);
+      }
     }
-
-    my $createDate;
-    if ($dateField) {
-      $createDate = parseTime($dateField);
-    } else {
-      ($createDate, undef) = &TWiki::Func::getRevisionInfo($this->{_web}, $topicName, 1);
-    }
-
-    $topic->set('createdate', $createDate);
-
   }
 
   #print STDERR "DEBUG: BlogPlugin::WebDB - done onReload()\n";

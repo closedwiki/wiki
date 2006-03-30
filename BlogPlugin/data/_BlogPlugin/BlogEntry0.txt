@@ -1,8 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1141055212" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 %DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
+%DBCALL{"RenderGoogleAdsense"}%
 %DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
 %DBCALL{"RenderAddComment"}%
+%DBCALL{"RenderGoogleAdsense"}%
 
 <!--
    * Set WHITEBOARD = off

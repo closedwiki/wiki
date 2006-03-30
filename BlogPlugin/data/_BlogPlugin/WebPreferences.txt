@@ -9,7 +9,8 @@
    * Set SITEMAPUSETO =
    * Set NOSEARCHALL = 
    * Set NOAUTOLINK = 
-   * Set TECHNORATICODE = 
+   * #Set TECHNORATICODE = 
+   * #Set GOOGLEADSENSECODE =
 
    * Set USERSTYLEURL = %PUBURLPATH%/%TWIKIWEB%/BlogPlugin/patternstyle.css
    * Set SKINSTYLE = Kubrick

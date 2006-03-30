@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1131555980" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1143520431" format="1.1" version="1.9"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
-   * NAME: name of a SubjectCategory
+   * CAT: name of a SubjectCategory
    * LIMIT: number of postings per page
    * SKIP: offset into the archive
 
@@ -12,14 +12,14 @@
 <verbatim>
 %STARTINCLUDE%
 *~~
-<h1 style="margin-bottom:0px;padding-bottom:0px">%NAME%</h1>
+<h1 style="margin-bottom:0px;padding-bottom:0px">%CAT%</h1>
 <div class="blogArchiveDescription">
-  %DBQUERY{topics="%NAME%" format="$expand(TopicDescription)<p />$expand(Comment)"}% 
+  %DBQUERY{topics="%CAT%" format="$expand(TopicDescription)<p />$expand(Comment)"}% 
 </div>
 %~~ DBCALL{"RenderFrontPage" 
 ~~~   %IFDEFINED{"%SKIP%" then="SKIP=\"%SKIP%\"" glue="off"}%  
 ~~~   %IFDEFINED{"%LIMIT%" then="LIMIT=\"%LIMIT%\"" glue="off"}%  
-~~~   CAT="%NAME%"
+~~~   CAT="%CAT%"
 ~~~ }%
 *~~ 
 %STOPINCLUDE%
@@ -28,7 +28,7 @@
 ---++ Test
 <div class="alt">
 %~~ DBCALL{"%TOPIC%" 
-~~~   NAME="BlogDev" 
+~~~   CAT="BlogDev" 
 ~~~   LIMIT="%URLPARAM{"limit" default="2"}%"
 ~~~   SKIP="%URLPARAM{"skip" default="0"}%"
 ~~~ }%

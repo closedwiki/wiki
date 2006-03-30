@@ -81,6 +81,7 @@ data/_BlogPlugin/RenderFrontPage.txt 0644
 data/_BlogPlugin/RenderFrontTeaser.txt 0644
 data/_BlogPlugin/RenderFullTeaser.txt 0644
 data/_BlogPlugin/RenderFunctionCallers.txt 0644
+data/_BlogPlugin/RenderGoogleAdsense.txt 0644
 data/_BlogPlugin/RenderHttpEquivs.txt 0644
 data/_BlogPlugin/RenderNewBlogEntryButton.txt 0644
 data/_BlogPlugin/RenderNewBlogLinkButton.txt 0644

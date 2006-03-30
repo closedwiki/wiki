@@ -1,0 +1,69 @@
+%META:TOPICINFO{author="MichaelDaum" date="1143538677" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+Note, that you must set your client code in the WebPreferences in
+the variable GOOGLEADSENECODE. It will be used on the complete blog. If no 
+client code is set this TopicFunction will return an empty string.
+
+See [[https://www.google.com/support/adsense][google help center]] for
+an explanation of the parameters. 
+
+---++ Parameters
+   * WIDTH: width of banner, defaults to 468
+   * HEIGHT: height of banner, defaults to 60
+   * FORMAT: ad format, defaults to 468x60_as
+   * TYPE: ad type, defaults to text_image
+   * CHANNEL: optional ad channel
+   * BORDERCOLOR: border color, defaults to ffffff <!--336699-->
+   * TEXTCOLOR: text color, defaults to 444444
+   * BGCOLOR: background color, defaults to ffffff
+   * LINKCOLOR: link color, defaults to 62A1E0 <!-- 0000ff -->
+   * URLCOLOR: url colur, defaults to 008000
+   
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+%IFDEFINEDTHEN{"%GOOGLEADSENSECODE%"}%
+<div class="blogGoogleAdsense" style="margin-top:2em;margin-bottom:2em;padding:5px;border:1px solid #e2e2e2">
+<script type="text/javascript"><!--
+google_ad_client = "%GOOGLEADSENSECODE%";
+google_ad_width = %IFDEFINED{"%WIDTH%" then="%WIDTH%" else="468"}%;
+google_ad_height = %IFDEFINED{"%HEIGHT%" then="%HEIGHT&" else="60"}%;
+google_ad_format = "%IFDEFINED{"%FORMAT%" then="%FORMAT%" else="468x60_as"}%";
+google_ad_type = "%IFDEFINED{"%TYPE%" then="%TYPE%" else="text_image"}%";
+google_ad_channel = "%IFDEFINED{"%CHANNEL%"}%";
+google_color_border = "%IFDEFINED{"%BORDERCOLOR%" then="%BGCOLOR%" else="ffffff"}%";
+google_color_text = "%IFDEFINED{"%TEXTCOLOR%" then="%TEXTCOLOR%" else="444444"}%";
+google_color_bg = "%IFDEFINED{"%BGCOLOR%" then="%BORDERCOLOR%" else="FFFFFF"}%";
+google_color_link = "%IFDEFINED{"%LINKCOLOR%" then="%LINKCOLOR%" else="62A1E0"}%";
+google_color_url = "%IFDEFINED{"%URLCOLOR%" then="%URLCOLOR%" else="008000"}%";
+//--></script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+%FIDEFINED%
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%" TYPE="text"}%
+</div>
+
+
+%DBCALL{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render google adsense banner"}%
