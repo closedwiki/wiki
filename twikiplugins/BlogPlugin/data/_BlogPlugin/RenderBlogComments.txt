@@ -48,7 +48,7 @@
 ~~~          .blogScroll { 
 ~~~            $percntCALC{
 ~~~              \"$dollarIF($dollarNOT($dollarGET(commentCounter)),display:none)\"
-~~~            }$percnt;
+~~~            }$percnt};
 ~~~           </style>"
 ~~~ }%
 ~~~

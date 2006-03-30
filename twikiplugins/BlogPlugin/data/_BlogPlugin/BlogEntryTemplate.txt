@@ -1,8 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127843305" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1143533601" format="1.1" version="1.5"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
 %DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
+%DBCALL{"RenderGoogleAdsense"}%
 %DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
 %DBCALL{"RenderAddComment"}%
+%DBCALL{"RenderGoogleAdsense"}%
 
 <!--
    * Set WHITEBOARD = off
