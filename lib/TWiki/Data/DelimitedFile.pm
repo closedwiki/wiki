@@ -21,6 +21,7 @@ package TWiki::Data::DelimitedFile;
 
 use Data::Dumper;
 use Error qw( :try );
+use FileHandle;
 
 sub read {
     my (%settings) = @_;
