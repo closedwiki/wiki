@@ -1324,6 +1324,105 @@ sub new {
 
 =pod
 
+Variable accessors
+
+=cut
+
+
+
+sub get_sandbox {
+    my $this = shift;
+    return $this->{sandbox};
+}
+
+sub get_pluginsObj {
+    my $this = shift;
+    return $this->{plugins};
+}
+
+sub get_netObj {
+    my $this = shift;
+    return $this->{net};
+}
+
+sub get_storeObj {
+    my $this = shift;
+    return $this->{store};
+}
+
+sub get_searchObj {
+    my $this = shift;
+    return $this->{search};
+}
+
+sub get_templatesObj {
+    my $this = shift;
+    return $this->{templates};
+}
+
+sub get_attachObj {
+    my $this = shift;
+    return $this->{attach};
+}
+
+sub get_clientObj {
+    my $this = shift;
+    return $this->{client};
+}
+
+sub get_query {
+    my $this = shift;
+    return $this->{query};
+}
+
+sub get_remoteUser {
+    my $this = shift;
+    return $this->{remoteUser};
+}
+
+sub get_users {
+    my $this = shift;
+    return $this->{users};
+}
+
+sub get_securityObj {
+    my $this = shift;
+    return $this->{security};
+}
+
+sub get_topicName {
+    my $this = shift;
+    return $this->{topicName};
+}
+
+sub get_scriptUrlPath {
+    my $this = shift;
+    return $this->{scriptUrlPath};
+}
+
+sub get_urlHost {
+    my $this = shift;
+    return $this->{urlHost};
+}
+
+sub get_prefsObj {
+    my $this = shift;
+    return $this->{prefs};
+}
+
+sub get_rendererObj {
+    my $this = shift;
+    return $this->{renderer};
+}
+
+sub get_i18n {
+    my $this = shift;
+    return $this->{i18n};
+}
+
+
+=pod
+
 ---++ ObjectMethod finish
 Complete processing after the client's HTTP request has been responded
 to. Right now this only entails one activity: calling TWiki::Client to
