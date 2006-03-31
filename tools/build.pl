@@ -138,7 +138,8 @@ sub _checkInFile {
             die 'failed to get revision: '.$file."\n";
         }
     } else {
-        # create rcs file, and ci
+        # create rcs file
+        `rcs -i -t-buildrelease $new/$file,v 2>&1`;
     }
 
     #only do a checkin, if the files are different (fake the rev number to be the same)
