@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-03-28 01:32+0200\n"
+"PO-Revision-Date: 2006-03-31 16:09+0200\n"
 "Last-Translator: Steffen Poulsen <N/A>\n"
 "Language-Team: Danish <N/A>\n"
 "MIME-Version: 1.0\n"
@@ -285,7 +285,7 @@ msgstr "(editér)"
 
 #: data/TWiki/TWikiRegistration.txt:92
 msgid "(how you log in) LoginName:"
-msgstr "(dit login-navn) LoginName:"
+msgstr "(Dit login-navn) LoginName:"
 
 #: data/TWiki/TWikiRegistration.txt:87
 msgid "(identifies you to others) WikiName:"
@@ -765,11 +765,11 @@ msgstr "Attribut"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:62
 msgid "Automated notification of topic changes"
-msgstr "Automatiseret besked om side-ændringer"
+msgstr "Automatiseret besked om opdateringer"
 
 #: data/_default/WebHome.txt:4
 msgid "Available Information"
-msgstr "Tilgængelig information"
+msgstr "Information i dette web:"
 
 #: twikiplugins/PatternSkin/templates/constants.pattern.tmpl:11
 msgid "Back to topic"
@@ -1065,7 +1065,7 @@ msgstr ""
 
 #: data/Sandbox/WebHome.txt:15
 msgid "Create a new auto-numbered test topic:"
-msgstr "Opret en ny (automatisk nummereret) side:"
+msgstr "Opret en ny side (automatisk nummereret):"
 
 #: data/Sandbox/WebHome.txt:9
 msgid "Create a new document by name:"
@@ -1526,7 +1526,7 @@ msgstr ""
 #: data/TWiki/WebTopicNonWikiTemplate.txt:11
 #: data/TWiki/WebTopicViewTemplate.txt:11
 msgid "If you intend to do a full text search:"
-msgstr "Hvis du gerne vil søge i den fulde tekst:"
+msgstr "Hvis du gerne vil søge i den fulde tekst i dette web:"
 
 #: templates/messages.tmpl:348
 msgid ""
@@ -1575,7 +1575,7 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:67
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr ""
-"Billeder vil blive vist direkte på siden, for andre typer vedhæftede filer "
+"Vedhæftede billeder vises direkte på siden, for andre typer vedhæftede filer "
 "oprettes et link."
 
 #: data/TWiki/WebSearchAdvanced.txt:58
@@ -1800,7 +1800,7 @@ msgstr "NY"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:2
 #: data/TWiki/WebTopicViewTemplate.txt:2
 msgid "NOTE: This Wiki topic does not exist yet"
-msgstr "NOTE: Denne Wiki-side findes ikke endnu"
+msgstr "BEMÆRK: Denne Wiki-side er ikke oprettet endnu"
 
 #: templates/messages.tmpl:103
 msgid "Name of new web is missing"
@@ -1925,8 +1925,8 @@ msgid ""
 "Once you have created the topic, consider adding links in related topics to "
 "the new topic so that there are more ways people can discover it."
 msgstr ""
-"Når du har oprettet siden, så overvej at tilføje links på andre relaterede "
-"sider, så der er flere måder folk kan finde den på."
+"Når du har oprettet den nye side, så overvej at tilføje links til den på andre relaterede "
+"sider, således at det bliver nemt at finde frem til den."
 
 #: templates/messages.tmpl:404
 msgid "Only members of the %1 are allowed to perform this action."
@@ -2346,12 +2346,12 @@ msgstr "Se <a href='%1'>alle</a> ændringer"
 #: data/Sandbox/WebIndex.txt:6 data/TWiki/WebIndex.txt:4
 #: data/Trash/WebIndex.txt:5 data/_default/WebIndex.txt:5
 msgid "See also the faster %1"
-msgstr "Se også den hurtigere %1"
+msgstr "Se også den hurtigere oversigt: %1."
 
 #: data/Sandbox/WebTopicList.txt:7 data/TWiki/WebTopicList.txt:5
 #: data/Trash/WebTopicList.txt:5 data/_default/WebTopicList.txt:5
 msgid "See also the verbose %1."
-msgstr "Se også den mere udførlige %1."
+msgstr "Se også den mere udførlige oversigt: %1."
 
 #: data/TWiki/RenameWeb.txt:3
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:75
@@ -3000,7 +3000,7 @@ msgstr "Brug en proprtional skrifttype"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:14
 #: data/TWiki/WebTopicViewTemplate.txt:14
 msgid "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
-msgstr "Benyt [[WebSearch][Søg]]-linket på denne side eller lav en simpel"
+msgstr "Benyt [[WebSearch][Søg]]-linket på denne side, eller indtast din søgning direkte her:"
 
 #: templates/messages.tmpl:10
 msgid "User Account %1 Deleted"
