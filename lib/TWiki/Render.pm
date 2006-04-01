@@ -738,6 +738,7 @@ sub _externalLink {
     if( $url =~ /^mailto:/i ) {
         # inject anti-spam padding
         $url =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
+        $text =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
     } else {
         $opt = ' target="_top"';
     }
