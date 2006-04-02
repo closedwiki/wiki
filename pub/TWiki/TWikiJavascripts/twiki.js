@@ -137,6 +137,68 @@ function hasClass(node, className) {
 }
 
 /**
+Checks if a string is a WikiWord.
+@param inValue : string to test
+@return True if a WikiWord, false if not.
+*/
+function isWikiWord(inValue) {
+	var upperAlphaRegex    = "[A-Z]";
+	var lowerAlphaRegex    = "[a-z]";
+	var numericRegex	   = "[0-9]";
+	var mixedAlphaRegex    = "[A-Za-z]";
+	var mixedAlphaNumRegex = "[A-Za-z0-9]";
+	var wikiWordRegex = "\\b" + upperAlphaRegex + "+" + lowerAlphaRegex + "+" + upperAlphaRegex + "+" + mixedAlphaNumRegex + "*";
+	var re = new RegExp(wikiWordRegex);
+	return (inValue.match(re)) ? true : false;
+}
+
+/**
+Capitalizes words in a string. For example: "A handy dictionary" becomes "A Handy Dictionary".
+@param inValue : the string to capitalize
+@return A new capitalized string.
+*/
+function capitalize(inValue) {
+	var sIn = inValue;
+	var sOut = '';
+	var chgUpper = true;
+	for ( var i = 0; i < sIn.length; i++ ) {
+		var ch = sIn.charAt( i );
+		if( ch!=' ' ) {
+			if( chgUpper ) {
+				ch = ch.toUpperCase();
+				chgUpper = false;
+			}
+		}
+		if( ch==' ' ) {
+			chgUpper = true;
+		} else {
+			chgUpper = false;
+		}
+		sOut += ch;
+	}
+	return sOut;
+}
+
+/**
+Removes spaces from a string. For example: "A Handy Dictionary" becomes "AHandyDictionary".
+@param inValue : the string to remove spaces from
+@return A new space-less string.
+*/
+function removeSpaces(inValue) {
+	var sIn = inValue;
+	var sOut = '';
+	for ( var i = 0; i < sIn.length; i++ ) {
+		var ch = sIn.charAt( i );
+		if( ch==' ' ) {
+			chgUpper = true;
+			continue;
+		}
+		sOut += ch;
+	}
+	return sOut;
+}
+
+/**
 Add a cookie. If 'days' is set to a non-zero number of days, sets an expiry on the cookie.
 @deprecated Use setPref.
 */
