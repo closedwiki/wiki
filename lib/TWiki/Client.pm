@@ -88,7 +88,7 @@ sub makeClient {
         throw Error::Simple( $@ ) if $@;
         if( $CGI::Session::VERSION eq "4.10" ) {
             # 4.10 is broken; see Item1989
-            CGI::Session::NAME = 'TWIKISID';
+            $CGI::Session::NAME = 'TWIKISID';
         } else {
             CGI::Session->name( 'TWIKISID' );
         }
