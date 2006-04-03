@@ -86,7 +86,12 @@ sub makeClient {
         $use .= '; use CGI::Cookie';
         eval $use;
         throw Error::Simple( $@ ) if $@;
-        CGI::Session->name( 'TWIKISID' );
+        if( $CGI::Session::VERSION eq "4.10" ) {
+            # 4.10 is broken; see Item1989
+            CGI::Session::NAME = 'TWIKISID';
+        } else {
+            CGI::Session->name( 'TWIKISID' );
+        }
     }
 
     my $mgr;
