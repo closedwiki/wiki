@@ -91,7 +91,7 @@ sub stringify {
         }
     }
     if( $this->{tag} ) {
-        $r .= '</'.$this->{tag}.'>';
+        $r .= '</'.lc($this->{tag}).'>';
     }
     return $r;
 }
@@ -258,18 +258,22 @@ sub _flatten {
 
 # $cutClasses is an RE matching class names to cut
 sub _htmlParams {
-    my ( $attrs, $cutClasses ) = @_;
+    my ( $attrs, $options, $cutClasses ) = @_;
     my @params;
 
     foreach my $key ( keys %$attrs ) {
         next unless $key;
-        if( $key eq 'class' && $cutClasses ) {
-            $attrs->{$key} ||= '';
-            # tidy up the list of class names
-            my @classes = grep { !/^($cutClasses)$/ }
-              split(/\s+/, $attrs->{$key} );
-            $attrs->{$key} = join(' ', @classes);
-            next unless( $attrs->{$key} =~ /\S/);
+        if( $key eq 'class' ) {
+            # if cleaning aggressively, remove class attributes completely
+            next if ($options & $WC::VERY_CLEAN);
+            if( $cutClasses ) {
+                $attrs->{$key} ||= '';
+                # tidy up the list of class names
+                my @classes = grep { !/^($cutClasses)$/ }
+                  split(/\s+/, $attrs->{$key} );
+                $attrs->{$key} = join(' ', @classes);
+                next unless( $attrs->{$key} =~ /\S/);
+            }
         }
         my $q = $attrs->{$key} =~ /"/ ? "'" : '"';
         push( @params, "$key=$q$attrs->{$key}$q" );
@@ -284,11 +288,11 @@ sub _defaultTag {
     my( $this, $options ) = @_;
     my( $flags, $text ) = $this->_flatten( $options );
     my $tag = lc( $this->{tag} );
-    my $p = _htmlParams( $this->{attrs} );
+    my $p = _htmlParams( $this->{attrs}, $options );
     if( $text =~ /^\s+$/ ) {
-        return ( $flags, '<'.$this->{tag}.$p.' />' );
+        return ( $flags, '<'.$tag.$p.' />' );
     } else {
-        return ( $flags, '<'.$this->{tag}.$p.'>'.$text.'</'.$this->{tag}.'>' );
+        return ( $flags, '<'.$tag.$p.'>'.$text.'</'.$tag.'>' );
     }
 }
 
@@ -338,7 +342,6 @@ sub _convertList {
             } else {
                 ( $f, $t ) = $grandkid->generate( $WC::NO_BLOCK_TML );
                 $t =~ s/$WC::CHECKn/ /g;
-                $t =~ s/\s*$//s;
             }
             $spawn .= $t;
         }
@@ -538,7 +541,7 @@ sub _handleVERBATIM {
     $text = HTML::Entities::decode_entities( $text );
     $text =~ s/ /$WC::NBSP/g;
     $text =~ s/$WC::CHECKn/$WC::NBBR/g;
-    my $p = _htmlParams( $this->{attrs}, 'TMLverbatim' );
+    my $p = _htmlParams( $this->{attrs}, $options, 'TMLverbatim' );
     return ( $WC::BLOCK_TML,
              "$WC::CHECKn<verbatim$p>$WC::CHECKn".$text."$WC::CHECKn</verbatim>$WC::CHECKn" );
 }
@@ -702,13 +705,11 @@ sub _handleDIV {
     if( defined( $this->{attrs}->{class} ) &&
           $this->{attrs}->{class} =~ /\bTMLnoautolink\b/ ) {
         my( $flags, $text ) = $this->_flatten( $options );
-        my $p = _htmlParams( $this->{attrs}, 'TMLnoautolink' );
+        my $p = _htmlParams( $this->{attrs}, $options, 'TMLnoautolink' );
         return ($WC::BLOCK_TML, "$WC::CHECKn<noautolink$p>$WC::CHECKn".$text.
                 "$WC::CHECKn</noautolink>$WC::CHECKn");
     }
-    if( $options & $WC::VERY_CLEAN ) {
-        return $this->_flatten( $options );
-    }
+
     return (0, undef);
 }
 
@@ -725,7 +726,16 @@ sub _handleEM {
 }
 
 sub _handleFIELDSET { return _flatten( @_ ); };
-sub _handleFONT     { return _flatten( @_ ); };
+sub _handleFONT {
+    my( $this, $options ) = @_;
+    if( defined( $this->{attrs}->{class} ) &&
+          scalar( %{$this->{attrs}}) == 1 &&
+            ($options & $WC::VERY_CLEAN)) {
+        # Only defines class. Ignore it if we are cleaning.
+        return $this->_flatten( $options );
+    }
+    return ( 0, undef );
+};
 # FORM
 sub _handleFRAME    { return _flatten( @_ ); };
 sub _handleFRAMESET { return _flatten( @_ ); };
@@ -824,11 +834,11 @@ sub _handlePRE {
         return $this->_handleVERBATIM( $options );
     }
 
-    # can't use CGI::pre because it wont put the newlines that
+    # Note: can't use CGI::pre because it won't put the newlines that
     # twiki needs in
     unless( $options & $WC::NO_BLOCK_TML ) {
         my( $flags, $text ) = $this->_flatten( $options | $WC::NO_BLOCK_TML );
-        my $p = _htmlParams( $this->{attrs} );
+        my $p = _htmlParams( $this->{attrs}, $options );
         $text =~ s/<br( \/)?>/$WC::NBBR/g;
         return ($WC::BLOCK_TML, "$WC::CHECKn<pre$p>$WC::CHECKn".$text.
                 "$WC::CHECKn</pre>$WC::CHECKn");
@@ -877,10 +887,8 @@ sub _handleSPAN {
         delete $this->{attrs}->{class};
     }
 
-    # ignore the span if there are no attrs, or if we are
-    # being very clean
-    if( !scalar( %{$this->{attrs}}) ||
-          $options & $WC::VERY_CLEAN ) {
+    # ignore the span if there are no attrs
+    if( !scalar( %{$this->{attrs}}) ) {
         return $this->_flatten( $options );
     }
 
