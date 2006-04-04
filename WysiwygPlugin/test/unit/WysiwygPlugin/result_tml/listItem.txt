@@ -39,7 +39,7 @@ Last test:
    * Last line...
 AND
    * gee
-   * bar<br />  bar2
+   * bar<br />bar2
    * foo
    
 
