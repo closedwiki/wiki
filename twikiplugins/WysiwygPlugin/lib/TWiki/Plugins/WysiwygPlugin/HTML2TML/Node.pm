@@ -114,8 +114,8 @@ sub addChild {
 sub _trim {
     my $s = shift;
 
-    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKw]+//o;
-    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw]+$//o;
+    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKw$WC::CHECKs]+//o;
+    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw$WC::CHECKs]+$//o;
     return $s;
 }
 
@@ -338,6 +338,7 @@ sub _convertList {
         foreach my $grandkid ( @{$kid->{children}} ) {
             my $t;
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
+                $spawn = _trim( $spawn );
                 $t = $grandkid->_convertList( $indent."   " );
             } else {
                 ( $f, $t ) = $grandkid->generate( $WC::NO_BLOCK_TML );
@@ -345,6 +346,7 @@ sub _convertList {
             }
             $spawn .= $t;
         }
+        $spawn =~ s/ +$//;
         $text .= $WC::CHECKn.$indent.$bullet.$WC::CHECKs.$spawn.$WC::CHECKn;
         $pendingDT = 0;
         $basebullet = '' if $isdl;
