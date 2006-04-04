@@ -828,11 +828,11 @@ Outside
 5 <span class="arfle" lang="fr">francais</span>
 HERE
               tml => <<HERE,
-1 <span class="arfle"></span>
+1 
 2 
 3 
 4 francais
-5 <span class="arfle">francais</span>
+5 francais
 HERE
           },
           {
