@@ -27,12 +27,14 @@ use TWiki::Plugins;
 
 ###############################################################################
 use vars qw(
-        $currentWeb $currentTopic $currentUser $VERSION $RELEASE $debug
+        $baseWeb $baseTopic $currentWeb $currentTopic 
+	$currentUser $VERSION $RELEASE $debug
         $isGuest $defaultWikiUserName $isEnabled
 	$useSpamObfuscator $isBeijing $isDakar $isCairo
-	$maxRev $query $urlHost
+	$query $urlHost
 	$defaultSkin $defaultVariation $defaultStyleSearchBox
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
+	%maxRevs
 	%knownStyles $hasInitKnownStyles
 	%knownVariations $knownStyleSearchBox
 	$knownStyleBorders $knownStyleSidebars
@@ -75,7 +77,7 @@ sub writeDebug {
 
 ###############################################################################
 sub initPlugin {
-  ($currentTopic, $currentWeb, $currentUser) = @_;
+  ($baseTopic, $baseWeb, $currentUser) = @_;
 
   # check TWiki version: let's eat spagetti
   $isDakar = (defined $TWiki::RELEASE)?1:0;
@@ -167,19 +169,8 @@ sub doInit {
   $doneHeader = 0;
   writeDebug("useSpamObfuscator=$useSpamObfuscator");
 
-  # Plugin correctly initialized
-  writeDebug("initPlugin ($currentWeb.$currentTopic) is OK");
-
-  # gather revision information
-  if ($isDakar) {
-    $maxRev = $TWiki::Plugins::SESSION->{store}->getRevisionNumber($currentWeb, $currentTopic);
-  } else {
-    $maxRev = &TWiki::Store::getRevisionNumber($currentWeb, $currentTopic);
-  }
-  $maxRev =~ s/r?1\.//go;  # cut 'r' and major
-#  writeDebug("maxRev=$maxRev");
-
   $urlHost = &TWiki::Func::getUrlHost();
+  %maxRevs = ();
 
   #writeDebug("done doInit");
 }
@@ -288,7 +279,7 @@ sub initSkinState {
       &clearSessionValue('STYLEVARIATION');
       &clearSessionValue('STYLESEARCHBOX');
       &clearSessionValue('TABLEATTRIBUTES');
-      my $redirectUrl = TWiki::Func::getViewUrl($currentWeb, $currentTopic);
+      my $redirectUrl = TWiki::Func::getViewUrl($baseWeb, $baseTopic);
       TWiki::Func::redirectCgiQuery($query, $redirectUrl); 
 	# we need to force a new request because the session value preferences
 	# are still loaded in the preferences cache; only clearing them in
@@ -536,6 +527,8 @@ sub initSkinState {
 # $_[2] - The web
 sub commonTagsHandler {
   return unless $isEnabled;
+  $currentTopic = $_[1];
+  $currentWeb = $_[2];
 
   &initSkinState(); # this might already be too late but there is no
                     # handler between initPlugin and beforeCommonTagsHandler
@@ -568,8 +561,8 @@ sub commonTagsHandler {
   # implementing this stuff again for maximum backwards compatibility
   $_[0] =~ s/%NATREVISIONS%/&renderRevisions()/geo;
   $_[0] =~ s/%PREVREV%/'1.' . &getPrevRevision()/geo;
-  $_[0] =~ s/%CURREV%/'1.' . &getCurRevision($currentWeb, $currentTopic)/geo; 
-  $_[0] =~ s/%NATMAXREV%/1.$maxRev/go;
+  $_[0] =~ s/%CURREV%/'1.' . &getCurRevision()/geo; 
+  $_[0] =~ s/%NATMAXREV%/1.&getMaxRevision()/geo;
 
   # spam obfuscator
   if ($useSpamObfuscator) {
@@ -603,8 +596,8 @@ sub endRenderingHandler {
   $_[0] =~ s/%STOPALIASAREA%//go;
   $_[0] =~ s/%ALIAS{.*?}%//go;
   $_[0] =~ s/%REDDOT{.*?}%//go;
-
 }
+
 ###############################################################################
 sub postRenderingHandler { 
   return unless $isEnabled;
@@ -650,7 +643,7 @@ sub renderIfAccess {
   my $theTopic = $currentTopic;
   my $theWeb = $currentWeb;
 
-  if ($theWebTopic =~ /^(.*)\.(.*)$/) {
+  if ($theWebTopic =~ /^(.*)\.(.*?)$/) {
     $theWeb = $1;
     $theTopic = $2;
   } elsif ($theWebTopic) {
@@ -878,31 +871,32 @@ sub renderUserActions {
     $theRaw = $query->param('raw');
   }
 
-  my $rev = &getCurRevision($currentWeb, $currentTopic, $curRev);
+  my $rev = &getCurRevision($baseWeb, $baseTopic, $curRev);
 
   my $rawAction;
   if ($theRaw) {
     $rawAction =
       '<a href="' . 
-      &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "view") . 
+      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
       "?rev=1.$rev\" accesskey=\"r\">View</a>";
   } else {
     $rawAction =
       '<a href="' .  
-      &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "view") .  
+      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
       "?raw=on&rev=1.$rev\" accesskey=\"r\">Raw</a>";
   }
   
   my $text;
   $curRev =~ s/r?1\.//go;
+  my $maxRev = &getMaxRevision();
   if ($curRev && $curRev < $maxRev) {
     $text =
       '<strike>Edit</strike> | ' .
       '<strike>Attach</strike> | ' .
       '<strike>Move</strike> | ';
   } else {
-    #writeDebug("get WHITEBOARD from $currentWeb.$currentTopic");
-    my $whiteBoard = _getValueFromTopic($currentWeb, $currentTopic, 'WHITEBOARD') || '';
+    #writeDebug("get WHITEBOARD from $baseWeb.$baseTopic");
+    my $whiteBoard = _getValueFromTopic($baseWeb, $baseTopic, 'WHITEBOARD') || '';
     $whiteBoard =~ s/^\s*(.*?)\s*$/$1/g;
     my $editUrlParams = '';
     my $useWysiwyg = &TWiki::Func::getPreferencesFlag('USEWYSIWYG');
@@ -913,22 +907,22 @@ sub renderUserActions {
     }
     $text = 
       '<a rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "edit") 
+      . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
       . '?t=' . time() 
       . $editUrlParams
       . '" accesskey="e">Edit</a> | ' .
       '<a rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "attach") 
+      . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "attach") 
       . '" accesskey="a">Attach</a> | ' .
       '<a rel="nofollow" href="'
-      . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "rename")
+      . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "rename")
       . '" accesskey="m">Move</a> | ';
   }
 
   $text .=
       $rawAction . ' | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "oops") . '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d">Diffs</a> | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "oops") . '?template=oopsmore" accesskey="x">More</a>';
+      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d">Diffs</a> | ' .
+      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsmore" accesskey="x">More</a>';
 
 
   return $text;
@@ -1015,7 +1009,7 @@ sub renderWebLink {
   my $args = shift || '';
 
   my $theWeb = &TWiki::Func::extractNameValuePair($args) || 
-    &TWiki::Func::extractNameValuePair($args, 'web') || $currentWeb;
+    &TWiki::Func::extractNameValuePair($args, 'web') || $baseWeb;
   my $theName =
     &TWiki::Func::extractNameValuePair($args, 'name') || $theWeb;
 
@@ -1048,7 +1042,7 @@ sub renderLogon {
       $logonCgi = 'viewauth';
     }
   }
-  my $logonScriptUrl = &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, $logonCgi);
+  my $logonScriptUrl = &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, $logonCgi);
   return '<a rel="nofollow" href="'.$logonScriptUrl.'" accesskey="l">Login</a>';
 
   return $dispUser;
@@ -1069,9 +1063,9 @@ sub renderLogout {
   my $logoutWeb = &TWiki::Func::getMainWebname(); 
   my $logoutTopic = 'WebHome';
   if (&TWiki::Func::checkAccessPermission('VIEW', $defaultWikiUserName, '', 
-    $currentTopic, $currentWeb)) {
-    $logoutWeb = $currentWeb;
-    $logoutTopic = $currentTopic;
+    $baseTopic, $baseWeb)) {
+    $logoutWeb = $baseWeb;
+    $logoutTopic = $baseTopic;
   }
   my $logoutScriptUrl = &TWiki::Func::getScriptUrl($logoutWeb, $logoutTopic, $logoutCgi);
 
@@ -1131,7 +1125,7 @@ sub renderFormButton {
   my $theFormat = &TWiki::Func::extractNameValuePair($args) ||
 		  &TWiki::Func::extractNameValuePair($args, 'format');
 
-  my ($meta, $dumy) = &TWiki::Func::readTopic($currentWeb, $currentTopic);
+  my ($meta, $dumy) = &TWiki::Func::readTopic($baseWeb, $baseTopic);
   my $formMeta = &getMetaData($meta, "FORM"); 
   my $form = '';
   $form = $formMeta->{"name"} if $formMeta;
@@ -1149,7 +1143,7 @@ sub renderFormButton {
   }
   if ($form) {
     $actionText = 'Change form';
-  } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $currentWeb)) {
+  } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $baseWeb)) {
     $actionText = 'Add form';
   } else {
     return '';
@@ -1219,7 +1213,7 @@ sub renderRevisions {
   $rev1 = $query->param("rev1") if $query;
   $rev2 = $query->param("rev2") if $query;
 
-  my $topicExists = &TWiki::Func::topicExists($currentWeb, $currentTopic);
+  my $topicExists = &TWiki::Func::topicExists($baseWeb, $baseTopic);
   if ($topicExists) {
     
     $rev1 = 0 unless $rev1;
@@ -1227,6 +1221,7 @@ sub renderRevisions {
     $rev1 =~ s/r?1\.//go;  # cut 'r' and major
     $rev2 =~ s/r?1\.//go;  # cut 'r' and major
 
+    my $maxRev = &getMaxRevision();
     $rev1 = $maxRev if $rev1 < 1;
     $rev1 = $maxRev if $rev1 > $maxRev;
     $rev2 = 1 if $rev2 < 1;
@@ -1234,10 +1229,10 @@ sub renderRevisions {
 
     $revTitle1 = "r1.$rev1";
     
-    $revInfo1 = getRevInfo($currentWeb, $rev1, $currentTopic);
+    $revInfo1 = getRevInfo($baseWeb, $rev1, $baseTopic);
     if ($rev1 != $rev2) {
       $revTitle2 = "r1.$rev2";
-      $revInfo2 = getRevInfo($currentWeb, $rev2, $currentTopic);
+      $revInfo2 = getRevInfo($baseWeb, $rev2, $baseTopic);
     }
 
     #writeDebug("revInfo1=$revInfo1, revInfo2=$revInfo2, revTitle1=$revTitle1, revTitle2=$revTitle2");
@@ -1306,6 +1301,9 @@ sub renderExternalLink {
 sub getCurRevision {
   my ($thisWeb, $thisTopic, $thisRev) = @_;
 
+  $thisWeb = $baseWeb unless $thisWeb;
+  $thisTopic = $baseTopic unless $thisTopic;
+
   my $rev;
   $rev = $query->param("rev") if $query;
   if ($rev) {
@@ -1335,7 +1333,7 @@ sub getPrevRevision {
   my $numberOfRevisions = 
     ($isDakar)?$TWiki::cfg{NumberOfRevisions}:$TWiki::numberOfRevisions;
 
-  $rev = $maxRev unless $rev;
+  $rev = &getMaxRevision() unless $rev;
   $rev =~ s/r?1\.//go; # cut major
   if ($rev > $numberOfRevisions) {
     $rev -= $numberOfRevisions;
@@ -1372,6 +1370,26 @@ sub getRevInfo {
   #writeDebug("revInfo=$revInfo");
   #writeDebug("done getRevInfo");
   return $revInfo;
+}
+
+###############################################################################
+sub getMaxRevision {
+  my ($thisWeb, $thisTopic) = @_;
+
+  $thisWeb = $baseWeb unless $thisWeb;
+  $thisTopic = $baseTopic unless $thisTopic;
+
+  my $maxRev = $maxRevs{"$thisWeb.$thisTopic"};
+  return $maxRev if defined $maxRev;
+
+  if ($isDakar) {
+    $maxRev = $TWiki::Plugins::SESSION->{store}->getRevisionNumber($thisWeb, $thisTopic);
+  } else {
+    $maxRev = &TWiki::Store::getRevisionNumber($thisWeb, $thisTopic);
+  }
+  $maxRev =~ s/r?1\.//go;  # cut 'r' and major
+  $maxRevs{"$thisWeb.$thisTopic"} = $maxRev;
+  return $maxRev;
 }
 
 ###############################################################################

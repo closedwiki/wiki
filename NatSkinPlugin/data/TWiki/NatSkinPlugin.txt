@@ -362,10 +362,11 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.998 |
+|  Plugin Version: | v2.999 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  05 Apr 2006: | added support for dakar's <nop>TemplateLogin; \
-                  changed semantics of NATLOGON, added NATLOGOUT |
+                  changed semantics of NATLOGON, added NATLOGOUT;\
+		  fixed some grave bugs exposed by the <nop>PublishContrib |
 |  27 Mar 2006: | moved <nop>MySideBar tempaltes to <nop>NatSkin; added docu for HTTPSLOGON |
 |  20 Mar 2006: | multiple errors in natsearch: \
                   always first look into the current web, even for a global search; \
