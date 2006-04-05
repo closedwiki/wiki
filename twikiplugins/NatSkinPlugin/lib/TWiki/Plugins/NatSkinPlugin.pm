@@ -51,7 +51,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.996';
+$RELEASE = '2.998';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -516,8 +516,14 @@ sub initSkinState {
   # temporary toggles
   $theToggleSideBar = 'off' if $theRaw;
   $theToggleSideBar = 'off' if $skinState{'border'} eq 'thin' && 
-    $skinState{'action'} =~ /^(edit|manage|rdiff|natsearch|changes|search)$/;
-    # SMELL get away with this hardcode
+    $skinState{'action'} =~ /^(login|logon|oops|edit|manage|rdiff|natsearch|changes|search)$/;
+
+  # switch the sidebar off if we need to authenticate
+  if ($isDakar && 
+    $TWiki::cfg{AuthScripts} =~ /\b$skinState{'action'}\b/ &&
+    !&TWiki::Func::getContext()->{authenticated}) {
+    $theToggleSideBar = 'off';
+  }
 
   $skinState{'sidebar'} = $theToggleSideBar 
     if $theToggleSideBar && $theToggleSideBar ne '';
@@ -544,6 +550,7 @@ sub commonTagsHandler {
   }
   $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;# deprecated
   $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
+  $_[0] =~ s/%NATLOGOUT%/&renderLogout()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
   $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
   $_[0] =~ s/%USERACTIONS%/&renderUserActions/geo;
@@ -1030,54 +1037,60 @@ sub renderWebLink {
 }
 
 ###############################################################################
-# renderLogon: replace the %NATLOGON% variable
-#
-# Displays the username when logged in.
-#
+# display url to login
 sub renderLogon {
 
-  my $dispUser = "";
-  my $logonScriptUrl = &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, "natlogon");
-  if ($isGuest) {
-    my $registerUrl = &TWiki::Func::getScriptUrl(&TWiki::Func::getTwikiWebname(), "TWikiRegistration", "view");
-    if ($TWiki::doEncryptConnection) { # FIXME
-      $logonScriptUrl =~ s/http:/https:/;
-      $registerUrl =~ s/http:/https:/;
+  my $logonCgi = 'natlogon';
+  if ($isDakar) {
+    if ($TWiki::cfg{LoginManager} =~ /TemplateLogin/) {
+      $logonCgi = 'login';
+    } elsif ($TWiki::cfg{LoginManager} =~ /ApacheLogin/) {
+      $logonCgi = 'viewauth';
     }
-    $dispUser .= '<a rel="nofollow" href="' 
-	      . $logonScriptUrl 
-	      . '" accesskey="l">Logon</a>'
-	      . ' | <a href="' 
-	      . $registerUrl 
-	      . '" accesskey="r">Register</a>';
-  } else {
-    my $wikiName = &TWiki::Func::getWikiName();
-    my $mainWeb  = &TWiki::Func::getMainWebname();
-    my $viewScriptUrl = &TWiki::Func::getScriptUrl($mainWeb, $wikiName, "view");
-    my $logoutWeb = $mainWeb;
-    my $logoutTopic = 'WebHome';
-    if (&TWiki::Func::checkAccessPermission('VIEW', $defaultWikiUserName, '', 
-      $currentTopic, $currentWeb)) {
-      $logoutWeb = $currentWeb;
-      $logoutTopic = $currentTopic;
-    }
-
-    $dispUser .= '<a href="' 
-	      . $viewScriptUrl 
-	      . '" accesskey="h">' 
-	      . $wikiName 
-	      . '</a> | <a href="'
-	      . $logonScriptUrl 
-	      . '?web='
-	      . $logoutWeb
-	      . '&amp;topic='
-	      . $logoutTopic
-	      . '&amp;username='
-	      . $defaultWikiUserName
-	      . '" accesskey="l">Logout</a>';
   }
+  my $logonScriptUrl = &TWiki::Func::getScriptUrl($currentWeb, $currentTopic, $logonCgi);
+  return '<a rel="nofollow" href="'.$logonScriptUrl.'" accesskey="l">Login</a>';
 
   return $dispUser;
+}
+
+###############################################################################
+# display url to logout
+sub renderLogout {
+
+  my $logoutCgi = 'natlogon';
+  if ($isDakar) {
+    if ($TWiki::cfg{LoginManager} =~ /TemplateLogin/) {
+      $logoutCgi = 'view';
+    } elsif ($TWiki::cfg{LoginManager} =~ /ApacheLogin/) {
+      return ''; # cant logout
+    }
+  }
+  my $logoutWeb = &TWiki::Func::getMainWebname(); 
+  my $logoutTopic = 'WebHome';
+  if (&TWiki::Func::checkAccessPermission('VIEW', $defaultWikiUserName, '', 
+    $currentTopic, $currentWeb)) {
+    $logoutWeb = $currentWeb;
+    $logoutTopic = $currentTopic;
+  }
+  my $logoutScriptUrl = &TWiki::Func::getScriptUrl($logoutWeb, $logoutTopic, $logoutCgi);
+
+  if ($logoutCgi eq 'natlogon') {
+    return '| <a rel="nofollow" href="'
+	   . $logoutScriptUrl 
+	   . '?web='
+	   . $logoutWeb
+	   . '&amp;topic='
+	   . $logoutTopic
+	   . '&amp;username='
+	   . $defaultWikiUserName
+	   . '" accesskey="l">Logout</a>';
+  } else {
+    return '| <a rel="nofollow" href="'
+	   . $logoutScriptUrl 
+	   . '?logout=1'
+	   . '" accesskey="l">Logout</a>';
+  }
 }
 
 ###############################################################################

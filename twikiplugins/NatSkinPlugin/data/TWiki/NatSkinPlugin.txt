@@ -144,8 +144,20 @@ render a list of all known styles variations being attachted to the NatSkin topi
 ---+++ NATLOGON
 *Syntax*: =%<nop>NATLOGON%=
 
-displays =Logon&#124;Register= for <nop>TWikiGuest, and
-=%WIKINAME%&#124;Logout= otherewise
+displays a link to a logon url depending on the current login scheme. This
+will be a link to
+   * =natlogon= on any legacy twiki releases or in case the <nop>LoginManager is set to "none"
+   * =login= on using dakar's <nop>TemplateLogin 
+   * =viewauth= using <nop>ApacheLogin
+
+---+++ NATLOGOUT
+*Syntax*: =%<nop>NATLOGOUT%=
+
+displays a link to a logout url depending on the current login scheme. This
+will be a link to
+   * =natlogon= on any legacy twiki releases or in case the <nop>LoginManager is set to "none"
+   * =view...?logout=1= on using dakar's <nop>TemplateLogin 
+   * the empty string in case you are using <nop>ApacheLogin (you can't logout explicitely)
 
 ---+++ NATMAXREV
 *Syntax*: =%<nop>NATMAXREV%= 
@@ -239,7 +251,7 @@ duration of the user session. The default values are given below
 		* Set STYLESIDEBAR = left
 	* switch the searchbox to be displayed in the topbar (top), at the top of the sidebar (pos1), in the middle of the sidebar (pos2), at the bottom of the sidebar (pos3) or off, 
 	  url param is =stylessearchbox=
-		* Set STYLESSEARCHBOX = top
+		* Set STYLESEARCHBOX = top
 
 In addition, there's a url parameter =togglesidebar= that disables the sidebar for this request
 only. 
@@ -251,7 +263,7 @@ To emulate the Kubrick style on the old
 	* Set STYLEBUTTONS = on
 	* Set STYLESIDEBAR = right
 	* Set STYLESVARIATION = none
-	* Set STYLESSEARCHBOX = pos1
+	* Set STYLESEARCHBOX = pos1
 
 to your [[%TWIKIWEB%.TWikiPreferences]]. Try out other settings using the NatSkinStyleBrowser,
 or even INCLUDE it in your [[%MAINWEB%.%WIKINAME%SideBar]].
@@ -348,8 +360,10 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.997 |
+|  Plugin Version: | v2.998 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Apr 2006: | added support for dakar's <nop>TemplateLogin; \
+                  changed semantics of NATLOGON, added NATLOGOUT |
 |  27 Mar 2006: | moved <nop>MySideBar tempaltes to <nop>NatSkin; added docu for HTTPSLOGON |
 |  20 Mar 2006: | multiple errors in natsearch: \
                   always first look into the current web, even for a global search; \
@@ -428,5 +442,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 20 Mar 2006 
+-- TWiki:Main/MichaelDaum - 05 Apr 2006 
 
