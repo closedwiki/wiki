@@ -46,11 +46,12 @@ outside the package.
 package TWiki::Contrib::GenPDF;
 
 use strict;
-use CGI::Carp qw( fatalsToBrowser );
+
 use CGI;
 use TWiki::Func;
 use TWiki::UI::View;
 use File::Temp;
+use Error qw( :try );
 
 use vars qw( $VERSION $RELEASE );
 
@@ -496,14 +497,16 @@ sub viewPDF {
        $htmldocCmd = $TWiki::htmldocCmd;
    }
 
+   die "Path to htmldoc command not defined" unless $htmldocCmd;
+
    if ($prefs{'recursive'}) {
       # Include all descendents of this topic
       use Cwd 'cwd';
       my $cwd = cwd; # we need to chdir back after searching
 
       # Get a list of possibilities (all files in the web)
-      chdir($TWiki::Func::getDataDir()."/$webName");
-      opendir(DIR, ".") or carp "$!";
+      chdir(TWiki::Func::getDataDir()."/$webName");
+      opendir(DIR, ".") or die "$!";
       my @files = grep { /\.txt$/ && -f "$_" } readdir(DIR);
       closedir DIR;
       #for (@files) { print STDERR "file: '$_'\n"; } # DEBUG
@@ -638,27 +641,31 @@ sub viewPDF {
    $ENV{HTMLDOC_NOCGI} = "yes";
    system($htmldocCmd, @htmldocArgs);
    if ($? == -1) {
-      croak "Failed to start htmldoc ($htmldocCmd): $!\n";
+      die "Failed to start htmldoc ($htmldocCmd): $!\n";
    }
    elsif ($? & 127) {
       printf STDERR "child died with signal %d, %s coredump\n",
          ($? & 127),  ($? & 128) ? 'with' : 'without';
-      croak "Conversion failed: '$!'";
+      die "Conversion failed: '$!'";
    }
    else {
       printf STDERR "child exited with value %d\n", $? >> 8 unless $? >> 8 == 0;
    }
 
-   #  output the HTML header and the output of HTMLDOC
-   if ($prefs{'format'} =~ /pdf/) {
-      print $query->header( -TYPE => "application/pdf" );
-   }
-   elsif ($prefs{'format'} =~ /ps/) {
-      print $query->header( -TYPE => "application/postscript" );
-   }
-   else {
-      print $query->header( -TYPE => "text/html" );
-   }
+   try {
+       #  output the HTML header and the output of HTMLDOC
+       if ($prefs{'format'} =~ /pdf/) {
+           print CGI::header( -TYPE => 'application/x-pdf' );
+       }
+       elsif ($prefs{'format'} =~ /ps/) {
+           print $query->header( -TYPE => "application/postscript" );
+       }
+       else {
+           print $query->header( -TYPE => "text/html" );
+       }
+   } catch Error::Simple with {
+   };
+
    while(<$outputFile>){
       print;
    }
