@@ -1,10 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1143536609" format="1.1" version="1.1"}%
-%STARTINCLUDE% %IFDEFINEDTHEN{"%WIKINAME%" as="TWikiGuest" glue="off"}%
+%STARTINCLUDE% 
+%IFDEFINEDTHEN{"%WIKINAME%" as="TWikiGuest"}%
 %NATLOGON% 
 | <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiRegistration" accesskey="r">Register</a> 
 %ELSEDEFINED%
 %WIKIUSERNAME% 
 %NATLOGOUT%
-%FIDEFINED% 
-| <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.nat" accesskey="p">Print</a> 
+%FIDEFINED% <!-- -->
+| <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?skin=print.nat" accesskey="p">Print</a> 
 <br/>%USERACTIONS% %STOPINCLUDE%
