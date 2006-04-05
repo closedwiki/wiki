@@ -219,12 +219,13 @@ sub publish {
         TWiki::Func::redirectCgiQuery($query, $url);
     } else {
         TWiki::Func::writeHeader($query);
-        my $tmpl = TWiki::Func::readTemplate("view", "print.pattern");
+        my $tmpl = TWiki::Func::readTemplate("view");
         $tmpl =~ s/%META{.*?}%//g;
         my($header, $footer) = split(/%TEXT%/, $tmpl);
         my $topic = $query->param('publishtopic') || $session->{topicName};
         $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
         $header = TWiki::Func::renderText( $header, $web );
+	$header =~ s/<nop>//go;
         print $header;
         print "<b>TWiki::cfg{PublishContrib}{Dir}: </b>$TWiki::cfg{PublishContrib}{Dir}<br />\n";
         print "<b>TWiki::cfg{PublishContrib}{URL}_PATH: </b>$TWiki::cfg{PublishContrib}{URL}<br />\n";
@@ -247,7 +248,7 @@ sub publish {
         publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
                    $exclusions, $skin, $topicsearch, $archive);
 
-        my $text = "Published at $TWiki::cfg{PublishContrib}{URL}/".$archive->{id};
+        my $text = "Published at $TWiki::cfg{PublishContrib}{URL}/".$archive->{id}.'/WebHome.html';
 
         $archive->close();
 
@@ -380,6 +381,7 @@ sub publishTopic {
 #   * =\%copied= - map of copied resources to new locations
 sub _copyResource {
     my ($web, $rsrcName, $copied, $archive) = @_;
+
     # See if we've already copied this resource.
     unless (exists $copied->{$rsrcName}) {
         # Nope, it's new. Gotta copy it to new location.
@@ -402,6 +404,18 @@ sub _copyResource {
         my $destURL = "rsrc/$path/$file";
         $destURL =~ s!//!/!g;
         $copied->{$rsrcName} = $destURL;
+	
+	# check css for additional resources, ie, url()
+	if ($rsrcName =~ /\.css$/) {
+	  open(F, "$TWikiPubDir/$rsrcName") || die "Cannot read $TWikiPubDir/$rsrcName: $!";
+	  foreach my $line (<F>) {
+	    if ($line =~ /url\(["']?(.*?)["']?\)/) {
+	      # recurse
+	      _copyResource($web, "$path/$1", $copied, $archive);
+	    }
+	  }
+	  close(F);
+	}
     }
     return $copied->{$rsrcName};
 }
@@ -412,7 +426,7 @@ sub _copyResource {
 sub _handleNewLink {
     my $link = shift;
     $link =~ s!<a .*?>!!gi;
-    $link =~ s!</a>!!gi;
+    $link =~ s!\?</a>!!gi;
     return $link;
 }
 

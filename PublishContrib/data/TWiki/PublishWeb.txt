@@ -1,8 +1,9 @@
+%META:TOPICINFO{author="MichaelDaum" date="1144227587" format="1.1" reprev="1.2" version="1.2"}%
 <i>This is a template topic for use with the PublishAddOn. It illustrates how
 to set up a topic in a web to simplify publishing. To use it, take a copy of the raw text of this topic, and paste it into a new topic in your own web.</i>
 
 ---+ Publish topics from the %WEB% web
-	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *include* </td>
+	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *include* 
 		* Set INCLUSIONS = *
 	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
 		* Set EXCLUSIONS = Web*,Publish*
