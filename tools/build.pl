@@ -138,8 +138,11 @@ sub _checkInFile {
             die 'failed to get revision: '.$file."\n";
         }
     } else {
+        #set revision number #TODO: what about topics with no META DATA?
+        my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
+        `$cmd`;
         # create rcs file
-        `rcs -i -t-buildrelease $new/$file,v 2>&1`;
+        `ci -u -mbuildrelease -wTWikiContributor -t-buildrelease $new/$file 2>&1`;
     }
 
     #only do a checkin, if the files are different (fake the rev number to be the same)
