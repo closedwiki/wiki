@@ -22,6 +22,7 @@ use vars qw($isInitialized $debug $defaultWikiUserName);
 use TWiki::Plugins::NatSkinPlugin;
 
 $debug = 0; # toggle me
+
 ###############################################################################
 sub writeDebug {
   TWiki::Func::writeDebug("- NatSkinPlugin::Auth - " . $_[0]) if $debug;
@@ -44,7 +45,6 @@ sub logon {
 
   &doInit();
   writeDebug("called logon");
-
 
   my $thePathInfo = $query->path_info(); 
   my $theRemoteUser = $query->remote_user();
@@ -73,16 +73,18 @@ sub logon {
   # init the NatSkinPlugin explicitely
   &TWiki::Plugins::NatSkinPlugin::doInit();
 
-  # check for existing user
-  if (!&_existsUser($theUser)) {
-    $theUrl = &TWiki::Func::getOopsUrl($theWeb, $theTopic, "oopsnotwikiuser", $theUser);
-    &TWiki::Func::redirectCgiQuery($query, $theUrl);
-    writeDebug("redirecting to oopsnotwikiuser");
-    return;
-  }
-
-  # check password
+  # check
   if ($theUser ne $defaultWikiUserName) {
+
+    # ... for existing user
+    if (!&_existsUser($theUser)) {
+      $theUrl = &TWiki::Func::getOopsUrl($theWeb, $theTopic, "oopsnotwikiuser", $theUser);
+      &TWiki::Func::redirectCgiQuery($query, $theUrl);
+      writeDebug("redirecting to oopsnotwikiuser");
+      return;
+    }
+
+    # ... password
     if (!&_checkPasswd($theUser, $thePasswd)) {
       $theUrl = &TWiki::Func::getOopsUrl($theWeb, $theTopic, "oopswrongpassword");
       &_setAuthUser($defaultWikiUserName);
@@ -117,9 +119,7 @@ sub logon {
     writeDebug("logonWeb=$logonWeb, logonTopic=$logonTopic");
     $theUrl = &TWiki::Func::getScriptUrl($logonWeb, $logonTopic, $theAction);
   }
-
   &_setAuthUser($theUser);
-  writeDebug("setting AUTHUSER to $theUser");
   &TWiki::Func::redirectCgiQuery($query, $theUrl);
   writeDebug("done logon");
 }
@@ -170,6 +170,8 @@ sub _checkPasswd {
 ###############################################################################
 sub _setAuthUser {
   my $theUser = shift;
+
+  writeDebug("_setAuthUser($theUser)");
 
   if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
     $theUser = undef if $theUser eq $defaultWikiUserName;
