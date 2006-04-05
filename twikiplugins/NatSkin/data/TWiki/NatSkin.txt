@@ -199,7 +199,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.997 |
+|  Skin Version: | v2.998 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -216,6 +216,11 @@ The default style is hardcoded into the NatSkinPlugin.
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-04-05: | added support for dakar's <nop>TemplateLogin; \
+                 preventing an empty line in <nop>WebButtons in case there are no public webs; \
+		 added <nop>WebComponent <nop>WebTopicActions; \
+		 simplified topicactions templates; \
+		 simplified <nop>TemplateLogin templates to match natlogon |
 |  2006-03-27: | moved <nop>MySideBar templates from plugin into the skin; \
                  fixed page layout of Kubrick style using borders for geckos; \
 		 added HTTPSLOGON variable to get around install hassle on non-ssl servers; \
@@ -328,7 +333,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 20 Mar 2006
+-- TWiki:Main/MichaelDaum - 05 Apr 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%

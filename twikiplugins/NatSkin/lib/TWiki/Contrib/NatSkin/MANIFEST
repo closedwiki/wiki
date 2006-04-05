@@ -4,15 +4,11 @@ templates/attachagain.nat.tmpl 0644
 templates/attachnew.nat.tmpl 0644
 templates/attachsidebar.nat.tmpl 0644
 templates/attachtables.nat.tmpl 0644
-templates/attachtopicactions.nat.tmpl 0644
 templates/changeform.nat.tmpl 0644
 templates/changeformsidebar.nat.tmpl 0644
-templates/changeformtopicactions.nat.tmpl 0644
 templates/changes.nat.tmpl 0644
-templates/changestopicactions.nat.tmpl 0644
 templates/defaultbody.nat.tmpl 0644
 templates/defaultsidebar.nat.tmpl 0644
-templates/defaulttopicactions.nat.tmpl 0644
 templates/defaulttopbar.nat.tmpl 0644
 templates/edit.nat.tmpl 0644
 templates/editform.nat.tmpl 0644
@@ -25,7 +21,6 @@ templates/login.nat.tmpl 0644
 templates/mailnotify.nat.tmpl 0644
 templates/moveattachment.nat.tmpl 0644
 templates/moveattachmentsidebar.nat.tmpl 0644
-templates/moveattachmenttopicactions.nat.tmpl 0644
 templates/oops.nat.tmpl 0644
 templates/oopsaccesschange.nat.tmpl 0644
 templates/oopsaccesscreateweb.nat.tmpl 0644
@@ -69,7 +64,6 @@ templates/oopssave.nat.tmpl 0644
 templates/oopssaveerr.nat.tmpl 0644
 templates/oopssendmailerr.nat.tmpl 0644
 templates/oopssoftwareerr.nat.tmpl 0644
-templates/oopstopicactions.nat.tmpl 0644
 templates/oopstopicexists.nat.tmpl 0644
 templates/oopsupload.nat.tmpl 0644
 templates/oopswrongpassword.nat.tmpl 0644
@@ -87,7 +81,6 @@ templates/renameconfirm.nat.tmpl 0644
 templates/renamedelete.nat.tmpl 0644
 templates/renamerefs.nat.tmpl 0644
 templates/renamesidebar.nat.tmpl 0644
-templates/renametopicactions.nat.tmpl 0644
 templates/search.nat.tmpl 0644
 templates/searchbase.nat.tmpl 0644
 templates/searchbookview.nat.tmpl 0644
@@ -116,6 +109,7 @@ data/TWiki/NatSkin.txt 0644
 data/TWiki/NatSkinCss.txt 0644
 data/TWiki/NatSkinStyleBrowser.txt 0644
 data/TWiki/NatSkinTemplates.txt 0644
+data/TWiki/TWikiTopicActions.txt 0644
 data/TWiki/TWikiWebButtons.txt 0644
 data/TWiki/TWikiWebLinks.txt 0644
 data/TWiki/TWikiWebSideBar.txt 0644
