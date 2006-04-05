@@ -203,6 +203,7 @@ By default the NatSkin comes with predefined components
    * [[%TWIKIWEB%.TWikiWebSideBar]]
    * [[%TWIKIWEB%.TWikiWebButtons]]
    * [[%TWIKIWEB%.TWikiWebLinks]]
+   * [[%TWIKIWEB%.TWikiWebTopicActions]]
 
 Example: 
    * use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to display a the sidebar component
@@ -352,7 +353,8 @@ By default this value is set to "off"
  RewriteEngine On
  RewriteCond %{SERVER_PORT} !443
  RewriteCond %{QUERY_STRING} template=oopslogon
- RewriteRule ^(.*)$ https://%{HTTP_HOST}/bin/$1 [R,L] </verbatim>
+ RewriteRule ^(.*)$ https://%{HTTP_HOST}/bin/$1 [R,L] 
+</verbatim>
 	  Note, that you might need to accommodate the =/bin= url path above to your installation!
 
 
