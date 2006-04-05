@@ -5,11 +5,13 @@
 %TOC%
 <!-- PDFSTART -->
 
-This is substantial re-write of the TWiki:Codev.PrintUsingPDF pdf script. It essentially accomplishes the same goal but with more integration with TWiki (e.g. use of TWiki variables for configuration and the TWiki rendering methods instead of using a hacked version of the =TWiki::view= for generating HTML) as well as more modular code structure (i.e. most of the logic is moved to a perl package).
+Generate PDF from TWiki pages.
+
+<em>
+This is a substantial re-write of the TWiki:Codev.PrintUsingPDF pdf script. It essentially accomplishes the same goal but with more integration with TWiki (e.g. use of TWiki variables for configuration and the TWiki rendering methods instead of using a hacked version of the =TWiki::view= for generating HTML) as well as more modular code structure (i.e. most of the logic is moved to a perl package).
 
 We began using the TWiki:Codev.PrintUsingPDF pdf script to publish pages but found it somewhat TWiki unfriendly (no offense to the authors as it's a great idea). This version allows most of the script configuration (such as page size, table of contents, etc.) via preference variables in TWiki. It also allows header, footer, and title page configuration via TWiki topics.
-
-This add-on has only been tried with the Cairo version of TWiki. We've made no attempt to determine if it will run on earlier versions. We've been running it in-house at my company for a while (and it seems to work fairly well), but it has obviously not undergone any significant level of testing.
+</em>
 
 ---++ Usage
 
@@ -117,8 +119,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	* Adjust the script ownership to match your webserver configuration (e.g. =chown nobody genpdf=) if needed.
 	* Make sure the script is executable (e.g =chmod 755 genpdf=).
 	* *Adjust the perl path in the genpdf script to match your perl installation location.*
-	* %X% Add the variable =$htmldocCmd = /path/to/htmldoc;= to your =lib/TWiki.cfg= file so TWiki can find the location of the htmldoc executable. Look for $fgrepCmd.
-	* %T% Copy the preferences from above and paste them into either %TWIKIWEB%.TWikiPreferences, or %WEB%.WebPreferences
+	* %X% *BEFORE TWiki-4* Add the variable =$htmldocCmd = "/path/to/htmldoc";= to your =lib/TWiki.cfg= file so TWiki can find the location of the htmldoc executable. Look for $fgrepCmd.
+	* %X% *TWiki-4 and later* Add the setting =$TWiki::cfg{Extensions}{GenPDFAddOn}{htmldocCmd} = "/path/to/htmldoc";= to your =LocalSite.cfg= file.
+	* %T% Copy the preferences from above and paste them into %MAINWEB%.TWikiPreferences, or the !WebPreferences topic for a single web.
 	* Test if the installation was successful:
 		* Try loading [[%SCRIPTURL%/genpdf/%WEB%/%TOPIC%][this page]]
 		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation problem.
@@ -150,48 +153,17 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 									 page_text, sizeof(page_text));
 </verbatim>
 
----++ Add-On History
-	* Version 0.6 (28 Jun 2005)
-		* Less aggressive regex for removing twikiNewLink spans so it doesn't break when using the TWiki:Plugins.SpacedWikiWordPlugin
-		* %T% Added 'recursive' preference to include chapters for all descendents of the base topic
-		* Use File::Spec->tmpdir to specify the default directory for temporary files
-	* Version 0.5 (16 Jun 2005)
-		* Redirect to 'oops' URLs if permission denied or topic does not exist.
-		* Removed twikiNewLink spans from title page so they render as normal text (without the blue ? mark).
-		* Fully qualify image/href URLs on the title page.
-		* Changed temp files to use OO style 'new File::Temp;' for better code portability.
-	* Version 0.4 (13 Jun 2005)
-		* Better security (now calls =system($TWiki::htmldocCmd, @htmldocArgs)= )
-		* Checks return code of htmldoc and returns an error on failure
-		* Validation of preferences
-		* %X% Preferences changed to comply with TWikiPlugins standard
-		* Better HTML3.2 compatibility for htmldoc 1.8.24 (downgrades a few elements)
-		* Full integration of PDF META tags (optionally using 2 FORMFIELDs):
-			* ==%<nop>FORMFIELD{"Topic<nop>Headine"}%== for PDF Subject field
-			* ==%<nop>FORMFIELD{"Key<nop>Words"}%== for PDF Keywords field
-			* all other PDF fields use topic info
-		* More htmldoc options (margins, permissions, numbered TOC, logoimage, headfootfont) using preferences
-		* Removed ==%<nop>TOC%== fields so it only uses HTMLDOC's TOC
-		* Title topic _and_ header/footer topics are now fully rendered
-		* Fixed the heading shifting function
-		* Fully qualify links, making the document portable
-		* HTMLDOC output goes to a temp file instead of stdout
-		* Temp files now use 'GenPDFAddOn' prefix. (Eg. /tmp/GenPDFAddOn1wr3C48ibd.html)
-	* Version 0.3 (12 Apr 2005)
-		* Added full TWiki rendering to title topic page
-		* Added TWiki common variable expansion to header/footer topic page
-	* Version 0.2 (26 Mar 2005)
-		* Fixed bug with table of contents generation (i.e. it was always generated even if =pdftoclevels= was set to 0)
-		* Now allow multiple =PDFSTART/PDFSTOP= pairs within a single page to include/exclude multiple sections of the same page
-		* Added Main.BrentRoberts fix to allow operation with latest version (1.8.24) of HTMLDOC
-	* Version 0.1 (30 Jan 2005)
-		* Initial version
-
 ---++ Add-On Info
 
 |  Add-on Author: | TWiki:Main/BrianSpinar, TWiki:Main/WadeTurland |
 |  Add-on Version: | 28 Jun 2005 (v0.6) |
-|  Change History: | See Add-On History section above |
+|  Change History: | |
+|  Version 0.6 (28 Jun 2005) | <ul><li>Less aggressive regex for removing twikiNewLink spans so it doesn't break when using the TWiki:Plugins.SpacedWikiWordPlugin</li><li>%T% Added 'recursive' preference to include chapters for all descendents of the base topic</li><li>Use File::Spec->tmpdir to specify the default directory for temporary files</li></ul> |
+|  Version 0.5 (16 Jun 2005) |<ul><li>Redirect to 'oops' URLs if permission denied or topic does not exist.</li><li>Removed twikiNewLink spans from title page so they render as normal text (without the blue ? mark).</li><li>Fully qualify image/href URLs on the title page.</li><li>Changed temp files to use OO style 'new File::Temp;' for better code portability.</li></ul> |
+|  Version 0.4 (13 Jun 2005) |<ul><li>Better security (now calls =system($TWiki::htmldocCmd, @htmldocArgs)= )</li><li>Checks return code of htmldoc and returns an error on failure</li><li>Validation of preferences</li><li>%X% Preferences changed to comply with TWikiPlugins standard</li><li>Better HTML3.2 compatibility for htmldoc 1.8.24 (downgrades a few elements)</li><li>Full integration of PDF META tags (optionally using 2 FORMFIELDs):</li><li><ul>	<li>==%<nop>FORMFIELD{"Topic<nop>Headine"}%== for PDF Subject field</li>	<li>==%<nop>FORMFIELD{"Key<nop>Words"}%== for PDF Keywords field</li>	<li>all other PDF fields use topic info</li></ul></li><li>More htmldoc options (margins, permissions, numbered TOC, logoimage, headfootfont) using preferences</li><li>Removed ==%<nop>TOC%== fields so it only uses HTMLDOC's TOC</li><li>Title topic _and_ header/footer topics are now fully rendered</li><li>Fixed the heading shifting function</li><li>Fully qualify links, making the document portable</li><li>HTMLDOC output goes to a temp file instead of stdout</li><li>Temp files now use 'GenPDFAddOn' prefix. (Eg. /tmp/GenPDFAddOn1wr3C48ibd.html)</li></ul>|
+|  Version 0.3 (12 Apr 2005) |<ul><li>Added full TWiki rendering to title topic page</li><li>Added TWiki common variable expansion to header/footer topic page</li></ul>|
+|  Version 0.2 (26 Mar 2005) |<ul><li>Fixed bug with table of contents generation (i.e. it was always generated even if =pdftoclevels= was set to 0)</li><li>Now allow multiple =PDFSTART/PDFSTOP= pairs within a single page to include/exclude multiple sections of the same page</li><li>Added Main.BrentRoberts fix to allow operation with latest version (1.8.24) of HTMLDOC</li></ul>|
+|  Version 0.1 (30 Jan 2005) |<ul><li>Initial version</li></ul>|
 |  CPAN Dependencies: | File::Temp (if for some reason you don't already have it installed ) |
 |  Other Dependencies: | HTMLDOC (http://www.htmldoc.org) |
 |  Perl Version: | 5.005 or above |
