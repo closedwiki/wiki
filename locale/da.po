@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: da\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2006-03-31 16:09+0200\n"
+"PO-Revision-Date: 2006-04-05 22:01+0200\n"
 "Last-Translator: Steffen Poulsen <N/A>\n"
 "Language-Team: Danish <N/A>\n"
 "MIME-Version: 1.0\n"
@@ -2090,7 +2090,7 @@ msgid ""
 "Read %1 to get a quick overview of this collaboration platform. To learn "
 "more, study the TWikiTutorial, which is accessible from the same link."
 msgstr ""
-"Siden %1 giver dig et et hurtigt overblik over denne e-samarbejds-platform. "
+"Siden %1 giver dig et et hurtigt overblik over e-samarbejds-platformen. "
 "For at få en dybere indsigt i systemet kan du læse siden TWikiTutorial, som "
 "kan nås fra samme link."
 
@@ -2432,7 +2432,7 @@ msgstr "Størrelse"
 #: templates/registernotify.tmpl:15
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:15
 msgid "Some add schedule information and vacation notice."
-msgstr "Nogle tilføjer deres kalender eller evt. ferie-beskeder."
+msgstr "Andre tilføjer deres kalender eller evt. ferie-beskeder."
 
 #: templates/messages.tmpl:294
 msgid "Some characters such as =&#126;=, =$=, =@=, =%= are removed"
@@ -2444,7 +2444,7 @@ msgid ""
 "Some people turn it into a personal portal with favorite links, what they "
 "work on, what help they'd like, etc."
 msgstr ""
-"Andre brugere opretter en personlig portal med deres favorit-links, hvad de "
+"Nogle brugere opretter en personlig portal med deres favorit-links, hvad de "
 "arbejder med, hvad de godt kunne bruge hjælp til, etc."
 
 #: data/TWiki/WebSearchAdvanced.txt:52
@@ -2550,7 +2550,7 @@ msgid ""
 "Thank you for registering in the %1 collaboration platform. Please save this "
 "e-mail for future reference."
 msgstr ""
-"Tak fordi du registrerede dig i denne e-samarbejds-platform, '%1'. Gem "
+"Tak fordi du registrerede dig i e-samarbejds-platformen '%1'. Gem "
 "venligst denne e-mail til senere reference."
 
 #: templates/registerconfirm.tmpl:9
@@ -3318,7 +3318,7 @@ msgstr "Dit password:"
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:12
 msgid "Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
-"Din personlige side, %1, findes på %2. Du er velkommen til at tilpasse den "
+"Din personlige side i %1 findes på adressen %2. Du er velkommen til at tilpasse den "
 "efter dine egne behov og ønsker:"
 
 #: templates/messages.tmpl:155
