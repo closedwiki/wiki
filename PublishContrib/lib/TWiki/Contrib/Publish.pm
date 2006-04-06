@@ -325,6 +325,15 @@ sub publishTopic {
         return;
     }
 
+    # SMELL: need a new prefs object for each topic
+    my $twiki = $TWiki::Plugins::SESSION;
+    $twiki->{prefs} = new TWiki::Prefs($twiki);
+    $twiki->{prefs}->pushGlobalPreferences();
+    $twiki->{prefs}->pushPreferences($TWiki::cfg{UsersWebName}, $wikiName, 'USER '.$wikiName);
+    $twiki->{prefs}->pushWebPreferences($web);
+    $twiki->{prefs}->pushPreferences($web, $topic, 'TOPIC');
+    $twiki->{prefs}->pushPreferenceValues('SESSION', $twiki->{client}->getSessionValues());
+
     my ($revdate, $revuser, $maxrev);
     ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
     $revuser = $revuser->wikiName();
@@ -354,14 +363,15 @@ sub publishTopic {
     # Modify relative links
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(0, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*!!;
-    $tmpl =~ s!(href=["'])$ilt/$web(/\w+)+!$1$2.html!g;
-    $tmpl =~ s!(href=["'])$ilt/(\w+(/\w+)+)!$1../$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
 
     # Modify absolute internal view links.
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(1, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*!!;
-    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)+!$1$2.html!g;
-    $tmpl =~ s!(href=["'])$ilt/(\w+(/\w+)+)!$1../$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
+
 
     # Remove base tag  - DZA
     $tmpl =~ s/<base[^>]+\/>//;
@@ -409,14 +419,18 @@ sub _copyResource {
 	
 	# check css for additional resources, ie, url()
 	if ($rsrcName =~ /\.css$/) {
+	  my @moreResources = ();
 	  open(F, "$TWikiPubDir/$rsrcName") || die "Cannot read $TWikiPubDir/$rsrcName: $!";
-	  foreach my $line (<F>) {
+	  while (my $line = <F>) {
 	    if ($line =~ /url\(["']?(.*?)["']?\)/) {
-	      # recurse
-	      _copyResource($web, "$path/$1", $copied, $archive);
+	      push @moreResources, $1;
 	    }
 	  }
 	  close(F);
+	  foreach my $resource (@moreResources) {
+	    # recurse
+	    _copyResource($web, "$path/$resource", $copied, $archive);
+	  }
 	}
     }
     return $copied->{$rsrcName};

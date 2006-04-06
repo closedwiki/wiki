@@ -156,6 +156,9 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/C
 | Dependencies: | %$DEPENDENCIES% |
 | Version: | %$VERSION% |
 | Change History: | |
+|  06 Apr 2006 | Michael Daum - fixed rewriting urls; \
+                 fixed nested resources issue; \
+		 creating a new prefs object for each topic |
 |  9713 | Corrected form action so it uses up the right web preferences |
 |  9695 | Michael Daum - recursively archive resources imported by css files;\
       fixed several html errors in the PublishContrib and PublishWeb topics;\
