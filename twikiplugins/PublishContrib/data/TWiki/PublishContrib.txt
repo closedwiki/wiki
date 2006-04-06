@@ -156,19 +156,20 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/C
 | Dependencies: | %$DEPENDENCIES% |
 | Version: | %$VERSION% |
 | Change History: | |
-| 05 Apr 2006  | Michael Daum - recursively archive resources imported by css files;\
+|  9713 | Corrected form action so it uses up the right web preferences |
+|  9695 | Michael Daum - recursively archive resources imported by css files;\
       fixed several html errors in the PublishContrib and PublishWeb topics;\
-      removed hardcoded reverence to print.pattern |
-| 8959 | TWiki-4 version. Also supports publishing to a file area, making TWiki easier to use as a CMS (see also TWiki:Plugins/PublishWebPlugin, which does almost the same thing :-( ) |
-| 6276 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  bugfix for HTTP_HOST, as described in the Dev topic for the contrib |
-| 5566 | Changed interface to support wildcards, and lightened the plugin by replacing a lot of files with simpler ways of doing things. |
-| 5499 | Added Compress::Zlib dependency, as requested by Brad Taylor |
-| 27 Apr 2005 | 1.301 Crawford Currie - fixed minor issues highlighted by Bruce Dillahunty and Scott Claridge |
-| 11 Apr 2005 | 1.3 Crawford Currie - reworked the interface and code to work better |
-| 13 October 2004 | 1.200 Crawford Currie - Cairo compatible |
-| 7 Jan 2003 | 1.1 Initial version |
-| Home: | TWiki:Plugins/%TOPIC% |
-| Feedback: | TWiki:Plugins/%TOPIC%Dev |
+      removed hardcoded reference to print.pattern |
+|  8959 | TWiki-4 version. Also supports publishing to a file area, making TWiki easier to use as a CMS (see also TWiki:Plugins/PublishWebPlugin, which does almost the same thing :-( ) |
+|  6276 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  bugfix for HTTP_HOST, as described in the Dev topic for the contrib |
+|  5566 | Changed interface to support wildcards, and lightened the plugin by replacing a lot of files with simpler ways of doing things. |
+|  5499 | Added Compress::Zlib dependency, as requested by Brad Taylor |
+|  27 Apr 2005 | 1.301 Crawford Currie - fixed minor issues highlighted by Bruce Dillahunty and Scott Claridge |
+|  11 Apr 2005 | 1.3 Crawford Currie - reworked the interface and code to work better |
+|  13 October 2004 | 1.200 Crawford Currie - Cairo compatible |
+|  7 Jan 2003 | 1.1 Initial version |
+|  Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
