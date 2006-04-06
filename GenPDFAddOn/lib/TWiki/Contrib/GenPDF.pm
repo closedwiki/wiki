@@ -652,16 +652,20 @@ sub viewPDF {
       printf STDERR "child exited with value %d\n", $? >> 8 unless $? >> 8 == 0;
    }
 
+   #  output the HTML header and the output of HTMLDOC
+   my $cd = "filename=${webName}_$topic.";
    try {
-       #  output the HTML header and the output of HTMLDOC
        if ($prefs{'format'} =~ /pdf/) {
-           print CGI::header( -TYPE => 'application/x-pdf' );
+           print CGI::header( -TYPE => 'application/x-pdf',
+                              -Content_Disposition => $cd.'pdf');
        }
        elsif ($prefs{'format'} =~ /ps/) {
-           print $query->header( -TYPE => "application/postscript" );
+           print CGI::header( -TYPE => 'application/postscript',
+                              -Content_Disposition => $cd.'ps');
        }
        else {
-           print $query->header( -TYPE => "text/html" );
+           print CGI::header( -TYPE => 'text/html',
+                              -Content_Disposition => $cd.'html' );
        }
    } catch Error::Simple with {
    };
