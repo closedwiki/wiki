@@ -152,11 +152,11 @@ do 'LocalSite.cfg';
 ---+++ Info
 This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/CrawfordCurrie at Motorola. This version is a rewrite from TWiki:Main/EricScouten, subsequently fixed by TWiki:Main/CrawfordCurrie (http://c-dot.co.uk)
 
-| Authors: | TWiki:Main/CrawfordCurrie, TWiki:Main/EricScouten |
-| Dependencies: | %$DEPENDENCIES% |
-| Version: | %$VERSION% |
-| Change History: | |
-|  06 Apr 2006 | Michael Daum - fixed rewriting urls; \
+|  Authors: | TWiki:Main/CrawfordCurrie, TWiki:Main/EricScouten |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
+|  Change History: | |
+|  9725 | Michael Daum - fixed rewriting urls; \
                  fixed nested resources issue; \
 		 creating a new prefs object for each topic |
 |  9713 | Corrected form action so it uses up the right web preferences |
