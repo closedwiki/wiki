@@ -633,6 +633,12 @@ sub getFieldValuesFromQuery {
     my @missing;
     my $seen = 0;
 
+    # Remove the old file defs so we apply the
+    # order in the form definition, and not the
+    # order in the previous meta object. See Item1982.
+    my @old = $meta->find( 'FIELD' );
+    $meta->remove('FIELD');
+
     foreach my $fieldDef ( @{$this->{fields}} ) {
         next unless $fieldDef->{name};
 
@@ -651,7 +657,13 @@ sub getFieldValuesFromQuery {
             }
         }
 
-        my $preDef = $meta->get( 'FIELD', $fieldDef->{name} );
+        my $preDef;
+        foreach my $item ( @old ) {
+            if( $item->{name} eq $fieldDef->{name} ) {
+                $preDef = $item;
+                last;
+            }
+        }
 
         if( $initialiseMissing && !defined( $value ) && !defined( $preDef )) {
             $value = '';
@@ -663,18 +675,23 @@ sub getFieldValuesFromQuery {
             push( @missing, $fieldDef->{title} || "unnamed field" );
         }
 
+        my $def;
+
         if( defined( $value ) ) {
             # NOTE: title and name are stored in the topic so that it can be
             # viewed without reading in the form definition
-            my $args =
+            $def =
               {
                   name =>  $fieldDef->{name},
                   title => $fieldDef->{title},
                   value => $value,
                   attributes => $fieldDef->{attributes},
               };
-            $meta->putKeyed( 'FIELD', $args );
+        } elsif( $preDef ) {
+            $def = $preDef;
         }
+
+        $meta->putKeyed( 'FIELD', $def ) if $def;
     }
 
     return ( $seen, \@missing );
