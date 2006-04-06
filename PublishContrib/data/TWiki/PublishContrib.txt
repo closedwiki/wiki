@@ -1,3 +1,5 @@
+Generates a static view of a web, either as files on disc or as a ZIP file.
+
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -7,17 +9,12 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
 -->
----+!! PublishContrib
 
 _Previously known as !GenHTMLAddOn, and then !PublishAddOn_.
 
 *WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.2][here]]*
 
 %TOC%
-
----++ Summary
-
-Generates a static view of a web, either as files on disc or as a ZIP file.
 
 When TWiki generates a view, it does so dynamically i.e. there's a CGI script that runs, processes some files, and generates HTML that is displayed by the browser. There are circumstances in which this may not be desirable or even possible. For example:
 	1 TWiki is used to create documentation which has to be bundled into a product release,
@@ -44,7 +41,7 @@ The output is generated in a directory designated during installation, either in
 You can also create a permanent topic in a web to help with the publishing process. See [[#PublishTopic][below]].
 
 <div class="twikiPageForm">
-<form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form method="POST" name="publish" action="%SCRIPTURL{publish}%/%URLPARAM{"web" default=""}%">
 <table class="twikiTable">
 <tr>
   <td valign="top"> Web to publish </td>

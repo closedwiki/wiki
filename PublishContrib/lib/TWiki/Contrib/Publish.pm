@@ -138,6 +138,7 @@ sub publish {
 
     my $query = $session->{cgiQuery};
     my $web = $query->param( 'web' ) || $session->{webName};
+
     $session->{webName} = $web;
 
     $TWiki::Plugins::SESSION = $session;
@@ -229,6 +230,7 @@ sub publish {
         print $header;
         print "<b>TWiki::cfg{PublishContrib}{Dir}: </b>$TWiki::cfg{PublishContrib}{Dir}<br />\n";
         print "<b>TWiki::cfg{PublishContrib}{URL}_PATH: </b>$TWiki::cfg{PublishContrib}{URL}<br />\n";
+        print "<b>Web: $web<br />\n";
         print "<b>Config: $configtopic<br />\n" if $configtopic;
         print "<b>Skin: </b>$skin<br />\n";
         print "<b>Inclusions: </b>$inclusions<br />\n";
@@ -352,14 +354,14 @@ sub publishTopic {
     # Modify relative links
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(0, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*!!;
-    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
-    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/$web(/\w+)+!$1$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/(\w+(/\w+)+)!$1../$2.html!g;
 
     # Modify absolute internal view links.
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(1, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*!!;
-    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
-    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)+!$1$2.html!g;
+    $tmpl =~ s!(href=["'])$ilt/(\w+(/\w+)+)!$1../$2.html!g;
 
     # Remove base tag  - DZA
     $tmpl =~ s/<base[^>]+\/>//;
