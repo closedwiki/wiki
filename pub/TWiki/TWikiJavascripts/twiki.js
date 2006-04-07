@@ -199,6 +199,15 @@ function removeSpaces(inValue) {
 }
 
 /**
+Creates a WikiWord from a string. For example: "A handy dictionary" becomes "AHandyDictionary".
+@param inValue : the string to wikiwordize
+@return A new WikiWord string.
+*/
+function makeWikiWord(inString) {
+	return removeSpaces(capitalize(inString));
+}
+
+/**
 Add a cookie. If 'days' is set to a non-zero number of days, sets an expiry on the cookie.
 @deprecated Use setPref.
 */
