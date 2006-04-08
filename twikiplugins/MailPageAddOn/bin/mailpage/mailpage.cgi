@@ -155,7 +155,7 @@ foreach $line (@temptoken) {
 print qq~
 <h2>Send!</h2>
 The email has been sent to $FORM{'recipient'}. Please click the back button below to return to the page you were before.<p>
-<center><FORM><INPUT type="button" value="Back" onClick="history.go(-2)"></FORM></center>
+<center><FORM><INPUT type="button" value="Back" onClick="window.location='$FORM{'url'}'"></FORM></center>
 ~;
 	}
 print "$line";
@@ -203,7 +203,7 @@ close MAIL;
 
 # The following sub was modified by Lynnwood Brown on 1/31/05 to for use with TWiki. It sends the "print" view.
 sub send_body {
-$req = new HTTP::Request 'GET' => $FORM{'url'}."?skin=print.pattern";
+$req = new HTTP::Request 'GET' => $FORM{'url'}."?template=viewprint";
 $res = $ua->request($req);
 
 if ($res->is_success) {
