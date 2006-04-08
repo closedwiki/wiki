@@ -45,8 +45,8 @@ use vars qw( $VERSION $RELEASE $debug );
 use TWiki::Plugins::LatexModePlugin qw($preamble);
 
 # number the release version of this addon
-$VERSION = '1.300';
-$RELEASE = 'Dakar';
+$VERSION = '$Rev$';
+$RELEASE = '1.400';
 
 =pod
 
@@ -93,6 +93,8 @@ use HTML::LatexLMP;
 use File::Basename;
 use File::Temp;
 
+use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
+
 sub genfile() {
 
     my ($query, $webName, $topic, $scriptUrlPath, $userName );
@@ -133,11 +135,80 @@ sub genfile() {
             print $tex;
         } else {
             print $query->header( -TYPE => "text/html" );
-            
+
             print "GenPDFLatex error:  No latex file generated.";
         }
 
-    } elsif ($action eq 'pdf') {
+    } elsif ( $action eq 'srczip' ) {
+
+        my $tex = _genlatex( $webName, $topic, $userName, $query );
+        my ($meta,$text) = TWiki::Func::readTopic( $webName, $topic );
+        my @filelist;
+    
+        my %h = %{$meta};
+        if ($debug) {
+            print $query->header( -TYPE => "text/html" );
+        
+            print "<p>Generating ZIP file of latex source + attached bib and fig files\n<p>";
+    
+            print map {"$_ => $h{$_}\n"} keys %h;
+        }
+
+        foreach my $c (@{$h{'FILEATTACHMENT'}}) {
+            my %h2 = %{$c};
+            next if ($h2{'attr'} eq 'h');
+            push @filelist, $h2{'name'};
+        }
+
+        if ($debug) {
+            print "<ul>";
+            print map {"<li> $_"} @filelist;
+            print "</ul>";
+        }
+
+        my $zip = Archive::Zip->new();
+        my ($tmpzip,$WDIR) = ('','');
+        if ( defined($zip) ) {
+
+            $WDIR = File::Temp::tempdir();
+            $tmpzip = $WDIR."tmp.zip";
+
+            my $member = $zip->addString( $tex, $topic.'.tex' );
+    #        $member->desiredCompressionMethod( COMPRESSION_DEFLATED );
+        
+            # use hard-disk path rather than relative url paths for images
+            my $url = TWiki::Func::getPubDir();
+        
+            foreach my $c (@filelist) {
+                my $member = $zip->addFile( join('/',$url,$webName,$topic,$c), $c );
+            }
+            die 'write error' unless 
+                $zip->writeToFileNamed( $tmpzip ) == AZ_OK;
+        }
+
+        if (-f $tmpzip) {
+            print $query->header( -TYPE => "application/zip",
+                                  -attachment=> $topic."_src.zip" );
+            open(F,$tmpzip);
+            while (<F>) {
+                print;
+            }
+            close(F);
+
+            unlink($tmpzip) unless ($debug);
+
+            rmdir($WDIR) || print STDERR "genpdflatex: Can't remove $WDIR: $!\n";
+            $WDIR = undef;
+
+        } else {
+            print $query->header( -TYPE => "text/html" );
+        
+            print "GenPDFLatex error:  No ZIP file generated.";
+        }
+        undef($zip);
+
+
+    } elsif ( $action eq 'pdf' ) {
 
         my $tex = _genlatex( $webName, $topic, $userName, $query );
 
@@ -174,7 +245,7 @@ sub genfile() {
             print $query->header( -TYPE => "text/html" );
             print "<html><body>";
             print "pdflatex reported " . scalar(@errors) . " errors while creating PDF:";
-            
+
             print map {"<br>$_ "} @errors;
 
             print "</html></body>";
@@ -205,7 +276,7 @@ sub genfile() {
             rmdir($WDIR) || print STDERR "genpdflatex: Can't remove $WDIR: $!\n";
             $WDIR = undef;
         } unless ($debug);
-        
+
     } else {
 
         my $optpg = &TWiki::Func::getPreferencesValue( "GENPDFLATEX_OPTIONSPAGE" ) || "";
@@ -213,7 +284,7 @@ sub genfile() {
         my $text = "";
         if ( $optpg ne "" ) {
             # if an options page is defined
-            
+
             my ($optWeb,$optTopic) = ($1,$2) if $optpg =~ /(.*)[\.\/](.*)/ ;
             # print STDERR "$optWeb . $optTopic \n";
             if ($optTopic eq "") { 
@@ -221,22 +292,22 @@ sub genfile() {
                 $optWeb = $webName;
             }
             $optWeb = $webName if ($optWeb eq "");
-            
+
             if (TWiki::UI::webExists( $optWeb, $optTopic ) ) {
-                
+
                 my $skin = "plain"; # $query->param( "skin" );
                 my $tmpl = &TWiki::Store::readTemplate( "view", $skin );
-                
+
                 $text = TWiki::Func::readTopicText($optWeb, $optTopic, undef );
-                
+
                 $tmpl =~ s/%TEXT%/$text/;
                 $tmpl =~ s/%META:\w+{.*?}%//gs;
-                
+
                 $tmpl .= "<p>(edit the $optpg topic to modify this form.)";
-                
+
                 $text = TWiki::Func::expandCommonVariables($tmpl, $optTopic, $optWeb);
                 $text = TWiki::Func::renderText($text);
-                
+
                 $text =~ s/%.*?%//g;    # clean up any spurious TWiki tags
             }
         } 
@@ -365,7 +436,10 @@ sub _genlatex {
     $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
         
     # $text =~ s/\\/\n/g;
-    ### NEED TO PROTECT line breaks within <latex> tags here...
+
+    ### for compatibility w/ SectionalEditPlugin (can't override skin
+    ### directives in TWiki::Func::getSkin)
+    $text =~ s!<.*?section.*?>!!g;
 
     $text = TWiki::Func::renderText($text);
     
@@ -379,11 +453,13 @@ sub _genlatex {
     $text =~ s!<nop>!!g;
 
     # use hard-disk path rather than relative url paths for images
-    my $url = TWiki::Func::getPubDir();
-    my $ptmp = TWiki::Func::getPubUrlPath();
+    my $pdir = TWiki::Func::getPubDir();
+    my $purl = TWiki::Func::getUrlHost().TWiki::Func::getPubUrlPath();
 
-    $url =~ s/$ptmp//;
-    $text =~ s!<img(.*?) src="\/!<img$1 src="$url\/!sgi;
+    $text =~ s!<img(.*?) src="$purl!<img$1 src="$pdir\/!sgi;
+
+    # $url =~ s/$ptmp//;
+    # $text =~ s!<img(.*?) src="\/!<img$1 src="$url\/!sgi;
 
     # add <p> tags to all paragraph breaks
     # while ($text =~ s!\n\n!\n<p />\n!gs) {}
@@ -450,12 +526,23 @@ sub _genlatex {
     $parser->add_head(@heads);
     $parser->ban_tag(@banned);
     $parser->set_option({ store => $htmlstore });
-    
+    # $parser->set_log('/tmp/LMP.log');
 
     my $tex = $parser->parse_string($text."<p>",1);
 
     $tex =~ s/(\\begin\{document\})/\n$preamble\n$1/;
-    
+
+    # some packages, e.g. endfloat, need environments to end on their own line
+    $tex =~ s/([^\n])\\end\{/$1\n\\end\{/g; 
+
+    # if color happens to appear outside of a latex environment,
+    # ensure that the color package is included.
+    # SMELL: there must be a better way to do this.
+    if ( ($tex =~ m/\\textcolor/) and 
+         !($tex =~ m/includepackage\{color\}/) ) {
+        $tex =~ s!(\\begin\{document\})!\\usepackage{color}\n$1!;
+    }
+
     return($tex);
 }
 
@@ -506,8 +593,11 @@ __DATA__
     <tr>
     <td>Output file type:
     <td>
-    <input type="radio" name="output" checked="on" value="latex" /> latex .tex file
-    <input type="radio" name="output" value="pdf" /> pdflatex PDF file
+    <table>
+    <tr><td><input type="radio" name="output" checked="on" value="latex" /> latex .tex file
+    <tr><td><input type="radio" name="output" value="pdf" /> pdflatex PDF file
+    <tr><td><input type="radio" name="output" value="srczip" /> ZIP file (.tex + attachments)
+    </table>
     <tr>
     <td>
     <td>
