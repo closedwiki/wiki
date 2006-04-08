@@ -139,7 +139,7 @@ All attributes for %<nop>BIBTEX% and %<nop>STARTBIBTEX% are optional. The attrib
 are not valid in the %<nop>STARBIBTEX% tag as the bibtex database is given inline and not as an attachment.
 %<nop>CITE% has one obligatory attribute, that is =key= refering to the bibtex entry that is to be
 cited. =topic= is optional here and defaults to the recently used bibtex database location in a %<nop>BIBTEX%
-tag on the same topic (see [[#Tips]]).
+tag on the same topic (see [[#Tips][Tips]]).
 
 | *option* | *value*	  | *description* |
 | topic | =(webName.)topicName= | a valid topic where bibtex files are attached. |
@@ -252,7 +252,7 @@ Here's the list of used styles:
 | bibkeywords | division surrounding the keywords |
 | bibsearch | class of the table in the BibtexSearchTemplate |
 | biboptions | class of the options table in the BibtexSearchTemplate |
-See [[#Tips]] for an example on how to modify the look easily.
+See [[#Tips][Tips]] for an example on how to modify the look easily.
 
 #SearchTemplates
 ---+++ !BibtexPlugin search templates
@@ -267,9 +267,9 @@ in a topic to which .bib files are attached.  The resulting rendered form
 files.
 
 	* Available search templates
-		* TWiki.BibtexSearchTemplate
-		* TWiki.BibtexSimpleSearchTemplate
-		* TWiki.BibtexSelectTemplate
+		* TWiki.BibtexSearchTemplate - verbose .bib file query form
+		* TWiki.BibtexSimpleSearchTemplate - !BibTeX key query form
+		* TWiki.BibtexSelectTemplate - query .bib files using bib2bib 'select' syntax
 
 ---+++ Bibtool Resource Files
 Actually this is an art for itself. The author has taken care to give you a quite reasonable
@@ -319,7 +319,7 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 	  Having a set of citations %<nop>CITE{keyA}% ... %<nop>CITE{keyZ}%
 	  refering to the same database is achievable in several ways:
 		* by attaching _all_ your bibtex files at a common place and set the =DEFAULTTOPIC= in the
-		  [[#Global_Settings]] section to that topic, or
+		  [[#Global_Settings][Global Settings]] section to that topic, or
 		* by declaring the current database in the first %<nop>CITE% tag: %CITE{"keyA" topic="Main.BibtexDatabase"}, or
 		* by setting the current database with %<nop>BIBTEX{topic="BibtexDatabase" display="off"}%, or
 		* by specifying the bibtex database in every %<nop>CITE% tag (not seriously)

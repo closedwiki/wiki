@@ -34,6 +34,8 @@ use vars qw(
         $bibtexPrg $citeno $bibcite
     );
 
+use vars qw( %TWikiCompatibility );
+
 use File::Basename;
 
 use strict;
@@ -163,6 +165,8 @@ sub commonTagsHandler {
 
 }
 
+
+$TWikiCompatibility{endRenderingHandler} = 1.1;
 sub endRenderingHandler
 {
     # for backwards compatibility with Cairo
