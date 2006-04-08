@@ -65,11 +65,14 @@ use strict;
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $debug
              $default_density $default_gamma $default_scale $preamble
              $eqn $fig $tbl $use_color @norender $tweakinline @EXPORT_OK
+             $rerender
              );
+
+use vars qw( %TWikiCompatibility );
 
 # number the release version of this plugin
 $VERSION = '$Rev$';
-$RELEASE = '2.4';
+$RELEASE = '2.5';
 
 require Exporter;
 *import = \&Exporter::import;
@@ -156,6 +159,8 @@ my $script = basename( $0 );
 ### between the two.
 my $latexout = 0 ;
 
+my $rerender = 0 ;              # flag to rerender all images
+
 # =========================
 sub initPlugin
 {
@@ -201,6 +206,12 @@ sub initPlugin
     $use_color = 0;             # initialize color setting.
 
     $latexout = 1 if ($script =~ m/genpdflatex/);
+
+    my $query = &TWiki::Func::getCgiQuery();
+    $rerender = &TWiki::Func::getPreferencesValue( "RERENDER" ) || 0;
+    if ($query->param( 'latex' )) {
+        $rerender = ($query->param( 'latex' ) eq 'rerender');
+    }
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::LatexModePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -396,7 +407,7 @@ sub handleLatex
         (my $a = $k) =~ s/^\s*|\s*$//;
 
         # scrub the inputs, since this gets passed to 'convert' (in
-        # particular, sheild against 'density=166|cat%20/etc/passwd'
+        # particular, shield against 'density=166|cat%20/etc/passwd'
         # type inputs). alpha-numeric OK. slash, space, and brackets
         # are valid in preamble. need semi-colon in eqn lables!
         # allow '-' and '_' in eqn labels too.
@@ -502,9 +513,15 @@ COLORS
         ### store the declared options for the rendering later...
         $markup_opts{$hash_code} = \%opts;
         
-        #remove any quotes in the string, so the alt tag doesn't break
+
+        # replace troublesome characters in the string, so the alt tag
+        # doesn't break:
         $escaped =~ s/\"/&quot;/gso;
         $escaped =~ s/\n/ /gso;
+        $escaped =~ s!\&!\&amp\;!g;
+        $escaped =~ s!\>!\&gt\;!g;
+        $escaped =~ s!\<!\&lt\;!g;    
+        # and NOP the WikiWords:
         $escaped =~ s!(\u\w\l\w+\u\w)!<nop>$1!g;
 
         my $image_name = "$pubUrlPath/latex$hash_code.$EXT";
@@ -555,10 +572,11 @@ COLORS
             $txt = "<div align=\"center\"><img src=\"$image_name\" $str alt=\"$escaped\" /></div>";
         }
     }  # end 'if !$latexout';
-
     return($txt);
 }
 
+## disable the call to endRenderingHandler in Dakar (i.e. TWiki::Plugins::VERSION >= 1.1)
+$TWikiCompatibility{endRenderingHandler} = 1.1;
 # =========================
 sub endRenderingHandler
 {
@@ -616,7 +634,8 @@ sub postRenderingHandler
             #is the image still used in the document?
             if( exists( $hashed_math_strings{$hash_code} ) ) {
                 #if the image is already there, we don't need to re-render
-                delete( $hashed_math_strings{$hash_code} );
+                delete( $hashed_math_strings{$hash_code} )
+                    unless ($rerender);
                 next;
             }
 
@@ -763,7 +782,7 @@ sub postRenderingHandler
                          ($tweakinline ne 0) );
             $cmd .= $outimg;
 
-	    system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG");
+	    system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG") if ($debug);
 	    system("$PATHTOCONVERT $cmd");
             }
             if (-f $outimg) {
@@ -774,11 +793,11 @@ sub postRenderingHandler
                      ) {
                     my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
                     move($outimg,$tmpfile);
-
-                    system("$PATHTOCONVERT $tmpfile -shave ".
-                           round(1*$ptsz)."x".round(1*$ptsz)." ".
-                           $outimg);
                     
+                    my $args = "$tmpfile -background black -trim $outimg";
+                    system("$PATHTOCONVERT $args");
+                    system("echo \"$PATHTOCONVERT $args\" >> $LATEXLOG") if ($debug);
+
                     my $img2 = image_info($outimg);
 
                     my ($nw,$nh) = ( $img2->{width}-round(8*$ptsz), 
@@ -796,6 +815,7 @@ sub postRenderingHandler
                     
                     move($outimg,$tmpfile);
                     system("$PATHTOCONVERT $tmpfile $cmd");
+                    system("echo \"$PATHTOCONVERT $tmpfile $cmd\" >> $LATEXLOG") if ($debug);
                     unlink("$tmpfile") unless ($debug);
 
                     ## Another strategy: trim gives better horizontal
