@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="ScottHoge" date="1125954924" format="1.0" version="1.4"}%
 ---+!! <nop>%TOPIC%
 
-This <nop>LaTeX Mode TWiki Plugin allows you to include <nop>LaTeX mark up commands within a TWiki page.  It uses external programs (specifically latex, dvips, and convert) to generate =png= images from the mark up.  These images are then included in the rendered TWiki page.  The first time a particular image is generated, there may be a significant lag in page rendering as the images are generated on the server.  Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.  When you remove a math expression from a page, its image is deleted.  
+This <nop>LaTeX Mode TWiki Plugin allows you to include <nop>LaTeX mark up commands within a TWiki page.  It uses external programs (specifically latex, dvipng, or dvips-and-convert) to generate =png= images from the mark up.  These images are then included in the rendered TWiki page.  The first time a particular image is generated, there may be a significant lag in page rendering as the images are generated on the server.  Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.  When you remove a math expression from a page, its image is deleted.  
 
 This plugin expands the functionality provided by the (older) TWiki:Plugins.MathModePlugin.
 
@@ -83,16 +83,6 @@ Latex is able to render colors defined in 3 color spaces: =gray=, =rgb=, and
 |   =yellow=|   cmyk   | 0,0,1,0 |
 </div>
 
-To use additional colors, they need to be defined in (what is known as) the
-Latex preamble.  The preamble can be set as either a web or topic preference
-variable
-<verbatim>
-   * #Set PREAMBLE = \usepackage{color} \definecolor{Aqua}{rgb}{0,1,1}
-</verbatim>
-
-or as a multi-line declaration, using the tags:
-%<nop>BEGINLATEXPREAMBLE% and %<nop>ENDLATEXPREAMBLE%
-
 For convenience, the following TWiki colors are pre-defined in the LatexModePlugin
 <verbatim>
    \definecolor{Red}{rgb}{1,0,0}
@@ -114,7 +104,29 @@ For convenience, the following TWiki colors are pre-defined in the LatexModePlug
    \definecolor{Silver}{gray}{0.75}
    \definecolor{White}{gray}{1}
 </verbatim>
-One does not need to declare a preamble to use these colors.
+
+To use additional colors, they need to be defined in the Latex preamble, as described in the next section.
+
+---+++ Defining the <nop>LaTeX preamble
+
+In <nop>LaTeX, the preamble is used to customize the latex processing,
+allowing one to add custom styles and declare new commands.
+
+In TWiki, the preamble can be set as either a web or topic preference variable
+<verbatim>
+   * #Set PREAMBLE = \usepackage{color} \definecolor{Aqua}{rgb}{0,1,1}
+</verbatim>
+or as a multi-line declaration, using the tags:
+<verbatim>
+   %BEGINLATEXPREAMBLE% ... %ENDLATEXPREAMBLE%
+</verbatim>
+
+One critical difference between the two exists.  With the exception of the
+color declarations above, the TWiki preference setting will _override_ the
+default settings, and is intended to provide site administrators a central
+point to set preamble settings globally.  In contrast, the tag declaration
+will _add_ to the preamble defined by either the default settings or the
+preference setting, allowing TWiki users to amend the preamble.
 
 ---++ Examples
 
@@ -176,8 +188,13 @@ these plugin settings write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<
 First, confirm that the external software needed by the plugin is installed on the TWiki server.  This includes:
    * The =Digest::MD5= and =Image::Info= perl modules.
    * A working <nop>LaTeX implementation ([[http://www.tug.org/tetex/][tetex]] and <nop>[[http://www.miktex.org/][MikTeX]] are two popular choices)
+   * [[http://sourceforge.net/projects/dvipng/][dvipng]], a fast dvi to png converter
    * the [[http://www.cs.wisc.edu/~ghost/][Ghostscript]] package
    * the 'convert' executable from either <nop>[[http://www.imagemagick.org/][ImageMagick]] or <nop>[[http://www.graphicsmagick.org/][GraphicsMagick]]
+
+Rendering can be performed by _either_ (=dvipng=) or (=dvips= and =convert=).
+=dvipng= is significantly faster.  However, the =tweakinline= processing
+currently (v 2.5) uses =convert=.  Installation requires at least one, and best results will be seen if all are installed.
 
 Second,
    * Download the ==%TOPIC%.zip== file from the Plugin web
@@ -185,6 +202,7 @@ Second,
       | *File:* | *Description:* |
       | ==lib/TWiki/Plugins/LatexModePlugin.pm== | Plugin Perl module |
       | ==data/TWiki/LatexModePlugin.txt== | Plugin topic and documentation |
+      | ==data/TWiki/LatexIntro.txt== | a basic description of <nop>LaTeX markup conventions |
       | ==data/TWiki/LatexSymbolList.txt== | Comprehensive list of available <nop>LaTeX symbols |
       | ==pub/TWiki/LatexModePlugin/expl-v1.4.png== | example image of rendered latex |
 
@@ -192,10 +210,10 @@ Finally, customize the installation specific variables.
    * Set the local paths of =latex=, =dvips= and =convert=.  This can be done by adding the following lines to =lib/LocalSite.cfg= or =lib/TWiki.cfg=.
       *  $TWiki::cfg{Plugins}{LatexModePlugin}{latex} = '/usr/bin/latex';
       *  $TWiki::cfg{Plugins}{LatexModePlugin}{dvips} = '/usr/bin/dvips';
+      *  $TWiki::cfg{Plugins}{LatexModePlugin}{dvipng} = '/usr/bin/dvipng';
       *  $TWiki::cfg{Plugins}{LatexModePlugin}{convert} = '/usr/X11R6/bin/convert';
    * Modify the following if needed. %BR% (These variables were introduced in version 2.4)
-      *  $TWiki::cfg{Plugins}{LatexModePlugin}{donotrenderlist} %BR% declare a comma-separated list of <nop>LaTeX commands that _will not be rendered_.  Default = ='input,include'=.
-     
+      *  $TWiki::cfg{Plugins}{LatexModePlugin}{donotrenderlist} %BR% declare a comma-separated list of <nop>LaTeX commands that _will not be rendered_.  %BR% Default = ='input,include'=.
       *  $TWiki::cfg{Plugins}{LatexModePlugin}{tweakinline} %BR% Turned off by default, setting this boolean variable to =1= will enable more complex in-line rendering.  See the TWiki:Plugins.LatexModePluginDev topic for more details.
 
 
@@ -205,20 +223,22 @@ Version control is not specifically used for the image files.  Because the image
 
 
 This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin created by TWiki:Main.GraemeLufkin.  There are a number of significant differences:
-   * latex-dvips-convert is used in place of =latex2html=, consequently
+   * =dvipng= or =latex-dvips-convert= is used in place of =latex2html=, consequently
       * hash table mismatching between twiki and images generated by =latex2html= is eliminated, which was a source of many problems in the TWiki:Plugins.MathModePlugin.
       * greater flexibility in markup rendering is available.
       * the rendering is done image-by-image, so the cost of total page rendering time should be linear. (that is, ten images will take ten times as long to render as one image.)
    * multi-line latex markup is now possible.  Consequently, this now means that a &lt;nop&gt; must be included to disable rendering in documentation, as opposed to spliting the math markup over multiple lines as before.
    * equations can be numbered, with automatic cross-links available
    * if errors occur during the latex markup processing, they are reported during the editing =preview= screen, but not during the standard =view=.  The motivation for this is that, in general, _authors_ care about the error but _readers_ do not.
+   * as of version 2.5, one can force the recreation of all latex images in a topic.  To do this, add the following text (similar to raw text rendering) to the end of the URL: =?latex=rerender=.  E.g. changing =http<nop>://localhost/twiki/bin/view/TWiki/LatexModePlugin= to  =http<nop>://localhost/twiki/bin/view/TWiki/LatexModePlugin?latex=rerender= will force all of the images to be redrawn.
 
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 21 Feb 2006 (v 2.4) |
+|  Plugin Version: | 14 Mar 2006 (v 2.5) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Feb 2006 (v 2.5) | added =rerender= hook, fixed '&gt; in =alt= field' bug. |
 |  21 Feb 2006 (v 2.4) | introduced =donotrenderlist= to patch a critical security hole.  Bug fixes include: disabling <nop>WikiWord link rendering in =alt= fields of =img= tags; improved in-line rendering alignment available; |
 |  1 Feb 2006 (v 2.3) | minor bug fixes: $pathSep changes, now uses &TWiki::Func::extractParameters() |
 |  11 Nov 2005 (v 2.2) | more mods for TWiki:Plugins.GenPDFLatexAddOn: protect newlines, moved float handler, moved float label checker |
@@ -230,7 +250,7 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin created b
 |  22 Aug 2005 (v 1.2) | Forked from the TWiki:Plugins.MathModePlugin by TWiki:Main.GraemeLufkin |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.025 |
 |  CPAN Dependencies: | CPAN:Digest::MD5, CPAN:File::Basename, CPAN:Image::Info |
-|  Other Dependencies: | A working installation of =latex= and =convert= |
+|  Other Dependencies: | A working installation of =latex=.  A working installation of =convert= or =dvipng=. |
 |  Perl Version: | 5.8.0 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
