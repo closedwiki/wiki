@@ -3,15 +3,17 @@
 
 package TWiki::Contrib::EditContrib;
 
-use vars qw( $VERSION );
+use vars qw( $VERSION $RELEASE );
 
 use strict;
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
 use TWiki::UI;
+use TWiki::UI::Preview;
 
-$VERSION = 1.001;
+$VERSION = '$Rev$';
+$RELEASE = 1.1;
 
 # =========================
 sub handleUrlParam {
@@ -29,11 +31,20 @@ sub savemulti {
 
   my $saveaction = lc($query->param( 'action' ));
   if ( $saveaction eq "checkpoint" ) {
-    $query->param( -name=>"dontnotify", -value=>"checked" );
-    $query->param( -name=>"unlock", -value=>'0' );
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+      $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"dontnotify", -value=>"checked");
+      $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"unlock", -value=>'0');
+    } else {
+      $query->param( -name=>"dontnotify", -value=>"checked" );
+      $query->param( -name=>"unlock", -value=>'0' );
+    }
     $redirecturl = $editlink;
   } elsif ( $saveaction eq "quietsave" ) {
-    $query->param( -name=>"dontnotify", -value=>"checked" );
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+      $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"dontnotify", -value=>"checked");
+    } else {
+      $query->param( -name=>"dontnotify", -value=>"checked" );
+    }
   } elsif ( $saveaction eq "cancel" ) {
     my $viewURL = TWiki::Func::getScriptUrl( $webName, $topic, "view" );
     TWiki::redirect( $query, "$viewURL?unlock=on" );
@@ -42,11 +53,14 @@ sub savemulti {
     my $text = $query->param( 'pretxt' ) . $query->param( 'text' ) . $nl . $query->param( 'postxt' );
     if( $TWiki::Plugins::VERSION >= 1.1 ) {
         $text = TWiki::entityDecode( $text );
+        $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"text", -value=>$text);
+        
+        TWiki::UI::Preview::preview( $TWiki::Plugins::SESSION );
     } else {
         $text = TWiki::Render::decodeSpecialChars( $text );
+        $query->param( -name=>"text", -value=>$text);
+        TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
     }
-    $query->param( -name=>"text", -value=>$text);
-    TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
     return;
   }
 
@@ -187,6 +201,11 @@ sub edit {
     my ($query,$topic,$webName) = init_edit( @_ );
     return unless ($query);
 
+    my $session = '';
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+        $session = $TWiki::Plugins::SESSION;
+    }    
+
     my ( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
 
     my $templateWeb = $webName;
@@ -215,13 +234,13 @@ sub edit {
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
     # Handle protective encoding only for edited section below
-
-    if( $TWiki::Plugins::VERSION >= 1.1 ) {
-    } else {
     if( $TWiki::doLogTopicEdit ) {
         # write log entry
-        &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );
-    }
+        if( $TWiki::Plugins::VERSION >= 1.1 ) {
+            $session->writeLog( 'edit', $webName.'.'.$topic, $extra );
+        } else {
+            &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );
+        }
     }
 
     $tmpl =~ s/%CMD%//go;
@@ -230,7 +249,44 @@ sub edit {
     $tmpl = &TWiki::Func::renderText( $tmpl );
 
     if( $TWiki::Plugins::VERSION >= 1.1 ) {
+        my $saveCmd = $query->param( 'cmd' ) || '';
+        my $formTemplate  = $query->param( 'formtemplate' ) || '';
+        my $templateWeb = $webName;
+        my $editaction = lc($query->param( 'action' )) || "";
 
+        # from Dakar version of Edit.pm
+        my $formMeta = $meta->get( 'FORM' );
+        my $form = '';
+        my $formText = '';
+
+        $form = $formMeta->{name} if( $formMeta );
+        if( $form && !$saveCmd ) {
+            my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
+            # if there's a form template, then pull whatever values exist in
+            # the query into the meta, overriding the values in the topic.
+            my $formDef = new TWiki::Form( $session, $templateWeb, $form );
+            unless( $formDef ) {
+                throw TWiki::OopsException( 'attention',
+                                            def => 'no_form_def',
+                                            web => $session->{webName},
+                                            topic => $session->{topicName},
+                                            params => [ $templateWeb, $form ] );
+            }
+            $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 0 );
+            # and render them for editing
+            if ( $editaction eq "text" ) {
+                $formText = $formDef->renderHidden( $meta,
+                                                    $getValuesFromFormTopic );
+            } else {
+                $formText = $formDef->renderForEdit( $webName, $topic, $meta,
+                                                     $getValuesFromFormTopic );
+            }
+        } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
+            $formText = $session->{templates}->readTemplate( "addform", $skin );
+            $formText = $session->handleCommonTags( $formText, $webName, $topic );
+        }
+        $tmpl =~ s/%FORMFIELDS%/$formText/g;
+        
     } else {
         # Don't want to render form fields, so this after getRenderedVersion
         my %formMeta = $meta->findOne( "FORM" );
