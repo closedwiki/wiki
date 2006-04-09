@@ -1,9 +1,8 @@
-bin/dav.pl										Checkin script
-bin/dav_recache									Protections DB maintenance script
+tools/dav.pl									Checkin script
+tools/dav_recache								Protections DB maintenance script
+tools/dumpLockDB.pl                         	Protections DB dump script
 data/TWiki/WebDAVPlugin.txt						Plugin topic
 lib/TWiki/Plugins/WebDAVPlugin.pm				Main plugin module
-lib/TWiki/Plugins/WebDAVPlugin/build.pl			Main build script
-lib/TWiki/Plugins/WebDAVPlugin/dumpLockDB.pl	Potections DB dump script
 lib/TWiki/Plugins/WebDAVPlugin/Permissions.pm	Perl module
 lib/twiki_dav/autogen.sh						Build support script
 lib/twiki_dav/CHANGES							Documentation
@@ -46,3 +45,58 @@ lib/twiki_dav/util/lock.py						Test code
 lib/twiki_dav/util/lockview.c					Code
 lib/twiki_dav/util/Makefile						Build support script
 lib/twiki_dav/util/regress						Test script
+lib/tdb/AUTHORS                                 Samba TDB
+lib/tdb/COPYING                                 Samba TDB
+lib/tdb/ChangeLog                               Samba TDB
+lib/tdb/INSTALL                                 Samba TDB
+lib/tdb/Makefile.am                             Samba TDB
+lib/tdb/Makefile.in                             Samba TDB
+lib/tdb/README                                  Samba TDB
+lib/tdb/TODO                                    Samba TDB
+lib/tdb/acconfig.h                              Samba TDB
+lib/tdb/aclocal.m4                              Samba TDB
+lib/tdb/autom4te.cache/output.0                 Samba TDB
+lib/tdb/autom4te.cache/requests                 Samba TDB
+lib/tdb/autom4te.cache/traces.0                 Samba TDB
+lib/tdb/config.guess                            Samba TDB
+lib/tdb/config.h.in                             Samba TDB
+lib/tdb/config.sub                              Samba TDB
+lib/tdb/configure                               Samba TDB
+lib/tdb/configure.in                            Samba TDB
+lib/tdb/includes.h                              Samba TDB
+lib/tdb/install-sh                              Samba TDB
+lib/tdb/ltconfig                                Samba TDB
+lib/tdb/ltmain.sh                               Samba TDB
+lib/tdb/missing                                 Samba TDB
+lib/tdb/mkinstalldirs                           Samba TDB
+lib/tdb/pstring.h                               Samba TDB
+lib/tdb/spinlock.c                              Samba TDB
+lib/tdb/spinlock.h                              Samba TDB
+lib/tdb/stamp-h.in                              Samba TDB
+lib/tdb/tdb.3                                   Samba TDB
+lib/tdb/tdb.c                                   Samba TDB
+lib/tdb/tdb.h                                   Samba TDB
+lib/tdb/tdb.spec                                Samba TDB
+lib/tdb/tdb_chainlock.3                         Samba TDB
+lib/tdb/tdb_close.3                             Samba TDB
+lib/tdb/tdb_delete.3                            Samba TDB
+lib/tdb/tdb_error.3                             Samba TDB
+lib/tdb/tdb_exists.3                            Samba TDB
+lib/tdb/tdb_fetch.3                             Samba TDB
+lib/tdb/tdb_firstkey.3                          Samba TDB
+lib/tdb/tdb_open.3                              Samba TDB
+lib/tdb/tdb_store.3                             Samba TDB
+lib/tdb/tdb_traverse.3                          Samba TDB
+lib/tdb/tdbback.c                               Samba TDB
+lib/tdb/tdbback.h                               Samba TDB
+lib/tdb/tdbbackup.c                             Samba TDB
+lib/tdb/tdbdump.c                               Samba TDB
+lib/tdb/tdbiterate.c                            Samba TDB
+lib/tdb/tdbspeed.c                              Samba TDB
+lib/tdb/tdbtest.c                               Samba TDB
+lib/tdb/tdbtool.c                               Samba TDB
+lib/tdb/tdbtorture.c                            Samba TDB
+lib/tdb/tdbutil.c                               Samba TDB
+lib/tdb/tdbutil.h                               Samba TDB
+lib/tdb/test.gdbm                               Samba TDB
+lib/tdb/test.tdb                                Samba TDB

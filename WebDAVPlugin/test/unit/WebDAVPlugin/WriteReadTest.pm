@@ -52,7 +52,7 @@ sub checkdb {
 sub test__topic_controls {
     my $this = shift;
 
-    my $db = new WebDAVPlugin::Permissions($tmpdir);
+    my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
     $db->processText($testweb, "Topic",<<HERE);
    * Set DENYTOPICVIEW = $dv
@@ -75,7 +75,7 @@ HERE
        $hash{"P:/$testweb/Topic:C:D"});
     untie(%hash);
 
-    $db = new WebDAVPlugin::Permissions($tmpdir);
+    $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
     $db->processText("$testweb", "Topic", "");
     $db = undef; # force close
     tie(%hash,'TDB_File',$testdb,TDB_File::TDB_DEFAULT,Fcntl::O_RDONLY,0666) || die "$testdb $!";
@@ -86,7 +86,7 @@ HERE
 
 sub test__web_preferences {
     my $this = shift;
-    my $db = new WebDAVPlugin::Permissions($tmpdir);
+    my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
     $db->processText("$testweb", "WebPreferences",<<HERE);
    * Set DENYWEBVIEW = $dv
@@ -109,7 +109,7 @@ HERE
        $hash{"P:/$testweb/WebPreferences:C:D"});
     untie(%hash);
 
-    $db = new WebDAVPlugin::Permissions($tmpdir);
+    $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
     $db->processText("$testweb", "WebPreferences", "");
     $db = undef; # force close
     tie(%hash,'TDB_File',$testdb,TDB_File::TDB_DEFAULT,Fcntl::O_RDONLY,0666) || die "$testdb $!";
@@ -121,7 +121,7 @@ HERE
 
 sub test__rewrite {
     my $this = shift;
-    my $db = new WebDAVPlugin::Permissions($tmpdir);
+    my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
     $db->processText("$testweb", "WebPreferences", <<HERE);
    * Set DENYWEBVIEW = $dt
    * Set ALLOWWEBVIEW = $dv
@@ -152,7 +152,7 @@ HERE
 
 sub test__twiki_preferences {
     my $this = shift;
-    my $db = new WebDAVPlugin::Permissions($tmpdir);
+    my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
     $db->processText("TWiki", "TWikiPreferences",
                      "\t* Set DENYWEBVIEW = $dv\n\t* Set ALLOWWEBVIEW = $av\n\t* Set DENYTOPICCHANGE = $dt");
@@ -172,7 +172,7 @@ sub test__twiki_preferences {
        $hash{"P:/TWiki/TWikiPreferences:C:D"});
     untie(%hash);
 
-    $db = new WebDAVPlugin::Permissions($tmpdir);
+    $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
     $db->processText("TWiki", "TWikiPreferences", "");
     $db = undef; # force close
 
@@ -185,7 +185,7 @@ sub test__twiki_preferences {
 
 sub test__group {
     my $this = shift;
-    my $db = new WebDAVPlugin::Permissions($tmpdir);
+    my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
     $db->processText("TWiki", "TWikiPreferences",
                      "\t* Set DENYWEBVIEW = TurfGroup\n\t* Set ALLOWWEBVIEW = Main.SodGroup\n");
@@ -213,7 +213,7 @@ sub test__open_nonexistent {
     my $this = shift;
 
     # use illegal pathname
-    my $db = new WebDAVPlugin::Permissions("*");
+    my $db = new TWiki::Plugins::WebDAVPlugin::Permissions("*");
 
     eval {
         $db->processText($testweb, "Topic", "empty");
