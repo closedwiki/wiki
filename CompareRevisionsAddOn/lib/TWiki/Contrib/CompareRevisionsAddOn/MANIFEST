@@ -1,4 +1,4 @@
-bin/compare.pm 0550
+bin/compare 0550
 data/TWiki/CompareRevisionsAddOn.txt 0660
 data/TWiki/CompareRevisionsAddonPlugin.txt 0660
 lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm 0440
