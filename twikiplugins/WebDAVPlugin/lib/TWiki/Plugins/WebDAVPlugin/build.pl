@@ -23,39 +23,40 @@ sub new {
 # override to build C program in test dir
 sub target_test {
     my $this = shift;
-    $this->pushd("$this->{basedir}/test/unit/WebDAVPlugin");
-    $this->sys_action("gcc access_check.c -I ../lib/twiki_dav -g -o accesscheck -ltdb");
-    $this->popd();
-    $this->SUPER::target_test;
-}
 
-# Override the build target to build the twiki_dav C code
-sub target_build {
-    my $this = shift;
+    open(F,">/tmp/tmp.c") || die $!;
+    print F "#include <tdb.h>\n";
+    close F;
 
-    $this->SUPER::target_build();
-
-    $this->pushd($this->{basedir}."/lib/twiki_dav");
-    if (! -f 'Makefile') {
-        $this->sys_action("./configure");
-    }
-    $this->sys_action("make");
-    $this->popd();
-}
-
-# Override the install target to install twiki_dav
-sub target_install {
-    my $this = shift;
-
-    $this->SUPER::target_install();
-
-    if (-w "/usr/lib/apache/libdav.so") {
-        $this->pushdd($this->{basedir}."/lib/twiki_dav");
+    `gcc /tmp/tmp.c -ltdb`;
+    if( $? ) {
+        print STDERR "Installing TDB\n";
+        $this->pushd($this->{basedir}."/lib/tdb");
+        if (! -f 'Makefile') {
+            # must be in /usr for apache
+            $this->sys_action("./configure --prefix=/usr/");
+        }
         $this->sys_action("make install");
         $this->popd();
     } else {
-        warn "No privilege to make install";
+        die "BOLLOCKS";
     }
+
+    $this->pushd($this->{basedir}."/lib/twiki_dav");
+    if (! -f 'Makefile') {
+        # Assume dynamic loading
+        $this->sys_action("./configure --with-apxs");
+    }
+    $this->popd();
+    $this->pushd($this->{basedir}."/lib/twiki_dav");
+    $this->sys_action("make install");
+    $this->popd();
+
+    $this->pushd("$this->{basedir}/test/unit/WebDAVPlugin");
+    $this->sys_action("gcc access_check.c -g -I $this->{basedir}/lib/twiki_dav -g -o accesscheck -ltdb");
+    $this->popd();
+
+    $this->SUPER::target_test;
 }
 
 $build = new WebDAVPluginBuild();

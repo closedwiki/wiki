@@ -252,11 +252,7 @@ fi
 #
 if test "$XML_LIB" != "" ; then
 	LIBS="$LIBS -L$XML_LIB $XML_EXPAT_LIB"
-fi	
-
-TDB_LIB=libtdb.a
-
-LIBS="$LIBS -$TDBLIB"
+fi
 
 #
 # Set up the various includes -- direct and via APXS
@@ -269,6 +265,9 @@ fi
 AC_MSG_RESULT(found in $XML_DIR)
 
 AC_SUBST(INCLUDE)
+
+LIBS="$LIBS -ltdb"
+
 AC_SUBST(LIBS)
 
 AC_OUTPUT(Makefile libdav.module)

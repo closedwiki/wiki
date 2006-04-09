@@ -1023,9 +1023,8 @@ static int dav_method_get(request_rec *r)
   
   /* Cannot handle GET of a collection from a repository */
   if (resource->collection) {
-	return dav_error_response(r, HTTP_CONFLICT, 
-							  "No default response to GET for a "
-							  "collection.");
+    return dav_error_response(r, HTTP_CONFLICT, 
+                              "DAV: Cannot handle GET of a directory.");
   }
   
   /*

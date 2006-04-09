@@ -21,7 +21,7 @@ use TWiki::Func;
 # Permissions DB object. Processes protections info out of topic text
 # and maintains a database of protections, using TDB. TDB is used because
 # unlike DBM it affords record locking.
-package WebDAVPlugin::Permissions;
+package TWiki::Plugins::WebDAVPlugin::Permissions;
 
 my $setGroupRE = qr/^\s+\*\s+Set\s+GROUP\s+=\s+(.+?)\s*$/;
 my $setWebRE = qr/^\s+\*\s+Set\s+(ALLOW|DENY)WEB([A-Z]+?)\s+=\s+(.+?)\s*$/;
@@ -30,21 +30,23 @@ my $twikiPrefsTopic;
 my $webPrefsTopic;
 my $isCairo = 0;
 
-if( defined( $TWiki::cfg{SitePrefsTopicName} )) {
-    $twikiPrefsTopic = $TWiki::cfg{SitePrefsTopicName};
-    $webPrefsTopic = $TWiki::cfg{WebPrefsTopicName};
-} else {
-    $twikiPrefsTopic = $TWiki::wikiPrefsTopicname;
-    $webPrefsTopic = $TWiki::webPrefsTopicname;
-    $isCairo = 1;
-};
-
 # Constructor for a DB. Does not connect to the DB until actually required.
 sub new {
     my ( $class, $dbdir ) = @_;
     my $this = {};
 
-    $this->{dbfile} = "$dbdir/TWiki";
+    $dbdir ||= $TWiki::cfg{Plugins}{WebDAVPlugin}{DAVLockDB};
+
+    if( defined( $TWiki::cfg{SitePrefsTopicName} )) {
+        $twikiPrefsTopic = $TWiki::cfg{SitePrefsTopicName};
+        $webPrefsTopic = $TWiki::cfg{WebPrefsTopicName};
+    } else {
+        $twikiPrefsTopic = $TWiki::wikiPrefsTopicname;
+        $webPrefsTopic = $TWiki::webPrefsTopicname;
+        $isCairo = 1;
+    };
+
+    $this->{dbfile} = $dbdir.'/TWiki';
     $this->{db} = undef;
 
     return bless( $this, $class );
@@ -78,41 +80,21 @@ sub recache {
 sub _processWeb {
     my ( $this, $web, $topic ) = @_;
     my $npr = 0;
-    my $dataDir = TWiki::Func::getDataDir();
-    my $cmd = "$TWiki::egrepCmd ";
-    $cmd .= $TWiki::cmdQuote;
-    $cmd .= "\* Set (ALLOW|DENY)(TOPIC|WEB)(VIEW|CHANGE)";
-    $cmd .= $TWiki::cmdQuote;
-
-    if ( $topic ) {
+    my @topics = $topic ?
+      ( $topic ) : TWiki::Func::getTopicList( $web );
+    foreach my $topic ( @topics ) {
         $this->_processTopic( $web, $topic );
         $npr++;
-    } else {
-        my @topics = TWiki::Func::getTopicList( $web );
-        my %processed;
-        while ( scalar( @topics )) {
-            my $p = "";;
-            my $ninset = 50;
-            while ( scalar( @topics ) && $ninset-- ) {
-                $p .= " $dataDir/$web/" . pop( @topics ) . ".txt";
-            }
-            foreach my $topic ( split( /\n/, `$cmd $p` )) {
-                if ( $topic =~ /^.*[\/\\](.*?)\.txt:/o ) {
-                    if ( !$processed{$1} ) {
-                        $this->_processTopic( $web, $1 );
-                        $npr++;
-                        $processed{$1} = 1;
-                    }
-                }
-            }
-        }
     }
+
     print "Processed $npr topics from $web\n";
 }
 
 # Extract and store permissions settings in a single topic
 sub _processTopic {
     my ( $this, $web, $topic ) = @_;
+
+    return unless $topic;
 
     my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
     print "Processing topic $web.$topic\n";
@@ -124,9 +106,7 @@ sub _processTopic {
 sub processText {
     my ( $this, $web, $topic, $text ) = @_;
 
-    my @lines =
-      grep { /($setGroupRE)|($setWebRE)|($setTopicRE)/ }
-        split /[\r\n]+/, $text;
+    my @lines = split /[\r\n]+/, $text;
 
     # If this is a group def topic, extract the group
     if ( $web eq TWiki::Func::getMainWebname() && $topic =~ /Group$/ ) {
@@ -138,15 +118,16 @@ sub processText {
                 push( @users, $who );
             }
             if ( @users ) {
-                $this->_defineGroup( $topic, "|" . join( '|', @users ) . "|");
+                $this->_defineGroup( $topic, '|' . join( '|', @users ) . '|');
             }
         }
     }
 
     my $path = '';
-    if ( $topic eq $twikiPrefsTopic &&
-           $web eq TWiki::Func::getTwikiWebname()) {
-        $path = "/";
+    if ( $topic eq $twikiPrefsTopic && (
+        $web eq TWiki::Func::getTwikiWebname() ||
+          $web eq TWiki::Func::getMainWebname())) {
+        $path = '/';
     } elsif ( $topic eq $webPrefsTopic ) {
         $path = "/$web/";
     }

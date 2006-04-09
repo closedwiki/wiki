@@ -40,7 +40,7 @@ my $dbdump = 0;
 
 sub check {
   my ( $this, $check, $exp ) = @_;
-  my $status = `./accesscheck $check $tmpdir/TWiki $dbdump`;
+  my $status = `export LD_LIBRARY_PATH=/usr/local/lib;./accesscheck $check $tmpdir/TWiki $dbdump`;
   if ($status !~ /$exp\s*$/) {
 	chop($status);
 	$this->assert(0, "Access '$check' is $status; should be $exp; called from ".
@@ -60,7 +60,7 @@ sub dumpdb {
 
 sub test__open_access {
   my $this = shift;
-  my $db = new WebDAVPlugin::Permissions($tmpdir);
+  my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
   $db->processText("Web", "Topic", "");
   $db = undef;
@@ -71,7 +71,7 @@ sub test__open_access {
 
 sub test__topic {
   my $this = shift;
-  my $db = new WebDAVPlugin::Permissions($tmpdir);
+  my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
   $db->processText("Web", "Topic",
 				   "\t* Set DENYTOPICVIEW = dtv\n".
@@ -86,7 +86,7 @@ sub test__topic {
 
 sub test__web_topic {
   my $this = shift;
-  my $db = new WebDAVPlugin::Permissions($tmpdir);
+  my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
   $db->processText("Web", "Topic",
 				   "\t* Set DENYTOPICVIEW = dtv\n".
@@ -101,7 +101,7 @@ sub test__web_topic {
 
 sub test__all_web_topic {
   my $this = shift;
-  my $db = new WebDAVPlugin::Permissions($tmpdir);
+  my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
   $db->processText("Web", "Topic",
 				   "\t* Set DENYTOPICVIEW = dtv\n".
@@ -119,7 +119,7 @@ sub test__all_web_topic {
 
 sub test__deny_global_group {
   my $this = shift;
-  my $db = new WebDAVPlugin::Permissions($tmpdir);
+  my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
 
   $db->processText("TWiki", "TWikiPreferences",
 				   "\t* Set DENYWEBVIEW = UsGroup\n");
@@ -137,7 +137,7 @@ sub test__deny_global_group {
 
 sub test__change_default {
   my $this = shift;
-  my $db = new WebDAVPlugin::Permissions($tmpdir);
+  my $db = new TWiki::Plugins::WebDAVPlugin::Permissions($tmpdir);
   $db->processText("Web", "Topic",
 				   "\t* Set DENYTOPICCHANGE = dtv\n");
   $db = undef; # force close

@@ -49,7 +49,7 @@
 #define DBM_NEXTKEY(db,d) sdbm_nextkey(db)
 #define DBM_FREE(x)
 #else
-#include <tdb.h>
+#include "../tdb/tdb.h"
 #define DBM TDB_CONTEXT
 #define DBM_OPEN(_f,_m,_p) tdb_open((_f),0,TDB_DEFAULT,(_m),(_p))
 #define DBM_CLOSE(_db) tdb_close(_db)
@@ -145,17 +145,17 @@ int dav_twiki_accessible(request_rec *r, const dav_resource* dr,
 
 	/**
      * If connection->user has not been set by the authentication method,
-     * then try and fill it in using basic_auth. Authentication MUST be
-     * set on DAV directories. */
+     * then try and fill it in using basic_auth. A user identity must be
+     * available for access to DAV directories. */
 	if (!r->connection->user) {
 	  int code = ap_get_basic_auth_pw((request_rec*)r, &pw);
       if (code != OK) {
-        ap_note_auth_failure(r);
-        return code;
-      }
-	}
-
-	tr->user = ap_pstrdup(r->pool, r->connection->user);
+        /* SMELL: should make this configurable */
+        tr->user = ap_pstrdup(r->pool, "guest");
+      } else
+        tr->user = ap_pstrdup(r->pool, r->connection->user);
+	} else
+      tr->user = ap_pstrdup(r->pool, r->connection->user);
 
 	if (!checkAccessibility(tr->web, tr->topic, tr->file, mode, tr->user,
 							dav_get_monitor(r)))
