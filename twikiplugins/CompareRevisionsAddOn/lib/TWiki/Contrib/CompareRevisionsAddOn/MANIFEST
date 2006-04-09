@@ -1,8 +1,8 @@
 bin/compare.pm 0550
+data/TWiki/CompareRevisionsAddOn.txt 0660
 data/TWiki/CompareRevisionsAddonPlugin.txt 0660
 lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm 0440
 lib/TWiki/UI/Compare.pm 0440
-pub/TWiki/HistoryPlugin/screenshot.png 0440
 templates/compare.tmpl 0440
 templates/compare.pattern.tmpl 0440
 templates/interweave.tmpl 0440
