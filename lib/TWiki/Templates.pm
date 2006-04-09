@@ -161,14 +161,16 @@ sub tmplP {
     my $val = '';
     if( exists($this->{VARS}->{$template} )) {
         $val = $this->{VARS}->{$template};
-        $val =~ s/%TMPL\:P{(.*?)}%/$this->expandTemplate($1)/ge;
-
         foreach my $p ( keys %$params ) {
-            if( $p =~ /^[A-Za-z0-9]+$/ ) {
+            if( $p eq 'then' || $p eq 'else' ) {
                 $val =~ s/%$p%/$this->expandTemplate($1)/ge;
+            } elsif( defined( $params->{$p} )) {
+                $val =~ s/%$p%/$params->{$p}/ge;
             }
         }
+        $val =~ s/%TMPL:P{(.*?)}%/$this->expandTemplate($1)/ge;
     }
+
     return $val;
 }
 
