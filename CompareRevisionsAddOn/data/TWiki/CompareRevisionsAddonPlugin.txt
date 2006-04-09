@@ -1,27 +1,27 @@
-%META:TOPICINFO{author="jcf" date="1141036504" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1144607735" format="1.1" version="1.1"}%
 ---+ CompareRevisionsAddonPlugin TWiki Plugin
 
 This is an helper plugin for the CompareRevisionsAddOn on TWiki Dakar.
 
 It has two purposes:
-	1. It sets the !CompareRevisionAddonPluginEnabled flag, which can be used by templates
-		(e.g. used by the HistoryPlugin)
-	2. It provides an easy way to replace links to the original rdiff script by links to the
-		new compare script.
+   1. It sets the !CompareRevisionAddonPluginEnabled flag, which can be used by templates
+      (e.g. used by the HistoryPlugin)
+   2. It provides an easy way to replace links to the original rdiff script by links to the
+      new compare script.
 
 ---++ Syntax Rules
-	
-	* %<nop>RDIFF2COMPARE{"text"}%:
-	  Replace in text links to the rdiff script by links to the compare script
+   
+   * %<nop>RDIFF2COMPARE{"text"}%:
+     Replace in text links to the rdiff script by links to the compare script
 
 ---++ Plugin Settings
 
-	(none)
+   (none)
 
 ---++ Plugin Installation Instructions 
 
-	This plugin is installed together with the CompareRevisionsAddOn, see the instructions there.
-	It should be enabled (if necessary) with the configure script.
+   This plugin is installed together with the CompareRevisionsAddOn, see the instructions there.
+   It should be enabled (if necessary) with the configure script.
 
 ---++ Plugin Info
 

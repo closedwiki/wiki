@@ -4,6 +4,11 @@
 %TMPL:INCLUDE{"viewbottombar"}%
 %TMPL:INCLUDE{"logo"}%
 
+%TMPL:DEF{"diffbin_rdiff"}%rdiff%TMPL:END%
+
+%TMPL:DEF{"diffbin_compare"}%compare%TMPL:END%
+
+%TMPL:DEF{"diffbin"}%%TMPL:P{context="CompareRevisionsAddonPluginEnabled" then="diffbin_compare" else="diffbin_rdiff"}%%TMPL:END% 
 
 
 %TMPL:DEF{"titleaction"}%(1.%HISTORY_REV1% - 1.%HISTORY_REV2%) %TMPL:END%
@@ -38,8 +43,7 @@
 %TMPL:DEF{"content"}%<div class="patternTopic">
 %TMPL:P{"pagetitle"}%
 *(1.%HISTORY_REV1% - 1.%HISTORY_REV2% from %HISTORY_MAXREV% revisions)*
-
-<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form name="main" action="%SCRIPTURLPATH%/%TMPL:P{"diffbin"}%%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast"> 
 <input type="hidden" name="render" value="sidebyside">
