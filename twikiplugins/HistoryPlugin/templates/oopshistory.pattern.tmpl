@@ -1,0 +1,74 @@
+%TMPL:INCLUDE{"searchbase"}%
+%TMPL:INCLUDE{"page"}%
+%TMPL:INCLUDE{"viewtopicactionbuttons"}%
+%TMPL:INCLUDE{"viewbottombar"}%
+%TMPL:INCLUDE{"logo"}%
+
+
+
+%TMPL:DEF{"titleaction"}%(1.%HISTORY_REV1% - 1.%HISTORY_REV2%) %TMPL:END%
+
+
+
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternDiffPage%TMPL:END%
+
+
+
+%TMPL:DEF{"pagetitle"}%<h1 class="patternTemplateTitle">%MAKETEXT{"Difference:"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%TOPIC%</a> %TMPL:P{"titleaction"}%</h1>%TMPL:END%
+
+
+
+
+%TMPL:DEF{"header:left"}%<b><a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?rev=%REVTITLE1%" rel='nofollow'>%MAKETEXT{"Revision"}% %REVTITLE1%</a></b>%TMPL:END%
+
+%TMPL:DEF{"header:right"}%%REVINFO1%%TMPL:END%
+
+
+%TMPL:DEF{"result"}%<div class="patternDiff"><div class="patternSearchResults">%TMPL:P{"header"}%
+%TEXT%</div><!--/patternSearchResults--></div><!--/patternDiff-->%TMPL:END%
+
+%TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a></span>%TMPL:END% 
+
+%TMPL:DEF{"topicactionbuttons"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%MAKETEXT{"View topic"}%</a>
+ %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%HISTORY_REV2%&amp;param2=%HISTORY_REV1%" rel='nofollow'>%MAKETEXT{"More topic actions..."}%</a>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%<div class="patternTopic">
+%TMPL:P{"pagetitle"}%
+*(1.%HISTORY_REV1% - 1.%HISTORY_REV2% from %HISTORY_MAXREV% revisions)*
+
+<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<div class="twikiFormSteps">
+<div class="twikiFormStep twikiLast"> 
+<input type="hidden" name="render" value="sidebyside">
+<input type="hidden" name="type" value="diff">
+<table border="0" cellspacing="0" cellpadding="5" style="border-width:0px!important">
+<tr><th>Rev</th><th>Date</th><th>User</th></tr>
+%HISTORY{"<tr><td align=\"right\" style=\"border-width:0px;\"><a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$rev\">1.$rev</a>&nbsp;<input type=\"radio\" name=\"rev1\" value=\"$rev\" >&nbsp;<input type=\"radio\" name=\"rev2\" value=\"$rev\"></td><td style=\"border-width:0px;\">$date</td><td style=\"border-width:0px;\">[[$wikiusername][$wikiname]]</td></tr>" rev1="%URLPARAM{"rev1"}%" rev2="%URLPARAM{"rev2"}%" nrev="%URLPARAM{"nrev"}%" header="<tr><td colspan=\"3\" align=\"left\" style=\"border-width:0px;\">$next{'later' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $next{'last' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&nrev=$nrev'}</td></tr>" footer="<tr><td colspan=\"3\" align=\"left\" style=\"border-width:0px;\">$previous{'earlier' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $previous{'first' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=1&nrev=$nrev'}</td></tr>"}%
+</table>
+<input type="submit" class="twikiSubmit" value="Compare selected revisions">
+</div><!-- /twikiFormStep-->
+</div><!-- /twikiFormSteps--> 
+</form>
+<p>
+<form action="%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<div class="twikiFormSteps">
+<div class="twikiFormStep twikiLast"> 
+<input type="hidden" name="template" value="oopshistory">
+<input type="submit" class="twikiSubmit" value="Show">
+<select type="select" name="nrev" size="1">
+<option selected>%HISTORY_NREV%</option>
+<option>5</option>
+<option>10</option>
+<option>20</option>
+<option>50</option>
+</select>
+revisions up to 1.
+<input type="text" name="rev2" value="%HISTORY_REV2%" size="2">
+</div><!-- /twikiFormStep-->
+</div><!-- /twikiFormSteps--> 
+</form>
+
+%TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%</div><!--/patternTopic-->%TMPL:END%
