@@ -178,7 +178,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
-| | Crawford Currie - added tgz and pdf support |
+|  9773 | Crawford Currie - added tgz and pdf support |
 |  9725 | Michael Daum - fixed rewriting urls; \
                  fixed nested resources issue; \
 		 creating a new prefs object for each topic |
@@ -202,12 +202,12 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 ---++++ Copyright
 This code is a development of the Architectures and System Platforms group of Motorola Inc. and is protected by the following copyrights:
 	* Copyright &copy; 2001 Motorola. All Rights Reserved.
+    * Copyright &copy; 2002-2003, Eric Scouten.
+	* Copyright &copy; 2004-2006 Crawford Currie http://c-dot.co.uk
 
-Further modifications were made by Eric Scouten and are copyright &copy; 2002-2003, Eric Scouten.
+The 2005 functionality improvements were sponsored by [[http://www.windriver.com][Wind River Systems]]
 
-The Cairo compatible version is Copyright &copy; 2004 Crawford Currie http://c-dot.co.uk
-
-The 2005 functionality improvements were made possible by the support of Wind River Systems (http://www.windriver.com)
+The =pdf= and =tgz= output formats were made possible by [[http://www.sabiolabs.com][ =Sabio Labs= ]]
 
 ---++++ License
 As required for the publication of all extensions to TWiki, the software is published under the terms of the GNU General Public License.
