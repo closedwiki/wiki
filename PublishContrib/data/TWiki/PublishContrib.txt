@@ -10,7 +10,7 @@ Generates a static view of a web, as HTML files on disc, or as a PDF, or as a zi
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
 -->
 
-_Previously known as !GenHTMLAddOn, and then !PublishAddOn; this is the *original and best* publishing add-on for TWiki_.
+_Previously known as !GenHTMLAddOn, and then !PublishAddOn, this is the *original and best* publishing extension for TWiki_.
 
 *WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.2][here]]*
 
@@ -202,7 +202,7 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 ---++++ Copyright
 This code is a development of the Architectures and System Platforms group of Motorola Inc. and is protected by the following copyrights:
 	* Copyright &copy; 2001 Motorola. All Rights Reserved.
-    * Copyright &copy; 2002-2003, Eric Scouten.
+	* Copyright &copy; 2002-2003, Eric Scouten.
 	* Copyright &copy; 2004-2006 Crawford Currie http://c-dot.co.uk
 
 The 2005 functionality improvements were sponsored by [[http://www.windriver.com][Wind River Systems]]
@@ -217,6 +217,3 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details, published at 
 http://www.gnu.org/copyleft/gpl.html
-
--- TWiki:Main/EricScouten %BR%
--- TWiki:Main/CrawfordCurrie - %$DATE%
