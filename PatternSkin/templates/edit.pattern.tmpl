@@ -48,19 +48,19 @@
 
 
 
-%TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save" buttonseparator="<span class='twikiSeparator'>&nbsp;|&nbsp;</span>"}%%TMPL:P{"button_quietsave" buttonseparator="<span class='twikiSeparator'>&nbsp;|&nbsp;</span>"}%%TMPL:P{"button_checkpoint" buttonseparator="<span class='twikiSeparator'>&nbsp;|&nbsp;</span>"}%%TMPL:P{"button_preview" buttonseparator="<span class='twikiSeparator'>&nbsp;|&nbsp;</span>"}%%TMPL:P{"button_cancel" buttonseparator="<span class='twikiSeparator'>&nbsp;|&nbsp;</span>"}%%TMPL:END%
+%TMPL:DEF{"action_buttons"}%%TMPL:P{"button_save"}%%TMPL:P{"sep"}%%TMPL:P{"button_quietsave"}%%TMPL:P{"sep"}%%TMPL:P{"button_checkpoint"}% %MAKETEXT{"or"}% %TMPL:P{"button_preview"}% %MAKETEXT{"or"}% %TMPL:P{"button_cancel"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"button_save"}%<input type="submit" class="twikiSubmit" name="action_save" id="save" %MAKETEXT{"value='Save' accesskey='s'"}% />%TMPL:END%
 
-%TMPL:DEF{"button_quietsave"}%%buttonseparator%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" %MAKETEXT{"value='Quiet save' accesskey='q'"}% />%TMPL:END%
+%TMPL:DEF{"button_quietsave"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" %MAKETEXT{"value='Quiet save' accesskey='q'"}% />%TMPL:END%
 
-%TMPL:DEF{"button_checkpoint"}%%buttonseparator%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" %MAKETEXT{"value='Checkpoint' accesskey='k'"}% />%TMPL:END%
+%TMPL:DEF{"button_checkpoint"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" %MAKETEXT{"value='Checkpoint' accesskey='k'"}% />%TMPL:END%
 
-%TMPL:DEF{"button_preview"}%%buttonseparator%<input type="submit" class="twikiButton" name="action_preview" id="preview" %MAKETEXT{"value='Preview' accesskey='p'"}% />%TMPL:END%
+%TMPL:DEF{"button_preview"}%<input type="submit" class="twikiButton" name="action_preview" id="preview" %MAKETEXT{"value='Preview' accesskey='p'"}% />%TMPL:END%
 
-%TMPL:DEF{"button_cancel"}%%buttonseparator%<input type="submit" class="twikiButton" name="action_cancel" id="cancel" title='%MAKETEXT{"Cancel editing and discard changes"}%' %MAKETEXT{"value='Cancel' accesskey='c'"}% />%TMPL:END%
+%TMPL:DEF{"button_cancel"}%<input type="submit" class="twikiButton" name="action_cancel" id="cancel" title='%MAKETEXT{"Cancel editing and discard changes"}%' %MAKETEXT{"value='Cancel' accesskey='c'"}% />%TMPL:END%
 
 
 
