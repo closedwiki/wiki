@@ -16,7 +16,7 @@
 		    qw( Encode Locale::Maketext::Lexicon ),
 		    qw( Digest::base Digest::SHA1 ),
 		    qw( Unicode::Map Unicode::Map8 Jcode Unicode::String Unicode::MapUTF8 ),
-	qw( Time::ParseDate ),	# for MailInContrib, BlogPlugin
+	qw( Time::ParseDate ),	# for MailInContrib, BlogPlugin, Schedule::Cron
 	qw( Time::Local ),	# for BlogPlugin
 	qw( Barcode::Code128 ),		# BarcodePlugin
 	qw( Carp::Clan Bit::Vector Date::Calc ),		# CalendarPlugin, HolidaylistPlugin
@@ -56,6 +56,7 @@
 		# (DBD::CSV or SQL::Statement for Log::Log4perl tests)
 	qw( DBD::SQLite Math::Units Parse::RecDescent URI::Find POE::Component::IRC Date::Parse ),	# PipSqueek
 		# (Class::Accessor, DBI, POE already installed) 
+	qw( Schedule::Cron ),
 );
 
 #$, = "\n";
