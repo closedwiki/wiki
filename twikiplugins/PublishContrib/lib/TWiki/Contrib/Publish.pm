@@ -46,85 +46,6 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-{   package TWiki::Contrib::Publish::Zipper;
-
-    sub new {
-        my( $class, $path, $web ) = @_;
-        my $this = bless( {}, $class );
-        $this->{path} = $path;
-        $this->{web} = $web;
-
-        eval "use Archive::Zip qw( :ERROR_CODES :CONSTANTS )";
-        die $@ if $@;
-        $this->{zip} = Archive::Zip->new();
-        my $tmp = TWiki::Func::formatTime(time());
-        $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
-        $this->{id} = TWiki::Func::getWikiName()."_".$this->{web}."_".$tmp.".zip";
-
-        return $this;
-    }
-
-    sub addDirectory {
-        my( $this, $dir ) = @_;
-        $this->{zip}->addDirectory( $dir );
-    }
-
-    sub addString {
-        my( $this, $string, $file ) = @_;
-        $this->{zip}->addString( $string, $file );
-    }
-
-    sub addFile {
-        my( $this, $from, $to ) = @_;
-        $this->{zip}->addFile( $from, $to );
-    }
-
-    sub close {
-        my $this = shift;
-        $this->{zip}->writeToFileNamed( "$this->{path}/$this->{id}" );
-    }
-};
-
-{   package  TWiki::Contrib::Publish::Filer;
-
-    sub new {
-        my( $class, $path, $web ) = @_;
-        my $this = bless( {}, $class );
-        $this->{path} = $path;
-        $this->{web} = $web;
-        $this->{id} = $web;
-
-        eval "use File::Copy;use File::Path;";
-        die $@ if $@;
-
-        File::Path::mkpath("$this->{path}/$web");
-
-        return $this;
-    }
-
-    sub addDirectory {
-        my( $this, $name ) = @_;
-        my $d = "$this->{web}/$name";
-        File::Path::mkpath("$this->{path}/$d")
-      }
-
-    sub addString {
-        my( $this, $string, $file) = @_;
-        my $f = "$this->{web}/$file";
-        open(F, ">$this->{path}/$f") || die "Cannot write $f: $!";
-        print F $string;
-        close(F);
-    }
-
-    sub addFile {
-        my( $this, $from, $to ) = @_;
-        File::Copy::copy( $from, "$this->{path}/$this->{web}/$to" );
-    }
-
-    sub close {
-    }
-}
-
 #  Main rendering loop.
 sub publish {
     my $session = shift;
@@ -143,7 +64,7 @@ sub publish {
 
     $TWiki::Plugins::SESSION = $session;
 
-    my ($inclusions, $exclusions, $topicsearch, $skin);
+    my ($inclusions, $exclusions, $topicsearch, $skin, $genopt);
     my $notify="off";
 
     # Load defaults from a config topic if one was specified
@@ -153,9 +74,9 @@ sub publish {
             die "Specified configuration topic does not exist in $web!\n";
         }
         my $cfgt = TWiki::Func::readTopicText($web, $configtopic);
-        unless( TWiki::Func::checkAccessPermission( "VIEW", TWiki::Func::getWikiName(),
-                                                    $cfgt, $configtopic,
-                                                    $web)) {
+        unless( TWiki::Func::checkAccessPermission(
+            "VIEW", TWiki::Func::getWikiName(),
+            $cfgt, $configtopic, $web)) {
             die "Access to $configtopic denied";
         }
         $cfgt =~ s/\r//g;
@@ -175,6 +96,8 @@ sub publish {
                 $skin = $v;
             } elsif ( $k eq "SKIN" ) {
                 $skin = $v;
+            } elsif( $k eq "GENOPT" ) {
+                $genopt = $v;
             }
         }
     } else {
@@ -188,6 +111,7 @@ sub publish {
         }
         $exclusions = $query->param('exclusions') || '';
         $topicsearch = $query->param('topicsearch') || '';
+        $genopt = $query->param('genopt') || '';
     }
     # convert wildcard pattern to RE
     $inclusions =~ s/([*?])/.$1/g;
@@ -230,27 +154,31 @@ sub publish {
         print $header;
         print "<b>TWiki::cfg{PublishContrib}{Dir}: </b>$TWiki::cfg{PublishContrib}{Dir}<br />\n";
         print "<b>TWiki::cfg{PublishContrib}{URL}_PATH: </b>$TWiki::cfg{PublishContrib}{URL}<br />\n";
-        print "<b>Web: $web<br />\n";
+        print "<b>Web: $web</b><br />\n";
         print "<b>Config: $configtopic<br />\n" if $configtopic;
         print "<b>Skin: </b>$skin<br />\n";
         print "<b>Inclusions: </b>$inclusions<br />\n";
         print "<b>Exclusions: </b>$exclusions<br />\n";
-        print "<b>Content Filter: </b>$topicsearch<p />\n";
-
+        print "<b>Content Filter: </b>$topicsearch<br />\n";
+        print "<b>Generator options: </b>$genopt<p />\n";
         my $archive;
 
-        if( $query->param( 'compress' ) ) {
-            $archive = new TWiki::Contrib::Publish::Zipper(
-                $TWiki::cfg{PublishContrib}{Dir}, $web );
-        } else {
-            $archive = new TWiki::Contrib::Publish::Filer(
-                $TWiki::cfg{PublishContrib}{Dir}, $web);
-        }
+        my $format = $query->param( 'format' ) ||
+          $query->param( 'compress' ) || 'file';
+
+        my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
+        eval 'use '.$generator.
+          ';$archive = new '.$generator.
+            '("'.$TWiki::cfg{PublishContrib}{Dir}.'","'.$web.'","'.
+              $genopt.'")';
+        die $@ if $@;
 
         publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
                    $exclusions, $skin, $topicsearch, $archive);
 
-        my $text = "Published at $TWiki::cfg{PublishContrib}{URL}/".$archive->{id}.'/WebHome.html';
+        my $text = 'Published to <a href="'.
+          $TWiki::cfg{PublishContrib}{URL}.'/'.$archive->{id}.'">'.
+          $archive->{id}.'</a>';
 
         $archive->close();
 
