@@ -1,5 +1,8 @@
 data/TWiki/PublishContrib.txt
 data/TWiki/PublishWeb.txt
 lib/TWiki/Contrib/Publish.pm
-lib/TWiki/Contrib/PublishContrib/build.pl
-bin/publish 0775 Publish script
+lib/TWiki/Contrib/PublishContrib/file.pm
+lib/TWiki/Contrib/PublishContrib/zip.pm
+lib/TWiki/Contrib/PublishContrib/tgz.pm
+lib/TWiki/Contrib/PublishContrib/pdf.pm
+bin/publish

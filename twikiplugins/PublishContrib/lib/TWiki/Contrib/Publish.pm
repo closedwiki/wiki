@@ -64,7 +64,7 @@ sub publish {
 
     $TWiki::Plugins::SESSION = $session;
 
-    my ($inclusions, $exclusions, $topicsearch, $skin, $genopt);
+    my ($inclusions, $exclusions, $topicsearch, $skin, $genopt, $format);
     my $notify="off";
 
     # Load defaults from a config topic if one was specified
@@ -96,8 +96,10 @@ sub publish {
                 $skin = $v;
             } elsif ( $k eq "SKIN" ) {
                 $skin = $v;
-            } elsif( $k eq "GENOPT" ) {
+            } elsif( $k eq "EXTRAS" ) {
                 $genopt = $v;
+            } elsif( $k eq 'FORMAT' ) {
+                $format = $v;
             }
         }
     } else {
@@ -112,6 +114,13 @@ sub publish {
         $exclusions = $query->param('exclusions') || '';
         $topicsearch = $query->param('topicsearch') || '';
         $genopt = $query->param('genopt') || '';
+        # 'compress' retained for compatibility
+        if( defined $query->param('compress') ) {
+            $format = $query->param('compress');
+        } else {
+            $format = $query->param( 'format' );
+        }
+        $format ||= 'file';
     }
     # convert wildcard pattern to RE
     $inclusions =~ s/([*?])/.$1/g;
@@ -162,9 +171,6 @@ sub publish {
         print "<b>Content Filter: </b>$topicsearch<br />\n";
         print "<b>Generator options: </b>$genopt<p />\n";
         my $archive;
-
-        my $format = $query->param( 'format' ) ||
-          $query->param( 'compress' ) || 'file';
 
         my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
         eval 'use '.$generator.
