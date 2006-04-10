@@ -4,9 +4,3 @@ data/TWiki/WebChangesWC.txt NEW
 lib/TWiki/Plugins/RevCommentPlugin.pm NEW
 pub/TWiki/RevCommentPlugin/ExampleHistory.png NEW
 pub/TWiki/RevCommentPlugin/ExampleWebChanges.png NEW
-templates/edit.classicWC.tmpl NEW
-templates/edit.patternWC.tmpl NEW
-templates/oopshistoryWC.tmpl NEW
-templates/oopshistoryWCCR.tmpl NEW
-templates/preview.classicWC.tmpl NEW
-templates/preview.patternWC.tmpl NEW
