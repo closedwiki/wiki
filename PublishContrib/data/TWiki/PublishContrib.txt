@@ -162,7 +162,7 @@ Where =dir_path= is the file system path to your publish directory on the server
    1 install htmldoc from http://www.easysw.com/htmldoc/
    1 Add the following line to =LocalSite.cfg=
 <verbatim>
-$TWiki::cfg{PublishContrib}{PDFCmd} = 'htmldoc --webpage --links --linkstyle plan --outfile %FILE|F% %EXTRAS|U% %FILES|F%';
+$TWiki::cfg{PublishContrib}{PDFCmd} = 'htmldoc --webpage --links --linkstyle plain --outfile %FILE|F% %EXTRAS|U% %FILES|F%';
 </verbatim>
 Note that =htmldoc= can also be used to generate !PostScript by using the =-t= option in the =Generator Options= field above. See the =htmldoc= man pages for details.
 
