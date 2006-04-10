@@ -2063,8 +2063,8 @@ msgstr "Registrieren"
 
 #:data/TWiki/TWikiRegistration.txt:6
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
-msgstr "Registrierte Benutzer können ihre Passwörter [[ChangePasswords][ändern]] und "
-"[[ResetPasswords][zurücksetzen]]."
+msgstr "Registrierte Benutzer können ihre Passwörter [[%1][ändern]] und "
+"[[%2][zurücksetzen]]."
 
 #:data/TWiki/TWikiRegistration.txt:2
 msgid "Registration"

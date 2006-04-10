@@ -2109,11 +2109,10 @@ msgid "Register"
 msgstr "Registrarse"
 
 #: data/TWiki/TWikiRegistration.txt:6
-#, fuzzy
 msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
-"Usuarios registrados pueden cambiar contraseñas (ChangePasswords) y "
-"reinicializar contraseñas (ResetPasswords)."
+"Usuarios registrados pueden [[%1][cambiar]] contraseñas y "
+"[[%2][reinicializar]] contraseñas."
 
 #: data/TWiki/TWikiRegistration.txt:2
 msgid "Registration"
