@@ -16,8 +16,8 @@ if you have any questions.
 %TMPL:DEF{"goback"}%Please go <a href="javascript:history.back()">back</a> in your browser and try again.
 
 <form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-  <input type="button" style="color:green" value="Ok" onclick="history.back()">&nbsp;
-  <input type="submit" style="color:red" value="Cancel">
+  <input type="button" style="color:green" value="Ok" onclick="history.back()" />&nbsp;
+  <input type="submit" style="color:red" value="Cancel" />
 </form> %TMPL:END%
 %TMPL:DEF{"content"}% 
 %IFSKINSTATETHEN{release="dakar"}%
@@ -27,8 +27,7 @@ if you have any questions.
 %FISKINSTATE%
 <div style="margin-top:20px">
 <h1 class="%TMPL:P{"headingstyle"}%">%TMPL:P{"heading"}%</h1>
-%TMPL:P{"message"}% 
-<div class="natContact"> 
+%TMPL:P{"message"}% <div class="natContact"> 
   %TMPL:P{"contact"}% 
 </div>
 </div>

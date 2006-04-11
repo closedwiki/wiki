@@ -2,7 +2,7 @@
 <!-- template: oopsleaseconflict.nat.tmpl -->
 %TMPL:DEF{"heading"}%Conflict%TMPL:END%
 %TMPL:DEF{"lease_active"}%<!-- -->
-%PARAM1% is editing %WEB%.%TOPIC%.
+%PARAM1% is editing [[%WEB%.%TOPIC%]].
 
 %PARAM1% has been editing the topic for %PARAM2% and the lease is still active for 
 another %PARAM3%.
@@ -15,7 +15,7 @@ check with %PARAM1% first.
 
 %TMPL:END%
 %TMPL:DEF{"lease_old"}% <!-- -->
-%PARAM1% may still be editing %WEB%.%TOPIC%.
+%PARAM1% may still be editing [[%WEB%.%TOPIC%]].
 
 The lease on this topic expired %PARAM2% ago.
 
@@ -39,23 +39,22 @@ first.
 </ul>
 
 <table border="0"><tr>
-<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <td valign="top">
+<form style="margin-bottom:0px" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
   <input type="hidden" name="breaklock" value="on" />
   <input type="submit" style="color:red" value="Edit Anyway" />
 %QUERYPARAMS% 
-</td> 
 </form>
-<form class="natOopsButtons" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+</td> 
 <td valign="top">
+<form style="margin-bottom:0px" class="natOopsButtons" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
   <input type="submit" style="color:blue" value="Try Again" />
 %QUERYPARAMS% 
-</td>
 </form>
-<form class="natOopsButtons" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+</td>
 <td valign="top">
-  <input type="submit" style="color:green" value="Cancel">
-</td>
+<form style="margin-bottom:0px" class="natOopsButtons" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+  <input type="submit" style="color:green" value="Cancel" />
 </form>
-</tr></table>
-%TMPL:END%
+</td>
+</tr></table> %TMPL:END%
