@@ -57,13 +57,19 @@
 
 %TMPL:DEF{"content"}%<div class="patternTopic">
 %TMPL:P{"pagetitle"}%
-*(1.%HISTORY_REV1% - 1.%HISTORY_REV2% from %HISTORY_MAXREV% revisions)*
+---
+&nbsp;
 <form name="main" action="%SCRIPTURLPATH%/%TMPL:P{"diffbin"}%%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <div class="twikiFormSteps">
 <div class="twikiFormStep twikiLast"> 
-<input type="hidden" name="render" value="sidebyside">
 <input type="hidden" name="type" value="diff">
 %TMPL:P{"rev_table"}%
+
+Render style: <select name="render">
+<option value="interweave">Interweave</option>
+<option value="sidebyside">Side-by-side</option>
+</select><br>
+<br>
 <input type="submit" class="twikiSubmit" value="Compare selected revisions">
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps--> 
@@ -86,5 +92,7 @@ revisions up to 1.
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps--> 
 </form>
+
+
 
 %TMPL:P{"topicaction"}%%TMPL:P{"topicinfo"}%</div><!--/patternTopic-->%TMPL:END%

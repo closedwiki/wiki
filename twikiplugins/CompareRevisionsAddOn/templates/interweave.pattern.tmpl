@@ -59,6 +59,7 @@
 
 %TMPL:DEF{"content"}%<div class="patternTopic">
 %TMPL:P{"pagetitle"}%
+---
 <div class="patternSearchResults">
 %REPEAT%
 </div><!--/patternSearchResults-->
@@ -74,5 +75,7 @@
 #TopicEnd
 </div><div class="twikiHidden"><hr />%MAKETEXT{"End of topic"}%<br /><a href="#Actions">%MAKETEXT{"Skip to actions"}%</a> | <a href="#PageTop">%MAKETEXT{"Back to top"}%</a><hr /></div>
 </div><!-- /patternContent -->
+---
+
 %TMPL:P{"topicaction"}%
 %TMPL:END%
