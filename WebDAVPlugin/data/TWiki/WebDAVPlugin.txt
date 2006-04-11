@@ -212,8 +212,9 @@ You may want to add a new DAV-edit-link to your attachments table.
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% build %$DATE% |
 | Change History: | |
-| | Ported to TWiki-4 |
-|      | Added TDB, ran detailed tests. Incorporated doc improvements made by Marius Reiner. |
+| 9756 | Ported to TWiki-4. \
+         Added TDB. \
+         Incorporated doc improvements made by Marius Reiner. |
 | 5248 | Improved debug and documentation, and added tab conversion |
 | 5048 | Cairo readiness |
 | 5023 | Udates for Cairo, bug fixes grokked from WRS installation |
