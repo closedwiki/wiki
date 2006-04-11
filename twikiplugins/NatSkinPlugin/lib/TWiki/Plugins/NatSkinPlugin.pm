@@ -35,10 +35,13 @@ use vars qw(
 	$defaultSkin $defaultVariation $defaultStyleSearchBox
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
 	%maxRevs
-	%knownStyles $hasInitKnownStyles
-	%knownVariations $knownStyleSearchBox
-	$knownStyleBorders $knownStyleSidebars
-	%skinState $hasInitSkinState
+	$hasInitKnownStyles $hasInitSkinState
+	%knownStyles 
+	%knownVariations 
+	%knownBorders 
+	%knownThins 
+	%knownButtons 
+	%skinState 
 	%emailCollection $nrEmails $doneHeader
 	$STARTWW $ENDWW
 	%TWikiCompatibility
@@ -53,7 +56,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.998';
+$RELEASE = '2.9991';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -63,10 +66,6 @@ $defaultStyleButtons = 'off';
 $defaultStyleSideBar = 'left';
 $defaultVariation = 'off';
 $defaultStyleSearchBox = 'top';
-$knownStyleBorders = '^(on|off|thin)$';
-$knownStyleButtons = '^(on|off)$';
-$knownStyleSidebars = '^(left|right|both|off)$';
-$knownStyleSearchBox = '^(top|pos1|pos2|pos3|off)$';
 
 ###############################################################################
 sub writeDebug {
@@ -184,22 +183,45 @@ sub initKnownStyles {
   $hasInitKnownStyles = 1;
   %knownStyles = ();
   %knownVariations = ();
+  %knownBorders = ();
+  %knownButtons = ();
+  %knownThins = ();
   
   my $twikiWeb = &TWiki::Func::getTwikiWebname();
-  my $cssDir = 
-    &TWiki::Func::getPubDir() . '/' . 
-    &TWiki::Func::getTwikiWebname() . '/NatSkin';
-  opendir(DIR, $cssDir);
-  foreach my $fileName (readdir(DIR)) {
-    if ($fileName =~ /(.*)Style\.css$/) {
-      $knownStyles{$1} = 1;
-      #writeDebug("found style $1");
-    } elsif ($fileName =~ /(.*)Variation\.css$/) {
-      $knownVariations{$1} = 1;
-      #writeDebug("found variation $1");
+  my $stylePath = &TWiki::Func::getPreferencesValue('STYLEPATH') 
+    || "$twikiWeb.NatSkin";
+  my $pubDir = &TWiki::Func::getPubDir();
+
+  foreach my $styleWebTopic (split(/[\s,]+/, $stylePath)) {
+    my $styleWeb;
+    my $styleTopic;
+    if ($styleWebTopic =~ /^(.*)\.(.*?)$/) {
+      $styleWeb = $1;
+      $styleWeb =~ s/\./\//go;
+      $styleTopic = $2;
+    } else {
+      next;
+    }
+    my $styleWebTopic = $styleWeb.'/'.$styleTopic;
+    my $cssDir = $pubDir.'/'.$styleWebTopic;
+
+    if (opendir(DIR, $cssDir))  {
+      foreach my $fileName (readdir(DIR)) {
+	if ($fileName =~ /(.*)Style\.css$/) {
+	  $knownStyles{$1} = $styleWebTopic unless $knownStyles{$1};
+	} elsif ($fileName =~ /(.*)Variation\.css$/) {
+	  $knownVariations{$1} = $styleWebTopic unless $knownVariations{$1};
+	} elsif ($fileName =~ /(.*)Border\.css$/) {
+	  $knownBorders{$1} = $styleWebTopic unless $knownBorders{$1};
+	} elsif ($fileName =~ /(.*)Buttons\.css$/) {
+	  $knownButtons{$1} = $styleWebTopic unless $knownButtons{$1};
+	} elsif ($fileName =~ /(.*)Thin\.css$/) {
+	  $knownThins{$1} = $styleWebTopic unless $knownThins{$1};
+	}
+      }
+      closedir(DIR);
     }
   }
-  closedir(DIR);
 }
 
 ###############################################################################
@@ -270,8 +292,10 @@ sub initSkinState {
     $theSwitchStyle = $query->param('switchstyle');
     $theSwitchVariation = $query->param('switchvariation');
     $theReset = $query->param('resetstyle');
-    if ($theReset) {
+    $theStyle = $query->param('style') || '';
+    if ($theReset || $theStyle eq 'reset') {
       writeDebug("clearing session values");
+      $theStyle = '';
       &clearSessionValue('SKINSTYLE');
       &clearSessionValue('STYLEBORDER');
       &clearSessionValue('STYLEBUTTONS');
@@ -286,7 +310,6 @@ sub initSkinState {
 	# the session object is not enough right now but will be during the next
 	# request; so we redirect to the current url
     } else {
-      $theStyle = $query->param('style');
       $theStyleBorder = $query->param('styleborder'); 
       $theStyleButtons = $query->param('stylebuttons'); 
       $theStyleSideBar = $query->param('stylesidebar');
@@ -316,15 +339,19 @@ sub initSkinState {
   } else {
     $theStyle = $prefStyle;
   }
-  my $found = 0;
-  foreach my $style (keys %knownStyles) {
-    if ($style eq $theStyle || lc $style eq lc $theStyle) {
-      $found = 1;
-      $theStyle = $style;
-      last;
+  if ($theStyle =~ /^(off|none)$/o) {
+    $theStyle = 'off';
+  } else {
+    my $found = 0;
+    foreach my $style (keys %knownStyles) {
+      if ($style eq $theStyle || lc $style eq lc $theStyle) {
+	$found = 1;
+	$theStyle = $style;
+	last;
+      }
     }
+    $theStyle = $defaultStyle unless $found;
   }
-  $theStyle = $defaultStyle unless $found;
   $skinState{'style'} = $theStyle;
   writeDebug("theStyle=$theStyle");
 
@@ -366,7 +393,7 @@ sub initSkinState {
     $theStyleBorder = $prefStyleBorder;
   }
   $theStyleBorder = $defaultStyleBorder 
-    if $theStyleBorder !~ /$knownStyleBorders/;
+    if $theStyleBorder !~ /^(on|off|thin)$/;
   $skinState{'border'} = $theStyleBorder;
 
   # handle buttons
@@ -380,7 +407,7 @@ sub initSkinState {
     $theStyleButtons = $prefStyleButtons;
   }
   $theStyleButtons = $defaultStyleButtons
-    if $theStyleButtons !~ /$knownStyleButtons/;
+    if $theStyleButtons !~ /^(on|off)$/;
   $skinState{'buttons'} = $theStyleButtons;
 
   # handle sidebar 
@@ -394,10 +421,10 @@ sub initSkinState {
     $theStyleSideBar = $prefStyleSideBar;
   }
   $theStyleSideBar = $defaultStyleSideBar
-    if $theStyleSideBar !~ /$knownStyleSidebars/;
+    if $theStyleSideBar !~ /^(left|right|both|off)$/;
   $skinState{'sidebar'} = $theStyleSideBar;
   $theToggleSideBar = undef
-    if $theToggleSideBar && $theToggleSideBar !~ /$knownStyleSidebars/;
+    if $theToggleSideBar && $theToggleSideBar !~ /^(left|right|both|off)$/;
 
   # handle searchbox
   my $prefStyleSearchBox = &TWiki::Func::getPreferencesValue('STYLESEARCHBOX') ||
@@ -410,7 +437,7 @@ sub initSkinState {
     $theStyleSearchBox = $prefStyleSearchBox;
   }
   $theStyleSearchBox = $defaultStyleSearchBox
-    if $theStyleSearchBox !~ /$knownStyleSearchBox/;
+    if $theStyleSearchBox !~ /^(top|pos1|pos2|pos3|off)$/;
   $skinState{'searchbox'} = $theStyleSearchBox;
 
   # handle variation 
@@ -604,10 +631,11 @@ sub postRenderingHandler {
   
   endRenderingHandler(@_); 
 
-  my $oldUseSpamObfuscator = $useSpamObfuscator;
-  $useSpamObfuscator = 0;
-  &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
-  $useSpamObfuscator = $oldUseSpamObfuscator;
+  if ($useSpamObfuscator) {
+    $useSpamObfuscator = 0;
+    &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
+    $useSpamObfuscator = 1;
+  }
 }
 
 ###############################################################################
@@ -817,39 +845,45 @@ sub renderKnownVariations {
 
 ###############################################################################
 sub renderGetSkinStyle {
+ 
 
   my $theStyle;
   my $theBorder;
+  my $theBorderType;
   my $theSideBar;
   my $theButtons;
   my $theVariation;
 
-  $theStyle = $skinState{'style'} . 'Style';
-  $theBorder = $skinState{'style'} . 'Border' if $skinState{'border'} eq 'on';
-  $theBorder = $skinState{'style'} . 'Thin' if $skinState{'border'} eq 'thin';
-  $theSideBar = $skinState{'style'} . 'Right' if $skinState{'sidebar'} eq 'right';
-  $theSideBar = 'NoSideBar' if $skinState{'sidebar'} eq 'off';
-  $theButtons = $skinState{'style'} . 'Buttons' if $skinState{'buttons'} eq 'on';
-  $theVariation = $skinState{'variation'} . 'Variation' unless $skinState{'variation'} =~ /^(off|none)$/;
+  $theStyle = $skinState{'style'};
 
-  my $cssDir = 
-    &TWiki::Func::getPubDir() . '/' . 
-    &TWiki::Func::getTwikiWebname() . '/NatSkin';
+  return '' if $theStyle eq 'off';
+
+  $theButtons = $skinState{'style'} if $skinState{'buttons'} eq 'on';
+  $theVariation = $skinState{'variation'} unless $skinState{'variation'} =~ /^(off|none)$/;
+
+  if ($skinState{'border'} eq 'on') {
+    $theBorder = $skinState{'style'};
+    $theBorderType = 'Border';
+  }
+  if ($skinState{'border'} eq 'thin') {
+    $theBorder = $skinState{'style'};
+    $theBorderType = 'Thin';
+  }
 
   my $text = 
     '<style type="text/css">' . "\n" .
-    '@import url("%PUBURL%/%TWIKIWEB%/NatSkin/' . $theStyle . '.css");' . "\n";
+    '@import url("%PUBURL%/'.$knownStyles{$theStyle}.'/'.$theStyle.'Style.css");'."\n";
 
   $text .=
-    '@import url("%PUBURL%/%TWIKIWEB%/NatSkin/' . $theBorder . '.css");' . "\n"
-    if $theBorder && -e "$cssDir/$theBorder.css";
+    '@import url("%PUBURL%/'.$knownBorders{$theBorder}.'/'.$theBorder.$theBorderType.'.css");'."\n"
+    if $theBorder;
 
   $text .=
-    '@import url("%PUBURL%/%TWIKIWEB%/NatSkin/' . $theButtons . '.css");' . "\n"
-    if $theButtons && -e "$cssDir/$theButtons.css";
+    '@import url("%PUBURL%/'.$knownButtons{$theButtons}.'/'.$theButtons.'Buttons.css");'."\n"
+    if $theButtons;
 
   $text .=
-    '@import url("%PUBURL%/%TWIKIWEB%/NatSkin/' . $theVariation . '.css");' . "\n"
+    '@import url("%PUBURL%/'.$knownVariations{$theVariation}.'/'.$theVariation.'Variation.css");'."\n"
     if $theVariation;
 
   $text .= '</style>';

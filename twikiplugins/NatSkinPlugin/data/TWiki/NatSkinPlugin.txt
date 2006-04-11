@@ -9,7 +9,6 @@
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
 -->
 ---+!! The Natural Skin Plugin
----+!! <nop>%TOPIC%
 %TOC%
 
 ---++ Description
@@ -134,12 +133,12 @@ advance.
 ---+++ KNOWNSKINSTYLES
 *Syntax*: =%<nop>KNOWNSKINSTYLES%= 
 
-render a list of all known skin styles being attachted to the NatSkin topic 
+returns a list of all known skin styles. 
 
 ---+++ KNOWNVARIATIONS
 *Syntax*: =%<nop>KNOWNVARIATIONS%= 
 
-render a list of all known styles variations being attachted to the NatSkin topic 
+returns a list of all known styles variations.
 
 ---+++ NATLOGON
 *Syntax*: =%<nop>NATLOGON%=
@@ -228,11 +227,37 @@ Below are the settings which affect the behavior of the NatSkin.
 
 	* Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
 
+---+++ CSS Styles
+The NatSkin can be themed using cascading styles attached to the <nop>TWiki.NatSkin or any
+other topic defined in the STYLEPATH preference variable.
+This variable is a list of topics that are consulted for css attachments. The default value is
+<verbatim>
+	* Set STYLEPATH = TWiki.NatSkin
+</verbatim>
+
+Styles are collected in the order specified. This allows to insert style contributions that are
+not part of the NatSkin. For example given you uploaded NatSkin css definitions to a topic
+<nop>Main.NatSkinThemesContrib you can activate them by setting the STYLEPATH to
+
+<verbatim>
+	* Set STYLEPATH = Main.NatSkinThemesContrib, TWiki.NatSkin
+</verbatim>
+
+Css files must obey the following naming scheme to be recognized
+	* =&lt;name>Style.css=: basic style definitions for style &lt;name>
+	* =&lt;name>Buttons.css=: <nop>WebButton definitions for style &lt;name>
+	* =&lt;name>Border.css=: definitions for style &lt;name> displayed using =STYLEBORDER = on=
+	* =&lt;name>Thin.css=: definitions for style &lt;name> displayed using =STYLEBORDER = thin=
+	* =&lt;name>Thin.css=: definitions for style &lt;name> displayed using =STYLEBORDER = thin=
+	* =&lt;name>Variation.css=: style variations that can be applied to any base style; this
+	  can be used to vary a base style, e.g. to add header art or change some fonts and colours
+	
+
 ---+++ Skin state configuration
 The skin state is controlled by a set of variables that are configured on the user's home topic,
-the WebPreferences or the [[%TWIKIWEB%.TWikiPreferences]] and are then loaded into the current
+the WebPreferences or the [[%TWIKIWEB%.TWikiPreferences]] and are loaded into the current
 session of the user. So every setting can be changed by an url parameter to take effect for the
-duration of the user session. The default values are given below 
+duration of the user's session. The default values are given below 
 
 	* switch to the given style,
 	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick,
@@ -253,18 +278,26 @@ duration of the user session. The default values are given below
 	* switch the searchbox to be displayed in the topbar (top), at the top of the sidebar (pos1), in the middle of the sidebar (pos2), at the bottom of the sidebar (pos3) or off, 
 	  url param is =stylessearchbox=
 		* Set STYLESEARCHBOX = top
-
-In addition, there's a url parameter =togglesidebar= that disables the sidebar for this request
-only. 
-
+		
+There are a couple of special url parameters:
+	* =togglesidebar=: disable the sidebar for this request only. 
+	* =style=off=: switch off any styles (simulating a non-css browser)
+	* =style=reset=: switch back to the user and server settings by reverting any 
+	  session preferences
+	* =switchstyle=next/prev=: switch to the next/previous known style
+	* =switchvariation=next/prev=: switch to the next/previous known style variation
+	  
 To emulate the Kubrick style on the old
 [[http://binarybonsai.com][BinaryBonsai]] (not the new K2 style) then copy-paste this
+
+<verbatim>
 	* Set SKINSTYLE = Kubrick
 	* Set STYLEBORDER = thin
 	* Set STYLEBUTTONS = on
 	* Set STYLESIDEBAR = right
 	* Set STYLESVARIATION = none
 	* Set STYLESEARCHBOX = pos1
+</verbatim>
 
 to your [[%TWIKIWEB%.TWikiPreferences]]. Try out other settings using the NatSkinStyleBrowser,
 or even INCLUDE it in your [[%MAINWEB%.%WIKINAME%SideBar]].
@@ -362,8 +395,11 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.999 |
+|  Plugin Version: | v2.9991 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Apr 2006: | added STYLEPATH feature; \
+                  added style=off feature to emulate non-css browser; \
+		  disable email obfuscation javascript if unused |
 |  05 Apr 2006: | added support for dakar's <nop>TemplateLogin; \
                   changed semantics of NATLOGON, added NATLOGOUT;\
 		  fixed some grave bugs exposed by the <nop>PublishContrib |
@@ -445,5 +481,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 05 Apr 2006 
+-- TWiki:Main/MichaelDaum - 11 Apr 2006 
 
