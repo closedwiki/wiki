@@ -256,8 +256,8 @@ sub compare {
     }
 
     $tmpl_after =~ s/%REVISIONS%/$revisions/go;
-    $tmpl_after =~ s/%CURRREV%/1.$rev1/go;
-    $tmpl_after =~ s/%MAXREV%/1.$maxrev/go;
+    $tmpl_after =~ s/%CURRREV%/$rev1/go;
+    $tmpl_after =~ s/%MAXREV%/$maxrev/go;
     $tmpl_after =~ s/%REVTITLE1%/$revtitle1/go;
     $tmpl_after =~ s/%REVINFO1%/$revinfo1/go;
     $tmpl_after =~ s/%REVTITLE2%/$revtitle2/go;
