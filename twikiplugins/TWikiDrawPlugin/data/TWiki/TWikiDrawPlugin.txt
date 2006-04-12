@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144799477" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1144799477" format="1.0" version="1.1"}%
 ---+!! <nop>%TOPIC%
 <!--
 
@@ -48,11 +48,11 @@ The tools on the left create or manipulate figures.
 ---+++ Handles
 
 When selected, figures provide different handles to manipulate them.
-   * the white squares let you to manipulate the shape of a figure
-   * the green squares on connections let you to reconnect them with another figure.
-   * the yellow circles on polygon figures let you change the size and rotation of the figure
-   * yellow circles on rounded rectangles let you change the radius of the corners
-   * the yellow circles on connections let you manipulate the position of connection segments.
+	* the white squares let you to manipulate the shape of a figure
+	* the green squares on connections let you to reconnect them with another figure.
+	* the yellow circles on polygon figures let you change the size and rotation of the figure
+	* yellow circles on rounded rectangles let you change the radius of the corners
+	* the yellow circles on connections let you manipulate the position of connection segments.
 
 ---+++ Commands
 
@@ -69,7 +69,7 @@ Attributes, such as fill color, text color or arrow tip, can be changed through 
 
 	* Set SHORTDESCRIPTION = Java Applet based drawing editor
 Extra colors to be added to the menu of colors in the applet, as a comma-separated list with colors in HTML format (see TWiki.StandardColors)
-	* Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=EBC79E,Sea Green=238E68,Motorola Blue=#3ff
+	* Set EXTRA_COLORS = Aquamarine=#70DB93,New Tan=#EBC79E,Sea Green=#238E68,Motorola Blue=#3ff
 Set to 1 if an "Edit" button is to be generated attached to the image. You will still be able to edit it by clicking on the boundary of the image.
 	* Set EDIT_BUTTON = 1
 Edit text defined here so you can change it for local languages. Text is shown when you hover over the image, and for the edit button. %<nop>F% will be replaced by the drawing name.
