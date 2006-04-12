@@ -1,0 +1,610 @@
+%META:TOPICINFO{author="TWikiContributor" date="1144865361" format="1.1" version="1.1"}%
+---+!! Overview of directed graph editing
+
+%TOC%
+
+---++ Introduction
+
+Support for creating advanced directed graphs has been installed on this TWiki installation. Directed graphs are rendered by [[http://www.graphviz.org][Graphviz]]. Only the most important basics are covered here, you should consult the dotguide.pdf from Graphviz's homepage for a more thourough guide on creating directed graphs.
+
+---++ What are directed graphs?
+
+<table>
+<tr><td valign="top">
+*The graph:*
+
+<dot>
+digraph G {
+  "a" -> "b";
+  "a" -> "c";
+  {
+    rank = same;
+    "b";
+    "c";
+  }
+}
+</dot>
+
+</td><td valign="top">
+To the left here you can see a simple directed graph with three ="nodes"=, one on the top and two below (which are connected from top to bottom). Connecting these nodes you can also see two ="edges"=, which is the technical term for the arrow connecting the three nodes.
+
+When entering directed graphs in TWiki, everything you do is to define nodes and their edges (or connections); the directed graph engine then does all placing by itself, fully automatic.
+
+No layout more than which nodes and their relationship, together with node and edge style is defined by the author; the engine takes care of *all* layout and placing of nodes, which makes creating advanced graphs extremely simple and fast.
+
+Using more advanced syntax very advanced graphs can be created, including subgraphs and balanced trees and record graphs. This document only focusses on "normal" directed graphs; if you want to experiment more with the graph engine, consult the dotguide on www.graphviz.org.
+</td>
+</tr>
+</table>
+
+---++ Examples
+
+---+++ A simple graph with two nodes
+
+<table>
+<tr><td valign="top">
+*The graph:*
+
+<dot>
+digraph G {
+ a -> b;
+}
+</dot>
+</td>
+<td valign="top">
+*The code:*
+
+<verbatim>
+<dot>
+digraph G {
+ a -> b;
+}
+</dot>
+</verbatim>
+</td><td valign="top">
+*Explanation:*
+
+In order to describe a graph you start by typing:
+<verbatim>
+<dot>
+digraph G {
+</verbatim>
+After the curly opening bracket (={=) the actual graph description is located. When you have defined your graph you close it by typing:
+<verbatim>
+}
+</dot>
+</verbatim>
+
+Inside those two parts you place your graph description. You can define nodes and edges (connection between nodes); you define edges by typing ="node1" -> "node2";= which also implicit defines both nodes =node1= and =node2=. If the nodes' names doesn't contain spaces or other special characters, the quotation marks can be ignored.
+
+As you can see in this example we actually only define exactly one edge, the link between node =a= and node =b=, by typing =a -> b;=. Note also how the line is terminated by a semi-colon (=;=).
+</td>
+</tr>
+</table>
+
+---+++ Added attributes to nodes and edges
+
+<table>
+<tr><td valign="top">
+*The graph:*
+
+<dot>
+digraph G {
+ a [style=filled, color=green];
+ b [style=filled, color=red];
+
+ a -> b [style=dotted, color=blue];
+}
+</dot>
+</td>
+<td valign="top">
+*The code:*
+
+<verbatim>
+<dot>
+digraph G {
+ a [style=filled, color=green];
+ b [style=filled, color=red];
+
+ a -> b [style=dotted, color=blue];
+}
+</dot>
+</verbatim>
+</td><td valign="top">
+*Explanation:*
+
+This example is very similar to the above example, with the difference that we have defined some attributes to both the nodes and the edge. As you can see the nodes are filled with green and red, respective. The edge has been changed to have a dotted line instead of a solid line.
+
+If you want to assign attributes to nodes, the nodes have to be defined first, which means they appear on a line on their own. The order of node and edge definitions is not important, the whole file is parsed before any layout is begun.
+
+The first line in the graph <verbatim>a [style=filled, color=green];</verbatim> defines the node =a= and assigns the attributes <verbatim>style=filled</verbatim> and <verbatim>color=green</verbatim>. These two attributes make the node filled with the color green.
+</td>
+</tr>
+</table>
+
+As you can see to assign attributes to a node you just type its name (with the optional quotation marks) followed by the attribute definitions separated by commas, as it appears in the example above.
+
+To add attributes to edges (i.e. arrows) just add the attributes to the line of the edge definition as can be seen on the last line of the graph definition.
+
+---+++ Adding labels to edges
+
+<table>
+<tr><td valign="top">
+*The graph:*
+
+<dot>
+digraph G {
+ a -> b [label="link"];
+}
+</dot>
+</td>
+<td valign="top">
+*The code:*
+
+<verbatim>
+<dot>
+digraph G {
+ a -> b [label="link"];
+}
+</dot>
+</verbatim>
+</td><td valign="top">
+*Explanation:*
+
+Edges can be labeled by adding the attribute <verbatim>label="text"</verbatim> at the edge definition, as can be seen in the code of this example.
+</td>
+</tr>
+</table>
+
+---+++ Adding subgraphs
+
+<table>
+<tr><td valign="top">
+*The graph:*
+
+<dot>
+digraph G {
+  a -> b;
+  a -> c;
+
+  subgraph cluster0 {
+    style=filled;
+    color=lightgrey;
+    rank=same;
+
+    node [style=filled, color=white];
+    b;
+    c;
+  }
+
+  c -> d;
+  b -> d;
+}
+</dot>
+</td>
+<td valign="top">
+*The code:*
+
+<verbatim>
+<dot>
+digraph G {
+  a -> b;
+  a -> c;
+
+  subgraph cluster0 {
+    node [style=filled, color=white];
+    style=filled;
+    color=lightgrey;
+    rank=same; 
+    b;
+    c;
+  }
+
+  c -> d;
+  b -> d;
+}
+</dot>
+</verbatim>
+</td><td valign="top">
+*Explanation:*
+
+If you want to group nodes together, you put the node definitions inside a =subgraph clusterXXX { }= statement.
+
+*Note:* the name of the subgraph *must* begin with =cluster=.
+
+The subgraph has the attributes <verbatim>style=filled</verbatim> and <verbatim>color=lightgrey</verbatim> which makes the subgraph filled with the color light grey. The subgraph also has the attribute <verbatim>rank=same</verbatim> which makes all nodes defined inside the subgraph appear on the same level (i.e. they have the same rank).
+
+You can also see the nodes =b= and =c= are defined in the subgraph by the last two lines in the subgraph.
+
+All nodes defined in the subgraph have the attributes <verbatim>style=filled, color=white</verbatim> by adding the line =node [style=filled, color=white];=.
+</td>
+</tr>
+</table>
+
+---+++ Grouping nodes
+
+<table>
+<tr><td valign="top">
+*The graph:*
+
+<dot>
+digraph G {
+  size="2.5,2";
+
+  {
+    node [shape=plaintext, fontsize=16];
+
+    1975 -> 1980 -> 1985;
+  }
+
+  { rank=same; 1975; a; b; c; }
+  { rank=same; 1980; d; e; }
+  { rank=same; 1985; f; g; h; i; }
+
+  a -> d;
+  b -> e;
+  c -> e;
+  d -> f;
+  e -> g;
+  e -> h;
+  e -> i;
+}
+</dot>
+</td>
+<td valign="top">
+*The code:*
+
+<verbatim>
+<dot>
+
+digraph G {
+  {
+    node [shape=plaintext, fontsize=16];
+
+    1975 -> 1980 -> 1985;
+  }
+
+  { rank=same; 1975; a; b; c; }
+  { rank=same; 1980; d; e; }
+  { rank=same; 1985; f; g; h; i; }
+
+  a -> d;
+  b -> e;
+  c -> e;
+  d -> f;
+  e -> g;
+  e -> h;
+  e -> i;
+}
+</dot>
+</verbatim>
+</td><td valign="top">
+*Explanation:*
+
+In this graph three groups are defined, by putting them inside a block, defined by ={ }=.
+
+The first group defines the nodes =1975=, =1980= and =1985=, by connecting them together; these nodes are of the type ="plaintext"= with font size equal to 16. We do this because the years are to be placed to the left as a timeline and therefore the font size is choosen to be a little larger.
+
+The next three groups for example <verbatim>{ rank=same; 1975; a; b; }</verbatim> ensures that the nodes =1975=, =a= and =b= are on the same level, of course, because =a= and =b= occured in 1975 (_It is left as an exercise to the reader to figure out what a and b actually is_).
+
+Following the last group definition we define all edges.
+</td>
+</tr>
+</table>
+
+---+++ Node types
+
+Choose the shape of a node by adding the attribute =shape= to the node definition.
+
+<table border="1"><tr>
+<td>
+<dot>
+digraph G {
+ " " [shape=box];
+}
+</dot>
+<center>box</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=polygon];
+}
+</dot>
+<center>polygon</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=ellipse];
+}
+</dot>
+<center>ellipse</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=circle];
+}
+</dot>
+<center>circle</center>
+</td>
+</tr><tr>
+<td>
+<dot>
+digraph G {
+ " " [shape=point];
+}
+</dot>
+<center>point</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=egg];
+}
+</dot>
+<center>egg</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=triangle];
+}
+</dot>
+<center>triangle</center>
+</td>
+<td>
+<dot>
+digraph G {
+ plaintext [shape=plaintext];
+}
+</dot>
+<center>plaintext</center>
+</td>
+<tr>
+<td>
+<dot>
+digraph G {
+ " " [shape=diamond];
+}
+</dot>
+<center>diamond</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=trapezium];
+}
+</dot>
+<center>trapezium</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=parallelogram];
+}
+</dot>
+<center>parallelogram</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=house];
+}
+</dot>
+<center>house</center>
+</td>
+</tr><tr>
+<td>
+<dot>
+digraph G {
+ " " [shape=hexagon];
+}
+</dot>
+<center>hexagon</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=octagon];
+}
+</dot>
+<center>octagon</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=doublecircle];
+}
+</dot>
+<center>doublecircle</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=doubleoctagon];
+}
+</dot>
+<center>doubleoctagon</center>
+</td>
+</tr>
+<tr>
+<td>
+<dot>
+digraph G {
+ " " [shape=tripleoctagon];
+}
+</dot>
+<center>tripleoctagon</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=invtriangle];
+}
+</dot>
+<center>invtriangle</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=invtrapezium];
+}
+</dot>
+<center>invtrapezium</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=invhouse];
+}
+</dot>
+<center>invhouse</center>
+</td>
+</tr><tr>
+<td>
+<dot>
+digraph G {
+ " " [shape=Mdiamond];
+}
+</dot>
+<center>Mdiamond</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=Msquare];
+}
+</dot>
+<center>Msquare</center>
+</td>
+<td>
+<dot>
+digraph G {
+ " " [shape=Mcircle];
+}
+</dot>
+<center>Mcircle</center>
+</td>
+</tr></table>
+
+---+++ Arrow types
+
+The form of the edge can be set by using the =arrowtail= and =arrowhead= attributes with edges. The attribute =arrowtail= sets the shape of the arrow at the source node, while =arrowhead= sets the shape of the arrow at the destination node.
+
+<table border="1">
+<tr>
+<td>
+<dot>
+digraph G {
+  a [shape=point];
+
+  a -> " " [arrowhead=normal];
+}
+</dot>
+<center>normal</center>
+</td>
+<td>
+<dot>
+digraph G {
+  a [shape=point];
+
+  a -> " " [arrowhead=dot];
+}
+</dot>
+<center>dot</center>
+</td>
+<td>
+<dot>
+digraph G {
+  a [shape=point];
+
+  a -> " " [arrowhead=odot];
+}
+</dot>
+<center>odot</center>
+</td>
+<td>
+<dot>
+digraph G {
+  a [shape=point];
+
+  a -> " " [arrowhead=inv];
+}
+</dot>
+<center>inv</center>
+</td>
+</tr><tr>
+<td>
+<dot>
+digraph G {
+  a [shape=point];
+
+  a -> " " [arrowhead=invdot];
+}
+</dot>
+<center>invdot</center>
+</td>
+<td>
+<dot>
+digraph G {
+  a [shape=point];
+
+  a -> " " [arrowhead=invodot];
+}
+</dot>
+<center>invodot</center>
+</td>
+<td>
+<dot>
+digraph G {
+  a [shape=point];
+
+  a -> " " [arrowhead=none];
+}
+</dot>
+<center>none</center>
+</td>
+</tr></table>
+
+
+
+-- Main.MikaelOlenfalk - 08 Aug 2005
+
+%META:FILEATTACHMENT{name="graph14f03d5741cb134e902bcd35ea80b59d.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865296" path="graph14f03d5741cb134e902bcd35ea80b59d.png" size="212" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphc99a73fa331d0844e4e38b5554ce19a0.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865345" path="graphc99a73fa331d0844e4e38b5554ce19a0.png" size="306" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph5e0492777986082c5ac118e586b6bb11.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865358" path="graph5e0492777986082c5ac118e586b6bb11.png" size="327" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph3cae7b25c063859cf487a4045375d8f3.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865289" path="graph3cae7b25c063859cf487a4045375d8f3.png" size="387" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphec1100db68e1dbbbe8eb8a05c382560e.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865342" path="graphec1100db68e1dbbbe8eb8a05c382560e.png" size="307" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph4265b3b87e64403662e76b9bf3012349.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865322" path="graph4265b3b87e64403662e76b9bf3012349.png" size="294" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph968f4e16e06e01aa71384efba1ef0060.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865249" path="graph968f4e16e06e01aa71384efba1ef0060.png" size="505" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphdeff46f9d90a362e96de72f97094a7fb.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865261" path="graphdeff46f9d90a362e96de72f97094a7fb.png" size="1317" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph870dd382f9262b1a6966689839698acf.png" attr="" autoattached="1"  comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865246" path="graph870dd382f9262b1a6966689839698acf.png" size="896" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph2cb0d90ef72e8ed03727efd512c15c25.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865283" path="graph2cb0d90ef72e8ed03727efd512c15c25.png" size="287" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph515db653278ebfd70bcc4b9fb28e7952.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865280" path="graph515db653278ebfd70bcc4b9fb28e7952.png" size="115" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph1ef8d999c909662e361fbaeab185d7ab.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865272" path="graph1ef8d999c909662e361fbaeab185d7ab.png" size="271" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph8618395918f9b936bb18175d02b1c5db.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865318" path="graph8618395918f9b936bb18175d02b1c5db.png" size="363" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph745b6ab9a5fe760cfaca58a195ef2ced.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865258" path="graph745b6ab9a5fe760cfaca58a195ef2ced.png" size="1616" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph226d462d829fa1961fa4509b6800aa31.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865276" path="graph226d462d829fa1961fa4509b6800aa31.png" size="245" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph60a4eb7bff4dcb1903f61ffb065fa29e.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865312" path="graph60a4eb7bff4dcb1903f61ffb065fa29e.png" size="324" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph5f1f74d96f655696aad054b350e6394f.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865309" path="graph5f1f74d96f655696aad054b350e6394f.png" size="257" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph3a41ea9dbfb5065c2f44e7de33d6ef92.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865265" path="graph3a41ea9dbfb5065c2f44e7de33d6ef92.png" size="133" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphb3ab34ea21907bbf951bda6b215b561b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865328" path="graphb3ab34ea21907bbf951bda6b215b561b.png" size="222" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph229f0091c3869af65ea91ffe39fadb74.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865361" path="graph229f0091c3869af65ea91ffe39fadb74.png" size="288" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph99d5c23afc7a92cf327109f9112406d1.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865351" path="graph99d5c23afc7a92cf327109f9112406d1.png" size="303" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph686b380752124d227d38f0bddbacb864.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865335" path="graph686b380752124d227d38f0bddbacb864.png" size="240" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph5761aad78076961649860451d2eb06a5.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865325" path="graph5761aad78076961649860451d2eb06a5.png" size="208" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph3983bae600c739bc7c8c8f4318d8e1f1.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865338" path="graph3983bae600c739bc7c8c8f4318d8e1f1.png" size="249" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphccbcf58a0f47e7677b78b5850059971c.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865331" path="graphccbcf58a0f47e7677b78b5850059971c.png" size="334" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph88062fc20b5a764c967ad4b8c77c2dc6.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865292" path="graph88062fc20b5a764c967ad4b8c77c2dc6.png" size="326" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph9ace9dbccf0b637b8eea32af4d43fff5.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865299" path="graph9ace9dbccf0b637b8eea32af4d43fff5.png" size="201" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph5751ce991768129422ff6f99da62c543.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865255" path="graph5751ce991768129422ff6f99da62c543.png" size="605" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph1af60b541a8d4550675929d4086777eb.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865252" path="graph1af60b541a8d4550675929d4086777eb.png" size="621" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphbaf6324cb62285798f52a535d8c8565b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865305" path="graphbaf6324cb62285798f52a535d8c8565b.png" size="268" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph206d9727a2c62d1c5a0a89afb2165307.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865286" path="graph206d9727a2c62d1c5a0a89afb2165307.png" size="300" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph4a118b57d82b4206aa9aaf80918e4562.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865302" path="graph4a118b57d82b4206aa9aaf80918e4562.png" size="221" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph4a22940250ff888310a61dec27b5282b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865355" path="graph4a22940250ff888310a61dec27b5282b.png" size="324" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph36ffa99efc2fc404d2a06ee77e22a68b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865348" path="graph36ffa99efc2fc404d2a06ee77e22a68b.png" size="310" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphda7f178f3ae0cb3d018546de979dc6e8.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865268" path="graphda7f178f3ae0cb3d018546de979dc6e8.png" size="133" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graph6020feb6437cbe4cf0b61521a4b2717b.png" attr="h" autoattached="1" comment="<nop>DirectedGraphPlugin: DOT graph" date="1144865315" path="graph6020feb6437cbe4cf0b61521a4b2717b.png" size="300" user="UnknownUser" version=""}%

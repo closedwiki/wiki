@@ -32,8 +32,10 @@ package TWiki::Plugins::DirectedGraphPlugin;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-        $debug $exampleCfgVar
+        $debug $exampleCfgVar $sandbox $isInitialized
     );
+    
+use vars qw( %TWikiCompatibility );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -52,8 +54,7 @@ use File::Path;
 
 my $HASH_CODE_LENGTH=32;
 my %hashed_math_strings=();
-#my $cmd = '/home/mrjc/packages/graphviz/bin/dot';
-my $cmd = '/usr/bin/dot';
+my $cmd = '/usr/bin/dot -T%FORMAT|S% %INFILE|F% -o %OUTFILE|F%';
 my $tmpFile = '/tmp/'.$pluginName."$$";
 
 # =========================
@@ -75,6 +76,32 @@ sub initPlugin
     return 1;
 }
 
+
+sub doInit {
+  return if $isInitialized;
+
+  unless (defined &TWiki::Sandbox::new) {
+    eval "use TWiki::Contrib::DakarContrib;";
+    $sandbox = new TWiki::Sandbox();
+  } else {
+    $sandbox = $TWiki::sharedSandbox;
+  }
+
+  &writeDebug("called doInit");
+
+  # for getRegularExpression
+  if ($TWiki::Plugins::VERSION < 1.020) {
+    eval 'use TWiki::Contrib::CairoContrib;';
+    #writeDebug("reading in CairoContrib");
+  }
+
+  &writeDebug( "doInit( ) is OK" );
+  $isInitialized = 1;
+
+  return '';
+} 
+
+
 # =========================
 sub commonTagsHandler
 {
@@ -95,6 +122,9 @@ sub commonTagsHandler
 # =========================
 sub handleDot
 {
+    my $errMsg = &doInit();
+    return $errMsg if $errMsg; 
+
     # Create topic directory "pub/$web/$topic" if needed
     my $dir = TWiki::Func::getPubDir() . "/$web/$topic";
     unless( -e "$dir" ) {
@@ -119,16 +149,20 @@ sub handleDot
     }
     # create the png
     else {
-        $command=system($cmd." -Tpng $tmpFile -o $image");
-        # If you've installed the netpbm package, you could alternatively 
-        # use this command to smooth-scale the image
-        #$command=system($cmd." -Tpng $tmpFile | pngtopnm | pnmscale 0.7 | pnmtopng > $image");
-        if($command) {
+        my ($output, $status) = $sandbox->sysCommand($cmd,
+                                                     FORMAT => 'png',
+                                                     INFILE => $tmpFile,
+                                                     OUTFILE => $image
+                                                    );
+        &writeDebug("dgp-png: output $output status $status");         	
+        if($status) {
             # errors existed so remove created files
             unlink "$image";
             unlink $tmpFile;
-            return "<nop>DirectedGraph Error: syntax error - $command";
+            return &showError($status, $output, $hashed_math_strings{"$hash_code"});
         }
+    # Attach created png file to topic, but hide it pr. default.
+    TWiki::Func::saveAttachment($web, $topic, "graph$hash_code.png", {comment=>'<nop>DirectedGraphPlugin: DOT graph', hide=>1, dontlog=>1});
     }
 
     # run the "dot" command to create a map file with a clientside map for the directed graph
@@ -141,13 +175,21 @@ sub handleDot
         }
         # create the map
         else {
-            $command=system("$cmd -Tcmap -o $cmapx $tmpFile");
-            if($command) {
+        	
+            my ($output, $status) = $sandbox->sysCommand($cmd,
+                                                         FORMAT => 'cmapx',
+                                                         INFILE => $tmpFile,
+                                                         OUTFILE => $cmapx
+                                                        );
+            &writeDebug("dgp-map: output $output status $status");         	
+            if($status) {
                 # errors existed so remove created files
                 unlink "$cmapx";
                 unlink $tmpFile;
-                return "<noc>DirectedGraph Error: syntax error";
+                return &showError($status, $output, $hashed_math_strings{"$hash_code"});
             }
+        # Attach created clientside map file to topic, but hide it pr. default.
+        TWiki::Func::saveAttachment($web, $topic, "graph${hash_code}.map", {comment=>'<nop>DirectedGraphPlugin: Clientside map', hide=>1, dontlog=>1});
         }
     }
 
@@ -167,5 +209,20 @@ sub handleDot
         return "<img src=\"$loc/graph$hash_code.png\"/>";
     }
 }
+
+# =========================
+sub showError {
+  my ($status, $output, $text) = @_;
+
+  $output =~ s/^.*: (.*)/$1/;
+  my $line = 1;
+  $text =~ s/\n/sprintf("\n%02d: ", $line++)/ges;
+  $output .= "<pre>$text\n</pre>";
+  return "<font color=\"red\"><nop>DirectedGraph Error ($status): $output</font>";
+}
+
+sub writeDebug {
+  &TWiki::Func::writeDebug("$pluginName - " . $_[0]) if $debug;
+} 
 
 1;
