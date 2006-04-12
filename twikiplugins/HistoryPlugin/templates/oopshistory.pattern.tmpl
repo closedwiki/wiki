@@ -64,10 +64,16 @@
 <div class="twikiFormStep twikiLast"> 
 <input type="hidden" name="type" value="diff">
 %TMPL:P{"rev_table"}%
-
+<br>
 Render style: <select name="render">
 <option value="interweave">Interweave</option>
 <option value="sidebyside">Side-by-side</option>
+</select>&nbsp;&nbsp;&nbsp;
+Context: <select name="context">
+<option value="-1">Whole page</option>
+<option value="1">1 paragraph</option>
+<option value="2">2 paragraphs</option>
+<option value="5">5 paragraphs</option>
 </select><br>
 <br>
 <input type="submit" class="twikiSubmit" value="Compare selected revisions">

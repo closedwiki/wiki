@@ -231,11 +231,11 @@ sub compare {
     my $i = $maxrev;
 #    my $revisions = "";
 
-    my $revisions = " | <span class=\"patternButton\"><a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$rev1&amp;rev2=$rev2&amp;render=" 
+    my $revisions = " | <span class=\"patternButton\"><a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$rev1&rev2=$rev2&render=" 
 		  . ($interweave ? 'sidebyside' : 'interweave')
-		  . '&amp;context='.$context
+		  . '&context='.$context
 		  . ($query->param('skin') ? 
-			'&amp;skin='.$query->param('skin') 
+			'&skin='.$query->param('skin') 
 		      :	'' )
         . ($interweave ? '" accesskey="S" rel="nofollow" title="Side-by-side">%MAKETEXT{"&Side-by-side"}%</a></span>' : '" accesskey="I" rel="nofollow" title="Interweave">%MAKETEXT{"&Interweave"}%</a></span>') 		      
 		  . ' |';
@@ -249,7 +249,7 @@ sub compare {
 	if( $i == $rev2 && $i-1 == $rev1 ) {
 	  $revisions .= "  &lt;";
 	} else {
-	  $revisions .= "  <a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=".($i-1).($query->param('skin')?'&amp;skin='.$query->param('skin'):'').'&amp;render='.$renderStyle.'">&lt;</a>';
+	  $revisions .= "  <a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&rev2=".($i-1).($query->param('skin')?'&skin='.$query->param('skin'):'').($query->param('context')?'&context='.$query->param('context'):'').'&render='.$renderStyle.'">&lt;</a>';
 	}
 	$i--; 
     }
