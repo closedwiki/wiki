@@ -52,8 +52,7 @@
 
 
 
-%TMPL:DEF{"topicactionbuttons"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%MAKETEXT{"View topic"}%</a>
- %TMPL:P{"sep"}%%TMPL:P{context="HistoryPluginEnabled" then="history_history" else="history_rdiff"}%%REVISIONS%%TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>%MAKETEXT{"More topic actions..."}%</a>%TMPL:END% 
+%TMPL:DEF{"topicactionbuttons"}%<span class='patternButton'><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" rel='nofollow' title='%MAKETEXT{"View topic"}%'>%MAKETEXT{"&View topic"}%</a></span> %TMPL:P{"sep"}%%TMPL:P{context="HistoryPluginEnabled" then="history_history" else="history_rdiff"}%%REVISIONS%%TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%MAKETEXT{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%MAKETEXT{"&More topic actions"}%</a> %TMPL:END% 
 
 
 

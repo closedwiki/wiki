@@ -14,7 +14,7 @@
 %TMPL:DEF{"diffbin"}%%TMPL:P{context="CompareRevisionsAddonPluginEnabled" then="diffbin_compare" else="diffbin_rdiff"}%%TMPL:END% 
 
 
-%TMPL:DEF{"titleaction"}%(1.%HISTORY_REV1% - 1.%HISTORY_REV2%) %TMPL:END%
+%TMPL:DEF{"titleaction"}%(r%HISTORY_REV1% - r%HISTORY_REV2%) %TMPL:END%
 
 
 %TMPL:DEF{"bodyclassname"}%patternNoViewPage patternDiffPage%TMPL:END%
@@ -35,7 +35,7 @@
 %TMPL:DEF{"revisions"}%<span class="patternRevision"><a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a></span>%TMPL:END% 
 
 
-%TMPL:DEF{"topicactionbuttons"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">%MAKETEXT{"View topic"}%</a>
+%TMPL:DEF{"topicactionbuttons"}%<span class='patternButton'><a href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" rel='nofollow' title='%MAKETEXT{"View topic"}%'">%MAKETEXT{"&View topic"}%</a></span>
  %TMPL:P{"sep"}% %TMPL:P{"revisions"}%
  %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%HISTORY_REV2%&amp;param2=%HISTORY_REV1%" rel='nofollow'>%MAKETEXT{"More topic actions..."}%</a>%TMPL:END%
 
@@ -87,7 +87,7 @@ Render style: <select name="render">
 <option>20</option>
 <option>50</option>
 </select>
-revisions up to 1.
+revisions up to revision 
 <input type="text" name="rev2" value="%HISTORY_REV2%" size="2">
 </div><!-- /twikiFormStep-->
 </div><!-- /twikiFormSteps--> 
