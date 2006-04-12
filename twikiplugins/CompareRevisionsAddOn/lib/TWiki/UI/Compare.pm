@@ -242,7 +242,7 @@ sub compare {
 		  . '</a> |';
 
     while( $i > 0 ) {
-	$revisions .= "  <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
+	$revisions .= "  <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">r$i</a>";
 
 	last if $i==1 || 
 		 ($TWiki::cfg{NumberOfRevisions} > 0 && 
@@ -250,7 +250,7 @@ sub compare {
 	if( $i == $rev2 && $i-1 == $rev1 ) {
 	  $revisions .= "  &lt;";
 	} else {
-	  $revisions .= "  <a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.".($i-1).($query->param('skin')?'&amp;skin='.$query->param('skin'):'').'&amp;render='.$renderStyle.'">&lt;</a>';
+	  $revisions .= "  <a href=\"%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=".($i-1).($query->param('skin')?'&amp;skin='.$query->param('skin'):'').'&amp;render='.$renderStyle.'">&lt;</a>';
 	}
 	$i--; 
     }
