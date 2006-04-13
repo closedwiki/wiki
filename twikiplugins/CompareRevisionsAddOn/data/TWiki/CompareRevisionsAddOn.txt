@@ -158,11 +158,14 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
    * Test if the installation was successful:%BR%
      Call ==%<nop>SCRIPTURL%/compare/Web/Topic== with
-     some existing topic.
+     some existing topic. (Try for instance Sandbox.CompareRevisionsAddOnDemoTopic and 
+     compare your output with above screenshots).
 
    * Enable the helper plugin CompareRevisionsAddonPlugin with the configure script
    * This plugin will support the HistoryPlugin, if it is enabled
    * If you disable this plugin, the skin will behave like standard <nop>PatternSkin again
+   
+   
 
 ---++ Add-On Info
 
