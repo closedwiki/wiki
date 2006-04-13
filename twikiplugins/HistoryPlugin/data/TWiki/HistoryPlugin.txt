@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144607664" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1144943989" format="1.1" version="1.1"}%
 ---+ <nop>%TOPIC%
+
 This plugin shows a complete or partial history of a document. The output can arbitrarily be formatted. An example for a Wikimedia-like history is included.
 
 ---++ Syntax Rules
@@ -38,8 +39,9 @@ r1.1 - 15 Nov 2003 - 01:23 - YetAnotherUser
 </pre>
 
 For a more complex example see the attached =oopshistory.tmpl= which also allows the comparison of two selected revisions. 
+
 Example screenshot from oopshistory.tmpl: <br />
-    <img src="%ATTACHURLPATH%/screenshot.png" alt="Example screenshot from oopshistory.tmpl"  width="407" height="432"  />
+     <img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot.png" width='762' height='553' />
 
 ---++ Plugin Settings
 
@@ -65,15 +67,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==templates/oopshistory.tmpl== | Template for history page |
+     | ==pub/TWiki/HistoryPlugin/screenshot.png== | Example screen shot |
    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the installation was successful:
       * Here should appear the history of this document inline: 
         %HISTORY{"      r1.$rev - $date - $wikiusername%BR%"}%
       * Show the history of Main.TWikiUsers :%BR%
         %SCRIPTURL%/oops%SCRIPTSUFFIX%/Main/TWikiUsers?template=oopshistory
-   * I found it useful to replace the links "Diff" or "Total page history" in the
-     =view...tmpl= templates by %<nop>SCRIPTURL%/oops%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?template=oopshistory
-      * If you install the updated viewtopicactions template from <nop>CompareRevisionsAddon is installed as well, this happens automatically
 
 ---++ Plugin Info
 
@@ -95,5 +95,3 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/JChristophFuchs - 17 Feb 2005
 
-
-%META:FILEATTACHMENT{name="screenshot.png" attr="" comment="Example screenshot from oopshistory.tmpl" date="1108637975" path="screenshot.png" size="7087" user="jcf" version="1.1"}%
