@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144608734" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1144955876" format="1.1" version="1.1"}%
 ---+ Compare Revisions Add-On
 
 This add-on compares the renderd HTML output of two revisions and shows the differences broken down to the word-by-word level if necessary. The output can be formatted by templates and skins.
@@ -19,8 +19,17 @@ that different words are marked instead of whole lines or even paragraphs.
 The differences may be shown in two formats, either side-by-side or as an interwoven output of the old and
 new revision (like it is done in  Word or !StarOffice/!OpenOffice):
 
-   * [[%ATTACHURL%/interweave.png][Screenshot of interwoven output]]
-   * [[%ATTACHURL%/sidebyside.png][Screenshot of side-by-side output]]
+---
+
+   * Screenshot of interwoven output: <br />
+     <img src="%ATTACHURLPATH%/interweave.png" alt="interweave.png" width='565' height='537' />
+
+---
+
+   * Screenshot of side-by-side output: <br />
+     <img src="%ATTACHURLPATH%/sidebyside.png" alt="sidebyside.png" width='546' height='637' />
+
+---
 
 The appearance can be affected by templates and skins. Default templates for the classic and pattern skins are 
 included in the distribution.
@@ -134,32 +143,26 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:*                      | *Description:*   |
      | ==data/TWiki/%TOPIC%.txt==   | Add-on topic     |
-     | ==data/TWiki/%TOPIC%.txt,v== | Add-on topic repository  |
      | ==bin/compare==              | Add-on script  |
      | ==lib/TWiki/UI/Compare.pm==  | Perl package used by the script |
      | ==templates/compare.tmpl==   | Template for side-by-side output |
      | ==templates/compare.pattern.tmpl== | Same for pattern skin |
      | ==templates/interweave.tmpl==   | Template for interwoven output |
      | ==templates/interweave.pattern.tmpl== | Same for pattern skin |
-     | _The following files are only in the distribution for the Dakar (4.0.x) release_ ||
-     | ==lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm== | Helper plugin (Dakar only) |
-     | ==data/TWiki/CompareRevisionsAddonPlugin.txt== | Plugin topic (Dakar only) |
-     | ==data/TWiki/CompareRevisionsAddonPlugin.txt,v== | Plugin topic repository (Dakar only) |
-     | ==templates/view_cra.tmpl== | Replacement for view.tmpl (Dakar only) |
-     | ==templates/viewtopicactions_cra.pattern.tmpl== | Replacement for viewtopicactions.pattern.tmpl (Dakar only) |
+     | ==lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm== | Helper plugin |
+     | ==data/TWiki/CompareRevisionsAddonPlugin.txt== | Plugin topic |
+     | ==pub/TWiki/CompareRevisionsAddOn/interweaved.png== | Interwoven screenshot |
+     | ==pub/TWiki/CompareRevisionsAddOn/sidebyside.png== | Side-by-side screenshot |
+     | ==data/Sandbox/CompareRevisionsAddOnDemoTopic.txt== | Demonstration topic |
+     | ==data/Sandbox/CompareRevisionsAddOnDemoTopic.txt,v== | Demonstration topic history |
+
    * Test if the installation was successful:%BR%
      Call ==%<nop>SCRIPTURL%/compare/Web/Topic== with
      some existing topic.
-   * Add links to the _compare_ script in your templates for viewing a topic 
-     (or replace the links to _rdiff_ with links to _compare_)
-     (but see below for Dakar release) 
-
-The following instructions apply only for the Dakar (4.0.x) release of TWiki:
 
    * Enable the helper plugin CompareRevisionsAddonPlugin with the configure script
-   *  If you want to replace the links to _rdiff_  by links to _compare_, replace the viewtopicactions.tmpl by the provided viewtopicactions_cra.tmpl, and view.pattern.tmpl by view_cra.pattern.tmpl. (These templates will also support the HistoryPlugin, if it is enabled)
-      * If you disable this plugin, the skin will behave like standard <nop>PatternSkin
-
+   * This plugin will support the HistoryPlugin, if it is enabled
+   * If you disable this plugin, the skin will behave like standard <nop>PatternSkin again
 
 ---++ Add-On Info
 

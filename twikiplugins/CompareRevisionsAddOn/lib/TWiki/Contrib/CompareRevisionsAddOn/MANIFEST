@@ -1,11 +1,15 @@
 bin/compare 0550
+data/Sandbox/CompareRevisionsAddOnDemoTopic.txt 0660
+data/Sandbox/CompareRevisionsAddOnDemoTopic.txt,v  0660
 data/TWiki/CompareRevisionsAddOn.txt 0660
 data/TWiki/CompareRevisionsAddonPlugin.txt 0660
 lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm 0440
 lib/TWiki/UI/Compare.pm 0440
-templates/compare.tmpl 0440
+pub/TWiki/CompareRevisionsAddOn/interweave.png 0660
+pub/TWiki/CompareRevisionsAddOn/sidebyside.png 0660
 templates/compare.pattern.tmpl 0440
-templates/interweave.tmpl 0440
+templates/compare.tmpl 0440
 templates/interweave.pattern.tmpl 0440
+templates/interweave.tmpl 0440
 templates/view_cra.tmpl 0440
 templates/viewtopicactionbuttons_cra.pattern.tmpl 0440
