@@ -1,0 +1,14 @@
+---++ <nop>%WEB% Web Preferences
+
+   * Set BROADCASTMESSAGE =
+   * Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
+   * Set WEBBGCOLOR = #D2D2FF
+   * Set WEBLOGONAME = logo.png
+   * Set SITEMAPLIST = on
+   * Set SITEMAPWHAT = Form based Issue tracking system
+   * Set SITEMAPUSETO = track bugs
+   * Set WEBFORMS = ItemTemplate
+   * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+
+%META:FILEATTACHMENT{name="logo.png" attachment="logo.png" attr="" comment="" date="1127687271" path="logo.png" size="2572" stream="logo.png" user="TWikiContributor" version="1"}%
+%META:FILEATTACHMENT{name="favicon.ico" attr="" autoattached="1" comment="" date="1127140245" path="favicon.ico" size="1150" user="TWikiContributor" version=""}%

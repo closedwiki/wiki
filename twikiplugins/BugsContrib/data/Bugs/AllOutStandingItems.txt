@@ -1,0 +1,22 @@
+---+++ Active Bugs
+%INCLUDE{
+        "Tabulator"
+        CLASS=".*?"
+        DETAIL=".*?"
+        LIMIT=""
+        PRIORITY="Requirement|Urgent|Normal|Low"
+        REPORTEDBY=".*?"
+        STATUS="New|Actioning|Waiting for Feedback"
+        SUMMARY=".*?"
+}%
+---+++ Active Enhancements
+%INCLUDE{
+        "Tabulator"
+        CLASS=".*?"
+        DETAIL=".*?"
+        LIMIT=""
+        PRIORITY="Enhancement"
+        REPORTEDBY=".*?"
+        STATUS="New|Actioning|Waiting for Feedback"
+        SUMMARY=".*?"
+}%

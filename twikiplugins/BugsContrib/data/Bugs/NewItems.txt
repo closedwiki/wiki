@@ -1,0 +1,17 @@
+<!--
+   * Set LIMIT = 30
+-->
+---+++ New Items
+
+_The %LIMIT% most recently reported New items._
+
+%INCLUDE{
+        "Tabulator"
+        CLASS=".*?"
+        DETAIL=".*?"
+        LIMIT="%LIMIT%"
+        PRIORITY=".*?"
+        REPORTEDBY=".*?"
+        STATUS="New"
+        SUMMARY=".*?"
+}%

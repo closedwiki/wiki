@@ -1,0 +1,3 @@
+%TABLE{tablewidth="100%" columnwidths="7%,,10%,,15%," valign="top"}%
+%SEARCH{"^Item\d+" web="%INCLUDINGWEB%" excludetopic="ItemTemplate" nosearch="on" scope="topic" regex="on"  reverse="on" limit="99" order="modified"  header="| *Id* | *Summary* | *State/ Priority* | *Changed By* | *Time* |" format="| [[$web.$topic#r$rev][$topic(10)]] | $formfield(Summary) | $formfield(CurrentState) / $formfield(ItemPriority) | [[TWiki:$wikiusername][$wikiname]] | <span style='white-space: nowrap;'>$date</span> |"}%
+[[%SCRIPTURL{"view"}%/%INCLUDINGWEB%/WebRss?skin=rss][%ICON{rss-small}%]]
