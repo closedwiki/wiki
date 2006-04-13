@@ -1,0 +1,82 @@
+<!--
+   This topic is designed to be used with a parameterised INCLUDE.
+   It can also be viewed directly, in which case it will present a form
+   that can be filled in to provide the parameters.
+
+   When used in a parameterised INCLUDE, each parameter (except LIMIT)
+   should be a non-greedy perl regular expression that
+   matches the relevant field. Parameters are optional.
+
+   The legal parameters to the include are:
+   CLASS - matches AppliesTo field
+   SUMMARY - matches Summary field
+   DETAIL - matches Details field
+   STATUS - matches Status field
+   PRIORITY - matches Priority field
+   REPORTEDBY - matches ReportedBy field
+   LIMIT - max number of results to return (integer)
+
+Defaults
+   * Set STATUS = .*?
+   * Set SUMMARY = .*?
+   * Set DETAIL = .*?
+   * Set PRIORITY = .*?
+   * Set REPORTEDBY = .*?
+   * Set LIMIT =
+   * Set CLASS = .*?
+-->
+<form name="listItems" action="%SCRIPTURL%/view/%INCLUDINGWEB%/%TOPIC%" method="get">
+<table>
+
+<tr>
+<td> Class: </td><td><input type="text" name="class" value="%URLPARAM{"class" default="%CLASS%"}%"size="40" /></td>
+</tr>
+
+<tr>
+<td>Summary: </td><td><input type="text" name="summary" value="%URLPARAM{"summary" default="%SUMMARY%"}%" size="40" /></td>
+</tr>
+
+<tr>
+<td>Detail: </td><td><input type="text" name="detail" value="%URLPARAM{"detail" default="%DETAIL%"}%" size="40" /></td>
+</tr>
+
+<tr>
+<td>Priority: </td><td><input type="text" name="priority" value="%URLPARAM{"priority" default="%PRIORITY%"}%" size="40" /></td>
+</tr>
+
+<tr>
+<td> %INCLUDINGWEB%.CurrentState: </td><td><input type="text" name="status" value="%URLPARAM{"status" default="%STATUS%"}%"size="40" /></td>
+</tr>
+
+<tr>
+<td> %INCLUDINGWEB%.ReportedBy: </td><td><input type="text" name="reportedby" value="%URLPARAM{"reportedby" default="%REPORTEDBY%"}%"size="40" /></td>
+</tr>
+
+<tr><td> </td><td> %PUBURL%/TWiki/TWikiDocGraphics/help.gif to query for multiple values, separate your choices using =|= (the pipe symbol) without any spaces</td></tr>
+</table>
+<input type="submit" value="View Items" />
+</form>
+
+----
+%STARTINCLUDE%
+
+<font size="-1">
+%TABLE{sort="on" headerrows="1" footerrows="1" initsort="2" initdirection="down"}%
+%SEARCH{
+    "META:FIELD{name=.CurrentState.*?value=.(%URLPARAM{"status" default="%STATUS%"}%);META:FIELD{name=.Summary.*?value=.(%URLPARAM{"summary" default="%SUMMARY%"}%);META:FIELD{name=.Detail.*?value=.(%URLPARAM{"detail" default="%DETAIL%"}%);META:FIELD{name=.AppliesTo.*?value=.(%URLPARAM{"class" default="%CLASS%"}%);META:FIELD{name=.ItemPriority.*?value=.(%URLPARAM{"priority" default="%PRIORITY%"}%);META:FIELD{name=.ReportedBy.*?value=.(%URLPARAM{"reportedby" default="%REPORTEDBY%"}%)" web="%INCLUDINGWEB%"
+    excludetopic="ItemTemplate"
+    topic="Item*"
+    type="regex"
+    nosearch="on"
+    order="modified"
+    reverse="on"
+    limit="%URLPARAM{"limit" default="%LIMIT%"}%"
+    nototal="on"
+    header="| *Id* | *Summary* | *Applies To* | *Priority* | *Current State* | *Creation Date* | *Last Edit* |"
+    format="| [[$web.$topic][$topic]]  | $formfield(Summary) | $formfield(AppliesTo) $formfield(ExtensionName) | $formfield(ItemPriority) | $formfield(CurrentState) | $createdate | $date |"
+}%
+| *Id* | *Summary* | %CALC{"$COUNTITEMS( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% | %CALC{"$COUNTITEMS( R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}% | %CALC{"$COUNTITEMS(R2:C$COLUMN()..R$ROW(-1):C$COLUMN() )"}%  | Creation Date | Last Edit |
+</font>
+
+
+%STOPINCLUDE%

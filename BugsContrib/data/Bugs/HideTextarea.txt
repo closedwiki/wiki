@@ -1,0 +1,4 @@
+<!-- hidden text
+   * Set USERSTYLEURL = %PUBURL%/%INCLUDINGWEB%/HideTextarea/hidetextarea.css
+-->
+%META:FILEATTACHMENT{name="hidetextarea.css" attachment="hidetextarea.css" attr="" comment="" date="1141437652" path="hidetextarea.css" size="122" stream="hidetextarea.css" user="TWikiContributor" version="6"}%

@@ -1,0 +1,25 @@
+---+++ Recently Closed
+%INCLUDE{
+        "Tabulator" 
+        STATUS="Closed"
+        SUMMARY=".*?"
+        DETAIL=".*?"
+        PRIORITY=".*?"
+        REPORTEDBY=".*?"
+        LIMIT="20"
+        CLASS=".*?"
+}%
+
+---+++ Recently Discarded
+%INCLUDE{
+        "Tabulator" 
+        STATUS="Discarded"
+        SUMMARY=".*?"
+        DETAIL=".*?"
+        PRIORITY=".*?"
+        REPORTEDBY=".*?"
+        LIMIT="20"
+        CLASS=".*?"
+}%
+
+

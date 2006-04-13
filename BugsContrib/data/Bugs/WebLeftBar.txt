@@ -1,0 +1,20 @@
+%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
+   * *[[%SCRIPTURL{"view"}%/Bugs/AllOutStandingItems?sortcol=3;table=1;up=1#sorted_table][%X% Items by Priority]]*
+
+   * *[[WebHome][%ICON{"home"}% %WEB% Web]]*
+   * [[%SCRIPTURL{edit}%/%WEB%/ItemXXXXXXXXXX?templatetopic=%INCLUDINGWEB%.HideTextarea&formtemplate=%INCLUDINGWEB%.ItemTemplate&_T=%GMTIME%;action=form][ %ICON{"newtopic"}% Create New Item]]
+   * [[AllOutStandingItems][ %ICON{"wip"}% Open Items]]
+   * [[%SCRIPTURL{view}%/%WEB%/Lister?reporter=%WIKIUSERNAME%][ %ICON{"arrowbright"}% My Items]]
+   * [[AppliesTo][%ICON{"gear"}% Applies To]]
+   * [[RecentlyClosed][ %ICON{"choice-yes"}% Recently Closed]]
+   * [[WebChanges][ %ICON{"changes"}% Changes]] <!-- [[%SCRIPTURL%/view/%INCLUDINGWEB%/WebRss?skin=rss][ %ICON{"rss-small"}% ]] -->
+   * [[WebSearch][ %ICON{"searchtopic"}% Search]]
+
+   * *List by Item Status*
+   * [[NewItems][%ICON{"viewtopic"}% New]]
+   * [[WaitingItems][%ICON{"rfc"}% Waiting]]
+   * [[%SCRIPTURL{view}%/%WEB%/Lister?status=Actioning][%ICON{"wip"}% Actioning]]
+   * [[%SCRIPTURL{view}%/%WEB%/Lister?status=Closed][%ICON{"choice-yes"}% Closed]]
+   * [[%SCRIPTURL{view}%/%WEB%/Lister?status=Discarded][%ICON{"choice-cancel"}% Discarded]]
+----
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%

@@ -1,0 +1,6 @@
+| *Name* | *Type* | *ToolTip* |
+| New | option | The issue has just been found, and hasn't been analysed yet, or there is new data about an existing issue |
+| Actioning | option | The issue has been analysed, and either someone is working on a fix, or it is waiting for someone to fix it |
+| Waiting for Feedback | option | The report was insufficient to analyse the issue, and more feedback is needed from the reporter. Once the reporter has added feedback they should flip the state back to "New" |
+| Closed | option | The issue has been fixed to the satisfaction of the fixer. If the reporter isn't satisfied with the fix, they should flip the state back to "New" and explain why |
+| Discarded | option | The issue was already fixed, or it's a duplicate, or an RTFM. |
