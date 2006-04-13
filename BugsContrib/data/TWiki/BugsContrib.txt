@@ -28,11 +28,11 @@ Then run =perl= ==%TOPIC%_installer.pl== =install= to automatically check and in
 
 See the Bugs.WebHome topic in the new web for help in configuring the application to your needs.
 
-|  Authors: | http://wikiring.com & others |
+|  Authors: | http://wikiring.com partners & others |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  License: | GPL |
 |  Change History: | |
-|   | Crawford Currie - packaged for release |
+|  9804 | Crawford Currie - packaged for release |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
