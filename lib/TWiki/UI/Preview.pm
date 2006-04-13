@@ -54,7 +54,7 @@ sub preview {
                                         topic => $session->{topicName},
                                         params => [ $web, $form ] );
         }
-        $formFields = $formDef->renderHidden( $meta );
+        $formFields = $formDef->renderHidden( $meta, 0 );
     }
 
     $session->{plugins}->afterEditHandler( $text, $topic, $web );

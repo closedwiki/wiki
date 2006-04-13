@@ -303,9 +303,6 @@ sub edit {
     my $formText = '';
     $form = $formMeta->{name} if( $formMeta );
     if( $form && !$saveCmd ) {
-        my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
-        # if there's a form template, then pull whatever values exist in
-        # the query into the meta, overriding the values in the topic.
         my $formDef = new TWiki::Form( $session, $templateWeb, $form );
         unless( $formDef ) {
             throw TWiki::OopsException( 'attention',
@@ -314,14 +311,15 @@ sub edit {
                                         topic => $session->{topicName},
                                         params => [ $templateWeb, $form ] );
         }
-        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 1 );
-        # and render them for editing
-        if ( $editaction eq "text" ) {
-            $formText = $formDef->renderHidden( $meta,
-                                                $getValuesFromFormTopic );
+        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta );
+        # And render them for editing
+        # SMELL: these are both side-effecting functions, that will set
+        # default values for fields if they are not set in the meta.
+        # This behaviour really ought to be pulled out to a common place.
+        if ( $editaction eq 'text' ) {
+            $formText = $formDef->renderHidden( $meta );
         } else {
-            $formText = $formDef->renderForEdit( $webName, $topic, $meta,
-                                                 $getValuesFromFormTopic );
+            $formText = $formDef->renderForEdit( $webName, $topic, $meta );
         }
     } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
         $formText = $session->{templates}->readTemplate( "addform", $skin );

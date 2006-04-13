@@ -318,11 +318,10 @@ sub _link {
 
 =pod
 
----++ ObjectMethod renderForEdit( $web, $topic, $meta, $useDefaults ) -> $html
+---++ ObjectMethod renderForEdit( $web, $topic, $meta ) -> $html
    * =$web= the web of the topic being rendered
    * =$topic= the topic being rendered
    * =$meta= the meta data for the form
-   * =$useDefaults= if true, will use default values from the form definition if no other value is given
 
 Render the form fields for entry during an edit session, using data values
 from $meta
@@ -330,7 +329,7 @@ from $meta
 =cut
 
 sub renderForEdit {
-    my( $this, $web, $topic, $meta, $useDefaults ) = @_;
+    my( $this, $web, $topic, $meta ) = @_;
     ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my $session = $this->{session};
@@ -368,7 +367,7 @@ sub renderForEdit {
                 my $field = $meta->get( 'FIELD', $name );
                 $value = $field->{value};
             }
-            if( $useDefaults && !defined( $value ) &&
+            if( !defined( $value ) &&
                   $fieldDef->{type} !~ /^checkbox/ ) {
 
                 # Try and get a sensible default value from the form
@@ -558,16 +557,14 @@ sub renderFieldForEdit {
 
 =pod
 
----++ ObjectMethod renderHidden( $meta, $useDefaults ) -> $html
-   * =$useDefaults= if true, will use default values from the form definition if no other value is given
-
+---++ ObjectMethod renderHidden( $meta ) -> $html
 Render form fields found in the meta as hidden inputs, so they pass
 through edits untouched.
 
 =cut
 
 sub renderHidden {
-    my( $this, $meta, $useDefaults ) = @_;
+    my( $this, $meta ) = @_;
     ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my $session = $this->{session};
@@ -583,7 +580,7 @@ sub renderHidden {
             $value = $field->{value};
         }
 
-        if( $useDefaults && !defined( $value ) &&
+        if( !defined( $value ) &&
               $fieldDef->{type} !~ /^checkbox|\+multi/ ) {
 
             $value = $fieldDef->{value};
@@ -613,11 +610,10 @@ sub cgiName {
 
 =pod
 
----++ ObjectMethod getFieldValuesFromQuery($query, $metaObject, $initialiseMissing) -> ( $seen, \@missing )
+---++ ObjectMethod getFieldValuesFromQuery($query, $metaObject) -> ( $seen, \@missing )
 Extract new values for form fields from a query.
    * =$query= - the query
    * =$metaObject= - the meta object that is storing the form values
-   * =$initialiseMissing= - if true, will cause fields that are in the form but have no value in the query or in the meta to be initialised to ''.
 
 For each field, if there is a value in the query, use it.
 Otherwise if there is already entry for the field in the meta, keep it.
@@ -627,7 +623,7 @@ Returns the number of fields which had values provided by the query, and a refer
 =cut
 
 sub getFieldValuesFromQuery {
-    my( $this, $query, $meta, $initialiseMissing ) = @_;
+    my( $this, $query, $meta ) = @_;
     ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my @missing;
@@ -663,10 +659,6 @@ sub getFieldValuesFromQuery {
                 $preDef = $item;
                 last;
             }
-        }
-
-        if( $initialiseMissing && !defined( $value ) && !defined( $preDef )) {
-            $value = '';
         }
 
         if( $fieldDef->{attributes} =~ /M/ && !$value &&

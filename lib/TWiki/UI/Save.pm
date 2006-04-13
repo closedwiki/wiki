@@ -212,7 +212,7 @@ sub buildNewTopic {
     if( $formDef ) {
         # override with values from the query
         my( $seen, $missing ) =
-          $formDef->getFieldValuesFromQuery( $query, $newMeta, 0 );
+          $formDef->getFieldValuesFromQuery( $query, $newMeta );
         if( $seen && @$missing ) {
             # chuck up if there is at least one field value defined in the
             # query and a mandatory field was not defined in the
