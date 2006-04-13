@@ -899,8 +899,9 @@ sub saveAttachment {
                 open( F, $tmpFile );
                 binmode( F );
                 # transfer 512KB blocks
-                while( my $r = sysread( $opts->{stream}, $text, 0x80000 )) {
-                    syswrite( F, $text, $r );
+                my $transfer;
+                while( my $r = sysread( $opts->{stream}, $transfer, 0x80000 )) {
+                    syswrite( F, $transfer, $r );
                 }
                 close( F );
                 $attrs->{file} = $tmpFile;
@@ -924,8 +925,9 @@ sub saveAttachment {
                 # very big data files. It really should use the stream.
                 open( F, $tmpFile );
                 binmode(F);
-                while( read($opts->{stream}, $text, 1024 )) {
-                    print F $text;
+                my $transfer;
+                while( read($opts->{stream}, $transfer, 1024 )) {
+                    print F $transfer;
                 }
                 close(F);
                 $attrs->{file} = $tmpFile;
