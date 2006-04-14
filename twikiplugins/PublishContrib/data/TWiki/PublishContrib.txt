@@ -27,10 +27,12 @@ PublishContrib provides support for the generation of stand-alone HTML from a TW
 	* All standard TWiki tags are interpreted
 	* Plugins are called
 	* UnresolvedLinks to non-existant topics are silently ignored
-	* Topic links internal to the web are translated to relative links
-	* External links (outside this web) are left untouched
-	* Any links to the 'pub' areas of topics in the web are automatically resolved and the referenced files copied into the 'images' subdirectory.
+	* Topic links internal to the TWiki are translated to relative links
 	* Powerful support for choosing what content gets published
+	* Any links to the 'pub' areas of topics in the web are automatically resolved and the referenced files copied.
+	* Any links to images outside the TWiki are resolved, and the image is stored in the output (requires LWP).
+	* Output in HTML or PDF. HTML can be compressed.
+	* Full support for hierarchical webs
 
 ---++ Usage
 
@@ -106,7 +108,6 @@ You can also create a permanent topic in a web to help with the publishing proce
 </td>
 </table>
 
-<input type="hidden" name="goAhead" value="yes" />
 <input type="submit" value="Publish" />
 </form>
 </div>
@@ -178,6 +179,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|       | Support for hierarchical webs |
 |  9773 | Crawford Currie - added tgz and pdf support |
 |  9725 | Michael Daum - fixed rewriting urls; \
                  fixed nested resources issue; \

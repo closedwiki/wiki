@@ -65,7 +65,6 @@ sub publish {
     $TWiki::Plugins::SESSION = $session;
 
     my ($inclusions, $exclusions, $topicsearch, $skin, $genopt, $format);
-    my $notify="off";
 
     # Load defaults from a config topic if one was specified
     my $configtopic = $query->param('configtopic');
@@ -103,9 +102,6 @@ sub publish {
             }
         }
     } else {
-        if ( defined($query->param('notify')) ) {
-            $notify = $query->param('notify');
-        }
         if ( defined($query->param('inclusions')) ) {
             $inclusions = $query->param('inclusions');
         } else {
@@ -143,58 +139,53 @@ sub publish {
     my $tmp = TWiki::Func::formatTime(time());
     $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
 
-    # Has user selected topic(s) yet?
-
-    my $goAhead = $query->param('goAhead');
-    if (!$goAhead) {
-        # redirect to the "publish" topic
-        my $url = TWiki::Func::getScriptUrl('TWiki', 'PublishContrib', "view");
-        $url .= '?publishweb='.$web.'&publishtopic='.$session->{topicName};
-        TWiki::Func::redirectCgiQuery($query, $url);
-    } else {
-        TWiki::Func::writeHeader($query);
-        my $tmpl = TWiki::Func::readTemplate("view");
-        $tmpl =~ s/%META{.*?}%//g;
-        my($header, $footer) = split(/%TEXT%/, $tmpl);
-        my $topic = $query->param('publishtopic') || $session->{topicName};
-        $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
-        $header = TWiki::Func::renderText( $header, $web );
-	$header =~ s/<nop>//go;
-        print $header;
-        print "<b>TWiki::cfg{PublishContrib}{Dir}: </b>$TWiki::cfg{PublishContrib}{Dir}<br />\n";
-        print "<b>TWiki::cfg{PublishContrib}{URL}_PATH: </b>$TWiki::cfg{PublishContrib}{URL}<br />\n";
-        print "<b>Web: $web</b><br />\n";
-        print "<b>Config: $configtopic<br />\n" if $configtopic;
-        print "<b>Skin: </b>$skin<br />\n";
-        print "<b>Inclusions: </b>$inclusions<br />\n";
-        print "<b>Exclusions: </b>$exclusions<br />\n";
-        print "<b>Content Filter: </b>$topicsearch<br />\n";
-        print "<b>Generator options: </b>$genopt<p />\n";
-        my $archive;
-
-        my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
-        eval 'use '.$generator.
-          ';$archive = new '.$generator.
-            '("'.$TWiki::cfg{PublishContrib}{Dir}.'","'.$web.'","'.
-              $genopt.'")';
-        die $@ if $@;
-
-        publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
-                   $exclusions, $skin, $topicsearch, $archive);
-
-        my $text = 'Published to <a href="'.
-          $TWiki::cfg{PublishContrib}{URL}.'/'.$archive->{id}.'">'.
-          $archive->{id}.'</a>';
-
-        $archive->close();
-
-        $text = TWiki::Func::expandCommonVariables( $text, $topic, $web );
-        $text = TWiki::Func::renderText( $text, $web );
-        print $text;
-        $footer = TWiki::Func::expandCommonVariables( $footer, $topic, $web );
-        $footer = TWiki::Func::renderText( $footer, $web );
-        print $footer;
+    TWiki::Func::writeHeader($query);
+    my $tmpl = TWiki::Func::readTemplate("view");
+    $tmpl =~ s/%META{.*?}%//g;
+    for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
+        $tmpl =~ s/%$tag%//g;
     }
+    my($header, $footer) = split(/%TEXT%/, $tmpl);
+    my $topic = $query->param('publishtopic') || $session->{topicName};
+    $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
+    $header = TWiki::Func::renderText( $header, $web );
+    $header =~ s/<nop>//go;
+    print $header;
+    my $url = $query->url().$query->path_info().'?'.$query->query_string();
+    print "<b>URL: </b> $url<br />\n";
+    print "<b>{PublishContrib}{Dir}: </b>$TWiki::cfg{PublishContrib}{Dir}<br />\n";
+    print "<b>{PublishContrib}{URL}: </b>$TWiki::cfg{PublishContrib}{URL}<br />\n";
+    print "<b>Web: $web</b><br />\n";
+    print "<b>Config: $configtopic<br />\n" if $configtopic;
+    print "<b>Skin: </b>$skin<br />\n";
+    print "<b>Inclusions: </b>$inclusions<br />\n";
+    print "<b>Exclusions: </b>$exclusions<br />\n";
+    print "<b>Content Filter: </b>$topicsearch<br />\n";
+    print "<b>Generator options: </b>$genopt<p />\n";
+    my $archive;
+
+    my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
+    eval 'use '.$generator.
+      ';$archive = new '.$generator.
+        '("'.$TWiki::cfg{PublishContrib}{Dir}.'","'.$web.'","'.
+          $genopt.'")';
+    die $@ if $@;
+
+    publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
+               $exclusions, $skin, $topicsearch, $archive);
+
+    my $text = 'Published to <a href="'.
+      $TWiki::cfg{PublishContrib}{URL}.'/'.$archive->{id}.'">'.
+        $archive->{id}.'</a>';
+
+    $archive->close();
+
+    $text = TWiki::Func::expandCommonVariables( $text, $topic, $web );
+    $text = TWiki::Func::renderText( $text, $web );
+    print $text;
+    $footer = TWiki::Func::expandCommonVariables( $footer, $topic, $web );
+    $footer = TWiki::Func::renderText( $footer, $web );
+    print $footer;
 }
 
 #  Publish the contents of one web.
@@ -284,36 +275,35 @@ sub publishTopic {
     $tmpl =~ s/%MAXREV%/$maxrev/g;
     $tmpl =~ s/%CURRREV%/$maxrev/g;
     $tmpl =~ s/%REVTITLE%//g;
-    $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
+    $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;
 
     # Strip unsatisfied WikiWords.
     $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/_handleNewLink($1)/ge;
 
     # Copy files from pub dir to rsrc dir in static dir.
     my $pub = TWiki::Func::getPubUrlPath();
-    $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$ENV{HTTP_HOST})?$pub/(.*?)\1!$1._copyResource($web, $3, $copied, $archive).$1!ge;
+    my $hs = $ENV{HTTP_HOST} || "localhost";
+    $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$hs)?$pub/(.*?)\1!$1._copyResource($web, $3, $copied, $archive).$1!ge;
+
     my $ilt;
 
-    # Modify relative links
+    # Modify topic links relative to server base
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(0, 'view', 'NOISE', 'NOISE');
-    $ilt =~ s!/NOISE/NOISE.*!!;
-    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
-    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
+    $ilt =~ s!/NOISE/NOISE.*$!!;
+    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1"._topicURL($2,$web).$1!ge;
 
-    # Modify absolute internal view links.
+    # Modify absolute topic links.
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(1, 'view', 'NOISE', 'NOISE');
-    $ilt =~ s!/NOISE/NOISE.*!!;
-    $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!g;
-    $tmpl =~ s!(href=["'])$ilt/(\w+/\w+)!$1../$2.html!g;
+    $ilt =~ s!/NOISE/NOISE.*$!!;
+    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1"._topicURL($2,$web).$1!ge;
 
+    my $extras = 0;
 
-    # Remove base tag  - DZA
+    # Handle image tags using absolute URLs not otherwise satisfied
+    $tmpl =~ s!(<img\s+.*?\bsrc=)(["'])(.*?)\2(.*?>)!$1.$2._handleURL($3,$archive,\$extras).$2.$4!ge;
+
+    # Remove base tag
     $tmpl =~ s/<base[^>]+\/>//;
-
-    # Handle SlideShow plugin urls
-    $tmpl =~ s/\bhref=(.*?)\?slideshow=on\&amp;skin=\w+/href=$1/g;
-    $tmpl =~ s/\bhref="([A-Za-z0-9_]+)((\#[^"]+)?)"/href="$1.html$2"/g;
-
     $tmpl =~ s/<nop>//g;
 
     # Write the resulting HTML.
@@ -354,7 +344,8 @@ sub _copyResource {
 	# check css for additional resources, ie, url()
 	if ($rsrcName =~ /\.css$/) {
 	  my @moreResources = ();
-	  open(F, "$TWikiPubDir/$rsrcName") || die "Cannot read $TWikiPubDir/$rsrcName: $!";
+	  open(F, "$TWikiPubDir/$rsrcName") ||
+        die "Cannot read $TWikiPubDir/$rsrcName: $!";
 	  while (my $line = <F>) {
 	    if ($line =~ /url\(["']?(.*?)["']?\)/) {
 	      push @moreResources, $1;
@@ -368,6 +359,51 @@ sub _copyResource {
 	}
     }
     return $copied->{$rsrcName};
+}
+
+sub _topicURL {
+    my( $path, $web ) = @_;
+    my $extra = '';
+    if( $path =~ /(\?.*)$/ ) {
+        $extra = $1;
+    }
+    # Normalise
+    $web = join('/', split( /[\/\.]+/, $web ));
+    $path = join('/', split( /[\/\.]+/, $path ));
+
+    # make a path relative to the web
+    $path = File::Spec->abs2rel( $path, $web );
+    $path .= '.html';
+
+    return $path.$extra;
+}
+
+sub _handleURL {
+    my( $src, $archive, $extras ) = @_;
+
+    return $src unless $src =~ /^[a-z]+:/;
+
+    require LWP;
+    if ( $@ ) {
+        print "<b>LWP not installed - cannot fetch $src</b><br />";
+        return $src;
+    }
+    my $userAgent = LWP::UserAgent->new();
+    $userAgent->agent( 'TWikiPublishContrib' );
+
+    my $response = $userAgent->get( $src );
+    unless( $response->is_success ) {
+        print "<b>failed to GET $src</b><br />";
+        return $src;
+    }
+
+    # Note: no extension; rely on file format.
+    # Images are pretty good that way.
+    my $file = '___extra'.$$extras++;
+    $archive->addDirectory( "rsrc" );
+    $archive->addString( $response->content(), "rsrc/$file" );
+
+    return 'rsrc/'.$file;
 }
 
 # Returns a pattern that will match the HTML used by TWiki to represent an
