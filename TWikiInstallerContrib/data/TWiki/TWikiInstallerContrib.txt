@@ -232,4 +232,47 @@ EXTENSIONS=' \
 
 -- TWiki:Main.WillNorris - 29 Dec 2005
 
+---+++ Offline installation
 
+not connected to the internet during installation; pre-download the various bits
+
+   * download a TWikiFor .zip file; place it in the same directory as the script file; name the downloaded file install.zip
+
+
+[02:17] *CDot* argh; no abstract. I'd give up immediately if I wasn't determined
+[02:17] * wbniv fires up emacs...
+[02:18] *CDot* undefined terms; TWikiKernel, TWikiFor
+[02:18] *CDot* shebang line
+[02:19] *CDot* "As the =twiki-install= program is running the webserver environment" - huh? It replaces Apache?
+[02:19] *wbniv* oops
+[02:20] *wbniv* missing under
+[02:20] *wbniv* ta
+[02:20] *CDot* Recommendation; keep the technical documentation light in the topic; it can be heavy in the code
+[02:20] *wbniv* i want to split it into 2 parts
+[02:20] *wbniv* i'm going to split it into 2 parts
+[02:21] *wbniv* the atual "download this script and install twiki" and the "build a (twiki distro and) installer"
+[02:21] *CDot* reccomned this:
+[02:21] *CDot* 1. Abstract (urgent)
+[02:21] *CDot* 2. How to use this contrib (headining the following sections)
+[02:21] *CDot* N. A series of sections detailing each use-mode
+[02:22] *CDot* N+1. Installing the Contrib
+[02:22] *CDot* N+2. Contrib Info (as per the standard)
+[02:23] *CDot* 2. could contain (for e.g)
+[02:23] *CDot* 2.1 Using the contrib for installing TWiki
+[02:23] *CDot* 2.2 Using the contrib for installing Plugins
+[02:23] *CDot* 2.3 Using the contrib for detecting available updates to Plugins
+[02:24] *CDot* 2.4 Using the contrib for managing your CPAN extensions
+[02:24] *CDot* etc etc
+[02:24] *CDot* get my drift?
+[02:32] *wbniv* ok, yeah, thanks
+[02:32] *wbniv* tho some of those sections will be pretty light
+[02:32] *wbniv* (tho i guess that's not necessarily bad)
+[02:32] *wbniv* for example,
+[02:32] *CDot* only examples; you organise it how you need to
+[02:32] *wbniv* for managing your CPAN extensions there's really only 1 "solution" atm
+[02:32] *wbniv* which is
+[02:32] *CDot* you have to look at is as an admin who wants to use it for a job
+[02:32] *wbniv* right, use case documentation
+[02:32] *CDot* and give them the essential instructions for that job
+[02:33] *CDot* and *no more*
+[02:33] *CDot* if they want more, they can look at the code
