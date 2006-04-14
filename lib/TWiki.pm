@@ -2638,20 +2638,12 @@ sub _INCLUDE {
 
     my $text = '';
     my $meta = '';
-    # test for different topic name and file name patterns
-    # TopicName
-    # Web.TopicName
-    # Web/TopicName
-    # TopicName.txt
-    # Web.TopicName.txt
-    # Web/TopicName.txt
-    my $includedWeb = $includingWeb;
+    my $includedWeb;
     my $includedTopic = $path;
-    $includedTopic =~ s/\.txt$//; # strip .txt extension
-    if( $includedTopic =~ /^($regex{webNameRegex})[\.\/]([$regex{mixedAlphaNum}_]+)$/o ) {
-        $includedWeb = $1;
-        $includedTopic = $2;
-    }
+    $includedTopic =~ s/\.txt$//; # strip optional (undocumented) .txt
+
+    ($includedWeb, $includedTopic) =
+      $this->normalizeWebTopicName($includingWeb, $includedTopic);
 
     # See Codev.FailedIncludeWarning for the history.
     unless( $this->{store}->topicExists($includedWeb, $includedTopic)) {
