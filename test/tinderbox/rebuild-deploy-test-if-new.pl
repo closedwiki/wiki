@@ -10,23 +10,18 @@ use strict;
 #   * run the (golden html) tests
 #   * post the test results to tinderbox.wbniv.wikihosting.com
 # 
-# Copyright 2005 Will Norris.  All Rights Reserved.
+# Copyright 2005,2006 Will Norris.  All Rights Reserved.
 # License: GPL
 ################################################################################
 
-my ( $TWIKIDEV, $BRANCH );
+my $TWIKIDEV;
 	 
 BEGIN {
-    $TWIKIDEV = $ENV{TWIKIDEV};
-    die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
-
-    $BRANCH = $ENV{BRANCH};
-    die "must set environment varibale BRANCH" unless $BRANCH;
-
-    my $cpan = "$TWIKIDEV/CPAN/";
-    die "no cpan directory [$cpan]" unless -d $cpan;
-    my @localLibs = ( "$cpan/lib", "$cpan/lib/arch" );
-    unshift @INC, @localLibs;
+    if ( $TWIKIDEV = $ENV{TWIKIDEV} )
+    {
+	my $cpan = "$TWIKIDEV/CPAN/";
+	unshift @INC, ( "$cpan/lib", "$cpan/lib/arch" ) if -d $cpan;
+    }
 }
 
 use FindBin;
