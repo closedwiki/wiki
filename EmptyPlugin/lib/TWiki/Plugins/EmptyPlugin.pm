@@ -488,13 +488,14 @@ sub DISABLE_afterSaveHandler {
    * =\%attrHash= - reference to hash of attachment attribute values
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
-This handler is called once when an attachment is uploaded.
+This handler is called once when an attachment is uploaded. When this
+handler is called, the attachment has *not* been recorded in the database.
 
-The attributes hash
-will include at least the following attributes:
+The attributes hash will include at least the following attributes:
    * =attachment= => the attachment name
    * =comment= - the comment
-   * =user= - the user's Web.<nop>WikiName
+   * =user= - the user's TWiki user object
+   * =tmpFilename= - name of a temporary file containing the attachment data
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
 
@@ -517,7 +518,7 @@ This handler is called just after the save action. The attributes hash
 will include at least the following attributes:
    * =attachment= => the attachment name
    * =comment= - the comment
-   * =user= - the user's Web.<nop>WikiName
+   * =user= - the user's TWiki user object
 
 __Since:__ TWiki::Plugins::VERSION = '1.023'
 
