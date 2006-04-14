@@ -1,6 +1,6 @@
 data/TWiki/RenderListPlugin.txt NEW
+data/TWiki/RenderListPlugin.txt,v NEW
 lib/TWiki/Plugins/RenderListPlugin.pm NEW
-lib/TWiki/Plugins/RenderListPlugin/Core.pm NEW
 pub/TWiki/RenderListPlugin/doc.gif NEW
 pub/TWiki/RenderListPlugin/dot_ud.gif NEW
 pub/TWiki/RenderListPlugin/dot_udr.gif NEW
