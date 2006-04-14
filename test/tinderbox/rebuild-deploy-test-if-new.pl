@@ -82,9 +82,10 @@ if ( $Config->{force} || $newVersionAvailable )
 	print LOCK "$rev\n";
 	close( LOCK );
 
-	system( './doit.pl' );
+	system( './tinderbox.pl' );
 	throw Error::Simple( 'build error' ) if $?;
 
+	# SMELL
 	my $wikiPage = LWP::Simple::get( 'http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome' );
 	throw Error::Simple( 'installation error' ) unless ( $wikiPage || '' ) =~ /build\s+$rev/i;
 
