@@ -11,15 +11,14 @@ to set up a topic in a web to simplify publishing. To use it, take a copy of the
 		* Set TOPICSEARCH =
 	* Skin for published HTML
 		* Set PUBLISHSKIN = text
-	* If set to on, then everyone in the WebNotify list in the web will be notified that the web has been published.
-		* Set NOTIFY = off
+	* Format to publish in (file, pdf, tgz, zip)
+		* Set FORMAT = file
 	* If set, additional options that will be passed to the output generator
 		*# Set EXTRAS =
 
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%">
-<input type="hidden" name="goAhead" value="yes" />
 <input type="hidden" name="configtopic" value="%TOPIC%" />
 <input type="hidden" name="ping" value="%SERVERTIME%" />
-<input type="submit" value="Publish" />
+<input type="submit" value="Publish using this topic" />
 </form>
 
