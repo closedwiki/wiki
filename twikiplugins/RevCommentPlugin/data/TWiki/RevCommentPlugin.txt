@@ -44,7 +44,7 @@ if the list of comments is not empty.)
      of a web may look like this:
 
    * Example <nop>WebChanges: <br />
-     <img src="%ATTACHURLPATH%/ExampleWebChanges.png" alt="EScreenshot: Example output of !WebChanges"  />
+     <img src="%ATTACHURLPATH%/ExampleWebChanges.png" alt="Screenshot: Example output of !WebChanges"  />
 
 ---
 
@@ -113,6 +113,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.JChristophFuchs |
 |  Plugin Version: | 22 Apr 2005 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Apr 2006: | &lt;noautolink&gt; added to default pre/post rendering output of REVCOMMENT tag |
 |  14 Apr 2006: | Minor update for Dakar 4.0.2 |
 |  22 Apr 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
