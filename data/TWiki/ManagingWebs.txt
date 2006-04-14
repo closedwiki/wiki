@@ -37,12 +37,13 @@ __%X% Note:__ *Keep the number of webs to a minimum!* It is not recommended to c
 
 __Notes:__
    * Attachments will NOT get copied over along with their topics
-   * While creating the new web, TWiki will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
+   * While creating the new web, TWiki will update the following variables in the %WEBPREFSTOPIC%: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
    * TWiki does not edit the [[%TWIKIWEB%.TWikiPreferences]] to update the =WIKIWEBLIST=.  This must be done by hand
 
+#RenameWeb
 ---++ Renaming or Deleting a Web
 
-Rename a web via the Tools section in each web's WebPreferences topic.  You may delete a web by moving it into a Trash web.  
+Rename a web via the Tools section in each web's %WEBPREFSTOPIC% topic.  You may delete a web by moving it into a Trash web.  
 
 ---+++ Permissions
 
@@ -54,9 +55,9 @@ If anyone is editing a topic which requires updating, or which lives in the web 
 
 ---+++ Renaming the webs in the distribution
 
-If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, which by default is =Main= (this is assigned in the site configuration). That means that every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).  This potentially large change can be performed automatically with the renameweb function mentioned above, in the [[%MAINWEB%.WebPreferences]] topic.
+If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in this web. That means that every WikiName signature - =%MAINWEB%.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout). This potentially large change can be performed automatically if you rename the web from the Tools section of %WEBPREFSTOPIC%, as described above.
 
-If you want to rename the TWiki web, remember it is referred to by =%<nop>TWIKIWEB%= which is also defined by a configuration setting.
+%X% If you want to rename the %TWIKIWEB% or %MAINWEB% webs, remember they are referred to in the TWiki configuration. You will need to change the relevant settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
 
 ---++ Hierarchical Webs
 
@@ -77,10 +78,10 @@ The preferences of a subweb are inherited from the parent web and overridden loc
 *Example Preference Inheritance for =Sandbox/TestWeb/SubWeb.SubWebTopic= topic:*
 
    1. =%TWIKIWEB%.TWikiPreferences= site-wide preferences
-   2. =Sandbox.WebPreferences= inherits from and overrides settings in =%TWIKIWEB%.TWikiPreferences=
-   3. =Sandbox/TestWeb.WebPreferences= inherits from and overrides settings in =Sandbox.WebPreferences=
-   4. =Sandbox/TestWeb/SubWeb.WebPreferences= inherits from and overrides settings in =Sandbox/TestWeb.WebPreferences= 
-   5. =Sandbox/TestWeb/SubWeb.SubWebTopic= inherits from and overrides settings in =Sandbox/TestWeb/SubWeb.WebPreferences= 
+   2. =Sandbox.%WEBPREFSTOPIC%= inherits from and overrides settings in =%TWIKIWEB%.TWikiPreferences=
+   3. =Sandbox/TestWeb.%WEBPREFSTOPIC%= inherits from and overrides settings in =Sandbox.%WEBPREFSTOPIC%=
+   4. =Sandbox/TestWeb/SubWeb.%WEBPREFSTOPIC%= inherits from and overrides settings in =Sandbox/TestWeb.%WEBPREFSTOPIC%= 
+   5. =Sandbox/TestWeb/SubWeb.SubWebTopic= inherits from and overrides settings in =Sandbox/TestWeb/SubWeb.%WEBPREFSTOPIC%= 
 
 ---+++ Navigation
 
