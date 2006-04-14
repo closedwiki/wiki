@@ -885,28 +885,31 @@ sub saveAttachment {
                 stream => $opts->{stream},
                 user => $user->webDotWikiName()
                };
-               
-            $attrs->{comment} = $opts->{comment} if (defined($opts->{comment}));               
+            $attrs->{comment} = $opts->{comment}
+              if (defined($opts->{comment}));
 
             my $handler = $this->_getHandler( $web, $topic, $attachment );
 
-            my $tmpFile = $handler->{file};
+            my $tmpFile;
 
             if( $plugins->haveHandlerFor( 'beforeAttachmentSaveHandler' )) {
                 # SMELL: legacy spec of beforeAttachmentSaveHandler requires
                 # a local copy of the stream. This could be a problem for
                 # very big data files.
-                open( F, $tmpFile );
+                use File::Temp;
+                $tmpFile = File::Temp::tempfile();
+                open( F, ">$tmpFile" );
                 binmode( F );
                 # transfer 512KB blocks
                 my $transfer;
-                while( my $r = sysread( $opts->{stream}, $transfer, 0x80000 )) {
+                my $r;
+                while( $r = sysread( $opts->{stream}, $transfer, 0x80000 )) {
                     syswrite( F, $transfer, $r );
                 }
                 close( F );
-                $attrs->{file} = $tmpFile;
+                $attrs->{tmpFilename} = $tmpFile;
                 $plugins->beforeAttachmentSaveHandler( $attrs, $topic, $web );
-                open( $opts->{stream}, $tmpFile );
+                open( $opts->{stream}, "<$tmpFile" );
                 binmode( $opts->{stream} );
             }
 
@@ -919,18 +922,9 @@ sub saveAttachment {
                 $error = shift;
             };
 
+            unlink( $tmpFile ) if( $tmpFile && -e $tmpFile );
+
             if( $plugins->haveHandlerFor( 'afterAttachmentSaveHandler' )) {
-                # SMELL: legacy spec of afterAttachmentSaveHandler requires
-                # a local copy of the stream. This could be a problem for
-                # very big data files. It really should use the stream.
-                open( F, $tmpFile );
-                binmode(F);
-                my $transfer;
-                while( read($opts->{stream}, $transfer, 1024 )) {
-                    print F $transfer;
-                }
-                close(F);
-                $attrs->{file} = $tmpFile;
                 $plugins->afterAttachmentSaveHandler( $attrs, $topic, $web,
                                                       $error ? 
                                                         $error->{-text} : '' );

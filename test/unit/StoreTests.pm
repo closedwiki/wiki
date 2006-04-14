@@ -364,4 +364,74 @@ sub test_beforeSaveHandlerChangeBoth {
 	$twiki->{store}->removeWeb($twiki->{user}, $web);
 }
 
+my $attachment = "afile.txt";
+
+# Handler used in next test
+sub beforeAttachmentSaveHandler {
+    my( $attrHash, $topic, $web ) = @_;
+    die "attachment $attrHash->{attachment}"
+      unless $attrHash->{attachment} eq $attachment;
+    die "comment $attrHash->{comment}"
+      unless $attrHash->{comment} eq "a comment";
+    die "user ".$user unless $user == $twiki->{user};
+
+    open(F, "<".$attrHash->{tmpFilename}) ||
+      die "$attrHash->{tmpFilename}: $!";
+    local $/ = undef;
+    my $text = <F>;
+    close(F) || die "$attrHash->{tmpFilename}: $!";
+
+    $text =~ s/two/four/;
+
+    open(F, ">".$attrHash->{tmpFilename}) ||
+      die "$attrHash->{tmpFilename}: $!";
+    print F $text;
+    close(F) || die "$attrHash->{tmpFilename}: $!";
+}
+
+# Handler used in next test
+sub afterAttachmentSaveHandler {
+    my( $attrHash, $topic, $web, $error ) = @_;
+    die "attachment $attrHash->{attachment}"
+      unless $attrHash->{attachment} eq $attachment;
+    die "comment $attrHash->{comment}"
+      unless $attrHash->{comment} eq "a comment";
+    die "user ".$user->stringify()
+      unless $user == $twiki->{user};
+}
+
+sub test_attachmentSaveHandlers {
+    my $this = shift;
+    my $args = {
+        name => "fieldname",
+        value  => "fieldvalue",
+       };
+
+    open( FILE, ">/tmp/$attachment" );
+    print FILE "one two three";
+    close(FILE);
+
+	$twiki->{store}->createWeb($twiki->{user}, $web, '_default');
+	$twiki->{store}->saveTopic( $twiki->{user}, $web, $topic, "", undef );
+
+    # SMELL: assumed implementation
+    push(@{$twiki->{plugins}->{registeredHandlers}{beforeAttachmentSaveHandler}},
+        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+    push(@{$twiki->{plugins}->{registeredHandlers}{afterAttachmentSaveHandler}},
+        new TWiki::Plugin($twiki, "StoreTestPlugin", 'StoreTests'));
+
+    $twiki->{store}->saveAttachment($web, $topic, $attachment, $user,
+                                    { file => "/tmp/$attachment",
+                                      comment => "a comment" } );
+
+    my $text = $twiki->{store}->readAttachment(
+        $twiki->{user},
+        $web, $topic, $attachment);
+    $this->assert_str_equals("one four three", $text);
+
+    unlink("/tmp/$attachment");
+
+	$twiki->{store}->removeWeb($twiki->{user}, $web);
+}
+
 1;
