@@ -40,19 +40,19 @@ Login management controls the way users have to log in. There are three basic op
 
 You can select your chosen login through the Security Settings pane in the =configure= interface.
 
----+++ No Login
+---+++ No Login (select =none= in configure)
 
 Does exactly what it says on the tin. Forget about authentication to make your site completely public - anyone can browse and edit freely, in classic Wiki style. All visitors are given the %MAINWEB%.TWikiGuest default identity, so you can't track individual user activity.
 
 __%X% Note:__ This setup is not recommended on public websites for security reasons; anyone would be able to change system settings and perform tasks usually restricted to the %MAINWEB%.TWikiAdminGroup.
 
----+++ Template Login
+---+++ Template Login (select =TWiki::Client::TemplateLogin= in configure)
 
 Template Login asks for a username and password in a web page, and processes them using whatever Password Manager you choose. Users can log in and log out.
 
 ---++++ Enabling Template Login
    1 Use the [[%SCRIPTURLPATH{"configure"}%][ =configure= ]] interface to
-      1 enable the =TemplateLogin= login manager (on the Security Settings pane).
+      1 select the =TWiki::Client::TemplateLogin= login manager (on the Security Settings pane).
       1 select the appropriate password manager for your system, or provide your own.
    1 Register yourself in the TWikiRegistration topic.
     <br /> %H% Check that the password manager recongises the new user. If you are using =.htpasswd= files, check that a new line with the username and encrypted password is added to the =.htpasswd= file. If not, you probably got a path wrong, or the permissions may not allow the webserver user to write to that file.
@@ -68,7 +68,7 @@ TWikiAccessControl has more information on setting up access controls.
 
 %T% You can customize the default user home page in NewUserTemplate. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]
 
----+++ Apache Login
+---+++ Apache Login (select =TWiki::Client::ApacheLogin= in configure)
 
 Using this method TWiki does not authenticate users internally. Instead it depends on the =REMOTE_USER= environment variable, which is set when you enable authentication in the webserver.
 
@@ -82,7 +82,7 @@ The same private =.htpasswd= file used in TWiki Template Login can be used to au
 
 ---++++ Enabling Apache Login using =mod_auth=
 You can use any other Apache authentication module that sets REMOTE_USER.
-   1 Use [[%SCRIPTURLPATH{"configure"}%#LoginManager][configure]] to select the =ApacheLogin= login manager.
+   1 Use [[%SCRIPTURLPATH{"configure"}%#LoginManager][configure]] to select the =TWiki::Client::ApacheLogin= login manager.
    1 Use [[%SCRIPTURLPATH{"configure"}%#PasswordManager][configure]] to set up TWiki to create the right kind of =.htpasswd= entries.
    1 Create a =.htaccess= file in the =twiki/bin= directory.<br />%H% There is an template for this file in =twiki/bin/.htaccess.txt= that you can copy and change. The comments in the file explain what need to be done.<br />%H% If you got it right, the browser should now ask for login name and password when you click on the <u>Edit</u>. If =.htaccess= does not have the desired effect, you may need to "AllowOverride All" for the directory in =httpd.conf= (if you have root access; otherwise, e-mail web server support)
     <br /> %X% At this time TWikiAccessControls do not control access to files in the =pub= area, unless they are only accessed through the =viewfile= script. If your =pub= directory is set up to allow open access you may want to add =.htaccess= files in there as well to restrict access 
