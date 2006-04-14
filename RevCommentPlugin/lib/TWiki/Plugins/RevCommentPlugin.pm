@@ -246,9 +246,9 @@ sub handleRevComment {
     $delimiter =~ s/\\n/\n/g;
     $delimiter =~ s/\\t/\t/g;
     my $pre = $params{pre};
-    $pre = '<ul><li style="margin-left:-1em;">' unless defined($pre);
+    $pre = '<noautolink><ul><li style="margin-left:-1em;">' unless defined($pre);
     my $post = $params{post};
-    $post = '</li></ul>' unless defined($post);
+    $post = '</li></ul></noautolink>' unless defined($post);
     my $minor = $params{minor};
     $minor = '<i>(minor)</i> ' unless defined($minor);
 
