@@ -710,11 +710,14 @@ a.twikiLinkInHeaderRight {
 	margin:0 0 0 .15em;
 	font-size:94%;
 }
-
+.patternTopicActions {
+	border-width:0 0 1px 0;
+	border-style:solid;
+}
 .patternTopicAction {
 	line-height:1.5em;
 	padding:.4em 20px; /*S5*/
-	border-width:1px 0;
+	border-width:1px 0 0 0;
 	border-style:solid;
 }
 .patternViewPage .patternTopicAction {
@@ -837,6 +840,10 @@ h4.patternSearchResultsHeader {
 }
 .patternSearched {
 }
+.patternSaveHelp {
+	line-height:1.5em;
+	padding:.5em 20px; /*S5*/
+}
 
 /* Search results in book view format */
 
@@ -915,20 +922,9 @@ table.patternDiffOptions img {
 	margin:.25em 0 .5em 0;
 	padding:0 .5em 0 0;
 }
-.patternAccessKeyInfo {
-	margin:1em 0 .5em 0;
-	padding:.25em .5em;
-	border-width:1px 0;
-	border-style:solid;
+.patternEditPage .patternTopicActions {
+	margin:1.5em 0 0 0;
 }
-.patternAccessKeyInfo a:link,
-.patternAccessKeyInfo a:visited {
-	text-decoration:underline;
-}
-.patternAccessKeyInfo a:hover {
-	text-decoration:none;
-}
-
 
 /* preview.pattern.tmpl */
 
