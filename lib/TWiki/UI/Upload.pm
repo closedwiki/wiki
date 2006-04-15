@@ -34,6 +34,7 @@ use TWiki;
 use TWiki::UI;
 use Error qw( :try );
 use TWiki::OopsException;
+use File::Spec;
 
 =pod
 
@@ -179,12 +180,8 @@ sub upload {
     my $origName = $fileName;
 
     unless( $doPropsOnly ) {
-        # cut path from filepath name (Windows '\' and Unix "/" format)
-        my @pathz = ( split( /\\/, $filePath ) );
-        my $filetemp = $pathz[$#pathz];
-        my @pathza = ( split( '/', $filetemp ) );
-        $fileName = $pathza[$#pathza];
-        $origName = $fileName;
+        my( $v, $d, $f) = File::Spec->splitpath( $filePath );
+        $origName = $fileName = $f;
 
         # Sanitize filename
         # FIXME: Allow spaces and other chars by encoding them (and decoding on download)
@@ -198,16 +195,18 @@ sub upload {
         ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
 
         # check if upload has non zero size
-        my @stats = stat $stream;
-        $fileSize = $stats[7];
-        $fileDate = $stats[9];
+        if( $stream ) {
+            my @stats = stat $stream;
+            $fileSize = $stats[7];
+            $fileDate = $stats[9];
+        }
 
-        if( ! $fileSize || ! $fileName ) {
+        unless( $fileSize && $fileName ) {
             throw TWiki::OopsException( 'attention',
                                         def => 'zero_size_upload',
                                         web => $webName,
                                         topic => $topic,
-                                        params => ($fileName || '""') );
+                                        params => ($filePath || '""') );
         }
 
         my $maxSize = $session->{prefs}->getPreferencesValue( 'ATTACHFILESIZELIMIT' );
