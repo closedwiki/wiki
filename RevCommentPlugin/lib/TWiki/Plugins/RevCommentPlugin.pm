@@ -140,19 +140,14 @@ sub beforeSaveHandler {
     }
     elsif ( $query->param('comment') || $query->param('dontnotify') ) {
         my $commentFromForm = $query->param('comment') || ' ';
-        my $t               = $query->param('t')       || 0;
-        my $thisComment = $newComment = {};
+        my $t               = $query->param('t')       || time();
 
-        foreach my $oldComment (@comments) {
-            if ( $t == $oldComment->{t} ) {
-                $thisComment = $oldComment;
-                last;
-            }
-        }
-        $thisComment->{comment} = $commentFromForm;
-        $thisComment->{minor}   = defined $query->param('dontnotify');
-        $thisComment->{t}       = $t;
-        $thisComment->{rev}     = undef;
+        $newComment = {
+            comment => $commentFromForm,
+            t     => $t,
+            minor => defined $query->param('dontnotify'),
+            rev   => undef,
+        };
     }
 
     if (   ( $newComment->{comment} || '' ) =~ /\S/

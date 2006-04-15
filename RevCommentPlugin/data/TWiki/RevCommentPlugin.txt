@@ -3,7 +3,7 @@
 
 This plugin allows to enter a short summary of changes made to a topic for a new revision.
 This summary can be displayed e.g. in a history page of the topic or on the !WebChanges page
-of a web. Changes may also be marked as "minor".
+of a web. Changes may also be marked as "minor" by using the "Quiet save" button.
 
 Since in TWiki it is possible to make several changes within the edit lock time (normally
 60 minutes) which are accumulated in only one new revision, it is also possible to
@@ -110,8 +110,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.JChristophFuchs |
-|  Plugin Version: | 22 Apr 2005 (V1.000) |
+|  Plugin Author: | TWiki:Main.JChristophFuchs & TWiki:Main.SteffenPoulsen |
+|  Plugin Version: | 14 Apr 2006 (V1.110) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  14 Apr 2006: | &lt;noautolink&gt; added to default pre/post rendering output of REVCOMMENT tag |
 |  14 Apr 2006: | Minor update for Dakar 4.0.2 |
