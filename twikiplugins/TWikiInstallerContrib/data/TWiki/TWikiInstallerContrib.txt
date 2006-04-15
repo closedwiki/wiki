@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="WillNorris" date="1135975932" format="1.1" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1135975932" format="1.1" version="1.6"}%
 <style>
 div.fragment{
         background : #FFFFCC;
@@ -8,18 +8,24 @@ div.fragment{
         padding : 4px;
 }
 </style>
+<!--
+   * Set CODE = <div class="fragment">
+   * Set ENDCODE = </div>
+-->
 
 ---+!! Abstract
+
+The TWikiInstallerContrib provides web-based and command line-based tools for __installing__ TWiki and TWiki plugins.
 
 
 %TOC%
 
----+ End-User Documentation
+---+ How to use TWikiInstallerContrib
 
----++ Installation
+---++ Web-based GUI Installer
 
 Download and install %ATTACHURL%/twiki-install to a directory where you can run scripts from (eg, =~/public_html/cgi-bin=).  Depending on your webhosting server, you may need to make certain changes to the script in order for it to run.  Some example modifications include:
-   * *Give the script an extension*  This is often the =.cgi= extension.  Another possibility is =.pl=.
+   * *Give the script an extension*  _If_ you need this, it will usually be a =.cgi= extension.  Another possibility is =.pl=.
    * *Change the location of the perl executable for the script to run*  The default version points to =/usr/local/bin/perl=.  If your perl interpreter is not located there, modify the line to point to your perl executable.  Some sample paths are =/usr/bin/perl= or =/opt/bin/perl=.
 
 In your web browser, browse to the URL to execute the install script.  You should see something along the lines of:
@@ -29,7 +35,7 @@ In your web browser, browse to the URL to execute the install script.  You shoul
 <a href="%ATTACHURLPATH%/snapshot1.png" ><img src="%ATTACHURLPATH%/snapshot1-thumb.png" /></a><br />
 </td>
 <td>
-   1. Specify a TWikiFor distribution.  Click "Next".
+   1. Specify a TWiki:Codev.TWikiFor distribution.  Click "Next".
 </td>
 </tr>
 <tr>
@@ -37,7 +43,7 @@ In your web browser, browse to the URL to execute the install script.  You shoul
 <a href="%ATTACHURLPATH%/snapshot1.png" ><img src="%ATTACHURLPATH%/snapshot2-thumb.png" /></a><br />
 </td>
 <td>
-   2. Choose a TWikiKernel to install.  Typically, there will be only one packaged with the TWikiFor.  However, if there are multiple TWikiKernels available, newer versions are listed first.  
+   2. Choose a TWiki:Codev.TWikiKernel to install.  Typically, there will be only one packaged with the TWiki:Codev.TWikiFor.  However, if there are multiple TWiki:Codev.TWikiKernels available, newer versions are listed first.  
    3. Set the perl executable path.  Typically, you won't need to change this.  The script either worked as-in, or you already updated the perl path in the script.  You will want to change this if you are using a perl accelerator; specify the full path to the accelerator.
    4. Specify an account name to automatically create.  This must be a proper WikiWord.
    5. Specify the WIKIWEBMASTER.  [[%LOCALSITEPREFS%]] is automatically updated with this TWikiPreferenceVariable.
@@ -51,27 +57,7 @@ In your web browser, browse to the URL to execute the install script.  You shoul
 <a href="%ATTACHURLPATH%/snapshot1.png" ><img src="%ATTACHURLPATH%/snapshot4-thumb.png" /></a><br />
 
 
----+ Technical Documentation
-
-As the =twiki-install= program is running under the webserver environment, it is able to autodetect pretty much all of its configuration settings.
-
-The =twiki-install= script creates a directory structure very similiar to the canonical TWiki directory layout: because =twiki-install= has been designed to run from a designated =cgi-bin= directory, =bin= has been moved up a level for nicer URL's (eg, =~account/cgi-bin/twiki/view= instead of =~account/cgi-bin/twiki/bin/view=)  (!!! there are other methods of manipulating urls, see ??? plus TWiki:Codev.ShorterURLs ? !!!)
-
----++ Directory layout
-   * twiki
-      * (bin files)
-      * data/
-      * lib/
-      * templates/
-      * locale/
-      * pub/
-
-      * tmp/
-         * install/
-            * components/
-               * kernels/
-               * extensions/
-
+--------------------------------------------------------------------------------
 ---++ Scripted Installation
 
 The following scripts provide _an_ automated solution to create a twiki installation from scratch.  It provides a specific which may be useful for many people's needs.  This script provides a solution which is most useful for people with certain types of environments, ones in which you can create users.  The setup is often found on corporate servers, home Linux boxes, and upper-tier hosting environments.   (plus virtualisation technology...)
@@ -108,11 +94,11 @@ say, something like this setup:
 </div>
 
 
-To install a TWiki to an account with Apache a typical configuration of =UserMod= 
-
+--------------------------------------------------------------------------------
+---+++ To install a TWiki to an account with Apache a typical configuration of =mod_user=
 
 (this is often the setup for webhosting as well).  Four pieces of information need to be specified:
-   | Parameter | Description | Sample Value |
+   | *Parameter* | *Description* | *Sample Value* |
    | ACCOUNT | Account name | =twiki= |
    | HOST | Hostname | =localhost= |
    | DIR | File location of the =cgi-bin= directory | =$ACCOUNT@$HOST:~/public_html/cgi-bin= |
@@ -120,7 +106,7 @@ To install a TWiki to an account with Apache a typical configuration of =UserMod
 
 the =install-twiki.pl= script copies the installation script to the server, and then executes the web page by calling a URL designed to perform the installation with its configuration options (see =$TWIKIDEV/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-twiki.pl --help= for more installation configuration options).
 
-%CODE{bash}%
+%CODE%
 ACCOUNT=twiki \
 HOST=localhost \
 DIR="$ACCOUNT@$HOST:~/public_html/cgi-bin" \
@@ -134,34 +120,12 @@ This example shows how =$URL= can specify a required script extension (just add 
 
 =install-twiki.pl= creates an installation report at =./install-report.html=
 
-<verbatim>
-                                TWiki Installer
-  TWikiKernelDEVELOP8000
-  BlogPlugin
-  CpanContrib
-  DBCacheContrib
-  DBCachePlugin
-  ExtendedSelectPlugin
-  GluePlugin
-  HeadlinesPlugin
-  ImageGalleryPlugin
-  NatSkinPlugin
-  RedDotPlugin
-  SpreadSheetPlugin
-  TablePlugin
-  TimeSincePlugin
-  TwistyContrib
-  TwistyPlugin
-</verbatim>
-
-
-
-
+--------------------------------------------------------------------------------
 ---+++ Debian complete account creation
 
 This script creates a new user account (if it doesn't exist), (SSH KEYS), sets up the user webspace (including =cgi-bin= directory), and finally, actually performs a TWiki installation.
 
-%CODE{bash}%
+%CODE%
 #! /bin/sh
 
 ACCOUNT=$1
@@ -203,8 +167,7 @@ time bin/install-twiki.pl \
 
 the script is =install-acount.sh= in the =TWikiInstallerContrib/bin= directory.  Here is a sample 
 
-%CODE{bash}%
-
+%CODE%
 cd $TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/
 EXTENSIONS=' \
    --extension=TWikiInstallerContrib --extension=TWikiPluginInstallerContrib \
@@ -230,49 +193,14 @@ EXTENSIONS=' \
 %ENDCODE%
 
 
--- TWiki:Main.WillNorris - 29 Dec 2005
-
----+++ Offline installation
+--------------------------------------------------------------------------------
+---++ Offline installation
 
 not connected to the internet during installation; pre-download the various bits
 
    * download a TWikiFor .zip file; place it in the same directory as the script file; name the downloaded file install.zip
+<!--
+SMELL: add more...
+-->
 
-
-[02:17] *CDot* argh; no abstract. I'd give up immediately if I wasn't determined
-[02:17] * wbniv fires up emacs...
-[02:18] *CDot* undefined terms; TWikiKernel, TWikiFor
-[02:18] *CDot* shebang line
-[02:19] *CDot* "As the =twiki-install= program is running the webserver environment" - huh? It replaces Apache?
-[02:19] *wbniv* oops
-[02:20] *wbniv* missing under
-[02:20] *wbniv* ta
-[02:20] *CDot* Recommendation; keep the technical documentation light in the topic; it can be heavy in the code
-[02:20] *wbniv* i want to split it into 2 parts
-[02:20] *wbniv* i'm going to split it into 2 parts
-[02:21] *wbniv* the atual "download this script and install twiki" and the "build a (twiki distro and) installer"
-[02:21] *CDot* reccomned this:
-[02:21] *CDot* 1. Abstract (urgent)
-[02:21] *CDot* 2. How to use this contrib (headining the following sections)
-[02:21] *CDot* N. A series of sections detailing each use-mode
-[02:22] *CDot* N+1. Installing the Contrib
-[02:22] *CDot* N+2. Contrib Info (as per the standard)
-[02:23] *CDot* 2. could contain (for e.g)
-[02:23] *CDot* 2.1 Using the contrib for installing TWiki
-[02:23] *CDot* 2.2 Using the contrib for installing Plugins
-[02:23] *CDot* 2.3 Using the contrib for detecting available updates to Plugins
-[02:24] *CDot* 2.4 Using the contrib for managing your CPAN extensions
-[02:24] *CDot* etc etc
-[02:24] *CDot* get my drift?
-[02:32] *wbniv* ok, yeah, thanks
-[02:32] *wbniv* tho some of those sections will be pretty light
-[02:32] *wbniv* (tho i guess that's not necessarily bad)
-[02:32] *wbniv* for example,
-[02:32] *CDot* only examples; you organise it how you need to
-[02:32] *wbniv* for managing your CPAN extensions there's really only 1 "solution" atm
-[02:32] *wbniv* which is
-[02:32] *CDot* you have to look at is as an admin who wants to use it for a job
-[02:32] *wbniv* right, use case documentation
-[02:32] *CDot* and give them the essential instructions for that job
-[02:33] *CDot* and *no more*
-[02:33] *CDot* if they want more, they can look at the code
+-- TWiki:Main.WillNorris - 15 Apr 2006
