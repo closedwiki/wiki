@@ -252,6 +252,11 @@ a:hover.twistyTrigger {
 	color:#FBF7E8; /*T3*/
 }
 
+/* RevCommentPlugin */
+.revComment .patternTopicAction {
+	background-color:#FDFBF4;
+}
+
 /*	-----------------------------------------------------------
 	TWiki styles
 	-----------------------------------------------------------	*/
@@ -428,9 +433,11 @@ a:hover .twikiAccessKey {
 	color:#FBF7E8; /*C3*/
 	background-color:#D6000F; /*BG2*/
 }
-
 .patternSeparator {
 	font-family:monospace;
+}
+.patternTopicActions {
+	border-color:#E2DCC8; /*BO4*/
 }
 .patternTopicAction {
 	color:#666; /*T7*/
@@ -516,6 +523,9 @@ a:hover .twikiAccessKey {
 .patternMoved a:hover {
 	color:#FBF7E8; /*T3*/
 }
+.patternSaveHelp {
+	background-color:#fff; /*BG1*/
+}
 
 /* WebSearch, WebSearchAdvanced */
 table#twikiSearchTable th,
@@ -596,18 +606,6 @@ table.patternDiffOptions img {
 .patternSig input {
 	color:#8E9195; /*T8*/
 	background-color:#fff; /*BG1*/
-}
-.patternAccessKeyInfo {
-	color:#666; /*T7*/
-	background-color:#ECF4FB; /*BG5*/
-	border-color:#D5E6F3; /*BO3*/
-}
-.patternAccessKeyInfo a:link,
-.patternAccessKeyInfo a:visited {
-	color:#06c; /*T2*/
-}
-.patternAccessKeyInfo a:hover {
-	color:#FBF7E8; /*T3*/
 }
 
 /* preview.pattern.tmpl */
