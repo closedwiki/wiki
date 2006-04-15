@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="pnomblot" date="1069422060" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1069422060" format="1.0" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This is a plugin to generate dynamic Tool Tips in HTML + javascript (mouseover event).
@@ -78,22 +78,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==pub/TWiki/ToolTipPlugin/ToolTipPhoto.gif== | sample image |
      | ==pub/TWiki/ToolTipPlugin/wz_tooltip.js== | wz tooltip library |
 
-
-Add :
-<verbatim>
-<script language="JavaScript" src="%PUBURLPATH%/%TWIKIWEB%/ToolTipPlugin/wz_tooltip.js"></script>
-</verbatim>
-in variable WEBCOPYRIGHT in TOPIC TWiki.TWikiPreferences or add it in your skins so this javascript code is called just before the closing body tag). Replace =/%TWIKIWEB%/= with =/TWiki/= in case you install the Plugin in the %TWIKIWEB% web.
-
    * Test if the installation was successful:
 
-The same tooltip is displayed if Plugin is installed :
+The same tooltip is displayed if Plugin is installed and not:
 
 ---
 With plugin :
 %TOOLTIP{TEXT="Whaoooo !" FONTCOLOR="#336699" TITLE="Nice tooltip, no ?" SHADOWCOLOR="#ccaacc" FONTSIZE="18px"}% put your mouse here, you should see a tooltip %TOOLTIP{END}%
 ---
-Without need of plugin :
+Without plugin :
 <a border="0" href="javascript:void(0);" onmouseover=" this.T_FONTCOLOR='#336699'; this.T_TITLE='Nice tooltip, no ?'; this.T_SHADOWCOLOR='#ccaacc'; this.T_FONTSIZE='18px';return escape('Whaoooo !')"> put you mouse here, you should see a tooltip </A>.
 ---
 
@@ -102,6 +95,7 @@ Without need of plugin :
 |  Plugin Author: | TWiki:Main/PatrickNomblot  |
 |  Plugin Version: | 1.3 |
 |  Change History: | &nbsp; |
+|  15 Apr 2006 | TWiki:Main/SteffenPoulsen: Updated with new version of =wz_tooltip.js= (updated browser support), support for Dakar |
 |  21 Nov 2003 | TWiki:Main/PatrickNomblot: Initial version |
 |  10 Sep 2004 | TWiki:Main/PatrickNomblot: tooltip text can comes from any TOPIC |
 |  29 Dec 2005 | TWiki:Main/AndreUlrich: updated to wz_tooltip.js v. 3.38; added further parameters|
@@ -115,4 +109,3 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/PatrickNomblot - 21 Nov 2003
 
-%META:FILEATTACHMENT{name="wz_tooltip.js" attr="" comment="The Javascript Tool Tip engine" date="1069420919" path="X:\data\twiki\pub\Trash\BesacPlugin\wz_tooltip.js" size="15526" user="pnomblot" version="1.1"}%

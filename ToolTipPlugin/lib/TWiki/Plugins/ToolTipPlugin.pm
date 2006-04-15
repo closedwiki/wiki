@@ -69,7 +69,7 @@ sub initPlugin
 sub postRenderingHandler
 {
 	TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $web.$topic )" ) if $debug;
-	$_[0] =~ s/%TOOLTIP{(.*?)}%/&handleToolTip($1)/ge;
+    $_[0] =~ s/%TOOLTIP{(.*?)}%/&handleToolTip($1)/ge;
     $_[0] =~ s/%TOOLTIP%/&handleToolTip("")/ge;
     
     # this search and replace could be made more robust if this were ever called more than once
@@ -142,9 +142,6 @@ sub handleToolTip
   }
   return ("$out");
 }
-
- 
-
 
 
 1;
