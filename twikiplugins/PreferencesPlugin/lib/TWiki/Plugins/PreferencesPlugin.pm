@@ -171,11 +171,11 @@ sub _generateButtons {
 
     my $text = '';
     if ( $doEdit ) {
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Edit');
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Edit', -class=>'twikiButton');
     } else {
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save');
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save', -class=>'twikiSubmitButton');
         $text .= '&nbsp;&nbsp;';
-        $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel');
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel', -class=>'twikiButton');
     }
     return $text;
 }
