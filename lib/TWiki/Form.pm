@@ -100,24 +100,19 @@ sub new {
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
             @posValues = split( /,/, $fieldDef->{value} );
             my $topic = $fieldDef->{definingTopic} || $fieldDef->{name};
+            my( $fieldWeb, $fieldTopic ) =
+              $session->normalizeWebTopicName($web, $topic);
             if (!scalar(@posValues)) {
-                # If no values are defined, see if we can get them from
-                # the topic of the same name as the field
-		my $tWeb = $web;
-		my $tTopic = $topic;
-		# This probably isn't the right way to do this, but I'm not getting any help
-		if ($topic =~ /^(.*?)\.([^.]+)$/) {
-		    $tWeb = $1;
-		    $tTopic = $2;
-		}
-                if ( $store->topicExists( $tWeb, $tTopic ) ) {
-		    my( $meta, $text ) =
-			$store->readTopic( $session->{user}, $tWeb, $tTopic, undef );
-		    # Add processing of SEARCHES for Lists
-		    $text = $this->{session}->handleCommonTags($text,$this->{web},$this->{topic});
-		    @posValues = _getPossibleFieldValues( $text );
-		    $fieldDef->{type} ||= 'select';  #FIXME keep?
-		}
+                if ( $store->topicExists( $fieldWeb, $fieldTopic ) ) {
+                    my( $meta, $text ) =
+                      $store->readTopic( $session->{user},
+                                         $fieldWeb, $fieldTopic, undef );
+                    # Add processing of SEARCHES for Lists
+                    $text = $this->{session}->handleCommonTags(
+                        $text,$this->{web},$this->{topic});
+                    @posValues = _getPossibleFieldValues( $text );
+                    $fieldDef->{type} ||= 'select';  #FIXME keep?
+                }
             }
             #FIXME duplicates code in _getPossibleFieldValues?
             @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
