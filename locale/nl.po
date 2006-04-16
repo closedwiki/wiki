@@ -1397,7 +1397,7 @@ msgstr ""
 msgid "Go back in your browser and save your changes locally."
 msgstr ""
 "Ga terug met je browser en bewaar je veranderingen lokaal (bijvoorbeeld op "
-"je harde schijf."
+"je harde schijf)."
 
 #: templates/messages.tmpl:219
 msgid "Good examples:"

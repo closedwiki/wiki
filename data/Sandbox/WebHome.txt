@@ -7,7 +7,7 @@
 
 <form action='%SCRIPTURLPATH{"edit"}%/%WEB%/'> 
 %ICON{"newtopic"}% %MAKETEXT{"Create a new document by name:"}% %MAKETEXT{"(Use a topic name in TWiki.WikiNotation)"}% <br /> 
-<input type="text" name="topic" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create by Name"}%' />
+<input class="twikiInputField" type="text" name="topic" size="32" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create by Name"}%' />
 <input type="hidden" name="onlywikiname" value="on" />
 </form>
 
@@ -24,7 +24,7 @@ _%MAKETEXT{"A more extensive changes list is available via the ~[~[[_1]~]~[Recen
 
 ---++ <nop>%WEB% Web Utilities
 <form action='%SCRIPTURLPATH{"search"}%/%WEB%/'>
-   * <input type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
+   * <input class="twikiInputField" type="text" name="search" size="22" />&nbsp;<input type="submit" class="twikiSubmit" value="Search" /> - [[WebSearchAdvanced][advanced search]]
    * WebTopicList - all topics in alphabetical order
    * WebChanges - recent topic changes in this web
    * WebNotify - subscribe to an e-mail alert sent when topics change
