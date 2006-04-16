@@ -181,6 +181,13 @@ sub handleTopicMap {
             $params{"links"} = 2;
         }
     }
+    unless ($params{"size"}) {
+        if (TWiki::Func::getPluginPreferencesValue("SIZE")) {
+            $params{"size"} = TWiki::Func::getPluginPreferencesValue("SIZE");
+        } else {
+            $params{"size"} = "8.5,6.5";
+        }
+    }
     $excludeSystem = $params{"excludesystem"};
 
     my $rankdir = "TB";
@@ -194,6 +201,7 @@ sub handleTopicMap {
 
     push @returnlist, "<dot map=1>";
     push @returnlist, "digraph webmap {";
+    push @returnlist, "size=\"".$params{"size"}."\";";
     push @returnlist, "rankdir=$rankdir;";
     my $webbgcolor = TWiki::Func::getPreferencesValue( "WEBBGCOLOR", $params{"web"} );
     push @returnlist, qq(node [style=filled, color="$webbgcolor"];);
@@ -263,6 +271,13 @@ sub handleWebMap {
     unless ($params{"web"} and TWiki::Func::webExists($params{"web"})) {
         $params{"web"} = $callingweb;
     }
+    unless ($params{"size"}) {
+        if (TWiki::Func::getPluginPreferencesValue("SIZE")) {
+            $params{"size"} = TWiki::Func::getPluginPreferencesValue("SIZE");
+        } else {
+            $params{"size"} = "8.5,6.5";
+        }
+    }
     $excludeSystem = $params{"excludesystem"};
     my $rankdir = "TB";
     $rankdir = "LR" if ($params{"lr"});
@@ -271,6 +286,7 @@ sub handleWebMap {
 
     push @returnlist, "<dot map=1>";
     push @returnlist, "digraph webmap {";
+    push @returnlist, "size=\"".$params{"size"}."\";";
     push @returnlist, "rankdir=$rankdir;";
     my $webbgcolor = TWiki::Func::getPreferencesValue( "WEBBGCOLOR", $params{"web"} );
     push @returnlist, qq(node [style=filled, color="$webbgcolor"];);
