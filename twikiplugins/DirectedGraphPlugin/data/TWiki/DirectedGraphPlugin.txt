@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144865212" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1145213189" format="1.1" version="1.1"}%
 ---+ Directed Graph Plugin
 This plugin accepts valid input to create a .dot file.  [[http://www.graphviz.org/][Graphviz's]] dot application is then used to create a .png of the directed graph.
 
@@ -92,20 +92,20 @@ digraph G {
 
 ---++ <nop>%TOPIC% Global Settings
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Embed directed graphs in TWiki topics
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Embed directed graphs in TWiki topics
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
-   * Install the Graphviz package
-   * Install required web fonts
-   * Install the Perl module Digest::MD5
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. 
+	* Install the Graphviz package
+	* Install required web fonts
+	* Install the Perl module Digest::MD5
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. 
 Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
@@ -119,15 +119,16 @@ Dependencies:
      | Graphviz dot | Preprocessor for drawing directed graphs |
      | Digest::MD5 | MD5 Perl module |
      | Web fonts | Fonts required for dot's png creations |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm* (Red Hat only).
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ColeBeck |
-|  Plugin Version: | 24 Oct 2005 (V1.210) |
+|  Plugin Version: | 16 Apr 2006 (V1.220) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Apr 2006: | Minor fix for areamap (Firefox compatibility)  -- TWiki:Main.SteffenPoulsen |
 |  12 Apr 2006: | Incorporated Sandbox security mechanism  -- TWiki:Main.SteffenPoulsen |
 |  24 Oct 2005: | Incorporated areamap patch (TWiki:Main.MagnusLewisSmith)  -- TWiki:Main.JoanTouzet |
 |  13 Apr 2005: | Added clientside maps functionality; correctly finds pub directory |
@@ -147,3 +148,6 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 -- TWiki:Main.ColeBeck - 01 Jul 2004
 
 
+
+%META:FILEATTACHMENT{name="graphsample.png" attr="" autoattached="1" comment="" date="1145145045" path="graphsample.png" size="5197" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="graphsample2.png" attr="" autoattached="1" comment="" date="1145145045" path="graphsample2.png" size="1364" user="UnknownUser" version=""}%
