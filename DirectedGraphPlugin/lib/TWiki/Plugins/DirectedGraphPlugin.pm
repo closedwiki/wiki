@@ -202,7 +202,7 @@ sub handleDot
         $mapfile =~ s/(<map\ id\=\")(.*?)(\"\ name\=\")(.*?)(\">)/$1$hash_code$3$hash_code$5/go;
         # place map and "foo.png" at the source of the <dot> tag in $Web.$Topic
         my $loc = &TWiki::Func::getPubUrlPath() . "/$web/$topic";
-        return "<map name=\"$hash_code\">\n$mapfile</MAP>\n<img usemap=\"#$hash_code\" src=\"$loc/graph$hash_code.png\"/>";
+        return "$mapfile<img usemap=\"#$hash_code\" src=\"$loc/graph$hash_code.png\"/>";
     } else {
         # attach "foo.png" at the source of the <dot> tag in $Web.$Topic
         $loc= &TWiki::Func::getPubUrlPath() . "/$web/$topic";
