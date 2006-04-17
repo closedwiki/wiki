@@ -58,6 +58,7 @@
 		# (Class::Accessor, DBI, POE already installed) 
 	qw( Schedule::Cron ),
 	qw( Params::Validate ),
+	qw( Spreadsheet::WriteExcel Date::Manip ),	# FormMeta2ExcelAddOn
 );
 
 #$, = "\n";
