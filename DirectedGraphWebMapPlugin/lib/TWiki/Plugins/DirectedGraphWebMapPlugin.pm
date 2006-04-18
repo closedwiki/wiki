@@ -212,11 +212,11 @@ sub handleTopicMap {
     push @returnlist, "}";
     push @returnlist, "</dot>";
 
-#     if ($debug) {
-#         return ("<verbatim>\n".join("\n", @returnlist)."\n</verbatim>");
-#     } else {
+     if ($debug) {
+         return ("<verbatim>\n".join("\n", @returnlist)."\n</verbatim>");
+     } else {
         return TWiki::Func::expandCommonVariables((join "\n", @returnlist), $callingtopic, $callingweb);
-#     }
+     }
 }
 
 sub forwardlinks {
@@ -300,11 +300,11 @@ sub handleWebMap {
     push @returnlist, "}";
     push @returnlist, "</dot>";
 
-#     if ($debug) {
-#         return ("<verbatim>\n".join("\n", @returnlist)."\n</verbatim>");
-#     } else {
+     if ($debug) {
+         return ("<verbatim>\n".join("\n", @returnlist)."\n</verbatim>");
+     } else {
         return TWiki::Func::expandCommonVariables((join "\n", @returnlist), $callingtopic, $callingweb);
-#     }
+     }
 }
 
 
