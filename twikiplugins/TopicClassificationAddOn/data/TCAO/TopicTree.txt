@@ -7,6 +7,7 @@
 <form name="selectType" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/" >
 <select name="type" size="1" onchange="document.location=this.value;">
 <option value='#'><Nop>%URLPARAM{"root" default="Select..."}%</option>
+<option value='%INCLUDINGTOPIC%?root=TopicClassification'><Nop>TopicClassification</option>
 <option value=%INCLUDINGTOPIC%?root=SubjectArea>SubjectArea</option>
 %SEARCH{"[T]opicType.*value\=.*[S]ubjectArea" regex="on" web="%BASEWEB%" nototal="on" nosummary="on" nosearch="on" format="<option value=$percntINCLUDINGTOPIC$percnt?root=$topic>- <nop>$topic</option>"}%
 <option value=%INCLUDINGTOPIC%?root=TopicType>TopicType</option>
