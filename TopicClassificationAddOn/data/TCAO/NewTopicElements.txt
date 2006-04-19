@@ -79,7 +79,7 @@ This section is displayed in newly added !WebLog !TopicType.
 This section is displayed in newly created !TopicType topics.
 <verbatim>
 %STARTSECTION{"topictype"}%
-   * %ICON{warning}% Remember to define %BASEWEB%.%BASETOPIC%Template for your new <nop>%BASETOPIC% topics.
+   * %ICON{warning}% Remember to customise %BASEWEB%.%BASETOPIC%Template for your new <nop>%BASETOPIC% topics.
 %ENDSECTION{"topictype"}%
 </verbatim>
 

@@ -1,9 +1,14 @@
-head	1.1;
+head	1.2;
 access;
 symbols;
 locks; strict;
 comment	@# @;
 
+
+1.2
+date	2006.03.03.05.51.50;	author LynnwoodBrown;	state Exp;
+branches;
+next	1.1;
 
 1.1
 date	2005.12.10.05.31.44;	author LynnwoodBrown;	state Exp;
@@ -16,15 +21,20 @@ desc
 @
 
 
-1.1
+1.2
 log
 @none
 @
 text
-@%META:TOPICINFO{author="LynnwoodBrown" date="1134192704" format="1.1" version="1.2"}%
+@%META:TOPICINFO{author="LynnwoodBrown" date="1141365110" format="1.1" version="1.2"}%
+%META:TOPICPARENT{}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
-This web is for holding template topics used in TopicClassificationAddOn. %RED%Note:%ENDCOLOR% *No topics in this web should be modified locally. Contact Main.LynnwoodBrown for questions and requested modifications.*
+%RED% See FixMe and DeleteMe working topics.%ENDCOLOR%
+
+FixMe: Add general info about the structure of the TCAO web.
+
+This web is for holding template topics used in TopicClassificationAddOn. For more information on installing and using it, see TopicClassificationAddOn.
 
 *List of organizing topics available for the %WIKITOOLNAME% site:*
    * *TopicTypes:*
@@ -45,5 +55,20 @@ This web is for holding template topics used in TopicClassificationAddOn. %RED%N
 ([[WebSearchAdvanced][%MAKETEXT{"advanced search"}%]])
 </form>	
 </blockquote>
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 2
+a2 1
+%META:TOPICINFO{author="LynnwoodBrown" date="1134192704" format="1.1" version="1.2"}%
+d5 5
+a9 1
+This web is for holding template topics used in TopicClassificationAddOn. %RED%Note:%ENDCOLOR% *No topics in this web should be modified locally. Contact Main.LynnwoodBrown for questions and requested modifications.*
+a29 1
 
 @
