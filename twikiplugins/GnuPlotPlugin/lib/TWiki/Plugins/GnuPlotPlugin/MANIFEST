@@ -13,7 +13,6 @@ pub/TWiki/GnuPlotHelp/gnuplot.html,v NEW
 pub/TWiki/GnuPlotPlugin/BlueWhale.err NEW
 pub/TWiki/GnuPlotPlugin/BlueWhale.gnu NEW
 pub/TWiki/GnuPlotPlugin/BlueWhale.png NEW
-pub/TWiki/GnuPlotPlugin/BlueWhale.png,v NEW
 pub/TWiki/GnuPlotPlugin/BlueWhaleSample.png NEW
 pub/TWiki/GnuPlotPlugin/CIAWorldDataBankIIDenmark.err NEW
 pub/TWiki/GnuPlotPlugin/CIAWorldDataBankIIDenmark.gnu NEW
@@ -37,7 +36,6 @@ pub/TWiki/GnuPlotPlugin/MultigraphWithErrorbarsSample.png NEW
 pub/TWiki/GnuPlotPlugin/RosenbrockFunction.err NEW
 pub/TWiki/GnuPlotPlugin/RosenbrockFunction.gnu NEW
 pub/TWiki/GnuPlotPlugin/RosenbrockFunction.png NEW
-pub/TWiki/GnuPlotPlugin/RosenbrockFunction.png,v NEW
 pub/TWiki/GnuPlotPlugin/RosenbrockFunctionSample.png
 pub/TWiki/GnuPlotPlugin/TestInstall.err NEW
 pub/TWiki/GnuPlotPlugin/TestInstall.gnu NEW
