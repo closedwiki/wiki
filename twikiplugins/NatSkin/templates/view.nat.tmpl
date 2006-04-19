@@ -22,22 +22,34 @@
 %FISKINSTATE%
 %TMPL:END%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_VIEW% 
+%IFDEFINEDTHEN{"%KEYWORDS%" action="view|preview|save|edit"}%
+  <meta name="keywords" content="%KEYWORDS%" /> 
+  <meta http-equiv="keywords" content="%KEYWORDS%" /> 
+%FIDEFINED%
 %IFSKINSTATETHEN{release="beijing"}%
 %ELSESKINSTATE%
-%$nopIFDEFINEDTHEN{"%FORMFIELD{"SubjectCategory"}%"}%
-<meta name="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
-<meta http-equiv="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
-%FIDEFINED%
-%$nopIFDEFINEDTHEN{"%FORMFIELD{"Headline"}%" action="view"}%
-<meta name="description" content="%FORMFIELD{"Headline"}%" />
-%ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%"}%
-<meta name="description" content="%FORMFIELD{"TopicDescription"}%" />
-%FIDEFINED%
-%$nopIFDEFINEDTHEN{"%FORMFIELD{"Author"}%"}%
-<meta name="author" content="%FORMFIELD{"Author"}%" />
-%ELSEDEFINED%
-<meta name="author" content="%REVINFO{"$wikiname"}%" />
-%FIDEFINED%
+  %$nopIFDEFINEDTHEN{"%FORMFIELD{"Tags"}%"}%
+    <meta name="keywords" content="%FORMFIELD{"Tags"}%" /> 
+    <meta http-equiv="keywords" content="%FORMFIELD{"Tags"}%" /> 
+  %FIDEFINED%
+  %$nopIFDEFINEDTHEN{"%FORMFIELD{"BlogTag"}%"}%
+    <meta name="keywords" content="%FORMFIELD{"BlogTag"}%" /> 
+    <meta http-equiv="keywords" content="%FORMFIELD{"BlogTag"}%" /> 
+  %FIDEFINED%
+  %$nopIFDEFINEDTHEN{"%FORMFIELD{"SubjectCategory"}%"}%
+    <meta name="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
+    <meta http-equiv="keywords" content="%FORMFIELD{"SubjectCategory"}%" /> 
+  %FIDEFINED%
+  %$nopIFDEFINEDTHEN{"%FORMFIELD{"Headline"}%" action="view"}%
+    <meta name="description" content="%FORMFIELD{"Headline"}%" />
+  %ELSIFDEFINED{"%FORMFIELD{"TopicDescription"}%"}%
+    <meta name="description" content="%FORMFIELD{"TopicDescription"}%" />
+  %FIDEFINED%
+  %$nopIFDEFINEDTHEN{"%FORMFIELD{"Author"}%"}%
+    <meta name="author" content="%FORMFIELD{"Author"}%" />
+  %ELSEDEFINED%
+    <meta name="author" content="%REVINFO{"$wikiname"}%" />
+  %FIDEFINED%
 %FISKINSTATE%
 %TMPL:END%
 %TMPL:DEF{"onloadscript"}%focusSearchBox();%TMPL:END%
