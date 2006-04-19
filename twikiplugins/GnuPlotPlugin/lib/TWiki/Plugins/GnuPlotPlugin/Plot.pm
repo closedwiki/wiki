@@ -72,7 +72,7 @@ sub render{
     else
     {
         TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - $gnuFile does not exist" ) if $debug;
-        $renderedText = "No settings found for this plot ($self->{GNUFILE} not found). Click on the Edit button below to generate and edit the settings for this plot.\n";
+        $renderedText = "No settings found for this plot (<nop>$self->{GNUFILE} not found). Click on the Edit button below to generate and edit the settings for this plot.\n";
         $renderedText .= "\n" . editPlotSettingsButton($self);
     }
     return $renderedText;
@@ -84,13 +84,19 @@ sub parseFile {
     open (INFILE, $gnuFile) or return newFile();
     open (OUTFILE, ">", $gnuTmpFile) or die;
     my $plotString = "";
+    my $terminal = "set terminal png\n";
     while (<INFILE>)
     {
-        if(/^set/ and not /terminal/)
+        if (/^set/ and not /terminal/)
         {
             print OUTFILE $_;
             next;
         }
+        if (/^set/ and /terminal/ and /png/ and /size/)
+        {
+            $terminal = $_;
+            next;
+        }        
         if (/^plot/ or /^splot/)
         {
             chomp;
@@ -99,18 +105,18 @@ sub parseFile {
         }
     }
     if ($plotString eq "") { $plotString = "test" };
-    print OUTFILE "set terminal png\n";
+    print OUTFILE "$terminal";
     print OUTFILE "$plotString\n\n";
 }
 
 sub editPlotSettingsButton {
     my $self = shift;
     my $text = '';
-    $text .= "<form action=" . TWiki::Func::getScriptUrl( "$self->{WEB}", "$self->{TOPIC}", "view" ) . "\#gnuplot$self->{NAME}\" method=\"post\">";
-    $text .= "<input type=\"hidden\" name=\"gnuPlotName\" value=\"$self->{NAME}\" />";
-    $text .= "<input type=\"hidden\" name=\"gnuPlotAction\" value=\"edit\" />";
-    $text .= "<input type=\"submit\" value=\"Edit Plot Settings\" class=\"twikiSubmit\"></input>";
-    $text .= "</form>";
+    $text .= "<form action='" . TWiki::Func::getScriptUrl( "$self->{WEB}", "$self->{TOPIC}", "view" ) . "#gnuplot".$self->{NAME}."' method=\"post\" >\n";
+    $text .= "<input type=\"hidden\" name=\"gnuPlotName\" value=\"$self->{NAME}\" />\n";
+    $text .= "<input type=\"hidden\" name=\"gnuPlotAction\" value=\"edit\" />\n";
+    $text .= "<input type=\"submit\" value=\"Edit Plot Settings\" class=\"twikiSubmit\"></input>\n";
+    $text .= "</form>\n";
     return $text;
 }
 
