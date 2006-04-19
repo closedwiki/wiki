@@ -10,14 +10,15 @@ The <nop>%BASEWEB% web uses a TopicClassification scheme that groups topics in t
 	* *TopicTypes* group topics according to their _function or purpose._  Some examples  include <nop>WebLog, <nop>MeetingNote, <nop>ResearchNote, or <nop>ReferenceNote. <nop>TopicTypes usually have a characteristic structure which is defined by a "[[TWiki.TWikiTemplates#Template_Topics][template topic]]".
 
 *List of %BASEWEB%.SubjectAreas in the <nop>%BASEWEB% web:* </br>
-%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="	* $web.$topic - $formfield(TopicHeadline)<br>"}% 
+%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="	* [[$web.$topic][$topic]] - $formfield(TopicHeadline)<br>"}% 
 
 *List of %BASEWEB%.TopicTypes used in the <nop>%BASEWEB% web:* </br>
-%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="   * $web.$topic - $formfield(TopicHeadline)<br>"}% 
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%BASEWEB%" regex="on" noheader="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="   * [[$web.$topic][$topic]] - $formfield(TopicHeadline)<br>"}% 
 
 *Using TopicClassification:*  
 
    * To _organize your topics_ using %BASEWEB%.TopicClassification, simply use the %BASEWEB%.CreateNewTopic "wizard."
+   * Visit %BASEWEB%.TopicTree to view a graphic presentation of your !TopicClassification.
    * To _add a new !TopicType or !SubjectArea_ to the <nop>%BASEWEB% web, see %BASEWEB%.TopicClassificationSetUp.
    
 %STOPINCLUDE%

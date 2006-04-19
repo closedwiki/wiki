@@ -9,7 +9,7 @@
 %INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
 %ICON{tip}% _Use TopicHeadline to summarize initial statement or question for discussion._
 %INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="templates" }%
-%ENDSECTION{"new"}%%
+%ENDSECTION{"new"}%
 -->
 <!-- Topic Permissions
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
