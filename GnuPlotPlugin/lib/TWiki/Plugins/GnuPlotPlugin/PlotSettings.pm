@@ -36,6 +36,7 @@ sub readFile {
     open (INFILE, $gnuFile) or return newFile();
     my $content = '';
     my $plotString = "test";
+    my $terminal = "set terminal png\n";
     while (<INFILE>)
     {
         if(/^set/ and not /terminal/)
@@ -43,12 +44,17 @@ sub readFile {
             $content .= $_;
             next;
         }
+        if(/^set/ and /terminal/ and /png/ and /size/)
+        {
+            $terminal = $_;
+            next;
+        }
         if (/^plot/ or /^splot/)
         {
             $plotString = $_;
         }
     }
-    $content .= "set terminal png\n";
+    $content .= $terminal;
     $content .= $plotString;
     return $content;
 }
