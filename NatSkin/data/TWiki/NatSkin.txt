@@ -21,6 +21,21 @@ these are inspired by the
 This includes a PatternSkin style that emulates the look&amp;feel of the PatternSkin
 as it is known from the TWiki/Cairo release.
 
+The layout of the NatSkin can be configured online using the NatSkinStyleBrowser
+	* by selecting one of the predefined styles;
+	* by selectiong one of the predefined variations;
+	* the sidebar can be displayed left or right or both for a 3 columns layout;
+	* the page border can be switched on, off or enable a thin blog-like layout;
+	* there are so-called WebButtons displaying webs as tabs that can be switched on and off;
+	* the position of the search box can be set to one of four predefined positions.
+
+The screenshots below only display a limitted set of all possible combinations.
+
+This is a rework of the 
+TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
+[[http://nats-www.informatik.uni-hamburg.de/Main/WebHome][Natural Language Systems Division]] 
+(NATS) of the University of Hamburg, Germany. 
+
 ---++ Features
 	* Skin state: an internal representation of different ways to render the NatSkin concerning
 		* the skin style,
@@ -29,12 +44,12 @@ as it is known from the TWiki/Cairo release.
 		* the page border decoration,
 		* the web buttons in the topbar and
 		* the positioning of the search box
+	* skin style control: infrastructure to get, set and display the skin style that
+	  is currently active using the NatSkinStyleBrowser
 	* Conditional content: 
 		* USERACTIONS, NATLOGON: display topic actions depending on the user being logged in or not
 		* IFSKINSTATE: render skin differently depending on the current skin state
 		* IFACCESS: render different content or include topics depending on access rights
-	* skin style control: infrastructure to get, set and display the skin style that
-	  is currently active using the NatSkinStyleBrowser
 	* [[TWikiWebSideBar][WebSideBar]]: a configurable navigation bar
 	* MySideBar: every user can extend the sidebar with a personalized navigation
 	* <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
@@ -49,6 +64,8 @@ as it is known from the TWiki/Cairo release.
 ---++ <nop>NatSearch
 <nop>NatSearch unifies the Seach and the Jump box known from the standard TWiki. You can 
 use one input field to either jump to a topic or start a content query.
+
+<nop>NatSearch is heavily inspired by the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
 
 ---+++ Usage
 This basically works in three modes: 
@@ -106,71 +123,21 @@ Furthermore, the WebPreferences variable =NATSEARCHTEMPLATE= can be set to a tem
 is used instead of the skin's =search= template. This can be used in <nop>TWikiApplications to
 define a customized look of search results.
 
----+++ Disclamer
-<nop>NatSearch is heavily inspired by the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
+---++ Special topic variables
+There is a set of variables that can be used in a topic to influence the NatSkin.
 
----++ About the <nop>WebSideBar
-The <nop>WebSideBar is used to generate a navigation appearing next to 
-the main topic area. Each web in your <nop>%WIKITOOLNAME% might optionaly have a 
-separate <nop>WebSideBar. The default [[%TWIKIWEB%.WebSideBar]] can be used to add a default 
-section common to all <nop>WebSideBars.
-If the <nop>WebSideBar isn't defined the default [[%TWIKIWEB%.WebSideBar]] 
-is used. Each user might define a personalized <nop>WebSideBar called =%<nop>WIKINAME%SideBar= that is
-appended to the <nop>WebSideBar. The TWiki:Plugins/RedDotPlugin is used to make customizing the <nop>WebSideBar
-easier appended to the different parts that make up the complete sidebar. These are hidden if
-you don't have write access to the respective topic fragments.
+| *Name* | *Description* |
+| =PAGETITLE= | the &lt;title>...</title> of the html page; if no PAGETITLE is defined the NatSkin \
+                will check for some formfields (Headlines, <nop>TopicDescription) to be used as a html page title \
+		and back off to the topic name |
+| =KEYWORDS= | the value of this variable will be used to construct &lt;meta name="keywords" ... /> in the html head; \
+                in addition <nop>SubjectCategory, <nop>BlogTag and <nop>Tags formfields will be used \
+		to generate keywords |
+| =WHITEBOARD= | possible values: on, off; if WHITEBOARD is set to only the topic form will be edited \
+                when clicking on "Edit"; note, that the textarea is still accessible and not hidden completely; \
+		this is flag is only there for convenience |
 
----++ About the WebButtons
-The WebButtons are used to render the button toolbar at the top of the page when the =STYLEBUTTONS=
-setting is set to ="on"=.
-The WebButtons are an unordered list of
-those links that should be visible there. There exists one WebButtons topic by default in the 
-%TWIKIWEB% web. You can define a WebButtons topic per web overwriting the settings in the
-<nop>%TWIKIWEB%.WebButtons topic. If you do not define a WebButtons topic in a web then the
-default one will be used displaying a set of links to all public webs in your <nop>%WIKITOOLNAME%
-installation.
-
----++ About Logon &amp; Logout
-=LOGONTOPIC=
-
-
-
-The layout of the NatSkin can be configured online using the NatSkinStyleBrowser
-	* by selecting one of the predefined styles;
-	* by selectiong one of the predefined variations;
-	* the sidebar can be displayed on the left or right;
-	* the page border can be toggled on and off;
-	* there are so-called WebButtons that can be switched on and off displaying webs as tabs;
-	* the position of the search box can be set to one of four predefined positions.
-
-The result can be configured per session, user, web or for the complete site.
-The screenshots below only display a limitted set of all possible combinations.
-
-This skin includes an enhanced navigation mechanism named <nop>WebSideBar.  This
-combines the best of the old <nop>WebMenu idea from the <nop>GnuSkin and the
-<nop>WebLeftBar known from the TWiki:Plugins/PatternSkin by providing all the
-flexibility of the <nop>WebLeftBar including the MySideBar feature and an
-enhanced navigation scheme. 
-
-This is a rework of the 
-TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
-[[http://nats-www.informatik.uni-hamburg.de/Main/WebHome][Natural Language Systems Division]] 
-(NATS) of the University of Hamburg, Germany. 
-
----++ Selecting Styles
-You can try alternative styles
-
-	1 per request: by appending =style=&lt;skin-name>= to the end of the url; 
-	  alternatively, use the NatSkinStyleBrowser
-	1 per user by setting a variable =SKINSYLE= on your %WIKIUSERNAME% homepage
-	1 per web by setting the variable =SKINSTYLE= in the WebPreferences
-	1 site-wide by setting the skinstyle in the %TWIKIWEB%.TWikiPreferences
-
-See the NatSkinPlugin for more information on how to predefine the variants of NatSkin.
-The default style is hardcoded into the NatSkinPlugin.
-
----++ Documentation
-(TODO: "refine" me)
+---++ More Documentation
 
 	* NatSkinTemplates
 	* NatSkinCss
@@ -199,7 +166,7 @@ The default style is hardcoded into the NatSkinPlugin.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.9991 |
+|  Skin Version: | v2.9992 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -216,6 +183,7 @@ The default style is hardcoded into the NatSkinPlugin.
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-04-19: | added support for KEYWORDS per topic | 
 |  2006-04-11: | fixed oops dialogue leaping off the page; \
                  be nicer to non-css browers |
 |  2006-04-05: | added support for dakar's <nop>TemplateLogin; \
@@ -335,7 +303,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 11 Apr 2006
+-- TWiki:Main/MichaelDaum - 19 Apr 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
