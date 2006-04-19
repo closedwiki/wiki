@@ -47,7 +47,6 @@ sub logon {
   writeDebug("called logon");
 
   my $thePathInfo = $query->path_info(); 
-  my $theRemoteUser = $query->remote_user();
   my $theUrl = $query->url;
   my $theUser = $query->param('username');
   my $theWeb = $query->param('web') || $web;
@@ -148,22 +147,25 @@ sub _existsUser {
 sub _checkPasswd {
   my ($theUser, $thePasswd) = @_;
 
-  writeDebug("called _checkPasswd");
+  writeDebug("called _checkPasswd($theUser)");
 
   # beijing
   if ($TWiki::Plugins::NatSkinPlugin::isBeijing) {
+    writeDebug("beijing check");
     my $oldcrypt = &TWiki::Access::htpasswdReadPasswd($theUser);
     return &TWiki::Access::htpasswdCheckPasswd($thePasswd, $oldcrypt);
   } 
 
   # dakar
   if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
+    writeDebug("dakar check");
     my $user = $TWiki::Plugins::SESSION->{users}->findUser($theUser);
     return 0 unless $user;
     return $user->checkPassword($thePasswd);
   }
   
   # well ... cairo ?
+  writeDebug("cairo check");
   return &TWiki::User::CheckUserPasswd($theUser, $thePasswd);
 }
 
