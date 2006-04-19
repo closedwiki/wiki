@@ -56,7 +56,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.9991';
+$RELEASE = '2.9992';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -870,23 +870,47 @@ sub renderGetSkinStyle {
     $theBorderType = 'Thin';
   }
 
-  my $text = 
-    '<style type="text/css">' . "\n" .
-    '@import url("%PUBURL%/'.$knownStyles{$theStyle}.'/'.$theStyle.'Style.css");'."\n";
+  # SMELL: why not use <link rel="stylesheet" href="..." type="text/css" medial="all" />
+  my $text = '';
+  if (0) {
+    $text = 
+      '<style type="text/css">' . "\n" .
+      '@import url("%PUBURL%/'.$knownStyles{$theStyle}.'/'.$theStyle.'Style.css");'."\n";
 
-  $text .=
-    '@import url("%PUBURL%/'.$knownBorders{$theBorder}.'/'.$theBorder.$theBorderType.'.css");'."\n"
-    if $theBorder;
+    $text .=
+      '@import url("%PUBURL%/'.$knownBorders{$theBorder}.'/'.$theBorder.$theBorderType.'.css");'."\n"
+      if $theBorder;
 
-  $text .=
-    '@import url("%PUBURL%/'.$knownButtons{$theButtons}.'/'.$theButtons.'Buttons.css");'."\n"
-    if $theButtons;
+    $text .=
+      '@import url("%PUBURL%/'.$knownButtons{$theButtons}.'/'.$theButtons.'Buttons.css");'."\n"
+      if $theButtons;
 
-  $text .=
-    '@import url("%PUBURL%/'.$knownVariations{$theVariation}.'/'.$theVariation.'Variation.css");'."\n"
-    if $theVariation;
+    $text .=
+      '@import url("%PUBURL%/'.$knownVariations{$theVariation}.'/'.$theVariation.'Variation.css");'."\n"
+      if $theVariation;
 
-  $text .= '</style>';
+    $text .= '</style>';
+  } else {
+    $text = 
+      '<link rel="stylesheet" href="%PUBURL%/'.
+      $knownStyles{$theStyle}.'/'.$theStyle.'Style'.
+      '.css"  type="text/css" medial="all" />'."\n";
+
+    $text .= 
+      '<link rel="stylesheet" href="%PUBURL%/'.
+      $knownBorders{$theBorder}.'/'.$theBorder.$theBorderType.
+      '.css"  type="text/css" medial="all" />'."\n" if $theBorder;
+
+    $text .=
+      '<link rel="stylesheet" href="%PUBURL%/'.
+      $knownButtons{$theButtons}.'/'.$theButtons.'Buttons'.
+      '.css" type="text/css" medial="all" />'."\n" if $theButtons;
+
+    $text .=
+      '<link rel="stylesheet" href="%PUBURL%/'.
+      $knownVariations{$theVariation}.'/'.$theVariation.'Variation'.
+      '.css" type="text/css" medial="all" />'."\n" if $theVariation;
+  }
 
   return $text;
 }
