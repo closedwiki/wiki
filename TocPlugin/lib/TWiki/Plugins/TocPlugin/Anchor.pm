@@ -112,7 +112,7 @@ use integer;
     if ($this->visible()) {
       $text = $this->unWikiWord($this->genIdentText() . " " . $this->text());
     }
-    return $this->genTargetA() . $text . "</A>";
+    return $this->genTargetA() . "</A>" . $text ;
   }
 
   # PUBLIC Generate HTML to target the link
