@@ -66,7 +66,9 @@
 # 07-Apr-2006: ScottHunter
 #		- replaced direct usage of %regex with TWiki::Func::getRegularExpression()
 #		- replaced some implicit scalar references with explicit $ notation
-#
+# 21-Apr-2006 - MichaeDaum
+#       - respects <noautolink> ... </noautolink> blocks as well as the
+#         NOAUTOLINK preference flag#
 
 # =========================
 package TWiki::Plugins::FindElsewherePlugin;
@@ -76,6 +78,7 @@ use vars qw(
 	    $web $topic $user $installWeb $VERSION $debug
 	    $disabledFlag $disablePluralToSingular
 	    $webNameRegex $wikiWordRegex $abbrevRegex $singleMixedAlphaNumRegex
+	    $noAutolink
 	    );
 
 
@@ -123,9 +126,11 @@ sub initPlugin
    $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
    $abbrevRegex = TWiki::Func::getRegularExpression('abbrevRegex');
    
-   my $upperAlphaRegex = TWiki::Func::getRegularExpression(upperAlpha);
-   my $lowerAlphaRegex = TWiki::Func::getRegularExpression(lowerAlpha);
-   my $numericRegex = TWiki::Func::getRegularExpression(numeric);
+   $noAutolink = TWiki::Func::getPreferencesFlag('NOAUTOLINK');
+
+   my $upperAlphaRegex = TWiki::Func::getRegularExpression('upperAlpha');
+   my $lowerAlphaRegex = TWiki::Func::getRegularExpression('lowerAlpha');
+   my $numericRegex = TWiki::Func::getRegularExpression('numeric');
    $singleMixedAlphaNumRegex = qr/[$upperAlphaRegex$lowerAlphaRegex$numericRegex]/;
 
    # Plugin correctly initialized
@@ -143,7 +148,11 @@ sub startRenderingHandler
    &TWiki::Func::writeDebug( "- FindElsewherePlugin::startRenderingHandler( $_[1].$topic )" ) if $debug;
 
    if ( $disabledFlag ) {
-      &TWiki::Func::writeDebug( "- FindElsewherePlugin::startRenderingHandler( Plugin is disabled, returning $_[1].$topic untouched! )" ) if $debug;
+      &TWiki::Func::writeDebug( "- FindElsewherePlugin::startRenderingHandler( Plugin is disabled (DISABLELOOKELSEWHERE set), returning $_[1].$topic untouched! )" ) if $debug;
+      return;
+   }
+   if ( $noAutolink ) {
+      &TWiki::Func::writeDebug( "- FindElsewherePlugin::startRenderingHandler( Plugin is disabled (NOAUTOLINK set), returning $_[1].$topic untouched! )" ) if $debug;
       return;
    }
 
@@ -155,14 +164,33 @@ sub startRenderingHandler
    # Debug incoming topic text if uncommented
    # &TWiki::Func::writeDebug( "- FindElsewherePlugin::startRenderingHandler( Incoming text: $_[0] )" ) if $debug;
 
+   my $text = $_[0];
+   my $removed = {};
+
+   my $renderer;
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
+        # Cairo doesn't have takeOutBlocks
+    } else {
+        # SMELL: No renderer / takeOutBlocks in Func.pm, bypassing API
+        $renderer = $TWiki::Plugins::SESSION->{renderer};
+        $text = $renderer->takeOutBlocks( $text, 'noautolink', $removed );
+    }
+
    # Match 
    # 0) (Allowed preambles: "\s" and "(")
    # 1) [[something]] - (including [[something][something]], but non-greedy),
    # 2) WikiWordAsWebName.WikiWord,
    # 3) WikiWords, and 
    # 4) WIK IWO RDS
-   
-   $_[0] =~ s/([\s\(])(\[\[.*?\]\]|$webNameRegex\.$wikiWordRegex|$wikiWordRegex|$abbrevRegex)/&findTopicElsewhere($_[1],$1,$2)/geo;
+
+   $text =~ s/([\s\(])(\[\[.*?\]\]|$webNameRegex\.$wikiWordRegex|$wikiWordRegex|$abbrevRegex)/&findTopicElsewhere($_[1],$1,$2)/geo;
+
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
+        # Cairo doesn't have putBackBlocks
+    } else {
+        $renderer->putBackBlocks( \$text, $removed, 'noautolink' );
+    }
+   $_[0] = $text;
 
    # Debug outgoing topic text if uncommented
    # &TWiki::Func::writeDebug( "- FindElsewherePlugin::startRenderingHandler( Outgoing text: $_[0] )" ) if $debug;
