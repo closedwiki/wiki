@@ -20,7 +20,18 @@ sub directCall {
     # do something... 
 }
 
+sub logWorkOutstanding {
+	my @entries = $cron->list_entries();
+}
 
+sub abortIfAlreadyRunning {
+   # find the stored pid
+   # if its still there
+      # abort
+   # else continue running
+}
+
+abortIfAlreadyRunning();
 findTWikiBinAndLib();
 require "TWiki.pm";
 
@@ -45,6 +56,7 @@ if (-f userCrontab) {
 
     $cron->add_entry("*/2 * * * *","Tick tock");
     $cron->add_entry("*/2 * * * *",\&directCall);
+    $cron->add_entry("*/2 * * * *",\&logWorkOutstanding);
 }
 
 

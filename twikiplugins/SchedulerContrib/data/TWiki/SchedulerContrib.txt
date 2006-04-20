@@ -1,6 +1,24 @@
 ---+!! SchedulerContrib Contrib Package
 
-Add short description here of your SchedulerContrib contrib.
+The SchedulerContrib implements the ideas contained in TWiki:Codev.CronCentre.
+
+It makes it possible to control notification schedules from a TWiki page. 
+
+The basic idea is to run a single cron at regular intervals that would invoke a script in the bin directory. This cron program then run continually, waiting to process the next event.
+
+Events are listed on a TWiki page containing cron schedule information and the names of pages containing notification information.
+
+For example, our cron could be:
+
+* * * * * * cd /hugedisk/twiki/bin && ./cron ../data/MyWeb/CronSchedule
+
+The cron schedule page would contain something like this:
+
+| *Schedule* | *Entry point* |
+| Every 2 days | TWiki::Plugins::ActionTrackerPlugin::ActionNotify:actionNotify |
+| Every day | TWiki::Notify::allWebs |
+
+This is based on http://search.cpan.org/~roland/Schedule-Cron-0.9/Cron.pm
 
 %TOC%
 
