@@ -1,4 +1,4 @@
-If you see tags such as %<nop>SECTION0% on the next line, read Plugins.TocPlugin
+If you see tags such as %<nop>SECTION0% on the next line, read TWiki.TocPlugin
 
 %SECTION0% Table of Contents and Cross-Reference Plugin
 This topic describes the facilities provided by the TOC TWiki Plugin
@@ -211,13 +211,6 @@ and the first =SECTION1= within <nop>SecondLevelTopic will be 1.1.1. The first =
 	* The standard TWiki variable HTTP_EQUIV_ON_VIEW can be set in WebPreferences to define a style-sheet for the web, for example to apply corporate style quidelines to your documents.
 	* Include a %<nop>TOCCHECK% tag at the end of the table of contents topic.
 	* Name all sections. This makes it easier to refer to them by symbolic names rather than trying to REF numbered sections.
-
-%SECTION1% Further development
-Further development of this Plugin is welcomed. It is recommended that
-you unpack the distribution into a development directory and use the
-supplied Ant http://jakarta.apache.org build file (twikitoc.xml) which
-includes targets to test and install your development code into a test
-installation.
 
 %SECTION1% Copyright
 The TOC Plugin is a development of the Architectures and Systems
