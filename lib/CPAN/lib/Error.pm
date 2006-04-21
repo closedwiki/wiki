@@ -25,7 +25,7 @@ use overload (
 );
 
 $Error::Depth = 0;	# Depth to pass to caller()
-$Error::Debug = 1;	# Generate verbose stack traces
+$Error::Debug = 0;	# Generate verbose stack traces
 @Error::STACK = ();	# Clause stack for try
 $Error::THROWN = undef;	# last error thrown, a workaround until die $ref works
 
@@ -67,7 +67,7 @@ sub prior {
 }
 
 # Return as much information as possible about where the error
-# happened. The -stacktrace element only exists if $Error::Debug
+# happened. The -stacktrace element only exists if $Error::DEBUG
 # was set when the error was created
 
 sub stacktrace {
@@ -244,14 +244,9 @@ sub new {
 
 sub stringify {
     my $self = shift;
-    my $text;
-    if (!$Error::Debug) {
-      $text = $self->SUPER::stringify;
-      $text .= sprintf(" at %s line %d.\n", $self->file, $self->line)
+    my $text = $self->SUPER::stringify;
+    $text .= sprintf(" at %s line %d.\n", $self->file, $self->line)
 	unless($text =~ /\n$/s);
-    } else {
-      $text = $self->stacktrace();
-    }
     $text;
 }
 
@@ -275,9 +270,6 @@ sub run_clauses ($$$\@) {
     my($clauses,$err,$wantarray,$result) = @_;
     my $code = undef;
 
-    print STDERR "********************************\n";
-    print STDERR $err."\n";
-    print STDERR "********************************\n";
     $err = new Error::Simple($err) unless ref($err);
 
     CATCH: {
@@ -388,6 +380,7 @@ sub try (&;$) {
 	    }
 	    1;
 	};
+
 	$err = defined($Error::THROWN) ? $Error::THROWN : $@
 	    unless $ok;
     };
