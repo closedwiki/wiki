@@ -54,11 +54,20 @@ sub new {
 
     $this->{session} = $session;
 
-    my $impl = $TWiki::cfg{PasswordManager};
-    $impl = 'TWiki::Users::Password' if( $impl eq 'none' );
-    eval "use $impl";
+    my $implPasswordManager = $TWiki::cfg{PasswordManager};
+    $implPasswordManager = 'TWiki::Users::Password' if( $implPasswordManager eq 'none' );
+    eval "use $implPasswordManager";
     die "Password Manager: $@" if $@;
-    $this->{passwords} = $impl->new( $session );
+    $this->{passwords} = $implPasswordManager->new( $session );
+
+    my $implUserMappingManager = $TWiki::cfg{UserMappingManager};
+    $implUserMappingManager = 'TWiki::Users::TWikiUserMapping' if( $implUserMappingManager eq 'none' );
+    eval "use $implUserMappingManager";
+    die "User Mapping Manager: $@" if $@;
+    $this->{usermappingmanager} = $implUserMappingManager->new( $session );
+
+    $this->{login} = {};
+    $this->{wikiname} = {};
 
     $this->{CACHED} = 0;
 
@@ -69,39 +78,23 @@ sub new {
     return $this;
 }
 
-# get a list of groups defined in this TWiki 
-sub _getListOfGroups {
+#returns a ref to an array of all group objects found.
+sub getAllGroups() {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-
-    my @list;
-    $this->{session}->{search}->searchWeb
-      (
-       _callback     => \&_collateGroups,
-       _cbdata       => \@list,
-       inline        => 1,
-       search        => "Set GROUP =",
-       web           => 'all',
-       topic         => "*Group",
-       type          => 'regex',
-       nosummary     => 'on',
-       nosearch      => 'on',
-       noheader      => 'on',
-       nototal       => 'on',
-       noempty       => 'on',
-       format	     => "\$web.\$topic",
-       separator     => '',
-      );
-
-    return @list;
+    
+    unless (defined($this->{grouplist})) {
+       $this->{grouplist} = [];
+	   my @groupList = $this->{usermappingmanager}->getListOfGroups();
+	   foreach my $g (@groupList) {
+	       my $groupObject = $this->findUser($g);
+	       push (@{$this->{grouplist}}, $groupObject);
+    	}
+    }
+	
+    return \@{$this->{grouplist}};
 }
 
-# callback for search function to collate results
-sub _collateGroups {
-    my $ref = shift;
-    my $group = shift;
-    push( @$ref, $group ) if $group;
-}
 
 # Get a list of user objects from a text string containing a
 # list of user names. Used by User.pm
@@ -225,129 +218,19 @@ sub createUser {
     my( $this, $name, $wikiname ) = @_;
 
     my $object = new TWiki::User( $this->{session}, $name, $wikiname );
-    $this->{login}{$name} = $object;
-    $this->{wikiname}{$object->webDotWikiName()} = $object;
+    if ( defined ($object) ) {
+        $this->{login}{$object->login()} = $object;
+        $this->{wikiname}{$object->webDotWikiName()} = $object;
+    }
 
     return $object;
 }
 
-=pod
-
----++ ObjectMethod addUserToTWikiUsersTopic( $user ) -> $topicName
-
-Add a user to the TWikiUsers topic. This is a topic that
-maps from usernames to wikinames. It is maintained by
-Register.pm, or manually outside TWiki.
-
-=cut
-
 sub addUserToTWikiUsersTopic {
     my ( $this, $user, $me ) = @_;
 
-    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
-    ASSERT($me->isa( 'TWiki::User')) if DEBUG;
 
-    my $store = $this->{session}->{store};
-    my( $meta, $text ) =
-      $store->readTopic( undef, $TWiki::cfg{UsersWebName},
-                         $TWiki::cfg{UsersTopicName}, undef );
-    my $result = '';
-    my $entry = "\t* ";
-    $entry .= $user->web()."."
-      unless $user->web() eq $TWiki::cfg{UsersWebName};
-    $entry .= $user->wikiName()." - ";
-    $entry .= $user->login() . " - " if $user->login();
-    my $today = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
-
-    # add to the cache
-    $this->{U2W}{$user->login()} = $user->{web} . "." . $user->wikiName();
-
-    # add name alphabetically to list
-    foreach my $line ( split( /\r?\n/, $text) ) {
-        # TODO: I18N fix here once basic auth problem with 8-bit user names is
-        # solved
-        if ( $entry ) {
-            my ( $web, $name, $odate ) = ( '', '', '' );
-            if ( $line =~ /^\s+\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*\w+\s*)?-\s*(.*)/ ) {
-                $web = $1 || $TWiki::cfg{UsersWebName};
-                $name = $2;
-                $odate = $3;
-            } elsif ( $line =~ /^\s+\*\s([A-Z]) - / ) {
-                #	* A - <a name="A">- - - -</a>^M
-                $name = $1;
-            }
-            if( $name && ( $user->wikiName() le $name ) ) {
-                # found alphabetical position
-                if( $user->wikiName() eq $name ) {
-                    # adjusting existing user - keep original registration date
-                    $entry .= $odate;
-                } else {
-                    $entry .= $today."\n".$line;
-                }
-                # don't adjust if unchanged
-                return $TWiki::cfg{UsersTopicName} if( $entry eq $line );
-                $line = $entry;
-                $entry = '';
-            }
-        }
-
-        $result .= $line."\n";
-    }
-    if( $entry ) {
-        # brand new file - add to end
-        $result .= "$entry$today\n";
-    }
-    $store->saveTopic( $me, $TWiki::cfg{UsersWebName},
-                       $TWiki::cfg{UsersTopicName},
-                       $result, $meta );
-
-    return $TWiki::cfg{UsersTopicName};
-}
-
-# Build hash to translate between username (e.g. jsmith)
-# and WikiName (e.g. Main.JaneSmith).  Only used for sites where
-# authentication is managed by external Apache configuration, instead of
-# via TWiki's .htpasswd mechanism.
-sub _cacheTWikiUsersTopic {
-    my $this = shift;
-    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-
-    return if $this->{CACHED};
-    $this->{CACHED} = 1;
-
-    %{$this->{U2W}} = ();
-    %{$this->{W2U}} = ();
-    my $text;
-    my $store = $this->{session}->{store};
-    if( $TWiki::cfg{MapUserToWikiName} &&
-       $store->topicExists($TWiki::cfg{UsersWebName},
-                           $TWiki::cfg{UsersTopicName} )) {
-        $text = $store->readTopicRaw( undef,
-                                      $TWiki::cfg{UsersWebName},
-                                      $TWiki::cfg{UsersTopicName},
-                                      undef );
-    } else {
-        # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
-        # map only guest to TWikiGuest. CODE_SMELL on localization
-        $text = "\t* $TWiki::cfg{DefaultUserWikiName} - $TWiki::cfg{DefaultUserLogin} - 01 Apr 1970";
-    }
-
-    my $wUser;
-    my $lUser;
-    # Get the WikiName and userid, and build hashes in both directions
-    # This matches:
-    #   * TWikiGuest - guest - 10 Mar 2005
-    #   * TWikiGuest - 10 Mar 2005
-    while( $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$//om ) {
-        my $web = $1 || $TWiki::cfg{UsersWebName};
-        $wUser = $2;	# WikiName
-        $lUser = $3 || $wUser;	# userid
-        $lUser =~ s/$TWiki::cfg{NameFilter}//go;	# FIXME: Should filter in for security...
-        my $wwn = $web.'.'.$wUser;
-        $this->{U2W}{$lUser} = $wwn;
-        $this->{W2U}{$wwn} = $lUser;
-    }
+    return $this->{usermappingmanager}->addUserToTWikiUsersTopic($user, $me);
 }
 
 =pod
@@ -387,7 +270,7 @@ sub lookupLoginName {
 
     return undef unless $loginUser;
 
-    $this->_cacheTWikiUsersTopic();
+    $this->{usermappingmanager}->cacheTWikiUsersTopic();
 
     $loginUser =~ s/$TWiki::cfg{NameFilter}//go;
     return $this->{U2W}{$loginUser};
@@ -400,7 +283,7 @@ sub lookupWikiName {
 
     return undef unless $wikiName;
 
-    $this->_cacheTWikiUsersTopic();
+    $this->{usermappingmanager}->cacheTWikiUsersTopic();
 
     $wikiName =~ s/$TWiki::cfg{NameFilter}//go;
     $wikiName = "$TWiki::cfg{UsersWebName}.$wikiName"
@@ -408,5 +291,47 @@ sub lookupWikiName {
 
     return $this->{W2U}{$wikiName};
 }
+
+#TODO: I was under the impression that this list would not contain every user, 
+#but i can't prove it..
+#using TWikiUserMapping, this hash will contain users listed in a group, that don't exist
+#Also, this list will contain a user that is in the current session file, even after it was removed from the system ( we don't check the validity of the user specified in the session - and thus a person can log in, then have their account removed, and until the session expires, they can still edit.)
+sub getAllLoadedUsers {
+    my $this = shift;
+    my $includeGroups = shift || 0;
+
+    my @list = ();
+    foreach my $key (sort keys(%{$this->{wikiname}})) {
+        my $u = $this->{wikiname}{$key};
+	if ($u->isa( 'TWiki::User')) {
+	        push(@list, $u) unless (($includeGroups == 0) && ($u->isGroup()));
+	} else {
+		die $u;
+	}
+    }        
+        
+    return \@list;
+}
+
+#TODO: we need to re-write and bring together the different UserCaches
+#this seems to be a safer list than getAllLoadedUsers()
+#however, if there is a non-existant user in the TWikiUsers topic, it will be here.
+sub getAllUsers {
+    my( $this ) = @_;
+
+    $this->{usermappingmanager}->cacheTWikiUsersTopic();
+    my @list = keys(%{$this->{W2U}});
+    @list = sort(@list);
+    
+    my @userlist= ();
+  
+    foreach my $u (@list) {
+        my $user = $this->findUser($u);  
+        push(@userlist, $user) if ($user->isa( 'TWiki::User'));
+    }        
+        
+    return \@userlist;
+}
+
 
 1;

@@ -168,6 +168,7 @@ BEGIN {
         ENCODE            => \&_ENCODE,
         FORMFIELD         => \&_FORMFIELD,
         GMTIME            => \&_GMTIME,
+        GROUPS            => \&_GROUPS,
         HTTP_HOST         => \&_HTTP_HOST,
         HTTP              => \&_HTTP,
         HTTPS             => \&_HTTPS,
@@ -3313,6 +3314,7 @@ sub _WIKIUSERNAME_deprecated {
 sub _USERINFO {
     my ( $this, $params ) = @_;
     my $format = $params->{format} || '$username, $wikiusername, $emails';
+    my $userDebug = $params->{'userdebug'} || '';
 
     my $user = $this->{user};
 
@@ -3336,11 +3338,42 @@ sub _USERINFO {
     if ($info =~ /\$groups/) {
         my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
         my $groups = join(', ', @groupNames);
+        $groups .= ' isAdmin()' if $user->isAdmin();
         $info =~ s/\$groups\b/$groups/g;
+    }
+    
+    #don't give out userlists to non-admins
+    if (($userDebug ne '')&&($user->isAdmin())) {
+        my $users = '';
+        $users .= "\n\nLoaded Users: ".join(" \n", map {$_->webDotWikiName()} @{$this->{users}->getAllLoadedUsers()});
+        $users .= "\n\nALL Users: ".join(" \n", map {$_->webDotWikiName()} @{$this->{users}->getAllUsers()});
+        $info .=  $users;
     }
 
 
     return $info;
+}
+
+sub _GROUPS {
+    my ( $this, $params ) = @_;
+
+    my @groupNames = map 
+    {
+        '   * '.$_->webDotWikiName().
+            '{'.$_->login().'}'.
+            ":\n      * ".
+        join(', ', map 
+        {
+            $_->webDotWikiName()    
+            .'{'.$_->login().'}'
+        } 
+        @{$_->groupMembers()}).
+        '';
+    } @{$this->{users}->getAllGroups()};
+    push(@groupNames, '   * TWiki::cfg{SuperAdminGroup} :('.$TWiki::cfg{SuperAdminGroup}.')');
+    my $groups = join(" \n", @groupNames);
+    
+    return $groups;
 }
 
 1;

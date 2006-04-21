@@ -75,6 +75,8 @@ sub new {
     $this->{_web} = $web;
     $this->{_topic} = $topic;
 
+    $this->{FILEATTACHMENT} = [];
+
     return $this;
 }
 

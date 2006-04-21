@@ -19,6 +19,7 @@ $VERSION = '1.000';
 Get a list of the registered users *not* including groups. The returned
 list is a list of TWiki::User objects.
 
+
 To get a combined list of users and groups, you can do this:
 <verbatim>
 @usersandgroups = ( @{TWiki::Func::getListOfUsers()}, TWiki::Func::getListOfGroups() );
@@ -27,7 +28,12 @@ To get a combined list of users and groups, you can do this:
 =cut
 
 sub getListOfUsers {
-    my $users = $TWiki::Plugins::SESSION->{users};
+    my $session = $TWiki::Plugins::SESSION;
+    my $users = $session->{users};
+
+    #if we have the UserMapping changes (post 4.0.2)
+    return $session->{users}->getAllUsers() if (defined ($session->{users}->getAllUsers));
+
     $users->lookupLoginName('guest'); # load the cache
 
     unless( $users->{_LIST_OF_REGISTERED_USERS} ) {
@@ -61,7 +67,11 @@ Get a list of groups. The returned list is a list of TWiki::User objects.
 sub getListOfGroups {
     my $session = $TWiki::Plugins::SESSION;
     my $users = $session->{users};
+    
+    #if we have the UserMapping changes (post 4.0.2)
+    return $session->{users}->getAllGroups() if (defined ($session->{users}->getAllGroups));
 
+    #This code assumes we are using TWiki topic based Group mapping
     unless( $users->{_LIST_OF_GROUPS} ) {
         my @list;
         $session->{search}->searchWeb(
@@ -124,6 +134,7 @@ sub lookupUser {
         # we have to cheat. We do this as follows:
         unless( $users->{_MAP_OF_EMAILS} ) {
             $users->lookupLoginName('guest'); # load the cache
+                                               #SMELL: this will not work for non-topic based users
             foreach my $wn ( keys %{$users->{W2U}} ) {
                 my $ou = $users->findUser( $users->{W2U}{$wn}, $wn, 1 );
                 map { $users->{_MAP_OF_EMAILS}->{$_} = $ou; }

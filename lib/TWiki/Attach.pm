@@ -223,9 +223,12 @@ sub _expandAttrs {
         return TWiki::Time::formatTime( $info->{date} );
     }
     elsif ( $attr eq 'USER' ) {
-        my( $w, $t ) = $this->{session}->normalizeWebTopicName(
-            $TWiki::cfg{UsersWebName}, $info->{user} );
-        return $w.'.'.$t;
+        my $user = $this->{session}->{users}->findUser($info->{user});
+        if (defined($user)) {
+            return $user->webDotWikiName();
+        } else {
+            return $info->{user};
+        }        
     }
     else {
         return "\0A_$attr\0";

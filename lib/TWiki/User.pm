@@ -107,7 +107,7 @@ Return the fully qualified wikiname of the user
 sub webDotWikiName {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
-    return "$this->{web}.$this->{wikiname}";
+    return $this->web().'.'.$this->wikiName();
 }
 
 =pod
@@ -358,13 +358,18 @@ True if the user is an admin (is a member of the $TWiki::cfg{SuperAdminGroup})
 sub isAdmin {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
-
-    unless( $this->{isKnownAdmin} ) {
+    unless( defined($this->{isKnownAdmin}) ) {
         $this->{isKnownAdmin} =
           $TWiki::cfg{SuperAdminGroup} =~ /\b$this->{wikiname}$/;
         unless( $this->{isKnownAdmin} ) {
+#we have to examine SuperAdminGroup like this to ensure that non-twiki-mapping gets called (done using getAllGroups())        
             my $sag = $this->{session}->{users}->findUser(
-                $TWiki::cfg{SuperAdminGroup} );
+                 $TWiki::cfg{SuperAdminGroup}, undef, 1 );
+             if (!defined($sag)) {    #force a lazy load groups
+                 $this->{session}->{users}->getAllGroups();
+                 $sag = $this->{session}->{users}->findUser(
+                     $TWiki::cfg{SuperAdminGroup} ); #must be undefined - create it
+             }                
             ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
             $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers() );
         }
@@ -383,14 +388,9 @@ Get a list of user objects for the groups a user is in
 sub getGroups {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
-
-	#because we lazy load the groups, we can't make this conditional on 
-	#  the existance of some groups in the array.
-	my @groupList = $this->{session}->{users}->_getListOfGroups();
-	foreach my $g (@groupList) {
-		my $groupObject = $this->{session}->{users}->findUser($g);
-		#simply calling isInList() will make sure the group added to $this->{groups}
-		$this->isInList( $groupObject->groupMembers() ); 
+    my @groupList = @{$this->{session}->{users}->getAllGroups()};
+    foreach my $groupObject (@groupList) {
+    	$groupObject->groupMembers(); 
 	}
 
     return @{$this->{groups}};
@@ -409,6 +409,7 @@ $list is a string representation of a user list.
 sub isInList {
     my( $this, $userlist, $scanning ) = @_;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
+    $scanning = {} unless $scanning;
 
     unless( ref( $userlist )) {
         # string parameter
@@ -416,15 +417,12 @@ sub isInList {
     }
     my $user;
     foreach $user ( @$userlist ) {
-        if( !$user->isGroup() ) {
-            return 1 if $this->equals( $user );
-        }
-    }
-    foreach $user ( @$userlist ) {
+        #don't check the same user twice
+        next if $scanning->{$user};
+        $scanning->{$user} = 1;
+        
+        return 1 if $this->equals( $user );
         if( $user->isGroup() ) {
-            $scanning = {} unless $scanning;
-            next if $scanning->{$user};
-            $scanning->{$user} = 1;
             return 1 if $this->isInList( $user->groupMembers(), $scanning );
         }
     }
@@ -457,32 +455,9 @@ called on groups.
 
 sub groupMembers {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
-    ASSERT( $this->isGroup()) if DEBUG;
-    my $store = $this->{session}->{store};
+    ASSERT($this->isGroup());
 
-    if( !defined $this->{members} &&
-          $store->topicExists( $this->{web}, $this->{wikiname} )) {
-        my $text =
-          $store->readTopicRaw( undef,
-                                $this->{web}, $this->{wikiname},
-                                undef );
-        foreach( split( /\r?\n/, $text ) ) {
-            if( /$TWiki::regex{setRegex}GROUP\s*=\s*(.+)$/ ) {
-                next unless( $1 eq 'Set' );
-                # Note: if there are multiple GROUP assignments in the
-                # topic, only the last will be taken.
-                $this->{members} = 
-                  $this->{session}->{users}->expandUserList( $2 );
-            }
-        }
-        # backlink the user to the group
-        foreach my $user ( @{$this->{members}} ) {
-            push( @{$user->{groups}}, $this );
-        }
-    }
-
-    return $this->{members};
+    return $this->{session}->{users}->{usermappingmanager}->groupMembers($this);
 }
 
 1;

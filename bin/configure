@@ -35,7 +35,7 @@
 # ---++ is H3, ---+++ is H4 etc
 # Comments of the form
 # **TYPE opts**
-# where TYPE is one of URL, PATH, URLPATH, BOOLEAN, STRING, REGEX, SELECT
+# where TYPE is one of URL, PATH, URLPATH, BOOLEAN, STRING, REGEX, SELECT, PASSWORD
 # are used to indicate that a following cfg var is configurable through
 # the interface. All intermediate comments are taken as documentation for
 # the value.
@@ -488,6 +488,26 @@ sub _warnAboutWindowsBackSlashes {
 ########################################################################
 ##################### PROMPT GENERATORS ################################
 ########################################################################
+# generate an input field for password types
+sub _PROMPT_FOR_PASSWORD {
+    my( $id, $opts, $value, $keys ) = @_;
+    my $size = "55%";
+    if( $opts =~ /\s(\d+)\s/ ) {
+        $size = $1;
+        # These numbers are somewhat arbitrary..
+        if($size>25) { $size="55%"; }
+    }
+
+    # support upgrade from old configuration, where LowerNational and UpperNational
+    # were stored as REGEX'es (now they are STRING's):
+    if ( $id eq "LowerNational" || $id eq "UpperNational" ) { 
+        if ($value =~ /^\(\?-xism:(.*)\)$/) {
+            $value = $1;
+        }
+    }
+
+    return CGI::password_field( -name => $id, -size=>$size, -default=>'--------' );
+}
 
 # generate an input field for string types
 sub _PROMPT_FOR_STRING {
@@ -1307,6 +1327,7 @@ sub handleUpdate {
             next if( $type eq 'OCTAL' && sprintf('0%o', $def) =~ /^0*$val$/ );
             next if( $type eq 'NUMBER' && $val + 1 == $def + 1 );
             next if( $type eq 'BOOLEAN' && ($val && $def || !$val && !$def));
+            next if( $type eq 'PASSWORD' && ($val eq '--------'));
             next if( $val eq $def );
             $output .= CGI::h3($var).
               CGI::strong('old ').
@@ -1354,6 +1375,7 @@ sub calculateChanges {
             next if( $type eq 'OCTAL' && sprintf('0%o', $def) =~ /^0*$val$/ );
             next if( $type eq 'NUMBER' && $val + 1 == $def + 1 );
             next if( $type eq 'BOOLEAN' && ($val && $def || !$val && !$def));
+            next if( $type eq 'PASSWORD' && ($val eq '--------'));
             next if( $val eq $def );
             $changed++;
         }

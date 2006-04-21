@@ -522,7 +522,7 @@ sub _resetUsersPassword {
     my $email = $em[0];
     unless ($email) {
         $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for',
-                                          $user->stringify());
+                                          $user->wikiName());
         return 0;
     }
 
@@ -530,7 +530,7 @@ sub _resetUsersPassword {
     unless( $user->passwordExists() ) {
         # Not an error.
         $$pMess .= $session->inlineAlert( 'alerts', 'missing_user',
-                                          $user->stringify());
+                                          $user->wikiName());
     }
 
     my $password = $user->resetPassword();
@@ -657,11 +657,11 @@ sub changePassword {
     if( $changePass ) {
         if ($user->changePassword( $oldpassword, $passwordA )) {
 
-            $session->writeLog('changepasswd', $user->stringify());
+            $session->writeLog('changepasswd', $user->wikiName());
             #recording the email would be nice
 
         } else {
-            $session->writeLog('changepasswd', $user->stringify(), 'FAILED');
+            $session->writeLog('changepasswd', $user->wikiName(), 'FAILED');
             die 'Problem resetting password';
         }
         # OK - password changed
