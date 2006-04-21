@@ -1,6 +1,5 @@
 data/TWiki/EasyTimelinePlugin.txt NEW
 data/TWiki/EasyTimelinePlugin.txt,v NEW
-lib/TWiki/Plugins/EasyTimelinePlugin NEW
 lib/TWiki/Plugins/EasyTimelinePlugin.pm NEW
 pub/TWiki/EasyTimelinePlugin/BinaryLogicExample.png NEW
 pub/TWiki/EasyTimelinePlugin/BinaryLogicExample.png,v NEW
