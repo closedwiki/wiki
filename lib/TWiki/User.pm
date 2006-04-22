@@ -363,13 +363,9 @@ sub isAdmin {
           $TWiki::cfg{SuperAdminGroup} =~ /\b$this->{wikiname}$/;
         unless( $this->{isKnownAdmin} ) {
 #we have to examine SuperAdminGroup like this to ensure that non-twiki-mapping gets called (done using getAllGroups())        
+            $this->{session}->{users}->getAllGroups();
             my $sag = $this->{session}->{users}->findUser(
-                 $TWiki::cfg{SuperAdminGroup}, undef, 1 );
-             if (!defined($sag)) {    #force a lazy load groups
-                 $this->{session}->{users}->getAllGroups();
-                 $sag = $this->{session}->{users}->findUser(
-                     $TWiki::cfg{SuperAdminGroup} ); #must be undefined - create it
-             }                
+                 $TWiki::cfg{SuperAdminGroup} );
             ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
             $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers() );
         }
