@@ -62,7 +62,7 @@ sub commonTagsHandler
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
     # do custom extension rule, like for example:
-    $_[0] =~ s!\[\[($protocolsPattern://[^]]+?)\]\[[^]]+?\]\]! handleExternalLink($&, $1) !ge;
+    $_[0] =~ s!\[\[($protocolsPattern://[^]]+?)\]\[[^]]+?\]\]([&]nbsp;)?! handleExternalLink($&, $1) !ge;
 }
 
 sub handleExternalLink {
@@ -71,7 +71,7 @@ sub handleExternalLink {
   my $scriptUrl = TWiki::Func::getUrlHost() . TWiki::Func::getScriptUrlPath();
   my $pubUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
 
-  if (($url =~ /^$scriptUrl/) || ($url =~ /^$pubUrl/ )) {
+  if (($url =~ /^$scriptUrl/) || ($url =~ /^$pubUrl/ ) || ($wholeLink =~ /[&]nbsp;$/)) {
     return $wholeLink;
   } else {
     $wholeLink . '&nbsp;' . $externalLinkMark;
