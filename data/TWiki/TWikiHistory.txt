@@ -36,6 +36,7 @@ Most of the redesign, refactoring and new documentation work in Dakar release wa
 | French translation | [[TWiki:Main.BenVoui][BenVoui]] |
 | German translation | [[TWiki:Main.AndreUlrich][AndreUlrich]] |
 | Italian translation | [[TWiki:Main.MassimoMancini][MassimoMancini]] |
+| Polish translation | [[TWiki:Main.ZbigniewKulesza][ZbigniewKulesza]] |
 | Portuguese translation | [[TWiki:Main.AntonioTerceiro][AntonioTerceiro]], [[TWiki:Main.CarlinhosCecconi][CarlinhosCecconi]] |
 | Spanish translation | [[TWiki:Main.WillNorris][WillNorris]], [[TWiki:Main.MiguelABayona][MiguelABayona]] |
 | Swedish translation | [[TWiki:Main.ErikAman][Erik &Aring;man]] |
