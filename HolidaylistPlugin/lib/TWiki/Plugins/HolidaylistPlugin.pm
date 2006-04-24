@@ -203,7 +203,6 @@ sub initDefaults() {
 
 	$defaultsInitialized = 1;
 
-	@processedTopics = ( );
 }
 
 # =========================
@@ -297,6 +296,7 @@ sub initOptions() {
 		}
 	}
 
+	@processedTopics = ( );
 	return 1;
 
 }
@@ -1028,7 +1028,7 @@ sub expandIncludedEvents
 	# recursively expand includes
 	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
 
-	$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
+	## $text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
 
 	return $text;
 }
