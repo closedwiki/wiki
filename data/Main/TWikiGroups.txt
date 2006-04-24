@@ -3,7 +3,7 @@
 
 These groups can be used to define fine grained %TWIKIWEB%.TWikiAccessControl in <nop>%WIKITOOLNAME%:
 
-%SEARCH{"GROUP" topic="*Group" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="   * $topic$n      * <font size=\"-1\">Members: $pattern(.*   \* Set GROUP =([^\n]*).*)</font>"}%
+%SEARCH{"GROUP" topic="*Group" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="   * $topic$n      * Members: $pattern(.*   \* Set GROUP =([^\n]*).*)"}%
 
 <form action="%SCRIPTURLPATH{"edit"}%/%WEB%/" method="get">
    * New Group:
