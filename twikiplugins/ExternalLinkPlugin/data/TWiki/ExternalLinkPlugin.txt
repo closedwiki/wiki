@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1145828137" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1145828137" format="1.0" version="1.1"}%
 ---+ External Link Plugin
 
 This plugin will mark external links so users don't leave your site by accident.
@@ -18,7 +18,7 @@ Remember to use the =[]= forced link syntax.
 		* Set SHORTDESCRIPTION = This plugin will mark external links so users don't leave your site by accident.
 
 	* External link mark (besides images it is also possible to use HTML entity characters like e.g. "&raquo;" (=&amp;raquo;=))
-		* Set MARK = <img src="%PUBURLPATH%/%TWIKIWEB%/%TOPIC%/external.gif" alt="External link mark" />
+		* Set MARK = <img src="%PUBURLPATH%/%TWIKIWEB%/ExternalLinkPlugin/external.gif" alt="External link mark" />
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -60,10 +60,11 @@ following links should not be marked with a %EXTERNALLINKPLUGIN_MARK%:
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AurelioAHeckert, TWiki:Main.NelsonFerraz, TWiki:Main.AntonioTerceiro |
-|  Plugin Version: | 23 Apr 2006 |
+|  Plugin Version: | v1.11 - 24 Apr 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  23 Apr 2006: | Incorporated patch from TWiki:Main.TobiasRoeser (only mark external link once in an included scenario). Minor doc brush-up. Changed default marker to =external.gif= graphic. (TWiki:Main.SteffenPoulsen). |
-|  02 Nov 2005: | Initial release |
+|  24 Apr 2006: | (v1.11) - =%<nop>TOPIC% removed from =MARK= definition, wasn't expanded correctly. |
+|  23 Apr 2006: | (v1.10) - Incorporated patch from TWiki:Main.TobiasRoeser (only mark external link once in an included scenario). Minor doc brush-up. Changed default marker to =external.gif= graphic. (TWiki:Main.SteffenPoulsen). 
+|  02 Nov 2005: | (v1.00) - Initial release |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
