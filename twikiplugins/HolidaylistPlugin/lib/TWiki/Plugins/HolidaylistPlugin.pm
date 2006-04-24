@@ -61,11 +61,6 @@ use strict;
 
 use Date::Calc qw(:all);
 
-# not really required:
-eval { 
-	use HTML::Entities 'encode_entities';
-}; 
-
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $REVISION $pluginName
@@ -79,6 +74,7 @@ use vars qw(
 	$defaultsInitialized
 	$theWeb $theTopic $attributes
 	$startDays
+	@processedTopics
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -91,7 +87,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
+$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar)
+#$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
 #$REVISION = '1.014'; #dro# incorporated documentation fixes by TWiki:Main.KennethLavrsen (Bugs:Item1440) 
 #$REVISION = '1.013'; #dro# added Perl strict pragma; 
 #$VERSION = '1.012'; #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
@@ -142,11 +139,12 @@ sub commonTagsHandler
     # This is the place to define customized tags and variables
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
-    eval {
+    #### eval is bad because Dakar works with exceptions
+    ####eval {
 	    $_[0] =~ s/%HOLIDAYLIST%/&handleHolidaylist("", $_[0], $_[1], $_[2])/ge;
 	    $_[0] =~ s/%HOLIDAYLIST{(.*?)}%/&handleHolidaylist($1, $_[0], $_[1], $_[2])/ge;
-    };
-    TWiki::Func::writeWarning("${pluginName}: $@") if $@;
+    ####};
+    ####TWiki::Func::writeWarning("${pluginName}: $@") if $@;
 
 
 }
@@ -204,6 +202,8 @@ sub initDefaults() {
 	%daysofweek = ( Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6, Sun=>7 );
 
 	$defaultsInitialized = 1;
+
+	@processedTopics = ( );
 }
 
 # =========================
@@ -918,11 +918,13 @@ sub renderHolidaylist() {
 				}
 				# could fail if HTML::Entities is not installed:
 				eval { 
+					require HTML::Entities;
 					my $location = $$ltableref[$i] if defined $ltableref;
 					if (defined $location) {
 						$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
 
 						$location=~s/<!--.*?-->//g; # remove HTML comments
+					
 						$location=encode_entities($location); # quote special characters like "<>
 
 						$location=~s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g; # replace forced link with comment
@@ -956,8 +958,6 @@ sub getTopicText() {
 
 	my $topics = $options{topic};
 	my @topics = split /,\s*/, $topics;
-
-	my @processedTopics = ( );
 
 	my $text = "";
 	foreach my $topicpair (@topics) {
