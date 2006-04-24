@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139475447" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1145354071" format="1.0" version="$Rev$"}%
 ---+!! Checklist Plugin
 
 <nop>ChecklistPlugin creates simple checklists. 
@@ -307,8 +307,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.DanielRohde |
-|  Plugin Version: | 9 Feb 2006 (v1.015) |
+|  Plugin Version: | 18 Apr 2006 (v1.016) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.016 (18 Apr 2006) | TWiki:Main.DanielRohde: fixed access right bug reported by TWiki:Main.SaschaVogt |
 |  v1.015 (9 Feb 2006) | TWiki:Main.DanielRohde: fixed mod_perl preload bug (removed =use warnings;=) reported by TWiki:Main.KennethLavrsen |
 |  v1.014 (6 Feb 2006) | TWiki:Main.DanielRohde: fixed mod_perl bug; fixed deprecated handler problem |
 |  v1.013 (3 Feb 2006) | TWiki:Main.DanielRohde: fixed anchor bug; fixed multiple save bug (performance improvement); fixed reset bugs in named checklists |
