@@ -1089,23 +1089,23 @@ sub _validateRegistration {
 
 #SMELL - when should they get notified of the password?
 sub _addUserToPasswordSystem {
-    my( $session, $p ) = @_;
+    my( $session, $userRow ) = @_;
 
-    my $user = $session->{users}->findUser($p->{LoginName}, $p->{WikiName});
+    my $user = $session->{users}->findUser($userRow->{LoginName}, $userRow->{WikiName});
     if ($user && $user->passwordExists()) {
-        $user->removePassword();
+	return 1;
     }
 
     my $success;
-    if ($p->{CryptPassword})  {
+    if ($userRow->{CryptPassword})  {
         throw Error::Simple( 'No API to install crypted password' );
-        #	$success = $session->{users}->installCryptedPassword($p->{LoginName},
-        #						   $p->{CryptPassword});
+        #	$success = $session->{users}->installCryptedPassword($userRow->{LoginName},
+        #						   $userRow->{CryptPassword});
     }
-    my $password = $p->{Password};
+    my $password = $userRow->{Password};
     unless ($password) {
         $password = TWiki::User::randomPassword();
-        $session->writeWarning('No password specified for '.$p->{LoginName}.' - using random='.$password);
+        $session->writeWarning('No password specified for '.$userRow->{LoginName}.' - using random='.$password);
     }
     if( $user->addPassword( $password )) {
         return 1;
