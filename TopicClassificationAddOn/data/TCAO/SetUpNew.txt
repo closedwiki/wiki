@@ -1,4 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1132167203" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1145483555" format="1.1" reprev="1.2" version="1.2"}%
+_This is the MasterTopic  included in !TopicClassificationSetUp for creating new !TopicClassifications topics._
+
+FixMe: Replace =name= form element with an INCLUDE referencing the new js in WebTopicCreator (once it's included in distribution).
+---
+%STARTINCLUDE%
 ---++ Topic Classification Set-up for the <nop>%BASEWEB% web
 Use this topic to add %BASEWEB%.TopicTypes or %BASEWEB%.SubjectAreas to the <nop>%BASEWEB% web. You can either add a predefined classification or define a new, custom classfication. 
 
@@ -39,6 +44,11 @@ _You selected to define a *new* <nop>%URLPARAM{type}%._
 
 Click here: <input type="submit" value=" Create New Topic Classification " /> _You will be sent immediately to your new <nop>%URLPARAM{type}% topic._
 </form>
+%STOPINCLUDE%
 
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="MasterTopic"}%
+%META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoAdmin"}%
+%META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="This is the MasterTopic included in !TopicClassificationSetUp for creating new !TopicClassifications topics."}%
 %META:PREFERENCE{name="ALLOWTOPICCHANGE" title="ALLOWTOPICCHANGE" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%
 %META:PREFERENCE{name="ALLOWTOPICRENAME" title="ALLOWTOPICRENAME" type="Set" value="%25MAINWEB%25.TWikiAdminGroup"}%

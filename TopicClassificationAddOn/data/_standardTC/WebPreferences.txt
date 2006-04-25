@@ -8,7 +8,7 @@ The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%
 __Preferences:__
 
 	* Variables for %TWIKIWEB%.TopicClassificationAddOn:
-		* Set TEMPLWEB = Template
+		* Set TCAOWEB = TCAO
 		* Set XL = <img src="%PUBURL%/%TEMPLWEB%/TopicClassificationAddOnGraphics/link-outside.gif" alt="External link" title="Link to external site" width='13' height='12' />
 		* Set sidebar style:
 <verbatim>
