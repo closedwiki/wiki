@@ -66,8 +66,8 @@ This Contrib is pre-installed as part of the TWiki release package, and should o
 ---+ Setting up your cron job
 You need to set up a =cron= (or equivalent) job to run =mailnotify=.
 
-<code>Usage: perl -I <bin> tools/mailnotify [-q] [ <i>web1 web2 ... webN</i> ]</code>
-<bin> is the path to the TWiki bin directory, so that the script can find the rest of TWiki.
+<code>Usage: perl -I &lt;bin&gt mailnotify [-q] [ <i>web1 web2 ... webN</i> ]</code>
+&lt;bin&gt; is the path to the TWiki bin directory (usually =../bin=), so that the script can find the rest of TWiki.
 | =-q= | Don't print progress information |
 | <code><i>web1 web2 ... webN</i></code> | List of webs to process, separated by spaces or commas. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
 For example, =perl -I /usr/local/twiki/bin mailnotify -q Public Private= will generate notifications for the Public and Private webs.
