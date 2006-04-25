@@ -35,7 +35,7 @@ Render bullet lists in a variety of formats
 			* =Like this=
 	* Decreasing indentation many levels at a time is OK
 	* Wrap long text with continuation lines, the Plugin does not do that for you%BR%
-	  =Align continuation lines with leading spaces linke this=
+	  =Align continuation lines with leading spaces like this=
 	* You can specify an icon for a bullet of render type *tree* or *icon*:
 		* Attach the icon to this Plugin topic, e.g. =myicon.gif=, or
 		* Use one of the existing icons: %ATTACHURL%/globe.gif =globe.gif=, %ATTACHURL%/home.gif =home.gif=, %ATTACHURL%/virtualhome.gif =virtualhome.gif=, %ATTACHURL%/group.gif =group.gif=, %ATTACHURL%/persons.gif =persons.gif=, %ATTACHURL%/virtualpersons.gif =virtualpersons.gif=, %ATTACHURL%/person.gif =person.gif=, %ATTACHURL%/virtualperson.gif =virtualperson.gif=, %ATTACHURL%/email.gif =email.gif=, %ATTACHURL%/trend.gif =trend.gif=, %ATTACHURL%/folder.gif =folder.gif=, %ATTACHURL%/file.gif =file.gif=, %ATTACHURL%/doc.gif =doc.gif=, %ATTACHURL%/image.gif =image.gif=, %ATTACHURL%/pdf.gif =pdf.gif=, %ATTACHURL%/ppt.gif =ppt.gif=, %ATTACHURL%/sound.gif =sound.gif=, %ATTACHURL%/xls.gif =xls.gif=, %ATTACHURL%/zip.gif =zip.gif=, %ATTACHURL%/see.gif =see.gif=
