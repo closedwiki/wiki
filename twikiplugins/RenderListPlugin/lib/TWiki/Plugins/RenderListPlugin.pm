@@ -25,7 +25,7 @@ use vars qw(
         $debug
     );
 
-$VERSION = '1.032';
+$VERSION = '1.033';
 $pluginName = 'RenderListPlugin';  # Name of this Plugin
 
 # =========================

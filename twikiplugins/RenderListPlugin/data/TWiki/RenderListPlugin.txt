@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1145048254" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="TWikiContributor" date="1145048254" format="1.0" version="1.13"}%
 ---+ Render List Plugin 
 
 Render bullet lists in a variety of formats
@@ -353,8 +353,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 21 Nov 2004 (V1.032) |
+|  Plugin Version: | 25 Apr 2006 (V1.033) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  25 Apr 2006: | SVN sync, Cairo + Dakar compatibility |
 |  14 Apr 2006: | [[http://TWiki.org/cgi-bin/view/Codev/TWikiRelease04x00][TWikiRelease04x00]] compatibility update |
 |  21 Nov 2004: | Added benchmarks (no code changes) |
 |  21 Mar 2004: | Internal change: Fixed unofficial function call |
