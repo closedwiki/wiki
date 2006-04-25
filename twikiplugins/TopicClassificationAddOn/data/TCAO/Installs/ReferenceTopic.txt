@@ -4,12 +4,12 @@
 %INCLUDE{%TCAOWEB%.TopicTypeMaster}%
 
 <!-- Hidden include for CreateNewTopic
-%STARTSECTION{name="new" type="include"}%
+%STARTSECTION{name="new" type="section"}%
 %INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="name" }%
 %INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="headline" }%
 %ICON{tip}% _Use TopicHeadline to summarize what reference information topic provides._
 %INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="templates" }%
-%ENDSECTION{name="new" type="include"}%%
+%ENDSECTION{name="new" type="section"}%%
 -->
 
 <!-- Topic Permissions

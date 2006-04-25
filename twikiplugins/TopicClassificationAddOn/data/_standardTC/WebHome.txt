@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1130442725" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1130442725" format="1.1" version="$Rev$"}%
 ---+!! %MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
 Welcome to the %WEB% web! The purpose of this collaborative wiki is...
 
-%INCLUDE{ "%TEMPLWEB%.TopicClassWebHomeIntro"}%
+%INCLUDE{ "%TCAOWEB%.TopicClassWebHomeIntro"}%
 
 %INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="dropdown" }%
 

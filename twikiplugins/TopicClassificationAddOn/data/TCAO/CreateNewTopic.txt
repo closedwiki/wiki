@@ -1,6 +1,8 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1141360516" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1145483379" format="1.1" reprev="1.2" version="1.2"}%
 %META:TOPICPARENT{}%
 _This is the MasterTopic for all CreateNewTopic topics across the TCAO installation._
+
+FixMe: Replace =name= form element with an INCLUDE referencing the new js in WebTopicCreator (once it's included in distribution).
 ---
 %STARTINCLUDE%
 ---+++ Create A New Topic
