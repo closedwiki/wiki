@@ -925,7 +925,7 @@ sub renderHolidaylist() {
 
 						$location=~s/<!--.*?-->//g; # remove HTML comments
 					
-						$location=encode_entities($location); # quote special characters like "<>
+						$location=&HTML::Entities::encode_entities($location); # quote special characters like "<>
 
 						$location=~s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g; # replace forced link with comment
 						$location=~s/\[\[([^\]]+)\]\]/$1/g; # replace forced link with comment
