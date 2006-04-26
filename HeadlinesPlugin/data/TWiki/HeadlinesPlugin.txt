@@ -174,8 +174,9 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Plugin Author: | TWiki:Main.PeterThoeny, TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2002-2006, Peter Thoeny; 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.02 |
+|  Plugin Version: | v2.10 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  26 Apr 2006: | added lazy compilation |
 |  10 Feb 2006: | packaged using the TWiki:Plugins/BuildContrib; \
                   minor fixes |
 |  03 Feb 2006: | off-by-one: limit="n" returned n+1 articles; \
@@ -206,6 +207,6 @@ defining the default CSS properties  (indentation illustrates enclosure).
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.PeterThoeny - 11 May 2005 %BR%
--- TWiki:Main.MichaelDaum - 10 Mar 2006
+-- TWiki:Main.MichaelDaum - 26 Apr 2006
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1132593600" path="style.css" size="1372" user="TWikiContributor" version="1.1"}%
