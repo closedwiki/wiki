@@ -3357,23 +3357,14 @@ sub _USERINFO {
 sub _GROUPS {
     my ( $this, $params ) = @_;
 
-    my @groupNames = map 
-    {
-        '   * '.$_->webDotWikiName().
-            '{'.$_->login().'}'.
-            ":\n      * ".
-        join(', ', map 
-        {
-            $_->webDotWikiName()    
-            .'{'.$_->login().'}'
-        } 
-        @{$_->groupMembers()}).
-        '';
-    } @{$this->{users}->getAllGroups()};
-    push(@groupNames, '   * TWiki::cfg{SuperAdminGroup} :('.$TWiki::cfg{SuperAdminGroup}.')');
-    my $groups = join(" \n", @groupNames);
-    
-    return $groups;
+    my @groupNames = map {
+      '| [['.$_->webDotWikiName().  ']['.$_->wikiName().']] |'.
+        join(', ', map {
+            '[['.$_->webDotWikiName().']['.$_->wikiName().']]'
+        } @{$_->groupMembers()}). ' |';
+    } sort {$a->wikiName() cmp $b->wikiName()} @{$this->{users}->getAllGroups()};
+
+    return '| *Group* | *Members* |'."\n".join("\n", @groupNames);
 }
 
 1;
