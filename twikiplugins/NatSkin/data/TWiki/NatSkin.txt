@@ -29,7 +29,7 @@ The layout of the NatSkin can be configured online using the NatSkinStyleBrowser
 	* there are so-called WebButtons displaying webs as tabs that can be switched on and off;
 	* the position of the search box can be set to one of four predefined positions.
 
-The screenshots below only display a limitted set of all possible combinations.
+The screenshots below only display a limited set of all possible combinations.
 
 This is a rework of the 
 TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
