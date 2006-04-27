@@ -39,7 +39,9 @@ sub render{
     { 
         parseFile($self, $gnuFile, $gnuTmpFile);
         my $errFile = $self->{PATH} . "/" . $self->{ERRFILE};
-        my $exePath = TWiki::Func::getPreferencesValue( 'GNUPLOTPLUGIN_GNUPLOTPATH' );
+
+        # Update $exePath to fit your environment
+        my $exePath = "/usr/bin/gnuplot";
         my $execCmd = "cd $self->{PATH} && $exePath $gnuTmpFile > $pngFile 2> $errFile";    
         TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - Exe Path: $exePath" ) if $debug;
         TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - Executing $execCmd" ) if $debug;

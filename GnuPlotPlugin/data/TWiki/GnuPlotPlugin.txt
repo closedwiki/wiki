@@ -250,9 +250,6 @@ splot [-1.5:1.5] [-0.5:1.5] (1-x)**2 + 100*(y - x**2)**2
 	* Debug plugin: (See output in =data/debug.txt=)
 	* Set DEBUG = 0
 
-	* Path to gnuplot executable:
-	* Set GNUPLOTPATH = /usr/bin/gnuplot
-
 ---++ Plugin Installation Instructions 
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
@@ -269,8 +266,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 		| =lib/TWiki/Plugins/GnuPlotPlugin/Plot.pm= | Perl module responsible for rendering the plot area |
 		| =lib/TWiki/Plugins/GnuPlotPlugin/PlotSettings.pm= | Perl module responsible for managing the settings |
 
-	* Edit the *GNUPLOTPATH* setting above to point to the gnuplot executable. *Note* -- you can specify an absolute or relative path. Relative path is specified relative to the twiki/bin directory. Absolute path will depend on your webserver configuration (whether or not it runs with chroot or not).
-If your plugin is correctly installed you should have fully interactive editable plots in the examples section
+	* In =/lib/TWiki/Plugins/GnuPlotPlugin/Plot.pm= look for the following lines, and update =$exePath= to fit your environment: %BR%
+	   =# Update $exePath to fit your environment= %BR%
+	   =my $exePath = "/usr/bin/gnuplot";=
+
+	* If your plugin is correctly installed you should have fully interactive editable plots in the examples section
 
 ---++ Known issues
 
