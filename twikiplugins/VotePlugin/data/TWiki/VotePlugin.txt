@@ -1,6 +1,14 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139390324" format="1.1" version="1.1"}%
----+!! <nop>VotePlugin
+<!--
 
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
+---+!! <nop>VotePlugin
 This plugin might be used to establish an online-voting system. Votes are
 collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlugin.
 
@@ -60,8 +68,9 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.22 |
+|  Plugin Version: | v1.30 |
 |  Change History: | &nbsp; | 
+|  2006-04-27 | added lazy compilation |
 |  2005-12-07 | added gif bar; removed debug flag |
 |  2005-10-09 | fixed invocation of normalizeFileName |
 |  2005-10-08 | added added a little more style flexibility |
@@ -80,5 +89,5 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Feedback: | TWiki:Plugins/VotePluginDev |
 |  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
 
--- TWiki:Main.MichaelDaum - 7 Dec 2005
+-- TWiki:Main.MichaelDaum - 27 Apr 2006
 

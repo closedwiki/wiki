@@ -29,6 +29,7 @@ if ($ENV{GATEWAY_INTERFACE} !~ /^CGI-Perl/) {
 }
 
 use strict;
+use TWiki::Plugins::VotePlugin::Core;
 
 ###############################################################################
 sub writeDebug {
@@ -36,8 +37,7 @@ sub writeDebug {
 }
 
 ###############################################################################
-sub main
-{
+sub main {
   my $query = new CGI;
   my $thePathInfo = $query->path_info(); 
   my $theRemoteUser = $query->remote_user();
@@ -45,10 +45,9 @@ sub main
   my $theUrl = $query->url;
 
   # initialize twiki engine
-  my($topic, $web, $scriptUrlPath, $userName)  = 
-    &TWiki::initialize($thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query);
+  my ($topic, $web)  = &TWiki::initialize($thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query);
 
-  my $wikiUserName = &TWiki::Func::userToWikiName($userName);
+  my $wikiUserName = &TWiki::Func::getWikiUserName();
 
   # check access permission
   my $viewAccessOK = &TWiki::Func::checkAccessPermission('view', $wikiUserName, '', $topic, $web);
@@ -66,11 +65,10 @@ sub main
   }
 
   # call the voter
-  &TWiki::Plugins::VotePlugin::vote(\%formData);
+  &TWiki::Plugins::VotePlugin::Core::vote($web, $topic,\%formData);
 
   # view again
   &TWiki::Func::redirectCgiQuery($query, &TWiki::Func::getViewUrl($web, $topic));
 }
-###############################################################################
 
 &main();
