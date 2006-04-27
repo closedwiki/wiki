@@ -39,7 +39,9 @@ sub render{
     { 
         parseFile($self, $ploticusFile, $ploticusTmpFile);
         my $errFile = $self->{PATH} . "/" . $self->{ERRFILE};
-        my $exePath = TWiki::Func::getPreferencesValue( 'PLOTICUSPLUGIN_PLOTICUSPATH' );
+
+        # Update $exePath to fit your environment
+        my $exePath = "/usr/bin/ploticus";
         my $execCmd = "cd $self->{PATH} && $exePath -f $ploticusTmpFile -png -o $pngFile 2> $errFile ";    
         TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - Exe Path: $exePath" ) if $debug;
         TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - Executing $execCmd" ) if $debug;
