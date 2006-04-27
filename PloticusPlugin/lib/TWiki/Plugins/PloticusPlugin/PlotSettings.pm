@@ -44,6 +44,25 @@ sub readFile {
         }
         $content .= $_;
     }
+    if ( $content =~ /#shell|#endshell|\$shellrow|#sql|#load|#write|#endwrite|#cat/ ) {
+        $content = "#proc annotate\n";
+        $content .= "location: 2 6\n";
+        $content .= "ellipse: yes\n";
+        $content .= "backcolor: red\n";
+        $content .= "text:\n";
+        $content .= "Security issue!\n";
+        $content .= "At least one of the \n";
+        $content .= "following directives was\n";
+        $content .= "found in script syntax:\n";
+        $content .= "-#shell\n";
+        $content .= "-#endshell\n";
+        $content .= "-\$shellrow\n";
+        $content .= "-#sql\n";
+        $content .= "-#load\n";
+        $content .= "-#write\n";
+        $content .= "-#endwrite\n";
+        $content .= "-#cat\n";
+    }
     return $content;
 }
 
