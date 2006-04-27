@@ -21,265 +21,33 @@
 
 package TWiki::Plugins::TimeSincePlugin;
 
-use Time::Local;
 use strict;
-use vars qw( $VERSION $RELEASE $debug @SECONDS %MON2NUM );
-
-$debug = 0; # toggle me
+use vars qw( $VERSION $RELEASE $isInitialized);
 
 $VERSION = '$Rev$';
-$RELEASE = '0.99';
-
-%MON2NUM = (
-  Jan => 0,
-  Feb => 1,
-  Mar => 2,
-  Apr => 3,
-  May => 4,
-  Jun => 5,
-  Jul => 6,
-  Aug => 7,
-  Sep => 8,
-  Oct => 9,
-  Nov => 10,
-  Dec => 11
-);
-
-@SECONDS = (
-  ['year',   60 * 60 * 24 * 365],
-  ['month',  60 * 60 * 24 * 30],
-  ['week',   60 * 60 * 24 * 7],
-  ['day',    60 * 60 * 24],
-  ['hour',   60 * 60],
-  ['minute', 60],
-  ['second', 1]
-);
-
-
-
-###############################################################################
-sub writeDebug {
-  &TWiki::Func::writeDebug('- TimeSincePlugin - ' . $_[0]) if $debug;
-}
-
+$RELEASE = '1.00';
 
 ###############################################################################
 sub initPlugin {
-  my ($topic, $web, $user, $installWeb) = @_;
 
-  if ($TWiki::Plugins::VERSION < 1.026) {
-    TWiki::Func::writeWarning("Version mismatch between TimeSincePlugin and Plugins.pm");
+  if ($TWiki::Plugins::VERSION < 1.1) {
     return 0;
   }
-  TWiki::Func::registerTagHandler('TIMESINCE', \&_TIMESINCE);
+
+  TWiki::Func::registerTagHandler('TIMESINCE', \&handleTimeSince);
   return 1;
 }
 
 ###############################################################################
-sub _TIMESINCE {
-  my ($session, $params, $theTopic, $theWeb) = @_;
+sub handleTimeSince {
 
-  #print STDERR "DEBUG: _TIMESINCE(" . $params->stringify() . ") called\n";
-
-  my $theFrom = $params->{_DEFAULT} || $params->{from} || '';
-  my $theTo = $params->{to} || '';
-  my $theUnits = $params->{units} || 2;
-  my $theSeconds = $params->{seconds} || 'off';
-  my $theAbs = $params->{abs} || 'off';
-  my $theNull = $params->{null} || 'about now';
-  my $theFormat = $params->{format} || '$time';
-
-  if ($theFrom eq '' && $theTo eq '') {
-    # if there's no starting date then get the current revision date
-    my ($meta, undef) = &TWiki::Func::readTopic($theWeb, $theTopic);
-    ($theFrom) = $meta->getRevisionInfo();
-    $theTo = time();
-  } else {
-
-    $theFrom =~ s/^\s*(.*)\s*$/$1/go;
-    $theTo =~ s/^\s*(.*)\s*$/$1/go;
-
-  
-    # convert time to epoch seconds
-    if ($theFrom ne '') {
-      if ($theFrom !~ /^\d+$/) { # already epoch seconds
-	eval {
-	  local $SIG{'__DIE__'};
-	  $theFrom = &parseTime($theFrom);
-	};
-	if ($@) {
-	  my $message = $@;
-	  $message =~ s/\sat\s.*//go;
-	  writeDebug("can't parse: $message");
-	  return &inlineError("ERROR: can't parse from=\"$theFrom\" - $message");
-	}
-	return &inlineError("ERROR: can't parse from=\"$theFrom\"")
-	  unless defined $theFrom;
-      }
-    } else {
-      $theFrom = time();
-    }
-    if ($theTo ne '') {
-      if ($theTo !~ /^\d+$/) { # already epoch seconds
-	eval {
-	  local $SIG{'__DIE__'};
-	  $theTo = &parseTime($theTo);
-	};
-	if ($@) {
-	  my $message = $@;
-	  $message =~ s/\sat\s.*//go;
-	  writeDebug("can't parse: $message");
-	  return &inlineError("ERROR: can't parse to=\"$theTo\" - $message");
-	}
-	return &inlineError("ERROR: can't parse from=\"$theTo\"")
-	  unless defined $theTo;
-      }
-    } else {
-      $theTo = time();
-    }
+  unless ($isInitialized) {
+    eval 'use TWiki::Plugins::TimeSincePlugin::Core;';
+    die $@ if $@;
+    $isInitialized = 1;
   }
 
-  my $since = $theTo - $theFrom;
-  if ($theAbs eq 'on') {
-    $since = abs($since);
-  }
-   
-  #print STDERR "DEBUG: theFrom=$theFrom, theTo=$theTo, since=$since\n";
-
-  # calculate time string
-  my $unit;
-  my $count;
-  my $seconds;
-  my $timeString = '';
-  my $state = 0;
-
-  # step one: the first chunk
-  my $max = ($theSeconds eq 'on')?7:6;
-  for (my $i = 0; $i < $max; $i++) {
-    $unit = $SECONDS[$i][0];
-    $seconds = $SECONDS[$i][1];
-    $count = int(($since + 0.0) / $seconds);
-
-    writeDebug("unit=$unit, seconds=$seconds, count=$count, since=$since");
-
-    # finding next unit
-    if ($count) {
-      $timeString .= ', ' if $state > 0;
-      $timeString .= ($count == 1) ? '1 '.$unit : "$count ${unit}s";
-      $state++;
-    } else {
-      next;
-    }
-
-    $since -= ($count * $seconds);
-    last if $theUnits && $state >= $theUnits;
-  }
-  
-  if ($timeString eq '') {
-    return expandVariables($theNull);
-  } else {
-    return expandVariables($theFormat, 'time'=>$timeString);
-  }
+  return TWiki::Plugins::TimeSincePlugin::Core::handleTimeSince(@_);
 }
 
-###############################################################################
-sub parseTime {
-    my( $date ) = @_;
-
-    my $isGmt = ($date =~ /GMT$/i)?1:0;
-
-    # NOTE: This routine *will break* if input is not one of below formats!
-    
-    # FIXME - why aren't ifs around pattern match rather than $5 etc
-    # try "31 Dec 2001 - 23:59"  (TWiki date)
-    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/) {
-        my $year = $3;
-        #$year -= 1900 if( $year > 1900 );
-        # The ($2) will look up the constant so named
-        return timegm( 0, $5, $4, $1, $MON2NUM{$2}, $year ) if $isGmt;
-        return timelocal( 0, $5, $4, $1, $MON2NUM{$2}, $year );
-    }
-
-    # try "31 Dec 2001"
-    if ($date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)/) {
-        my $year = $3;
-        #$year -= 1900 if( $year > 1900 );
-        # The ($2) will look up the constant so named
-        return timegm( 0, 0, 0, $1, $MON2NUM{$2}, $year ) if $isGmt;
-        return timelocal( 0, 0, 0, $1, $MON2NUM{$2}, $year );
-    }
-
-    # try "2001/12/31 23:59:59" or "2001.12.31.23.59.59" (RCS date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)[\.\:]([0-9]+)/) {
-        my $year = $1;
-        #$year -= 1900 if( $year > 1900 );
-        return timegm( $6, $5, $4, $3, $2-1, $year ) if $isGmt;
-        return timelocal( $6, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001/12/31"
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)/) {
-        my $year = $1;
-        #$year -= 1900 if( $year > 1900 );
-        return timegm( 0, 0, 0, $3, $2-1, $year ) if $isGmt;
-        return timelocal( 0, 0, 0, $3, $2-1, $year );
-    }
-
-    # try "2001/12/31 23:59" or "2001.12.31.23.59" (RCS short date)
-    if ($date =~ /([0-9]+)[\.\/\-]([0-9]+)[\.\/\-]([0-9]+)[\.\s\-]+([0-9]+)[\.\:]([0-9]+)/) {
-        my $year = $1;
-        #$year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $3, $2-1, $year ) if $isGmt;
-        return timelocal( 0, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001-12-31T23:59:59Z" or "2001-12-31T23:59:59+01:00" (ISO date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        #$year -= 1900 if( $year > 1900 );
-        return timegm( $6, $5, $4, $3, $2-1, $year ) if $isGmt;
-        return timelocal( $6, $5, $4, $3, $2-1, $year );
-    }
-
-    # try "2001-12-31T23:59Z" or "2001-12-31T23:59+01:00" (ISO short date)
-    # FIXME: Calc local to zulu time "2001-12-31T23:59+01:00"
-    if ($date =~ /([0-9]+)\-([0-9]+)\-([0-9]+)T([0-9]+)\:([0-9]+)/ ) {
-        my $year = $1;
-        #$year -= 1900 if( $year > 1900 );
-        return timegm( 0, $5, $4, $3, $2-1, $year ) if $isGmt;
-        return timelocal( 0, $5, $4, $3, $2-1, $year );
-    }
-
-    # give up, return start of epoch (01 Jan 1970 GMT)
-    return undef;
-}
-
-###############################################################################
-sub inlineError {
-  return '<span class="twikiAlert">' . $_[0] . '</span>' ;
-}
-
-###############################################################################
-sub expandVariables {
-  my ($theFormat, %params) = @_;
-
-  return '' unless $theFormat;
-  
-  foreach my $key (keys %params) {
-    if($theFormat =~ s/\$$key/$params{$key}/g) {
-      #print STDERR "DEBUG: expanding $key->$params{$key}\n";
-    }
-  }
-  $theFormat =~ s/\$percnt/\%/go;
-  $theFormat =~ s/\$dollar/\$/go;
-  $theFormat =~ s/\$n/\n/go;
-  $theFormat =~ s/\$t\b/\t/go;
-  $theFormat =~ s/\$nop//g;
-
-  return $theFormat;
-}
-
-
-###############################################################################
 1;

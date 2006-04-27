@@ -80,8 +80,9 @@ Format strings may contain the following:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.99 |
+|  Plugin Version: | v1.00 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 Apr 2006: | added lazy compilation |
 |  11 Nov 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Time::Local |
@@ -92,5 +93,5 @@ Format strings may contain the following:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 11 Nov 2005
+-- TWiki:Main.MichaelDaum - 27 Apr 2006
 
