@@ -9,9 +9,9 @@ This plugin is basically a rip off of TWiki:Plugins.GnuPlotPlugin - thanks [[TWi
 
 ---++ Syntax Rules 
 
-   * Add =%<nop>PLOTICUSPLOT{"PlotName"}%= in a topic (where you want the plot to appear) and save the topic
-   * Multiple plots can be displayed within one topic
-   * Any CSV (Comma Seperated Variable) files attached to the topic can be used with the ploticus command (see examples)
+	* Add =%<nop>PLOTICUSPLOT{"PlotName"}%= in a topic (where you want the plot to appear) and save the topic
+	* Multiple plots can be displayed within one topic
+	* Any CSV (Comma Seperated Variable) files attached to the topic can be used with the ploticus command (see examples)
 
 ---++ Examples
 
@@ -43,11 +43,12 @@ Plot settings:
 #endif
 //  specify data using proc getdata
 #proc getdata
-data:   Brazil 22
-   Columbia 17
-   "Costa Rica" 22
-   Guatemala 19
-   Honduras 12
+data:
+ Brazil        22
+ Columbia      17
+ "Costa Rica"  22
+ Guatemala     19
+ Honduras      12
 
 //  render the pie graph using proc pie
 #proc pie
@@ -157,20 +158,21 @@ Plot settings:
 #if @DEVICE in gif,png
   scale: 0.5
 #endif
-<p />
+
 //  specify data using proc getdata
 #proc getdata
-data:   Brazil 22
-   Columbia 17
-   "Costa Rica" 22
-   Guatemala 3
-   Honduras 12
-   Mexico 14
-   Nicaragua 28
-   Belize 9
-    United\nStates 21
-   Canada 8
-<p />
+data:   
+ Brazil          22
+ Columbia        17
+ "Costa Rica"    22
+ Guatemala        3
+ Honduras        12
+ Mexico          14
+ Nicaragua       28
+ Belize           9
+ United\nStates  21
+ Canada           8
+
 //  render the pie graph using proc pie
 #proc pie
 clickmapurl: @CGI?country=@@1&n=@@2
@@ -210,16 +212,17 @@ Verbatim (<nop>PieChartHalfMoon):<br />
 Plot settings:
 //  specify data using proc getdata
 #proc getdata
-data:   Brazil 22
-   Columbia 17
-   "Costa Rica" 22
-   Guatemala 3
-   Honduras 12
-   Mexico 14
-   Nicaragua 28
-   Belize 9
-    "United States" 21
-   Canada 8
+data:   
+ Brazil           22
+ Columbia         17
+ "Costa Rica"     22
+ Guatemala         3
+ Honduras         12
+ Mexico           14
+ Nicaragua        28
+ Belize            9
+ "United States"  21
+ Canada            8
 
 //  render the pie graph using proc pie
 #proc pie
@@ -554,11 +557,11 @@ pagesize: 8.5 9.6
 #if @DEVICE in gif,png
   scale: 0.8
 #endif
-<p />
+
 #proc getdata
   delim: comma
   file: sess03022000.dat
-<p />
+
 #proc areadef
   title: ADSM Sessions 03/02
   areaname: whole
@@ -567,19 +570,19 @@ pagesize: 8.5 9.6
   yscaletype: categories
   ycategories: datafield 4
 //  frame: bevel
-<p />
+
 // #proc originaldata
-<p />
+
 #proc yaxis
   stubs: categories
   grid: color=powderblue
-<p />
+
 #proc xaxis
   stubs: inc 30
   stubformat: hh:mm
   grid: color=orange style=2
   label: Hour of Day
-<p />
+
 #proc bars
   axis: x
   locfield: 4
@@ -614,17 +617,17 @@ Plot settings:
 //  Specify data using proc getdata
 #proc getdata
 data:
-   // region         1985   1995
-  "Middle East"      17   8
+// region            1985 1995
+  "Middle East"       17   8
   "Eastern Europe"    12   8
-  "North Africa"   7.5   4
-  "Sub Saharan Africa"   3   1.5
-  "North America"   5.5   3.5
-  "Western Europe"   3   2.5
-  "South Asia"      3.7   2.2
-  "East Asia"      2.5   1.5
-  "South America"   2   1.6
-<p />
+  "North Africa"     7.5   4
+  "Sub Saharan Africa" 3   1.5
+  "North America"    5.5   3.5
+  "Western Europe"     3   2.5
+  "South Asia"       3.7   2.2
+  "East Asia"        2.5   1.5
+  "South America"      2   1.6
+
 //  Define plotting area using proc areadef
 #proc areadef
   title: Military Expenditure as percent of GDP
@@ -632,19 +635,19 @@ data:
   rectangle: 2 1 4 3.5
   yrange: 0 10
   xrange: 0 20
-<p />
+
 //  Set up X axis using proc axis
 #proc xaxis
   stubs: inc 5
   stubformat: %3.0f%%
   grid: color=gray(0.9)
-<p />
+
 //  Do Y axis using proc axis
 #proc yaxis:
   stubs: datafields 1
   tics: none
   axisline: none
-<p />
+
 //  Do orange bars using proc bars
 #proc bars
   horizontalbars: yes
@@ -653,7 +656,7 @@ data:
   cluster: 1 / 2
   barwidth: 0.08
   legendlabel: 1985
-<p />
+
 //  Do blue bars using proc bars
 #proc bars
   horizontalbars: yes
@@ -663,7 +666,7 @@ data:
   cluster: 2 / 2
   barwidth: 0.08
   legendlabel: 1995
-<p />
+
 //  Do legend using proc legend
 #proc legend
   location: max-0.6 min+0.5
@@ -827,14 +830,14 @@ areacolor: gray(0.2)
 yscaletype: categories
 clickmapurl: @CGI?chrom=@@YVAL&cM=@@XVAL
 ycategories: 
-   1
-   2
-   3
-   4
-   5
-   6
-   7
-   X
+ 1
+ 2
+ 3 
+ 4
+ 5
+ 6
+ 7
+ X
    
 yaxis.stubs: usecategories
 // yaxis.stubdetails: adjust=0.2,0
@@ -1239,55 +1242,33 @@ Plot settings:
 </tr>
 </table>
 
----++ Security considerations
-
-For now, you should only use <nop>%TOPIC% in a protected environment, i.e. in a trusted intranet.
-
-The ploticus script language has some potentially nasties, that are not filtered from entered Ploticus scripts in current release of the plugin:
-
-<verbatim>
-#shell
-  .. shell stuff ..
-#endshell
-$shellrow
-#sql
-#load
-#write
-  .. write stuff ..
-#endwrite
-#cat
-</verbatim>
-
-The allowed use of these _procs_ means that you can use them for your benefit in your Ploticus scripts - if the execution of =ploticus= is not jailed or chroot'ed (by default not), people you don't trust could also use them for purposes not intended.
-
 ---++ Plugin Settings 
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-   * Set SHORTDESCRIPTION = Allows users to plot data and functions using <nop>Ploticus
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Allows users to plot data and functions using <nop>Ploticus
 
-   * Debug plugin: (See output in =data/debug.txt=)
-   * Set DEBUG = 0
-
-   * Path to Ploticus executable:
-   * Set PLOTICUSPATH = /usr/bin/ploticus
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions 
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. <br />
-      Content:
-      | *File:* | *Description:* |
-      | =data/TWiki/PloticusPlugin.txt= | Plugin topic |
-      | =data/TWiki/PloticusPlugin.txt,v= | Plugin topic repository |
-      | =lib/TWiki/Plugins/PloticusPlugin.pm= | Plugin Perl module |
-      | =lib/TWiki/Plugins/PloticusPlugin/Plot.pm= | Perl module responsible for rendering the plot area |
-      | =lib/TWiki/Plugins/PloticusPlugin/PlotSettings.pm= | Perl module responsible for managing the settings |
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. <br />
+	   Content:
+	   | *File:* | *Description:* |
+	   | =data/TWiki/PloticusPlugin.txt= | Plugin topic |
+	   | =data/TWiki/PloticusPlugin.txt,v= | Plugin topic repository |
+	   | =lib/TWiki/Plugins/PloticusPlugin.pm= | Plugin Perl module |
+	   | =lib/TWiki/Plugins/PloticusPlugin/Plot.pm= | Perl module responsible for rendering the plot area |
+	   | =lib/TWiki/Plugins/PloticusPlugin/PlotSettings.pm= | Perl module responsible for managing the settings |
 
-   * Edit the *PLOTICUSPATH* setting above to point to the Ploticus executable.
+	* In =/lib/TWiki/Plugins/PloticusPlugin/Plot.pm= look for the following lines, and update =$exePath= to fit your environment: %BR%
+	   =# Update $exePath to fit your environment= %BR%
+	   =my $exePath = "/usr/bin/ploticus";=
 
-   * If your plugin is correctly installed you should have fully interactive editable plots in the examples section
+	* If your plugin is now correctly installed you should have fully interactive editable plots in the examples section
 
 ---++ Plugin Info 
 
@@ -1363,4 +1344,3 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 %META:FILEATTACHMENT{name="HeatMap.png" attr="h" autoattached="1" comment="" date="1146144425" path="HeatMap.png" size="1853" user="Main.TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="WindDirectionSample.png" attr="h" autoattached="1" comment="Ploticus pre-rendered sample" date="1146143797" path="WindDirectionSample.png" size="28955" user="Main.TWikiContributor" version="1"}%
 %META:FILEATTACHMENT{name="Accrual.ploticus" attr="h" autoattached="1" comment="" date="1146130848" path="Accrual.ploticus" size="3507" user="Main.TWikiContributor" version=""}%
-%META:REVCOMMENT{ncomments="0"}%

@@ -56,6 +56,26 @@ sub writeFile{
     TWiki::Func::writeDebug( "PloticusPlugin::PlotSettings::writeFile - Writing ---=$text=--- to $ploticusFile" );# if $debug;
     open (OUTFILE, ">", $ploticusFile) or die "Cannot create new Ploticusplot file!";
     TWiki::Func::writeDebug( "PloticusPlugin::PlotSettings::writeFile - Writing ---=$text=--- to $ploticusFile" );# if $debug;
+    $text  =~s/<p \/>//g;
+    if ( $text =~ /#shell|#endshell|\$shellrow|#sql|#load|#write|#endwrite|#cat/ ) {
+        $text = "#proc annotate\n";
+        $text .= "location: 2 6\n";
+        $text .= "ellipse: yes\n";
+        $text .= "backcolor: red\n";
+        $text .= "text:	\n";
+        $text .= "Security issue!\n";
+        $text .= "At least one of the \n";
+        $text .= "following directives was\n";
+        $text .= "found in script syntax:\n";
+        $text .= "-#shell\n";
+        $text .= "-#endshell\n";
+        $text .= "-\$shellrow\n";
+        $text .= "-#sql\n";
+        $text .= "-#load\n";
+        $text .= "-#write\n";
+        $text .= "-#endwrite\n";
+        $text .= "-#cat\n";
+    }
     print OUTFILE "$text";
     close OUTFILE;
 }
