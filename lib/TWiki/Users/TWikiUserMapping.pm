@@ -76,7 +76,7 @@ sub getListOfGroups {
        _cbdata       => \@list,
        inline        => 1,
        search        => "Set GROUP =",
-       web           => 'all',
+       web           => $TWiki::cfg{UsersWebName},
        topic         => "*Group",
        type          => 'regex',
        nosummary     => 'on',
