@@ -40,13 +40,26 @@ sub render{
         parseFile($self, $ploticusFile, $ploticusTmpFile);
         my $errFile = $self->{PATH} . "/" . $self->{ERRFILE};
 
-        # Update $exePath to fit your environment
-        my $exePath = "/usr/bin/ploticus";
-        my $execCmd = "cd $self->{PATH} && $exePath -f $ploticusTmpFile -png -o $pngFile 2> $errFile ";    
-        TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - Exe Path: $exePath" ) if $debug;
-        TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - Executing $execCmd" ) if $debug;
-	system($execCmd);
-        if(-s $pngFile)
+        # Update $ploticusPath, $ploticusHelperPath and $execCmd to fit your environment
+        my $ploticusPath = "/usr/bin/ploticus";
+        my $ploticusHelperPath = "/home/httpd/twiki/tools/ploticus.pl";
+        my $execCmd = "/usr/bin/perl %HELPERSCRIPT|F% %PLOTICUS|F% %WORKDIR|F% %INFILE|F% %FORMAT|S% %OUTFILE|F% %ERRFILE|F% ";
+        TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - Ploticus path: $ploticusPath" ) if $debug;
+        TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - Ploticus helper path: $ploticusHelperPath" ) if $debug;
+        TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - Executing $execCmd in sandbox" ) if $debug;
+        TWiki::Func::writeDebug( "PloticusPlugin::Plot::render - errorfile set to $errFile" ) if $debug;
+        my $sandbox = $TWiki::sharedSandbox; 
+        my ($output, $status) = $sandbox->sysCommand($execCmd,
+                                                     HELPERSCRIPT => $ploticusHelperPath,
+                                                     PLOTICUS => $ploticusPath,
+                                                     WORKDIR => $self->{PATH},
+                                                     INFILE => $ploticusTmpFile,
+                                                     FORMAT => 'png',
+                                                     OUTFILE => $pngFile,
+                                                     ERRFILE => $errFile
+                                                    );
+        TWiki::Func::writeDebug("ploticus-sandbox: output $output status $status") if $debug;
+        if (-s $pngFile)
         {
             $renderedText .= "%ATTACHURL%/$self->{PNGFILE}\n\n";
         }
