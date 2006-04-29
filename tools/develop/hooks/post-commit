@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# POST-COMMIT HOOK
+# See post-commit.tmpl for help
+
+REPOS="$1"
+REV="$2"
+
+#cd /home/develop/twikisvn
+#perl tools/develop/post-commit.pl "$REPOS" "$REV"
+
+cd $REPOS/hooks
+
+author=`/usr/bin/svnlook author -r $REV $REPOS`
+./commit-email.pl --from develop@develop.twiki.org -s "[SVN] $author" "$REPOS" "$REV" twiki-dev@lists.sourceforge.net
+#./commit-email.pl --from develop@develop.twiki.org -s "[SVN]" "$REPOS" "$REV" twiki-svn@home.org.au
+./rssfeed.sh "$REPOS" "$REV" &
+
