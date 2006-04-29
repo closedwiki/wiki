@@ -17,6 +17,11 @@ pub/TWiki/PloticusPlugin/ClusteredVertBars.ploticus
 pub/TWiki/PloticusPlugin/ClusteredVertBars.png
 pub/TWiki/PloticusPlugin/ClusteredVertBarsSample.png
 pub/TWiki/PloticusPlugin/ClusteredVertBarsSample.png,v
+pub/TWiki/PloticusPlugin/DrawingLogo.err
+pub/TWiki/PloticusPlugin/DrawingLogo.ploticus
+pub/TWiki/PloticusPlugin/DrawingLogo.png
+pub/TWiki/PloticusPlugin/DrawingLogoSample.png
+pub/TWiki/PloticusPlugin/DrawingLogoSample.png,v
 pub/TWiki/PloticusPlugin/FatsContent.err
 pub/TWiki/PloticusPlugin/FatsContent.ploticus
 pub/TWiki/PloticusPlugin/FatsContent.png
@@ -69,6 +74,8 @@ pub/TWiki/PloticusPlugin/WindDirectionSample.png
 pub/TWiki/PloticusPlugin/WindDirectionSample.png,v
 pub/TWiki/PloticusPlugin/accrual.dat
 pub/TWiki/PloticusPlugin/accrual.dat,v
+pub/TWiki/PloticusPlugin/logo.dcm
+pub/TWiki/PloticusPlugin/logo.dcm,v
 pub/TWiki/PloticusPlugin/sess03022000.dat
 pub/TWiki/PloticusPlugin/sess03022000.dat,v
 pub/TWiki/PloticusPlugin/snpmap.dat
@@ -79,3 +86,4 @@ pub/TWiki/PloticusPlugin/vf.dat
 pub/TWiki/PloticusPlugin/vf.dat,v
 pub/TWiki/PloticusPlugin/wind.csv
 pub/TWiki/PloticusPlugin/wind.csv,v
+tools/ploticus.pl
