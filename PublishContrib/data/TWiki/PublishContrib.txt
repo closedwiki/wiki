@@ -47,9 +47,15 @@ You can also create a permanent topic in a web to help with the publishing proce
 <form method="POST" name="publish" action="%SCRIPTURL{publish}%/%URLPARAM{"web" default=""}%">
 <table class="twikiTable">
 <tr>
+  <th>Description</th><th>Value</th><th>Parameter Name</th>
+</tr>
+<tr>
   <td valign="top"> Web to publish </td>
   <td>
    <select name="web">%WEBLIST{"<option $marker value='$name'>$name</option>" selection="%URLPARAM{"web" default="%WEB%"}%"}%</select>
+  </td>
+  <td>
+   =web=
   </td>
 </tr>
 <tr>
@@ -60,6 +66,9 @@ You can also create a permanent topic in a web to help with the publishing proce
   <td> 
     <input type="text" name="inclusions" value="%URLPARAM{"inclusions" default="*"}%" size="50"/>
   </td>
+  <td>
+   =inclusions=
+  </td>
 </tr>
 <tr>
   <td valign="top"> 
@@ -69,6 +78,9 @@ You can also create a permanent topic in a web to help with the publishing proce
   <td> 
     <input type="text" name="exclusions" value="%URLPARAM{"exclusions" default=""}%" size="50"/>
   </td>
+  <td>
+   =exclusions=
+  </td>
 </tr>
 <tr>
   <td valign="top"> 
@@ -76,15 +88,21 @@ You can also create a permanent topic in a web to help with the publishing proce
     *excluded* if the RE matches the topic content 
   </td>
   <td> 
-    <input type="text" name="topicsearch" value="%URLPARAM{"topicsearch" default=""}%" size="50" />
+    <input type="text" name="filter" value="%URLPARAM{"filter" default=""}%" size="50" />
+  </td>
+  <td>
+   =filter=
   </td>
 </tr>
 <tr>
   <td valign="top">Select skin for published HTML :</td>
   <td>
-    <input type="text" name="publishskin" size="20" value="text" /><br />
+    <input type="text" name="skin" size="20" value="text" /><br />
     You are recommended to pick =text=, or =plain=, or a =print= skin.
     Your installation may also offer a special =export= or =publish= skin.
+  </td>
+  <td>
+   =skin=
   </td>
 </tr>
 <tr>
@@ -99,12 +117,18 @@ You can also create a permanent topic in a web to help with the publishing proce
     *WARNING* The rendered data can get pretty big, and the process itself puts
     a heavy load on the server when using compression on large webs.
   </td>
+  <td>
+   =format=
+  </td>
 </tr>
 <tr>
   <td valign="top">Extra options :</td>
   <td>
    Some output generators support extra options (e.g. PDF; you can add =htmldoc= command-line parameters here e.g =--linkstyle underline=)<br />
    <textarea rows="5" cols="80">%URLPARAM{"genopt" default=""}%</textarea>
+  </td>
+  <td>
+   =genopt=
   </td>
 </td>
 </table>
@@ -127,10 +151,25 @@ A perl regular expression. You can use a simple string here, which will be match
 ---+++ Using a Publish Topic
 You can create a publish topic in a web that contains all the details needed to publish that web. This is just a topic with a series of standard TWiki variable settings in it. You can use the PublishWeb topic in this web as a template for your own topics.
 
----+++ Controlling what gets published
-You can control what gets published from a topic using the &lt;nopublish&gt; .. &lt;/nopublish&gt; tags (anything between the tags will not be published).
+Alternatively you can just take a copy of the form in this topic, paste it into your own topic, and change the defaults.
 
-A good trick is to set up a special "publishing" web. Create topics in the web that %INCLUDE the topics from *other* webs that you want to publish. You can use %STARTSECTION and %ENDSECTION to highlight what you want published. This way the "publishing" web gives you a view of exactly what will be in the published output.
+---+++ Publishing from the command line
+TWiki-4 allows you to call any TWiki script from the command line, and the =publish= script is no exception. Just =cd= to the =bin= directory, and
+=perl publish=. Parameters are passed as name=value pairs, for example:
+<verbatim>
+perl publish web=Book exclusions='Web*' format=file
+perl publish web=Book inclusions=WebBook format=pdf genopt='--book --duplex --toclevels=5'
+</verbatim>
+The available parameter names are shown in the example above, in the 'Name' column.
+
+---+++ Controlling which parts of a topic get published
+You can control what gets published from a topic using =%<nop>STARTPUBLISH%= and =%<nop>STOPPUBLISH%= control tags:
+   * If =%<nop>STARTPUBLISH%= is the first control tag seen in the file, everything before it will be ignored.
+   * Everything between =%<nop>STOPPUBLISH%= and the next =%<nop>STARTPUBLISH%= (or the end of the topic) will be ignored.
+   * =%<nop>STARTPUBLISH%= and =%<nop>STOPPUBLISH%= will be visible in the viewed topic, so you can easily see what will be published from the topic.
+Note: the old &lt;nopublish> tag is deprecated and should be replaced in topics
+
+Another good trick is to set up a special "publishing" web. Create topics in the web that %INCLUDE the topics from *other* webs that you want to publish. You can use [[VarSTARTSECTION][STARTSECTION]] and [[VarENDSECTION][ENDSECTION]] to highlight what you want published. This way the "publishing" web gives you a view of exactly what will be in the published output, without the need for special publishing tags.
 
 ---++ Settings
    * Name of the perl package
@@ -138,7 +177,7 @@ A good trick is to set up a special "publishing" web. Create topics in the web t
    * Short description
       * Set SHORTDESCRIPTION = Generate static HTML for a TWiki Web
 
----++++ Known problems
+---+++ Known problems
 	* Doesn't handle revision info tags in templates
 	* Plugin tags that create complex HTML (sug as TWikiDraw DRAWING tags) are not handled correctly.
 	* Links to excluded topics still get generated as links
@@ -180,6 +219,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|       | Crawford Currie - added doc on usage from command line, corrected sense of topicsearch filter (Bugs:Item2120, Bugs:Item2121), renamed parameters (old ones are still valid), corrected handling of empty web refs (Bugs:Item2128), deprecated nopublish html-style tag in favour of !PublishWebPlugin-compatible style (though with richer semantics) (Bugs:Item2196) |
 |  9823 | Crawford Currie - added support for hierarchical webs, and inclusion of external images. |
 |  9773 | Crawford Currie - added tgz and pdf support |
 |  9725 | Michael Daum - fixed rewriting urls; \

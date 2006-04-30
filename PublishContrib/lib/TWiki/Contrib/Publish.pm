@@ -34,12 +34,18 @@ use Error qw( :try );
 
 use strict;
 
-use vars qw( $VERSION $RELEASE );
+use vars qw( $VERSION $RELEASE $ob $cb $br $os $cs );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
+
+$ob = '';
+$cb = '';
+$br = "\n";
+$os = '***';
+$cs = $os;
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -64,7 +70,7 @@ sub publish {
 
     $TWiki::Plugins::SESSION = $session;
 
-    my ($inclusions, $exclusions, $topicsearch, $skin, $genopt, $format);
+    my ($inclusions, $exclusions, $filter, $skin, $genopt, $format);
 
     # Load defaults from a config topic if one was specified
     my $configtopic = $query->param('configtopic');
@@ -90,7 +96,7 @@ sub publish {
             } elsif ( $k eq "EXCLUSIONS" ) {
                 $exclusions = $v;
             } elsif ( $k eq "TOPICSEARCH" ) {
-                $topicsearch = $v;
+                $filter = $v;
             } elsif ( $k eq "PUBLISHSKIN" ) {
                 $skin = $v;
             } elsif ( $k eq "SKIN" ) {
@@ -108,7 +114,8 @@ sub publish {
             $inclusions = '*';
         }
         $exclusions = $query->param('exclusions') || '';
-        $topicsearch = $query->param('topicsearch') || '';
+        $filter = $query->param('filter') ||
+          $query->param('topicsearch') || '';
         $genopt = $query->param('genopt') || '';
         # 'compress' retained for compatibility
         if( defined $query->param('compress') ) {
@@ -124,8 +131,8 @@ sub publish {
     $exclusions =~ s/([*?])/.$1/g;
     $exclusions =~ s/,/|/g;
 
-    $skin ||= $query->param('publishskin') ||
-      TWiki::Func::getPreferencesValue("PUBLISHSKIN");
+    $skin ||= $query->param('skin') || $query->param('publishskin') ||
+      TWiki::Func::getPreferencesValue("PUBLISHSKIN") || '';
 
     my $ok = 1;
     if ( ! -d $TWiki::cfg{PublishContrib}{Dir} &&
@@ -139,29 +146,38 @@ sub publish {
     my $tmp = TWiki::Func::formatTime(time());
     $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
 
-    TWiki::Func::writeHeader($query);
-    my $tmpl = TWiki::Func::readTemplate("view");
-    $tmpl =~ s/%META{.*?}%//g;
-    for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
-        $tmpl =~ s/%$tag%//g;
-    }
-    my($header, $footer) = split(/%TEXT%/, $tmpl);
     my $topic = $query->param('publishtopic') || $session->{topicName};
-    $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
-    $header = TWiki::Func::renderText( $header, $web );
-    $header =~ s/<nop>//go;
-    print $header;
-    my $url = $query->url().$query->path_info().'?'.$query->query_string();
-    print "<b>URL: </b> $url<br />\n";
-    print "<b>{PublishContrib}{Dir}: </b>$TWiki::cfg{PublishContrib}{Dir}<br />\n";
-    print "<b>{PublishContrib}{URL}: </b>$TWiki::cfg{PublishContrib}{URL}<br />\n";
-    print "<b>Web: $web</b><br />\n";
-    print "<b>Config: $configtopic<br />\n" if $configtopic;
-    print "<b>Skin: </b>$skin<br />\n";
-    print "<b>Inclusions: </b>$inclusions<br />\n";
-    print "<b>Exclusions: </b>$exclusions<br />\n";
-    print "<b>Content Filter: </b>$topicsearch<br />\n";
-    print "<b>Generator options: </b>$genopt<p />\n";
+    my($header, $footer) = '';
+    unless( TWiki::Func::getContext()->{command_line} ) {
+        TWiki::Func::writeHeader($query);
+        my $tmpl = TWiki::Func::readTemplate("view");
+        $tmpl =~ s/%META{.*?}%//g;
+        for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
+            $tmpl =~ s/%$tag%//g;
+        }
+        ($header, $footer) = split(/%TEXT%/, $tmpl);
+        $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
+        $header = TWiki::Func::renderText( $header, $web );
+        $header =~ s/<nop>//go;
+        print $header;
+        my $url = $query->url().$query->path_info().'?'.$query->query_string();
+        $ob = '<b>';
+        $cb = '</b>';
+        $br = "<br />\n";
+        $os = '<span class="twikiAlert">';
+        $cs = '</span>';
+        print "${ob}URL: ${cb} $url$br";
+    }
+    print "${ob}{PublishContrib}{Dir}: ${cb}$TWiki::cfg{PublishContrib}{Dir}$br";
+    print "${ob}{PublishContrib}{URL}: ${cb}$TWiki::cfg{PublishContrib}{URL}$br";
+    print "${ob}Web: $web${cb}$br";
+    print "${ob}Config: $configtopic$br" if $configtopic;
+    print "${ob}Skin: ${cb}$skin$br";
+    print "${ob}Inclusions: ${cb}$inclusions$br";
+    print "${ob}Exclusions: ${cb}$exclusions$br";
+    print "${ob}Content Filter: ${cb}$filter$br";
+    print "${ob}Generator options: ${cb}$genopt$br";
+
     my $archive;
 
     my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
@@ -172,7 +188,7 @@ sub publish {
     die $@ if $@;
 
     publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
-               $exclusions, $skin, $topicsearch, $archive);
+               $exclusions, $skin, $filter, $archive);
 
     my $text = 'Published to <a href="'.
       $TWiki::cfg{PublishContrib}{URL}.'/'.$archive->{id}.'">'.
@@ -193,11 +209,11 @@ sub publish {
 #   * =$inclusions= - REs describing which topics to include
 #   * =$exclusions= - REs describing which topics to exclude
 #   * =$skin= -
-#   * =$topicsearch= -
+#   * =$filter= -
 #   * =$archive= - archiver
 
 sub publishWeb {
-    my ($web, $wikiName, $inclusions, $exclusions, $skin, $topicsearch, $archive) = @_;
+    my ($web, $wikiName, $inclusions, $exclusions, $skin, $filter, $archive) = @_;
 
     # Get list of topics from this web.
     my @topics = TWiki::Func::getTopicList($web);
@@ -209,22 +225,22 @@ sub publishWeb {
     # Attempt to render each included page.
     my %copied;
     foreach my $topic (@topics) {
-        print "<b>$topic: </b>\n";
+        print "${ob}$topic: ${cb}\t";
         if( $topic !~ /^($inclusions)$/ ) {
-            print "<span class='twikiAlert'>not included</span>";
+            print "${os}not included$cs";
         } elsif( $exclusions && $topic =~ /^($exclusions)$/ ) {
-            print "<span class='twikiAlert'>excluded</span>";
+            print "${os}excluded$cs";
         } else {
             try {
                 publishTopic($web, $topic, $wikiName, $skin, $tmpl,
-                             \%copied, $topicsearch, $archive);
+                             \%copied, $filter, $archive);
                 print "published";
             } catch Error::Simple with {
                 my $e = shift;
                 print "not published: ".$e->{-text};
             };
         }
-        print "<br />\n";
+        print $br;
     }
 }
 
@@ -234,19 +250,19 @@ sub publishWeb {
 #   * =$skin= - which skin to use
 #   * =\%copied= - map of copied resources to new locations
 sub publishTopic {
-    my ($web, $topic, $wikiName, $skin, $tmpl, $copied, $topicsearch, $archive) = @_;
+    my ($web, $topic, $wikiName, $skin, $tmpl, $copied, $filter, $archive) = @_;
 
     # Read topic data.
     my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
 
-    if ( $topicsearch ) {
-        if ( $text !~ /$topicsearch/ ) {
-            return;
-        }
-    }
     unless( TWiki::Func::checkAccessPermission( "VIEW", $wikiName,
                                                 $text, $topic, $web)) {
-        print "View access to $topic denied; not ";
+        print "View access to $topic denied";
+        return;
+    }
+
+    if ( $filter && $text =~ /$filter/ ) {
+        print "$topic excluded by filter";
         return;
     }
 
@@ -271,7 +287,26 @@ sub publishTopic {
     $tmpl = TWiki::Func::renderText($tmpl, "", $meta);
 
     $tmpl =~ s/%TEXT%/$text/g;
+    # legacy
     $tmpl =~ s/<nopublish>.*?<\/nopublish>//gs;
+    # New tags
+    my $newTmpl = '';
+    my $tagSeen = 0;
+    my $publish = 1;
+    foreach my $s ( split( /(%STARTPUBLISH%|%STOPPUBLISH%)/, $tmpl )) {
+        if( $s eq '%STARTPUBLISH%' ) {
+            $publish = 1;
+            $newTmpl = '' unless( $tagSeen );
+            $tagSeen = 1;
+        } elsif( $s eq '%STOPPUBLISH%' ) {
+            $publish = 0;
+            $tagSeen = 1;
+        } elsif( $publish ) {
+            $newTmpl .= $s;
+        }
+    }
+    $tmpl = $newTmpl;
+    $tmpl =~ s/.*?<\/nopublish>//gs;
     $tmpl =~ s/%MAXREV%/$maxrev/g;
     $tmpl =~ s/%CURRREV%/$maxrev/g;
     $tmpl =~ s/%REVTITLE%//g;
@@ -307,7 +342,7 @@ sub publishTopic {
     $tmpl =~ s/<nop>//g;
 
     # Write the resulting HTML.
-    $archive->addString( $tmpl, "$topic.html" );
+    $archive->addString( $tmpl, $topic.'.html' );
 }
 
 #  Copy a resource (image, style sheet, etc.) from twiki/pub/%WEB% to
@@ -364,9 +399,14 @@ sub _copyResource {
 sub _topicURL {
     my( $path, $web ) = @_;
     my $extra = '';
-    if( $path =~ /(\?.*)$/ ) {
+
+    if( $path && $path =~ /(\?.*)$/ ) {
         $extra = $1;
     }
+
+    $path ||= $TWiki::cfg{HomeTopicName};
+    $path .= $TWiki::cfg{HomeTopicName} if $path =~ /\/$/;
+
     # Normalise
     $web = join('/', split( /[\/\.]+/, $web ));
     $path = join('/', split( /[\/\.]+/, $path ));
@@ -385,7 +425,7 @@ sub _handleURL {
 
     require LWP;
     if ( $@ ) {
-        print "<b>LWP not installed - cannot fetch $src</b><br />";
+        print "${ob}LWP not installed - cannot fetch $src${cb}$br";
         return $src;
     }
     my $userAgent = LWP::UserAgent->new();
@@ -393,7 +433,7 @@ sub _handleURL {
 
     my $response = $userAgent->get( $src );
     unless( $response->is_success ) {
-        print "<b>failed to GET $src</b><br />";
+        print "${ob}failed to GET $src${cb}$br";
         return $src;
     }
 
