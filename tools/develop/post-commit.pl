@@ -23,7 +23,7 @@ $first ||= ($last-1);
 my @changes;
 for (my $i = $first + 1; $i <= $last; $i++) {
     push( @changes,
-          map { s/^..// }
+          map { s/^.*?$BRANCH\/// }
            grep { /twiki\/branches\/$BRANCH/ }
             split(/\n/, `/usr/bin/svnlook changed -r $i $REPOS` ));
 }
@@ -84,11 +84,9 @@ for my $rev ($first..$last) {
 }
 
 # Create the flag that tells the cron job to update from the repository
-if( ! -f "../svncommit" ) {
-    open(F, ">../svncommit") || die "Failed to write ../svncommit: $!";
-    print F "$last\n",join("\n", @changes);
-    close(F);
-}
+open(F, ">>../svncommit") || die "Failed to write ../svncommit: $!";
+print F join(" ", @changes);
+close(F);
 
 # Create the flag for this script
 open(F, ">../lastupdate") || die $!;
