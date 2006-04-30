@@ -11,8 +11,20 @@ use strict;
 my $REPOS = $ARGV[0];
 my $first = `cat ../lastupdate`;
 chomp($first);
-my $last = $ARGV[1] || `/usr/bin/svnlook youngest $REPOS` || $first;
+my $last = $ARGV[1] || `/usr/bin/svnlook youngest $REPOS`;
 chomp($last);
+my $BRANCH = $ARGV[2];
+
+die unless $last;
+die unless $BRANCH;
+
+$first ||= $last;
+
+my $changes = ''
+for my $i ($first..$last) {
+    $changes .= `/usr/bin/svnlook changes $REPOS $i`;
+}
+exit 0 unless( $changes =~ m#\stwiki/branches/$BRANCH/#s );
 
 sub _add {
    my( $cur, $rev, $changed ) = @_;
