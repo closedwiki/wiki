@@ -1,0 +1,16 @@
+NOTE:
+
+This Plugin is removed from the TWikiRelease04x00 branch.
+Please get the latest Plugin version from the DEVELOP branch.
+
+Reason for single branch development:
+   * Reduce confusion where to develop (some use DEVELOP, 
+     some use TWikiRelease04x00, some use Plugins web.)
+   * Avoid a developer centric "one Plugin for each release" 
+     view, with "click here to download for Cairo, here for
+     Dakar" message for users. 
+   * Reduce the likelihood of divergence and Plugins API 
+     changes, e.g. avoid incompatibility issues that hurt
+     the TWiki project.
+
+-- PTh
