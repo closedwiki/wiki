@@ -1,6 +1,8 @@
 #!/bin/sh
 # Regular cleanup of shipped webs.
 
+cd $HOME/twikisvn
+
 WEBS="Main TWiki Sandbox _default Trash TestCases";
 
 # Cleanup.
@@ -14,3 +16,5 @@ for web in $WEBS; do
         | sed 's/^\(M\|C\)...../svn revert/' \
         | sh
 done
+
+svn update
