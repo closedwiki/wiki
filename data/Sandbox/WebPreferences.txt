@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127401408" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="SimianApe" date="1144843964" format="1.1" reprev="1.4" version="1.4"}%
+   * Set REVINFO1 = ShagPot
+ShagWilly
 ---+!! <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]] and [[%LOCALSITEPREFS%]], and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
@@ -20,7 +22,7 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * [[%TWIKIWEB%.WebTopicEditTemplate]]: Site-level default topic template
 
    * Comma separated list of *forms* that can be attached to topics in this web. See %TWIKIWEB%.TWikiForms for more information.
-      * Set WEBFORMS = 
+      * Set WEBFORMS = TestForm
 
    * Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl). Remove the # to enable any of these settings. Remember that an empty setting is a valid setting; setting DENYWEBVIEW to nothing means that anyone can view the web.
       * #Set DENYWEBVIEW = 
@@ -38,5 +40,6 @@ These settings override the defaults for this web only. See [[%TWIKIWEB%.TWikiPr
       * Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
 
 %INCLUDE{"%TWIKIWEB%.WebPreferencesHelp"}%
-%META:FILEATTACHMENT{name="logo.gif" attr="" comment="" date="1126793019" path="logo.png" size="3362" user="TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1125867877" path="favicon.ico" size="1750" user="TWikiContributor" version=""}%
+
+%META:FILEATTACHMENT{name="logo.gif" attr="" autoattached="1" comment="" date="1142497761" path="logo.gif" size="2545" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="favicon.ico" attr="" autoattached="1" comment="" date="1142497761" path="favicon.ico" size="1406" user="TWikiContributor" version=""}%

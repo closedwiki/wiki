@@ -19,14 +19,3 @@
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
    * __%X% Note:__ There is a risk that this variable could be misused for cross-site scripting.
    * Related: [[#VarENCODE][ENCODE]], [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
-
----+++ USERINFO - retrieve details about the logged in user
-   * By default, the retrieved info will be formatted as a comma-separated list comprising the username, wikiusername, and emails.
-   * Syntax: =%<nop>USERINFO%=
-   * Expands to: =%USERINFO%=
-   * you can also use the =format= parameter to get different formatted results:
-   * Syntax: =%<nop>USERINFO{format="$username is really $wikiname"}%=
-   * Expands to =%USERINFO{format="$username is really $wikiname"}%=
-   * The tokens =$emails=, =$username=, =$wikiname=, =$wikiusername=, and =$groups= are available for use in the format string. 
-   * Related: [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication, ChangeEmailAddress
-

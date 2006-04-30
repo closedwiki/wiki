@@ -723,6 +723,21 @@ sub getField {
 
 =pod
 
+---++ ObjectMethod getFields() -> \@fields
+Return a list containing references to field name/value pairs.
+Each entry in the list has a {name} field and a {value} field. It may
+have other fields as well, which caller should ignore. The
+returned list should be treated as *read only* (must not be written to).
+
+=cut
+
+sub getFields {
+    my $this = shift;
+    return $this->{fields};
+}
+
+=pod
+
 ---++ StaticMethod renderForDisplay($templates, $meta )
    * =$templates= ref to templates singleton
    * =$meta= - meta object containing the form to be rendered

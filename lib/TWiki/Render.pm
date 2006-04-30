@@ -736,9 +736,17 @@ sub _externalLink {
     }
     my $opt = '';
     if( $url =~ /^mailto:/i ) {
-        # inject anti-spam padding
-        $url =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
-        $text =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
+        # Note EmailPadding still supported for compatibility
+        # HideUserDetails has a much wider meaning.
+        if( $TWiki::cfg{AntiSpam}{EmailPadding} ) {
+            $url =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
+            $text =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
+
+        } elsif( $TWiki::cfg{AntiSpam}{HideUserDetails} ) {
+            # Much harder obfuscation scheme
+            $url =~ s/(\W)/'&#'.ord($1).';'/ge;
+            $text =~ s/(\W)/'&#'.ord($1).';'/ge;
+        }
     } else {
         $opt = ' target="_top"';
     }

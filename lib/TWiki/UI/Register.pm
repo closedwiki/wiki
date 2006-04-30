@@ -41,6 +41,7 @@ use strict;
 use TWiki;
 use TWiki::Net;
 use TWiki::Plugins;
+use TWiki::Form;
 use TWiki::User;
 use TWiki::Data::DelimitedFile;
 use Data::Dumper;
@@ -826,6 +827,10 @@ sub _newUserFromTemplate {
 #on the user's topic.
 #
 #Returns 'BulletFields' or 'FormFields' depending on what it chose.
+#
+# Note that _purgeKeys will have deleted some keys before this is called.
+# (such as password and email)
+#
 sub _writeRegistrationDetailsToTopic {
     my ($session, $data, $meta, $text) = @_;
 
@@ -836,13 +841,22 @@ sub _writeRegistrationDetailsToTopic {
 
     my( $before, $repeat, $after ) = split( /%SPLIT%/, $text, 3 );
     $before = '' unless defined( $before );
-    $repeat = "\n".'   * %KEY%: %VALUE%' unless defined( $repeat );
     $after = "\n".'   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%'."\n" unless defined( $after );
 
     my $log;
     my $addText;
-    if ($meta->get('FORM')) {
-        ( $meta, $addText ) = _getRegFormAsTopicForm( $meta, $data );
+    my $form = $meta->get( 'FORM' );
+    if ($form) {
+        # use eval to trap and ignore exceptions in the form reader
+        eval {
+            $form = new TWiki::Form(
+                $session, $TWiki::cfg{UsersWebName},
+                $form->{name} );
+        };
+        $form = undef if $@;
+    }
+    if( $form ) {
+        ( $meta, $addText ) = _getRegFormAsTopicForm( $form, $meta, $data );
         $log = 'Using Form Fields';
     } else {
         $addText = _getRegFormAsTopicContent( $data );
@@ -864,51 +878,36 @@ sub _writeRegistrationDetailsToTopic {
     return $log;
 }
 
-# Caveats
-# Ideally we'd put any fields mentioned on the registration form
-# but not in the UserForm into the text. However there is no API to 
-# through which to determine what is legal. So I can't
-
+# Puts form fields into the topic form
 sub _getRegFormAsTopicForm {
-    my ( $meta, $data ) = @_;
-    return _getKeyValuePairsAsTopicForm($meta, @{$data->{form}});
-}
+    my ( $formDef, $meta, $data ) = @_;
 
-# SMELL
-# problem now is that the fields are ordered by the HTML form
-# not by the order of the template form definition. Hence they are arguably in the wrong order.
-sub _getKeyValuePairsAsTopicForm {
-    my ($meta, @fieldArray)     = @_;   # SMELL - why is this an array? surely a hash is better?
-    my $leftoverText = '';
-    foreach my $fd (@fieldArray) {
-        my $name  = $fd->{name};
-        my $value = $fd->{value};
-        my $title = $name;
-        $title =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;    # Spaced
+    my %inform;
+    foreach my $field ( @{$formDef->getFields()} ) {
+        foreach my $fd (@{$data->{form}}) {
+            next unless $fd->{name} eq $field->{name};
+            my $value = $fd->{value};
+            my $title = $fd->{name};
+            $title =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;    # Spaced
 
-        #### SMELL I want to write:
-        #     if (field is on form) {
-        #	$meta->putKeyed('FIELD',
-        # { 'name' => $name, 'value' => $value, 'title' =>$title});
-        #     } else {
-        # accumulate it in $leftoverText
-        #     }
-        #### but SMELL instead we write this ugliness
-        # not least because although I can see a key with a value, I can't distinguish those one without one.
-        # from no key at all.
-        if ( $name eq 'Email' ) {
-            # Don't paste the e-mail address in the user topic (prevent e-mail harvesting)
-            # $leftoverText .= "\t* E-mail: $value\n";
-        } else {
-            $meta->putKeyed( 'FIELD',
-                        { name => $name, value => $value, title => $title } );
+            $meta->putKeyed(
+                'FIELD',
+                { 'name' => $fd->{name}, 'value' => $value, 'title' =>$title});
+
+            $inform{$fd->{name}} = 1;
+            last;
         }
-        #### end workaround SMELL
+    }
+    my $leftoverText = '';
+    foreach my $fd (@{$data->{form}}) {
+        unless( $inform{$fd->{name}} ) {
+            $leftoverText .= "   * $fd->{name}: $fd->{value}\n";
+        }
     }
     return ( $meta, $leftoverText );
 }
 
-#Registers a user using the old bullet field code
+# Registers a user using the old bullet field code
 sub _getRegFormAsTopicContent {
     my $data = shift;
     my $text;
@@ -1286,15 +1285,18 @@ sub _deleteKey {
     }
 };
 
+# Deletes keys from the user data that should *not* be included in
+# the user topic.
 sub _purgeKeys {
     my $data = shift;
 
     ASSERT($data) if DEBUG;
 
-    _deleteKey($data, 'Photo');
+    _deleteKey($data, 'Photo'); # SMELL this should go
     _deleteKey($data, 'WikiName');
     _deleteKey($data, 'LoginName');
     _deleteKey($data, 'Password');
+    _deleteKey($data, 'Email');
 }
 
 1;

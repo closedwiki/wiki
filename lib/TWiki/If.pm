@@ -90,6 +90,17 @@ $defOps{context} =
         return $twiki->inContext($b->evaluate($twiki)) || 0;
     }
    };
+$defOps{config} =
+  { name => 'config',
+    prec => 5,
+    type => 0, # unary
+    exec => sub {
+        my( $twiki, $a, $b ) = @_;
+        my $x;
+        eval '$x = $TWiki::cfg'.$b;
+        return $x;
+    }
+   };
 $defOps{'$'} =
   { name => '$',
     prec => 5,
@@ -284,6 +295,11 @@ sub _parse {
         }
         elsif( $string =~ s/^\s*(\w+)//o ) {
             push( @opands, new TWiki::IfNode( undef, $1, undef ));
+        }
+        elsif( $string =~ s/\s*({\w+})+//o ) {
+            # {config expression}
+            push( @opands, new TWiki::IfNode(
+                undef, $this->{operators}->{config}, $1 ));
         }
         elsif( $string =~ s/\s*\(//o ) {
             my $oa;

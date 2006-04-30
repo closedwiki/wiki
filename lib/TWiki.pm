@@ -3316,9 +3316,15 @@ sub _USERINFO {
     my $format = $params->{format} || '$username, $wikiusername, $emails';
     my $userDebug = $params->{'userdebug'} || '';
 
-    my $user = $this->{user};
+    my $user;
+    if( $params->{_DEFAULT} && !$TWiki::cfg{AntiSpam}{HideUserDetails} ) {
+        $user = $this->{users}->findUser( $params->{_DEFAULT}, undef, 0 );
+    }
+
+    $user ||= $this->{user};
 
     my $info = $format;
+
     if ($info =~ /\$username/) {
         my $username = $user->login();
         $info =~ s/\$username\b/$username/g;
@@ -3341,15 +3347,14 @@ sub _USERINFO {
         $groups .= ' isAdmin()' if $user->isAdmin();
         $info =~ s/\$groups\b/$groups/g;
     }
-    
+
     #don't give out userlists to non-admins
-    if (($userDebug ne '')&&($user->isAdmin())) {
+    if ($userDebug ne '' && $user->isAdmin()) {
         my $users = '';
         $users .= "\n\nLoaded Users: ".join(" \n", map {$_->webDotWikiName()} @{$this->{users}->getAllLoadedUsers()});
         $users .= "\n\nALL Users: ".join(" \n", map {$_->webDotWikiName()} @{$this->{users}->getAllUsers()});
         $info .=  $users;
     }
-
 
     return $info;
 }
