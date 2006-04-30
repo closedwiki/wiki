@@ -40,12 +40,24 @@ sub render{
         parseFile($self, $gnuFile, $gnuTmpFile);
         my $errFile = $self->{PATH} . "/" . $self->{ERRFILE};
 
-        # Update $exePath to fit your environment
-        my $exePath = "/usr/bin/gnuplot";
-        my $execCmd = "cd $self->{PATH} && $exePath $gnuTmpFile > $pngFile 2> $errFile";    
-        TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - Exe Path: $exePath" ) if $debug;
-        TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - Executing $execCmd" ) if $debug;
-	system($execCmd);
+        # Update $gnuplotPath, $gnuplotHelperPath and $execCmd to fit your environment
+        my $gnuplotPath = "/usr/bin/gnuplot";
+        my $gnuplotHelperPath = "/home/httpd/twiki/tools/gnuplot.pl";
+        my $execCmd = "/usr/bin/perl %HELPERSCRIPT|F% %GNUPLOT|F% %WORKDIR|F% %INFILE|F% %OUTFILE|F% %ERRFILE|F% ";
+        TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - GnuPlot path: $gnuplotPath" ) if $debug;
+        TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - GnuPlot helper path: $gnuplotHelperPath" ) if $debug;
+        TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - Executing $execCmd in sandbox" ) if $debug;
+        TWiki::Func::writeDebug( "GnuPlotPlugin::Plot::render - errorfile set to $errFile" ) if $debug;
+        my $sandbox = $TWiki::sharedSandbox; 
+        my ($output, $status) = $sandbox->sysCommand($execCmd,
+                                                     HELPERSCRIPT => $gnuplotHelperPath,
+                                                     GNUPLOT => $gnuplotPath,
+                                                     WORKDIR => $self->{PATH},
+                                                     INFILE => $gnuTmpFile,
+                                                     OUTFILE => $pngFile,
+                                                     ERRFILE => $errFile
+                                                    );
+        TWiki::Func::writeDebug("gnuplot-sandbox: output $output status $status") if $debug;
         if(-s $pngFile)
         {
             $renderedText .= "%ATTACHURL%/$self->{PNGFILE}\n\n";
