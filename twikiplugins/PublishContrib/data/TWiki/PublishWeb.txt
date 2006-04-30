@@ -8,7 +8,7 @@ to set up a topic in a web to simplify publishing. To use it, take a copy of the
 	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
 		* Set EXCLUSIONS = Web*,Publish*
 	* A [[#RegularExpression][regular expression]] that will cause a topic to be *excluded* if the RE matches the topic content
-		* Set TOPICSEARCH =
+		*# Set FILTER =
 	* Skin for published HTML
 		* Set PUBLISHSKIN = text
 	* Format to publish in (file, pdf, tgz, zip)
