@@ -23,7 +23,7 @@ $first ||= ($last-1);
 my @changes;
 for (my $i = $first + 1; $i <= $last; $i++) {
     push( @changes,
-          map { s/^.*?$BRANCH\/// }
+          map { s/^.*?$BRANCH\///; $_ }
            grep { /twiki\/branches\/$BRANCH/ }
             split(/\n/, `/usr/bin/svnlook changed -r $i $REPOS` ));
 }
