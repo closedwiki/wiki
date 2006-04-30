@@ -42,3 +42,4 @@ pub/TWiki/GnuPlotPlugin/TestInstall.gnu NEW
 pub/TWiki/GnuPlotPlugin/TestInstall.png NEW
 pub/TWiki/GnuPlotPlugin/TestInstallSample.png NEW
 pub/TWiki/GnuPlotPlugin/whale.dat NEW
+tools/gnuplot.pl
