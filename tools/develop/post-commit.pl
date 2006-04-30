@@ -18,13 +18,16 @@ my $BRANCH = $ARGV[2];
 die unless $last;
 die unless $BRANCH;
 
-$first ||= $last;
+$first ||= ($last-1);
 
-my $changes = ''
-for my $i ($first..$last) {
-    $changes .= `/usr/bin/svnlook changes $REPOS $i`;
+my @changes;
+for (my $i = $first + 1; $i <= $last; $i++) {
+    push( @changes,
+          map { s/^..// }
+           grep { /twiki\/branches\/$BRANCH/ }
+            split(/\n/, `/usr/bin/svnlook changed -r $i $REPOS` ));
 }
-exit 0 unless( $changes =~ m#\stwiki/branches/$BRANCH/#s );
+exit 0 unless scalar( @changes );
 
 sub _add {
    my( $cur, $rev, $changed ) = @_;
@@ -36,7 +39,7 @@ sub _add {
 }
 
 # Don't know where STDERR goes, so send it somewhere we can read it
-open(STDERR, ">>../post-commit.log");
+open(STDERR, ">>../post-commit.log") || die $!;
 print STDERR "Post-Commit $first..$last in $REPOS\n";
 $/ = undef;
 
@@ -65,7 +68,7 @@ for my $rev ($first..$last) {
 
         next unless $changed;
 
-        print STDERR `rcs -l $fi`;
+        print STDERR `co -l -f $fi`;
         die $! if $?;
         open(F, ">$fi") || die "Failed to write $fi: $!";
         print F $text;
@@ -83,12 +86,12 @@ for my $rev ($first..$last) {
 # Create the flag that tells the cron job to update from the repository
 if( ! -f "../svncommit" ) {
     open(F, ">../svncommit") || die "Failed to write ../svncommit: $!";
-    print F "$last\n";
+    print F "$last\n",join("\n", @changes);
     close(F);
 }
 
 # Create the flag for this script
-open(F, ">../lastupdate");
+open(F, ">../lastupdate") || die $!;
 print F "$last\n";
 close(F);
 
