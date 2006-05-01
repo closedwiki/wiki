@@ -23,7 +23,7 @@ When customizing your TWiki installation, you can either choose to completely re
 <pre>
       * <nop>Set TWIKILAYOUTURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/layout.css
       * <nop>Set TWIKISTYLEURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/style.css
-      * <nop>Set TWIKICOLORURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
+      * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/YourNewTopic/colors.css
  </pre>
 
 ---+++ When you need small adjustments: Adding to existing CSS
