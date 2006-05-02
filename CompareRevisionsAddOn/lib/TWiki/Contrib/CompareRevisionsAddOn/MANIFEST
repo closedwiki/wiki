@@ -1,6 +1,5 @@
 bin/compare 0550
 data/Sandbox/CompareRevisionsAddOnDemoTopic.txt 0660
-data/Sandbox/CompareRevisionsAddOnDemoTopic.txt,v  0660
 data/TWiki/CompareRevisionsAddOn.txt 0660
 data/TWiki/CompareRevisionsAddonPlugin.txt 0660
 lib/TWiki/Plugins/CompareRevisionsAddonPlugin.pm 0440
