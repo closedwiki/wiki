@@ -219,6 +219,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|       | Crawford Currie - fixed problem where it was failing to remove &lt;base> tags completely (Bugs:Item2200) |
 |  9986 | Crawford Currie - added doc on usage from command line, corrected sense of topicsearch filter (Bugs:Item2120, Bugs:Item2121), renamed parameters (old ones are still valid), corrected handling of empty web refs (Bugs:Item2128), deprecated nopublish html-style tag in favour of !PublishWebPlugin-compatible style (though with richer semantics) (Bugs:Item2196) |
 |  9823 | Crawford Currie - added support for hierarchical webs, and inclusion of external images. |
 |  9773 | Crawford Currie - added tgz and pdf support |
