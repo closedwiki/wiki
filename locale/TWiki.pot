@@ -41,23 +41,23 @@ msgstr ""
 msgid "%1 - Registration for %2 (%3)"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:62
+#: data/TWiki/NewUserTemplate.txt:68
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:64
+#: data/TWiki/NewUserTemplate.txt:70
 msgid "%1 - just for me"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:61
+#: data/TWiki/NewUserTemplate.txt:67
 msgid "%1 - starting points on TWiki"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:63
+#: data/TWiki/NewUserTemplate.txt:69
 msgid "%1 - try out TWiki on your own"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:60
+#: data/TWiki/NewUserTemplate.txt:66
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgstr ""
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:2
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:3
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:3
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:54
 msgid "%1 Web"
 msgstr ""
 
@@ -75,15 +75,15 @@ msgstr ""
 msgid "%1 Web Home"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:86
+#: data/TWiki/NewUserTemplate.txt:92
 msgid "%1 for changing your email address"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:85
+#: data/TWiki/NewUserTemplate.txt:91
 msgid "%1 for changing your password"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:87
+#: data/TWiki/NewUserTemplate.txt:93
 msgid "%1 has a list of other TWiki users"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "%1 home"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:88
+#: data/TWiki/NewUserTemplate.txt:94
 msgid "%1 is a list of TWiki user documentation"
 msgstr ""
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "%1 is the default topic for deleted attachments."
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:89
+#: data/TWiki/NewUserTemplate.txt:95
 msgid "%1 lists all TWiki user tools"
 msgstr ""
 
@@ -183,6 +183,7 @@ msgstr ""
 #: templates/twiki.tmpl:164
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:151
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:58
 msgid "&History"
 msgstr ""
 
@@ -215,8 +216,7 @@ msgstr ""
 msgid "(=all= to show all topics)"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:18
-#: data/TWiki/WebTopicViewTemplate.txt:18
+#: data/TWiki/WebTopicViewTemplate.txt:19
 msgid "(More options in WebSearch)"
 msgstr ""
 
@@ -269,8 +269,8 @@ msgstr ""
 msgid "(edit text)"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:22
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:30
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:31
 msgid "(edit)"
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr ""
 msgid "(move attachment)"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:66 data/TWiki/WebTopicCreator.txt:67
+#: data/TWiki/WebTopicCreator.txt:58 data/TWiki/WebTopicCreator.txt:59
 msgid "(no parent, orphaned topic)"
 msgstr ""
 
@@ -474,7 +474,7 @@ msgstr ""
 msgid "<em>in all public webs</em>"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:32
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:58
 msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
@@ -533,8 +533,8 @@ msgstr ""
 msgid "Access check on %1 failed"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:26
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
 msgid "Access keys"
 msgstr ""
 
@@ -602,7 +602,7 @@ msgstr ""
 msgid "All topics in %1"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:60
+#: data/TWiki/WebTopicCreator.txt:52
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr ""
@@ -747,7 +747,7 @@ msgstr ""
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
 msgid "Cancel editing and discard changes"
 msgstr ""
 
@@ -808,7 +808,7 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:26
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Change topic"
 msgstr ""
 
@@ -869,7 +869,7 @@ msgstr ""
 msgid "Choose a new form template"
 msgstr ""
 
-#: lib/TWiki/Form.pm:497
+#: lib/TWiki/Form.pm:501
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:85
 msgid "Clear all"
 msgstr ""
@@ -888,7 +888,7 @@ msgid ""
 "references."
 msgstr ""
 
-#: lib/TWiki/Form.pm:280
+#: lib/TWiki/Form.pm:283
 msgid "Click to see details in separate window"
 msgstr ""
 
@@ -930,10 +930,6 @@ msgstr ""
 msgid "Continue and try to rename web?"
 msgstr ""
 
-#: data/TWiki/WebTopicViewTemplate.txt:23
-msgid "Continue to *[[%1][create topic !%2]]*"
-msgstr ""
-
 #: data/TWiki/TWikiPreferences.txt:42
 msgid ""
 "Copyright &&copy; by the contributing authors. All material on this "
@@ -973,7 +969,7 @@ msgstr ""
 msgid "Create New Topic"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:52
+#: data/TWiki/WebTopicCreator.txt:3
 msgid "Create New Topic in %1 Web"
 msgstr ""
 
@@ -998,7 +994,7 @@ msgstr ""
 msgid "Create personal sidebar"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:71 lib/TWiki/Render.pm:574
+#: data/TWiki/WebTopicCreator.txt:63 lib/TWiki/Render.pm:574
 #: lib/TWiki/Render.pm:586
 msgid "Create this topic"
 msgstr ""
@@ -1176,7 +1172,13 @@ msgstr ""
 msgid "Edit topic preference settings"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:65
+#: templates/messages.tmpl:300
+msgid ""
+"Either you did not specify a file name, or the file you are trying to upload "
+"%1 has no content. You may not upload an empty file."
+msgstr ""
+
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:98
 msgid "Enlarge edit box"
 msgstr ""
 
@@ -1245,8 +1247,8 @@ msgstr ""
 msgid "First Name:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
 msgid "Force new revision"
 msgstr ""
 
@@ -1325,7 +1327,7 @@ msgstr ""
 msgid "History:"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:74
+#: data/TWiki/NewUserTemplate.txt:80
 msgid "Horizontal size of text edit box:"
 msgstr ""
 
@@ -1406,8 +1408,7 @@ msgstr ""
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:11
-#: data/TWiki/WebTopicViewTemplate.txt:11
+#: data/TWiki/WebTopicViewTemplate.txt:12
 msgid "If you intend to do a full text search:"
 msgstr ""
 
@@ -1417,8 +1418,7 @@ msgid ""
 "the topic, [[%1][cancel save]] to go to %2."
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:4
-#: data/TWiki/WebTopicViewTemplate.txt:4
+#: data/TWiki/WebTopicViewTemplate.txt:5
 msgid "If you used the \"Jump\" feature to jump to this page:"
 msgstr ""
 
@@ -1426,8 +1426,7 @@ msgstr ""
 msgid "If you want to create the topic"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:21
-#: data/TWiki/WebTopicViewTemplate.txt:21
+#: data/TWiki/WebTopicViewTemplate.txt:22
 msgid "If you would like to create this page:"
 msgstr ""
 
@@ -1504,7 +1503,7 @@ msgid ""
 "check with %1 first."
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:61
+#: data/TWiki/WebTopicCreator.txt:53
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:33
 msgid ""
 "It's usually best to choose a <a target='WikiWord' onclick=\"return "
@@ -1521,7 +1520,7 @@ msgid ""
 msgstr ""
 
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:2
-#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:6
+#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
 msgid "Jump"
 msgstr ""
 
@@ -1589,8 +1588,7 @@ msgstr ""
 msgid "Make search:"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:6
-#: data/TWiki/WebTopicViewTemplate.txt:6
+#: data/TWiki/WebTopicViewTemplate.txt:7
 msgid ""
 "Make sure you spelled the %1 correctly and try again. Remember, a %2 is case "
 "sensitive"
@@ -1646,7 +1644,7 @@ msgstr ""
 msgid "Move topic to web:"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:58
+#: data/TWiki/NewUserTemplate.txt:64
 msgid "My Links"
 msgstr ""
 
@@ -1654,8 +1652,7 @@ msgstr ""
 msgid "NEW"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:2
-#: data/TWiki/WebTopicViewTemplate.txt:2
+#: data/TWiki/WebTopicViewTemplate.txt:3
 msgid "NOTE: This Wiki topic does not exist yet"
 msgstr ""
 
@@ -1774,7 +1771,7 @@ msgstr ""
 msgid "Once registered you can login using your %1 and password."
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:79
+#: data/TWiki/WebTopicCreator.txt:76
 msgid ""
 "Once you have created the topic, consider adding links in related topics to "
 "the new topic so that there are more ways people can discover it."
@@ -1787,12 +1784,12 @@ msgstr ""
 #: templates/edit.tmpl:21 templates/preview.tmpl:10
 #: twikiplugins/ClassicSkin/templates/edit.classic.tmpl:18
 #: twikiplugins/ClassicSkin/templates/preview.classic.tmpl:10
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:20
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:21
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:26
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
 msgid "Opens page in new window"
 msgstr ""
 
@@ -1845,7 +1842,7 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:54 data/TWiki/NewUserTemplate.txt:68
+#: data/TWiki/NewUserTemplate.txt:60 data/TWiki/NewUserTemplate.txt:74
 msgid "Personal Preferences"
 msgstr ""
 
@@ -1936,7 +1933,8 @@ msgid ""
 "more, study the TWikiTutorial, which is accessible from the same link."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
 msgid "Read new revision help text in new window"
 msgstr ""
 
@@ -1966,7 +1964,7 @@ msgstr ""
 msgid "Regular expression search"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:83
+#: data/TWiki/NewUserTemplate.txt:89
 msgid "Related Topics"
 msgstr ""
 
@@ -2075,11 +2073,11 @@ msgstr ""
 msgid "Revision:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:26
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:49
 msgid "S = Save, Q = Quiet save, K = Checkpoint, D = Discard"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:71
 msgid "S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"
 msgstr ""
 
@@ -2093,14 +2091,13 @@ msgid "Saved to:"
 msgstr ""
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
-#: data/TWiki/WebTopicNonWikiTemplate.txt:15
-#: data/TWiki/WebTopicViewTemplate.txt:15 data/_default/WebHome.txt:11
+#: data/TWiki/WebTopicViewTemplate.txt:16 data/_default/WebHome.txt:11
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:7
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarExample.txt:6
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarSearch.txt:3
-#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:7
+#: twikiplugins/PatternSkin/data/TWiki/WebTopBar.txt:8
 #: twikiplugins/PatternSkin/data/Trash/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/_default/WebLeftBar.txt:6
 msgid "Search"
@@ -2123,8 +2120,7 @@ msgstr ""
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:8
-#: data/TWiki/WebTopicViewTemplate.txt:8
+#: data/TWiki/WebTopicViewTemplate.txt:9
 msgid "Search for similar topics in all public webs"
 msgstr ""
 
@@ -2200,7 +2196,7 @@ msgstr ""
 msgid "Select all"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:60
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 
@@ -2212,7 +2208,7 @@ msgstr ""
 msgid "Sequential"
 msgstr ""
 
-#: lib/TWiki/Form.pm:492
+#: lib/TWiki/Form.pm:496
 msgid "Set all"
 msgstr ""
 
@@ -2233,11 +2229,11 @@ msgstr ""
 msgid "Show help"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:72
+#: data/TWiki/NewUserTemplate.txt:78
 msgid "Show tool-tip topic info on mouse-over of %1 links, on or off:"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:65
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:98
 msgid "Shrink edit box"
 msgstr ""
 
@@ -2245,8 +2241,7 @@ msgstr ""
 msgid "Side by side"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:7
-#: data/TWiki/WebTopicViewTemplate.txt:7
+#: data/TWiki/WebTopicViewTemplate.txt:8
 msgid "Similar topics in this web (if any):"
 msgstr ""
 
@@ -2300,7 +2295,7 @@ msgid ""
 "and save %1 to activate the new parent"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:78
+#: data/TWiki/NewUserTemplate.txt:84
 msgid ""
 "Style of text edit box. =width: 99%= for full window width (default), "
 "=width: auto= to disable."
@@ -2563,12 +2558,11 @@ msgstr ""
 msgid "This requires the form definition to be present."
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:9
-#: data/TWiki/WebTopicViewTemplate.txt:9
+#: data/TWiki/WebTopicViewTemplate.txt:10
 msgid "This topic has moved to %1."
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:23
+#: data/TWiki/WebTopicNonWikiTemplate.txt:4
 msgid ""
 "This topic name is not recommended because it will not be linked "
 "automatically. See %1 for details"
@@ -2586,11 +2580,11 @@ msgid ""
 "especially if you made any changes to form fields."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:36
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:62
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:34
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:60
 msgid "To *save* changes: Press the [Save Changes] button."
 msgstr ""
 
@@ -2613,7 +2607,7 @@ msgstr ""
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:35
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:61
 msgid "To make *more changes*: Go back in your browser."
 msgstr ""
 
@@ -2654,11 +2648,11 @@ msgstr ""
 msgid "Topic name"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:55
+#: data/TWiki/WebTopicCreator.txt:50 data/TWiki/WebTopicViewTemplate.txt:27
 msgid "Topic name:"
 msgstr ""
 
-#: data/TWiki/WebTopicCreator.txt:64
+#: data/TWiki/WebTopicCreator.txt:56 data/TWiki/WebTopicViewTemplate.txt:32
 msgid "Topic parent:"
 msgstr ""
 
@@ -2712,7 +2706,7 @@ msgstr ""
 msgid "Unchanged"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:70
+#: data/TWiki/NewUserTemplate.txt:76
 msgid ""
 "Uncomment preferences variables to activate them (remove the #-sign). Help "
 "and details on preferences variables are available in %1."
@@ -2739,10 +2733,6 @@ msgstr ""
 msgid "Upload up to %1 KB."
 msgstr ""
 
-#: templates/messages.tmpl:300
-msgid "Uploaded file %1 does not exist or is empty"
-msgstr ""
-
 #: templates/messages.tmpl:305
 msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr ""
@@ -2755,16 +2745,15 @@ msgstr ""
 msgid "Use %1 instead."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:96
 msgid "Use monospace font"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:96
 msgid "Use proportional spaced font"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:14
-#: data/TWiki/WebTopicViewTemplate.txt:14
+#: data/TWiki/WebTopicViewTemplate.txt:15
 msgid "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
 msgstr ""
 
@@ -2799,7 +2788,7 @@ msgstr ""
 msgid "Version history of %1"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:76
+#: data/TWiki/NewUserTemplate.txt:82
 msgid "Vertical size of text edit box:"
 msgstr ""
 
@@ -2834,10 +2823,11 @@ msgstr ""
 #: templates/twiki.tmpl:164
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:151
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:58
 msgid "View total topic history"
 msgstr ""
 
-#: data/TWiki/WebTopicNonWikiTemplate.txt:23
+#: data/TWiki/WebTopicNonWikiTemplate.txt:4
 msgid "WARNING:"
 msgstr ""
 
@@ -2892,7 +2882,7 @@ msgstr ""
 msgid "Would you like to go to:"
 msgstr ""
 
-#: data/TWiki/NewUserTemplate.txt:80
+#: data/TWiki/NewUserTemplate.txt:86
 msgid "Write protect your home page: (set it to your %1)"
 msgstr ""
 
@@ -2917,7 +2907,7 @@ msgid ""
 "with %1 first."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:44
+#: twikiplugins/PatternSkin/templates/view.pattern.tmpl:50
 msgid "You are here:"
 msgstr ""
 
@@ -3048,7 +3038,7 @@ msgstr ""
 msgid "Your registered e-mail address(es) are updated to: %1."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:60
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
 msgid "Your signature to copy/paste:"
 msgstr ""
 
@@ -3065,7 +3055,7 @@ msgid ""
 "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
 
-#: lib/TWiki/I18N.pm:271
+#: lib/TWiki/I18N.pm:270
 msgid "_language_name"
 msgstr ""
 
@@ -3117,10 +3107,10 @@ msgstr ""
 msgid "fields are required."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:38
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:40
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:39
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:20
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:21
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:24
 msgid "help"
 msgstr ""
 
@@ -3176,10 +3166,10 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:38
 #: twikiplugins/PatternSkin/templates/attachnew.pattern.tmpl:13
 #: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:20
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:51
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:47
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:30
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:28
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:45
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:25
 #: twikiplugins/PatternSkin/templates/renameconfirm.pattern.tmpl:21
@@ -3206,30 +3196,30 @@ msgstr ""
 msgid "to see if %1 has finished editing yet."
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
 msgid "value='Cancel' accesskey='c'"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:59
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:36
 msgid "value='Checkpoint' accesskey='k'"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:38
 msgid "value='Discard' accesskey='d'"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:61
 msgid "value='Preview' accesskey='p'"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:57
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:34
 msgid "value='Quiet save' accesskey='q'"
 msgstr ""
 
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:42
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:23
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:55
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:32
 msgid "value='Save' accesskey='s'"
 msgstr ""
 
