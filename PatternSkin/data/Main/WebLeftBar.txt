@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1121074087" format="1.1" version="$Rev: 7316 $"}%
-%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
+%META:TOPICINFO{author="TWikiGuest" date="1146591050" format="1.1" reprev="1.2" version="1.2"}%
+%IF{"context can_login" then="%INCLUDE{"%TWIKIWEB%.WebLeftBarLogin" warn="off"}%"}%
    * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][ %ICON{"home"}% <nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
    * [[TWikiUsers][ %ICON{"person"}% %MAKETEXT{"Users"}%]]
    * [[TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
