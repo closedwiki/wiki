@@ -1285,6 +1285,9 @@ msgid ""
 "Either you did not specify a file name, or the file you are trying to upload "
 "%1 has no content. You may not upload an empty file."
 msgstr ""
+"Ou você não espeficicou um nome de arquvio, ou o arquivo %1 que você está "
+"tentando subir não tem nenhum conteúdo. Você não pode subir um arquivo "
+"vazio."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:98
 msgid "Enlarge edit box"
