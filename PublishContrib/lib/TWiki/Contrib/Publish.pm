@@ -312,7 +312,12 @@ sub publishTopic {
     $tmpl =~ s/%REVTITLE%//g;
     $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;
 
-    # Strip unsatisfied WikiWords.
+    # Remove <base.../> tag
+    $tmpl =~ s/<base[^>]+\/>//;
+    # Remove <base...>...</base> tag
+    $tmpl =~ s/<base[^>]+>.*?<\/base>//;
+
+    # Clean up unsatisfied WikiWords.
     $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/_handleNewLink($1)/ge;
 
     # Copy files from pub dir to rsrc dir in static dir.
@@ -337,8 +342,6 @@ sub publishTopic {
     # Handle image tags using absolute URLs not otherwise satisfied
     $tmpl =~ s!(<img\s+.*?\bsrc=)(["'])(.*?)\2(.*?>)!$1.$2._handleURL($3,$archive,\$extras).$2.$4!ge;
 
-    # Remove base tag
-    $tmpl =~ s/<base[^>]+\/>//;
     $tmpl =~ s/<nop>//g;
 
     # Write the resulting HTML.
