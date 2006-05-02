@@ -16,7 +16,7 @@
 		    ==prefix="..."==: Prefix that goes before parents, but only if there are parents, default =""=. %BR% \
 		    ==format="..."==: format string used to display each partent topic, default ="[<nop>[$web.$topic][$topic]]"= %BR% \
 		    ==suffix="..."==: Suffix, only appears if there are parents, default =""=. %BR% \
-		    ==separator="..."==: Separator between parents, default =" &gt; "=. %BR% \
-     | Generates the parent link |
+		    ==separator="..."==: Separator between parents, default =" &gt; "=. \
+                  | Generates the parent link |
    * Related: [[#VarMETASEARCH][METASEARCH]]
 
