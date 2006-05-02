@@ -1,7 +1,5 @@
 data/TWiki/GnuPlotHelp.txt NEW
-data/TWiki/GnuPlotHelp.txt,v NEW
 data/TWiki/GnuPlotPlugin.txt NEW
-data/TWiki/GnuPlotPlugin.txt,v NEW
 lib/TWiki/Plugins/GnuPlotPlugin.pm NEW
 lib/TWiki/Plugins/GnuPlotPlugin/Plot.pm NEW
 lib/TWiki/Plugins/GnuPlotPlugin/PlotSettings.pm NEW
@@ -9,7 +7,6 @@ lib/TWiki/Plugins/GnuPlotPlugin/TestInstall.err NEW
 lib/TWiki/Plugins/GnuPlotPlugin/TestInstall.gnu NEW
 lib/TWiki/Plugins/GnuPlotPlugin/TestInstall.png NEW
 pub/TWiki/GnuPlotHelp/gnuplot.html NEW
-pub/TWiki/GnuPlotHelp/gnuplot.html,v NEW
 pub/TWiki/GnuPlotPlugin/BlueWhale.err NEW
 pub/TWiki/GnuPlotPlugin/BlueWhale.gnu NEW
 pub/TWiki/GnuPlotPlugin/BlueWhale.png NEW
@@ -43,3 +40,4 @@ pub/TWiki/GnuPlotPlugin/TestInstall.png NEW
 pub/TWiki/GnuPlotPlugin/TestInstallSample.png NEW
 pub/TWiki/GnuPlotPlugin/whale.dat NEW
 tools/gnuplot.pl
+
