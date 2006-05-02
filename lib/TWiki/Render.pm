@@ -116,11 +116,11 @@ sub renderParent {
     my $prefix =      $ah->{prefix} || '';
     my $suffix =      $ah->{suffix} || '';
     my $usesep =      $ah->{separator} || ' &gt; ';
+    my $format =      $ah->{format} || '[[$web.$topic][$topic]]';
 
     my %visited;
     $visited{$web.'.'.$topic} = 1;
 
-    my $sep = '';
     my $pWeb = $web;
     my $pTopic;
     my $text = '';
@@ -140,7 +140,10 @@ sub renderParent {
                  ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
                  $visited{$parent} );
         $visited{$parent} = 1;
-        unshift( @stack, "[[$parent][$pTopic]]" );
+	$text = $format;
+	$text =~ s/\$web/$pWeb/g;
+	$text =~ s/\$topic/$pTopic/g;
+        unshift( @stack, $text );
         last if $dontRecurse;
         $parent = $store->getTopicParent( $pWeb, $pTopic );
     }
