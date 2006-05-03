@@ -1264,7 +1264,8 @@ msgstr "Edycja ustawień strony"
 msgid ""
 "Either you did not specify a file name, or the file you are trying to upload "
 "%1 has no content. You may not upload an empty file."
-msgstr ""
+msgstr "Nie podano nazwy ładowanego pliku lub plik o podanej nazwie "
+"(%1) jest pusty. Nie można załadować pustego pliku."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:98
 msgid "Enlarge edit box"
