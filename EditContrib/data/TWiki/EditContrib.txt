@@ -28,6 +28,8 @@ The use of this contrib follows closely the pattern used in TWiki core when edit
 		* Determine the text before the section to be edited, the section to be edited, and the text after that section, as well as the rendered versions (if desired) of the pre- and post-sections.
 		* Pass these to =finalize_edit()= to generate the edit topic.
 The contrib provides the rest of the plumbing (save script, edit templates).
+Note that to perform these functions, the plugin violates the TWiki Func API.  Thus, future releases of TWiki may be incompatible with this plugin.
+
 
 ---++ =passFormForEdit ( $web, $topic, $form, $meta, $query, @fieldsInfo )=
 
