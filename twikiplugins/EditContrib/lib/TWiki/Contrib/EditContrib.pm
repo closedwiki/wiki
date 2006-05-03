@@ -31,25 +31,18 @@ sub savemulti {
 
   my $saveaction = lc($query->param( 'action' ));
   if ( $saveaction eq "checkpoint" ) {
-    if( $TWiki::Plugins::VERSION >= 1.1 ) {
-      $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"dontnotify", -value=>"checked");
-      $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"unlock", -value=>'0');
-    } else {
-      $query->param( -name=>"dontnotify", -value=>"checked" );
-      $query->param( -name=>"unlock", -value=>'0' );
-    }
+    $query->param( -name=>"dontnotify", -value=>"checked" );
+    $query->param( -name=>"unlock", -value=>'0' );
     $redirecturl = $editlink;
   } elsif ( $saveaction eq "quietsave" ) {
-    if( $TWiki::Plugins::VERSION >= 1.1 ) {
-      $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"dontnotify", -value=>"checked");
-    } else {
-      $query->param( -name=>"dontnotify", -value=>"checked" );
-    }
+    $query->param( -name=>"dontnotify", -value=>"checked" );
   } elsif ( $saveaction eq "cancel" ) {
     my $viewURL = TWiki::Func::getScriptUrl( $webName, $topic, "view" );
-    TWiki::redirect( $query, "$viewURL?unlock=on" );
+    TWiki::Func::redirectCgiQuery( $query, "$viewURL?unlock=on" );
     return;
   } elsif( $saveaction eq "preview" ) {
+    ## the following violates the TWiki Func API.  It may not work in
+    ## anything other than Dakar or Cairo.
     my $text = $query->param( 'pretxt' ) . $query->param( 'text' ) . $nl . $query->param( 'postxt' );
     if( $TWiki::Plugins::VERSION >= 1.1 ) {
         $text = TWiki::entityDecode( $text );
@@ -258,6 +251,9 @@ sub edit {
         my $formMeta = $meta->get( 'FORM' );
         my $form = '';
         my $formText = '';
+
+    ## the following violates the TWiki Func API.  It may not work in
+    ## anything other than Dakar or Cairo.
 
         $form = $formMeta->{name} if( $formMeta );
         if( $form && !$saveCmd ) {

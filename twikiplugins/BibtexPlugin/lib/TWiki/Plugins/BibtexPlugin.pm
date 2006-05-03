@@ -211,7 +211,7 @@ sub handleCitation2
       
       # print STDERR "found CITE:$cit\n";
       $txt .= (length($txt) > 1) ? ',' : '';
-      $txt .= '<a href="#'.$cit.'">'.
+      $txt .= '<a href="#'.$cit.'" title="'.$cit.'">'.
           $bibliography{$cit}{"order"}.
           "</a>";
   }

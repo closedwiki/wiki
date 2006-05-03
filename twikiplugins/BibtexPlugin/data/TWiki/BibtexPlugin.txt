@@ -130,7 +130,7 @@ _Note: The %<nop>CITE% macro is also defined by the TWiki:BibliographyPlugin.  I
 ---++ Syntax
 	* =%<nop>BIBTEX{&lt;attributes&gt;}%= - render a set of bibtex files attached to some topic 
 	* =%<nop>STARTBIBTEX{&lt;attributes&gt;}% ... %<nop>STOPBIBTEX%= - render an inline-bibtex database
-	* =%<nop>CITE{key}%= (or =%<nop>BIBCITE%=) - generate an hyperlink to a bibtex entry 
+	* =%<nop>CITE{key}%= (or =%<nop>BIBCITE{key}%=) - generate an hyperlink to a bibtex entry 
 	* =%<nop>BIBTEXREF{key, topic}%= - generate a list of references based on the declared =CITE= keys
 
 ---++ Attributes
@@ -400,6 +400,7 @@ lines to the .htaccess file:
 |  16 Okt 2003: | Initial version |
 |  Plugin Version: | v1.2 |
 |  Change History: | &nbsp; |
+|  2006/01/06: | added code to generate automatic reference lists, based on declared citations |
 |  2005/12/09: | reworked to use the TWiki:DakarContrib on cairo and beijing |
 |  2004/11/26: | added simple and expert search forms, added select option to cgi-script; \
 		added configurable default search template |
