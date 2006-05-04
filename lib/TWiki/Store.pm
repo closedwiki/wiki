@@ -413,6 +413,9 @@ sub moveTopic {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user->isa('TWiki::User')) if DEBUG;
 
+    my $handler = $this->_getHandler( $oldWeb, $oldTopic, '' );
+    my $rev = $handler->numRevisions();
+
     # will block
     $this->lockTopic( $user, $oldWeb, $oldTopic );
     try {
@@ -438,11 +441,17 @@ sub moveTopic {
                 $this->{session}->{security}->getReason());
         }
 
-        my $handler = $this->_getHandler( $oldWeb, $oldTopic, '' );
         $handler->moveTopic( $newWeb, $newTopic );
     } finally {
         $this->unlockTopic( $user, $oldWeb, $oldTopic );
     };
+
+    if( $newWeb ne $oldWeb ) {
+        # Record that it was moved away
+        $this->_recordChange( $oldWeb, $oldTopic, $user, $rev );
+    }
+
+    $this->_recordChange( $newWeb, $newTopic, $user, $rev );
 
     # Log rename
     if( $TWiki::cfg{Log}{rename} ) {
@@ -450,6 +459,21 @@ sub moveTopic {
         my $new = $newWeb.'.'.$newTopic;
         $this->{session}->writeLog( 'rename', $old, "moved to $new", $user );
     }
+}
+
+# update .changes for statistics and mailer
+sub _recordChange {
+    my( $this, $web, $topic, $user, $rev, $more ) = @_;
+    $more ||= '';
+    my @foo = map { my @row = split(/\t/, $_); \@row }
+      split( /[\r\n]+/, $this->readMetaData( $web, 'changes' ));
+    # SMELL: make the 500 configurable? Or trim on the basis of age?
+    shift( @foo) if( $#foo > 500 );
+    push( @foo, [ $topic, $user->login(), time(), $rev, $more ] );
+    $this->saveMetaData(
+        $web, 'changes',
+        join( "\n",
+              map { join( "\t", @$_); } @foo ));
 }
 
 =pod
@@ -1009,24 +1033,19 @@ sub _noHandlersSave {
     try {
         $handler->addRevisionFromText( $text, $options->{comment},
                                        $user->wikiName() );
+        # just in case they are not sequential
+        $nextRev = $handler->numRevisions();
+
+        my $extra = $options->{minor} ? 'minor' : '';
+        $this->_recordChange( $web, $topic, $user, $nextRev, $extra );
+
+        if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
+            $this->{session}->writeLog( 'save', $web.'.'.$topic,
+                                        $extra, $user );
+        }
     } finally {
         $this->unlockTopic( $user, $web, $topic );
     };
-
-    # update .changes
-    my @foo = split( /\r?\n/, $this->readMetaData( $web, 'changes' ));
-    shift( @foo) if( $#foo > 500 );
-    my $minor = '';
-    $minor = "\tminor" if $options->{minor};
-    push( @foo, "$topic\t".$user->login()."\t".time()."\t$nextRev$minor" );
-    $this->saveMetaData( $web, 'changes', join( "\n", @foo ));
-
-    if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
-        # write log entry
-        my $extra = '';
-        $extra   .= 'minor' if( $options->{minor} );
-        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra, $user );
-    }
 }
 
 =pod
