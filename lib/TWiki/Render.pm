@@ -732,8 +732,6 @@ sub _handleSquareBracketedLink {
 
         $web = join('.', @weba) if scalar(@weba);
         $topic = join('', @topica);
-    } else {
-        $topic =~ s/\.//g;
     }
 
     # Topic defaults to the current topic
