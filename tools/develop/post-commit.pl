@@ -56,7 +56,7 @@ for my $rev ($first..$last) {
         my $fi = "data/Bugs/$item.txt";
         my $changed = 0;
 
-        open(F, "<$fi") || die "Failed to read $fi: $!";
+        open(F, "<$fi") || next;
         my $text = <F>;
         close(F);
 
