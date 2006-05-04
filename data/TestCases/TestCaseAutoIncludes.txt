@@ -38,7 +38,7 @@ And called for some hot buttered toast.
 ---++ Expected
 <!-- expected expand FNF -->
 <p></p><p /><p />
-<span class='twikiAlert'>Warning: Can't find topic FileNotFound</span>
+<span class='twikiAlert'>Warning: Can't find topic TestCases.FileNotFound</span>
 <p></p>
 <!-- /expected -->
 ---++ Actual
@@ -68,7 +68,7 @@ IncludedTopic
 
 ---+ Parameterized includes
 ---++ Expected
-<!-- expected -->
+<!-- expected PARAM -->
 %A% %B% %C%
 <p />
 1 2 3
@@ -81,3 +81,15 @@ IncludedTopic
 %INCLUDE{"ParameterizedIncludeFixture" A="1" B="2" C="3"}%
 %A% %B% %C%
 <!-- /actual -->
+
+---+ Include nothing
+---++ Expected
+<!-- expected NOWT --><p></p><p></p><span class='twikiAlert'>Warning: Can't find topic </span><!-- /expected -->
+---++ Actual
+<!-- actual -->%INCLUDE{""}%<!-- /actual -->
+
+---+ Include nothing with warning
+---++ Expected
+<!-- expected NOBBUTWARN --><!-- /expected -->
+---++ Actual
+<!-- actual -->%INCLUDE{"" warn="off"}%<!-- /actual -->

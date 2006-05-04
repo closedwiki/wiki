@@ -2602,6 +2602,26 @@ sub _IF {
     }
 }
 
+# generate an include warning
+sub _includeWarning {
+    my $this = shift;
+    my $warn = shift;
+    my $message = shift;
+    my $web = shift;
+    my $topic = shift || '';
+    $topic =~ s#/#.#g;
+    $topic = $web.'.'.$topic if( $web );
+
+    if( $warn eq 'on' ) {
+        return $this->inlineAlert( 'alerts', $message,
+                                   $topic, @_ );
+    } elsif( isTrue( $warn )) {
+        $warn =~ s/\$topic/$topic/go;
+        return $warn;
+    } # else fail silently
+    return '';
+}
+
 # Processes a specific instance %<nop>INCLUDE{...}% syntax.
 # Returns the text to be inserted in place of the INCLUDE command.
 # $topic and $web should be for the immediate parent topic in the
@@ -2637,6 +2657,14 @@ sub _INCLUDE {
         $path =~ s/passwd//gi;    # filter out passwd filename
     }
 
+    # make sure we have something to include. If we don't do this, then
+    # normalizeWebTopicName will default to WebHome. Item2209.
+    unless( $path ) {
+        # SMELL: could do with a different message here, but don't want to
+        # add one right now because translators are already working
+        return $this->_includeWarning( $warn, 'topic_not_found' );
+    }
+
     my $text = '';
     my $meta = '';
     my $includedWeb;
@@ -2648,14 +2676,8 @@ sub _INCLUDE {
 
     # See Codev.FailedIncludeWarning for the history.
     unless( $this->{store}->topicExists($includedWeb, $includedTopic)) {
-        if( $warn eq 'on' ) {
-            return $this->inlineAlert( 'alerts', 'topic_not_found', $includedTopic );
-        } elsif( isTrue( $warn )) {
-            $includedTopic =~ s/\//\./go;
-            $warn =~ s/\$topic/$includedTopic/go;
-            return $warn;
-        } # else fail silently
-        return '';
+        return $this->_includeWarning( $warn, 'topic_not_found',
+                                       $includedWeb, $includedTopic );
     }
 
     # prevent recursive includes. Note that the inclusion of a topic into
@@ -2665,21 +2687,8 @@ sub _INCLUDE {
     my $count = grep( $key, keys %{$this->{includes}});
     $key .= $args;
     if( $this->{includes}->{$key} || $count > 99) {
-        if( $warn eq 'on' ) {
-            my $more = '';
-            # Commented out because no order in the hash, so of very limited
-            # use in debugging.
-            #if( defined $this->{includes} ) {
-            #    $more .= join( ', ', keys %{$this->{includes}} );
-            #}
-            return $this->inlineAlert( 'alerts', 'already_included',
-                                       $includedWeb, $includedTopic, $more );
-        } elsif( isTrue( $warn )) {
-            $includedTopic =~ s/\//\./go;
-            $warn =~ s/\$topic/$includedTopic/go;
-            return $warn;
-        } # else fail silently
-        return '';
+        return $this->_includeWarning( $warn, 'already_included',
+                                       $includedWeb, $includedTopic, '' );
     }
 
     my %saveTags = %{$this->{SESSION_TAGS}};
