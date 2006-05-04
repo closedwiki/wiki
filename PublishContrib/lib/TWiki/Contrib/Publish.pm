@@ -168,8 +168,8 @@ sub publish {
         $cs = '</span>';
         print "${ob}URL: ${cb} $url$br";
     }
-    print "${ob}{PublishContrib}{Dir}: ${cb}$TWiki::cfg{PublishContrib}{Dir}$br";
-    print "${ob}{PublishContrib}{URL}: ${cb}$TWiki::cfg{PublishContrib}{URL}$br";
+    print "${ob}\{PublishContrib}{Dir}: ${cb}$TWiki::cfg{PublishContrib}{Dir}$br";
+    print "${ob}\{PublishContrib}{URL}: ${cb}$TWiki::cfg{PublishContrib}{URL}$br";
     print "${ob}Web: $web${cb}$br";
     print "${ob}Config: $configtopic$br" if $configtopic;
     print "${ob}Skin: ${cb}$skin$br";
