@@ -732,8 +732,12 @@ sub _handleSquareBracketedLink {
 
         $web = join('.', @weba) if scalar(@weba);
         $topic = join('', @topica);
+    } else {
+        if( $topic =~ s/^($TWiki::regex{webNameBaseRegex}|$TWiki::regex{defaultWebNameRegex})\.//) {
+            $web = $1;
+        }
+        $topic =~ s/\.//g;
     }
-
     # Topic defaults to the current topic
     ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
 
