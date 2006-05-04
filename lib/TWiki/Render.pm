@@ -671,7 +671,7 @@ sub _handleSquareBracketedLink {
           $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
           return $this->_externalLink( $link, $text );
     }
-    
+
     # Spot other full explicit URLs
     # (explicit external [[$link][$text]]-style, that can be handled directly)
     if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
@@ -718,9 +718,25 @@ sub _handleSquareBracketedLink {
     # Collapse spaces and capitalise following letter
     $link =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;
 
-    # Topic defaults to the current topic
     $topic = $link if( $link );
 
+    if( $TWiki::cfg{EnableHierarchicalWebs} ) {
+        # look up the leading path components to see
+        # if they form a valid web path.
+        my @topica = split( /\./, $topic );
+        my @weba;
+        while( @topica && $this->{session}->{store}->webExists(
+            join('.', @weba, $topica[0]))) {
+            push(@weba, shift(@topica));
+        }
+
+        $web = join('.', @weba) if scalar(@weba);
+        $topic = join('', @topica);
+    } else {
+        $topic =~ s/\.//g;
+    }
+
+    # Topic defaults to the current topic
     ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
 
     return $this->internalLink( $web, $topic, $text, $anchor, 1, undef );
