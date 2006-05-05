@@ -4,5 +4,4 @@
    * [[WebChanges][Changes]] 
    * [[WebNotify][Notifications]] 
    * [[WebStatistics][Statistics]] 
-   * [[WebPreferences][Preferences]] 
-%STOPINCLUDE%
+   * [[WebPreferences][Preferences]] %STOPINCLUDE%

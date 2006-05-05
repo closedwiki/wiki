@@ -18,7 +18,7 @@
 %$nopWEBCOMPONENT{"WebLinks"}%
 %FIDEFINED%
 
-%FORMATLIST{"%WEBLIST{webs="public" separator=" "}%" exclude="Main|TWiki|Trash" split=" " separator="$n" format="<h2 class=\"navButton navButton$1\">$percntWEBLINK{\"$1\"}$percnt</h2><div style=\"$percntIFDEFINED{\"$percntBASEWEB$percnt\" as=\"$1\" else=\"display:none\"}$percnt\">$percntWEBCOMPONENT{\"WebLinks\"}$percnt</div>"}%
+%FORMATLIST{"%WEBLIST{webs="public,%BASEWEB%" separator=" "}%" unique="on" exclude="Main|TWiki|Trash" split=" " separator="$n" format="<h2 class=\"navButton navButton$1\">$percntWEBLINK{\"$1\"}$percnt</h2><div style=\"$percntIFDEFINED{\"$percntBASEWEB$percnt\" as=\"$1\" else=\"display:none\"}$percnt\">$percntWEBCOMPONENT{\"WebLinks\"}$percnt</div>"}%
 
 %IFDEFINEDTHEN{"%BASEWEB%" as="Trash"}%
 <h2 class="navButton navButtonTrash">%WEBLINK{"Trash"}%</h2>

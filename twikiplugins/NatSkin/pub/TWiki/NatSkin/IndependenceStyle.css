@@ -371,6 +371,11 @@ hr {
   color:#0F314E;
 }
 
+/* HeadlinesPlugin */
+.headlinesTitle a {
+  text-decoration:none;
+}
+
 /* blogging */
 .blogAbout {
   font-size:0.8em;
