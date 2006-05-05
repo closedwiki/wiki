@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141923830" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1144222717" format="1.1" version="1.2"}%
 %META:TOPICPARENT{}%
 ---+!! BlogUp: a twiki based weblog setup
 
@@ -186,4 +186,4 @@ See also: BlogPlugin, [[_BlogPlugin.WebHome][BlogUp template web]]
 %META:FILEATTACHMENT{name="BlogPluginSnap12.jpg" attachment="BlogPluginSnap12.jpg" attr="h" comment="Customized WebSearch showing headlines and teasers" date="1138826039" path="BlogPluginSnap12.jpg" size="69360" stream="BlogPluginSnap12.jpg" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="BlogPluginSnap13.jpg" attachment="BlogPluginSnap13.jpg" attr="h" comment="Editing a BlogEntry" date="1139946650" path="BlogPluginSnap13.jpg" size="111446" stream="BlogPluginSnap13.jpg" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="BlogPluginSnap14.jpg" attachment="BlogPluginSnap14.jpg" attr="h" comment="Editing a BlogLink" date="1139946686" path="BlogPluginSnap14.jpg" size="53731" stream="BlogPluginSnap14.jpg" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="BlogPluginSnap15.jpg" attachment="BlogPluginSnap15.jpg" attr="" comment="Editing a posting" date="1141923830" path="BlogPluginSnap15.jpg" size="69566" stream="BlogPluginSnap15.jpg" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="BlogPluginSnap15.jpg" attachment="BlogPluginSnap15.jpg" attr="h" comment="Editing a posting" date="1141923830" path="BlogPluginSnap15.jpg" size="69566" stream="BlogPluginSnap15.jpg" user="TWikiContributor" version="1.1"}%
