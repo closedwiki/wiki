@@ -33,7 +33,7 @@
 %~~ DBCALL{"%TOPIC%" 
 ~~~   NAME="MichaelDaum" 
 ~~~   LIMIT="%URLPARAM{"limit" default="2"}%"
-~~~   SKIP="%URLPARAM{"skip" default="0"}%"
+~~~   SKIP="%URLPARAM{"skip" default=" 0"}%"
 ~~~ }%
 </div>
 

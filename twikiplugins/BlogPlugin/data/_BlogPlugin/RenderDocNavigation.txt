@@ -7,7 +7,7 @@
    * NAME: topic name of a BlogComment, BlogEntry or BlogLink 
            to which the prev-next doc navigation is displayed
    * WHERE: search parameter to restrict the linked documents
-   * SORT: criterion how to sort set of documents (created, name, ...)
+   * ORDER: criterion how to sort set of documents (created, name, ...)
    * REVERSE: invert the sorting order (on, off)
    * PARAMS: additional url parameters (optional)
 

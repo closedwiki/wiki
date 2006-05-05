@@ -7,6 +7,7 @@ see also: RenderBlogTeaser
 
 ---++ Parameters
    * NAME: BlogEntry topic name
+   * PARAMS: additional urlparams that are added to the permalinks (optional)
 
 ---++ Implementation
 ---+++ Main

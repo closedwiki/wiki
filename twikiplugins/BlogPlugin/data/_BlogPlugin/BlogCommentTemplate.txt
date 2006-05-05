@@ -1,11 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139652449" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
-%DBCALL{"RenderBlogComment" NAME="%TOPIC%"}%
-%DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
-%DBCALL{"RenderAddComment"}%
 <!-- 
    * Set WHITEBOARD = off
-   * Set VIEW_TEMPLATE = HiddenFormView
+   * Set VIEW_TEMPLATE = BlogCommentView
 -->
 %STARTSECTION{type="templateonly"}%
 <!--

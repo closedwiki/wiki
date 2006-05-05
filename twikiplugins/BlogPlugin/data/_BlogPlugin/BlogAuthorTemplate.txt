@@ -1,15 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1142179051" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicTemplate"}%
-%DBCALL{"RenderBlogEntriesOfAuthor" NAME="%TOPIC%" SKIP="%URLPARAM{"skip" default=" 0"}%"}%
-
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
-   * Set VIEW_TEMPLATE = HiddenFormView
    * Set WHITEBOARD = off
    * Set SIDEBAR = Author
+   * Set VIEW_TEMPLATE = BlogAuthorView
 -->
-
-
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicTemplate"}%
 %META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Template to create BlogAuthors"}%

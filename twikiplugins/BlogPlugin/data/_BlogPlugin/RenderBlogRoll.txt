@@ -1,11 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142179710" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1146824546" format="1.1" reprev="1.10" version="1.10"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 ---++ Parameters
    * CAT: reduce the blogroll to BlogLinks in the given SubjectCategory (optional)
+   * NOCAT: exclude BlogLinks which are in this SubjectCategory (optional)
    * AUTHOR: display the blogroll of the given author (optional)
+   * TITLE: string describing this blogroll, defaults to "Blogroll"
 
 ---++ Implementation
 <verbatim>
@@ -13,14 +15,18 @@
 ~~~
 %~~ DBQUERY{"TopicType=~'\bBlogLink\b' 
 ~~~     %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'" glue="off"}%
+~~~     %IFDEFINED{"%NOCAT%" then="AND !(SubjectCategory=~'\b%NOCAT%\b')" glue="off"}%
 ~~~     %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
 ~~~   web="%WEB%"
 ~~~   order="Name" hidenull="on"
 ~~~   header="<div class=\"blogSideBarSection blogSideBarAggregations\"><noautolink>
-~~~     <h1>Blogroll$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
+~~~     <h1>
+*~~       %IFDEFINED{"%TITLE%" then="%TITLE%" else="Blogroll"}%
+*~~       $percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
 ~~~   format="<li>
 ~~~      $percntIFDEFINEDTHEN{\"$formfield(Feed)\" glue=\"off\"}$percnt
-~~~        <a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~        <a href=\"%SCRIPTURL{"view"}%/$web/$topic
+*~~           %IFDEFINED{"%CAT%" then="?cat=%CAT%"}%\"
 ~~~           title=\"$formfield(Headline)\">$formfield(Name)</a>
 ~~~      $percntELSEDEFINED$percnt
 ~~~        <a href=\"$formfield(Url)\"
@@ -36,7 +42,11 @@
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" CAT=".*"}%
+%DBCALL{"%TOPIC%" NOCAT="BlogUp"}%
+</div>
+
+<div class="alt">
+%DBCALL{"%TOPIC%" CAT="BlogUp" TITLE="BlogUp Ring"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

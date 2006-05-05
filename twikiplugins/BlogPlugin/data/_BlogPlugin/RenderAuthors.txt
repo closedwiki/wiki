@@ -14,7 +14,7 @@ NONE
 ~~~     <h1>Authors$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
 ~~~   format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\" 
 ~~~      title=\"$formfield(TopicDescription)\">$topic</a></li>"
-~~~   footer="</div>"
+~~~   footer="</ul></div>"
 ~~~  }%
 %~~ DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%
