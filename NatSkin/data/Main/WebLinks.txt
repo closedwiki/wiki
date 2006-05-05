@@ -6,4 +6,5 @@
    * [[%MAINWEB%.TWikiGroups][Groups]] 
    * [[%TWIKIWEB%.ChangePassword][Password]] 
 %WEBCOMPONENT{"TWikiWebLinks"}%
+   * [[%MAINWEB%.TWikiPreferences][SitePreferences]] 
 %STOPINCLUDE%

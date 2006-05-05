@@ -76,8 +76,11 @@ hr {
 .natSearchBox input {
   font-size:1em;
 }
-.natHeaderArt {
+.natHeaderArt,
+.natSearchBox input {
   background:#3388CC;
+}
+.natHeaderArt {
   border:1px solid white; /* IE fix */
 }
 .natTopBar,
@@ -107,7 +110,6 @@ hr {
   font-size:0.5em;
 }
 .natSearchBox input {
-  background-color: #3388CC;
   border:0px;
   font-family:arial,sans-serif;
 }

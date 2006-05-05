@@ -164,9 +164,9 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 </style>
 
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2003-2006, Michael Daum |
+|  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.9992 |
+|  Skin Version: | v2.9993 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -183,6 +183,8 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-05-05: | minor css cleanup;\
+                 display default <nop>WebLinks and <nop>WebButton for a current non-public web |
 |  2006-04-19: | added support for KEYWORDS per topic | 
 |  2006-04-11: | fixed oops dialogue leaping off the page; \
                  be nicer to non-css browers |
@@ -303,7 +305,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 19 Apr 2006
+-- TWiki:Main/MichaelDaum - 05 Mai 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
