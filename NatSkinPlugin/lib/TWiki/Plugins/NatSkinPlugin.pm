@@ -1,7 +1,7 @@
 ###############################################################################
 # NatSkinPlugin.pm - Plugin handler for the NatSkin.
 # 
-# Copyright (C) 2003-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2003-2006 MichaelDaum@WikiRing.com
 #
 # Based on GnuSkin Copyright (C) 2001 Dresdner Kleinwort Wasserstein
 # 
@@ -56,7 +56,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.9992';
+$RELEASE = '2.9993';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
