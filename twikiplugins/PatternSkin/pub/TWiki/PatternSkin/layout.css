@@ -64,7 +64,7 @@ page when it calculates auto margins above. Can't use min-width. Note that putti
 width in #patternPage shows it to IE and causes problems, so IE needs a hack
 to remove this width. Left Col + Right Col + Center Col + Both Inner Border + Both Outer Borders ***/
 /* \*/
-	height:100%;
+
 /* Last height declaration hidden from Mac IE 5.x */
 /*** Needed for Moz to give full height design if page content is
 too small to fill the page ***/
