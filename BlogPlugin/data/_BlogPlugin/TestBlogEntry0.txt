@@ -1,15 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1142193664" format="1.1" version="1.1"}%
-%DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
-%DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%  
-%DBCALL{"RenderAddComment"}%    
-<!--    
+<!--
    * Set WHITEBOARD = off
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set SIDEBAR = Entry
-   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup  
-   * Set VIEW_TEMPLATE = HiddenFormView
--->  
-
-
+   * Set VIEW_TEMPLATE = BlogEntryView
+-->
 %META:FORM{name="BlogEntryForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogEntry"}%
 %META:FIELD{name="Headline" attributes="M" title="Headline" value="Let's get blogged"}%

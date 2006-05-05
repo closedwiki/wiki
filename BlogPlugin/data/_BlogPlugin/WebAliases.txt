@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1140617669" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1145545696" format="1.1" reprev="1.16" version="1.16"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
@@ -30,10 +30,8 @@ if they use special characters.
 
 %ALIAS{name="NatSkinPlugin" value="TWiki.NatSkinPlugin"}%
 %ALIAS{name="NatSkin" value="TWiki.NatSkin"}%
-%ALIAS{name="PatternSkin" value="TWiki.PatternSkin"}%
 %ALIAS{name="DBCacheContrib" value="TWiki.DBCacheContrib"}%
 %ALIAS{name="BlogPlugin" value="TWiki.BlogPlugin"}%
-%ALIAS{name="BlogUp" value="TWiki.BlogUp"}%
 %ALIAS{name="TimeSincePlugin" value="TWiki.TimeSincePlugin"}%
 %ALIAS{name="JojoWiki" value="[[http://jojowiki.dyndns.org][JojoWiki]]"}%
 %ALIAS{name="WordPress" value="[[http://wordpress.org][WordPress]]"}%

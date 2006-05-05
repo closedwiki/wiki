@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1143533437" format="1.1" reprev="1.21" version="1.21"}%
+%META:TOPICINFO{author="MichaelDaum" date="1145545546" format="1.1" reprev="1.22" version="1.22"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -16,7 +16,7 @@
 %STARTINCLUDE%
 *~~
 ~~~ %STOPALIASAREA%
-~~~
+~~~ 
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%" 
 ~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'
@@ -46,7 +46,7 @@
 ~~~   REVERSE="on"
 ~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
 ~~~ }%
-~~~
+~~~ 
 %~~ DBCALL{"RenderBlogAuthorSwitch"}%
 ~~~ %STARTALIASAREA%
 *~~

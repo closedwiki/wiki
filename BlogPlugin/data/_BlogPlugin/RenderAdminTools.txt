@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139489595" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1146822427" format="1.1" reprev="1.17" version="1.17"}%
 %META:TOPICPARENT{}%
 ---+ Function %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -47,6 +47,14 @@ NONE
     <li>%TWISTY{id="topictemplates" remember="on" link="TopicTemplates"}%
       <ol>
 %~~   DBQUERY{"TopicType=~'\bTopicTemplate\b'"
+~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
+~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
+~~~   }%
+      </ol>%ENDTWISTY%
+    </li>
+    <li>%TWISTY{id="topicviews" remember="on" link="TopicViews"}%
+      <ol>
+%~~   DBQUERY{"TopicType=~'\bTopicView\b'"
 ~~~      format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
 ~~~                           title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   }%

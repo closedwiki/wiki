@@ -1,19 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1141055212" format="1.1" version="1.1"}%
-%META:TOPICPARENT{name="WebHome"}%
-%DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
-%DBCALL{"RenderGoogleAdsense"}%
-%DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
-%DBCALL{"RenderAddComment"}%
-%DBCALL{"RenderGoogleAdsense"}%
-
 <!--
    * Set WHITEBOARD = off
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set SIDEBAR = Entry
-   * Set VIEW_TEMPLATE = HiddenFormView
+   * Set VIEW_TEMPLATE = BlogEntryView
 -->
-
-
 %META:FORM{name="BlogEntryForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogEntry"}%
 %META:FIELD{name="BlogAuthor" attributes="M" title="BlogAuthor" value="MichaelDaum"}%

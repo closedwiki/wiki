@@ -71,7 +71,8 @@ See also BlogHelpText
 %DBCALL{"RenderAuthors"}%
 %DBCALL{"RenderArchives"}%
 %DBCALL{"RenderCategories"}%
-%DBCALL{"RenderBlogRoll"}%
+%DBCALL{"RenderBlogRoll" NOCAT="BlogUp"}%
+%DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
 %DBCALL{"RenderVisitors"}%
 %IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
 ---+!! Technorati
@@ -90,7 +91,8 @@ See also BlogHelpText
 %DBCALL{"RenderPages" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderArchives" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
-%DBCALL{"RenderBlogRoll" AUTHOR="%BASETOPIC%"}%
+%DBCALL{"RenderBlogRoll" AUTHOR="%BASETOPIC%" NOCAT="BlogUp"}%
+%DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
 %DBCALL{"RenderVisitors"}%
 %IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
 ---+!! Technorati
@@ -140,7 +142,12 @@ See also BlogHelpText
 *~~
 %DBCALL{"RenderAuthorTools" warn="off"}%
 %DBCALL{"RenderAdminTools" warn="off"}%
-%DBCALL{"RenderBlogRoll"}%
+%IFDEFINEDTHEN{"%URLPARAM{"cat"}%"}%
+%$nopDBCALL{"RenderBlogRoll" CAT="%URLPARAM{"cat"}%"}%
+%ELSEDEFINED%
+%$nopDBCALL{"RenderBlogRoll" NOCAT="BlogUp"}%
+%$nopDBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
+%FIDEFINED%
 %ENDSECTION{"Aggregation"}%
 </verbatim>
 
@@ -162,7 +169,6 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}%
 %DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
-%DBCALL{"RenderPages"}%
 %DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
 %DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%

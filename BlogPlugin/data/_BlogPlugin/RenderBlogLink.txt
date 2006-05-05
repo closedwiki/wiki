@@ -15,8 +15,10 @@ if the linked site has a nice rss feed.
 %STARTINCLUDE%
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%"
-~~~   WHERE="TopicType=~'\bBlogLink\b'"
+~~~   WHERE="TopicType=~'\bBlogLink\b'
+*~~     %IFDEFINED{"%URLPARAM{"cat"}%" then=" AND SubjectCategory=~'\b%URLPARAM{"cat"}%\b'"}%"
 ~~~   ORDER="Name"
+~~~   %IFDEFINED{"%URLPARAM{"cat"}%" then="PARAMS=\"cat=%URLPARAM{"cat"}%\""}%
 ~~~ }%
 <noautolink>
 %~~ DBQUERY{topic="%NAME%"
@@ -49,8 +51,10 @@ if the linked site has a nice rss feed.
 </noautolink>
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%"
-~~~   WHERE="TopicType=~'\bBlogLink\b'"
+~~~   WHERE="TopicType=~'bBlogLink\b'
+*~~     %IFDEFINED{"%URLPARAM{"cat"}%" then=" AND SubjectCategory=~'\b%URLPARAM{"cat"}%\b'"}%"
 ~~~   ORDER="Name"
+~~~   %IFDEFINED{"%URLPARAM{"cat"}%" then="PARAMS=\"cat=%URLPARAM{"cat"}%\""}%
 ~~~ }%
 %STOPINCLUDE%
 </verbatim>
