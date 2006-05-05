@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 MichaelDaum@WikiRing.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -451,6 +451,7 @@ sub getDB {
       || 'TWiki::Plugins::DBCachePlugin::WebDB';
     $impl =~ s/^\s*(.*?)\s*$/$1/o;
     writeDebug("loading new webdb for $theWeb");
+    eval "use $impl;";
     $webDB{$theWeb} = new $impl($theWeb);
     $webDB{$theWeb}->load();
     $webDBIsModified{$theWeb} = 0;
