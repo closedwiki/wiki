@@ -218,14 +218,32 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.80 |
+|  Version: | v0.91 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Mai 2006: | added views for all models: \
+                  all <nop>BlogenTries, <nop>SubjectCategories etc only set a specific <nop>TopicView; \
+		  this reduces redundancy, hides implementation and fixes a pagination error using URLPARAM in \
+		  <nop>TopicTemplates, e.g. <nop>SubjectCategories pages couldn't be run over; \
+                  separated BlogUp ring from blogroll using new NOCAT parameter of <nop>RenderBlogRoll; \
+		  added <nop>TopicViews twisty to <nop>AdminTools;\
+		  page through <nop>BlogLinks of the same category |
+|  30 Mar 2006: | moved the createdate field in the <nop>WebDB into the <nop>DBCachePlugin; \
+                  overriding it using a Date formfield if there is one;\
+		  this means you need <nop>DBCachePlugin > 1.2;\
+		  added <nop>RenderGoogleAdsense; \
+		  fixed inconsequent parameter naming of categories (was sometimes NAME sometimes CAT)\
+		  NOTE: you will need to correct preexisting <nop>SubjectCategory topics by hand if you upgrade\
+		  (sorry again);\
+		  fixed html in <nop>RenderBlogComments; |
+|  27 Mar 2006: | fixed rendering of scroll helpers; \
+                  using template comments instead of templateonly sections in <nop>TopicViews; \
+		  initialize email fields of comment with USERINFO |
 |  12 Mar 2006: | better separation of multiple authors: each <nop>BlogAuthor page \
                   renders a dedicated About info now taken from the new <nop>BlogAuthorForm; \
 		  the sidebar renders the items that belong to the author only using \
 		  the new Author section in <nop>RenderSideBar; \
 		  unpublished postings are listed per author only; \
-		  added RenderAuthors to the sidebar - disabled on a single-author blog;\
+		  added <nop>RenderAuthors to the sidebar - disabled on a single-author blog;\
 		  added <nop>BlogAuthor to <nop>BlogLinks so that every author can have \
 		  his own sidebar as well as share parts with other authors; \
 		  added AUTHOR to a couple of <nop>TopicTunctions to make them author-aware; \
@@ -308,4 +326,4 @@ And send me a patch if you've coded that into TWiki ;).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 11 Mar 2006
+-- TWiki:Main.MichaelDaum - 05 Mai 2006
