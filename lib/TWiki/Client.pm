@@ -53,6 +53,10 @@ The TWiki object this login manager is attached to.
 
 package TWiki::Client;
 
+use TWiki::Disposable;
+
+@TWiki::Client::ISA = qw( TWiki::Disposable );
+
 use strict;
 use Assert;
 use Error qw( :try );
@@ -298,21 +302,24 @@ sub checkAccess {
 
 =pod
 
----++ ObjectMethod finish
-Complete processing after the client's HTTP request has been responded
-to. Flush the user's session (if any) to disk.
+---++ ObjectMethod cleanUp
+Overrides TWiki::Disposable.
+Flush the user's session (if any) to disk.
 
 =cut
 
-sub finish {
+sub cleanUp {
     my $this = shift;
 
     if( $this->{_cgisession} ) {
         $this->{_cgisession}->flush();
-        die $this->{_cgisession}->errstr()
+        warn $this->{_cgisession}->errstr()
           if $this->{_cgisession}->errstr();
         _trace($this, "Flushed");
+        undef $this->{_cgisession};
     }
+
+    $this->SUPER::cleanUp();
 
     return unless( $TWiki::cfg{Sessions}{ExpireAfter} > 0 );
 

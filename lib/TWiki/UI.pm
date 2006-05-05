@@ -145,7 +145,9 @@ sub run {
         print "Unspecified error";
     };
 
-    $session->finish();
+    # Break cycles in allocated memory, and do any other
+    # important cleanup at the end of the session
+    $session->cleanUp();
 }
 
 =pod twiki

@@ -38,9 +38,14 @@ and web it reads. This supports the lookup of preferences for webs and topics
 that are not on the stack, and must not be chained in (you can't allow
 a user to override protections from their home topic!)
 
+---++ Exported instance variables
+   * {session} - the TWiki session used to initialise the object
+
 =cut
 
 package TWiki::Prefs;
+
+@TWiki::Prefs::ISA = qw( TWiki::Disposable );
 
 use TWiki::Prefs::PrefsCache;
 use Assert;
@@ -59,13 +64,31 @@ sub new {
     my $this = bless( {}, $class );
     ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
-    push( @{$this->{PREFS}}, $cache ) if defined( $cache );
-    # $this->{TOPICS} - hash of TWiki::Prefs objects, for solitary topics
-    # $this->{WEBS} - hash of TWiki::Prefs objects, for solitary webs
+    push( @{$this->{_caches}}, $cache ) if defined( $cache );
+    # $this->{_topics} - hash of TWiki::Prefs objects, for solitary topics
+    # $this->{_webs} - hash of TWiki::Prefs objects, for solitary webs
     # remember what "Local" means
-    $this->{LOCAL} = $session->{webName}.'.'.$this->{session}->{topicName};
+    $this->{_local} = $session->{webName}.'.'.$this->{session}->{topicName};
 
     return $this;
+}
+
+# Break possible cycles involving this object
+sub cleanUp {
+    my $this = shift;
+    my $cache;
+
+    foreach $cache (@{$this->{_caches}}) {
+        $cache->cleanUp();
+    }
+
+    foreach my $hash qw( _topics _webs ) {
+        foreach $cache (values %{$this->{$hash}}) {
+            $cache->cleanUp();
+        }
+    }
+
+    $this->SUPER::cleanUp();
 }
 
 =pod
@@ -109,8 +132,8 @@ sub pushPreferences {
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
     my $top;
 
-    if( $this->{PREFS} ) {
-        $top = $this->{PREFS}[$#{$this->{PREFS}}];
+    if( $this->{_caches} ) {
+        $top = $this->{_caches}[$#{$this->{_caches}}];
     }
 
     my $req =
@@ -118,7 +141,7 @@ sub pushPreferences {
           $this, $top, $type, $web, $topic, $prefix );
 
     if( $req ) {
-        push( @{$this->{PREFS}}, $req );
+        push( @{$this->{_caches}}, $req );
         $req->finalise( $this );
     }
 }
@@ -157,8 +180,8 @@ sub pushPreferenceValues {
     return unless $values;
 
     my $top;
-    if( $this->{PREFS} ) {
-        $top = $this->{PREFS}[$#{$this->{PREFS}}];
+    if( $this->{_caches} ) {
+        $top = $this->{_caches}[$#{$this->{_caches}}];
     }
 
     my $req = new TWiki::Prefs::PrefsCache( $this, $top, $type );
@@ -168,7 +191,7 @@ sub pushPreferenceValues {
         $req->insert( 'Set', $key, $val );
     }
 
-    push( @{$this->{PREFS}}, $req );
+    push( @{$this->{_caches}}, $req );
     $req->finalise( $this );
 }
 
@@ -183,7 +206,7 @@ are pushed during a topic include.
 
 sub mark {
     my $this = shift;
-    return scalar( @{$this->{PREFS}} );
+    return scalar( @{$this->{_caches}} );
 }
 
 =pod
@@ -197,7 +220,7 @@ include.
 sub restore {
     my( $this, $where ) = @_;
     ASSERT( $where ) if DEBUG;
-    splice( @{$this->{PREFS}}, $where );
+    splice( @{$this->{_caches}}, $where );
 }
 
 =pod
@@ -215,9 +238,9 @@ topic is the same as the current web,topic in the session.
 sub getPreferencesValue {
     my( $this, $key ) = @_;
 
-    return undef unless @{$this->{PREFS}};
-    my $top = $this->{PREFS}[$#{$this->{PREFS}}];
-    my $lk = $this->{LOCAL}.'-'.$key;
+    return undef unless @{$this->{_caches}};
+    my $top = $this->{_caches}[$#{$this->{_caches}}];
+    my $lk = $this->{_local}.'-'.$key;
     if( defined( $top->{locals}{$lk} )){
         return $top->{locals}{$lk};
     } else {
@@ -235,7 +258,7 @@ Return true if $key is finalised somewhere in the prefs stack
 sub isFinalised {
     my( $this, $key ) = @_;
 
-    foreach my $level ( @{$this->{PREFS}} ) {
+    foreach my $level ( @{$this->{_caches}} ) {
         return 1 if $level->{final}{$key};
     }
 
@@ -258,11 +281,11 @@ sub getTopicPreferencesValue {
     my( $this, $key, $web, $topic ) = @_;
     my $wtn = $web.'.'.$topic;
 
-    unless( $this->{TOPICS}{$wtn} ) {
-        $this->{TOPICS}{$wtn} =
+    unless( $this->{_topics}{$wtn} ) {
+        $this->{_topics}{$wtn} =
           new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC', $web, $topic );
     }
-    return $this->{TOPICS}{$wtn}->{values}{$key};
+    return $this->{_topics}{$wtn}->{values}{$key};
 }
 
 =pod
@@ -304,13 +327,13 @@ sub getWebPreferencesValue {
     my( $this, $key, $web ) = @_;
     my $wtn = $web.'.'.$TWiki::cfg{WebPrefsTopicName};
 
-    unless( $this->{WEBS}{$wtn} ) {
+    unless( $this->{_webs}{$wtn} ) {
         my $blank = new TWiki::Prefs( $this->{session} );
         $blank->pushWebPreferences( $web );
-        $this->{WEBS}{$wtn} = $blank;
+        $this->{_webs}{$wtn} = $blank;
     }
 
-    return $this->{WEBS}{$wtn}->getPreferencesValue( $key );
+    return $this->{_webs}{$wtn}->getPreferencesValue( $key );
 }
 
 =pod
@@ -328,7 +351,7 @@ sub stringify {
     my %shown;
     $html = 1 unless defined $html;
 
-    foreach my $ptr ( reverse @{$this->{PREFS}} ) {
+    foreach my $ptr ( reverse @{$this->{_caches}} ) {
         $s .= $ptr->stringify($html, \%shown);
     }
 
