@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 MichaelDaum@WikiRing.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.20';
+$RELEASE = '1.21';
 
 ###############################################################################
 # plugin initializer
