@@ -1020,7 +1020,7 @@ sub getWebComponent {
   my $mainWeb = &TWiki::Func::getMainWebname();
   my $twikiWeb = &TWiki::Func::getTwikiWebname();
 
-  my $theWeb = $currentWeb;
+  my $theWeb = $baseWeb; # NOTE: don't use the currentWeb
   my $theComponent = $component;
   if (&TWiki::Func::topicExists($theWeb, $theComponent)) { # current
     ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);

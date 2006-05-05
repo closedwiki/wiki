@@ -397,7 +397,8 @@ By default this value is set to "off"
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v2.9993 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  05 Mai 2006: | fixed table bgcolor for Independence style |
+|  05 Mai 2006: | fixed table bgcolor for Independence style; \
+                  display default <nop>WebLinks for non-public webs |
 |  19 Apr 2006: | use &lt;link rel="stylesheet" ... /&gt; instead of @import url() \
                   to ease the pain for js wysiwyg editors |
 |  11 Apr 2006: | added STYLEPATH feature; \
