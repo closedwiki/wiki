@@ -290,15 +290,17 @@ sub view {
         $session->leaveContext( 'header_text' );
 
         if( $raw ) {
-            my $p = $session->{prefs};
-            $page .=
-              CGI::textarea( -readonly => 'readonly',
-                             -wrap => 'virtual',
-                             -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
-                             -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
-                             -style => $p->getPreferencesValue('EDITBOXSTYLE'),
-                             -default => $text
-                           );
+	    if ($text) {
+	      my $p = $session->{prefs};
+	      $page .=
+		CGI::textarea( -readonly => 'readonly',
+			       -wrap => 'virtual',
+			       -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
+			       -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
+			       -style => $p->getPreferencesValue('EDITBOXSTYLE'),
+			       -default => $text
+			     );
+	    }
         } else {
             $session->enterContext( 'body_text' );
             $page .= _prepare($text, @args);
