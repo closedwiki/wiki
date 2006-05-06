@@ -41,10 +41,6 @@ with CGI accelerators such as mod_perl.
 
 package TWiki;
 
-use TWiki::Disposable;
-
-@TWiki::ISA = qw( TWiki::Disposable );
-
 use strict;
 use Assert;
 use Error qw( :try );
@@ -1327,6 +1323,46 @@ sub new {
 # Uncomment when enabling AutoLoader
 #__END__
 
+=pod
+
+---++ ObjectMethod finish
+Complete processing after the client's HTTP request has been responded
+to. Right now this does two things:
+   1 calling TWiki::Client to flushing the user's session (if any) to disk,
+   2 breaking circular references to allow garbage collection in persistent
+     environments
+
+=cut
+
+sub finish {
+    my $this = shift;
+    $this->{client}->finish();
+
+#    use Data::Dumper;
+#    $Data::Dumper::Indent = 1;
+#    warn "prepared to finish";
+#    warn Dumper($this);
+
+    my $prefs = $this->{prefs};
+    $prefs->{TEXT}      =  {};
+    $prefs->{TOPICS}    =  {};
+    my $prefswebs       =  $prefs->{WEBS};
+    while (my ($pref_key,$prefs) = each %$prefswebs) {
+       $prefs->{PREFS} = ();
+    }
+    $prefs->{WEBS}      =  {};
+    @{$prefs->{PREFS}}  =  ();
+
+    my $users = $this->{users};
+    my $wikinames = $users->{wikiname};
+    while (my ($wikiname,$user) = each %$wikinames) {
+       $user->{groups} = ();
+    }
+    $users->{wikiname}  =  {};
+    $users->{login}     =  {};
+
+    %$this = ();
+ }
 =pod
 
 ---++ ObjectMethod writeLog( $action, $webTopic, $extra, $user )

@@ -26,26 +26,23 @@ use strict;
 The PrefsCache package holds a cache of topics that have been read in, using
 the TopicPrefs class.  These functions manage that cache.
 
-As each cache level is built, the values are copied down from the parent
-cache level. This sounds monstrously inefficient, but in fact perl does
-this a lot better than doing a multi-level lookup when a value is referenced.
-This is especially important when many prefs lookups may be done in a
-session, for example when searching.
-
----++ Exported instance variables
+We maintain 2 hashes of values:
    * {locals} Contains all locals at this level. Locals are values that
      only apply when the current topic is the topic where the local is
      defined. The variable names are decorated with the locality where
      they apply.
    * {values} contains all sets, locals, and all values inherited from
      the parent level
-   * {final} Boolean hash, maps to true if {final}{key} is true at this level
+
+As each cache level is built, the values are copied down from the parent
+cache level. This sounds monstrously inefficient, but in fact perl does
+this a lot better than doing a multi-level lookup when a value is referenced.
+This is especially important when many prefs lookups may be done in a
+session, for example when searching.
 
 =cut
 
 package TWiki::Prefs::PrefsCache;
-
-@TWiki::Prefs::PrefsCache::ISA = qw( TWiki::Disposable );
 
 use TWiki::Prefs::Parser;
 use Assert;
@@ -72,10 +69,10 @@ sub new {
     ASSERT($type) if DEBUG;
 
     my $this = bless( {}, $class );
-    $this->{_manager} = $prefs;
-    $this->{_type} = $type;
-    $this->{_source} = '';
-    $this->{_context} = $prefs;
+    $this->{MANAGER} = $prefs;
+    $this->{TYPE} = $type;
+    $this->{SOURCE} = '';
+    $this->{CONTEXT} = $prefs;
 
     if( $parent && $parent->{values} ) {
         %{$this->{values}} = %{$parent->{values}};
@@ -89,13 +86,6 @@ sub new {
     }
 
     return $this;
-}
-
-# Clean up this object
-sub cleanUp {
-    my $this = shift;
-
-    %$this = ();
 }
 
 =pod
@@ -114,7 +104,7 @@ sub finalise {
     if( $value ) {
         foreach ( split( /[\s,]+/, $value ) ) {
             # Note: cannot refinalise an already final value
-            unless( $this->{_context}->isFinalised( $_ )) {
+            unless( $this->{CONTEXT}->isFinalised( $_ )) {
                 $this->{final}{$_} = 1;
             }
         }
@@ -136,9 +126,9 @@ sub loadPrefsFromTopic {
 
     $keyPrefix ||= '';
 
-    $this->{_source} = $web.'.'.$topic;
+    $this->{SOURCE} = $web.'.'.$topic;
 
-    my $session = $this->{_manager}->{session};
+    my $session = $this->{MANAGER}->{session};
     if( $session->{store}->topicExists( $web, $topic )) {
         my( $meta, $text ) =
           $session->{store}->readTopic( undef, $web, $topic, undef );
@@ -166,9 +156,9 @@ sub loadPrefsFromText {
     my( $this, $text, $web, $topic ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
 
-    $this->{_source} = $web.'.'.$topic;
+    $this->{SOURCE} = $web.'.'.$topic;
 
-    my $session = $this->{_manager}->{session};
+    my $session = $this->{MANAGER}->{session};
     my $meta = new TWiki::Meta( $session, $web, $topic );
     $session->{store}->extractMetaData( $meta, \$text );
 
@@ -191,18 +181,18 @@ Note that attempts to redefine final preferences will be ignored.
 sub insert {
     my( $this, $type, $key, $value ) = @_;
 
-    return if $this->{_context}->isFinalised( $key );
+    return if $this->{CONTEXT}->isFinalised( $key );
 
     $value =~ s/\t/ /g;                 # replace TAB by space
     $value =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
     $value =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
     $value =~ s/`//g;                   # filter out dangerous chars
     if( $type eq 'Local' ) {
-        $this->{locals}{$this->{_source}.'-'.$key} = $value;
+        $this->{locals}{$this->{SOURCE}.'-'.$key} = $value;
     } else {
         $this->{values}{$key} = $value;
     }
-    $this->{_setHere}{$key} = 1;
+    $this->{SetHere}{$key} = 1;
 }
 
 =pod
@@ -218,14 +208,14 @@ sub stringify {
 
     if( $html ) {
         $res = CGI::Tr( {style=>'background-color: yellow'},
-                   CGI::th( {colspan=>2}, $this->{_type}.' '.
-                              $this->{_source} ))."\n";
+                   CGI::th( {colspan=>2}, $this->{TYPE}.' '.
+                              $this->{SOURCE} ))."\n";
     } else {
-        $res = '******** '.$this->{_type}.' '.$this->{_source}."\n";
+        $res = '******** '.$this->{TYPE}.' '.$this->{SOURCE}."\n";
     }
 
     foreach my $key ( sort keys %{$this->{values}} ) {
-        next unless $this->{_setHere}{$key};
+        next unless $this->{SetHere}{$key};
         my $final = '';
         if ( $this->{final}{$key}) {
             $final = ' *final* ';
@@ -242,7 +232,7 @@ sub stringify {
         }
     }
     foreach my $key ( sort keys %{$this->{locals}} ) {
-        next unless $this->{_setHere}{$key};
+        next unless $this->{SetHere}{$key};
         my $final = '';
         my $val = $this->{locals}{$key};
         $val =~ s/^(.{32}).*$/$1..../s;
