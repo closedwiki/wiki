@@ -180,8 +180,13 @@ sub upload {
     my $origName = $fileName;
 
     unless( $doPropsOnly ) {
-        my( $v, $d, $f) = File::Spec->splitpath( $filePath );
-        $origName = $fileName = $f;
+        # SMELL: homegrown split because we don't know the client OS
+        # cut path from filepath name (Windows '\' and Unix "/" format)
+        my @pathz = ( split( /\\/, $filePath ) );
+        my $filetemp = $pathz[$#pathz];
+        my @pathza = ( split( '/', $filetemp ) );
+        $fileName = $pathza[$#pathza];
+        $origName = $fileName;
 
         # Sanitize filename
         # FIXME: Allow spaces and other chars by encoding them (and decoding on download)
