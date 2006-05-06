@@ -405,9 +405,9 @@ sub userLoggedIn {
             # if we are not authenticated, expire any existing session
             $this->{_cgisession}->clear( [ 'AUTHUSER' ] );
             # flush the session, to try to fix Item1820
-            $this->{_cgisession}->flush() ||
-              die $this->{_cgisession}->errstr();
-;
+            $this->{_cgisession}->flush();
+            die $this->{_cgisession}->errstr()
+              if $this->{_cgisession}->errstr();
             _trace($this, "Flushed");
 
             $twiki->leaveContext( 'authenticated' );
