@@ -379,6 +379,11 @@ sub _saveAttachment {
     close( TF );
 
     my $err = '';
+    # SMELL: no central way to process attachment filenames, so we
+    # have to copy-paste the TWiki core code.
+    $filename =~ s/ /_/go;
+    $filename =~ s/$TWiki::cfg{NameFilter}//goi;
+    $filename =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
     $this->{session}->{store}->saveAttachment(
         $web, $topic, $filename, $user,
         { comment => "Submitted by e-mail", file => $tmpfile });
