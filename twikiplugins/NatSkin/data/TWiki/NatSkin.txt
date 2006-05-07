@@ -183,6 +183,7 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-05-06: | provide customised CSS support using <nop>WebComponent <nop>WebCss |
 |  2006-05-05: | minor css cleanup;\
                  display default <nop>WebLinks and <nop>WebButton for a current non-public web |
 |  2006-04-19: | added support for KEYWORDS per topic | 
