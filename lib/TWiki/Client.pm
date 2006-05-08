@@ -404,14 +404,12 @@ sub userLoggedIn {
             _trace($this, "Session is NOT authenticated");
             # if we are not authenticated, expire any existing session
             $this->{_cgisession}->clear( [ 'AUTHUSER' ] );
-            # flush the session, to try to fix Item1820
-            $this->{_cgisession}->flush();
-            die $this->{_cgisession}->errstr()
-              if $this->{_cgisession}->errstr();
-            _trace($this, "Flushed");
-
             $twiki->leaveContext( 'authenticated' );
         }
+	# flush the session, to try to fix Item1820 and Item2234
+	$this->{_cgisession}->flush();
+	die $this->{_cgisession}->errstr() if $this->{_cgisession}->errstr();
+	_trace($this, "Flushed");
     }
 }
 
