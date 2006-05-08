@@ -755,6 +755,7 @@ sub _externalLink {
         $filename =~ s@.*/([^/]*)@$1@go;
         return CGI::img( { src => $url, alt => $filename } );
     }
+    $text ||= $url;
     my $opt = '';
     if( $url =~ /^mailto:/i ) {
         # Note EmailPadding still supported for compatibility
@@ -771,7 +772,6 @@ sub _externalLink {
     } else {
         $opt = ' target="_top"';
     }
-    $text ||= $url;
     # SMELL: Can't use CGI::a here, because it encodes ampersands in
     # the link, and those have already been encoded once in the
     # rendering loop (they are identified as "stand-alone"). One
