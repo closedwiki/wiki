@@ -53,4 +53,9 @@ sub deleteWorkFile {
     return 0;
 }
 
+sub getSubWebs {
+    my $web = shift;
+    return $TWiki::Plugins::SESSION->{store}->_getSubWebs($web);
+}
+
 1;
