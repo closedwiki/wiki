@@ -8,10 +8,9 @@ Short example: A syntax like this =%<nop>IMAGE{"Westminstpalace.jpg" type="frame
 <img src="%ATTACHURLPATH%/WestminstpalaceSample.png" alt="WestminstpalaceSample.png" width='416' height='339' />
 
 This plugin has been extended to support resizing, and alignment control.  The new TAG is
-=%<nop>IMAGE{"[web].[topic]/image.ext;" web="&lt;web&gt;" topic="&lt;topic&gt;" type="thumb|thumbnail|frame" align="left|center|right" size="&lt<nnn&gt;" caption="caption text"}%=
+=%<nop>IMAGE{"[web].[topic]/image.ext;" web="&lt;web&gt;" topic="&lt;topic&gt;" type="thumb|thumbnail|frame" align="left|center|right" size="&lt;nnn&gt;" caption="caption text"}%=
 
 The original TAG =%<nop>IMG{"foo.gif" web="&lt;web&gt;" topic="&lt;topic&gt;"}%= is still supported.
-of using HTML syntax. 
 
 %TOC%
 
@@ -60,19 +59,20 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
       
-   * Set Defaults Thumbnail size (defaults to 180)
+   * Default Thumbnail size (defaults to 180)
       * Set THUMBNAIL_SIZE = 180
       
-   * Set Location of [[http://www.imagemagick.org/script/convert.php ][ ImageMagick]] *convert* utility
+   * Location of [[http://www.imagemagick.org/script/convert.php ][ ImageMagick]] *convert* utility
       * Set CONVERT_PROG = /usr/bin/convert
       
-   * Set Location of [[http://www.imagemagick.org/script/identify.php ][ ImageMagick]] *identify* utility
+   * Location of [[http://www.imagemagick.org/script/identify.php ][ ImageMagick]] *identify* utility
       * Set IDENTIFY_PROG = /usr/bin/identify
 
    * Location of ImgPlugin <nop>StyleSheet
       * Set IMGPLUGIN_STYLE = %PUBURLPATH%/TWiki/ImgPlugin/ImgPlugin.css
 
-
+   * Location of picture used as enlarge icon for thumbnails
+      * Set IMGPLUGIN_ENLARGE_ICON = %PUBURLPATH%/TWiki/ImgPlugin/magnify-clip.png
 
 ---++ Plugin Installation Instructions
 
