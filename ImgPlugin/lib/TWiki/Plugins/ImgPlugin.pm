@@ -90,6 +90,7 @@ and highly dangerous!
 		$NO_CAPTION_FORMAT
 		$CAPTION_FORMAT
 		$ImgPlugin_Style
+		$ImgPlugin_EnlargeIcon
 		$Debug
 		);
 
@@ -97,7 +98,7 @@ and highly dangerous!
     $SIMPLE_FORMAT = qq[<a href="%s" class="image" title="%s"><img border="0" align="absmiddle" src="%s" alt="%s" width="%d" height="%d" longdesc="%s" /></a>];
 
     # href
-    $MAGNIFY_FORMAT = qq[<div class="magnify" style="float:right"><a href="%s" class="internal" title="Enlarge"><img border="0" align="absmiddle" src="/tw/templates/magnify-clip.png" width="15" height="11" alt="Enlarge" /></a></div>];
+    $MAGNIFY_FORMAT = qq[<div class="magnify" style="float:right"><a href="%s" class="internal" title="Enlarge"><img border="0" align="absmiddle" src="%s" width="15" height="11" alt="Enlarge" /></a></div>];
 
     $NO_CAPTION_FORMAT = qq[<div class="float%s"><div class="floatnone"><span><a href="%s" class="image" title=""><img border="0" align="absmiddle" src="%s" width="%d" height="%d" longdesc="%s" /></a></span></div></div>];
 
@@ -147,6 +148,9 @@ sub initPlugin {
 
     $ImgPlugin_Style = TWiki::Func::getPluginPreferencesValue( 'IMGPLUGIN_STYLE' ) ||
       join('/', TWiki::Func::getPubUrlPath(), 'TWiki', 'ImgPlugin', 'ImgPlugin.css');
+
+    $ImgPlugin_EnlargeIcon = TWiki::Func::getPluginPreferencesValue( 'IMGPLUGIN_ENLARGE_ICON' ) ||
+      join('/', TWiki::Func::getPubUrlPath(), 'TWiki', 'ImgPlugin', 'magnify-clip.png');
 
     TWiki::Func::writeWarning( "Initialize (ImgPlugin) error=($error): [$ConvertProg][$IdentifyProg][$Default_Thumb][$ImgPlugin_Style]" );
 
@@ -351,7 +355,7 @@ sub _IMAGE {
 
     } else {
 	my($enlarge);
-	$enlarge = sprintf($MAGNIFY_FORMAT, $view_img) . $caption;
+	$enlarge = sprintf($MAGNIFY_FORMAT, $view_img, $ImgPlugin_EnlargeIcon) . $caption;
 	if( !defined($align) ){
 	    $align = 'right';
 	}
