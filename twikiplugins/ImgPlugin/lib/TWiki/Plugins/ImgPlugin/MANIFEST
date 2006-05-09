@@ -1,3 +1,17 @@
-data/TWiki/ImgPlugin.txt  Plugin doc page
-lib/TWiki/Plugins/ImgPlugin.pm  Plugin Perl module 
-data/Sandbox/PluginTestImgPlugin.txt  Plugin examples
+data/Sandbox/ImgPluginEx2.txt
+data/TWiki/ImgPlugin.txt
+lib/TWiki/Plugins/ImgPlugin.pm
+pub/Sandbox/ImgPluginEx2/100px-Tst.png
+pub/Sandbox/ImgPluginEx2/100px-Westminstpalace.jpg
+pub/Sandbox/ImgPluginEx2/150px-Westminstpalace.jpg
+pub/Sandbox/ImgPluginEx2/180px-Westminstpalace.jpg
+pub/Sandbox/ImgPluginEx2/200px-Westminstpalace.jpg
+pub/Sandbox/ImgPluginEx2/50px-Westminstpalace.jpg
+pub/Sandbox/ImgPluginEx2/70px-Westminstpalace.jpg
+pub/Sandbox/ImgPluginEx2/80px-Westminstpalace.jpg
+pub/Sandbox/ImgPluginEx2/Buckingham_palace_Copyright2003KaihsuTai.jpg
+pub/Sandbox/ImgPluginEx2/STS-32_crew.jpg
+pub/Sandbox/ImgPluginEx2/Tst.png
+pub/Sandbox/ImgPluginEx2/Westminstpalace.jpg
+pub/TWiki/ImgPlugin/ImgPlugin.css
+pub/TWiki/ImgPlugin/WestminstpalaceSample.png 
