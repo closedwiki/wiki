@@ -424,6 +424,7 @@ lib/TWiki/Users.pm 0440
 lib/TWiki/Users/ApacheHtpasswdUser.pm 0440
 lib/TWiki/Users/HtPasswdUser.pm 0440
 lib/TWiki/Users/Password.pm 0440
+lib/TWiki/Users/TWikiUserMapping.pm 0440
 locale/TWiki.pot 0440
 locale/da.po 0440
 locale/de.po 0440
@@ -431,7 +432,9 @@ locale/es.po 0440
 locale/fr.po 0440
 locale/it.po 0440
 locale/nl.po 0440
+locale/pl.po 0440
 locale/pt.po 0440
+locale/sv.po 0440
 locale/zh-cn.po 0440
 locale/zh-tw.po 0440
 pub-htaccess.txt 0440
