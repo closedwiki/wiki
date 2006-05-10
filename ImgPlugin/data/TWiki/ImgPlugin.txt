@@ -1,14 +1,18 @@
-%META:TOPICINFO{author="TWikiContributor" date="1147158959" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1147158959" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
-Use this plugin to control the display and alignment of images using an easy syntax. 
+Use this plugin to control the display and alignment of images using an easy
+syntax. 
 
-Short example: A syntax like this =%<nop>IMAGE{"Westminstpalace.jpg" type="frame" align="none" caption="caption text"}%= produces this image:
+Short example: A syntax like this =%<nop>IMAGE{"Westminstpalace.jpg"
+type="frame" align="none" caption="caption text"}%= produces this image:
 
 <img src="%ATTACHURLPATH%/WestminstpalaceSample.png" alt="WestminstpalaceSample.png" width='416' height='339' />
 
-This plugin has been extended to support resizing, and alignment control.  The new TAG is
-=%<nop>IMAGE{"[web].[topic]/image.ext;" web="&lt;web&gt;" topic="&lt;topic&gt;" type="thumb|thumbnail|frame" align="left|center|right" size="&lt;nnn&gt;" caption="caption text"}%=
+This plugin has been extended to support resizing, and alignment control.  The
+new TAG is =%<nop>IMAGE{"[web].[topic]/image.ext;" web="&lt;web&gt;"
+topic="&lt;topic&gt;" type="thumb|thumbnail|frame" align="left|center|right"
+size="&lt;nnn&gt;" caption="caption text"}%=
 
 The original TAG =%<nop>IMG{"foo.gif" web="&lt;web&gt;" topic="&lt;topic&gt;"}%= is still supported.
 
@@ -22,7 +26,9 @@ The original TAG =%<nop>IMG{"foo.gif" web="&lt;web&gt;" topic="&lt;topic&gt;"}%=
    * Supports the img attributes 'align', 'border', 'height', 'width', 'id', and 'class
    * Always puts in an alt tag with a value of '' if not specified. This is per XHTML spec.
 
-One good addition would be the auto-addition of the image size when possible, since I believe that pages load faster that way. This may require imagemagick, however.
+One good addition would be the auto-addition of the image size when possible,
+since I believe that pages load faster that way. This may require imagemagick,
+however.
 
 ---+++ =%<nop>IMAGE{"foo.gif" ...}%=
 
@@ -51,23 +57,12 @@ One good addition would be the auto-addition of the image size when possible, si
 
 ---++ Plugin Settings
 
-Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>IMGPLUGIN_SHORTDESCRIPTION%==
-
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = Control the display and alignment of images using an easy syntax
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
-      
    * Default Thumbnail size (defaults to 180)
       * Set THUMBNAIL_SIZE = 180
       
-   * Location of [[http://www.imagemagick.org/script/convert.php ][ ImageMagick]] *convert* utility
-      * Set CONVERT_PROG = /usr/bin/convert
-      
-   * Location of [[http://www.imagemagick.org/script/identify.php ][ ImageMagick]] *identify* utility
-      * Set IDENTIFY_PROG = /usr/bin/identify
-
    * Location of ImgPlugin <nop>StyleSheet
       * Set IMGPLUGIN_STYLE = %PUBURLPATH%/TWiki/ImgPlugin/ImgPlugin.css
 
@@ -76,21 +71,18 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
-
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
      | ==pub/TWiki/ImgPlugin/ImgPlugin.css== | Plugin supporting CSS |
      | ==data/Sandbox/ImgPluginEx2.txt== | Example usage of Plugin | 
      | ==pub/Sandbox/ImgPluginEx2/== | attachments for Example |
-     | ==pub/Sandbox/ImgPluginEx2/Buckingham_palace_Copyright2003KaihsuTai.jpg== | Image 1/4 |
-     | ==pub/Sandbox/ImgPluginEx2/STS-32_crew.jpg== | Image 2/4 |
-     | ==pub/Sandbox/ImgPluginEx2/Tst.png== | Image 3/4 |
-     | ==pub/Sandbox/ImgPluginEx2/Westminstpalace.jpg== | Image 4/4 |
+     | ==pub/Sandbox/ImgPluginEx2/STS-32_crew.jpg== | Image 1/3 |
+     | ==pub/Sandbox/ImgPluginEx2/Tst.png== | Image 2/3 |
+     | ==pub/Sandbox/ImgPluginEx2/Westminstpalace.jpg== | Image 3/3 |
 
    * Configure the Plugin:
       * TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
@@ -105,22 +97,31 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 8 May 2006 (V1.100) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 May 2006: | (TWiki:Main.MichaelDaum) - major rewrite and cleanup; \
+                  added lazy compilation, \
+		  fixed security issue by using <nop>Image::Magick instead of cmdline tools; \
+		  reworked css styles and naming; \
+		  added IMGALBUM feature; \
+		  added header,format,footer parameters to IMAGE tag \
+		  and respective pseudo variables; \
+		  added =expandCommonVariables(result)= for delayed TML expansion \
+		  in <no>TWikiApplications; \
+		  fixed issue where thumbnails get autoattached | 
 |  8 May 2006: | (TWiki:Main.CraigMeyer) - Extended version w/ =%<nop>IMAGE{}%= tag | 
 |  21 Feb 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | <nop>ImageMagick (from http://www.imagemagick.org/) |
-|  Perl Version: | 5.005 |
+|  CPAN Dependencies: | CPAN:Image::Magick |
+|  Other Dependencies: |  |
+|  Perl Version: | 5.8 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main.MeredithLesly - 21 Feb 2006
+-- TWiki:Main.MichaelDaum - 10 May 2006
 
 
-
-%META:FILEATTACHMENT{name="ImgPlugin.css" attr="h" autoattached="1" comment="" date="1144705196" path="ImgPlugin.css" size="1367" user="Main.TWikiContributor" version=""}%
-%META:FILEATTACHMENT{name="WestminstpalaceSample.png" attr="h" autoattached="1" comment="" date="1147158552" path="WestminstpalaceSample.png" size="107728" user="Main.TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="ImgPlugin.css" attr="h" autoattached="1" comment="" date="1144705196" path="ImgPlugin.css" size="1367" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="WestminstpalaceSample.png" attr="h" autoattached="1" comment="" date="1147158552" path="WestminstpalaceSample.png" size="107728" user="TWikiContributor" version="1.1"}%
