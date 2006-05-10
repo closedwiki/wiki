@@ -47,6 +47,10 @@ $br = "\n";
 $os = '***';
 $cs = $os;
 
+my $pub = TWiki::Func::getPubUrlPath();
+my $debug = 0;
+my $template = 'view';
+
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
@@ -86,26 +90,34 @@ sub publish {
         }
         $cfgt =~ s/\r//g;
 
+#SMELL - parsing the topic directly for settings
         while ( $cfgt =~ s/^\s+\*\s+Set\s+([A-Z]+)\s*=(.*?)$//m ) {
             my $k = $1;
             my $v = $2;
             $v =~ s/^\s*(.*?)\s*$/$1/go;
 
-            if ( $k eq "INCLUSIONS" ) {
+            if ( $k eq 'INCLUSIONS' ) {
                 $inclusions = $v;
-            } elsif ( $k eq "EXCLUSIONS" ) {
+            } elsif ( $k eq 'EXCLUSIONS' ) {
                 $exclusions = $v;
-            } elsif ( $k eq "TOPICSEARCH" ) {
+            } elsif ( $k eq 'TOPICSEARCH' ) {
                 $filter = $v;
-            } elsif ( $k eq "PUBLISHSKIN" ) {
+            } elsif ( $k eq 'PUBLISHSKIN' ) {
                 $skin = $v;
-            } elsif ( $k eq "SKIN" ) {
+            } elsif ( $k eq 'SKIN' ) {
                 $skin = $v;
-            } elsif( $k eq "EXTRAS" ) {
+            } elsif( $k eq 'EXTRAS' ) {
                 $genopt = $v;
             } elsif( $k eq 'FORMAT' ) {
                 $format = $v;
-            }
+            } elsif ($k eq 'DEBUG' ) {
+		$debug = $v;
+	    } elsif ($k eq 'TEMPLATE' ) {
+		$template = $v;
+	    } elsif ($k eq 'INSTANCE' ) {
+		$TWiki::cfg{PublishContrib}{Dir} .= '/'.$v;
+		$TWiki::cfg{PublishContrib}{URL} .= '/'.$v;
+	    }
         }
     } else {
         if ( defined($query->param('inclusions')) ) {
@@ -150,7 +162,7 @@ sub publish {
     my($header, $footer) = '';
     unless( TWiki::Func::getContext()->{command_line} ) {
         TWiki::Func::writeHeader($query);
-        my $tmpl = TWiki::Func::readTemplate("view");
+        my $tmpl = TWiki::Func::readTemplate($template);
         $tmpl =~ s/%META{.*?}%//g;
         for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
             $tmpl =~ s/%$tag%//g;
@@ -219,7 +231,7 @@ sub publishWeb {
     my @topics = TWiki::Func::getTopicList($web);
 
     # Choose template.
-    my $tmpl = TWiki::Func::readTemplate("view", $skin);
+    my $tmpl = TWiki::Func::readTemplate($template, $skin);
     die "Couldn't find template\n" if(!$tmpl);
 
     # Attempt to render each included page.
@@ -321,7 +333,6 @@ sub publishTopic {
     $tmpl =~ s/<span class="twikiNewLink">(.*?)<\/span>/_handleNewLink($1)/ge;
 
     # Copy files from pub dir to rsrc dir in static dir.
-    my $pub = TWiki::Func::getPubUrlPath();
     my $hs = $ENV{HTTP_HOST} || "localhost";
     $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$hs)?$pub/(.*?)\1!$1._copyResource($web, $3, $copied, $archive).$1!ge;
 
@@ -356,16 +367,23 @@ sub publishTopic {
 sub _copyResource {
     my ($web, $rsrcName, $copied, $archive) = @_;
 
+    print "-- Depends on $rsrcName " if $debug;
+
     # See if we've already copied this resource.
-    unless (exists $copied->{$rsrcName}) {
+    if (exists $copied->{$rsrcName}) {
+	print "(got already)$br" if $debug;
+    } else {
         # Nope, it's new. Gotta copy it to new location.
         # Split resource name into path (relative to pub/%WEB%) and leaf name.
+
+	print "${os}Need it$cs $br" if $debug;
+
         my $file = $rsrcName;
         $file =~ s(^(.*)\/)()o;
         my $path = "";
         if ($rsrcName =~ "/") {
             $path = $rsrcName;
-            $path =~ s(\/[^\/]*$)()o;
+            $path =~ s(\/[^\/]*$)()o; # path, excluding the basename
         }
         # Copy resource to rsrc directory.
         my $TWikiPubDir = TWiki::Func::getPubDir();
@@ -383,7 +401,7 @@ sub _copyResource {
 	if ($rsrcName =~ /\.css$/) {
 	  my @moreResources = ();
 	  open(F, "$TWikiPubDir/$rsrcName") ||
-        die "Cannot read $TWikiPubDir/$rsrcName: $!";
+        die "${os}Cannot read $TWikiPubDir/$rsrcName: $!$cs$br";
 	  while (my $line = <F>) {
 	    if ($line =~ /url\(["']?(.*?)["']?\)/) {
 	      push @moreResources, $1;
@@ -391,8 +409,21 @@ sub _copyResource {
 	  }
 	  close(F);
 	  foreach my $resource (@moreResources) {
+            print "${os}--- importing url $resource $cs$br" if $debug;
 	    # recurse
-	    _copyResource($web, "$path/$resource", $copied, $archive);
+            if ($resource !~ m!^/!) {
+               # if the url is not absolute, assume its relative to the current path
+               $resource = $path.'/'.$resource;
+            } else {
+               print "---- $resource already prefixed with / - checking for $pub$br" if $debug;
+               if ($resource =~ m!$pub/(.*)!) {
+                  my $old = $resource;
+                  $resource = $1;
+                  print "${os}---- $old had extraneous absolute reference to twikipubdir $pub (now $resource)$cs$br";
+               }
+            }
+            print "${os}--- ($resource) $cs$br" if $debug;
+	    _copyResource($web, $resource, $copied, $archive);
 	  }
 	}
     }

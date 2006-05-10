@@ -3,6 +3,8 @@
 to set up a topic in a web to simplify publishing. To use it, take a copy of the raw text of this topic, and paste it into a new topic in your own web.</i>
 
 ---+ Publish topics from the %WEB% web
+        * Name of the URL and folder space inside $TWiki::cfg{PublishContrib}{Dir} and $TWiki::cfg{PublishContrib}{URL}. e.g. test, prod. Defaults to '', so publishes to the top of those.
+		* Set INSTANCE =
 	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *include* 
 		* Set INCLUSIONS = *
 	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
@@ -11,8 +13,12 @@ to set up a topic in a web to simplify publishing. To use it, take a copy of the
 		*# Set FILTER =
 	* Skin for published HTML
 		* Set PUBLISHSKIN = text
+	* Set template to use (defaults to view)
+		* Set TEMPLATE = view
 	* Format to publish in (file, pdf, tgz, zip)
 		* Set FORMAT = file
+	* Set whether to show debug output (defaults to '', for no)
+		* Set DEBUG = 
 	* If set, additional options that will be passed to the output generator
 		*# Set EXTRAS =
 
