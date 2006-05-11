@@ -216,7 +216,7 @@ And send me a patch if you've coded that into TWiki ;).
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006, Michael Daum |
+|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | v0.91 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
