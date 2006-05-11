@@ -191,7 +191,8 @@ sub renderMoved {
                         ( 0, 'rename', $web, $topic,
                          newweb => $fromWeb,
                          newtopic => $fromTopic,
-                         confirm => 'on' ),
+                         confirm => 'on',
+                         nonwikiword => 'checked' ),
                         rel => 'nofollow'
                       },
                       $this->{session}->{i18n}->maketext('put it back') );
