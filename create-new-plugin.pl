@@ -6,12 +6,12 @@ use FindBin;
 use Cwd;
 
 ################################################################################
-my @types = qw( Plugin Contrib HeaderArtContrib );
+my @types = qw( Tag Plugin Contrib HeaderArtContrib );
 
 my ( $name ) = ( @ARGV, '' );
 usage(), exit 0 unless $name;
 
-( my $type = $name ) =~ s/^.*?(Plugin|(HeaderArt)?Contrib)?$/$1/;
+( my $type = $name ) =~ s/^.*?(Tag|Plugin|(HeaderArt)?Contrib)?$/$1/;
 usage(), exit 0 unless $type;
 
 
@@ -85,6 +85,7 @@ sub generateMinimalExtension
     close TOPIC;
 
     $topic =~ s/EmptyPlugin/$name/g;
+    $topic =~ s/EmptyTag/$name/g;
     $topic =~ s/EmptyContrib/$name/g;
 
     # adjust variables examples to use the actual topic name
@@ -230,6 +231,43 @@ sub _init
 
 ################################################################################
 
+package TWiki::Builder::Extension::Tag;
+use base( qw( TWiki::Builder::Extension ) );
+
+use File::Path qw( mkpath );
+use Data::Dumper qw( Dumper );
+
+sub _init
+{
+    my $self = shift or die;
+
+    $self->SUPER::_init();
+
+    $self->{name} = $name;
+    $self->{twiki_lib_dir} = 'lib/TWiki/Tags';
+    $self->{build_pl_dir} = 'BuildContrib/lib/TWiki/Contrib/BuildContrib';
+    $self->{module_template} = 'EmptyTag/lib/TWiki/Tags/EmptyTag.pm';
+    $self->{extension_topic_template} = 'EmptyTag/data/TWiki/EmptyTag.txt';
+    $self->{lib_base_dir} = "$self->{name}/$self->{twiki_lib_dir}";
+}
+
+sub new
+{
+#    print "new Tag:", Dumper( \@_ );
+    my $class = shift;
+    my $name = shift;
+    my $self  = {};
+    bless( $self, $class );
+    $self->_init();
+
+    eval { mkpath "$self->{lib_base_dir}/$self->{name}" };
+    $@ && die $@;
+
+    return $self;
+}
+
+################################################################################
+
 package TWiki::Builder::Extension::Plugin;
 use base( qw( TWiki::Builder::Extension ) );
 
@@ -245,8 +283,8 @@ sub _init
     $self->{name} = $name;
     $self->{twiki_lib_dir} = 'lib/TWiki/Plugins';
     $self->{build_pl_dir} = 'BuildContrib/lib/TWiki/Contrib/BuildContrib';
-    $self->{module_template} = '../lib/TWiki/Plugins/EmptyPlugin.pm';
-    $self->{extension_topic_template} = '../data/TWiki/EmptyPlugin.txt';
+    $self->{module_template} = 'EmptyPlugin/lib/TWiki/Plugins/EmptyPlugin.pm';
+    $self->{extension_topic_template} = 'EmptyPlugin/data/TWiki/EmptyPlugin.txt';
     $self->{lib_base_dir} = "$self->{name}/$self->{twiki_lib_dir}";
 }
 
@@ -355,7 +393,7 @@ sub new
 
     # may need to massage type into a class-compatable name
     my $class = $type;
-    if ( my ( $subclass, $baseclass ) = $class =~ /(HeaderArt)(Contrib|Plugin)$/ )
+    if ( my ( $subclass, $baseclass ) = $class =~ /(HeaderArt)(Contrib|Plugin|Tag)$/ )
     {
 	$class = "$2::$1";
     }
