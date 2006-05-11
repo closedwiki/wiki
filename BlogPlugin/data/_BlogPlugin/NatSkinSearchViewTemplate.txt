@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1142931513" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1142931513" format="1.1" version="1.1"}%
 %TMPL:INCLUDE{"searchbase"}% 
 <!-- template: <nop>NatSkinSearchViewTemplate -->
 %TMPL:DEF{"content"}% %SPLIT%<b>Search</b>: <span class="natSearchString">%SEARCHSTRING%</span> 

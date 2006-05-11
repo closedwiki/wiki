@@ -33,7 +33,7 @@ if the linked site has a nice rss feed.
 ~~~      $percntHEADLINES{
 *~~         href=\"$formfield(Feed)\" 
 ~~~         limit=\"%LIMIT%\"
-~~~         refresh=\"$formfield(Refresh)\"
+~~~         refresh=\"$percntIFDEFINED{\"$formfield(Refresh)\" else=\"%RSSREFRESH%\"}$percnt\"
 ~~~         header=\"$percntDBCALL{\"%TOPIC%\" section=\"header\"}$percnt\"
 ~~~         format=\"$percntDBCALL{\"%TOPIC%\" section=\"article\"}$percnt\"
 *~~      }$percnt

@@ -27,6 +27,8 @@
    * Set NATSEARCHTEMPLATE = SearchView
    * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
 
+   * Set RSSREFRESH = 1440
+   
    * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
    * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>
    * Set WEBRSSCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssComments" title="RSS Feed for the Comments on this Site">RSS COMMENTS</a>
