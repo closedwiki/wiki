@@ -415,9 +415,22 @@ sub _lock {
         $TWiki::cfg{RCS}{lockCmd}, FILENAME => $this->{file} );
 
     if( $exit ) {
-        $rcsOutput ||= '';
-        throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{lockCmd}.
-                               ' failed: '.$rcsOutput );
+        # if the lock has been set more than 24h ago, let's try to break it
+        # and then retry.  Should not happen unless in Cairo upgrade
+        # scenarios - see Item2102
+        if ((time - (stat($this->{rcsFile}))[9]) > 3600) {
+            warn 'Automatic recovery: breaking lock for ' . $this->{file} ;
+            $this->{session}->{sandbox}->sysCommand(
+                $TWiki::cfg{RCS}{breaklockCmd}, FILENAME => $this->{file} );
+        ($rcsOutput, $exit) = $this->{session}->{sandbox}->sysCommand(
+                $TWiki::cfg{RCS}{lockCmd}, FILENAME => $this->{file} );
+        }
+       if ( $exit ) {
+           # still no luck - bailing out
+           $rcsOutput ||= '';
+           throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{lockCmd}.
+                                ' failed: '.$rcsOutput );
+       }
     }
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 }
