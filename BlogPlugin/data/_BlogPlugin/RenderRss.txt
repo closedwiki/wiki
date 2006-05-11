@@ -90,4 +90,4 @@ See also: RenderAtom, WebSyndication
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render rss an feed"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render an RSS feed"}%
