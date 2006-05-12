@@ -10,7 +10,7 @@
 <verbatim>
 %STARTINCLUDE%
 %~~ DBQUERY{topic="%NAME%" web="%WEB%"
-~~~   format="%DBCALL{"RenderBlogPage" section="format"}%"
+~~~   format="%DBCALL{"%TOPIC%" section="format"}%"
 ~~~ }%
 %DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%

@@ -28,7 +28,7 @@
 ~~~
 %~~ DBQUERY{%IFDEFINED{"%WIKINAME%" as="TWikiGuest" then="\"State='enabled'\""}%
 ~~~   topic="%NAME%" web="%WEB%"
-~~~   format="%DBCALL{"RenderBlogEntry" section="format"
+~~~   format="%DBCALL{"%TOPIC%" section="format"
 ~~~     PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
 ~~~   }%"
 ~~~ }%
