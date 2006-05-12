@@ -60,6 +60,8 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+
     $session = new TWiki();
 
     $SIG{__DIE__} = sub { confess $_[0] };
@@ -73,8 +75,8 @@ sub set_up {
                                      'TWikiAdminGroup',
                                      "   * Set GROUP = TestAdmin\n");
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
-                                     'NewUserTemplate',
-                                     '%NOP{Ignore this}%
+                                     'NewUserTemplate', <<'EOF'
+%NOP{Ignore this}%
 But not this
 %SPLIT%
 \t* Set %KEY% = %VALUE%
@@ -82,7 +84,20 @@ But not this
 %WIKIUSERNAME%
 %WIKINAME%
 %USERNAME%
-AFTER');
+AFTER
+EOF
+                                    );
+        $session->{store}->saveTopic($session->{user}, $peopleWeb,
+                                     'UserForm', <<'EOF'
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
+| <nop>FirstName | text | 40 | | |
+| <nop>LastName | text | 40 | | |
+| Email | text | 40 | | H |
+| Name | text | 40 | | H |
+| Comment | textarea | 50x6 | | |
+EOF
+                                    );
+
         my $user = $session->{users}->findUser("TestAdmin", "TestAdmin");
         $session->{store}->createWeb($user, $systemWeb,
                                      $TWiki::cfg{SystemWebName});
@@ -96,7 +111,6 @@ AFTER');
     $TWiki::cfg{HtpasswdFileName} = "/tmp/htpasswd";
     $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
     $TWiki::cfg{Register}{NeedVerification} = 1;
-    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
 
     $Error::Debug = 1;
 
@@ -172,21 +186,94 @@ sub registerAccount {
     };
 }
 
-sub test_userTopic {
+sub test_userTopicWithPMWithoutForm {
     my $this = shift;
     $this->registerAccount();
     my( $meta, $text ) = $session->{store}->readTopic(
         undef, $TWiki::cfg{UsersWebName}, $testUserWikiName);
     $this->assert($text !~ /Ignore this%/, $text);
     $this->assert($text =~ s/But not this//,$text);
-    $this->assert($text =~ s/\t*\* First Name: Test\n//,$text);
-    $this->assert($text =~ s/\t*\* Email: kakapo\@ground.dwelling.parrot.net\n//,$text);
-    $this->assert($text =~ s/\t*\* Comment:\s*\n//,$text);
-    $this->assert($text =~ s/\t*\* Last Name: User\n//,$text);
-    $this->assert($text =~ s/\t*\* Name: Test User\n//,$text);
+    $this->assert($text =~ s/^\s*\* First Name: Test$//m,$text);
+    $this->assert($text =~ s/^\s*\* Last Name: User$//m,$text);
+    $this->assert($text =~ s/^\s*\* Comment:\s*$//m,$text);
+    $this->assert($text =~ s/^\s*\* Name: Test User$//m,$text);
     $this->assert($text =~ s/$TWiki::cfg{UsersWebName}\.$testUserWikiName//,$text);
     $this->assert($text =~ s/$testUserWikiName//,$text);
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
+}
+
+sub test_userTopicWithoutPMWithoutForm {
+    my $this = shift;
+    # Switch off the password manager to force email to be written to user
+    # topic
+    $TWiki::cfg{PasswordManager} = 'none';
+    $this->registerAccount();
+    my( $meta, $text ) = $session->{store}->readTopic(
+        undef, $TWiki::cfg{UsersWebName}, $testUserWikiName);
+    $this->assert($text !~ /Ignore this%/, $text);
+    $this->assert($text =~ s/But not this//,$text);
+    $this->assert($text =~ s/^\s*\* First Name: Test$//m,$text);
+    $this->assert($text =~ s/^\s*\* Last Name: User$//m,$text);
+    $this->assert($text =~ s/^\s*\* Comment:\s*$//m,$text);
+    $this->assert($text =~ s/^\s*\* Name: Test User$//m,$text);
+    $this->assert($text =~ s/^\s*\* Email: kakapo\@ground.dwelling.parrot.net$//m,$text);
+    $this->assert($text =~ s/$TWiki::cfg{UsersWebName}\.$testUserWikiName//,$text);
+    $this->assert($text =~ s/$testUserWikiName//,$text);
+    $this->assert_matches(qr/\s*AFTER\s*/, $text);
+}
+
+sub test_userTopicWithoutPMWithForm {
+    my $this = shift;
+    # Switch off the password manager to force email to be written to user
+    # topic
+    $TWiki::cfg{PasswordManager} = 'none';
+
+    # Change the new user topic to include the form
+    my $m = new TWiki::Meta($session, $peopleWeb, 'NewUserTemplate' );
+    $m->put('FORM', { name => "$peopleWeb.UserForm" });
+    $session->{store}->saveTopic($session->{user}, $peopleWeb,
+                                 'NewUserTemplate', <<'EOF',
+%SPLIT%
+\t* Set %KEY% = %VALUE%
+%SPLIT%
+EOF
+                                 $m );
+
+    $this->registerAccount();
+    my( $meta, $text ) = $session->{store}->readTopic(
+        undef, $TWiki::cfg{UsersWebName}, $testUserWikiName);
+    $this->assert_str_equals('Test',
+                             $meta->get('FIELD', 'FirstName')->{value});
+    $this->assert_str_equals('User', $meta->get('FIELD', 'LastName')->{value});
+    $this->assert_str_equals('', $meta->get('FIELD', 'Comment')->{value});
+    $this->assert_str_equals('kakapo@ground.dwelling.parrot.net',
+                             $meta->get('FIELD', 'Email')->{value});
+    $this->assert_matches(qr/^\s*$/s, $text);
+}
+
+sub test_userTopicWithPMWithForm {
+    my $this = shift;
+
+    # Change the new user topic to include the form
+    my $m = new TWiki::Meta($session, $peopleWeb, 'NewUserTemplate' );
+    $m->put('FORM', { name => "$peopleWeb.UserForm" });
+    $session->{store}->saveTopic($session->{user}, $peopleWeb,
+                                 'NewUserTemplate', <<'EOF',
+%SPLIT%
+\t* Set %KEY% = %VALUE%
+%SPLIT%
+EOF
+                                 $m );
+
+    $this->registerAccount();
+    my( $meta, $text ) = $session->{store}->readTopic(
+        undef, $TWiki::cfg{UsersWebName}, $testUserWikiName);
+    $this->assert_str_equals('Test',
+                             $meta->get('FIELD', 'FirstName')->{value});
+    $this->assert_str_equals('User', $meta->get('FIELD', 'LastName')->{value});
+    $this->assert_str_equals('', $meta->get('FIELD', 'Comment')->{value});
+    $this->assert_null($meta->get('FIELD', 'Email'));
+    $this->assert_matches(qr/^\s*$/s, $text);
 }
 
 #Register a user, and then verify it
