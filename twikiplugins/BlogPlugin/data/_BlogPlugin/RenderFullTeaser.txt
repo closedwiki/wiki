@@ -14,7 +14,7 @@ see also: RenderBlogTeaser
 <verbatim>
 %STARTINCLUDE%
 %~~ DBQUERY{topic="%NAME%"
-~~~   format="%DBCALL{"RenderFullTeaser" section="format"}%"}%
+~~~   format="%DBCALL{"%TOPIC%" section="format"}%"}%
 ~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%
 </verbatim>
