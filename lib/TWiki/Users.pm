@@ -106,8 +106,8 @@ sub expandUserList {
     # comma delimited list of users or groups
     # i.e.: "%MAINWEB%.UserA, UserB, Main.UserC  # something else"
     $names =~ s/(<[^>]*>)//go;     # Remove HTML tags
-    # TODO: i18n fix for user name
-    $names =~ s/\s*([a-zA-Z0-9_\.\,\s\%]*)\s*(.*)/$1/go; # Limit list
+
+    $names =~ s/\s*([$TWiki::regex{mixedAlphaNum}_\.\,\s\%]*)\s*(.*)/$1/go;
 
     my @l = map { $this->findUser( $_ ) } split( /[\,\s]+/, $names );
     return \@l;
