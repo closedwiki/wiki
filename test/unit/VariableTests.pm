@@ -177,6 +177,7 @@ END
 
 sub test_userExpansions {
     my $this = shift;
+    $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
     my $user = new TWiki::User($twiki, "fnurgle", "FrankNurgle");
     $user->setEmails('frank@nurgle.org','mad@sad.com');
     $this->assert_str_equals('fnurgle', $user->login());
@@ -188,6 +189,7 @@ sub test_userExpansions {
 %WIKIUSERNAME%
 %USERINFO%
 %USERINFO{format="$emails,$username,$wikiname,$wikiusername"}%
+%USERINFO{"TWikiGuest" format="$emails,$username,$wikiname,$wikiusername"}%
 END
     $twiki->{user} = $user;
     my $result = $twiki->handleCommonTags($text, $testWeb, $testTopic);
@@ -197,6 +199,7 @@ FrankNurgle
 TemporaryTesUsersUsersWeb.FrankNurgle
 fnurgle, TemporaryTesUsersUsersWeb.FrankNurgle, frank@nurgle.org,mad@sad.com
 frank@nurgle.org,mad@sad.com,fnurgle,FrankNurgle,TemporaryTesUsersUsersWeb.FrankNurgle
+,guest,TWikiGuest,TemporaryTesUsersUsersWeb.TWikiGuest
 END
     $this->assert_str_equals($xpect, $result);
 }
