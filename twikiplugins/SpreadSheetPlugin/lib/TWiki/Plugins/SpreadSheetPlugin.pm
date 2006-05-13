@@ -18,7 +18,7 @@
 #
 # =========================
 #
-# This is TWiki's spreadsheet Plugin.
+# This is TWiki's Spreadsheet Plugin.
 #
 
 package TWiki::Plugins::SpreadSheetPlugin;
@@ -37,7 +37,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'any TWiki';
 
 $doInit = 0;
 
