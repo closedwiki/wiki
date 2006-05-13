@@ -18,7 +18,7 @@
 #
 # =========================
 #
-# This is part of TWiki's spreadsheet Plugin.
+# This is part of TWiki's Spreadsheet Plugin.
 #
 # The code below is kept out of the main plugin module for
 # performance reasons, so it doesn't get compiled until it
@@ -706,6 +706,14 @@ sub doFunc
        my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
        $name =~ s/[^a-zA-Z0-9\_]//go;
        if( $name && defined( $value ) ) {
+           $value =~ s/\s*$//o;
+           $varStore{ $name } = $value;
+       }
+
+    } elsif( $theFunc eq "SETIFEMPTY" ) {
+       my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
+       $name =~ s/[^a-zA-Z0-9\_]//go;
+       if( $name && defined( $value ) && ! $varStore{ $name } ) {
            $value =~ s/\s*$//o;
            $varStore{ $name } = $value;
        }
