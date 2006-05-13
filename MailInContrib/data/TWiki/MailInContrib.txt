@@ -105,6 +105,7 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | |
+|  10182 | Fixed parser failures on multipart MIME messages |
 |  10111 | Fixed problem with spaces in attachment names |
 |  9427 | Added Email::Delete::POP3 and Email::Delete::IMAP implementations, and solved a curious problem with IMAP folders, where the MIME parser couldn't parse messages coming from them. |
 |  8969 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1665'>Item1665</a>  Item1666: Now configurable to accept mail only from registered users. Automatically maps the user and signs the contribution. Also configurable to parse the topic from the To: line. Also improved error reporting and recovery. |
