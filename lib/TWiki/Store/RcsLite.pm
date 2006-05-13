@@ -131,7 +131,7 @@ my $T = "\t";
 # date    - ref to array of dates indexed by version number
 # log     - ref to array of messages indexed by version
 # delta   - ref to array of deltas indexed by version
-# where   - 'nofile' if there is no file, or a text string
+# where   - 'nofile' if there is no ,v file, or a text string
 #           representing the parse state when the parse finished.
 #           If the parse was successful this will be 'parsed'.
 #
@@ -212,18 +212,18 @@ sub _ensureProcessed {
     }
 }
 
-# Read in the whole RCS file
+# Read in the whole RCS file (assuming it exists)
 sub _process {
     my( $this ) = @_;
     my $rcsFile = TWiki::Sandbox::normalizeFileName( $this->{rcsFile} );
     if( ! -e $rcsFile ) {
-        $this->{state} = 'nofile';
+        $this->{state} = 'nocommav';
         return;
     }
     my $fh = new FileHandle;
     if( ! $fh->open( $rcsFile ) ) {
         $this->{session}->writeWarning( 'Failed to open '.$rcsFile );
-        $this->{state} = 'nofile';
+        $this->{state} = 'nocommav';
         return;
     }
     binmode( $fh );
@@ -326,7 +326,7 @@ sub _process {
         $this->{session}->writeWarning( $error );
         #ASSERT(0) if DEBUG;
         $headNum = 0;
-        $state = 'nofile'; # ignore the RCS file; graceful recovery
+        $state = 'nocommav'; # ignore the RCS file; graceful recovery
     }
 
     $this->{head} = $headNum;
@@ -404,6 +404,8 @@ sub initText {
 sub numRevisions {
     my( $this ) = @_;
     $this->_ensureProcessed();
+    # if state is is nocommav, there is only one revision
+    return 1 if $this->{state} eq 'nocommav';
     return $this->{head};
 }
 
@@ -419,6 +421,19 @@ sub addRevisionFromStream {
 sub _addRevision {
     my( $this, $data, $log, $author, $date ) = @_;
 
+    $this->_ensureProcessed();
+
+    if( $this->{state} eq 'nocommav' && -e $this->{file} ) {
+        # Must do this *before* saving the attachment, so we
+        # save the file on disc
+        $this->{head} = 1;
+        $this->{revs}[1]->{text} = $this->_readFile( $this->{file} );
+        $this->{revs}[1]->{log} = $log;
+        $this->{revs}[1]->{author} = $author;
+        $this->{revs}[1]->{date} = (defined $date ? $date : time());
+        $this->_writeMe();
+    }
+
     if( $this->{attachment} ) {
         $this->_saveStream( $data );
         # SMELL: for big attachments, this is a dog
@@ -426,8 +441,6 @@ sub _addRevision {
     } else {
         $this->_saveFile( $this->{file}, $data );
     }
-
-    $this->_ensureProcessed();
 
     my $head = $this->{head};
     if( $head ) {
@@ -441,9 +454,7 @@ sub _addRevision {
     $this->{head} = $head;
     $this->{revs}[$head]->{log} = $log;
     $this->{revs}[$head]->{author} = $author;
-    $date = time() unless( defined( $date ));
-
-    $this->{revs}[$head]->{date} = $date;
+    $this->{revs}[$head]->{date} = ( defined $date ? $date : time());
 
     return $this->_writeMe();
 }
@@ -479,6 +490,8 @@ sub replaceRevision {
 sub deleteRevision {
     my( $this ) = @_;
     $this->_ensureProcessed();
+    # Can't delete revision 1
+    return unless $this->{head} > 1;
     $this->_delLastRevision();
     return $this->_writeMe();
 }
@@ -486,14 +499,13 @@ sub deleteRevision {
 sub _delLastRevision {
     my( $this ) = @_;
     my $numRevisions = $this->{head};
-    if( $numRevisions > 1 ) {
-        # can't delete revision 1
-        my $lastText = $this->getRevision( $numRevisions - 1 );
-        $this->{revs}[$numRevisions - 1]->{text} = $lastText;
-    }
-    $this->{head} = $numRevisions - 1;
+    return unless $numRevisions;
+    $numRevisions--;
+    my $lastText = $this->getRevision( $numRevisions );
+    $this->{revs}[$numRevisions]->{text} = $lastText;
+    $this->{head} = $numRevisions;
+    $this->_saveFile( $this->{file}, $lastText );
 }
-
 
 # implements RcsFile
 # Recovers the two revisions and uses sdiff on them. Simplest way to do
@@ -521,7 +533,7 @@ sub getRevisionInfo {
 
     $this->_ensureProcessed();
 
-    if( $this->{state} ne 'nofile' ) {
+    if( $this->{state} ne 'nocommav' ) {
         if( !$version || $version > $this->{head} ) {
             $version = $this->{head} || 1;
         }
@@ -571,11 +583,15 @@ sub getRevision {
     return $this->SUPER::getRevision($version) unless $version;
 
     $this->_ensureProcessed();
+
+    return $this->SUPER::getRevision($version) if $this->{state} eq 'nocommav';
+
     my $head = $this->{head};
     $this->SUPER::getRevision($version) unless $head;
     if( $version == $head ) {
         return $this->{revs}[$version]->{text};
     }
+    $version = $head if $version > $head;
     my $headText = $this->{revs}[$head]->{text};
     my $text = _split( $headText );
     return $this->_patchN( $text, $head-1, $version );
@@ -691,7 +707,7 @@ sub getRevisionAtTime {
 sub stringify {
     my $this = shift;
 
-    my $s = '{'.$this->{web}.'.'.$this->{topic};
+    my $s = $this->SUPER::stringify();
     $s .= " access=$this->{access}" if $this->{access};
     $s .= " symbols=$this->{symbols}" if $this->{symbols};
     $s .= " comment=$this->{comment}" if $this->{comment};
@@ -699,13 +715,12 @@ sub stringify {
     $s .= " [";
     if( $this->{head} ) {
         for( my $i = $this->{head}; $i > 0; $i--) {
-            $s .= "$i : {t=$this->{revs}[$i]->{date}";
+            $s .= "\tRev $i : { d=$this->{revs}[$i]->{date}";
             $s .= " l=$this->{revs}[$i]->{log}";
-            $s .= " a=$this->{revs}[$i]->{text}";
-            $s .= " d=$this->{revs}[$i]->{text}}";
+            $s .= " t=$this->{revs}[$i]->{text}}\n";
         }
     }
-    return $s.'}'."\n";
+    return "$s]\n";
 }
 
 1;

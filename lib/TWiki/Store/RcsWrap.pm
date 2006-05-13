@@ -67,12 +67,12 @@ sub initBinary {
           $TWiki::cfg{RCS}{initBinaryCmd}, FILENAME => $this->{file} );
     if( $exit ) {
         throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
-                               ' of '.$this->{file}.
+                               ' of '.$this->_hidePath($this->{file}).
                                  ' failed: '.$rcsOutput );
     } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
-                               ' of '.$this->{rcsFile}.
+                               ' of '.$this->_hidePath($this->{rcsFile}).
                                  ' failed to create history file ');
     }
 }
@@ -94,12 +94,12 @@ sub initText {
     if( $exit ) {
         $rcsOutput ||= '';
         throw Error::Simple( $TWiki::cfg{RCS}{initTextCmd}.
-                               ' of '.$this->{file}.
+                               ' of '.$this->_hidePath($this->{file}).
                                  ' failed: '.$rcsOutput );
     } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
         throw Error::Simple( $TWiki::cfg{RCS}{initTextCmd}.
-                               ' of '.$this->{rcsFile}.
+                               ' of '.$this->_hidePath($this->{rcsFile}).
                                  ' failed to create history file ');
     }
 }
@@ -109,8 +109,12 @@ sub addRevisionFromText {
     my( $this, $text, $comment, $user, $date ) = @_;
     $this->init();
 
-    $this->_lock();
+    unless( -e $this->{rcsFile} ) {
+        $this->_lock();
+        $this->_ci( $comment, $user, $date );
+    }
     $this->_saveFile( $this->{file}, $text );
+    $this->_lock();
     $this->_ci( $comment, $user, $date );
 }
 
@@ -143,7 +147,6 @@ sub replaceRevision {
 	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
 
     $this->_lock();
-
     my ($rcsOut, $exit) =
       $this->{session}->{sandbox}->sysCommand(
           $TWiki::cfg{RCS}{ciDateCmd},
@@ -181,10 +184,26 @@ sub _deleteRevision {
         $TWiki::cfg{RCS}{delRevCmd},
         REVISION => '1.'.$rev,
         FILENAME => $this->{file} );
+
     if( $exit ) {
         throw Error::Simple( $TWiki::cfg{RCS}{delRevCmd}.
-                               ' of '.$this->{file}.' failed: '.$rcsOut );
+                               ' of '.$this->_hidePath($this->{file}).
+                                 ' failed: '.$rcsOut );
     }
+
+    # Update the checkout
+    $rev--;
+    ($rcsOut, $exit) = $this->{session}->{sandbox}->sysCommand(
+        $TWiki::cfg{RCS}{coCmd},
+        REVISION => '1.'.$rev,
+        FILENAME => $this->{file} );
+
+    if( $exit ) {
+        throw Error::Simple( $TWiki::cfg{RCS}{coCmd}.
+                               ' of '.$this->_hidePath($this->{file}).
+                                 ' failed: '.$rcsOut );
+    }
+    $this->_saveFile( $this->{file}, $rcsOut );
 }
 
 # implements RcsFile
@@ -243,7 +262,7 @@ sub numRevisions {
           FILENAME => $this->{rcsFile} );
     if( $exit ) {
         throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{histCmd}.
-                               ' of '.$this->{rcsFile}.
+                               ' of '.$this->_hidePath($this->{rcsFile}).
                                  ' failed: '.$rcsOutput );
     }
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
@@ -287,7 +306,6 @@ sub getRevisionInfo {
 # implements RcsFile
 sub revisionDiff {
     my( $this, $rev1, $rev2, $contextLines ) = @_;
-
     my $tmp = '';
     my $exit;
     if ( $rev1 eq '1' && $rev2 eq '1' ) {
@@ -398,8 +416,8 @@ sub _ci {
     $rcsOutput ||= '';
 
     if( $exit ) {
-        throw Error::Simple($cmd.' of '.$this->{file}.
-                              ' failed: '.$rcsOutput );
+        throw Error::Simple($cmd.' of '.$this->_hidePath($this->{file}).
+                              ' failed: '.$exit.' '.$rcsOutput );
     }
 
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );

@@ -28,6 +28,10 @@ sub set_up {
     die unless (defined $TWiki::cfg{PubUrlPath});
     die unless (defined $TWiki::cfg{ScriptSuffix});
     $twiki = new TWiki();
+    $twiki->{sandbox}->{TRACE} = 0;
+    # Switch off pipes to maximise debug opportunities
+    $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
+    $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
     $saveWF = $TWiki::cfg{WarningFileName};
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     die unless $twiki;
@@ -172,6 +176,15 @@ BEGIN {
 
         $sfn = $fn.'_revInfo';
         *$sfn = sub { shift->verifyRevInfo( $class ) };
+
+        $sfn = $fn.'_MissingVrestoreRev';
+        *$sfn = sub { shift->verifyMissingVrestoreRev( $class ) };
+
+        $sfn = $fn.'_MissingVrepRev';
+        *$sfn = sub { shift->verifyMissingVrepRev( $class ) };
+
+        $sfn = $fn.'_MissingVdelRev';
+        *$sfn = sub { shift->verifyMissingVdelRev( $class ) };
     }
 }
 
@@ -353,9 +366,122 @@ sub verifyRevInfo {
     $this->assert_str_equals('Default revision information', $comment);
 }
 
-# not tested:
-# deleteRevision
-# getRevisionInfo
-# any of the RcsFile methods
+# If a .txt file exists with no ,v and we perform an op on that
+# file, a ,v must be created for rev 1 before the op is completed.
+sub verifyMissingVrestoreRev {
+    my( $this, $class ) = @_;
+
+    my $file = "$TWiki::cfg{DataDir}/$testWeb/MissingV.txt";
+
+    open(F, ">$file") || die;
+    print F "Rev 1\n";
+    close(F);
+
+    my $rcs = $class->new( $twiki, $testWeb, 'MissingV', "" );
+    my ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(3);
+    $this->assert_equals(1, $rev);
+    $this->assert_equals(1, $rcs->numRevisions());
+
+    my $text = $rcs->getRevision(0);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $text = $rcs->getRevision(1);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $rcs->restoreLatestRevision("ArtForger");
+
+    $this->assert(-e "$file,v");
+
+    $text = $rcs->getRevision(0);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    unlink($file);
+    unlink("$file,v");
+}
+
+# If a .txt file exists with no ,v and we perform an op on that
+# file, a ,v must be created for rev 1 before the op is completed.
+sub verifyMissingVrepRev {
+    my( $this, $class ) = @_;
+
+    my $file = "$TWiki::cfg{DataDir}/$testWeb/MissingV.txt";
+
+    open(F, ">$file") || die;
+    print F "Rev 1\n";
+    close(F);
+
+    my $rcs = $class->new( $twiki, $testWeb, 'MissingV', "" );
+    my ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(3);
+    $this->assert_equals(1, $rev);
+    $this->assert_equals(1, $rcs->numRevisions());
+
+    my $text = $rcs->getRevision(0);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $text = $rcs->getRevision(1);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $rcs->replaceRevision("2", "no way", "me", time());
+
+    $this->assert(-e "$file,v");
+
+    $text = $rcs->getRevision(0);
+    $this->assert_matches(qr/^2/, $text);
+
+    unlink($file);
+    unlink("$file,v");
+}
+
+sub verifyMissingVdelRev {
+    my( $this, $class ) = @_;
+
+    my $file = "$TWiki::cfg{DataDir}/$testWeb/MissingV.txt";
+
+    open(F, ">$file") || die;
+    print F "Rev 1";
+    close(F);
+
+    my $rcs = $class->new( $twiki, $testWeb, 'MissingV', "" );
+    my ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(3);
+    $this->assert_equals(1, $rev);
+    $this->assert_equals(1, $rcs->numRevisions());
+
+    my $text = $rcs->getRevision(0);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $text = $rcs->getRevision(1);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $text = $rcs->getRevision(2);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $rcs->addRevisionFromText("Rev 2", "more", "idiot", time());
+    $this->assert(-e "$file,v");
+
+    $text = $rcs->getRevision(1);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $text = $rcs->getRevision(2);
+    $this->assert_matches(qr/^Rev 2/, $text);
+
+    $text = $rcs->getRevision(0);
+    $this->assert_matches(qr/^Rev 2/, $text);
+
+    $rcs->deleteRevision();
+
+    $this->assert(-e "$file,v");
+
+    $text = $rcs->getRevision(0);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $text = $rcs->getRevision(1);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    $text = $rcs->getRevision(2);
+    $this->assert_matches(qr/^Rev 1/, $text);
+
+    unlink($file);
+    unlink("$file,v");
+}
 
 1;

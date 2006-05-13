@@ -425,19 +425,24 @@ sub getTimestamp {
 
 =pod
 
----++ ObjectMethod restoreLatestRevision()
+---++ ObjectMethod restoreLatestRevision($wikiname)
 
 Restore the plaintext file from the revision at the head.
 
 =cut
 
 sub restoreLatestRevision {
-    my( $this ) = @_;
+    my( $this, $user ) = @_;
 
     my $rev = $this->numRevisions();
     my $text = $this->getRevision( $rev );
 
-    return $this->_saveFile( $this->{file}, $text );
+    # If there is no ,v, create it
+    unless( -e $this->{rcsFile} ) {
+        $this->addRevisionFromText( $text, "restored", $user, time() );
+    } else {
+        $this->_saveFile( $this->{file}, $text );
+    }
 }
 
 =pod
@@ -954,12 +959,14 @@ given epoch-secs time, or undef it none could be found.
 
 
 =pod
+
 ---++ ObjectMethod getAttachmentAttributes($web, $topic, $attachment)
 
 returns [stat] for any given web, topic, $attachment
 SMELL - should this return a hash of arbitrary attributes so that 
 SMELL + attributes supported by the underlying filesystem are supported
 SMELL + (eg: windows directories supporting photo "author", "dimension" fields)
+
 =cut
 
 sub getAttachmentAttributes {
@@ -973,30 +980,32 @@ sub getAttachmentAttributes {
 }
 
 =pod
+
 sub _constructAttributesForAutoAttached
 as long as stat is defined, return an emulated set of attributes for that attachment.
+
 =cut
 
 sub _constructAttributesForAutoAttached {
-   my ($file, $stat) = @_;
- 
+    my ($file, $stat) = @_;
+
     my %pairs = (
-                  name    => $file,
-                  version => '',
-                  path    => $file,
-                  size    => $stat->[7],
-                  date    => $stat->[9], 
-                  user    => 'UnknownUser', 
-                  comment => '',
-                  attr    => '',
-                  autoattached => '1'
-   );
-   
-   if ($#$stat > 0) {
-	return \%pairs;
-   } else {
- 	return undef;  
-   }
+        name    => $file,
+        version => '',
+        path    => $file,
+        size    => $stat->[7],
+        date    => $stat->[9], 
+        user    => 'UnknownUser', 
+        comment => '',
+        attr    => '',
+        autoattached => '1'
+       );
+
+    if ($#$stat > 0) {
+        return \%pairs;
+    } else {
+        return undef;
+    }
 }
 
 
@@ -1006,6 +1015,7 @@ sub _constructAttributesForAutoAttached {
 
 returns {} of filename => { key => value, key2 => value } for any given web, topic
 Ignores files starting with _ or ending with ,v
+
 =cut
 
 sub getAttachmentList {
@@ -1025,8 +1035,33 @@ sub getAttachmentList {
 }
 
 sub dirForTopicAttachments {
-   my ($web, $topic ) = @_;
-   return $TWiki::cfg{PubDir}.'/'.$web.'/'.$topic;
+    my ($web, $topic ) = @_;
+    return $TWiki::cfg{PubDir}.'/'.$web.'/'.$topic;
+}
+
+=pod
+
+---++ ObjectMethod stringify()
+Generate string representation for debugging
+
+=cut
+
+sub stringify {
+    my $this = shift;
+
+    return $this->{web}.'.'.
+      ($this->{topic} || '{no topic}').
+        ($this->{attachment} ? ':'.$this->{attachment} : '').
+          $this->{file}.(-e $this->{file} ? '(e)' : '').
+            '/'.$this->{rcsFile}.(-e $this->{rcsFile} ? '(e)' : '');
+}
+
+# Chop out recognisable path components to prevent hacking based on error
+# messages
+sub _hidePath {
+    my ( $this, $erf ) = @_;
+    $erf =~ s#.*(/\w+/\w+\.[\w,]*)$#...$1#;
+    return $erf;
 }
 
 1;
