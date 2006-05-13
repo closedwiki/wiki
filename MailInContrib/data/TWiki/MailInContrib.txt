@@ -50,7 +50,7 @@ You can also define a 'spambox' for each mail folder. A spambox is a topic that 
 
 The module can use special HTML comments in the topic to decide where to insert new emails within the text.
 
-If it sees the comment =&lt;--MAIL--&gt;= it will insert the incoming mail immediately *below* the comment. =MAIL= is rather ike a TWikiVariable; you can give it parameters. For example, =&lt;--MAIL{where="below"}--&gt;=. The following options are available:
+If it sees the comment =&lt;!--MAIL--&gt;= it will insert the incoming mail immediately *below* the comment. =MAIL= is rather ike a TWikiVariable; you can give it parameters. For example, =&lt;!--MAIL{where="below"}--&gt;=. The following options are available:
    * =where= - can be =above=, =below= (relative to the comment) =top=, =bottom= (of the topic)
    * =template= set to the name of one of the templates in %TWIKIWEB%.MailInContribTemplate to change the formatting of comments. The default format is "below" format.
 
