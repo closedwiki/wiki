@@ -127,3 +127,4 @@ templates/viewrightbar.pattern.tmpl 0440
 templates/viewtoolbar.pattern.tmpl 0440
 templates/viewtopbar.pattern.tmpl 0440
 templates/viewtopicactionbuttons.pattern.tmpl 0440
+lib/TWiki/Contrib/PatternSkin.pm
