@@ -33,10 +33,10 @@ use Error qw( :try );
 use vars qw ( $VERSION $RELEASE );
 use Carp;
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
+# This should always be $Rev: 10111$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 10111$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -45,6 +45,19 @@ $RELEASE = 'Dakar';
 
 BEGIN {
     $SIG{__DIE__} = sub { Carp::confess $_[0] };
+}
+
+{
+    package MIMEFolder;
+
+    use base qw/Email::Folder/;
+
+    sub bless_message {
+        my $self    = shift;
+        my $message = shift || die "You must pass a message\n";
+
+        return Email::MIME->new($message);
+    }
 }
 
 =pod
@@ -105,7 +118,7 @@ sub processInbox {
     my $ftype = Email::FolderType::folder_type($box->{folder});
     print STDERR "Process $ftype folder $box->{folder}\n" if $this->{debug};
 
-    my $folder = new Email::Folder( $box->{folder} );
+    my $folder = new MIMEFolder( $box->{folder} );
 
     my $user;
     my %kill;
@@ -133,13 +146,11 @@ sub processInbox {
                 $received = $receipt if $receipt > $received;
             }
         }
+        unless ($received) {
+            # Use the send date
+            $received = Time::ParseDate::parsedate($mail->header('Date'));
+        }
         $received ||= time();
-        # remove the Received: headers, which foul up the MIME
-        # parser for unknown reasons :-(
-        $mail->header_set('Received', '');
-
-        my $s = $mail->as_string();
-        $mail = new Email::MIME( $s );
 
         # Try to get the target topic by
         #    1. examining the "To" address to see if it is a valid web.wikiname (if
@@ -152,9 +163,10 @@ sub processInbox {
 
         my $subject = $mail->header('Subject');
 
-        print STDERR "Message ",$mail->header('Subject'),"\n" if $this->{debug};
-
         my $from = $mail->header('From');
+
+        print STDERR "Message from $from: ",$mail->header('Subject'),"\n"
+          if $this->{debug};
 
         $from =~ s/^.*<(.*)>.*$/$1/;
         $user = TWiki::Contrib::FuncUsersContrib::lookupUser( email => $from );
@@ -180,8 +192,8 @@ sub processInbox {
             ( $web, $topic ) = ( $1, $2 );
         }
         if( !$topic && $box->{topicPath} =~ /\bsubject\b/ &&
-          $subject =~
-            s/^\s*(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})(:\s*|\s*$)// ) {
+              $subject =~
+                s/^\s*(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex})(:\s*|\s*$)// ) {
             ( $web, $topic ) = ( $1, $2 );
         }
 
@@ -281,7 +293,7 @@ sub _onError {
     if( $box->{onError} =~ /\breply\b/ ) {
         $this->_reply( $box, $mail,
                        "TWiki found an error in your e-mail submission\n\n$mess\n\n".
-                      $mail->as_string());
+                         $mail->as_string());
     }
     if( $box->{onError} =~ /\bdelete\b/ ) {
         $kill->{$mail->header( 'Message-ID' )} = $num;
@@ -303,7 +315,7 @@ sub _extract {
                   {
                       payload => $part->body(),
                       filename => $part->filename()
-                  } );
+                     } );
         } elsif( $part != $mime ) {
             _extract( $part, $text, $attach );
         }
@@ -395,13 +407,20 @@ sub _saveAttachment {
 sub _reply {
     my( $this, $box, $mail, $body ) = @_;
     my $addressee = $mail->header('Reply-To') ||
-      $mail->header('From');
+      $mail->header('From') ||
+        $mail->header('Return-Path');
+    die "No addressee" unless $addressee;
     my $message =
       "To: $addressee" .
         "\nFrom: ".$mail->header('To').
           "\nSubject: RE: your TWiki submission to ".$mail->header('Subject').
-              "\n\n$body\n";
-    $TWiki::Plugins::SESSION->{net}->sendEmail( $message, 5 );
+            "\n\n$body\n";
+    eval {
+        $TWiki::Plugins::SESSION->{net}->sendEmail( $message, 5 );
+    };
+    if ($@) {
+        print "Failed trying to send mail: $@\n";
+    }
 }
 
 1;
