@@ -1,4 +1,4 @@
-package TWiki:Contrib:EmptyContrib;
+package TWiki::Contrib::EmptyContrib;
 use vars qw( $VERSION );
 $VERSION = '$Rev$';
 1;
