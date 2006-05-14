@@ -574,7 +574,7 @@ sub wikiToUserName {
     my( $wiki ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
-    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
+    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki, undef, 1 );
     return $wiki unless $user;
     return $user->login();
 }
@@ -596,7 +596,7 @@ sub userToWikiName {
     my( $login, $dontAddWeb ) = @_;
     return '' unless $login;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $login );
+    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $login, undef, 1 );
     return '' unless $user;
     return $user->wikiName() if $dontAddWeb;
     return $user->webDotWikiName();
@@ -1618,7 +1618,7 @@ sub wikiToEmail {
     my( $wiki ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
-    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
+    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki, undef, 1 );
     return '' unless $user;
     return join( ',', @{$user->emails()} );
 }
