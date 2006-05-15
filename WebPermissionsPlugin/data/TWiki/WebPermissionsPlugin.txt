@@ -46,9 +46,25 @@ The plugin tries very hard to keep the permissions specification you started wit
 
 The permissions matrix can be viewed (and edited) by entering =%<nop>WEBPERMISSIONS%= anywhere in a topic. You have to have admin rights (be a member of !TWikiAdminGroup) to view/edit the matrix.
 
-If you have admin rights and the plugin is installed, you will see the matrix below:
+The =WEBPERMISSIONS= TWiki variable accepts the following parameters:
+   * =webs= - a comma-separated list of webs to show. Default is to show all webs.
+   * =repeatheads= - if set to a number, headings will be repeated every this number of rows. This is very useful when you have a lot of users and groups.
 
-%WEBPERMISSIONS%
+If you have a lot of webs, use the following form to select the subset of webs you want to display. If you have admin rights, and the plugin is installed, you will see the matrix below the form:
+
+<!-- Copy from HERE -->
+<div style="background-color: #ffffdf; padding: 10px">
+Select the webs you want to change permissions for from the list below. Ctrl+click and Shift+click work as normal.<br />
+<form action="%SCRIPTURL{view}%/%WEB%/%TOPIC%">
+<select size="7" name="webs" multiple="multiple" method="POST">
+%WEBLIST{format="<option $marker>$name</option>" selection="%URLPARAM{"webs" multiple="on" separator=", "}%"}%
+</select> <br />
+<input type="submit" value="Select webs"/>
+</form>
+
+%WEBPERMISSIONS{webs="%URLPARAM{"webs" multiple="on" separator="," default="%TWIKIWEB%"}%" repeatheads="10"}%
+</div>
+<!-- TO HERE -->
 
 ---++ Plugin Settings
 
@@ -81,6 +97,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
+|  10216 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1766'>Item2291</a> Added repeatheads and webs parameters |
 |  9048 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1766'>Item1766</a> corrected problems with passing incorrect parameters to setACLs and not interpreting values from the form correctly. |
 |  8877 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1701'>Item1701</a>  first release |
 |  Dependencies: | %$DEPENDENCIES% |
