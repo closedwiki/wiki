@@ -55,7 +55,7 @@ sub initPlugin {
 sub _WEBPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
 
-    return undef unless TWiki::Contrib::FuncUsersContrib::isAdmin();
+    #return undef unless TWiki::Contrib::FuncUsersContrib::isAdmin();
 
     my $query = $session->{cgiQuery};
     my $action = $query->param( 'web_permissions_action' );
@@ -65,7 +65,13 @@ sub _WEBPERMISSIONS {
     my @modes = split(/[\s,]+/,$TWiki::cfg{Plugins}{WebPermissionsPlugin}{modes} ||
                            'VIEW,CHANGE' );
 
-    my @webs = TWiki::Func::getListOfWebs( 'user' );
+    my @webs;
+    my $chosenWebs = $params->{webs} || $query->param('webs');
+    if( $chosenWebs ) {
+        @webs = split(/[,\s]+/, $chosenWebs);
+    } else {
+        @webs = TWiki::Func::getListOfWebs( 'user' );
+    }
     my @knownusers;
 
     my %table;
@@ -110,13 +116,19 @@ sub _WEBPERMISSIONS {
 
     $tab .= CGI::start_table( { border => 1, class => 'twikiTable' } );
 
-    my $row = CGI::th( '' );
-    foreach $web ( @webs ) {
-        $row .= CGI::th( $web );
-    }
-    $tab .= CGI::Tr( $row );
-
+    my $repeat_heads = $params->{repeatheads} || 0;
+    my $repeater = 0;
+    my $row;
     foreach my $user ( sort @knownusers ) {
+        unless( $repeater ) {
+            $row = CGI::th( '' );
+            foreach $web ( @webs ) {
+                $row .= CGI::th( $web );
+            }
+            $tab .= CGI::Tr( $row );
+            $repeater = $repeat_heads;
+        }
+        $repeater--;
         $row = CGI::th( ' '.$user.' ' );
         foreach $web ( sort @webs ) {
             my $cell;
@@ -141,11 +153,16 @@ sub _WEBPERMISSIONS {
     } else {
         $tab .= CGI::submit( -name => 'web_permissions_action', -value => 'Edit' );
     }
-    $tab = CGI::start_form(
+    my $page = CGI::start_form(
         -method => 'POST',
-        -action => TWiki::Func::getScriptUrl( $web, $topic, 'view') ) .
-          $tab . CGI::end_form();
-    return $tab;
+        -action => TWiki::Func::getScriptUrl( $web, $topic, 'view') );
+
+    if( defined $chosenWebs ) {
+      $page .= CGI::hidden( -name => 'webs', -value => $chosenWebs );
+    }
+
+    $page .= $tab . CGI::end_form();
+    return $page;
 }
 
 1;
