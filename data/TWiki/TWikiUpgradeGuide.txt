@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127433585" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1147664322" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -100,6 +100,23 @@ You are *highly* recommended *not* to change any distributed files if you can av
    1 Copy over any local files you created (such as .htpasswd and .htaccess files)
    1 Point your webserver at the new install.
 *If* you changed any of the distributed files, you will have to continue from Step 5 above.
+
+---++ Upgrading from Cairo to TWiki4 (additional advice)
+
+---+++ Favicon
+
+TWiki4's PatternSkin introduces the use of the favicon feature which most browsers use to show a small icon in front of the URL and for bookmarks.
+
+In TWiki4 it is assumed that each web has a favicon.ico file attached to the !WebPreferences topic. When you upgrade from Cairo to TWiki4 you do not have this file and you will get flooded with errors the error log of your web server. There are two solutions to this.
+
+   * Attach a favicon.ico file to !WebPreferences in each web.
+   * Change the setting of the location of favicon.ico in !TWikiPreferences so all webs use the favicon.ico from the TWiki web. This is the fastest and easiest solution.
+
+To change the location of favicon.ico in !TWikiPreferences to the TWiki web add this line to Main.TWikiPreferences
+
+<verbatim>
+   * Set FAVICON = %PUBURLPATH%/%TWIKIWEB%/%WEBPREFSTOPIC%/favicon.ico
+</verbatim>
 
 %STOPINCLUDE%
 
