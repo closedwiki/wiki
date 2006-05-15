@@ -39,7 +39,7 @@ sub _add {
 }
 
 # Don't know where STDERR goes, so send it somewhere we can read it
-open(STDERR, ">>../post-commit.log") || die $!;
+open(STDERR, ">>../logs/post-commit.log") || die $!;
 print STDERR "Post-Commit $first..$last in $REPOS\n";
 $/ = undef;
 
