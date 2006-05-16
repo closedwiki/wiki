@@ -288,14 +288,19 @@ sub _sendEmailByNetSMTP {
     my $smtp = 0;
     if( $this->{HELLO_HOST} ) {
         $smtp = Net::SMTP->new( $this->{MAIL_HOST},
-                                Hello => $this->{HELLO_HOST} );
+                                Hello => $this->{HELLO_HOST},
+                                Debug => $TWiki::cfg{SMTP}{Debug} || 0 );
     } else {
-        $smtp = Net::SMTP->new( $this->{MAIL_HOST} );
+        $smtp = Net::SMTP->new( $this->{MAIL_HOST},
+                                Debug => $TWiki::cfg{SMTP}{Debug} || 0 );
     }
     my $status = '';
     my $mess = "ERROR: Can't send mail using Net::SMTP. ";
     die $mess."Can't connect to '$this->{MAIL_HOST}'" unless $smtp;
 
+    if( $TWiki::cfg{SMTP}{Username} ) {
+        $smtp->auth($TWiki::cfg{SMTP}{Username}, $TWiki::cfg{SMTP}{Password});
+    }
     $smtp->mail( $from ) || die $mess.$smtp->message;
     $smtp->to( @to, { SkipBad => 1 } ) || die $mess.$smtp->message;
     $smtp->data( $text ) || die $mess.$smtp->message;
