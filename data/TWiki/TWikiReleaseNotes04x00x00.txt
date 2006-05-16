@@ -12,7 +12,7 @@ __Major New Features__
    * WYSIWYG editor
    * Hierarchical sub-webs
 
-&nbsp; &nbsp; %M% See feature list at TWikiHistory#DakarRelease.
+&nbsp; &nbsp; %M% See feature list at TWikiHistory#DakarRelease. TWiki 4.0 patch release details are at the end of this release notes document.
 
 __Note:__ In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
 
@@ -525,3 +525,156 @@ You should convert your plugins to call the =TWiki::Func= API. If you have calle
    * The =TWiki::Func= API has been extended to expose a number of new core functions. Review TWikiFuncDotPm for details.
    * The =TWiki::Meta= API, which was previously for internal core use only, has now been exposed and may be used in plugins. See TWikiMetaDotPm for full details.
    * Plugins which observed the existing published API (TWiki::Func) should continue to work.
+
+---++ TWiki 4.0.1 Patch Release Details
+<!-- do not use Bugs: interwiki links because interwiki rule might not be defined
+   * Set BUGS = http://develop.twiki.org/~develop/cgi-bin/view/Bugs
+-->
+<noautolink>
+The following fixes have been addressed in this release:
+
+---+++ TWiki 4.0.1 Fixes
+| [[%BUGS%/Item1597][Item1597]] | configure shows text outside the text boxes - thanks KoenMartens |
+| [[%BUGS%/Item1592][Item1592]] | Whoops, deprecated syntax was both alive and documented, trying something else |
+| [[%BUGS%/Item1592][Item1592]] | Killing some never documented syntax, allowing for more flexibility in explicit external [[]]-style links |
+| [[%BUGS%/Item1591][Item1591]] | Friendly fallback added to meta-&gt;getParent() |
+| [[%BUGS%/Item1591][Item1591]] | small fix to parent search but bug remains |
+| [[%BUGS%/Item1590][Item1590]] | Don't loose old TOPICPARENT on save |
+| [[%BUGS%/Item1589][Item1589]] | Don't report cfg-files as non-executable |
+| [[%BUGS%/Item1587][Item1587]] | Including upgrade_emails.pl in distro |
+| [[%BUGS%/Item1583][Item1583]] | Cairo compatibility for rev argument syntax |
+| [[%BUGS%/Item1579][Item1579]] | corrected spanish access key. |
+| [[%BUGS%/Item1574][Item1574]] | Net.pm: Tidying up e-mail split |
+| [[%BUGS%/Item1574][Item1574]] | Net.pm: Split only on , not on spaces when sending e-mail |
+| [[%BUGS%/Item1572][Item1572]] | made  optional - thus removing the horrible slowdown it causes from the main loop |
+| [[%BUGS%/Item663][Item663]] | Fix %<nop>MAINWEB%.TWikiPreferences to %<nop>LOCALSITEPREFS%; remove %<nop>TWIKIWEB% prefix where not needed |
+| [[%BUGS%/Item663][Item663]] | TWiki.org doc merge: GNU patch requirement |
+| [[%BUGS%/Item240][Item240]] | layout of more screen; added line "Current parent" with 2 searches inside IF - must be a more efficient way but how? |
+| [[%BUGS%/Item240][Item240]] | just to be sure: replacing MAKETEXT text with English, to be translated later. |
+| [[%BUGS%/Item240][Item240]] | removes unwanted left border in non-view pages |
+| Item000 | replaced 9 tabs by 9 x 3 spaces |
+| Item000 | Typo in ClassicSkin.pm |
+| Item000 | Committed a whole lot of local setup by accident, reverting - sorry folks |
+| Item000 | Typo fix in Search.pm |
+| Item0 | Untainting the tainted title |
+</noautolink>
+
+The 4.0.1 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *8740*.
+
+---++ TWiki 4.0.2 Patch Release Details
+
+<noautolink>
+The following fixes and minor enhancements have been addressed in this release:
+
+---+++ TWiki 4.0.2 Fixes
+| [[%BUGS%/Item2004][Item2004]] | Syntax error in DelimitedFile.pm |
+| [[%BUGS%/Item1983][Item1983]] | Search box bust when searching for WikiWords |
+| [[%BUGS%/Item1978][Item1978]] | Form.pm fails when the name field is [<nop>[Topic][fieldname]] for controls |
+| [[%BUGS%/Item1971][Item1971]] | Not possible to INCLUDE javascript from external sites |
+| [[%BUGS%/Item1963][Item1963]] | "public" in WEBLIST should include all webs if the user is an admin |
+| [[%BUGS%/Item1961][Item1961]] | LANGUAGES variable very slow |
+| [[%BUGS%/Item1958][Item1958]] | RSS feed mentions the TWikiAdministrator as creator |
+| [[%BUGS%/Item1951][Item1951]] | Excluding topic from SEARCH does not exclude WebHome (Doc improvement) |
+| [[%BUGS%/Item1950][Item1950]] | Denial of Service attack very easy on both Cairo and Dakar |
+| [[%BUGS%/Item1944][Item1944]] | Add Comment to Configure Page - AuthScripts section |
+| [[%BUGS%/Item1937][Item1937]] | rename script doesn't honour access control restrictions |
+| [[%BUGS%/Item1935][Item1935]] | preview script ignores access control settings |
+| [[%BUGS%/Item1925][Item1925]] | rdiff and changes scripts ignore access settings |
+| [[%BUGS%/Item1921][Item1921]] | Merging 3part duplicates the text screwing up the page |
+| [[%BUGS%/Item1920][Item1920]] | Hide form twisty gives poor usability for TWiki apps that use the form |
+| [[%BUGS%/Item1912][Item1912]] | 3-way merge doesn't call the plugins merge handler |
+| [[%BUGS%/Item1911][Item1911]] | Small typo correction in MANIFEST for upgrade_emails.pl |
+| [[%BUGS%/Item1909][Item1909]] | TWiki.pot should be included in distribution |
+| [[%BUGS%/Item1903][Item1903]] | Special chars not escaped in registration |
+| [[%BUGS%/Item1902][Item1902]] | New chars to escape during registration |
+| [[%BUGS%/Item1900][Item1900]] | Compatibility issue: variables only work when upper case. |
+| [[%BUGS%/Item1899][Item1899]] | statistics ignore pages with dashes and underscores |
+| [[%BUGS%/Item1898][Item1898]] | configure is unhelpful if rcs is not installed |
+| [[%BUGS%/Item1897][Item1897]] | Simultaneous edit feature is not at all reliable. |
+| [[%BUGS%/Item1896][Item1896]] | Skin fallback not working |
+| [[%BUGS%/Item1895][Item1895]] | $topic not substituted right in INCLUDEWARNING |
+| [[%BUGS%/Item1882][Item1882]] | "Plural to singular" unmarked breaks documentation |
+| [[%BUGS%/Item1878][Item1878]] | FORMLIST in ChangeForm.pm generates invalid html |
+| [[%BUGS%/Item1871][Item1871]] | Attachment table broken with version history |
+| [[%BUGS%/Item1864][Item1864]] | "Modify search" link in search results not working |
+| [[%BUGS%/Item1863][Item1863]] | missing oopslanguagechanged template |
+| [[%BUGS%/Item1853][Item1853]] | Sandbox doesn't report full errors for command execution on Windows |
+| [[%BUGS%/Item1850][Item1850]] | checkPassword not checkPasswd |
+| [[%BUGS%/Item1849][Item1849]] | Typo in code: checkPassword not checkPasswd, so remove user does not work |
+| [[%BUGS%/Item1848][Item1848]] | .htaccess.txt internal documentation unclear |
+| [[%BUGS%/Item1840][Item1840]] | Inadequate upgrade documentation |
+| [[%BUGS%/Item1838][Item1838]] | commonTagHandler garbles square bracket links in WebTopBar |
+| [[%BUGS%/Item1830][Item1830]] | Rename web does not work |
+| [[%BUGS%/Item1829][Item1829]] | the templates for SEARCH are broken |
+| [[%BUGS%/Item1820][Item1820]] | Reproducible case of not being able to log out |
+| [[%BUGS%/Item1819][Item1819]] | tainted username prevents exec() |
+| [[%BUGS%/Item1803][Item1803]] | Sorting bugs by merge field causes an internal error |
+| [[%BUGS%/Item1789][Item1789]] | User::isAdmin can create an empty SuperAdminGroup |
+| [[%BUGS%/Item1788][Item1788]] | Formatted search does not return values that are zero |
+| [[%BUGS%/Item1787][Item1787]] | I18N: Translation updates for 4.0.2 / new PatternSkin |
+| [[%BUGS%/Item1781][Item1781]] | Allow admin users to change passwords and mail addresses |
+| [[%BUGS%/Item1778][Item1778]] | Registration gives strange TWiki vars in user topic |
+| [[%BUGS%/Item1771][Item1771]] | Error message 'Oh dear' in warnyyyymm.txt isn't helpful |
+| [[%BUGS%/Item1743][Item1743]] | Attachment sort order is cockeyed |
+| [[%BUGS%/Item1729][Item1729]] | Better localisation of variable in Net.pm |
+| [[%BUGS%/Item1724][Item1724]] | Attach: FILENAME AND FILEPATH not showing the file name with non-alpha characters |
+| [[%BUGS%/Item1720][Item1720]] | Save script fails on old topic when sole argument is topicparent and there's a mandatory field in the form. |
+| [[%BUGS%/Item1714][Item1714]] | quotes in attachment comment break manage form |
+| [[%BUGS%/Item1687][Item1687]] | Must set TWiki::Plugins::SESSION before invoking registered tag handler |
+| [[%BUGS%/Item1677][Item1677]] | STARTSECTION/ENDSECTION variables being stripped from templates |
+| [[%BUGS%/Item1672][Item1672]] | Change PatternSkin to use non-table based layout |
+| [[%BUGS%/Item1657][Item1657]] | RenderListPlugin broken. The case where you draw a tree view does not work |
+| [[%BUGS%/Item1654][Item1654]] | mailnotify does not enter the command_line context |
+| [[%BUGS%/Item1652][Item1652]] | REVINFO{$time} should display time, not date - time |
+| [[%BUGS%/Item1649][Item1649]] | TWikiJavascripts prototype.js causes crash on Internet Explorer. |
+| [[%BUGS%/Item1645][Item1645]] | Someweb.WebTopicEditTemplate topic does not exist |
+| [[%BUGS%/Item1636][Item1636]] | ResetPasswd deletes email entry in .htpasswd |
+| [[%BUGS%/Item1634][Item1634]] | Pattern Skin in Dakar: verbatim text and large images makes everything wider than the screen. |
+| [[%BUGS%/Item1624][Item1624]] | FORMFIELD variable always expands to value of most recent topic revision |
+| [[%BUGS%/Item1623][Item1623]] | PatternSkin: WebLeftBar border margin |
+| [[%BUGS%/Item1621][Item1621]] | beforeSaveHandler not functioning correctly |
+| [[%BUGS%/Item1619][Item1619]] | Label form field content destroyed |
+| [[%BUGS%/Item1616][Item1616]] | inaccurate password_changed message |
+| [[%BUGS%/Item1611][Item1611]] | Generic doc work for TWiki 4.0.2 |
+| [[%BUGS%/Item1610][Item1610]] | Configure script corrupts NameFilter (Unmatched Bracket in Regex) |
+| [[%BUGS%/Item1608][Item1608]] | TOC{"MyTopic" web="MyWeb" } no longer forwards |
+| [[%BUGS%/Item1599][Item1599]] | "Upgrading a Beta" documentation errors |
+| [[%BUGS%/Item1595][Item1595]] | WebTopicCreator disallows topic names containing numbers |
+| [[%BUGS%/Item1587][Item1587]] | upgrade_emails.pl script missing in TWiki 4 distro |
+| [[%BUGS%/Item1583][Item1583]] | INCLUDE of a topic of a specific revision is not backwards compatible. |
+| [[%BUGS%/Item1579][Item1579]] | Incorrect properties in the Discard button in the action bar for the spanish translation |
+| [[%BUGS%/Item1574][Item1574]] | Registration process tries to send extra emails |
+| [[%BUGS%/Item1566][Item1566]] | DakarReleaseNotes.html and TWikiDocumentation.html not included in distribution of TWiki4.0 |
+| [[%BUGS%/Item1553][Item1553]] | Clean up "oops attention: merge_notice" |
+| [[%BUGS%/Item1515][Item1515]] | Localise formatting help |
+| [[%BUGS%/Item1430][Item1430]] | inconsistent width constraints on topbar and content area |
+
+---+++ TWiki 4.0.2 Enhancements
+| [[%BUGS%/Item1964][Item1964]] | Configurable user homepage layout |
+| [[%BUGS%/Item1960][Item1960]] | WebRss lacks search options |
+| [[%BUGS%/Item1956][Item1956]] | Cleaned up Plugins.EmptyPlugin |
+| [[%BUGS%/Item1926][Item1926]] | Usability: Add tabindex + setfocus to template login form in TWiki.PatternSkin |
+| [[%BUGS%/Item1801][Item1801]] | Improved doc |
+| [[%BUGS%/Item1728][Item1728]] | increase security by defaulting "send password" in email off |
+| [[%BUGS%/Item1689][Item1689]] | Add more colors for text ink in Plugins.WysiwygPlugin |
+| [[%BUGS%/Item1148][Item1148]] | Consistent buttons in edit and editsettings |
+| [[%BUGS%/Item1147][Item1147]] | "Raw view" should turn into "Normal View" in raw mode |
+| [[%BUGS%/Item1146][Item1146]] | Two "Create" buttons |
+</noautolink>
+
+The 4.0.2 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *9626*.
+
+---++ TWiki 4.0.3 Patch Release Details
+
+<noautolink>
+The following fixes and minor enhancements have been addressed in this release:
+
+---+++ TWiki 4.0.3 Fixes
+FIXME
+
+---+++ TWiki 4.0.3 Enhancements
+FIXME
+
+</noautolink>
+
+The 4.0.3 release was built from SVN http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00 revision *FIXME*.
