@@ -36,7 +36,7 @@ eval {
     my $rev = `svn update $ROOT/twikisvn`;
 
     # Remove all links before refreshing from the manifests
-    print `find $ROOT/twikisvn -type l -exec rm \\{\\} \\;`;
+    print `find $ROOT/twikisvn -name Bugs -prune -o -type l -exec rm \\{\\} \\;`;
     print `perl pseudo-install.pl -link default`;
 
     print "Updated $rev";
