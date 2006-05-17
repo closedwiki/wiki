@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1147820697" format="1.0" version="$Rev$"}%
----+ RevisionLinkPlugin
+---+ Revision Link Plugin
 
 This plugin enables the author of a TWiki page to specify a particular version of a topic to link to. You can use also negative numbers when specifying the revision number.
 
@@ -71,10 +71,10 @@ Plugin settings are stored as preferences variables. The following variables are
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 18 May 2006 (2.0 - SVN 10228) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-| 18 May 2006 (2.0)<br />SVN 10228 | TWiki:Main.KennethLavrsen<br />updated plugin to Dakar while maintaining Cairo compatibility.<br />Enhanced the syntax robustness.<br />Fixed some rendering errors when plugin was used several times on same topic.<br />Fixed the plugin so only official API is used. |
-| 27 Aug 2003 (1.11) | Repaired link when "web" attribute specified |
-| 14 Aug 2003 (1.1) | You can specify revision only with one number (ex. %<nop>REV{"5"}%)<br>You can use negative numbers for revision (ex. %<nop>REV{"-2"}%)<br>Enhanced syntax (added characters *[* and *'*)<br>Added variables $date, $user and $comment to format attribute |
-| 05 Aug 2003 (1.0) | Initial version |
+|  18 May 2006 (2.0)<br />SVN 10228 | TWiki:Main.KennethLavrsen<br />updated plugin to Dakar while maintaining Cairo compatibility.<br />Enhanced the syntax robustness.<br />Fixed some rendering errors when plugin was used several times on same topic.<br />Fixed the plugin so only official API is used. |
+|  27 Aug 2003 (1.11) | Repaired link when "web" attribute specified |
+|  14 Aug 2003 (1.1) | You can specify revision only with one number (ex. %<nop>REV{"5"}%)<br>You can use negative numbers for revision (ex. %<nop>REV{"-2"}%)<br>Enhanced syntax (added characters *[* and *'*)<br>Added variables $date, $user and $comment to format attribute |
+|  05 Aug 2003 (1.0) | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.0 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
