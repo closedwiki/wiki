@@ -284,6 +284,7 @@ _(Click for form-based editing of existing preferences.)_
       * Set X = <img src="%ICONURLPATH{warning}%" alt="ALERT!" title="ALERT!" width="16" height="16" border="0" />
       * Set Y = <img src="%ICONURLPATH{choice-yes}%" alt="DONE" title="DONE" width="16" height="16" border="0" />
 
+
 ---++ Miscellaneous Settings
 
    * Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
@@ -294,6 +295,13 @@ _(Click for form-based editing of existing preferences.)_
 
    * %TWIKIWEB%.PreviewBackground image:
       * Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
+
+
+---++ Access Control Settings
+
+   * Users or groups allowed to change or rename this <nop>%TOPIC% topic:
+      * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 
 ---++ Creating New Preference Variables
