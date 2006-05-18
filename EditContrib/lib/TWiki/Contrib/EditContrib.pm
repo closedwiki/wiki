@@ -13,7 +13,7 @@ use TWiki::UI;
 use TWiki::UI::Preview;
 
 $VERSION = '$Rev$';
-$RELEASE = 1.1;
+$RELEASE = 1.2;
 
 # =========================
 sub handleUrlParam {
@@ -57,23 +57,36 @@ sub savemulti {
     return;
   }
 
-  # save called by preview
-  # $query->param( -name=>"text", -value=>$query->param( 'pretxt' ) . $nl . $query->param( 'text' ) . $query->param( 'postxt' ));
+  my $saveopts = {};
+  $saveopts->{minor} = 1 if $query->param( 'dontnotify' );
+  $saveopts->{comment} = $query->param('comment') if $query->param( 'comment' );
+
   my $text = $query->param( 'pretxt' ) . $nl . $query->param( 'text' ) . $nl . $query->param( 'postxt' );
+      
+  my $oopsurl = '';
 
   if( $TWiki::Plugins::VERSION >= 1.1 ) {
+      my ($meta, undef) = &TWiki::Func::readTopic( $webName, $topic );
+
       $text = TWiki::entityDecode( $text );
+
+      if (TWiki::Func::saveTopic( $webName, $topic, $meta, $text, $saveopts )) {
+          $oopsurl = TWiki::Func::getOopsUrl( $webName, $topic, 'oopssaveerr', 'Error on topic save' );
+          TWiki::Func::redirectCgiQuery( $query, $oopsurl ); 
+      } else {
+          TWiki::Func::redirectCgiQuery( $query, $redirecturl );
+        }
+
   } else {
+      # Cairo interface (violates TWiki::Func API)
+
+      $query->param( -name=>"text", -value=>$text );
       $text = TWiki::Render::decodeSpecialChars( $text );
+      if (TWiki::UI::Save::_save( $webName, $topic, $userName, $query )) {
+          TWiki::Func::redirectCgiQuery( $query, $redirecturl );
+      }
   }
 
-  my $oopsurl = TWiki::Func::saveTopicText( $webName, $topic, $text, 0, 0 );
-  if ( $oopsurl ) {
-      TWiki::Func::redirectCgiQuery( $query, $oopsurl );
-  } else { 
-      TWiki::Func::redirectCgiQuery( $query, $redirecturl );
-  }
-  
 }
 
 # =========================
@@ -223,6 +236,16 @@ sub edit {
 	}
       }
       $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
+    } else {
+        my $parentMeta = '';
+        if ( $TWiki::Plugins::VERSION >= 1.1 ) {
+            $parentMeta = $meta->get( 'TOPICPARENT' ) if $meta;
+            $theParent = $parentMeta->{name} if $parentMeta;
+        } 
+        # else {
+        #    $parentMeta = $meta->findOne( "TOPICPARENT" );
+        #    print $parentMeta ;
+        # }
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
