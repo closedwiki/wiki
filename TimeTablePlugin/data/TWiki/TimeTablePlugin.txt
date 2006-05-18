@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1147952658" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1147952718" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The %TOPIC% handles the tag =%<nop>TIMETABLE%=. The timetable is rendered with HTML tables and should works with all modern web browsers.
 
@@ -29,6 +29,36 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | endtime | a end time, e.g. 18:00, 6:00pm, ... | endtime="20:00" |
 | timeinterval | interval steps in minutes for the timeline | timeinterval="30 |
 
+---++ Examples
+%TIMETABLE%
+	* Mon,Tue - 9 - 14 - MONTEST1 - green
+	* Mon - 9 - 11 - MONTEST2 - yellow
+	* Mon - 10 - 13 - MONTEST3
+	* Mon - 12 - 15 - MONTEST4
+
+
+	* Tue - 9 - 9:30 - TUETEST1
+	* Tue - 9 - 10:00 - TUETEST2
+	* Tue - 10:00 - 11:00 - TUETESTFO
+	* Tue - 9 - 11:30 - TUETEST3
+	* Tue - 12 - 15 - TUETEST4
+	
+	* Wed - 7 - 9 - WEDTEST1
+	* Wed - 9 - 11 - WEDTEST2
+	* Wed - 11 - 13 - WEDTEST3
+	* Wed - 13 - 17 - WEDTEST4
+
+	* Thu - 7 - 20:30 - THUTEST1
+  
+	* Fri - 7 - 10 - FRITEST1
+	* Fri - 12 - 15 - FRITEST2
+
+	* Sat - 5 - 10 - SATTEST1 - blue
+	* Sat - 6 - 21 - SATTEST2 - yellow
+	* Sat - 11 - 22 - SATTEST3 - green 
+
+	* Sun - 9:18 - 17:35 - SUNTEST1 - red
+	* Sun - 18:00 - 18:15 - SUNTEST2 - yellow
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
@@ -57,7 +87,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 		* TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
 		* Change the Plugin settings as needed
 	* Test if the installation was successful:
-		* _enter samples here_
+		* see Examples section
 
 ---++ Plugin Info
 
