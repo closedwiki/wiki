@@ -1,0 +1,4 @@
+lib/TWiki/Plugins/TimeTablePlugin/TimeTable.pm
+lib/TWiki/Plugins/TimeTablePlugin.pm
+pub/TWiki/TimeTablePlugin/example.png
+data/TWiki/TimeTablePlugin.txt
