@@ -56,12 +56,16 @@ If it sees the comment =&lt;!--MAIL--&gt;= it will insert the incoming mail imme
 
 If there is no such comment in the topic, then it just appends it to the end. If there is more than one, only the first is recognised.
 
-Any attachments in the mail get added to the target topic as TWiki attachments.
+Any attachments in the mail get added to the target topic as TWiki attachments. Attachments are also listed immediately below the mail body in the topic.
 
 ---+ How the contributor is identified
-You can configure the module to look at the =From:= entry in the email, and if a registered user has set that email, then they are identified as the contributor. You can also optionally set a default user for an inbox, so if the user can't be identified from the mail, it will fall back to that user. The user identity is used for access control checks on the target topic, so you can use TWiki access controls to protect target topics.
+The user identity is used for access control checks on the target topic, so you can use TWiki access controls to protect target topics.
 
-Note that there is a security risk here, as the =From:= address in e-mail can easily be spoofed.
+You can configure the module to look at the =From:= entry in the email, and if a registered user has set that email (see ChangeEmailAddress), then they are identified as the contributor. Note that there is a security risk here, as the =From:= address in e-mail can easily be spoofed.
+
+You can also optionally set a default user for an inbox, so if the user can't be identified from the mail, it will fall back to the default.
+
+See <a href="#Installation">Installation</a> for help on settings.
 
 ---++ Settings
    * One line description:
@@ -105,6 +109,7 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 | Change History: | |
+|        | Added support for listing attachments in-line with the mail |
 |  10182 | Fixed parser failures on multipart MIME messages |
 |  10111 | Fixed problem with spaces in attachment names |
 |  9427 | Added Email::Delete::POP3 and Email::Delete::IMAP implementations, and solved a curious problem with IMAP folders, where the MIME parser couldn't parse messages coming from them. |
