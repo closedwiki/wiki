@@ -150,9 +150,8 @@ sub beforeCommonTagsHandler
 sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-  if ($bibcite) {
-      $_[0] =~ s/%BIBCITE{(.*?)}%/&handleCitation2($1)/ge;
-  } else {
+  $_[0] =~ s/%BIBCITE{(.*?)}%/&handleCitation2($1)/ge;
+  if (!($bibcite)) { 
       $_[0] =~ s/%CITE{(.*?)}%/&handleCitation2($1)/ge;
   }
 
@@ -183,9 +182,9 @@ sub postRenderingHandler
     foreach my $key (keys %bibliography) {
         if ($_[0] =~ m!<a name=\"$key\">([^\<]*?)</a>!) {
             my $newno = $1;
-            $_[0] =~ s!(<a href=\"\#$key\">)[^\<]*?(</a>)!$1$newno$2!g;
+            $_[0] =~ s!(<a href=\"\#$key\".*?>)[^\<]*?(</a>)!$1$newno$2!g;
         } else {
-            $_[0] =~ s!<a href=\"\#$key\">[^\<]*?</a>!?? $key not found ??!g;
+            $_[0] =~ s!<a href=\"\#$key\".*?>[^\<]*?</a>!?? $key not found ??!g;
         }
     }
     unlink($citefile) unless ($debug);

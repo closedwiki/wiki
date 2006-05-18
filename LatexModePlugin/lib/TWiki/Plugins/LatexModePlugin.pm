@@ -209,7 +209,7 @@ sub initPlugin
 
     my $query = &TWiki::Func::getCgiQuery();
     $rerender = &TWiki::Func::getPreferencesValue( "RERENDER" ) || 0;
-    if ($query->param( 'latex' )) {
+    if (($query) and $query->param( 'latex' )) {
         $rerender = ($query->param( 'latex' ) eq 'rerender');
     }
 
@@ -654,7 +654,8 @@ sub postRenderingHandler
                     } else {
                         # Cairo interface
                         unlink( $path.$pathSep.$fn ) if (-f $fn);
-                    }                }
+                    }
+                }
             }
         }
     }
@@ -670,7 +671,7 @@ sub postRenderingHandler
     ### create the temporary Latex Working Directory...
     #does the topic's attachment directory exist?
     if( -e $LATEXWDIR ) {
-        #if it's not really a directory, we can't do anything        
+        #if it's not really a directory, we can't do anything
         return unless ( -d $LATEXWDIR );
 
         # FIXME: this section should never be called, but should
@@ -850,7 +851,6 @@ sub postRenderingHandler
                                   ($opts{'scale'} * $img->{height}) );
                 $_[0] =~ s/($outimg\")/$1 $str/;
 
-                
                 if( $TWiki::Plugins::VERSION >= 1.1 ) 
                 { 
                     # Dakar interface
