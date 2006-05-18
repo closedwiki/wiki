@@ -30,12 +30,8 @@ pre {
 	%IF{ "$ USERLAYOUTURL" then="@import url('%USERLAYOUTURL%');"}%
 	%IF{ "$ USERSTYLEURL"  then="@import url('%USERSTYLEURL%');"}%
 	%IF{ "$ USERCOLORSURL" then="@import url('%USERCOLORSURL%');"}%
-</style>%TMPL:END%
-
-
-
-%{ the print style uses the 'media="all"' so the print version will look like the final print }%
-%TMPL:DEF{"stylesprint"}%<style type="text/css" media="all">
+</style>
+<style type="text/css" media="all">
 	@import url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/print.css");
 </style>%TMPL:END%
 
