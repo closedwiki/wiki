@@ -1,57 +1,118 @@
-/* Content */
-/* show url for links */
-/* disabled to make the topic readable again */
-/*
-.patternTopic a:link:after,
-.patternTopic a:visited:after {
-	content: " (" attr(href) ") ";
-	font-weight:normal;
-	font-size:86%;
-}
-.twikiAttachments a:link:after,
-.twikiAttachments a:visited:after,
-.twikiForm a:link:after,
-.twikiForm a:visited:after,
-.twikiTable a:link:after,
-.twikiTable a:visited:after,
-table a:link:after,
-table a:visited:after {
-	content:"";
-}
-*/
+@media print {
+	/* Layout */
+	#patternScreen,
+	#patternPageShadow, 
+	#patternPage {
+		margin:0;
+		padding:0;
+		top:0;
+	}
+	#patternScreen {
+		padding:0;
+	}
+	body html {
+		margin:0;
+		padding:0;
+	}
+	#patternMain {
+		padding-bottom:1em;
+		width:100%;
+	}
+	
+	/* no left bar */
+	#patternOuter {
+		margin-left:0;
+	}
+	#patternLeftBar {
+		width:0em;
+		margin-left:0em;
+		display:none;
+	}
+	#patternWrapper {
+		height:1%;
+	}
+	
+	/* no top bar */
+	#patternTopBar,
+	#patternClearHeaderCenter,
+	#patternClearHeaderLeft,
+	#patternClearHeaderRight,
+	#patternTopBarContentsOuter {
+		display:none;
+	}
+	
+	/* Content */
+	/* show url for links */
+	/* disabled to make the topic readable again */
+	/*
+	.patternTopic a:link:after,
+	.patternTopic a:visited:after {
+		content: " (" attr(href) ") ";
+		font-weight:normal;
+		font-size:86%;
+	}
+	.twikiAttachments a:link:after,
+	.twikiAttachments a:visited:after,
+	.twikiForm a:link:after,
+	.twikiForm a:visited:after,
+	.twikiTable a:link:after,
+	.twikiTable a:visited:after,
+	table a:link:after,
+	table a:visited:after {
+		content:"";
+	}
+	*/
+	
+	
+	/* hide bits of the gui */
+	.patternTopicAction,
+	.patternToolBar,
+	.patternToolBarBottom,
+	.patternHomePath img,
+	.patternHomePathTitle {
+		display:none;
+	}
+	
+	#patternMainContents {
+		padding:0;
+	}
+	#patternBottomBar {
+		border:none;
+	}
+	/* hide attachment twisty controls */
+	#attachmentsshow,
+	#attachmentshide {
+		display:none;
+	}
+	
+	/* Colors */
+	body {
+		background-color:#fff;
+	}
+	h2, h3, h4, h5, h6 {
+		background-color:transparent;
+	}
+	.twikiAttachments,
+	.patternContent .twikiAttachments,
+	.twikiForm,
+	.patternContent .twikiForm {
+		background-color:#fff;
+	}
+	.patternRevInfo,
+	.twikiGrayText {
+		color:#666; /*T7*/
+	}
+	.patternRevInfo a:link,
+	.patternRevInfo a:visited
+	.twikiGrayText a:link,
+	.twikiGrayText a:visited {
+		color:#666; /*T7*/
+	}
+	.twikiGrayText a:hover {
+		color:#FBF7E8; /*T7*/
+	}
+	
+	/* define custom print styles here */
 
-.patternHomePath img,
-.patternHomePathTitle {
-	display:none;
-}
 
-/* Colors */
-body {
-	background-color:#fff;
 }
-h2, h3, h4, h5, h6 {
-	background-color:transparent;
-}
-.twikiAttachments,
-.patternContent .twikiAttachments,
-.twikiForm,
-.patternContent .twikiForm {
-	background-color:#fff;
-}
-.patternRevInfo,
-.twikiGrayText {
-	color:#666; /*T7*/
-}
-.patternRevInfo a:link,
-.patternRevInfo a:visited
-.twikiGrayText a:link,
-.twikiGrayText a:visited {
-	color:#666; /*T7*/
-}
-.twikiGrayText a:hover {
-	color:#FBF7E8; /*T7*/
-}
-
-/* define custom print styles here */
-
-
