@@ -1,0 +1,84 @@
+%META:TOPICINFO{author="TWikiContributor" date="1147952658" format="1.0" version="$Rev$"}%
+---+!! <nop>%TOPIC%
+The %TOPIC% handles the tag =%<nop>TIMETABLE%=. The timetable is rendered with HTML tables and should works with all modern web browsers.
+
+*Example: (png image):*
+
+<img src="%ATTACHURLPATH%/example.png" alt="timetable example" />
+
+
+%TOC%
+
+---++ Syntax Rules
+
+Following event types are supported to define entries for the timetable:
+
+| *Event Type* | *Syntax* | *Example(s)* |
+| <b>Single</b>	| ==&nbsp;* DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - 09:00 - 11:00 - Meeting== |
+| <b>Interval</b> | ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch== |
+
+---++ Attributes
+Usage: %<nop>TIMETABLE{attribute1="value1" attribute2="value2" ...}% 
+
+Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
+
+| *Attribute* | *Comment* | *Default/Example* |
+| lang | Language (e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...) | lang="English" |
+| topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
+| starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00" |
+| endtime | a end time, e.g. 18:00, 6:00pm, ... | endtime="20:00" |
+| timeinterval | interval steps in minutes for the timeline | timeinterval="30 |
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Render a timetable.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==lib/TWiki/Plugins/%TOPIC%/TimeTable.pm== | Plugin Perl library |
+	  | ==pub/TWiki/%TOPIC%/example.png== | example image |
+	* Configure the Plugin:
+		* TWiki 4.0 and up: Run the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] script to enable the Plugin
+		* Change the Plugin settings as needed
+	* Test if the installation was successful:
+		* _enter samples here_
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.DanielRohde |
+|  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | V1.000 (16 May 2006) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.000 (16 May 2006): | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | CPAN:Date::Calc <br/> CPAN:CGI |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main.DanielRohde - 16 May 2006
+ 
+
+%META:FILEATTACHMENT{name="example.png" attr="" comment="" date="1147953975" path="example.png" size="78991" user="rohdedan" version="1.2"}%
