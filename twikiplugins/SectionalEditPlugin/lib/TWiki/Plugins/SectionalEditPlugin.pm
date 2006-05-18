@@ -24,6 +24,8 @@ use vars qw(
         $bgcolor $label $skipskin $leftjustify $alwayssection
     );
 
+use vars qw( %TWikiCompatibility );
+
 use TWiki;
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -34,7 +36,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '6 Mar 2006';
+$RELEASE = '17 May 2006';
 
 # =========================
 sub initPlugin
@@ -139,8 +141,19 @@ sub displayRow
 	 (($editstyle)?"":"</tr>");
 }
 
-# =========================
+## disable the call to endRenderingHandler in Dakar (i.e. TWiki::Plugins::VERSION >= 1.1)
+$TWikiCompatibility{startRenderingHandler} = 1.1;
+
 sub startRenderingHandler
+{
+
+    # startRenderingHandler is depreciated post Cairo, but needed for
+    # Cairo compatibility 
+    return preRenderingHandler( @_ );
+}
+
+# =========================
+sub preRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
