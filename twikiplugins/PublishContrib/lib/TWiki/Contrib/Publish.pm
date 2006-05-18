@@ -13,6 +13,7 @@
 # Copyright (C) 2001 Sven Dowideit, svenud@ozemail.com.au
 # Copyright (C) 2001 Motorola Ltd.
 # Copyright (C) 2005 Crawford Currie, http://c-dot.co.uk
+# Copyright (C) 2006 Martin Cleaver, http://www.cleaver.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -49,7 +50,9 @@ $cs = $os;
 
 my $pub = TWiki::Func::getPubUrlPath();
 my $debug = 0;
-my $template = 'view';
+my $templatesWanted = 'view';
+my $templateLocation = ""; #_PublishContrib"; # used to prefix alternate template renderings
+my %templatesReferenced = (); # this determine which templates (e.g. view, viewprint, viuehandheld, etc) have been referred to and thus should be generated.
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -75,6 +78,7 @@ sub publish {
     $TWiki::Plugins::SESSION = $session;
 
     my ($inclusions, $exclusions, $filter, $skin, $genopt, $format);
+    $genopt = '';
 
     # Load defaults from a config topic if one was specified
     my $configtopic = $query->param('configtopic');
@@ -90,7 +94,7 @@ sub publish {
         }
         $cfgt =~ s/\r//g;
 
-#SMELL - parsing the topic directly for settings
+        #SMELL - parsing the topic directly for settings
         while ( $cfgt =~ s/^\s+\*\s+Set\s+([A-Z]+)\s*=(.*?)$//m ) {
             my $k = $1;
             my $v = $2;
@@ -112,8 +116,10 @@ sub publish {
                 $format = $v;
             } elsif ($k eq 'DEBUG' ) {
 		$debug = $v;
-	    } elsif ($k eq 'TEMPLATE' ) {
-		$template = $v;
+	    } elsif ($k eq 'TEMPLATES' ) {
+		$templatesWanted = $v;
+	    } elsif ($k eq 'TEMPLATELOCATION' ) {
+		$templateLocation = $v;
 	    } elsif ($k eq 'INSTANCE' ) {
 		$TWiki::cfg{PublishContrib}{Dir} .= '/'.$v;
 		$TWiki::cfg{PublishContrib}{URL} .= '/'.$v;
@@ -162,7 +168,7 @@ sub publish {
     my($header, $footer) = '';
     unless( TWiki::Func::getContext()->{command_line} ) {
         TWiki::Func::writeHeader($query);
-        my $tmpl = TWiki::Func::readTemplate($template);
+        my $tmpl = TWiki::Func::readTemplate("view");
         $tmpl =~ s/%META{.*?}%//g;
         for my $tag qw( REVTITLE REVARG REVISIONS MAXREV CURRREV ) {
             $tmpl =~ s/%$tag%//g;
@@ -192,19 +198,39 @@ sub publish {
 
     my $archive;
 
-    my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
-    eval 'use '.$generator.
-      ';$archive = new '.$generator.
-        '("'.$TWiki::cfg{PublishContrib}{Dir}.'","'.$web.'","'.
-          $genopt.'")';
-    die $@ if $@;
+    my @templatesWanted = split /,/, $templatesWanted;
 
-    publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
-               $exclusions, $skin, $filter, $archive);
+    foreach my $template (@templatesWanted) {
+	$template =~ s/^\s+//, s/\s+\z//;
+	$templatesReferenced{$template} = 1;
+	print "-- template=$template$br" if $debug;
+	my $dir = $TWiki::cfg{PublishContrib}{Dir}.'/'._dirForTemplate($template);
+	print "-- dir=$dir$br" if $debug;
+
+	my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
+	eval 'use '.$generator.
+	    ';$archive = new '.$generator.
+	    '("'.$dir.'","'.$web.'","'.
+	    $genopt.'")';
+	die $@ if $@;
+	
+	publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
+               $exclusions, $skin, $template, $filter, $archive);
+    }
+    # check the $templatesReferenced, and that everything referenced has been generated.
+    my @templatesReferenced = sort keys %templatesReferenced;
+    @templatesWanted = sort @templatesWanted;
+
+    my @difference = arrayDiff(\@templatesReferenced, \@templatesWanted); 
+    if ($#difference > 0) {
+	print "${ob}Templates Used = ",join(",", @templatesReferenced), "$br".
+	    "Templates Specified = ".join(",", @templatesWanted)."$br";
+	print "${os}WARNING: there is a difference between what you specified and what you needed. Consider changing the TEMPLATES setting so it has all Templates Used.${cs}$br";
+    }
 
     my $text = 'Published to <a href="'.
       $TWiki::cfg{PublishContrib}{URL}.'/'.$archive->{id}.'">'.
-        $archive->{id}.'</a>';
+        $archive->{id}.'</a>'."$br$br";
 
     $archive->close();
 
@@ -216,6 +242,20 @@ sub publish {
     print $footer;
 }
 
+sub arrayDiff { 
+# from http://perl.active-venture.com/pod/perlfaq4-dataarrays.html
+    my ($array1, $array2) = @_;
+    my (@union, @intersection, @difference);
+    @union = @intersection = @difference = ();
+    my %count = ();
+    foreach my $element (@$array1, @$array2) { $count{$element}++ }
+    foreach my $element (keys %count) {
+	push @union, $element;
+	push @{ $count{$element} > 1 ? \@intersection : \@difference }, $element;
+    }  
+    return @difference;
+}
+
 #  Publish the contents of one web.
 #   * =$web= - which web to publish
 #   * =$inclusions= - REs describing which topics to include
@@ -225,7 +265,7 @@ sub publish {
 #   * =$archive= - archiver
 
 sub publishWeb {
-    my ($web, $wikiName, $inclusions, $exclusions, $skin, $filter, $archive) = @_;
+    my ($web, $wikiName, $inclusions, $exclusions, $skin, $template, $filter, $archive) = @_;
 
     # Get list of topics from this web.
     my @topics = TWiki::Func::getTopicList($web);
@@ -233,27 +273,28 @@ sub publishWeb {
     # Choose template.
     my $tmpl = TWiki::Func::readTemplate($template, $skin);
     die "Couldn't find template\n" if(!$tmpl);
-
+    
     # Attempt to render each included page.
     my %copied;
     foreach my $topic (@topics) {
-        print "${ob}$topic: ${cb}\t";
-        if( $topic !~ /^($inclusions)$/ ) {
-            print "${os}not included$cs";
-        } elsif( $exclusions && $topic =~ /^($exclusions)$/ ) {
-            print "${os}excluded$cs";
-        } else {
-            try {
-                publishTopic($web, $topic, $wikiName, $skin, $tmpl,
-                             \%copied, $filter, $archive);
-                print "published";
-            } catch Error::Simple with {
-                my $e = shift;
-                print "not published: ".$e->{-text};
-            };
-        }
-        print $br;
+	print "${ob}$topic: ${cb}\t";
+	if( $topic !~ /^($inclusions)$/ ) {
+	    print "${os}not included$cs";
+	} elsif( $exclusions && $topic =~ /^($exclusions)$/ ) {
+	    print "${os}excluded$cs";
+	} else {
+	    try {
+		publishTopic($web, $topic, $wikiName, $skin, $tmpl,
+			     \%copied, $filter, $archive);
+		print "published";
+	    } catch Error::Simple with {
+		my $e = shift;
+		print "not published: ".$e->{-text};
+	    };
+	}
+	print $br;
     }
+    return 
 }
 
 #  Publish one topic from web.
@@ -346,7 +387,10 @@ sub publishTopic {
     # Modify absolute topic links.
     $ilt = $TWiki::Plugins::SESSION->getScriptUrl(1, 'view', 'NOISE', 'NOISE');
     $ilt =~ s!/NOISE/NOISE.*$!!;
-    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1"._topicURL($2,$web).$1!ge;
+    $tmpl =~ s!href=(["'])$ilt/(.*?)\1!"href=$1"._topicURL($2,$web).$1!ge; 
+
+    # replace any external template references
+    $tmpl =~ s!href=["'](.*?)\?template=(\w*)(.*?)["']!_rewriteTemplateReferences($tmpl, $web, $1, $2, $3)!e;
 
     my $extras = 0;
 
@@ -359,6 +403,46 @@ sub publishTopic {
     $archive->addString( $tmpl, $topic.'.html' );
 }
 
+# rewrite 
+#   Topic?template=viewprint%REVARG%.html?template=viewprint%REVARG%
+# to
+#   _viewprint/Topic.html
+#
+#   * =$web=
+#   * =$tmpl=
+#   * =$topic=
+#   * =$template=
+# return
+#   * 
+# side effects
+
+
+sub _rewriteTemplateReferences {
+    my ($tmpl, $web, $topic, $template, $redundantduplicate) = @_;
+       # for an unknown reason, these come through with doubled up template= arg
+       # e.g.
+       # http://.../site/instance/Web/WebHome?template=viewprint%REVARG%.html?template=viewprint%REVARG%
+       #$link:
+       # Web/ContactUs?template=viewprint%REVARG%.html? "
+
+       my $newLink = $TWiki::cfg{PublishContrib}{URL}.'/'._dirForTemplate($template)."/".$web.'/'.$topic.'.html';
+       print "---- Found alternate template use on $topic template=$template $br".
+        "---- Changed to $newLink$br" if $debug;
+    $templatesReferenced{$template} = 1;
+	return "href='$newLink'";
+
+}
+
+# Where alternative templates (e.g. viewprint) renderings end up
+# This gets appended onto puburl and pubdir
+# The web is prefixed before this.
+sub _dirForTemplate {
+    my ($template) = @_;
+    return '' if ($template eq 'view');
+    return $template if ($templateLocation eq '');
+    return $templateLocation."/".$template;
+}
+
 #  Copy a resource (image, style sheet, etc.) from twiki/pub/%WEB% to
 #   static HTML's rsrc directory.
 #   * =$web= - name of web
@@ -367,7 +451,11 @@ sub publishTopic {
 sub _copyResource {
     my ($web, $rsrcName, $copied, $archive) = @_;
 
-    print "-- Depends on $rsrcName " if $debug;
+    # Trim the resource name, as they can sometimes pick up whitespaces
+    $rsrcName =~ s/^\s+//;
+    $rsrcName =~ s/\s+$//;
+
+    print "-- Depends on '$rsrcName'" if $debug;
 
     # See if we've already copied this resource.
     if (exists $copied->{$rsrcName}) {
@@ -378,6 +466,7 @@ sub _copyResource {
 
 	print "${os}Need it$cs $br" if $debug;
 
+
         my $file = $rsrcName;
         $file =~ s(^(.*)\/)()o;
         my $path = "";
@@ -387,11 +476,13 @@ sub _copyResource {
         }
         # Copy resource to rsrc directory.
         my $TWikiPubDir = TWiki::Func::getPubDir();
-        if ( -f "$TWikiPubDir/$rsrcName" ) {
+        if ( -r "$TWikiPubDir/$rsrcName" ) {
             $archive->addDirectory( "rsrc" );
             $archive->addDirectory( "rsrc/$path" );
             $archive->addFile( "$TWikiPubDir/$rsrcName" , "rsrc/$path/$file" );
-        }
+        } else {
+            print "${os}--- $rsrcName not readable $br('$TWikiPubDir/$rsrcName' does not exist) $cs$br" if $debug;	    
+	}
         # Record copy so we don't duplicate it later.
         my $destURL = "rsrc/$path/$file";
         $destURL =~ s!//!/!g;
