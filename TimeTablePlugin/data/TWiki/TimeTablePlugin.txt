@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1147952718" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1147960420" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The %TOPIC% handles the tag =%<nop>TIMETABLE%=. The timetable is rendered with HTML tables and should works with all modern web browsers.
 
@@ -27,7 +27,9 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
 | starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00" |
 | endtime | a end time, e.g. 18:00, 6:00pm, ... | endtime="20:00" |
-| timeinterval | interval steps in minutes for the timeline | timeinterval="30 |
+| timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
+| showweekend | show weekend if set to '1' | showweekend="1" |
+| tablecaption | table caption shown above the timetable | tablecaption="Timetable" |
 
 ---++ Examples
 %TIMETABLE%

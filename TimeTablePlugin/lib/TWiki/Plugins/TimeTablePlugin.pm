@@ -217,7 +217,7 @@ sub commonTagsHandler {
     ###eval {
 	    require TWiki::Plugins::TimeTablePlugin::TimeTable;
 	    $_[0] =~ s/%TIMETABLE%/&TWiki::Plugins::TimeTablePlugin::TimeTable::expand("",$_[0],$_[1],$_[2])/ge;
-	    $_[0] =~ s/%TIMETABLE{.*?}%/ TWiki::Plugins::TimeTablePlugin::TimeTable::expand($1, $_[0], $_[1], $_[2])/ge;
+	    $_[0] =~ s/%TIMETABLE{(.*?)}%/ TWiki::Plugins::TimeTablePlugin::TimeTable::expand($1, $_[0], $_[1], $_[2])/ge;
     ###};
     ###&TWiki::Func::writeWarning($@) if $@;
 }
