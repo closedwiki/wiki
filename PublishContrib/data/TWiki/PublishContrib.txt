@@ -34,6 +34,8 @@ When TWiki generates a view, it does so dynamically i.e. there's a CGI script th
 	* Any links to images outside the TWiki are resolved, and the image is stored in the output (requires LWP).
 	* Output in HTML or PDF. HTML can be compressed.
 	* Full support for hierarchical webs
+	* Multiple instances (e.g. dev, test, prod) can be specified
+	* Templates (such as viewprint) can also be generated, and the links are fixed up appropritately
 
 ---++ Usage
 
@@ -219,6 +221,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|        | Martin Cleaver - changes to allow generation of viewprint and viewxxx when specified by TEMPLATE; multiple INSTANCE (dev/test/prod); |
 |  10063 | Bugfix Bugs:Item2216 |
 |  10006 | Crawford Currie - fixed problem where it was failing to remove &lt;base> tags completely (Bugs:Item2200) |
 |  9986 | Crawford Currie - added doc on usage from command line, corrected sense of topicsearch filter (Bugs:Item2120, Bugs:Item2121), renamed parameters (old ones are still valid), corrected handling of empty web refs (Bugs:Item2128), deprecated nopublish html-style tag in favour of !PublishWebPlugin-compatible style (though with richer semantics) (Bugs:Item2196) |
@@ -250,6 +253,7 @@ This code is a development of the Architectures and System Platforms group of Mo
 	* Copyright &copy; 2001 Motorola. All Rights Reserved.
 	* Copyright &copy; 2002-2003, Eric Scouten.
 	* Copyright &copy; 2004-2006 Crawford Currie http://c-dot.co.uk
+	* Copyright &copy; 2006 Martin Cleaver http://www.cleaver.org
 
 The 2005 functionality improvements were sponsored by [[http://www.windriver.com][Wind River Systems]]
 

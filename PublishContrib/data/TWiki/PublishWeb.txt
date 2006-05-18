@@ -13,8 +13,8 @@ to set up a topic in a web to simplify publishing. To use it, take a copy of the
 		*# Set FILTER =
 	* Skin for published HTML
 		* Set PUBLISHSKIN = text
-	* Set template to use (defaults to view)
-		* Set TEMPLATE = view
+	* Set templates to use (defaults to view)
+		* Set TEMPLATES = view
 	* Format to publish in (file, pdf, tgz, zip)
 		* Set FORMAT = file
 	* Set whether to show debug output (defaults to '', for no)
