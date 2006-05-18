@@ -21,7 +21,7 @@
 package TWiki::Plugins::TimeTablePlugin::TimeTable;
 
 use strict;
-###use warnings;
+use warnings;
 
 use CGI;
 use Date::Calc qw(:all);
@@ -68,11 +68,12 @@ sub _initDefaults {
 		year => undef,
 		daynames => undef,
 		monthnames => undef,
-		headerformat => '<font size="-2">%a</font>'
+		headerformat => '<font size="-2">%a</font>',
+		showweekend => 1		# show weekend
 	);
 
 	@renderedOptions = ('tablecaption');
-	@flagOptions = ();
+	@flagOptions = ( 'showweekend' );
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -103,7 +104,7 @@ sub _initRegexs {
 	$pm_rx = "[pP]\\.?[mM]\\.?";
 	$ampm_rx = "($am_rx|$pm_rx)";
 	
-	$time_rx = "$hour_rx(:$minute_rx)?$ampm_rx?";
+	$time_rx = "$hour_rx([\.:]$minute_rx)?$ampm_rx?";
 	$timerange_rx="$time_rx\\s*-\\s*$time_rx";
 
 	$dowrange_rx="($dow_rx)\\s*-\\s*($dow_rx)";
@@ -112,6 +113,8 @@ sub _initRegexs {
 
 sub _initOptions {
         my ($attributes) = @_;
+
+	TWiki::Func::writeWarning("_initOptions($attributes)");
 
         my %params = &TWiki::Func::extractParameters($attributes);
 
@@ -263,12 +266,14 @@ sub _render {
 	my $cgi = new CGI;
 
 	my($tr,$td);
+	$text .= '<font size="-2">';
 	$text .= $cgi->start_table({-bgcolor=>"#aaaaaa", -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'});
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
 	$tr=$cgi->td("&nbsp;"); ### XXX option! 
 	for (my $dow = 0; $dow < 7; $dow++) {
+		next if ($options{'showweekend'}==0)&&($dow>4);
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$dow);
 		$tr .= $cgi->td({-bgcolor=>"#33CC66",-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
 	}
@@ -289,6 +294,7 @@ sub _render {
 
 	### render timetable:
 	for (my $dow = 0; $dow < 7; $dow++) {
+		next if ($options{'showweekend'}==0)&&($dow>4);
 		my $dowentries_ref = $$entries_ref{$dow+1};
 		if (! defined $dowentries_ref) {
 			$tr.=$cgi->td("&nbsp;");
@@ -311,7 +317,7 @@ sub _render {
 							-bgcolor=>$$mentry_ref{'color'}?$$mentry_ref{'color'}:"#aaaaaa",
 							-rowspan=>$rs+$fillRows}, 
 							$$mentry_ref{'descr'}
-							.($rs==1?'':' '.&_renderTime($mst).'-'.&_renderTime($met))
+							.($rs==1?'':' <font size="-2">'.&_renderTime($mst).'-'.&_renderTime($met).'</font>')
 							);
 				}
 				$td .=$cgi->Tr($itr)."\n";
@@ -346,6 +352,7 @@ sub _render {
 
 
 	$text .= $cgi->end_table();
+	$text .= '</font>';
 
 
 	return $text;
