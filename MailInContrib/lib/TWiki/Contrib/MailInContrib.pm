@@ -33,10 +33,10 @@ use Error qw( :try );
 use vars qw ( $VERSION $RELEASE );
 use Carp;
 
-# This should always be $Rev: 10111$ so that TWiki can determine the checked-in
+# This should always be $Rev: 10183$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 10111$';
+$VERSION = '$Rev: 10183$';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -237,10 +237,8 @@ sub processInbox {
 
                 print "Received mail from $sender for $web.$topic\n";
 
-                $err = $this->_saveTopic( $user, $web, $topic, $body, $subject );
-                foreach my $att ( @attachments ) {
-                    $err .= $this->_saveAttachment( $user, $web, $topic, $att );
-                }
+                $err .= $this->_saveTopic( $user, $web, $topic, $body,
+                                           $subject, \@attachments );
             }
             if( $err ) {
                 $this->_onError(
@@ -323,8 +321,8 @@ sub _extract {
 }
 
 sub _saveTopic {
-    my( $this, $user, $web, $topic, $body, $subject ) = @_;
-    my $err;
+    my( $this, $user, $web, $topic, $body, $subject, $attachments ) = @_;
+    my $err = '';
 
     try {
         my( $meta, $text ) = $this->{session}->{store}->readTopic(
@@ -334,7 +332,7 @@ sub _saveTopic {
         if( $text =~ /<!--MAIL(?:{(.*?)})?-->/ ) {
             $opts = new TWiki::Attrs( $1 );
         } else {
-            $opts = new TWiki::Attrs( "" );
+            $opts = new TWiki::Attrs( '' );
         }
         $opts->{template} ||= 'normal';
         $opts->{where} ||= 'bottom';
@@ -342,7 +340,21 @@ sub _saveTopic {
         $insert ||= "   * *%SUBJECT%*: %TEXT% _%WIKIUSERNAME% @ %SERVERTIME%_\n";
         $insert =~ s/%SUBJECT%/$subject/g;
         $body =~ s/\r//g;
-        $body =~ s/^\n*(.*?)\n*$/$1/;
+
+        my $atts = '';
+        foreach my $att ( @$attachments ) {
+            $err .= $this->_saveAttachment( $user, $web, $topic, $att );
+            my $tmpl = TWiki::Func::expandTemplate(
+                'MAILIN:'.$opts->{template}.':ATTACHMENT' );
+            if( $tmpl ) {
+                $tmpl =~ s/%A_FILE%/$att->{filename}/g;
+                $atts .= $tmpl;
+            } else {
+                print 'No template for attachments' if $this->{debug};
+            }
+        }
+        $insert =~ s/%ATTACHMENTS%/$atts/;
+
         $insert =~ s/%TEXT%/$body/g;
         my $curUser = $TWiki::Plugins::SESSION->{user};
         $TWiki::Plugins::SESSION->{user} = $user;
@@ -367,10 +379,10 @@ sub _saveTopic {
 
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        $err = $e->stringify();
+        $err .= $e->stringify();
     } catch Error::Simple with {
         my $e = shift;
-        $err = $e->stringify();
+        $err .= $e->stringify();
     };
     return $err;
 }
