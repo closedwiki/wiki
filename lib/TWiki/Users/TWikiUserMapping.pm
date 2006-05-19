@@ -178,7 +178,7 @@ sub cacheTWikiUsersTopic {
 
     %{$this->{session}->{users}->{U2W}} = ();
     %{$this->{session}->{users}->{W2U}} = ();
-    
+
     my $text;
     my $store = $this->{session}->{store};
     if( $TWiki::cfg{MapUserToWikiName} &&
@@ -200,15 +200,21 @@ sub cacheTWikiUsersTopic {
     # This matches:
     #   * TWikiGuest - guest - 10 Mar 2005
     #   * TWikiGuest - 10 Mar 2005
-    while( $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$//om ) {
-        my $web = $1 || $TWiki::cfg{UsersWebName};
-        $wUser = $2;	# WikiName
-        $lUser = $3 || $wUser;	# userid
-        $lUser =~ s/$TWiki::cfg{NameFilter}//go;	# FIXME: Should filter in for security...
-        my $wwn = $web.'.'.$wUser;
-        $this->{session}->{users}->{U2W}{$lUser} = $wwn;
-        $this->{session}->{users}->{W2U}{$wwn} = $lUser;
-    }
+    my $ch = $this->{session}->{users};
+    $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$/_cacheUser($ch,$1,$2,$3)/gome;
+}
+
+sub _cacheUser {
+    my($cacheHolder, $web, $wUser, $lUser) = @_;
+    $web ||= $TWiki::cfg{UsersWebName};
+    $lUser ||= $wUser;	# userid
+    # FIXME: Should filter in for security...
+    # SMELL: filter prevents use of password managers with wierd usernames,
+    # like the DOMAIN\username used in the swamp of despair.
+    $lUser =~ s/$TWiki::cfg{NameFilter}//go;
+    my $wwn = $web.'.'.$wUser;
+    $cacheHolder->{U2W}{$lUser} = $wwn;
+    $cacheHolder->{W2U}{$wwn} = $lUser;
 }
 
 =pod
