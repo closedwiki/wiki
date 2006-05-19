@@ -743,25 +743,31 @@ sub _readKeyValues {
     my( $args, $format ) = @_;
     my $res = {};
 
-    # Format of data is name='value' name1='value1' [...]
-    while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
-        my $key = $1;
-        my $value = $2;
-        $format =~ s/[^\d\.]+//g if $format;
-        if( !$format || $format =~ /[^\d.]/ || $format < 1.1 ) {
-            # Old decoding retained for backward compatibility
-            # (this encoding is badly broken)
-            $value =~ s/%_N_%/\n/g;
-            $value =~ s/%_Q_%/\"/g;
-            $value =~ s/%_P_%/%/g;
-        } else {
-            $value = dataDecode( $value );
-        }
+    $format =~ s/[^\d\.]+//g if $format;
+    my $oldStyle = ( !$format || $format =~ /[^\d.]/ || $format < 1.1 );
 
-        $res->{$key} = $value;
-    }
+    # Format of data is name='value' name1='value1' [...]
+    $args =~ s/\s*([^=]+)="([^"]*)"/_singleKey($1,$2,$res,$oldStyle)/ge;
 
     return $res;
+}
+
+sub _singleKey {
+    my( $key, $value, $res, $oldStyle ) = @_;
+
+    if( $oldStyle ) {
+        # Old decoding retained for backward compatibility
+        # (this encoding is badly broken)
+        $value =~ s/%_N_%/\n/g;
+        $value =~ s/%_Q_%/\"/g;
+        $value =~ s/%_P_%/%/g;
+    } else {
+        $value = dataDecode( $value );
+    }
+
+    $res->{$key} = $value;
+
+    return '';
 }
 
 =pod
