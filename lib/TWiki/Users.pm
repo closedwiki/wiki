@@ -270,10 +270,9 @@ sub lookupLoginName {
 
     return undef unless $loginUser;
 
-    $this->{usermappingmanager}->cacheTWikiUsersTopic();
-
     $loginUser =~ s/$TWiki::cfg{NameFilter}//go;
-    return $this->{U2W}{$loginUser};
+    return $this->{usermappingmanager}->lookupLoginName($wikiName);
+
 }
 
 # Translates Web.WikiName (e.g. Main.JaneSmith) to
@@ -283,13 +282,11 @@ sub lookupWikiName {
 
     return undef unless $wikiName;
 
-    $this->{usermappingmanager}->cacheTWikiUsersTopic();
-
     $wikiName =~ s/$TWiki::cfg{NameFilter}//go;
     $wikiName = "$TWiki::cfg{UsersWebName}.$wikiName"
       unless $wikiName =~ /\./;
 
-    return $this->{W2U}{$wikiName};
+    return $this->{usermappingmanager}->lookupWikiName($wikiName);
 }
 
 #TODO: I was under the impression that this list would not contain every user, 

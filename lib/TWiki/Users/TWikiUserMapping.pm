@@ -51,6 +51,10 @@ sub new {
 
     my $this = bless( {}, $class );
     $this->{session} = $session;
+
+    %{$this->{session}->{users}->{U2W}} = ();
+    %{$this->{session}->{users}->{W2U}} = ();
+
     return $this;
 }
 
@@ -165,6 +169,24 @@ sub addUserToTWikiUsersTopic {
     return $TWiki::cfg{UsersTopicName};
 }
 
+
+#API func to be used for User systems that are faster in single request mode
+sub lookupLoginName {
+    my ($this, $loginUser) = @_;
+
+    $this->cacheTWikiUsersTopic();
+    return $this->{session}->{users}->{U2W}{$loginUser};
+}
+
+#API func to be used for User systems that are faster in single request mode
+sub lookupWikiName {
+    my ($this, $wikiName) = @_;
+
+    $this->cacheTWikiUsersTopic();
+    return $this->{session}->{users}->{W2U}{$wikiName};
+}
+
+
 # Build hash to translate between username (e.g. jsmith)
 # and WikiName (e.g. Main.JaneSmith).  Only used for sites where
 # authentication is managed by external Apache configuration, instead of
@@ -175,9 +197,6 @@ sub cacheTWikiUsersTopic {
 
     return if $this->{session}->{users}->{CACHED};
     $this->{session}->{users}->{CACHED} = 1;
-
-    %{$this->{session}->{users}->{U2W}} = ();
-    %{$this->{session}->{users}->{W2U}} = ();
 
     my $text;
     my $store = $this->{session}->{store};
