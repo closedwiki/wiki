@@ -271,7 +271,7 @@ sub lookupLoginName {
     return undef unless $loginUser;
 
     $loginUser =~ s/$TWiki::cfg{NameFilter}//go;
-    return $this->{usermappingmanager}->lookupLoginName($wikiName);
+    return $this->{usermappingmanager}->lookupLoginName($loginUser);
 
 }
 
