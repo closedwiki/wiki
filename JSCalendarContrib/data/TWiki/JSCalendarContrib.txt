@@ -72,6 +72,7 @@ Note that the header will only be added once, regardless of the number of times 
 |  License: | GNU LGPL |
 |  Dependencies: | %$DEPENDENCIES% |
 | Change History: | |
+| 10247 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2054'>Item2054</a>  put the calendar at z-index 2000, way above pattern skin divs. |
 | 6634 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item453'>Item453</a>  removed EditTablePlugins private copy of the Mishoo JS calendar, and made sure it works with JSCalendarContrib. Improved the documentation of the JSCalendar while I was there. |
 | 6626 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item468'>Item468</a>  updated docs for Dakar release |
 | 5048 | Cairo readiness |
