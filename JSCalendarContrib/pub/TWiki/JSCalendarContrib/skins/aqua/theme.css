@@ -12,7 +12,7 @@ div.calendar { position: relative; }
   font-size: 11px;
   color: #000;
   cursor: default;
-  background: url("normal-bg.gif");
+  background: url("transparent-bg.png");
   font-family: "trebuchet ms",verdana,tahoma,sans-serif;
 }
 
