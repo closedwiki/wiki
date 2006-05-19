@@ -1,6 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1147960420" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148047698" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
-The %TOPIC% handles the tag =%<nop>TIMETABLE%=. The timetable is rendered with HTML tables and should works with all modern web browsers.
+The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
+The timetable is rendered with HTML tables and should works with all modern web browsers.
 
 *Example: (png image):*
 
@@ -11,7 +12,7 @@ The %TOPIC% handles the tag =%<nop>TIMETABLE%=. The timetable is rendered with H
 
 ---++ Syntax Rules
 
-Following event types are supported to define entries for the timetable:
+Events are defined with bullets. Following event types are supported to define entries for the timetable:
 
 | *Event Type* | *Syntax* | *Example(s)* |
 | <b>Single</b>	| ==&nbsp;* DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - 09:00 - 11:00 - Meeting== |
@@ -30,6 +31,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
 | showweekend | show weekend if set to '1' | showweekend="1" |
 | tablecaption | table caption shown above the timetable | tablecaption="Timetable" |
+| descrlimit | per line character limit for the description | descrlimit="15" | 
 
 ---++ Examples
 %TIMETABLE%
@@ -66,7 +68,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>NEWPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Render a timetable.
+		* Set SHORTDESCRIPTION = Render a weekly timetable
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -98,9 +100,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.000 (16 May 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.001 (19 May 2006): | TWiki:Main.DanielRohde: fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; |
 |  V1.000 (16 May 2006): | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | CPAN:Date::Calc <br/> CPAN:CGI |
+|  CPAN Dependencies: | CPAN:Date::Calc |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |

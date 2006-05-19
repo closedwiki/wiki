@@ -21,7 +21,7 @@
 package TWiki::Plugins::TimeTablePlugin::TimeTable;
 
 use strict;
-use warnings;
+##use warnings;
 
 use CGI;
 use Date::Calc qw(:all);
@@ -69,7 +69,8 @@ sub _initDefaults {
 		daynames => undef,
 		monthnames => undef,
 		headerformat => '<font size="-2">%a</font>',
-		showweekend => 1		# show weekend
+		showweekend => 1,		# show weekend
+		descrlimit => 15		# per line description text limit
 	);
 
 	@renderedOptions = ('tablecaption');
@@ -113,8 +114,6 @@ sub _initRegexs {
 
 sub _initOptions {
         my ($attributes) = @_;
-
-	TWiki::Func::writeWarning("_initOptions($attributes)");
 
         my %params = &TWiki::Func::extractParameters($attributes);
 
@@ -267,13 +266,13 @@ sub _render {
 
 	my($tr,$td);
 	$text .= '<font size="-2">';
-	$text .= $cgi->start_table({-bgcolor=>"#aaaaaa", -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'});
+	$text .= $cgi->start_table({-bgcolor=>"white", -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'});
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
 	$tr=$cgi->td("&nbsp;"); ### XXX option! 
 	for (my $dow = 0; $dow < 7; $dow++) {
-		next if ($options{'showweekend'}==0)&&($dow>4);
+		next if (!$options{'showweekend'})&&($dow>4);
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$dow);
 		$tr .= $cgi->td({-bgcolor=>"#33CC66",-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
 	}
@@ -294,30 +293,30 @@ sub _render {
 
 	### render timetable:
 	for (my $dow = 0; $dow < 7; $dow++) {
-		next if ($options{'showweekend'}==0)&&($dow>4);
+		next if (!$options{'showweekend'})&&($dow>4);
 		my $dowentries_ref = $$entries_ref{$dow+1};
 		if (! defined $dowentries_ref) {
 			$tr.=$cgi->td("&nbsp;");
 			next;
 		}
 		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
-		$td = $cgi->start_table({-nowrap=>1, -bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		$td = $cgi->start_table({-bgcolor=>($dow>4?"#33CC66":"#fafafa"), -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 		my ($itr, $itd);
-		my $fillRows = 0;
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
 			$itr="";
 			if ($#$mentries>-1) {
 				my $rs;
 				foreach my $mentry_ref ( @{$mentries})  {
-					$fillRows=&_countConflicts($mentry_ref,$dowentries_ref)-$#$mentries;
+					my $fillRows = &_countConflicts($mentry_ref,$dowentries_ref)-$#$mentries;
 					$rs= _getEntryRows($mentry_ref, $min, $endtime, $options{'timeinterval'});
-					my ($mst,$met) = ($$mentry_ref{'starttime'},$$mentry_ref{'endtime'});
-					$itr.=$cgi->td({-valign=>"top",
+
+					$itr.=$cgi->td({-nowrap=>"",
+							-valign=>"top",
 							-bgcolor=>$$mentry_ref{'color'}?$$mentry_ref{'color'}:"#aaaaaa",
 							-rowspan=>$rs+$fillRows}, 
-							$$mentry_ref{'descr'}
-							.($rs==1?'':' <font size="-2">'.&_renderTime($mst).'-'.&_renderTime($met).'</font>')
+							&_renderCell($mentry_ref, $rs, $cgi)
 							);
 				}
 				$td .=$cgi->Tr($itr)."\n";
@@ -331,12 +330,7 @@ sub _render {
 			}
 		}
 		$td .= $cgi->end_table();
-		if ($dow>5) {
-			 $tr.=$cgi->td({-bgcolor=>"#33CC66", -valign=>"top"},$td);
-		} else {
-			$tr.=$cgi->td({-valign=>"top"},$td);
-		}
-
+		$tr.=$cgi->td({-valign=>"top"},$td);
 
 	}
 	$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'});
@@ -357,13 +351,36 @@ sub _render {
 
 	return $text;
 }
+sub _renderCell {
+	my ($mentry_ref, $rs, $cgi) = @_;
+	my $tddata ="";
+	my ($mst,$met) = ($$mentry_ref{'starttime'},$$mentry_ref{'endtime'});
+	my $title = $$mentry_ref{'descr'}.' ('.&_renderTime($mst).'-'.&_renderTime($met).')';
+
+	my $text = $$mentry_ref{'descr'};
+	$text.=' ('.&_renderTime($mst).'-'.&_renderTime($met).')';
+	
+	my $nt="";
+	for (my $l=0; $l<$rs; $l++) {
+		my $sub=  substr($text, $l*$options{'descrlimit'}, $options{'descrlimit'});
+		last if (length($sub)<=0);
+		$nt .= (($l==$rs-1)&&(length($sub)>$options{'descrlimit'}))? substr($sub,0,$options{'descrlimit'}-3).'...':$sub;
+		$nt .='<br/>' unless $l==$rs-1;
+	}	
+	$text=$nt;
+
+	##$tddata.= $cgi->div({-title=>$title, -style=>'font-family:monospace;'}, $text);
+	$tddata.= $cgi->div({-title=>$title}, $text);
+
+	return $tddata;
+}
 sub _countConflicts {
 	my ($entry_ref, $entries_ref) = @_;
 	my $c=0;
 	my ($sd1,$ed1) = ($$entry_ref{'starttime'},$$entry_ref{'endtime'});
 	foreach my $e (@{$entries_ref}) {
 		my ($sd2,$ed2) = ($$e{'starttime'},$$e{'endtime'});
-		$c++ if (($sd2 >=$sd1) && ($sd2<$ed1));
+		$c++ if (($sd2 >=$sd1) && ($sd2<$ed1))||(($ed2>=$sd1)&&($ed2<=$ed1));
 	}
 	return $c;
 }
@@ -377,6 +394,9 @@ sub _getEntryRows {
 
 	$starttime=$time if $starttime<$time;
 	$endtime=$maxtime+$interval+1 if $endtime>$maxtime;
+
+	$endtime+=$interval if ($starttime==$endtime);
+
 	$rows=sprintf("%d",(abs($endtime-$starttime+$interval-1)/$interval));
 
 	return $rows>=1?$rows:1;
@@ -392,7 +412,9 @@ sub _getMatchingEntries {
 				|| (($time==$starttime)&&($stime<$time)&&($etime>$starttime))
 		;
 	}
-	@matches = sort { $$b{'endtime'} <=> $$a{'endtime'} } @matches;
+	### XXX setup a sort order for conflict entries (default: no sort)XXX
+	### @matches = sort { $$b{'endtime'} <=> $$a{'endtime'} } @matches;
+	### @matches = sort { $$a{'descr'} <=> $$b{'descr'} } @matches;
 	return \@matches;
 }
 sub _getStartDate() {
@@ -579,4 +601,3 @@ sub _expandIncludedEvents
 
 
 1;
-
