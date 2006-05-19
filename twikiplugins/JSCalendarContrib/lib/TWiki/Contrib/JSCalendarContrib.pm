@@ -20,12 +20,13 @@ $RELEASE = 'Dakar';
 sub addHEAD {
     my $setup = shift;
     $setup ||= 'calendar-setup';
-    my $style = $TWiki::cfg{JSCalendarContrib}{style} || 'win2k-1';
+    my $style = $TWiki::cfg{JSCalendarContrib}{style} || 'blue';
     my $lang = $TWiki::cfg{JSCalendarContrib}{lang} || 'en';
     my $base = '%PUBURLPATH%/%TWIKIWEB%/JSCalendarContrib';
     my $head = <<HERE;
 <style type='text/css' media='all'>
   \@import url('$base/calendar-$style.css');
+  .calendar {z-index:2000;}
 </style>
 <script type='text/javascript' src='$base/calendar.js'></script>
 <script type='text/javascript' src='$base/lang/calendar-$lang.js'></script>
