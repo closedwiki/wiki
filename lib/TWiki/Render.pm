@@ -718,6 +718,8 @@ sub _handleSquareBracketedLink {
     $link =~ s/^(.)/\U$1/;
     # Collapse spaces and capitalise following letter
     $link =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;
+    # Get rid of remaining spaces, i.e. spaces in front of -'s and ('s
+    $link =~ s/\s//go;
 
     $topic = $link if( $link );
 
