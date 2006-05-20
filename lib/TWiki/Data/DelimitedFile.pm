@@ -42,7 +42,10 @@ sub read {
     my @content = split $rowend, $content;
     
     my $headerRow  = shift @content;
-    
+    until ($headerRow =~ /\Q$delimiter\E/ ) {
+       $headerRow  = shift @content;
+    }
+
     $headerRow =~ s/\x0a*//g;
     $headerRow =~ s/\x0d*//g;
     
