@@ -19,7 +19,6 @@
          * you may want to inset it with a bullet and/or _set it in italics_ so it's clear (always sign and date)
       * if you'd like to use an initial, use a link with label. Example:%BR%
         =-- [<nop>[%WIKIUSERNAME%][ZXQ]] - %SERVERTIME{$day $mon $year}%=
-         * To automate that, add a bullet like =* Initials: ZXQ= to your [[%WIKIUSERNAME%][home page]].
 
    * A good format for a *new topic* is "dissertation followed by discussion": 
       * start with a brief, factual introduction, followed by double horizontal rules
