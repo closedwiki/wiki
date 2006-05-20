@@ -362,12 +362,6 @@ sub isAdmin {
         $this->{isKnownAdmin} =
           $TWiki::cfg{SuperAdminGroup} =~ /\b$this->{wikiname}$/;
         unless( $this->{isKnownAdmin} ) {
-#we have to examine SuperAdminGroup like this to ensure that non-twiki-mapping gets called (done using getAllGroups())    
-#basicaly because the assumption made by findUser and createUser that name and wikiname are the same, are incorrect outside
-#TWikiUserMapping, and once a user object is created, the current cacheing makes it very hard to update all the mappings
-#until we re-write it all. SO....
-            $this->{session}->{users}->getAllGroups() 
-                unless ($this->{session}->{users}->{usermappingmanager}->isa( 'TWiki::Users::TWikiUserMapping'));
             my $sag = $this->{session}->{users}->findUser(
                  $TWiki::cfg{SuperAdminGroup} );
             ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
