@@ -86,7 +86,9 @@ sub makeClient {
     my $twiki = shift;
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
 
-    if( $TWiki::cfg{UseClientSessions} ) {
+    if( $TWiki::cfg{UseClientSessions} && 
+	!$twiki->inContext( 'command_line' )) {
+
         my $use = 'use CGI::Session';
         if( $TWiki::cfg{Sessions}{UseIPMatching} ) {
             $use .= ' qw(-ip-match)';
@@ -190,11 +192,13 @@ the login name.
 =cut
 
 sub loadSession {
-    my $this = shift;
-
     return undef unless( $TWiki::cfg{UseClientSessions} );
 
+    my $this = shift;
     my $twiki = $this->{twiki};
+
+    return undef if $twiki->inContext( 'command_line' );
+
     my $query = $twiki->{cgiQuery};
 
     $this->{_haveCookie} = $query->raw_cookie();
@@ -280,8 +284,11 @@ sub checkAccess {
     return unless( $TWiki::cfg{UseClientSessions} );
 
     my $this = shift;
+    my $twiki = $this->{twiki};
 
-    unless( $this->{twiki}->inContext( 'authenticated' ) ||
+    return undef if $twiki->inContext( 'command_line' );
+
+    unless( $twiki->inContext( 'authenticated' ) ||
               $TWiki::cfg{LoginManager} eq 'none' ) {
         my $script = $ENV{'SCRIPT_NAME'} || $ENV{'SCRIPT_FILENAME'};
         $script =~ s@^.*/([^./]+)@$1@g if $script;
@@ -385,6 +392,7 @@ sub userLoggedIn {
     my( $this, $authUser, $wikiName ) = @_;
 
     my $twiki = $this->{twiki};
+    return undef if $twiki->inContext( 'command_line' );
 
     if( $TWiki::cfg{UseClientSessions} ) {
         # create new session if necessary
@@ -504,6 +512,7 @@ sub endRenderingHandler {
     return unless( $TWiki::cfg{UseClientSessions} );
 
     my $this = shift;
+    return undef if $this->{twiki}->inContext( 'command_line' );
 
     # If cookies are not turned on and transparent CGI session IDs are,
     # grab every URL that is an internal link and pass a CGI variable
@@ -543,6 +552,7 @@ sub addCookie {
     return unless( $TWiki::cfg{UseClientSessions} );
 
     my( $this, $c ) = @_;
+    return undef if $this->{twiki}->inContext( 'command_line' );
     ASSERT($c->isa('CGI::Cookie')) if DEBUG;
 
     push( @{$this->{_cookies}}, $c );

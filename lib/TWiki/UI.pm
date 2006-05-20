@@ -65,8 +65,6 @@ sub run {
     } else {
         # script is called by cron job or user
         $scripted = 1;
-        # don't use sessions on the command line
-		$TWiki::cfg{UseClientSessions} = 0;
         $user = $TWiki::cfg{SuperAdminGroup};
         $query = new CGI();
         while( scalar( @ARGV )) {
