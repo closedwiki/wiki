@@ -31,9 +31,15 @@ pre {
 	%IF{ "$ USERSTYLEURL"  then="@import url('%USERSTYLEURL%');"}%
 	%IF{ "$ USERCOLORSURL" then="@import url('%USERCOLORSURL%');"}%
 </style>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"stylesprint"}%
 <style type="text/css" media="all">
 	@import url("%PUBURLPATH%/%TWIKIWEB%/PatternSkin/print.css");
-</style>%TMPL:END%
+</style>
+%TMPL:END%
 
 
 
@@ -46,6 +52,7 @@ pre {
 %TMPL:DEF{"styles"}%
 %TMPL:P{"stylestwist"}%
 %TMPL:P{"stylesscreen"}%
+%TMPL:P{"stylesprint"}%
 %TMPL:END%
 
 

@@ -16,12 +16,14 @@ Put your local templates into %TWIKIWEB%.UserCommentsTemplate.
 Generic prompt box used by other templates
 <verbatim>
 %TMPL:DEF{promptbox}%
+<div class="commentPlugin commentPluginPromptBox">
 <table><tr valign="middle"><td><textarea %DISABLED% rows="%rows|3%" cols="%cols|70%" name="comment" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea></td><td><input %DISABLED% type="submit" value="%button|Add comment%" /></td></tr></table>
+</div><!--/commentPlugin-->
 %TMPL:END%
 </verbatim>
 Short comment, signed and dated
 <verbatim>
-%TMPL:DEF{outputoneliner}%	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %SERVERTIME%%TMPL:END%
+%TMPL:DEF{outputoneliner}%<span class="commentPlugin commentPluginOutputOneliner">	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %SERVERTIME%</span></span><!--/commentPlugin-->%TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
 ---++ User templates
