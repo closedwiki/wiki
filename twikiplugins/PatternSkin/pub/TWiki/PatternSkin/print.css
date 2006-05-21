@@ -85,6 +85,11 @@
 		display:none;
 	}
 	
+	/* hide plugins */
+	.commentPlugin {
+		display:none;
+	}
+	
 	/* Colors */
 	body {
 		background-color:#fff;
