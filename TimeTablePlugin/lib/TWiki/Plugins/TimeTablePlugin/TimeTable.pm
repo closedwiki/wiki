@@ -23,6 +23,7 @@ package TWiki::Plugins::TimeTablePlugin::TimeTable;
 use strict;
 ##use warnings;
 
+
 use CGI;
 use Date::Calc qw(:all);
 
@@ -33,10 +34,10 @@ use vars qw( $session $theTopic $theWeb $topic $web $attributes $text $refText
 	     $year_rx $monthyear_rx $monthyearrange_rx
 	     $hour_rx $minute_rx $am_rx $pm_rx $ampm_rx $time_rx $timerange_rx
 	     $dowrange_rx $dowlist_rx
-
-
+	     $cgi $pluginName
 	 );
 
+$pluginName = "TimeTablePlugin";
 BEGIN {
 	$defaultsInitialized = 0;
 };
@@ -56,6 +57,7 @@ sub expand {
 
 }
 sub _initDefaults {
+	my $webbgcolor = &TWiki::Func::getPreferencesValue("\U$pluginName\E_WEBBGCOLOR", $web) || '#33CC66';
 	%defaults = (
 		tablecaption => "Timetable",	# table caption
 		lang => 'English',		# default language
@@ -70,11 +72,21 @@ sub _initDefaults {
 		monthnames => undef,
 		headerformat => '<font size="-2">%a</font>',
 		showweekend => 1,		# show weekend
-		descrlimit => 15		# per line description text limit
+		descrlimit => 10,		# per line description text limit
+		showtimeline => 'both',		# 
+		tableheadercolor => $webbgcolor,#
+		eventbgcolor => '#AAAAAA',	#
+		eventfgcolor => 'black',	#
+		name => '&nbsp;',		# content of the first cell
+		weekendbgcolor => $webbgcolor,	#
+		tablebgcolor => 'white',	# table background color
+		timeformat => '24', 		# timeformat 12 or 24
+		unknownparamsmsg => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMS LIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.$pluginName topic for more details): %KNOWNPARAMSLIST%',
+		displaytime => 0		# display time in description
 	);
 
-	@renderedOptions = ('tablecaption');
-	@flagOptions = ( 'showweekend' );
+	@renderedOptions = ('tablecaption', 'name');
+	@flagOptions = ( 'showweekend', 'displaytime' );
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -117,6 +129,7 @@ sub _initOptions {
 
         my %params = &TWiki::Func::extractParameters($attributes);
 
+
         my @allOptions = keys %defaults;
         # Check attributes:
         @unknownParams= ( );
@@ -137,9 +150,9 @@ sub _initOptions {
                         }
                 } else {
                         if (grep /^\Q$option\E$/, @flagOptions) {
-                                $v = TWiki::Func::getPluginPreferencesFlag("\U$option\E") || undef;
+                                $v = &TWiki::Func::getPreferencesFlag("\U$pluginName\E_\U$option\E") || undef;
                         } else {
-                                $v = TWiki::Func::getPluginPreferencesValue("\U$option\E") || undef;
+                                $v = &TWiki::Func::getPreferencesValue("\U$pluginName\E_\U$option\E") || undef;
                         }
                         $options{$option}=(defined $v)? $v : $defaults{$option};
                 }
@@ -187,6 +200,8 @@ sub _initOptions {
         }
 
         @processedTopics = ( );
+
+	$cgi = CGI->new();
         return 1;
 
 
@@ -217,13 +232,27 @@ sub _fetch {
 		if ($line =~ m/^$dowrange_rx\s+\-\s+$timerange_rx/ ) {
 			### DOW - DOW - hh:mm - hh:mm
 			my ($startdow,$enddow,$starttime,$endtime, $descr,$color) = split /\s+\-\s+/, $line, 6;
+			my ($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
+			if (($fgcolor)&&(!$bgcolor)) {
+				$bgcolor = $fgcolor;
+				$fgcolor = undef;
+			}
+			TWiki::Func::writeWarning(" fgcolor=$fgcolor,bgcolor=$bgcolor");
 
 			$startdow=$daysofweek{$startdow};
 			$enddow=$daysofweek{$enddow};
 			$starttime=&_getTime($starttime);
 			$endtime=&_getTime($endtime);
 			for (my $dow = $startdow; $dow<=$enddow; $dow++) {
-				push @{$entries{$dow}}, { 'starttime' => $starttime, 'endtime' => $endtime, 'descr' => $descr , 'color'=>$color};
+				push @{$entries{$dow}}, 
+					{ 	'starttime' => $starttime, 
+						'endtime' => $endtime, 
+						'nstarttime' => &_normalize($starttime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+						'nendtime' => &_normalize($endtime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+						'descr' => $descr , 
+						'fgcolor'=>$fgcolor,
+						'bgcolor'=>$bgcolor
+					};
 			}
 
 		} elsif ($line =~ m/^$dow_rx\s+\-\s+$timerange_rx/ ) {
@@ -232,15 +261,41 @@ sub _fetch {
 			$dow=$daysofweek{$dow};
 			$starttime=&_getTime($starttime);
 			$endtime=&_getTime($endtime);
-			push @{$entries{$dow}}, { 'starttime' => $starttime, 'endtime' => $endtime, 'descr'=>$descr,'color'=>$color };
+			my ($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
+			if (!defined $bgcolor) {
+				$bgcolor = $fgcolor;
+				$fgcolor = undef;
+			}
+			push @{$entries{$dow}}, { 
+				'starttime' => $starttime, 
+				'endtime' => $endtime, 
+				'nstarttime' => &_normalize($starttime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+				'nendtime' => &_normalize($endtime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+				'descr'=>$descr,
+				'fgcolor'=>$fgcolor,
+				'bgcolor'=>$bgcolor
+				};
 
 		} elsif ($line =~m /^$dowlist_rx\s+\-\s+$timerange_rx/ ) {
 			my ($dowlist,$starttime,$endtime,$descr,$color) = split /\s+\-\s+/, $line, 5;
 			$starttime=&_getTime($starttime);
 			$endtime=&_getTime($endtime);
 			my @dowlistarr = split /\s*\,\s*/, $dowlist;
+			my ($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
+			if (!defined $bgcolor) {
+				$bgcolor = $fgcolor;
+				$fgcolor = undef;
+			}
 			foreach my $dow (@dowlistarr) {
-				push @{$entries{$dow}}, { 'starttime'=>$starttime,  'endtime' => $endtime, 'descr'=>$descr,'color'=>$color };
+				push @{$entries{$dow}}, { 
+					'starttime'=>$starttime,  
+					'endtime' => $endtime, 
+					'nstarttime' => &_normalize($starttime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+					'nendtime' => &_normalize($endtime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+					'descr'=>$descr,
+					'fgcolor'=>$fgcolor,
+					'bgcolor'=>$bgcolor
+					};
 			}
 		}
 
@@ -261,35 +316,28 @@ sub _render {
 	($week,$yy)=Week_of_Year($yy,$mm,$dd);
 	($yy,$mm,$dd)=Monday_of_Week($week,$yy);
 
+	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
+
 	my $text = "";
-	my $cgi = new CGI;
 
 	my($tr,$td);
 	$text .= '<font size="-2">';
-	$text .= $cgi->start_table({-bgcolor=>"white", -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'});
+	$text .= $cgi->start_table({-bgcolor=>$options{'tablebgcolor'}, -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'});
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
-	$tr=$cgi->td("&nbsp;"); ### XXX option! 
+	$tr=$cgi->td($options{name}); 
 	for (my $dow = 0; $dow < 7; $dow++) {
 		next if (!$options{'showweekend'})&&($dow>4);
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$dow);
-		$tr .= $cgi->td({-bgcolor=>"#33CC66",-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-bgcolor=>$options{($dow>4?'weekendbgcolor':'tableheadercolor')},-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$text .= $cgi->Tr($tr);
 	$text .= "\n";
 
-	### render time list:
+	### render time line:
 	$tr = "";
-	###$td = $cgi->start_table({-rules=>"rows",-border=>'1',-cellpadding=>'0',-cellspacing=>'0'});
-	$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'});
-	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
-	for (my $min=$starttime; $min <=$endtime ; $min+=$options{'timeinterval'}) {
-		$td .= $cgi->Tr($cgi->td({-bgcolor=>"#33CC66", -align=>"right"},&_renderTime($min)));
-		$td .= "\n";
-	}
-	$td .= $cgi->end_table();
-	$tr.=$cgi->td({-valign=>"top"},$td);
+	$tr.=$cgi->td({-valign=>"top"},($options{'showtimeline'}=~m/(left|both)/i?&_renderTimeline():"&nbsp;"));
 
 	### render timetable:
 	for (my $dow = 0; $dow < 7; $dow++) {
@@ -301,7 +349,7 @@ sub _render {
 		}
 		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
 		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
-		$td = $cgi->start_table({-bgcolor=>($dow>4?"#33CC66":"#fafafa"), -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		$td = $cgi->start_table({-bgcolor=>$options{($dow>4?'weekendbgcolor':'tablebgcolor')}, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 		my ($itr, $itd);
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
@@ -309,23 +357,25 @@ sub _render {
 			if ($#$mentries>-1) {
 				my $rs;
 				foreach my $mentry_ref ( @{$mentries})  {
-					my $fillRows = &_countConflicts($mentry_ref,$dowentries_ref)-$#$mentries;
-					$rs= _getEntryRows($mentry_ref, $min, $endtime, $options{'timeinterval'});
+					my $fillRows = &_countConflicts($mentry_ref,$dowentries_ref, $starttime, $options{'timeinterval'});
+
+					$rs= _getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
 
 					$itr.=$cgi->td({-nowrap=>"",
 							-valign=>"top",
-							-bgcolor=>$$mentry_ref{'color'}?$$mentry_ref{'color'}:"#aaaaaa",
+							-bgcolor=>$$mentry_ref{'bgcolor'}?$$mentry_ref{'bgcolor'}:$options{eventbgcolor},
 							-rowspan=>$rs+$fillRows}, 
-							&_renderCell($mentry_ref, $rs, $cgi)
+							&_renderText($mentry_ref, $rs,$fillRows)
 							);
 				}
 				$td .=$cgi->Tr($itr)."\n";
 				$itr=$cgi->td('&nbsp;');
-				##$itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;');
+				##$itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;'); ## DEBUG
+				##$itr=$cgi->td('X'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";	
 			} else {
-				## $itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;');
 				$itr=$cgi->td("&nbsp;");
+				##$itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";
 			}
 		}
@@ -333,14 +383,7 @@ sub _render {
 		$tr.=$cgi->td({-valign=>"top"},$td);
 
 	}
-	$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'});
-	####my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
-	for (my $min=$starttime; $min <=$endtime ; $min+=$options{'timeinterval'}) {
-		$td .= $cgi->Tr($cgi->td({-bgcolor=>"#33CC66", -align=>"right"},&_renderTime($min)));
-		$td .= "\n";
-	}
-	$td .= $cgi->end_table();
-	$tr.=$cgi->td({-valign=>"top"},$td);
+	$tr.=$cgi->td({-valign=>"top"},&_renderTimeline()) if ($options{'showtimeline'}=~m/(both|right)/i);
 
 	$text.= $cgi->Tr($tr);
 
@@ -351,14 +394,16 @@ sub _render {
 
 	return $text;
 }
-sub _renderCell {
-	my ($mentry_ref, $rs, $cgi) = @_;
+sub _renderText {
+	my ($mentry_ref, $rs, $fillRows) = @_;
 	my $tddata ="";
 	my ($mst,$met) = ($$mentry_ref{'starttime'},$$mentry_ref{'endtime'});
 	my $title = $$mentry_ref{'descr'}.' ('.&_renderTime($mst).'-'.&_renderTime($met).')';
 
+	###$title.=" (rows=$rs, fillRows=$fillRows)"; ## DEBUG
+
 	my $text = $$mentry_ref{'descr'};
-	$text.=' ('.&_renderTime($mst).'-'.&_renderTime($met).')';
+	$text.=' ('.&_renderTime($mst).'-'.&_renderTime($met).')' if $options{'displaytime'};
 	
 	my $nt="";
 	for (my $l=0; $l<$rs; $l++) {
@@ -370,34 +415,58 @@ sub _renderCell {
 	$text=$nt;
 
 	##$tddata.= $cgi->div({-title=>$title, -style=>'font-family:monospace;'}, $text);
-	$tddata.= $cgi->div({-title=>$title}, $text);
+	$tddata.= $cgi->div({
+			-title=>$title, 
+			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'}).';'
+			}, $text);
 
 	return $tddata;
 }
-sub _countConflicts {
-	my ($entry_ref, $entries_ref) = @_;
-	my $c=0;
-	my ($sd1,$ed1) = ($$entry_ref{'starttime'},$$entry_ref{'endtime'});
-	foreach my $e (@{$entries_ref}) {
-		my ($sd2,$ed2) = ($$e{'starttime'},$$e{'endtime'});
-		$c++ if (($sd2 >=$sd1) && ($sd2<$ed1))||(($ed2>=$sd1)&&($ed2<=$ed1));
+sub _renderTimeline {
+	###my $td = $cgi->start_table({-rules=>"rows",-border=>'1',-cellpadding=>'0',-cellspacing=>'0'});
+	my $td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'});
+	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
+	for (my $min=$starttime; $min <=$endtime ; $min+=$options{'timeinterval'}) {
+		$td .= $cgi->Tr($cgi->td({-bgcolor=>$options{tableheadercolor}, -align=>"right"},&_renderTime($min)));
+		$td .= "\n";
 	}
+	$td .= $cgi->end_table();
+	return $td;
+}
+sub _normalize {
+	my ($time, $starttime, $interval) = @_;
+	$time = int(( $time + ($starttime % $interval ) ) / $interval)*$interval;
+	return $time;
+}
+sub _countConflicts {
+	my ($entry_ref, $entries_ref, $starttime, $interval) = @_;
+	my $c=1;
+	my ($sd1,$ed1) = ($$entry_ref{'nstarttime'},$$entry_ref{'nendtime'});
+	foreach my $e (@{$entries_ref}) {
+		my ($sd2,$ed2) = ($$e{'nstarttime'},$$e{'nendtime'});
+
+		# go to the next if the same entry:
+		next if $e == $entry_ref;
+
+		# increase if the other start time is in my time range or my end time is in the time range of the other:
+		$c++ if (($sd2>$sd1)&&($sd2<$ed1)) || (($ed1>$sd2)&&($ed1<$ed2));
+
+		# decrease if my start time and end time is completly in a time range or the other:
+		$c-- if ($sd1>=$sd2)&&($sd1<$ed2)&&($ed1>$sd2)&&($ed1<$ed2); 
+	}		
 	return $c;
 }
-sub _renderTime {
-	return sprintf("%02d",int($_[0]/60)).":".sprintf("%02d",int($_[0] % 60))
-}
 sub _getEntryRows {
-	my ($entry_ref, $time, $maxtime, $interval) = @_;
+	my ($entry_ref, $time, $mintime, $maxtime, $interval) = @_;
 	my ($rows)=1;
-	my ($starttime,$endtime)=($$entry_ref{'starttime'}, $$entry_ref{'endtime'});
+	my ($starttime,$endtime)=($$entry_ref{'nstarttime'}, $$entry_ref{'nendtime'});
 
-	$starttime=$time if $starttime<$time;
-	$endtime=$maxtime+$interval+1 if $endtime>$maxtime;
+	$starttime=$time if $starttime<$mintime;
+	$endtime=$maxtime+$interval if $endtime>$maxtime;
 
 	$endtime+=$interval if ($starttime==$endtime);
 
-	$rows=sprintf("%d",(abs($endtime-$starttime+$interval-1)/$interval));
+	$rows=sprintf("%d",(abs($endtime-$starttime+1)/$interval));
 
 	return $rows>=1?$rows:1;
 }
@@ -416,6 +485,12 @@ sub _getMatchingEntries {
 	### @matches = sort { $$b{'endtime'} <=> $$a{'endtime'} } @matches;
 	### @matches = sort { $$a{'descr'} <=> $$b{'descr'} } @matches;
 	return \@matches;
+}
+sub _renderTime {
+	my ($hours, $minutes) = ( int($_[0]/60), ($_[0] % 60) );
+	$hours-=12 if ($hours>12)&&($options{'timeformat'} eq '12');
+	
+	return sprintf("%02d",$hours).':'.sprintf("%02d",$minutes);
 }
 sub _getStartDate() {
         my ($yy,$mm,$dd) = Today();
@@ -598,6 +673,16 @@ sub _expandIncludedEvents
 
         return $text;
 }
+# =========================
+sub _createUnknownParamsMessage {
+        my $msg;
+        $msg = TWiki::Func::getPreferencesValue("\U$pluginName\E_UNKNOWNPARAMSMSG") || undef;
+        $msg = $defaults{unknownparamsmsg} unless defined $msg;
+        $msg =~ s/\%UNKNOWNPARAMSLIST\%/join(', ', sort @unknownParams)/eg;
+        $msg =~ s/\%KNOWNPARAMSLIST\%/join(', ', sort keys %defaults)/eg;
+        return $msg;
+}
+
 
 
 1;

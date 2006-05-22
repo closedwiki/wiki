@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1148047758" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148305251" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should works with all modern web browsers.
@@ -16,7 +16,11 @@ Events are defined with bullets. Following event types are supported to define e
 
 | *Event Type* | *Syntax* | *Example(s)* |
 | <b>Single</b>	| ==&nbsp;* DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - 09:00 - 11:00 - Meeting== |
+|^| ==&nbsp;* DDD - HH:MM - HH:MM - description - background color== | ==&nbsp;* Mon - 09:00 - 11:00 - Meeting - green== |
+|^| ==&nbsp;* DDD - HH:MM - HH:MM - description - foreground color, background color== | ==&nbsp;* Mon - 09:00 - 11:00 - Meeting - white,black== |
 | <b>Interval</b> | ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch== |
+|^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - green== |
+|^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - foreground color, background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - white,black== |
 
 ---++ Attributes
 Usage: %<nop>TIMETABLE{attribute1="value1" attribute2="value2" ...}% 
@@ -24,20 +28,37 @@ Usage: %<nop>TIMETABLE{attribute1="value1" attribute2="value2" ...}%
 Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 
 | *Attribute* | *Comment* | *Default/Example* |
-| lang | Language (e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...) | lang="English" |
-| topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
-| starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00" |
-| endtime | a end time, e.g. 18:00, 6:00pm, ... | endtime="20:00" |
-| timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
+|  *Behavior:*  |||
+| endtime | a end time, e.g. 18:00, 6:00pm, ...  | endtime="8:00pm" |
+| lang | Language used for weekdays in the table header and for event entries (e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...) | lang="English" |
 | showweekend | show weekend if set to '1' | showweekend="1" |
+| starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00am" |
+| timeformat | time format; allowed values: 12 and 24 | timeformat="24" |
+| timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
+| topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
+|  *Table formatting*  |||
+| descrlimit | per line character limit for the description | descrlimit="10" | 
+| displaytime | display time in the event description of the timetable | displaytime="0" |
+| eventbgcolor | default background color of an event cell (you can overwrite this with an event entry) | eventbgcolor = "#AAAAAA" |
+| eventfgcolor | default text color of an event cell (you can overwrite this with an event entry) | eventfgcolor = "black" |
+| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%a&lt;/font&gt;" |
+| name | header content of the first column | name = "&amp;nbsp;" |
+| showtimeline | show timeline =left=, =right=, or on =both= sides | showtimeline="both" |
+| tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption shown above the timetable | tablecaption="Timetable" |
-| descrlimit | per line character limit for the description | descrlimit="15" | 
+| tableheadercolor | color of the table header | tableheadercolor="%<nop>WEBBGCOLOR%" |
+| weekendbgcolor | weekend column background color | weekendbgcolor="%<nop>WEBBGCOLOR%" |
+
+*Hints:*
+	* You can use TextFormattingRules for some attribute values: tablecaption, name
+	* Every attribute of %<nop>TIMETABLE% can also be used as plugin setting. You only have to use capital letters.
+
 
 ---++ Examples
-%TIMETABLE%
+%TIMETABLE{descrlimit="9"}%
 	* Mon,Tue - 9 - 14 - MONTEST1 - green
 	* Mon - 9 - 11 - MONTEST2 - yellow
-	* Mon - 10 - 13 - MONTEST3
+	* Mon - 10 - 13 - MONTEST3 - white,black
 	* Mon - 12 - 15 - MONTEST4
 
 
@@ -57,7 +78,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 	* Fri - 7 - 10 - FRITEST1
 	* Fri - 12 - 15 - FRITEST2
 
-	* Sat - 5 - 10 - SATTEST1 - blue
+	* Sat - 5 - 10 - SATTEST1 - white,blue
 	* Sat - 6 - 21 - SATTEST2 - yellow
 	* Sat - 11 - 22 - SATTEST3 - green 
 
@@ -73,7 +94,29 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
 
+	* Time format (default: 24, allowed: 12 or 24)
+		* # Set TIMEFORMAT = 12
 
+	* Timetable start time (default: 7:00am):
+		* # Set STARTTIME = 7am
+
+	* Timetable end time (default: 8:00pm):
+		* # Set ENDTIME = 8pm
+
+	* Character limitation of a description in a table cell line (default: 10):
+		* # Set DESCRLIMIT = 15
+
+	* Show timeline on the =left=, =right= or =both= sides (default: both):
+		* # Set SHOWTIMELINE = left
+
+	* Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...): 
+		* # Set LANG = Deutsch
+
+	* Set unknown parameter message (default: =%<nop>RED% Sorry, some parameters are unknown: %<nop>UNKNOWNPARAMSLIST% %<nop>ENDCOLOR% &lt;br/&gt; Allowed parameters are (see !TWiki.TimeTablePlugin topic for more details): %<nop>KNOWNPARAMSLIST%=)
+		* # Set UNKNOWNPARAMSMSG = %RED% Following parameter(s) is/are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR%
+
+
+*Note:* Every attribute of %<nop>TIMETABLE% can also be used as plugin setting. You only have to use capital letters.
 
 ---++ Plugin Installation Instructions
 
@@ -98,10 +141,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.001 (19 May 2006) |
+|  Plugin Version: | V1.002 (22 May 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.002 (22 May 2006): | TWiki:Main.DanielRohde: fixed major bugs (conflict handling, preferences); added documentation; |
 |  V1.001 (19 May 2006): | TWiki:Main.DanielRohde: fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; |
-|  V1.000 (16 May 2006): | Initial version |
+|  V1.000 (16 May 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | CPAN:Date::Calc |
 |  Other Dependencies: | none |
@@ -116,4 +160,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCa
 -- TWiki:Main.DanielRohde - 16 May 2006
  
 
-%META:FILEATTACHMENT{name="example.png" attr="" comment="" date="1147953975" path="example.png" size="78991" user="rohdedan" version="1.2"}%
+%META:FILEATTACHMENT{name="example.png" attr="" comment="" date="1148305873" path="example.png" size="71848" user="rohdedan" version="1.4"}%
