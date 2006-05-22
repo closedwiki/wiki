@@ -13,12 +13,12 @@ These topics are for frequently asked questions __including__ answers; please as
 New FAQ topics are based on the TWikiFaqTemplate.
 
 <form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/">
-New FAQ topic: &nbsp; (Use a name in TWiki.WikiNotation) <br />
+New FAQ topic: &nbsp; (Use a name in WikiNotation) <br />
 <input type="text" name="topic" size="32" />
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="TWikiFaqTemplate" />
 <input type="hidden" name="topicparent" value="%TOPIC%" />
-<input type="submit" value="Create Topic" /> <br />
+<input type="submit" value="Create Topic" />
 </form>
 
 ---++ More sources...
