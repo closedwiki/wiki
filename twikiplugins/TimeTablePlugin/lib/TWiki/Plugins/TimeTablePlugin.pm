@@ -38,7 +38,8 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.001'; #dro# fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; 
+$REVISION = '1.002'; #dro# fixed major bugs (conflict handling, preferences); added documentation; 
+#$REVISION = '1.001'; #dro# fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; 
 #$REVISION = '1.000'; #dro# initial version
 
 # Name of this Plugin, only used in this module
