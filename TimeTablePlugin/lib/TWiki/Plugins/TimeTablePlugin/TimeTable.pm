@@ -21,7 +21,7 @@
 package TWiki::Plugins::TimeTablePlugin::TimeTable;
 
 use strict;
-##use warnings;
+###use warnings;
 
 
 use CGI;
@@ -56,8 +56,43 @@ sub expand {
 
 
 }
+sub inflate {
+	my ($attributes, $text, $topic, $web) = @_;
+
+	my ($starttime, $endtime, $fgcolor, $bgcolor) = &_getTTCMValues($attributes);
+
+	my $cgi = new CGI;
+
+	my $title = &_renderTime($starttime,"12pm").'-'.&_renderTime($endtime,"12pm")
+			.' / '.&_renderTime($starttime,24).'-'.&_renderTime($endtime,24);
+
+	$fgcolor='' unless defined $fgcolor;
+	$bgcolor='' unless defined $bgcolor;
+
+	return $cgi->span(
+			{
+				-style=>"color:$fgcolor;background-color:$bgcolor",
+				-title=>$title
+			}, &_renderTime($starttime).'-'.&_renderTime($endtime));
+}
+sub _getTTCMValues {
+	my ($attributes) = @_;
+	my $textattr = &TWiki::Func::extractNameValuePair($attributes);
+
+	my ($timerange, $fgcolor, $bgcolor) = split /\s*\,\s*/, $textattr;
+	if (!$bgcolor) {
+		$bgcolor = $fgcolor;
+		$fgcolor = undef;
+	}
+
+	my ($starttime,$endtime) = split /-/,$timerange;
+	($starttime,$endtime) = (&_getTime($starttime), &_getTime($endtime));
+
+	return ($starttime, $endtime, $fgcolor, $bgcolor);
+
+}
 sub _initDefaults {
-	my $webbgcolor = &TWiki::Func::getPreferencesValue("\U$pluginName\E_WEBBGCOLOR", $web) || '#33CC66';
+	my $webbgcolor = &TWiki::Func::getPreferencesValue("WEBBGCOLOR", $web) || '#33CC66';
 	%defaults = (
 		tablecaption => "Timetable",	# table caption
 		lang => 'English',		# default language
@@ -82,11 +117,19 @@ sub _initDefaults {
 		tablebgcolor => 'white',	# table background color
 		timeformat => '24', 		# timeformat 12 or 24
 		unknownparamsmsg => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMS LIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.$pluginName topic for more details): %KNOWNPARAMSLIST%',
-		displaytime => 0		# display time in description
+		displaytime => 0,		# display time in description
+		workingstarttime => '9:00',	# 
+		workingendtime => '17:00',
+		workingbgcolor => 'white',	
+		workingfgcolor => 'black',
+		compatmode => 0, 		# compatibility mode
+		cmheaderformat => '<font size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
+                todaybgcolor    => undef,       # background color for today cells (usefull for a defined startdate)
+                todayfgcolor    => undef,       # foreground color for today cells (usefull for a dark todaybgcolor)
 	);
 
 	@renderedOptions = ('tablecaption', 'name');
-	@flagOptions = ( 'showweekend', 'displaytime' );
+	@flagOptions = ( 'compatmode', 'showweekend', 'displaytime' );
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -209,14 +252,15 @@ sub _initOptions {
 }
 sub _getTime {
 	my ($strtime) = @_;
+
+	return undef unless defined $strtime;
 	
 	$strtime =~ s/^(\d+)(:(\d+))?//;
 	my ($hh,$mm)=($1,$3);
+	$hh = 0 unless $hh;
 	$mm = 0 unless $mm;
 
-	$strtime =~ m/($ampm_rx)/;
-	my ($ampm) = $1;
-	$hh+=12 if ($ampm =~ m/$pm_rx/);
+	$hh+=12 if ($strtime =~ m/$pm_rx/);
 
 	return $hh*60+$mm;
 }
@@ -225,19 +269,28 @@ sub _fetch {
 	my ($text) = @_;
 	my %entries = ();
 
+	for (my $day=1; $day<7; $day++) {
+		$entries{$day}= ( );
+	}
+
+	my $STARTTIME = &_getTime($options{'starttime'});
+	my $TIMEINTERVAL = $options{'timeinterval'};
+
 	foreach my $line (grep(/$bullet_rx/, split(/\r?\n/, $text))) {
 
 		$line =~ s/$bullet_rx//g; 
 
-		if ($line =~ m/^$dowrange_rx\s+\-\s+$timerange_rx/ ) {
+		if ($line =~ m/^($dowrange_rx)\s+\-\s+($timerange_rx)/ ) {
 			### DOW - DOW - hh:mm - hh:mm
 			my ($startdow,$enddow,$starttime,$endtime, $descr,$color) = split /\s+\-\s+/, $line, 6;
-			my ($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
-			if (($fgcolor)&&(!$bgcolor)) {
-				$bgcolor = $fgcolor;
-				$fgcolor = undef;
+			my ($fgcolor,$bgcolor);
+			if ($color) {
+				($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
+				if (($fgcolor)&&(!$bgcolor)) {
+					$bgcolor = $fgcolor;
+					$fgcolor = undef;
+				}
 			}
-			TWiki::Func::writeWarning(" fgcolor=$fgcolor,bgcolor=$bgcolor");
 
 			$startdow=$daysofweek{$startdow};
 			$enddow=$daysofweek{$enddow};
@@ -247,36 +300,39 @@ sub _fetch {
 				push @{$entries{$dow}}, 
 					{ 	'starttime' => $starttime, 
 						'endtime' => $endtime, 
-						'nstarttime' => &_normalize($starttime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
-						'nendtime' => &_normalize($endtime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+						'nstarttime' => &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
+						'nendtime' => &_normalize($endtime, $STARTTIME, $TIMEINTERVAL),
 						'descr' => $descr , 
 						'fgcolor'=>$fgcolor,
 						'bgcolor'=>$bgcolor
 					};
 			}
 
-		} elsif ($line =~ m/^$dow_rx\s+\-\s+$timerange_rx/ ) {
+		} elsif ($line =~ m/^($dow_rx)\s+\-\s+$timerange_rx/ ) {
 			### DOW - hh:mm - hh:mm
 			my ($dow,$starttime,$endtime,$descr,$color) = split /\s+\-\s+/, $line, 5;
 			$dow=$daysofweek{$dow};
 			$starttime=&_getTime($starttime);
 			$endtime=&_getTime($endtime);
-			my ($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
-			if (!defined $bgcolor) {
-				$bgcolor = $fgcolor;
-				$fgcolor = undef;
+			my ($fgcolor,$bgcolor);
+			if ($color) {
+				($fgcolor,$bgcolor) = split(/\s*\,\s*/,$color);
+				if (!defined $bgcolor) {
+					$bgcolor = $fgcolor;
+					$fgcolor = undef;
+				}
 			}
 			push @{$entries{$dow}}, { 
 				'starttime' => $starttime, 
 				'endtime' => $endtime, 
-				'nstarttime' => &_normalize($starttime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
-				'nendtime' => &_normalize($endtime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+				'nstarttime' => &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
+				'nendtime' => &_normalize($endtime, $STARTTIME, $TIMEINTERVAL),
 				'descr'=>$descr,
 				'fgcolor'=>$fgcolor,
 				'bgcolor'=>$bgcolor
 				};
 
-		} elsif ($line =~m /^$dowlist_rx\s+\-\s+$timerange_rx/ ) {
+		} elsif ($line =~m /^($dowlist_rx)\s+\-\s+($timerange_rx)/ ) { # XXX DONT WORK YET
 			my ($dowlist,$starttime,$endtime,$descr,$color) = split /\s+\-\s+/, $line, 5;
 			$starttime=&_getTime($starttime);
 			$endtime=&_getTime($endtime);
@@ -290,13 +346,16 @@ sub _fetch {
 				push @{$entries{$dow}}, { 
 					'starttime'=>$starttime,  
 					'endtime' => $endtime, 
-					'nstarttime' => &_normalize($starttime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
-					'nendtime' => &_normalize($endtime, &_getTime($options{'starttime'}), $options{'timeinterval'}),
+					'nstarttime' => &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
+					'nendtime' => &_normalize($endtime, $STARTTIME, $TIMEINTERVAL),
 					'descr'=>$descr,
 					'fgcolor'=>$fgcolor,
 					'bgcolor'=>$bgcolor
 					};
 			}
+		} elsif ($options{'compatmode'}) {
+
+			&_fetchCompat($line, \%entries);
 		}
 
 
@@ -310,11 +369,7 @@ sub _fetch {
 sub _render {
 	my ($entries_ref) = @_;
 
-	my ($yy,$mm,$dd, $week);
-
-	($yy,$mm,$dd)=Today();
-	($week,$yy)=Week_of_Year($yy,$mm,$dd);
-	($yy,$mm,$dd)=Monday_of_Week($week,$yy);
+	my ($dd,$mm,$yy)=&_getStartDate();
 
 	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
 
@@ -398,16 +453,24 @@ sub _renderText {
 	my ($mentry_ref, $rs, $fillRows) = @_;
 	my $tddata ="";
 	my ($mst,$met) = ($$mentry_ref{'starttime'},$$mentry_ref{'endtime'});
-	my $title = $$mentry_ref{'descr'}.' ('.&_renderTime($mst).'-'.&_renderTime($met).')';
 
-	###$title.=" (rows=$rs, fillRows=$fillRows)"; ## DEBUG
+	my $title = ($$mentry_ref{'longdescr'}?$$mentry_ref{'longdescr'}:$$mentry_ref{'descr'});
+	$title .= ' ('.&_renderTime($mst).'-'.&_renderTime($met).')';
+
+	$title=TWiki::Func::renderText($title,$web);
+	$title=~s/<\/?[^>]+>//g;
+
+	### $title.=" (rows=$rs, fillRows=$fillRows)"; ## DEBUG
 
 	my $text = $$mentry_ref{'descr'};
 	$text.=' ('.&_renderTime($mst).'-'.&_renderTime($met).')' if $options{'displaytime'};
 	
 	my $nt="";
 	for (my $l=0; $l<$rs; $l++) {
-		my $sub=  substr($text, $l*$options{'descrlimit'}, $options{'descrlimit'});
+		my $sub;
+		my $offset = $l*$options{'descrlimit'};
+		last if $offset>length($text);
+		$sub  = substr($text, $offset, $options{'descrlimit'});
 		last if (length($sub)<=0);
 		$nt .= (($l==$rs-1)&&(length($sub)>$options{'descrlimit'}))? substr($sub,0,$options{'descrlimit'}-3).'...':$sub;
 		$nt .='<br/>' unless $l==$rs-1;
@@ -426,8 +489,18 @@ sub _renderTimeline {
 	###my $td = $cgi->start_table({-rules=>"rows",-border=>'1',-cellpadding=>'0',-cellspacing=>'0'});
 	my $td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1'});
 	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
+	my ($wst,$wet) = ( &_getTime($options{'workingstarttime'}), &_getTime($options{'workingendtime'}) );
 	for (my $min=$starttime; $min <=$endtime ; $min+=$options{'timeinterval'}) {
-		$td .= $cgi->Tr($cgi->td({-bgcolor=>$options{tableheadercolor}, -align=>"right"},&_renderTime($min)));
+		$td .= $cgi->Tr($cgi->td({
+			-bgcolor=>(($min>=$wst)&&($min<=$wet))?$options{'workingbgcolor'}:$options{'tableheadercolor'}, 
+			-align=>"right"},
+				$cgi->div({
+						-style=>'color:'.$options{'workingfgcolor'},
+						-title=>&_renderTime($min,'12am').' / '.&_renderTime($min,24)
+					},
+						&_renderTime($min)
+					)
+			));
 		$td .= "\n";
 	}
 	$td .= $cgi->end_table();
@@ -435,18 +508,29 @@ sub _renderTimeline {
 }
 sub _normalize {
 	my ($time, $starttime, $interval) = @_;
-	$time = int(( $time + ($starttime % $interval ) ) / $interval)*$interval;
+	if ((!defined $time)||(!defined $starttime)||(! defined $interval)) {
+		TWiki::Func::writeWarning("_normalize needs time ($time), starttime ($starttime) and interval ($interval)");
+	} else {
+		$time = int(( $time + ($starttime % $interval ) ) / $interval)*$interval;
+		$time=$starttime if $time<$starttime ;
+	}
+
 	return $time;
 }
 sub _countConflicts {
 	my ($entry_ref, $entries_ref, $starttime, $interval) = @_;
 	my $c=1;
 	my ($sd1,$ed1) = ($$entry_ref{'nstarttime'},$$entry_ref{'nendtime'});
+	my (%visitedstartdates);
 	foreach my $e (@{$entries_ref}) {
 		my ($sd2,$ed2) = ($$e{'nstarttime'},$$e{'nendtime'});
 
 		# go to the next if the same entry:
 		next if $e == $entry_ref;
+
+		# count only one conflict for events with same start time:
+		next if defined $visitedstartdates{$sd2};
+		$visitedstartdates{$sd2}=$ed2;
 
 		# increase if the other start time is in my time range or my end time is in the time range of the other:
 		$c++ if (($sd2>$sd1)&&($sd2<$ed1)) || (($ed1>$sd2)&&($ed1<$ed2));
@@ -488,16 +572,22 @@ sub _getMatchingEntries {
 }
 sub _renderTime {
 	my ($hours, $minutes) = ( int($_[0]/60), ($_[0] % 60) );
-	$hours-=12 if ($hours>12)&&($options{'timeformat'} eq '12');
+	my ($timeformat) = ( $_[1]?$_[1]:$options{'timeformat'} );
+
+	$hours-=12 if ($hours>12)&&($timeformat =~ m/^12/);
+	my $time = sprintf("%02d",$hours).':'.sprintf("%02d",$minutes);
 	
-	return sprintf("%02d",$hours).':'.sprintf("%02d",$minutes);
+	$time.=(int($_[0]/60)>12)?"p$1m$2":"a$1m$2" if ($timeformat =~ m/[ap](\.?)m(\.?)$/);
+	$time.=(int($_[0]/60)>12)?"P$1m$2":"A$1m$2" if ($timeformat =~ m/[AP](\.?)M(\.?)$/);
+	
+	return $time;
 }
 sub _getStartDate() {
         my ($yy,$mm,$dd) = Today();
 
         # handle startdate (absolute or offset)
-        if (defined $options{startdate}) {
-                my $sd = $options{startdate};
+        if (defined $options{'startdate'}) {
+                my $sd = $options{'startdate'};
                 $sd =~ s/^\s*(.*?)\s*$/$1/; # cut whitespaces
                 if ($sd =~ /^$date_rx$/) {
                         my ($d,$m,$y);
@@ -508,8 +598,8 @@ sub _getStartDate() {
                 }
         } 
         # handle year (absolute or offset)
-        if (defined $options{year}) {
-                my $year = $options{year};
+        if (defined $options{'year'}) {
+                my $year = $options{'year'};
                 if ($year =~ /^(\d{4})$/) {
                         $yy=$year;
                 } elsif ($year =~ /^([\+\-]?\d+)$/) {
@@ -517,8 +607,8 @@ sub _getStartDate() {
                 } 
         }
         # handle month (absolute or offset)
-        if (defined $options{month}) {
-                my $month = $options{month};
+        if (defined $options{'month'}) {
+                my $month = $options{'month'};
                 my $matched = 1;
                 if ($month=~/^($months_rx)$/) {
                         $mm=$months{$1};
@@ -535,11 +625,15 @@ sub _getStartDate() {
                 }
         }
 
+	
+	my $dow = Day_of_Week($yy, $mm, $dd);
+	($yy,$mm,$dd)=Add_Delta_Days($yy, $mm, $dd, -($dow-1));
+
         return ($dd,$mm,$yy);
 }
 sub _mystrftime($$$) {
         my ($yy,$mm,$dd) = @_;
-        my $text = $options{headerformat};
+        my $text = $options{'compatmode'}?$options{'cmheaderformat'}:$options{'headerformat'};
 
         my $dow = Day_of_Week($yy,$mm,$dd);
         my $t_dow =  undef;
@@ -683,6 +777,360 @@ sub _createUnknownParamsMessage {
         return $msg;
 }
 
+
+
+sub _fetchCompat {
+	my ($line, $entries_ref) = @_;
+
+	my ($dd, $mm, $yy) = &_getStartDate();
+
+	my ($eyy,$emm,$edd) = Add_Delta_Days($yy,$mm,$dd, 7);
+
+	my $startDays = Date_to_Days($yy,$mm,$dd);
+	my $endDays = Date_to_Days($eyy,$emm,$edd);
+
+	my $STARTTIME = &_getTime($options{'starttime'});
+	my $TIMEINTERVAL = $options{'timeinterval'};
+
+	my ($descr, $tt);
+	my ($starttime,$endtime,$nstarttime,$nendtime,$fgcolor,$bgcolor);
+	my ($strdate);
+
+	if ($line=~m/%TTCM{(.*?)}/) {
+		$line =~ s/%TTCM{(.*?)}%//;
+		$tt=$1;
+		($starttime,$endtime,$fgcolor,$bgcolor) = _getTTCMValues($tt);
+	} else {
+		$starttime=0; $endtime=24*60; $fgcolor=undef; $bgcolor=undef;
+	}
+	if ((defined $starttime)&&(defined $endtime)) {
+		($nstarttime, $nendtime) = ( &_normalize($starttime, $STARTTIME, $TIMEINTERVAL),
+					     &_normalize($endtime, $STARTTIME, $TIMEINTERVAL) );
+	} else {
+		$nstarttime=undef;
+		$nendtime=undef;
+	}
+
+	my $excref = &_fetchExceptions($line, $startDays, $endDays);
+
+	if (($line =~ m/^$daterange_rx/) || ($line =~ m/^$date_rx/)
+			|| ($line =~ m/^$monthyearrange_rx/)  || ($line =~ m/^$monthyear_rx/)) {
+		### dd MMM yyyy - dd MMM yyyy
+		### dd MMM yyyy
+		### MMM yyyy 
+		### MMM yyyy - MMM yyyy
+		my ($sdate,$edate);
+		if (($line=~m/^$daterange_rx/)||($line =~ m/^$monthyearrange_rx/)) {
+			($sdate,$edate,$descr) = split /\s+\-\s+/, $line;
+		} else {
+			($sdate,$descr) = split /\s+\-\s+/, $line;
+			$edate=$sdate;
+		}
+
+		my ($start, $end) = ( &_getDays($sdate), &_getDays($edate, 1) );
+
+		$descr =~ s/^\s*//; $descr =~ s/\s*$//; # strip whitespaces 
+
+		my $date = $startDays;
+		for (my $day=0; ($day<7)&&(($date+$day)<=$end); $day++) {
+			next if $$excref[$day];
+			if (($date+$day)>=$start) {
+				push @{$$entries_ref{$day+1}}, 
+					{ 
+						'descr' => $descr,
+						'longdescr' => $line,
+						'starttime' => $starttime,
+						'endtime' => $endtime,
+						'nstarttime' => $nstarttime,
+						'nendtime' => $nendtime,
+						'fgcolor' => $fgcolor,
+						'bgcolor' => $bgcolor
+					};
+			}
+		}
+	} elsif ($line =~ m/^A\s+$date_rx/) {
+		### Yearly: A dd MMM yyyy
+
+		($strdate,$descr) = split /\s+\-\s+/, $line;
+		$strdate=~s/^A\s+//;
+
+		my ($dd1, $mm1, $yy1) = split /\s+/, $strdate;
+                $mm1 = $months{$mm1};
+		return unless check_date($yy1, $mm1, $dd1);
+		
+		for (my $day=0; $day<7; $day++) {
+			next if $$excref[$day];
+			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$day);
+			if (($m==$mm1)&&($d==$dd1)) {
+				push @{$$entries_ref{$day+1}},
+                                        {
+                                                'descr' => $descr,
+                                                'longdescr' => $line,
+                                                'starttime' => $starttime,
+                                                'endtime' => $endtime,
+                                                'nstarttime' => $nstarttime,
+                                                'nendtime' => $nendtime,
+                                                'fgcolor' => $fgcolor,
+                                                'bgcolor' => $bgcolor
+                                        };
+			}
+
+		}
+		
+	} elsif ($line =~ m/^$day_rx\s+($months_rx)/) {
+                ### Interval: dd MMM
+		($strdate, $descr) = split /\s+\-\s+/, $line;
+		my ($dd1, $mm1) = split /\s+/, $strdate;
+		$mm1 = $months{$mm1};
+		return if $dd1>31;
+
+		for (my $day=0; $day<7; $day++) {
+			next if $$excref[$day];
+			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$day);
+			if (($mm1==$m)&&($dd1==$d)) {
+				push @{$$entries_ref{$day+1}},
+                                        {
+                                                'descr' => $descr,
+                                                'longdescr' => $line,
+                                                'starttime' => $starttime,
+                                                'endtime' => $endtime,
+                                                'nstarttime' => $nstarttime,
+                                                'nendtime' => $nendtime,
+                                                'fgcolor' => $fgcolor,
+                                                'bgcolor' => $bgcolor
+                                        };
+			}
+		}
+	} elsif ($line =~ m/^[0-9L](\.|th)?\s+($dow_rx)(\s+($months_rx))?/) {
+                ### Interval: w DDD MMM 
+                ### Interval: L DDD MMM 
+                ### Monthly: w DDD
+                ### Monthly: L DDD
+
+		($strdate,$descr) = split /\s+\-\s+/, $line;
+
+		my ($n1, $dow1, $mm1) = split /\s+/, $strdate;
+                $dow1 = $daysofweek{$dow1};
+                $mm1 = $months{$mm1} if defined $mm1;
+
+		for (my $day=0; $day<7; $day++) {
+			next if $$excref[$day];
+			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$day);
+                        if ((! defined $mm1) || ($m == $mm1)) {
+                                my ($yy2,$mm2,$dd2);
+                                if ($n1 eq 'L') {
+                                        $n1 = 6;
+                                        do {
+                                                $n1--;
+                                                ($yy2, $mm2, $dd2)=Nth_Weekday_of_Month_Year($y, $m, $dow1, $n1); 
+                                        } until ($yy2);
+                                } else {
+                                        eval { # may fail with a illegal factor
+                                                ($yy2, $mm2, $dd2) = Nth_Weekday_of_Month_Year($y, $m, $dow1, $n1);
+                                        };
+                                        next if $@;
+                                }
+
+                                if (($dd2)&&($dd2==$d)) {
+					push @{$$entries_ref{$day+1}},
+						{
+							'descr' => $descr,
+							'longdescr' => $line,
+							'starttime' => $starttime,
+							'endtime' => $endtime,
+							'nstarttime' => $nstarttime,
+							'nendtime' => $nendtime,
+							'fgcolor' => $fgcolor,
+							'bgcolor' => $bgcolor
+						};
+                                } # if
+                        } # if
+		} # for 
+	} elsif ($line =~ m/^$day_rx\s+/) {
+                ### Monthly: dd
+		($strdate, $descr) = split /\s+\-\s+/, $line;
+		return if $strdate > 31;
+		for (my $day=0; $day<7; $day++) {
+			next if $$excref[$day];
+			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$day);
+			if ($strdate == $d) {
+				push @{$$entries_ref{$day+1}},
+					{
+						'descr' => $descr,
+						'longdescr' => $line,
+						'starttime' => $starttime,
+						'endtime' => $endtime,
+						'nstarttime' => $nstarttime,
+						'nendtime' => $nendtime,
+						'fgcolor' => $fgcolor,
+						'bgcolor' => $bgcolor
+					};
+			} # if
+		} # for
+	} elsif ($line =~ m/^E\s+($dow_rx)/) {
+                ### Monthly: E DDD dd MMM yyy - dd MMM yyyy
+                ### Monthly: E DDD dd MMM yyy
+                ### Monthly: E DDD
+                my $strdate2 = undef;
+                if ($line =~ m/^E\s+($dow_rx)\s+$daterange_rx/) {
+                        ($strdate, $strdate2, $descr) = split /\s+\-\s+/, $line;
+                } else {
+                        ($strdate, $descr) = split /\s+\-\s+/, $line;
+                }
+                $strdate=~s/^E\s+//;
+                my ($dow1) = split /\s+/, $strdate;
+                $dow1=$daysofweek{$dow1};
+
+                $strdate=~s/^\S+\s*//;
+
+                my ($start, $end) = (undef, undef);
+                if ((defined $strdate)&&($strdate ne "")) {
+                        $start = &_getDays($strdate);
+                        return unless defined $start;
+                }
+
+                if (defined $strdate2) {
+                        $end = &_getDays($strdate2);
+                        return unless defined $end;
+                }
+
+                return if (defined $start) && ($start > $endDays);
+                return if (defined $end) && ($end < $startDays);
+
+		for (my $day=0; $day<7; $day++) {
+			next if $$excref[$day];
+                        my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$day);
+                        my $date = Date_to_Days($y,$m,$d);
+                        my $dow = Day_of_Week($y, $m, $d);
+                        if ( ($dow==$dow1)
+                            && ( (!defined $start) || ($date>=$start) )
+                            && ( (!defined $end)   || ($date<=$end) )
+                           ) {
+                                push @{$$entries_ref{$day+1}},
+                                        {
+                                                'descr' => $descr,
+                                                'longdescr' => $line,
+                                                'starttime' => $starttime,
+                                                'endtime' => $endtime,
+                                                'nstarttime' => $nstarttime,
+                                                'nendtime' => $nendtime,
+                                                'fgcolor' => $fgcolor,
+                                                'bgcolor' => $bgcolor
+                                        };
+                        }
+
+		}
+	} elsif ($line =~ m/^E\d+\s+$date_rx/) {
+                ### Periodic: En dd MMM yyyy - dd MMM yyyy
+                ### Periodic: En dd MMM yyyy
+                my $strdate2 = undef;
+                if ($line =~ m/^E\d+\s+$daterange_rx/) {
+                        ($strdate, $strdate2, $descr) = split /\s+\-\s+/, $line;
+                } else {
+                        ($strdate, $descr) = split /\s+\-\s+/, $line, 4;
+                }
+
+                $strdate=~s/^E//;
+                my ($n1) = split /\s+/, $strdate;
+
+                return unless $n1 > 0;
+
+                $strdate=~s/^\d+\s+//;
+
+                my ($start, $end) = (undef, undef);
+                my ($dd1, $mm1, $yy1) = split /\s+/, $strdate;
+                $mm1 = $months{$mm1};
+
+                $start = &_getDays($strdate);
+                return unless defined $start;
+
+                $end = &_getDays($strdate2) if defined $strdate2;
+                return if (defined $strdate2)&&(!defined $end);
+
+                return if (defined $start) && ($start > $endDays);
+                return if (defined $end) && ($end < $startDays);
+
+                ($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
+                        $n1 * int( (abs($startDays-$start)/$n1) + ($startDays-$start!=0?1:0) ) );
+                $start = Date_to_Days($yy1, $mm1, $dd1);
+
+                # start at first occurence and increment by repeating count ($n1)
+                for (my $day=(abs($startDays-$start) % $n1); (($day < 7)&&((!defined $end) || ( ($startDays+$day) <= $end)) ); $day+=$n1) {
+			next if $$excref[$day];
+                        if (($startDays+$day) >= $start) {
+                                push @{$$entries_ref{$day+1}},
+                                        {
+                                                'descr' => $descr,
+                                                'longdescr' => $line,
+                                                'starttime' => $starttime,
+                                                'endtime' => $endtime,
+                                                'nstarttime' => $nstarttime,
+                                                'nendtime' => $nendtime,
+                                                'fgcolor' => $fgcolor,
+                                                'bgcolor' => $bgcolor
+                                        };
+
+                        }
+                } # for
+
+	} # elsif
+} # sub
+
+sub _getDays {
+        my ($date,$ldom) = @_;
+        my $days = undef;
+
+        $date=~s/^\s*//;
+        $date=~s/\s*$//;
+
+        my ($yy,$mm,$dd);
+        if ($date =~ /^$date_rx$/) {
+                ($dd,$mm,$yy) = split /\s+/, $date;
+                $mm = $months{$mm};
+        } elsif ($date =~ /^$monthyear_rx$/) {
+                ($mm, $yy) = split /\s+/, $date;
+                $mm = $months{$mm};
+                $dd = $ldom? Days_in_Month($yy, $mm) : 1;
+        } else {
+                return undef;
+        }
+        $dd=~/(\d+)/;
+        $dd=$1;
+        $days = check_date($yy,$mm,$dd) ? Date_to_Days($yy,$mm,$dd) : undef;
+
+        return $days;
+
+}
+sub _fetchExceptions {
+        my ($line, $startDays, $endDays) = @_;
+
+        my @exceptions = ( );
+
+        $_[0] =~s /X\s+{\s*([^}]+)\s*}// || return \@exceptions;
+        my $ex=$1;
+
+
+        for my $x ( split /\s*\,\s*/, $ex ) {
+                my ($start, $end) = (undef, undef);
+                if (($x =~ m/^$daterange_rx$/)||($x =~ m/^$monthyearrange_rx/)) {
+                        my ($sdate,$edate) = split /\s*\-\s*/, $x;
+                        $start = &_getDays($sdate,0);
+                        $end = &_getDays($edate,1);
+
+                } elsif (($x =~ m/^$date_rx/)||($x =~ m/^$monthyear_rx/)) {
+                        $start = &_getDays($x,0);
+                        $end = &_getDays($x, 1);
+                }
+                next unless defined $start && ($start <= $endDays);
+                next unless defined $end &&   ($end >= $startDays);
+
+                for (my $i=0; ($i<$options{days})&&(($startDays+$i)<=$end); $i++) {
+                        $exceptions[$i] = 1 if ( (($startDays+$i)>=$start) && (($startDays+$i)<=$end) );
+                }
+        }
+
+        return \@exceptions;
+}
 
 
 1;
