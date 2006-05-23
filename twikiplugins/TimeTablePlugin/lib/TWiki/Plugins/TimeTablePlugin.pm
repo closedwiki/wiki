@@ -38,7 +38,8 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.002'; #dro# fixed major bugs (conflict handling, preferences); added documentation; 
+$REVISION = '1.003'; #dro# fixed minor bugs (bgcolor bug; conflict handling; documentation); added compatibility mode (CalendarPlugin event types)
+#$REVISION = '1.002'; #dro# fixed major bugs (conflict handling, preferences); added documentation; 
 #$REVISION = '1.001'; #dro# fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; 
 #$REVISION = '1.000'; #dro# initial version
 
@@ -219,7 +220,9 @@ sub commonTagsHandler {
     eval {
 	    require TWiki::Plugins::TimeTablePlugin::TimeTable;
 	    $_[0] =~ s/%TIMETABLE%/&TWiki::Plugins::TimeTablePlugin::TimeTable::expand("",$_[0],$_[1],$_[2])/ge;
-	    $_[0] =~ s/%TIMETABLE{(.*?)}%/ TWiki::Plugins::TimeTablePlugin::TimeTable::expand($1, $_[0], $_[1], $_[2])/ge;
+	    $_[0] =~ s/%TIMETABLE{(.*?)}%/&TWiki::Plugins::TimeTablePlugin::TimeTable::expand($1, $_[0], $_[1], $_[2])/ge;
+	    $_[0] =~ s/%TTCM{(.*?)}%/&TWiki::Plugins::TimeTablePlugin::TimeTable::inflate($1, $_[0],$_[1],$_[2])/ge;
+	    $_[0] =~ s/%TTCM%//g;
     };
     &TWiki::Func::writeWarning($@) if $@;
 }
