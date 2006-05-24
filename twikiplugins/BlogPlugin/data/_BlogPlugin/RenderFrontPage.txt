@@ -34,7 +34,6 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 ~~~      }$percnt
 *~~   "
 ~~~ }%
-~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
 ~~~ %DBCALL{"RenderGoogleAdsense" TYPE="text_image"}%
 %STOPINCLUDE%
 </verbatim>

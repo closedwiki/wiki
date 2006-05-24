@@ -3,7 +3,7 @@
 %TMPL:INCLUDE{"view"}%
 %TMPL:DEF{"content"}%
 %DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
-%DBCALL{"RenderGoogleAdsense"}%
+<!--%<nop>DBCALL{"RenderGoogleAdsense"}%-->
 %DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
 %DBCALL{"RenderAddComment"}%
 %DBCALL{"RenderGoogleAdsense"}%

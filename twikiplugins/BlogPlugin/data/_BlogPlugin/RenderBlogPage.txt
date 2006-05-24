@@ -12,7 +12,6 @@
 %~~ DBQUERY{topic="%NAME%" web="%WEB%"
 ~~~   format="%DBCALL{"%TOPIC%" section="format"}%"
 ~~~ }%
-%DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%
 </verbatim>
 

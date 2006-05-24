@@ -39,7 +39,7 @@ See also: RenderAtom, WebSyndication
 <image rdf:about="%WEBLOGOIMG%">
   <title>TWiki/NatSkin</title>
   <link>%SCRIPTURL{"view"}%/%INCLUDINGWEB%</link>
-  <url>%WEBLOGOIMG%</url>
+  <url>%IFDEFINED{"%WEBLOGOIMG%" then="%WEBLOGOIMG%" else="%WIKILOGOIMG%"}%</url>
 </image>
 %~~ DBQUERY{"%SEARCH%" 
 ~~~   web="%INCLUDINGWEB%"
@@ -47,18 +47,25 @@ See also: RenderAtom, WebSyndication
 ~~~   reverse="on" 
 ~~~   limit="%LIMIT%" 
 ~~~   separator="$n"
+~~~   exclude="BlogAbout|WebHome"
 ~~~   format="
 *~~     <item rdf:about=\"%SCRIPTURL{"view"}%/$web/$topic\">$n
-~~~       <title>$expand(Headline or Name or name)</title>$n
+~~~       <title>
+*~~            $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"BlogComment\" glue=\"off\"}$percnt
+~~~              $expand(Name) replies on 
+~~~              \"<a href=\"%SCRIPTURL{"view"}%/view/$web/$expand(BaseRef)\">
+*~~                $expand(@BaseRef.Headline)
+*~~              </a>\"
+~~~            $percntELSEDEFINED$percnt
+~~~              $expand(Headline or Name or name)
+~~~            $percntFIDEFINED$percnt
+*~~       </title>$n
 ~~~       <link>%SCRIPTURL{"view"}%/$web/$topic</link>$n
 ~~~       <description>
+*~~        $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"BlogComment\" glue=\"off\"}$percnt
+~~~          $expand('&lt;b&gt;' and Headline and '&lt;/b&gt;')
+~~~        $percntFIDEFINED$percnt
 ~~~        $encode(
-*~~          $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"BlogComment\" glue=\"off\"}$percnt
-~~~            $expand(Name) replies on 
-~~~            \"<a href=\"%SCRIPTURL{"view"}%/view/$web/$expand(BaseRef)\">
-~~~              $expand(@BaseRef.Headline)
-~~~            </a>\":
-~~~          $percntFIDEFINED$percnt
 ~~~          $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"TWikiTopic\" glue=\"off\"}$percnt
 ~~~            $expand(TopicDescription)
 ~~~          $percntFIDEFINED$percnt

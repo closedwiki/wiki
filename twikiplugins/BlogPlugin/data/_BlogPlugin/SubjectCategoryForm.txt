@@ -1,11 +1,11 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141731829" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148406023" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TWikiForm"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
-| TopicType | checkbox | 3 | %DBQUERY{"TopicType=~'\bTopicType\b'" separator=", "}% | document type  | M |
-| TopicDescription | text | 75 | | short description of the role of this topic | M |
+| TopicType | label | 1 | SubjectCategory, FrontPage | document type  | M |
+| TopicDescription | text | 75 | | short description of the role of this topic |  |
 | Comment | textarea | 80x4 | | informal description | |
 
 

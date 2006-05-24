@@ -1,13 +1,13 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139250721" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148405972" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TWikiForm"}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
 | *Name:*| *Type:* | *Size:* | *Values:* | *Tooltip message:* | *Attributes:* |
-| TopicType | select | 1 | BlogPage | | M |
+| TopicType | label | 1 | BlogPage | |  |
 | BlogAuthor | text | 25 | | Author of the blog page | M |
 | Date | text | 25 | | Creation date | M |
-| Headline | text | 78 | | headline of the blog page | M |
+| Headline | text | 78 | | headline of the blog page | |
 | SubjectCategory | checkbox | 3 | %DBQUERY{"TopicType=~'\bSubjectCategory\b'" separator=", "}% | blog page categories | |
 | Related | select+multi+values | 5 | %DBQUERY{"(TopicType=~'\bBlogPage\b' OR TopicType=~'\bBlogEntry\b') AND State='enabled'" format="$percntENCODE{\"$formatTime(createdate): $expand(Headline or TopicDescription)\"}$percnt=$topic" separator=", " order="created" reverse="on" limit="100"}%| list of related blog pages | |
 | State | select | 1 | enabled, disabled | |  |

@@ -16,7 +16,6 @@ NONE
 ~~~      title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   footer="</ul></div>"
 ~~~  }%
-%~~ DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%
 
 <!-- interrupt glue -->

@@ -49,8 +49,11 @@ NONE
   <td><textarea id="text" wrap="virtual" name="Text" style="width:98%" rows="10" cols="80"></textarea></td>
 </tr>
 <tr>
-  <td align="right">
-      <input type="submit" class="blogSubmitButton" value="Submit" />
+  <td align="right" style="padding-top:0.5em;">
+    <div style="float:left;">
+      You may have to [[%TWIKIWEB%.TWikiRegistration][register]] to comment if you haven't already.
+    </div>
+    <input type="submit" class="blogSubmitButton" value="Submit" />
   </td>
 </tr>
 </table>

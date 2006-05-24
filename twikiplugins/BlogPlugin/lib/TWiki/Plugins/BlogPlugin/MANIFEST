@@ -19,6 +19,7 @@ data/_BlogPlugin/BlogEntryTemplate.txt 0644
 data/_BlogPlugin/BlogEntryViewTemplate.txt 0644
 data/_BlogPlugin/BlogEntry.txt 0644
 data/_BlogPlugin/BlogHelpText.txt 0644
+data/_BlogPlugin/BlogImages.txt 0644
 data/_BlogPlugin/BlogLinkForm.txt 0644
 data/_BlogPlugin/BlogLinkTemplate.txt 0644
 data/_BlogPlugin/BlogLinkViewTemplate.txt 0644
@@ -34,6 +35,7 @@ data/_BlogPlugin/NatSkinSearchViewTemplate.txt 0644
 data/_BlogPlugin/NewsFeeds.txt 0644
 data/_BlogPlugin/RenderAddComment.txt 0644
 data/_BlogPlugin/RenderAdminTools.txt 0644
+data/_BlogPlugin/RenderAffiliation.txt 0644
 data/_BlogPlugin/RenderArchives.txt 0644
 data/_BlogPlugin/RenderAtom.txt 0644
 data/_BlogPlugin/RenderAuthorTools.txt 0644
@@ -44,7 +46,6 @@ data/_BlogPlugin/RenderBlogArchiveHitList.txt 0644
 data/_BlogPlugin/RenderBlogArchiveLex.txt 0644
 data/_BlogPlugin/RenderBlogArchiveTag.txt 0644
 data/_BlogPlugin/RenderBlogArchive.txt 0644
-data/_BlogPlugin/RenderBlogAuthorSwitch.txt 0644
 data/_BlogPlugin/RenderBlogComments.txt 0644
 data/_BlogPlugin/RenderBlogComment.txt 0644
 data/_BlogPlugin/RenderBlogEntriesInCategory.txt 0644
@@ -115,6 +116,7 @@ data/_BlogPlugin/WebAtomTeaser.txt 0644
 data/_BlogPlugin/WebAtom.txt 0644
 data/_BlogPlugin/WebButtons.txt 0644
 data/_BlogPlugin/WebChanges.txt 0644
+data/_BlogPlugin/WebCss.txt 0644
 data/_BlogPlugin/WebHome.txt 0644
 data/_BlogPlugin/WebIndex.txt 0644
 data/_BlogPlugin/WebLeftBar.txt 0644

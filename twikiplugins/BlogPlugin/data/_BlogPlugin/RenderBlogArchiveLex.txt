@@ -81,7 +81,7 @@
 *~~          #hits
 *~~       \"
 ~~~        class=\"$percntCALC{\"$IF($EXACT(%QUERY%,$term),current)\"}$percnt\"
-~~~        style=\"color:$fadeRGB(124,164,204,0,102,204);\"
+~~~        style=\"color:$fadeRGB(%TAGCLOUDFADE%);\"
 ~~~        title=\"$count\">$term</a></span>"
 ~~~   footer="</div>"
 ~~~   min="%URLPARAM{"min" default="5"}%"

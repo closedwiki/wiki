@@ -42,7 +42,6 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontPage
 ~~~    skip="%FULL%" limit="%LIMIT%" order="created" reverse="on" hidenull="on"
 ~~~    format="%DBCALL{"RenderBlogTeaser" section="format" NAME="$topic"}%"
 ~~~ }%
-~~~ %DBCALL{"RenderBlogAuthorSwitch"}%
 %STOPINCLUDE%
 </verbatim>
 

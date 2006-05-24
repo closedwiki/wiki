@@ -1,0 +1,27 @@
+%META:TOPICINFO{author="TWikiContributor" date="1147900996" format="1.1" version="1.1"}%
+---+ %TOPIC%
+
+Switches off revision info and breadcrumbs.
+Switches off authorship information on postings if this blog
+is single-authored (or even null-authored).
+
+<verbatim>
+%STARTINCLUDE%.natRevision, .natWebLocator { display:none; }
+%~~ IFDEFINED{"
+*~~
+%~~   DBQUERY{"TopicType=~'\bBlogAuthor\b'" web="%WEB%" limit="1" 
+~~~     header="$count" format="none" separator="none"
+~~~   }%" 
+~~~   as="0|1" 
+~~~   then=".blogAuthor, .blogAuthorSwitch {display:none;}"
+~~~   glue="off"
+~~~ }%
+%STOPINCLUDE%
+</verbatim>
+
+---++ Test
+<pre>%DBCALL{"%TOPIC%"}%</pre>
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="AdminTool"}%
+%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Additional css for this web"}%
