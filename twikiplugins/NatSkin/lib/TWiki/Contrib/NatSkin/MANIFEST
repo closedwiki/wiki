@@ -125,9 +125,11 @@ pub/TWiki/NatSkin/external.png 0644
 pub/TWiki/NatSkin/favicon.ico 0644
 pub/TWiki/NatSkin/feed-icon-12x12.gif 0644
 pub/TWiki/NatSkin/feed-icon-12x12-gray.gif 0644
+pub/TWiki/NatSkin/feed-icon-12x12.png 0644
 pub/TWiki/NatSkin/previewbg.png 0644
 pub/TWiki/NatSkin/quote.gif 0644
 pub/TWiki/NatSkin/quote.png 0644
+pub/TWiki/NatSkin/quote-white.png 0644
 templates/addform.nat.tmpl 0644
 templates/attachagain.nat.tmpl 0644
 templates/attach.nat.tmpl 0644
