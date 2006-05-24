@@ -61,6 +61,9 @@ sub inflate {
 
 	my ($starttime, $endtime, $fgcolor, $bgcolor) = &_getTTCMValues($attributes);
 
+	&_initDefaults() unless $defaultsInitialized;
+	return &_createUnknownParamsMessage() unless &_initOptions('');
+
 	my $cgi = new CGI;
 
 	my $title = &_renderTime($starttime,"12pm").'-'.&_renderTime($endtime,"12pm")
@@ -114,6 +117,7 @@ sub _initDefaults {
 		eventfgcolor => 'black',	#
 		name => '&nbsp;',		# content of the first cell
 		weekendbgcolor => $webbgcolor,	#
+		weekendfgcolor => 'black',	#
 		tablebgcolor => 'white',	# table background color
 		timeformat => '24', 		# timeformat 12 or 24
 		unknownparamsmsg => '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMS LIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.$pluginName topic for more details): %KNOWNPARAMSLIST%',
@@ -126,6 +130,7 @@ sub _initDefaults {
 		cmheaderformat => '<font size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
                 todaybgcolor    => undef,       # background color for today cells (usefull for a defined startdate)
                 todayfgcolor    => undef,       # foreground color for today cells (usefull for a dark todaybgcolor)
+		days	=> 7,			# XXX for later use
 	);
 
 	@renderedOptions = ('tablecaption', 'name');
@@ -269,9 +274,15 @@ sub _fetch {
 	my ($text) = @_;
 	my %entries = ();
 
-	for (my $day=1; $day<7; $day++) {
-		$entries{$day}= ( );
-	}
+	##for (my $day=1; $day<7; $day++) {
+	##	$entries{$day}= ( );
+	##}
+
+	my ($dd, $mm, $yy) = &_getStartDate();
+	my ($eyy,$emm,$edd) = Add_Delta_Days($yy,$mm,$dd, 7);
+
+	my $startDays = Date_to_Days($yy,$mm,$dd);
+	my $endDays = Date_to_Days($eyy,$emm,$edd);
 
 	my $STARTTIME = &_getTime($options{'starttime'});
 	my $TIMEINTERVAL = $options{'timeinterval'};
@@ -279,6 +290,9 @@ sub _fetch {
 	foreach my $line (grep(/$bullet_rx/, split(/\r?\n/, $text))) {
 
 		$line =~ s/$bullet_rx//g; 
+
+		my $excref = &_fetchExceptions($line, $startDays, $endDays);
+
 
 		if ($line =~ m/^($dowrange_rx)\s+\-\s+($timerange_rx)/ ) {
 			### DOW - DOW - hh:mm - hh:mm
@@ -355,7 +369,7 @@ sub _fetch {
 			}
 		} elsif ($options{'compatmode'}) {
 
-			&_fetchCompat($line, \%entries);
+			&_fetchCompat($line, \%entries, $excref);
 		}
 
 
@@ -370,6 +384,9 @@ sub _render {
 	my ($entries_ref) = @_;
 
 	my ($dd,$mm,$yy)=&_getStartDate();
+	my ($tyy, $tmm, $tdd) = Today();
+	my $startDateDays = Date_to_Days($yy,$mm,$dd);
+	my $todayDays = Date_to_Days($tyy,$tmm,$tdd);
 
 	my ($starttime,$endtime) = ( &_getTime($options{'starttime'}), &_getTime($options{'endtime'}));
 
@@ -384,8 +401,15 @@ sub _render {
 	$tr=$cgi->td($options{name}); 
 	for (my $dow = 0; $dow < 7; $dow++) {
 		next if (!$options{'showweekend'})&&($dow>4);
+		my $colbgcolor = $options{(($dow>4)?'weekendbgcolor':'tableheadercolor')};
+		$colbgcolor = $options{'todaybgcolor'} if ($options{'todaybgcolor'})&&($todayDays==$startDateDays+$dow);
+		$colbgcolor = '' unless defined $colbgcolor;
+		my $colfgcolor = $options{(($dow>4)?'weekendfgcolor':'black')};
+		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$dow);
+		$colfgcolor = '' unless defined $colfgcolor;
+
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$dow);
-		$tr .= $cgi->td({-bgcolor=>$options{($dow>4?'weekendbgcolor':'tableheadercolor')},-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>"color:$colfgcolor", -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$text .= $cgi->Tr($tr);
 	$text .= "\n";
@@ -402,9 +426,15 @@ sub _render {
 			$tr.=$cgi->td("&nbsp;");
 			next;
 		}
+
+		my $colbgcolor = $options{(($dow>4)?'weekendbgcolor':'tablebgcolor')};
+		$colbgcolor = $options{'todaybgcolor'} if ($options{'todaybgcolor'})&&($todayDays==$startDateDays+$dow);
+		my $colfgcolor = $options{(($dow>4)?'weekendfgcolor':'black')};
+		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$dow);
+
 		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
 		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
-		$td = $cgi->start_table({-bgcolor=>$options{($dow>4?'weekendbgcolor':'tablebgcolor')}, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		$td = $cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 		my ($itr, $itd);
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
@@ -414,7 +444,7 @@ sub _render {
 				foreach my $mentry_ref ( @{$mentries})  {
 					my $fillRows = &_countConflicts($mentry_ref,$dowentries_ref, $starttime, $options{'timeinterval'});
 
-					$rs= _getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
+					$rs= &_getEntryRows($mentry_ref, $min, $starttime, $endtime, $options{'timeinterval'});
 
 					$itr.=$cgi->td({-nowrap=>"",
 							-valign=>"top",
@@ -434,6 +464,7 @@ sub _render {
 				$td .=$cgi->Tr($itr)."\n";
 			}
 		}
+
 		$td .= $cgi->end_table();
 		$tr.=$cgi->td({-valign=>"top"},$td);
 
@@ -780,10 +811,9 @@ sub _createUnknownParamsMessage {
 
 
 sub _fetchCompat {
-	my ($line, $entries_ref) = @_;
+	my ($line, $entries_ref, $excref) = @_;
 
 	my ($dd, $mm, $yy) = &_getStartDate();
-
 	my ($eyy,$emm,$edd) = Add_Delta_Days($yy,$mm,$dd, 7);
 
 	my $startDays = Date_to_Days($yy,$mm,$dd);
@@ -810,8 +840,6 @@ sub _fetchCompat {
 		$nstarttime=undef;
 		$nendtime=undef;
 	}
-
-	my $excref = &_fetchExceptions($line, $startDays, $endDays);
 
 	if (($line =~ m/^$daterange_rx/) || ($line =~ m/^$date_rx/)
 			|| ($line =~ m/^$monthyearrange_rx/)  || ($line =~ m/^$monthyear_rx/)) {
@@ -1106,7 +1134,7 @@ sub _fetchExceptions {
 
         my @exceptions = ( );
 
-        $_[0] =~s /X\s+{\s*([^}]+)\s*}// || return \@exceptions;
+        $_[0] =~s /X\s*{\s*([^}]+)\s*}// || return \@exceptions;
         my $ex=$1;
 
 
@@ -1124,7 +1152,7 @@ sub _fetchExceptions {
                 next unless defined $start && ($start <= $endDays);
                 next unless defined $end &&   ($end >= $startDays);
 
-                for (my $i=0; ($i<$options{days})&&(($startDays+$i)<=$end); $i++) {
+                for (my $i=0; ($i<7)&&(($startDays+$i)<=$end); $i++) {
                         $exceptions[$i] = 1 if ( (($startDays+$i)>=$start) && (($startDays+$i)<=$end) );
                 }
         }

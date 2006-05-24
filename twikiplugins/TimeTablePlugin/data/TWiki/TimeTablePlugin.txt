@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1148400794" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148459954" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should works with all modern web browsers.
@@ -62,6 +62,8 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | timeformat | time format; allowed values: 12, 12am, 12p.m., 12a.m, 12p.m. and 24 | timeformat="24" |
 | timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
 | topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
+| workingendtime | working hours end time | workingendtime="5:00pm" |
+| workingstarttime | working hours start time | workingstarttime="9:00am" |
 |  *Compatibility Mode:*  |||
 | cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
 | daynames | costum daynames (a list separated by a '¦' and starting on Monday; overwrites lang attribute) | daynames="M¦T¦W¦T¦F¦S¦S" |
@@ -80,11 +82,12 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption shown above the timetable | tablecaption="Timetable" |
 | tableheadercolor | color of the table header | tableheadercolor="%<nop>WEBBGCOLOR%" |
+| todaybgcolor | background color for today column | todaybgcolor="black" |
+| todayfgcolor | foreground color for today column | todayfgcolor="white" | 
 | weekendbgcolor | weekend column background color | weekendbgcolor="%<nop>WEBBGCOLOR%" |
+| weekendfgcolor | weekend column foreground color | weekendfgcolor="black" |
 | workingbgcolor | background color for working hours | workingbgcolor="white" |
-| workingendtime | working hours end time | workingendtime="5:00pm" |
 | workingfgcolor | foreground color for working hours | workingfgcolor="black" |
-| workingstarttime | working hours start time | workingstarttime="9:00am" |
 
 *Hints:*
 	* You can use TextFormattingRules for some attribute values: tablecaption, name
@@ -181,9 +184,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.003 (BETA) |
+|  Plugin Version: | V1.003 (24 May 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.003 (BETA) | TWiki:Main.DanielRohde: fixed minor bugs (bgcolor bug; conflict handling; documentation); added compatibility mode (TWiki:Plugins.CalendarPlugin event types)|
+|  V1.003 (24 May 2006) | TWiki:Main.DanielRohde: added compatibility mode (TWiki:Plugins.CalendarPlugin event types); added documentation and new attributes; fixed bugs (bgcolor bug; conflict rendering; documentation; error logs; warnings);|
 |  V1.002 (22 May 2006): | TWiki:Main.DanielRohde: fixed major bugs (conflict handling, preferences); added documentation; |
 |  V1.001 (19 May 2006): | TWiki:Main.DanielRohde: fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; |
 |  V1.000 (16 May 2006): | TWiki:Main.DanielRohde: Initial version |
@@ -201,4 +204,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCa
 -- TWiki:Main.DanielRohde - 16 May 2006
  
 
-%META:FILEATTACHMENT{name="example.png" attr="" comment="" date="1148305873" path="example.png" size="71848" user="rohdedan" version="1.4"}%
+%META:FILEATTACHMENT{name="example.png" attr="h" comment="" date="1148463674" path="example.png" size="29752" user="rohdedan" version="1.5"}%
