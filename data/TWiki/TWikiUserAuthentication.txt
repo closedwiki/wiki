@@ -119,6 +119,8 @@ To make use of these features, use the tags:
 %SESSION_VARIABLE{ "varName" clear="" }%
 </verbatim>
 
+Note that you *cannot* override access controls preferences this way.
+
 ---+++ Cookies and Transparent Session IDs
 
 TWiki normally uses cookies to store session information on a client computer. Cookies are a common way to pass session information from client to server. TWiki cookies simply hold a unique session identifier that is used to look up a database of session information on the TWiki server.
