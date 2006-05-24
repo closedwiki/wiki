@@ -17,10 +17,10 @@ See also BlogHelpText
 %STARTINCLUDE%
 *~~
 <div class="blogSideBar">
----+!! About
-*~~ %REDDOT{"%WEB%.BlogAbout"}%
 <div class="blogAbout">
+---+!! About 
 %IFDEFINEDTHEN{"%SIDEBAR%"}%
+*~~ %REDDOT{"%WEB%.BlogAbout"}% 
 %IFDEFINEDTHEN{"%SIDEBAR%" as="Author"}%
 %$nopDBQUERY{topic="%BASETOPIC%" format="$formfield(About)"}%
 %ELSEDEFINED%
@@ -46,15 +46,7 @@ See also BlogHelpText
 %ELSEDEFINED%
 %$nopDBCALL{"%TOPIC%" section="Default"}%
 %FIDEFINED%
-
-<!-- todo move it to somewhere else -->
-<style type="text/css">
-.natRevision,
-.natWebLocator {
-   display:none;
-}
-</style>
-*~~
+%DBCALL{"RenderAffiliation"}%
 </div>
 %STOPINCLUDE%
 </verbatim>
@@ -75,8 +67,10 @@ See also BlogHelpText
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
 %DBCALL{"RenderVisitors"}%
 %IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
+<div class="blogSideBarSection blogSideBarTechnorati">
 ---+!! Technorati
 <script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
+</div>
 %FIDEFINED%
 %ENDSECTION{"Default"}%
 </verbatim>
@@ -95,8 +89,10 @@ See also BlogHelpText
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
 %DBCALL{"RenderVisitors"}%
 %IFDEFINEDTHEN{"%TECHNORATICODE%" glue="off"}%
+<div class="blogSideBarSection blogSideBarTechnorati">
 ---+!! Technorati
 <script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
+</div>
 %FIDEFINED%
 %ENDSECTION{"Author"}%
 </verbatim>

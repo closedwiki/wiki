@@ -1,6 +1,7 @@
 /* blogging */
 
 /* debug 
+.blogEntryButton, .blogCategoryButton, .blogPageButton, .blogTopicButton,
 .blogAbout, .blogSideBar, .blogSideBarCommenter, .blogSideBarSection,
 .blogEntry, .blogHeadline, .blogInfo, .blogDate, .blogText, .blogMore,
 .blogComments, .blogComment, .blogCommentOdd, .blogCommentEven,
@@ -221,7 +222,6 @@
 .blogArchiveHitList table td,
 .blogArchiveHitList table th {
   vertical-align:top;
-  background:white;
   padding-left:1em;
 }
 .blogArchiveHitList .twikiFirstCol {

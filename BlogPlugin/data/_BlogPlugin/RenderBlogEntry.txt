@@ -46,8 +46,6 @@
 ~~~   REVERSE="on"
 ~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
 ~~~ }%
-~~~ 
-%~~ DBCALL{"RenderBlogAuthorSwitch"}%
 ~~~ %STARTALIASAREA%
 *~~
 %STOPINCLUDE%

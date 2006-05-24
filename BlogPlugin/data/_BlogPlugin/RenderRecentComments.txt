@@ -29,8 +29,8 @@ no newer comments than that.
 ~~~   %IFDEFINED{"%AUTHOR%" then="author=\"%AUTHOR%\"" glue="off"}%
 ~~~   header="$n<noautolink>$n
 *~~     <div class=\"blogSideBarSection blogSideBarComments\">
-~~~     <table class=\"blogSideBarHeader\" 
-~~~            border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">
+~~~     <div class=\"blogSideBarHeader\">
+~~~     <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">
 ~~~       <tr><td>
 *~~         <h1>
 *~~           Comments$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt
@@ -41,6 +41,7 @@ no newer comments than that.
 ~~~           href=\"%SCRIPTURL{"view"}%/%WEB%/WebRssComments\">RSS</a>
 *~~       </td></tr>
 *~~     </table>
+~~~     </div>$n
 ~~~     <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
 ~~~   format="<tr>
 ~~~     <td valign=\"top\"><ul style=\"margin-top:0px;margin-bottom:0px;padding-top:0px;\">

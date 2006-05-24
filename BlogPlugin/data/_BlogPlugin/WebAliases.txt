@@ -11,34 +11,19 @@ see also: TWiki.WebAliases, TWiki.AliasPlugin
 Note, that you have to add urlencoded versions of your aliases to the RenderRss
 if they use special characters.
 
-%STARTSECTION{"textiles"}%
-*~~
-%ALIAS{name="''" regex="$start''$stop" value="&rdquo;"}%
-%ALIAS{name="``" regex="$start``$stop" value="&ldquo;"}%
-%ALIAS{name="-" regex=" - " value=" &ndash; "}%
-%ALIAS{name="--" regex=" -- " value=" &mdash; "}%
-%ALIAS{name="(c)" regex="$start\(c\)$stop" value="&copy;"}%
-%ALIAS{name="(r)" regex="$start\(r\)$stop" value="&reg;"}%
-%ALIAS{name="(tm)" regex="$start\(tm\)$stop" value="&trade;"}%
-%ALIAS{name="..." regex="$start\.\.\.$stop" value="&hellip;"}%
-%ALIAS{name=",," regex="$start,,$stop" value="&bdquo;"}%
-%ALIAS{name="1/2" regex="$start1/2$stop" value="&frac12;"}%
-%ALIAS{name="1/4" regex="$start1/4$stop" value="&frac14;"}%
-%ALIAS{name="3/4" regex="$start3/4$stop" value="&frac34;"}%
-*~~
-%ENDSECTION{"textiles"}%
+%ALIAS{name="''" regex="$start''$stop" value="&#8221;"}%
+%ALIAS{name="``" regex="$start``$stop" value="&#8220;"}%
+%ALIAS{name="-" regex=" - " value=" &#8211; "}%
+%ALIAS{name="--" regex=" -- " value=" &#8212; "}%
+%ALIAS{name="(c)" regex="$start\(c\)$stop" value="&#169;"}%
+%ALIAS{name="(r)" regex="$start\(r\)$stop" value="&#174;"}%
+%ALIAS{name="(tm)" regex="$start\(tm\)$stop" value="&#8482;"}%
+%ALIAS{name="..." regex="$start\.\.\.$stop" value="&#8230;"}%
+%ALIAS{name=",," regex="$start,,$stop" value="&#8222;"}%
+%ALIAS{name="1/4" regex="$start1/4$stop" value="&#188;"}%
+%ALIAS{name="1/2" regex="$start1/2$stop" value="&#189;"}%
+%ALIAS{name="3/4" regex="$start3/4$stop" value="&#190;"}%
 
-%ALIAS{name="NatSkinPlugin" value="TWiki.NatSkinPlugin"}%
-%ALIAS{name="NatSkin" value="TWiki.NatSkin"}%
-%ALIAS{name="DBCacheContrib" value="TWiki.DBCacheContrib"}%
-%ALIAS{name="BlogPlugin" value="TWiki.BlogPlugin"}%
-%ALIAS{name="TimeSincePlugin" value="TWiki.TimeSincePlugin"}%
-%ALIAS{name="JojoWiki" value="[[http://jojowiki.dyndns.org][JojoWiki]]"}%
-%ALIAS{name="WordPress" value="[[http://wordpress.org][WordPress]]"}%
-%ALIAS{name="MovableType" value="[[http://www.sixapart.com/movabletype][MovableType]]"}%
-%ALIAS{name="MovableStyle" value="[[http://www.movablestyle.com][MovableStyle]]"}%
-%ALIAS{name="BinaryBonsai" value="[[http://binarybonsai.com][BinaryBonsai]]"}%
-%ALIAS{name="Kwiki" value="[[http://www.kwiki.com][Kwiki]]"}%
 -->
 
 %ALIASES%

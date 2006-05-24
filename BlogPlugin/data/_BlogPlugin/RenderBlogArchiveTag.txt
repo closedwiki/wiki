@@ -25,7 +25,7 @@
 ~~~   format="<span style=\"font-size:$weightpx;line-height:90%;margin:0;padding:0;\">
 ~~~     <a href=\"%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?mode=tag;search=$term\"
 ~~~        title=\"$count\"
-~~~        style=\"color:$fadeRGB(124,164,204,0,102,204);\"
+~~~        style=\"color:$fadeRGB(%TAGCLOUDFADE%);\"
 ~~~        class=\"$percntCALC{\"$IF($EXACT(%QUERY%,$term),current)\"}$percnt\"
 ~~~     >$term</a></span>"
 ~~~   footer="</div>"

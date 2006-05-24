@@ -19,8 +19,8 @@
 ~~~  order="createdate" reverse="on" limit="%LIMIT%" 
 ~~~  hidenull="on"
 ~~~  header="<div class=\"blogSideBarSection blogSideBarLatest\">
-~~~    <table class=\"blogSideBarHeader\" 
-~~~           border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">
+~~~    <div class=\"blogSideBarHeader\">
+~~~    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">
 ~~~      <tr><td>
 ~~~        <h1>
 *~~          Latest$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt
@@ -30,7 +30,8 @@
 ~~~           title=\"RSS Feed for the Entries on this Site\"
 ~~~           href=\"%SCRIPTURL{"view"}%/%WEB%/WebRss\">RSS</a>
 *~~      </td></tr>
-*~~    </table><ul style=\"margin-top:0px;margin-bottom:0px;\"><noautolink>"
+*~~    </table>
+~~~    </div><ul style=\"margin-top:0px;margin-bottom:0px;\"><noautolink>"
 ~~~  format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\"
 ~~~            title=\"link to <nop>$topic\">
 *~~            $formfield(Headline)</a></li>"

@@ -31,7 +31,7 @@ See also: RenderRss, WebSyndication
 <link rel="alternate" type="text/html"
 ~~~ hreflang="%LANGUAGES{format="$langtag" separator=","}%" 
 ~~~ href="%SCRIPTURL{"view"}%/%INCLUDINGWEB%/%INCLUDINGTOPIC%" />
-<logo>%WEBLOGOIMG%</logo>
+%IFDEFINED{"%WEBLOGOIMG%" then="<logo>%WEBLOGOIMG%</logo>"}%
 <generator uri="%SCRIPTURL{"view"}%/%TWIKIWEB%/BlogPlugin">
   TWiki %WIKIVERSION%, <nop>BlogPlugin %PLUGINVERSION{"BlogPlugin"}%
 </generator>
@@ -46,7 +46,14 @@ See also: RenderRss, WebSyndication
 ~~~   format="
 *~~     <entry>$n
 *~~       <title>
-*~~         $expand(Headline or Name or name)
+*~~         $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"BlogComment\" glue=\"off\"}$percnt
+~~~           $expand(Name) replies on 
+~~~           \"<a href=\"%SCRIPTURL{"view"}%/view/$web/$expand(BaseRef)\">
+*~~             $expand(@BaseRef.Headline)
+*~~           </a>\"
+~~~         $percntELSEDEFINED$percnt
+~~~           $expand(Headline or Name or name)
+~~~         $percntFIDEFINED$percnt
 *~~       </title>$n
 *~~       <link rel=\"alternate\" type=\"text/html\" 
 ~~~         href=\"%SCRIPTURL{"view"}%/$web/$topic\" />$n
@@ -62,10 +69,7 @@ See also: RenderRss, WebSyndication
 *~~       <content type=\"xhtml\">$n
 *~~         <div xmlns=\"http://www.w3.org/1999/xhtml\">
 *~~           $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"BlogComment\" glue=\"off\"}$percnt
-*~~             $expand(Name) replies on 
-~~~            \"<a href=\"%SCRIPTURL{"view"}%/view/$web/$expand(BaseRef)\">
-~~~              $expand(@BaseRef.Headline)
-~~~            </a>\":
+~~~           $expand('<b>' and Headline and '</b>')
 ~~~           $percntFIDEFINED$percnt
 ~~~           $percntIFDEFINEDTHEN{\"$expand(TopicType)\" as=\"TWikiTopic\" glue=\"off\"}$percnt
 ~~~             $expand(TopicDescription) 
@@ -73,9 +77,9 @@ See also: RenderRss, WebSyndication
 ~~~           $expand(Teaser) 
 ~~~           $percntIFDEFINEDTHEN{\"%TEASEONLY%\"}$percnt
 ~~~           $percntELSEDEFINED$percnt
-~~~             <p />$expand(Text)
+~~~             <p />$expand(Text)<!-- -->$n<!-- -->
 ~~~           $percntFIDEFINED$percnt
-*~~         </div>$n
+~~~         </div>$n
 *~~       </content>$n
 *~~       <author>$n
 *~~         <name>$expand(BlogAuthor or Name)</name>$n

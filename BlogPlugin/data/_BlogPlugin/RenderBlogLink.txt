@@ -100,7 +100,6 @@ if the linked site has a nice rss feed.
 *~~   <div class=\"headlinesTitle\">
 *~~      <a href=\"$link\" target=\"_blank\">$title</a>
 *~~   </div>
-*~~   <hr/>
 *~~   $percntIFDEFINEDTHEN{\"$date\"}$percnt
 *~~   <div class=\"headlinesDate\">
 *~~     $percntCALC{\"$FORMATGMTIME($TIME($date),

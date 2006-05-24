@@ -5,8 +5,8 @@
 
    * Set WEBBGCOLOR = #E2DCC8
    * Set SITEMAPLIST = on
-   * Set SITEMAPWHAT = 
-   * Set SITEMAPUSETO =
+   * Set SITEMAPWHAT = Welcome to <nop>BlogUp
+   * Set SITEMAPUSETO = Welcome to <nop>BlogUp
    * Set NOSEARCHALL = 
    * Set NOAUTOLINK = 
    * #Set TECHNORATICODE = 
