@@ -223,7 +223,7 @@ And send me a patch if you've coded that into TWiki ;).
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | v0.92 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  24 May 2006: | added BlogImages: centralize all image resources; \
+|  24 May 2006: | added <nop>BlogImages: centralize all image resources; \
                   added affiliations to the sidebar; \
 		  cleaned up code to detect multi-authored blog; \
 		  cleaned up forms with singleton formfields ;\
