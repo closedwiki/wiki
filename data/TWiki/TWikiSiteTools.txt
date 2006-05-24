@@ -73,7 +73,7 @@ You can generate a listing manually, or on an automated schedule, of visits to i
    * The =twiki/bin/statistics= script can also be executed as a CGI script, just enter the URL in your browser. Examples:
       * Update current month for all webs: %BR% =%SCRIPTURLPATH{statistics}%=
       * Update current month for %MAINWEB% web only: %BR% =%SCRIPTURLPATH{statistics}%/%MAINWEB%=
-      * Update January 2000 for %MAINWEB% web: %BR% =%SCRIPTURLPATH{statistics}%/%MAINWEB%?logdate=%SERVERTIME{$year$mo}%=
+      * Update January 2006 for %MAINWEB% web: %BR% =%SCRIPTURLPATH{statistics}%/%MAINWEB%?logdate=200601=
 
 #LogFiles
 ---++ Log Files
