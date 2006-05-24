@@ -1220,19 +1220,22 @@ sub attachmentExists {
    * =$topic= - topic
    * =$name= - attachment name
    * =$rev= - revision to read (default latest)
-Read an attachment from the store for a topic, and return it as a string. The names of attachments on a topic can be recovered from the meta-data returned by =readTopic=. If the attachment does not exist, or cannot be read, undef will be returned.
+Read an attachment from the store for a topic, and return it as a string. The
+names of attachments on a topic can be recovered from the meta-data returned
+by =readTopic=. If the attachment does not exist, or cannot be read, undef
+will be returned. If the revision is not specified, the latest version will
+be returned.
 
 View permission on the topic is required for the
 read to be successful.  Access control violations are flagged by a
-TWiki::AccessControlException. Permissions are checked for the user
-passed in.
+TWiki::AccessControlException. Permissions are checked for the current user.
 
 <verbatim>
 my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
 my @attachments = $meta->find( 'FILEATTACHMENT' );
 foreach my $a ( @attachments ) {
    try {
-       my $data = TWiki::Func::readAttachment( $meta, $a->{name} );
+       my $data = TWiki::Func::readAttachment( $web, $topic, $a->{name} );
        ...
    } catch TWiki::AccessControlException with {
    };
