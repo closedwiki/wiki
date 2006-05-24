@@ -175,6 +175,28 @@ the TWiki:Plugins/PatternSkin.
 
 returns the previous topic revision taking =NumberOfRevisions= into account 
 
+---+++ SETSKINSTATE
+*Syntax*: =%<nop>SETSKINSTATE{...}%
+
+set the skin state using TWiki markup. This is different from using topic preference
+variables in three respects: (1) you can set the skin state at any place now, i.e.
+INCLUDEing another topic where that topic's preference variables are not evaluated.
+(2) SETSKINSTATE "may come to late" in the rendering pipeline so that it does
+not take effect throughly; topic preferences are fetched before rendering starts.
+(3) it is not checked if the resulting skinstate is "valid" when you use SETSKINSTATE;
+this _is_ the case if you use preferences values
+
+The following argumets are known and can be used in any combination:
+   * buttons="..."
+   * sidebar="..."
+   * variation="..."
+   * style="..."
+   * searchbox="..."
+   * border="..."
+The values to these keys will be commited into the skin state at once. Multiple
+invokations will override any former setting.
+
+
 ---+++ USERACTIONS
 *Syntax*: =%<nop>USERACTIONS%= 
 
@@ -203,6 +225,7 @@ By default the NatSkin comes with predefined components
    * [[%TWIKIWEB%.TWikiWebButtons]]
    * [[%TWIKIWEB%.TWikiWebLinks]]
    * [[%TWIKIWEB%.TWikiWebTopicActions]]
+   * [[%TWIKIWEB%.TWikiWebCss]]
 
 Example: 
    * use =%<nop>WEBCOMPONENT{"WebSideBar"}%= to display a the sidebar component
@@ -395,9 +418,13 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.9993 |
+|  Plugin Version: | v2.9994 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  05 Mai 2006: | fixed table bgcolor for Independence style; \
+|  24 May 2006: | fixed detection of style files to prevent 403 errors; \
+                  added SETSKINSTATE; \
+		  added more accesskeys to topic actions; \
+		  added "nop" class to prevent external link detection| 
+|  05 May 2006: | fixed table bgcolor for Independence style; \
                   display default <nop>WebLinks for non-public webs |
 |  19 Apr 2006: | use &lt;link rel="stylesheet" ... /&gt; instead of @import url() \
                   to ease the pain for js wysiwyg editors |
@@ -485,5 +512,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 05 Mai 2006 
+-- TWiki:Main/MichaelDaum - 24 May 2006 
 
