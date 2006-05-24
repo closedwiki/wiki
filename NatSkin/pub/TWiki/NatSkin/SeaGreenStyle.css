@@ -395,7 +395,7 @@ hr {
 }
 .blogSideBarSection ol,
 .blogSideBarSection ul {
-  padding-left:0px;
+  padding-left:0.5ex;
 }
 .blogHeadline h1,
 .blogHeadline h2,
@@ -435,5 +435,10 @@ hr {
   font-size:0.9em;
 }
 .blogNavigation a {
+  text-decoration:none;
+}
+
+/* HeadlinePlugin */
+.headlinesTitle a {
   text-decoration:none;
 }

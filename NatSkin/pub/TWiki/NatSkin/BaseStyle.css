@@ -15,7 +15,7 @@ a:hover {
 hr {
   border:0px;
   border-bottom:1px solid black;
-  margin:0px;
+  margin:0.7em 0px;
 }
 a img {border: none;}
 
@@ -319,6 +319,9 @@ h1, h2, h3, h4, h5, h6 {
 .natSearchTotal span {
   color:red;
 }
+.natSearch {
+  font-weight:bold;
+}
 .natSearchString {
   margin-bottom:10px;
   font-weight:bold;
@@ -446,12 +449,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .natSideBar a.natFeedIcon:hover,
 a.natFeedIcon:hover {
-  background:#eee url("feed-icon-12x12.gif") 3px center no-repeat;
+  background:#eee url("feed-icon-12x12.png") 3px center no-repeat;
   text-decoration:none !important;
   color:#444 !important;
 }
 a.natFeedIcon {
-  background:url("feed-icon-12x12-gray.gif") 3px center no-repeat;
+  background:url("feed-icon-12x12-gray.png") 3px center no-repeat;
   text-decoration:none !important;
   color:#444;
   font-size:10px;
@@ -542,6 +545,9 @@ a.natFeedIcon {
 .natTopicForm table {
   width:100%;
   border-collapse:collapse;
+}
+.twikiPageForm form {
+  margin-bottom:0px;
 }
 
 .natTopicForm table table,

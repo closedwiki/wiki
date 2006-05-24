@@ -10,6 +10,12 @@ a:hover {
   color:#3f59bb;
 }
 
+hr {
+  background:#aaaaaa;
+  height:1px;
+  border:none;
+  margin:1em 0;
+}
 /* layout */
 .natBody {
   margin:0;
@@ -382,5 +388,10 @@ a:hover {
   margin-bottom:1em;
 }
 .blogNavigation a {
+  text-decoration:none;
+}
+
+/* HeadlinePlugin */
+.headlinesTitle a {
   text-decoration:none;
 }
