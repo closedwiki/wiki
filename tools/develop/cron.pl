@@ -2,10 +2,11 @@
 # Cron script that refreshes the develop installs
 use strict;
 
+my $BRANCH = $1;
 my $ROOT = $ENV{HOME};
 my $COMMIT_FLAG = "$ROOT/svncommit";
 my $UPDATE_FLAG = "$ROOT/update_in_progress";
-my $LATEST = "$ROOT/twikisvn/pub/latest_svn.txt";
+my $LATEST = "$ROOT/twikisvn/pub/latest_$BRANCH.txt";
 
 chdir("$ROOT/twikisvn") || die $!;
 
