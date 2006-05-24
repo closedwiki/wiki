@@ -56,7 +56,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.9993';
+$RELEASE = '2.9994';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -207,16 +207,16 @@ sub initKnownStyles {
 
     if (opendir(DIR, $cssDir))  {
       foreach my $fileName (readdir(DIR)) {
-	if ($fileName =~ /(.*)Style\.css$/) {
-	  $knownStyles{$1} = $styleWebTopic unless $knownStyles{$1};
-	} elsif ($fileName =~ /(.*)Variation\.css$/) {
-	  $knownVariations{$1} = $styleWebTopic unless $knownVariations{$1};
-	} elsif ($fileName =~ /(.*)Border\.css$/) {
-	  $knownBorders{$1} = $styleWebTopic unless $knownBorders{$1};
-	} elsif ($fileName =~ /(.*)Buttons\.css$/) {
-	  $knownButtons{$1} = $styleWebTopic unless $knownButtons{$1};
-	} elsif ($fileName =~ /(.*)Thin\.css$/) {
-	  $knownThins{$1} = $styleWebTopic unless $knownThins{$1};
+	if ($fileName =~ /((.*)Style\.css)$/) {
+	  $knownStyles{$2} = $styleWebTopic.'/'.$1 unless $knownStyles{$2};
+	} elsif ($fileName =~ /((.*)Variation\.css)$/) {
+	  $knownVariations{$2} = $styleWebTopic.'/'.$1 unless $knownVariations{$2};
+	} elsif ($fileName =~ /((.*)Border\.css)$/) {
+	  $knownBorders{$2} = $styleWebTopic.'/'.$1 unless $knownBorders{$2};
+	} elsif ($fileName =~ /((.*)Buttons\.css)$/) {
+	  $knownButtons{$2} = $styleWebTopic.'/'.$1 unless $knownButtons{$2};
+	} elsif ($fileName =~ /((.*)Thin\.css)$/) {
+	  $knownThins{$2} = $styleWebTopic.'/'.$1 unless $knownThins{$1};
 	}
       }
       closedir(DIR);
@@ -352,6 +352,7 @@ sub initSkinState {
     }
     $theStyle = $defaultStyle unless $found;
   }
+  $theStyle = $defaultStyle unless $knownStyles{$theStyle};
   $skinState{'style'} = $theStyle;
   writeDebug("theStyle=$theStyle");
 
@@ -394,6 +395,10 @@ sub initSkinState {
   }
   $theStyleBorder = $defaultStyleBorder 
     if $theStyleBorder !~ /^(on|off|thin)$/;
+  $theStyleBorder = $defaultStyleBorder 
+    if $theStyleBorder eq 'on' && !$knownBorders{$theStyle};
+  $theStyleBorder = $defaultStyleBorder 
+    if $theStyleBorder eq 'thin' && !$knownThins{$theStyle};
   $skinState{'border'} = $theStyleBorder;
 
   # handle buttons
@@ -408,6 +413,8 @@ sub initSkinState {
   }
   $theStyleButtons = $defaultStyleButtons
     if $theStyleButtons !~ /^(on|off)$/;
+  $theStyleButtons = $defaultStyleButtons
+    if $theStyleButtons eq 'on' && !$knownButtons{$theStyle};
   $skinState{'buttons'} = $theStyleButtons;
 
   # handle sidebar 
@@ -562,6 +569,7 @@ sub commonTagsHandler {
 		    # which only matters if you've got a SessionPlugin and the 
 		    # TablePlugin installed which most probably is only the 
 		    # case on a cairo installation
+  $_[0] =~ s/%SETSKINSTATE{(.*?)}%/&renderSetSkinStyle($1)/geo;
 
   # conditional content
   $_[0] =~ s/(\s*)%IFSKINSTATE{(.*?)}%(\s*)/&renderIfSkinState($2, $1, $3)/geos;
@@ -842,75 +850,66 @@ sub renderKnownVariations {
   return join(', ', sort {$a cmp $b} keys %knownVariations);
 }
 
+###############################################################################
+# TODO: prevent illegal skin states
+sub renderSetSkinStyle {
+  my $args = shift;
+  my $theButtons = &TWiki::Func::extractNameValuePair($args, 'buttons');
+  my $theSideBar = &TWiki::Func::extractNameValuePair($args, 'sidebar');
+  my $theVariation = &TWiki::Func::extractNameValuePair($args, 'variation');
+  my $theStyle = &TWiki::Func::extractNameValuePair($args, 'style');
+  my $theSearchBox = &TWiki::Func::extractNameValuePair($args, 'searchbox');
+  my $theBorder = &TWiki::Func::extractNameValuePair($args, 'border');
+
+  $skinState{'buttons'} = $theButtons if $theButtons;
+  $skinState{'sidebar'} = $theSideBar if $theSideBar;
+  $skinState{'variation'} = $theSideBar if $theVariation;
+  $skinState{'style'} = $theStyle if $theStyle;
+  $skinState{'searchbox'} = $theSearchBox if $theSearchBox;
+  $skinState{'border'} = $theBorder if $theBorder;
+
+  return '';
+}
 
 ###############################################################################
 sub renderGetSkinStyle {
  
 
   my $theStyle;
-  my $theBorder;
-  my $theBorderType;
-  my $theSideBar;
-  my $theButtons;
   my $theVariation;
 
   $theStyle = $skinState{'style'};
 
   return '' if $theStyle eq 'off';
 
-  $theButtons = $skinState{'style'} if $skinState{'buttons'} eq 'on';
   $theVariation = $skinState{'variation'} unless $skinState{'variation'} =~ /^(off|none)$/;
 
-  if ($skinState{'border'} eq 'on') {
-    $theBorder = $skinState{'style'};
-    $theBorderType = 'Border';
-  }
-  if ($skinState{'border'} eq 'thin') {
-    $theBorder = $skinState{'style'};
-    $theBorderType = 'Thin';
-  }
-
-  # SMELL: why not use <link rel="stylesheet" href="..." type="text/css" medial="all" />
+  # SMELL: why not use <link rel="stylesheet" href="..." type="text/css" media="all" />
   my $text = '';
-  if (0) {
-    $text = 
-      '<style type="text/css">' . "\n" .
-      '@import url("%PUBURL%/'.$knownStyles{$theStyle}.'/'.$theStyle.'Style.css");'."\n";
 
-    $text .=
-      '@import url("%PUBURL%/'.$knownBorders{$theBorder}.'/'.$theBorder.$theBorderType.'.css");'."\n"
-      if $theBorder;
+  $text = 
+    '<link rel="stylesheet" href="%PUBURL%/'.
+    $knownStyles{$theStyle}.'"  type="text/css" media="all" />'."\n";
 
-    $text .=
-      '@import url("%PUBURL%/'.$knownButtons{$theButtons}.'/'.$theButtons.'Buttons.css");'."\n"
-      if $theButtons;
-
-    $text .=
-      '@import url("%PUBURL%/'.$knownVariations{$theVariation}.'/'.$theVariation.'Variation.css");'."\n"
-      if $theVariation;
-
-    $text .= '</style>';
-  } else {
-    $text = 
-      '<link rel="stylesheet" href="%PUBURL%/'.
-      $knownStyles{$theStyle}.'/'.$theStyle.'Style'.
-      '.css"  type="text/css" medial="all" />'."\n";
-
+  if ($skinState{'border'} eq 'on') {
     $text .= 
       '<link rel="stylesheet" href="%PUBURL%/'.
-      $knownBorders{$theBorder}.'/'.$theBorder.$theBorderType.
-      '.css"  type="text/css" medial="all" />'."\n" if $theBorder;
-
-    $text .=
+      $knownBorders{$theStyle}.'"  type="text/css" media="all" />'."\n";
+  } elsif ($skinState{'border'} eq 'thin') {
+    $text .= 
       '<link rel="stylesheet" href="%PUBURL%/'.
-      $knownButtons{$theButtons}.'/'.$theButtons.'Buttons'.
-      '.css" type="text/css" medial="all" />'."\n" if $theButtons;
-
-    $text .=
-      '<link rel="stylesheet" href="%PUBURL%/'.
-      $knownVariations{$theVariation}.'/'.$theVariation.'Variation'.
-      '.css" type="text/css" medial="all" />'."\n" if $theVariation;
+      $knownThins{$theStyle}.'"  type="text/css" media="all" />'."\n";
   }
+
+  if ($skinState{'buttons'} eq 'on') {
+    $text .=
+      '<link rel="stylesheet" href="%PUBURL%/'.
+      $knownButtons{$theStyle}.'" type="text/css" media="all" />'."\n";
+  }
+
+  $text .=
+    '<link rel="stylesheet" href="%PUBURL%/'.
+    $knownVariations{$theVariation}.'" type="text/css" media="all" />'."\n" if $theVariation;
 
   return $text;
 }
@@ -936,12 +935,12 @@ sub renderUserActions {
     $rawAction =
       '<a href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
-      "?rev=1.$rev\" accesskey=\"r\">View</a>";
+      "?rev=1.$rev\" accesskey=\"r\" title=\"View formatted topic\">View</a>";
   } else {
     $rawAction =
       '<a href="' .  
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
-      "?raw=on&rev=1.$rev\" accesskey=\"r\">Raw</a>";
+      "?raw=on&rev=1.$rev\" accesskey=\"r\" title=\"View raw topic\">Raw</a>";
   }
   
   my $text;
@@ -968,19 +967,19 @@ sub renderUserActions {
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
       . '?t=' . time() 
       . $editUrlParams
-      . '" accesskey="e">Edit</a> | ' .
+      . '" accesskey="e" title="Edit this topic">Edit</a> | ' .
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "attach") 
-      . '" accesskey="a">Attach</a> | ' .
+      . '" accesskey="a" title="Attach image or document to this topic">Attach</a> | ' .
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "rename")
-      . '" accesskey="m">Move</a> | ';
+      . '" accesskey="m" title="Move or rename this topic">Move</a> | ';
   }
 
   $text .=
       $rawAction . ' | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d">Diffs</a> | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsmore" accesskey="x">More</a>';
+      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="View topic history">Diffs</a> | ' .
+      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsmore" accesskey="x" title="More topic actions">More</a>';
 
 
   return $text;
@@ -1101,7 +1100,7 @@ sub renderLogon {
     }
   }
   my $logonScriptUrl = &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, $logonCgi);
-  return '<a rel="nofollow" href="'.$logonScriptUrl.'" accesskey="l">Login</a>';
+  return '<a rel="nofollow" href="'.$logonScriptUrl.'" accesskey="l" title="Login to <nop>%WIKITOOLNAME%">Login</a>';
 
   return $dispUser;
 }
@@ -1136,12 +1135,12 @@ sub renderLogout {
 	   . $logoutTopic
 	   . '&amp;username='
 	   . $defaultWikiUserName
-	   . '" accesskey="l">Logout</a>';
+	   . '" accesskey="l" title="Logout of <nop>%WIKITOOLNAME%">Logout</a>';
   } else {
     return '| <a rel="nofollow" href="'
 	   . $logoutScriptUrl 
 	   . '?logout=1'
-	   . '" accesskey="l">Logout</a>';
+	   . '" accesskey="l" title="Logout of <nop>%WIKITOOLNAME%">Logout</a>';
   }
 }
 
@@ -1343,6 +1342,7 @@ sub renderExternalLink {
   $theUrl =~ /^http/i && ($addClass = 1); # only for http and hhtps
   $theUrl =~ /^$urlHost/i && ($addClass = 0); # not for own host
   $theUrl =~ /^$httpsUrlHost/i && ($addClass = 0); # not for own host
+  $thePrefix =~ /class="nop"/ && ($addClass = 0); # prevent adding it 
   $thePrefix =~ /class="natExternalLink"/ && ($addClass = 0); # prevent adding it twice
 
   if ($addClass) {
