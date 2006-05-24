@@ -13,14 +13,15 @@ if( -e $UPDATE_FLAG) {
     exit 0;
 }
 
-print "Update started at ",`date`;
-print "Last update was to ",`cat $LATEST`;
-
 # /tmp/svncommit is created by an svn hook on a checkin
 # See post-commit.pl
 if ( ! -f $COMMIT_FLAG ) {
-    print "No new updates; exiting\n";
+    #print "No new updates; exiting\n";
+    exit 0;
 }
+
+print "Update started at ",`date`;
+print "Last update was to ",`cat $LATEST`;
 
 open(F, ">$UPDATE_FLAG") || die $!;
 print F time();
@@ -28,15 +29,11 @@ close(F);
 
 eval {
     undef $/;
-    open(F, "<$COMMIT_FLAG") || die $!;
-    my $c = <F>;
-    close(F);
-    unlink $COMMIT_FLAG;
     print "Updating\n";
     my $rev = `svn update $ROOT/twikisvn`;
 
     # Remove all links before refreshing from the manifests
-    print `find $ROOT/twikisvn -name Bugs -prune -o -type l -exec rm \\{\\} \\;`;
+    print `find $ROOT/twikisvn -name Bugs -prune -o -type l -exec rm -f \\{\\} \\;`;
     print `perl pseudo-install.pl -link default`;
 
     print "Updated $rev";
@@ -44,6 +41,10 @@ eval {
     open(F, ">$LATEST") || die $!;
     print F "$rev\n";
     close(F);
+
+    # Do this last just in case the update failed. If it is still there,
+    # the cron will try again.
+    unlink($COMMIT_FLAG);
 };
 my $e = $@;
 unlink($UPDATE_FLAG);
