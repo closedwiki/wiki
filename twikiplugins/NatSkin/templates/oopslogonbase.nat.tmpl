@@ -2,6 +2,7 @@
 <!-- template: oopslogonbase.tmpl -->
 %TMPL:DEF{"onloadscript"}%document.LogonFormular.username.focus();%TMPL:END%
 %TMPL:DEF{"logon"}%<!-- -->
+<div class="natLogonFormular">
 <form name="LogonFormular" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%SCRIPTURLPATH%/%IFSKINSTATE{action="oops" then="natlogon" else="login"}%%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <table border="0"> 
 <tr> 
@@ -25,4 +26,4 @@
   </td>
   <td>&nbsp;</td>
 </tr>
-</table> </form> %TMPL:END%
+</table> </form> </div> %TMPL:END%

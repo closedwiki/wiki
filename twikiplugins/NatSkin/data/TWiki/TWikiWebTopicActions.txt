@@ -2,10 +2,10 @@
 %STARTINCLUDE% 
 %IFDEFINEDTHEN{"%WIKINAME%" as="TWikiGuest"}%
 %NATLOGON% 
-| <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiRegistration" accesskey="r">Register</a> 
+| <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiRegistration" accesskey="r" title="Register on <nop>%WIKITOOLNAME%">Register</a> 
 %ELSEDEFINED%
 %WIKIUSERNAME% 
 %NATLOGOUT%
 %FIDEFINED% <!-- -->
-| <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?skin=print.nat" accesskey="p">Print</a> 
-<br/>%USERACTIONS% %STOPINCLUDE%
+| <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%?skin=print.nat" accesskey="p" title="Print this page">Print</a> 
+<div class="natUserActions">%USERACTIONS%</div> %STOPINCLUDE%
