@@ -155,6 +155,9 @@ function isWikiWord(inValue) {
 	return (inValue.match(re)) ? true : false;
 }
 
+/**
+Capitalizes words in the string. For example: "A handy dictionary" becomes "A Handy Dictionary".
+*/
 String.prototype.capitalize = function() {
     return this.replace(/\w+/g, function(a) {
         return a.charAt(0).toUpperCase() + a.substr(1);
@@ -162,9 +165,14 @@ String.prototype.capitalize = function() {
 };
 
 /**
-Capitalizes words in a string. For example: "A handy dictionary" becomes "A Handy Dictionary".
-@param inValue : the string to capitalize
-@return A new capitalized string.
+Returns true if the string is either "on", "true" or "1"; otherwise: false.
+*/
+String.prototype.boolean = function() {
+    return this == "on" || this == "true" || this == "1";
+};
+
+/**
+@deprecated: Use someString.capitalize().
 */
 function capitalize(inValue) {
 	return inValue.capitalize();
