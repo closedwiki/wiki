@@ -74,6 +74,9 @@ A wide range of standard styles are used in the TWiki core code and topics, and 
 |.twikiAttachments  |attachtables.tmpl |
 |.twikiEditForm |form.tmpl |
 |.twikiSubmit  | |
+|.twikiSubmitDisabled  | |
+|.twikiInputField  | |
+|.twikiInputFieldDisabled  | |
 |.twikiButton  | |
 |.twikiLeft  | |
 |.twikiRight  | |

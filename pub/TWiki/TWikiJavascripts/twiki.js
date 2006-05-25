@@ -1,4 +1,4 @@
-// Generally useful JavaScript used by TWiki
+﻿// Generally useful JavaScript used by TWiki
 
 var POPUP_WINDOW_WIDTH = 500;
 var POPUP_WINDOW_HEIGHT = 480;
@@ -12,6 +12,15 @@ var COOKIE_EXPIRY_TIME = 365 * 24 * 60 * 60 * 1000; // one year from now
 var ns4 = (document.layers) ? true : false;
 var ie4 = (document.all) ? true : false;
 var dom = (document.getElementById) ? true : false;
+
+var UPPER_ALPHA_CHARS    	= "ÀÈÌÒÙÁÉÍÓÚÝÂÊÎÔÛÃÑÕÄËÏÖÜŸŸÇŒØÅÆþÐA-Z";
+var LOWER_ALPHA_CHARS		= "àèìòùáéíóúýâêîôûãñõäëïöüœßøÞåæðça-z";
+var NUMERIC_CHARS			= "\\d";
+var MIXED_ALPHA_CHARS		= UPPER_ALPHA_CHARS + LOWER_ALPHA_CHARS;
+var MIXED_ALPHANUM_CHARS	= MIXED_ALPHA_CHARS + NUMERIC_CHARS;
+var WIKIWORD_REGEX = "\\b" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + LOWER_ALPHA_CHARS + "]" + "+" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + MIXED_ALPHANUM_CHARS + "]" + "*";
+var ILLEGAL_URL_CHARS = "\\<\\>\\,\\.\\/\\\\\|\\?\\;\\:\\\"\\'\\[\\]\\{\\}\\=\\+\\!@#$%&*()";
+
 
 
 // Chain a new load handler onto the existing handler chain
@@ -142,15 +151,15 @@ Checks if a string is a WikiWord.
 @return True if a WikiWord, false if not.
 */
 function isWikiWord(inValue) {
-	var upperAlphaRegex    = "[A-Z]";
-	var lowerAlphaRegex    = "[a-z]";
-	var numericRegex	   = "[0-9]";
-	var mixedAlphaRegex    = "[A-Za-z]";
-	var mixedAlphaNumRegex = "[A-Za-z0-9]";
-	var wikiWordRegex = "\\b" + upperAlphaRegex + "+" + lowerAlphaRegex + "+" + upperAlphaRegex + "+" + mixedAlphaNumRegex + "*";
-	var re = new RegExp(wikiWordRegex);
+	var re = new RegExp(WIKIWORD_REGEX);
 	return (inValue.match(re)) ? true : false;
 }
+
+String.prototype.capitalize = function() {
+    return this.replace(/\w+/g, function(a) {
+        return a.charAt(0).toUpperCase() + a.substr(1);
+    });
+};
 
 /**
 Capitalizes words in a string. For example: "A handy dictionary" becomes "A Handy Dictionary".
@@ -158,31 +167,13 @@ Capitalizes words in a string. For example: "A handy dictionary" becomes "A Hand
 @return A new capitalized string.
 */
 function capitalize(inValue) {
-	var sIn = inValue;
-	var sOut = '';
-	var chgUpper = true;
-	for ( var i = 0; i < sIn.length; i++ ) {
-		var ch = sIn.charAt( i );
-		if( ch!=' ' ) {
-			if( chgUpper ) {
-				ch = ch.toUpperCase();
-				chgUpper = false;
-			}
-		}
-		if( ch==' ' ) {
-			chgUpper = true;
-		} else {
-			chgUpper = false;
-		}
-		sOut += ch;
-	}
-	return sOut;
+	return inValue.capitalize();
 }
 
 /**
 Removes spaces from a string. For example: "A Handy Dictionary" becomes "AHandyDictionary".
 @param inValue : the string to remove spaces from
-@return A new space-less string.
+@return A new space free string.
 */
 function removeSpaces(inValue) {
 	var sIn = inValue;
@@ -196,6 +187,24 @@ function removeSpaces(inValue) {
 		sOut += ch;
 	}
 	return sOut;
+}
+
+/**
+Removes punctuation characters from a string. For example: "A/Z" becomes "AZ".
+@param inValue : the string to remove chars from
+@return A new punctuation free string.
+*/
+function removePunctuation(inValue) {
+	var illegalRegex = "[" + ILLEGAL_URL_CHARS + "]";
+	var re = new RegExp(illegalRegex, "g");
+  	return inValue.replace(re, "");
+}
+
+/**
+Combines removePunctuation and removeSpaces.
+*/
+function removeSpacesAndPunctiation(inValue) {
+	return removePunctuation(removeSpaces(inValue));
 }
 
 /**
