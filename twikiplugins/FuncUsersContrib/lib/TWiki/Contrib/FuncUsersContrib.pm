@@ -67,7 +67,7 @@ Get a list of groups. The returned list is a list of TWiki::User objects.
 sub getListOfGroups {
     my $session = $TWiki::Plugins::SESSION;
     my $users = $session->{users};
-    
+
     #if we have the UserMapping changes (post 4.0.2)
     return $session->{users}->getAllGroups() if (defined ($session->{users}->getAllGroups));
 
@@ -103,12 +103,13 @@ Find the TWiki::User object for a named user.
    * =%spec= - the identifying marks of the user. The following options are supported:
       * =wikiname= - the wikiname of the user (web name optional, also supports %MAINWEB%)
       * =login= - login name of the user
-      * =email= - email address of the user
+      * =email= - email address of the user **returns an array of users**
 For example,
 <verbatim>
-my $pa = TWiki::Func::lookupUser( email => "pa@addams.org" );
+my @pa = TWiki::Func::lookupUser( email => "pa@addams.org" );
 my $ma = TWiki::Func::lookupUser( wikiname => "%MAINWEB%.MorticiaAddams" );
 </verbatim>
+
 
 =cut
 
@@ -130,15 +131,20 @@ sub lookupUser {
     }
 
     if( $opts{email} ) {
-        # SMELL: there is no way in TWiki to map from an email back to a user, so
-        # we have to cheat. We do this as follows:
-        unless( $users->{_MAP_OF_EMAILS} ) {
-            $users->lookupLoginName('guest'); # load the cache
-                                               #SMELL: this will not work for non-topic based users
-            foreach my $wn ( keys %{$users->{W2U}} ) {
-                my $ou = $users->findUser( $users->{W2U}{$wn}, $wn, 1 );
-                map { $users->{_MAP_OF_EMAILS}->{$_} = $ou; }
-                  $ou->emails();
+        #if we have the UserMapping changes (post 4.0.3)
+        if (defined ($users->findUserByEmail)) {
+            return $users->findUserByEmail();
+        } else {
+            # SMELL: there is no way in TWiki to map from an email back to a user, so
+        	# we have to cheat. We do this as follows:
+            unless( $users->{_MAP_OF_EMAILS} ) {
+        	    $users->lookupLoginName('guest'); # load the cache
+                #SMELL: this will not work for non-topic based users
+            	foreach my $wn ( keys %{$users->{W2U}} ) {
+                    my $ou = $users->findUser( $users->{W2U}{$wn}, $wn, 1 );
+                    map { push( @{$users->{_MAP_OF_EMAILS}->{$_}}, $ou); } $ou->emails();
+
+            	}
             }
         }
         return $users->{_MAP_OF_EMAILS}->{$opts{email}};

@@ -223,4 +223,20 @@ sub setEmails {
                                   $user->wikiName(), $text, $meta );
 }
 
+#returns an array of user objects that relate to a email address
+sub findUserByEmail {
+    my $this = shift;
+    my $email = shift;
+    # SMELL: there is no way in TWiki to map from an email back to a user, so
+    # we have to cheat. We do this as follows:
+    unless( $this->{_MAP_OF_EMAILS} ) {
+        $this->{_MAP_OF_EMAILS} = ();
+        my $users = $this->{session}->{users}->getAllUsers();
+        foreach my $user ( @{$users} ) {
+            map { push( @{$this->{_MAP_OF_EMAILS}->{$_}}, $user); } $user->emails();
+        }
+    }
+    return $this->{_MAP_OF_EMAILS}->{$email};
+}
+
 1;

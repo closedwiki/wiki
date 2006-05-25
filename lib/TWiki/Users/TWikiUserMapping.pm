@@ -52,8 +52,8 @@ sub new {
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
-    %{$this->{session}->{users}->{U2W}} = ();
-    %{$this->{session}->{users}->{W2U}} = ();
+    %{$this->{U2W}} = ();
+    %{$this->{W2U}} = ();
 
     return $this;
 }
@@ -125,7 +125,7 @@ sub addUserToTWikiUsersTopic {
     my $today = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
 
     # add to the cache
-    $this->{session}->{users}->{U2W}{$user->login()} = $user->{web} . "." . $user->wikiName();
+    $this->{U2W}{$user->login()} = $user->{web} . "." . $user->wikiName();
 
     # add name alphabetically to list
     foreach my $line ( split( /\r?\n/, $text) ) {
@@ -175,7 +175,7 @@ sub lookupLoginName {
     my ($this, $loginUser) = @_;
 
     $this->cacheTWikiUsersTopic();
-    return $this->{session}->{users}->{U2W}{$loginUser};
+    return $this->{U2W}{$loginUser};
 }
 
 #API func to be used for User systems that are faster in single request mode
@@ -183,9 +183,16 @@ sub lookupWikiName {
     my ($this, $wikiName) = @_;
 
     $this->cacheTWikiUsersTopic();
-    return $this->{session}->{users}->{W2U}{$wikiName};
+    return $this->{W2U}{$wikiName};
 }
 
+sub getListOfAllWikiNames {
+    my ( $this ) = @_;
+    ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
+
+    $this->cacheTWikiUsersTopic();
+    return keys(%{$this->{W2U}});
+}
 
 # Build hash to translate between username (e.g. jsmith)
 # and WikiName (e.g. Main.JaneSmith).  Only used for sites where
@@ -195,8 +202,8 @@ sub cacheTWikiUsersTopic {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
-    return if $this->{session}->{users}->{CACHED};
-    $this->{session}->{users}->{CACHED} = 1;
+    return if $this->{CACHED};
+    $this->{CACHED} = 1;
 
     my $text;
     my $store = $this->{session}->{store};
@@ -219,8 +226,7 @@ sub cacheTWikiUsersTopic {
     # This matches:
     #   * TWikiGuest - guest - 10 Mar 2005
     #   * TWikiGuest - 10 Mar 2005
-    my $ch = $this->{session}->{users};
-    $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$/_cacheUser($ch,$1,$2,$3)/gome;
+    $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$/_cacheUser($this,$1,$2,$3)/gome;
 }
 
 sub _cacheUser {

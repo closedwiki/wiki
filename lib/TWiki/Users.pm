@@ -203,7 +203,14 @@ sub findUser {
     }
 
     return $this->createUser( $name, $wikiname );
-}
+    }
+
+    sub findUserByEmail {
+        my $this = shift;
+        ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
+
+        return $this->{passwords}->findUserByEmail(@_);
+    }
 
 =pod
 
@@ -228,7 +235,6 @@ sub createUser {
 
 sub addUserToTWikiUsersTopic {
     my ( $this, $user, $me ) = @_;
-
 
     return $this->{usermappingmanager}->addUserToTWikiUsersTopic($user, $me);
 }
@@ -305,8 +311,8 @@ sub getAllLoadedUsers {
 	} else {
 		die $u;
 	}
-    }        
-        
+    }
+
     return \@list;
 }
 
@@ -316,17 +322,17 @@ sub getAllLoadedUsers {
 sub getAllUsers {
     my( $this ) = @_;
 
-    $this->{usermappingmanager}->cacheTWikiUsersTopic();
-    my @list = keys(%{$this->{W2U}});
+    my @list = $this->{usermappingmanager}->getListOfAllWikiNames();
     @list = sort(@list);
-    
+#    die join(', ', @list);
+
     my @userlist= ();
-  
+
     foreach my $u (@list) {
-        my $user = $this->findUser($u);  
+        my $user = $this->findUser($u);
         push(@userlist, $user) if ($user->isa( 'TWiki::User'));
-    }        
-        
+    }
+
     return \@userlist;
 }
 
