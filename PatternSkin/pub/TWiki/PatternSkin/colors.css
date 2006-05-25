@@ -183,6 +183,9 @@ select {
 	color:#000;
 	background-color:#fff; /*BG1*/
 }
+.twikiInputFieldDisabled {
+	color:#666; /*T7*/
+}
 
 /*	-----------------------------------------------------------
 	Plugin elements
