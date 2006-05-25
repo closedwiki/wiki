@@ -1,4 +1,4 @@
-// Generally useful JavaScript used by TWiki
+ï»¿// Generally useful JavaScript used by TWiki
 
 var POPUP_WINDOW_WIDTH = 500;
 var POPUP_WINDOW_HEIGHT = 480;
@@ -13,8 +13,8 @@ var ns4 = (document.layers) ? true : false;
 var ie4 = (document.all) ? true : false;
 var dom = (document.getElementById) ? true : false;
 
-var UPPER_ALPHA_CHARS    	= "ÀÈÌÒÙÁÉÍÓÚİÂÊÎÔÛÃÑÕÄËÏÖÜŸŸÇŒØÅÆşĞA-Z";
-var LOWER_ALPHA_CHARS		= "àèìòùáéíóúıâêîôûãñõäëïöüœßøŞåæğça-z";
+var UPPER_ALPHA_CHARS    	= "Ã€ÃˆÃŒÃ’Ã™ÃÃ‰ÃÃ“ÃšÃÃ‚ÃŠÃÃ”Ã›ÃƒÃ‘Ã•Ã„Ã‹ÃÃ–ÃœÅ¸Å¸Ã‡Å’Ã˜Ã…Ã†Ã¾ÃA-Z";
+var LOWER_ALPHA_CHARS		= "Ã Ã¨Ã¬Ã²Ã¹Ã¡Ã©Ã­Ã³ÃºÃ½Ã¢ÃªÃ®Ã´Ã»Ã£Ã±ÃµÃ¤Ã«Ã¯Ã¶Ã¼Å“ÃŸÃ¸ÃÃ¥Ã¦Ã°Ã§a-z";
 var NUMERIC_CHARS			= "\\d";
 var MIXED_ALPHA_CHARS		= UPPER_ALPHA_CHARS + LOWER_ALPHA_CHARS;
 var MIXED_ALPHANUM_CHARS	= MIXED_ALPHA_CHARS + NUMERIC_CHARS;
@@ -158,7 +158,7 @@ function isWikiWord(inValue) {
 Capitalizes words in the string. For example: "A handy dictionary" becomes "A Handy Dictionary".
 */
 String.prototype.capitalize = function() {
-    return this.replace(/[ÀÈÌÒÙÁÉÍÓÚİÂÊÎÔÛÃÑÕÄËÏÖÜŸŸÇŒØÅÆşĞA-ZàèìòùáéíóúıâêîôûãñõäëïöüœßøŞåæğça-z]+/g, function(a) {
+    return this.replace(/\w+/g, function(a) {
         return a.charAt(0).toUpperCase() + a.substr(1);
     });
 };
