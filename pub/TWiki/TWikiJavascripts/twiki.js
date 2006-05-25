@@ -19,8 +19,7 @@ var NUMERIC_CHARS			= "\\d";
 var MIXED_ALPHA_CHARS		= UPPER_ALPHA_CHARS + LOWER_ALPHA_CHARS;
 var MIXED_ALPHANUM_CHARS	= MIXED_ALPHA_CHARS + NUMERIC_CHARS;
 var WIKIWORD_REGEX = "^" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + LOWER_ALPHA_CHARS + "]" + "+" + "[" + UPPER_ALPHA_CHARS + "]" + "+" + "[" + MIXED_ALPHANUM_CHARS + "]" + "*";
-var ILLEGAL_URL_CHARS = "\\<\\>\\,\\.\\/\\\\\|\\?\\;\\:\\\"\\'\\[\\]\\{\\}\\=\\+\\!@#$%&*()";
-
+var ALLOWED_URL_CHARS = MIXED_ALPHANUM_CHARS + "-_^";
 
 
 // Chain a new load handler onto the existing handler chain
@@ -203,8 +202,8 @@ Removes punctuation characters from a string. For example: "A/Z" becomes "AZ".
 @return A new punctuation free string.
 */
 function removePunctuation(inValue) {
-	var illegalRegex = "[" + ILLEGAL_URL_CHARS + "]";
-	var re = new RegExp(illegalRegex, "g");
+	var allowedRegex = "[^" + ALLOWED_URL_CHARS + "]";
+	var re = new RegExp(allowedRegex, "g");
   	return inValue.replace(re, "");
 }
 
