@@ -295,7 +295,8 @@ CGI gateway to the =%<nop>SEARCH%= functionality driven by the following CGI par
 ---+++ =statistics=
 Refresh the WebStatistics topics in range of webs.
 | *Parameter* | *Description* | *Default* |
-| =webs= | *list* of webs to run stats on | none |
+| =webs= | comma-separated list of webs to run stats on | current web |
+| =logdate= | YYYYMM to generate statistics for | current month |
 
 ---+++ =twiki=
 Single-script interface to the functionality of all the other scripts. Experimental, not for production use. Read the code if you want to know more.
