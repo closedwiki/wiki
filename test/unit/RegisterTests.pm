@@ -921,62 +921,6 @@ sub visible {
  $a;
 }
 
-sub testReRegister {
-    my $this = shift;
-
-    $this->registerVerifyOk();
-
-    # make sure we can't re-register the same user
-    my $query = new CGI ({
-                          'TopicName' => [
-                                          'TWikiRegistration'
-                                         ],
-                          'Twk1Email' => [
-                                          $testUserEmail
-                                         ],
-                          'Twk1WikiName' => [
-                                             $testUserWikiName
-                                            ],
-                          'Twk1Name' => [
-                                         'Test User'
-                                        ],
-                          'Twk0Comment' => [
-                                            ''
-                                           ],
-                          'Twk1LoginName' => [
-                                              $testUserLoginName
-                                             ],
-                          'Twk1FirstName' => [
-                                              'Test'
-                                             ],
-                          'Twk1LastName' => [
-                                             'User'
-                                            ],
-                          'action' => [
-                                       'register'
-                                      ]
-                         });
-
-    $query->path_info( "/$peopleWeb/TWikiRegistration" );
-    $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
-    $session->{net}->setMailHandler(\&sentMail);
-
-    try {
-        TWiki::UI::Register::register_cgi($session);
-    } catch TWiki::OopsException with {
-        my $e = shift;
-        $this->assert_str_equals("attention", $e->{template},$e->stringify());
-        $this->assert_str_equals("rejected", $e->{def});
-    } catch TWiki::AccessControlException with {
-        my $e = shift;
-        $this->assert(0, $e->stringify);
-    } catch Error::Simple with {
-        $this->assert(0, shift->stringify());
-    } otherwise {
-        $this->assert(0, "expected an oops redirect");
-    };
-}
-
 1;
 
 
