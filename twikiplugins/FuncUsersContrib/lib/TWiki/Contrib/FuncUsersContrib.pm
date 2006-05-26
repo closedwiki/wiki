@@ -8,10 +8,24 @@ use strict;
 
 package TWiki::Contrib::FuncUsersContrib;
 
-use vars qw( $VERSION );
+use vars qw( $VERSION $RELEASE );
 my( $web, $topic, $rev ) = @_;
 
-$VERSION = '1.000';
+$VERSION = '$Rev$';
+$RELEASE = 1.000;
+
+# Compatibility for plugins that used it before the methods
+# moved to TWiki::Func
+sub getListOfUsers { return TWiki::Func::getListOfUsers(@_); }
+sub getListOfGroups { return TWiki::Func::getListOfGroups(@_); }
+sub lookupUser { return TWiki::Func::lookupUser(@_); }
+sub getACLs { return TWiki::Func::getACLs(@_); }
+sub setACLs { return TWiki::Func::setACLs(@_); }
+sub isAdmin { return TWiki::Func::isAdmin(@_); }
+sub isInGroup { return TWiki::Func::isInGroup(@_); }
+
+# Extend TWiki::Func
+package TWiki::Func;
 
 =pod
 

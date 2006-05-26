@@ -1,4 +1,5 @@
 *EXPERTS ONLY* Proposed API for user access, for use with TWiki-4.0.x
+
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -6,9 +7,9 @@
    It is automatically generated from the subversion repository, and any changes
    you make will simply be overwritten the next time a release is generated.
 
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
-*This module will only work with TWiki versions 4.00 and above.*
+*This module will only work with TWiki versions 4.0.0 and above.*
 
 Intended for use with any other plugin that urgently needs access to user data.
 
@@ -19,6 +20,8 @@ The module implements a set of functions for access to TWiki internal user data,
 A single perl module that implements the proposed user access API.
 
 The API is packaged this way so it can be used with TWiki-4.0
+	* Set STUB = %$STUB%
+	* Set SHORTDESCRIPTION = *EXPERTS ONLY* Proposed API for user access, for use with TWiki-4.0.x
 
 ---+ Details
 %$POD%
