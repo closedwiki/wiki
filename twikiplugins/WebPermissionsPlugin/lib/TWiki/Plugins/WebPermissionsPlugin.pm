@@ -30,7 +30,6 @@ use strict;
 use vars qw( $VERSION $RELEASE );
 
 use TWiki::Func;
-use TWiki::Contrib::FuncUsersContrib;
 use CGI qw( :all );
 
 $VERSION = '$Rev$';
@@ -46,6 +45,9 @@ sub initPlugin {
             'Version mismatch between WebPermissionsPlugin and TWiki::Plugins' );
         return 0;
     }
+    if( $TWiki::Plugins::VERSION == 1.1 ) {
+        eval 'use TWiki::Contrib::FuncUsersContrib';
+    }
 
     TWiki::Func::registerTagHandler( 'WEBPERMISSIONS', \&_WEBPERMISSIONS );
 
@@ -55,7 +57,7 @@ sub initPlugin {
 sub _WEBPERMISSIONS {
     my( $session, $params, $topic, $web ) = @_;
 
-    #return undef unless TWiki::Contrib::FuncUsersContrib::isAdmin();
+    return undef unless TWiki::Func::isAdmin();
 
     my $query = $session->{cgiQuery};
     my $action = $query->param( 'web_permissions_action' );
@@ -76,7 +78,7 @@ sub _WEBPERMISSIONS {
 
     my %table;
     foreach $web ( @webs ) {
-        my $acls = TWiki::Contrib::FuncUsersContrib::getACLs( \@modes, $web );
+        my $acls = TWiki::Func::getACLs( \@modes, $web );
 
         @knownusers = keys %$acls unless scalar( @knownusers );
         if( $saving ) {
@@ -93,7 +95,7 @@ sub _WEBPERMISSIONS {
             }
             # Commit changes to ACLs
             if( $changes ) {
-                TWiki::Contrib::FuncUsersContrib::setACLs( \@modes, $acls, $web );
+                TWiki::Func::setACLs( \@modes, $acls, $web );
             }
         }
         $table{$web} = $acls;

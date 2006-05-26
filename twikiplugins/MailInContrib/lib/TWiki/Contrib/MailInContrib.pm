@@ -28,7 +28,6 @@ use Email::FolderType::Net;
 use Email::MIME;
 use Email::Delete;
 use Time::ParseDate;
-use TWiki::Contrib::FuncUsersContrib;
 use Error qw( :try );
 use vars qw ( $VERSION $RELEASE );
 use Carp;
@@ -113,6 +112,10 @@ sub processInbox {
 
     $TWiki::Plugins::SESSION = $this->{session};
 
+    if( $TWiki::Plugins::VERSION <= 1.1 ) {
+        eval 'use TWiki::Contrib::FuncUsersContrib';
+    }
+
     die "No folder specification" unless $box->{folder};
 
     my $ftype = Email::FolderType::folder_type($box->{folder});
@@ -169,7 +172,7 @@ sub processInbox {
           if $this->{debug};
 
         $from =~ s/^.*<(.*)>.*$/$1/;
-        $user = TWiki::Contrib::FuncUsersContrib::lookupUser( email => $from );
+        $user = TWiki::Func::lookupUser( email => $from );
 
         my $to = $mail->header('To');
         $to =~ s/^.*<(.*)>.*$/$1/;
