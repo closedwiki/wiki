@@ -114,7 +114,7 @@ white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, tea
 ---+++ Password changed successfully!
 
 <form action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%">
-<input type="submit" style="color:green" value="OK" />
+<input type="submit" class="natOkButton" value="OK" />
 </form>
 %TMPL:END%
 %TMPL:DEF{"confirm"}%<!-- BlackListPlugin support -->
@@ -132,7 +132,7 @@ link in your email or enter the code in the box below to activate your membershi
 
 %TMPL:END%
 %TMPL:DEF{"missing_fields"}%<!-- better dialog, uses goback def -->
----+++ Missing Fields =<font color="red">**</font>= 
+---+++ Missing Fields =<span class="twikiAlert">**</span>= 
 The required field *%PARAM1%* was not filled in.
 
 %TMPL:P{"goback"}%
@@ -220,7 +220,7 @@ An email address is required before a password can be reset.
 ---+++ Topic Save Error
 Could not save  <nop>%WEB%.%TOPIC%.
 
-The required field =<font color="red">**</font>= *%PARAM1%* was not filled in.
+The required field =<span class="twikiAlert">**</span>= *%PARAM1%* was not filled in.
 
 %TMPL:P{"goback"}%
 %TMPL:END%
@@ -286,8 +286,8 @@ Do you want to continue and try to rename the web?
 <form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%HOMETOPIC%">
   <input type="hidden" name="action" value="renameweb">
   <input type="hidden" name="confirm" value="continue">
-  <input type="submit" style="color:green" value="Ok">&nbsp;
-  <input type="button" style="color:red" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%'">
+  <input type="submit" class="natOkButton" value="OK">&nbsp;
+  <input type="button" class="natCancelButton" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%'">
 </form> 
 </div>
 %TMPL:END%

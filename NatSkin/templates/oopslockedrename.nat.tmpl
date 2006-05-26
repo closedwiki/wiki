@@ -11,9 +11,9 @@
  <li> To cancel go <a href="javscript:history.back()">back</a> in your browser.</li>
 </ul>
 <form class="natOopsButtons" name="ButtonBox">
-  <input style="color:red" type="button" value="Rename anyway" onclick="window.location.href='%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%'">&nbsp;
-  <input type="button" value="View raw" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on';">&nbsp;
-  <input style="color:green" type="button" value="Cancel" onclick="history.back()">
+  <input class="natOkButton" type="button" value="Rename anyway" onclick="window.location.href='%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%'">&nbsp;
+  <input class="natAltButton" type="button" value="View raw" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on';">&nbsp;
+  <input class="natCancelButton" type="button" value="Cancel" onclick="history.back()">
 </form> 
 %I% __Note:__ Renaming a topic which is being edited by someone else might 
 cause serious trouble as it will _break_ the lock on the topic!

@@ -44,8 +44,8 @@ However, there was an error while trying to update the WebPreferences.
 
 Please check out the WebPreferences or try again.
 <form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebPreferences" method="post">
-  <input type="submit" style="color:green" value="OK">
-  <input type="button" style="color:red" value="Cancel" onclick="history.back()">&nbsp;
+  <input type="submit" class="natOkButton" value="OK">
+  <input type="button" class="natCancelButton" value="Cancel" onclick="history.back()">&nbsp;
 </form>
 
 *Error message*: <div class="natErrorMsg">%TMPL:END%
@@ -64,8 +64,8 @@ Would you like to go to:
   </select>
 </td></tr>
 <tr><td>
-  <input type="submit" style="color:green" value="OK">&nbsp;
-  <input type="button" style="color:red" value="Cancel" onclick="history.back()">
+  <input type="submit" class="natOkButton" value="OK">&nbsp;
+  <input type="button" class="natCancelButton" value="Cancel" onclick="history.back()">
 </td></tr> </table> </form> <div style="visibility:hidden">%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
 %PARAM1%

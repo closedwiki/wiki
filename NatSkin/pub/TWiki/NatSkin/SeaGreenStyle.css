@@ -273,6 +273,9 @@ hr {
 .twikiTable th a:hover {
   color:#0F314E;
 }
+.twikiDiffTable td {
+  border:0px;
+}
 
 /* topic form */
 .natTopicForm table {

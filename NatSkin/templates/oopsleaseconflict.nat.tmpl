@@ -42,19 +42,19 @@ first.
 <td valign="top">
 <form style="margin-bottom:0px" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
   <input type="hidden" name="breaklock" value="on" />
-  <input type="submit" style="color:red" value="Edit Anyway" />
+  <input type="submit" class="natOkButton" value="Edit Anyway" />
 %QUERYPARAMS% 
 </form>
 </td> 
 <td valign="top">
 <form style="margin-bottom:0px" class="natOopsButtons" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-  <input type="submit" style="color:blue" value="Try Again" />
+  <input type="submit" class="natAltButton" value="Try Again" />
 %QUERYPARAMS% 
 </form>
 </td>
 <td valign="top">
 <form style="margin-bottom:0px" class="natOopsButtons" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-  <input type="submit" style="color:green" value="Cancel" />
+  <input type="submit" class="natCancelButton" value="Cancel" />
 </form>
 </td>
 </tr></table> %TMPL:END%

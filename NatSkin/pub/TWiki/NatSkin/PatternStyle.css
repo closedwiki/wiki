@@ -522,6 +522,9 @@ html>body .natSideBar li a {
 .twikiTable td {
   border:1px #ccc solid;
 }
+.twikiDiffTable td {
+  border:0px;
+}
 
 /* twiki forms */
 .natTopicEditForm,

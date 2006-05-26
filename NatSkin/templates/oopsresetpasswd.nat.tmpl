@@ -7,10 +7,9 @@
 %TMPL:DEF{"message"}%<!-- -->
 The following is your encrypted password entry: 
 
-<div style="margin-left:40px;">
-<span style="background:#eeeeee; border:1px solid #aaaaaa; padding:5px;\
-	     padding-left:10px; padding-right:10px; font:normal medium monospace">
-<nop>%PARAM1%</span>
+<div style="padding:15px">
+<pre style="padding:5px 10px;display:inline;font-size:1.5em">
+<nop>%PARAM1%</pre>
 </div>
 
 Please copy this information into a friendly e-mail to 
@@ -18,6 +17,6 @@ Please copy this information into a friendly e-mail to
 
 <form name="ButtonBox" enctype="text/plain" method="post" action=%TMPL:P{"mailuri"}%>
   <input type="hidden" name="Password" value="%PARAM1%" />
-  <input type="submit" style="color:green" value ="OK">&nbsp;
-  <input type="button" style="color:red" value="Cancel" onclick="history.back()">
+  <input type="submit" class="natOkButton" value ="OK">&nbsp;
+  <input type="button" class="natCancelButton" value="Cancel" onclick="history.back()">
 </form> %TMPL:END%
