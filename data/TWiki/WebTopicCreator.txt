@@ -102,7 +102,7 @@ function disableSubmit(inButton) {
 //<![CDATA[
 // Read url param 'allowsnonwikiword' to set the initial checkbox value
 var allowsNonWikiWord = "%URLPARAM{"allowsnonwikiword" default=off}%";
-setCheckBoxState(document.forms.newtopic.nonwikiword, allowsNonWikiWord.boolean() ? true : false);
+setCheckBoxState(document.forms.newtopic.nonwikiword, allowsNonWikiWord.toBoolean() ? true : false);
 // start with a check
 canSubmit(document.forms.newtopic,false);
 //]]>

@@ -173,8 +173,8 @@ String.prototype.capitalize = function() {
 /**
 Returns true if the string is either "on", "true" or "1"; otherwise: false.
 */
-String.prototype.boolean = function() {
-    return this == "on" || this == "true" || this == "1";
+String.prototype.toBoolean = function() {
+	return (this == "on") || (this == "true") || (this == "1");
 };
 
 /**
