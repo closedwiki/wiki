@@ -56,7 +56,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.9994';
+$RELEASE = '2.9996';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -597,7 +597,7 @@ sub commonTagsHandler {
   $_[0] =~ s/%NATREVISIONS%/&renderRevisions()/geo;
   $_[0] =~ s/%PREVREV%/'1.' . &getPrevRevision()/geo;
   $_[0] =~ s/%CURREV%/'1.' . &getCurRevision()/geo; 
-  $_[0] =~ s/%NATMAXREV%/1.&getMaxRevision()/geo;
+  $_[0] =~ s/%NATMAXREV%/'1.'.&getMaxRevision()/geo;
 
   # spam obfuscator
   if ($useSpamObfuscator) {
