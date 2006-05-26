@@ -270,13 +270,13 @@ sub _renderSequential
         $result .=
           _sequentialRow( '#D0FFD0',
                           ($session->{i18n}->maketext('Changed')),
-                          'Added',
+                          'Changed',
                           _renderCellData( $session, $left, $web, $topic ),
                           '-', '&lt;' );
         $result .=
           _sequentialRow( undef,
                           ($session->{i18n}->maketext('Changed')),
-                          'Added',
+                          'Changed',
                           _renderCellData( $session, $right, $web, $topic ),
                           '+', '&gt;' );
     } elsif ( $diffType eq 'l' && $left ne '' && $right ne '' ) {
