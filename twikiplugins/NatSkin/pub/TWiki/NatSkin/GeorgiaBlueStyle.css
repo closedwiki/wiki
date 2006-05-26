@@ -36,6 +36,9 @@ hr {
 .twikiTable th a {
   color:#999966;
 }
+.twikiDiffTable td {
+  border:0px;
+}
 
 /* forms */
 .natTopicForm table,

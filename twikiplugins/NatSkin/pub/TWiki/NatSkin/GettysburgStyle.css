@@ -75,6 +75,9 @@ hr {
 .twikiTable td {
   line-height:170%;
 }
+.twikiDiffTable td {
+  border:0px;
+}
 
 /* topic form */
 .natTopicForm table,

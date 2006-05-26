@@ -78,6 +78,27 @@ hr {
   font-size:small;
   color:#cccccc;
 }
+.twikiDiffTable td {
+  border:0px;
+}
+
+/* twiki diff */
+.twikiDiffChangedHeader,
+.twikiDiffChangedMarker,
+.twikiDiffAddedHeader,
+.twikiDiffAddedMarker,
+.twikiDiffDeletedHeader,
+.twikiDiffDeletedMarker {
+  color:black;
+}
+.twikiDiffChangedText,
+.twikiDiffAddedText,
+.twikiDiffDeletedText {
+  background:#222222;
+}
+.twikiDiffUnchangedText {
+  background:#333333;
+}
 
 /* topic form */
 .natTopicForm td,

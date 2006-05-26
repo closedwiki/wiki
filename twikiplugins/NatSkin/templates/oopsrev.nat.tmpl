@@ -1,42 +1,94 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsrev.nat.tmpl -->
-%TMPL:DEF{"heading"}%View Previous Topic Revisions of <nop>%WEB%.%TOPIC%%TMPL:END%
+%TMPL:DEF{"heading"}%Compare Revisions of %WEB%.%TOPIC%%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
 <p>
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
-<table border="0"><tr><td>
-<ul>
-  <li>Revision: </li>
-</ul>
-</td><td>
-<input type="text" name="rev" size="6" value="%PARAM1%" />
-&nbsp;<input type="submit" value="View revision" /> <br/>
-in <input type="checkbox" name="raw"> raw text format.
-</td></tr>
-<tr><td>&nbsp;</td><td valign=top> (1.1 ... %PARAM3%)</td></tr>
-</form>
-<tr><td colspan="2" style="padding-top:30px; padding-bottom:10px">
-<h1 class="%TMPL:P{"headingstyle"}%">Compare Revisions <img src="%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/warning.gif" alt="warning"/></h1>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td align="right"><b>Old revision</b>:&nbsp;</td>
+<td>
+<form name="main" style="margin:0px" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+  <input type="text" name="rev2" size="6" value="%PARAM1%" />
 </td>
-<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
-<tr><td>
-<ul>
-  <li> Older revision: </li>
-</ul>
-</td><td>
-<input type="text" name="rev2" size="6" value="%PARAM1%" />
-</td></tr><tr><td>
-<ul>
-  <li> Newer revision: </li>
-</ul>
-</td><td>
-<input type="text" name="rev1" size="6" value="%PARAM2%" />
-&nbsp;<input type="submit" value="View difference" />
-</td></tr>
+<td rowspan="2" valign="top" style="padding-left:1em">
+%IFSKINSTATETHEN{release="dakar"}%
+<table border="0" class="natDiffOptions">
+  <tr>
+    <td align="center">
+      <label for="sequential">
+	<img src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/oopsmore_diff_sequential.gif" alt="sequential" width="80" height="80" />
+      </label>
+    </td>
+    <td align="center">
+      <label for="sidebyside">
+	<img src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/oopsmore_diff_sidebyside.gif" alt="side by side" width="80" height="80" />
+      </label>
+    </td>
+    <td align="center">
+      <label for="debug">
+	<img src="%PUBURLPATH%/%TWIKIWEB%/PatternSkin/oopsmore_diff_debug.gif" alt="debug" width="80" height="80" />
+      </label>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <input type="radio" name="render" id="sequential" value="sequential" checked="checked" />
+      <label for="sequential">Sequential</label>
+      </td>
+    <td align="center">
+      <input type="radio" name="render" id="sidebyside" value="sidebyside" />
+      <label for="sidebyside">Side by side</label>
+    </td>
+    <td align="center">
+      <input type="radio" name="render" id="debug" value="debug" />
+      <label for="debug">Debug</label>
+    </td>
+  </tr>
+</table>
+%FISKINSTATE%
+</td>
+</tr>
+<tr>
+<td align="right"><b>New revision</b>:&nbsp;</td>
+<td>
+  <input type="text" name="rev1" size="6" value="%PARAM2%" />
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="left" style="padding-left:1em">
+  <input type="submit" style="width:10em;margin-top:1em;" class="natAltButton" value="View difference" />
 </form>
-<form name="ButtonBox" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
-<tr><td style="padding-top:30px;" align="right" valign="bottom">
-<input type="submit" style="color:green" value="View all diffs"></td>
-<td style="padding-top:30px;" align="left" valign="bottom">
-<input type="button" style="color:red" value="Cancel" onclick="javascript:history.back()">
-</td></tr> </table> </form> %TMPL:END%
+</td>
+</tr>
+<tr>
+<td colspan="3" style="padding-top:30px;">
+<h1 class="%TMPL:P{"headingstyle"}%">View Previous Topic Revision</h1>
+</td>
+<tr>
+<td valign="top" align="right"><b>Revision</b>:&nbsp;</td>
+<td>
+<form style="margin:0px" name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+  <input type="text" name="rev" size="6" value="%PARAM1%" /> <br />
+  (1.1 ... %PARAM3%) </td>
+<td valign=top style="padding-left:1em"> in <input type="checkbox" name="raw"> raw text format.</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td align="left" style="padding-left:1em">
+  <input type="submit" style="width:10em" class="natAltButton" value="View revision" />
+  </form>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="top" align="left" style="padding-left:1em">
+  <form name="ButtonBox" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+    <input type="submit" style="width:10em" class="natOkButton" value="View all diffs"><br />
+    <input type="button" style="width:10em" class="natCancelButton" value="Cancel" onclick="javascript:history.back()">
+  </form> 
+</td></tr> 
+</table>%TMPL:END%

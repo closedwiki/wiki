@@ -249,6 +249,9 @@ hr {
 .twikiTable td {
   border:1px ridge #999;
 }
+.twikiDiffTable td {
+  border:0px;
+}
 
 /* topic form */
 .natTopicForm .natTopicFormFirstCol a,

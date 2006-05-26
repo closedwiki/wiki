@@ -38,6 +38,9 @@ hr { border-bottom: 1px solid #999999; }
   letter-spacing: .1em;
   vertical-align:middle;
 }
+.twikiDiffTable td {
+  border:0px;
+}
 
 /* topic form */
 .natTopicForm table {

@@ -116,11 +116,9 @@ hr {
   color:#3f59bb;
 }
 
-/* twiki diff table (SMELL put that into BaseStyle) */
-.twikiDiffTable table th {
-  padding-left:5px;
-  padding-right:5px;
-  padding-top:2px;
+/* twiki diff */
+.twikiDiffTable td {
+  border:0px;
 }
 
 /* search table */

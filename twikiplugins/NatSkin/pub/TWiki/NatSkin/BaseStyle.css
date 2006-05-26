@@ -379,6 +379,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 .natMain .natContact {
 }
+.natOkButton {
+  color:green;
+}
+.natCancelButton {
+  color:red;
+}
+.natAltButton {
+  color:blue;
+}
 
 /* helpers */
 .natSep {
@@ -434,12 +443,13 @@ h1, h2, h3, h4, h5, h6 {
 .natTopicAttachments table {
   width:100%;
 }
-.natSideBarContents .natSkinStyleBrowser ul {
+.natSideBar .natSkinStyleBrowser ul,
+.natSkinStyleBrowser ul {
   padding-left:0px;
   margin-top:5px;
   margin-bottom:0px;
 }
-.natSideBarContents .natSkinStyleBrowser li  {
+.natSkinStyleBrowser li  {
   list-style-type: none;
 }
 
@@ -515,6 +525,9 @@ a.natFeedIcon {
   overflow:auto;
   padding:1px;
 }
+.twikiDiffTable td {
+  border:0px;
+}
 
 /* twiki forms */
 .natTopicForm {
@@ -562,6 +575,50 @@ a.natFeedIcon {
 .natTopicFormLabel {
   margin-top:3px;
   margin-bottom:3px;
+}
+
+/* twikiDiff */
+.twikiDiffTable { 
+  border:1px solid #ccc;
+  margin-bottom:2em;
+}
+.twikiDiffTable table {
+  border:0px;
+}
+
+.twikiDiffTable th {
+  background:#dddddd;
+}
+.twikiDiffLineNumberHeader th { 
+  background:#eeeeee;
+}
+
+td.twikiDiffChangedHeader,
+td.twikiDiffAddedHeader { 
+  background:#D0FFD0;
+  border-top:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+}
+.twikiDiffAddedMarker { 
+  background:#aaaadd;
+}
+.twikiDiffAddedText { 
+  background:#ccccff;
+}
+.twikiDiffChangedMarker,
+.twikiDiffChangedText { 
+}
+
+.twikiDiffDeletedHeader { }
+.twikiDiffDeletedMarker { 
+  background:#dd7777;
+}
+.twikiDiffDeletedText { 
+ background:#ff9999;
+}
+
+td.twikiDiffChangedText {
+  color:red;
 }
 
 /* CAIRO-HACK to use the FORMBUTTON of the NatSkin */

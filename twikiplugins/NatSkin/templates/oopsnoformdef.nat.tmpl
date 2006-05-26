@@ -26,7 +26,7 @@ This can be automatically upgraded by:
 Please ask your <nop>%WIKITOOLNAME% administrator <a href=%TMPL:P{"mailuri"}%>%WIKIWEBMASTER%</a>, to do this. 
 
 <form class="natOopsButtons" name="buttonbox" action=%TMPL:P{"mailuri"}%>
-  <input type="submit" style="color:green" value="OK">&nbsp; 
-  <input type="button" style="color:blue" value="View raw" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on'">&nbsp; 
-  <input type="button" style="color:red" value="Cancel" onclick="history.back()">
+  <input type="submit" class="natOkButton" value="OK">&nbsp; 
+  <input type="button" class="natAltButton" value="View raw" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on'">&nbsp; 
+  <input type="button" class="natCancelButton" value="Cancel" onclick="history.back()">
 </form> %TMPL:END%

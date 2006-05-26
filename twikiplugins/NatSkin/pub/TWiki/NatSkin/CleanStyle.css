@@ -36,6 +36,35 @@ hr {
   border:1px #aaaaaa solid;
 }
 
+/* twikiDiff */
+.twikiDiffTable { 
+  border:1px solid #aaaaaa;
+  background:#fafafa;
+}
+.twikiDiffTable td,
+.twikiDiffTable th {
+  border:0px;
+}
+.twikiDiffTable th { 
+  border-bottom:1px solid #aaaaaa;
+}
+
+.twikiDiffChangedHeader { }
+.twikiDiffChangedMarker { }
+.twikiDiffChangedText { }
+
+.twikiDiffDeletedHeader { }
+.twikiDiffDeletedMarker { }
+.twikiDiffDeletedText { 
+ background:#FFD7D7;
+}
+
+.twikiDiffAddedHeader { }
+.twikiDiffAddedMarker { }
+.twikiDiffAddedText { }
+
+.twikiDiffUnchangedText { }
+
 
 /* twiki page form */
 .twikiPageForm table {
