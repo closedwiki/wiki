@@ -25,9 +25,11 @@ function initForm() {
 	unhideTextArea();
 	
 	var i, ilen = toShow.length;
+	var elem;
 	for (i = 0; i < ilen; ++i) {
 		if (dom) {
-			document.getElementById(toShow[i]).style.display="inline";
+			elem = document.getElementById(toShow[i]);
+			if (elem) elem.style.display="inline";
 		} else if (ie4) {
 			document.all[toShow[i]].style.display="inline";
 		} else if (ns4) {
@@ -37,7 +39,8 @@ function initForm() {
 	ilen = toHide.length;
 	for ( i = 0; i < toHide.length; ++i) {
 		if (dom) {
-			document.getElementById(toHide[i]).style.display="none";
+			elem = document.getElementById(toHide[i]);
+			if (elem) elem.style.display="none";
 		} else if (ie4) {
 			document.all[toHide[i]].style.display="none";
 		} else if (ns4) {
@@ -68,7 +71,8 @@ function initTextAreaFontStyle() {
 Now that all edit box properties have been set, the hidden text area holder may unhide.
 */
 function unhideTextArea() {
-	document.getElementById(EDITBOX_HOLDER_ID).style.display = "block";
+	var elem = document.getElementById(EDITBOX_HOLDER_ID);
+	if (elem) elem.style.display = "block";
 }
 
 /**
