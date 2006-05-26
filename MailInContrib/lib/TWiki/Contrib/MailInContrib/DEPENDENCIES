@@ -1,5 +1,5 @@
 TWiki::Plugins,>=1.1,,This module requires TWiki-4
-TWiki::Contrib::FuncUsersContrib,>=8986,perl,Required for TWiki-4
+TWiki::Contrib::FuncUsersContrib,>=10352,perl,Required for TWiki-4
 Time::ParseDate,>=2003.0211,cpan,Required. Available from the CPAN:Time::ParseDate archive.
 Error,>=0.15,cpan,Required. Available from the CPAN:Error archive.
 Email::Folder,>=0.84,cpan,Required. Available from the CPAN:Email::Folder archive.

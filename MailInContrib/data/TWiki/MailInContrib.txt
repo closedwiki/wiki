@@ -13,7 +13,7 @@ This Contrib supports the submission of content to TWiki topics via e-mail.
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
 
-*WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please see [[%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?rev=1.12][here]]*
+*WARNING: TWiki-4 only. If you want to use this plugin with an earlier version of TWiki, please use http://twiki.org/cgi-bin/viewfile/Plugins/MailInContrib?rev=1.7&filename=MailInContrib.zip*
 
 Mails for twiki can be pulled out of mail folders using [[CPAN:Email::Folder::POP3][POP3]], [[CPAN:Email::Folder::IMAP][IMAP]], or anything else supported by CPAN:Email::Folder.
 
