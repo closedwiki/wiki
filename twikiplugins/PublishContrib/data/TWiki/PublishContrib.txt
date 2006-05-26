@@ -221,6 +221,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, written by TWiki:Main/Cra
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | |
+|  10345 | Correction to support anchors in URLs properly |
 |        | Martin Cleaver - changes to allow generation of viewprint and viewxxx when specified by TEMPLATE; multiple INSTANCE (dev/test/prod); |
 |  10063 | Bugfix Bugs:Item2216 |
 |  10006 | Crawford Currie - fixed problem where it was failing to remove &lt;base> tags completely (Bugs:Item2200) |
