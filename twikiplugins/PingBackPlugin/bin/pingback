@@ -1,0 +1,53 @@
+#!/usr/bin/perl -wT
+# Pingback Server
+#
+# Copyright (c) 2006 by MichaelDaum@WikiRing.com
+#
+# based on 
+# Pingback Proxy Copyright (c) 2002 by Ian Hickson
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+use strict;
+BEGIN {
+  if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+    chdir $1;
+  }
+  unshift @INC, '.';
+  require 'setlib.cfg';
+}
+
+# SMELL: I'd like to use REST for that but I can't: responses are mallformed
+#        after they run thru writeCompletePage(); there is a handleRESTServer()
+#        but it does not work out :(
+#
+#        the advantage of doing it stand-alone is that we don't have construct
+#        a new TWiki object
+#
+# see: http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/Item2362
+# as long as this is not commited use this cgi as your pingback service
+
+use TWiki::Plugins::PingBackPlugin::Server;
+
+my $pbServer = TWiki::Plugins::PingBackPlugin::Server->new();
+die "ERROR: can't construct PingBack Server" unless $pbServer;
+
+local $/ = undef;
+my $data = <STDIN>;
+
+print $pbServer->callProcedure($data);
+
+1;
+
