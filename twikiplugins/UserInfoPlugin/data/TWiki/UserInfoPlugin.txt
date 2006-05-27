@@ -1,6 +1,15 @@
 %META:TOPICINFO{author="TWikiContributor" date="1140093931" format="1.1" version="1.1"}%
----+ <nop>UserInfoPlugin
+<!--
 
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
+---+!! <nop>UserInfoPlugin
+%TOC%
 This plugin analyses the log files of your twiki-engine and extracts usefull
 information to be displayed on your site. %BR%
 Warning: please respect the privacy of your users and don't display too much information.
@@ -58,6 +67,7 @@ TWiki/Dakar has build-in support for cgi sessions.
 	  | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | Plugin Perl module |
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
+---++ Test
 If the plugin is installed correctly then you should get valid output for the tags below:%BR%
 
 <blockquote>
@@ -84,8 +94,11 @@ Recently registered users: %BR%
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.50 |
+|  Plugin Version: | v1.51 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 May 2006: | fixed error computing the number of last visitors (TWiki:Main.DavidBright); \
+                  exclude the <no>TWikiAdminGroup "user" from the statistics; \
+		  check back if the user found in the logs already approved his account |
 |  17 Feb 2006: | optimized tag parsing; \
                   using Time::Local instead of Date::Parse; \
 		  added =header= and =footer= format strings; \
@@ -94,19 +107,19 @@ Recently registered users: %BR%
                   added IGNORE_USER plugin parameter |
 |  14 Feb 2006: | fixed detection of the session directory |
 |  02 Feb 2006: | fixed numerical comparison of dates (TWiki:Main/AntonAylward) |
-|  05 Aug 2005: | removed dependency on the SessionPlugin |
+|  05 Aug 2005: | removed dependency on the <nop>SessionPlugin |
 |  27 Apr 2005: | fixed getting guests + some minor glitches | 
 |  12 Apr 2005: | initial release |
 |  &nbsp; | fixed =sep= handling, fixed =$host= parsing |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | Time::Local |
-|  Other Dependencies: | (SessionPlugin) |
+|  Other Dependencies: | (TWiki:Plugins/SessionPlugin) |
 |  Perl Version: | 5.8 |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 17 Feb 2006
+-- TWiki:Main/MichaelDaum - 27 May 2006
 

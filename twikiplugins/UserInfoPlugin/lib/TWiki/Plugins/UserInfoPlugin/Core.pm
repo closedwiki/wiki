@@ -27,6 +27,13 @@ use Time::Local; # for timelocal
 $debug = 0; # toggle me
 
 ###############################################################################
+# static
+sub writeDebug {
+  &TWiki::Func::writeDebug("- UserInfoPlugin - " . $_[0]) if $debug;
+}
+
+
+###############################################################################
 sub new {
   my ($class, $id, $topic, $web) = @_;
   my $this = bless({}, $class);
@@ -62,6 +69,7 @@ sub new {
   $this->{ignoreUsers} .= '|' if $this->{ignoreUsers};
   $this->{ignoreUsers} .= 
     $this->{twikiGuest} .
+    '|'.'TWikiAdminGroup' .
     '|'.'UnknownUser' .
     '|'.'TWikiRegistrationAgent' .
     '|'.'TWikiContributor';
@@ -76,12 +84,13 @@ sub new {
 sub handleNrUsers {
   my $this = shift;
 
-  #writeDebug("called handleNrUsers");
+  writeDebug("called handleNrUsers");
   return $this->{nrUsers} if defined $this->{nrUsers};
 
   my $users = $this->getUsers();
   $this->{nrUsers} = scalar(@$users);
-  
+ 
+  writeDebug("got $this->{nrUsers} nr users");
   return $this->{nrUsers};
 }
 
@@ -89,12 +98,13 @@ sub handleNrUsers {
 sub handleNrVisitors {
   my $this = shift;
 
-  #writeDebug("called handleNrVisitors");
+  writeDebug("called handleNrVisitors");
   return $this->{nrVisitors} if defined $this->{nrVisitors};
 
   my ($visitors) = $this->getVisitorsFromSessionStore(undef, $this->{ignoreUsers});
   $this->{nrVisitors} = scalar @$visitors;
 
+  writeDebug("got $this->{nrVisitors} nr visitors");
   return $this->{nrVisitors};
 }
 
@@ -102,12 +112,13 @@ sub handleNrVisitors {
 sub handleNrGuests {
   my $this =  shift;
 
-  #writeDebug("called handleNrGuests");
+  writeDebug("called handleNrGuests");
   return $this->{nrGuests} if defined $this->{nrGuests};
 
   my (undef, $guests) = $this->getVisitorsFromSessionStore($this->{twikiGuest});
   $this->{nrGuests} = scalar @$guests;
 
+  writeDebug("got $this->{nrGuests} nr guests");
   return $this->{nrGuests};
 }
 
@@ -115,23 +126,25 @@ sub handleNrGuests {
 sub handleNrLastVisitors {
   my ($this, $attributes) = @_;
 
-  #writeDebug("called handleNrLastVisitors");
-  return $this->{nrVisitors} if defined $this->{nrVisitors};
+  writeDebug("called handleNrLastVisitors");
 
   $attributes = '' unless $attributes;
 
   my $theDays = TWiki::Func::extractNameValuePair($attributes, "days") || 1;
-  my $visitors = $this->getVisitors($theDays, undef, undef, $this->{ignoreUsers});
-  $this->{nrVisitors} = scalar @$visitors;
+  return $this->{nrLastVisitors}{$theDays} if defined $this->{nrLastVisitors}{$theDays};
 
-  return $this->{nrVisitors};
+  my $visitors = $this->getVisitors($theDays, undef, undef, $this->{ignoreUsers});
+  $this->{nrLastVisitors}{$theDays} = scalar @$visitors;
+
+  writeDebug("got $this->{nrLastVisitors} nr last visitors");
+  return $this->{nrLastVisitors}{$theDays};
 }
 
 ###############################################################################
 sub handleCurrentVisitors {
   my ($this, $attributes) = @_;
 
-  #writeDebug("called handleCurrentVisitors");
+  writeDebug("called handleCurrentVisitors");
   $attributes = '' unless $attributes;
 
   my $theHeader = &TWiki::Func::extractNameValuePair($attributes, "header") || '';
@@ -166,6 +179,7 @@ sub handleCurrentVisitors {
       'host'=>$visitor->{host},
       'topic'=>$visitor->{topic},
     });
+    writeDebug("found visitor $visitor->{wikiname}");
   }
 
   if ($counter) {
@@ -184,13 +198,13 @@ sub handleCurrentVisitors {
 sub handleNewUsers {
   my ($this, $attributes) = @_;
 
-  #writeDebug("called handleNewUsers");
+  writeDebug("called handleNewUsers");
   $attributes = '' unless $attributes;
 
   my $theHeader = &TWiki::Func::extractNameValuePair($attributes, "header") || '';
   my $theFooter = &TWiki::Func::extractNameValuePair($attributes, "footer") || '';
   my $theFormat = &TWiki::Func::extractNameValuePair($attributes, "format") ||
-    "\t* \$date: \$wikiusername";
+    "\t* \$date - \$wikiusername";
   my $theSep = &TWiki::Func::extractNameValuePair($attributes, "sep") || '$n';
   my $theMax = &TWiki::Func::extractNameValuePair($attributes, "max") || 10;
   $theMax = 0 if $theMax eq "unlimited";
@@ -209,6 +223,7 @@ sub handleNewUsers {
       wikiname=>$user->{name}, 
       date=>$user->{sdate}  
     });
+    writeDebug("found new user $user->{name}");
   }
 
   if ($counter) {
@@ -225,13 +240,13 @@ sub handleNewUsers {
 sub handleLastVisitors {
   my ($this, $attributes) = @_;
 
-  #writeDebug("called handleLastVisitors");
+  writeDebug("called handleLastVisitors");
   $attributes = '' unless $attributes;
 
   my $theHeader = &TWiki::Func::extractNameValuePair($attributes, "header") || '';
   my $theFooter = &TWiki::Func::extractNameValuePair($attributes, "footer") || '';
   my $theFormat = TWiki::Func::extractNameValuePair($attributes, "format" ) ||
-    "\t* \$wikiusername";
+    "\t* \$date - \$wikiusername";
   my $theSep = TWiki::Func::extractNameValuePair($attributes, "sep" ) || '$n';
   my $theMax = TWiki::Func::extractNameValuePair($attributes, "max") || 0;
   $theMax = 0 if $theMax eq 'unlimited';
@@ -242,7 +257,7 @@ sub handleLastVisitors {
   # garnish the collected data
   my $result = '';
   my $counter = 0;
-  foreach my $visitor (sort {$a->{wikiname} cmp $b->{wikiname}} @$visitors) {
+  foreach my $visitor (sort {$b->{date} <=> $a->{date}} @$visitors) {
     my $text = $result?$theSep:'';
     $text .= $theFormat;
     $result .= &replaceVars($text, {
@@ -253,6 +268,7 @@ sub handleLastVisitors {
       'host'=>$visitor->{host},
       'topic'=>$visitor->{topic},
     });
+    writeDebug("found last visitor $visitor->{wikiname}");
   }
 
   if ($counter) {
@@ -273,9 +289,9 @@ sub handleLastVisitors {
 sub getVisitorsFromSessionStore {
   my ($this, $includeNames, $excludeNames) = @_;
 
-  #writeDebug("getVisitorsFromSessionStore()");
-  #writeDebug("includeNames=$includeNames") if $includeNames;
-  #writeDebug("excludeNames=$excludeNames") if $excludeNames;
+  writeDebug("getVisitorsFromSessionStore()");
+  writeDebug("includeNames=$includeNames") if $includeNames;
+  writeDebug("excludeNames=$excludeNames") if $excludeNames;
 
   # get session directory
 
@@ -310,7 +326,7 @@ sub getVisitorsFromSessionStore {
     next if $users{$wikiName};
     next if $excludeNames && $wikiName =~ /$excludeNames/;
     next if $includeNames && $wikiName !~ /$includeNames/;
-    #writeDebug("found $wikiName");
+    writeDebug("found $wikiName");
     $users{$wikiName} = 1;
   }
 
@@ -361,12 +377,12 @@ sub getVisitors {
 
   $theMax = 0 unless $theMax;
 
-  #writeDebug("getVisitors()");
+  writeDebug("getVisitors()");
   #writeDebug("theDays=$theDays") if $theDays;
   #writeDebug("theMax=$theMax") if $theMax;
   #writeDebug("includeNames=$includeNames") if $includeNames;
   #writeDebug("excludeNames=$excludeNames") if $excludeNames;
-  
+  my $mainWeb = &TWiki::Func::getMainWebname();
 
   # get the logfile mask
   my $logFileGlob;
@@ -427,14 +443,16 @@ sub getVisitors {
       
       next if $excludeNames && $wikiName =~ /$excludeNames/;
       next if $includeNames && $wikiName !~ /$includeNames/;
+      next if $seen{"$wikiName"};
 
+      # check back
+      next unless TWiki::Func::topicExists($mainWeb, $wikiName);
 
       # host
       my $host = $fields[6];
       $host =~ s/^\s+//g;
       $host =~ s/\s+$//g;
       next if $host =~ /$this->{ignoreHosts}/;
-      next if $seen{"$wikiName"};
 
       # topic
       my $thisTopic = $fields[4];
@@ -456,6 +474,7 @@ sub getVisitors {
 	'host'=>$host,
 	'topic'=>$thisTopic,
       };
+      writeDebug("found visitor $wikiName in the logs");
 
       # store
       push @lastVisitors, $visitor;
@@ -497,12 +516,6 @@ sub replaceVars {
   #writeDebug("returns '$format'");
 
   return $format;
-}
-
-###############################################################################
-# static
-sub writeDebug {
-  &TWiki::Func::writeDebug("- UserInfoPlugin - " . $_[0]) if $debug;
 }
 
 ###############################################################################
