@@ -78,7 +78,7 @@ If the plugin is installed correctly then you should get valid output for the ta
 </td>
 <td valign="top" rowspan="2">
 %NRLASTVISITORS{days="1"}% visitor(s) today (%SERVERTIME{"$day $month $year"}%): %BR%
-%LASTVISITORS{days="1"}%
+%LASTVISITORS{days="1" format="   * $wikiusername"}%
 </td>
 <tr>
 <td valign="top">
@@ -94,11 +94,12 @@ Recently registered users: %BR%
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.51 |
+|  Plugin Version: | v1.52 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  27 May 2006: | fixed error computing the number of last visitors (TWiki:Main.DavidBright); \
                   exclude the <no>TWikiAdminGroup "user" from the statistics; \
-		  check back if the user found in the logs already approved his account |
+		  check back if the user found in the logs already approved his account;\
+		  fixed use of non-numerical value in comparison |
 |  17 Feb 2006: | optimized tag parsing; \
                   using Time::Local instead of Date::Parse; \
 		  added =header= and =footer= format strings; \

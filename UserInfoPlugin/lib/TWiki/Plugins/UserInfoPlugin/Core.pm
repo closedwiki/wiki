@@ -174,7 +174,7 @@ sub handleCurrentVisitors {
     $result .= &replaceVars($text, {
       'counter'=>++$counter,
       'wikiname'=>$visitor->{wikiname}, 
-      'date'=>$visitor->{date},
+      'date'=>$visitor->{sdate},
       'time'=>$visitor->{time},
       'host'=>$visitor->{host},
       'topic'=>$visitor->{topic},
@@ -263,7 +263,7 @@ sub handleLastVisitors {
     $result .= &replaceVars($text, {
       'counter'=>++$counter,
       'wikiname'=>$visitor->{wikiname}, 
-      'date'=>$visitor->{date},
+      'date'=>$visitor->{sdate},
       'time'=>$visitor->{time},
       'host'=>$visitor->{host},
       'topic'=>$visitor->{topic},
@@ -469,7 +469,8 @@ sub getVisitors {
       # create visitor struct
       my $visitor = {
 	'wikiname'=>$wikiName,
-	'date'=>$date,
+	'sdate'=>$date,
+	'date'=>parseDate($date),
 	'time'=>$time,
 	'host'=>$host,
 	'topic'=>$thisTopic,
