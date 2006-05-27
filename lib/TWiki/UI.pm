@@ -62,6 +62,20 @@ sub run {
     if( $ENV{'GATEWAY_INTERFACE'} ) {
         # script is called by browser
         $query = new CGI;
+
+        # drain STDIN.  This may be necessary if the script is called
+        # due to a redirect and the original query was a POST. In this
+        # case the web server is waiting to write the POST data to
+        # this script's STDIN, but CGI.pm won't drain STDIN as it is
+        # seeing a GET because of the redirect, not a POST.  This script
+        # tries to write to STDOUT, which goes back to the web server,
+        # but the server isn't paying attention to that (as its waiting for
+        # the script to _read_, not _write_), and everything blocks.
+        # Some versions of apache seem to be more susceptible than others to
+        # this.
+        my $content_length = 
+            defined($ENV{'CONTENT_LENGTH'}) ? $ENV{'CONTENT_LENGTH'} : 0;
+        read(STDIN, my $buf, $content_length, 0 ) if $content_length;
     } else {
         # script is called by cron job or user
         $scripted = 1;
