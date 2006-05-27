@@ -1,0 +1,40 @@
+%META:TOPICINFO{author="TWikiContributor" date="1023947640" format="1.0" version="1.1"}%
+---+ %TOPIC%
+
+Enter source and target urls to create a ping. Normally, the system will generate
+pings by itself by extracting external target urls from a source topic, or explicitely
+using =%<nop>PINGBACK{"ping" target="http://...."}%=.
+
+%RED%CAUTION: Don't send a ping from a source that you don't own! That's spam.%ENDCOLOR%
+
+<div class="twikiPageForm">
+<table>
+  <tr>
+    <td><b>Source</b>:</td>
+    <td>
+      <form action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="POST" enctype="multipart/form-data">
+      <input type="text" name="source" value="%URLPARAM{"source" default="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%"}%" size="50"></td>
+      <input type="hidden" name="endPoint" value="%WEB%/%TOPIC%" />
+      <input type="hidden" name="action" value="pingback" />
+  </tr>
+  <tr>
+    <td><b>Target</b>:</td>
+    <td><input type="text" name="target" value="%URLPARAM{"target" default="%SCRIPTURL{"view"}%/%WEB%/WebHom"}%" size="50"></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>
+      <input type="submit" value="Submit">&nbsp;
+      <input type="button" value="Reset" onclick="window.location=window.location">
+      </form>
+    </td>
+  </tr>
+</table>
+</div>
+
+%PINGBACK%
+
+
+<!--
+   * Set ALLOWTOPICVIEW = %MAINWEB%.TWikiAdminGroup
+-->
