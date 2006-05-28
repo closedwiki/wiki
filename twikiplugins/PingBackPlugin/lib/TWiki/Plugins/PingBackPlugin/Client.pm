@@ -25,20 +25,27 @@ use LWP::UserAgent;
 use RPC::XML::Client;
 use HTML::Entities;
 
+use vars qw( $debug );
+
+$debug = 0; # toggle me
+
+################################################################################
+# static
+sub writeDebug {
+  print STDERR "- PingBackPlugin::Client - " . $_[0] . "\n" if $debug;
+}
+
+
 ################################################################################
 # constructor
 sub new {
   my ($class) = @_;
-  my $this = bless({}, $class);
 
-  $this->{ua} = ''; # LWP::UserAgent
+  my $this = {
+    ua=>'', # LWP::UserAgent
+  };
 
-  return $this;
-}
-
-################################################################################
-sub writeDebug {
-  print STDERR "INFO: pingback client - " . $_[0] . "\n";
+  return bless($this, $class);
 }
 
 ################################################################################
@@ -95,12 +102,12 @@ sub detectServer {
 
 ################################################################################
 # send a pingback to a server
-# server : the xmlrpc server
-# source : the citing instance
-# target : the cited instance
+# - source : the citing instance
+# - target : the cited instance
+# - server : the xmlrpc server (optional)
 # returns ($status, $result) where
-# status : the http status code
-# result : is a plain text (error) message 
+# - status : the http status code
+# - result : is a plain text (error) message 
 sub ping {
   my ($this, $source, $target, $server) = @_;
 
