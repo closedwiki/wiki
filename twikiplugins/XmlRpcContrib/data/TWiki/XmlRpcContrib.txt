@@ -1,0 +1,115 @@
+%META:TOPICINFO{author="TWikiContributor" date="1023947640" format="1.0" version="1.1"}%
+---+!! %TOPIC%
+
+XML-RPC services for TWiki
+
+%TOC%
+
+This package allows to register handlers for remote procedures the same way tags
+are registered to the TWiki engine. The xmlrpc cgi will then call them on request.
+
+---++ =XmlRpcContrib=
+---+++ =registerXMLHandler($name, $impl)=
+register an implementation for a handler
+
+*Parameters*: %BR%
+   * $name: symbolic method name
+   * $impl: implementation of a handler for the given method name
+
+---+++ =callProcedure($session, $data)=
+process a remote procedure call
+
+*Parameters*: %BR%
+   * $session: the current TWiki session objecet
+   * $data: the net data to be processed (optional)
+
+If no data is passed it is requested from the CGI query object.
+During execution the context =xmlrpc= is entered as well as the context of the
+symbolic method name.
+
+This call will be delegate to =XmlRpcContrib::Server::callProcedure= and print
+out its result to STDOUT.
+
+---++ =XmlRpcContrib::Server=
+light implementation of an XML-RPC server
+
+---+++ =new(%handler)=
+create a new server object
+
+*Parameters*: %BR%
+   * %handler: hash mapping method names to their implementation
+
+The server is a singleton object in the =XmlRpcContrib= namespace.
+
+---+++ =callProcedure($session, $data)=
+carry out the procedure call
+
+*Parameters*: %BR%
+   * $session: the current TWiki session objecet
+   * $data: xml request data
+
+This will call the method implementation if available or return
+an error if not available. A method must implement the interface
+
+<verbatim>
+($status, $error, $result) = handleXMLCall($session, $requestargs)
+</verbatim>
+
+where:
+   * $session: is the current TWiki session object
+   * $requestargs: is an array of methods parameters
+
+The handler must return an array ($status, $error, $result) where
+   * $status: string representation of the status
+   * $error: xml rpc error code
+   * $result: the procedure's result data
+
+Values for $error indicate
+   * &lt 0: a server error, see XML-RPC specs
+   * 0: the $result is ok and a valid xml response 
+   * 1: the $result is ok, a flat string and will be converted into an RPC::XML string
+
+
+---+++ =getResponse($status, $data)=
+create a well-formated =RPC::XML::response= that can be printed to STDOUT on completion
+
+*Parameters:*
+   * $status: response status value
+   * $data: net data
+
+returns the formatted response
+
+---+++ =getError($status, $error, $data)=
+creates a =RPC::XML::fault= object using the $error and its $data
+and returns the formatted error response.
+
+---++ Settings
+
+   * Set SHORTDESCRIPTION = XML-RPC services for TWiki
+   * Set STUB = %$STUB%
+
+---++ Installation Instructions
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   | *File:* | *Description:* |
+   | ==bin/xmlrpc== | server cgi |
+   | ==data/TWiki/XmlRpcContrib.txt== | contrib topic |
+   | ==lib/TWiki/Contrib/XmlRpcContrib.pm== | perl module |
+   | ==lib/TWiki/Contrib/XmlRpcContrib/Server.pm== | server module |
+   * possibly enable/secure the xmlrpc in =bin/.htaccess= so that it gets
+     recognized as a cgi script at least
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/%USERNAME% |
+|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  CPAN Dependencies: | CPAN:RPC::XML |
+|  Version: | v0.01 |
+|  Change History: | &nbsp; |
+|  28 May 2006: | Initial version |
+|  Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+
+-- TWiki:Main/MichaelDaum - 28 May 2006
