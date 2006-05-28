@@ -23,8 +23,6 @@ There's a PingBackClient for testing.
 ---++ Plugin Settings
 
    * Set SHORTDESCRIPTION = Pingback service for TWiki
-   * Set PINGBACKSERVER = http://jojowiki.dyndns.org/pingback
-   * #Set PINGBACKSERVER = http://jojowiki.dyndns.org/rest/PingBackPlugin/server
 
 ---++ Plugin Installation Instructions
 
@@ -32,27 +30,26 @@ There's a PingBackClient for testing.
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-     | ==bin/TWiki/pingback== | pingback cgi |
      | ==data/TWiki/%TOPIC%.txt== | plugin topic |
      | ==data/TWiki/PingBackClient.txt== | test client |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin perl module |
-     | ==lib/TWiki/Plugins/%TOPIC%/Client.pm== | client code |
-     | ==lib/TWiki/Plugins/%TOPIC%/Server.pm== | server code |
+     | ==lib/TWiki/Plugins/%TOPIC%/Client.pm== | client module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | core perl module |
+   * Optionally, run ==%TOPIC%_installer.pl== to automatically check and
+     install other TWiki modules that this module depends on. You can also do
+     this step manually.
+   * Alternatively, manually make sure the dependencies listed in the table
+     below are resolved.
+     %$DEPENDENCIES%
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.01 |
+|  Plugin Version: | v0.02 |
 |  Change History: | &nbsp; |
 |  27 May 2006: | Initial version |
-|  CPAN Dependencies: | CPAN:LWP::UserAgent, \
-                        CPAN:RPC::XML, \
-                        CPAN:HTML::Entities, \
-                        CPAN:URI::Escape |
-|  Other Dependencies: | none |
-|  Perl Version: | 5.8 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |

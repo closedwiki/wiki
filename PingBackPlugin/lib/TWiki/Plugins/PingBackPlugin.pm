@@ -18,21 +18,14 @@
 package TWiki::Plugins::PingBackPlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $debug $pluginName 
+use vars qw( $VERSION $RELEASE 
   $currentWeb $currentTopic $currentUser
-  $pingbackServerUrl $pingbackServer $pingbackClient 
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.01';
-$pluginName = 'PingBackPlugin';
+$RELEASE = 'v0.02';
 
-$debug = 0; # toggle me
-
-###############################################################################
-sub writeDebug {
-  &TWiki::Func::writeDebug('- '.$pluginName.' - '.$_[0]) if $debug;
-}
+use TWiki::Contrib::XmlRpcContrib;
 
 ###############################################################################
 sub initPlugin {
@@ -40,116 +33,38 @@ sub initPlugin {
 
   # check for Plugins.pm versions
   if ($TWiki::Plugins::VERSION < 1.026) {
-    TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+    TWiki::Func::writeWarning( "Version mismatch between PingBackPlugin and Plugins.pm" );
     return 0;
   }
 
-  my $pingbackServerUrl = TWiki::Func::getPreferencesValue("\U$pluginName\E_PINGBACKSERVER");
-  $pingbackServer = undef;
-  $pingbackClient = undef;
+  TWiki::Func::registerTagHandler('PINGBACK', \&handlePingbackTag);
+  TWiki::Contrib::XmlRpcContrib::registerXMLHandler('pingback.ping', \&handlePingbackCall);
 
-  TWiki::Func::registerTagHandler('PINGBACK', \&handlePINGBACK);
-  TWiki::Func::registerRESTHandler('server', \&handleRESTServer);
+  my $xmlRpcUrl = TWiki::Func::getScriptUrl($currentWeb, $currentTopic, 'xmlrpc');
+
   TWiki::Func::addToHEAD('PINGBACKPLUGIN_LINK',
-    "\n<link rel=\"pingback\" href=\"$pingbackServerUrl\" />\n");
+    "\n<link rel=\"pingback\" href=\"$xmlRpcUrl\" />\n");
 
   # Plugin correctly initialized
   return 1;
 }
 
-
 ###############################################################################
-sub handlePINGBACK {
-  my ($session, $params, $theTopic, $theWeb) = @_;
+sub handlePingbackTag {
 
-  writeDebug("called handlePINGBACK");
+  eval 'use TWiki::Plugins::PingBackPlugin::Core';
+  die $@ if $@;
 
-  my $query = TWiki::Func::getCgiQuery();
-  my $action = $query->param('action') || '';
-  my $source;
-  my $target;
-  my $format = $params->{format} || 
-    '<pre style="overflow:auto">%STATUS%: %RESULT%</pre>';
-
-  if ($action eq 'pingback') { 
-    # cgi mode
-    $source = $query->param('source');
-    $target = $query->param('target');
-  } else { 
-    # tml mode
-    $source = $params->{source};
-    $target = $params->{target};
-  }
-
-  return '' unless $target;
-  $source = &TWiki::Func::getViewUrl($theWeb, $theTopic) unless $source;
-
-  writeDebug("source=$source");
-  writeDebug("target=$target");
-
-  unless ($pingbackClient) {
-    eval 'use TWiki::Plugins::PingBackPlugin::Client;';
-    die $@ if $@;
-    $pingbackClient = TWiki::Plugins::PingBackPlugin::Client->new();
-    die $@ unless $pingbackClient;
-  }
-
-  my ($status, $result) = $pingbackClient->ping($source, $target);
-
-  my $text = expandVariables($format, 
-    STATUS=>$status,
-    RESULT=>$result,
-    TARGET=>$target,
-    SOURCE=>$source,
-  );
-
-
-  writeDebug("done handlePINGBACK");
-
-  return $text;
-}
-
-
-###############################################################################
-sub handleRESTServer {
-  my $session = shift;
-
-  writeDebug("called handleRESTServer");
-
-  unless ($pingbackServer) {
-    eval 'use TWiki::Plugins::PingBackPlugin::Server;';
-    die $@ if $@;
-    $pingbackServer = new TWiki::Plugins::PingBackPlugin::Server;
-    die $@ unless $pingbackServer; 
-  }
-
-  # get the data
-  my $query = TWiki::Func::getCgiQuery();
-  my $data = $query->param('POSTDATA');
-
-  # process it
-  my $result = $pingbackServer->callProcedure($data);
-
-  writeDebug("result=$result");
-  writeDebug("done handleRESTServer");
-
-  print $result; # we print out the response ourselves
-  return 0; # don't produce any further output
-}
-
-################################################################################
-sub expandVariables {
-  my ($format, %variables) = @_;
-
-  my $text = $format;
-
-  foreach my $key (keys %variables) {
-    $text =~ s/\%$key%/$variables{$key}/g;
-  }
-  $text =~ s/%[A-Z]+%//go;
-
-  return $text;
+  return TWiki::Plugins::PingBackPlugin::Core::handlePingbackTag(@_);
 }
 
 ###############################################################################
+sub handlePingbackCall {
+
+  eval 'use TWiki::Plugins::PingBackPlugin::Core';
+  die $@ if $@;
+
+  return TWiki::Plugins::PingBackPlugin::Core::handlePingbackCall(@_);
+}
+
 1;

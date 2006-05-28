@@ -8,8 +8,8 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Create the build object
-$build = new TWiki::Contrib::Build( 'PingBackPlugin' );
+my $build = new TWiki::Contrib::Build( 'PingBackPlugin' );
 
 # Build the target on the command line, or the default target
-$build->build($build->{target});
+my $build->build($build->{target});
 
