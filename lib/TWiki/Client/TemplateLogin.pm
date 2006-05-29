@@ -71,8 +71,8 @@ sub loginUrl {
     my $web = $twiki->{webName};
     my $query = $twiki->{cgiQuery};
     return $twiki->getScriptUrl( 0, 'login', $web, $topic,
-                                 origurl => $query->url( -path => 1,
-                                                         -query => 1 ), @_ );
+                                 origurl => $query->url( -full => 1,
+                                                         -query => 1 ) );
 }
 
 =pod
