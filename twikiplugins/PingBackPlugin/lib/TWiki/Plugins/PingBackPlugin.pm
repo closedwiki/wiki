@@ -19,11 +19,12 @@ package TWiki::Plugins::PingBackPlugin;
 
 use strict;
 use vars qw( $VERSION $RELEASE 
-  $currentWeb $currentTopic $currentUser
+  $currentWeb $currentTopic $currentUser $xmlRpcLink $doneHeader
+  $enabledPingBack
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.02';
+$RELEASE = 'v0.03';
 
 use TWiki::Contrib::XmlRpcContrib;
 
@@ -36,17 +37,40 @@ sub initPlugin {
     TWiki::Func::writeWarning( "Version mismatch between PingBackPlugin and Plugins.pm" );
     return 0;
   }
-
+  $doneHeader = 0;
+  $enabledPingBack = TWiki::Func::getPreferencesFlag('ENABLEPINGBACK');
   TWiki::Func::registerTagHandler('PINGBACK', \&handlePingbackTag);
-  TWiki::Contrib::XmlRpcContrib::registerXMLHandler('pingback.ping', \&handlePingbackCall);
+  TWiki::Contrib::XmlRpcContrib::registerRPCHandler('pingback.ping', \&handlePingbackCall);
 
   my $xmlRpcUrl = TWiki::Func::getScriptUrl($currentWeb, $currentTopic, 'xmlrpc');
-
-  TWiki::Func::addToHEAD('PINGBACKPLUGIN_LINK',
-    "\n<link rel=\"pingback\" href=\"$xmlRpcUrl\" />\n");
+  $xmlRpcLink = "<link rel=\"pingback\" href=\"$xmlRpcUrl\" />";
 
   # Plugin correctly initialized
   return 1;
+}
+
+###############################################################################
+# we can't use addToHEAD as the pingback specification to autodetect the
+# server only demands the link to be within the first 5KB. So some sources
+# might not detect the xmlrpc service if we add the pingback relation th the
+# _end_ of the <head>...</head> section rather than to the start
+sub commonTagsHandler {
+  if ($enabledPingBack) {
+    if (!$doneHeader && $_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$xmlRpcLink\n/o) {
+      $doneHeader = 1;
+    }
+  }
+  $_[0] =~ s/%(START|STOP)PINGBACK%//go;
+}
+
+###############################################################################
+sub afterSaveHandler {
+  ### my ( $text, $topic, $web, $error, $meta ) = @_;
+
+  eval 'use TWiki::Plugins::PingBackPlugin::Core';
+  die $@ if $@;
+
+  return TWiki::Plugins::PingBackPlugin::Core::afterSaveHandler(@_);
 }
 
 ###############################################################################

@@ -61,7 +61,7 @@ sub detectServer {
 
   unless ($this->{ua}) {
     $this->{ua} = LWP::UserAgent->new();
-    $this->{ua}->agent("Michas's pingback client");
+    $this->{ua}->agent("TWiki Pingback Client");
     $this->{ua}->timeout(5);
     $this->{ua}->env_proxy();
     writeDebug("new agent=" . $this->{ua}->agent());
@@ -129,10 +129,11 @@ sub ping {
 
   if (not ref $response) {
     $status = 502;
-    $result = "502 Bad Gateway (not a valid XML-RPC response) from '$server':\n$response\n";
+    $result = "Bad Gateway (not a valid XML-RPC response) from '$server':\n$response\n";
   } elsif ($response->is_fault) {
-    $status = 502;
-    $result = "Server Error from '$server':\n" . $response->as_string . "\n";
+    my $value = $response->value;
+    $status = $value->{faultCode};
+    $result = $value->{faultString};
   } else {
     $status = 202;
     $result = "Accepted. Got a responce from '$server':\n" . $response->as_string . "\n";
