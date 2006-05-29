@@ -17,11 +17,10 @@
 
 package TWiki::Plugins::PingBackPlugin::Core;
 use strict;
-use vars qw( $debug $pingbackClient);
+use TWiki::Plugins::PingBackPlugin::DB;
 
+use vars qw($debug $pingClient $pingDB);
 $debug = 0; # toggle me
-
-use Fcntl qw(:flock);
 
 ###############################################################################
 sub writeDebug {
@@ -29,48 +28,87 @@ sub writeDebug {
   print STDERR '- PingBackPlugin::Core - '.$_[0]."\n" if $debug;
 }
 
-################################################################################
-sub expandVariables {
-  my ($format, %variables) = @_;
+###############################################################################
+# construct a signleton PingDB
+sub getPingDB {
+  return $pingDB if $pingDB;
 
-  my $text = $format;
+  $pingDB = TWiki::Plugins::PingBackPlugin::DB->new();
 
-  foreach my $key (keys %variables) {
-    $text =~ s/\$$key/$variables{$key}/g;
+  return $pingDB;
+}
+
+###############################################################################
+# construct a signleton pingClient
+sub getPingClient {
+
+  return $pingClient if $pingClient;
+
+  eval 'use TWiki::Plugins::PingBackPlugin::Client;';
+  die $@ if $@; # never reach
+  
+  $pingClient = TWiki::Plugins::PingBackPlugin::Client->new();
+  die $@ unless $pingClient; # never reach
+
+  return $pingClient;
+}
+
+###############################################################################
+# remote procedure handler
+sub handlePingbackCall {
+  my ($session, $params) = @_;
+
+  $TWiki::Plugins::SESSION = $session;
+
+  writeDebug("called handlePingbackCall");
+
+  # check arguments
+  if (@$params != 2) {
+    return ('400 Bad Request', -32602, 'Wrong number of arguments');
   }
-  $text =~ s/\$percnt/\%/go;
-  $text =~ s/\$dollar/\$/go;
-  $text =~ s/\$n/\n/go;
-  $text =~ s/\\\\/\\/go;
-  $text =~ s/\$nop//g;
 
-  return $text;
+  my $source = $params->[0]->value;
+  my $target = $params->[1]->value;
+  my $web = $session->{webName};
+  my $topic = $session->{topicName};
+
+  # write twiki log
+  $session->writeLog('PING', $web.'.'.$topic);
+
+  writeDebug("source=$source");
+  writeDebug("target=$target");
+
+  if ($TWiki::Plugins::PingBackPlugin::enabledPingBack) {
+
+    # queue incoming ping
+    my $db = getPingDB();
+    my $ping = $db->newPing($source, $target);
+    $ping->timeStamp();
+    $ping->queuePing('in');
+
+    writeDebug("done handlePingBackCall");
+    return ('200 OK', 0, 'Pingback registered.');
+  } else {
+    # reject incoming ping
+    writeDebug("resource not pingback-enabled");
+    writeDebug("done handlePingBackCall");
+    return ('200 OK', 33, 'resource not pingback-enabled');
+  }
 }
 
 ###############################################################################
-sub getLocaldate {
-
-  my ($sec, $min, $hour, $mday, $mon, $year) = localtime(time());
-  return  sprintf("%.4u/%.2u/%.2u - %.2u:%.2u:%.2u", 
-    $year+1900, $mon+1, $mday, $hour, $min, $sec);
-}
-
-###############################################################################
+# dispatch all sub commands
 sub handlePingbackTag {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   my $action = $params->{action} || $params->{_DEFAULT} || 'ping';
   return handlePing(@_) if $action eq 'ping';
   return handleShow(@_) if $action eq 'show';
-  return inlineError("unknown action $action");
+  return inlineWarning("ERROR: unknown action $action");
 }
 
 ###############################################################################
-sub inlineError {
-  return '<span class="twikiAlert">ERROR: '.$_[0].'</span>';
-}
-
-###############################################################################
+# send a ping
 sub handlePing {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
@@ -99,14 +137,8 @@ sub handlePing {
   writeDebug("source=$source");
   writeDebug("target=$target");
 
-  unless ($pingbackClient) {
-    eval 'use TWiki::Plugins::PingBackPlugin::Client;';
-    die $@ if $@;
-    $pingbackClient = TWiki::Plugins::PingBackPlugin::Client->new();
-    die $@ unless $pingbackClient;
-  }
-
-  my ($status, $result) = $pingbackClient->ping($source, $target);
+  my $client = getPingClient();
+  my ($status, $result) = $client->ping($source, $target);
 
   my $text = expandVariables($format, 
     status=>$status,
@@ -122,33 +154,37 @@ sub handlePing {
 }
 
 ###############################################################################
+# display pings, used in the PingManager
 sub handleShow {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   writeDebug("called handleShow");
 
   my $header = $params->{header} || 
-    '<span class="twikiAlert">$count</span> pings pending<p/>'.
+    '<span class="twikiAlert">$count</span> ping(s) in $queue queue<p/>'.
     '<table class="twikiTable" width="100%">';
   my $format = $params->{format} || 
-    '<tr><th>$index</th><th>$date</th><th>$state</th></tr>'.
-    '<tr><td>&nbsp;</td><td colspan="2">'. '
+    '<tr><th>$index</th><th>$date</th></tr>'.
+    '<tr><td>&nbsp;</td><td>'. '
       <table><tr><td><b>Source</b>:</td><td> $source </td></tr>'.
 	'<tr><td><b>Target</b>:</td><td> $target </td></tr>'.
+	'<tr><td>&nbsp;</td><td> $extra </td></tr>'.
       '</table>'.
     '</tr>';
   my $footer = $params->{footer} || '</table>';
-    
   my $separator = $params->{sep} || $params->{separator} || '$n';
   my $warn = $params->{warn} || 'on';
-
-  my @pings = readPingbackLog();
-
-  return inlineError("no pings found") if $warn eq 'on' && !@pings ;
-
-  @pings = reverse @pings;
+  my $reverse = $params->{reverse} || 'on';
+  my $queue = $params->{queue} || 'in';
+  return inlineWarning('ERROR: unknown queue '.$queue) unless $queue =~ /^(in|out|cur)$/;
 
   my $result = '';
+  my @pings;
+
+  my $db = getPingDB();
+  @pings = $db->readQueue($queue);
+  @pings = reverse @pings if $reverse eq 'on';
+
   my $index = 0;
   foreach my $ping (@pings) {
     my $text = '';
@@ -159,111 +195,111 @@ sub handleShow {
       date=>$ping->{date},
       source=>$ping->{source},
       target=>$ping->{target},
-      state=>$ping->{state},
+      extra=>$ping->{extra},
       'index'=>$index,
+      queue=>$queue,
     );
     $result .= $text;
   }
-  writeDebug("result=$result");
+  #writeDebug("result=$result");
 
-  if ($result) {
-    $result = $header.$separator.$result if $header;
-    $result .= $separator.$footer if $footer;
-    $result = expandVariables($result, count=>$index);
-  }
+  $result = $header.$separator.$result if $header;
+  $result .= $separator.$footer if $footer;
+  $result = expandVariables($result, queue=>$queue, count=>" $index" );
 
   writeDebug("done handleShow");
 
   return $result;
 }
 
-###############################################################################
-sub getPingbackLog {
-  return TWiki::Func::getWorkArea('PingBackPlugin').'/logfile.txt';
-}
+################################################################################
+sub afterSaveHandler {
+  my ($text, $topic, $web, $error, $meta) = @_;
 
-###############################################################################
-sub appendPingbackLog {
-  my ($source, $target, $status) = @_;
+  writeDebug("called afterSaveHandler($web.$topic)");
 
-  # open and lock
-  my $pingbackLog = getPingbackLog();
-  open(PBL, ">>$pingbackLog") || die "cannot append $pingbackLog";
-  flock(PBL, LOCK_EX); # wait for exclusive rights
-  seek(PBL, 0, 2); # seek EOF in case someone else appended 
-		   # stuff while we where waiting
+  if ($error) {
+    writeDebug("bailing out afterSaveHandler ... save error");
+    return;
+  }
 
-  my $date = &getLocaldate();
-  print PBL "$date|$source|$target|received\n";
-
-  # unlock and close
-  flock(PBL,LOCK_UN);
-  close PBL;
-}
-
-###############################################################################
-sub readPingbackLog {
-
-  writeDebug("called readPingbackLog");
-
-  my $pingbackLog = getPingbackLog();
-  my @pings = ();
-
-  writeDebug("pingbackLog=$pingbackLog");
-
-  if (open(PBL, "<$pingbackLog")) {
-    # date|source|target|status
-    while (my $line = <PBL>) {
-      if ($line =~ /^\s*([^\|]+)\|([^\|]+)\|([^\|]+)\|(.*?)\s*$/) {
-	writeDebug("found ping");
-	my $ping = {
-	  date=>$1,
-	  source=>$2,
-	  target=>$3,
-	  state=>$4,
-	};
-	push @pings, $ping;
-      } else {
-	writeDebug("no ping found in line $line");
+  unless ($TWiki::Plugins::PingBackPlugin::enabledPingBack) {
+    # check if we jus enabled pingback during this save; these values aren't 
+    # in the preference cache yet; this is SMELLs
+    my $found = 0;
+    my $setRegex = TWiki::Func::getRegularExpression('setRegex');
+    my $enablePingbackRegex = qr/^${setRegex}ENABLEPINGBACK\s*=\s*(on|yes|1)$/o;
+    foreach my $line (split(/\r?\n/, $text)) {
+      if ($line =~ /$enablePingbackRegex/o) {
+	$found = 1;
+	last;
       }
+    } 
+    if ($found) {
+      writeDebug("found ENABLEPINGBACK");
+    } else {
+      writeDebug("bailing out afterSaveHandler ... no pingback here");
+      return;
     }
-    close PBL;
   }
 
-  writeDebug("found ".(scalar @pings)." pings");
-  writeDebug("done readPingbackLog");
-  return @pings;
+  my $urlHost = &TWiki::Func::getUrlHost();
+  my $source = TWiki::Func::getViewUrl($web, $topic);
+  my @pings;
+  my $db = getPingDB();
+
+  # get all text
+  $text =~ s/.*?%STARTPINGBACK%//os;
+  $text =~ s/%STOPPINGBACK%.*//os;
+  $text =~ s/%META:[A-Z]+{.*}%\s*//go;
+  my @fields = $meta->find('FIELD');
+  foreach my $field (@fields) {
+    $text .= ' ' . $field->{value};
+  }
+
+  # expand it
+  $text = TWiki::Func::expandCommonVariables($text, $topic, $web);
+  $text = TWiki::Func::renderText($text, $web);
+  #writeDebug("text=$text");
+
+  # analyse it
+  while ($text =~ /<a\s+[^>]*?href=(?:\"|\'|&quot;)?([^\"\'\s>]+)(?:\"|\'|\s|&quot;>)?/gios) {
+    my $target = $1;
+    my $doPing = 0;
+    $target =~ /^http/i && ($doPing = 1); # only for outgoing
+    #$target =~ /^$urlHost/i && ($doPing = 0); # not for own host
+    next unless $doPing;
+    writeDebug("found target $target");
+    my $ping = $db->newPing($source, $target);
+    $ping->timeStamp();
+    push @pings, $ping;
+  }
+  $db->queuePings('out', @pings);
+  writeDebug('queued '.(scalar @pings).' pings');
+  writeDebug("done afterSaveHandler");
+}
+
+################################################################################
+sub expandVariables {
+  my ($format, %variables) = @_;
+
+  my $text = $format;
+
+  foreach my $key (keys %variables) {
+    $text =~ s/\$$key/$variables{$key}/g;
+  }
+  $text =~ s/\$percnt/\%/go;
+  $text =~ s/\$dollar/\$/go;
+  $text =~ s/\$n/\n/go;
+  $text =~ s/\\\\/\\/go;
+  $text =~ s/\$nop//g;
+
+  return $text;
 }
 
 ###############################################################################
-sub handlePingbackCall {
-  my ($session, $params) = @_;
-
-  $TWiki::Plugins::SESSION = $session;
-
-  writeDebug("called handlePingbackCall");
-
-  # check arguments
-  if (@$params != 2) {
-    return ('400 Bad Request', -32602, 'Wrong number of arguments');
-  }
-
-  my $source = $params->[0]->value;
-  my $target = $params->[1]->value;
-  my $web = $session->{webName};
-  my $topic = $session->{topicName};
-
-  $session->writeLog('ping', $web.'.'.$topic);
-
-  writeDebug("source=$source");
-  writeDebug("target=$target");
-
-  # write into log
-  appendPingbackLog($source, $target, 'received');
-
-  writeDebug("done handlePingBackCall");
-
-  return ('200 OK', 1, 'Done');
+sub inlineWarning {
+  return '<span class="twikiAlert">'.$_[0].'</span>';
 }
 
 1;
