@@ -31,7 +31,7 @@ BEGIN {
 
 use TWiki::Contrib::XmlRpcContrib;
 use TWiki::UI::View;
-TWiki::UI::run(\&TWiki::Contrib::XmlRpcContrib::callProcedure);
+TWiki::UI::run(\&TWiki::Contrib::XmlRpcContrib::dispatch);
 
 1;
 

@@ -9,14 +9,14 @@ This package allows to register handlers for remote procedures the same way tags
 are registered to the TWiki engine. The xmlrpc cgi will then call them on request.
 
 ---++ =XmlRpcContrib=
----+++ =registerXMLHandler($name, $impl)=
+---+++ =registerRPCHandler($name, $impl)=
 register an implementation for a handler
 
 *Parameters*: %BR%
    * $name: symbolic method name
    * $impl: implementation of a handler for the given method name
 
----+++ =callProcedure($session, $data)=
+---+++ =dispatch($session, $data)=
 process a remote procedure call
 
 *Parameters*: %BR%
@@ -27,7 +27,7 @@ If no data is passed it is requested from the CGI query object.
 During execution the context =xmlrpc= is entered as well as the context of the
 symbolic method name.
 
-This call will be delegate to =XmlRpcContrib::Server::callProcedure= and print
+This call will be delegate to =XmlRpcContrib::Server::dispatch= and print
 out its result to STDOUT.
 
 ---++ =XmlRpcContrib::Server=
@@ -41,7 +41,7 @@ create a new server object
 
 The server is a singleton object in the =XmlRpcContrib= namespace.
 
----+++ =callProcedure($session, $data)=
+---+++ =dispatch($session, $data)=
 carry out the procedure call
 
 *Parameters*: %BR%
@@ -52,7 +52,7 @@ This will call the method implementation if available or return
 an error if not available. A method must implement the interface
 
 <verbatim>
-($status, $error, $result) = handleXMLCall($session, $requestargs)
+($status, $error, $result) = handleRPCCall($session, $requestargs)
 </verbatim>
 
 where:
@@ -61,14 +61,13 @@ where:
 
 The handler must return an array ($status, $error, $result) where
    * $status: string representation of the status
-   * $error: xml rpc error code
+   * $error: error code
    * $result: the procedure's result data
 
-Values for $error indicate
-   * &lt 0: a server error, see XML-RPC specs
-   * 0: the $result is ok and a valid xml response 
-   * 1: the $result is ok, a flat string and will be converted into an RPC::XML string
-
+If $error is null, a response is created using $result if it is
+an RPC::XML object already, or create an RPC::XML::string from it.
+If $error is a non-null value a server error occured and an RPC::XML::fault
+object is respondend (see =getError()=).
 
 ---+++ =getResponse($status, $data)=
 create a well-formated =RPC::XML::response= that can be printed to STDOUT on completion
@@ -105,7 +104,7 @@ and returns the formatted error response.
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  CPAN Dependencies: | CPAN:RPC::XML |
-|  Version: | v0.01 |
+|  Version: | v0.02 |
 |  Change History: | &nbsp; |
 |  28 May 2006: | Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
