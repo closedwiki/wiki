@@ -77,10 +77,10 @@ sub getResponse {
 }
 
 ################################################################################
-sub callProcedure {
+sub dispatch {
   my ($this, $session, $data) = @_;
 
-  writeDebug("called callProcedure");
+  writeDebug("called dispatch");
   writeDebug("data=$data");
 
   # check ENV
@@ -94,7 +94,7 @@ sub callProcedure {
 
   # parse
   my $request = $this->{parser}->parse($data);
-  return $this->getError(400, 'Bad Request', -32700, $request) unless ref($request);
+  return $this->getError('400 Bad Request', -32700, $request) unless ref($request);
 
   # check impl
   my $name = $request->name;
@@ -113,12 +113,11 @@ sub callProcedure {
 
   # print response
   my $response;
-  if ($error < 0) {
-    $response = $this->getError($status, $error, $result); # error
-  } elsif ($error == 0) {
-    $response = $this->getResponse($status, $result); # default
+  if ($error == 0) {
+    $result = RPC::XML::string->new($result) if not ref $result;
+    $response = $this->getResponse($status, $result); # default 
   } else {
-    $response = $this->getResponse($status, RPC::XML::string->new($result)); # plain 
+    $response = $this->getError($status, $error, $result); # error
   }
   writeDebug("response=$response");
   return $response;

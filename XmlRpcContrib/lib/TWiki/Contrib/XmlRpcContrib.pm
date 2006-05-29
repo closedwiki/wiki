@@ -26,11 +26,11 @@ use vars qw( $VERSION $RELEASE $SERVER %handler);
 
 use strict;
 $VERSION = '$Rev$';
-$RELEASE = '0.01';
+$RELEASE = '0.02';
 
 ################################################################################
 # register an implementation for a handler
-sub registerXMLHandler {
+sub registerRPCHandler {
   my ($methodName, $methodImpl) = @_;
 
   # SMELL: this may override a previous registration; must we take care?
@@ -39,7 +39,7 @@ sub registerXMLHandler {
 
 ################################################################################
 # process an xml call
-sub callProcedure {
+sub dispatch {
   my ($session, $data) = @_;
 
   _initServer();
@@ -49,7 +49,7 @@ sub callProcedure {
   }
 
   $session->enterContext('xmlrpc');
-  print $SERVER->callProcedure($session, $data);
+  print $SERVER->dispatch($session, $data);
   $session->leaveContext('xmlrpc');
 }
 
