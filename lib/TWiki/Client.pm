@@ -258,7 +258,7 @@ sub loadSession {
     # is this a logout?
     if( $query && $query->param( 'logout' ) ) {
         _trace($this, "User is logging out");
-        my $origurl = $query->url().$query->path_info();
+        my $origurl = $ENV{HTTP_REFERER} || $query->url().$query->path_info();
         $this->redirectCgiQuery( $query, $origurl );
         $authUser = undef;
     }
