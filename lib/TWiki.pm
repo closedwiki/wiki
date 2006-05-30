@@ -3318,7 +3318,7 @@ sub _WIKINAME_deprecated {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     
     $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKINAME' ) || 
-            '%USERINFO{format="$wikiname"}%';
+            '$wikiname';
     
     return $this->_USERINFO($params);
 }
@@ -3329,7 +3329,7 @@ sub _USERNAME_deprecated {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $params->{format} = $this->{prefs}->getPreferencesValue( 'USERNAME' ) || 
-        '%USERINFO{format="$username"}%';
+        '$username';
     
     return $this->_USERINFO($params);
 }
@@ -3340,7 +3340,7 @@ sub _WIKIUSERNAME_deprecated {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKIUSERNAME' ) || 
-            '%USERINFO{format="$wikiusername"}%';
+            '$wikiusername';
     
     return $this->_USERINFO($params);
 }
