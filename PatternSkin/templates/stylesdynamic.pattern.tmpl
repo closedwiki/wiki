@@ -33,7 +33,7 @@
 	.patternBookView .twikiTopRow {
 		background-color:%WEBBGCOLOR%;
 	}
-	%IF{ 'defined WEBHEADERART' then='#patternTopBar { background-image:url("%WEBHEADERART%"); background-repeat:no-repeat;}'}%
+	%IF{ "defined WEBHEADERART and $ WEBHEADERART != ''" then='#patternTopBar { background-image:url("%WEBHEADERART%"); background-repeat:no-repeat;}'}%
 	%IF{ 'defined WEBHEADERBGCOLOR' then='#patternTopBar { background-color:%WEBHEADERBGCOLOR%;}'}%
 	/*
 	.twikiHelp,
