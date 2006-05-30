@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1145867699" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148995934" format="1.0" version="$Rev$"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -211,9 +211,10 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.016 (BETA) |
+|  Plugin Version: | v1.017 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.016 (BETA) | TWiki:Main.DanielRohde: fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar) |
+|  v1.017 (BETA) | TWiki:Main.DanielRohde: fixed minor bug (periodic repeater) |
+|  v1.016 (27 Apr 2006) | TWiki:Main.DanielRohde: fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar) |
 |  v1.015 (9 Feb 2006) | TWiki:Main.DanielRohde: added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen |
 |  v1.014 (23 Jan 2006) | TWiki:Main.DanielRohde: incorporated documentation fixes by TWiki:Main.KennethLavrsen (Bugs:Item1440) | 
 |  v1.013 (8 Nov 2005) | TWiki:Main.DanielRohde: added Perl strict pragma; | 

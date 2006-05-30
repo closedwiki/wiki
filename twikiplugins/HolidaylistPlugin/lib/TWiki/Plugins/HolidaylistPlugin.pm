@@ -87,7 +87,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar)
+$REVISION = '1.017'; #dro# fixed minor bug (periodic repeater)
+#$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar)
 #$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
 #$REVISION = '1.014'; #dro# incorporated documentation fixes by TWiki:Main.KennethLavrsen (Bugs:Item1440) 
 #$REVISION = '1.013'; #dro# added Perl strict pragma; 
@@ -739,7 +740,8 @@ sub handleCalendarEvents {
 		return if (defined $end) && ($end < $startDays);
 
 		($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
-			$n1 * int( (abs($startDays-$start)/$n1) + ($startDays-$start!=0?1:0) ) );
+			### $n1 * int( (abs($startDays-$start)/$n1) + ($startDays-$start!=0?1:0) ) );
+			$n1 * int( (abs($startDays-$start)/$n1) + ((abs($startDays-$start) % $n1)!=0?1:0) ) );
 		$start = Date_to_Days($yy1, $mm1, $dd1);
 
 		# start at first occurence and increment by repeating count ($n1)
