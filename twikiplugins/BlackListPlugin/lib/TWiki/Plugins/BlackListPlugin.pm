@@ -39,7 +39,7 @@ $VERSION = '$Rev: 9979 $';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
+$RELEASE = 'any TWiki';
 
     $pluginName = 'BlackListPlugin';  # Name of this Plugin
     %cfg =
@@ -271,12 +271,52 @@ sub beforeSaveHandler
         if( $cgiQuery ) {
             my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
             _handleBanList( "add", $remoteAddr );
-            _writeLog( "SPAMLIST add: $remoteAddr, spam '$badword'" );
+            _writeLog( "SPAMLIST add: $remoteAddr, topic spam '$badword'" );
 
             my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
                       "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
             $msg =~ s/%WIKISPAMWORD%/$badword/;
-            my $ok = "[[http://en.wikipedia.org/wiki/Link_spam][OK]]";
+            my $ok = "[[http://en.wikipedia.org/wiki/Spamdexing][OK]]";
+            $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
+            print $cgiQuery->redirect( $url );
+            exit 0; # should never reach this
+        }
+        # else (unlikely case) force a "500 Internal Server Error" error
+        exit 1;
+    }
+}
+
+# =========================
+sub beforeAttachmentSaveHandler
+{
+### my ( $attachmentAttr, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    my $attachmentAttr = $_[0];
+    my $attachmentName = $attachmentAttr->{"attachment"};
+    my $tmpFilename    = $attachmentAttr->{"tmpFilename"};
+
+    # This handler is called by TWiki::Store::saveAttachment just before the save action
+    writeDebug( "beforeAttachmentSaveHandler( $_[2].$_[1], $attachmentName )" );
+
+    # Bail out unless spam filtering is enabled
+    return unless( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_FILTERWIKISPAM" ) );
+
+    # test only .htm and .html attachments
+    return unless( $attachmentName =~ m/.html?$/i );
+
+    my $spamListRegex = _getSpamListRegex();
+    return if( $spamListRegex =~ /\(\)$/ ); # empty list
+    if( TWiki::Func::readFile( $tmpFilename ) =~ /$spamListRegex/ ) {
+        my $badword = $1;
+        my $cgiQuery = TWiki::Func::getCgiQuery();
+        if( $cgiQuery ) {
+            my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
+            _handleBanList( "add", $remoteAddr );
+            _writeLog( "SPAMLIST add: $remoteAddr, html spam '$badword'" );
+
+            my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
+                      "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
+            $msg =~ s/%WIKISPAMWORD%/$badword/;
+            my $ok = "[[http://en.wikipedia.org/wiki/Spamdexing][OK]]";
             $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
             print $cgiQuery->redirect( $url );
             exit 0; # should never reach this
