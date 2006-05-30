@@ -56,7 +56,7 @@ sub forceAuthentication {
     unless( $twiki->inContext( 'authenticated' )) {
         my $query = $twiki->{cgiQuery};
         # SMELL CGI::url drops the anchor. Report as bug against CGI::?
-        $query->param( origurl => $query->url( -full => 1, -query => 1 ));
+        $query->param( origurl => $query->url( -path => 1, -query => 1 ));
         $this->login( $query, $twiki );
         return 1;
     }
@@ -71,8 +71,8 @@ sub loginUrl {
     my $web = $twiki->{webName};
     my $query = $twiki->{cgiQuery};
     return $twiki->getScriptUrl( 0, 'login', $web, $topic,
-                                 origurl => $query->url( -full => 1,
-                                                         -query => 1 ) );
+                                 origurl => $query->url( -path => 1,
+                                                         -query => 1 ), @_ );
 }
 
 =pod
