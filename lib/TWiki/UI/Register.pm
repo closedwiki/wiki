@@ -52,6 +52,16 @@ use Assert;
 
 my $twikiRegistrationAgent = 'TWikiRegistrationAgent';
 
+# Keys from the user data that should *not* be included in
+# the user topic.
+my %SKIPKEYS = (
+    'Photo' => 1,
+    'WikiName' => 1,
+    'LoginName' => 1,
+    'Password' => 1,
+    'Email' => 1
+   );
+
 =pod
 
 ---++ StaticMethod register_cgi( $session )
@@ -260,7 +270,7 @@ sub bulkRegister {
 #    * sets LoginName to be WikiName if not present
 #    * rearranges the row to comply with the ordered list
 #    * if using htpasswd, calls _addUserToPasswordSystem()
-#    * makes newUserFromTemplate
+#    * makes createUserTopic
 #    * calls addUserToTWikiUsersTopic()
 # SMELL could be made much more efficient if needed, as calls to addUserToTWikiUsersTopic()
 # are quite expensive when doing 300 in succession!
@@ -303,20 +313,19 @@ sub _registerSingleBulkUser {
     $session->writeLog('bulkregister', $row->{webName}.'.'.$row->{WikiName},
                        $row->{Email}, $row->{WikiName} );
 
-    if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
-        $log .= _newUserFromTemplate($session, 'NewUserTemplate', $row);
-    } else {
-        $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
-	}
-
     my $user = $session->{users}->findUser( $row->{LoginName},
                                             $row->{WikiName} );
 
     my $userTopic =
       $session->{users}->addUserToTWikiUsersTopic( $user,
                                                    $session->{user} );
-
     $user->setEmails( $row->{Email} );
+
+    if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
+        $log .= _createUserTopic($session, 'NewUserTemplate', $row);
+    } else {
+        $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
+	}
 
     #if ($TWiki::cfg{EmailUserDetails}) {
         # If you want it, write it.
@@ -717,7 +726,7 @@ sub verifyEmailAddress {
 
 Presently this is called in RegisterCgiScript directly after a call to verify. The separation is intended for the RegistrationApprovals functionality
    1 calls _reloadUserContext (throws oops if appropriate)
-   3 calls newUserFromTemplate()
+   3 calls createUserTopic()
    4 if using the htpasswdFormatFamily, calls _addUserToPasswordSystem
    5 calls the misnamed RegistrationHandler to set cookies
    6 calls addUserToTWikiUsersTopic
@@ -750,12 +759,6 @@ sub finish {
         throw Error::Simple( 'no WikiName after reload');
     }
 
-    # inform user and admin about the registration. Note: do it now before 
-    # purgeKeys deletes the password.
-    _emailRegistrationConfirmations( $session, $data );
-
-    my $log = _newUserFromTemplate($session, 'NewUserTemplate', $data);
-
     my $success = _addUserToPasswordSystem( $session, $data );
     # SMELL - error condition? surely need a way to flag an error?
     unless ( $success ) {
@@ -787,6 +790,11 @@ sub finish {
 
     $user->setEmails( $data->{Email} );
 
+    # inform user and admin about the registration.
+    _emailRegistrationConfirmations( $session, $data );
+
+    my $log = _createUserTopic($session, 'NewUserTemplate', $data);
+
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
         $session->writeLog( 'register', $data->{webName}.'.'.$data->{WikiName},
@@ -807,13 +815,12 @@ sub finish {
 #
 #I use RegistrationHandler::register to prevent certain fields (like password) 
 #appearing in the homepage and to fetch photos into the topic
-sub _newUserFromTemplate {
+sub _createUserTopic {
     my ($session, $template, $row) = @_;
     my ( $meta, $text ) = TWiki::UI::readTemplateTopic($session, $template);
     my $log = $b.' Writing topic '.$row->{webName}.'.'.$row->{WikiName}."\n".
       $b2.' RegistrationHandler: ';
     my $regLog = $text;
-    _purgeKeys( $row );
     $log .= join($b2.' ', split /\r?\n/, $regLog)."\n";
     $log .= $b2.' '.
       join( $b2.' ',
@@ -827,9 +834,6 @@ sub _newUserFromTemplate {
 #on the user's topic.
 #
 #Returns 'BulletFields' or 'FormFields' depending on what it chose.
-#
-# Note that _purgeKeys will have deleted some keys before this is called.
-# (such as password and email)
 #
 sub _writeRegistrationDetailsToTopic {
     my ($session, $data, $meta, $text) = @_;
@@ -886,6 +890,7 @@ sub _getRegFormAsTopicForm {
     foreach my $field ( @{$formDef->getFields()} ) {
         foreach my $fd (@{$data->{form}}) {
             next unless $fd->{name} eq $field->{name};
+            next if $SKIPKEYS{$fd->{name}};
             my $value = $fd->{value};
             my $title = $fd->{name};
             $title =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;    # Spaced
@@ -900,7 +905,7 @@ sub _getRegFormAsTopicForm {
     }
     my $leftoverText = '';
     foreach my $fd (@{$data->{form}}) {
-        unless( $inform{$fd->{name}} ) {
+        unless( $inform{$fd->{name}} || $SKIPKEYS{$fd->{name}} ) {
             $leftoverText .= "   * $fd->{name}: $fd->{value}\n";
         }
     }
@@ -912,8 +917,8 @@ sub _getRegFormAsTopicContent {
     my $data = shift;
     my $text;
     foreach my $fd ( @{ $data->{form} } ) {
-        my $name  = $fd->{name};
-        my $title = $name;
+        next if $SKIPKEYS{$fd->{name}};
+        my $title = $fd->{name};
         $title =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;    # Spaced
         my $value = $fd->{value};
         $value =~ s/[\n\r]//go;
@@ -1284,19 +1289,5 @@ sub _deleteKey {
         }
     }
 };
-
-# Deletes keys from the user data that should *not* be included in
-# the user topic.
-sub _purgeKeys {
-    my $data = shift;
-
-    ASSERT($data) if DEBUG;
-
-    _deleteKey($data, 'Photo'); # SMELL this should go
-    _deleteKey($data, 'WikiName');
-    _deleteKey($data, 'LoginName');
-    _deleteKey($data, 'Password');
-    _deleteKey($data, 'Email');
-}
 
 1;
