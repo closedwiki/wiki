@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1148996942" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1149090296" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should works with all modern web browsers.
@@ -191,9 +191,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.004 (BETA) |
+|  Plugin Version: | V1.004 (31 May 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.004 (BETA) | TWiki:Main.DanielRohde: fixed typos (documentation, timeformat); added new attributes (days, forcestartdate, nowfgcolor, nowbgcolor); fixed minor bug (periodic repeater); added new event type (list) |
+|  V1.004 (31 May 2006) | TWiki:Main.DanielRohde: fixed typos (documentation, timeformat); added new attributes (days, forcestartdate, nowfgcolor, nowbgcolor); fixed minor bug (periodic repeater); added new event type (list) |
 |  V1.003 (24 May 2006) | TWiki:Main.DanielRohde: added compatibility mode (TWiki:Plugins.CalendarPlugin event types); added documentation and new attributes; fixed bugs (bgcolor bug; conflict rendering; documentation; error logs; warnings);|
 |  V1.002 (22 May 2006): | TWiki:Main.DanielRohde: fixed major bugs (conflict handling, preferences); added documentation; |
 |  V1.001 (19 May 2006): | TWiki:Main.DanielRohde: fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; |

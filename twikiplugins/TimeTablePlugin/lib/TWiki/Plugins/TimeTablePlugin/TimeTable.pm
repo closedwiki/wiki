@@ -398,10 +398,10 @@ sub _render {
 		my $dow = Day_of_Week($yy1,$mm1,$dd1);
 		next if (!$options{'showweekend'})&&($dow>5);
 		my $colbgcolor = $options{(($dow>5)?'weekendbgcolor':'tableheadercolor')};
-		$colbgcolor = $options{'todaybgcolor'} if ($options{'todaybgcolor'})&&($todayDays==$startDateDays+$dow);
+		$colbgcolor = $options{'todaybgcolor'} if ($options{'todaybgcolor'})&&($todayDays==$startDateDays+$day);
 		$colbgcolor = '' unless defined $colbgcolor;
 		my $colfgcolor = $options{(($dow>5)?'weekendfgcolor':'black')};
-		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$dow);
+		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
 		$tr .= $cgi->td({-style=>"color:$colfgcolor", -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
