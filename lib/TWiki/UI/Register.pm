@@ -902,7 +902,7 @@ sub _getRegFormAsTopicForm {
 
             $meta->putKeyed(
                 'FIELD',
-                { 'name' => $fd->{name}, 'value' => $value, 'title' =>$title});
+                { 'name' => $fd->{name}, attributes => '', 'value' => $value, 'title' =>$title});
 
             $inform{$fd->{name}} = 1;
             last;
