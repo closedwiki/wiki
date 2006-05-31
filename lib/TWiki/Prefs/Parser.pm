@@ -116,6 +116,22 @@ sub parseMeta {
 	    my $name = $field->{name};
 	    $prefs->insert( $type, $keyPrefix.$name, $value );
     }
+
+    # SMELL: have to support the "S" form from Cairo for a single user
+    my $form = $meta->get( 'FORM' );
+    if( $form ) {
+        my @fields = $meta->find( 'FIELD' );
+        foreach my $field ( @fields ) {
+            my $title = $field->{title};
+            my $attributes = $field->{attributes};
+            if( $attributes && $attributes =~ /S/o ) {
+                my $value = $field->{value};
+                my $name = $field->{name};
+                $prefs->insert( 'Set', 'FORM_'.$name, $value );
+                $prefs->insert( 'Set', $name, $value );
+            }
+        }
+    }
 }
 
 1;
