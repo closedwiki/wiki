@@ -1096,8 +1096,13 @@ sub _addUserToPasswordSystem {
     my( $session, $userRow ) = @_;
 
     my $user = $session->{users}->findUser($userRow->{LoginName}, $userRow->{WikiName});
+
     if ($user && $user->passwordExists()) {
-	return 1;
+        unless( $user->checkPassword( $userRow->{Password} )) {
+            throw Error::Simple("New password did not match existing password for this user");
+        }
+        # User exists, and the password was good.
+        return 1;
     }
 
     my $success;
