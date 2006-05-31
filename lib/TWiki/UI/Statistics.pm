@@ -135,9 +135,6 @@ sub statistics {
 
     my @weblist;
     my $webSet = $session->{cgiQuery}->param( 'webs' );
-    unless( defined( $webSet ) || $session->inContext( 'command_line' )) {
-        $webSet = $session->{webName};
-    }
     if( $webSet) {
         # do specific webs
         push( @weblist, split( /,\s*/, $webSet ));
