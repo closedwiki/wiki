@@ -856,17 +856,8 @@ sub _writeRegistrationDetailsToTopic {
     my $log;
     my $addText;
     my $form = $meta->get( 'FORM' );
-    if ($form) {
-        # use eval to trap and ignore exceptions in the form reader
-        eval {
-            $form = new TWiki::Form(
-                $session, $TWiki::cfg{UsersWebName},
-                $form->{name} );
-        };
-        $form = undef if $@;
-    }
     if( $form ) {
-        ( $meta, $addText ) = _getRegFormAsTopicForm( $form, $meta, $data );
+        ( $meta, $addText ) = _getRegFormAsTopicForm( $meta, $data );
         $log = 'Using Form Fields';
     } else {
         $addText = _getRegFormAsTopicContent( $data );
@@ -890,20 +881,16 @@ sub _writeRegistrationDetailsToTopic {
 
 # Puts form fields into the topic form
 sub _getRegFormAsTopicForm {
-    my ( $formDef, $meta, $data ) = @_;
+    my ( $meta, $data ) = @_;
 
     my %inform;
-    foreach my $field ( @{$formDef->getFields()} ) {
+    my @fields = $meta->find( 'FIELD' );
+    foreach my $field ( @fields ) {
         foreach my $fd (@{$data->{form}}) {
             next unless $fd->{name} eq $field->{name};
             next if $SKIPKEYS{$fd->{name}};
-            my $value = $fd->{value};
-            my $title = $fd->{name};
-
-            $meta->putKeyed(
-                'FIELD',
-                { 'name' => $fd->{name}, attributes => '', 'value' => $value, 'title' =>$title});
-
+            $field->{value} = $fd->{value};
+            $meta->putKeyed( 'FIELD', $field );
             $inform{$fd->{name}} = 1;
             last;
         }
