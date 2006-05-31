@@ -16,7 +16,7 @@
 
 Note: if personal data is being stored using a secret database, then it is only visible to the user and to administrators.
 
-| E-mail | %USERINFO{"%TOPIC%" format="$emails"}% |
+| E-mail | %USERIN%NOP%FO{"%TOPIC%" format="$emails"}% |
 
 ---++ My Personal Preferences
 
