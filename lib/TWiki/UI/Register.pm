@@ -78,9 +78,6 @@ sub register_cgi {
     $session->enterContext('absolute_urls');
 
     my $tempUserDir = $TWiki::cfg{RegistrationApprovals};
-    # SMELL hacked name, and stores in binary format!
-    my $needVerification = $TWiki::cfg{Register}{NeedVerification};    
-	# NB. No test harness for needVerification = 0.
     my $needApproval = 0;
 
     # Register -> Verify -> Approve -> Finish
@@ -214,8 +211,8 @@ sub bulkRegister {
     unless( $user->isAdmin() ) {
         throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $web, topic => $topic,
-                                    params => $TWiki::cfg{UsersWebName}.'.'.
-                                      $TWiki::cfg{SuperAdminGroup} );
+                                    params => [ $TWiki::cfg{UsersWebName}.'.'.
+                                      $TWiki::cfg{SuperAdminGroup} ] );
     }
 
     #-- Read the topic containing a table of people to be registered
@@ -433,18 +430,19 @@ sub _requireVerification {
 
     my $err = _sendEmail( $session, 'registerconfirm', $data );
 
-    if ( $err ) {
+    if($err) {
         throw TWiki::OopsException( 'attention',
                                     def => 'send_mail_error',
                                     web => $data->{webName},
                                     topic => $topic,
                                     params => [ $data->{Email}, $err ]);
-    }
+    };
+
     throw TWiki::OopsException( 'attention',
                                 def => 'confirm',
                                 web => $data->{webName},
                                 topic => $topic,
-                                params => $data->{Email} );
+                                params => [ $data->{Email} ] );
 }
 
 =pod
@@ -479,8 +477,8 @@ sub resetPassword {
             throw TWiki::OopsException
               ( 'accessdenied', def => 'only_group',
                 web => $web, topic => $topic,
-                params => $TWiki::cfg{UsersWebName}.'.'.
-                $TWiki::cfg{SuperAdminGroup} );
+                params => [ $TWiki::cfg{UsersWebName}.'.'.
+                $TWiki::cfg{SuperAdminGroup} ] );
         }
     } else {
         # Anyone can reset a single password - important because by definition
@@ -508,12 +506,12 @@ sub resetPassword {
         throw TWiki::OopsException( 'attention',
                                     topic => $TWiki::cfg{UsersTopicName},
                                     def => 'reset_ok',
-                                    params => $message );
+                                    params => [ $message ] );
     } else {
         throw TWiki::OopsException( 'attention',
                                     topic => $TWiki::cfg{UsersTopicName},
                                     def => 'reset_bad',
-                                    params => $message );
+                                    params => [ $message ] );
     }
 }
 
@@ -684,7 +682,7 @@ sub changePassword {
     throw TWiki::OopsException( 'attention',
                                  web => $webName, topic => $topic,
                                  def => 'email_changed',
-                                 params => $email );
+                                 params => [ $email ] );
 
 }
 
@@ -766,7 +764,7 @@ sub finish {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'problem_adding',
-                                    params => $data->{WikiName} );
+                                    params => [ $data->{WikiName} ] );
     }
 
     # Plugin callback to set cookies.
@@ -791,7 +789,7 @@ sub finish {
     $user->setEmails( $data->{Email} );
 
     # inform user and admin about the registration.
-    _emailRegistrationConfirmations( $session, $data );
+    my $status = _emailRegistrationConfirmations( $session, $data );
 
     my $log = _createUserTopic($session, 'NewUserTemplate', $data);
 
@@ -801,12 +799,20 @@ sub finish {
                             $data->{Email}, $data->{WikiName} );
     }
 
+    if( $status ) {
+        $status = $session->{i18n}->maketext(
+            'Warning: Could not send confirmation email')."\n\n$status";
+    } else {
+        $status = $session->{i18n}->maketext(
+            'A confirmation e-mail has been sent to [_1]', $data->{Email} );
+    }
+
     # and finally display thank you page
     throw TWiki::OopsException( 'attention',
                                 web => $data->{webName},
                                 topic => $data->{WikiName},
                                 def => 'thanks',
-                                params => $data->{Email} );
+                                params => [ $status ] );
 }
 
 #Given a template and a hash, creates a new topic for a user
@@ -942,20 +948,8 @@ sub _emailRegistrationConfirmations {
                                $TWiki::cfg{Register}{HidePasswd}
                              );
 
-    my $err = 
-      $session->{net}->sendEmail( $email);
+    my $warnings = $session->{net}->sendEmail( $email);
 
-    # SMELL: This needs to log to tell the admin.
-    if ( $err ) {
-        throw TWiki::OopsException( 'attention',
-                                    web => $data->{webName},
-                                    topic => $data->{WikiName},
-                                    def => 'send_mail_error',
-                                    params => $err );
-    }
-
-    # Furthermore it would be better if it returned
-    # A template to give to the user.
     $template =
       $session->{templates}->readTemplate( 'registernotifyadmin', $skin );
     $email =
@@ -964,14 +958,13 @@ sub _emailRegistrationConfirmations {
                                $template,
                                1 );
 
-    $err = $session->{net}->sendEmail( $email );
-    if ( $err ) {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'send_mail_error',
-                                    web => $data->{webName},
-                                    topic => $data->{WikiName},
-                                    params => $err );
+    my $err = $session->{net}->sendEmail( $email );
+    if( $err ) {
+        # don't tell the user about this one
+        $session->writeWarning('Could not confirm registration: '.$err);
     }
+
+    return $warnings;
 }
 
 #The template dictates the to: field
@@ -1014,7 +1007,7 @@ sub _validateRegistration {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'missing_fields',
-                                    params => '' );
+                                    params => [ '' ] );
     }
 
     if($session->{store}->topicExists( $data->{webName}, $data->{WikiName} )) {
@@ -1022,7 +1015,7 @@ sub _validateRegistration {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'already_exists',
-                                    params => $data->{WikiName} );
+                                    params => [ $data->{WikiName} ] );
     }
 
     if ($session->{users}->lookupLoginName($data->{LoginName})) {
@@ -1030,7 +1023,7 @@ sub _validateRegistration {
 				  web => $data->{webName},
 				  topic => $topic,
 				  def => 'already_exists',
-				  params => $data->{LoginName} );
+				  params => [ $data->{LoginName} ] );
     }
 
     my $user = $session->{users}->findUser( $data->{LoginName}, undef, 1 );
@@ -1039,7 +1032,7 @@ sub _validateRegistration {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'already_exists',
-                                    params => $data->{LoginName} );
+                                    params => [ $data->{LoginName} ] );
     }
 
     # check if required fields are filled in
@@ -1055,7 +1048,7 @@ sub _validateRegistration {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'missing_fields',
-                                    params => join(', ', @missing) );
+                                    params => [ join(', ', @missing) ] );
     }
 
     # check if WikiName is a WikiName
@@ -1082,7 +1075,7 @@ sub _validateRegistration {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'bad_email',
-                                    params => $data->{Email} );
+                                    params => [ $data->{Email} ] );
     }
 }
 
@@ -1136,6 +1129,7 @@ sub _sendEmail {
     $text =~ s/%VERIFICATIONCODE%/$p->{VerificationCode}/go;
     $text =~ s/%PASSWORD%/$p->{PasswordA}/go;
     $text = $session->handleCommonTags( $text, $p->{webName}, $p->{WikiName} );
+
     return $session->{net}->sendEmail($text);
 }
 

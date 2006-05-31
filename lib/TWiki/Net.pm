@@ -229,6 +229,7 @@ sub _sendEmailBySendmail {
       die "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
     print MAIL $text;
     close( MAIL );
+    die "ERROR: Exit code $? from TWiki::cfg{MailProgram}" if $?;
 }
 
 sub _sendEmailByNetSMTP {
