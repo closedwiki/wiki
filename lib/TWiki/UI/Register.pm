@@ -893,7 +893,6 @@ sub _getRegFormAsTopicForm {
             next if $SKIPKEYS{$fd->{name}};
             my $value = $fd->{value};
             my $title = $fd->{name};
-            $title =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;    # Spaced
 
             $meta->putKeyed(
                 'FIELD',
