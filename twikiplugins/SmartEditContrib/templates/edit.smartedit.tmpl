@@ -1,12 +1,12 @@
 %TMPL:INCLUDE{"edit.pattern"}%
 
+
 %TMPL:DEF{"templatejavascript"}%<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/SmartEditContrib/js/smartedit.js"></script>
 <script type="text/javascript">
 twikismartEdit('topic');
 </script>
 %TMPL:END%
-
 
 %TMPL:DEF{"textarea"}%
 <table width="99%" height="25" id="smarttoolbar"><tr>
@@ -70,3 +70,4 @@ size"></img><font face="Verdana, Arial, Helvetica, sans-serif"
 color="#60a0e0">TWikiSmartEdit alpha release</font></td>
 </tr></table>
 <textarea class="twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>%TMPL:END
+
