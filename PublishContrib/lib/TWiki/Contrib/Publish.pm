@@ -115,15 +115,15 @@ sub publish {
             } elsif( $k eq 'FORMAT' ) {
                 $format = $v;
             } elsif ($k eq 'DEBUG' ) {
-		$debug = $v;
-	    } elsif ($k eq 'TEMPLATES' ) {
-		$templatesWanted = $v;
-	    } elsif ($k eq 'TEMPLATELOCATION' ) {
-		$templateLocation = $v;
-	    } elsif ($k eq 'INSTANCE' ) {
-		$TWiki::cfg{PublishContrib}{Dir} .= '/'.$v;
-		$TWiki::cfg{PublishContrib}{URL} .= '/'.$v;
-	    }
+                $debug = $v;
+            } elsif ($k eq 'TEMPLATES' ) {
+                $templatesWanted = $v;
+            } elsif ($k eq 'TEMPLATELOCATION' ) {
+                $templateLocation = $v;
+            } elsif ($k eq 'INSTANCE' ) {
+                $TWiki::cfg{PublishContrib}{Dir} .= '/'.$v;
+                $TWiki::cfg{PublishContrib}{URL} .= '/'.$v;
+            }
         }
     } else {
         if ( defined($query->param('inclusions')) ) {
@@ -201,21 +201,22 @@ sub publish {
     my @templatesWanted = split /,/, $templatesWanted;
 
     foreach my $template (@templatesWanted) {
-	$template =~ s/^\s+//, s/\s+\z//;
-	$templatesReferenced{$template} = 1;
-	print "-- template=$template$br" if $debug;
-	my $dir = $TWiki::cfg{PublishContrib}{Dir}.'/'._dirForTemplate($template);
-	print "-- dir=$dir$br" if $debug;
+        $template =~ s/^\s+//;
+        $template =~ s/\s+\z//;
+        $templatesReferenced{$template} = 1;
+        print "-- template=$template$br" if $debug;
+        my $dir = $TWiki::cfg{PublishContrib}{Dir}.'/'._dirForTemplate($template);
+        print "-- dir=$dir$br" if $debug;
 
-	my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
-	eval 'use '.$generator.
-	    ';$archive = new '.$generator.
-	    '("'.$dir.'","'.$web.'","'.
-	    $genopt.'")';
-	die $@ if $@;
-	
-	publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
-               $exclusions, $skin, $template, $filter, $archive);
+        my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
+        eval 'use '.$generator.
+          ';$archive = new '.$generator.
+            '("'.$dir.'","'.$web.'","'.
+              $genopt.'")';
+        die $@ if $@;
+
+        publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
+                   $exclusions, $skin, $template, $filter, $archive);
     }
     # check the $templatesReferenced, and that everything referenced has been generated.
     my @templatesReferenced = sort keys %templatesReferenced;
@@ -223,9 +224,9 @@ sub publish {
 
     my @difference = arrayDiff(\@templatesReferenced, \@templatesWanted); 
     if ($#difference > 0) {
-	print "${ob}Templates Used = ",join(",", @templatesReferenced), "$br".
-	    "Templates Specified = ".join(",", @templatesWanted)."$br";
-	print "${os}WARNING: there is a difference between what you specified and what you needed. Consider changing the TEMPLATES setting so it has all Templates Used.${cs}$br";
+        print "${ob}Templates Used = ",join(",", @templatesReferenced), "$br".
+          "Templates Specified = ".join(",", @templatesWanted)."$br";
+        print "${os}WARNING: there is a difference between what you specified and what you needed. Consider changing the TEMPLATES setting so it has all Templates Used.${cs}$br";
     }
 
     my $text = 'Published to <a href="'.
@@ -243,15 +244,15 @@ sub publish {
 }
 
 sub arrayDiff { 
-# from http://perl.active-venture.com/pod/perlfaq4-dataarrays.html
+    # from http://perl.active-venture.com/pod/perlfaq4-dataarrays.html
     my ($array1, $array2) = @_;
     my (@union, @intersection, @difference);
     @union = @intersection = @difference = ();
     my %count = ();
     foreach my $element (@$array1, @$array2) { $count{$element}++ }
     foreach my $element (keys %count) {
-	push @union, $element;
-	push @{ $count{$element} > 1 ? \@intersection : \@difference }, $element;
+        push @union, $element;
+        push @{ $count{$element} > 1 ? \@intersection : \@difference }, $element;
     }  
     return @difference;
 }
@@ -273,26 +274,26 @@ sub publishWeb {
     # Choose template.
     my $tmpl = TWiki::Func::readTemplate($template, $skin);
     die "Couldn't find template\n" if(!$tmpl);
-    
+
     # Attempt to render each included page.
     my %copied;
     foreach my $topic (@topics) {
-	print "${ob}$topic: ${cb}\t";
-	if( $topic !~ /^($inclusions)$/ ) {
-	    print "${os}not included$cs";
-	} elsif( $exclusions && $topic =~ /^($exclusions)$/ ) {
-	    print "${os}excluded$cs";
-	} else {
-	    try {
-		publishTopic($web, $topic, $wikiName, $skin, $tmpl,
-			     \%copied, $filter, $archive);
-		print "published";
-	    } catch Error::Simple with {
-		my $e = shift;
-		print "not published: ".$e->{-text};
-	    };
-	}
-	print $br;
+        print "${ob}$topic: ${cb}\t";
+        if( $topic !~ /^($inclusions)$/ ) {
+            print "${os}not included$cs";
+        } elsif( $exclusions && $topic =~ /^($exclusions)$/ ) {
+            print "${os}excluded$cs";
+        } else {
+            try {
+                publishTopic($web, $topic, $wikiName, $skin, $tmpl,
+                             \%copied, $filter, $archive);
+                print "published";
+            } catch Error::Simple with {
+                my $e = shift;
+                print "not published: ".$e->{-text};
+            };
+        }
+        print $br;
     }
     return 
 }
@@ -403,31 +404,17 @@ sub publishTopic {
     $archive->addString( $tmpl, $topic.'.html' );
 }
 
-# rewrite 
-#   Topic?template=viewprint%REVARG%.html?template=viewprint%REVARG%
-# to
-#   _viewprint/Topic.html
-#
-#   * =$web=
-#   * =$tmpl=
-#   * =$topic=
-#   * =$template=
-# return
-#   * 
-# side effects
-
-
 sub _rewriteTemplateReferences {
     my ($tmpl, $web, $topic, $template, $redundantduplicate) = @_;
-       # for an unknown reason, these come through with doubled up template= arg
-       # e.g.
-       # http://.../site/instance/Web/WebHome?template=viewprint%REVARG%.html?template=viewprint%REVARG%
-       #$link:
-       # Web/ContactUs?template=viewprint%REVARG%.html? "
+    # for an unknown reason, these come through with doubled up template= arg
+    # e.g.
+    # http://.../site/instance/Web/WebHome?template=viewprint%REVARG%.html?template=viewprint%REVARG%
+    #$link:
+    # Web/ContactUs?template=viewprint%REVARG%.html? "
 
-       my $newLink = $TWiki::cfg{PublishContrib}{URL}.'/'._dirForTemplate($template)."/".$web.'/'.$topic.'.html';
-       print "---- Found alternate template use on $topic template=$template $br".
-        "---- Changed to $newLink$br" if $debug;
+    my $newLink = $TWiki::cfg{PublishContrib}{URL}.'/'._dirForTemplate($template)."/".$web.'/'.$topic.'.html';
+    print "---- Found alternate template use on $topic template=$template $br".
+      "---- Changed to $newLink$br" if $debug;
     $templatesReferenced{$template} = 1;
 	return "href='$newLink'";
 
@@ -459,13 +446,10 @@ sub _copyResource {
 
     # See if we've already copied this resource.
     if (exists $copied->{$rsrcName}) {
-	print "(got already)$br" if $debug;
+        print "(got already)$br" if $debug;
     } else {
         # Nope, it's new. Gotta copy it to new location.
         # Split resource name into path (relative to pub/%WEB%) and leaf name.
-
-	print "${os}Need it$cs $br" if $debug;
-
 
         my $file = $rsrcName;
         $file =~ s(^(.*)\/)()o;
@@ -482,41 +466,41 @@ sub _copyResource {
             $archive->addFile( "$TWikiPubDir/$rsrcName" , "rsrc/$path/$file" );
         } else {
             print "${os}--- $rsrcName not readable $br('$TWikiPubDir/$rsrcName' does not exist) $cs$br" if $debug;	    
-	}
+        }
         # Record copy so we don't duplicate it later.
         my $destURL = "rsrc/$path/$file";
         $destURL =~ s!//!/!g;
         $copied->{$rsrcName} = $destURL;
-	
-	# check css for additional resources, ie, url()
-	if ($rsrcName =~ /\.css$/) {
-	  my @moreResources = ();
-	  open(F, "$TWikiPubDir/$rsrcName") ||
-        die "${os}Cannot read $TWikiPubDir/$rsrcName: $!$cs$br";
-	  while (my $line = <F>) {
-	    if ($line =~ /url\(["']?(.*?)["']?\)/) {
-	      push @moreResources, $1;
-	    }
-	  }
-	  close(F);
-	  foreach my $resource (@moreResources) {
-            print "${os}--- importing url $resource $cs$br" if $debug;
-	    # recurse
-            if ($resource !~ m!^/!) {
-               # if the url is not absolute, assume its relative to the current path
-               $resource = $path.'/'.$resource;
-            } else {
-               print "---- $resource already prefixed with / - checking for $pub$br" if $debug;
-               if ($resource =~ m!$pub/(.*)!) {
-                  my $old = $resource;
-                  $resource = $1;
-                  print "${os}---- $old had extraneous absolute reference to twikipubdir $pub (now $resource)$cs$br";
-               }
+
+        # check css for additional resources, ie, url()
+        if ($rsrcName =~ /\.css$/) {
+            my @moreResources = ();
+            open(F, "$TWikiPubDir/$rsrcName") ||
+              die "${os}Cannot read $TWikiPubDir/$rsrcName: $!$cs$br";
+            while (my $line = <F>) {
+                if ($line =~ /url\(["']?(.*?)["']?\)/) {
+                    push @moreResources, $1;
+                }
             }
-            print "${os}--- ($resource) $cs$br" if $debug;
-	    _copyResource($web, $resource, $copied, $archive);
-	  }
-	}
+            close(F);
+            foreach my $resource (@moreResources) {
+                print "${os}--- importing url $resource $cs$br" if $debug;
+                # recurse
+                if ($resource !~ m!^/!) {
+                    # if the url is not absolute, assume its relative to the current path
+                    $resource = $path.'/'.$resource;
+                } else {
+                    print "---- $resource already prefixed with / - checking for $pub$br" if $debug;
+                    if ($resource =~ m!$pub/(.*)!) {
+                        my $old = $resource;
+                        $resource = $1;
+                        print "${os}---- $old had extraneous absolute reference to twikipubdir $pub (now $resource)$cs$br";
+                    }
+                }
+                print "${os}--- ($resource) $cs$br" if $debug;
+                _copyResource($web, $resource, $copied, $archive);
+            }
+        }
     }
     return $copied->{$rsrcName};
 }
@@ -525,7 +509,7 @@ sub _topicURL {
     my( $path, $web ) = @_;
     my $extra = '';
 
-    if( $path && $path =~ /([#\?].*)$/ ) {
+    if( $path && $path =~ s/([#\?].*)$// ) {
         $extra = $1;
     }
 
