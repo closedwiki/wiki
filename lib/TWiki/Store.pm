@@ -1888,17 +1888,14 @@ sub searchMetaData {
     my ( $this, $params ) = @_;
 
     my $attrType = $params->{type} || 'FIELD';
+    my $attrWeb = $params->{web} || $this->{session}->{webName};
+    my $attrTopic = $params->{topic} || $this->{session}->{topicName};
 
     my $searchVal = 'XXX';
 
-    my $attrWeb = $params->{web} || '';
-    my $searchWeb = $attrWeb || 'all';
-
     if ( $attrType eq 'parent' ) {
-        my $attrTopic = $params->{topic} || '';
         $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
     } elsif ( $attrType eq 'topicmoved' ) {
-        my $attrTopic = $params->{topic} || '';
         $searchVal = "%META:TOPICMOVED[{].*from=\\\"$attrWeb\.$attrTopic\\\".*[}]%";
     } else {
         $searchVal = "%META:".uc( $attrType )."[{].*";
@@ -1915,7 +1912,7 @@ sub searchMetaData {
        _callback     => \&_collate,
        _cbdata       => \$text,,
        search        => $searchVal,
-       web           => $searchWeb,
+       web           => $attrWeb,
        type          => 'regex',
        nosummary     => 'on',
        nosearch      => 'on',
