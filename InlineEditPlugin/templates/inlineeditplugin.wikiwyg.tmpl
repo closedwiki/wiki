@@ -1,0 +1,29 @@
+
+<link rel='stylesheet' type='text/css' href='%PLUGINPUBURL%/twikiwyg.css' />
+<link rel="stylesheet" type="text/css" href="%PLUGINPUBURL%/Wikiwyg-0.12/css/wikiwyg.css" />
+<script type="text/javascript" src="%PLUGINPUBURL%/Wikiwyg-0.12/lib/Wikiwyg.js"></script>
+<script type="text/javascript" src="%PLUGINPUBURL%/Wikiwyg-0.12/lib/Wikiwyg/Toolbar.js"></script>
+<script type="text/javascript" src="%PLUGINPUBURL%/Wikiwyg-0.12/lib/Wikiwyg/Wysiwyg.js"></script>
+<script type="text/javascript" src="%PLUGINPUBURL%/Wikiwyg-0.12/lib/Wikiwyg/Wikitext.js"></script>
+<script type="text/javascript" src="%PLUGINPUBURL%/Wikiwyg-0.12/lib/Wikiwyg/Preview.js"></script>
+<script type="text/javascript" src="%PLUGINPUBURL%/TWysiwyg.js"></script>
+<script type="text/javascript" src="%PLUGINPUBURL%/TWikitext.js"></script>
+<script type="text/javascript" src="%PLUGINPUBURL%/Wikiwyg.js"></script>
+<script>
+
+//ONLY one config for all wikiwygs
+var config = {
+    doubleClickToEdit: false,
+    toolbar: {
+        imagesLocation: '%PLUGINPUBURL%/Wikiwyg-0.12/images/'
+    },
+};
+initialiseInlineEditDiv = function(topicSectionObject) {
+        var wikiwyg = new Wikiwyg.ClientServer();
+        wikiwyg.createWikiwygArea(topicSectionObject.HTMLdiv, config);
+        wikiwyg.setTopicSectionObject(topicSectionObject);
+
+	return wikiwyg;
+}
+
+</script>
