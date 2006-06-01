@@ -1,0 +1,125 @@
+%TMPL:INCLUDE{"twiki"}%
+
+
+
+%TMPL:DEF{"templatescript"}%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki_edit.js"></script>
+<script type="text/javascript">
+// Just to copy paste for image paths, no need in the script ....
+//var smart_url = '%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/';
+</script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/js/smartedit.js"></script>
+%TMPL:END%
+
+
+%TMPL:DEF{"templatecustomstyle"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"toolbar"}%<div class="patternTop">
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="patternToolBar">
+<span id="edithelpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%ICON{toggleopen-small}%<span class="twikiLinkLabel">%MAKETEXT{"Show formatting help"}%</span></a></span><span id="edithelphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%ICON{toggleclose-small}%<span class="twikiLinkLabel">%MAKETEXT{"Hide formatting help"}%</span></a></span>&nbsp;
+</td>
+</tr>
+</table>
+</div>
+<div class="patternToolBarBottom"></div>
+%TMPL:END%
+
+
+%TMPL:DEF{"bodyclassname"}%patternNoViewPage patternEditPage%TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}%%MAKETEXT{"(edit)"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%%MAKETEXT{"Change topic"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"simpleheader"}%
+---+ <nop>%TOPIC% %MAKETEXT{"(edit)"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"syntaxhelp"}%%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%%IF{ "context RevCommentPluginEnabled" then="<p><label for='comment'>Summary of changes</label> <input class='twikiEditComment' type='text' style='width:50%' name='comment' id='comment' /> <a target='RevComment' onclick='return launchWindow(\"%TWIKIWEB%\",\"RevComment\")' href='#%MAKETEXT{"Opens page in new window"}%' title='' >%MAKETEXT{"help"}%</a><br /></p>" else=""}%
+<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
+<input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="#%MAKETEXT{"Opens page in new window"}%" title='%MAKETEXT{"Read new revision help text in new window"}%' rel='nofollow'>%MAKETEXT{"help"}%</a></span></div>
+<div class="patternActionButtons">
+<input type="submit" class="twikiSubmit" name="action_save" id="save" %MAKETEXT{"value='Save' accesskey='s'"}% />%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" %MAKETEXT{"value='Quiet save' accesskey='q'"}% />%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" %MAKETEXT{"value='Checkpoint' accesskey='k'"}% />&nbsp;%MAKETEXT{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" %MAKETEXT{"value='Preview' accesskey='p'"}% />&nbsp;%MAKETEXT{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" title='%MAKETEXT{"Cancel editing and discard changes"}%' %MAKETEXT{"value='Cancel' accesskey='c'"}% /></div><div class="patternAccessKeyInfo"><a href="#%MAKETEXT{"Opens page in new window"}%" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%MAKETEXT{"Access keys"}%</a>: %MAKETEXT{"S = Save, Q = Quiet save, K = Checkpoint, P = Preview, C = Cancel"}%</div></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+%TMPL:P{"toolbar"}%<div id="edithelptoggle" class="twikiHelp twistyHidden twistyRememberSetting">%TMPL:P{"syntaxhelp"}%</div>
+<div class="patternFormHolder">
+<form name="main" action="%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%" method="post">
+<table width="99%" height="25" id="smarttoolbar"><tr>
+<td height="25" valign="top"><select id="twikismartselect" onchange="twikismartInsertFormat();">
+<option value="9">Normal</option>
+<option value="0">Formatted</option>
+<option value="1">Heading 1</img></option>
+<option value="2">Heading 2</option>
+<option value="3">Heading 3</option>
+<option value="4">Heading 4</option>
+<option value="5">Heading 5</option>
+<option value="6">Heading 6</option>
+<option value="7">Paragraph</option>
+<option value="10">Verbatim</option>
+</select></td>
+<td height="25" valign="top"><img id="twikismartbold" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/bold.gif" onclick="twikismartInsertBold();"></img></td>
+<td height="25" valign="top"><img id="twikismartitalic" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/italic.gif" onclick="twikismartInsertItalic();"></img></td>
+<td height="25" valign="top"><img id="twikismartbullet" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/bullist.gif" onclick="twikismartInsertBulletList();"></img></td>
+<td height="25" valign="top"><img id="twikismartnum" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/numlist.gif" onclick="twikismartInsertNumList();"></img></td>
+<td height="25" valign="top"><img id="twikismartexlink" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/exthyperlink.png" onclick="twikismartExlink();"></img></td>
+<td height="25" valign="top"><img id="twikismartindent" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/indent.gif" onclick="twikismartIndent();"></img></td>
+<td height="25" valign="top"><img id="twikismartoutdent" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/outdent.gif" onclick="twikismartOutdent();"></img></td>
+<td height="25" valign="top"><img id="twikismarthr" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/hr.gif" onclick="twikismartInsertHR();"></img></td>
+<td height="25" valign="top"><img id="twikismartnop" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/nop.png" onclick="twikismartNop();"></img></td>
+<td height="25" valign="top"><select id="twikismartselectcommon" onchange="twikismartCommon();">
+<option value="0">Common</option>
+<option value="1">Signature</option>
+<option value="2">Date</option>
+<option value="3">Table of content</option>
+</select></td>
+<td id="cheatItem" height="25" valign="top"></td>
+<td height="25" valign="top" align="right"><input id="twikismartadjustmode" type="checkbox" selected="false" onclick="twikismartAdjustMode();">Adjust to text size</input><img id="twikismartzoomin" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/loupe.gif" onclick="twikismartZoomIn();" title="Increase textarea size"></img><img id="twikismartzoomout" src="%PUBURLPATH%/%TWIKIWEB%/TWikiSmartEdit/img/loupem.gif" onclick="twikismartZoomOut();" title="Decrease textarea size"></img><font face="Verdana, Arial, Helvetica, sans-serif" color="#60a0e0">TWikiSmartEdit alpha release</font></td>
+</tr></table>
+<textarea id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>
+<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+<input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
+<input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
+<input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+<input type="hidden" name="templatetopic" value="%TEMPLATETOPIC%" />
+<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<input type="hidden" name="newtopic" value="%NEWTOPIC%" />
+<input type="hidden" name="cmd" value="%CMD%" />
+<div class="patternSig">
+<label for="sig" class="twikiGrayText">%MAKETEXT{"Your signature to copy/paste:"}%&nbsp;&nbsp;</label><input size="41" name="sig" type="text" readonly="readonly" title='%MAKETEXT{"Select, copy and paste your signature text to the bottom of your entry"}%' id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
+%FORMFIELDS%
+%TMPL:P{"topicaction"}%
+</form>
+</div>
+<div class="twikiHelp twistyMakeHidden">%TMPL:P{"syntaxhelp"}%</div>
+%TMPL:END%
+
+
+
+%TMPL:P{"page"}%
+<script type="text/javascript">
+// To know the id of the textarea ... if it is not 'topic'
+twikismartEdit('topic');
+</script>
