@@ -116,28 +116,36 @@ sub getUrl {
 # pick a default mail handler
 sub _installMailHandler {
     my $this = shift;
-    my $useNetSMTP = 0;
+    my $handler;
     my $prefs = $this->{session}->{prefs};
 
     $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' ) ||
       $TWiki::cfg{SMTP}{MAILHOST};
     $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' ) ||
       $TWiki::cfg{SMTP}{SENDERHOST};
+
     if( $this->{MAIL_HOST} ) {
         # See Codev.RegisterFailureInsecureDependencyCygwin for why
         # this must be untainted
         $this->{MAIL_HOST} =
           TWiki::Sandbox::untaintUnchecked( $this->{MAIL_HOST} );
         eval {	# May fail if Net::SMTP not installed
-            $useNetSMTP = require Net::SMTP;
+            require Net::SMTP;
+        };
+        if( $@ ) {
+            $this->{session}->writeWarning( "SMTP not available: $@" );
+        } else {
+            $handler = \&_sendEmailByNetSMTP;
         }
     }
 
-    if( $useNetSMTP ) {
-        $this->setMailHandler( \&_sendEmailByNetSMTP );
+    if( !$handler && $TWiki::cfg{MailProgram} ) {
+        $handler = \&_sendEmailBySendmail;
     } else {
-        $this->setMailHandler( \&_sendEmailBySendmail );
+        $handler = 0; # Not undef
     }
+
+    $this->setMailHandler( $handler ) if $handler;
 }
 
 =pod
@@ -154,7 +162,6 @@ alternative mail handling method.
 
 sub setMailHandler {
     my( $this, $fnref ) = @_;
-    ASSERT( $fnref ) if DEBUG;
     $this->{mailHandler} = $fnref;
 }
 
@@ -178,7 +185,7 @@ sub sendEmail {
         $this->_installMailHandler();
     }
 
-    return ( "No mail handler" ) unless $this->{mailHandler};
+    return 'No mail handler available' unless $this->{mailHandler};
 
     # Put in a Date header, mainly for Qmail
     my $dateStr = TWiki::Time::formatTime(time, '$email');
