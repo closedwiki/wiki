@@ -296,7 +296,7 @@ sub _parse {
         elsif( $string =~ s/^\s*(\w+)//o ) {
             push( @opands, new TWiki::IfNode( undef, $1, undef ));
         }
-        elsif( $string =~ s/\s*({\w+})+//o ) {
+        elsif( $string =~ s/^\s*(({\w+})+)//o ) {
             # {config expression}
             push( @opands, new TWiki::IfNode(
                 undef, $this->{operators}->{config}, $1 ));

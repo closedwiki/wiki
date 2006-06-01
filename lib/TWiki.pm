@@ -210,7 +210,7 @@ BEGIN {
         VAR               => \&_VAR,
         WEBLIST           => \&_WEBLIST,
         WIKINAME          => \&_WIKINAME_deprecated,
-        WIKIUSERNAME          => \&_WIKIUSERNAME_deprecated
+        WIKIUSERNAME      => \&_WIKIUSERNAME_deprecated
        );
     $contextFreeSyntax{IF} = 1;
 
@@ -3311,37 +3311,38 @@ sub _SEP {
     return $this->{templates}->expandTemplate('sep');
 }
 
-#depercated functionality, now implemented using %USERINFO%
+#deprecated functionality, now implemented using %USERINFO%
 #move to compatibility plugin in TWiki5
 sub _WIKINAME_deprecated {
     my ( $this, $params ) = @_;
     ASSERT($this->isa( 'TWiki')) if DEBUG;
-    
-    $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKINAME' ) || 
-            '$wikiname';
-    
+
+    $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKINAME' ) ||
+      '$wikiname';
+
     return $this->_USERINFO($params);
 }
-#depercated functionality, now implemented using %USERINFO%
+#deprecated functionality, now implemented using %USERINFO%
 #move to compatibility plugin in TWiki5
 sub _USERNAME_deprecated {
     my ( $this, $params ) = @_;
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
-    $params->{format} = $this->{prefs}->getPreferencesValue( 'USERNAME' ) || 
-        '$username';
-    
+    $params->{format} = $this->{prefs}->getPreferencesValue( 'USERNAME' ) ||
+      '$username';
+
     return $this->_USERINFO($params);
 }
-#depercated functionality, now implemented using %USERINFO%
+#deprecated functionality, now implemented using %USERINFO%
 #move to compatibility plugin in TWiki5
 sub _WIKIUSERNAME_deprecated {
     my ( $this, $params ) = @_;
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
-    $params->{format} = $this->{prefs}->getPreferencesValue( 'WIKIUSERNAME' ) || 
-            '$wikiusername';
-    
+    $params->{format} =
+      $this->{prefs}->getPreferencesValue( 'WIKIUSERNAME' ) ||
+        '$wikiusername';
+
     return $this->_USERINFO($params);
 }
 
@@ -3350,12 +3351,13 @@ sub _USERINFO {
     my $format = $params->{format} || '$username, $wikiusername, $emails';
     my $userDebug = $params->{'userdebug'} || '';
 
-    my $user;
-    if( $params->{_DEFAULT} && !$TWiki::cfg{AntiSpam}{HideUserDetails} ) {
+    my $user = $this->{user};
+    if( $params->{_DEFAULT} ) {
         $user = $this->{users}->findUser( $params->{_DEFAULT}, undef, 0 );
+        return '' if( $TWiki::cfg{AntiSpam}{HideUserDetails} &&
+                        !$this->{user}->isAdmin() &&
+                          $user != $this->{user} );
     }
-
-    $user ||= $this->{user};
 
     my $info = $format;
 

@@ -2,14 +2,16 @@
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarUSERINFO
 ---+++ USERINFO - retrieve details about a user (by default the logged-in user)
-   * By default, the retrieved info will be formatted as a comma-separated list comprising the username, wikiusername, and emails.
-   * To get information about the logged-in user: =%<nop>USERINFO%=
+   * Syntax: =%<nop>USERINFO%=
    * Expands to: =%USERINFO%=
-   * To format that information differently: =%<nop>USERINFO{format="$username is really $wikiname"}%=
-   * Expands to =%USERINFO{format="$username is really $wikiname"}%=
-   * The tokens =$emails=, =$username=, =$wikiname=, =$wikiusername=, and =$groups= are available for use in the format string.
-   * To get information about another user: =%<nop>USERINFO{"TWikiGuest" format="$username is really $wikiname"}%=
-   * Expands to =%USERINFO{"TWikiGuest" format="$username is really $wikiname"}%=
-   * You can only get information about another user if the {AntiSpam}{HideUserDetails} configuration option is not enabled. Otherwise it is ignored, and information about the logged-in user is returned instead. The parameter should be the wikiname of a user.
+*To format that information differently:*
+   * Syntax: =%<nop>USERINFO{format="$username is really $wikiname"}%=
+   * Expands to: =%USERINFO{format="$username is really !$wikiname"}%=.
+      * The tokens =$emails=, =$username=, =$wikiname=, =$wikiusername=, and =$groups= are available for use in the format string .By default, the info will be formatted as a comma-separated list of the username, wikiusername, and emails.
+*To get information about another user:*
+   * Syntax: =%<nop>USERINFO{"TWikiGuest" format="$username is really $wikiname"}%=
+   * Expands to: <code>%USERINFO{"TWikiGuest" format="$username is really !$wikiname"}%</code>
+      * The parameter should be the wikiname of a user. You can only get information about another user if the ={AntiSpam}{HideUserDetails}= configuration option is not enabled, or if you are an admin. %IF{"{AntiSpam}{HideUserDetails}" then=" _(User details are hidden in this TWiki)_ "}%
+
    * Related: [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication, ChangeEmailAddress
 
