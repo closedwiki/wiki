@@ -30,8 +30,8 @@ Skin: <input name="skin" value="%URLPARAM{"skin" default="%SKIN%}%" />
 %INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=rename_topic_exists;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%;TWIKISID=%SESSIONID%"}%
 ---++ =oopsattention rename_web_exists=
 %INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=rename_web_exists;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%;TWIKISID=%SESSIONID%"}%
----++ =oopsattention rename_not_wikiword=
-%INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=rename_not_wikiword;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%;TWIKISID=%SESSIONID%"}%
+---++ =oopsattention not_wikiword=
+%INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=not_wikiword;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%;TWIKISID=%SESSIONID%"}%
 ---++ =oopsattention rename_err=
 %INCLUDE{"%SCRIPTURL{"oops"}%/TheWeb/TheTopic?template=oopsattention&def=rename_err;param1=P1;param2=P2;param3=P3;param4=P4;param5=P5;skin=%URLPARAM{"skin" default="%SKIN%"}%;TWIKISID=%SESSIONID%"}%
 ---++ =oopsattention rename_web_err=

@@ -65,7 +65,7 @@ sub buildNewTopic {
     my $topicExists  = $store->topicExists( $webName, $topic );
 
     # Prevent saving existing topic?
-    my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
+    my $onlyNewTopic = TWiki::isTrue( $query->param( 'onlynewtopic' ));
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
         throw TWiki::OopsException( 'attention',
@@ -75,14 +75,16 @@ sub buildNewTopic {
     }
 
     # prevent non-Wiki names?
-    my $onlyWikiName = $query->param( 'onlywikiname' ) || '';
+    my $onlyWikiName = TWiki::isTrue( $query->param( 'onlywikiname' ));
     if( ( $onlyWikiName )
           && ( ! $topicExists )
             && ( ! TWiki::isValidTopicName( $topic ) ) ) {
-        # do not allow non-wikinames, redirect to view topic
-        # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ) );
-        return 0;
+        # do not allow non-wikinames
+        throw TWiki::OopsException( 'attention',
+                                    def => 'not_wikiword',
+                                    web => $webName,
+                                    topic => $topic,
+                                    params => [ $topic ] );
     }
 
     my $user = $session->{user};

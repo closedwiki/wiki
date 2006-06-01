@@ -167,10 +167,12 @@ sub edit {
     if( ( $onlyWikiName )
         && ( ! $topicExists )
         && ( ! TWiki::isValidTopicName( $topic ) ) ) {
-        # do not allow non-wikinames, redirect to view topic
-        # SMELL: this should be an oops, shouldn't it?
-        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ));
-        return;
+         # do not allow non-wikinames
+        throw TWiki::OopsException( 'attention',
+                                    def => 'not_wikiword',
+                                    web => $webName,
+                                    topic => $topic,
+                                    params => [ $topic ] );
     }
 
     if( $topicExists ) {
