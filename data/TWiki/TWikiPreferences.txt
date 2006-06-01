@@ -85,7 +85,10 @@ _(Click for form-based editing of existing preferences.)_
 
    * Format of file link when the __link__ check box is checked: (can be overwritten by user preferences)
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
+<!-- verbatim tag required to prevent error in Apache log; does not suppress Set -->
+<verbatim>
       * Set ATTACHEDFILELINKFORMAT = \n   * [[%ATTACHURL%/$name][$name]]: $comment
+</verbatim>
 
    * Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
       * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab and ==\n== to linefeed (3 spaces for bullets).
