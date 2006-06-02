@@ -136,9 +136,7 @@ sub initPlugin
     } 
 
     # white list
-    my $whiteList = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WHITELIST" ) || "127.0.0.1";
-    $whiteList = join( "|", map { quotemeta } split( /,\s*/, $whiteList ) );
-    $whiteList = "($whiteList)";
+    my $whiteList = _getWhiteListRegex();
 
     # black list
     my $blackList = TWiki::Func::getPreferencesValue( "\U$pluginName\E_BLACKLIST" ) || "";
@@ -263,13 +261,17 @@ sub beforeSaveHandler
         return if( ( /^(.*)/ ) && ( $1 eq "$_[2].$_[1]" ) );
     }
 
+    # exclude white list
+    my $whiteList = _getWhiteListRegex();
+    my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
+    return if( $remoteAddr =~ /^$whiteList/ );
+
     my $spamListRegex = _getSpamListRegex();
     return if( $spamListRegex =~ /\(\)$/ ); # empty list
     if( $_[0] =~ /$spamListRegex/ ) {
         my $badword = $1;
         my $cgiQuery = TWiki::Func::getCgiQuery();
         if( $cgiQuery ) {
-            my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
             _handleBanList( "add", $remoteAddr );
             _writeLog( "SPAMLIST add: $remoteAddr, topic spam '$badword'" );
 
@@ -292,7 +294,8 @@ sub beforeAttachmentSaveHandler
 ### my ( $attachmentAttr, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
     my $attachmentAttr = $_[0];
     my $attachmentName = $attachmentAttr->{"attachment"};
-    my $tmpFilename    = $attachmentAttr->{"tmpFilename"};
+    my $tmpFilename    = $attachmentAttr->{"tmpFilename"}
+                      || $attachmentAttr->{"file"};  # workaround for TWiki 4.0.2 bug
 
     # This handler is called by TWiki::Store::saveAttachment just before the save action
     writeDebug( "beforeAttachmentSaveHandler( $_[2].$_[1], $attachmentName )" );
@@ -301,7 +304,12 @@ sub beforeAttachmentSaveHandler
     return unless( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_FILTERWIKISPAM" ) );
 
     # test only .htm and .html attachments
-    return unless( $attachmentName =~ m/.html?$/i );
+    return unless( $attachmentName =~ m/(\.html?|\.txt)$/i );
+
+    # exclude white list
+    my $whiteList = _getWhiteListRegex();
+    my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
+    return if( $remoteAddr =~ /^$whiteList/ );
 
     my $spamListRegex = _getSpamListRegex();
     return if( $spamListRegex =~ /\(\)$/ ); # empty list
@@ -309,7 +317,6 @@ sub beforeAttachmentSaveHandler
         my $badword = $1;
         my $cgiQuery = TWiki::Func::getCgiQuery();
         if( $cgiQuery ) {
-            my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
             _handleBanList( "add", $remoteAddr );
             _writeLog( "SPAMLIST add: $remoteAddr, html spam '$badword'" );
 
@@ -324,6 +331,14 @@ sub beforeAttachmentSaveHandler
         # else (unlikely case) force a "500 Internal Server Error" error
         exit 1;
     }
+}
+
+# =========================
+sub _getWhiteListRegex
+{
+    my $regex = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WHITELIST" ) || "127.0.0.1";
+    $regex = join( "|", map { quotemeta } split( /,\s*/, $regex ) );
+    return "($regex)";
 }
 
 # =========================

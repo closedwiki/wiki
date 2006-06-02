@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1146374475" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1149289710" format="1.0" version="1.14"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -37,7 +37,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set LOGACCESS = 1
 
 	* Access restriction:
-		* #Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+		* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
 ---+++ WHITELIST, BLACKLIST and BANLIST settings
 	* WHITELIST: Comma delimited list of IP addresses; possible to use partial addresses ending in a dot
@@ -67,10 +67,10 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set BLACKLISTMESSAGE = Your IP address %REMOTE_ADDR% is black listed at the %WIKITOOLNAME% web site due to excessive access or suspicious activities. Please contact site administrator %WIKIWEBMASTER% if you got on the list by mistake.
 
 ---+++ Wiki-spam filtering settings
-	* Filter wiki-spam on topic save based on SPAMLIST: (0 or 1)
+	* Filter wiki-spam on topic save and HTML file uploads based on SPAMLIST: (0 or 1)
 		* Set FILTERWIKISPAM = 1
 
-	* Comma separated list of Web.Topics to exclude from wiki-spam filtering:
+	* Comma separated list of Web.Topics to exclude from wiki-spam filtering on topic save:
 		* Set SPAMEXCLUDETOPICS = 
 
 #SpamList
@@ -116,9 +116,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/.htaccess== | Apache access control to protect pub dir |
 	  | ==templates/oopsblacklist.tmpl== | Generic oops message |
-	* Write protect this Plugin topics by removing the # hash sign from the ALLOWTOPICCHANGE setting
+	* Write protect this Plugin topic (if not already done)
 	* Make sure =pub/TWiki/%TOPIC%/= is writable by the CGI user (typically =nobody=)
-	* Add the hidden form field to the registration form as described in the "Registration protection settings" section
+	* Add the hidden form field to the registration form as described in the "Registration protection settings" section (this is already in TWiki 4.0)
 	* From TWiki 4.0 release on: Run the configure utility in your browser to enable the Plugin
 	* Test if the installation was successful:
 		1 Using above form, add the IP address of one of your workstations to the BANLIST
@@ -127,18 +127,24 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 			* else, you should get an 500 Internal Server Error for other scripts
 		1 On a different workstation, remove the IP address of the test workstation from the BANLIST
 
+---++ Known Issues and Limitations
+
+	* Wiki-spam filtering for HTML attachments only works in TWiki 4.0 and up.
+	* With TWiki 4.0.2 on some platforms, notably Solaris, attached files are uploaded with a zero file size. This is because there is a bug in how TWiki 4.0.2 handles the beforeAttachmentSaveHandler. If affected, upgrade TWiki or apply bug fix [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2390][Item2390]]
+
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 29 Apr 2006 (r8745) |
+|  Plugin Version: | 02 Jun 2006 (r10440) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  02 Jun 2006: | Added wiki-spam filtering for HTML attachments to combat TWiki:Codev.HtmlAttachmentSpam |
 |  29 Apr 2006: | Added =%<nop>BLACKLISTPLUGIN{ action="spam_show_n" }%= that shows the local spam list in a shareable format with newline separator |
 |  07 Feb 2006: | TWiki Release 4.0 fix to allow registration with e-mail verification, reset password and approve |
 |  03 Jan 2006: | Filter lines with space from spam list; fixed bug that inproperly filtered HTML from spam list; Dakar Release fix (end/postRenderingHandler issue) |
 |  08 Nov 2005: | Doc fixes; code warning fixes; allow empty local SPAMLIST and public spam list |
 |  04 Nov 2005: | Added registration protection with magic number |
 |  30 Oct 2005: | Dakar Release compatibility: Work around Dakar preferencs bug |
-|  29 Oct 2005: | Added wiki-spam handling to prevent topic save with wiki-spam |
+|  29 Oct 2005: | Added wiki-spam filtering to prevent topic save with wiki-spam |
 |  27 Oct 2005: | For BANLIST, add/remove multiple IP addresses at once, contributed by TWiki:Main.MichaelDaum |
 |  22 Jan 2005: | Added NOFOLLOWAGE handling |
 |  19 Jan 2005: | Added score for "view raw" to address e-mail harvester issue |
@@ -156,5 +162,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 29 Apr 2006
+-- TWiki:Main/PeterThoeny - 02 Jun 2006
 
