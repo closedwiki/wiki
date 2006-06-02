@@ -111,15 +111,12 @@ try {
         my $path = $ARGV[4];
         die 'No path' unless ($path);
         $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
-        die  $path.' does not exist' unless (-e $path);
+        die $path.' does not exist' unless (-e $path);
 
-        my $stream;
-        open( $stream, "<$path" );
-        binmode($stream);
-        TWiki::Func::saveAttachment($web, $topic, $att, {
-            stream => $stream
-           } );
-        close($stream);
+        my $f = $path.$$;
+        File::Copy::move($path, $f);
+        TWiki::Func::saveAttachment($web, $topic, $att, { file => $f } );
+        unlink($f);
 
     } elsif ($function eq 'unmeta') {
 
