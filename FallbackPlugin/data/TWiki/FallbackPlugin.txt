@@ -1,17 +1,18 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 9189 $"}%
----+ Empty TWiki Plugin
+%META:TOPICINFO{author="MeredithLesly" date="1149271755" format="1.1" reprev="1.2" version="1.2"}%
+---+ Fallback Plugin
 
-This is an empty Plugin you can use as a template to build your own %TWIKIWEB%.TWikiPlugins. This Plugin does nothing, but is ready to be used.
-
-To create your own Plugin:
-
-   * Copy file ==TWiki/Plugins/FallbackPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
-   * Create a  ==&lt;name&gt;Plugin== topic in the %TWIKIWEB% web. Do so by visiting http://TWiki.org/cgi-bin/view/Plugins/PluginPackage#NewPlugin and starting a new topic to get the default plugin topic text (don't save the topic). Customize your plugin topic to your needs.
-   * See details in %TWIKIWEB%.TWikiPlugins.
+This plugin allows you to easily specify fallback topics and webs, which will be checked if the topic argument isn't found in the current web.
 
 ---++ Syntax Rules
 
-(none)
+| *Argument* | *Use* | *Default* |  *required* | 
+| =topic= | the topic you're looking for | none | yes, but can just specify topic in quotes |
+| =othertopics= | other topic names to look for if =topic= isn't found | none | no |
+| =otherwebs= | other webs to look in besides the current one | none | no |
+
+Returns =Web.Topic=, where =Web= is the Web it was found in, =Topic= the name of the topic that was found.
+
+%X% You really should provide either =othertopics= or =otherwebs=, or this tag is kinda useless. It will work, but what's the point?
 
 ---++ Plugin Settings
 
@@ -19,38 +20,28 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>FALLBACKPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Empty Plugin used as a template for new Plugins
-
-   * Your own setting, for example:
-      * Set EXAMPLE = got it!
+      * Set SHORTDESCRIPTION = allows an easy way to specify fallback topics and webs to be checked if the topic argument isn't found in the current web.
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-   * This plugin is preinstalled, you do not need to install it.
+   * This plugin is currently only in SVN. It may or may not remain only there.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny, TWiki:Main.CrawfordCurrie |
-|  Copyright: | &copy; 2001-2006, %TWIKIWEB%.TWikiContributor |
+|  Plugin Author: | TWiki:Main.MeredithLesly |
+|  Copyright: | &copy; 2006, %MAINWEB%.MeredithLesly |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 01 Feb 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  01 Feb 2006: | Dakar changes |
-|  21 Mar 2004: | Added afterSaveHandler |
-|  14 Jul 2001: | Changed to plug&amp;play |
-|  27 Feb 2001: | Initial version |
+|  02 Jun 2006: | Original version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.005 |
-|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+|  Perl Version: | 5.6 |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- %TWIKIWEB%.TWikiContributor - 01 Feb 2006
+-- %MAINWEB%.MeredithLesly - 01 Feb 2006

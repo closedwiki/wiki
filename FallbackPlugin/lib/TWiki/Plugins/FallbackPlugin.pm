@@ -93,24 +93,8 @@ sub initPlugin {
         return 0;
     }
 
-    # Example code of how to get a preference value, register a variable handler
-    # and register a RESTHandler. (remove code you do not need)
-
-    # Get plugin preferences, variables defined by:
-    #   * Set EXAMPLE = ...
-    # my $exampleCfgVar = TWiki::Func::getPreferencesValue( "\U$pluginName\E_EXAMPLE" );
-    # There is also an equivalent:
-    # $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( 'EXAMPLE' );
-    # that may _only_ be called from the main plugin package.
-
-    # $exampleCfgVar ||= 'default'; # make sure it has a value
-
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
     TWiki::Func::registerTagHandler( 'FALLBACK', \&_FALLBACK );
-
-    # Allow a sub to be called from the REST interface 
-    # using the provided alias
-    # TWiki::Func::registerRESTHandler('example', \&restExample);
 
     # Plugin correctly initialized
     return 1;
