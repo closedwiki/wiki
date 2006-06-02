@@ -116,13 +116,14 @@ sub getUrl {
 # pick a default mail handler
 sub _installMailHandler {
     my $this = shift;
-    my $handler;
+    my $handler = 0; # Not undef
     my $prefs = $this->{session}->{prefs};
 
     $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' ) ||
       $TWiki::cfg{SMTP}{MAILHOST};
     $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' ) ||
       $TWiki::cfg{SMTP}{SENDERHOST};
+
 
     if( $this->{MAIL_HOST} ) {
         # See Codev.RegisterFailureInsecureDependencyCygwin for why
@@ -141,8 +142,6 @@ sub _installMailHandler {
 
     if( !$handler && $TWiki::cfg{MailProgram} ) {
         $handler = \&_sendEmailBySendmail;
-    } else {
-        $handler = 0; # Not undef
     }
 
     $this->setMailHandler( $handler ) if $handler;
