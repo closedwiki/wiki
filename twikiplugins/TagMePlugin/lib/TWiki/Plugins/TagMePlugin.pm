@@ -136,7 +136,7 @@ sub showDefault
 
     my $webTopic = "$web.$topic";
     @tagInfo = readTagInfo( $webTopic ) unless( scalar( @tagInfo ) );
-    my $text = '<span class="tagMePlugin"><form name="tags" '
+    my $text = '<div class="tagMePlugin" style="display:inline;"><form name="tags" '
              . 'action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post">';
     my $tag = '';
     my $num = '';
@@ -179,7 +179,7 @@ sub showDefault
     }
     $text .= " <a href=\"%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/$installWeb/$pluginName?"
            . "from=$web.$topic#AddNewTag\">create new tag</a>";
-    $text .= '</form></span>';
+    $text .= '</form></div>';
     return $text;
 }
 
