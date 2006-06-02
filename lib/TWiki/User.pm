@@ -234,21 +234,21 @@ sub removePassword {
 used to change the user's password
 =$oldUserPassword= unencrypted password
 =$newUserPassword= unencrypted password
-'1' if success
+undef if success, error message otherwise
 
 =cut
 
-# TODO: need to improve the error mechanism so TWikiAdmins know what failed |
 sub changePassword {
     my ( $this, $oldUserPassword, $newUserPassword ) = @_;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
-    ASSERT($newUserPassword) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
-    my $success = $passwordHandler->passwd($this->{login}, $newUserPassword, $oldUserPassword);
-    if ($success) {return $success};
-
-    die $passwordHandler->{error};
+    if( $passwordHandler->passwd($this->{login},
+                                 $newUserPassword, $oldUserPassword)) {
+        return undef;
+    } else {
+        return $passwordHandler->{error};
+    }
 }
 
 =pod

@@ -112,7 +112,9 @@ Otherwise returns 1 on success, undef on failure.
 =cut
 
 sub passwd {
-    return 1;
+    my $this = shift;
+    $this->{error} = 'System does not support changing passwords';
+    return undef;
 }
 
 =pod

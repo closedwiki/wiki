@@ -671,14 +671,15 @@ sub changePassword {
                 def => 'bad_password',
                 params => [ $TWiki::cfg{MinPasswordLength} ] );
         }
-        if ($user->changePassword( $oldpassword, $passwordA )) {
-
-            $session->writeLog('changepasswd', $user->wikiName());
-            #recording the email would be nice
-
+        my $e = $user->changePassword( $oldpassword, $passwordA );
+        if( $e ) {
+            $session->writeWarning('password could not be changed: '.$e);
+            throw TWiki::OopsException( 'attention',
+                                        web => $webName,
+                                        topic => $topic,
+                                        def => 'password_not_changed');
         } else {
-            $session->writeLog('changepasswd', $user->wikiName(), 'FAILED');
-            die 'Problem resetting password';
+            $session->writeLog('changepasswd', $user->wikiName());
         }
         # OK - password changed
         throw TWiki::OopsException( 'attention',
