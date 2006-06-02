@@ -927,16 +927,20 @@ sub saveAttachment {
                 # a local copy of the stream. This could be a problem for
                 # very big data files.
                 use File::Temp;
-                $tmpFile = File::Temp::tempfile();
-                open( F, ">$tmpFile" );
-                binmode( F );
+                my $fh;
+                # Note: do *not* rely on UNLINK => 1, because in a mod_perl
+                # context the destructor may not be called for a *long* time.
+                # Call tempfile in a list context so that file does not get
+                # deleted when closed.
+                ( $fh, $tmpFile ) = File::Temp::tempfile();
+                binmode( $fh );
                 # transfer 512KB blocks
                 my $transfer;
                 my $r;
                 while( $r = sysread( $opts->{stream}, $transfer, 0x80000 )) {
-                    syswrite( F, $transfer, $r );
+                    syswrite( $fh, $transfer, $r );
                 }
-                close( F );
+                close( $fh );
                 $attrs->{tmpFilename} = $tmpFile;
                 $plugins->beforeAttachmentSaveHandler( $attrs, $topic, $web );
                 open( $opts->{stream}, "<$tmpFile" );
