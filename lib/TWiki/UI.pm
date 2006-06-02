@@ -85,14 +85,14 @@ sub run {
             my $arg = shift( @ARGV );
             if ( $arg =~ /^-?([A-Za-z0-9_]+)$/o ) {
                 my $name = $1;
-                my $arg = shift( @ARGV );
+                my $arg = TWiki::Sandbox::untaintUnchecked( shift( @ARGV ));
                 if( $name eq 'user' ) {
                     $user = $arg;
                 } else {
                     $query->param( -name => $name, -value => $arg );
                 }
             } else {
-                $query->path_info( $arg );
+                $query->path_info( TWiki::Sandbox::untaintUnchecked( $arg ));
             }
         }
     }

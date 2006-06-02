@@ -68,6 +68,11 @@ You can generate a listing manually, or on an automated schedule, of visits to i
       * __Attention:__ The script must run as the same user as the CGI scripts are running, which is user =nobody= on many systems. Example crontab entry: %BR% =0 0 * * * (cd /path/to/twiki/bin; ./statistics &gt;/dev/null 2&gt;&amp;1)=
       * There is a workaround in case you can't run the script as user =nobody= : Run the utility =twiki/bin/geturl= in your cron job and specify the URL of the =twiki/bin/statistics= script as a parameter. Example: %BR% =0 0 * * * (cd /path/to/twiki/bin; ./geturl mydomain.com /urlpath/to/twiki/bin/statistics &gt;/dev/null 2&gt;&amp;1)=
 
+When running from the command line or a cron job, you can pass parameters to the script like this:
+<verbatim>
+./statistics -logdate 200605 -webs TWiki,Sandbox
+</verbatim>
+
 ---+++ Generating statistics manually by URL
 
    * The =twiki/bin/statistics= script can also be executed as a CGI script, just enter the URL in your browser. Examples:
