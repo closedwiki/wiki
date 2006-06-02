@@ -216,9 +216,11 @@ sub _buildCommandLine {
                             throw Error::Simple( "invalid number argument '$param' $t" );
                         }
                     } elsif ($flag =~ /S/) {
-                        # Harmless string.
-                        if ( $param =~ /^([0-9A-Za-z.+_\-]{0,30})$/ ) {
-                            push @targs, $1;
+                        # "Harmless" string. Aggressively filter-in on unsafe
+                        # platforms.
+                        if ( $this->{SAFE} ||
+                               $param =~ /^[0-9A-Za-z.+_\-]$/ ) {
+                            push @targs, untaintUnchecked( $param );
                         } else {
                             throw Error::Simple( "invalid string argument '$param' $t" );
                         }
@@ -379,7 +381,7 @@ sub sysCommand {
         close(OLDERR);
         $exit = ( $? >> 8 );
         # Do *not* return the error message; it contains sensitive path info.
-	print STDERR "$cmd failed: $!" if $exit;
+        print STDERR "$cmd failed: $!" if $exit;
     }
 
     if( $this->{TRACE} ) {
