@@ -212,6 +212,7 @@ You may want to add a new DAV-edit-link to your attachments table.
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% build %$DATE% |
 | Change History: | |
+| 10434 | Cured problem with attachments going to zero bytes |
 | 9756 | Ported to TWiki-4. \
          Added TDB. \
          Incorporated doc improvements made by Marius Reiner. |
