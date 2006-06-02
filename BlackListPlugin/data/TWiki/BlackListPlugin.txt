@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1149289770" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1149289950" format="1.0" version="1.14"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -130,13 +130,13 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Known Issues and Limitations
 
-	* Wiki-spam filtering for HTML attachments only works in TWiki 4.0 and up.
+	* Wiki-spam filtering for HTML attachments works in TWiki 01-Sep-2004 and later.
 	* With TWiki 4.0.2 on some platforms, notably Solaris, attached files are uploaded with a zero file size. This is because there is a bug in how TWiki 4.0.2 handles the beforeAttachmentSaveHandler. If affected, upgrade TWiki or apply bug fix [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2390][Item2390]]
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 02 Jun 2006 (r10440) |
+|  Plugin Version: | 02 Jun 2006 (r10442) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  02 Jun 2006: | Added wiki-spam filtering for HTML attachments to combat TWiki:Codev.HtmlAttachmentSpam |
 |  29 Apr 2006: | Added =%<nop>BLACKLISTPLUGIN{ action="spam_show_n" }%= that shows the local spam list in a shareable format with newline separator |
