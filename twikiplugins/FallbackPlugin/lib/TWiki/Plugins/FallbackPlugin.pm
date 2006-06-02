@@ -1,6 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2006 Meredith Lesly
+# Copyright (C) 2006 Meredith Lesly, msnomer@spamcop.net
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -16,6 +16,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # For licensing info read LICENSE file in the TWiki root.
+#
+# This plugin is not to be modified without the permission of the author. If you
+# need it modified and I'm unavailable or unwilling to make the changes, please
+# create a new plugin.
 
 =pod
 
@@ -126,23 +130,35 @@ sub _FALLBACK {
     # $theWeb   - name of the web in the query
     # Return: the result of processing the variable
 
-    # For example, %EXAMPLETAG{'hamburger' sideorder="onions"}%
-    # $params->{_DEFAULT} will be 'hamburger'
-    # $params->{sideorder} will be 'onions'
-
     my $topic = $params->{topic} || $params->{_DEFAULT};
+    my $returntype = $params->{returntype} || 'fullname';
+
     my $weblist = $params->{otherwebs};
-
     $weblist = $theWeb . ',' . $weblist if $weblist;
+    $weblist ||= $theWeb;
     $weblist =~ tr/ //d;
+    my @webs = split(',', $weblist);
 
-    my @webs = split(/,/, $weblist);
-
-    foreach my $web (@webs) {
-        return "$web.$topic" if TWiki::Func::topicExists($web, $topic);
+    my $othertopics = $params->{othertopics};
+    my $topiclist;
+    my @topiclist;
+    if ($othertopics) {
+        $topiclist = $topic . ',' . $othertopics;
+        $topiclist =~ tr/ //d;
+        @topiclist = split(',', $topiclist);
+    } else {
+        $topiclist[0] = $topic;
     }
+
+    foreach my $aTopic (@topiclist) {
+        foreach my $web (@webs) {
+            if (TWiki::Func::topicExists($web, $aTopic)) {
+                return "$web.$aTopic";
+            }
+        }
+    }
+
     return '';
 }
-
 
 1;
