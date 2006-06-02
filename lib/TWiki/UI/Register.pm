@@ -663,6 +663,14 @@ sub changePassword {
 
     # OK - password may be changed
     if( $changePass ) {
+        if (length($passwordA) < $TWiki::cfg{MinPasswordLength}) {
+            throw TWiki::OopsException(
+                'attention',
+                web => $webName,
+                topic => $topic,
+                def => 'bad_password',
+                params => [ $TWiki::cfg{MinPasswordLength} ] );
+        }
         if ($user->changePassword( $oldpassword, $passwordA )) {
 
             $session->writeLog('changepasswd', $user->wikiName());
@@ -1044,6 +1052,17 @@ sub _validateRegistration {
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'bad_wikiname' );
+    }
+
+    if ($TWiki::cfg{MinPasswordLength} &&
+          (!$data->{PasswordA} ||
+             length($data->{PasswordA}) < $TWiki::cfg{MinPasswordLength})) {
+        throw TWiki::OopsException(
+            'attention',
+            web => $data->{webName},
+            topic => $topic,
+            def => 'bad_password',
+            params => [ $TWiki::cfg{MinPasswordLength} ] );
     }
 
     if (exists $data->{PasswordA}) {
