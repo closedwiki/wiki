@@ -18,17 +18,21 @@ The BugsContrib is a _TWikiApplication_ (an application that is implemented enti
 
 ---++ Installation
 
-First, check that you do no have an existing web called "Bugs". if you do, move it out of the way.
+---+++ Installation Instructions
 
-Download and unpack the archive over your TWiki installation. The following files will be installed:
-
+	* First, check that you do no have an existing web called "Bugs". if you do, move it out of the way.
+	* Download the archive from the Plugins web (see below)
+	* Unpack it in your twiki installation directory. Content:
+     | *File:* | *Description:* |
 %$MANIFEST%
-
-Then run =perl= ==%TOPIC%_installer.pl== =install= to automatically check and install other TWiki modules that this module depends on, that you may not have installed. This script also includes an =uninstall= option should you ever wish to remove the plugin from your installation, and an =upgrade= option that will automatically download and install the latest version.
+	* Make sure that all files are readable by the web server user
+	* Run =perl= ==%TOPIC%_installer.pl== =install= to automatically check and install other TWiki modules that this module depends on, that you may not have installed. This script also includes an =uninstall= option should you ever wish to remove the plugin from your installation, and an =upgrade= option that will automatically download and install the latest version.
 
 See the Bugs.WebHome topic in the new web for help in configuring the application to your needs.
 
-|  Authors: | http://wikiring.com partners & others |
+   * Set SHORTDESCRIPTION = Item Tracking system implemented as a TWiki Application
+
+|  Authors: | Main.SvenDowideit http://wikiring.com partners & others |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  License: | GPL |
@@ -36,3 +40,4 @@ See the Bugs.WebHome topic in the new web for help in configuring the applicatio
 |  9804 | Crawford Currie - packaged for release |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
