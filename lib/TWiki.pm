@@ -2296,7 +2296,7 @@ sub _expandTagOnTopicCreation {
     # This is what we want to make sure new user templates are populated
     # correctly, but you need to think about this if you extend the set of
     # tags expanded here.
-    return undef unless $_[0] =~ /^(URLPARAM|DATE|(SERVER|GM)TIME|(USER|WIKI)NAME|WIKIUSERNAME)$/;
+    return undef unless $_[0] =~ /^(URLPARAM|DATE|(SERVER|GM)TIME|(USER|WIKI)NAME|WIKIUSERNAME|USERINFO)$/;
 
     return $this->_expandTagOnTopicRendering( @_ );
 }

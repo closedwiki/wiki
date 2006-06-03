@@ -299,9 +299,7 @@ sub _registerSingleBulkUser {
     }
 
     #-- Generation of the page is done from the {form} subhash, so align the two
-    $row->{form} = [
-                    _makeFormFieldOrderMatch( $fieldNames, $row)
-                   ];
+    $row->{form} = _makeFormFieldOrderMatch( $fieldNames, $row);
 
     my $passResult = _addUserToPasswordSystem( $session, $row );
     $log .= $b.' Password set: '.$passResult.' (1 = success)'."\n";
@@ -351,12 +349,12 @@ sub _missingElements {
 # rearranges the fields in $data so that they match settings
 # returns a new ordered form
 sub _makeFormFieldOrderMatch {
-    my( $fieldNames, $data ) =@_;
+    my( $fieldNames, $data ) = @_;
     my @form = ();
     foreach my $field ( @$fieldNames ) {
         push @form, {name => $field, value => $data->{$field}};
     }
-    return @form;
+    return \@form;
 }
 
 =pod
@@ -519,18 +517,11 @@ sub resetPassword {
 sub _resetUsersPassword {
     my( $session, $userName, $introduction, $pMess ) = @_;
 
-    my $user = $session->{users}->findUser( $userName, undef);
+    my $user = $session->{users}->findUser( $userName, undef, 1);
     unless( $user ) {
         # couldn't work out who they are, its neither loginName nor
         # wikiName.
         $$pMess .= $session->inlineAlert( 'alerts', 'bad_user', $userName );
-        return 0;
-    }
-    my @em = $user->emails();
-    my $email = $em[0];
-    unless ($email) {
-        $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for',
-                                          $user->wikiName());
         return 0;
     }
 
@@ -543,22 +534,31 @@ sub _resetUsersPassword {
 
     my $password = $user->resetPassword();
 
-    my $err = _sendEmail( $session,
-                          'mailresetpassword',
-                          {
-                           webName => $TWiki::cfg{UsersWebName},
-                           LoginName => $user->login(),
-                           Name => TWiki::spaceOutWikiWord($user->wikiName()),
-                           WikiName => $user->wikiName(),
-                           Email => $email,
-                           PasswordA => $password,
-                           Introduction => $introduction,
-                          } );
+    my @em = $user->emails();
+    if (!scalar(@em)) {
+        $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for',
+                                          $user->wikiName());
+    } else {
+        foreach my $email ( @em ) {
+            my $err = _sendEmail(
+                $session,
+                'mailresetpassword',
+                {
+                    webName => $TWiki::cfg{UsersWebName},
+                    LoginName => $user->login(),
+                    Name => TWiki::spaceOutWikiWord($user->wikiName()),
+                    WikiName => $user->wikiName(),
+                    Email => $email,
+                    PasswordA => $password,
+                    Introduction => $introduction,
+                } );
 
-    if( $err ) {
-        $$pMess .= $session->inlineAlert( 'alerts', 'generic', $err );
-        return 0;
+            if( $err ) {
+                $$pMess .= $session->inlineAlert( 'alerts', 'generic', $err );
+            }
+        }
     }
+
     $$pMess .= $session->inlineAlert( 'alerts',
                                       'new_sys_pass',
                                       $user->login(),
@@ -866,7 +866,8 @@ sub _writeRegistrationDetailsToTopic {
     my $addText;
     my $form = $meta->get( 'FORM' );
     if( $form ) {
-        ( $meta, $addText ) = _getRegFormAsTopicForm( $meta, $data );
+        ( $meta, $addText ) =
+          _populateUserTopicForm( $session, $form->{name}, $meta, $data );
         $log = 'Using Form Fields';
     } else {
         $addText = _getRegFormAsTopicContent( $data );
@@ -889,12 +890,13 @@ sub _writeRegistrationDetailsToTopic {
 }
 
 # Puts form fields into the topic form
-sub _getRegFormAsTopicForm {
-    my ( $meta, $data ) = @_;
+sub _populateUserTopicForm {
+    my ( $session, $formName, $meta, $data ) = @_;
 
     my %inform;
-    my @fields = $meta->find( 'FIELD' );
-    foreach my $field ( @fields ) {
+    my $form =
+      new TWiki::Form( $session, $TWiki::cfg{UsersWebName}, $formName );
+    foreach my $field ( @{$form->{fields}} ) {
         foreach my $fd (@{$data->{form}}) {
             next unless $fd->{name} eq $field->{name};
             next if $SKIPKEYS{$fd->{name}};
@@ -923,7 +925,7 @@ sub _getRegFormAsTopicContent {
         $title =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;    # Spaced
         my $value = $fd->{value};
         $value =~ s/[\n\r]//go;
-        $text .= "\t* $title\: $value\n";    # SMELL - tabs but stored as tabs.
+        $text .= "   * $title\: $value\n";
     }
     return $text;
 }
@@ -1095,7 +1097,6 @@ sub _addUserToPasswordSystem {
     my( $session, $userRow ) = @_;
 
     my $user = $session->{users}->findUser($userRow->{LoginName}, $userRow->{WikiName});
-
     if ($user && $user->passwordExists()) {
         unless( $user->checkPassword( $userRow->{Password} )) {
             throw Error::Simple("New password did not match existing password for this user");
@@ -1115,10 +1116,8 @@ sub _addUserToPasswordSystem {
         $password = TWiki::User::randomPassword();
         $session->writeWarning('No password specified for '.$userRow->{LoginName}.' - using random='.$password);
     }
-    if( $user->addPassword( $password )) {
-        return 1;
-    }
-    return 0;
+    $user->addPassword( $password );
+    return 1;
 }
 
 # sends $p->{template} to $p->{Email} with a bunch of substitutions.

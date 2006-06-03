@@ -111,6 +111,8 @@ sub encrypt {
 
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
+    $passwd ||= '';
+
     if( $TWiki::cfg{Htpasswd}{Encoding} eq 'sha1') {
         my $encodedPassword = '{SHA}'.
           MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) );
@@ -147,23 +149,23 @@ sub encrypt {
 sub fetchPass {
     my ( $this, $user ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
+    my $ret = undef;
 
     if( $user ) {
         try {
             my $db = _readPasswd();
             if( exists $db->{$user} ) {
-                return $db->{$user}->{pass};
+                $ret = $db->{$user}->{pass};
+            } else {
+                $this->{error} = 'Login invalid';
             }
-            $this->{error} = 'Login invalid';
-            return 0;
         } catch Error::Simple with {
             $this->{error} = $!;
-            return undef;
         };
     } else {
         $this->{error} = 'No user';
-        return 0;
     }
+    return $ret;
 }
 
 sub passwd {
@@ -228,7 +230,7 @@ sub checkPassword {
     # pw may validly be '', and must match an unencrypted ''. This is
     # to allow for sysadmins removing the password field in .htpasswd in
     # order to reset the password.
-    return 1 if ( $pw eq '' && $password eq '' );
+    return 1 if ( defined $password && $pw eq '' && $password eq '' );
 
     $this->{error} = 'Invalid user/password';
     return 0;

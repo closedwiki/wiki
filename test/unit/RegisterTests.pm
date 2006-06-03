@@ -108,9 +108,12 @@ EOF
         $this->assert(0,shift->stringify());
     };
 
-    $TWiki::cfg{HtpasswdFileName} = "/tmp/htpasswd";
+    $TWiki::cfg{Htpasswd}{FileName} = "/tmp/htpasswd";
+    open(F,">$TWiki::cfg{Htpasswd}{FileName}") || die;
+    close F;
     $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
     $TWiki::cfg{Register}{NeedVerification} = 1;
+    $TWiki::cfg{MinPasswordLength} = 0;
 
     $Error::Debug = 1;
 
@@ -126,7 +129,6 @@ sub tear_down {
     $this->removeWebFixture($session,$peopleWeb);
     $this->removeWebFixture($session,$systemWeb);
     File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
-    unlink($TWiki::cfg{HtpasswdFileName});
     @mails = ();
 
     $this->SUPER::tear_down();
@@ -157,8 +159,8 @@ sub registerAccount {
         TWiki::UI::Register::finish( $session, $TWiki::cfg{RegistrationApprovals} );
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{template});
-        $this->assert_str_equals("thanks", $e->{def});
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("thanks", $e->{def}, $e->stringify());
         $this->assert_equals(2, scalar(@mails));
         my $done = '';
         foreach my $mail ( @mails ) {
@@ -216,7 +218,7 @@ sub test_userTopicWithoutPMWithoutForm {
     $this->assert($text =~ s/^\s*\* Last Name: User$//m,$text);
     $this->assert($text =~ s/^\s*\* Comment:\s*$//m,$text);
     $this->assert($text =~ s/^\s*\* Name: Test User$//m,$text);
-    $this->assert($text =~ s/^\s*\* Email: kakapo\@ground.dwelling.parrot.net$//m,$text);
+    #$this->assert($text =~ s/^\s*\* Email: kakapo\@ground.dwelling.parrot.net$//m,$text);
     $this->assert($text =~ s/$TWiki::cfg{UsersWebName}\.$testUserWikiName//,$text);
     $this->assert($text =~ s/$testUserWikiName//,$text);
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
@@ -246,8 +248,10 @@ EOF
                              $meta->get('FIELD', 'FirstName')->{value});
     $this->assert_str_equals('User', $meta->get('FIELD', 'LastName')->{value});
     $this->assert_str_equals('', $meta->get('FIELD', 'Comment')->{value});
-    $this->assert_str_equals('kakapo@ground.dwelling.parrot.net',
-                             $meta->get('FIELD', 'Email')->{value});
+    if($meta->get('FIELD', 'Email')) {
+        $this->assert_str_equals('kakapo@ground.dwelling.parrot.net',
+                                 $meta->get('FIELD', 'Email')->{value});
+    }
     $this->assert_matches(qr/^\s*$/s, $text);
 }
 
@@ -268,6 +272,7 @@ EOF
     $this->registerAccount();
     my( $meta, $text ) = $session->{store}->readTopic(
         undef, $TWiki::cfg{UsersWebName}, $testUserWikiName);
+    $this->assert_str_equals("$TWiki::cfg{UsersWebName}.UserForm", $meta->get('FORM')->{name});
     $this->assert_str_equals('Test',
                              $meta->get('FIELD', 'FirstName')->{value});
     $this->assert_str_equals('User', $meta->get('FIELD', 'LastName')->{value});
@@ -320,7 +325,7 @@ sub registerVerifyOk {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template},$e->stringify());
-        $this->assert_str_equals("confirm", $e->{def});
+        $this->assert_str_equals("confirm", $e->{def}, $e->stringify());
         $this->assert_matches(qr/$testUserEmail/, $e->stringify());
     } catch TWiki::AccessControlException with {
         my $e = shift;
@@ -444,8 +449,8 @@ sub test_registerBadVerify {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention",$e->{template});
-        $this->assert_str_equals("bad_ver_code",$e->{def});
+        $this->assert_str_equals("attention",$e->{template}, $e->stringify());
+        $this->assert_str_equals("bad_ver_code",$e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -503,8 +508,8 @@ sub test_registerNoVerifyOk {
         TWiki::UI::Register::register_cgi($session);
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{template});
-        $this->assert_str_equals("thanks", $e->{def});
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("thanks", $e->{def}, $e->stringify());
         $this->assert_equals(2, scalar(@mails));
         my $done = '';
         foreach my $mail ( @mails ) {
@@ -568,7 +573,7 @@ sub test_resetPasswordOkay {
         $this->assert(0, $e->stringify);
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{template});
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
         $this->assert_str_equals("reset_ok", $e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
@@ -585,6 +590,7 @@ sub test_resetPasswordNoSuchUser {
     my $this = shift;
     # This time we don't set up the testWikiName, so it should fail.
 
+    $this->assert(!$session->{users}->findUser( $testUserWikiName, undef,1));
     my $query = new CGI (
                          {
                           'LoginName' => [
@@ -611,7 +617,7 @@ sub test_resetPasswordNoSuchUser {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template}, $e->stringify());
-        $this->assert_str_equals("reset_bad", $e->{def});
+        $this->assert_str_equals("reset_bad", $e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -683,7 +689,7 @@ sub test_resetPasswordNoPassword {
                          });
 
     $query->path_info( '/'.$peopleWeb.'/WebHome' );
-    unlink $TWiki::cfg{HtpasswdFileName};
+    unlink $TWiki::cfg{Htpasswd}{FileName};
 
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
@@ -696,18 +702,15 @@ sub test_resetPasswordNoPassword {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{template});
-        $this->assert_str_equals("reset_ok", $e->{def});
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("reset_ok", $e->{def}, $e->stringify());
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     };
-    my $mess = $mails[0];
-    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
-    $this->assert_matches(qr/To: .*\b$testUserEmail/,$mess);
-    $this->assert_matches(qr/Subject: TWiki password reset/,$mess);
-    $this->assert_equals(1, scalar(@mails));
+    # If the user is not in htpasswd, there's can't be an email
+    $this->assert_equals(0, scalar(@mails));
     @mails = ();
 }
 
