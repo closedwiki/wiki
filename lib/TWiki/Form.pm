@@ -346,7 +346,6 @@ sub renderForEdit {
         my $tooltip = $fieldDef->{tooltip};
         my $definingTopic = $fieldDef->{definingTopic};
         my $title = $fieldDef->{title};
-
         if (! $title && $fieldDef->{type} eq 'label') {
             # Special handling for untitled labels
             my $tmp = $repeatUntitledText;
@@ -374,7 +373,6 @@ sub renderForEdit {
                 }
             }
             $value = '' unless defined $value;  # allow 0 values
-
             ( $extra, $value ) =
               $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
 
@@ -501,6 +499,7 @@ sub renderFieldForEdit {
                 -value => $session->{i18n}->maketext('Clear all'),
                 -onClick => 'checkAll(this,1,'.$boxes.',false)');
         }
+        my %isSelected = map { $_ => 1 } split(/\s*,\s*/, $value);
         foreach $item ( @$options ) {
             #NOTE: Does not expand $item in label
             $attrs{$item} =
@@ -508,7 +507,8 @@ sub renderFieldForEdit {
                 label=>$session->handleCommonTags( $item,
                                                    $web,
                                                    $topic ) };
-            if( $value =~ /(^|,\s*)$item(\s*,|$)/ ) {
+
+            if( $isSelected{$item} ) {
                 $attrs{$item}{checked} = 'checked';
                 push( @defaults, $item );
             }
