@@ -1,11 +1,10 @@
-lib/TWiki/Contrib/MailerContrib/WebNotify.pm
-lib/TWiki/Contrib/MailerContrib/Subscriber.pm
-lib/TWiki/Contrib/MailerContrib/Subscription.pm
-lib/TWiki/Contrib/MailerContrib/Change.pm
-lib/TWiki/Contrib/MailerContrib/UpData.pm
-lib/TWiki/Contrib/MailerContrib/build.pl
-lib/TWiki/Contrib/Mailer.pm
-data/TWiki/MailerContrib.txt
-tools/mailnotify
-templates/mailnotify.tmpl
+lib/TWiki/Contrib/MailerContrib/WebNotify.pm 0440
+lib/TWiki/Contrib/MailerContrib/Subscriber.pm 0440
+lib/TWiki/Contrib/MailerContrib/Subscription.pm 0440
+lib/TWiki/Contrib/MailerContrib/Change.pm 0440
+lib/TWiki/Contrib/MailerContrib/UpData.pm 0440
+lib/TWiki/Contrib/Mailer.pm 0440
+data/TWiki/MailerContrib.txt 0660
+tools/mailnotify 0440
+templates/mailnotify.tmpl 0440
 
