@@ -1,102 +1,99 @@
-tools/dav.pl									Checkin script
-tools/dav_recache								Protections DB maintenance script
-tools/dumpLockDB.pl                         	Protections DB dump script
-data/TWiki/WebDAVPlugin.txt						Plugin topic
-lib/TWiki/Plugins/WebDAVPlugin.pm				Main plugin module
-lib/TWiki/Plugins/WebDAVPlugin/Permissions.pm	Perl module
-lib/twiki_dav/autogen.sh						Build support script
-lib/twiki_dav/CHANGES							Documentation
-lib/twiki_dav/config.h.in						Build support script
-lib/twiki_dav/configure							Build support script
-lib/twiki_dav/configure.in						Build support script
-lib/twiki_dav/dav_dyn.c							Code
-lib/twiki_dav/dav_fs_dbm.c						Code
-lib/twiki_dav/dav_fs_lock.c						Code
-lib/twiki_dav/dav_fs_repos.c					Code
-lib/twiki_dav/dav_fs_repos.h					Code
-lib/twiki_dav/dav_fs_vsn.c						Code
-lib/twiki_dav/dav_lock.c						Code
-lib/twiki_dav/dav_opaquelock.c					Code
-lib/twiki_dav/dav_opaquelock.h					Code
-lib/twiki_dav/dav_props.c						Code
-lib/twiki_dav/dav_shared_stub.c					Code
-lib/twiki_dav/dav_util.c						Code
-lib/twiki_dav/dav_xmlparse.c					Code
-lib/twiki_dav/INSTALL							Documentation
-lib/twiki_dav/libdav.module.in					Build support script
-lib/twiki_dav/LICENSE.html						Documentation
-lib/twiki_dav/Makefile.in						Build support script
-lib/twiki_dav/Makefile.libdir					Build support script
-lib/twiki_dav/Makefile.tmpl						Build support script
-lib/twiki_dav/mod_dav.c							Code
-lib/twiki_dav/mod_dav.h							Code
-lib/twiki_dav/dav_twiki.c						Code
-lib/twiki_dav/dav_twiki.h						Code
-lib/twiki_dav/sdbm/sdbm.c						Code
-lib/twiki_dav/sdbm/sdbm.h						Code
-lib/twiki_dav/sdbm/sdbm_hash.c					Code
-lib/twiki_dav/sdbm/sdbm_lock.c					Code
-lib/twiki_dav/sdbm/sdbm_pair.c					Code
-lib/twiki_dav/sdbm/sdbm_pair.h					Code
-lib/twiki_dav/sdbm/sdbm_tune.h					Code
-lib/twiki_dav/util/dbu.c						Code
-lib/twiki_dav/util/fixvers.c					Code
-lib/twiki_dav/util/lock.py						Test code
-lib/twiki_dav/util/lockview.c					Code
-lib/twiki_dav/util/Makefile						Build support script
-lib/twiki_dav/util/regress						Test script
-lib/tdb/AUTHORS                                 Samba TDB
-lib/tdb/COPYING                                 Samba TDB
-lib/tdb/ChangeLog                               Samba TDB
-lib/tdb/INSTALL                                 Samba TDB
-lib/tdb/Makefile.am                             Samba TDB
-lib/tdb/Makefile.in                             Samba TDB
-lib/tdb/README                                  Samba TDB
-lib/tdb/TODO                                    Samba TDB
-lib/tdb/acconfig.h                              Samba TDB
-lib/tdb/aclocal.m4                              Samba TDB
-lib/tdb/autom4te.cache/output.0                 Samba TDB
-lib/tdb/autom4te.cache/requests                 Samba TDB
-lib/tdb/autom4te.cache/traces.0                 Samba TDB
-lib/tdb/config.guess                            Samba TDB
-lib/tdb/config.h.in                             Samba TDB
-lib/tdb/config.sub                              Samba TDB
-lib/tdb/configure                               Samba TDB
-lib/tdb/configure.in                            Samba TDB
-lib/tdb/includes.h                              Samba TDB
-lib/tdb/install-sh                              Samba TDB
-lib/tdb/ltconfig                                Samba TDB
-lib/tdb/ltmain.sh                               Samba TDB
-lib/tdb/missing                                 Samba TDB
-lib/tdb/mkinstalldirs                           Samba TDB
-lib/tdb/pstring.h                               Samba TDB
-lib/tdb/spinlock.c                              Samba TDB
-lib/tdb/spinlock.h                              Samba TDB
-lib/tdb/stamp-h.in                              Samba TDB
-lib/tdb/tdb.3                                   Samba TDB
-lib/tdb/tdb.c                                   Samba TDB
-lib/tdb/tdb.h                                   Samba TDB
-lib/tdb/tdb.spec                                Samba TDB
-lib/tdb/tdb_chainlock.3                         Samba TDB
-lib/tdb/tdb_close.3                             Samba TDB
-lib/tdb/tdb_delete.3                            Samba TDB
-lib/tdb/tdb_error.3                             Samba TDB
-lib/tdb/tdb_exists.3                            Samba TDB
-lib/tdb/tdb_fetch.3                             Samba TDB
-lib/tdb/tdb_firstkey.3                          Samba TDB
-lib/tdb/tdb_open.3                              Samba TDB
-lib/tdb/tdb_store.3                             Samba TDB
-lib/tdb/tdb_traverse.3                          Samba TDB
-lib/tdb/tdbback.c                               Samba TDB
-lib/tdb/tdbback.h                               Samba TDB
-lib/tdb/tdbbackup.c                             Samba TDB
-lib/tdb/tdbdump.c                               Samba TDB
-lib/tdb/tdbiterate.c                            Samba TDB
-lib/tdb/tdbspeed.c                              Samba TDB
-lib/tdb/tdbtest.c                               Samba TDB
-lib/tdb/tdbtool.c                               Samba TDB
-lib/tdb/tdbtorture.c                            Samba TDB
-lib/tdb/tdbutil.c                               Samba TDB
-lib/tdb/tdbutil.h                               Samba TDB
-lib/tdb/test.gdbm                               Samba TDB
-lib/tdb/test.tdb                                Samba TDB
+tools/dav.pl									0550 Checkin script
+tools/dav_recache								0550 Protections DB maintenance script
+tools/dumpLockDB.pl                         	0550 Protections DB dump script
+data/TWiki/WebDAVPlugin.txt						0660 Plugin topic
+lib/TWiki/Plugins/WebDAVPlugin.pm				0440 Main plugin module
+lib/TWiki/Plugins/WebDAVPlugin/Permissions.pm	0440 Perl module
+lib/twiki_dav/autogen.sh						0550 Build support script
+lib/twiki_dav/CHANGES							0440 Documentation
+lib/twiki_dav/config.h.in						0440 Build support script
+lib/twiki_dav/configure							0550 Build support script
+lib/twiki_dav/configure.in						0550 Build support script
+lib/twiki_dav/dav_dyn.c							0440 Code
+lib/twiki_dav/dav_fs_dbm.c						0440 Code
+lib/twiki_dav/dav_fs_lock.c						0440 Code
+lib/twiki_dav/dav_fs_repos.c					0440 Code
+lib/twiki_dav/dav_fs_repos.h					0440 Code
+lib/twiki_dav/dav_fs_vsn.c						0440 Code
+lib/twiki_dav/dav_lock.c						0440 Code
+lib/twiki_dav/dav_opaquelock.c					0440 Code
+lib/twiki_dav/dav_opaquelock.h					0440 Code
+lib/twiki_dav/dav_props.c						0440 Code
+lib/twiki_dav/dav_shared_stub.c					0440 Code
+lib/twiki_dav/dav_util.c						0440 Code
+lib/twiki_dav/dav_xmlparse.c					0440 Code
+lib/twiki_dav/INSTALL							0440 Documentation
+lib/twiki_dav/libdav.module.in					0550 Build support script
+lib/twiki_dav/LICENSE.html						0440 Documentation
+lib/twiki_dav/Makefile.in						0550 Build support script
+lib/twiki_dav/Makefile.libdir					0550 Build support script
+lib/twiki_dav/Makefile.tmpl						0550 Build support script
+lib/twiki_dav/mod_dav.c							0440 Code
+lib/twiki_dav/mod_dav.h							0440 Code
+lib/twiki_dav/dav_twiki.c						0440 Code
+lib/twiki_dav/dav_twiki.h						0440 Code
+lib/twiki_dav/sdbm/sdbm.c						0440 Code
+lib/twiki_dav/sdbm/sdbm.h						0440 Code
+lib/twiki_dav/sdbm/sdbm_hash.c					0440 Code
+lib/twiki_dav/sdbm/sdbm_lock.c					0440 Code
+lib/twiki_dav/sdbm/sdbm_pair.c					0440 Code
+lib/twiki_dav/sdbm/sdbm_pair.h					0440 Code
+lib/twiki_dav/sdbm/sdbm_tune.h					0440 Code
+lib/twiki_dav/util/dbu.c						0440 Code
+lib/twiki_dav/util/fixvers.c					0440 Code
+lib/twiki_dav/util/lock.py						0440 Test code
+lib/twiki_dav/util/lockview.c					0440 Code
+lib/twiki_dav/util/Makefile						0440 Build support script
+lib/twiki_dav/util/regress						0440 Test script
+lib/tdb/AUTHORS                                 0440 Samba TDB Documentation
+lib/tdb/COPYING                                 0440 Samba TDB Documentation
+lib/tdb/ChangeLog                               0440 Samba TDB Documentation
+lib/tdb/INSTALL                                 0440 Samba TDB Documentation
+lib/tdb/Makefile.am                             0440 Samba TDB Build
+lib/tdb/Makefile.in                             0440 Samba TDB Build
+lib/tdb/README                                  0440 Samba TDB Documentation
+lib/tdb/TODO                                    0440 Samba TDB Documentation
+lib/tdb/acconfig.h                              0440 Samba TDB Code
+lib/tdb/aclocal.m4                              0440 Samba TDB Build
+lib/tdb/config.guess                            0440 Samba TDB Build
+lib/tdb/config.h.in                             0440 Samba TDB Build
+lib/tdb/config.sub                              0440 Samba TDB Build
+lib/tdb/configure                               0550 Samba TDB Build
+lib/tdb/configure.in                            0440 Samba TDB Build
+lib/tdb/includes.h                              0440 Samba TDB Code
+lib/tdb/install-sh                              0440 Samba TDB Build
+lib/tdb/ltconfig                                0440 Samba TDB Build
+lib/tdb/ltmain.sh                               0440 Samba TDB Build
+lib/tdb/missing                                 0440 Samba TDB Build
+lib/tdb/mkinstalldirs                           0440 Samba TDB Build
+lib/tdb/pstring.h                               0440 Samba TDB Code
+lib/tdb/spinlock.c                              0440 Samba TDB Code
+lib/tdb/spinlock.h                              0440 Samba TDB Code
+lib/tdb/stamp-h.in                              0440 Samba TDB Code
+lib/tdb/tdb.3                                   0440 Samba TDB Code
+lib/tdb/tdb.c                                   0440 Samba TDB Code
+lib/tdb/tdb.h                                   0440 Samba TDB Code
+lib/tdb/tdb.spec                                0440 Samba TDB Code
+lib/tdb/tdb_chainlock.3                         0440 Samba TDB Code
+lib/tdb/tdb_close.3                             0440 Samba TDB Code
+lib/tdb/tdb_delete.3                            0440 Samba TDB Code
+lib/tdb/tdb_error.3                             0440 Samba TDB Code
+lib/tdb/tdb_exists.3                            0440 Samba TDB Code
+lib/tdb/tdb_fetch.3                             0440 Samba TDB Code
+lib/tdb/tdb_firstkey.3                          0440 Samba TDB Code
+lib/tdb/tdb_open.3                              0440 Samba TDB Code
+lib/tdb/tdb_store.3                             0440 Samba TDB Code
+lib/tdb/tdb_traverse.3                          0440 Samba TDB Code
+lib/tdb/tdbback.c                               0440 Samba TDB Code
+lib/tdb/tdbback.h                               0440 Samba TDB Code
+lib/tdb/tdbbackup.c                             0440 Samba TDB Code
+lib/tdb/tdbdump.c                               0440 Samba TDB Code
+lib/tdb/tdbiterate.c                            0440 Samba TDB Code
+lib/tdb/tdbspeed.c                              0440 Samba TDB Code
+lib/tdb/tdbtest.c                               0440 Samba TDB Code
+lib/tdb/tdbtool.c                               0440 Samba TDB Code
+lib/tdb/tdbtorture.c                            0440 Samba TDB Code
+lib/tdb/tdbutil.c                               0440 Samba TDB Code
+lib/tdb/tdbutil.h                               0440 Samba TDB Code
+lib/tdb/test.gdbm                               0440 Samba TDB Code
+lib/tdb/test.tdb                                0440 Samba TDB Code
