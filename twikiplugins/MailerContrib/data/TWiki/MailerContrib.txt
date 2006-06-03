@@ -1,4 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+---+!! %TOPIC%
+
+Add-on to the TWiki kernel that supports e-mail notification of changes.
+
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -6,16 +9,16 @@
    It is automatically generated from the subversion repository, and any changes
    you make will simply be overwritten the next time a release is generated.
 
-   Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
-This module is an add-on to the TWiki kernel that supports e-mail notification of changes.
+
 
 *WARNING: TWiki-4 only. If you want to use this extension with an earlier version of TWiki, please see [[http://twiki.org/cgi-bin/view/Plugins/%TOPIC%?rev=1.17][here]]*
 
 %TOC%
 
----+ Summary of Contents
----++ <code>tools/mailnotify</code>
+---++ Summary of Contents
+---+++ <code>tools/mailnotify</code>
 The main part of the mailer module is a script, =tools/mailnotify=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard <nop>%NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line or a cron job.
 
 <!-- Included by %TWIKIWEB%.WebChangesAlert -->
@@ -53,17 +56,17 @@ In the future it is intended that individual users will be able to control the f
 
 %RED% __Note__ =mailnotify= ignores permissions in webs. It is entirely possible for a user to get added to a <nop>%NOTIFYTOPIC% topic in a web, when they are not authorised to view the topics in that web. This could result in them having limited access to sensitive information (the topic summaries). %ENDCOLOR%
 
----++ <code>TWiki/Contrib/MailerContrib</code> code library
+---+++ <code>TWiki/Contrib/MailerContrib</code> code library
 The second part of the module is a code library that provides the services for other applications to modify <nop>%NOTIFYTOPIC% through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for notification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
 
----+ Installation Instructions
+---++ Installation Instructions
 This Contrib is pre-installed as part of the TWiki release package, and should only have to be re-installed if an upgrade is required.
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory.
    * Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
    * To make sure the installation was successful, run the =mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
 
----+ Setting up your cron job
+---++ Setting up your cron job
 You need to set up a =cron= (or equivalent) job to run =mailnotify=.
 
 <code>Usage: perl -I &lt;bin&gt; mailnotify [-q] [ <i>web1 web2 ... webN</i> ]</code>
@@ -72,11 +75,11 @@ You need to set up a =cron= (or equivalent) job to run =mailnotify=.
 | <code><i>web1 web2 ... webN</i></code> | List of webs to process, separated by spaces or commas. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
 For example, =perl -I /usr/local/twiki/bin mailnotify -q Public Private= will generate notifications for the Public and Private webs.
 
----+ Settings
-   * Name of the perl package
-      * Set STUB = TWiki::Contrib::Mailer
+---++ Settings
+	* Set STUB = TWiki::Contrib::Mailer
+	* Set SHORTDESCRIPTION = Supports e-mail notification of changes.
 
----+ Contrib Info
+---++ Contrib Info
 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2004, Wind River Systems |
@@ -114,7 +117,6 @@ For example, =perl -I /usr/local/twiki/bin mailnotify -q Public Private= will ge
 |  8 Sep 2004 | 1.000 Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/CrawfordCurrie

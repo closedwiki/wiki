@@ -1,49 +1,49 @@
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/WC.pm Perl module
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Leaf.pm Perl module
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Node.pm Perl module
-lib/TWiki/Plugins/WysiwygPlugin/HTML2TML.pm Perl module
-lib/TWiki/Plugins/WysiwygPlugin.pm Perl module
-lib/TWiki/Plugins/WysiwygPlugin/TML2HTML.pm Perl module
-data/TWiki/WysiwygPlugin.txt Documentation and settings
-data/TWiki/WysiwygPluginTopicLister.txt Special AJAX topic
-pub/TWiki/WysiwygPlugin/kuputwiki.css Kupu customisation
-pub/TWiki/WysiwygPlugin/twikitools.js Kupu customisation
-pub/TWiki/WysiwygPlugin/kupuinit.js Kupu customisation
-pub/TWiki/WysiwygPlugin/kupustart.js Kupu customisation
-pub/TWiki/WysiwygPlugin/bold.png Button image
-pub/TWiki/WysiwygPlugin/cancel.png Button image
-pub/TWiki/WysiwygPlugin/code.png Button image
-pub/TWiki/WysiwygPlugin/definition-list.png Button image
-pub/TWiki/WysiwygPlugin/exthyperlink.png Button image
-pub/TWiki/WysiwygPlugin/help.png Button image
-pub/TWiki/WysiwygPlugin/indent.png Button image
-pub/TWiki/WysiwygPlugin/inthyperlink.png Button image
-pub/TWiki/WysiwygPlugin/italic.png Button image
-pub/TWiki/WysiwygPlugin/new-attachment.png Button image
-pub/TWiki/WysiwygPlugin/new-image.png Button image
-pub/TWiki/WysiwygPlugin/nop.png Button image
-pub/TWiki/WysiwygPlugin/ordered-list.png Button image
-pub/TWiki/WysiwygPlugin/outdent.png Button image
-pub/TWiki/WysiwygPlugin/redo.png Button image
-pub/TWiki/WysiwygPlugin/remove.png Button image
-pub/TWiki/WysiwygPlugin/save.png Button image
-pub/TWiki/WysiwygPlugin/separator.png Button image
-pub/TWiki/WysiwygPlugin/smiley.png Button image
-pub/TWiki/WysiwygPlugin/strings.png Button image
-pub/TWiki/WysiwygPlugin/table.png Button image
-pub/TWiki/WysiwygPlugin/text-color.png Button image
-pub/TWiki/WysiwygPlugin/undo.png Button image
-pub/TWiki/WysiwygPlugin/unordered-list.png Button image
-pub/TWiki/WysiwygPlugin/vars.png Button image
-pub/TWiki/WysiwygPlugin/verbatim.png Button image
-pub/TWiki/WysiwygPlugin/verbatim-watermark.png Watermark
-pub/TWiki/WysiwygPlugin/screenshot.jpg Screen shot
-pub/TWiki/WysiwygPlugin/view-source.png Button image
-templates/edit.kupu.tmpl Template for an edit using kupu
-templates/view.kupuxml.tmpl Template for AJAX data
-templates/attachtables.kupu.tmpl Attachment table rendering for editor
-templates/view.kupu.tmpl Template for a kupu skin view, used by the editor
-tools/html2tml.pl Stand-alone convertor script
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/WC.pm 0440 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Leaf.pm 0440 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML/Node.pm 0440 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/HTML2TML.pm 0440 Perl module
+lib/TWiki/Plugins/WysiwygPlugin.pm 0440 Perl module
+lib/TWiki/Plugins/WysiwygPlugin/TML2HTML.pm 0440 Perl module
+data/TWiki/WysiwygPlugin.txt 0660 Documentation and settings
+data/TWiki/WysiwygPluginTopicLister.txt 0660 Special AJAX topic
+pub/TWiki/WysiwygPlugin/kuputwiki.css 0660 Kupu customisation
+pub/TWiki/WysiwygPlugin/twikitools.js 0440 Kupu customisation
+pub/TWiki/WysiwygPlugin/kupuinit.js 0440 Kupu customisation
+pub/TWiki/WysiwygPlugin/kupustart.js 0440 Kupu customisation
+pub/TWiki/WysiwygPlugin/bold.png 0440 Button image
+pub/TWiki/WysiwygPlugin/cancel.png 0440 Button image
+pub/TWiki/WysiwygPlugin/code.png 0440 Button image
+pub/TWiki/WysiwygPlugin/definition-list.png 0440 Button image
+pub/TWiki/WysiwygPlugin/exthyperlink.png 0440 Button image
+pub/TWiki/WysiwygPlugin/help.png 0440 Button image
+pub/TWiki/WysiwygPlugin/indent.png 0440 Button image
+pub/TWiki/WysiwygPlugin/inthyperlink.png 0440 Button image
+pub/TWiki/WysiwygPlugin/italic.png 0440 Button image
+pub/TWiki/WysiwygPlugin/new-attachment.png 0440 Button image
+pub/TWiki/WysiwygPlugin/new-image.png 0440 Button image
+pub/TWiki/WysiwygPlugin/nop.png 0440 Button image
+pub/TWiki/WysiwygPlugin/ordered-list.png 0440 Button image
+pub/TWiki/WysiwygPlugin/outdent.png 0440 Button image
+pub/TWiki/WysiwygPlugin/redo.png 0440 Button image
+pub/TWiki/WysiwygPlugin/remove.png 0440 Button image
+pub/TWiki/WysiwygPlugin/save.png 0440 Button image
+pub/TWiki/WysiwygPlugin/separator.png 0440 Button image
+pub/TWiki/WysiwygPlugin/smiley.png 0440 Button image
+pub/TWiki/WysiwygPlugin/strings.png 0440 Button image
+pub/TWiki/WysiwygPlugin/table.png 0440 Button image
+pub/TWiki/WysiwygPlugin/text-color.png 0440 Button image
+pub/TWiki/WysiwygPlugin/undo.png 0440 Button image
+pub/TWiki/WysiwygPlugin/unordered-list.png 0440 Button image
+pub/TWiki/WysiwygPlugin/vars.png 0440 Button image
+pub/TWiki/WysiwygPlugin/verbatim.png 0440 Button image
+pub/TWiki/WysiwygPlugin/verbatim-watermark.png 0440 Watermark
+pub/TWiki/WysiwygPlugin/screenshot.jpg 0440 Screen shot
+pub/TWiki/WysiwygPlugin/view-source.png 0440 Button image
+templates/edit.kupu.tmpl 0440 Template for an edit using kupu
+templates/view.kupuxml.tmpl 0440 Template for AJAX data
+templates/attachtables.kupu.tmpl 0440 Attachment table rendering for editor
+templates/view.kupu.tmpl 0440 Template for a kupu skin view, used by the editor
+tools/html2tml.pl 0440 Stand-alone convertor script
 pub/TWiki/WysiwygPlugin/_kupu/Extensions/Install.py 0440 Kupu 1.3.2
 pub/TWiki/WysiwygPlugin/_kupu/Makefile 0440 Kupu 1.3.2
 pub/TWiki/WysiwygPlugin/_kupu/__init__.py 0440 Kupu 1.3.2

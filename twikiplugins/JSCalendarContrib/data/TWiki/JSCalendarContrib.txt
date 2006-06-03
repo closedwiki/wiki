@@ -1,3 +1,7 @@
+---+!! %TOPIC%
+
+[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
+
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -7,12 +11,13 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail thge author.
 -->
-[[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
 
----+ Summary of Contents
+%TOC%
+
+---++ Summary of Contents
 This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]] Javascript in a form suitable for use with TWiki.
 
----+ Detailed Documentation
+---++ Detailed Documentation
 Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
 
 This package also includes a small Perl module to make using the calendar easier from TWiki plugins. This module includes the function:
@@ -52,24 +57,27 @@ Note that the header will only be added once, regardless of the number of times 
 
 =addHEAD= can be called from =commonTagsHandler= for adding the header to all pages, or to =beforeEditHandler= just for edit pages etc.
 
----++ Settings
+---+++ Settings
 	* Name of the perl package
 		* Set STUB = %$STUB%
+	* What do I do
+		* Set SHORTDESCRIPTION = [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]], packaged for use by plugins, skins and add-ons.
 
----++ Installation Instructions
+---+++ Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the archive from the Plugins web (see below)
+	* Unpack it in your twiki installation directory. Content:
      | *File:* | *Description:* |
 %$MANIFEST%
 	* Make sure that all files are readable by the web server user
 
----++ Contrib Info
+---+++ Contrib Info
 
 |  Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Version: | %$VERSION% of the Mishoo calendar |
 |  Copyright &copy;: | See [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] |
-|  License: | GNU LGPL |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|
 |  Dependencies: | %$DEPENDENCIES% |
 | Change History: | |
 | 10247 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2054'>Item2054</a>  put the calendar at z-index 2000, way above pattern skin divs. |
@@ -81,7 +89,7 @@ Note that the header will only be added once, regardless of the number of times 
 |  14 Aug 2004 | Separated out from SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/CrawfordCurrie - %$DATE%
