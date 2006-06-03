@@ -997,6 +997,7 @@ sub target_upload {
     unless( $response->is_success ) {
         print 'Failed to GET old topic ', $response->request->uri,
           ' -- ', $response->status_line, $NL;
+        $newform{formtemplate} = 'PackageForm';
     } else {
         foreach my $line ( split(/\n/, $response->content() )) {
             if ( $line =~ m/META:FIELD{name="(.*?)".*?value="(.*?)"}/ ) {
@@ -1328,7 +1329,7 @@ sub target_history {
     my $post;
     local $/ = "\n";
     while( my $line = <IN> ) {
-        if( $line =~ /^\s*\|\s*Change(\s+|&nbsp;)History:.*?\|\s*(.*?)\s*\|\s*$/i ) {
+        if( $line =~ /^\s*\|\s*Change(?:\s+|&nbsp;)History:.*?\|\s*(.*?)\s*\|\s*$/i ) {
             $in_history = 1;
             push( @history, [ "?1'$1'", $1 ] ) if( $1 && $1 !~ /^\s*$/ );
         } elsif( $in_history ) {
@@ -1392,7 +1393,7 @@ sub target_history {
         } elsif( $line =~ /^Last Changed Rev: (.*)$/ ) {
             die unless $curpath;
             if( $1 > $base ) {
-                print STDERR "$curpath $1\n";
+                print STDERR "$curpath $1 > $base\n";
                 push(@revs, $curpath);
             }
             $curpath = undef;
@@ -1405,7 +1406,7 @@ sub target_history {
     }
 
     # Update the history
-    $cmd = "cd $this->{basedir} && svn log ".join(' ', @revs);
+    $cmd = "cd $this->{basedir} && svn log ".join(' && svn log ', @revs);
     print STDERR "Updating history using $cmd...\n";
     $log = `$cmd`;
     my %new;
