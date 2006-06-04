@@ -855,7 +855,7 @@ sub _newTopicScreen {
                                class => 'twikiCheckBox',
                                name => 'referring_topics',
                                value => $entry,
-                               checked => 'checked' } ). ' '.$entry.' ' ).
+                               checked => 'checked' } ). " [[$entry]] " ) .
                CGI::td( { class => 'twikiSummary twikiGrayText' },
                         $refs->{$entry} ));
         }
@@ -878,7 +878,7 @@ sub _newTopicScreen {
                            class => 'twikiCheckBox',
                            name => 'referring_topics',
                            value => $entry,
-                           checked => 'checked' } ). ' '.$entry.' ' ).
+                           checked => 'checked' } ). " [[$entry]] " ) .
            CGI::td( { class => 'twikiSummary twikiGrayText' },
                     $refs->{$entry} ));
     }
@@ -1049,7 +1049,7 @@ sub _newWebScreen {
                           class => 'twikiCheckBox',
                           name => 'referring_topics',
                           value => $entry,
-                          checked => 'checked' } ). " $entry " ).
+                          checked => 'checked' } ). " [[$entry]] " ) .
                         CGI::td( { class => 'twikiSummary twikiGrayText' },
                                  $refs->{$entry} ));
     }
