@@ -5,7 +5,8 @@ The InlineEditPlugin provides a quick (zero server roundtrip) edit functionality
 It has been architected to allow the definition and choice of Javascript editing component, using a TWiki template file.
 It is intended to be used in conjunction with ComponentEditPlugin to enable editing of TWikiVariables.
 
-This is an initial pre-release and is not intended to be used in production. Insufficient testing and feedback has happened - and Its known to have problems with TWikiVariables embeded in HTML attributes.
+This is an initial pre-release and is not intended to be used in production.
+Insufficient testing and feedback has happened - and Its known to have problems with TWikiVariables embeded in HTML attributes.
 
 *WARNING:* when you edit using InlineEditPlugin, it tries to create a topic lock or lease. In Cairo, this is done using the edit script, and in TWiki-4 via rest script. Unfortunatly, this means that they will only work if the respective scripts are authenticated, or a server side session is used.
 
@@ -15,44 +16,11 @@ This is an initial pre-release and is not intended to be used in production. Ins
 ---+++ Usage 
 If the InlineEditPlugin is installed and enabled, all you should need to edit a page, is to double click on the rendered topic text. TWikiVariables will be highlighted in Grey boxes, that you can click on to get a popup edit dialog driven by the ComponentEditPlugin.
 
+
 <img width="640" alt="InlineEditPlugin_tinyMCE.png" align="right" src="%ATTACHURLPATH%/InlineEditPlugin_tinyMCE.png" height="410">
 </img>
 
-&nbsp;
----+++!! TODO list 
-   1 see what we can do to protect TWikiVariables in html attributes (or even just protecting html at all (tinymce makes a mess with its cleaning up))
-   1 possibly protect all inline html from the editor - can fall back to a textarea inline edit for those sections
-
-
-   1 neither wikiwyg nor tinymce use css styles as specified in pattern skin (ie import @url)
-   1 tinymce version currently does not try to set / check leases (is merging going to work?)
-      * prepare for sectional edits
-      * IMPLEMENT as rest, and add an async call to it when the user wants to edit - need a status bar..
-   1 improve the robustness of the TML2HTML and HTML2TML converters
-   1 test scripts - call TML2HTML then HTML2TML on all topics, and make sure they are the same..
-   1 add templates for more editors
-   1 / or maybe just sectional save, ie, the editor sends a diff, not the whole doc.
-   1 fix browser back button
-   1 hide the twiki actions?
-   1 implement raw view etc as non-round trip
-   1 benchmarking - both load on server and client time
-   1 Qualify functionality on the following browsers:
-      * FireFox 1.0.7
-      * FireFox 1.5.
-      * IE 6.
-   1 improve the info wrt why the user is not able to edit
-   1 change the size of the edit div..
----+++!! TODO for wikiwyg 
-   1 IE support for wikiwyg - add wikiwyg patch from mailing list
-   1 naive sectional edit results in loading N*every image
-   1 prevent double click from starting wikiwyg before onload / init javascript is completed
-   1 Wikiwyg needs to realise if the document has been modified / not, don't really do a save un-necessarily
----+++!! TODO for tinymce 
-   * looks like tinymce puts in lots of extra whitespace, which will need to be post cleaned up
-   * the stylesheet gathering however does not work on IE, and on FF has an issue
-
-
----++ Plugin Settings 
+---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
@@ -60,24 +28,25 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
       * Set SHORTDESCRIPTION = adds double click to edit functionality to the TWiki view script
 
-
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
    * Select the javascript header template to load the editor with (wikiwyg / tinymce / textarea)
+   * only textarea works in this release
       * Set EDITOR = textarea
 
-&nbsp;
    * If defined, we use the WysiwygPlugin 's TML2HTML, while if undefined, we use the new and less tested javascript version
       * Set SENDHTML = 1
 
-&nbsp;
    * set a minimum number of lines in a section, for sectional Edit - otherwise you get alot of single line edit boxes
    * 0 means no sections (edit entire topic only)
       * Set MINIMUMSECTIONLENGTH = 1
 
-&nbsp;
----++ Plugin Installation Instructions 
+   * this option restricts the InlineEditPlugin from adding its sections to only views using the specificed skins (it will otherwise break rss, kupu, etc)
+   * unset means the plugin is not present in view, but can still be used for sectional saving
+      * Set SKINS = nat, pattern, classic, koala, smartedit
+
+---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
