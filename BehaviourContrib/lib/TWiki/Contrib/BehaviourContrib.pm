@@ -1,4 +1,4 @@
-package TWiki::Contrib::PrototypeContrib;
+package TWiki::Contrib::BehaviourContrib;
 
 use vars qw( $VERSION $RELEASE );
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -9,7 +9,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '1.5.0_pre0';
+$RELEASE = '1.1';
 
 
 1;
