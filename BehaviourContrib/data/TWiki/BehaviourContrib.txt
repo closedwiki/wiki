@@ -1,0 +1,68 @@
+%META:TOPICINFO{author="TWikiContributor" date="1126490512" format="1.1" version="1.1"}%
+---+!! !Behaviour Javascript framework Contrib
+
+This contrib packages the third-party =Behaviour= Javascript event framework, available from http://bennolan.com/behaviour/.
+
+Javascript file: [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.js][behaviour.js]]
+
+From the website:
+<blockquote style="border:1px solid #ddd; padding:.5em 1em;">
+After all the work of WASP and others to promote clean markup, valid pages and graceful degradation via css - it sucks that we're going back to tag soup days by throwing javascript tags into our html.
+
+The better way to do javascript is to do it unobtrusively. PPK and Simon Willison have been recommending this approach for ages. And it's definitely the way to go. The only problem is that it's a bit of a pain in the ass.
+
+That's why I came up with Behaviour - my solution to unobtrusive javascript behaviours.
+
+*How does it work?*
+
+Behaviour lets you use CSS selectors to specify elements to add javascript events to. This means that instead of writing:
+<verbatim>
+<li>
+	<a onclick="this.parentNode.removeChild(this)" href="#">
+		Click me to delete me
+	</a>
+</li>
+</verbatim>
+You can use:
+<verbatim>
+<ul id="example">
+	<li>
+		<a href="/someurl">Click me to delete me</a>
+	</li>
+</ul>
+</verbatim>
+And then use css selectors to select that element and add javascript functions to it.
+<verbatim>
+var myrules = {
+	'#example li' : function(el){
+		el.onclick = function(){
+			this.parentNode.removeChild(this);
+
+		}
+	}
+};
+
+Behaviour.register(myrules);
+</verbatim>
+</blockquote>
+
+---++ License
+Behaviour is freely distributable under the terms of an BSD license.
+For details, see the Behaviour website.
+
+---++ Links
+   * [[http://bennolan.com/behaviour/][Behaviour website]]
+   * [[http://groups.google.com/group/behaviour][Behaviour Google Group]]
+   
+---++ Contrib Info
+
+| Author: | TWiki:Main.ArthurClemens |
+| Copyright: | version 1.1 - Copyright (c) Ben Nolan and Simon Willison |
+| License: | BSD |
+| Dependencies: | %$DEPENDENCIES% |
+| 4 June 2006| 1.000 First Version. Included Behaviour version: 1.1 |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
