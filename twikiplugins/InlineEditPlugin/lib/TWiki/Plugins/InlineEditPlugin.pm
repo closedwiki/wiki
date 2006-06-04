@@ -30,7 +30,7 @@ package TWiki::Plugins::InlineEditPlugin;
 use JSON;
 
 use vars qw( $VERSION $pluginName $debug  $currentWeb %vars %sectionIds $lastSection
-    $templateText $WEB $TOPIC $USER $EDITOR $MODERN $sendHTML $minimumSectionLength $tml2html $html2tml);
+    $templateText $WEB $TOPIC $USER $EDITOR $MODERN $sendHTML $minimumSectionLength $supportedSkins $tml2html $html2tml);
 use vars qw( %TWikiCompatibility %changedSections);
 
 $VERSION = '0.900';
@@ -67,6 +67,7 @@ sub initPlugin {
 	$sendHTML = TWiki::Func::getPluginPreferencesValue( 'SENDHTML' ) || 1;
     $sendHTML = 0 if ($EDITOR eq 'textarea');
     $minimumSectionLength = TWiki::Func::getPluginPreferencesValue( 'MINIMUMSECTIONLENGTH' ) || 0;
+    $supportedSkins = TWiki::Func::getPluginPreferencesValue( 'SKINS' ) || '';
     $lastSection = 0;
 
     # Plugin correctly initialized
@@ -356,7 +357,11 @@ sub pluginApplies {
     }
 
     #lets only apply to the skins i've tested on (nat, pattern, classic, koala)
-    return 0 unless (grep {TWiki::Func::getSkin() eq $_ } ('nat', 'pattern', 'classic', 'koala'));
+    my @supported = split(/[, ]/, $supportedSkins);
+    my @skinset = split(/[, ]/, TWiki::Func::getSkin());
+    foreach my $skin (@skinset) {
+        return 0 unless (grep {$skin eq $_ } @supported);
+    }
 
     my $cgiQuery = TWiki::Func::getCgiQuery();
     #lets only work in text/html....
