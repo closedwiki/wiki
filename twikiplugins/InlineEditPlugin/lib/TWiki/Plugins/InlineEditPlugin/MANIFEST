@@ -455,6 +455,7 @@ pub/TWiki/InlineEditPlugin/twikiwyg.css
 pub/TWiki/InlineEditPlugin/TWikitext.js
 pub/TWiki/InlineEditPlugin/MyTinyMCE.js
 pub/TWiki/InlineEditPlugin/textarea.js
+pub/TWiki/InlineEditPlugin/tableedit.js
 pub/TWiki/InlineEditPlugin/TML2HTML.js
 data/TWiki/InlineEditPlugin.txt
 templates/inlineeditplugin.nopermission.tmpl
@@ -463,5 +464,6 @@ templates/inlineeditplugin.tinymce.tmpl
 templates/inlineeditplugin.wikiwyg.tmpl
 templates/inlineeditplugin.dojoedit.tmpl
 templates/inlineeditplugin.textarea.tmpl
+templates/inlineeditplugin.tableedit.tmpl
 templates/inlineeditplugin.prejavascript.tmpl
 
