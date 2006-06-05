@@ -31,12 +31,14 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
-   * Select the javascript header template to load the editor with (wikiwyg / tinymce / textarea)
+   * Select the editors, in order of preference (list the more specialised ones first)
+   * choose from (wikiwyg / tinymce / textarea)
    * only textarea works in this release
-      * Set EDITOR = textarea
+      * Set EDITORS = textarea
 
    * If defined, we use the WysiwygPlugin 's TML2HTML, while if undefined, we use the new and less tested javascript version
-      * Set SENDHTML = 1
+   * don't set this unless you have alot of spare CPU on your server
+      * Set SENDHTML = 0
 
    * set a minimum number of lines in a section, for sectional Edit - otherwise you get alot of single line edit boxes
    * 0 means no sections (edit entire topic only)

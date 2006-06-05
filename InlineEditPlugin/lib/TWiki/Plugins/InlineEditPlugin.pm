@@ -30,7 +30,7 @@ package TWiki::Plugins::InlineEditPlugin;
 use JSON;
 
 use vars qw( $VERSION $pluginName $debug  $currentWeb %vars %sectionIds $lastSection
-    $templateText $WEB $TOPIC $USER $EDITOR $MODERN $sendHTML $minimumSectionLength $supportedSkins $tml2html $html2tml);
+    $templateText $WEB $TOPIC $USER $EDITORSLIST @EDITORS $MODERN $sendHTML $minimumSectionLength $supportedSkins $tml2html $html2tml);
 use vars qw( %TWikiCompatibility %changedSections);
 
 $VERSION = '0.900';
@@ -63,9 +63,9 @@ sub initPlugin {
 	$TOPIC= $topic;
     $USER = $user;
 	$templateText = '';
-    $EDITOR = TWiki::Func::getPluginPreferencesValue( 'EDITOR' ) || 'textarea';
-	$sendHTML = TWiki::Func::getPluginPreferencesValue( 'SENDHTML' ) || 1;
-    $sendHTML = 0 if ($EDITOR eq 'textarea');
+    $EDITORSLIST = TWiki::Func::getPluginPreferencesValue( 'EDITORS' ) || 'textarea';
+    @EDITORS = split(/[, ]/, $EDITORSLIST);
+	$sendHTML = TWiki::Func::getPluginPreferencesValue( 'SENDHTML' ) || 0;
     $minimumSectionLength = TWiki::Func::getPluginPreferencesValue( 'MINIMUMSECTIONLENGTH' ) || 0;
     $supportedSkins = TWiki::Func::getPluginPreferencesValue( 'SKINS' ) || '';
     $lastSection = 0;
@@ -211,15 +211,16 @@ sub afterSaveHandler() {
 sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my $text = shift;
-
     return unless (pluginApplies('view'));
+
+    my $scriptHeader = '';
 
    my $pluginPubUrl = TWiki::Func::getPubUrlPath().'/'.
             TWiki::Func::getTwikiWebname().'/'.$pluginName;
 
     #add the initialisation javascript
-    my $jscript = TWiki::Func::readTemplate ( 'inlineeditplugin', 'prejavascript' );
-    addToHEAD($pluginName.'-prejavascript', $jscript);
+    my $jscript .= TWiki::Func::readTemplate ( 'inlineeditplugin', 'prejavascript' );
+    $scriptHeader .= $jscript;
 
     my $hiddenStyle = 'style="display:none;" ';#visibility:hidden;height:0px;" ';
     my $output = '';
@@ -227,8 +228,7 @@ sub postRenderingHandler {
     #disable if the user does not have edit permissions
     #TODO: need to check if this user is allowed to run the edit / save script (templateLogin makes the checkAccessPermission check a little less useful)
     if (TWiki::Func::checkAccessPermission( 'CHANGE', $USER, undef, $TOPIC, $WEB ) != 1) {
-        $jscript = TWiki::Func::readTemplate ( 'inlineeditplugin', 'nopermission' );
-        addToHEAD($pluginName.'-nopermission', $jscript);
+        $scriptHeader .= TWiki::Func::readTemplate ( 'inlineeditplugin', 'nopermission' );
 
         #lets add an InfoSection for the topic.
         my $section = 0;
@@ -237,9 +237,10 @@ sub postRenderingHandler {
         $output .= $topicState;
     } else {
     	#add the inlineEdit JavaScript
-    	$jscript = TWiki::Func::readTemplate ( 'inlineeditplugin', $EDITOR );
-    	$jscript =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
-    	addToHEAD($pluginName.'-'.$EDITOR, $jscript);
+        foreach my $EDITOR (@EDITORS) {
+            $jscript = TWiki::Func::readTemplate ( 'inlineeditplugin', $EDITOR );
+            $scriptHeader .= $jscript;
+        }
 
         foreach my $key (keys(%sectionIds)) {
     #TODO: exctract into a func to use with sectional edit
@@ -276,8 +277,10 @@ sub postRenderingHandler {
 
     #add the initialisation javascript
     $jscript = TWiki::Func::readTemplate ( 'inlineeditplugin', 'javascript' );
-    $jscript =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
-    addToHEAD($pluginName.'-javascript', $jscript);
+    $scriptHeader .= $jscript;
+    $scriptHeader =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
+
+    addToHEAD($pluginName.'-javascript', $scriptHeader);
 }
 
 # DEPRECATED in Dakar (postRenderingHandler does the job better)
@@ -391,7 +394,7 @@ sub _getTopicState {
 #   my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;html2tml=1;section='.$section.';originalrev='.$rev;
    my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;section='.$section.';originalrev='.$rev;
 #TODO: make this param up to the editor
-   $saveUrl .= ';html2tml=1' if ( $EDITOR ne 'textarea');
+#   $saveUrl .= ';html2tml=1' if ( $EDITOR ne 'textarea');
    my $viewUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'view').'?rev='.$rev;
    my $restUrl;
    if ($TWiki::Plugins::VERSION > 1.025) {

@@ -44,6 +44,15 @@ function addLoadEvent(func){
   onloadFuncChain = window.onload;
 }
 
+//create the TWiki namespace if needed
+if ( typeof( TWiki ) == "undefined" ) {
+    TWiki = {};
+}
+//create the TWiki.InlineEditPlugin namespace if needed
+if ( typeof( TWiki.InlineEditPlugin ) == "undefined" ) {
+    TWiki.InlineEditPlugin = {};
+}
+
 //show the current state of the topic
 showTopicState = function(stateJSON) {
     var state= eval('('+stateJSON+')');
