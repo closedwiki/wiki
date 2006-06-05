@@ -16,75 +16,81 @@
 #
 */
 
-// not editor object created..
-initialiseInlineEditDiv = function(topicSectionObject) {
-    return;
-}
-
 //TODO: change it to re-size dependant on the number of lines in the textarea.. with minimum
 
 
-//Called by inlineEdit generic functions
-//please define in such a way that it initiates edit mode on the specifed section
-function gotoEditMode(topicSectionObject) {
-    topicSectionObject.modified = 1;    //TODO: make sure there really is a change..
-
-    if ( typeof( topicSectionObject.editDivSection ) == "undefined" ) {
-        var newForm = document.createElement('FORM');
-        newForm.topicSectionObject = topicSectionObject;
-        newForm.name = "componenteditpluginform";
-        newForm.method = "post";
-        newForm.action = topicSectionObject.HTMLdiv.parentNode.action;
-
-        var numberOfLines = topicSectionObject.TMLdiv.innerHTML.split("\n").length;
-        if (numberOfLines < 4) {numberOfLines = 4};
-        if (numberOfLines > 12) {numberOfLines = 12};
-
-        var innerHTML = '<textarea id="componentedittextarea" name="text" width="99%" rows="'+numberOfLines+'">COMPONENTEDITPLUGINTML</textarea>';
-
-        newForm.innerHTML = innerHTML;
-        newForm.elements.namedItem("text").value = topicSectionObject.TMLdiv.innerHTML;
-        newForm.elements.namedItem("text").topicSection =topicSectionObject.topicSection;
-        topicSectionObject.HTMLdiv.parentNode.insertBefore(newForm, topicSectionObject.HTMLdiv);
-        topicSectionObject.editDivSection = newForm;//TODO:this is supposed to be a div element
-
-        //TODO: ***************************************make sure we're using this everwhere we should
-        if (( typeof( getComputedStyle ) != "undefined" )) {
-            //forks for firefox
-            var s = getComputedStyle(topicSectionObject.HTMLdiv, "");
-//            topicSectionObject.editDivSection.elements.namedItem("text").style.height = s.height;
-            topicSectionObject.editDivSection.elements.namedItem("text").style.width = s.width;
-        } else {
-            //IE
-//            topicSectionObject.editDivSection.elements.namedItem("text").style.height = topicSectionObject.HTMLdiv.offsetHeight;
-            topicSectionObject.editDivSection.elements.namedItem("text").style.width = topicSectionObject.HTMLdiv.offsetWidth;
-        }
+//create the TWiki namespace if needed
+if ( typeof( TWiki ) == "undefined" ) {
+    TWiki = {};
+}
+//create the TWiki.InlineEditPlugin namespace if needed
+if ( typeof( TWiki.InlineEditPlugin ) == "undefined" ) {
+    TWiki.InlineEditPlugin = {};
+}
+//create the TWiki.InlineEditPlugin.TextArea Class constructor
+TWiki.InlineEditPlugin.TextArea = function(topicSectionObject) {
+    this.topicSectionObject = topicSectionObject;
+}
+//register this inline editor component with the main factory
+TWiki.InlineEditPlugin.TextArea.register = function() {
+    if ( typeof( TWiki.InlineEditPlugin.editors ) == "undefined" ) {
+        TWiki.InlineEditPlugin.editors = [];
     }
-
-    topicSectionObject.editDivSection.style.display='inline';
-    topicSectionObject.HTMLdiv.style.display='none';
+    TWiki.InlineEditPlugin.editors.push('TWiki.InlineEditPlugin.TextArea');
+}
+//returns true if the section can be edited by this editor
+TWiki.InlineEditPlugin.TextArea.appliesToSection = function(topicSectionObject) {
+    return true;    //TextArea is the fallback editor
 }
 
-hideEdit = function(topicSectionObject) {
-    topicSectionObject.editDivSection.style.display='none';
-    topicSectionObject.HTMLdiv.style.display='inline';
-}
-
-getSaveData = function(topicSectionObject) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//TWiki.InlineEditPlugin.TextArea CLASS functions
+TWiki.InlineEditPlugin.TextArea.prototype.getSaveData = function() {
     var serialzationObj = {};
 
-    serialzationObj.topicSection = topicSectionObject.editDivSection.elements.namedItem("text").topicSection;
-    serialzationObj.value = topicSectionObject.editDivSection.elements.namedItem("text").value;
-    if (topicSectionObject.newSection) {
+    serialzationObj.topicSection = this.topicSectionObject.editDivSection.elements.namedItem("text").topicSection;
+    serialzationObj.value = this.topicSectionObject.editDivSection.elements.namedItem("text").value;
+    if (this.topicSectionObject.newSection) {
         //make a real section of it
         serialzationObj.value = "\n\n"+serialzationObj.value+"\n\n";
     }
     return serialzationObj.toJSONString();
 
 //TODO: recode as object so each editor sends the object it thinks it should
-    if (topicSectionObject.newSection) {
+    if (this.topicSectionObject.newSection) {
         //make a real section of it
-        topicSectionObject.editDivSection.elements.namedItem("text").value = "\n\n"+topicSectionObject.editDivSection.elements.namedItem("text").value+"\n\n";
+        this.topicSectionObject.editDivSection.elements.namedItem("text").value = "\n\n"+this.topicSectionObject.editDivSection.elements.namedItem("text").value+"\n\n";
     }
-    return topicSectionObject.editDivSection.elements.namedItem("text").toJSONString(1);
+    return this.topicSectionObject.editDivSection.elements.namedItem("text").toJSONString(1);
+}
+
+TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
+        var newForm = document.createElement('FORM');
+        newForm.topicSectionObject = this.topicSectionObject;
+        newForm.name = "componenteditpluginform";
+        newForm.method = "post";
+        newForm.action = this.topicSectionObject.HTMLdiv.parentNode.action;
+
+        var numberOfLines = this.topicSectionObject.TMLdiv.innerHTML.split("\n").length;
+        if (numberOfLines < 4) {numberOfLines = 4};
+        if (numberOfLines > 12) {numberOfLines = 12};
+
+        var innerHTML = '<textarea id="componentedittextarea" name="text" width="99%" rows="'+numberOfLines+'">COMPONENTEDITPLUGINTML</textarea>';
+
+        newForm.innerHTML = innerHTML;
+        newForm.elements.namedItem("text").value = this.topicSectionObject.TMLdiv.innerHTML;
+        newForm.elements.namedItem("text").topicSection =this.topicSectionObject.topicSection;
+
+        //TODO: ***************************************make sure we're using this everwhere we should
+        if (( typeof( getComputedStyle ) != "undefined" )) {
+            //forks for firefox
+            var s = getComputedStyle(this.topicSectionObject.HTMLdiv, "");
+//            topicSectionObject.editDivSection.elements.namedItem("text").style.height = s.height;
+            newForm.elements.namedItem("text").style.width = s.width;
+        } else {
+            //IE
+//            topicSectionObject.editDivSection.elements.namedItem("text").style.height = topicSectionObject.HTMLdiv.offsetHeight;
+            newForm.elements.namedItem("text").style.width = this.topicSectionObject.HTMLdiv.offsetWidth;
+        }
+    return newForm;
 }

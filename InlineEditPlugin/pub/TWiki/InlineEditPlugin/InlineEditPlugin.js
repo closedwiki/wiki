@@ -158,7 +158,7 @@ InlineEditOnload = function() {
 
         topicSectionObject.TMLdiv = tmldiv;
         topicSectionObject.TML2HTMLdiv = tml2htmldiv;
-        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
+//        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
 
         topicSections.push(topicSectionObject);
     }
@@ -168,6 +168,7 @@ gotoEditModeFromEvent = function(event) {
     var topicSectionObject = getTopicSectionObject(event);
     gotoEditMode(topicSectionObject);
 
+    //add the save, cancel, add new section buttons
     if (!topicSectionObject.editDivSection.adorned) {
         topicSectionObject.editDivSection.adorned = 1;
 
@@ -201,6 +202,37 @@ gotoEditModeFromEvent = function(event) {
     }
 }
 
+function gotoEditMode(topicSectionObject) {
+    topicSectionObject.modified = 1;    //TODO: make sure there really is a change..
+
+    //for the delayed edit creation case (preffered)
+    if ( typeof( topicSectionObject.editDivSection ) == "undefined" ) {
+
+        //got through the registered editors, find the first applicable one, and instanciate it.
+        for (var i=0;i<TWiki.InlineEditPlugin.editors.length;i++) {
+            var appliesTo = TWiki.InlineEditPlugin.editors[i]+'.appliesToSection(topicSectionObject)';
+            if (eval(appliesTo)) {
+                var newEditor = 'new '+TWiki.InlineEditPlugin.editors[i]+'(topicSectionObject)';
+                topicSectionObject.editSectionObject = eval(newEditor);
+                topicSectionObject.editDivSection = topicSectionObject.editSectionObject.createEditSection();
+
+                topicSectionObject.HTMLdiv.parentNode.insertBefore(topicSectionObject.editDivSection, topicSectionObject.HTMLdiv);
+                break;
+            }
+        }
+    }
+    if (typeof( topicSectionObject.editDivSection ) == "undefined") {
+        alert('sorry, no applicable inline editor registered');
+    } else {
+        topicSectionObject.editDivSection.style.display='inline';
+        topicSectionObject.HTMLdiv.style.display='none';
+    }
+}
+
+hideEdit = function(topicSectionObject) {
+    topicSectionObject.editDivSection.style.display='none';
+    topicSectionObject.HTMLdiv.style.display='inline';
+}
 
 addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
     var originatingTopicSectionObject = getTopicSectionObject(event);
@@ -249,7 +281,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
 
         topicSectionObject.TMLdiv = tmldiv;
         topicSectionObject.TML2HTMLdiv = tml2htmldiv;
-        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
+//        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
 
         //insert it..
         var topicSectionsArrayIndex;
@@ -323,7 +355,7 @@ saveAllSections = function(event) {
         if (!topicSections[i].deleted) {
             sectionOrderArray.push(topicSections[i].topicSection);
             if (topicSections[i].modified) {
-                data = data + getSaveData(topicSections[i])+'####';
+                data = data + topicSections[i].editSectionObject.getSaveData()+'####';
                 hideEdit(topicSections[i]);
             }
         }
