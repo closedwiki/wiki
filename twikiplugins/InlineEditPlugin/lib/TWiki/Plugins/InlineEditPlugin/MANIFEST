@@ -464,4 +464,4 @@ templates/inlineeditplugin.wikiwyg.tmpl
 templates/inlineeditplugin.dojoedit.tmpl
 templates/inlineeditplugin.textarea.tmpl
 templates/inlineeditplugin.prejavascript.tmpl
-templates/edit.inlineeditplugin.tmpl
+
