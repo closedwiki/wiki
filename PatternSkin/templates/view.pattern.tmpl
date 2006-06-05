@@ -51,7 +51,7 @@
 
 %TMPL:DEF{"breadcrumb:wikitoolname"}%[[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]]%TMPL:P{"topicpathseparator"}%%TMPL:END%
 
-%TMPL:DEF{"breadcrumb:currentweb"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> %MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a> %TMPL:END%
+%TMPL:DEF{"breadcrumb:currentweb"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg-small}%" border="0" alt="" width="13" height="13" style="background-color:%WEBBGCOLOR%" /> %MAKETEXT{"[_1] Web" args="<nop>%WEB%"}%</a> %TMPL:END%
 
 %TMPL:DEF{"breadcrumb:currenttopic"}%%TMPL:P{"topicpathseparator"}%<span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span>%TMPL:END%
 
