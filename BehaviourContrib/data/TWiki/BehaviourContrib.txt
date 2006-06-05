@@ -3,7 +3,7 @@
 
 This contrib packages the third-party =Behaviour= Javascript event framework, available from http://bennolan.com/behaviour/.
 
-Javascript file: [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.js][behaviour.js]]
+Javascript file: [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.js][behaviour.js]]. The [[%PUBURL%/%TWIKIWEB%/%TOPIC%/behaviour.compressed.js][compressed javascript file]] has been processed by [[http://alex.dojotoolkit.org/shrinksafe/][ShrinkSafe]].
 
 From the website:
 <blockquote style="border:1px solid #ddd; padding:.5em 1em;">
