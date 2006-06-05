@@ -15,18 +15,8 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 */
-
 //TODO: change it to re-size dependant on the number of lines in the textarea.. with minimum
 
-
-//create the TWiki namespace if needed
-if ( typeof( TWiki ) == "undefined" ) {
-    TWiki = {};
-}
-//create the TWiki.InlineEditPlugin namespace if needed
-if ( typeof( TWiki.InlineEditPlugin ) == "undefined" ) {
-    TWiki.InlineEditPlugin = {};
-}
 //create the TWiki.InlineEditPlugin.TextArea Class constructor
 TWiki.InlineEditPlugin.TextArea = function(topicSectionObject) {
     this.topicSectionObject = topicSectionObject;
