@@ -31,25 +31,25 @@
 %TMPL:DEF{"activatable_combo_edit"}%%TMPL:P{"activatable_raw_edit"}%%TMPL:P{"sep"}%%TMPL:END%
 
 
-%TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="A" title="%MAKETEXT{"Attach an image or document to this topic"}%" rel="nofollow">%MAKETEXT{"&Attach"}%</a>%TMPL:END%
+%TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%" accesskey="A" title="%MAKETEXT{"Attach an image or document to this topic"}%" rel="nofollow">%MAKETEXT{"&Attach"}%</a>%TMPL:END%
 %TMPL:DEF{"inactive_attach"}%<strike>%MAKETEXT{"Attach"}%</strike>%TMPL:END%
 %TMPL:DEF{"activatable_attach"}%%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%%TMPL:END%
 
 
-%TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%MAKETEXT{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%MAKETEXT{"&More topic actions"}%</a>%TMPL:END%
+%TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%MAKETEXT{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%MAKETEXT{"&More topic actions"}%</a>%TMPL:END%
 %TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%MAKETEXT{"More topic actions..."}%</strike></span>%TMPL:END%
 %TMPL:DEF{"activatable_more"}%%TMPL:P{context="inactive" then="inactive_more" else="active_more"}%%TMPL:END%
 
 
-%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=viewprint%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
+%TMPL:DEF{"printable"}%<a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?template=viewprint%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel="nofollow">%MAKETEXT{"&Printable"}%</a>%TMPL:END%
 
 
 %TMPL:DEF{"raw"}%%IF{"defined raw" then="%TMPL:P{"link_in_raw_to_view"}%" else="%TMPL:P{"link_in_view_to_raw"}%"}%%TMPL:END%
-%TMPL:DEF{"link_in_view_to_raw"}%<a href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%' title='%MAKETEXT{"View raw text without formatting"}%' accesskey='r' rel='nofollow'>%MAKETEXT{"&Raw View"}%</a>%TMPL:END%
+%TMPL:DEF{"link_in_view_to_raw"}%<a href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on%REVARG%' title='%MAKETEXT{"View raw text without formatting"}%' accesskey='r' rel='nofollow'>%MAKETEXT{"&Raw View"}%</a>%TMPL:END%
 %TMPL:DEF{"link_in_raw_to_view"}%%TMPL:P{"view_topic"}%%TMPL:END%
 
 
-%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey="b">%MAKETEXT{"We&b"}%</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll Webs"}%</a>%TMPL:END%
+%TMPL:DEF{"backlinks"}%%MAKETEXT{"Backlinks"}%: <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey="b">%MAKETEXT{"We&b"}%</a>, <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll Webs"}%</a>%TMPL:END%
 
 
 %TMPL:DEF{"history_rdiff"}%<a href="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%?type=history" title="%MAKETEXT{"View total topic history"}%" accesskey="H" rel="nofollow">%MAKETEXT{"&History"}%</a>%TMPL:END%
@@ -65,4 +65,3 @@
 
 
 %TMPL:DEF{"revisions"}%<span class="patternRevision">%TMPL:P{context="HistoryPluginEnabled" then="history_history" else="history_rdiff"}%: %TMPL:P{context="CompareRevisionsAddonPluginEnabled" then="revisions_compare" else="revisions_rdiff"}%</span>%TMPL:END%
-
