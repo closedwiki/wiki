@@ -34,7 +34,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Select the editors, in order of preference (list the more specialised ones first)
    * choose from (wikiwyg / tinymce / textarea)
    * only textarea works in this release
-      * Set EDITORS = textarea
+      * Set EDITORS = tableedit, textarea
 
    * If defined, we use the WysiwygPlugin 's TML2HTML, while if undefined, we use the new and less tested javascript version
    * don't set this unless you have alot of spare CPU on your server

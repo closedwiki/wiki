@@ -206,7 +206,7 @@ gotoEditModeFromEvent = function(event) {
         add_below = add_below + makeFormButton('add_below', 'Add Table Below', 'addNewSection(event, 0, 1);');
         post.innerHTML = add_below;
 
-        topicSectionObject.editDivSection.insertBefore(pre, topicSectionObject.editDivSection.elements[0]);
+        topicSectionObject.editDivSection.insertBefore(pre, topicSectionObject.editDivSection.firstChild);
         topicSectionObject.editDivSection.insertBefore(post, topicSectionObject.editDivSection.elements[topicSectionObject.editDivSection.elements.length-1].nextSibling);
     }
 }
