@@ -45,8 +45,10 @@ showReply = function(reply) {
     }
 }
 
-proto = new Subclass('Wikiwyg.ClientServer', 'Wikiwyg');
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//WikiWyg impl
 
+proto = new Subclass('Wikiwyg.ClientServer', 'Wikiwyg');
 
 proto.saveChanges = function() {
 //TODO: looks like the TWikiVariable span striping is different now?
