@@ -139,15 +139,15 @@ sub lookupUser {
     }
 
     if( $opts{login} ) {
-        if( $user = $users->findUser($opts{login},$opts{login},1)) {
+        if( $user = $users->findUser($opts{login},undef,1)) {
             return $user;
         }
     }
 
     if( $opts{email} ) {
         #if we have the UserMapping changes (post 4.0.3)
-        if (defined ($users->findUserByEmail)) {
-            return $users->findUserByEmail();
+        if (defined &TWiki::Users::findUserByEmail) {
+            return $users->findUserByEmail( $opts{email} );
         } else {
             # SMELL: there is no way in TWiki to map from an email back to a user, so
         	# we have to cheat. We do this as follows:
@@ -160,8 +160,8 @@ sub lookupUser {
 
             	}
             }
+            return $users->{_MAP_OF_EMAILS}->{$opts{email}};
         }
-        return $users->{_MAP_OF_EMAILS}->{$opts{email}};
     }
 
     return undef;
@@ -188,6 +188,8 @@ The =\%acls= object may safely be written to e.g. for subsequent use with =setAC
 
 __Note__ topic ACLs are *not* the final permissions used to control access to a topic. Web level restrictions may apply that prevent certain access modes for individual topics.
 
+*WARNING* when you use =setACLs= to set the ACLs of a web or topic, the change is not committed to the database until the current session exist. After =setACLs= has been called on a web or topic, the results of =getACLS= for that web/topic are *undefined*.
+
 =cut
 
 sub getACLs {
@@ -211,43 +213,44 @@ sub getACLs {
         }
     }
 
-    my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-    my $modeRE = join('|', map { uc( $_ ) } @$modes );
-    while( $text =~ s/^(?:   |\t)+\* Set (ALLOW|DENY)$context($modeRE) = *(.*)$//m ) {
-        my $perm = $1;
-        my $mode = $2;
-        my @lusers =
-          grep { $_ }
-            map {
-                my( $w, $t ) = TWiki::Func::normalizeWebTopicName(
-                    $TWiki::cfg{UsersWebName}, $_);
-                lookupUser( wikiname => "$w.$t");
-            } split( /[ ,]+/, $3 || '' );
+    foreach my $mode ( @$modes ) {
+        foreach my $perm ( 'ALLOW', 'DENY' ) {
+            my $users = $TWiki::Plugins::SESSION->{prefs}->getTopicPreferencesValue(
+                $perm.$context.$mode, $web, $topic );
 
-        # expand groups
-        my @users;
-        while( scalar( @lusers )) {
-            my $user = pop( @lusers );
-            if( $user->isGroup()) {
-                # expand groups and add individual users
-                my $group = $user->groupMembers();
-                push( @lusers, @$group ) if $group;
-            }
-            push( @users, $user->webDotWikiName() );
-        }
+            my @lusers =
+              grep { $_ }
+                map {
+                    my( $w, $t ) = TWiki::Func::normalizeWebTopicName(
+                        $TWiki::cfg{UsersWebName}, $_);
+                    lookupUser( wikiname => "$w.$t");
+                } split( /[ ,]+/, $users || '' );
 
-        if( $perm eq 'ALLOW' ) {
-            # If ALLOW, only users in the ALLOW list are permitted, so change
-            # the default for all other users to 0.
-            foreach my $user ( @knownusers ) {
-                $acls{$user}->{$mode} = 0;
+            # expand groups
+            my @users;
+            while( scalar( @lusers )) {
+                my $user = pop( @lusers );
+                if( $user->isGroup()) {
+                    # expand groups and add individual users
+                    my $group = $user->groupMembers();
+                    push( @lusers, @$group ) if $group;
+                }
+                push( @users, $user->webDotWikiName() );
             }
-            foreach my $user ( @users ) {
-                $acls{$user}->{$mode} = 1;
-            }
-        } else {
-            foreach my $user ( @users ) {
-                $acls{$user}->{$mode} = 0;
+
+            if( $perm eq 'ALLOW' ) {
+                # If ALLOW, only users in the ALLOW list are permitted,
+                # so change the default for all other users to 0.
+                foreach my $user ( @knownusers ) {
+                    $acls{$user}->{$mode} = 0;
+                }
+                foreach my $user ( @users ) {
+                    $acls{$user}->{$mode} = 1;
+                }
+            } else {
+                foreach my $user ( @users ) {
+                    $acls{$user}->{$mode} = 0;
+                }
             }
         }
     }
@@ -257,21 +260,24 @@ sub getACLs {
 
 =pod
 
----++ setACLs( \@modes, $web, $topic, \%acls, $nosearchall )
+---++ setACLs( \@modes, \%acls, $web, $topic, $plainText )
 Set the access controls on the named topic.
    * =\@modes= - list of access modes you want to set; e.g. [ "VIEW","CHANGE" ]
    * =$web= - the web
    * =$topic= - if =undef=, then this is the ACL for the web. otherwise it's for the topic.
-   * =\%acls= - must be a hash indexed by *user object*. This maps to a hash indexed by *access mode* e.g. =VIEW=, =CHANGE= etc. This in turn maps to a boolean value; 1 for allowed, and 0 for denied. See =getACLs= for an example of this kind of object.
+   * =\%acls= - must be a hash indexed by *user name* (web.wikiname). This maps to a hash indexed by *access mode* e.g. =VIEW=, =CHANGE= etc. This in turn maps to a boolean value; 1 for allowed, and 0 for denied. See =getACLs= for an example of this kind of object.
+   * =$plainText - if set, permissions will be written using plain text (* Set) in the topic body rather than being stored in meta-data (the default)
 
 Access modes used in \%acls that do not appear in \@modes are simply ignored.
 
 If there are any errors, then an =Error::Simple= will be thrown.
 
+*WARNING* when you use =setACLs= to set the ACLs of a web or topic, the change is not committed to the database until the current session exist. After =setACLs= has been called on a web or topic, the results of =getACLS= for that web/topic are *undefined*.
+
 =cut
 
 sub setACLs {
-    my( $modes, $acls, $web, $topic ) = @_;
+    my( $modes, $acls, $web, $topic, $plainText ) = @_;
 
     my $context = 'TOPIC';
     unless( $topic ) {
@@ -283,22 +289,41 @@ sub setACLs {
 
     my @knownusers = map { $_->webDotWikiName() }
       ( @{getListOfUsers()}, @{getListOfGroups()} );
-
-    $text .= "\n" unless $text =~ /\n$/s;
+    if( $plainText ) {
+        $text .= "\n" unless $text =~ /\n$/s;
+    }
 
     foreach my $op ( @$modes ) {
         my @allowed = grep { $acls->{$_}->{$op} } @knownusers;
         my @denied = grep { !$acls->{$_}->{$op} } @knownusers;
+        # Remove existing preferences of this type in text
         $text =~ s/^(   |\t)+\* Set (ALLOW|DENY)$context$op =.*$//gm;
+        $meta->remove('PREFERENCE', 'DENY'.$context.$op);
+        $meta->remove('PREFERENCE', 'ALLOW'.$context.$op);
+
         if( scalar( @denied )) {
             # Work out the access modes
-            my $line;
+            my $name;
+            my $set;
             if( scalar( @denied ) <= scalar( @allowed )) {
-                $line = "   * Set DENY$context$op = ".join(' ', @denied)."\n";
+                $name = 'DENY'.$context.$op;
+                $set = \@denied;
             } else {
-                $line = "   * Set ALLOW$context$op = ".join(' ', @allowed)."\n";
+                $name = 'ALLOW'.$context.$op;
+                $set = \@allowed;
             }
-            $text .= $line;
+            if ($plainText) {
+                $text .= "   * Set $name = ". join(' ', @$set)."\n";
+            } else {
+                $meta->putKeyed( 'PREFERENCE',
+                                 {
+                                     name => $name,
+                                     type => 'Set',
+                                     title => 'PREFERENCE_'.$name,
+                                     value => join(' ', @$set)
+                                    }
+                                );
+            }
         }
     }
 
