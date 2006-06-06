@@ -1,5 +1,5 @@
-#
 # Copyright (C) 2005 Crawford Currie, http://c-dot.co.uk
+# Copyright (C) 2006 Martin Cleaver, http://www.cleaver.org
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -12,46 +12,41 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-# PDF writer module for PublishContrib
-#
+# driver for writing individual pdfs for PublishContrib
 
 use strict;
 
-package TWiki::Contrib::PublishContrib::pdf;
+package TWiki::Contrib::PublishContrib::pdffiles;
 
 use Error qw( :try );
 use TWiki::Contrib::PublishContrib::file;
 use TWiki::Contrib::PublishContrib::PDFWriter;
- 
-@TWiki::Contrib::PublishContrib::pdf::ISA = qw( TWiki::Contrib::PublishContrib::file );
-
-my $publishWeb;
+my $debug = 1;
+@TWiki::Contrib::PublishContrib::pdffiles::ISA = qw( TWiki::Contrib::PublishContrib::file
+						     TWiki::Contrib::PublishContrib::PDFWriter);
 
 sub new {
     my( $class, $path, $web, $genopt ) = @_;
     my $this = bless( $class->SUPER::new( $path, "${web}_$$" ), $class );
     $this->{genopt} = $genopt;
-    $publishWeb = $web;
     return $this;
 }
 
 sub addString {
     my( $this, $string, $file) = @_;
     $this->SUPER::addString( $string, $file );
-    push( @{$this->{files}}, "$this->{path}/$this->{web}/$file" )
-      if( $file =~ /\.html$/ );
+    $this->writePdf("$this->{path}/$this->{web}/$file.pdf", $file, $debug ) if( $file =~ /\.html$/ );
 }
 
 sub addFile {
     my( $this, $from, $to ) = @_;
     $this->SUPER::addFile( $from, $to );
-    push( @{$this->{files}}, "$this->{path}/$this->{web}/$to" )
-      if( $to =~ /\.html$/ );
+    $this->writePdf( "$this->{path}/$this->{web}/$to.pdf", $to, $debug ) if( $to =~ /\.html$/ );	
 }
 
 sub close {
     my $this = shift;
-    TWiki::Contrib::PublishContrib::PDFWriter->writePdf( "$this->{path}/$publishWeb.pdf", \@{$this->{files}} );
 }
 
 1;
+
