@@ -201,8 +201,7 @@ sub publish {
     my @templatesWanted = split /,/, $templatesWanted;
 
     foreach my $template (@templatesWanted) {
-        $template =~ s/^\s+//;
-        $template =~ s/\s+\z//;
+	$template =~ s/^\s+//, s/\s+\z//;
         $templatesReferenced{$template} = 1;
         print "-- template=$template$br" if $debug;
         my $dir = $TWiki::cfg{PublishContrib}{Dir}.'/'._dirForTemplate($template);
@@ -244,7 +243,7 @@ sub publish {
 }
 
 sub arrayDiff { 
-    # from http://perl.active-venture.com/pod/perlfaq4-dataarrays.html
+# from http://perl.active-venture.com/pod/perlfaq4-dataarrays.html
     my ($array1, $array2) = @_;
     my (@union, @intersection, @difference);
     @union = @intersection = @difference = ();
@@ -274,6 +273,7 @@ sub publishWeb {
     # Choose template.
     my $tmpl = TWiki::Func::readTemplate($template, $skin);
     die "Couldn't find template\n" if(!$tmpl);
+	my $filetype = _filetypeForTemplate($template);
 
     # Attempt to render each included page.
     my %copied;
@@ -285,7 +285,7 @@ sub publishWeb {
             print "${os}excluded$cs";
         } else {
             try {
-                publishTopic($web, $topic, $wikiName, $skin, $tmpl,
+		publishTopic($web, $topic, $wikiName, $skin, $filetype, $tmpl,
                              \%copied, $filter, $archive);
                 print "published";
             } catch Error::Simple with {
@@ -302,9 +302,11 @@ sub publishWeb {
 #   * =$web= - which web to publish
 #   * =$topic= - which topic to publish
 #   * =$skin= - which skin to use
+#   * =$filetype= - which filetype (pdf, html) to use as a suffix on the file generated
+
 #   * =\%copied= - map of copied resources to new locations
 sub publishTopic {
-    my ($web, $topic, $wikiName, $skin, $tmpl, $copied, $filter, $archive) = @_;
+    my ($web, $topic, $wikiName, $skin, $filetype, $tmpl, $copied, $filter, $archive) = @_;
 
     # Read topic data.
     my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
@@ -401,8 +403,22 @@ sub publishTopic {
     $tmpl =~ s/<nop>//g;
 
     # Write the resulting HTML.
-    $archive->addString( $tmpl, $topic.'.html' );
+    $archive->addString( $tmpl, $topic.$filetype);
 }
+
+# rewrite 
+#   Topic?template=viewprint%REVARG%.html?template=viewprint%REVARG%
+# to
+#   _viewprint/Topic.html
+#
+#   * =$web=
+#   * =$tmpl=
+#   * =$topic=
+#   * =$template=
+# return
+#   * 
+# side effects
+
 
 sub _rewriteTemplateReferences {
     my ($tmpl, $web, $topic, $template, $redundantduplicate) = @_;
@@ -412,7 +428,7 @@ sub _rewriteTemplateReferences {
     #$link:
     # Web/ContactUs?template=viewprint%REVARG%.html? "
 
-    my $newLink = $TWiki::cfg{PublishContrib}{URL}.'/'._dirForTemplate($template)."/".$web.'/'.$topic.'.html';
+       my $newLink = $TWiki::cfg{PublishContrib}{URL}.'/'._dirForTemplate($template)."/".$web.'/'.$topic._filetypeForTemplate($template);
     print "---- Found alternate template use on $topic template=$template $br".
       "---- Changed to $newLink$br" if $debug;
     $templatesReferenced{$template} = 1;
@@ -428,6 +444,13 @@ sub _dirForTemplate {
     return '' if ($template eq 'view');
     return $template if ($templateLocation eq '');
     return $templateLocation."/".$template;
+}
+
+# SMELL this needs to be table driven
+sub _filetypeForTemplate {
+	my ($template) = @_;
+	return '.pdf' if ($template eq 'viewpdf');
+	return '.html';
 }
 
 #  Copy a resource (image, style sheet, etc.) from twiki/pub/%WEB% to
@@ -450,6 +473,9 @@ sub _copyResource {
     } else {
         # Nope, it's new. Gotta copy it to new location.
         # Split resource name into path (relative to pub/%WEB%) and leaf name.
+
+	print "${os}Need it$cs $br" if $debug;
+
 
         my $file = $rsrcName;
         $file =~ s(^(.*)\/)()o;
@@ -509,7 +535,7 @@ sub _topicURL {
     my( $path, $web ) = @_;
     my $extra = '';
 
-    if( $path && $path =~ s/([#\?].*)$// ) {
+    if( $path && $path =~ /([#\?].*)$/ ) {
         $extra = $1;
     }
 
