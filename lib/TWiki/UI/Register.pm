@@ -1058,8 +1058,8 @@ sub _validateRegistration {
     }
 
     if ($TWiki::cfg{MinPasswordLength} &&
-          (!$data->{PasswordA} ||
-             length($data->{PasswordA}) < $TWiki::cfg{MinPasswordLength})) {
+          (!$data->{passwordA} ||
+             length($data->{passwordA}) < $TWiki::cfg{MinPasswordLength})) {
         throw TWiki::OopsException(
             'attention',
             web => $data->{webName},
@@ -1068,7 +1068,7 @@ sub _validateRegistration {
             params => [ $TWiki::cfg{MinPasswordLength} ] );
     }
 
-    if (exists $data->{PasswordA}) {
+    if (exists $data->{passwordA}) {
         # check if passwords are identical
         if ( $data->{passwordA} ne $data->{passwordB} ) {
             throw TWiki::OopsException( 'attention',
