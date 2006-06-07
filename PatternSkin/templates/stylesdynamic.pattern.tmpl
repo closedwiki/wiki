@@ -69,4 +69,6 @@
 	.patternPreviewPage #patternMain {
 		background-image:url(%PREVIEWBGIMAGE%);
 	}
+	%IF{ "defined PAGEBGCOLOR and $ PAGEBGCOLOR != ''" then='html body, #patternPage, #patternBottomBar, .patternPreviewArea, #patternOuter, #patternTopBar { background-color:%PAGEBGCOLOR%;}
+	#patternOuter {background-image:none;}'}%
 </style>%TMPL:END%
