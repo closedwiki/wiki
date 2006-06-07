@@ -32,9 +32,10 @@ use vars qw( $session $theTopic $theWeb $topic $web $attributes $text $refText
 	     @processedTopics @unknownParams
 	     $months_rx $date_rx $daterange_rx $bullet_rx $bulletdate_rx $bulletdaterange_rx $dow_rx $day_rx
 	     $year_rx $monthyear_rx $monthyearrange_rx
-	     $hour_rx $minute_rx $am_rx $pm_rx $ampm_rx $time_rx $timerange_rx
+	     $hour_rx $minute_rx $am_rx $pm_rx $ampm_rx $time_rx $timerange_rx $timerangestrict_rx
 	     $dowrange_rx 
 	     $cgi $pluginName
+	     $ttid
 	 );
 
 $pluginName = "TimeTablePlugin";
@@ -48,6 +49,8 @@ sub expand {
 	$refText = $text; $theWeb=$web; $theTopic=$topic;
 
 	&_initDefaults() unless $defaultsInitialized;
+
+	$ttid++;
 
 	return &_createUnknownParamsMessage() unless &_initOptions($attributes);
 
@@ -66,7 +69,7 @@ sub inflate {
 	&_initDefaults() unless $defaultsInitialized;
 	return &_createUnknownParamsMessage() unless &_initOptions('');
 
-	my $cgi = new CGI;
+	$cgi = &TWiki::Func::getCgiQuery();
 
 	my $title = &_renderTime($starttime,"12pm").'-'.&_renderTime($endtime,"12pm")
 			.' / '.&_renderTime($starttime,24).'-'.&_renderTime($endtime,24);
@@ -112,7 +115,7 @@ sub _initDefaults {
 		year => undef,
 		daynames => undef,
 		monthnames => undef,
-		headerformat => '<font size="-2">%a</font>',
+		headerformat => '<font title="%A - %d %b %Y" size="-2">%a</font>',
 		showweekend => 1,		# show weekend
 		descrlimit => 10,		# per line description text limit
 		showtimeline => 'both',		# 
@@ -131,16 +134,18 @@ sub _initDefaults {
 		workingbgcolor => 'white',	
 		workingfgcolor => 'black',
 		compatmode => 0, 		# compatibility mode
-		cmheaderformat => '<font size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
+		cmheaderformat => '<font title="%A - %d %b %Y" size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
                 todaybgcolor    => undef,       # background color for today cells (usefull for a defined startdate)
                 todayfgcolor    => undef,       # foreground color for today cells (usefull for a dark todaybgcolor)
 		days	=> 7,			# XXX for later use
 		nowfgcolor => undef,
 		nowbgcolor => undef,
 		forcestartdate => 0,
+		navprev => '&lt;&lt;',
+		navnext => '&gt;&gt;',
 	);
 
-	@renderedOptions = ('tablecaption', 'name');
+	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext');
 	@flagOptions = ( 'compatmode', 'showweekend', 'displaytime', 'forcestartdate' );
 
 
@@ -148,6 +153,8 @@ sub _initDefaults {
                     Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
 
         %daysofweek = ( Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6, Sun=>7 );
+
+	$ttid = 0;
 
         $defaultsInitialized = 1;
 
@@ -175,6 +182,8 @@ sub _initRegexs {
 	
 	$time_rx = "$hour_rx([\.:]$minute_rx)?$ampm_rx?";
 	$timerange_rx="$time_rx\\s*-\\s*$time_rx";
+	
+	$timerangestrict_rx="$time_rx-$time_rx";
 
 	$dowrange_rx="($dow_rx)\\s*-\\s*($dow_rx)";
 }
@@ -257,7 +266,8 @@ sub _initOptions {
 
         @processedTopics = ( );
 
-	$cgi = CGI->new();
+	$cgi = &TWiki::Func::getCgiQuery();
+
         return 1;
 
 
@@ -388,11 +398,12 @@ sub _render {
 
 	my($tr,$td);
 	$text .= '<font size="-2">';
+	$text .= $cgi->a({-name=>"ttpa$ttid"});
 	$text .= $cgi->start_table({-bgcolor=>$options{'tablebgcolor'}, -cellpadding=>'0',-cellspacing=>'1', -id=>'timeTablePluginTable'});
 	$text .= $cgi->caption($options{'tablecaption'});
 
 	### render weekday header:
-	$tr=$cgi->td($options{name}); 
+	$tr=$cgi->td($options{'name'}." ".&_renderNav(0)); 
 	for (my $day = 0; $day < $options{'days'}; $day++) {
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$day);
 		my $dow = Day_of_Week($yy1,$mm1,$dd1);
@@ -406,6 +417,7 @@ sub _render {
 
 		$tr .= $cgi->td({-style=>"color:$colfgcolor", -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
 	}
+	$tr.=$cgi->td(&_renderNav(1));
 	$text .= $cgi->Tr($tr);
 	$text .= "\n";
 
@@ -476,6 +488,34 @@ sub _render {
 
 
 	return $text;
+}
+# =========================
+sub _renderNav {
+	my ($next) = @_;
+	my $nav="";
+	return "" if !$options{'compatmode'};
+	my $query = &TWiki::Func::getCgiQuery();
+
+	my $qpttid = $query->param('ttpid')?$query->param('ttpid'):$ttid;
+	my $ttppage = $query->param('ttppage')?$query->param('ttppage'):0;
+
+	$ttppage=0 unless ($ttid eq $qpttid);
+	$ttppage+= ($next?+1:-1);
+
+	my $newcgi = new CGI($cgi);
+	$newcgi->param(-name=>'ttpid',-value=>$ttid);
+	$newcgi->param(-name=>'ttppage',-value=>$ttppage);
+	my $href = $newcgi->self_url();
+
+	$href=~s/\#.*$//;
+	$href.="#ttpa$ttid";
+
+	if ($next) {
+		$nav.="&nbsp;".$cgi->a({-href=>$href}, $options{'navnext'});
+	} else {	
+		$nav.="&nbsp;".$cgi->a({-href=>$href}, $options{'navprev'});
+	}
+	return $nav;
 }
 # =========================
 sub _renderText {
@@ -675,6 +715,16 @@ sub _getStartDate() {
 		my $dow = Day_of_Week($yy, $mm, $dd);
 		($yy,$mm,$dd)=Add_Delta_Days($yy, $mm, $dd, 1-$dow);
 	}
+	if ($options{'compatmode'}) {
+		my $qpttpid = $cgi->param('ttpid');
+		my $qpttppage = $cgi->param('ttppage');
+		
+		if ($qpttpid eq $ttid) {
+
+			($yy,$mm,$dd) = Add_Delta_Days($yy, $mm, $dd, $qpttppage*$options{'days'});
+
+		}
+	}
 
         return ($dd,$mm,$yy);
 }
@@ -845,6 +895,8 @@ sub _fetchCompat {
 		$line =~ s/%TTCM{(.*?)}%//;
 		$tt=$1;
 		($starttime,$endtime,$fgcolor,$bgcolor) = _getTTCMValues($tt);
+	} elsif ($line =~ s/($timerangestrict_rx(,\S+)*)//) {
+		($starttime,$endtime,$fgcolor,$bgcolor) = _getTTCMValues($1);
 	} else {
 		$starttime=0; $endtime=24*60; $fgcolor=undef; $bgcolor=undef;
 	}
