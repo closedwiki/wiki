@@ -54,13 +54,13 @@
 
 /* LAYOUT ELEMENTS */
 
-#patternTopBar{
-	background-color:#fff;
+#patternTopBar {
+	background-color:#fff; /*BG1*/
 	border-color:#ccc;
 }
 #patternMain { /* don't set a background here; use patternOuter */ }
 #patternOuter {
-	background-color:#fff; /*** Sets background of center col***/
+	background-color:#fff; /*BG1*/ /*** Sets background of center col***/
 	border-color:#ccc;
 }
 #patternLeftBar, #patternLeftBarContents { /* don't set a background here; use patternWrapper */ }
@@ -68,7 +68,7 @@
 	background-color:#F6FAFD; /*BG13*/
 }
 #patternBottomBar {
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 	border-color:#ccc;
 }
 #patternBottomBarContents,
