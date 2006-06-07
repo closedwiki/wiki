@@ -47,17 +47,19 @@ TWiki.InlineEditPlugin.TableEdit.prototype.getSaveData = function() {
 
     serialzationObj.topicSection = this.topicSectionObject.topicSection;
     var reconstitutedTable ='|';
+    var elementAddress;//[0] == section [1] == line [2] = row
     var line;
     for (var i=0;i<this.topicSectionObject.editDivSection.elements.length;i++) {
         if (this.topicSectionObject.editDivSection.elements[i].name != 'text') {
             continue;
         }
+        elementAddress = this.topicSectionObject.editDivSection.elements[i].id.split(",");
         if (line == undefined) {
-            line = this.topicSectionObject.editDivSection.elements[i].id;
+            line = elementAddress[1];
         }
-        if (this.topicSectionObject.editDivSection.elements[i].id != line) {
+        if (elementAddress[1] != line) {
             reconstitutedTable = reconstitutedTable + '\n|';
-            line = this.topicSectionObject.editDivSection.elements[i].id;
+            line = elementAddress[1];
         }
 
         reconstitutedTable = reconstitutedTable + this.topicSectionObject.editDivSection.elements[i].value;
@@ -80,7 +82,6 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
         newForm.method = "post";
         newForm.action = this.topicSectionObject.HTMLdiv.parentNode.action;
 
-//        var innerHTML = 'TableEdit<textarea id="componentedittextarea" name="text" width="99%" rows="'+numberOfLines+'">COMPONENTEDITPLUGINTML</textarea>';
     var innerHTML = '';
     var lines = this.topicSectionObject.TMLdiv.innerHTML.split("\n");
     var maxColumns = 0;
@@ -92,13 +93,25 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
         if (cells.length > maxColumns) {
             maxColumns = cells.length;
         }
+        var largestLength = 0;
+        var largestIndex = 1;
         for (var j=1; j< cells.length-1;j++) {
-            innerHTML = innerHTML + '<td><textarea id="'+i+'" name="text" width="99%" >'+cells[j]+'</textarea></td>';
+            if (cells[j].length > largestLength) {
+                largestLength = cells[j].length;
+                largestIndex = j;
+            }
+        }
+        var defaultNumberOfCols = 20;
+        var defaultNumberOfRows = countLines(cells[largestIndex], defaultNumberOfCols);
+        for (var j=1; j< cells.length-1;j++) {
+            innerHTML = innerHTML + '<td><textarea rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" onkeyup="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" onclick="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" id="'+this.topicSectionObject.topicSection+','+i+','+j+'" name="text" width="99%" >'+cells[j]+'</textarea></td>';
+//            innerHTML = innerHTML + '<td>'+cells[j]+'</td>';
         }
         innerHTML = innerHTML + '</tr>';
     }
     //add colunm manipulation buttons
-    var columnActions = '<tr>';
+    var columnActions = '';
+    columnActions = columnActions+ '<tr>';
     columnActions = columnActions + '<td>'+makeFormButton('add_row', '+', 'addRow(event);', 1);
     columnActions = columnActions +'</td>';
     for (var j=1; j< maxColumns-1;j++) {
@@ -107,9 +120,34 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
     }
     columnActions = columnActions + '</tr>';
 
-    innerHTML = '<table>' + columnActions + innerHTML + '</table>';
+    innerHTML = '<table border="1">' + columnActions + innerHTML + '</table>';
 
     newForm.innerHTML = innerHTML;
 
     return newForm;
+}
+
+TWiki.InlineEditPlugin.TableEdit.TextAreaResize = function(event) {
+    var tg = (event.target) ? event.target : event.srcElement;
+
+    elementAddress = tg.id.split(",");
+
+    tg.rows = Math.max(1, tg.rows);
+    tg.cols = Math.max(20, tg.cols);
+
+    //resize the textarea to fit the text - assume that width is fixed.
+    var letterCount = tg.value.length;
+    var neededRows = countLines(tg.value, tg.cols);
+    if (tg.rows >= neededRows) {
+        return;
+    }
+
+    for (var i=1;;i++) {
+        var EDITBOX_ID = elementAddress[0]+','+elementAddress[1]+','+i;
+        var textarea = document.getElementById(EDITBOX_ID);
+        if (textarea == null) {
+            break;
+        }
+        textarea.rows = Math.min(neededRows, 60);
+    }
 }
