@@ -69,7 +69,7 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
         var defaultNumberOfRows = countLines(this.topicSectionObject.TMLdiv.innerHTML, defaultNumberOfCols);
         if (defaultNumberOfRows < 4) {defaultNumberOfRows = 4};
         if (defaultNumberOfRows > 12) {defaultNumberOfRows = 12};
-        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.TMLdiv.innerHTML+'</textarea>';
+        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.TMLdiv.innerHTML+'</textarea>';
 
         newForm.innerHTML = innerHTML;
         newForm.elements.namedItem("text").topicSection =this.topicSectionObject.topicSection;
@@ -85,7 +85,7 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
 //            topicSectionObject.editDivSection.elements.namedItem("text").style.height = topicSectionObject.HTMLdiv.offsetHeight;
             newForm.elements.namedItem("text").style.width = this.topicSectionObject.HTMLdiv.offsetWidth;
         }
-        TWiki.InlineEditPlugin.TextArea.TextAreaResize(newForm.elements.namedItem("text"));
+        //TWiki.InlineEditPlugin.TextArea.TextAreaResize(newForm.elements.namedItem("text"));
     return newForm;
 }
 
@@ -103,3 +103,53 @@ TWiki.InlineEditPlugin.TextArea.TextAreaResize = function(tg) {
     tg.rows = Math.min(neededRows, 60);
 }
 
+TWiki.InlineEditPlugin.TextArea.showComponentEdit = function(event) {
+    var tg = (event.target) ? event.target : event.srcElement;
+
+    var selectionArray = twikismartCursorPosition(tg);
+
+    var tml2html = new TML2HTML();
+    var options = new Object();
+    options.getViewUrl = getViewUrl;
+    var stringToParse = tg.value;
+
+    //hack around the fact i'm using private members
+    //TODO: i'll want this array to be global, so that we don't need to parse more than once
+    tml2html.refs = new Array();
+    //this pulls the vars out..
+    var editableHTML = tml2html._processTags(stringToParse);
+    //put round clickable spans..
+    for (var i = 0; i < tml2html.refs.length; i++) {
+        //TODO: this won't work :( as it strips %'s off TWikiVariables nested inside other TWikiVariables - but its needed as otherwise OnSave added %'s to the vars
+        if (-1 != tml2html.refs[i].indexOf(tg.selectedText)) {
+            //TODO: this won't work :( as it strips %'s off TWikiVariables nested inside other TWikiVariables - but its needed as otherwise OnSave added %'s to the vars
+            var tml = tml2html.refs[i];
+            tml =  tml.substring(1,  tml.length-1);
+            TWiki.ComponentEditPlugin.sourceTarget = tg;
+            TWiki.ComponentEditPlugin.popupEdit(event, tml);
+        }
+    }
+}
+
+// Give the cursor position
+function twikismartCursorPosition(node) { 
+//from http://the-stickman.com/web-development/javascript/finding-selection-cursor-position-in-a-textarea-in-internet-explorer
+if (document.selection) {
+    // The current selection
+    var range = document.selection.createRange();
+    // We'll use this as a 'dummy'
+    var stored_range = range.duplicate();
+    // Select all text
+    stored_range.moveToElementText( node );
+    // Now move 'dummy' end point to end point of original range
+    stored_range.setEndPoint( 'EndToEnd', range );
+    // Now we can calculate start and end points
+    node.selectionStart = stored_range.text.length - range.text.length;
+    node.selectionEnd = node.selectionStart + range.text.length;
+    node.selectedText = range.text;
+} else {
+        node.selectedText = node.value.substring(node.selectionStart, node.selectionEnd);
+}
+
+    return [node.selectionStart, node.selectionEnd, node.selectedText];
+}
