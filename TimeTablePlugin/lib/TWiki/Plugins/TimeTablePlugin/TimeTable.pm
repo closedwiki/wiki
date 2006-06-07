@@ -143,6 +143,8 @@ sub _initDefaults {
 		forcestartdate => 0,
 		navprev => '&lt;&lt;',
 		navnext => '&gt;&gt;',
+		navprevtitle => 'Previous Week',
+		navnexttitle => 'Next Week',
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext');
@@ -511,9 +513,9 @@ sub _renderNav {
 	$href.="#ttpa$ttid";
 
 	if ($next) {
-		$nav.="&nbsp;".$cgi->a({-href=>$href}, $options{'navnext'});
+		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$options{'navnexttitle'}}, $options{'navnext'});
 	} else {	
-		$nav.="&nbsp;".$cgi->a({-href=>$href}, $options{'navprev'});
+		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$options{'navprevtitle'}}, $options{'navprev'});
 	}
 	return $nav;
 }
@@ -716,8 +718,8 @@ sub _getStartDate() {
 		($yy,$mm,$dd)=Add_Delta_Days($yy, $mm, $dd, 1-$dow);
 	}
 	if ($options{'compatmode'}) {
-		my $qpttpid = $cgi->param('ttpid');
-		my $qpttppage = $cgi->param('ttppage');
+		my $qpttpid = $cgi->param('ttpid')?$cgi->param('ttpid'):-1;
+		my $qpttppage = $cgi->param('ttppage')?$cgi->param('ttppage'):0;
 		
 		if ($qpttpid eq $ttid) {
 
