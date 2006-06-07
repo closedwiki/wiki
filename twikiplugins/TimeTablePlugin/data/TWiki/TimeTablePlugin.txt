@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1149692396" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1149692456" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -78,7 +78,9 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) | month="+1" |
 | monthnames | custom month names (a list separated by '¦' and starting on January; overwrites lang attribute) | monthnames="J¦F¦M¦A¦M¦J¦J¦A¦S¦O¦N¦D" |
 | navnext | navigation button to the next week | navnext="&amp;gt;&amp;gt;" |
+| navnextitle | title text (tooltip text) for the navigation button to the next week | navnexttitle="Next Week" |
 | navprev | navigation button to the previous week | navprev="&amp;lt;&amp;lt;" |
+| navprevtitle | title text (tooltip text) for the navigation button to the previous week | navprevtitle="Previous Week" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +0, +1, -1, ...) | year="+0" |
 |  *Table formatting:*  |||
