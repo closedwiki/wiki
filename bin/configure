@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
@@ -45,6 +45,7 @@ package TWiki;
 # BASIC checks. Without these, nothing works.
 
 use strict;
+use warnings;
 
 $SIG{__DIE__} = sub { Carp::confess( $_[0] || '' ) };
 $SIG{'__WARN__'} = sub { die @_ };
@@ -1170,6 +1171,9 @@ sub _perlifyType {
 }
 
 sub _perlModulesCheck {
+    # Suppress "Subroutine TWiki::O_CREAT redefined" warnings - see Bugs:Item2433
+    no warnings qw(redefine);
+
     my $mods = shift;
     my $e = '';
     foreach my $mod (keys %$mods) {
