@@ -76,19 +76,19 @@ TWiki.InlineEditPlugin.TableEdit.prototype.getSaveData = function() {
 }
 
 TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
-        var newForm = document.createElement('FORM');
-        newForm.topicSectionObject = this.topicSectionObject;
-        newForm.name = "componenteditpluginform";
-        newForm.method = "post";
-        newForm.action = this.topicSectionObject.HTMLdiv.parentNode.action;
+    var newForm = document.createElement('FORM');
+    newForm.topicSectionObject = this.topicSectionObject;
+    newForm.name = "componenteditpluginform";
+    newForm.method = "post";
+    newForm.action = this.topicSectionObject.HTMLdiv.parentNode.action;
 
     var innerHTML = '';
     var lines = this.topicSectionObject.TMLdiv.innerHTML.split("\n");
     var maxColumns = 0;
     for (var i=0; i< lines.length;i++) {
-        innerHTML = innerHTML + '<tr>';
-        innerHTML = innerHTML + '<td>'+makeFormButton('add_row', '+', 'addRow(event);', 1);
-        innerHTML = innerHTML + makeFormButton('delete_row', '-', 'deleteRow(event);', 1) +'</td>';
+//        innerHTML = innerHTML + '<tr>';
+//        innerHTML = innerHTML + '<td>'+makeFormButton('add_row', '+', 'addRow(event);', 1);
+//        innerHTML = innerHTML + makeFormButton('delete_row', '-', 'deleteRow(event);', 1) +'</td>';
         var cells = lines[i].split(/[|]/);
         if (cells.length > maxColumns) {
             maxColumns = cells.length;
@@ -104,23 +104,24 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
         var defaultNumberOfCols = 20;
         var defaultNumberOfRows = countLines(cells[largestIndex], defaultNumberOfCols);
         for (var j=1; j< cells.length-1;j++) {
-            innerHTML = innerHTML + '<td><textarea rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" onkeyup="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" onclick="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" id="'+this.topicSectionObject.topicSection+','+i+','+j+'" name="text" width="99%" >'+cells[j]+'</textarea></td>';
+            innerHTML = innerHTML + '<td><textarea rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" onkeyup="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" id="'+this.topicSectionObject.topicSection+','+i+','+j+'" name="text" width="99%" >'+cells[j]+'</textarea></td>';
 //            innerHTML = innerHTML + '<td>'+cells[j]+'</td>';
         }
         innerHTML = innerHTML + '</tr>';
     }
     //add colunm manipulation buttons
-    var columnActions = '';
-    columnActions = columnActions+ '<tr>';
-    columnActions = columnActions + '<td>'+makeFormButton('add_row', '+', 'addRow(event);', 1);
-    columnActions = columnActions +'</td>';
-    for (var j=1; j< maxColumns-1;j++) {
-        columnActions = columnActions + '<td align="center">'+makeFormButton('add_row', '+', 'addRow(event);', 1);
-        columnActions = columnActions + makeFormButton('delete_row', '-', 'deleteRow(event);', 1) +'</td>';
-    }
-    columnActions = columnActions + '</tr>';
+//    var columnActions = '';
+//    columnActions = columnActions+ '<tr>';
+//    columnActions = columnActions + '<td>'+makeFormButton('add_row', '+', 'addRow(event);', 1);
+//    columnActions = columnActions +'</td>';
+//    for (var j=1; j< maxColumns-1;j++) {
+//        columnActions = columnActions + '<td align="center">'+makeFormButton('add_row', '+', 'addRow(event);', 1);
+//        columnActions = columnActions + makeFormButton('delete_row', '-', 'deleteRow(event);', 1) +'</td>';
+//    }
+//    columnActions = columnActions + '</tr>';
+//    innerHTML = columnActions + innerHTML;
 
-    innerHTML = '<table border="1">' + columnActions + innerHTML + '</table>';
+    innerHTML = '<table border="1">' + innerHTML + '</table>';
 
     newForm.innerHTML = innerHTML;
 
