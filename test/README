@@ -13,10 +13,12 @@ All TWiki unit tests are run from that directory with the command:
 
 perl ../bin/TestRunner.pl TWikiSuite.pm
 
+
 Attention: 
 
-   * for the tests to be run, you need a valid LocalLib.cfg under
+   * for the tests to be run, you need a valid LocalSite.cfg under
      /path/to/twiki/bin/ stating where your /path/to/twiki/lib directory is.
+   * They must be run as superuser.
 
 TestCases Tests
 ===============
