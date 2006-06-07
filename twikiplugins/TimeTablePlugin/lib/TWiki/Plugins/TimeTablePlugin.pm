@@ -38,7 +38,8 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.004'; #dro# fixed typos (documentation, timeformat); added new attributes (days, forcestartdate, nowfgcolor, nowbgcolor); fixed minor bug (periodic repeater); added new event type (list)
+$REVISION = '1.005'; #dro# fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...)
+#$REVISION = '1.004'; #dro# fixed typos (documentation, timeformat); added new attributes (days, forcestartdate, nowfgcolor, nowbgcolor); fixed minor bug (periodic repeater); added new event type (list)
 #$REVISION = '1.003'; #dro# added compatibility mode (CalendarPlugin event types); added documentation and new attributes; fixed bugs (bgcolor bug; conflict rendering; documentation; error logs; warnings); 
 #$REVISION = '1.002'; #dro# fixed major bugs (conflict handling, preferences); added documentation; 
 #$REVISION = '1.001'; #dro# fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; 

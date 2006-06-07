@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1149090296" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1149692396" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
-The timetable is rendered with HTML tables and should works with all modern web browsers.
+The timetable is rendered with HTML tables and should work with all modern web browsers.
 
 It also handles the tag =%<nop>TTCM%= (<nop>TimeTable Compatibilty Mode). The compatibility mode allows the usage of all TWiki:Plugins.CalendarPlugin event types. The =%<nop>TTCM%= tag should be placed into the description field of an event and must contain a time range and
 optional colors in a comma seperated list (=&lt;time range&gt;[<nop>[','&lt;forground color&gt;][','&lt;background color&gt;]]=), 
@@ -41,14 +41,17 @@ Events are defined with bullets. Following event types are supported to define e
 If you enable the compatibility mode (see Attributes or Plugins Settings sections) you can also use all TWiki:Plugins.CalendarPlugin event types.
 Examples:
 <verbatim>
-%TIMETABLE{compatmode="1"}%
-	* 05 Jun - %TTCM{"10am-5pm,yellow"}% Every 5th of June between 10am and 5pm
+%TIMETABLE{compatmode="1" startdate="12 Jun 2006"}%
+	* 12 Jun - %TTCM{"10am-5pm,yellow"}% Every 12th of June between 10am and 5pm
 	* E Wed - Every Wednesday (whole-time)
-	* 12 Jun 2006 - 19 Jun 2006 - %TTCM{"12:15am-1pm,white,black"} Lunch with Mary
+	* 12 Jun 2006 - 19 Jun 2006 - %TTCM{"12:15am-1pm,white,black"}% Lunch with Mary
+	* 13 Jun 2006 - 10:00-12:00 Meeting 
+	* 14 Jun 2006 - Meeting - 01pm-03pm,green
 </verbatim>
 *Notes:*
 	* The parameter of the %<nop>TTCM% tag *must not contain any whitespaces*.
-	* If no %<nop>TTCM% tag was specified in a description of a TWiki:Plugins.CalendarPlugin event the event starts at 0:00am o'clock and ends at 0:00pm (24:00) o'clock.
+	* Time ranges in a description field *must not contain any whitespaces*.
+	* If no %<nop>TTCM% tag or no time range was specified in a description of a TWiki:Plugins.CalendarPlugin event the event starts at 0:00am o'clock and ends at 0:00pm (24:00) o'clock.
 
 ---++ Attributes
 Usage: %<nop>TIMETABLE{attribute1="value1" attribute2="value2" ...}% 
@@ -57,7 +60,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 
 | *Attribute* | *Comment* | *Default/Example* |
 |  *Behavior:*  |||
-| compatmode | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatibility mode attributes); %X% the description field can contain a %<nop>TTCM%-Tag (e.g. ==%<nop>TTCM{"7:00-1:00pm,white,black"}%== ) with a time range and optional foreground and background color and *without* any *whitespaces* | compatmode="0" |
+| compatmode | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported (related: compatibility mode attributes); %X% the description field can contain a time range (without any whitespaces, e.g. 1pm-2pm) or a %<nop>TTCM%-Tag (e.g. ==%<nop>TTCM{"7:00-1:00pm,white,black"}%== ) with a time range and optional foreground and background color and *without* any *whitespaces* | compatmode="0" |
 | days	 | days to show | days="7" |
 | endtime | a end time, e.g. 18:00, 6:00pm, ...  | endtime="8:00pm" |
 | lang | Language used for weekdays in the table header and for event entries (e.g: English, Deutsch, Français, Español, Nederlands, Dansk, suomi, ...) | lang="English" |
@@ -69,11 +72,13 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | workingendtime | working hours end time | workingendtime="5:00pm" |
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
 |  *Compatibility Mode:*  |||
-| cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
+| cmheaderformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | cmheaderformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
 | daynames | costum daynames (a list separated by a '¦' and starting on Monday; overwrites lang attribute) | daynames="M¦T¦W¦T¦F¦S¦S" |
-| forcestartdate | if set to 1 the timetable starts with the given startdate ('0' means: start the timetable view with Monday') | forcestartdate="0" |
+| forcestartdate | if set to 1 the timetable starts with the given startdate ('0' means: the timetable view starts with Monday') | forcestartdate="0" |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +0, +1, -2,...) | month="+1" |
-| monthnames | costum month names (a list separated by '¦' and starting on January; overwrites lang attribute) | monthnames="J¦F¦M¦A¦M¦J¦J¦A¦S¦O¦N¦D" |
+| monthnames | custom month names (a list separated by '¦' and starting on January; overwrites lang attribute) | monthnames="J¦F¦M¦A¦M¦J¦J¦A¦S¦O¦N¦D" |
+| navnext | navigation button to the next week | navnext="&amp;gt;&amp;gt;" |
+| navprev | navigation button to the previous week | navprev="&amp;lt;&amp;lt;" |
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +0, +1, -1, ...) | year="+0" |
 |  *Table formatting:*  |||
@@ -81,7 +86,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | displaytime | display time in the event description of the timetable | displaytime="0" |
 | eventbgcolor | default background color of an event cell (you can overwrite this with an event entry) | eventbgcolor = "#AAAAAA" |
 | eventfgcolor | default text color of an event cell (you can overwrite this with an event entry) | eventfgcolor = "black" |
-| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%a&lt;/font&gt;" |
+| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;title=\"%A - %d %b %Y\" size=\"-2\">%a&lt;/font&gt;" |
 | name | header content of the first column | name = "&amp;nbsp;" |
 | nowbgcolor | highlight current time in the timeline with a background color | nowbgcolor="black" | 
 | nowfgcolor | highlight current time in the timeline with a forgeround color | nowfgcolor="white" |
@@ -97,7 +102,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | workingfgcolor | highlight working hours in the timeline with a foreground color | workingfgcolor="black" |
 
 *Hints:*
-	* You can use TextFormattingRules for some attribute values: tablecaption, name
+	* You can use TextFormattingRules for some attribute values: tablecaption, name, navnext, navprev
 	* Every attribute of %<nop>TIMETABLE% can also be used as plugin setting. You only have to use capital letters.
 
 
@@ -191,8 +196,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.004 (31 May 2006) |
+|  Plugin Version: | V1.005 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.005 (BETA) | TWiki:Main.DanielRohde: fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...) |
 |  V1.004 (31 May 2006) | TWiki:Main.DanielRohde: fixed typos (documentation, timeformat); added new attributes (days, forcestartdate, nowfgcolor, nowbgcolor); fixed minor bug (periodic repeater); added new event type (list) |
 |  V1.003 (24 May 2006) | TWiki:Main.DanielRohde: added compatibility mode (TWiki:Plugins.CalendarPlugin event types); added documentation and new attributes; fixed bugs (bgcolor bug; conflict rendering; documentation; error logs; warnings);|
 |  V1.002 (22 May 2006): | TWiki:Main.DanielRohde: fixed major bugs (conflict handling, preferences); added documentation; |
