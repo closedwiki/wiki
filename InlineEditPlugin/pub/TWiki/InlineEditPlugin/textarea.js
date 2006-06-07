@@ -65,10 +65,13 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
         if (numberOfLines < 4) {numberOfLines = 4};
         if (numberOfLines > 12) {numberOfLines = 12};
 
-        var innerHTML = '<textarea id="componentedittextarea" name="text" width="99%" rows="'+numberOfLines+'">COMPONENTEDITPLUGINTML</textarea>';
+        var defaultNumberOfCols = 40;
+        var defaultNumberOfRows = countLines(this.topicSectionObject.TMLdiv.innerHTML, defaultNumberOfCols);
+        if (defaultNumberOfRows < 4) {defaultNumberOfRows = 4};
+        if (defaultNumberOfRows > 12) {defaultNumberOfRows = 12};
+        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.TMLdiv.innerHTML+'</textarea>';
 
         newForm.innerHTML = innerHTML;
-        newForm.elements.namedItem("text").value = this.topicSectionObject.TMLdiv.innerHTML;
         newForm.elements.namedItem("text").topicSection =this.topicSectionObject.topicSection;
 
         //TODO: ***************************************make sure we're using this everwhere we should
@@ -82,5 +85,21 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
 //            topicSectionObject.editDivSection.elements.namedItem("text").style.height = topicSectionObject.HTMLdiv.offsetHeight;
             newForm.elements.namedItem("text").style.width = this.topicSectionObject.HTMLdiv.offsetWidth;
         }
+        TWiki.InlineEditPlugin.TextArea.TextAreaResize(newForm.elements.namedItem("text"));
     return newForm;
 }
+
+TWiki.InlineEditPlugin.TextArea.TextAreaResize = function(tg) {
+    tg.rows = Math.max(1, tg.rows);
+    tg.cols = Math.max(20, tg.cols);
+
+    //resize the textarea to fit the text - assume that width is fixed.
+    var letterCount = tg.value.length;
+    var neededRows = countLines(tg.value, tg.cols)+1;
+    if (tg.rows >= neededRows) {
+        return;
+    }
+
+    tg.rows = Math.min(neededRows, 60);
+}
+

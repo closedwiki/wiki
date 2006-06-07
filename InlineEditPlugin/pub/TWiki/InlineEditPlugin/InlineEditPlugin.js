@@ -440,6 +440,21 @@ deleteSection = function(event) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Support Funcs
 
+//from http://tuckey.org/textareasizer/
+function countLines(strtocount, cols) {
+    var hard_lines = 1;
+    var last = 0;
+    while ( true ) {
+        last = strtocount.indexOf("\n", last+1);
+        hard_lines ++;
+        if ( last == -1 ) break;
+    }
+    var soft_lines = Math.round(strtocount.length / (cols-1));
+    var hard = eval("hard_lines  " + unescape("%3e") + "soft_lines;");
+    if ( hard ) soft_lines = hard_lines;
+    return soft_lines;
+}
+
 //traverses downwards through parents to find the topicSectionObject
 getTopicSectionObject = function(event) {
     var tg = (event.target) ? event.target : event.srcElement;
