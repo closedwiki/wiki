@@ -20,7 +20,7 @@ TWiki-4.0.0 is a major new release. You can chose between an automated upgrade u
 
 ---++ Major Changes Compared to TWiki Release 01-Sep-2004
 
-See TWikiReleaseNotes04x00x00.
+See TWikiReleaseNotes04x00.
 
 ---++ Automated Upgrade Procedure
 

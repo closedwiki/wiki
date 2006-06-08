@@ -78,7 +78,7 @@ Most of the redesign, refactoring and new documentation work in Dakar release wa
 | Design of TWikiLogos with big "T" in a speech bubble | [[TWiki:Main.ArthurClemens][ArthurClemens]], [[TWiki:Main.PeterThoeny][Peter Thoeny]] |
 | Improved templates and PatternSkin | [[TWiki:Main.ArthurClemens][ArthurClemens]] |
 
-See more details at TWikiReleaseNotes04x00x00
+See more details at TWikiReleaseNotes04x00
 
 #CairoRelease
 ---++ 01-Sep-2004 Release (Cairo)
