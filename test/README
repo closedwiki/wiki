@@ -18,7 +18,6 @@ Attention:
 
    * for the tests to be run, you need a valid LocalSite.cfg under
      /path/to/twiki/bin/ stating where your /path/to/twiki/lib directory is.
-   * They must be run as superuser.
 
 TestCases Tests
 ===============
