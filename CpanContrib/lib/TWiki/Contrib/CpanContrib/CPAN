@@ -61,6 +61,7 @@
 	qw( Spreadsheet::WriteExcel Date::Manip ),	# FormMeta2ExcelAddOn
 	qw( Image::Magick ),
 	qw( GetOpt::Long ),
+	qw( JSON ),					# InlineEditPlugin
 );
 
 #$, = "\n";
