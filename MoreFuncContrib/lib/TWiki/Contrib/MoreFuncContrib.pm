@@ -62,7 +62,7 @@ sub getTopicPreferenceValue {
     my ($web, $topic, $prefName) = @_;
 
     my $meta = readTopicMeta($web, $topic);
-    my $prefHash = $meta->get($prefName);
+    my $prefHash = $meta->get('PREFERENCE', $prefName);
 
     return $prefHash->{value} if $prefHash;
     return 0;
