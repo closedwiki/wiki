@@ -69,7 +69,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  30 April 2006: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
-|  CPAN Dependencies: | none |
+|  CPAN Dependencies: | CPAN:JSON |
 |  Other Dependencies: | TWiki:Plugins.WysiwygPlugin |
 |  Perl Version: | 5.005 |
 |  License: | GPL ( [[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
