@@ -498,17 +498,21 @@ sub _renderNav {
 	return "" if !$options{'compatmode'};
 	my $query = &TWiki::Func::getCgiQuery();
 
-	my $qpttid = $query->param('ttpid')?$query->param('ttpid'):$ttid;
-	my $ttppage = $query->param('ttppage')?$query->param('ttppage'):0;
+	my $ttppage = $query->param('ttppage'.$ttid) ? &_parseInt($query->param('ttppage'.$ttid)) : 0;
 
-	$ttppage=0 unless ($ttid eq $qpttid);
 	$ttppage+= ($next?+1:-1);
 
 	my $newcgi = new CGI($cgi);
-	$newcgi->param(-name=>'ttpid',-value=>$ttid);
-	$newcgi->param(-name=>'ttppage',-value=>$ttppage);
-	my $href = $newcgi->self_url();
 
+	if ($ttppage eq 0) {
+		$newcgi->delete('ttppage'.$ttid);
+	} else {
+		$newcgi->param(-name=>'ttppage'.$ttid,-value=>$ttppage);
+	}
+
+	$newcgi->delete('contenttype');
+
+	my $href = $newcgi->self_url();
 	$href=~s/\#.*$//;
 	$href.="#ttpa$ttid";
 
@@ -518,6 +522,17 @@ sub _renderNav {
 		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$options{'navprevtitle'}}, $options{'navprev'});
 	}
 	return $nav;
+}
+# =========================
+sub _parseInt {
+	my ($val) = @_;
+	return $val unless defined $val;
+	if ($val =~ m/^([\+\-]?\d+)$/) {
+		$val = $1;
+	} else {
+		$val = undef;
+	}
+	return $val;
 }
 # =========================
 sub _renderText {
@@ -718,14 +733,8 @@ sub _getStartDate() {
 		($yy,$mm,$dd)=Add_Delta_Days($yy, $mm, $dd, 1-$dow);
 	}
 	if ($options{'compatmode'}) {
-		my $qpttpid = $cgi->param('ttpid')?$cgi->param('ttpid'):-1;
-		my $qpttppage = $cgi->param('ttppage')?$cgi->param('ttppage'):0;
-		
-		if ($qpttpid eq $ttid) {
-
-			($yy,$mm,$dd) = Add_Delta_Days($yy, $mm, $dd, $qpttppage*$options{'days'});
-
-		}
+		my $qpttppage = &_parseInt($cgi->param('ttppage'.$ttid));
+		($yy,$mm,$dd) = Add_Delta_Days($yy, $mm, $dd, $qpttppage*$options{'days'}) if defined $qpttppage;
 	}
 
         return ($dd,$mm,$yy);
