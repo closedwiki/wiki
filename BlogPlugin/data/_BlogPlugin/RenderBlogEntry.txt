@@ -97,6 +97,7 @@
 ~~~      $n</noautolink>$n
 ~~~   </div>
 ~~~   %STOPALIASAREA%
+~~~   <br clear=\"all\" />
 ~~~ </div>
 *~~ 
 %ENDSECTION{"format"}%

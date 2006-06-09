@@ -70,7 +70,14 @@ See also: RenderAtom, WebSyndication
 ~~~            $expand(TopicDescription)
 ~~~          $percntFIDEFINED$percnt
 ~~~          $expand(Teaser)
-~~~          %IFDEFINED{"%TEASEONLY%" then=" " else="<p />$expand(Text)"}%)
+~~~          %IFDEFINED{"%TEASEONLY%" then=" " else="<p />$expand(Text)"}%
+~~~          $percntIFDEFINEDTHEN{\"$expand(BlogTag)\" glue=\"off\"}$percnt
+~~~            <p /><b>Tags</b>: 
+~~~            $percntFORMATLIST{\"$expand(BlogTag)\" sort=\"on\"
+~~~              format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/BlogArchive?mode=tag&search=$1\\" 
+~~~                          rel=\\"tag\\">$1</a>\"
+~~~            }$percnt
+~~~          $percntFIDEFINED$percnt)
 ~~~      </description>$n
 ~~~      <dc:creator>$expand(BlogAuthor or Name)</dc:creator>$n
 ~~~      <dc:date>$formatTime(createdate, '$year-$mo-$dayT$hour:$minute:$secondZ')</dc:date>$n

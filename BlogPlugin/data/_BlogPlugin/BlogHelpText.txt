@@ -66,6 +66,12 @@ You are visiting this blog by category, that is all postings here are filed
 into the %BASETOPIC% category.
 %ENDSECTION{"Category"}%
 
+---+++ Image section
+%STARTSECTION{"Image"}%
+You are in the image section of this blog. 
+%ENDSECTION{"Image"}%
+
+
 ---+++ Nosidebar section
 %STARTSECTION{"Nosidebar"}% %ENDSECTION{"Nosidebar"}%
 

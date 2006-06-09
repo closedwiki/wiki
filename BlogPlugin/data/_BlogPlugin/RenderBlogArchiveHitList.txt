@@ -24,7 +24,7 @@
 ~~~     <td style=\"padding-left:1em;\" align=\"right\"> $index </td>
 ~~~     <td style=\"padding-left:1em;\" align=\"right\"> <span style=\"white-space:nowrap\">$formatTime(createdate,'$day $mon $year')</span> </td>
 ~~~     <td style=\"padding-left:1em;\" align=\"left\" width=\"100%\"> [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt 
-~~~       $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" format=\"($dollarcount)\"}$percnt </td>
+*~~       &nbsp;$percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" format=\"($dollarcount)\"}$percnt </td>
 ~~~     </tr>"
 ~~~   footer="</table>$percntDBCALL{\"RenderPageNavigation\" 
 ~~~      SKIP=\"%URLPARAM{"skip" default=" 0"}%\" 

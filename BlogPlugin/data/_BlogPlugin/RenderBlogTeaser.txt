@@ -60,14 +60,15 @@ see also: RenderFullTeaser
 ~~~   <div class=\"blogText\">$n
 ~~~      <noautolink>$n
 ~~~      $formfield(Teaser)
-~~~      <div class=\"blogMore\"> ...&nbsp;
+~~~      <div class=\"blogMore\"> &#8230;&nbsp;
 *~~        <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
 ~~~           title=\"permalink to <nop>$topic\">more</a>
 ~~~      </div>
 ~~~      </noautolink>$n
 ~~~   </div>
 ~~~   %STOPALIASAREA%
-</div>
+~~~   <br clear=\"all\" />
+~~~ </div>
 %ENDSECTION{"format"}%
 </verbatim>
 

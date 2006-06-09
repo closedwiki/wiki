@@ -16,6 +16,7 @@
 %DBCALL{"RenderNewBlogLinkButton" TEXT="New Link" warn="off"}%
 %DBCALL{"RenderNewBlogPageButton" TEXT="New Page" warn="off"}%
 %DBCALL{"RenderNewTWikiTopicButton" TEXT="New Topic" warn="off"}%
+%DBCALL{"RenderUploadImageButton" TEXT="Upload Image" warn="off"}%
 </div>
 %IFDEFINEDTHEN{"%AUTHOR%"}%
 %$nopDBCALL{"RenderUnpublishedBlogEntries" warn="off" AUTHOR="%AUTHOR%"}%

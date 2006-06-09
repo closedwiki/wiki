@@ -221,8 +221,19 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.92 |
+|  Version: | v0.93 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 June 2006: | added last.fm support to display the 10 most recent tracks you listened to in the sidebar; \
+                  simplified uploading/managing images using a new "Upload Image" button; \
+		  cleaned up technorati sidebar functionality;\
+		  minor fixes in the blog archive; \
+		  added ENABLEPINGBACK to blog postings so that they can receive pings once that plugin is ready;\
+		  added TAG parameter to <nop>TopicFunctions that extract blog entries; \
+		  fixed error in <nop>RenderGoogleAdsense; \
+		  displaying recent visitors within the last week (was today's visitors only) ;\
+                  added a customized "page not found"; \
+		  added support to render your blog's license in the sidebar, defaults to a \
+		  creative common license for wiki |
 |  24 May 2006: | added <nop>BlogImages: centralize all image resources; \
                   added affiliations to the sidebar; \
 		  cleaned up code to detect multi-authored blog; \

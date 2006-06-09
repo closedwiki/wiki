@@ -1,0 +1,44 @@
+%META:TOPICINFO{author="TWikiContributor" date="1149348063" format="1.1" version="1.1"}%
+%META:TOPICPARENT{name="TopicFunction"}%
+---+!! Function: %TOPIC%
+%FORMFIELD{"TopicDescription"}%
+
+---++ Parameters
+NONE
+
+---++ Implementation
+<verbatim>
+%STARTINCLUDE%
+<div class="blogSideBarSection blogImageSection">
+%~~ DBQUERY{
+~~~   "TopicType=~'\bBlogEntry\b' 
+~~~    AND State='enabled' 
+~~~    AND (Teaser=~'<img ' OR Text=~'<img')
+~~~   "
+~~~   hidenull="on" order="created" reverse="on"
+~~~   header="<h1>Image Utilisation</h1><ul>"
+~~~   format="<li>[[$web.$topic][$expand(Headline or TopicDescription)]]</li>"
+~~~   footer="</ul>"
+~~~ }%
+</div>
+%STOPINCLUDE%
+</verbatim>
+
+<!-- interrupt glue -->
+
+---++ Test
+<div class="alt">
+%DBCALL{"%TOPIC%"}%
+</div>
+
+%DBCALL{"RenderFunctionCallers"}%
+
+<!--
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set SIDEBAR = Admin
+   * Set SIDEBARARG = TopicFunction
+-->
+
+%META:FORM{name="TopicForm"}%
+%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
+%META:FIELD{name="TopicDescription" attributes="" title="TopicDescription" value="Render list of backlings to the BlogImages"}%

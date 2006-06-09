@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142171497" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148539223" format="1.1" reprev="1.17" version="1.1"}%
 %META:TOPICPARENT{}%
 ---+ %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -11,7 +11,11 @@
 
 <div class="feeds">
 %~~ DBQUERY{"TopicType=~'\bSubjectCategory\b'"
-~~~         format="$percntDBCALL{\"RenderBlogLinksInCategory\" CAT=\"$topic\" PARAMS=\"cat=$topic\"}$percnt"
+~~~   format="
+*~~     $percntDBCALL{\"RenderBlogLinksInCategory\" 
+~~~       CAT=\"$topic\" 
+~~~       PARAMS=\"cat=$topic\"
+~~~    }$percnt"
 ~~~ }%
 </div>
 
@@ -26,4 +30,4 @@
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogPage, TWikiTopic"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="News Aggregation"}%
+%META:FIELD{name="TopicDescription" attributes="" title="TopicDescription" value="News Aggregation"}%

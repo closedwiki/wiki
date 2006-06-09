@@ -64,6 +64,10 @@ data/_BlogPlugin/RenderFullTeaser.txt 0644
 data/_BlogPlugin/RenderFunctionCallers.txt 0644
 data/_BlogPlugin/RenderGoogleAdsense.txt 0644
 data/_BlogPlugin/RenderHttpEquivs.txt 0644
+data/_BlogPlugin/RenderImageTools.txt 0644
+data/_BlogPlugin/RenderImageUtilisation.txt 0644
+data/_BlogPlugin/RenderLastFMRecentTracks.txt 0644
+data/_BlogPlugin/RenderLicense.txt 0644
 data/_BlogPlugin/RenderNewBlogEntryButton.txt 0644
 data/_BlogPlugin/RenderNewBlogLinkButton.txt 0644
 data/_BlogPlugin/RenderNewBlogPageButton.txt 0644
@@ -80,10 +84,12 @@ data/_BlogPlugin/RenderRss.txt 0644
 data/_BlogPlugin/RenderSideBar.txt 0644
 data/_BlogPlugin/RenderSubComments.txt 0644
 data/_BlogPlugin/RenderTWikiFormList.txt 0644
+data/_BlogPlugin/RenderTechnorati.txt 0644
 data/_BlogPlugin/RenderTopicList.txt 0644
 data/_BlogPlugin/RenderTopicSummary.txt 0644
 data/_BlogPlugin/RenderTopicTypes.txt 0644
 data/_BlogPlugin/RenderUnpublishedBlogEntries.txt 0644
+data/_BlogPlugin/RenderUploadImageButton.txt 0644
 data/_BlogPlugin/RenderValidateButton.txt 0644
 data/_BlogPlugin/RenderVisitors.txt 0644
 data/_BlogPlugin/RenderWebChanges.txt 0644
@@ -131,6 +137,7 @@ data/_BlogPlugin/WebStatistics.txt 0644
 data/_BlogPlugin/WebSyndication.txt 0644
 data/_BlogPlugin/WebTopicEditTemplate.txt 0644
 data/_BlogPlugin/WebTopicList.txt 0644
+data/_BlogPlugin/WebTopicViewTemplate.txt 0644
 data/Main/BlogAdminGroup.txt 0644
 data/Main/BlogAuthorGroup.txt 0644
 data/TWiki/BlogPlugin.txt 0644

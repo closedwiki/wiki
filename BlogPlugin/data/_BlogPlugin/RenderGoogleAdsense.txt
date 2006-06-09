@@ -33,7 +33,7 @@ All optional colors can be set globally in the WebPreferences.
 <script type="text/javascript"><!--
 google_ad_client = "%GOOGLEADSENSECODE%";
 google_ad_width = %IFDEFINED{"%WIDTH%" then="%WIDTH%" else="468"}%;
-google_ad_height = %IFDEFINED{"%HEIGHT%" then="%HEIGHT&" else="60"}%;
+google_ad_height = %IFDEFINED{"%HEIGHT%" then="%HEIGHT%" else="60"}%;
 google_ad_format = "%IFDEFINED{"%FORMAT%" then="%FORMAT%" else="468x60_as"}%";
 google_ad_type = "%IFDEFINED{"%TYPE%" then="%TYPE%" else="text_image"}%";
 google_ad_channel = "%IFDEFINED{"%CHANNEL%"}%";
