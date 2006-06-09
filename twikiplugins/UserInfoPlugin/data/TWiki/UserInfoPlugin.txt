@@ -94,8 +94,10 @@ Recently registered users: %BR%
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.52 |
+|  Plugin Version: | v1.53 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 June 2006: | fixed duplicate users in LASTVISITORS; \
+                   use IGNORE_USERS in LASTVISITORS |
 |  27 May 2006: | fixed error computing the number of last visitors (TWiki:Main.DavidBright); \
                   exclude the <no>TWikiAdminGroup "user" from the statistics; \
 		  check back if the user found in the logs already approved his account;\
@@ -122,5 +124,5 @@ Recently registered users: %BR%
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 27 May 2006
+-- TWiki:Main/MichaelDaum - 09 June 2006
 
