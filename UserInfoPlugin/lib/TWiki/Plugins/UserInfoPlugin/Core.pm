@@ -74,8 +74,8 @@ sub new {
     '|'.'TWikiRegistrationAgent' .
     '|'.'TWikiContributor';
 
-  #writeDebug("ignoreHosts=$this->{ignoreHosts}");
-  #writeDebug("ignoreUsers=$this->{ignoreUsers}");
+  writeDebug("ignoreHosts=$this->{ignoreHosts}");
+  writeDebug("ignoreUsers=$this->{ignoreUsers}");
 
   return $this;
 }
@@ -179,7 +179,7 @@ sub handleCurrentVisitors {
       'host'=>$visitor->{host},
       'topic'=>$visitor->{topic},
     });
-    writeDebug("found visitor $visitor->{wikiname}");
+    #writeDebug("found visitor $visitor->{wikiname}");
   }
 
   if ($counter) {
@@ -223,7 +223,7 @@ sub handleNewUsers {
       wikiname=>$user->{name}, 
       date=>$user->{sdate}  
     });
-    writeDebug("found new user $user->{name}");
+    #writeDebug("found new user $user->{name}");
   }
 
   if ($counter) {
@@ -252,7 +252,7 @@ sub handleLastVisitors {
   $theMax = 0 if $theMax eq 'unlimited';
   my $theDays = TWiki::Func::extractNameValuePair($attributes, "days") || 1;
 
-  my $visitors = $this->getVisitors($theDays, $theMax, undef, $this->{twikiGuest});
+  my $visitors = $this->getVisitors($theDays, $theMax, undef, $this->{ignoreUsers});
 
   # garnish the collected data
   my $result = '';
@@ -268,7 +268,7 @@ sub handleLastVisitors {
       'host'=>$visitor->{host},
       'topic'=>$visitor->{topic},
     });
-    writeDebug("found last visitor $visitor->{wikiname}");
+    #writeDebug("found last visitor $visitor->{wikiname}");
   }
 
   if ($counter) {
@@ -326,7 +326,7 @@ sub getVisitorsFromSessionStore {
     next if $users{$wikiName};
     next if $excludeNames && $wikiName =~ /$excludeNames/;
     next if $includeNames && $wikiName !~ /$includeNames/;
-    writeDebug("found $wikiName");
+    #writeDebug("found $wikiName");
     $users{$wikiName} = 1;
   }
 
@@ -378,7 +378,7 @@ sub getVisitors {
   $theMax = 0 unless $theMax;
 
   writeDebug("getVisitors()");
-  #writeDebug("theDays=$theDays") if $theDays;
+  writeDebug("theDays=$theDays") if $theDays;
   #writeDebug("theMax=$theMax") if $theMax;
   #writeDebug("includeNames=$includeNames") if $includeNames;
   #writeDebug("excludeNames=$excludeNames") if $excludeNames;
@@ -400,6 +400,7 @@ sub getVisitors {
   my $currentDate = '';
   my @logFiles = reverse glob $logFileGlob;
   my @lastVisitors = ();
+  my %seen = ();
   foreach my $logFilename (@logFiles) {
     #writeDebug("reading $logFilename");
 
@@ -407,7 +408,6 @@ sub getVisitors {
     my $fileContents = TWiki::Func::readFile($logFilename);
     
     # analysis
-    my %seen = ();
     my $nrVisitors = 0;
     foreach my $line (reverse split(/\n/, $fileContents)) {
       my @fields = split(/\|/, $line);
@@ -475,7 +475,7 @@ sub getVisitors {
 	'host'=>$host,
 	'topic'=>$thisTopic,
       };
-      writeDebug("found visitor $wikiName in the logs");
+      #writeDebug("found visitor $wikiName in the logs");
 
       # store
       push @lastVisitors, $visitor;
