@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1142201270" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1149319048" format="1.1" reprev="1.3" version="1.1"}%
 %META:TOPICPARENT{name="TopicFunction"}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -6,40 +6,24 @@
 see: RenderFullTeaser, RenderBlogTeaser, RenderFrontPage
 
 ---++ Parameters
-   * FULL: number of full teasers
-   * LIMIT: number of teasers 
-   * CAT: categories to extract
-   * AUTHOR: extract postings of this author
+   * LIMIT: number of teasers, defaults to 5
+   * CAT: categories to extract (optional)
+   * TAG: tag to extract (optional)
+   * AUTHOR: extract postings of this author (optional)
 
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
 <noautolink>
-<!--
-%~~ CALC{"$SET(postings,
-*~~
-%~~   DBQUERY{
-~~~      "TopicType=~'\bBlogEntry\b' AND
-~~~       SubjectCategory=~'\b%CAT%\b' AND
-~~~       State='enabled' AND
-~~~       BlogAuthor='%AUTHOR%'
+%~~ DBQUERY{
+~~~      "TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~       %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'" glue="off"}%
+~~~       %IFDEFINED{"%TAG%" then="AND BlogTag=~'\b%TAG%\b'" glue="off"}%
+~~~       %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor='%AUTHOR%'" glue="off"}%
 ~~~      "
-~~~      limit="%LIMIT%" separator=", " order="created" reverse="on"
-~~~      web="%WEB%"
-~~~   }%
-~~~ )$IF($LISTSIZE($GET(postings))==0,$SET(postings,none))"}%
--->
-</noautolink>
-%~~ DBQUERY{
 ~~~    web="%WEB%"
-~~~    topics="%CALC{"$GET(postings)"}%" 
-~~~    limit="%FULL%" order="created" reverse="on" hidenull="on"
-~~~    format="%DBCALL{"RenderFullTeaser" section="format" NAME="$topic"}%"
-~~~ }%
-%~~ DBQUERY{
-~~~    web="%WEB%"
-~~~    topics="%CALC{"$GET(postings)"}%" 
-~~~    skip="%FULL%" limit="%LIMIT%" order="created" reverse="on" hidenull="on"
+~~~    limit="%IFDEFINED{"%LIMIT%" then="%LIMIT%" else="5"}%"
+~~~    order="created" reverse="on" hidenull="on"
 ~~~    format="%DBCALL{"RenderBlogTeaser" section="format" NAME="$topic"}%"
 ~~~ }%
 %STOPINCLUDE%
@@ -47,7 +31,7 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontPage
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" LIMIT="2" FULL="1" CAT="BlogDev" AUTHOR=".*"}%
+%DBCALL{"%TOPIC%" LIMIT="3" CAT="BlogDev"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%
@@ -61,4 +45,4 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontPage
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Render a set of teasers where the first n are rendered verbosly"}%
+%META:FIELD{name="TopicDescription" attributes="" title="TopicDescription" value="Render a set of teasers"}%

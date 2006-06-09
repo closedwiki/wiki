@@ -237,3 +237,6 @@
   font-size:1em;
   padding:0 5px;
 }
+.blogSideBarLastFM h1 a:after {
+  display:none;
+}

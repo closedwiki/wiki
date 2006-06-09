@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1144222717" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148545407" format="1.1" version="1.1"}%
 %META:TOPICPARENT{}%
 ---+!! BlogUp: a twiki based weblog setup
 
@@ -37,7 +37,7 @@ The main features are:
    * one-click easy publishing and correction of postings and comments
    * extensible tagging system
    * tagged news aggregation
-   * semin-automatic computation of "related" postings
+   * semi-automatic computation of "related" postings
    * threaded comment system
    * full content syndication
    * flexible archiving and retrieval

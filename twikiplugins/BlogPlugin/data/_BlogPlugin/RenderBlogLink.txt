@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1139168397" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1148970412" format="1.1" version="1.1"}%
 %META:TOPICPARENT{}%
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
@@ -39,11 +39,17 @@ if the linked site has a nice rss feed.
 *~~      }$percnt
 ~~~      $percntELSEDEFINED$percnt
 ~~~      $n<!-- -->
-~~~      $n| *Name:* | $formfield(Name) |
-~~~      $n| *Headline:* | $formfield(Headline) |
-~~~      $n| *Url:* | $formfield(Url) |
-~~~      $n| *Category:* | $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" format=\"[[$web.$1][$1]]\"}$percnt |
-~~~      $n$n<div> *Comment:* $formfield(Comment)</div>
+~~~      $n<table class=\"twikiTable\">
+~~~      <tr><th>Name:</th><td> $formfield(Name) </td></tr>
+~~~      <tr><th>Headline:</th><td> $formfield(Headline) </td></tr>
+~~~      <tr><th>Url:</th><td> $formfield(Url) </td></tr>
+~~~      <tr><th>Category:</th><td> 
+~~~        $percntFORMATLIST{\"$formfield(SubjectCategory)\" 
+~~~          sort=\"on\" 
+~~~          format=\"[[$web.$1][$1]]\"
+~~~        }$percnt</td></tr>
+~~~      <tr><th>Comment:</th><td> $formfield(Comment) </td></tr>
+~~~      </table>
 ~~~      $percntFIDEFINED%
 *~~      "
 ~~~ }%
@@ -119,7 +125,7 @@ if the linked site has a nice rss feed.
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="BlogLink3" LIMIT="3"}%
+%DBCALL{"%TOPIC%" NAME="BlogLink0" LIMIT="3"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%
@@ -133,5 +139,5 @@ if the linked site has a nice rss feed.
 
 %META:FORM{name="TopicForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="TopicFunction"}%
-%META:FIELD{name="TopicDescription" attributes="M" title="TopicDescription" value="Renders a BlogLink"}%
+%META:FIELD{name="TopicDescription" attributes="" title="TopicDescription" value="Renders a BlogLink"}%
 %META:TOPICMOVED{by="MichaelDaum" date="1130169846" from="Blog.RenderNewsFeed" to="Blog.RenderBlogLink"}%

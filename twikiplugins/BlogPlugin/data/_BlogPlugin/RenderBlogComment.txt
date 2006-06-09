@@ -91,7 +91,7 @@ see also: RenderDocNavigation
 ~~~ %STARTALIASAREA%$n
 ~~~ <div class=\"blogCommentText\">$n
 ~~~    $expand(Text)
-~~~    ...&nbsp;
+~~~    &#8230;&nbsp;
 *~~   <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic#bottomComment\"
 ~~~      title=\"comment on <nop>$topic\">reply</a>
 ~~~ </div>$n

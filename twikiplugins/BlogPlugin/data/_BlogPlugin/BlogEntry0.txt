@@ -4,6 +4,7 @@
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
    * Set SIDEBAR = Entry
    * Set VIEW_TEMPLATE = BlogEntryView
+   * Set ENABLEPINGBACK = on
 -->
 %META:FORM{name="BlogEntryForm"}%
 %META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogEntry"}%

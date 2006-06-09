@@ -8,17 +8,17 @@ NONE
 
 ---++ Implementation
 %STARTINCLUDE%
-%STOPINCLUDE%
 *~~
 %~~ LASTVISITORS{
+~~~    days="7"
 ~~~    header="<div class=\"blogSideBarSection blogSideBarVisitors\">
 ~~~      <h1>Visitors$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
 ~~~    format="<li><a href=\"%SCRIPTURL{"view"}%/%MAINWEB%/$wikiname\"
-~~~      title=\"last seen $time\">$wikiname</a></li>"
+~~~      title=\"last seen $date - $time\">$wikiname</a></li>"
 ~~~    footer="</ul></div>"
 ~~~ }%
 *~~
-%<nop>STOPINCLUDE%
+%STOPINCLUDE%
 
 %DBCALL{"RenderFunctionCallers"}%
 

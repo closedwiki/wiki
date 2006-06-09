@@ -24,6 +24,7 @@
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup, %WIKIUSERNAME%
    * Set SIDEBAR = Page
    * Set VIEW_TEMPLATE = HiddenFormView
+   * Set ENABLEPINGBACK = on
 -->
 %STARTSECTION{type="templateonly"}%
 <!--

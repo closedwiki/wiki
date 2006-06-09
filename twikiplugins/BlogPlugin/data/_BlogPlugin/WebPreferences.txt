@@ -28,6 +28,7 @@
    * Set WEBDB = TWiki::Plugins::BlogPlugin::WebDB
 
    * Set RSSREFRESH = 1440
+   * #Set LASTFMNICK = 
    
    * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
    * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>

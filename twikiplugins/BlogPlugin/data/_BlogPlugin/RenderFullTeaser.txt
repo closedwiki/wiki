@@ -71,14 +71,15 @@ see also: RenderBlogTeaser
 ~~~      $formfield(Teaser)
 ~~~    </div>
 ~~~    $formfield(Text)
-~~~    <div class=\"blogMore\">...&nbsp;
+~~~    <div class=\"blogMore\"> &#8230;&nbsp;
 *~~      <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic
 *~~        %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\" 
-~~~        title=\"permalink to <nop>$topic\">more</a>
+~~~        title=\"permalink to <nop>$topic\">reply</a>
 ~~~    </div>
 ~~~  </div>$n
 ~~~  %STOPALIASAREA%
 ~~~  </noautolink>
+~~~  <br clear=\"all\" />
 ~~~ </div>
 %ENDSECTION{"format"}%
 </verbatim>

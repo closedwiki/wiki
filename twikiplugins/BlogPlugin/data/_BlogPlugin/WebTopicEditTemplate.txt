@@ -10,7 +10,6 @@
 
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup, %WIKIUSERNAME%
-   * Set SIDEBAR = Default
 -->
 %STARTSECTION{type="templateonly"}%
 <!--

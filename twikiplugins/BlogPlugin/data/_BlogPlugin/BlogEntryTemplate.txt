@@ -9,6 +9,7 @@
 %STARTSECTION{type="templateonly"}%
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
+   * Set ENABLEPINGBACK = on
 -->
 %ENDSECTION{type="templateonly"}%
 %META:FORM{name="TopicForm"}%
