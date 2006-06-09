@@ -46,7 +46,7 @@ sub getListOfUsers {
     my $users = $session->{users};
 
     #if we have the UserMapping changes (post 4.0.2)
-    return $session->{users}->getAllUsers() if (defined ($session->{users}->getAllUsers));
+    return $session->{users}->getAllUsers() if (defined (&TWiki::Users::getAllUsers));
 
     $users->lookupLoginName('guest'); # load the cache
 
@@ -83,7 +83,7 @@ sub getListOfGroups {
     my $users = $session->{users};
 
     #if we have the UserMapping changes (post 4.0.2)
-    return $session->{users}->getAllGroups() if (defined ($session->{users}->getAllGroups));
+    return $session->{users}->getAllGroups() if (defined (&TWiki::Users::getAllGroups));
 
     #This code assumes we are using TWiki topic based Group mapping
     unless( $users->{_LIST_OF_GROUPS} ) {
