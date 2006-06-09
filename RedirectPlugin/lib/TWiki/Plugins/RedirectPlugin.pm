@@ -10,89 +10,70 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
+# GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
-
 
 # =========================
 package TWiki::Plugins::RedirectPlugin;
 
 # =========================
-use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
-        $exampleCfgVar
-    );
+use vars qw( $VERSION $RELEASE $debug);
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-
 # =========================
-sub initPlugin
-{
-    ( $topic, $web, $user, $installWeb ) = @_;
+sub initPlugin {
+    #my ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
-        &TWiki::Func::writeWarning( "Version mismatch between RedirectPlugin and Plugins.pm" );
+    if ($TWiki::Plugins::VERSION < 1.1) {
+        TWiki::Func::writeWarning("Version mismatch between RedirectPlugin and Plugins.pm");
         return 0;
     }
+    #return 0 unless TWiki::Func::getContext()->{view};
+    my $query = TWiki::Func::getCgiQuery();
 
-    my $query=&TWiki::Func::getCgiQuery();
-
-    if( ! $query ) # this doesn't really have any meaning if we aren't being called as a CGI
-    {
-	return 0;
-    }
-
-
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-#    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    # this doesn't really have any meaning if we aren't being called as a CGI
+    return 0 unless $query;
 
     # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag( "REDIRECTPLUGIN_DEBUG" );
+    $debug = TWiki::Func::getPreferencesFlag("REDIRECTPLUGIN_DEBUG");
 
     # Plugin correctly initialized
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::RedirectPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    TWiki::Func::writeDebug( "- TWiki::Plugins::RedirectPlugin::initPlugin( $web.$topic ) is OK") if $debug;
+
+    TWiki::Func::registerTagHandler('REDIRECTTO', \&_REDIRECT);
     return 1;
 }
 
+
+
 # =========================
-sub commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+sub _REDIRECT {
+    my ($session, $params, $topic, $web) = @_;
 
-    &TWiki::Func::writeDebug( "- RedirectPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    TWiki::Func::writeDebug("- RedirectPlugin::_REDIRECT( $web.$topic)") if $debug;
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
+    my $query = TWiki::Func::getCgiQuery();
+    my $context = TWiki::Func::getContext();
+    my $newTopic = $params->{'newtopic'} || $params->{_DEFAULT};
 
-    my $query=&TWiki::Func::getCgiQuery();
-
-    if( !($ENV{SCRIPT_NAME} =~ /preview/) ) # make sure we don't redirect on preview!
-    {
-        if( $_[0] =~ /%REDIRECT\{\"([A-Z]+[A-Za-z]+)\.([A-Za-z0-9.-]+)\"\}%/ )
-        {
-            &TWiki::Func::redirectCgiQuery($query,&TWiki::Func::getViewUrl($1,$2));
+    #
+    # Redirect only on view. Do we want to redirect otherwise?
+    #
+    if ($context->{'view'} && $newTopic) {
+        my $webNameRegex = TWiki::Func::getRegularExpression('webNameRegex');
+        if (($newTopic =~ /($webNameRegex)\.([A-Za-z0-9-]+)/) && TWiki::Func::topicExists($1, $2)) {
+           TWiki::Func::redirectCgiQuery($query, TWiki::Func::getViewUrl($1, $2));
         }
-        if( $_[0] =~ /%REDIRECT\{\"([A-Za-z0-9.-]+)\"\}%/ )
-        {
-            &TWiki::Func::redirectCgiQuery($query,&TWiki::Func::getViewUrl($_[2],$1));
+        if (($newTopic =~ /([A-Za-z0-9-]+)/) && TWiki::Func::topicExists($web, $1)) {
+            TWiki::Func::redirectCgiQuery($query, TWiki::Func::getViewUrl($web, $1));
         }
-        if( $_[0] =~ /%REDIRECT\{\"(.+\:\/\/.+)\"\}%/ )
-        {
-            &TWiki::Func::redirectCgiQuery($query,$1);
-        }
+        return "%RED%Topic '$newTopic' not found%ENDCOLOR%";
     }
+    return "";
 }
 
-# =========================
 
 1;
