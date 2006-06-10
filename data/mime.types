@@ -10,8 +10,6 @@
 application/atom+xml            atom
 application/font-tdpfr          pfr
 application/java-archive        jar
-application/java-serialized-object ser
-application/java-vm				  class
 application/mac-binhex40        hqx
 application/mac-compactpro      cpt
 application/msword              doc dot
@@ -84,6 +82,7 @@ application/x-iso9660-image     iso
 application/x-javascript        js
 application/x-java-jnlp-file    jnlp 
 application/x-java-archive-diff jardiff
+application/x-java-serialized-object ser
 application/x-koan              skp skd skt skm
 application/x-latex             latex
 application/x-mif               mif
@@ -140,10 +139,10 @@ image/x-xpixmap                 xpm
 image/x-xwindowdump             xwd
 message/rfc822                  eml
 model/vrml                      wrl vrml
-text/css                        css
+text/css                        css cssfrag
 text/h323                       323
-text/html                       html htm
-text/plain                      txt text diff
+text/html                       html htm htmlfrag
+text/plain                      txt text diff sql sqlfrag
 text/richtext                   rtx
 text/tab-separated-values       tsv
 text/vnd.sun.j2me.app-descriptor    jad 
@@ -151,7 +150,7 @@ text/vnd.wap.wml                wml
 text/vnd.wap.wmlscript          wmls 
 text/xml                        rdf
 text/x-bibtex                   bib
-text/x-java                     java
+text/x-java-source              java javafrag
 text/x-setext                   etx
 text/x-sgml                     sgml sgm
 text/x-vcalendar                vcs
