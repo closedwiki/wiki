@@ -29,10 +29,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.SteveMokris, based on the original version by TWiki:Main/SteveMokris |
-|  Plugin Version: | 1 |
+|  Plugin Author: | TWiki:Main/SteveMokris, TWiki:Main.MeredithLesly |
+|  Plugin Version: | 09 Jun 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  09 Jun 2006: | Initial version |
+|  09 Jun 2006: | TWiki 4 fix |
+|  20 Jun 2003: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.8 |
