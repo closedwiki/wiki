@@ -460,8 +460,6 @@ Get toolname as defined in TWiki.cfg
 
 Return: =$name= Name of tool, e.g. ='TWiki'=
 
-Synonymous with TWiki::Func::getPreferencesValue('WIKITOOLNAME');
-
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
 
 =cut
@@ -478,8 +476,6 @@ Get name of Main web as defined in TWiki.cfg
 
 Return: =$name= Name, e.g. ='Main'=
 
-Synonymous with TWiki::Func::getPreferencesValue('MAINWEB');
-
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
 
 =cut
@@ -495,8 +491,6 @@ sub getMainWebname {
 Get name of TWiki documentation web as defined in TWiki.cfg
 
 Return: =$name= Name, e.g. ='TWiki'=
-
-Synonymous with TWiki::Func::getPreferencesValue('TWIKIWEB');
 
 *Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 2001)
 
