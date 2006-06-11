@@ -1057,7 +1057,11 @@ sub _validateRegistration {
                                     def => 'bad_wikiname' );
     }
 
-    if ($TWiki::cfg{MinPasswordLength} &&
+    my $doCheckPasswordLength  =
+        ($TWiki::cfg{PasswordManager}  ne  'none')  &&
+	!$TWiki::cfg{Register}{AllowLoginName}      &&
+         $TWiki::cfg{MinPasswordLength};
+    if ($doCheckPasswordLength &&
           (!$data->{passwordA} ||
              length($data->{passwordA}) < $TWiki::cfg{MinPasswordLength})) {
         throw TWiki::OopsException(

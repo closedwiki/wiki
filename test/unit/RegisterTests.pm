@@ -538,6 +538,96 @@ sub test_registerNoVerifyOk {
 }
 
 
+# Register a user with a password which is too short - must be rejected
+sub test_rejectShortPassword {
+    my $this = shift;
+    $TWiki::cfg{Register}{NeedVerification}  =  0;
+    $TWiki::cfg{MinPasswordLength}           =  6;
+    $TWiki::cfg{PasswordManager}             =  'TWiki::Users::HtPasswdUser';
+    $TWiki::cfg{Register}{AllowLoginName}    =  0;
+    my $query = new CGI ({
+                          'TopicName'     => ['TWikiRegistration'],
+                          'Twk1Email'     => [$testUserEmail],
+                          'Twk1WikiName'  => [$testUserWikiName],
+                          'Twk1Name'      => ['Test User'],
+                          'Twk0Comment'   => [''],
+#                         'Twk1LoginName' => [$testUserLoginName],
+                          'Twk1FirstName' => ['Test'],
+                          'Twk1LastName'  => ['User'],
+                          'Twk1Password'  => ['12345'],
+                          'Twk1Confirm'   => ['12345'],
+                          'action'        => ['register'],
+                         });
+
+    $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $session->{net}->setMailHandler(\&sentMail);
+
+    try {
+        TWiki::UI::Register::register_cgi($session);
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("bad_password", $e->{def}, $e->stringify());
+        $this->assert_equals(0, scalar(@mails));
+        @mails = ();
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+}
+
+# Register a user with a password which is too short - must be accepted
+# if TWiki does not do login management
+sub test_ignoreShortPassword {
+    my $this = shift;
+    $TWiki::cfg{Register}{NeedVerification}  =  0;
+    $TWiki::cfg{MinPasswordLength}           =  6;
+    $TWiki::cfg{PasswordManager}             =  'TWiki::Users::HtPasswdUser';
+    $TWiki::cfg{Register}{AllowLoginName}    =  1;
+    my $query = new CGI ({
+                          'TopicName'     => ['TWikiRegistration'],
+                          'Twk1Email'     => [$testUserEmail],
+                          'Twk1WikiName'  => [$testUserWikiName],
+                          'Twk1Name'      => ['Test User'],
+                          'Twk0Comment'   => [''],
+                          'Twk1LoginName' => [$testUserLoginName],
+                          'Twk1FirstName' => ['Test'],
+                          'Twk1LastName'  => ['User'],
+                          'Twk1Password'  => ['12345'],
+                          'Twk1Confirm'   => ['12345'],
+                          'action'        => ['register'],
+                         });
+
+    $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
+    $session->{net}->setMailHandler(\&sentMail);
+
+    try {
+        TWiki::UI::Register::register_cgi($session);
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("thanks", $e->{def}, $e->stringify());
+        $this->assert_equals(2, scalar(@mails));
+	# don't check the mails in this test case - this is done elsewhere
+        @mails = ();
+    } catch TWiki::AccessControlException with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        my $e = shift;
+        $this->assert(0, $e->stringify);
+    } otherwise {
+        $this->assert(0, "expected an oops redirect");
+    };
+}
+
 ################################################################################
 ################################ RESET PASSWORD TESTS ##########################
 
