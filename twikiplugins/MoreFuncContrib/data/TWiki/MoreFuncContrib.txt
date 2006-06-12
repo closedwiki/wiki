@@ -1,25 +1,12 @@
----+!! MoreFuncContrib Contrib Package
+%META:TOPICINFO{author="MeredithLesly" date="1150126445" format="1.1" reprev="1.2" version="1.2"}%
+<!-- Do not edit! Automatically generated from SVN
+-->
 
-Add short description here of your MoreFuncContrib contrib.
+---+!! !MoreFuncContrib Package
 
-%TOC%
+Supplemental functions to TWiki::Func
 
----++ Summary of Contents
-   * 
-   * 
-
----++ Detailed Documentation
-%$POD%
-
----++ Settings
-
-Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>MOREFUNCCONTRIB_STUB%==
-
-   * One line description:
-      * Set SHORTDESCRIPTION = Add short description here of your MoreFuncContrib contrib
-
-   * Name of the perl package
-      * Set STUB = %$STUB%
+%PERLDOC{"TWiki::Contrib::MoreFuncContrib"}%
 
 ---++ Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
@@ -29,14 +16,10 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 	* Run ==%TOPIC%_installer.pl== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
 	%$DEPENDENCIES%
 
-   * Test if the installation was successful:
-      * __enter sample here__
-      * see also [[Sandbox.PluginTest%TOPIC%]]
-
 ---++ Contrib Info
 
-|  Author: | TWiki:Main/root |
-|  Copyright &copy;: | <!-- e.g. "2004, SlobSoft Gmbh, All Rights Reserved" --> |
+|  Author: | TWiki:Main.MeredithLesly|
+|  Copyright &copy;: | 2006 Meredith Lesly based on code from other TWiki contributors |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
@@ -46,6 +29,6 @@ Settings are stored as preferences variables. To reference a setting write ==%<n
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ %TWIKIWEB%.TWikiFuncDotPm
 
--- TWiki:Main/root - %DATE%
+-- TWiki:Main.MeredithLesly - %DATE%
