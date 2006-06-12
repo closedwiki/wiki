@@ -305,6 +305,7 @@ sub test_getACLsBodyTextIMPLIED {
                          $testNormalWeb,
                          $testTopic);
     $this->assert(defined($acls->{"$testUsersWeb.UserA"}));
+    $this->assert(defined($acls->{"$testUsersWeb.UserA"}->{VIEW}));
     $this->assert($acls->{"$testUsersWeb.UserA"}->{VIEW});
     $this->assert($acls->{"$testUsersWeb.UserB"}->{VIEW});
     $this->assert($acls->{"$testUsersWeb.UserC"}->{VIEW});
