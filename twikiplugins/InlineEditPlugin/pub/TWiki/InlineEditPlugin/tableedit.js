@@ -64,6 +64,7 @@ TWiki.InlineEditPlugin.TableEdit.prototype.getSaveData = function() {
 
         var cellValue = this.topicSectionObject.editDivSection.elements[i].value;
         //escape linefeeds
+        cellValue = cellValue.replace(/\r/g, '');
         cellValue = cellValue.replace(/\n/g, '<br>');
         reconstitutedTable = reconstitutedTable + cellValue;
         reconstitutedTable = reconstitutedTable + '|';
@@ -92,7 +93,7 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
 //        innerHTML = innerHTML + '<tr>';
 //        innerHTML = innerHTML + '<td>'+makeFormButton('add_row', '+', 'addRow(event);', 1);
 //        innerHTML = innerHTML + makeFormButton('delete_row', '-', 'deleteRow(event);', 1) +'</td>';
-        var cells = lines[i].split(/[|]/);
+        var cells = lines[i].split('|');
         if (cells.length > maxColumns) {
             maxColumns = cells.length;
         }
