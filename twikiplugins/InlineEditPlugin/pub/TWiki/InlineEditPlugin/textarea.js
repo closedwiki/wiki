@@ -61,15 +61,15 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
         newForm.method = "post";
         newForm.action = this.topicSectionObject.HTMLdiv.parentNode.action;
 
-        var numberOfLines = this.topicSectionObject.TMLdiv.innerHTML.split("\n").length;
+        var numberOfLines = this.topicSectionObject.tml.split("\n").length;
         if (numberOfLines < 4) {numberOfLines = 4};
         if (numberOfLines > 12) {numberOfLines = 12};
 
         var defaultNumberOfCols = 40;
-        var defaultNumberOfRows = countLines(this.topicSectionObject.TMLdiv.innerHTML, defaultNumberOfCols);
+        var defaultNumberOfRows = countLines(this.topicSectionObject.tml, defaultNumberOfCols);
         if (defaultNumberOfRows < 4) {defaultNumberOfRows = 4};
         if (defaultNumberOfRows > 12) {defaultNumberOfRows = 12};
-        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.TMLdiv.innerHTML+'</textarea>';
+        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.tml+'</textarea>';
 
         newForm.innerHTML = innerHTML;
         newForm.elements.namedItem("text").topicSection =this.topicSectionObject.topicSection;
