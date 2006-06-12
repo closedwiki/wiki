@@ -8,15 +8,11 @@
 
 =pod
 
----+ package TWiki::Contrib::MoreFuncContrib
+%TOC%
 
 This contrib contains basic functionality needed by many plugins that is not
 included in Dakar's TWiki::Func. Some or all of these will probably be merged
 into the TWiki::Func at some point.
-
----++ No breakout of groups of functions yet
-
-%TOC%
 
 =cut
 
@@ -30,10 +26,11 @@ use TWiki::Plugins;
 use vars qw( $VERSION );
 $VERSION = '1.000';
 
-#
-# This is yucky, since what we really want is for Store.pm to have a function that
-# returns only the $meta.
-#
+=pod
+
+---++ Webs, Topics, and Attachments
+
+=cut
 
 =pod
 
@@ -43,6 +40,9 @@ Returns the metadata for a topic.
 
 =cut
 
+#
+# SMELL: This should be rewritten to use an Store subroutine.
+#
 sub readTopicMeta {
     my( $web, $topic, $rev ) = @_;
 
@@ -67,6 +67,28 @@ sub getTopicPreferenceValue {
     return $prefHash->{value} if $prefHash;
     return 0;
 }
+
+=pod
+
+---+++ getChildWebs($web) -> $listOfWebs
+
+Returns a list of a web's child webs
+
+=cut
+
+sub getChildWebs {
+    my $web = shift;
+    my @kids =  $TWiki::Plugins::SESSION->{store}->_getSubWebs($web);
+    my $kidlist = join(/,/, @kids);
+    $kidlist =~ s#.*/##;
+    return split(/,/, $kidlist);
+}
+
+=pod
+
+---++ Plugin-specific file handling
+
+=cut
 
 =pod
 
@@ -115,19 +137,9 @@ sub deleteWorkFile {
 
 =pod
 
----+++ getChildWebs($web) -> $listOfWebs
-
-Returns a list of a web's child webs
+---++ General Utilities
 
 =cut
-
-sub getChildWebs {
-    my $web = shift;
-    my @kids =  $TWiki::Plugins::SESSION->{store}->_getSubWebs($web);
-    my $kidlist = join(/,/, @kids);
-    $kidlist =~ s#.*/##;
-    return split(/,/, $kidlist);
-}
 
 =pod
 
