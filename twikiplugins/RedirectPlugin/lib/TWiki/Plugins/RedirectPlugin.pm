@@ -1,5 +1,6 @@
 # TWiki RedirectPlugin
 #
+# Copyright (C) 2006 Meredith Lesly, msnomer@spamcop.net
 # Copyright (C) 2003 Steve Mokris, smokris@softpixel.com
 #
 # This program is free software; you can redistribute it and/or
@@ -31,7 +32,7 @@ sub initPlugin {
         TWiki::Func::writeWarning("Version mismatch between RedirectPlugin and Plugins.pm");
         return 0;
     }
-    #return 0 unless TWiki::Func::getContext()->{view};
+
     my $query = TWiki::Func::getCgiQuery();
 
     # this doesn't really have any meaning if we aren't being called as a CGI
@@ -40,40 +41,54 @@ sub initPlugin {
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag("REDIRECTPLUGIN_DEBUG");
 
-    # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::RedirectPlugin::initPlugin( $web.$topic ) is OK") if $debug;
-
-    TWiki::Func::registerTagHandler('REDIRECTTO', \&_REDIRECT);
+    TWiki::Func::registerTagHandler('REDIRECTTO', \&REDIRECTTO);
     return 1;
 }
 
 
 
 # =========================
-sub _REDIRECT {
+sub REDIRECTTO {
     my ($session, $params, $topic, $web) = @_;
 
-    TWiki::Func::writeDebug("- RedirectPlugin::_REDIRECT( $web.$topic)") if $debug;
-
-    my $query = TWiki::Func::getCgiQuery();
     my $context = TWiki::Func::getContext();
-    my $newTopic = $params->{'newtopic'} || $params->{_DEFAULT};
+    my $newWeb = $web;
+    my $newTopic;
+    my $anchor = '';
+    my $dest = $params->{'newtopic'} || $params->{_DEFAULT};
 
     #
-    # Redirect only on view. Do we want to redirect otherwise?
+    # Redirect only on view.
     #
-    if ($context->{'view'} && $newTopic) {
+    if ($context->{'view'} && $dest) {
+        my $query = TWiki::Func::getCgiQuery();
+        $dest = TWiki::Func::expandCommonVariables($dest);
+
         my $webNameRegex = TWiki::Func::getRegularExpression('webNameRegex');
-        if (($newTopic =~ /($webNameRegex)\.([A-Za-z0-9-]+)/) && TWiki::Func::topicExists($1, $2)) {
-           TWiki::Func::redirectCgiQuery($query, TWiki::Func::getViewUrl($1, $2));
+        my $wikiWordRegex = TWiki::Func::getRegularExpression('wikiWordRegex');
+        my $anchorRegex = TWiki::Func::getRegularExpression('anchorRegex');
+
+        if ($dest =~ s/^($webNameRegex)\.// ) {
+            $newWeb = $1;
         }
-        if (($newTopic =~ /([A-Za-z0-9-]+)/) && TWiki::Func::topicExists($web, $1)) {
-            TWiki::Func::redirectCgiQuery($query, TWiki::Func::getViewUrl($web, $1));
+
+        if ($dest =~ s/^($wikiWordRegex)//) {
+            $newTopic = $1;
+        } elsif ($dest =~ s/^\.([a-zA-Z0-9]+)//) {
+            $newTopic = $1;
         }
-        return "%RED%Topic '$newTopic' not found%ENDCOLOR%";
+        if ($dest =~ /^($anchorRegex)$/) {
+            $anchor = $1;
+        }
+
+        if ($newWeb eq $web && $newtopic eq $topic) {
+            return "%RED%Can't redirect to same topic%ENDCOLOR%";
+        } else {
+            TWiki::Func::redirectCgiQuery($query, TWiki::Func::getViewUrl($newWeb, $newTopic) . $anchor);
+        }
+        return "%RED%Destination $dest not found";
     }
     return "";
 }
-
 
 1;
