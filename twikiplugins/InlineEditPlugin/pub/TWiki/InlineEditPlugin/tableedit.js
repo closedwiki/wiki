@@ -62,7 +62,10 @@ TWiki.InlineEditPlugin.TableEdit.prototype.getSaveData = function() {
             line = elementAddress[1];
         }
 
-        reconstitutedTable = reconstitutedTable + this.topicSectionObject.editDivSection.elements[i].value;
+        var cellValue = this.topicSectionObject.editDivSection.elements[i].value;
+        //escape linefeeds
+        cellValue = cellValue.replace(/\n/g, '<br>');
+        reconstitutedTable = reconstitutedTable + cellValue;
         reconstitutedTable = reconstitutedTable + '|';
         //if end of row, add new line and a new |
     }
@@ -104,7 +107,11 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
         var defaultNumberOfCols = 20;
         var defaultNumberOfRows = countLines(cells[largestIndex], defaultNumberOfCols);
         for (var j=1; j< cells.length-1;j++) {
-            innerHTML = innerHTML + '<td><textarea rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" onkeyup="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" id="'+this.topicSectionObject.topicSection+','+i+','+j+'" name="text" width="99%" >'+cells[j]+'</textarea></td>';
+            //escape linefeeds
+            var cellValue = cells[j];
+            cellValue = cellValue.replace(/<br>/gi, "\n");
+
+            innerHTML = innerHTML + '<td><textarea rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" onkeyup="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" id="'+this.topicSectionObject.topicSection+','+i+','+j+'" name="text" width="99%" >'+cellValue+'</textarea></td>';
 //            innerHTML = innerHTML + '<td>'+cells[j]+'</td>';
         }
         innerHTML = innerHTML + '</tr>';
