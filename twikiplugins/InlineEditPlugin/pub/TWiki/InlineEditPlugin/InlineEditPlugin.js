@@ -154,7 +154,6 @@ InlineEditOnload = function() {
             continue;
 
         var topicSectionObject = topicInfo.parseJSON();
-alert(topicInfo)
         topicSectionObject.HTMLdiv = divs[i];
         topicSectionObject.HTMLdiv.topicSectionObject = topicSectionObject;
         topicSectionObject.topicinfoSrc = topicInfo;
