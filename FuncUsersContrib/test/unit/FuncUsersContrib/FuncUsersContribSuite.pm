@@ -291,4 +291,42 @@ sub test_setACLsPrefs {
     $this->assert(!$acls->{"$testUsersWeb.UserC"}->{VIEW});
 }
 
+sub test_getACLsBodyTextIMPLIED {
+    my $this = shift;
+    
+    {
+    my $twiki = new TWiki('AdminUser');
+    $twiki->{store}->saveTopic($twiki->{user}, $testNormalWeb, $testTopic,
+                  "no allow or deny lines at all");
+    }
+
+    # totally inadequate test of getACLs
+    my $acls = TWiki::Func::getACLs([ 'VIEW' ],
+                         $testNormalWeb,
+                         $testTopic);
+    $this->assert($acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert($acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert($acls->{"$testUsersWeb.UserC"}->{VIEW});
+}
+
+sub test_getACLsBodyTextDENIED {
+    my $this = shift;
+    
+    {
+    my $twiki = new TWiki('AdminUser');
+    $twiki->{store}->saveTopic($twiki->{user}, $testNormalWeb, $testTopic,
+                  "      * Set DENYVIEW=");
+    }
+
+    # totally inadequate test of getACLs
+    my $acls = TWiki::Func::getACLs([ 'VIEW' ],
+                         $testNormalWeb,
+                         $testTopic);
+    $this->assert(!$acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert(!$acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert(!$acls->{"$testUsersWeb.UserC"}->{VIEW});
+}
+
+
+
 1;
