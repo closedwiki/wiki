@@ -31,6 +31,7 @@ The API is packaged this way so it can be used with TWiki-4.0
 |  Author: | TWiki:Main/CrawfordCurrie http://www.c-dot.co.uk |
 |  Version: | %$VERSION%  |
 |  Change History: | |
+|  10558 | Now supports ACL stored in META:PREFERENCE |
 |  9060 | Removed NOSEARCHALL handling from setACLs |
 |  9046 | Was not deleting the old setting out of the file, just writing the new setting at the end. Not a killer, just untidy. |
 |  8877 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1701'>Item1701</a>  getting install right |
