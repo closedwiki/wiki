@@ -381,4 +381,24 @@ sub test_getACLsBodyTextUserAALLOWED {
     $this->assert(!$acls->{"$testUsersWeb.UserC"}->{VIEW});
 }
 
+sub test_getACLsBodyTextUserAALLOWEDUserBDENIED {
+    my $this = shift;
+    
+    {
+    my $twiki = new TWiki('AdminUser');
+    $twiki->{store}->saveTopic($twiki->{user}, $testNormalWeb, $testTopic,
+                  "      * Set ALLOWVIEW=UserA"."\n".
+                  "      * Set DENYVIEW=UserB");
+    }
+
+    # totally inadequate test of getACLs
+    my $acls = TWiki::Func::getACLs([ 'VIEW' ],
+                         $testNormalWeb,
+                         $testTopic);
+    $this->assert($acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert(!$acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert(!$acls->{"$testUsersWeb.UserC"}->{VIEW});
+}
+
+
 1;
