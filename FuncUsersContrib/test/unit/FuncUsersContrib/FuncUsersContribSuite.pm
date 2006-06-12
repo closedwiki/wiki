@@ -304,6 +304,7 @@ sub test_getACLsBodyTextIMPLIED {
     my $acls = TWiki::Func::getACLs([ 'VIEW' ],
                          $testNormalWeb,
                          $testTopic);
+    $this->assert(defined($acls->{"$testUsersWeb.UserA"}));
     $this->assert($acls->{"$testUsersWeb.UserA"}->{VIEW});
     $this->assert($acls->{"$testUsersWeb.UserB"}->{VIEW});
     $this->assert($acls->{"$testUsersWeb.UserC"}->{VIEW});
