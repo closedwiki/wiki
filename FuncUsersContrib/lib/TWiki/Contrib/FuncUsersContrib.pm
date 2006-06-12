@@ -212,11 +212,13 @@ sub getACLs {
             $acls{$user}->{$mode} = 1;
         }
     }
-
+    #print STDERR "Got users ",join(',',keys %acls),"\n";
     foreach my $mode ( @$modes ) {
         foreach my $perm ( 'ALLOW', 'DENY' ) {
             my $users = $TWiki::Plugins::SESSION->{prefs}->getTopicPreferencesValue(
                 $perm.$context.$mode, $web, $topic );
+            #print STDERR "$perm$context is not defined\n" unless defined($users);
+            next unless defined($users);
 
             my @lusers =
               grep { $_ }
@@ -242,13 +244,16 @@ sub getACLs {
                 # If ALLOW, only users in the ALLOW list are permitted,
                 # so change the default for all other users to 0.
                 foreach my $user ( @knownusers ) {
+                    #print STDERR "Disallow ",$user,"\n";
                     $acls{$user}->{$mode} = 0;
                 }
                 foreach my $user ( @users ) {
+                    #print STDERR "Allow ",$user,"\n";
                     $acls{$user}->{$mode} = 1;
                 }
             } else {
                 foreach my $user ( @users ) {
+                    #print STDERR "Deny ",$user,"\n";
                     $acls{$user}->{$mode} = 0;
                 }
             }
