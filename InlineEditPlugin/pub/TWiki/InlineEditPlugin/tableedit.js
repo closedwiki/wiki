@@ -31,7 +31,7 @@ TWiki.InlineEditPlugin.TableEdit.register = function() {
 TWiki.InlineEditPlugin.TableEdit.appliesToSection = function(topicSectionObject) {
 //TODO: deal with \ and other special cases
 //foreach line make sure it starts and ends with a |
-    var lines = topicSectionObject.TMLdiv.innerHTML.split("\n");
+    var lines = topicSectionObject.tml.split("\n");
     for (var i=0; i< lines.length;i++) {
         if ( ! lines[i].match(/^\s*\|(.*)\|\s*$/)) {
             return false;
@@ -83,7 +83,7 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
     newForm.action = this.topicSectionObject.HTMLdiv.parentNode.action;
 
     var innerHTML = '';
-    var lines = this.topicSectionObject.TMLdiv.innerHTML.split("\n");
+    var lines = this.topicSectionObject.tml.split("\n");
     var maxColumns = 0;
     for (var i=0; i< lines.length;i++) {
 //        innerHTML = innerHTML + '<tr>';

@@ -90,7 +90,7 @@ getEditableHTML = function(topicSectionObject) {
     if ( topicSectionObject.TML2HTMLdiv != null ) {
         editableHTML = topicSectionObject.TML2HTMLdiv.innerHTML;
     } else {
-        editableHTML = tml2html.convert(topicSectionObject.TMLdiv.innerHTML, options);
+        editableHTML = tml2html.convert(topicSectionObject.tml, options);
     }
 
     //hack around the fact i'm using private members
@@ -118,27 +118,24 @@ getEditableHTML = function(topicSectionObject) {
 // Find all the divs in the page (after it has loaded) and Wikiwygify them.
 var topicSections = [];
 InlineEditOnload = function() {
-    var elements = document.getElementsByTagName('div');
     var divs = [];
-    var tmldivs = [];
     var tml2htmldivs = [];
     var twikiTopicStatedivs = [];
+    var elements = document.getElementsByTagName('div');
     for (var i = 0; i < elements.length; i++) {
         //The user viewed HTML
         if (elements[i].className == 'inlineeditTopicHTML') {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             divs[id] = elements[i];
         }
-        //The pure TML based topic text
-        if (elements[i].className == 'inlineeditTopicTML') {
-            var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
-            tmldivs[id] = elements[i];
-        }
-        //The HTML generated using the perl TM2HTML code    
+        //The HTML generated using the perl TM2HTML code
         if (elements[i].className == 'inlineeditTopicTML2HTML') {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             tml2htmldivs[id] = elements[i];
         }
+    }
+    elements = document.getElementsByTagName('pre');
+    for (var i = 0; i < elements.length; i++) {
         if (elements[i].className == 'inlineeditTopicInfo') {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             twikiTopicStatedivs[id] = elements[i];
@@ -150,7 +147,6 @@ InlineEditOnload = function() {
     }
     for (var i in divs) {
         var tmldiv, tml2htmldiv, topicInfo;
-        if (tmldivs[i]) {tmldiv=tmldivs[i]};
         if (tml2htmldivs[i]) {tml2htmldiv=tml2htmldivs[i]};
         if (twikiTopicStatedivs[i]) {topicInfo=twikiTopicStatedivs[i].innerHTML};
 
@@ -158,6 +154,7 @@ InlineEditOnload = function() {
             continue;
 
         var topicSectionObject = topicInfo.parseJSON();
+alert(topicInfo)
         topicSectionObject.HTMLdiv = divs[i];
         topicSectionObject.HTMLdiv.topicSectionObject = topicSectionObject;
         topicSectionObject.topicinfoSrc = topicInfo;
@@ -165,7 +162,6 @@ InlineEditOnload = function() {
         topicSectionObject.HTMLdiv.TWikiInlineEditPluginonDblClickFunction = gotoEditModeFromEvent;
         XBrowserAddHandler(topicSectionObject.HTMLdiv, 'dblclick', 'TWikiInlineEditPluginonDblClickFunction');
 
-        topicSectionObject.TMLdiv = tmldiv;
         topicSectionObject.TML2HTMLdiv = tml2htmldiv;
 //        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
 
@@ -254,16 +250,12 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
         var newSectionID = 'new'+originatingTopicSectionObject.topicSection+aboveBelow[putSectionAbove]+originatingTopicSectionObject.newSectionName;
         originatingTopicSectionObject.newSectionName++;
 
-        var newTml = ' SvenDowideit was here <b>and we are cool</b>';
+        var newTml = 'new Section';
         if (sectionType == 1) {
             newTml = "| | | |\n| | | |\n| | | |";
         }
 
         //TODO: change the ids etc..
-        var tmldiv=document.createElement('DIV');
-        tmldiv.setAttribute("class", "inlineeditTopicTML")
-        tmldiv.setAttribute("id", 'inlineeditTopicTML_'+newSectionID)
-        tmldiv.innerHTML = newTml;
         var htmldiv=document.createElement('DIV');
         htmldiv.setAttribute("class", "inlineeditTopicHTML")
         htmldiv.setAttribute("id", 'inlineeditTopicHTML_'+newSectionID)
@@ -288,7 +280,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
         topicSectionObject.HTMLdiv.TWikiInlineEditPluginonDblClickFunction = gotoEditModeFromEvent;
         XBrowserAddHandler(topicSectionObject.HTMLdiv, 'dblclick', 'TWikiInlineEditPluginonDblClickFunction');
 
-        topicSectionObject.TMLdiv = tmldiv;
+        topicSectionObject.tml = newTml;
         topicSectionObject.TML2HTMLdiv = tml2htmldiv;
 //        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
 
@@ -444,6 +436,10 @@ deleteSection = function(event) {
 
 //from http://tuckey.org/textareasizer/
 function countLines(strtocount, cols) {
+    if (typeof(strtocount) == "undefined")
+        return 0;
+    if (strtocount == "")
+        return 0;
     var hard_lines = 1;
     var last = 0;
     while ( true ) {

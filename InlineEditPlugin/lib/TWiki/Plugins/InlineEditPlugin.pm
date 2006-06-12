@@ -245,12 +245,9 @@ sub postRenderingHandler {
         foreach my $key (keys(%sectionIds)) {
     #TODO: exctract into a func to use with sectional edit
             my $section = $key;
-            my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicState($WEB, $TOPIC, $section);
-
-            #my ($meta, $tml) = TWiki::Func::readTopic($WEB, $TOPIC);
             my $tml = $sectionIds{$key};
+            my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section, $tml);
 
-            $output .= '<div class="inlineeditTopicTML" '.$hiddenStyle.'id="inlineeditTopicTML_'.$section.'" '.'>'.$tml.'</div>';
             #these need to remain in seperate divs to avoid needing to escape them
     	   if ( $sendHTML == 1) {
                 unless ( $tml2html ) {
@@ -269,7 +266,7 @@ sub postRenderingHandler {
                 $_[0] =~ s/(<div id=.inlineeditTopicHTML_)/$tml2htmloutput$1/g;#TODO: this presumes only one editor
             } else {
             }
-            my $topicState = '<div class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
+            my $topicState = '<pre class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</pre>';
             $output .= $topicState;
         }
     }
@@ -382,8 +379,8 @@ sub pluginApplies {
 }
 
 #TODO: seperate this into a JavaScript TopicInfoPlugin and the InlineEditPlugin specific info.
-sub _getTopicState {
-   my ($web, $topic, $section) = @_;
+sub _getTopicSectionState {
+   my ($web, $topic, $section, $tml) = @_;
 
    my ( $date, $user, $rev, $comment ) = TWiki::Func::getRevisionInfo($web, $topic);
 
@@ -421,6 +418,7 @@ sub _getTopicState {
     topicDate   => $date,
     topicUser   =>$user ,
     topicSection   => $section,
+    tml => $tml,
     sectionName   => $sectionName,
     leasedBy   => $leaseduserWikiName,
     leasedByLogin   => $loginName,
