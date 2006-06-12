@@ -413,6 +413,7 @@ sub _getTopicState {
 
    my $sectionName = $viewUrl.';section='.$section;
    my $wikiusername = TWiki::Func::getWikiUserName();
+   my $browserLogin =  TWiki::Func::wikiToUserName($wikiusername);
 
  my $obj = {
     topicName   => $web.$topic,
@@ -430,6 +431,7 @@ sub _getTopicState {
     restUrl   => $restUrl,
     authedRestUrl   =>$authedRestUrl ,
     me   => $wikiusername,
+    browserLogin => $browserLogin,
     Infoend => 0
  };
 
