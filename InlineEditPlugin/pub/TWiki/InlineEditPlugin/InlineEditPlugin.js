@@ -267,7 +267,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
 
         var newTml = 'new Section';
         if (sectionType == 1) {
-            newTml = "| | | |\n| | | |\n| | | |";
+            newTml = "||||\n||||\n||||";
         }
 
         //TODO: change the ids etc..
