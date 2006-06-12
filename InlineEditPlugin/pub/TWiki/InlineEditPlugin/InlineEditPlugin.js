@@ -372,9 +372,11 @@ saveAllSections = function(event) {
 
         sectionOrder = sectionOrderArray.toJSONString();
         topicSectionalSaveUrl = topicSections[0].saveUrl;
+        browserLogin = topicSections[0].browserLogin;
 
         var bindArgs = {
         url:        topicSectionalSaveUrl,
+        username: browserLogin,
         method: 'POST',
         parameters: {replywitherrors: 1, dataType: 'JSON', data: data, inlineeditsave: 1, originalrev: topicSections[0].topicRev,sectionOrder: sectionOrder},
         onError:      function(req) {
@@ -406,7 +408,7 @@ saveAllSections = function(event) {
     };
 
     // dispatch the request
-    var requestObj = AjaxRequest.get(bindArgs);
+    var requestObj = AjaxRequest.post(bindArgs);
 }
 
 cancelEditMode = function(event) {
