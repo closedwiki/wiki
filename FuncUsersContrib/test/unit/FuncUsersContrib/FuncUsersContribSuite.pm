@@ -309,7 +309,7 @@ sub test_getACLsBodyTextIMPLIED {
     $this->assert($acls->{"$testUsersWeb.UserC"}->{VIEW});
 }
 
-sub test_getACLsBodyTextDENIED {
+sub test_getACLsBodyTextEMPTYDENIED {
     my $this = shift;
     
     {
@@ -322,11 +322,63 @@ sub test_getACLsBodyTextDENIED {
     my $acls = TWiki::Func::getACLs([ 'VIEW' ],
                          $testNormalWeb,
                          $testTopic);
+    $this->assert($acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert($acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert($acls->{"$testUsersWeb.UserC"}->{VIEW});
+}
+
+sub test_getACLsBodyTextEMPTYALLOWED {
+    my $this = shift;
+    
+    {
+    my $twiki = new TWiki('AdminUser');
+    $twiki->{store}->saveTopic($twiki->{user}, $testNormalWeb, $testTopic,
+                  "      * Set ALLOWVIEW=");
+    }
+
+    # totally inadequate test of getACLs
+    my $acls = TWiki::Func::getACLs([ 'VIEW' ],
+                         $testNormalWeb,
+                         $testTopic);
     $this->assert(!$acls->{"$testUsersWeb.UserA"}->{VIEW});
     $this->assert(!$acls->{"$testUsersWeb.UserB"}->{VIEW});
     $this->assert(!$acls->{"$testUsersWeb.UserC"}->{VIEW});
 }
 
+sub test_getACLsBodyTextUserADENIED {
+    my $this = shift;
+    
+    {
+    my $twiki = new TWiki('AdminUser');
+    $twiki->{store}->saveTopic($twiki->{user}, $testNormalWeb, $testTopic,
+                  "      * Set DENYVIEW=UserA");
+    }
 
+    # totally inadequate test of getACLs
+    my $acls = TWiki::Func::getACLs([ 'VIEW' ],
+                         $testNormalWeb,
+                         $testTopic);
+    $this->assert(!$acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert($acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert($acls->{"$testUsersWeb.UserC"}->{VIEW});
+}
+
+sub test_getACLsBodyTextUserAALLOWED {
+    my $this = shift;
+    
+    {
+    my $twiki = new TWiki('AdminUser');
+    $twiki->{store}->saveTopic($twiki->{user}, $testNormalWeb, $testTopic,
+                  "      * Set ALLOWVIEW=UserA");
+    }
+
+    # totally inadequate test of getACLs
+    my $acls = TWiki::Func::getACLs([ 'VIEW' ],
+                         $testNormalWeb,
+                         $testTopic);
+    $this->assert($acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert(!$acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert(!$acls->{"$testUsersWeb.UserC"}->{VIEW});
+}
 
 1;
