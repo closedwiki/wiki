@@ -232,7 +232,7 @@ sub postRenderingHandler {
 
         #lets add an InfoSection for the topic.
         my $section = 0;
-        my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicState($WEB, $TOPIC, $section);
+        my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section);
         my $topicState = '<div class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
         $output .= $topicState;
     } else {
@@ -247,6 +247,8 @@ sub postRenderingHandler {
             my $section = $key;
             my $tml = $sectionIds{$key};
             my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section, $tml);
+            #send the tml in a textarea to stop the browser from closing xml fragments
+            $output .= '<textarea class="inlineeditTopicTML" '.$hiddenStyle.'id="inlineeditTopicTML_'.$section.'" '.'>'.$tml.'</textarea>';
 
             #these need to remain in seperate divs to avoid needing to escape them
     	   if ( $sendHTML == 1) {
@@ -266,7 +268,7 @@ sub postRenderingHandler {
                 $_[0] =~ s/(<div id=.inlineeditTopicHTML_)/$tml2htmloutput$1/g;#TODO: this presumes only one editor
             } else {
             }
-            my $topicState = '<pre class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</pre>';
+            my $topicState = '<div class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
             $output .= $topicState;
         }
     }
@@ -333,7 +335,7 @@ sub REST_setTopicLock {
 
    TWiki::Func::setTopicEditLock($web, $topic, 1);
 
-    my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime) = _getTopicState($web, $topic, $section);
+    my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime) = _getTopicSectionState($web, $topic, $section);
    return $response;
 }
 
@@ -418,7 +420,7 @@ sub _getTopicSectionState {
     topicDate   => $date,
     topicUser   =>$user ,
     topicSection   => $section,
-    tml => $tml,
+#    tml => $tml,       #can't pass it here, json does not do ><'s'
     sectionName   => $sectionName,
     leasedBy   => $leaseduserWikiName,
     leasedByLogin   => $loginName,

@@ -119,6 +119,7 @@ getEditableHTML = function(topicSectionObject) {
 var topicSections = [];
 InlineEditOnload = function() {
     var divs = [];
+    var tmldivs = [];
     var tml2htmldivs = [];
     var twikiTopicStatedivs = [];
     var elements = document.getElementsByTagName('div');
@@ -126,6 +127,7 @@ InlineEditOnload = function() {
         //The user viewed HTML
         if (elements[i].className == 'inlineeditTopicHTML') {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
+//            alert(elements[i].id + '>----<'+id+'>')
             divs[id] = elements[i];
         }
         //The HTML generated using the perl TM2HTML code
@@ -133,12 +135,16 @@ InlineEditOnload = function() {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             tml2htmldivs[id] = elements[i];
         }
-    }
-    elements = document.getElementsByTagName('pre');
-    for (var i = 0; i < elements.length; i++) {
         if (elements[i].className == 'inlineeditTopicInfo') {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             twikiTopicStatedivs[id] = elements[i];
+        }
+    }
+    elements = document.getElementsByTagName('textarea');
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].className == 'inlineeditTopicTML') {
+            var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
+            tmldivs[id] = elements[i].value;
         }
     }
     if (divs.length == 0) {
@@ -154,7 +160,17 @@ InlineEditOnload = function() {
             continue;
 
         var topicSectionObject = topicInfo.parseJSON();
+//        if (!topicSectionObject) {
+//            alert(topicInfo)
+//        }
+
+        topicSectionObject.tml = tmldivs[i];
+
         topicSectionObject.HTMLdiv = divs[i];
+//        if (topicSectionObject.HTMLdiv != divs[i]) {
+//            alert(divs[i] + '>----<'+i+'>'+divs[i].id)
+//            alert(topicSectionObject.HTMLdiv);
+//        }
         topicSectionObject.HTMLdiv.topicSectionObject = topicSectionObject;
         topicSectionObject.topicinfoSrc = topicInfo;
 
@@ -356,6 +372,7 @@ saveAllSections = function(event) {
             sectionOrderArray.push(topicSections[i].topicSection);
             if (topicSections[i].modified) {
                 data = data + topicSections[i].editSectionObject.getSaveData()+'####';
+                topicSections[i].HTMLdiv.innerHTML = '<FONT color="red"><B>please Wait, sending your changes to the server.....</B></FONT><br />';
                 hideEdit(topicSections[i]);
             }
         }
