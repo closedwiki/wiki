@@ -468,8 +468,6 @@ sub internalLink {
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     # SMELL - shouldn't it be callable by TWiki::Func as well?
 
-    #PN: Webname.Subweb -> Webname/Subweb
-    $theWeb =~ s/\./\//go;
     #PN: Webname/Subweb/ -> Webname/Subweb
     $theWeb =~ s/\/\Z//o;
 
@@ -636,10 +634,8 @@ sub _handleWikiWord {
     $text = $this->{session}->{plugins}->renderWikiWordHandler( $text ) || $text;
 
     # =$doKeepWeb= boolean: true to keep web prefix (for non existing Web.TOPIC)
-    # SMELL: Why set keepWeb when the topic is an abbreviation?
-    # NO IDEA, and it doesn't work anyway; it adds 'TWiki.' in front
-    # of every TWiki.CAPITALISED TWiki.WORD
-    #$keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
+    # (Necessary to leave "web part" of ABR.ABR.ABR intact if topic not found)
+    $keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
 
     # false means suppress link for non-existing pages
     $linkIfAbsent = ( $topic !~ /^$TWiki::regex{abbrevRegex}$/o );
