@@ -75,6 +75,9 @@ sub set_up {
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                      $TWiki::cfg{SuperAdminGroup},
                                      "   * Set GROUP = TestAdmin\n");
+        $session = new TWiki();
+        my $u = $session->{users}->findUser('TestAdmin');
+        $this->assert($u->isAdmin(), $u->stringify());
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                      'NewUserTemplate', <<'EOF'
 %NOP{Ignore this}%

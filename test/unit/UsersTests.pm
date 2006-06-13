@@ -42,7 +42,7 @@ sub set_up {
     $topicquery = new CGI( "" );
     $topicquery->path_info("/$testNormalWeb/$testTopic");
     try {
-        $twiki = new TWiki('AdminUser');
+        $twiki = new TWiki($TWiki::cfg{SuperAdminGroup});
         my $twikiUserObject = $twiki->{user};
         $twiki->{store}->createWeb($twikiUserObject, $testUsersWeb);
         # the group is recursive to force a recursion block

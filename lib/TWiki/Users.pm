@@ -86,9 +86,13 @@ sub getAllGroups() {
     unless (defined($this->{grouplist})) {
        $this->{grouplist} = [];
 	   my @groupList = $this->{usermappingmanager}->getListOfGroups();
+       push(@groupList, $TWiki::cfg{SuperAdminGroup});
+       my %saw;
 	   foreach my $g (@groupList) {
+           next if $saw{$g};
 	       my $groupObject = $this->findUser($g);
 	       push (@{$this->{grouplist}}, $groupObject);
+           $saw{$g} = 1;
     	}
     }
 	

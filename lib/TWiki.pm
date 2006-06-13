@@ -918,7 +918,7 @@ sub getScriptUrl {
             if( $p eq '#' ) {
                 $url .= '#' . shift( @params );
             } else {
-                $ps .= ';' . $p.'='.urlEncode(shift( @params ));
+                $ps .= ';' . $p.'='.urlEncode(shift( @params )||'');
             }
         }
         if( $ps ) {

@@ -224,6 +224,7 @@ sub checkPassword {
     $this->{error} = undef;
 
     my $pw = $this->fetchPass( $user );
+    return 0 unless defined $pw;
     # $pw will be 0 if there is no pw
 
     return 1 if( $pw && ($encryptedPassword eq $pw) );

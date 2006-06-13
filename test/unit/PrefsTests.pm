@@ -34,23 +34,22 @@ sub set_up {
     $TWiki::cfg{UsersWebName} = $testUsersWeb;
     $TWiki::cfg{SystemWebName} = $testSysWeb;
     $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
-    $TWiki::cfg{SuperAdminGroup} = 'ArglyBargly";
+    $TWiki::cfg{SuperAdminGroup} = 'ArglyBargly';
 
     $topicquery = new CGI( "" );
     $topicquery->path_info("/$testNormalWeb/$testTopic");
     try {
         $twiki = new TWiki('AdminUser');
-        my $twikiUserObject = $twiki->{user};
-        $twiki->{store}->createWeb($twikiUserObject, $testUsersWeb);
+        $twiki->{store}->createWeb($twiki->{user}, $testUsersWeb);
         $twiki->{store}->saveTopic(
             $twiki->{user}, $testUsersWeb, $TWiki::cfg{SuperAdminGroup},
-            '   * Set GROUP = '.$twikiUserObject->wikiName()."\n");
-
-        $twiki->{store}->createWeb($twikiUserObject, $testSysWeb, $original);
-        $twiki->{store}->createWeb($twikiUserObject, $testNormalWeb, '_default');
+            '   * Set GROUP = '.$twiki->{user}->wikiName()."\n");
+        $twiki = new TWiki($TWiki::cfg{SuperAdminGroup});
+        $twiki->{store}->createWeb($twiki->{user}, $testSysWeb, $original);
+        $twiki->{store}->createWeb($twiki->{user}, $testNormalWeb, '_default');
 
         $twiki->{store}->copyTopic(
-            $twikiUserObject, $original, $TWiki::cfg{SitePrefsTopicName},
+            $twiki->{user}, $original, $TWiki::cfg{SitePrefsTopicName},
             $testSysWeb, $TWiki::cfg{SitePrefsTopicName} );
 
         $testUser = $this->createFakeUser($twiki);

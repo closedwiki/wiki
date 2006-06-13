@@ -50,7 +50,8 @@ sub set_up {
     }
 }
 
-my $session = { plugins => new HackJob() };
+my $session = new TWiki();
+$session->{plugins} = new HackJob();
 $info = { argle => "bargle" };
 
 sub _merge3 {
@@ -66,6 +67,7 @@ sub _merge3 {
 
 sub _merge2 {
     my( $ia, $ib ) = @_;
+
     return TWiki::Merge::merge2(
         'a', $ia,
         'b', $ib,

@@ -254,7 +254,6 @@ sub groupMembers {
     my $this = shift;
     my $group = shift;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
-    ASSERT( $this->isGroup($group)) if DEBUG;
     my $store = $this->{session}->{store};
 
     if( !defined $group->{members} &&

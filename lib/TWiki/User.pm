@@ -359,12 +359,11 @@ sub isAdmin {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
     unless( defined($this->{isKnownAdmin}) ) {
-        $this->{isKnownAdmin} =
-          $TWiki::cfg{SuperAdminGroup} =~ /\b$this->{wikiname}$/;
-        unless( $this->{isKnownAdmin} ) {
+        if ($this->{wikiname} eq $TWiki::cfg{SuperAdminGroup}) {
+            $this->{isKnownAdmin} = 1;
+        } else {
             my $sag = $this->{session}->{users}->findUser(
                  $TWiki::cfg{SuperAdminGroup} );
-            ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
             $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers() );
         }
     }
@@ -433,6 +432,8 @@ Test if this is a group user or not
 
 sub isGroup {
     my $this = shift;
+
+    return 1 if $this->{wikiname} eq $TWiki::cfg{SuperAdminGroup};
 
     return $this->{session}->{users}->{usermappingmanager}->isGroup($this);
 }
