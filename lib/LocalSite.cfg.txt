@@ -23,17 +23,17 @@
 # following paths muct be defined.
 
 # URL for TWiki host e.g. http://myhost.com:123
-$cfg{DefaultUrlHost} = 'http://your.domain.com';
+$TWiki::$cfg{DefaultUrlHost} = 'http://your.domain.com';
 
 # cgi-bin URL path for TWiki e.g. /twiki/bin
-$cfg{ScriptUrlPath} = '/twiki/bin';
+$TWiki::$cfg{ScriptUrlPath} = '/twiki/bin';
 
 # Attachments URL path e.g. /twiki/pub
-$cfg{PubUrlPath} = '/twiki/pub';
+$TWiki::$cfg{PubUrlPath} = '/twiki/pub';
 
 # Attachments store file path (not URL), must match /twiki/pub e.g.
 # /usr/local/twiki/pub
-$cfg{PubDir} = '/home/httpd/twiki/pub';
+$TWiki::$cfg{PubDir} = '/home/httpd/twiki/pub';
 
 # SECURITY NOTE: Directories =twiki/data= , =twiki/templates= and all their
 # subdirectories should be set so that they are _not_ visible through
@@ -41,15 +41,15 @@ $cfg{PubDir} = '/home/httpd/twiki/pub';
 # not visible, and set the paths here as appropriate)
 
 # Template directory e.g. /usr/local/twiki/templates
-$cfg{TemplateDir} = '/home/httpd/twiki/templates';
+$TWiki::$cfg{TemplateDir} = '/home/httpd/twiki/templates';
 
 # Topic files store (file path not URL) e.g. /usr/local/twiki/data
 # TWiki will use this path to base other defaults, such as the location
 # of password files.
-$cfg{DataDir} = '/home/httpd/twiki/data';
+$TWiki::$cfg{DataDir} = '/home/httpd/twiki/data';
 
 # TWiki.cfg will use this path to default where to put log files, unless
 # you override individual paths here.
-$cfg{LogDir} = $cfg{DataDir};
+$TWiki::$cfg{LogDir} = $TWiki::$cfg{DataDir};
 
 1;
