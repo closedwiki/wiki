@@ -433,9 +433,8 @@ Test if this is a group user or not
 
 sub isGroup {
     my $this = shift;
-    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
-    return $this->wikiName() =~ /Group$/;
+    return $this->{session}->{users}->{usermappingmanager}->isGroup($this);
 }
 
 =pod

@@ -165,7 +165,7 @@ sub passwd_cgi {
 # TODO: registernotifybulk.tmpl 
 # TODO: make it copy the fields it wants before handing off to the RegsitrationPlugin - that way it won't matter if
 #       that deletes such keys.
-# ISSUE: TWiki::User::addUserToTWikiUsersTopic does not replace the line if you now supply a login name when one 
+# ISSUE: TWiki::User::addUserToMapping does not replace the line if you now supply a login name when one 
 #       was not needed before.
 # TODO: write a plugin that intercepts the change of metadata on a topic and invokes functionality as described on 
 #       RegistrationAsPlugin.
@@ -268,8 +268,8 @@ sub bulkRegister {
 #    * rearranges the row to comply with the ordered list
 #    * if using htpasswd, calls _addUserToPasswordSystem()
 #    * makes createUserTopic
-#    * calls addUserToTWikiUsersTopic()
-# SMELL could be made much more efficient if needed, as calls to addUserToTWikiUsersTopic()
+#    * calls addUserToMapping()
+# SMELL could be made much more efficient if needed, as calls to addUserToMapping()
 # are quite expensive when doing 300 in succession!
 sub _registerSingleBulkUser {
     my ($session, $row, $settings) = @_;
@@ -312,8 +312,7 @@ sub _registerSingleBulkUser {
                                             $row->{WikiName} );
 
     my $userTopic =
-      $session->{users}->addUserToTWikiUsersTopic( $user,
-                                                   $session->{user} );
+      $session->{users}->addUserToMapping( $user, $session->{user} );
     $user->setEmails( $row->{Email} );
 
     if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
@@ -736,7 +735,7 @@ Presently this is called in RegisterCgiScript directly after a call to verify. T
    3 calls createUserTopic()
    4 if using the htpasswdFormatFamily, calls _addUserToPasswordSystem
    5 calls the misnamed RegistrationHandler to set cookies
-   6 calls addUserToTWikiUsersTopic
+   6 calls addUserToMapping
    7 writes the logEntry (if wanted :/)
    8 redirects browser to 'oopsregthanks'
 
@@ -793,7 +792,7 @@ sub finish {
     my $agent = $session->{users}->findUser( $twikiRegistrationAgent,
                                              $twikiRegistrationAgent);
 
-    my $userTopic = $session->{users}->addUserToTWikiUsersTopic( $user, $agent);
+    my $userTopic = $session->{users}->addUserToMapping( $user, $agent);
 
     $user->setEmails( $data->{Email} );
 

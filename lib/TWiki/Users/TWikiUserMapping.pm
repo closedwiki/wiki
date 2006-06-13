@@ -97,15 +97,16 @@ sub getListOfGroups {
 
 =pod
 
----++ ObjectMethod addUserToTWikiUsersTopic( $user ) -> $topicName
+---++ ObjectMethod addUserToMapping( $user ) -> $topicName
 
-Add a user to the TWikiUsers topic. This is a topic that
-maps from usernames to wikinames. It is maintained by
-Register.pm, or manually outside TWiki.
+Add a user to the persistant mapping that maps from usernames to wikinames
+and vice-versa. The default implementation uses a special topic called
+"TWikiUsers" in the users web. Subclasses will provide other implementations
+(usually stubs if they have other ways of mapping usernames to wikinames).
 
 =cut
 
-sub addUserToTWikiUsersTopic {
+sub addUserToMapping {
     my ( $this, $user, $me ) = @_;
 
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
@@ -174,7 +175,7 @@ sub addUserToTWikiUsersTopic {
 sub lookupLoginName {
     my ($this, $loginUser) = @_;
 
-    $this->cacheTWikiUsersTopic();
+    $this->loadMapping();
     return $this->{U2W}{$loginUser};
 }
 
@@ -182,7 +183,7 @@ sub lookupLoginName {
 sub lookupWikiName {
     my ($this, $wikiName) = @_;
 
-    $this->cacheTWikiUsersTopic();
+    $this->loadMapping();
     return $this->{W2U}{$wikiName};
 }
 
@@ -190,15 +191,13 @@ sub getListOfAllWikiNames {
     my ( $this ) = @_;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
-    $this->cacheTWikiUsersTopic();
+    $this->loadMapping();
     return keys(%{$this->{W2U}});
 }
 
 # Build hash to translate between username (e.g. jsmith)
-# and WikiName (e.g. Main.JaneSmith).  Only used for sites where
-# authentication is managed by external Apache configuration, instead of
-# via TWiki's .htpasswd mechanism.
-sub cacheTWikiUsersTopic {
+# and WikiName (e.g. Main.JaneSmith).
+sub loadMapping {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
 
@@ -255,8 +254,7 @@ sub groupMembers {
     my $this = shift;
     my $group = shift;
     ASSERT($this->isa( 'TWiki::Users::TWikiUserMapping')) if DEBUG;
-    ASSERT($group->isa( 'TWiki::User')) if DEBUG;
-    ASSERT( $group->isGroup()) if DEBUG;
+    ASSERT( $this->isGroup($group)) if DEBUG;
     my $store = $this->{session}->{store};
 
     if( !defined $group->{members} &&
@@ -281,6 +279,25 @@ sub groupMembers {
     }
 
     return $group->{members};
+}
+
+=pod
+
+---++ ObjectMethod isGroup($user) -> boolean
+
+Establish if a user object refers to a user group or not.
+
+The default implementation is to check if the wikiname of the user ends with
+'Group'. Subclasses may override this behaviour to provide alternative
+intepretations.
+
+=cut
+
+sub isGroup {
+    my ($this, $user) = @_;
+    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
+
+    return $user->wikiName() =~ /Group$/;
 }
 
 1;

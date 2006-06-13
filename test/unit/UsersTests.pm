@@ -2,8 +2,10 @@ use strict;
 
 package UsersTests;
 
-# Some basic tests for adding/removing users in the TWiki users topic,
-# and finding them again.
+# Some basic tests for TWiki::Users::TWikiUserMapping
+#
+# The tests are performed using the APIs published by the facade class,
+# TWiki:Users, not the actual TWiki::Users::TWikiuserMapping
 
 use base qw(TWikiTestCase);
 
@@ -12,13 +14,12 @@ use TWiki::Users;
 use Error qw( :try );
 
 my $twiki;
-my $me;
 my $saveTopic;
 my $ttpath;
 
 my $testSysWeb = 'TemporaryTestUsersSystemWeb';
 my $testNormalWeb = "TemporaryTestUsersWeb";
-my $testUsersWeb = "TemporaryTesUsersUsersWeb";
+my $testUsersWeb = "TemporaryTestUsersUsersWeb";
 my $testTopic = "TmpUsersTopic".time();
 my $testUser;
 
@@ -35,6 +36,7 @@ sub set_up {
     $TWiki::cfg{UsersWebName} = $testUsersWeb;
     $TWiki::cfg{SystemWebName} = $testSysWeb;
     $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
+    $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{MapUserToWikiName} = 1;;
     $topicquery = new CGI( "" );
     $topicquery->path_info("/$testNormalWeb/$testTopic");
@@ -57,7 +59,6 @@ sub set_up {
         $testUser = $this->createFakeUser($twiki);
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        die "FUCK" unless $e;
         $this->assert(0,$e->stringify());
     } catch Error::Simple with {
         $this->assert(0,shift->stringify()||'');
@@ -116,9 +117,8 @@ THIS
 sub testAddUsers {
     my $this = shift;
     $twiki = new TWiki();
-    $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$testTopic.txt";
-    $TWiki::cfg{UsersTopicName} = $testTopic;
-    $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
+    my $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$TWiki::cfg{UsersTopicName}.txt";
+    my $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
 
     open(F,">$ttpath") || $this->assert(0,  "open $ttpath failed");
     print F $initial;
@@ -127,77 +127,109 @@ sub testAddUsers {
     my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
     my $user2 = $twiki->{users}->findUser("guser", "GeorgeUser");
     my $user3 = $twiki->{users}->findUser("zuser", "ZebediahUser");
-    $twiki->{users}->addUserToTWikiUsersTopic($user2, $me);
+    $twiki->{users}->addUserToMapping($user2, $me);
     open(F,"<$ttpath");
     undef $/;
     my $text = <F>;
     close(F);
     $this->assert_matches(qr/\n\s+\* GeorgeUser - guser - \d\d \w\w\w \d\d\d\d\n/s, $text);
-    $twiki->{users}->addUserToTWikiUsersTopic($user1, $me);
+    $twiki->{users}->addUserToMapping($user1, $me);
     open(F,"<$ttpath");
     undef $/;
     $text = <F>;
     close(F);
     $this->assert_matches(qr/AaronUser.*GeorgeUser/s, $text);
-    $twiki->{users}->addUserToTWikiUsersTopic($user3, $me);
+    $twiki->{users}->addUserToMapping($user3, $me);
     open(F,"<$ttpath");
     undef $/;
     $text = <F>;
     close(F);
     $this->assert_matches(qr/Aaron.*George.*Zebediah/s, $text);
-#    unlink($ttpath);
-    #print $ttpath."\n";
 }
 
-# Disabled due to changes in Users implementation
-#sub testLoad {
-#    my $this = shift;
-#
-#    $twiki = new TWiki();
-#    $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
-#    $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$testTopic.txt";
-#    $TWiki::cfg{UsersTopicName} = $testTopic;
-#
-#    open(F,">$ttpath") || $this->assert(0,  "open $ttpath failed");
-#    print F $initial;
-#    close(F);
-#
-#    my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
-#    my $user2 = $twiki->{users}->findUser("guser","GeorgeUser");
-#    my $user3 = $twiki->{users}->findUser("zuser","ZebediahUser");
-#    $twiki->{users}->addUserToTWikiUsersTopic($user1, $me);
-#    $twiki->{users}->addUserToTWikiUsersTopic($user2, $me);
-#    $twiki->{users}->addUserToTWikiUsersTopic($user3, $me);
-#    $twiki->{users}->addUserToTWikiUsersTopic($user1, $me);
-#    $twiki->{users}->addUserToTWikiUsersTopic($user2, $me);
-#    $twiki->{users}->addUserToTWikiUsersTopic($user3, $me);
-#    # find a nonexistent user to force a cache read
-#    $twiki = new TWiki();
-#    $twiki->{users}->lookupLoginName("hogwash");
-#    my $k = join(",",sort keys %{$twiki->{users}->{W2U}});
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.AaronUser,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.AttilaTheHun,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.BungditDin,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.GeorgeUser,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.GungaDin,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.SadOldMan,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.SorryOldMan,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.StupidOldMan,//,$k);
-#    $this->assert($k =~ s/^$TWiki::cfg{UsersWebName}\.ZebediahUser//,$k);
-#    $this->assert_str_equals("",$k);
-#    $k = join(",",sort keys %{$twiki->{users}->{U2W}});
-#    $this->assert($k =~ s/^AttilaTheHun,//,$k);
-#    $this->assert($k =~ s/^BungditDin,//,$k);
-#    $this->assert($k =~ s/^GungaDin,//,$k);
-#    $this->assert($k =~ s/^SadOldMan,//,$k);
-#    $this->assert($k =~ s/^SorryOldMan,//,$k);
-#    $this->assert($k =~ s/^StupidOldMan,//,$k);
-#    $this->assert($k =~ s/^auser,//,$k);
-#    $this->assert($k =~ s/^guser,//,$k);
-#    $this->assert($k =~ s/^zuser//,$k);
-#    $this->assert_str_equals("", $k);
-#
-##    unlink($ttpath);
-#}
+sub testLoad {
+    my $this = shift;
+
+    $twiki = new TWiki();
+    my $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
+    $ttpath = "$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$TWiki::cfg{UsersTopicName}.txt";
+
+    open(F,">$ttpath") || $this->assert(0,  "open $ttpath failed");
+    print F $initial;
+    close(F);
+
+    my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
+    my $user2 = $twiki->{users}->findUser("guser","GeorgeUser");
+    my $user3 = $twiki->{users}->findUser("zuser","ZebediahUser");
+    $twiki->{users}->addUserToMapping($user1, $me);
+    $twiki->{users}->addUserToMapping($user2, $me);
+    $twiki->{users}->addUserToMapping($user3, $me);
+    $twiki->{users}->addUserToMapping($user1, $me);
+    $twiki->{users}->addUserToMapping($user2, $me);
+    $twiki->{users}->addUserToMapping($user3, $me);
+    # find a nonexistent user to force a cache read
+    $twiki = new TWiki();
+    my $n = $twiki->{users}->lookupLoginName("auser");
+    $this->assert_str_equals("$testUsersWeb.AaronUser", $n);
+    $n = $twiki->{users}->lookupWikiName("AaronUser");
+    $this->assert_str_equals("auser", $n);
+
+    my $l = $twiki->{users}->getAllUsers();
+    my $k = join(",",map { $_->wikiName() } @$l);
+    $this->assert($k =~ s/^AaronUser,//,$k);
+    $this->assert($k =~ s/^AttilaTheHun,//,$k);
+    $this->assert($k =~ s/^BungditDin,//,$k);
+    $this->assert($k =~ s/^GeorgeUser,//,$k);
+    $this->assert($k =~ s/^GungaDin,//,$k);
+    $this->assert($k =~ s/^SadOldMan,//,$k);
+    $this->assert($k =~ s/^SorryOldMan,//,$k);
+    $this->assert($k =~ s/^StupidOldMan,//,$k);
+    $this->assert($k =~ s/^ZebediahUser//,$k);
+    $this->assert_str_equals("",$k);
+}
+
+sub groupFix {
+    my $this = shift;
+    my $me =  $twiki->{users}->findUser("TWikiRegistrationAgent");
+    my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
+    my $user2 = $twiki->{users}->findUser("guser","GeorgeUser");
+    my $user3 = $twiki->{users}->findUser("zuser","ZebediahUser");
+    $twiki->{users}->addUserToMapping($user1, $me);
+    $twiki->{users}->addUserToMapping($user2, $me);
+    $twiki->{users}->addUserToMapping($user3, $me);
+    $twiki->{users}->addUserToMapping($user1, $me);
+    $twiki->{users}->addUserToMapping($user2, $me);
+    $twiki->{users}->addUserToMapping($user3, $me);
+    $twiki->{store}->saveTopic(
+        $twiki->{user}, $testUsersWeb, 'AmishGroup',
+        "   * Set GROUP = AaronUser,%MAINWEB%.GeorgeUser\n");
+    $twiki->{store}->saveTopic(
+        $twiki->{user}, $testUsersWeb, 'BaptistGroup',
+        "   * Set GROUP = GeorgeUser,$testUsersWeb.ZebediahUser\n");
+}
+
+sub test_getListOfGroups {
+    my $this = shift;
+    $this->groupFix();
+    my $l = $twiki->{users}->getAllGroups();
+    my $k = join(',',map{$_->wikiName()} @$l);
+    $this->assert_str_equals("AmishGroup,BaptistGroup,TWikiAdminGroup", $k);
+}
+
+sub test_groupMembers {
+    my $this = shift;
+    $this->groupFix();
+    my $g = $twiki->{users}->findUser("AmishGroup");
+    $this->assert($g->isGroup());
+    my $l = $g->groupMembers();
+    my $k = join(',',map{$_->wikiName()} @$l);
+    $this->assert_str_equals("AaronUser,GeorgeUser", $k);
+    $g = $twiki->{users}->findUser("BaptistGroup");
+    $this->assert($g->isGroup());
+    $l = $g->groupMembers();
+    $k = join(',',map{$_->wikiName()} @$l);
+    $this->assert_str_equals("GeorgeUser,ZebediahUser", $k);
+
+}
 
 1;

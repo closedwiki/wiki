@@ -119,18 +119,17 @@ sub expandUserList {
 
    * =$name= - login name or wiki name
    * =$wikiname= - optional, wikiname for created user
-   * =$nocreate= - optional, disable creation of user object for user not found in TWikiUsers
+   * =$nocreate= - optional, disable creation of user object for user not found
 
 Find the user object corresponding to =$name=, which may be either a
-login name or a wiki name. The name is looked up in the
-TWikiUsers topic. If =$name= is found (either in the list
+login name or a wiki name. If =$name= is found (either in the list
 of login names or the list of wiki names) the corresponding
 user object is returned. In this case =$wikiname= is ignored.
 
 If they are not found, and =$nocreate= is true, then return undef.
 
 If =$nocreate= is false, then a user object is returned even if
-the user is not listed in TWikiUsers.
+the user is not known.
 
 If =$nocreate= is false, and no =$wikiname= is given, then the
 =$name= is used for both login name and wiki name.
@@ -233,10 +232,19 @@ sub createUser {
     return $object;
 }
 
-sub addUserToTWikiUsersTopic {
+=pod
+
+---++ ObjectMethod addUserToMapping( $user ) -> $topicName
+
+Add a user to the persistant mapping that maps from usernames to wikinames
+and vice-versa.
+
+=cut
+
+sub addUserToMapping {
     my ( $this, $user, $me ) = @_;
 
-    return $this->{usermappingmanager}->addUserToTWikiUsersTopic($user, $me);
+    return $this->{usermappingmanager}->addUserToMapping($user, $me);
 }
 
 =pod
@@ -270,7 +278,7 @@ sub initializeRemoteUser {
 }
 
 # Translates username (e.g. jsmith) to Web.WikiName
-# (e.g. Main.JaneSmith) by lookup in TWikiUsers.
+# (e.g. Main.JaneSmith)
 sub lookupLoginName {
     my( $this, $loginUser ) = @_;
 
@@ -282,7 +290,7 @@ sub lookupLoginName {
 }
 
 # Translates Web.WikiName (e.g. Main.JaneSmith) to
-# username (e.g. jsmith) to by lookup in TWikiUsers.
+# username (e.g. jsmith)
 sub lookupWikiName {
     my( $this, $wikiName ) = @_;
 
