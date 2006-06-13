@@ -289,13 +289,16 @@ Establish if a user object refers to a user group or not.
 
 The default implementation is to check if the wikiname of the user ends with
 'Group'. Subclasses may override this behaviour to provide alternative
-intepretations.
+intepretations. The SuperAdminGroup is recognized as a group no matter
+what it's name is.
 
 =cut
 
 sub isGroup {
     my ($this, $user) = @_;
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
+
+    return 1 if $user->wikiName() eq $TWiki::cfg{SuperAdminGroup};
 
     return $user->wikiName() =~ /Group$/;
 }
