@@ -635,7 +635,7 @@ sub _handleWikiWord {
 
     # =$doKeepWeb= boolean: true to keep web prefix (for non existing Web.TOPIC)
     # (Necessary to leave "web part" of ABR.ABR.ABR intact if topic not found)
-    $keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o );
+    $keepWeb = ( $topic =~ /^$TWiki::regex{abbrevRegex}$/o && $web ne $this->{session}->{webName} );
 
     # false means suppress link for non-existing pages
     $linkIfAbsent = ( $topic !~ /^$TWiki::regex{abbrevRegex}$/o );
