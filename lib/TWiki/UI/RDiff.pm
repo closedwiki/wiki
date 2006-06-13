@@ -94,8 +94,8 @@ sub _renderCellData {
                 $data = CGI::start_table().$data.CGI::end_table();
             }
         }
-        #remove the <!--- type tag (i don't know how you would find the matching >)
-        #$data =~ s/<!/&lt!/go;
+        # unhide html comments (<!-- --> type tags)
+        $data =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
     }
     return $data;
 }
@@ -160,6 +160,9 @@ sub _renderSideBySide
                                    ($session->{i18n}->maketext('Line: [_1]',$right)))
                           );
     }
+    # unhide html comments (<!-- --> type tags)
+    $result =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
+
     return $result;
 }
 
@@ -206,6 +209,9 @@ sub _renderDebug
 	    $result .= CGI::Tr( {class=>'twikiDiffDebug'},
 		    CGI::td( {class=>'twikiDiffDebugRight'.$styleClassRight}, CGI::div( $right) ));
 	}
+        # unhide html comments (<!-- --> type tags)
+        $result =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
+
     return $result;
 }
 
@@ -288,6 +294,9 @@ sub _renderSequential
                                   )
                            );
     }
+
+    # unhide html comments (<!-- --> type tags)
+    $result =~  s/<!--(.*?)-->/<pre>&lt;--$1--&gt;<\/pre>/gos;
 
     return $result;
 }
