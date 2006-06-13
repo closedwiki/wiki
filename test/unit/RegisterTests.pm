@@ -61,6 +61,7 @@ sub set_up {
     $this->SUPER::set_up();
 
     $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+    $TWiki::cfg{SuperAdminGroup} = "PowerRangers";
 
     $session = new TWiki();
 
@@ -72,7 +73,7 @@ sub set_up {
                                      $TWiki::cfg{UsersWebName});
         $TWiki::cfg{UsersWebName} = $peopleWeb;
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
-                                     'TWikiAdminGroup',
+                                     $TWiki::cfg{SuperAdminGroup},
                                      "   * Set GROUP = TestAdmin\n");
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                      'NewUserTemplate', <<'EOF'
@@ -747,7 +748,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_matches(qr/$peopleWeb\.TWikiAdminGroup/, $e->stringify());
+        $this->assert_matches(qr/$peopleWeb\.$TWiki::cfg{SuperAdminGroup}/, $e->stringify());
         $this->assert_str_equals('accessdenied', $e->{template});
         $this->assert_str_equals('only_group', $e->{def});
     } catch Error::Simple with {

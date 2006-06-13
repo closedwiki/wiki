@@ -34,6 +34,7 @@ sub set_up {
     $TWiki::cfg{UsersWebName} = $testUsersWeb;
     $TWiki::cfg{SystemWebName} = $testSysWeb;
     $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
+    $TWiki::cfg{SuperAdminGroup} = 'ArglyBargly";
 
     $topicquery = new CGI( "" );
     $topicquery->path_info("/$testNormalWeb/$testTopic");
@@ -42,7 +43,7 @@ sub set_up {
         my $twikiUserObject = $twiki->{user};
         $twiki->{store}->createWeb($twikiUserObject, $testUsersWeb);
         $twiki->{store}->saveTopic(
-            $twiki->{user}, $testUsersWeb, 'TWikiAdminGroup',
+            $twiki->{user}, $testUsersWeb, $TWiki::cfg{SuperAdminGroup},
             '   * Set GROUP = '.$twikiUserObject->wikiName()."\n");
 
         $twiki->{store}->createWeb($twikiUserObject, $testSysWeb, $original);

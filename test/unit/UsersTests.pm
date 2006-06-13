@@ -35,6 +35,7 @@ sub set_up {
     $original = $TWiki::cfg{SystemWebName};
     $TWiki::cfg{UsersWebName} = $testUsersWeb;
     $TWiki::cfg{SystemWebName} = $testSysWeb;
+    $TWiki::cfg{SuperAdminGroup} = 'ArfleBarfleGloop';
     $TWiki::cfg{LocalSitePreferences} = "$testUsersWeb.TWikiPreferences";
     $TWiki::cfg{UserMappingManager} = 'TWiki::Users::TWikiUserMapping';
     $TWiki::cfg{MapUserToWikiName} = 1;;
@@ -46,8 +47,9 @@ sub set_up {
         $twiki->{store}->createWeb($twikiUserObject, $testUsersWeb);
         # the group is recursive to force a recursion block
         $twiki->{store}->saveTopic(
-            $twiki->{user}, $testUsersWeb, 'TWikiAdminGroup',
-            '   * Set GROUP = '.$twikiUserObject->wikiName().", TWikiAdminGroup\n");
+            $twiki->{user}, $testUsersWeb, $TWiki::cfg{SuperAdminGroup},
+            '   * Set GROUP = '.$twikiUserObject->wikiName().", ".
+              $TWiki::cfg{SuperAdminGroup}."\n");
 
         $twiki->{store}->createWeb($twikiUserObject, $testSysWeb, $original);
         $twiki->{store}->createWeb($twikiUserObject, $testNormalWeb, '_default');
@@ -213,7 +215,7 @@ sub test_getListOfGroups {
     $this->groupFix();
     my $l = $twiki->{users}->getAllGroups();
     my $k = join(',',map{$_->wikiName()} @$l);
-    $this->assert_str_equals("AmishGroup,BaptistGroup,TWikiAdminGroup", $k);
+    $this->assert_str_equals("AmishGroup,BaptistGroup,$TWiki::cfg{SuperAdminGroup}", $k);
 }
 
 sub test_groupMembers {
