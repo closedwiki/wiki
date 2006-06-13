@@ -422,7 +422,7 @@ sub _requireVerification {
       $data->{WikiName}.'.'.TWiki::User::randomPassword();
     _putRegDetailsByCode( $data, $tmpDir );
 
-    $session->writeLog( 'regstart', $data->{webName}.'.'.$data->{WikiName},
+    $session->writeLog( 'regstart', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
                         $data->{Email}, $data->{WikiName} );
 
     my $err = _sendEmail( $session, 'registerconfirm', $data );
@@ -803,7 +803,7 @@ sub finish {
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
-        $session->writeLog( 'register', $data->{webName}.'.'.$data->{WikiName},
+        $session->writeLog( 'register', $TWiki::cfg{UsersWebName}.'.'.$data->{WikiName},
                             $data->{Email}, $data->{WikiName} );
     }
 
@@ -817,7 +817,7 @@ sub finish {
 
     # and finally display thank you page
     throw TWiki::OopsException( 'attention',
-                                web => $data->{webName},
+                                web => $TWiki::cfg{UsersWebName},
                                 topic => $data->{WikiName},
                                 def => 'thanks',
                                 params => [ $status ] );
@@ -832,7 +832,7 @@ sub finish {
 sub _createUserTopic {
     my ($session, $template, $row) = @_;
     my ( $meta, $text ) = TWiki::UI::readTemplateTopic($session, $template);
-    my $log = $b.' Writing topic '.$row->{webName}.'.'.$row->{WikiName}."\n".
+    my $log = $b.' Writing topic '.$TWiki::cfg{UsersWebName}.'.'.$row->{WikiName}."\n".
       $b2.' RegistrationHandler: ';
     my $regLog = $text;
     $log .= join($b2.' ', split /\r?\n/, $regLog)."\n";
@@ -883,7 +883,7 @@ sub _writeRegistrationDetailsToTopic {
     my $agent = $session->{users}->findUser( $twikiRegistrationAgent,
                                              $twikiRegistrationAgent);
 
-    $session->{store}->saveTopic($agent, $data->{webName},
+    $session->{store}->saveTopic($agent, $TWiki::cfg{UsersWebName},
                                  $data->{WikiName}, $text, $meta );
     return $log;
 }
@@ -986,7 +986,7 @@ sub _buildConfirmationEmail {
     }
     $templateText = $before.$after;
     $templateText = $session->handleCommonTags
-      ( $templateText, $data->{webName}, $data->{WikiName} );
+      ( $templateText, $TWiki::cfg{UsersWebName}, $data->{WikiName} );
     $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
     # remove <nop> and <noautolink> tags
 
@@ -1007,7 +1007,7 @@ sub _validateRegistration {
                                     params => [ '' ] );
     }
 
-    if($session->{store}->topicExists( $data->{webName}, $data->{WikiName} )) {
+    if($session->{store}->topicExists( $TWiki::cfg{UsersWebName}, $data->{WikiName} )) {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
@@ -1137,7 +1137,7 @@ sub _sendEmail {
     $text =~ s/%INTRODUCTION%/$p->{Introduction}/go;
     $text =~ s/%VERIFICATIONCODE%/$p->{VerificationCode}/go;
     $text =~ s/%PASSWORD%/$p->{PasswordA}/go;
-    $text = $session->handleCommonTags( $text, $p->{webName}, $p->{WikiName} );
+    $text = $session->handleCommonTags( $text, $TWiki::cfg{UsersWebName}, $p->{WikiName} );
 
     return $session->{net}->sendEmail($text);
 }
