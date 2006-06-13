@@ -1,0 +1,39 @@
+%META:TOPICINFO{author="VlyonYahoo" date="1150212357" format="1.1" version="1.1"}%
+---+ Quick Menu Skin
+
+A functional skin that replaces the left bar with a customizable Javascript menu system.
+
+---++ Screen Shot
+
+%SEARCH{ "QuickMenuSkin" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
+
+---++ Installation
+
+*Note:* You do not need to install anything on the browser to use this skin. The following instructions are for the administrator who installs the skin on the server where TWiki is running.
+
+   * Download the ZIP file from the Skin Home page (see below)
+   * Unzip ==QuickMenuSkin.zip== in your twiki installation directory
+   * Test if installed: %SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=quickmenu
+   * For skin activation see %TWIKIWEB%.TWikiSkins
+
+---++ Skin Info
+
+<!-- Note on Screenshot: Please attach a 600x130 pixel screenshot and a full screen shot to the Skin topic, then update the href and img src to reflect the names -->
+|  Description: | Functional skin that replaces the left bar with a customizable Javascript menu system |
+|  Screenshot: | <a href="%ATTACHURL%/fullscreen.gif"><img src="%ATTACHURL%/screenshot.gif" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Preview: | [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=quickmenu][Preview with this topic]] |
+|  Base Name: | quickmenu |
+|  Skin Author: | TWiki:Main/VernonLyon |
+|  Skin Version: | 13 Jun 2006 (v1.000) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  13 Jun 2006: | Initial version (v1.000) |
+|  Dependencies: |  |
+|  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/QuickMenuSkin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/QuickMenuSkinDev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/QuickMenuSkinAppraisal |
+
+__Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIKIWEB%.TWikiSkinBrowser
+
+__Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB%.UserDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory
+
+-- TWiki:Main/VernonLyon - 13 Jun 2006

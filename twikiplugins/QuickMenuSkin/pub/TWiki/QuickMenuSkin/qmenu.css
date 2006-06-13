@@ -1,0 +1,127 @@
+.qmenu-menu,
+.qmenu-menu-free,
+.qmenu-menu-over,
+.qmenu-menu-click {
+	position: relative;
+	color: black;
+	cursor: default;
+	font: 11px verdana;
+	padding: 1px 6px 3px 6px;
+	border: 1px solid #315ea3;
+	z-index: 1;
+}
+.qmenu-menu {
+	border: 0;
+	padding: 2px 7px 4px 7px;
+}
+.qmenu-menu-free {
+	background: url("menubaritem_bg.gif") repeat-x center;
+}
+.qmenu-menu-over {
+	background: url("menu_over.gif") repeat-x center;
+}
+.qmenu-menu-click {
+	background: url("menu_bg.gif") repeat-x center;
+	border-left-color: #315ea3;
+	border-bottom-color: white;
+	color: white;
+	z-index: 3;
+}
+.qmenu-menulist-outer {
+	position: absolute;
+	visibility: hidden;
+	font: 11px verdana;
+	z-index: 2;
+}
+.qmenu-menulist-shadow {
+	background-color: gray;
+	position: absolute;
+	filter: progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow="true",ShadowOpacity=.4);
+	-moz-opacity: 0.30;
+	position: absolute;
+	top: 3px !important;
+	left: 3px !important;
+	top: 1px;
+	left: 1px;
+	-moz-border-radius: 1px;
+}
+.qmenu-menulist {
+	position: relative;
+	background-color: white;
+	padding: 1px 0;
+	border: 1px solid #315EA3;
+	margin: 0;
+	cursor: default;
+	z-index: 2;
+}
+.qmenu-menulist-container {
+	background: url("menuitem_bg.gif") repeat-y left;
+	padding: 0 1px;
+}
+.qmenu-menuitem-left,
+.qmenu-menuitem-middle,
+.qmenu-menuitem-right,
+.qmenu-menuitem-arrow {
+	color: black;
+	padding: 1px;
+}
+.qmenu-menuitem-left-over,
+.qmenu-menuitem-middle-over,
+.qmenu-menuitem-right-over,
+.qmenu-menuitem-arrow-over {
+	color: black;
+	background: url("menuitem_over.gif") repeat-x center;
+	border: 1px solid #315EA3;
+}
+.qmenu-menuitem-left,
+.qmenu-menuitem-left-over {
+	width: 22px;
+	height: 18px;
+}
+.qmenu-menuitem-left {
+	padding-right: 0;
+}
+.qmenu-menuitem-left-over {
+	border-color: #315EA3;
+	border-right: 0;
+}
+.qmenu-menuitem-middle {
+	padding-left: 0;
+	padding-right: 0;
+	line-height: 18px;
+}
+.qmenu-menuitem-middle-over {
+	border-left: 0;
+	border-right: 0;
+	line-height: 18px;
+}
+.qmenu-menuitem-right,
+.qmenu-menuitem-arrow {
+	width: 25px;
+	padding-left: 0;
+}
+.qmenu-menuitem-right-over,
+.qmenu-menuitem-arrow-over {
+	width: 25px;
+	border-left: 0;
+}
+.qmenu-menuitem-arrow {
+	background: url("arrow.gif") no-repeat center right;
+}
+.qmenu-menuitem-arrow-over {
+	background: url("arrow_over.gif") no-repeat center right;
+}
+.qmenu-menuitem-separator {
+	height: 3px;
+}
+.qmenu-menuitem-separator DIV {
+	overflow: hidden;
+	background-color: #315EA3;
+	height: 1px;
+}
+.qmenu-menuitem-disabled TD {
+	padding: 1px;
+	color: #777;
+	border-width: 0;
+	background: none;
+}
