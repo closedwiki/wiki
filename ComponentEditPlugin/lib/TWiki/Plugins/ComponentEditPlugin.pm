@@ -100,7 +100,7 @@ sub endRenderingHandler {
 sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
     #my $text = shift;
-    return unless (pluginApplies('view'));
+#    return unless (pluginApplies('view'));
 
    my $pluginPubUrl = TWiki::Func::getPubUrlPath().'/'.
             TWiki::Func::getTwikiWebname().'/'.$pluginName;

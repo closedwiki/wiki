@@ -41,22 +41,16 @@ TWiki.ComponentEditPlugin.onClickFunction = function(event) {
     if (tg.className=='TMLvariable') {
         TWiki.ComponentEditPlugin.sourceTarget = tg;
         TWiki.ComponentEditPlugin.popupEdit(event, tg.innerHTML);
+    } else {
+        //if we're not in a TMLVariable element, then we have to be careful to parse and replace only the parsed bit..
     }
-}
-
-TWiki.ComponentEditPlugin.saveClick = function(event) {
-    var tg = (event.target) ? event.target : event.srcElement;
-    var result = tg.form.elements.namedItem("componentedit").value;
-
-    TWiki.ComponentEditPlugin.sourceTarget.innerHTML = result;
-	TWiki.ComponentEditPlugin.popupEdit(event, null);
 }
 
 TWiki.ComponentEditPlugin.popupEdit = function(event, tml) {
     if ((tml) && (tml != '')) {
         if (tml.indexOf('SEARCH') > -1) {
-//TODO: need to get rid og the getting rid of %'s
-tml = '%'+tml+'%';
+//TODO: need to get rid of the getting rid of %'s
+//tml = '%'+tml+'%';
             TWiki.JSPopupPlugin.openPopup(event, 'Please wait, requesting data from server');
             TWiki.JSPopupPlugin.ajaxCall(event, TWiki.ComponentEditPlugin.restUrl, 'tml='+tml);
         } else {
@@ -74,6 +68,19 @@ tml = '%'+tml+'%';
         //try { showControlText.focus(); } catch (er) {alert(er)}
     } else {
         TWiki.JSPopupPlugin.closePopup(event);
+    }
+}
+
+TWiki.ComponentEditPlugin.saveClick = function(event) {
+    var tg = (event.target) ? event.target : event.srcElement;
+    var result = tg.form.elements.namedItem("componentedit").value;
+
+    if (TWiki.ComponentEditPlugin.sourceTarget.className=='TMLvariable') {
+        TWiki.ComponentEditPlugin.sourceTarget.innerHTML = result;
+        TWiki.ComponentEditPlugin.popupEdit(event, null);
+    } else {
+        //if we're not in a TMLVariable element, then we have to be careful to parse and replace only the parsed bit..
+        alert(TWiki.ComponentEditPlugin.selectionArray)
     }
 }
 
