@@ -88,7 +88,8 @@ TWiki.ComponentEditPlugin.saveClick = function(event) {
             pre = pre+splitByPercents[i] + '%';
         }
         pre = pre+splitByPercents[i];
-        for (var i=TWiki.ComponentEditPlugin.stopIdx+1;i<splitByPercents.length-2;i++) {
+        for (var i=TWiki.ComponentEditPlugin.stopIdx+1;i<splitByPercents.length-1;i++) {
+             post = post+splitByPercents[i] + '%';
         }
         post = post+splitByPercents[i];
 
@@ -122,5 +123,5 @@ TWiki.ComponentEditPlugin.inputFieldModified = function(event) {
 
     tml = tml+'}';
 
-    tg.form.elements.namedItem("componentedit").value = tml;
+    tg.form.elements.namedItem("componentedit").value = '%'+tml+'%';
 }
