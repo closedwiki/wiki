@@ -112,7 +112,7 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
             var cellValue = cells[j];
             cellValue = cellValue.replace(/<br>/gi, "\n");
 
-            innerHTML = innerHTML + '<td><textarea rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" onkeyup="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" id="'+this.topicSectionObject.topicSection+','+i+','+j+'" name="text" width="99%" >'+cellValue+'</textarea></td>';
+            innerHTML = innerHTML + '<td><textarea rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" onkeyup="TWiki.InlineEditPlugin.TableEdit.TextAreaResize(event)" onclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" id="'+this.topicSectionObject.topicSection+','+i+','+j+'" name="text" width="99%" >'+cellValue+'</textarea></td>';
 //            innerHTML = innerHTML + '<td>'+cells[j]+'</td>';
         }
         innerHTML = innerHTML + '</tr>';
