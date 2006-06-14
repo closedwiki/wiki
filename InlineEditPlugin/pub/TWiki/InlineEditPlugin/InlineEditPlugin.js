@@ -205,14 +205,16 @@ gotoEditModeFromEvent = function(event) {
         pre.innerHTML = add_above;
 
         var add_below = '';
+        add_below = add_below + makeFormButton('save', 'Save', 'saveEditMode(event);');
+        add_below = add_below + makeFormButton('preview', 'Preview', 'previewMode(event);', 1);
         if (! topicSectionObject.newSection) {
             add_below = add_below + makeFormButton('cancel', 'Cancel', 'cancelEditMode(event);');
         }
-        add_below = add_below + makeFormButton('save', 'Save', 'saveEditMode(event);');
-        add_below = add_below + makeFormButton('preview', 'Preview', 'previewMode(event);', 1);
+        add_below = add_below + '&nbsp;|&nbsp;';
         add_below = add_below + makeFormButton('delete', 'Delete', 'deleteSection(event);');
         add_below = add_below + makeFormButton('moveup', 'Move Up', 'moveSectionUp(event);', 1);
         add_below = add_below + makeFormButton('movedown', 'Move Down', 'moveSectiondown(event);', 1);
+        add_below = add_below + '&nbsp;|&nbsp;';
         add_below = add_below + makeFormButton('add_below', 'Add Text Below', 'addNewSection(event, 0);');
         add_below = add_below + makeFormButton('add_below', 'Add Table Below', 'addNewSection(event, 0, 1);');
         post.innerHTML = add_below;
@@ -482,14 +484,16 @@ getTopicSectionObject = function(event) {
 }
 
 makeFormButton = function(id, value, onclick, disabled) {
-    var text = '<input type="button"  class="twikiSubmit" ';
+    var text = '<input type="button"  ';
     if (onclick) {
         text = text + 'onclick="'+onclick+'" ';
     }
     text = text + 'name="action_'+id+'" id="'+id+'" ';
     text = text + 'value="'+value+'" ';
     if (disabled == 1) {
-        text = text + ' disabled="TRUE"';
+        text = text + ' disabled="TRUE"' +'class="twikiSubmitDisabled" ';
+    } else {
+        text = text + 'class="twikiSubmit" ';
     }
     text = text + ' />';
 
