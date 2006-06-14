@@ -80,7 +80,21 @@ TWiki.ComponentEditPlugin.saveClick = function(event) {
         TWiki.ComponentEditPlugin.popupEdit(event, null);
     } else {
         //if we're not in a TMLVariable element, then we have to be careful to parse and replace only the parsed bit..
-        alert(TWiki.ComponentEditPlugin.selectionArray)
+        var pre = '';
+        var post = '';
+
+        var splitByPercents = TWiki.ComponentEditPlugin.sourceTarget.value.split('%');
+        for (var i=0;i<TWiki.ComponentEditPlugin.startIdx-1;i++) {
+            pre = pre+splitByPercents[i] + '%';
+        }
+        pre = pre+splitByPercents[i];
+        for (var i=TWiki.ComponentEditPlugin.stopIdx+1;i<splitByPercents.length-2;i++) {
+        }
+        post = post+splitByPercents[i];
+
+        //TODO: arge - i'm embedding the assumption of textarea here
+        TWiki.ComponentEditPlugin.sourceTarget.value = pre + result + post;
+        TWiki.ComponentEditPlugin.popupEdit(event, null);
     }
 }
 
