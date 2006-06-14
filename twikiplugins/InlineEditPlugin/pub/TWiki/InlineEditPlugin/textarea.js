@@ -69,7 +69,7 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
         var defaultNumberOfRows = countLines(this.topicSectionObject.tml, defaultNumberOfCols);
         if (defaultNumberOfRows < 4) {defaultNumberOfRows = 4};
         if (defaultNumberOfRows > 12) {defaultNumberOfRows = 12};
-        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  ondblclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.tml+'</textarea>';
+        var innerHTML = '<textarea id="componentedittextarea" name="text" onkeyup="TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)"  onclick="TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)" rows="'+defaultNumberOfRows+'" cols="'+defaultNumberOfCols+'" >'+this.topicSectionObject.tml+'</textarea>';
 
         newForm.innerHTML = innerHTML;
         newForm.elements.namedItem("text").topicSection =this.topicSectionObject.topicSection;
@@ -107,28 +107,60 @@ TWiki.InlineEditPlugin.TextArea.showComponentEdit = function(event) {
     var tg = (event.target) ? event.target : event.srcElement;
 
     var selectionArray = twikismartCursorPosition(tg);
-
-    var tml2html = new TML2HTML();
-    var options = new Object();
-    options.getViewUrl = getViewUrl;
-    var stringToParse = tg.value;
-
-    //hack around the fact i'm using private members
-    //TODO: i'll want this array to be global, so that we don't need to parse more than once
-    tml2html.refs = new Array();
-    //this pulls the vars out..
-    var editableHTML = tml2html._processTags(stringToParse);
-    //put round clickable spans..
-    for (var i = 0; i < tml2html.refs.length; i++) {
-        //TODO: this won't work :( as it strips %'s off TWikiVariables nested inside other TWikiVariables - but its needed as otherwise OnSave added %'s to the vars
-        if (-1 != tml2html.refs[i].indexOf(tg.selectedText)) {
-            //TODO: this won't work :( as it strips %'s off TWikiVariables nested inside other TWikiVariables - but its needed as otherwise OnSave added %'s to the vars
-            var tml = tml2html.refs[i];
-            tml =  tml.substring(1,  tml.length-1);
-            TWiki.ComponentEditPlugin.sourceTarget = tg;
-            TWiki.ComponentEditPlugin.popupEdit(event, tml);
+    var splitByPercents = tg.value.split('%');
+    var characterCount = 0;
+    var i=0;
+    //TODO: what if the section starts or ends in a %
+    for (;i<splitByPercents.length;i++) {
+        characterCount = characterCount+splitByPercents[i].length+1;//1 for the removed %
+        if (selectionArray[0]<characterCount) {
+            break;
         }
     }
+    if ((i==0) || (i>=splitByPercents.length-1)) {
+        return;
+    }
+    selectionIdx = i;
+    
+    //TODO: need to see if the found TMLVariable has {}'s - if so, have to find the matching pair'
+    var openCount = 0;
+    var closedCount = 0;
+    var open = (-1 != splitByPercents[i].search(/^[A-Z][A-Z0-9]*{/));
+    if (open) {openCount++;}
+    var close = ('}' == splitByPercents[i].charAt(splitByPercents[i].length-1));
+    if (close) {closedCount++;}
+    while (openCount != closedCount) {
+        //need to find the matching set
+        if (openCount > closedCount) {
+            i++;
+        }
+        if (openCount < closedCount) {
+            i--;
+        }
+        if ((i<0) || (i>=splitByPercents.length)) {
+            return;//not fully symetric variable
+        }
+        open = (-1 != splitByPercents[i].search(/^[A-Z][A-Z0-9]*{/));
+        if (open) {openCount++;}
+        close = ('}' == splitByPercents[i].charAt(splitByPercents[i].length-1));
+        if (close) {closedCount++;}
+    }
+    var startIdx = Math.min(selectionIdx, i);
+    var stopIdx = Math.max(selectionIdx, i);
+    var selectedTml = '%';
+    for (i = startIdx;i<=stopIdx;i++) {
+        selectedTml = selectedTml + splitByPercents[i] + '%';
+    }
+    if ((startIdx != stopIdx) && (0 != selectedTml.search(/^%[A-Z][A-Z0-9]*{.*}%$/))) {
+        return;//what a long way to come only to realise we're outside a variable, but surrounded by them
+    }
+
+    selectionArray[2] = selectedTml;
+    //TODO: update selection start and end so save can do its thing
+    
+    TWiki.ComponentEditPlugin.sourceTarget = tg;
+    TWiki.ComponentEditPlugin.selectionArray = selectionArray;
+    TWiki.ComponentEditPlugin.popupEdit(event, selectionArray[2]);
 }
 
 // Give the cursor position
