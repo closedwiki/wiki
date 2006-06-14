@@ -82,18 +82,13 @@ sub new {
 sub getAllGroups() {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
-    
+
     unless (defined($this->{grouplist})) {
-       $this->{grouplist} = [];
-	   my @groupList = $this->{usermappingmanager}->getListOfGroups();
-       push(@groupList, $TWiki::cfg{SuperAdminGroup});
-       my %saw;
-	   foreach my $g (@groupList) {
-           next if $saw{$g};
-	       my $groupObject = $this->findUser($g);
-	       push (@{$this->{grouplist}}, $groupObject);
-           $saw{$g} = 1;
-    	}
+        @{$this->{grouplist}} =
+          map { $this->findUser($_); }
+            grep { !/(^|\.)$TWiki::cfg{SuperAdminGroup}$/ }
+              $this->{usermappingmanager}->getListOfGroups();
+        push(@{$this->{grouplist}}, $this->findUser($TWiki::cfg{SuperAdminGroup}));
     }
 	
     return \@{$this->{grouplist}};
