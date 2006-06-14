@@ -160,6 +160,8 @@ TWiki.InlineEditPlugin.TextArea.showComponentEdit = function(event) {
     
     TWiki.ComponentEditPlugin.sourceTarget = tg;
     TWiki.ComponentEditPlugin.selectionArray = selectionArray;
+    TWiki.ComponentEditPlugin.startIdx = startIdx
+    TWiki.ComponentEditPlugin.stopIdx = stopIdx
     TWiki.ComponentEditPlugin.popupEdit(event, selectionArray[2]);
 }
 
