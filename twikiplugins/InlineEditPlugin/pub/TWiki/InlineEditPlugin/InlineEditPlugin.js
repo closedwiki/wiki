@@ -267,6 +267,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
         var newSectionID = 'new'+originatingTopicSectionObject.topicSection+aboveBelow[putSectionAbove]+originatingTopicSectionObject.newSectionName;
         originatingTopicSectionObject.newSectionName++;
 
+        //TODO: extract this into each editor
         var newTml = 'new Section';
         if (sectionType == 1) {
             newTml = "||||\n||||\n||||";
@@ -314,8 +315,9 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
                 }
             }
         } else {
-            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(topicSectionObject.HTMLdiv, originatingTopicSectionObject.editDivSection.nextSibling);
-            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, originatingTopicSectionObject.editDivSection.nextSibling);
+            var nextSibling = originatingTopicSectionObject.editDivSection.nextSibling.nextSibling
+            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, nextSibling);
+            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(topicSectionObject.HTMLdiv, nextSibling);
             for (var i=0;i < topicSections.length;i++) {
                 if (topicSections[i] == originatingTopicSectionObject) {
                     topicSectionsArrayIndex = i+1;
