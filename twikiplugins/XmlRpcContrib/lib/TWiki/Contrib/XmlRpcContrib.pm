@@ -26,7 +26,7 @@ use vars qw( $VERSION $RELEASE $SERVER %handler);
 
 use strict;
 $VERSION = '$Rev$';
-$RELEASE = '0.02';
+$RELEASE = '0.03';
 
 ################################################################################
 # register an implementation for a handler
@@ -41,6 +41,8 @@ sub registerRPCHandler {
 # process an xml call
 sub dispatch {
   my ($session, $data) = @_;
+
+  $TWiki::Plugins::SESSION = $session;
 
   _initServer();
   unless ($data) {
