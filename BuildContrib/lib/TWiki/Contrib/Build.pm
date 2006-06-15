@@ -788,6 +788,8 @@ sub target_archive {
 
     $this->pushd($this->{tmpDir});
 
+    $this->apply_perms($this->{files}, $this->{tmpDir} );
+
     $this->sys_action('zip -r -q '.$project.'.zip *');
     $this->perl_action('File::Copy::move("'.$project.'.zip", "'.
                          $this->{basedir}.'/'.$project.'.zip");');
