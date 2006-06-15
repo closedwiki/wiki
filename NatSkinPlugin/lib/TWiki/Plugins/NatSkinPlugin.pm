@@ -56,7 +56,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.9996';
+$RELEASE = '2.9997';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -624,6 +624,7 @@ sub endRenderingHandler {
   return unless $isEnabled;
 
   $_[0] =~ s/<a\s+([^>]*?href=(?:\"|\'|&quot;)?)([^\"\'\s>]+(?:\"|\'|\s|&quot;>)?)/'<a '.renderExternalLink($1,$2)/geoi;
+  $_[0] =~ s/(<a\s+[^>]+ target="_blank" [^>]+) target="_top"/$1/go; # twiki4 adds target="_top" ... we kick it out again
 
   # remove leftover tags of supported plugins if they are not installed
   # so that they are remove from the NatSkin templates
