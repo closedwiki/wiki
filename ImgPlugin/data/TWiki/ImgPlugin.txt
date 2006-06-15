@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MeredithLesly" date="1150407422" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="MeredithLesly" date="1150408134" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
 This is a fairly winky-dink plugin that allows people to use =%<nop>IMG{"foo.gif"}%= instead
@@ -15,6 +15,15 @@ Another small step in the eradication of html in TWiki!
    * image name is mandatory, web and/or topic optional (defaulting to the current web and topic respectively
    * Supports the img attributes 'align', 'border', 'height', 'width', 'id', and 'class
    * Always puts in an alt tag with a value of '' if not specified. This is per XHTML spec.
+
+| *Argument* | *Meaning* | *Default* | *Required* |
+| =name= | attachment name | none | yes |
+| =web= | web name of the attachment | current web | no |
+| =topic= | topic name of the attachment | current topic | no |
+| =alt= | alternate text tag | '' | no |
+| =caption= | caption to go with the image | none | no |
+| =captionplacement= | one of =right=, =left=, =top=, =bottom= | =right= | no |
+
 
 One good addition would be the auto-addition of the image size when possible, since I believe that pages load faster that way. This may require imagemagick, however.
 
