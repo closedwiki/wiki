@@ -374,8 +374,8 @@ WebPreferences or %TWIKIWEB%.TWikiPreferences)
 By default this value is set to "off"
 
 ---++ Plugin Installation Instructions
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip it in your twiki installation directory. Content: 
 	  | *File:* | *Description:* |
 	  | ==bin/natlogon== | logon cgi script |
 	  | ==bin/natsearch== | search cgi script |
@@ -418,8 +418,9 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.9996 |
+|  Plugin Version: | v2.9997 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 June 2006: | remove double target attribute from external urls |
 |  26 May 2006: | fixed error fetching the number of the last revision |
 |  24 May 2006: | fixed detection of style files to prevent 403 errors; \
                   added SETSKINSTATE; \
@@ -513,5 +514,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 26 May 2006 
+-- TWiki:Main/MichaelDaum - 15 June 2006 
 
