@@ -1,4 +1,4 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# PingBack Database
 #
 # Copyright (C) 2006 MichaelDaum@WikiRing.com
 #
@@ -16,16 +16,29 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 package TWiki::Plugins::PingBackPlugin::DB;
-use strict;
-use Fcntl qw(:flock);
-use TWiki::Plugins::PingBackPlugin::Ping;
 
-use vars qw($debug);
+use strict;
+use vars qw($debug $pingDB @ISA @EXPORT_OK);
+use Fcntl qw(:flock);
+use TWiki::Plugins::PingBackPlugin::Ping qw(readPing);
+require Exporter;
+@ISA = qw(Exporter);
+@EXPORT_OK = qw(getPingDB);
 $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
   print STDERR '- PingBackPlugin::DB - '.$_[0]."\n" if $debug;
+}
+
+###############################################################################
+# static constructor of a signleton pingback db
+sub getPingDB {
+  return $pingDB if $pingDB;
+
+  $pingDB = TWiki::Plugins::PingBackPlugin::DB->new();
+
+  return $pingDB;
 }
 
 ################################################################################
@@ -35,18 +48,24 @@ sub new {
 
   writeDebug("called constructor");
 
+  die 'this is a singleton class, use getPingDB()' if $pingDB;
+
   my $workarea = TWiki::Func::getWorkArea('PingBackPlugin');
   my $this = {
     inQueueDir=>$workarea.'/in',
     outQueueDir=>$workarea.'/out',
     curQueueDir=>$workarea.'/cur',
+    trashDir=>$workarea.'/trash',
   };
 
   # check and create db skelleton
   mkdir $this->{inQueueDir} unless -d $this->{inQueueDir};
   mkdir $this->{outQueueDir} unless -d $this->{outQueueDir};
   mkdir $this->{curQueueDir} unless -d $this->{curQueueDir};
+  mkdir $this->{trashDir} unless -d $this->{trashDir};
 
+  $pingDB = $this;
+  
   return bless($this, $class);
 }
 
@@ -96,12 +115,28 @@ sub unlockCurQueue {
 }
 
 ###############################################################################
+sub lockTrash {
+  my $this = shift;
+
+  my $lockfile = $this->{trashDir}.'/lock';
+  open(TRASH, ">$lockfile") || die "cannot create lock $lockfile - $!\n";
+  flock(TRASH, LOCK_EX); # wait for exclusive rights
+}
+
+###############################################################################
+sub unlockTrash {
+  flock(TRASH, LOCK_UN);
+  close TRASH;
+}
+
+###############################################################################
 sub getQueueDir {
   my ($this, $queueName) = @_;
   
   return $this->{inQueueDir} if $queueName eq 'in';
   return $this->{outQueueDir} if $queueName eq 'out';
   return $this->{curQueueDir} if $queueName eq 'cur';
+  return $this->{trashDir} if $queueName eq 'trash';
 
   die "unknown queue name $queueName";
 }
@@ -113,6 +148,7 @@ sub lockQueue {
   return $this->lockInQueue() if $queueName eq 'in';
   return $this->lockOutQueue() if $queueName eq 'out';
   return $this->lockCurQueue() if $queueName eq 'cur';
+  return $this->lockTrash() if $queueName eq 'trash';
 
   die "unknown queue name $queueName";
 }
@@ -124,6 +160,7 @@ sub unlockQueue {
   return $this->unlockInQueue() if $queueName eq 'in';
   return $this->unlockOutQueue() if $queueName eq 'out';
   return $this->unlockCurQueue() if $queueName eq 'cur';
+  return $this->unlockTrash() if $queueName eq 'trash';
 
   die "unknown queue name $queueName";
 }
@@ -139,7 +176,7 @@ sub queuePings {
 
   # write all pings
   foreach my $ping (@pings) {
-    $ping->writePing($queueName);
+    $ping->write($queueName);
   }
 
   # unlock queue
@@ -160,7 +197,9 @@ sub readQueue {
   my $queueDir = $this->getQueueDir($queueName);
   opendir(DIR, $queueDir) || die "cannot open directory $queueDir - $!\n";
   foreach my $file (grep(!/^(\.|\.\.|lock)/, readdir(DIR))) {
-    push @pings, TWiki::Plugins::PingBackPlugin::Ping::readPing($this, $queueDir.'/'.$file);
+    my $ping = readPing($this, $queueDir.'/'.$file);
+    $ping->{queueName} = $queueName;
+    push @pings, $ping;
   }
   closedir DIR;
 
@@ -176,6 +215,8 @@ sub readQueue {
 ###############################################################################
 sub newPing {
   my $this = shift;
+
+  writeDebug("called newPing");
   return TWiki::Plugins::PingBackPlugin::Ping->new($this, @_);
 }
 

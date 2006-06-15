@@ -12,13 +12,10 @@ Manager for the PingBackPlugin
 ---++ CUR Queue
 %PINGBACK{"show" queue="cur"}%
 
+---++ TRASH
+%PINGBACK{"show" queue="trash"}%
+
 
 <!--
    * Set ALLOWTOPICVIEW = %MAINWEB%.TWikiAdminGroup
-   * Set DISABLEPINGBACK = on
 -->
-
-
-
-
--- Main.MichaelDaum - 29 May 2006

@@ -1,4 +1,4 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# Ping Abstraction
 #
 # Copyright (C) 2006 MichaelDaum@WikiRing.com
 #
@@ -16,35 +16,82 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 package TWiki::Plugins::PingBackPlugin::Ping;
+
 use strict;
 use Digest::MD5 qw(md5_hex);
-
-use vars qw($debug);
+use vars qw($debug @ISA @EXPORT_OK);
+require Exporter;
+@ISA = qw(Exporter);
+@EXPORT_OK = qw(readPing);
 $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  print STDERR '- PingBackPlugin::PingDB - '.$_[0]."\n" if $debug;
+  print STDERR '- PingBackPlugin::Ping - '.$_[0]."\n" if $debug;
+}
+
+###############################################################################
+# static: read a ping from a file 
+sub readPing {
+  my ($db, $file) = @_;
+
+  writeDebug("called readPing($file)");
+
+  my %data = (
+    date => '',
+    source => '',
+    target => '',
+    title => '',
+    favicon => '',
+    paragraph => '',
+    extra => '',
+  );
+
+  open(FILE, "<$file") || die "cannot open $file - $!";
+  writeDebug('opening');
+  while (my $line = <FILE>) {
+    next if $line =~ /^#/;
+    writeDebug("line=$line");
+    if ($line =~ /^(date|source|target|title|favicon|title|paragraph)=(.*)$/) {
+      unless ($data{$1}) {
+	$data{$1} = $2;
+	writeDebug("found $1=$2");
+	next;
+      }
+    }
+    writeDebug("adding extra");
+    $data{extra} .= $line;
+  }
+  close FILE;
+  writeDebug('closing');
+
+  my $ping = $db->newPing(%data);
+  writeDebug("read ping \n".$ping->toString("\n"));
+
+  return $ping;
 }
 
 ################################################################################
 # constructor
 sub new {
-  my ($class, $db, $source, $target, $extra) = @_;
+  my $class = shift;
+  my $db = shift;
 
   writeDebug("new ping");
 
   my $this = {
-    date=>'',
     db=>$db,
-    source=>$source,
-    target=>$target,
-    extra=>($extra||''),
+    date=>'',
+    source=>'',
+    target=>'',
+    title=>'',
+    favicon=>'',
+    paragraph=>'',
+    extra=>'',
+    @_
   };
 
   $this = bless($this, $class);
-
-  writeDebug($this->toString);
 
   return $this;
 }
@@ -63,24 +110,26 @@ sub timeStamp {
   }
   $this->{date} = $date;
 
-  writeDebug($this->toString);
-
   return $date;
 }
 
 ###############################################################################
 # write w/o locking
-sub writePing {
+sub write {
   my ($this, $queueName) = @_;
 
-  writeDebug("called writePing($queueName) for ".$this->toString);
-
-  my $queueDir = $this->{db}->getQueueDir($queueName);
-
-  unless ($this->{key}) {
-    $this->{key} = md5_hex($this->{source}."\0".$this->{target});
+  if ($queueName) {
+    # tag ping location
+    $this->{queueName} = $queueName;
+  } else {
+    # retrieve location
+    $queueName = $this->{queueName};
+    die "don't know where to write this ping to" unless $queueName;
   }
-  my $pingFile = $queueDir.'/'.$this->{key};
+
+  writeDebug("called write($queueName) for \n".$this->toString("\n"));
+
+  my $pingFile = $this->getPingFile($queueName);
 
   open(FILE, ">$pingFile") || die "cannot append $pingFile - $!\n";
 
@@ -88,77 +137,154 @@ sub writePing {
     'date='.$this->{date}."\n".
     'source='.$this->{source}."\n".
     'target='.$this->{target}."\n".
-    $this->{extra}."\n"; 
+    'title='.$this->{title}."\n".
+    'paragraph='.$this->{paragraph}."\n".
+    'favicon='.$this->{favicon}."\n".
+    $this->{extra}; 
 
   close FILE;
-}
 
-###############################################################################
-# static
-# read a ping from a file and constructs a new ping
-sub readPing {
-  my ($db, $file) = @_;
-
-  writeDebug("called readPing($file)");
-
-  my ($date, $source, $target, $extra) = ('','','','');
-
-  open(FILE, "<$file") || die "cannot open $file - $!";
-  writeDebug('opening');
-  while (my $line = <FILE>) {
-    next if $line =~ /^#/;
-    writeDebug("line=$line");
-    if (!$date && $line =~ /^date=(.*)$/) {
-      $date = $1;
-      writeDebug("found date=$date");
-      next;
-    }
-    if (!$source && $line =~ /^source=(.*)$/) {
-      $source = $1;
-      writeDebug("found source=$source");
-      next;
-    }
-    if (!$target && $line =~ /^target=(.*)$/) {
-      $target = $1;
-      writeDebug("found target=$target");
-      next;
-    }
-    writeDebug("adding extra");
-    $extra .= $line;
-  }
-  close FILE;
-  writeDebug('closing');
-
-  my $ping = $db->newPing($source, $target, $extra);
-  $ping->timeStamp($date);
-
-  writeDebug("read ping ".$ping->toString);
-
-  return $ping;
+  return $this;
 }
 
 ###############################################################################
 # safe write using locking
-sub queuePing {
+sub queue {
   my ($this, $queueName) = @_;
 
-  writeDebug("called queuePing($queueName)");
+  writeDebug("called queue($queueName)");
   writeDebug($this->toString);
 
   $this->{db}->lockQueue($queueName);
-  $this->writePing($queueName);
+  $this->write($queueName);
   $this->{db}->unlockQueue($queueName);
+
+  return $this;
+}
+
+###############################################################################
+sub unqueue {
+  my ($this, $queueName) = @_;
+
+  $queueName = $this->{queueName} unless $queueName;
+  die "don't know where this ping is" unless $queueName;
+
+  writeDebug("called unqueue($queueName)");
+  writeDebug($this->toString);
+
+  $this->{db}->lockQueue($queueName);
+  unlink $this->getPingFile($queueName);
+  $this->{db}->unlockQueue($queueName);
+
+  $this->{queueName} = undef;
+
+  return $this;
 }
 
 ###############################################################################
 sub toString {
-  my $this = shift;
+  my ($this, $separator) = @_;
+  $separator ||= ', ';
 
   return 
-    'date='.$this->{date}.', '.
-    'source='.$this->{source}.', '.
-    'target='.$this->{target}.', '.
+    'date='.$this->{date}.$separator.
+    'source='.$this->{source}.$separator.
+    'target='.$this->{target}.$separator.
+    'title='.$this->{title}.$separator.
+    'paragraph='.$this->{paragraph}.$separator.
+    'favicon='.$this->{favicon}.$separator.
     'extra='.$this->{extra};
+}
+
+###############################################################################
+sub getPingFile {
+  my ($this, $queueName) = @_;
+
+  $queueName = $this->{queueName} unless $queueName;
+  die "don't know where this ping is" unless $queueName;
+
+  my $queueDir = $this->{db}->getQueueDir($queueName);
+  $this->{pingFile} = $queueDir.'/'.$this->getKey();
+
+  return $this->{pingFile};
+}
+
+###############################################################################
+sub getKey {
+  my $this = shift;
+
+  $this->{key} = md5_hex($this->{source}."\0".$this->{target}) 
+    unless $this->{key};
+
+  return $this->{key};
+}
+
+###############################################################################
+sub isAlien {
+  my $this = shift;
+
+  $this->getTargetWebTopic();
+
+  return $this->{targetWeb}?0:1;
+}
+
+###############################################################################
+sub isInternal {
+  my $this = shift;
+
+  $this->getTargetWebTopic();
+  $this->getSourceWebTopic();
+
+  return ($this->{sourceWeb} && $this->{targetWeb})?1:0;
+}
+
+###############################################################################
+sub getTargetWebTopic {
+  my $this = shift;
+  
+  unless (defined $this->{targetWeb}) {
+
+    my $viewUrl = TWiki::Func::getScriptUrl(undef,undef,'view');
+    
+    if ($this->{target} =~ /^$viewUrl\/(.*)\/(.*?)$/) {
+    
+      ($this->{targetWeb}, $this->{targetTopic}) = 
+	TWiki::Func::normalizeWebTopicName($1, $2);
+	
+    } else {
+    
+      $this->{targetWeb} = '';
+      $this->{targetTopic} = '';
+
+    }
+  }
+
+  return ($this->{targetWeb}, $this->{targetTopic});
+}
+
+###############################################################################
+sub getSourceWebTopic {
+  my $this = shift;
+
+  unless (defined $this->{sourceWeb}) {
+
+    my $viewUrl = TWiki::Func::getScriptUrl(undef,undef,'view');
+    
+    if ($this->{source} =~ /^$viewUrl\/(.*)\/(.*?)$/) {
+    
+      ($this->{sourceWeb}, $this->{sourceTopic}) = 
+	TWiki::Func::normalizeWebTopicName($1, $2);
+	
+    } else {
+    
+      $this->{sourceWeb} = '';
+      $this->{sourceTopic} = '';
+
+    }
+  }
+
+  return ($this->{sourceWeb}, $this->{sourceTopic});
+
 }
 
 1;
