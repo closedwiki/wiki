@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1148885788" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1149012888" format="1.1" version="1.1"}%
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -23,6 +23,7 @@ There's a PingBackClient for testing. See also the PingBackManager.
 ---++ Plugin Settings
 
    * Set SHORTDESCRIPTION = Pingback service for TWiki
+   * Set ENABLEPINGBACK = on
 
 ---++ Plugin Installation Instructions
 
@@ -47,7 +48,7 @@ There's a PingBackClient for testing. See also the PingBackManager.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.03 |
+|  Plugin Version: | v0.04 |
 |  Change History: | &nbsp; |
 |  27 May 2006: | Initial version |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |

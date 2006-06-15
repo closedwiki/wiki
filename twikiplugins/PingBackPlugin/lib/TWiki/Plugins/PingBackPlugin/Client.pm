@@ -22,6 +22,7 @@ package TWiki::Plugins::PingBackPlugin::Client;
 
 use strict;
 use LWP::UserAgent;
+use HTTP::Request;
 use RPC::XML::Client;
 use HTML::Entities;
 
@@ -49,6 +50,34 @@ sub new {
 }
 
 ################################################################################
+sub getAgent {
+  my $this = shift;
+
+  return $this->{ua} if $this->{ua};
+
+  $this->{ua} = LWP::UserAgent->new();
+  $this->{ua}->agent("TWiki Pingback Client");
+  $this->{ua}->timeout(5);
+  $this->{ua}->env_proxy();
+  #writeDebug("new agent=" . $this->{ua}->agent());
+
+  return $this->{ua};
+}
+
+################################################################################
+# get target page
+sub fetchPage {
+  my ($this, $source, $target) = @_;
+
+  #writeDebug("called fetchPage($source, $target)");
+
+  my $ua = $this->getAgent();
+  my $request = HTTP::Request->new('GET' => $target);
+  $request->referer($source);
+  return $ua->request($request);
+}
+
+################################################################################
 # detect a pingback server 
 # source : the source of a possible ping
 # target  : the ping target
@@ -59,26 +88,16 @@ sub detectServer {
   
   writeDebug("called detectServer($source, $target)");
 
-  unless ($this->{ua}) {
-    $this->{ua} = LWP::UserAgent->new();
-    $this->{ua}->agent("TWiki Pingback Client");
-    $this->{ua}->timeout(5);
-    $this->{ua}->env_proxy();
-    writeDebug("new agent=" . $this->{ua}->agent());
-  }
-
   # get target page
-  my $request = HTTP::Request->new('GET', $target);
-  $request->referer($source);
-  my $page = $this->{ua}->request($request);
+  my $page = $this->fetchPage($source, $target);
   if ($page->is_error) {
     writeDebug("got an error");
     return undef;
   }
   my $content = $page->content;
-  my $server;
   #writeDebug("content=$content");
 
+  my $server;
   # check http header
   if (my @servers = $page->header('X-Pingback')) {
     $server = $servers[0];

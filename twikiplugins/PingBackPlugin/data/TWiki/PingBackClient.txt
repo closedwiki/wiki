@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1148921506" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1149012914" format="1.1" version="1.1"}%
 ---+ %TOPIC%
 Test client for the PingBackPlugin.
 
@@ -16,11 +16,11 @@ using =%<nop>PINGBACK{"ping" target="http://...."}%=.
       <form action="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" method="POST" enctype="multipart/form-data">
       <input type="text" name="source" value="%URLPARAM{"source" default="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%"}%" size="50"></td>
       <input type="hidden" name="endPoint" value="%WEB%/%TOPIC%" />
-      <input type="hidden" name="action" value="ping" />
+      <input type="hidden" name="pingback_action" value="ping" />
   </tr>
   <tr>
     <td><b>Target</b>:</td>
-    <td><input type="text" name="target" value="%URLPARAM{"target" default="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%"}%" size="50"></td>
+    <td><input type="text" name="target" value="%URLPARAM{"target" default="%SCRIPTURL{"view"}%/%TWIKIWEB%/PingBackPlugin"}%" size="50"></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -35,7 +35,7 @@ using =%<nop>PINGBACK{"ping" target="http://...."}%=.
 
 %PINGBACK%
 
-See also PingBackManager,.
+See also PingBackManager.
 
 <!--
    * Set ALLOWTOPICVIEW = %MAINWEB%.TWikiAdminGroup

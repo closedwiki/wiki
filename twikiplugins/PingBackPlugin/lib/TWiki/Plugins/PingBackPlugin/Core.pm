@@ -1,4 +1,4 @@
-# Plugin for TWiki Collaboration Platform, http://TWiki.org/
+# PingBackPlugin Core
 #
 # Copyright (C) 2006 MichaelDaum@WikiRing.com
 #
@@ -16,26 +16,16 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 package TWiki::Plugins::PingBackPlugin::Core;
-use strict;
-use TWiki::Plugins::PingBackPlugin::DB;
 
-use vars qw($debug $pingClient $pingDB);
+use strict;
+use vars qw($debug $pingClient);
+use TWiki::Plugins::PingBackPlugin::DB qw(getPingDB);
 $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
   #&TWiki::Func::writeDebug('- PingBackPlugin::Core - '.$_[0]) if $debug;
   print STDERR '- PingBackPlugin::Core - '.$_[0]."\n" if $debug;
-}
-
-###############################################################################
-# construct a signleton PingDB
-sub getPingDB {
-  return $pingDB if $pingDB;
-
-  $pingDB = TWiki::Plugins::PingBackPlugin::DB->new();
-
-  return $pingDB;
 }
 
 ###############################################################################
@@ -57,8 +47,6 @@ sub getPingClient {
 # remote procedure handler
 sub handlePingbackCall {
   my ($session, $params) = @_;
-
-  $TWiki::Plugins::SESSION = $session;
 
   writeDebug("called handlePingbackCall");
 
@@ -82,9 +70,9 @@ sub handlePingbackCall {
 
     # queue incoming ping
     my $db = getPingDB();
-    my $ping = $db->newPing($source, $target);
+    my $ping = $db->newPing(source=>$source, target=>$target);
     $ping->timeStamp();
-    $ping->queuePing('in');
+    $ping->queue('in');
 
     writeDebug("done handlePingBackCall");
     return ('200 OK', 0, 'Pingback registered.');
@@ -115,7 +103,7 @@ sub handlePing {
   writeDebug("called handlePing");
 
   my $query = TWiki::Func::getCgiQuery();
-  my $action = $query->param('action') || '';
+  my $action = $query->param('pingback_action') || '';
   my $source;
   my $target;
   my $format = $params->{format} || 
@@ -161,7 +149,7 @@ sub handleShow {
   writeDebug("called handleShow");
 
   my $header = $params->{header} || 
-    '<span class="twikiAlert">$count</span> ping(s) in $queue queue<p/>'.
+    '<span class="twikiAlert">$count</span> ping(s) found<p/>'.
     '<table class="twikiTable" width="100%">';
   my $format = $params->{format} || 
     '<tr><th>$index</th><th>$date</th></tr>'.
@@ -176,7 +164,7 @@ sub handleShow {
   my $warn = $params->{warn} || 'on';
   my $reverse = $params->{reverse} || 'on';
   my $queue = $params->{queue} || 'in';
-  return inlineWarning('ERROR: unknown queue '.$queue) unless $queue =~ /^(in|out|cur)$/;
+  return inlineWarning('ERROR: unknown queue '.$queue) unless $queue =~ /^(in|out|cur|trash)$/;
 
   my $result = '';
   my @pings;
@@ -223,26 +211,31 @@ sub afterSaveHandler {
     return;
   }
 
-  unless ($TWiki::Plugins::PingBackPlugin::enabledPingBack) {
-    # check if we jus enabled pingback during this save; these values aren't 
-    # in the preference cache yet; this is SMELLs
-    my $found = 0;
-    my $setRegex = TWiki::Func::getRegularExpression('setRegex');
-    my $enablePingbackRegex = qr/^${setRegex}ENABLEPINGBACK\s*=\s*(on|yes|1)$/o;
-    foreach my $line (split(/\r?\n/, $text)) {
-      if ($line =~ /$enablePingbackRegex/o) {
-	$found = 1;
-	last;
-      }
-    } 
-    if ($found) {
-      writeDebug("found ENABLEPINGBACK");
-    } else {
-      writeDebug("bailing out afterSaveHandler ... no pingback here");
-      return;
+  # check if we jus enabled/disabled pingback during this save; these values aren't 
+  # in the preference cache yet; this SMELLs
+  my $found = 0;
+  my $isEnabled = 0;
+  my $setRegex = TWiki::Func::getRegularExpression('setRegex');
+  my $enablePingbackRegex = qr/^${setRegex}ENABLEPINGBACK\s*=\s*(on|yes|1|off|no|0)$/o;
+  foreach my $line (split(/\r?\n/, $text)) {
+    if ($line =~ /$enablePingbackRegex/o) {
+      $found = 1;
+      $isEnabled = $1;
+      $isEnabled =~ s/off//gi;
+      $isEnabled =~ s/no//gi;
+      $isEnabled = $found?1:0;
+      last;
     }
+  } 
+  $isEnabled = $TWiki::Plugins::PingBackPlugin::enabledPingBack unless $found;
+  if ($isEnabled) {
+    writeDebug("generating pingbacks for $web.$topic");
+  } else {
+    writeDebug("bailing out afterSaveHandler ... not generating pingbacks for $web.$topic");
+    return; # nop
   }
 
+  # now do it
   my $urlHost = &TWiki::Func::getUrlHost();
   my $source = TWiki::Func::getViewUrl($web, $topic);
   my @pings;
@@ -270,7 +263,7 @@ sub afterSaveHandler {
     #$target =~ /^$urlHost/i && ($doPing = 0); # not for own host
     next unless $doPing;
     writeDebug("found target $target");
-    my $ping = $db->newPing($source, $target);
+    my $ping = $db->newPing(source=>$source, target=>$target);
     $ping->timeStamp();
     push @pings, $ping;
   }

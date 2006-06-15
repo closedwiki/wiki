@@ -24,7 +24,7 @@ use vars qw( $VERSION $RELEASE
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.03';
+$RELEASE = 'v0.04';
 
 use TWiki::Contrib::XmlRpcContrib;
 
