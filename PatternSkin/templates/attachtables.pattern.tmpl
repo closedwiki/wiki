@@ -29,6 +29,17 @@
 %{ Footer for topic attachment table }%
 %TMPL:DEF{ATTACH:files:footer}%
 </div></div>
+<script type="text/javascript">
+//<![CDATA[
+	var table = document.getElementById("twikiAttachmentsTable");
+	if (table) {
+		var count = table.getElementsByTagName("tr").length - 1;
+		var countStr = "(" + count + ")";
+		document.getElementById('attachmentsshowlink').firstChild.data += " " + countStr;
+		document.getElementById('attachmentshidelink').firstChild.data += " " + countStr;
+	}
+//]]>
+</script>
 %TMPL:END%
 
 %{ Header for table at top of attach screen }%
