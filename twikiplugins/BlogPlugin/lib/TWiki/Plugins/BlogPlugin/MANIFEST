@@ -140,9 +140,11 @@ data/_BlogPlugin/WebTopicList.txt 0644
 data/_BlogPlugin/WebTopicViewTemplate.txt 0644
 data/Main/BlogAdminGroup.txt 0644
 data/Main/BlogAuthorGroup.txt 0644
+data/TWiki/BlogFactory.txt 0644
 data/TWiki/BlogPlugin.txt 0644
 data/TWiki/BlogUp.txt 0644
 lib/TWiki/Plugins/BlogPlugin/Core.pm 0644
+lib/TWiki/Plugins/BlogPlugin/Factory.pm 0644
 lib/TWiki/Plugins/BlogPlugin/WebDB.pm 0644
 lib/TWiki/Plugins/BlogPlugin.pm 0644
 pub/TWiki/BlogPlugin/blogplugin.js 0644

@@ -3,8 +3,9 @@
 ---+ Function: %TOPIC%
 %FORMFIELD{"TopicDescription"}%
 
-The maximum age of a BlogComment to be displayed is hardcoded below in epoch seconds.
-See the =age="2592000"= parameter below. Customize it to
+The maximum age of a BlogComment to be displayed is configurable by the COMMENTSAGE
+variable in the WebPreferences. Current value is %COMMENTSAGE% epoch seconds.
+Customize it to
 
    1 month: 2592000 
    2 months: 5184000 
@@ -58,7 +59,7 @@ no newer comments than that.
 *~~         $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\"}$percnt
 *~~       </a>
 ~~~     </td></tr>"
-~~~   limit="%LIMIT%" age="2592000"
+~~~   limit="%LIMIT%" age="%COMMENTSAGE%"
 ~~~   footer="</table></div>$n</noautolink>"
 ~~~ }%
 *~~

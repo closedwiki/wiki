@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2005-2006 Michael Daum <micha@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2005-2006 MichaelDaum@WikiRing.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,19 +18,20 @@ package TWiki::Plugins::BlogPlugin;
 
 use strict;
 use vars qw(
-        $VERSION $RELEASE $doneHeader $blogCore
+        $VERSION $RELEASE $doneHeader $blogCore $blogFactory
     );
 
 use TWiki::Plugins::BlogPlugin::WebDB; # must be compiled in advance
 
 $VERSION = '$Rev$';
-$RELEASE = '0.80';
+$RELEASE = '0.94';
 
 ###############################################################################
 sub initPlugin {
 
   $doneHeader = 0;
   $blogCore = undef;
+  $blogFactory = undef;
 
   TWiki::Func::registerTagHandler('CITEBLOG', \&handleCiteBlog);
   TWiki::Func::registerTagHandler('COUNTCOMMENTS', \&handleCountComments);
@@ -38,6 +39,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('PREVDOC', \&handlePrevDoc);
   TWiki::Func::registerTagHandler('RECENTCOMMENTS', \&handleRecentComments);
   TWiki::Func::registerTagHandler('RELATEDTOPICS', \&handleRelatedTopics);
+  TWiki::Func::registerRESTHandler('createblog', \&handleCreateBlog);
 
   return 1;
 }
@@ -61,6 +63,22 @@ sub handleRecentComments {
 sub handleRelatedTopics { 
   newCore()->handleRelatedTopics(@_);
 }
+sub handleCreateBlog { 
+  newFactory()->handleCreateBlog(@_);
+}
+
+###############################################################################
+sub newFactory {
+  return $blogFactory if $blogFactory;
+
+  eval 'use TWiki::Plugins::BlogPlugin::Factory;';
+  die $@ if $@;
+
+  $blogFactory = new TWiki::Plugins::BlogPlugin::Factory;
+
+  return $blogFactory;
+}
+
 
 ###############################################################################
 sub newCore {
@@ -73,8 +91,6 @@ sub newCore {
 
   return $blogCore;
 }
-
-
 
 ###############################################################################
 sub commonTagsHandler {

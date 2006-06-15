@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1141055212" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1150304736" format="1.1" reprev="1.3" version="1.1"}%
 <!--
    * Set WHITEBOARD = off
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAuthorGroup
@@ -6,14 +6,15 @@
    * Set VIEW_TEMPLATE = BlogEntryView
    * Set ENABLEPINGBACK = on
 -->
+
 %META:FORM{name="BlogEntryForm"}%
-%META:FIELD{name="TopicType" attributes="M" title="TopicType" value="BlogEntry"}%
+%META:FIELD{name="TopicType" attributes="" title="TopicType" value="BlogEntry"}%
 %META:FIELD{name="BlogAuthor" attributes="M" title="BlogAuthor" value="MichaelDaum"}%
-%META:FIELD{name="Headline" attributes="M" title="Headline" value="Welcome to BlogUp"}%
-%META:FIELD{name="Teaser" attributes="M" title="Teaser" value="This is a <b>blog</b>ging set<b>up</b> for TWiki.%0d%0a"}%
-%META:FIELD{name="Text" attributes="" title="Text" value="Visit the [[http://jojowiki.dyndns.org/Blog/BlogDev][BlogDev]]  to track latest news on the development of this setup.%0d%0a%0d%0aFirst steps to complete this %25WEB%25:%0d%0a   * The _BlogPlugin web is the template web for a set of blog webs on %0d%0a     your <nop>%25WIKITOOLNAME%25. Use [[TWiki.ManagingWebs#Adding_a_New_Web][ManagingWebs]] to create a new web.%0d%0a   * unfortunately not everything is adjusted to derive some NewBlog from %0d%0a     the _BlogPlugin template:%0d%0a     you need to copy templates/_BlogPlugin to templates/NewBlog;%0d%0a     edit NewBlog.WebPreferences and replace _BlogPlugin with NewBlog; edit%0d%0a     the [[BlogAbout]] to describe your blog%0d%0a   * Revise the access rights on [[WebPreferences]]. By default commenting is open%0d%0a     to everybody. You might restrict it to registered users only by adding TWikiGuest to%0d%0a     the  DENYWEBCHANGE variable.%0d%0a   * Revise the two blog related groups [[%25MAINWEB%25.BlogAuthorGroup][BlogAuthorGroup]] and%0d%0a    [[ %25MAINWEB%25.BlogAdminGroup][BlogAdminGroup]].%0d%0a   * The WebHome and all other [[FrontPages]] have a specific way of selecting which%0d%0a     articles are to be displayed, which of them as in full or only as teasers. You may edit%0d%0a     [[WebHome]] and the other [[TopicFunctions]] to match your  needs. Think of%0d%0a     the BlogUp more of a blog construction set.%0d%0a   * Recent comments are listed in the sidebar as long as they didn't get too old. So%0d%0a     your blog will only show comment activities within a recent time period. Edit%0d%0a     [[RenderRecentComments]] and change the %22age%22  parameter (epoch seconds) %0d%0a     to your needs.%0d%0a   * The sidebar is divided into several sections to be displayed on different%0d%0a     levels of the application. You might want to adjust them to fit your needs, e.g.%0d%0a     show recent visitors using [[RenderVisitors]] which uses the TWiki:Plugins.UserInfoPlugin%0d%0a     to display the visitors of today or add your technorati code to the [[WebPreferences]]%0d%0a     to display your technorati connection in the sidebar%0d%0a   * There's a set of [[AdminTools]] which are displayed using the [[RenderAdminTools]] %0d%0a     TopicFunction and  displayed in the sidebar if you are member of the %0d%0a     [[%25MAINWEB%25.BlogAdminGroup][BlogAdminGroup]].%0d%0a   * Finally, set the state of this BlogEntry to %22disabled%22 to prevent it from being published on your blog.%0d%0a%0d%0aUse %25CITEBLOG%7b%22TestBlogEntry0%22%7d%25 to test aspects of this blogging application.%0d%0a%0d%0a"}%
-%META:FIELD{name="SubjectCategory" attributes="M" title="SubjectCategory" value="BlogDev"}%
-%META:FIELD{name="State" attributes="" title="State" value="enabled"}%
-%META:FIELD{name="Related" attributes="" title="Related" value=""}%
 %META:FIELD{name="Date" attributes="M" title="Date" value="20 Aug 2005 - 11:38"}%
-%META:FIELD{name="BlogTag" attributes="" title="BlogTag" value="blogging, help"}%
+%META:FIELD{name="Headline" attributes="" title="Headline" value="Welcome to BlogUp"}%
+%META:FIELD{name="Teaser" attributes="" title="Teaser" value="This is your first posting in this <nop>%25WEB%25. Please delete or disable it after reading.%0d%0a"}%
+%META:FIELD{name="Text" attributes="" title="Text" value="Before you start there might be some additional things to consider.%0d%0a%0d%0a*Configuration*:%0d%0a   * If you created this blog using the [[%25TWIKIWEB%25.BlogFactory][BlogFactory]]%0d%0a     the [[WebPreferences][preferences]] of this blog %0d%0a     should have been set to some reasonable values. Revising them might be%0d%0a     a good idea in case you want to adjust them afterwards.%0d%0a   * Describe your blog in more detail by editing the [[BlogAbout]] page.%0d%0a     Watch out for the red TODOs.%0d%0a   * Create a [[BlogAuthor]] page for each writer on this blog. %0d%0a   * Create a set of [[SubjectCategory][categories]] to divide your blog into%0d%0a     compartments. Don't create too many at the beginning. You may%0d%0a     get away by copious tagging postings.%0d%0a%0d%0a*Feedback:*%0d%0a   * If your blog is public then you might want to mail the%0d%0a     [[mailto:MichaelDaum@WikiRing.com][BlogUp author]] to apply%0d%0a     for being added to the BlogUp ring%0d%0a   * Or just drop a line of feedback and incentives.%0d%0a   * If you use the BlogUp software commercially then think about making a donnation%0d%0a     by filling up his PayPal account.%0d%0a   * Be welcome to visit the [[http://jojowiki.dyndns.org][JojoWiki]]  %0d%0a     to read about latest news on the development.%0d%0a%0d%0aThanks. And have a nice time using BlogUp.%0d%0a%0d%0a[[mailto:MichaelDaum@WikiRing.com][Michael Daum]].%0d%0a%0d%0a"}%
+%META:FIELD{name="BlogTag" attributes="" title="BlogTag" value="welcome"}%
+%META:FIELD{name="SubjectCategory" attributes="M" title="SubjectCategory" value=""}%
+%META:FIELD{name="Related" attributes="" title="Related" value=""}%
+%META:FIELD{name="State" attributes="" title="State" value="enabled"}%
