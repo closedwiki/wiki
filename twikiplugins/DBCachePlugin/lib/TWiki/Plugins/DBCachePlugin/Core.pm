@@ -509,6 +509,7 @@ sub _encode {
   $text = "\n<noautolink>\n$text\n</noautolink>\n";
   $text = &TWiki::Func::expandCommonVariables($text);
   $text = &TWiki::Func::renderText($text);
+  $text =~ s/<nop>//go;
   $text =~ s/[\n\r]+/ /go;
   $text =~ s/\n*<\/?noautolink>\n*//go;
   $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
