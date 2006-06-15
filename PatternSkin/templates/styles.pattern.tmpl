@@ -25,6 +25,14 @@ pre {
 }
 </style>
 <![endif]-->
+<!--[if IE 5.5000]> 
+<style type="text/css">
+#patternLeftBar {
+	position:relative;  IE 5.5 needs this or the contents won't show outside the parent container. 
+}
+</style>
+<![endif]-->
+
 %TMPL:P{"stylesdynamic"}%
 <style type="text/css" media="all">
 	%IF{ "$ USERLAYOUTURL" then="@import url('%USERLAYOUTURL%');"}%
