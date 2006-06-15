@@ -5,7 +5,13 @@
 	  <div class="natTopLeftContents">
 	    <h1 class="natWebTitle">
       	      <a href="%IFDEFINED{"%WEBLOGOURL%" then="%WEBLOGOURL%" else="%WIKILOGOURL%"}%" title="%WEBLOGOALT%" accesskey="h">
-		%IFDEFINED{"%WEBLOGOIMG%" then="<img src=\"%WEBLOGOIMG%\" alt=\"%WEBLOGOALT%\" align=\"absmiddle\" border=\"0\"/>" else="%WIKITOOLNAME%"}%
+		%IFDEFINEDTHEN{"%WEBLOGOIMG%"}%
+		  <img src="%WEBLOGOIMG%" alt="%WEBLOGOALT%" align="absmiddle" border="0"/>"
+		%ELSIFDEFINED{"%WEBTOOLNAME%"}%
+		  %WEBTOOLNAME%
+		%ELSEDEFINED%
+		  %WIKITOOLNAME%
+		%FIDEFINED%
 	      </a><span class="natWebLocator">%TMPL:P{"locator"}%</span>
 	    </h1>
 	    <div class="natWebSlogan">%SITEMAPUSETO%</div>

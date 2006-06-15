@@ -39,25 +39,25 @@
 <td colspan="3">
 <ul>
 %IFSKINSTATETHEN{final="border"}% %ELSESKINSTATE%
-<li> <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%/>Border On</li>
-<li> <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%/>Border Off</li>
-<li> <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%/>Thin Layout</li>
+<li> <input type="radio" id="borderon" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%/><label for="borderon">Border On</label></li>
+<li> <input type="radio" id="borderoff" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%/><label for="borderoff">Border Off</label></li>
+<li> <input type="radio" id="borderthin" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%/><label for="borderthin">Thin Layout</label></li>
 %FISKINSTATE%
 %IFSKINSTATETHEN{final="sidebar"}% %ELSESKINSTATE%
-<li> <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}%/>Sidebar Left</li>
-<li> <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}%/>Sidebar Right</li>
-<li> <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%/>Sidebar Off</li>
+<li> <input type="radio" id="sidebarleft" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}%/><label for="sidebarleft">Sidebar Left</label></li>
+<li> <input type="radio" id="sidebarright" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}%/><label for="sidebarright">Sidebar Right</label></li>
+<li> <input type="radio" id="sidebaroff" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%/><label for="sidebaroff">Sidebar Off</label></li>
 %FISKINSTATE%
 %IFSKINSTATETHEN{final="buttons"}% %ELSESKINSTATE%
-<li> <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%/>Web Buttons On</li>
-<li> <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%/>Web Buttons Off</li>
+<li> <input type="radio" id="buttonson" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%/><label for="buttonson">Web Buttons On</label></li>
+<li> <input type="radio" id="buttonsoff" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%/><label for="buttonsoff">Web Buttons Off</label></li>
 %FISKINSTATE%
 %IFSKINSTATETHEN{final="searchbox"}% %ELSESKINSTATE%
-<li> <input type="radio" name="stylesearchbox" value="top"%IFSKINSTATE{searchbox="top" then=" checked=\"checked\""}%/>Searchbox in topbar</li>
-<li> <input type="radio" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%/>Searchbox in pos. 1</li>
-<li> <input type="radio" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%/>Searchbox in pos. 2</li>
-<li> <input type="radio" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%/>Searchbox in pos. 3</li>
-<li> <input type="radio" name="stylesearchbox" value="off"%IFSKINSTATE{searchbox="off" then=" checked=\"checked\""}%/>Searchbox off</li>
+<li> <input type="radio" id="searchboxtop" name="stylesearchbox" value="top"%IFSKINSTATE{searchbox="top" then=" checked=\"checked\""}%/><label for="searchboxtop">Searchbox in topbar</label></li>
+<li> <input type="radio" id="searchboxpos1" name="stylesearchbox" value="pos1"%IFSKINSTATE{searchbox="pos1" then=" checked=\"checked\""}%/><label for="searchboxpos1">Searchbox in pos. 1</label></li>
+<li> <input type="radio" id="searchboxpos2" name="stylesearchbox" value="pos2"%IFSKINSTATE{searchbox="pos2" then=" checked=\"checked\""}%/><label for="searchboxpos2">Searchbox in pos. 2</label></li>
+<li> <input type="radio" id="searchboxpos3" name="stylesearchbox" value="pos3"%IFSKINSTATE{searchbox="pos3" then=" checked=\"checked\""}%/><label for="searchboxpos3">Searchbox in pos. 3</label></li>
+<li> <input type="radio" id="searchboxoff" name="stylesearchbox" value="off"%IFSKINSTATE{searchbox="off" then=" checked=\"checked\""}%/><label for="searchboxoff">Searchbox off</label></li>
 %FISKINSTATE%
 </ul>
 </td></tr>
