@@ -1,0 +1,57 @@
+/* ImagePlugin css styles */
+.imageFrame,
+.imageFloat {
+  font-size: 94%;
+  overflow: hidden;
+}
+.imageFrame {
+  padding: 3px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+.imageFrame .imageHref {
+  border: 1px solid #ccc;
+  display:block;
+  overflow: hidden;
+}
+.imageSimple {
+  overflow:auto;
+}
+.imageFloat_right {
+  clear:right;
+  float:right;
+  margin: .5em 0 .8em 1.4em;
+}
+.imageFloat_left {
+  clear:left;
+  float:left;
+  margin: .5em 1.4em .8em 0;
+}
+.imageFloat_center {
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
+}
+.imageFloat_none {
+}
+.imageCaption {
+  text-align: left;
+  line-height: 1.4em;
+  padding: .3em 0 .1em 0;
+}
+.imageMagnify {
+  float:right;
+}
+.imageMagnify image {
+  border:0px;
+  margin:0 1px;
+}
+
+/* debug 
+.imageFloat, .imageFrame, .imageFloat_left, .imageFloat_right, .imageFloat_center,
+.imageFloat_none, .imageLink, .imageCaption, .imageMagnify, .imagePlain
+.imageFloat image, .imageMagnify image, .imageClear
+{
+  border:1px solid red;
+}
+*/
