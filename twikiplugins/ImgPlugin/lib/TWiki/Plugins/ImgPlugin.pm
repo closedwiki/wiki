@@ -23,7 +23,7 @@ package TWiki::Plugins::ImgPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $imgCore $doneHeader $imgStyle $baseWeb $baseTopic);
+use vars qw( $VERSION $RELEASE );
 
 $VERSION = '$Rev$';
 $RELEASE = 'Dakar';
@@ -38,52 +38,74 @@ sub initPlugin {
     return 0;
   }
 
-  # init plugin variables
-  $imgCore = undef;
-  $doneHeader = 0;
-  $imgStyle = TWiki::Func::getPreferencesValue('IMGPLUGIN_STYLE') ||
-    '%PUBURL%/%TWIKIWEB%/ImgPlugin/ImgPlugin.css';
-  $imgStyle = 
-    '<link rel="stylesheet" '.
-    'href="'.$imgStyle.'" '.
-    'type="text/css" media="all" />';
-
-
   # register the tag handlers
   TWiki::Func::registerTagHandler( 'IMG', \&_IMG);
-  TWiki::Func::registerTagHandler( 'IMAGE', \&_IMAGE);
 
   # Plugin correctly initialized
   return 1;
 } 
 
-###############################################################################
-# only used to insert the link style
-sub commonTagsHandler {
-  return if $doneHeader;
+# The function used to handle the %IMG{...}% tag
+# You would have one of these for each tag you want to process.
+sub _IMG {
+    my($session, $params, $theTopic, $theWeb) = @_;
+    # $session  - a reference to the TWiki session object (if you don't know
+    #             what this is, just ignore it)
+    # $params=  - a reference to a TWiki::Attrs object containing parameters.
+    #             This can be used as a simple hash that maps parameter names
+    #             to values, with _DEFAULT being the name for the default
+    #             parameter.
+    # $theTopic - name of the topic in the query
+    # $theWeb   - name of the web in the query
+    # Return: the result of processing the tag
 
-  if ($_[0] =~ s/<head>(.*?[\r\n]+)/<head>$1$imgStyle\n/o) {
-    $doneHeader = 1;
-  }
+    my $imgName = $params->{_DEFAULT};
+    my $path = TWiki::Func::getPubUrlPath();
+    my $imgTopic = $params->{topic} || $theTopic;
+    my $imgWeb = $params->{web} || $theWeb;
+    my $altTag = $params->{alt} || '';
+    my $caption = $params->{caption};
+    my $captionplacement = $params->{captionplacement} || 'right';
+    my $res;
+
+    my @attrs = ('align', 'border', 'height', 'width', 'id', 'class');
+
+    my $txt = "<img src='$path/$imgWeb/$imgTopic/$imgName' ";
+    $txt .= " alt='$altTag'";
+    while (my $key = shift @attrs) {
+	if (my $val = $params->{$key}) {
+	    $txt .= " $key='$val'";
+	}
+    }
+    $txt .= " />";
+
+    if (defined($caption) && $caption) {
+        $res = <<HERE;
+<table>
+   <tr>
+HERE
+        if ($captionplacement == 'right') {
+            $res .= "<td>$txt</td>\n";
+            $res .= "<td>$caption</td>\n";
+        } elsif ($captionplacement == 'left') {
+            $res .= "<td>$caption</td>\n";
+            $res .= "<td>$txt</td>\n";
+        } elsif ($captionplacement == 'top') {
+            $res .= "<td>$caption</td></tr>\n";
+            $res .= "<tr><td>$txt</td></tr>\n";
+        } elsif ($captionplacement == 'bottom') {
+            $res .= "<td>$txt</td></tr>\n";
+            $res .= "<tr><td>$caption</td></tr>\n";
+        }
+        $res .= <<HERE;
+    </tr>
+</table>
+HERE
+    } else {
+        $res = $txt;
+    }
+
+    return $res;
 }
 
-###############################################################################
-# lazy initializer
-sub getCore {
-  return $imgCore if $imgCore;
-  
-  eval 'use TWiki::Plugins::ImgPlugin::Core;';
-  die $@ if $@;
-
-  $imgCore = new TWiki::Plugins::ImgPlugin::Core(@_);
-  return $imgCore;
-}
-
-###############################################################################
-# schedule tag handlers
-sub _IMG { getCore($baseWeb, $baseTopic)->handleIMG(@_); }
-sub _IMAGE { getCore($baseWeb, $baseTopic)->handleIMAGE(@_); }
-
-###############################################################################
-1;
-
+return 1;
