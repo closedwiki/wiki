@@ -44,20 +44,16 @@ The main features are:
    * tag statistics
    * completely form-based TWikiApplication using the TWikiWorkbench approach
 
-Planned features:
-   * selective syndication: only postings, postings+comments, syndication per posting
-   * optional email subscription for comments
-   * posting series: parts, followups, redux, ...
-   * blog pages: non-chronological tagged content
-   * integrating <nop>TrackBack and <nop>PingBack
-
 ---++ Screenshots
 <noautolink>
 %IMAGEGALLERY%
 </noautolink>
 
 ---++ Getting started
-%TODO%
+To create a blog use the BlogFactory. Note, however, that only members of 
+the %MAINWEB%.TWikiAdminGroup are allowed to create a new blog. After entering
+the mandatory information you will get a new web that is a copy of the _BlogPlugin
+template web.
 
 ---++ User Manual
 %TODO%

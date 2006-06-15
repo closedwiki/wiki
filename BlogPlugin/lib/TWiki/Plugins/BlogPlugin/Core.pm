@@ -26,8 +26,7 @@ $debug = 0; # toggle me
 
 ###############################################################################
 sub new {
-
-  my ($class, $id, $topic, $web) = @_;
+  my $class = shift;
   my $this = bless({}, $class);
 
   $this->{prevTopicCache} = ();

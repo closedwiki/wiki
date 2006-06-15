@@ -18,6 +18,8 @@ Note, that most of the tags are tightly related to the
 data model of BlogUp, i.e. it relies on its <nop>TopicType and <nop>TWikiForm 
 definitions. 
 
+Shortcut: want to create a blog ... use the BlogFactory.
+
 ---++ Syntax Rules
 
 ---+++ CITEBLOG
@@ -193,17 +195,19 @@ And send me a patch if you've coded that into TWiki ;).
    
 ---++ Plugin Installation Instructions
 
-   * Download and install all additionally required plugins listed in the
+   * [[%ATTACHURL%/BlogPlugin.zip][Download]] and install all additionally required plugins listed in the
      [[#Plugin_Info][dependencies information]] below
    * Download the BlogPlugin ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
      | ==data/_BlogPlugin/*.txt== | blog template web |
      | ==data/Main/BlogAdminGroup.txt== | blog admin group |
      | ==data/Main/BlogAuthorGroup.txt== | blog author group |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | Plugin Perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin perl module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | plugin core module |
+     | ==lib/TWiki/Plugins/%TOPIC%/Factory.pm== | rest interface for the <nop>BlogFactory |
+     | ==lib/TWiki/Plugins/%TOPIC%/WebDB.pm== | <nop>WebDB implementation for the <nop>DBCachePlugin |
    * Open the TWiki [[%SCRIPTURL{"configure"}%][configuration]] dialog,
      enable the plugin and change the <nop>PluginsOrder to 
      _<nop>GluePlugin, <nop>SpreadSheetPlugin, <nop>IfDefinedPlugin, <nop>AliasPlugin_
@@ -221,8 +225,13 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.93 |
+|  Version: | v0.94 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 June 2006: | added <nop>BlogFactory to ease creation of blogs; \
+                   fixed <nop>BlogImages feature introduced recently; \
+		   added docu to to blog's <nop>WebPreferences; \
+		   moved some hard-coded values to <nop>WebPreferences so that they can be set\
+		   by the <nop>BlogFactory |
 |  09 June 2006: | added last.fm support to display the 10 most recent tracks you listened to in the sidebar; \
                   simplified uploading/managing images using a new "Upload Image" button; \
 		  cleaned up technorati sidebar functionality;\
