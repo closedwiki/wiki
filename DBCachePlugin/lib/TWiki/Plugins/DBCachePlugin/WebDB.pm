@@ -21,6 +21,7 @@ use strict;
 use TWiki::Contrib::DBCacheContrib;
 use TWiki::Plugins::DBCachePlugin;
 use TWiki::Attrs;
+use Error qw( :try );
 
 @TWiki::Plugins::DBCachePlugin::WebDB::ISA = ("TWiki::Contrib::DBCacheContrib");
 
@@ -173,9 +174,14 @@ sub dbQuery {
   # parse & fetch
   my %hits;
   if ($theSearch) {
-    my $search = new TWiki::Contrib::DBCacheContrib::Search($theSearch);
+    my $search;
+    try {
+      $search = new TWiki::Contrib::DBCacheContrib::Search($theSearch);
+    } catch Error::Simple with {
+      my $error = shift;
+    };
     unless ($search) {
-      return (undef, undef, "ERROR: can't parse query $theSearch");
+      return (undef, undef, "ERROR: can't parse query \"$theSearch\"");
     }
     foreach my $topicName (@topicNames) {
       my $topicObj = $this->fastget($topicName);
