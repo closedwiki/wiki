@@ -84,13 +84,15 @@ sub getAllGroups() {
     ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
 
     unless (defined($this->{grouplist})) {
+        # Always add $cfg{SuperAdminGroup}
+        my $sawAdmin = 0;
         @{$this->{grouplist}} =
-          map { $this->findUser($_); }
-            grep { !/(^|\.)$TWiki::cfg{SuperAdminGroup}$/ }
-              $this->{usermappingmanager}->getListOfGroups();
-        push(@{$this->{grouplist}}, $this->findUser($TWiki::cfg{SuperAdminGroup}));
+          map { $sawAdmin ||= ($_->wikiName() eq $TWiki::cfg{SuperAdminGroup}); $_ }
+            $this->{usermappingmanager}->getListOfGroups();
+        if (!$sawAdmin) {
+            push(@{$this->{grouplist}}, $this->findUser($TWiki::cfg{SuperAdminGroup}));
+        }
     }
-	
     return \@{$this->{grouplist}};
 }
 
@@ -201,14 +203,15 @@ sub findUser {
     }
 
     return $this->createUser( $name, $wikiname );
-    }
+}
 
-    sub findUserByEmail {
-        my $this = shift;
-        ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
+sub findUserByEmail {
+    my $this = shift;
+    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
 
-        return $this->{passwords}->findUserByEmail(@_);
-    }
+    my $user = $this->{passwords}->findUserByEmail(@_);
+    return $user;
+}
 
 =pod
 
