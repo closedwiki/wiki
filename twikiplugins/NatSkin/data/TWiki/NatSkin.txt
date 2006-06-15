@@ -146,8 +146,8 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 	* Get the TWiki:Plugins/NatSkinPlugin supplementary package and install it.
 	* If you are installing on TWiki/Cairo then consider applying this patch:
           [[%ATTACHURL%/Cairo_UI_pm.diff][Cairo_UI_pm.diff]]
-	* Download the ZIP file from the Skin Home page (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory
+	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip it in your twiki installation directory. Content: 
 	* Test if installed: [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
 
 ---++ Skin Info
@@ -166,7 +166,7 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.9996 |
+|  Skin Version: | v2.9997 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -183,6 +183,8 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-06-15: | added =WEBTOOLNAME= to customize the name displayed in the header bar; \
+                 minor usability improvements in the <nop>NatSkinStyleBrowser |
 |  2006-05-25: | added advanced diff options available on twiki4; \
                  improved diff dialogue; \
 		 added css classes for ok/cancel buttons on oops dialogues; \
@@ -317,7 +319,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 25 May 2006
+-- TWiki:Main/MichaelDaum - 15 June 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
