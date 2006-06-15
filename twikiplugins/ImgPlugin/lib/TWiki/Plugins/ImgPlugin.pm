@@ -30,7 +30,7 @@ $RELEASE = 'Dakar';
 
 ###############################################################################
 sub initPlugin {
-  ($baseTopic, $baseWeb) = @_;
+  my ($baseTopic, $baseWeb) = @_;
 
   # check for Plugins.pm versions
   if( $TWiki::Plugins::VERSION < 1.026 ) {
@@ -59,7 +59,7 @@ sub _IMG {
     # $theWeb   - name of the web in the query
     # Return: the result of processing the tag
 
-    my $imgName = $params->{_DEFAULT};
+    my $imgName = $params->{name} || $params->{_DEFAULT};
     my $path = TWiki::Func::getPubUrlPath();
     my $imgTopic = $params->{topic} || $theTopic;
     my $imgWeb = $params->{web} || $theWeb;
