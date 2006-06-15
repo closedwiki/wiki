@@ -605,6 +605,82 @@ sub _PROMPT_FOR_SELECT {
     return CGI::Select({ name => $id, size=>1 }, $sopts);
 }
 
+# generate an input field for SELECTCLASS types
+# Takes a comma-separated list of options
+# Each option must be either 'none' or a wildcard expression that matches classes e.g.
+# TWiki::Plugins::*Plugin
+# * is the only wildcard supported
+# Finds all classes that match in @INC
+sub _PROMPT_FOR_SELECTCLASS {
+    my( $id, $opts, $value, $keys ) = @_;
+    $opts =~ s/^\s*(.*)\s*$/$1/;
+    my $sopts = '';
+    if ( defined($value) ) {
+    	$sopts .= '<option selected="selected">'.$value.'</option>';
+    }
+    foreach my $opt (split( /\s*,\s*/, $opts)) {
+        if ($opt eq 'none') {
+            $sopts .= '<option>none</option>';
+        } else {
+            foreach my $class (_findClasses($opt)) {
+                $sopts .= '<option>'.$class.'</option>' unless $class eq $value;
+            }
+        }
+    }
+    return CGI::Select({ name => $id, size=>1 }, $sopts);
+}
+
+# $pattern is a wildcard expression that matches classes e.g.
+# TWiki::Plugins::*Plugin
+# * is the only wildcard supported
+# Finds all classes that match in @INC
+sub _findClasses {
+    my $pattern = shift;
+
+    $pattern =~ s/^\s+//;
+    $pattern =~ s/\s+$//;
+    $pattern =~ s/\*/.*/g;
+    my @path = split(/::/, $pattern);
+
+    my $places = \@INC;
+
+    while (scalar(@path) > 1 && @$places) {
+        my $pathel = shift(@path);
+        eval "\$pathel = qr/^$pathel\$/";
+        my @newplaces;
+
+        foreach my $place (@$places) {
+            if( opendir( DIR, $place ) ) {
+                foreach my $subplace ( readdir DIR ) {
+                    next unless $subplace =~ $pathel;
+                    push(@newplaces, $place.'/'.$subplace);
+                }
+            }
+        }
+        $places = \@newplaces;
+    }
+
+    my @list;
+    my $leaf = shift(@path);
+    eval "\$leaf = qr/$leaf\.pm\$/";
+    my %known;
+    foreach my $place (@$places) {
+        if (opendir( DIR, $place )) {
+            foreach my $file ( readdir DIR ) {
+                next unless $file =~ $leaf;
+                $file =~ /^(.*)\.pm$/;
+                my $module = "$place/$1";
+                $module =~ s./.::.g;
+                $module =~ /($pattern)$/;
+                push(@list, $1) unless $known{$1};
+                $known{$1} = 1;
+            }
+        }
+    }
+
+    return @list;
+}
+
 ########################################################################
 ###################### VARIABLE CHECKERS ###############################
 ########################################################################
@@ -1067,22 +1143,14 @@ sub _checkAndBuildValueGrabber {
 
 sub _showPlugins {
     my %modules;
-    foreach my $libDir ( @INC ) {
-        if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
-            foreach my $file ( grep { /^[A-Za-z0-9_]+Plugin\.pm$/ }
-                                 readdir DIR ) {
-                my $module = $file;
-                $module =~ s/\.pm$//;
-                $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
-                $module =~ /^(.*)$/;    # untaint
-                $module = $1;
-                # only add the first instance of any plugin, as only
-                # the first can get loaded from @INC.
-                unless( $modules{$module} ) {
-                    $modules{$module} =  $libDir;
-                }
-                closedir( DIR );
-            }
+    my @classes = _findClasses('TWiki::Plugins::*Plugin');
+    foreach my $module ( @classes ) {
+        $module =~ s/^.*::([^:]*)/$1/;
+        $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
+        # only add the first instance of any plugin, as only
+        # the first can get loaded from @INC.
+        unless( $modules{$module} ) {
+            $modules{$module} = 1;
         }
     }
     my $block = '';
