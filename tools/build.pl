@@ -218,7 +218,6 @@ sub stage_rcsfiles() {
     #foreach file in data|pub in tmpDir, cp ,v file from svnCo 
     #do a ci
     #if there was no existing ,v file, make one and ci
-
     my $lastReleaseDir = $this->{tmpDir}.'/lastRel'.($$ +1);
 
     $this->makepath($lastReleaseDir);
@@ -232,6 +231,10 @@ sub stage_rcsfiles() {
 
     $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'pub',
                        sub { return -f shift; } );
+
+    # Fix perms mangled by RCS
+    $this->apply_perms($this->{files}, $this->{tmpDir} );
+
     $this->rm( $lastReleaseDir );
 }
 
