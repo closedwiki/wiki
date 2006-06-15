@@ -1,10 +1,2 @@
-data/Sandbox/ImgPluginEx2.txt 0644
 data/TWiki/ImgPlugin.txt 0644
-lib/TWiki/Plugins/ImgPlugin/Core.pm 0644
 lib/TWiki/Plugins/ImgPlugin.pm 0644
-pub/Sandbox/ImgPluginEx2/STS-32_crew.jpg 0644
-pub/Sandbox/ImgPluginEx2/Tst.png 0644
-pub/Sandbox/ImgPluginEx2/Westminstpalace.jpg 0644
-pub/TWiki/ImgPlugin/ImgPlugin.css 0644
-pub/TWiki/ImgPlugin/WestminstpalaceSample.png 0644
-pub/TWiki/ImgPlugin/magnify-clip.png 0644
