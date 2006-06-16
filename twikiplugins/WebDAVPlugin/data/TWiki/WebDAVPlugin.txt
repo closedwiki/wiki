@@ -52,7 +52,7 @@ These instructions apply to *TWiki-4* and later *only*. For earlier versions of 
 
 Installation is in several steps.
    1 Download and unpack the package,
-   1 Build and install TDB (the Tiny Database from the Samba project),
+   1 Build and install the dependencies
    1 Build and install the Apache twiki_dav module,
    1 Configure the plugin and Publish your directories
 
@@ -62,25 +62,10 @@ Installation is in several steps.
 	| *File* | *Description* |
 %$MANIFEST%
 
----+++ Install TDB
+---+++ Install the dependencies
 *Note that administrator access may be required to install this module.*
 
-You may already have =tdb= installed on your system. Check for the existance of the library =libtdb= in the usual places.
-
-If you don't have TDB, the distribution includes all you need to build and install it. Starting from your TWiki root directory:
-<verbatim>
-cd lib/tdb
-./configure
-make
-make install
-</verbatim>
-The last step =make install= will install the library in =/usr/lib=. If you can't write there, you can change the target directory like this:
-<verbatim>
-./configure --prefix=/home/twiki/libs
-</verbatim>
-but you will have to work out how to explain to Apache that is has to look there instead.
-
-__Note:__ The version of TDB shipped with this module is a hybrid of =tdb-1.0.6= and the tdb used by =samba-3.0.21c=. this was required because the developers of these packages have not kept the packages synchronised.
+Install the TdbContrib package (available from TWiki.org)
 
 ---+++ Build =twiki_dav=
 *Note that administrator access may be required to install this module.*
@@ -212,30 +197,31 @@ You may want to add a new DAV-edit-link to your attachments table.
 |  Plugin Author: | TWiki:Main/CrawfordCurrie http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% build %$DATE% |
 | Change History: | |
-| 10434 | Cured problem with attachments going to zero bytes |
-| 9756 | Ported to TWiki-4. \
+|  10617 | Moved TDB to a separate Contrib |
+|  10434 | Cured problem with attachments going to zero bytes |
+|  9756 | Ported to TWiki-4. \
          Added TDB. \
          Incorporated doc improvements made by Marius Reiner. |
-| 5248 | Improved debug and documentation, and added tab conversion |
-| 5048 | Cairo readiness |
-| 5023 | Udates for Cairo, bug fixes grokked from WRS installation |
-| 5001 | Corner-case bugfixes |
-| 5000 | Merging changes made in live sites |
-| 4991 | Documentation fixes |
-| 4990 | Added back .exp and other PC build files. Added yet more tests. Updated documentation. |
-| 4989 | Range of tests for topic handling |
-| 4988 | Added first version of topic manipulation |
-| 4982 | Minor correction |
-| 4981 | Added curl-based server tests, and extended documentation. Renamed recache.pl to dav_recache. |
-| 4974 | Fixed rename, and respected locks |
-| 4973 | Cured nasty bug when drag-dropping to DAV dirs in Konqueror |
-| 4970 | Depends on shared |
-| 4958 | Changed tests to use shared fixtures |
-| 4949 | Changed to use shared code build process |
-| 4948 | Moved build process to SharedCode |
-| 4940 | Fixes for drag and drop, and checkin script. Tidied up debugging and added more tests. |
-| 4939 | Fixes for minor probs and docs |
-| 4937 | Added protections mechanism and tests |
+|  5248 | Improved debug and documentation, and added tab conversion |
+|  5048 | Cairo readiness |
+|  5023 | Udates for Cairo, bug fixes grokked from WRS installation |
+|  5001 | Corner-case bugfixes |
+|  5000 | Merging changes made in live sites |
+|  4991 | Documentation fixes |
+|  4990 | Added back .exp and other PC build files. Added yet more tests. Updated documentation. |
+|  4989 | Range of tests for topic handling |
+|  4988 | Added first version of topic manipulation |
+|  4982 | Minor correction |
+|  4981 | Added curl-based server tests, and extended documentation. Renamed recache.pl to dav_recache. |
+|  4974 | Fixed rename, and respected locks |
+|  4973 | Cured nasty bug when drag-dropping to DAV dirs in Konqueror |
+|  4970 | Depends on shared |
+|  4958 | Changed tests to use shared fixtures |
+|  4949 | Changed to use shared code build process |
+|  4948 | Moved build process to SharedCode |
+|  4940 | Fixes for drag and drop, and checkin script. Tidied up debugging and added more tests. |
+|  4939 | Fixes for minor probs and docs |
+|  4937 | Added protections mechanism and tests |
 |  15 Sep 2004 | Improved authentication handling |
 |  16 Aug 2004 | Minor bugfixes |
 |  22 May 2004 | Support for topics added. Production release. |
