@@ -84,8 +84,8 @@ sub finish {
     $this->{TEXT}      =  {};
     $this->{TOPICS}    =  {};
     my $prefswebs       =  $this->{WEBS};
-    while (my ($pref_key,$prefs) = each %$prefswebs) {
-       $this->{PREFS} = ();
+    while (my ($pref_key,$wprefs) = each %$prefswebs) {
+       $wprefs->{PREFS} = ();
     }
     $this->{WEBS}      =  {};
     @{$this->{PREFS}}  =  ();
