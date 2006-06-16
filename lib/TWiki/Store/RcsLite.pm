@@ -152,6 +152,21 @@ sub new {
     return $this;
 }
 
+=pod
+
+---++ ObjectMethod finish
+Complete processing after the client's HTTP request has been responded
+to.
+   1 breaking circular references to allow garbage collection in persistent
+     environments
+
+=cut
+
+sub finish {
+    my $this = shift;
+
+}
+
 sub _readTo {
     my( $file, $char ) = @_;
     my $buf = '';

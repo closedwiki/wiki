@@ -78,6 +78,30 @@ sub new {
     return $this;
 }
 
+=pod
+
+---++ ObjectMethod finish
+Complete processing after the client's HTTP request has been responded
+to.
+   1 breaking circular references to allow garbage collection in persistent
+     environments
+
+=cut
+
+sub finish {
+    my $this = shift;
+    
+    $this->{passwords}->finish();
+    $this->{usermappingmanager}->finish();
+
+    my $wikinames = $this->{wikiname};
+    while (my ($wikiname,$user) = each %$wikinames) {
+       $user->{groups} = ();
+    }
+    $this->{wikiname}  =  {};
+    $this->{login}     =  {};
+}
+
 #returns a ref to an array of all group objects found.
 sub getAllGroups() {
     my $this = shift;

@@ -70,6 +70,29 @@ sub new {
 
 =pod
 
+---++ ObjectMethod finish
+Complete processing after the client's HTTP request has been responded
+to. 
+   1 breaking circular references to allow garbage collection in persistent
+     environments
+
+=cut
+
+sub finish {
+    my $this = shift;
+
+    $this->{TEXT}      =  {};
+    $this->{TOPICS}    =  {};
+    my $prefswebs       =  $this->{WEBS};
+    while (my ($pref_key,$prefs) = each %$prefswebs) {
+       $this->{PREFS} = ();
+    }
+    $this->{WEBS}      =  {};
+    @{$this->{PREFS}}  =  ();
+}
+
+=pod
+
 ---++ ObjectMethod pushGlobalPreferences()
 Add global preferences to this preferences stack.
 

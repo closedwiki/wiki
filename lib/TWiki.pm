@@ -1343,23 +1343,9 @@ sub finish {
 #    warn "prepared to finish";
 #    warn Dumper($this);
 
-    my $prefs = $this->{prefs};
-    $prefs->{TEXT}      =  {};
-    $prefs->{TOPICS}    =  {};
-    my $prefswebs       =  $prefs->{WEBS};
-    while (my ($pref_key,$prefs) = each %$prefswebs) {
-       $prefs->{PREFS} = ();
-    }
-    $prefs->{WEBS}      =  {};
-    @{$prefs->{PREFS}}  =  ();
-
-    my $users = $this->{users};
-    my $wikinames = $users->{wikiname};
-    while (my ($wikiname,$user) = each %$wikinames) {
-       $user->{groups} = ();
-    }
-    $users->{wikiname}  =  {};
-    $users->{login}     =  {};
+    $this->{prefs}->finish();
+    $this->{users}->finish();
+    $this->{store}->finish();
 
     %$this = ();
  }
