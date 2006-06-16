@@ -1009,10 +1009,14 @@ sub mapToIconFileName {
         my( $web, $topic) = $this->normalizeWebTopicName(
             $this->{webName}, $iconTopic );
         local $/ = undef;
-        my $icons = $this->{store}->getAttachmentStream(
-            undef, $web, $topic, '_filetypes.txt' );
-        %{$this->{_ICONMAP}} = split( /\s+/, <$icons> );
-        close( $icons );
+        try {
+            my $icons = $this->{store}->getAttachmentStream(
+                undef, $web, $topic, '_filetypes.txt' );
+            %{$this->{_ICONMAP}} = split( /\s+/, <$icons> );
+            close( $icons );
+        } catch Error::Simple with {
+            %{$this->{_ICONMAP}} = ();
+        };
     }
 
     return $this->{_ICONMAP}->{$fileExt} || $default || 'else';
