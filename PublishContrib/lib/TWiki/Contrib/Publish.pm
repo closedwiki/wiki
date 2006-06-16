@@ -63,11 +63,15 @@ $RELEASE = 'Dakar';
 sub publish {
     my $session = shift;
 
+
     unless ( defined $TWiki::cfg{PublishContrib}{Dir} ) {
         die "{PublishContrib}{Dir} not defined; run install script";
     }
     unless( -d $TWiki::cfg{PublishContrib}{Dir}) {
         die "{PublishContrib}{Dir} $TWiki::cfg{PublishContrib}{Dir} does not exist";
+    }
+    unless ( $TWiki::cfg{PublishContrib}{Dir} =~ m!/$!) {
+        die "{PublishContrib}{Dir} must terminate in a slash";
     }
 
     my $query = $session->{cgiQuery};
@@ -121,8 +125,8 @@ sub publish {
             } elsif ($k eq 'TEMPLATELOCATION' ) {
                 $templateLocation = $v;
             } elsif ($k eq 'INSTANCE' ) {
-                $TWiki::cfg{PublishContrib}{Dir} .= '/'.$v;
-                $TWiki::cfg{PublishContrib}{URL} .= '/'.$v;
+                $TWiki::cfg{PublishContrib}{Dir} .= '/'.$v if $v;
+                $TWiki::cfg{PublishContrib}{URL} .= '/'.$v if $v;
             }
         }
     } else {
@@ -204,7 +208,7 @@ sub publish {
 	$template =~ s/^\s+//, s/\s+\z//;
         $templatesReferenced{$template} = 1;
         print "-- template=$template$br" if $debug;
-        my $dir = $TWiki::cfg{PublishContrib}{Dir}.'/'._dirForTemplate($template);
+        my $dir = $TWiki::cfg{PublishContrib}{Dir}._dirForTemplate($template);
         print "-- dir=$dir$br" if $debug;
 
         my $generator = 'TWiki::Contrib::PublishContrib::'.$format;
@@ -428,7 +432,7 @@ sub _rewriteTemplateReferences {
     #$link:
     # Web/ContactUs?template=viewprint%REVARG%.html? "
 
-       my $newLink = $TWiki::cfg{PublishContrib}{URL}.'/'._dirForTemplate($template)."/".$web.'/'.$topic._filetypeForTemplate($template);
+       my $newLink = $TWiki::cfg{PublishContrib}{URL}._dirForTemplate($template)."/".$web.'/'.$topic._filetypeForTemplate($template);
     print "---- Found alternate template use on $topic template=$template $br".
       "---- Changed to $newLink$br" if $debug;
     $templatesReferenced{$template} = 1;
@@ -439,6 +443,7 @@ sub _rewriteTemplateReferences {
 # Where alternative templates (e.g. viewprint) renderings end up
 # This gets appended onto puburl and pubdir
 # The web is prefixed before this.
+# Do not prepend with a /
 sub _dirForTemplate {
     my ($template) = @_;
     return '' if ($template eq 'view');
