@@ -1,5 +1,5 @@
-data/TWiki/TwistyContrib.txt NEW
-lib/TWiki/Contrib/TwistyContrib.pm NEW
-pub/TWiki/TwistyContrib/toggle-optm-jsoff-sep.html NEW
-pub/TWiki/TwistyContrib/twist.css NEW
-pub/TWiki/TwistyContrib/twist.js NEW
+data/TWiki/TwistyContrib.txt 0660
+lib/TWiki/Contrib/TwistyContrib.pm 0440
+pub/TWiki/TwistyContrib/toggle-optm-jsoff-sep.html 0660
+pub/TWiki/TwistyContrib/twist.css 0660
+pub/TWiki/TwistyContrib/twist.js 0660
