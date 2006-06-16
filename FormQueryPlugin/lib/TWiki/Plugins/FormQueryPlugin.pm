@@ -87,7 +87,7 @@ sub _handleTableFormat {
 sub _handleShowQuery {
     my($session, $params, $topic, $web) = @_;
     return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit() );
+      unless ( _lazyInit($web) );
     return $db{$web}->showQuery( 'SHOWQUERY', $params );
 }
 
@@ -116,12 +116,13 @@ sub _handleWorkingDays {
 sub _handleProgress {
     my($session, $params, $topic, $web) = @_;
     return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
-      unless ( _lazyInit() );
+      unless ( _lazyInit($web) );
     return  TWiki::Plugins::FormQueryPlugin::ReqDBSupport::progressBar(
         'PROGRESSBAR', $params, $web, $topic );
 }
 
 sub _lazyInit {
+    my ($web) = @_;
 
     return 1 if $db{$web};
 
