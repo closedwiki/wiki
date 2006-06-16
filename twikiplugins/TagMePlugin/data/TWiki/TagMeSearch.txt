@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1142121665" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1150438170" format="1.0" version="1.5"}%
 %META:TOPICPARENT{name="TagMeViewAllTags"}%
 ---+ Tag-me: Tag Search
 
@@ -25,6 +25,7 @@ Show topics tagged with
 <input type="radio" name="by" value="me" %CALC{"$IF($EXACT(%URLPARAM{by}%,me), checked=\"checked\")"}% /> me only
 <input type="submit" value="Go" /> </td>
 </tr></table>
+</form>
 
 %TAGME{ tpaction="query" web="%URLPARAM{qweb}%" topic="%URLPARAM{qtopic}%" tag="%URLPARAM{tag}%" by="%URLPARAM{by}%" }%
 %STOPINCLUDE%
