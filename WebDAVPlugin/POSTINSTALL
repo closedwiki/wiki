@@ -1,26 +1,7 @@
-# See if we have tdb
-print "Installing TDB....\n";
-chdir('lib/tdb');
-if (! -f 'Makefile') {
-    print <<EOF;
-What is the prefix for library installation?
-I will create a /lib subdirectory here (if one doesn't already exist) and
-put some required shareable libraries in it. The lib directory must be on the
-library path used by httpd processes.
-EOF
-    my $prefix = prompt('Prefix', '/usr');
-
-    `./configure --prefix=$prefix`;
-    die "Configuration failed: $?. Please correct any reported errors and re-run this script." if $?;
-}
-`make install`;
-die "Installation failed: $?. Please correct any reported errors and re-run this script." if $?;
-chdir('..');
-
 print "Installing twiki_dav....\n";
 # Install the twiki_dav apache module.
 # Would be better if we checked it was Apache 1.3
-chdir('twiki_dav');
+chdir('lib/twiki_dav');
 if (! -f 'Makefile') {
     # Assume dynamic loading with apxs
     `./configure --with-apxs`;
