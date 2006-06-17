@@ -123,10 +123,10 @@ sub publish {
             } elsif ($k eq 'TEMPLATES' ) {
                 $templatesWanted = $v;
             } elsif ($k eq 'TEMPLATELOCATION' ) {
-                $templateLocation = $v;
+                $templateLocation = $v if $v;
             } elsif ($k eq 'INSTANCE' ) {
-                $TWiki::cfg{PublishContrib}{Dir} .= '/'.$v if $v;
-                $TWiki::cfg{PublishContrib}{URL} .= '/'.$v if $v;
+                $TWiki::cfg{PublishContrib}{Dir} .= $v.'/' if $v;
+                $TWiki::cfg{PublishContrib}{URL} .= $v.'/' if $v;
             }
         }
     } else {
@@ -326,6 +326,8 @@ sub publishTopic {
         return;
     }
 
+    # REFACTOR OPPORTUNITY: start factor me into getTWikiRendering()
+
     # SMELL: need a new prefs object for each topic
     my $twiki = $TWiki::Plugins::SESSION;
     $twiki->{prefs} = new TWiki::Prefs($twiki);
@@ -347,6 +349,9 @@ sub publishTopic {
     $tmpl = TWiki::Func::renderText($tmpl, "", $meta);
 
     $tmpl =~ s/%TEXT%/$text/g;
+
+    # REFACTOR OPPORTUNITY: stop factor me into getTWikiRendering()
+
     # legacy
     $tmpl =~ s/<nopublish>.*?<\/nopublish>//gs;
     # New tags
@@ -382,6 +387,7 @@ sub publishTopic {
 
     # Copy files from pub dir to rsrc dir in static dir.
     my $hs = $ENV{HTTP_HOST} || "localhost";
+
     $tmpl =~ s!(['"])($TWiki::cfg{DefaultUrlHost}|https?://$hs)?$pub/(.*?)\1!$1._copyResource($web, $3, $copied, $archive).$1!ge;
 
     my $ilt;
@@ -470,7 +476,18 @@ sub _copyResource {
     $rsrcName =~ s/^\s+//;
     $rsrcName =~ s/\s+$//;
 
-    print "-- Depends on '$rsrcName'" if $debug;
+    print "-- Need dependency '$rsrcName' " if $debug;
+
+    # SMELL WARNING
+    # This is covers up a case such as where rsrcname comes through like 
+    # configtopic=PublishTestWeb/WebPreferences/favicon.ico
+    # this should be just WebPreferences/favicon.ico
+    # I've searched for hours and so here's a workaround
+    if ($rsrcName =~ m/configtopic/) {
+	print "\n--- INTERNAL ERROR: rsrcName '$rsrcName' contains literal 'configtopic'\n" if $debug;
+	$rsrcName =~ s!.*?/(.*)!$web/$1!;
+	print "--- FIXED UP to $rsrcName " if $debug;
+    }
 
     # See if we've already copied this resource.
     if (exists $copied->{$rsrcName}) {
@@ -495,13 +512,13 @@ sub _copyResource {
             $archive->addDirectory( "rsrc" );
             $archive->addDirectory( "rsrc/$path" );
             $archive->addFile( "$TWikiPubDir/$rsrcName" , "rsrc/$path/$file" );
+	    # Record copy so we don't duplicate it later.
+	    my $destURL = "rsrc/$path/$file";
+	    $destURL =~ s!//!/!g;
+	    $copied->{$rsrcName} = $destURL;
         } else {
             print "${os}--- $rsrcName not readable $br('$TWikiPubDir/$rsrcName' does not exist) $cs$br" if $debug;	    
         }
-        # Record copy so we don't duplicate it later.
-        my $destURL = "rsrc/$path/$file";
-        $destURL =~ s!//!/!g;
-        $copied->{$rsrcName} = $destURL;
 
         # check css for additional resources, ie, url()
         if ($rsrcName =~ /\.css$/) {
