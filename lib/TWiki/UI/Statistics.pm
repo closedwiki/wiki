@@ -144,8 +144,8 @@ sub statistics {
     }
     my $firstTime = 1;
     foreach my $web ( @weblist ) {
-
-        $destWeb = _processWeb( $session,
+        try {
+            $destWeb = _processWeb( $session,
                                 $web,
                                 $logMonthYear,
                                 $viewRef,
@@ -154,6 +154,9 @@ sub statistics {
                                 $statSavesRef,
                                 $statUploadsRef,
                                 $firstTime );
+        } catch TWiki::AccessControlException with  {
+            _printMsg( $session, '  - ERROR: no permission to CHANGE statistics topic in '.$web);
+        }
         $firstTime = 0;
     }
 
