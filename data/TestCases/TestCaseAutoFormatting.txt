@@ -324,13 +324,13 @@ Note: noautolink tags will still be there, because they are not removed until im
 Note: depends on setting of spam padding
 ---+++ Expected
 <!-- expected MAILTOS -->
-<a href="mailto:a@z.com">Mail</a>
-<a href="mailto:?subject=Hi">Hi</a>
-<a href="mailto:a@b.com">a@b.com</a>
-<a href="mailto:a@b.com">Mail</a>
-<a href="mailto:a@b.com">Mail link</a>
-<a href="mailto:?subject=Hi">Subject_only</a>
-<a href="mailto:?subject=Hi">Subject only</a>
+<a href="mailto&#58;a&#64;z&#46;com">Mail</a>
+<a href="mailto&#58;&#63;subject&#61;Hi">Hi</a>
+<a href="mailto&#58;a&#64;b&#46;com">a&#64;b&#46;com</a>
+<a href="mailto&#58;a&#64;b&#46;com">Mail</a>
+<a href="mailto&#58;a&#64;b&#46;com">Mail&#32;link</a>
+<a href="mailto&#58;&#63;subject&#61;Hi">Subject_only</a>
+<a href="mailto&#58;&#63;subject&#61;Hi">Subject&#32;only</a>
 <a href="mailto:?subject=Hi">Subject only</a>
 <!-- /expected -->
 ---+++ Actual
