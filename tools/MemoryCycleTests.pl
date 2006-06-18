@@ -49,6 +49,11 @@ use TWiki::UI::View;
     monitor('TWiki' => \$TWiki::Plugins::SESSION );
 
     TWiki::UI::run( \&TWiki::UI::View::view );
+    
+    #NOTE that TWiki::finish() is hiding many circular references by foricbly clearing
+    #them with the %$this = (); its worth commenting out this line once in a while to 
+    #see if its gettign worse (56 are found as of Jun2006)
+    
     print_circular_ref(\$TWiki::Plugins::SESSION );
 }
 
