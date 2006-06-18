@@ -35,6 +35,7 @@ BEGIN {
     }
 
     if(scalar(@path)) {
+        unshift @INC, join( '/', @path ).'/lib';
         unshift @INC, join( '/', @path ).'/twikiplugins/BuildContrib/lib';
     }
 }
