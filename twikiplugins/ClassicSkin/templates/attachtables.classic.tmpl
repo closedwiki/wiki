@@ -3,12 +3,12 @@
 %{ Header definition for topic attachments and top table in attach screen }%
 %TMPL:DEF{ATTACH:files:header(basic)}%
 <div class="twikiAttachments"><p></p>
-| *[[%TWIKIWEB%.FileAttachment][Attachment]]* | *Action* | *Size* | *Date* | *Who* | *Comment* |
+| *[[%TWIKIWEB%.FileAttachment][Attachment]]* | *Action* | *Size* | *Date* | *Who* | *Comment* | 
 %TMPL:END%
 
 %{ A basic row definition, for attachment table and attach screen }%
 %TMPL:DEF{ATTACH:files:row(basic)}%
-| %A_ICON% <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{"%A_FILE%"}%%&revInfo=1" title="change, update, previous revisions, move, delete..." rel='nofollow'>manage</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |
+| %A_ICON% <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{"%A_FILE%"}%%&revInfo=1" title="change, update, previous revisions, move, delete..." rel='nofollow'>manage</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% | 
 %TMPL:END%
 
 %{ Header for topic attachment table }%
@@ -23,10 +23,15 @@
 %TMPL:END%
 
 %{ Header for table at top of attach screen }%
-%TMPL:DEF{ATTACH:files:header:A}%%TMPL:P{ATTACH:files:header(basic)}% *[[%TWIKIWEB%.FileAttribute][Attribute]]* |%TMPL:END%
+%TMPL:DEF{ATTACH:files:header:A}%
+<div class="twikiAttachments"><p></p>
+| *[[%TWIKIWEB%.FileAttachment][Attachment]]* | *Action* | *Size* | *Date* | *Who* | *Comment* |  *[[%TWIKIWEB%.FileAttribute][Attribute]]* |
+%TMPL:END%
 
 %{ Row for table at top of attach screen }%
-%TMPL:DEF{ATTACH:files:row:A}%%TMPL:P{ATTACH:files:row(basic)}% %A_ATTRS% |%TMPL:END%
+%TMPL:DEF{ATTACH:files:row:A}%
+| %A_ICON% <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{"%A_FILE%"}%%&revInfo=1" title="change, update, previous revisions, move, delete..." rel='nofollow'>manage</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |  %A_ATTRS% |
+%TMPL:END%
 
 %{ Footer for table at top of attach screen }%
 %TMPL:DEF{ATTACH:files:footer:A}%
