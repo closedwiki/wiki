@@ -595,6 +595,10 @@ a.twikiLinkInHeaderRight {
 	margin:0 1.1em 0 0;
 	overflow:hidden;
 }
+#patternLeftBarContents h2 {
+	border:none;
+	background-color:transparent;
+}
 #patternLeftBarContents .patternWebIndicator {
 	margin:0 -1em; /*S6*/
 	padding:.55em 1em; /*S6*/
