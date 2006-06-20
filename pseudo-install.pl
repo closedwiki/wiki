@@ -50,6 +50,7 @@ sub installModule {
     print "Processing $module\n";
     my $subdir = 'Plugins';
     $subdir = 'Contrib' if $module =~ /(Contrib|Skin|AddOn)$/;
+    $subdir = 'Tags' if $module =~ /Tag$/;
     my $moduleDir = "twikiplugins/$module/";
 
     unless (-d $moduleDir) {
@@ -187,7 +188,7 @@ my @modules;
 
 if ($ARGV[0] eq "all") {
   opendir(D, "twikiplugins") || die "Must be run from root of installation";
-  @modules = ( grep { /(Plugin|Contrib|Skin|AddOn)$/ } readdir( D ));
+  @modules = ( grep { /(Tag|Plugin|Contrib|Skin|AddOn)$/ } readdir( D ));
   closedir( D );
 } elsif ($ARGV[0] eq "default") {
     open(F, "<", "tools/MANIFEST") || die "Could not open MANIFEST: $!";
