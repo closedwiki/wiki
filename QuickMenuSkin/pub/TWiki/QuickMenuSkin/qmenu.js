@@ -8,8 +8,8 @@ Jeremy McPeak http://www.wdonline.com/dhtml/xwebmenu/
 ***********************************/
 
 var QuickMenu = {
-  Option : {
-    Behavior : "mouse"
+  Set : {
+    ShowOnHover : 1
   },
   User : {
   },
@@ -27,7 +27,7 @@ var QuickMenu = {
     }
     this.Button.Menu = menu;
     this.Button.MenuBar = parent;
-    if (!parent.MenuBehavior) parent.MenuBehavior = QuickMenu.Option.Behavior;
+    if (parent.ShowOnHover == null) parent.ShowOnHover = QuickMenu.Set.ShowOnHover;
     this.Button.defaultClass = this.Button.className;
     if (tip) this.Button.title = tip;
 
@@ -59,7 +59,7 @@ var QuickMenu = {
         QuickMenu.Timer = null;
         return;
       }
-      if (this.MenuBar.MenuBehavior == "mouse" ||
+      if (this.MenuBar.ShowOnHover ||
           (QuickMenu.ShownMenu && (QuickMenu.ShownMenu.MenuBar == this.Menu.MenuBar))) {
         clearTimeout(QuickMenu.Timer);
         QuickMenu.HideAll();
@@ -89,7 +89,7 @@ var QuickMenu = {
         window.location = this.Link;
       } else if (this.Action) {
         eval (this.Action);
-      } else if (this.Menu.Shown && this.MenuBar.MenuBehavior == "click") {
+      } else if (this.Menu.Shown && !this.MenuBar.ShowOnHover) {
         this.Menu.Hide();
         if (this.Dot) this.Dot.style.visibility = "hidden";
         this.className = "qmenu-menu-over";

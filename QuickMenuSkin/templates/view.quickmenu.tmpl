@@ -16,18 +16,20 @@ pageMenu.Add("%MAKETEXT{"Edit"}%", "", "%ICONURLPATH{"edittopic"}%");%TMPL:END%
 pageMenu.Add("%MAKETEXT{"New Topic"}%", "%SCRIPTURLPATH{"view"}%/%WEB%/WebTopicCreator?parent=%TOPIC%","%ICONURLPATH{"newtopic"}%","%MAKETEXT{"Create a new topic"}%");%TMPL:END%
 
 %TMPL:DEF{"webaction"}%
-	webMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Webs"}%","","%MAKETEXT{"List of Webs"}%");
-%WEBLIST{"	webMenu.Add($qname,"%SCRIPTURLPATH{"view"}%/$name/%HOMETOPIC%","%ICONURLPATH{"web-bg"}%");
-	webMenu.Items[webMenu.Items.length - 1].Icon.style.backgroundColor="%$markerVAR{"WEBBGCOLOR" web=$qname}$marker%";"}%
-
-%INCLUDE{"%TWIKIWEB%.WebUtilitiesMenu" warn="off" raw="on"}%
+<noautolink>
+%INCLUDE{"%TWIKIWEB%.QuickMenuBar" raw="on" warn="off"}%
 
 	pageMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Options"}%","","%MAKETEXT{"Page viewing and editing options"}%");
 	%TMPL:P{context="inactive" then="inactive_menuitem" else="active_menuitem"}%
 	pageMenu.Add("%MAKETEXT{"Attach"}%","%IF{"context inactive" then='","%ICONURLPATH{"attachfile"}%' else='%SCRIPTURLPATH{attach}%/%WEB%/%TOPIC%","%ICONURLPATH{"attachfile"}%","%MAKETEXT{"Attach an image or document to this topic"}%'}%");
 	pageMenu.Add("%MAKETEXT{"Printable"}%","%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%?cover=print.quickmenu%REVARG%","%ICONURLPATH{"printtopic"}%","%MAKETEXT{"Printable version of this topic"}%");
+%IF{"defined raw" then='
+	pageMenu.Add("%MAKETEXT{"View Topic"}%","%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%","%ICONURLPATH{"viewtopic"}%","%MAKETEXT{"View topic"}%");
+' else='
 	pageMenu.Add("%MAKETEXT{"Raw View"}%","%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%?raw=on%REVARG%","%ICONURLPATH{"viewtopic"}%","%MAKETEXT{"View raw text without formatting"}%");
+'}%
 	%TMPL:P{context="new_topic" then="" else="new_menuitem"}%
+</noautolink>
 %TMPL:END%
 
 %TMPL:DEF{"attachments"}%

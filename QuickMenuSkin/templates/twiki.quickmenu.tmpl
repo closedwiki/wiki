@@ -89,6 +89,7 @@
 <div id=MenuBar class=MenuBar><div class=MenuBarRight><form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input type=text name=topic value="%MAKETEXT{"Jump"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)"></form> <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type=text name=search value="%MAKETEXT{"Search"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)"></form></div></div>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/QuickMenuSkin/qmenu.js"></script>
 <script type="text/javascript">
+QuickMenu.Set.ShowOnHover =%IF{"$ CLICKMENU" then=" 0" else=" 1"}%;
 function clearDefaultandCSS(el) {
 	if (!el.defaultValue) el.defaultValue = el.value;
 	if (el.defaultValue == el.value) el.value = "";

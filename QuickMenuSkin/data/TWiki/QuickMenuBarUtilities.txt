@@ -1,5 +1,6 @@
-%META:TOPICINFO{author="VlyonYahoo" date="1149614589" format="1.1" version="1.1"}%
-utilMenu = new %NOP%QuickMenu.Menu(menuBar,"%MAKETEXT{"Utilities"}%","","%MAKETEXT{"Utilities available for this Web"}%");
+%META:TOPICINFO{author="VlyonYahoo" date="1150724700" format="1.1" version="1.2"}%
+<pre>%STARTINCLUDE%<noautolink>
+utilMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Utilities"}%","","%MAKETEXT{"Utilities available for this Web"}%");
 if ("%USERINFO{format="$groups"}%".match(/TWikiAdminGroup/)) {
   utilMenu.Add("%MAKETEXT{"Users"}%","%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers","%ICONURLPATH{"person"}%");
   utilMenu.Add("%MAKETEXT{"Groups"}%","%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiGroups","%ICONURLPATH{"group"}%");
@@ -10,3 +11,4 @@ utilMenu.Add("%MAKETEXT{"Changes"}%","%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/Web
 utilMenu.Add("%MAKETEXT{"Notifications"}%","%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/WebNotify","%ICONURLPATH{"notify"}%");
 utilMenu.Add("%MAKETEXT{"Statistics"}%","%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/WebStatistics","%ICONURLPATH{"statistics"}%");
 utilMenu.Add("%MAKETEXT{"Preferences"}%","%SCRIPTURLPATH{"view"}%/%INCLUDINGWEB%/WebPreferences","%ICONURLPATH{"wrench"}%");
+</noautolink>%STOPINCLUDE%</pre>
