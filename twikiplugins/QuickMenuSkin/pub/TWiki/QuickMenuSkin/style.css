@@ -93,10 +93,13 @@ OL LI, UL LI {
 	background-color: #f7f7f7;
 }
 .MenuBar {
-	height: 19px;
+	height: 21px;
 	font: 12px "Lucida Grande", Verdana, Arial, sans-serif;
 	background: url("menubar.gif");
-	padding: 4px 10px 0;
+	padding: 1px 10px;
+}
+.MenuBar CENTER {
+	padding: 3px 0;
 }
 .MenuBarRight {
 	float: right;
@@ -126,7 +129,7 @@ OL LI, UL LI {
 	color: #666;
 }
 .twikiInputBox {
-	margin: 0 4px;
+	margin: 1px 4px;
 	padding: 0 1px 1px 1px;
 	color: black;
 	font-size: 10px;

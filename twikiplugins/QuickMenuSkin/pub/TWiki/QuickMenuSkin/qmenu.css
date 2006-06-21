@@ -7,6 +7,7 @@
 	cursor: default;
 	font: 11px verdana;
 	padding: 1px 6px 3px 6px;
+	top: 3px;
 	border: 1px solid #315ea3;
 	z-index: 1;
 }
