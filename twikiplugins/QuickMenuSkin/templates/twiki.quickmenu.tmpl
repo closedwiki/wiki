@@ -47,35 +47,30 @@
 %TMPL:END%
 
 
-
 %TMPL:DEF{"head"}%
 <head>
-	%TMPL:P{"windowtitle"}%
-	<meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
-	<link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
-	<base href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" />
-	%TMPL:P{"script"}%
-	%TMPL:P{"twikistyle"}%
+%TMPL:P{"windowtitle"}%
+ <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
+ <meta name="robots" content="noindex" />
+ %HTTP_EQUIV_ON_VIEW%
+ <link rel="icon" href="%FAVICON%" type="image/x-icon" />
+ <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
+ <base href="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" />
+ %TMPL:P{"script"}%
+ %TMPL:P{"twikistyle"}%
 </head>%TMPL:END%
-
 
 
 %TMPL:DEF{"titleaction"}% %TMPL:END%
 
-
-
 %TMPL:DEF{"webaction"}%%TMPL:END%
-
-
 
 %TMPL:DEF{"bodystart"}%
 <body bgcolor="#ffffff">
 #PageTop%TMPL:END%
 
 
-
 %TMPL:DEF{"attachments"}%%TMPL:END%
-
 
 
 %TMPL:DEF{"standardheader"}%
@@ -86,7 +81,7 @@
 <a href="%SCRIPTURLPATH{view}%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg}%" border=0 alt="" hspace=1 style="background-color:%WEBBGCOLOR%;vertical-align:bottom" /> %MAKETEXT{"[_1] Web" args="<nop/>%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" &gt; " suffix=""}% <span class="twikiSeparator">&gt;</span></small> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span> %TMPL:P{"titleaction"}%</td>
 <tr><td class=twikiRevInfo>%REVINFO%</td>
 </table>
-<div id=MenuBar class=MenuBar><div class=MenuBarRight><form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input type=text name=topic value="%MAKETEXT{"Jump"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)"></form> <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type=text name=search value="%MAKETEXT{"Search"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)"></form></div></div>
+<div id=MenuBar class=MenuBar><div class=MenuBarRight><form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input type=text name=topic value="%MAKETEXT{"Jump"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)" style="margin-top:2px"></form> <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type=text name=search value="%MAKETEXT{"Search"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)" style="margin-top:2px"></form></div></div>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/QuickMenuSkin/qmenu.js"></script>
 <script type="text/javascript">
 QuickMenu.Set.ShowOnHover =%IF{"defined CLICKMENU and $ CLICKMENU" then=" 0" else=" 1"}%;
