@@ -93,10 +93,20 @@ sub _loadTags() {
                 $module =~ /^(.*)Tag\.pm$/;
                 my $tag = $1;
                 $module = 'TWiki/Tags/' . TWiki::Sandbox::untaintUnchecked($module);
+                $module =~ /^(.*)\.pm$/;
+                my $stripped = $module;
                 
                 if (do $module) {
-                    package TWiki;
-                    TWiki::Func::registerTagHandler($tag, \&$tag);
+                    $tag = $TWiki::tagname if $TWiki::tagname;
+
+                    if ($tag) {
+                        package TWiki;
+                        if ($tag) {
+                            TWiki::Func::registerTagHandler($tag, \&$tag);
+                        } else {
+                            die $tag;
+                        }
+                    }
                 }
             }
             closedir( DIR );
