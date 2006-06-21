@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="MeredithLesly" date="1145576152" format="1.1" version="1.1"}%
+---++ TWiki Tags
+
+TWiki tags are, in essence, lightweight plugins. 
+
+One of the key additions to Dakar plugins was the ability to register a function associated with a tag. Unfortunately, full-blown plugins have a cost associated with them whether they are used or not, because an object is created and the existence of each possible =handler= is checked for callback purposes.  !TWikiTags, on the other hands, have no callbacks, are compiled when TWiki.pm is loaded (during the =BEGIN= block) and are no more expensive to use than TWikiVariables (many of which probably should be moved into !TWikiTags that are enabled by default).
+
+Moving TWikiVariables out of =TWiki.pm= into tags probably won't make things any faster. There will be two benefits of doing this, however. First, it isolates the code for a particular !TWikiVariable, making it easier to maintain and enhance. Second, it allows for alternate implementations of the same tag.
+
+There are still details to be worked out, such as making !TWikiTags self-documenting. But they work, are supported by =bin/configure= and =create-new-plugin.pl=, so the basics are all there.
+
+-- Main.MeredithLesly - 20 Apr 2006
+
+%COMMENT%
