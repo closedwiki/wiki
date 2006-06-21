@@ -17,6 +17,11 @@
 # Always use strict to enforce variable scoping
 use strict;
 use TWiki::Contrib::MoreFuncContrib;
+package TWiki;
+
+use vars qw($tagname);
+
+$tagname = 'TITLE';
 
 sub TITLE {
     my ($session, $params, $topic, $web) = @_; 
@@ -27,13 +32,10 @@ sub TITLE {
     my $topicpart = $topic;
     my $specifiedtitle;
 
-    if ($spacify =~ 'on') {
-        $topic = '%SPACEOUT{"' . $topic . '"}%';
-    }
+    $topic = '%SPACEOUT{"' . $topic . '"}%' if $spacify eq 'on';
 
-    if ($type =~ 'simple') {
-       return $topic;
-    }
+    return $topic if ($type eq 'simple');
+
 
     if (($type eq 'specified') && ($specifiedtitle = TWiki::Contrib::MoreFuncContrib::getTopicPreferenceValue($web, $topic, 'USETITLE'))) {
         return $specifiedtitle;
