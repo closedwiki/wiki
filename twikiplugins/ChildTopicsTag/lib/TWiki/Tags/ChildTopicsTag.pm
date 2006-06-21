@@ -19,7 +19,9 @@ use strict;
 use TWiki::Contrib::MoreFuncContrib;
 use TWiki::Func;
 
-sub CHILDTOPICS {
+package TWiki;
+
+sub ChildTopics {
     my ($session, $params, $topic, $web) = @_;
     my $format = $params->{format} || '   * $topic';
     my $join = $params->{format} || "\n";
