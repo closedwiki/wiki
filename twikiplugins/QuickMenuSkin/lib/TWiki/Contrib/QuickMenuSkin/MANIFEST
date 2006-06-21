@@ -2,6 +2,7 @@ templates/attach.quickmenu.tmpl
 templates/attachtables.quickmenu.tmpl
 templates/changeform.quickmenu.tmpl
 templates/edit.quickmenu.tmpl
+templates/login.quickmenu.tmpl
 templates/preview.quickmenu.tmpl
 templates/rdiff.quickmenu.tmpl
 templates/search.quickmenu.tmpl
