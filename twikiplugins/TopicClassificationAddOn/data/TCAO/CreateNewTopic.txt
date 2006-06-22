@@ -40,7 +40,7 @@ _Optional: Skip the "edit" step?_ &nbsp;  <input type="checkbox" name="save"  va
 <br>
 ---+++ List of Existing <nop>%URLPARAM{"type"}% Topics  
 
-%SEARCH{"[T]opicType.*value\=.*%URLPARAM{"type"}%" web="%BASEWEB%" regex="on" casesensitive="on" noheader="on" nosearch="on" format="	* $web.$topic - $formfield(TopicHeadline)<br />"}%
+%SEARCH{"[T]opicType.*value\=.*%URLPARAM{"type"}%" web="%BASEWEB%" regex="on" casesensitive="on" noheader="on" nosearch="on" format="	* [[$web.$topic][$topic]] - $formfield(TopicHeadline)<br />"}%
 
 </div>
 %STOPINCLUDE%

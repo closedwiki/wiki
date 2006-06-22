@@ -18,7 +18,7 @@ __This topic defines the basic structure of most TopicType topics within webs wh
 
 __Click  [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic?type=%BASETOPIC%][here]] to create a new <nop>%BASETOPIC%.__ 
 
-%SEARCH{ "[T]opicType.*value\=.*%INCLUDINGTOPIC%;[S]ubjectArea.*\=.*%URLPARAM{subject}%\"" web="%BASEWEB%" casesensitive="on" regex="on" noheader="on" nosearch="on" format="   * $web.$topic - <noautolink>$formfield(TopicHeadline)</noautolink> <font face=\"arial,helvetica\" size=\"1\"> _(Modified by $wikiusername on $date)_ </font>" sort="modified" }%
+%SEARCH{ "[T]opicType.*value\=.*%INCLUDINGTOPIC%%IF{'defined subject' then=';[S]ubjectArea.*\=.*%URLPARAM{subject}%' }%" web="%BASEWEB%" casesensitive="on" regex="on" noheader="on" nosearch="on" format="   * [[$web.$topic][$topic]] -<noautolink> $formfield(TopicHeadline) </noautolink> <font face=\"arial,helvetica\" size=\"1\"> _(Modified by $wikiusername on $date)_ </font>" sort="modified" }%
 
 _For more information on content organization within the *%BASEWEB%* web, see %BASEWEB%.TopicClassification._
 %STOPINCLUDE%

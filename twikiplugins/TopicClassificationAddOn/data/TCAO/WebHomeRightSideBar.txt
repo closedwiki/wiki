@@ -1,4 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1130437338" format="1.1" version="$Rev$"}%
+%META:TOPICPARENT{}%
 %STARTINCLUDE%
 %STARTSIDEBAR%
 ---++++!! <font  FACE="arial,helvetica"> Recent News for the %BASEWEB% web: </font>

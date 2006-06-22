@@ -1,12 +1,14 @@
 %META:TOPICINFO{author="LynnwoodBrown" date="1141363479" format="1.1" version="1.2"}%
 %META:TOPICPARENT{}%
-FixMe: Need to figure out what is going on here with Twisty.
+---+ %TOPIC%
+__This topic is for discussion-related page elements.__
 
 ---
 
 %STARTSECTION{"begincomments"}%
 ---
-%SEARCH{ "%BASETOPIC%$" scope="topic" regex="on" nonoise="on" format="$count(.*?(---[+][+][+][+]) .*) Comments - " }% %TWISTYSHOW{id="%BASETOPIC%Comments" link="View Comments" img="%ICONPATH{toggleopen}%"}% %TWISTYHIDE{id="%BASETOPIC%Comments" link="Hide Comments" img="%ICONPATH{'toggleclose'}%"}% 
+%SEARCH{ "%BASETOPIC%" scope="topic" regex="on" nonoise="on" format="$count(.*?(---[+][+][+][+]) .*) Comments - " }% 
+%TWISTYSHOW{ id="%BASETOPIC%Comments" link="View Comments" img="%ICONURLPATH{toggleopen}%" }% %TWISTYHIDE{id="%BASETOPIC%Comments" link="Hide Comments" img="%ICONURLPATH{'toggleclose'}%"}% 
 ---
 %TWISTYTOGGLE{id="%BASETOPIC%Comments" mode="div" remember="on"}% 
 
@@ -15,9 +17,10 @@ FixMe: Need to figure out what is going on here with Twisty.
 %ENDSECTION{"begincomments"}%
 
 %STARTSECTION{"endcomments"}%
-%COMMENT{type="tocdiscuss" target="%BASEWEB%.%BASETOPIC%#AddComments" }%
+%COMMENT{type="toctalk" target="%BASEWEB%.%BASETOPIC%#AddComments" }%
 %ENDTWISTYTOGGLE% 
 %ENDSECTION{"endcomments"}%
+
 
 
 %META:FORM{name="WebForm"}%

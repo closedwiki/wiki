@@ -7,11 +7,6 @@ Welcome to the %WEB% web! The purpose of this collaborative wiki is...
 
 %INCLUDE{"%TCAOWEB%.CreateNewTopicElements" section="dropdown" }%
 
-*15 most recently changed classified topics:* 
-%SEARCH{"[F]ORM.name.*[W]ebForm" web="%WEB%" regex="on" nosearch="on" order="modified" limit="15" nototal="on" format="	* $topic - $formfield(TopicHeadline) <font class=twikiSmall> _(Modified on $date by $wikiusername)_  </font>" }%
-   * _[[WebChanges][See more recent changes...]]_
-   * _See also: TWiki.SiteChanges_
-
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
 <input type="text" name="search" size="22" />

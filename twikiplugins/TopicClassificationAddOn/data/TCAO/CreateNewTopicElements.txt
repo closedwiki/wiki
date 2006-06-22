@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LynnwoodBrown" date="1141365018" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1150527195" format="1.1" version="1.2"}%
 %META:TOPICPARENT{}%
 __This topic contains form elements used in or releated to CreateNewTopic.__
 
@@ -19,7 +19,7 @@ FixMe: Add additional information about how to use the various form elements.
 ---+++ Auto-name topic
 <verbatim>
 %STARTSECTION{"autoname"}%
-<input type="hidden" name="topic" value="%URLPARAM{type}%XXXXXXXXXXX" /> *Topic will be named automatically.*
+<input type="hidden" name="topic" value='%URLPARAM{"type" default="%INCLUDINGTOPIC%"}%XXXXXXXXXXX' /> *Topic will be named automatically.*
 %ENDSECTION{"autoname"}%
 </verbatim>
 
@@ -30,7 +30,7 @@ FixMe: Add additional information about how to use the various form elements.
 %ENDSECTION{"headline"}%
 </verbatim>
 
----++ Standard hidden elements
+---++ Standard "template" elements
 <verbatim>
 %STARTSECTION{"templates"}%
 <input type="hidden" name="formtemplate" value="%BASEWEB%.WebForm" />
@@ -74,3 +74,4 @@ To create a new topic, select the %BASEWEB%.TopicType you'd like to create from 
 %META:FIELD{name="TopicType" attributes="" title="TopicType" value="MasterTopic"}%
 %META:FIELD{name="SubjectArea" attributes="" title="SubjectArea" value="TcaoAdmin"}%
 %META:FIELD{name="TopicHeadline" attributes="" title="TopicHeadline" value="Reusable form elements for CreateNewTopic"}%
+%META:REVCOMMENT{ncomments="0"}%
