@@ -39,7 +39,9 @@ use vars qw( $session $theTopic $theWeb $topic $web $attributes $text $refText
 	 );
 
 $pluginName = "TimeTablePlugin";
-BEGIN {
+
+# =========================
+sub initPlugin {
 	$defaultsInitialized = 0;
 };
 
@@ -115,7 +117,7 @@ sub _initDefaults {
 		year => undef,
 		daynames => undef,
 		monthnames => undef,
-		headerformat => '<font title="%A - %d %b %Y" size="-2">%a</font>',
+		headerformat => '<font title="%A - %d %B %Y" size="-2">%a</font>',
 		showweekend => 1,		# show weekend
 		descrlimit => 10,		# per line description text limit
 		showtimeline => 'both',		# 
@@ -134,7 +136,7 @@ sub _initDefaults {
 		workingbgcolor => 'white',	
 		workingfgcolor => 'black',
 		compatmode => 0, 		# compatibility mode
-		cmheaderformat => '<font title="%A - %d %b %Y" size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
+		cmheaderformat => '<font title="%A - %d %B %Y" size="-2">%b<br/>%a<br/>%e</font>',   # format of the header
                 todaybgcolor    => undef,       # background color for today cells (usefull for a defined startdate)
                 todayfgcolor    => undef,       # foreground color for today cells (usefull for a dark todaybgcolor)
 		days	=> 7,			# XXX for later use
@@ -145,10 +147,13 @@ sub _initDefaults {
 		navnext => '&gt;&gt;',
 		navprevtitle => 'Previous Week',
 		navnexttitle => 'Next Week',
+		wholetimerow => 0,
+		wholetimerowtext => '24h',
+		wholetimerowtitle => 'whole-time events'
 	);
 
-	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext');
-	@flagOptions = ( 'compatmode', 'showweekend', 'displaytime', 'forcestartdate' );
+	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
+	@flagOptions = ( 'compatmode', 'showweekend', 'displaytime', 'forcestartdate', 'wholetimerow' );
 
 
         %months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -427,26 +432,50 @@ sub _render {
 	$tr = "";
 	$tr.=$cgi->td({-valign=>"top"},($options{'showtimeline'}=~m/(left|both)/i?&_renderTimeline():"&nbsp;"));
 
+	my $wtrow = "";;
+
 	### render timetable:
 	for (my $day = 0; $day < $options{'days'}; $day++) {
 		my ($yy1,$mm1,$dd1)= Add_Delta_Days($yy,$mm,$dd,$day);
 		my $dow = Day_of_Week($yy1,$mm1,$dd1);
 		next if (!$options{'showweekend'})&&($dow>5);
 		my $dowentries_ref = $$entries_ref{$day+1};
-		if (! defined $dowentries_ref) {
-			$tr.=$cgi->td("&nbsp;");
-			next;
-		}
 
 		my $colbgcolor = $options{(($dow>5)?'weekendbgcolor':'tablebgcolor')};
 		$colbgcolor = $options{'todaybgcolor'} if ($options{'todaybgcolor'})&&($todayDays==$startDateDays+$day);
 		my $colfgcolor = $options{(($dow>5)?'weekendfgcolor':'black')};
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 
+		if (! defined $dowentries_ref) {
+			$tr.=$cgi->td({-bgcolor=>$colbgcolor}, '&nbsp;');
+			next;
+		}
 		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
 		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 		$td = $cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+
 		my ($itr, $itd);
+
+		if ($options{'wholetimerow'}) {
+			$itr="";
+			my $wtentries = &_getWholeTimeEntries($dowentries_ref);
+			if ($#$wtentries > -1) {
+				$itr=$cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+				foreach my $wtentry_ref ( @{$wtentries} ) {
+					$itr.=$cgi->Tr($cgi->td({-nowrap=>"",
+							-valign=>"top",
+							-bgcolor=>$$wtentry_ref{'bgcolor'}?$$wtentry_ref{'bgcolor'}:$options{eventbgcolor},
+							}, 
+								&_renderText($wtentry_ref, 1, 0)
+							));
+				}
+				$itr.=$cgi->end_table();
+			} else {
+				$itr='&nbsp;';
+			}
+			$wtrow.=$cgi->td({-bgcolor=>$colbgcolor}, $itr);	
+		}
+
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
 			$itr="";
@@ -470,7 +499,7 @@ sub _render {
 				##$itr=$cgi->td('X'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";	
 			} else {
-				$itr=$cgi->td("&nbsp;");
+				$itr=$cgi->td('&nbsp;');
 				##$itr=$cgi->td({-valign=>'bottom', -align=>'left'}, '<font size="-4">'.&_renderTime($min).'</font>&nbsp;'); ## DEBUG
 				$td .=$cgi->Tr($itr)."\n";
 			}
@@ -482,6 +511,24 @@ sub _render {
 	}
 	$tr.=$cgi->td({-valign=>"top"},&_renderTimeline()) if ($options{'showtimeline'}=~m/(both|right)/i);
 
+	if ($options{'wholetimerow'}) {
+		if ($options{'showtimeline'}=~m/(both|left)/i) {
+			$wtrow=$cgi->td(
+				{-align=>'right',-valign=>"top",-bgcolor=>$options{'tableheadercolor'}},
+				$cgi->div(
+						{ -title=>$options{'wholetimerowtitle'} }, 
+						$options{'wholetimerowtext'}
+					)
+				).$wtrow ;
+		} else {
+			$wtrow=$cgi->td().$wtrow; ## nav
+		}
+		$wtrow.=$cgi->td({-align=>'left',-valign=>"top",-bgcolor=>$options{'tableheadercolor'}},
+				$cgi->div({-title=>$options{'wholetimerowtitle'}},$options{'wholetimerowtext'}))
+			if ($options{'showtimeline'}=~m/(both|right)/i);
+
+		$text.= $cgi->Tr({-valign=>'top'},$wtrow);
+	}
 	$text.= $cgi->Tr($tr);
 
 
@@ -580,6 +627,7 @@ sub _renderTimeline {
 	my ($wst,$wet) = ( &_getTime($options{'workingstarttime'}), &_getTime($options{'workingendtime'}) );
 	my ($bla,$minutes,$hours) = localtime();
 	my ($now) = $minutes + (60 * $hours);
+
 	for (my $min=$starttime; $min <=$endtime ; $min+=$interval) {
 		my $bgcolor = (($min>=$wst)&&($min<=$wet))?$options{'workingbgcolor'}:$options{'tableheadercolor'};
 		my $fgcolor = $options{'workingfgcolor'};
@@ -626,6 +674,9 @@ sub _countConflicts {
 		# go to the next if the same entry:
 		next if $e == $entry_ref;
 
+		# ignore whole-time  events:
+		next if $options{'wholetimerow'} && ($sd2==0) && ($ed2==1440);
+
 		# count only one conflict for events with same start time:
 		next if defined $visitedstartdates{$sd2};
 		$visitedstartdates{$sd2}=$ed2;
@@ -654,12 +705,28 @@ sub _getEntryRows {
 	return $rows>=1?$rows:1;
 }
 # =========================
+sub _getWholeTimeEntries {
+	my ($entries_arrref) = @_;
+	my (@matches);
+	foreach my $entryref ( @{$entries_arrref} )  {
+		my $stime = $$entryref{'starttime'};
+		my $etime = $$entryref{'endtime'};
+		push(@matches, $entryref) if ($stime==0)&&($etime==1440);
+	}
+	return \@matches;
+	
+}
+# =========================
 sub _getMatchingEntries {
 	my ($entries_arrref, $time, $interval, $starttime) = @_;
 	my (@matches);
 	foreach my $entryref ( @{$entries_arrref} ) {
 		my $stime = $$entryref{'starttime'};
 		my $etime = $$entryref{'endtime'};
+
+		# ignore whole-time events:
+		next if $options{'wholetimerow'} && ($stime==0) && ($etime==1440);
+
 		push(@matches, $entryref) 
 			if (($stime >= $time) && ($stime < $time+$interval))
 				|| (($time==$starttime)&&($stime<$time)&&($etime>$starttime))
