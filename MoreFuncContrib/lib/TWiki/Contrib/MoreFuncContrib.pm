@@ -8,11 +8,14 @@
 
 =pod
 
-%TOC%
+
+---+!! !MoreFuncContrib
 
 This contrib contains basic functionality needed by many plugins that is not
 included in Dakar's TWiki::Func. Some or all of these will probably be merged
 into the TWiki::Func at some point.
+
+%TOC%
 
 =cut
 
@@ -79,9 +82,9 @@ Returns a list of a web's child webs
 sub getChildWebs {
     my $web = shift;
     my @kids =  $TWiki::Plugins::SESSION->{store}->_getSubWebs($web);
-    my $kidlist = join(/,/, @kids);
+    my $kidlist = join(',', @kids);
     $kidlist =~ s#.*/##;
-    return split(/,/, $kidlist);
+    return split(',', $kidlist);
 }
 
 =pod
@@ -143,6 +146,18 @@ sub deleteWorkFile {
 
 =pod
 
+---+++ getSearchObj($session) -> searchObj
+
+=cut
+
+sub getSearchObj {
+    my $session = shift;
+    die "no session`" unless $session;
+    return $session->{search};
+}
+
+=pod
+
 ---+++ buildMimeHash($session) -> $hash
 
 Return a mapping of extention to mime type
@@ -184,5 +199,25 @@ sub suffixToMimeType {
     }
     return $mimeType;
 }
+
+=pod
+
+'Web*, FooBar' ==> ( 'Web*', 'FooBar' ) ==> ( 'Web.*', "FooBar" )
+
+=cut
+
+sub makeTopicPattern {
+    my( $pattern ) = @_ ;
+    return '' unless( $pattern );
+    # 'Web*, FooBar' ==> ( 'Web*', 'FooBar' ) ==> ( 'Web.*', "FooBar" )
+    $pattern =~ tr/ //d;
+    my @arr = map { s/[^\*\_$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
+        split( ',', $pattern );
+    return '' unless( @arr );
+    # ( 'Web.*', 'FooBar' ) ==> "^(Web.*|FooBar)$"
+    return '^(' . join( '|', @arr ) . ')$';
+}
+
+
 
 1;
