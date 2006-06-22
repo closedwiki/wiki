@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="LynnwoodBrown" date="1131308074" format="1.1" version="1.2"}%
 %META:TOPICPARENT{name="CommentPlugin"}%
 
-*This topic is for defining custom CommentPlugin templates for %WIKITOOLNAME%. For more information about defining templates, see CommentPlugin#Customisation. To see the "default" templates, see CommentsTemplate.*
+*This topic is for defining custom %TWIKIWEB%.CommentPlugin templates for %WIKITOOLNAME%. For more information about defining templates, see %TWIKIWEB%.CommentPlugin#Customisation. To see the "default" templates, see %TWIKIWEB%.CommentPluginTemplate.*
 ---------------------------------------------------------------------------
 ---+++ discuss
 Comments, signed and dated, added immediately before anchor
@@ -15,27 +15,21 @@ Comments, signed and dated, added immediately before anchor
 </verbatim>
 
 ---------------------------------------------------------------------------
----+++ codetalk
-Post verbatim code & comment using TOC adding on end - TWiki:Main/LynnwoodBrown
+---+++ tocdiscuss
+Discussion with heading for Table of Content - TWiki:Main.LynnwoodBrown
 <verbatim>
-%TMPL:DEF{PROMPT:codetalk}%
-<hr width="60%"/> *Headline:* (This will posted as a heading.)  <br />
-<input %DISABLED% type="text" size="40" name="comment_summary" /> <br /> 
-*Post Code:* (This will be posted between =verbatim= tags.) <br />
-<textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="verbatim_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /> 
-*Add Comment:* (Optional.) <br />
-<textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="comment_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /><input %DISABLED% type="submit" value="%button|Add%" /> <hr width="90%"/>
+%TMPL:DEF{PROMPT:tocdiscuss}%
+--- <br /> *Headline:* <span class="twikiSmall"> _Enter a short headline for your comment._ </span><br />
+<input %DISABLED% type="text" size="60" name="comment_headline" /> <br /> *Comment:* <br />
+<textarea %DISABLED% rows="%rows|5%" cols="%cols|60%" name="comment_text" wrap="soft" onfocus="if(this.value=='%MESSAGE%')this.value=''" onblur="if(this.value=='')this.value='%MESSAGE%'">%MESSAGE%</textarea> <br /> <input %DISABLED% type="submit" value="%button|Add Comment%" /> 
 %TMPL:END%
 </verbatim>
 <verbatim>
-%TMPL:DEF{OUTPUT:codetalk}%
-%POS:BEFORE%---
----+++ %URLPARAM{"comment_summary"}% <font size=-2> _Posted by %WIKIUSERNAME% - %GMTIME%_ </font>
-<verbatim>
-%POS:BEFORE%%URLPARAM{"verbatim_text" }%
-</verbatim>
+%TMPL:DEF{OUTPUT:tocdiscuss}%
+%POS:BEFORE%---+++ %URLPARAM{"comment_headline"}% 
+%POS:BEFORE% <span class="twikiSmall"> _Posted by %WIKIUSERNAME% on %DATE% at %TIME%._ </span> <br />
 %POS:BEFORE%%URLPARAM{"comment_text" }%
 %POS:BEFORE%
 %TMPL:END%
 </verbatim>
-%META:TOPICMOVED{by="LynnwoodBrown" date="1131308074" from="TWiki.UserTemplates" to="TWiki.UserCommentTemplate"}%
+---------------------------------------------------------------------------
