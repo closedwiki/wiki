@@ -388,6 +388,10 @@ sub _readTemplateFile {
         my $retrieve = $candidate->{retrieve};
         my $name = $candidate->{name};
         if( &$validate( $name )) {
+            next if (defined($this->{files}->{$name}));
+            #recursion prevention.
+            $this->{files}->{$name} = 1;
+
             return &$retrieve( $name );
         }
     }
