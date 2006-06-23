@@ -149,7 +149,9 @@ sub _initDefaults {
 		navnexttitle => 'Next Week',
 		wholetimerow => 0,
 		wholetimerowtext => '24h',
-		wholetimerowtitle => 'whole-time events'
+		wholetimerowtitle => 'whole-time events',
+		wholetimerowpos => 'top',
+		cuttext => '...',
 	);
 
 	@renderedOptions = ('tablecaption', 'name' , 'navprev', 'navnext', 'wholetimerowtext');
@@ -527,9 +529,10 @@ sub _render {
 				$cgi->div({-title=>$options{'wholetimerowtitle'}},$options{'wholetimerowtext'}))
 			if ($options{'showtimeline'}=~m/(both|right)/i);
 
-		$text.= $cgi->Tr({-valign=>'top'},$wtrow);
 	}
+	$text.= $cgi->Tr({-valign=>'top'},$wtrow) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(top|both)$/i);
 	$text.= $cgi->Tr($tr);
+	$text.= $cgi->Tr({-valign=>'top'},$wtrow) if $options{'wholetimerow'} && ($options{'wholetimerowpos'}=~m/^(bottom|both)$/i);
 
 
 	$text .= $cgi->end_table();
@@ -598,19 +601,21 @@ sub _renderText {
 	my $text = $$mentry_ref{'descr'};
 	$text.=' ('.&_renderTime($mst).'-'.&_renderTime($met).')' if $options{'displaytime'};
 	
+	my $descrlimit = $options{'descrlimit'};
 	my $nt="";
 	for (my $l=0; $l<$rs; $l++) {
 		my $sub;
-		my $offset = $l*$options{'descrlimit'};
+		my $offset = $l * $descrlimit;
 		last if $offset>length($text);
-		$sub  = substr($text, $offset, $options{'descrlimit'});
-		last if (length($sub)<=0);
-		$nt .= (($l==$rs-1)&&(length($sub)>$options{'descrlimit'}))? substr($sub,0,$options{'descrlimit'}-3).'...':$sub;
+		$sub  = substr($text, $offset, $descrlimit);
+		last if (length($sub)<1);
+		$nt .= (($l==($rs-1))&&(length(substr($text,$offset))>$descrlimit))
+				? substr($sub,0,$descrlimit-length($options{'cuttext'})).$options{'cuttext'}
+				: $sub;
 		$nt .='<br/>' unless $l==$rs-1;
 	}	
 	$text=$nt;
 
-	##$tddata.= $cgi->div({-title=>$title, -style=>'font-family:monospace;'}, $text);
 	$tddata.= $cgi->div({
 			-title=>$title, 
 			-style=>'color:'.($$mentry_ref{'fgcolor'}?$$mentry_ref{'fgcolor'}:$options{'eventfgcolor'}).';'
@@ -1050,7 +1055,7 @@ sub _fetchCompat {
 
 		}
 		
-	} elsif ($line =~ m/^$day_rx\s+($months_rx)/) {
+	} elsif ($line =~ m/^$day_rx\s+($months_rx)\s+\-/) {
                 ### Interval: dd MMM
 		($strdate, $descr) = split /\s+\-\s+/, $line;
 		my ($dd1, $mm1) = split /\s+/, $strdate;
@@ -1119,7 +1124,7 @@ sub _fetchCompat {
                                 } # if
                         } # if
 		} # for 
-	} elsif ($line =~ m/^$day_rx\s+/) {
+	} elsif ($line =~ m/^$day_rx\s+\-/) {
                 ### Monthly: dd
 		($strdate, $descr) = split /\s+\-\s+/, $line;
 		return if $strdate > 31;
