@@ -53,6 +53,11 @@ _(Click for form-based editing of existing preferences.)_
    * Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently if empty or =off=. Output warning message (defined in templates/oopsalerts.tmpl) if set to =on=. Otherwise output specific text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE{}%= :
       * Set INCLUDEWARNING = on
 
+---++ Extra web settings
+   * Set DOCWEB = TWiki
+   * Set USERSWEB = Main
+   * Set SYSTEMWEB = TWiki
+
 
 ---++ Default User Settings
 
