@@ -21,7 +21,11 @@ use TWiki::Func;
 
 package TWiki;
 
-sub ChildTopics {
+use vars qw($tagname);
+
+$tagname = 'CHILDTOPICS';
+
+sub CHILDTOPICS {
     my ($session, $params, $topic, $web) = @_;
     my $format = $params->{format} || '   * $topic';
     my $join = $params->{format} || "\n";
