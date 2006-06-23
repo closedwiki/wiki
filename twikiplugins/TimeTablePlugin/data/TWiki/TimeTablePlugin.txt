@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1151055918" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1151064979" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -208,9 +208,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.006 (23 Jun 2006) |
+|  Plugin Version: | V1.007 (23 Jun 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.006 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major mod_perl bug (paging in compatmode); add whole-time row feature; fixed minor bugs (empty column color; cutted text) |
+|  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: emtpy column) |
+|  V1.006 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bugs (empty column color; cutted text) |
 |  V1.005 (8 Jun 2006) | TWiki:Main.DanielRohde: fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...) |
 |  V1.004 (31 May 2006) | TWiki:Main.DanielRohde: fixed typos (documentation, timeformat); added new attributes (days, forcestartdate, nowfgcolor, nowbgcolor); fixed minor bug (periodic repeater); added new event type (list) |
 |  V1.003 (24 May 2006) | TWiki:Main.DanielRohde: added compatibility mode (TWiki:Plugins.CalendarPlugin event types); added documentation and new attributes; fixed bugs (bgcolor bug; conflict rendering; documentation; error logs; warnings);|
