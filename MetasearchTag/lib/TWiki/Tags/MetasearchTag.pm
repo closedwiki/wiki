@@ -32,10 +32,6 @@ use TWiki::Contrib::MoreFuncContrib;
 
 use vars qw($tagname);
 
-#
-# By default, the tag will be the name of the module. If you want to have a different tag,
-# redefine $tagname to that tag
-#
 $tagname='METASEARCH';
 
 sub METASEARCH {
@@ -71,8 +67,8 @@ sub METASEARCH {
             format       => $params->{format},
             header       => $params->{header},
             limit        => $params->{limit},
-            sortOrder    => $params->{sortOrder},
-            revSort      => $params->{revSort},
+            sortOrder    => $params->{order},
+            revSort      => $params->{reverse},
             excludetopic => $params->{excludetopic},
             search       => $searchVal,
             web          => $searchWeb,
@@ -88,9 +84,11 @@ sub METASEARCH {
         my $searchObj = TWiki::Contrib::MoreFuncContrib::getSearchObj($session);
         die "No search object" unless $searchObj;
         $text = TWiki::Contrib::MoreFuncContrib::getSearchObj($session)->searchWeb(
-            _callback => \&_collate,
+            _callback => sub {
+                my $ref = shift;
+                $$ref .= join( ' ', @_ );
+                },
             _cbdata   => \$text,
-            ,
             search    => $searchVal,
             web       => $searchWeb,
             type      => 'regex',
@@ -113,14 +111,6 @@ sub METASEARCH {
     }
 
     return $text;
-}
-
-# callback for search function to collate
-# results
-sub _collate {
-    my $ref = shift;
-
-    $$ref .= join( ' ', @_ );
 }
 
 1;
