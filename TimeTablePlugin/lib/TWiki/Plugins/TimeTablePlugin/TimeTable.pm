@@ -448,14 +448,6 @@ sub _render {
 		my $colfgcolor = $options{(($dow>5)?'weekendfgcolor':'black')};
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 
-		if (! defined $dowentries_ref) {
-			$tr.=$cgi->td({-bgcolor=>$colbgcolor}, '&nbsp;');
-			next;
-		}
-		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
-		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
-		$td = $cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
-
 		my ($itr, $itd);
 
 		if ($options{'wholetimerow'}) {
@@ -477,6 +469,15 @@ sub _render {
 			}
 			$wtrow.=$cgi->td({-bgcolor=>$colbgcolor}, $itr);	
 		}
+
+		if (! defined $dowentries_ref) {
+			$tr.=$cgi->td({-bgcolor=>$colbgcolor}, '&nbsp;');
+			next;
+		}
+		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
+		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		$td = $cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+
 
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
 			my $mentries = &_getMatchingEntries($dowentries_ref, $min, $options{'timeinterval'}, $starttime);
