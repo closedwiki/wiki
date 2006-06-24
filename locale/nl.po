@@ -647,6 +647,9 @@ msgid ""
 "After submitting this form, you will receive an e-mail with your new, "
 "*system-generated* password, and a link to a page where you can change it."
 msgstr ""
+"Na het versturen van dit formulier ontvang je een e-mail met je nieuwe "
+"*automatisch gegenereerde* wachtwoord, en een link naar de pagina waar je "
+"het wachtwoord kan wijzigen."
 
 #: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:48
 msgid "All public webs"
@@ -1270,6 +1273,8 @@ msgid ""
 "Either you did not specify a file name, or the file you are trying to upload "
 "%1 has no content. You may not upload an empty file."
 msgstr ""
+"Je hebt geen bestand geselecteerd, of het bestand dat je wil uploaden is "
+"leeg (0 bytes). Je kan geen leeg bestand uploaden."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:98
 msgid "Enlarge edit box"
@@ -1565,6 +1570,9 @@ msgid ""
 "If your old e-mail addresses are all invalid (you can't receive mail there "
 "any more) and you have forgotten your password, please contact %1 for help."
 msgstr ""
+"Als al je oude e-mail adressen niet meer geldig zijn (als je daar geen e-mail "
+"kunt ontvangen) en je je wachtwoord bent vergeten, neem dan contact op met %1 "
+"voor hulp."
 
 #: data/TWiki/ChangeEmailAddress.txt:11
 msgid ""
@@ -1572,6 +1580,9 @@ msgid ""
 "don't register an e-mail address using this form, then your user account "
 "could be hijacked by someone else."
 msgstr ""
+"Als je persoonlijke pagina niet is beschermd (en andere gebruikers deze "
+"dus kunnen veranderen), en als je je e-mailadres niet registreert met dit "
+"formulier, dan kan je gebruikersaccount worden gekaapt door iemand anders."
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:67
 msgid "Images will be displayed, for other attachments a link will be created."
@@ -1808,7 +1819,7 @@ msgstr "Naam van het nieuwe web ontbreekt"
 
 #: data/TWiki/ChangeEmailAddress.txt:25
 msgid "New e-mails (space-separated list)"
-msgstr ""
+msgstr "Nieuwe e-mails (spatie-gescheiden lijst)"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:73
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:9
@@ -2011,7 +2022,7 @@ msgstr "Standaardpagina voor weggegooide bijlagen"
 
 #: templates/messages.tmpl:213 templates/messages.tmpl:247
 msgid "Please contact %1 if you have any questions."
-msgstr ""
+msgstr "Neem contact op met %1 als je vragen hebt."
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
 msgid "Please enter your username and password:"
@@ -2080,11 +2091,11 @@ msgstr "Voorkeuren voor"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:44
 msgid "Printable version of this topic"
-msgstr ""
+msgstr "Printbare versie van deze pagina"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:65
 msgid "Properties"
-msgstr ""
+msgstr "Eigenschappen"
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2741,6 +2752,10 @@ msgid ""
 "notifications of password changes. The addresses you register via this form "
 "are kept secret and will *not* be published anywhere on this site."
 msgstr ""
+"Gebruik dit formulier om je geregistreerde e-mailadres te wijzigen. Je "
+"geregistreerde e-mailadressen worden gebruikt door TWiki voor het versturen "
+"van e-mails over wachtwoordwijzigingen. De adressen die je hier registreert "
+"worden geheimgehouden en worden *niet gepubliceerd* op deze site."
 
 #: data/Sandbox/WebNotify.txt:4 data/Trash/WebNotify.txt:3
 #: data/_default/WebNotify.txt:2
@@ -3103,7 +3118,7 @@ msgstr "Waarschuwing: Kan pagina %1 niet vinden"
 
 #: templates/messages.tmpl:390
 msgid "Warning: This site does not allow %<nop>INCLUDE% of URLs"
-msgstr ""
+msgstr "Waarschuwing: Deze site staat niet toe het gebruik van %<nop>INCLUDE% van URLs"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "We&b"
@@ -3281,6 +3296,9 @@ msgid ""
 "registered e-mail for you in the secret database, it will look in your user "
 "topic for a line like this:"
 msgstr ""
+"We raden je echt aan om een geldig e-mailadres te registreren. Als TWiki geen "
+"geregistreerd e-mailadres kan vinden in de afgeschermde database, zal het "
+"zoeken in je persoonlijke pagina naar een regel als deze:"
 
 #: templates/messages.tmpl:283
 msgid "You will probably have to ask your administrator, %1, to do this."
