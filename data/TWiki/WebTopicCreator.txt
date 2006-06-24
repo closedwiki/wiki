@@ -48,7 +48,9 @@ function canSubmit(inForm, inShouldConvertInput) {
 	}
 
 	// Update feedback field
-	insertHtml(wikiWordName, "webTopicCreatorFeedback");
+	feedbackHeader = "<strong>%MAKETEXT{"Topic will be named: "}%</strong>";
+	feedbackText = feedbackHeader + wikiWordName;
+	insertHtml(feedbackText, "webTopicCreatorFeedback");
 
 	// Update hidden field value
 	// Use the negative value of the checkbox. This is the ugly way but must be used until edit script parameter =allowsnonwikiword= is implemented.
