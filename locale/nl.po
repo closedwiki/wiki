@@ -998,9 +998,8 @@ msgstr "Conflict"
 
 #: templates/messages.tmpl:399 templates/messages.tmpl:406
 #: templates/messages.tmpl:430 templates/messages.tmpl:436
-#, fuzzy
 msgid "Contact %1 if you have any questions."
-msgstr "Als je vragen heby, neem dan contact op met %1."
+msgstr "Als je vragen hebt, neem dan contact op met %1."
 
 #: templates/messages.tmpl:330
 msgid "Continue and try to rename web?"
@@ -2844,9 +2843,8 @@ msgstr ""
 "gebruikersnaam en wachtwoord nodig."
 
 #: templates/oopsleaseconflict.tmpl:19
-#, fuzzy
 msgid "To edit the topic anyway, click "
-msgstr "om de pagina toch te bewerken."
+msgstr "Om de pagina toch te bewerken, klik "
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:13
 msgid "To edit the topic anyway, hit 'Edit Anyway'."
@@ -2861,9 +2859,8 @@ msgid "To register as a new user, simply fill out this form:"
 msgstr "Om te registreren als nieuwe gebruiker vul je dit formulier in:"
 
 #: templates/oopsleaseconflict.tmpl:15
-#, fuzzy
 msgid "To see if %1 has finished editing yet, click "
-msgstr "Om te zien of %1 klaar is met bewerken, klik 'Probeer opnieuw'."
+msgstr "Om te zien of %1 klaar is met bewerken, klik "
 
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:11
 msgid "To see if %1 has finished editing yet, click 'Try Again'."
@@ -3537,28 +3534,4 @@ msgstr ""
 "mailadressen geldig zijn, en je je wachtwoord bent vergeten, neem dan "
 "contact op met %1."
 
-#~ msgid "Continue to *[[%1][create topic !%2]]*"
-#~ msgstr "Ga verder met *[[%1][pagina !%2 aanmaken]]*"
 
-#~ msgid "Uploaded file %1 does not exist or is empty"
-#~ msgstr "Geupload bestand %1 bestaat niet of is leeg"
-
-#~ msgid ""
-#~ "To create a new topic, enter a %1.WikiWord for the topic name, select a "
-#~ "topic parent and click 'Create.'"
-#~ msgstr ""
-#~ "Om een nieuwe pagina aan te maken, voer je een [[%1.WikiWord][Wikiwoord]] "
-#~ "in als paginanaam. Kies eventueel een bovenliggende pagina en klik op "
-#~ "'Aanmaken.'"
-
-#~ msgid "Hide form"
-#~ msgstr "Formulier verbergen"
-
-#~ msgid "Show form"
-#~ msgstr "Formulier tonen"
-
-#~ msgid "(changed language)"
-#~ msgstr "(taal gewijzigd)"
-
-#~ msgid "Cancel"
-#~ msgstr "Afbreken"
