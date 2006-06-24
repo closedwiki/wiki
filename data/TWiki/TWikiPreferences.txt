@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1123097457" format="1.1" version="$Rev $"}%
+%META:TOPICINFO{author="MeredithLesly" date="1151162599" format="1.1" reprev="1.2" version="1.2"}%
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 This topic defines __site-level__ settings that apply to all users and webs on this TWikiSite.
 
-__%X% Note:__ This topic should be regarded as read-only, so that upgrades can safely overwrite it without risk to your customizations.
+__%X% Note:__ *This topic should be regarded as read-only, so that upgrades can safely overwrite it without risk to your customizations.*
 
 Preference settings local to your site should be set in [[%LOCALSITEPREFS%]] (this topic is pointed to by {LocalSitePreferences}, which is set by the admin in the =configure= interface). Settings in [[%LOCALSITEPREFS%]] will override settings in this topic, and should be used for defining custom settings and variables.
 
@@ -304,6 +304,12 @@ _(Click for form-based editing of existing preferences.)_
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic:
       * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
       * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+
+---++ Web variables
+   * Variables to allow splitting the TWiki web between system settings and documentation.
+      * Set DOCWEB = %TWIKIWEB%
+      * Set SYSTEMWEB = %TWIKIWEB%
+
 
 
 ---++ Creating New Preference Variables
