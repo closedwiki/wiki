@@ -1465,6 +1465,9 @@ sub _removeNewlines {
 sub _rewriteURLInInclude {
     my( $theHost, $theAbsPath, $url ) = @_;
 
+    # leave out an eventual final non-directory component from the absolute path
+    $theAbsPath =~ s/(.*?)[^\/]*$/$1/;
+
     if( $url =~ /^\// ) {
         # fix absolute URL
         $url = $theHost.$url;
