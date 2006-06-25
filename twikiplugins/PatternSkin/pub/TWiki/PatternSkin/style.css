@@ -335,13 +335,11 @@ th.twikiSortedDescendingCol a:hover font {
 }
 
 /* TwistyContrib */
-a:link.twistyTrigger,
-a:visited.twistyTrigger {
+.twistyTrigger a:link,
+.twistyTrigger a:visited,
+.twistyTrigger a:link .twikiLinkLabel,
+.twistyTrigger a:visited .twikiLinkLabel {
 	text-decoration:none;
-}
-a:link .twistyLinkLabel,
-a:visited .twistyLinkLabel {
-	text-decoration:underline;
 }
 
 /*	-----------------------------------------------------------
@@ -560,12 +558,12 @@ a:hover .twikiAccessKey {
 .twikiWebIndent {
 	margin:0 0 0 1em;
 }
-
 a.twikiLinkInHeaderRight {
 	float:right;
 	display:block;
 	margin:0 0 0 5px;
 }
+.twikiLinkLabel {}
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements

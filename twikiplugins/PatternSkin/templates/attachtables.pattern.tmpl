@@ -7,16 +7,20 @@
 
 %{ Header definition for topic attachments and top table in attach screen }%
 %TMPL:DEF{ATTACH:files:header(basic)}%
-<div class="twikiAttachments">%TABLE{tableborder="0" cellpadding="0" cellspacing="0" databg="#FFFFFF" id="twikiAttachmentsTable" summary="%MAKETEXT{"Topic attachments"}%" caption="%MAKETEXT{"Topic attachments"}%" }%
+<div class="twikiAttachments">
+%TMPL:P{context="TablePluginEnabled" then="ATTACH:files:tableformat"}%
 %TMPL:P{ATTACH:files:header(toprow)}%%TMPL:END%
 
 %{ A basic row definition, for attachment table and attach screen }%
 %TMPL:DEF{ATTACH:files:row(basic)}%| %A_ICON%<span class="twikiHidden">%A_EXT%</span> | <a href="%A_URL%">%A_FILE%</a> | <a href="%SCRIPTURLPATH{"attach"}%/%WEB%/%TOPIC%?filename=%ENCODE{"%A_FILE%"}%&revInfo=1" title='%MAKETEXT{"change, update, previous revisions, move, delete..."}%'rel='nofollow'>%MAKETEXT{"manage"}%</a> |  %A_SIZE% | %A_DATE% | %A_USER% | %A_COMMENT% |%TMPL:END%
 
+%{ Format definition for topic attachment table }%
+%TMPL:DEF{ATTACH:files:tableformat}%%TABLE{tableborder="0" cellpadding="0" cellspacing="0" databg="#FFFFFF" id="twikiAttachmentsTable" summary="%MAKETEXT{"Topic attachments"}%" caption="%MAKETEXT{"Topic attachments"}%"}%%TMPL:END%
+
 %{ Header for topic attachment table }%
 %TMPL:DEF{ATTACH:files:header}%
 <div class="twikiAttachments">
-%TABLE{tableborder="0" cellpadding="0" cellspacing="0" databg="#FFFFFF" id="twikiAttachmentsTable" summary="%MAKETEXT{"Topic attachments"}%" caption="%MAKETEXT{"Topic attachments"}%" }%
+%TMPL:P{context="TablePluginEnabled" then="ATTACH:files:tableformat"}%
 <span id="attachmentsshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleopen}%<span class="twikiLinkLabel" id="attachmentsshowlink">%MAKETEXT{"Show attachments"}%</span></a></span><span id="attachmentshide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleclose}%<span class="twikiLinkLabel" id="attachmentshidelink">%MAKETEXT{"Hide attachments"}%</span></a></span>
 <div id="attachmentstoggle" class="twistyMakeHidden twistyRememberSetting">
 %TMPL:P{ATTACH:files:header(toprow)}%
