@@ -96,7 +96,7 @@ sub new {
 
     return $this unless defined( $string );
 
-    $string =~ s/\\(["'])/"\0".sprintf("%.2u", ord($1))/ge;  # escapes
+    $string =~ s/\\(["'])/$TWiki::TranslationToken.sprintf("%.2u", ord($1))/ge;  # escapes
 
     my $sep = ( $friendly ? "[\\s,]" : "\\s" );
     my $first = 1;
@@ -149,7 +149,7 @@ sub new {
         }
     }
     foreach my $k ( keys %$this ) {
-        $this->{$k} =~ s/\0(\d\d)/chr($1)/ge;  # escapes
+        $this->{$k} =~ s/$TWiki::TranslationToken(\d\d)/chr($1)/geo;  # escapes
     }
     return $this;
 }
@@ -235,7 +235,7 @@ sub extractValue {
 
     my $value = '';
     return $value unless( $str );
-    $str =~ s/\\\"/\\\0/g;  # escape \"
+    $str =~ s/\\\"/\\$TWiki::TranslationToken/g;  # escape \"
 
     if( $name ) {
         # format is: %VAR{ ... name = "value" }%
@@ -261,7 +261,7 @@ sub extractValue {
             $value = $str;
         }
     }
-    $value =~ s/\\\0/\"/go;  # resolve \"
+    $value =~ s/\\$TWiki::TranslationToken/\"/go;  # resolve \"
     return $value;
 }
 

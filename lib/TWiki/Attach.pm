@@ -168,7 +168,7 @@ sub _formatRow {
     my $row = $tmpl;
 
     $row =~ s/%A_(\w+)%/$this->_expandAttrs($1,$web,$topic,$info)/ge;
-    $row =~ s/\0/%/g;
+    $row =~ s/$TWiki::TranslationToken/%/go;
 
     return $row;
 }
@@ -228,10 +228,10 @@ sub _expandAttrs {
             return $user->webDotWikiName();
         } else {
             return $info->{user};
-        }        
+        }
     }
     else {
-        return "\0A_$attr\0";
+        return $TWiki::TranslationToken.'A_'.$attr.$TWiki::TranslationToken;
     }
 }
 

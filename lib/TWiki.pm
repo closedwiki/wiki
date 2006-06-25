@@ -73,7 +73,15 @@ use vars qw(
 
 # Token character that must not occur in any normal text - converted
 # to a flag character if it ever does occur (very unlikely)
-$TranslationToken= "\0";    # Null not allowed in charsets used with TWiki
+# TWiki uses $TranslationToken to mark points in the text. This is
+# normally \0, which is not a useful character in any 8-bit character
+# set we can find, nor in UTF-8. But if you *do* encounter problems
+# with it, the workaround is to change $TranslationToken to something
+# longer that is unlikely to occur in your text - for example
+# muRfleFli5ble8leep (do *not* use punctuation characters or whitspace
+# in the string!)
+# See Codev.NationalCharTokenClash for more.
+$TranslationToken= "\0";
 
 =pod
 

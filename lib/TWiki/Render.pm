@@ -899,12 +899,6 @@ sub getRenderedVersion {
 
     # clutch to enforce correct rendering at end of doc
     $text =~ s/\n?$/\n<nop>\n/s;
-    # Convert any occurrences of token (very unlikely - details in
-    # Codev.NationalCharTokenClash)
-    # WARNING: since the token is used as a marker in takeOutBlocks,
-    # be careful never to call this method on text which has already had
-    # embedded blocks removed!
-    $text =~ s/$TWiki::TranslationToken/!/go;
 
     # Maps of placeholders to tag parameters and text
     my $removed = {};
