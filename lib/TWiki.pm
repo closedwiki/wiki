@@ -899,7 +899,7 @@ sub getScriptUrl {
     if( defined $TWiki::cfg{ScriptUrlPaths} ) {
         $url = $TWiki::cfg{ScriptUrlPaths}{$script};
     }
-    unless( $url ) {
+    unless( defined( $url )) {
         $url = $TWiki::cfg{ScriptUrlPath};
         if( $script ) {
             $url .= '/' unless $url =~ /\/$/;
