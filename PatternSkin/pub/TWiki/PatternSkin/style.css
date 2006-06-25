@@ -335,11 +335,13 @@ th.twikiSortedDescendingCol a:hover font {
 }
 
 /* TwistyContrib */
-.twistyTrigger a:link,
-.twistyTrigger a:visited,
-.twistyTrigger a:link .twikiLinkLabel,
-.twistyTrigger a:visited .twikiLinkLabel {
+a:link.twistyTrigger,
+a:visited.twistyTrigger {
 	text-decoration:none;
+}
+a:link .twistyLinkLabel,
+a:visited .twistyLinkLabel {
+      text-decoration:underline;
 }
 
 /*	-----------------------------------------------------------
