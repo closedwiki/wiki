@@ -190,7 +190,8 @@ sub handleEditTableTag
         "helptopic"     => "",
         "editbutton"    => "",
         "editlink"      => "",
-	"showHeaderOnEmpty" => "",
+        "showtable" => "",
+        "showHeaderOnEmpty" => "",
     );
 
     extractParams( $theArgs, \%params );
