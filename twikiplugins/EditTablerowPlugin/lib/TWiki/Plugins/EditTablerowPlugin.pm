@@ -28,22 +28,13 @@ package TWiki::Plugins::EditTablerowPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
+        $web $topic $user $installWeb $VERSION $debug
         $query $renderingWeb
         $preSp %params @format @formatExpanded
         $prefsInitialized $prefCHANGEROWS $prefEDITBUTTON $prefEDITLINK
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$VERSION = '1.024';
 $prefsInitialized  = 0;
 
 # =========================
@@ -326,7 +317,7 @@ sub handleTableRow
     $title = $boldTitle if $boldTitle;
     $text .= "*" if $boldTitle;
     # Add edit links, maybe this should just be a link of the first table item
-    my $eurl = TWiki::Func::getScriptUrlPath() . "/editTableRow$scriptSuffix/$web/$topic";
+    my $eurl = TWiki::Func::getScriptUrlPath() . "/editTableRow$TWiki::scriptSuffix/$web/$topic";
     if ( $prefEDITLINK ) {
       my $value = $prefEDITLINK;
       my $img = "";
