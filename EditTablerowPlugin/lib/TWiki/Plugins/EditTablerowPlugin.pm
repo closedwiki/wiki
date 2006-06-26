@@ -318,7 +318,7 @@ sub handleTableRow
     $title = $boldTitle if $boldTitle;
     $text .= "*" if $boldTitle;
     # Add edit links, maybe this should just be a link of the first table item
-    my $eurl = TWiki::Func::getScriptUrlPath() . "/editTableRow$TWiki::scriptSuffix/$web/$topic";
+    my $eurl = TWiki::Func::getScriptUrl($web, $topic, 'editTableRow');
     if ( $prefEDITLINK ) {
       my $value = $prefEDITLINK;
       my $img = "";
@@ -348,6 +348,7 @@ sub handleTableRow
 sub carriageReturnConvert
 {
 	my ( $string ) = @_;
+    $string = " " unless defined($string);
 	
 	if ( $string =~ /\<br\>/ ) {
 		$string =~ s/\<br\>/\n/g;
