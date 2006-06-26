@@ -120,7 +120,6 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 	  | ==bin/uploadTableRow== |  |
 	  | ==templates/editTableRow.pattern.tmpl== |  |
 	  | ==templates/editTableRow.tmpl== |  |
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Verify access and ownership settings for the new scripts.
 	* Edit your .htaccess file to require a valid user for the included scripts (if needed).
 	* For Beijing release point to a valid image for =EDITBUTTON=
@@ -128,8 +127,10 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 21 Apr 2005 |
+|  Plugin Version: | 30 Jun 2005 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  07 Jul 2005: | Remove further warning message (thanks to TWiki:Main/KennethLavrsen and TWiki:Main/CrawfordCurrie)	|
+|  30 Jun 2005: | Fix access control. Remove warning messages from apache log.	|
 |  21 Apr 2005: | Fix to remove conflict with %<nop>TOC% rendering	|
 |  26 Mar 2005: | Removed dependencies on EditContrib and made compatible with Beijing release  |
 |  20 Mar 2005: | Initial version |

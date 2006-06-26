@@ -77,7 +77,8 @@ sub main
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
     $dummy = "";  # to suppress warning
 
-    return unless ( &doEnableEdit ($webName, $topic, $userName, $query) );
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
+    return unless ( &doEnableEdit ($webName, $topic, $wikiUserName, $query) );
 
     return unless ($query);
     $query->{'jscalendar'} = 0;
@@ -106,7 +107,7 @@ sub main
     # Need to determine table row
     if ( $text =~ m/%EDITTABLEROW/i ) { 
 	my @sections = split(/\s*%EDITTABLEROW{.*}%/i, $text);
-	my $table = @sections[$tableNr];
+	my $table = $sections[$tableNr];
 	my @rows = split (/\n/, $table);
 	my $rowidx = -1;
 	my $row = "";
@@ -134,7 +135,7 @@ sub main
 	  $tmpl =~ s/%SHOWTABLE%//go;
 	}
 
-	$row = @rows[$rowNr + $rowidx];
+	$row = $rows[$rowNr + $rowidx];
 	my @fields = split (/\|/, $row);
 
 	# If we are editing an existing Form add meta fields
@@ -144,7 +145,7 @@ sub main
 	    $idx++;
 	    my @fieldDef = @$fieldDefP;
 	    my $entryName = shift @fieldDef;
-	    my $value = @fields[$idx];
+	    my $value = $fields[$idx];
 	    #$value = "" if ($value eq "&nbsp;");
 	    my @tmpArgs = (
 			   "name" => $entryName,
