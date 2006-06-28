@@ -15,6 +15,7 @@
 package TWiki::Contrib::Build;
 
 use TWiki::Contrib::BuildContrib::BaseBuild;
+use Error qw(:try);
 
 =pod
 
@@ -283,33 +284,18 @@ sub new {
     ##############################################################
     # Work out the dependencies
 
-    my $deps = _findRelativeTo($buildpldir, 'DEPENDENCIES');
-    die 'Failed to find DEPENDENCIES' unless $deps && -f $deps;
-    my $condition = '';
-    if (-f $deps) {
-        open(PF, '<'.$deps) ||
-          die 'Failed to open '.$deps;
-        while (my $line = <PF>) {
-            if ($line =~ /^ONLYIF\s*(\(.*\))\s*$/) {
-                $condition = $1;
-            } elsif ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
-                push(@{$this->{dependencies}},
-                     { name=>$1, type=>$2, version=>'',
-                       description=>$3, trigger=>$condition});
-                $condition='';
-            } elsif ($line =~ m/^([^,]+),([^,]*),\s*(\w*)\s*,\s*(.+)$/o) {
-                push(@{$this->{dependencies}},
-                     { name=>$1, version=>$2, type=>$3, description=>$4,
-                       trigger=>$condition });
-                $condition='';
-            } elsif ($line !~ /^\s*$/ && $line !~ /^\s*#/) {
-                warn 'WARNING: LINE '.$line.' IN '.$deps.' IGNORED';
-            }
+    $this->_loadDependenciesFrom($buildpldir);
+
+    # Pull in dependencies from other modules
+    if( $this->{other_modules} ) {
+        foreach my $module (@{$this->{other_modules}}) {
+            try {
+                $this->_loadDependenciesFrom("$basedir/$module");
+            } catch Error::Simple with {
+                warn "WARNING: no dependencies in $basedir/$module ".shift;
+            };
         }
-    } else {
-        warn 'WARNING: no '.$deps.'; dependencies will only be extracted from code';
     }
-    close(PF);
 
     my $deptable = '';
     my $a = ' align="left"';
@@ -350,6 +336,65 @@ sub new {
 sub DESTROY {
     my $self = shift;
     File::Path::rmtree( $self->{tmpDir} ) if $self->{tmpDir};
+}
+
+sub _addDependency {
+    my $this = shift;
+    my %dep = @_;
+    my @existing = grep {$_->{name} eq $dep{name}} @{$this->{dependencies}};
+    if (scalar @existing) {
+        # SMELL: this is a crude merge of conditions, and probably not
+        # correct in some cases, but it will have to do
+        my $a = $existing[0]->{version};
+        my $b = $dep{version};
+        $a =~ s/[<>=]//g;
+        $b =~ s/[<>=]//g;
+        if ($a =~ /^[0-9.]+$/ && $b =~ /^[0-9.]+$/) {
+            if ($a < $b) {
+                $existing[0]->{version} = $dep{version};
+            }
+            return;
+        }
+    }
+    # New dependency
+    push(@{$this->{dependencies}}, \%dep);
+}
+
+sub _loadDependenciesFrom {
+    my( $this, $module) = @_;
+
+    my $deps = _findRelativeTo($module, 'DEPENDENCIES');
+    die 'Failed to find DEPENDENCIES for '.$module unless $deps && -f $deps;
+    my $condition = '';
+    if (-f $deps) {
+        open(PF, '<'.$deps) || die 'Failed to open '.$deps;
+        while (my $line = <PF>) {
+            if ($line =~ /^ONLYIF\s*(\(.*\))\s*$/) {
+                $condition = $1;
+            } elsif ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
+                $this->_addDependency(
+                    name=>$1,
+                    type=>$2,
+                    version=>'',
+                    description=>$3,
+                    trigger=>$condition);
+                $condition='';
+            } elsif ($line =~ m/^([^,]+),([^,]*),\s*(\w*)\s*,\s*(.+)$/o) {
+                $this->_addDependency(
+                    name=>$1,
+                    version=>$2,
+                    type=>$3,
+                    description=>$4,
+                    trigger=>$condition);
+                $condition='';
+            } elsif ($line !~ /^\s*$/ && $line !~ /^\s*#/) {
+                warn 'WARNING: LINE '.$line.' IN '.$deps.' IGNORED';
+            }
+        }
+    } else {
+        warn 'WARNING: no '.$deps.'; dependencies will only be extracted from code';
+    }
+    close(PF);
 }
 
 sub _get_svn_version {
