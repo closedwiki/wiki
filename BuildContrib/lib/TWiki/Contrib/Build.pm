@@ -45,7 +45,9 @@ The following targets will always exist:
 | pod | build POD documentation of the package |
 | release | build, pod and package a release zip |
 | upload | build, pod, package and upload to twiki.org |
-| manifest | print a guess at the MANIFEST to STDOUT |
+| manifest | print a guess at the MANIFEST |
+| history | Update the history in the topic for an extension |
+| dependencies | Find and print missing dependencies (for DEPENDENCIES) |
 Note: if you override any of these targets it is generally wise to call the SUPER version of the target!
 
 ---+++ Standard directory structure
@@ -1300,50 +1302,50 @@ Generate and print to STDOUT a rough guess at the MANIFEST listing
 
 =cut
 
-my %manilist;
-my $rootdir;
+my $collector;
 sub target_manifest {
     my $this = shift;
 
+    $collector = $this;
     my $manifest = _findRelativeTo($buildpldir,'MANIFEST');
     if( $manifest && -e $manifest ) {
         open(F, '<'.$manifest) || die 'Could not open existing '.$manifest;
         local $/ = undef;
-        %manilist = map{ /^(.*?)(\s+.*)?$/; $1 => ($2||'') } split(/\r?\n/, <F> );
+        %{$collector->{manilist}} = map{ /^(.*?)(\s+.*)?$/; $1 => ($2||'') } split(/\r?\n/, <F> );
         close(F);
     } else {
         $manifest = $buildpldir.'/MANIFEST';
     }
     require File::Find;
+    $collector->{manilist} = ();
+    print STDERR "Gathering from $this->{basedir}\n";
 
-    $rootdir = $this->{basedir};
-    print STDERR "Gathering from $rootdir\n";
-
-    File::Find::find(\&_manicollect, $rootdir);
+    File::Find::find(\&_manicollect, $this->{basedir});
     print '# DRAFT ',$manifest,' follows:',$NL;
     print '################################################',$NL;
-    for (sort keys %manilist) {
-        print $_.' '.$manilist{$_}.$NL;
+    for (sort keys %{$collector->{manilist}}) {
+        print $_.' '.$collector->{manilist}{$_}.$NL;
     }
     print '################################################',$NL;
     print '# Copy and paste the text between the ###### lines into the file',$NL;
     print '# '.$manifest,$NL;
     print '# to create an initial manifest. Remove any files',$NL;
-    print '# that should _not_ be released (such as build.pl!), and add a',$NL;
-    print '# description of each file in place of NEW.',$NL;
+    print '# that should _not_ be released, and add a',$NL;
+    print '# description of each file at the end of each line.',$NL;
 }
 
 sub _manicollect {
     if( /^(CVS|\.svn|twikiplugins)$/ ) {
         $File::Find::prune = 1;
     } elsif ( !-d && /^\w.*\w$/ &&
-                !/^DEPENDENCIES$/ &&
-                  !/^MANIFEST$/ &&
-                    !/^[A-Z]+INSTALL$/ &&
-                      !/^build.pl$/ ) {
+                !/^(DEPENDENCIES|MANIFEST|(PRE|POST)INSTALL|build\.pl)$/ &&
+               !/$collector->{project}\.(md5|zip|tgz|txt)/) {
         my $n = $File::Find::name;
-        $n =~ s/$rootdir\/?//;
-        $manilist{$n} = 'NEW' unless exists $manilist{$n};
+        my @a = stat($n);
+        my $perms = sprintf("%04o", $a[2] & 0777);
+        $n =~ s/$collector->{basedir}\/?//;
+        $collector->{manilist}{$n} = $perms
+          unless exists $collector->{manilist}{$n};
     }
 }
 
@@ -1481,6 +1483,97 @@ sub target_history {
     print OUT join("\n", map { "|  $_->[0] | $_->[1] |" } @history);
     print OUT "\n$post";
     close(OUT);
+}
+
+=pod
+
+---++++ target_dependencies
+
+Extract and print all dependencies, in standard DEPENDENCIES syntax.
+Requires B::PerlReq. Analyses perl sources in !includes as well.
+
+All dependencies except those on pragmas (strict, integer etc) are
+extracted.
+
+=cut
+
+sub target_dependencies {
+    my $this = shift;
+    local $/ = "\n";
+
+    eval 'use B::PerlReq';
+    die "B::PerlReq is required for 'dependencies': $@" if $@;
+
+    foreach my $m qw(strict vars diagnostics base bytes constant integer locale overload warnings Assert TWiki) {
+        $this->{satisfied}{$m} = 1;
+    }
+    # See if we already know about it
+    foreach my $dep (@{$this->{dependencies}}) {
+       $this->{satisfied}{$dep->{name}} = 1;
+    }
+
+    $this->{extracted_deps} = undef;
+    my @queue;
+    my %tainted;
+    foreach my $file (@{$this->{files}}) {
+        my $is_perl = 0;
+        my $pmfile = $file->{name};
+        if ($pmfile =~ /\.p[ml]$/o &&
+              $pmfile !~ /build.pl/ &&
+                $pmfile !~ /TEMPLATE_installer.pl/) {
+            $is_perl = 1;
+        } else {
+            my $testfile = $this->{basedir}.'/'.$pmfile;
+            if (-e $testfile) {
+                open(PMFILE,"<$testfile") || die "$testfile: $!";
+                my $fline = <PMFILE>;
+                if ($fline && $fline =~ m.#!/usr/bin/perl.) {
+                    $is_perl = 1;
+                    $tainted{$pmfile} = '-T' if $fline =~ /-T/;
+                }
+                close(PMFILE);
+            }
+        }
+        if ($pmfile =~ /^lib\/(.*)\.pm$/) {
+            my $f = $1;
+            $f =~ s.CPAN/lib/..;
+            $f =~ s./.::.g;
+            $this->{satisfied}{$f} = 1;
+        }
+        if ($is_perl) {
+            $tainted{$pmfile} = '' unless defined $tainted{$pmfile};
+            push(@queue, $pmfile);
+        }
+    }
+
+    my $inc = '-I'.join(' -I', @INC);
+    foreach my $pmfile (@queue) {
+        die unless defined $basedir;
+        die unless defined $inc;
+        die unless defined $pmfile;
+        die $pmfile unless defined $tainted{$pmfile};
+        my $deps = `cd $basedir && perl $inc $tainted{$pmfile} -MO=PerlReq,-strict $pmfile 2>/dev/null`;
+        $deps =~ s/perl\((.*?)\)/$this->_addDep($pmfile, $1)/ge if $deps;
+    }
+
+    print "MISSING DEPENDENCIES:\n";
+    my $depcount = 0;
+    foreach my $module (sort keys %{$this->{extracted_deps}}) {
+        print "$module,>=0,cpan,May be required for ".
+          join(', ',@{$this->{extracted_deps}{$module}})."\n";
+        $depcount++;
+    }
+    print $depcount.' missing dependenc'.($depcount==1?'y':'ies')."\n";
+}
+
+sub _addDep {
+    my ($this, $from, $file) = @_;
+
+    $file =~ s./.::.g;
+    $file =~ s/\.pm$//;
+    return '' if $this->{satisfied}{$file};
+    push(@{$this->{extracted_deps}{$file}},$from);
+    return '';
 }
 
 1;

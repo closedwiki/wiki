@@ -4,3 +4,9 @@ File::Spec,>=0.86,cpan,Used to convert relative paths to absolute. Available fro
 File::Find,>=1.05,cpan,Used to find file components. Available from CPAN:File::Find
 File::Copy,>=2.06,cpan,Used to copy files. Available from CPAN:File::Copy
 File::Path,>1000000,cpan,Used to build paths. Available from CPAN:File::Path
+CGI,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
+Carp,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
+Error,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
+Exporter,>=0,cpan,May be required for lib/TWiki/Contrib/BuildContrib/BaseBuild.pm
+LWP,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
+POSIX,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
