@@ -75,10 +75,11 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this topic]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 31 Jan 2006 (v2.0.0) | 
+|  Skin Version: | 26 Jun 2006 (v2.0.3) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
-|  31 Jan 2006: | v.2.0.0 - DAKAR RELEASE VERSION |
-|  28 Aug 2004: | v.1.0.9 - CAIRO RELEASE VERSION |
+|  26 Jun 2006: | v.2.0.3 - TWiki 4.0.3 (Dakar) RELEASE VERSION |
+|  31 Jan 2006: | v.2.0.0 - TWiki 4.0.0 (Dakar) RELEASE VERSION |
+|  28 Aug 2004: | v.1.0.9 - TWiki 3.0 (Cairo) RELEASE VERSION |
 |  08 Aug 2004: | Initial version (v1.0.0) |
 |  Dependencies: | TWiki:Plugins/TwistyContrib (automatically supported by Dakar) |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
