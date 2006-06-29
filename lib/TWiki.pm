@@ -1457,7 +1457,7 @@ sub _writeReport {
 
 sub _removeNewlines {
     my( $theTag ) = @_;
-    $theTag =~ s/[\r\n]+//gs;
+    $theTag =~ s/[\r\n]+/ /gs;
     return $theTag;
 }
 
