@@ -48,7 +48,7 @@ msgstr "%1 - Registro de %2 (%3)"
 
 #: data/TWiki/NewUserTemplate.txt:68
 msgid "%1 - complete TWiki documentation, Quick Start to Reference"
-msgstr "%1 - Completar la documentación Twiki, Inicio rápido para referencias"
+msgstr "%1 - Completar la documentación TWiki, Inicio rápido para referencias"
 
 #: data/TWiki/NewUserTemplate.txt:70
 msgid "%1 - just for me"
@@ -56,15 +56,15 @@ msgstr "%1 - Sólo para mi"
 
 #: data/TWiki/NewUserTemplate.txt:67
 msgid "%1 - starting points on TWiki"
-msgstr "%1 - Puntos iniciales en Twiki"
+msgstr "%1 - Puntos iniciales en TWiki"
 
 #: data/TWiki/NewUserTemplate.txt:69
 msgid "%1 - try out TWiki on your own"
-msgstr "%1 - Prueba Twiki por tí mismo"
+msgstr "%1 - Prueba TWiki por tí mismo"
 
 #: data/TWiki/NewUserTemplate.txt:66
 msgid "%1 - view a short introductory presentation on TWiki for beginners"
-msgstr "%1 - Ver una pequeña presentación introductoria en Twiki para principiantes"
+msgstr "%1 - Ver una pequeña presentación introductoria en TWiki para principiantes"
 
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:3
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:3
@@ -90,12 +90,12 @@ msgstr "%1 Para cambiar la contraseña"
 
 #: data/TWiki/NewUserTemplate.txt:93
 msgid "%1 has a list of other TWiki users"
-msgstr "%1 Tiene una lista de otros usuarios Twiki"
+msgstr "%1 Tiene una lista de otros usuarios TWiki"
 
 #: data/TWiki/ChangeEmailAddress.txt:17 data/TWiki/ChangePassword.txt:7
 #: data/TWiki/ResetPassword.txt:10
 msgid "%1 has a list of other TWiki users."
-msgstr "%1 Tiene una lista de otros usuarios Twiki."
+msgstr "%1 Tiene una lista de otros usuarios TWiki."
 
 #: templates/messages.tmpl:359
 msgid ""
@@ -116,7 +116,7 @@ msgstr "Inicio"
 
 #: data/TWiki/NewUserTemplate.txt:94
 msgid "%1 is a list of TWiki user documentation"
-msgstr "%1 Es una lista de documentación de usuarios Twiki"
+msgstr "%1 Es una lista de documentación de usuarios TWiki"
 
 #: templates/messages.tmpl:106
 msgid "%1 is an invalid name for a new web"
@@ -144,7 +144,7 @@ msgstr "%1 es la página por default para adjuntos borrados."
 
 #: data/TWiki/NewUserTemplate.txt:95
 msgid "%1 lists all TWiki user tools"
-msgstr "%1  lista todas las herramientas para usuarios Twiki"
+msgstr "%1  lista todas las herramientas para usuarios TWiki"
 
 #: templates/messages.tmpl:365
 msgid "%1 may still be editing %2."
@@ -419,13 +419,13 @@ msgid ""
 "before registering."
 msgstr ""
 "*Importante:* la información proporcionada en esta forma será almacenada en"
-"una base de datos en el servidor Twiki. Esta base de datos es accesible para"
+"una base de datos en el servidor TWiki. Esta base de datos es accesible para"
 "cualquiera que pueda accesar el servidor a través de la web (de todas maneras"
 "las contraseñas serán encriptadas, y los correos electronicos serán ofuscados"
 "para prevenir correo basura). Tu país, o el país donde el servidor es recibido"
 "puede tener leyes de protección de datos gobernando el mantenimiento de dichas"
 "bases de datos. Si tienes alguna duda, deberías contactar %1 para obtener"
-"detalles acerca de la politica de proteccion de datos de este servidor Twiki"
+"detalles acerca de la politica de proteccion de datos de este servidor TWiki"
 "antes de registrarse."
 
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:29
@@ -1466,7 +1466,7 @@ msgstr "Si ya sabe el nombre de la página, introduzca el nombre de la página e
 msgid ""
 "If you are developing a <nop>TWikiApplication, see %1 for a description of "
 "the correct parameters."
-msgstr "Si está creando un <nop>TwikiApplication, vea %1 para la descripción"
+msgstr "Si está creando un <nop>TWikiApplication, vea %1 para la descripción"
 "los parametros correctos."
 
 #: templates/messages.tmpl:415
@@ -1563,7 +1563,7 @@ msgstr "En orden inverso"
 msgid ""
 "In some cases, TWiki changes the name of the uploaded file to make it safe "
 "and accessible across all platforms:"
-msgstr "En algunos casos, Twiki cambia el nombre del archivo cargado para"
+msgstr "En algunos casos, TWiki cambia el nombre del archivo cargado para"
 "hacerlo seguro para todas las plataformas: "
 
 #: templates/messages.tmpl:216
@@ -2058,7 +2058,7 @@ msgid ""
 "Read %1 to get a quick overview of this collaboration platform. To learn "
 "more, study the TWikiTutorial, which is accessible from the same link."
 msgstr "Lea %1 para obtener una vista rapida de esta plataforma de colaboración."
-"Para aprender mas estudie el TwikiTutorial, el cual esta accesible en el mismo"
+"Para aprender mas estudie el TWikiTutorial, el cual esta accesible en el mismo"
 "enlace."
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:43
@@ -2474,7 +2474,7 @@ msgstr "CONSEJO: Para buscar por todos los páginas que contengan =\"SOAP\"=, =\
 #: templates/mailresetpassword.tmpl:3
 #: twikiplugins/ClassicSkin/templates/mailresetpassword.classic.tmpl:3
 msgid "TWiki password reset for %1"
-msgstr "Reinicialice su contraseña Twiki para %1"
+msgstr "Reinicialice su contraseña TWiki para %1"
 
 #: templates/oopschangelanguage.tmpl:13
 msgid ""
@@ -2482,7 +2482,7 @@ msgid ""
 "change the language for this session, choose one of the following and hit "
 "\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
 "the page to return to the previous topic."
-msgstr "La interfase para usuarios Twiki está disponible en diferentes lenguajes."
+msgstr "La interfase para usuarios TWiki está disponible en diferentes lenguajes."
 "Si usted quiere cambiar el lenguaje para esta sesión, escoja uno de los siguientes"
 "y presione \"Change language\". Si no es asi, siga el enlace \"Cancel\" en el fondo"
 "de la pagina para regresar al página anterior."
@@ -2546,7 +2546,7 @@ msgstr "La web %1 esta en la zona de pruebas que puede usar para pruebas. todos 
 msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
 "Enterprise."
-msgstr "La web %1 de Twiki. Twiki es una plataforma de colaboración basada en"
+msgstr "La web %1 de TWiki. TWiki es una plataforma de colaboración basada en"
 "la web para uso empresarial."
 
 #: templates/messages.tmpl:237
@@ -2669,7 +2669,7 @@ msgid ""
 "This form applies only if TWiki uses a {PasswordManager} that supports "
 "changing passwords. Otherwise replace this topic with a note describing how "
 "to change the password in your organization."
-msgstr "Esta forma aplica solamente si Twiki usa un {PasswordManager} que soporte"
+msgstr "Esta forma aplica solamente si TWiki usa un {PasswordManager} que soporte"
 "cambiar contraseñas. De otra manera remplace esta página con una nota describiendo"
 "cómo cambiar la contraseña en su organización."
 
@@ -2680,7 +2680,7 @@ msgid ""
 "notifications of password changes. The addresses you register via this form "
 "are kept secret and will *not* be published anywhere on this site."
 msgstr "Esta forma es usada para cambiar sus direcciones de correo electronico."
-"Sus correos electronicos registrados son usados por Twiki para enviar sus correos,"
+"Sus correos electronicos registrados son usados por TWiki para enviar sus correos,"
 "incluyendo notificaciones de cambios de contraseña- Las direcciones que usted registre"
 "por esta forma son mantenidas en secreto y *no* serán publicadas en ningún lado"
 "de este sitio."
@@ -2775,7 +2775,7 @@ msgstr "Para borrar esta web: Mueva esta web a el web basura renombrandolo"
 msgid ""
 "To edit pages on this TWikiSite, you must have a registered user name and "
 "password."
-msgstr "Para editar paginas en este TwikiSite, deberá tener un nombre de usuario"
+msgstr "Para editar paginas en este TWikiSite, deberá tener un nombre de usuario"
 "registrado y una contraseña."
 
 #: templates/oopsleaseconflict.tmpl:19
@@ -3157,7 +3157,7 @@ msgstr "Puede mover la página a una diferente web."
 
 #: templates/messages.tmpl:135
 msgid "You can review your changes in your personal TWiki topic %1"
-msgstr "Puede revisar sus cambios en su página personal Twiki %1"
+msgstr "Puede revisar sus cambios en su página personal TWiki %1"
 
 #: templates/messages.tmpl:31
 msgid "You can see the differences [[%1][here]]."
@@ -3178,7 +3178,7 @@ msgstr "No se puede registrar dos veces, el nombre %1 ha sido registrado previam
 msgid ""
 "You may be able to get your TWiki administrator to change the settings if "
 "they are inappropriate for your environment."
-msgstr "Puede que no pueda obtener su administrador Twiki para cambiar la"
+msgstr "Puede que no pueda obtener su administrador TWiki para cambiar la"
 "configuración si son inapropiadas para su entorno."
 
 #: templates/messages.tmpl:148
@@ -3200,7 +3200,7 @@ msgid ""
 "You really ought to register a valid e-mail address. If TWiki can't find a "
 "registered e-mail for you in the secret database, it will look in your user "
 "topic for a line like this:"
-msgstr "Realmente deberá de registrar un correo electronico. Si Twiki no puede"
+msgstr "Realmente deberá de registrar un correo electronico. Si TWiki no puede"
 "encontrar un correo electronico registrado de usted en la base de datos secreta,"
 "buscará en la página del usuario por una linea como esta:"
 
