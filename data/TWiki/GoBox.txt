@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1151720041" format="1.1" reprev="1.2" version="1.2"}%
 ---+ Go Box
 The box at the top or sidebar of each page, also called Jump box. 
 
@@ -10,6 +10,9 @@ Enter a topic name to quickly jump to the topic, for example:
 
 Enter part of a topic name to get a list of similar topics, for example:
    * *faq* to get %SEARCH{ "faq" scope="topic" nosearch="on" nototal="on" format="[[$topic]]" separator=", " }%
+   * *%MAINWEB%.users*  to jump to the %MAINWEB% web from any web, and get a list of topics about users (all in one step)
+
+__%T% Tip:__ Entering part of a topic name is a simple, yet powerful way to quickly navigate to content of interest, also in a large wiki.
 
 __Note:__ The Go box is not a search box
 
