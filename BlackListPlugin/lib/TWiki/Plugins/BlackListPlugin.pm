@@ -269,22 +269,7 @@ sub beforeSaveHandler
     my $spamListRegex = _getSpamListRegex();
     return if( $spamListRegex =~ /\(\)$/ ); # empty list
     if( $_[0] =~ /$spamListRegex/ ) {
-        my $badword = $1;
-        my $cgiQuery = TWiki::Func::getCgiQuery();
-        if( $cgiQuery ) {
-            _handleBanList( "add", $remoteAddr );
-            _writeLog( "SPAMLIST add: $remoteAddr, topic spam '$badword'" );
-
-            my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
-                      "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
-            $msg =~ s/%WIKISPAMWORD%/$badword/;
-            my $ok = "[[http://en.wikipedia.org/wiki/Spamdexing][OK]]";
-            $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
-            print $cgiQuery->redirect( $url );
-            exit 0; # should never reach this
-        }
-        # else (unlikely case) force a "500 Internal Server Error" error
-        exit 1;
+        _oopsMessage( "topic", $1, $remoteAddr );
     }
 }
 
@@ -303,34 +288,48 @@ sub beforeAttachmentSaveHandler
     # Bail out unless spam filtering is enabled
     return unless( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_FILTERWIKISPAM" ) );
 
-    # test only .htm and .html attachments
-    return unless( $attachmentName =~ m/(\.html?|\.txt)$/i );
+    # test only attachments of type .html and a few more
+    return unless( $attachmentName =~ m/\.(html?|txt|js|css)$/i );
 
     # exclude white list
     my $whiteList = _getWhiteListRegex();
     my $remoteAddr = $ENV{'REMOTE_ADDR'}   || "";
     return if( $remoteAddr =~ /^$whiteList/ );
 
+    # check for evil eval() spam in <script>
+    my $text = TWiki::Func::readFile( $tmpFilename );
+    if( $text =~ /<script.*?eval *\(.*?<\/script>/gis ) {
+        _oopsMessage( "html", "script eval", $remoteAddr );
+    }
+
+    # check for known spam signatures
     my $spamListRegex = _getSpamListRegex();
     return if( $spamListRegex =~ /\(\)$/ ); # empty list
-    if( TWiki::Func::readFile( $tmpFilename ) =~ /$spamListRegex/ ) {
-        my $badword = $1;
-        my $cgiQuery = TWiki::Func::getCgiQuery();
-        if( $cgiQuery ) {
-            _handleBanList( "add", $remoteAddr );
-            _writeLog( "SPAMLIST add: $remoteAddr, html spam '$badword'" );
-
-            my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
-                      "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
-            $msg =~ s/%WIKISPAMWORD%/$badword/;
-            my $ok = "[[http://en.wikipedia.org/wiki/Spamdexing][OK]]";
-            $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
-            print $cgiQuery->redirect( $url );
-            exit 0; # should never reach this
-        }
-        # else (unlikely case) force a "500 Internal Server Error" error
-        exit 1;
+    if( $text =~ /$spamListRegex/ ) {
+        _oopsMessage( "html", $1, $remoteAddr );
     }
+}
+
+# =========================
+sub _oopsMessage
+{
+    my ( $type, $badword, $remoteAddr ) = @_;
+
+    my $cgiQuery = TWiki::Func::getCgiQuery();
+    if( $cgiQuery ) {
+        _handleBanList( "add", $remoteAddr );
+        _writeLog( "SPAMLIST add: $remoteAddr, $type spam '$badword'" );
+
+        my $msg = TWiki::Func::getPreferencesValue( "\U$pluginName\E_WIKISPAMMESSAGE" ) ||
+                  "Spam detected, '%WIKISPAMWORD%' is a banned word and cannot be saved.";
+        $msg =~ s/%WIKISPAMWORD%/$badword/;
+        my $ok = "[[http://en.wikipedia.org/wiki/Spamdexing][OK]]";
+        $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsblacklist", $msg, $ok );
+        print $cgiQuery->redirect( $url );
+        exit 0; # should never reach this
+    }
+    # else (unlikely case) force a "500 Internal Server Error" error
+    exit 1;
 }
 
 # =========================
@@ -358,9 +357,15 @@ sub _getSpamListRegex
     my $text = _getSpamMergeText() . "\n" . _handleSpamList( "read", "" );
     $text =~ s/ *\#.*//go;      # strip comments
     $text =~ s/.*?[ <>].*//go;  # remove all lines that have spaces or HTML <tags>
+
+    # Remove patterns in exclude list
+    my $excludeRE = join( '|', map{ quotemeta } split( /[\n\r]+/, _handleExcludeList( "read", "" ) ) );
+    $text =~ s/\b($excludeRE)\b//gs;
+
+    # Build regex
     $text =~ s/^[\n\r]+//os;
     $text =~ s/[\n\r]+$//os;
-    $text =~ s/[\n\r]+/\|/gos;  # build regex
+    $text =~ s/[\n\r]+/\|/gos;
     $text = "http://[\\w\\.\\-:\\@/]*?($text)";
     TWiki::Func::saveFile( $cacheFile, $text );
     return $text;
@@ -476,6 +481,64 @@ sub _handleSpamList
 }
 
 # =========================
+sub _handleExcludeList
+{
+    my ( $theAction, $theValue ) = @_;
+    my $fileName = _makeFileName( "exclude_list", 0 );
+    writeDebug( "_handleExcludeList( Action: $theAction, value: $theValue, file: $fileName )" );
+    my $text = TWiki::Func::readFile( $fileName ) || "# The exclude-list is a generated file, do not edit\n";
+    if( $theAction eq "read" ) {
+        $text =~ s/^\#[^\n]*\n//s;
+        return $text;
+    }
+
+    my @errorMessages;
+    my @infoMessages;
+    foreach my $item (split( /,\s*/, $theValue )) {
+      $item =~ s/^\s+//;
+      $item =~ s/\s+$//;
+
+      if( $theAction eq "add" ) {
+        if( $text =~ /\n\Q$item\E\n/s ) {
+            push @infoMessages, "Warning: Exclude pattern '$item' is already on the list";
+            next;
+        }
+        $text .= "$item\n";
+        push @infoMessages, "Note: Added exclude pattern '$item'";
+        unlink( _makeFileName( "spam_regex" ) ); # remove cache
+
+      } elsif( $theAction eq "remove" ) {
+        unless( ( $item ) && ( $text =~ s/(\n)\Q$item\E\n/$1/s ) ) {
+            push @errorMessages, "Error: Exclude pattern '$item' not found";
+            next;
+        }
+        push @infoMessages, "Note: Removed exclude pattern '$item'";
+        unlink( _makeFileName( "spam_regex" ) ); # remove cache
+
+      } else {
+        # never reach
+        return "Error: invalid action '$theAction'";
+      }
+    }
+
+    if (@errorMessages) {
+      writeDebug("excludelist=$text");
+      return '<div class="twikiAlert">' .  join("<br /> ", @errorMessages) . '</div>';
+
+    } else {
+      if (@infoMessages) {
+        # SMELL: overwrites a concurrent save
+        writeDebug("excludelist=$text");
+        TWiki::Func::saveFile( $fileName, $text );
+        return '<br />' . join( "<br /> ", @infoMessages );
+
+      } else {
+        return 'Error: done nothing';
+      }
+    }
+}
+
+# =========================
 sub _handleBlackList
 {
     my( $theAttributes, $theWeb, $theTopic ) = @_;
@@ -510,13 +573,18 @@ sub _handleBlackList
         $text =~ s/[\n\r]+$//os;
         $text =~ s/[\n\r]+/, /gos;
 
+    } elsif( $action eq "exclude_show" ) {
+        $text = _handleExcludeList( "read", "" );
+        $text =~ s/[\n\r]+$//os;
+        $text =~ s/[\n\r]+/, /gos;
+
     } elsif( $action eq "spam_show_n" ) {
         $text = _handleSpamList( "read", "" );
 
     } elsif( $action eq "user_score" ) {
         $text = $userScore;
 
-    } elsif( $action =~ /^(ban_add|ban_remove|spam_add|spam_remove)$/ ) {
+    } elsif( $action =~ /^(ban_add|ban_remove|spam_add|spam_remove|exclude_add|exclude_remove)$/ ) {
         my $anchor = "#BanList";
         if( "$theWeb.$theTopic" eq "$installWeb.$pluginName" ) {
             my $wikiName = &TWiki::Func::userToWikiName( $user );
@@ -531,10 +599,18 @@ sub _handleBlackList
                     $text .= _handleSpamList( "add", $value );
                     $anchor = "#SpamList";
                     _writeLog( "SPAMLIST add: $value, by user" );
-                } else {
+                } elsif( $action eq "spam_remove" ) {
                     $text .= _handleSpamList( "remove", $value );
                     $anchor = "#SpamList";
                     _writeLog( "SPAMLIST delete: $value by user" );
+                } elsif( $action eq "exclude_add" ) {
+                    $text .= _handleExcludeList( "add", $value );
+                    $anchor = "#ExcludeList";
+                    _writeLog( "EXCLUDELIST add: $value, by user" );
+                } else {
+                    $text .= _handleExcludeList( "remove", $value );
+                    $anchor = "#ExcludeList";
+                    _writeLog( "EXCLUDELIST delete: $value by user" );
                 }
             } else {
                 $text = "Error: You do not have permission to maintain the list";
@@ -697,7 +773,7 @@ sub _writeLog
     my ( $theText ) = @_;
     if( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_LOGACCESS" ) ) {
         # FIXME: Call to unofficial function
-        $TWiki::Plugins::SESSION
+        $TWiki::Plugins::SESSION > 1.1
           ? $TWiki::Plugins::SESSION->writeLog( "blacklist", "$web.$topic", $theText )
           : TWiki::Store::writeLog( "blacklist", "$web.$topic", $theText );
         writeDebug( "BLACKLIST access, $web/$topic, $theText" );

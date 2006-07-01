@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1149289950" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="TWikiContributor" date="1151731346" format="1.0" version="1.15"}%
 ---+!! Black List Plugin
 
 %TOC%
@@ -61,7 +61,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		4 Points for view raw
 		5 Threshold to add to BANLIST
 		6 Measured over time (in seconds)
-		* Set BANLISTCONFIG = 20, 5, 1, 20, 120, 300
+		* Set BANLISTCONFIG = 10, 5, 1, 20, 120, 300
 		* Your current score: %BLACKLISTPLUGIN{ action="user_score" }% for IP address %REMOTE_ADDR%
 
 	* Message for users on BLACKLIST and BANLIST:
@@ -79,6 +79,13 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Local SPAMLIST: Manually maintained list of spam patterns (NOTE: *Must be* %TWIKIWEB%.RegularExpression patterns)
 		* Action: <select name="spam_action"> <option></option> <option value="spam_add">Add</option> <option value="spam_remove">Remove</option> </select> wiki-spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{spam_action}%" value="%URLPARAM{spam}%" }%
 		* Current list: %BLACKLISTPLUGIN{ action="spam_show" }%
+</form>
+
+#ExcludeList
+<form name="spamlist" action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%#ExcludeList" method="post">
+	* EXCLUDELIST: Manually maintained list of exceptions to public wiki-spam patterns, useful to exclude patterns listed incorrectly as spam (NOTE: *Must be* %TWIKIWEB%.RegularExpression patterns)
+		* Action: <select name="exclude_action"> <option></option> <option value="exclude_add">Add</option> <option value="exclude_remove">Remove</option> </select> exclude spam regex pattern(s) <code>http://.*?</code><input type="text" name="spam" size="32" value="" /> <input type="submit" value="Submit" /> %BLACKLISTPLUGIN{ action="%URLPARAM{exclude_action}%" value="%URLPARAM{spam}%" }%
+		* Current list: %BLACKLISTPLUGIN{ action="exclude_show" }%
 </form>
 
 	* Public wiki-spam list: Big list of wiki-spam patterns, retrieved from external web site (thanks to <nop>MoinMoin's [[http://moinmoin.wikiwikiweb.de/AntiSpamGlobalSolution][AntiSpamGlobalSolution]] wiki-spam list)
@@ -132,12 +139,14 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 	* Wiki-spam filtering for HTML attachments works in TWiki 01-Sep-2004 and later.
 	* With TWiki 4.0.2 on some platforms, notably Solaris, attached files are uploaded with a zero file size. This is because there is a bug in how TWiki 4.0.2 handles the beforeAttachmentSaveHandler. If affected, upgrade TWiki or apply bug fix [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2390][Item2390]]
+	* Scan for script eval in attachments is currently hardcoded
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 02 Jun 2006 (r10442) |
+|  Plugin Version: | 01 Jul 2006 (r10768) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  01 Jul 2006: | Added EXCLUDELIST; scan for evil script eval in attachments; scan also .js and .css attachments; fixed writeLog error on Cairo |
 |  02 Jun 2006: | Added wiki-spam filtering for HTML attachments to combat TWiki:Codev.HtmlAttachmentSpam |
 |  29 Apr 2006: | Added =%<nop>BLACKLISTPLUGIN{ action="spam_show_n" }%= that shows the local spam list in a shareable format with newline separator |
 |  07 Feb 2006: | TWiki Release 4.0 fix to allow registration with e-mail verification, reset password and approve |
@@ -163,5 +172,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, [[http://directory.google.com/Top/Computers/Internet/Abuse/Spam/Wikispam/][Google wiki spam directory]]
 
--- TWiki:Main/PeterThoeny - 02 Jun 2006
+-- TWiki:Main/PeterThoeny - 01 Jul 2006
 
