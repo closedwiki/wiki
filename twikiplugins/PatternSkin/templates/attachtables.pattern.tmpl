@@ -39,8 +39,10 @@
 	if (table) {
 		var count = table.getElementsByTagName("tr").length - 1;
 		var countStr = "(" + count + ")";
-		document.getElementById('attachmentsshowlink').firstChild.data += " " + countStr;
-		document.getElementById('attachmentshidelink').firstChild.data += " " + countStr;
+		var showlink = document.getElementById('attachmentsshowlink');
+		if (showlink != undefined) showlink.firstChild.data += " " + countStr;
+		var hidelink = document.getElementById('attachmentshidelink');
+		if (hidelink != undefined) hidelink.firstChild.data += " " + countStr;
 	}
 //]]>
 </script>
