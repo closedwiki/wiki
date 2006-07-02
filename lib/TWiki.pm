@@ -1506,18 +1506,17 @@ sub _fixIncludeLink {
 
 # Clean-up HTML text so that it can be shown embedded in a topic
 sub _cleanupIncludedHTML {
-    my( $text, $host, $path ) = @_;
+    my( $text, $host, $path, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) = @_;
 
     # FIXME: Make aware of <base> tag
 
-    $text =~ s/^.*?<\/head>//is;            # remove all HEAD
-    $text =~ s/<script.*?<\/script>//gis;   # remove all SCRIPTs
-    $text =~ s/^.*?<body[^>]*>//is;         # remove all to <BODY>
-    $text =~ s/(?:\n)<\/body>.*//is;        # remove </BODY>
-    $text =~ s/(?:\n)<\/html>.*//is;        # remove </HTML>
-    $text =~ s/(<[^>]*>)/_removeNewlines($1)/ges;
-    # SMELL: this will miss all JavaScript links
-    $text =~ s/(\s(?:href|src|action)=(["']))(.*?)\2/$1._rewriteURLInInclude( $host, $path, $3 ).$2/geois;
+    $text =~ s/^.*?<\/head>//is                  unless ( $disableremoveheaders );   # remove all HEAD
+    $text =~ s/<script.*?<\/script>//gis         unless ( $disableremovescript );    # remove all SCRIPTs
+    $text =~ s/^.*?<body[^>]*>//is               unless ( $disableremovebody );      # remove all to <BODY>
+    $text =~ s/(?:\n)<\/body>.*//is              unless ( $disableremovebody );      # remove </BODY>
+    $text =~ s/(?:\n)<\/html>.*//is              unless ( $disableremoveheaders );   # remove </HTML>
+    $text =~ s/(<[^>]*>)/_removeNewlines($1)/ges unless ( $disablecompresstags );    # replace newlines in html tags with space
+    $text =~ s/(\s(?:href|src|action)=(["']))(.*?)\2/$1._rewriteURLInInclude( $host, $path, $3 ).$2/geois unless ( $disablerewriteurls );
 
     return $text;
 }
@@ -1540,7 +1539,7 @@ sub applyPatternToIncludedText {
 
 # Fetch content from a URL for inclusion by an INCLUDE
 sub _includeUrl {
-    my( $this, $theUrl, $thePattern, $theWeb, $theTopic, $theRaw ) = @_;
+    my( $this, $theUrl, $thePattern, $theWeb, $theTopic, $theRaw, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) = @_;
     my $text = '';
     my $host = '';
     my $port = 80;
@@ -1574,7 +1573,7 @@ sub _includeUrl {
             $text = $this->{store}->readAttachment( undef, $web, $topic,
                                                     $attname );
             $text = _cleanupIncludedHTML( $text, $this->{urlHost},
-                                          $TWiki::cfg{PubUrlPath} ) unless $theRaw;
+                                          $TWiki::cfg{PubUrlPath}, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) unless $theRaw;
             $text = applyPatternToIncludedText( $text, $thePattern )
               if( $thePattern );
             return $text;
@@ -1611,7 +1610,7 @@ sub _includeUrl {
             if( $port != 80 ) {
                 $host .= ":$port";
             }
-            $text = _cleanupIncludedHTML( $text, $host, $path ) unless $theRaw;
+            $text = _cleanupIncludedHTML( $text, $host, $path, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) unless $theRaw;
         } elsif( $contentType =~ /^text\/(plain|css)/ ) {
             # do nothing
         } else {
@@ -2666,10 +2665,15 @@ sub _INCLUDE {
     my $raw = $params->remove('raw') || '';
     my $warn = $params->remove('warn')
       || $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
+    my $disableremoveheaders  = $params->remove('disableremoveheaders')  || '';
+    my $disableremovescript   = $params->remove('disableremovescript')   || '';
+    my $disableremovebody     = $params->remove('disableremovebody')     || '';
+    my $disablecompresstags   = $params->remove('disablecompresstags')   || '';
+    my $disablerewriteurls    = $params->remove('disablerewriteurls')    || '';
 
     if( $path =~ /^https?\:/ ) {
         # include web page
-        return $this->_includeUrl( $path, $pattern, $includingWeb, $includingTopic, $raw );
+        return $this->_includeUrl( $path, $pattern, $includingWeb, $includingTopic, $raw, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls );
     }
 
     $path =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
