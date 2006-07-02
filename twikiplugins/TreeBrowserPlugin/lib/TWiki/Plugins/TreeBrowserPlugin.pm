@@ -99,8 +99,6 @@ sub handleTreeView {
     $icons = 1 if ($type eq "icon");
     my $wrap = 0;
     $wrap = 1 if ($wraptext eq "on");
-    my $isunique = 0;
-    $isunique = 1 if ($unique eq "on");
     my $openall = 0;
     $openall = 1 if ($open2 eq "on");
     my $opento = 0;
@@ -131,8 +129,8 @@ sub renderTreeView
     $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
     my ( $rooticon, $docicon, $fldricon, $fldropenicon )
        = split( /, */, $theParams );
-    $width   = 16;
-    $height  = 16;
+    my $width   = 16;
+    my $height  = 16;
     $docicon = "$attach/page.gif" unless( $docicon );
     $docicon = "$docgraphics/$docicon" unless ( !$docicon || $docicon =~ m#/#o );
     #$docicon = fixImageTag( $docicon, $width, $height );
