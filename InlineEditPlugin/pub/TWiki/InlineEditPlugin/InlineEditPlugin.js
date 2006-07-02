@@ -135,16 +135,19 @@ InlineEditOnload = function() {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             tml2htmldivs[id] = elements[i];
         }
-        if (elements[i].className == 'inlineeditTopicInfo') {
-            var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
-            twikiTopicStatedivs[id] = elements[i];
-        }
+    }
+    elements = document.getElementsByTagName('button');
+    for (var i = 0; i < elements.length; i++) {
     }
     elements = document.getElementsByTagName('textarea');
     for (var i = 0; i < elements.length; i++) {
         if (elements[i].className == 'inlineeditTopicTML') {
             var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
             tmldivs[id] = elements[i].value;
+        }
+        if (elements[i].className == 'inlineeditTopicInfo') {
+            var id = elements[i].id.substring((elements[i].id.lastIndexOf('_'))+1, elements[i].id.length) * 1;
+            twikiTopicStatedivs[id] = elements[i];
         }
     }
     if (divs.length == 0) {
