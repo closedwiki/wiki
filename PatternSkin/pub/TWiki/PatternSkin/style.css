@@ -574,6 +574,10 @@ a.twikiLinkInHeaderRight {
 .patternTopic {
 	margin:1em 0 2em 0;
 }
+.patternTopic .patternBlockquote {
+	margin:1em 0 1em 5em;
+}
+
 #patternLeftBarContents {
 	font-size:94%; /*S2*/
 	padding:0 0 .5em 0;
