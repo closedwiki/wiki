@@ -50,10 +50,22 @@ H1, H2, H3, H4, H5, H6 {
 	line-height: 120%;
 }
 H1 {
+	font-size: 2em;
+	font-weight: 500;
 	margin: 0 0 0.7em 0;
 }
-H1, H2 {
+H2 {
+	font-size: 1.6em;
 	font-weight: 500;
+}
+H3 {
+	font-size: 1.2em;
+}
+H4 {
+	font-size: 1.1em;
+}
+H6 {
+	font-size: 0.85em;
 }
 OL LI, UL LI {
 	line-height: 1.3em;
@@ -91,6 +103,9 @@ OL LI, UL LI {
 }
 .PageHeader {
 	background-color: #f7f7f7;
+}
+.HomePathTitle {
+	font-size: 70%;
 }
 .MenuBar {
 	height: 21px;
@@ -185,6 +200,13 @@ OL LI, UL LI {
 	color: #000;
 	background: url("menu_over.gif") repeat-x center;
 }
+INPUT.twikiSubmitDisabled,
+INPUT.twikiSubmitDisabled:focus,
+INPUT.twikiSubmitDisabled:hover {
+	border: 1px solid #666;
+	color: #666;
+	background: #aaa;
+}
 .twikiToc {
 	margin: 1em 0;
 	padding: .3em 0 .6em 0;
@@ -223,6 +245,7 @@ a:visited .twistyLinkLabel {
 
 .tipsOfTheDay {
 	background-color: #def;
+	border: 1px solid #69c;
 }
 .tipsOfTheDayHeader {
 	display: block;
