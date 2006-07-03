@@ -215,7 +215,7 @@ Render meta-data for a single formfield
 =cut
 
 sub renderFormField {
-    my( $this, $web, $topic, $meta, $attrs ) = @_;
+    my( $this, $meta, $attrs ) = @_;
     my $text = '';
     my $name = $attrs->{name};
     $text = renderFormFieldArg( $meta, $name ) if( $name );
