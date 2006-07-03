@@ -5,11 +5,9 @@
 %TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
 
 
-
 %TMPL:DEF{"htmldoctype"}%
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%"> %TMPL:END%
-
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%">%TMPL:END%
 
 
 %TMPL:DEF{"templatescript"}%%TMPL:END%
@@ -76,9 +74,9 @@
 %TMPL:DEF{"standardheader"}%
 <table class=PageHeader width=100%>
 <tr><td rowspan=2><noautolink><a href="%WEBLOGOURL%" rel='nofollow'><img src="%WEBLOGOIMG%" alt="%WEBLOGOALT%" border=0></a></noautolink></td>
-<td class=PageTitle><small>%MAKETEXT{"You are here"}%:
+<td class=PageTitle><span class="HomePathTitle"><small>%MAKETEXT{"You are here"}%:</small>
 [[%WIKIHOMEURL%][%WIKITOOLNAME%]] <span class="twikiSeparator">&gt;</span>
-<a href="%SCRIPTURLPATH{view}%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg}%" border=0 alt="" hspace=1 style="background-color:%WEBBGCOLOR%;vertical-align:bottom" /> %MAKETEXT{"[_1] Web" args="<nop/>%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" &gt; " suffix=""}% <span class="twikiSeparator">&gt;</span></small> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span> %TMPL:P{"titleaction"}%</td>
+<a href="%SCRIPTURLPATH{view}%/%WEB%/%HOMETOPIC%"><img src="%ICONURLPATH{web-bg}%" border=0 alt="" hspace=1 style="background-color:%WEBBGCOLOR%;vertical-align:bottom" /> %MAKETEXT{"[_1] Web" args="<nop/>%WEB%"}%</a> %META{"parent" nowebhome="on" prefix=" &gt; " suffix=""}% <span class="twikiSeparator">&gt;</span></span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span> %TMPL:P{"titleaction"}%</td>
 <tr><td class=twikiRevInfo>%REVINFO%</td>
 </table>
 <div id=MenuBar class=MenuBar><div class=MenuBarRight><form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%"><input type=text name=topic value="%MAKETEXT{"Jump"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)" style="margin-top:2px"></form> <form action="%SCRIPTURLPATH{view}%/%INCLUDINGWEB%/WebSearch"><input type=text name=search value="%MAKETEXT{"Search"}%" class="twikiInputBox twikiInputBoxDefault" size=15 onfocus="clearDefaultandCSS(this)" onblur="setDefaultandCSS(this)" style="margin-top:2px"></form></div></div>
@@ -138,7 +136,7 @@ addLoadEvent(QuickMenuInit, false);
 
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
-<div class=twikiTopic>
+<div class="twikiTopic">
 ---+ %TMPL:P{"heading"}%
 %BR%
 %TMPL:P{"message"}%
