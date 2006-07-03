@@ -88,15 +88,15 @@
 
 %TMPL:DEF{"searchresults"}%<div class="patternSearchResults">
 ---+++ %MAKETEXT{"Notices:"}%
-%TMPL:P{"updatenote"}%<blockquote>
+%TMPL:P{"updatenote"}%<div class="patternBlockquote">
 ---++++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="%TOPIC%, <nop>%WEB%"}%
 %LOCAL_SEARCH%
-</blockquote>
-<blockquote>
+</div>
+<div class="patternBlockquote">
 ---++++ %MAKETEXT{"Change links in topics that refer to [_1] in any Web:" args="[[%WEB%.%TOPIC%]]"}%
 %GLOBAL_SEARCH%
 %TMPL:P{"checkuncheck"}%
-</blockquote>
+</div>
 </div><!-- /patternSearchResults-->%TMPL:END%
 
 
