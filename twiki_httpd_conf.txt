@@ -39,16 +39,17 @@ BrowserMatchNoCase ^$ anonymous_spider
 
 #### Change the path to match your local installation
 <Directory "/home/httpd/twiki/bin">
-	 Options +ExecCGI FollowSymLinks
-	 SetHandler cgi-script
-	 Order Allow,Deny
-	 Allow from all
-	 Deny from env=anonymous_spider
+	Options +ExecCGI FollowSymLinks
+	SetHandler cgi-script
+	Order Allow,Deny
+	Allow from all
+	Deny from env=anonymous_spider
 </Directory>
 
 # This sets the options on the pub directory, which contains attachments and
 # other files like CSS stylesheets and icons. AllowOverride None stops a
 # user installing a .htaccess file that overrides these options.
+# Finally all execution of PHP and other scripts is disabled.
 
 # Note that files in pub are *not* protected by TWiki Access Controls,
 # so if you want to control access to files attached to topics, you may
@@ -57,9 +58,21 @@ BrowserMatchNoCase ^$ anonymous_spider
 
 #### Change the path to match your local installation
 <Directory "/home/httpd/twiki/pub">
-	 Options FollowSymLinks +Includes
-	 AllowOverride None
-	 Allow from all
+	Options None
+	AllowOverride None
+	Allow from all
+	
+	# If you have PHP4 or PHP5 installed make sure the directive below is enabled
+	# If you do not have PHP installed you will need to comment out the directory below
+	# to avoid errors.
+	php_admin_flag engine off
+	
+	#If you have PHP3 installed make sure the directive below is enabled
+	#php3_engine off
+
+	# This line will redefine the mime type for the most common types of scripts
+	# It will also deliver HTML files as if they are text files
+	AddType text/plain .html .htm .shtml .php .php3 .phtml .phtm .pl .py .cgi
 </Directory>
 
 # Security note: All other directories should be set so
@@ -67,19 +80,19 @@ BrowserMatchNoCase ^$ anonymous_spider
 
 #### Change the paths to match your local installation
 <Directory "/home/httpd/twiki/data">
-	 deny from all
+	deny from all
 </Directory>
 
 <Directory "/home/httpd/twiki/templates">
-	 deny from all
+	deny from all
 </Directory>
 
 <Directory "/home/httpd/twiki/lib">
-	 deny from all
+	deny from all
 </Directory>
 
 <Directory "/home/httpd/twiki/tools">
-	 deny from all
+	deny from all
 </Directory>
 
 <Directory "/home/httpd/twiki/locale">
