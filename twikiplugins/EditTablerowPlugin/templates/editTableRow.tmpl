@@ -68,7 +68,9 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 %TMPL:DEF{"headerhelp"}% %TMPL:END%
 %TMPL:DEF{"webaction"}% Add Table Element to <nop>%TABLENAME% for topic : <b>%TOPIC%</b> %TMPL:END%
 %TMPL:DEF{"topicaction"}%
-   <a id="cancel" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a>%TMPL:P{"sep"}% %ACTIONBUTTONS%  %TMPL:END%
+   <input type="submit" class="twikiButton" name="action_cancel" id="cancel" title='Cancel editing and discard changes' value='Cancel' accesskey='c' />%TMPL:P{"sep"}% %ACTIONBUTTONS%  %TMPL:END%
+
+
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 <body bgcolor="#ffffff" onload="initForm()">
@@ -81,6 +83,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 <input type="hidden" name="name" value="%ENTRY%">
 %TABLEFIELDS%
 %HELPTEXT%
+%TMPL:P{"topicinfo"}%
 %TMPL:P{"standardfooter"}%
 </form>
 #PageBottom

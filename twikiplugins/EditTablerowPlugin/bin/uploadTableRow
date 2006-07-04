@@ -4,6 +4,8 @@
 #
 # Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
 # Shawn Bradford 20011010 Initial design
+# TWiki:Main/ThomasWeigert 
+# TWiki:Main/SvenDowideit update to TWiki-4
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -63,7 +65,15 @@ sub main
 
     # Need to cycle through the fieldDefs and query the parameters to fill the
     # the associative array
-    my @fieldsInfo = &TWiki::Form::getFormDef( $webName, $template );
+    my @fieldsInfo;
+    if (!defined($TWiki::Plugins::SESSION)) {
+        #cairo
+        @fieldsInfo = &TWiki::Form::getFormDef( $webName, $template );
+    } else {
+        #post twiki4 and beyond
+        my $twikiForm = new TWiki::Form($TWiki::Plugins::SESSION, $webName, $template );
+        @fieldsInfo = @{$twikiForm->{fields}};
+    }
 
     # Name is name based upon a unique time-stamp. This is based to the 
     # editTable.tmpl and is transparent to the user. This removes the 
