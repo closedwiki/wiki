@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152046313" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarWEBLOGOIMG
+#VarWEBLOGOURL
+#VarWEBLOGOALT
+---+++ WEBLOGOIMG, WEBLOGOURL, WEBLOGOALT -- default web logo image
+
+The variables WEBLOGOIMG, WEBLOGOURL, and WEBLOGOALT together define a
+logo.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: WEBLOGOIMG = %WEBLOGOIMG%
+   * Current value: WEBLOGOURL = %WEBLOGOURL%
+   * Current value: WEBLOGOALT = %WEBLOGOALT%
+   * Related: TWikiTemplates
+

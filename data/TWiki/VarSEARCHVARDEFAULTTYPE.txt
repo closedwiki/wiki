@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047754" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarSEARCHVARDEFAULTTYPE
+---+++ SEARCHVARDEFAULTTYPE -- default type for search
+
+Default type for search by =%<nop>SEARCH{}%= variable, one of: keyword (for search engine like syntax), regex (for RegularExpression search), or literal (for verbatim search)
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: SEARCHVARDEFAULTTYPE = %SEARCHVARDEFAULTTYPE%

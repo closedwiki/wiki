@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047754" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="VarHTTP_EQUIV"}%
+#VarHTTP_EQUIV_ON_EDIT
+#VarHTTP_EQUIV_ON_PREVIEW
+#VarHTTP_EQUIV_ON_VIEW
+---+++ HTTP_EQUIV_ON_EDIT, HTTP_EQUIV_ON_PREVIEW, HTTP_EQUIV_ON_VIEW -- Extra HEAD elements
+
+Extra element(s) to be included in the HTML =head= section for
+the various scripts.  Note that the values are not displayed in normal
+view mode since they consist of HTML elements which should appear in
+the =head= only.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: HTTP_EQUIV_ON_VIEW = %HTTP_EQUIV_ON_VIEW%   * Current value: HTTP_EQUIV_ON_EDIT = %HTTP_EQUIV_ON_EDIT%   * Current value: HTTP_EQUIV_ON_PREVIEW = %HTTP_EQUIV_ON_PREVIEW%

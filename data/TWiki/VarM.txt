@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047756" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarM
+---+++ M -- moved to... icon
+
+   * Type: Preference variable - TWikiRenderingShortcut.
+   * Current value: M = %M%
+

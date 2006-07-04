@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047754" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="VarNEWTOPIC"}%
+#VarNEWTOPICFONTCOLOR
+---+++ NEWTOPICFONTCOLOR -- font color for nonexisting topics
+
+
+%STARTINCLUDE%
+<!-- intentionally nothing to be included -->
+%STOPINCLUDE%
+
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: NEWTOPICFONTCOLOR = %NEWTOPICFONTCOLOR%

@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047756" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiAccessControl"}%
+#VarALLOWTOPICVIEW
+#VarALLOWTOPICCHANGE
+#VarALLOWTOPICRENAME
+---+++ ALLOWTOPICVIEW, ALLOWTOPICCHANGE, ALLOWTOPICRENAME -- access control for topics
+
+
+These variables define lists of users and groups who may view or edit
+topics, or move them around.
+   * Type: Access control - See [[%TWIKIWEB%.TWikiAccessControl]] for a comprehensive description.
+
+

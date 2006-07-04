@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152051258" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarNOAUTOLINK
+---+++ NOAUTOLINK -- do not autolink WikiWords and acronyms
+
+If set to =on= in a web's [[%WEBPREFSTOPIC%]], automatic linking of
+WikiWords and acronyms is prevented for this web.
+
+__Note:__ Use the [<nop>[...][...]] syntax to link topics in case you disabled WikiWord linking. The &lt;noautolink&gt; ... &lt;/noautolink&gt; syntax can be used to prevents links within a block of text.
+
+   * Usage: Evaluated by TWiki and not intended to be expanded in any topic.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+
+
+

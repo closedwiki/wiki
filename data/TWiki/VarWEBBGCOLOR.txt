@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152044730" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarWEBBGCOLOR
+---+++ WEBBGCOLOR -- background color for a web
+
+This variable can be used in skin templates or style declarations to
+provide a background color in standard HTML/CSS syntax ('#' followed
+by six hex digits).
+
+When creating a new web this variable can be set.
+
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: WEBBGCOLOR = %WEBBGCOLOR%
+   * Related: TWikiTemplates
+

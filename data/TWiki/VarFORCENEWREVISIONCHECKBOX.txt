@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047754" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarFORCENEWREVISIONCHECKBOX
+---+++ FORCENEWREVISIONCHECKBOX -- default value for new revisions after editing
+
+
+Default state of the __Force New Revision__ (ForceNewRevision) check
+box in preview. Check box is initially checked if
+=Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty.
+   * Usage: Evaluated by TWiki skins/templates and not intended to be expanded in any topic.
+   * Type: Preference variable - TWikiUserSetting.  Can be customized for a site in [[%LOCALSITEPREFS%]], for each web in their %WEBPREFSTOPIC% topics and by individual [[%MAINWEB%.TWikiUsers][TWikiUsers]] in their home topics.
+   * Current value: FORCENEWREVISIONCHECKBOX = %FORCENEWREVISIONCHECKBOX%
+
+

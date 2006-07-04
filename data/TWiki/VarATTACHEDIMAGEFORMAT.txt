@@ -1,0 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047757" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarATTACHEDIMAGEFORMAT
+---+++ ATTACHEDIMAGEFORMAT -- default value for attachment link
+
+Format of images when the __link__ check box is checked.
+   * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab and ==\n== to linefeed (3 spaces for bullets).
+   * Usage: Evaluated by TWiki skins/templates and not intended to be expanded in any topic.
+   * Type: Preference variable defined in [[%TWIKIWEB%.%WIKIPREFSTOPIC%]].  Can be customized for a TWiki site in [[%LOCALSITEPREFS%]], and for each web in their %WEBPREFSTOPIC% topics.
+   * Current value: ATTACHEDIMAGEFORMAT = %ATTACHEDIMAGEFORMAT%
+
+

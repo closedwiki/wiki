@@ -1,0 +1,13 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152047753" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiAccessControl"}%
+#VarDENYWEBCHANGE
+---+++ DENYWEBCHANGE -- access control for webs
+
+
+%STARTINCLUDE%
+<!-- intentionally nothing to be included -->
+%STOPINCLUDE%
+List of users or groups who must not change topics in a web.  Must be defined in a web's
+!WebPreferences topic and is ignored in other topics. 
+   * Type: Access control - See [[%TWIKIWEB%.TWikiAccessControl]] for a comprehensive description.
+

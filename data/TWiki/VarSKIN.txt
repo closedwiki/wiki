@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1152044728" format="1.2" version="$Rev$"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+#VarSKIN
+---+++ SKIN -- how your %WIKITOOLNAME% looks like
+
+
+Skin overriding the default TWiki templates.  See TWikiSkinBrowser for currently installed skins.
+   * Type: Preference variable - TWikiUserSetting.  Can be customized for a site in [[%LOCALSITEPREFS%]], for each web in their %WEBPREFSTOPIC% topics and by individual [[%MAINWEB%.TWikiUsers][TWikiUsers]] in their home topics.
+   * Current value: SKIN = %SKIN%
+
+
