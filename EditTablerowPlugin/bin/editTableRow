@@ -4,11 +4,12 @@
 # This script was modified from the original attach code to add a growing
 # modifiable verification table to the page.
 #
-# Shawn Bradford 20011010 Initial design
-#
 # TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
 # Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
+# Shawn Bradford 20011010 Initial design
+# TWiki:Main/ThomasWeigert 
+# TWiki:Main/SvenDowideit update to TWiki-4
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -53,7 +54,7 @@ sub doEnableEdit
     }
 
     my( $oopsUrl, $lockUser ) = &TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
-    if( $lockUser ) {
+    if (( $lockUser ) && ($lockUser ne $userName)) {
         # warn user that other person is editing this topic
         &TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
         return 0;
@@ -77,12 +78,11 @@ sub main
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
     $dummy = "";  # to suppress warning
 
-    my $wikiUserName = &TWiki::userToWikiName( $userName );
-    return unless ( &doEnableEdit ($webName, $topic, $wikiUserName, $query) );
+    return unless ( &doEnableEdit ($webName, $topic, &TWiki::Func::getWikiName() , $query) );
 
     return unless ($query);
     $query->{'jscalendar'} = 0;
-    my ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+    my ( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
 
     my $template = $query->param( 'template' ) || "";
     my $tableNr = $query->param( 'tablename' ) || "";
@@ -92,14 +92,22 @@ sub main
     my $helptopic = $query->param( 'helptopic' ) || "";
 
     #my $tmpl = &TWiki::Store::readTemplate( ($rowNr)?"editTableRow":"addTableRow" );
-    my $tmpl = &TWiki::Store::readTemplate( "editTableRow" );
+    my $tmpl = &TWiki::Func::readTemplate( "editTableRow" );
 
     # This loads the table that you want
     $tmpl =~ s/%TEMPLATE%/$template/go;
     $tmpl =~ s/%TABLENAME%/$tableNr/go;
 
     # This renders the editable fields
-    my @fieldDefs = &TWiki::Form::getFormDef( $webName, $template );
+    my @fieldDefs;
+    if (!defined($TWiki::Plugins::SESSION)) {
+        #cairo
+        @fieldDefs = &TWiki::Form::getFormDef( $webName, $template );
+    } else {
+        #post twiki4 and beyond
+        my $twikiForm = new TWiki::Form($TWiki::Plugins::SESSION, $webName, $template );
+        @fieldDefs = @{$twikiForm->{fields}};
+    }
 
     # Get rid of CRs (we only want to deal with LFs)
     $text =~ s/\r//g;
@@ -130,7 +138,7 @@ sub main
 	      $oldTable .= $oldrow . "\n";
 	    }
 	  }
-	  $tmpl =~ s/%SHOWTABLE%/---++ Current Table Entries\n%BR%$oldTable\n/go;
+	  $tmpl =~ s/%SHOWTABLE%/\n---++ Current Table Entries\n%BR%$oldTable\n/go;
 	} else {
 	  $tmpl =~ s/%SHOWTABLE%//go;
 	}
@@ -143,28 +151,53 @@ sub main
 	if ($rowNr != 0) {
 	  foreach my $fieldDefP ( @fieldDefs ) {
 	    $idx++;
-	    my @fieldDef = @$fieldDefP;
-	    my $entryName = shift @fieldDef;
-	    my $value = $fields[$idx];
+	    my $entryName;
+	    my $value;
+         if (!defined($TWiki::Plugins::SESSION)) {
+            my @fieldDef = @$fieldDefP;
+            $entryName = shift @fieldDef;
+            $value = $fields[$idx];
+            my @tmpArgs = (
+               "name" => $entryName,
+               "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $value )
+              );
+            $meta->put("FIELD",@tmpArgs);
+        } else {
+            $entryName = $fieldDefP->{name};
+            $value = $fields[$idx];
+            my %tmpArgs = (
+               "name" => $entryName,
+               "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $value )
+              );
+            $meta->putKeyed("FIELD",\%tmpArgs);
+        }
 	    #$value = "" if ($value eq "&nbsp;");
-	    my @tmpArgs = (
-			   "name" => $entryName,
-			   "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $value )
-			  );
-	    $meta->put("FIELD",@tmpArgs);
 	  }
 	  #$entry = TWiki::Plugins::EditTablerowPlugin::stringConvert($entry);
 	  $tmpl =~ s/%ENTRY%/$rowNr/go;
 	} else {
 	  my $id = time;
 	  foreach my $fieldDefP ( @fieldDefs ) {
-	    my @fieldDef = @$fieldDefP;
-	    my $entryName = shift @fieldDef;
-	    my @tmpArgs = (
-			   "name" => $entryName,
-			   "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $fieldDef[5] )
-			  );
-	    $meta->put("FIELD",@tmpArgs);
+        my $entryName;
+        my $value;
+         if (!defined($TWiki::Plugins::SESSION)) {
+            my @fieldDef = @$fieldDefP;
+            $entryName = shift @fieldDef;
+            $value = $fieldDef[5];
+            my @tmpArgs = (
+               "name" => $entryName,
+               "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $value )
+              );
+            $meta->put("FIELD",@tmpArgs);
+        } else {
+            $entryName = $fieldDefP->{name};
+            $value = $fieldDefP->{value};
+            my %tmpArgs = (
+               "name" => $entryName,
+               "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $value )
+              );
+            $meta->putKeyed("FIELD",\%tmpArgs);
+        }
 	  }
 	  $tmpl =~ s/%ENTRY%/$id/go;
 	}
@@ -201,14 +234,21 @@ sub main
       $tmpl =~ s/%HEADERTEXT%/Add Table Row/go;
     }
 
+#    die join(', ', @{$meta->{FIELD}});
     my $formText = "";
-    if( $TWiki::Plugins::VERSION < 1.025 ) {
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+        my $twikiForm = new TWiki::Form($TWiki::Plugins::SESSION, $webName, $template );
+        $formText = $twikiForm->renderForEdit($webName, $topic, $meta);
+        $formText =~ s/twikiChangeFormButton/twikiHidden/g;     #hide the innapropriate change form button
+    } elsif( $TWiki::Plugins::VERSION < 1.025 ) {
       $formText = &TWiki::Form::renderForEdit( $webName, $topic, $template, $meta, $query, @fieldDefs );
     } else {
       $formText = &TWiki::Form::renderForEdit( $webName, $topic, $template, $meta, $query, "", @fieldDefs );
     }
     $tmpl = &TWiki::Func::expandCommonVariables( $tmpl, $topic );
-    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+    if( $TWiki::Plugins::VERSION < 1.1 ) {
+        $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+    }
     $tmpl = &TWiki::Func::renderText( $tmpl );
     $tmpl =~ s/%TABLEFIELDS%/$formText/go; #Moved after getRenderedVersion so that TWiki Syntax does not expand
 

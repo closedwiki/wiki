@@ -2,6 +2,8 @@
 # TWiki WikiClone ($wikiversion has version info)
 #
 # Copyright (C) 2002-2004 Peter Thoeny, Peter@Thoeny.com
+# TWiki:Main/ThomasWeigert 
+# TWiki:Main/SvenDowideit update to TWiki-4
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,10 +23,13 @@
 # Note that vanilla twiki shows the "Change form..." button in update
 # mode, albeit it has no effect.
 # Support the $quot, etc., non-expanded values in table initialization.
+# For twiki4 - replace the bin scripts with restHandlers
 
 
 # =========================
 package TWiki::Plugins::EditTablerowPlugin;
+
+#use strict;        TODO: ARGH!!!
 
 # =========================
 use vars qw(
@@ -225,10 +230,20 @@ sub handleEditTableTag
 sub handleTableStart
 {
     my( $theWeb, $theTopic, $theTableNr ) = @_;
+    my $template = $params{'template'};
 
-    my @fieldDefs = &TWiki::Form::getFormDef( $theWeb, $params{"template"} );
+    my @fieldDefs;
+    if (!defined($TWiki::Plugins::SESSION)) {
+        #cairo
+        @fieldDefs = &TWiki::Form::getFormDef( $theWeb, $template );
+    } else {
+        #post twiki4 and beyond
+        ( $theWeb, $template ) = TWiki::Func::normalizeWebTopicName( $theWeb, $template );
+        my $twikiForm = new TWiki::Form($TWiki::Plugins::SESSION, $theWeb, $template );
+        @fieldDefs = @{$twikiForm->{fields}};
+    }
     if( ! @fieldDefs ) {
-      return "<font color=red>No Table template found: $theWeb . $params{'template'}</font>";
+      return "<font color=red>No Table template found: $webName . $template</font>";
     } else {
       my $tableHeader .= renderForDisplay( @fieldDefs );
       #$tableHeader =~ s/^(\s*)\|(.*)/&processTR($1,$2)/eo;
@@ -248,8 +263,14 @@ sub renderForDisplay
     # Get each field definition
     # | *Name:* | *Type:* | *Size:* | *Value:*  | *Tooltip message:* |
 	foreach my $fieldDefP ( @fieldDefs ) {
-        my @fieldDef = @$fieldDefP;
-        my( $name, $title, $type, $size, $posValuesS, $tooltip ) = @fieldDef;
+        my $title;
+         if (!defined($TWiki::Plugins::SESSION)) {
+            my @fieldDef = @$fieldDefP;
+            $entryName = shift @fieldDef;
+            $title = shift @fieldDef;
+        } else {
+            $title = $fieldDefP->{title};
+        }
 		$tableHeader .= "*$title* | ";
 	}
 
@@ -391,13 +412,28 @@ sub updateTableRow {
     $result .= "\|";
     my $firstEntry = 1;
     foreach my $c ( @{$fieldsInfo} ) {
-      my @fieldInfo = @$c;
-      my $entryName = shift @fieldInfo;
-      my $title     = shift @fieldInfo;
-      my $type      = shift @fieldInfo;
-      my $size      = shift @fieldInfo;
-      my $tableEntry= $query->param( $entryName );
+      my $entryName;
+      my $title;
+      my $type;
+      my $size;
+      my $tableEntry;
       my $cvalue    = "";
+
+        if (!defined($TWiki::Plugins::SESSION)) {
+            #cairo
+            my @fieldInfo = @$c;
+            $entryName = shift @fieldInfo;
+            $title     = shift @fieldInfo;
+            $type      = shift @fieldInfo;
+            $size      = shift @fieldInfo;
+        } else {
+            #twiki4
+            $entryName = $c->{name};
+            $title     = $c->{title};
+            $type      = $c->{type};
+            $size      = $c->{size};
+        }
+        $tableEntry= $query->param( $entryName );
 
       ## Puts default text "---" for first entry
       if ($firstEntry == 1) {
@@ -447,13 +483,28 @@ sub appendToTable {
     $result .= "\|";
     my $firstEntry = 1;
     foreach my $c ( @{$fieldsInfo} ) {
-      my @fieldInfo = @$c;
-      my $entryName = shift @fieldInfo;
-      my $title     = shift @fieldInfo;
-      my $type      = shift @fieldInfo;
-      my $size      = shift @fieldInfo;
-      my $tableEntry= $query->param( $entryName );
+      my $entryName;
+      my $title;
+      my $type;
+      my $size;
+      my $tableEntry;
       my $cvalue    = "";
+
+        if (!defined($TWiki::Plugins::SESSION)) {
+            #cairo
+            my @fieldInfo = @$c;
+            $entryName = shift @fieldInfo;
+            $title     = shift @fieldInfo;
+            $type      = shift @fieldInfo;
+            $size      = shift @fieldInfo;
+        } else {
+            #twiki4
+            $entryName = $c->{name};
+            $title     = $c->{title};
+            $type      = $c->{type};
+            $size      = $c->{size};
+        }
+        $tableEntry= $query->param( $entryName );
 
       ## Puts default text "---" for first entry
       if ($firstEntry == 1) {

@@ -1,4 +1,4 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"edit"}%
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 <!--HIDE
@@ -58,7 +58,8 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
   return false;
 }
 //STOP HIDING-->
-</script> %TMPL:END%
+</script>
+ %TMPL:END%
 
 
 %TMPL:DEF{"bodystart"}%
@@ -104,7 +105,9 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 %TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
 <tr class="twikiTopicAction">
-<td class="twikiCancelCol"><a id="cancel" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" accesskey="c">Cancel</a></td>
+<td class="twikiCancelCol">
+<input type="submit" class="twikiButton" name="action_cancel" id="cancel" title='Cancel editing and discard changes' value='Cancel' accesskey='c' />
+</td>
 <td colspan="2" class="twikiSubmitCol">%ACTIONBUTTONS%</td>
 </tr>
 </table>
@@ -116,8 +119,3 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-%TMPL:P{"bodystart"}%
-%TMPL:P{"main"}%
-%TMPL:P{"bodyend"}%
