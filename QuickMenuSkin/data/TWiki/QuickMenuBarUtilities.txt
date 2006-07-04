@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="VlyonYahoo" date="1150724700" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="VernonLyon" date="1150724700" format="1.1" version="1.2"}%
 <pre>%STARTINCLUDE%<noautolink>
 utilMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Utilities"}%","","%MAKETEXT{"Utilities available for this Web"}%");
 if ("%USERINFO{format="$groups"}%".match(/TWikiAdminGroup/)) {

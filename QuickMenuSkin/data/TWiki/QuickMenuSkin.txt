@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="VlyonYahoo" date="1150901809" format="1.1" version="1.3"}%
+%META:TOPICINFO{author="VernonLyon" date="1152025344" format="1.1" reprev="1.4" version="1.4"}%
 ---+ Quick Menu Skin
 
 A functional skin that replaces the left bar with a customizable Javascript menu system.
@@ -18,21 +18,28 @@ A functional skin that replaces the left bar with a customizable Javascript menu
 
 ---++ Settings
 
-The menu can behave in two ways. When =CLICKMENU= is set to 0 then the menu automatically shows when you hover the mouse over the menu. When it is set to 1 then the menu is activated by clicking on it.
+The menu can behave in two ways. When =CLICKMENU= is set to 0 then the menu automatically shows when you hover the mouse over the menu. When it is set to 1 then the menu is activated by clicking on it. By default =CLICKMENU= is set to 0.
 
-To set =CLICKMENU= just add the following line to %MAINWEB%.TWikiPreferences, WebPreferences, or your personal page:
+To add different menus to the menubar you can set =QUICKMENUBAR= to the topic containing the javascript for your own custom menus. By default =QUICKMENUBAR= is set to [[%TWIKIWEB%.QuickMenuBar]], have a look at that topic to see how the menus are created.
+
+To change settings just add them to %MAINWEB%.TWikiPreferences, WebPreferences, or your personal page.%BR%
+Eg:
 <pre>
    * %NOP%Set CLICKMENU = 1
+   * %NOP%Set QUICKMENUBAR = %%NOP%TWIKIWEB%.QuickMenuBar
 </pre>
 
 ---++ Modifying Menus
 
-The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn includes %TWIKIWEB%.QuickMenuBarWebs & %TWIKIWEB%.QuickMenuBarUtilities. These files contain javascript commands that are included in by the skin's templates. You can edit these files to customize the menu, but be sure to avoid unwanted linking by enclosing your code in =&lt;noautolink&gt;= ... =&lt;/noautolink&gt;= tags.
+The menu bar is built by default from [[%TWIKIWEB%.QuickMenuBar]], which in turn includes [[%TWIKIWEB%.QuickMenuBarWebs]] (if login is enabled) and [[%TWIKIWEB%.QuickMenuBarWebs]] and [[%TWIKIWEB%.QuickMenuBarUtilities]]. These files contain javascript commands that are included by the skin's templates. You can edit these files to customize the menu, but be sure to avoid unwanted linking by enclosing your code in =&lt;noautolink&gt;= ... =&lt;/noautolink&gt;= tags.
+
+*%RED%Note%ENDCOLOR%:* In a future release, it will be possible to add icons to the menus in the menubar. When this is done the =QuickMenu.Menu= function will change! This will make the arguments similar to the =QuickMenu.Menu.Add= function in that the argument for an icon will be inserted before the "menu tip information" argument.
 
 <noautolink>
 ---+++ QuickMenu Javascript Reference
 
    * *To create a new menu* %BR%
+   <small> __%RED%Note:__ _This may change! See above.%ENDCOLOR%_ </small> %BR%
    =mymenu = new QuickMenu.Menu(menuBar, "Menu Text", "", "Menu Tip Information");= %BR%
    or just a link:%BR%
    =new QuickMenu.Menu(menuBar, "TWiki.org", "http://twiki.org/");= %BR%
@@ -57,8 +64,9 @@ The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn inc
 |  Preview: | [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=quickmenu][Preview with this topic]] |
 |  Base Name: | quickmenu |
 |  Skin Author: | TWiki:Main/VernonLyon |
-|  Skin Version: | 21 Jun 2006 (v1.01) |
+|  Skin Version: | 4 Jul 2006 (v1.02) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  4 Jul 2006: | Added =QUICKMENUBAR= setting (v1.02) |
 |  21 Jun 2006: | Added "Account" menu (v1.01) |
 |  13 Jun 2006: | Initial version (v1.00) |
 |  Dependencies: |  |
@@ -72,16 +80,16 @@ __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB
 
 -- TWiki:Main/VernonLyon - 13 Jun 2006
 
-%META:FILEATTACHMENT{name="menuitem_over.gif" attr="" autoattached="1" comment="" date="1144339645" path="menuitem_over.gif" size="93" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menu_over.gif" attr="" autoattached="1" comment="" date="1143900022" path="menu_over.gif" size="159" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menubaritem_bg.gif" attr="" autoattached="1" comment="" date="1144250285" path="menubaritem_bg.gif" size="108" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.js" attr="" autoattached="1" comment="" date="1150367165" path="qmenu.js" size="10906" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="arrow.gif" attr="" autoattached="1" comment="" date="1144850051" path="arrow.gif" size="85" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="arrow_over.gif" attr="" autoattached="1" comment="" date="1144853985" path="arrow_over.gif" size="227" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="screenshot.gif" attr="" autoattached="1" comment="" date="1150210415" path="screenshot.gif" size="8839" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1150900848" path="style.css" size="6322" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menu_bg.gif" attr="" autoattached="1" comment="" date="1144247292" path="menu_bg.gif" size="825" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.css" attr="" autoattached="1" comment="" date="1150898857" path="qmenu.css" size="2533" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menuitem_bg.gif" attr="" autoattached="1" comment="" date="1144323350" path="menuitem_bg.gif" size="273" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="fullscreen.gif" attr="" autoattached="1" comment="" date="1150214550" path="fullscreen.gif" size="24979" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menubar.gif" attr="" autoattached="1" comment="" date="1147966341" path="menubar.gif" size="874" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="menuitem_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="menuitem_over.gif" size="93" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="menu_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="menu_over.gif" size="159" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="menubaritem_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menubaritem_bg.gif" size="108" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="qmenu.js" attr="" autoattached="1" comment="" date="1151935718" path="qmenu.js" size="10906" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="arrow.gif" attr="" autoattached="1" comment="" date="1151935718" path="arrow.gif" size="85" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="arrow_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="arrow_over.gif" size="227" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="screenshot.gif" attr="" autoattached="1" comment="" date="1151935718" path="screenshot.gif" size="8839" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1151936684" path="style.css" size="6684" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="menu_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menu_bg.gif" size="825" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="qmenu.css" attr="" autoattached="1" comment="" date="1151935718" path="qmenu.css" size="2533" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="menuitem_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menuitem_bg.gif" size="273" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="fullscreen.gif" attr="" autoattached="1" comment="" date="1151935718" path="fullscreen.gif" size="24979" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="menubar.gif" attr="" autoattached="1" comment="" date="1151935718" path="menubar.gif" size="874" user="UnknownUser" version=""}%
