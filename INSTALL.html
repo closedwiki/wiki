@@ -1832,6 +1832,8 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 </li>
 <li> <a href="#Basic_Installation">Basic Installation</a>
 </li>
+<li> <a href="#Important_Server_Security_Settings">Important Server Security Settings</a>
+</li>
 <li> <a href="#Next_Steps_optional">Next Steps (optional)</a>
 <ul>
 <li> <a href="#Enable_Authentication_of_Users">Enable Authentication of Users</a>
@@ -1883,7 +1885,9 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 <p />
 Before attempting to install TWiki, you are encouraged to review the <a href="http://twiki.org/cgi-bin/view/TWiki.AdminSkillsAssumptions" title="'TWiki.AdminSkillsAssumptions' on TWiki.org">TWiki:TWiki.AdminSkillsAssumptions</a>. This guide assumes the person installing TWiki has, at a minimum, basic knowledge of server administration and cgi script management on the system on which TWiki is to be installed. While it is possible to install TWiki with ftp access alone (for example, on a hosted site), it is tricky and may require additional support from your hosting service (for example, in setting file ownership).
 <p />
-While this installation guide specifically describes installation on an Apache web server on Linux, TWiki should be fine with any web server and OS that meet the <a href="#SystemRequirements" class="twikiAnchorLink">system requirements</a>. For additional notes on installing TWiki on other systems, see <a href="http://twiki.org/cgi-bin/view/TWiki/InstallingTWiki#OtherPlatforms" title="'TWiki/InstallingTWiki#OtherPlatforms' on TWiki.org">TWiki:TWiki/InstallingTWiki#OtherPlatforms</a>.
+To help setting up a correct Apache configuration you can use the automatic <a href="http://twiki.org/cgi-bin/view/TWiki/ApacheConfigGenerator" title="'TWiki/ApacheConfigGenerator' on TWiki.org">TWIki:TWiki.ApacheConfigGenerator</a> which generates the contents for an Apache config file for TWiki based on your inputs.
+<p />
+While this installation guide specifically describes installation on an Apache web server on Linux, TWiki should be fine with any web server and OS that meet the <a href="#SystemRequirements" class="twikiAnchorLink">system requirements</a>. For additional notes on installing TWiki on other systems, see <a href="http://twiki.org/cgi-bin/view/TWiki/InstallingTWiki#OtherPlatforms" title="'TWiki/InstallingTWiki#OtherPlatforms' on TWiki.org">TWiki:TWiki.InstallingTWiki#OtherPlatforms</a>.
 
 <p />
 If you are installing TWiki without Unix/Linux root (administrator) privileges (for example, on a hosted domain), see <a href="#NonRootInstallNotes" class="twikiAnchorLink">Notes on Installing TWiki on Non-Root Account</a> for supplemental instructions to the basic steps presented below.
@@ -1902,7 +1906,7 @@ If you need help, ask a question in the <a href="http://twiki.org/cgi-bin/view/S
 <ol>
 <li> <strong>Download</strong> the TWiki distribution from <a href="http://TWiki.org/download.html" target="_top">http://TWiki.org/download.html</a>.
 </li>
-<li> <strong>Make a directory</strong> for the installation and <strong>unpack the distribution</strong> in it.
+<li> <strong>Make a directory</strong> for the installation and <strong>unpack the distribution</strong> in it. In the rest of this document we assume this directory is called <code>twiki</code>.
 </li>
 
 <li> <strong>Make sure</strong> the user that runs CGI scripts on your system can read and write all files in the distribution.
@@ -1910,7 +1914,7 @@ If you need help, ask a question in the <a href="http://twiki.org/cgi-bin/view/S
 <ul>
 <li> During installation and configuration, the CGI user needs to be able to read and write <em>everything</em> in the distribution,
 </li>
-<li> Once installation and configuration is complete, the CGI user needs write access to everything under the <code>data</code> and <code>pub</code> directories and to <code>lib/LocalSite.cfg</code>. <em>Everything else</em> should be read-only.
+<li> Once installation and configuration is complete, the CGI user needs write access to everything under the <code>data</code> and <code>pub</code> directories and to <code>twiki/lib/LocalSite.cfg</code>. <em>Everything else</em> should be read-only.
 
 </li>
 <li> Everybody else should be denied access to everything, always.
@@ -1922,26 +1926,39 @@ If you need help, ask a question in the <a href="http://twiki.org/cgi-bin/view/S
      <br /> <img src="pub/TWiki/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" /> Some systems require a special extension on perl scripts (e.g. <code>.cgi</code> or <code>.pl</code>). If necessary, rename all files in <code>twiki/bin</code>  (i.e. rename <code>view</code> to <code>view.pl</code> etc). If you do this, make sure you set the <code>ScriptSuffix</code> option in <code>configure</code> (Step 6).
 
 </li>
-<li> <strong>Create the file</strong> <code>/twiki/bin/LocalLib.cfg</code>.
-      <br /> There is a template for this file in <code>/twiki/bin/LocalLib.cfg.txt</code>.
-      <br /> The file must contain a setting for <code>$twikiLibPath</code>, which must point to the absolute file path of your <code>twiki/lib</code> e.g. <code>/home/httpd/twiki/lib</code>.
+<li> <strong>Create the file</strong> <code>twiki/bin/LocalLib.cfg</code>.
+      <br /> There is a template for this file in <code>twiki/bin/LocalLib.cfg.txt</code>.
+      <br /> (Make sure you do not mix up <code>twiki/bin/LocalLib.cfg.txt</code> with the similar named <code>twiki/lib/LocalSite.cfg.txt</code> which you should normally never need to copy or touch.)
+      <br /> The file <code>twiki/bin/LocalLib.cfg.txt</code> must contain a setting for <code>$twikiLibPath</code>, which must point to the absolute file path of your <code>twiki/lib</code> e.g. <code>/home/httpd/twiki/lib</code>.
      <br /> <img src="pub/TWiki/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" /> If you need to install additional <a class="twikiLink" href="/cgi-bin/view/Codev/CPAN" title=" ComprehensivePerlArchiveNetwork, http://cpan.perl.org/ Basically, if you have written a perl module you can make it available to others by uploading it to this website ... (07 May 2003 - 11:28 - 1.5, RichardDonkin)">CPAN</a> modules, but can't update the main Perl installation files on the server, you can set <code>$CPANBASE</code> to point to your personal <a class="twikiLink" href="/cgi-bin/view/Codev/CPAN" title=" ComprehensivePerlArchiveNetwork, http://cpan.perl.org/ Basically, if you have written a perl module you can make it available to others by uploading it to this website ... (07 May 2003 - 11:28 - 1.5, RichardDonkin)">CPAN</a> install. Don't forget that the webserver user has to be able to read those files as well.
 
 </li>
 <li> <strong>Configure the webserver</strong> so you can execute the <code>bin/configure</code> script from your browser.
 <ul>
 <li> If you are unsure about how to do this on your system, see <a href="http://twiki.org/cgi-bin/view/TWiki.InstallingTWiki#OtherPlatforms" title="'TWiki.InstallingTWiki#OtherPlatforms' on TWiki.org">TWiki:TWiki.InstallingTWiki#OtherPlatforms</a> for links to information about various server setups. There is an example Apache <code>httpd.conf</code> file in <code>twiki_httpd_conf.txt</code> at the root of the package. This file also contains advice on securing your installation. There's also a script called <code>tools/rewriteshebang.pl</code> to help you in fixing up the shebang lines in your CGI scripts.
-
 </li>
 </ul>
 </li>
 <li> <strong>Run the <code>configure</code> script</strong> from your browser (i.e. enter <code>http://yourdomain/twiki/bin/configure</code> into your browser address bar) and resolve any errors or warnings it tells you about.
       <br /> <img src="pub/TWiki/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" /> When you run <code>configure</code> for the first time, remember to <em>first</em> set the <code>General Path Settings</code>, save these settings, and then return to <code>configure</code> to continue configuration.
-
 </li>
 </ol>
 <p />
 You now have a basic, unauthenticated installation running. At this point you can just point your Web browser at <code>http://yourdomain.com/twiki/bin/view</code> and start TWiki-ing away!
+<p />
+<h2><a name="Important_Server_Security_Settings"> </a>Important Server Security Settings</h2>
+Before you continue any further there are some basic and very important security settings you have to make sure are set correctly.
+<ul>
+<li>You should protect the configure script from general access. The configure script cannot save any settings once the password has been saved the first time, but the script reveals many details about the webserver that you should not display in public
+</li>
+<li>You absolutely must turn off any kind of PHP, Perl, Python, Server Side Includes etc in the <code>pub</code> directory. TWiki has some builtin protection which renames files with dangerous filenames by appending .txt to the filename. But this is a secondary security measure. The essential action that you must take is to turn off any possible execution of any of the attached files.<br /> Most Linux distributions have a default Apache installation which has PHP and server side include (SSI) enabled. The <code>twiki_httpd_conf.txt</code> file provided in the root of the twiki directory is an example of an Apache config file which you would normally include from httpd.conf. In many distributions this happens automatically if the file is copied to a specific directory (Example RedHat/Fedora/Centos: /etc/httpd/conf.d) and has suffix <code>.conf</code>. This example file shows how to protect the <code>pub</code> directory from executing both PHP scripts and server side includes.<br />
+If you do not have access to the apache config files you can normally control control access by placing a file called <code>.htaccess</code> in the directory you want to protect. The <code>pub-htaccess.txt</code> file provided in the root of the twiki directory is an example of an Apache <code>.htaccess</code> file which protects against execusion of PHP and SSI scripts.
+</li>
+<li>Make sure that you deny access to all other twiki directories than the <code>bin</code> and <code>pub</code> directories. When you have access to the Apache config files the <code>twiki_httpd_conf.txt</code> file mentioned above also contains protection of these directories.<br />
+For those that do not have access to the Apache config files a sample <code>subdir-htaccess.txt</code> file can be copied as <code>.htaccess</code> to the data, lib, locale, templates and tools directories.
+</li>
+</ul>
+The <a href="http://twiki.org/cgi-bin/view/TWiki/ApacheConfigGenerator" title="'TWiki/ApacheConfigGenerator' on TWiki.org">TWIki:TWiki.ApacheConfigGenerator</a> will help you address all 3 security elements.
 <p />
 <h2><a name="Next_Steps_optional"> </a><a name="Next_Steps_optional_"> </a> Next Steps (optional) </h2>
 Once you have TWiki installed and running, you might consider the following optional steps for setting up and customizing your TWiki site. Many of the references below refer to topics within your TWiki installation. For example, <code>TWiki.TWikiSkins</code> refers to the <code>TWikiSkins</code> topic in your TWiki web. If not available locally, you can find these topics in the on-line reference copy of <a href="http://twiki.org/cgi-bin/view/TWiki04.WebHome" target="_top">TWiki Release 4.0</a>. 
@@ -1981,7 +1998,7 @@ These are the steps for enabling "Template Login" which asks for a username and 
 </li>
 </ol>
 <p />
-You are strongly encouraged to read <code>TWiki.TWikiUserAuthentication</code>, <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiUserAuthenticationSupplement" title="'TWiki/TWikiUserAuthenticationSupplement' on TWiki.org">TWiki:TWiki/TWikiUserAuthenticationSupplement</a>, and <a href="http://twiki.org/cgi-bin/view/TWiki/SecuringTWikiSite" title="'TWiki/SecuringTWikiSite' on TWiki.org">TWiki:TWiki/SecuringTWikiSite</a> 
+You are strongly encouraged to read <code>TWiki.TWikiUserAuthentication</code>, <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiUserAuthenticationSupplement" title="'TWiki/TWikiUserAuthenticationSupplement' on TWiki.org">TWiki:TWiki.TWikiUserAuthenticationSupplement</a>, and <a href="http://twiki.org/cgi-bin/view/TWiki/SecuringTWikiSite" title="'TWiki/SecuringTWikiSite' on TWiki.org">TWiki:TWiki.SecuringTWikiSite</a> 
 for further information about managing users and security of your TWiki site. 
 <p />
 <a name="SetPreferences"></a>
@@ -2025,7 +2042,7 @@ TWiki now supports displaying of national (non-ascii) characters and presentatio
 <p />
 <h2><a name="Customize_your_TWiki"> </a><a name="Customize_your_TWiki_"> </a> Customize your TWiki! </h2>
 
-The real power of TWiki lies in it's flexibility to be customized to meet your needs. A good place to start for exploring what's possible is <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiAdminCookBook" title="'TWiki/TWikiAdminCookBook' on TWiki.org">TWiki:TWiki/TWikiAdminCookBook</a> which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these. If you would like to customize the look of your TWiki, see <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiSkinsSupplement" title="'TWiki.TWikiSkinsSupplement' on TWiki.org">TWiki:TWiki.TWikiSkinsSupplement</a>.
+The real power of TWiki lies in it's flexibility to be customized to meet your needs. A good place to start for exploring what's possible is <a href="http://twiki.org/cgi-bin/view/TWiki/TWikiAdminCookBook" title="'TWiki/TWikiAdminCookBook' on TWiki.org">TWiki:TWiki.TWikiAdminCookBook</a> which offers tips and tricks for customizing your TWiki site. Many of these are appropriate to implement immediately after installing TWiki and before adding content so now's a good time to look at these. If you would like to customize the look of your TWiki, see <a href="http://twiki.org/cgi-bin/view/TWiki.TWikiSkinsSupplement" title="'TWiki.TWikiSkinsSupplement' on TWiki.org">TWiki:TWiki.TWikiSkinsSupplement</a>.
 <p />
 <h2><a name="Troubleshooting"> </a> Troubleshooting </h2>
 
@@ -2033,21 +2050,21 @@ The first step is to re-run the <code>configure</code> script and make sure you 
 <p />
 Failing that, please check the topics listed below which include important tips for HP-UX, Solaris, OS/390, and many other platforms.
 <ul>
-<li> For Unix or Linux, check <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnUnix" title="'Codev/TWikiOnUnix' on TWiki.org">TWiki:Codev/TWikiOnUnix</a> and <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnLinux" title="'Codev/TWikiOnLinux' on TWiki.org">TWiki:Codev/TWikiOnLinux</a>.
+<li> For Unix or Linux, check <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnUnix" title="'Codev/TWikiOnUnix' on TWiki.org">TWiki:Codev.TWikiOnUnix</a> and <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnLinux" title="'Codev/TWikiOnLinux' on TWiki.org">TWiki:Codev.TWikiOnLinux</a>.
 </li>
-<li> For Windows, check the <a href="http://twiki.org/cgi-bin/view/Codev/WindowsInstallCookbook" title="'Codev/WindowsInstallCookbook' on TWiki.org">TWiki:Codev/WindowsInstallCookbook</a>. 
+<li> For Windows, check the <a href="http://twiki.org/cgi-bin/view/Codev/WindowsInstallCookbook" title="'Codev/WindowsInstallCookbook' on TWiki.org">TWiki:Codev.WindowsInstallCookbook</a>. 
 
 </li>
-<li> For MacOS X, check <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnMacOSX" title="'Codev/TWikiOnMacOSX' on TWiki.org">TWiki:Codev/TWikiOnMacOSX</a>. 
+<li> For MacOS X, check <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnMacOSX" title="'Codev/TWikiOnMacOSX' on TWiki.org">TWiki:Codev.TWikiOnMacOSX</a>. 
 </li>
-<li> To install TWiki on SourceForge, for use on a software development project, read <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnSourceForge" title="'Codev/TWikiOnSourceForge' on TWiki.org">TWiki:Codev/TWikiOnSourceForge</a>
+<li> To install TWiki on SourceForge, for use on a software development project, read <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOnSourceForge" title="'Codev/TWikiOnSourceForge' on TWiki.org">TWiki:Codev.TWikiOnSourceForge</a>
 </li>
-<li> For other platforms, see <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOn" title="'Codev/TWikiOn' on TWiki.org">TWiki:Codev/TWikiOn</a>, and search the <a href="http://twiki.org/cgi-bin/view/Codev" title="'Codev' on TWiki.org">TWiki:Codev</a> and <a href="http://twiki.org/cgi-bin/view/Support" title="'Support' on TWiki.org">TWiki:Support</a> webs for other installation notes.
+<li> For other platforms, see <a href="http://twiki.org/cgi-bin/view/Codev/TWikiOn" title="'Codev/TWikiOn' on TWiki.org">TWiki:Codev.TWikiOn</a>, and search the <a href="http://twiki.org/cgi-bin/view/Codev" title="'Codev' on TWiki.org">TWiki:Codev</a> and <a href="http://twiki.org/cgi-bin/view/Support" title="'Support' on TWiki.org">TWiki:Support</a> webs for other installation notes.
 
 </li>
 </ul>
 <p />
-It is also advisable to review <a href="http://twiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki04x00x00" title="'Codev/KnownIssuesOfTWiki04x00x00' on TWiki.org">TWiki:Codev/KnownIssuesOfTWiki04x00x00</a>.
+It is also advisable to review <a href="http://twiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki04x00x00" title="'Codev/KnownIssuesOfTWiki04x00x00' on TWiki.org">TWiki:Codev.KnownIssuesOfTWiki04x00x00</a>.
 <p />
 If you need help, ask a question in the <a href="http://twiki.org/cgi-bin/view/Support" title="'Support' on TWiki.org">TWiki:Support</a> web or on <a href="http://twiki.org/cgi-bin/view/Codev/TWikiIRC" title="'Codev/TWikiIRC' on TWiki.org">TWiki:Codev/TWikiIRC</a> (irc.freenode.net, channel #twiki)
 <p />
