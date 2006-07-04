@@ -244,15 +244,16 @@ a:visited .twistyLinkLabel {
 }
 
 .tipsOfTheDay {
+	font-size: 80%;
 	background-color: #def;
 	border: 1px solid #69c;
 }
 .tipsOfTheDayHeader {
 	display: block;
-	padding: 5px;
+	padding: 3px;
 }
 .tipsOfTheDayText {
-	padding: 0 5px 5px 5px;
+	padding: 0 3px 3px 3px;
 }
 .tipsOfTheDayTitle {
 	font-weight: bold;

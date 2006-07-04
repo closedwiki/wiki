@@ -7,7 +7,7 @@ expand	@o@;
 
 
 1.1
-date	2006.06.19.13.47.20;	author VlyonYahoo;	state Exp;
+date	2006.06.19.13.47.20;	author VernonLyon;	state Exp;
 branches;
 next	;
 
@@ -22,7 +22,7 @@ log
 @none
 @
 text
-@%META:TOPICINFO{author="VlyonYahoo" date="1150724840" format="1.1" version="1.1"}%
+@%META:TOPICINFO{author="VernonLyon" date="1150724840" format="1.1" version="1.1"}%
 <pre>%STARTINCLUDE%<noautolink>
 websMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Webs"}%","","%MAKETEXT{"List of Webs"}%");
 %WEBLIST{"websMenu.Add($qname,"%SCRIPTURLPATH{"view"}%/$name/%HOMETOPIC%","%ICONURLPATH{"web-bg"}%");
