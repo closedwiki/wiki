@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1152149335" format="1.1" version="1.2"}%
 This is a short introductory training course for TWiki beginners.
 
 %SLIDESHOWSTART{template="ATasteOfTWikiTemplate"}%
@@ -45,7 +45,7 @@ TWiki is mainly used in commercial environments, often on corporate intranets
      </tr></table>
 
 A number of public Wiki sites also use TWiki
-   * Examples: <br /> https://uimon.cern.ch/twiki/bin/view/ <br /> http://csci.mrs.umn.edu/twiki/view
+   * Examples: <br /> https://twiki.cern.ch/twiki/bin/view/ <br /> http://csci.mrs.umn.edu/twiki/view
 
 ---++ TWiki Features
 TWiki builds on the original Wiki concept and adds a number of features that make it very useful in a business environment.
@@ -344,3 +344,4 @@ There are many other plugins, see http://TWiki.org/cgi-bin/view/Plugins
 %SLIDESHOWEND%
 
 __Related topics:__ WelcomeGuest, TWikiTutorial, ATasteOfTWikiTemplate
+
