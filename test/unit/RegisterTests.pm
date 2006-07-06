@@ -222,7 +222,7 @@ sub test_userTopicWithoutPMWithoutForm {
     $this->assert($text =~ s/^\s*\* Last Name: User$//m,$text);
     $this->assert($text =~ s/^\s*\* Comment:\s*$//m,$text);
     $this->assert($text =~ s/^\s*\* Name: Test User$//m,$text);
-    #$this->assert($text =~ s/^\s*\* Email: kakapo\@ground.dwelling.parrot.net$//m,$text);
+    $this->assert($text =~ s/^\s*\* Email: kakapo\@ground.dwelling.parrot.net$//m,$text);
     $this->assert($text =~ s/$TWiki::cfg{UsersWebName}\.$testUserWikiName//,$text);
     $this->assert($text =~ s/$testUserWikiName//,$text);
     $this->assert_matches(qr/\s*AFTER\s*/, $text);

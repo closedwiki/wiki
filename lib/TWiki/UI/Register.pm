@@ -313,13 +313,13 @@ sub _registerSingleBulkUser {
 
     my $userTopic =
       $session->{users}->addUserToMapping( $user, $session->{user} );
-    $user->setEmails( $row->{Email} );
 
     if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
         $log .= _createUserTopic($session, 'NewUserTemplate', $row);
     } else {
         $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
 	}
+    $user->setEmails( $row->{Email} );
 
     #if ($TWiki::cfg{EmailUserDetails}) {
         # If you want it, write it.
@@ -794,12 +794,12 @@ sub finish {
 
     my $userTopic = $session->{users}->addUserToMapping( $user, $agent);
 
-    $user->setEmails( $data->{Email} );
-
     # inform user and admin about the registration.
     my $status = _emailRegistrationConfirmations( $session, $data );
 
     my $log = _createUserTopic($session, 'NewUserTemplate', $data);
+
+    $user->setEmails( $data->{Email} );
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
