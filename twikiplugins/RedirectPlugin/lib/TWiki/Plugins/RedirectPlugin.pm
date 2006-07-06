@@ -41,14 +41,14 @@ sub initPlugin {
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag("REDIRECTPLUGIN_DEBUG");
 
-    TWiki::Func::registerTagHandler('REDIRECTTO', \&REDIRECTTO);
+    TWiki::Func::registerTagHandler('REDIRECT', \&REDIRECT);
     return 1;
 }
 
 
 
 # =========================
-sub REDIRECTTO {
+sub REDIRECT {
     my ($session, $params, $topic, $web) = @_;
 
     my $context = TWiki::Func::getContext();
