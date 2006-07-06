@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="VernonLyon" date="1152025344" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="VernonLyon" date="1152185822" format="1.1" reprev="1.6" version="1.6"}%
 ---+ Quick Menu Skin
 
 A functional skin that replaces the left bar with a customizable Javascript menu system.
@@ -20,7 +20,7 @@ A functional skin that replaces the left bar with a customizable Javascript menu
 
 The menu can behave in two ways. When =CLICKMENU= is set to 0 then the menu automatically shows when you hover the mouse over the menu. When it is set to 1 then the menu is activated by clicking on it. By default =CLICKMENU= is set to 0.
 
-To add different menus to the menubar you can set =QUICKMENUBAR= to the topic containing the javascript for your own custom menus. By default =QUICKMENUBAR= is set to [[%TWIKIWEB%.QuickMenuBar]], have a look at that topic to see how the menus are created.
+To add different menus to the menubar you can set =QUICKMENUBAR= to the topic containing the javascript for your own custom menus. By default =QUICKMENUBAR= is set to =%%NOP%TWIKIWEB%.QuickMenuBar=, have a look at %TWIKIWEB%.QuickMenuBar to see how the menus are created.
 
 To change settings just add them to %MAINWEB%.TWikiPreferences, WebPreferences, or your personal page.%BR%
 Eg:
@@ -31,7 +31,7 @@ Eg:
 
 ---++ Modifying Menus
 
-The menu bar is built by default from [[%TWIKIWEB%.QuickMenuBar]], which in turn includes [[%TWIKIWEB%.QuickMenuBarWebs]] (if login is enabled) and [[%TWIKIWEB%.QuickMenuBarWebs]] and [[%TWIKIWEB%.QuickMenuBarUtilities]]. These files contain javascript commands that are included by the skin's templates. You can edit these files to customize the menu, but be sure to avoid unwanted linking by enclosing your code in =&lt;noautolink&gt;= ... =&lt;/noautolink&gt;= tags.
+The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn includes %TWIKIWEB%.QuickMenuBarLogin (if login is enabled) and %TWIKIWEB%.QuickMenuBarWebs and %TWIKIWEB%.QuickMenuBarUtilities. These files contain javascript commands that are included by the skin's templates. You can edit these files to customize the menu, but be sure to avoid unwanted linking by enclosing your code in =&lt;noautolink&gt;= ... =&lt;/noautolink&gt;= tags.
 
 *%RED%Note%ENDCOLOR%:* In a future release, it will be possible to add icons to the menus in the menubar. When this is done the =QuickMenu.Menu= function will change! This will make the arguments similar to the =QuickMenu.Menu.Add= function in that the argument for an icon will be inserted before the "menu tip information" argument.
 
