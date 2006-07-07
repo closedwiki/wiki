@@ -132,9 +132,12 @@ sub initPlugin {
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
     TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
 
+    # get debug flag
+    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
+
     # Allow a sub to be called from the REST interface 
     # using the provided alias
-    TWiki::Func::registerRESTHandler('example', \&restExample);
+    # TWiki::Func::registerRESTHandler('example', \&restExample);
 
     # Plugin correctly initialized
     return 1;
