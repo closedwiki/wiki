@@ -457,6 +457,8 @@ sub save {
     my( $newMeta, $newText, $saveOpts, $merged ) =
       TWiki::UI::Save::buildNewTopic($session, 'save');
 
+    $session->{plugins}->afterEditHandler( $newText, $topic, $web );
+
     try {
         $store->saveTopic( $user, $web, $topic,
                            $newText, $newMeta, $saveOpts );
