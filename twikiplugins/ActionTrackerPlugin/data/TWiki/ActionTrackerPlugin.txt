@@ -400,6 +400,7 @@ The mechanism for defining notification groups as lists of "EMail" lines in a to
 |  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 | Change History: | |
+| 10883 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2606'>Item2606</a>  actionnotify can now read email addresses from password manager as well as new TWiki4 style user topics. |
 | 8385 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1443'>Item1443</a>  style sheet bug makes yellow warning not show |
 | 8372 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1434'>Item1434</a>  moved actionnotify from bin into tools |
 | 8304 | <a href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1305'>Item1305</a>  removing dotted style from AT. Looks horrible in IE |

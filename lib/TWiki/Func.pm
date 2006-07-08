@@ -1617,7 +1617,7 @@ sub wikiToEmail {
     return '' unless $wiki;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki, undef, 1 );
     return '' unless $user;
-    return join( ',', @{$user->emails()} );
+    return join( ',', $user->emails() );
 }
 
 =pod

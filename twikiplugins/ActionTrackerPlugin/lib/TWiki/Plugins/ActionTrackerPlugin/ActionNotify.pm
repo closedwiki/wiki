@@ -303,12 +303,10 @@ sub _getMailAddress {
                     $addresses = join( ',', @people );
                 }
             } else {
-                # parse Email: format lines from personal topic
-                my @people;
-                while ( $text =~ s/^\s+\*\s*E-?mail:\s*([^\s\r\n]+)//imo ) {
-                    push( @people, $1 );
-                }
-                $addresses = join( ',', @people );
+                # Email address will be picked from provided by
+                # $TWiki::cfg{PasswordManager} if possible
+                # Otherwise email address is picked from users topic
+                $addresses = TWiki::Func::wikiToEmail($intopic);
             }
         }
     }
