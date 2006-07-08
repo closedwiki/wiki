@@ -281,12 +281,11 @@ sub getWebNames {
         my @tmpList =
           sort
             map { TWiki::Sandbox::untaintUnchecked( $_ ) }
-              grep { !/$TWiki::cfg{NameFilter}/ &&
-                     !/^\./ &&
+              grep { !/\./ &&
+                     !/$TWiki::cfg{NameFilter}/ &&
                      -d $dir.'/'.$_
                    }
-                grep { !/\.(txt|txt,v|lease)$/ }
-                  readdir( DIR );
+                readdir( DIR );
         closedir( DIR );
         return @tmpList;
     }
