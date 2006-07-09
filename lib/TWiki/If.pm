@@ -78,16 +78,6 @@ sub stringify {
 
 package TWiki::If;
 
-BEGIN {
-    # Do a dynamic 'use locale' for this module, so that \w can stand for
-    # international chars.
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-        import locale();
-    }
-}
-
-
 # Operator precedences
 my %defOps;
 
