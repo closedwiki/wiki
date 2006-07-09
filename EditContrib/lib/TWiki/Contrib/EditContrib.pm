@@ -3,440 +3,400 @@
 
 package TWiki::Contrib::EditContrib;
 
-use vars qw( $VERSION $RELEASE );
+use vars qw( $VERSION );
 
 use strict;
 use CGI::Carp qw(fatalsToBrowser);
 use CGI;
 use TWiki;
 use TWiki::UI;
-use TWiki::UI::Preview;
+use Error qw( :try );
+use TWiki::OopsException;
 
-$VERSION = '$Rev$';
-$RELEASE = 1.2;
+$VERSION = 1.001;
 
 # =========================
+##### Note done yet
 sub handleUrlParam {
     my( $theParam ) = @_;
     return TWiki::handleUrlParam( $theParam );
 }
 
 # =========================
-sub savemulti {
-  my( $webName, $topic, $userName, $query, $editlink ) = @_;
-
-  my $redirecturl = TWiki::Func::getViewUrl( $webName, $topic );
-
-  my $nl = "\n"; # ( $query->param( 'newline' ) )?"\n":" ";
-
-  my $saveaction = lc($query->param( 'action' ));
-  if ( $saveaction eq "checkpoint" ) {
-    $query->param( -name=>"dontnotify", -value=>"checked" );
-    $query->param( -name=>"unlock", -value=>'0' );
-    $redirecturl = $editlink;
-  } elsif ( $saveaction eq "quietsave" ) {
-    $query->param( -name=>"dontnotify", -value=>"checked" );
-  } elsif ( $saveaction eq "cancel" ) {
-    my $viewURL = TWiki::Func::getScriptUrl( $webName, $topic, "view" );
-    TWiki::Func::redirectCgiQuery( $query, "$viewURL?unlock=on" );
-    return;
-  } elsif( $saveaction eq "preview" ) {
-    ## the following violates the TWiki Func API.  It may not work in
-    ## anything other than Dakar or Cairo.
-    my $text = $query->param( 'pretxt' ) . $query->param( 'text' ) . $nl . $query->param( 'postxt' );
-    if( $TWiki::Plugins::VERSION >= 1.1 ) {
-        $text = TWiki::entityDecode( $text );
-        $TWiki::Plugins::SESSION->{cgiQuery}->param( -name=>"text", -value=>$text);
-        
-        TWiki::UI::Preview::preview( $TWiki::Plugins::SESSION );
-    } else {
-        $text = TWiki::Render::decodeSpecialChars( $text );
-        $query->param( -name=>"text", -value=>$text);
-        TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
-    }
-    return;
-  }
-
-  my $saveopts = {};
-  $saveopts->{minor} = 1 if $query->param( 'dontnotify' );
-  $saveopts->{comment} = $query->param('comment') if $query->param( 'comment' );
-
-  my $text = $query->param( 'pretxt' ) . $nl . $query->param( 'text' ) . $nl . $query->param( 'postxt' );
-      
-  my $oopsurl = '';
-
-  if( $TWiki::Plugins::VERSION >= 1.1 ) {
-      my ($meta, undef) = &TWiki::Func::readTopic( $webName, $topic );
-
-      $text = TWiki::entityDecode( $text );
-
-      if (TWiki::Func::saveTopic( $webName, $topic, $meta, $text, $saveopts )) {
-          $oopsurl = TWiki::Func::getOopsUrl( $webName, $topic, 'oopssaveerr', 'Error on topic save' );
-          TWiki::Func::redirectCgiQuery( $query, $oopsurl ); 
-      } else {
-          TWiki::Func::redirectCgiQuery( $query, $redirecturl );
-        }
-
-  } else {
-      # Cairo interface (violates TWiki::Func API)
-
-      $query->param( -name=>"text", -value=>$text );
-      $text = TWiki::Render::decodeSpecialChars( $text );
-      if (TWiki::UI::Save::_save( $webName, $topic, $userName, $query )) {
-          TWiki::Func::redirectCgiQuery( $query, $redirecturl );
-      }
-  }
-
-}
-
-# =========================
-sub passFormForEdit
-{
-    my( $web, $topic, $form, $meta, $query, @fieldsInfo ) = @_;
-
-    my $mandatoryFieldsPresent = 0;
-
-    # FIXME could do with some of this being in template
-    my $text = "";
-               
-    TWiki::Form::fieldVars2Meta( $web, $query, $meta, "override" );
-    
-    foreach my $c ( @fieldsInfo ) {
-        my @fieldInfo = @$c;
-        my $fieldName = shift @fieldInfo;
-        my $name = $fieldName;
-        my $title = shift @fieldInfo;
-        my $type = shift @fieldInfo;
-        my $size = shift @fieldInfo;
-        my $tooltip = shift @fieldInfo;
-        my $attributes = shift @fieldInfo;
-	$mandatoryFieldsPresent = 1 if $attributes =~ /M/;
-
-        my %field = $meta->findOne( "FIELD", $fieldName );
-        my $value = $field{"value"};
-        if( ! defined( $value ) && $attributes =~ /S/ ) {
-            # Allow initialisation based on a preference
-            $value = &TWiki::Prefs::getPreferencesValue($fieldName);
-        }
-        $value = "" unless defined $value;  # allow "0" values
-	my $extra = ($attributes =~ /M/) ? "<font color=\"red\">*</font>" : "";
-
-        $tooltip =~ s/&/&amp\;/g;
-        $tooltip =~ s/"/&quot\;/g;
-        $tooltip =~ s/</&lt\;/g;
-        $tooltip =~ s/>/&gt\;/g;
-
-	# Generate hidden inputs for each form field
-	$value =~ s/&/&amp\;/go;
-	$value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
-	$value =~ s/</&lt\;/go;
-	$value =~ s/>/&gt\;/go;
-	$value = "<input type=\"hidden\" name=\"$name\" size=\"$size\" value=\"$value\" />";
-        $text .= "$value\n";
-    }
-    
-    return $text;
-}
-
-# =========================
-sub quoteForXml {
-    my ($text) = @_;
-    $text =~ s/&/&amp\;/go;
-    $text =~ s/\"/&quot;/g;
-    $text =~ s/</&lt\;/go;
-    $text =~ s/>/&gt\;/go;
-    $text =~ s/\t/   /go;
-    return $text;
-}
-
-# =========================
 sub init_edit {
+    my $session = shift;
 
-    my $query = shift; 
+    $session->enterContext( 'edit' );
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $user = $session->{user};
 
-    my $thePathInfo = $query->path_info(); 
-    my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param( 'topic' ) || "";
-    my $theUrl = $query->url;
+    # empty means edit both form and text, "form" means edit form only,
+    # "text" means edit text only
 
-    my( $topic, $webName, $dummy, $userName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
-    $dummy = "";  # to suppress warning
+    my $onlyWikiName = TWiki::isTrue( $query->param( 'onlywikiname' ));
+    my $onlyNewTopic = TWiki::isTrue( $query->param( 'onlynewtopic' ));
+    my $store = $session->{store};
 
-    my $breakLock = $query->param( 'breaklock' ) || "";
+    TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
+    TWiki::UI::checkMirror( $session, $webName, $topic );
 
-    return unless TWiki::Func::webExists( $webName, $topic );
+    my $topicExists  = $store->topicExists( $webName, $topic );
 
-    # return if TWiki::UI::isMirror( $webName, $topic );
+    # If you want to edit, you have to be able to view and change.
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'view', $user );
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'change', $user );
 
-    my $topicExists  = &TWiki::Func::topicExists( $webName, $topic );
+    # Check lease, unless we have been instructed to ignore it
+    # or if we are using the 10X's topic name for dynamic topic names
+    my $breakLock = $query->param( 'breaklock' ) || '';
+    unless( $breakLock || ($topic =~ /X{10}/ )) {
+        my $lease = $store->getLease( $webName, $topic );
+        if( $lease ) {
+            my $who = $lease->{user}->webDotWikiName();
 
-    # Read topic 
-    unless( $topicExists ) {
-	my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmissing" );
-        print $query->redirect( $url );
+            if( $who ne $user->webDotWikiName() ) {
+                # redirect; we are trying to break someone else's lease
+                my( $future, $past );
+                my $why = $lease->{message};
+                my $def;
+                my $t = time();
+                if( $t > $lease->{expires} ) {
+                    # The lease has expired, but see if we are still
+                    # expected to issue a "less forceful' warning
+                    if( $TWiki::cfg{LeaseLengthLessForceful} < 0 ||
+                          $t < $lease->{expires} +
+                            $TWiki::cfg{LeaseLengthLessForceful} ) {
+                        $def = 'lease_old';
+                        $past = TWiki::Time::formatDelta(
+                            $t - $lease->{expires}, $session->{i18n} );
+                        $future = '';
+                    }
+                }
+                else {
+                    # The lease is active
+                    $def = 'lease_active';
+                    $past = TWiki::Time::formatDelta(
+                        $t - $lease->{taken}, $session->{i18n} );
+                    $future = TWiki::Time::formatDelta(
+                        $lease->{expires} - $t, $session->{i18n} );
+                }
+                if( $def ) {
+                    # use a 'keep' redirect to ensure we pass parameter
+                    # values in the query on to the oops script
+                    throw TWiki::OopsException( 'leaseconflict',
+                                                keep => 1,
+                                                def => $def,
+                                                web => $webName,
+                                                topic => $topic,
+                                                params =>
+                                                  [ $who, $past, $future ] );
+                }
+            }
+        }
+    }
+
+    # Prevent editing existing topic?
+    if( $onlyNewTopic && $topicExists ) {
+        # Topic exists and user requested oops if it exists
+        throw TWiki::OopsException( 'attention',
+                                    def => 'topic_exists',
+                                    web => $webName,
+                                    topic => $topic );
+    }
+
+    # prevent non-Wiki names?
+    if( ( $onlyWikiName )
+        && ( ! $topicExists )
+        && ( ! TWiki::isValidTopicName( $topic ) ) ) {
+        # do not allow non-wikinames, redirect to view topic
+        # SMELL: this should be an oops, shouldn't it?
+        $session->redirect( $session->getScriptUrl( 1, 'view', $webName, $topic ));
         return;
     }
 
-    # Check access controls
-    my $wikiUserName = &TWiki::Func::userToWikiName( $userName );
-    return unless TWiki::Func::checkAccessPermission( 'CHANGE', 
-                                                      $wikiUserName, '',
-                                                      $webName, $topic );
-
-    # Check for locks
-    my( $lockUser, $lockTime ) = &TWiki::Func::checkTopicEditLock( $webName, $topic );
-    # if( ( ! $breakLock ) && ( $lockUser ) ) {
-    #     # warn user that other person is editing this topic
-    #     $lockUser = &TWiki::userToWikiName( $lockUser );
-    #     use integer;
-    #     $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-    #     my $editLock = $TWiki::editLockTime / 60;
-    #     TWiki::UI::oops( $webName, $topic, "locked",
-    #     		 $lockUser, $editLock, $lockTime );
-    #     return;
-    # }
-    &TWiki::Func::setTopicEditLock( $webName, $topic, 1 );
-
-    return ($query, $topic, $webName);
-}
+    return ($session, $topicExists);
+  }
 
 # =========================
 sub edit {
 
-    my ($query,$topic,$webName) = init_edit( @_ );
+    my $session = shift;
+    my $topicExists;
+    ( $session, $topicExists ) = init_edit( $session );
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $store = $session->{store};
+    my $saveCmd = $query->param( 'cmd' ) || '';
+    my $editaction = lc($query->param( 'action' )) || "";
+    my $skin = $session->getSkin();
+    my $templateTopic = $query->param( 'templatetopic' ) || '';
+    my $formTemplate  = $query->param( 'formtemplate' ) || '';
+    my $user = $session->{user};
+    my $theParent = $query->param( 'topicparent' ) || '';
+    my $ptext = $query->param( 'text' );
+    my $meta = '';
+    my $text = '';
+    my $extra = '';
+
     return unless ($query);
+    if( $topicExists ) {
+        ( $meta, $text ) =
+          $store->readTopic( undef, $webName, $topic, undef );
+    }
 
-    my $session = '';
-    if( $TWiki::Plugins::VERSION >= 1.1 ) {
-        $session = $TWiki::Plugins::SESSION;
-    }    
-
-    my ( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
+    if( $saveCmd && ! $session->{user}->isAdmin()) {
+        throw TWiki::OopsException( 'accessdenied', def=>'only_group',
+                                    web => $webName, topic => $topic,
+                                    params => $TWiki::cfg{UsersWebName}.
+                                    '.'.$TWiki::cfg{SuperAdminGroup} );
+    }
 
     my $templateWeb = $webName;
-    my $skin = $query->param( "skin" );
-    my $theParent = $query->param( 'topicparent' ) || "";
-    my $ptext = $query->param( 'text' );
-    my $tmpl = "";
-    my $extra = "";
 
     # Get edit template, standard or a different skin
-    $skin = TWiki::Func::getPreferencesValue( "SKIN" ) unless ( $skin );
-    $tmpl = &TWiki::Func::readTemplate( "editsection", $skin );
+    #### Removed a chunk here. Figure out how we can get the right
+    #### template by using the editaction url parameter
+
+    my $tmpl =
+      $session->{templates}->readTemplate( "editsection", $skin );
+
+    unless( $topicExists ) {
+        if( $templateTopic ) {
+            ( $templateWeb, $templateTopic ) =
+              $session->normalizeWebTopicName( $templateWeb, $templateTopic );
+
+            unless( $store->topicExists( $templateWeb, $templateTopic )) {
+                throw TWiki::OopsException( 'accessdenied',
+                                            def => 'no_such_topic',
+                                            web => $templateWeb,
+                                            topic => $templateTopic,
+                                            params => [ 'templatetopic' ] );
+            }
+
+            ( $meta, $text ) =
+              $store->readTopic( $session->{user}, $templateWeb,
+                                        $templateTopic, undef );
+        } else {
+            ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, 'WebTopicEditTemplate' );
+        }
+
+        $extra = "(not exist)";
+
+        # If present, instantiate form
+        if( ! $formTemplate ) {
+            my $form = $meta->get( 'FORM' );
+            $formTemplate = $form->{name} if $form;
+        }
+
+        $text = $session->expandVariablesOnTopicCreation( $text, $user );
+        $tmpl =~ s/%NEWTOPIC%/1/;
+    } else {
+        $tmpl =~ s/%NEWTOPIC%//;
+    }
+    $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/;
+
+    # override with parameter if set
+    $text = $ptext if defined $ptext;
+
+    # Insert the rev number/date we are editing. This will be boolean false if
+    # this is a new topic.
+    if( $topicExists ) {
+        my ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+        $tmpl =~ s/%ORIGINALREV%/${orgRev}_$orgDate/g;
+    } else {
+        $tmpl =~ s/%ORIGINALREV%/0/g;
+    }
 
     # parent setting
-    if( $theParent eq "none" ) {
-      $meta->remove( "TOPICPARENT" );
+    if( $theParent eq 'none' ) {
+        $meta->remove( 'TOPICPARENT' );
     } elsif( $theParent ) {
-      if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
-	my $parentWeb = $1;
-	if( $1 eq $webName ) {
-	  $theParent = $2;
-	}
-      }
-      $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
-    } else {
-        my $parentMeta = '';
-        if ( $TWiki::Plugins::VERSION >= 1.1 ) {
-            $parentMeta = $meta->get( 'TOPICPARENT' ) if $meta;
-            $theParent = $parentMeta->{name} if $parentMeta;
-        } 
-        # else {
-        #    $parentMeta = $meta->findOne( "TOPICPARENT" );
-        #    print $parentMeta ;
-        # }
+        my $parentWeb;
+        ($parentWeb, $theParent) =
+          $session->normalizeWebTopicName( $webName, $theParent );
+        if( $parentWeb ne $webName ) {
+            $theParent = $parentWeb.'.'.$theParent;
+        }
+        $meta->put( 'TOPICPARENT', { name => $theParent } );
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
-    # Handle protective encoding only for edited section below
-    if( $TWiki::doLogTopicEdit ) {
+    if( $formTemplate ) {
+        $meta->remove( 'FORM' );
+        if( $formTemplate ne 'none' ) {
+            $meta->put( 'FORM', { name => $formTemplate } );
+        } else {
+            $meta->remove( 'FORM' );
+        }
+        $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
+    }
+
+    if( $saveCmd ) {
+        $text = $store->readTopicRaw( $session->{user}, $webName,
+                                                 $topic, undef );
+    }
+
+    $session->{plugins}->beforeEditHandler(
+        $text, $topic, $webName, $meta ) unless( $saveCmd );
+
+    if( $TWiki::cfg{Log}{edit} ) {
         # write log entry
-        if( $TWiki::Plugins::VERSION >= 1.1 ) {
-            $session->writeLog( 'edit', $webName.'.'.$topic, $extra );
-        } else {
-            &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );
-        }
+        $session->writeLog( 'edit', $webName.'.'.$topic, $extra );
     }
 
-    $tmpl =~ s/%CMD%//go;
-    $tmpl = &TWiki::Func::expandCommonVariables( $tmpl, $topic );
-    # $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
-    $tmpl = &TWiki::Func::renderText( $tmpl );
+    $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go if $saveCmd;
 
-    if( $TWiki::Plugins::VERSION >= 1.1 ) {
-        my $saveCmd = $query->param( 'cmd' ) || '';
-        my $formTemplate  = $query->param( 'formtemplate' ) || '';
-        my $templateWeb = $webName;
-        my $editaction = lc($query->param( 'action' )) || "";
+    $tmpl =~ s/%CMD%/$saveCmd/go;
+    $session->enterContext( 'can_render_meta', $meta );
 
-        # from Dakar version of Edit.pm
-        my $formMeta = $meta->get( 'FORM' );
-        my $form = '';
-        my $formText = '';
-
-    ## the following violates the TWiki Func API.  It may not work in
-    ## anything other than Dakar or Cairo.
-
-        $form = $formMeta->{name} if( $formMeta );
-        if( $form && !$saveCmd ) {
-            my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
-            # if there's a form template, then pull whatever values exist in
-            # the query into the meta, overriding the values in the topic.
-            my $formDef = new TWiki::Form( $session, $templateWeb, $form );
-            unless( $formDef ) {
-                throw TWiki::OopsException( 'attention',
-                                            def => 'no_form_def',
-                                            web => $session->{webName},
-                                            topic => $session->{topicName},
-                                            params => [ $templateWeb, $form ] );
-            }
-            $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 0 );
-            # and render them for editing
-            if ( $editaction eq "text" ) {
-                $formText = $formDef->renderHidden( $meta,
-                                                    $getValuesFromFormTopic );
-            } else {
-                $formText = $formDef->renderForEdit( $webName, $topic, $meta,
-                                                     $getValuesFromFormTopic );
-            }
-        } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
-            $formText = $session->{templates}->readTemplate( "addform", $skin );
-            $formText = $session->handleCommonTags( $formText, $webName, $topic );
+    $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
+    # Don't want to render form fields, so this after getRenderedVersion
+    my $formMeta = $meta->get( 'FORM' );
+    my $form = '';
+    my $formText = '';
+    $form = $formMeta->{name} if( $formMeta );
+    if( $form && !$saveCmd ) {
+        my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
+        # if there's a form template, then pull whatever values exist in
+        # the query into the meta, overriding the values in the topic.
+        my $formDef = new TWiki::Form( $session, $templateWeb, $form );
+        unless( $formDef ) {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'no_form_def',
+                                        web => $session->{webName},
+                                        topic => $session->{topicName},
+                                        params => [ $templateWeb, $form ] );
         }
-        $tmpl =~ s/%FORMFIELDS%/$formText/g;
-        
-    } else {
-        # Don't want to render form fields, so this after getRenderedVersion
-        my %formMeta = $meta->findOne( "FORM" );
-        my $form = "";
-        $form = $formMeta{"name"} if( %formMeta );
-        if( $form ) {
-            my @fieldDefs = &TWiki::Form::getFormDef( $templateWeb, $form );
-            
-            if( ! @fieldDefs ) {
-                TWiki::UI::oops( $webName, $topic, "noformdef" );
-                  return;
-              }
-            my $formText = &TWiki::Contrib::EditContrib::passFormForEdit( $webName, $topic, $form, $meta, $query, @fieldDefs );
-            $tmpl =~ s/%FORMFIELDS%/$formText/go;
-        } elsif( TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
-            # follows a hybrid html monster to let the 'choose form button' align at
-            # the right of the page in all browsers
-            $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'
-                . &TWiki::Form::chooseFormButton( "Add form" )
-                . '</td></tr></table></div>';
-            $tmpl =~ s/%FORMFIELDS%/$form/go;
+        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 1 );
+        # and render them for editing
+        if ( $editaction eq "text" ) {
+            $formText = $formDef->renderHidden( $meta,
+                                                $getValuesFromFormTopic );
         } else {
-            $tmpl =~ s/%FORMFIELDS%//go;
+            $formText = $formDef->renderForEdit( $webName, $topic, $meta,
+                                                 $getValuesFromFormTopic );
         }
+    } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
+        $formText = $session->{templates}->readTemplate( "addform", $skin );
+        $formText = $session->handleCommonTags( $formText, $webName, $topic );
     }
+    $tmpl =~ s/%FORMFIELDS%/$formText/g;
+
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
+    my $p = $session->{prefs};
 
     # Table
 
     my $width = 
-       TWiki::Func::getPreferencesValue( "SECTIONEDITBOXWIDTH", $webName ) || 
-       TWiki::Func::getPreferencesValue( "EDITBOXWIDTH", $webName ) || 
-       60 ;
+       $p->getPreferencesValue( "SECTIONEDITBOXWIDTH", $webName ) || 
+       $p->getPreferencesValue( "EDITBOXWIDTH", $webName );
     my $height = 
-       TWiki::Func::getPreferencesValue( "SECTIONEDITBOXHEIGHT", $webName ) || 
-       TWiki::Func::getPreferencesValue( "EDITBOXHEIGHT", $webName ) || 
-       15 ;
+       $p->getPreferencesValue( "SECTIONEDITBOXHEIGHT", $webName ) || 
+       $p->getPreferencesValue( "EDITBOXHEIGHT", $webName );
     my $style =
-       TWiki::Func::getPreferencesValue( "SECTIONEDITBOXSTYLE", $webName ) || 
-       TWiki::Func::getPreferencesValue( "EDITBOXSTYLE", $webName ) || 
-       '' ;
+       $p->getPreferencesValue( "SECTIONEDITBOXSTYLE", $webName ) || 
+       $p->getPreferencesValue( "EDITBOXSTYLE", $webName );
     $tmpl =~ s/%SECTIONEDITBOXWIDTH%/$width/go;
     $tmpl =~ s/%SECTIONEDITBOXHEIGHT%/$height/go;
     $tmpl =~ s/%SECTIONEDITBOXSTYLE%/$style/go;
 
-    return ($query, $topic, $webName, $text, $tmpl);
+    return ($session, $text, $tmpl);
 
 }
 
 # =========================
 sub finalize_edit {
-    my ( $query, $topic, $webName, $pretxt, $sectxt, $postxt, $pretxtRender, $postxtRender ) = @_;
-    # $_[8] is template
+####    my ( $session, $pretxt, $sectxt, $postxt, $pretxtRender, $postxtRender ) = @_;
+    my ( $session, $pretxt, $sectxt, $postxt, $pretxtRender, $postxtRender, $tmpl ) = @_;
+    # $_[6] is template
+    #### Why is this necessary?
+    #### For right now, just pass tmpl
 
-    if( $TWiki::Plugins::VERSION >= 1.1 ) {
-        # Dakar interface
-        $pretxt = &TWiki::entityEncode( $pretxt );
-        $_[8] =~ s/%PRETEXTFIELD%/$pretxt/go;
-        $sectxt = &TWiki::Contrib::EditContrib::quoteForXml($sectxt);
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $store = $session->{store};
+    my $user = $session->{user};
+    # apptype is undocumented legacy
+    my $cgiAppType = $query->param( 'contenttype' ) ||
+      $query->param( 'apptype' ) || 'text/html';
 
-        $postxt = &TWiki::entityEncode( $postxt );
-        $_[8] =~ s/%POSTEXTFIELD%/$postxt/go;
 
-        $TWiki::Plugins::SESSION->{plugins}->beforeEditHandler( $sectxt, $topic, $webName );
-    } else {
-        $pretxt = &TWiki::Render::encodeSpecialChars($pretxt);
-        $_[8] =~ s/%PRETEXTFIELD%/$pretxt/go;
-        $sectxt = &TWiki::Contrib::EditContrib::quoteForXml($sectxt);
-        $postxt = &TWiki::Render::encodeSpecialChars($postxt);
-        $_[8] =~ s/%POSTEXTFIELD%/$postxt/go;
-        ##AS added hook for plugins that want to do heavy stuff
-        TWiki::Plugins::beforeEditHandler( $sectxt, $topic, $webName );
-        ##/AS
-    }
+    $pretxt = TWiki::entityEncode($pretxt);
+    $tmpl =~ s/%PRETEXTFIELD%/$pretxt/go;
+    $postxt = TWiki::entityEncode($postxt);
+    $tmpl =~ s/%POSTEXTFIELD%/$postxt/go;
+    
+    ##AS added hook for plugins that want to do heavy stuff
+    #TW: Does not appear to be in Edit.pm
+    $session->{plugins}->beforeEditHandler( $sectxt, $topic, $webName );
+    ##/AS
 
-    $_[8] =~ s/%TEXT%/$sectxt/go;
+    $tmpl =~ s/%UNENCODED_TEXT%/$sectxt/g;
+
+    #### quoteForXml included in entityEncode
+    #### $sectxt = &TWiki::Contrib::EditContrib::quoteForXml($sectxt);
+    $sectxt = TWiki::entityEncode( $sectxt );
+    $tmpl =~ s/%TEXT%/$sectxt/g;
+
+    $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
 
     if ( $sectxt =~ /^\n/o ) {
-      $_[8] =~ s/%TEXTDETAIL%/<input type="hidden" name="newline" value="t" \/>/go;
+      $tmpl =~ s/%TEXTDETAIL%/<input type="hidden" name="newline" value="t" \/>/go;
     } else {
-      $_[8] =~ s/%TEXTDETAIL%//go;
+      $tmpl =~ s/%TEXTDETAIL%//go;
     }
 
     # do not allow click on link before save: (mods by TedPavlic)
     my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-    $oopsUrl = &TWiki::Func::expandCommonVariables( $oopsUrl, $topic );
+    $oopsUrl = $session->handleCommonTags( $oopsUrl, $topic );
 
     if ( $pretxtRender ) {
-#      $pretxtRender = &TWiki::Contrib::EditContrib::quoteForXml($pretxtRender);
+      #### quoteForXml included in entityEncode
+      #### $pretxtRender = &TWiki::Contrib::EditContrib::quoteForXml($pretxtRender);
+      #### don't think we still do the tab encoding
       $pretxtRender =~ s/ {3}/\t/go;
-      $pretxtRender = &TWiki::Func::expandCommonVariables( $pretxtRender, $topic );
-      $pretxtRender = &TWiki::Func::renderText( $pretxtRender );
-      $pretxtRender =~ s@(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))@$1href="$oopsUrl?template=oopspreview"@goi;
-      $pretxtRender =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">\n<input type="hidden" name="topic" value="$topic">@goi;
-      $pretxtRender =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
-      $_[8] =~ s/%PRETEXT%/$pretxtRender/go;
+      $pretxtRender = $session->handleCommonTags( $pretxtRender, $topic );
+      # Same as TWiki::Func::renderText( $pretxtRender )
+      $pretxtRender = $session->{renderer}->getRenderedVersion( $pretxtRender );
+      # Disable links and inputs in the text
+      $pretxtRender =~ s#<a\s[^>]*>(.*?)</a>#<span class="twikiEmulatedLink">$1</span>#gis;
+      $pretxtRender =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
+      $pretxtRender =~ s(</?form(|\s.*?)>)()gis;
+      $pretxtRender =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
+
+      $tmpl =~ s/%PRETEXT%/$pretxtRender/go;
     } else {
-      $_[8] =~ s/%PRETEXT%//go;
+      $tmpl =~ s/%PRETEXT%//go;
     }
       
     if ( $postxtRender ) {
-#      $postxtRender = &TWiki::Contrib::EditContrib::quoteForXml($postxtRender);
+      #### quoteForXml included in entityEncode
+      #### $postxtRender = &TWiki::Contrib::EditContrib::quoteForXml($postxtRender);
+      #### don't think we still do the tab encoding
       $postxtRender =~ s/ {3}/\t/go;
-      $postxtRender = &TWiki::Func::expandCommonVariables( $postxtRender, $topic );
-      $postxtRender = &TWiki::Func::renderText( $postxtRender );
-      $postxtRender =~ s@(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))@$1href="$oopsUrl?template=oopspreview"@goi;
-      $postxtRender =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">\n<input type="hidden" name="topic" value="$topic">@goi;
-      $postxtRender =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
-      $_[8] =~ s/%POSTEXT%/$postxtRender/go;
+      $postxtRender = $session->handleCommonTags( $postxtRender, $topic );
+      # Same as TWiki::Func::renderText( $pretxtRender )
+      $postxtRender = $session->{renderer}->getRenderedVersion( $postxtRender );
+
+      # Disable links and inputs in the text
+      $postxtRender =~ s#<a\s[^>]*>(.*?)</a>#<span class="twikiEmulatedLink">$1</span>#gis;
+      $postxtRender =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
+      $postxtRender =~ s(</?form(|\s.*?)>)()gis;
+      $postxtRender =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
+
+      $tmpl =~ s/%POSTEXT%/$postxtRender/go;
     } else {
-      $_[8] =~ s/%POSTEXT%//go;
+      $tmpl =~ s/%POSTEXT%//go;
     }
     
-    $_[8] =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
+    $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
 
-    # TWiki::writeHeaderFull ( $query, 'edit', 'text/html', length($_[8]) );
-    TWiki::Func::writeHeader( $query, length($_[8]) );
-
-    print $_[8];
-
-}
-
-## Random URL:
-# returns 4 random bytes in 0x01-0x1f range in %xx form
-# =========================
-sub randomURL
-{
-  my (@hc) = (qw (01 02 03 04 05 06 07 08 09 0b 0c 0d 0e 0f 10
-                  11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f));
-  #  srand; # needed only for perl < 5.004
-  return "%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]";
+    $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );
 }
 
 

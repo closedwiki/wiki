@@ -1,13 +1,15 @@
-%META:TOPICINFO{author="guest" date="1112872172" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiGuest" date="1150177015" format="1.1" version="1.8"}%
+---+!! Edit Contrib Package
+
 Provides subroutines useful in writing plugins that edit and save parts of topics.
 
----+ Summary of Contents
+%TOC%
+
+---++ Summary of Contents
 
 This contrib provides subroutines that come in handy when editing and saving parts of topics (refered to as sections).
 
-	* =passFormForEdit= supports editing a topic or parts of a topic without showing the form
-	* =savemulti= is an adaption of TWiki::UI::Save::savemulti
-	* =quoteForXml= encodes sensitive characters before using text as URL variable
+	* =init_edit= initializes editing of a topic
 	* =edit= sets up the section for editing
 	* =finalize_edit= completes the generation of the edit topic
 	* =bin/savesection= is an adaption of =bin/save=
@@ -15,7 +17,9 @@ This contrib provides subroutines that come in handy when editing and saving par
 
 This contrib is used by TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/MultiEditPlugin, and TWiki:Plugins/ThreadedDiscussionPlugin. Examining these plugins will provide guidance of how to use these subroutines in implementing your own plugin.
 
----+ Detailed Documentation
+This contrib supports TWiki4 and onward. For a version of this contrib that works with the Cairo release, please download the appropriate version from twiki.org.
+
+---++ Detailed Documentation
 
 The use of this contrib follows closely the pattern used in TWiki core when editing a topic. A plugin implementing editing of a section of a topic has to
 	* Implement code called during view which would provide appropriate controls for edting a section, and identify the section to be edited by differentiating
@@ -28,28 +32,12 @@ The use of this contrib follows closely the pattern used in TWiki core when edit
 		* Determine the text before the section to be edited, the section to be edited, and the text after that section, as well as the rendered versions (if desired) of the pre- and post-sections.
 		* Pass these to =finalize_edit()= to generate the edit topic.
 The contrib provides the rest of the plumbing (save script, edit templates).
-Note that to perform these functions, the plugin violates the TWiki Func API.  Thus, future releases of TWiki may be incompatible with this plugin.
 
+---+++ =edit ( $session ) -> ( $session, $text, $template )=
 
----++ =passFormForEdit ( $web, $topic, $form, $meta, $query, @fieldsInfo )=
+Sets up a section of the topic for editing. This code is derived from =lib/TWiki/UI/Edit.pm=, but omits code related to topic creation (as the topic must exist for this function to be called).
 
-To be used instead of =TWiki::Forms::renderForEdit= when editing a topic should not display the forms for editing. In this case, form values are passed through to the save script unchanged. This would allow, for example, separating the editing of the form from editing the text of the topic.
-
----++ =savemulti ( $web, $topic, $user, $query, $editlink )=
-
-Works identical to =TWiki::UI::Save::savemulti= except
-	* redirects to =$editlink= when "Checkpoint" is selected (thus a custom edit script can be called)
-	* additional text can be passed via the =pretxt= and =postxt= URL parameters. These will be prepended and appended to the text coming from the edit box, respectively.
-
----++ =quoteForXml ( $text )=
-
-Quotes characters in =$text= so that it can used for display and editing.
-
----++ =edit ( )=
-
-Sets up a section of the topic for editing. This code is derived from =bin/edit= and =lib/TWiki/UI/Edit.pm=, but omits code related to topic creation (as the topic must exist for this function to be called).
-
-Returns the current query object, the topic, web, the topic text passed into the script, as well as the appropriate template rendered with the exception of application specific text (these template variables must be substituted for by the client function):
+Returns the current session object, the topic text passed into the script, as well as the appropriate template rendered with the exception of application specific text (these template variables must be substituted for by the client function):
 
 |*Template&nbsp;variable*|*Purpose*|
 |=%TEXT%=|Text to be edited; shown in textarea  |
@@ -60,7 +48,7 @@ Returns the current query object, the topic, web, the topic text passed into the
 |=%EDIT%=|URL to be invoked to edit the section (used when "Checkpoint" is selected)  |
 |=%EDITPARAMS%=|URL parameters to be passed when the section is edited  |
 
----++ =finalize_edit ( $query, $topic, $webName, $pretxt, $sectxt, $postxt, $pretxtRender, $postxtRender, $tmpl )=
+---+++ =finalize_edit ( $session, $pretxt, $sectxt, $postxt, $pretxtRender, $postxtRender, $tmpl )=
 
 Sets up the final edit topic. 
 
@@ -68,19 +56,21 @@ Sets up the final edit topic.
 
 =$postxtRender= and =$pretxtRender= will be rendered for edit and displayed above and below the text area, respectively. Pass an empty string if no such text should be displayed. These will be encoded for display and substituted for =%<nop>PRETEXTFIELD%= and =%<nop>POSTEXTFIELD%=, respectively.
 
----++ =bin/savesection=
+---+++ =bin/savesection=
 
 Works identical to =bin/save= except
 	* invokes =TWiki::Contrib::savemulti=
 	* constructs the edit link (see above) from the URL parameters =edit= and =editparams=. The former has to be the edit script to be invoked when "Checkpoint" is selected, the latter determines any additional URL parameters to be passed to the edit script (must include the leading =&=).
 
----++ =templates/editsection.tmpl=, =templates/editsection.pattern.tmpl=
+---+++ =templates/editsection.tmpl=, =templates/editsection.pattern.tmpl=
 
 Templates supporting the editing of a section. The =pretxt= and =postxt= URL parameters (see =savemulti=) are generated by the two variables =%<nop>PRETEXTFIELD%= and =%<nop>POSTEXTFIELD%=. The size of the edit window is controlled by preference variables (see below).
 
 
 
 ---++ Settings
+
+Settings are stored as preferences variables. To reference a setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, e.g. ==%<nop>JSCALENDARCONTRIB_STUB%==
 
 	* Name of the perl package
 		* Set STUB = TWiki::Contrib::EditContrib
@@ -91,8 +81,15 @@ Set the variables conrolling the size and style of the textara for editing in th
 		* Set SECTIONEDITBOXHEIGHT = 27 
 		* Set SECTIONEDITBOXSTYLE = width: 99%; 
 
+	* One line description:
+		* Set SHORTDESCRIPTION = Provides subroutines useful in writing plugins that edit and save parts of topics.
+
+	* Name of the perl package
+		* Set STUB = TWiki::Contrib::EditContrib
 
 ---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -111,10 +108,13 @@ Set the variables conrolling the size and style of the textara for editing in th
 
 |  Author: | TWiki:Main/ThomasWeigert |
 |  Copyright &copy;: |  |
-|  License: | GPL |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | none  |
-|  Version: | 07 Apr 2005 |
+|  Version: | 12 Jun n2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  12 Jun 2006: | Removed some usage of "illegal" code |
+|  10 Jun 2006: | Rewrite to support Dakar release |
+|  04 Aug 2005: | Deal with certain browsers eating the leading newline in text areas  |
 |  07 Apr 2005: | Fix rendering of bullets etc. in pre and post text  |
 |  21 Mar 2005: | Provide =finalize_edit= function to further simplify developing client plugins |
 |  20 Mar 2005: | Resolved problems arising from inconsistencies how various browsers treat URL parameters  |
@@ -126,6 +126,7 @@ Set the variables conrolling the size and style of the textara for editing in th
 
 __Related Topics:__ TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/MultiEditPlugin, TWiki:Plugins/ThreadedDiscussionPlugin, TWiki:Plugins/EditTablerowPlugin
 
--- TWiki:Main/ThomasWeigert 21 Mar 2005
+-- TWiki:Main/ThomasWeigert 12 Jun 2006
 
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
