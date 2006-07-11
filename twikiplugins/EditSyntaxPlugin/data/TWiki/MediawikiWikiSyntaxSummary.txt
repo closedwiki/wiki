@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1152439270" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1152640489" format="1.1" reprev="1.1" version="1.1"}%
 %META:TOPICPARENT{name="MediawikiEditSyntaxRegex"}%
 ---+ Wikimedia Wiki Syntax Summary 
 
@@ -15,7 +15,7 @@ Keeping this help text short and simple is important since this page is aimed at
    * *italic* put word/phrase in two single quotes: =''your words''=
    * *internal links* use topic name or =[<nop>[link|label]]= rule: =WebHome=, or =[<nop>[WebHome|home]]=
    * *external links* use URL or =[url label]= rule: =http://yahoo.com=, or =[http://yahoo.com/ link to Yahoo]=
-   * *monospaced* use HTML: =&lt;tt&gt;your words&lt;/tt&gt;="
+   * *monospaced* use HTML: =&lt;tt&gt;your words&lt;/tt&gt;=
    * *paragraphs* separate with blank line
    * <a target="WikimediaTextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','WikimediaTextFormattingRules')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/WikimediaTextFormattingRules">More formatting help</a> and <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/GoodStyle">hints on good style</a>
 %STOPINCLUDE%
