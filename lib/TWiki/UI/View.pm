@@ -257,6 +257,9 @@ sub view {
     } elsif( $skin =~ /\brss/ ) {
         $contentType = 'text/xml';
         $minimalist = 1;
+    } elsif( $skin =~ /\bxml/ ) {
+        $contentType = 'text/xml';
+        $minimalist = 1;
     } elsif( $raw eq 'text' || $raw eq 'all' ) {
         $contentType = 'text/plain';
     } else {

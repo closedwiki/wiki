@@ -884,6 +884,7 @@ templates/settings.tmpl 0440
 templates/twiki.tmpl 0440
 templates/view.plain.tmpl 0440
 templates/view.print.tmpl 0440
+templates/view.xml.tmpl 0440
 templates/view.rss.tmpl 0440
 templates/view.rssatom.tmpl 0440
 templates/view.text.tmpl 0440
