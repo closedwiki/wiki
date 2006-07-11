@@ -35,31 +35,31 @@ handler calls to registered plugins.
 Note that as of version 1.026 of this module, TWiki internal
 methods are _no longer available_ to plugins. Any calls to
 TWiki internal methods must be replaced by calls via the
-$SESSION object in this package, or via the Func package.
+=$SESSION= object in this package, or via the Func package.
 For example, the call:
 
-my $pref = TWiki::getPreferencesValue('URGH');
+=my $pref = TWiki::getPreferencesValue('URGH');=
 
 should be replaced with
 
-my $pref = TWiki::Func::getPreferencesValue('URGH');
+=my $pref = TWiki::Func::getPreferencesValue('URGH');=
 
 and the call
 
-my $t = TWiki::writeWarning($message);
+=my $t = TWiki::writeWarning($message);=
 
 should be replaced with
 
-my $pref = $TWiki::Plugins::SESSION->writeWarning($message);
+=my $pref = $TWiki::Plugins::SESSION->writeWarning($message);=
 
 Methods in other modules such as Store must be accessed through
 the relevant TWiki sub-object, for example
 
-TWiki::Store::saveTopic(...)
+=TWiki::Store::saveTopic(...)=
 
 should be replaced with
 
-$TWiki::Plugins::SESSION->{store}->saveTopic(...)
+=$TWiki::Plugins::SESSION->{store}->saveTopic(...)=
 
 Note that calling TWiki internal methods is very very bad practice,
 and should be avoided wherever practical.
@@ -455,7 +455,7 @@ sub afterCommonTagsHandler {
 
 =pod
 
----++ ObjectMethd preRenderingHandler( $text, \%map )
+---++ ObjectMethod preRenderingHandler( $text, \%map )
 
    * =$text= - the text, with the head, verbatim and pre blocks replaced with placeholders
    * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
@@ -472,6 +472,7 @@ the map will contain:
 $removed->{'pre1'}{text}:   XYZ
 $removed->{'pre1'}{params}: class="slobadob"
 </pre>
+</verbatim>
 
 Iterating over blocks for a single tag is easy. For example, to prepend a line number to every line of a pre block you might use this code:
 
