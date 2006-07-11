@@ -1658,6 +1658,8 @@ sub _TOC {
     $defaultWeb =~ s#/#.#g;
     my $web = $params->{web} || $defaultWeb;
 
+    my $isSameTopic = $web eq $defaultWeb  &&  $topic eq $defaultTopic;
+
     $web =~ s#/#\.#g;
     my $webPath = $web;
     $webPath =~ s/\./\//g;
@@ -1724,8 +1726,10 @@ sub _TOC {
             # Prevent manual links
             $line =~ s/<[\/]?a\b[^>]*>//gi;
             # create linked bullet item, using a relative link to anchor
-            $line = $tabs.'* '.
-              CGI::a( { href=>$this->getScriptUrl( 0, 'view', $web, $topic, '#'=>$anchor ) }, $line );
+            my $target = $isSameTopic ?
+                         "#$anchor"   :
+                         $this->getScriptUrl(0,'view',$web,$topic,'#'=>$anchor);
+            $line = $tabs.'* ' .  CGI::a({href=>$target},$line);
             $result .= "\n".$line;
         }
     }
