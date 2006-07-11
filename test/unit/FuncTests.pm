@@ -340,4 +340,14 @@ sub test_extractParameters {
     }
 }
 
+sub test_w2em {
+    my $this = shift;
+    my $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+
+    my $ems = join(',', $twiki->{user}->emails());
+    $this->assert_str_equals(
+        $ems, TWiki::Func::wikiToEmail($twiki->{user}->wikiName()));
+}
+
 1;

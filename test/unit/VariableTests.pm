@@ -308,4 +308,47 @@ sub test_sections10 {
     $this->assert_str_equals('end="4" name="one" start="1" type="section";end="3" name="two" start="2" type="section"',dumpsec($s));
 }
 
+sub test_correctIF {
+    my $this = shift;
+    $twiki->enterContext('test');
+    $TWiki::cfg{Fnargle} = 'Fleeble';
+    $TWiki::cfg{A}{B} = 'C';
+    my @tests = (
+        { test => 'A=B', then=>0, else=>1 },
+        { test => 'A!=B', then=>1, else=>0 },
+        { test => "A='A'", then=>1, else=>0 },
+        { test => "'A'=B", then=>0, else=>1 },
+        { test => 'context test', then=>1, else=>0 },
+        { test => '{Fnargle}=Fleeble', then=>1, else=>0 },
+        { test => '{A}{B}=C', then=>1, else=>0 },
+        { test => '$ WIKINAME = '.$twiki->{user}->wikiName(), then=>1, else=>0 },
+        { test => 'defined EDITBOXHEIGHT', then=>1, else=>0 },
+        { test => '0>1', then=>0, else=>1 },
+        { test => '1>0', then=>1, else=>0 },
+        { test => '1<0', then=>0, else=>1 },
+        { test => '0<1', then=>1, else=>0 },
+        { test => '0>=1', then=>0, else=>1 },
+        { test => '1>=0', then=>1, else=>0 },
+        { test => '1>=1', then=>1, else=>0 },
+        { test => '1<=0', then=>0, else=>1 },
+        { test => '0<=1', then=>1, else=>0 },
+        { test => '1<=1', then=>1, else=>0 },
+        { test => 'not A=B', then=>1, else=>0 },
+        { test => 'not not A=B', then=>0, else=>1 },
+        { test => 'A=A AND B=B', then=>1, else=>0 },
+        { test => 'A=A and B=B', then=>1, else=>0 },
+        { test => 'A=A and B=B', then=>1, else=>0 },
+        { test => 'A=B or B=B', then=>1, else=>0 },
+        { test => 'A=A or B=A', then=>1, else=>0 },
+        { test => 'A=B or B=A', then=>0, else=>1 },
+       );
+
+    foreach my $test (@tests) {
+        my $text = '%IF{"'.$test->{test}.'" then="'.
+          $test->{then}.'" else="'.$test->{else}.'"}%';
+        my $result = $twiki->handleCommonTags($text, $testWeb, $testTopic);
+        $this->assert_equals('1', $result, $text." => ".$result);
+    }
+}
+
 1;

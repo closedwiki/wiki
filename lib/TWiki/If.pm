@@ -137,7 +137,9 @@ $defOps{'='} =
     type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return  $a->evaluate($twiki ) eq $b->evaluate($twiki);
+        my $ea = $a->evaluate($twiki) || '';
+        my $eb = $b->evaluate($twiki) || '';
+        return $ea eq $eb;
     }
    };
 $defOps{'!='} =
@@ -146,7 +148,9 @@ $defOps{'!='} =
     type => 1, # binary
     exec => sub {
         my( $twiki, $a, $b ) = @_;
-        return $a->evaluate($twiki) ne $b->evaluate($twiki);
+        my $ea = $a->evaluate($twiki) || '';
+        my $eb = $b->evaluate($twiki) || '';
+        return $ea ne $eb;
     }
    };
 $defOps{'>='} =
@@ -242,6 +246,7 @@ sub new {
     foreach my $opn ( keys %{$this->{operators}} ) {
         my $re = $opn;
         $re =~ s/(\W)/\\$1/g;
+        $re .= '\b' if $re =~ /\w$/;
         $this->{RE}[$this->{operators}->{$opn}->{type}] .= $re.'|';
     }
     $this->{RE}[0] =~ s/\|$//;
@@ -282,7 +287,7 @@ sub _parse {
         if ( $string =~ s/^\s*($this->{RE}[0])//i ||
                $string =~ s/^\s*($this->{RE}[1])//i ) {
 
-            my $op = $this->{operators}->{$1};
+            my $op = $this->{operators}->{lc($1)};
             while( scalar( @opers ) > 0 &&
                      $op->{prec} < $opers[$#opers]->{prec} ) {
                 $this->_apply( \@opers, \@opands );
