@@ -50,12 +50,16 @@ sub formatNode {
 	my ($this, $node, $count, $level) = @_;	
 	my $res = $this->data("format");
 
-	return $node->name() unless ($res);
+	my $nodeLinkName = '[[' . $node->name() . ']]';
+	return $nodeLinkName unless ($res);
 		
 	# special substituions
 
-	$res =~ s/\$topic/$node->name()/geo;
-	$res =~ s/\$spacetopic/&TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic($node->name())/ge;
+        # Make linkable non-wiki-word names
+	my $spaceTopicLinkName = '[[' . &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic($node->name()) . ']]';
+	$res =~ s/\$topic/$nodeLinkName/geo;
+	$res =~ s/\$spacetopic/$spaceTopicLinkName/ge;
+
 	$res =~ s/\$outnum/$this->formatOutNum($node)/geo;
 	$res =~ s/\$count/$this->formatCount($count)/geo;
 	$res =~ s/\$level/$this->formatLevel($level)/geo;

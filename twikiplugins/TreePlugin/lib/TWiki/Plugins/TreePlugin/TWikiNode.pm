@@ -30,6 +30,16 @@ sub new {
     return bless($this, $class);
 }
 
+########
+#sub data {
+#    my $this = shift;
+#    my $key = shift;
+#    return $this->{_data} unless ($key);
+#    my $val = shift;
+#    return $this->{_data}->{$key} unless ($val);
+#    return $this->{_data}->{$key} = $val;
+#}
+
 sub data {
     my $this = shift;
     my $key = shift;
@@ -41,7 +51,7 @@ sub data {
 
 ########
 # need to move all these data accessors
-# into one hash like data above (which fails in CGI mode for some reason)
+# into one hash like data above (which fails in CGI mode for osme reason)
 
 
 # PUBLIC the , set/get
@@ -81,8 +91,8 @@ sub toHTMLFormat {
 		}
     }
     return ($childrenText) 
-    	? $formatter->formatBranch( $this, $childrenText, $num, $level)
-    	: $formatter->formatNode( $this, $num, $level);
+    	? $formatter->formatBranch(  $this, $childrenText, $num, $level)
+    	: $formatter->formatNode(  $this, $num, $level);
 }
 
 1;
