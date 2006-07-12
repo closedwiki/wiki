@@ -46,6 +46,16 @@ sub parent {
     return $this->{_parent};
 }
 
+# the data, set/get data hash values
+#sub data {
+#    my $this = shift;
+#    my $key = shift;
+#    return $this->{_data} unless ($key);
+#    my $val = shift;
+#    return $this->{_data}->{$key} unless (defined $val);
+#    return $this->{_data}->{$key} = $val;
+#}
+
 # PUBLIC gets a ref to the children
 sub children {
     my $this = shift;
@@ -60,6 +70,33 @@ sub add_child {
     $child->parent($this);
     push @{$this->{_children}}, $child;
 }
+
+sub remove_child {
+    my ($this, $child) = @_;
+    # leave $child->parent() eq $this
+    # ... only doing this to break cycles in down traversals
+    my @oldchildren = @{$this->{_children}};
+
+    @{$this->{_children}} = ();
+    foreach my $c ( @oldchildren ) {
+	if( $c ne $child ) {
+	    push @{$this->{_children}}, $c;
+        } 
+    }
+}
+
+# Nonrecursive string representation
+sub toStringNonRecursive {
+    my ($this) = shift;
+    my $res = $this->name() . "(";
+    if ( scalar(@{$this->children()}) ) {
+    	foreach my $node (@{$this->children()} ){
+    		$res .= $node->name() . ",";
+    	}
+    }
+    return $res.")";
+}
+
 
 # Generate a string representation for debugging
 sub toString {
@@ -92,4 +129,6 @@ sub toHTML {
     return $res;
 }
 
+
 1;
+

@@ -75,6 +75,10 @@ sub formatOutNum {
 sub formatNode {
 	my ($this, $node, $count, $level) = @_;
 #	return $this->formatOutNum($node)." ".$node->name()."<br>\n";
+# AG Thu Jun 19 2003: expected to have to add [[ ]] for non-wikiword links,
+# but seems unnecessary, since OutlineNodeFormatter is inherited from
+# only by FormatOutlineNodeFormatter, which overrides formatNode.
+# I.e. OutlineNodeFormatter::formatNode seems to be unused.
 	return $node->name();
 }
 

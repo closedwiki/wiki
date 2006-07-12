@@ -59,7 +59,7 @@ sub data {
 
 sub formatNode {
 	my ($this, $node, $count, $level) = @_;
-	return $node->name();
+	return "[[". $node->name()."]]";
 }
 
 sub formatBranch {

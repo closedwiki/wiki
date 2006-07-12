@@ -1,4 +1,4 @@
-#
+
 # TWiki ($wikiversion has version info)
 #
 # Copyright (C) 2002 Slava Kozlov, 
@@ -21,7 +21,7 @@
 # =========================
 package TWiki::Plugins::TreePlugin;
 
-#use TWiki::Func;
+use TWiki::Func;
 
 use TWiki::Plugins::TreePlugin::TWikiNode;
 use TWiki::Plugins::TreePlugin::ListNodeFormatter;
@@ -32,23 +32,13 @@ use TWiki::Plugins::TreePlugin::ImgNodeFormatter;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug $INTREE
-        %FormatMap %TreeTopics $RootLabel $cgi $CurrUrl
+        $web $topic $user $installWeb $VERSION $debug $INTREE
+        %FormatMap $RootLabel
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
+$VERSION = '0.311';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
-
-$RootLabel = "_"; # what we use to label the root of a tree if not a topic
-
+$RootLabel = "_RootLabel_"; # what we use to label the root of a tree if not a topic
 
 # =========================
 sub initPlugin
@@ -61,21 +51,19 @@ sub initPlugin
         return 0;
     }
 
-    $cgi = &TWiki::Func::getCgiQuery();
-
-    &TWiki::Func::writeDebug( "installWeb: $installWeb" );
     
+    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
+    # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "TreePlugin_EXAMPLE" ) || "default";
+
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "TreePlugin_DEBUG" );
 
-	# mod_perl will have trouble because these three vals are globals
-    %TreeTopics = ();
+    &TWiki::Func::writeDebug( "installWeb: $installWeb" ) if $debug;
+
+    my $cgi = &TWiki::Func::getCgiQuery();
     if( ! $cgi ) {
         return 0;
     }
-    my $plist = $cgi->query_string();
-	$plist .= "\&" if $plist;
-	$CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
     
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::TreePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -89,8 +77,11 @@ sub commonTagsHandler
 
     #&TWiki::Func::writeDebug( "- TreePlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 	
+	#$_[0] =~ s/%CREATECHILD%/&handleCreateChildInput(0, $_[2])/geo;
+	#$_[0] =~ s/%CREATECHILD{(.*?)}%/&handleCreateChildInput($1, $_[2])/geo;
     $_[0] =~ s/%TREEVIEW%/&handleTreeView($_[1], $_[2], "")/geo;
     $_[0] =~ s/%TREEVIEW{(.*?)}%/&handleTreeView($_[1], $_[2], $1)/geo;
+
 }
 
 # given attribute and formatter
@@ -133,8 +124,24 @@ sub _getSearchString {
 #	2) if two topics with identical names in different webs AND
 #		both have a TREEVIEW tag -> the second will be excluded
 
+
+
+$AGdebugmsg = "<br>AG debug message<br>";
+
+# bugs re recursion:
+#	1) doesn't remember webs so: recursion across webs is problematic
+#	2) if two topics with identical names in different webs AND
+#		both have a TREEVIEW tag -> the second will be excluded
+
 sub handleTreeView {
 	my ($topic, $web, $attributes) = @_;
+	
+
+    my $cgi = &TWiki::Func::getCgiQuery();
+    my $plist = $cgi->query_string();
+    $plist .= "\&" if $plist;
+    $CurrUrl = $cgi->url . $cgi->path_info() . "?" . $plist;
+    # $CurrUrl =~ s/\&/\&amp;/go;
 	
     my $attrWeb   = TWiki::Func::extractNameValuePair( $attributes, "web" ) || $web || "";
     my $attrTopic = TWiki::Func::extractNameValuePair( $attributes, "topic" ) || $RootLabel; # ie, do all web, needs to be nonempty
@@ -142,16 +149,15 @@ sub handleTreeView {
 	cgiOverride(\$attrTopic, "treetopic");
 	cgiOverride(\$attrFormatting, "formatting");
 	
-	# we've expanded TRESEARCH on this topic before, we won't repeat
-	return "<!-- Self-recursion -->"
-    	if ($TreeTopics{$topic});
+	# we've expanded TREESEARCH on this topic before, we won't repeat
+#	return "<!-- Self-recursion -->" if ($TreeTopics{$topic});
 
-    # global hash, record this object and attrTopic too (as initial seed)
-    $TreeTopics{$topic} = 1;
-	$TreeTopics{$attrTopic} = 1;
+#    # global hash, record this object and attrTopic too (as initial seed)
+#    $TreeTopics{$topic} = 1;
+#	$TreeTopics{$attrTopic} = 1;
 	    
 	my $attrHeader = TWiki::Func::extractNameValuePair( $attributes, "header" ) || "";
-	$attrHeader .= "\n" if ($attrHeader); # to enable |-tables foramtting
+	$attrHeader .= "\n" if ($attrHeader); # to enable |-tables formatting
 	my $attrFormat = TWiki::Func::extractNameValuePair( $attributes, "format" ) || "";
 	$attrFormat .= "\n" if ($attrFormat); # to enable |-tables formatting
 	my $attrFormatBranch = TWiki::Func::extractNameValuePair( $attributes, "formatbranch" ) || "";
@@ -189,14 +195,8 @@ sub handleTreeView {
 		# get parent
         my( $meta, $text ) = &TWiki::Func::readTopic( $attrWeb, $topic );
 
-        my %par;
-        if(defined(&TWiki::Meta::findOne)) {
-            %par = $meta->findOne( "TOPICPARENT" );
-        } else {
-            my $r = $meta->get( "TOPICPARENT" );
-            next unless $r;
-            %par = %{$r};
-        }
+        my $ref = $meta->get( "TOPICPARENT" );
+        my %par = (defined $ref ? %$ref : ());
         my $parent = ( %par )
              ?  _findTWikiNode($par{"name"}, \%nodes)    # yes i have a parent, get it
              : $root;                              # otherwise root's my parent
@@ -214,6 +214,7 @@ sub handleTreeView {
                 $node->data("text", $text);
                 $node->data("meta", $meta);
         }
+        $node->data("parent", $parent);
         $parent->add_child($node);                 # hook me up
     }
     
@@ -222,12 +223,96 @@ sub handleTreeView {
     $root->name(" "); # change root's name so it don't show up, hack
     
     # format the tree & parse TWiki tags and rendering
-    return TWiki::Func::expandCommonVariables(
-    	$attrHeader.$nodes{$attrTopic}->toHTMLFormat($formatter),
-        $attrTopic,
-        $attrWeb);
+    if( $attrTopic ne $RootLabel ) {
+	return "Tree for specific topic $attrTopic\n".
+	    TWiki::Func::expandCommonVariables
+	    (
+	     $attrHeader.$nodes{$attrTopic}->toHTMLFormat($formatter),
+	     $attrTopic,
+	     $attrWeb);
+    }
+    else {
+	my $ret = "";
+	#debug $ret = "Keys of topics in node list\n\n";
+	my %rootnodes = %{_findRootsBreakingCycles( \%nodes )};
+	foreach my $i ( sort keys( %rootnodes ) ) {
+	    $ret = $ret 
+		#debug . "<br>Tree for topic $i:\n\n" 
+		. TWiki::Func::expandCommonVariables
+		(
+		 $attrHeader.$rootnodes{$i}->toHTMLFormat($formatter),
+		 $attrTopic,
+		 $attrWeb)
+	    ;
+	}
+	#$ret = $AGdebugmsg . $ret;
+	return $ret;
+    }
 }
 
+sub _findRootsBreakingCycles {
+    my ($hashMappingNamesToNodes) = @_;
+    my %roots = ();
+
+    $AGdebugmsg = "";
+    foreach my $i ( sort keys( %$hashMappingNamesToNodes ) ) {
+		my $ultimateParentNode = _findUltimateParentBreakingCycles( ${$hashMappingNamesToNodes}{$i} );
+		$roots{$ultimateParentNode->name()} = $ultimateParentNode;
+	}
+    
+    return \%roots;
+}
+
+sub _findUltimateParentBreakingCycles {
+    my $orignode = shift;
+    my $node = $orignode;
+    my %alreadyvisited = ();
+    while( $parent = _findParent( $node ) ) {
+		# break cycles
+		if( $alreadyvisited{$parent->name()} ) {
+			$AGdebugmsg = $AGdebugmsg . "pre-rm:" . $parent->toStringNonRecursive() . " <br>\n";
+			$parent->remove_child( $node );
+			$AGdebugmsg = $AGdebugmsg . "post-rm:" . $parent->toStringNonRecursive() . " <br>\n";
+			$AGdebugmsg = 
+				$AGdebugmsg 
+				. $parent->name() ."<-". $node->name() ." \n<br>\n";
+			my $cycleroot = TWiki::Plugins::TreePlugin::TWikiNode->new($parent->name() . " cycle...");
+			my $cycleleaf = TWiki::Plugins::TreePlugin::TWikiNode->new($node->name() . " ...cycle");
+			$node->data("parent",$cycleroot);
+			$cycleroot->add_child($node);
+			$parent->add_child($cycleleaf);
+			# TBD: give some indication of cycle broken
+			return $cycleroot;
+		}
+		else {
+			$alreadyvisited{$parent->name()} = 1;
+		}
+		# move up
+		$node = $parent;
+    }
+    $AGdebugmsg = 
+	$AGdebugmsg 
+	. "findUltimateParent(" 
+	. $orignode->name()
+        . ")"
+	. "=" 
+	. $node->name()
+	. "<br>";
+    return $node;
+}
+
+sub _findParent {
+	my $node = shift;
+	$AGdebugmsg = 
+	    $AGdebugmsg 
+	    . "findParent(" 
+	    . $node->name()
+	    . ")"
+	    . "=" 
+	    . ($node->data("parent") ? $node->data("parent")->name() : "no-parent")
+	    . "<br>";
+	return $node->data("parent");
+}
 
 # lazy variable init
 # ned to abstract this at some point
@@ -267,14 +352,17 @@ sub setFormatter {
 }
 
 
+# TBD: so far as I can tell, the code below is mis-commented.
+# It is not finding a child of a node via the lookup;
+# instead, it is finding an entry for the node itself.
 sub _findTWikiNode {
     my ($name, $hash) = @_;
-    my $child = $hash->{$name}; # look for child
-    if (! $child) {             # create if not there
-        $child = TWiki::Plugins::TreePlugin::TWikiNode->new($name);
-        $hash->{$name} = $child;
+    my $node = $hash->{$name}; # look for node
+    if (! $node) {             # create if not there
+        $node = TWiki::Plugins::TreePlugin::TWikiNode->new($name);
+        $hash->{$name} = $node;
     }
-    return $child;
+    return $node;
 }
 
 # use cgi var to override given variable ref
@@ -283,13 +371,103 @@ sub cgiOverride {
     my $variable = shift;
     my $paramname = shift;
     
-    my $tmp = $cgi->param( $paramname );
-    $$variable = $tmp if( $tmp );
+    my $cgi = &TWiki::Func::getCgiQuery();
+    if( ! $cgi ) {
+	return;
+    }
+    else {
+	my $tmp = $cgi->param( $paramname );
+	$$variable = $tmp if( $tmp );
+    }
 }
 
 # allow other classes to see the installation web
 sub installWeb {
     return $installWeb;
 }
+
+sub handleCreateChildInput {
+	my ($args, $web) = @_;
+
+	my ($addtext, $meta, $text);
+
+	if( TWiki::Func::topicExists( $web, "AddUnder" ) ) {
+			( $meta, $addtext ) = &TWiki::Func::readTopic( $web, "AddUnder" );
+	}
+
+	# need to reread to get the meta of this topic
+	( $meta, $text ) = &TWiki::Func::readTopic( $web, $topic );
+
+	# change meta according to new attributes (reuse $meta for object props)
+	if ($args) {
+		$meta = setMetaFromAttr($meta, $args);
+	}
+
+	# put in fields data (if this is going to be a form)
+
+	my $formfields;
+
+	# so: is new topic to have a form? if so, put in new fields
+        my $ref = $meta->get( "FORM" );
+        my %form = (defined $ref ? %$ref : ());
+	#my %form = $meta->get( "FORM" );
+	if( %form ) {
+		my $name = $form{"name"};
+		$formfields = &TWiki::Form::getFieldParams($meta);
+		my $forminput = "<input type=\"hidden\" name=\"formtemplate\" value=\"$name\" />";
+		$addtext =~ s/%FORMINPUT%/$forminput/e;
+	} else {
+		$addtext =~ s/%FORMINPUT%//g;
+	}
+
+	$addtext =~ s/%ADDFORM%/$formfields/g;
+
+	return $addtext;
+}
+
+
+# changes the passed meta, to the given fields value of the given args
+
+sub setMetaFromAttr {
+	my ($meta, $args) = @_; 
+
+	# no matter what, no inherited values in child's form
+	if (&TWiki::extractNameValuePair($args, "resetform")){
+		$meta->remove ("FIELD");
+		return $meta;
+	}
+
+	# get this form name
+        my $ref = $meta->get( "FORM" );
+        my %form = (defined $ref ? %$ref : ());
+	#my %form = $meta->get( "FORM" );
+	my $name = $form{"name"} if ( %form ) || "";
+
+	# get new form name, if any
+	my $newform = TWiki::extractNameValuePair($args, "form");
+
+	# if newform & different, just set new form name (& delete all fields)
+	if ($newform && $newform ne $name) {
+		$meta->put( "FORM", ( "name" => $newform) );
+		$meta->remove ("FIELD");
+	}
+
+	my $fields = TWiki::extractNameValuePair($args, "fields");
+
+	# put in new fields into $meta
+
+	# hash of fields
+	my %f = map { split( /=/, $_ ) }
+		grep { /[^\=]*\=[^\=]*$/ }
+		split (/\s*,\s*/, $fields) ;
+
+	foreach (keys %f) {
+		my @a = ( "name" =>  $_, "value" => $f{$_} );
+		$meta->put( "FIELD", @a );
+	}
+
+	return $meta;
+}
+
 
 1;
