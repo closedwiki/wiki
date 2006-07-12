@@ -341,6 +341,7 @@ sub test_correctIF {
         { test => 'A=B or B=B', then=>1, else=>0 },
         { test => 'A=A or B=A', then=>1, else=>0 },
         { test => 'A=B or B=A', then=>0, else=>1 },
+        { test => "\$PUBURLPATH='".$TWiki::cfg{PubUrlPath}."'", then=>1, else =>0 },
        );
 
     foreach my $test (@tests) {
