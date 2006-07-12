@@ -1973,20 +1973,27 @@ sub getRegularExpression {
 Parse a web and topic name, supplying defaults as appropriate.
    * =$web= - Web name, identifying variable, or empty string
    * =$topic= - Topic name, may be a web.topic string, required.
-Return: the parsed Web/Topic pai
+Return: the parsed Web/Topic pair
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
-| *Input* | *Return* |
-| <tt>( 'Web',  'Topic' )     </tt> | <tt>( 'Web',  'Topic' ) </tt> |
-| <tt>( '',     'Topic' )     </tt> | <tt>( 'Main', 'Topic' ) </tt> |
-| <tt>( '',     '' )          </tt> | <tt>( 'Main', 'WebHome' ) </tt> |
-| <tt>( '',     'Web/Topic' ) </tt> | <tt>( 'Web',  'Topic' ) </tt> |
-| <tt>( '',     'Web.Topic' ) </tt> | <tt>( 'Web',  'Topic' ) </tt> |
-| <tt>( 'Web1', 'Web2.Topic' )</tt> | <tt>( 'Web2', 'Topic' ) </tt> |
-| <tt>( '%MAINWEB%', 'Topic' )</tt> | <tt>( 'Main', 'Topic' ) </tt> |
-| <tt>( '%TWIKIWEB%', 'Topic' )</tt> | <tt>( 'TWiki', 'Topic' ) </tt> |
-where =Main= and =TWiki= are the web names set in $cfg{UsersWebName} and $cfg{SystemWebName} respectively.
+| *Input*                               | *Return*  |
+| <tt>( 'Web', 'Topic' ) </tt>          | <tt>( 'Web', 'Topic' ) </tt>  |
+| <tt>( '', 'Topic' ) </tt>             | <tt>( 'Main', 'Topic' ) </tt>  |
+| <tt>( '', '' ) </tt>                  | <tt>( 'Main', 'WebHome' ) </tt>  |
+| <tt>( '', 'Web/Topic' ) </tt>         | <tt>( 'Web', 'Topic' ) </tt>  |
+| <tt>( '', 'Web/Subweb/Topic' ) </tt>  | <tt>( 'Web/Subweb', 'Topic' ) </tt>  |
+| <tt>( '', 'Web.Topic' ) </tt>         | <tt>( 'Web', 'Topic' ) </tt>  |
+| <tt>( '', 'Web.Subweb.Topic' ) </tt>  | <tt>( 'Web/Subweb', 'Topic' ) </tt>  |
+| <tt>( 'Web1', 'Web2.Topic' )</tt>     | <tt>( 'Web2', 'Topic' ) </tt>  |
+
+Note that hierarchical web names (Web.SubWeb) are only available if hierarchical webs are enabled in =configure=.
+
+The symbols %<nop>USERSWEB%, %<nop>SYSTEMWEB%, %<nop>DOCWEB%, %<nop>MAINWEB% and %<nop>TWIKIWEB% can be used in the input to represent the web names set in $cfg{UsersWebName} and $cfg{SystemWebName}. For example:
+| *Input*                               | *Return* |
+| <tt>( '%<nop>USERSWEB%', 'Topic' )</tt>     | <tt>( 'Main', 'Topic' ) </tt>  |
+| <tt>( '%<nop>SYSTEMWEB%', 'Topic' )</tt>    | <tt>( 'TWiki', 'Topic' ) </tt>  |
+| <tt>( '', '%<nop>DOCWEB%.Topic' )</tt>    | <tt>( 'TWiki', 'Topic' ) </tt>  |
 
 =cut
 

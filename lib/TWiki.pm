@@ -1095,21 +1095,12 @@ sub getOopsUrl {
 ---++ ObjectMethod normalizeWebTopicName( $theWeb, $theTopic ) -> ( $theWeb, $theTopic )
 
 Normalize a Web<nop>.<nop>TopicName
-<pre>
-Input:                      Return:
-  ( 'Web',  'Topic' )         ( 'Web',  'Topic' )
-  ( '',     'Topic' )         ( 'Main', 'Topic' )
-  ( '',     '' )              ( 'Main', 'WebHome' )
-  ( '',     'Web/Topic' )     ( 'Web',  'Topic' )
-  ( '',     'Web.Topic' )     ( 'Web',  'Topic' )
-  ( 'Web1', 'Web2.Topic' )    ( 'Web2', 'Topic' )
-  ( '%MAINWEB%', 'Web2.Topic' ) ( 'Main', 'Topic' )
-  ( '%TWIKIWEB%', 'Web2.Topic' ) ( 'TWiki', 'Topic' )
-</pre>
-Note: Function renamed from getWebTopic
 
-SMELL: WARNING: this function defaults the web and topic names.
-Be very careful where you use it!
+See TWikiFuncDotPm for a full specification of the expansion (not duplicated here)
+
+*WARNING* if there is no web specification (in the web or topic parameters) the web
+defaults to $TWiki::cfg{UsersWebName}. If there is no topic specification, or the topic
+is '0', the topic defaults to the web home topic name.
 
 =cut
 
@@ -1119,13 +1110,13 @@ sub normalizeWebTopicName {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT(defined $topic) if DEBUG;
 
-    if( $topic =~ m|^(.*)[\./](.*)$| ) {
+    if( $topic =~ m|^(.*)[./](.*?)$| ) {
         $web = $1;
         $topic = $2;
     }
     $web ||= $cfg{UsersWebName};
     $topic ||= $cfg{HomeTopicName};
-    $web =~ s/^%((MAIN|TWIKI)WEB)%$/$this->_expandTagOnTopicRendering($1)||''/e;
+    $web =~ s/%((MAIN|TWIKI|USERS|SYSTEM|DOC)WEB)%/$this->_expandTagOnTopicRendering($1)||''/e;
     $web =~ s#\.#/#go;
     return( $web, $topic );
 }
