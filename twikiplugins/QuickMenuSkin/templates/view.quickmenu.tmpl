@@ -13,13 +13,14 @@ pageMenu.Add("%MAKETEXT{"Edit"}%", "%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMT
 %TMPL:DEF{"inactive_menuitem"}%
 pageMenu.Add("%MAKETEXT{"Edit"}%", "", "%ICONURLPATH{"edittopic"}%");%TMPL:END%
 %TMPL:DEF{"new_menuitem"}%
+pageMenu.Add();
 pageMenu.Add("%MAKETEXT{"New Topic"}%", "%SCRIPTURLPATH{"view"}%/%WEB%/WebTopicCreator?parent=%TOPIC%","%ICONURLPATH{"newtopic"}%","%MAKETEXT{"Create a new topic"}%");%TMPL:END%
 
 %TMPL:DEF{"webaction"}%
 <noautolink>
 %INCLUDE{"%IF{"defined QUICKMENUBAR and $ QUICKMENUBAR" then="%QUICKMENUBAR%" else="%TWIKIWEB%.QuickMenuBar"}%" raw="on" warn="off"}%
 
-	pageMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Options"}%","","%MAKETEXT{"Page viewing and editing options"}%");
+	pageMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Options"}%","","","%MAKETEXT{"Page viewing and editing options"}%");
 	%TMPL:P{context="inactive" then="inactive_menuitem" else="active_menuitem"}%
 	pageMenu.Add("%MAKETEXT{"Attach"}%","%IF{"context inactive" then='","%ICONURLPATH{"attachfile"}%' else='%SCRIPTURLPATH{attach}%/%WEB%/%TOPIC%","%ICONURLPATH{"attachfile"}%","%MAKETEXT{"Attach an image or document to this topic"}%'}%");
 	pageMenu.Add("%MAKETEXT{"Printable"}%","%SCRIPTURLPATH{view}%/%WEB%/%TOPIC%?cover=print.quickmenu%REVARG%","%ICONURLPATH{"printtopic"}%","%MAKETEXT{"Printable version of this topic"}%");

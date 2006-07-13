@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="VernonLyon" date="1150724700" format="1.1" version="1.2"}%
 <pre>%STARTINCLUDE%<noautolink>
-utilMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Utilities"}%","","%MAKETEXT{"Utilities available for this Web"}%");
+utilMenu = new QuickMenu.Menu(menuBar,"%MAKETEXT{"Utilities"}%","","","%MAKETEXT{"Utilities available for this Web"}%");
 if ("%USERINFO{format="$groups"}%".match(/TWikiAdminGroup/)) {
   utilMenu.Add("%MAKETEXT{"Users"}%","%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiUsers","%ICONURLPATH{"person"}%");
   utilMenu.Add("%MAKETEXT{"Groups"}%","%SCRIPTURLPATH{"view"}%/%MAINWEB%/TWikiGroups","%ICONURLPATH{"group"}%");
