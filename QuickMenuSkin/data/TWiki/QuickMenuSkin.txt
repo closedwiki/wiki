@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="VernonLyon" date="1152185822" format="1.1" reprev="1.6" version="1.6"}%
+%META:TOPICINFO{author="VernonLyon" date="1152806940" format="1.1" version="1.8"}%
 ---+ Quick Menu Skin
 
 A functional skin that replaces the left bar with a customizable Javascript menu system.
@@ -33,14 +33,14 @@ Eg:
 
 The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn includes %TWIKIWEB%.QuickMenuBarLogin (if login is enabled) and %TWIKIWEB%.QuickMenuBarWebs and %TWIKIWEB%.QuickMenuBarUtilities. These files contain javascript commands that are included by the skin's templates. You can edit these files to customize the menu, but be sure to avoid unwanted linking by enclosing your code in =&lt;noautolink&gt;= ... =&lt;/noautolink&gt;= tags.
 
-*%RED%Note%ENDCOLOR%:* In a future release, it will be possible to add icons to the menus in the menubar. When this is done the =QuickMenu.Menu= function will change! This will make the arguments similar to the =QuickMenu.Menu.Add= function in that the argument for an icon will be inserted before the "menu tip information" argument.
+%N% In this release, it is now possible to add icons to the menus in the menubar. The =QuickMenu.Menu= function has changed to make the arguments similar to the =QuickMenu.Menu.Add= function.
 
 <noautolink>
 ---+++ QuickMenu Javascript Reference
 
    * *To create a new menu* %BR%
-   <small> __%RED%Note:__ _This may change! See above.%ENDCOLOR%_ </small> %BR%
-   =mymenu = new QuickMenu.Menu(menuBar, "Menu Text", "", "Menu Tip Information");= %BR%
+   <small> %ICON{warning}% %RED% _This has changed! See above.%ENDCOLOR%_ </small> %BR%
+   =mymenu = new QuickMenu.Menu(menuBar, "Menu Text", "", "/icons/icon.gif", "Menu Tip Information");= %BR%
    or just a link:%BR%
    =new QuickMenu.Menu(menuBar, "TWiki.org", "http://twiki.org/");= %BR%
    or a javascript function:%BR%
@@ -64,8 +64,9 @@ The menu bar is built by default from %TWIKIWEB%.QuickMenuBar, which in turn inc
 |  Preview: | [[%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=quickmenu][Preview with this topic]] |
 |  Base Name: | quickmenu |
 |  Skin Author: | TWiki:Main/VernonLyon |
-|  Skin Version: | 4 Jul 2006 (v1.02) |
+|  Skin Version: | 13 Jul 2006 (v1.03) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  13 Jul 2006: | Added support for icons in the menubar (v1.03) |
 |  4 Jul 2006: | Added =QUICKMENUBAR= setting (v1.02) |
 |  21 Jun 2006: | Added "Account" menu (v1.01) |
 |  13 Jun 2006: | Initial version (v1.00) |
@@ -83,13 +84,14 @@ __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB
 %META:FILEATTACHMENT{name="menuitem_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="menuitem_over.gif" size="93" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="menu_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="menu_over.gif" size="159" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="menubaritem_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menubaritem_bg.gif" size="108" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.js" attr="" autoattached="1" comment="" date="1151935718" path="qmenu.js" size="10906" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="qmenu.js" attr="" autoattached="1" comment="" date="1152791084" path="qmenu.js" size="12925" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrow.gif" attr="" autoattached="1" comment="" date="1151935718" path="arrow.gif" size="85" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="arrow_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="arrow_over.gif" size="227" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="screenshot.gif" attr="" autoattached="1" comment="" date="1151935718" path="screenshot.gif" size="8839" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1151936684" path="style.css" size="6684" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1152802117" path="style.css" size="6885" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="qmenu.js.old" attr="" autoattached="1" comment="" date="1152787786" path="qmenu.js.old" size="10931" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="menu_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menu_bg.gif" size="825" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.css" attr="" autoattached="1" comment="" date="1151935718" path="qmenu.css" size="2533" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="qmenu.css" attr="" autoattached="1" comment="" date="1152790863" path="qmenu.css" size="2698" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="menuitem_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menuitem_bg.gif" size="273" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="fullscreen.gif" attr="" autoattached="1" comment="" date="1151935718" path="fullscreen.gif" size="24979" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="menubar.gif" attr="" autoattached="1" comment="" date="1151935718" path="menubar.gif" size="874" user="UnknownUser" version=""}%

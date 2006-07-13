@@ -24,6 +24,7 @@ templates/edit.quickmenu.tmpl
 templates/login.quickmenu.tmpl
 templates/moveattachment.quickmenu.tmpl
 templates/preview.quickmenu.tmpl
+templates/renamebase.quickmenu.tmpl
 templates/rdiff.quickmenu.tmpl
 templates/search.quickmenu.tmpl
 templates/twiki.quickmenu.tmpl
