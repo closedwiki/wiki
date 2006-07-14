@@ -236,7 +236,7 @@ sub readTemplate {
     foreach( split( /(%TMPL\:)/, $text ) ) {
         if( /^(%TMPL\:)$/ ) {
             $delim = $1;
-        } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
+        } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%(.*)/s ) && ( $1 ) ) {
             # handle %TMPL:DEF{key}%
             if( $key ) {
                 $this->{VARS}->{$key} = $val;

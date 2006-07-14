@@ -24,7 +24,7 @@ _Templates_ are plain text with embedded _template directives_ that tell TWiki h
    * Directives are of the form ==%<nop>TMPL:&lt;key&gt;%== and ==%<nop>TMPL:&lt;key&gt;{"attr"}%==.
    * Directives:
       * ==%<nop>TMPL:INCLUDE{"file"}%==: Includes a template file. The file is found as described [[#FindingTemplates][below]].
-      * ==%<nop>TMPL:DEF{"block"}%==: Define a block. Text between this and the =%<nop>TMPL:END%= directive is not used in-place, but is saved for later use with =%<nop>TMPL:P=. Leading and trailing whitespace is ignored.
+      * ==%<nop>TMPL:DEF{"block"}%==: Define a block. *All* text between this and the next =%<nop>TMPL:END%= directive is removed and saved for later use with =%<nop>TMPL:P=.
       * ==%<nop>TMPL:END%==: Ends a block definition.
       * ==%<nop>TMPL:P{"var"}%==: Includes a previously defined block.
       * ==%<nop>{...}%==: is a comment.
