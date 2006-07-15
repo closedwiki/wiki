@@ -3353,7 +3353,8 @@ sub _USERINFO {
 
     my $user = $this->{user};
     if( $params->{_DEFAULT} ) {
-        $user = $this->{users}->findUser( $params->{_DEFAULT}, undef, 0 );
+        $user = $this->{users}->findUser( $params->{_DEFAULT}, undef, 1 );
+        return '' if !$user;
         return '' if( $TWiki::cfg{AntiSpam}{HideUserDetails} &&
                         !$this->{user}->isAdmin() &&
                           $user != $this->{user} );
@@ -3363,25 +3364,25 @@ sub _USERINFO {
 
     if ($info =~ /\$username/) {
         my $username = $user->login();
-        $info =~ s/\$username\b/$username/g;
+        $info =~ s/\$username/$username/g;
     }
     if ($info =~ /\$wikiname/) {
         my $wikiname = $user->wikiName();
-        $info =~ s/\$wikiname\b/$wikiname/g;
+        $info =~ s/\$wikiname/$wikiname/g;
     }
     if ($info =~ /\$wikiusername/) {
         my $wikiusername = $user->webDotWikiName();
-        $info =~ s/\$wikiusername\b/$wikiusername/g;
+        $info =~ s/\$wikiusername/$wikiusername/g;
     }
     if ($info =~ /\$emails/) {
         my $emails = join(',', $user->emails());
-        $info =~ s/\$emails\b/$emails/g;
+        $info =~ s/\$emails/$emails/g;
     }
     if ($info =~ /\$groups/) {
         my @groupNames = map {$_->webDotWikiName();} $user->getGroups();
         my $groups = join(', ', @groupNames);
         $groups .= ' isAdmin()' if $user->isAdmin();
-        $info =~ s/\$groups\b/$groups/g;
+        $info =~ s/\$groups/$groups/g;
     }
 
     #don't give out userlists to non-admins
