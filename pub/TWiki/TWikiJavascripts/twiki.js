@@ -240,6 +240,54 @@ function makeWikiWord(inString) {
 }
 
 /**
+Javascript query string parsing.
+Author: djohnson@ibsys.com {{djohnson}} - you may use this file as you wish but please keep this header with it thanks
+@use 
+Pass location.search to the constructor:
+<code>var myPageQuery = new PageQuery(location.search)</code>
+Retrieve values
+<code>var myValue = myPageQuery.getValue("param1")</code>
+*/
+TWiki.PageQuery = function (q) {
+	if (q.length > 1) {
+		this.q = q.substring(1, q.length);
+	} else {
+		this.q = null;
+	}
+	this.keyValuePairs = new Array();
+	if (q) {
+		for(var i=0; i < this.q.split(/[&;]/).length; i++) {
+			this.keyValuePairs[i] = this.q.split(/[&;]/)[i];
+		}
+	}
+}
+TWiki.PageQuery.prototype.getKeyValuePairs = function() {
+	return this.keyValuePairs;
+}
+/**
+@return The query string value; if not found returns -1.
+*/
+TWiki.PageQuery.prototype.getValue = function (s) {
+	for(var j=0; j < this.keyValuePairs.length; j++) {
+		if(this.keyValuePairs[j].split(/=/)[0] == s)
+			return this.keyValuePairs[j].split(/=/)[1];
+	}
+	return -1;
+}
+TWiki.PageQuery.prototype.getParameters = function () {
+	var a = new Array(this.getLength());
+	for(var j=0; j < this.keyValuePairs.length; j++) {
+		a[j] = this.keyValuePairs[j].split(/=/)[0];
+	}
+	return a;
+}
+TWiki.PageQuery.prototype.getLength = function() {
+	return this.keyValuePairs.length;
+}
+
+// COOKIE FUNCTIONS
+
+/**
 Add a cookie. If 'days' is set to a non-zero number of days, sets an expiry on the cookie.
 @deprecated Use setPref.
 */
@@ -496,4 +544,3 @@ function DeleteCookie (name,path,domain) {
       "; expires=Thu, 01-Jan-70 00:00:01 GMT";
   }
 }
-
