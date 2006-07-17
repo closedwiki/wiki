@@ -206,6 +206,10 @@ msgstr "Stam&pabile"
 msgid "&Raw View"
 msgstr "Vista &Raw"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Vista Raw"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "&Vedi pagina"

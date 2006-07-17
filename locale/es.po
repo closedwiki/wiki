@@ -206,6 +206,10 @@ msgstr "Imprimible"
 msgid "&Raw View"
 msgstr "&Vista previa"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Vista previa"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "&Ver página"

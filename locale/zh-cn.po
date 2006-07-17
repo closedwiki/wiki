@@ -205,6 +205,10 @@ msgstr "打印"
 msgid "&Raw View"
 msgstr "&源代码"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "源代码"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "&查看主题"

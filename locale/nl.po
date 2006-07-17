@@ -201,6 +201,10 @@ msgstr "&Printbaar"
 msgid "&Raw View"
 msgstr "Bron&code"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Broncode"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "Be&kijk pagina"

@@ -202,6 +202,10 @@ msgstr "Im&primer"
 msgid "&Raw View"
 msgstr "Code sou&rce"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Code source"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "Afficher la page"

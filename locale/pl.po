@@ -201,6 +201,10 @@ msgstr "&Do druku"
 msgid "&Raw View"
 msgstr "&Kod źródłowy"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Kod źródłowy"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "&Wyświetl stronę"

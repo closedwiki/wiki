@@ -204,6 +204,10 @@ msgstr "Im&pressão"
 msgid "&Raw View"
 msgstr "Texto Pu&ro"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Texto Puro"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "&Visualizar tópico"

@@ -204,6 +204,10 @@ msgstr "Utskriftsvänlig (&P)"
 msgid "&Raw View"
 msgstr "Källtext (&R)"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Källtext"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "&Visa sida"

@@ -208,6 +208,10 @@ msgstr "&Printvenlig"
 msgid "&Raw View"
 msgstr "Kildetekst (&R)"
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr "Kildetekst"
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr "&Vis side"
