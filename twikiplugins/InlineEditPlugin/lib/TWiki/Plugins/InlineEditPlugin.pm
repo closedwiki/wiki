@@ -129,7 +129,7 @@ sub beforeSaveHandler {
         foreach my $json (@jsons) {
             my $obj = jsonToObj($json);
             my $sectionName = $obj->{topicSection};
-            $sectionName =~ s/"//g;
+            $sectionName =~ s/"//g; #"gedit does dumb syntax highlighting
             $changedSections{$sectionName} = $obj;
         }
         my ($meta,$text) = TWiki::Func::readTopic($_[2],$_[1]);
@@ -391,7 +391,7 @@ sub _getTopicSectionState {
    my $leaseduserWikiName = TWiki::Func::userToWikiName($loginName);
    #TODO: remove lock on save?
 #   my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;html2tml=1;section='.$section.';originalrev='.$rev;
-   my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;section='.$section.';originalrev='.$rev;
+   my $saveUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'save').'?inlineeditsave=1;section='.$section.';originalrev='.$rev.';forcenewrevision=1';
 #TODO: make this param up to the editor
 #   $saveUrl .= ';html2tml=1' if ( $EDITOR ne 'textarea');
    my $viewUrl = TWiki::Func::getScriptUrl( $WEB, $TOPIC, 'view').'?rev='.$rev;

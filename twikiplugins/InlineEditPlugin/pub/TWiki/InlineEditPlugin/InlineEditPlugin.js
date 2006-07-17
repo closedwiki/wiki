@@ -389,11 +389,12 @@ saveAllSections = function(event) {
         topicSectionalSaveUrl = topicSections[0].saveUrl;
         browserLogin = topicSections[0].browserLogin;
 
+//TODO: change this so the parameters are initialised from the topicSectionalSaveUrl sent by the perl
         var bindArgs = {
         url:        topicSectionalSaveUrl,
         username: browserLogin,
         method: 'POST',
-        parameters: {replywitherrors: 1, dataType: 'JSON', data: data, inlineeditsave: 1, originalrev: topicSections[0].topicRev,sectionOrder: sectionOrder},
+        parameters: {replywitherrors: 1, dataType: 'JSON', data: data, inlineeditsave: 1, originalrev: topicSections[0].topicRev,sectionOrder: sectionOrder, forcenewrevision: 1},
         onError:      function(req) {
                 // handle error here
                 alert('Error!\nStatusText='+req.statusText+'\nContents='+req.responseText);
