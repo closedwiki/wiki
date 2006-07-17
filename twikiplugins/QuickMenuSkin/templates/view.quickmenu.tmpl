@@ -78,8 +78,7 @@ pageMenu.Add("%MAKETEXT{"New Topic"}%", "%SCRIPTURLPATH{"view"}%/%WEB%/WebTopicC
 </div>%TMPL:END%
 
 %TMPL:DEF{"topicaction"}%
-  %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%
-  %TMPL:P{context="WysiwygPluginEnabled" then="active_wysiwyg"}%
+  %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}% %TMPL:P{context="WysiwygPluginEnabled" then="active_wysiwyg"}%
   %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
   %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksweb" title='%MAKETEXT{"Search the [_1] Web for topics that link to here" args="<nop>%WEB%"}%' accesskey="b">%MAKETEXT{"We&b"}%</a>, <a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=backlinksallwebs" title="%MAKETEXT{"Search all webs for topics that link to here"}%" accesskey="L">%MAKETEXT{"A&ll webs"}%</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?cover=print.quickmenu%REVARG%" title="%MAKETEXT{"Printable version of this topic"}%" accesskey="P" rel='nofollow'>%MAKETEXT{"&Printable"}%</a>
