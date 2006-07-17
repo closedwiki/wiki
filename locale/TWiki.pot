@@ -199,6 +199,10 @@ msgstr ""
 msgid "&Raw View"
 msgstr ""
 
+#: twikiplugins/QuickMenuSkin/templates/view.quickmenu.tmpl:34
+msgid "Raw View"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "&View topic"
 msgstr ""
