@@ -72,7 +72,7 @@ use vars qw( %TWikiCompatibility );
 
 # number the release version of this plugin
 $VERSION = '$Rev$';
-$RELEASE = '2.5';
+$RELEASE = '2.51';
 
 require Exporter;
 *import = \&Exporter::import;
@@ -105,7 +105,7 @@ my $PATHTODVIPNG = $TWiki::cfg{Plugins}{LatexModePlugin}{dvipng} ||
     '/usr/share/texmf/bin/dvipng';
 
 my $DISABLE = $TWiki::cfg{Plugins}{LatexModePlugin}{donotrenderlist} ||
-    'input,include';
+    'input,include,catcode';
 my @norender = split(',',$DISABLE);
 
 my $tweakinline = $TWiki::cfg{Plugins}{LatexModePlugin}{tweakinline} || 
@@ -600,7 +600,7 @@ sub postRenderingHandler
     #check if there was any math in this document
     return unless scalar( keys( %hashed_math_strings ) );
 
-    $_[0] .= "\n<hr>Twiki LatexModePlugin error messages:<br>\n".
+    $_[0] .= "\n<hr>TWiki LatexModePlugin error messages:<br>\n".
         $error_catch_all if ( length($error_catch_all) > 0 );
 
 
@@ -739,7 +739,7 @@ sub postRenderingHandler
     close( MATHOUT );
 
     # generate the output images by running latex-dvips-convert on the file
-    system("$PATHTOLATEX $LATEXFILENAME >> $LATEXLOG 2>&1");
+    system("$PATHTOLATEX -interaction=nonstopmode $LATEXFILENAME >> $LATEXLOG 2>&1");
 
     ### report errors on 'preview' and 'save'
     if ( ( $script eq 'preview' ) || ( $script eq 'save' ) ) {
