@@ -145,7 +145,7 @@ OL LI, UL LI {
 	color: #666;
 }
 .twikiInputBox {
-	margin: 1px 4px;
+	margin: 0;
 	padding: 0 1px 1px 1px;
 	color: black;
 	font-size: 10px;

@@ -294,14 +294,22 @@ QuickMenu.MenuList.prototype.Hide = function () {
 };
 
 QuickMenu.MenuList.prototype.Place = function () {
-  h = (QuickMenu.User.Moz) ? innerHeight : (QuickMenu.User.cssCompat) ?
-    document.documentElement.clientHeight : document.body.clientHeight;
-  w = (QuickMenu.User.Moz) ? innerWidth : (QuickMenu.User.cssCompat) ?
-    document.documentElement.clientWidth : document.body.clientWidth;
+  var h, w;
+  if (document.documentElement && document.documentElement.clientWidth) {
+    h = document.documentElement.clientHeight;
+    w = document.documentElement.clientWidth;
+  } else if (document.body && document.body.offsetWidth) {
+    h = document.body.offsetHeight;
+    w = document.body.offsetWidth;
+  } else {
+    h = innerHeight;
+    w = innerWidth;
+  }
   if (this.Parent.Button) {
     pos = findAbsPos(this.Parent.Button);
     max = w - this.OuterDiv.offsetWidth - (QuickMenu.User.Ie ? 5 : 3);
     if (max < 0) max = 0;
+//alert("w = " + w + "\ncli = " + document.documentElement.clientWidth + "\nbod = " + document.body.clientWidth + "\nbof = " + document.body.offsetWidth);
     this.OuterDiv.style.left = (pos.x > max) ?  max + "px" : pos.x + "px";
     this.OuterDiv.style.top = pos.y + this.Parent.Button.offsetHeight - 1 + "px";
   } else {
