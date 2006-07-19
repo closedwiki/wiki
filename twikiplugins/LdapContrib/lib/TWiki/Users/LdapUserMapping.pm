@@ -196,7 +196,7 @@ sub isGroup {
 
 =pod
 
----++ Object Method finish
+---++++ Object Method finish
 
 Complete processing after the client's HTTP request has been responded
 to. I.e. it disconnects the LDAP database connection.
