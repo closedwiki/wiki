@@ -23,10 +23,30 @@ use TWiki::Contrib::LdapContrib;
 
 @TWiki::Users::LdapUserMapping::ISA = qw(TWiki::Users::TWikiUserMapping);
 
+=pod
+
+---+++ class TWiki::Users::LdapUserMapping
+
+This class allows to use user names and groups stored in an LDAP
+database inside TWiki in a transparent way. This replaces TWiki's
+native way to represent users and groups using topics with
+according LDAP records.
+
+=cut
+
 sub writeDebug {
   # comment me in/out
   #print STDERR "LdapUserMapping - $_[0]\n";
 }
+
+=pod 
+
+---++++ new($session)
+
+create a new <nop>LdapUserMapping object and constructs an <nop>LdapContrib
+object to delegate LDAP services to.
+
+=cut
 
 sub new {
   my ($class, $session) = @_;
@@ -36,6 +56,16 @@ sub new {
 
   return $this;
 }
+
+=pod
+
+---++++ Object Method getListOfGroups( ) -> @listOfUserObjects
+
+Get a list of groups defined in the LDAP database. If 
+=twikiGroupsBackoff= is defined the set of LDAP and native groups will
+merged whereas LDAP groups have precedence in case of a name clash.
+
+=cut
 
 sub getListOfGroups {
   my $this = shift;
@@ -54,6 +84,15 @@ sub getListOfGroups {
 
   return values %groups;
 }
+
+=pod 
+
+---++++ Object Method groupMembers($group)
+
+Returns a list of all members of a given group. Members are 
+TWiki::User objects.
+
+=cut
 
 sub groupMembers {
   my ($this, $group) = @_;
@@ -78,11 +117,30 @@ sub groupMembers {
   return $group->{members};
 }
 
+=pod 
+
+---++++ addUserToMapping($user, $me)
+
+overrides and thus disables the SUPER method
+
+=cut
+
 sub addUserToMapping {
     my ( $this, $user, $me ) = @_;
 
     return '';
 }
+
+=pod 
+
+---++++ _loadMapping()
+
+overrides internal SUPER method called by 
+TWiki::Users::TWikiUserMapping::lookupWikiName and
+TWiki::Users::TWikiUserMapping::lookupLoginName while
+filling the internal mapping cache.
+
+=cut
 
 sub _loadMapping {
   my $this = shift;
@@ -106,6 +164,18 @@ sub _loadMapping {
   }
 }
 
+=pod
+
+---++++ isGroup($user)
+
+Establish if a user object refers to a user group or not.
+This returns true for the <nop>SuperAdminGroup or
+the known LDAP groups. Finally, if =twikiGroupsBackoff= 
+is set the native mechanism are used to check if $user is 
+a group
+
+=cut
+
 sub isGroup {
   my ($this, $user) = @_;
 
@@ -123,6 +193,15 @@ sub isGroup {
 
   return 0;
 }
+
+=pod
+
+---++ Object Method finish
+
+Complete processing after the client's HTTP request has been responded
+to. I.e. it disconnects the LDAP database connection.
+
+=cut
 
 sub finish {
   my $this = shift;
