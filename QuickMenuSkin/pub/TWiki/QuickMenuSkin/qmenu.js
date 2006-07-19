@@ -309,7 +309,6 @@ QuickMenu.MenuList.prototype.Place = function () {
     pos = findAbsPos(this.Parent.Button);
     max = w - this.OuterDiv.offsetWidth - (QuickMenu.User.Ie ? 5 : 3);
     if (max < 0) max = 0;
-//alert("w = " + w + "\ncli = " + document.documentElement.clientWidth + "\nbod = " + document.body.clientWidth + "\nbof = " + document.body.offsetWidth);
     this.OuterDiv.style.left = (pos.x > max) ?  max + "px" : pos.x + "px";
     this.OuterDiv.style.top = pos.y + this.Parent.Button.offsetHeight - 1 + "px";
   } else {

@@ -14,6 +14,7 @@
 .qmenu-menu-free IMG,
 .qmenu-menu-over IMG,
 .qmenu-menu-click IMG {
+	margin: 0 0 1px 0;
 	vertical-align: -3px;
 	height: 16px;
 	width: auto;
