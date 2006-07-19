@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1146225476" format="1.1" reprev="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1146225476" format="1.1" reprev="1.1" version="1.1"}%
 ---+!! %TOPIC%
 <!--
 
@@ -190,16 +190,19 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 ---++ Contrib Info
 
 |  Author: | TWiki:Main/MichaelDaum |
-|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
+   This work was partly funded by Spanlink Communications |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Version: | v0.4 |
 |  CPAN Dependencies: | CPAN:Net::LDAP, CPAN:Digest::MD5 | 
 |  Dependencies: | None |
 |  Change History: | |
+|  19 July 2006: | public release |
 |  24 May 2006: | api adjustments, improved wikiname generation |
 |  28 Apr 2006: | Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 15 June 2006
+
+-- TWiki:Main/MichaelDaum - 19 July 2006
