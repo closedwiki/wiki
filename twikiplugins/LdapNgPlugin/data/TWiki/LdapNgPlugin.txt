@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1148483690" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1148483690" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 <!--
 
@@ -11,8 +11,8 @@
 -->
 %TOC%
 This plugin provides an interface to query an LDAP directory and display the results in a TWiki topic.
-It is a rewrite of the original TWiki:Plugins/LdapPlugin by TWiki:Main.GerardHickey to provide
-greater flexibility and performance. 
+It is a complete rewrite of the TWiki:Plugins/LdapPlugin by TWiki:Main.GerardHickey to provide
+greater flexibility and performance based on the TWiki:Plugins/LdapContrib package.
 
 ---++ Syntax Rules
 <verbatim>
@@ -86,10 +86,12 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
 
 ---++ Plugin Info
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
+|  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
+   This work was partly funded by Spanlink Communications |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v0.01 |
 |  Change History: | &nbsp; |
+|  19 July 2006: | public release |
 |  25 April 2006: | Initial (internal) version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | TWiki:Plugins/LdapContrib |
@@ -98,4 +100,4 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main/MichaelDaum - 25 April 2006
+-- TWiki:Main/MichaelDaum - 19 July 2006
