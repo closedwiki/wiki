@@ -29,7 +29,7 @@ $RELEASE = 'v0.5';
 
 =begin text
 
----+++ class LdapContrib
+---+++ class TWiki::Contrib::LdapContrib
 
 General LDAP services for TWiki. This class encapsulates the TWiki-specific
 means to integrate an LDAP directory service.  Used by TWiki::Users::LdapUser

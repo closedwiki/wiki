@@ -25,7 +25,7 @@ use TWiki::Contrib::LdapContrib;
 
 =pod
 
----+ package TWiki::Users::LdapUser
+---+++ class TWiki::Users::LdapUser
 
 Password manager that uses Net::LDAP to manage users and passwords.
 
@@ -39,7 +39,7 @@ Configuration: add the following variables to your LocalSite.cfg
    * $TWiki::cfg{Ldap}{base} = &lt;base dn> subtree that holds the user accounts
      e.g. ou=people,dc=your,dc=domain,dc=com
 
----++ Implemented Interface
+---+++ Implemented Interface
 
    * checkPassword(login, password)
    * error()
@@ -47,6 +47,15 @@ Configuration: add the following variables to your LocalSite.cfg
    * getEmails(login)
    * setEmails(login, @emails)
    
+=cut
+
+=pod
+
+---++++ Class Method new($session)
+
+takes a session object, calls the SUPER constructor and creates an LdapContrib object
+delegating LDAP calls to
+
 =cut
 
 sub new {
@@ -58,7 +67,14 @@ sub new {
   return $this;
 }
 
-# return the last error
+=pod
+
+---++++ Object Method error()
+
+return the last error during LDAP operations
+
+=cut
+
 sub error {
   my $this = shift;
   return $this->{ldap}->getError();
@@ -66,7 +82,7 @@ sub error {
 
 =pod 
 
----++ ObjectMethod fetchPass
+---++++ Object Method fetchPass($login)
 
 SMELL: this method is used most of the time to detect if a given
 login user is known to the database. the concrete (encrypted) password 
@@ -85,7 +101,7 @@ sub fetchPass {
 
 =pod 
 
----++ ObjectMethod checkPassword
+---++++ Object Method checkPassword($login, $password)
 
 check passwd by binding to the ldap server
 
@@ -101,7 +117,7 @@ sub checkPassword {
 
 =pod 
 
----++ ObjectMethod getEmails
+---++++ Object Method getEmails($login)
 
 emails might be stored in the ldap account as well if
 the record is of type possixAccount and inetOrgPerson.
@@ -125,7 +141,7 @@ sub getEmails {
   return $this->SUPER::getEmails($login);
 }
 
-=pod ObjectMethod finish
+=pod ObjectMethod finish()
 
 Complete processing after the client's HTTP request has been responded.
 i.e. destroy the ldap object.
