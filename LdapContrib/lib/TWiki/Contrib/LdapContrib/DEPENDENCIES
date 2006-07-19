@@ -1,0 +1,2 @@
+Net::LDAP,>=0.33,cpan,Required
+Digest::MD5,>=2.36,cpan,Required
