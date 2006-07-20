@@ -1,0 +1,102 @@
+%META:TOPICINFO{author="TWikiContributor" date="1140597757" format="1.1" version="$Rev$"}%
+---+!! Google AJAX Search Plugin
+*Wrapper plugin for a dynamic search service provided by Google.*
+
+%TOC%
+
+---++ About Google AJAX Search
+The [[http://code.google.com/apis/ajaxsearch/][Google AJAX Search API]] is an experimental API that lets you integrate a dynamic Google search module into your web pages so your users can mash up Google search results with other content on your site or add search results clippings to their own content.
+
+Note that this service (as stated by Google themselves):
+   * Is in BETA
+   * Will likely change in the future, so the current implementation may break
+   * Future versions may contain ads
+
+If you want to put this service on your own site you need to [[http://code.google.com/apis/ajaxsearch/signup.html][obtain a (free) unique key]] from Google.
+
+Set =GOOGLEKEY= below in [[%TOPIC%#Settings][Settings]].
+
+---++ Restricting search to a site or Web
+To obtain results from a particular website, set variable =GOOGLESEARCHSITE=.
+
+To get results from one TWiki Web only, set variable =GOOGLESEARCHWEB= in combination with =GOOGLESEARCHSITE=.
+
+For example:
+<verbatim>
+   * Set GOOGLESEARCHWEB = TWiki
+   * Set GOOGLESEARCHSITE = http://twiki.org/cgi-bin/view/%GOOGLESEARCHWEB%
+</verbatim>
+Set the variables below in [[%TOPIC%#Settings][Settings]].
+
+---++ Putting a search box
+The !JavaScript code written by the plugin assumes a html container element exists with id =googleAjaxSearchControl=. The results will be written to this element.
+
+The input field should have the id =googleAjaxSearchInputElement=.
+
+Example:
+<verbatim>
+<div class="googleAjaxSearch">
+*Search %GOOGLESEARCHWEB% Web:* <input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value=""/>
+<span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span>
+<div id="googleAjaxSearchControl"></div>
+</div><!--//googleAjaxSearch-->
+</verbatim>
+
+---++ Re-use
+To show the search box in another topic, put in an =INCLUDE= as follows:
+<verbatim>
+%INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" web="TWiki"}%
+</verbatim>
+
+<verbatim>
+%STARTSECTION{"default"}%<div class="googleAjaxSearch">
+*Search %web% Web:* <input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value="%query%"/> <span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span>
+<div id="googleAjaxSearchControl"></div>
+</div><!--//googleAjaxSearch-->%ENDSECTION{"default"}%
+</verbatim>
+
+---++ Start search automatically
+To start off with a search, pass a default search string to the input field.
+
+---++ Start search automatically by URL parameter
+Pass parameter =googleAjaxQuery= to the url to start off a default search. For example: =%SCRIPTURL{view}%/Support/WebHome?googleAjaxQuery=htaccess=.
+
+A URL parameter will override a locally set search input value.
+
+---++ Settings
+For an explanation of the following variables read above.
+   * Set GOOGLEKEY = ABQIAAAAdn2_5Mg-sVVHHg0HFPhdZxTMiauJ16V0CcIMMO6qXNNbrggihxT-tO-TaDHfJzckAhMHgZy2Ll3AqA
+   * Set GOOGLESEARCHWEB = 
+   * Set GOOGLESEARCHSITE = http://twiki.org/cgi-bin/view/
+
+---++ Example
+To see it work (if installed and the right Google key is put):
+
+<div class="googleAjaxSearch">
+*Search %GOOGLESEARCHWEB% Web:* <input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value="oops"/> <span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span>
+<div id="googleAjaxSearchControl"></div>
+</div><!--//googleAjaxSearch-->
+
+---++ Plugin Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
+   | *File:* | *Description:* |
+%$MANIFEST%
+	* Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+   %$DEPENDENCIES%
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	
+---++ Contrib Info
+
+| Authors: | TWiki:Main.ArthurClemens |
+| Copyright &copy;: | 2006 Arthur Clemens |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Dependencies: | %$DEPENDENCIES% |
+|  20 Jul 2006 | 1.000 First Version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+ 
