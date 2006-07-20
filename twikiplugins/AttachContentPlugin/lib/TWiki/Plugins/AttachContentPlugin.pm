@@ -78,7 +78,7 @@ sub afterSaveHandler {
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 
-    $_[0] =~ s/%ATTACH{"(.*?)"}%(.*?)%ENDATTACH%/&handleAttach($1, $2, $_[2], $_[1])/ges;
+    $_[0] =~ s/%STARTATTACH{"(.*?)"}%(.*?)%ENDATTACH%/&handleAttach($1, $2, $_[2], $_[1])/ges;
     $savedAlready = 0;
 }
 
