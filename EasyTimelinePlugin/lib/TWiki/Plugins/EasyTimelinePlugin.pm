@@ -54,7 +54,7 @@ my %hashed_math_strings = ();
 
 # Please update sandbox command string to fit your environment:
 my $cmd =
-'/usr/bin/perl /home/httpd/twiki/tools/EasyTimeline.pl -i %INFILE|F% -m -P /usr/bin/ploticus -T %TMPDIR|F% -A /twiki/bin/view/%WEB|S%';
+'/usr/bin/perl /home/httpd/twiki/tools/EasyTimeline.pl -i %INFILE|F% -m -P /usr/bin/ploticus -T %TMPDIR|F% -A /twiki/bin/view/%WEB|F%';
 
 my $tmpDir  = '/tmp/' . $pluginName . "$$";
 my $tmpFile = '/tmp/' . $pluginName . "$$" . '/' . $pluginName . "$$";
