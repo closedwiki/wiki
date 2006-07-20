@@ -118,6 +118,8 @@ sub renderParent {
     my $usesep =      $ah->{separator} || ' &gt; ';
     my $format =      $ah->{format} || '[[$web.$topic][$topic]]';
 
+    return '' unless $web && $topic;
+
     my %visited;
     $visited{$web.'.'.$topic} = 1;
 
