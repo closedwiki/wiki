@@ -1,7 +1,7 @@
 
-GoogleAjaxSearch  = {};
+function GoogleAjaxSearch () {};
 
-GoogleAjaxSearch.createSearchControl = function (inQueryString) {
+GoogleAjaxSearch.prototype.createSearchControl = function (inQueryString) {
 	
 	// Create a search control
 	var searchControl = new GSearchControl();
@@ -17,7 +17,8 @@ GoogleAjaxSearch.createSearchControl = function (inQueryString) {
 
 	// site restricted web search
 	var siteSearch = new GwebSearch();
-	siteSearch.setSiteRestriction(GoogleAjaxSearch.getSearchSite());
+	siteSearch.setSiteRestriction(this.getSearchSite());
+	siteSearch.setUserDefinedLabel(this.getSiteLabel());
 	searchControl.addSearcher(siteSearch, options);
 
 	// tell the searcher to draw itself and tell it where to attach
@@ -32,10 +33,13 @@ GoogleAjaxSearch.createSearchControl = function (inQueryString) {
 
 	// execute an inital search
 	// check if a search query parameter with key "googleAjaxQuery" has been passed
-	var searchParam = GoogleAjaxSearch.getUrlParam();
+	var searchParam = this.getUrlParam();
 	var searchString = (searchParam != "") ? searchParam : "";
 	if (searchString == "" && inQueryString != undefined) searchString = inQueryString;
 	searchControl.execute(searchString);
 }
-
-addLoadEvent(GoogleAjaxSearch.createSearchControl);
+var gas = new GoogleAjaxSearch();
+function createSearchControl () {
+	gas.createSearchControl();
+}
+addLoadEvent(createSearchControl);

@@ -2,7 +2,7 @@ package TWiki::Plugins::GoogleAjaxSearchPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $pluginName $debug $googleSiteKey $searchSite $searchWeb);
+use vars qw( $VERSION $RELEASE $pluginName $debug $googleSiteKey $searchSite $searchWeb $siteLabel );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -32,6 +32,7 @@ sub initPlugin {
 	$googleSiteKey = TWiki::Func::getPluginPreferencesValue( "GOOGLEKEY" );
 	$searchSite = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHSITE" ) || '';
 	$searchWeb = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHWEB" ) || '';
+	$siteLabel = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHLABEL" ) || '';
 	
 	_addToHead();
 	
@@ -49,14 +50,32 @@ sub _addToHead {
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/GoogleAjaxSearchPlugin/googleAjaxSearch.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-GoogleAjaxSearch.getSearchSite = function () {
-	return "'.$searchSite.'" + GoogleAjaxSearch.getSearchWeb();
+GoogleAjaxSearch.prototype.getSearchSite = function () {
+	return "'.$searchSite.'" + this.getSearchWeb();
 }
-GoogleAjaxSearch.getSearchWeb = function () {
+/**
+An input field with id \'googleAjaxSearchWeb\' may override GOOGLESEARCHWEB.
+*/
+GoogleAjaxSearch.prototype.getSearchWeb = function () {
+	var webElem = document.getElementById("googleAjaxSearchWeb");
+	if (webElem) {
+		var webName = webElem.value;
+		if (webName) return webName;
+	}
+	// else default
 	return "'.$searchWeb.'";
 }
-GoogleAjaxSearch.getUrlParam = function () {
+GoogleAjaxSearch.prototype.getUrlParam = function () {
 	return "%URLPARAM{"googleAjaxQuery" default=""}%";
+}
+GoogleAjaxSearch.prototype.getSiteLabel = function () {
+	var webElem = document.getElementById("googleAjaxSearchlabel");
+	if (webElem) {
+		var label = webElem.value;
+		if (label) return label;
+	}
+	// else default
+	return "'.$siteLabel.'";
 }
 //]]>
 </script>
