@@ -256,6 +256,7 @@ Each row of the table is a line containing of one or more cells. Each cell start
    * You can split rows over multiple lines by putting a backslash ='\'= at the end of each line
    * Contents of table cells wrap automatically as determined by the browser
 %T% The %TWIKIWEB%.TablePlugin provides the =|^|= multiple-span row functionality and additional rendering features
+   * to create a literal pipe symbol safely, use ASCII code for pipe symbol - 124, like this: =&amp;#124;=
 </td><td>
 <verbatim>
 | *L* | *C* | *R* |
