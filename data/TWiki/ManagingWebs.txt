@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1153528583" format="1.1" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Webs
@@ -57,7 +57,7 @@ If anyone is editing a topic which requires updating, or which lives in the web 
 
 If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in this web. That means that every WikiName signature - =%MAINWEB%.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout). This potentially large change can be performed automatically if you rename the web from the Tools section of %WEBPREFSTOPIC%, as described above.
 
-%X% If you want to rename the %TWIKIWEB% or %MAINWEB% webs, remember they are referred to in the TWiki configuration. You will need to change the relevant settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
+%X% If you want to rename the %TWIKIWEB% or %MAINWEB% webs, remember they are referred to in the TWiki configuration. You will need to change the ={SystemWebName}=, ={UsersWebName}= and/or ={LocalSitePreferences}= settings in the configuration using the [[%SCRIPTURL{configure}%][configure]] interface.
 
 ---++ Hierarchical Webs
 
