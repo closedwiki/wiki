@@ -207,7 +207,7 @@ sub new {
     my $this = bless({}, $class);
 
     # Constants with internet paths
-    $this->{TWIKIORGPUB} = 'http://www.twiki.org/p/pub';
+    $this->{TWIKIORGPUB} = 'http://twiki.org/p/pub';
     $this->{TWIKIORGSCRIPT} = 'http://twiki.org/cgi-bin';
     $this->{BUGSURL} = 'http://develop.twiki.org/~develop/cgi-bin/view/Bugs';
 
