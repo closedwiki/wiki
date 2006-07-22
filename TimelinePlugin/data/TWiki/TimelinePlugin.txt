@@ -1,0 +1,77 @@
+%META:TOPICINFO{author="SvenDowideit" date="1153565653" format="1.1" reprev="1.2" version="1.2"}%
+---+ Timeline TWiki Plugin
+
+Uses the dead sexy Timeline view from http://simile.mit.edu/timeline/ to show any correctly formated information. I use it to show webChanges with the query below, and will update with a task / calendar query soon.
+
+<img src="%ATTACHURLPATH%/timeline.jpg" alt="timeline.jpg" width='300' height='328' />
+
+---++ Syntax Rules
+
+<verbatim>
+%TIMELINE{
+"%SCRIPTURL{view}%/Sandbox/TimeLineSearch"
+interval="DAY"
+height="450px"
+width="450px"
+date="%DISPLAYTIME{"$day $month $year"}%"
+}%
+</verbatim>
+
+where !TimeLineSearch conatins
+<verbatim>
+<data>
+<!--
+   * Set !SKIN = xml
+
+the format of and event:  
+   start="May 28 2006 09:00:00 GMT"
+   end="Jun 15 2006 09:00:00 GMT"
+   isDuration="true" 
+   title="Writing Timeline documentation" 
+   image="http://simile.mit.edu/images/csail-logo.gif" 
+-->
+%SEARCH{
+".*" web="%INCLUDINGWEB%" regex="on" nototal="on" noheader="on" nosearch="on" order="modified" limit="10"
+format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topic' >$summary(noheader)</event>"}%
+</data>
+</verbatim>
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TIMELINEPLUGIN_SHORTDESCRIPTION%==
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Show a scrolling Timeline from a TWiki query
+
+   * Your own setting, for example:
+      * Set EXAMPLE = got it!
+
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+   * This plugin is preinstalled, you do not need to install it.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.SvenDowideit - http://WikiRing.com |
+|  Copyright: | &copy; 2006, SvenDowideit |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 22 Feb 2006 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  22 July 2006: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+
+%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153565200" path="timeline.jpg" size="11824" user="Main.SvenDowideit" version="1"}%
