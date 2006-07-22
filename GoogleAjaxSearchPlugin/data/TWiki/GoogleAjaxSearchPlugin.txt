@@ -29,6 +29,8 @@ For example:
 Set the variables below in [[%TOPIC%#Settings][Settings]].
 
 ---++ Putting a search box
+Start a search box with =%<nop>GOOGLEAJAXSEARCH%=.
+
 The !JavaScript code written by the plugin assumes a html container element exists with id =googleAjaxSearchControl=. The results will be written to this element.
 
 The input field should have the id =googleAjaxSearchInputElement=.
@@ -37,6 +39,7 @@ The input field should have the id =googleAjaxSearchInputElement=.
 
 Example:
 <verbatim>
+%GOOGLEAJAXSEARCH%
 <div class="googleAjaxSearch">
 <strong>Search %GOOGLESEARCHWEB% </strong><input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value=""/>
 <span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span>
@@ -61,7 +64,7 @@ To show the search box in another topic, put in an =INCLUDE= as follows:
 </verbatim>
 The included section is:
 <verbatim>
-%STARTSECTION{"default"}%<div class="googleAjaxSearch"><strong>Search %web% </strong><input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value="%query%" /><input type="hidden" id="googleAjaxSearchWeb" value="%web%" /><input type="hidden" id="googleAjaxSearchlabel" value="%label%" /> <span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span><div id="googleAjaxSearchControl"></div></div><!--//googleAjaxSearch-->%ENDSECTION{"default"}%
+%STARTSECTION{"default"}%%GOOGLEAJAXSEARCH%<div class="googleAjaxSearch"><strong>Search %web% </strong><input class="twikiInputField" size="55" id="googleAjaxSearchInputElement" value="%query%" /><input type="hidden" id="googleAjaxSearchWeb" value="%web%" /><input type="hidden" id="googleAjaxSearchlabel" value="%label%" /> <span class="twikiGrayText twikiSmallish">(results by Google !AJAX - Beta)</span><div id="googleAjaxSearchControl"></div></div><!--//googleAjaxSearch-->%ENDSECTION{"default"}%
 </verbatim>
 
 ---++ Start search automatically
@@ -106,6 +109,7 @@ To see it work (if installed and the right Google key is set):
 | Copyright &copy;: | 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+|  22 Jul 2006 | 1.0.2 Added Lazy loading |
 |  22 Jul 2006 | 1.0.1 Added =GOOGLESEARCHLABEL=; various bug fixes |
 |  20 Jul 2006 | 1.0.0 First Version |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
