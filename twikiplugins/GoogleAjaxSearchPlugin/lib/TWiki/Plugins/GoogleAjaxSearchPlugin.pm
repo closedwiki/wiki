@@ -2,7 +2,7 @@ package TWiki::Plugins::GoogleAjaxSearchPlugin;
 
 use strict;
 
-use vars qw( $VERSION $RELEASE $pluginName $debug $googleSiteKey $searchSite $searchWeb $siteLabel );
+use vars qw( $VERSION $RELEASE $pluginName $debug $initialised $googleSiteKey $searchSite $searchWeb $siteLabel );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -15,6 +15,25 @@ $VERSION = '$Rev$';
 $RELEASE = 'Dakar';
 
 $pluginName = 'GoogleAjaxSearchPlugin';
+
+BEGIN {
+    $initialised = 0;
+};
+
+sub commonTagsHandler {
+	return unless ( $_[0] =~ s/%GOOGLEAJAXSEARCH%//ge );
+
+    if ( !$initialised ) {
+        return unless _lazyInit();
+    }
+}
+
+sub _lazyInit {
+    unless ( $initialised ) {
+        _addToHead();
+        $initialised = 1;
+    }
+}
 
 #there is no need to document this.
 sub initPlugin {
@@ -33,9 +52,7 @@ sub initPlugin {
 	$searchSite = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHSITE" ) || '';
 	$searchWeb = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHWEB" ) || '';
 	$siteLabel = TWiki::Func::getPluginPreferencesValue( "GOOGLESEARCHLABEL" ) || '';
-	
-	_addToHead();
-	
+		
     return 1;
 }
 
