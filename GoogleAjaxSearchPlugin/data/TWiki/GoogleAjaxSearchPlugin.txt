@@ -78,7 +78,7 @@ You can set the label of the search results to a custom string by defining =GOOG
 
 ---++ Settings
 For an explanation of the following variables read above. These are example variable values:
-   * Set GOOGLEKEY = ABQIAAAAdn2_5Mg-sVVHHg0HFPhdZxTMiauJ16V0CcIMMO6qXNNbrggihxT-tO-TaDHfJzckAhMHgZy2Ll3AqA
+   * Set GOOGLEKEY = XXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXX
    * Set GOOGLESEARCHWEB = 
    * Set GOOGLESEARCHSITE = http://twiki.org/cgi-bin/view/
    * Set GOOGLESEARCHLABEL = twiki.org
@@ -88,6 +88,7 @@ For an explanation of the following variables read above. These are example vari
 To see it work (if installed and the right Google key is set):
 
 %INCLUDE{"%TWIKIWEB%.GoogleAjaxSearchPlugin" section="default" query="" web="TWiki" label="twiki.org TWiki Web"}%
+
 
 ---++ Plugin Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
