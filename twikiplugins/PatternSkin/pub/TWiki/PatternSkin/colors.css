@@ -3,73 +3,89 @@
 	Appearance: text colors, background colors, border colors
 	-----------------------------------------------------------	*/
 	
-/*	---------------------------------------------------------------------------------------
+/*	----------------------------------------------------------------------------
 	CONSTANTS
+	
+	Logical groupings
+	----------------------------------------
+	G-Text on background-BG												#fff
+	G-Text on background-T												#000
+	
+	G-Link-normal-T														#06c
+	G-Link-normal-BG													(not defined)
+	G-Link-action-button (same as G-Link-hover-BG)						#D6000F
+	G-Link-hover-T														#FBF7E8
+	G-Link-hover-BG														#D6000F
+	
+	G-Disabled-BO														#e0e0e0
+	G-Disabled-T														#ccc
+	G-Disabled-BG														#f5f5f5
 	
 	Text colors
 	----------------------------------------
-	T1 text color																	#000
-	T2 link color																	#06c
-	T3 link hover text color														#FBF7E8
-	T4 link action button color (red) (same as BG2)									#D6000F
-	T5 header color																	#a00
-	T6 code text, left bar text														#7A4707
-	T7 muted (dark gray) text														#666
-	T8 grayed out text																#8E9195
-	T9 alert 																		#f00
-	T10 green 'new'																	#049804
-	T11 dark gray																	#333
+	T1 text color														#000
+	T5 header color														#a00
+	T6 code text, left bar text											#7A4707
+	T7 muted (dark gray) text											#666
+	T8 grayed out text													#8E9195
+	T9 alert (red)														#f00
+	T9-m muted alert (dark red)											#900
+	T10 'new' (green)													#049804
+	T11 button text color, header (dark gray)							#333
+	T12 .patternTopicAction .twikiSeparator								#aaa
 	
 	Background colors
 	----------------------------------------
-	BG1	white; attachment, form table background									#fff
-	BG2 link hover background color (red)  											#D6000F 
-	BG3	light gray																	#efefef
-	BG4 active form field (not implemented yet)										#ffc
-	BG5 info background very light blue	(placeholder for background image)			#ECF4FB
-	BG6	patternTopicAction light yellow (same as T3)								#FBF7E8
-	BG7 header background (very light yellow)										#FDFAF1
-	BG8 accent on sorted table column												#ccc
-	BG9 light yellow; attachment, form background									#FEFBF3
-	BG10 light green 'new'															#ECFADC
-	BG11 dark gray; diff header background (same as T8)								#8E9195
-	BG12 dark yellow, submit button													#FED764
-	BG13 light blue: form steps														#F6FAFD
-	BG14 lighter blue: left bar														#F9FCFE
+	BG1	(white)															#fff
+	BG3	table header background											#efefef
+	BG4 active form field (not implemented yet)							#ffc
+	BG5 info (very light blue) (placeholder for background image)		#ECF4FB
+	BG6	topic action row (light yellow)									#FBF7E8
+	BG6-l topic action row (lighter yellow)								#FDFBF4
+	BG7 h1, h2, etc header (very light yellow)							#FDFAF1
+	BG8 sorted table column accent background							#ccc
+	BG9 attachment, form (light yellow)									#FEFBF3
+	BG10 'new' (light green)											#ECFADC
+	BG11 diff header (dark gray) (same as T8)							#8E9195
+	BG12 submit button (dark yellow)									#FED764
+	BG13 edit form, form steps (light blue)								#F6FAFD
+	BG14 left bar (lighter blue)										#F9FCFE
 	
 	Border colors
 	----------------------------------------
-	BO1	light gray																	#efefef
-	BO2 submit button border blue ('active')										#88B6CF
-	BO3	info light blue border														#D5E6F3
-	BO4 border color beige, header h2 bottom border									#E2DCC8
-	BO5 header h3..h6 bottom border	(75% of BO4)									#E9E4D2
-	BO6 darker gray																	#aaa
-	BO7 neutral gray border															#ccc
-	BO8 light neutral gray															#ddd
-	BO9 alert border																#f00
-	BO10 dark gray (same as BG11)													#8E9195
+	BO1	form (light gray)												#efefef
+	BO2 submit button (blue) ('active')									#88B6CF
+	BO3	info (light blue)												#D5E6F3
+	BO4 hr line, bottom of h2, attachment table, form (brown)			#E2DCC8
+	BO5 header h3..h6 bottom (75% of BO4)								#E9E4D2
+	BO6 textarea, input and select (darker gray)						#aaa
+	BO7 main layout elements (neutral tone)								#ccc
+	BO8 disabled, sup (light neutral tone)								#ddd
+	BO9 alert															#f00
+	BO10 .twikiInputField, .twikiSelect									#aaa #ddd #ddd #aaa
+	BO11 .twikiSubmit, .twikiButton										#ddd #aaa #aaa #ddd
+	BO11-a .twikiSubmit, .twikiButton (active)							#999 #ccc #ccc #999
 
-	---------------------------------------------------------------------------------------	*/
+	------------------------------------------------------------------------- */
 
 /* LAYOUT ELEMENTS */
 
 #patternTopBar {
-	background-color:#fff; /*BG1*/
-	border-color:#ccc;
+	background-color:#fff; /*G-Text on background-BG*/
+	border-color:#ccc; /*BO7*/
 }
 #patternMain { /* don't set a background here; use patternOuter */ }
 #patternOuter {
-	background-color:#fff; /*BG1*/ /*** Sets background of center col***/
-	border-color:#ccc;
+	background-color:#fff; /*G-Text on background-BG*/ /*** Sets background of center col***/
+	border-color:#ccc; /*BO7*/
 }
 #patternLeftBar, #patternLeftBarContents { /* don't set a background here; use patternWrapper */ }
 #patternWrapper {
 	background-color:#F6FAFD; /*BG13*/
 }
 #patternBottomBar {
-	background-color:#fff; /*BG1*/
-	border-color:#ccc;
+	background-color:#fff; /*G-Text on background-BG*/
+	border-color:#ccc; /*BO7*/
 }
 #patternBottomBarContents,
 #patternBottomBarContents a:link,
@@ -80,8 +96,8 @@
 /* GENERAL HTML ELEMENTS */
 
 html body {
-	background-color:#fff; /*BG1*/
-	color:#000; /*T1*/
+	background-color:#fff; /*G-Text on background-BG*/
+	color:#000; /*G-Text on background-T*/
 }
 /* be kind to netscape 4 that doesn't understand inheritance */
 body, p, li, ul, ol, dl, dt, dd, acronym, h1, h2, h3, h4, h5, h6 {
@@ -102,10 +118,10 @@ h1 a:visited {
 	color:#a00; /*T5*/
 }
 h1 a:hover {
-	color:#FBF7E8; /*T3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 h2 {
-	background-color:#FDFAF1;
+	background-color:#FDFAF1; /*BG7*/
 	border-color:#E2DCC8; /*BO4*/
 }
 h3, h4, h5, h6 {
@@ -121,9 +137,9 @@ h3, h4, h5, h6 {
 	border-color:#ddd; /*BO8*/
 }
 .twikiNewLink a:hover sup {
-	background-color:#D6000F; /*BG2*/
-	color:#FBF7E8; /*C3*/
-	border-color:#D6000F; /*BG2*/ /* (part of bg) */
+	background-color:#D6000F; /*G-Link-hover-BG*/
+	color:#FBF7E8; /*G-Link-hover-T*/
+	border-color:#D6000F; /*G-Link-hover-BG*/ /* (part of bg) */
 }
 .twikiNewLink {
 	border-color:#ddd; /*BO8*/
@@ -134,23 +150,23 @@ h3, h4, h5, h6 {
 :visited,
 :link:active,
 :visited:active {
-	color:#06c; /*T2*/;
+	color:#06c; /*G-Link-normal-T*/
 	background-color:transparent;
 }
 :link:hover,
 :visited:hover {
-	color:#FBF7E8; /*C3*/
-	background-color:#D6000F; /*BG2*/
+	color:#FBF7E8; /*G-Link-hover-T*/
+	background-color:#D6000F; /*G-Link-hover-BG*/
 }
 :link:hover img,
 :visited:hover img {
-	background:#fff; /*BG1*/
+	background:transparent;
 }
 .patternTopic a:visited {
 	color:#666; /*T7*/
 }
 .patternTopic a:hover {
-	color:#FBF7E8; /*C3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 
 /* Form elements */
@@ -159,29 +175,30 @@ textarea,
 input,
 select {
 	border-color:#aaa; /*BO6*/
+	color:#000; /*G-Text on background-T*/
 }
 .twikiSubmit,
 .twikiButton {
-	border-color:#ddd #aaa #aaa #ddd;
-	color:#333;
+	border-color:#ddd #aaa #aaa #ddd; /*BO11*/
+	color:#333; /*T11*/
 	background-color:#fff; /*BG1*/
 }
 .twikiSubmit:active,
 .twikiButton:active {
-	border-color:#999 #ccc #ccc #999;
-	color:#000;
+	border-color:#999 #ccc #ccc #999; /*BO11-a*/
+	color:#000; /*T1*/
 }
 .twikiSubmitDisabled,
 .twikiSubmitDisabled:active {
-	border-color:#ddd;
-	color:#ccc;
-	background-color:#f5f5f5;
+	border-color:#e0e0e0; /*G-Disabled-BO*/
+	color:#ccc; /*G-Disabled-T*/
+	background-color:#f5f5f5; /*G-Disabled-BG*/
 }
 .twikiInputField,
 .twikiSelect {
-	border-color:#aaa #ddd #ddd #aaa;
-	color:#000;
-	background-color:#fff; /*BG1*/
+	border-color:#aaa #ddd #ddd #aaa; /*BO10*/
+	color:#000; /*G-Text on background-T*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 .twikiInputFieldDisabled {
 	color:#666; /*T7*/
@@ -200,13 +217,13 @@ select {
 .twikiTable th a:link,
 .twikiTable th a:visited,
 .twikiTable th a font {
-	color:#06c; /*T2*/
+	color:#06c; /*G-Link-normal-T*/
 }
 .twikiTable th a:hover,
 .twikiTable th a:hover font {
 	background-color:transparent;
-	color:#D6000F; /*T4*/
-	border-color:#D6000F; /*T4*/
+	color:#D6000F; /*G-Link-hover-BG*/
+	border-color:#D6000F; /*G-Link-hover-BG*/
 }
 
 /* TablePlugin - sorting of table columns */
@@ -228,7 +245,7 @@ th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover font,
 th.twikiSortedDescendingCol a:hover,
 th.twikiSortedDescendingCol a:hover font {
-	border-color:#D6000F; /*T4*/
+	border-color:#D6000F; /*G-Link-hover-BG*/
 }
 
 /* TwistyContrib */
@@ -236,7 +253,7 @@ th.twikiSortedDescendingCol a:hover font {
 	color:#8E9195; /*T8*/
 }
 a:hover.twistyTrigger {
-	color:#FBF7E8; /*T3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 
 /* TipsContrib */
@@ -252,12 +269,12 @@ a:hover.twistyTrigger {
 	color:#a00; /*T5*/
 }
 #patternLeftBar .tipsOfTheDay a:hover {
-	color:#FBF7E8; /*T3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 
 /* RevCommentPlugin */
 .revComment .patternTopicAction {
-	background-color:#FDFBF4;
+	background-color:#FDFBF4; /*BG6-l*/
 }
 
 /*	-----------------------------------------------------------
@@ -272,7 +289,7 @@ a:hover.twistyTrigger {
 	color:#8E9195; /*T8*/
 }
 .twikiGrayText a:hover {
-	color:#FBF7E8; /*C3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 
 table.twikiFormTable th.twikiFormTableHRow,
@@ -280,14 +297,14 @@ table.twikiFormTable td.twikiFormTableRow {
 	color:#666; /*T7*/
 }
 .twikiEditForm {
-	color:#000; /*T1*/
+	color:#000; /*G-Text on background-T*/
 }
 .twikiEditForm .twikiFormTable th,
 .twikiEditForm .twikiFormTable td {
 	border-color:#ddd; /*BO8*/
 }
 .twikiEditForm .twikiFormTable td  {
-	background-color:#F6F8FC;
+	background-color:#F6FAFD; /*BG13*/
 }
 .twikiEditForm .twikiFormTable th {
 	background-color:#ECF4FB; /*BG5*/
@@ -300,35 +317,35 @@ table.twikiFormTable td.twikiFormTableRow {
 .twikiAttachments table,
 table.twikiFormTable {
 	border-color:#ccc; /*BO7*/
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 .twikiAttachments table {
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 .twikiAttachments td, 
 .twikiAttachments th {
-	border-color:#ccc;
+	border-color:#ccc; /*BO7*/
 }
 .twikiAttachments th/*,
 table.twikiFormTable th.twikiFormTableHRow*/ {
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 .twikiAttachments td {
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
 table.twikiFormTable th.twikiFormTableHRow a:link,
 table.twikiFormTable th.twikiFormTableHRow a:visited {
-	color:#06c; /*T2*/
+	color:#06c; /*G-Link-normal-T*/
 }
 .twikiAttachments th font,
 table.twikiFormTable th.twikiFormTableHRow font {
-	color:#06c; /*T2*/
+	color:#06c; /*G-Link-normal-T*/
 }
 .twikiAttachments th a:hover,
 table.twikiFormTable th.twikiFormTableHRow a:hover {
-	border-color:#06c; /*T2*/
+	border-color:#06c; /*G-Link-normal-T*/
 	background-color:transparent;
 }
 .twikiAttachments th.twikiSortedAscendingCol,
@@ -337,10 +354,10 @@ table.twikiFormTable th.twikiFormTableHRow a:hover {
 }
 .twikiFormSteps {
 	background-color:#F6FAFD; /*BG13*/
-	border-color:#E2DCC8;
+	border-color:#E2DCC8; /*BO4*/
 }
 .twikiFormStep {
-	border-color:#E2DCC8;
+	border-color:#E2DCC8; /*BO4*/
 }
 .twikiFormStep h3,
 .twikiFormStep h4 {
@@ -361,11 +378,11 @@ table.twikiFormTable th.twikiFormTableHRow a:hover {
 	color:#f00; /*T9*/
 }
 .twikiEmulatedLink {
-	color:#06c; /*T2*/
+	color:#06c; /*G-Link-normal-T*/
 }
 .twikiPageForm table {
 	border-color:#ddd; /*BO8*/
-	background:#fff; /*BG1*/
+	background:#fff; /*G-Text on background-BG*/
 }
 .twikiPageForm hr {
 	border-color:#efefef; /*BO1*/
@@ -391,7 +408,7 @@ a:hover .twikiAccessKey {
 	Pattern skin specific elements
 	-----------------------------------------------------------	*/
 #patternPage {
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 /* Left bar */
 #patternLeftBarContents {
@@ -405,7 +422,7 @@ a:hover .twikiAccessKey {
 	color:#000; /*T1*/
 }
 #patternLeftBarContents .patternWebIndicator a:hover {
-	color:#FBF7E8; /*T3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 #patternLeftBarContents hr {
 	color:#E2DCC8; /*BO4*/
@@ -416,7 +433,7 @@ a:hover .twikiAccessKey {
 	color:#7A4707; /*T6*/
 }
 #patternLeftBarContents a:hover {
-	color:#FBF7E8; /*C3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 #patternLeftBarContents b,
 #patternLeftBarContents strong {
@@ -426,15 +443,15 @@ a:hover .twikiAccessKey {
 	color:#8E9195; /*T8*/
 }
 #patternLeftBarContents .patternLeftBarPersonal {
-	border-color:#D9EAF6;
+	border-color:#D5E6F3; /*BO3*/
 }
 #patternLeftBarContents .patternLeftBarPersonal a:link,
 #patternLeftBarContents .patternLeftBarPersonal a:visited {
-	color:#06c; /*T2*/;
+	color:#06c; /*G-Link-normal-T*/
 }
 #patternLeftBarContents .patternLeftBarPersonal a:hover {
-	color:#FBF7E8; /*C3*/
-	background-color:#D6000F; /*BG2*/
+	color:#FBF7E8; /*G-Link-hover-T*/
+	background-color:#D6000F; /*G-Link-hover-BG*/
 }
 .patternSeparator {
 	font-family:monospace;
@@ -445,20 +462,25 @@ a:hover .twikiAccessKey {
 .patternTopicAction {
 	color:#666; /*T7*/
 	border-color:#E2DCC8; /*BO4*/
-	background-color:#FBF7E8;
+	background-color:#FBF7E8; /*BG6*/
+}
+.patternTopicAction s,
+.patternTopicAction strike {
+	color:#ccc; /*G-Disabled-T*/
 }
 .patternTopicAction .twikiSeparator {
-	color:#aaa;
+	color:#aaa; /*T12*/
 }
 .patternActionButtons a:link,
 .patternActionButtons a:visited {
-	color:#D6000F; /*T4*/
+	color:#D6000F; /*G-Link-action-button*/
 }
 .patternActionButtons a:hover {
-	color:#FBF7E8; /*C3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 .patternTopicAction .twikiAccessKey {
-	border-color:#C75305;
+	color:#D6000F; /*G-Link-action-button*/
+	border-color:#D6000F; /*G-Link-action-button*/
 }
 .patternTopicAction label {
 	color:#000; /*T1*/
@@ -484,14 +506,13 @@ a:hover .twikiAccessKey {
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike {
-	color:#ccc;
-	border-color:#e0e0e0;
-	background-color:#fff; /*BG1*/
+	color:#ccc; /*G-Disabled-T*/
+	border-color:#e0e0e0; /*G-Disabled-BO*/
 }
 .patternToolBar .patternButton a:hover {
-	background-color:#D6000F; /*BG2*/
-	color:#FBF7E8; /*C3*/
-	border-color:#D6000F; /*T4*/
+	background-color:#D6000F; /*G-Link-hover-BG*/
+	color:#FBF7E8; /*G-Link-hover-T*/
+	border-color:#D6000F; /*G-Link-action-button*/
 }
 .patternToolBar .patternButton img {
 	background-color:transparent;
@@ -515,7 +536,7 @@ a:hover .twikiAccessKey {
 	color:#8E9195; /*T8*/
 }
 .patternRevInfo a:hover {
-	color:#FBF7E8; /*C3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 
 .patternMoved,
@@ -524,10 +545,10 @@ a:hover .twikiAccessKey {
 	color:#8E9195; /*T8*/
 }
 .patternMoved a:hover {
-	color:#FBF7E8; /*T3*/
+	color:#FBF7E8; /*G-Link-hover-T*/
 }
 .patternSaveHelp {
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 
 /* WebSearch, WebSearchAdvanced */
@@ -554,7 +575,7 @@ h4.patternSearchResultsHeader {
 	border-color:#ccc; /*BO7*/
 }
 h4.patternSearchResultsHeader {
-	color:#000;
+	color:#000; /*G-Text on background-T*/
 }
 .patternNoViewPage h4.patternSearchResultsHeader {
 	color:#a00; /*T5*/
@@ -566,7 +587,7 @@ h4.patternSearchResultsHeader {
 	color:#f00; /*T9*/
 }
 .patternSearchResult .twikiSummary .twikiAlert {
-	color:#900; /*C5*/
+	color:#900; /*T9-m*/
 }
 .patternSearchResult .twikiNew {
 	background-color:#ECFADC; /*BG10*/
@@ -599,52 +620,53 @@ table.patternDiffOptions img {
 /* edit.pattern.tmpl */
 
 .patternEditPage textarea#topic {
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
+	color:#000; /*G-Text on background-T*/
 }
 .twikiChangeFormButton .twikiButton,
-.twikiChangeFormButtonHolder .twikiButton {
-	color:#06c; /*T2*/
+.twikiChangeFormButtonHolder .twikiButton { /* looks like a link */
+	color:#06c; /*G-Link-normal-T*/
 	background:none;
 }
 .patternSig input {
 	color:#8E9195; /*T8*/
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 
 /* preview.pattern.tmpl */
 
 .patternPreviewArea {
 	border-color:#f00; /*BO9*/
-	background-color:#fff; /*BG1*/
+	background-color:#fff; /*G-Text on background-BG*/
 }
 
 /* rdiff.pattern.tmpl */
 
 .patternDiff {
-	border-color:#ccc;
+	border-color:#ccc; /*BO7*/
 }
 .patternDiff h4.patternSearchResultsHeader {
-	background-color:#ccc;
+	background-color:#ccc; /*BG8*/
 }
 tr.twikiDiffDebug td {
 	border-color:#ddd; /*BO8*/
 }
 .patternDiffPage .twikiDiffTable th {
-	background-color:#eee;
+	background-color:#efefef; /*BG3*/
 }
 tr.twikiDiffDebug .twikiDiffChangedText,
 tr.twikiDiffDebug .twikiDiffChangedText {
-	background:#99ff99; /* green */
+	background:#9f9; /* green - do not change */
 }
 /* Deleted */
 tr.twikiDiffDebug .twikiDiffDeletedMarker,
 tr.twikiDiffDebug .twikiDiffDeletedText {
-	background-color:#f99;
+	background-color:#f99; /* red - do not change */
 }
 /* Added */
 tr.twikiDiffDebug .twikiDiffAddedMarker,
 tr.twikiDiffDebug .twikiDiffAddedText {
-	background-color:#ccf;
+	background-color:#ccf; /* violet - do not change */
 }
 /* Unchanged */
 tr.twikiDiffDebug .twikiDiffUnchangedText {
@@ -654,10 +676,10 @@ tr.twikiDiffDebug .twikiDiffUnchangedText {
 .twikiDiffChangedHeader,
 .twikiDiffDeletedHeader,
 .twikiDiffAddedHeader {
-	background-color:#ccc;
+	background-color:#ccc; /*BG8*/
 }
 /* Unchanged */
 .twikiDiffUnchangedTextContents { }
 .twikiDiffLineNumberHeader {
-	background-color:#eee;
+	background-color:#efefef; /*BG3*/
 }

@@ -4,19 +4,19 @@
 	-----------------------------------------------------------	*/
 	
 
-/*	---------------------------------------------------------------------------------------
+/*	----------------------------------------------------------------------------
 	CONSTANTS
 	
 	Sizes
 	----------------------------------------
-	S1 line-height																	1.4em
-	S2 somewhat smaller font size													94%
-	S3 small font size, twikiSmall													font-size:86%; line-height:110%;
-	S4 horizontal bar padding (h2, patternTop)										5px
-	S5 form and attachment padding													20px
-	S6 left margin left bar															1em
+	S1 line-height											1.4em
+	S2 somewhat smaller font size							94%
+	S3 small font size, twikiSmall							font-size:86%; line-height:110%;
+	S4 horizontal bar padding (h2, patternTop)				5px
+	S5 form and attachment padding							20px
+	S6 left margin left bar									1em
 
-	---------------------------------------------------------------------------------------	*/
+	------------------------------------------------------------------------- */
 
 /* GENERAL HTML ELEMENTS */
 
@@ -373,7 +373,7 @@ a:visited .twistyLinkLabel {
 .patternContent .twikiForm {
 	/* form or attachment table inside topic area */
 	font-size:94%; /*S2*/
-	padding:.5em 20px; /*S5*/ /* top:use less padding for the toggle link; bottom:use less space in case the table is folded in  */
+	padding:1em 20px; /*S5*/ /* top:use less padding for the toggle link; bottom:use less space in case the table is folded in  */
 	border-width:1px 0 0 0;
 	border-style:solid;
 	margin:0;
