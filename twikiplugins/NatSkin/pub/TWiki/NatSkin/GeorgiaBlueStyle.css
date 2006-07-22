@@ -248,6 +248,11 @@ hr {
   padding-left:20px;
 }
 
+.natSubWebs .natWebLink a {
+  background:white;
+  text-transform:none;
+}
+
 /* main area */
 .natMain,
 .natMainFooter,

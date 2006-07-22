@@ -255,10 +255,10 @@ hr {
 /* main */
 .natMiddle {
   background:#333333;
+  color:#cccccc;
 }
 .natMainFooterContents,
 .natMainContents {
-  color:#cccccc;
   font:normal small arial,sans-serif;
 }
 

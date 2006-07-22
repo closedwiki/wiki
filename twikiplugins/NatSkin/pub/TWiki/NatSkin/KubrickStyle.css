@@ -206,6 +206,12 @@ html>body .natSideBar ol { /* hide from IE */
   font-family:arial,sans-serif;
   font-size:1.2em;
 }
+.natSubWebs h1 {
+  margin-bottom:0px;
+}
+.natSubWebs .natWebLink a {
+  color: #06c;
+}
 /* main */
 .natMiddle {
   background-color: white;
