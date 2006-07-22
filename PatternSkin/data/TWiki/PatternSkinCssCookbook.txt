@@ -77,3 +77,6 @@ See example at: PatternSkinCssCookbookCenterPageBorder
 ---+++ Setting !EditTablePlugin styles
 
 See example at: PatternSkinCssCookbookEditTableStyle
+
+---++ Style sheet documentation
+See %TWIKIWEB%.PatternSkinCss for documentation of !PatternSkin CSS classes

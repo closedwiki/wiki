@@ -21,7 +21,7 @@
 %TMPL:DEF{ATTACH:files:header}%
 <div class="twikiAttachments">
 %TMPL:P{context="TablePluginEnabled" then="ATTACH:files:tableformat"}%
-<span id="attachmentsshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleopen}%<span class="twikiLinkLabel" id="attachmentsshowlink">%MAKETEXT{"Show attachments"}%</span></a></span><span id="attachmentshide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger">%ICON{toggleclose}%<span class="twikiLinkLabel" id="attachmentshidelink">%MAKETEXT{"Hide attachments"}%</span></a></span>
+<span id="attachmentsshow" class="twistyMakeOpaque"><a href="#" class="twistyTrigger"><img src="%ICONURL{toggleopen}%" width="16" height="16" alt="%MAKETEXT{"Show attachments"}%" border="0" /><span class="twikiLinkLabel" id="attachmentsshowlink">%MAKETEXT{"Show attachments"}%</span></a></span><span id="attachmentshide" class="twistyHidden twistyMakeOpaque"><a href="#" class="twistyTrigger"><img src="%ICONURL{toggleclose}%" width="16" height="16" alt="%MAKETEXT{"Hide attachments"}%" border="0" /><span class="twikiLinkLabel" id="attachmentshidelink">%MAKETEXT{"Hide attachments"}%</span></a></span>
 <div id="attachmentstoggle" class="twistyMakeHidden twistyRememberSetting">
 %TMPL:P{ATTACH:files:header(toprow)}%
 %TMPL:END%

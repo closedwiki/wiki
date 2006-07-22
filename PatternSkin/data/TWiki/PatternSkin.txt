@@ -2,11 +2,11 @@
 %STARTINCLUDE%
 ---+!! Pattern skin
 
-*<nop>PatternSkin is developed to provide a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
+*<nop>PatternSkin provides a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
 
 %TOC{title="Page contents"}%
 
----++ Screen Shot
+---++ Screenshot
 
 <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
 <!--
@@ -15,13 +15,13 @@
 
 ---++ Creating your own look
 
-It is easy to tune the look and feel of !PatternSkin by changing the color and space (margin, padding) settings in the Style Sheet files. 
+---+++ Template customization
+%TWIKIWEB%.PatternSkinCustomization - how to configure page elements
+%TOC{"%TWIKIWEB%.PatternSkinCustomization"}%
 
-You may also choose to radically change the look and create a !PatternSkin-based new skin. This is easier than to create a skin by writing new template files; you can concentrate on how things should look instead of what elements should get displayed.
-
-   * PatternSkinCustomization - how to configure page elements
-   * PatternSkinCssCookbook - how to customize the default look of TWiki
-   * PatternSkinCss - documentation of !PatternSkin CSS classes
+---+++ Style sheet customization
+%TWIKIWEB%.PatternSkinCssCookbook - how to customize the visual style
+%TOC{"%TWIKIWEB%.PatternSkinCssCookbook"}%
 
 ---++ Supported browsers
 
@@ -64,6 +64,8 @@ If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing f
       * <nop>Set TWIKICOLORSURL = %<nop>PUBURLPATH%/%<nop>TWIKIWEB%/PatternSkin/colors.css
 </pre>
 
+*NOTE:* customization of these values should be done in [[%MAINWEB%.TWikiPreferences]]
+
 If this still does not work, contact the administrator who installs skins.
 
 For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Report bugs in the [[TWiki:Support/WebHome][Support web]].
@@ -72,11 +74,12 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 |  Description: | TWiki's default skin; CSS based, flexible and W3C-compliant |
 |  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.jpg" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
-|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this topic]] |
+|  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
 |  Skin Version: | 26 Jun 2006 (v2.0.3) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  22 Jul 2006: | v.2.0.4 - Refactored info in colors.css; fixed textarea color |
 |  26 Jun 2006: | v.2.0.3 - TWiki 4.0.3 (Dakar) RELEASE VERSION |
 |  31 Jan 2006: | v.2.0.0 - TWiki 4.0.0 (Dakar) RELEASE VERSION |
 |  28 Aug 2004: | v.1.0.9 - TWiki 3.0 (Cairo) RELEASE VERSION |
@@ -88,30 +91,30 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 
 ---++ Related topics
 
-   * TWikiCss
-   * PatternSkinCss
-   * PatternSkinCssCookbook
-   * PatternSkinCssCookbookCenterPage
-   * PatternSkinCssCookbookEditTableStyle
-   * PatternSkinCssCookbookFonts
-   * PatternSkinCssCookbookNoLeftBar
-   * PatternSkinCssCookbookNoTopBar
-   * PatternSkinCustomization
-   * PatternSkinJavascripts
-   * WebBottomBar
-   * WebLeftBar
-   * WebLeftBarCookbook
-   * WebLeftBarExample
-   * WebLeftBarLogin
-   * WebLeftBarPersonalTemplate
-   * WebLeftBarSearch
-   * WebLeftBarWebsList
-   * WebTopBar
-   * AdminDocumentationCategory
+   * %TWIKIWEB%.TWikiCss
+   * %TWIKIWEB%.PatternSkinCss
+   * %TWIKIWEB%.PatternSkinCssCookbook
+   * %TWIKIWEB%.PatternSkinCssCookbookCenterPage
+   * %TWIKIWEB%.PatternSkinCssCookbookEditTableStyle
+   * %TWIKIWEB%.PatternSkinCssCookbookFonts
+   * %TWIKIWEB%.PatternSkinCssCookbookNoLeftBar
+   * %TWIKIWEB%.PatternSkinCssCookbookNoTopBar
+   * %TWIKIWEB%.PatternSkinCustomization
+   * %TWIKIWEB%.PatternSkinJavascripts
+   * %TWIKIWEB%.WebBottomBar
+   * %TWIKIWEB%.WebLeftBar
+   * %TWIKIWEB%.WebLeftBarCookbook
+   * %TWIKIWEB%.WebLeftBarExample
+   * %TWIKIWEB%.WebLeftBarLogin
+   * %TWIKIWEB%.WebLeftBarPersonalTemplate
+   * %TWIKIWEB%.WebLeftBarSearch
+   * %TWIKIWEB%.WebLeftBarWebsList
+   * %TWIKIWEB%.WebTopBar
+   * %TWIKIWEB%.AdminDocumentationCategory
 
 Other skins:
-   * TWikiSkins
-   * TWikiSkinBrowser
+   * %TWIKIWEB%.TWikiSkins
+   * %TWIKIWEB%.TWikiSkinBrowser
 
 ---++ Feedback
 
