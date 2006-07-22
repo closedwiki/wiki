@@ -50,6 +50,17 @@ h1, h2, h3, h4, h5, h6 {
   background:#ffffff;
   text-align:center;
 }
+.natBodyPrint {
+  width:21cm; 
+  margin:0px; 
+  padding:10px;
+}
+.natBodyPrint,
+.natBodyPrint .natMain,
+.natBodyPrint .natMiddle {
+  background-color:white !important;
+  color:black !important;
+}
 .natBodyContents {
   text-align:left;
 }
@@ -153,12 +164,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 .natSideBar h1 {
   margin-top:0px;
-  margin-bottom:5px;
+  margin-bottom:10px;
   font-size:24px;
 }
 .natSideBar h2 {
   margin-top:10px;
-  margin-bottom:0px;
+  margin-bottom:5px;
   font-size:18px;
   padding-left:15px; 
 }
@@ -166,10 +177,9 @@ h1, h2, h3, h4, h5, h6 {
 .natSideBar ul {
   list-style-type:square;
   margin-left:0px;
-  margin-top:5px;
-  margin-bottom:5px;
+  margin-top:0px;
+  margin-bottom:0px;
 }
-
 
 .natNotes a:hover,
 .natNotes a {
@@ -414,7 +424,7 @@ h1, h2, h3, h4, h5, h6 {
 .natEditAction a,
 .natPreviewAction a,
 .natSaveAction a,
-.natQuitAction a,
+.natDoneAction a,
 .natFormAction a,
 .natUndoAction a,
 .natCancelAction a {
@@ -478,6 +488,13 @@ a.natFeedIcon {
   font-size:0.9em;
   color:#444;
 }
+
+.natSubWebs h1 {
+}
+.natSubWebs .natWebLink a {
+  font-weight:bold;
+}
+
 
 /* twiki styles */
 .twikiNewLink {
@@ -619,6 +636,9 @@ td.twikiDiffAddedHeader {
 
 td.twikiDiffChangedText {
   color:red;
+}
+.twikiWebIndent {
+  margin:0 0 0 1em;
 }
 
 /* CAIRO-HACK to use the FORMBUTTON of the NatSkin */

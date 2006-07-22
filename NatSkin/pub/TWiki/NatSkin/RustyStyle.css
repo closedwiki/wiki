@@ -307,6 +307,10 @@ hr {
   color:white;
 }
 
+.natSubWebs .natWebLink a {
+  font-weight:normal;
+  font-size:1.0em;
+}
 
 /* main area */
 .natMain, .natMainFooter {
