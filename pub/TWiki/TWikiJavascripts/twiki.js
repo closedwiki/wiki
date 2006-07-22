@@ -414,7 +414,7 @@ Writes a cookie with the stringified array values of inValues.
 */
 function _writePrefValues (inValues, inExpiryDate) {
 	var cookieString = (inValues != null) ? inValues.join(COOKIE_PREF_SEPARATOR) : '';
-	var expdate = (inExpiryDate != null) ? inExpiryDate : new Date ();
+	var expdate = (inExpiryDate != null) ? new Date(inExpiryDate) : new Date ();
 	FixCookieDate (expdate); // Correct for Mac date bug - call only once for given Date object!
 	expdate.setTime (expdate.getTime() + COOKIE_EXPIRY_TIME);
 	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expdate);
