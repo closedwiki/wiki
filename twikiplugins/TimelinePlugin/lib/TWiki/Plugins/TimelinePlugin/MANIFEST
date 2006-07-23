@@ -1,4 +1,6 @@
 data/TWiki/TimelinePlugin.txt  Plugin doc page
+data/Sandbox/TimelinePluginVisualizationTopic.txt  Plugin demo page
+data/Sandbox/TimelinePluginXMLDataInput.txt  Plugin demo page
 lib/TWiki/Plugins/TimelinePlugin.pm  Plugin Perl module 
 templates/timelineplugin.tmpl
 pub/TWiki/TimelinePlugin/styles/ethers.css
