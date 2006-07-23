@@ -10,7 +10,7 @@
 <verbatim>
 %STARTINCLUDE%
 ~~~ %STOPALIASAREA%
-%~~ DBQUERY{"TopicType=~'\bBlogPage\b' AND (form!='Blog(Page|Entry)Form' OR State='enabled')
+%~~ DBQUERY{"TopicType=~'\bBlogPage\b' AND (form!='Blog(Page|Entry)Form' OR State='published')
 ~~~      %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
 ~~~   hidenull="on"
 ~~~   header="<noautolink><div class=\"blogSideBarSection blogSideBarPages\">$n

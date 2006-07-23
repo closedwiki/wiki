@@ -45,13 +45,13 @@ see also: RenderFullTeaser
 ~~~          format=\"$time ago\"
 ~~~          null=\"about now\"
 ~~~       }$percnt
-~~~     </span> in
-~~~     <span class=\"blogCategory\"> 
-~~~       $percntFORMATLIST{\"$formfield(SubjectCategory)\" 
-~~~         sort=\"on\" 
-~~~         format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
-~~~       }$percnt
 ~~~     </span>
+~~~     $percntFORMATLIST{\"$formfield(SubjectCategory)\" 
+~~~       sort=\"on\" 
+~~~       header=\"in <span class=\\"blogCategory\\">\"
+~~~       format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
+~~~       footer=\"</span>\"
+~~~     }$percnt
 ~~~     <span class=\"blogAuthor\"> 
 ~~~       by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] 
 ~~~     </span>
@@ -74,7 +74,7 @@ see also: RenderFullTeaser
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" NAME="BlogEntry32"}%
+%DBCALL{"%TOPIC%" NAME="TestBlogEntry0"}%
 </div>
 
 

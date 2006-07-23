@@ -30,7 +30,6 @@ See also BlogHelpText
 %FIDEFINED%
 </div>
 %IFDEFINEDTHEN{"%SKIN%" as="pattern"}%
-<!-- %<nop>INCLUDE{"%TWIKIWEB%.WebLeftBarSearch"}% -->
 %ELSEDEFINED%
 %IFSKINSTATETHEN{searchbox="pos2"}%
 <div class="natSearchBox natSearchBoxPos2">

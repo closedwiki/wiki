@@ -10,7 +10,7 @@
 <verbatim>
 %STARTINCLUDE%
 *~~
-%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='disabled' AND name=~'^\bBlog'
+%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='unpublished' AND name=~'^\bBlog'
 ~~~     %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
 ~~~   order="created" reverse="on"
 ~~~   hidenull="on"

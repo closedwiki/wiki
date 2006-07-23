@@ -61,7 +61,7 @@ Only BlogAuthors will get to see them. See the access rights below.
 
    * =Set BLOGIMAGES = %<nop>PUBURLPATH%/%<nop>WEB%/BlogImages= in WebPreferences
    * Add to your posting text 
-     =&lt;img class="alignright border src="%<nop>BLOGIMAGES%/SomeImage.gif" />=,
+     =&lt;img class="alignright border" src="%<nop>BLOGIMAGES%/SomeImage.gif" />=,
      use classes =alignright=, =alignleft=, =border=
    * when you are editing a posting open up a second window with the BlogImages,
      click on an image in the gallery, drag-and-drop the image url into the posting text

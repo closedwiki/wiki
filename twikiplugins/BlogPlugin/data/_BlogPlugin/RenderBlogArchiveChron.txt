@@ -15,7 +15,7 @@
 *~~
 <div class="blogArchiveDateSelect">
 <div class="blogArchiveYears">
-%~~ DBSTATS{"TopicType=~'\bBlogEntry\b' AND  State='enabled'
+%~~ DBSTATS{"TopicType=~'\bBlogEntry\b' AND State='published'
 ~~~   %IFDEFINED{"%URLPARAM{"year"}%" then="AND Date=~'%URLPARAM{"year"}%'" glue="off"}%
 ~~~   "
 ~~~   field="Date" sort="created" 
@@ -29,7 +29,7 @@
 ~~~ }%
 </div>
 <div class="blogArchiveMonths">
-%~~ DBSTATS{"TopicType=~'\bBlogEntry\b' AND  State='enabled'
+%~~ DBSTATS{"TopicType=~'\bBlogEntry\b' AND State='published'
 ~~~   %IFDEFINED{"%URLPARAM{"year"}%" then="AND Date=~'%URLPARAM{"year"}%'" glue="off"}%
 ~~~   %IFDEFINED{"%URLPARAM{"month"}%" then="AND Date=~'%URLPARAM{"month"}%'" glue="off"}%
 ~~~   "

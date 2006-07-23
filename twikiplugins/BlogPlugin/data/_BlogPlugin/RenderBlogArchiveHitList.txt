@@ -13,7 +13,7 @@
 *~~
 <div class="blogArchiveHitList">
 <a name="hits"></a>
-%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled' %QUERY%"
+%~~ DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='published' %QUERY%"
 ~~~   %IFDEFINED{"%URLPARAM{"skip"}%" then="skip=\"%URLPARAM{"skip"}%\""}%
 ~~~   limit="15"
 ~~~   order="created" 

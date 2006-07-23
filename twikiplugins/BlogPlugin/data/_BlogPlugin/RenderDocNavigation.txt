@@ -84,7 +84,7 @@
 <div class="alt">
 %~~ DBCALL{"%TOPIC%" 
 ~~~   NAME="BlogEntry0" 
-~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'"
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='published'"
 ~~~ }%
 </div>
 

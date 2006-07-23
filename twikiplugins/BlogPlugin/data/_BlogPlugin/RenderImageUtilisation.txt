@@ -12,7 +12,7 @@ NONE
 <div class="blogSideBarSection blogImageSection">
 %~~ DBQUERY{
 ~~~   "TopicType=~'\bBlogEntry\b' 
-~~~    AND State='enabled' 
+~~~    AND State='published'
 ~~~    AND (Teaser=~'<img ' OR Text=~'<img')
 ~~~   "
 ~~~   hidenull="on" order="created" reverse="on"

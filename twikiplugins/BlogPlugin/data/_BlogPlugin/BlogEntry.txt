@@ -13,7 +13,7 @@
 ~~~   format="
 ~~~           | <nobr>$formatTime(createdate)</nobr>
 ~~~           | [[$web.$topic][$formfield(Headline)]]$percntREDDOT{\"$web.$topic\"}$percnt
-~~~             $percntIFDEFINED{\"$formfield(State)\" as=\"disabled\" 
+~~~             $percntIFDEFINED{\"$formfield(State)\" as=\"unpublished\" 
 ~~~               then=\"<font color='red'>(unpublished)</font>\"
 ~~~             }$percnt
 ~~~           | $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\" 

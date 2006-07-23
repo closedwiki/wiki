@@ -5,7 +5,7 @@
 <noautolink> %STARTALIASAREA%
 *~~
 %~~ DBCALL{"RenderRss" 
-~~~   SEARCH="(TopicType=~'\bBlog(Entry|Page)\b' AND State='enabled') OR
+~~~   SEARCH="(TopicType=~'\bBlog(Entry|Page)\b' AND State='published') OR
 ~~~            TopicType=~'\bBlogComment\b'"
 ~~~   LIMIT="20"
 ~~~   TITLE="<nop>%WIKITOOLNAME% <nop>%WEB% (combined)"

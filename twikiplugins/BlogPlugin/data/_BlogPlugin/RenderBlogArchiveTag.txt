@@ -14,7 +14,7 @@
 <noautolink>
 *~~
 %~~ TAGCLOUD{"
-%~~   DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'"
+%~~   DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='published'"
 ~~~     format="$formfield(BlogTag)" separator=", "
 ~~~   }%"
 ~~~   buckets="40"

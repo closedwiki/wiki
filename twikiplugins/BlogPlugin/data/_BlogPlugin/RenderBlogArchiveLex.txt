@@ -67,8 +67,7 @@
 </div>
 *~~
 %~~ TAGCLOUD{"
-%~~   DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='enabled'
-~~~     "
+%~~   DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='published'"
 ~~~     format="$flatten($formfield(Headline) $formfield(Teaser) $formfield(Text))" separator=", "
 ~~~   }%"
 ~~~   header="<div class=\"blogArchiveTagCloud\">"
