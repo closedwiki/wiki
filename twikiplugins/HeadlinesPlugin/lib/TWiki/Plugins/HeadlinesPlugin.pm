@@ -24,12 +24,13 @@
 
 # =========================
 package TWiki::Plugins::HeadlinesPlugin;
+use strict;
 
 # =========================
 use vars qw($VERSION $RELEASE $isInitialized $doneHeader);
 
 $VERSION = '$Rev$';
-$RELEASE = '2.10';
+$RELEASE = '2.11';
 
 # =========================
 sub initPlugin {
