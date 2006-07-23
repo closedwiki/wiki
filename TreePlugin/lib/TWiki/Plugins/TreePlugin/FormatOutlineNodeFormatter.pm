@@ -56,9 +56,9 @@ sub formatNode {
 	# special substituions
 
         # Make linkable non-wiki-word names
-	my $spaceTopicLinkName = '[[' . &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic($node->name()) . ']]';
-	$res =~ s/\$topic/$nodeLinkName/geo;
-	$res =~ s/\$spacetopic/$spaceTopicLinkName/ge;
+ 	my $spaceTopic = &TWiki::Plugins::TreePlugin::FormatHelper::spaceTopic($node->name()) ;
+ 	$res =~ s/\$topic/$node->name()/geo;
+ 	$res =~ s/\$spacetopic/$spaceTopic/ge;
 
 	$res =~ s/\$outnum/$this->formatOutNum($node)/geo;
 	$res =~ s/\$count/$this->formatCount($count)/geo;
