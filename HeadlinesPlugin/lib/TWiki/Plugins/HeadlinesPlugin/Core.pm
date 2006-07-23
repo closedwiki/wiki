@@ -507,7 +507,7 @@ sub parseRssFeed {
     $line = $format;
     $ok = 0;
     if (/<title[^>]*>(.*?)<\/title>/) {
-      $val = &recode($1);
+      $val = &recode($1) || 'Untitled';
       $line =~ s/\$(item)?title/$val/gos;
       $ok = 1;
     }
@@ -546,8 +546,9 @@ sub parseRssFeed {
     if (&parseIMAGE(\$_, \$line)) {
       $ok = 1;
     }
-    $line =~ s/\$(item)?(title|link|description|date|category)//go;
-    $line =~ s/\$(rights|coverage|relation|language|source|identifier|format|date|contributor|creator|title|subject|description)//go;
+    $line =~ s/\$title/Untitled/go;
+    $line =~ s/\$(item)?(link|description|date|category)//go;
+    $line =~ s/\$(rights|coverage|relation|language|source|identifier|format|date|contributor|creator|subject|description)//go;
     $text .= $line if ($ok);
     $count++;
     last if $count >= $limit;
@@ -574,7 +575,8 @@ sub parseAtomFeed {
       $val = &recode($1);
       $header =~ s/\$(channel)?title/$val/gos;
     }
-    if ($sub =~ /<link href="([^"]*)"[^>]*type="text\/html"[^>]*\/>/) {
+    if ($sub =~ /<link[^>]*href="([^"]*)"[^>]*type="text\/html"[^>]*\/>/ || 
+        $sub =~ /<link[^>]*type="text\/html"[^>]*href="([^"]*)"[^>]*\/>/) {
       $val = $1;
       $baseRef = $val;
       $baseRef =~ s/^(https?.\/\/.*?)\/.*$/$1/go;
@@ -624,11 +626,12 @@ sub parseAtomFeed {
       $line = $format;
       $ok = 0;
       if (/<title[^>]*>(.*?)<\/title>/) {
-  	$val = &recode($1);
+  	$val = &recode($1) || 'Untitled';
 	$line =~ s/\$(item)?title/$val/gos;
 	$ok = 1;
       }
-      if (/<link href="([^"]*)"[^>]*type="text\/html"[^>]*\/>/) {
+      if (/<link[^>]*href="([^"]*)"[^>]*type="text\/html"[^>]*\/>/ || 
+	  /<link[^>]*type="text\/html"[^>]*href="([^"]*)"[^>]*\/>/) {
   	$val = $1;
 	$val =~ s/^http:\/\/.*\*(http:\/\/.*)$/$1/gos; # yahoo fix
 	$line =~ s/\$(item)?link/$val/gos;
@@ -673,7 +676,8 @@ sub parseAtomFeed {
 	$ok = 1;
       }
 
-      $line =~ s/\$(item)?(title|link|description|date|category)//go;
+      $line =~ s/\$(item)?title/Untitled/go;
+      $line =~ s/\$(item)?(link|description|date|category)//go;
       $line =~ s/\$(rights|coverage|relation|language|source|identifier|format|contributor|creator|subject)//go;
       $text .= $line if ($ok);
       $count++;
