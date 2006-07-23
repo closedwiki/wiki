@@ -52,7 +52,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 ---++ Plugin Installation Instructions
 
-   * This plugin is preinstalled, you do not need to install it.
+   * unzip the zip file into the twiki directory
+   * if you are running TWiki release 4.0.4 or before, you need to apply the code change and add the tmpl file mentioned in http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2617
+   * enable the plugin using configure
 
 ---++ Plugin Info
 
