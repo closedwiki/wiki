@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="SvenDowideit" date="1153565653" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="SteffenPoulsen" date="1153652520" format="1.1" reprev="1.2" version="1.2"}%
 ---+ Timeline TWiki Plugin
 
-Uses the dead sexy Timeline view from http://simile.mit.edu/timeline/ to show any correctly formated information. I use it to show webChanges with the query below, and will update with a task / calendar query soon.
+This plugin uses the DHTML-based AJAX widget for visualizing time-based events from http://simile.mit.edu/timeline/ to show any formatted chronological events. I use it to show <nop>WebChanges with the query below, and will update with a task / calendar query soon.
 
 <img src="%ATTACHURLPATH%/timeline.jpg" alt="timeline.jpg" width='300' height='328' />
 
@@ -21,7 +21,11 @@ where !TimeLineSearch conatins
 <verbatim>
 <data>
 <!--
-   * Set !SKIN = xml
+</verbatim>
+<pre>
+   * Set <nop>SKIN = xml
+</pre>
+<verbatim>
 
 the format of and event:  
    start="May 28 2006 09:00:00 GMT"
@@ -31,10 +35,14 @@ the format of and event:
    image="http://simile.mit.edu/images/csail-logo.gif" 
 -->
 %SEARCH{
-".*" web="%INCLUDINGWEB%" regex="on" nototal="on" noheader="on" nosearch="on" order="modified" limit="10"
+".*" web="%INCLUDINGWEB%" regex="on" nototal="on" noheader="on" nosearch="on" order="modified" reverse="on" limit="50"
 format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topic' >$summary(noheader)</event>"}%
 </data>
 </verbatim>
+
+---++ Example
+
+In the installation package of this plugin you will find a demonstration topic that will unzip to the Sandbox web. After installation steps are done, please visit the [[Sandbox.TimelinePluginVisualizationTopic]] to see a live example.
 
 ---++ Plugin Settings
 
@@ -42,24 +50,21 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TIMELINEPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Show a scrolling Timeline from a TWiki query
-
-   * Your own setting, for example:
-      * Set EXAMPLE = got it!
+      * Set SHORTDESCRIPTION = Show a scrolling timeline based on a URL containing a XML document with events. The events list can be constructed from a TWiki query.
 
    * Debug plugin: (See output in =data/debug.txt=)
       * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-   * unzip the zip file into the twiki directory
-   * if you are running TWiki release 4.0.4 or before, you need to apply the code change and add the tmpl file mentioned in http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2617
-   * enable the plugin using configure
+   * Unzip the zip/tgz file into your twiki base directory
+   * If you are running TWiki release 4.0.4 or before, you need to apply the code change and add the tmpl file mentioned in http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2617
+   * Enable the plugin using =configure=
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.SvenDowideit - http://WikiRing.com |
-|  Copyright: | &copy; 2006, SvenDowideit |
+|  Copyright: | &copy; 2006, TWiki:Main.SvenDowideit |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 22 Feb 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
@@ -76,4 +81,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 
-%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153565200" path="timeline.jpg" size="11824" user="Main.SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="scripts" attr="h" autoattached="1" comment="" date="1153574174" path="scripts" size="4096" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="monet.xml" attr="h" autoattached="1" comment="" date="1153574174" path="monet.xml" size="10596" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="images" attr="h" autoattached="1" comment="" date="1153574170" path="images" size="4096" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="styles" attr="h" autoattached="1" comment="" date="1153574169" path="styles" size="70" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="timeline-api.js" attr="h" autoattached="1" comment="" date="1153574174" path="timeline-api.js" size="6456" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="timeline.jpg" attr="h" autoattached="1" comment="" date="1153574174" path="timeline.jpg" size="11824" user="UnknownUser" version=""}%
