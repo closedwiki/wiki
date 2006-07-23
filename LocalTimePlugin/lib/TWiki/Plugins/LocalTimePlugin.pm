@@ -3,7 +3,7 @@
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
 # Copyright (C) 2003      Nathan Ollerenshaw, chrome@stupendous.net
-# Copyright (C) 2006      Sven Dowideit, SvenDowideit@home.org.au
+# Copyright (C) 2006      Sven Dowideit, SvenDowideit@WikiRing.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
