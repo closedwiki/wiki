@@ -99,6 +99,10 @@ sub _WEBPERMISSIONS {
 
     my %table;
     foreach $web ( @webs ) {
+        #TODO: use TWiki::Func::getRegularExpression(webNameRegex)
+        next unless ($web=~/^([a-zA-Z0-9]*)$/); #untaint before we do anything
+        $web = $1;
+
         my $acls = TWiki::Func::getACLs( \@modes, $web );
 
         @knownusers = keys %$acls unless scalar( @knownusers );
