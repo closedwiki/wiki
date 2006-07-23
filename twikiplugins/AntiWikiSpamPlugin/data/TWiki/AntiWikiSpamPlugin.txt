@@ -33,8 +33,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
    * Local spam list (checked before the larger shared one)
    * Set LOCALANTISPAMREGEXLISTTOPIC = %TWIKIWEB%.LocalAntiWikiSpamPluginList
  
-    * to ensure that only TWikiAdmins can make changes here
-    * set ALLOWTOPICCHANGE = TWikiAdminGroup
+   * to ensure that only TWikiAdmins can make changes here
+   * Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 
 
