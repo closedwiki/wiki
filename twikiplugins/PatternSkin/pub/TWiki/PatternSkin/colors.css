@@ -41,7 +41,6 @@
 	BG4 active form field (not implemented yet)							#ffc
 	BG5 info (very light blue) (placeholder for background image)		#ECF4FB
 	BG6	topic action row (light yellow)									#FBF7E8
-	BG6-l topic action row (lighter yellow)								#FDFBF4
 	BG7 h1, h2, etc header (very light yellow)							#FDFAF1
 	BG8 sorted table column accent background							#ccc
 	BG9 attachment, form (light yellow)									#FEFBF3
@@ -160,7 +159,12 @@ h3, h4, h5, h6 {
 }
 :link:hover img,
 :visited:hover img {
-	background:transparent;
+	background-color:transparent;
+}
+/* fix for hover over transparent logo: */
+#patternTopBar :link:hover img,
+#patternTopBar :visited:hover img {
+	background:#fff; /*G-Text on background-BG*/
 }
 .patternTopic a:visited {
 	color:#666; /*T7*/
@@ -274,7 +278,7 @@ a:hover.twistyTrigger {
 
 /* RevCommentPlugin */
 .revComment .patternTopicAction {
-	background-color:#FDFBF4; /*BG6-l*/
+	background-color:#FEFBF3; /*BG9*/
 }
 
 /*	-----------------------------------------------------------
