@@ -13,7 +13,7 @@
 %STOPALIASAREA%
 %~~ RELATEDTOPICS{"%NAME%"
 ~~~   depth="2"
-~~~   filter="State='enabled'"
+~~~   filter="State='published'"
 ~~~   header="<noautolink>
 ~~~     <div class=\"blogSideBarSection blogSideBarRelated\">
 ~~~     <h1>Related$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>" 

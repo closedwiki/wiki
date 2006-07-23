@@ -225,8 +225,22 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.94 |
+|  Version: | v0.95 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  23 Jul 2006: | added view templates specific to <nop>PatternSkin; \
+                  improved the blog's sidebar for <nop>PatternSkin; \
+		  added standard <nop>WebSearch topics; \
+		  improved <nop>PatternSkin css support; \
+		  fixed rendering postings without a <nop>SubjectCategory; \
+		  usability improvements in <nop>RenderAddComment; \
+                  fighting back sprinkling &lt;p />; \
+		  small improvements to the <nop>BlogFactory; \
+		  *Upgrade warning*: blogentries created with older versions of this plugin \
+		  need to be editted to replace %BR%\
+		  =%META:FIELD{name="State" ... value="enabled"}%= \
+		  with %BR% \
+		  =%META:FIELD{name="State" ... value="published"}%=; %BR%\
+		  replace =disabled= with =unpublised= respictively |
 |  15 June 2006: | added <nop>BlogFactory to ease creation of blogs; \
                    fixed <nop>BlogImages feature introduced recently; \
 		   added docu to to blog's <nop>WebPreferences; \
@@ -365,4 +379,4 @@ And send me a patch if you've coded that into TWiki ;).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 24 May 2006
+-- TWiki:Main.MichaelDaum - 23 Jul 2006

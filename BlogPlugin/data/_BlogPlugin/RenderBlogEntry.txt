@@ -19,21 +19,21 @@
 ~~~ 
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%" 
-~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='published'
 ~~~     AND SubjectCategory=~'\b%URLPARAM{"cat" default=".*"}%\b'"
 ~~~   REVERSE="on"
 ~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
 ~~~ }%
 ~~~ <a name="%WEB%_%NAME%"></a>
 ~~~
-%~~ DBQUERY{%IFDEFINED{"%WIKINAME%" as="TWikiGuest" then="\"State='enabled'\""}%
+%~~ DBQUERY{%IFDEFINED{"%WIKINAME%" as="TWikiGuest" then="\"State='published'\""}%
 ~~~   topic="%NAME%" web="%WEB%"
 ~~~   format="%DBCALL{"%TOPIC%" section="format"
 ~~~     PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
 ~~~   }%"
 ~~~ }%
 ~~~
-%~~ DBQUERY{"State='disabled'" topic="%NAME%" 
+%~~ DBQUERY{"State='unpublished'" topic="%NAME%" 
 ~~~   format="$percntDBCALL{\"BlogHelpText\" 
 ~~~     section=\"Unpublished\"
 ~~~     NAME=\"posting\"}$percnt"
@@ -41,7 +41,7 @@
 ~~~
 %~~ DBCALL{"RenderDocNavigation" 
 ~~~   NAME="%NAME%" 
-~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='enabled'
+~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='published
 ~~~     AND SubjectCategory=~'\b%URLPARAM{"cat" default=".*"}%\b'"
 ~~~   REVERSE="on"
 ~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
@@ -84,7 +84,7 @@
 ~~~                   rel=\\"tag\\">$term</a>\"
 ~~~       footer=\"</span>\"
 ~~~     }$percnt
-~~~     <span class=\"blogAuthor\">by $formfield(BlogAuthor) </span> 
+~~~     <span class=\"blogAuthor\">by [[$web.$formfield(BlogAuthor)][$formfield(BlogAuthor)]] </span> 
 ~~~     $n
 ~~~   </div>
 ~~~   %STARTALIASAREA%

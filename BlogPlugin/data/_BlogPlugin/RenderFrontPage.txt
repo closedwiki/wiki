@@ -17,7 +17,7 @@ see: RenderFullTeaser, RenderBlogTeaser, RenderFrontTeaser, RenderPageNavigation
 %STARTINCLUDE%
 ~~~
 %~~ DBQUERY{
-~~~   "TopicType=~'\bBlogEntry\b' AND State='enabled' 
+~~~   "TopicType=~'\bBlogEntry\b' AND State='published'
 ~~~    %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'" glue="off"}%
 ~~~    %IFDEFINED{"%TAG%" then="AND BlogTag=~'\b%TAG%\b'" glue="off"}%
 ~~~    %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%

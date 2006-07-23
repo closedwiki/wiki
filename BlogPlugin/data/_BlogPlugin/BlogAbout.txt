@@ -44,4 +44,4 @@ and add your e-mail address or your <nop>%WIKITOOLNAME% username if you are a
 %META:FIELD{name="Headline" attributes="M" title="Headline" value="About the %25WIKITOOLNAME%25 Blog"}%
 %META:FIELD{name="SubjectCategory" attributes="" title="SubjectCategory" value=""}%
 %META:FIELD{name="Related" attributes="" title="Related" value="BlogPage0"}%
-%META:FIELD{name="State" attributes="" title="State" value="enabled"}%
+%META:FIELD{name="State" attributes="" title="State" value="published"}%

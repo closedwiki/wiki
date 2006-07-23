@@ -4,10 +4,9 @@
 %TMPL:DEF{"content"}%
 %DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
 <!--%<nop>DBCALL{"RenderGoogleAdsense"}%-->
-%DBCALL{"RenderBlogComments" NAME="%TOPIC%"}%
-%DBCALL{"RenderAddComment"}%
-%DBCALL{"RenderGoogleAdsense"}%
-%TMPL:END% %{
+%DBCALL{"RenderBlogComments" NAME="%TOPIC%"}% <!-- -->
+%DBCALL{"RenderAddComment"}% <!-- -->
+%DBCALL{"RenderGoogleAdsense"}% %TMPL:END% %{
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup
    * Set SIDEBAR = Admin

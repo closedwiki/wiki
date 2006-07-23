@@ -42,6 +42,8 @@ Flag to include/exclude this web from TWiki's SEARCH
    * Set NATSEARCHINCLUDETOPIC = (BlogEntry|BlogComment|BlogPage)\d+.*
    * Set NATSEASRCHEXCLUDETOPIC = 
 
+Note this is only relevant if you are using TWiki:Plugins.NatSkin
+
 Flag to enable/disable automatic linking of %TWIKIWEB%.WikiWords
    * Set NOAUTOLINK = 
    

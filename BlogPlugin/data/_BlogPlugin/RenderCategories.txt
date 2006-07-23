@@ -9,7 +9,7 @@ NONE
 ---++ Implementation
 %STARTINCLUDE%
 *~~
-%~~ DBSTATS{"TopicType=~'\bBlogEntry\b' AND State='enabled'"
+%~~ DBSTATS{"TopicType=~'\bBlogEntry\b' AND State='published'"
 ~~~   field="SubjectCategory"
 ~~~   header="
 ~~~     <div class=\"blogSideBarSection blogSideBarCategories\">

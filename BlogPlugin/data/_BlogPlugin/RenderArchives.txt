@@ -11,7 +11,7 @@
 <verbatim>
 %STARTINCLUDE%
 *~~ 
-%~~     DBSTATS{"TopicType=~'\bBlogEntry\b' AND  State='enabled'
+%~~     DBSTATS{"TopicType=~'\bBlogEntry\b' AND State='published'
 ~~~         %IFDEFINED{"%CAT%" then="AND SubjectCategory=~'\b%CAT%\b'" glue="off"}%
 ~~~         %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%
 ~~~       "
