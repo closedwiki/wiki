@@ -107,7 +107,7 @@ sub _getSearchString {
     my $searchTmpl = "\$topic|%TIME%|%AUTHOR%";
 
     # optimization: remember not to save heavy memory values
-    if ($formatter->data("format") =~ m/\$(summary|text)/) {
+    if ($formatter->data("format") && $formatter->data("format") =~ m/\$(summary|text)/) {
 		$formatter->data("fullSubs", 1);
 		$searchTmpl .= "|\$summary";
     }
@@ -224,7 +224,6 @@ sub handleTreeView {
     
     # format the tree & parse TWiki tags and rendering
     if( $attrTopic ne $RootLabel ) {
-	return "Tree for specific topic $attrTopic\n".
 	    TWiki::Func::expandCommonVariables
 	    (
 	     $attrHeader.$nodes{$attrTopic}->toHTMLFormat($formatter),
