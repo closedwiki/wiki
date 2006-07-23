@@ -156,7 +156,7 @@ sub handleTreeView {
 #    $TreeTopics{$topic} = 1;
 #	$TreeTopics{$attrTopic} = 1;
 	    
-	my $attrHeader = TWiki::Func::extractNameValuePair( $attributes, "header" ) || "";
+	my $attrHeader = "<div class=\"treePluginHeader\"> " . TWiki::Func::extractNameValuePair( $attributes, "header" ) . " </div><!--//treePluginHeader-->" || "";
 	$attrHeader .= "\n" if ($attrHeader); # to enable |-tables formatting
 	my $attrFormat = TWiki::Func::extractNameValuePair( $attributes, "format" ) || "";
 	$attrFormat .= "\n" if ($attrFormat); # to enable |-tables formatting
@@ -223,30 +223,27 @@ sub handleTreeView {
     $root->name(" "); # change root's name so it don't show up, hack
     
     # format the tree & parse TWiki tags and rendering
+    my $renderedTree = "";
     if( $attrTopic ne $RootLabel ) {
-	    TWiki::Func::expandCommonVariables
+    	# running from a given topic
+		$renderedTree = TWiki::Func::expandCommonVariables
 	    (
 	     $attrHeader.$nodes{$attrTopic}->toHTMLFormat($formatter),
 	     $attrTopic,
 	     $attrWeb);
-    }
-    else {
-	my $ret = "";
-	#debug $ret = "Keys of topics in node list\n\n";
+    } else {
+    	# no starting topic given so do all topics
 	my %rootnodes = %{_findRootsBreakingCycles( \%nodes )};
 	foreach my $i ( sort keys( %rootnodes ) ) {
-	    $ret = $ret 
-		#debug . "<br>Tree for topic $i:\n\n" 
-		. TWiki::Func::expandCommonVariables
-		(
-		 $attrHeader.$rootnodes{$i}->toHTMLFormat($formatter),
-		 $attrTopic,
-		 $attrWeb)
-	    ;
+			$renderedTree .= TWiki::Func::expandCommonVariables
+				($attrHeader.$rootnodes{$i}->toHTMLFormat($formatter),
+				 $attrTopic,
+				 $attrWeb);
+		}
 	}
-	#$ret = $AGdebugmsg . $ret;
-	return $ret;
-    }
+	#$renderedTree = $AGdebugmsg . $renderedTree;
+	$renderedTree = "<div class=\"treePlugin\">" . $renderedTree . "</div><!--//treePlugin-->";
+	return $renderedTree;
 }
 
 sub _findRootsBreakingCycles {
