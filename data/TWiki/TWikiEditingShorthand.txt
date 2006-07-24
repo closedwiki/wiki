@@ -257,7 +257,6 @@ Each row of the table is a line containing of one or more cells. Each cell start
    * Contents of table cells wrap automatically as determined by the browser
    * Use &amp;#124; or %<nop>VBAR% to add &#124; characters in tables.
 %T% The %TWIKIWEB%.TablePlugin provides the =|^|= multiple-span row functionality and additional rendering features
-   * to create a literal pipe symbol safely, use ASCII code for pipe symbol - 124, like this: =&amp;#124;=
 </td><td>
 <verbatim>
 | *L* | *C* | *R* |
