@@ -218,7 +218,7 @@ sub render {
   my ($this, $args) = @_;
 
   if (!$this->init($args)) {
-    return &renderError("can't initialize from '$args'");
+    return '';
   }
 
   $this->getImages();
@@ -515,6 +515,9 @@ sub getImages {
 
       next if $this->{exclude} && $image->{$this->{field}} =~ /$this->{exclude}/;
       next if $this->{include} && $image->{$this->{field}} !~ /$this->{include}/;
+      
+      # SMELL work around for Image::Magick segfaulting reading svg image files
+      next if $image->{name} =~ /svg$/i;
 
       $image->{IGP_comment} = &getImageTitle($image);
       $image->{IGP_sizeK} = sprintf("%dk", $image->{size} / 1024);
@@ -628,6 +631,8 @@ sub computeImageSize {
     # forget
     my $mage = $this->{mage};
     @$mage = ();
+
+    #writeDebug("done");
   }
     
   # compute max image width and height
@@ -697,6 +702,8 @@ sub computeImageSize {
   $entry->{thumbheight} = $image->{IGP_thumbheight};
   $entry->{imgChanged} = $imgChanged;
   $this->{info}{$entry->{name}} = $entry;
+
+  #writeDebug("done computeImageSize");
 }
 
 # =========================
@@ -757,7 +764,9 @@ sub createImg {
   $this->{errorMsg} = '';
 
   # read
+  #writeDebug("mage->read($image->{IGP_filename})");
   my $error = $this->{mage}->Read($image->{IGP_filename});
+  #writeDebug("done read");
   if ($error =~ /(\d+)/) {
     #writeDebug("Read(): error=$error");
     $this->{errorMsg} = " $error";
@@ -765,6 +774,7 @@ sub createImg {
   }
 
   # compute
+  #writeDebug("mage->scale");
   if ($thumbMode) {
     $error = 
       $this->{mage}->Scale(geometry=>"$image->{IGP_thumbwidth}x$image->{IGP_thumbheight}");
@@ -772,6 +782,7 @@ sub createImg {
     $error = 
       $this->{mage}->Scale(geometry=>"$image->{IGP_width}x$image->{IGP_height}");
   }
+  #writeDebug("done mage->scale");
   if ($error =~ /(\d+)/) {
     #writeDebug("Scale(): error=$error");
     $this->{errorMsg} .= " $error";
@@ -779,7 +790,9 @@ sub createImg {
   }
 
   # write
+  #writeDebug("mage->write($target)");
   $error = $this->{mage}->Write($target);
+  #writeDebug("done mage->write()");
   if ($error =~ /(\d+)/) {
     #writeDebug("Write(): error=$error");
     $this->{errorMsg} .= " $error";
@@ -791,6 +804,7 @@ sub createImg {
   # forget
   my $mage = $this->{mage};
   @$mage = ();
+  #writeDebug("done createImage()");
   return 1;
 }
 
@@ -864,7 +878,7 @@ sub getImageTitle {
 sub readInfo {
   my $this = shift;
 
-  writeDebug("readInfo() called");
+  #writeDebug("readInfo() called");
 
   $this->{infoChanged} = 1;
   return unless -e $this->{infoFile};
@@ -925,7 +939,7 @@ sub writeInfo {
       "\n";
   }
 
-  writeDebug("writing infoFile=$this->{infoFile}");
+  #writeDebug("writing infoFile=$this->{infoFile}");
 
   &TWiki::Func::saveFile($this->{infoFile}, $text);
 }
