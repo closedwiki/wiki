@@ -1080,55 +1080,51 @@ END
         unless $response->is_redirect &&
           $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
 
+    #upload any attachments to the developer's version of the topic
+    my @attachments;
+    $newform{'text'} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
+    for my $a (@attachments) {
+        $this->_uploadAttachment($userAgent, $response, $web, $to, $a)
+    }
+
     return if($this->{-topiconly});
 
-    print 'Uploading zip',$NL;
-    $url =~ s./save/./upload/.;
-    $response =
-      $userAgent->post(
-          $url,
-          [
-              'filename' => $to.'.zip',
-              'filepath' => [ $this->{basedir}.'/'.$to.'.zip' ],
-              'filecomment' => 'unzip, correct the permissions, and run the installer script, if there is one'
-             ],
-          'Content_Type' => 'form-data' );
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.zip', $this->{basedir}.'/'.$to.'.zip', 'Unzip and run the installer script, if there is one');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Untar and run the installer script, if there is one');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.md5', $this->{basedir}.'/'.$to.'.md5', 'md5 checksums');
+}
 
-    die 'Update of zip failed ', $response->request->uri,
-      ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
-        unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
+#%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153565200" path="timeline.jpg" size="11824" user="Main.SvenDowideit" version="1"}%
+sub _uploadAttachment {
+    my ($this, $userAgent, $response, $web, $to, $params) = @_;
 
-    print 'Uploading tgz',$NL;
+    $params =~ /^.*name="([^"]*)".*comment="([^"]*)".*path="([^"]*)".*$/;
+    my $name = $1;
+    my $path = $3;
+    my $comment = $2;
+
+    print "Uploading attachment ($name, $this->{basedir}/pub/$this->{project}/$path, $comment)",$NL;
+    $this->_uploadFile($userAgent, $response, $web, $to, $name, $this->{basedir}.'/pub/TWiki/'.$this->{project}.'/'.$path, $comment);
+
+}
+
+sub _uploadFile {
+    my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment) = @_;
+
+    print 'Uploading'.$filename,$NL;
     $response =
-      $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/Plugins/'.$to,
+      $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/'.$web.'/'.$to,
                         [
-                         'filename' => $to.'.tgz',
-                         'filepath' => [ $this->{basedir}.'/'.$to.'.tgz' ],
-                         'filecomment' => 'Untar and run the installer script, if there is one'
+                         'filename' => $filename,
+                         'filepath' => [ $filepath ],
+                         'filecomment' => $filecomment
                         ],
                         'Content_Type' => 'form-data' );
 
-    die 'Update of tgz failed ', $response->request->uri,
+    die 'Update of '.$filename.' failed ', $response->request->uri,
       ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
         unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
-
-    print 'Uploading md5 checksums',$NL;
-    $response =
-      $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/Plugins/'.$to,
-                        [
-                         'filename' => $to.'.md5',
-                         'filepath' => [ $this->{basedir}.'/'.$to.'.md5' ],
-                         'filecomment' => 'md5 checksums'
-                        ],
-                        'Content_Type' => 'form-data' );
-
-    die 'Update of zip failed ', $response->request->uri,
-      ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
-        unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
-
+          $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$to/;
 }
 
 sub _unhtml {
