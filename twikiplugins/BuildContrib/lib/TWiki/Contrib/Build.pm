@@ -968,6 +968,7 @@ sub target_uninstall {
             if( open(F, '<'.$ENV{HOME}.'/.buildcontriblogin')) {
                 $knownUser = <F>; chomp($knownUser);
                 $knownPass = <F>; chomp($knownPass);
+                print "using password for $knownUser saved in $ENV{HOME}/.buildcontriblogin \n";
                 close(F);
             } else {
                 print 'Logon to ',$uri->host_port,$NL;
