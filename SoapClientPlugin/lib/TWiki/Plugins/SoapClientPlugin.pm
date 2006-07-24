@@ -97,11 +97,10 @@ sub initPlugin
 # =========================
 sub doSoapRequest
 {
-my $service= TWiki::Func::extractNameValuePair( $_[0], "service");
-my $call_with_params= TWiki::Func::extractNameValuePair( $_[0], "call");
-my $format= TWiki::Func::extractNameValuePair( $_[0], "format");
-
-my $text = "";
+    my $service= TWiki::Func::extractNameValuePair( $_[0], "service");
+    my $call_with_params= TWiki::Func::extractNameValuePair( $_[0], "call");
+    my $format= TWiki::Func::extractNameValuePair( $_[0], "format");
+    my $text = "";
 
 #       my $service = SOAP::Lite
 #         -> service($service);
@@ -109,15 +108,16 @@ my $text = "";
 #       @results = @{$service->getPublicProjectNames()};
 
 #$call="getPublicProjectNames";
-$service= "http://gforge.org/soap/SoapAPI.php";
+#$service= "http://gforge.org/soap/SoapAPI.php";
 
-my $call = $call_with_params;
-$call =~ /(.*)[(](.*)[)]/ ;
-$call = $1;
-my $params = $2;
+    my $call = $call_with_params;
+    $call =~ /(.*)[(](.*)[)]/ ;
+    $call = $1;
+    my $params = $2;
 
-  my $method = SOAP::Data->name($call)
-                         ->attr({xmlns => "http://gforge.org/soap/SoapAPI.php"});
+#    try {
+        my $method = SOAP::Data->name($call)
+                         ->attr({xmlns => $service});
 
         my @parameters = split( /,/, $params);
         my $res = SOAP::Lite
@@ -131,26 +131,32 @@ my $params = $2;
                 $text = $text."($result);";
         }
 
-    if (ref $res->result eq "SCALAR") {
-        $text = $text. "scalar\n";
-    } elsif (ref $res->result eq "ARRAY") {
-        @results = @{$res->result};
-        foreach $result (@results) {
+        if (ref $res->result eq "SCALAR") {
+            $text = $text. "scalar\n";
+        } elsif (ref $res->result eq "ARRAY") {
+            @results = @{$res->result};
+            foreach $result (@results) {
                 my $tmp = $format;
                 $tmp =~ s/\$list_element/$result/geo;
                 $text = $text.$tmp;
+            }
+        } elsif (ref $res->result eq "HASH") {
+            # split up the format, finding all the $field() bits, and then use them in the HASH
+            $text = $format;
+            my $mmm = "v";
+            $text =~ s/\$struct\(([^)]*)\)/getHash($res->result, $1)/ge;
+        } else {
+            $text = $test. "mmm".ref $res->result ."\n";
         }
-    } elsif (ref $res->result eq "HASH") {
-# split up the format, finding all the $field() bits, and then use them in the HASH
-        $text = $format;
-my $mmm = "v";
-        $text =~ s/\$struct\(([^)]*)\)/getHash($res->result, $1)/ge;
-    } else {
-        $text = $test. "mmm".ref $res->result ."\n";
-   }
+#    } catch Error::Simple with {
+#        #TODO: some sort of error response
+#        my $e = shift;
+#        $text = 'Error during SOAP operation: '.$e;
+#    }
 
+    $text =~ s/\$n/\n/g;
 
-        return $text;
+    return $text;
 }
 
 # =========================
@@ -172,7 +178,7 @@ sub startRenderingHandler
     # do custom extension rule, like for example:
     # $_[0] =~ s/old/new/g;
 
-	$_[0] =~ s/%SOAP{(.*?)}%/doSoapRequest($1)/geo;
+    $_[0] =~ s/%SOAP{(.*?)}%/doSoapRequest($1)/geo;
 }
 
 
