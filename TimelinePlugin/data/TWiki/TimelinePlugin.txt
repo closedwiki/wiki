@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="SvenDowideit" date="1153565653" format="1.1" reprev="1.2" version="1.2"}%
+%META:TOPICINFO{author="TWikiGuest" date="1153741461" format="1.1" version="1.2"}%
 ---+ Timeline TWiki Plugin
 
 Uses the dead sexy Timeline view from http://simile.mit.edu/timeline/ to show any correctly formated information. I use it to show webChanges with the query below, and will update with a task / calendar query soon.
@@ -21,7 +21,11 @@ where !TimeLineSearch conatins
 <verbatim>
 <data>
 <!--
-   * Set !SKIN = xml
+</verbatim>
+<pre>
+   * Set <nop>SKIN = xml
+</pre>
+<verbatim>
 
 the format of and event:  
    start="May 28 2006 09:00:00 GMT"
@@ -31,7 +35,7 @@ the format of and event:
    image="http://simile.mit.edu/images/csail-logo.gif" 
 -->
 %SEARCH{
-".*" web="%INCLUDINGWEB%" regex="on" nototal="on" noheader="on" nosearch="on" order="modified" limit="10"
+".*" web="%INCLUDINGWEB%" regex="on" nototal="on" noheader="on" nosearch="on" order="modified" reverse="on" limit="10"
 format="<event start='$date' title='$topic' link='%SCRIPTURL{"view"}%/$web/$topic' >$summary(noheader)</event>"}%
 </data>
 </verbatim>
@@ -58,8 +62,8 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.SvenDowideit - http://WikiRing.com |
-|  Copyright: | &copy; 2006, SvenDowideit |
+|  Plugin Author: | TWiki:Main.SvenDowideit - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> http://WikiRing.com |
+|  Copyright: | &copy; 2006, TWiki:Main.SvenDowideit |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | 22 Feb 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
@@ -75,5 +79,5 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
-
-%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153565200" path="timeline.jpg" size="11824" user="Main.SvenDowideit" version="1"}%
+%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153721646" path="timeline.jpg" size="11824" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attachment="wikiringlogo20x20.png" attr="" comment="" date="1153741460" path="wikiringlogo20x20.png" size="1343" stream="wikiringlogo20x20.png" user="Main.TWikiGuest" version="1"}%
