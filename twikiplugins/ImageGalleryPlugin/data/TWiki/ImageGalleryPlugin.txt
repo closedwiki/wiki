@@ -167,8 +167,8 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 
 ---++ Plugin Installation Instructions
 
-	* Download the ZIP file from the <nop>%TOPIC% home
-	* Unzip ==ImageGalleryPlugin.zip== in your twiki installation directory. Content:
+	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip it in your twiki installation directory. Content: 
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
 	  | ==pub/TWiki/%TOPIC%/style.css== | cascading style sheets |
@@ -181,8 +181,9 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/WillNoris |
 |  Copyright &copy;: | 2002-2003, Will Noris; 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.40 |
+|  Plugin Version: | v3.41 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Jul 2006 | working around Image::Magick crashes reading svg image files |
 |  20 Mar 2006 | added =sort= and =reverse= arguments; \
                  fixed updating thumbnails when a new image version is created |
 |  20 Feb 2006 | added =include=, =exclude= and =field= arguments |
@@ -208,8 +209,9 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 |  Perl Version: | 5.8 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 20 Mar 2006
+-- TWiki:Main.MichaelDaum - 27 Jul 2006
 
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="TWikiContributor" version="1.1"}%
