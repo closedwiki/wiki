@@ -220,6 +220,9 @@ _(Click for form-based editing of existing preferences.)_
    * Bullet sign:
       * Set BULLET = &#8226;
 
+   * %VBAR% symbol:
+      * Set VBAR = &#124;
+
    * Line break and bullet with different levels of indentation:
       * Set BB = <br />&#8226;
       * Set BB2 = <br />&nbsp;&nbsp;&#8226;
