@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="SvenDowideit" date="1153722520" format="1.1" version="1.10"}%
+%META:TOPICINFO{author="TWikiGuest" date="1153746501" format="1.1" version="1.2"}%
 ---+ <nop>%TOPIC%
 
 This plugin will provide a TWiki Topic interface to SOAP::Lite calls (a la TWiki:Codev/TWikiAsWebServicesClient) - as its a developer tool, you can find it in SVN.
@@ -38,7 +38,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/SvenDowideit - SvenDowideit@WikiRing.com - http://www.wikiring.com |
+|  Plugin Author: | TWiki:Main/SvenDowideit - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> http://www.wikiring.com |
 |  Plugin Version: | 24 July 2006 (V1.100) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  24 July 2006: | fix docco to reflect the changed example (GForge changed the wsdl) |
@@ -54,7 +54,7 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 -- TWiki:Main/SvenDowideit
 
 %META:FORM{name="PackageForm"}%
-%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="Select one..."}%
+%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="PluginPackage"}%
 %META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="01 Feb 2003"}%
 %META:FIELD{name="TestedOnOS" attributes="" title="TestedOnOS" value="OsLinux"}%
 %META:FIELD{name="ShouldRunOnOS" attributes="" title="ShouldRunOnOS" value="OsLinux"}%
@@ -63,3 +63,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 %META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="Yes"}%
 %META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
 %META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value="SoapClientPluginDev"}%
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attachment="wikiringlogo20x20.png" attr="" comment="" date="1153746500" path="wikiringlogo20x20.png" size="1343" stream="wikiringlogo20x20.png" user="Main.TWikiGuest" version="1"}%
