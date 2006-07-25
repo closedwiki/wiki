@@ -1094,6 +1094,9 @@ specified a way for users to log in. Please pick a LoginManager
     return '';
 }
 
+# delicate; must constrain hard, as $1 will be fed to eval
+my $TYPEOF = qr/^TYPEOF:((?:{(?:'[-\w]*'|[A-Z0-9_]+)})+)$/i;
+
 # Generates the appropriate HTML for getting a value to configure the
 # entry. The opts are additional parameters, and by convention may
 # be a number (for a string length), a comma separated list of values
@@ -1386,12 +1389,11 @@ sub handleUpdate {
     $output .= CGI::h2('Updating configuration');
     my $languageChanged=0;
     foreach $param ( $query->param ) {
-        next unless $param =~ /^^TYPEOF:(.*)/;
+        next unless $param =~ /$TYPEOF/os;
+        my $keys = $1;
         my $type = $query->param( $param );
-        $param =~ s/^TYPEOF:(.*)$/$1/;
-        my $basevar = $1;
-        my $var = '$TWiki::cfg'.$basevar;
-        my $val = $query->param( $param );
+        my $var = '$TWiki::cfg'.$keys;
+        my $val = $query->param( $keys );
         my $def;
         eval "\$def = defined( $var );";
         if( $type ) {
@@ -1407,9 +1409,9 @@ sub handleUpdate {
               CGI::br().
               CGI::strong('new ').
               CGI::code($val||' ');
-            $updates{$basevar} = _perlifyType($val, $type);
+            $updates{$keys} = _perlifyType($val, $type);
             #SMELL: Not elegant, but works
-            if ($basevar=~/\{Languages\}/) {
+            if ($keys=~/\{Languages\}/) {
                 $languageChanged=1;
             }
             $changed++;
@@ -1435,11 +1437,11 @@ sub calculateChanges {
     my $param;
     my $changed = 0;
     foreach $param ( $query->param ) {
-        next unless $param =~ /^^TYPEOF:(.*)/;
+        next unless $param =~ /$TYPEOF/os;
+        my $keys = $1;
         my $type = $query->param( $param );
-        $param =~ s/^TYPEOF:(.*$)/$1/;
         my $var = '$TWiki::cfg'.$1;
-        my $val = $query->param( $param );
+        my $val = $query->param( $keys );
         my $def;
         eval "\$def = defined( $var );";
         if( $type ) {
