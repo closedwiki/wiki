@@ -1,9 +1,9 @@
 %META:TOPICINFO{author="TWikiGuest" date="1153746501" format="1.1" version="1.2"}%
 ---+ <nop>%TOPIC%
 
-This plugin will provide a TWiki Topic interface to SOAP::Lite calls (a la TWiki:Codev/TWikiAsWebServicesClient) - as its a developer tool, you can find it in SVN.
+This plugin will provide a TWiki Topic interface to SOAP::Lite calls (a la TWiki:Codev/TWikiAsWebServicesClient).
 
-it will cause the rendering of the topic to be as slow as the internet request - so its probably best to do on a local machine only.
+It will cause the rendering of the topic to be as slow as the internet request - so its probably best to do on a local machine only.
 
 
 ---++ Syntax Rules
