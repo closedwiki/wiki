@@ -54,9 +54,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: <table cellspacing="1" cellpadding="0" border="1">       *File:*  *Description:*        ==data/TWiki/%TOPIC%.txt==  Plugin topic        ==data/TWiki/%TOPIC%.txt,v==  Plugin topic repository        ==lib/TWiki/Plugins/%TOPIC%.pm==  Plugin Perl module  </table>
-   * use the configure script to enable the WysiwygPlugin and InlineEditPlugin
+   * use the configure script to enable
    * Test if the installation was successful:
-      * double click in a topic you have permission to edit.
+%POPUP{anchor="<span class='twikiButton'>Clicking here should popup</span>" popuptitle="testing" popuptext="This is a popup text" popuptexttype="tml"}%
 
 ---++ Plugin Info
 
