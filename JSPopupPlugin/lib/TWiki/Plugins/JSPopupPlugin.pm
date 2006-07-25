@@ -97,7 +97,13 @@ sub commonTagsHandler {
     }
 }
 
-
+#TODO:   * popuptexttype ="" - tml, rest
+#TODO:      * TODO: delayedtml, javascript
+#TODO:   * popuplocation="" - general location relative to the anchor (center, above, below, left, right) - center is default *TODO: only center and below are implemented*
+#TODO:      * TODO: its currently relative to the mouse event, not the anchor
+#TODO:      * TODO: add location on screen, not- relative to mouse.. (popup in top right)
+#TODO:   * buttons="" - what buttons to show (ok, cancel, save...) *TODO*
+#TODO:    * popuplocation="" - general location relative to the anchor (center, above, below, left, right) - center is default *TODO: only center and below are implemented*
 sub handlePopup {
     my($session, $params, $theTopic, $theWeb) = @_;
 
