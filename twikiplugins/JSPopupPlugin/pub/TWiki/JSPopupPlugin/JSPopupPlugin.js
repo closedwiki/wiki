@@ -78,6 +78,9 @@ TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, ti
     var showControl = document.getElementById('popupwindow');
     var popupWrapper = document.getElementById('popupwrapper');
     var popupNoBorder = document.getElementById('popupnoborder');
+    popupNoBorder.popuplocation = popuplocation;
+    popupNoBorder.border = border;
+    popupNoBorder.title = title;
 
         //reset the text to a simple default
     popupWrapper.innerHTML = '';
@@ -113,11 +116,9 @@ TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, ti
     if (border == 'on') {
         popupWrapper.innerHTML = text;
         popupNoBorder.innerHTML = TWiki.JSPopupPlugin.closeButton+title;
-        popupNoBorder.MouseLeave = 0;
     } else {
         popupNoBorder.innerHTML = text;
         popupWrapper.innerHTML = '';
-        popupNoBorder.MouseLeave = 1;
     }
     if (popuplocation == 'center') {
         mousey = mousey - (showControl.clientHeight/2);
@@ -142,7 +143,7 @@ TWiki.JSPopupPlugin.OnMouseLeave = function (e, sectionName)
 	var tg = (window.event) ? e.srcElement : e.target;
 	if (tg.id != 'popuptable') return;     //TODO: make this on popuptable, when we know what anchortype it is
     var popupNoBorder = document.getElementById('popupnoborder');
-	if (        popupNoBorder.MouseLeave == 0) return;        //TODO: don't exit if there is a border and a close button
+	if (        popupNoBorder.border == 'on') return;        //TODO: don't exit if there is a border and a close button
 	var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
 	while (reltg != tg && reltg.nodeName != 'BODY')
 		reltg= reltg.parentNode
@@ -193,6 +194,7 @@ TWiki.JSPopupPlugin.ajaxCall = function(event, popupUrl, popupParams) {
                     data = data.substring(startBodyTag+1, endBodyTag-1);
                 }
             }
+            data = '<div>' + data + '</div>';
             TWiki.JSPopupPlugin.openPopup(event, data);
         }
     };
