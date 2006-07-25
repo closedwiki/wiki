@@ -29,16 +29,10 @@ parameters are
    * anchor="" - the text that is the click target that causes the POPUP to come up
    * anchortype="" - action done to trigger the popup - onclick,onmouseover  ('onclick' is default)
    * popuptext="" - what will be displayed in the popup
-   * popuptexttype ="" - tml, rest *the rest Option requires the DojoToolkitContrib to be installed*, delayedtml *TODO*, javascript *TODO*
-   * popuplocation="" - general location relative to the anchor (center, above, below, left, right) - center is default *TODO: only center and below are implemented*
-      * TODO: its currently relative to the mouse event, not the anchor
-      * TODO: add location on screen, not- relative to mouse.. (popup in top right)
-   * buttons="" - what buttons to show (ok, cancel, save...) *TODO*
+   * popuptexttype ="" - tml, rest
+   * popuplocation="" - general location relative to the anchor (center, below) - center is default
    * border="" - show the border & close button (defaults to 'on') - if you select not to show the border and close button then there is an onmouseleave that closes the window
 
-*TODO:* should cache the answers, cos its not worth re-requesting attach twice withing a few seconds
-
-*TODO:* look at JSAN-ing it all
 
 ---++ Plugin Settings
 
