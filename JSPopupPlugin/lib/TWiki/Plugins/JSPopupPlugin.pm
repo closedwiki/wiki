@@ -100,6 +100,7 @@ sub commonTagsHandler {
     }
 }
 
+#TODO: MAKE SOME URL PARAMS TO POPUP TOO - SO YOU GET POPUP OOPSES
 #TODO:   * popuptexttype ="" - tml, rest
 #TODO:      * TODO: delayedtml, javascript
 #TODO:   * popuplocation="" - general location relative to the anchor (center, above, below, left, right) - center is default *TODO: only center and below are implemented*
