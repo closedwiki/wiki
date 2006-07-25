@@ -16,6 +16,20 @@
 #
 */
 
+InitJSPopups = function() {
+//look for PopupSpan's, with anchortype == 'anchorless', and call openPopup on them..
+    var elements = document.getElementsByTagName('span');
+    for (var i = 0; i < elements.length; i++) {
+        //The user viewed HTML
+        if ((elements[i].className == 'JSPopupSpan')) {
+            var anchor = elements[i].getAttribute('anchortype');
+            if (anchor == 'anchorless') {
+                TWiki.JSPopupPlugin.openPopupSectional(null, elements[i].id)
+            }
+        }
+    }
+}
+
 //create the TWiki namespace if needed
 if ( typeof( TWiki ) == "undefined" ) {
     TWiki = {};
@@ -26,7 +40,7 @@ if ( typeof( TWiki ) == "undefined" ) {
 if ( typeof( TWiki.JSPopupPlugin ) == "undefined" ) {
     TWiki.JSPopupPlugin = {};
 }
-TWiki.JSPopupPlugin.closeButton = '<a style="float:right;display:inline;border:1;" align="rght" onclick="TWiki.JSPopupPlugin.closePopup(event);">close</a>';
+TWiki.JSPopupPlugin.closeButton = '<a style="float:right;display:inline;background-color: LightSteelBlue;" align="rght" onclick="TWiki.JSPopupPlugin.closePopup(event);">X</a>';
 
 
 TWiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
@@ -34,10 +48,10 @@ TWiki.JSPopupPlugin.openPopupSectional = function (event, sectionName) {
         var sectionElem = document.getElementById(sectionName);
         if (sectionElem.getAttribute('type') == 'rest') {
             //reset the text to a simple default
-            TWiki.JSPopupPlugin.openPopup(event, 'Please wait, requesting data from server', sectionElem.getAttribute('location'), sectionElem.getAttribute('border'));
+            TWiki.JSPopupPlugin.openPopup(event, 'Please wait, requesting data from server', sectionElem.getAttribute('location'), sectionElem.getAttribute('border'), sectionElem.getAttribute('title'));
             TWiki.JSPopupPlugin.ajaxCall(event, sectionElem.innerHTML);
         } else {
-            TWiki.JSPopupPlugin.openPopup(event, sectionElem.innerHTML, sectionElem.getAttribute('location'), sectionElem.getAttribute('border'));
+            TWiki.JSPopupPlugin.openPopup(event, sectionElem.innerHTML, sectionElem.getAttribute('location'), sectionElem.getAttribute('border'), sectionElem.getAttribute('title'));
         }
     } else {
         TWiki.JSPopupPlugin.closePopup(event);
@@ -50,12 +64,15 @@ TWiki.JSPopupPlugin.closePopup = function (event) {
 }
 
 //where text == the payload, most often in html
-TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border) {
+TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border, title) {
     if ( typeof( popuplocation ) == "undefined" ) {
         popuplocation = 'center';
     }
     if ( typeof( border ) == "undefined" ) {
         border = 'on';
+    }
+    if ( typeof( title ) == "undefined" ) {
+        title = '';
     }
 
     var showControl = document.getElementById('popupwindow');
@@ -67,8 +84,8 @@ TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border) {
     popupNoBorder.innerHTML = '';
 
     //from http://www.quirksmode.org/js/events_compinfo.html#prop
-    var posx = 0;
-    var posy = 0;
+    var posx = 200;
+    var posy = 50;
     if (typeof( event ) == "undefined") var event = window.event;
     if ((typeof( event ) != "undefined") && (event != null)) {
         if (event.pageX || event.pageY)
@@ -84,29 +101,30 @@ TWiki.JSPopupPlugin.openPopup = function (event, text, popuplocation, border) {
         showControl.target = (event.target) ? event.target : event.srcElement;
     }
 
-        var mousex = posx;
-        var mousey = posy//IE..
-
-        showControl.style.top=mousey+"px";
-        showControl.style.left=mousex+"px";
-        showControl.style.display = 'inline';
-        showControl.style.zindex=999;
+    var mousex = posx;
+    var mousey = posy//IE..
+    showControl.style.top=mousey+"px";
+    showControl.style.left=mousex+"px";
+    showControl.style.display = 'inline';
+    showControl.style.zindex=999;
 
 //        try { showControlText.focus(); } catch (er) {alert(er)}
 
-            if (border == 'on') {
-                popupWrapper.innerHTML = TWiki.JSPopupPlugin.closeButton+text;
-                popupNoBorder.innerHTML = '';
-            } else {
-                popupNoBorder.innerHTML = text;
-                popupWrapper.innerHTML = '';
-            }
+    if (border == 'on') {
+        popupWrapper.innerHTML = text;
+        popupNoBorder.innerHTML = TWiki.JSPopupPlugin.closeButton+title;
+        popupNoBorder.MouseLeave = 0;
+    } else {
+        popupNoBorder.innerHTML = text;
+        popupWrapper.innerHTML = '';
+        popupNoBorder.MouseLeave = 1;
+    }
     if (popuplocation == 'center') {
         mousey = mousey - (showControl.clientHeight/2);
         if (mousey < 10) {mousey = 10;}
     } else {
-        mousex = mousex - (showControl.clientWidth/2);
-        if (mousex < 10) {mousex = 10;}
+//        mousex = mousex - (showControl.clientWidth/2);
+//        if (mousex < 10) {mousex = 10;}
     }
     showControl.style.top=mousey+"px";
     showControl.style.left=mousex+"px";
@@ -124,7 +142,7 @@ TWiki.JSPopupPlugin.OnMouseLeave = function (e, sectionName)
 	var tg = (window.event) ? e.srcElement : e.target;
 	if (tg.id != 'popuptable') return;     //TODO: make this on popuptable, when we know what anchortype it is
     var popupNoBorder = document.getElementById('popupnoborder');
-	if (popupNoBorder.innerHTML == '') return;        //TODO: don't exit if there is a border and a close button
+	if (        popupNoBorder.MouseLeave == 0) return;        //TODO: don't exit if there is a border and a close button
 	var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
 	while (reltg != tg && reltg.nodeName != 'BODY')
 		reltg= reltg.parentNode
