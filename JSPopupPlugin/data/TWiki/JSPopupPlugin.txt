@@ -60,7 +60,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%PUBURL%/TWiki/WikiRing/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
+|  Plugin Author: | TWiki:Main.SvenDowideit - SvenDowideit@wikiring.com - <img src="%ATTACHURLPATH%/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]] |
 |  uses AjaxToolbox | &copy; & Author: Matt Kruse <matt@ajaxtoolbox.com> http://www.AjaxToolbox.com/ |
 |  Copyright: | &copy; 2001-2006, SvenDowideit@wikiring.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
@@ -77,4 +77,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- SvenDowideit@wikiring.com - <img src="%PUBURL%/TWiki/WikiRing/wikiringlogo20x20.png" /> [[http://www.wikiring.com][WikiRing.com]]
+-- SvenDowideit@wikiring.com - [[http://www.wikiring.com][WikiRing.com]]
+
+%META:FILEATTACHMENT{name="wikiringlogo20x20.png" attachment="wikiringlogo20x20.png" attr="" comment="" date="1153810769" path="wikiringlogo20x20.png" size="1343" stream="wikiringlogo20x20.png" user="Main.TWikiGuest" version="1"}%
