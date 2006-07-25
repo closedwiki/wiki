@@ -81,7 +81,7 @@ sub inflate {
 
 	return $cgi->span(
 			{
-				-style=>"color:$fgcolor;background-color:$bgcolor",
+				-style=>(($fgcolor ne '')?"color:$fgcolor;":'').(($bgcolor ne '')?"background-color:$bgcolor":''),
 				-title=>$title
 			}, &_renderTime($starttime).'-'.&_renderTime($endtime));
 }
@@ -145,8 +145,8 @@ sub _initDefaults {
 		forcestartdate => 0,
 		navprev => '&lt;&lt;',
 		navnext => '&gt;&gt;',
-		navprevtitle => 'Previous Week',
-		navnexttitle => 'Next Week',
+		navprevtitle => 'Previous %n day(s)',
+		navnexttitle => 'Next %n day(s)',
 		wholetimerow => 0,
 		wholetimerowtext => '24h',
 		wholetimerowtitle => 'whole-time events',
@@ -293,7 +293,8 @@ sub _getTime {
 	$hh = 0 unless $hh;
 	$mm = 0 unless $mm;
 
-	$hh+=12 if ($strtime =~ m/$pm_rx/);
+	$hh+=12 if (($hh<12)&&($strtime =~ m/$pm_rx/)) || (($hh==12)&&($mm==0)&&($strtime =~ m/$am_rx/));
+	$hh=0 if (($hh==12)&&($mm>0)&&($strtime =~ m/$am_rx/));
 
 	return $hh*60+$mm;
 }
@@ -424,7 +425,7 @@ sub _render {
 		$colfgcolor = $options{'todayfgcolor'} if ($options{'todayfgcolor'})&&($todayDays==$startDateDays+$day);
 		$colfgcolor = '' unless defined $colfgcolor;
 
-		$tr .= $cgi->td({-style=>"color:$colfgcolor", -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
+		$tr .= $cgi->td({-style=>(($colfgcolor ne '')?"color:$colfgcolor":''), -bgcolor=>$colbgcolor,-valign=>"top", -align=>"center"},&_mystrftime($yy1,$mm1,$dd1));
 	}
 	$tr.=$cgi->td(&_renderNav(1));
 	$text .= $cgi->Tr($tr);
@@ -476,7 +477,7 @@ sub _render {
 		}
 		###$td = $cgi->start_table({-rules=>"rows", -border=>"1",-cellpadding=>'0',-cellspacing=>'0', -tableheight=>"100%"});
 		###$td = $cgi->start_table({-bgcolor=>"#fafafa", -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
-		$td = $cgi->start_table({-bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
+		$td = $cgi->start_table({-width=>'100%', -bgcolor=>$colbgcolor, -cellpadding=>'0',-cellspacing=>'1', -tableheight=>"100%"});
 
 
 		for (my $min=$starttime; $min <=$endtime; $min+=$options{'timeinterval'}) {
@@ -555,7 +556,7 @@ sub _renderNav {
 
 	my $newcgi = new CGI($cgi);
 
-	if ($ttppage eq 0) {
+	if ($ttppage == 0) {
 		$newcgi->delete('ttppage'.$ttid);
 	} else {
 		$newcgi->param(-name=>'ttppage'.$ttid,-value=>$ttppage);
@@ -567,10 +568,13 @@ sub _renderNav {
 	$href=~s/\#.*$//;
 	$href.="#ttpa$ttid";
 
+	my $title = $options{($next?'navnexttitle':'navprevtitle')};
+	$title =~ s/\%n/$options{'days'}/g;
+
 	if ($next) {
-		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$options{'navnexttitle'}}, $options{'navnext'});
+		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$title}, $options{'navnext'});
 	} else {	
-		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$options{'navprevtitle'}}, $options{'navprev'});
+		$nav.="&nbsp;".$cgi->a({-href=>$href,-title=>$title}, $options{'navprev'});
 	}
 	return $nav;
 }
@@ -748,11 +752,15 @@ sub _renderTime {
 	my ($hours, $minutes) = ( int($_[0]/60), ($_[0] % 60) );
 	my ($timeformat) = ( $_[1]?$_[1]:$options{'timeformat'} );
 
-	$hours-=12 if ($hours>12)&&($timeformat =~ m/^12/);
+	if ($timeformat =~ m/^12/) {
+		$hours-=12 if ($hours>12);
+		$hours=12 if ($hours==0);
+	}
 	my $time = sprintf("%02d",$hours).':'.sprintf("%02d",$minutes);
 	
-	$time.=(int($_[0]/60)>12)?"p$1m$2":"a$1m$2" if ($timeformat =~ m/[ap](\.?)m(\.?)$/);
-	$time.=(int($_[0]/60)>12)?"P$1M$2":"A$1M$2" if ($timeformat =~ m/[AP](\.?)M(\.?)$/);
+	my $rh = int($_[0]/60);
+	$time.=(($rh>11)&&($rh<24))?"p$1m$2":"a$1m$2" if ($timeformat =~ m/[ap](\.?)m(\.?)$/);
+	$time.=(($rh>11)&&($rh<24))?"P$1M$2":"A$1M$2" if ($timeformat =~ m/[AP](\.?)M(\.?)$/);
 	
 	return $time;
 }
@@ -1229,9 +1237,11 @@ sub _fetchCompat {
                 return if (defined $start) && ($start > $endDays);
                 return if (defined $end) && ($end < $startDays);
 
-                ($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
-                        $n1 * int( (abs($startDays-$start)/$n1) + ((abs($startDays-$start) % $n1)!=0?1:0) ) );
-                $start = Date_to_Days($yy1, $mm1, $dd1);
+		if ($start < $startDays) {
+			($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, 
+				$n1 * int( (abs($startDays-$start)/$n1) + ((abs($startDays-$start) % $n1)!=0?1:0) ) );
+			$start = Date_to_Days($yy1, $mm1, $dd1);
+		}
 
                 # start at first occurence and increment by repeating count ($n1)
                 for (my $day=(abs($startDays-$start) % $n1); (($day < $options{'days'})&&((!defined $end) || ( ($startDays+$day) <= $end)) ); $day+=$n1) {
