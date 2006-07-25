@@ -1,7 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 9189 $"}%
 ---+ JSPopupPlugin TWiki Plugin
 
-Uses javascript to create a popup window containing either a hiden pre-rendered part of a topic, or a TWiki request that is dynamically requested and served.
+Uses javascript to create a popup window containing either a hidden pre-rendered part of a topic, or a TWiki request that is dynamically requested and served.
+
+To create a popup dialog when a topic is first viewed, leave the anchor undefined.
 
 This will allow you to create a popup Comment Edit box:
 <verbatim>
@@ -26,8 +28,9 @@ there is only one popup window at a time, so if the clicks on an anchor while an
 !%POPUP{}%
 
 parameters are
-   * anchor="" - the text that is the click target that causes the POPUP to come up
+   * anchor="" - the text that is the click target that causes the POPUP to come up (if this is not set, or an empty string, then the popup is shown on page load *REMEMBER, only one popup open at a time*)
    * anchortype="" - action done to trigger the popup - onclick,onmouseover  ('onclick' is default)
+   * popuptitle="" - what will be displayed in the popup title (not shown if border="off")
    * popuptext="" - what will be displayed in the popup
    * popuptexttype ="" - tml, rest
    * popuplocation="" - general location relative to the anchor (center, below) - center is default
