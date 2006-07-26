@@ -1,13 +1,17 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 9189 $"}%
 ---+ JSPopupPlugin TWiki Plugin
 
-Uses javascript to create a popup window containing either a hidden pre-rendered part of a topic, or a TWiki request that is dynamically requested and served.
+JSPopupPlugin allows you to show dynamic content in a virtual popup.
+Good for status messages, or to show detailed information without causing the web browser's context to switch from the page that they requested.
 
-To create a popup dialog when a topic is first viewed, leave the anchor undefined.
+There is a running demo of JSPopupPlugin running at the [[http://demo.wikiring.com/twiki/bin/view/Demo/JSPopupPluginDemo][WikiRing demo site]]
+
+It uses javascript to create a popup window containing either a hidden pre-rendered part of a topic, or a TWiki request that is dynamically requested and served.
+Popups are activated either on a mouse click, when the mouse passes over the anchor, or when the page is loaded.
 
 This will allow you to create a popup Comment Edit box:
 <verbatim>
-%POPUP{anchor="<span class='twikiButton'>add comment</span>" popuptext="%COMMENT%" popuptexttype="tml"}%
+%POPUP{anchor="<button class='twikiButton'>add comment</button>" popuptext="%COMMENT%" popuptexttype="tml"}%
 </verbatim>
 
 or a popup menu of webs
@@ -18,7 +22,18 @@ anchortype="onmouseover"
 popuptext="%WEBLIST{"| [[$name.WebHome][$name]] |"}%" 
 popuptexttype="tml" 
 popuplocation="below"
-border="off"}%
+border="off"
+}%
+</verbatim>
+
+or a popup that quickly shows the topic source
+<verbatim>
+%POPUP{
+anchor="<button class='twikiButton'>view topic Source</button>"
+popuptitle="%TOPIC%"
+popuptext="%SCRIPTURL{view}%/%WEB%/%TOPIC%?raw=on;skin=print"
+popuptexttype="rest"
+}%
 </verbatim>
 
 there is only one popup window at a time, so if the clicks on an anchor while another popup is up, it will be replaced by the new one.
@@ -28,7 +43,8 @@ there is only one popup window at a time, so if the clicks on an anchor while an
 !%POPUP{}%
 
 parameters are
-   * anchor="" - the text that is the click target that causes the POPUP to come up (if this is not set, or an empty string, then the popup is shown on page load *REMEMBER, only one popup open at a time*)
+   * anchor="" - the text that is the click target that causes the POPUP to come up
+      * (if this is not set, or an empty string, then the popup is shown on page load *REMEMBER*, only one popup open at a time)
    * anchortype="" - action done to trigger the popup - onclick,onmouseover  ('onclick' is default)
    * popuptitle="" - what will be displayed in the popup title (not shown if border="off")
    * popuptext="" - what will be displayed in the popup
@@ -56,7 +72,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content: <table cellspacing="1" cellpadding="0" border="1">       *File:*  *Description:*        ==data/TWiki/%TOPIC%.txt==  Plugin topic        ==data/TWiki/%TOPIC%.txt,v==  Plugin topic repository        ==lib/TWiki/Plugins/%TOPIC%.pm==  Plugin Perl module  </table>
    * use the configure script to enable
    * Test if the installation was successful:
-%POPUP{anchor="<span class='twikiButton'>Clicking here should popup</span>" popuptitle="testing" popuptext="This is a popup text" popuptexttype="tml"}%
+%POPUP{anchor="<button class='twikiButton'>Clicking here should popup</button>" popuptitle="testing" popuptext="This is a popup text" popuptexttype="tml"}%
 
 ---++ Plugin Info
 
