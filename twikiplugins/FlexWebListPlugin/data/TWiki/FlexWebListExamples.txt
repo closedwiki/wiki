@@ -90,6 +90,7 @@ to ease reading multiline TML expressions and arguments.
 
 ---+++ Twisty weblist
 needs the TWiki:Plugins/TwistyPlugin
+<verbatim>
 %~~ FLEXWEBLIST{
 ~~~   header="<ul>" 
 ~~~   format="<li>
@@ -98,10 +99,16 @@ needs the TWiki:Plugins/TwistyPlugin
 ~~~       link=\"$name ($nrsubwebs)\"
 ~~~     }$percnt"
 ~~~   separator="</li>"
-~~~   subheader="$percntTWISTYTOGGLE{id=\"twisty_weblist_$web\" mode=\"div\"}$percnt<ul>" 
+~~~   subheader="
+~~~     $percntTWISTYTOGGLE{
+~~~       id=\"twisty_weblist_$web\" 
+~~~       mode=\"div\"
+~~~     }$percnt<ul>" 
 ~~~   subfooter="</li></ul>$percntENDTWISTY$percnt" 
 ~~~   footer="</li></ul>" 
 ~~~ }%
+</verbatim>
+%FLEXWEBLIST{header="<ul>" format="<li> $percntTWISTYBUTTON{ id=\"twisty_weblist_$web\" link=\"$name ($nrsubwebs)\" }$percnt" separator="</li>" subheader="$percntTWISTYTOGGLE{id=\"twisty_weblist_$web\" mode=\"div\"}$percnt<ul>" subfooter="</li></ul>$percntENDTWISTY$percnt" footer="</li></ul>"}%
 
 
 ---++ Twisty navigation
@@ -166,7 +173,6 @@ needs the TWiki:Plugins/TwistyPlugin and the TWiki:Plugins/IfDefinedPlugin
 %FLEXWEBLIST{map="TestCases=Tests,%TWIKIWEB%=System,%MAINWEB%=Home" format="$indent* [[$web.WebHome][$name]]$n"}%
 
 ---++ Marking a selection
-
 ---+++ Using marker
 <verbatim>
 %~~ FLEXWEBLIST{
