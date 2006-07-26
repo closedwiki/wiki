@@ -16,6 +16,8 @@
 #                  - Dakar compatibility
 # 20-Apr-2006:   SteffenPoulsen
 #                  - Cairo+Dakar compatibility
+# 26-Jul-2006:   SteffenPoulsen
+#                  - Updated to use default new and updated icons (from TWiki.TWikiDocGraphics)
 
 package TWiki::Plugins::UpdateInfoPlugin;
 
@@ -172,10 +174,10 @@ sub update_info {
 
         $r = "";
         if ($updated) {
-            $r = " <img src=\"%PUBURLPATH%/$installWeb/UpdateInfoPlugin/updated.gif\">";
+            $r = " %U%";
         }
         if ($new) {
-            $r = " <img src=\"%PUBURLPATH%/$installWeb/UpdateInfoPlugin/new.gif\">";
+            $r = " %N%";
         }
 
         # revert to old style wikiword formatting
