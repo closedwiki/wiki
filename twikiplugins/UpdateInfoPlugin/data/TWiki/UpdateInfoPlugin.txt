@@ -1,16 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1145569616" format="1.0" version="1.1"}%
-%META:TOPICPARENT{}%
+%META:TOPICINFO{author="TWikiContributor" date="1153933070" format="1.1" version="1.2"}%
 ---+ Update Info Plugin
 
-The <nop>UpdateInfoPlugin handles the new %<nop>ISNEW% tag after a %TWIKIWEB%.WikiWord.
+<nop>UpdateInfoPlugin will add a "new" or "updated" icon after a %TWIKIWEB%.WikiWord link if a =%<nop>ISNEW%= tag is used after the link, and the linked topic was recently touched.
 
-=<nop>WikiWord %<nop>ISNEW%= becomes:
+=<nop>WikiWord %<nop>ISNEW%= will be expanded to:
 
-	* <nop>WikiWord if the topic is neither new nor updated
-	* <nop>WikiWord "yellow-new-icon" if the topic is younger than five days and is revision 1.1
-	* <nop>WikiWord "yellow-updated-icon" if the topic was changed during the last five days
+	* <nop>WikiWord - if the topic is neither new nor updated
+	* <nop>WikiWord %N% - if the topic is younger than five days and is revision 1.1
+	* <nop>WikiWord %U% - if the topic revision is higher than 1.1 and the topic was updated during the last five days
 
-Default "version" and "days" parameters are set sitewide in %TOPIC%#PluginSettings, but can be overridden pr. topic (or in !WebPreferences pr. web), by setting variables =UPDATEINFOVERSION= and/or =UPDATEINFODAYS=.
+Default values for the "version" and "days" parameters are set sitewide here in %TOPIC%#PluginSettings, but can be overridden pr. topic (or in !WebPreferences pr. web), by setting variables =UPDATEINFOVERSION= and/or =UPDATEINFODAYS=.
 
 ---++ Syntax Rules
 
@@ -23,13 +22,13 @@ Full %<nop>ISNEW% syntax takes one or two options:
 
 Full syntax overrides site/topic defaults.
 
----++ Examples:
+---++ Syntax Examples
 
-	* <nop>MyTopic %<nop/>ISNEW%
-	* <nop>Web.ToPic %<nop/>ISNEW%
-	* <nop>GrødWeb.BlåBærGrød %<nop/>ISNEW% (I18N characters in <nop>WikiWords and <nop>WebNames are matched)
-	* <nop>TopIc %<nop/>ISNEW{days="15"}%
-	* <nop>TopiC %<nop/>ISNEW{days="20" version="1.4"}%
+	* =<nop>MyTopic %<nop/>ISNEW%=
+	* =<nop>Web.ToPic %<nop/>ISNEW%=
+	* =<nop>GrødWeb.BlåBærGrød %<nop/>ISNEW%= (I18N characters in <nop>WikiWords and <nop>WebNames are matched)
+	* =<nop>TopIc %<nop/>ISNEW{days="15"}%=
+	* =<nop>TopiC %<nop/>ISNEW{days="20" version="1.4"}%=
 
 %TOPIC% supports these <nop/>TWikiML link syntaxes:
 
@@ -44,19 +43,19 @@ Full syntax overrides site/topic defaults.
 
 (All followed by the %<nop/>ISNEW% syntax).
 
----++ If installed ..
+---++ Examples (Works if installed)
 
 	* UpdateInfoPlugin %ISNEW%
 	* Main.WebHome %ISNEW%
 	* TWiki.WebHome %ISNEW{days="15"}%
 	* TWiki.TWikiPreferences %ISNEW{days="20" version="1.4"}%
-	* Sandbox.UpdateInfoPluginTest %ISNEW% (Edit and save the <nop/>Sandbox.UpdateInfoPluginTest topic, and it should be highlighted with a "yellow-new-icon")
+	* Sandbox.UpdateInfoPluginTest %ISNEW% (Edit and save the <nop/>Sandbox.UpdateInfoPluginTest topic, and it should be highlighted with a %N% icon)
 
 #PluginSettings
 ---+++ <nop>%TOPIC% Settings
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Add a %<nop>ISNEW% tag after a %TWIKIWEB%.WikiWord to indicate whether a topic has been created or updated recently
+		* Set SHORTDESCRIPTION = Add a %<nop>ISNEW% tag after a %TWIKIWEB%.WikiWord to get a visual display of whether the linked topic was created or updated recently
 
 	* Sitewide "version" default
 		* Set UPDATEINFOVERSION = 1.1
@@ -73,8 +72,10 @@ Full syntax overrides site/topic defaults.
 
 ---+++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.ChrisHuebsch |
+|  Plugin Author: | TWiki:Main.ChrisHuebsch & TWiki:Main.SteffenPoulsen |
+|  Plugin Version: | v2.0 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 Jul 2006: | (v2.0) - Updated to use default graphic icons from TWiki:TWiki.TWikiDocGraphics. |
 |  20 Apr 2006: | (v1.9) - Cairo+Dakar compatibility (TWiki:Main.SteffenPoulsen) |
 |  10 Jan 2006: | (v1.8) - Dakar compatibility |
 |  7 Apr 2005: | (v1.7) - New variable name in plugin settings |
@@ -94,7 +95,3 @@ Full syntax overrides site/topic defaults.
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.ChrisHuebsch - 07 Apr 2005
-
-
-%META:FILEATTACHMENT{name="updated.gif" attr="" autoattached="1" comment="" date="1043450927" path="updated.gif" size="154" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="new.gif" attr="" autoattached="1" comment="" date="1136926038" path="new.gif" size="906" user="UnknownUser" version=""}%
