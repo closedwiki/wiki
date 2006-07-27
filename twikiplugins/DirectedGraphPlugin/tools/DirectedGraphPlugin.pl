@@ -3,6 +3,8 @@
 # Support script for sandbox security mechanism for DirectedGraphPlugin
 # Sets the proper working dir and calls dot
 
+use strict;
+
 my $debug = 0;
 
 if ($debug) {
@@ -19,13 +21,10 @@ if ( $#ARGV != 5 ) {
     die "Usage: DirectedGraphPlugin.pl dot_executable working_dir infile format outfile errfile\n";
 }
 
-my $ploticusBin = $ARGV[0];
-
 open( ERRFILE, "$ARGV[5]" );
 print ERRFILE "";
 close ERRFILE;
 
-print "Changing dir to" . $ARGV[1] . "\n" if $debug;
 unless ( chdir "$ARGV[1]" ) {
     open( ERRFILE, ">>$ARGV[5]" );
     print ERRFILE "Couldn't change working dir to $ARGV[1]: $!\n";
@@ -37,16 +36,18 @@ unless ( chdir "$ARGV[1]" ) {
 my $execCmd = "GV_FILE_PATH=\"$ARGV[1]/\" $ARGV[0] -T$ARGV[3] $ARGV[2] -o $ARGV[4] 2> $ARGV[5] ";
 
 if ($debug) {
-    print "Built command line: " . $execCmd . "\n";
-    open( DEBUGFILE, ">>$ARGV[5]" );
+    open( DEBUGFILE, ">>/tmp/DirectedGraphPlugin.pl.log" );
     print DEBUGFILE "Built command line: " . $execCmd . "\n";
     close DEBUGFILE;
 }
 
 print `$execCmd`;
-if ($!) {
-    open( ERRFILE, ">>$ARGV[5]" );
-    print ERRFILE "Problem with executing dot command: '$execCmd', got:\n$!";
-    close ERRFILE; 
-    die "Problem with executing dot command: '$execCmd', got:\n$!";
+if ($?) {
+    print "Problem executing dot command";
+    if ($debug) {
+       open( DEBUGFILE, ">>/tmp/DirectedGraphPlugin.pl.log" );
+       print DEBUGFILE "Problem executing dot command: '$execCmd', got:\n$!";
+       close DEBUGFILE;
+    }
+    die "Problem executing dot command: '$execCmd', got:\n$!";
 }

@@ -346,8 +346,9 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ColeBeck |
-|  Plugin Version: | 16 Apr 2006 (V1.220) |
+|  Plugin Version: | 16 Apr 2006 (V1.300) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 Jul 2006: | Error messages from graphviz binary now reported to topic. Check for succesful graphviz binary execution corrected (patch by TWiki:Main.JChristophFuchs). -- TWiki:Main.SteffenPoulsen |
 |  12 Jun 2006: | Optional antialias parameter added  (using <nop>ImageMagick). Support for custom icons (shapefiles) added. Support for five layout engines added. Support for attaching vectorbased renderings added. -- TWiki:Main.SteffenPoulsen |
 |  16 Apr 2006: | Minor fix for areamap (Firefox compatibility)  -- TWiki:Main.SteffenPoulsen |
 |  12 Apr 2006: | Incorporated Sandbox security mechanism  -- TWiki:Main.SteffenPoulsen |
@@ -382,4 +383,3 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 %META:FILEATTACHMENT{name="Printer.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1150143276" path="Printer.png" size="7747" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="Wireless_Router.png" attr="h" autoattached="1" comment="Cisco library icon for sample graph" date="1150143262" path="Wireless_Router.png" size="7771" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="usecase_sample.png" attr="h" autoattached="1" comment="DOT usecase sample" date="1150067973" path="usecase_sample.png" size="109307" user="Main.TWikiContributor" version="1"}%
-%META:REVCOMMENT{ncomments="0"}%
