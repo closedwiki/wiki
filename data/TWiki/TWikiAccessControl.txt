@@ -125,12 +125,12 @@ Attachments are referred to directly, and are not normally indirected via TWiki 
 The easiest way to apply the same access control rules for attachments as apply to topics is to use the Apache =mod_rewrite= module, and configure your webserver to redirect accesses to attachments to the TWiki =viewfile= script. For example,
 
 <verbatim>
-  ScriptAlias /twiki/bin/ /filesystem/path/to/twiki/bin/
-  Alias /twiki/pub/       /filesystem/path/to/twiki/pub/
+    ScriptAlias /twiki/bin/ /filesystem/path/to/twiki/bin/
+    Alias /twiki/pub/       /filesystem/path/to/twiki/pub/
 
-  RewriteEngine on
-  RewriteRule ^/twiki/pub/TWiki/(.*)$ /twiki/pub/TWiki/$1 [L,PT]
-  RewriteRule ^/twiki/pub/([^\/]+)/([^\/]+)/([^\/]+)$ /twiki/bin/viewfile/$1/$2?filename=$3 [L,PT]
+    RewriteEngine on
+    RewriteCond %{REQUEST_URI} !^/+twiki/+pub/+TWiki/+.+
+    RewriteRule ^/+twiki/+pub/+([^/]+)/+((([^/]+)/+)+)(.+) /twiki/bin/viewfile/$1/$4?filename=$5 [L,PT]
 </verbatim>
 
 That way all the controls that apply to the topic also apply to attachments to the topic. Other types of webserver have similar support.
