@@ -346,7 +346,7 @@ To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ColeBeck |
-|  Plugin Version: | 16 Apr 2006 (V1.300) |
+|  Plugin Version: | 27 Jul 2006 (V1.300) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  27 Jul 2006: | Error messages from graphviz binary now reported to topic. Check for succesful graphviz binary execution corrected (patch by TWiki:Main.JChristophFuchs). -- TWiki:Main.SteffenPoulsen |
 |  12 Jun 2006: | Optional antialias parameter added  (using <nop>ImageMagick). Support for custom icons (shapefiles) added. Support for five layout engines added. Support for attaching vectorbased renderings added. -- TWiki:Main.SteffenPoulsen |
