@@ -43,9 +43,13 @@ hr {
 }
 
 .natMainContents,
+.natMainHeaderContents,
 .natMainFooterContents,
 .natSideBarContents {
   margin:10px;
+}
+.natMainHeaderContents a {
+  text-decoration:none;
 }
 
 /* misc twiki */
@@ -252,7 +256,7 @@ hr {
   text-decoration:none;
 }
 
-.natMain a {
+.natMainContents a {
   color:#3f59bb;
   text-decoration:underline;
 }

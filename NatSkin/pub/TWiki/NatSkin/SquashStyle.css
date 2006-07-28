@@ -322,8 +322,12 @@ hr { border-bottom: 1px solid #999999; }
 .natMain h2 {
   border-bottom:1px solid #CC6600;
 }
+.natMainHeaderContents,
 .natMainFooterContents {
   font-size:x-small;
+}
+.natMainHeaderContents {
+  margin-bottom:15px;
 }
 
 /* bottom */

@@ -8,7 +8,7 @@
   height:120px;
 }
 .natWebButtons {
-  padding-left:15px;
+  padding-left:20px;
   padding-right:25px;
   border-bottom:1px solid #ffffff;
 }
@@ -17,9 +17,6 @@
   font-size:x-small;
   font-family:verdana,arial,sans-serif;
   text-transform:lowercase;
-}
-.natWebButtons ul li {
-  padding-right:10px;
 }
 .natWebButtons ul li a {
   font-weight:normal;

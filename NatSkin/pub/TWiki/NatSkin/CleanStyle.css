@@ -200,9 +200,12 @@ hr {
 }
 .natMainContents,
 .natMainFooterContents,
+.natMainHeaderContents,
 .natMainContents table {
   color:#444444;
   font-family:arial,sans-serif;
+}
+.natMainHeaderContents {
 }
 
 /* anchors in natMain */

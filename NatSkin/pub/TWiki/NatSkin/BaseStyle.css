@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6 {
 .natMiddle, 
 .natTopBarSizer,
 .natSideBar, natSideBarContents			{ border: 1px solid red }
-.natMain, .natMainContents,
+.natMain, .natMainContents, natMainHeaderContents
 .natSideBar, .natSideBarContents,
 .natMainFooter, natMainFooterContents {
   border:1px solid red;
@@ -203,6 +203,12 @@ h1, h2, h3, h4, h5, h6 {
   padding:1px; /* firefox fix */
   padding-bottom:15px;
   line-height:140%;
+}
+.natMainHeaderContents {
+  font-weight:normal;
+  font-size:12px;
+  padding:1px 2px;
+  line-height:100%;
 }
 .natMainFooterContents {
   text-align:right;
@@ -489,8 +495,7 @@ a.natFeedIcon {
   color:#444;
 }
 
-.natSubWebs h1 {
-}
+.natSubWebs a,
 .natSubWebs .natWebLink a {
   font-weight:bold;
 }

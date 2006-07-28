@@ -220,6 +220,8 @@ label {
 .natMainFooter {
   border-bottom:1px solid #ddd;
 }
+.natMainFooterContents,
+.natMainHeaderContents,
 .natMainContents {
   padding:10px;
 }

@@ -6,9 +6,9 @@
 <!-- -->%TMPL:INCLUDE{"attachjavascript"}%
 <!-- -->%TMPL:INCLUDE{"attachstyles"}%
 %TMPL:DEF{"title"}%%TOPIC% (attach)%TMPL:END%
-%TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
+%TMPL:DEF{"meta"}%<meta name="robots" content="noindex, nofollow" />%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.main.filepath.focus();%TMPL:END%
-%TMPL:DEF{"content"}% <!-- -->
+%TMPL:DEF{"content"}%<!-- -->
 %TMPL:P{"previousdetails"}%
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 <table width="100%" style="padding-top:20px">

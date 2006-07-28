@@ -5,7 +5,7 @@
   border-bottom:0px;
 }
 .natWebButtons {
-  padding-left:25px;
+  padding-left:20px;
   padding-right:10px;
 }
 .natWebButtonsContents {
@@ -15,7 +15,7 @@
 }
 
 .natWebButtons ul li {
-  padding-right:10px;
+  margin-right:4px;
 }
 .natWebButtons ul li a {
   padding:5px 5px;

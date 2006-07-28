@@ -24,6 +24,7 @@
 	  </td>
 	  %FISKINSTATE%
 	  <td class="natMiddle natMain %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight"}%" valign="top">
+	    <div class="natMainHeaderContents"> %TMPL:P{"contentheader"}% </div>
 	    <div class="natMainContents"> %TMPL:P{"content"}% </div>
 	  </td> 
 	  %IFSKINSTATETHEN{sidebar="right|both"}%
@@ -48,7 +49,6 @@
 	<div class="natBottomBarContents">
 	  <div class="natCopyRight">%WEBCOPYRIGHT%</div>
 	  <div class="natTWikiInfo">
-	    <!--a href="http://TWiki.org" border="0"><img  border="0" src="%PUBURLPATH%/%TWIKIWEB%/TWikiLogos/horzTWikiPowered.gif" alt=TWiki.org"/></a><br/-->
 	    Powered by <a href="http://TWiki.org">TWiki/%WIKIRELEASENAME%</a>
 	    <nop>%WIKIVERSION%
 	  </div>

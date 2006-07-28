@@ -41,6 +41,7 @@ hr {
 }
 
 .natMainContents,
+.natMainHeaderContents,
 .natMainFooterContents,
 .natSideBarContents {
   padding:5px 10px 5px 10px;
@@ -256,6 +257,9 @@ hr {
 .natMiddle {
   background:#333333;
   color:#cccccc;
+}
+.natMainHeaderContents {
+  font-size:x-small;
 }
 .natMainFooterContents,
 .natMainContents {

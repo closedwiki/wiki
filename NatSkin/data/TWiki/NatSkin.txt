@@ -47,7 +47,7 @@ TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the
 	* skin style control: infrastructure to get, set and display the skin style that
 	  is currently active using the NatSkinStyleBrowser
 	* Conditional content: 
-		* USERACTIONS, NATLOGON: display topic actions depending on the user being logged in or not
+		* USERACTIONS: display topic actions depending on the user being logged in or not
 		* IFSKINSTATE: render skin differently depending on the current skin state
 		* IFACCESS: render different content or include topics depending on access rights
 	* [[TWikiWebSideBar][WebSideBar]]: a configurable navigation bar
@@ -166,7 +166,7 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.9997 |
+|  Skin Version: | v2.9998 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -183,6 +183,21 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-07-28: | improved navigation in hierarchical webs by using the new TWiki:Plugins/FlexWebListPlugin \
+                 and TWiki:Plugins/BreadCrumbPlugin; \
+                 dropped usage of the TWiki:Plugins/FilterPlugin as using =FORMATLIST{WEBLIST}= \
+		 has been superseeded by FLEXWEBLIST; \
+		 using the <nop>FlexWebListPlugin + <nop>GluePlugin to generate a better \
+		 sidebar navigation showing subwebs in a twisty; \
+		 dropped the natWebLocation thing in the headerbar (commented out for now) \
+		 in favour of a real breadcrumbs navigation;  \
+		 added a new template macro "contentheader" to contain the breadcrumbs by default; \
+		 increased flexibility in default <nop>WebTopicActions \
+		 using NATLOG(IN/OUT)URL instead of NATLOGON,NATLOGOUT tags; \
+                 removed leading space char in mailnotify.nat.tmpl which may bust mail servers not \
+		 sending out notifications; \
+		 added missing =feed-icon-12x12-gray.png= in package; \
+		 lots of css fixes to style the new breadcrumbs navigation |
 |  2006-06-15: | added =WEBTOOLNAME= to customize the name displayed in the header bar; \
                  minor usability improvements in the <nop>NatSkinStyleBrowser |
 |  2006-05-25: | added advanced diff options available on twiki4; \
@@ -319,7 +334,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 15 June 2006
+-- TWiki:Main/MichaelDaum - 28 July 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%

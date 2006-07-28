@@ -67,6 +67,7 @@ hr {
 }
 .natSideBarContents,
 .natMainContents,
+.natMainHeaderContents,
 .natMainFooterContents {
   margin:20px;
 }
