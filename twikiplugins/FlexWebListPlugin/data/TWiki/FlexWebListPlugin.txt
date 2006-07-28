@@ -9,6 +9,8 @@
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
 ---+!! <nop>%TOPIC%
+%TOC%
+---++ Description
 This is a replacement for TWiki's standard [[%TWIKIWEB%.VarWEBLIST][WEBLIST]] variable.
 It is extended to improve the display of hierarchical web structures,
 a feature added to TWiki4 and adds more flexibility when used in
@@ -71,6 +73,10 @@ that are replaced with a current value:
    * =$indent=: expands to three spaces for each level a web is embeded; main level
      webs get three spaces, subwebs on first level six spaces and so on.
    * =$indent(string)=: same as =$indent= but using =string= instead of three spaces
+   * =$n=: replaced with a newline char (\n)
+   * =$percnt=: replaced with a percent char (%)
+   * =$dollar=: replaced with a dollar char ($)
+   * =$nop=: removed from the format string before expanding common TWiki variables
 
 The following picture illustrates when which format strings are used
 <div class="box">
@@ -137,8 +143,9 @@ See the FlexWebListExamples.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.01 |
+|  Plugin Version: | v0.02 |
 |  Change History: | &nbsp; |
+|  28 Jul 2006: | preserve order in webs parameter |
 |  26 Jul 2006: | first release |
 |  05 Jul 2006: | initial version |
 |  CPAN Dependencies: | none |
@@ -149,4 +156,4 @@ See the FlexWebListExamples.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 27 Jul 2006
+-- TWiki:Main/MichaelDaum - 28 Jul 2006

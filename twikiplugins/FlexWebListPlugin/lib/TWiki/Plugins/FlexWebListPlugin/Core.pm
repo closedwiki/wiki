@@ -95,6 +95,7 @@ sub handler {
     if ($aweb eq 'public' || $aweb eq 'webtemplate') {
       foreach my $bweb (sort keys %{$this->getWebs($aweb)}) {
 	next if $seen{$bweb};
+	next if $this->{webs} =~ /\b$bweb\b/;
 	$seen{$bweb} = 1;
 	push @list, $bweb;
       }
@@ -104,6 +105,7 @@ sub handler {
       push @list, $aweb if defined $allWebs->{$aweb}; # only add if it exists
     }
   }
+  #writeDebug("list=".join(',', @list));
 
   # format result
   my @result;
