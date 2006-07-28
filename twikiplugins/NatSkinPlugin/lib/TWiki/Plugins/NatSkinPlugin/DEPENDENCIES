@@ -1,5 +1,8 @@
-TWiki::Plugins::SpreadSheetPlugin,>=1.018,perl,Required. Download and install from the TWiki:Plugins/SpreadSheetPlugin code library.
-TWiki::Plugins::RedDotPlugin,>=1.25,perl,Recommended; Download from TWiki:Plugins/RedDotPlugin repository.
-TWiki::Plugins::FilterPlugin,>=0.94,perl,Required; Download from TWiki:Plugins/FilterPlugin repository.
-TWiki::Plugins::IfDefinedPlugin,>=0.90,perl,Required; Download from TWiki:Plugins/IfDefinedPlugin repository.
-TWiki::Contrib::DakarContrib,>=0.1,perl,Optional; Download from TWiki:Plugins/DakarContrib repository.
+TWiki::Plugins::SpreadSheetPlugin,>=1.018,perl,Required. Download and install from TWiki:Plugins/SpreadSheetPlugin 
+TWiki::Plugins::RedDotPlugin,>=1.25,perl,Recommended; Download from TWiki:Plugins/RedDotPlugin 
+TWiki::Plugins::FlexWebListPlugin,>=0.01,perl,Required; Download from TWiki:Plugins/FlexWebListPlugin 
+TWiki::Plugins::BreadCrumbsPlugin,>=0.01,perl,Required; Download from TWiki:Plugins/BreadCrumbsPlugin 
+TWiki::Plugins::GluePlugin,>=1.5,perl,Required; Download from TWiki:Plugins/GluePlugin 
+TWiki::Plugins::IfDefinedPlugin,>=0.90,perl,Required; Download from TWiki:Plugins/IfDefinedPlugin 
+TWiki::Plugins::TwistyPlugin,>=1.000,perl,Required; Download from TWiki:Plugins/TwistyPlugin 
+TWiki::Contrib::DakarContrib,>=0.1,perl,Optional; Download from TWiki:Plugins/DakarContrib 
