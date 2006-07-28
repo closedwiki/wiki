@@ -197,8 +197,13 @@ hr {
   color:#B22222;
   font-weight:bold;
 }
+.natMainHeaderContents,
 .natMainFooterContents {
   font-size:x-small;
+  margin-bottom:10px;
+}
+.natMainHeaderContents a {
+  text-decoration:none;
 }
 
 

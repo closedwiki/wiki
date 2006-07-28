@@ -36,9 +36,9 @@ hr {
 }
 .natSideBarContents,
 .natMainContents,
+.natMainHeaderContents,
 .natMainFooterContents {
-  margin-left:10px;
-  margin-right:10px;
+  margin:10px;
 }
 .natTopLeftContents,
 .natTopRightContents {
@@ -52,6 +52,12 @@ hr {
 }
 .natTopBarSizer {
   height:130px;
+}
+.natMainFooterContents {
+  font-size:x-small;
+}
+.natMainHeaderContents a {
+  text-decoration:none;
 }
 
 /* top */
@@ -176,8 +182,8 @@ hr {
   color: #333333;
 }
 
-.natMain .twikiEmulatedLink,
-.natMain a {
+.natMainContents .twikiEmulatedLink,
+.natMainContents a {
   font-weight:normal;
   text-decoration:underline;
 }
@@ -225,9 +231,6 @@ hr {
 .natMain .natOopsHeading {
   color:#B22222;
   font-weight:bold;
-}
-.natMainFooterContents {
-  font-size:x-small;
 }
 
 /* bottom */

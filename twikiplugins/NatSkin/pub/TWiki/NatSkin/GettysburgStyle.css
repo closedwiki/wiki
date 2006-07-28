@@ -30,10 +30,6 @@ hr {
 .natSideBar {
   padding:10px 20px 10px 20px;
 }
-.natMainContents,
-.natMainFooterContents {
-  margin:20px;
-}
 .natTopRightContents,
 .natTopLeftContents {
   margin-left:20px;
@@ -288,7 +284,14 @@ hr {
   border:1px solid #ffffff;
 }
 
-.natMainFooterContents, .natMainContents {
+.natMainHeaderContents, 
+.natMainContents,
+.natMainFooterContents {
+  margin:10px 20px;
+}
+.natMainHeaderContents, 
+.natMainFooterContents, 
+.natMainContents {
   color:#444444;
   font:normal small/150% georgia,serif
 }
@@ -316,9 +319,6 @@ hr {
 
 .natMain h1 {
   padding-bottom:5px;
-}
-.natMainFooterContents {
-  font-size:x-small;
 }
 
 /* bottom */

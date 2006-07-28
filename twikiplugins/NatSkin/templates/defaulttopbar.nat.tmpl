@@ -12,7 +12,7 @@
 		%ELSEDEFINED%
 		  %WIKITOOLNAME%
 		%FIDEFINED%
-	      </a><span class="natWebLocator">%TMPL:P{"locator"}%</span>
+	      </a><!-- span class="natWebLocator">%<nop>TMPL:P{"locator"}%</span-->
 	    </h1>
 	    <div class="natWebSlogan">%SITEMAPUSETO%</div>
 	  </div>
@@ -42,4 +42,4 @@
 %FISKINSTATE%
 %TMPL:END%
 %TMPL:DEF{"topbar"}%%TMPL:P{"defaulttopbar"}%%TMPL:END%
-%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
+%TMPL:DEF{"locatorDISABLED"}%%BREADCRUMBS{header="<span class='natSep'>&middot;</span>" separator="<span class='natSep'>&middot;</span>" recurse="topicoff"}%%TMPL:END%

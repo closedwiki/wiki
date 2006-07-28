@@ -8,6 +8,7 @@
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (preview)%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span><b>%TOPIC%</b>%TMPL:END%
+%TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&#187;</span>" footer="<span class='natSep'>&#187;</span><nop>%BASETOPIC%"}%</div>%TMPL:END%
 %TMPL:DEF{"content"}% %TEXT%
 %META{"form"}%
 <form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
@@ -30,8 +31,6 @@
   <textarea name="text" rows="10" cols="80" style="display:none">%HIDDENTEXT%</textarea>
   %TMPL:P{"bottomtopicactions"}%
 </form>
-%TMPL:END%
-%TMPL:DEF{"contentfooter"}% 
 %TMPL:END%
 %TMPL:DEF{"bottomtopicactions"}%
 <div class="natBottomTopicActions">

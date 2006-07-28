@@ -44,6 +44,10 @@ hr {
 .natMainFooterContents,
 .natMainContents {
   padding:15px;
+  /*padding:15px 15px 15px 20px;*/
+}
+.natMainHeaderContents {
+  padding:15px 10px 15px 20px;
 }
 
 .natMiddleLeft {

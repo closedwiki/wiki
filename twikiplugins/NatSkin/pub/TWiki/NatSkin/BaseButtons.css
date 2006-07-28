@@ -5,6 +5,7 @@
 }
 .natWebButtons ul li {
   display:inline;
+  margin-right:10px;
 }
 .natWebButtons ul a {
   text-decoration:none;
