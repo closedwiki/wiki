@@ -23,7 +23,7 @@
 ###############################################################################
 
 package TWiki::Plugins::NatSkinPlugin;
-use TWiki::Plugins;
+use strict;
 
 ###############################################################################
 use vars qw(
@@ -34,6 +34,7 @@ use vars qw(
 	$query $urlHost
 	$defaultSkin $defaultVariation $defaultStyleSearchBox
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
+	$defaultStyleButtons
 	%maxRevs
 	$hasInitKnownStyles $hasInitSkinState
 	%knownStyles 
@@ -56,7 +57,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.9997';
+$RELEASE = '2.9998';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -252,6 +253,7 @@ sub initSkinState {
   my $doStickySideBar = 0;
   my $doStickySearchBox = 0;
   my $doStickyVariation = 0;
+  my $found = 0;
 
   # get finalisations
   
@@ -292,7 +294,7 @@ sub initSkinState {
     $theSwitchStyle = $query->param('switchstyle');
     $theSwitchVariation = $query->param('switchvariation');
     $theReset = $query->param('resetstyle');
-    $theStyle = $query->param('style') || '';
+    $theStyle = $query->param('style') || $query->param('skinstyle') || '';
     if ($theReset || $theStyle eq 'reset') {
       writeDebug("clearing session values");
       $theStyle = '';
@@ -342,7 +344,7 @@ sub initSkinState {
   if ($theStyle =~ /^(off|none)$/o) {
     $theStyle = 'off';
   } else {
-    my $found = 0;
+    $found = 0;
     foreach my $style (keys %knownStyles) {
       if ($style eq $theStyle || lc $style eq lc $theStyle) {
 	$found = 1;
@@ -577,8 +579,8 @@ sub commonTagsHandler {
     # nop
   }
   $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;# deprecated
-  $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
-  $_[0] =~ s/%NATLOGOUT%/&renderLogout()/geo;
+  $_[0] =~ s/%NATLOGINURL%/&renderLoginUrl()/geo;
+  $_[0] =~ s/%NATLOGOUTURL%/&renderLogoutUrl()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
   $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
   $_[0] =~ s/%USERACTIONS%/&renderUserActions/geo;
@@ -958,7 +960,7 @@ sub renderUserActions {
     $whiteBoard =~ s/^\s*(.*?)\s*$/$1/g;
     my $editUrlParams = '';
     my $useWysiwyg = &TWiki::Func::getPreferencesFlag('USEWYSIWYG');
-    if ($TWiki::cfg{Plugins}{WysiwygPlugin} && $useWysiwyg) {
+    if ($TWiki::cfg{Plugins}{WysiwygPlugin} && $useWysiwyg eq 'on') {
       $editUrlParams = '&skin=kupu';
     }  else {
       $editUrlParams = '&action=form' if $whiteBoard eq 'off';
@@ -1089,10 +1091,11 @@ sub renderWebLink {
 }
 
 ###############################################################################
-# display url to login
-sub renderLogon {
+# returns the login url
+sub renderLoginUrl {
 
   my $logonCgi = 'natlogon';
+
   if ($isDakar) {
     if ($TWiki::cfg{LoginManager} =~ /TemplateLogin/) {
       $logonCgi = 'login';
@@ -1100,15 +1103,27 @@ sub renderLogon {
       $logonCgi = 'viewauth';
     }
   }
-  my $logonScriptUrl = &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, $logonCgi);
-  return '<a rel="nofollow" href="'.$logonScriptUrl.'" accesskey="l" title="Login to <nop>%WIKITOOLNAME%">Login</a>';
 
-  return $dispUser;
+  return &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, $logonCgi);
+}
+
+###############################################################################
+# display url to login
+sub renderLogin {
+  my $args = shift || '';
+
+  my $loginString = TWiki::Func::extractNameValuePair($args) || 'Login';
+
+  return '<a rel="nofollow" href="'.
+    &renderLoginUrl().
+    '" accesskey="l" title="Login to <nop>%WIKITOOLNAME%">'.
+    $loginString.
+    '</a>';
 }
 
 ###############################################################################
 # display url to logout
-sub renderLogout {
+sub renderLogoutUrl {
 
   my $logoutCgi = 'natlogon';
   if ($isDakar) {
@@ -1128,20 +1143,12 @@ sub renderLogout {
   my $logoutScriptUrl = &TWiki::Func::getScriptUrl($logoutWeb, $logoutTopic, $logoutCgi);
 
   if ($logoutCgi eq 'natlogon') {
-    return '| <a rel="nofollow" href="'
-	   . $logoutScriptUrl 
-	   . '?web='
-	   . $logoutWeb
-	   . '&amp;topic='
-	   . $logoutTopic
-	   . '&amp;username='
-	   . $defaultWikiUserName
-	   . '" accesskey="l" title="Logout of <nop>%WIKITOOLNAME%">Logout</a>';
+    return $logoutScriptUrl
+      . '?web='. $logoutWeb 
+      . '&amp;topic='.$logoutTopic 
+      . '&amp;username='.$defaultWikiUserName;
   } else {
-    return '| <a rel="nofollow" href="'
-	   . $logoutScriptUrl 
-	   . '?logout=1'
-	   . '" accesskey="l" title="Logout of <nop>%WIKITOOLNAME%">Logout</a>';
+    return $logoutScriptUrl.'?logout=1';
   }
 }
 
@@ -1285,16 +1292,6 @@ sub renderRevisions {
     $rev2 = 1 if $rev2 < 1;
     $rev2 = $maxRev if $rev2 > $maxRev;
 
-    $revTitle1 = "r1.$rev1";
-    
-    $revInfo1 = getRevInfo($baseWeb, $rev1, $baseTopic);
-    if ($rev1 != $rev2) {
-      $revTitle2 = "r1.$rev2";
-      $revInfo2 = getRevInfo($baseWeb, $rev2, $baseTopic);
-    }
-
-    #writeDebug("revInfo1=$revInfo1, revInfo2=$revInfo2, revTitle1=$revTitle1, revTitle2=$revTitle2");
-    
   } else {
     $rev1 = 1;
     $rev2 = 1;
@@ -1407,29 +1404,29 @@ sub getPrevRevision {
 
 ###############################################################################
 # local copy with beijing backwards compatibility
-sub getRevInfo {
-  my ($thisWeb, $rev, $thisTopic) = @_;
-
-  #writeDebug("called getRevInfo");
-
-  my ($date, $user);
-  
-  if ($isBeijing) { # frelled
-    ($date, $user) = &TWiki::Store::getRevisionInfo($thisWeb, $thisTopic, "1.$rev");
-  } else {
-    ($date, $user) = &TWiki::Func::getRevisionInfo($thisWeb, $thisTopic, "1.$rev");
-  }
-
-  $user = &TWiki::Func::renderText(&TWiki::Func::userToWikiName($user));
-  $date = &TWiki::Func::formatTime($date) unless $isBeijing;
-
-  my $revInfo = "$date - $user";
-  $revInfo =~ s/[\n\r]*//go;
-
-  #writeDebug("revInfo=$revInfo");
-  #writeDebug("done getRevInfo");
-  return $revInfo;
-}
+#sub getRevInfo {
+#  my ($thisWeb, $rev, $thisTopic) = @_;
+#
+#  #writeDebug("called getRevInfo");
+#
+#  my ($date, $user);
+#  
+#  if ($isBeijing) { # frelled
+#    ($date, $user) = &TWiki::Store::getRevisionInfo($thisWeb, $thisTopic, "1.$rev");
+#  } else {
+#    ($date, $user) = &TWiki::Func::getRevisionInfo($thisWeb, $thisTopic, "1.$rev");
+#  }
+#
+#  $user = &TWiki::Func::renderText(&TWiki::Func::userToWikiName($user));
+#  $date = &TWiki::Func::formatTime($date) unless $isBeijing;
+#
+#  my $revInfo = "$date - $user";
+#  $revInfo =~ s/[\n\r]*//go;
+#
+#  #writeDebug("revInfo=$revInfo");
+#  #writeDebug("done getRevInfo");
+#  return $revInfo;
+#}
 
 ###############################################################################
 sub getMaxRevision {
@@ -1496,7 +1493,6 @@ sub clearSessionValue {
   # last resort
   return &TWiki::Func::setSessionValue($key, undef);
 }
-
 
 1;
 
