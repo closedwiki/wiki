@@ -15,6 +15,7 @@
 #
 ###############################################################################
 package TWiki::Plugins::RedDotPlugin;
+use strict;
 
 ###############################################################################
 use vars qw(
@@ -27,7 +28,7 @@ use vars qw(
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 $VERSION = '$Rev$';
-$RELEASE = '1.33';
+$RELEASE = '1.34';
 
 $debug = 0; # toggle me
 
