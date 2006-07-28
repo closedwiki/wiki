@@ -18,7 +18,7 @@ use strict;
 use vars qw($VERSION $RELEASE $debug $isDakar);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.01';
+$RELEASE = 'v0.02';
 
 $debug = 0; # toggle me
 
@@ -105,6 +105,7 @@ sub getLocationBreadCrumbs {
       my $parentName = $parentMeta->{name};
       last unless $parentName;
       ($web, $topic) = normalizeWebTopicName($web, $parentName);
+      next if $topic eq 'WebHome'; 
       #writeDebug("adding breadcrumb: target=$web/$topic, name=$topic");
       unshift @topicCrumbs, { target=>"$web/$topic", name=>$topic };
       last if $recurse->{once} || $recurse->{topiconce};
