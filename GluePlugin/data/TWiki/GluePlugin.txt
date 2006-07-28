@@ -1,4 +1,13 @@
 %META:TOPICINFO{author="TWikiContributor" date="1139389832" format="1.1" version="1.1"}%
+<!--
+
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
 ---+!! <nop>%TOPIC%
 %TOC%
 ---++ Description
@@ -151,11 +160,10 @@ Oranges
 
 ---++ Plugin Installation Instructions
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   * [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+   * Unzip it in your twiki installation directory. Content: 
      | *File:* | *Description:* |
-     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+%$MANIFEST%
    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * If the plugin is installed correctly then the following two fruits
      will appear joined on one line: Apples
@@ -168,8 +176,11 @@ Oranges
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 28 Aug 2005 (V1.5) |
+|  Plugin Version: | v1.51 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Jul 2006: | fixed MANIFEST;\
+                  some minor docu updates; \
+		  added =use strict;= |
 |  28 Aug 2005: | changed glue syntax; added glue escape sequence to \
                   work arround tags been interpreted before lines are \
                   recombined |
@@ -187,4 +198,4 @@ Oranges
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main.MichaelDaum - 15 Aug 2005
+-- TWiki:Main.MichaelDaum - 28 Jul 2006

@@ -15,6 +15,7 @@
 #
 # =========================
 package TWiki::Plugins::GluePlugin;
+use strict;
 
 # =========================
 use vars qw(
@@ -22,7 +23,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.5';
+$RELEASE = '1.51';
 
 # =========================
 sub initPlugin { 
