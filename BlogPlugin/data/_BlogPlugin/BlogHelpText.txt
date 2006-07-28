@@ -50,11 +50,11 @@ mode</b>.
 <div class="blogSideBarSection blogHelpText">
 The <nop>%WEB% Archive may be used in four modes that differ in the
 way the data is made accessible:
-   * *CHRON*: this is a chronological way of browsing the archive; select a year
+   CHRON: this is a chronological way of browsing the archive; select a year
      and a month to restrict the list of postings to that timespan.
-   * *CAT*: use the CAT mode to list postings in each <nop>SubjectCategory
-   * *TAG*: list postings by exploring their <nop>BlogTags
-   * *LEX*: retrieve postings by exploring most frequently used words
+   CAT: use the CAT mode to list postings in each <nop>SubjectCategory
+   TAG: list postings by exploring their <nop>BlogTags
+   LEX: retrieve postings by exploring most frequently used words
 The CAT, TAG, and LEX modes use tag clouds to visualize the frequency of the
 cateogries, tags and words respectively.
 </div>

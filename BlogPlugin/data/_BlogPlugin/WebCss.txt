@@ -9,6 +9,7 @@ Note, this only works with TWiki:Plugins.NatSkin.
 
 <verbatim>
 %STARTINCLUDE%
+~~~ .natMainHeaderContents,
 ~~~ .natRevision, .natWebLocator, .headlinesLogo
 ~~~ { display:none; }
 %~~ IFDEFINED{"

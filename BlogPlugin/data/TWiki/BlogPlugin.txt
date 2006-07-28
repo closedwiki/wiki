@@ -225,8 +225,13 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.95 |
+|  Version: | v0.96 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Jul 2006: | hiding the breadcrumbs in the blog introduced in the recent <nop>NatSkin version; \
+                  reordered sidebar section to "make more sense"; \
+		  minor docu changes; \
+		  added recommendation to use the <nop>BlogPlugin in combination with the \
+		  TWiki:Plugins/NatSkin because some features will work with it only |
 |  23 Jul 2006: | added view templates specific to <nop>PatternSkin; \
                   improved the blog's sidebar for <nop>PatternSkin; \
 		  added standard <nop>WebSearch topics; \
@@ -240,7 +245,7 @@ And send me a patch if you've coded that into TWiki ;).
 		  =%META:FIELD{name="State" ... value="enabled"}%= \
 		  with %BR% \
 		  =%META:FIELD{name="State" ... value="published"}%=; %BR%\
-		  replace =disabled= with =unpublised= respictively |
+		  replace =disabled= with =unpublised= respectively |
 |  15 June 2006: | added <nop>BlogFactory to ease creation of blogs; \
                    fixed <nop>BlogImages feature introduced recently; \
 		   added docu to to blog's <nop>WebPreferences; \
@@ -379,4 +384,4 @@ And send me a patch if you've coded that into TWiki ;).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 23 Jul 2006
+-- TWiki:Main.MichaelDaum - 28 Jul 2006

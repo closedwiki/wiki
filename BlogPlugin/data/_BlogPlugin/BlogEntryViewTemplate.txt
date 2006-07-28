@@ -1,6 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1146303376" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="TopicView"}%
 %TMPL:INCLUDE{"view"}%
+%TMPL:DEF{"contentheader"}%%TMPL:END%
 %TMPL:DEF{"content"}%
 %DBCALL{"RenderBlogEntry" NAME="%TOPIC%"}%
 <!--%<nop>DBCALL{"RenderGoogleAdsense"}%-->

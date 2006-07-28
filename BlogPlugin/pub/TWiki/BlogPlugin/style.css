@@ -13,7 +13,6 @@
    border:1px solid red;
 }
 */
-
 .blogAbout {
   /*text-align:justify; */
   font-size:95%; 
@@ -179,6 +178,13 @@
   margin-top:0px;
   margin-bottom:0px;
 }
+.blogSideBar dd {
+  margin-left:2em;
+}
+.blogSideBar dt {
+  font-weight:bold;
+}
+
 .blogAdminButtons,
 .blogAuthorButtons {
   margin-bottom:10px !important;
@@ -239,4 +245,4 @@
 }
 .blogSideBarLastFM h1 a:after {
   display:none;
-}
+

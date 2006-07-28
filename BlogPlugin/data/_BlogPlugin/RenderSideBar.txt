@@ -56,12 +56,12 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}% 
 %DBCALL{"RenderRecentComments" LIMIT="5"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10"}%
-%DBCALL{"RenderPages"}%
-%DBCALL{"RenderAuthors"}%
-%DBCALL{"RenderArchives"}%
 %DBCALL{"RenderCategories"}%
+%DBCALL{"RenderArchives"}%
+%DBCALL{"RenderAuthors"}%
 %DBCALL{"RenderBlogRoll" NOCAT="BlogUp"}%
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
+%DBCALL{"RenderPages"}%
 %DBCALL{"RenderLastFMRecentTracks"}%
 %DBCALL{"RenderVisitors"}%
 %DBCALL{"RenderTechnorati"}%
@@ -76,11 +76,11 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}% 
 %DBCALL{"RenderRecentComments" LIMIT="5" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" AUTHOR="%BASETOPIC%"}%
-%DBCALL{"RenderPages" AUTHOR="%BASETOPIC%"}%
-%DBCALL{"RenderArchives" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
+%DBCALL{"RenderArchives" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderBlogRoll" AUTHOR="%BASETOPIC%" NOCAT="BlogUp"}%
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
+%DBCALL{"RenderPages" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderLastFMRecentTracks"}%
 %DBCALL{"RenderVisitors"}%
 %DBCALL{"RenderTechnorati"}%
@@ -155,8 +155,8 @@ See also BlogHelpText
 %DBCALL{"RenderAdminTools" warn="off"}%
 %DBCALL{"RenderRecentComments" LIMIT="10" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderRecentPostings" LIMIT="10" CAT="%BASETOPIC%"}%
-%DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderCategories"}%
+%DBCALL{"RenderArchives" CAT="%BASETOPIC%"}%
 %DBCALL{"RenderBlogRoll" CAT="%BASETOPIC%"}%
 %ENDSECTION{"Category"}%
 </verbatim>
