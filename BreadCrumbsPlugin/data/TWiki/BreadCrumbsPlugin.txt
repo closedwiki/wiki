@@ -24,7 +24,7 @@ In a way location breadcrumbs have always been supported by TWiki using the
 4.x  TWiki also supports hierarchical subwebs but the breadcrumbs support of
 TWiki does not allow to display the parent webs as part of of the location
 breadcrumbs.  Besides that this plugin adds more flexibility in deciding which
-parts of the breadcrumbs location should be rendered and how each
+parts of the breadcrumbs path should be rendered and how each
 individual breadcrumb is displayed
 
 
@@ -134,9 +134,10 @@ separator) may contain special variables:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.01 |
+|  Plugin Version: | v0.02 |
 |  Change History: | &nbsp; |
-|  28 Jul 2006: | initial version |
+|  28 Jul 2006: | initial version; \
+                  don't add the topic parent '<nop>WebHome' to the path |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.8 |
