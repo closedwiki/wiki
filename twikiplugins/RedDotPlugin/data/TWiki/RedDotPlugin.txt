@@ -59,8 +59,8 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 
 ---++ Plugin Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip it in your twiki installation directory. Content: 
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
@@ -72,8 +72,9 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.33 |
+|  Plugin Version: | v1.34 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Jul 2006: | added <nop>PatternSkin css to really make reddots red |
 |  10 Mar 2006: | use ENV instead of the CGI object to detect the current cgi action |
 |  15 Feb 2006: | don't initialize the redirector in scripted mode |
 |  14 Feb 2006: | fixed redirects to anchors; \
@@ -96,7 +97,7 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 10 Mar 2006
+-- TWiki:Main.MichaelDaum - 28 Jul 2006
 
 
 
