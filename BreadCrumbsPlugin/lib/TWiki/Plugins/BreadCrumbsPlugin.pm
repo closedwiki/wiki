@@ -95,9 +95,10 @@ sub getLocationBreadCrumbs {
     my $web = $thisWeb;
     my $topic = $thisTopic;
     my %seen;
+    $seen{"$thisWeb.$thisTopic"} = 1;
     my @topicCrumbs;
     while (1) {
-      next if $seen{"$web.$topic"};
+      last if $seen{"$web.$topic"};
       $seen{"$web.$topic"} = 1;
       my ($meta, $dumy) = &TWiki::Func::readTopic($web, $topic);
       my $parentMeta = &getMetaData($meta, "TOPICPARENT"); 
