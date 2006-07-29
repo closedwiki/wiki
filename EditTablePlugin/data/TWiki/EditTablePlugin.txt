@@ -150,6 +150,7 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 	  | ==pub/TWiki/%TOPIC%/calendar-system.css== | Mishoo DHTML calendar stylesheet |
 	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file. 
 	* The Mishoo DHTML calendar 0.9.5 is preinstalled and should work without any configuration. If you wish to use another language, specify the in the Plugin settings, or create a new language files, attach it to the Plugin topic, and change the Plugin settings
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the Plugin is correctly installed:
 		* Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
 		* Click on *[&nbsp;Edit&nbsp;table&nbsp;]*, make changes and save the table
@@ -165,6 +166,7 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 |  Plugin Author: | TWiki:Main/PeterThoeny |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  29 Jul 2006: | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2684'>Item2684</a> - Quietly ignore topic edit locks on table edit |
 |  21 Jan 2006: | TWiki:Main.CrawfordCurrie ported to TWiki-4.0.0, changed to use JSCalendarContrib |
 |  16 Sep 2004: | Added radio buttons and checkbox controls; escaped "&#124;" pipe symbol found in input fields to preserve tables |
 |  01 Aug 2004: | Fixed bug where edittable did not work if at the end of a topic |

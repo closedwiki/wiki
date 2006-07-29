@@ -93,7 +93,7 @@ sub process {
 
                } elsif( $query->param( 'etedit' ) ) {
                    # [Edit table] button pressed
-                   $doEdit = doEnableEdit( $theWeb, $theTopic, 1 );
+                   $doEdit = doEnableEdit( $theWeb, $theTopic, 0 );
                    # never return if locked or no permission
                    return unless( $doEdit );
                    $cgiRows = -1; # make sure to get the actual number of rows
