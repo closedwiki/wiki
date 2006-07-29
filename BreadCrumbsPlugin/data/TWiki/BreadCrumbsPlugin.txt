@@ -134,8 +134,9 @@ separator) may contain special variables:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.02 |
+|  Plugin Version: | v0.03 |
 |  Change History: | &nbsp; |
+|  29 Jul 2006: | fixed infinit loop when a topic is its own parent topic |
 |  28 Jul 2006: | initial version; \
                   don't add the topic parent '<nop>WebHome' to the path |
 |  CPAN Dependencies: | none |
@@ -146,4 +147,4 @@ separator) may contain special variables:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 28 Jul 2006
+-- TWiki:Main/MichaelDaum - 29 Jul 2006
