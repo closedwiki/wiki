@@ -203,6 +203,6 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 %META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="" date="1071283396" path="EditTablePluginCalendarExample.gif" size="7823" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="ScreenshotEditCell1.gif" attr="h" comment="Screenshot" date="1077050633" path="ScreenshotEditCell1.gif" size="2017" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="ScreenshotEditCell2.gif" attr="h" comment="Screenshot" date="1077050702" path="ScreenshotEditCell2.gif" size="3199" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="img.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813483" path="C:\Data\Temp\img.gif" size="145" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="menuarrow.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813470" path="C:\Data\Temp\menuarrow.gif" size="68" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="img.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813483" path="img.gif" size="145" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="menuarrow.gif" attr="h" comment="Component of Mishoo DHTML calendar" date="1077813470" path="menuarrow.gif" size="68" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="edittable.gif" attr="h" comment="Edit table image button" date="1077933805" path="edittable.gif" size="298" user="PeterThoeny" version="1.1"}%
