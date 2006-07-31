@@ -74,6 +74,7 @@ sub handler {
   $this->{currentTopic} = $currentTopic;
   writeDebug("include filter=/^($this->{include})\$/") if $this->{include};
   writeDebug("exclude filter=/^($this->{exclude})\$/") if $this->{exclude};
+
   
   # compute map
   my $theMap = TWiki::Func::extractNameValuePair($args, 'map') || '';
@@ -87,7 +88,8 @@ sub handler {
   # compute list
   my %seen;
   my @list = ();
-  my @websList = split(/,\s*/, $this->{webs});
+  my @websList = map {s/^\s+//go; s/\s+$//go; s/\./\//go; $_} split(/,\s*/, $this->{webs});
+  %{$this->{isExplicit}} = map {$_ => 1} grep {!/^(public|webtemplate)$/} @websList;
   my $allWebs = $this->getWebs();
 
   # collect the list in preserving the given order in webs parameter
@@ -95,7 +97,7 @@ sub handler {
     if ($aweb eq 'public' || $aweb eq 'webtemplate') {
       foreach my $bweb (sort keys %{$this->getWebs($aweb)}) {
 	next if $seen{$bweb};
-	next if $this->{webs} =~ /\b$bweb\b/;
+	next if defined $this->{isExplicit}{$bweb};
 	$seen{$bweb} = 1;
 	push @list, $bweb;
       }
@@ -146,11 +148,13 @@ sub formatWeb {
 
   # check conditions to format this web
   return '' if $web->{done};
-  return ''
-    if $web->{isSubWeb} && $this->{subWebs} eq 'none' && # skip subwebs
-       $this->{webs} !~ /\b$web->{key}\b/; # but only if they are not explicit
-  return '' if $this->{exclude} ne '' && $web->{key} =~ /^($this->{exclude})$/;
-  return '' if $this->{include} ne '' && $web->{key} !~ /^($this->{include})$/;
+
+  # filter webs
+  unless ($this->{isExplicit}{$web->{key}}) {
+    return '' if $web->{isSubWeb} && $this->{subWebs} eq 'none';
+    return '' if $this->{exclude} ne '' && $web->{key} =~ /^($this->{exclude})$/;
+    return '' if $this->{include} ne '' && $web->{key} !~ /^($this->{include})$/;
+  }
 
   $web->{done} = 1;
   writeDebug("formatWeb($web->{key})");
@@ -159,7 +163,7 @@ sub formatWeb {
   my $subWebResult = '';
   my @lines;
   foreach my $subWeb (@{$web->{children}}) {
-    next if $this->{webs} =~ /\b$subWeb->{key}\b/;
+    next if $this->{isExplicit}{$subWeb->{key}}; # don't include webs that are explicit
     my $line = $this->formatWeb($subWeb, $this->{subFormat}); # recurse
     push @lines, $line if $line;
   }
@@ -168,7 +172,9 @@ sub formatWeb {
   }
 
   my $result = '';
-  if (!$web->{isSubWeb} && $this->{subWebs} eq 'only' && $this->{webs} !~ /\b$web->{key}\b/) {
+  if (!$web->{isSubWeb} && 
+      $this->{subWebs} eq 'only' && 
+      !$this->{isExplicit}{$web->{key}}) {
     $result = $subWebResult;
   } else {
     if ($this->{selection} =~ / \Q$web->{key}\E /) {
