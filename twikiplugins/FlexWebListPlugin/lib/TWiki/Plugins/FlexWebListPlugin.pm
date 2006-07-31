@@ -18,7 +18,7 @@ use strict;
 use vars qw( $VERSION $RELEASE $core);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.02';
+$RELEASE = 'v0.03';
 
 ###############################################################################
 sub initPlugin {
