@@ -219,6 +219,11 @@ templates/rename.nat.tmpl 0644
 templates/renamerefs.nat.tmpl 0644
 templates/renamesidebar.nat.tmpl 0644
 templates/renamestyles.nat.tmpl 0644
+templates/renamewebbase.nat.tmpl 0644
+templates/renamewebconfirm.nat.tmpl 0644
+templates/renamewebdelete.nat.tmpl 0644
+templates/renameweb.nat.tmpl 0644
+templates/renamewebsidebar.nat.tmpl 0644
 templates/searchbase.nat.tmpl 0644
 templates/searchbookview.nat.tmpl 0644
 templates/searchbox.nat.tmpl 0644

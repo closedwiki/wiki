@@ -7,7 +7,7 @@
 .navButton { %IFSKINSTATE{buttons="on" then="display:none"}% }
 </style>
 %~~ FLEXWEBLIST{
-~~~   webs="%MAINWEB%,User,public,%TWIKIWEB%" 
+~~~   webs="%MAINWEB%,User,public,%BASEWEB%,%TWIKIWEB%" 
 ~~~   map="%TWIKIWEB%=System"
 ~~~   include="\w+|%BASEWEB%"
 ~~~   exclude="TestCases|Trash" 

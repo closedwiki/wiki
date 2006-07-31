@@ -12,11 +12,11 @@
 %TMPL:DEF{"content"}%<!-- -->
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
 <!--input type="hidden" name="confirm" value="on"-->
----+ %TMPL:P{"webaction"}% <nop>%TOPIC%
+---+ %TMPL:P{"webaction"}% Topic
 
-| *&nbsp;* |  *Web:* | *Topic:* |
-|  *From:* |    <nop>%WEB% | <nop>%TOPIC% |
-|  *To:* |  %TMPL:P{"newweb"}% | %TMPL:P{"newtopic"}% |
+*From:* <code>%WEB%.%TOPIC%</code>
+
+*To:* %TMPL:P{"newweb"}% %TMPL:P{"newtopic"}% 
 %TMPL:P{"buttons"}%
 ---++ Change links in topics that refer to <nop>%TOPIC% in the <nop>%WEB% Web:
 <div class="natSearchRenameContents">
