@@ -97,7 +97,6 @@ sub handler {
     if ($aweb eq 'public' || $aweb eq 'webtemplate') {
       foreach my $bweb (sort keys %{$this->getWebs($aweb)}) {
 	next if $seen{$bweb};
-	next if defined $this->{isExplicit}{$bweb};
 	$seen{$bweb} = 1;
 	push @list, $bweb;
       }
@@ -163,7 +162,6 @@ sub formatWeb {
   my $subWebResult = '';
   my @lines;
   foreach my $subWeb (@{$web->{children}}) {
-    next if $this->{isExplicit}{$subWeb->{key}}; # don't include webs that are explicit
     my $line = $this->formatWeb($subWeb, $this->{subFormat}); # recurse
     push @lines, $line if $line;
   }

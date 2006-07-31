@@ -45,9 +45,9 @@ to ease reading multiline TML expressions and arguments.
 
 ---+++ Exclude <nop>TestCases and Trash webs
 <verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash" subwebs="none"}%
+%FLEXWEBLIST{exclude="TestCases|Trash.*" subwebs="none"}%
 </verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash" subwebs="none"}%
+%FLEXWEBLIST{exclude="TestCases|Trash.*" subwebs="none"}%
 
 ---+++ Include Sandbox web and all of its subwebs
 <verbatim>
@@ -76,7 +76,7 @@ to ease reading multiline TML expressions and arguments.
 ---+++ Nested calls to FLEXWEBLIST
 <verbatim>
 %~~ FLEXWEBLIST{
-~~~   exclude="TestCases|Trash" 
+~~~   exclude="TestCases|Trash.*" 
 ~~~   subwebs="none"
 ~~~   selection="Sandbox"
 ~~~   format="$indent* [[$web.WebHome][$name]]$n"
@@ -86,7 +86,7 @@ to ease reading multiline TML expressions and arguments.
 ~~~   }$percnt"
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash" subwebs="none" selection="Sandbox" format="$indent* [[$web.WebHome][$name]]$n" markerformat="$percntFLEXWEBLIST{ webs=\"$web\" format=\"$dollarindent* [[$dollarweb.WebHome][$dollarname]]$dollarn\" }$percnt"}%
+%FLEXWEBLIST{exclude="TestCases|Trash.*" subwebs="none" selection="Sandbox" format="$indent* [[$web.WebHome][$name]]$n" markerformat="$percntFLEXWEBLIST{ webs=\"$web\" format=\"$dollarindent* [[$dollarweb.WebHome][$dollarname]]$dollarn\" }$percnt"}%
 
 ---+++ Twisty weblist
 needs the TWiki:Plugins/TwistyPlugin
@@ -117,7 +117,7 @@ needs the TWiki:Plugins/TwistyPlugin and the TWiki:Plugins/IfDefinedPlugin
 <verbatim>
 %~~ FLEXWEBLIST{
 ~~~   webs="%MAINWEB%,public,%TWIKIWEB%"
-~~~   exclude="TestCases|Trash"
+~~~   exclude="TestCases|Trash.*"
 ~~~   header="<ul>" 
 ~~~   format="<li>[[$web.WebHome][$name]]&nbsp;
 ~~~     $percntIFDEFINEDTHEN{\"$nrsubwebs \" as=\"0 \"}$percnt
@@ -135,7 +135,7 @@ needs the TWiki:Plugins/TwistyPlugin and the TWiki:Plugins/IfDefinedPlugin
 ~~~   footer="</ul>" 
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{webs="%MAINWEB%,public,%TWIKIWEB%" exclude="TestCases|Trash" header="<ul>" format="<li>[[$web.WebHome][$name]]&nbsp; $percntIFDEFINEDTHEN{\"$nrsubwebs \" as=\"0 \"}$percnt $percntELSEDEFINED$percnt $percntTWISTYBUTTON{id=\"sitemap_$web\" buttonmode=\"span\" showimg=\"$percntICONURLPATH{\"toggleopenleft\"}$percnt\" hideimg=\"$percntICONURLPATH{\"toggleclose\"}$percnt\" }$percnt $percntFIDEFINED$percnt" separator="</li>$n" subheader="$percntTWISTYTOGGLE{id=\"sitemap_$web\" mode=\"div\"}$percnt<ul>" subfooter="</li></ul>$percntENDTWISTY$percnt" footer="</ul>"}%
+%FLEXWEBLIST{webs="%MAINWEB%,public,%TWIKIWEB%" exclude="TestCases|Trash.*" header="<ul>" format="<li>[[$web.WebHome][$name]]&nbsp; $percntIFDEFINEDTHEN{\"$nrsubwebs \" as=\"0 \"}$percnt $percntELSEDEFINED$percnt $percntTWISTYBUTTON{id=\"sitemap_$web\" buttonmode=\"span\" showimg=\"$percntICONURLPATH{\"toggleopenleft\"}$percnt\" hideimg=\"$percntICONURLPATH{\"toggleclose\"}$percnt\" }$percnt $percntFIDEFINED$percnt" separator="</li>$n" subheader="$percntTWISTYTOGGLE{id=\"sitemap_$web\" mode=\"div\"}$percnt<ul>" subfooter="</li></ul>$percntENDTWISTY$percnt" footer="</ul>"}%
 
 ---++ Sitemap
 %~~ FLEXWEBLIST{
@@ -176,23 +176,23 @@ needs the TWiki:Plugins/TwistyPlugin and the TWiki:Plugins/IfDefinedPlugin
 ---+++ Using marker
 <verbatim>
 %~~ FLEXWEBLIST{
-~~~   exclude="TestCases|Trash"
+~~~   exclude="TestCases|Trash.*"
 ~~~   format="$indent* <span class=\"$marker\"> $web </span>$n"
 ~~~   marker="twikiAlert"
 ~~~   selection="%BASEWEB%"
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash" format="$indent* <span class=\"$marker\"> $web </span>$n" marker="twikiAlert" selection="%BASEWEB%"}%
+%FLEXWEBLIST{exclude="TestCases|Trash.*" format="$indent* <span class=\"$marker\"> $web </span>$n" marker="twikiAlert" selection="%BASEWEB%"}%
 
 ---+++ Using markerformat
 <verbatim>
 %~~ FLEXWEBLIST{
-~~~   exclude="TestCases|Trash"
+~~~   exclude="TestCases|Trash.*"
 ~~~   format="$indent* [[$web.WebHome][$name]]$n"
 ~~~   markerformat="$indent* 
 ~~~     [[$web.WebHome][<span class=\"twikiAlert\">$name</span>]]$n"
 ~~~   selection="%BASEWEB%"
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash" format="$indent* [[$web.WebHome][$name]]$n" markerformat="$indent* [[$web.WebHome][<span class=\"twikiAlert\">$name</span>]]$n" selection="%BASEWEB%"}% 
+%FLEXWEBLIST{exclude="TestCases|Trash.*" format="$indent* [[$web.WebHome][$name]]$n" markerformat="$indent* [[$web.WebHome][<span class=\"twikiAlert\">$name</span>]]$n" selection="%BASEWEB%"}% 
 

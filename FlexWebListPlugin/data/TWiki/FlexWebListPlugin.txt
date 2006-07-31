@@ -143,9 +143,10 @@ See the FlexWebListExamples.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.03 |
+|  Plugin Version: | v0.04 |
 |  Change History: | &nbsp; |
 |  31 Jul 2006: | don't filter webs that have been added explicitly added to =webs= |
+|  &nbsp;       | more fixes related to web filtering; fixed some testcases |
 |  28 Jul 2006: | preserve order in webs parameter |
 |  26 Jul 2006: | first release |
 |  05 Jul 2006: | initial version |
