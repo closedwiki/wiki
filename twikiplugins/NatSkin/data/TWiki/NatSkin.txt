@@ -166,7 +166,7 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.9998 |
+|  Skin Version: | v2.9999 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -183,6 +183,9 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-07-31: | added renameweb templates; \
+		 rename topic usability improvements; \
+                 some css alignment corrections |
 |  2006-07-28: | improved navigation in hierarchical webs by using the new TWiki:Plugins/FlexWebListPlugin \
                  and TWiki:Plugins/BreadCrumbPlugin; \
                  dropped usage of the TWiki:Plugins/FilterPlugin as using =FORMATLIST{WEBLIST}= \
@@ -334,7 +337,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 28 July 2006
+-- TWiki:Main/MichaelDaum - 31 July 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
