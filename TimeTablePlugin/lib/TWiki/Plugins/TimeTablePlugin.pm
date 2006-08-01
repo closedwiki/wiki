@@ -37,8 +37,8 @@ $VERSION = '$Rev: 8670$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
-
-$REVISION = '1.008'; #dro# fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing JavaScript errors; empty event row) 
+ 
+$REVISION = '1.008'; #dro# added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing JavaScript errors; empty event row) 
 #$REVISION = '1.007'; #dro# fixed major bug (wholetimerow: empty column)
 #$REVISION = '1.006'; #dro# fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bug (empty column color; cutted text)
 #$REVISION = '1.005'; #dro# fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...)
@@ -229,10 +229,17 @@ sub commonTagsHandler {
 
     eval {
 	    require TWiki::Plugins::TimeTablePlugin::TimeTable;
+
 	    $_[0] =~ s/%TIMETABLE%/&TWiki::Plugins::TimeTablePlugin::TimeTable::expand("",$_[0],$_[1],$_[2])/ge;
 	    $_[0] =~ s/%TIMETABLE{(.*?)}%/&TWiki::Plugins::TimeTablePlugin::TimeTable::expand($1, $_[0], $_[1], $_[2])/ge;
 	    $_[0] =~ s/%TTCM{(.*?)}%/&TWiki::Plugins::TimeTablePlugin::TimeTable::inflate($1, $_[0],$_[1],$_[2])/ge;
 	    $_[0] =~ s/%TTCM%//g;
+
+	    $_[0] =~ s/%TTTOPICSETUP%//g;
+	    $_[0] =~ s/%TTTOPICSETUP{.*?}%//g;
+
+	    $_[0] =~ s/%TTSETUP%//g;
+	    $_[0] =~ s/%TTSETUP{.*?}%//g;
     };
     &TWiki::Func::writeWarning($@) if $@;
 }

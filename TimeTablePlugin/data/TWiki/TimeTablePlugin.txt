@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1153754562" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1154450646" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -14,6 +14,8 @@ e.g:
 you get:
 	* 22 May 2006 - <span style="color:white;background-color:black">07:00am-01:00pm</span> Meeting
 	* 23 May 2006 - 24 May 2006 - <span style="background-color:yellow">07:00am-04:00pm</span> Conference
+
+The =%<nop>TTTOPICSETUP%= tag allows you to define foreground/background colors and a timezone for all events on a topic.
 
 
 *Example: (png image):*
@@ -52,8 +54,7 @@ Examples:
 	* The parameter of the %<nop>TTCM% tag *must not contain any whitespaces*.
 	* Time ranges in a description field *must not contain any whitespaces*.
 	* If no %<nop>TTCM% tag or no time range was specified in a description of a TWiki:Plugins.CalendarPlugin event the event gets a full-time event (12:01am-11:59pm o'clock, 0-24h).
-	* KNOWN ISSUE: If a time range leaves a day (e.g. 1pm - 12:45am) it *does not work* yet. 
-
+ 
 ---++ Attributes
 Usage: %<nop>TIMETABLE{attribute1="value1" attribute2="value2" ...}% 
 
@@ -69,6 +70,7 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00am" |
 | timeformat | time format; allowed values: 12, 12am, 12p.m., 12a.m, 12p.m. and 24 | timeformat="24" |
 | timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
+| timezone | an hour offset (allowed values: -12 ... 0 ... +12) for time correction %X% It is *not* a real time zone like CET, CEST but you can use it in =%<nop>TIMETABLE%= and =%<nop>TTTOPICSETUP%= to simulate time zones.| timezone="0" |
 | topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
 | wholetimerow | enables/disables a whole-time event row (related attributes: wholetimerowtext, wholetimerowtitle) | wholetimerow="0" |
 | workingendtime | working hours end time | workingendtime="5:00pm" |
@@ -211,7 +213,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.008 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.008 (BETA) | fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
+|  V1.008 (BETA) | added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
 |  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: empty column) |
 |  V1.006 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bugs (empty column color; cutted text) |
 |  V1.005 (8 Jun 2006) | TWiki:Main.DanielRohde: fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...) |
