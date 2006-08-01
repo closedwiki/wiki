@@ -11,7 +11,7 @@ package TWiki::Contrib::FuncUsersContrib;
 use vars qw( $VERSION $RELEASE );
 my( $web, $topic, $rev ) = @_;
 
-$VERSION = '$Rev$';
+$VERSION = '$Rev: 10558$';
 $RELEASE = 1.000;
 
 # Compatibility for plugins that used it before the methods
@@ -215,10 +215,18 @@ sub getACLs {
     #print STDERR "Got users ",join(',',keys %acls),"\n";
     foreach my $mode ( @$modes ) {
         foreach my $perm ( 'ALLOW', 'DENY' ) {
-            my $users = $TWiki::Plugins::SESSION->{prefs}->getTopicPreferencesValue(
-                $perm.$context.$mode, $web, $topic );
-            #print STDERR "$perm$context is not defined\n" unless defined($users);
+            my $users;
+            if ($context eq 'WEB') {
+                $users = $TWiki::Plugins::SESSION->{prefs}->getWebPreferencesValue(
+                    $perm.$context.$mode, $web, $topic );
+                #print STDERR "$perm$context$mode ($web) is not defined\n" unless defined($users);
+            } else {
+                $users = $TWiki::Plugins::SESSION->{prefs}->getTopicPreferencesValue(
+                    $perm.$context.$mode, $web, $topic );
+                #print STDERR "$perm$context$mode ($web, $topic) is not defined\n" unless defined($users);
+            }
             next unless defined($users);
+            #print STDERR "$perm$context$mode\n";
 
             my @lusers =
               grep { $_ }
@@ -333,6 +341,7 @@ sub setACLs {
     }
 
     # If there is an access control violation this will throw.
+    #SMELL: if you call setACLs from a plugin save handler, you will get an undefined mess as saveTopic calls them again
     TWiki::Func::saveTopic( $web, $topic,
                             $meta, $text, { minor => 1 } );
 }
