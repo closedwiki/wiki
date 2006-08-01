@@ -393,4 +393,115 @@ sub test_getACLsBodyTextUserAALLOWEDUserBDENIED {
     $this->assert(!$acls->{"$testUsersWeb.UserC"}->{VIEW});
 }
 
+sub test_setWEBACLsBodyText {
+    my $this = shift;
+
+    my $ua = TWiki::Func::lookupUser(wikiname=>'UserA')->webDotWikiName();
+    my $ub = TWiki::Func::lookupUser(wikiname=>'UserB')->webDotWikiName();
+    my $uc = TWiki::Func::lookupUser(wikiname=>'UserC')->webDotWikiName();
+    my $acls = {
+        $ua => { VIEW => 1, CHANGE => 0, RENAME => 1 },
+        $ub => { VIEW => 0, CHANGE => 1, RENAME => 0 },
+        $uc => { VIEW => 0, CHANGE => 0, RENAME => 1 },
+    };
+    TWiki::Func::setACLs([ qw(VIEW CHANGE RENAME) ],
+                         $acls,
+                         $testNormalWeb,
+                         undef,
+                         1);
+    $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'VIEW', 'UserA', undef, $testTopic, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'CHANGE', 'UserA', undef, $testTopic, $testNormalWeb));
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'RENAME', 'UserA', undef, $testTopic, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'VIEW', 'UserB', undef, $testTopic, $testNormalWeb));
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'CHANGE', 'UserB', undef, $testTopic, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'RENAME', 'UserB', undef, $testTopic, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'VIEW', 'UserC', undef, $testTopic, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'CHANGE', 'UserC', undef, $testTopic, $testNormalWeb));
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'RENAME', 'UserC', undef, $testTopic, $testNormalWeb));
+
+    # totally inadequate test of getACLs
+    my $get_acls = TWiki::Func::getACLs([ qw(VIEW CHANGE RENAME) ],
+                         $testNormalWeb,
+                         undef);
+    $this->assert($get_acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserC"}->{VIEW});
+
+    $this->assert(!$get_acls->{"$testUsersWeb.UserA"}->{CHANGE});
+    $this->assert($get_acls->{"$testUsersWeb.UserB"}->{CHANGE});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserC"}->{CHANGE});
+
+    $this->assert($get_acls->{"$testUsersWeb.UserA"}->{RENAME});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserB"}->{RENAME});
+    $this->assert($get_acls->{"$testUsersWeb.UserC"}->{RENAME});
+}
+
+sub test_setWEBACLsPrefs {
+    my $this = shift;
+
+    my $ua = TWiki::Func::lookupUser(wikiname=>'UserA')->webDotWikiName();
+    my $ub = TWiki::Func::lookupUser(wikiname=>'UserB')->webDotWikiName();
+    my $uc = TWiki::Func::lookupUser(wikiname=>'UserC')->webDotWikiName();
+    my $acls = {
+        $ua => { VIEW => 1, CHANGE => 0, RENAME => 1 },
+        $ub => { VIEW => 0, CHANGE => 1, RENAME => 0 },
+        $uc => { VIEW => 0, CHANGE => 0, RENAME => 1 },
+    };
+    TWiki::Func::setACLs([ qw(VIEW CHANGE RENAME) ],
+                         $acls,
+                         $testNormalWeb,
+                         undef,
+                         0);
+    $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'VIEW', 'UserA', undef, undef, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'CHANGE', 'UserA', undef, undef, $testNormalWeb));
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'RENAME', 'UserA', undef, undef, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'VIEW', 'UserB', undef, undef, $testNormalWeb));
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'CHANGE', 'UserB', undef, undef, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'RENAME', 'UserB', undef, undef, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'VIEW', 'UserC', undef, undef, $testNormalWeb));
+    $this->assert(!TWiki::Func::checkAccessPermission(
+        'CHANGE', 'UserC', undef, undef, $testNormalWeb));
+    $this->assert(TWiki::Func::checkAccessPermission(
+        'RENAME', 'UserC', undef, undef, $testNormalWeb));
+
+    # totally inadequate test of getACLs
+    my $get_acls = TWiki::Func::getACLs([ qw(VIEW CHANGE RENAME) ],
+                         $testNormalWeb,
+                         undef);
+    $this->assert($get_acls->{"$testUsersWeb.UserA"}->{VIEW});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserB"}->{VIEW});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserC"}->{VIEW});
+
+
+    $this->assert(!$get_acls->{"$testUsersWeb.UserA"}->{CHANGE});
+    $this->assert($get_acls->{"$testUsersWeb.UserB"}->{CHANGE});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserC"}->{CHANGE});
+
+    $this->assert($get_acls->{"$testUsersWeb.UserA"}->{RENAME});
+    $this->assert(!$get_acls->{"$testUsersWeb.UserB"}->{RENAME});
+    $this->assert($get_acls->{"$testUsersWeb.UserC"}->{RENAME});
+
+}
+
+
 1;
