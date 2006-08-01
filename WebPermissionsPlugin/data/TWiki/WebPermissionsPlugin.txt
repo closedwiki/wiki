@@ -162,6 +162,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 |  9048 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1766'>Item1766</a> corrected problems with passing incorrect parameters to setACLs and not interpreting values from the form correctly. |
 |  8877 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1701'>Item1701</a>  first release |
 |  Dependencies: | %$DEPENDENCIES% |
+|  Demo Url: | http://demo.wikiring.com/twiki/bin/view/Demo/TopicPermissionsDemo |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
