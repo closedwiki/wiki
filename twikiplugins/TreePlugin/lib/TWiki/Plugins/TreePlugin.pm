@@ -36,7 +36,7 @@ use vars qw(
         %FormatMap $RootLabel
     );
 
-$VERSION = '0.311';
+$VERSION = '$Rev$';
 
 $RootLabel = "_RootLabel_"; # what we use to label the root of a tree if not a topic
 

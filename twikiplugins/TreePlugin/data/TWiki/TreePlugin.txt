@@ -107,8 +107,6 @@ Contents:
 
   then installation was successful.
 
-	* If you have Wiki:PerlUnit, you can unzip the test file, chdir to test, and run =TestRunner.pl=.
-
 <!-- Check the %TOPIC%Help topic. .-->
 <!---   * Add the following line to the "TWiki Plugins" section of %TWIKIWEB%.TextFormattingRules:
 	* Plugins.%TOPIC%: Tree viewing
@@ -118,9 +116,11 @@ Contents:
 
 |  One Line Description: | View Twiki topics as nodes in a tree |
 |  Plugin Author: | TWiki:Main.SlavaKozlov |
-|  Plugin Version: | 0.2 |
-|  Change History: | 08 Feb 2002 Internal (0.1) release |
-| | 15 Feb 2002 Alpha (0.2) release |
+|  Plugin Version: | v0.4 |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  26 Jul 2006: | (v0.4) - TWiki:Main.SteffenPoulsen: Ported to TWiki-4 / Dakar. Leading text removed, less warnings, no double bracket links, css classnames around output. |
+|  15 Feb 2002: | Alpha (0.2) release |
+|  08 Feb 2002: | Internal (0.1) release |
 |  CPAN Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.0 _(only tested on 5.6.1 so far)_ |
