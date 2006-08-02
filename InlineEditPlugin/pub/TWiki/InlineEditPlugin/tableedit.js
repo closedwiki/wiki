@@ -77,9 +77,7 @@ TWiki.InlineEditPlugin.TableEdit.prototype.getSaveData = function() {
     if (this.topicSectionObject.newSection) {
         //make a real section of it
         serialzationObj.value = "\n\n"+serialzationObj.value+"\n\n";
-    } else {
 	}
-	alert('|'+this.topicSectionObject.editDivSection.postLines+'|');
 
     serialzationObj.value = serialzationObj.value + this.topicSectionObject.editDivSection.postLines;
 	
@@ -99,7 +97,6 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
 	newForm.postLines = '';	//don't lose the empty lines on the end of the section
     for (var i=0; i< lines.length;i++) {
 		if (lines[i].length == 0) {
-			alert('|'+newForm.postLines+'|');
 			//must be in the post table empty lines
 			newForm.postLines = newForm.postLines + lines[i] + "\n"; 
 			continue;
