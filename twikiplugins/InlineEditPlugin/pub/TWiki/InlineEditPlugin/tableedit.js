@@ -35,7 +35,6 @@ TWiki.InlineEditPlugin.TableEdit.appliesToSection = function(topicSectionObject)
     for (var i=0; i< lines.length;i++) {
 		//allow blank lines after the table
         if ((lines[i] != '') && ( ! lines[i].match(/^\s*\|(.*)\|\s*$/))) {
-			alert('|'+lines[i]+'|');
             return false;
         }
     }
