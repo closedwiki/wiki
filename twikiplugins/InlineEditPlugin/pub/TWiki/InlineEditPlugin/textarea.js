@@ -21,6 +21,16 @@
 TWiki.InlineEditPlugin.TextArea = function(topicSectionObject) {
     this.topicSectionObject = topicSectionObject;
 }
+TWiki.InlineEditPlugin.TextArea.appliesToSection = function(topicSectionObject) {
+    return true;    //TextArea is the fallback editor
+}
+TWiki.InlineEditPlugin.TextArea.getDefaultTml = function() {
+    return 'new Section';    //TextArea is the fallback editor
+}
+TWiki.InlineEditPlugin.TextArea.getTypeName = function() {
+    return "Text";
+}
+
 //register this inline editor component with the main factory
 TWiki.InlineEditPlugin.TextArea.register = function() {
     if ( typeof( TWiki.InlineEditPlugin.editors ) == "undefined" ) {
@@ -29,9 +39,6 @@ TWiki.InlineEditPlugin.TextArea.register = function() {
     TWiki.InlineEditPlugin.editors.push('TWiki.InlineEditPlugin.TextArea');
 }
 //returns true if the section can be edited by this editor
-TWiki.InlineEditPlugin.TextArea.appliesToSection = function(topicSectionObject) {
-    return true;    //TextArea is the fallback editor
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //TWiki.InlineEditPlugin.TextArea CLASS functions
@@ -88,6 +95,11 @@ TWiki.InlineEditPlugin.TextArea.prototype.createEditSection = function() {
         //TWiki.InlineEditPlugin.TextArea.TextAreaResize(newForm.elements.namedItem("text"));
     return newForm;
 }
+
+TWiki.InlineEditPlugin.TextArea.prototype.disableEdit = function(disable) {
+        this.topicSectionObject.editDivSection.elements.namedItem("text").disabled = disable;
+}
+
 
 TWiki.InlineEditPlugin.TextArea.TextAreaResize = function(tg) {
     tg.rows = Math.max(1, tg.rows);
