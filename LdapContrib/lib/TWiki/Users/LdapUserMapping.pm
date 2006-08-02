@@ -21,6 +21,8 @@ use strict;
 use TWiki::Users::TWikiUserMapping;
 use TWiki::Contrib::LdapContrib;
 
+use vars qw(%U2W %W2U $cacheHits);
+
 @TWiki::Users::LdapUserMapping::ISA = qw(TWiki::Users::TWikiUserMapping);
 
 =pod
@@ -53,6 +55,24 @@ sub new {
 
   my $this = bless($class->SUPER::new( $session ), $class);
   $this->{ldap} = new TWiki::Contrib::LdapContrib;
+
+  $this->{maxCacheHits} = defined($TWiki::cfg{Ldap}{MaxCacheHits})?
+    $TWiki::cfg{Ldap}{MaxCacheHits}:-1;
+
+  my $refresh = $session->{cgiQuery}->param('refreshldap') || '';
+
+  if (defined $cacheHits) {
+    if ($cacheHits > 0) {
+      $cacheHits--; 
+    } else {
+      $cacheHits = $this->{maxCacheHits};
+    }
+    $cacheHits = 0 if $refresh eq 'on';
+  } else {
+    $cacheHits = 0;
+  }
+
+  writeDebug("cacheHits=$cacheHits");
 
   return $this;
 }
@@ -131,6 +151,52 @@ sub addUserToMapping {
     return '';
 }
 
+=pod
+
+---++ ObjectMethod lookupLoginName($username) -> $wikiName
+
+Map a username to the corresponding wikiname. This is used for lookups during
+user resolution, and should be as fast as possible.
+
+=cut
+
+sub lookupLoginName {
+    my ($this, $loginUser) = @_;
+
+    $this->_loadMapping();
+    return $U2W{$loginUser};
+}
+
+=pod
+
+---++ Objectmethod lookupWikiName($wikiname) -> $username
+
+Map a wikiname to the corresponding username. This is used for lookups during
+user resolution, and should be as fast as possible.
+
+=cut
+
+sub lookupWikiName {
+    my ($this, $wikiName) = @_;
+
+    $this->_loadMapping();
+    return $W2U{$wikiName};
+}
+
+=pod
+
+---++ ObjectMethod getListOfAllWikiNames() -> @wikinames
+
+Returns a list of all wikinames of users known to the mapping manager.
+
+=cut
+
+sub getListOfAllWikiNames {
+  my $this = shift;
+  $this->_loadMapping();
+  return keys %W2U ;
+}
+
 =pod 
 
 ---++++ _loadMapping()
@@ -148,20 +214,33 @@ sub _loadMapping {
   return if $this->{CACHED};
   $this->{CACHED} = 1;
 
+  return if $cacheHits != 0;
+  $cacheHits = $this->{maxCacheHits};
+
+  writeDebug("loading mapping");
+  %U2W = ();
+  %W2U = ();
+
   my $accounts = $this->{ldap}->getAccounts();
-  return unless $accounts;
+  unless ($accounts) {
+    writeDebug("error=".$this->{ldap}->getError());
+    return;
+  }
 
   my $web = $TWiki::cfg{UsersWebName};
+  my $nrUsers = 0;
   while (my $entry = $accounts->pop_entry()) {
+    $nrUsers++;
     my $loginName = $entry->get_value($this->{ldap}{loginAttribute});
     my $wikiName = $entry->get_value($this->{ldap}{wikiNameAttribute});
     if ($this->{ldap}->{wikiNameRemoveWhiteSpace}) {
-      $wikiName =~ s/ //go;
+      $wikiName =~ s/[^$TWiki::regex{mixedAlphaNum}]//g;
     }
     my $wikiUserName = $web.'.'.$wikiName;
-    $this->{U2W}{$loginName} = $wikiUserName;
-    $this->{W2U}{$wikiUserName} = $loginName;
+    $U2W{$loginName} = $wikiUserName;
+    $W2U{$wikiUserName} = $loginName;
   }
+  writeDebug("loaded $nrUsers users");
 }
 
 =pod

@@ -25,7 +25,7 @@ use Digest::MD5 qw( md5_hex );
 use vars qw($VERSION $RELEASE);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.5';
+$RELEASE = 'v0.6';
 
 =begin text
 
@@ -91,7 +91,7 @@ in =lib/LocalSite.cfg=.
 sub new {
   my $class = shift;
 
-  writeDebug("called LdapUser constuctor");
+  #writeDebug("called LdapContrib constuctor");
 
   my $this = {
     ldap=>undef,# connect later
@@ -213,7 +213,7 @@ sub _checkError {
     $this->{error} = undef;
   } else {
     $this->{error} = $code.': '.$msg->error();
-    #writeDebug('LdapUser - '.$this->{error});
+    #writeDebug('LdapContrib - '.$this->{error});
   } 
  
   return $code;
@@ -285,7 +285,7 @@ Check the error message using $ldap->getError().
 sub getGroup {
   my ($this, $wikiname) = @_;
 
-  writeDebug("called getGroup($wikiname)");
+  #writeDebug("called getGroup($wikiname)");
 
   my $filter = '(&('.$this->{groupFilter}.')('.$this->{groupAttribute}.'='.$wikiname.'))';
   my $msg = $this->search($filter, $this->{baseGroup});
@@ -305,29 +305,29 @@ not exist.
 sub getGroupMembers {
   my ($this, $groupName) = @_;
 
-  writeDebug("called getGroupMembers($groupName)");
+  #writeDebug("called getGroupMembers($groupName)");
 
   my $groupEntry = $this->getGroup($groupName);
   return undef unless $groupEntry;
 
-  writeDebug("this is an ldap group");
+  #writeDebug("this is an ldap group");
 
   # fetch all members
   my @members = ();
   foreach my $member ($groupEntry->get_value($this->{memberAttribute})) {
 
-    writeDebug("found member=$member");
+    #writeDebug("found member=$member");
 
     # groups may store DNs to members instead of a memberUid, in this case we
     # have to query the member objects again and get their id
     if ($this->{memberIndirection}) {
-      writeDebug("following indirection");
+      #writeDebug("following indirection");
       my $msg = $this->search(
 	'objectClass=*', $member, 'base', 1, [$this->{loginAttribute}]);
       my $memberEntry = $msg->entry(0);
       if ($memberEntry) {
 	$member = $memberEntry->get_value($this->{loginAttribute});
-	writeDebug("found indirect member=$member");
+	#writeDebug("found indirect member=$member");
       } else {
 	# inconsistent ldap data: the group points to an object that is not
 	# there, only warning about this error case
@@ -367,7 +367,7 @@ Returns a list of known group names.
 sub getGroupNames {
   my $this = shift;
 
-  writeDebug("called getGroupNames");
+  #writeDebug("called getGroupNames");
   return keys %{$this->{groupNames}} if $this->{cachedGroupNames};
 
   $this->{cachedGroupNames} = 1;
@@ -444,8 +444,10 @@ sub search {
   );
   
   if ($this->_checkError($msg) != LDAP_SUCCESS) {
+    writeDebug("error in search: ".$this->getError());
     return undef;
   }
+  #writeDebug("done search");
   return $msg;
 }
 
@@ -473,7 +475,7 @@ my $blobUrlPath = $ldap->cacheBlob($entry, $attr);
 sub cacheBlob {
   my ($this, $entry, $attr, $refresh) = @_;
 
-  writeDebug("called cacheBlob()");
+  #writeDebug("called cacheBlob()");
 
   my $twikiWeb = &TWiki::Func::getTwikiWebname();
   my $dir = &TWiki::Func::getPubDir().'/'.$twikiWeb.'/LdapContrib';
@@ -481,7 +483,7 @@ sub cacheBlob {
   my $fileName = $dir.'/'.$key;
 
   if ($refresh || !-f $fileName) {
-    writeDebug("caching blob");
+    #writeDebug("caching blob");
     my $value = $entry->get_value($attr);
     return undef unless defined $value;
     mkdir($dir, 0775) unless -e $dir;
@@ -491,10 +493,10 @@ sub cacheBlob {
     print FILE $value;
     close (FILE);
   } else {
-    writeDebug("already got blob");
+    #writeDebug("already got blob");
   }
   
-  writeDebug("done cacheBlob()");
+  #writeDebug("done cacheBlob()");
 
   return &TWiki::Func::getPubUrlPath().'/'.$twikiWeb.'/LdapContrib/'.$key;
 }
