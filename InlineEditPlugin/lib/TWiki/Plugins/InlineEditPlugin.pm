@@ -69,7 +69,7 @@ sub initPlugin {
     $minimumSectionLength = TWiki::Func::getPluginPreferencesValue( 'MINIMUMSECTIONLENGTH' ) || 0;
     $supportedSkins = TWiki::Func::getPluginPreferencesValue( 'SKINS' ) || '';
     $lastSection = 0;
-
+    
     # Plugin correctly initialized
     return 1;
 }
@@ -87,7 +87,6 @@ sub beforeCommonTagsHandler {
     } else {
         return unless ( TWiki::Func::getContext()->{'body_text'});
     }
-
     fakeTWiki4RestHandlers(@_);
 
     #TODO:why is this called multiple times?
@@ -438,17 +437,55 @@ sub _getTopicSectionState {
    return (objToJson($obj), $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName);
 }
 
+sub deepcopy {
+   if (ref $_[0] eq 'HASH') {
+      return { map(deepcopy($_), %{$_[0]}) };
+   } elsif (ref $_[0] eq 'ARRAY') {
+      return [ map(deepcopy($_), @{$_[0]}) ];
+   }
+   return $_[0];
+}
+
 #TODO: ffs use references
+#TODO: cacheing - the $sectionNumber case is dumb
 #if sectionNumber is not specified, return a list of all sections
 sub getSection {
     my $text = shift;
     my $sectionNumber = shift || -1;
-
-    my @sections = ($text);
+    
+    my $removedLiterals = {};
+    my $removedVerbatims = {};
+    my $removedPres = {};
+    my $renderer = $TWiki::Plugins::SESSION->{renderer};
+    
+    my @sections = ();
     if ($minimumSectionLength > 0) {
-        @sections = split(/(\n\n)/, $text);
-        #TODO: re-combine sections that are too small
-    }
+    	#TODO: change this to do all html?
+    	$text = $renderer->takeOutBlocks( $text, 'literal', $removedLiterals );
+    	$text = $renderer->takeOutBlocks( $text, 'verbatim', $removedVerbatims );
+    	$text = $renderer->takeOutBlocks( $text, 'pre', $removedPres );
+
+        my @rawSections = split(/(\n\n+)/, $text, -1);
+        #my @rawSections = ($text);
+        #re-combine sections that are just made up of newlines
+        for my $sec (@rawSections) {
+        	if ( $sec =~ /^[\n\r]*$/ ) {
+        		$sections[$#sections] .= $sec;
+        	} else {
+				my $tempHash;
+				$tempHash = deepcopy($removedLiterals);	#putBack is destructive :(
+        		$renderer->putBackBlocks( \$sec, $tempHash, 'literal', 'literal');
+				$tempHash = deepcopy($removedVerbatims);	#putBack is destructive :(
+        		$renderer->putBackBlocks( \$sec, $tempHash, 'verbatim', 'verbatim');
+				$tempHash = deepcopy($removedPres);	#putBack is destructive :(
+        		$renderer->putBackBlocks( \$sec, $tempHash, 'pre', 'pre');
+       			push @sections, $sec;
+       		}
+        }
+    } else {
+    	@sections = ($text);
+   	}
+
     if ($sectionNumber == -1) {
         return \@sections;
     } else {
