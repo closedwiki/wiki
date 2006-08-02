@@ -27,6 +27,7 @@ Parameters:
    * =webs=: a list of webs to be displayed and/or 
      "public" - a list of all non-hidden webs, 
      "webtemplate" - a list of all template webs; 
+     "publiccurrent" - a list of all non-hidden webs including the current one;
      (defaults to "public")
    * =format=: format string to render one item 
      (defaults to "$web ")
@@ -143,8 +144,11 @@ See the FlexWebListExamples.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.04 |
+|  Plugin Version: | v0.05 |
 |  Change History: | &nbsp; |
+|  02 Aug 2006: | added =publiccurrent= pseudo-web which is the sorted list of all public webs \
+                  including the current one; fixed =$indent= not to assume multiples of 3 items \
+		  to indent |
 |  31 Jul 2006: | don't filter webs that have been added explicitly added to =webs= |
 |  &nbsp;       | more fixes related to web filtering; fixed some testcases |
 |  28 Jul 2006: | preserve order in webs parameter |
@@ -158,4 +162,4 @@ See the FlexWebListExamples.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 31 Jul 2006
+-- TWiki:Main/MichaelDaum - 02 Aug 2006

@@ -72,8 +72,8 @@ sub handler {
   $this->{selection} = ' '.$this->{selection}.' ';
   $this->{currentWeb} = $currentWeb;
   $this->{currentTopic} = $currentTopic;
-  writeDebug("include filter=/^($this->{include})\$/") if $this->{include};
-  writeDebug("exclude filter=/^($this->{exclude})\$/") if $this->{exclude};
+  #writeDebug("include filter=/^($this->{include})\$/") if $this->{include};
+  #writeDebug("exclude filter=/^($this->{exclude})\$/") if $this->{exclude};
 
   
   # compute map
@@ -89,29 +89,35 @@ sub handler {
   my %seen;
   my @list = ();
   my @websList = map {s/^\s+//go; s/\s+$//go; s/\./\//go; $_} split(/,\s*/, $this->{webs});
+  #writeDebug("websList=".join(',', @websList));
   %{$this->{isExplicit}} = map {$_ => 1} grep {!/^(public|webtemplate)$/} @websList;
   my $allWebs = $this->getWebs();
 
   # collect the list in preserving the given order in webs parameter
   foreach my $aweb (@websList) {
-    if ($aweb eq 'public' || $aweb eq 'webtemplate') {
-      foreach my $bweb (sort keys %{$this->getWebs($aweb)}) {
+    if ($aweb =~ /^(public|webtemplate)(current)?$/) {
+      $aweb = $1;
+      my $addCurrentWebFlag = defined($2)?1:0;
+      my @webs = keys %{$this->getWebs($aweb)};
+      push @webs, $currentWeb;
+      foreach my $bweb (sort @webs) {
 	next if $seen{$bweb};
+	next if $this->{isExplicit}{$bweb};
 	$seen{$bweb} = 1;
 	push @list, $bweb;
       }
+
     } else {
       next if $seen{$aweb};
       $seen{$aweb} = 1;
       push @list, $aweb if defined $allWebs->{$aweb}; # only add if it exists
     }
   }
-  #writeDebug("list=".join(',', @list));
+  writeDebug("list=".join(',', @list));
 
   # format result
   my @result;
   foreach my $aweb (@list) {
-    writeDebug("aweb=$aweb");
     my $web = $allWebs->{$aweb};
 
     # filter explicite subwebs
@@ -189,8 +195,8 @@ sub formatWeb {
   $result =~ s/\$qname/"$web->{key}"/g;# historical
   $result =~ s/\$web/$web->{key}/go;
   $result =~ s/\$depth/$web->{depth}/go;
-  $result =~ s/\$indent\((.+?)\)/$1 x (($web->{depth}+1)*3)/ge;
-  $result =~ s/\$indent/' ' x (($web->{depth}+1)*3)/ge;
+  $result =~ s/\$indent\((.+?)\)/$1 x ($web->{depth}+1)/ge;
+  $result =~ s/\$indent/'   ' x ($web->{depth}+1)/ge;
   $result =~ s/\$nrsubwebs/$nrSubWebs/g;
 
   #writeDebug("result=$result");
