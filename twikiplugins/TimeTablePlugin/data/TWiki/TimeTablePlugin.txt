@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1154450646" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1154511242" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -15,7 +15,10 @@ you get:
 	* 22 May 2006 - <span style="color:white;background-color:black">07:00am-01:00pm</span> Meeting
 	* 23 May 2006 - 24 May 2006 - <span style="background-color:yellow">07:00am-04:00pm</span> Conference
 
-The =%<nop>TTTOPICSETUP%= tag allows you to define foreground/background colors and a timezone for all events on a topic.
+The =%<nop>TTTOPICSETUP%= (!TimeTable Topic Setup) tag allows you 
+to define default foreground/background colors (eventfgcolor/eventbgcolor attributes) 
+and a time zone (timezone attribute) for all events on a topic. Please use it only once on a topic.
+
 
 
 *Example: (png image):*
@@ -70,8 +73,8 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00am" |
 | timeformat | time format; allowed values: 12, 12am, 12p.m., 12a.m, 12p.m. and 24 | timeformat="24" |
 | timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
-| timezone | an hour offset (allowed values: -12 ... 0 ... +12) for time correction %X% It is *not* a real time zone like CET, CEST but you can use it in =%<nop>TIMETABLE%= and =%<nop>TTTOPICSETUP%= to simulate time zones.| timezone="0" |
-| topic  | a comma separated list of source topics | topic="%<nop>TOPIC%" |
+| timezone | an hour offset (allowed values: -12 ... 0 ... +12) for time correction %X% It is *not* a real time zone like CET, CEST but you can use it in =%<nop>TIMETABLE%= and =%<nop>TTTOPICSETUP%= in conjunction with the topic attribute to simulate time zones.| timezone="0" |
+| topic  | a comma separated list of source topics; you can add a time zone to any source topic name by adding a ':' and a hour offset (-12 ... +12) to the topic name, e.g: =topic="MySourceTopic:-2"=  %X% this time zone feature overwrites the =timezone= attribute of a =%<nop>TTTOPICSETUP%= tag | topic="%<nop>TOPIC%" |
 | wholetimerow | enables/disables a whole-time event row (related attributes: wholetimerowtext, wholetimerowtitle) | wholetimerow="0" |
 | workingendtime | working hours end time | workingendtime="5:00pm" |
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
@@ -211,9 +214,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.008 (BETA) |
+|  Plugin Version: | V1.008 (2 Aug 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.008 (BETA) | added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
+|  V1.008 (2 Aug 2006) | added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
 |  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: empty column) |
 |  V1.006 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bugs (empty column color; cutted text) |
 |  V1.005 (8 Jun 2006) | TWiki:Main.DanielRohde: fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...) |
