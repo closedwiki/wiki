@@ -27,6 +27,13 @@ TWiki.InlineEditPlugin.TableEdit.register = function() {
     }
     TWiki.InlineEditPlugin.editors.push('TWiki.InlineEditPlugin.TableEdit');
 }
+TWiki.InlineEditPlugin.TableEdit.getDefaultTml = function() {
+    return "||||\n||||\n||||";
+}
+TWiki.InlineEditPlugin.TableEdit.getTypeName = function() {
+    return "Table";
+}
+
 //returns true if the section can be edited by this editor
 TWiki.InlineEditPlugin.TableEdit.appliesToSection = function(topicSectionObject) {
 //TODO: deal with \ and other special cases
@@ -40,6 +47,7 @@ TWiki.InlineEditPlugin.TableEdit.appliesToSection = function(topicSectionObject)
     }
     return true;
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //TWiki.InlineEditPlugin.TableEdit CLASS functions
@@ -145,6 +153,19 @@ TWiki.InlineEditPlugin.TableEdit.prototype.createEditSection = function() {
 
     return newForm;
 }
+
+TWiki.InlineEditPlugin.TableEdit.prototype.disableEdit = function(disable) {
+        //this.topicSectionObject.editDivSection.elements.namedItem("text").disabled = disable;
+		
+		
+    for (var i=0;i<this.topicSectionObject.editDivSection.elements.length;i++) {
+        if (this.topicSectionObject.editDivSection.elements[i].name != 'text') {
+            continue;
+        }
+        this.topicSectionObject.editDivSection.elements[i].disabled = disable;
+	}
+}
+
 
 TWiki.InlineEditPlugin.TableEdit.TextAreaResize = function(event) {
     var tg = (event.target) ? event.target : event.srcElement;

@@ -183,6 +183,7 @@ InlineEditOnload = function() {
         topicSectionObject.TML2HTMLdiv = tml2htmldiv;
 //        topicSectionObject.editDivSection = initialiseInlineEditDiv(topicSectionObject);
 
+		topicSectionObject.index = topicSections.length;
         topicSections.push(topicSectionObject);
     }
 }
@@ -200,12 +201,23 @@ gotoEditModeFromEvent = function(event) {
         var post = document.createElement('DIV');
         post.style.display='inline';
 
-        //TODO: be more discriminating - only create add_ buttonset if there is not already one at that seperation
-
         var add_above = '';
-        add_above = add_above + makeFormButton('add_above', 'Add Text Above', 'addNewSection(event, 1);');
-        add_above = add_above + makeFormButton('add_above', 'Add Table Above', 'addNewSection(event, 1, 1);');
-        pre.innerHTML = add_above;
+        //TODO: be more discriminating - only create add_ buttonset if there is not already one at that seperation
+//topicSectionObject.index = topicSections.length;
+		if ((topicSectionObject.index == 0)
+		 || (topicSectionObject.newSection)
+		 || (typeof(topicSections[topicSectionObject.index-1].editDivSection) == 'undefined')
+		 ) {
+		 	//TODO: replace with a dropdown selet and an add button (and right justify..)
+			//got through the registered editors
+        	for (var i=0;i<TWiki.InlineEditPlugin.editors.length;i++) {
+            	var getTypeName = TWiki.InlineEditPlugin.editors[i]+'.getTypeName()';
+            	var typeName = eval(getTypeName);
+
+    	    	add_above = add_above + makeFormButton('add_above', 'Add '+typeName+' Above', 'addNewSection(event, 1, '+i+');');
+			}
+		}
+       	pre.innerHTML = add_above;
 
         var add_below = '';
         add_below = add_below + makeFormButton('save', 'Save', 'saveEditMode(event);');
@@ -217,9 +229,20 @@ gotoEditModeFromEvent = function(event) {
         add_below = add_below + makeFormButton('delete', 'Delete', 'deleteSection(event);');
         add_below = add_below + makeFormButton('moveup', 'Move Up', 'moveSectionUp(event);', 1);
         add_below = add_below + makeFormButton('movedown', 'Move Down', 'moveSectiondown(event);', 1);
-        add_below = add_below + '&nbsp;|&nbsp;';
-        add_below = add_below + makeFormButton('add_below', 'Add Text Below', 'addNewSection(event, 0);');
-        add_below = add_below + makeFormButton('add_below', 'Add Table Below', 'addNewSection(event, 0, 1);');
+		if ((topicSectionObject.index == topicSections.length-1) 
+		 || (topicSectionObject.newSection)
+		 || (typeof(topicSections[topicSectionObject.index+1].editDivSection) == 'undefined')
+			) {
+        	add_below = add_below + '&nbsp;|&nbsp;';
+			//got through the registered editors
+        	for (var i=0;i<TWiki.InlineEditPlugin.editors.length;i++) {
+            	var getTypeName = TWiki.InlineEditPlugin.editors[i]+'.getTypeName()';
+            	var typeName = eval(getTypeName);
+
+    	    	add_below = add_below + makeFormButton('add_below', 'Add '+typeName+' Below', 'addNewSection(event, 1, '+i+');');
+			}
+		}
+
         post.innerHTML = add_below;
 
         topicSectionObject.editDivSection.insertBefore(pre, topicSectionObject.editDivSection.firstChild);
@@ -270,11 +293,8 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
         var newSectionID = 'new'+originatingTopicSectionObject.topicSection+aboveBelow[putSectionAbove]+originatingTopicSectionObject.newSectionName;
         originatingTopicSectionObject.newSectionName++;
 
-        //TODO: extract this into each editor
-        var newTml = 'new Section';
-        if (sectionType == 1) {
-            newTml = "||||\n||||\n||||";
-        }
+		var newTmlFunc = TWiki.InlineEditPlugin.editors[sectionType]+'.getDefaultTml()';
+        var newTml = eval(newTmlFunc);
 
         //TODO: change the ids etc..
         var htmldiv=document.createElement('DIV');
@@ -310,7 +330,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
         var hr=document.createElement('hr');
         if (putSectionAbove) {
             originatingTopicSectionObject.editDivSection.parentNode.insertBefore(topicSectionObject.HTMLdiv, originatingTopicSectionObject.editDivSection);
-            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, originatingTopicSectionObject.editDivSection);
+//            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, originatingTopicSectionObject.editDivSection);
             for (var i=0;i < topicSections.length;i++) {
                 if (topicSections[i] == originatingTopicSectionObject) {
                     topicSectionsArrayIndex = i;
@@ -319,7 +339,7 @@ addNewSection = function(event, putSectionAbove, sectionType, sectionTml) {
             }
         } else {
             var nextSibling = originatingTopicSectionObject.editDivSection.nextSibling.nextSibling
-            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, nextSibling);
+//            originatingTopicSectionObject.editDivSection.parentNode.insertBefore(hr, nextSibling);
             originatingTopicSectionObject.editDivSection.parentNode.insertBefore(topicSectionObject.HTMLdiv, nextSibling);
             for (var i=0;i < topicSections.length;i++) {
                 if (topicSections[i] == originatingTopicSectionObject) {
@@ -446,11 +466,13 @@ deleteSection = function(event) {
     if (topicSectionObject.deleted) {
         topicSectionObject.deleted = 0;
         tg.value = 'Delete';
-        topicSectionObject.editDivSection.elements.namedItem("text").disabled = false;
+		topicSectionObject.editSectionObject.disableEdit(false);
+        //topicSectionObject.editDivSection.elements.namedItem("text").disabled = false;
     } else {
         topicSectionObject.deleted = 1;
         tg.value = 'unDelete';
-        topicSectionObject.editDivSection.elements.namedItem("text").disabled = true;
+		topicSectionObject.editSectionObject.disableEdit(true);
+        //topicSectionObject.editDivSection.elements.namedItem("text").disabled = true;
     }
 }
 
