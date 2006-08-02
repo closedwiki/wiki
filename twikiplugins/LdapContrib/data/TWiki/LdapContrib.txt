@@ -22,6 +22,23 @@ This work is a rewrite of the TWiki:Plugins/LdapPlugin by
 TWiki:Main/GerardHickey while bringing authentication, user management and
 other LDAP applications onto a common base.
 
+%RED%Note%ENDCOLOR%: 
+if you have a large LDAP directory it is a good idea
+to install a perl accelerator like [[http://perl.apache.org/][mod_perl]], 
+[[http://www.daemoninc.com/SpeedyCGI/][SpeedyCGI]] (aka <nop>PersistentPerl) or 
+[[http://www.fastcgi.com/][FastCGI]]. The <nop>LdapUserMapping will be
+cached in memory then resulting in an considerable speedup.
+The cache can be configured to refresh at a certain hit rate or manually here:
+<center>%STARTINCLUDE%<form action="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">
+<input type="hidden" name="refreshldap" value="on" />
+<input type="submit" value="Refresh Cache" style="color:red" />
+</form>%STOPINCLUDE%
+</center>
+
+Tip: You can add this button on any page by adding
+=%<nop>INCLUDE{"%TWIKIWEB%.LdapContrib"}%= to it.
+
+
 ---++ Configuration
 The LdapContrib package is configured using a set of variables that need to be
 added to the =lib/LocalSite.cfg= configuration file. Have a look at the
@@ -122,6 +139,11 @@ These are:
      <verbatim> $TWiki::cfg{Ldap}{BindPassword} = 'secret'; </verbatim>
    * negotiate ssl when binding to the server; possible values: 0, 1
      <verbatim> $TWiki::cfg{Ldap}{SSL} = 0; </verbatim>
+   * refresh rate when the ldap cache is fetched from the LDAP server; 
+     a value of -1 means unlimitted caching; 
+     a value of 0 disables the caching; 
+     default is -1
+     <verbatim> $TWiki::cfg{Ldap}{MaxCacheHits} = -1; </verbatim>
 
 ---+++ Membership
 Ldap servers follow different schemata to define "membership". They store the
@@ -194,10 +216,11 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 |  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
    This work was partly funded by Spanlink Communications |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.4 |
+|  Version: | v0.6 |
 |  CPAN Dependencies: | CPAN:Net::LDAP, CPAN:Digest::MD5 | 
 |  Dependencies: | None |
 |  Change History: | |
+|  02 Aug 2006: | added a user accounts in memory cache |
 |  19 July 2006: | public release |
 |  24 May 2006: | api adjustments, improved wikiname generation |
 |  28 Apr 2006: | Initial version |
@@ -206,4 +229,4 @@ take precedence. If switched off <nop>TWikiGroups are ignored.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 19 July 2006
+-- TWiki:Main/MichaelDaum - 02 Aug 2006
