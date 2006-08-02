@@ -46,7 +46,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
    * this option restricts the InlineEditPlugin from adding its sections to only views using the specificed skins (it will otherwise break rss, kupu, etc)
    * unset means the plugin is not present in view, but can still be used for sectional saving
-      * Set SKINS = nat, pattern, classic, koala, smartedit, plain
+      * Set SKINS = nat, pattern, classic, koala, smartedit, plain, webpermissions
 
 ---++ Plugin Installation Instructions
 
