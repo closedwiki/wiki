@@ -893,10 +893,11 @@ sub _mystrftime($$$) {
 
 # =========================
 sub _handleTopicSetup {
-	my ($attributes, $web, $topic) = @_;
+	my ($attributes, $web, $topic, $timezone) = @_;
         my %params = &TWiki::Func::extractParameters($attributes);
 
 	$topicDefaults{"$web.$topic"} = \%params;
+	${$topicDefaults{"$web.$topic"}}{'timezone'}=$timezone if defined $timezone;
 
 	return "";
 }
@@ -906,8 +907,11 @@ sub _processTopicSetup {
 	### my ($text, $web, $topic) = @_;
 	my $web = $_[1];
 	my $topic = $_[2];
+	my $timezone = $_[3];
 
-	if ($_[0] =~s /%TTTOPICSETUP{(.*?)}%/&_handleTopicSetup($1, $web, $topic)/esg) {
+	$topicDefaults{"$web.$topic"} = { 'timezone' => $timezone } if (defined $timezone) ;
+
+	if (($_[0] =~s /%TTTOPICSETUP{(.*?)}%/&_handleTopicSetup($1, $web, $topic, $timezone)/esg)||(defined $timezone)) {
 		$_[0] =~ s/^(\s+\*.+)$/$1 \%TTSETUP{"$web.$topic"}\%/mg;
 	}
 	
@@ -918,18 +922,19 @@ sub _processTopicSetup {
 # =========================
 sub _getTopicText() {
 
-        my ($web, $topic);
+        my ($web, $topic, $timezone);
 
         my $topics = $options{topic};
         my @topics = split /,\s*/, $topics;
 
         my $text = "";
         foreach my $topicpair (@topics) {
-                if ($topicpair =~ m/([^\.]+)\.([^\.]+)/) {
-                        ($web, $topic) = ($1, $2);
+                if ($topicpair =~ m/([^\.]+)\.([^\.]+):?([\+\-]?\d+)?/) {
+                        ($web, $topic, $timezone) = ($1, $2, $3);
                 } else {
                         $web = $theWeb;
                         $topic = $topicpair;
+			$timezone=$1 if ($topic =~ s/:([\+\-]?\d+)$//);
                 }
 
                 # ignore processed topics;
@@ -939,12 +944,10 @@ sub _getTopicText() {
 
                 if (($topic eq $theTopic) && ($web eq $theWeb)) {
                         # use current text so that preview can show unsaved events
-                        $text .= &_processTopicSetup($refText, $web, $topic);
-                        ###$text .= $refText;
+                        $text .= &_processTopicSetup($refText, $web, $topic, $timezone);
                 } else {
 			my $nt = &_readTopicText($web, $topic);
-			$text .= &_processTopicSetup($nt, $web, $topic);
-                        ###$text .= &_readTopicText($web, $topic);
+			$text .= &_processTopicSetup($nt, $web, $topic, $timezone);
                 }
         }
 
