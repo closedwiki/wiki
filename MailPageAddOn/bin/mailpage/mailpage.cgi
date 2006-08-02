@@ -38,7 +38,7 @@ $ua = new LWP::UserAgent;
 $ua->agent("$ENV{'HTTP_USER_AGENT'}");
 use CGI::Carp qw(fatalsToBrowser); # Provides you with fatal error message if they occur.
 use CGI qw/:standard/;
-require '/home/lynnwood/skyloom.com/bin/mailpage/mailpage.conf';
+require '/home/httpd/twiki/bin/mailpage/mailpage.conf';
 require $mtvwebdesignlib;
 
 main: {
