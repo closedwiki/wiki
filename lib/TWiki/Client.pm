@@ -33,7 +33,7 @@ for all login managers.
 
 On it's own, an object of this class is used when you specify 'none' in
 the security setup section of
-[[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. When it is used,
+[[%SCRIPTURL{"configure"}%][configure]]. When it is used,
 logins are not supported. If you want to authenticate users then you should
 consider TemplateLogin or ApacheLogin, which are subclasses of this class.
 

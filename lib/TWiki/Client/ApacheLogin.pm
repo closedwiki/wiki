@@ -25,7 +25,13 @@
 
 ---+ package TWiki::Client::ApacheLogin
 
-This is login manager that you can specify in the security setup section of [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. It instructs TWiki to cooperate with your web server (typically Apache) to require authentication information (username & password) from users. It requires that you configure your web server to demand authentication for scripts named "login" and anything ending in "auth". The latter should be symlinks to existing scripts; e.g., =viewauth -> view=, =editauth -> edit=, and so on.
+This is login manager that you can specify in the security setup section of
+[[%SCRIPTURL{"configure"}%][configure]]. It instructs TWiki to
+cooperate with your web server (typically Apache) to require authentication
+information (username & password) from users. It requires that you configure
+your web server to demand authentication for scripts named "login" and anything
+ending in "auth". The latter should be symlinks to existing scripts; e.g.,
+=viewauth -> view=, =editauth -> edit=, and so on.
 
 See also TWikiUserAuthentication.
 
