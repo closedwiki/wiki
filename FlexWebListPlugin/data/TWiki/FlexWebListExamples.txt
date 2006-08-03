@@ -58,9 +58,9 @@ to ease reading multiline TML expressions and arguments.
 ---++ Creating lists
 ---+++ Simple nested list
 <verbatim>
-%FLEXWEBLIST{format="$indent* [[$web.WebHome][$name]]$n"}%
+%FLEXWEBLIST{format="$indent   * [[$web.WebHome][$name]]$n"}%
 </verbatim>
-%FLEXWEBLIST{format="$indent* [[$web.WebHome][$name]]$n"}%
+%FLEXWEBLIST{format="$indent   * [[$web.WebHome][$name]]$n"}%
 
 ---+++ Nested list using HTML
 <verbatim>
@@ -79,14 +79,14 @@ to ease reading multiline TML expressions and arguments.
 ~~~   exclude="TestCases|Trash.*" 
 ~~~   subwebs="none"
 ~~~   selection="Sandbox"
-~~~   format="$indent* [[$web.WebHome][$name]]$n"
+~~~   format="$indent   * [[$web.WebHome][$name]]$n"
 ~~~   markerformat="$percntFLEXWEBLIST{
 ~~~     webs=\"$web\"
-~~~     format=\"$dollarindent* [[$dollarweb.WebHome][$dollarname]]$dollarn\"
+~~~     format=\"$dollarindent   * [[$dollarweb.WebHome][$dollarname]]$dollarn\"
 ~~~   }$percnt"
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash.*" subwebs="none" selection="Sandbox" format="$indent* [[$web.WebHome][$name]]$n" markerformat="$percntFLEXWEBLIST{ webs=\"$web\" format=\"$dollarindent* [[$dollarweb.WebHome][$dollarname]]$dollarn\" }$percnt"}%
+%FLEXWEBLIST{exclude="TestCases|Trash.*" subwebs="none" selection="Sandbox" format="$indent   * [[$web.WebHome][$name]]$n" markerformat="$percntFLEXWEBLIST{ webs=\"$web\" format=\"$dollarindent   * [[$dollarweb.WebHome][$dollarname]]$dollarn\" }$percnt"}%
 
 ---+++ Twisty weblist
 needs the TWiki:Plugins/TwistyPlugin
@@ -167,32 +167,32 @@ needs the TWiki:Plugins/TwistyPlugin and the TWiki:Plugins/IfDefinedPlugin
 <verbatim>
 %~~ FLEXWEBLIST{
 ~~~    map="TestCases=Tests,%TWIKIWEB%=System,%MAINWEB%=Home"
-~~~    format="$indent* [[$web.WebHome][$name]]$n"
+~~~    format="$indent   * [[$web.WebHome][$name]]$n"
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{map="TestCases=Tests,%TWIKIWEB%=System,%MAINWEB%=Home" format="$indent* [[$web.WebHome][$name]]$n"}%
+%FLEXWEBLIST{map="TestCases=Tests,%TWIKIWEB%=System,%MAINWEB%=Home" format="$indent   * [[$web.WebHome][$name]]$n"}%
 
 ---++ Marking a selection
 ---+++ Using marker
 <verbatim>
 %~~ FLEXWEBLIST{
 ~~~   exclude="TestCases|Trash.*"
-~~~   format="$indent* <span class=\"$marker\"> $web </span>$n"
+~~~   format="$indent   * <span class=\"$marker\"> $web </span>$n"
 ~~~   marker="twikiAlert"
 ~~~   selection="%BASEWEB%"
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash.*" format="$indent* <span class=\"$marker\"> $web </span>$n" marker="twikiAlert" selection="%BASEWEB%"}%
+%FLEXWEBLIST{exclude="TestCases|Trash.*" format="$indent   * <span class=\"$marker\"> $web </span>$n" marker="twikiAlert" selection="%BASEWEB%"}%
 
 ---+++ Using markerformat
 <verbatim>
 %~~ FLEXWEBLIST{
 ~~~   exclude="TestCases|Trash.*"
-~~~   format="$indent* [[$web.WebHome][$name]]$n"
-~~~   markerformat="$indent* 
+~~~   format="$indent   * [[$web.WebHome][$name]]$n"
+~~~   markerformat="$indent   * 
 ~~~     [[$web.WebHome][<span class=\"twikiAlert\">$name</span>]]$n"
 ~~~   selection="%BASEWEB%"
 ~~~ }%
 </verbatim>
-%FLEXWEBLIST{exclude="TestCases|Trash.*" format="$indent* [[$web.WebHome][$name]]$n" markerformat="$indent* [[$web.WebHome][<span class=\"twikiAlert\">$name</span>]]$n" selection="%BASEWEB%"}% 
+%FLEXWEBLIST{exclude="TestCases|Trash.*" format="$indent   * [[$web.WebHome][$name]]$n" markerformat="$indent   * [[$web.WebHome][<span class=\"twikiAlert\">$name</span>]]$n" selection="%BASEWEB%"}% 
 

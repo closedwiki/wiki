@@ -144,9 +144,10 @@ See the FlexWebListExamples.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.06 |
+|  Plugin Version: | v0.07 |
 |  Change History: | &nbsp; |
 |  03 Aug 2006: | fixed use of uninitialized value |
+|  &nbsp;       | start counting =$indent= at zero, not one; fixed the examples accordingly |
 |  02 Aug 2006: | added =publiccurrent= pseudo-web which is the sorted list of all public webs \
                   including the current one; fixed =$indent= not to assume multiples of 3 items \
 		  to indent |

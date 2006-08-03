@@ -195,8 +195,8 @@ sub formatWeb {
   $result =~ s/\$qname/"$web->{key}"/g;# historical
   $result =~ s/\$web/$web->{key}/go;
   $result =~ s/\$depth/$web->{depth}/go;
-  $result =~ s/\$indent\((.+?)\)/$1 x ($web->{depth}+1)/ge;
-  $result =~ s/\$indent/'   ' x ($web->{depth}+1)/ge;
+  $result =~ s/\$indent\((.+?)\)/$1 x $web->{depth}/ge;
+  $result =~ s/\$indent/'   ' x $web->{depth}/ge;
   $result =~ s/\$nrsubwebs/$nrSubWebs/g;
 
   #writeDebug("result=$result");
