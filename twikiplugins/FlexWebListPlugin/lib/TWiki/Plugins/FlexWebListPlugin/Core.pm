@@ -97,9 +97,9 @@ sub handler {
   foreach my $aweb (@websList) {
     if ($aweb =~ /^(public|webtemplate)(current)?$/) {
       $aweb = $1;
-      my $addCurrentWebFlag = defined($2)?1:0;
-      my @webs = keys %{$this->getWebs($aweb)};
-      push @webs, $currentWeb;
+      my @webs;
+      push @webs, $currentWeb if defined $2;
+      push @webs, keys %{$this->getWebs($aweb)};
       foreach my $bweb (sort @webs) {
 	next if $seen{$bweb};
 	next if $this->{isExplicit}{$bweb};
@@ -162,7 +162,7 @@ sub formatWeb {
   }
 
   $web->{done} = 1;
-  writeDebug("formatWeb($web->{key})");
+  #writeDebug("formatWeb($web->{key})");
 
   # format all subwebs recursively
   my $subWebResult = '';
