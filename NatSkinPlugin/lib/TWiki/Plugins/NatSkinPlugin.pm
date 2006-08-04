@@ -57,7 +57,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '2.9998';
+$RELEASE = '3.00-pre1';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -70,8 +70,8 @@ $defaultStyleSearchBox = 'top';
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug("- NatSkinPlugin - " . $_[0]) if $debug;
-  #print STDERR "DEBUG: NatSkinPlugin - " . $_[0] . "\n" if $debug;
+  #&TWiki::Func::writeDebug("- NatSkinPlugin - " . $_[0]) if $debug;
+  print STDERR "DEBUG: NatSkinPlugin - " . $_[0] . "\n" if $debug;
 }
 
 
@@ -154,15 +154,15 @@ sub doInit {
       #writeDebug("no query ... batch mode");
     } else {
       # disable during register context
-      my $theAction = $ENV{'SCRIPT_NAME'} || '';
+      my $theAction = getCgiAction();      
       my $theSkin = $query->param('skin') || TWiki::Func::getSkin();
       my $theContentType = $query->param('contenttype');
-      $theAction =~ s/^.*\///o;
-      if (!$theAction || $theAction =~ /^(register|mailnotif)/ || 
+      if ($theAction =~ /^(register|mailnotif)/ || 
 	  $theSkin =~ /^rss/ ||
 	  $theContentType) {
 	$useSpamObfuscator = 0;
       }
+      writeDebug("useSpamObfuscator=$useSpamObfuscator");
     }
   }
   $nrEmails = 0;
@@ -258,7 +258,7 @@ sub initSkinState {
   # get finalisations
   
   # SMELL: we only get the WebPreferences' FINALPREFERENCES here
-  my $finalPreferences = TWiki::Func::getPreferencesValue("FINALPREFERENCES");
+  my $finalPreferences = TWiki::Func::getPreferencesValue("FINALPREFERENCES") || '';
   writeDebug("finalPreferences=$finalPreferences"); 
   my $isFinalStyle = 0;
   my $isFinalBorder = 0;
@@ -521,8 +521,7 @@ sub initSkinState {
 
   # handle action
   if ($query) { # are we in cgi mode?
-    $skinState{'action'} = $ENV{'SCRIPT_NAME'} || '';
-    $skinState{'action'} =~ s/^.*\///o;
+    $skinState{'action'} = getCgiAction();
   }
 
   # store sticky state into session
@@ -597,6 +596,9 @@ sub commonTagsHandler {
   # MAXREV is different on Cairo, Beijing and Dakar 
   # implementing this stuff again for maximum backwards compatibility
   $_[0] =~ s/%NATREVISIONS%/&renderRevisions()/geo;
+  $_[0] =~ s/%NATSCRIPTURL{(.*?)}%/&renderNatScriptUrl($1)/geo;
+  $_[0] =~ s/%NATSCRIPTURLPATH{(.*?)}%/&renderNatScriptUrlPath($1)/geo;
+  $_[0] =~ s/%NATWEBLOGO%/&renderNatWebLogo()/geo;
   $_[0] =~ s/%PREVREV%/'1.' . &getPrevRevision()/geo;
   $_[0] =~ s/%CURREV%/'1.' . &getCurRevision()/geo; 
   $_[0] =~ s/%NATMAXREV%/'1.'.&getMaxRevision()/geo;
@@ -709,6 +711,26 @@ sub renderIfAccess {
     &escapeParameter($theElse);
     return TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
   }
+}
+
+###############################################################################
+# take the REQUEST_URI, strip off the PATH_INFO from the end, the last word
+# is the action; this is done that complicated as there may be different
+# paths for the same action depending on the apache configuration (rewrites, aliases)
+sub getCgiAction {
+
+  my $pathInfo = $ENV{'PATH_INFO'};
+  my $theAction = $ENV{'REQUEST_URI'} || '';
+  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
+    $theAction = $1;
+  } else {
+    $theAction = 'view';
+  }
+  #writeDebug("PATH_INFO=$ENV{'PATH_INFO'}");
+  #writeDebug("REQUEST_URI=$ENV{'REQUEST_URI'}");
+  #writeDebug("theAction=$theAction");
+
+  return $theAction;
 }
 
 ###############################################################################
@@ -1074,7 +1096,8 @@ sub renderWebLink {
     &TWiki::Func::extractNameValuePair($args, 'name') || $theWeb;
 
   my $result = 
-    '<span class="natWebLink"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/' . "$theWeb/WebHome\"";
+    '<span class="natWebLink"><a href="'.
+    renderNatScriptUrlPath('view').'/'.$theWeb.'/WebHome"';
 
   my $popup = _getValueFromTopic($theWeb , 'WebPreferences', "SITEMAPUSETO");
   if ($popup) {
@@ -1181,12 +1204,12 @@ sub _getValueFromTopic {
 
 ###############################################################################
 sub renderFormButton {
+  my $args = shift || '';
 
   my $saveCmd = '';
   $saveCmd = $query->param('cmd') || '' if $query;
   return '' if $saveCmd eq 'repRev';
 
-  my $args = shift || '';
   my $theFormat = &TWiki::Func::extractNameValuePair($args) ||
 		  &TWiki::Func::extractNameValuePair($args, 'format');
 
@@ -1214,8 +1237,10 @@ sub renderFormButton {
     return '';
   }
   
-  my $text = "<a href=\"javascript:submitEditFormular('save', '$action');\" accesskey=\"f\" title=\"$actionText\">$actionText</a>";
-  $theFormat =~ s/\$1/$text/;
+  my $text = $theFormat;
+  $theFormat =~ s/\$1/<a href=\"javascript:submitEditFormular('save', '$action');\" accesskey=\"f\" title=\"$actionText\">$actionText<\/a>/g;
+  $theFormat =~ s/\$url/javascript:submitEditFormular('save', '$action');/g;
+  $theFormat =~ s/\$action/$actionText/g;
   return $theFormat;
 }
 
@@ -1269,6 +1294,70 @@ sub renderEmailObfuscator {
 }
 
 ###############################################################################
+# backport of dakar's %SCRIPTURL{'scriptname'}%
+sub renderNatScriptUrl {
+  my $args = shift || '';
+
+  my $script =  &TWiki::Func::extractNameValuePair($args) || '';
+  my $url = TWiki::Func::getScriptUrl('', '', $script);
+
+  $url =~ s/\/+$// unless $isDakar; # strip / at the end
+
+  return $url;
+}
+
+###############################################################################
+# backport of dakar's %SCRIPTURL{'scriptname'}%
+sub renderNatScriptUrlPath {
+  my $args = shift || '';
+
+  my $script =  &TWiki::Func::extractNameValuePair($args) || '';
+
+  my $url;
+
+  if ($isDakar) {
+    my $session = $TWiki::Plugins::SESSION;
+    $url = $session->getScriptUrl(0, $script); # SMELL: no Func api
+  } else {
+    $url = $TWiki::scriptUrlPath.$script.$TWiki::scriptSuffix; # SMELL: even worse
+  }
+
+  return $url;
+}
+
+###############################################################################
+# returns the weblogo for the header bar.
+# this will check for a couple of preferences:
+#    * return %NATWEBLOGONAME% if defined
+#    * return %NATWEBLOGOIMG% if defined
+#    * return %WEBLOGOIMG% if defined
+#    * return %WIKITOOLNAME% if defined
+#    * or return 'TWiki'
+#
+# the *IMG cases will return a full <img src /> tag
+# 
+sub renderNatWebLogo {
+
+  my $natWebLogo;
+
+  $natWebLogo = TWiki::Func::getPreferencesValue('NATWEBLOGONAME');
+  return $natWebLogo if $natWebLogo;
+
+  $natWebLogo = TWiki::Func::getPreferencesValue('NATWEBLOGOIMG');
+  return '<img src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
+    if $natWebLogo;
+
+  $natWebLogo = TWiki::Func::getPreferencesValue('WEBLOGOIMG');
+  return '<img src="'.$natWebLogo.'" alt="%WEBLOGOALT%" align="absmiddle" border="0" />' 
+    if $natWebLogo;
+
+  $natWebLogo = TWiki::Func::getPreferencesValue('WIKITOOLNAME');
+  return $natWebLogo if $natWebLogo;
+
+  return 'TWiki';
+}
+
+###############################################################################
 sub renderRevisions {
 
   #writeDebug("called renderRevisions");
@@ -1297,7 +1386,7 @@ sub renderRevisions {
     $rev2 = 1;
   }
 
-  my $revisions = "";
+  my $revisions = '';
   my $nrrevs = $rev1 - $rev2;
   my $numberOfRevisions = 
     ($isDakar)?$TWiki::cfg{NumberOfRevisions}:$TWiki::numberOfRevisions;
@@ -1309,18 +1398,21 @@ sub renderRevisions {
   #writeDebug("rev1=$rev1, rev2=$rev2, nrrevs=$nrrevs");
 
   my $j = $rev1 - $nrrevs;
-  my $scriptUrlPath = &TWiki::Func::getScriptUrlPath();
   for (my $i = $rev1; $i >= $j; $i -= 1) {
-    $revisions .= " | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
+    $revisions .= ' | <a href="'.renderNatScriptUrlPath('view').
+      '/%WEB%/%TOPIC%?rev=1.'.$i.'">r1.'.$i.'</a>';
     if ($i == $j) {
       my $torev = $j - $nrrevs;
       $torev = 1 if $torev < 0;
       if ($j != $torev) {
-	$revisions = "$revisions | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$j&amp;rev2=1.$torev\">...</a>";
+	$revisions = "$revisions | <a href=\"".
+	renderNatScriptUrlPath('rdiff').
+	'/%WEB%/%TOPIC%?rev1=1.'.$j.'&amp;rev2=1.'.$torev.'">...</a>';
       }
       last;
     } else {
-      $revisions .= " | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.". ($i - 1) . "\">&gt;</a>";
+      $revisions .= ' | <a href="'.renderNatScriptUrlPath('rdiff').
+      '/%WEB%/%TOPIC%?rev1=1.'.$i.'&amp;rev2=1.'.($i-1).'">&gt;</a>';
     }
   }
 
