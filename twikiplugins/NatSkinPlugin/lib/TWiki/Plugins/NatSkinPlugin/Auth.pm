@@ -39,6 +39,14 @@ sub doInit {
   $defaultWikiUserName = &TWiki::Func::userToWikiName($defaultWikiUserName, 1);
 }
 
+##############################################################################
+# wrapper for dakar's TWiki::UI:run interface
+sub logonCgi {
+  my $session = shift;
+  $TWiki::Plugins::SESSION = $session;
+  return logon($session->{cgiQuery}, $session->{topicName}, $session->{webName});
+}
+
 ###############################################################################
 sub logon {
   my ($query, $topic, $web) = @_;

@@ -55,6 +55,14 @@ sub doInit {
 }
 
 ##############################################################################
+# wrapper for dakar's TWiki::UI:run interface
+sub natSearchCgi {
+  my $session = shift;
+  $TWiki::Plugins::SESSION = $session;
+  return natSearch($session->{cgiQuery}, $session->{topicName}, $session->{webName});
+}
+
+##############################################################################
 sub natSearch {
   my ($query, $topic, $web) = @_;
 
@@ -224,8 +232,7 @@ sub natSearch {
 }
 
 ##############################################################################
-sub natTopicSearch
-{
+sub natTopicSearch {
   my ($theSearchString, $theWebList, $doIgnoreCase, $theUser) = @_;
 
   my $nrHits = 0;

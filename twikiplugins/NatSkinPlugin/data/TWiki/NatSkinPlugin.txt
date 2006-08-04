@@ -170,6 +170,53 @@ and Dakar. This version grants to behave the same.
 substitute for the =%<nop>REVISIONS%= tag which only works on 
 the TWiki:Plugins/PatternSkin.
 
+---+++ NATSCRIPTURL
+*Syntax*: =%<nop>NATSCRIPTURL{"script"}%=
+
+returns the full url to the named script.
+This is a backport of dakar's =%<nop>SCRIPTURL{}%= variable. Warning: don't use
+NATSCRIPTURL as it is will be removed as soon as this plugin will drop
+support for TWiki/Cairo and TWiki/Beijing.
+
+---+++ NATSCRIPTURLPATH
+*Syntax*: =%<nop>NATSCRIPTURLPATH{"script"}%=
+
+returns the relative url to the named script.
+
+see also: 
+[[#NATSCRIPTURL][NATSCRIPTURL]]
+
+---+++ NATWEBLOGO
+*Syntax*: =%<nop>NATWEBLOGO%=
+
+returns either a textual or a graphical a logo to be used in the header bar
+depending on a set of preference variables.
+
+NATWEBLOGO will check for a couple of preference variables in the following order:
+   1 return =%<nop>NATWEBLOGONAME%= if defined
+   1 return =%<nop>NATWEBLOGOIMG%= if defined
+   1 return =%<nop>WEBLOGOIMG%= if defined
+   1 return =%<nop>WIKITOOLNAME%= if defined
+   1 or return the string 'TWiki' otherwise
+
+The =...IMG%= cases will return a full =&lt;img src="..." ... /&gt;= tag whereas
+the =...NAME%= cases will return the string only.
+
+So given you want to have the string <nop>%WIKITOOLNAME% in the logo position
+when using NatSkin but not so when using a different skin on the same site.
+Then add the following to the %MAINWEB%.TWikiPreferences:
+<verbatim>
+   * Set NATWEBLOGONAME = %WIKITOOLNAME%
+   * Set WEBLOGOIMG = /path/to/your/defaultlogo.gif
+</verbatim>
+
+If you want to have a different logo using NatSkin than using another skin on the same site
+then add the following to  the %MAINWEB%.TWikiPreferences:
+<verbatim>
+   * Set NATWEBLOGOIMG = /path/to/your/natskinlogo.gif
+   * Set WEBLOGOIMG = /path/to/your/defaultlogo.gif
+</verbatim>
+
 ---+++ PREVREV
 *Syntax*: =%<nop>PREVREV%= 
 
@@ -418,9 +465,17 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v2.9998 |
+|  Plugin Version: | v3.00-pre1 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  28 July 2006: | This version dropps the dependency on the <nop>FilterPlugin \
+|  04 Aug 2006: | fixed detection of the cgi action to be more robust on different apache \
+                  configurations (rewrites, aliases);\
+		  implemented NATWEBLOGO to circumvent different ways of using WEBLOGO, \
+		  WIKITOOLNAME; \
+		  added a wrapper for natsearch and natlogon to be called using dakar's \
+		  =TWiki::UI:run()= mechanism; \
+		  reintroduced the dependency on the <nop>FilterPlugin which is still \
+		  used in one place |
+|  28 July 2006: | This version drops the dependency on the <nop>FilterPlugin \
                    and adds three new dependencies (1) <nop>FlexWebListPlugin, \
 		   (2) <nop>BreadCrumbsPlugin and (3) <nop>GluePlugin; %BR% \
                    added =use strict;= and fixed some minor bugs showing up then; \
@@ -521,5 +576,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 28 July 2006 
+-- TWiki:Main/MichaelDaum - 04 Aug 2006 
 
