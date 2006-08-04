@@ -1,77 +1,199 @@
-%META:TOPICINFO{author="GraemeLufkin" date="1023309361" format="1.0" version="1.7"}%
----++ Math Mode TWiki Plugin
+%META:TOPICINFO{author="TWikiContributor" date="1023309361" format="1.0" version="1.1"}%
+<!--
 
+   PLEASE DO NOT EDIT THIS TOPIC
+
+   It is automatically generated from the subversion repository, and any changes
+   you make will simply be overwritten the next time a release is generated.
+
+   Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
+-->
+---+!! <nop>%TOPIC%
 %TOC%
+---++ Description
+This plugin allows you to include mathematics in a TWiki page, with a format
+very similar to <nop>LaTeX.  The external program =latex2html= is used to
+generate =gif= (or =png=) images from the math markup, and the image is then included in
+the page.  The first time a particular expression is rendered, you will notice
+a lag as =latex2html= is being run on the server.  Once rendered, the image is
+saved as an attached file for the page, so subsequent viewings will not require
+re-renders.  When you remove a math expression from a page, its image is
+deleted.  
 
-This plugin allows you to include mathematics in a TWiki page, with a format very similar to <nop>LaTeX.
-The external program =latex2html= is used to generate =png= images from the math markup, and the image is then included in the page.
-The first time a particular expression is rendered, you will notice a lag as =latex2html= is being run on the server.
-Once rendered, the image is saved as an attached file for the page, so subsequent viewings will not require re-renders.
-When you remove a math expression from a page, its image is deleted.
-The file =twiki_l2h.init= that is attached to this page is used by the plugin to determine how =latex2html= will render the images.
-Note that this plugin is called MathModePlugin, not <nop>LaTeXPlugin, because the only piece of <nop>LaTeX implemented is rendering of images of mathematics.
+Note that this plugin is called MathModePlugin, not <nop>LaTeXPlugin, because
+the only piece of <nop>LaTeX implemented is rendering of images of mathematics.
 
----+++ Syntax Rules
+---++ Syntax Rules
+<b>&lt;latex [attr="value"]* &gt; =formula= &lt;/latex&gt;</b>
 
-A new delimiter is used to define math strings, the percent sign and the dollar sign (%$ _math goes here_ 
-$%).
-As with the other markup tokens (asterisk, underscore, equals), you enclose the text to be specially rendered with the token.
-The closing token must be on the same line as the opening token.
-This use is identical to that of <nop>LaTeX.
-For example, consider this math string: =\int_{-\infty}^\infty e^{-\alpha x^2} dx = \sqrt{\frac{\pi}{\alpha}}=
-When we enclose this string with the math delimeter, we get %$\int_{-\infty}^\infty e^{-\alpha x^2} dx = \sqrt{\frac{\pi}{\alpha}}$%
-If the preceding statement is not replaced by an image of the expression, your installation of the plugin is broken.
+generates an image from the contained =formula=. In addition attribute-value
+pairs may
+be specified that are passed to the resulting =img= html tag. The formula
+will be displayed using a =math= latex environment by default. If the formula
+contains a latex linebreak (=\\=) then a =multiline= environment is used instead
+See amsmath's docu on =multiline= math environments.
 
-The use of %$ is very similar to <nop>LaTeX's inline math mode.
-The plugin also supports equations that go on their own line, using two alternate syntaxes.
-Again like in <nop>LaTeX, you can enclose math with %\[ ...
- \]% to get equations that will be rendered in big mode and centered in their own line.
-You get the same effect with the long form %MATHMODE{ ... 
-}%
+Note that the old notation using =%<nop>$formula$%= and =%<nop>\[formula\]%=
+is still supported but are deprecated.
 
----+++ <nop>%TOPIC% Settings
+---++ Examples
+The following will only display correctly if this plugin is installed and 
+configured correctly.
+<verbatim>
+<latex title="this is an example">
+  \int_{-\infty}^\infty e^{-\alpha x^2} dx = \sqrt{\frac{\pi}{\alpha}}
+</latex>
+</verbatim>
+<latex title="this is an example">
+  \int_{-\infty}^\infty e^{-\alpha x^2} dx = \sqrt{\frac{\pi}{\alpha}}
+</latex>
 
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>MATHMODEPLUGIN_SHORTDESCRIPTION%==
+<verbatim>
+<latex>
+  \parbox{5cm}{
+  \begin{eqnarray*}
+    {\cal P} & = & \{f_1, f_2, \ldots, f_m\} \\
+    {\cal C} & = & \{c_1, c_2, \ldots, c_m\} \\
+    {\cal N} & = & \{n_1, n_2, \ldots, n_m\}
+  \end{eqnarray*}
+  }
+</latex>
+</verbatim>
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin allows you to include <nop>LaTeX formatted math in your TWiki pages.
+<latex>
+  \parbox{5cm}{
+  \begin{eqnarray*}
+    {\cal P} & = & \{f_1, f_2, \ldots, f_m\} \\
+    {\cal C} & = & \{c_1, c_2, \ldots, c_m\} \\
+    {\cal N} & = & \{n_1, n_2, \ldots, n_m\}
+  \end{eqnarray*}
+  }
+</latex>
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+<verbatim>
+<latex title="Calligraphics">
+  \cal
+  A, B, C, D, E, F, G, H, I, J, K, L, M, \\
+  N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+</latex>
+</verbatim>
 
----+++ Plugin Installation Instructions
+<latex title="Calligraphics">
+  \cal
+  A, B, C, D, E, F, G, H, I, J, K, L, M, \\
+  N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+</latex>
 
-	* Download the archive, and unzip in the =twiki= directory.
-	* Make sure that the =Digest::MD5= module is properly installed.
+<verbatim>
+<latex>
+  \sum_{i_1, i_2, \ldots, i_n} \pi * i + \sigma
+</latex>
+</verbatim>
+
+<latex>
+  \sum_{i_1, i_2, \ldots, i_n} \pi * i + \sigma
+</latex>
+
+This is <latex>\cal A</latex> new inline test.
+
+
+| *Greek letters* ||||
+| =\alpha= | <latex>\alpha</latex> | =\theta= | <latex>\theta</latex> |
+| =\beta= | <latex>\beta</latex> | =\iota= | <latex>\iota</latex> |
+| =\gamma= | <latex>\gamma</latex> | =\kappa= | <latex>\kappa</latex> |
+| =\delta= | <latex>\delta</latex> | =\lambda= | <latex>\lambda</latex> |
+| =\epsilon= | <latex>\epsilon</latex> | =\mu= | <latex>\mu</latex> |
+| =\zeta= | <latex>\zeta</latex> | =\nu= | <latex>\nu</latex> |
+| =\eta= | <latex>\eta</latex> | =\xi= | <latex>\xi</latex> |
+
+---++ Plugin Settings
+
+   * Set SHORTDESCRIPTION = Include <nop>LaTeX formatted math in your TWiki pages.
+
+---++ Plugin Installation Instructions
+
+	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	* =latex2html= must be properly installed and in the path of the process that runs the TWiki scripts.
-	* Include some math in a page, and view it.
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
----+++ More Details
-No versioning is used for the image files.
-This is okay, because the text of the page includes all the versions of the markup for the expressions, and can be re-rendered when you view a different version.
+---++ Configuration
+There are a set of configuration variables that an be set in different places.
+All of the below variables can be set in your =LocalSite.cfg= file like this:
+<verbatim>
+$TWiki::cfg{MathModePlugin}{<Name>} = <value>;
+</verbatim>
+Some of the below variables can _only_ be set this way, some of the may be
+overridden by defining the respective prefrence variable.
 
-Since this plugin depends on =latex2html=, you will get different results using different versions of =latex2html=.
-For example, in some versions, you get an ugly black border on the left and bottom of your images.
-Some versions pad own-line equations with whitespace on the left, screwing up the centering of the image.
-Your mileage may vary, try installing a newer version of =latex2html= if you encounter these issues. 
+| *Name* | *Preference Variable* | *Default* |
+| =HashCodeLength= |  | 32 |
+| &nbsp; | length of the hash code. If you switch to a different \
+           hash function, you will likely have to change this ||
+| =ImagePrefix= | | '_MathModePlugin_' |
+| &nbsp; | string to be prepended to any auto-generated image ||
+| =Latex2Html= | | '/usr/bin/latex2html' |
+| &nbsp; | the path to invoke the latex2html command ||
+| =AntiAlias=  | | 'on' |
+| &nbsp; | flag to indicate if images should be anti-aliased ||
+| =InitFile= | | '' | 
+| &nbsp; | init file for latex2html ||
+| =ScaleFactor= | %<nop>LATEXSCALEFACTOR% | 1.8 |
+| &nbsp; | factor to scale images this value has no effect if you \
+           specified an =InitFile= ||
+| =LatexPreamble= | %<nop>LATEXPREAMBLE% | '\usepackage{mathptmx}' |
+| &nbsp; | latex preamble, e.g. to include additional packages ||
+| =FontSize= | %<nop>LATEXFONTSIZE% | '12pt' |
+| &nbsp; | font size used in the latex documentclass; \
+           possible values are '10pt', '11pt', '12pt' ||
+| =ImageType= | %<nop>LATEXIMAGETYPE% | 'gif' |
+| &nbsp; | extension of the image type; \
+           possible values are 'gif' and 'png' ||
 
-For information about where this plugin is going, visit TWiki:Plugins.MathModePluginDev
+---++ More Details
+No versioning is used for the image files.  This is okay, because the text of
+the page includes all the versions of the markup for the expressions, and can
+be re-rendered when you view a different version.
 
----+++ Plugin Info
+Since this plugin depends on =latex2html=, you will get different results using
+different versions of =latex2html=.  For example, in some versions, you get an
+ugly black border on the left and bottom of your images.  Some versions pad
+own-line equations with whitespace on the left, screwing up the centering of
+the image.  Your mileage may vary, try installing a newer version of
+=latex2html= if you encounter these issues. 
 
-|  Plugin Author: | TWiki:Main.GraemeLufkin |
-|  Plugin Version: | 05 Jun 2002: Second Release |
-|  Change History: | 03 Apr 2002: Initial version |
-|  CPAN Dependencies: | CPAN:Digest::MD5 |
+For information about where this plugin is going, visit
+TWiki:Plugins.MathModePluginDev
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.GraemeLufkin, TWiki:Main.MichaelDaum |
+|  Copyright &copy;: | 2002 Graeme Lufkin, gwl@u.washington.edu, 2006, MichaelDaum@WikiRing.com |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | 2.90 |
+|  Change History: | &nbsp; |
+|  04 Aug 2006: | major rewrite; \
+		  fixed security issues by using TWiki's sandbox feature \
+		  and creating tempfiles properly; \
+                  added new &lt;latex>...&lt;/latex> tag to support multiline formulas;\
+                  better configurability; \
+		  better error reporting; \
+		  fixed issues where images have not been cleaned up regularly; \
+		  speedup don't clean orphaned images during =view= but during =save=; \
+                  speedup by adding lazy compilation and initialization; \
+                  implemented a =postRenderingHandler= for TWiki V4; \
+                  prevent auto-generated images stored in pub from \
+		  being auto-attached using TWiki V4 |
+|  03 Apr 2002: | Initial version |
+|  CPAN Dependencies: | none |
 |  Other Dependencies: | A working installation of =latex2html= |
-|  Perl Version: | 5.0 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Perl Version: | 5.8 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
-This plugin was created and tested on the 01 Dec 2001 version of TWiki.
-
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main.GraemeLufkin - 05 Jun 2002
-%META:FILEATTACHMENT{name="twiki_l2h.init" attr="" comment="" date="1017883719" path="twiki_l2h.init" size="66" user="GraemeLufkin" version="1.2"}%
+-- TWiki:Main.GraemeLufkin - 05 Jun 2002 %BR%
+-- TWiki:Main.MichaelDaum - 04 Aug 2006
