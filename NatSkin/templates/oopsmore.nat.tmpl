@@ -5,7 +5,7 @@
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
 %TMPL:DEF{"message"}% <table border="0">
 ---++ Set Parent Topic</td> </tr>
-<form name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form name="main" action="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%">
 <tr>
   <td style="padding-left:20px"> <select name="topicparent"><option value="">Select...</option>
      %TOPICLIST{"<option value='$name'>$name</option>" separator=" "}%
@@ -17,13 +17,13 @@
     <ul style="margin:0px"><li>Note: Edit and save the topic  to activate the new parent. %I%</li></ul>
   </td>
   <td>
-    <input type="button" class="natCancelButton" style="width:5em" value="Cancel" onclick="self.location.href = '%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%';">
+    <input type="button" class="natCancelButton" style="width:5em" value="Cancel" onclick="self.location.href = '%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';">
   </td>
 </tr>
 </form>
 <tr><td colspan="2">
 ---++ Back-links</td></tr>
-<form name="main" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult">
+<form name="main" action="%NATSCRIPTURLPATH{"search"}%/%WEB%/SearchResult">
 <tr>
   <td>
     <input type="hidden" name="scope" value="text">
@@ -48,7 +48,7 @@
 <tr>
 <td colspan="2">
 ---++ Topic preferences</td></tr>
-<form name="main" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="main" action="%NATSCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="post">
   <input type="hidden" name="action" value="editSettings" />
 <tr>
   <td>
@@ -63,7 +63,7 @@
 <td colspan="2">
 ---++ Topic Caching</td>
 </tr>
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="main" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" method="post">
 <tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
   <td>
     <ul style="margin:0px;"><li>Get a fresh page of the topic [[%WEB%.%TOPIC%]]&nbsp;</li></ul>

@@ -244,6 +244,51 @@ h1, h2, h3, h4, h5, h6 {
 }
 */
 
+/* edit */
+.natEditToolBar {
+  margin-bottom:5px;
+  padding:0px 2px;
+  white-space:nowrap;
+}
+.natPreviewToolBar img,
+.natEditToolBar img {
+  margin-right:3px;
+  width:24px;
+  height:24px;
+  border:0px;
+  position:relative;
+  top:3px;
+}
+.natPreviewToolBar a:hover img,
+.natEditToolBar a:hover img {
+  top:2px;
+  right:1px;
+}
+.natEditEditTools,
+.natEditHelpTools,
+.natEditObjectTools,
+.natEditParagraphTools,
+.natEditHeadlineTools,
+.natEditTextTools {
+  margin-right:15px;
+}
+.natEditDoneButton {
+  margin-left:15px;
+}
+
+.natBottomTopicActions {
+  padding:0px 2px;
+  margin-top:5px;
+}
+.natBottomTopicActions a:hover {
+  text-decoration:none;
+  border:1px solid red;
+}
+.natPreviewToolBar {
+  width:100%;
+  text-align:right;
+}
+
 /* bottom bar */
 .natBottomBarContents {
   font-size:x-small;
@@ -417,14 +462,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 .natCurrentAction {
   font-weight:bold;
-}
-.natBottomTopicActions {
-  margin-top:1em;
-  margin-bottom:1em;
-}
-.natBottomTopicActions a:hover {
-  text-decoration:none;
-  border:1px solid red;
 }
 .natCurrentAction,
 .natEditAction a,
@@ -846,4 +883,3 @@ img.alignleft {
   position:relative;
   bottom:2px;
 }
-

@@ -1,0 +1,11 @@
+/* fire variation for natskin */
+
+.natHeaderArt {
+  background-image:url(Fire.jpg); 
+  background-repeat:no-repeat;
+  background-position:top left;
+}
+.natTopBarSizer {
+  height:140px;
+  max-height:200px;
+}

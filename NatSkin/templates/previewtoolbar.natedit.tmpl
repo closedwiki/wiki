@@ -1,0 +1,18 @@
+<!-- template: preview.natedit.tmpl -->
+%TMPL:DEF{"previewtoolbar"}% <div class="natPreviewToolBar"><!--
+--><a class="natEditButton" href="javascript:history.back();" accesskey="e"><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_edit.png" alt="Continue editing" title="Continue editing" /></a><!--
+-->%FORMBUTTON{"<a href=\"$url\" accesskey="f"><img src='%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_form.png' alt='$action' title='$action' /></a>"}%<!--
+--><a class="natEditUndoButton" href="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u" title="Abandon your changes but continue editing"><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_undo.png" alt="Abandon your changes but continue editing" title="Abandon your changes but continue editing" /></a><!--
+-->%IFSKINSTATETHEN{release="beijing"}%<!--
+--><a class="natEditSaveButton" href="javascript:submitEditFormular('save', 'save');" accesskey="s" title="Save and exit">Save</a></span><!--
+-->%ELSESKINSTATE%<!--
+--><a class="natEditSaveButton" href="javascript:submitEditFormular('save','checkpoint');" accesskey="s"><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_save.png" alt="Save and continue editing" title="Save and continue editing" /></a><!--
+--><a class="natEditDoneButton" href="javascript:submitEditFormular('save', 'save');" accesskey="d"><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_accept.png" alt="Save and exit" title="Save and exit" /></a><!--
+-->%FISKINSTATE%<!--
+--><a class="natEditCancelButton" href="%IFSKINSTATE{release="beijing" then="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit"><!--
+--><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_cancel.png" alt="Cancel and abandon changes" title="Cancel and abandon changes" /></a>
+</div><br clear="both" />%TMPL:END%

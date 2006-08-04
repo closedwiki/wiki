@@ -3,7 +3,7 @@
 %TMPL:DEF{"onloadscript"}%document.LogonFormular.username.focus();%TMPL:END%
 %TMPL:DEF{"logon"}%<!-- -->
 <div class="natLogonFormular">
-<form name="LogonFormular" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%SCRIPTURLPATH%/%IFSKINSTATE{action="oops" then="natlogon" else="login"}%%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="LogonFormular" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%NATSCRIPTURLPATH{"%IFSKINSTATE{action="oops" then="natlogon" else="login"}%"}%/%WEB%/%TOPIC%" method="post">
 <table border="0"> 
 <tr> 
   <td><b>Login</b>: </td>
@@ -20,7 +20,7 @@
   <td colspan="2"><p />
     <input type="submit" class="natOkButton" value="OK" />&nbsp;<!--
     --><input type="reset"  class="natAltButton" value="Clear" />&nbsp;<!--
-    --><input type="button" class="natCancelButton" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Main/WebHome'" /> 
+    --><input type="button" class="natCancelButton" value="Cancel" onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome'" /> 
     <input type="hidden" name="web" value="%WEB%" />
     <input type="hidden" name="topic" value="%TOPIC%" />
     <input type="hidden" name="action" value="%TMPL:P{action}%"/>
