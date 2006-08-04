@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1154511242" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1154706563" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -42,6 +42,7 @@ Events are defined with bullets. Following event types are supported to define e
 | <b>Interval</b> | ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch== |
 |^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - green== |
 |^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - foreground color, background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - white,black== |
+| <b>Duration</b> | instead of an end time (==HH:MM==) in a time range of a single/list/interval event you can define an event duration in days (==d==), hours (==h==) and/or minutes (==m==), e.g. one day: =1d= ; one day and two hours: =1:2d= ; one day, two hours and 30 minutes: =1:2:40d= ; two hours: =2h= ;  two yours and 30 minutes: =2:30h= ; 30 minutes: =30m= | ==&nbsp;* Mon - 10:00 - 2h - every Monday 2 hours at 10 o'clock== |
 
 If you enable the compatibility mode (see Attributes or Plugins Settings sections) you can also use all TWiki:Plugins.CalendarPlugin event types.
 Examples:
@@ -73,8 +74,9 @@ Example: %<nop>TIMETABLE{lang="Deutsch" timeinterval="15" }%
 | starttime | a start time, e.g. 7:00, 8a.m., 9:15a.m. ... | starttime="7:00am" |
 | timeformat | time format; allowed values: 12, 12am, 12p.m., 12a.m, 12p.m. and 24 | timeformat="24" |
 | timeinterval | interval steps in minutes for the timeline | timeinterval="30" |
-| timezone | an hour offset (allowed values: -12 ... 0 ... +12) for time correction %X% It is *not* a real time zone like CET, CEST but you can use it in =%<nop>TIMETABLE%= and =%<nop>TTTOPICSETUP%= in conjunction with the topic attribute to simulate time zones.| timezone="0" |
-| topic  | a comma separated list of source topics; you can add a time zone to any source topic name by adding a ':' and a hour offset (-12 ... +12) to the topic name, e.g: =topic="MySourceTopic:-2"=  %X% this time zone feature overwrites the =timezone= attribute of a =%<nop>TTTOPICSETUP%= tag | topic="%<nop>TOPIC%" |
+| timezone | a hour offset (allowed values: -12 ... 0 ... +12) for time correction or a time zone abbreviation (e.g. UTC, CET ...) | timezone="0" |
+| timezoneabbr | a comma separated list of time zone abbreviations with UTC offsets; the standard time zone abbreviations will be extended with this user defined abbreviations | timezoneabbr="CET:+1, MEST:+2" |
+| topic  | a comma separated list of source topics; you can add a time zone to any source topic name by adding a ':' and a hour offset (-12 ... +12) or a time zone abbreviation, e.g: =topic="MySourceTopic:-2"=  %X% this time zone feature overwrites the =timezone= attribute of a =%<nop>TTTOPICSETUP%= tag | topic="%<nop>TOPIC%" |
 | wholetimerow | enables/disables a whole-time event row (related attributes: wholetimerowtext, wholetimerowtitle) | wholetimerow="0" |
 | workingendtime | working hours end time | workingendtime="5:00pm" |
 | workingstarttime | working hours start time | workingstarttime="9:00am" |
@@ -214,9 +216,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.008 (2 Aug 2006) |
+|  Plugin Version: | V1.009 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.008 (2 Aug 2006) | added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
+|  V1.009 (BETA) | TWiki:Main.DanielRohde: added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include) |
+|  V1.008 (2 Aug 2006) | TWiki:Main.DanielRohde: added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
 |  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: empty column) |
 |  V1.006 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bugs (empty column color; cutted text) |
 |  V1.005 (8 Jun 2006) | TWiki:Main.DanielRohde: fixed typos (documentation); added new features (compatmode only): inline time range feature and navigation; minor improvements (table header, ...) |
@@ -226,7 +229,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  V1.001 (19 May 2006): | TWiki:Main.DanielRohde: fixed some major bugs (conflict entries, parameter handling, long descriptions); added documentation; |
 |  V1.000 (16 May 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.021 |
-|  CPAN Dependencies: | CPAN:Date::Calc |
+|  CPAN Dependencies: | CPAN:Date::Calc %BR% CPAN:POSIX |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
