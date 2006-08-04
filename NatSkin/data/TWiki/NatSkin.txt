@@ -13,7 +13,7 @@
 
 ---++ Description
 NatSkin is a skin driven by cascading stylesheets which is shipped with 12
-predefined styles and 10 style variations that can be applied to each. Most of
+predefined styles and 11 style variations that can be applied to each. Most of
 these are inspired by the
 [[http://www.movabletype.org][MovableType]] and
 [[http://wordpress.org][WordPress]] among others a port of the Kubrick style by
@@ -143,7 +143,7 @@ There is an additional set of templates that can be used to replace the normal t
 with a javascript based "wikiwyg" editor that will ease to write [[%TWIKIWEB%.TextFormattingRules][TWikiMarkUp]].
 To enable <nop>NatEdit add the following to your [[%MAINWEB%.TWikiPreferences]] or to your [[%WIKIUSERNAME%][HomeTopic]]:
 <verbatim>
-   * Set SKIN = natedit, nat
+* Set SKIN = natedit, nat
 </verbatim>
 This makes use of features that are only present in TWiki V4 and upwards.
 
