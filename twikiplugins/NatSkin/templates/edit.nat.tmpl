@@ -46,7 +46,7 @@
   --><span class="natSaveAction"><a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title="Save and continue editing">Save</a></span><!--
   --><span class="natDoneAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="d" title="Save and exit">Done</a></span><!--
   -->%FISKINSTATE%<!--
-  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a></span>
+  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a></span>
 </div>
 <div class="natSubmitOptions">
   <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
