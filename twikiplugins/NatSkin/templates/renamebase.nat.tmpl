@@ -10,7 +10,7 @@
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
-<form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<form method="POST" name="rename" action="%NATSCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 <!--input type="hidden" name="confirm" value="on"-->
 ---+ %TMPL:P{"webaction"}% Topic
 

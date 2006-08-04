@@ -8,7 +8,7 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author(s).
 -->
----+!! The Natural Skin
+---+!! [[%TOPIC%][The Natural Skin]]
 %TOC%
 
 ---++ Description
@@ -60,6 +60,7 @@ TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the
 	  of dynamic html; so mailto links are still clickable while the pure html text does not
 	  allow to extract the addresses by respective web crawlers.
 	* marking external links: add a nice icon to offsite links
+	* <nop>NatEdit: optional javascript enabled wikiwyg editor
 
 ---++ <nop>NatSearch
 <nop>NatSearch unifies the Seach and the Jump box known from the standard TWiki. You can 
@@ -123,8 +124,8 @@ Furthermore, the WebPreferences variable =NATSEARCHTEMPLATE= can be set to a tem
 is used instead of the skin's =search= template. This can be used in <nop>TWikiApplications to
 define a customized look of search results.
 
----++ Special topic variables
-There is a set of variables that can be used in a topic to influence the NatSkin.
+---++ Special preference variables
+There is a set of variables that can be used influence how NatSkin renders pages or behaves.
 
 | *Name* | *Description* |
 | =PAGETITLE= | the &lt;title>...</title> of the html page; if no PAGETITLE is defined the NatSkin \
@@ -137,6 +138,16 @@ There is a set of variables that can be used in a topic to influence the NatSkin
                 when clicking on "Edit"; note, that the textarea is still accessible and not hidden completely; \
 		this is flag is only there for convenience |
 
+---++ <nop>NatEdit
+There is an additional set of templates that can be used to replace the normal text editor
+with a javascript based "wikiwyg" editor that will ease to write [[%TWIKIWEB%.TextFormattingRules][TWikiMarkUp]].
+To enable <nop>NatEdit add the following to your [[%MAINWEB%.TWikiPreferences]] or to your [[%WIKIUSERNAME%][HomeTopic]]:
+<verbatim>
+   * Set SKIN = natedit, nat
+</verbatim>
+This makes use of features that are only present in TWiki V4 and upwards.
+
+
 ---++ More Documentation
 
 	* NatSkinTemplates
@@ -148,7 +159,7 @@ There is a set of variables that can be used in a topic to influence the NatSkin
           [[%ATTACHURL%/Cairo_UI_pm.diff][Cairo_UI_pm.diff]]
 	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
 	* Unzip it in your twiki installation directory. Content: 
-	* Test if installed: [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
+	* Test if installed: [[%NATSCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
 
 ---++ Skin Info
 <style type="text/css">
@@ -166,7 +177,7 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v2.9999 |
+|  Skin Version: | v3.0-pre1 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -183,6 +194,13 @@ There is a set of variables that can be used in a topic to influence the NatSkin
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-08-03: | first 3 dot O prerelease, 3.0-final will be a TWiki V4 only skin; \
+                 addded <nop>NatEdit templates; \
+		 restructured edit and preview templates to allow <nop>NatEdit to "mix in" \
+		 its toolbar; \
+		 make use of the new NATSCRIPTURL variables to support short urls; \
+                 make use of new FLEXWEBLIST features; \
+		 added <nop>FireVariation |
 |  2006-07-31: | added renameweb templates; \
 		 rename topic usability improvements; \
                  some css alignment corrections |
@@ -337,7 +355,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki
 
 __Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
 
--- TWiki:Main/MichaelDaum - 31 July 2006
+-- TWiki:Main/MichaelDaum - 03 Aug 2006
 
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%

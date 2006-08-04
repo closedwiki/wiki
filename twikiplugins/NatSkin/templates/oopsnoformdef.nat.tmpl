@@ -7,7 +7,7 @@ See %TWIKIWEB%.TWikiForms for information about Form Definitions.
 Problems could arrise for two reasons:
 ---++ 1. Form definition missing
 <ul>
-  <li> [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw topic text]]</li>
+  <li> [[%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on][View raw topic text]]</li>
   <li> There should be a line that includes =META:FORM=, look for name="&lt;formName&gt;"
   <ul>
     <li> If this line isn't present see _upgrade_ section below</li>
@@ -27,6 +27,6 @@ Please ask your <nop>%WIKITOOLNAME% administrator <a href=%TMPL:P{"mailuri"}%>%W
 
 <form class="natOopsButtons" name="buttonbox" action=%TMPL:P{"mailuri"}%>
   <input type="submit" class="natOkButton" value="OK">&nbsp; 
-  <input type="button" class="natAltButton" value="View raw" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on'">&nbsp; 
+  <input type="button" class="natAltButton" value="View raw" onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on'">&nbsp; 
   <input type="button" class="natCancelButton" value="Cancel" onclick="history.back()">
 </form> %TMPL:END%

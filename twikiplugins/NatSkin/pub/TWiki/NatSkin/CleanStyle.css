@@ -206,6 +206,7 @@ hr {
   font-family:arial,sans-serif;
 }
 .natMainHeaderContents {
+  margin-bottom:1em;
 }
 
 /* anchors in natMain */

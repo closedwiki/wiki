@@ -6,13 +6,13 @@
 %NEW_LOCK%
 <br />
 <ul>
- <li> To look at the text without editing the topic click on the [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw text]].</li>
- <li> To rename anyway click on [[%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%][Rename anyway]]</li>
+ <li> To look at the text without editing the topic click on the [[%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on][View raw text]].</li>
+ <li> To rename anyway click on [[%NATSCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%][Rename anyway]]</li>
  <li> To cancel go <a href="javscript:history.back()">back</a> in your browser.</li>
 </ul>
 <form class="natOopsButtons" name="ButtonBox">
-  <input class="natOkButton" type="button" value="Rename anyway" onclick="window.location.href='%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%'">&nbsp;
-  <input class="natAltButton" type="button" value="View raw" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on';">&nbsp;
+  <input class="natOkButton" type="button" value="Rename anyway" onclick="window.location.href='%NATSCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%'">&nbsp;
+  <input class="natAltButton" type="button" value="View raw" onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on';">&nbsp;
   <input class="natCancelButton" type="button" value="Cancel" onclick="history.back()">
 </form> 
 %I% __Note:__ Renaming a topic which is being edited by someone else might 

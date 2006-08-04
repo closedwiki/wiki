@@ -113,7 +113,7 @@ white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, tea
 %TMPL:DEF{"password_changed"}%<!-- huh -->
 ---+++ Password changed successfully!
 
-<form action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%">
+<form action="%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/%WIKINAME%">
 <input type="submit" class="natOkButton" value="OK" />
 </form>
 %TMPL:END%
@@ -123,7 +123,7 @@ Your activation code has been sent to %PARAM1%.  Either click on the
 link in your email or enter the code in the box below to activate your membership.
 (This code is of the form "YourName.xxxxxxxxxx")
 
-<form action="%SCRIPTURLPATH%/register%SCRIPTSUFFIX%" method=get>
+<form action="%NATSCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="rx" value="%BLACKLISTPLUGIN{action="magic"}%" />
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
@@ -172,7 +172,7 @@ administrator, <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%2
 ---+++ You are already registered
 You cannot register twice, the name '%PARAM1%' is already registered.
 
-Did you want to [[%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%.ResetPassword?username=%PARAM1%][reset %PARAM1%'s password]]?
+Did you want to [[%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%.ResetPassword?username=%PARAM1%][reset %PARAM1%'s password]]?
 
 Alternatively go <a href="javascript:history.back()">back</a> in your browser
 and choose a different username.
@@ -205,7 +205,7 @@ The activation code ==%PARAM1%== is invalid. %PARAM2%
 
 Please try again.
 
-<form action="%SCRIPTURLPATH%/register%SCRIPTSUFFIX%" method=get>
+<form action="%NATSCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="rx" value="%BLACKLISTPLUGIN{action="magic"}%" />
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />

@@ -1,0 +1,12 @@
+%TMPL:INCLUDE{"preview.nat"}%
+<!-- template: preview.natedit.tmpl -->
+%TMPL:DEF{"bottomtopicactions"}%<div class="natSubmitOptions">
+  <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
+  <label for="dontnotify">Minor changes</label> <!-- -->
+%IFSKINSTATETHEN{release="dakar"}%
+  <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
+  <label for="forcenewrevision">Force new revision</label>
+%ELSESKINSTATE%
+  <input type="checkbox" id="unlock" name="unlock" %RELEASEEDITLOCKCHECKBOX% /><label for="unlock">Release edit lock</label>
+%FISKINSTATE%
+</div>%TMPL:END%

@@ -4,7 +4,7 @@
 %IFSKINSTATETHEN{final="all"}%
 <!-- %RED%all styles and switches are final%ENDCOLOR% -->
 %ELSESKINSTATE%
-<form method="post" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
+<form method="post" action="%NATSCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%">
 <table border="0">
 %IFSKINSTATETHEN{final="style"}% %ELSESKINSTATE%
 <tr><td colspan="3"> *Style:* </td></tr>

@@ -5,13 +5,15 @@
 <!-- -->%TMPL:INCLUDE{"previewsidebar"}% 
 <!-- -->%TMPL:INCLUDE{"previewjavascript"}%
 <!-- -->%TMPL:INCLUDE{"previewstyles"}%
+<!-- -->%TMPL:INCLUDE{"previewtoolbar"}%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (preview)%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span><b>%TOPIC%</b>%TMPL:END%
 %TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&#187;</span>" footer="<span class='natSep'>&#187;</span><nop>%BASETOPIC%"}%</div>%TMPL:END%
-%TMPL:DEF{"content"}% %TEXT%
+%TMPL:DEF{"content"}%%TMPL:P{"previewtoolbar"}% 
+%TEXT%
 %META{"form"}%
-<form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form name="EditFormular" method="post" action="%NATSCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%">
   %IFSKINSTATETHEN{release="cairo"}%
     <input type="hidden" name="action" value="" />
   %ELSIFSKINSTATE{release="dakar"}%
@@ -29,22 +31,20 @@
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
   <input type="hidden" name="cmd" value="%CMD%" />
   <textarea name="text" rows="10" cols="80" style="display:none">%HIDDENTEXT%</textarea>
-  %TMPL:P{"bottomtopicactions"}%
-</form>
-%TMPL:END%
+  %TMPL:P{"bottomtopicactions"}% </form> %TMPL:END%
 %TMPL:DEF{"bottomtopicactions"}%
 <div class="natBottomTopicActions">
   <span class="natEditAction"><a href="javascript:history.back();" accesskey="e" title="Continue editing">Edit</a></span><!-- 
   --><span class="natCurrentAction natPreviewAction">Preview</span><!--
   -->%FORMBUTTON{"<span class='natFormAction'>$1</span>"}%<!--
-  --><span class="natUndoAction"><a href="javascript:self.location.reload();" accesskey="u" title="Abandon your changes but continue editing">Undo</a></span><!--
+  --><span class="natUndoAction"><a href="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u" title="Abandon your changes but continue editing">Undo</a></span><!--
   -->%IFSKINSTATETHEN{release="beijing"}%<!--
   --><span class="natSaveAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title="Save and exit">Save</a></span><!--
   -->%ELSESKINSTATE%<!--
   --><span class="natSaveAction"><a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title="Save and continue editing">Save</a></span><!--
   --><span class="natDoneAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="d" title="Save and exit">Done</a></span><!--
   -->%FISKINSTATE%<!--
-  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a></span>
+  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a></span>
 </div>
 <div class="natSubmitOptions">
   <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />

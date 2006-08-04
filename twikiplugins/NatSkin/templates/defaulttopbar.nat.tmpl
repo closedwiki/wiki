@@ -4,15 +4,9 @@
 	<div class="natTopBarSizer">
 	  <div class="natTopLeftContents">
 	    <h1 class="natWebTitle">
-      	      <a href="%IFDEFINED{"%WEBLOGOURL%" then="%WEBLOGOURL%" else="%WIKILOGOURL%"}%" title="%WEBLOGOALT%" accesskey="h">
-		%IFDEFINEDTHEN{"%WEBLOGOIMG%"}%
-		  <img src="%WEBLOGOIMG%" alt="%WEBLOGOALT%" align="absmiddle" border="0"/>
-		%ELSIFDEFINED{"%WEBTOOLNAME%"}%
-		  %WEBTOOLNAME%
-		%ELSEDEFINED%
-		  %WIKITOOLNAME%
-		%FIDEFINED%
-	      </a><!-- span class="natWebLocator">%<nop>TMPL:P{"locator"}%</span-->
+      	      <a href="%IFDEFINED{"%WEBLOGOURL%" then="%WEBLOGOURL%" else="%WIKILOGOURL%"}%" title="%WEBLOGOALT%" accesskey="h"><!--
+	      -->%NATWEBLOGO%<!--
+	      --></a>
 	    </h1>
 	    <div class="natWebSlogan">%SITEMAPUSETO%</div>
 	  </div>
