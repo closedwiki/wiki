@@ -65,14 +65,14 @@ use strict;
 use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $debug
              $default_density $default_gamma $default_scale $preamble
              $eqn $fig $tbl $use_color @norender $tweakinline @EXPORT_OK
-             $rerender
+             $rerender $sandbox $initialized
              );
 
 use vars qw( %TWikiCompatibility );
 
 # number the release version of this plugin
 $VERSION = '$Rev$';
-$RELEASE = '2.51';
+$RELEASE = '2.6';
 
 require Exporter;
 *import = \&Exporter::import;
@@ -133,6 +133,20 @@ my $LATEXFILENAME = $LATEXBASENAME . '.tex';
 #hash function, you will likely have to change this
 my $HASH_CODE_LENGTH = 32;
 
+### the following are sandbox templates
+my $dvipngargs = " -D %DENSITY|N% -T tight".
+    " --%EXT|S%".
+    " -gamma %GAMMA|N%".
+    " -bg transparent ".
+    " -pp %NUM|N% -o %OUTIMG|F% %DVIFILE|F% "; # >> %LOG|F% 2>&1";
+
+my $dvipsargs = " -E -pp %NUM|N% -o %EPS|F% %DVI|F% ";
+    # ">> %LOG|F% 2>&1 ";
+
+my $convertargs = " -density %DENSITY|N%".
+    "  %EPS|F% -antialias -trim -gamma %GAMMA|N% ";
+## note: below, %OUTIMG|F% is appended to $convertargs 
+
 #this hash table will contain the math strings, indexed by their hash code
 my %hashed_math_strings = ();
 
@@ -165,7 +179,7 @@ my $rerender = 0 ;              # flag to rerender all images
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
-	
+
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.025 ) { 
         # this version is Dakar and Cairo compatible
@@ -173,12 +187,35 @@ sub initPlugin
         return 0;
     }
 
+    $debug = 1; &TWiki::Func::getPreferencesFlag( "LATEXMODEPLUGIN_DEBUG" );
+
+    $initialized = 0;
+
+    &TWiki::Func::writeDebug( "- LatexModePlugin initPlugin( $web.$topic ) is OK" ) if $debug;
+
+    return 1;
+}
+
+sub doInit{
+    my ($topic,$web) = @_;
+
+    return if ($initialized);
+
+    if( $TWiki::Plugins::VERSION >= 1.1 ) {
+        # Dakar provides a sandbox
+        $sandbox = $TWiki::sharedSandbox;
+    } else {
+        # in Cairo, must use the contrib package
+        eval("use TWiki::Contrib::DakarContrib;");
+        $sandbox = new TWiki::Sandbox();
+    }
+    print STDERR "sandbox: ".$sandbox."\n";
+
     #get the relative URL to the attachment directory for this page
     $pubUrlPath = # &TWiki::Func::getUrlHost() . 
         &TWiki::Func::getPubUrlPath() . "/$web/$topic";
-    
+
     # Get preferences values
-    $debug = &TWiki::Func::getPreferencesFlag( "LATEXMODEPLUGIN_DEBUG" );
     $default_density = 
         &TWiki::Func::getPreferencesValue( "DENSITY" ) ||
         &TWiki::Func::getPreferencesValue( "LATEXMODEPLUGIN_DENSITY" ) || 
@@ -214,20 +251,37 @@ sub initPlugin
     }
 
     # Plugin correctly initialized
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::LatexModePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    $initialized = 1;
+    &TWiki::Func::writeDebug( "- TWiki::Plugins::LatexModePlugin::doInit( $web.$topic ) is OK" ) if $debug;
 
     return 1;
+}
+
+sub beforeCommonTagsHandler
+{
+    my $topic = $_[1];
+    my $web = $_[2];
+
+    ######################################################
+
+    &doInit($topic,$web) if ( ($_[0]=~m/%(REFLATEX|MATHMODE){.*?}%/) ||
+                              ($_[0]=~m/%BEGINLATEX.*?%/)  ||
+                              ($_[0]=~m/%BEGIN(FIGURE|TABLE){.*?}%/) ||
+                              ($_[0] =~ m/%(\$.*?\$)%/) ||
+                              ($_[0] =~ m/%(\\\[.*?\\\])%/) 
+                              );
+
 }
 
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-    
+
     TWiki::Func::writeDebug( " TWiki::Plugins::LatexModePlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-      
+
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
-    
+
     # handle floats first, in case of latex markup in captions.
     $_[0] =~ s!%BEGINFIGURE{(.*?)}%(.*?)%ENDFIGURE%!&handleFloat($2,$1,'fig')!giseo;
     $_[0] =~ s!%BEGINTABLE{(.*?)}%(.*?)%ENDTABLE%!&handleFloat($2,$1,'tbl')!giseo;
@@ -236,7 +290,7 @@ sub commonTagsHandler
     $_[0] =~ s/%(\$.*?\$)%/&handleLatex($1,'inline="1"')/gseo;
     $_[0] =~ s/%(\\\[.*?\\\])%/&handleLatex($1,'inline="0"')/gseo;
     $_[0] =~ s/%MATHMODE{(.*?)}%/&handleLatex("\\[".$1."\\]",'inline="0"')/gseo;
-    
+
     # pass everything between the latex BEGIN and END tags to the handler
     # 
     $_[0] =~ s!%BEGINLATEX{(.*?)}%(.*?)%ENDLATEX%!&handleLatex($2,$1)!giseo;
@@ -326,7 +380,7 @@ sub handleFloat
     # 'fig:' or 'tbl:' or ...
     ( $opts{'label'} = $_[2].":".$opts{'label'} )
         unless ( substr($opts{'label'},0,4) eq $_[2].':' );
-        
+
     my $txt2 = "";
     if( $latexout ) {           ## for genpdflatex
         # in Cairo (at least) latex new-lines, '\\', get translated to 
@@ -339,7 +393,7 @@ sub handleFloat
         $txt2 .= $input."\n\\caption{".$opts{'caption'}."}\n";
         $txt2 .= '\label{'.$opts{'label'}."}\n\\end{".lc($env).$tc."}";
         $txt2 .= '</latex>';
-        
+
     } else {
         ## otherwise, generate HTML ...
         my $infrmt = '<tr><td align="center">%s</td></tr>';
@@ -347,19 +401,19 @@ sub handleFloat
 
         if ($_[2] eq 'fig') {
             $fig++;
-            
+
             $txt2 .= sprintf($infrmt."\n",$input).
                 sprintf($cpfrmt."\n",$env,$fig,$opts{'caption'});
-                
+
             my $key = $opts{'label'};
             $figrefs{$key} = $fig;
-            
+
         } elsif ($_[2] eq 'tbl') {
             $tbl++;
-            
+
             $txt2 .= sprintf($cpfrmt."\n",$env,$fig,$opts{'caption'}).
                 sprintf($infrmt."\n",$input);
-            
+
             my $key = $opts{'label'};
             $tblrefs{$key} = $tbl;
         } else {
@@ -369,7 +423,7 @@ sub handleFloat
             '<table width="100%" border=0>'."\n" .
             $txt2 .
             '</table>';
-        
+
     } # end. if !($latexout)
 
     return($txt2);
@@ -472,7 +526,7 @@ COLORS
                 # try to handle equation arrays.
                 if ($1 eq '*') {
                     $math_string =~ s/eqnarray\*/eqnarray/g;
-                    
+
                     # leave no numbers ...
                     $math_string =~ s!\\\\!\\nonumber \\\\!g;
                     # except for the last one
@@ -494,7 +548,6 @@ COLORS
         $math_string =~ s!\n!  \n!g;
         $txt = '<latex>'.$math_string.'</latex>';
 
-        
     } else {
 
         # compute the MD5 hash of this string, using both the markup text
@@ -508,11 +561,10 @@ COLORS
         }
         #store the string in a hash table, indexed by the MD5 hash
         $hashed_math_strings{$hash_code} = $math_string;
-        
-        
+
         ### store the declared options for the rendering later...
         $markup_opts{$hash_code} = \%opts;
-        
+
 
         # replace troublesome characters in the string, so the alt tag
         # doesn't break:
@@ -525,7 +577,7 @@ COLORS
         $escaped =~ s!(\u\w\l\w+\u\w)!<nop>$1!g;
 
         my $image_name = "$pubUrlPath/latex$hash_code.$EXT";
-        
+
         # if image currently exists, get its dimensions
         my $outimg = &TWiki::Func::getPubDir() . "/$web/$topic/"."latex$hash_code.$EXT";
         my $str = "";
@@ -536,10 +588,10 @@ COLORS
                            ($opts{'scale'} * $img->{height})  );
             undef($img);
         }
-        
+
         #return a link to an attached image, which we will create later
-        if( ($opts{'inline'} eq 1) or 
-            ($opts{'inline'} eq "on") or 
+        if( ($opts{'inline'} eq 1) or
+            ($opts{'inline'} eq "on") or
             ($opts{'inline'} eq "true") ) {
 
             my $algn;
@@ -552,14 +604,14 @@ COLORS
 
         } elsif( exists($opts{'label'}) ) {
             $eqn++;
-            
+
             $txt = '<a name="'.$opts{'label'}.'"></a>'.
                 '<table width="100%" border=0><tr>'."\n".
                 '<td width=10>&nbsp;</td>'.
                 '<td width="100%" align="center">'.
                 "<img src=\"$image_name\" $str alt=\"$escaped\" /></td>".
                 "<td width=10>($eqn)</dt></tr></table>\n";
-            
+
             if ( exists( $eqnrefs{ $opts{'label'} } ) ) {
                 $error_catch_all .= 
                     "&nbsp;&nbsp;&nbsp;Error! multiple equation labels '$opts{'label'}' defined.\n".
@@ -567,7 +619,7 @@ COLORS
             } else {
                 $eqnrefs{ $opts{'label'} } = $eqn;
             }
-            
+
         } else {
             $txt = "<div align=\"center\"><img src=\"$image_name\" $str alt=\"$escaped\" /></div>";
         }
@@ -583,7 +635,7 @@ sub endRenderingHandler
     # for backwards compatibility with Cairo
     postRenderingHandler($_[0]);
 }
-	
+
 # =========================
 sub postRenderingHandler
 {
@@ -593,10 +645,10 @@ sub postRenderingHandler
     my $path;
 
     &TWiki::Func::writeDebug( "- LatexModePlugin::postRenderingHandler( $web.$topic )" ) if $debug;
-	
+
     #my @revinfo = &TWiki::Func::getRevisionInfo($web, $topic, "", 0);
     #&TWiki::Func::writeDebug( "- LatexModePlugin: @revinfo" ) if $debug;
-    
+
     #check if there was any math in this document
     return unless scalar( keys( %hashed_math_strings ) );
 
@@ -608,25 +660,28 @@ sub postRenderingHandler
     my $delete_files = ( $script =~ m/^view/ );
 
     my @extfiles;
-    if( $TWiki::Plugins::VERSION >= 1.1 ) { 
-        # Dakar interface
-        my ( $meta, undef ) = TWiki::Func::readTopic( $web, $topic );
-        my %h2 = %{$meta};
-        @extfiles = @{$h2{FILEATTACHMENT}} if defined($h2{FILEATTACHMENT});
-    } else {
+    if ( ( $TWiki::Plugins::VERSION < 1.1 ) || 
+         ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach} ) ) {
         # Cairo interface
         $path = &TWiki::Func::getPubDir() . "/$web/$topic";
         opendir(D,$path);
         @extfiles = grep(/\.$EXT$/,readdir(D));
         closedir(D);
+    } else {
+        # Dakar interface
+        my ( $meta, undef ) = TWiki::Func::readTopic( $web, $topic );
+        my %h2 = %{$meta};
+        @extfiles = @{$h2{FILEATTACHMENT}} if defined($h2{FILEATTACHMENT});
     }
     &TWiki::Func::writeDebug( "Scanning file attachments" ) if $debug;
     foreach my $a ( @extfiles ) {
-        my $fn = ( $TWiki::Plugins::VERSION >= 1.1 ) ? $a->{name} : $a;
+        my $fn = ( ( $TWiki::Plugins::VERSION < 1.1 ) ||
+                   ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach} ) )
+                   ? $a : $a->{name};
 
         # print STDERR "\n----\n";
         # print STDERR map {"$_ -> $h{$_}\n"} keys %h;
-        
+
         # was the image likely generated by this plugin?
         if( $fn =~ m/^latex[0-9a-f]+\.$EXT$/ ) {
 
@@ -644,16 +699,16 @@ sub postRenderingHandler
                 &TWiki::Func::writeDebug( "Deleting old image that I think belongs to me: $fn" ) if $debug;
                 if ( $fn =~ /^([-\@\w.]+)$/ ) { # untaint filename
                     $fn = $1;
-                    
-                    if ( $TWiki::Plugins::VERSION >= 1.1 ) { 
+
+                    if ( ( $TWiki::Plugins::VERSION < 1.1 ) ||
+                         ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach} ) ) {
+                        # Cairo interface
+                        unlink( $path.$pathSep.$fn ) if (-f $fn);
+                    } else {
                         # Dakar interface
                         TWiki::Func::moveAttachment( $web, $topic, $fn, 
                                                      $TWiki::cfg{TrashWebName},
-                                                     'TrashAttachment', $fn )
-                            if (-f $fn);
-                    } else {
-                        # Cairo interface
-                        unlink( $path.$pathSep.$fn ) if (-f $fn);
+                                                     'TrashAttachment', $fn );
                     }
                 }
             }
@@ -691,7 +746,10 @@ sub postRenderingHandler
 
     do { $_[0] .= "<BR>unable to access latex working directory.";
          return; } unless chdir( $LATEXWDIR );
-    system("echo \"$LATEXWDIR\n^O\n\" > $LATEXLOG");
+    # system("echo \"$LATEXWDIR\n^O\n\" > $LATEXLOG");
+    open(LF,">$LATEXLOG");
+    print LF "$LATEXWDIR\n\n";
+    close(LF);
 
     my $image_number = 0;   # initialize the image count
     #this hash table maps the digest strings to the output filenames
@@ -709,7 +767,7 @@ sub postRenderingHandler
 
     print MATHOUT "\\documentclass{article}\n".$preamble."\n\\begin{document}\n\\pagestyle{empty}\n";
     while( (my $key, my $value) = each( %hashed_math_strings ) ) {
-        
+
         # restore the declared rendering options
         my %opts = %{$markup_opts{$key}};
 
@@ -723,7 +781,7 @@ sub postRenderingHandler
                                   $value . " :: " .
                                   join('; ', map{"$_=>$opts{$_}"} keys(%opts))
                                   ) if ($debug);
-        
+
         print MATHOUT "\\clearpage\n";
         print MATHOUT "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
         print MATHOUT '\textcolor{'.$opts{'color'}.'}{'
@@ -739,12 +797,22 @@ sub postRenderingHandler
     close( MATHOUT );
 
     # generate the output images by running latex-dvips-convert on the file
-    system("$PATHTOLATEX -interaction=nonstopmode $LATEXFILENAME >> $LATEXLOG 2>&1");
+    # system("$PATHTOLATEX -interaction=nonstopmode $LATEXFILENAME >> $LATEXLOG 2>&1");
+    $sandbox->sysCommand("$PATHTOLATEX ".
+                         ' -interaction=nonstopmode %FILE|F% ',
+                         FILE => $LATEXFILENAME
+                         );
 
     ### report errors on 'preview' and 'save'
     if ( ( $script eq 'preview' ) || ( $script eq 'save' ) ) {
-        my $resp = `$GREP -A 3 -i "!" $LATEXLOG`;
-        $_[0] .= "\n<hr>Latex rendering error messages:<pre>$resp</pre>\n" if ( length($resp) > 0 );
+        # my $resp = `$GREP -A 3 -i "!" $LATEXLOG`;
+        (my $log = $LATEXFILENAME) =~ s/\.tex$/\.log/;
+        $sandbox->{TRACE} = 1;
+        my ($resp,$ret) = $sandbox->sysCommand( $GREP.' -A 1 ! %LOG|F%',
+                                                LOG => $LATEXWDIR.$pathSep.$log );
+        $_[0] .= "\n<hr>Latex rendering error messages:<pre>$resp</pre>\n" 
+          if ( ( length($resp) > 0 ) or ( $ret > 0 ) );
+        $sandbox->{TRACE} = 0;
     }
 
     if ( -f $LATEXBASENAME.".dvi" ) {
@@ -757,47 +825,87 @@ sub postRenderingHandler
             # calculate point-to-pixel mapping (1pt/72dpi*density) 
             # == 1.61 for density=116
             my $ptsz = ($opts{'density'}/72); 
-	    
+
 	    my $num = $hash_code_mapping{$key};
 
             my $outimg = "latex$key.$EXT";
-            
+
             if (-x $PATHTODVIPNG) {
                 # if dvipng is installed ...
-                $EXT = lc($EXT);
-                my $cmd = "$PATHTODVIPNG -D ".$opts{'density'}." -T tight".
-                    " --".$EXT.
-                    " -gamma ".($opts{'gamma'}+1.0).
-                    " -bg transparent ".
-                    " -pp $num -o $outimg ".$LATEXBASENAME.".dvi >> $LATEXLOG 2>&1";
-                system($cmd);
+                # $EXT = lc($EXT);
+                # my $cmd = "$PATHTODVIPNG -D ".$opts{'density'}." -T tight".
+                #     " --".$EXT.
+                #     " -gamma ".($opts{'gamma'}+1.0).
+                #     " -bg transparent ".
+                #     " -pp $num -o $outimg ".$LATEXBASENAME.".dvi >> $LATEXLOG 2>&1";
+                # system($cmd);
+                $sandbox->sysCommand( "$PATHTODVIPNG $dvipngargs",
+                                      DENSITY => $opts{'density'},
+                                      EXT => lc($EXT),
+                                      GAMMA => ($opts{'gamma'}+1.0),
+                                      NUM => $num,
+                                      DVIFILE => $LATEXBASENAME.".dvi",
+                                      OUTIMG => $outimg,
+                                      LOG => $LATEXLOG
+                                      );
+
             } else {
                 # OTW, use dvips/convert ...
 
-	    system("$PATHTODVIPS -E -pp $num -o $LATEXBASENAME.$num.eps $LATEXBASENAME.dvi >> $LATEXLOG 2>&1 ");
-	    
-	    my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.eps ";
-            $cmd .= "-antialias -trim -gamma ".$opts{'gamma'}." ";
-            $cmd .= " -transparent white " 
-                unless ( ($markup_opts{$key}{'inline'} ne 0) and
-                         ($tweakinline ne 0) );
-            $cmd .= $outimg;
+                # system("$PATHTODVIPS -E -pp $num -o $LATEXBASENAME.$num.eps $LATEXBASENAME.dvi >> $LATEXLOG 2>&1 ");
 
-	    system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG") if ($debug);
-	    system("$PATHTOCONVERT $cmd");
+                # my $cmd = "-density $opts{'density'} $LATEXBASENAME.$num.eps ";
+                # $cmd .= "-antialias -trim -gamma ".$opts{'gamma'}." ";
+                # $cmd .= " -transparent white " 
+                #     unless ( ($markup_opts{$key}{'inline'} ne 0) and
+                #              ($tweakinline ne 0) );
+                # $cmd .= $outimg;
+
+                my ($d,$e) =
+                    $sandbox->sysCommand( "$PATHTODVIPS $dvipsargs",
+                                          NUM => $num,
+                                          EPS => $LATEXBASENAME.$num.".eps",
+                                          DVI => $LATEXBASENAME.".dvi",
+                                          LOG => $LATEXLOG );
+                print STDERR "dvips: $d $e" if length($d) > 0;
+
+                # system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG") if ($debug);
+                # system("$PATHTOCONVERT $cmd");
+
+                my $ccmd = $convertargs;
+                $ccmd .= " -transparent white " 
+                    unless ( ($markup_opts{$key}{'inline'} ne 0) and
+                             ($tweakinline ne 0) );
+                $ccmd .= " %OUTIMG|F%";
+
+                $sandbox->sysCommand( $PATHTOCONVERT." $ccmd",
+                                      DENSITY => $opts{'density'},
+                                      EPS => $LATEXBASENAME.$num.".eps",
+                                      EXT => lc($EXT),
+                                      GAMMA => $opts{'gamma'},
+                                      OUTIMG => $outimg,
+                                      LOG => $LATEXLOG );
+
             }
             if (-f $outimg) {
-                
+
                 if ( ($markup_opts{$key}{'inline'} ne 0) 
                      and ($tweakinline) 
                      and (-x $PATHTOCONVERT) 
                      ) {
                     my $tmpfile = File::Temp::tempnam( $LATEXWDIR, 'tmp' ).".$EXT";
                     move($outimg,$tmpfile);
-                    
+
                     my $args = "$tmpfile -background black -trim $outimg";
-                    system("$PATHTOCONVERT $args");
-                    system("echo \"$PATHTOCONVERT $args\" >> $LATEXLOG") if ($debug);
+                    # system("$PATHTOCONVERT $args");
+                    # system("echo \"$PATHTOCONVERT $args\" >> $LATEXLOG") if ($debug);
+                    my ($d,$e) = 
+                        $sandbox->sysCommand("$PATHTOCONVERT %IN|F% ".
+                                             " -background black -trim ".
+                                             " %OUT|F% ",
+                                             IN => $tmpfile,
+                                             OUT => $outimg );
+                    print STDERR "convert: $d $e\n" if ($e > 0);
 
                     my $img2 = image_info($outimg);
 
@@ -811,12 +919,26 @@ sub postRenderingHandler
                     my ($sh,$sh2) = ( round(3.1*$ptsz), round(2.25*$ptsz) );
                     $sh = $1 if ($sh =~ m/(\d+)/); # untaint
                     $sh2 = $1 if ($sh2 =~ m/(\d+)/); # untaint
-                     
+
                     my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 -transparent white $outimg";
-                    
+
                     move($outimg,$tmpfile);
-                    system("$PATHTOCONVERT $tmpfile $cmd");
-                    system("echo \"$PATHTOCONVERT $tmpfile $cmd\" >> $LATEXLOG") if ($debug);
+                    # system("$PATHTOCONVERT $tmpfile $cmd");
+                    # system("echo \"$PATHTOCONVERT $tmpfile $cmd\" >> $LATEXLOG") if ($debug);
+                    ($d,$e) = 
+                        $sandbox->sysCommand("$PATHTOCONVERT %INIMG|F% ".
+                                             " -crop ".
+                                             '%NW|N%'.'x'.'%NH|N%'.
+                                             '+'.'%SH|N%'.'+'.'%SH2|N%'.
+                                             ' -transparent white %OUTIMG|F%',
+                                             INIMG => $tmpfile,
+                                             NW => $nw,
+                                             NH => $nh,
+                                             SH => $sh,
+                                             SH2 => $sh2,
+                                             OUTIMG => $outimg
+                                             );
+                    print STDERR "convert: $d $e\n" if ($e > 0);
                     unlink("$tmpfile") unless ($debug);
 
                     ## Another strategy: trim gives better horizontal
@@ -851,23 +973,24 @@ sub postRenderingHandler
                                   ($opts{'scale'} * $img->{height}) );
                 $_[0] =~ s/($outimg\")/$1 $str/;
 
-                if( $TWiki::Plugins::VERSION >= 1.1 ) 
-                { 
+                if ( ( $TWiki::Plugins::VERSION < 1.1 ) ||
+                     ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) )
+                {
+                    # Cairo interface
+
+                    mkdir( $path.$pathSep )unless (-e $path.$pathSep);
+
+                    move($outimg,$path.$pathSep.$outimg) or 
+                        $_[0] .= "<br> LatexModePlugin error: Move of $outimg failed: $!";
+                } else {
                     # Dakar interface
                     TWiki::Func::saveAttachment( $web, $topic, $outimg,
                                                  { file => $outimg,
                                                    comment => '',
                                                    hide => 1 } );
                     unlink($outimg) unless $debug; # delete working copy
-                } else {
-                    # Cairo interface
-                    
-                    mkdir( $path.$pathSep )unless (-e $path.$pathSep);
-                    
-                    move($outimg,$path.$pathSep.$outimg) or 
-                        $_[0] .= "<br> LatexModePlugin error: Move of $outimg failed: $!";
                 }
-                
+
                 undef($img);
             }
         }
@@ -909,9 +1032,9 @@ sub postRenderingHandler
 }
 
 sub round {
-    
+
     my ($i) = @_;
-    
+
     # my $a = ( ($i - int($i)) > 0.5 ) ? int($i) : int($i) + 1;
     my $a = int($i);
     $a = $a + 1 if ( ($i - int($i)) > 0.5 );
