@@ -1572,8 +1572,12 @@ sub _duplicateDaysSpanningEntry
 
 	return if ($startday==$endday);  # nothing to duplicate
 
-	for (my $d=$startday; ($d<=$endday)&&($d<$options{'days'}); $d++) {
-		if ($d==$startday) {
+	my $wrapped = 0;
+	for (my $d=$startday; ($d<=$endday)&&(($d<$options{'days'})||(!$options{'compatmode'})); $d++) {
+		if ($d==$options{'days'}) { ## wrap arround if compatmode==0 (event goes above days limit)
+			$endday-=7; $d=0; $wrapped=1;
+		}
+		if (($d==$startday)&&(!$wrapped)) {
 			$$entry_ref{'nendtime'}=&_normalize(1440, $STARTTIME, $TIMEINTERVAL,1);
 		} else {
 			my %newentry = ( );

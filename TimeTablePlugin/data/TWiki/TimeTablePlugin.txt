@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1154706563" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1154944125" format="1.0" version="$Rev$"}%
 ---+!! <nop>%TOPIC%
 The <nop>%TOPIC% handles the tag =%<nop>TIMETABLE%= and creates a weekly timetable. 
 The timetable is rendered with HTML tables and should work with all modern web browsers.
@@ -42,7 +42,7 @@ Events are defined with bullets. Following event types are supported to define e
 | <b>Interval</b> | ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch== |
 |^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - green== |
 |^| ==&nbsp;* DDD - DDD - HH:MM - HH:MM - description - foreground color, background color== | ==&nbsp;* Mon - Fri - 12:15 - 13:00 - Lunch - white,black== |
-| <b>Duration</b> | instead of an end time (==HH:MM==) in a time range of a single/list/interval event you can define an event duration in days (==d==), hours (==h==) and/or minutes (==m==), e.g. one day: =1d= ; one day and two hours: =1:2d= ; one day, two hours and 30 minutes: =1:2:40d= ; two hours: =2h= ;  two yours and 30 minutes: =2:30h= ; 30 minutes: =30m= | ==&nbsp;* Mon - 10:00 - 2h - every Monday 2 hours at 10 o'clock== |
+| <b>Duration</b> | instead of an end time (==HH:MM==) in a time range of a single/list/interval event you can define an event duration in days (==d==), hours (==h==) and/or minutes (==m==), e.g. one day: =1d= ; one day and two hours: =1:2d= ; one day, two hours and 30 minutes: =1:2:30d= ; two hours: =2h= ;  two yours and 30 minutes: =2:30h= ; 30 minutes: =30m= | ==&nbsp;* Mon - 10:00 - 2h - every Monday 2 hours at 10 o'clock== |
 
 If you enable the compatibility mode (see Attributes or Plugins Settings sections) you can also use all TWiki:Plugins.CalendarPlugin event types.
 Examples:
@@ -58,6 +58,7 @@ Examples:
 	* The parameter of the %<nop>TTCM% tag *must not contain any whitespaces*.
 	* Time ranges in a description field *must not contain any whitespaces*.
 	* If no %<nop>TTCM% tag or no time range was specified in a description of a TWiki:Plugins.CalendarPlugin event the event gets a full-time event (12:01am-11:59pm o'clock, 0-24h).
+
  
 ---++ Attributes
 Usage: %<nop>TIMETABLE{attribute1="value1" attribute2="value2" ...}% 
@@ -216,9 +217,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.009 (BETA) |
+|  Plugin Version: | V1.009 (7 Aug 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.009 (BETA) | TWiki:Main.DanielRohde: added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include) |
+|  V1.009 (7 Aug 2006) | TWiki:Main.DanielRohde: added duration feature; added time zone abbreviations; improved performance; fixed conflict rendering bug; fixed time zone bugs (whole-time event handling, topic include) |
 |  V1.008 (2 Aug 2006) | TWiki:Main.DanielRohde: added timezone feature requested by TWiki:Main.BenWatts; fixed major midday/midnight (12pm/12am) bug reported by TWiki:Main.BenWatts; fixed overlapping day bug; fixed periodic event bug; fixed minor bugs (stylesheet bug: annyoing <nop>JavaScript errors; empty event row) |
 |  V1.007 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major bug (wholetimerow: empty column) |
 |  V1.006 (23 Jun 2006) | TWiki:Main.DanielRohde: fixed major mod_perl bug (paging in compatmode); added whole-time row feature; fixed minor bugs (empty column color; cutted text) |
