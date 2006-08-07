@@ -26,7 +26,7 @@ package TWiki::Plugins::MathModePlugin;
 use strict;
 use vars qw($web $topic $VERSION $RELEASE $core %TWikiCompatibility);
 $VERSION = '$Rev$';
-$RELEASE = '2.90';
+$RELEASE = '2.91';
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 
 ###############################################################################
