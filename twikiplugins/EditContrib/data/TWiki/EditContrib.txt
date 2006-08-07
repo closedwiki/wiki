@@ -110,8 +110,9 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 |  Copyright &copy;: |  |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | none  |
-|  Version: | 12 Jun n2006 |
+|  Version: | 04 Aug 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  04 Aug 2006: | Protect pre and post text passed from being corrupted by Firefox 1.5 |
 |  12 Jun 2006: | Removed some usage of "illegal" code |
 |  10 Jun 2006: | Rewrite to support Dakar release |
 |  04 Aug 2005: | Deal with certain browsers eating the leading newline in text areas  |
@@ -126,7 +127,7 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 
 __Related Topics:__ TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/MultiEditPlugin, TWiki:Plugins/ThreadedDiscussionPlugin, TWiki:Plugins/EditTablerowPlugin
 
--- TWiki:Main/ThomasWeigert 12 Jun 2006
+-- TWiki:Main/ThomasWeigert 04 Aug 2006
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
