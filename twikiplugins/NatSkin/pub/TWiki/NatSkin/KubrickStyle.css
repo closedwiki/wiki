@@ -296,8 +296,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natBottomBarContents a {
   color:#959596;
 }
-.natCopyRight,
-.natTWikiInfo {
+.natCopyRight {
   display:inline;
 }
 
