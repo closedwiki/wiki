@@ -1,0 +1,33 @@
+
+
+---++ Preferences
+
+	* Set WORKFLOWNOTICE = This topic is under document control. Last approval on %WORKFLOWLASTTIME_APPROVED%: %WORKFLOWLASTVERSION_APPROVED%
+
+	* Set WORKFLOWBUTTON =  <table border="0" cellspacing="0" cellpadding="0"> <tr><td>You are permitted to change the status of this document:</td><td>%WORKFLOWTRANSITION%</TD></tr></table>
+
+
+
+---++ States
+
+| State | Allow Edit | Message |
+| UNDERREVISION |  | <H1>This document is under revision. DO NOT USE!</H1> <BR><P><BR> <HR>|
+| APPROVED |  | |
+| WAITINGFORQM | Main.TWikiAdminGroup | <H1>This document is waiting for approval by the Quality Manager. DO NOT USE! </H1> <BR><P><BR><HR>|
+| WAITINGFORCEO | Main.TWikiAdminGroup | <H1>This document is waiting for approval by the CEO. DO NOT USE! </H1><BR><P><BR><HR>|
+
+
+
+
+---++ Transitions
+
+| State | Action | Next State | Allowed |
+| APPROVED | revise | UNDERREVISION | Main.TWikiAdminGroup, Main.TWikiGuest |
+| UNDERREVISION | send to Quality Manager for approval | WAITINGFORQM |  |
+| WAITINGFORQM | approve and send to CEO for approval| WAITINGFORCEO |  |
+| WAITINGFORQM | reject and keep revising| UNDERREVISION |  |
+| WAITINGFORCEO | approve | APPROVED |  |
+| WAITINGFORCEO | reject and keep revising | UNDERREVISION |  |
+
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
