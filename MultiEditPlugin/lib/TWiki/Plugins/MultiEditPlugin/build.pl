@@ -33,7 +33,7 @@ use TWiki::Contrib::Build;
 
   sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "MultiEditPlugin" ), $class );
+    return bless( $class->SUPER::new( "MultiEditPlugin", "Build" ), $class );
   }
 
   # Example: Override the build target
