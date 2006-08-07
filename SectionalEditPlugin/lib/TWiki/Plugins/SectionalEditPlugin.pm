@@ -19,24 +19,19 @@
 package TWiki::Plugins::SectionalEditPlugin;
 
 # =========================
+use strict;
+
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
         $bgcolor $label $skipskin $leftjustify $alwayssection
+	$sectiondepth $editstyle $placement
     );
 
-use vars qw( %TWikiCompatibility );
+use TWiki::Contrib::EditContrib;
 
-use TWiki;
-
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
 $VERSION = '$Rev$';
 
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = '17 May 2006';
+$RELEASE = '6 Mar 2006';
 
 # =========================
 sub initPlugin
@@ -141,17 +136,6 @@ sub displayRow
 	 (($editstyle)?"":"</tr>");
 }
 
-## disable the call to endRenderingHandler in Dakar (i.e. TWiki::Plugins::VERSION >= 1.1)
-$TWikiCompatibility{startRenderingHandler} = 1.1;
-
-sub startRenderingHandler
-{
-
-    # startRenderingHandler is depreciated post Cairo, but needed for
-    # Cairo compatibility 
-    return preRenderingHandler( @_ );
-}
-
 # =========================
 sub preRenderingHandler
 {
@@ -161,7 +145,7 @@ sub preRenderingHandler
 
     # This handler is called by getRenderedVersion just before the line loop
     # Only bother with this plugin if viewing (i.e. not searching, etc)
-    return unless ($0 =~ m/\/view|\/viewauth/o);
+    return unless ($0 =~ m/view|viewauth|render/o);
 
     my $cskin = &TWiki::Func::getSkin();
     my $skipit = 0;
@@ -172,7 +156,7 @@ sub preRenderingHandler
     }
 
     unless($skipit) {
-	my $editsections = 'EditSections' if (($alwayssection && $_[0] !~ /^\s*<body/is) || ($_[0] =~ m%<editsections\s*/>%i));
+	my $editsections = 'EditSections' if (($alwayssection && $_[0] !~ /\<body class\=/is && $_[0] !~ /\<\/body\>/is)  || ($_[0] =~ m%<editsections\s*/>%i));
 	# <sectionbreak/> inserts break in sections, <editsections/> sections all.
 	# why did we also use <sectionbreak/> in the first line to section all?
 	# Make sure space before /> is allowed also in the script
@@ -206,13 +190,16 @@ sub preRenderingHandler
 		    $lastpos = $curpos;
 		    $pos++;
 		}
+		# If there were no sections, leave text alone
+		return if ($lastpos == $pos);
+		# Otherwise, complete the section
 		$sec = substr($text,$lastpos);
 		$ret .= editRow($eurl,$pos, ($pos > 0 ? "\n". $lastmark : "") . $sec) unless ($sec =~ /^\s*$/o);
 	    }
 	    if ($sectionbreak) {
 		my @sections = split(/<sectionbreak\s*\/?>/i, $_[0]);
 		my $pos = 0;
-		foreach $sec (@sections) {
+		foreach my $sec (@sections) {
 		    $ret .= editRow($eurl,$pos,$sec);
 		    $pos++;
 		}
@@ -222,7 +209,7 @@ sub preRenderingHandler
 		my $pos = 0;
 		my $state = "noedit";
 		my $origstyle = $editstyle;
-		foreach $sec (@sections) {
+		foreach my $sec (@sections) {
 		    if ( $sec =~ m/<sectionedit(.*?)>/i ) {
 		      $editstyle = $1 if $1;
 		      $state="edit"; next; 
@@ -240,6 +227,109 @@ sub preRenderingHandler
 	    $_[0] = $ret;
 	}
     }
+}
+
+# =========================
+sub edit
+{
+    my $session = shift;
+
+    $session->enterContext( 'edit' );
+    my $text= '';
+    my $tmpl = '';
+    ( $session, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( $session );
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $theSec = int($query->param('sec')) || 0;
+    my $theEditUrl = &TWiki::Func::getScriptUrl( $webName, $topic, "editsection" );
+    my $theEditUrlParams = "&sec=$theSec#SECEDITBOX";
+    $tmpl =~ s/%EDIT%/$theEditUrl/go;
+    $tmpl =~ s/%EDITPARAMS%/$theEditUrlParams/go;
+    my $sectxt = "";
+    my $pretxt = "";
+    my $postxt = "";
+    my $pos = 0;
+    my $editsections = 0;
+
+    # Get rid of CRs (we only want to deal with LFs)
+    $text =~ s/\r//g;
+
+    if ( $TWiki::Plugins::SectionalEditPlugin::alwayssection || ($editsections = $text =~ m/<editsections\s*\/>/i) ) {
+	my $lastmark = "";
+	my $lastpos = 0;
+        while ( $text =~ m/^---\+{1,$TWiki::Plugins::SectionalEditPlugin::sectiondepth}[^+]/mg ) {
+	  if ( $pos == $theSec ) {
+	    $postxt = $&.$';
+	    $sectxt = $lastmark.substr($text,$lastpos,(pos $text) - length($&) - $lastpos);
+	    $pos++;
+	    last;
+	  } elsif ( $pos == ($theSec - 1) ) {
+	    $lastmark = $&;
+	    $lastpos = pos $text;
+	    $pretxt = $`;
+	  }
+	  $pos++;
+	}
+	if ( $pos == $theSec ) {
+	  # The target section was the last section
+	  #$postxt = "";
+	  $sectxt = $lastmark.substr($text,$lastpos);
+	}
+	if ( $editsections ) {
+	  # move the <editsections/> command into $pretxt
+	  if ( $sectxt =~ s|<editsections\s*\/>||i ) {
+	    $pretxt = "<editsections\/>\n$pretxt";
+	  }
+	}
+        # Move the end of line to the beginning of postxt
+        # So that sections aren't accidentally collapsed
+	# (by user deleting the trailing newline in section)
+        if ($sectxt =~ s/[\n\r]$//s) {
+	  $postxt = "\n" . $postxt;
+        }
+    }
+    elsif ( $text =~ m/<sectionbreak\s*\/?>/i ) {    
+	my @sections = split(/<sectionbreak\s*\/?>/i, $text);
+	# The following does not honor the literal spelling of the <sectionbreak/> tag
+	foreach my $s (@sections) {
+	    if ($pos < $theSec) {
+		unless ($pretxt eq "") {
+		    $pretxt .= "<sectionbreak/>";
+		}
+		$pretxt .= $s;
+	    } elsif ($pos > $theSec) {
+		$postxt .= "<sectionbreak/>";
+		$postxt .= $s;
+	    } else {
+		$sectxt = $s;
+	    }
+	    $pos++;
+	}
+	unless ($pretxt eq "") {
+	    $pretxt .= "<sectionbreak/>\n";
+	}
+    }
+    elsif ( $text =~ m/<\/?sectionedit.*?>/i ) { 
+	my @sections = split(/(<\/?sectionedit.*?>)/i, $text); 
+	foreach my $s (@sections) {
+	    if ($pos < $theSec) {
+		if ( $s =~ m/<(\/?)sectionedit(.*?)>/ ) { $pretxt .= "<$1sectionedit$2>"; next; }
+		$pretxt .= $s;
+	    } elsif ($pos > $theSec) {
+		if ( $s =~ m/<(\/?)sectionedit(.*?)>/ ) { $postxt .= "<$1sectionedit$2>"; next; }
+		$postxt .= $s;
+	    } else {
+		if ( $s =~ m/<(\/?)sectionedit(.*?)>/ ) { $pretxt .= "<$1sectionedit$2>"; next; }
+		$sectxt = $s;
+	    }
+	    $pos++;
+	}
+    }
+
+    TWiki::Contrib::EditContrib::finalize_edit ($session, $pretxt, $sectxt, $postxt, $pretxt, $postxt, $tmpl);
+
 }
 
 1;
