@@ -136,6 +136,7 @@ separator) may contain special variables:
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | v0.03 |
 |  Change History: | &nbsp; |
+|  08 Aug 2006: | fixed topic parents not showing up; don't show non-existing topics |
 |  29 Jul 2006: | fixed infinit loop when a topic is its own parent topic |
 |  28 Jul 2006: | initial version; \
                   don't add the topic parent '<nop>WebHome' to the path |
@@ -147,4 +148,4 @@ separator) may contain special variables:
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 29 Jul 2006
+-- TWiki:Main/MichaelDaum - 08 Aug 2006

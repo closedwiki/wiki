@@ -18,13 +18,14 @@ use strict;
 use vars qw($VERSION $RELEASE $debug $isDakar);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.03';
+$RELEASE = 'v0.04';
 
 $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug('- BreadCrumbPlugin - '.$_[0]) if $debug;
+  #&TWiki::Func::writeDebug('- BreadCrumbPlugin - '.$_[0]) if $debug;
+  print STDERR '- BreadCrumbPlugin - '.$_[0]."\n" if $debug;
 }
 
 ###############################################################################
@@ -56,6 +57,7 @@ sub getMetaData {
 
   return $result;
 }
+
 
 ###############################################################################
 sub getLocationBreadCrumbs {
@@ -91,31 +93,45 @@ sub getLocationBreadCrumbs {
   }
 
   # collect all parent topics
+  my %seen;
   unless ($recurse->{off} || $recurse->{topicoff}) {
     my $web = $thisWeb;
     my $topic = $thisTopic;
-    my %seen;
-    $seen{"$thisWeb.$thisTopic"} = 1;
     my @topicCrumbs;
+
     while (1) {
-      last if $seen{"$web.$topic"};
-      $seen{"$web.$topic"} = 1;
+      # get parent
       my ($meta, $dumy) = &TWiki::Func::readTopic($web, $topic);
       my $parentMeta = &getMetaData($meta, "TOPICPARENT"); 
       last unless $parentMeta;
       my $parentName = $parentMeta->{name};
       last unless $parentName;
       ($web, $topic) = normalizeWebTopicName($web, $parentName);
-      last if $topic eq 'WebHome';
+
+      # check end of loop
+      last if 
+	$seen{"$web.$topic"} || 
+	$topic eq 'WebHome' ||
+	!TWiki::Func::topicExists($web,$topic);
+
+      # add breadcrumb
       #writeDebug("adding breadcrumb: target=$web/$topic, name=$topic");
       unshift @topicCrumbs, { target=>"$web/$topic", name=>$topic };
-      last if $recurse->{once} || $recurse->{topiconce};
+      $seen{"$web.$topic"} = 1;
+
+      # check for bailout
+      last if 
+	$recurse->{once} || 
+	$recurse->{topiconce};
     }
     push @breadCrumbs, @topicCrumbs;
   }
   
-  #writeDebug("finally adding breadcrumb: target=$thisWeb/$thisTopic, name=$thisTopic");
-  push @breadCrumbs, { target=>"$thisWeb/$thisTopic", name=>$thisTopic };
+  # maybe add this topic if it was not covered yet
+  unless ($seen{"$thisWeb.$thisTopic"}) {
+    #writeDebug("finally adding breadcrumb: target=$thisWeb/$thisTopic, name=$thisTopic");
+    push @breadCrumbs, { target=>"$thisWeb/$thisTopic", name=>$thisTopic };
+  }
 
   return \@breadCrumbs;
 }
@@ -147,7 +163,7 @@ sub normalizeWebTopicName {
 sub renderBreadCrumbs {
   my ($currentWeb, $currentTopic, $args) = @_;
 
-  writeDebug("called renderBreadCrumbs($currentWeb, $currentTopic, $args)");
+  #writeDebug("called renderBreadCrumbs($currentWeb, $currentTopic, $args)");
 
   # get parameters
   my $webTopic = TWiki::Func::extractNameValuePair($args) || "$currentWeb.$currentTopic";
