@@ -29,7 +29,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.91';
+$RELEASE = 'v0.92';
 $debug = 0; # toggle me
 
 ###############################################################################
@@ -41,10 +41,7 @@ sub writeDebug {
 sub initPlugin {
   ($currentTopic, $currentWeb) = @_;
 
-  $currentAction = $ENV{SCRIPT_NAME} || '';
-  $currentAction =~ s/^.*\/(.*?)$/$1/go;
-
-  #writeDebug("currentAction=$currentAction");
+  $currentAction = undef;
 
   $isDakar = (defined $TWiki::RELEASE)?1:0;
   if ($isDakar) {
@@ -148,6 +145,10 @@ sub ifDefinedImpl {
     $theAs = TWiki::Func::expandCommonVariables($theAs, $currentTopic, $currentWeb);
   }
 
+  unless (defined $currentAction) {
+    $currentAction = getCgiAction();
+  }
+
   if (!$theAction || $currentAction =~ /$theAction/) {
     if ($theVariable =~ /^%([A-Za-z][A-Za-z0-9]*)%$/) {
       my $varName = $1;
@@ -219,6 +220,28 @@ sub escapeParameter {
   $found = 1 if $_[0] =~ s/\$dollar/\$/g;
 
   return $found;
+}
+
+
+###############################################################################
+# take the REQUEST_URI, strip off the PATH_INFO from the end, the last word
+# is the action; this is done that complicated as there may be different
+# paths for the same action depending on the apache configuration (rewrites, aliases)
+sub getCgiAction {
+
+  my $pathInfo = $ENV{'PATH_INFO'};
+  my $theAction = $ENV{'REQUEST_URI'} || '';
+  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
+    $theAction = $1;
+  } else {
+    $theAction = 'view';
+  }
+
+  #writeDebug("PATH_INFO=$ENV{'PATH_INFO'}");
+  #writeDebug("REQUEST_URI=$ENV{'REQUEST_URI'}");
+  #writeDebug("theAction=$theAction");
+
+  return $theAction;
 }
 
 ###############################################################################
