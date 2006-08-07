@@ -982,7 +982,8 @@ sub renderUserActions {
     $whiteBoard =~ s/^\s*(.*?)\s*$/$1/g;
     my $editUrlParams = '';
     my $useWysiwyg = &TWiki::Func::getPreferencesFlag('USEWYSIWYG');
-    if ($TWiki::cfg{Plugins}{WysiwygPlugin} && $useWysiwyg eq 'on') {
+    if (defined $TWiki::cfg{Plugins}{WysiwygPlugin} &&
+	$TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} && $useWysiwyg) {
       $editUrlParams = '&skin=kupu';
     }  else {
       $editUrlParams = '&action=form' if $whiteBoard eq 'off';
