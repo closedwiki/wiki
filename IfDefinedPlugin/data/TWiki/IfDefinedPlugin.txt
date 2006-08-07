@@ -104,8 +104,8 @@ advance.
 
 ---++ Plugin Installation Instructions
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip it in your twiki installation directory. Content: 
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
@@ -115,8 +115,9 @@ advance.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.91 |
+|  Plugin Version: | v0.92 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  07 Aug 2006: | be smarter to detect the cgi action wrt to different apache setups |
 |  10 Mar 2006: | added =as= parameter; \
                   added escape parameters and recursive variable expansion to the condition argument \
 		  which helps to circumvent problems due to different plugin orders |
@@ -129,4 +130,4 @@ advance.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 10 Mar 2006
+-- TWiki:Main.MichaelDaum - 07 Aug 2006
