@@ -46,38 +46,46 @@ sub new {
     hashedMathStrings => {}, 
       # contains the math strings, indexed by their hash code
 
-    hashCodeLength => $TWiki::cfg{MathModePlugin}{HashCodeLength} || 32,
+    fgColors => {},
+      # contains the foreground color of a math string
 
+    bgColors => {},
+      # contains the background color of a math string
+
+    sizes => {},
+      # font size of a math string, can be; can be
+      # tiny, scriptsize, footnotesize, small, normalsize, large, Large, LARGE,
+      # huge or Huge
+
+    hashCodeLength => $TWiki::cfg{MathModePlugin}{HashCodeLength} || 32,
       # length of the hash code. If you switch to a different
       # hash function, you will likely have to change this
 
     imagePrefix => $TWiki::cfg{MathModePlugin}{ImagePrefix} || '_MathModePlugin_',
       # string to be prepended to any auto-generated image
 
-    latex2Html => $TWiki::cfg{MathModePlugin}{Latex2Html} || '/usr/bin/latex2html', 
-      # the path to invoke the latex2html command
+    latex2Img => $TWiki::cfg{MathModePlugin}{Latex2Img},
+      # the command to convert latex to a png or gif
 
-    antiAlias => $TWiki::cfg{MathModePlugin}{AntiAlias} || 'on',
-      # flag to indicate if images should be anti-aliased
+    scaleFactor => $TWiki::cfg{MathModePlugin}{ScaleFactor} || 1.2,
+      # factor to scale images;
+      # may be overridden by a LATEXSCALEFACTOR  TWiki preference variable
 
-    initFile => $TWiki::cfg{MathModePlugin}{InitFile} || '',
-      # init file for latex2html
+    latexFGColor => $TWiki::cfg{MathModePlugin}{LatexFGColor} || 'black',
+      # default text color
 
-    scaleFactor => $TWiki::cfg{MathModePlugin}{ScaleFactor} || 1.8,
-      # factor to scale images this value has no effect if you
-      # specified an initFile; may be overridden by a LATEXSCALEFACTOR 
-      # TWiki preference variable
+    latexBGColor => $TWiki::cfg{MathModePlugin}{LatexBGColor} || 'white',
+      # default background color
+
+    latexFontSize => $TWiki::cfg{MathModePlugin}{LatexFontSize} || 'normalsize',
+      # default text color
 
     latexPreamble => $TWiki::cfg{MathModePlugin}{Preamble} || '\usepackage{mathptmx}',
       # latex preamble, e.g. to include additional packages; may be 
       # overridden by a LATEXPREAMBLE preference variable;
       # Example: \usepackage{mathptmx} to change the math font
 
-    fontSize => $TWiki::cfg{MathModePlugin}{FontSize} || '12pt',
-      # font size used for the latex document and the math images;
-      # may be overridden by a LATEXFONTSIZE preference variable
-
-    imageType => $TWiki::cfg{MathModePlugin}{ImageType} || 'gif',
+    imageType => $TWiki::cfg{MathModePlugin}{ImageType} || 'png',
       # extension of the image type;
       # may be overridden by a LATEXIMAGETYPE preference variable
 
@@ -100,19 +108,21 @@ sub init {
   my $value = TWiki::Func::getPreferencesValue('LATEXSCALEFACTOR');
   $this->{scaleFactor} = $value if $value;
 
-  $value = TWiki::Func::getPreferencesValue('LATEXFONTSIZE');
-  $this->{fontSize} = $value if $value;
-
   $value = TWiki::Func::getPreferencesValue('LATEXIMAGETYPE');
   $this->{imageType} = $value if $value;
+  $this->{imageType} = 'png' unless $this->{imageType} =~ /^(png|gif)$/i;
 
   $value = TWiki::Func::getPreferencesValue('LATEXPREAMBLE');
   $this->{latexPreamble} = $value if $value;
 
-  #writeDebug("scaleFactor=$this->{scaleFactor}");
-  #writeDebug("fontSize=$this->{fontSize}");
-  #writeDebug("imageType=$this->{imageType}");
-  #writeDebug("latexPreamble=$this->{latexPreamble}");
+  $value = TWiki::Func::getPreferencesValue('LATEXBGCOLOR');
+  $this->{latexBGColor} = $value if $value;
+
+  $value = TWiki::Func::getPreferencesValue('LATEXFGCOLOR');
+  $this->{latexFGColor} = $value if $value;
+
+  $value = TWiki::Func::getPreferencesValue('LATEXFONTSIZE');
+  $this->{latexFontSize} = $value if $value;
 
   # get the current cgi
   my $pathInfo = $ENV{'PATH_INFO'};
@@ -133,9 +143,6 @@ sub init {
   my $refresh = $query->param('refresh') || '';
   $this->{doRefresh} = ($refresh =~ /^(on|yes|1)$/)?1:0;
 
-  # fix antialias param
-  $this->{antiAlias} = ($this->{antiAlias} =~ /^\s*(on|yes|1)\s*$/)?1:0;
-
   # create a sandbox
   unless (defined &TWiki::Sandbox::new) {
     eval "use TWiki::Contrib::DakarContrib;";
@@ -145,12 +152,18 @@ sub init {
   }
 
   # create the topic pubdir if it does not exist already
-  my $topicPubDir = &TWiki::Func::getPubDir()."/$web/$topic";
+  my $pubDir = &TWiki::Func::getPubDir();
+  my $topicPubDir = $pubDir."/$web/$topic";
   $topicPubDir = TWiki::Sandbox::normalizeFileName($topicPubDir);
   unless (-d $topicPubDir) {
     mkdir $topicPubDir or die "can't create directory $topicPubDir";
   }
   $this->{topicPubDir} = $topicPubDir;
+
+  # default to supplied tools
+  unless ($this->{latex2Img}) {
+    $this->{latex2Img} = $pubDir.'/TWiki/MathModePlugin/latex2img';
+  }
 
 }
 
@@ -163,8 +176,23 @@ sub handleMath {
   $args ||= '';
 
   # store the string in a hash table, indexed by the MD5 hash
-  my $hashCode = md5_hex($text);
+  $text =~ s/^\s+//go;
+  $text =~ s/\s+$//go;
+  # extract latex options
+  my $color = TWiki::Func::extractNameValuePair($args, 'color') || '';
+  $this->{fgColors}{$text} = $color if $color;
+
+  my $bgcolor = TWiki::Func::extractNameValuePair($args, 'bgcolor') || '';
+  $this->{bgColors}{$text} = $bgcolor if $bgcolor;
+
+  my $size = TWiki::Func::extractNameValuePair($args, 'size') || '';
+  $this->{sizes}{$text} = $size if $size;
+
+  # TODO: add global settings to hash
+  my $hashCode = md5_hex($text.$color.$bgcolor.$size);
   $this->{hashedMathStrings}{$hashCode} = $text;
+  writeDebug("hasing '$text' as $hashCode");
+
   
   # construct url path to image
   my $url = &TWiki::Func::getPubUrlPath().'/'.$web.'/'.$topic.
@@ -195,7 +223,7 @@ sub postRenderingHandler {
   my $msg = $this->renderImages();
 
   # append to text
-  $_[3] .= $msg if $msg;
+  $_[3] .= '<pre>'.$msg.'</pre>' if $msg;
 }
 	
 ###############################################################################
@@ -255,70 +283,96 @@ sub renderImages {
   my $msg;
 
   # create temporary storage
-  my $tempDir = File::Temp::tempdir(CLEANUP =>1);
-  my $tempFile = new File::Temp(DIR=>$tempDir, SUFFIX=>'.tex');
-
-  # create a latex2html init file; some options cannot be done on the cmdline
-  my $initFile = $this->{initFile};
-  my $closeIniFile = 0;
-  unless ($initFile) {
-    $closeIniFile = 1;
-    $initFile = new File::Temp(DIR=>$tempDir, SUFFIX=>'.init');
-    print $initFile "\$MATH_SCALE_FACTOR = $this->{scaleFactor};\n1;\n"
-  }
+  my $tempDir = File::Temp::tempdir(CLEANUP =>0);
+  my $tempFile = new File::Temp(DIR=>$tempDir);
+  chdir $tempDir or die "can't change to temp dir $tempDir";
 
   # maps math strings' hash codes to the filename latex2html generates
-  my %hashCodeMapping = ();
+  my %imageFile = ();
 
   # latex2html names its image img(n).png where (n) is an integer
   # we will rename these files, so need to know which math string gets with image
   my $imageNumber = 0;
 
   # create the latex file on the fly
-  print $tempFile "\\documentclass[fleqn,$this->{fontSize}]{article}\n"; 
-  print $tempFile "$this->{latexPreamble}\n";
-  print $tempFile "\\usepackage{amsmath}\n";
-  print $tempFile "\\setlength{\\mathindent}{0cm}\n";
-  print $tempFile "\\begin{document}\n";
+  print $tempFile "\\documentclass[fleqn,12pt]{article}\n";
+  print $tempFile <<'PREAMBLE';
+    \usepackage{amsmath}
+    \usepackage{color}
+    \setlength{\mathindent}{0cm}
+    \definecolor{red}{rgb}{1,0,0}
+    \definecolor{blue}{rgb}{0,0,1}
+    \definecolor{yellow}{rgb}{1,1,0}
+    \definecolor{orange}{rgb}{1,0.4,0}
+    \definecolor{pink}{rgb}{1,0,1}
+    \definecolor{purple}{rgb}{0.5,0,0.5}
+    \definecolor{teal}{rgb}{0,0.5,0.5}
+    \definecolor{navy}{rgb}{0,0,0.5}
+    \definecolor{aqua}{rgb}{0,1,1}
+    \definecolor{lime}{rgb}{0,1,0}
+    \definecolor{green}{rgb}{0,0.5,0}
+    \definecolor{olive}{rgb}{0.5,0.5,0}
+    \definecolor{maroon}{rgb}{0.5,0,0}
+    \definecolor{brown}{rgb}{0.6,0.4,0.2}
+    \definecolor{black}{gray}{0}
+    \definecolor{gray}{gray}{0.5}
+    \definecolor{silver}{gray}{0.75}
+    \definecolor{white}{gray}{1}
+PREAMBLE
+  print $tempFile $this->{latexPreamble}."\n";
+  print $tempFile '\begin{document}'."\n";
+  print $tempFile '\pagestyle{empty}'."\n";
+  print $tempFile "\\color{$this->{latexFGColor}}\n";
+  print $tempFile "\\pagecolor{$this->{latexBGColor}}\n";
   while (my ($key, $value) = each(%{$this->{hashedMathStrings}})) {
     $imageNumber++;
-    $value =~ s/^\s+//o;
-    $value =~ s/\s+$//o;
+    print $tempFile "{\n";
+    print $tempFile "\\color{$this->{fgColors}{$value}}\n"
+      if $this->{fgColors}{$value};
+    print $tempFile "\\pagecolor{$this->{bgColors}{$value}}\n"
+      if $this->{bgColors}{$value};
+    if ($this->{sizes}{$value}) {
+      print $tempFile "\\$this->{sizes}{$value}\n";
+    } else {
+      print $tempFile "\\$this->{latexFontSize}\n"
+	if $this->{latexFontSize} ne "normalsize";
+    }
 
     # analyze which environment to use
-    my $environment = ($value =~ /\\\\/)?'multiline*':'math';
+    my $environment = 'math';
+    $environment = 'multline*' if $value =~ /\\\\/;
+    $environment = 'eqnarray*' if $value =~ '&\s*=\s*&';
     #writeDebug("using $environment for $value");
     print $tempFile "\\begin{$environment}\\displaystyle $value\\end{$environment}\n";
-    $hashCodeMapping{$key} = 'img'.$imageNumber.'.'.$this->{imageType};
+    print $tempFile "}\n";
+
+    print $tempFile "\\clearpage\n";
+
+    # remember the filename it ends up
+    $imageFile{$key} = $tempFile.$imageNumber.'.'.$this->{imageType};
   }
   print $tempFile "\\end{document}\n";
 
   # run latex2html on the latex file we generated
-  my $latex2HtmlCmd = $this->{latex2Html};
-  $latex2HtmlCmd .= ' -init_file '.$initFile;
-  $latex2HtmlCmd .= ' -no_math';
-  $latex2HtmlCmd .= ' -image_type '.$this->{imageType};
-  $latex2HtmlCmd .= ' -font_size '.$this->{fontSize};
-  $latex2HtmlCmd .= ' -antialias' if $this->{antiAlias};
-  $latex2HtmlCmd .= ' -noantialias' unless $this->{antiAlias};
-  $latex2HtmlCmd .= ' -white';
-  $latex2HtmlCmd .= ' -novalidate';
-  $latex2HtmlCmd .= ' -dir '.$tempDir;
-  $latex2HtmlCmd .= ' %FILENAME|F%';
+  my $latex2ImgCmd = $this->{latex2Img} . ' %FILENAME|F%';
+  $latex2ImgCmd .= " $this->{latexBGColor}";
+  $latex2ImgCmd .= ' -D '.int(100)*$this->{scaleFactor};
+  $latex2ImgCmd .= ' --'.$this->{imageType};
 
-  #writeDebug("executing $latex2HtmlCmd");
-  my ($data, $exit) = $this->{sandbox}->sysCommand($latex2HtmlCmd, FILENAME=>"$tempFile");
+  #writeDebug("executing $latex2ImgCmd");
+  my ($data, $exit) = $this->{sandbox}->sysCommand($latex2ImgCmd, FILENAME=>"$tempFile");
   #writeDebug("exit=$exit");
   #writeDebug("data=$data");
   if ($exit) {
-    $msg = '<div class="twikiAlert">Error during latex2html';
+    $msg = '<div class="twikiAlert">Error during latex2img';
     $msg .= ": $data" if $data;
     $msg .= '</div>';
   } else {
     # rename the files to the hash code, so we can uniquely identify them
-    while ((my $key, my $value) = each(%hashCodeMapping)) {
-      my $source = $tempDir.'/'.$value;
+    while ((my $key, my $value) = each(%imageFile)) {
+      my $source = $value;
       my $target = $this->{topicPubDir}.'/'.$this->{imagePrefix}.$key.'.'.$this->{imageType};
+      #writeDebug("source=$source, target=$target");
       #writeDebug("created new image $target");
       move($source, $target);# or die "can't move $source to $target: $@";
     }
@@ -328,7 +382,6 @@ sub renderImages {
   $this->{hashedMathStrings} =  {};
   File::Temp::cleanup();
   close $tempFile;
-  close $initFile if $closeIniFile;
   return $msg;
 }
 
