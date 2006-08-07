@@ -48,13 +48,12 @@ my ( $topic, $web, $dummy, $userName ) =
                      $theTopic, $theUrl, $query );
 
 # Update url parameters
-my $text = $query->param( 'pretxt' ) . 
-             $query->param( 'text' ) . $nl . 
-                $query->param( 'postxt' );
+my $text = TWiki::Contrib::EditContrib::unprotect($query->param( 'pretxt' )) . 
+             $query->param( 'text' ) .
+               TWiki::Contrib::EditContrib::unprotect($query->param( 'postxt' ));
+
 my $editaction = $query->param ( 'editaction' );
 $editaction .= $query->param ( 'editparams' );
-#### Apparently not necessary in twiki4
-#### $text = TWiki::Render::decodeSpecialChars( $text );
 
 my $session = $TWiki::Plugins::SESSION;
 $session->{cgiQuery}->param( -name=>"text", -value=>$text);

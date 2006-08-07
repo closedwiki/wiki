@@ -308,6 +308,17 @@ sub edit {
 
 }
 
+# TW: The following concoction is to work around a problem with
+# Firefix which eats leading and trailing newlines on text passed
+# as hidden URL parameter
+sub protect {
+    return ' ' . $_[0] . ' ';
+}
+
+sub unprotect {
+    return substr( $_[0], 1, -1 );
+}
+
 # =========================
 sub finalize_edit {
 ####    my ( $session, $pretxt, $sectxt, $postxt, $pretxtRender, $postxtRender ) = @_;
@@ -327,8 +338,10 @@ sub finalize_edit {
 
 
     $pretxt = TWiki::entityEncode($pretxt);
+    $pretxt = protect($pretxt);
     $tmpl =~ s/%PRETEXTFIELD%/$pretxt/go;
     $postxt = TWiki::entityEncode($postxt);
+    $postxt = protect($postxt);
     $tmpl =~ s/%POSTEXTFIELD%/$postxt/go;
     
     ##AS added hook for plugins that want to do heavy stuff
@@ -341,6 +354,7 @@ sub finalize_edit {
     #### quoteForXml included in entityEncode
     #### $sectxt = &TWiki::Contrib::EditContrib::quoteForXml($sectxt);
     $sectxt = TWiki::entityEncode( $sectxt );
+    $sectxt = $sectxt;
     $tmpl =~ s/%TEXT%/$sectxt/g;
 
     $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
