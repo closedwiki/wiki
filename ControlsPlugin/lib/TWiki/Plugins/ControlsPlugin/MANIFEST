@@ -1,2 +1,5 @@
-data/TWiki/ControlsPlugin.txt NEW
-lib/TWiki/Plugins/ControlsPlugin.pm NEW
+data/TWiki/ControlsPlugin.txt
+pub/TWiki/ControlsPlugin/cascade_select.js
+lib/TWiki/Plugins/ControlsPlugin.pm
+lib/TWiki/Plugins/ControlsPlugin/build.pl
+lib/TWiki/Plugins/ControlsPlugin/menuexample.zip
