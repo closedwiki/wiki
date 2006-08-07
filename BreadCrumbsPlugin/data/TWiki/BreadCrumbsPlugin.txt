@@ -134,7 +134,7 @@ separator) may contain special variables:
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.03 |
+|  Plugin Version: | v0.04 |
 |  Change History: | &nbsp; |
 |  08 Aug 2006: | fixed topic parents not showing up; don't show non-existing topics |
 |  29 Jul 2006: | fixed infinit loop when a topic is its own parent topic |
