@@ -72,7 +72,7 @@ use vars qw( %TWikiCompatibility );
 
 # number the release version of this plugin
 $VERSION = '$Rev$';
-$RELEASE = '2.6';
+$RELEASE = '2.61';
 
 require Exporter;
 *import = \&Exporter::import;
@@ -162,9 +162,6 @@ my %tblrefs = ();               # table back-references
 # a place to store intermediate errors until all latex handling is done.
 my $error_catch_all = "";
 
-#the url to the attachment directory for this page
-my $pubUrlPath;
-
 # get the name of the script that called us
 my $script = basename( $0 );
 
@@ -187,19 +184,11 @@ sub initPlugin
         return 0;
     }
 
-    $debug = 1; &TWiki::Func::getPreferencesFlag( "LATEXMODEPLUGIN_DEBUG" );
+    $debug = &TWiki::Func::getPreferencesFlag( "LATEXMODEPLUGIN_DEBUG" );
 
     $initialized = 0;
 
     &TWiki::Func::writeDebug( "- LatexModePlugin initPlugin( $web.$topic ) is OK" ) if $debug;
-
-    return 1;
-}
-
-sub doInit{
-    my ($topic,$web) = @_;
-
-    return if ($initialized);
 
     if( $TWiki::Plugins::VERSION >= 1.1 ) {
         # Dakar provides a sandbox
@@ -209,11 +198,13 @@ sub doInit{
         eval("use TWiki::Contrib::DakarContrib;");
         $sandbox = new TWiki::Sandbox();
     }
-    print STDERR "sandbox: ".$sandbox."\n";
 
-    #get the relative URL to the attachment directory for this page
-    $pubUrlPath = # &TWiki::Func::getUrlHost() . 
-        &TWiki::Func::getPubUrlPath() . "/$web/$topic";
+    return 1;
+}
+
+sub doInit{
+
+    return if ($initialized);
 
     # Get preferences values
     $default_density = 
@@ -259,23 +250,26 @@ sub doInit{
 
 sub beforeCommonTagsHandler
 {
-    my $topic = $_[1];
-    my $web = $_[2];
 
     ######################################################
 
-    &doInit($topic,$web) if ( ($_[0]=~m/%(REFLATEX|MATHMODE){.*?}%/) ||
-                              ($_[0]=~m/%BEGINLATEX.*?%/)  ||
-                              ($_[0]=~m/%BEGIN(FIGURE|TABLE){.*?}%/) ||
-                              ($_[0] =~ m/%(\$.*?\$)%/) ||
-                              ($_[0] =~ m/%(\\\[.*?\\\])%/) 
-                              );
+    &doInit() if ( ($_[0]=~m/%(REFLATEX|MATHMODE){.*?}%/) ||
+                   ($_[0]=~m/%BEGINLATEX.*?%/)  ||
+                   ($_[0]=~m/%BEGIN(FIGURE|TABLE){.*?}%/) ||
+                   ($_[0] =~ m/%(\$.*?\$)%/) ||
+                   ($_[0] =~ m/%(\\\[.*?\\\])%/) 
+                   );
 
 }
 
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    return unless ($initialized);
+
+    $topic = $_[1];
+    $web = $_[2];
 
     TWiki::Func::writeDebug( " TWiki::Plugins::LatexModePlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
@@ -450,6 +444,7 @@ sub handleLatex
                  'density' => $default_density, 
                  'gamma' => $default_gamma, 
                  'scale' => $default_scale,
+                 'bgcolor' => 'white',
                  'color' => 'black' );
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
@@ -576,7 +571,9 @@ COLORS
         # and NOP the WikiWords:
         $escaped =~ s!(\u\w\l\w+\u\w)!<nop>$1!g;
 
-        my $image_name = "$pubUrlPath/latex$hash_code.$EXT";
+        my $image_name = 
+            &TWiki::Func::getPubUrlPath() . "/$web/$topic".
+            "/latex$hash_code.$EXT";
 
         # if image currently exists, get its dimensions
         my $outimg = &TWiki::Func::getPubDir() . "/$web/$topic/"."latex$hash_code.$EXT";
@@ -642,6 +639,8 @@ sub postRenderingHandler
 # Here we check if we saw any math, try to delete old files, render new math, and clean up
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
+    return unless ($initialized);
+
     my $path;
 
     &TWiki::Func::writeDebug( "- LatexModePlugin::postRenderingHandler( $web.$topic )" ) if $debug;
@@ -696,14 +695,16 @@ sub postRenderingHandler
 
             if( $delete_files ) {
                 #delete the old image
-                &TWiki::Func::writeDebug( "Deleting old image that I think belongs to me: $fn" ) if $debug;
+
                 if ( $fn =~ /^([-\@\w.]+)$/ ) { # untaint filename
                     $fn = $1;
+                    &TWiki::Func::writeDebug( "Deleting old image that I think belongs to me: $fn" ) if $debug;
 
                     if ( ( $TWiki::Plugins::VERSION < 1.1 ) ||
                          ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach} ) ) {
                         # Cairo interface
-                        unlink( $path.$pathSep.$fn ) if (-f $fn);
+                        unlink( $path.$pathSep.$fn ) 
+                            if (-f $path.$pathSep.$fn);
                     } else {
                         # Dakar interface
                         TWiki::Func::moveAttachment( $web, $topic, $fn, 
@@ -784,6 +785,7 @@ sub postRenderingHandler
 
         print MATHOUT "\\clearpage\n";
         print MATHOUT "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
+        print MATHOUT '\pagecolor{'.$opts{'bgcolor'}."} \n" if ($use_color);
         print MATHOUT '\textcolor{'.$opts{'color'}.'}{'
             unless ($opts{'color'} eq 'black');
         print MATHOUT " $value ";
@@ -867,7 +869,7 @@ sub postRenderingHandler
                                           EPS => $LATEXBASENAME.$num.".eps",
                                           DVI => $LATEXBASENAME.".dvi",
                                           LOG => $LATEXLOG );
-                print STDERR "dvips: $d $e" if length($d) > 0;
+                # print STDERR "dvips: $d $e" if length($d) > 0;
 
                 # system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG") if ($debug);
                 # system("$PATHTOCONVERT $cmd");
@@ -905,7 +907,7 @@ sub postRenderingHandler
                                              " %OUT|F% ",
                                              IN => $tmpfile,
                                              OUT => $outimg );
-                    print STDERR "convert: $d $e\n" if ($e > 0);
+                    # print STDERR "convert: $d $e\n" if ($e > 0);
 
                     my $img2 = image_info($outimg);
 
@@ -938,7 +940,7 @@ sub postRenderingHandler
                                              SH2 => $sh2,
                                              OUTIMG => $outimg
                                              );
-                    print STDERR "convert: $d $e\n" if ($e > 0);
+                    # print STDERR "convert: $d $e\n" if ($e > 0);
                     unlink("$tmpfile") unless ($debug);
 
                     ## Another strategy: trim gives better horizontal
