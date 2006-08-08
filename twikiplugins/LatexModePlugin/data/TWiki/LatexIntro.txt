@@ -21,7 +21,7 @@ and %BROWN%\]%%ENDCOLOR%. Thus, %BROWN%%<nop>\[\mathcal{N}=\langle \mathbb{N},0,
 
 All %BEGINLATEX{inline="1"}%\TeX%ENDLATEX% codes begin with a backslash (\). Curly braces ({ }) are used to delimit groupings, except in a few cases where optional arguments must be enclosed in square brackets ([ ]). Many symbols have mnemonic names, like =\Alpha=, =\alpha=, =\forall=, =\exists=, =\lor=, =\land=. 
 
-A list of some common symbols is given in the LatexSymbolList topic.  Other off-site lists include:  [[http://www.math.union.edu/~dpvc/jsMath/symbols/welcome.html][Some Symbols]] and [[http://www.iam.ubc.ca/~newbury/tex/symbols.html][Some Little-Known Symbols]], [[http://www.ctan.org/tex-archive/info/symbols/comprehensive/symbols-a4.pdf][All the Symbols]].  Not all the symbols work in the Wiki, but most of them do.
+A list of some common symbols is given in the LatexSymbols topic.  Other off-site lists include:  [[http://www.math.union.edu/~dpvc/jsMath/symbols/welcome.html][Some Symbols]] and [[http://www.iam.ubc.ca/~newbury/tex/symbols.html][Some Little-Known Symbols]], [[http://www.ctan.org/tex-archive/info/symbols/comprehensive/symbols-a4.pdf][All the Symbols]].  Not all the symbols work in the Wiki, but most of them do.
 
 A subscript is indicated with an underline (_). If the subscript consists of more than one symbol, it must be enclosed in braces. Similarly, a superscript is indicated with a caret (^). Thus, %BROWN%%<nop>$ \alpha _{ \beta _1^2}^{ \gamma ^{ \delta ^ \epsilon }}
 $%%ENDCOLOR% yields %$ \alpha _{ \beta _1^2}^{ \gamma ^{ \delta^ \epsilon }}$%,
