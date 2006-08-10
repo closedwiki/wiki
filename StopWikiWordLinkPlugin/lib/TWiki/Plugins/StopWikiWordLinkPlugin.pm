@@ -56,7 +56,7 @@ sub initPlugin {
     $stopWords =~ s/^ *//o;
     $stopWords =~ s/ *$//o;
     $stopWords =~ s/[^A-Za-z0-9\|]//go;
-    $stopWordsRE = "(^|[\( ])($stopWords)"; # WikiWord preceeded by space or parens
+    $stopWordsRE = "(^|[\( \n\r\t\|])($stopWords)"; # WikiWord preceeded by space or parens
     TWiki::Func::writeDebug( "- $pluginName stopWordsRE: $stopWordsRE" ) if $debug;
 
     # Plugin correctly initialized
