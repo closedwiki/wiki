@@ -196,7 +196,7 @@
 %TMPL:DEF{"problem_adding"}%
 ---+++ %MAKETEXT{"Error registering user [_1]" args="%PARAM1%"}%
 
-%MAKETEXT{"There has been a problem adding your user id to the Password system. Please contact [_1]." args="%WIKIWEBMASTER%"}%
+%MAKETEXT{"There has been a problem adding your user id to the Password system."}% %MAKETEXT{"Please contact [_1]." args="%WIKIWEBMASTER%"}%
 %TMPL:END%
 %TMPL:DEF{"send_mail_error"}%
 ---+++ Mail Error
@@ -348,9 +348,9 @@ __%MAKETEXT{"Note:"}%__
 
 %MAKETEXT{"Check your configuration setting for {TemplateDir}. If that's not the problem, it may be because you have a setting of [_1] that is pointing to a template that doesn't exist." args="=%PARAM2%="}%
 
-%MAKETEXT{"[_1] is currently set to [_2]" args="=%PARAM2%=,<code><nop>%%PARAM2%%</code>"}% 
+%MAKETEXT{"[_1] is currently set to [_2]" args="=%PARAM2%=,<code><nop>%PARAM1%</code>"}% 
 
-(don't forget to check your Topic Settings)
+(%MAKETEXT{"don't forget to check your Topic Settings"}%)
 %TMPL:END%
 
 %TMPL:DEF{bad_script_parameters}%

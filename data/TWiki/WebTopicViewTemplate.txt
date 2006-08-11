@@ -16,7 +16,7 @@
    * <input type="text" class="twikiInputField" name="search" size="32" value="%BASETOPIC%" />&nbsp;<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Search"}%' />
      <input type="hidden" name="scope" value="text" />
      <input type="hidden" name="ignorecase" value="on" />
-     &nbsp;&nbsp; %MAKETEXT{"(More options in WebSearch)"}%
+     &nbsp;&nbsp; (%MAKETEXT{"More options in WebSearch"}%)
 </form>
 
 ---+++ %ICON{newtopic}% %MAKETEXT{"If you would like to create this page:"}%
