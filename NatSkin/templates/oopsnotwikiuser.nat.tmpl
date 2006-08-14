@@ -1,12 +1,12 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsnotwikiuser.nat.tmpl -->
-%TMPL:DEF{"heading"}%You are not registered%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"You are not registered"}%%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
-Can't find the username <b>%PARAM1%</b>.
+%MAKETEXT{"Can't find the username <b>[_1]</b>" args="%PARAM1%"}%.
 
-Make sure you spelled the User Name correctly and try again.
-Remember, a %TWIKIWEB%.WikiName is case sensitive.
-See %MAINWEB%.TWikiUsers for a list of existing users or register as new user in
-%TWIKIWEB%.TWikiRegistration. 
+%MAKETEXT{"Make sure you spelled the User Name correctly and try again.
+Remember, a [_1] is case sensitive.
+See [_2] for a list of existing users or register as new user in
+[_3]." args="%TWIKIWEB%.WikiName,%MAINWEB%.TWikiUsers,%TWIKIWEB%.TWikiRegistration"}% 
 
 %TMPL:P{"goback"}% %TMPL:END%

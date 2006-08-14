@@ -1,18 +1,18 @@
 From: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
 To: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
-Subject: %WIKITOOLNAME% - Registration for %WIKINAME% (%EMAILADDRESS%)
+Subject: %WIKITOOLNAME% - %MAKETEXT{"Registration for [_1] ([_2])" args="%WIKINAME%,%EMAILADDRESS%"}%
 MIME-Version: 1.0
 Content-Type: text/plain; charset=%CHARSET%
 Content-Transfer-Encoding: 7bit
 
-This is an automated email notification of a user registration at %WIKITOOLNAME%.
+%MAKETEXT{"This is an automated email notification of a user registration at [_1].
 
-%WIKINAME% has been registered with email %EMAILADDRESS%.
+[_2] has been registered with email [_3].
 
 Submitted content:
 
-%FORMDATA%
+[_4]
 
-Saved to:
+Saved to:" args="%WIKITOOLNAME%,%WIKINAME%,%EMAILADDRESS%,%FORMDATA%"}%
 
 %SCRIPTURL{"view"}%/%MAINWEB%/%WIKINAME%

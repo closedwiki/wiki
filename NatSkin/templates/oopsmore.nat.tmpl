@@ -1,43 +1,43 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsmore.nat.tmpl -->
 %TMPL:DEF{"title"}%%TOPIC% (more)%TMPL:END%
-%TMPL:DEF{"heading"}%More Actions on <nop>%WEB%.%TOPIC%%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"More Actions on Topic [_1]" args="<nop>%WEB%.%TOPIC%"}%%TMPL:END%
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
 %TMPL:DEF{"message"}% <table border="0">
----++ Set Parent Topic</td> </tr>
+---++ %MAKETEXT{"Set Parent Topic"}%</td> </tr>
 <form name="main" action="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%">
 <tr>
-  <td style="padding-left:20px"> <select name="topicparent"><option value="">Select...</option>
+  <td style="padding-left:20px"> <select name="topicparent"><option value="">%MAKETEXT{"Select..."}%</option>
      %TOPICLIST{"<option value='$name'>$name</option>" separator=" "}%
      </select>&nbsp;
-  <td><input type="submit" class="natOkButton" style="width:5em" value="OK"/><br/>
+  <td><input type="submit" class="natOkButton" style="width:5em" value='%MAKETEXT{"OK"}%'/><br/>
   </td>
 </tr><tr>
   <td>
-    <ul style="margin:0px"><li>Note: Edit and save the topic  to activate the new parent. %I%</li></ul>
+    <ul style="margin:0px"><li>%MAKETEXT{"Note: Edit and save the topic to activate the new parent. [_1]" args="%I%"}%</li></ul>
   </td>
   <td>
-    <input type="button" class="natCancelButton" style="width:5em" value="Cancel" onclick="self.location.href = '%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';">
+    <input type="button" class="natCancelButton" style="width:5em" value='%MAKETEXT{"Cancel"}%' onclick="self.location.href = '%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';">
   </td>
 </tr>
 </form>
 <tr><td colspan="2">
----++ Back-links</td></tr>
+---++ %MAKETEXT{"Backlinks"}%</td></tr>
 <form name="main" action="%NATSCRIPTURLPATH{"search"}%/%WEB%/SearchResult">
 <tr>
   <td>
     <input type="hidden" name="scope" value="text">
     <input type="hidden" name="regex" value="on">
     <input type="hidden" name="search" value="%TOPIC%[^A-Za-z]">
-    <ul style="margin:0px"><li>Find topics that link to [[%WEB%.%TOPIC%]]</li></ul>
+    <ul style="margin:0px"><li>%MAKETEXT{"Find topics that link to [_1] ..." args="[[%WEB%.%TOPIC%]]"}%</li></ul>
   </td>
   <td>
-    <input type="submit" class="natAltButton" style="width:5em" value="Find">
+    <input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Find"}%'>
   </td>
 </tr>
 <tr>
   <td>
-    <ul style="margin:0px"><li>Search in all public webs</li></ul>
+    <ul style="margin:0px"><li>%MAKETEXT{"Search in all public webs"}%</li></ul>
   </td>
   <td>
     <input type="checkbox" name="web">
@@ -47,30 +47,30 @@
 %IFSKINSTATETHEN{release="dakar"}%
 <tr>
 <td colspan="2">
----++ Topic preferences</td></tr>
+---++ %MAKETEXT{"Topic preferences"}%</td></tr>
 <form name="main" action="%NATSCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="post">
-  <input type="hidden" name="action" value="editSettings" />
+  <input type="hidden" name="action" value='%MAKETEXT{"editSettings"}%' />
 <tr>
   <td>
-    <ul style="margin:0px"><li>Edit preference settings for [[%WEB%.%TOPIC%]]</li></ul>
+    <ul style="margin:0px"><li>%MAKETEXT{"Edit preference settings for [[[_1]]]" args="%WEB%.%TOPIC%"}%</li></ul>
   </td>
-  <td><input type="submit" class="natAltButton" style="width:5em" value="Edit">
+  <td><input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Edit"}%'>
 </tr>
 </form>
 %FISKINSTATE%
 <tr><td colspan="2">
 <tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
 <td colspan="2">
----++ Topic Caching</td>
+---++ %MAKETEXT{"Topic Caching"}%</td>
 </tr>
 <form name="main" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" method="post">
 <tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
   <td>
-    <ul style="margin:0px;"><li>Get a fresh page of the topic [[%WEB%.%TOPIC%]]&nbsp;</li></ul>
+    <ul style="margin:0px;"><li>%MAKETEXT{"Get a fresh page of the topic [[[_1]]]" args="%WEB%.%TOPIC%"}%&nbsp;</li></ul>
   </td>
   <td>
       <input type="hidden" name="refresh" value="on" />
-      <input type="submit" class="natAltButton" style="width:5em" value="Refresh" />
+      <input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Refresh"}%' />
   </td>
 </tr>
 </form>

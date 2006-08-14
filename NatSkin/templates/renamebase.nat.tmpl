@@ -14,11 +14,11 @@
 <!--input type="hidden" name="confirm" value="on"-->
 ---+ %TMPL:P{"webaction"}% Topic
 
-*From:* <code>%WEB%.%TOPIC%</code>
+*%MAKETEXT{"From:"}%* <code>%WEB%.%TOPIC%</code>
 
-*To:* %TMPL:P{"newweb"}% %TMPL:P{"newtopic"}% 
+*%MAKETEXT{"To:"}%* %TMPL:P{"newweb"}% %TMPL:P{"newtopic"}% 
 %TMPL:P{"buttons"}%
----++ Change links in topics that refer to <nop>%TOPIC% in the <nop>%WEB% Web:
+---++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="<nop>%TOPIC%,<nop>%WEB%"}%
 <div class="natSearchRenameContents">
 %IFSKINSTATETHEN{release="dakar"}%
   %LOCAL_SEARCH%
@@ -27,7 +27,7 @@
 %FISKINSTATE%
 </div>
 
----++ Change links in topics that refer to <nop>%WEB%.<nop>%TOPIC% in any Web:
+---++ %MAKETEXT{"Change links in topics that refer to [_1].[_2] in any Web:" args="<nop>%WEB%,<nop>%TOPIC%"}%
 <div class="natSearchRenameContents">
 %IFSKINSTATETHEN{release="dakar"}%
   %GLOBAL_SEARCH%
@@ -36,6 +36,6 @@
 %FISKINSTATE%
 </div>
 
-<input type="button" class="natAltButton" value="Clear all checkboxes" onClick="checkAll('rename', false);" />
+<input type="button" class="natAltButton" value='%MAKETEXT{"Clear all"}%' onClick="checkAll('rename', false);" />
 </form>
 %TMPL:END%

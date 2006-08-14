@@ -13,14 +13,14 @@
 %IFSKINSTATETHEN{release="Dakar"}% %$nopTEXT% %ELSESKINSTATE% <input type="hidden" name="text" value="%$nopTEXT%" /> %FISKINSTATE%
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
----+ Choose a new form for [[%TOPIC%]]
+---+ %MAKETEXT{"Choose a new form for [_1]" args="[[%TOPIC%]]"}%
 <ul>
 %FORMLIST%
 </ul>
 <p>
 <blockquote>
-  <input type="submit" class="natOkButton" name="submit" value="OK" accesskey="o" />&nbsp;
-  <input type="button" class="natCancelButton" value="Cancel" accesskey="c" onclick="history.back()">
+  <input type="submit" class="natOkButton" name="submit" value='%MAKETEXT{"OK"}%' accesskey="o" />&nbsp;
+  <input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' accesskey="c" onclick="history.back()">
 </blockquote>
 </form>
 %TMPL:END%

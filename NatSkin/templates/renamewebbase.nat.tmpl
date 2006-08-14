@@ -10,8 +10,8 @@
 %TMPL:DEF{"webaction"}%Rename%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.renameweb.newsubweb.focus();%TMPL:END%
 %TMPL:DEF{"buttons"}%
-  <input type="submit" class="natOkButton" value="OK" />&nbsp;
-  <input type="button" class="natCancelButton" value="Cancel" onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'">
+  <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />&nbsp;
+  <input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'">
 %TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
 ---+ %TMPL:P{"webaction"}% Web
@@ -19,53 +19,53 @@
 <input type="hidden" name="action" value="renameweb" />
 <input type="hidden" name="confirm" value="getlock" />
 
-*From:* <code>%WEB%</code>
+*%MAKETEXT{"From:"}%* <code>%WEB%</code>
 
-*To:* %TMPL:P{"newparentweb"}% / %TMPL:P{"newsubweb"}%  
+*%MAKETEXT{"To:"}%* %TMPL:P{"newparentweb"}% / %TMPL:P{"newsubweb"}%  
 
 %TMPL:P{"buttons"}%
 
----++ Change links in topics that refer to <nop>%WEB% in the <nop>%WEB% Web:
+---++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="<nop>%WEB%,<nop>%WEB%"}%
 <div class="natSearchRenameContents">
 %LOCAL_SEARCH%
 </div>
 
----++ Change links in topics that refer to <nop>%WEB% in any Web:
+---++ %MAKETEXT{"Change links in topics that refer to [_1] in any Web:" args="<nop>%WEB%"}%
 <div class="natSearchRenameContents">
 %GLOBAL_SEARCH%
 </div>
 
-<input type="button" class="natAltButton" value="Clear all checkboxes" onClick="checkAll('renameweb', false);" />
+<input type="button" class="natAltButton" value='%MAKETEXT{"Clear all"}%' onClick="checkAll('renameweb', false);" />
 </form>
 
----++ Locked Topics
-*No permission:* 
+---++ %MAKETEXT{"Locked Topics"}%
+*%MAKETEXT{"No permission:"}%* 
 <div class="natSearchRenameContents">
 %REF_DENIED%
 </div>
 
-*Currently being edited:* 
+*%MAKETEXT{"Currently being edited:"}%* 
 <div class="natSearchRenameContents">
 %MOVE_LOCKED%
 </div>
 
-*Referring topics currently being edited:* 
+*%MAKETEXT{"Referring topics currently being edited:"}%* 
 <div class="natSearchRenameContents">
 %REF_LOCKED%
 </div>
 %TMPL:END%
 %TMPL:DEF{"notes"}%
-Get help on
-<a target="_blank" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Renaming and moving webs</a>.
+%MAKETEXT{"Get help on
+<a target=\"_blank\" href=\"%SCRIPTURLPATH{\"view\"}%/%TWIKIWEB%/ManagingWebs\" rel='nofollow'>Renaming and moving webs</a>."}%
 <p/>
 <p>
-It's usually best to choose a 
-<a target="_blank" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/WikiWord" rel='nofollow'>WikiWord</a> 
+%MAKETEXT{"It's usually best to choose a 
+<a target=\"_blank\" href=\"%SCRIPTURLPATH{\"view\"}%/%TWIKIWEB%/WikiWord\" rel='nofollow'>WikiWord</a> 
 for the new web name, otherwise automatic linking may not work.  Characters not
-allowed in topic names, such as spaces will automatically be removed.
+allowed in topic names, such as spaces will automatically be removed."}%
 <p/>
-<p> Select the <a target="_blank" href="%SCRIPTURLPATH{"view"}%/%TRASHWEB%/WebHome">%TRASHWEB%</a> 
+<p> %MAKETEXT{"Select the <a target=\"_blank\" href=\"%SCRIPTURLPATH{\"view\"}%/%TRASHWEB%/WebHome\">%TRASHWEB%</a> 
     web to *delete* this web, that is
-    rename it to %TRASHWEB%/%WEB%. </p>
-<p> The checkmarked topics will be updated. </p>
+    rename it to [_1]. " args="%TRASHWEB%/%WEB%"}%</p>
+<p> %MAKETEXT{"The checkmarked topics will be updated."}% </p>
 %TMPL:END%
