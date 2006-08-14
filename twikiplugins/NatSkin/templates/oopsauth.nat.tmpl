@@ -1,20 +1,20 @@
 %TMPL:INCLUDE{"oopslogonbase"}%
 <!-- template: oopsauth.nat.tmpl -->
 %TMPL:DEF{"action"}%view%TMPL:END%
-%TMPL:DEF{"heading"}%Either you need to register or the authentication failed%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Either you need to register or the authentication failed"}%%TMPL:END%
 %TMPL:DEF{"message"}%<!-- -->
-To edit topics on this <nop>%WIKITOOLNAME% collaborative web, you must be registered as a user.
+%MAKETEXT{"To edit topics on this [_1] collaborative web, you must be registered as a user." args="<nop>%WIKITOOLNAME%"}%
 
 %TMPL:P{"logon"}%
 
----+++ If you expected to be logged in at this point:
+---+++ %MAKETEXT{"If you expected to be logged in at this point:"}%
 <ul>
- <li> Did you type in your login name and password correctly? Remeber, both are case sensitive. </li>
- <li> Your login name is usually the %TWIKIWEB%.WikiName, like *<nop>TomSawyer* and _not_ Tom Sawyer or tom or sawyer. </li>
- <li> Registered users can %TWIKIWEB%.ChangePassword and %TWIKIWEB%.ResetPassword. </li>
-</ul>
----+++ To register as a new user:
+ <li> %MAKETEXT{"Did you type in your login name and password correctly? Remember, both are case sensitive."}% </li>
+ <li> %MAKETEXT{"Your login name is usually the [_1], like *<nop>TomSawyer* and _not_ Tom Sawyer or tom or sawyer." args="%TWIKIWEB%.WikiName"}% </li>
+ <li> %MAKETEXT{"Registered users can [[_1][change]] and [[_2][reset]] their passwords." args="%TWIKIWEB%.ChangePassword,%TWIKIWEB%.ResetPassword"}% </li>
+</ul>            
+---+++ %MAKETEXT{"To register as a new user:"}%
 <ul>
-  <li> Simply fill out the *[[%TWIKIWEB%.TWikiRegistration][TWikiRegistration]]* form. It only takes a minute. </li>
+  <li> %MAKETEXT{"Simply fill out the *[[[_1]][TWikiRegistration]]* form. It only takes a minute." args="%TWIKIWEB%.TWikiRegistration"}% </li>
 </ul>
 %TMPL:END%

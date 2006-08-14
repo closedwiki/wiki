@@ -6,21 +6,21 @@
 <form name="LogonFormular" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%NATSCRIPTURLPATH{"%IFSKINSTATE{action="oops" then="natlogon" else="login"}%"}%/%WEB%/%TOPIC%" method="post">
 <table border="0"> 
 <tr> 
-  <td><b>Login</b>: </td>
+  <td><b>%MAKETEXT{"Login"}%</b>: </td>
   <td> <input type="text" size="20" name="username" /> </td>
   <td><span class="twikiAlert">**</span></td>
 </tr>
 <tr> 
-  <td><b>Password</b>: </td>
+  <td><b>%MAKETEXT{"Password"}%</b>: </td>
   <td> <input type="password" size="20" name="password" /> </td>
   <td><span class="twikiAlert">**</span></td>
 </tr>
 <tr>
   <td>&nbsp;</td>
   <td colspan="2"><p />
-    <input type="submit" class="natOkButton" value="OK" />&nbsp;<!--
-    --><input type="reset"  class="natAltButton" value="Clear" />&nbsp;<!--
-    --><input type="button" class="natCancelButton" value="Cancel" onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome'" /> 
+    <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />&nbsp;<!--
+    --><input type="reset"  class="natAltButton" value='%MAKETEXT{"Clear"}%' />&nbsp;<!--
+    --><input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome'" /> 
     <input type="hidden" name="web" value="%WEB%" />
     <input type="hidden" name="topic" value="%TOPIC%" />
     <input type="hidden" name="action" value="%TMPL:P{action}%"/>

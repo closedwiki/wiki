@@ -37,24 +37,24 @@
 </form> %TMPL:END%
 %TMPL:DEF{"bottomtopicactions"}%<div class="natBottomTopicActions">
   <span class="natEditAction natCurrentAction">Edit</span><!-- 
-  --><span class="natPreviewAction"><a href="javascript:submitEditFormular('preview','preview');" accesskey="p" title="Preview your changes">Preview</a></span><!--
+  --><span class="natPreviewAction"><a href="javascript:submitEditFormular('preview','preview');" accesskey="p" title='%MAKETEXT{"Preview your changes"}%'>%MAKETEXT{"Preview"}%</a></span><!--
   -->%FORMBUTTON{"<span class='natFormAction'>$1</span>"}%<!--
-  --><span class="natUndoAction"><a href="javascript:self.location.reload();" accesskey="u" title="Abandon your changes but continue editing">Undo</a></span><!--
+  --><span class="natUndoAction"><a href="javascript:self.location.reload();" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a></span><!--
   -->%IFSKINSTATETHEN{release="beijing"}%<!--
-  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title="Save and exit">Save</a></span><!--
+  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Save"}%</a></span><!--
   -->%ELSESKINSTATE%<!--
-  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title="Save and continue editing">Save</a></span><!--
-  --><span class="natDoneAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="d" title="Save and exit">Done</a></span><!--
+  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a></span><!--
+  --><span class="natDoneAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a></span><!--
   -->%FISKINSTATE%<!--
-  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title="Abandon your changes and exit">Cancel</a></span>
+  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a></span>
 </div>
 <div class="natSubmitOptions">
   <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
-  <label for="dontnotify">Minor changes</label> <!-- -->
+  <label for="dontnotify">%MAKETEXT{"Minor changes"}%</label> <!-- -->
 %IFSKINSTATETHEN{release="dakar"}%
-  <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
-  <label for="forcenewrevision">Force new revision</label>
+  <input type="checkbox" class="twikiCheckbox" title='%MAKETEXT{"Creates a new topic revision when saving"}%' id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
+  <label for="forcenewrevision">%MAKETEXT{"Force new revision"}%</label>
 %ELSESKINSTATE%
-  <input type="checkbox" id="unlock" name="unlock" %RELEASEEDITLOCKCHECKBOX% /><label for="unlock">Release edit lock</label>
+  <input type="checkbox" id="unlock" name="unlock" %RELEASEEDITLOCKCHECKBOX% /><label for="unlock">%MAKETEXT{"Release edit lock"}%</label>
 %FISKINSTATE%
 </div> %TMPL:END%

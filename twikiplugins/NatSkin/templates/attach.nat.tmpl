@@ -31,14 +31,14 @@
   <td align="right" style="padding-top:20px">
    Link:
   </td><td style="padding-top:20px">
-   <input type="checkbox" name="createlink" %ATTACHLINKBOX% /> Create a link to the attached file at the end of the topic.
+   <input type="checkbox" name="createlink" %ATTACHLINKBOX% /> %MAKETEXT{"Create a link to the attached file at the end of the topic."}%
   </td>
  </tr>
  <tr>
   <td align="right">
-   Hide file:
+   %MAKETEXT{"Hide file:"}%
   </td><td>
-   <input type="checkbox" name="hidefile" %HIDEFILE% /> Hide attachment in normal topic view.
+   <input type="checkbox" name="hidefile" %HIDEFILE% /> %MAKETEXT{"Hide attachment in normal topic view."}%
   </td>
  </tr>
 <tr>
@@ -49,6 +49,6 @@
 </tr>
 </table>
 </form>
-<h2>Existing attachments for <nop>%TOPIC%</h2>
+<h2>%MAKETEXT{"Existing attachments for"}% <nop>%TOPIC%</h2>
 <div class="natTopicAttachments" style="padding:0px;margin:0px"> %META{"attachments" all="on"}% </div>
 %TMPL:END%

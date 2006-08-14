@@ -1,11 +1,11 @@
 %TMPL:INCLUDE{"oopserrbase"}% 
 <!-- template: oopssaveerr.nat.tmpl -->
-%TMPL:DEF{"heading"}%Topic save error%TMPL:END%
+%TMPL:DEF{"heading"}%%MAKETEXT{"Topic save error"}%%TMPL:END%
 %TMPL:DEF{"errormessage"}%<!-- -->
-During save of file [[%WEB%.%TOPIC%]] an error was found by the 
-version control system.
+%MAKETEXT{"During save of file [[[_1]]] an error was found by the 
+version control system." args="%WEB%.%TOPIC%"}%
 <div class="natErrorMsg">%PARAM1%</div>
-You might go <a href="javascript:history.back()">back</a> in your browser and save your changes locally. 
+%MAKETEXT{"You might go <a href=\"javascript:history.back()\">back</a> in your browser and save your changes locally."}% 
 %TMPL:END%
 %TMPL:DEF{"formvariables"}%<!-- -->
 <input type="hidden" name="Topic" value="%WEB%.%TOPIC%" />
