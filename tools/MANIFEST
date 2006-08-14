@@ -15,6 +15,7 @@
 !include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
 !include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 !include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
+!include twikiplugins/NatSkin/lib/TWiki/Contrib/NatSkin
 AUTHORS 0440
 COPYING 0440
 COPYRIGHT 0440
