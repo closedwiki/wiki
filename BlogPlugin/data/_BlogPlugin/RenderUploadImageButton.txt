@@ -9,7 +9,7 @@
 ---++ Implementation
 %STARTINCLUDE%
 *~~
-<form action="%SCRIPTURL{"view"}%/%WEB%/BlogImages" method="get">
+<form action="%SCRIPTURLPATH{"view"}%/%WEB%/BlogImages" method="get">
 <input type="submit" class="blogSubmitButton blogImageButton" value="%TEXT%" />
 </form>
 *~~

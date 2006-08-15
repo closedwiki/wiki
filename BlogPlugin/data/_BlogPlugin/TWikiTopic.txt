@@ -4,7 +4,7 @@
 %FORMFIELD{"TopicDescription"}%
 
 <div class="twikiPageForm blogAdminButtons">
-<form action="%SCRIPTURL{"edit"}%/%WEB%/" method="post">
+<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/" method="post">
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="WebTopicEditTemplate" />
 <input type="hidden" name="TopicType" value="TWikiTopic" />

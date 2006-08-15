@@ -7,7 +7,7 @@
 %~~ DBCALL{"RenderAtom" 
 ~~~   SEARCH="TopicType=~'\bBlogComment\b'
 ~~~     %IFDEFINEDTHEN{"%URLPARAM{"name"}%"}%
-~~~       AND BaseRef='%URLPARAM{"name"}%' 
+~~~       AND BaseRef='$test' 
 ~~~     %FIDEFINED%"
 ~~~   LIMIT="20"
 ~~~   TITLE="<nop>%WIKITOOLNAME% <nop>%WEB% (comments)"

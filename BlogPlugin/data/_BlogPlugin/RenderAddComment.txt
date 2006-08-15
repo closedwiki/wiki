@@ -12,7 +12,7 @@ NONE
 *~~
 <div class="blogAddComment">
 ---++ Leave a Reply
-<form name="AddCommentForm" action="%SCRIPTURL{"save"}%/%BASEWEB%/BlogCommentXXXXXXXXXX" method="post">
+<form name="AddCommentForm" action="%SCRIPTURLPATH{"save"}%/%BASEWEB%/BlogCommentXXXXXXXXXX" method="post">
 <input type="hidden" name="redirect" value="%BASETOPIC%#bottomComment" />
 <input type="hidden" name="onlywikiname" value="on" />
 <input type="hidden" name="templatetopic" value="BlogCommentTemplate" />

@@ -11,7 +11,7 @@ see also: RenderNewBlogEntryButton, RenderNewBlogLinkButton
 ---++ Implementation
 %STARTINCLUDE%
 *~~
-<form action="%SCRIPTURL{"view"}%/%WEB%/SubjectCategory" method="get">
+<form action="%SCRIPTURLPATH{"view"}%/%WEB%/SubjectCategory" method="get">
 <input type="submit" class="blogSubmitButton blogCategoryButton" value="%TEXT%" />
 </form>
 *~~

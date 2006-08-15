@@ -63,7 +63,7 @@ See also BlogHelpText
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
 %DBCALL{"RenderPages"}%
 %DBCALL{"RenderLastFMRecentTracks"}%
-%DBCALL{"RenderVisitors"}%
+<!--%<nop>DBCALL{"RenderVisitors"}%-->
 %DBCALL{"RenderTechnorati"}%
 %DBCALL{"RenderAffiliation"}%
 %ENDSECTION{"Default"}%
@@ -82,7 +82,7 @@ See also BlogHelpText
 %DBCALL{"RenderBlogRoll" CAT="BlogUp" TITLE="BlogUp Ring"}%
 %DBCALL{"RenderPages" AUTHOR="%BASETOPIC%"}%
 %DBCALL{"RenderLastFMRecentTracks"}%
-%DBCALL{"RenderVisitors"}%
+<!--%<nop>DBCALL{"RenderVisitors"}%-->
 %DBCALL{"RenderTechnorati"}%
 %ENDSECTION{"Author"}%
 </verbatim>

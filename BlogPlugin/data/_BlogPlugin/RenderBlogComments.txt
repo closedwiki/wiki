@@ -26,10 +26,10 @@
 ~~~ <div class="blogEntryFeed">
 ~~~  <a class="natFeedIcon blogFeedIcon" 
 ~~~     title="RSS Feed for the Comments of this Entry"
-~~~     href="%SCRIPTURL{"view"}%/%BASEWEB%/WebRssComments?name=%NAME%">RSS</a>
+~~~     href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebRssComments?name=%NAME%">RSS</a>
 *~~  <a class="natFeedIcon blogFeedIcon" 
 ~~~     title="ATOM Feed for the Comments of this Entry"
-~~~     href="%SCRIPTURL{"view"}%/%BASEWEB%/WebAtomComments?name=%NAME%">ATOM</a>
+~~~     href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/WebAtomComments?name=%NAME%">ATOM</a>
 ~~~ </div>
 ~~~ 
 %~~ DBQUERY{"TopicType='BlogComment' AND BlogRef='%NAME%'"

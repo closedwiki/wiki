@@ -82,6 +82,7 @@ data/_BlogPlugin/RenderNewTWikiTopicButton.txt 0644
 data/_BlogPlugin/RenderNewTopicTypeForm.txt 0644
 data/_BlogPlugin/RenderNextCommentNr.txt 0644
 data/_BlogPlugin/RenderPageNavigation.txt 0644
+data/_BlogPlugin/RenderPageTitle.txt 0644
 data/_BlogPlugin/RenderPages.txt 0644
 data/_BlogPlugin/RenderRecentComments.txt 0644
 data/_BlogPlugin/RenderRecentPostings.txt 0644

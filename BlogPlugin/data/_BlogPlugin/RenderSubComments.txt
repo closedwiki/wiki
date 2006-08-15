@@ -15,7 +15,7 @@
 ~~~            <a name=\"$topic\"></a><a name=\"$formfield(Nr)\"></a>
 ~~~            <span class=\"blogCommentNr\">$formfield(Nr)</span>
 ~~~            $percntIFDEFINEDTHEN{\"$expand(Url)\"}$percnt
-~~~              [[$expand(Url)][$expand(Name)]] 
+~~~              [[$test][$expand(Name)]] 
 ~~~            $percntELSEDEFINED$percnt
 ~~~              $percntCALC{
 ~~~                \"$dollarIF($dollarEXISTS(%MAINWEB%.$expand(Name)),
@@ -42,7 +42,7 @@
 ~~~            <noautolink>
 ~~~            <div class=\"blogCommentText\">
 ~~~              $formfield(Text)
-~~~              &#8230;&nbsp;<a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic#$topic\"
+~~~              &#8230;&nbsp;<a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/$web/$topic#$topic\"
 ~~~                          title=\"comment on <nop>$topic\">
 *~~              reply</a>
 ~~~            </div>$n

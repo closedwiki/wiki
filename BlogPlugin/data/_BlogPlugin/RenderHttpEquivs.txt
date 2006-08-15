@@ -12,41 +12,66 @@ NONE
 ---++ Implementation
 <verbatim>
 %STARTINCLUDE%
-<meta name="keywords" 
-~~~ content="twiki blog natskin blogplugin" />
 <link rel="alternate" 
 ~~~ type="application/rss+xml" 
 ~~~ title="rss" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRss" />
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebRss" />
 <link rel="alternate" 
 ~~~ type="application/rss+xml" 
 ~~~ title="rss (combined)" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssCombined" />
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebRssCombined" />
 <link rel="alternate" 
 ~~~ type="application/rss+xml" 
 ~~~ title="rss (comments)" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssComments" />
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebRssComments" />
 <link rel="alternate" 
 ~~~ type="application/rss+xml" 
 ~~~ title="rss (teaser)" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssTeaser" />
-
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebRssTeaser" />
 <link rel="alternate" 
 ~~~ type="application/atom+xml" 
 ~~~ title="atom" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtom" />
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebAtom" />
 <link rel="alternate" 
 ~~~ type="application/atom+xml" 
 ~~~ title="atom (combined)" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomCombined" />
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebAtomCombined" />
 <link rel="alternate" 
 ~~~ type="application/atom+xml" 
 ~~~ title="atom (comments)" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomComments" />
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebAtomComments" />
 <link rel="alternate" 
 ~~~ type="application/atom+xml" 
 ~~~ title="atom (teaser)" 
-~~~ href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomTeaser" />
+~~~ href="%SCRIPTURL{"view"}%/%WEB%/WebAtomTeaser" />
+%IFDEFINEDTHEN{"$percntFORMFIELD{\"Headline\"}$percnt" glue="off"}%
+<meta name="description" content="$test" />
+%ELSIFDEFINED{"$percntFORMFIELD{\"TopicDescription\"}$percnt" glue="off"}%
+<meta name="description" content="$test" />
+%FIDEFINED%
+%IFDEFINEDTHEN{"$percntFORMFIELD{\"BlogAuthor\"}$percnt" glue="off"}%
+<meta name="author" content="$test" />
+%ELSEDEFINED%
+<meta name="author" content="%$nopREVINFO{"$wikiname"}%" />
+%FIDEFINED%
+%~~ FORMATLIST{"
+~~~   $percntFORMFIELD{\"Tag\"}$percnt 
+~~~   $percntFORMFIELD{\"BlogTag\"}$percnt
+~~~   $percntFORMFIELD{\"SubjectCategory\"}$percnt"
+~~~   header="<meta http-equiv=\"keywords\" content=\""
+~~~   footer="\" />"
+~~~   unique="on"
+~~~   sort="on"
+~~~ }%
+%~~ FORMATLIST{"
+~~~   $percntFORMFIELD{\"Tag\"}$percnt 
+~~~   $percntFORMFIELD{\"BlogTag\"}$percnt
+~~~   $percntFORMFIELD{\"SubjectCategory\"}$percnt"
+~~~   header="<meta name=\"keywords\" content=\""
+~~~   footer="\" />"
+~~~   unique="on"
+~~~   sort="on"
+~~~ }%
 %STOPINCLUDE%
 </verbatim>
 

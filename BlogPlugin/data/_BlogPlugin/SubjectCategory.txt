@@ -6,7 +6,7 @@
 See also: %TOPIC%Template, FrontPage
 
 <noautolink>
-<form action="%SCRIPTURL{"edit"}%/%WEB%/" method="post">
+<form action="%SCRIPTURLPATH{"edit"}%/%WEB%/" method="post">
 <!--input type="hidden" name="onlywikiname" value="off" /-->
 <input type="hidden" name="templatetopic" value="%TOPIC%Template" />
 <input type="hidden" name="formtemplate" value="SubjectCategoryForm" />

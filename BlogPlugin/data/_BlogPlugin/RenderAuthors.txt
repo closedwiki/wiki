@@ -12,7 +12,7 @@ NONE
 %~~ DBQUERY{"TopicType=~'\bBlogAuthor\b'"
 ~~~   header="<div class=\"blogSideBarSection blogSideBarAuthors blogAuthor\">
 ~~~     <h1>Authors$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
-~~~   format="<li><a href=\"%SCRIPTURL{"view"}%/$web/$topic\" 
+~~~   format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\" 
 ~~~      title=\"$formfield(TopicDescription)\">$topic</a></li>"
 ~~~   footer="</ul></div>"
 ~~~  }%

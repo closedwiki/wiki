@@ -23,7 +23,7 @@
 ~~~   group="<strong>$group</strong>"
 ~~~   header="<div class=\"blogArchiveTagCloud\">"
 ~~~   format="<span style=\"font-size:$weightpx;line-height:90%;margin:0;padding:0;\">
-~~~     <a href=\"%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?mode=cat;search=$term\"
+~~~     <a href=\"%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?mode=cat;search=$term\"
 ~~~        title=\"$count\"
 ~~~        style=\"color:$fadeRGB(%TAGCLOUDFADE%);\"
 ~~~        class=\"$percntIFDEFINED{\"%QUERY%\" as=\"$term\" then=\"current\"}$percnt\"

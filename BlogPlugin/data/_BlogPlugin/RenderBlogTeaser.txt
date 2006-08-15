@@ -26,14 +26,14 @@ see also: RenderFullTeaser
 ~~~   <table class=\"blogHeadline\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
 ~~~   <tr><td>
 ~~~   <h2>
-~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
+~~~     <a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/$web/$topic\" 
 ~~~       title=\"permalink to <nop>$topic\">
 ~~~       $formfield(Headline)
 ~~~     </a>$percntREDDOT{\"$web.$topic\"}$percnt
 ~~~   </h2></td>
 ~~~   <td class=\"blogCommentCount\">
 ~~~     $percntCOUNTCOMMENTS{\"$web.$topic\" hidenull=\"on\" 
-~~~       format=\"<a href=\\"$dollarpercntSCRIPTURL{\\"view\\"}$dollarpercnt/
+~~~       format=\"<a href=\\"$dollarpercntSCRIPTURLPATH{\\"view\\"}$dollarpercnt/
 *~~         $web/$topic#topComment\\" title=\\"comments on <nop>$topic\\">
 ~~~         $dollarcount</a>\"
 ~~~     }$percnt
@@ -49,7 +49,7 @@ see also: RenderFullTeaser
 ~~~     $percntFORMATLIST{\"$formfield(SubjectCategory)\" 
 ~~~       sort=\"on\" 
 ~~~       header=\"in <span class=\\"blogCategory\\">\"
-~~~       format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
+~~~       format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
 ~~~       footer=\"</span>\"
 ~~~     }$percnt
 ~~~     <span class=\"blogAuthor\"> 
@@ -61,7 +61,7 @@ see also: RenderFullTeaser
 ~~~      <noautolink>$n
 ~~~      $formfield(Teaser)
 ~~~      <div class=\"blogMore\"> &#8230;&nbsp;
-*~~        <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic\" 
+*~~        <a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/$web/$topic\" 
 ~~~           title=\"permalink to <nop>$topic\">more</a>
 ~~~      </div>
 ~~~      </noautolink>$n

@@ -6,7 +6,7 @@
 %TMPL:END% 
 %TMPL:DEF{"formatbottom"}%%TMPL:END% 
 %TMPL:DEF{"attachmentsatbottom"}%%TMPL:END% 
-%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%IFDEFINED{"%WHITEBOARD%" as="off" then="&action=form"}%%TMPL:P{"editaction"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
+%TMPL:DEF{"editraw"}%<span class="patternButton"><a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%%IFDEFINED{"%WHITEBOARD%" as="off" then="&action=form"}%%TMPL:P{"editaction"}%" rel="nofollow" title='%MAKETEXT{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
 %{
 <!--
    * Set ALLOWTOPICCHANGE = %MAINWEB%.BlogAdminGroup

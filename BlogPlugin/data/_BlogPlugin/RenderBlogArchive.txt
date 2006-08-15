@@ -20,7 +20,7 @@ started on the blog and displayed using the RenderBlogArchiveHitList function.
 %STARTINCLUDE%
 <div class="blogArchiveModes">
 <span class="blogArchiveMode blogArchiveModeChron">
-~~~ <a href="%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?mode=chron" 
+~~~ <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?mode=chron" 
 ~~~    title="Browse the Archive in Chronological Order"
 ~~~    %IFDEFINED{"%MODE%" as="chron" then="class=\"current\"" glue="off"}%>
 *~~   Chron
@@ -28,7 +28,7 @@ started on the blog and displayed using the RenderBlogArchiveHitList function.
 *~~ %REDDOT{"%BASEWEB%.RenderBlogArchiveChron"}%
 </span> 
 <span class="blogArchiveMode blogArchiveModeCat">
-~~~ <a href="%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?mode=cat" 
+~~~ <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?mode=cat" 
 ~~~    title="Browse the Archive by Category"
 ~~~    %IFDEFINED{"%MODE%" as="cat" then="class=\"current\"" glue="off"}%>
 *~~   Cat
@@ -36,7 +36,7 @@ started on the blog and displayed using the RenderBlogArchiveHitList function.
 *~~ %REDDOT{"%BASEWEB%.RenderBlogArchiveCat"}%
 </span>
 <span class="blogArchiveMode blogArchiveModeTag">
-~~~ <a href="%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?mode=tag" 
+~~~ <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?mode=tag" 
 ~~~    title="Browse the Archive by Tag"
 ~~~    %IFDEFINED{"%MODE%" as="tag" then="class=\"current\"" glue="off"}%>
 *~~   Tag
@@ -44,7 +44,7 @@ started on the blog and displayed using the RenderBlogArchiveHitList function.
 *~~ %REDDOT{"%BASEWEB%.RenderBlogArchiveTag"}%
 </span> 
 <span class="blogArchiveMode blogArchiveModeLex">
-~~~ <a href="%SCRIPTURL{"view"}%/%BASEWEB%/%BASETOPIC%?mode=lex" 
+~~~ <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?mode=lex" 
 ~~~    title="Browse the Archive by Lexical Analysis"
 ~~~    %IFDEFINED{"%MODE%" as="lex" then="class=\"current\"" glue="off"}%>
 *~~   Lex
