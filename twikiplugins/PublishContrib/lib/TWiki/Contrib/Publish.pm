@@ -80,6 +80,12 @@ sub publish {
     $session->{webName} = $web;
 
     $TWiki::Plugins::SESSION = $session;
+    
+    #don't add extra markup for topics we're not linking too
+    #NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL LINKTOOLTIPINFO    
+    $TWiki::Plugins::SESSION->{renderer}->{NEWLINKSYMBOL} = '';    
+    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICBGCOLOR} = '';    
+    $TWiki::Plugins::SESSION->{renderer}->{NEWTOPICFONTCOLOR} = '';    
 
     my ($inclusions, $exclusions, $filter, $skin, $genopt, $format);
     $genopt = '';
@@ -609,7 +615,8 @@ sub _handleURL {
 sub _handleNewLink {
     my $link = shift;
     $link =~ s!<a .*?>!!gi;
-    $link =~ s!\?</a>!!gi;
+    $link =~ s!</a>!!gi;
+    
     return $link;
 }
 
