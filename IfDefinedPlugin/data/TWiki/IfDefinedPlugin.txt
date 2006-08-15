@@ -17,23 +17,23 @@ This plugin adds a couple of tags that allow to render content conditionally.
 There are two different ways to do that: either by using the inline 
 =%<nop>IFDEFINED{"string" then="..." else="..."}%= tag that returns the 
 =then= or =else= argument depending on the =string= being defined, that is non-empty.
-There are no other ways to deceide the condition but rendering the =string= argument
-using <nop>TWikiML, for example by embedding a =%<nop>CALC{}%= expression. This simplifies
+There are no other ways to decide the condition but rendering the =test= string 
+being a <nop>TWikiML expression, for example by embedding a =%<nop>CALC{}%= expression. This simplifies
 this plugin alot and allows a rather flexible way to generate the condition.
 
 The other way is to use blocks of content surrounded by expressions like this:
 <verbatim>
-%IFDEFINEDTHEN{"string"}%
+%IFDEFINEDTHEN{"test"}%
 ...
-%ELSIFDEFINED{"string"}%
+%ELSIFDEFINED{"test"}%
 ...
 %ELSEDEFINED%
 ...
 %FIDEFINED%
 </verbatim>
-This way conditioning content is not limited to fit into a <nop>TWikiML argument
-as it is the case using an inline IFDEFINED tag. Blocked conditions can be nested
-and are evaluated starting from the outside, contrary to standard <nop>TWikiML being
+This way the conditioned content is not limited to fit into a the argument
+position of a =%<nop>IFDEFINED{...}%= expression.  Blocks can be nested and are
+evaluated starting from the outside, contrary to standard <nop>TWikiML being
 evaluated left-to-right-inside-out.
 
 ---++ Related work
@@ -58,7 +58,7 @@ This plugin has been externalized from the TWiki:Plugins/NatSkinPlugin.
 ---+++ IFDEFINED
 *Syntax*: 
 <verbatim>
-%IFDEFINED{"<TWikiML>" 
+%IFDEFINED{"test" 
   [action="view,edit,preview,..."]? 
   [as="..."]
   then="..." 
@@ -66,16 +66,25 @@ This plugin has been externalized from the TWiki:Plugins/NatSkinPlugin.
   glue="on,off"}%
 </verbatim>
 
-returns the "then" or "else" content depeinding on the &lt;<nop>TWikiML>
+returns the "then or "else" content depending on the "test"
 expression expanding to the emtpy string or to the string given in "as".
-Optionally the current topic action is checked to match the given one.  This
-tag works similar to the <nop>IfStatements in dakar but is backwards compatible
-to beijing and cairo and omits the overhead of an expression parser.
+Optionally the current topic action is checked to match the one given in "action".  
+Normally, all surrounding whitespaces are removed, that is the resulting content
+is glued together in a way. You may switch that off by setting "glue" to "off"
+thus preventing all whitespace as it is.
+
+The "then" and "else" strings may contain the following pseudo-variables:
+   * =$n=: substituted with a newline character (\n)
+   * =$percnt=: substituted with a percent character (%)
+   * =$dollar=: substituted with a dollar character ($)
+   * =$test= or =$variable=: substituted with the "test" string
+   * =$value=: substituted with the "as" string
+
 
 ---+++ IFDEFINEDTHEN, ELSIFDEFINED, ELSEDEFINED, FIDEFINED
 *Syntax*:
 <verbatim>
-%IFDEFINEDTHEN{"<TWikiML>" [action="view,edit,preview,..."]?}% 
+%IFDEFINEDTHEN{"test" [action="view,edit,preview,..."]?}% 
   <then content> 
 [%ELSIFDEFINED{...}% 
   <elsif content>]* 
@@ -109,14 +118,16 @@ advance.
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Copyright &copy;: | 2006, Michael Daum |
+|  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.92 |
+|  Plugin Version: | v0.93 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  15 Aug 2006: | added =$test= and =$value= |
 |  07 Aug 2006: | be smarter to detect the cgi action wrt to different apache setups |
 |  10 Mar 2006: | added =as= parameter; \
                   added escape parameters and recursive variable expansion to the condition argument \
@@ -130,4 +141,4 @@ advance.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 07 Aug 2006
+-- TWiki:Main.MichaelDaum - 15 Aug 2006
