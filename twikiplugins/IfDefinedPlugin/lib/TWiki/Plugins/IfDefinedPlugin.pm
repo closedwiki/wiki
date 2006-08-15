@@ -29,7 +29,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.92';
+$RELEASE = 'v0.93';
 $debug = 0; # toggle me
 
 ###############################################################################
@@ -167,6 +167,8 @@ sub ifDefinedImpl {
       if ($theThen =~ s/\$nop//go) {
 	$theThen = TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
       }
+      $theThen =~ s/\$(test|variable)/$theVariable/g;
+      $theThen =~ s/\$value/$theAs/g;
       return $before.$theThen.$after;
     }
   }
@@ -176,6 +178,9 @@ sub ifDefinedImpl {
   if ($theElse =~ s/\$nop//go) {
     $theElse = TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
   }
+
+  $theElse =~ s/\$test/$theVariable/g;
+  $theElse =~ s/\$value/$theAs/g;
   return $before.$theElse.$after; # variable is empty
 }
 
@@ -229,7 +234,7 @@ sub escapeParameter {
 # paths for the same action depending on the apache configuration (rewrites, aliases)
 sub getCgiAction {
 
-  my $pathInfo = $ENV{'PATH_INFO'};
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
   my $theAction = $ENV{'REQUEST_URI'} || '';
   if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
     $theAction = $1;
