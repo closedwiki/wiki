@@ -15,6 +15,7 @@
 #
 ###############################################################################
 package TWiki::Plugins::FilterPlugin;
+use strict;
 
 ###############################################################################
 use vars qw(
@@ -23,7 +24,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.94';
+$RELEASE = '0.95';
 $debug = 0; # toggle me
 
 ###############################################################################
@@ -74,7 +75,7 @@ sub handleFilter {
   my $theFormat = &TWiki::Func::extractNameValuePair($theAttributes, "format") || '';
   my $theMaxHits = &TWiki::Func::extractNameValuePair($theAttributes, "hits") || 0;
   my $theTopic = &TWiki::Func::extractNameValuePair($theAttributes, "topic") || $currentTopic;
-  my $theWeb = $currentWeb if !$theWeb;
+  my $theWeb = $currentWeb;
   if ($theTopic =~ /^(.*)\.(.*)$/) { # TODO : put normalizeWebTopicName() into the DakarContrib
     $theWeb = $1;
     $theTopic = $2;
@@ -144,7 +145,7 @@ sub handleFilter {
       $match =~ s/\$4/$arg4/g;
       $match =~ s/\$5/$arg5/g;
       $match =~ s/\$6/$arg6/g;
-      writeDebug("match=$match");
+      #writeDebug("match=$match");
       $text =~ s/$thePattern/$match/gmsi;
       #writeDebug("($hits) text=$text");
       $hits--;
@@ -206,21 +207,21 @@ sub handleFormatList {
     my $arg4 = $4 || '';
     my $arg5 = $5 || '';
     my $arg6 = $6 || '';
-    my $item = $theFormat;
-    $item =~ s/\$1/$arg1/g;
-    $item =~ s/\$2/$arg2/g;
-    $item =~ s/\$3/$arg3/g;
-    $item =~ s/\$4/$arg4/g;
-    $item =~ s/\$5/$arg5/g;
-    $item =~ s/\$6/$arg6/g;
-    #writeDebug("after susbst '$item'");
+    my $line = $theFormat;
+    $line =~ s/\$1/$arg1/g;
+    $line =~ s/\$2/$arg2/g;
+    $line =~ s/\$3/$arg3/g;
+    $line =~ s/\$4/$arg4/g;
+    $line =~ s/\$5/$arg5/g;
+    $line =~ s/\$6/$arg6/g;
+    #writeDebug("after susbst '$line'");
     if ($theUnique eq 'on') {
-      next if $seen{$item};
-      $seen{$item} = 1;
+      next if $seen{$line};
+      $seen{$line} = 1;
     }
-    next if $item eq '';
-    $item =~ s/\$index/$count/g;
-    push @result, $item;
+    next if $line eq '';
+    $line =~ s/\$index/$count/g;
+    push @result, $line;
     $count++;
   }
   return '' if $count == 0;
