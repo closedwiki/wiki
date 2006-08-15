@@ -15,7 +15,7 @@ See also: RenderNewBlogLinkButton, RenderNewCategoryButton, RenderNewBlogEntryBu
 <verbatim>
 %STARTINCLUDE%
 *~~
-<form action="%SCRIPTURL{"view"}%/%WEB%/TWikiTopic" method="get">
+<form action="%SCRIPTURLPATH{"view"}%/%WEB%/TWikiTopic" method="get">
 <input type="submit" class="blogSubmitButton blogTopicButton" value="%TEXT%" />
 </form>
 *~~

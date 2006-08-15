@@ -15,7 +15,7 @@
 ~~~        order="Name"
 ~~~        separator="$n" hidenull="on"
 ~~~        header="%IFDEFINED{"%CAT%" then="| *%CAT% links* ||"}%"
-~~~        format="| <a href=\"%SCRIPTURL{"view"}%/$web/$topic
+~~~        format="| <a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic
 *~~          %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\">$formfield(Name)</a> |
 ~~~          $formfield(Headline) |"
 ~~~ }% 

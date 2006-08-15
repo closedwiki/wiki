@@ -16,7 +16,7 @@
 | SubjectCategory | checkbox | 3 | %DBQUERY{"TopicType=~'\bSubjectCategory\b'" separator=", "}% | Blog entry categories |  |
 | Related | select+multi+values | 10 | %DBQUERY{"(TopicType=~'\bBlogPage\b' OR TopicType=~'\bBlogEntry\b')" format="$percntENCODE{\"$formatTime(createdate): $expand(Headline or TopicDescription)\"}$percnt=$topic" separator=", " order="created" reverse="on" limit="100"}%| list of related blog pages | |
 | State | select | 1 | published, unpublished | |  |
-| | label | 3 | *Upload*: <ul style="margin-top:0px"><li>Attach image to the <a target="_blank" href="%SCRIPTURL{"view"}%/%WEB%/BlogImages">BlogImages</a> collection</li> \
+| | label | 3 | *Upload*: <ul style="margin-top:0px"><li>Attach image to the <a target="_blank" href="%SCRIPTURLPATH{"view"}%/%WEB%/BlogImages">BlogImages</a> collection</li> \
   <li>Add to your posting text %BR% &lt;img class="alignright border" src="%<nop>BLOGIMAGES%/SomeImage.gif" /> </li>\
   <li>use css classes alignright, alignleft, border to layout the image</li></ul> |||
 

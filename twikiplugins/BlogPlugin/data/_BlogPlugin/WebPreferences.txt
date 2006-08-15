@@ -80,14 +80,14 @@ Default refresh rate for BlogLinks with rss feeds;
    * Set RSSREFRESH = 1440
 
 Syndication variables (expert settings):
-   * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
-   * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>
-   * Set WEBRSSCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssComments" title="RSS Feed for the Comments on this Site">RSS COMMENTS</a>
-   * Set WEBRSSCOMBINED = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRssCombined" title="RSS Feed for Site">RSS COMBINED</a>
-   * Set WEBATOM = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtom" title="ATOM Feed for the Entries on this Site">ATOM</a>
-   * Set WEBATOMTEASER = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomTeaser" title="ATOM Feed for the Teasers on this Site">ATOM TEASER</a>
-   * Set WEBATOMCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomComments" title="ATOM Feed for the Comments on this Site">ATOM COMMENTS</a>
-   * Set WEBATOMCOMBINED = <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtomCombined" title="ATOM Feed for this Site">ATOM COMBINED</a>
+   * Set WEBRSS = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRss" title="RSS Feed for the Entries on this Site">RSS</a>
+   * Set WEBRSSTEASER = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssTeaser" title="RSS Feed for the Teaser on this Site">RSS TEASER</a>
+   * Set WEBRSSCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssComments" title="RSS Feed for the Comments on this Site">RSS COMMENTS</a>
+   * Set WEBRSSCOMBINED = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebRssCombined" title="RSS Feed for Site">RSS COMBINED</a>
+   * Set WEBATOM = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtom" title="ATOM Feed for the Entries on this Site">ATOM</a>
+   * Set WEBATOMTEASER = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomTeaser" title="ATOM Feed for the Teasers on this Site">ATOM TEASER</a>
+   * Set WEBATOMCOMMENTS = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomComments" title="ATOM Feed for the Comments on this Site">ATOM COMMENTS</a>
+   * Set WEBATOMCOMBINED = <a class="natFeedIcon" href="%SCRIPTURLPATH{"view"}%/%WEB%/WebAtomCombined" title="ATOM Feed for this Site">ATOM COMBINED</a>
    * Set WEBSYNDICATION = [[%WEB%.WebSyndication][Syndicate]] this site %WEBRSS%%WEBRSSCOMMENTS%%WEBATOM%%WEBATOMCOMMENTS%
 
 
@@ -141,9 +141,10 @@ Initialization of WebButtons variables (don't change):
 Definition of TWikiForms (expert settings):
    * Set WEBFORMS = BlogEntryForm, TopicForm, BlogCommentForm, BlogLinkForm, BlogPageForm, SubjectCategoryForm, BlogAuthorForm
 
-TopicFunction to generate html page header information:
+TopicFunctions to generate html page header information:
 <verbatim>
    * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"RenderHttpEquivs"}%
+   * Set PAGETITLE = $percntDBCALL{\"RenderPageTitle\"}$percnt
 </verbatim>
 
    * Set FINALPREFERENCES = ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME

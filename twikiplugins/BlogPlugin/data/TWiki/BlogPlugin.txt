@@ -195,7 +195,8 @@ And send me a patch if you've coded that into TWiki ;).
    
 ---++ Plugin Installation Instructions
 
-   * [[%ATTACHURL%/BlogPlugin.zip][Download]] and install all additionally required plugins listed in the
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] and install 
+     all additionally required plugins listed in the
      [[#Plugin_Info][dependencies information]] below
    * Download the BlogPlugin ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -225,8 +226,11 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.96 |
+|  Version: | v0.97 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  15 Aug 2006: | making use of new feature of the <nop>IfDefinedPlugin to speed up certain things; \
+                  improved way to render meta data and pagetitle; \
+		  generating relative urls instead of absolute where possible now |
 |  28 Jul 2006: | hiding the breadcrumbs in the blog introduced in the recent <nop>NatSkin version; \
                   reordered sidebar section to "make more sense"; \
 		  minor docu changes; \
@@ -384,4 +388,4 @@ And send me a patch if you've coded that into TWiki ;).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 28 Jul 2006
+-- TWiki:Main.MichaelDaum - 15 Aug 2006

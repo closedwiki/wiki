@@ -22,14 +22,14 @@
 ~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='published'
 ~~~     AND SubjectCategory=~'\b%URLPARAM{"cat" default=".*"}%\b'"
 ~~~   REVERSE="on"
-~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
+~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=$test"}%"
 ~~~ }%
 ~~~ <a name="%WEB%_%NAME%"></a>
 ~~~
 %~~ DBQUERY{%IFDEFINED{"%WIKINAME%" as="TWikiGuest" then="\"State='published'\""}%
 ~~~   topic="%NAME%" web="%WEB%"
 ~~~   format="%DBCALL{"%TOPIC%" section="format"
-~~~     PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
+~~~     PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=$test"}%"
 ~~~   }%"
 ~~~ }%
 ~~~
@@ -44,7 +44,7 @@
 ~~~   WHERE="TopicType=~'\bBlogEntry\b' AND State='published
 ~~~     AND SubjectCategory=~'\b%URLPARAM{"cat" default=".*"}%\b'"
 ~~~   REVERSE="on"
-~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=%URLPARAM{"cat"}%"}%"
+~~~   PARAMS="%IFDEFINED{"%URLPARAM{"cat"}%" then="cat=$test"}%"
 ~~~ }%
 ~~~ %STARTALIASAREA%
 *~~
@@ -58,11 +58,11 @@
 ~~~   $n<noautolink>$n
 ~~~   <div class=\"blogHeadline\">
 ~~~   <h1>
-~~~     <a href=\"$percntSCRIPTURL{\"view\"}$percnt/$web/$topic
+~~~     <a href=\"$percntSCRIPTURLPATH{\"view\"}$percnt/$web/$topic
 *~~        %IFDEFINED{"%PARAMS%" then="?%PARAMS%"}%\" 
 ~~~        title=\"permalink to <nop>$topic\">
 ~~~       $formfield(Headline)
-~~~     </a>$percntREDDOT{\"$web.$topic\"}$percnt
+*~~     </a>$percntREDDOT{\"$web.$topic\"}$percnt
 ~~~   </h1></div>
 ~~~   $n</noautolink>$n
 ~~~   <div class=\"blogInfo\">
@@ -71,7 +71,7 @@
 ~~~     </span>
 ~~~     $percntFORMATLIST{\"$formfield(SubjectCategory)\" sort=\"on\"
 ~~~       header=\"in <span class=\\"blogCategory\\">\"
-~~~       format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
+~~~       format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/$web/$1\\" rel=\\"tag\\">$1</a>\"
 ~~~       footer=\"</span>\"
 ~~~     }$percnt
 ~~~     $percntTAGCLOUD{\"$formfield(BlogTag)\" sort=\"on\"
@@ -80,7 +80,7 @@
 ~~~       warn=\"off\"
 ~~~       header=\"tagged <span class=\\"blogTag\\">\"
 ~~~       separator=\", \"
-~~~       format=\"<a href=\\"%SCRIPTURL{"view"}%/$web/BlogArchive?mode=tag;search=$term\\" 
+~~~       format=\"<a href=\\"%SCRIPTURLPATH{"view"}%/$web/BlogArchive?mode=tag;search=$term\\" 
 ~~~                   rel=\\"tag\\">$term</a>\"
 ~~~       footer=\"</span>\"
 ~~~     }$percnt

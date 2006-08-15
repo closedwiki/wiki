@@ -33,7 +33,7 @@ NONE
 ~~~    <dc:description>Wiki content</dc:description>
 ~~~    <dc:creator><Agent><dc:title>%WIKIWEBMASTERNAME%</dc:title></Agent></dc:creator>
 ~~~    <dc:rights><Agent><dc:title>The contributing authors</dc:title></Agent></dc:rights>
-~~~    <dc:source rdf:resource="%SCRIPTURL{"view"}%/%WEB%/%TOPIC%" />
+~~~    <dc:source rdf:resource="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" />
 ~~~  </Work>
 ~~~  <License rdf:about="http://creativecommons.org/licenses/by-sa/2.5/">
 ~~~    <permits rdf:resource="http://web.resource.org/cc/Reproduction"/>

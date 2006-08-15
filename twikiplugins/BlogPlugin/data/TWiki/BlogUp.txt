@@ -160,7 +160,7 @@ See also: BlogPlugin, [[_BlogPlugin.WebHome][BlogUp template web]]
 |  Dependencies: | BlogPlugin |
 |  Change History: | (see also the change history of the BlogPlugin) |
 |  24 Jan 2006: | Initial version |
-|  Demo: | http://jojowiki.dyndns.org/view/Blog/WebHome |
+|  Demo: | http://jojowiki.dyndns.org |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/BlogPlugin |
 |  Appraisal: | TWiki:Plugins/BlogPluginAppraisal |
