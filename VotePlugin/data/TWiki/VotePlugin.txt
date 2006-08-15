@@ -8,7 +8,7 @@
 
    Instead, you could check your fix in, raise a bug in the Bugs web, or mail the author.
 -->
----+!! <nop>VotePlugin
+---+!! <nop>%TOPIC%
 This plugin might be used to establish an online-voting system. Votes are
 collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlugin.
 
@@ -52,24 +52,20 @@ The plugin will count only you latest vote. You might only vote once a day.
 
 ---++ Plugin Installation Instructions
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-     | *File:* | *Description:* |
-     | ==bin/vote== | Plugin cgi script |
-     | ==data/TWiki/VotePlugin.txt== | Plugin topic |
-     | ==lib/TWiki/Plugins/VotePlugin.pm== | Plugin Perl module |
-     | ==pub/TWiki/VotePlugin/mainbar.gif== | decoration |
-     | ==pub/TWiki/VotePlugin/leftbar.gif== | decoration |
-     | ==pub/TWiki/VotePlugin/rightbar.gif== | decoration |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+	* Unzip it in your twiki installation directory. Content: 
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.30 |
+|  Plugin Version: | v1.31 |
 |  Change History: | &nbsp; | 
+|  2006-08-15 | added "use strict" and fixed revealing errors |
 |  2006-04-27 | added lazy compilation |
 |  2005-12-07 | added gif bar; removed debug flag |
 |  2005-10-09 | fixed invocation of normalizeFileName |
@@ -85,9 +81,8 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Other Dependencies: | none |
 |  Perl Version: | >=5.6.1 |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | TWiki:Plugins/VotePlugin |
-|  Feedback: | TWiki:Plugins/VotePluginDev |
-|  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 27 Apr 2006
-
+-- TWiki:Main.MichaelDaum - 15 Aug 2006
