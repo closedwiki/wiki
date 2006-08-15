@@ -58,7 +58,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre2';
+$RELEASE = '3.00-pre3';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -1335,6 +1335,7 @@ sub renderEmailObfuscator {
   }
   $text .= "}\n";
   $text .= "//-->\n</script>\n";
+  $text .= '<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/obfuscator.js"></script>'."\n";
   return $text;
 }
 
