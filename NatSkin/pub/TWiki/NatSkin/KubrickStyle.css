@@ -37,7 +37,7 @@ hr {
 }
 .natSideBar,
 .natTopRight {
-  width:22em;
+  width:250px;
 }
 
 .natSideBarContents,
@@ -55,23 +55,23 @@ hr {
 }
 
 .natTopLeft, .natTopRight {
-  padding-top:0px;
-  padding-bottom:0px;
+  padding:0px;
 }
-.natTopLeftContents,
-.natTopRightContents{
-  margin-top:4em;
-  margin-bottom:1em;
-  margin-left:20px;
+.natTopLeftContents {
+  margin:45px 0px 10px 20px;
 }
 .natTopRightContents {
-  margin-top:5.2em;
+  margin:55px 5px 0px 15px;
 }
 .natTopBarSizer {
   height:160px;
 }
 .natSearchBox input {
-  width:13em;
+  width:150px;
+  border:1px solid red;
+}
+.natSearchBoxTop {
+  margin-bottom:3px;
 }
 
 /* top bar */
@@ -162,12 +162,7 @@ hr {
 .natSideBar a:hover {
   text-decoration:underline;
 }
-/*
-.natSideBar ol {
-  padding-left:2em;
-}
-*/
-html>body .natSideBar ul { /* hide from IE */
+.natSideBar ul {
   margin-left:0px;
   padding-left:2ex;
   list-style-type: none;

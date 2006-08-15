@@ -1,17 +1,18 @@
 <!-- template: editsidebar.nat.tmpl -->
 %TMPL:DEF{"sidebar"}% <!-- -->
----+ %MAKETEXT{"Help"}%
----++ <nop>%WIKITOOLNAME%
+---+ <nop>%WIKITOOLNAME%
 	* <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/GoodStyle" target="_blank">%MAKETEXT{"GoodStyle"}%</a>
 	* <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/TextFormattingRules" target="_blank">%MAKETEXT{"TextFormatting"}%</a> 
 	* <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiVariables" target="_blank">%MAKETEXT{"Variables"}%</a>
 	* <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/FormattedSearch" target="_blank">%MAKETEXT{"Formatted Search"}%</a>
 	* <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiForms" target="_blank">%MAKETEXT{"Form based input"}%</a>
 	* <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/IncludeTopicsAndWebPages" target="_blank">%MAKETEXT{"Including"}%</a>
----++ <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/InstalledPlugins" target="_blank">%MAKETEXT{"Plugins"}%</a>
+
+---+ %MAKETEXT{"Plugins"}%
 <ul>
 %FORMATLIST{"%ACTIVATEDPLUGINS%" separator=" " format="<li><a href=\"$percntNATSCRIPTURLPATH{\"view\"}$percnt/%TWIKIWEB%/$1Plugin\" target=\"_blank\">$1</a></li>" pattern="(\w+)Plugin" sort="on"}%
 </ul>
----++ %MAKETEXT{"External"}%
+
+---+ %MAKETEXT{"External"}%
 	* <a href="http://en.selfhtml.org" target="_blank">SelfHtml</a>
 %TMPL:END%

@@ -49,9 +49,7 @@ hr {
 }
 .natTopLeftContents,
 .natTopRightContents {
-  margin-top:20px;
-  margin-left:20px;
-  margin-right:20px;
+  margin:20px;
 }
 .natTopRightContents {
   margin-top:40px;
@@ -187,9 +185,7 @@ hr {
 
 .natSearchBox input { 
   border:1px dotted white;
-  width:13em;
   _border:1px solid white; /* IE only */
-  _width:10em; /* IE only */
 }
 .natSearchBoxTop {
   margin-top:10px;

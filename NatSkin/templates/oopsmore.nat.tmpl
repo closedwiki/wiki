@@ -3,18 +3,18 @@
 %TMPL:DEF{"title"}%%TOPIC% (more)%TMPL:END%
 %TMPL:DEF{"heading"}%%MAKETEXT{"More Actions on Topic [_1]" args="<nop>%WEB%.%TOPIC%"}%%TMPL:END%
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
-%TMPL:DEF{"message"}% <table border="0">
+%TMPL:DEF{"message"}% <table border="0" cellspacing="0">
 ---++ %MAKETEXT{"Set Parent Topic"}%</td> </tr>
 <form name="main" action="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%">
 <tr>
   <td style="padding-left:20px"> <select name="topicparent"><option value="">%MAKETEXT{"Select..."}%</option>
      %TOPICLIST{"<option value='$name'>$name</option>" separator=" "}%
      </select>&nbsp;
-  <td><input type="submit" class="natOkButton" style="width:5em" value='%MAKETEXT{"OK"}%'/><br/>
+  <td><input type="submit" class="natOkButton" style="width:5em" value='%MAKETEXT{"OK"}%'/><p />
   </td>
 </tr><tr>
   <td>
-    <ul style="margin:0px"><li>%MAKETEXT{"Note: Edit and save the topic to activate the new parent. [_1]" args="%I%"}%</li></ul>
+    <ul style="margin:0px"><li>%MAKETEXT{"Note: Edit and save the topic to activate the new parent"}%. %I%&nbsp;</li></ul>
   </td>
   <td>
     <input type="button" class="natCancelButton" style="width:5em" value='%MAKETEXT{"Cancel"}%' onclick="self.location.href = '%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';">
@@ -49,7 +49,7 @@
 <td colspan="2">
 ---++ %MAKETEXT{"Topic preferences"}%</td></tr>
 <form name="main" action="%NATSCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%" method="post">
-  <input type="hidden" name="action" value='%MAKETEXT{"editSettings"}%' />
+  <input type="hidden" name="action" value="editSettings" />
 <tr>
   <td>
     <ul style="margin:0px"><li>%MAKETEXT{"Edit preference settings for [[[_1]]]" args="%WEB%.%TOPIC%"}%</li></ul>
@@ -57,23 +57,43 @@
   <td><input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Edit"}%'>
 </tr>
 </form>
+<tr style='%IF{"context i18n_enabled" then="" else="display:none"}%'>
+<td colspan="2">
+---++ %MAKETEXT{"Change language"}%
+</td></tr>
+<tr style='%IF{"context i18n_enabled" then="" else="display:none"}%'>
+  <td style="padding-left:20px" valign="top">
+    <form name="%INCLUDINGWEB%%INCLUDINGTOPIC%ChangeLanguage" action="%SCRIPTURLPATH{"oops"}%/%BASEWEB%/%BASETOPIC%" method="get">
+    <select name="language">
+    %LANGUAGES{format="<option $marker value=\"$langtag\">$langname</option>" selection="%LANGUAGE%" separator=" "}%
+    </select>
+    <input type="hidden" name="template" value="oopslanguagechanged" />
+  </td>
+  <td valign="top">
+    <input class="natOkButton" style="width:5em" type="submit" value="%MAKETEXT{"OK"}%" />
+    </form><p />
+    <form name="%INCLUDINGWEB%%INCLUDINGTOPIC%ChangeLanguage" action="%SCRIPTURLPATH{"oops"}%/%BASEWEB%/%BASETOPIC%" method="get">
+      <input type="hidden" name="template" value="oopslanguagechanged" />
+      <input type="hidden" name="language" value="default" />
+      <input class="natCancelButton" style="width:5em" type="submit" value="%MAKETEXT{"Reset"}%" />
+    </form>
+  </td>
+</tr>
 %FISKINSTATE%
-<tr><td colspan="2">
 <tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
 <td colspan="2">
 ---++ %MAKETEXT{"Topic Caching"}%</td>
 </tr>
-<form name="main" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" method="post">
 <tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
   <td>
     <ul style="margin:0px;"><li>%MAKETEXT{"Get a fresh page of the topic [[[_1]]]" args="%WEB%.%TOPIC%"}%&nbsp;</li></ul>
   </td>
   <td>
-      <input type="hidden" name="refresh" value="on" />
-      <input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Refresh"}%' />
+    <form name="main" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" method="post">
+    <input type="hidden" name="refresh" value="on" />
+    <input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Refresh"}%' />
+    </form>
   </td>
-</tr>
-</form>
 </tr>
 </table>
 %TMPL:END%

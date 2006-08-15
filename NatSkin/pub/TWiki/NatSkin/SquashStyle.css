@@ -149,17 +149,15 @@ hr { border-bottom: 1px solid #999999; }
 }
 
 .natMiddle {
-  padding: 20px 25px;
+  padding:20px;
 }
-.natTopRightContents,
 .natTopLeftContents {
-  margin-right:20px;
-  margin-left:20px;
-  margin-top:20px;
-  margin-bottom:20px;
+  margin:20px;
 }
 .natTopRightContents {
-  margin-top:35px;
+  margin:25px 10px 5px 25px;
+  font-size:12px;
+  font-family:Arial, Sans-serif;
 }
 .natTopBarSizer {
   height:130px;
@@ -198,9 +196,6 @@ hr { border-bottom: 1px solid #999999; }
   font:normal small 'Trebuchet MS', arial, sans-serif;
 }
 
-.natSearchBox input {
-  width:15em;
-}
 .natSearchBoxTop input {
   background:#E7AA5C;
   border:1px dotted #CC6600;
@@ -215,9 +210,6 @@ hr { border-bottom: 1px solid #999999; }
   color:#666666;
   font-weight:bold;
   width:99%;
-}
-.natTopicActions {
-  line-height:110%;
 }
 
 /* sidebar */

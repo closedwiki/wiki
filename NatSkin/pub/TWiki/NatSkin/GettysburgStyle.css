@@ -32,13 +32,10 @@ hr {
 }
 .natTopRightContents,
 .natTopLeftContents {
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:25px;
-  margin-bottom:25px;
+  margin:25px 5px 25px 20px;
 }
 .natTopRightContents {
-  margin-top:35px;
+  margin:35px 10px 25px 20px;
 }
 .natWebTitle,
 .natWebTitle a {
@@ -49,11 +46,24 @@ hr {
   height:140px;
 }
 
+.natSideBar {
+  width:220px;
+  min-width:220px;
+  max-width:220px;
+}
+.natSideBarRight,
+.natTopRight {
+  width:250px;
+  min-width:250px;
+  max-width:250px;
+}
+
 /* twiki table */
 .twikiTable,
 .twikiTable th,
 .twikiTable td {
   border:1px #aaaaaa solid;
+  font-size:95%;
 }
 
 .twikiTable th {
@@ -97,6 +107,14 @@ hr {
 }
 .natTopicForm td {
   line-height:170%;
+}
+
+/* edit form */
+.natTopicEditForm {
+  padding:2px;
+}
+.natTopicEditForm td {
+  border:0px;
 }
 
 /* twiki page form */
@@ -204,6 +222,7 @@ hr {
   _border:1px solid white; /* IE only */
 }
 .natSearchBoxTop input {
+  width:150px;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,
@@ -361,7 +380,6 @@ hr {
 }
 .blogAbout {
   font-size:0.9em;
-  margin:0px 10px;
 }
 .blogHeadline .blogCommentCount {
   font-size:24px; /* h2 */
@@ -405,6 +423,7 @@ hr {
 }
 .blogHeadline h1 {
   padding-bottom:0px;
+  font-size:28px;
 }
 .blogEntry {
   margin-bottom:1.0em;

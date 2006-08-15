@@ -16,10 +16,10 @@
 ~~~     $percntWEBLINK{web=\"$web\" name=\"$name\"}$percnt
 ~~~     </h2>$n" 
 ~~~   markerformat="
+~~~     <div class=\"navCurrent\">
 ~~~     <h2 class=\"navButton\" style=\"display:block\">
-~~~     $percntWEBLINK{web=\"$web\" name=\"$name\"}$percnt
-~~~     </h2>
-~~~     $percntFLEXWEBLIST{
+~~~       $percntWEBLINK{web=\"$web\" name=\"$name\"}$percnt
+~~~     </h2> $percntFLEXWEBLIST{
 ~~~       include=\"$web/\w+\"
 ~~~       header=\"<ul><li>
 ~~~         $dollarpercntTWISTY{
@@ -32,7 +32,8 @@
 ~~~       format=\"<li> $dollarpercntWEBLINK{name=\\"$dollarname\\" web=\\"$dollarweb\\"}$dollarpercnt</li>\"
 ~~~       footer=\"</ul>$dollarpercntENDTWISTY$dollarpercnt</li></ul>\"
 ~~~     }$percnt
-~~~     $percntWEBCOMPONENT{\"WebLinks\"}$percnt$n"
+~~~     $percntWEBCOMPONENT{\"WebLinks\"}$percnt
+~~~     </div>"
 ~~~ }%
 %IFDEFINEDTHEN{"%BASEWEB%" as="Trash"}%
 <h2 class="navButton navButtonTrash">%WEBLINK{"Trash"}%</h2>

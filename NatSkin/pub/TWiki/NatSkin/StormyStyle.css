@@ -26,15 +26,11 @@ hr {
   font-family:arial,sans-serif;
 }
 
-.natTopRightContents,
 .natTopLeftContents{
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:25px;
-  margin-bottom:20px;
+  margin:20px;
 }
 .natTopRightContents {
-  margin-top:35px;
+  margin:25px 10px 0px 20px;
 }
 .natMiddle {
   padding:20px 10px 20px 10px;
@@ -44,16 +40,15 @@ hr {
 .natMainHeaderContents,
 .natMainFooterContents,
 .natSideBarContents {
-  padding:5px 10px 5px 15px;
+  padding:5px 10px 5px 10px;
 }
 .natTopRight,
 .natSideBar {
-  width:15em;
-  _width:17em; /* IE hack */
+  width:250px;
 }
 
 .natTopBarSizer {
-  height:130px;
+  height:140px;
 }
 
 /* twiki styles */
@@ -208,6 +203,7 @@ hr {
   color:white;
   background:black;
   border:1px solid #99ccff;
+  width:160px;
 }
 
 .natWebTitle {
@@ -216,9 +212,6 @@ hr {
 }
 .natWebLocator {
   font-size:small;
-}
-.natTopicActions {
-  line-height:110%;
 }
 
 /* sidebar */

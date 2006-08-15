@@ -8,9 +8,9 @@
   border-bottom:1px solid #ffffff;
 }
 .natWebButtonsContents {
-  font-size:x-small;
+  font-size:small;
   font-family:'Trebuchet MS', arial, sans-serif;
-  padding:0px 25px 7px 25px;
+  margin:0px 10px 7px 25px;
 }
 .natWebButtons ul li a {
   font-weight:normal;

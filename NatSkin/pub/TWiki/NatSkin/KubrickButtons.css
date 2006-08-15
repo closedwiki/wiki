@@ -2,7 +2,7 @@
 @import url('BaseButtons.css');
 
 .natWebButtonsContents {
-  padding:5px 10px 5px;
+  padding:5px 10px 5px 10px;
 }
 
 .natWebButtons ul li {

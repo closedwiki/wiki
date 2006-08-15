@@ -115,7 +115,7 @@ hr {
   margin:20px;
 }
 .natTopRightContents {
-  margin-top:40px;
+  margin-top:25px;
 }
 
 /* top */
@@ -160,7 +160,6 @@ hr {
 }
 .natSearchBoxTop {
   margin-top:10px;
-  width:13em;
 }
 .natTopRightContents {
   font-family:arial,sans-serif;

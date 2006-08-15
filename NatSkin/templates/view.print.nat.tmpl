@@ -9,12 +9,9 @@
 <link rel="icon" href="%FAVICON%" type="image/x-icon" /> 
 <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 %GETSKINSTYLE%
-<script type="text/javascript" charset="ISO-8859-1">
-<!--
+<!-- template javascript -->
 %TMPL:P{"javascript"}%
-//addLoadEvent(function() {window.print()});
-//-->
-</script>
+<!-- template javascript -->
 <style type="text/css">
 .natFeedIcon,
 .blogEntryFeed,
@@ -27,13 +24,14 @@
   content: " (" attr(href) ") ";
 }
 */
+%WEBCOMPONENT{"WebCss"}%
 </style>
 </head>
 <body class="natBody natBodyPrint">
 <div class="natBodyContents">
   <div class="natMiddle natMain">
     <div class="natMainContents">
-      %TMPL:P{"content"}%
+%TMPL:P{"content"}%
     </div>
   <div class="natMainFooterContents">
     <div class="natTopicAttachments"> %META{"attachments"}% </div>
@@ -43,5 +41,7 @@
 </body>
 </html>
 <!-- template: view.print.nat.tmpl -->
-%TMPL:DEF{"content"}% %TEXT% %META{"form"}% %TMPL:END%
+%TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT% 
+%META{"form"}% 
+%STOPALIASAREA% %TMPL:END%
 %TMPL:INCLUDE{"defaultjavascript.nat"}%

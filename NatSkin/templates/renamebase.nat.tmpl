@@ -14,10 +14,13 @@
 <!--input type="hidden" name="confirm" value="on"-->
 ---+ %TMPL:P{"webaction"}% Topic
 
-*%MAKETEXT{"From:"}%* <code>%WEB%.%TOPIC%</code>
+<table width="100%" cellspacing="5px">
+<tr><td align="right"><b>%MAKETEXT{"From"}%:</b></td><td><code>%WEB%.%TOPIC%</code></td></tr>
+<tr><td align="right"><b>%MAKETEXT{"To"}%:</b></td><td>%TMPL:P{"newweb"}% %TMPL:P{"newtopic"}%</td></tr>
+<tr><td>&nbsp;</td><td><p/><input type="checkbox" name="nonwikiword" %NONWIKIWORDFLAG% />%MAKETEXT{"Allow non <nop>WikiWord for the new topic name"}%<p/></td></tr>
+<tr><td>&nbsp;</td><td>%TMPL:P{"buttons"}%</td></tr>
+</table>
 
-*%MAKETEXT{"To:"}%* %TMPL:P{"newweb"}% %TMPL:P{"newtopic"}% 
-%TMPL:P{"buttons"}%
 ---++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="<nop>%TOPIC%,<nop>%WEB%"}%
 <div class="natSearchRenameContents">
 %IFSKINSTATETHEN{release="dakar"}%

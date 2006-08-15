@@ -2,22 +2,24 @@
 <!-- template: oopslogonbase.tmpl -->
 %TMPL:DEF{"onloadscript"}%document.LogonFormular.username.focus();%TMPL:END%
 %TMPL:DEF{"logon"}%<!-- -->
-<div class="natLogonFormular">
+<div class="natLogonFormularHolder">
 <form name="LogonFormular" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%NATSCRIPTURLPATH{"%IFSKINSTATE{action="oops" then="natlogon" else="login"}%"}%/%WEB%/%TOPIC%" method="post">
-<table border="0"> 
+<table class="natLogonFormular" border="0"> 
 <tr> 
   <td><b>%MAKETEXT{"Login"}%</b>: </td>
-  <td> <input type="text" size="20" name="username" /> </td>
-  <td><span class="twikiAlert">**</span></td>
+  <td><input type="text" size="20" name="username" /> 
+      <span class="twikiAlert">**</span>
+  </td>
 </tr>
 <tr> 
   <td><b>%MAKETEXT{"Password"}%</b>: </td>
-  <td> <input type="password" size="20" name="password" /> </td>
-  <td><span class="twikiAlert">**</span></td>
+  <td><input type="password" size="20" name="password" />
+      <span class="twikiAlert">**</span>
+  </td>
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td colspan="2"><p />
+  <td><p />
     <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />&nbsp;<!--
     --><input type="reset"  class="natAltButton" value='%MAKETEXT{"Clear"}%' />&nbsp;<!--
     --><input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome'" /> 
@@ -26,4 +28,6 @@
     <input type="hidden" name="action" value="%TMPL:P{action}%"/>
   </td>
 </tr>
-</table> </form> </div> %TMPL:END%
+</table> 
+</form>
+</div>%TMPL:END%
