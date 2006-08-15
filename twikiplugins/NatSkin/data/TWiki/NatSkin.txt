@@ -177,7 +177,7 @@ This makes use of features that are only present in TWiki V4 and upwards.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre2 |
+|  Skin Version: | v3.0-pre3 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -202,7 +202,8 @@ This makes use of features that are only present in TWiki V4 and upwards.
                  reworked meta data creation: renamed KEYWORDS to METAKEYWORDS, added METAAUTHOR and \
 		 METADESCRIPTION; moved blog related stuff to <nop>BlogPlugin; \
 		 added =strings.nat.tmpl= template defining strings used in <nop>NatSkinPlugin; \
-		 lots of css and template fixes |
+		 lots of css and template fixes;\
+		 only load those javascript snippets that are really used |
 |  2006-08-07: | removed natTWikiInfo from the bottom bar containing the "Powered by" prose; \
                  fixed USEWYSIWYG (again) |
 |  2006-08-03: | first 3 dot O prerelease, 3.0-final will be a TWiki V4 only skin; \

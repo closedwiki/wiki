@@ -1,14 +1,14 @@
 <!-- template: edittopicactions.nat.tmpl -->
 %TMPL:DEF{"topicactions"}% <!-- -->
 <span class="natAction">%MAKETEXT{"Edit"}%</span>
-| <a href="javascript:submitEditFormular('preview','preview');" accesskey="p" title='%MAKETEXT{"Preview your changes"}%'>%MAKETEXT{"Preview"}%</a> 
+| <a href="javascript:submitEditForm('preview','preview');" accesskey="p" title='%MAKETEXT{"Preview your changes"}%'>%MAKETEXT{"Preview"}%</a> 
 %IFSKINSTATETHEN{release="beijing"}% <!-- -->
-| <a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Save"}%</a>
+| <a href="javascript:submitEditForm('save', 'save');" accesskey="s" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Save"}%</a>
 %ELSESKINSTATE% <!-- -->
-| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a> 
-| <a href="javascript:submitEditFormular('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a>
+| <a href="javascript:submitEditForm('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a> 
+| <a href="javascript:submitEditForm('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a>
 %FISKINSTATE% <!-- -->
 <br/> %FORMBUTTON{"$1 |"}%
 <a href="javascript:self.location.reload();" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a>
-| <a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a>
+| <a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditForm('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a>
 %TMPL:END%

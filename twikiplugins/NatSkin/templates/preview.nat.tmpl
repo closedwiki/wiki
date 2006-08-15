@@ -39,12 +39,12 @@
   -->%FORMBUTTON{"<span class='natFormAction'>$1</span>"}%<!--
   --><span class="natUndoAction"><a href="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a></span><!--
   -->%IFSKINSTATETHEN{release="beijing"}%<!--
-  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="s" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Save"}%</a></span><!--
+  --><span class="natSaveAction"><a href="javascript:submitEditForm('save', 'save');" accesskey="s" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Save"}%</a></span><!--
   -->%ELSESKINSTATE%<!--
-  --><span class="natSaveAction"><a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a></span><!--
-  --><span class="natDoneAction"><a href="javascript:submitEditFormular('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a></span><!--
+  --><span class="natSaveAction"><a href="javascript:submitEditForm('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a></span><!--
+  --><span class="natDoneAction"><a href="javascript:submitEditForm('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a></span><!--
   -->%FISKINSTATE%<!--
-  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a></span>
+  --><span class="natCancelAction"><a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditForm('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a></span>
 </div>
 <div class="natSubmitOptions">
   <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
