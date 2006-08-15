@@ -421,7 +421,7 @@ WebPreferences or %TWIKIWEB%.TWikiPreferences)
 By default this value is set to "off"
 
 ---++ Plugin Installation Instructions
-	* [[%ATTACHURL%/%TOPIC%.zip][Download]] the ZIP file
+	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
 	* Unzip it in your twiki installation directory. Content: 
 	  | *File:* | *Description:* |
 	  | ==bin/natlogon== | logon cgi script |
@@ -465,7 +465,7 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre2 |
+|  Plugin Version: | v3.00-pre3 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  15 Aug 2006: | suport for userinterface internationalization | 
 |  04 Aug 2006: | fixed detection of the cgi action to be more robust on different apache \
@@ -475,7 +475,8 @@ By default this value is set to "off"
 		  added a wrapper for natsearch and natlogon to be called using dakar's \
 		  =TWiki::UI:run()= mechanism; \
 		  reintroduced the dependency on the <nop>FilterPlugin which is still \
-		  used in one place |
+		  used in one place; \
+		  load email obfuscator javascript only when needed |
 |  28 July 2006: | This version drops the dependency on the <nop>FilterPlugin \
                    and adds three new dependencies (1) <nop>FlexWebListPlugin, \
 		   (2) <nop>BreadCrumbsPlugin and (3) <nop>GluePlugin; %BR% \
