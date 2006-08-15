@@ -1,0 +1,28 @@
+<!-- template: editjavascript.nat.tmpl -->
+%TMPL:DEF{"editjavascript"}%<script type="text/javascript">
+<!--
+function submitEditForm(script, action) {
+  if (action == 'add form') {
+    document.EditFormular.elements['submitChangeForm'].value = action;
+  }
+%IFSKINSTATETHEN{release="beijing" glue="off"}%
+  document.EditFormular.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+%ELSIFSKINSTATE{release="cairo" glue="off"}%
+  document.EditFormular.elements['action'].value = action;
+%ELSESKINSTATE%
+  document.EditFormular.elements['action_preview'].value = '';
+  document.EditFormular.elements['action_save'].value = '';
+  document.EditFormular.elements['action_checkpoint'].value = '';
+  document.EditFormular.elements['action_addform'].value = '';
+  document.EditFormular.elements['action_replaceform'].value = '';
+  document.EditFormular.elements['action_cancel'].value = '';
+  document.EditFormular.elements['action_' + action].value = 'foobar';
+%FISKINSTATE%
+  document.EditFormular.submit();
+}
+//-->
+</script>%TMPL:END%
+%TMPL:DEF{"javascript"}%
+%TMPL:P{"defaultjavascript"}%
+%TMPL:P{"editjavascript"}%
+%TMPL:END%

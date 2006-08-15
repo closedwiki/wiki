@@ -167,6 +167,7 @@ templates/defaultsidebar.nat.tmpl 0644
 templates/defaulttopbar.nat.tmpl 0644
 templates/editform.nat.tmpl 0644
 templates/editjavascript.natedit.tmpl 0644
+templates/editjavascript.nat.tmpl 0644
 templates/edit.natedit.tmpl 0644
 templates/edit.nat.tmpl 0644
 templates/editsidebar.nat.tmpl 0644
@@ -228,6 +229,7 @@ templates/oopstopicexists.nat.tmpl 0644
 templates/oopsupload.nat.tmpl 0644
 templates/oopswrongpassword.nat.tmpl 0644
 templates/page.nat.tmpl 0644
+templates/previewjavascript.nat.tmpl 0644
 templates/preview.natedit.tmpl 0644
 templates/preview.nat.tmpl 0644
 templates/previewstyles.nat.tmpl 0644
@@ -242,6 +244,7 @@ templates/registernotify.nat.tmpl 0644
 templates/renamebase.nat.tmpl 0644
 templates/renameconfirm.nat.tmpl 0644
 templates/renamedelete.nat.tmpl 0644
+templates/renamejavascript.nat.tmpl 0644
 templates/rename.nat.tmpl 0644
 templates/renamerefs.nat.tmpl 0644
 templates/renamesidebar.nat.tmpl 0644
@@ -249,18 +252,21 @@ templates/renamestyles.nat.tmpl 0644
 templates/renamewebbase.nat.tmpl 0644
 templates/renamewebconfirm.nat.tmpl 0644
 templates/renamewebdelete.nat.tmpl 0644
+templates/renamewebjavascript.nat.tmpl 0644
 templates/renameweb.nat.tmpl 0644
 templates/renamewebsidebar.nat.tmpl 0644
 templates/searchbase.nat.tmpl 0644
 templates/searchbookview.nat.tmpl 0644
 templates/searchbox.nat.tmpl 0644
 templates/searchformat.nat.tmpl 0644
+templates/searchjavascript.nat.tmpl 0644
 templates/searchmeta.nat.tmpl 0644
 templates/search.nat.tmpl 0644
 templates/searchrenameview.nat.tmpl 0644
 templates/searchtopicactions.nat.tmpl 0644
 templates/settings.nat.tmpl 0644
 templates/settingstopicactions.nat.tmpl 0644
+templates/strings.nat.tmpl 0644
 templates/view.nat.tmpl 0644
 templates/view.plain.nat.tmpl 0644
 templates/view.print.nat.tmpl 0644
