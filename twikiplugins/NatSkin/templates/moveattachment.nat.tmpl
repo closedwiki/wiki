@@ -17,6 +17,8 @@
 | *&nbsp;* |  *%MAKETEXT{"Web:"}%* | *&nbsp;%MAKETEXT{"Topic"}%:* |
 |  *%MAKETEXT{"From:"}%* |    %WEB% | &nbsp;%TOPIC% |
 |  *%MAKETEXT{"To:"}%* |  <select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> | &nbsp;<input type="text" name="newtopic" value="%TOPIC%" /> |
+
+<input type="checkbox" name="nonwikiword" /> Allow non <nop>WikiWord for the new topic name.
 <input type="hidden" name="attachment" value="%FILENAME%" />
 <input type="hidden" name="changeRefs" value="0" />
 <center>

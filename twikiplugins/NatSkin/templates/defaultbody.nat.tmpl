@@ -13,7 +13,7 @@
       %FISKINSTATE%
 	<tr>
 	  %IFSKINSTATETHEN{sidebar="left|both"}%
-	  <td class="natMiddle natMiddleLeft natSideBar" rowspan="2" valign="top">
+	  <td class="natMiddle natMiddleLeft natSideBar natSideBarLeft" rowspan="2" valign="top">
 	    <div class="natSideBarContents">
 	    %IFSKINSTATETHEN{sidebar="both"}%
 %$nopTMPL:P{"leftsidebar"}%
@@ -23,12 +23,12 @@
 	    </div>
 	  </td>
 	  %FISKINSTATE%
-	  <td class="natMiddle natMain %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight"}%" valign="top">
+	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight natMainLeft natMainRight"}% natMain" valign="top">
 	    <div class="natMainHeaderContents"> %TMPL:P{"contentheader"}% </div>
 	    <div class="natMainContents"> %TMPL:P{"content"}% </div>
 	  </td> 
 	  %IFSKINSTATETHEN{sidebar="right|both"}%
-	  <td class="natMiddle natMiddleRight natSideBar"  rowspan="2" valign="top">
+	  <td class="natMiddle natMiddleRight natSideBar natSideBarRight"  rowspan="2" valign="top">
 	    <div class="natSideBarContents">
 	    %IFSKINSTATETHEN{sidebar="both"}%
 %$nopTMPL:P{"rightsidebar"}%
@@ -40,7 +40,7 @@
 	  %FISKINSTATE%
 	</tr>
 	<tr>
-	  <td class="natMiddle natMainFooter %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight"}%" valign="bottom">
+	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight natMainFooterRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft natMainFooterLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight natMainFooterLeft natMainFooterRight"}% natMainFooter" valign="bottom">
 	    <div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>
 	  </td>
 	</tr>

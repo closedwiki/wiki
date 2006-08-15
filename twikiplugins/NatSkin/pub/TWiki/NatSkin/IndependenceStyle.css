@@ -18,6 +18,7 @@ hr {
 .natBody {
   margin:0;
   padding:0;
+  font-size:12px;
 }
 .natBodyContents {
   line-height: 140%;
@@ -30,15 +31,11 @@ hr {
   padding:20px;
 }
 
-.natTopRightContents,
 .natTopLeftContents {
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:20px;
-  margin-bottom:20px;
+  margin:20px 5px 20px 20px;
 }
 .natTopRightContents {
-  margin-top:35px;
+  margin:35px 10px 10px 20px;
 }
 
 .natTopBarSizer {
@@ -86,7 +83,6 @@ hr {
   color:white;
   border:1px dotted white;
   _border:1px solid white; /* IE only */
-  width:15em;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,
@@ -107,7 +103,6 @@ hr {
 /* sidebar */
 .natSideBarContents {
   font-family: 'Trebuchet MS', arial, sans-serif;
-  font-size: 0.9em;
   line-height:1.4em;
 }
 
@@ -214,7 +209,6 @@ hr {
 .natBottomBarContents {
   letter-spacing:.3em;
   font-family: 'Trebuchet MS', sans-serif;
-  font-size: 0.9em;
   line-height: 150%;
   color: #666666;
   margin-bottom:5px;

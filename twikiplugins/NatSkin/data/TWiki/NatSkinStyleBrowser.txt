@@ -13,7 +13,7 @@
 <td>
 <select name="style">
 <noautolink>
-%FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{style=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n" separator=" "}%
+%FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option $percntIFSKINSTATE{style=\"$1\" then=\" selected=\\"selected\\"\"}$percnt>$1</option>" join="\n" separator=" "}%
 </noautolink>
 </select>
 </td>
@@ -26,7 +26,7 @@
 <td>
 <select name="stylevariation">
 <noautolink>
-%FORMATLIST{"none, %KNOWNVARIATIONS%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{variation=\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n" separator=" "}%
+%FORMATLIST{"none, %KNOWNVARIATIONS%" pattern="\s*(.*)\s*" format="<option $percntIFSKINSTATE{variation=\"$1\" then=\" selected=\\"selected\\"\"}$percnt>$1</option>" join="\n" separator=" "}%
 </noautolink>
 </select>
 </td>

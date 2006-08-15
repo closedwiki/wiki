@@ -40,15 +40,11 @@ hr {
 .natMainFooterContents {
   margin:10px;
 }
-.natTopLeftContents,
-.natTopRightContents {
-  margin-left:20px;
-  margin-right:20px;
-  margin-top:20px;
-  margin-bottom:30px
+.natTopLeftContents {
+  margin:20px 20px 30px 20px;
 }
 .natTopRightContents {
-  margin-top:30px;
+  margin:30px 10px 20px 20px;
 }
 .natTopBarSizer {
   height:130px;
@@ -109,7 +105,6 @@ hr {
   color:white;
   border:1px dotted white; 
   _border:1px solid white; /* IE hack */
-  width:15em;
 }
 .natSearchBoxPos1 input,
 .natSearchBoxPos2 input,

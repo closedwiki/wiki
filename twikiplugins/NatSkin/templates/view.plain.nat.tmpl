@@ -9,17 +9,18 @@
 <link rel="icon" href="%FAVICON%" type="image/x-icon" /> 
 <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 %GETSKINSTYLE%
-<script type="text/javascript" charset="ISO-8859-1">
-<!--
+<!-- template javascript -->
 %TMPL:P{"javascript"}%
-//-->
-</script>
+<!-- template styles -->
+<style type="text/css">
+%WEBCOMPONENT{"WebCss"}%
+</style>
 </head>
-<body class="natBody">
+<body class="natBody natBodyPlain">
 <div class="natBodyContents">
   <div class="natMiddle natMain">
     <div class="natMainContents">
-      %TMPL:P{"content"}%
+%TMPL:P{"content"}%
     </div>
     <div class="natMainFooterContents">
       <div class="natTopicAttachments"> %META{"attachments"}% </div>
@@ -32,5 +33,7 @@
 </body>
 </html>
 <!-- template: view.plain.nat.tmpl -->
-%TMPL:DEF{"content"}% %TEXT% %META{"form"}% %TMPL:END%
+%TMPL:DEF{"content"}%%STARTALIASAREA%%TEXT% 
+%META{"form"}% 
+%STOPALIASAREA% %TMPL:END%
 %TMPL:INCLUDE{"defaultjavascript.nat"}%

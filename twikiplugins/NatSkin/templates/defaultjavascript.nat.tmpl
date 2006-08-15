@@ -1,6 +1,6 @@
 <!-- template: defaultjavascript.nat.tmpl -->
 <!-- vim:set filetype=javascript: -->
-%TMPL:DEF{"defaultjavascript"}% <script type="text/javascript">
+%TMPL:DEF{"defaultjavascript"}%<script type="text/javascript">
 <!--
  function checkAll(formular, theCheck) {
   var j = 0;
@@ -30,7 +30,7 @@ function submitEditFormular(script, action) {
 %IFSKINSTATETHEN{release="beijing" glue="off"}%
   document.EditFormular.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
 %ELSIFSKINSTATE{release="cairo" glue="off"}%
-  document.EditFormular.elements['action'].value = action; 
+  document.EditFormular.elements['action'].value = action;
 %ELSESKINSTATE%
   document.EditFormular.elements['action_preview'].value = '';
   document.EditFormular.elements['action_save'].value = '';
@@ -61,7 +61,7 @@ function writeEmailAddrs(addrs, linkText, id) {
 	anchor.href += ', ';
       }
     }
-    
+
     if (linkText == '') {
       for (var i = 0; i < addrs.length; i++) {
 	linkText += addrs[i][1] + '@' + addrs[i][0] + '.' + addrs[i][2] + ' ';
@@ -104,5 +104,5 @@ function initNatSkin() {
 
 addLoadEvent(initNatSkin);
 //-->
-</script> %TMPL:END%
+</script>%TMPL:END%
 %TMPL:DEF{"javascript"}%%TMPL:P{"defaultjavascript"}%%TMPL:END%

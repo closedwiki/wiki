@@ -32,8 +32,8 @@ hr {
 
 .natTopRightContents,
 .natTopLeftContents {
-  padding-top:1em;
-  padding-bottom:1em;
+  margin-top:1em;
+  margin-bottom:1em;
   margin-left:10px;
   margin-right:10px;
 }
