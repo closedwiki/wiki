@@ -36,7 +36,7 @@ use vars qw(
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
 	$defaultStyleButtons
 	%maxRevs
-	$hasInitKnownStyles $hasInitSkinState
+	$hasInitKnownStyles $hasInitSkinState $hasInitGuiStrings
 	%knownStyles 
 	%knownVariations 
 	%knownBorders 
@@ -46,6 +46,7 @@ use vars qw(
 	%emailCollection $nrEmails $doneHeader
 	$STARTWW $ENDWW
 	%TWikiCompatibility
+	%guiStrings
     );
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
@@ -57,7 +58,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre1';
+$RELEASE = '3.00-pre2';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -130,6 +131,7 @@ sub doInit {
   # get skin state from session
   $hasInitKnownStyles = 0;
   $hasInitSkinState = 0;
+  $hasInitGuiStrings = 0;
   &initKnownStyles();
 
   $defaultWikiUserName = &TWiki::Func::getDefaultUserName();
@@ -556,6 +558,53 @@ sub initSkinState {
 }
 
 ###############################################################################
+# strings used internally
+sub initGuiStrings {
+
+  return if $hasInitGuiStrings;
+  $hasInitGuiStrings = 1;
+
+  # default strings
+  %guiStrings = ();
+
+  if ($isDakar && $TWiki::cfg{"UserInterfaceInternationalisation"}) {
+    $guiStrings{'View'} = TWiki::Func::expandTemplate('VIEW');
+    $guiStrings{'ViewHelp'} = TWiki::Func::expandTemplate('VIEW_HELP');
+    $guiStrings{'Raw'} = TWiki::Func::expandTemplate('RAW');
+    $guiStrings{'RawHelp'} = TWiki::Func::expandTemplate('RAW_HELP');
+    $guiStrings{'Edit'} = TWiki::Func::expandTemplate('EDIT');
+    $guiStrings{'EditHelp'} = TWiki::Func::expandTemplate('EDIT_HELP');
+    $guiStrings{'Attach'} = TWiki::Func::expandTemplate('ATTACH');
+    $guiStrings{'AttachHelp'} = TWiki::Func::expandTemplate('ATTACH_HELP');
+    $guiStrings{'Move'} = TWiki::Func::expandTemplate('MOVE');
+    $guiStrings{'MoveHelp'} = TWiki::Func::expandTemplate('MOVE_HELP');
+    $guiStrings{'Diff'} = TWiki::Func::expandTemplate('DIFF');
+    $guiStrings{'DiffHelp'} = TWiki::Func::expandTemplate('DIFF_HELP');
+    $guiStrings{'More'} = TWiki::Func::expandTemplate('MORE');
+    $guiStrings{'MoreHelp'} = TWiki::Func::expandTemplate('MORE_HELP');
+    $guiStrings{'AddForm'} = TWiki::Func::expandTemplate('ADD_FORM');
+    $guiStrings{'ChangeForm'} = TWiki::Func::expandTemplate('CHANGE_FORM');
+  } else {
+    $guiStrings{'View'} = 'View';
+    $guiStrings{'ViewHelp'} = 'View formatted topic';
+    $guiStrings{'Raw'} = 'Raw';
+    $guiStrings{'RawHelp'} = 'View raw topic';
+    $guiStrings{'Edit'} = 'Edit';
+    $guiStrings{'EditHelp'} = 'Edit this topic';
+    $guiStrings{'Attach'} = 'Attach';
+    $guiStrings{'AttachHelp'} = 'Attach image or document to this topic';
+    $guiStrings{'Move'} = 'Move';
+    $guiStrings{'MoveHelp'} = 'Move or rename this topic';
+    $guiStrings{'Diff'} = 'Diffs';
+    $guiStrings{'DiffHelp'} = 'View topic history';
+    $guiStrings{'More'} = 'More';
+    $guiStrings{'MoreHelp'} = 'More topic actions';
+    $guiStrings{'AddForm'} = 'Add form';
+    $guiStrings{'ChangeForm'} = 'Change form';
+  }
+}
+
+###############################################################################
 # commonTagsHandler:
 # $_[0] - The text
 # $_[1] - The topic
@@ -719,7 +768,7 @@ sub renderIfAccess {
 # paths for the same action depending on the apache configuration (rewrites, aliases)
 sub getCgiAction {
 
-  my $pathInfo = $ENV{'PATH_INFO'};
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
   my $theAction = $ENV{'REQUEST_URI'} || '';
   if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
     $theAction = $1;
@@ -944,7 +993,9 @@ sub renderGetSkinStyle {
 # renderUserActions: render the USERACTIONS variable:
 # display advanced topic actions for non-guests
 sub renderUserActions {
-  return "" if $isGuest;
+  return '' if $isGuest;
+
+  &initGuiStrings();
 
   my $curRev = '';
   my $theRaw;
@@ -960,12 +1011,12 @@ sub renderUserActions {
     $rawAction =
       '<a href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
-      "?rev=1.$rev\" accesskey=\"r\" title=\"View formatted topic\">View</a>";
+      "?rev=1.$rev\" accesskey=\"r\" title=\"$guiStrings{ViewHelp}\">$guiStrings{View}</a>";
   } else {
     $rawAction =
       '<a href="' .  
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
-      "?raw=on&rev=1.$rev\" accesskey=\"r\" title=\"View raw topic\">Raw</a>";
+      "?raw=on&rev=1.$rev\" accesskey=\"r\" title=\"$guiStrings{RawHelp}\">$guiStrings{Raw}</a>";
   }
   
   my $text;
@@ -973,9 +1024,9 @@ sub renderUserActions {
   my $maxRev = &getMaxRevision();
   if ($curRev && $curRev < $maxRev) {
     $text =
-      '<strike>Edit</strike> | ' .
-      '<strike>Attach</strike> | ' .
-      '<strike>Move</strike> | ';
+      '<strike>'.$guiStrings{Edit}.'</strike>&nbsp;| ' .
+      '<strike>'.$guiStrings{Attach}.'</strike>&nbsp;| ' .
+      '<strike>'.$guiStrings{Move}.'</strike>&nbsp;| ';
   } else {
     #writeDebug("get WHITEBOARD from $baseWeb.$baseTopic");
     my $whiteBoard = _getValueFromTopic($baseWeb, $baseTopic, 'WHITEBOARD') || '';
@@ -993,20 +1044,25 @@ sub renderUserActions {
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
       . '?t=' . time() 
       . $editUrlParams
-      . '" accesskey="e" title="Edit this topic">Edit</a> | ' .
+      . '" accesskey="e" title="'.$guiStrings{EditHelp}.'">'.$guiStrings{Edit}.'</a>&nbsp;| ' .
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "attach") 
-      . '" accesskey="a" title="Attach image or document to this topic">Attach</a> | ' .
+      . '" accesskey="a" title="'.$guiStrings{AttachHelp}.'">'.$guiStrings{Attach}.'</a>&nbsp;| ' .
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "rename")
-      . '" accesskey="m" title="Move or rename this topic">Move</a> | ';
+      . '" accesskey="m" title="'.$guiStrings{MoveHelp}.'">'.$guiStrings{Move}.'</a>&nbsp;| ';
   }
 
   $text .=
-      $rawAction . ' | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="View topic history">Diffs</a> | ' .
-      '<a rel="nofollow" href="' . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . '?template=oopsmore" accesskey="x" title="More topic actions">More</a>';
-
+      $rawAction . '&nbsp;| ' .
+      '<a rel="nofollow" href="' . 
+      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
+      '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="'.
+      $guiStrings{DiffHelp}.'">'.$guiStrings{Diff}.'</a>&nbsp;| ' .
+      '<a rel="nofollow" href="' . 
+      &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
+      '?template=oopsmore" accesskey="x" title="'.
+      $guiStrings{MoreHelp}.'">'.$guiStrings{More}.'</a>';
 
   return $text;
 }
@@ -1132,20 +1188,6 @@ sub renderLoginUrl {
 }
 
 ###############################################################################
-# display url to login
-sub renderLogin {
-  my $args = shift || '';
-
-  my $loginString = TWiki::Func::extractNameValuePair($args) || 'Login';
-
-  return '<a rel="nofollow" href="'.
-    &renderLoginUrl().
-    '" accesskey="l" title="Login to <nop>%WIKITOOLNAME%">'.
-    $loginString.
-    '</a>';
-}
-
-###############################################################################
 # display url to logout
 sub renderLogoutUrl {
 
@@ -1207,6 +1249,8 @@ sub _getValueFromTopic {
 sub renderFormButton {
   my $args = shift || '';
 
+  &initGuiStrings();
+
   my $saveCmd = '';
   $saveCmd = $query->param('cmd') || '' if $query;
   return '' if $saveCmd eq 'repRev';
@@ -1231,9 +1275,9 @@ sub renderFormButton {
     $action = 'add form';
   }
   if ($form) {
-    $actionText = 'Change form';
+    $actionText = $guiStrings{ChangeForm};
   } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $baseWeb)) {
-    $actionText = 'Add form';
+    $actionText = $guiStrings{AddForm};
   } else {
     return '';
   }
@@ -1400,19 +1444,19 @@ sub renderRevisions {
 
   my $j = $rev1 - $nrrevs;
   for (my $i = $rev1; $i >= $j; $i -= 1) {
-    $revisions .= ' | <a href="'.renderNatScriptUrlPath('view').
+    $revisions .= '&nbsp;| <a href="'.renderNatScriptUrlPath('view').
       '/%WEB%/%TOPIC%?rev=1.'.$i.'">r1.'.$i.'</a>';
     if ($i == $j) {
       my $torev = $j - $nrrevs;
       $torev = 1 if $torev < 0;
       if ($j != $torev) {
-	$revisions = "$revisions | <a href=\"".
+	$revisions = "$revisions&nbsp;| <a href=\"".
 	renderNatScriptUrlPath('rdiff').
 	'/%WEB%/%TOPIC%?rev1=1.'.$j.'&amp;rev2=1.'.$torev.'">...</a>';
       }
       last;
     } else {
-      $revisions .= ' | <a href="'.renderNatScriptUrlPath('rdiff').
+      $revisions .= '&nbsp;| <a href="'.renderNatScriptUrlPath('rdiff').
       '/%WEB%/%TOPIC%?rev1=1.'.$i.'&amp;rev2=1.'.($i-1).'">&gt;</a>';
     }
   }
