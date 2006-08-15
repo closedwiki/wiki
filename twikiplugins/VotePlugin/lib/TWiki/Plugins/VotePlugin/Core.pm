@@ -19,6 +19,7 @@ package TWiki::Plugins::VotePlugin::Core;
 ###############################################################################
 use vars qw($debug $isInitialized);
 
+use strict;
 use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
 
@@ -187,8 +188,8 @@ sub handleVote {
       last if $n == 0;
       $n--;
       $result .= "| $value | ";
-      $freq = $keyValueFreq{$key}{$value};
-      $perc = int(1000 * $freq / $totalVotes{$key}) / 10;
+      my $freq = $keyValueFreq{$key}{$value};
+      my $perc = int(1000 * $freq / $totalVotes{$key}) / 10;
       if ($theStyle =~ /bar/) {
 	$result .= '<table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>'
 	  . '<td style="white-space:nowrap;border:0;'
@@ -265,7 +266,7 @@ sub vote {
 
   my $date = &getLocaldate();
   my $user = &TWiki::Func::getWikiUserName();
-
+  my $host;
   if ($debug) {
     $host = int(rand(100)); # for testing
   } else {
