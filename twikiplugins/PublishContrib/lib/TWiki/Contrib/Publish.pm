@@ -563,7 +563,7 @@ sub _topicURL {
     my( $path, $web ) = @_;
     my $extra = '';
 
-    if( $path && $path =~ /([#\?].*)$/ ) {
+    if( $path && $path =~ s/([#\?].*)$// ) {
         $extra = $1;
     }
 
