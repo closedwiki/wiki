@@ -223,6 +223,8 @@ sub publish {
             '("'.$dir.'","'.$web.'","'.
               $genopt.'")';
         die $@ if $@;
+        
+        $archive->{params} = $query->Vars;
 
         publishWeb($web, TWiki::Func::getWikiName(), $inclusions,
                    $exclusions, $skin, $template, $filter, $archive);
