@@ -36,6 +36,10 @@ When TWiki generates a view, it does so dynamically i.e. there's a CGI script th
 	* Full support for hierarchical webs
 	* Multiple instances (e.g. dev, test, prod) can be specified
 	* Templates (such as viewprint) can also be generated, and the links are fixed up appropritately
+	* able to publish html and referenced files directly to a remote server via ftp (using the ftp publish format)
+	   * generates a sitemal.xml, default.htm, index.html and google site verification file
+	   * uses extra parameters (ftppublish, destinationftpserver, destinationftppath, destinationftpusername, destinationftppassword, googlefile, defaultpage)
+	   * requires Net::FTP to ftp, only if ftppublish=ftp
 
 ---++ Usage
 
