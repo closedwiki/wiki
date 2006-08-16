@@ -43,7 +43,8 @@ sub addString {
         my $topic = $1;
         push( @{$this->{urls}}, "$file" );
       
-        if ((defined($this->{params}->{defaultpage})) &&
+            #write link from index.html to actual topic
+            if ((defined($this->{params}->{defaultpage})) &&
             ($topic eq $this->{params}->{defaultpage})) {
             $this->addString( $string, 'default.htm' );
             $this->addString( $string, 'index.html' );
@@ -67,13 +68,16 @@ sub close {
     my $sitemap = $this->createSitemap( \@{$this->{urls}} );
     $this->addString($sitemap, 'sitemap.xml');
     print 'Published sitemap.xml<br />';
-    #write google verification file
+    #write google verification files (comma seperated list)
     if (defined($this->{params}->{googlefile})) {
-        my $simplehtml = '<html><title>'.$this->{params}->{googlefile}.'</title><body>just for google</body></html>';
-        $this->addString($simplehtml, $this->{params}->{googlefile});
-        print 'Published googlefile : '.$this->{params}->{googlefile}.'<br />';
+        my @files = split(/[,\s]+/, $this->{params}->{googlefile});
+        
+        for my $file (@files) {
+            my $simplehtml = '<html><title>'.$file.'</title><body>just for google</body></html>';
+            $this->addString($simplehtml, $file);
+            print 'Published googlefile : '.$file.'<br />';
+        }
     }
-    #write link from index.html to actual topic
 
     $this->SUPER::close();
     
