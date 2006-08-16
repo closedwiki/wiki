@@ -70,7 +70,7 @@ sub gateway {
             if (defined($endPoint)) {
                 $session->redirect($session->getScriptUrl( 1, 'view', '', $endPoint ));
             } else {
-                $session->writeCompletePage( $result );
+                $session->writeCompletePage( $result ) if $result;
             }
         } else {
             $session->writeCompletePage( 'Unknown Action '.$subject.'/'.$verb);
