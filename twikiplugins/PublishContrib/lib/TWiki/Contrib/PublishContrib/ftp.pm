@@ -39,7 +39,7 @@ sub addString {
     push( @{$this->{files}}, "$this->{path}/$this->{web}/$file" );
     push( @{$this->{remotefiles}}, "$file" );
 
-    if( $file =~ /(.*)\.html$/ ) {
+    if( $file =~ /(.*)\.html?$/ ) {
         my $topic = $1;
         push( @{$this->{urls}}, "$file" );
       
@@ -102,7 +102,7 @@ sub close {
 
         for my $remoteFilename (@{$this->{remotefiles}}) {
             my $localfilePath = "$this->{path}/$this->{web}/$remoteFilename";
-            if ( $remoteFilename =~ /^(.*\/)([^\/]*)$/ ) {
+            if ( $remoteFilename =~ /^\/?(.*\/)([^\/]*)$/ ) {
                 $ftp->mkdir($1, 1)
                         or die "Cannot create directory ", $ftp->message;
             }
