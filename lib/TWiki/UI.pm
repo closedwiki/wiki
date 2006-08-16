@@ -53,6 +53,23 @@ sub run {
     # Use unbuffered IO
     $| = 1;
 
+    # -------------- Only needed to work around an Apache 2.0 bug on Unix
+    # OPTIONAL
+    # If you are running TWiki on Apache 2.0 on Unix you might experience
+    # TWiki scripts hanging forever. This is a known Apache 2.0 bug. A fix is 
+    # available at http://issues.apache.org/bugzilla/show_bug.cgi?id=22030.
+    # You are recommended to patch your Apache installation.
+    #
+    # As a workaround, uncomment ONE of the lines below. As a drawback,
+    # errors will not be reported to the browser via CGI::Carp any more.
+
+    # Opening STDERR here and not in the BEGIN block as some perl accelerators
+    # close STDERR after each request so that we need to reopen it here again
+
+    # open(STDERR, ">>/dev/null");      # throw away cgi script errors, or
+    # open(STDERR, ">>$TWiki::cfg{DataDir}/error.log"); # redirect errors to a log file
+
+
     if( DEBUG || $TWiki::cfg{WarningsAreErrors} ) {
         # For some mysterious reason if this handler is defined
         # in 'new TWiki' it gets lost again before we get here
