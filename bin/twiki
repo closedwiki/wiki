@@ -117,10 +117,6 @@ BEGIN {
     require 'setlib.cfg';
     require 'LocalSite.cfg';
 }
-# redirect errors to a log file of choice
-# moved in here as some perl accelerators close STDERR after finishing
-# a request
-open(STDERR, ">>/home/micha/Projekt/twiki/TWikiRelease04x00/data/error.log");    
 
 use strict;
 use CGI;
