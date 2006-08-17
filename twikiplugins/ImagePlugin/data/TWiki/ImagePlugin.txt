@@ -164,8 +164,9 @@ order is left-to-right-inside-out.
 |  Plugin Author: | TWiki:Main.CraigMeyer |
 |  Copyright: | &copy; 2006, TWiki:Main.CraigMeyer, MichaelDaum@WikiRing.com, |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 0.1 |
+|  Plugin Version: | 0.2 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17 Aug 2006: | width and height arguments had no effect; floating images not clearing proberly on IE |
 |  16 June 2006: | released into the public |
 |  10 May 2006: | Initial version by forking <nop>ImgPlugin |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
@@ -179,4 +180,4 @@ order is left-to-right-inside-out.
 
 
 -- TWiki:Main.CraigMeyer %BR%
--- TWiki:Main.MichaelDaum - 16 June 2006
+-- TWiki:Main.MichaelDaum - 17 Aug 2006
