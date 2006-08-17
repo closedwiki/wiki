@@ -2,8 +2,8 @@
 <!-- template: oopserrbase.nat.tmpl -->
 %TMPL:DEF{"message"}%<!-- -->
 %TMPL:P{"errormessage"}%
-%MAKETEXT{"Please notify your [_1] administrator and explain how to reproduce
-it:" args="<nop>%WIKITOOLNAME%"}%
+%MAKETEXT{"Please notify your [_1] administrator and explain how to reproduce it:"
+ args="<nop>%WIKITOOLNAME%"}%
 
 <noautolink>
 <form enctype="text/plain" method="post" name="ErrorMail" action="mailto:%WIKIWEBMASTER%?subject=%ENCODE{"%WIKITOOLNAME%: %TMPL:P{"heading"}%"}%">

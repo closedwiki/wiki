@@ -7,7 +7,7 @@
 <!-- -->%TMPL:INCLUDE{"editstyles"}%
 <!-- -->%TMPL:INCLUDE{"edittoolbar"}%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% - (edit)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% - (%MAKETEXT{"edit"}%)%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.EditFormular.text.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span><b>%TOPIC%</b>%TMPL:END%
 %TMPL:DEF{"contentheader"}%<div class="natBreadCrumbs">%BREADCRUMBS{"%BASEWEB%.%BASETOPIC%" exclude="%BASETOPIC%" separator="<span class='natSep'>&#187;</span>" footer="<span class='natSep'>&#187;</span><nop>%BASETOPIC%"}%</div>%TMPL:END%
@@ -59,3 +59,4 @@
   <input type="checkbox" id="unlock" name="unlock" %RELEASEEDITLOCKCHECKBOX% /><label for="unlock">%MAKETEXT{"Release edit lock"}%</label>
 %FISKINSTATE%
 </div> %TMPL:END%
+

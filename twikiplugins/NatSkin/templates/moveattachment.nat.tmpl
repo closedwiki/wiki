@@ -5,7 +5,7 @@
 <!-- -->%TMPL:INCLUDE{"moveattachmenttopicactions"}% 
 <!-- -->%TMPL:INCLUDE{"moveattachmentjavascript"}%
 <!-- -->%TMPL:INCLUDE{"moveattachmentstyles"}%
-%TMPL:DEF{"title"}%%TOPIC% (move)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"move"}%)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
@@ -18,7 +18,7 @@
 |  *%MAKETEXT{"From:"}%* |    %WEB% | &nbsp;%TOPIC% |
 |  *%MAKETEXT{"To:"}%* |  <select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value='$name'>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> | &nbsp;<input type="text" name="newtopic" value="%TOPIC%" /> |
 
-<input type="checkbox" name="nonwikiword" /> Allow non <nop>WikiWord for the new topic name.
+<input type="checkbox" name="nonwikiword" /> %MAKETEXT{"Allow non <nop>WikiWord for the new topic name."}%
 <input type="hidden" name="attachment" value="%FILENAME%" />
 <input type="hidden" name="changeRefs" value="0" />
 <center>
