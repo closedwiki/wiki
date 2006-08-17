@@ -18,21 +18,22 @@
   overflow:auto;
 }
 .imageFloat_right {
-  clear:right;
+  clear:both;
   float:right;
-  margin: .5em 0 .8em 1.4em;
+  margin:10px 0 10px 10px;
 }
 .imageFloat_left {
-  clear:left;
+  clear:both;
   float:left;
-  margin: .5em 1.4em .8em 0;
+  margin:10px 10px 10px 0px;
 }
 .imageFloat_center {
   text-align:center;
-  margin-left:auto;
-  margin-right:auto;
+  margin:10px auto;
+  clear:both;
 }
 .imageFloat_none {
+  margin:10px;
 }
 .imageCaption {
   text-align: left;
