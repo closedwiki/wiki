@@ -5,7 +5,7 @@
 %TMPL:DEF{"message"}%<!-- -->
 %MAKETEXT{"See [_1] for information about Form Definitions." args="%TWIKIWEB%.TWikiForms"}%
 %MAKETEXT{"Problems could arise for two reasons:"}%
----++ 1. %MAKETEXT{"Form definition missing"}%
+---++ %MAKETEXT{"1. Form definition missing"}%
 <ul>
   <li> [[%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on][%MAKETEXT{"View raw topic text"}%]]</li>
   <li> %MAKETEXT{"There should be a line that includes =META:FORM=, look for name=\"&lt;formName&gt;\""}%
@@ -15,15 +15,14 @@
   <li> %MAKETEXT{"There should be a topic &lt;formName&gt;"}%</li>
   <li> %MAKETEXT{"If this topic is missing create it, otherwise check it for errors."}%</li>
 </ul>
----++ %MAKETEXT{"2. Topic can not be upgraded from old style category table
-This requires the form definition to be present.
-This can be automatically upgraded by:"}%
+---++ %MAKETEXT{"2. Topic can not be upgraded from old style category table"}%
+%MAKETEXT{"This requires the form definition to be present. This can be automatically upgraded by:"}%
 <ul>
   <li> %MAKETEXT{"Creating a suitable Form Definition topic"}%
   <li> %MAKETEXT{"Adding a =WEBFORMS= variable in WebPreferences"}%
 </ul>
 
-%MAKETEXT{"Please ask your [_1] administrator <a href=%TMPL:P{\"mailuri\"}%>%WIKIWEBMASTER%</a>, to do this." args="<nop>%WIKITOOLNAME%"}% 
+%MAKETEXT{"Please ask your [_1] administrator [_2], to do this." args="<nop>%WIKITOOLNAME%,<a href=%TMPL:P{\"mailuri\"}%>%WIKIWEBMASTER%</a>"}%
 
 <form class="natOopsButtons" name="buttonbox" action=%TMPL:P{"mailuri"}%>
   <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%'>&nbsp; 

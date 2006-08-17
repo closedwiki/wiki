@@ -2,10 +2,10 @@
 <!-- template: oopssoftwareerr.tmpl -->
 %TMPL:DEF{"heading"}%%MAKETEXT{"Software Error"}%%TMPL:END%
 %TMPL:DEF{"errormessage"}%<!-- -->
-%MAKETEXT{"A software error occured in"}% 
+%MAKETEXT{"A software error occured in
 <verbatim>
-%PARAM1%
-</verbatim>
+[_1]
+</verbatim>" args="%PARAM1%"}%
 <div class="natErrorMsg">%PARAM2%</div>
 %TMPL:END%
 %TMPL:DEF{"formvariables"}%<!-- -->

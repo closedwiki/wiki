@@ -23,9 +23,9 @@
 %TAIL%
 </table>
 %ELSESKINSTATE%
-Revision %REVTITLE2% - %REVINFO2%<br />
-Revision %REVTITLE1% - %REVINFO1%
+%MAKETEXT{"Revision"}% %REVTITLE2% - %REVINFO2%<br />
+%MAKETEXT{"Revision"}% %REVTITLE1% - %REVINFO1%
 %FISKINSTATE%
 </div>
 %TMPL:END%
-%REPEAT%<tr><td>Revision %REVTITLE%</td><td>%REVINFO%</td></tr>
+%REPEAT%<tr><td>%MAKETEXT{"Revision"}% %REVTITLE%</td><td>%REVINFO%</td></tr>

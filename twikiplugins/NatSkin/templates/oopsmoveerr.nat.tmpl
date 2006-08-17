@@ -2,7 +2,7 @@
 <!-- template: oopsmoveerr.nat.tmpl -->
 %TMPL:DEF{"heading"}%MAKETEXT{"Attachment move error"}%%TMPL:END%
 %TMPL:DEF{"errormessage"}% <!-- -->
-MAKETEXT{"During move of attachment \" ==[_1]== \" in [[[_2]]] an error was found." args="%PARAM1%,%WEB%.%TOPIC%"}%
+MAKETEXT{"During move of attachment \" ==[_1]== \" in [_2] an error was found." args="%PARAM1%,[[%WEB%.%TOPIC%]]"}%
 <div class="natErrorMsg">%PARAM1%</div>
 %TMPL:END%
 %TMPL:DEF{"formvariables"}%<!-- -->

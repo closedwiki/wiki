@@ -6,11 +6,11 @@
 <!-- -->%TMPL:INCLUDE{"settingsjavascript"}%
 <!-- -->%TMPL:INCLUDE{"settingsstyles"}%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (prefs)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"prefs"}%)%TMPL:END%
 %TMPL:DEF{"onloadscript"}%document.EditFormular.text.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%TOPIC%%TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
-<h2>%MAKETEXT{"Preference Settings for [[[_1]]]:" args="%WEB%.%TOPIC%"}%</h2>
+<h2>%MAKETEXT{"Preference Settings for [_1]:" args="[[%WEB%.%TOPIC%]]"}%</h2>
 <div class="natEdit">
 <form name="SettingsFormular" method="post" action="%NATSCRIPTURLPATH{"manage"}%/%WEB%/%TOPIC%">
   <input type="hidden" name="action" value="saveSettings" />

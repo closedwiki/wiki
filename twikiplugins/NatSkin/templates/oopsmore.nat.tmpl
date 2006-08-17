@@ -1,6 +1,6 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopsmore.nat.tmpl -->
-%TMPL:DEF{"title"}%%TOPIC% (more)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"more"}%)%TMPL:END%
 %TMPL:DEF{"heading"}%%MAKETEXT{"More Actions on Topic [_1]" args="<nop>%WEB%.%TOPIC%"}%%TMPL:END%
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
 %TMPL:DEF{"message"}% <table border="0" cellspacing="0">
@@ -52,7 +52,7 @@
   <input type="hidden" name="action" value="editSettings" />
 <tr>
   <td>
-    <ul style="margin:0px"><li>%MAKETEXT{"Edit preference settings for [[[_1]]]" args="%WEB%.%TOPIC%"}%</li></ul>
+    <ul style="margin:0px"><li>%MAKETEXT{"Edit preference settings for [_1]" args="[[%WEB%.%TOPIC%]]"}%</li></ul>
   </td>
   <td><input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Edit"}%'>
 </tr>
@@ -86,7 +86,7 @@
 </tr>
 <tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
   <td>
-    <ul style="margin:0px;"><li>%MAKETEXT{"Get a fresh page of the topic [[[_1]]]" args="%WEB%.%TOPIC%"}%&nbsp;</li></ul>
+    <ul style="margin:0px;"><li>%MAKETEXT{"Get a fresh page of the topic [_1]" args="[[%WEB%.%TOPIC%]]"}%&nbsp;</li></ul>
   </td>
   <td>
     <form name="main" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" method="post">

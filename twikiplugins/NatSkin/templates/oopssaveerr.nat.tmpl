@@ -2,8 +2,7 @@
 <!-- template: oopssaveerr.nat.tmpl -->
 %TMPL:DEF{"heading"}%%MAKETEXT{"Topic save error"}%%TMPL:END%
 %TMPL:DEF{"errormessage"}%<!-- -->
-%MAKETEXT{"During save of file [[[_1]]] an error was found by the 
-version control system." args="%WEB%.%TOPIC%"}%
+%MAKETEXT{"During save of file [_1] an error was found by the version control system." args="[[%WEB%.%TOPIC%]]"}%
 <div class="natErrorMsg">%PARAM1%</div>
 %MAKETEXT{"You might go <a href=\"javascript:history.back()\">back</a> in your browser and save your changes locally."}% 
 %TMPL:END%
