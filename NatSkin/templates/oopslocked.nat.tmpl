@@ -6,8 +6,8 @@
 Please ask the contributor before making changes to this topic." args="%PARAM1%"}%
 <ul>
   <li> %MAKETEXT{"To look at the text without editing the topic click on the [[[_1]][View raw text]]." args="%NATSCRIPTURLPATH{\"view\"}%/%WEB%/%TOPIC%?raw=on"}%</li>
-  <li> %MAKETEXT{"To edit anyway click on the <a href=\"%NATSCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%&breaklock=on\">Edit anyway</a>."}% 
-     %MAKETEXT{"Note, that this will _break_ the lock&nbsp;[_1]" args="%I%"}%</li>
+  <li> %MAKETEXT{"To edit anyway click on the <a href=\"[_1]\">Edit anyway</a>.", args="%NATSCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%&breaklock=on"}%
+       %MAKETEXT{"Note, that this will _break_ the lock"}%&nbsp;%I%</li>
   <li> %MAKETEXT{"To cancel simply go <a href=\"javascript:history.back()\">back</a> in your browser."}%</li>
 </ul>
 <form class="natOopsButtons" name="ButtonBox">
@@ -15,6 +15,5 @@ Please ask the contributor before making changes to this topic." args="%PARAM1%"
   <input class="natAltButton" type="button" value='%MAKETEXT{"View raw"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on';">&nbsp;
   <input class="natCancelButton" type="button" value='%MAKETEXT{"Cancel"}%' onclick="history.back()">
 </form> 
-%MAKETEXT{"[_1] __Note:__ Locking gets reset after <b> [_2] </b> minutes of inactivity, 
-the earliest in <b>[_3]</b> minutes." args="%I%,%PARAM2%,%PARAM3%"}%
+%I% %MAKETEXT{"__Note:__ Locking gets reset after <b> [_1] </b> minutes of inactivity, the earliest in <b>[_2]</b> minutes." args="%PARAM2%,%PARAM3%"}%
 %TMPL:END%

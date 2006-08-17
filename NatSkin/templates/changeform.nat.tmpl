@@ -6,7 +6,7 @@
 <!-- -->%TMPL:INCLUDE{"changeformjavascript"}%
 <!-- -->%TMPL:INCLUDE{"changeformstyles"}%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
-%TMPL:DEF{"title"}%%TOPIC% (edit)%TMPL:END%
+%TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit"}%)%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <form name="EditFormular" method="post" action="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />

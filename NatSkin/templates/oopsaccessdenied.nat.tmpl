@@ -6,7 +6,7 @@
 
 %TMPL:P{"logon"}%
 
-See also: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
+%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
 %TWIKIWEB%.TWikiRegistration
 %TMPL:END%
 %TMPL:DEF{"only_group"}% <!-- -->
@@ -27,8 +27,7 @@ See also: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
 ---++ %MAKETEXT{"\"[_1]\" topic does not exist" args="%WEB%.%TOPIC%"}%
 %MAKETEXT{"You are trying to [_1] a topic that does not exist." args="%PARAM1%"}%
 
-%MAKETEXT{"If you want to create the topic then\n
-[[[_1]][click here]]." args="%NATSCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%"}%
+%MAKETEXT{"If you want to create the topic then [[[_1]][click here]]." args="%NATSCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%"}%
 %TMPL:END%
 %TMPL:DEF{"message"}% <!-- -->
 %INSTANTIATE%

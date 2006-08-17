@@ -4,15 +4,15 @@ Subject: %MAKETEXT{"[_1] - Automated notification of topic changes" args="%WIKIT
 Content-Type: text/plain; charset=%CHARSET%
 Content-Transfer-Encoding: 7bit
 
-%MAKETEXT{"This is an automated email from [_1].
+%MAKETEXT{"This is an automated email from [_1]." args="%WIKITOOLNAME%"}%
 
-Review recent changes in:
-  [_2] 
+%MAKETEXT{"Review recent changes in:"}%
+  %NATSCRIPTURL{"view"}%/%WEB%/WebChanges
 
-Subscribe / Unsubscribe in:
-  [_3]
+%MAKETEXT{"Subscribe / Unsubscribe in:"}%
+  %NATSCRIPTURL{"view"}%/%WEB%/%NOTIFYTOPIC%
 
-New or changed topics in the [_4] web, since [_5] GMT:" args="%WIKITOOLNAME%,%NATSCRIPTURL{\"view\"}%/%WEB%/WebChanges,%NATSCRIPTURL{\"view\"}%/%WEB%/%NOTIFYTOPIC%,%WEB%,%LASTDATE%"}%
+%MAKETEXT{"New or changed topics in the [_1] web, since [_2] GMT:" args="%WEB%,%LASTDATE%"}%
 
 %IFSKINSTATETHEN{release="dakar" glue="off"}%
 %PLAIN_TEXT%
