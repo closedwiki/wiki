@@ -113,7 +113,7 @@ sub handleReaders
 
 
   my %readers=();
-  opendir( DIR, "$TWiki::cfg{DataDir}" );
+  opendir( DIR, "$TWiki::cfg{LogDir}" );
 
   foreach my $file ( sort readdir DIR )
   {
@@ -124,7 +124,7 @@ sub handleReaders
        my $filedate="$1$2";
        if ( $filedate < $logfileLimit ) { next; }
 
-       my $filename="$TWiki::cfg{DataDir}/$file";
+       my $filename="$TWiki::cfg{LogDir}/$file";
        if ( ! -f $filename) { next; }
        open (FILE, "<$filename");
 
