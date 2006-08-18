@@ -56,7 +56,7 @@ args="%MAINWEB%.TWikiUsers,%TWIKIWEB%.TWikiRegistration"}%
 %MAKETEXT{"During rename of topic [_1] to [_2] an error ([_3]) was found."
  args="<nop>%WEB%.<nop>%TOPIC%,<nop>%PARAM2%.<nop>%PARAM3%,%PARAM1%"}%
 
-%MAKETEXT{"Please notify your [_1] administrator [_2]." args="<nop>%WIKITOOLNAME%,%WIKIWEBMASTER%"}%
+%MAKETEXT{"Please notify your [_1] administrator [_2]" args="<nop>%WIKITOOLNAME%,%WIKIWEBMASTER%"}%.
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
 %TMPL:DEF{"rename_web_err"}%<!-- removes contact -->
@@ -128,7 +128,7 @@ link in your email or enter the code in the box below to activate your membershi
 
 %TMPL:END%
 %TMPL:DEF{"missing_fields"}%<!-- better dialog, uses goback def -->
----+++ %MAKETEXT{"Missing Fields =[_1]=" args="<span class=\"twikiAlert\">**</span>"}%
+---+++ %MAKETEXT{"Missing Fields =<span class=\"twikiAlert\">**</span>="}%
 %MAKETEXT{"The required field [_1] was not filled in." args="*%PARAM1%*"}%
 
 %TMPL:P{"goback"}%
@@ -159,7 +159,7 @@ link in your email or enter the code in the box below to activate your membershi
 %PARAM2%
 </verbatim>
 
-%MAKETEXT{"Please notify your [_1] administrator, [_2]"
+%MAKETEXT{"Please notify your [_1] administrator [_2]"
  args="<nop>%WIKITOOLNAME%,<a href=\"mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Send%20Mail%20Error\">%WIKIWEBMASTER%</a>"}%
 <style type="text/css">.natContact {display:none}</style>
 %TMPL:END%
