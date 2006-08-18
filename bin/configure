@@ -787,6 +787,16 @@ sub _CHECKVAR_DataDir {
     return $e;
 }
 
+sub _CHECKVAR_LogDir {
+    my $e = _findMajorDir('LogDir', 'data');
+    my $e2 = _checkTreePerms( $TWiki::cfg{LogDir}, "r" );
+    $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{LogDir});
+    $e2 = _checkTreePerms( $TWiki::cfg{LogDir}, "w", qr/\.txt$/ )
+      unless $e2;
+    $e .= WARN($e2) if $e2;
+    return $e;
+}
+
 sub _CHECKVAR_LocalesDir {
     my $e = _findMajorDir('LocalesDir', 'locale');
     my $e2 = _checkTreePerms( $TWiki::cfg{LocalesDir}, "r" );
