@@ -41,13 +41,13 @@ $linkFormat =
 
 $simpleFormat = 
   '<a href="$href" id="$id" class="imageSimple $class" title="$title" style="$style">'.
-    '<image border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+    '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
   '</a>';
   
 $frameFormat = 
-  '<div id="$id" class="imageFrame imageFloat_$align" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
+  '<div id="$id" class="imageFrame imageFrame_$align" style="_width:$framewidthpx;max-width:$framewidthpx;$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<image border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+      '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
     '</a>'.
     '$captionFormat'.
   '</div>';
@@ -55,13 +55,13 @@ $frameFormat =
 $floatFormat = 
   '<div id="$id" class="imageFloat imageFloat_$align" style="$style">'.
     '<a href="$href" class="imageHref" title="$title">'.
-      '<image border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
+      '<img border="0" align="absmiddle" src="$src" alt="$alt" width="$width" height="$height" longdesc="$desc" onmouseover="$mousein" onmouseout="$mouseout" />'.
     '</a>'.
     '$captionFormat'.
   '</div>';
 
 $clearFormat =
-  '<br id="$id" class="imageClear" clear="all" />';
+  '<br class="imageClear" clear="all" />';
  
 # helper formats
 $captionFormat =
@@ -70,7 +70,7 @@ $captionFormat =
 $magnifyFormat =
   '<div class="imageMagnify">'.
     '<a href="$href" title="Enlarge">'.
-      '<image bordeR="0" align="absmiddle" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
+      '<img border="0" align="absmiddle" src="$magnifyIcon" width="$magnifyWidth" height="$magnifyHeight" alt="Enlarge" />'.
     '</a>'.
   '</div>';
 
@@ -187,7 +187,7 @@ sub handleIMAGE {
 	if $params->{caption};
     } elsif ($params->{type} eq 'thumb') {
       $result = $frameFormat; 
-      my $thumbCaption = $params->{caption}.$magnifyFormat;
+      my $thumbCaption = $magnifyFormat.$params->{caption};
       $result =~ s/\$captionFormat/$captionFormat/g;
       $result =~ s/\$caption/$thumbCaption/g;
     } else {
