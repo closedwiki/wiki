@@ -113,7 +113,7 @@ sub handleReaders
 
 
   my %readers=();
-  opendir( DIR, "$TWiki::logDir" );
+  opendir( DIR, "$TWiki::cfg{DataDir}" );
 
   foreach my $file ( sort readdir DIR )
   {
@@ -124,7 +124,7 @@ sub handleReaders
        my $filedate="$1$2";
        if ( $filedate < $logfileLimit ) { next; }
 
-       my $filename="$TWiki::logDir/$file";
+       my $filename="$TWiki::cfg{DataDir}/$file";
        if ( ! -f $filename) { next; }
        open (FILE, "<$filename");
 
@@ -163,7 +163,8 @@ sub handleReaders
     my ($time, $count) = split (' ',$readers{"$author"});
     my $date=&TWiki::Func::formatTime($time, "HTTP","gmtime");
     my $tmp="$theFormat";
-    $tmp=~s/%READERNAME%/$author/gi;
+    $author =~ s/\W//go;
+    $tmp=~s/%READERNAME%/$TWiki::cfg{UsersWebName}\.$author/gi;
     $tmp=~s/%READERDATE%/$date/gi;
     $tmp=~s/%READERCOUNT%/$count/gi;
     $tmp=~s/\|$/\|\n/;
