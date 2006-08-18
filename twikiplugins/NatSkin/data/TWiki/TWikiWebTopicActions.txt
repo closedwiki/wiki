@@ -1,13 +1,13 @@
 %META:TOPICINFO{author="TWikiContributor" date="1143536609" format="1.1" version="1.1"}%
 %STARTINCLUDE%
 %IFDEFINEDTHEN{"%WIKINAME%" as="TWikiGuest"}%
-<a href="%NATLOGINURL%" rel="nofollow" accesskey="l" title="Login to <nop>%WIKITOOLNAME%">%TMPL:P{"LOG_IN"}%</a>
-| <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiRegistration" accesskey="r" title="Register on <nop>%WIKITOOLNAME%">%MAKETEXT{"Register"}%</a>
+<a href="%NATLOGINURL%" rel="nofollow" accesskey="l" title="%MAKETEXT{"Login to [_1]" args="<nop>%WIKITOOLNAME%"}%">%TMPL:P{"LOG_IN"}%</a>
+| <a href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiRegistration" accesskey="r" title="%MAKETEXT{"Register on [_1]" args="<nop>%WIKITOOLNAME%"}%">%MAKETEXT{"Register"}%</a>
 %ELSEDEFINED%
 %WIKIUSERNAME%
 <span style="%IF{"{LoginManager} = 'TWiki::Client::ApacheLogin'" then="display:none"}%">
-| <a href="%NATLOGOUTURL%" rel="nofollow" accesskey="l" title="Logout of <nop>%WIKITOOLNAME%">%TMPL:P{"LOG_OUT"}%</a>
+| <a href="%NATLOGOUTURL%" rel="nofollow" accesskey="l" title="%MAKETEXT{"Logout of [_1]" args="<nop>%WIKITOOLNAME%"}%">%TMPL:P{"LOG_OUT"}%</a>
 </span>
 %FIDEFINED% <!-- -->
-| <a href="%NATSCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?skin=print.nat" accesskey="p" title="Print this page">%MAKETEXT{"Print"}%</a>
+| <a href="%NATSCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?skin=print.nat" accesskey="p" title="%MAKETEXT{"Print this page"}%">%MAKETEXT{"Print"}%</a>
 <div class="natUserActions">%USERACTIONS%</div>%STOPINCLUDE%

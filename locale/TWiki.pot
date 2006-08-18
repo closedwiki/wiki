@@ -201,6 +201,10 @@ msgstr ""
 msgid "%1 web:"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:3
+msgid "%1's sidebar"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:34
 msgid "&Attach"
 msgstr ""
@@ -521,6 +525,10 @@ msgstr ""
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:7
+msgid "<a href='%1' title='%2'>Create</a> your personalized sidebar."
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:25
 msgid ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%1','ManagingWebs')"
@@ -646,6 +654,10 @@ msgstr ""
 
 #: templates/messages.tmpl:408
 msgid "Action %1: %2."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:19
+msgid "Add a new form to <nop>%1"
 msgstr ""
 
 #: templates/addform.tmpl:1
@@ -826,6 +838,10 @@ msgstr ""
 msgid "Attachment move failed"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:40
+msgid "Attachments"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:69
 msgid "Attachments will not be shown in topic view page."
 msgstr ""
@@ -891,6 +907,14 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:7
 msgid "Bold text"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:43
+msgid "Border Off"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:42
+msgid "Border On"
 msgstr ""
 
 #: data/TWiki/WebSearch.txt:36 data/TWiki/WebSearchAdvanced.txt:46
@@ -1010,7 +1034,7 @@ msgstr ""
 msgid "Change comment and properties only"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/strings.nat.tmpl:19
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:20
 msgid "Change form"
 msgstr ""
 
@@ -1063,6 +1087,10 @@ msgstr ""
 msgid "Change references"
 msgstr ""
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:21
+msgid "Change the current form of <nop>%1"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:27
 msgid "Change topic"
 msgstr ""
@@ -1085,6 +1113,7 @@ msgstr ""
 msgid "Changed:"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:4
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:8
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:7
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:8
@@ -1432,6 +1461,10 @@ msgstr ""
 msgid "Do show:"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:16
+msgid "Documentation"
+msgstr ""
+
 #: data/TWiki/WebSearchAdvanced.txt:68
 msgid "Don't show:"
 msgstr ""
@@ -1688,6 +1721,10 @@ msgstr ""
 msgid "External link"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:22
+msgid "FAQs"
+msgstr ""
+
 #: templates/messages.tmpl:400
 msgid "Failed to include URL %1"
 msgstr ""
@@ -1699,6 +1736,10 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsregrequ.nat.tmpl:5
 msgid "Fields with a =<span class=\"twikiAlert\">**</span>= mark are required."
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:26
+msgid "File Attachment"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:4
@@ -1761,6 +1802,7 @@ msgstr ""
 msgid "Form definition missing"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:25
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:7
 msgid "Formatted Search"
 msgstr ""
@@ -1821,6 +1863,10 @@ msgstr ""
 msgid "Go back in your browser and save your changes locally."
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:21
+msgid "Good Style"
+msgstr ""
+
 #: templates/messages.tmpl:224
 #: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:179
 #: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
@@ -1831,6 +1877,7 @@ msgstr ""
 msgid "GoodStyle"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:6
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:5
 msgid "Groups"
@@ -2074,6 +2121,7 @@ msgstr ""
 msgid "Incorrect parameters to the =%1= script"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:3
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:6
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:5
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:6
@@ -2192,6 +2240,10 @@ msgstr ""
 msgid "Linking to Attachments"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:8
+msgid "Links"
+msgstr ""
+
 #: data/TWiki/WebSearch.txt:49 data/TWiki/WebSearchAdvanced.txt:92
 msgid "List all topics in the %1 web in alphabetical order"
 msgstr ""
@@ -2226,12 +2278,20 @@ msgstr ""
 msgid "Login name %1"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:4
+msgid "Login to %1"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:99
 msgid "Logon"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/strings.nat.tmpl:3
 msgid "Logout"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:9
+msgid "Logout of %1"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:149
@@ -2364,6 +2424,14 @@ msgstr ""
 msgid "My Links"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBar.txt:4
+msgid "MySideBar"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:6
+msgid "MySidebar"
+msgstr ""
+
 #: lib/TWiki/Search.pm:792
 msgid "NEW"
 msgstr ""
@@ -2375,6 +2443,14 @@ msgstr ""
 #: templates/messages.tmpl:103
 #: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:76
 msgid "Name of new web is missing"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebSideBar.txt:4
+msgid "Navigation"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:22
+msgid "New"
 msgstr ""
 
 #: data/TWiki/ChangeEmailAddress.txt:25
@@ -2490,11 +2566,16 @@ msgstr ""
 msgid "Notes:"
 msgstr ""
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:23
+msgid "Nothing found. Try again!"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:90
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:39
 msgid "Notices:"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:5
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:9
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:8
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:9
@@ -2610,6 +2691,7 @@ msgid "Otherwise, use this form to get a new one e-mailed to you."
 msgstr ""
 
 #: data/TWiki/ChangeEmailAddress.txt:24
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:7
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
@@ -2758,6 +2840,8 @@ msgid ""
 "Please visit %1 to change your password to something more memorable for you."
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:29
+#: twikiplugins/NatSkin/data/TWiki/WebLinks.txt:3
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:11
 msgid "Plugins"
 msgstr ""
@@ -2774,6 +2858,7 @@ msgstr ""
 msgid "Preference Settings for %1:"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:7
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:11
@@ -2801,6 +2886,10 @@ msgstr ""
 
 #: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:12
 msgid "Print"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:12
+msgid "Print this page"
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:44
@@ -2841,6 +2930,10 @@ msgstr ""
 msgid "Recently changed topics"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:20
+msgid "Reference Manual"
+msgstr ""
+
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:52
 msgid "Referring topics currently being edited:"
 msgstr ""
@@ -2855,6 +2948,10 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
+msgid "Register on %1"
+msgstr ""
+
 #: twikiplugins/NatSkin/templates/oopsauth.nat.tmpl:14
 msgid "Registered users can [%1[change]] and [%2[reset]] their passwords."
 msgstr ""
@@ -2864,6 +2961,7 @@ msgid "Registered users can [[%1][change]] and [[%2][reset]] their passwords."
 msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:2
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:4
 msgid "Registration"
 msgstr ""
 
@@ -2980,6 +3078,10 @@ msgstr ""
 
 #: data/TWiki/ResetPassword.txt:17
 msgid "Reset password"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:69
+msgid "Reset to defaults"
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:22
@@ -3130,6 +3232,26 @@ msgstr ""
 msgid "Search where:"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:57
+msgid "Searchbox in pos. 1"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:58
+msgid "Searchbox in pos. 2"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:59
+msgid "Searchbox in pos. 3"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:56
+msgid "Searchbox in topbar"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:60
+msgid "Searchbox off"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:1
 msgid "Searched:"
 msgstr ""
@@ -3172,7 +3294,8 @@ msgstr ""
 msgid "See also the verbose %1."
 msgstr ""
 
-#: data/TWiki/RenameWeb.txt:3 twikiplugins/NatSkin/templates/login.nat.tmpl:16
+#: data/TWiki/RenameWeb.txt:3 twikiplugins/NatSkin/data/TWiki/MySideBar.txt:12
+#: twikiplugins/NatSkin/templates/login.nat.tmpl:16
 #: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:11
 #: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/oopsaccessdenied.nat.tmpl:17
@@ -3261,6 +3384,18 @@ msgstr ""
 msgid "Side by side"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:47
+msgid "Sidebar Left"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:49
+msgid "Sidebar Off"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:48
+msgid "Sidebar Right"
+msgstr ""
+
 #: data/TWiki/WebTopicViewTemplate.txt:8
 msgid "Similar topics in this web (if any):"
 msgstr ""
@@ -3274,11 +3409,20 @@ msgid ""
 "Simply fill out the *[[%1][TWikiRegistration]]* form. It only takes a minute."
 msgstr ""
 
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:9
+#: twikiplugins/NatSkin/data/TWiki/WebLinks.txt:5
+msgid "SitePreferences"
+msgstr ""
+
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:6
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:64
 msgid "Size"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:34
+msgid "Skin Styles"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopssoftwareerr.nat.tmpl:3
@@ -3309,6 +3453,7 @@ msgstr ""
 msgid "Spaces are replaced by underscores"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebLinks.txt:6
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:10
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:9
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:10
@@ -3336,11 +3481,19 @@ msgid ""
 "=width: auto= to disable."
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:10
+msgid "Style:"
+msgstr ""
+
 #: data/TWiki/TWikiRegistration.txt:268 templates/messages.tmpl:172
 #: templates/messages.tmpl:255
 #: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:126
 #: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:205
 msgid "Submit"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:68
+msgid "Submit changes"
 msgstr ""
 
 #: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
@@ -3371,6 +3524,23 @@ msgstr ""
 msgid "Superscript text"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
+msgid "Switch to next style"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
+msgid "Switch to previous style"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
+msgid "Switch to previous variation"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:37
+msgid "Switches:"
+msgstr ""
+
 #: twikiplugins/NatSkin/templates/defaultbody.nat.tmpl:55
 msgid "Syndicate this site"
 msgstr ""
@@ -3379,6 +3549,14 @@ msgstr ""
 msgid ""
 "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
 "=\"web service\"=, but not =\"shampoo\"=, write:"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:24
+msgid "TWiki Forms"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:23
+msgid "TWiki Variables"
 msgstr ""
 
 #: templates/mailresetpassword.tmpl:3
@@ -3627,6 +3805,10 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:15
 msgid "There should be a topic &lt;formName&gt;"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:44
+msgid "Thin Layout"
 msgstr ""
 
 #: templates/messages.tmpl:289
@@ -4042,10 +4224,15 @@ msgstr ""
 msgid "User Reference"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:19
+msgid "User's Guide"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:88
 msgid "Username"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:5
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:4
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:4
 msgid "Users"
@@ -4060,6 +4247,10 @@ msgstr ""
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:6
 msgid "Variables"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:24
+msgid "Variation:"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:25
@@ -4184,6 +4375,14 @@ msgstr ""
 msgid "We&b"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:53
+msgid "Web Buttons Off"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:52
+msgid "Web Buttons On"
+msgstr ""
+
 #: data/TWiki/WebSearch.txt:3
 msgid "Web Search"
 msgstr ""
@@ -4197,8 +4396,16 @@ msgstr ""
 msgid "Webs"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/Main/WebLinks.txt:3
+msgid "Welcome"
+msgstr ""
+
 #: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:8
 msgid "Welcome %1, take a [[%2][first tour]] on the %3."
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/MySideBarTemplate.txt:18
+msgid "Welcome Guest"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/login.nat.tmpl:8
@@ -4636,6 +4843,10 @@ msgstr ""
 msgid "move or delete %1"
 msgstr ""
 
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:20
+msgid "next"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:8
 msgid "none (remove topic parent)"
 msgstr ""
@@ -4677,6 +4888,12 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/settings.nat.tmpl:9
 msgid "prefs"
+msgstr ""
+
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:12
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:25
+#: twikiplugins/NatSkin/data/TWiki/NatSkinStyleBrowser.txt:33
+msgid "prev"
 msgstr ""
 
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:10
