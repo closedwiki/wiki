@@ -1,10 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1132161897" format="1.1" version="1.1"}%
 %STARTINCLUDE% <!-- -->
-   * [[%TWIKIWEB%.WelcomeGuest][Welcome]]
-   * [[%TWIKIWEB%.TWikiRegistration][Registration]] 
-   * [[%MAINWEB%.TWikiUsers][Users]] 
-   * [[%MAINWEB%.TWikiGroups][Groups]] 
-   * [[%TWIKIWEB%.ChangePassword][Password]] 
+   * [[%TWIKIWEB%.WelcomeGuest][%MAKETEXT{"Welcome"}%]]
+   * [[%TWIKIWEB%.TWikiRegistration][%MAKETEXT{"Registration"}%]]
+   * [[%MAINWEB%.TWikiUsers][%MAKETEXT{"Users"}%]]
+   * [[%MAINWEB%.TWikiGroups][%MAKETEXT{"Groups"}%]]
+   * [[%TWIKIWEB%.ChangePassword][%MAKETEXT{"Password"}%]]
 %WEBCOMPONENT{"TWikiWebLinks"}%
-   * [[%MAINWEB%.TWikiPreferences][SitePreferences]] 
+   * [[%MAINWEB%.TWikiPreferences][%MAKETEXT{"SitePreferences"}%]]
 %STOPINCLUDE%

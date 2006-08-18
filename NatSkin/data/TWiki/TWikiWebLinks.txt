@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1132161897" format="1.1" version="1.1"}%
 %STARTINCLUDE% <!-- -->
-   * [[WebTopicList][Index]]  
-   * [[WebChanges][Changes]] 
-   * [[WebNotify][Notifications]] 
-   * [[WebStatistics][Statistics]] 
-   * [[WebPreferences][Preferences]] %STOPINCLUDE%
+   * [[WebTopicList][%MAKETEXT{"Index"}%]]
+   * [[WebChanges][%MAKETEXT{"Changes"}%]]
+   * [[WebNotify][%MAKETEXT{"Notifications"}%]]
+   * [[WebStatistics][%MAKETEXT{"Statistics"}%]]
+   * [[WebPreferences][%MAKETEXT{"Preferences"}%]] %STOPINCLUDE%
