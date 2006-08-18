@@ -35,13 +35,6 @@ msgstr "%*(%1,minuta) "
 msgid "%*(%1,second) "
 msgstr "%*(%1,sekunda)"
 
-#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:3
-#, fuzzy
-msgid "%1 (note)"
-msgstr "(brak)"
-
 #: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:3
 #, fuzzy
 msgid "%1 - Automated notification of topic changes"
@@ -88,12 +81,6 @@ msgstr "Dział %1"
 msgid "%1 Web Home"
 msgstr "Strona domowa działu: %1"
 
-#: twikiplugins/NatSkin/templates/oopspreview.nat.tmpl:6
-msgid ""
-"%1 __Note:__ Go back and click on Cancel if you would like to cancel the "
-"changes you did."
-msgstr ""
-
 #: data/TWiki/NewUserTemplate.txt:92
 msgid "%1 for changing your email address"
 msgstr "%1 aby zmienić adres email"
@@ -112,6 +99,7 @@ msgid "%1 has a list of other TWiki users."
 msgstr "%1 lista kont użytkowników TWiki"
 
 #: templates/messages.tmpl:370
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:7
 msgid ""
 "%1 has been editing the topic for %2 and the lease is still active for "
 "another %3."
@@ -167,7 +155,7 @@ msgid "%1 is currently logged in"
 msgstr "Użytkownik %1 jest już zalogowany"
 
 #: templates/messages.tmpl:351
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:301
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:295
 msgid "%1 is currently set to %2"
 msgstr "%1 jest obecnie ustawione na %2"
 
@@ -271,10 +259,6 @@ msgstr "(%1 vs. %2)"
 msgid "(=all= to show all topics)"
 msgstr "(wpisz =all=, aby wyświetlić wyniki dla wszystkich stron)"
 
-#: data/TWiki/WebTopicViewTemplate.txt:19
-msgid "(More options in WebSearch)"
-msgstr "(więcej opcji na stronie WebSearch)"
-
 #: data/Sandbox/WebHome.txt:9
 msgid "(Use a topic name in TWiki.WikiNotation)"
 msgstr ""
@@ -301,6 +285,7 @@ msgid "(change form)"
 msgstr "(zmień formularz)"
 
 #: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:6
 msgid "(change language)"
 msgstr "(zmień język)"
@@ -317,7 +302,7 @@ msgstr "(usuń załącznik)"
 msgid "(delete)"
 msgstr "(usuń)"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:303
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:297
 msgid "(don't forget to check your Topic Settings)"
 msgstr ""
 
@@ -380,11 +365,6 @@ msgstr "(opcjonalnie)"
 #: data/TWiki/WebSearch.txt:38 data/TWiki/WebSearchAdvanced.txt:48
 msgid "(otherwise search %1 Web only)"
 msgstr "(w przeciwnym razie wyszukaj tylko w dziale %1)"
-
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:16
-#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:8
-msgid "(preview)"
-msgstr "(podgląd)"
 
 #: templates/oopsmore.tmpl:15 templates/oopsmore.tmpl:9
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:13
@@ -511,6 +491,11 @@ msgstr ""
 "\"HiddenAttachment\" onclick=\"return launchWindow('%1','HiddenAttachment')"
 "\" href=\"%2\" rel='nofollow'>HiddenAttachment</a>."
 
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:31
+#, fuzzy
+msgid "*Tip:* More options in WebSearch"
+msgstr "(więcej opcji na stronie WebSearch)"
+
 #: data/TWiki/WikiSyntaxSummary.txt:9
 msgid "*bold* put word/phrase in asterisks: =<nop>*your phrase*="
 msgstr "*pogrubiony* - tekst między gwiazdkami: =<nop>*tekst pogrubiony*="
@@ -559,6 +544,21 @@ msgstr "..."
 #: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:11
 msgid "... don't know, it just happended."
 msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:7
+#, fuzzy
+msgid "... for user %1."
+msgstr "Nie można odnaleźć użytkownika: %1"
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:8
+#, fuzzy
+msgid "1. Form definition missing"
+msgstr "Nie podano definicji formularza"
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:18
+#, fuzzy
+msgid "2. Topic can not be upgraded from old style category table"
+msgstr "Strona nie może zostać zaktualizowana"
 
 #: twikiplugins/PatternSkin/templates/oopsmoresettings.pattern.tmpl:3
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
@@ -611,6 +611,15 @@ msgstr ""
 "Oznaczenie koloru zaczyna się od znaku #, po którym następuje sześć cyfr "
 "heksadecymalnych, np.: =#FFFF00=."
 
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:24
+#, fuzzy
+msgid ""
+"A color starts with the number sign, followed by 6 hexadecimal numbers, e.g. "
+"yellow is =#FFFF00=."
+msgstr ""
+"Oznaczenie koloru zaczyna się od znaku #, po którym następuje sześć cyfr "
+"heksadecymalnych, np.: =#FFFF00=."
+
 #. ($data->{Email})
 #: lib/TWiki/UI/Register.pm:815
 #: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:14
@@ -642,15 +651,11 @@ msgstr ""
 "2) zostało przesłane na adres email podany przy rejestracji. Skontaktuj się "
 "z %2, jeśli ten adres nie jest poprawny."
 
-#: twikiplugins/NatSkin/templates/oopssoftwareerr.nat.tmpl:5
-msgid "A software error occured in"
-msgstr ""
-
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:52
 msgid "A&ll Webs"
 msgstr "&we wszystkich działach"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:49
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:50
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:71
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:13
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:47
@@ -659,7 +664,7 @@ msgstr "&we wszystkich działach"
 msgid "Abandon your changes and exit"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:42
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:43
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:61
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:62
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:12
@@ -670,7 +675,7 @@ msgstr ""
 msgid "Abandon your changes but continue editing"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:4
 #, fuzzy
 msgid "About Topics"
 msgstr "Strony testowe"
@@ -705,6 +710,7 @@ msgstr "Operacja %1: %2."
 
 #: templates/addform.tmpl:1
 #: twikiplugins/ClassicSkin/templates/addform.classic.tmpl:1
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:18
 #: twikiplugins/PatternSkin/templates/addform.pattern.tmpl:1
 msgid "Add form"
 msgstr "Dodaj formularz"
@@ -721,7 +727,7 @@ msgstr "Wprowadzona"
 msgid "Adding a %1 variable in WebPreferences"
 msgstr "Dodano zmienną %1 w ustawieniach na stronie WebPreferences"
 
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:23
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:22
 #, fuzzy
 msgid "Adding a =WEBFORMS= variable in WebPreferences"
 msgstr "Dodano zmienną %1 w ustawieniach na stronie WebPreferences"
@@ -780,20 +786,24 @@ msgid "All topics in %1"
 msgstr "Wszystkie strony w dziale: %1"
 
 #: data/TWiki/WebTopicCreator.txt:88
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:20
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:27
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr ""
 "Zezwolenie na tworzenie stron o nazwach nie będących w formacie <nop>WikiWord"
 
-#: twikiplugins/NatSkin/templates/rename.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:21
 #, fuzzy
 msgid "Allow non <nop>WikiWord for the new topic name."
 msgstr ""
 "Zezwolenie na tworzenie stron o nazwach nie będących w formacie <nop>WikiWord"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:176
-msgid "Alternatively go <a href=\"javascript:history.back()\\"
-msgstr ""
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:172
+#, fuzzy
+msgid ""
+"Alternatively go <a href=\"javascript:history.back()\">back</a> in your "
+"browser and choose a different username."
+msgstr "Kliknij Wstecz i spróbuj ponownie."
 
 #: templates/messages.tmpl:216
 msgid ""
@@ -803,7 +813,7 @@ msgstr ""
 "Można także wrócić na stronę TWiki.TWikiRegistration i podać inną nazwę "
 "konta użytkownika."
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:154
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:150
 #, fuzzy
 msgid "An e-mail could not be delivered."
 msgstr "Nie można dostarczyć poczty. Powiadom administratora: %2."
@@ -813,7 +823,7 @@ msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr "Nie można dostarczyć poczty. Powiadom administratora: %2."
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:216
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:210
 #, fuzzy
 msgid "An email address is required before a password can be reset."
 msgstr "Brak adresu email użytkownika %1 (wymagany do zresetowania hasła)"
@@ -835,6 +845,7 @@ msgstr "Oraz rozmieszczone na stronach działu bazowego"
 msgid "Any change you made to topic before coming to this page are preserved."
 msgstr "Wykonywanie zmian przed przejściem na tę stronę jest zabronione."
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:35
 msgid "Attach"
 msgstr "&Załączniki"
@@ -851,6 +862,11 @@ msgstr "Utwórz załącznik do strony %1"
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:24
 msgid "Attach image or document on %1"
 msgstr "Utwórz załącznik do strony %1"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:11
+#, fuzzy
+msgid "Attach image or document to this topic"
+msgstr "Utworzenie załącznika do strony"
 
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:51
 msgid "Attach new file"
@@ -871,7 +887,7 @@ msgid "Attachment already exists in new topic"
 msgstr "Załącznik już istnieje na nowej stronie"
 
 #: templates/messages.tmpl:62
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:245
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:239
 msgid "Attachment delete failed"
 msgstr "Usunięcie załącznika nie powiodło się"
 
@@ -943,14 +959,15 @@ msgstr "Odwołania do %1 we wszystkich działach"
 msgid "Bad password"
 msgstr "Nowe hasło"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:21
-msgid "Base web"
-msgstr ""
-
 #: templates/messages.tmpl:116
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:97
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:94
 msgid "Base web %1 is missing or does not exist"
 msgstr "Strona nadrzędna %1 nie została podana lub nie istnieje"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:21
+#, fuzzy
+msgid "Base web:"
+msgstr "Dział %1"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:7
 #, fuzzy
@@ -994,7 +1011,7 @@ msgstr "Nie można odnaleźć użytkownika: %1"
 msgid "Can't get an e-mail address for %1 (required for password reset)"
 msgstr "Brak adresu email użytkownika %1 (wymagany do zresetowania hasła)"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:215
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:209
 #, fuzzy
 msgid "Can't get an email address for %1"
 msgstr "Brak adresu email użytkownika %1 (wymagany do zresetowania hasła)"
@@ -1002,28 +1019,28 @@ msgstr "Brak adresu email użytkownika %1 (wymagany do zresetowania hasła)"
 #: twikiplugins/NatSkin/templates/attachagain.nat.tmpl:25
 #: twikiplugins/NatSkin/templates/attachnew.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/changeform.nat.tmpl:23
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:49
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:50
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:13
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:27
 #: twikiplugins/NatSkin/templates/oops.nat.tmpl:19
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:290
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:284
 #: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:13
 #: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:13
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:57
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:56
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:16
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:16
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:23
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:48
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:68
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:25
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:46
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:66
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:20
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:31
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:30
 #: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:21
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:91
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:47
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:13
 #: twikiplugins/NatSkin/templates/rename.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:9
-#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:14
 #: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
@@ -1033,12 +1050,9 @@ msgstr "Rezygnacja"
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:72
 #: twikiplugins/NatSkin/templates/previewtoolbar.natedit.tmpl:17
+#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
 #, fuzzy
 msgid "Cancel and abandon changes"
-msgstr "Rezygnacja z edycji - porzuć zmiany"
-
-#: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:63
-msgid "Cancel editing and discard changes"
 msgstr "Rezygnacja z edycji - porzuć zmiany"
 
 #: templates/messages.tmpl:69
@@ -1047,7 +1061,7 @@ msgid "Cannot create %1 because it already exists."
 msgstr "Nie można utworzyć strony %1, gdyż taka już istnieje."
 
 #: templates/messages.tmpl:112
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:93
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:90
 msgid "Cannot create web %1 because it already exists"
 msgstr "Nie można utworzyć działu %1, gdyż taki już istnieje"
 
@@ -1087,12 +1101,19 @@ msgstr "Zmień hasło"
 msgid "Change comment and properties only"
 msgstr "Zmień tylko komentarz i właściwości"
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:19
+#, fuzzy
+msgid "Change form"
+msgstr "Poprzednia nazwa:"
+
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:13
 msgid "Change from:"
 msgstr "Poprzednia nazwa:"
 
 #: data/TWiki/LanguageSelector.txt:16 templates/oopschangelanguage.tmpl:21
 #: templates/oopschangelanguage.tmpl:4 templates/oopslanguagechanged.tmpl:4
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:62
 msgid "Change language"
 msgstr "Zmień język"
 
@@ -1110,13 +1131,17 @@ msgid "Change links in topics that refer to %1 in any Web:"
 msgstr ""
 "Uaktualnij skróty, które odwołują się do strony %1 we wszystkich działach:"
 
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:21
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:28
+#, fuzzy
+msgid "Change links in topics that refer to %1 in the %1 Web:"
+msgstr "Uaktualnij skróty, które odwołują się do strony %1 tylko w dziale %2"
+
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:24
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:92
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "Uaktualnij skróty, które odwołują się do strony %1 tylko w dziale %2"
 
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:30
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:33
 #, fuzzy
 msgid "Change links in topics that refer to %1.%2 in any Web:"
 msgstr ""
@@ -1131,7 +1156,7 @@ msgstr "Zmień hasło"
 msgid "Change properties"
 msgstr "Zmień stronę"
 
-#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/renamerefs.nat.tmpl:7
 #, fuzzy
 msgid "Change references"
 msgstr "Preferencje"
@@ -1146,15 +1171,12 @@ msgstr "Zmień stronę"
 msgid "Changed"
 msgstr "Zmienione"
 
+#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:18
 #: twikiplugins/NatSkin/templates/changes.nat.tmpl:16
 #: twikiplugins/NatSkin/templates/search.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:11
 #, fuzzy
 msgid "Changed by"
-msgstr "Zmieniony przez:"
-
-#: twikiplugins/MailerContrib/templates/mailnotify.tmpl:18
-msgid "Changed by:"
 msgstr "Zmieniony przez:"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
@@ -1175,6 +1197,12 @@ msgstr "Zmiany"
 #: lib/TWiki/UI/RDiff.pm:474
 msgid "Changes from r%1 to r%2"
 msgstr "Zmiany w wersji r%2 w porównaniu do r%1"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:62
+msgid ""
+"Characters not allowed in topic names, such as spaces will automatically be "
+"removed."
+msgstr ""
 
 #: templates/messages.tmpl:349
 msgid ""
@@ -1205,20 +1233,24 @@ msgid "Child topics in %1 web"
 msgstr "Strony podrzędne w dziale %1"
 
 #: twikiplugins/NatSkin/templates/changeform.nat.tmpl:16
+#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:10
 #, fuzzy
 msgid "Choose a new form for %1"
 msgstr "Wybierz nowy szablon formularza"
 
-#: twikiplugins/PatternSkin/templates/changeform.pattern.tmpl:10
-msgid "Choose a new form template"
-msgstr "Wybierz nowy szablon formularza"
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:51
+#, fuzzy
+msgid "Chose a topic name that is a %1 or check the allow non-Wiki Word box."
+msgstr ""
+"Kliknij Wstecz i podaj nazwę strony w formacie %1.WikiWord lub spośród "
+"poniższych wybierz nazwę dozwoloną, nie będącą w formacie <nop>WikiWord "
 
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:22
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:24
 #, fuzzy
 msgid "Clear"
 msgstr "Wyczyść wszystkie"
 
-#: lib/TWiki/Form.pm:499 twikiplugins/NatSkin/templates/renamebase.nat.tmpl:39
+#: lib/TWiki/Form.pm:499 twikiplugins/NatSkin/templates/renamebase.nat.tmpl:42
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:38
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:85
 msgid "Clear all"
@@ -1245,7 +1277,7 @@ msgid "Click to see details in separate window"
 msgstr "Kliknij, aby wyświetlić szczegóły w nowym oknie"
 
 #: templates/messages.tmpl:120
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:101
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:98
 msgid "Color %1 has an invalid format"
 msgstr "Format zapisu koloru %1 jest nieprawidłowy"
 
@@ -1256,6 +1288,11 @@ msgstr "Format zapisu koloru %1 jest nieprawidłowy"
 #: twikiplugins/PatternSkin/templates/attachtables.pattern.tmpl:64
 msgid "Comment"
 msgstr "Komentarz"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:25
+#, fuzzy
+msgid "Comment:"
+msgstr "Komentarze:"
 
 #: data/TWiki/TWikiRegistration.txt:259
 msgid "Comments:"
@@ -1279,6 +1316,7 @@ msgstr "Potwierdź zmianę nazwy lub przesunięcie"
 
 #: templates/oopsleaseconflict.tmpl:5
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:5
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:3
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:7
 msgid "Conflict"
 msgstr "Konflikt"
@@ -1290,7 +1328,7 @@ msgid "Contact %1 if you have any questions."
 msgstr "Pytania można kierować do: %1."
 
 #: templates/messages.tmpl:341
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:283
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:277
 msgid "Continue and try to rename web?"
 msgstr "Czy kontynuować i spróbować zmienić nazwę działu?"
 
@@ -1316,13 +1354,13 @@ msgstr "Nie można utworzyć nowego działu: %1"
 msgid "Could not find template"
 msgstr "Nie można odnaleźć szablonu"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:295
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:289
 #, fuzzy
 msgid "Could not find template =%1="
 msgstr "Nie można odnaleźć szablonu"
 
 #: templates/messages.tmpl:262
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:220
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:214
 msgid "Could not save %1."
 msgstr "Nie można zapisać strony: %1."
 
@@ -1361,11 +1399,8 @@ msgstr "Utwórz nową stronę"
 msgid "Create Web Access Denied"
 msgstr "Dostęp zabroniony"
 
-#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:67
-msgid "Create a link to the attached file"
-msgstr "Utwórz skrót do załącznika"
-
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:34
+#: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:67
 #, fuzzy
 msgid "Create a link to the attached file at the end of the topic."
 msgstr "Utwórz skrót do załącznika"
@@ -1401,7 +1436,7 @@ msgstr ""
 "użytkownika w formacie [[WikiName][WikWord]]. Na stronie możesz zamieścić "
 "dane osobowe i inne informacje o sobie."
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:55
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:56
 #: twikiplugins/NatSkin/templates/edit.natedit.tmpl:7
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:53
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:7
@@ -1409,7 +1444,7 @@ msgid "Creates a new topic revision when saving"
 msgstr ""
 
 #: templates/messages.tmpl:291
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:22
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:21
 msgid "Creating a suitable Form Definition topic"
 msgstr "Tworzenie właściwej strony definicji formularza"
 
@@ -1443,7 +1478,6 @@ msgstr "Data"
 msgid "Dear %1"
 msgstr "Drogi %1!"
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:44
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:6
 msgid "Debug"
 msgstr "Wyświetl błędy"
@@ -1489,7 +1523,7 @@ msgstr "Usunięto"
 msgid "Deleting Attachments"
 msgstr "Usuń załącznik"
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:7
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:6
 #, fuzzy
 msgid "Deleting Topics"
 msgstr "Usuń stronę"
@@ -1512,6 +1546,10 @@ msgstr "Czy chcesz [[%1][zresetować hasło użytkownika: %2]]?"
 msgid "Difference:"
 msgstr "Różnice:"
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:14
+msgid "Diffs"
+msgstr ""
+
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:69
 msgid "Do not show attachment in table"
 msgstr "Nie wyświetlaj załącznika w tabeli załączników"
@@ -1524,7 +1562,7 @@ msgstr "Wyświetl:"
 msgid "Don't show:"
 msgstr "Nie wyświetlaj:"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:47
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:48
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:9
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:45
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:9
@@ -1532,7 +1570,7 @@ msgstr "Nie wyświetlaj:"
 msgid "Done"
 msgstr "(brak)"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:246
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:240
 #, fuzzy
 msgid "During deletion of attachment =%1= an error was found."
 msgstr ""
@@ -1553,6 +1591,13 @@ msgstr ""
 "Wystąpił błąd przy przenoszeniu załącznika %1 do %2. Powiadom administratora "
 "%3."
 
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:56
+#, fuzzy
+msgid "During rename of topic %1 to %2 an error (%3) was found."
+msgstr ""
+"Wystąpił błąd (%3) przy zmianie nazwy strony z %1 na %2. Powiadom "
+"administratora %4."
+
 #: templates/messages.tmpl:91
 msgid ""
 "During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
@@ -1563,7 +1608,14 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/oopsrenameerr.nat.tmpl:5
 #, fuzzy
-msgid "During rename of topic [[%1]] to [[%2]] an error was found."
+msgid "During rename of topic %1 to %2 an error was found."
+msgstr ""
+"Wystąpił błąd (%3) przy zmianie nazwy strony z %1 na %2. Powiadom "
+"administratora %4."
+
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:63
+#, fuzzy
+msgid "During rename of web %1 to %2 an error (%3) was found."
 msgstr ""
 "Wystąpił błąd (%3) przy zmianie nazwy strony z %1 na %2. Powiadom "
 "administratora %4."
@@ -1576,10 +1628,25 @@ msgstr ""
 "Wystąpił błąd (%3) przy zmianie nazwy działu z %1 na %2. Powiadom "
 "administratora %4."
 
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:226
+#, fuzzy
+msgid "During save of %1 an error was found by the version control system."
+msgstr ""
+"Podczas zapisywania strony %1 wystąpił błąd w systemie kontroli wersji. "
+"Powiadom administratora %2."
+
 #: templates/messages.tmpl:320
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
+msgstr ""
+"Podczas zapisywania strony %1 wystąpił błąd w systemie kontroli wersji. "
+"Powiadom administratora %2."
+
+#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:5
+#, fuzzy
+msgid ""
+"During save of file %1 an error was found by the version control system."
 msgstr ""
 "Podczas zapisywania strony %1 wystąpił błąd w systemie kontroli wersji. "
 "Powiadom administratora %2."
@@ -1610,13 +1677,14 @@ msgstr "Składnia ustawień jest następująca:"
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:37
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/settingstopicactions.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:8
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:17
 msgid "Edit"
 msgstr "Edycja"
 
 #: templates/oopsleaseconflict.tmpl:21
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:24
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:45
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:44
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:14
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:22
 msgid "Edit Anyway"
@@ -1628,12 +1696,17 @@ msgstr "Edycja danych osobistych"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:55
 #, fuzzy
-msgid "Edit preference settings for [[%1]]"
+msgid "Edit preference settings for %1"
 msgstr "Edycja ustawień strony"
 
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:10
 msgid "Edit text"
 msgstr "Edycja tekstu"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:9
+#, fuzzy
+msgid "Edit this topic"
+msgstr "Edycja strony"
 
 #: twikiplugins/ClassicSkin/templates/view.classic.tmpl:28
 #: twikiplugins/PatternSkin/data/Main/PatternSkinUserViewTemplate.txt:18
@@ -1678,27 +1751,22 @@ msgid ""
 "TWIKIWEB%.TWikiRegistration if you do not have one."
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:33
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:39
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:51
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:32
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:37
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:49
 #, fuzzy
 msgid "Error message"
 msgstr "Błędy"
 
 #: templates/messages.tmpl:197
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:146
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:143
 msgid "Error registering user %1"
 msgstr "Błąd rejestracji użytkownika: %1"
 
 #: templates/messages.tmpl:319
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:231
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:225
 msgid "Error saving topic"
 msgstr "Błąd zapisu strony"
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:5
-#, fuzzy
-msgid "Error:"
-msgstr "Błędy"
 
 #: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:8
 msgid "Error: %1 <span class=\"twikiAlert\">%2</span>"
@@ -1709,14 +1777,19 @@ msgstr ""
 msgid "Error: Cannot create this web because it already exists"
 msgstr "Nie można utworzyć działu %1, gdyż taki już istnieje"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:35
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:34
 #, fuzzy
 msgid "Error: Could not copy topics to the new web"
 msgstr "Nie można utworzyć nowego działu: %1"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:31
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:30
 #, fuzzy
 msgid "Error: Could not create the new web"
+msgstr "Nie można utworzyć nowego działu: %1"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:39
+#, fuzzy
+msgid "Error: Could not update the <nop>WebPreferences"
 msgstr "Nie można utworzyć nowego działu: %1"
 
 #: templates/messages.tmpl:390
@@ -1732,6 +1805,11 @@ msgstr "%1 jest niepoprawną nazwą nowego działu"
 #, fuzzy
 msgid "Error: Name of base web is missing or does not exist"
 msgstr "Strona nadrzędna %1 nie została podana lub nie istnieje"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:5
+#, fuzzy
+msgid "Error: Name of new web is missing"
+msgstr "Nie podano nazwy działu"
 
 #: templates/messages.tmpl:392
 msgid ""
@@ -1751,7 +1829,7 @@ msgid "Error: Web color is missing or has an invalid format"
 msgstr "Format zapisu koloru %1 jest nieprawidłowy"
 
 #: templates/messages.tmpl:207
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:161
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:157
 msgid "Errors"
 msgstr "Błędy"
 
@@ -1761,7 +1839,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/attach.nat.tmpl:52
 #, fuzzy
-msgid "Existing attachments for"
+msgid "Existing attachments for <nop>%1"
 msgstr "Ukryj załączniki"
 
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:10
@@ -1774,7 +1852,7 @@ msgstr ""
 msgid "Explanation"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:15
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:16
 msgid "External"
 msgstr ""
 
@@ -1802,7 +1880,7 @@ msgid "File Attachments"
 msgstr "Ukryj załączniki"
 
 #: templates/messages.tmpl:297
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:257
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:251
 msgid "File has been uploaded with different name"
 msgstr "Plik załadowano i zapisano pod inną nazwą"
 
@@ -1831,7 +1909,7 @@ msgstr ""
 msgid "First Name:"
 msgstr "Imię:"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:56
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:57
 #: twikiplugins/NatSkin/templates/edit.natedit.tmpl:8
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:54
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:8
@@ -1849,17 +1927,16 @@ msgid "Form Definition %1 missing"
 msgstr "Nie podano definicji formularza: %1"
 
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:4
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:8
 msgid "Form based input"
 msgstr ""
 
 #: templates/messages.tmpl:274
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:8
 msgid "Form definition missing"
 msgstr "Nie podano definicji formularza"
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:7
 #, fuzzy
 msgid "Formatted Search"
 msgstr "Wyszukiwanie zaawansowane"
@@ -1868,20 +1945,23 @@ msgstr "Wyszukiwanie zaawansowane"
 msgid "Found <span>%1</span> topics."
 msgstr ""
 
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:18
+msgid "From"
+msgstr ""
+
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:18
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:17
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:22
 msgid "From:"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:69
-msgid "Get a fresh page of the topic [[%1]]"
-msgstr ""
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:89
+#, fuzzy
+msgid "Get a fresh page of the topic %1"
+msgstr "Formularz powinien zostać zdefiniowany na stronie: %1"
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:13
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:11
 msgid ""
-"Get help on <a href=\"%NATSCRIPTURLPATH{\"view\"}%/%TWIKIWEB%/ManagingTopics"
-"\" target=\"_blank\">Renaming and moving topics</a>."
+"Get help on <a href=\"%1\" target=\"_blank\">Renaming and moving topics</a>."
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:39
@@ -1903,7 +1983,7 @@ msgstr ""
 "Pomoc: <a target='TWikiVariables' onclick=\"return launchWindow('%"
 "1','TWikiVariables')\" href='%2' rel='nofollow'>Ustawienia strony</a>."
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:241
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:235
 #, fuzzy
 msgid ""
 "Go <a href=\"javascript:history.back()\">back</a> in your browser and save "
@@ -1925,12 +2005,12 @@ msgid "Go back in your browser and save your changes locally."
 msgstr "Kliknij Wstecz i zapisz zmiany lokalnie."
 
 #: templates/messages.tmpl:224
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:185
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:179
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
 msgid "Good examples:"
 msgstr "Dobre przykłady:"
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:4
 msgid "GoodStyle"
 msgstr ""
 
@@ -1947,7 +2027,6 @@ msgstr "Użytkownik:<br>%1"
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:55
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:3
 #: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:3
@@ -2029,7 +2108,7 @@ msgstr ""
 "Jeśli podana strona nie istnieje, należy ją utworzyć. W przeciwnym razie "
 "należy poprawić błędy."
 
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:38
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:37
 msgid "If unsure, click 'Cancel'."
 msgstr ""
 
@@ -2092,7 +2171,7 @@ msgstr ""
 "stronę: %1"
 
 #: data/TWiki/WebTopicViewTemplate.txt:12
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:24
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:23
 msgid "If you intend to do a full text search:"
 msgstr "Wyszukiwanie pełnotekstowe:"
 
@@ -2110,6 +2189,11 @@ msgstr "Jeśli dostałeś się na tę stronę za pomocą \"Skocz do\":"
 
 #: templates/messages.tmpl:438
 msgid "If you want to create the topic"
+msgstr "Aby utworzyć stronę:"
+
+#: twikiplugins/NatSkin/templates/oopsaccessdenied.nat.tmpl:30
+#, fuzzy
+msgid "If you want to create the topic then [[%1][click here]]."
 msgstr "Aby utworzyć stronę:"
 
 #: data/TWiki/WebTopicViewTemplate.txt:22
@@ -2166,13 +2250,13 @@ msgstr ""
 "W pewnych przypadkach TWiki może zmienić nazwę ładowanego pliku (ze względów "
 "bezpieczeństwa lub w celu zapewnienia przenośności)."
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:10
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:9
 msgid "Including"
 msgstr ""
 
 #: templates/messages.tmpl:221
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:180
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:185
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:175
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:179
 msgid "Incorrect %1"
 msgstr "Nieprawidłowy: %1"
 
@@ -2181,13 +2265,13 @@ msgid "Incorrect %1.WikiNames:"
 msgstr "Nieprawidłowe [[%1.WikiNames][WikiName]]:"
 
 #: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:3
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:8
 #, fuzzy
 msgid "Incorrect <nop>WikiName"
 msgstr "Nieprawidłowe [[%1.WikiNames][WikiName]]:"
 
 #: templates/messages.tmpl:97
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:73
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:70
 #: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:4
 msgid "Incorrect Password"
 msgstr "Błędne hasło"
@@ -2214,12 +2298,12 @@ msgid "Internal link"
 msgstr ""
 
 #: templates/messages.tmpl:247
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:202
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:196
 msgid "Invalid Activation Code"
 msgstr "Błędny kod aktywacyjny"
 
 #: templates/messages.tmpl:239
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:194
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:188
 #: twikiplugins/NatSkin/templates/oopsregemail.nat.tmpl:3
 msgid "Invalid e-mail address"
 msgstr "Błędny adres email"
@@ -2261,12 +2345,6 @@ msgstr ""
 "Lepiej jest wybrać krótką nazwę działu, bo łatwiej jest z niej korzystać. "
 "Znaki niedozwolone w nazwie działu takie, jak spacje zostaną automatycznie "
 "usunięte."
-
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:14
-msgid ""
-"It's usually best to chose a <a href=\"%NATSCRIPTURLPATH{\"view\"}%/%TWIKIWEB"
-"%/WikiWord\" target=\"_blank\\"
-msgstr ""
 
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:9
 #, fuzzy
@@ -2329,6 +2407,11 @@ msgstr "Linia: %1"
 msgid "Line: %1 to %2"
 msgstr "Linie: %1 do %2"
 
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:32
+#, fuzzy
+msgid "Link:"
+msgstr "Linia: %1"
+
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:7
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:7
 #, fuzzy
@@ -2342,6 +2425,11 @@ msgstr "Utwórz alfabetyczną listę stron w dziale: %1"
 #: data/TWiki/WebSearch.txt:50 data/TWiki/WebSearchAdvanced.txt:93
 msgid "List topics that start with the letter:"
 msgstr "Utwórz listę stron, których nazwa zaczyna się na literę:"
+
+#: twikiplugins/NatSkin/templates/attach.nat.tmpl:17
+#, fuzzy
+msgid "Local file:"
+msgstr "Załaduj"
 
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:41
 #, fuzzy
@@ -2357,6 +2445,7 @@ msgid "Log Out"
 msgstr "Wyloguj"
 
 #: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:2
 #, fuzzy
 msgid "Login"
 msgstr "Zaloguj"
@@ -2370,13 +2459,18 @@ msgstr "Nazwa konta użytkownika %1"
 msgid "Logon"
 msgstr "Zaloguj"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:153
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:3
+#, fuzzy
+msgid "Logout"
+msgstr "Wyloguj"
+
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:149
 #, fuzzy
 msgid "Mail Error"
 msgstr "Adres pocztowy:"
 
 #: templates/messages.tmpl:205
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:156
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:152
 msgid "Mail to"
 msgstr "Adres pocztowy:"
 
@@ -2392,11 +2486,11 @@ msgstr ""
 "Sprawdź, czy prawidłowo wpisałeś: %1 i spróbuj ponownie. Uwaga: w %2 jest "
 "ważna wielkość liter."
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:5
 msgid "Managing Topics"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:4
 msgid "Managing Webs"
 msgstr ""
 
@@ -2404,7 +2498,7 @@ msgstr ""
 msgid "Mathematical formula (<nop>LaTeX)"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:53
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:54
 #: twikiplugins/NatSkin/templates/edit.natedit.tmpl:5
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:51
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:5
@@ -2417,6 +2511,11 @@ msgstr "Niezmienione"
 msgid "Missing Fields"
 msgstr "Nie wypełniono pól"
 
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:131
+#, fuzzy
+msgid "Missing Fields =<span class=\"twikiAlert\">**</span>="
+msgstr "Nie wypełniono wymaganego pola: %1."
+
 #: templates/messages.tmpl:36
 #: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:16
 #: twikiplugins/NatSkin/templates/oopsmanage.nat.tmpl:3
@@ -2427,6 +2526,11 @@ msgstr "Nie podano polecenia"
 msgid "Modify search"
 msgstr "Zmień"
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:16
+#, fuzzy
+msgid "More"
+msgstr "Przenieś"
+
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:4
 #: twikiplugins/PatternSkin/templates/oopsmore.pattern.tmpl:18
 msgid "More Actions on Topic %1"
@@ -2436,16 +2540,22 @@ msgstr "Inne operacje dla strony %1"
 msgid "More formatting help"
 msgstr "Pomoc do formatowania"
 
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:32
+#: data/TWiki/WebTopicViewTemplate.txt:19
 #, fuzzy
 msgid "More options in WebSearch"
 msgstr "(więcej opcji na stronie WebSearch)"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:17
+#, fuzzy
+msgid "More topic actions"
+msgstr "&Inne operacje"
 
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:40
 msgid "More topic actions..."
 msgstr "Inne operacje..."
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:12
 #: twikiplugins/PatternSkin/templates/attachagain.pattern.tmpl:34
 #: twikiplugins/PatternSkin/templates/moveattachment.pattern.tmpl:43
 msgid "Move"
@@ -2466,6 +2576,11 @@ msgstr "Przenieś załącznik"
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:14
 msgid "Move or Delete File \"%1\""
 msgstr ""
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:13
+#, fuzzy
+msgid "Move or rename this topic"
+msgstr "Utwórz tę stronę"
 
 #: twikiplugins/PatternSkin/templates/renameattachmentdelete.pattern.tmpl:21
 msgid "Move to web:"
@@ -2499,8 +2614,7 @@ msgid "NOTE: This Wiki topic does not exist yet"
 msgstr "Uwaga: podana strona jeszcze nie istnieje"
 
 #: templates/messages.tmpl:103
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:79
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:5
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:76
 msgid "Name of new web is missing"
 msgstr "Nie podano nazwy działu"
 
@@ -2511,6 +2625,11 @@ msgstr "Nowe adresy email (oddzielone spacjami)"
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:73
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:9
 msgid "New or changed topics in %1, since %2:"
+msgstr "Nowe lub zmienione strony w dziale: %1, od dnia %2:"
+
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:15
+#, fuzzy
+msgid "New or changed topics in the %1 web, since %2 GMT:"
 msgstr "Nowe lub zmienione strony w dziale: %1, od dnia %2:"
 
 #: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:13
@@ -2536,6 +2655,10 @@ msgid "New web name:"
 msgstr "Nowa nazwa działu:"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:52
+#, fuzzy
+msgid "Newer revision"
+msgstr "Zmiana:"
+
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:5
 msgid "Newer revision:"
 msgstr "Zmiana:"
@@ -2580,7 +2703,7 @@ msgid "Note to administrator"
 msgstr "Uwaga dla administratora"
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:10
-msgid "Note, that this will _break_ the lock&nbsp;%1"
+msgid "Note, that this will _break_ the lock"
 msgstr ""
 
 #: data/TWiki/ResetPassword.txt:8 data/TWiki/TWikiRegistration.txt:6
@@ -2588,15 +2711,15 @@ msgstr ""
 #: templates/registernotify.tmpl:22
 #: twikiplugins/ClassicSkin/templates/registerconfirm.classic.tmpl:13
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:22
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:262
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:256
 msgid "Note:"
 msgstr "Uwaga:"
 
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:17
-msgid "Note: Edit and save the topic to activate the new parent. %1"
+msgid "Note: Edit and save the topic to activate the new parent"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:53
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:51
 #, fuzzy
 msgid ""
 "Note: The new web has been created successfully and populated with topics "
@@ -2606,8 +2729,8 @@ msgstr "Oraz rozmieszczone na stronach działu bazowego"
 #: twikiplugins/NatSkin/templates/attachsidebar.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/moveattachmentsidebar.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:11
-#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:7
 #, fuzzy
 msgid "Notes"
 msgstr "Uwagi:"
@@ -2644,21 +2767,23 @@ msgstr "Liczba stron:"
 #: templates/oopssaveerr.tmpl:16
 #: twikiplugins/ClassicSkin/templates/oopsaccessdenied.classic.tmpl:6
 #: twikiplugins/NatSkin/templates/changeform.nat.tmpl:22
-#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:24
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:26
 #: twikiplugins/NatSkin/templates/oops.nat.tmpl:18
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:116
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:289
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:113
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:283
 #: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:12
 #: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:12
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:21
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:47
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:67
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:16
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:23
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:45
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:65
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:13
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:29
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:73
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:28
 #: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:20
 #: twikiplugins/NatSkin/templates/rename.nat.tmpl:7
-#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/renameconfirm.nat.tmpl:7
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:13
 #: twikiplugins/NatSkin/templates/renamewebconfirm.nat.tmpl:7
 #: twikiplugins/PatternSkin/templates/oopsaccessdenied.pattern.tmpl:10
@@ -2667,6 +2792,10 @@ msgid "OK"
 msgstr "OK"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:8
+#, fuzzy
+msgid "Older revision"
+msgstr "Wersja:"
+
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:4
 msgid "Older revision:"
 msgstr "Wersja:"
@@ -2737,7 +2866,7 @@ msgstr ""
 "pocztą elektroniczną."
 
 #: data/TWiki/ChangeEmailAddress.txt:24
-#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:14
+#: twikiplugins/NatSkin/templates/oopslogonbase.nat.tmpl:15
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:94
 msgid "Password"
 msgstr "Hasło"
@@ -2748,7 +2877,7 @@ msgid "Password Format Error"
 msgstr "Niezgodność haseł"
 
 #: templates/messages.tmpl:146
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:113
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:110
 #: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:4
 msgid "Password changed successfully!"
 msgstr "Hasło zostało zmienione!"
@@ -2763,7 +2892,7 @@ msgid "Password reset failed"
 msgstr "Resetowanie hasła nie powiodło się"
 
 #: templates/messages.tmpl:191
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:140
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:137
 #: twikiplugins/NatSkin/templates/oopsregpasswd.nat.tmpl:3
 msgid "Passwords do not match"
 msgstr "Niezgodność haseł"
@@ -2773,26 +2902,21 @@ msgid "Personal Preferences"
 msgstr "Ustawienia osobiste"
 
 #: templates/messages.tmpl:123
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:105
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:102
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:26
 msgid "Pick one of the %1."
-msgstr "Wybierz spośród: %1."
-
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:27
-#, fuzzy
-msgid "Pick one of the %1.StandardColors."
 msgstr "Wybierz spośród: %1."
 
 #: data/Trash/TrashAttachment.txt:3
 msgid "Placeholder for trashed attachments"
 msgstr "Miejsce na usunięte załączniki"
 
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:26
-msgid ""
-"Please ask your %1 administrator <a href=%TMPL:P{\"mailuri\"}%>%WIKIWEBMASTER"
-"%</a>, to do this."
-msgstr ""
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:25
+#, fuzzy
+msgid "Please ask your %1 administrator %2, to do this."
+msgstr "Nie można dostarczyć poczty. Powiadom administratora: %2."
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:45
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:43
 #, fuzzy
 msgid "Please check out the WebPreferences or try again."
 msgstr "Kliknij Wstecz i spróbuj ponownie."
@@ -2809,6 +2933,20 @@ msgstr ""
 #: templates/messages.tmpl:218 templates/messages.tmpl:258
 msgid "Please contact %1 if you have any questions."
 msgstr "Pytania należy kierować do: %1."
+
+#: templates/messages.tmpl:199
+msgid "Please contact %1."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:15
+msgid "Please copy this information into a friendly e-mail to %1"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:11
+#, fuzzy
+msgid "Please email %1 to request this."
+msgstr ""
+"Nazwa strony domowej nie została zmieniona. Powiadom administratora: %1."
 
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:42
 msgid "Please enter your username and password:"
@@ -2849,6 +2987,7 @@ msgid "Please go back in your browser and try again."
 msgstr "Kliknij Wstecz i spróbuj ponownie."
 
 #: templates/messages.tmpl:45
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:25
 msgid ""
 "Please make sure you spelled the %1 correctly and try again. If you get "
 "stuck, please mail %2."
@@ -2856,21 +2995,33 @@ msgstr ""
 "Sprawdź pisownię %1 i spróbuj ponownie. W razie dalszych problemów "
 "skontaktuj się z %2."
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:252
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:246
 msgid "Please notify your %1"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:239
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:162
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:59
+#, fuzzy
+msgid "Please notify your %1 administrator %2"
+msgstr "Nie można dostarczyć poczty. Powiadom administratora: %2."
+
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:233
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:66
 #, fuzzy
 msgid "Please notify your %1 administrator %2."
 msgstr "Nie można dostarczyć poczty. Powiadom administratora: %2."
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:149
+#: twikiplugins/NatSkin/templates/oopserrbase.nat.tmpl:5
+#, fuzzy
+msgid "Please notify your %1 administrator and explain how to reproduce it:"
+msgstr "Nie można dostarczyć poczty. Powiadom administratora: %2."
+
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:145
 msgid "Please notify your %1 webmaster %2."
 msgstr ""
 
 #: templates/messages.tmpl:250
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:205
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:199
 msgid "Please try again."
 msgstr "Spróbuj ponownie."
 
@@ -2894,7 +3045,7 @@ msgstr ""
 
 #: twikiplugins/NatSkin/templates/settings.nat.tmpl:13
 #, fuzzy
-msgid "Preference Settings for [[%1]]:"
+msgid "Preference Settings for %1:"
 msgstr "Preferencje dla:"
 
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:11
@@ -2908,19 +3059,26 @@ msgstr "Preferencje"
 msgid "Preferences for"
 msgstr "Preferencje dla:"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:40
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:41
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:4
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:38
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:16
+#: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:8
 #, fuzzy
 msgid "Preview"
 msgstr "(podgląd)"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:40
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:41
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:59
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:4
 #, fuzzy
 msgid "Preview your changes"
 msgstr "Wyświetl ostatnie zmiany w:"
+
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:12
+#, fuzzy
+msgid "Print"
+msgstr "&Do druku"
 
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:44
 msgid "Printable version of this topic"
@@ -2935,6 +3093,10 @@ msgstr "Może to być spowodowane szeregiem przyczyn:"
 #: twikiplugins/PatternSkin/templates/attach.pattern.tmpl:65
 msgid "Properties"
 msgstr "Właściwości"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:6
+msgid "Raw"
+msgstr ""
 
 #: templates/registernotify.tmpl:10
 #: twikiplugins/ClassicSkin/templates/registernotify.classic.tmpl:10
@@ -2963,11 +3125,12 @@ msgstr "Strony zmieniane ostatnio"
 msgid "Referring topics currently being edited:"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:73
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:94
 msgid "Refresh"
 msgstr ""
 
 #: twikiplugins/ClassicSkin/data/TWiki/ClassicSkinLogin.txt:2
+#: twikiplugins/NatSkin/data/TWiki/TWikiWebTopicActions.txt:5
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBarLogin.txt:3
 msgid "Register"
 msgstr "Zarejestruj się"
@@ -3011,7 +3174,7 @@ msgstr "Zobacz także:"
 msgid "Related topics:"
 msgstr "Zobacz także:"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:58
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:59
 #: twikiplugins/NatSkin/templates/edit.natedit.tmpl:10
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:56
 #: twikiplugins/NatSkin/templates/preview.natedit.tmpl:10
@@ -3033,6 +3196,7 @@ msgstr "Czy pamiętasz swoje hasło?"
 msgid "Remove the user from the group(s) %1 first."
 msgstr "Najpierw usuń użytkownika z grupy: %1."
 
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/rename.pattern.tmpl:9
 #: twikiplugins/PatternSkin/templates/renameweb.pattern.tmpl:9
 msgid "Rename"
@@ -3042,6 +3206,11 @@ msgstr "Zmień nazwę"
 #, fuzzy
 msgid "Rename Access Denied"
 msgstr "Dostęp zabroniony"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:17
+#, fuzzy
+msgid "Rename Web"
+msgstr "Zmień nazwę"
 
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:14
 #, fuzzy
@@ -3092,6 +3261,11 @@ msgstr "Zmień formularz..."
 msgid "Request to reset your TWiki password"
 msgstr "Nie podano nazwy konta użytkownika przy resetowaniu hasła."
 
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:78
+#, fuzzy
+msgid "Reset"
+msgstr "Zarejestruj się"
+
 #: data/TWiki/ResetPassword.txt:3
 msgid "Reset Password"
 msgstr "Resetowanie hasła"
@@ -3122,10 +3296,14 @@ msgstr "Zmiana %1 została w trakcie Twojej pracy zapisana przez %2."
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:44
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:76
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:9
 msgid "Review recent changes in:"
 msgstr "Wyświetl ostatnie zmiany w:"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:70
+#: twikiplugins/NatSkin/templates/rdiff.nat.tmpl:26
+#: twikiplugins/NatSkin/templates/rdiff.nat.tmpl:27
+#: twikiplugins/NatSkin/templates/rdiff.nat.tmpl:31
 #: twikiplugins/PatternSkin/templates/rdiff.pattern.tmpl:22
 msgid "Revision"
 msgstr "Zmiana"
@@ -3145,8 +3323,8 @@ msgstr ""
 "Z = Zapisz, B = Zapisz bez powiadamiania, E = Zapisz i edytuj, P = Podgląd, "
 "R = Rezygnacja"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:44
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:46
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:45
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:47
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:64
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:6
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:8
@@ -3160,7 +3338,7 @@ msgstr ""
 msgid "Save"
 msgstr "Zapisz"
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:46
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:47
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:67
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:8
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:44
@@ -3169,8 +3347,8 @@ msgstr "Zapisz"
 msgid "Save and continue editing"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:44
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:47
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:45
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:48
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:64
 #: twikiplugins/NatSkin/templates/edittoolbar.natedit.tmpl:69
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:6
@@ -3192,8 +3370,11 @@ msgstr "Zapisz jako:"
 
 #: data/TWiki/WebSearch.txt:29 data/TWiki/WebSearchAdvanced.txt:37
 #: data/TWiki/WebTopicViewTemplate.txt:16 data/_default/WebHome.txt:11
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:28
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:27
 #: twikiplugins/NatSkin/templates/search.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/searchbox.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/searchformat.nat.tmpl:4
+#: twikiplugins/NatSkin/templates/searchrenameview.nat.tmpl:4
 #: twikiplugins/PatternSkin/data/Main/WebLeftBar.txt:7
 #: twikiplugins/PatternSkin/data/Sandbox/WebLeftBar.txt:6
 #: twikiplugins/PatternSkin/data/TWiki/WebLeftBar.txt:7
@@ -3255,6 +3436,7 @@ msgid "Security Note:"
 msgstr "Uwaga:"
 
 #: templates/messages.tmpl:47
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:28
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr ""
 "Przejdź na stronę %1, zawierającą listę kont użytkowników lub zarejestruj "
@@ -3295,12 +3477,13 @@ msgstr "Zobacz także: %1."
 #: twikiplugins/NatSkin/templates/oopsaccesschange.nat.tmpl:11
 #: twikiplugins/NatSkin/templates/oopsaccesscreateweb.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/oopsaccessdenied.nat.tmpl:17
+#: twikiplugins/NatSkin/templates/oopsaccessdenied.nat.tmpl:9
 #: twikiplugins/NatSkin/templates/oopsaccessgroup.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/oopsaccessrename.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/oopsaccessvote.nat.tmpl:10
 #: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:10
-#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:11
+#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:10
 #: twikiplugins/PatternSkin/templates/login.pattern.tmpl:75
 msgid "See also:"
 msgstr "Zobacz także:"
@@ -3317,14 +3500,8 @@ msgstr "Wybierz inny plik lokalny w celu zaktualizowania załącznika"
 msgid "Select all"
 msgstr "Zaznacz wszystkie"
 
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:67
-msgid ""
-"Select the <a target=\"_blank\" href=\"%SCRIPTURLPATH{\"view\"}%/%TRASHWEB%/"
-"WebHome\\"
-msgstr ""
-
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:17
-msgid "Select the [[%1][Trash]] web to delete the topic."
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:15
+msgid "Select the [[Trash.WebHome][Trash]] web to delete the topic."
 msgstr ""
 
 #: twikiplugins/PatternSkin/templates/edit.pattern.tmpl:90
@@ -3333,7 +3510,7 @@ msgstr ""
 "Pod wpisem zamieść swój podpis, który poniżej możesz zaznaczyć, skopiować i "
 "wkleić"
 
-#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:62
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:60
 #: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:10
 #, fuzzy
 msgid "Select..."
@@ -3347,7 +3524,6 @@ msgstr ""
 msgid "Send you a confirmation of your registration by e-mail."
 msgstr "Zostanie wysłany list z potwierdzeniem twojej rejestracji."
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:36
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:6
 msgid "Sequential"
 msgstr "Sekwencyjnie"
@@ -3386,7 +3562,6 @@ msgstr "Włącz wyświetlanie podpowiedzi dla skrótów %1:"
 msgid "Shrink edit box"
 msgstr "Zmniejsz okienko edycyjne"
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:40
 #: twikiplugins/PatternSkin/templates/oopsmorecompare.pattern.tmpl:6
 msgid "Side by side"
 msgstr "Obok siebie"
@@ -3477,8 +3652,8 @@ msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:268 templates/messages.tmpl:172
 #: templates/messages.tmpl:255
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:129
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:211
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:126
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:205
 msgid "Submit"
 msgstr "Prześlij"
 
@@ -3490,6 +3665,7 @@ msgstr "Przesłana zawartość:"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:47
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:79
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:12
 msgid "Subscribe / Unsubscribe in:"
 msgstr "Subskrybuj/nie subskrybuj:"
 
@@ -3552,13 +3728,13 @@ msgstr "Strony testowe"
 msgid "Text body"
 msgstr "w zawartości"
 
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:5
 #, fuzzy
 msgid "TextFormatting"
 msgstr "*Pomoc do zasad formatowania:*"
 
 #: templates/messages.tmpl:134 templates/messages.tmpl:165
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:120
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:117
 #: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:5
 msgid "Thank you for registering"
 msgstr "Dziękujemy za zarejestrowanie się"
@@ -3582,6 +3758,16 @@ msgstr ""
 msgid ""
 "The %1 field must be your first and last name in %2, e.g. your capitalized "
 "first and last name with spaces removed."
+msgstr ""
+"W pole %1 należy wpisać imię i nazwisko w formacie WikiWord bez żadnych "
+"spacji."
+
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:176
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:5
+#, fuzzy
+msgid ""
+"The %1 field must be your first and lastname in %2, e.g. your capitalized "
+"first and lastname with spaces removed."
 msgstr ""
 "W pole %1 należy wpisać imię i nazwisko w formacie WikiWord bez żadnych "
 "spacji."
@@ -3618,7 +3804,7 @@ msgid ""
 msgstr "Dział: %1. TWiki to internetowa platforma współpracy."
 
 #: templates/messages.tmpl:248
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:203
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:197
 msgid "The activation code %1 is invalid."
 msgstr "Kod aktywacyjny %1 jest niepoprawny."
 
@@ -3627,15 +3813,12 @@ msgid "The attachment and any history will be moved to the new topic."
 msgstr "Załącznik wraz z całą historią zostanie przeniesiony na nową stronę."
 
 #: templates/messages.tmpl:380
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:22
 msgid ""
 "The chances are good that %1 has simply navigated away from the edit page "
 "without saving."
 msgstr ""
 "Bardzo możliwe, że użytkownik %1 zrezygnował z edycji i nie zapisał zmian."
-
-#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:26
-msgid "The checkmarked topics will be updated"
-msgstr "Zaznaczone strony zostaną zaktualizowane"
 
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:42
 msgid ""
@@ -3645,7 +3828,8 @@ msgstr ""
 "Zaznaczone strony zostaną zaktualizowane oraz zostanie wyświetlony kolejny "
 "formularz umożliwiający ewentualne zaktualizowanie zablokowanych stron."
 
-#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:70
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:67
+#: twikiplugins/PatternSkin/templates/renamewebbase.pattern.tmpl:26
 #, fuzzy
 msgid "The checkmarked topics will be updated."
 msgstr "Zaznaczone strony zostaną zaktualizowane"
@@ -3655,7 +3839,7 @@ msgid "The correct format is =WikiName:&lt;encryptedpassword&gt;= (13 chars)."
 msgstr ""
 
 #: templates/messages.tmpl:240
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:195
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:189
 msgid "The e-mail address for this account is not valid."
 msgstr "Podany adres email jest niepoprawny."
 
@@ -3715,18 +3899,41 @@ msgstr "Nowa strona musi istnieć."
 msgid "The new web has been created"
 msgstr "Utworzono nowy dział"
 
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:35
+#, fuzzy
+msgid ""
+"The new web has been created, however not all topics could be copied from "
+"the base web."
+msgstr "Oraz rozmieszczone na stronach działu bazowego"
+
+#: twikiplugins/NatSkin/templates/oopsempty.nat.tmpl:15
+msgid ""
+"The other possibility is that someone sent you the preview URL of [[%1]] "
+"instead of the view URL."
+msgstr ""
+
 #: templates/messages.tmpl:98
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:74
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:71
 msgid "The password you entered in the *old password* field is incorrect."
 msgstr "Hasło podane w polu *Poprzednie hasło* jest niepoprawne."
 
+#: twikiplugins/NatSkin/templates/oopswrongpassword.nat.tmpl:6
+#, fuzzy
+msgid ""
+"The password you entered in the *password* field is incorrect. Please try "
+"again."
+msgstr "Hasło podane w polu *Poprzednie hasło* jest niepoprawne."
+
 #: templates/messages.tmpl:264
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:132
 msgid "The required field %1 was not filled in."
 msgstr "Nie wypełniono wymaganego pola: %1."
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:222
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:216
 #, fuzzy
-msgid "The required field =%1= *%2* was not filled in."
+msgid ""
+"The required field =<span class=\"twikiAlert\">**</span>= *%1* was not "
+"filled in."
 msgstr "Nie wypełniono wymaganego pola: %1."
 
 #: templates/messages.tmpl:279
@@ -3734,28 +3941,21 @@ msgid "The topic is in an old format"
 msgstr "Strona jest zapisana w starym formacie"
 
 #: templates/messages.tmpl:192
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:141
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:138
 #: twikiplugins/NatSkin/templates/oopsregpasswd.nat.tmpl:5
 msgid "The two passwords you entered do not match."
 msgstr "Podano niezgodne hasła."
 
 #: templates/messages.tmpl:327
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:272
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:266
 msgid "There are problems with renaming this web:"
 msgstr ""
 "Przy próbie zmiany nazwy podanego działu wystąpiły następujące problemy:"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:148
+#: templates/messages.tmpl:199
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:144
 #, fuzzy
 msgid "There has been a problem adding your user id to the Password system."
-msgstr ""
-"Wystąpił problem przy dodawaniu nowego użytkownika do bazy haseł. Powiadom "
-"administratora: %1."
-
-#: templates/messages.tmpl:199
-msgid ""
-"There has been a problem adding your user id to the Password system. Please "
-"contact %1."
 msgstr ""
 "Wystąpił problem przy dodawaniu nowego użytkownika do bazy haseł. Powiadom "
 "administratora: %1."
@@ -3837,6 +4037,11 @@ msgstr ""
 "To jest automatycznie wygenerowane powiadomienie o zarejestrowaniu "
 "użytkownika w %1."
 
+#: twikiplugins/NatSkin/templates/mailnotify.nat.tmpl:7
+#, fuzzy
+msgid "This is an automated email from %1."
+msgstr "Ten list został wygenerowany automatycznie przez %1."
+
 #: data/Trash/WebHome.txt:2
 msgid ""
 "This is the Trash. Here you can undelete topics; deleted attachments are in "
@@ -3855,6 +4060,13 @@ msgstr ""
 
 #: templates/messages.tmpl:287
 msgid "This requires the form definition to be present."
+msgstr "Wymaga to wcześniejszego zdefiniowania formularza."
+
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:19
+#, fuzzy
+msgid ""
+"This requires the form definition to be present. This can be automatically "
+"upgraded by:"
 msgstr "Wymaga to wcześniejszego zdefiniowania formularza."
 
 #: templates/messages.tmpl:234
@@ -3889,9 +4101,10 @@ msgstr ""
 "zmiany. Po zapisaniu sprawdź zawartość strony, zwłaszcza, jeśli dokonałeś "
 "zmian w formularzach."
 
-#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:32
-msgid "Tip:"
-msgstr ""
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:19
+#, fuzzy
+msgid "To"
+msgstr "Nowa nazwa działu:"
 
 #: twikiplugins/PatternSkin/templates/preview.pattern.tmpl:62
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
@@ -3920,10 +4133,7 @@ msgstr ""
 "przeniesiony do działu Trash."
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:9
-msgid ""
-"To edit anyway click on the <a href=\"%NATSCRIPTURLPATH{\"edit\"}%/%WEB%/%"
-"TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%&breaklock=on\">Edit anyway</"
-"a>."
+msgid "To edit anyway click on the <a href=\"%1\">Edit anyway</a>."
 msgstr ""
 
 #: data/TWiki/TWikiRegistration.txt:4
@@ -3942,7 +4152,7 @@ msgstr ""
 "Aby mimo wszystko przeprowadzić edycję strony, kliknij 'Edycja mimo "
 "wszystko'."
 
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:36
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:35
 #, fuzzy
 msgid "To edit the topic anyway, hit 'Edit&nbsp;Anyway'."
 msgstr ""
@@ -3992,7 +4202,7 @@ msgstr ""
 "Aby sprawdzić, czy użytkownik %1 zakończył już edycję, kliknij 'Spróbuj "
 "ponownie'."
 
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:37
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:36
 #, fuzzy
 msgid "To see if they have finished their edit yet, click 'Try&nbsp;Again'"
 msgstr ""
@@ -4008,7 +4218,6 @@ msgid "To web:"
 msgstr "Nowa nazwa działu:"
 
 #: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:19
-#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:19
 #: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:24
 #, fuzzy
 msgid "To:"
@@ -4020,7 +4229,7 @@ msgstr "Nowa nazwa działu:"
 msgid "Topic"
 msgstr "Nowa nazwa strony:"
 
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:64
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:85
 #, fuzzy
 msgid "Topic Caching"
 msgstr "Załączniki"
@@ -4031,7 +4240,7 @@ msgid "Topic Meta data"
 msgstr "w tytule"
 
 #: templates/messages.tmpl:261
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:219
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:213
 msgid "Topic Save Error"
 msgstr "Błąd zapisu strony"
 
@@ -4131,7 +4340,7 @@ msgstr "liczby trafień"
 
 #: templates/oopsleaseconflict.tmpl:16
 #: twikiplugins/ClassicSkin/templates/oopsleaseconflict.classic.tmpl:18
-#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:51
+#: twikiplugins/NatSkin/templates/oopsleaseconflict.nat.tmpl:50
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:17
 msgid "Try Again"
 msgstr "Spróbuj ponownie"
@@ -4152,7 +4361,7 @@ msgstr ""
 msgid "Underlined text"
 msgstr ""
 
-#: twikiplugins/NatSkin/templates/edit.nat.tmpl:42
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:43
 #: twikiplugins/NatSkin/templates/edittopicactions.nat.tmpl:12
 #: twikiplugins/NatSkin/templates/preview.nat.tmpl:40
 #: twikiplugins/NatSkin/templates/previewtopicactions.nat.tmpl:12
@@ -4214,7 +4423,7 @@ msgstr ""
 msgid "Uploaded file \"%1\" does not exist or is empty"
 msgstr "Ładowany plik %1 nie istnieje lub jest pusty"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:227
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:221
 #, fuzzy
 msgid "Uploaded file \"<nop>%1\" does not exist or is empty."
 msgstr "Ładowany plik %1 nie istnieje lub jest pusty"
@@ -4268,7 +4477,7 @@ msgstr ""
 "[Zmień hasło]]."
 
 #: twikiplugins/NatSkin/templates/changeformsidebar.nat.tmpl:6
-#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:7
+#: twikiplugins/NatSkin/templates/editsidebar.nat.tmpl:6
 #, fuzzy
 msgid "Variables"
 msgstr "&Do druku"
@@ -4285,6 +4494,12 @@ msgstr "Historia zmian załącznika %1"
 #: data/TWiki/NewUserTemplate.txt:82
 msgid "Vertical size of text edit box:"
 msgstr "Wysokość okienka edycyjnego:"
+
+#: twikiplugins/NatSkin/templates/rdifftopicactions.nat.tmpl:2
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:4
+#, fuzzy
+msgid "View"
+msgstr "wyświetl"
 
 #: twikiplugins/NatSkin/templates/oopsaccessview.nat.tmpl:4
 #, fuzzy
@@ -4306,6 +4521,11 @@ msgstr "Wyświetl różnice"
 msgid "View difference"
 msgstr "Wyświetl różnice"
 
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:5
+#, fuzzy
+msgid "View formatted topic"
+msgstr "Wyświetl stronę"
+
 #: templates/oopsmore.tmpl:41
 #: twikiplugins/ClassicSkin/templates/oopsmore.classic.tmpl:39
 #: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:3
@@ -4314,7 +4534,7 @@ msgstr "Wyświetl kolejną zmianę na stronie"
 
 #: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:15
 #: twikiplugins/NatSkin/templates/oopslockedrename.nat.tmpl:15
-#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:30
+#: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:29
 msgid "View raw"
 msgstr ""
 
@@ -4322,6 +4542,11 @@ msgstr ""
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:48
 msgid "View raw text without formatting"
 msgstr "Wyświetl kod źródłowy strony"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:7
+#, fuzzy
+msgid "View raw topic"
+msgstr "Wyświetl stronę"
 
 #: twikiplugins/NatSkin/templates/oopsnoformdef.nat.tmpl:10
 #, fuzzy
@@ -4341,6 +4566,11 @@ msgstr "Wyświetl zmianę"
 #: twikiplugins/PatternSkin/templates/viewtopicactionbuttons.pattern.tmpl:16
 msgid "View topic"
 msgstr "Wyświetl stronę"
+
+#: twikiplugins/NatSkin/templates/strings.nat.tmpl:15
+#, fuzzy
+msgid "View topic history"
+msgstr "Historia strony"
 
 #: templates/twiki.tmpl:164
 #: twikiplugins/ClassicSkin/templates/twiki.classic.tmpl:151
@@ -4431,12 +4661,13 @@ msgstr ""
 msgid "Who"
 msgstr "Kto załadował"
 
-#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:8
-#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/renamesidebar.nat.tmpl:7
+#: twikiplugins/NatSkin/templates/renamewebsidebar.nat.tmpl:5
 msgid "WikiWord"
 msgstr ""
 
 #: templates/messages.tmpl:19
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:52
 msgid "Would you like to go to:"
 msgstr "Przejdź do:"
 
@@ -4447,7 +4678,7 @@ msgstr ""
 "zmienną na %1"
 
 #: templates/messages.tmpl:211
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:171
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:167
 #: twikiplugins/NatSkin/templates/oopsregexist.nat.tmpl:3
 msgid "You are already registered"
 msgstr "Użytkownik jest już zarejestrowany"
@@ -4520,6 +4751,20 @@ msgstr ""
 "uprawnienia. W razie dalszych pytań należy skontaktować się z "
 "administratorem: %2."
 
+#: twikiplugins/NatSkin/templates/oopsnoweb.nat.tmpl:19
+#, fuzzy
+msgid ""
+"You can [[%1][create a new web]] if you have the permission. Contact %2 if "
+"you have any questions."
+msgstr ""
+"Nowe działy mogą [[%1][tworzyć]] tylko użytkownicy mający odpowiednie "
+"uprawnienia. W razie dalszych pytań należy skontaktować się z "
+"administratorem: %2."
+
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:104
+msgid "You can also use the names of the standard HTML colors"
+msgstr ""
+
 #: templates/messages.tmpl:125
 msgid ""
 "You can also use the names of the standard HTML colors (black, silver, gray, "
@@ -4564,7 +4809,7 @@ msgid "You cannot call this script directly, %1 uses it internally."
 msgstr ""
 
 #: templates/messages.tmpl:212
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:172
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:168
 #: twikiplugins/NatSkin/templates/oopsregexist.nat.tmpl:5
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr "Użytkownik o podanej nazwie %1 jest już zarejestrowany."
@@ -4581,7 +4826,7 @@ msgid "You may need to close your browser to make this change take effect."
 msgstr ""
 "Aby zmiany odniosły skutek, należy zamknąć i ponownie uruchomić przeglądarkę."
 
-#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:8
+#: twikiplugins/NatSkin/templates/oopssaveerr.nat.tmpl:7
 #, fuzzy
 msgid ""
 "You might go <a href=\"javascript:history.back()\">back</a> in your browser "
@@ -4634,10 +4879,22 @@ msgstr ""
 "\"NazwaKonta.xxxxxxxxxx\"."
 
 #: templates/oopslanguagechanged.tmpl:11
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:12
 #: twikiplugins/PatternSkin/templates/oopslanguagechanged.pattern.tmpl:19
 msgid ""
 "Your language will be changed to %1 from the next screen. You will be "
 "redirected to there right now. If you aren't, [[%2][click here]] to proceed."
+msgstr ""
+"Za chwilę nastąpi zmiana języka na %1. Nastąpi przekierowanie na następną "
+"stronę. Jeżeli przekierowanie nie nastąpi automatycznie, tokliknij [[%2]"
+"[tutaj]]."
+
+#: twikiplugins/NatSkin/templates/oopslanguagechanged.nat.tmpl:9
+#, fuzzy
+msgid ""
+"Your language will be reset to the global default from the next screen on. "
+"You will be redirected to there right now. If you aren't, [[%1][click here]] "
+"to proceed."
 msgstr ""
 "Za chwilę nastąpi zmiana języka na %1. Nastąpi przekierowanie na następną "
 "stronę. Jeżeli przekierowanie nie nastąpi automatycznie, tokliknij [[%2]"
@@ -4701,7 +4958,7 @@ msgid ""
 msgstr ""
 "[wielokrotność 3 spacji] * [spacja] Set [spacja] ZMIENNA [spacja] = [wartość]"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:83
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:80
 #, fuzzy
 msgid "\"%1\" is an invalid name for a new web."
 msgstr "%1 jest niepoprawną nazwą nowego działu"
@@ -4710,6 +4967,18 @@ msgstr "%1 jest niepoprawną nazwą nowego działu"
 #, fuzzy
 msgid "\"%1\" topic does not exist"
 msgstr "strona %1 nie istnieje"
+
+#: twikiplugins/NatSkin/templates/oopspreview.nat.tmpl:6
+msgid ""
+"__Note:__ Go back and click on Cancel if you would like to cancel the "
+"changes you did."
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/oopslocked.nat.tmpl:18
+msgid ""
+"__Note:__ Locking gets reset after <b> %1 </b> minutes of inactivity, the "
+"earliest in <b>%2</b> minutes."
+msgstr ""
 
 #: lib/TWiki/I18N.pm:270
 msgid "_language_name"
@@ -4755,33 +5024,39 @@ msgstr "i"
 msgid "change, update, previous revisions, move, delete..."
 msgstr "zmień, odśwież, poprzednie wersje, przenieś, usuń..."
 
+#: twikiplugins/NatSkin/templates/changes.nat.tmpl:8
+#, fuzzy
+msgid "changes"
+msgstr "(zmiany)"
+
 #: twikiplugins/PatternSkin/templates/renamebase.pattern.tmpl:85
 msgid "checkboxes of referenced topics"
 msgstr "strony z odwołaniami"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:29
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:43
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:44
 #, fuzzy
 msgid "debug"
 msgstr "Wyświetl błędy"
+
+#: templates/messages.tmpl:353
+msgid "don't forget to check your Topic Settings"
+msgstr ""
+
+#: twikiplugins/NatSkin/templates/changeform.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/edit.nat.tmpl:10
+#, fuzzy
+msgid "edit"
+msgstr "(edycja)"
 
 #: twikiplugins/NatSkin/templates/editform.nat.tmpl:3
 #, fuzzy
 msgid "edit form"
 msgstr "(edycja formularza)"
 
-#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:52
-msgid "editSettings"
-msgstr ""
-
 #: templates/messages.tmpl:186
 msgid "fields are required."
 msgstr "pola są wymagane."
-
-#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:7
-#, fuzzy
-msgid "for user %1."
-msgstr "Nie można odnaleźć użytkownika: %1"
 
 #: twikiplugins/NatSkin/templates/searchtopicactions.nat.tmpl:2
 msgid "go back to <nop>%1"
@@ -4797,6 +5072,10 @@ msgstr "pomoc"
 #: data/TWiki/WikiSyntaxSummary.txt:16
 msgid "hints on good style"
 msgstr "wskazówki dobrego stylu"
+
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:75
+msgid "in <input type=\"checkbox\" name=\"raw\"> raw text format."
+msgstr ""
 
 #: twikiplugins/PatternSkin/templates/oopsmorerevision.pattern.tmpl:5
 msgid "in raw text format"
@@ -4833,11 +5112,17 @@ msgstr "zarządzaj"
 msgid "manage properties of %1"
 msgstr ""
 
+#: twikiplugins/NatSkin/templates/oopsmore.nat.tmpl:3
+#, fuzzy
+msgid "more"
+msgstr "(więcej)"
+
 #: data/Trash/WebHome.txt:10
 msgid "more..."
 msgstr "więcej..."
 
 #: twikiplugins/NatSkin/templates/attachtables.nat.tmpl:6
+#: twikiplugins/NatSkin/templates/moveattachment.nat.tmpl:8
 #, fuzzy
 msgid "move"
 msgstr "Przenieś"
@@ -4850,6 +5135,14 @@ msgstr "Zmień nazwę, przenieś lub usuń dział:"
 #: twikiplugins/PatternSkin/templates/oopsmoresetparent.pattern.tmpl:8
 msgid "none (remove topic parent)"
 msgstr "brak (usuń stronę nadrzędną)"
+
+#: twikiplugins/NatSkin/templates/oopschangepasswd.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopslogon.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopsregthanks.nat.tmpl:3
+#: twikiplugins/NatSkin/templates/oopsresetpasswd.nat.tmpl:3
+#, fuzzy
+msgid "note"
+msgstr "Uwagi:"
 
 #: twikiplugins/MailerContrib/templates/mailnotify.tmpl:16
 msgid "now %1"
@@ -4880,6 +5173,16 @@ msgstr "(oops)"
 msgid "or"
 msgstr "lub"
 
+#: twikiplugins/NatSkin/templates/settings.nat.tmpl:9
+#, fuzzy
+msgid "prefs"
+msgstr "Grupy"
+
+#: twikiplugins/NatSkin/templates/preview.nat.tmpl:10
+#, fuzzy
+msgid "preview"
+msgstr "(podgląd)"
+
 #: twikiplugins/NatSkin/templates/view.print.nat.tmpl:4
 #, fuzzy
 msgid "printable"
@@ -4894,10 +5197,16 @@ msgstr "Grupy"
 msgid "put it back"
 msgstr "odłóż"
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:75
+#: twikiplugins/NatSkin/templates/renamebase.nat.tmpl:9
 #, fuzzy
-msgid "raw text format."
-msgstr "w postaci kodu źródłowego"
+msgid "rename"
+msgstr "(zmień nazwę)"
+
+#: twikiplugins/NatSkin/templates/renamewebbase.nat.tmpl:9
+#: twikiplugins/NatSkin/templates/renamewebdelete.nat.tmpl:3
+#, fuzzy
+msgid "rename web"
+msgstr "Utwórz nową stronę"
 
 #: twikiplugins/PatternSkin/templates/searchbase.pattern.tmpl:22
 msgid "retrieved at %1"
@@ -4909,32 +5218,43 @@ msgid "search"
 msgstr "Wyszukaj"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:19
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:35
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:36
 #, fuzzy
 msgid "sequential"
 msgstr "Sekwencyjnie"
 
 #: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:24
+#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:40
 #, fuzzy
 msgid "side by side"
 msgstr "Obok siebie"
 
-#: twikiplugins/NatSkin/templates/oopsrev.nat.tmpl:39
-#, fuzzy
-msgid "sidebyside"
-msgstr "Obok siebie"
-
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:189
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:13
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:183
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:12
 #, fuzzy
 msgid "single character first name"
 msgstr "(imię jednoznakowe)"
 
-#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:188
-#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:12
+#: twikiplugins/NatSkin/templates/oopsattention.nat.tmpl:182
+#: twikiplugins/NatSkin/templates/oopsregwiki.nat.tmpl:11
 #, fuzzy
 msgid "single character last name"
 msgstr "(nazwisko jednoznakowe)"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:55
+#, fuzzy
+msgid "the %1 home?"
+msgstr "strona domowa %1"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:54
+#, fuzzy
+msgid "the %1 to customize the web specific preferences or"
+msgstr "%1 w celu skonfigurowania działu"
+
+#: twikiplugins/NatSkin/templates/oopsmngcreateweb.nat.tmpl:53
+#, fuzzy
+msgid "the %1 to start working on the new web,"
+msgstr "%1 w celu rozpoczęcia pracy w nowym dziale"
 
 #: twikiplugins/PatternSkin/templates/oopsleaseconflict.pattern.tmpl:22
 msgid "to edit the topic anyway."
@@ -4984,6 +5304,55 @@ msgstr ""
 "Aby móc zresetować hasło, *musisz* mieć przynajmniej jeden poprawny adres "
 "email. Jeśli żaden z zarejestrowanych adresów email nie jest poprawny, to "
 "aby zresetować hasło, musisz skontaktować się z administratorem: %1."
+
+#, fuzzy
+#~ msgid "Missing Fields =%1="
+#~ msgstr "Nie wypełniono pól"
+
+#, fuzzy
+#~ msgid "%1 (note)"
+#~ msgstr "(brak)"
+
+#~ msgid "(More options in WebSearch)"
+#~ msgstr "(więcej opcji na stronie WebSearch)"
+
+#~ msgid "Cancel editing and discard changes"
+#~ msgstr "Rezygnacja z edycji - porzuć zmiany"
+
+#~ msgid "Changed by:"
+#~ msgstr "Zmieniony przez:"
+
+#~ msgid "Choose a new form template"
+#~ msgstr "Wybierz nowy szablon formularza"
+
+#~ msgid "Create a link to the attached file"
+#~ msgstr "Utwórz skrót do załącznika"
+
+#, fuzzy
+#~ msgid "Error:"
+#~ msgstr "Błędy"
+
+#, fuzzy
+#~ msgid "Pick one of the %1.StandardColors."
+#~ msgstr "Wybierz spośród: %1."
+
+#~ msgid "The checkmarked topics will be updated"
+#~ msgstr "Zaznaczone strony zostaną zaktualizowane"
+
+#~ msgid ""
+#~ "There has been a problem adding your user id to the Password system. "
+#~ "Please contact %1."
+#~ msgstr ""
+#~ "Wystąpił problem przy dodawaniu nowego użytkownika do bazy haseł. "
+#~ "Powiadom administratora: %1."
+
+#, fuzzy
+#~ msgid "raw text format."
+#~ msgstr "w postaci kodu źródłowego"
+
+#, fuzzy
+#~ msgid "sidebyside"
+#~ msgstr "Obok siebie"
 
 #~ msgid "Raw View"
 #~ msgstr "Kod źródłowy"
