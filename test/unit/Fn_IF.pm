@@ -2,7 +2,7 @@ use strict;
 
 # tests for the correct expansion of IF
 
-package IFTests;
+package Fn_IF;
 
 use base qw( TWikiFnTestCase );
 

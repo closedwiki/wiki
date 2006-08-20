@@ -2,7 +2,7 @@ use strict;
 
 # tests for the correct expansion of SECTION
 
-package SECTIONTests;
+package Fn_SECTION;
 
 use base qw( TWikiFnTestCase );
 

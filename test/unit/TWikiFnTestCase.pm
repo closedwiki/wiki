@@ -26,13 +26,8 @@ sub new {
     $this->{var} = $var;
     $this->{test_web} = 'Temporary'.$var.'TestWeb'.$var;
     $this->{test_topic} = 'TestTopic'.$var;
-    $this->{users_web} = $TWiki::cfg{UsersWebName} = 'Temporary'.$var.'UsersWeb';
+    $this->{users_web} = 'Temporary'.$var.'UsersWeb';
     $this->{twiki} = undef;
-    $TWiki::cfg{MapUserToWikiName} = 1;
-    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd'.$var;
-    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
-    $TWiki::cfg{Register}{NeedVerification} = 0;
-    $TWiki::cfg{MinPasswordLength} = 0;
     return $this;
 }
 
@@ -40,6 +35,13 @@ sub set_up {
     my $this = shift;
 
     $this->SUPER::set_up();
+
+    $TWiki::cfg{MapUserToWikiName} = 1;
+    $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd'.$this->{var};
+    $TWiki::cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';
+    $TWiki::cfg{Register}{NeedVerification} = 0;
+    $TWiki::cfg{MinPasswordLength} = 0;
+    $TWiki::cfg{UsersWebName} = $this->{users_web};
 
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");

@@ -177,6 +177,29 @@ THIS
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 
+sub test_allowtopic_c {
+    my $this = shift;
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
+                                <<THIS
+If ALLOWTOPIC is set
+   1. people in the list are PERMITTED
+   2. everyone else is DENIED
+%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25MAINWEB%25.$MrOrange $MrYellow"}%
+THIS
+                                , undef);
+    # renew TWiki, so WebPreferences gets re-read
+    $twiki = new TWiki();
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $twiki = new TWiki();
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
+}
+
 sub test_denyweb {
     my $this = shift;
     $twiki->{store}->saveTopic( $currUser, $testWeb, $TWiki::cfg{WebPrefsTopicName},
@@ -199,8 +222,9 @@ THIS
 
 sub test_allow_web {
     my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, $TWiki::cfg{WebPrefsTopicName},
-                                <<THIS
+    $twiki->{store}->saveTopic(
+        $currUser, $testWeb, $TWiki::cfg{WebPrefsTopicName},
+        <<THIS
 If ALLOWWEB is set to a list of wikinames
     * people in the list will be PERMITTED
     * everyone else will be DENIED

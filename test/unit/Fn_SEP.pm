@@ -2,7 +2,7 @@ use strict;
 
 # tests for the correct expansion of SEP
 
-package SEPTests;
+package Fn_SEP;
 
 use base qw( TWikiFnTestCase );
 

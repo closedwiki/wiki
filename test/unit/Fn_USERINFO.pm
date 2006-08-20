@@ -2,7 +2,7 @@ use strict;
 
 # tests for the correct expansion of USERINFO
 
-package USERINFOTests;
+package Fn_USERINFO;
 
 use base qw( TWikiFnTestCase );
 

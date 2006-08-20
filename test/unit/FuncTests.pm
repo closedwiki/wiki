@@ -357,10 +357,10 @@ sub test_normalizeWebTopicName {
     $this->assert_str_equals( 'Web', $w);
     $this->assert_str_equals( 'Topic', $t );
     ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Topic' );
-    $this->assert_str_equals( 'Main', $w);
+    $this->assert_str_equals( $TWiki::cfg{UsersWebName}, $w);
     $this->assert_str_equals( 'Topic', $t );
     ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     '' );
-    $this->assert_str_equals( 'Main', $w);
+    $this->assert_str_equals( $TWiki::cfg{UsersWebName}, $w);
     $this->assert_str_equals( 'WebHome', $t );
     ($w, $t) = TWiki::Func::normalizeWebTopicName( '',     'Web/Topic' );
     $this->assert_str_equals( 'Web', $w);

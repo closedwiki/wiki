@@ -2,7 +2,7 @@ use strict;
 
 # tests for the correct expansion of SCRIPTURL
 
-package SCRIPTURLTests;
+package Fn_SCRIPTURL;
 
 use base qw( TWikiFnTestCase );
 

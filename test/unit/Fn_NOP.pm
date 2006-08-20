@@ -2,7 +2,7 @@ use strict;
 
 # tests for the correct expansion of NOP
 
-package NOPTests;
+package Fn_NOP;
 
 use base qw( TWikiFnTestCase );
 
