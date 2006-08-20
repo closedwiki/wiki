@@ -54,14 +54,14 @@ my @specs =
    },
    # single topic with 2 levels of children
    {
-    entry => "email2\@test.email: TestTopic1 (2)",
-    email => "email2\@test.email",
+    entry => "WikiName1 : TestTopic1 (2)",
+    email => "WikiName1\@test.email",
     topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122"
    },
    # single topic with 3 levels of children
    {
     email => "email3\@test.email",
-    entry => "email3\@test.email: TestTopic1 (3)",
+    entry => "email3\@test.email : TestTopic1 (3)",
     topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122 TestTopic1221"
    },
    # Comma separated list of subscriptions
