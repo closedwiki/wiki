@@ -273,32 +273,28 @@ sub _loadMapping {
     return if $this->{CACHED};
     $this->{CACHED} = 1;
 
-    my $text;
     my $store = $this->{session}->{store};
-    if( $TWiki::cfg{MapUserToWikiName} &&
-       $store->topicExists($TWiki::cfg{UsersWebName},
-                           $TWiki::cfg{UsersTopicName} )) {
-        $text = $store->readTopicRaw( undef,
+    if( $store->topicExists($TWiki::cfg{UsersWebName},
+                            $TWiki::cfg{UsersTopicName} )) {
+        my $text = $store->readTopicRaw( undef,
                                       $TWiki::cfg{UsersWebName},
                                       $TWiki::cfg{UsersTopicName},
                                       undef );
+        # Get the WikiNames and userids, and build hashes in both directions
+        # This matches:
+        #   * TWikiGuest - guest - 10 Mar 2005
+        #   * TWikiGuest - 10 Mar 2005
+        $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*(\S+)\s*)?-.*$/$this->_cacheUser($1,$2,$3)/gome;
     } else {
-        # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
-        # map only guest to TWikiGuest. CODE_SMELL on localization
-        $text = "\t* $TWiki::cfg{DefaultUserWikiName} - $TWiki::cfg{DefaultUserLogin} - 01 Apr 1970";
+        # If there is no mapping topic, then
+        # map only guest to TWikiGuest.
+        $this->_cacheUser(undef, $TWiki::cfg{DefaultUserWikiName},
+                          $TWiki::cfg{DefaultUserLogin});
     }
-
-    my $wUser;
-    my $lUser;
-    # Get the WikiName and userid, and build hashes in both directions
-    # This matches:
-    #   * TWikiGuest - guest - 10 Mar 2005
-    #   * TWikiGuest - 10 Mar 2005
-    $text =~ s/^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*(?:-\s*(\S+)\s*)?-\s*\d+ \w+ \d+\s*$/_cacheUser($this,$1,$2,$3)/gome;
 }
 
 sub _cacheUser {
-    my($cacheHolder, $web, $wUser, $lUser) = @_;
+    my($this, $web, $wUser, $lUser) = @_;
     $web ||= $TWiki::cfg{UsersWebName};
     $lUser ||= $wUser;	# userid
     # FIXME: Should filter in for security...
@@ -306,8 +302,8 @@ sub _cacheUser {
     # like the DOMAIN\username used in the swamp of despair.
     $lUser =~ s/$TWiki::cfg{NameFilter}//go;
     my $wwn = $web.'.'.$wUser;
-    $cacheHolder->{U2W}{$lUser} = $wwn;
-    $cacheHolder->{W2U}{$wwn} = $lUser;
+    $this->{U2W}{$lUser} = $wwn;
+    $this->{W2U}{$wwn} = $lUser;
 }
 
 =pod
