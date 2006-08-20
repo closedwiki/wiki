@@ -110,17 +110,35 @@ sub close {
                 or die "Cannot change working directory ", $ftp->message;
         }
 
+        my $fastUpload = $this->{params}->{fastupload} || 0;
+        print "fastUpload = $fastUpload <br />";
         for my $remoteFilename (@{$this->{remotefiles}}) {
             my $localfilePath = "$this->{path}/$this->{web}/$remoteFilename";
             if ( $remoteFilename =~ /^\/?(.*\/)([^\/]*)$/ ) {
                 $ftp->mkdir($1, 1)
                         or die "Cannot create directory ", $ftp->message;
             }
-
-            $ftp->put($localfilePath, $remoteFilename)
-                or die "put failed ", $ftp->message;
             
-            print "FTPed $remoteFilename to $this->{params}->{destinationftpserver} <br />";
+            #TODO: this is a really crap way to reduce upload times
+            #remote time and local times don't match, will have to base it on twiki revisions and sending a manifest
+            #for eg, add username, topic mod date and rev to sitemap, and download and compare
+            #and similar for big files - ie attachments.
+            my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+               $atime,$mtime,$ctime,$blksize,$blocks)
+                   = stat($localfilePath);
+            my $remoteSize = $ftp->size($remoteFilename);
+            my $remoteMTime = $ftp->mdtm($remoteFilename);
+            
+            #print "($remoteMTime eq $mtime) && ($remoteSize eq $size) ";
+            if (($fastUpload eq 1) && ($remoteSize eq $size) && (!( $remoteFilename =~ /(.*)\.html?$/ ))) {
+                #file's already there
+                print "<b>skipped</b> uploading $remoteFilename to $this->{params}->{destinationftpserver} <br />";
+            } else {
+                $ftp->put($localfilePath, $remoteFilename)
+                    or die "put failed ", $ftp->message;
+            
+                print "<b>FTPed</b> $remoteFilename to $this->{params}->{destinationftpserver} <br />";
+            }
         }
 
         $ftp->quit;
