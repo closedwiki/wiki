@@ -649,7 +649,7 @@ sub checkAccessPermission {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
-      ( $type, $user, $text, $topic, $web );
+      ( $type, $user, $text, undef, $topic, $web );
 }
 
 =pod

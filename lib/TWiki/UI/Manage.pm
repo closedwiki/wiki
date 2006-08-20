@@ -525,7 +525,7 @@ sub _renameweb {
                 $webTopicInfo{modify}{$ref}{summary} = $refs{$ref};
                 $webTopicInfo{modify}{$ref}{access} =
                   $security->checkAccessPermission('change', $user,
-                                                   undef, $webTopic,
+                                                   undef, undef, $webTopic,
                                                    $webIter);
                 if(!$webTopicInfo{modify}{$ref}{access}) {
                     $webTopicInfo{modify}{$ref}{accessReason} =
@@ -564,7 +564,7 @@ sub _renameweb {
                        $webTopicInfo{move}{$wit}{leaseuser} ne $user);
                 $webTopicInfo{move}{$wit}{access} =
                   $security->checkAccessPermission('rename', $user,
-                                                   undef, $webTopic,
+                                                   undef, undef, $webTopic,
                                                    $webIter);
                 $webTopicInfo{move}{$wit}{accessReason} =
                   $security->getReason();

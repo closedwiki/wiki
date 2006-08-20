@@ -100,11 +100,12 @@ sub getReason {
 
 =pod
 
----++ ObjectMethod checkAccessPermission( $action, $user, $text, $topic, $web ) -> $boolean
+---++ ObjectMethod checkAccessPermission( $action, $user, $text, $meta, $topic, $web ) -> $boolean
 Check if user is allowed to access topic
    * =$action=  - 'VIEW', 'CHANGE', 'CREATE', etc.
    * =$user=    - User object
    * =$text=    - If undef or '': Read '$theWebName.$theTopicName' to check permissions
+   * =$meta=    - If undef, but =$text= is defined, then metadata will be parsed from =$text=. If defined, then metadata embedded in =$text= will be ignored. Always ignored if =$text= is undefined. Settings in =$meta= override * Set settings in plain text.
    * =$topic=   - Topic name to check, e.g. 'SomeTopic' *undef to check web perms only)
    * =$web=     - Web, e.g. 'Know'
 If the check fails, the reason can be recoveered using getReason.
@@ -112,7 +113,7 @@ If the check fails, the reason can be recoveered using getReason.
 =cut
 
 sub checkAccessPermission {
-    my( $this, $mode, $user, $text, $topic, $web ) = @_;
+    my( $this, $mode, $user, $text, $meta, $topic, $web ) = @_;
     ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
@@ -135,14 +136,12 @@ sub checkAccessPermission {
     my $denyText;
 
     # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
-    if( $text ) {
-        # override topic permissions. Note: ignores embedded metadata
-        # SMELL: this is horrible! But it's inevitable given the dreadful
-        # business of storing access controls embedded in topic text.
-        $allowText = $prefs->getTextPreferencesValue( 'ALLOWTOPIC'.$mode,
-                                                      $text, $web, $topic );
-        $denyText = $prefs->getTextPreferencesValue( 'DENYTOPIC'.$mode,
-                                                     $text, $web, $topic );
+    if( defined $text ) {
+        # override topic permissions.
+        $allowText = $prefs->getTextPreferencesValue(
+            'ALLOWTOPIC'.$mode, $text, $meta, $web, $topic );
+        $denyText = $prefs->getTextPreferencesValue(
+            'DENYTOPIC'.$mode, $text, $meta, $web, $topic );
     } elsif( $topic ) {
         $allowText = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
                                                        $web, $topic );

@@ -290,22 +290,20 @@ sub getTopicPreferencesValue {
 
 =pod
 
----++ getTextPreferencesValue( $key, $text, $web, $topic ) -> $value
-Get a preference value from the settings in the text. The values are
-*not* cached.
+---++ getTextPreferencesValue( $key, $text, $meta, $web, $topic ) -> $value
+Get a preference value from the settings in the text (and/or optional $meta).
+The values read are *not* cached.
 
 =cut
 
-# SMELL: this is horrible! But it's inevitable given the truly dreadful
-# business of storing access controls embedded in topic text.
 sub getTextPreferencesValue {
-    my( $this, $key, $text, $web, $topic ) = @_;
+    my( $this, $key, $text, $meta, $web, $topic ) = @_;
 
     my $wtn = $web.'.'.$topic;
 
     my $cache = 
       new TWiki::Prefs::PrefsCache( $this, undef, 'TOPIC' );
-    $cache->loadPrefsFromText( $text, $web, $topic );
+    $cache->loadPrefsFromText( $text, $meta, $web, $topic );
 
     return $cache->{values}{$key};
 }

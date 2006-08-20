@@ -59,14 +59,14 @@ sub tear_down {
 sub DENIED {
     my( $this, $web, $topic, $mode, $user ) = @_;
     $this->assert(!$twiki->{security}->checkAccessPermission
-                  ($mode, $twiki->{users}->findUser($user),undef,$topic,$web),
+                  ($mode, $twiki->{users}->findUser($user),undef,undef,$topic,$web),
                   "$user $mode $web.$topic");
 }
 
 sub PERMITTED {
     my( $this, $web, $topic, $mode, $user ) = @_;
     $this->assert($twiki->{security}->checkAccessPermission
-                  ($mode, $twiki->{users}->findUser($user),undef,$topic,$web),
+                  ($mode, $twiki->{users}->findUser($user),undef,undef,$topic,$web),
                  "$user $mode $web.$topic");
 }
 
@@ -218,52 +218,109 @@ THIS
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 
-sub test_text {
+sub checkText {
+    my ($this, $text, $meta) = @_;
+
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrOrange),
+                   $text,$meta,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert($twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrGreen),
+                   $text,$meta,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrYellow),
+                   $text,$meta,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrWhite),
+                   $text,$meta,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+    $this->assert(!$twiki->{security}->checkAccessPermission
+                  ('VIEW', $twiki->{users}->findUser($MrBlue),
+                   $text,$meta,$testTopic,$testWeb),
+                  " 'VIEW' $testWeb.$testTopic");
+}
+
+sub test_SetInText {
     my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
-                                <<THIS
-If ALLOWTOPIC is set
-   1. people in the list are PERMITTED
-   2. everyone else is DENIED
-\t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
-THIS
-                                , undef);
+
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
     $twiki = new TWiki();
-    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
-    $twiki = new TWiki();
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
-    $twiki = new TWiki();
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
-    $twiki = new TWiki();
-    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
-    $twiki = new TWiki();
-    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 
     my $text = <<THIS;
 \t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrGreen
 THIS
+    $this->checkText($text, undef);
+}
 
+sub test_setInMETA {
+    my $this = shift;
+
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
     $twiki = new TWiki();
-    $this->assert(!$twiki->{security}->checkAccessPermission
-                  ('VIEW', $twiki->{users}->findUser($MrOrange),
-                   $text,$testTopic,$testWeb),
-                  " 'VIEW' $testWeb.$testTopic");
-    $this->assert($twiki->{security}->checkAccessPermission
-                  ('VIEW', $twiki->{users}->findUser($MrGreen),
-                   $text,$testTopic,$testWeb),
-                  " 'VIEW' $testWeb.$testTopic");
-    $this->assert(!$twiki->{security}->checkAccessPermission
-                  ('VIEW', $twiki->{users}->findUser($MrYellow),
-                   $text,$testTopic,$testWeb),
-                  " 'VIEW' $testWeb.$testTopic");
-    $this->assert(!$twiki->{security}->checkAccessPermission
-                  ('VIEW', $twiki->{users}->findUser($MrWhite),
-                   $text,$testTopic,$testWeb),
-                  " 'VIEW' $testWeb.$testTopic");
-    $this->assert(!$twiki->{security}->checkAccessPermission
-                  ('VIEW', $twiki->{users}->findUser($MrBlue),
-                   $text,$testTopic,$testWeb),
-                  " 'VIEW' $testWeb.$testTopic");
+    my $meta = new TWiki::Meta($twiki,$testWeb,$testTopic);
+    my $args =
+      {
+          name =>  'ALLOWTOPICVIEW',
+          title => 'ALLOWTOPICVIEW',
+          value => "%MAINWEB%.$MrGreen",
+          type =>  "Set"
+         };
+    $meta->putKeyed('PREFERENCE', $args);
+    $this->checkText('', $meta);
+}
+
+sub test_setInSetAndMETA {
+    my $this = shift;
+
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki = new TWiki();
+    my $meta = new TWiki::Meta($twiki,$testWeb,$testTopic);
+    my $args =
+      {
+          name =>  'ALLOWTOPICVIEW',
+          title => 'ALLOWTOPICVIEW',
+          value => "%MAINWEB%.$MrGreen",
+          type =>  "Set"
+         };
+    $meta->putKeyed('PREFERENCE', $args);
+    my $text = <<THIS;
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
+THIS
+    $this->checkText($text, $meta);
+}
+
+sub test_setInEmbedAndNoMETA {
+    my $this = shift;
+
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki = new TWiki();
+    my $text = <<THIS;
+%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25MAINWEB%25.$MrGreen"}%
+THIS
+    $this->checkText($text, undef);
+}
+
+sub test_setInEmbedAndMETA {
+    my $this = shift;
+
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki = new TWiki();
+    my $meta = new TWiki::Meta($twiki,$testWeb,$testTopic);
+    my $args =
+      {
+          name =>  'ALLOWTOPICVIEW',
+          title => 'ALLOWTOPICVIEW',
+          value => "%MAINWEB%.$MrGreen",
+          type =>  "Set"
+         };
+    $meta->putKeyed('PREFERENCE', $args);
+    my $text = <<THIS;
+%META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25MAINWEB%25.$MrOrange"}%
+THIS
+    $this->checkText($text, $meta);
 }
 
 1;

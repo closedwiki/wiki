@@ -62,29 +62,29 @@ Parse settings from text and add them to the preferences in $prefs
 sub parseText {
     my( $this, $text, $prefs, $keyPrefix ) = @_;
 
+    $text =~ tr/\r//d;
     my $key = '';
     my $value ='';
     my $type;
-    foreach my $line ( split( /\r?\n/, $text ) ) {
-        if( $line =~ m/$TWiki::regex{setVarRegex}/o ) {
-            if( $type ) {
+    foreach( split( "\n", $text ) ) {
+        if( m/$TWiki::regex{setVarRegex}/os ) {
+            if( defined $type ) {
                 $prefs->insert( $type, $keyPrefix.$key, $value );
             }
             $type = $1;
             $key = $2;
             $value = (defined $3) ? $3 : '';
-        } elsif( $type ) {
-            if( $line =~ /^(\s{3}|\t)+\s*[^\s*]/ &&
-                  $line !~ m/$TWiki::regex{bulletRegex}/o ) {
+        } elsif( defined $type ) {
+            if( /^(   |\t)+ */ && !/$TWiki::regex{bulletRegex}/o ) {
                 # follow up line, extending value
-                $value .= "\n$line";
+                $value .= "\n".$_;
             } else {
                 $prefs->insert( $type, $keyPrefix.$key, $value );
                 undef $type;
             }
         }
     }
-    if( $type ) {
+    if( defined $type ) {
         $prefs->insert( $type, $keyPrefix.$key, $value );
     }
 }

@@ -1039,10 +1039,9 @@ sub _extractTopicInfo {
 
     $info->{allowView} =
       $session->{security}->
-        checkAccessPermission( 'view',
-                               $session->{user},
-                               $text, $topic,
-                               $web );
+        checkAccessPermission( 'view', $session->{user},
+                               $text, $meta,
+                               $topic, $web );
 
     return $info unless $sortfield;
 

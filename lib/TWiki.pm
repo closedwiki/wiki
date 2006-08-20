@@ -407,13 +407,12 @@ BEGIN {
     $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
 
     # %TAG% name
-    $regex{tagNameRegex} = qr/[$regex{mixedAlpha}][$regex{mixedAlphaNum}_:]*/o;
+    $regex{tagNameRegex} = '['.$regex{mixedAlpha}.']['.$regex{mixedAlphaNum}.'_:]*';
 
     # Set statement in a topic
-    $regex{bulletRegex} = qr/^(?:\t|   )+\*/;
-    $regex{setRegex} = qr/$regex{bulletRegex}\s+(Set|Local)\s+/o;
-    # SMELL: this ought to use $regex{tagNameRegex}
-    $regex{setVarRegex} = qr/$regex{setRegex}(\w+)\s*=\s*(.*)$/o;
+    $regex{bulletRegex} = '^(?:\t|   )+\*';
+    $regex{setRegex} = $regex{bulletRegex}.'\s+(Set|Local)\s+';
+    $regex{setVarRegex} = $regex{setRegex}.'('.$regex{tagNameRegex}.')\s*=\s*(.*)$';
 
     # Character encoding regexes
 
@@ -1556,7 +1555,7 @@ sub _includeUrl {
             if( $web ne $theWeb || $topic ne $theTopic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
                 unless( $this->{security}->checkAccessPermission(
-                    'view', $this->{user}, undef, $topic, $web ) ) {
+                    'view', $this->{user}, undef, undef, $topic, $web ) ) {
                     return $this->inlineAlert( 'alerts', 'access_denied',
                                                $web, $topic );
                 }
@@ -1664,7 +1663,7 @@ sub _TOC {
 
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
         unless( $this->{security}->checkAccessPermission
-                ( 'view', $this->{user}, undef, $topic, $web ) ) {
+                ( 'view', $this->{user}, undef, undef, $topic, $web ) ) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $web, $topic );
         }
@@ -2733,7 +2732,7 @@ sub _INCLUDE {
                                  $rev );
 
     unless( $this->{security}->checkAccessPermission(
-        'VIEW', $this->{user}, $text, $includedTopic, $includedWeb )) {
+        'VIEW', $this->{user}, $text, $meta, $includedTopic, $includedWeb )) {
         if( isTrue( $warn )) {
             return $this->inlineAlert( 'alerts', 'access_denied',
                                        $includedTopic );

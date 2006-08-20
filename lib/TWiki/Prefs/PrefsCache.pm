@@ -45,7 +45,10 @@ session, for example when searching.
 package TWiki::Prefs::PrefsCache;
 
 use TWiki::Prefs::Parser;
+
 use Assert;
+
+use vars qw( $parser );
 
 =pod
 
@@ -133,7 +136,7 @@ sub loadPrefsFromTopic {
         my( $meta, $text ) =
           $session->{store}->readTopic( undef, $web, $topic, undef );
 
-        my $parser = new TWiki::Prefs::Parser();
+        $parser ||= new TWiki::Prefs::Parser();
         $parser->parseText( $text, $this, $keyPrefix );
         $parser->parseMeta( $meta, $this, $keyPrefix );
     }
@@ -141,10 +144,12 @@ sub loadPrefsFromTopic {
 
 =pod
 
----++ ObjectMethod loadPrefsFromText( $text, $web, $topic )
+---++ ObjectMethod loadPrefsFromText( $text, $meta, $web, $topic )
 
-Loads preferences from a topic. All settings loaded are prefixed
-with the key prefix (default '').
+Loads preferences from text and optional metadata. All settings loaded
+are prefixed with the key prefix (default ''). If =$meta= is defined,
+then metadata will be taken from that object. Otherwise, =$text= will
+be parsed to extract meta-data.
 
 =cut
 
@@ -153,14 +158,16 @@ with the key prefix (default '').
 # stuck with.
 
 sub loadPrefsFromText {
-    my( $this, $text, $web, $topic ) = @_;
+    my( $this, $text, $meta, $web, $topic ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
 
     $this->{SOURCE} = $web.'.'.$topic;
 
     my $session = $this->{MANAGER}->{session};
-    my $meta = new TWiki::Meta( $session, $web, $topic );
-    $session->{store}->extractMetaData( $meta, \$text );
+    unless( $meta ) {
+        $meta = new TWiki::Meta( $session, $web, $topic );
+        $session->{store}->extractMetaData( $meta, \$text );
+    }
 
     my $parser = new TWiki::Prefs::Parser();
     $parser->parseText( $text, $this, '' );
@@ -183,10 +190,11 @@ sub insert {
 
     return if $this->{CONTEXT}->isFinalised( $key );
 
-    $value =~ s/\t/ /g;                 # replace TAB by space
+    $value =~ tr/\r//d;                 # Delete \r
+    $value =~ tr/\t/ /;                 # replace TAB by space
     $value =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
     $value =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
-    $value =~ s/`//g;                   # filter out dangerous chars
+    $value =~ tr/`//d;                  # filter out dangerous chars
     if( $type eq 'Local' ) {
         $this->{locals}{$this->{SOURCE}.'-'.$key} = $value;
     } else {
