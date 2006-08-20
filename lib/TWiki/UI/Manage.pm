@@ -282,7 +282,7 @@ sub rename {
             throw TWiki::OopsException( 'attention',
                                         web => $oldWeb,
                                         topic => $oldTopic,
-                                        def => 'rename_not_wikiword',
+                                        def => 'not_wikiword',
                                         params => [ $newTopic ] );
         }
         # Filter out dangerous characters (. and / may cause
