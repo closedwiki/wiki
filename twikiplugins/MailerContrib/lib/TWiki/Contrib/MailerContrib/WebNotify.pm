@@ -260,11 +260,11 @@ sub _load {
             # * email@domain
             $this->subscribe($1, '*', 0 );
         }
-        elsif ( $line =~ /^\s+\*\s($TWiki::regex{emailAddrRegex}):(.*)$/o ) {
+        elsif ( $line =~ /^\s+\*\s($TWiki::regex{emailAddrRegex})\s*:(.*)$/o ) {
             # * email@domain: topics
             $this->_parsePages( $1, $3 );
         }
-        elsif ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex}):(.*)$/o ) {
+        elsif ( $line =~ /^\s+\*\s$webRE?($TWiki::regex{wikiWordRegex})\s*:(.*)$/o ) {
             # * Main.WikiName: topics
             # * %MAINWEB%.WikiName: topics
             if ( $2 ne $TWiki::cfg{DefaultUserWikiName} ) {
