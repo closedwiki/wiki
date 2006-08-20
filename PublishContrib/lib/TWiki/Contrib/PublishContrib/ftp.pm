@@ -100,9 +100,15 @@ sub close {
             
         $ftp->binary();
 
-        $ftp->mkdir($this->{params}->{destinationftppath}, 1);
-        $ftp->cwd($this->{params}->{destinationftppath})
-            or die "Cannot change working directory ", $ftp->message;
+        my $destinationftppath = $this->{params}->{destinationftppath};
+        if ( $destinationftppath =~ /^\/?(.*)$/ ) {
+            $destinationftppath = $1;
+        }
+        if ( $destinationftppath ne '') {
+            $ftp->mkdir($destinationftppath, 1);
+            $ftp->cwd($destinationftppath)
+                or die "Cannot change working directory ", $ftp->message;
+        }
 
         for my $remoteFilename (@{$this->{remotefiles}}) {
             my $localfilePath = "$this->{path}/$this->{web}/$remoteFilename";
