@@ -12,7 +12,7 @@ This function will return nothing if that value is not set
 %STARTINCLUDE%
 %IFDEFINEDTHEN{"%TECHNORATICODE%"}%
 <div class="blogSideBarSection blogSideBarTechnorati">
-<h1>Technorati</h1>
+<h1 class="blogSideBarHeader">Technorati</h1>
 <script type="text/javascript" src="http://embed.technorati.com/embed/%TECHNORATICODE%.js"></script>
 </div>
 %FIDEFINED%

@@ -163,7 +163,7 @@
 .blogSideBar .twikiPageForm {
   width:90%;
   margin:auto;
-  font-size:x-small;
+  font-size:12px;
 }
 .blogFeedCategory { 
   margin-top:5px;
@@ -183,6 +183,10 @@
 }
 .blogSideBar dt {
   font-weight:bold;
+}
+
+.blogSideBarAdmin li {
+  white-space:nowrap;
 }
 
 .blogAdminButtons,
@@ -245,4 +249,7 @@
 }
 .blogSideBarLastFM h1 a:after {
   display:none;
+}
+.blogGoogleAds {
+  margin:5px auto;
 }

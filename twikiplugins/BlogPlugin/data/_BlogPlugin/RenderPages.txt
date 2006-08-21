@@ -14,7 +14,7 @@
 ~~~      %IFDEFINED{"%AUTHOR%" then="AND BlogAuthor=~'\b%AUTHOR%\b'" glue="off"}%"
 ~~~   hidenull="on"
 ~~~   header="<noautolink><div class=\"blogSideBarSection blogSideBarPages\">$n
-~~~           <h1>Pages$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
+~~~           <h1 class=\"blogSideBarHeader\">Pages$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
 ~~~   format="<li><a href=\"%SCRIPTURLPATH{"view"}%/$web/$topic\"
 ~~~                  title=\"permalink to $topic\">
 *~~                 $expand(Headline or TopicDescription)

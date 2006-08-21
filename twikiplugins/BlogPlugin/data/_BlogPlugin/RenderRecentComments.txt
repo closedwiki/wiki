@@ -69,7 +69,7 @@ no newer comments than that.
 
 ---++ Test
 <div class="alt">
-%DBCALL{"%TOPIC%" LIMIT="10" CAT="BlogDev"}%
+%DBCALL{"%TOPIC%" LIMIT="10"}%
 </div>
 
 %DBCALL{"RenderFunctionCallers"}%

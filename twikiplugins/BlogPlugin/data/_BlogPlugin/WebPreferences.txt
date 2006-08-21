@@ -145,6 +145,10 @@ TopicFunctions to generate html page header information:
 <verbatim>
    * Set HTTP_EQUIV_ON_VIEW = %DBCALL{"RenderHttpEquivs"}%
    * Set PAGETITLE = $percntDBCALL{\"RenderPageTitle\"}$percnt
+   * Set DEFAULT_METAKEYWORDS = TWiki, Blogging, BlogPlugin, BlogUp, BlogUpRing
+   * Set METAKEYWORDS = %DEFAULT_METAKEYWORDS%
+   * #Set METAAUTHOR = 
+   * #Set METADESCRIPTION = 
 </verbatim>
 
    * Set FINALPREFERENCES = ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME

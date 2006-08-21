@@ -51,6 +51,7 @@ NONE
 %FIDEFINED%
 %IFDEFINEDTHEN{"$percntFORMFIELD{\"BlogAuthor\"}$percnt" glue="off"}%
 <meta name="author" content="$test" />
+%ELSIFDEFINED{"%METAAUTHOR%"}%
 %ELSEDEFINED%
 <meta name="author" content="%$nopREVINFO{"$wikiname"}%" />
 %FIDEFINED%

@@ -6,9 +6,7 @@ See also: RenderAdminTools, RenderSideBar, WebLeftBar
 
 <div class="natSideBar">
 <div class="natSideBarContents">
-%STARTINCLUDE%
-%DBCALL{"RenderSideBar"}%
-%STOPINCLUDE%
+%STARTINCLUDE%%DBCALL{"RenderSideBar"}%%STOPINCLUDE%
 </div>
 </div>
 

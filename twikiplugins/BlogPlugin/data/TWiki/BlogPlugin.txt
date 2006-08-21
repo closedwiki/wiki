@@ -226,8 +226,11 @@ And send me a patch if you've coded that into TWiki ;).
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.97 |
+|  Version: | v0.98 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  21 Aug 2006: | fixed error in RECENTCOMMENTS checking the posting's status; \
+                  some css fixes; \
+                  added default meta data keywords |
 |  15 Aug 2006: | making use of new feature of the <nop>IfDefinedPlugin to speed up certain things; \
                   improved way to render meta data and pagetitle; \
 		  generating relative urls instead of absolute where possible now |
@@ -388,4 +391,4 @@ And send me a patch if you've coded that into TWiki ;).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 15 Aug 2006
+-- TWiki:Main.MichaelDaum - 21 Aug 2006

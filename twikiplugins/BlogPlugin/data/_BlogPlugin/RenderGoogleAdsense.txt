@@ -29,7 +29,7 @@ All optional colors can be set globally in the WebPreferences.
 <verbatim>
 %STARTINCLUDE%
 %IFDEFINEDTHEN{"%GOOGLEADSENSECODE%"}%
-<div class="blogGoogleAds">
+<table class="blogGoogleAds"><tr><td>
 <script type="text/javascript"><!--
 google_ad_client = "%GOOGLEADSENSECODE%";
 google_ad_width = %IFDEFINED{"%WIDTH%" then="%WIDTH%" else="468"}%;
@@ -46,7 +46,7 @@ google_color_url = "%IFDEFINED{"%URLCOLOR%" then="%URLCOLOR%" else="%GOOGLEADS_U
 <script type="text/javascript"
   src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
-</div>
+</td></tr></table>
 %FIDEFINED%
 %STOPINCLUDE%
 </verbatim>

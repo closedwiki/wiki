@@ -77,13 +77,6 @@ NONE
 </div>
 </div>
 
-<!-- 
-%~~   CALC{"$IF($EXISTS(_BlogPlugin/WebHome),
-~~~     <li><a href=\"%SCRIPTURLPATH{"view"}%/_BlogPlugin/WebHome\">BlogTemplateWeb</a></li>)"
-~~~   }%
-
--->
-
 %DBCALL{"RenderFunctionCallers"}%
 
 <!--

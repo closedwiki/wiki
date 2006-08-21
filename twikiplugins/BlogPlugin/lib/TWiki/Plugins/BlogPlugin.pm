@@ -24,7 +24,7 @@ use vars qw(
 use TWiki::Plugins::BlogPlugin::WebDB; # must be compiled in advance
 
 $VERSION = '$Rev$';
-$RELEASE = '0.97';
+$RELEASE = '0.98';
 
 ###############################################################################
 sub initPlugin {

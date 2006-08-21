@@ -20,7 +20,7 @@
 ~~~   web="%WEB%"
 ~~~   order="Name" hidenull="on"
 ~~~   header="<div class=\"blogSideBarSection blogSideBarAggregations\"><noautolink>
-~~~     <h1>
+~~~     <h1 class=\"blogSideBarHeader\">
 *~~       %IFDEFINED{"%TITLE%" then="%TITLE%" else="Blogroll"}%
 *~~       $percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
 ~~~   format="<li>

@@ -13,7 +13,7 @@ NONE
 ~~~   field="SubjectCategory"
 ~~~   header="
 ~~~     <div class=\"blogSideBarSection blogSideBarCategories\">
-~~~       <h1>Categories$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1>
+~~~       <h1 class=\"blogSideBarHeader\">Categories$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1>
 ~~~       <noautolink>
 ~~~       <table width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">"
 ~~~   format="
