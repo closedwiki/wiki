@@ -381,25 +381,6 @@ when combining the different skin states:
 	* If the web buttons are enabled the default [[TWikiWebSideBar][WebSideBar]] will disable the redundant 
 	  navigation to other webs.
 
----+++ Style support for the TablePlugin 
-These attributes will be loaded into your session and thereby overwriting any 
-default settings on the TablePlugin topic. Depending on the skin style you are currently
-using these settings will be changed accordingly.
-
-
-	* Set BASETABLEATTRIBUTES = databg="white" headercolor="black" headerbg="white" tableborder="0" cellpadding="0" cellspacing="0" 
-	* Set CLEANTABLEATTRIBUTES = headercolor="#444444"
-	* Set GEORGIABLUETABLEATTRIBUTES = headercolor="#999966"
-	* Set GETTYSBURGTABLEATTRIBUTES = headercolor="#03366"
-	* Set INDEPENDENCETABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set KUBRICKTABLEATTRIBUTES = databg="#f4f4f4, white" headercolor="#0055aa"
-	* Set PLAINJANETABLEATTRIBUTES = headercolor="#666666"
-	* Set RUSTYTABLEATTRIBUTES = headercolor="white"
-	* Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black" headerbg="black"
-	* Set PATTERNTABLEATTRIBUTES =  databg="#f0f0f0, white" headercolor="#444444"
-
 ---+++ Email Obfuscation
 The standard TWiki engine tries to obfuscate email addresses by adding a phrase to the email url (like NOSPAM)
 to fool collecting web crawlers. But that is not adequate enough today as crawlers are aware of that. The solution
@@ -443,6 +424,9 @@ By default this value is set to "off"
 	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
 	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
 	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
+	* If you are using TWiki version <= 4.0.4 and want TWiki table's appearance to match
+	  the selected style then apply this
+	  [[%PUBURLPATH%/%TWIKIWEB%/NatSkin/TablePlugin_Core_pm.diff][TablePlugin_Core_pm.diff]] patch.
 	* to enable the NatSkin's logon scheme disable TWiki's <nop>LoginManager
 	  and remove all lines containing "require valid-user" (except for the =configure= cgi script)
 	  from the file =bin/.htaccess=
@@ -456,7 +440,7 @@ By default this value is set to "off"
  RewriteEngine On
  RewriteCond %{SERVER_PORT} !443
  RewriteCond %{QUERY_STRING} template=oopslogon
- RewriteRule ^(.*)$ https://%{HTTP_HOST}/bin/$1 [R,L] 
+ RewriteRule ^(.*)$ https://%{HTTP_HOST}/bin/$1 [R,L]
 </verbatim>
 	  Note, that you might need to accommodate the =/bin= url path above to your installation!
 
@@ -465,9 +449,16 @@ By default this value is set to "off"
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre3 |
+|  Plugin Version: | v3.00-pre4 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  15 Aug 2006: | suport for userinterface internationalization | 
+|  21 Aug 2006: | removed <nop>TablePlugin hack loading plugin preferences into the session store;\
+                  instead provide proper css for twikiTables to match the current style now; \
+		  this needs !TablePlugin from TWiki > 4.0.4; \
+		  alternatively use the attached patch to it; \
+                  multiple fixes to email obfuscator; \
+		  simplified support for localization ; \
+		  fixed unexpanded MAKETEXT in natsearch |
+|  15 Aug 2006: | suport for userinterface internationalization |
 |  04 Aug 2006: | fixed detection of the cgi action to be more robust on different apache \
                   configurations (rewrites, aliases);\
 		  implemented NATWEBLOGO to circumvent different ways of using WEBLOGO, \
@@ -483,7 +474,7 @@ By default this value is set to "off"
                    added =use strict;= and fixed some minor bugs showing up then; \
                    removed NATLOGON, NATLOGOUT tags and replaced it with \
 		   NATLOGINURL, NATLOGOUTURL for more flexibility; \
-		   fixed check of USEWYSIWIG preference variable |
+		   fixed check of USEWYSIWYG preference variable |
 |  15 June 2006: | remove double target attribute from external urls |
 |  26 May 2006: | fixed error fetching the number of the last revision |
 |  24 May 2006: | fixed detection of style files to prevent 403 errors; \
@@ -578,5 +569,5 @@ By default this value is set to "off"
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 15 Aug 2006 
+-- TWiki:Main/MichaelDaum - 21 Aug 2006 
 

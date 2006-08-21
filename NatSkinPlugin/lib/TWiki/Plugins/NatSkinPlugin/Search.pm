@@ -31,8 +31,8 @@ $specialCharPattern = qr/([^\\])([\$\@\%\&\#\'\`\/])/o;
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug("- NatSkinPlugin::Search - " . $_[0]) if $debug;
-  #print STDERR "NatSkinPlugin::Search - $_[0]\n" if $debug;
+  #&TWiki::Func::writeDebug("- NatSkinPlugin::Search - " . $_[0]) if $debug;
+  print STDERR "NatSkinPlugin::Search - $_[0]\n" if $debug;
 }
 
 ##############################################################################
@@ -66,9 +66,9 @@ sub natSearchCgi {
 sub natSearch {
   my ($query, $topic, $web) = @_;
 
+  #writeDebug("called natSearch()");
   &doInit();
 
-  #writeDebug("called natSearch()");
 
   my $theSearchString = $query->param('search') || '';
   my $theWeb = $query->param('web') || $web;
@@ -203,23 +203,24 @@ sub natSearch {
   #writeDebug("tmplHead='$tmplHead'");
   #writeDebug("tmplSearch='$tmplSearch'");
   #writeDebug("tmplTable='$tmplTable'");
-  writeDebug("tmplNumber='$tmplNumber'");
-  writeDebug("tmplTail='$tmplTail'");
+  #writeDebug("tmplNumber='$tmplNumber'");
+  #writeDebug("tmplTail='$tmplTail'");
 
   $tmplHead = &TWiki::Func::expandCommonVariables($tmplHead, $topic);
   $tmplHead = &TWiki::Func::renderText($tmplHead);
   $tmplHead =~ s|</*nop/*>||goi;
   $tmplHead =~ s/%TOPIC%/$topic/go;
   $tmplHead =~ s/%SEARCHSTRING%/$origSearch/go;
-
   print $tmplHead;
+
   if ($nrHits) {
     $tmplNumber =~ s/%NTOPICS%/$nrHits/go;
+    $tmplNumber = &TWiki::Func::expandCommonVariables($tmplNumber, $topic);
     print $tmplNumber;
     _natPrintSearchResult($tmplTable, $results, $theSearchString);
   } else {
-    print '<div class="natSearchMessage">Nothing found. Try again!</div>' . 
-      "\n";
+    my $text = &TWiki::Func::expandCommonVariables('%TMPL:P{"NOTHING_FOUND"}%');
+    print '<div class="natSearchMessage">'.$text."</div>\n";
   }
 
   # print last part of full HTML page
@@ -401,8 +402,7 @@ sub natContentsSearch {
 }
 
 ##############################################################################
-sub _natPrintSearchResult
-{
+sub _natPrintSearchResult {
   my ($theTemplate, $theResults, $theSearchString) = @_;
 
   my $noSpamPadding =
@@ -449,7 +449,7 @@ sub _natPrintSearchResult
       if ($revNum > 1) {
 	$revNum = "r1.$revNum";
       } else {
-	$revNum = '<span class="natSearchNewTopic">New</span>';
+	$revNum = '<span class="natSearchNewTopic">%TMPL:P{"NEW"}%</span>';
       } 
       $tempVal =~ s/%REVISION%/$revNum/go;
       $tempVal =~ s/%AUTHOR%/$revUser/go;

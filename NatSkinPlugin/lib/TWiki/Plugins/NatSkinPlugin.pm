@@ -36,7 +36,7 @@ use vars qw(
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
 	$defaultStyleButtons
 	%maxRevs
-	$hasInitKnownStyles $hasInitSkinState $hasInitGuiStrings
+	$hasInitKnownStyles $hasInitSkinState
 	%knownStyles 
 	%knownVariations 
 	%knownBorders 
@@ -46,7 +46,6 @@ use vars qw(
 	%emailCollection $nrEmails $doneHeader
 	$STARTWW $ENDWW
 	%TWikiCompatibility
-	%guiStrings
     );
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
@@ -58,7 +57,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre3';
+$RELEASE = '3.00-pre4';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -109,7 +108,6 @@ sub initPlugin {
     &clearSessionValue('STYLESIDEBAR');
     &clearSessionValue('STYLEVARIATION');
     &clearSessionValue('STYLESEARCHBOX');
-    &clearSessionValue('TABLEATTRIBUTES');
 
     #TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
     $isEnabled = 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
@@ -131,7 +129,6 @@ sub doInit {
   # get skin state from session
   $hasInitKnownStyles = 0;
   $hasInitSkinState = 0;
-  $hasInitGuiStrings = 0;
   &initKnownStyles();
 
   $defaultWikiUserName = &TWiki::Func::getDefaultUserName();
@@ -168,13 +165,14 @@ sub doInit {
     }
   }
   $nrEmails = 0;
+  %emailCollection = ();
   $doneHeader = 0;
   writeDebug("useSpamObfuscator=$useSpamObfuscator");
 
   $urlHost = &TWiki::Func::getUrlHost();
   %maxRevs = ();
 
-  #writeDebug("done doInit");
+  writeDebug("done doInit");
 }
 
 ###############################################################################
@@ -261,7 +259,7 @@ sub initSkinState {
   
   # SMELL: we only get the WebPreferences' FINALPREFERENCES here
   my $finalPreferences = TWiki::Func::getPreferencesValue("FINALPREFERENCES") || '';
-  writeDebug("finalPreferences=$finalPreferences"); 
+  #writeDebug("finalPreferences=$finalPreferences"); 
   my $isFinalStyle = 0;
   my $isFinalBorder = 0;
   my $isFinalButtons = 0;
@@ -298,7 +296,7 @@ sub initSkinState {
     $theReset = $query->param('resetstyle');
     $theStyle = $query->param('style') || $query->param('skinstyle') || '';
     if ($theReset || $theStyle eq 'reset') {
-      writeDebug("clearing session values");
+      #writeDebug("clearing session values");
       $theStyle = '';
       &clearSessionValue('SKINSTYLE');
       &clearSessionValue('STYLEBORDER');
@@ -306,7 +304,6 @@ sub initSkinState {
       &clearSessionValue('STYLESIDEBAR');
       &clearSessionValue('STYLEVARIATION');
       &clearSessionValue('STYLESEARCHBOX');
-      &clearSessionValue('TABLEATTRIBUTES');
       my $redirectUrl = TWiki::Func::getViewUrl($baseWeb, $baseTopic);
       TWiki::Func::redirectCgiQuery($query, $redirectUrl); 
 	# we need to force a new request because the session value preferences
@@ -322,14 +319,14 @@ sub initSkinState {
       $theToggleSideBar = $query->param('togglesidebar');
     }
 
-    writeDebug("urlparam style=$theStyle") if $theStyle;
-    writeDebug("urlparam styleborder=$theStyleBorder") if $theStyleBorder;
-    writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
-    writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
-    writeDebug("urlparam stylevariation=$theStyleVariation") if $theStyleVariation;
-    writeDebug("urlparam stylesearchbox=$theStyleSearchBox") if $theStyleSearchBox;
-    writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
-    writeDebug("urlparam switchvariation=$theSwitchVariation") if $theSwitchVariation;
+    #writeDebug("urlparam style=$theStyle") if $theStyle;
+    #writeDebug("urlparam styleborder=$theStyleBorder") if $theStyleBorder;
+    #writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
+    #writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
+    #writeDebug("urlparam stylevariation=$theStyleVariation") if $theStyleVariation;
+    #writeDebug("urlparam stylesearchbox=$theStyleSearchBox") if $theStyleSearchBox;
+    #writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
+    #writeDebug("urlparam switchvariation=$theSwitchVariation") if $theSwitchVariation;
   }
 
   # handle style
@@ -358,7 +355,7 @@ sub initSkinState {
   }
   $theStyle = $defaultStyle unless $knownStyles{$theStyle};
   $skinState{'style'} = $theStyle;
-  writeDebug("theStyle=$theStyle");
+  #writeDebug("theStyle=$theStyle");
 
   # cycle styles
   if ($theSwitchStyle && !$isFinalStyle) {
@@ -500,24 +497,6 @@ sub initSkinState {
     $skinState{'variation'} = $firstVari if $state == 1;
   }
 
-  # handle TablePlugin attributes
-  my $prefsName = "\U$theStyle\ETABLEATTRIBUTES";
-  my $tablePluginAttrs = 
-    &TWiki::Func::getPreferencesValue('BASETABLEATTRIBUTES') ||
-    &TWiki::Func::getPreferencesValue('NATSKINPLUGIN_BASETABLEATTRIBUTES') || '';
-  my $skinTablePluginAttrs =
-    &TWiki::Func::getPreferencesValue("$prefsName") ||
-    &TWiki::Func::getPreferencesValue("NATSKINPLUGIN_$prefsName") || '';
-
-  # order matters ... differently *sigh*
-  if ($isDakar) {
-    $tablePluginAttrs .= ' ' . $skinTablePluginAttrs;
-  } else {
-    $tablePluginAttrs = $skinTablePluginAttrs . ' ' . $tablePluginAttrs;
-  }
-  $tablePluginAttrs =~ s/\s+$//;
-  $tablePluginAttrs =~ s/^\s+//;
-  
   # handle release
   $skinState{'release'} = lc &getReleaseName();
 
@@ -539,7 +518,6 @@ sub initSkinState {
     if $doStickyVariation;
   &TWiki::Func::setSessionValue('STYLESEARCHBOX', $skinState{'searchbox'})
     if $doStickySearchBox;
-  &TWiki::Func::setSessionValue('TABLEATTRIBUTES', $tablePluginAttrs);
 
   # temporary toggles
   $theToggleSideBar = 'off' if $theRaw;
@@ -555,53 +533,6 @@ sub initSkinState {
 
   $skinState{'sidebar'} = $theToggleSideBar 
     if $theToggleSideBar && $theToggleSideBar ne '';
-}
-
-###############################################################################
-# strings used internally
-sub initGuiStrings {
-
-  return if $hasInitGuiStrings;
-  $hasInitGuiStrings = 1;
-
-  # default strings
-  %guiStrings = ();
-
-  if ($isDakar && $TWiki::cfg{"UserInterfaceInternationalisation"}) {
-    $guiStrings{'View'} = TWiki::Func::expandTemplate('VIEW');
-    $guiStrings{'ViewHelp'} = TWiki::Func::expandTemplate('VIEW_HELP');
-    $guiStrings{'Raw'} = TWiki::Func::expandTemplate('RAW');
-    $guiStrings{'RawHelp'} = TWiki::Func::expandTemplate('RAW_HELP');
-    $guiStrings{'Edit'} = TWiki::Func::expandTemplate('EDIT');
-    $guiStrings{'EditHelp'} = TWiki::Func::expandTemplate('EDIT_HELP');
-    $guiStrings{'Attach'} = TWiki::Func::expandTemplate('ATTACH');
-    $guiStrings{'AttachHelp'} = TWiki::Func::expandTemplate('ATTACH_HELP');
-    $guiStrings{'Move'} = TWiki::Func::expandTemplate('MOVE');
-    $guiStrings{'MoveHelp'} = TWiki::Func::expandTemplate('MOVE_HELP');
-    $guiStrings{'Diff'} = TWiki::Func::expandTemplate('DIFF');
-    $guiStrings{'DiffHelp'} = TWiki::Func::expandTemplate('DIFF_HELP');
-    $guiStrings{'More'} = TWiki::Func::expandTemplate('MORE');
-    $guiStrings{'MoreHelp'} = TWiki::Func::expandTemplate('MORE_HELP');
-    $guiStrings{'AddForm'} = TWiki::Func::expandTemplate('ADD_FORM');
-    $guiStrings{'ChangeForm'} = TWiki::Func::expandTemplate('CHANGE_FORM');
-  } else {
-    $guiStrings{'View'} = 'View';
-    $guiStrings{'ViewHelp'} = 'View formatted topic';
-    $guiStrings{'Raw'} = 'Raw';
-    $guiStrings{'RawHelp'} = 'View raw topic';
-    $guiStrings{'Edit'} = 'Edit';
-    $guiStrings{'EditHelp'} = 'Edit this topic';
-    $guiStrings{'Attach'} = 'Attach';
-    $guiStrings{'AttachHelp'} = 'Attach image or document to this topic';
-    $guiStrings{'Move'} = 'Move';
-    $guiStrings{'MoveHelp'} = 'Move or rename this topic';
-    $guiStrings{'Diff'} = 'Diffs';
-    $guiStrings{'DiffHelp'} = 'View topic history';
-    $guiStrings{'More'} = 'More';
-    $guiStrings{'MoreHelp'} = 'More topic actions';
-    $guiStrings{'AddForm'} = 'Add form';
-    $guiStrings{'ChangeForm'} = 'Change form';
-  }
 }
 
 ###############################################################################
@@ -658,7 +589,7 @@ sub commonTagsHandler {
     $_[0] =~ s/$STARTWW(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/&renderEmailAddrs([$1])/ge;
   }
 
-  if (!$doneHeader && !$isDakar) {
+  if (!$doneHeader && !$isDakar && $nrEmails) {
     my $oldUseSpamObfuscator = $useSpamObfuscator;
     $useSpamObfuscator = 0;
     if($_[0] =~ s/<\/head>/&renderEmailObfuscator() . '<\/head>'/geo) {
@@ -693,7 +624,7 @@ sub postRenderingHandler {
   
   endRenderingHandler(@_); 
 
-  if ($useSpamObfuscator) {
+  if ($useSpamObfuscator && $nrEmails) {
     $useSpamObfuscator = 0;
     &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
     $useSpamObfuscator = 1;
@@ -995,8 +926,6 @@ sub renderGetSkinStyle {
 sub renderUserActions {
   return '' if $isGuest;
 
-  &initGuiStrings();
-
   my $curRev = '';
   my $theRaw;
   if ($query) {
@@ -1011,12 +940,12 @@ sub renderUserActions {
     $rawAction =
       '<a href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") . 
-      "?rev=1.$rev\" accesskey=\"r\" title=\"$guiStrings{ViewHelp}\">$guiStrings{View}</a>";
+      '?rev=1.'.$rev.'" accesskey="r" title="%TMPL:P{"VIEW_HELP"}%">%TMPL:P{"VIEW"}%</a>';
   } else {
     $rawAction =
       '<a href="' .  
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "view") .  
-      "?raw=on&rev=1.$rev\" accesskey=\"r\" title=\"$guiStrings{RawHelp}\">$guiStrings{Raw}</a>";
+      '?raw=on&rev=1.'.$rev.'" accesskey="r" title="%TMPL:P{"RAW_HELP"}%">%TMPL:P{"RAW"}%</a>';
   }
   
   my $text;
@@ -1024,9 +953,9 @@ sub renderUserActions {
   my $maxRev = &getMaxRevision();
   if ($curRev && $curRev < $maxRev) {
     $text =
-      '<strike>'.$guiStrings{Edit}.'</strike>&nbsp;| ' .
-      '<strike>'.$guiStrings{Attach}.'</strike>&nbsp;| ' .
-      '<strike>'.$guiStrings{Move}.'</strike>&nbsp;| ';
+      '<strike>%TMPL:P{"EDIT"}%</strike>&nbsp;| ' .
+      '<strike>%TMPL:P{"ATTACH"}%</strike>&nbsp;| ' .
+      '<strike>%TMPL:P{"MOVE"}%</strike>&nbsp;| ';
   } else {
     #writeDebug("get WHITEBOARD from $baseWeb.$baseTopic");
     my $whiteBoard = _getValueFromTopic($baseWeb, $baseTopic, 'WHITEBOARD') || '';
@@ -1044,13 +973,13 @@ sub renderUserActions {
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "edit") 
       . '?t=' . time() 
       . $editUrlParams
-      . '" accesskey="e" title="'.$guiStrings{EditHelp}.'">'.$guiStrings{Edit}.'</a>&nbsp;| ' .
+      . '" accesskey="e" title="%TMPL:P{"EDIT_HELP"}%">%TMPL:P{"EDIT"}%</a>&nbsp;| ' .
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "attach") 
-      . '" accesskey="a" title="'.$guiStrings{AttachHelp}.'">'.$guiStrings{Attach}.'</a>&nbsp;| ' .
+      . '" accesskey="a" title="%TMPL:P{"ATTACH_HELP"}%">%TMPL:P{"ATTACH"}%</a>&nbsp;| ' .
       '<a rel="nofollow" href="'
       . &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "rename")
-      . '" accesskey="m" title="'.$guiStrings{MoveHelp}.'">'.$guiStrings{Move}.'</a>&nbsp;| ';
+      . '" accesskey="m" title="%TMPL:P{"MOVE_HELP"}%">%TMPL:P{"MOVE"}%</a>&nbsp;| ';
   }
 
   $text .=
@@ -1058,11 +987,11 @@ sub renderUserActions {
       '<a rel="nofollow" href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
       '?template=oopsrev&param1=%PREVREV%&param2=%CURREV%&param3=%NATMAXREV%" accesskey="d" title="'.
-      $guiStrings{DiffHelp}.'">'.$guiStrings{Diff}.'</a>&nbsp;| ' .
+      '%TMPL:P{"DIFF_HELP"}%">%TMPL:P{"DIFF"}%</a>&nbsp;| ' .
       '<a rel="nofollow" href="' . 
       &TWiki::Func::getScriptUrl($baseWeb, $baseTopic, "oops") . 
       '?template=oopsmore" accesskey="x" title="'.
-      $guiStrings{MoreHelp}.'">'.$guiStrings{More}.'</a>';
+      '%TMPL:P{"MORE_HELP"}%">%TMPL:P{"MORE"}%</a>';
 
   return $text;
 }
@@ -1249,8 +1178,6 @@ sub _getValueFromTopic {
 sub renderFormButton {
   my $args = shift || '';
 
-  &initGuiStrings();
-
   my $saveCmd = '';
   $saveCmd = $query->param('cmd') || '' if $query;
   return '' if $saveCmd eq 'repRev';
@@ -1274,17 +1201,20 @@ sub renderFormButton {
   } else {
     $action = 'add form';
   }
+  my $actionTitle;
   if ($form) {
-    $actionText = $guiStrings{ChangeForm};
+    $actionText = '%TMPL:P{"CHANGE_FORM"}%';
+    $actionTitle = '%TMPL:P{"CHANGE_FORM_HELP"}%';
   } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $baseWeb)) {
-    $actionText = $guiStrings{AddForm};
+    $actionText = '%TMPL:P{"ADD_FORM"}%';
+    $actionTitle = '%TMPL:P{"ADD_FORM_HELP"}%';
   } else {
     return '';
   }
   
   my $text = $theFormat;
-  $theFormat =~ s/\$1/<a href=\"javascript:submitEditFormular('save', '$action');\" accesskey=\"f\" title=\"$actionText\">$actionText<\/a>/g;
-  $theFormat =~ s/\$url/javascript:submitEditFormular('save', '$action');/g;
+  $theFormat =~ s/\$1/<a href=\"javascript:submitEditForm('save', '$action');\" accesskey=\"f\" title=\"$actionTitle\">$actionText<\/a>/g;
+  $theFormat =~ s/\$url/javascript:submitEditForm('save', '$action');/g;
   $theFormat =~ s/\$action/$actionText/g;
   return $theFormat;
 }
