@@ -13,20 +13,6 @@ To create your own Plugin:
 
 (none)
 
----++ Plugin Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
-
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Empty Plugin used as a template for new Plugins
-
-   * Your own setting, for example:
-      * Set EXAMPLE = got it!
-
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
-
 ---++ Plugin Installation Instructions
 
    * This plugin is preinstalled, you do not need to install it.
