@@ -223,7 +223,7 @@ sub handleRecentComments {
     $baseRefForm = $baseRefObj->fastget($baseRefForm);
     my $state = $baseRefForm->fastget('State');
     next unless $state;
-    next unless $state eq 'enabled';
+    next unless $state eq 'published';
     my $category = $baseRefForm->fastget('SubjectCategory');
     next unless $category =~ /$theCategory/;
     my $author = $baseRefForm->fastget('BlogAuthor');

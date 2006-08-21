@@ -12,7 +12,7 @@ NONE
 %~~ LASTVISITORS{
 ~~~    days="7"
 ~~~    header="<div class=\"blogSideBarSection blogSideBarVisitors\">
-~~~      <h1>Visitors$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
+~~~      <h1 class=\"blogSideBarHeader\">Visitors$percntREDDOT{\"%WEB%.%TOPIC%\"}$percnt</h1><ul>"
 ~~~    format="<li><a href=\"%SCRIPTURLPATH{"view"}%/%MAINWEB%/$wikiname\"
 ~~~      title=\"last seen $date - $time\">$wikiname</a></li>"
 ~~~    footer="</ul></div>"

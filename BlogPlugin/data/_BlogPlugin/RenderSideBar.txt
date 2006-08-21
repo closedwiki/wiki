@@ -14,11 +14,9 @@ See also BlogHelpText
 
 ---++ Implementation
 <verbatim>
-%STARTINCLUDE%
-*~~
-<div class="blogSideBar">
+%STARTINCLUDE%<div class="blogSideBar">
 <div class="blogAbout">
-<h1>About%REDDOT{"%WEB%.BlogAbout"}%</h1>
+<h1 class="blogSideBarHeader">About%REDDOT{"%WEB%.BlogAbout"}%</h1>
 %IFDEFINEDTHEN{"%SIDEBAR%"}%
 %IFDEFINEDTHEN{"%SIDEBAR%" as="Author"}%
 %$nopDBQUERY{topic="%BASETOPIC%" format="$formfield(About)"}%
