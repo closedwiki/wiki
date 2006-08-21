@@ -372,6 +372,9 @@ Return: =$value=  Preferences value; empty string if not set
       * WebPreferences topic has: =* Set WEBBGCOLOR = #FFFFC0=
       * =my $webColor = TWiki::Func::getPreferencesValue( 'WEBBGCOLOR', 'Sandbox' );=
 
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
+
 =cut
 
 sub getPreferencesValue {
@@ -396,6 +399,9 @@ Return: =$value=  Preferences value; empty string if not set
 __Note__: This function will will *only* work when called from the Plugin.pm file itself. it *will not work* if called from a sub-package (e.g. TWiki::Plugins::MyPlugin::MyModule)
 
 *Since:* TWiki::Plugins::VERSION 1.021 (27 Mar 2004)
+
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
 
 =cut
 
@@ -423,6 +429,9 @@ Return: =$value=  Preferences flag ='1'= (if set), or ="0"= (for preferences val
       * Use ="MYPLUGIN_SHOWHELP"= for =$key=
       * =my $showHelp = TWiki::Func::getPreferencesFlag( "MYPLUGIN_SHOWHELP" );=
 
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
+
 =cut
 
 sub getPreferencesFlag {
@@ -442,6 +451,9 @@ Return: false for preferences values ="off"=, ="no"= and ="0"=, or values not se
 __Note__: This function will will *only* work when called from the Plugin.pm file itself. it *will not work* if called from a sub-package (e.g. TWiki::Plugins::MyPlugin::MyModule)
 
 *Since:* TWiki::Plugins::VERSION 1.021 (27 Mar 2004)
+
+*NOTE:* As of TWiki4.1, if =$NO_PREFS_IN_TOPIC= is enabled in the plugin, then
+preferences set in the plugin topic will be ignored.
 
 =cut
 

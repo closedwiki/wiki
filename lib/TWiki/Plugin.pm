@@ -105,28 +105,35 @@ sub load {
     #   3 Plugins.plugin
     #   4 thisweb.plugin
 
+    my $p = $this->{module};
+
+    $this->{description} = eval $p.'::SHORTDESCRIPTION';
+    my $noTopic = eval $p.'::NO_PREFS_IN_TOPIC';
+
     my $store = $this->{session}->{store};
     my $web;
-    if ( $store->topicExists( $TWiki::cfg{SystemWebName}, $this->{name} ) ) {
-        # found plugin in TWiki web
-        $web = $TWiki::cfg{SystemWebName};
-    } elsif ( $store->topicExists( 'Plugins', $this->{name} ) ) {
-        # found plugin in Plugins web (compatibility, deprecated)
-        $web = 'Plugins';
-    } elsif ( $store->topicExists( $this->{session}->{webName},
-                                   $this->{name} ) ) {
-        # found plugin in current web
-        $web = $this->{session}->{webName};
-    } else {
-        # not found
-        push( @{$this->{errors}}, 'Plugins: could not fully register '.
-              $this->{name}.', no plugin topic' );
-        $web = '';
+    unless ($noTopic) {
+        if ( $store->topicExists( $TWiki::cfg{SystemWebName}, $this->{name} ) ) {
+            # found plugin in TWiki web
+            $web = $TWiki::cfg{SystemWebName};
+        } elsif ( $store->topicExists( 'Plugins', $this->{name} ) ) {
+            # found plugin in Plugins web (compatibility, deprecated)
+            $web = 'Plugins';
+        } elsif ( $store->topicExists( $this->{session}->{webName},
+                                       $this->{name} ) ) {
+            # found plugin in current web
+            $web = $this->{session}->{webName};
+        } else {
+            # not found
+            push( @{$this->{errors}}, 'Plugins: could not fully register '.
+                    $this->{name}.', no plugin topic' );
+            $noTopic = 1;
+            $web = $TWiki::cfg{SystemWebName};
+        }
     }
 
-    $this->{web} = $web || '';
-
-    my $p = $this->{module};
+    $this->{installWeb} = $web;
+    $this->{no_topic} = $noTopic;
 
     #use Benchmark qw(:all :hireswallclock);
     #my $begin = new Benchmark;
@@ -137,6 +144,10 @@ sub load {
         $this->{disabled} = 1;
         return undef;
     }
+
+    # Get the description from the code, if present. if it's not there, it'll
+    # be loaded as a preference from the plugin topic later
+    $this->{description} = eval $p.'::SHORTDESCRIPTION';
 
     # Set the session for this call stack
     local $TWiki::Plugins::SESSION = $this->{session};
@@ -183,8 +194,8 @@ sub registerHandlers {
     }
 
     my $prefs = $this->{session}->{prefs};
-    if( $this->{web} ) {
-        $prefs->pushPreferences( $this->{web}, $this->{name}, 'PLUGIN',
+    if( !$this->{no_topic} ) {
+        $prefs->pushPreferences( $this->{installWeb}, $this->{name}, 'PLUGIN',
                                  uc( $this->{name} ) . '_');
     }
 
@@ -192,7 +203,7 @@ sub registerHandlers {
     my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},
                         $TWiki::Plugins::SESSION->{webName},
                         $TWiki::Plugins::SESSION->{user}->login(),
-                        $this->{web} );
+                        $this->{installWeb} );
     use strict 'refs';
 
     unless( $status ) {
@@ -267,7 +278,7 @@ sub getDescription {
     $version =~ s/\$Rev: (\d+) \$/$1/g;
     $version = $release.', '.$version if $release;
 
-    my $result = ' '.$this->{web}.'.'.$this->{name}.' ';
+    my $result = ' '.$this->{installWeb}.'.'.$this->{name}.' ';
     $result .= CGI::span( { class=> 'twikiGrayText twikiSmall'}, '('.$version.')' );
     $result .= ': '.$this->{description};
 

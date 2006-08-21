@@ -42,11 +42,10 @@ code below that line; Perl ignores anything after __END__).
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
 the failure will be silent but the plugin will not be available.
-Check the warning log file (defined by $TWiki::cfg{WarningFileName}) for
-errors.
+See %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS for error messages.
 
 __NOTE:__ Defining deprecated handlers will cause the handlers to be 
-listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See 
+listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See
 %TWIKIWEB%.TWikiPlugins#Handlig_deprecated_functions
 for information on regarding deprecated handlers that are defined for
 compatibility with older TWiki versions.
@@ -60,8 +59,8 @@ package TWiki::Plugins::EmptyPlugin;
 use strict;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
-# *must* exist in this package
-use vars qw( $VERSION $RELEASE $debug $pluginName );
+# *must* exist in this package.
+use vars qw( $VERSION $RELEASE $debug $pluginName $NO_PREFS_IN_TOPIC );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -72,6 +71,19 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
+
+# Short description of this plugin
+# One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+$SHORTDESCRIPTION = 'Empty Plugin used as a template for new Plugins';
+
+# You must set $NO_PREFS_IN_TOPIC to 0 if you want your plugin to use preferences
+# stored in the plugin topic. This default is required for compatibility with
+# older plugins, but imposes a significant performance penalty, and
+# is not recommended. Instead, use $TWiki::cfg entries set in LocalSite.cfg, or
+# if you want the users to be able to change settings, then use standard TWiki
+# preferences that can be defined in your Main.TWikiPreferences and overridden
+# at the web and topic level.
+$NO_PREFS_IN_TOPIC = 1;
 
 # Name of this Plugin, only used in this module
 $pluginName = 'EmptyPlugin';
@@ -120,20 +132,17 @@ sub initPlugin {
     # Example code of how to get a preference value, register a variable handler
     # and register a RESTHandler. (remove code you do not need)
 
-    # Get plugin preferences, variables defined by:
-    #   * Set EXAMPLE = ...
-    my $exampleCfgVar = TWiki::Func::getPreferencesValue( "\U$pluginName\E_EXAMPLE" );
-    # There is also an equivalent:
-    # $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( 'EXAMPLE' );
-    # that may _only_ be called from the main plugin package.
-
-    $exampleCfgVar ||= 'default'; # make sure it has a value
+    # Set plugin preferences in LocalSite.cfg, like this:
+    # $TWiki::cfg{Plugins}{EmptyPlugin}{ExampleSetting} = 1;
+    # Then recover it like this. Always provide a default in case the
+    # setting is not defined in LocalSite.cfg
+    my $setting = $TWiki::cfg{Plugins}{EmptyPlugin}{ExampleSetting} || 0;
+    $debug = $TWiki::cfg{Plugins}{EmptyPlugin}{Debug} || 0;
 
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
+    # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
+    # seen in the topic text.
     TWiki::Func::registerTagHandler( 'EXAMPLETAG', \&_EXAMPLETAG );
-
-    # get debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Allow a sub to be called from the REST interface 
     # using the provided alias
