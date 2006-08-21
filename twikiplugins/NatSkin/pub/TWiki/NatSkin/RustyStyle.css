@@ -71,6 +71,9 @@ hr {
 }
 
 /* twiki table */
+.twikiTable {
+  font-size:95%;
+}
 .twikiTable th,
 .twikiTable td,
 .twikiTable {
@@ -79,18 +82,29 @@ hr {
 .twikiTable th {
   border-bottom:1px #ff9831 solid;
   background:#ff9831;
-  color:white;
   font-weight:bold;
-  font-size:x-small;
   line-height:140%;
   text-transform:uppercase;
 }
-.twikiTable th a:hover,
+.twikiTable th,
+.twikiTable th font,
 .twikiTable th a {
   color:white;
   font-weight:bold;
 }
+.twikiTable td,
+.twikiTable {
+  background:white;
+}
+.twikiTableEven td {
+  background:#ffefb9;
+}
+
 .twikiDiffTable td {
+  border:0px;
+}
+
+.natTopicEditForm td {
   border:0px;
 }
 
@@ -105,7 +119,6 @@ hr {
   background:#ff9831;
   color:white;
   font-weight:bold;
-  font-size:x-small;
   line-height:140%;
   text-transform:uppercase;
 }
@@ -126,7 +139,6 @@ hr {
   background:#ff9831;
   color:white;
   font-weight:bold;
-  font-size:x-small;
   line-height:140%;
   text-transform:uppercase;
 }
@@ -205,12 +217,13 @@ hr {
 
 .natWebTitle a {
   color:white;
-  font:bold xx-large "Century Schoolbook l", georgia, "Times New Roman", serif;
+  font-family:"Century Schoolbook l", georgia, "Times New Roman", serif;
+  font-weight:bold;
+  font-size:36px;
 }
 
 .natWebTitle a:hover {
   color:#ffcc66;
-  font:bold xx-large "Century Schoolbook l", georgia, "Times New Roman", serif;
   text-decoration:none;
 }
 
@@ -221,28 +234,20 @@ hr {
   text-transform:none
 }
 .natWebSlogan {
-  font-size:x-small;
+  font-size:90%;
   line-height:100%;
 }
 
 .natWebLocator {
   color:white;
 }
-.natWebLocator a:hover,
-.natWebLocator a,
-.natWebLocator {
-  font-weight:bold;
-  font-size:small;
-  text-transform:none;
-  font-family:verdana,arial,sans-serif;
-}
 
 .natAction {
   color:#ff9831;
 }
 
-.natTopRightContents {
-  font-size:xx-small;
+.natTopicActions {
+  font-size:80%;
 }
 
 /* sidebar */
@@ -251,14 +256,16 @@ hr {
   color:#9C3300;
 }
 .natSideBarContents {
-  font-size:0.8em;
+  font-size:95%;
   line-height:140%;
 }
 
 .natSideBar h1,
 .natSideBar h1 a {
   color:white;
-  font:bold small/140% verdana,arial,sans-serif;
+  font-family:verdana,arial,sans-serif;
+  font-size:14px;
+  line-height:140%;
   text-transform:uppercase;
   letter-spacing:.2em;
   padding-left:0px;
@@ -336,13 +343,23 @@ hr {
   color:#ff9831;
 }
 
-/* bottom */
-.natBottomBarContents {
-  font:bold xx-small/140% verdana,arial,sans-serif;
-  float:left;
-  color:#444444;
-  height:10em;
+.natMain input,
+.natMain select,
+.natMain textarea {
+  font-size:13px;
 }
+
+/* bottom */
+.natBottomBar {
+  margin-bottom:20px;
+}
+.natBottomBarContents {
+  font-family:verdana,arial,sans-serif;
+  line-height:140%;
+  font-size:85%;
+  font-weight:bold;
+}
+.natBottomBarContents,
 .natBottomBarContents a {
   color:#444444;
 }
@@ -354,7 +371,6 @@ hr {
 .bibsearch th {
   background:#ff9831;
   text-transform:uppercase;
-  font:bold small verdana,arial,sans-serif;
   color:white;
 }
 
@@ -365,7 +381,6 @@ hr {
 }
 .bibtex dt a,
 .bibtex dt {
-  font:normal;
   color:#9C3300;
 }
 
@@ -398,8 +413,8 @@ hr {
 .blogHeadline {
 }
 .blogHeadline .blogCommentCount {
-  padding-top:8px;
   font-size:1.8em;
+  vertical-align:top;
 }
 .blogEntry {
   margin-bottom:1em;

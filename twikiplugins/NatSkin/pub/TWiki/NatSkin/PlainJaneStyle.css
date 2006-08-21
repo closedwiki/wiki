@@ -26,27 +26,22 @@ hr {
   background:white;
   font-family:arial,sans-serif;
 }
-.natMiddle {
-  padding-top:10px;
-}
 
 .natTopRightContents,
 .natTopLeftContents {
-  margin-top:1em;
-  margin-bottom:1em;
-  margin-left:10px;
-  margin-right:10px;
-}
-.natTopRightContents,
-.natMiddleRight {
-  padding-left:10px;
+  margin:1em 10px;
 }
 
+.natMain {
+  padding:0px;
+  margin:0px;
+}
+.natMain,
 .natMainContents,
 .natMainHeaderContents,
 .natMainFooterContents,
 .natSideBarContents {
-  margin:10px;
+  margin:10px 10px 0px 10px;
 }
 .natMainHeaderContents a {
   text-decoration:none;
@@ -59,20 +54,30 @@ hr {
 }
 
 /* twik table */
+.twikiTable {
+  font-size:95%;
+}
+.twikiTable td,
+.twikiTable {
+  background:white;
+}
 .twikiTable th,
 .twikiTable td,
 .twikiTable {
   border:1px #aaaaaa solid;
 }
 .twikiTable th {
-  color:#666666;
   background:#eeeeee;
+}
+.twikiTable th,
+.twikiTable th font,
+.twikiTable th a {
+  color:#666666;
 }
 .twikiTable th a:hover,
 .twikiTable th a {
   text-decoration:none;
   background:#eeeeee;
-  color:#666666;
 }
 .twikiTable th a:hover {
   color:#3f59bb;
@@ -120,6 +125,10 @@ hr {
   color:#3f59bb;
 }
 
+.natTopicEditForm td {
+  border:0px;
+}
+
 /* twiki diff */
 .twikiDiffTable td {
   border:0px;
@@ -158,9 +167,6 @@ hr {
   background:#3f59bb;
   color:#ffffff;
 }
-.natWebTitle {
-  font-size:xx-large;
-}
 .natWebTitle,
 .natWebTitle a:hover,
 .natWebTitle a {
@@ -183,14 +189,15 @@ hr {
   padding-left:0px;
   color:#3f59bb;
 }
-.natWebLocator {
-  font-size:small;
-}
 
 /* sidebar */
+.natSideBarTitle,
+.natSideBarTitle h1 {
+  margin:0px;
+  padding:0px;
+}
 .natSideBarContents {
   color:#666666;
-  font-size:small;
 }
 .natSideBar h1 a {
   color:#3f59bb;
@@ -205,6 +212,7 @@ hr {
   color:#3f59bb;
   font-weight:bold;
   font-size:1.2em;
+  padding-left:2px;
 }
 .natSideBar h2 {
   padding:0px;
@@ -216,7 +224,7 @@ hr {
   list-style-type:none;
 }
 .natSideBar li {
-  border:1px solid white; /* IE fix */
+  _border:1px solid white; /* IE fix */
 }
 
 .natSideBar h2 a,
@@ -241,7 +249,6 @@ hr {
 
 /* main */
 .natMiddle {
-  font-size:small;
   background:white;
 }
 .natMainFooter,
@@ -283,14 +290,16 @@ hr {
 .natMain h4 {font-size:18px;}
 .natMain h5 {font-size:16px;}
 .natMain h6 {font-size:16px; margin-top:5px}
-.natMainFooterContents {
-  font-size:x-small;
+
+.natMain input,
+.natMain select,
+.natMain textarea {
+  font-size:14px;
 }
 
 /* bottom */
 .natBottomBarContents {
   font-weight:bold;
-  font-size:xx-small;
   line-height:140%;
   margin-bottom:5px;
   color:#cccccc;

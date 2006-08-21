@@ -120,8 +120,11 @@ function natEditHeadlineButtonAction(level) {
     natInsertTags('\n---+ ','\n','Headline text');
   }
 }
-function natEditImageButtonAction() {
+function natEditImageButtonActionStandard() {
   natInsertTags('<img class=\'border alignleft\' src=\'%ATTACHURLPATH%/','\' title="Example" />','Example.jpg');
+}
+function natEditImageButtonActionImagePlugin() {
+  natInsertTags('%IMAGE{"','|400px|Caption text|frame|center"}%','Example.jpg');
 }
 function natEditMathButtonAction() {
   natInsertTags('<latex title="Example">\n','\n</latex>','\\LaTeX'); // inline
@@ -134,8 +137,8 @@ function natEditSignatureButtonAction(date, wikiUserName) {
 }
 
 function natSetupToolbar() {
-  if (document.EditFormular) {
-    txtarea = document.EditFormular.natEditTextArea;
+  if (document.EditForm) {
+    txtarea = document.EditForm.natEditTextArea;
   } else {
     // some alternate form? take the first one we can find
     var areas = document.getElementsByTagName('textarea');

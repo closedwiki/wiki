@@ -3,22 +3,22 @@
 <!--
 function submitEditForm(script, action) {
   if (action == 'add form') {
-    document.EditFormular.elements['submitChangeForm'].value = action;
+    document.EditForm.elements['submitChangeForm'].value = action;
   }
 %IFSKINSTATETHEN{release="beijing" glue="off"}%
-  document.EditFormular.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+  document.EditForm.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
 %ELSIFSKINSTATE{release="cairo" glue="off"}%
-  document.EditFormular.elements['action'].value = action;
+  document.EditForm.elements['action'].value = action;
 %ELSESKINSTATE%
-  document.EditFormular.elements['action_preview'].value = '';
-  document.EditFormular.elements['action_save'].value = '';
-  document.EditFormular.elements['action_checkpoint'].value = '';
-  document.EditFormular.elements['action_addform'].value = '';
-  document.EditFormular.elements['action_replaceform'].value = '';
-  document.EditFormular.elements['action_cancel'].value = '';
-  document.EditFormular.elements['action_' + action].value = 'foobar';
+  document.EditForm.elements['action_preview'].value = '';
+  document.EditForm.elements['action_save'].value = '';
+  document.EditForm.elements['action_checkpoint'].value = '';
+  document.EditForm.elements['action_addform'].value = '';
+  document.EditForm.elements['action_replaceform'].value = '';
+  document.EditForm.elements['action_cancel'].value = '';
+  document.EditForm.elements['action_' + action].value = 'foobar';
 %FISKINSTATE%
-  document.EditFormular.submit();
+  document.EditForm.submit();
 }
 //-->
 </script>%TMPL:END%

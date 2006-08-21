@@ -155,8 +155,6 @@ This makes use of features that are only present in TWiki V4 and upwards.
 
 ---++ Installation
 	* Get the TWiki:Plugins/NatSkinPlugin supplementary package and install it.
-	* If you are installing on TWiki/Cairo then consider applying this patch:
-          [[%ATTACHURL%/Cairo_UI_pm.diff][Cairo_UI_pm.diff]]
 	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
 	* Unzip it in your twiki installation directory. Content: 
 	* Test if installed: [[%NATSCRIPTURL{"view"}%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
@@ -177,7 +175,7 @@ This makes use of features that are only present in TWiki V4 and upwards.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre3 |
+|  Skin Version: | v3.0-pre4 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -194,6 +192,12 @@ This makes use of features that are only present in TWiki V4 and upwards.
 	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2006-08-21: | complete rework of fonts in all styles not to rely on font preference settings in \
+                 browsers; enhanced twikiTable appearance; \
+                 added support for TWiki:Plugins.ImagePlugin in natedit; \
+                 fixed sidebar in !PatternStyle + searchbox in position 1; \
+		 fixed oopsmore's button style on different locales; \
+		 more IE hacks; more i18n fixes |
 |  2006-08-15: | interface internationalization (TWiki:Main.OliverKrueger, TWiki:Main.AndreUlrich); \
                  adjusted css to cope waith possibly long strings in i18n; \
 		 added "Change Language" dialogue to oopsmore; \
@@ -365,7 +369,7 @@ This makes use of features that are only present in TWiki V4 and upwards.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 15 Aug 2006
+-- TWiki:Main/MichaelDaum - 21 Aug 2006
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="h" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="previewbg.png" attr="h" comment="" date="1114174051" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%

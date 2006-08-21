@@ -32,7 +32,7 @@ hr {
   background:white;
   text-align:left;
   /*border: 1px solid #959596;*/
-  font-size: 65.5%;
+  font-size: 80%;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .natSideBar,
@@ -41,13 +41,14 @@ hr {
 }
 
 .natSideBarContents,
-.natMainFooterContents,
 .natMainContents {
-  padding:15px;
+  padding:0px 15px 15px 15px;
   /*padding:15px 15px 15px 20px;*/
 }
+.natMainFooterContents,
 .natMainHeaderContents {
-  padding:15px 10px 15px 20px;
+  margin:0px;
+  padding:0px 15px 10px;
 }
 
 .natMiddleLeft {
@@ -68,18 +69,12 @@ hr {
 }
 .natSearchBox input {
   width:150px;
-  border:1px solid red;
 }
 .natSearchBoxTop {
   margin-bottom:3px;
 }
 
 /* top bar */
-.natTopLeftContents,
-.natTopRightContents,
-.natSearchBox input {
-  font-size:1em;
-}
 .natHeaderArt,
 .natSearchBox input {
   background:#3388CC;
@@ -100,6 +95,9 @@ hr {
   font-weight:bold;
   margin:0px;
 }
+.natTopicActions {
+  font-size:1.0em;
+}
 
 .natWebTitle {
   font-size: 3em;
@@ -109,9 +107,6 @@ hr {
   color:white;
   /*text-shadow:1px 1px 1px black;*/
 
-}
-.natWebLocator {
-  font-size:0.5em;
 }
 .natSearchBox input {
   border:0px;
@@ -163,10 +158,17 @@ hr {
   text-decoration:underline;
 }
 .natSideBar ul {
-  margin-left:0px;
+  margin:0px;
   padding-left:2ex;
   list-style-type: none;
   text-indent:-2ex;
+}
+.natSideBar ol {
+  margin-top:0px;
+  margin-bottom:0px;
+  padding-left:4ex;
+  margin-left:0px;
+  _margin-left:1ex; /* IE hack */
 }
 html>body .natSideBar ol { /* hide from IE */
   text-indent:-1ex;
@@ -216,6 +218,7 @@ html>body .natSideBar ol { /* hide from IE */
   background-color: white;
   font-weight:normal;
   color:#444;
+  padding-top:15px;
 }
 .natMainContents {
   /*color:#777;*/
@@ -245,7 +248,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natMain h3 {font-size:1.5em}
 .natMain h4 {font-size:1.3em}
 .natMain h5 {font-size:1.2em}
-.natMain h6 {font-size:1.1em}
+.natMain h6 {font-size:1.2em}
 
 .natMain h1 {
   /*text-shadow:2px 2px 2px #ccc;*/
@@ -259,6 +262,7 @@ html>body .natSideBar ol { /* hide from IE */
 .natMain h6 {
   font-family: 'Trebuchet MS', Verdana, sans-serif;
   letter-spacing:-1px;
+  margin-bottom:0px;
 }
 
 .natMainContents pre {
@@ -270,6 +274,7 @@ html>body .natSideBar ol { /* hide from IE */
 }
 
 .natMain textarea {
+  font-size:1.0em;
   background:white;
   border:0px;
   color:#444;
@@ -285,6 +290,7 @@ html>body .natSideBar ol { /* hide from IE */
 
 /* bottom bar */
 .natBottomBarContents {
+  padding:0px 15px;
   font-size:1em;
 }
 .natBottomBarContents,
@@ -298,7 +304,6 @@ html>body .natSideBar ol { /* hide from IE */
 /* tables */
 .twikiTable {
   border:1px solid #d9d6e7;
-  background:#f6f7f8;
   font-size:0.9em;
 }
 
@@ -307,6 +312,17 @@ html>body .natSideBar ol { /* hide from IE */
   border-top:1px solid #ffd324;
   border-bottom:1px solid #ffd324;
   text-align:center;
+}
+.twikiTable th,
+.twikiTable th font,
+.twikiTable th a {
+  color:#0055aa;
+}
+.twikiTable td {
+  background:white;
+}
+.twikiTableEven td {
+  background:#f4f4f4;
 }
 
 /* twiki forms */
@@ -367,7 +383,7 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #d9d6e7;
   margin:2px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  font-size:small;
+  font-size:1.1em;
   color:#444;
   padding:2px;
 }
@@ -501,9 +517,13 @@ html>body .natSideBar ol { /* hide from IE */
 /* supported plugins */
 
 /* blogging */
+.blogAbout h1 {
+  margin-top:5px;
+}
 .blogHeadline {
   border-bottom:1px solid #ddd;
   margin-bottom:5px;
+  margin-top:5px;
   font-size:95%;
 }
 .blogInfo {
@@ -574,7 +594,7 @@ html>body .natSideBar ol { /* hide from IE */
   text-align:justify; 
 }
 .blogNavigation {
-  padding-top:2px;
+  padding-top:7px;
 }
 .blogEntryFeed a,
 .blogScroll,
@@ -588,7 +608,7 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #aaa;
   color:#444;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  font-size:small;
+  font-size:1.1em;
   padding:2px;
 }
 .blogAddComment .blogSubmitButton {
@@ -691,3 +711,4 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #b8b8b8;
   padding:3px;
 }
+

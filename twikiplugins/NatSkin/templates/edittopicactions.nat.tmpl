@@ -7,8 +7,8 @@
 %ELSESKINSTATE% <!-- -->
 | <a href="javascript:submitEditForm('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a> 
 | <a href="javascript:submitEditForm('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a>
-%FISKINSTATE% <!-- -->
-<br/> %FORMBUTTON{"$1 |"}%
+%FISKINSTATE% <!-- 
+--><br/> %FORMBUTTON{"$1 |"}%
 <a href="javascript:self.location.reload();" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a>
 | <a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditForm('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a>
 %TMPL:END%

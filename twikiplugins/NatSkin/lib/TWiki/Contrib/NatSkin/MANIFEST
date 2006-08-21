@@ -111,6 +111,7 @@ pub/TWiki/NatSkin/StormyThin.jpeg 0644
 pub/TWiki/NatSkin/Stormy.jpeg 0644
 pub/TWiki/NatSkin/SubwayBar.jpg 0644
 pub/TWiki/NatSkin/SubwayVariation.css 0644
+pub/TWiki/NatSkin/TablePlugin_Core_pm.diff 0644
 pub/TWiki/NatSkin/WaterBar.jpg 0644
 pub/TWiki/NatSkin/WaterVariation.css 0644
 pub/TWiki/NatSkin/button_accept.png 0644
@@ -148,6 +149,7 @@ pub/TWiki/NatSkin/feed-icon-12x12.gif 0644
 pub/TWiki/NatSkin/feed-icon-12x12-gray.gif 0644
 pub/TWiki/NatSkin/feed-icon-12x12-gray.png 0644
 pub/TWiki/NatSkin/feed-icon-12x12.png 0644
+pub/TWiki/NatSkin/obfuscator.js 0644
 pub/TWiki/NatSkin/previewbg.png 0644
 pub/TWiki/NatSkin/quote.gif 0644
 pub/TWiki/NatSkin/quote.png 0644
@@ -239,8 +241,6 @@ templates/rdiff.nat.tmpl 0644
 templates/rdiffstyles.nat.tmpl 0644
 templates/rdifftopicactions.nat.tmpl 0644
 templates/registerconfirm.nat.tmpl 0644
-templates/registernotifyadmin.nat.tmpl 0644
-templates/registernotify.nat.tmpl 0644
 templates/renamebase.nat.tmpl 0644
 templates/renameconfirm.nat.tmpl 0644
 templates/renamedelete.nat.tmpl 0644

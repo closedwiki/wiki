@@ -10,7 +10,7 @@
 }
 .natWebButtonsContents {
   padding:5px 0px 0px 2px;
-  font-size:x-small;
+  font-size:90%;
   font-family:arial,sans-serif;
 }
 
@@ -19,7 +19,6 @@
 }
 .natWebButtons ul li a {
   padding:5px 5px;
-  font-weight:normal;
   font-weight:bold;
   border-top:1px #ddd solid;
   border-left:1px #ddd solid;

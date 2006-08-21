@@ -3,7 +3,7 @@
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit form"}%)%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
 <div class="natEdit">
-<form name="EditFormular" method="post" action="%NATSCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%">
+<form name="EditForm" method="post" action="%NATSCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%">
   %IFSKINSTATETHEN{release="cairo"}%
     <input type="hidden" name="action" value="" />
   %ELSIFSKINSTATE{release="dakar"}%
