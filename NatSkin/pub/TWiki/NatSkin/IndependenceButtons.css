@@ -8,24 +8,26 @@
   border-bottom:1px solid #ffffff;
 }
 .natWebButtonsContents {
-  font-size:small;
+  font-size:12px;
   font-family:'Trebuchet MS', arial, sans-serif;
   margin:0px 10px 7px 25px;
 }
 .natWebButtons ul li a {
   font-weight:normal;
-  padding-bottom:5px;
+  padding-bottom:10px;
   color:white;
 }
 .natWebButtons ul li.current a:hover,
 .natWebButtons ul li a:hover {
   text-decoration: none;
   border-bottom:5px solid white;
+  padding-bottom:5px;
 }
 
 .natWebButtons ul li.current a {
   text-decoration: none;
   border-bottom:5px solid #0F314E;
+  padding-bottom:5px;
 }
 .natTopBarSizer {
   height:110px;

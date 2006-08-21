@@ -17,13 +17,14 @@ hr {
   border-bottom:1px solid black;
   margin:0.7em 0px;
 }
-a img {border: none;}
 
-h1, h2, h3, h4, h5, h6 {
-  margin-top:20px;
-  margin-bottom:5px;
-  padding:0px;
-}
+h1 { font-size:24px;}
+h2 { font-size:20px;}
+h3 { font-size:18px;}
+h4 { font-size:16px; margin-top:10px}
+h5 { font-size:14px; margin-top:10px}
+h6 { font-size:14px; margin-top:10px}
+body { font-size:14px; }
 
 /* debug
 .natPageBox,
@@ -47,7 +48,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* layout */
 .natBody {
-  background:#ffffff;
   text-align:center;
 }
 .natBodyPrint {
@@ -76,6 +76,7 @@ h1, h2, h3, h4, h5, h6 {
 .natBottomBarContents {
   text-align:center;
   padding-top:5px;
+  font-size:12px;
 }
 .natSideBar, .natTopRight {
   width:280px;
@@ -110,11 +111,6 @@ h1, h2, h3, h4, h5, h6 {
   background-repeat:no-repeat;
 }
 
-.natTopLeftContents,
-.natTopRightContents {
-  font-size:12px;
-}
-
 .natTopRight form {
   padding:0px;
   margin:0px;
@@ -138,13 +134,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .natWebTitle {
-  font-size:xx-large;
+  font-size:34px;
   font-weight:bold;
+  margin:0px;
+  padding:0px;
 }
-.natWebLocator {
-  font-size:small;
-  font-weight:bold;
-  text-transform:none;
+
+.natTopicActions {
+  font-size:12px;
 }
 
 /* sidebar */
@@ -153,29 +150,21 @@ h1, h2, h3, h4, h5, h6 {
 .natSearchBoxPos3 input {
   width:98%;
 }
-.natSideBarContents {
-  font-size:small;
-}
 .natSideBarPersonal {
   margin-top:1em;
 }
 .natSideBar h1 {
   margin-top:0px;
   margin-bottom:10px;
-  font-size:24px;
 }
 .natSideBar h2 {
   margin-top:10px;
   margin-bottom:5px;
-  font-size:18px;
   padding-left:15px; 
 }
 
 .natSideBar ul {
   list-style-type:square;
-  margin-left:0px;
-  margin-top:0px;
-  margin-bottom:0px;
 }
 
 .natNotes a:hover,
@@ -187,32 +176,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* main area */
-.natMiddle {
-  /*background:white;*/
-}
 .natMiddleLeft {
   padding-right:10px;
 }
-.natMainContents,
-.natMainFooterContents { 
-  font-weight:normal;
-  font-size:small;
-  padding:1px; /* firefox fix */
-  padding-bottom:15px;
-  line-height:140%;
+.natMainContents {
+  padding:1px 1px 1px 1px;
 }
+.natRevision,
+.natMainFooterContents,
 .natMainHeaderContents {
-  font-weight:normal;
+  padding:1px;
+  margin:5px 0px;
   font-size:12px;
-  padding:1px 2px;
-  line-height:100%;
-}
-.natMainFooterContents {
-  text-align:right;
-  font-size:x-small;
-}
-.natTopicAttachments {
-  font-size:x-small;
 }
 .natMainContents pre {
   width:99%;
@@ -229,9 +204,13 @@ h1, h2, h3, h4, h5, h6 {
   margin-top:10px;
   margin-bottom:10px;
 }
-.natRevision {
+
+/* login */
+.natLogonFormHolder {
+  padding:10px 0px 10px 0px;
+}
+.natLogonFormButtons td {
   padding-top:1em;
-  padding-bottom:1em;
 }
 
 /*
@@ -245,7 +224,6 @@ h1, h2, h3, h4, h5, h6 {
 .natEditToolBar {
   margin-bottom:5px;
   padding:0px 2px;
-  white-space:nowrap;
 }
 .natPreviewToolBar img,
 .natEditToolBar img {
@@ -267,7 +245,11 @@ h1, h2, h3, h4, h5, h6 {
 .natEditParagraphTools,
 .natEditHeadlineTools,
 .natEditTextTools {
-  margin-right:15px;
+  margin-right:5px;
+  white-space:nowrap;
+}
+.natEditHelpTools,
+.natEditEditTools {
 }
 .natEditDoneButton {
   margin-left:15px;
@@ -285,19 +267,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align:right;
 }
 
-/* bottom bar */
-.natBottomBarContents {
-  font-size:x-small;
-}
-
 /* headings */
-.natMain h1 {font-size:32px;}
-.natMain h2 {font-size:24px;}
-.natMain h3 {font-size:20px;}
-.natMain h4 {font-size:18px; margin-top:10px}
-.natMain h5 {font-size:16px; margin-top:10px}
-.natMain h6 {font-size:16px; margin-top:10px}
-
 .natMain h1 .twikiEmulatedLink,
 .natMain h2 .twikiEmulatedLink,
 .natMain h3 .twikiEmulatedLink,
@@ -411,7 +381,7 @@ h1, h2, h3, h4, h5, h6 {
   padding:5px;
   margin-top:2ex;
   margin-bottom:2ex;
-  font:normal small monospace;
+  font-family:monospace;
   color:red;
 }
 
@@ -551,7 +521,6 @@ a.natFeedIcon {
   left:2px;
   bottom:0px;
   width:99%;
-  font-size:small;
   line-height:100%;
 }
 
@@ -565,9 +534,7 @@ a.natFeedIcon {
 
 .twikiTable th, 
 .twikiTable td {
-  padding-left:5px;
-  padding-right:5px;
-  padding-top:2px;
+  padding:2px 5px;
   line-height:140%;
   border:0px;
 }
@@ -582,10 +549,6 @@ a.natFeedIcon {
   margin-left:2px;
 }
 
-.twikiAttachments {
-  overflow:auto;
-  padding:1px;
-}
 .twikiDiffTable td {
   border:0px;
 }
@@ -782,7 +745,6 @@ img.alignleft {
   padding-left:25px;
   padding-right:5px;
   padding-bottom:5px;
-  font-size:small;
   text-transform:capitalize;
 }
 

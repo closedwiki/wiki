@@ -9,5 +9,5 @@
 | <a href="%NATLOGOUTURL%" rel="nofollow" accesskey="l" title="%MAKETEXT{"Logout of [_1]" args="<nop>%WIKITOOLNAME%"}%">%TMPL:P{"LOG_OUT"}%</a>
 </span>
 %FIDEFINED% <!-- -->
-| <a href="%NATSCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?skin=print.nat" accesskey="p" title="%MAKETEXT{"Print this page"}%">%MAKETEXT{"Print"}%</a>
+| <a href="%NATSCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?skin=print.nat" rel="nofollow" accesskey="p" title="%MAKETEXT{"Print this page"}%">%MAKETEXT{"Print"}%</a>
 <div class="natUserActions">%USERACTIONS%</div>%STOPINCLUDE%

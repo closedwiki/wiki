@@ -24,7 +24,7 @@
 	  </td>
 	  %FISKINSTATE%
 	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight natMainLeft natMainRight"}% natMain" valign="top">
-	    <div class="natMainHeaderContents"> %TMPL:P{"contentheader"}% </div>
+	    <div class="natMainHeaderContents">%TMPL:P{"contentheader"}%</div>
 	    <div class="natMainContents"> %TMPL:P{"content"}% </div>
 	  </td> 
 	  %IFSKINSTATETHEN{sidebar="right|both"}%
@@ -45,7 +45,7 @@
 	  </td>
 	</tr>
       </table> 
-      <div class="natBottomBar %IFSKINSTATE{sidebar="right|off" glue="off" then="natBottomLeft"}% %IFSKINSTATE{sidebar="left|off" glue="off" then="natBottomRight"}%">
+      <div class="natBottomBar %IFSKINSTATE{sidebar="right|off" glue="off" then="natBottomLeft"}% %IFSKINSTATE{sidebar="left|off" glue="off" then="natBottomRight"}% %IFSKINSTATE{sidebar="off" glue="off" then="natBottomBoth"}%">
 	<div class="natBottomBarContents">
 	  <div class="natCopyRight">%WEBCOPYRIGHT%</div>
 	  <div class="natSyndicate">

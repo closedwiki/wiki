@@ -4,20 +4,22 @@
 %TMPL:DEF{"heading"}%%MAKETEXT{"More Actions on Topic [_1]" args="<nop>%WEB%.%TOPIC%"}%%TMPL:END%
 %TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
 %TMPL:DEF{"message"}% <table border="0" cellspacing="0">
----++ %MAKETEXT{"Set Parent Topic"}%</td> </tr>
 <form name="main" action="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%">
+<tr><td colspan="2">
+---++ %MAKETEXT{"Set Parent Topic"}%</td></tr>
+</tr>
 <tr>
   <td style="padding-left:20px"> <select name="topicparent"><option value="">%MAKETEXT{"Select..."}%</option>
      %TOPICLIST{"<option value='$name'>$name</option>" separator=" "}%
      </select>&nbsp;
-  <td><input type="submit" class="natOkButton" style="width:5em" value='%MAKETEXT{"OK"}%'/><p />
+  <td><input type="submit" class="natOkButton" style="width:100%" value='%MAKETEXT{"OK"}%'/><p />
   </td>
 </tr><tr>
   <td>
     <ul style="margin:0px"><li>%MAKETEXT{"Note: Edit and save the topic to activate the new parent"}%. %I%&nbsp;</li></ul>
   </td>
   <td>
-    <input type="button" class="natCancelButton" style="width:5em" value='%MAKETEXT{"Cancel"}%' onclick="self.location.href = '%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';">
+    <input type="button" class="natCancelButton" style="width:100%" value='%MAKETEXT{"Cancel"}%' onclick="self.location.href = '%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%';">
   </td>
 </tr>
 </form>
@@ -32,7 +34,7 @@
     <ul style="margin:0px"><li>%MAKETEXT{"Find topics that link to [_1] ..." args="[[%WEB%.%TOPIC%]]"}%</li></ul>
   </td>
   <td>
-    <input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Find"}%'>
+    <input type="submit" class="natAltButton" style="width:100%" value='%MAKETEXT{"Find"}%'>
   </td>
 </tr>
 <tr>
@@ -54,7 +56,7 @@
   <td>
     <ul style="margin:0px"><li>%MAKETEXT{"Edit preference settings for [_1]" args="[[%WEB%.%TOPIC%]]"}%</li></ul>
   </td>
-  <td><input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Edit"}%'>
+  <td><input type="submit" class="natAltButton" style="width:100%" value='%MAKETEXT{"Edit"}%'>
 </tr>
 </form>
 <tr style='%IF{"context i18n_enabled" then="" else="display:none"}%'>
@@ -70,12 +72,12 @@
     <input type="hidden" name="template" value="oopslanguagechanged" />
   </td>
   <td valign="top">
-    <input class="natOkButton" style="width:5em" type="submit" value="%MAKETEXT{"OK"}%" />
+    <input class="natOkButton" style="width:100%" type="submit" value="%MAKETEXT{"OK"}%" />
     </form><p />
     <form name="%INCLUDINGWEB%%INCLUDINGTOPIC%ChangeLanguage" action="%SCRIPTURLPATH{"oops"}%/%BASEWEB%/%BASETOPIC%" method="get">
       <input type="hidden" name="template" value="oopslanguagechanged" />
       <input type="hidden" name="language" value="default" />
-      <input class="natCancelButton" style="width:5em" type="submit" value="%MAKETEXT{"Reset"}%" />
+      <input class="natCancelButton" style="width:100%" type="submit" value="%MAKETEXT{"Reset"}%" />
     </form>
   </td>
 </tr>
@@ -91,7 +93,7 @@
   <td>
     <form name="main" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%" method="post">
     <input type="hidden" name="refresh" value="on" />
-    <input type="submit" class="natAltButton" style="width:5em" value='%MAKETEXT{"Refresh"}%' />
+    <input type="submit" class="natAltButton" style="width:100%" value='%MAKETEXT{"Refresh"}%' />
     </form>
   </td>
 </tr>

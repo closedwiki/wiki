@@ -1,25 +1,25 @@
 %TMPL:INCLUDE{"oops"}%
 <!-- template: oopslogonbase.tmpl -->
-%TMPL:DEF{"onloadscript"}%document.LogonFormular.username.focus();%TMPL:END%
+%TMPL:DEF{"onloadscript"}%document.LogonForm.username.focus();%TMPL:END%
 %TMPL:DEF{"logon"}%<!-- -->
-<div class="natLogonFormularHolder">
-<form name="LogonFormular" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%NATSCRIPTURLPATH{"%IFSKINSTATE{action="oops" then="natlogon" else="login"}%"}%/%WEB%/%TOPIC%" method="post">
-<table class="natLogonFormular" border="0"> 
-<tr> 
-  <td><b>%MAKETEXT{"Login"}%</b>: </td>
+<div class="natLogonFormHolder">
+<form name="LogonForm" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%NATSCRIPTURLPATH{"%IFSKINSTATE{action="oops" then="natlogon" else="login"}%"}%/%WEB%/%TOPIC%" method="post">
+<table class="natLogonForm" border="0"> 
+<tr class="natLogonFormLogin"> 
+  <td class="twikiFirstCol"><b>%MAKETEXT{"Login"}%</b>: </td>
   <td><input type="text" size="20" name="username" /> 
       <span class="twikiAlert">**</span>
   </td>
 </tr>
-<tr> 
-  <td><b>%MAKETEXT{"Password"}%</b>: </td>
+<tr class="natLogonFormPassword"> 
+  <td class="twikiFirstCol"><b>%MAKETEXT{"Password"}%</b>: </td>
   <td><input type="password" size="20" name="password" />
       <span class="twikiAlert">**</span>
   </td>
 </tr>
-<tr>
-  <td>&nbsp;</td>
-  <td><p />
+<tr class="natLogonFormButtons">
+  <td class="twikiFirstCol">&nbsp;</td>
+  <td>
     <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />&nbsp;<!--
     --><input type="reset"  class="natAltButton" value='%MAKETEXT{"Clear"}%' />&nbsp;<!--
     --><input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome'" /> 
