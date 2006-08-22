@@ -83,6 +83,10 @@ sub _handleInput {
       $attrs->remove( 'type' ) || $attrs->remove( 'mode' ) || $defaultType;
     my $silent = $attrs->remove( 'nonotify' );
     my $location = $attrs->remove( 'location' );
+    my $remove = $attrs->remove( 'remove' );
+    my $nopost = $attrs->remove( 'nopost' );
+    my $default = $attrs->remove( 'default' );
+    $message ||= $default;
 
     # clean off whitespace
     $type =~ m/(\S*)/o;
@@ -130,7 +134,7 @@ sub _handleInput {
             $input .= CGI::hidden( -name=>'comment_action', -value=>'save' );
             $input .= CGI::hidden( -name=>'comment_type', -value=>$type );
             if( defined( $silent )) {
-                $input .= CGI::hidden( -name=>'comment_quietly', value=>1 );
+                $input .= CGI::hidden( -name=>'comment_nonotify', value=>1 );
             }
             if ( $location ) {
                 $input .= CGI::hidden( -name=>'comment_location', -value=>$location );
@@ -138,6 +142,12 @@ sub _handleInput {
                 $input .= CGI::hidden( -name=>'comment_anchor', -value=>$anchor );
             } else {
                 $input .= CGI::hidden( -name=>'comment_index', -value=>$$pidx );
+            }
+            if( $nopost ) {
+                $input .= CGI::hidden( -name=>'comment_nopost', -value=>$nopost );
+            }
+            if( $remove ) {
+                $input .= CGI::hidden( -name=>'comment_remove', -value=>$$pidx );
             }
         }
         unless ($noform eq 'on') {
@@ -194,7 +204,10 @@ sub _buildNewTopic {
     my $index = $query->param( 'comment_index' );
     my $anchor = $query->param( 'comment_anchor' );
     my $location = $query->param( 'comment_location' );
-    my $silent = $query->param( 'comment_quietly' );
+    my $silent = $query->param( 'comment_nonotify' );
+    my $remove = $query->param( 'comment_remove' );
+    my $nopost = $query->param( 'comment_nopost' );
+
     my $output = _getTemplate( "OUTPUT:$type", $topic, $web );
     if ( $output =~ m/^%RED%/o ) {
         die $output;
@@ -212,7 +225,7 @@ sub _buildNewTopic {
 
     # SMELL: Reverse the process that inserts meta-data just performed
     # by the TWiki core, but this time without the support of the
-    # methods in the core. Firtunately this will work even if there is
+    # methods in the core. Fortunately this will work even if there is
     # no embedded meta-data.
     # Note: because this is Dakar, and has sensible semantics for handling
     # the =text= parameter to =save=, there is no longer any need to re-read
@@ -236,42 +249,51 @@ sub _buildNewTopic {
         }
     }
 
-    if ( $position eq 'TOP' ) {
-        $text = $output.$text;
-    } elsif ( $position eq 'BOTTOM' ) {
-        # Awkward newlines here, to avoid running into meta-data.
-        # This should _not_ be a problem.
-        $text =~ s/[\r\n]+$//;
-        $text .= "\n" unless $output =~ m/^\n/s;
-        $text .= $output;
-        $text .= "\n" unless $text =~ m/\n$/s;
-    } else {
-        if ( $location ) {
-            if ( $position eq 'BEFORE' ) {
-                $text =~ s/($location)/$output$1/m;
-            } else { # AFTER
-                $text =~ s/($location)/$1$output/m;
-            }
-        } elsif ( $anchor ) {
-            # position relative to anchor
-            if ( $position eq 'BEFORE' ) {
-                $output =~ s/\n$//;
-                $text =~ s/^($anchor)\b/$output\n$1/m;
-            } else { # AFTER
-                $output =~ s/^\n+//;
-                $text =~ s/^($anchor)\b/$1\n$output/m;
-            }
+    unless( $nopost ) {
+        if( $position eq 'TOP' ) {
+            $text = $output.$text;
+        } elsif ( $position eq 'BOTTOM' ) {
+            # Awkward newlines here, to avoid running into meta-data.
+            # This should _not_ be a problem.
+            $text =~ s/[\r\n]+$//;
+            $text .= "\n" unless $output =~ m/^\n/s;
+            $text .= $output;
+            $text .= "\n" unless $text =~ m/\n$/s;
         } else {
-            # Position relative to index'th comment
-            my $idx = 0;
-            unless( $text =~ s((%COMMENT({.*?})?%.*\n))
-                    (&_nth($1,\$idx,$position,$index,$output))eg ) {
-                # If there was a problem adding relative to the comment,
-                # add to the end of the topic
-                $text .= $output;
-            };
+            if ( $location ) {
+                if ( $position eq 'BEFORE' ) {
+                    $text =~ s/($location)/$output$1/m;
+                } else { # AFTER
+                    $text =~ s/($location)/$1$output/m;
+                }
+            } elsif ( $anchor ) {
+                # position relative to anchor
+                if ( $position eq 'BEFORE' ) {
+                    $output =~ s/\n$//;
+                    $text =~ s/^($anchor)\b/$output\n$1/m;
+                } else { # AFTER
+                    $output =~ s/^\n+//;
+                    $text =~ s/^($anchor)\b/$1\n$output/m;
+                }
+            } else {
+                # Position relative to index'th comment
+                my $idx = 0;
+                unless( $text =~ s((%COMMENT({.*?})?%.*\n))
+                          (&_nth($1,\$idx,$position,$index,$output))eg ) {
+                    # If there was a problem adding relative to the comment,
+                    # add to the end of the topic
+                    $text .= $output;
+                };
+            }
         }
     }
+
+    if (defined $remove) {
+        # remove the index'th comment box
+        my $idx = 0;
+        $text =~ s/(%COMMENT({.*?})?%)/_remove_nth($1,\$idx,$remove)/eg;
+    }
+
     $_[0] = $premeta . $text . $postmeta;
 }
 
@@ -286,6 +308,14 @@ sub _nth {
             $tag .= $output;
         }
     }
+    $$pidx++;
+    return $tag;
+}
+
+# PRIVATE remove the nth comment box
+sub _remove_nth {
+    my( $tag, $pidx, $index ) = @_;
+    $tag = '' if( $$pidx == $index);
     $$pidx++;
     return $tag;
 }
