@@ -24,21 +24,25 @@ This will display an *uneditable* text field and a date selection icon that can 
 If you want to use Javascript to create other data types in form fields, you can use this plugin as a model of how to do it.
 
 ---+ Settings
-	* Description:
+<!--
+Required for old TWiki versions
 	* Set SHORTDESCRIPTION = Adds a =date= type to forms
-	* #Set DATEFORMAT = %d %b %Y 
-      * Format changed to make it sortable in TWiki tables. To get the old Format like "3 April 2005" set DATEFORMAT to '%e %B %Y'
+-->
+The default date format is =%d %b %Y= (day of month, month name, year). You can change the date format by setting the TWiki variable 'DATEFORMAT' in your !TWikiPreferences, your !WebPreferences or in a topic. For example:
+   * Set <nop>DATEFORMAT = %c
+Look up =strftime= in Google for a full list of the format options.
+
 See JSCalendarContrib for additional settings.
 
 ---+ Plugin Installation Instructions
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the archive (.zip or .tgz) from the Plugin web (see below)
+	* Unpack the archive in your twiki installation directory. Content:
    | *File:* | *Description:* |
 %$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	* Run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on.
+		* Alternatively, manually make sure the dependencies listed in the table below are resolved.
    %$DEPENDENCIES%
-	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Visit =configure= in your TWiki installation, and enable the plugin in the ={Plugins}= section.
 
 ---+ Plugin Info
 
@@ -47,6 +51,7 @@ See JSCalendarContrib for additional settings.
 |  Copyright &copy;: | 2004 Deutsche Bank AG |
 |  License: | [[GPL][http://www.gnu.org/copyleft/gpl.html]] |
 | Change History: | |
+| 11335 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item2804'>Item2804</a> default date to todays date, support DATEFORMAT as standard preference |
 | 7265 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  removed pointless, outdated dependency check from DateFieldPlugin |
 | 6653 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item196'>Item196</a>  removed spurious documentation. JSCalendarContrib is now used, and there is no longer any plugin-specific setup for the calendar |
 | 5958 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item180'>Item180</a>  modernised DateFieldPlugin, and made mklinks.sh link in contribs. Also added a copy option, for people like Anton who want to make local dists for upload to remote servers |
