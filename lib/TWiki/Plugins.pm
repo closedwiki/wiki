@@ -344,7 +344,7 @@ sub _handleFAILEDPLUGINS {
             $td = CGI::td( 'none' );
         }
         $text .= CGI::Tr( { valign=>'top' },
-                          CGI::td(' '.$plugin->{web}.'.'.$plugin->{name}.' '). $td );
+                          CGI::td(' '.$plugin->{installWeb}.'.'.$plugin->{name}.' '). $td );
     }
 
     $text .= CGI::end_table().CGI::start_table({ border=>1, class => 'twikiTable' }).
@@ -389,7 +389,7 @@ sub _handleACTIVATEDPLUGINS {
     my $text = '';
     foreach my $plugin ( @{$this->{plugins}} ) {
         unless( $plugin->{disabled} ) {
-            $text .= "$plugin->{web}.$plugin->{name}, ";
+            $text .= "$plugin->{installWeb}.$plugin->{name}, ";
         }
     }
     $text =~ s/\,\s*$//o;
