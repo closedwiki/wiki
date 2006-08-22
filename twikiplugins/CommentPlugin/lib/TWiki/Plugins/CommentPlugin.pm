@@ -26,7 +26,7 @@ use strict;
 
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -37,6 +37,8 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
+
+$SHORTDESCRIPTION = 'Allows users to quickly post comments to a page without an edit/preview/save cycle';
 
 sub initPlugin {
     #my ( $topic, $web, $user, $installWeb ) = @_;
@@ -71,18 +73,6 @@ sub commonTagsHandler {
     TWiki::Plugins::CommentPlugin::Comment::prompt( $previewing,
                                                     $_[0], $web, $topic );
 }
-
-=pod
-
----++ beforeSaveHandler($text, $topic, $web )
-   * =$text= - text _with embedded meta-data tags_
-   * =$topic= - the name of the topic in the current CGI query
-   * =$web= - the name of the web in the current CGI query
-This handler is called just before the save action. The text is populated
-with 'meta-data tags' before this method is called. If you modify any of
-these tags, or their contents, you may break meta-data. You have been warned!
-
-=cut
 
 sub beforeSaveHandler {
     #my ( $text, $topic, $web ) = @_;
