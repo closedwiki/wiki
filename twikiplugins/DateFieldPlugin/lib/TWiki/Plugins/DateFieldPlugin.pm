@@ -2,6 +2,7 @@
 # Date field entry plugin
 #
 # Copyright (C) Deutsche Bank AG http://www.db.com
+# Author Crawford Currie http://c-dot.co,uk
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,10 +18,11 @@
 package TWiki::Plugins::DateFieldPlugin;
 
 use strict;
+use POSIX qw(strftime);
 
 use TWiki::Func;
 
-use vars qw( $VERSION $RELEASE );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -32,6 +34,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
+$SHORTDESCRIPTION = 'Adds a =date= type for use in forms';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -55,15 +58,22 @@ sub beforeEditHandler {
 
 sub renderFormFieldForEditHandler {
     my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
-    my $calendarOutputFormat = TWiki::Func::getPreferencesValue('DATEFIELDPLUGIN_DATEFORMAT') || '%d %b %Y';
-    return unless $type eq "date";
+    return undef unless $type eq 'date';
+
+    my $calendarOutputFormat = 
+      TWiki::Func::getPreferencesValue('DATEFORMAT') ||
+          TWiki::Func::getPreferencesValue('DATEFIELDPLUGIN_DATEFORMAT') ||
+              '%d %b %Y';
+
+    # Default to local today
+    $value ||= POSIX::strftime($calendarOutputFormat, localtime(time()));
 
     my $content =
       CGI::image_button(
           -name => 'calendar',
           -onclick =>
             "return showCalendar('date_$name','$calendarOutputFormat')",
-          -src=> TWiki::Func::getPubUrlPath() . '/' .
+          -src => TWiki::Func::getPubUrlPath() . '/' .
             TWiki::Func::getTwikiWebname() .
                 '/JSCalendarContrib/img.gif',
           -alt => 'Calendar',
