@@ -356,6 +356,7 @@ sub viewfile {
     my $topic = $session->{topicName};
 
     my $fileName = $query->param( 'filename' );
+    $fileName = TWiki::Sandbox::sanitizeAttachmentName( $fileName );
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ) );
 

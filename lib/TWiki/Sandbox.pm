@@ -113,9 +113,9 @@ sub untaintUnchecked {
 
 =pod
 
----++ StaticMethod normalizeFileName ( $string ) -> $filename
+---++ StaticMethod normalizeFileName( $string ) -> $filename
 
-STATIC Errors out if $string contains filtered characters.
+Errors out if $string contains filtered characters.
 
 The returned string is not tainted, but it may contain shell
 metacharacters and even control characters.
@@ -125,9 +125,9 @@ metacharacters and even control characters.
 sub normalizeFileName {
     my ($string) = @_;
     return '' unless $string;
-    my $absolute = $string =~ /^\//;
+    my $absolute = File::Spec->file_name_is_absolute($string);
     my @result;
-    for my $component (split /\//, $string) {
+    for my $component (File::Spec->splitdir($string)) {
         next unless $component;
         next if $component eq '.';
         if ($component eq '..') {
@@ -141,6 +141,7 @@ sub normalizeFileName {
                                    $component.' of filename '.$string );
         }
     }
+    # Convert to UNIX path and return
     if (@result) {
         if ($absolute) {
             $result[0] = "/$result[0]";
@@ -152,6 +153,36 @@ sub normalizeFileName {
         return '/' if $absolute;
         throw Error::Simple( 'empty filename '.$string );
     }
+}
+
+=pod
+
+---++ StaticMethod sanitizeAttachmentName($fname) -> ($fileName, $origName)
+
+Given a file name received in a query parameter, sanitise it. Returns
+the sanitised name together with the basename before sanitisation.
+
+Sanitisation includes filtering illegal characters and mapping client
+file names to legal server names.
+
+=cut
+
+sub sanitizeAttachmentName {
+    my $fileName = shift;
+
+    # Strip all path components
+    my @paths = File::Spec->splitdir($fileName);
+    # untaint
+    $fileName = untaintUnchecked($paths[$#paths]);
+    my $origName = $fileName;
+    # Change spaces to underscore
+    $fileName =~ s/ /_/go;
+    # Remove problematic chars
+    $fileName =~ s/$TWiki::cfg{NameFilter}//goi;
+    # Append .txt to some files
+    $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
+
+    return ($fileName, $origName);
 }
 
 # $template is split at whitespace, and '%VAR%' strings contained in it
