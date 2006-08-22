@@ -326,7 +326,7 @@ Administrators, especially of public sites, need to be aware of the security imp
 
 The evaluation of protections has been re-worked to make it more naturally understandable, and also fill a number of holes in the protection scheme, These holes meant that it was relatively easy to _deny_ access to a topic, but rather difficult to subsequently _restore_ access without either compromising other topics, or compromising old revisions.
 
-When deciding whether to grant access, TWiki now evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
+When deciding whether to grant access, TWiki now evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW and CHANGE access may be granted/denied separately.
    1 If the user is a [[#SuperAdminGroup][super-user]]
       * access is *PERMITTED*.
    1 If DENYTOPIC is set to a list of wikinames
@@ -351,12 +351,8 @@ The major impact of this change is that !WebPreferences topics shipped with earl
    * <nop>Set DENYWEBCHANGE = 
    * <nop>Set ALLOWWEBCHANGE = 
       * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
-   * <nop>Set DENYWEBRENAME = 
-   * <nop>Set ALLOWWEBRENAME = 
-      * This will now _deny_ rename access to everyone _not_ in the list (i.e. everyone except admins)
    * <nop>Set ALLOWTOPICCHANGE = 
       * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
-   * <nop>Set ALLOWTOPICRENAME = %MAINWEB%.<nop>TWikiAdminGroup
 
 The standard webs shipped with this release have these settings disabled. However you are likely to have inherited the old default settings in your user webs. The easiest way to deal with this is to simply insert a # sign in these settings; for example:
    * #Set DENYWEBVIEW = 

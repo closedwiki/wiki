@@ -2,8 +2,7 @@
 %META:TOPICPARENT{name="TWikiAccessControl"}%
 #VarDENYWEBVIEW
 #VarDENYWEBCHANGE
-#VarDENYWEBRENAME
----+++ DENYWEBVIEW, DENYWEBCHANGE, DENYWEBRENAME -- access control for webs
+---+++ DENYWEBVIEW, DENYWEBCHANGE -- access control for webs
 
 
 These variables define lists of users and groups who may _not_ view or

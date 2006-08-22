@@ -59,7 +59,7 @@ Changed references are kept are as short as possible, ex: =topic= is used in pre
 
 ---+++ Effect of User Access Settings
 
-User permissions affect the Rename function in various ways. To rename a topic, you need both ==ALLOWTOPICCHANGE== and ==ALLOWTOPICRENAME== permission for that topic. To alter referring topics, you need change permission. See TWikiAccessControl for information on setting up access permissions.
+User permissions affect the Rename function in various ways. To rename a topic, you need both ==ALLOWTOPICVIEW== and ==ALLOWTOPICCHANGE== permission for that topic. To alter referring topics, you need change permission. See TWikiAccessControl for information on setting up access permissions.
 
 ---++ Special Considerations
 

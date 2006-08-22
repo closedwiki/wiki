@@ -308,8 +308,8 @@ _(Click for form-based editing of existing preferences.)_
 
    * Users or groups allowed to change or rename this <nop>%TOPIC% topic:
       * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
-      * Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
-
+   * By default, only admins can create webs in the root
+      * Set ALLOWROOTCHANGE = %MAINWEB%.TWikiAdminGroup
 
 ---++ Creating New Preference Variables
  

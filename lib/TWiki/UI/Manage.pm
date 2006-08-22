@@ -144,19 +144,13 @@ sub _createWeb {
     my $siteMapUseTo = $query->param( 'sitemapuseto' ) || '';
     my $noSearchAll = $query->param( 'nosearchall' ) || '';
 
-    # check permission, user authorized to create webs?
-#    TWiki::UI::checkAccess( $session, $webName, $topicName,
-#                            'MANAGE', $session->{user} );
-    #hack due to late realisation of hacking possibility
-    unless($session->{user}->isAdmin()) { 
-        throw TWiki::OopsException( 'accessdenied',
-                                    def => 'topic_access',
-                                    web => $webName,
-                                    topic => $topicName,
-                                    params =>
-                                    [ 'MANAGE',
-                                      $session->{i18n}->maketext('access not allowed on web')]);
+    # check permission, user authorized to create web here?
+    my $parent = undef; # default is root if no parent web
+    if( $webName =~ m|^(.*)[./](.*?)$| ) {
+        $parent = $1;
     }
+    TWiki::UI::checkAccess( $session, $parent, undef,
+                            'CHANGE', $session->{user} );
 
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {

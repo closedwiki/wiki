@@ -2,8 +2,7 @@
 %META:TOPICPARENT{name="TWikiAccessControl"}%
 #VarALLOWTOPICVIEW
 #VarALLOWTOPICCHANGE
-#VarALLOWTOPICRENAME
----+++ ALLOWTOPICVIEW, ALLOWTOPICCHANGE, ALLOWTOPICRENAME -- access control for topics
+---+++ ALLOWTOPICVIEW, ALLOWTOPICCHANGE -- access control for topics
 
 
 These variables define lists of users and groups who may view or edit

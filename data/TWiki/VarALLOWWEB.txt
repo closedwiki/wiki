@@ -2,13 +2,12 @@
 %META:TOPICPARENT{name="TWikiAccessControl"}%
 #VarALLOWWEBVIEW
 #VarALLOWWEBCHANGE
-#VarALLOWWEBRENAME
----+++ ALLOWWEBVIEW, ALLOWWEBCHANGE, ALLOWWEBRENAME -- access control for webs
+---+++ ALLOWWEBVIEW, ALLOWWEBCHANGE -- access control for webs
 
 
 These variables define lists of users and groups who may view or edit
 topics in a web, or move them around.  They must be defined in a web's
 !WebPreferences topic and are ignored in other topics.
    * Type: Access control - See [[%TWIKIWEB%.TWikiAccessControl]] for a comprehensive description.
-   * Related: [[TWikiVariables.#VarDENYWEBVIEW][DENYWEBVIEW]], [[TWikiVariables.#VarDENYWEBCHANGE][DENYWEBCHANGE]], [[TWikiVariables.#VarDENYWEBRENAME][DENYWEBRENAME]], [[%TWIKIWEB%.TWikiAccessControl]]
+   * Related: [[TWikiVariables.#VarDENYWEBVIEW][DENYWEBVIEW]], [[TWikiVariables.#VarDENYWEBCHANGE][DENYWEBCHANGE]], [[%TWIKIWEB%.TWikiAccessControl]]
 

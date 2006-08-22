@@ -1,9 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1120654797" format="1.1" version="$Rev$"}%
 ---+ Permissions settings of the webs on this TWiki site
 %STARTINCLUDE%
-| *Web* | *Sitemap* | *VIEW* || *CHANGE* || *RENAME* ||
-|^| *Listed* | *DENY* | *ALLOW* | *DENY* | *ALLOW* | *DENY* | *ALLOW* |
-%SEARCH{ "DENYWEBVIEW" web="%MAINWEB%, %TWIKIWEB%, all" topic="%WEBPREFSTOPIC%" nototal="on" nosearch="on" format="| [[$web.WebHome][$web]] [[$web.WebPreferences][...]] | $percntVAR{ \"SITEMAPLIST\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBCHANGE\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBCHANGE\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBRENAME\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBRENAME\" web=\"$web\" }$percnt |" }%
+| *Web* | *Sitemap* | *VIEW* || *CHANGE* ||
+|^| *Listed* | *DENY* | *ALLOW* | *DENY* | *ALLOW* |
+%SEARCH{ "DENYWEBVIEW" web="%MAINWEB%, %TWIKIWEB%, all" topic="%WEBPREFSTOPIC%" nototal="on" nosearch="on" format="| [[$web.WebHome][$web]] [[$web.WebPreferences][...]] | $percntVAR{ \"SITEMAPLIST\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBCHANGE\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBCHANGE\" web=\"$web\" }$percnt |" }%
 
 See TWikiAccessControl for details 
 

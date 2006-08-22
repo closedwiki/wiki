@@ -2,8 +2,7 @@
 %META:TOPICPARENT{name="TWikiAccessControl"}%
 #VarDENYTOPICVIEW
 #VarDENYTOPICCHANGE
-#VarDENYTOPICRENAME
----+++ DENYTOPICVIEW, DENYTOPICCHANGE, DENYTOPICRENAME -- access control for topics
+---+++ DENYTOPICVIEW, DENYTOPICCHANGE -- access control for topics
 
 
 These variables define lists of users and groups who may _not_ view or edit

@@ -255,6 +255,8 @@ the prefs stack.
 
 sub getTopicPreferencesValue {
     my( $this, $key, $web, $topic ) = @_;
+
+    return undef unless defined $web && defined $topic;
     my $wtn = $web.'.'.$topic;
 
     unless( $this->{TOPICS}{$wtn} ) {
@@ -299,6 +301,9 @@ the prefs stack.
 
 sub getWebPreferencesValue {
     my( $this, $key, $web ) = @_;
+
+    return undef unless defined $web;
+
     my $wtn = $web.'.'.$TWiki::cfg{WebPrefsTopicName};
 
     unless( $this->{WEBS}{$wtn} ) {

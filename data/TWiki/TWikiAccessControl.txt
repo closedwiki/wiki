@@ -75,13 +75,10 @@ You can define who is allowed to read or write to a web or a topic. Note that so
 
    * Restricting VIEW blocks viewing and searching of content.
    * Restricting CHANGE blocks creating new topics, changing topics or attaching files.
-   * Restricting RENAME controls who is allowed to rename, move or delete a topic.
-      * To rename, move or delete a topic, the user also also needs VIEW and CHANGE permission.  They also need CHANGE access to change references in any referring topics (though the rename can proceed without this access), and CHANGE access to the target topic.
-   * Restricting MANAGE controls access to certain management functions, such as 'create web'. It must be set in the %TWIKIWEB% web.
 
 ---+++ Controlling access to a Web
 
-You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web. You can restrict access to certain webs to selected Users and Groups, by:
+You can define restrictions on who is allowed to view a <nop>%WIKITOOLNAME% web. You can restrict access to certain webs to selected Users and Groups, by:
 
    * *authenticating all webs and restricting selected webs:* Topic access in all webs is authenticated, and selected webs have restricted access.
    * *authenticating and restricting selected webs only:* Provide unrestricted viewing access to open webs, with authentication and restriction only on selected webs.
@@ -91,8 +88,6 @@ You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web.
       * ==Set <nop>ALLOWWEBVIEW = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>DENYWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
-      * ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
-      * ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
 *Be careful* with empty values for any of these. In older versions of TWiki,
    * ==Set <nop>ALLOWWEBVIEW = <nop>==
@@ -107,8 +102,6 @@ now means _do not deny anyone the right to view this web_. See "How TWiki evalua
       * ==Set <nop>ALLOWTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>DENYTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
       * ==Set <nop>ALLOWTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
-      * ==Set <nop>DENYTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
-      * ==Set <nop>ALLOWTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
 
@@ -137,9 +130,16 @@ That way all the controls that apply to the topic also apply to attachments to t
 
 __Note:__ Images embedded in topics will load much slower since each image will be delivered by the =viewfile= script.
 
+---+++ Controlling who can create top-level webs
+Top level webs are a special case, because they don't have a parent web with a %WEBPREFSTOPIC%. So there has to be a special control just for the root level.
+   * You can define these settings in the %MAINWEB%.%TWIKIPREFSTOPIC% topic, preferable towards the end of the topic:
+      * ==Set <nop>DENYROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWROOTCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+Note that you do *not* require =ROOTCHANGE= access to rename an existing top-level web. You just need =WEBCHANGE= in the web itself.
+
 ---+++ How TWiki evaluates ALLOW/DENY settings
 
-When deciding whether to grant access, TWiki evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
+When deciding whether to grant access, TWiki evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW and CHANGE access may be granted/denied separately.
    1 If the user is a [[#SuperAdminGroup][super-user]]
       * access is *PERMITTED*.
    1 If DENYTOPIC is set to a list of wikinames

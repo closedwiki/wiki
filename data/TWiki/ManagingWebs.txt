@@ -36,6 +36,7 @@ __%X% Note:__ *Keep the number of webs to a minimum!* It is not recommended to c
 </form>
 
 __Notes:__
+   * You have to have =ROOTCHANGE= access to create a top-level web (one with no parent)
    * Attachments will NOT get copied over along with their topics
    * While creating the new web, TWiki will update the following variables in the %WEBPREFSTOPIC%: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
    * TWiki does not edit the [[%TWIKIWEB%.TWikiPreferences]] to update the =WIKIWEBLIST=.  This must be done by hand
