@@ -37,11 +37,11 @@ sub afterSaveHandler {
 
   # force reload
   my $theDB = getDB($TWiki::Plugins::DBCachePlugin::currentWeb);
-  writeDebug("touching webdb for $TWiki::Plugins::DBCachePlugin::currentWeb");
+  #writeDebug("touching webdb for $TWiki::Plugins::DBCachePlugin::currentWeb");
   $theDB->touch();
   if ($TWiki::Plugins::DBCachePlugin::currentWeb ne $_[2]) {
     $theDB = getDB($_[2]); 
-    writeDebug("touching webdb for $_[2]");
+    #writeDebug("touching webdb for $_[2]");
     $theDB->touch();
   }
 }
@@ -430,16 +430,16 @@ sub getDB {
   unless (defined $webDB{$theWeb}) {
     # never loaded
     $isModified = 1;
-    writeDebug("fresh reload");
+    #writeDebug("fresh reload");
   } else {
     unless (defined $webDBIsModified{$theWeb}) {
       # never checked
       $webDBIsModified{$theWeb} = $webDB{$theWeb}->isModified();
       if ($debug) {
 	if ($webDBIsModified{$theWeb}) {
-	  writeDebug("checking modified webdb for $theWeb");
+	  #writeDebug("checking modified webdb for $theWeb");
 	} else {
-	  writeDebug("don't need to load webdb for $theWeb");
+	  #writeDebug("don't need to load webdb for $theWeb");
 	}
       }
     }
@@ -450,7 +450,7 @@ sub getDB {
     my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb) 
       || 'TWiki::Plugins::DBCachePlugin::WebDB';
     $impl =~ s/^\s*(.*?)\s*$/$1/o;
-    writeDebug("loading new webdb for $theWeb");
+    #writeDebug("loading new webdb for $theWeb");
     eval "use $impl;";
     $webDB{$theWeb} = new $impl($theWeb);
     $webDB{$theWeb}->load();
@@ -495,9 +495,9 @@ sub _expandVariables {
   $theFormat =~ s/\$n/\n/go;
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$nop//g;
-  $theFormat =~ s/\$flatten\((.*)\)/&_flatten($1)/ges;
+  $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
   $theFormat =~ s/\$encode\((.*)\)/&_encode($1)/ges;
-  $theFormat =~ s/\$trunc\((.*),\s*(\d+)\)/substr($1,0,$2)/ges;
+  $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
 
   return $theFormat;
 }
