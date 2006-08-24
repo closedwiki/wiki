@@ -364,7 +364,7 @@ sub viewfile {
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'viewfile' );
     unless( $fileName && $session->{store}->attachmentExists(
         $webName, $topic, $fileName )) {
-        throw TWiki::OopsException( 'accessdenied',
+        throw TWiki::OopsException( 'attention',
                                     def => 'no_such_attachment',
                                     web => $webName,
                                     topic => $topic,
