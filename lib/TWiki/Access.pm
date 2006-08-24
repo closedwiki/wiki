@@ -119,11 +119,11 @@ sub checkAccessPermission {
 
     undef $this->{failure};
 
-    print STDERR "Check $mode access ", $user->stringify()," to ", ($web||'undef'), '.', ($topic||'undef'),"\n";
+    #print STDERR "Check $mode access ", $user->stringify()," to ", ($web||'undef'), '.', ($topic||'undef'),"\n";
 
     # super admin is always allowed
     if( $user->isAdmin() ) {
-        print STDERR $user->stringify() . " - ADMIN\n";
+        #print STDERR $user->stringify() . " - ADMIN\n";
         return 1;
     }
 
@@ -153,12 +153,12 @@ sub checkAccessPermission {
         if( $denyText =~ /\S$/ ) {
             if( $user->isInList( $denyText )) {
                 $this->{failure} = $this->{session}->{i18n}->maketext('access denied on topic');
-                print STDERR $this->{failure},"\n";
+                #print STDERR $this->{failure},"\n";
                 return 0;
             }
         } else {
             # If DENYTOPIC is empty, don't deny _anyone_
-            print STDERR "DENYTOPIC is empty\n";
+            #print STDERR "DENYTOPIC is empty\n";
             return 1;
         }
     }
@@ -166,11 +166,11 @@ sub checkAccessPermission {
     # Check ALLOWTOPIC. If this is defined the user _must_ be in it
     if( defined( $allowText ) && $allowText =~ /\S/ ) {
         if( $user->isInList( $allowText )) {
-            print STDERR "in ALLOWTOPIC\n";
+            #print STDERR "in ALLOWTOPIC\n";
             return 1;
         }
         $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on topic');
-        print STDERR $this->{failure},"\n";
+        #print STDERR $this->{failure},"\n";
         return 0;
     }
 
@@ -181,7 +181,7 @@ sub checkAccessPermission {
           $prefs->getWebPreferencesValue( 'DENYWEB'.$mode, $web );
         if( defined( $denyText ) && $user->isInList( $denyText )) {
             $this->{failure} = $this->{session}->{i18n}->maketext('access denied on web');
-            print STDERR $this->{failure},"\n";
+            #print STDERR $this->{failure},"\n";
             return 0;
         }
     }
@@ -193,7 +193,7 @@ sub checkAccessPermission {
     if( defined( $allowText ) && $allowText =~ /\S/ ) {
         unless( $user->isInList( $allowText )) {
             $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on web');
-            print STDERR $this->{failure},"\n";
+            #print STDERR $this->{failure},"\n";
             return 0;
         }
     }
@@ -204,7 +204,7 @@ sub checkAccessPermission {
           $prefs->getPreferencesValue( 'DENYROOT'.$mode, $web );
         if( defined( $denyText ) && $user->isInList( $denyText )) {
             $this->{failure} = $this->{session}->{i18n}->maketext('access denied on root');
-            print STDERR $this->{failure},"\n";
+            #print STDERR $this->{failure},"\n";
             return 0;
         }
 
@@ -213,15 +213,15 @@ sub checkAccessPermission {
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
             unless( $user->isInList( $allowText )) {
                 $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on root');
-                print STDERR $this->{failure},"\n";
+                #print STDERR $this->{failure},"\n";
                 return 0;
             }
         }
     }
 
-    print STDERR "OK, permitted\n";
-    print STDERR "ALLOW: $allowText\n" if defined $allowText;
-    print STDERR "DENY: $denyText\n" if defined $denyText;
+    #print STDERR "OK, permitted\n";
+    #print STDERR "ALLOW: $allowText\n" if defined $allowText;
+    #print STDERR "DENY: $denyText\n" if defined $denyText;
     return 1;
 }
 
