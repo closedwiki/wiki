@@ -28,7 +28,7 @@ use vars qw(
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 $VERSION = '$Rev$';
-$RELEASE = '1.34';
+$RELEASE = '1.35';
 
 $debug = 0; # toggle me
 
@@ -89,8 +89,7 @@ sub initRedirector {
   $query = &TWiki::Func::getCgiQuery();
   return unless $query;
 
-  my $theAction = $ENV{'SCRIPT_NAME'} || '';
-  $theAction =~ s/^.*\///o;
+  my $theAction = getCgiAction();
   #writeDebug("theAction=$theAction");
 
   my $sessionKey = "REDDOT_REDIRECT_$web.$topic";
@@ -290,6 +289,24 @@ sub redirectCgiQueryHandler {
   return 0;
 }
 
+###############################################################################
+# take the REQUEST_URI, strip off the PATH_INFO from the end, the last word
+# is the action; this is done that complicated as there may be different
+# paths for the same action depending on the apache configuration (rewrites, aliases)
+sub getCgiAction {
 
+  my $pathInfo = $ENV{'PATH_INFO'} || '';
+  my $theAction = $ENV{'REQUEST_URI'} || '';
+  if ($theAction =~ /^.*?\/([^\/]+)$pathInfo.*$/) {
+    $theAction = $1;
+  } else {
+    $theAction = 'view';
+  }
+  #writeDebug("PATH_INFO=$ENV{'PATH_INFO'}");
+  #writeDebug("REQUEST_URI=$ENV{'REQUEST_URI'}");
+  #writeDebug("theAction=$theAction");
+
+  return $theAction;
+}
 
 1;
