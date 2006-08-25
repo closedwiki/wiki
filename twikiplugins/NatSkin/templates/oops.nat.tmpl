@@ -14,7 +14,7 @@
 %TMPL:END%
 %TMPL:DEF{"goback"}%%MAKETEXT{"Please go <a href=\"javascript:history.back()\">back</a> in your browser and try again."}%
 
-<form class="natOopsButtons" name="ButtonBox" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
+<form class="natOopsButtons" name="ButtonBox" action="%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/%HOMETOPIC%">
   <input type="button" class="natOkButton" value='%MAKETEXT{"OK"}%' onclick="history.back()" />&nbsp;
   <input type="submit" class="natCancelButton"  value='%MAKETEXT{"Cancel"}%' />
 </form> %TMPL:END%
