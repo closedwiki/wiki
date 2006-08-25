@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2004 C-Dot Consultants - All rights reserved
 #
@@ -62,8 +63,20 @@ Contribs are held in the =lib/TWiki/Contrib= directory instead of =lib/TWiki/Plu
 | contrib/ | this is where non-TWiki, non-web-accessible files associated with a Contrib or plugin go |
 
 ---+++ Environment Variables
-   * =$TWIKI_LIBS= is a colon-separated path list that may be set to point at any required dependencies (usually CPAN dependencies). =$TWIKI_LIBS= is used to extend @INC for the duration of the build. If all dependencies are satisfied by directories on @INC it isn't required.
-   * =$TWIKI_HOME= should point to the root of your test TWiki installation. =$TWIKI_HOME= is where the =install= target will run test installs. It is not needed if you never use the =install= target.
+During development you might use a single directory tree to do all of developemnt, development testing and release testing. Alternatively you might use:
+   1 A subversion checkout tree for the sources
+   1 A test installation
+   1 An installation of the latest released TWiki for final release testing
+Or you might use some other combination in between - it depends on what you are developing. To make the build as flexible as possible, !BuildContrib supports a number of environment variables that can be used to point to your different components.
+
+The build process requires access to the TWiki libraries, so it can pick up the components of the build system. There are two ways to point to the required perl libraries:
+   1 Set =PERL5LIB= (as described in =man perlrun=) to point to the =lib= directory in your development area. You may also want to point to your =lib/CPAN/lib= directory to pick up CPAN dependencies, if you are using a local install.
+      * The *advantage* of setting =PERL5LIB= is that you only need to set it once, in your login script.
+      * The *disadvantage* of setting it is that any TWiki scripts you run during testing will *also* pick up these libs, which may mask problems elsewhere in your configuration.
+   1 Set =TWIKI_LIBS= (which is a path, same as PERL5LIB) to point to your =lib= directory in your development area. =$TWIKI_LIBS= is used to extend @INC _for the duration of the build only_, so it won't mask problems during testing.
+The approach we _recommend_ is to set =TWIKI_LIBS= in your login script (e.g. =.login=, =.csh=, =.profile= depending on what shell you prefer).
+
+The build scripts support the =install= target. if you are developing a TWiki extension, you can use the =install= target to automatically install your package in a test installation. The environment variable =TWIKI_HOME= should be pointed to the *root* of your *test* TWiki installation. It is not needed if you never use the =install= target (for example, if you use =pseudo-install.pl= to install in your development system.
 
 ---+++ Manifest
 The main driving file for the build is the MANIFEST file. This contains a list of all the files that are wanted in the zip file. It is located at build time by looking in the current directory, and if there is no file there looking up a level, and so on. It will normally be held in your _module directory_. The MANIFEST file consists of a list of file paths, each relative to the root of the installation. Wildcards may NOT be used. Each file has an optional octal permissions mask and a description; for example,
@@ -79,7 +92,7 @@ MANIFESTs can trigger the inclusion of other modules that have been wrapped usin
 This will use 'perl build.pl handsoff_install' to build and install the module in the release tree being built.
 
 ---+++ Dependencies
-The DEPENDENCIES file specifies module dependencies, for example dependencies on other TWiki modules and on CPAN modules etc. It is found in the same way as the MANIFEST file. The DEPENDENCIES file contains a list of lines, each of which is a single dependency:
+The DEPENDENCIES file specifies module dependencies, for example dependencies on other TWiki modules and on CPAN modules. It is found in the same way as the MANIFEST file. The DEPENDENCIES file contains a list of lines, each of which is a single dependency:
 <verbatim>
 name, version, type, description
 </verbatim>
@@ -88,8 +101,19 @@ where
    * version is the version constraint (e.g. ">1.5"),
    * type is its type (CPAN, perl, C etc) and
    * description is a short description of the module and where to get it.
-Perl modules also referenced in the dependencies list in the stub topic should be listed using their perl package name (e.g. TWiki::Contrib::MyContrib) and use the type 'perl'.
+---++++ Calculating DEPENDENCIES
+When your module (the _depender_) depends on another module (a _dependee_), it is important to think carefully about what version of the dependee your module requires.
 
+When you are working with TWiki modules (such as contribs and plugins) you should list the version number of the module that you tested with. Normally you will want to use a <code>&gt;</code> condition, so that more recent versions will also work. If a dependency on a TWiki module fails (because the module isn't installed, for example) then the installer script will pull *the latest version* of the module from TWiki.org, whether that is the required version or not. This is a limitation of the way plugins are stored on TWiki.org.
+
+When you are working with CPAN modules, you need to take account of the fact that there are *two types* of CPAN modules; _built-ins_ and _add-ons_.
+
+*Built-ins* are perl modules that are pre-installed in the perl distribution. Since these modules are usually very stable, it is generally safe to express the version dependency as ">0" (i.e. "any version of the module will do").
+
+Note however that the list of built-in modules is constantly growing with each new release of perl. So your module may be installed with a perl version that doesn't have the required module pre-installed. In this case, CPAN will *automatically try to upgrade the perl version*! There is no way around this, other than for the admin on the target system to *manually* install the module (download frm CPAN and build locally). You can help out the dmin by expressing the dependency clearly, thus:
+File::Find,>0,cpan,This module is shipped as part of standard perl from perl 5.8.0 onwards. If your perl installation is older than this, you should either upgrade perl, or *manually* install this module. If you allow this installer to continue, it will *automatically upgrade your perl installation* which is probably not what you want!
+
+---++++ ONLYIF
 A dependency may optionally be preceded by a condition that limits the cases where the dependency applies. The condition is specified using a line that contans <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl conditional. This is most useful for enabling dependencies only for certain versions of TWiki. For example,
 <verbatim>
 TWiki::Rhinos,>=1.000,perl,Required. Download from TWiki:Plugins/RhinosContrib and install.
@@ -247,11 +271,8 @@ sub new {
     }
 
     # the .pm module
-    if ($rootModule) {
-        $this->{pm} = $this->{libdir}.'/'.$rootModule.'.pm';
-    } else {
-        $this->{pm} = $this->{libdir}.'/'.$project.'.pm';
-    }
+    $this->{ROOTMODULE} = $rootModule || $project;
+    $this->{pm} = $this->{libdir}.'/'.$this->{ROOTMODULE}.'.pm';
 
     my $stubpath = $this->{pm};
     $stubpath =~ s/.*[\\\/](TWiki[\\\/].*)\.pm/$1/;
@@ -332,6 +353,27 @@ sub new {
 
     $this->{MODULE} = $this->{project};
 
+    $this->{INSTALL_INSTRUCTIONS} = <<HERE;
+This module is shipped with a fully automatic installer script.
+   * If you have a permanent connection to the internet, you are recommended to use the automatic installer script
+      * There is no need to download any archives. Just download the =$this->{MODULE}_installer.pl= script and run it.
+      * If the \$TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
+      * The script requires Perl 5.8, File::Temp and File::Copy
+   * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
+      * Point the environment variable =\$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages
+      * If you are behind a firewall that blocks access to CPAN, you can build a local CPAN mini-mirror, as described at http://twiki.org/cgi-bin/view/Codev/BuildingDakar#CPAN_local_minimirror
+   * The installer script will:
+      * Automatically resolve dependencies,
+      * Copy files into the right places in your local install even if you have renamed data directories,
+      * check in new versions of any installed files that have existing RCS histories files in your existing install.
+   * If you don't want to use the script, or have problems on your platform (e.g. you don't have Perl 5.8), then you can still install manually:
+      1 Download and unpack one of the =.zip= or =.tgz= archives to a temporary directory.
+      1 Manually copy the contents across to the relevant places in your TWiki installation.
+      1 Check in any installed files that have existing =,v= files in your existing install (take care *not* to lock the files when you check in)
+      1 Manually edit !LocalSite.cfg to set any configuration variables.
+      1 Run =configure= and enable the module, if it is a plugin.
+      1 Repeat from step 1 for any missing dependencies.
+HERE
     return $this;
 }
 
@@ -417,14 +459,31 @@ sub _get_svn_version {
 }
 
 sub ask {
-    my $q = shift;
+    my ($q, $default) = @_;
     my $reply;
     local $/ = "\n";
 
     $q .= '?' unless $q =~ /\?\s*$/;
 
-    print $q.' [y/n] ';
+    my $yorn = 'y/n';
+    if (defined $default) {
+        if ($default =~ /y/i) {
+            $default = 'yes';
+            $yorn = 'Y/n';
+        } elsif( $default =~ /n/i) {
+            $default = 'no';
+            $yorn = 'y/N';
+        } else {
+            $default = undef;
+        }
+    }
+    print $q.' ['.$yorn.'] ';
+
     while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
+        if ($reply =~ /^\s*$/ && defined($default)) {
+            $reply = $default;
+            last;
+        }
         print "Please answer yes or no\n";
     }
     return ( $reply =~ /^y/i ) ? 1 : 0;
@@ -687,6 +746,7 @@ Expands tokens. The following tokens are supported:
    * %$TWIKIORGSCRIPT% - URL of twiki.org scripts dir
    * %$TWIKIORGPUB% - URL of twiki.org pub dir
    * %$BUGSURL% - URL of bugs web
+   * %$INSTALL_INSTRUCTIONS% - basic instructions for installing
 Three spaces is automatically translated to tab.
 
 The filter is used in the generation of documentation topics and the installer
@@ -702,6 +762,8 @@ sub filter_txt {
     local $/ = undef;
     my $text = <IF>;
     close(IF);
+    # remove topicinfo; it is just confusing
+    $text =~ s/^%META:TOPICINFO{.*}%$//m;
     $text =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
 
     unless ($this->{-n}) {
@@ -714,7 +776,7 @@ sub filter_txt {
 sub _expand {
     my ($this, $tok) = @_;
     if (!$this->{$tok} && $tok eq 'POD') {
-        $this->build('pod');
+        $this->build('POD');
     }
     if (defined($this->{$tok})) {
         if ($this->{-v} || $this->{-n}) {
@@ -821,7 +883,7 @@ sub target_stage {
 =pod
 
 ---++++ target_archive
-makes zip and tgz archives of the files in tmpDir
+Makes zip and tgz archives of the files in tmpDir. Also copies the installer.
 
 =cut
 
@@ -845,15 +907,20 @@ sub target_archive {
     $this->perl_action('File::Copy::move("'.$project.'.tgz", "'.
                          $this->{basedir}.'/'.$project.'.tgz")');
 
+    $this->cp($this->{tmpDir}.'/'.$project.'_installer.pl',
+              $this->{basedir}.'/'.$project.'_installer.pl');
+
     $this->popd();
 
     $this->sys_action('md5sum '.$this->{basedir}.'/'.$project.'.tgz '.
+                        $this->{basedir}.'/'.$project.'_installer.pl '.
                         $this->{basedir}.'/'.$project.'.zip > '.
                         $this->{basedir}.'/'.$project.'.md5');
 
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
     print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
     print 'Release TOPIC is '.$this->{basedir}.'/'.$project.'.txt',$NL;
+    print 'Release INSTALLER is '.$this->{basedir}.'/'.$project.'_installer.pl',$NL;
     print 'MD5 checksums are in '.$this->{basedir}.'/'.$project.'.md5',$NL;
 }
 
@@ -1089,9 +1156,10 @@ END
 
     return if($this->{-topiconly});
 
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.zip', $this->{basedir}.'/'.$to.'.zip', 'Unzip and run the installer script, if there is one');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Untar and run the installer script, if there is one');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.md5', $this->{basedir}.'/'.$to.'.md5', 'md5 checksums');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.zip', $this->{basedir}.'/'.$to.'.zip', 'Download, unzip and run the installer script for manual install');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Download, untar and run the installer script for manual install');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Download and run for automatic install');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.md5', $this->{basedir}.'/'.$to.'.md5', 'md5 checksums, calculated for .zip. tgz and .pl');
 }
 
 #%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153565200" path="timeline.jpg" size="11824" user="Main.SvenDowideit" version="1"}%
@@ -1137,29 +1205,23 @@ sub _unhtml {
     return $html;
 }
 
-=pod
+# Build POD documentation. This target defines =%$POD%= - it
+# does not generate any output. The target will be invoked
+# automatically if =%$POD%= is used in a .txt file. POD documentation
+# is intended for use by developers only.
 
----++++ target_pod
+# POD text in =.pm= files should use TWiki syntax or HTML. Packages should be
+# introduced with a level 1 header, ---+, and each method in the package by
+# a level 2 header, ---++. Make sure you document any global variables used
+# by the module.
 
-Build POD documentation. This target defines =%$POD%= - it
-does not generate any output files. The target will be invoked
-automatically if =%$POD%= is used in a .txt file. POD documentation
-is intended for use by developers only.
-
-POD text in =.pm= files should use TWiki syntax or HTML. Packages should be
-introduced with a level 0 header, and each method in the package by
-a second level header. Make sure you document any global variables used
-by the module.
-
-=cut
-
-sub target_pod {
+sub target_POD {
     my $this = shift;
     $this->{POD} = '';
     local $/ = "\n";
     foreach my $file (@{$this->{files}}) {
         my $pmfile = $file->{name};
-        if ($pmfile =~ /\.pm$/o) {
+        if ($pmfile =~ /\.p[ml]$/o) {
             $pmfile = $this->{basedir}.'/'.$pmfile;
             open(PMFILE,"<$pmfile") || die $!;
             my $inPod = 0;
@@ -1175,6 +1237,26 @@ sub target_pod {
             close(PMFILE);
         }
     }
+}
+
+=pod
+
+---++++ target_POD
+
+Print POD documentation. This target does not modify any files, it simply
+prints the (TWiki format) POD.
+
+POD text in =.pm= files should use TWiki syntax or HTML. Packages should be
+introduced with a level 1 header, ---+, and each method in the package by
+a level 2 header, ---++. Make sure you document any global variables used
+by the module.
+
+=cut
+
+sub target_pod {
+    my $this = shift;
+    $this->target_POD();
+    print $this->{POD}."\n";
 }
 
 =pod
