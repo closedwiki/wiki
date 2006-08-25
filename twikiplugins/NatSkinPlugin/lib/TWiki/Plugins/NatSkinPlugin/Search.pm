@@ -26,6 +26,7 @@ use vars qw($isInitialized $debug $includeWeb $excludeWeb
 	    $sandbox  $specialCharPattern);
 use URI::Escape;
 use TWiki::Plugins::NatSkinPlugin;
+
 $debug = 0; # toggle me
 $specialCharPattern = qr/([^\\])([\$\@\%\&\#\'\`\/])/o;
 
@@ -116,11 +117,10 @@ sub natSearch {
   # construct the list of webs to search in
   my @webList = ($theWeb);
   if ($options =~ /g/) {
-    @webList = TWiki::Func::getPublicWebList();
+    @webList = sort TWiki::Func::getPublicWebList();
     @webList = grep (/^$includeWeb$/, @webList) if $includeWeb;
     @webList = grep (!/^$excludeWeb$/, @webList) if $excludeWeb;
     @webList = grep (!/^$theWeb$/, @webList);
-    @webList = sort @webList;
     unshift @webList, $theWeb;
   }
   #writeDebug("webList=" . join(',', @webList));
@@ -136,9 +136,9 @@ sub natSearch {
   #     (3.1) try a topic search
   #     (3.2) fallback to content search
   my ($results, $nrHits);
-  if ($theSearchString =~ /^[A-Z]/) { 
+  if ($theSearchString =~ /^[A-Z]/) {
     if ($theSearchString =~ /^(.*)\.(.*?)$/) {  # Special web.topic notation
-      $theWeb = $1;
+      @webList = ($1);
       $theSearchString = $2;
     }
 
