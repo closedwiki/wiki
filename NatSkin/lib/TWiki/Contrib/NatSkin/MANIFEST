@@ -3,13 +3,17 @@ data/Main/TWikiGuestSideBar.txt 0644
 data/Main/WebLinks.txt 0644
 data/TWiki/MySideBarTemplate.txt 0644
 data/TWiki/MySideBar.txt 0644
+data/TWiki/NatSearch.txt 0644
+data/TWiki/NatSkinConfiguration.txt 0644
 data/TWiki/NatSkinCss.txt 0644
+data/TWiki/NatSkinFAQ.txt 0644
 data/TWiki/NatSkinStyleBrowser.txt 0644
 data/TWiki/NatSkinTemplates.txt 0644
 data/TWiki/NatSkin.txt 0644
 data/TWiki/TWikiWebButtons.txt 0644
 data/TWiki/TWikiWebCss.txt 0644
 data/TWiki/TWikiWebLinks.txt 0644
+data/TWiki/TWikiWebRightBar.txt 0644
 data/TWiki/TWikiWebSideBar.txt 0644
 data/TWiki/TWikiWebTopicActions.txt 0644
 data/TWiki/WebLinks.txt 0644
@@ -180,6 +184,7 @@ templates/form.nat.tmpl 0644
 templates/formtables.nat.tmpl 0644
 templates/login.nat.tmpl 0644
 templates/mailnotify.nat.tmpl 0644
+templates/messages.nat.tmpl 0644
 templates/moveattachment.nat.tmpl 0644
 templates/moveattachmentsidebar.nat.tmpl 0644
 templates/oopsaccesschange.nat.tmpl 0644

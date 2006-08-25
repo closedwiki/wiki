@@ -1,5 +1,5 @@
 // (c)opyright 2006 MichaelDaum@WikiRing.com
-function writeEmailAddrs(addrs, linkText, id) {
+function wremo(emoas, linkText, id) {
   var elem = document.getElementById(id);
   if (elem) {
     if (elem.firstChild) {
@@ -9,18 +9,18 @@ function writeEmailAddrs(addrs, linkText, id) {
     var anchor = document.createElement("a");
     elem.appendChild(anchor);
 
-    anchor.href = 'mailto:';
+    anchor.href = 'ma'+'il'+'to'+':';
 
-    for (var i = 0; i < addrs.length; i++) {
-      anchor.href += addrs[i][1] + '@' + addrs[i][0] + '.' + addrs[i][2];
-      if (i < addrs.length-1) {
+    for (var i = 0; i < emoas.length; i++) {
+      anchor.href += emoas[i][1] + '@' + emoas[i][0] + '.' + emoas[i][2];
+      if (i < emoas.length-1) {
 	anchor.href += ', ';
       }
     }
 
     if (linkText == '') {
-      for (var i = 0; i < addrs.length; i++) {
-	linkText += addrs[i][1] + '@' + addrs[i][0] + '.' + addrs[i][2] + ' ';
+      for (var i = 0; i < emoas.length; i++) {
+	linkText += emoas[i][1] + '@' + emoas[i][0] + '.' + emoas[i][2] + ' ';
       }
     }
     var anchorText = document.createTextNode(linkText);
@@ -28,4 +28,3 @@ function writeEmailAddrs(addrs, linkText, id) {
   }
 }
 
-addLoadEvent(initObfuscator);

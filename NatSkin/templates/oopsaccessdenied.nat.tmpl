@@ -1,34 +1,5 @@
 %TMPL:INCLUDE{"oopslogonbase"}%
 <!-- template: oopsaccessdenied.nat.tmpl -->
+%TMPL:INCLUDE{"messages"}%
 %TMPL:DEF{"heading"}%%MAKETEXT{"Access Denied"}%%TMPL:END%
-%TMPL:DEF{"topic_access"}% <!-- -->
-%MAKETEXT{"[_1] has no permission to [_2] *[_3]*." args="<nop>%WIKINAME%,%PARAM1%,%TOPIC%"}%
-
-%TMPL:P{"logon"}%
-
-%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
-%TWIKIWEB%.TWikiRegistration
-%TMPL:END%
-%TMPL:DEF{"only_group"}% <!-- -->
-%MAKETEXT{"Only members of the [_1] are allowed to perform this action." args="%PARAM1%"}%
-
-%TMPL:P{"logon"}%
-
-%MAKETEXT{"See also:"}% %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
-%TWIKIWEB%.TWikiRegistration
-%TMPL:END%
-%TMPL:DEF{"no_such_web"}% <!-- -->
----++ %MAKETEXT{"The [_1] web does not exist" args="\"%WEB%\""}%
-%MAKETEXT{"You are trying to '[_1]' a topic in a web that does not exist." args="%PARAM1%"}%
-
-%TMPL:P{"goback"}%
-%TMPL:END%
-%TMPL:DEF{"no_such_topic"}% <!-- -->
----++ %MAKETEXT{"\"[_1]\" topic does not exist" args="%WEB%.%TOPIC%"}%
-%MAKETEXT{"You are trying to [_1] a topic that does not exist." args="%PARAM1%"}%
-
-%MAKETEXT{"If you want to create the topic then [[[_1]][click here]]." args="%NATSCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%"}%
-%TMPL:END%
-%TMPL:DEF{"message"}% <!-- -->
-%INSTANTIATE%
-%TMPL:END%
+%TMPL:DEF{"message"}%%INSTANTIATE%%TMPL:END%
