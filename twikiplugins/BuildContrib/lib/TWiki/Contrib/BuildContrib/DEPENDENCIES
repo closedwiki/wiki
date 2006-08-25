@@ -1,9 +1,9 @@
 Test::Unit,>=0.24,cpan,Optional, required for unit testing. Available from CPAN:Test::Unit
-Pod::Text,>=2.21,cpan,POD documentation extracter. Available from CPAN:Pod::Text
-File::Spec,>=0.86,cpan,Used to convert relative paths to absolute. Available from CPAN:File::Spec
-File::Find,>=1.05,cpan,Used to find file components. Available from CPAN:File::Find
-File::Copy,>=2.06,cpan,Used to copy files. Available from CPAN:File::Copy
-File::Path,>1000000,cpan,Used to build paths. Available from CPAN:File::Path
+Pod::Text,>=0,cpan,POD documentation extracter. Available from CPAN:Pod::Text
+File::Spec,>0,cpan,Used to convert relative paths to absolute. Available from CPAN:File::Spec
+File::Find,>0,cpan,Used to find file components. Available from CPAN:File::Find
+File::Copy,>0,cpan,Used to copy files. Available from CPAN:File::Copy
+File::Path,>0,cpan,Used to build paths. Available from CPAN:File::Path
 CGI,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
 Carp,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
 Error,>=0,cpan,May be required for lib/TWiki/Contrib/Build.pm
