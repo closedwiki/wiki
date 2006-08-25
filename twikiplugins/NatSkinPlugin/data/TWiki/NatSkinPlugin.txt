@@ -313,7 +313,7 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
                   removed unused IFACCESS tag; \
                   minor rewrite of the email obfuscator; \
                   fixed natsearch to properly support web.topic jumps; \
-		  moved part of the documentation to NatSkin; \
+		  moved part of the documentation to NatSkin |
 |  21 Aug 2006: | removed <nop>TablePlugin hack loading plugin preferences into the session store;\
                   instead provide proper css for twikiTables to match the current style now; \
                   this needs !TablePlugin from TWiki > 4.0.4; \
