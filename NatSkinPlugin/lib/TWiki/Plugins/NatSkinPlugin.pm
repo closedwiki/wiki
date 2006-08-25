@@ -30,13 +30,13 @@ use vars qw(
         $baseWeb $baseTopic $currentWeb $currentTopic 
 	$currentUser $VERSION $RELEASE $debug
         $isGuest $defaultWikiUserName $isEnabled
-	$useSpamObfuscator $isBeijing $isDakar $isCairo
-	$query $urlHost
+	$useEmailObfuscator $isBeijing $isDakar $isCairo
+	$query
 	$defaultSkin $defaultVariation $defaultStyleSearchBox
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
 	$defaultStyleButtons
 	%maxRevs
-	$hasInitKnownStyles $hasInitSkinState
+	$doneInit $doneInitKnownStyles $doneInitSkinState
 	%knownStyles 
 	%knownVariations 
 	%knownBorders 
@@ -57,7 +57,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre4';
+$RELEASE = '3.00-pre5';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -95,7 +95,7 @@ sub initPlugin {
       $isCairo = 1;
     }
   }
-  writeDebug("isDakar=$isDakar isBeijing=$isBeijing isCairo=$isCairo");
+  #writeDebug("isDakar=$isDakar isBeijing=$isBeijing isCairo=$isCairo");
   
   # check skin
   my $skin = TWiki::Func::getSkin();
@@ -115,21 +115,30 @@ sub initPlugin {
     $isEnabled = 1;
   }
 
-  &doInit();
+  $doneInit = 0;
+  $doneInitKnownStyles = 0;
+  $doneInitSkinState = 0;
+  $doneHeader = 0;
+  $nrEmails = 0;
+  %emailCollection = ();
+  %maxRevs = ();
 
-  writeDebug("done initPlugin");
+  #writeDebug("done initPlugin");
   return 1;
 }
 
 ###############################################################################
 sub doInit {
 
-  writeDebug("called doInit");
+  return if $doneInit;
+  $doneInit = 1;
+
+  #writeDebug("called doInit");
+  $query = &TWiki::Func::getCgiQuery();
 
   # get skin state from session
-  $hasInitKnownStyles = 0;
-  $hasInitSkinState = 0;
   &initKnownStyles();
+  &initSkinState();
 
   $defaultWikiUserName = &TWiki::Func::getDefaultUserName();
   $defaultWikiUserName = &TWiki::Func::userToWikiName($defaultWikiUserName, 1);
@@ -139,49 +148,41 @@ sub doInit {
   #writeDebug("defaultWikiUserName=$defaultWikiUserName, wikiUserName=$wikiUserName, isGuest=$isGuest");
 
   my $isScripted;
-  $query = &TWiki::Func::getCgiQuery();
   if ($isDakar) {
-    $isScripted = &TWiki::Func::getContext()->{'command_line'};
+    $isScripted = &TWiki::Func::getContext()->{'command_line'}?1:0;
+    #writeDebug("isScripted=$isScripted");
   } else {
     $isScripted = defined $query;
   }
 
-  $useSpamObfuscator = &TWiki::Func::getPreferencesFlag('OBFUSCATEEMAIL');
-  if ($useSpamObfuscator) {
+  $useEmailObfuscator = &TWiki::Func::getPreferencesFlag('OBFUSCATEEMAIL');
+  if ($useEmailObfuscator) {
     if ($isScripted || !$query) { # are we in cgi mode?
-      $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
-      #writeDebug("no query ... batch mode");
+      $useEmailObfuscator = 0; # batch mode, i.e. mailnotification
+      #writeDebug("no email obfuscation: batch mode");
     } else {
       # disable during register context
-      my $theAction = getCgiAction();      
       my $theSkin = $query->param('skin') || TWiki::Func::getSkin();
       my $theContentType = $query->param('contenttype');
-      if ($theAction =~ /^(register|mailnotif)/ || 
+      if ($skinState{'action'} =~ /^(register|mailnotif)/ || 
 	  $theSkin =~ /^rss/ ||
 	  $theContentType) {
-	$useSpamObfuscator = 0;
+	$useEmailObfuscator = 0;
       }
-      writeDebug("useSpamObfuscator=$useSpamObfuscator");
     }
   }
-  $nrEmails = 0;
-  %emailCollection = ();
-  $doneHeader = 0;
-  writeDebug("useSpamObfuscator=$useSpamObfuscator");
+  #writeDebug("useEmailObfuscator=$useEmailObfuscator");
 
-  $urlHost = &TWiki::Func::getUrlHost();
-  %maxRevs = ();
-
-  writeDebug("done doInit");
+  #writeDebug("done doInit");
 }
 
 ###############################################################################
 sub initKnownStyles {
 
-  return if $hasInitKnownStyles;
+  return if $doneInitKnownStyles;
 
-  writeDebug("called initKnownStyles");
-  $hasInitKnownStyles = 1;
+  #writeDebug("called initKnownStyles");
+  $doneInitKnownStyles = 1;
   %knownStyles = ();
   %knownVariations = ();
   %knownBorders = ();
@@ -228,12 +229,12 @@ sub initKnownStyles {
 ###############################################################################
 sub initSkinState {
 
-  return if $hasInitSkinState;
+  return if $doneInitSkinState;
 
-  $hasInitSkinState = 1;
+  $doneInitSkinState = 1;
   %skinState = ();
 
-  writeDebug("called initSkinState");
+  #writeDebug("called initSkinState");
 
   my $theStyle;
   my $theStyleBorder;
@@ -330,7 +331,6 @@ sub initSkinState {
   }
 
   # handle style
-  &initKnownStyles();
   my $prefStyle = &TWiki::Func::getPreferencesValue('SKINSTYLE') || 
     $defaultStyle;
   $prefStyle =~ s/^\s*(.*)\s*$/$1/go;
@@ -497,14 +497,6 @@ sub initSkinState {
     $skinState{'variation'} = $firstVari if $state == 1;
   }
 
-  # handle release
-  $skinState{'release'} = lc &getReleaseName();
-
-  # handle action
-  if ($query) { # are we in cgi mode?
-    $skinState{'action'} = getCgiAction();
-  }
-
   # store sticky state into session
   &TWiki::Func::setSessionValue('SKINSTYLE', $skinState{'style'}) 
     if $doStickyStyle;
@@ -518,6 +510,10 @@ sub initSkinState {
     if $doStickyVariation;
   &TWiki::Func::setSessionValue('STYLESEARCHBOX', $skinState{'searchbox'})
     if $doStickySearchBox;
+
+  # misc
+  $skinState{'release'} = lc &getReleaseName();
+  $skinState{'action'} = getCgiAction();
 
   # temporary toggles
   $theToggleSideBar = 'off' if $theRaw;
@@ -545,11 +541,8 @@ sub commonTagsHandler {
   $currentTopic = $_[1];
   $currentWeb = $_[2];
 
-  &initSkinState(); # this might already be too late but there is no
-                    # handler between initPlugin and beforeCommonTagsHandler
-		    # which only matters if you've got a SessionPlugin and the 
-		    # TablePlugin installed which most probably is only the 
-		    # case on a cairo installation
+  &doInit(); # delayed init not _possible_ during initPlugin
+
   $_[0] =~ s/%SETSKINSTATE{(.*?)}%/&renderSetSkinStyle($1)/geo;
 
   # conditional content
@@ -557,7 +550,6 @@ sub commonTagsHandler {
   while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/&renderIfSkinStateThen($2, $3, $1, $4)/geos) {
     # nop
   }
-  $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;# deprecated
   $_[0] =~ s/%NATLOGINURL%/&renderLoginUrl()/geo;
   $_[0] =~ s/%NATLOGOUTURL%/&renderLogoutUrl()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
@@ -584,21 +576,21 @@ sub commonTagsHandler {
   $_[0] =~ s/%NATMAXREV%/'1.'.&getMaxRevision()/geo;
 
   # spam obfuscator
-  if ($useSpamObfuscator) {
+  if ($useEmailObfuscator) {
     $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(?:\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $2)/ge;
     $_[0] =~ s/$STARTWW(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/&renderEmailAddrs([$1])/ge;
   }
 
   if (!$doneHeader && !$isDakar && $nrEmails) {
-    my $oldUseSpamObfuscator = $useSpamObfuscator;
-    $useSpamObfuscator = 0;
+    my $oldUseEmailObfuscator = $useEmailObfuscator;
+    $useEmailObfuscator = 0;
     if($_[0] =~ s/<\/head>/&renderEmailObfuscator() . '<\/head>'/geo) {
       #writeDebug("wrote email obfuscator");
       $doneHeader = 1;
 #      } else {
 #	writeDebug("no email obfuscator code");
     }
-    $useSpamObfuscator = $oldUseSpamObfuscator;
+    $useEmailObfuscator = $oldUseEmailObfuscator;
   }
   $_[0] =~ s/%WEBCOMPONENT{(.*?)}%/&renderWebComponent($1)/geo;
 }
@@ -624,72 +616,10 @@ sub postRenderingHandler {
   
   endRenderingHandler(@_); 
 
-  if ($useSpamObfuscator && $nrEmails) {
-    $useSpamObfuscator = 0;
+  if ($useEmailObfuscator && $nrEmails) {
+    $useEmailObfuscator = 0;
     &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
-    $useSpamObfuscator = 1;
-  }
-}
-
-###############################################################################
-# deprecated
-sub renderIfAccess {
-  my $args = shift;
-
-  my $theWebTopic = 
-    &TWiki::Func::extractNameValuePair($args) ||
-    &TWiki::Func::extractNameValuePair($args, 'topic') || '';
-
-  my $theAction = 
-    &TWiki::Func::extractNameValuePair($args, 'action') || 'view';
-
-  my $theThen =
-    &TWiki::Func::extractNameValuePair($args, 'then') || $theWebTopic;
-
-  my $theElse =
-    &TWiki::Func::extractNameValuePair($args, 'else') || '';
-
-
-  my $theMode =
-    &TWiki::Func::extractNameValuePair($args, 'mode') || '';
-
-  my $theThenArgs = 
-    &TWiki::Func::extractNameValuePair($args, 'args') || 
-    &TWiki::Func::extractNameValuePair($args, 'then_args') || '';
-
-  my $theElseArgs = 
-    &TWiki::Func::extractNameValuePair($args, 'else_args') || '';
-
-
-  my $theTopic = $currentTopic;
-  my $theWeb = $currentWeb;
-
-  if ($theWebTopic =~ /^(.*)\.(.*?)$/) {
-    $theWeb = $1;
-    $theTopic = $2;
-  } elsif ($theWebTopic) {
-    $theTopic = $theWebTopic;
-  }
-
-  my $wikiName = &TWiki::Func::getWikiUserName();
-  my $hasAccess = &TWiki::Func::checkAccessPermission($theAction,
-    $wikiName, '', $theTopic, $theWeb);
-
-  if ($theMode eq 'include') {
-    if ($theThen) {
-      $theThen = '%INCLUDE{"' . $theThen . '" ' .  $theThenArgs . '}%';
-    }
-    if ($theElse) {
-      $theThen = '%INCLUDE{"' . $theElse . '" ' .  $theElseArgs . '}%';
-    }
-  }
-  
-  if ($hasAccess) {
-    &escapeParameter($theThen);
-    return TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
-  } else {
-    &escapeParameter($theElse);
-    return TWiki::Func::expandCommonVariables($theElse, $currentTopic, $currentWeb);
+    $useEmailObfuscator = 1;
   }
 }
 
@@ -1227,11 +1157,11 @@ sub renderEmailAddrs {
 
   #writeDebug("called renderEmailAddrs(".join(", ", @$emailAddrs).", $linkText)");
 
-  my $emailKey = '_email'.$nrEmails;
+  my $emailKey = '_wremoId'.$nrEmails;
   $nrEmails++;
 
   $emailCollection{$emailKey} = [$emailAddrs, $linkText]; 
-  my $text = "<span class=\"natEmail\" id=\"$emailKey\">$emailKey</span>";
+  my $text = "<span id=\"$emailKey\">$emailKey</span>";
 
   #writeDebug("result: $text");
   return $text;
@@ -1243,11 +1173,11 @@ sub renderEmailObfuscator {
   #writeDebug("called renderEmailObfuscator()");
 
   my $text = "\n".
+    '<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/obfuscator.js"></script>'."\n".
     '<script type="text/javascript">'."\n".
-    '<!--'."\n";
-
-  $text .= "function initObfuscator() {\n";
-  $text .= "   var addrs = new Array();\n";
+    "<!--\n".
+    "function initEMO() {\n".
+    "   var emoas = new Array();\n";
   foreach my $emailKey (sort keys %emailCollection) {
     my $emailAddrs = $emailCollection{$emailKey}->[0];
     my $linkText = $emailCollection{$emailKey}->[1];
@@ -1257,15 +1187,15 @@ sub renderEmailObfuscator {
       my $theAccount = $1;
       my $theSubDomain = $2;
       my $theTopDomain = $3;
-      $text .= "   addrs[$index] = new Array('$theSubDomain','$theAccount','$theTopDomain');\n";
+      $text .= "   emoas[$index] = new Array('$theSubDomain','$theAccount','$theTopDomain');\n";
       $index++
     }
-    $text .= "   writeEmailAddrs(addrs, '$linkText', '$emailKey');\n";
-    $text .= "   delete addrs; addrs = new Array();\n";
+    $text .= "   wremo(emoas, '$linkText', '$emailKey');\n";
+    $text .= "   delete emoas; emoas = new Array();\n";
   }
-  $text .= "}\n";
-  $text .= "//-->\n</script>\n";
-  $text .= '<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/obfuscator.js"></script>'."\n";
+  $text .= "}\n".
+    "addLoadEvent(initEMO);\n".
+    "//-->\n</script>\n";
   return $text;
 }
 
@@ -1402,6 +1332,7 @@ sub renderExternalLink {
 
   my $addClass = 0;
   my $text = $thePrefix.$theUrl;
+  my $urlHost = &TWiki::Func::getUrlHost();
   my $httpsUrlHost = $urlHost;
   $httpsUrlHost =~ s/^http:\/\//https:\/\//go;
 
