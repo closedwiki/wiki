@@ -16,60 +16,65 @@ Automates build process, including installer generation, for Pugins, Add-ons and
 ---+ Summary of Contents
 
 ---++ Build & Install Modules
-The Build.pm module can be used by developers to create a really simple build process for your plugin, addon or contrib module. The advantage of using this module is that it dictates a standard build procedure for plugins, so you won't get file names wrong or get the list of files in the plugin topic wrong either.
+This module can be used by developers to create a really simple build process for your plugin, addon or contrib module. It is inspired by the Java ANT build tool developed by the Apache project, but is targeted specifically at building TWiki and TWiki extensions.
 
-The module also automatically generates an installer script that manages dependencies in the user installation.
+The module is used for TWiki release builds, and optionally for building TWiki extensions as well. The advantage of using the module is that it dictates a standard build procedure for extensions (such as plugins), so you won't get file names wrong or get the list of files in the topic wrong either. Further, if you use this build approach, your module can easily be included into other build scripts, for example for creating collections of plugins.
+
+The module can also automatically generate an installer script that simplifies end-user installation.
+
+__Notes__
+   * This is a _build_ module for use by _developers_, *not* an _install_ module for _end users_.
 
 #DevelopmentModel
 ---+++ Development Model
 The build module assumes:
-   * that you are *not* developing your plugin in a live TWiki installation (which is usually a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree, usually - but not always - an SVN checkout area.
-   * that your module follows the standards for plugins and contribs i.e. that it
-      1 has a topic in the =data/TWiki= directory
+   1 that you are *not* developing your plugin in a 'live' TWiki installation (which would be a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree, usually - but not always - a Subversion checkout area.
+   1 that your module follows the standards for extensions i.e. that it
+      1 has a topic named the same as the extension in the =data/TWiki= directory
       1 has a perl module in the =lib/TWiki/Plugins= or =lib/TWiki/Contrib= directory
       1 has a sub-directory alongside the perl module that contains the extra =.pm= files specific to the module
+The module also supports optional separation of your *development*, *module test*, and *integration test* TWiki installations. You can do all three steps in a single install, or you can use three separate installs for the three steps if you want to be particularly thorough.
 
-The idea is that your module is built using a perl script =build.pl= that is kept in the module-specific subdirectory (3). This build script is like a Makefile. It has several _targets_ that can be used to perform different stages of the development cycle. By default these targets are:
+Each individual extension has its own build script, usually called =build.pl=. This script uses the !BuildContrib libraries to build the extension.
+For example, assuming you are working in a Subversion checkout area (*strongly* recommended), the development cycle for a new Plugin looks like this. 
+   1 Create your plugin area under =twikiplugins=
+      * =cd twikiplugins; perl create-new-plugin.pl MyNewPlugin=
+   1 Edit files to create your plugin functionality
+   1 =cd twikiplugins/MyPlugin/lib/TWiki/Plugins/MyPlugin; perl build.pl release= to build a release package and installer
+   1 Unzip and install the built package in your *test* system (which may be your development system, or may be another TWiki install altogether)
+   1 Repeat from step 2 until it works
+   1 =cd twikiplugins/MyPlugin/lib/TWiki/Plugins/MyPlugin; perl build.pl upload= to upload the module to TWiki.org
+
+The build script is rather like a Makefile. It has several _targets_ that can be used to perform different stages of the development cycle. By default these targets are:
 | =build= | check that everything is perl |
 | =test= | run unit tests |
 | =installer= | Build an install/uninstall script for use by end-users |
-| =install= | install on local installation defined by $TWIKI_HOME |
-| =uninstall= | uninstall from local installation defined by $TWIKI_HOME |
 | =pod= | build POD documentation |
-| =release= | build, pod and package a release zip |
-| =upload= | build, pod, package and upload to twiki.org |
-| =manifest= | print a best-guess _draft_ MANIFEST file |
-| =history= | Updates the plugin/contrib topic with the history extracted from Subversion. See #HistoryTarget for more information. |
+| =release= | =build=, =installer=, =pod=, and package a release zip |
+| =upload= | =release= and upload to twiki.org |
+| =manifest= | _print_ a best-guess _draft_ MANIFEST file |
+| =history= | _update_ the plugin/contrib topic with the history extracted from Subversion. See #HistoryTarget for more information. |
 The default target is =test=.
 
 The module is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets in your =build.pl= and add extra behaviours.
 
-The result of the 'release' target is a ZIP file, that will contain the following:
-   1 All the files listed in the MANIFEST
-   1 A generated documentation topic
-   1 An install/uninstall script, that is run after the module is unzipped
-This zip file can be generated and subsequently uploaded to twiki.org, or you can simply use the =upload= target directly.
-
-The easiest way to start using the module is to copy the =build.pl= file from =lib/TWiki/Contrib/BuildContrib/build.pl= into your own plugin or contrib, in the corresponding place i.e. copy it to =lib/TWiki/Plugins/MyPlugin/build.pl= or =lib/TWiki/Contrib/MyContrib/build.pl=. Then edit the file, and change as appropriate (it should be fairly obvious what you have to do). Then type
-   * =perl build.pl manifest=
-This should inspect the directory structure and write a best-guess MANIFEST file.
+The results of the 'release' target are three files: a Zip format archive, a gzipped tar archive, and an md5 checksum. The archives will each contain the following:
+   1 All the files listed in the =MANIFEST=
+   1 An install/uninstall script, that is can be run after the module is unpacked
 
 __Notes__
-   * This is a _build_ module for use by developers, not an _install_ module for end users. When a release is built, an installer/uninstaller script is automatically generated that is packaged with the release. This simple script is the only part of the build system visible to end users
-   * This topic and all the embedded POD documentation are generated using this build module.
-   * The build environment does _not_ assume the use of SVN, though it is highly recommended.
-   * The =test= target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
+   * When a release is built, an installer/uninstaller script is automatically generated that is packaged with the release. This simple script is the only part of the build system visible to end users
+   * This topic, and all the embedded POD documentation, are generated using this build module.
+   * The build environment does _not_ assume the use of Subversion, though it is highly recommended.
+   * The =test= target assumes you are using Test::Unit.
+   * =Build.pm= has only been tested on Linux, but should work with cygwin OK.
 ---+++ Install support
 The installer script shipped with the package is very simple. By default all it does is to check the dependencies you list, and if necessary download and install any missing TWiki and CPAN modules. Other dependencies are simply checked. In Dakar and later releases, TWiki topics shipped with the module are automatically merged into any existing local copies, ensuring histories are preserved.
 
-If you want your installer to do anything else - for example, optionally install submodules shipped with the module - then you will need to write a POSTINSTALL script. A good example of a POSTINSTALL can be found in the SVN tree for TWiki:Plugins/WysiwygPlugin.
+If you want your installer to do anything else - for example, optionally install submodules shipped with the module - then you will need to write a =POSTINSTALL= script. See #InstallScripts for more information.
 
----++ Test Fixtures
-The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
-
-The fixtures do not replace _all_ of the TWiki core functionality, just those pieces used by the plugins. If you find a piece is missing, and you need it, please feel free to extend the fixtures on condition that you check your improvements back in.
 ---++ Support scripts
-=conformance_analyser.pl= is a perl script that analyses the conformance of plugins to the API and packaging standards. It is driven from the zips downloadable from twiki.org.
+=conformance_analyser.pl= is a perl script that analyses the conformance of plugins to the API and packaging standards. It is driven from the archives downloadable from twiki.org.
 
 ---+ Detailed Documentation
 %$POD%
