@@ -339,7 +339,20 @@ sub publishTopic {
     # SMELL: need a new prefs object for each topic
     my $twiki = $TWiki::Plugins::SESSION;
     $twiki->{prefs} = new TWiki::Prefs($twiki);
-    $twiki->{prefs}->pushGlobalPreferences();
+
+#    $twiki->{prefs}->pushGlobalPreferences();
+    my $prefs = $twiki->{prefs}->pushPreferences(
+            $TWiki::cfg{SystemWebName},
+	            $TWiki::cfg{SitePrefsTopicName},
+	            'DEFAULT' );
+
+     # Then local site prefs
+     if( $TWiki::cfg{LocalSitePreferences} ) {
+             my( $lweb, $ltopic ) = $twiki->normalizeWebTopicName(
+                        undef, $TWiki::cfg{LocalSitePreferences} );
+             $twiki->{prefs}->pushPreferences( $lweb, $ltopic, 'SITE' );
+    }
+
     $twiki->{prefs}->pushPreferences($TWiki::cfg{UsersWebName}, $wikiName, 'USER '.$wikiName);
     $twiki->{prefs}->pushWebPreferences($web);
     $twiki->{prefs}->pushPreferences($web, $topic, 'TOPIC');
