@@ -338,6 +338,11 @@ sub publishTopic {
 
     # SMELL: need a new prefs object for each topic
     my $twiki = $TWiki::Plugins::SESSION;
+
+    #tell the session what topic we are currently rendering so the contexts are correct
+    $twiki->{topicName} = $topic;
+    $twiki->{webName} = $web;
+
     $twiki->{prefs} = new TWiki::Prefs($twiki);
 
 #    $twiki->{prefs}->pushGlobalPreferences();
