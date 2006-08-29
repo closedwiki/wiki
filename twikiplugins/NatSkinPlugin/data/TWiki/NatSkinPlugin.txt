@@ -31,6 +31,24 @@ see also:
 [[#NATREVISIONS][NATREVISIONS]]
 [[#PREVREV][PREVREV]], 
 
+---+++ FORMBUTTON
+*Syntax*: =%<nop>FORMBUTTON{";lt;format>"}%=
+
+returns a link on to add or change the form attached to a topic. This
+will be shown on the edit screen depending on WEBFORMs being defined or not.
+More precisely FORMBUTTON returns
+   * an empty string if there are no WEBFORMS defined
+   * or an "Add form" link if there are but no form is attached yet
+   * or a "Change form" link to change the current form
+
+The optional =%lt;format>= string may contain the following variables
+   * =$url=: the url of the link
+   * =$action=: the link text 
+   * =$1=: the complete anchor including the link and the text
+
+For example =%<nop>FORMBUTTON{"| $1"}%= will generate a pipe and the formbutton
+if possible. See the =edit.nat.tmpl= template file of the !NatSkin.
+
 ---+++ GETSKINSTYLE
 *Syntax*: =%<nop>GETSKINSTYLE%= 
 
@@ -131,22 +149,6 @@ and Dakar. This version grants to behave the same.
 substitute for the =%<nop>REVISIONS%= tag which only works on 
 the TWiki:Plugins/PatternSkin.
 
----+++ NATSCRIPTURL
-*Syntax*: =%<nop>NATSCRIPTURL{"script"}%=
-
-returns the full url to the named script.
-This is a backport of dakar's =%<nop>SCRIPTURL{}%= variable. Warning: don't use
-NATSCRIPTURL as it is will be removed as soon as this plugin will drop
-support for TWiki/Cairo and TWiki/Beijing.
-
----+++ NATSCRIPTURLPATH
-*Syntax*: =%<nop>NATSCRIPTURLPATH{"script"}%=
-
-returns the relative url to the named script.
-
-see also: 
-[[#NATSCRIPTURL][NATSCRIPTURL]]
-
 ---+++ NATWEBLOGO
 *Syntax*: =%<nop>NATWEBLOGO%=
 
@@ -203,7 +205,6 @@ The following argumets are known and can be used in any combination:
    * border="..."
 The values to these keys will be commited into the skin state at once. Multiple
 invokations will override any former setting.
-
 
 ---+++ USERACTIONS
 *Syntax*: =%<nop>USERACTIONS%= 
@@ -306,8 +307,10 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v3.00-pre5 |
+|  Plugin Version: | v3.00-pre6 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  29 Aug 2006: | cleaned up and removed all spaghetti code distinguishing beijing, cairo and dakar; \
+                  removed lots of code that got useless now, i.e. NATSCRIPTURL |
 |  25 Aug 2006: | first release that drops beijing and cairo support; \
                   fixed and cleaned up initialisation sequence to detect commandline context properly; \
                   removed unused IFACCESS tag; \
@@ -432,5 +435,5 @@ returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin 
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 
--- TWiki:Main/MichaelDaum - 25 Aug 2006 
+-- TWiki:Main/MichaelDaum - 29 Aug 2006 
 
