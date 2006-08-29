@@ -7,18 +7,14 @@ Content-Transfer-Encoding: 7bit
 %MAKETEXT{"This is an automated email from [_1]." args="%WIKITOOLNAME%"}%
 
 %MAKETEXT{"Review recent changes in:"}%
-  %NATSCRIPTURL{"view"}%/%WEB%/WebChanges
+  %SCRIPTURL{"view"}%/%WEB%/WebChanges
 
 %MAKETEXT{"Subscribe / Unsubscribe in:"}%
-  %NATSCRIPTURL{"view"}%/%WEB%/%NOTIFYTOPIC%
+  %SCRIPTURL{"view"}%/%WEB%/%NOTIFYTOPIC%
 
 %MAKETEXT{"New or changed topics in the [_1] web, since [_2] GMT:" args="%WEB%,%LASTDATE%"}%
 
-%IFSKINSTATETHEN{release="dakar" glue="off"}%
 %PLAIN_TEXT%
-%ELSESKINSTATE%
-%TOPICLIST%
-%FISKINSTATE%
 %TMPL:END%
 %TMPL:DEF{PLAIN:middle}%- %AUTHOR%, %TIME%: 
   %URL% 

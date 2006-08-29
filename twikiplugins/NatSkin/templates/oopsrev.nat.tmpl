@@ -7,11 +7,10 @@
 <tr>
 <td align="right"><b>%MAKETEXT{"Older revision"}%</b>:&nbsp;</td>
 <td>
-<form name="main" style="margin:0px" action="%NATSCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%">
+<form name="main" style="margin:0px" action="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%">
   <input type="text" name="rev2" size="6" value="%PARAM1%" />
 </td>
 <td rowspan="2" valign="top" style="padding-left:1em">
-%IFSKINSTATETHEN{release="dakar"}%
 <table border="0" class="natDiffOptions">
   <tr>
     <td align="center">
@@ -45,7 +44,6 @@
     </td>
   </tr>
 </table>
-%FISKINSTATE%
 </td>
 </tr>
 <tr>
@@ -69,7 +67,7 @@
 <tr>
 <td valign="top" align="right"><b>%MAKETEXT{"Revision"}%</b>:&nbsp;</td>
 <td>
-<form style="margin:0px" name="main" action="%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
+<form style="margin:0px" name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%">
   <input type="text" name="rev" size="6" value="%PARAM1%" /> <br />
   (1.1 ... %PARAM3%) </td>
 <td valign=top style="padding-left:1em"> %MAKETEXT{"in <input type=\"checkbox\" name=\"raw\"> raw text format."}%</td>
@@ -86,7 +84,7 @@
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td valign="top" align="left" style="padding-left:1em">
-  <form name="ButtonBox" action="%NATSCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%">
+  <form name="ButtonBox" action="%SCRIPTURLPATH{"rdiff"}%/%WEB%/%TOPIC%">
     <input type="submit" style="width:10em" class="natOkButton" value='%MAKETEXT{"View all diffs"}%'><br />
     <input type="button" style="width:10em" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="javascript:history.back()">
   </form> 

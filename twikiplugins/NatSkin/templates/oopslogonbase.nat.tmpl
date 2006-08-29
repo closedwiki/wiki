@@ -3,7 +3,7 @@
 %TMPL:DEF{"onloadscript"}%if (document.LogonForm) {document.LogonForm.username.focus();} %TMPL:END%
 %TMPL:DEF{"logon"}%<!-- -->
 <div class="natLogonFormHolder">
-<form name="LogonForm" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%NATSCRIPTURLPATH{"%IFSKINSTATE{action="oops" then="natlogon" else="login"}%"}%/%WEB%/%TOPIC%" method="post">
+<form name="LogonForm" action="%IFDEFINED{"%HTTPSLOGON%" as ="on" then="https" else="http"}%://%HTTP_HOST%%SCRIPTURLPATH{"%IFSKINSTATE{action="oops" then="natlogon" else="login"}%"}%/%WEB%/%TOPIC%" method="post">
 <table class="natLogonForm" border="0"> 
 <tr class="natLogonFormLogin"> 
   <td class="twikiFirstCol"><b>%MAKETEXT{"Login"}%</b>: </td>
@@ -22,7 +22,7 @@
   <td>
     <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />&nbsp;<!--
     --><input type="reset"  class="natAltButton" value='%MAKETEXT{"Clear"}%' />&nbsp;<!--
-    --><input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome'" /> 
+    --><input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%MAINWEB%/WebHome'" /> 
     <input type="hidden" name="web" value="%WEB%" />
     <input type="hidden" name="topic" value="%TOPIC%" />
     <input type="hidden" name="action" value="%TMPL:P{action}%"/>

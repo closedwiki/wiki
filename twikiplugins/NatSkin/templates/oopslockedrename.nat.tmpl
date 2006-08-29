@@ -6,13 +6,13 @@
 %NEW_LOCK%
 <br />
 <ul>
- <li> %MAKETEXT{"To look at the text without editing the topic click on the [[[_1]][View raw text]]." args="%NATSCRIPTURLPATH{\"view\"}%/%WEB%/%TOPIC%?raw=on"}%</li>
- <li> %MAKETEXT{"To rename anyway click on [[[_1]][Rename anyway]]" args="%NATSCRIPTURLPATH{\"rename\"}%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%"}%</li>
+ <li> %MAKETEXT{"To look at the text without editing the topic click on the [[[_1]][View raw text]]." args="%SCRIPTURLPATH{\"view\"}%/%WEB%/%TOPIC%?raw=on"}%</li>
+ <li> %MAKETEXT{"To rename anyway click on [[[_1]][Rename anyway]]" args="%SCRIPTURLPATH{\"rename\"}%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%"}%</li>
  <li> %MAKETEXT{"To cancel go <a href=\"javscript:history.back()\">back</a> in your browser."}%</li>
 </ul>
 <form class="natOopsButtons" name="ButtonBox">
-  <input class="natOkButton" type="button" value='%MAKETEXT{"Rename anyway"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%'">&nbsp;
-  <input class="natAltButton" type="button" value='%MAKETEXT{"View raw"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on';">&nbsp;
+  <input class="natOkButton" type="button" value='%MAKETEXT{"Rename anyway"}%' onclick="window.location.href='%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%'">&nbsp;
+  <input class="natAltButton" type="button" value='%MAKETEXT{"View raw"}%' onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%?raw=on';">&nbsp;
   <input class="natCancelButton" type="button" value='%MAKETEXT{"Cancel"}%' onclick="history.back()">
 </form> 
 %MAKETEXT{"[_1] __Note:__ Renaming a topic which is being edited by someone else might 

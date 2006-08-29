@@ -647,7 +647,7 @@ td.twikiDiffChangedText {
 /* CAIRO-HACK to use the FORMBUTTON of the NatSkin */
 .natTopicForm .twikiChangeFormButtonHolder,
 .natTopicForm .twikiChangeFormButton {
-  display:none;
+  /*display:none;*/
 }
 
 /* see also page.nat.tmpl */

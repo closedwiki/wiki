@@ -2,13 +2,9 @@
 %TMPL:DEF{"topicactions"}%<!-- -->
 <a href="javascript:history.back();" accesskey="e" title='%MAKETEXT{"Continue editing"}%'>%MAKETEXT{"Edit"}%</a>
 | <span class="natAction">Preview</span> 
-%IFSKINSTATETHEN{release="beijing"}% <!-- -->
-| <a href="javascript:submitEditForm('save', 'save');" accesskey="s" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Save"}%</a>
-%ELSESKINSTATE% <!-- -->
 | <a href="javascript:submitEditForm('save','checkpoint');" accesskey="s" title='%MAKETEXT{"Save and continue editing"}%'>%MAKETEXT{"Save"}%</a> 
 | <a href="javascript:submitEditForm('save', 'save');" accesskey="d" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Done"}%</a>
-%FISKINSTATE% <!-- -->
 <br/> %FORMBUTTON{"$1 |"}%
-<a href="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a>
-| <a href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditForm('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a>
+<a href="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'>%MAKETEXT{"Undo"}%</a>
+| <a href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'>%MAKETEXT{"Cancel"}%</a>
 %TMPL:END%

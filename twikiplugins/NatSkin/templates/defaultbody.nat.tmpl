@@ -23,7 +23,7 @@
 	    </div>
 	  </td>
 	  %FISKINSTATE%
-	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight natMainLeft natMainRight"}% natMain" valign="top">
+	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainLeft"}% %IFSKINSTATE{action="oops" then="natMiddleLeft natMiddleRight natMainLeft natMainRight"}% natMain" valign="top">
 	    <div class="natMainHeaderContents">%TMPL:P{"contentheader"}%</div>
 	    <div class="natMainContents"> %TMPL:P{"content"}% </div>
 	  </td> 
@@ -40,12 +40,12 @@
 	  %FISKINSTATE%
 	</tr>
 	<tr>
-	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight natMainFooterRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft natMainFooterLeft"}% %IFSKINSTATE{glue="off" action="oops" then="natMiddleLeft natMiddleRight natMainFooterLeft natMainFooterRight"}% natMainFooter" valign="bottom">
+	  <td class="natMiddle %IFSKINSTATE{sidebar="left|off" then="natMiddleRight natMainFooterRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft natMainFooterLeft"}% %IFSKINSTATE{action="oops" then="natMiddleLeft natMiddleRight natMainFooterLeft natMainFooterRight"}% natMainFooter" valign="bottom">
 	    <div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>
 	  </td>
 	</tr>
       </table> 
-      <div class="natBottomBar %IFSKINSTATE{sidebar="right|off" glue="off" then="natBottomBarLeft"}% %IFSKINSTATE{sidebar="left|off" glue="off" then="natBottomBarRight"}% %IFSKINSTATE{sidebar="off" glue="off" then="natBottomBarBoth"}%">
+      <div class="natBottomBar %IFSKINSTATE{sidebar="right|off" then="natBottomBarLeft"}% %IFSKINSTATE{sidebar="left|off" then="natBottomBarRight"}% %IFSKINSTATE{sidebar="off" then="natBottomBarBoth"}%">
 	<div class="natBottomBarContents">
 	  <div class="natCopyRight">%WEBCOPYRIGHT%</div>
 	  <div class="natSyndicate">
@@ -53,7 +53,7 @@
 	      %WEBSYNDICATION%
 	    %ELSEDEFINED%
 	      %MAKETEXT{"Syndicate this site"}% 
-	      <a class="natFeedIcon" href="%NATSCRIPTURL{"view"}%/%WEB%/WebRss">RSS</a><a class="natFeedIcon" href="%NATSCRIPTURL{"view"}%/%WEB%/WebAtom">ATOM</a>
+	      <a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebRss">RSS</a><a class="natFeedIcon" href="%SCRIPTURL{"view"}%/%WEB%/WebAtom">ATOM</a>
 	    %FIDEFINED%
 	  </div>
 	</div>
