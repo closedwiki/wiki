@@ -405,9 +405,7 @@ sub natContentsSearch {
 sub _natPrintSearchResult {
   my ($theTemplate, $theResults, $theSearchString) = @_;
 
-  my $noSpamPadding =
-    $TWiki::Plugins::NatSkinPlugin::isDakar?
-      $TWiki::cfg{AntiSpam}{EmailPadding}:$TWiki::noSpamPadding;
+  my $noSpamPadding = $TWiki::cfg{AntiSpam}{EmailPadding};
       
   # print hits in all webs
   foreach my $thisWeb (keys %{$theResults}) {
@@ -435,12 +433,11 @@ sub _natPrintSearchResult {
 
       # get topic information
       my ($meta, $text) = &TWiki::Func::readTopic($thisWeb, $thisTopic);
-      my ($revDate, $revUser, $revNum) = &getRevisionInfoFromMeta($thisWeb, $thisTopic, $meta); 
-      #writeDebug("revDate=$revDate, revUser=$revUser, revNum=$revNum");
+      my ($revDate, $revUser, $revNum ) = $meta->getRevisionInfo();
+      $revUser = $revUser->webDotWikiName() if $revUser;
       $revUser = &TWiki::Func::userToWikiName($revUser);
-      $revDate = &TWiki::Func::formatTime($revDate) 
-	unless $TWiki::Plugins::NatSkinPlugin::isBeijing;
-
+      $revDate = &TWiki::Func::formatTime($revDate);
+      #writeDebug("revDate=$revDate, revUser=$revUser, revNum=$revNum");
 
       # insert the topic information into the template
       $tempVal =~ s/%WEB%/$thisWeb/go;
@@ -563,23 +560,6 @@ sub _getSearchTerms {
   }
 
   return @searchTerms;
-}
-
-##############################################################################
-sub getRevisionInfoFromMeta {
-  my ($thisWeb, $thisTopic, $meta) = @_;
-
-  my ($revDate, $revUser, $revNum);
-
-  if ($TWiki::Plugins::NatSkinPlugin::isDakar) {
-    ($revDate, $revUser, $revNum ) = $meta->getRevisionInfo();
-    $revUser = $revUser->webDotWikiName() if $revUser;
-  } else {
-    ($revDate, $revUser, $revNum) = 
-      &TWiki::Store::getRevisionInfoFromMeta($thisWeb, $thisTopic, $meta); 
-  }
-
-  return ($revDate, $revUser, $revNum);
 }
 
 ##############################################################################
