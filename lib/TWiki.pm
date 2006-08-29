@@ -140,6 +140,7 @@ sub getTWikiLibDir {
 BEGIN {
 
     use TWiki::Sandbox;   # system command sandbox
+    use TWiki::Config;    # read configuration files
 
     $TRUE = 1;
     $FALSE = 0;
@@ -261,31 +262,8 @@ BEGIN {
           TWiki::Sandbox::untaintUnchecked( $ENV{SERVER_NAME} );
     }
 
-    # Get LocalSite first, to pick up definitions of things like
-    # {RCS}{BinDir} and {LibDir} that are used in TWiki.cfg
-    # do, not require, because we do it twice
-    do 'LocalSite.cfg';
-    # Now get all the defaults
-    require 'TWiki.cfg';
-    die "Cannot read TWiki.cfg: $@" if $@;
-    die "Bad configuration: $@" if $@;
-
-    # If we got this far without definitions for key variables, then
-    # we need to default them. otherwise we get peppered with
-    # 'uninitialised variable' alerts later.
-
-    foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
-                        PubDir TemplateDir ScriptUrlPath LocalesDir ) {
-        # We can't do this, because it prevents TWiki being run without
-        # a LocalSite.cfg, which we don't want
-        # die "$var must be defined in LocalSite.cfg"
-        #  unless( defined $TWiki::cfg{$var} );
-        $TWiki::cfg{$var} ||= 'NOT SET';
-    }
-
-    # read localsite again to ensure local definitions override TWiki.cfg
-    do 'LocalSite.cfg';
-    die "Bad configuration: $@" if $@;
+    # readConfig is defined in TWiki::Config to allow overriding it
+    readConfig();
 
     if( $TWiki::cfg{WarningsAreErrors} ) {
         # Note: Warnings are always errors if ASSERTs are enabled
