@@ -44,27 +44,28 @@ TWiki:Main/JoachimNilsson. The TWiki:Plugins/PhotonSkin by
 TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= .
 
 ---++ Feature Overview
----+++ Conditional markup
-Skin states: 
-an internal representation of different ways to render the NatSkin concerning
+*Conditional markup and skin states:* 
+
+The NatSkinPlugin maintaines an internal representation of different ways to render the NatSkin concerning
    * the skin style,
    * style variants,
    * the sidebar location,
    * the page border decoration,
    * the web buttons in the topbar and
    * the positioning of the search box
+and provides the infrastructure to get, set and display the skin style that
+is currently active as well as rendering different content depending on the skin state.
+This, for example, allows to switch the sidebar navigation from the left
+to the right with a single click.
 
-Skin control:
-infrastructure to get, set and display the skin style that
-is currently active as well as rendering different content depending on the skin state
-(IFSKINSTATE)
+*Componentized templates:*
 
----+++ Componentized templates
 The underlying templates that generate the TWiki pages are arranged in a flexible and
 manageable way to facilitate easy "skin mix-in", that is overriding specific parts of
 the templates by using the NatSkin as a base skin to create template modifications.
 
----+++ Customizing webs using <nop>WebComponents
+*Customizing webs using <nop>WebComponents:*
+
    * <nop>WebSideBar: a configurable navigation bar
    * <nop>WebLinks: component used by the standard navigation scheme to plug in more
      navigation links
@@ -73,48 +74,47 @@ the templates by using the NatSkin as a base skin to create template modificatio
    * <nop>WebCss: additional css code per web
    * <nop>WebTopicActions: actions to manipulate TWiki topics
 
----+++ Search &amp; GO
+*Search &amp; GO* 
+
 NatSearch: a search+go box that combines advanced search with the GO feature of TWiki.
 Compared to the standard WebSearch <nop>NatSearch is trying to maximize usability
 and minimizing workflow disruption. In addition, <nop>NatSearch can be customized
 on an application level to specify the scope of search (using include/exclude rules)
 as well as the appearance of listed search hits.
 
----+++ Wikiwyg editor
+*Wikiwyg editor:* 
+
 <nop>NatEdit: optional javascript enabled wikiwyg editor
 
----+++ Email Obfuscation
+*Email Obfuscation:* 
+
 Optionally, all email addresses can be obfuscated by use of javascript. Email
 links are still clickable while automatic email extraction is hampert.
 
----+++ Application based authentication
+*Application based authentication:* 
+
 <nop>NatLogon: An independent implementation of an html login page is provided for
 maximal compatibility with old TWiki releases.  This is similar to the
 <nop>TemplateLogin authentication mechanism available since TWiki-4. There are
 usability differences between <nop>TemplateLogin and <nop>NatLogon trying
 to ease the authorization-authentication workflow.
 
----+++ External link detection
+*External link detection:*
+
 All offsite links are marked and a nice icon is added. Clicking on them will
 allways open an extra window.
 
 ---++ Documentation
----+++ Templates
-See NatSkinTemplates
----+++ Css
-See NatSkinCss
----+++ <nop>NatSearch
-See NatSearch
----+++ Configuration
-See NatSkinConfiguration
----+++ Frequently asked questions
-See NatSkinFAQ
----+++ Plugin syntax
-See NatSkinPlugin
+   * NatSkinTemplates
+   * NatSkinCss
+   * NatSearch
+   * NatSkinConfiguration
+   * NatSkinFAQ
+   * NatSkinPlugin
 
 ---++ Installation Instructions
    * Get the TWiki:Plugins/NatSkinPlugin supplementary package and install it.
-   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
+   * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the !NatSkin ZIP file
    * Unzip it in your twiki installation directory. Content: 
 | *File:* | *Description:* |
 | ==data/Main/NatSkinUserViewTemplate.txt== | skin specific user view |
@@ -164,7 +164,7 @@ See NatSkinPlugin
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre4 |
+|  Skin Version: | v3.0-pre6 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -180,6 +180,10 @@ See NatSkinPlugin
    <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
    <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  29 Aug 2006: | removed spaghetti template code for beijing and cairo; \
+                  removed NATSCRIPTURL; \
+		  fixed <nop>MySideBar localization;\
+		  adjusted usage of IFSKINSTATE due to its new evaluation priority |
 |  25 Aug 2006: | first release dropping beijing and cairo support; \
                   major documentation rewrite; \
                   added a default <nop>WebRightBar to exemplify 3 columns layout; \
@@ -364,7 +368,7 @@ See NatSkinPlugin
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 25 Aug 2006
+-- TWiki:Main/MichaelDaum - 29 Aug 2006
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="h" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="previewbg.png" attr="h" comment="" date="1114174051" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%

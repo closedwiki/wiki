@@ -1,6 +1,6 @@
 package TWiki:Contrib:NatSkin;
 use vars qw($VERSION $RELEASE);
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre5';
+$RELEASE = '3.00-pre6';
 
 1;

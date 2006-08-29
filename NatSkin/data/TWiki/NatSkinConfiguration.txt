@@ -51,7 +51,7 @@ There are a couple of special url parameters:
   * Set STYLEBORDER = thin
   * Set STYLEBUTTONS = on
   * Set STYLESIDEBAR = right
-  * Set STYLESVARIATION = none
+  * Set STYLEVARIATION = none
   * Set STYLESEARCHBOX = pos1
 </verbatim>
 

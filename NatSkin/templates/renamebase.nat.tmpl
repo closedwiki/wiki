@@ -10,7 +10,7 @@
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}%<!-- -->
-<form method="POST" name="rename" action="%NATSCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
+<form method="POST" name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 <!--input type="hidden" name="confirm" value="on"-->
 ---+ %TMPL:P{"webaction"}% Topic
 
@@ -22,22 +22,10 @@
 </table>
 
 ---++ %MAKETEXT{"Change links in topics that refer to [_1] in the [_2] Web:" args="<nop>%TOPIC%,<nop>%WEB%"}%
-<div class="natSearchRenameContents">
-%IFSKINSTATETHEN{release="dakar"}%
-  %LOCAL_SEARCH%
-%ELSESKINSTATE%
-  %RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
-%FISKINSTATE%
-</div>
+<div class="natSearchRenameContents">%LOCAL_SEARCH%</div>
 
 ---++ %MAKETEXT{"Change links in topics that refer to [_1].[_2] in any Web:" args="<nop>%WEB%,<nop>%TOPIC%"}%
-<div class="natSearchRenameContents">
-%IFSKINSTATETHEN{release="dakar"}%
-  %GLOBAL_SEARCH%
-%ELSESKINSTATE%
-  %RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
-%FISKINSTATE%
-</div>
+<div class="natSearchRenameContents">%GLOBAL_SEARCH%</div>
 
 <input type="button" class="natAltButton" value='%MAKETEXT{"Clear all"}%' onClick="checkAll('rename', false);" />
 </form>

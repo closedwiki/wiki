@@ -5,11 +5,6 @@ function submitEditForm(script, action) {
   if (action == 'add form') {
     document.EditForm.elements['submitChangeForm'].value = action;
   }
-%IFSKINSTATETHEN{release="beijing" glue="off"}%
-  document.EditForm.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-%ELSIFSKINSTATE{release="cairo" glue="off"}%
-  document.EditForm.elements['action'].value = action;
-%ELSESKINSTATE%
   document.EditForm.elements['action_preview'].value = '';
   document.EditForm.elements['action_save'].value = '';
   document.EditForm.elements['action_checkpoint'].value = '';
@@ -17,7 +12,6 @@ function submitEditForm(script, action) {
   document.EditForm.elements['action_replaceform'].value = '';
   document.EditForm.elements['action_cancel'].value = '';
   document.EditForm.elements['action_' + action].value = 'foobar';
-%FISKINSTATE%
   document.EditForm.submit();
 }
 //-->

@@ -107,7 +107,7 @@ white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, tea
 %TMPL:DEF{"password_changed"}%<!-- huh -->
 ---+++ %MAKETEXT{"Password changed successfully!"}%
 
-<form action="%NATSCRIPTURLPATH{"view"}%/%MAINWEB%/%WIKINAME%">
+<form action="%SCRIPTURLPATH{"view"}%/%MAINWEB%/%WIKINAME%">
 <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />
 </form>
 %TMPL:END%
@@ -117,7 +117,7 @@ white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, tea
 link in your email or enter the code in the box below to activate your membership.
 (This code is of the form \"YourName.xxxxxxxxxx\")" args="%PARAM1%"}%
 
-<form action="%NATSCRIPTURLPATH{"register"}%" method=get>
+<form action="%SCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="rx" value="%BLACKLISTPLUGIN{action="magic"}%" />
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
@@ -165,7 +165,7 @@ link in your email or enter the code in the box below to activate your membershi
 ---+++ %MAKETEXT{"You are already registered"}%
 %MAKETEXT{"You cannot register twice, the name [_1] is already registered." args="'%PARAM1%'"}%
 
-%MAKETEXT{"Did you want to [[[_1]][reset [_2]'s password]]?" args="%NATSCRIPTURLPATH{\"view\"}%/%TWIKIWEB%.ResetPassword?username=%PARAM1%,%PARAM1%"}%
+%MAKETEXT{"Did you want to [[[_1]][reset [_2]'s password]]?" args="%SCRIPTURLPATH{\"view\"}%/%TWIKIWEB%.ResetPassword?username=%PARAM1%,%PARAM1%"}%
 
 %MAKETEXT{"Alternatively go <a href=\"javascript:history.back()\">back</a> in your browser and choose a different username."}%
 %TMPL:END%
@@ -196,7 +196,7 @@ link in your email or enter the code in the box below to activate your membershi
 
 %MAKETEXT{"Please try again."}%
 
-<form action="%NATSCRIPTURLPATH{"register"}%" method=get>
+<form action="%SCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="rx" value="%BLACKLISTPLUGIN{action="magic"}%" />
 <input type="hidden" name="action" value="verify" size="20" />
 <input type="text" name="code" size="20" />
@@ -320,7 +320,7 @@ template that doesn't exist." args="%PARAM2%"}%
 ---++ %MAKETEXT{"\"[_1]\" topic does not exist" args="%WEB%.%TOPIC%"}%
 %MAKETEXT{"You are trying to [_1] a topic that does not exist." args="%PARAM1%"}%
 
-%MAKETEXT{"If you want to create the topic then [[[_1]][click here]]." args="%NATSCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%"}%
+%MAKETEXT{"If you want to create the topic then [[[_1]][click here]]." args="%SCRIPTURLPATH{\"edit\"}%/%WEB%/%TOPIC%?t=%SERVERTIME{\"$year$mo$day$min$sec\"}%"}%
 %TMPL:END%
 %TMPL:DEF{"no_such_attachment"}% <!-- removed contact -->
 ---++ %MAKETEXT{"Attachment '[_1]' does not exist" args="%PARAM2%"}%

@@ -10,7 +10,7 @@
 %TMPL:DEF{"onloadscript"}%document.rename.newtopic.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
-<form name="rename" action="%NATSCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
+<form name="rename" action="%SCRIPTURLPATH{"rename"}%/%WEB%/%TOPIC%">
 ---+ %MAKETEXT{"Move or Delete File \"[_1]\"" args="<nop>%FILENAME%"}%
 
 <div style="width:450px">
@@ -24,7 +24,7 @@
 <center>
 
 <input type="submit" class="natOkButton" value='%MAKETEXT{"OK"}%' />&nbsp;
-<input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%NATSCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'">
+<input type="button" class="natCancelButton" value='%MAKETEXT{"Cancel"}%' onclick="window.location.href='%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%'">
 </center>
 </div>
 </form>

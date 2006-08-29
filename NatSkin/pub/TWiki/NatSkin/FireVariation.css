@@ -24,13 +24,10 @@
   color:white;
   border:1px solid #FF7D08;
 }
-.natWebTitle {
-  text-shadow:1px 1px 2px #111111;
-}
 .natWebTitle a,
 .natWebTitle {
-  color:#732408;
-  font-size:50px;
+  color:white;
+  font-size:40px;
 }
 
 .natTopicActions a {

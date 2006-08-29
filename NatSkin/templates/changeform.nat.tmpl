@@ -8,9 +8,9 @@
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"title"}%%TOPIC% (%MAKETEXT{"edit"}%)%TMPL:END%
 %TMPL:DEF{"content"}% <!-- -->
-<form name="EditForm" method="post" action="%NATSCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
+<form name="EditForm" method="post" action="%SCRIPTURLPATH{"edit"}%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
   <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-%IFSKINSTATETHEN{release="Dakar"}% %$nopTEXT% %ELSESKINSTATE% <input type="hidden" name="text" value="%$nopTEXT%" /> %FISKINSTATE%
+%TEXT%
   <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
   <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
 ---+ %MAKETEXT{"Choose a new form for [_1]" args="[[%TOPIC%]]"}%

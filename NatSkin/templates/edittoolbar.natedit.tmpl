@@ -49,7 +49,7 @@
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_h4.png" alt='%MAKETEXT{"Level 4 headline"}%' title='%MAKETEXT{"Level 4 headline"}%' /></a><!--
 --></span>%TMPL:END%
 %TMPL:DEF{"helptools"}%<span class="natEditHelpTools"><!--
---><a class="natEditHelpButton" accesskey="?" href="%NATSCRIPTURLPATH{"view"}%/%TWIKIWEB%/TextFormattingRules" target="_blank"><!--
+--><a class="natEditHelpButton" accesskey="?" href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TextFormattingRules" target="_blank"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_help.png" alt='%MAKETEXT{"Help"}%' title='%MAKETEXT{"Help"}%' /></a><!--
 --></span>%TMPL:END%
 %TMPL:DEF{"edittools"}%<span class="natEditEditTools"><!--
@@ -58,14 +58,10 @@
 -->%FORMBUTTON{"<a href=\"$url\" accesskey="f"><img src='%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_form.png' alt='$action' title='$action' /></a>"}%<!--
 --><a class="natEditUndoButton" href="javascript:self.location.reload();" accesskey="u" title='%MAKETEXT{"Abandon your changes but continue editing"}%'><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_undo.png" alt='%MAKETEXT{"Abandon your changes but continue editing"}%' title='%MAKETEXT{"Abandon your changes but continue editing"}%' /></a><!--
--->%IFSKINSTATETHEN{release="beijing"}%<!--
---><span class="natEditSaveButton"><a href="javascript:submitEditForm('save', 'save');" accesskey="s" title='%MAKETEXT{"Save and exit"}%'>%MAKETEXT{"Save"}%</a></span><!--
--->%ELSESKINSTATE%<!--
 --><a class="natEditSaveButton" href="javascript:submitEditForm('save','checkpoint');" accesskey="s"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_save.png" alt='%MAKETEXT{"Save and continue editing"}%' title='%MAKETEXT{"Save and continue editing"}%' /></a><!--
 --><a class="natEditDoneButton" href="javascript:submitEditForm('save', 'save');" accesskey="d"><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_accept.png" alt='%MAKETEXT{"Save and exit"}%' title='%MAKETEXT{"Save and exit"}%' /></a><!--
--->%FISKINSTATE%<!--
---><a class="natEditCancelButton" href="%IFSKINSTATE{release="beijing" then="$percntNATSCRIPTURLPATH{\"view\"}$percnt/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditForm('save', 'cancel');"}%" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'><!--
+--><a class="natEditCancelButton" href="javascript:submitEditForm('save', 'cancel');" accesskey="c" title='%MAKETEXT{"Abandon your changes and exit"}%'><!--
 --><img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/button_cancel.png" alt='%MAKETEXT{"Cancel and abandon changes"}%' title='%MAKETEXT{"Cancel and abandon changes"}%' /></a><!--
 --></span>%TMPL:END%
