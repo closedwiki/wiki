@@ -29,7 +29,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $defaultTopic $defaultSearchTemplate $pubUrlPath $hostUrl $pubDir
 	$isInitialized $currentBibWeb $currentBibTopic 
-	$cmdTemplate $sandbox
+	$cmdTemplate $sandbox $render_script
         %bibliography $script
         $bibtexPrg $citeno $bibcite
     );
@@ -40,9 +40,9 @@ use File::Basename;
 
 use strict;
 $VERSION = '$Rev$';
-$RELEASE = '1.3';
+$RELEASE = '1.4';
 $pluginName = 'BibtexPlugin'; 
-$debug = 0; # toggle me
+$debug = 1; # toggle me
 
 my %bibliography = ();
 my $citefile = "";
@@ -96,7 +96,8 @@ sub doInit {
   #   '/usr/bin/bibtex2html';
   # my $bibtexPrg =  $TWiki::cfg{Plugins}{BibtexPlugin}{bibtex} ||
   #   '/usr/bin/bibtex';
-
+  $render_script = $TWiki::cfg{Plugins}{BibtexPlugin}{render} ||
+      '/var/www/twiki/tools/bibtex_render.sh ';
 
   # for getRegularExpression
   if ($TWiki::Plugins::VERSION < 1.020) {
@@ -105,16 +106,19 @@ sub doInit {
   }
 
   # get configuration
-  $defaultTopic = TWiki::Func::getPreferencesValue( "\U${pluginName}\E_DEFAULTTOPIC" ) || 
+  $defaultTopic = TWiki::Func::getPreferencesValue( "\U${pluginName}\E_DEFAULTTOPIC", $web ) || 
+    TWiki::Func::getPreferencesValue( "\U${pluginName}\E_DEFAULTTOPIC" ) || 
     "TWiki.BibtexPlugin";
-  $defaultSearchTemplate = TWiki::Func::getPreferencesValue( "\U${pluginName}\E_DEFAULTSEARCHTEMPLATE" ) || 
+  $defaultSearchTemplate = TWiki::Func::getPreferencesValue( "\U${pluginName}\E_DEFAULTSEARCHTEMPLATE", $web ) || 
+    TWiki::Func::getPreferencesValue( "\U${pluginName}\E_DEFAULTSEARCHTEMPLATE" ) || 
     "TWiki.BibtexSearchTemplate";
 
   $hostUrl = &TWiki::Func::getUrlHost();
   $pubUrlPath = &TWiki::Func::getPubUrlPath();
   $pubDir = &TWiki::Func::getPubDir();
 
-  $cmdTemplate = $pubDir .  '/TWiki/BibtexPlugin/render.sh ' .
+#  $cmdTemplate = $pubDir .  '/TWiki/BibtexPlugin/bibtex_render.sh ' .
+  $cmdTemplate = $render_script . 
     '%MODE|U% ' .
     '%BIBTOOLRSC|F% ' .
     '%SELECT|U% ' .
@@ -150,10 +154,7 @@ sub beforeCommonTagsHandler
 sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-  $_[0] =~ s/%BIBCITE{(.*?)}%/&handleCitation2($1)/ge;
-  if (!($bibcite)) { 
-      $_[0] =~ s/%CITE{(.*?)}%/&handleCitation2($1)/ge;
-  }
+  $_[0] =~ s/%(BIBCITE|CITE){(.*?)}%/&handleCitation2($2,$1)/ge;
 
   $_[0] =~ s/%BIBTEXREF{([^}]*)}%/&handleBibtexBibliography($1)/ge;
 
@@ -199,7 +200,10 @@ sub postRenderingHandler
 ######################################################################
 sub handleCitation2
 {
-  my ($input) = @_;
+  my ($input,$type) = @_;
+
+  return '%'.$type.'{'.$input.'}%'
+      if ( ($bibcite) and ($type = 'CITE') );
 
   my $txt = '[';
   foreach my $cit ( split(/,/,$input) ) { 
@@ -207,8 +211,7 @@ sub handleCitation2
       $bibliography{$cit}{"order"} = $citeno++
           unless defined( $bibliography{$cit}{"order"} );
       
-      
-      # print STDERR "found CITE:$cit\n";
+      # print STDERR "found CITE:$cit $citeno\n";
       $txt .= (length($txt) > 1) ? ',' : '';
       $txt .= '<a href="#'.$cit.'" title="'.$cit.'">'.
           $bibliography{$cit}{"order"}.
@@ -237,7 +240,7 @@ sub handleBibtexBibliography
 
     my $header = "---+ References";
 
-    my $style = $opts{'style'} || 'plain';
+    my $style = $opts{'bibstyle'} || 'plain';
     my $files = $opts{'file'} || '.*\.bib';
     my $reqtopic = $opts{'topic'} || $topic;
 
@@ -341,7 +344,7 @@ sub handleBibtexBibliography
         $text .= '%BIBTEX{select="';
         $text .= join(' or ', map { "\$key : '$_'" } @cites );
         $text .= '"';
-        $text .= " style=\"$style\"";
+        $text .= " bibstyle=\"$style\"";
         $text .= " file=\"$files\"" if ($files);
         $text .= " topic=\"$reqtopic\"" if ($reqtopic);
         $text .= " citefile=\"on\"";
@@ -366,7 +369,7 @@ sub handleBibtex {
   my $theSelect = &TWiki::Func::extractNameValuePair($theAttributes, "select");
   my $theBibfile = &TWiki::Func::extractNameValuePair($theAttributes, "file");
   my $theTopic = &TWiki::Func::extractNameValuePair($theAttributes, "topic");
-  my $theStyle = &TWiki::Func::extractNameValuePair($theAttributes, "style");
+  my $theStyle = &TWiki::Func::extractNameValuePair($theAttributes, "bibstyle");
   my $theSort = &TWiki::Func::extractNameValuePair($theAttributes, "sort");
   my $theErrors = &TWiki::Func::extractNameValuePair($theAttributes, "errors");
   my $theReverse = &TWiki::Func::extractNameValuePair($theAttributes, "rev");
@@ -396,7 +399,7 @@ sub handleInlineBibtex {
   #&writeDebug("handleInlineBibtex: bibtext=$theBibtext");
 
   my $theSelect = &TWiki::Func::extractNameValuePair($theAttributes, "select");
-  my $theStyle = &TWiki::Func::extractNameValuePair($theAttributes, "style");
+  my $theStyle = &TWiki::Func::extractNameValuePair($theAttributes, "bibstyle");
   my $theSort = &TWiki::Func::extractNameValuePair($theAttributes, "sort");
   my $theErrors = &TWiki::Func::extractNameValuePair($theAttributes, "errors");
   my $theReverse = &TWiki::Func::extractNameValuePair($theAttributes, "rev");
@@ -607,11 +610,15 @@ sub bibSearch {
          $bibtex2HtmlArgs .= "-s $theStyle -a ";
       } else {
          $bibtex2HtmlArgs .= ' -dl --use-keys ';
+      }
+      do
+      {
          $bibtex2HtmlArgs .= '-a ' if $theSort =~ /^(author|name)$/;
          $bibtex2HtmlArgs .= '-d ' if $theSort =~ /^(date|year)$/;
          $bibtex2HtmlArgs .= '-u ' if $theSort !~ /^(author|name|date|year)$/;
          $bibtex2HtmlArgs .= '-r ' if $theReverse eq 'on';
-      }
+      } unless ($usecites eq 'on');
+
       $bibtex2HtmlArgs .= '-single ' if $theMixed eq 'on';
 
       $bibtex2HtmlArgs .= '--no-abstract ' if $theAbstracts eq 'off';
@@ -663,6 +670,7 @@ sub bibSearch {
     $text =~ s/%BIBKEYWORDS%/$theKeywords/g;
     $text =~ s/%BIBTOTAL%/$theTotal/g;
     $text =~ s/%BIBTEXRESULT%/$result/o;
+    $text =~ s/%BIBSTYLE%/$theStyle/o;
     $result = $text;
   }
 

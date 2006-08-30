@@ -16,6 +16,10 @@ You type
 </verbatim>
 you get
 
+(simulated)
+<img src="%ATTACHURL%/bibtex-select-ex.png" alt="bibtex select example">
+
+(if installed)
 %BIBTEX{select="author:'Moresi'"}%
 
 You type
@@ -69,6 +73,10 @@ You type
 </verbatim>
 you get
 
+(simulated)
+<img src="%ATTACHURL%/bibtex-inline-ex.png" alt="bibtex inline example">
+
+(if installed)
 %STARTBIBTEX{abstracts="on" keywords="on"}%
 @Article{DeLange:EPODD-6-3-241,
   author =		 "Rudi W. De Lange and Hendry L. Esterhuizen and Derek
@@ -120,8 +128,7 @@ You type
 <verbatim>
 %CITE{BahrSimpson02}%
 </verbatim>
-you get
-%CITE{BahrSimpson02}%
+you get (simulated) <img src="%ATTACHURL%/bibtex-cite-ex.png" alt="bibtex select example"> (if installed) %CITE{BahrSimpson02}%
 
 The text within the citation is dictated by the results of the %<nop>BIBTEXREF% declaration in the topic (see below).
 
@@ -148,7 +155,7 @@ tag on the same topic (see [[#Tips][Tips]]).
 								if no =bibfile= is specified all bibfiles attached are used |
 | select | =query=	 | see chapter [[#QueryAnchor][The Query Language]] for an explamation | 
 | sort  | =sorting=	| how to sort the bibentries; possible values are =year= (default), =author=  and =none= |
-| style | =style=		| can be one of the installed <nop>BibTeX styles installed on the servers system \
+| bibstyle | =bibstyle=		| can be one of the installed <nop>BibTeX styles installed on the servers system \
 								 plus the special styles =bibtool= and =raw=: <ul> \
   <li> =bibtool= : keys are generated in the style defined in the =bibtoolrcs= file (default)</li> \
   <li> =raw= : output is displayed in as raw bibtex (inside a &lt;pre&gt;...&lt;/pre&gt; environment. </li></ul> |
@@ -179,14 +186,18 @@ You type
 
 <verbatim>
 <table border=1><tr><td>
-     %BIBTEXREF{style="alpha"}%
+     %BIBTEXREF{bibstyle="alpha"}%
 </table>
 </verbatim>
 
 you get
 
+(simulated)
+<img src="%ATTACHURL%/bibtex-ref-ex.png" alt="bibtex reference example">
+
+(if installed)
 <table border=1><tr><td>
-%BIBTEXREF{style="alpha"}%
+%BIBTEXREF{ bibstyle="alpha" }%
 </table>
 
 #QueryAnchor
@@ -297,7 +308,7 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 		* select references appearing after and/or before a given year, e.g. references after 1997: %BR%
 		 <b><tt>select="year>1997"</tt></b>
 		* references between 1990 and 1995: %BR%
-		 <b><tt>select="year>=1990 and year<=1995"</tt></b>
+		 <b><tt>select="year&gt;=1990 and year&lt;=1995"</tt></b>
 
 	* Selecting references of a given author
 		* select only entries whose (co)author is Donald Knuth: %BR%
@@ -327,11 +338,11 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 	  If there are lots of databases all over your twiki site, you might want to merge them or extend them
 	  with some extra entries you don't want in the main database. Example: the main database contains all
 	  publications of your division but not the crossrefering presentation slides. You might want to keep 
-	  them separate on your home-topic. You do that by _nesting_ one or several %<nop>;BIBTEX{...style="raw"...}% 
+	  them separate on your home-topic. You do that by _nesting_ one or several %<nop>;BIBTEX{...bibstyle="raw"...}% 
 	  commands inside a %<nop>STARBIBTEX% ... %<nop>STOPBIBTEX% section.
 <verbatim>
 		%STARTBIBTEX%
-		%BIBTEX{select="author:'YourName'" style="raw"}%
+		%BIBTEX{select="author:'YourName'" bibstyle="raw"}%
 		@Misc{YourName02Slides,
 			crossref = {YourName02},
 			note = {slides of oral presentation},
@@ -370,7 +381,7 @@ have a look at the bibtool manual page and dig into the =bibtoolrcs= file yourse
 
 
 ---++ Plugin Installation Instructions
-__Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTool]] and [[http://www-sop.inria.fr/epidaure/personnel/malandain/codes/bibtex2html.html][Bibtex2html]] on the server. The commands bibtool and bibtex2html must be in the path of the process that runs the TWiki scripts. If they are not in the path, change *$bibtoolPath* and *$bibtex2htmlPath* in *lib/TWiki/Plugins/EmbedBibPlugin.pm* to point to the correct location. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTool]] and [[http://www.lri.fr/~filliatr/bibtex2html/][Bibtex2html]] on the server. The commands bibtool and bibtex2html must be in the path of the process that runs the TWiki scripts. If they are not in the path, change *$bibtoolPath* and *$bibtex2htmlPath* in *lib/TWiki/Plugins/EmbedBibPlugin.pm* to point to the correct location. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
@@ -385,6 +396,7 @@ __Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTo
 	  | ==pub/TWiki/BibtexPlugin/style.css== | default style definitions |
 	  | ==pub/TWiki/BibtexPlugin/bibtoolrsc== | bibtool resource file |
 	  | ==bin/bibsearch== | cgi query script |
+	  | ==tools/render.sh== | bibtex to html/raw rendering script |
 
 If TWiki access control is managed at the web-server level, be sure to add
 =bibsearch= to the authorization list. E.g., for Apache, add the following
@@ -396,10 +408,12 @@ lines to the .htaccess file:
 </verbatim>
 
 ---++ Plugin Info
-|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Plugin Author: | TWiki:Main/MichaelDaum, TWiki:Main/ScottHoge |
 |  16 Okt 2003: | Initial version |
-|  Plugin Version: | v1.2 |
+|  Plugin Version: | v1.4 |
 |  Change History: | &nbsp; |
+|  2006/08/29: | (v1.4) minor bug fixes: =bibstyle= replaces =style=, CITE/BIBCITE cleanup |
+|  2006/05/19: | (v1.3) twiki.org release |
 |  2006/01/06: | added code to generate automatic reference lists, based on declared citations |
 |  2005/12/09: | reworked to use the TWiki:DakarContrib on cairo and beijing |
 |  2004/11/26: | added simple and expert search forms, added select option to cgi-script; \
@@ -416,7 +430,6 @@ lines to the .htaccess file:
 |  Feedback: | TWiki:Plugins/BibtexPluginDev |
 
 %META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1134157744" path="style.css" size="1221" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="render.sh" attr="" autoattached="1" comment="" date="1136505116" path="render.sh" size="1351" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bibtoolrsc" attr="" autoattached="1" comment="" date="1136505651" path="bibtoolrsc" size="1905" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="sample.bib" attr="" autoattached="1" comment="" date="1066305348" path="sample.bib" size="1713" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="render.pl" attr="" autoattached="1" comment="" date="1136687640" path="render.pl" size="1677" user="UnknownUser" version=""}%
+
