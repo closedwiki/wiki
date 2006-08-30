@@ -80,7 +80,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.017'; #dro# fixed access right checking bug; notify disabled
+$REVISION = '1.018'; #dro# fixed notification bug reported by TWiki:Main.JosMaccabiani; fixed a minor whitespace bug; add static attribute
+#$REVISION = '1.017'; #dro# fixed access right bug; disabled change/create mail notification (added attribute: notify)
 #$REVISION = '1.016'; #dro# fixed access right bug reported by TWiki:Main.SaschaVogt
 #$REVISION = '1.015'; #dro# fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
 #$REVISION = '1.014'; #dro# fixed mod_perl bug; fixed deprecated handler problem
@@ -168,6 +169,7 @@ sub initDefaults() {
 		'pos'=>'bottom',
 		'statetopic'=> $topic.'ChecklistItemState',
 		'notify'=> 0,
+		'static'=> 0,
 	);
 
 	@listOptions = ('states','stateicons');
@@ -175,7 +177,7 @@ sub initDefaults() {
 
 	@filteredOptions = ( 'id', 'name', 'states');
 
-	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify');
+	@flagOptions = ('showlegend', 'anchors', 'useforms', 'notify', 'static');
 
 	$idMapRef = { };
 
@@ -340,7 +342,7 @@ sub handleChecklist {
 		$legend.=qq@</noautolink>@;
 	}
 
-	if (defined $options{'reset'}) {
+	if (defined $options{'reset'} && !$options{'static'}) {
 		my $reset = $options{'reset'};
 		my $state = (split /\|/, $options{'states'})[0];
 
@@ -620,7 +622,7 @@ sub renderChecklistItem {
 
 	$text.=$query->a({name=>"$name$uetId"}, "&nbsp;") if $options{'anchors'};
 
-	if ( ! $options{'useforms'} ) {
+	if ( ! $options{'useforms'} || $options{'static'}) {
 		
 		my $linktext="";
 		if (lc($options{'clipos'}) ne 'left') {
@@ -632,7 +634,7 @@ sub renderChecklistItem {
 		if (lc($options{'clipos'}) eq 'left') {
 			$linktext.=' '.$options{'text'} unless $options{'text'} =~ /^(\s|\&nbsp\;)*$/;
 		}
-		$text.=$query->a({-href=>$action},$linktext);
+		$text.=$options{'static'} ? $linktext : $query->a({-href=>$action},$linktext);
 	} else {
 		my $form=$query->start_form(-method=>"POST", -action=>$action, -name=>"changeitemstate\[$stId\]");
 		$form.=$query->hidden(-name=>'clpscls', -value=>$heState);
@@ -709,7 +711,7 @@ sub readChecklistItemStateTopic {
 	}
 
 	foreach my $line (split /[\r\n]+/, $clisTopic) {
-		if ($line =~ /^\s*\|\s*([^\|\*]*)\s*\|\s*([^\|\*]*)\s*\|\s*([^\|]*)\s*\|\s*$/) {
+		if ($line =~ /^\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\*\s]*)\s*\|\s*([^\|\s]*)\s*\|\s*$/) {
 			$$idMapRef{$1}{$2}=$3;
 		}
 	}
@@ -753,7 +755,7 @@ sub saveChecklistItemStateTopic {
 		$topicText.="\n$perm\n" if $perm;
 	}
 	$topicText.="\n-- $installWeb.$pluginName - ".&TWiki::Func::formatTime(time(), "rcs")."\n";
-	TWiki::Func::saveTopicText($web, $clisTopicName, $topicText, 1, $options{'notify'});
+	TWiki::Func::saveTopicText($web, $clisTopicName, $topicText, 1, !$options{'notify'});
 	TWiki::Func::setTopicEditLock($web, $clisTopicName, 0);
 }
 # =========================
