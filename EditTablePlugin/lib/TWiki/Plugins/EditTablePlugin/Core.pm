@@ -93,7 +93,7 @@ sub process {
 
                } elsif( $query->param( 'etedit' ) ) {
                    # [Edit table] button pressed
-                   $doEdit = doEnableEdit( $theWeb, $theTopic, 0 );
+                   $doEdit = doEnableEdit( $theWeb, $theTopic, ($TWiki::Plugins::VERSION < 1.1) );
                    # never return if locked or no permission
                    return unless( $doEdit );
                    $cgiRows = -1; # make sure to get the actual number of rows
@@ -421,6 +421,8 @@ sub inputElement {
         while( $i < @bits ) {
             $val  = $bits[$i] || '';
             $valExpanded  = $bitsExpanded[$i] || '';
+            $expandedValue =~ s/^\s+//;
+            $expandedValue =~ s/\s+$//;
             if( $valExpanded eq $expandedValue ) {
                 $text .= " <option selected=\"selected\">$val</option>";
             } else {
@@ -442,6 +444,8 @@ sub inputElement {
         while( $i < @bits ) {
             $val  = $bits[$i] || "";
             $valExpanded  = $bitsExpanded[$i] || "";
+            $expandedValue =~ s/^\s+//;
+            $expandedValue =~ s/\s+$//;
             $text .= " <input type=\"radio\" name=\"$theName\" value=\"$val\"";
             $text .= " checked=\"checked\"" if( $valExpanded eq $expandedValue );
             $text .= " /> $val";
@@ -449,7 +453,7 @@ sub inputElement {
                 if( ($i-1) % $lines ) {
                     $text .= " <br />";
                 } elsif( $i-1 < $elements ) {
-                    $text .= "</td><td valign=\"top\">";
+                    $text .= " </td><td valign=\"top\">";
                 }
             }
             $i++;
@@ -469,6 +473,8 @@ sub inputElement {
         while( $i < @bits ) {
             $val  = $bits[$i] || "";
             $valExpanded  = $bitsExpanded[$i] || "";
+            $expandedValue =~ s/^\s+//;
+            $expandedValue =~ s/\s+$//;
             $names .= " ${theName}x$i";
             $text .= " <input type=\"checkbox\" name=\"${theName}x$i\" value=\"$val\"";
             $text .= " checked=\"checked\"" if( $expandedValue =~ /(^|, )\Q$valExpanded\E(,|$)/ );
@@ -477,7 +483,7 @@ sub inputElement {
                 if( ($i-1) % $lines ) {
                     $text .= " <br />";
                 } elsif( $i-1 < $elements ) {
-                    $text .= "</td><td valign=\"top\">";
+                    $text .= " </td><td valign=\"top\">";
                 }
             }
             $i++;
