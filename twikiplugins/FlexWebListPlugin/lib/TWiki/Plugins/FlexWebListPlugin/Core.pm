@@ -22,8 +22,8 @@ $debug = 0; # toggle me
 ###############################################################################
 # static
 sub writeDebug {
-  &TWiki::Func::writeDebug('- FlexWebListPlugin - '.$_[0]) if $debug;
-  #print STDERR '- FlexWebListPlugin - '.$_[0]."\n" if $debug;
+  #&TWiki::Func::writeDebug('- FlexWebListPlugin - '.$_[0]) if $debug;
+  print STDERR '- FlexWebListPlugin - '.$_[0]."\n" if $debug;
 }
 
 ###############################################################################
@@ -32,7 +32,6 @@ sub new {
   my $class = shift;
   my $this = bless({}, $class);
 
-  $this->{isDakar} = (defined $TWiki::RELEASE)?1:0; # we could do better
   $this->{webCache} = ();
 
   return $this;
@@ -40,44 +39,40 @@ sub new {
 
 ###############################################################################
 sub handler {
-  my ($this, $args, $currentWeb, $currentTopic) = @_;
+  my ($this, $session, $params, $currentTopic, $currentWeb) = @_;
 
-  writeDebug("*** called hander($args)");
+  writeDebug("*** called hander()");
 
   # extract parameters
-  $this->{webs} = 
-    TWiki::Func::extractNameValuePair($args) ||
-    TWiki::Func::extractNameValuePair($args, 'webs') || 'public';
+  $this->{webs} = $params->{_DEFAULT} || $params->{webs} || 'public';
 
-  $this->{header} = TWiki::Func::extractNameValuePair($args, 'header') || '';
-  $this->{format} = TWiki::Func::extractNameValuePair($args, 'format') || '$web ';
-  $this->{footer} = TWiki::Func::extractNameValuePair($args, 'footer') || '';
-  $this->{separator} = TWiki::Func::extractNameValuePair($args, 'separator') || '';
+  $this->{header} = $params->{header} || '';
+  $this->{format} = $params->{format} || '$web ';
+  $this->{footer} = $params->{footer} || '';
+  $this->{separator} = $params->{separator} || '';
   $this->{separator} = '' if $this->{separator} eq 'none';
 
-  $this->{subHeader} = TWiki::Func::extractNameValuePair($args, 'subheader') || $this->{header};
-  $this->{subFormat} = TWiki::Func::extractNameValuePair($args, 'subformat') || $this->{format};
-  $this->{subFooter} = TWiki::Func::extractNameValuePair($args, 'subfooter') || $this->{footer};
-  $this->{subSeparator} = TWiki::Func::extractNameValuePair($args, 'subseparator') || $this->{separator};
+  $this->{subHeader} = $params->{subheader} || $this->{header};
+  $this->{subFormat} = $params->{subformat} || $this->{format};
+  $this->{subFooter} = $params->{subfooter} || $this->{footer};
+  $this->{subSeparator} = $params->{subseparator} || $this->{separator};
   $this->{subSeparator} = '' if $this->{subSeparator} eq 'none';
 
-  $this->{markerFormat} = TWiki::Func::extractNameValuePair($args, 'markerformat') || $this->{format};
-  $this->{selection} = TWiki::Func::extractNameValuePair($args, 'selection') || '';
-  $this->{marker} = TWiki::Func::extractNameValuePair($args, 'marker') || '';
-  $this->{exclude} = TWiki::Func::extractNameValuePair($args, 'exclude') || '';
-  $this->{include} = TWiki::Func::extractNameValuePair($args, 'include') || '';
-  $this->{subWebs} = TWiki::Func::extractNameValuePair($args, 'subwebs') || 'all';
+  $this->{markerFormat} = $params->{markerformat} || $this->{format};
+  $this->{selection} = $params->{selection} || '';
+  $this->{marker} = $params->{marker} || '';
+  $this->{exclude} = $params->{exclude} || '';
+  $this->{include} = $params->{include} || '';
+  $this->{subWebs} = $params->{subwebs} || 'all';
 
   $this->{selection} =~ s/\,/ /go;
   $this->{selection} = ' '.$this->{selection}.' ';
-  $this->{currentWeb} = $currentWeb;
-  $this->{currentTopic} = $currentTopic;
   #writeDebug("include filter=/^($this->{include})\$/") if $this->{include};
   #writeDebug("exclude filter=/^($this->{exclude})\$/") if $this->{exclude};
 
   
   # compute map
-  my $theMap = TWiki::Func::extractNameValuePair($args, 'map') || '';
+  my $theMap = $params->{map} || '';
   $this->{map} = ();
   foreach my $entry (split(/,\s*/, $theMap)) {
     if ($entry =~ /^(.*)=(.*)$/) {
@@ -200,7 +195,7 @@ sub formatWeb {
   $result =~ s/\$nrsubwebs/$nrSubWebs/g;
 
   #writeDebug("result=$result");
-  writeDebug("done formatWeb($web->{key})");
+  #writeDebug("done formatWeb($web->{key})");
 
   return $result;
 }
@@ -221,24 +216,12 @@ sub getWebs {
   my @webs = ();
   
   # dakar
-  if ($this->{isDakar}) {
-    if ($filter eq 'public') {
-      @webs = TWiki::Func::getListOfWebs('user,public,allowed');
-    } elsif ($filter eq 'webtemplate') {
-      @webs = TWiki::Func::getListOfWebs('template,allowed');
-    } else {
-      @webs = TWiki::Func::getListOfWebs($filter);
-    }
+  if ($filter eq 'public') {
+    @webs = TWiki::Func::getListOfWebs('user,public,allowed');
+  } elsif ($filter eq 'webtemplate') {
+    @webs = TWiki::Func::getListOfWebs('template,allowed');
   } else {
-
-    # cairo, beijing
-    if ($filter eq 'public') {
-      @webs = TWiki::Func::getPublicWebList();
-    } elsif ($filter eq 'webtemplate') {
-      @webs = grep { /^\_/o } &TWiki::Store::getAllWebs(''); # no Func API available
-    } else {
-      @webs = &TWiki::Store::getAllWebs(''); # no Func API available
-    }
+    @webs = TWiki::Func::getListOfWebs($filter);
   }
   my $webs = $this->hashWebs(@webs);
 
