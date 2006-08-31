@@ -26,10 +26,13 @@ use vars qw(
   $currentAction 
   $currentWeb $currentTopic
   $isBeijing $isCairo $isDakar
+  $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.93';
+$RELEASE = 'v0.94';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Render content conditionally';
 $debug = 0; # toggle me
 
 ###############################################################################
