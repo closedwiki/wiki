@@ -682,10 +682,14 @@ sub searchWeb {
         my( $beforeText, $repeatText, $afterText ) =
           split( /%REPEAT%/, $tmplTable );
         if( $header ) {
-            $header =~ s/\$n\(\)/\n/gos;          # expand '$n()' to new line
-            $header =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand '$n' to new line
             $beforeText = $header;
-            $beforeText =~ s/\$web/$web/gos;
+            $beforeText =~ s/\$n\(\)/\n/gos;         # expand '$n()' to new line
+            $beforeText =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand '$n' to new line
+            $beforeText =~ s/\$web/$web/gos;         # expand name of web
+            $beforeText =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+            $beforeText =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+            $beforeText =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+            $beforeText =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
             if( defined( $separator )) {
                 $beforeText .= $separator;
             } else {
