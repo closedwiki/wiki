@@ -15,10 +15,12 @@
 package TWiki::Plugins::BreadCrumbsPlugin;
 
 use strict;
-use vars qw($VERSION $RELEASE $debug $isDakar);
+use vars qw($VERSION $RELEASE $debug $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.04';
+$RELEASE = 'v0.05';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'A flexible way to display breadcrumbs navigation';
 
 $debug = 0; # toggle me
 
@@ -31,29 +33,52 @@ sub writeDebug {
 ###############################################################################
 sub initPlugin {
 
-  $isDakar = (defined $TWiki::RELEASE)?1:0; # we could do better
+  TWiki::Func::registerTagHandler('BREADCRUMBS', \&renderBreadCrumbs);
   return 1;
 }
 
 ###############################################################################
-sub commonTagsHandler {
+sub renderBreadCrumbs {
+  my ($session, $params, $currentTopic, $currentWeb) = @_;
 
-  $_[0] =~ s/%BREADCRUMBS%/&renderBreadCrumbs($_[2],$_[1],'')/geo;
-  $_[0] =~ s/%BREADCRUMBS{(.*?)}%/&renderBreadCrumbs($_[2], $_[1],$1)/geo;
-}
+  #writeDebug("called renderBreadCrumbs($currentWeb, $currentTopic)");
 
-###############################################################################
-# wrapper around version differences
-sub getMetaData {
-  my ($meta, $key) = @_;
+  # get parameters
+  my $webTopic = $params->{_DEFAULT} || "$currentWeb.$currentTopic";
+  my $header = $params->{header} || '';
+  my $format = $params->{format} || '[[$target][$name]]';
+  my $footer = $params->{footer} || '';
+  my $separator = $params->{separator} || ' ';
+  $separator = '' if $separator eq 'none';
+  my $recurse = $params->{recurse} || 'on';
+  my $include = $params->{include} || '';
+  my $exclude = $params->{exclude} || '';
 
-  my $result;
-  if ($isDakar) {
-    $result = $meta->get($key) if $isDakar;
-  } else {
-    my %tempHash = $meta->findOne($key);
-    $result = \%tempHash;
+  my %recurseFlags = map {$_ => 1} split (/,\s*/, $recurse);
+  #foreach my $key (keys %recurseFlags) {
+  #  writeDebug("recurse($key)=$recurseFlags{$key}");
+  #}
+
+  # compute breadcrumbs
+  my ($web, $topic) = normalizeWebTopicName($currentWeb, $webTopic);
+  my $breadCrumbs = getLocationBreadCrumbs($web, $topic, \%recurseFlags);
+
+  # format result
+  my @lines = ();
+  foreach my $item (@$breadCrumbs) {
+    next unless $item;
+    next if $exclude ne '' && $item->{name} =~ /^($exclude)$/;
+    next if $include ne '' && $item->{name} !~ /^($include)$/;
+    my $line = $format;
+    $line =~ s/\$name/$item->{name}/g;
+    $line =~ s/\$target/$item->{target}/g;
+    push @lines, $line;
   }
+  my $result = $header.join($separator, @lines).$footer;
+
+  # expand common variables
+  escapeParameter($result);
+  $result = TWiki::Func::expandCommonVariables($result, $topic, $web);
 
   return $result;
 }
@@ -102,7 +127,7 @@ sub getLocationBreadCrumbs {
     while (1) {
       # get parent
       my ($meta, $dumy) = &TWiki::Func::readTopic($web, $topic);
-      my $parentMeta = &getMetaData($meta, "TOPICPARENT"); 
+      my $parentMeta = $meta->get('TOPICPARENT'); 
       last unless $parentMeta;
       my $parentName = $parentMeta->{name};
       last unless $parentName;
@@ -158,53 +183,6 @@ sub normalizeWebTopicName {
   
   return ($web, $topic);
 }
-
-###############################################################################
-sub renderBreadCrumbs {
-  my ($currentWeb, $currentTopic, $args) = @_;
-
-  #writeDebug("called renderBreadCrumbs($currentWeb, $currentTopic, $args)");
-
-  # get parameters
-  my $webTopic = TWiki::Func::extractNameValuePair($args) || "$currentWeb.$currentTopic";
-  my $header = TWiki::Func::extractNameValuePair($args, 'header') || '';
-  my $format = TWiki::Func::extractNameValuePair($args, 'format') || '[[$target][$name]]';
-  my $footer = TWiki::Func::extractNameValuePair($args, 'footer') || '';
-  my $separator = TWiki::Func::extractNameValuePair($args, 'separator') || ' ';
-  $separator = '' if $separator eq 'none';
-  my $recurse = TWiki::Func::extractNameValuePair($args, 'recurse') || 'on';
-  my $include = TWiki::Func::extractNameValuePair($args, 'include') || '';
-  my $exclude = TWiki::Func::extractNameValuePair($args, 'exclude') || '';
-
-  my %recurseFlags = map {$_ => 1} split (/,\s*/, $recurse);
-  #foreach my $key (keys %recurseFlags) {
-  #  writeDebug("recurse($key)=$recurseFlags{$key}");
-  #}
-
-  # compute breadcrumbs
-  my ($web, $topic) = normalizeWebTopicName($currentWeb, $webTopic);
-  my $breadCrumbs = getLocationBreadCrumbs($web, $topic, \%recurseFlags);
-
-  # format result
-  my @lines = ();
-  foreach my $item (@$breadCrumbs) {
-    next unless $item;
-    next if $exclude ne '' && $item->{name} =~ /^($exclude)$/;
-    next if $include ne '' && $item->{name} !~ /^($include)$/;
-    my $line = $format;
-    $line =~ s/\$name/$item->{name}/g;
-    $line =~ s/\$target/$item->{target}/g;
-    push @lines, $line;
-  }
-  my $result = $header.join($separator, @lines).$footer;
-
-  # expand common variables
-  escapeParameter($result);
-  $result = TWiki::Func::expandCommonVariables($result, $topic, $web);
-
-  return $result;
-}
-
 
 ###############################################################################
 1;
