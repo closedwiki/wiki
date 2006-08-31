@@ -16,10 +16,12 @@
 package TWiki::Plugins::LdapNgPlugin;
 
 use strict;
-use vars qw($VERSION $RELEASE $isInitialized);
+use vars qw($VERSION $RELEASE $isInitialized $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.01';
+$RELEASE = 'v0.02';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Query and display data from an LDAP directory';
 
 ###############################################################################
 sub initPlugin { 
