@@ -19,7 +19,7 @@ package TWiki::Plugins::BlogPlugin;
 use strict;
 use vars qw(
   $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
-  doneHeader $blogCore $blogFactory
+  $doneHeader $blogCore $blogFactory
 );
 
 use TWiki::Plugins::BlogPlugin::WebDB; # must be compiled in advance
