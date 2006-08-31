@@ -29,7 +29,8 @@ $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug('- DBCachePlugin - '.$_[0]) if $debug;
+  #&TWiki::Func::writeDebug('- DBCachePlugin - '.$_[0]) if $debug;
+  print STDERR "- DBCachePlugin - $_[0]\n" if $debug;
 }
 
 ###############################################################################
@@ -447,11 +448,12 @@ sub getDB {
   }
 
   if ($isModified) {
-    my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb) 
+    my $impl = TWiki::Func::getPreferencesValue('WEBDB', $theWeb)
       || 'TWiki::Plugins::DBCachePlugin::WebDB';
-    $impl =~ s/^\s*(.*?)\s*$/$1/o;
-    #writeDebug("loading new webdb for $theWeb");
-    eval "use $impl;";
+    $impl =~ s/^\s+//go;
+    $impl =~ s/\s+$//go;
+    #writeDebug("loading new webdb for '$theWeb'");
+    #writeDebug("impl='$impl'");
     $webDB{$theWeb} = new $impl($theWeb);
     $webDB{$theWeb}->load();
     $webDBIsModified{$theWeb} = 0;

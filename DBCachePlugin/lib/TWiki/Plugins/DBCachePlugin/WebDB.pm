@@ -64,7 +64,7 @@ sub _getModificationTime {
   
   my @stat = stat($this->_getCacheFile());
 
-  return $stat[8] || $stat[9] || $stat[10];
+  return $stat[8] || $stat[9] || $stat[10] || 0;
 }
 
 ###############################################################################
