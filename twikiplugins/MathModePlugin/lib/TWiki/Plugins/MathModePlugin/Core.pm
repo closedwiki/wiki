@@ -80,7 +80,8 @@ sub new {
     latexFontSize => $TWiki::cfg{MathModePlugin}{LatexFontSize} || 'normalsize',
       # default text color
 
-    latexPreamble => $TWiki::cfg{MathModePlugin}{Preamble} || '\usepackage{mathptmx}',
+    latexPreamble => $TWiki::cfg{MathModePlugin}{Preamble} || 
+      '\usepackage{latexsym}',
       # latex preamble, e.g. to include additional packages; may be 
       # overridden by a LATEXPREAMBLE preference variable;
       # Example: \usepackage{mathptmx} to change the math font
@@ -191,9 +192,8 @@ sub handleMath {
   # TODO: add global settings to hash
   my $hashCode = md5_hex($text.$color.$bgcolor.$size);
   $this->{hashedMathStrings}{$hashCode} = $text;
-  writeDebug("hasing '$text' as $hashCode");
+  #writeDebug("hasing '$text' as $hashCode");
 
-  
   # construct url path to image
   my $url = &TWiki::Func::getPubUrlPath().'/'.$web.'/'.$topic.
     '/'.$this->{imagePrefix}.$hashCode.'.'.$this->{imageType};
@@ -223,7 +223,7 @@ sub postRenderingHandler {
   my $msg = $this->renderImages();
 
   # append to text
-  $_[3] .= '<pre>'.$msg.'</pre>' if $msg;
+  $_[3] .= $msg if $msg;
 }
 	
 ###############################################################################
@@ -298,38 +298,26 @@ sub renderImages {
   print $tempFile "\\documentclass[fleqn,12pt]{article}\n";
   print $tempFile <<'PREAMBLE';
     \usepackage{amsmath}
-    \usepackage{color}
+    \usepackage[normal]{xcolor}
     \setlength{\mathindent}{0cm}
-    \definecolor{red}{rgb}{1,0,0}
-    \definecolor{blue}{rgb}{0,0,1}
-    \definecolor{yellow}{rgb}{1,1,0}
-    \definecolor{orange}{rgb}{1,0.4,0}
-    \definecolor{pink}{rgb}{1,0,1}
-    \definecolor{purple}{rgb}{0.5,0,0.5}
     \definecolor{teal}{rgb}{0,0.5,0.5}
     \definecolor{navy}{rgb}{0,0,0.5}
     \definecolor{aqua}{rgb}{0,1,1}
     \definecolor{lime}{rgb}{0,1,0}
-    \definecolor{green}{rgb}{0,0.5,0}
-    \definecolor{olive}{rgb}{0.5,0.5,0}
     \definecolor{maroon}{rgb}{0.5,0,0}
-    \definecolor{brown}{rgb}{0.6,0.4,0.2}
-    \definecolor{black}{gray}{0}
-    \definecolor{gray}{gray}{0.5}
     \definecolor{silver}{gray}{0.75}
-    \definecolor{white}{gray}{1}
 PREAMBLE
   print $tempFile $this->{latexPreamble}."\n";
   print $tempFile '\begin{document}'."\n";
   print $tempFile '\pagestyle{empty}'."\n";
-  print $tempFile "\\color{$this->{latexFGColor}}\n";
-  print $tempFile "\\pagecolor{$this->{latexBGColor}}\n";
+  print $tempFile "\\color".formatColorSpec($this->{latexFGColor})."\n";
+  print $tempFile "\\pagecolor".formatColorSpec($this->{latexBGColor})."\n";
   while (my ($key, $value) = each(%{$this->{hashedMathStrings}})) {
     $imageNumber++;
     print $tempFile "{\n";
-    print $tempFile "\\color{$this->{fgColors}{$value}}\n"
+    print $tempFile "\\color".formatColorSpec($this->{fgColors}{$value})."\n"
       if $this->{fgColors}{$value};
-    print $tempFile "\\pagecolor{$this->{bgColors}{$value}}\n"
+    print $tempFile "\\pagecolor".formatColorSpec($this->{bgColors}{$value})."\n"
       if $this->{bgColors}{$value};
     if ($this->{sizes}{$value}) {
       print $tempFile "\\$this->{sizes}{$value}\n";
@@ -364,9 +352,8 @@ PREAMBLE
   #writeDebug("exit=$exit");
   #writeDebug("data=$data");
   if ($exit) {
-    $msg = '<div class="twikiAlert">Error during latex2img';
-    $msg .= ": $data" if $data;
-    $msg .= '</div>';
+    $msg = '<div class="twikiAlert">Error during latex2img:<pre>'.
+      $data.'</pre></div>';
   } else {
     # rename the files to the hash code, so we can uniquely identify them
     while ((my $key, my $value) = each(%imageFile)) {
@@ -383,6 +370,17 @@ PREAMBLE
   File::Temp::cleanup();
   close $tempFile;
   return $msg;
+}
+
+###############################################################################
+# returns the arguments to the latex commands \color or \pagecolor
+sub formatColorSpec {
+  my $color = shift;
+
+  # try to auto-detect the color spec
+  return "{$color}" if $color =~ /^[a-zA-Z]+$/; # named
+  return "[HTML]{$color}" if $color =~ /^[a-fA-F0-9]{6}$/; # named
+  return "$color";
 }
 
 1;
