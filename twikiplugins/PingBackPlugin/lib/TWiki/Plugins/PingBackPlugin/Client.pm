@@ -26,7 +26,7 @@ use HTTP::Request;
 use RPC::XML::Client;
 use HTML::Entities;
 
-use vars qw( $debug );
+use vars qw($debug $pingClient);
 
 $debug = 0; # toggle me
 
@@ -34,6 +34,18 @@ $debug = 0; # toggle me
 # static
 sub writeDebug {
   print STDERR "- PingBackPlugin::Client - " . $_[0] . "\n" if $debug;
+}
+
+###############################################################################
+# construct a signleton pingClient
+sub getClient {
+
+  unless ($pingClient) {
+    $pingClient = TWiki::Plugins::PingBackPlugin::Client->new();
+    die $@ unless $pingClient; # never reach
+  }
+
+  return $pingClient;
 }
 
 

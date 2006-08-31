@@ -287,4 +287,16 @@ sub getSourceWebTopic {
 
 }
 
+###############################################################################
+# send this ping using the pingback client
+sub send {
+  my $this = shift;
+
+  eval 'use TWiki::Plugins::PingBackPlugin::Client;';
+  die $@ if $@; # never reach
+
+  my $client = TWiki::Plugins::PingBackPlugin::Client::getClient();
+  return $client->ping($this->{source}, $this->{target});
+}
+
 1;
