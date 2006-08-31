@@ -15,21 +15,18 @@
 package TWiki::Plugins::FlexWebListPlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $core);
+use vars qw( $VERSION $RELEASE $core $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.07';
+$RELEASE = 'v0.08';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Flexible way to display hierarchical weblists';
 
 ###############################################################################
 sub initPlugin {
   $core = undef;
+  TWiki::Func::registerTagHandler('FLEXWEBLIST', \&renderFlexWebList);
   return 1;
-}
-
-###############################################################################
-sub commonTagsHandler {
-  $_[0] =~ s/%FLEXWEBLIST%/&renderFlexWebList('', $_[2], $_[1])/geo;
-  $_[0] =~ s/%FLEXWEBLIST{(.*?)}%/&renderFlexWebList($1, $_[2], $_[1])/geo;
 }
 
 ###############################################################################
