@@ -24,9 +24,14 @@
 package TWiki::Plugins::MathModePlugin;
 
 use strict;
-use vars qw($web $topic $VERSION $RELEASE $core %TWikiCompatibility);
+use vars qw(
+  $web $topic $VERSION $RELEASE $core %TWikiCompatibility
+  $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
+);
 $VERSION = '$Rev$';
-$RELEASE = '2.91';
+$RELEASE = '2.92';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Include <nop>LaTeX formatted math in your TWiki pages';
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 
 ###############################################################################
