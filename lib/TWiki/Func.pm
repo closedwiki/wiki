@@ -987,9 +987,9 @@ sub saveTopicText {
 
     # check access permission
     unless( $ignorePermissions ||
-            $session->{security}->checkAccessPermission( 'change',
-                                                     $session->{user}, undef,
-                                                     $topic, $web )
+            $session->{security}->checkAccessPermission(
+                'change', $session->{user}, undef, undef,
+                $topic, $web )
           ) {
         my @plugin = caller();
         return $session->getOopsUrl( 'accessdenied',
