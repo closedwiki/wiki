@@ -23,12 +23,15 @@ use vars qw(
         $debug $styleLink $doneHeader $hasInitRedirector
 	$redirectUrl $doneRedirect $query
 	%TWikiCompatibility
+	$NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
 
 $TWikiCompatibility{endRenderingHandler} = 1.1;
 $VERSION = '$Rev$';
-$RELEASE = '1.35';
+$RELEASE = '1.36';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Renders edit-links as little red dots';
 
 $debug = 0; # toggle me
 
