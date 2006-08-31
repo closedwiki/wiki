@@ -18,10 +18,15 @@
 package TWiki::Plugins::TagCloudPlugin;
 
 use strict;
-use vars qw( $VERSION $RELEASE $debug $isInitialized);
+use vars qw(
+  $VERSION $RELEASE $SHORTDESCRIPTION $NO_PREFS_IN_TOPIC 
+  $debug $isInitialized
+);
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.30';
+$RELEASE = 'v0.41';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Renders a tag cloud given a list of terms';
 
 ###############################################################################
 sub initPlugin {
