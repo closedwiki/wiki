@@ -13,10 +13,10 @@
 %STOPALIASAREA%
 <noautolink>
 *~~
-%~~ TAGCLOUD{"
-%~~   DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='published'"
-~~~     format="$formfield(BlogTag)" separator=", "
-~~~   }%"
+%~~ TAGCLOUD{
+~~~   "$percntDBQUERY{\"TopicType=~'\bBlogEntry\b' AND State='published'\"
+~~~     format=\"$formfield(BlogTag)\" separator=\", \"
+~~~   }$percnt"
 ~~~   buckets="40"
 ~~~   offset="9"
 ~~~   split="[,\s]+"

@@ -66,10 +66,11 @@
   </span>
 </div>
 *~~
-%~~ TAGCLOUD{"
-%~~   DBQUERY{"TopicType=~'\bBlogEntry\b' AND State='published'"
-~~~     format="$flatten($formfield(Headline) $formfield(Teaser) $formfield(Text))" separator=", "
-~~~   }%"
+%~~ TAGCLOUD{
+~~~   "$percntDBQUERY{\"TopicType=~'\bBlogEntry\b' AND State='published'\"
+~~~     format=\"$formfield(Headline) $formfield(Teaser) $formfield(Text)\" 
+~~~     separator=\", \"
+~~~   }$percnt"
 ~~~   header="<div class=\"blogArchiveTagCloud\">"
 ~~~   group="<strong>$group</strong>"
 ~~~   format="<span style=\"font-size:$weightpx;line-height:90%;margin:0;padding:0;\">
@@ -88,7 +89,8 @@
 ~~~   offset="9"
 ~~~   stopwords="on"
 ~~~   plural="off"
-~~~   exclude="http.*|citeblog.*|xxxxxxxxxx|www.*|WebPreferences|WebHome|MAINWEB|com|ve"
+~~~   exclude="http.*|citeblog.*|xxxxxxxxxx|www.*|WebPreferences|WebHome|
+*~~     com|ve|([A-Z]+)"
 ~~~   map="twiki=TWiki"
 ~~~ }%
 %IFDEFINEDTHEN{"%QUERY%"}%

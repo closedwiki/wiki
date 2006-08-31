@@ -188,11 +188,6 @@ Read
    * [[http://search.cpan.org/~mceglows/Search-VectorSpace-0.02/][Search-VectorSpace]]
 And send me a patch if you've coded that into TWiki ;).
 
-
----++ Plugin Settings
-
-   * Set SHORTDESCRIPTION = Basic blogging features used to implement the BlogUp <nop>TWikiApplication
-   
 ---++ Plugin Installation Instructions
 
    * [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] and install 
@@ -222,12 +217,19 @@ And send me a patch if you've coded that into TWiki ;).
      %$DEPENDENCIES%
 
 ---++ Plugin Info
-
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Basic blogging features used to implement the BlogUp <nop>TWikiApplication
+-->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Version: | v0.98 |
+|  Version: | v0.99 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC;\
+                  added TWiki:Plugins/ImagePlugin support; \
+		  fixed <nop>BlogArchive not to compute terms _before_ calling the tagcloud; \
+		  removed whitespaces from <nop>WebPreferences to prevent insecure eval warnings (strange); \
+		  fixed use of <nop>NatSkin's IFSKINSTATE as it glues no more |
 |  21 Aug 2006: | fixed error in RECENTCOMMENTS checking the posting's status; \
                   some css fixes; \
                   added default meta data keywords |
@@ -391,4 +393,4 @@ And send me a patch if you've coded that into TWiki ;).
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 21 Aug 2006
+-- TWiki:Main.MichaelDaum - 31 Aug 2006
