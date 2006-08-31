@@ -1,12 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1149012914" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1150485167" format="1.1" version="1.1"}%
 ---+ %TOPIC%
 Test client for the PingBackPlugin.
 
 Enter source and target urls to create a ping. Normally, the system will generate
 pings by itself by extracting external target urls from a source topic, or explicitely
 using =%<nop>PINGBACK{"ping" target="http://...."}%=.
-
-%RED%CAUTION: Don't send a ping from a source that you don't own! That's spam.%ENDCOLOR%
 
 <div class="twikiPageForm">
 <table>

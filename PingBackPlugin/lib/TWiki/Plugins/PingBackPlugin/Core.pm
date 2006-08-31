@@ -17,6 +17,11 @@
 
 package TWiki::Plugins::PingBackPlugin::Core;
 
+# this pacakage has three duties
+# - reveive pings
+# - send pings
+# - manage ping queues
+
 use strict;
 use vars qw($debug $pingClient);
 use TWiki::Plugins::PingBackPlugin::DB qw(getPingDB);
@@ -32,19 +37,10 @@ sub writeDebug {
 # construct a signleton pingClient
 sub getPingClient {
 
-  return $pingClient if $pingClient;
-
-  eval 'use TWiki::Plugins::PingBackPlugin::Client;';
-  die $@ if $@; # never reach
-  
-  $pingClient = TWiki::Plugins::PingBackPlugin::Client->new();
-  die $@ unless $pingClient; # never reach
-
-  return $pingClient;
 }
 
 ###############################################################################
-# remote procedure handler
+# receive a ping
 sub handlePingbackCall {
   my ($session, $params) = @_;
 
@@ -96,11 +92,14 @@ sub handlePingbackTag {
 }
 
 ###############################################################################
-# send a ping
+# send a ping, used by the PingBackClient
 sub handlePing {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
   writeDebug("called handlePing");
+
+  eval 'use TWiki::Plugins::PingBackPlugin::Client;';
+  die $@ if $@; # never reach
 
   my $query = TWiki::Func::getCgiQuery();
   my $action = $query->param('pingback_action') || '';
@@ -125,7 +124,8 @@ sub handlePing {
   writeDebug("source=$source");
   writeDebug("target=$target");
 
-  my $client = getPingClient();
+  
+  my $client = TWiki::Plugins::PingBackPlugin::Client::getClient();
   my ($status, $result) = $client->ping($source, $target);
 
   my $text = expandVariables($format, 
@@ -156,7 +156,7 @@ sub handleShow {
     '<tr><td>&nbsp;</td><td>'. '
       <table><tr><td><b>Source</b>:</td><td> $source </td></tr>'.
 	'<tr><td><b>Target</b>:</td><td> $target </td></tr>'.
-	'<tr><td>&nbsp;</td><td> $extra </td></tr>'.
+	'<tr><td>&nbsp;</td><td> <noautolink>"$title": $paragraph </noautolink></td></tr>'.
       '</table>'.
     '</tr>';
   my $footer = $params->{footer} || '</table>';
@@ -184,6 +184,8 @@ sub handleShow {
       source=>$ping->{source},
       target=>$ping->{target},
       extra=>$ping->{extra},
+      title=>$ping->{title},
+      paragraph=>$ping->{paragraph},
       'index'=>$index,
       queue=>$queue,
     );
@@ -211,14 +213,19 @@ sub afterSaveHandler {
     return;
   }
 
-  # check if we jus enabled/disabled pingback during this save; these values aren't 
+  if ($web =~ /^_/) {
+    writeDebug("bailing out afterSaveHandler ... no pings for template webs");
+    return;
+  }
+
+  # check if we just enabled/disabled pingback during this save; these values aren't 
   # in the preference cache yet; this SMELLs
   my $found = 0;
   my $isEnabled = 0;
   my $setRegex = TWiki::Func::getRegularExpression('setRegex');
   my $enablePingbackRegex = qr/^${setRegex}ENABLEPINGBACK\s*=\s*(on|yes|1|off|no|0)$/o;
   foreach my $line (split(/\r?\n/, $text)) {
-    if ($line =~ /$enablePingbackRegex/o) {
+    if ($line =~ /$enablePingbackRegex/) {
       $found = 1;
       $isEnabled = $1;
       $isEnabled =~ s/off//gi;
@@ -251,9 +258,11 @@ sub afterSaveHandler {
   }
 
   # expand it
+  $TWiki::Plugins::SESSION->enterContext('absolute_urls');
   $text = TWiki::Func::expandCommonVariables($text, $topic, $web);
   $text = TWiki::Func::renderText($text, $web);
-  #writeDebug("text=$text");
+  $TWiki::Plugins::SESSION->leaveContext('absolute_urls');
+  writeDebug("text=$text");
 
   # analyse it
   while ($text =~ /<a\s+[^>]*?href=(?:\"|\'|&quot;)?([^\"\'\s>]+)(?:\"|\'|\s|&quot;>)?/gios) {

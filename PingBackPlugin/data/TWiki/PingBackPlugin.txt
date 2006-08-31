@@ -19,15 +19,7 @@ There's a PingBackClient for testing. See also the PingBackManager.
 ---++ Syntax Rules
 =%<nop>PINGBACK{...}%=
 
-
----++ Plugin Settings
-
-   * Set SHORTDESCRIPTION = Pingback service for TWiki
-   * Set ENABLEPINGBACK = on
-
 ---++ Plugin Installation Instructions
-
-
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
@@ -42,18 +34,26 @@ There's a PingBackClient for testing. See also the PingBackManager.
    * Alternatively, manually make sure the dependencies listed in the table
      below are resolved.
      %$DEPENDENCIES%
+   * Test if it works by using the PingBackManager and ping the %TOPIC% topic;
+     ping-enable other topics by setting
+<verbatim>
+   * Set ENABLEPINGBACK = on
+</verbatim>
 
 ---++ Plugin Info
-
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Pingback service for TWiki
+-->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.04 |
+|  Plugin Version: | v0.05-alpha |
 |  Change History: | &nbsp; |
+|  31 Aug 2006: | completed roundtrip of sending, receive and verifying |
 |  27 May 2006: | Initial version |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main/MichaelDaum - 27 May 2006
+-- TWiki:Main/MichaelDaum - 31 Aug 2006
