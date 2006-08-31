@@ -107,9 +107,6 @@ advance.
 	* BAR is %IFDEFINED{"%BAR%" then=" " else="not" glue="off"}% defined.
    
 
----++ Plugin Settings
-
-	* Set SHORTDESCRIPTION = Render content conditionally
 
 ---++ Plugin Installation Instructions
 
@@ -121,12 +118,15 @@ advance.
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
-
+<!-- provided for compatibility only
+	* Set SHORTDESCRIPTION = Render content conditionally
+-->
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.93 |
+|  Plugin Version: | v0.94 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  15 Aug 2006: | added =$test= and =$value= |
 |  07 Aug 2006: | be smarter to detect the cgi action wrt to different apache setups |
 |  10 Mar 2006: | added =as= parameter; \
@@ -141,4 +141,4 @@ advance.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 15 Aug 2006
+-- TWiki:Main.MichaelDaum - 31 Aug 2006
