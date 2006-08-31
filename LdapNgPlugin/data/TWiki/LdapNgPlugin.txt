@@ -57,8 +57,9 @@ The =header=, =format= and =footer= format strings may contain the following var
 %LDAP{"(objectClass=posixGroup)" base="(ou=group)" header="| *Nr* | *Group* | *Members* |" format="| $index | $cn | $memberUid |" sort="cn"}%
 
 ---++ Plugin Settings
-
-   * Set SHORTDESCRIPTION = This plugin retrieves data from an LDAP directory and displays it on the current topic.
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Query and display data from an LDAP directory
+-->
 
 The %TOPIC% will use the default configuration of the LdapContrib in your =LocalSite.cfg= file, that is
    * $TWiki::cfg{Ldap}{Host} (overridable per query)
@@ -89,9 +90,10 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
 |  Copyright &copy;: | 2006 Michael Daum http://wikiring.com %BR% \
    This work was partly funded by Spanlink Communications |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.01 |
+|  Plugin Version: | v0.02 |
 |  Change History: | &nbsp; |
-|  19 July 2006: | public release |
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
+|  19 Jul 2006: | public release |
 |  25 April 2006: | Initial (internal) version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | TWiki:Plugins/LdapContrib |
@@ -100,4 +102,4 @@ The %TOPIC% will use the default configuration of the LdapContrib in your =Local
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
--- TWiki:Main/MichaelDaum - 19 July 2006
+-- TWiki:Main/MichaelDaum - 31 Aug 2006
