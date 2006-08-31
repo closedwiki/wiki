@@ -292,6 +292,13 @@ sub _sendEmailByNetSMTP {
 
     return undef unless( scalar @to );
 
+    # Change SMTP protocol recipient format from 
+    # "User Name <userid@domain>" to "userid@domain"
+    # for those SMTP hosts that need it just that way.
+    foreach (@to) {
+        s/^.*<(.*)>$/$1/;
+    }
+
     my $smtp = 0;
     if( $this->{HELLO_HOST} ) {
         $smtp = Net::SMTP->new( $this->{MAIL_HOST},
