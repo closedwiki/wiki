@@ -20,10 +20,13 @@ use strict;
 # =========================
 use vars qw(
         $VERSION $RELEASE $web $topic $doExpandCommonVariables
+	$NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.51';
+$RELEASE = '1.52';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Enable <nop>TWikiML to span multiple lines';
 
 # =========================
 sub initPlugin { 
