@@ -18,10 +18,15 @@ package TWiki::Plugins::VotePlugin;
 use strict;
 
 ###############################################################################
-use vars qw($user $VERSION $RELEASE $isInitialized);
+use vars qw(
+  $user $isInitialized
+  $VERSION $RELEASE $NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
+);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.31';
+$RELEASE = '1.32';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Simple way to count votes';
 
 ###############################################################################
 sub initPlugin {

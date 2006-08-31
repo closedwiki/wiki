@@ -46,10 +46,6 @@ in an argument to a TWiki tag.
 The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll results.
 The plugin will count only you latest vote. You might only vote once a day.
 
----++ Plugin Settings
-
-   * Set SHORTDESCRIPTION = Simple way to count votes
-
 ---++ Plugin Installation Instructions
 
 	* [[http://twiki.org/p/pub/Plugins/%TOPIC%/%TOPIC%.zip][Download]] the ZIP file
@@ -59,23 +55,26 @@ The plugin will count only you latest vote. You might only vote once a day.
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
-
+<!-- provided for compatibility only
+   * Set SHORTDESCRIPTION = Simple way to count votes
+-->
 |  Plugin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2005-2006, Michael Daum |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.31 |
+|  Plugin Version: | v1.32 |
 |  Change History: | &nbsp; | 
-|  2006-08-15 | added "use strict" and fixed revealing errors |
-|  2006-04-27 | added lazy compilation |
-|  2005-12-07 | added gif bar; removed debug flag |
-|  2005-10-09 | fixed invocation of normalizeFileName |
-|  2005-10-08 | added added a little more style flexibility |
-|  2005-10-07 | storing votes into =_Vote*.txt= now (was =Vote*.txt= before) ;\
+|  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
+|  15 Aug 2006: | added "use strict" and fixed revealing errors |
+|  27 Apr 2006: | added lazy compilation |
+|   7 Dec 2005: | added gif bar; removed debug flag |
+|   9 Oct 2005: | fixed invocation of normalizeFileName |
+|   8 Oct 2005: | added added a little more style flexibility |
+|   7 Oct 2005: | storing votes into =_Vote*.txt= now (was =Vote*.txt= before) ;\
                 fixed error messaging on empty argument lists |
-|  2005-09-14 | fixes for dakar |
-|  2005-03-14 | incorporated =getLocaldate()= function |
-|  2005-03-16 | use Cache API only if its there; delayed =use &lt;package&gt;= | 
-|  2005-03-07 | Initial version |
+|  14 Sep 2005: | fixes for dakar |
+|  14 Apr 2005: | incorporated =getLocaldate()= function |
+|  16 Mar 2005: | use Cache API only if its there; delayed =use &lt;package&gt;= | 
+|   7 Mar 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -85,4 +84,4 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 15 Aug 2006
+-- TWiki:Main.MichaelDaum - 31 Aug 2006
