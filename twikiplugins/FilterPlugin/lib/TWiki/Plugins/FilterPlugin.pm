@@ -20,11 +20,14 @@ use strict;
 ###############################################################################
 use vars qw(
         $currentWeb $currentTopic $user $VERSION $RELEASE
+	$NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
         $debug
     );
 
 $VERSION = '$Rev$';
-$RELEASE = '0.95';
+$RELEASE = '0.96';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Substitute and extract information from content by using regular expressions';
 $debug = 0; # toggle me
 
 ###############################################################################
