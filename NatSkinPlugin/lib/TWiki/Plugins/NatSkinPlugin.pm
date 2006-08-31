@@ -40,6 +40,7 @@ use vars qw(
 	%skinState 
 	%emailCollection $nrEmails $doneHeader
 	$STARTWW $ENDWW
+	$NO_PREFS_IN_TOPIC $SHORTDESCRIPTION
     );
 
 $debug = 0; # toggle me
@@ -50,6 +51,8 @@ $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
 $RELEASE = '3.00-pre6';
+$NO_PREFS_IN_TOPIC = 1;
+$SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
 # TODO generalize and reduce the ammount of variables 
 $defaultSkin    = 'nat';
@@ -71,24 +74,6 @@ sub writeDebug {
 sub initPlugin {
   ($baseTopic, $baseWeb, $currentUser) = @_;
 
-  # check skin
-  my $skin = TWiki::Func::getSkin();
-
-  # clear NatSkinPlugin traces from session
-  unless ($skin =~ /\b(nat|plain|rss|rssatom|atom)\b/) {
-    &TWiki::Func::clearSessionValue('SKINSTYLE');
-    &TWiki::Func::clearSessionValue('STYLEBORDER');
-    &TWiki::Func::clearSessionValue('STYLEBUTTONS');
-    &TWiki::Func::clearSessionValue('STYLESIDEBAR');
-    &TWiki::Func::clearSessionValue('STYLEVARIATION');
-    &TWiki::Func::clearSessionValue('STYLESEARCHBOX');
-
-    #TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
-    $isEnabled = 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
-  } else {
-    $isEnabled = 1;
-  }
-
   # register tags
   TWiki::Func::registerTagHandler('SETSKINSTATE', \&renderSetSkinStyle);
   TWiki::Func::registerTagHandler('NATLOGINURL', \&renderLoginUrl);
@@ -109,7 +94,7 @@ sub initPlugin {
   TWiki::Func::registerTagHandler('CURREV', \&renderCurRevision);
   TWiki::Func::registerTagHandler('NATMAXREV', \&renderMaxRevision);
 
-
+  $isEnabled = 1;
   $doneInit = 0;
   $doneInitSkinState = 0;
   $doneHeader = 0;
@@ -136,7 +121,7 @@ sub commonTagsHandler {
   $currentTopic = $_[1];
   $currentWeb = $_[2];
 
-  &doInit(); # delayed init not _possible_ during initPlugin
+  return unless &doInit(); # delayed init not _possible_ during initPlugin
 
   # conditional content
   while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/&renderIfSkinStateThen($2, $3, $1, $4)/geos) {
@@ -175,10 +160,30 @@ sub postRenderingHandler {
 }
 
 ###############################################################################
+# returns 1 on success, 0 if this plugin is disabled
 sub doInit {
 
-  return if $doneInit;
+  return 1 if $doneInit;
   $doneInit = 1;
+
+  # check skin
+  my $skin = TWiki::Func::getSkin();
+
+  # clear NatSkinPlugin traces from session
+  unless ($skin =~ /\b(nat|plain|rss|rssatom|atom)\b/) {
+    &TWiki::Func::clearSessionValue('SKINSTYLE');
+    &TWiki::Func::clearSessionValue('STYLEBORDER');
+    &TWiki::Func::clearSessionValue('STYLEBUTTONS');
+    &TWiki::Func::clearSessionValue('STYLESIDEBAR');
+    &TWiki::Func::clearSessionValue('STYLEVARIATION');
+    &TWiki::Func::clearSessionValue('STYLESEARCHBOX');
+
+    #TWiki::Func::writeWarning("NatSkinPlugin used with skin $skin");
+    $isEnabled = 0; # disable the plugin if it is used with a foreign skin, i.e. kupu
+    return 0;
+  } else {
+    $isEnabled = 1;
+  }
 
   writeDebug("called doInit");
   $query = &TWiki::Func::getCgiQuery();
@@ -215,6 +220,7 @@ sub doInit {
   #writeDebug("useEmailObfuscator=$useEmailObfuscator");
 
   writeDebug("done doInit");
+  return 1;
 }
 
 ###############################################################################
