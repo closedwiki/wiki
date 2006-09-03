@@ -27,7 +27,7 @@ Timeline.DOM.registerEvent = function(elmt, eventName, handler) {
         return true;
     }
     
-    if (Timeline.Platform.isIE) {
+    if (Timeline.Platform.browser.isIE) {
         elmt.attachEvent("on" + eventName, handler2);
     } else {
         elmt.addEventListener(eventName, handler2, false);
@@ -50,3 +50,27 @@ Timeline.DOM.getPageCoordinates = function(elmt) {
     }
     return { left: left, top: top };
 };
+
+Timeline.DOM.getEventRelativeCoordinates = function(evt, elmt) {
+    if (Timeline.Platform.browser.isIE) {
+        return {
+            x: evt.offsetX,
+            y: evt.offsetY
+        };
+    } else {
+        var coords = Timeline.DOM.getPageCoordinates(elmt);
+        return {
+            x: evt.pageX - coords.left,
+            y: evt.pageY - coords.top
+        };
+    }
+};
+
+Timeline.DOM.cancelEvent = function(evt) {
+    evt.returnValue = false;
+    evt.cancelBubble = true;
+    if ("preventDefault" in evt) {
+        evt.preventDefault();
+    }
+};
+

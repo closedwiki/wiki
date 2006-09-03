@@ -1,7 +1,6 @@
 # Plugin for TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2006 Peter Thoeny, peter@thoeny.org
+# Copyright (C) 2006 Sven Dowideit, SvenDowideit@wikiring.com
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
 # are listed in the AUTHORS file in the root of this distribution.
 # NOTE: Please extend that file, not this notice.
@@ -21,35 +20,6 @@
 =pod
 
 ---+ package TimelinePlugin
-
-This is an empty TWiki plugin. It is a fully defined plugin, but is
-disabled by default in a TWiki installation. Use it as a template
-for your own plugins; see TWiki.TWikiPlugins for details.
-
-__NOTE:__ To interact with TWiki use ONLY the official API functions
-in the TWiki::Func module. Do not reference any functions or
-variables elsewhere in TWiki, as these are subject to change
-without prior warning, and your plugin may suddenly stop
-working.
-
-For increased performance, all handlers except initPlugin are
-disabled below. *To enable a handler* remove the leading DISABLE_ from
-the function name. For efficiency and clarity, you should comment out or
-delete the whole of handlers you don't use before you release your
-plugin (or you can put __END__ on a line of it's own and move dead
-code below that line; Perl ignores anything after __END__).
-
-__NOTE:__ When developing a plugin it is important to remember that
-TWiki is tolerant of plugins that do not compile. In this case,
-the failure will be silent but the plugin will not be available.
-Check the warning log file (defined by $TWiki::cfg{WarningFileName}) for
-errors.
-
-__NOTE:__ Defining deprecated handlers will cause the handlers to be 
-listed in %TWIKIWEB%.TWikiPlugins#FAILEDPLUGINS. See 
-%TWIKIWEB%.TWikiPlugins#Handlig_deprecated_functions
-for information on regarding deprecated handlers that are defined for
-compatibility with older TWiki versions.
 
 =cut
 
@@ -167,7 +137,8 @@ sub _TIMELINE {
     $jscript =~ s/%PLUGINPUBURL%/$pluginPubUrl/g;
     TWiki::Func::addToHEAD($pluginName, $jscript);
 
-    my $timeline = '<div id="my-timeline" class="TimelineDiv" style="height: '.$params->{height}.'; width: '.$params->{width}.'; border: 1px solid #aaa" url="'.$params->{_DEFAULT}.'" interval="'.$params->{interval}.'" date="'.$params->{date}.'"></div>';
+    my $timeline = '<div id="my-timeline" class="TimelineDiv" style="height: '.$params->{height}
+        .'; width: '.$params->{width}.'; border: 1px solid #aaa" url="'.$params->{_DEFAULT}.'" interval="'.$params->{interval}.'" date="'.$params->{date}.'"></div>';
     return $timeline;
 }
 
