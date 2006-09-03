@@ -49,6 +49,37 @@ if ( typeof( TWiki.TimelinePlugin ) == "undefined" ) {
 }
 TWiki.TimelinePlugin.timelines = [];
 
+TWiki.TimelinePlugin.getDateTimeConstantByName = function(periodName) {
+if (periodName == "MILLISECOND") {
+    return Timeline.DateTime.MILLISECOND;
+} else if (periodName == "SECOND") {
+    return Timeline.DateTime.SECOND;
+} else if (periodName == "MINUTE") {
+    return Timeline.DateTime.MINUTE;
+} else if (periodName == "HOUR") {
+    return Timeline.DateTime.HOUR;
+} else if (periodName == "DAY") {
+    return Timeline.DateTime.DAY;
+} else if (periodName == "WEEK") {
+    return Timeline.DateTime.WEEK;
+} else if (periodName == "MONTH") {
+    return Timeline.DateTime.MONTH;
+} else if (periodName == "YEAR") {
+    return Timeline.DateTime.YEAR;
+} else if (periodName == "DECADE") {
+    return Timeline.DateTime.DECADE;
+} else if (periodName == "CENTURY") {
+    return Timeline.DateTime.CENTURY;
+} else if (periodName == "MILLENNIUM") {
+    return Timeline.DateTime.MILLENNIUM;
+} else if (periodName == "EPOCH") {
+    return Timeline.DateTime.EPOCH;
+} else if (periodName == "ERA") {
+    return Timeline.DateTime.ERA;
+}
+return Timeline.DateTime.YEAR;
+}
+
 
 TWiki.TimelinePlugin.timelineOnLoad = function() {
     var elements = document.getElementsByTagName('div');
@@ -63,6 +94,7 @@ TWiki.TimelinePlugin.timelineOnLoad = function() {
 TWiki.TimelinePlugin.createNewTimeline = function(thisDiv) {
     var url = thisDiv.getAttribute('url');
     var interval = thisDiv.getAttribute('interval');
+    var TimelineInterval = TWiki.TimelinePlugin.getDateTimeConstantByName(interval);
     var date = thisDiv.getAttribute('date');
     
     var eventSource = new Timeline.DefaultEventSource(0);
@@ -75,7 +107,7 @@ TWiki.TimelinePlugin.createNewTimeline = function(thisDiv) {
     var bandInfos = [
         Timeline.createBandInfo({
             width:          "85%", 
-            intervalUnit:   Timeline.DateTime.DAY, 
+            intervalUnit:   TimelineInterval-1, 
             intervalPixels: 100,
             eventSource:    eventSource,
             date:           d,
@@ -83,7 +115,7 @@ TWiki.TimelinePlugin.createNewTimeline = function(thisDiv) {
         }),
         Timeline.createBandInfo({
             width:          "15%", 
-            intervalUnit:   Timeline.DateTime.MONTH, 
+            intervalUnit:   TimelineInterval, 
             intervalPixels: 200,
             eventSource:    eventSource,
             date:           d,
@@ -99,7 +131,7 @@ TWiki.TimelinePlugin.createNewTimeline = function(thisDiv) {
             
     TWiki.TimelinePlugin.timelines = Timeline.create(document.getElementById(thisDiv.id), bandInfos, Timeline.HORIZONTAL);
 //    push(TimelinePlugin.timelines, TWiki.TimelinePlugin.timelines);
-    Timeline.loadXML(url, function(xml, url) {
+    Timeline.loadXML(url, function(xml, url) { 
          eventSource.loadXML(xml, url);
     });
 }
@@ -114,7 +146,6 @@ TWiki.TimelinePlugin.timelineOnResize = function() {
         }, 500);
     }
 }
-
 addLoadEvent(TWiki.TimelinePlugin.timelineOnLoad);
 addResizeEvent(TWiki.TimelinePlugin.timelineOnResize);
 </script>

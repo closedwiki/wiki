@@ -1,4 +1,5 @@
 data/TWiki/TimelinePlugin.txt  Plugin doc page
+data/TWiki/TimeLineSearch.txt  Plugin doc page
 lib/TWiki/Plugins/TimelinePlugin.pm  Plugin Perl module 
 templates/timelineplugin.tmpl
 pub/TWiki/TimelinePlugin/styles/ethers.css
@@ -59,3 +60,19 @@ pub/TWiki/TimelinePlugin/scripts/l10n/vi/labellers.js
 pub/TWiki/TimelinePlugin/timeline-api.js
 pub/TWiki/TimelinePlugin/monet.xml
 pub/TWiki/TimelinePlugin/timeline.jpg
+pub/TWiki/TimelinePlugin/ext/geochrono/geochrono-api.js
+pub/TWiki/TimelinePlugin/ext/geochrono/scripts/labellers.js
+pub/TWiki/TimelinePlugin/ext/geochrono/scripts/ether-painters.js
+pub/TWiki/TimelinePlugin/ext/geochrono/scripts/l10n
+pub/TWiki/TimelinePlugin/ext/geochrono/scripts/l10n/en
+pub/TWiki/TimelinePlugin/ext/geochrono/scripts/l10n/en/labellers.js
+pub/TWiki/TimelinePlugin/ext/geochrono/scripts/units.js
+pub/TWiki/TimelinePlugin/ext/geochrono/scripts/geochrono.js
+pub/TWiki/TimelinePlugin/images/message-right.png
+pub/TWiki/TimelinePlugin/images/message-top-right.png
+pub/TWiki/TimelinePlugin/images/message-bottom-right.png
+pub/TWiki/TimelinePlugin/images/progress-running.gif
+pub/TWiki/TimelinePlugin/images/message-left.png
+pub/TWiki/TimelinePlugin/images/message-top-left.png
+pub/TWiki/TimelinePlugin/images/message-bottom-left.png
+pub/TWiki/TimelinePlugin/scripts/l10n/fr/labellers.js
