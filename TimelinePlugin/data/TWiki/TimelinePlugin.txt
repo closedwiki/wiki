@@ -26,22 +26,21 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 ---++ Example (shows when Plugin is installed and running successfully)
 The first example shows a timeline based on a pre-esisting xml file (%PUBURL%/%TWIKIWEB%/TimelinePlugin/monet.xml)
 
-
-*(DISABLED - currently can only show one timeline per page)*
-
-%<nop>TIMELINE{
+%TIMELINE{
 "%PUBURL%/%TWIKIWEB%/TimelinePlugin/monet.xml"
 interval="DECADE"
 height="450px"
 width="700px"
-date="1840"
+date="1870"
 }%
 
 
-
 This example uses the %TWIKIWEB%.TimeLineSearch topic to show the last 50 modified topics in all webs.
+*(DISABLED - currently can only show one timeline per page)*
 
-%TIMELINE{
+*WARNING: at the moment IE will only work with xml file, not from generated xml as below*
+
+%<nop>TIMELINE{
 "%SCRIPTURL{view}%/%TWIKIWEB%/TimeLineSearch"
 interval="YEAR"
 height="450px"
