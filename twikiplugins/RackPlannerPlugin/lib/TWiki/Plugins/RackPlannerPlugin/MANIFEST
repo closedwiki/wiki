@@ -1,0 +1,3 @@
+lib/TWiki/Plugins/RackPlannerPlugin/RackPlanner.pm
+lib/TWiki/Plugins/RackPlannerPlugin.pm
+data/TWiki/RackPlannerPlugin.txt
