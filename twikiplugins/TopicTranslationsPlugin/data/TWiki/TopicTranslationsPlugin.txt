@@ -104,8 +104,9 @@ TopicTranslationsPlugin is capable of automatically redirecting to the available
 translation best suited to the user's language. Once TopicTranslationsPlugin is
 installed, this will happen by default.
 
-	* User's language is detected by the =Accept-Language= header sent by the user agent
-	  (the browser, most of the times), using the  =I18N::AcceptLanguage= Perl module.
+	* User's language is detected according to the REDIRECT_METHOD preference:
+		* if =REDIRECT_METHOD= is =http=, then the =Accept-Language= header sent by the user agent (the browser, most of the times) is used by =I18N::AcceptLanguage= Perl module to detect the language.
+		* if =REDIRECT_METHOD= is =user=, then the "LANGUAGE" user preference is used as the preferred language.
 	* The user *won't* be redirected:
 		* during an action other than =view= and =viewauth= (off course)
 		* if the user came from a link in another translation of the same topic.
@@ -159,8 +160,11 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* Whether automatic redirection must be disabled or not. Set to =yes= to disable.
 		* Set DISABLE_AUTOMATIC_REDIRECTION = no
 
-	* My own setting:
+	* List of available languages:
 		* Set TOPICTRANSLATIONS = en, pt-br
+
+	* Method used for detect language when redirecting (See "Automatic Redirection" above):
+		* REDIRECT_METHOD = http
 
 ---++ Plugin Installation Instructions
 
