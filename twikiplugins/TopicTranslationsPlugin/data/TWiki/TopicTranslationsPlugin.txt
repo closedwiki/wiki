@@ -185,6 +185,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AntonioTerceiro |
 |  Plugin Version: | 03 Jul 2005 (V1.003) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  04 Sep 2006 | new version released. Added patch from TWiki:Main/BeomsuChang for flexible language detection; thanks for TWiki:Main/JoenioCosta for remembering me I should release a new version. |
 |  03 Jul 2005 | Version =1.003=: fixed to redirect only during =view=/=viewauth= |
 |  02 Jul 2005 | Version =1.002=: major rewrite; documented all (or almost all :)) the code; added selection of available/missing translations; added =missingformat=; added support for custom topics (and webs) in <code>%<nop/>TRANSLATIONS%</code>; added automatic redirection for the "best" translation (detection via =I18N::AcceptLanguage=).  |
 |  19 Jun 2005: | Initial version: =1.001= |
