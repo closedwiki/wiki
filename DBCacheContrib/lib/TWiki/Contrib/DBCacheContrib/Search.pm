@@ -154,7 +154,7 @@ Construct a new search node by parsing the passed expression.
 	push( @opands, $1 );
       } elsif ( $string =~ s/^\s*([\w\.]+)//o ) {
 	push( @opands, $1 );
-      } elsif ( $string =~ s/\s*\(//o ) {
+      } elsif ( $string =~ s/^\s*\(//o ) {
 	my $oa;
 	( $oa, $string ) = _parse( $string );
 	push( @opands, $oa );
