@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="1157377527" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1157454724" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
-The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices.
+The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
 Devices are defined within a TWiki table. Following columns are supported (one row per device):
 
@@ -22,7 +22,7 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute1="value" ... }%=
 
 | *Attribute* | *Description* | *Example/Default* |
 |  *Behavior:*  |||
-| autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your devices on topics with the same name as the device | =autotopic="off"= |
+| autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your racks and devices on topics with the same name as the rack | =autotopic="off"= |
 | dir | sets the direction of the units: =topdown= - unit 1 is at the top of the rack; =bottomup= - unit 1 is at the bottom of the rack | =dir="bottomup"= |
 | racks | a comma separated list of rack names to show; if omitted all racks found on topics (see =topic= attribute) are shown  | =racks="rack1,rack2"= |
 | steps | unit steps to display (useful if you use only every =steps= unit of a rack) | =steps="1"= |
@@ -75,7 +75,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin renders a rack overview (e.g. of 19'' racks) with HTML tables.
+		* Set SHORTDESCRIPTION = This plugin renders a rack overview (e.g. of 19'' computer racks) with HTML tables.
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -104,14 +104,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.000 (4 Aug 2006) |
+|  Plugin Version: | V1.001 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.001 (BETA): | TWiki:Main.DanielRohde: fixed documentation |
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.021 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
-|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  [[TWiki:Plugins/Benchmark][Benchmarks]]: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 99% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
