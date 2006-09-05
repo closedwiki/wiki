@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1157460680" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1157460920" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -39,14 +39,19 @@ Usage: =%<nop>RACKPLANNER{attribute1="value" attribute1="value" ... }%=
 | displaynotes | if enabled the 'notes' entry will be displayed in the table cell instead of the 'notes' icon | =displaynotes="off"= |
 | displayowner | if enabled the 'owner' entry will be displayed in the table cell | =displayowner="off"= |
 | displaystats | if enabled the statistics will be displayed | =displaystats="on"= |
+| displayunitcolumn | if enabled the unit column will be displayed (related: =unitcolumnpos=, =unitcolumnformat=) | =displayunitcolumn="1"= |
 | emptybgcolor | default empty unit background color | =emptybgcolor="#f0f0f0"= |
 | emptyfgcolor | default empty unit foreground color | =emptyfgcolor="#000000"= |
 | emptytext | text for empty units (replacements: =%U= - unit number; =%R= - rack name) | =emptytext="empty"= |
 | fontsize | font size of the text (in percent, pt, em, ...); don't forget to reduce the =iconsize= if you reduce the =fontsize= | =fontsize="100%"= |
 | iconsize | icon size | =iconsize="16"= |
 | name | entry of the first cell (header of the unit row) | =name="U"= |
-| rackstatformat | rack statistics format (replacements: =%EU= - emty units; =%LEB= - largest empty block; =%OU= - occupied units) | =rackstatformat="Empty: %EUU %<nop>BR%Largest Empty Block: %LEBU %<nop>BR%Occupied: %OUU"= |
+| rackstatformat | rack statistics format (replacements: =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units) | =rackstatformat="Empty: %EUU %<nop>BR%Largest Empty Block: %LEBU %<nop>BR%Occupied: %OUU"= |
 | statformat | statistics format (replacements: =%R= - rack count; =%EU= - empty units; =%LEB= - largest empty block; =%OU= - occupied units; =%U= - # units) | =statformat="#Racks: %R, #Units: %U, Occupied: %OUU, Empty: %EUU, Largest Empty Block: %LEBU"= |
+| unitcolumnbgcolor | background color of the unit column | =unitcolumnbgcolor="white"= |
+| unitcolumnfgcolor | foreground color of the unit column | =unitcolumnfgcolor="black"= |
+| unitcolumnformat | format of the unit column (replacement: =%U= - unit) | =unitcolumnformat="%U"= |
+| unitcolumnpos | positions of the unit column: =left=, =right=, =both= (=left= and =right=), =all= (=both= and between racks) | =unitcolumnpos="left"= |
 
 
 *Notes:*
@@ -109,7 +114,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Version: | V1.001 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.001 (BETA): | TWiki:Main.DanielRohde: improved some features (added statistics); added attribute rackstatformat; renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug |
+|  V1.001 (BETA): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.021 |
 |  CPAN Dependencies: | none |
