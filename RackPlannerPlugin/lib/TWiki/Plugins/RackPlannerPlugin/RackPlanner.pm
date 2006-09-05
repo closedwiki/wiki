@@ -85,10 +85,15 @@ sub _initDefaults {
 		'rackstatformat' => 'Empty: %EUU<br/>Largest Empty Block: %LEBU<br/>Occupied: %OUU',
 		'statformat'    => '#Racks: %R, #Units: %U, Occupied: %OUU, Empty: %EUU, Largest Empty Block: %LEBU',
 		'displaystats' => 1,
+		'unitcolumnformat' => '%U',
+		'displayunitcolumn' => 1,
+		'unitcolumnpos' => 'left',
+		'unitcolumnfgcolor' => undef,	
+		'unitcolumnbgcolor' => undef,
 	);
 
 	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
-	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner' );
+	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner', 'displayunitcolumn' );
 
 
         $defaultsInitialized = 1;
@@ -116,7 +121,7 @@ sub _initOptions {
                 my $v = $params{$option};
                 if (defined $v) {
                         if (grep /^\Q$option\E$/, @flagOptions) {
-                                $options{$option} = 1 unless $v=~/^(0|on|off)$/i;
+                                $options{$option} = ($v!~/^(0|off)$/i);
                         } else {
                                 $options{$option} = $v;
                         }
@@ -197,22 +202,31 @@ sub _render {
 
 	### render table header:
 	my $tr = "";
-	$tr.=$cgi->th({-align=>'center'},$cgi->span({-title=>$options{'units'}},$options{'name'}));
-	foreach my $rack (@racks) {
+
+	my $unitColumnStyle ="";
+	$unitColumnStyle.='background-color:'.$options{'unitcolumnbgcolor'}.';'  if $options{'unitcolumnbgcolor'};
+	$unitColumnStyle.='color:'.$options{'unitcolumnfgcolor'}.';' if $options{'unitcolumnfgcolor'};
+	my $unitColumnHeader = $cgi->th({-style=>$unitColumnStyle, -align=>'center', -title=>$options{'units'}}, $options{'name'});
+	my $unitColumn = ($options{'displayunitcolumn'}? $cgi->td({-style=>$unitColumnStyle}, &_renderUnitColumn($startUnit,$endUnit,$steps)): undef);
+
+	$tr.= $unitColumnHeader if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(left|both|all)$/i;
+
+	for (my $rackNumber=0; $rackNumber<=$#racks; $rackNumber++) {
+		my $rack = $racks[$rackNumber];
 		$tr.=$cgi->th({-align=>'center'},&TWiki::Func::renderText($rack));
+		$tr.=$unitColumnHeader if $options{'displayunitcolumn'} && ($options{'unitcolumnpos'}=~/^all$/i) && ($rackNumber<$#racks);
 
 	}
+
+	$tr.= $unitColumnHeader if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(right|both|all)$/i;
+
 	$text .= $cgi->Tr($tr);
 
 	## render table data:
 	$tr="";
 
-	my $utext ="";
-	for (my $unit=$startUnit; $unit<=$endUnit; $unit+=$steps) {
-		$utext.=$cgi->Tr($cgi->th({-align=>'right'},abs($unit)));
-	}
-	$utext = $cgi->start_table().$utext.$cgi->end_table();
-	$tr.=$cgi->td($utext); 
+
+	$tr.=$unitColumn if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(left|both|all)$/ig; 
 
 	my $notesIcon = &_resizeIcon($options{'notesicon'});
 	my $connectedtoIcon = &_resizeIcon($options{'connectedtoicon'});
@@ -220,14 +234,15 @@ sub _render {
 	my $statRow = $cgi->td("");
 
 	my @stats = ( );
-	foreach my $rack (@racks) {
+	for (my $rackNumber=0; $rackNumber<=$#racks; $rackNumber++) {
+		my $rack = $racks[$rackNumber];
 		my $td= "";
 		my $fillRows = 0;
 
 		my $statsRef = &_getRackStatistics($$entriesRef{$rack});
 		push @stats, $statsRef;
 		$statRow.=$cgi->th(&_renderRackStatistics($statsRef)) if $options{'displaystats'};
-
+		$statRow.=$cgi->th() if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^all$/ig;
 		for (my $unit=$startUnit; $unit<=$endUnit; $unit+=$steps) {
 			my $itd="";
 			my $rowspan=1;
@@ -297,21 +312,39 @@ sub _render {
 			$td .= $cgi->Tr({-align=>'left',-valign=>'top'},$itd)."\n";
 			
 		}
-		$td = $cgi->start_table(-style=>'font-size:'.$options{'fontsize'}, -cellpadding=>'0',-cellspacing=>'1',-tableheight=>'100%').$td.$cgi->end_table();
+		$td = $cgi->start_table(-style=>'font-size:'.$options{'fontsize'}, 
+				-cellpadding=>'0',-cellspacing=>'1',-tableheight=>'100%')
+			.$td.$cgi->end_table();
 		
 		$tr.=$cgi->td($td);
+		$tr.=$unitColumn if $options{'displayunitcolumn'} && ($options{'unitcolumnpos'}=~/^all$/ig) && ($rackNumber<$#racks); 
 	}
-	$tr.=$cgi->td(""); ### XXXX Units
+
+	$tr.=$unitColumn if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(right|both|all)$/ig; 
+
 	$text .= $cgi->Tr({-valign=>'top'}, $tr);
 
 	$text.=$cgi->Tr($statRow) if $options{'displaystats'};
 
-	$text.=$cgi->Tr($cgi->td().$cgi->td({-colspan=>$#stats+1}, &_renderStatistics(\@stats))) if $options{'displaystats'};
+	my $colspan=$#racks+1 + ($options{'displayunitcolumn'}&&$options{'unitcolumnpos'}=~/^all$/i ? $#racks : 0);
+	$text.=$cgi->Tr($cgi->td().$cgi->td({-colspan=>$colspan}, &_renderStatistics(\@stats))) if $options{'displaystats'};
 
 
 	$text .= $cgi->end_table();
 	$text .= '</noautolink>';
 
+	return $text;
+}
+sub _renderUnitColumn {
+	my ($startUnit,$endUnit,$steps) = @_;
+	my $text ="";
+	for (my $unit=$startUnit; $unit<=$endUnit; $unit+=$steps) {
+		my $f = $options{'unitcolumnformat'};
+		my $u = abs($unit);
+		$f =~ s/%U/$u/g;
+		$text.=$cgi->Tr($cgi->th({-align=>'right'},$f));
+	}
+	$text = $cgi->start_table().$text.$cgi->end_table();
 	return $text;
 }
 sub _renderEmptyText {
