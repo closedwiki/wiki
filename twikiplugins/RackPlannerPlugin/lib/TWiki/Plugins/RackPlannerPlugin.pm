@@ -38,7 +38,8 @@ $VERSION = '$Rev: 8670$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
  
-$REVISION = '1.000'; #dro# initial version
+$REVISION = '1.001'; #dro# improved some features; fixed documentation; fixed tooltip bug; fixed conflict bug;
+#$REVISION = '1.000'; #dro# initial version
 
 # Name of this Plugin, only used in this module
 $pluginName = 'RackPlannerPlugin';
