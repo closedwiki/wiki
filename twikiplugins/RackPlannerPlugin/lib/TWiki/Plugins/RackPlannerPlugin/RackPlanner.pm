@@ -82,11 +82,12 @@ sub _initDefaults {
 		'emptyfgcolor'=> '#000000',
 		'emptybgcolor'=> '#f0f0f0',
 		'name'=>'U',
-		'statformat' => 'Empty Units: %EU<br/>Largest Empty Block: %LEB<br/>Occupied Units: %OU',
+		'rackstatformat' => 'Empty: %EUU<br/>Largest Empty Block: %LEBU<br/>Occupied: %OUU',
+		'statformat'    => '#Racks: %R, #Units: %U, Occupied: %OUU, Empty: %EUU, Largest Empty Block: %LEBU',
 		'displaystats' => 1,
 	);
 
-	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon' );
+	@renderedOptions = ( 'name', 'notesicon','conflicticon', 'connectedtoicon', 'emptytext' );
 	@flagOptions = ( 'autotopic', 'displaystats', 'displayconnectedto', 'displaynotes', 'displayowner' );
 
 
@@ -198,7 +199,7 @@ sub _render {
 	my $tr = "";
 	$tr.=$cgi->th({-align=>'center'},$cgi->span({-title=>$options{'units'}},$options{'name'}));
 	foreach my $rack (@racks) {
-		$tr.=$cgi->th({-align=>'center',-colwidth=>int(80/($#racks+1)).'%'},&TWiki::Func::renderText($rack));
+		$tr.=$cgi->th({-align=>'center'},&TWiki::Func::renderText($rack));
 
 	}
 	$text .= $cgi->Tr($tr);
@@ -218,11 +219,14 @@ sub _render {
 
 	my $statRow = $cgi->td("");
 
+	my @stats = ( );
 	foreach my $rack (@racks) {
 		my $td= "";
 		my $fillRows = 0;
 
-		$statRow.=$cgi->th(&_renderStatistics($$entriesRef{$rack})) if $options{'displaystats'};
+		my $statsRef = &_getRackStatistics($$entriesRef{$rack});
+		push @stats, $statsRef;
+		$statRow.=$cgi->th(&_renderRackStatistics($statsRef)) if $options{'displaystats'};
 
 		for (my $unit=$startUnit; $unit<=$endUnit; $unit+=$steps) {
 			my $itd="";
@@ -271,7 +275,7 @@ sub _render {
 				$bgcolor=$options{'emptybgcolor'};
 				$fgcolor=$options{'emptyfgcolor'};
 				if ($fillRows==0) {
-					$itd.=$options{'emptytext'};
+					$itd.=&_renderEmptyText($rack,$unit);
 				} else {
 					if (defined $entryListRef && $#$entryListRef!=-1) {
 						
@@ -302,10 +306,20 @@ sub _render {
 
 	$text.=$cgi->Tr($statRow) if $options{'displaystats'};
 
+	$text.=$cgi->Tr($cgi->td().$cgi->td({-colspan=>$#stats+1}, &_renderStatistics(\@stats))) if $options{'displaystats'};
+
 
 	$text .= $cgi->end_table();
 	$text .= '</noautolink>';
 
+	return $text;
+}
+sub _renderEmptyText {
+	my ($rack,$unit) = @_;
+	my $text = $options{'emptytext'};
+
+	$text=~s/%R/$rack/ig;
+	$text=~s/%U/$unit/ig;
 	return $text;
 }
 sub _renderConflictCell {
@@ -405,11 +419,29 @@ sub _retitleIcon {
 	return $icon;
 }
 sub _renderStatistics {
-	my ($rackEntriesRef) = @_;
+	my ($statsRef) = @_;
+	my $text=$options{'statformat'};
+	$text=~s/%R/$#$statsRef+1/egi;
+	my $maxContinuesEmptyUnits = 0;
+	my $countEmptyUnits = 0;
+	my $countOccupiedUnits = 0;
+	foreach my $s (@{$statsRef}) {
+		$maxContinuesEmptyUnits=$$s{'maxContinuesUnits'} if ($$s{'maxContinuesUnits'}>$maxContinuesEmptyUnits);
+		$countEmptyUnits+=$$s{'emptyUnits'};
+		$countOccupiedUnits+=$$s{'occupiedUnits'};
+	}
+	
+	$text=~s/%LEB/$maxContinuesEmptyUnits/ig;
+	$text=~s/%EU/$countEmptyUnits/ig;
+	$text=~s/%OU/$countOccupiedUnits/ig;
+	$text=~s/%U/($options{'units'}*($#$statsRef+1))/egi;
 
-	my $statsRef = &_getStatistics($rackEntriesRef);
+	return $text;
+}
+sub _renderRackStatistics {
+	my ($statsRef) = @_;
 
-	my $text = $options{'statformat'};
+	my $text = $options{'rackstatformat'};
 
 	$text =~s/%EU/$$statsRef{'emptyUnits'}/g;
 	$text =~s/%LEB/$$statsRef{'maxContinuesUnits'}/g;
@@ -417,7 +449,7 @@ sub _renderStatistics {
  
 	return $text;
 }
-sub _getStatistics {
+sub _getRackStatistics {
 	my ($rackEntriesRef) = @_;
 
 	my $startUnit = -abs($options{'units'});
