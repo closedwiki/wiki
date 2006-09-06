@@ -230,6 +230,7 @@ sub _render {
 
 	my $notesIcon = &_resizeIcon($options{'notesicon'});
 	my $connectedtoIcon = &_resizeIcon($options{'connectedtoicon'});
+	my $conflictIcon = &_resizeIcon($options{'conflicticon'});
 
 	my $statRow = $cgi->td("");
 
@@ -281,7 +282,7 @@ sub _render {
 				}
 
 				if ($#$entryListRef!=-1) {
-					$itd .= &_renderConflictCell(abs($unit), $entryListRef);
+					$itd .= &_renderConflictCell(abs($unit), $entryListRef, $conflictIcon);
 				} else {
 					$itd .= $cgi->td({-title=>abs($unit)},"&nbsp;") if ($rowspan>1);
 				}
@@ -297,7 +298,7 @@ sub _render {
 						my $title=&_renderConflictTitle(abs($unit),$entryListRef);
 						$itd.=$cgi->span({
 								-title=>$title
-								}, &_retitleIcon($options{'conflicticon'},$title));
+								}, &_retitleIcon($conflictIcon,$title));
 						$bgcolor="white";
 						$fgcolor="red";
 					} else {
@@ -327,7 +328,7 @@ sub _render {
 	$text.=$cgi->Tr($statRow) if $options{'displaystats'};
 
 	my $colspan=$#racks+1 + ($options{'displayunitcolumn'}&&$options{'unitcolumnpos'}=~/^all$/i ? $#racks : 0);
-	$text.=$cgi->Tr($cgi->td().$cgi->td({-colspan=>$colspan}, &_renderStatistics(\@stats))) if $options{'displaystats'};
+	$text.=$cgi->Tr($cgi->td().$cgi->td({-colspan=>$colspan}, &_renderStatistics(\@stats))) if $options{'displaystats'} && ($#stats>0);
 
 
 	$text .= $cgi->end_table();
@@ -356,12 +357,12 @@ sub _renderEmptyText {
 	return $text;
 }
 sub _renderConflictCell {
-	my ($unit, $entryListRef) = @_;
+	my ($unit, $entryListRef, $conflictIcon) = @_;
 	my $title=&_renderConflictTitle($unit, $entryListRef);
 	my $text=$cgi->td({-title=>$title, 
 				-bgcolor=>'white', -color=>'red',
 				-style=>'background-color:white;color:red' },
-			&_retitleIcon($options{'conflicticon'}, $title));
+			&_retitleIcon($conflictIcon, $title));
 	return $text;
 }
 sub _renderTextContent {
@@ -503,7 +504,7 @@ sub _getRackStatistics {
 		if ((defined $entriesRef) && ($#$entriesRef != -1)) {
 			$$rackEntriesRef{abs($unit)}[0]{'formfactor'} =~ m/(\d+)/;
 			my $u=$1;
-			if ($u+$unit<=$endUnit) {
+			if ($u+$unit<=$endUnit+1) {
 				$countOccupiedUnits += $u;
 				$countContinuesEmptyUnits = 0;
 				$unit += $u-1;
