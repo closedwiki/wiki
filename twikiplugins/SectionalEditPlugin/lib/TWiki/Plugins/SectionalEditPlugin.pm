@@ -40,7 +40,7 @@ sub initPlugin
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
-        &TWiki::Func::writeWarning( "Version mismatch between SectionalEditPlugin and Plugins.pm" );
+        &TWiki::Func::writeWarning( "Version mismatch between ${pluginName} and Plugins.pm" );
         return 0;
     }
 
@@ -71,7 +71,7 @@ sub initPlugin
     $debug = &TWiki::Func::getPreferencesFlag( "SECTIONALEDITPLUGIN_DEBUG" );
 
     # Plugin correctly initialized
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::SectionalEditPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
+    &TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
@@ -146,17 +146,19 @@ sub preRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
-    &TWiki::Func::writeDebug( "- SectionalEditPlugin::startRenderingHandler( $_[1].$topic )" ) if $debug;
+    &TWiki::Func::writeDebug( "- ${pluginName}::preRenderingHandler( $_[1].$topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just before the line loop
     # Only bother with this plugin if viewing (i.e. not searching, etc)
     return unless ($0 =~ m/view|viewauth|render/o);
 
+    my $ctmpl = $TWiki::Plugins::SESSION->{cgiQuery}->param('template');
     my $cskin = &TWiki::Func::getSkin();
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
-        if ($cskin eq $ss) {
+        if (($cskin eq $ss)||($ctmpl eq $ss)) {
             $skipit = 1;
+	    last;
         }
     }
 
