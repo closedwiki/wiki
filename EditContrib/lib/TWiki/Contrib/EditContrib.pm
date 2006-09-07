@@ -18,8 +18,8 @@ $VERSION = 1.001;
 # =========================
 ##### Note done yet
 sub handleUrlParam {
-    my( $theParam ) = @_;
-    return TWiki::handleUrlParam( $theParam );
+    #my( $theParam ) = @_;
+    return TWiki::handleUrlParam( @_ );
 }
 
 # =========================
@@ -309,7 +309,7 @@ sub edit {
 }
 
 # TW: The following concoction is to work around a problem with
-# Firefix which eats leading and trailing newlines on text passed
+# Firefox which eats leading and trailing newlines on text passed
 # as hidden URL parameter
 sub protect {
     return ' ' . $_[0] . ' ';
@@ -359,6 +359,7 @@ sub finalize_edit {
 
     $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
 
+    ## TW: Is this tstill needed?
     if ( $sectxt =~ /^\n/o ) {
       $tmpl =~ s/%TEXTDETAIL%/<input type="hidden" name="newline" value="t" \/>/go;
     } else {
@@ -413,5 +414,38 @@ sub finalize_edit {
     $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );
 }
 
+sub addSection {
+    my $session = shift;
+
+    $session->enterContext( 'edit' );
+    my $text = '';
+    my $tmpl = '';
+    ( $session, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( $session );
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $preamble = $query->param('pretxt') || '';
+    my $posamble = $query->param('postxt') || '';
+    my $attrs = new TWiki::Attrs( $query->param('mapping') || '' );
+
+    $preamble =~ s/\\n/\n/g;
+    $preamble =~ s/%HTML{(.*)}%/<$1>/go;
+    $posamble =~ s/\\n/\n/g;
+    $posamble =~ s/%HTML{(.*)}%/<$1>/go;
+    foreach my $i ( keys %$attrs ) {
+      next if $i eq "_RAW";
+      my $inew = $query->param($attrs->{$i});
+      $preamble =~ s/$i/$inew/g;
+      $posamble =~ s/$i/$inew/g;
+    }
+
+    my $sectxt = "";
+    my $pretxt = $text . $preamble;
+    my $postxt = $posamble;
+
+    TWiki::Contrib::EditContrib::finalize_edit ($session, $pretxt, $sectxt, $postxt, '', '', $tmpl);
+
+}
 
 1;
