@@ -16,7 +16,7 @@ You type
 </verbatim>
 you get
 
-(simulated)
+(simulated) %BR%
 <img src="%ATTACHURL%/bibtex-select-ex.png" alt="bibtex select example">
 
 (if installed)
@@ -73,7 +73,7 @@ You type
 </verbatim>
 you get
 
-(simulated)
+(simulated) %BR%
 <img src="%ATTACHURL%/bibtex-inline-ex.png" alt="bibtex inline example">
 
 (if installed)
@@ -192,7 +192,7 @@ You type
 
 you get
 
-(simulated)
+(simulated) %BR%
 <img src="%ATTACHURL%/bibtex-ref-ex.png" alt="bibtex reference example">
 
 (if installed)
