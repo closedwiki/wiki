@@ -26,7 +26,8 @@ Add a =%<nop>EDITTABLEROW{...}%= variable just before an existing table to make 
 | =changerows= | Rows can be added and removed if ="on"=; rows can be added but not removed if ="add"=. | =CHANGEROWS= Plugin setting |
 | =helptopic= | Topic name containing help text shown below the table when editing a table. The %<nop>STARTINCLUDE% and %<nop>STOPINCLUDE% variables can be used in the topic to specify what is shown. | (no help text) |
 | =headerislabel= | Table header cells are read-only (labels) if ="on"=; header cells can be edited if ="off"= or "0" | ="on"= |
-| =editbutton= | Set edit button text, e.g. ="Edit this table"=; set button image with alt text, e.g. ="Edit table, %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/edittopic.gif"= | =EDITBUTTON= %BR% Plugin setting |
+| =editbutton= | Set edit button text, e.g. ="Edit this table"=; set button image with alt text, e.g. ="Edit table, %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/edittopic.gif"= | =EDITBUTTON= Plugin setting |
+| =editlink= | Set appearance of the per-row link, e.g. ="Edit"=; set button image with alt text, e.g. ="Edit table, %<nop>PUBURL%/%<nop>TWIKIWEB%/TWikiDocGraphics/edittopic.gif"= | =EDITLINK= Plugin setting |
 | =show= | When editing a row of a table, or adding to a table, display that table during edit. | ="off"=  |
 | =headeronempty= | Show the table headers when starting a table by placing the =%<nop>EDITTABLEROW{...}%= variable freely. | ="off"=  |
 
@@ -91,19 +92,20 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set CHANGEROWS = on
 
 	* Default edit button: Specify =button text=, or specify =alternate text, image URL=
-		* #Set EDITBUTTON = Edit table
-		* Set EDITBUTTON = Edit this table, %PUBURL%/TWiki/EditTablePlugin/edittable.gif
+		* Set EDITBUTTON = Edit table
+		* #Set EDITBUTTON = Edit this table, %PUBURL%/TWiki/EditTablePlugin/edittable.gif
 
 	* Default edit link for row: Specify =button text=, or specify =alternate text, image URL=. If empty, create link from first field.
 		* #Set EDITLINK = Edit
-		* #Set EDITLINK = Edit, %PUBURL%/TWiki/TWikiDocGraphics/pencil.gif
+		* #Set EDITLINK = Edit, %PUBURL%/TWiki/TWikiDocGraphics/edittopic.gif
 
 
 ---++ Limitations and Known Issues
 
 	* This Plugin does not (yet) support TWiki table formatting like Multi-span cells (e.g. =| ... ||=)
-	* Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label
 	* You cannot put two =%<nop>EDITTABLE{}%= statements on the same line in the source
+	* The template defining the table is different than the definition given by the =include= parameter in EditTablePlugin.
+
 
 ---++ Plugin Installation Instructions
 
@@ -122,21 +124,20 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 	  | ==templates/editTableRow.tmpl== |  |
 	* Verify access and ownership settings for the new scripts.
 	* Edit your .htaccess file to require a valid user for the included scripts (if needed).
-	* For Beijing release point to a valid image for =EDITBUTTON=
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 30 Jun 2005 |
+|  Plugin Version: | 01 Sep 2006 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  28 Jun 2006: | update plugin to work with TWiki 4.0 - TWiki:Main/SvenDowideit |
+|  01 Sep 2006: | Dakar port. Fix handling of date fields in Dakar. Allow editlink in tag. Move existing table to bottom of edit view. |
 |  07 Jul 2005: | Remove further warning message (thanks to TWiki:Main/KennethLavrsen and TWiki:Main/CrawfordCurrie)	|
 |  30 Jun 2005: | Fix access control. Remove warning messages from apache log.	|
 |  21 Apr 2005: | Fix to remove conflict with %<nop>TOC% rendering	|
 |  26 Mar 2005: | Removed dependencies on EditContrib and made compatible with Beijing release  |
 |  20 Mar 2005: | Initial version |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | JSCalendarContrib (if the Mishoo calendar is used)  |
+|  Other Dependencies: | JSCalendarContrib  |
 |  Perl Version: | 5.0 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
@@ -146,7 +147,7 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 
 __Related Topics:__ %TWIKIWEB%.EditTablePlugin
 
--- TWiki:Main/ThomasWeigert - 20 Mar 2005
+-- TWiki:Main/ThomasWeigert - 01 Sep 2006
 
 %META:FILEATTACHMENT{name="editwithcalendar.jpg" attr="h" comment="" date="1111293617" path="E:\tmp\editwithcalendar.jpg" size="47115" user="guest" version="1.1"}%
 %META:FILEATTACHMENT{name="edit_ex2.jpg" attr="h" comment="" date="1111296773" path="E:\tmp\edit_ex2.jpg" size="56795" user="guest" version="1.1"}%
