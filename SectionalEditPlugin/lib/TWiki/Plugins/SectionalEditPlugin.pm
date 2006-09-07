@@ -24,14 +24,14 @@ use strict;
 use vars qw(
         $web $topic $user $installWeb $VERSION $RELEASE $debug
         $bgcolor $label $skipskin $leftjustify $alwayssection
-	$sectiondepth $editstyle $placement
+	$sectiondepth $sectiondepthmin $sectioninit $editstyle $placement
     );
 
 use TWiki::Contrib::EditContrib;
 
-$VERSION = '$Rev$';
+$VERSION = '17 Aug 2006';
 
-$RELEASE = '6 Mar 2006';
+$RELEASE = 'Dakar';
 
 # =========================
 sub initPlugin
@@ -47,12 +47,17 @@ sub initPlugin
     $bgcolor = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_BGCOLOR" ) || "silver";
     $bgcolor = &TWiki::Func::expandCommonVariables($bgcolor, $topic, $web);
     $label = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_LABEL" ) || "Edit";
+    $label = TWiki::Func::expandCommonVariables( $label );
     $skipskin = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_SKIPSKIN" ) || "";
     $leftjustify = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_JUSTIFICATION" ) || "left";
     $leftjustify = ($leftjustify =~ /left/i ? 1 : 0);
 
     $alwayssection = &TWiki::Func::getPreferencesValue( "EDITSECTIONS" ) || 0;
-    $sectiondepth = &TWiki::Func::getPreferencesValue( "SECTIONDEPTH" ) || "";
+    $sectiondepth = &TWiki::Func::getPreferencesValue( "SECTIONDEPTH" ) || 0;
+    $sectiondepthmin = &TWiki::Func::getPreferencesValue( "SECTIONDEPTHMIN" ) || 0;
+    $sectiondepthmin = $sectiondepth if ($sectiondepthmin > $sectiondepth);
+    $sectioninit = ($sectiondepthmin) ? 0 : 1;
+    $sectiondepthmin = 1 unless $sectiondepthmin;
     $editstyle = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_STYLE" ) || "";
 
     if ($editstyle) {
@@ -80,7 +85,7 @@ sub blankCell
 sub editLink
 {
     my ($eurl,$pos,$title) = @_;
-    return "<a href=\"$eurl\?t=" . time() . "&sec=$pos#SECEDITBOX\"><small>$title</small></a>";
+    return "<a href=\"$eurl\?t=" . time() . "&sec=$pos#SECEDITBOX\"><small> $title </small></a>";
 }
 
 # =========================
@@ -177,7 +182,8 @@ sub preRenderingHandler
 		my $lastmark = "";
 		my $text = $_[0];
 		my $sec = "";
-	        while ( $text =~ m/^---\+{1,$sectiondepth}[^+]/mg ) {
+		my $foundit = ($sectioninit) ? 1 : 0;
+	        while ( $text =~ m/^---(\+{1,$sectiondepth})[^+]/mg ) {
 		    # Minor bug in the above regex: A "---+" with no
 		    # title text before either newline or end of topic
 		    # does not render as heading but is treated as 
@@ -185,7 +191,22 @@ sub preRenderingHandler
 		    my $curpos = pos $text;
 		    my $curmark = $&;
 		    $sec = substr($text,$lastpos,$curpos - length($&) - $lastpos);
-		    $ret .= editRow($eurl,$pos, ($pos > 0 ? "\n". $lastmark : "") . $sec) unless ($sec =~ /^\s*$/o);
+		    if ( $foundit ) {
+		      $ret .= editRow($eurl,$pos, ($pos > 0 ? "\n". $lastmark : "") . $sec) unless ($sec =~ /^\s*$/o);
+		    } else {
+		      if ( $editstyle ) {
+			$ret .= ($pos > 0 ? "\n". $lastmark : "") . $sec;
+		      } else {
+			$ret .= "<tr><td>";
+			$ret .= ($pos > 0 ? "\n". $lastmark : "") . $sec;
+			$ret .= "</td></tr>";
+		      }
+		    }
+		    if ( length($1) < $sectiondepthmin ) {
+		      $foundit = 0;
+		    } else {
+		      $foundit = 1;
+		    }
 		    $lastmark = $curmark;
 		    $lastpos = $curpos;
 		    $pos++;
@@ -194,17 +215,25 @@ sub preRenderingHandler
 		return if ($lastpos == $pos);
 		# Otherwise, complete the section
 		$sec = substr($text,$lastpos);
-		$ret .= editRow($eurl,$pos, ($pos > 0 ? "\n". $lastmark : "") . $sec) unless ($sec =~ /^\s*$/o);
-	    }
-	    if ($sectionbreak) {
+		if ( $foundit ) {
+		  $ret .= editRow($eurl,$pos, ($pos > 0 ? "\n". $lastmark : "") . $sec) unless ($sec =~ /^\s*$/o);
+		} else {
+		  if ( $editstyle ) {
+		    $ret .= ($pos > 0 ? "\n". $lastmark : "") . $sec;
+		  } else {
+		    $ret .= "<tr><td>";
+		    $ret .= ($pos > 0 ? "\n". $lastmark : "") . $sec;
+		    $ret .= "</td></tr>";
+		  }
+		}
+	    } elsif ($sectionbreak) {
 		my @sections = split(/<sectionbreak\s*\/?>/i, $_[0]);
 		my $pos = 0;
 		foreach my $sec (@sections) {
 		    $ret .= editRow($eurl,$pos,$sec);
 		    $pos++;
 		}
-	    }
-	    if ($sectionedit) { 
+	    } elsif ($sectionedit) {
 		my @sections = split(/(<\/?sectionedit.*?>)/i, $_[0]);
 		my $pos = 0;
 		my $state = "noedit";
@@ -256,41 +285,7 @@ sub edit
     # Get rid of CRs (we only want to deal with LFs)
     $text =~ s/\r//g;
 
-    if ( $TWiki::Plugins::SectionalEditPlugin::alwayssection || ($editsections = $text =~ m/<editsections\s*\/>/i) ) {
-	my $lastmark = "";
-	my $lastpos = 0;
-        while ( $text =~ m/^---\+{1,$TWiki::Plugins::SectionalEditPlugin::sectiondepth}[^+]/mg ) {
-	  if ( $pos == $theSec ) {
-	    $postxt = $&.$';
-	    $sectxt = $lastmark.substr($text,$lastpos,(pos $text) - length($&) - $lastpos);
-	    $pos++;
-	    last;
-	  } elsif ( $pos == ($theSec - 1) ) {
-	    $lastmark = $&;
-	    $lastpos = pos $text;
-	    $pretxt = $`;
-	  }
-	  $pos++;
-	}
-	if ( $pos == $theSec ) {
-	  # The target section was the last section
-	  #$postxt = "";
-	  $sectxt = $lastmark.substr($text,$lastpos);
-	}
-	if ( $editsections ) {
-	  # move the <editsections/> command into $pretxt
-	  if ( $sectxt =~ s|<editsections\s*\/>||i ) {
-	    $pretxt = "<editsections\/>\n$pretxt";
-	  }
-	}
-        # Move the end of line to the beginning of postxt
-        # So that sections aren't accidentally collapsed
-	# (by user deleting the trailing newline in section)
-        if ($sectxt =~ s/[\n\r]$//s) {
-	  $postxt = "\n" . $postxt;
-        }
-    }
-    elsif ( $text =~ m/<sectionbreak\s*\/?>/i ) {    
+    if ( $text =~ m/<sectionbreak\s*\/?>/i ) {
 	my @sections = split(/<sectionbreak\s*\/?>/i, $text);
 	# The following does not honor the literal spelling of the <sectionbreak/> tag
 	foreach my $s (@sections) {
@@ -326,8 +321,42 @@ sub edit
 	    }
 	    $pos++;
 	}
+    } else {
+        # assume that $TWiki::Plugins::SectionalEditPlugin::alwayssection || ($editsections = $text =~ m/<editsections\s*\/>/i)
+        # cannot check for this, as we might have used %TEXTSTART%
+	my $lastmark = "";
+	my $lastpos = 0;
+        while ( $text =~ m/^---\+{1,$sectiondepth}[^+]/mg ) {
+	  if ( $pos == $theSec ) {
+	    $postxt = $&.$';
+	    $sectxt = $lastmark.substr($text,$lastpos,(pos $text) - length($&) - $lastpos);
+	    $pos++;
+	    last;
+	  } elsif ( $pos == ($theSec - 1) ) {
+	    $lastmark = $&;
+	    $lastpos = pos $text;
+	    $pretxt = $`;
+	  }
+	  $pos++;
+	}
+	if ( $pos == $theSec ) {
+	  # The target section was the last section
+	  #$postxt = "";
+	  $sectxt = $lastmark.substr($text,$lastpos);
+	}
+	if ( $editsections ) {
+	  # move the <editsections/> command into $pretxt
+	  if ( $sectxt =~ s|<editsections\s*\/>||i ) {
+	    $pretxt = "<editsections\/>\n$pretxt";
+	  }
+	}
+        # Move the end of line to the beginning of postxt
+        # So that sections aren't accidentally collapsed
+	# (by user deleting the trailing newline in section)
+        if ($sectxt =~ s/[\n\r]$//s) {
+	  $postxt = "\n" . $postxt;
+        }
     }
-
     TWiki::Contrib::EditContrib::finalize_edit ($session, $pretxt, $sectxt, $postxt, $pretxt, $postxt, $tmpl);
 
 }
