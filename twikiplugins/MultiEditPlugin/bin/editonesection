@@ -29,5 +29,6 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Edit;
+use TWiki::Plugins::MultiEditPlugin;
 TWiki::UI::run( \&TWiki::Plugins::MultiEditPlugin::doEdit );
 
