@@ -42,7 +42,7 @@ use strict;
 $VERSION = '$Rev$';
 $RELEASE = '1.4';
 $pluginName = 'BibtexPlugin'; 
-$debug = 1; # toggle me
+$debug = 0; # toggle me
 
 my %bibliography = ();
 my $citefile = "";
@@ -154,6 +154,8 @@ sub beforeCommonTagsHandler
 sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
+    TWiki::Func::writeDebug( "- ${pluginName}::CommonTagsHandler( $_[1] )" ) if $debug;
+
   $_[0] =~ s/%(BIBCITE|CITE){(.*?)}%/&handleCitation2($2,$1)/ge;
 
   $_[0] =~ s/%BIBTEXREF{([^}]*)}%/&handleBibtexBibliography($1)/ge;
@@ -201,6 +203,8 @@ sub postRenderingHandler
 sub handleCitation2
 {
   my ($input,$type) = @_;
+
+  my $errMsg = &doInit();
 
   return '%'.$type.'{'.$input.'}%'
       if ( ($bibcite) and ($type = 'CITE') );
