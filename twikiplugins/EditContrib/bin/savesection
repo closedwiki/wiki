@@ -28,37 +28,34 @@ BEGIN {
 }
 
 use strict;
-use Assert;
-use CGI::Carp qw( fatalsToBrowser );
-use CGI qw( :cgi -any );
-use TWiki;
+use TWiki::Func;
 use TWiki::UI;
 use TWiki::UI::Save;
+use TWiki::Contrib::EditContrib;
 
-my $query = new CGI;
-my $thePathInfo = $query->path_info(); 
-my $theRemoteUser = $query->remote_user();
-my $theUrl = $query->url;
-my $theTopic = $query->param( 'topic' );
-my $nl = ( $query->param( 'newline' ) )?"\n":"";
+TWiki::UI::run ( \&save );
 
-#### Deprecated function, could emulate TWiki::UI::run
-my ( $topic, $web, $dummy, $userName ) = 
-  TWiki::initialize( $thePathInfo, $theRemoteUser,
-                     $theTopic, $theUrl, $query );
+sub save {
 
-# Update url parameters
-my $text = TWiki::Contrib::EditContrib::unprotect($query->param( 'pretxt' )) . 
-             $query->param( 'text' ) .
-               TWiki::Contrib::EditContrib::unprotect($query->param( 'postxt' ));
+  my $session = shift;
+  $TWiki::Plugins::SESSION = $session;
+  my $query = TWiki::Func::getCgiQuery();
 
-my $editaction = $query->param ( 'editaction' );
-$editaction .= $query->param ( 'editparams' );
+  ## Not used?
+  my $nl = ( $query->param( 'newline' ) )?"\n":"";
 
-my $session = $TWiki::Plugins::SESSION;
-$session->{cgiQuery}->param( -name=>"text", -value=>$text);
-$session->{cgiQuery}->param( -name=>"editaction", -value=>$editaction);
+  # Update url parameters
+  my $text =
+    TWiki::Contrib::EditContrib::unprotect($query->param( 'pretxt' )) .
+	$query->param( 'text' ) .
+	  TWiki::Contrib::EditContrib::unprotect($query->param( 'postxt' ));
 
-TWiki::UI::Save::save( $session );
+  my $editaction = $query->param ( 'editaction' );
+  $editaction .= $query->param ( 'editparams' );
 
+  $session->{cgiQuery}->param( -name=>"text", -value=>$text);
+  $session->{cgiQuery}->param( -name=>"editaction", -value=>$editaction);
 
+  TWiki::UI::Save::save( $session );
+
+}
