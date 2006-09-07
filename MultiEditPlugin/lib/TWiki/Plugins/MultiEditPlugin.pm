@@ -46,12 +46,13 @@ sub initPlugin
     $label = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_LABEL" ) || "Edit";
     #Figure out how to do security in Dakar
     #$label =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
-    $label = eval $label;
+    #$label = eval $label;
+    $label = TWiki::Func::expandCommonVariables( $label );
     #Example for img tag:
     #$label = "<br><img src=\"". &TWiki::Func::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\">";
-    $skipskin = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_SKIPSKIN" ) || "";
+    $skipskin = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_SKIPSKIN" ) || '';
     $placement = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_PLACEMENT" ) || "after";
-    $placement = ($placement =~ /left/i ? 1 : 0);
+    $placement = ($placement =~ /before/i ? 1 : 0);
 
     #initialize a few other things
     $renderedText = [];
@@ -74,45 +75,48 @@ sub startRenderingHandler
 
     # This handler is called by getRenderedVersion just before the line loop
 
+    # Only bother with this plugin if viewing (i.e. not searching, etc)
+    return unless ($0 =~ m/view|viewauth|render/o);
+
+    my $ctmpl = $TWiki::Plugins::SESSION->{cgiQuery}->param('template');
     my $cskin = &TWiki::Func::getSkin();
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
-        if ($cskin eq $ss) {
+        if (($cskin eq $ss)||($ctmpl eq $ss)) {
             $skipit = 1;
         }
     }
 
-    unless($skipit) {
-        my $ret = '';
-	my $eurl = TWiki::Func::getScriptUrlPath() . "/editonesection/$web/$topic";
+    return if $skipit;
+    my $ret = '';
+    my $eurl = TWiki::Func::getScriptUrlPath() . "/editonesection/$web/$topic";
 
-	my $sectionedit = ($_[0] =~ m%<section/?>%i);
+    my $sectionedit = ($_[0] =~ m%<section/?>%i);
 
-	if ($sectionedit) {
-	    my @sections = split(/(<\/?section>)/i, $_[0]);
-	    my $pos = 0;
-	    my $state = "noedit";
-	    my $lastsec = "";
-	    foreach $sec (@sections) {
-	      if ( $sec eq "<section>" ) { $state="edit"; next; }
-	      if ( $sec eq "</section>" ) {
-                my $tmp = TWiki::Func::renderText($lastsec, $_[1], $_[2]);
-                # restore verbatim markers
-                $tmp =~ s/\<\!\-\-\!([a-z0-9]+)\!\-\-\>/\<\!\-\-$TWiki::TranslationToken$1$TWiki::TranslationToken\-\-\>/gio;
-  	        my $rText = &editRow($eurl, $pos, $tmp);
-                $$renderedText[$pos] = $rText;
-		$lastsec = "";
-                $ret .= ($prefix . $pos);
-		$state="noedit"; next; 
-	      }
-	      if ( $state eq "edit" ) { $lastsec = $sec; }
-	      else { $ret .= $sec; };
-	      $pos++;
-	    }
-	    $_[0] = $ret . $lastsec;
+    if ($sectionedit) {
+      my @sections = split(/(<\/?section>)/i, $_[0]);
+      my $pos = 0;
+      my $state = "noedit";
+      my $lastsec = "";
+      foreach $sec (@sections) {
+	if ( $sec eq "<section>" ) { $state="edit"; next; }
+	if ( $sec eq "</section>" ) {
+	  my $tmp = TWiki::Func::renderText($lastsec, $_[1], $_[2]);
+	  # restore verbatim markers
+	  $tmp =~ s/\<\!\-\-\!([a-z0-9]+)\!\-\-\>/\<\!\-\-$TWiki::TranslationToken$1$TWiki::TranslationToken\-\-\>/gio;
+	  my $rText = &editRow($eurl, $pos, $tmp);
+	  $$renderedText[$pos] = $rText;
+	  $lastsec = "";
+	  $ret .= ($prefix . $pos);
+	  $state="noedit"; next; 
+	}
+	if ( $state eq "edit" ) { $lastsec = $sec; }
+	else { $ret .= $sec; };
+	$pos++;
+      }
+      $_[0] = $ret . $lastsec;
 
-	  }
-       }
+    }
 }
 
 # =========================

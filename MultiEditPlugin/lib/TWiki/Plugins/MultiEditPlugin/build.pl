@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
 #
-# Example build class. Copy this file to the equivalent place in your
-# plugin or contrib and edit.
+# Build class for MultiEditPlugin
+# Requires the environment variable TWIKI_LIBS to be
+# set to point at the TWiki installation
 #
 # Read the comments at the top of lib/TWiki/Contrib/Build.pm for
 # details of how the build process works, and what files you
@@ -26,28 +27,8 @@ BEGIN {
 
 use TWiki::Contrib::Build;
 
-# Declare our build package
-{ package MultiEditPluginBuild;
-
-  @MultiEditPluginBuild::ISA = ( "TWiki::Contrib::Build" );
-
-  sub new {
-    my $class = shift;
-    return bless( $class->SUPER::new( "MultiEditPlugin", "Build" ), $class );
-  }
-
-  # Example: Override the build target
-  sub target_build {
-    my $this = shift;
-
-    $this->SUPER::target_build();
-
-    # Do other build stuff here
-  }
-}
-
 # Create the build object
-$build = new MultiEditPluginBuild();
+$build = new TWiki::Contrib::Build( 'MultiEditPlugin' );
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
