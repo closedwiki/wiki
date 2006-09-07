@@ -206,7 +206,7 @@ sub _render {
 	my $unitColumnStyle ="";
 	$unitColumnStyle.='background-color:'.$options{'unitcolumnbgcolor'}.';'  if $options{'unitcolumnbgcolor'};
 	$unitColumnStyle.='color:'.$options{'unitcolumnfgcolor'}.';' if $options{'unitcolumnfgcolor'};
-	my $unitColumnHeader = $cgi->th({-style=>$unitColumnStyle, -align=>'center', -title=>$options{'units'}}, $options{'name'});
+	my $unitColumnHeader = $cgi->th({-style=>$unitColumnStyle, -align=>'center', -title=>&_encodeTitle($options{'units'})}, $options{'name'}); 
 	my $unitColumn = ($options{'displayunitcolumn'}? $cgi->td({-style=>$unitColumnStyle}, &_renderUnitColumn($startUnit,$endUnit,$steps)): undef);
 
 	$tr.= $unitColumnHeader if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(left|both|all)$/i;
@@ -268,7 +268,7 @@ sub _render {
 					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($entryRef);
 
 					$itd = $cgi->td({
-						-title=>&_encode_entities($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')', 
+						-title=>&_encodeTitle($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')', 
 						-valign=>'top', 
 						-rowspan=>$rowspan, 
 						-nowrap=>($rowspan<2)?'1':'',
@@ -284,7 +284,7 @@ sub _render {
 				if ($#$entryListRef!=-1) {
 					$itd .= &_renderConflictCell(abs($unit), $entryListRef, $conflictIcon);
 				} else {
-					$itd .= $cgi->td({-title=>abs($unit)},"&nbsp;") if ($rowspan>1);
+					$itd .= $cgi->td({-title=>&_encodeTitle(abs($unit))},"&nbsp;") if ($rowspan>1);
 				}
 
 			} else {
@@ -308,7 +308,7 @@ sub _render {
 					$fillRows--;
 				}
 				$style="background-color:$bgcolor;color:$fgcolor";
-				$itd = $cgi->td({-title=>abs($unit), -style=>$style, -bgcolor=>$bgcolor, -color=>$fgcolor}, $itd);
+				$itd = $cgi->td({-title=>&_encodeTitle(abs($unit)), -style=>$style, -bgcolor=>$bgcolor, -color=>$fgcolor}, $itd);
 			}
 			$td .= $cgi->Tr({-align=>'left',-valign=>'top'},$itd)."\n";
 			
@@ -374,7 +374,7 @@ sub _renderTextContent {
 	$text.=" ".$$entryRef{'notes'} if defined $$entryRef{'notes'} && $options{'notes'};
 
 
-	$text = $cgi->span({-title=>$$entryRef{'owner'}}, &TWiki::Func::renderText($text));
+	$text = $cgi->span({-title=>&_encodeTitle($$entryRef{'owner'},1)}, &TWiki::Func::renderText($text));
 	
 	return $text;
 }
@@ -384,7 +384,7 @@ sub _renderIconContent {
 	if ((defined $$entryRef{'connectedto'}) && ($$entryRef{'connectedto'}!~/^\s*$/) && (!$options{'displayconnectedto'})) {
 		foreach my $ct (split(/\s*\,\s*/, $$entryRef{'connectedto'})) {
 			my $rt = TWiki::Func::renderText($ct);
-			my $title = &_encode_entities($ct);
+			my $title = &_encodeTitle($ct);
 			my $icon = &_retitleIcon($connectedtoIcon, $title);
 
 			if ($rt=~/<a\s+[^>]*?href=\"([^\">]+)\"/) {
@@ -398,7 +398,7 @@ sub _renderIconContent {
 
 	if (defined $$entryRef{'notes'} && $$entryRef{'notes'}!~/^\s*$/ && !$options{'notes'}) {
 		my $rt = TWiki::Func::renderText($$entryRef{'notes'});
-		my $title = &_encode_entities($$entryRef{'notes'});
+		my $title = &_encodeTitle($$entryRef{'notes'});
 		my $icon = &_retitleIcon($notesIcon, $title);
 		if ($rt=~/<a\s+[^>]*?href=\"([^\">]+)\"/) {
 			$text.=$cgi->a({-href=>&_encode_entities($1),-title=>$title},$icon);
@@ -436,7 +436,7 @@ sub _renderConflictTitle {
 		$title.=" ".$$entryRef{'server'};
 	}
 
-	return $title;
+	return &_encodeTitle($title);
 }
 sub _resizeIcon {
 	my ($icon) = @_;
@@ -631,4 +631,14 @@ sub _encode_entities {
 	
 }
 
+sub _encodeTitle {
+	my ($title, $dontEncodeEntities) = @_;
+	return $title unless defined $title;
+	$title =~ s/<[\/]?\w+[^>]*>//g;
+	$title =~ s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g;
+	$title =~ s/\[\[([^\]]+)\]\]/$1/g;
+	
+	$title = &_encode_entities($title) unless $dontEncodeEntities;
+	return $title;
+}
 1;

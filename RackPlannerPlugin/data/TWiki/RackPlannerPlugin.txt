@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1157532957" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1157634031" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
@@ -13,16 +13,21 @@ You can use following =%<nop>EDITTABLE%= tag (EditTablePlugin must be installed)
 %EDITTABLE{format="|text,10,|text,10,|text,5,1|select,1,1U,2U,3U,4U,5U,6U,7U,8U,9U,10U|text,20,|text,20,|text,10,|textarea,3x20|" 
 header="|*Device*|*Rack*|*Starting Unit*|*Form Factor*|*Connected to:*|*Owner*|*Color/Image*|*Notes*|"}%
 </verbatim>
+This =%<nop>EDITTABLE%= tag is an example. Feel free to modify the attributes (=format= and =header=). Hint: Put a =%<nop>TABLE{initsort="3" initdirection="down"}%= tag before the =%<nop>EDITTABLE%= tag to sort the table like the rack (modify =initdirection= to ="up"= if your first unit is at the top of the rack (=dir="topdown"=)).
 
-*Note:*
-	* If more than one device use the same unit the conflict is displayed with a icon (see =conflicticon= attribute). The tooltip of the icon contains the server names.
+*Notes:*
+	* The device order in the table is not relevant (except there's a conflict) but the column order is relevant (because the table header will be ignored).
+	* If more than one device uses the same unit the conflict will be displayed with a icon (see =conflicticon= attribute, e.g. %S%). The tooltip of the icon contains the server names.
+	
+  
+
 ---++ Attributes
-Usage: =%<nop>RACKPLANNER{attribute1="value" attribute1="value" ... }%=
+Usage: =%<nop>RACKPLANNER{attribute1="value" attribute2="value" ... }%=
 <br/>Example: =%<nop>RACKPLANNER{racks="rack1, rack2"}%=
 
 | *Attribute* | *Description* | *Example/Default* |
 |  *Behavior:*  |||
-| autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your racks and devices on topics with the same name as the rack | =autotopic="off"= |
+| autotopic | set it =on= and every rack name is automatically used as source topic for the device definition (=racks= attribute is required and the value is attached to the =topic= attribute value); useful if you define your racks and devices on topics with the same names as the racks | =autotopic="off"= |
 | dir | sets the direction of the units: =topdown= - unit 1 is at the top of the rack; =bottomup= - unit 1 is at the bottom of the rack | =dir="bottomup"= |
 | racks | a comma separated list of rack names to show; if omitted all racks found on topics (see =topic= attribute) are shown  | =racks="rack1,rack2"= |
 | steps | unit steps to display (useful if you use only every =steps= unit of a rack) | =steps="1"= |
@@ -112,9 +117,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.001 (BETA) |
+|  Plugin Version: | V1.001 (7 Aug 2006) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.001 (BETA): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
+|  V1.001 (7 Aug 2006): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.021 |
 |  CPAN Dependencies: | none |
