@@ -27,8 +27,7 @@ BEGIN {
     require 'setlib.cfg';
 }
 
-#use TWiki::UI;
-#use TWiki::UI::Edit;
-use TWiki::Contrib::EditContrib;
+use TWiki::UI;
+use TWiki::Plugins::SectionalEditPlugin;
 TWiki::UI::run( \&TWiki::Plugins::SectionalEditPlugin::edit );
 
