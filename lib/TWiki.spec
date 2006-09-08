@@ -114,10 +114,6 @@ my $OS = $TWiki::cfg{OS} || '';
 # $TWiki::cfg{DataDir} = '/home/httpd/twiki/data';
 
 # **PATH M**
-# Log files store (file path, not URL) e.g. /usr/local/twiki/data
-# $TWiki::cfg{LogDir} = "/home/httpd/twiki/data";
-
-# **PATH M**
 # Translation files directory (file path, not URL) e.g. /usr/local/twiki/locales
 # $TWiki::cfg{LocalesDir} = '/home/httpd/twiki/po';
 
@@ -541,7 +537,6 @@ $TWiki::cfg{Log}{register} = $TRUE; # rare, when a new user registers
 # Names of the various log files. You can use %DATE% (which gets expanded
 # to YYYYMM e.g. 200501) in the pathnames to cause the file to be renewed
 # every month e.g. /var/log/TWiki/log.%DATE%.
-# {LogDir} directory must be writable by the CGI user
 # It defaults to the data dir
 
 # **PATH**

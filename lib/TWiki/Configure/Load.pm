@@ -48,6 +48,9 @@ overriding the custom code again, we use an "unconfigurable" key
 sub readConfig {
     return if $TWiki::cfg{ConfigurationFinished};
 
+    # Reluctantly we have to do this to prevent uninitialised vars
+    do 'TWiki.spec';
+
     # Note: no error handling!
     do 'LocalSite.cfg';
 
@@ -64,7 +67,10 @@ sub readConfig {
         $TWiki::cfg{$var} ||= 'NOT SET';
     }
 
+    # Expand references to $TWiki::cfg vars embedded in the values of
+    # other $TWiki::cfg vars.
     foreach ( values %TWiki::cfg ) {
+        next unless $_;
         s/\$TWiki::cfg{([[A-Za-z0-9{}]+)}/$TWiki::cfg{$1}/g;
     }
 
