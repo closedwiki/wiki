@@ -171,6 +171,7 @@ foreach my $module (
     'TWiki::Configure::Root',
     'TWiki::Configure::Valuer',
     'TWiki::Configure::TWikiCfg',
+    'TWiki::Configure::Load',
    ) {
     _loadBasicModule($module);
 }
@@ -199,6 +200,20 @@ $FALSE = 0;
 # Remember what we detected previously, for use by Checkers
 if( $scriptName =~ /(\.\w+)$/ ) {
     $TWiki::cfg{DETECTED}{ScriptExtension} = $1;
+}
+
+# very basic tool
+sub findFileOnPath {
+    my $file = shift;
+
+    $file =~ s(::)(/)g;
+
+    foreach my $dir ( @INC ) {
+        if ( -e "$dir/$file" ) {
+            return "$dir/$file";
+        }
+    }
+    return undef;
 }
 
 ###########################################################
@@ -373,9 +388,7 @@ sub _actionNext {
         return 1 unless $ui;
         print $ui->ui(1, 'Save');
     } else {
-        my $parser = new TWiki::Configure::TWikiCfg();
-        $parser->parse($sanityUI->{TWikiDotCfg}, $root, $valuer);
-        $parser->parse($sanityUI->{LocalSiteDotCfg}, $root, $valuer);
+        TWiki::Configure::TWikiCfg::load($root);
 
         $ui = _checkLoadUI('UPDATE', $root);
         return 1 unless $ui;
@@ -451,7 +464,7 @@ browse to the TWiki Reference Manual</a>.
        and
        <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiAccessControl">
         access control</a>, and the
-       <a rel="nofollow" href="#" onclick="foldBlock(\'SecuritySetup\'); return false;">Security Setup</a>
+       <a rel="nofollow" href="#" onclick="foldBlock('SecuritySetup'); return false;">Security Setup</a>
        section below.
       </li>
      </ul>
@@ -469,7 +482,7 @@ browse to the TWiki Reference Manual</a>.
      </li>
     </ul>
    </div>
-   <div class="remark">Explanation of color codes:
+   <div class="remark">Explanation of colours and symbols:
     <ul style="margin-top:0;">
      <li>Settings marked <span class='mandatory'>like this</span> are required
       (they must have a value).</li>
@@ -477,6 +490,8 @@ browse to the TWiki Reference Manual</a>.
       highlighted.</li>
      <li><span class='warn'>Warnings</span> are non-fatal, but are often a good
       indicator that something that is wrong.</li>
+     <li>The little <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span> after an entry means that the current value is <b>not</b> the same as the default value. If you hover the cursor over the <span class='twikiAlert' title="Not here, stupid. In the table below!">&delta;</span>, a popup will show you what the default value is.</li>
+     <li><b><font color="#f00">EXPERT</font></b> means a setting is for expert use only. You should not fiddle with it unless you know what you are doing, or at least have read all the documentation!</lib>
     </ul>
    </div><!-- remark-->
   </div><!--explanation-->
@@ -528,17 +543,11 @@ HERE
     $root = new TWiki::Configure::Root();
     my $valuer = new TWiki::Configure::Valuer(
         $TWiki::defaultCfg, \%TWiki::cfg);
-    my $parser = new TWiki::Configure::TWikiCfg();
 
-    # Load the config structures from TDC and LSC. Note that this does
-    # note read the actualy *values*, it just parses the type information
-    # for each value. The actual values are held in %TWiki::cfg and
-    # %TWiki::defaultCfg
-    $parser->parse($sanityUI->{TWikiDotCfg}, $root, $valuer);
-
-    # Parse LSC as well, in case a plugin installer added type info (or
-    # a pluggable module) for an extension there.
-    $parser->parse($sanityUI->{LocalSiteDotCfg}, $root, $valuer);
+    # Load the config structures. Note that this does
+    # note read the actual *values*, it just parses the type information
+    # for each value. The actual values are held in the $valuer
+    TWiki::Configure::TWikiCfg::load($root);
 
     # Load the UI for the configuration and whack it out
     $ui = _checkLoadUI('Root', $root);
