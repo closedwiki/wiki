@@ -21,7 +21,7 @@
 
 =pod
 
----+ module TWiki::Config
+---+ package TWiki::Configure::Load
 
 ---++ Purpose
 
@@ -29,19 +29,9 @@ This module consists of just a single subroutine =readConfig=.  It allows to
 safely modify configuration variables _for one single run_ without affecting
 normal TWiki operation.
 
----++ Implementation Note
-
-This module is written against the Perl convention which suggests to name a
-package after the module it is in.  The reason is legacy: TWiki's main
-configuration file =TWiki.cfg= defines configuration data without a namespace,
-whereas definitions in =LocalSite.cfg= explicitly use TWiki's package.
-
 =cut
 
-package TWiki;
-
-# Site configuration constants
-use vars qw( %cfg );
+package TWiki::Configure::Load;
 
 =pod
 
@@ -56,16 +46,10 @@ overriding the custom code again, we use an "unconfigurable" key
 =cut
 
 sub readConfig {
-    return if $cfg{ConfigurationFinished};
+    return if $TWiki::cfg{ConfigurationFinished};
 
-    # Get LocalSite first, to pick up definitions of things like
-    # {RCS}{BinDir} and {LibDir} that are used in TWiki.cfg
-    # do, not require, because we do it twice
+    # Note: no error handling!
     do 'LocalSite.cfg';
-    # Now get all the defaults
-    require 'TWiki.cfg';
-    die "Cannot read TWiki.cfg: $@" if $@;
-    die "Bad configuration: $@" if $@;
 
     # If we got this far without definitions for key variables, then
     # we need to default them. otherwise we get peppered with
@@ -80,11 +64,49 @@ sub readConfig {
         $TWiki::cfg{$var} ||= 'NOT SET';
     }
 
-    # read localsite again to ensure local definitions override TWiki.cfg
-    do 'LocalSite.cfg';
-    die "Bad configuration: $@" if $@;
+    foreach ( values %TWiki::cfg ) {
+        s/\$TWiki::cfg{([[A-Za-z0-9{}]+)}/$TWiki::cfg{$1}/g;
+    }
 
-    $cfg{ConfigurationFinished} = 1;
+    $TWiki::cfg{ConfigurationFinished} = 1;
+}
+
+=pod
+
+---++ StaticMethod readDefaults() -> \@errors
+
+This is only called by =configure= to initialise the TWiki config hash with
+default values from the .spec files.
+
+Normally all configuration values come from LocalSite.cfg. However when
+=configure= runs it has to get default values for config vars that have not
+yet been saved to =LocalSite.cfg=.
+
+Returns a reference to a list of the errors it saw.
+
+=cut
+
+sub readDefaults {
+    my %read = ( 'TWiki.spec' );
+    my @errors;
+
+    eval {
+        do 'TWiki.spec';
+    };
+    push(@errors, $@) if ($@);
+    foreach my $dir (@INC) {
+        opendir(D, $dir) || next;
+        foreach my $file (grep { /\.spec$/ } readdir D) {
+            # Only read the first occurrence of each .spec file
+            next if $read{$file};
+            eval {
+                do "$dir/$file";
+            };
+            push(@errors, $@) if ($@);
+            $read{$file} = 1;
+        }
+    }
+    return \@errors;
 }
 
 1;

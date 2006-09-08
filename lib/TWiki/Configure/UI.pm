@@ -109,18 +109,6 @@ sub getUrl {
     return $result;
 }
 
-sub findFileOnPath {
-    my ($this, $file) = @_;
-    $file =~ s(::)(/)g;
-
-    foreach my $dir ( @INC ) {
-        if ( -e "$dir/$file" ) {
-            return "$dir/$file";
-        }
-    }
-    return undef;
-}
-
 # STATIC Used by a whole bunch of things that just need to show a key-value row
 sub setting {
     my $this = shift;
@@ -150,14 +138,17 @@ sub foldableBlock {
     my $linkId = 'blockLink'.$id;
     my $linkAnchor = $anchor.'link';
     return CGI::a({ name => $linkAnchor }).
-           CGI::a( {id => $linkId,
-                    class => 'blockLink blockLinkOff',
-                    href => '#'.$linkAnchor,
-                    rel => 'nofollow',
-                    onclick => 'foldBlock(\'' . $id . '\'); return false;'}, $headText.$mess).
-           CGI::div( { id => $blockId,
-                       class=> 'foldableBlock foldableBlockClosed' }, $body ).
-                       "\n";
+      CGI::a({id => $linkId,
+              class => 'blockLink blockLinkOff',
+              href => '#'.$linkAnchor,
+              rel => 'nofollow',
+              onclick => 'foldBlock("' . $id . '"); return false;'
+             },
+             $headText.$mess).
+               CGI::div( {id => $blockId,
+                          class=> 'foldableBlock foldableBlockClosed'
+                         }, $body ).
+                           "\n";
 }
 
 # encode a string to make an HTML anchor

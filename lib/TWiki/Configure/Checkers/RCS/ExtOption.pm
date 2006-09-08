@@ -14,26 +14,19 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 #
 # As per the GPL, removal of this notice is prohibited.
-package TWiki::Configure::Types::PASSWORD;
-
 use strict;
 
-use TWiki::Configure::Types::STRING;
+package TWiki::Configure::Checkers::RCS::ExtOption;
 
-use base 'TWiki::Configure::Types::STRING';
+use TWiki::Configure::Checkers::RCS::Checker;
 
-sub prompt {
-    my( $this, $id, $opts, $value ) = @_;
-    my $size = '55%';
-    if( $opts =~ /\s(\d+)\s/ ) {
-        $size = $1;
-        # These numbers are somewhat arbitrary..
-        if ($size > 25) {
-            $size = '55%';
-        }
-    }
+use base 'TWiki::Configure::Checkers::RCS::Checker';
 
-    return CGI::password_field( -name => $id, -size=>$size, -default=>$value );
+sub check {
+    my $this = shift;
+
+    return if $TWiki::cfg{RCS}{ExtOption};
+    $TWiki::cfg{RCS}{ExtOption} = "-x,v" if $TWiki::cfg{OS} eq 'WINDOWS';
 }
 
 1;

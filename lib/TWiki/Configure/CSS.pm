@@ -1990,3 +1990,12 @@ a.error {
     display:none;
 }
 
+.expertsOnly {
+ background-color:#fde;
+ padding: 3pt;
+}
+
+.expertsOnly h6 {
+ font-weight: bold;
+ color:#f00;
+}

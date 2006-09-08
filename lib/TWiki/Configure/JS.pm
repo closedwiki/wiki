@@ -125,4 +125,4 @@ function getElementsByClassName(class_name)
     return ret_obj;
 }
 //-->
-HERE
+

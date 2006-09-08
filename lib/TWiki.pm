@@ -140,7 +140,7 @@ sub getTWikiLibDir {
 BEGIN {
 
     use TWiki::Sandbox;   # system command sandbox
-    use TWiki::Config;    # read configuration files
+    use TWiki::Configure::Load;    # read configuration files
 
     $TRUE = 1;
     $FALSE = 0;
@@ -164,7 +164,7 @@ BEGIN {
     # DO NOT CHANGE THE FORMAT OF $VERSION
     # automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
-    $RELEASE = 'TWiki-4.1-beta1';
+    $RELEASE = 'TWiki-4.1';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$RELEASE, $1, build $2/;
 
     # Default handlers for different %TAGS%
@@ -262,8 +262,8 @@ BEGIN {
           TWiki::Sandbox::untaintUnchecked( $ENV{SERVER_NAME} );
     }
 
-    # readConfig is defined in TWiki::Config to allow overriding it
-    readConfig();
+    # readConfig is defined in TWiki::Configure::Load to allow overriding it
+    TWiki::Configure::Load::readConfig();
 
     if( $TWiki::cfg{WarningsAreErrors} ) {
         # Note: Warnings are always errors if ASSERTs are enabled

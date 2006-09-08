@@ -77,7 +77,7 @@ HERE
  </li>
  <li>
   If you are running TWiki on a public website, you are
-  <strong>strongly</strong> advised to disable saving from
+  <strong>strongly</strong> advised to totally disable saving from
   <code>configure</code> by making <code>lib/LocalSite.cfg</code> readonly once
   you are happy with your configuration.
  </li>

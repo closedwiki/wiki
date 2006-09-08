@@ -39,24 +39,7 @@ sub ui {
         $this->{user} = $TWiki::query->remote_user() || '';
     }
 
-    my $parser = new TWiki::Configure::TWikiCfg();
-    my $out = <<'HERE';
-# Local site settings for TWiki. This file is managed by the 'configure'
-# CGI script, though you can also make (careful!) manual changes with a
-# text editor.
-HERE
-    $out .= $parser->save($root, $valuer, $this);
-
-    my $lsc = $this->findFileOnPath('LocalSite.cfg');
-    unless ($lsc) {
-        $lsc = $this->findFileOnPath('TWiki.cfg') || '';
-        $lsc =~ s/TWiki\.cfg/LocalSite.cfg/;
-    }
-
-    open(F, '>'.$lsc) ||
-      return $this->ERROR("Could not open $lsc for write: $!");
-    print F $out;
-    close(F);
+    TWiki::Configure::TWikiCfg::save($this, $root, $valuer, $this);
 
     # Debug
     $this->{output}.= "<br><textarea cols=120 rows=20>\n$out\n</textarea><br>";

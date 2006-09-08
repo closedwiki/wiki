@@ -44,45 +44,32 @@ sub ui {
     my $result = '';
     my $badLSC = 0;
 
-    $this->{TWikiDotCfg} = $this->findFileOnPath('TWiki.cfg');
+    # SMELL: this should probably be replaced by Harald's Config.pm
+    # module; but the checking here is more thorough....
+    $this->{TWikiDotCfg} = TWiki::findFileOnPath('TWiki.cfg');
 
-    $this->{LocalSiteDotCfg} = $this->findFileOnPath('LocalSite.cfg');
+    $this->{LocalSiteDotCfg} = TWiki::findFileOnPath('LocalSite.cfg');
     unless ($this->{LocalSiteDotCfg}) {
-        $this->{LocalSiteDotCfg} = $this->findFileOnPath('TWiki.cfg') || '';
+        $this->{LocalSiteDotCfg} = TWiki::findFileOnPath('TWiki.cfg') || '';
         $this->{LocalSiteDotCfg} =~ s/TWiki\.cfg/LocalSite.cfg/;
     }
 
-    # Get default settings
-    eval {
-        package TWiki;
-        do "TWiki.cfg";
-        die $@ if $@; # propagate errors
-    };
-    if ($@) {
-        $this->{errors}++;
-        $result .= $this->ERROR(<<HERE);
-TWiki.cfg is unreadable, or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.
-<pre>$@</pre>
-Please correct this error before continuing.
-HERE
-    }
+    # Get default settings by reading .spec files
+    TWiki::Configure::Load::readDefaults();
 
     $TWiki::defaultCfg = _copy( \%TWiki::cfg );
 
     if (!$this->{LocalSiteDotCfg} ) {
         $this->{errors}++;
         $result .= $this->ERROR(<<HERE);
-Could not find where configuration files are supposed to go.
+Could not find where LocalSite.cfg is supposed to go.
 Use your LocalLib.cfg to set \$twikiLibPath to the 'lib' directory
 for your install.
 Please correct this error before continuing.
 HERE
     } elsif( -e $this->{LocalSiteDotCfg} ) {
-        # if this fails, ignore the problem, but we have to do it
         eval {
-            package TWiki;
-            do "LocalSite.cfg";
-            die $@ if $@; # propagate errors
+            TWiki::Configure::Load::readConfig();
         };
         if ($@) {
             $result .= $this->WARN(<<HERE);
@@ -124,41 +111,6 @@ case you can simply ignore this warning until you have filled in your
 General path settings</a>.
 HERE
             $badLSC = 1;
-        }
-    }
-
-    unless ($this->{errors}) {
-        # Get default settings
-        eval {
-            package TWiki;
-            do "TWiki.cfg";
-            die $@ if $@; # propagate errors
-        };
-        if ($@) {
-            $this->{errors}++;
-            return $this->ERROR(<<HERE);
-$this->{TWikiDotCfg} is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.
-<pre>$@</pre>
-Please correct this error before continuing. Either fix the Perl error,
-or delete the file and start again.
-HERE
-        }
-    }
-
-    unless ($this->{errors} || $badLSC) {
-        # and again, so that local settings override defaults (ignore errors,
-        # we already reported them)
-        eval {
-            package TWiki;
-            do "LocalSite.cfg";
-            die $@ if $@; # propagate errors
-        };
-        if ($@) {
-            $result .= $this->WARNING(<<HERE);
-Existing configuration file has a configuration problem
-that is causing a Perl error - the following message(s) was generated:
-<pre>$@</pre>
-HERE
         }
     }
 

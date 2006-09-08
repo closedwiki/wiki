@@ -33,7 +33,13 @@ sub open_html {
     my $type = $value->getType();
     return '' if $value->{hidden};
 
-    my $info = $value->{desc};
+    my $trclass = '';
+    my $info = '';
+    if ($value->{opts} =~ /(\b|^)EXPERT(\b|$)/i) {
+        $info = CGI::h6('EXPERT') . $info;
+        $trclass = 'expertsOnly';
+    }
+    $info .= $value->{desc};
     my $keys = $value->getKeys();
     my $checker = TWiki::Configure::UI::loadChecker($keys, $value);
     $info .= $checker->check($value) if $checker;
@@ -46,12 +52,13 @@ sub open_html {
 
     my $td = CGI::td(
         { colspan => 2, class=>'docdata info' },
-        $this->hidden( 'TYPEOF:'.$keys, $value->{typename} ).$info );
+        $this->hidden( 'TYPEOF:'.$keys, $value->{typename} ).
+          $info );
     my $row1;
     if ($value->{hidden}) {
-        $row1 = CGI::Tr({class => 'hiddenRow' }, $td)."\n";
+        $row1 = CGI::Tr({class => 'hiddenRow '.$trclass }, $td)."\n";
     } else {
-        $row1 = CGI::Tr($td)."\n";
+        $row1 = CGI::Tr({ class => $trclass }, $td)."\n";
     }
 
     $keys = CGI::span({class=>'mandatory'}, $keys) if $value->{mandatory};
@@ -59,11 +66,12 @@ sub open_html {
     my $row2col1 = $keys;
     if ($value->needsSaving($valuer)) {
         my $v = $valuer->defaultValue($value);
-        $row2col1 .= CGI::span({title => 'default = '.$v}, '&delta;');
+        $row2col1 .= CGI::span({title => 'default = '.$v,
+                                class => 'twikiAlert'}, '&delta;');
     }
 
     return $row1.
-      CGI::Tr(
+      CGI::Tr( { class => $trclass },
           CGI::td({class=>'firstCol'}, $row2col1)."\n".
               CGI::td({class=>'secondCol'}, $prompter))."\n";
 }

@@ -72,7 +72,7 @@ sub open_html {
              class => 'blockLink blockLinkOff',
              href => '#'.$linkAnchor,
              rel => 'nofollow',
-             onclick => 'foldBlock(\'' . $id . '\'); return false;'},
+             onclick => 'foldBlock("' . $id . '"); return false;'},
             $section->{headline}.$mess);
 
         $guts .= "<div id='$id' class='foldableBlock foldableBlockClosed'>";

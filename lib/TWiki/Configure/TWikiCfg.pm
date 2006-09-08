@@ -15,10 +15,11 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 #
-# This is a both parser for TWiki.cfg and LocalSite.cfg, and a
-# syntax-generating serialisation visitor for writing out changes.
+# This is a both parser for configuration declaration files, such as
+# TWikiCfg.spec, and a serialisation visitor for writing out changes
+# to LocalSite.cfg
 #
-# The supported syntax in these files is as follows:
+# The supported syntax in declaration files is as follows:
 #
 # cfg ::= ( setting | section | extension )* ;
 # setting ::= BOL typespec EOL comment* BOL def ;
@@ -69,11 +70,29 @@ use TWiki::Configure::Section;
 use TWiki::Configure::Checker;
 use TWiki::Configure::Value;
 use TWiki::Configure::Pluggable;
+use TWiki::Configure::Item;
 
-sub new {
-    my $class = shift;
+# Load the configuration declarations. The core set is defined in
+# TWiki.spec, which must be found on the @INC path and is always loaded
+# first. Other .spec files are read after this.
+sub load {
+    my $root = shift;
+    my %read;
 
-    return bless({}, $class);
+    my $file = TWiki::findFileOnPath('TWiki.spec');
+    if ($file) {
+        _parse($file, $root);
+        $read{'TWiki.spec'} = $file;
+    }
+    foreach my $dir (@INC) {
+        opendir(D, $dir) || next;
+        foreach $file (grep { /\.spec$/ } readdir D) {
+            # Only read the first occurrence of each .spec file
+            next if $read{$file};
+            _parse("$dir/$file", $root);
+            $read{$file} = "$dir/$file";
+        }
+    }
 }
 
 ###########################################################################
@@ -83,8 +102,6 @@ sub new {
     # Inner class that represents section headings temporarily during the
     # parse. They are expanded to section blocks at the end.
     package SectionMarker;
-
-use TWiki::Configure::Item;
 
     use base 'TWiki::Configure::Item';
 
@@ -101,7 +118,7 @@ use TWiki::Configure::Item;
 
 # Process the config array and add section objects
 sub _extractSections {
-    my ($this, $settings, $root) = @_;
+    my ($settings, $root) = @_;
 
     my $section = $root;
     my $depth = 0;
@@ -143,7 +160,7 @@ sub _extractSections {
 
 # See if we have already build a value object for these keys
 sub _getValueObject {
-    my ($this, $keys, $settings) = @_;
+    my ($keys, $settings) = @_;
     foreach my $item (@$settings) {
         my $i = $item->getValueObject($keys);
         return $i if $i;
@@ -151,9 +168,10 @@ sub _getValueObject {
     return undef;
 }
 
-# Parse the config file and return a root node for the configuration
-sub parse {
-    my ($this, $file, $root, $valuer) = @_;
+# Parse the config declaration file and return a root node for the
+# configuration it describes
+sub _parse {
+    my ($file, $root) = @_;
 
     open(F, "<$file") || return '';
     local $/ = "\n";
@@ -175,7 +193,7 @@ sub parse {
             # isn't, we do.
             if (!$open) {
                 next if $root->getValueObject($keys);
-                next if ($this->_getValueObject($keys, \@settings));
+                next if (_getValueObject($keys, \@settings));
                 # This is an untyped value
                 $open = new TWiki::Configure::Value();
             }
@@ -201,7 +219,7 @@ sub parse {
     }
     close(F);
     pusht(\@settings, $open) if $open;
-    $this->_extractSections(\@settings, $root);
+    _extractSections(\@settings, $root);
 }
 
 sub pusht {
@@ -218,57 +236,60 @@ sub pusht {
 
 # Generate .cfg file format output
 sub save {
-    my ($this, $root, $valuer, $logger) = @_;
+    my ($this, $ui, $root, $valuer, $logger) = @_;
     $this->{output} = '';
     my $fh;
 
     $this->{logger} = $logger;
     $this->{valuer} = $valuer;
+
+    my $lsc = TWiki::findFileOnPath('LocalSite.cfg');
+    unless ($lsc) {
+        # If not found on the path, park it beside TWiki.cfg
+        $lsc = TWiki::findFileOnPath('TWiki.cfg') || '';
+        $lsc =~ s/TWiki\.cfg/LocalSite.cfg/;
+    }
+
+    if (open(F, '<'.$lsc)) {
+        local $/ = undef;
+        $this->{content} = <F>;
+        close(F);
+    } else {
+        $this->{content} = <<'HERE';
+# Local site settings for TWiki. This file is managed by the 'configure'
+# CGI script, though you can also make (careful!) manual changes with a
+# text editor.
+HERE
+    }
+    $this->{content} =~ s/^\s*1;\s*$//s;
+
     $root->visit($this);
 
-    $this->{output} .= "1;\n";
+    $this->{content} .= "1;\n";
 
-    return $this->{output};
+    open(F, '>'.$lsc) ||
+      return $this->ERROR("Could not open $lsc for write: $!");
+    print F $this->{content};
+    close(F);
 }
 
-sub comment {
-    my $str = shift;
-
-    return ''  unless $str;
-    return '' unless $str =~ /\S/;
-    $str =~ s/^\s*(.*?)\s*$/# $1/s;
-    $str =~ s/\n/\n# /gs;
-    return "$str\n";
-}
-
-# Visitor method called by node traversal during save
+# Visitor method called by node traversal during save. Incrementally modify
+# values, unless a value is reverting to the default in which case remove it.
 sub startVisit {
     my ($this, $visitee) = @_;
 
-    return 1 unless $visitee->needsSaving($this->{valuer});
-
     if ($visitee->isa('TWiki::Configure::Value')) {
-        my $typename = $visitee->getType()->{name};
-        $this->{output} .= "# ** ".$typename;
-        $this->{output} .= ' '.$visitee->{opts} if $visitee->{opts};
-        $this->{output} .= " **\n";
-        $this->{output} .= comment($visitee->{desc});
+        my $keys = $visitee->getKeys();
         my $warble = $this->{valuer}->currentValue($visitee);
         my $txt = Data::Dumper->Dump([$warble],
-                                     ['$TWiki::cfg'.$visitee->getKeys()]);
+                                     ['$TWiki::cfg'.$keys]);
         if ($this->{logger}) {
             $this->{logger}->logChange($visitee->getKeys(), $txt);
         }
-        $this->{output} .= $txt;
-    } elsif ($visitee->isa('TWiki::Configure::Pluggable')) {
-        $this->{output} .= '# *'.$visitee->{name}."*\n";
-    } elsif (!$visitee->isa('TWiki::Configure::Root') &&
-               !$visitee->isa('TWiki::Configure::Pluggable') &&
-                 $visitee->isa('TWiki::Configure::Section') &&
-                   ($visitee->{headline} || $visitee->{desc})) {
-        my $plus = '+' x ($visitee->getDepth()-2);
-        $this->{output} .= '#---+'.$plus.' '.$visitee->{headline}."\n";
-        $this->{output} .= comment($visitee->{desc});
+        # Substitute any existing value, or append if not there
+        unless ($this->{content} =~ s/\$(TWiki::)?cfg$keys\s*=.*?;\n/$txt;\n/) {
+            $this->{content} .= $txt."\n";
+        }
     }
     return 1;
 }
@@ -276,15 +297,6 @@ sub startVisit {
 sub endVisit {
     my ($this, $visitee) = @_;
 
-    return 1 unless $visitee->needsSaving($this->{valuer});
-
-    if (!$visitee->isa('TWiki::Configure::Root') &&
-               !$visitee->isa('TWiki::Configure::Pluggable') &&
-                 $visitee->isa('TWiki::Configure::Section') &&
-                   ($visitee->{headline} || $visitee->{desc})) {
-        my $plus = '+' x ($visitee->getDepth()-2);
-        $this->{output} .= "# End +$plus $visitee->{headline}\n";
-    }
     return 1;
 }
 
