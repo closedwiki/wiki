@@ -21,9 +21,11 @@
 # =========================
 package TWiki::Plugins::EditTablerowPlugin;
 
+use strict;
+
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug $pluginName
 	$renderingWeb
         $preSp %params @format @formatExpanded
         $prefsInitialized $prefCHANGEROWS $prefEDITBUTTON $prefEDITLINK
@@ -191,12 +193,6 @@ sub handleEditTableTag
     );
 
     extractParams( $theArgs, \%params );
-    my $sortName = $rowNr;
-
-    if ( $copyElement ) { #Give unique table element keys for copied elements
-      $sortName = time;
-    }
-
 
     $params{"header"} = "" if( $params{"header"} =~ /^(off|no)$/oi );
     $params{"header"} =~ s/^\s*\|//o;
@@ -254,8 +250,8 @@ sub handleTableEnd
 {
     my( $theWeb, $theTableNr, $theRowNr ) = @_;
 
-    $header = "";
-    $button = "";
+    my $header = "";
+    my $button = "";
 
     my $value = $params{"editbutton"};
     my $img = "";
@@ -304,14 +300,16 @@ sub handleTableRow
       my @fields = split (/\|/, $tail);
       foreach my $fld (@fields) {
 	if ( $fld !~ m/\s*\*.*\*\s*/o ) { $isTitle = 0; last; }
-      }
+ }
       return "$text$title$r2\|$tail" if $isTitle;
     }
 
     $title = $boldTitle if $boldTitle;
+    $title = "---" unless $title;
     $text .= "*" if $boldTitle;
     # Add edit links, maybe this should just be a link of the first table item
     my $eurl = &TWiki::Func::getScriptUrl ( $web, $topic, "editTableRow" ) ;
+    my $button = '';
     if ( $params{'editlink'} ) {
       my $value = $params{'editlink'};
       my $img = "";
@@ -325,10 +323,8 @@ sub handleTableRow
       } else {
 	$button = "$value";
       }
-      $text .= "<a href=\"$eurl\?t=" . time() . "&template=$params{'template'}&helptopic=$params{'helptopic'}&tablename=$theTableNr&sec=$theRowNr&changerows=$params{'changerows'}&showtable=$params{'showtable'}#SECEDITBOX\">$button</a> $title";
-    } else {
-      $text .= "<a href=\"$eurl\?t=" . time() . "&template=$params{'template'}&helptopic=$params{'helptopic'}&tablename=$theTableNr&sec=$theRowNr&changerows=$params{'changerows'}&showtable=$params{'showtable'}#SECEDITBOX\"> $title </a>";
     }
+    $text .= "<a name=\"Tbl${theTableNr}Row${theRowNr}\" href=\"$eurl\?t=" . time() . "&template=$params{'template'}&helptopic=$params{'helptopic'}&tablename=$theTableNr&sec=$theRowNr&changerows=$params{'changerows'}&showtable=$params{'showtable'}#SECEDITBOX\">$button</a> $title";
       
     $text .= "*" if $boldTitle;
 
@@ -370,7 +366,7 @@ sub updateTableRow {
     my @fieldElements = ();
 
     # found row
-    $result = "";
+    my $result = "";
     if ($deleteElement) {
       return ""; 
     }
@@ -380,7 +376,7 @@ sub updateTableRow {
     }
     # Update the entry
     $result .= "\|";
-    my $firstEntry = 1;
+
     foreach my $fieldInfo ( @{$fieldsInfo} ) {
       my $entryName = $fieldInfo->{name};
       my $title     = $fieldInfo->{title};
@@ -389,24 +385,12 @@ sub updateTableRow {
       my $tableEntry= $query->param( $entryName );
       my $cvalue    = "";
 
-      # Puts default text "---" for first entry
-      if ($firstEntry == 1) {
-	$tableEntry = "---" if ($tableEntry eq "");
-	$firstEntry = 0;
-      }
-
       # Takes care of special checkbox entry (Form.pm -- line : 376) 
-      if( ! $tableEntry && $type =~ "^checkbox" ) {
-	foreach my $name ( @fieldInfo ) {
-	  $cvalue = $query->param( "$entryName" . "$name" );
-	  if( defined( $cvalue ) ) {
-	    if( ! $tableEntry ) {
-	      $tableEntry = "";
-	    } else {
-	      $tableEntry .= ", " if( $cvalue );
-	    }
-	    $tableEntry .= "$name" if( $cvalue );
-	  }
+      if( $type =~ "^checkbox" ) {
+	my @values = $query->param( $entryName );
+	$tableEntry = shift @values;
+	foreach my $val (@values) {
+	  $tableEntry .= ", $val";
 	}
       }
       $tableEntry = " " unless $tableEntry;
@@ -424,7 +408,7 @@ sub appendToTable {
     my @fieldElements = ();
 
     # found row
-    $result = "";
+    my $result = "";
     if ($deleteElement) {
       return ""; 
     }
@@ -434,7 +418,6 @@ sub appendToTable {
     }
     # Update the entry
     $result .= "\|";
-    my $firstEntry = 1;
     foreach my $fieldInfo ( @{$fieldsInfo} ) {
       my $entryName = $fieldInfo->{name};
       my $title     = $fieldInfo->{title};
@@ -443,24 +426,12 @@ sub appendToTable {
       my $tableEntry= $query->param( $entryName );
       my $cvalue    = "";
 
-      # Puts default text "---" for first entry
-      if ($firstEntry == 1) {
-	$tableEntry = "---" if ($tableEntry eq "");
-	$firstEntry = 0;
-      }
-
       # Takes care of special checkbox entry (Form.pm -- line : 376) 
-      if( ! $tableEntry && $type =~ "^checkbox" ) {
-	foreach my $name ( @fieldInfo ) {
-	  $cvalue = $query->param( "$entryName" . "$name" );
-	  if( defined( $cvalue ) ) {
-	    if( ! $tableEntry ) {
-	      $tableEntry = "";
-	    } else {
-	      $tableEntry .= ", " if( $cvalue );
-	    }
-	    $tableEntry .= "$name" if( $cvalue );
-	  }
+      if( $type =~ "^checkbox" ) {
+	my @values = $query->param( $entryName );
+	$tableEntry = shift @values;
+	foreach my $val (@values) {
+	  $tableEntry .= ", $val";
 	}
       }
       $tableEntry = " " unless $tableEntry;
@@ -681,6 +652,10 @@ sub uploadTablerow
 		$fileName = $1;
 	}
 
+    # setup the view url (do now as we need the tableNr, rowNr)
+    my $url = &TWiki::Func::getViewUrl( $webName, $topic );
+    $url .= "#Tbl${tableNr}Row${rowNr}";
+
     # Need to cycle through the fieldDefs and query the parameters to fill the
     # the associative array
     my $theForm = new TWiki::Form( $session, $webName, $template );
@@ -742,8 +717,8 @@ sub uploadTablerow
       TWiki::Func::redirectCgiQuery( $query, $error );
       return 0;
     } else {
-      # and finally display topic
-      TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $webName, $topic ) );
+      # and finally display topic, and move to edited line
+      TWiki::Func::redirectCgiQuery( $query, $url );
     }
 }
 
