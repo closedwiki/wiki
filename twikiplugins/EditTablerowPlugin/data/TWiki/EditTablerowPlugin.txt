@@ -62,6 +62,8 @@ In add mode, the  following action button is available
 		* <input type="submit" name="etdelrow" value="Add" onclick="return(false);" /> - Add row at end of table, taking its values from the form (if enabled)
 </form>
 
+After editing, the focus is moved to the row edited, to avoid excessive scrolling when working with large tables.
+
 ---++ Examples
 
 Line before table: =%<nop>EDITTABLEROW{ template="..." changerows="on" }%=
@@ -128,8 +130,9 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 01 Sep 2006 |
+|  Plugin Version: | 08 Sep 2006 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  08 Sep 2006: | Use strict warnings. Fix handling of checkbox fields. Move to last edited row after save to avoid scrolling. Do not insert placeholder text in first field. |
 |  01 Sep 2006: | Dakar port. Fix handling of date fields in Dakar. Allow editlink in tag. Move existing table to bottom of edit view. |
 |  07 Jul 2005: | Remove further warning message (thanks to TWiki:Main/KennethLavrsen and TWiki:Main/CrawfordCurrie)	|
 |  30 Jun 2005: | Fix access control. Remove warning messages from apache log.	|
@@ -147,7 +150,7 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 
 __Related Topics:__ %TWIKIWEB%.EditTablePlugin
 
--- TWiki:Main/ThomasWeigert - 01 Sep 2006
+-- TWiki:Main/ThomasWeigert - 08 Sep 2006
 
 %META:FILEATTACHMENT{name="editwithcalendar.jpg" attr="h" comment="" date="1111293617" path="E:\tmp\editwithcalendar.jpg" size="47115" user="guest" version="1.1"}%
 %META:FILEATTACHMENT{name="edit_ex2.jpg" attr="h" comment="" date="1111296773" path="E:\tmp\edit_ex2.jpg" size="56795" user="guest" version="1.1"}%
