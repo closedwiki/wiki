@@ -41,9 +41,6 @@ sub ui {
 
     TWiki::Configure::TWikiCfg::save($this, $root, $valuer, $this);
 
-    # Debug
-    $this->{output}.= "<br><textarea cols=120 rows=20>\n$out\n</textarea><br>";
-
     if( $this->{log} &&
           defined( $TWiki::cfg{ConfigurationLogName} ) &&
             open(F, '>>'.$TWiki::cfg{ConfigurationLogName} )) {
