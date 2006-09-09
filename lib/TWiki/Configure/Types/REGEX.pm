@@ -36,4 +36,19 @@ sub string2value {
     return qr/$val/;
 }
 
+sub equals {
+    my ($this, $val, $def) = @_;
+    while ($val =~ s/^\(\?-xism:(.*)\)$/$1/) {
+    }
+    while ($def =~ s/^\(\?-xism:(.*)\)$/$1/) {
+    }
+    if (!defined $val) {
+        return 0 if defined $def;
+        return 1;
+    } elsif (!defined $def) {
+        return 0;
+    }
+    return $val eq $def;
+}
+
 1;

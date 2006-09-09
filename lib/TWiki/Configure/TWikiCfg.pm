@@ -72,6 +72,14 @@ use TWiki::Configure::Value;
 use TWiki::Configure::Pluggable;
 use TWiki::Configure::Item;
 
+# Used in saving, when we need a callback. Otherwise the methods here are
+# all static.
+sub new {
+    my $class = shift;
+
+    return bless({}, $class);
+}
+
 # Load the configuration declarations. The core set is defined in
 # TWiki.spec, which must be found on the @INC path and is always loaded
 # first. Other .spec files are read after this.
@@ -236,10 +244,10 @@ sub pusht {
 
 # Generate .cfg file format output
 sub save {
-    my ($this, $ui, $root, $valuer, $logger) = @_;
-    $this->{output} = '';
-    my $fh;
+    my ($ui, $root, $valuer, $logger) = @_;
 
+    # Object used to act as a visitor to hold the output
+    my $this = new TWiki::Configure::TWikiCfg();
     $this->{logger} = $logger;
     $this->{valuer} = $valuer;
 
@@ -261,7 +269,7 @@ sub save {
 # text editor.
 HERE
     }
-    $this->{content} =~ s/^\s*1;\s*$//s;
+    $this->{content} =~ s/\s*1;\s*$//sg;
 
     $root->visit($this);
 
@@ -281,13 +289,14 @@ sub startVisit {
     if ($visitee->isa('TWiki::Configure::Value')) {
         my $keys = $visitee->getKeys();
         my $warble = $this->{valuer}->currentValue($visitee);
+        next unless defined $warble;
         my $txt = Data::Dumper->Dump([$warble],
                                      ['$TWiki::cfg'.$keys]);
         if ($this->{logger}) {
             $this->{logger}->logChange($visitee->getKeys(), $txt);
         }
         # Substitute any existing value, or append if not there
-        unless ($this->{content} =~ s/\$(TWiki::)?cfg$keys\s*=.*?;\n/$txt;\n/) {
+        unless ($this->{content} =~ s/\$(TWiki::)?cfg$keys\s*=.*?;\n/$txt/s) {
             $this->{content} .= $txt."\n";
         }
     }
