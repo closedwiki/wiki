@@ -271,7 +271,7 @@ sub moveAttachment {
         $this->{session}->writeLog(
             'move',
             $fileAttachment->{movefrom}.' moved to '.
-              $fileAttachment->{movedto}, $user );
+              $fileAttachment->{movedto}, $user->webDotWikiName() );
     } finally {
         $this->unlockTopic( $user, $oldWeb, $oldTopic );
         $this->unlockTopic( $user, $newWeb, $newTopic );
