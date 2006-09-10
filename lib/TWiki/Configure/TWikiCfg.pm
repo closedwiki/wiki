@@ -244,12 +244,14 @@ sub pusht {
 
 # Generate .cfg file format output
 sub save {
-    my ($ui, $root, $valuer, $logger) = @_;
+    my ($root, $valuer, $logger) = @_;
 
     # Object used to act as a visitor to hold the output
     my $this = new TWiki::Configure::TWikiCfg();
     $this->{logger} = $logger;
     $this->{valuer} = $valuer;
+    $this->{root} = $root;
+    $this->{content} = '';
 
     my $lsc = TWiki::findFileOnPath('LocalSite.cfg');
     unless ($lsc) {
@@ -269,16 +271,22 @@ sub save {
 # text editor.
 HERE
     }
-    $this->{content} =~ s/\s*1;\s*$/\n/sg;
 
-    $root->visit($this);
-
-    $this->{content} .= "1;\n";
-
+    my $out = $this->_save();
     open(F, '>'.$lsc) ||
       return $this->ERROR("Could not open $lsc for write: $!");
     print F $this->{content};
     close(F);
+
+    return '';
+}
+
+sub _save {
+    my $this = shift;
+
+    $this->{content} =~ s/\s*1;\s*$/\n/sg;
+    $this->{root}->visit($this);
+    $this->{content} .= "1;\n";
 }
 
 # Visitor method called by node traversal during save. Incrementally modify
@@ -289,7 +297,7 @@ sub startVisit {
     if ($visitee->isa('TWiki::Configure::Value')) {
         my $keys = $visitee->getKeys();
         my $warble = $this->{valuer}->currentValue($visitee);
-        next unless defined $warble;
+        return 1 unless defined $warble;
         my $txt = Data::Dumper->Dump([$warble],
                                      ['$TWiki::cfg'.$keys]);
         if ($this->{logger}) {
@@ -297,7 +305,7 @@ sub startVisit {
         }
         # Substitute any existing value, or append if not there
         unless ($this->{content} =~ s/\$(TWiki::)?cfg$keys\s*=.*?;\n/$txt/s) {
-            $this->{content} .= $txt."\n";
+            $this->{content} .= $txt;
         }
     }
     return 1;

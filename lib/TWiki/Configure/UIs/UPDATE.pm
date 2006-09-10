@@ -39,7 +39,7 @@ sub ui {
         $this->{user} = $TWiki::query->remote_user() || '';
     }
 
-    TWiki::Configure::TWikiCfg::save($this, $root, $valuer, $this);
+    TWiki::Configure::TWikiCfg::save($root, $valuer, $this);
 
     if( $this->{log} &&
           defined( $TWiki::cfg{ConfigurationLogName} ) &&
