@@ -879,9 +879,15 @@ $TWiki::cfg{TrashWebName} = 'Trash';
 $TWiki::cfg{UsersWebName} = 'Main';
 
 #---+ Mail and Proxies
-# **BOOLEAN**
-# Remove IMG tags in notification mails.
-$TWiki::cfg{RemoveImgInMailnotify} = $TRUE;
+# **STRING 30**
+# TWiki administrator's e-mail address e.g. <code>webmaster@example.com</code>
+# (used in <code>%WIKIWEBMASTER%</code>)
+$TWiki::cfg{WebMasterEmail} = '';
+
+# **STRING 30**
+# TWiki administrator's name address, for use in mails (first name and
+# last name, e.g. =Fred Smith=) (used in %WIKIWEBMASTERNAME%)
+$TWiki::cfg{WebMasterName} = 'TWiki Administrator';
 
 # **COMMAND**
 # Mail program. If Net::SMTP is installed, it will be used in preference.
@@ -918,6 +924,10 @@ $TWiki::cfg{SMTP}{Username} = '';
 # **PASSWORD 30**
 # Password for your {SMTP}{Username}.
 $TWiki::cfg{SMTP}{Password} = '';
+
+# **BOOLEAN EXPERT**
+# Remove IMG tags in notification mails.
+$TWiki::cfg{RemoveImgInMailnotify} = $TRUE;
 
 # **STRING 20 EXPERT**
 # Name of topic in each web that has notification registrations.

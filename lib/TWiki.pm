@@ -289,6 +289,8 @@ BEGIN {
     $constantTags{DEFAULTURLHOST}  = $TWiki::cfg{DefaultUrlHost};
     $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
     $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
+    $constantTags{WIKIWEBMASTER}   = $TWiki::cfg{WebMasterEmail};
+    $constantTags{WIKIWEBMASTERNAME} = $TWiki::cfg{WebMasterName};
     if( $TWiki::cfg{NoFollow} ) {
         $constantTags{NOFOLLOW} = 'rel='.$TWiki::cfg{NoFollow};
     }

@@ -269,7 +269,7 @@ sub save {
 # text editor.
 HERE
     }
-    $this->{content} =~ s/\s*1;\s*$//sg;
+    $this->{content} =~ s/\s*1;\s*$/\n/sg;
 
     $root->visit($this);
 

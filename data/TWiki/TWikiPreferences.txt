@@ -139,12 +139,6 @@ _(Click for form-based editing of existing preferences.)_
 
 ---+++ E-mail Settings
 
-   * TWiki administrator e-mail address:
-      * Set WIKIWEBMASTER = webmaster@example.com
-
-   * TWiki administrator name (first name and last name, e.g. =Fred Smith=):
-      * Set WIKIWEBMASTERNAME = TWiki Administrator
-
    * 'Mail this topic' mailto: link - can be included in topics, templates or skins
       * Set MAILTHISTOPIC = <a href="mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL%">%MAILTHISTOPICTEXT%</a>
 
