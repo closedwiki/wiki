@@ -303,6 +303,10 @@ _(Click for form-based editing of existing preferences.)_
    * %TWIKIWEB%.PreviewBackground image:
       * Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
 
+   * User-friendly synonyms for MAINWEB and TWIKIWEB
+   * Set USERSWEB = %MAINWEB%
+   * Set SYSTEMWEB = %TWIKIWEB%
+   * Set DOCWEB = %TWIKIWEB%
 
 ---++ Access Control Settings
 
