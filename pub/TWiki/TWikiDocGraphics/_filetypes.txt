@@ -43,7 +43,7 @@ lzh zip
 m1v mov
 mid wav
 mim zip
-mail eml
+mail mail
 mda mdb
 mdb mdb
 mde mdb
