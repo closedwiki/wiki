@@ -69,7 +69,6 @@ Each row in this table defines a transition from one state to another state:
 In our example the Main.<nop>QualityGroup is allowed to revise the document. After finishing the revision, the document must be approved by the Main.<nop>QualityManager, and after that by the Main.<nop>TechnicalDirector. Even though they can't edit the document themselves (see state table above), they _can_ reject the revision and put the document back into the =UNDERREVISION= state. 
 
 If a form name is given in the last column, this form will be attached to the topic, and the topic will put in edit mode to allow information to be provided in the form *when that state transition happens*. in the examples above, a form of type Approved<nop>Form will be attached to the topic when the CEO transitions the topic into =APPROVED= state.
-   * the person triggering the transition has to be able to edit the topic (under the state rules described above) to be able to enter data in the form i.e. the CEO has to be able to edit topics in =APPROVED= state.
    * if there is already a form of a different type attached to the topic, then any fields that have the same name in the *new* form will be preserved.
    * If no form is given, the existing form (if any) is left in place.
 A typical usage of the form would be to collect additional information as the topic walks through the work flow, or to make information in the form unchangeable (by setting it to a =label= field) once a given state is reached.
@@ -131,13 +130,12 @@ __Note:__ For strict access control, the plugin should know who is looking at th
 
 __Note:__ This plugin works on TWiki 4 and later only. For a version under Cairo, please download [[%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=1;filename=ApprovalPlugin.zip][this version]].
 
-
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasHartkens, Dakar port and changes from 24 Jul 2006 by TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 05 Aug 2006 |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  11489        | Crawford Currie rewrote the doc and corrected the install procedure |
+|  11455 | Crawford Currie rewrote the doc and corrected the install procedure |
 |  05 Aug 2006: | Converted from !ApprovalPlugin to %TOPIC%. |
 |  26 Jul 2006: | Minor bug fix. Additional examples provided. |
 |  25 Jul 2006: | Added state-based forms and history from TWiki:Plugins/WorkFlowAddOn. Changed time stamp format to be more wiki like. |
@@ -145,9 +143,6 @@ __Note:__ This plugin works on TWiki 4 and later only. For a version under Cairo
 |  16 Feb 2005: | Initial version of !ApprovalPlugin |
 |  05 Feb 2004: | Initial version of !WorkFlowAddOn |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
-|  Perl Version: | 5.005 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
