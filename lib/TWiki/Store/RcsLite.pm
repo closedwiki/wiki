@@ -419,8 +419,11 @@ sub initText {
 sub numRevisions {
     my( $this ) = @_;
     $this->_ensureProcessed();
-    # if state is is nocommav, there is only one revision
-    return 1 if $this->{state} eq 'nocommav';
+    # if state is nocommav, and the file exists, there is only one revision
+    if( $this->{state} eq 'nocommav' ) {
+        return 1 if( -e $this->{file} );
+        return 0;
+    }
     return $this->{head};
 }
 
