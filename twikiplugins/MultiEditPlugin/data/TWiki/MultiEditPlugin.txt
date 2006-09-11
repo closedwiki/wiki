@@ -10,7 +10,8 @@ The motivation behind this plugin was to allow the separation of a topic into se
 ---++ Syntax Rules
 
    * Enclose a portion of your topic by =&lt;section&gt;= and =&lt;/section&gt;= tags.
-   * Sections to be editable cannot be nested, but may appear anywhere within the topic.
+   * The attribute =edit= can be given to the =section= tag. If =edit= is given the value =0=, the section is not editable. If there is no attribute, or the value of =edit= is =1=, the section is editable.
+   * Sections cannot be nested, but may appear anywhere within the topic.
 
 ---++ Examples
 
@@ -71,8 +72,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 18 Aug 2006 |
+|  Plugin Version: | 09 Sep 2006 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  09 Sep 2006: | Bug (disabled SectionalEditPlugin) fixed. |
+|  08 Sep 2006: | Allow embedded complex constructs without editing. |
 |  18 Aug 2006: | Fix handling of image tags in labels. Allow skipping of the new =viewprint= (or other) template in addition to skins. |
 |  18 Jun 2006: | Fix for verbatim being taken out due to bug in =TWiki::Func::renderText= |
 |  10 Jun 2006: | Migrated to Dakar release |
@@ -93,6 +96,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/RecursiveRenderPlugin
 
--- TWiki:Main/ThomasWeigert - 04 Sep 2006
+-- TWiki:Main/ThomasWeigert - 09 Sep 2006
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
