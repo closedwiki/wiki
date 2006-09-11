@@ -23,16 +23,17 @@ use strict;
 # =========================
 use vars qw(
             $web $topic $user $installWeb $VERSION $RELEASE $pluginName
-            $debug 
+            $inited
             $prefWorkflow
             $prefNeedsWorkflow
             $globWorkflow
-	    $globForm
+            $globForm
             $globWebName
             $globCurrentState $globHistory
             $globWorkflowMessage $globAllowEdit
-            $CalledByMyself 
+            $CalledByMyself
             %globPreferences
+            $SHORTDESCRIPTION
            );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
@@ -44,6 +45,8 @@ $VERSION = '$Rev$';
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
+
+$SHORTDESCRIPTION = 'Supports work flows associated with topics';
 
 $pluginName = 'WorkflowPlugin';  # Name of this Plugin
 
@@ -57,36 +60,32 @@ sub initPlugin {
         return 0;
     }
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
-$debug=1;
+    return 1;
+}
 
-    $globWebName = $web;
+# Return 1 if we need workflow in this topic, -1 if not
+sub _init {
+    my ($web, $topic) = @_;
+
+    return $inited if $inited;
+    $inited = -1;
 
     my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
 
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    if (($prefWorkflow = TWiki::Func::getPreferencesValue( "WORKFLOW" )) &&
-          &TWiki::Func::topicExists( $globWebName, $prefWorkflow)) {
-
-        # get preferences
-        $prefNeedsWorkflow = 1;
-
-	$user = $TWiki::Plugins::SESSION->{user};
-
-        $globCurrentState = getWorkflowState($meta);
-        Debug("initPlugin State in the document: '" . $globCurrentState->{name} . "'");
-        ($globWorkflow, $globCurrentState, $globWorkflowMessage, $globAllowEdit, $globForm) = 
-          parseWorkflow($prefWorkflow,$user,$globCurrentState);
-	$globHistory = $meta->get( 'WORKFLOWHISTORY' ) || '';
-	$globHistory = $globHistory->{value} if $globHistory;
-
-    } else {
-        $prefNeedsWorkflow = 0;
-    }
-
-    # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
+    my $prefWorkflow = TWiki::Func::getPreferencesValue( "WORKFLOW" ) || 0;
+    return $inited unless ($prefWorkflow);
+    my ($defweb, $deftopic) =
+      TWiki::Func::normalizeWebTopicName($web, $prefWorkflow);
+    return $inited unless (TWiki::Func::topicExists( $defweb, $deftopic));
+    $user = $TWiki::Plugins::SESSION->{user};
+    $globCurrentState = getWorkflowState($meta);
+    ($globWorkflow, $globCurrentState, $globWorkflowMessage,
+     $globAllowEdit, $globForm) =
+       parseWorkflow($defweb, $deftopic, $user, $globCurrentState);
+    $globHistory = $meta->get( 'WORKFLOWHISTORY' ) || '';
+    $globHistory = $globHistory->{value} if $globHistory;
+    #Debug("initPlugin State in the document: '" . $globCurrentState->{name} . "'");
+    $inited = 1;
     return 1;
 }
 
@@ -95,102 +94,101 @@ $debug=1;
 sub commonTagsHandler {
     ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    my $query = TWiki::Func::getCgiQuery();
+    return unless ($query);
 
-    if (NeedsWorkflow() && (my $query = TWiki::Func::getCgiQuery())) {
-        my $action = $query->param( 'WORKFLOWACTION' );
-        my $state = $query->param( 'WORKFLOWSTATE' );
+    return unless (_init($_[2], $_[1]) > 0);
 
-        # find out if the user is allowed to perform the action 
-        if ($action && ($state eq $globCurrentState->{name}) && defined($$globWorkflow{$action})) {
-            # store new status as meta data
-            changeWorkflowState($$globWorkflow{$action}, $$globForm{$action});
+    my $action = $query->param( 'WORKFLOWACTION' );
+    my $state = $query->param( 'WORKFLOWSTATE' );
+    # find out if the user is allowed to perform the action 
+    if ($action && ($state eq $globCurrentState->{name}) &&
+          defined($globWorkflow->{$action})) {
+        # store new status as meta data
+        changeWorkflowState($globWorkflow->{$action}, $globForm->{$action});
 
-            # we need to parse the workflow again since the state of the document has
-            # changed which will effect the actions the user can do now. 
-	    my $user = $TWiki::Plugins::SESSION->{user};
-            ($globWorkflow, $globCurrentState, $globWorkflowMessage, $globAllowEdit, $globForm) = 
-              parseWorkflow($prefWorkflow,$user,$globCurrentState);
-        }
-
-        # replace edit tag
-        if ($globAllowEdit) {
-            $_[0] =~ s!%WORKFLOWEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
-        } else {
-            $_[0] =~ s!%WORKFLOWEDITTOPIC%! <strike>Edit<\/strike> !g;
-        }
-
-
-        # show all tags defined by the preferences
-        foreach my $key (keys %globPreferences) {
-            if ($key =~ /^WORKFLOW/) {
-                $_[0] =~ s/%$key%/$globPreferences{$key}/g;
-            }
-        }
-
-        # show last version tags
-        foreach my $key (keys %{$globCurrentState}) {
-            if ($key =~ /^LASTVERSION_/) {
-                my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
-                my $foo = "<a href='${url}?rev=".$globCurrentState->{$key}."'>revision ".
-                  $globCurrentState->{$key}."</a>";
-                $_[0] =~ s/%WORKFLOW$key%/$foo/g;
-            }
-        }
-
-        # show last time tags
-        foreach my $key (keys %{$globCurrentState}) {
-            if ($key =~ /^LASTTIME_/) {
-                $_[0] =~ s/%WORKFLOW$key%/$globCurrentState->{$key}/g;
-            }
-        }
-
-        # display the message for current status
-        $_[0] =~ s/%WORKFLOWSTATEMESSAGE%/$globWorkflowMessage/g;
-
-	$_[0] =~ s/%WORKFLOWHISTORY%/$globHistory/g;
-
-        #
-        # Build the button to change the current status
-        #
-        my @actions = keys(%{$globWorkflow});
-        my $NumberOfActions = scalar(@actions);
-        if ($NumberOfActions > 0) {
-            my $button;
-            my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
-
-            if ($NumberOfActions == 1) {
-                $button = '<table><tr><td><div class="twikiChangeFormButton twikiSubmit ">'.
-                  ' <a href="'.$url.'?WORKFLOWACTION='.$actions[0].
-                    '&WORKFLOWSTATE='.$globCurrentState->{name}.'">'.$actions[0].'</a>'.
-                      '</div></td></tr></table>';
-                #		  $button = ' <a href="'.$url.'?WORKFLOWACTION='.$actions[0].
-                #		      '&WORKFLOWSTATE='.$globCurrentState->{name}.' class="twikiChangeFormButton twikiSubmit ">'.
-                #		      $actions[0].'</a>';
-            } else {
-                my $select="";
-                foreach my $key (@actions) {
-                    $select .= "<option value='$key'> $key </option>";
-                }
-                $button = "<FORM METHOD=POST ACTION='$url'>".
-                  "<input type='hidden' name='WORKFLOWSTATE' value='$globCurrentState->{name}'>".
-                    "<select name='WORKFLOWACTION'>$select</select> ".
-                      "<input type='submit' value='Change status' class='twikiChangeFormButton twikiSubmit '/>".
-                        "</FORM>";
-            }
-
-            # build the final form
-            #	      my $form = '<div style="text-align:right;">'.
-            #		  '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder">'.
-            #		  '<tr>'.
-            #		  "<td align='right'>".$globPreferences{"TEXTBEFORECHANGEBUTTON"}." &nbsp; </td>".
-            #		  '<td align="right"> '.$button .' </td></tr></table></div>';
-            $_[0] =~ s/%WORKFLOWTRANSITION%/$button/g;
-        }
-
-    } else {
-        $_[0] =~ s!%WORKFLOWEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
+        # we need to parse the workflow again since the state of the document
+        # has changed which will effect the actions the user can do now. 
+        my $user = $TWiki::Plugins::SESSION->{user};
+        $inited = 0;
+        return unless (_init($_[2], $_[1]) > 0);
     }
+
+    # replace edit tag
+    if ($globAllowEdit) {
+        $_[0] =~ s!%WORKFLOWEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
+    } else {
+        $_[0] =~ s!%WORKFLOWEDITTOPIC%! <strike>Edit<\/strike> !g;
+    }
+
+    # show all tags defined by the preferences
+    foreach my $key (keys %globPreferences) {
+        if ($key =~ /^WORKFLOW/) {
+            $_[0] =~ s/%$key%/$globPreferences{$key}/g;
+        }
+    }
+
+    # show last version tags
+    foreach my $key (keys %{$globCurrentState}) {
+        if ($key =~ /^LASTVERSION_/) {
+            my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
+            my $foo = "<a href='${url}?rev=".$globCurrentState->{$key}."'>revision ".
+              $globCurrentState->{$key}."</a>";
+            $_[0] =~ s/%WORKFLOW$key%/$foo/g;
+        }
+    }
+
+    # show last time tags
+    foreach my $key (keys %{$globCurrentState}) {
+        if ($key =~ /^LASTTIME_/) {
+            $_[0] =~ s/%WORKFLOW$key%/$globCurrentState->{$key}/g;
+        }
+    }
+
+    # display the message for current status
+    $_[0] =~ s/%WORKFLOWSTATEMESSAGE%/$globWorkflowMessage/g;
+
+    $_[0] =~ s/%WORKFLOWHISTORY%/$globHistory/g;
+
+    #
+    # Build the button to change the current status
+    #
+    my @actions = keys(%{$globWorkflow});
+    my $NumberOfActions = scalar(@actions);
+    if ($NumberOfActions > 0) {
+        my $button;
+        my $url = TWiki::Func::getScriptUrl( $web,$topic,"view" );
+
+        if ($NumberOfActions == 1) {
+            $button = '<table><tr><td><div class="twikiChangeFormButton twikiSubmit ">'.
+              ' <a href="'.$url.'?WORKFLOWACTION='.$actions[0].
+                '&WORKFLOWSTATE='.$globCurrentState->{name}.'">'.$actions[0].'</a>'.
+                  '</div></td></tr></table>';
+            #		  $button = ' <a href="'.$url.'?WORKFLOWACTION='.$actions[0].
+            #		      '&WORKFLOWSTATE='.$globCurrentState->{name}.' class="twikiChangeFormButton twikiSubmit ">'.
+            #		      $actions[0].'</a>';
+        } else {
+            my $select="";
+            foreach my $key (@actions) {
+                $select .= "<option value='$key'> $key </option>";
+            }
+            $button = "<FORM METHOD='POST' ACTION='$url'>".
+              "<input type='hidden' name='WORKFLOWSTATE' value='$globCurrentState->{name}'>".
+                "<select name='WORKFLOWACTION'>$select</select> ".
+                  "<input type='submit' value='Change status' class='twikiChangeFormButton twikiSubmit '/>".
+                    "</FORM>";
+        }
+
+        # build the final form
+        #	      my $form = '<div style="text-align:right;">'.
+        #		  '<table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder">'.
+        #		  '<tr>'.
+        #		  "<td align='right'>".$globPreferences{"TEXTBEFORECHANGEBUTTON"}." &nbsp; </td>".
+        #		  '<td align="right"> '.$button .' </td></tr></table></div>';
+        $_[0] =~ s/%WORKFLOWTRANSITION%/$button/g;
+    }
+
+    $_[0] =~ s!%WORKFLOWEDITTOPIC%!<a href=\"%EDITURL%\"><b>Edit</b></a>!g;
 
     # delete all tags which start with the word WORKFLOW
     $_[0] =~ s/%WORKFLOW([a-zA-Z_]*)%//g;
@@ -202,20 +200,21 @@ sub commonTagsHandler {
 sub beforeEditHandler {
     ### my ( $text, $topic, $web, $meta ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
+    return unless (_init($_[2], $_[1]) > 0);
 
     # This handler is called by the edit script just before presenting the edit text
     # in the edit box. Use it to process the text before editing.
 
-    if (NeedsWorkflow()) {
-        if (! $globAllowEdit) {
-	    throw TWiki::OopsException( 'accessdenied',
-                                    def => 'topic_access',
-                                    web => $_[2],
-                                    topic => $_[1],
-				    params => [ 'Edit topic', 'You are not permitted to edit this topic' ] );
-            return 0;
-        }
+    if (! $globAllowEdit) {
+        throw TWiki::OopsException(
+            'accessdenied',
+            def => 'topic_access',
+            web => $_[2],
+            topic => $_[1],
+            params => [
+                'Edit topic',
+                'You are blocked from editing this topic by the %TWIKIWEB%.WorkflowPlugin' ] );
+        return 0;
     }
 }
 
@@ -223,49 +222,36 @@ sub beforeEditHandler {
 sub beforeSaveHandler {
     ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
-
     # This handler is called by TWiki::Store::saveTopic just before the save action.
 
-    if (NeedsWorkflow()) {
-        Debug("---------- beforeSaveHandler");
-        if (! $globAllowEdit && ! $CalledByMyself) {
-	    throw TWiki::OopsException( 'accessdenied',
+    return unless (_init($_[2], $_[1]) > 0);
+
+    #Debug("---------- beforeSaveHandler");
+    if (! $globAllowEdit && ! $CalledByMyself) {
+        throw TWiki::OopsException( 'accessdenied',
                                     def => 'topic_access',
                                     web => $_[2],
                                     topic => $_[1],
-				    params => [ 'Save topic', 'You are not permitted to edit this topic' ] );
-            return 0;
-	    }
+                                    params => [ 'Save topic', 'You are not permitted to edit this topic' ] );
+        return 0;
     }
 }
 
-
 # =========================
 
-
-sub NeedsWorkflow {
-    return $prefNeedsWorkflow;
-}
-
-sub Timestamp {
-    use TWiki::Time;
-    return TWiki::Time::formatTime( time(), undef, 'servertime' );
-}
-
 sub changeWorkflowState {
-    my $state = shift;
-    my $form = shift;
+    my ($state, $form) = @_;
 
-    my ($meta, $text) = &TWiki::Func::readTopic( $web, $topic );
+    my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
     $text = TWiki::Func::expandVariablesOnTopicCreation( $text ); #TW: really needed?
     my ($revdate, $revuser, $version, $revcmt) =  $meta->getRevisionInfo();
 
-    Debug("changeWorkflowState from $globCurrentState->{name} to $state");
+    #Debug("changeWorkflowState from $globCurrentState->{name} to $state");
 
     $globCurrentState->{name}=$state;
     $globCurrentState->{"LASTVERSION_$state"}="$version";
-    $globCurrentState->{"LASTTIME_$state"} = Timestamp();
+    $globCurrentState->{"LASTTIME_$state"} =
+      TWiki::Func::formatTime( time(), undef, 'servertime' );
 
     $meta->remove( "WORKFLOW" );
     $meta->put( "WORKFLOW", $globCurrentState);
@@ -302,9 +288,9 @@ sub changeWorkflowState {
     # values in the topic, due to the TWiki form initialization
     # algorithm, or pass them here via URL parameters (take from
     # initialization topic)
-    if ( $form && ! ( $oldForm eq $form )) {
+    if ( $form && !($oldForm && $oldForm eq $form)) {
         my $url = TWiki::Func::getScriptUrl( $web, $topic, 'edit' );
-	$url .= "?formtemplate=$form";
+        $url .= "?formtemplate=$form";
         TWiki::Func::redirectCgiQuery(undef, $url);
         return 0;
     }
@@ -318,15 +304,16 @@ sub getWorkflowState {
 
 sub Debug {
     my $text = shift;
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}: $text" ) if $debug;
+    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}: $text" );
 }
+
 #
 # return a hash table representing the actions alowed by
 # the current user. The hash-key is the possible action
 # while the value is the next state.
 #
 sub parseWorkflow {
-    my ($WorkflowTopic, $User, $CurrentState) = @_;
+    my ($WorkflowWeb, $WorkflowTopic, $User, $CurrentState) = @_;
     my %workflow = ();
     my %workflowForm = ();
     my $WorkflowMessage = "";
@@ -340,8 +327,9 @@ sub parseWorkflow {
     my $CurrentStateIsValid = 0;
 
     # Read topic that defines the statemachine
-    if( &TWiki::Func::topicExists( $globWebName, $WorkflowTopic ) ) {
-        my( $meta, $text ) = &TWiki::Func::readTopic( $globWebName, $WorkflowTopic );
+    if( TWiki::Func::topicExists( $WorkflowWeb, $WorkflowTopic ) ) {
+        my( $meta, $text ) = TWiki::Func::readTopic(
+            $WorkflowWeb, $WorkflowTopic );
 
         my $inBlock = 0;
         # | *Current state* | *Action* | *Next state* | *Allowed* |
@@ -360,17 +348,18 @@ sub parseWorkflow {
                 # read row in TRANSITION table
                 my( $state, $action, $next, $allowed, $form ) = split( /\s*\|\s*/ );
                 $state = _cleanField($state);
-                if (UserIsAllowed($User, $allowed) && ($state eq $CurrentState->{name})) { 
+                if (UserIsAllowed($User, $allowed) &&
+                      ($state eq $CurrentState->{name})) {
                     # store the transition in user's workflow 
                     $workflow{$action} = $next;
-		    $workflowForm{$action} = $form;
+                    $workflowForm{$action} = $form;
                 }
 
             } elsif( ($inBlock == 2) && s/^\s*\|//o ) {
                 # read row in STATE table
                 my( $state, $allowedit, $message ) = split( /\s*\|\s*/ );
                 $state = _cleanField($state);
-                Debug("STATE: '$state', $allowedit, $message  CurrentState: '$CurrentState->{name}'");
+                #Debug("STATE: '$state', $allowedit, $message  CurrentState: '$CurrentState->{name}'");
 
                 # the first state in the table defines the default state
                 if (!defined($defaultState)) {
@@ -380,7 +369,7 @@ sub parseWorkflow {
                 if ($state eq $CurrentState->{name}) {
                     $CurrentStateIsValid=1;
                     $WorkflowMessage=$message;
-                    if (UserIsAllowed($User, $allowedit)) { 
+                    if (UserIsAllowed($User, $allowedit)) {
                         $AllowEdit = 1;
                     }
                 }
@@ -394,7 +383,7 @@ sub parseWorkflow {
         # the default status!
         if (!$CurrentStateIsValid && defined($defaultState)) {
             $CurrentState->{name}=$defaultState;
-            return parseWorkflow($WorkflowTopic, $User, $CurrentState);
+            return parseWorkflow($WorkflowWeb, $WorkflowTopic, $User, $CurrentState);
         }
     } else {
         # FIXME - do what if there is an error?
@@ -409,11 +398,12 @@ sub UserIsAllowed {
 
     # Always allow members of the admin group to edit
     if ( $User->isAdmin() ) {
-      return 1;
+        return 1;
     }
 
     if ( defined( $allow ) && $allow ) {
-      return $User->isInList( $allow );
+        return 0 if $allow =~ /^\s*nobody\s*$/;
+        return $User->isInList( $allow );
     }
 
     # user IS allowed!

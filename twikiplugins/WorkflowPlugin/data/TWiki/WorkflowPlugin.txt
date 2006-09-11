@@ -34,19 +34,21 @@ Note: you can hide the setting in a normal view using HTML comments e.g.
 The workflow description topic must contain one state table and one transition table. The state table has three columns, as in this example:
 
 | *State* | *Allow Edit* | *Message* |
-| UNDERREVISION | Main.<nop>User1,Main.Quality<nop>Group | This document is being revised. |
+| UNDERREVISION | | This document is being revised. |
 | APPROVED | | This documented has been approved for release. |
-| WAITINGFORQM | | This document is waiting for approval by the Quality Manager. |
-| WAITINGFORCEO | | This document is waiting for approval by the CEO.|
+| WAITINGFORQM | Main.<nop>User1,Main.Quality<nop>Group | This document is waiting for approval by the Quality Manager. |
+| WAITINGFORCEO | nobody | This document is waiting for approval by the CEO.|
 
 Each row in the table defines a state where:
 	* the *State* column specifies a name for the state, 
 	* the *Allow Edit* column specifies who is permitted to edit the topic when it is in the state, and 
 	* the *Message* column defines a message which can be displayed on the document page when the document is in this state.
 
-In the example we have defined four states. Only =Main.<nop>User1= and =Main.<nop>QualityGroup= are permitted to make changes to the document when it is in the state =UNDERREVISION=. In all other states the document *may not be edited* (except a TWiki admin). 
+In the example we have defined four states. Anyone can make changes to the document in UNDERREVISION state. Only =Main.<nop>User1= and =Main.<nop>QualityGroup= are permitted to make changes to the document when it is in the =WAITINGFORQM= state. Nobody can edit the document in =WAITINGFORCEO= state.
 
 The first state in the table is the initial/default state.
+
+*NOTE: The state table must be defined *before* the transition table!*
 
 The transition table consists of four columns, as in this example:
 | *State* | *Action* | *Next State* | *Allowed* | *Form* |
@@ -54,7 +56,7 @@ The transition table consists of four columns, as in this example:
 | UNDERREVISION | send to Quality Manager for approval | WAITINGFORQM | Main.<nop>QualityGroup | In<nop>ProcessForm |
 | WAITINGFORQM | approve and send to CEO for approval| WAITINGFORCEO | Main.<nop>QualityManager |  |
 | WAITINGFORQM | reject and keep revising| UNDERREVISION | Main.<nop>QualityManager |  |
-| WAITINGFORCEO | approve | APPROVED | Main.TechnicalDirector |  |
+| WAITINGFORCEO | approve | APPROVED | Main.TechnicalDirector | Approved<nop>Form |
 | WAITINGFORCEO | reject and keep revising | UNDERREVISION | Main.<nop>TechnicalDirector |  |
 
 Each row in this table defines a transition from one state to another state:
@@ -66,11 +68,13 @@ Each row in this table defines a transition from one state to another state:
 
 In our example the Main.<nop>QualityGroup is allowed to revise the document. After finishing the revision, the document must be approved by the Main.<nop>QualityManager, and after that by the Main.<nop>TechnicalDirector. Even though they can't edit the document themselves (see state table above), they _can_ reject the revision and put the document back into the =UNDERREVISION= state. 
 
-If a form name is given in the last column, this form will be attached to the topic, and the topic is put in edit mode to allow information to be provided in the form. If no form is given, the existing form (if any) is left in place. A typical usage of the form would be to collect additional information as the topic walks through the work flow, or to make information in the form unchangeable (by setting it to a =label= field) once a given state is reached.
+If a form name is given in the last column, this form will be attached to the topic, and the topic will put in edit mode to allow information to be provided in the form *when that state transition happens*. in the examples above, a form of type Approved<nop>Form will be attached to the topic when the CEO transitions the topic into =APPROVED= state.
+   * the person triggering the transition has to be able to edit the topic (under the state rules described above) to be able to enter data in the form i.e. the CEO has to be able to edit topics in =APPROVED= state.
+   * if there is already a form of a different type attached to the topic, then any fields that have the same name in the *new* form will be preserved.
+   * If no form is given, the existing form (if any) is left in place.
+A typical usage of the form would be to collect additional information as the topic walks through the work flow, or to make information in the form unchangeable (by setting it to a =label= field) once a given state is reached.
 
-An example of a workflow that also controls the form information can be found in Sandbox.DefectWorkflow, where a simple defect tracking system is implemented.
-
-*NOTE: The state table must be defined *before* the transition table!*
+An example of a workflow that also controls the form information can be found in WorkflowPluginDemo.ControlledDocument (only available if the plugin is installed).
 
 You can also define other TWiki variables starting with =WORKFLOW= in the workflow description topic. These will be expanded to their defined values in any topic that uses the workflow. For example:
 	* Set WORKFLOWNOTICE = This topic is under document control.
@@ -94,9 +98,6 @@ __Note:__ If you replace =%<nop>EDITTOPIC%= with =%<nop>WORKFLOWEDITTOPIC%= in y
 
 The example topics Sandbox.DefectOne and Sandbox.DefectTwo give examples of how to use these tags to create workflow controlled topics (the latter also shows the use of custom views to change the appearance of the topic).
 
----++ Internals
-The plugin stores the current state of the topic in a preference variable named "%META:PREFERENCE{name="WORKFLOW" title="WORKFLOW" type="Set" value="DefectWorkflow"}%
-
 ---++ Bugs
 
 	* You can attach a file to a contolled topic even if the state of the topic does not allow the user to edit it. In general, the plugin should prevent any changes to the topic in such case.
@@ -104,12 +105,10 @@ The plugin stores the current state of the topic in a preference variable named 
 ---++ Plugin Settings
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>WORKFLOWPLUGIN_SHORTDESCRIPTION%==
-
+<!--
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Supports work flows associated with topics
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+-->
 
    * History format. The first line tells to format the history as a bullet list, the second just writes a newline separated list. The variables =$state=, =$wikiusername=, =$date=, =$quot=, and =$n= (or =$n()=) can be used in the format statement, with the same meaning as in TWiki.FormattedSearch.
 	* #Set WORKFLOWHISTORYFORMAT = "	* $state -- $wikiusername, $date"
