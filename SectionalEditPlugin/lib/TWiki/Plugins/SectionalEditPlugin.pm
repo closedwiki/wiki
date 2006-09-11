@@ -22,7 +22,7 @@ package TWiki::Plugins::SectionalEditPlugin;
 use strict;
 
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug $pluginName
         $bgcolor $label $skipskin $leftjustify $alwayssection
 	$sectiondepth $sectiondepthmin $sectioninit $editstyle $placement
     );
@@ -144,9 +144,9 @@ sub displayRow
 # =========================
 sub preRenderingHandler
 {
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+### my ( $text, $pmap ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
-    &TWiki::Func::writeDebug( "- ${pluginName}::preRenderingHandler( $_[1].$topic )" ) if $debug;
+    &TWiki::Func::writeDebug( "- ${pluginName}::preRenderingHandler( $topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just before the line loop
     # Only bother with this plugin if viewing (i.e. not searching, etc)
