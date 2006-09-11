@@ -1,5 +1,3 @@
-%META:TOPICINFO{author="TWikiGuest" date="1153719921" format="1.1" version="1.196"}%
-
 %WORKFLOWNOTICE%
 
 %WORKFLOWSTATEMESSAGE%
@@ -7,17 +5,14 @@
 Last approved %WORKFLOWLASTVERSION_APPROVED%, on %WORKFLOWLASTTIME_APPROVED%<br>
 Last revision %WORKFLOWLASTVERSION_UNDERREVISION%, on %WORKFLOWLASTTIME_UNDERREVISION%
 
-Some controlled text.
-
-
 	* Set WORKFLOW = DocumentApprovalWorkflow
-
 
 %WORKFLOWTRANSITION% 
 
+%WORKFLOWBUTTON%
+---
+The quality (Q) of your quality documents (QD) is quality-controlled (QC) by the quality group (QG), lead by the quality group controller (QGC).
 
-PS: Note, that the tags %<nop>WORKFLOWBUTTON%, %<nop>WORKFLOWNOTICE%, and
-%<nop>WORKFLOWSTATEMESSAGE% could be placed in the footer or header, as
-well.
+If the Q of the QD is SNAFU, the QGC gets it in the BTU from the CEO.
 
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. -->
