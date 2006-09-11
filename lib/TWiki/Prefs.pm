@@ -145,6 +145,35 @@ sub pushWebPreferences {
 
 =pod
 
+---++ ObjectMethod pushGlobalPreferences()
+Add global preferences to this preferences stack.
+
+=cut
+
+sub pushGlobalPreferences {
+    my $this = shift;
+
+    # Default prefs first, from read-only web
+    my $prefs = $this->pushPreferences(
+        $TWiki::cfg{SystemWebName},
+        $TWiki::cfg{SitePrefsTopicName},
+        'DEFAULT' );
+
+}
+
+sub pushGlobalPreferencesSiteSpecific {
+    my $this = shift;
+
+    # Then local site prefs
+    if( $TWiki::cfg{LocalSitePreferences} ) {
+        my( $lweb, $ltopic ) = $this->{session}->normalizeWebTopicName(
+            undef, $TWiki::cfg{LocalSitePreferences} );
+        $this->pushPreferences( $lweb, $ltopic, 'SITE' );
+    }
+}
+
+=pod
+
 ---++ ObjectMethod pushPreferencesValues( $type, \%values )
 Push a new preference level using type and values given
 

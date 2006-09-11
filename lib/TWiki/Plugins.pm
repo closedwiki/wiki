@@ -224,6 +224,26 @@ sub load {
 
 =pod
 
+---++ ObjectMethod settings()
+
+Push plugin settings onto preference stack
+
+=cut
+
+sub settings {
+    my $this = shift;
+    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
+
+    # Set the session for this call stack
+    local $TWiki::Plugins::SESSION = $this->{session};
+
+    foreach my $plugin ( @{$this->{plugins}} ) {
+        $plugin->registerSettings( $this );
+    }
+}
+
+=pod
+
 ---++ ObjectMethod enable()
 
 Initialisation that is done after the user is known.

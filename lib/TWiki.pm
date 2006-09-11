@@ -1257,17 +1257,7 @@ sub new {
     $this->{prefs} = $prefs;
 
     # Push global preferences from TWiki.TWikiPreferences
-    $prefs->pushPreferences(
-        $TWiki::cfg{SystemWebName},
-        $TWiki::cfg{SitePrefsTopicName},
-        'DEFAULT' );
-
-    # Push site preferences from Main.TWikiPreferences
-    if( $TWiki::cfg{LocalSitePreferences} ) {
-        my( $lweb, $ltopic ) = $this->normalizeWebTopicName(
-            undef, $TWiki::cfg{LocalSitePreferences} );
-        $prefs->pushPreferences( $lweb, $ltopic, 'SITE' );
-    }
+    $prefs->pushGlobalPreferences();
 
     # SMELL: there should be a way for the plugin to specify
     # the WikiName of the user as well as the login.
@@ -1277,9 +1267,6 @@ sub new {
     }
     my $user = $this->{users}->findUser( $login );
     $this->{user} = $user;
-
-    # Finish plugin initialization - register handlers and load variables
-    $this->{plugins}->enable();
 
     # Static session variables that can be expanded in topics when they
     # are enclosed in % signs
@@ -1291,6 +1278,12 @@ sub new {
     $this->{SESSION_TAGS}{BASETOPIC}      = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $this->{topicName};
     $this->{SESSION_TAGS}{INCLUDINGWEB}   = $this->{webName};
+
+    # Push plugin settings
+    $this->{plugins}->settings();
+
+    # Now the rest of the preferences
+    $prefs->pushGlobalPreferencesSiteSpecific();
 
     $prefs->pushPreferences(
         $TWiki::cfg{UsersWebName}, $user->wikiName(),
@@ -1306,6 +1299,9 @@ sub new {
 
     # requires preferences (such as NEWTOPICBGCOLOR)
     $this->{renderer} = new TWiki::Render( $this );
+
+    # Finish plugin initialization - register handlers
+    $this->{plugins}->enable();
 
     # language information; must be loaded after
     # *all possible preferences sources* are available

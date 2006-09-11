@@ -175,8 +175,8 @@ sub load {
     return $user;
 }
 
-# invoke plugin initialisation and register handlers.
-sub registerHandlers {
+# register plugin settings
+sub registerSettings {
     my ( $this, $plugins ) = @_;
     ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
@@ -195,6 +195,17 @@ sub registerHandlers {
         $prefs->pushPreferences( $this->{installWeb}, $this->{name}, 'PLUGIN',
                                  uc( $this->{name} ) . '_');
     }
+}
+
+# invoke plugin initialisation and register handlers.
+sub registerHandlers {
+    my ( $this, $plugins ) = @_;
+    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
+
+    return if $this->{disabled};
+
+    my $p = $this->{module};
+    my $sub = $p . "::initPlugin";
 
     no strict 'refs';
     my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},
