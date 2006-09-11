@@ -1,5 +1,4 @@
 | *Name* | *Type* | *Size* | *Values* | *Tooltip messages* | *Attributes* | 
-| Reason for revision | label | | | | M | 
 | Approving Quality Manager | text | 73 | | | M | 
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. -->

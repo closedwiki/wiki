@@ -1,3 +1,10 @@
-data/TWiki/WorkflowPlugin.txt  Plugin doc page
-lib/TWiki/Plugins/WorkflowPlugin.pm  Plugin Perl module 
-data/Sandbox/PluginTestWorkflowPlugin.txt  Plugin examples
+data/TWiki/WorkflowPlugin.txt 0640 Plugin doc page
+lib/TWiki/Plugins/WorkflowPlugin.pm 0640 Plugin Perl module
+pub/TWiki/WorkflowPlugin/Flow.gif 0640 Example image
+data/WorkflowPluginDemo/ControlledDocument.txt 0640 Example document
+data/WorkflowPluginDemo/DocumentApprovalWorkflow.txt 0640 Example workflow
+data/WorkflowPluginDemo/ApprovedForm.txt 0640 Forms for defect workflow
+data/WorkflowPluginDemo/UnderRevisionForm.txt 0640 Forms for defect workflow
+data/WorkflowPluginDemo/QMApprovalForm.txt 0640 Forms for defect workflow
+data/WorkflowPluginDemo/TMApprovalForm.txt 0640 Forms for defect workflow
+data/WorkflowPluginDemo/DocumentApprovalWorkflow.txt 0640 Forms for defect workflow
