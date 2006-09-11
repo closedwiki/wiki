@@ -67,11 +67,11 @@ sub initPlugin
 }
 
 # =========================
-sub startRenderingHandler
+sub preRenderingHandler
 {
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+### my ( $text, $pmap ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
-    &TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1].$topic )" ) if $debug;
+    &TWiki::Func::writeDebug( "- ${pluginName}::preRenderingHandler( $topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion just before the line loop
 
@@ -91,23 +91,34 @@ sub startRenderingHandler
     my $ret = '';
     my $eurl = TWiki::Func::getScriptUrlPath() . "/editonesection/$web/$topic";
 
-    my $sectionedit = ($_[0] =~ m%<section/?>%i);
+    my $sectionedit = ($_[0] =~ m%<section( |>)%i);
 
     if ($sectionedit) {
-      my @sections = split(/(<\/?section>)/i, $_[0]);
+      my @sections = split(/(<\/?section(\s+[^>]+)?>)/i, $_[0]);
+      my $dontedit;
       my $pos = 0;
       my $state = "noedit";
+      my $skip = 0;
       my $lastsec = "";
       foreach $sec (@sections) {
-	if ( $sec eq "<section>" ) { $state="edit"; next; }
+	if ( $skip ) { $skip = 0; next; }
+	if ( $sec eq "<section>" ) 
+	  { $state="edit"; $dontedit = 0; $skip = 1; next; }
+	if ( $sec =~ m/<section(.*)>/i ) 
+	  { use TWiki::Attrs;
+	    $attrs = new TWiki::Attrs($1, 1);
+	    $dontedit = ( ! $attrs->{edit} );
+	    $state="edit"; $skip = 1; next; }
 	if ( $sec eq "</section>" ) {
+	  $skip = 1;
 	  my $tmp = TWiki::Func::renderText($lastsec, $_[1], $_[2]);
 	  # restore verbatim markers
 	  $tmp =~ s/\<\!\-\-\!([a-z0-9]+)\!\-\-\>/\<\!\-\-$TWiki::TranslationToken$1$TWiki::TranslationToken\-\-\>/gio;
-	  my $rText = &editRow($eurl, $pos, $tmp);
+	  my $rText = ( $dontedit )? $tmp : &editRow($eurl, $pos, $tmp);
 	  $$renderedText[$pos] = $rText;
 	  $lastsec = "";
 	  $ret .= ($prefix . $pos);
+          $dontedit = 0;
 	  $state="noedit"; next; 
 	}
 	if ( $state eq "edit" ) { $lastsec = $sec; }
@@ -140,13 +151,13 @@ sub editRow
 }
 
 # =========================
-sub endRenderingHandler
+sub postRenderingHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
     return if ($_[0] =~ m/\<\/?body[^>]*\>/o);
 
-    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
+    TWiki::Func::writeDebug( "- ${pluginName}::postRenderingHandler( $web.$topic )" ) if $debug;
 
     if (@$renderedText) {
         while ($_[0] =~ s/$prefix([0-9]+)/$$renderedText[$1]/e) {}
