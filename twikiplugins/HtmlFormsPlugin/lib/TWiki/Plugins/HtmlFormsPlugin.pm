@@ -249,9 +249,8 @@ sub _RADIO {
 sub _TEXTVALUE {
     my($session, $params, $theTopic, $theWeb) = @_;
     
-    my $currentvalue = $params->{currentvalue} || '';
-    my $optionlist = $params->{options} || $currentvalue;
-    
+    my $value = $params->{value} || '';
+   
     my $destinationaddress = $params->{destinationaddress};
 
     my $web = $theWeb;
@@ -269,7 +268,7 @@ sub _TEXTVALUE {
     my $element =     
         $session->{cgiQuery}->textfield(
                 -name=>$variable,
-				-value=>$optionlist,
+				-value=>$value,
                 -size=>50,
     		    -maxlength=>80				
             );
@@ -278,8 +277,7 @@ sub _TEXTVALUE {
 sub _TEXTAREA {
     my($session, $params, $theTopic, $theWeb) = @_;
     
-    my $currentvalue = $params->{currentvalue} || '';
-    my $optionlist = $params->{options} || $currentvalue;
+    my $value = $params->{value} || '';
     
     my $destinationaddress = $params->{destinationaddress};
 
@@ -298,7 +296,7 @@ sub _TEXTAREA {
     my $element =     
         $session->{cgiQuery}->textarea(
                 -name=>$variable,
-				-value=>$optionlist,
+				-value=>$value,
                 -rows=>10,
     		    -columns=>80				
             );
@@ -307,8 +305,7 @@ sub _TEXTAREA {
 sub _BUTTON {
     my($session, $params, $theTopic, $theWeb) = @_;
     
-    my $currentvalue = $params->{currentvalue} || '';
-    my $optionlist = $params->{options} || $currentvalue;
+    my $value = $params->{value} || '';
     
     my $destinationaddress = $params->{destinationaddress};
 
@@ -327,7 +324,7 @@ sub _BUTTON {
     my $element =     
         $session->{cgiQuery}->hidden(
                 -name=>$variable,
-				-default=>$optionlist,
+				-default=>$value,
             );
     return getForm($session, $element, $method, $action, $variable, "$theWeb.$theTopic");
 }
