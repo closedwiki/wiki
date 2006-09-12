@@ -1,6 +1,6 @@
 ---+!! TWiki Developer Environment
 <div style="float:right">
-<a href="http://wikiring.com"><img src="%ATTACHURLPATH%/logo.gif" /></a>
+<a href="http://wikiring.com"><img src="%ATTACHURLPATH%/logo.gif" title="WikiRing: Professional Wiki Innovation and Support" /></a>
 </div>
 <!--
 
