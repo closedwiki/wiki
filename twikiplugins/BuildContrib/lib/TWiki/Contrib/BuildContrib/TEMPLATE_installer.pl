@@ -7,17 +7,21 @@
 # BY THE BUILD PROCESS DO NOT EDIT IT - IT WILL BE OVERWRITTEN
 #
 use strict;
+require 5.008;
 use Cwd;
 use File::Temp;
 use File::Copy;
+use File::Path;
 
 =pod
 
----+ %$MODULE_Installer.pl
+---+ %$MODULE%_Installer.pl
 This is the installer script. The basic function of this script is to
-check the dependencies listed in DEPENDENCIES and assist the user in
-installing any that are missing. The script also automatically maintains
-the revision histories of any files that are being installed by the
+locate an archive and unpack it.
+
+It will also check the dependencies listed in DEPENDENCIES and assist
+the user in installing any that are missing. The script also automatically
+maintains the revision histories of any files that are being installed by the
 package but already have ,v files on disc (indicating that they are
 revision controlled).
 
@@ -43,19 +47,17 @@ my $PACKAGES_URL = "%$TWIKIORGPUB%/Plugins/";
 my $noconfirm = 0;
 my $inactive = 0;
 my $twiki;
-my $NL = "\n";
 my %manifest = ( %$FILES% );
 my @deps = ( %$SATISFIES% );
 my $dakar;
 my %available;
 my $lwp;
-my @archTypes = ( 'tar.gz', 'tgz', 'zip' );
-my $here = Cwd::cwd();
+my @archTypes = ( 'tgz', 'tar.gz', 'zip' );
 my %cfg;
-
-require 5.008;
+my $here;
 
 BEGIN {
+    $here = Cwd::getcwd();
     my $check_perl_module = sub {
         my $module = shift;
 
@@ -179,9 +181,10 @@ sub check_dep {
     } else {
         # This module has no perl interface, and can't be checked
         $ok = 0;
-        $msg = 'Module is type '.$dep->{type}.
-          ', and cannot be automatically checked.'.$NL.
-            'Please check it manually and install if necessary.'.$NL;
+        $msg = <<END;
+Module is type $dep->{type}, and cannot be automatically checked.
+Please check it manually and install if necessary.
+END
     }
     return ( $ok, $msg );
 }
@@ -304,7 +307,7 @@ sub ask {
 
     print $q.' [y/n] ';
     while ( ( $reply = <STDIN> ) !~ /^[yn]/i ) {
-        print 'Please answer yes or no'.$NL;
+        print "Please answer yes or no\n";
     }
     return ( $reply =~ /^y/i ) ? 1 : 0;
 }
@@ -332,7 +335,7 @@ sub prompt {
     return $reply;
 }
 
-# DEPRECATED - do not use
+# DEPRECATED - do not use - install a .spec instead
 # ---++ StaticMethod getConfig( $major, $minor, $cairo ) -> $string
 #    * =$major= name of major key.
 #    * =$minor= if undefined, there is no minor key
@@ -365,7 +368,7 @@ sub getConfig {
     return undef;
 }
 
-# DEPRECATED - do not use
+# DEPRECATED - do not use - install a .spec instead
 # ---++ StaticMethod commentConfig( $comment )
 #    * $comment - comment to insert in LocalSite.cfg, usually before a setConfig
 # Inserts a comment into LocalSite.cfg. The comment will usually describe a following setConfig; for example,
@@ -386,7 +389,7 @@ sub commentConfig {
     close(F);
 }
 
-# DEPRECATED - do not use
+# DEPRECATED - do not use - install a .spec instead
 # ---++ StaticMethod setConfig( $major, ... )
 #    * =$major= if defined, name of major key. If not given, there is no major key and the minorkeys are treated as major keys
 #    * =...= list of minorkey=>value pairs
@@ -461,99 +464,19 @@ sub setConfig {
     }
 }
 
-=pod
-
----++ getTWikiCfg($key)
-Get the value of an existing configuration key. The key should be in the form
-{This}{Key} (e.g. getTWikiCfg("{Plugins}{PluginOrder}");
-
-=cut
-
-sub getTWikiCfg {
-    my $key = shift;
-    return undef unless ( -e "lib/LocalSite.cfg" );
-    open(F, "<lib/LocalSite.cfg") ||
-      die "Failed to open lib/LocalSite.cfg for read";
-    local $/ = undef;
-    my $txt = <F>;
-    my $val;
-    if ($txt =~ /^.*\$TWiki::cfg$key\s*=\s*(.*?)/) {
-        eval '$val='.$1;
-    }
-    close(F);
-    return $val;
-}
-
-=pod
-
----++ setTWikiCfg($key, $type, $comment, $value, $nooverwrite)
-    * =$key= - key to set, of the form {This}{Key}
-    * =$type= - type of value, using =configure= syntax e.g. STRING 30
-    * =$comment= - comment to use (no #'s)
-    * =$value= - value to set the key to
-    * =$nooverwrite= - by default, =setTWikiCfg= will write the key even if it already exists, wiping out any existing type/comment/value setting in =LocalSite.cfg=. If =$nooverwrite= is set, the old type/value will be kept (and the new one ignored).
-Returns 1 if the key was set, 0 if it was skipped.
-
-=cut
-
-sub setTWikiCfg {
-    my ($key, $type, $comment, $value, $nooverwrite) = @_;
-
-    my $txt = '';
-    if( -e "lib/LocalSite.cfg" ) {
-        open(F, "<lib/LocalSite.cfg") ||
-          die "Failed to open lib/LocalSite.cfg for read";
-        local $/ = undef;
-        $txt = <F>;
-        close(F);
-        $txt =~ s/\s+1;\s*$//s;
-        if ($nooverwrite) {
-            return 0 if $txt =~ /\$TWiki::cfg$key\s*=/;
-        } else {
-            # kill the old settings (and previous comment) if any are there
-            $txt =~ s/(# \*\*.*?\n(#.*?\n)*)?\$TWiki::cfg$key\s*=.*;\r?\n//s;
-        }
-    }
-
-    $txt =~ s/\s+$//s;
-    $txt .= "\n".Data::Dumper->Dump([ $value ], [ '$TWiki::cfg'.$key ]);
-    $txt .= "\n1;\n";
-
-    open(F, ">lib/LocalSite.cfg") ||
-      die "Failed to open lib/LocalSite.cfg for write";
-    print F $txt;
-    close(F);
-
-    # is this Cairo or earlier? If it is, we need to include
-    # LocalSite.cfg from TWiki.cfg
-    unless( $dakar ) {
-        open(F, "<lib/TWiki.cfg");
-        undef $/;
-        $txt = <F>;
-        close(F);
-        unless( $txt =~ /^do.*LocalSite\.cfg/m ) {
-            $txt =~ s/^\s*1\s*;\s*$//m;
-            open(F, ">lib/TWiki.cfg") ||
-              die "Failed to open lib/TWiki.cfg for write";
-            print F "$txt\ndo 'LocalSite.cfg';\n1;\n";
-            close(F);
-        }
-    }
-    return 1;
-}
-
-# Try and find an archive for the named module. Look in (1) the current directory
-# (2) on the $TWIKI_PACKAGES path and finally (3) download from $PACKAGES_URL
+# Try and find an archive for the named module.
+# Look in (1) the current directory (2) on the $TWIKI_PACKAGES path and
+# (3) in the twikiplugins subdirectory (if there, to support developers)
+# and finally (4) download from $PACKAGES_URL
 sub getArchive {
     my( $module ) = @_;
     my $f;
 
-    # Look in (1) the current directory (2) $TWIKI_PACKAGES or (3)
-    # twiki.org for the module.
-    foreach my $dir ('.', split(':', $ENV{TWIKI_PACKAGES}||'')) {
-        foreach my $type ( @archTypes ) {
+    # Look for the archive.
+    foreach my $dir ($here, $here.'/twikiplugins/'.$module,
+                     split(':', $ENV{TWIKI_PACKAGES}||'')) {
+        foreach my $type ( @archTypes ) { # .tgz preferred
             $f = $dir.'/'.$module.'.'.$type;
-
             if( -e $f ) {
                 my $ans = ask( 'An existing '.$f.
                                  ' exists; would you like me to use it?' );
@@ -603,7 +526,7 @@ HERE
 
     unless ($f) {
         print STDERR 'Failed to download ', $module,
-          "\n", $response->status_line, $NL;
+          "\n", $response->status_line, "\n";
         return undef;
     } else {
         print "Downloaded an archive from $PACKAGES_URL to $f\n";
@@ -666,7 +589,7 @@ sub unzip {
     unless ( $@ ) {
         my $zip = new Archive::Zip( $archive );
         unless ( $zip ) {
-            print STDERR 'Could not open zip file '.$archive.$NL;
+            print STDERR "Could not open zip file $archive\n";
             return 0;
         }
 
@@ -676,18 +599,18 @@ sub unzip {
             my $target = $file ;
             my $err = $zip->extractMember( $file, $target );
             if ( $err ) {
-                print STDERR 'Failed to extract ',$file,' from zip file ',
-                  $zip,'. Archive may be corrupt.',$NL;
+                print STDERR "Failed to extract '$file' from zip file ",
+                  $zip,". Archive may be corrupt.\n";
                 return 0;
             } else {
                 print "    $target\n";
             }
         }
     } else {
-        print STDERR 'Archive::Zip is not installed; trying unzip on the command line'.$NL;
+        print STDERR "Archive::Zip is not installed; trying unzip on the command line\n";
         print `unzip $archive`;
         if ( $! ) {
-            print STDERR 'unzip failed: ',$!,$NL;
+            print STDERR "unzip failed: $!\n";
             return 0;
         }
     }
@@ -704,7 +627,7 @@ sub untar {
     unless ( $@ ) {
         my $tar = Archive::Tar->new( $archive, $compressed );
         unless ( $tar ) {
-            print STDERR 'Could not open tar file '.$archive.$NL;
+            print STDERR "Could not open tar file $archive\n";
             return 0;
         }
 
@@ -715,17 +638,17 @@ sub untar {
             my $err = $tar->extract_file( $file, $target );
             unless ( $err ) {
                 print STDERR 'Failed to extract ',$file,' from tar file ',
-                  $tar,'. Archive may be corrupt.',$NL;
+                  $tar,". Archive may be corrupt.\n";
                 return 0;
             } else {
                 print "    $target\n";
             }
         }
     } else {
-        print STDERR 'Archive::Tar is not installed; trying tar on the command-line'.$NL;
+        print STDERR "Archive::Tar is not installed; trying tar on the command-line\n";
         print `tar xvf$compressed $archive`;
         if ( $! ) {
-            print STDERR 'tar failed: ',$!,$NL;
+            print STDERR "tar failed: $!\n";
             return 0;
         }
     }
@@ -756,8 +679,8 @@ DONE
             # Need copy of file to upload it, use temporary location
             my $tmp = new File::Temp( UNLINK => 1 );
             my $tmpfilename = $tmp->filename;
-            File::Copy::copy($origfile, $tmpfilename) or
-              die "$origfile could no be copied to tmp dir ($tmpfilename).";
+            File::Copy::copy($origfile, $tmpfilename) ||
+              die "$origfile could not be copied to tmp dir ($tmpfilename).";
             my @stats = stat $origfile;
             my $fileSize = $stats[7];
             my $fileDate = $stats[9];
@@ -800,8 +723,8 @@ sub uninstall {
         print STDERR 'No part of %$MODULE% is installed';
         return 0;
     }
-    print 'To uninstall %$MODULE%, the following files will be deleted:'.$NL;
-    print join( ', ', @dead );
+    print "To uninstall %$MODULE%, the following files will be deleted:\n";
+    print "\t".join( "\n\t", @dead )."\n";
     return 1 if $inactive;
     my $reply = ask('Are you SURE you want to uninstall %$MODULE%?');
     if( $reply ) {
@@ -817,7 +740,7 @@ sub uninstall {
         %$POSTUNINSTALL%;
         # <<<< POSTUNINSTALL
     }
-    print '### %$MODULE% uninstalled ###'.$NL;
+    print "### %$MODULE% uninstalled ###\n";
     return 1;
 }
 
@@ -840,7 +763,15 @@ sub emplace {
         my $target = remap($file);
         print "Install $target, permissions 0",sprintf('%0.3o', $manifest{$file}),"\n";
         unless ($inactive) {
-            File::Copy::move($source, $target);
+            if (-e $target) {
+                unless (File::Copy::move($target, "$target.bak")) {
+                    print STDERR "Could not create $target.bak: $!\n";
+                }
+            }
+            my @path = split(/[\/\\]+/, $target);
+            pop(@path);
+            File::Path::mkpath(join('/',@path));
+            File::Copy::move($source, $target) || die "Install failed: $!\n";
         }
         if( $target =~ /^data\/(\w+)\/(\w+).txt$/ ) {
             push(@topic, $target);
@@ -937,11 +868,8 @@ sub install {
                 return 0;
             }
             print <<DONE;
-I am going to uninstall the old %$MODULE% before upgrading, to
-make sure that any files that have been removed from the
-package are also removed from your installation.
+I will keep a backup of any files I overwrite.
 DONE
-            uninstall();
         }
     }
 
@@ -956,23 +884,24 @@ DONE
     %$PREINSTALL%;
     # <<<< PREINSTALL
     my $tmpdir = unpackArchive( $archive );
+    print "Archive unpacked\n";
     return 0 unless $tmpdir;
     return 0 unless emplace( $tmpdir );
 
-    print $NL.'### %$MODULE% installed';
+    print "\n### %$MODULE% installed";
     print ' with ',$unsatisfied.' unsatisfied dependencies' if ( $unsatisfied );
-    print ' ###'.$NL;
+    print " ###\n";
     # >>>> POSTINSTALL
     %$POSTINSTALL%;
     # <<<< POSTINSTALL
 
-    print $NL,'### Installation finished ###',$NL;
+    print "\n### Installation finished ###\n";
     return ($unsatisfied ? 0 : 1);
 }
 
 unshift( @INC, 'lib' );
 
-print $NL,'### %$MODULE% Installer ###',$NL,$NL;
+print "\n### %$MODULE% Installer ###\n\n";
 my $n = 0;
 my $action = 'install';
 while ( $n < scalar( @ARGV ) ) {
