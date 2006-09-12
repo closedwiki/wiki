@@ -78,8 +78,8 @@ sub preRenderingHandler
     # Only bother with this plugin if viewing (i.e. not searching, etc)
     return unless ($0 =~ m/view|viewauth|render/o);
 
-    my $ctmpl = $TWiki::Plugins::SESSION->{cgiQuery}->param('template');
-    my $cskin = &TWiki::Func::getSkin();
+    my $ctmpl = $TWiki::Plugins::SESSION->{cgiQuery}->param('template') || '';
+    my $cskin = &TWiki::Func::getSkin() || '';
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
         if (($cskin eq $ss)||($ctmpl eq $ss)) {
