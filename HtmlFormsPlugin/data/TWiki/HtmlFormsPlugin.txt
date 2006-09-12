@@ -7,30 +7,30 @@ I will be using SELECT to allow the user to set a variable to a set of topics, w
 
 ---++ Syntax Rules
 
-   * %!CHECKBOX{}%
-   * %!RADIO{}%
-   * %!SELECT{}%
+   * %<nop>CHECKBOX{}%
+   * %<nop>RADIO{}%
+   * %<nop>SELECT{}%
       * options="" - the comma seperated list of options, or VARIABLE containing or resulting in such a list (SEARCH is valid)
       * currentvalue="" - single value, or comma seperated list of values as appropriate
       * destinationaddress="Web.Topic.VARIABLENAME" (and where Web & Topic can be left out for the usual context driven locations
-   * %!TEXTVALUE{}%
-   * %!TEXTAREA{}%
-   * %!BUTTON{}%
+   * %<nop>TEXTVALUE{}%
+   * %<nop>TEXTAREA{}%
+   * %<nop>BUTTON{}%
       * value="" - the value to set the destination to
       * destinationaddress="Web.Topic.VARIABLENAME" (and where Web & Topic can be left out for the usual context driven locations
 
 ---++++ for later 
    * make all buttons submit all changes - just like inline edit!!
-   * %!FORMVALUES{"Web.FormDefinitionTopic.FormfieldName"}% - returns a comma seperated list of options defined for that form field
+   * %<nop>FORMVALUES{"Web.FormDefinitionTopic.FormfieldName"}% - returns a comma seperated list of options defined for that form field
    * later make a TOM like destination and source value syntax to get values from text, formfields etc
       * see http://twiki.org/cgi-bin/view/Codev/TopicObjectModel
       
 ---++ Examples
-select multiple values from a scrolling selection list, and set WHOWILLITBENOW in this topic
+select multiple values from a scrolling selection list, and set WHOWILLITBENOW in Sandbox.WebHome
 
-=%<nop>SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%<nop>WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
+=%<nop>SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%<nop>WHOWILLITBENOW%" destinationaddress="Sandbox.WebHome.WHOWILLITBENOW"}%=
 ---+++ if installed
-%SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
+%SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="Sandbox.WebHome.WHOWILLITBENOW"}%
 ---+++ demo
 <form method="post" action="" enctype="multipart/form-data">
 <select name="WHOWILLITBENOW"  size="5" multiple="multiple">
@@ -112,6 +112,5 @@ and set WHOWILLITBENOWTEXT in this topic to "There once was a girl"
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- %TWIKIWEB%.SvenDowideit
 
 %META:PREFERENCE{name="WHOWILLITBENOW" title="PREFERENCE_WHOWILLITBENOW" type="Set" value="annabel, jennifer, bananaman"}%
