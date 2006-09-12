@@ -3,6 +3,8 @@
 
 This plugin can be used to make html forms that set TWikiVariables. SELECT, CHECKBOX and RADIO can be used to select from a comma seperated list of options (that could be defined using a SEARCH), while BUTTON, TEXTVALUE and TEXTAREA will set the TWikiVariable based on the value.
 
+I will be using SELECT to allow the user to set a variable to a set of topics, which they will later publish to a web site using TWiki:Plugins/PublishContrib.
+
 ---++ Syntax Rules
 
    * %!CHECKBOX{}%
@@ -24,30 +26,37 @@ This plugin can be used to make html forms that set TWikiVariables. SELECT, CHEC
       * see http://twiki.org/cgi-bin/view/Codev/TopicObjectModel
       
 ---++ Examples
+select multiple values from a scrolling selection list, and set WHOWILLITBENOW in this topic
 
 =%<nop>SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%<nop>WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
 
 %SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
 
+select multiple values from a checkbox group list, and set WHOWILLITBENOW in this topic
 
 =%<nop>CHECKBOX{options="mary, peter, annabel, nicky, jennifer" currentvalue="%<nop>WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
 
 %CHECKBOX{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
 
+select one value from a radio selector list, and set WHOWILLITBENOW in this topic
 
 =%<nop>RADIO{options="mary, peter, annabel, nicky, jennifer" currentvalue="%<nop>WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
 
 %RADIO{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
 
+use a single line text edit, and set WHOWILLITBENOWTEXT in this topic
 
 =%<nop>TEXTVALUE{value="There once was a girl" destinationaddress="WHOWILLITBENOWTEXT"}%=
 
 %TEXTVALUE{value="There once was a girl"  destinationaddress="WHOWILLITBENOWTEXT"}%
 
+use a multi line text edit, and set WHOWILLITBENOWTEXT in this topic
 
 =%<nop>TEXTAREA{value="There once was a girl" destinationaddress="WHOWILLITBENOWTEXT"}%=
 
 %TEXTAREA{value="There once was a girl" destinationaddress="WHOWILLITBENOWTEXT"}%
+
+and set WHOWILLITBENOWTEXT in this topic to "There once was a girl"
 
 =%<nop>BUTTON{value="There once was a girl" destinationaddress="WHOWILLITBENOWTEXT"}%=
 
