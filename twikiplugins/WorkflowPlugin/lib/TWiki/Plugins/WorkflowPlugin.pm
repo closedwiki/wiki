@@ -60,6 +60,9 @@ sub initPlugin {
         return 0;
     }
 
+    # Force re-init on each run
+    $inited = 0;
+
     return 1;
 }
 

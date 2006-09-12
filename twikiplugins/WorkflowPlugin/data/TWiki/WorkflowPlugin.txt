@@ -95,8 +95,6 @@ Furthermore, the plugin replaces any variable starting with =WORKFLOW= that is d
 
 __Note:__ If you replace =%<nop>EDITTOPIC%= with =%<nop>WORKFLOWEDITTOPIC%= in your %TWIKIWEB%.TWikiTemplates, then the _Edit_ link is crossed out when the user is not allowed to edit the page in a state.  
 
-The example topics Sandbox.DefectOne and Sandbox.DefectTwo give examples of how to use these tags to create workflow controlled topics (the latter also shows the use of custom views to change the appearance of the topic).
-
 ---++ Bugs
 
 	* You can attach a file to a contolled topic even if the state of the topic does not allow the user to edit it. In general, the plugin should prevent any changes to the topic in such case.
@@ -105,11 +103,12 @@ The example topics Sandbox.DefectOne and Sandbox.DefectTwo give examples of how 
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>WORKFLOWPLUGIN_SHORTDESCRIPTION%==
 <!--
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules
+     topic. (Only used for TWiki<4.1)
 		* Set SHORTDESCRIPTION = Supports work flows associated with topics
 -->
 
-   * History format. The first line tells to format the history as a bullet list, the second just writes a newline separated list. The variables =$state=, =$wikiusername=, =$date=, =$quot=, and =$n= (or =$n()=) can be used in the format statement, with the same meaning as in TWiki.FormattedSearch.
+   * History format. The first line tells the plugin to format the history as a bullet list, the second just writes a newline separated list. The variables =$state=, =$wikiusername=, =$date=, =$quot=, and =$n= (or =$n()=) can be used in the format statement, with the same meaning as in TWiki.FormattedSearch.
 	* #Set WORKFLOWHISTORYFORMAT = "	* $state -- $wikiusername, $date"
 	* Set WORKFLOWHISTORYFORMAT = "$n$state, $wikiusername, $date"
 
@@ -135,7 +134,7 @@ __Note:__ This plugin works on TWiki 4 and later only. For a version under Cairo
 |  Plugin Author: | TWiki:Main/ThomasHartkens, Dakar port and changes from 24 Jul 2006 by TWiki:Main/ThomasWeigert |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  11455 | Crawford Currie rewrote the doc and corrected the install procedure |
+|  11463 | Crawford Currie rewrote the doc and corrected the install procedure |
 |  05 Aug 2006: | Converted from !ApprovalPlugin to %TOPIC%. |
 |  26 Jul 2006: | Minor bug fix. Additional examples provided. |
 |  25 Jul 2006: | Added state-based forms and history from TWiki:Plugins/WorkFlowAddOn. Changed time stamp format to be more wiki like. |
