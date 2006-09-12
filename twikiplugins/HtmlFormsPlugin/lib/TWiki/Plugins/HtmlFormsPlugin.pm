@@ -344,7 +344,7 @@ sub getForm {
 #TODO: add disabled if the user does not have permission
         $session->{cgiQuery}->submit(
                 -name=>'button_name',
-                -value=>"set value ($variable)"
+                -value=>"set value"
             ) .
         $session->{cgiQuery}->hidden(
                 -name=>'htmlformvalue',
