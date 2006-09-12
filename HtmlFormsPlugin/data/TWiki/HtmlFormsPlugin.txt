@@ -1,0 +1,83 @@
+%META:TOPICINFO{author="SvenDowideit" date="1158056830" format="1.1" reprev="1.3" version="1.3"}%
+---+ %TOPIC%
+
+This plugin is currently useful to create a set of one change at a time web form elements - each form element has its own submit button, that goes to save - and it saves the new settings in META
+
+---++ Syntax Rules
+
+   * %!BUTTON{}%
+   * %!CHECKBOX{}%
+   * %!RADIO{}%
+   * %!SELECT{}%
+   * %!TEXTVALUE{}%
+   * %!TEXTAREA{}%
+   
+---++++ common parameters
+   * options="" - the comma seperated list of options, or VARIABLE containing or resulting in such a list (SEARCH is valid)
+   * currentvalue="" - single value, or comma seperated list of values as appropriate
+   * destinationaddress="Web.Topic.VARIABLENAME" (and where Web & Topic can be left out for the usual context driven locations
+
+---++++ for later 
+   * make all buttons submit all changes - just like inline edit!!
+   * %!FORMVALUES{"Web.FormDefinitionTopic.FormfieldName"}% - returns a comma seperated list of options defined for that form field
+   * later make a TOM like destination and source value syntax to get values from text, formfields etc
+      * see http://twiki.org/cgi-bin/view/Codev/TopicObjectModel
+      
+---++ Examples
+
+=%<nop>SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
+
+%SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
+
+
+=%<nop>BUTTON{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
+
+%BUTTON{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
+
+
+=%<nop>CHECKBOX{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
+
+%CHECKBOX{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
+
+
+=%<nop>RADIO{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
+
+%RADIO{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
+
+
+=%<nop>TEXTVALUE{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
+
+%TEXTVALUE{options="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
+
+
+=%<nop>TEXTAREA{qqoptions="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%=
+
+%TEXTAREA{qqoptions="mary, peter, annabel, nicky, jennifer" currentvalue="%WHOWILLITBENOW%" destinationaddress="WHOWILLITBENOW"}%
+
+
+
+---++ Plugin Installation Instructions
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.SvenDowideit |
+|  Copyright: | &copy; 2006, SvenDowideit@WikiRing.com |
+|  License: | GPL2 ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Plugin Version: | September 2006 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  September 2006: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
+
+-- %TWIKIWEB%.SvenDowideit
+
+%META:PREFERENCE{name="WHOWILLITBENOW" title="PREFERENCE_WHOWILLITBENOW" type="Set" value="mary, peter, annabel, nicky, jennifer, bananaman"}%
