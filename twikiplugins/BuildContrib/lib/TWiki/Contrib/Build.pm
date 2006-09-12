@@ -1142,7 +1142,7 @@ END
         print "Basing new topic on some default text:\n$newform{text}\n";
     }
 
-    print 'Uploading new topic',$NL;
+    print "Uploading new topic\n";
     $url =~ s./view/./save/.;
     $response = $userAgent->post( $url, \%newform );
 
@@ -1162,7 +1162,7 @@ END
 
     $this->_uploadFile($userAgent, $response, $web, $to, $to.'.zip', $this->{basedir}.'/'.$to.'.zip', 'Download, unzip and run the installer script for manual install');
     $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Download, untar and run the installer script for manual install');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Download and run for automatic install');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'_installer.pl', $this->{basedir}.'/'.$to.'_installer.perl', 'Download, change the extension to .pl, and run for automatic install');
     $this->_uploadFile($userAgent, $response, $web, $to, $to.'.md5', $this->{basedir}.'/'.$to.'.md5', 'md5 checksums, calculated for .zip. tgz and .pl');
 }
 
@@ -1183,7 +1183,7 @@ sub _uploadAttachment {
 sub _uploadFile {
     my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment) = @_;
 
-    print 'Uploading'.$filename,$NL;
+    print "Uploading $filename\n";
     $response =
       $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/'.$web.'/'.$to,
                         [
