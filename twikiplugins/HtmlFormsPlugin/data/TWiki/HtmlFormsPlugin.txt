@@ -1,32 +1,33 @@
 %META:TOPICINFO{author="SvenDowideit" date="1158056830" format="1.1" reprev="1.3" version="1.3"}%
 ---+ %TOPIC%
 
-This plugin can be used to make html forms that set TWikiVariables. SELECT, CHECKBOX and RADIO can be used to select from a comma seperated list of options (that could be defined using a SEARCH), while BUTTON, TEXTVALUE and TEXTAREA will set the TWikiVariable based on the value.
+This plugin can be used to make html forms that set %TWIKIWEB%.TWikiVariables. SELECT, CHECKBOX and RADIO can be used to select from a comma separated list of options (that could be defined using a SEARCH), while BUTTON, TEXTVALUE and TEXTAREA will set the %TWIKIWEB%.TWikiVariable based on the value.
 
 I will be using SELECT to allow the user to set a variable to a set of topics, which they will later publish to a web site using TWiki:Plugins/PublishContrib.
 
 ---++ Syntax Rules
 
-   * %<nop>CHECKBOX{}%
-   * %<nop>RADIO{}%
-   * %<nop>SELECT{}%
-      * options="" - the comma seperated list of options, or VARIABLE containing or resulting in such a list (SEARCH is valid)
-      * currentvalue="" - single value, or comma seperated list of values as appropriate
-      * destinationaddress="Web.Topic.VARIABLENAME" (and where Web & Topic can be left out for the usual context driven locations
-   * %<nop>TEXTVALUE{}%
-   * %<nop>TEXTAREA{}%
-   * %<nop>BUTTON{}%
-      * value="" - the value to set the destination to
-      * destinationaddress="Web.Topic.VARIABLENAME" (and where Web & Topic can be left out for the usual context driven locations
+   * =%<nop>CHECKBOX{}%=
+   * =%<nop>RADIO{}%=
+   * =%<nop>SELECT{}%=
+      * =options=""= - the comma separated list of options, or VARIABLE containing or resulting in such a list (SEARCH is valid)
+      * =currentvalue=""= - single value, or comma separated list of values as appropriate
+      * =destinationaddress="Web.Topic.VARIABLENAME"= (and where Web & Topic can be left out for the usual context driven locations
+   * =%<nop>TEXTVALUE{}%=
+   * =%<nop>TEXTAREA{}%=
+   * =%<nop>BUTTON{}%=
+      * =value=""= - the value to set the destination to
+      * =destinationaddress="Web.Topic.VARIABLENAME"= (and where Web & Topic can be left out for the usual context driven locations
 
----++++ for later 
+---++++ future development
+   * the addressing scheme is going to change to be XPathy
    * make all buttons submit all changes - just like inline edit!!
-   * %<nop>FORMVALUES{"Web.FormDefinitionTopic.FormfieldName"}% - returns a comma seperated list of options defined for that form field
+   * =%<nop>FORMVALUES{"Web.FormDefinitionTopic.FormfieldName"}%= - returns a comma separated list of options defined for that form field
    * later make a TOM like destination and source value syntax to get values from text, formfields etc
-      * see http://twiki.org/cgi-bin/view/Codev/TopicObjectModel
-      
+      * see TWiki:Codev/TopicObjectModel
+
 ---++ Examples
-select multiple values from a scrolling selection list, and set WHOWILLITBENOW in Sandbox.WebHome
+select multiple values from a scrolling selection list, and set WHOWILLITBENOW in Sandbox.WebHome topic
 
 =%<nop>SELECT{options="mary, peter, annabel, nicky, jennifer" currentvalue="%<nop>WHOWILLITBENOW%" destinationaddress="Sandbox.WebHome.WHOWILLITBENOW"}%=
 ---+++ if installed
@@ -94,7 +95,6 @@ and set WHOWILLITBENOWTEXT in this topic to "There once was a girl"
 
 
 ---++ Plugin Info
-
 |  Plugin Author: | TWiki:Main.SvenDowideit |
 |  Copyright: | &copy; 2006, SvenDowideit@WikiRing.com |
 |  License: | GPL2 ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
@@ -112,5 +112,13 @@ and set WHOWILLITBENOWTEXT in this topic to "There once was a girl"
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
-
+%META:FORM{name="PackageForm"}%
+%META:FIELD{name="TopicClassification" attributes="" title="TopicClassification" value="PluginPackage"}%
+%META:FIELD{name="TestedOnTWiki" attributes="" title="TestedOnTWiki" value="4.0.0"}%
+%META:FIELD{name="InstalledOnTWikiOrg" attributes="" title="InstalledOnTWikiOrg" value="No"}%
+%META:FIELD{name="DemoUrl" attributes="" title="DemoUrl" value=""}%
+%META:FIELD{name="DevelopedInSVN" attributes="" title="DevelopedInSVN" value="Yes"}%
+%META:FIELD{name="ModificationPolicy" attributes="" title="ModificationPolicy" value="ContactAuthorFirst"}%
+%META:FIELD{name="RelatedTopics" attributes="" title="RelatedTopics" value=""}%
 %META:PREFERENCE{name="WHOWILLITBENOW" title="PREFERENCE_WHOWILLITBENOW" type="Set" value="annabel, jennifer, bananaman"}%
+%META:PREFERENCE{name="SHORTDESCRIPTION" title="PREFERENCE_SHORTDESCRIPTION" type="Set" value="Make HTML forms that set TWiki variables"}%
