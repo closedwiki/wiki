@@ -1484,17 +1484,24 @@ sub _fixIncludeLink {
 
 # Clean-up HTML text so that it can be shown embedded in a topic
 sub _cleanupIncludedHTML {
-    my( $text, $host, $path, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) = @_;
+    my( $text, $host, $path, $options ) = @_;
 
     # FIXME: Make aware of <base> tag
 
-    $text =~ s/^.*?<\/head>//is                  unless ( $disableremoveheaders );   # remove all HEAD
-    $text =~ s/<script.*?<\/script>//gis         unless ( $disableremovescript );    # remove all SCRIPTs
-    $text =~ s/^.*?<body[^>]*>//is               unless ( $disableremovebody );      # remove all to <BODY>
-    $text =~ s/(?:\n)<\/body>.*//is              unless ( $disableremovebody );      # remove </BODY>
-    $text =~ s/(?:\n)<\/html>.*//is              unless ( $disableremoveheaders );   # remove </HTML>
-    $text =~ s/(<[^>]*>)/_removeNewlines($1)/ges unless ( $disablecompresstags );    # replace newlines in html tags with space
-    $text =~ s/(\s(?:href|src|action)=(["']))(.*?)\2/$1._rewriteURLInInclude( $host, $path, $3 ).$2/geois unless ( $disablerewriteurls );
+    $text =~ s/^.*?<\/head>//is
+      unless ( $options->{disableremoveheaders} );   # remove all HEAD
+    $text =~ s/<script.*?<\/script>//gis
+      unless ( $options->{disableremovescript} );    # remove all SCRIPTs
+    $text =~ s/^.*?<body[^>]*>//is
+      unless ( $options->{disableremovebody} );      # remove all to <BODY>
+    $text =~ s/(?:\n)<\/body>.*//is
+      unless ( $options->{disableremovebody} );      # remove </BODY>
+    $text =~ s/(?:\n)<\/html>.*//is
+      unless ( $options->{disableremoveheaders} );   # remove </HTML>
+    $text =~ s/(<[^>]*>)/_removeNewlines($1)/ges
+      unless ( $options->{disablecompresstags} );    # replace newlines in html tags with space
+    $text =~ s/(\s(?:href|src|action)=(["']))(.*?)\2/$1._rewriteURLInInclude( $host, $path, $3 ).$2/geois
+      unless ( $options->{disablerewriteurls} );
 
     return $text;
 }
@@ -1517,7 +1524,7 @@ sub applyPatternToIncludedText {
 
 # Fetch content from a URL for inclusion by an INCLUDE
 sub _includeUrl {
-    my( $this, $theUrl, $thePattern, $theWeb, $theTopic, $theRaw, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) = @_;
+    my( $this, $url, $pattern, $web, $topic, $raw, $options, $warn ) = @_;
     my $text = '';
     my $host = '';
     my $port = 80;
@@ -1525,50 +1532,50 @@ sub _includeUrl {
     my $user = '';
     my $pass = '';
 
-    return $this->inlineAlert( 'alerts', 'urls_not_allowed' )
-      unless $TWiki::cfg{INCLUDE}{AllowURLs};
-
     # For speed, read file directly if URL matches an attachment directory
-    if( $theUrl =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
-        my $web = $1;
-        my $topic = $2;
-        my $attname = $3;
+    if( $url =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
+        my $incWeb = $1;
+        my $incTopic = $2;
+        my $incAtt = $3;
         # FIXME: Check for MIME type, not file suffix
-        if( $attname =~ m/\.(txt|html?)$/i ) {
-            unless( $this->{store}->attachmentExists( $web, $topic,
-                                                      $attname )) {
-                return $this->inlineAlert( 'alerts', 'bad_attachment',
-                                           $theUrl );
+        if( $incAtt =~ m/\.(txt|html?)$/i ) {
+            unless( $this->{store}->attachmentExists(
+                $incWeb, $incTopic, $incAtt )) {
+                return $this->_includeWarning( $warn, 'bad_attachment', $url );
             }
-            if( $web ne $theWeb || $topic ne $theTopic ) {
+            if( $incWeb ne $web || $incTopic ne $topic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
                 unless( $this->{security}->checkAccessPermission(
-                    'view', $this->{user}, undef, undef, $topic, $web ) ) {
-                    return $this->inlineAlert( 'alerts', 'access_denied',
-                                               $web, $topic );
+                    'view', $this->{user}, undef, undef, $incTopic, $incWeb ) ) {
+                    return $this->_includeWarning( $warn, 'access_denied',
+                                                   "$incWeb.$incTopic" );
                 }
             }
-            $text = $this->{store}->readAttachment( undef, $web, $topic,
-                                                    $attname );
+            $text = $this->{store}->readAttachment( undef, $incWeb, $incTopic,
+                                                    $incAtt );
             $text = _cleanupIncludedHTML( $text, $this->{urlHost},
-                                          $TWiki::cfg{PubUrlPath}, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) unless $theRaw;
-            $text = applyPatternToIncludedText( $text, $thePattern )
-              if( $thePattern );
+                                          $TWiki::cfg{PubUrlPath}, $options )
+              unless $raw;
+            $text = applyPatternToIncludedText( $text, $pattern )
+              if( $pattern );
             return $text;
         }
         # fall through; try to include file over http based on MIME setting
     }
 
-    if( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
+    return $this->_includeWarning( $warn, 'urls_not_allowed' )
+      unless $TWiki::cfg{INCLUDE}{AllowURLs};
+
+    if( $url =~ /http\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
         ( $user, $pass, $host, $port, $path ) = ( $1, $2, $3, $4, $5 );
-    } elsif( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\/]+)(\/.*)/ ) {
+    } elsif( $url =~ /http\:\/\/(.+)\:(.+)\@([^\/]+)(\/.*)/ ) {
         ( $user, $pass, $host, $path ) = ( $1, $2, $3, $4 );
-    } elsif( $theUrl =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
+    } elsif( $url =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
         ( $host, $port, $path ) = ( $1, $2, $3 );
-    } elsif( $theUrl =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
+    } elsif( $url =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
         ( $host, $path ) = ( $1, $2 );
     } else {
-        $text = $this->inlineAlert( 'alerts', 'bad_protocol', $theUrl );
+        $text = $this->_includeWarning( $warn, 'bad_protocol', $url );
         return $text;
     }
 
@@ -1576,8 +1583,10 @@ sub _includeUrl {
         $text = $this->{net}->getUrl( $host, $port, $path, $user, $pass );
         $text =~ s/\r\n/\n/gs;
         $text =~ s/\r/\n/gs;
-        $text =~ s/^(.*?\n)\n(.*)/$2/s;
+        $text =~ s/^(.*?\n)\n//s;
         my $httpHeader = $1;
+        # Trap 4xx and 5xx
+        die $text if ($httpHeader =~ /^HTTP\/[\d.]+\s[45]\d\d\s/s);
         my $contentType = '';
         if( $httpHeader =~ /content\-type\:\s*([^\n]*)/ois ) {
             $contentType = $1;
@@ -1588,18 +1597,18 @@ sub _includeUrl {
             if( $port != 80 ) {
                 $host .= ":$port";
             }
-            $text = _cleanupIncludedHTML( $text, $host, $path, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls ) unless $theRaw;
+            $text = _cleanupIncludedHTML( $text, $host, $path, $options )
+              unless $raw;
         } elsif( $contentType =~ /^text\/(plain|css)/ ) {
             # do nothing
         } else {
-            $text = $this->inlineAlert( 'alerts', 'bad_content',
-                                        $contentType );
+            $text = $this->_includeWarning(
+                $warn, 'bad_content', $contentType );
         }
-        $text = applyPatternToIncludedText( $text, $thePattern )
-          if( $thePattern );
+        $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
     } catch Error::Simple with {
         my $e = shift;
-        $text = $this->inlineAlert( 'alerts', 'geturl_failed', $theUrl );
+        $text = $this->_includeWarning( $warn, 'geturl_failed', $url );
     };
 
     return $text;
@@ -2614,16 +2623,12 @@ sub _includeWarning {
     my $this = shift;
     my $warn = shift;
     my $message = shift;
-    my $web = shift;
-    my $topic = shift || '';
-    $topic =~ s#/#.#g;
-    $topic = $web.'.'.$topic if( $web );
 
     if( $warn eq 'on' ) {
-        return $this->inlineAlert( 'alerts', $message,
-                                   $topic, @_ );
+        return $this->inlineAlert( 'alerts', $message, @_ );
     } elsif( isTrue( $warn )) {
-        $warn =~ s/\$topic/$topic/go;
+        my $topic = shift;
+        $warn =~ s/\$topic/$topic/go if $topic;
         return $warn;
     } # else fail silently
     return '';
@@ -2647,15 +2652,12 @@ sub _INCLUDE {
     my $raw = $params->remove('raw') || '';
     my $warn = $params->remove('warn')
       || $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
-    my $disableremoveheaders  = $params->remove('disableremoveheaders')  || '';
-    my $disableremovescript   = $params->remove('disableremovescript')   || '';
-    my $disableremovebody     = $params->remove('disableremovebody')     || '';
-    my $disablecompresstags   = $params->remove('disablecompresstags')   || '';
-    my $disablerewriteurls    = $params->remove('disablerewriteurls')    || '';
 
     if( $path =~ /^https?\:/ ) {
         # include web page
-        return $this->_includeUrl( $path, $pattern, $includingWeb, $includingTopic, $raw, $disableremoveheaders, $disableremovescript, $disableremovebody, $disablecompresstags, $disablerewriteurls );
+        return $this->_includeUrl(
+            $path, $pattern, $includingWeb, $includingTopic,
+            $raw, $params, $warn );
     }
 
     $path =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
