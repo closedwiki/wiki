@@ -289,7 +289,7 @@ sub new {
     # Read the manifest
 
     my $manifest = _findRelativeTo( $buildpldir, 'MANIFEST' );
-    ($this->{files},$this->{other_modules}) =
+    ($this->{files}, $this->{other_modules}) =
       readManifest($this->{basedir},'',$manifest,sub{exit(1)});
 
     # Generate a TWiki table representing the manifest contents
@@ -354,13 +354,17 @@ sub new {
     $this->{MODULE} = $this->{project};
 
     $this->{INSTALL_INSTRUCTIONS} = <<HERE;
-This module is shipped with a fully automatic installer script.
-   * If you have a permanent connection to the internet, you are recommended to use the automatic installer script
-      * There is no need to download any archives. Just download the =$this->{MODULE}_installer.pl= script and run it.
+You do not need to install anything in the browser to use this extension. The following instructions are for the administrator who installs the extension on the server where TWiki is running.
+
+Like many other TWiki extensions, this module is shipped with a fully automatic installer script written using the Build<nop>Contrib.
+   * If you have TWiki 4.1 or later, and Perl 5.8, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
+   * If you have a permanent connection to the internet (and Perl 5.8), you are recommended to use the automatic installer script
+      * Just download the =$this->{MODULE}_installer.pl= script and run it.
       * If the \$TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
-      * The script requires Perl 5.8, File::Temp and File::Copy
+      * (Developers only: the script will look for twikiplugins/$this->{MODULE}/$this->{MODULE}.tgz before downloading from TWiki.org)
    * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
-      * Point the environment variable =\$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages
+      * Point the environment variable =\$TWIKI_PACKAGES= to this directory, and the installer script will look there first for required TWiki packages.
+         * =\$TWIKI_PACKAGES= is actually a path; you can list several directories separated by :
       * If you are behind a firewall that blocks access to CPAN, you can build a local CPAN mini-mirror, as described at http://twiki.org/cgi-bin/view/Codev/BuildingDakar#CPAN_local_minimirror
    * The installer script will:
       * Automatically resolve dependencies,
@@ -1336,7 +1340,7 @@ sub target_installer {
         $trig = 1 unless ( $trig );
         push(@sats, "{ name=>'$dep->{name}', type=>'$dep->{type}',version=>'$dep->{version}',description=>'$descr', trigger=>$trig }");
     }
-    my $satisfies = join("\n,", @sats);
+    my $satisfies = join(",", @sats);
     $this->{SATISFIES} = $satisfies;
 
     my $installScript = $this->{basedir}.'/'.$this->{project}.'_installer.pl';

@@ -1,4 +1,7 @@
 ---+!! TWiki Developer Environment
+<div style="float:right">
+<a href="http://wikiring.com"><img src="%ATTACHURLPATH%/logo.gif" /></a>
+</div>
 <!--
 
    PLEASE DO NOT EDIT THIS TOPIC
@@ -14,7 +17,6 @@ Automates build process, including installer generation, for Pugins, Add-ons and
 %TOC%
 
 ---+ Summary of Contents
-
 ---++ Build & Install Modules
 This module can be used by developers to create a really simple build process for your plugin, addon or contrib module. It is inspired by the Java ANT build tool developed by the Apache project, but is targeted specifically at building TWiki and TWiki extensions.
 
@@ -87,13 +89,8 @@ If you want your installer to do anything else - for example, optionally install
 
 ---+ Installation Instructions
 You are strongly recommended to use this Contrib to help split your code development away from your live TWiki environment, as described [[#DevelopmentModel][above]].
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your development ($TWIKI_DEV) directory. Content:
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
+
+%$INSTALL_INSTRUCTIONS%
 
 ---+ Contrib Info
 
@@ -102,6 +99,7 @@ You are strongly recommended to use this Contrib to help split your code develop
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Version: | %$VERSION% |
 | Change History: | |
+| 11478 | Install made easier to use for developers and end users; will now download an archive if it can't find one locally. Added dependencies target. |
 | 8947 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  discovered that svn log doesn't work recursively, so more code required to find changes. Added new inline tokens for various URLs. Updated history to 8894. |
 | 8894 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  added rel=nofollow to generated links to ~develop |
 | 8892 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  Added =history= target to support extraction of history from SVN logs. |
