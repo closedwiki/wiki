@@ -80,7 +80,9 @@ sub generate {
            };
         $props->{checked} = 'checked' if $form eq $formName;
         $formList .= CGI::input( $props );
-        my $formLabelContent = '&nbsp;' . ( $store->topicExists( $web, $form ) ? '[['.$form.']]' : $form );
+	my ($formWeb, $formTopic) = $session->normalizeWebTopicName($web, $form);
+        my $formLabelContent = '&nbsp;' . ( $store->topicExists( $formWeb, $formTopic ) ? 
+	  '[['.$formWeb.'.'.$formTopic.']['.$form.']]' : $form );
         $formList .= CGI::label( { for => $formElemId}, $formLabelContent );
     }
     $page =~ s/%FORMLIST%/$formList/go;
