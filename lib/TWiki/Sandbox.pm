@@ -169,11 +169,20 @@ file names to legal server names.
 
 sub sanitizeAttachmentName {
     my $fileName = shift;
+    
+    # homegrown split because File::Spec functions will assume that directory path
+    # is using / in UNIX and \ in Windows as defined in the HOST environment.
+    # And we don't know the client OS. Problem is specific to IE which sends the full
+    # original client path when you upload files. See Item2859 and Item2225 before
+    # trying again to use File::Spec functions and remember to test with IE.
+    # Cut path from filepath name (Windows '\' and Unix "/" format)
+    my @pathz = ( split( /\\/, $fileName ) );
+    my $filetemp = $pathz[$#pathz];
+    my @pathza = ( split( '/', $filetemp ) );
+    $filetemp = $pathza[$#pathza];
 
-    # Strip all path components
-    my @paths = File::Spec->splitdir($fileName);
     # untaint
-    $fileName = untaintUnchecked($paths[$#paths]);
+    $fileName = untaintUnchecked($filetemp);
     my $origName = $fileName;
     # Change spaces to underscore
     $fileName =~ s/ /_/go;

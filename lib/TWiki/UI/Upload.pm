@@ -185,7 +185,7 @@ sub upload {
 
     unless( $doPropsOnly ) {
         ( $fileName, $origName ) =
-          TWiki::Sandbox::sanitizeAttachmentName( $filePath );
+          TWiki::Sandbox::sanitizeAttachmentName( $fileName );
 
         # check if upload has non zero size
         if( $stream ) {
