@@ -40,8 +40,7 @@ pageMenu.Add("%MAKETEXT{"New Topic"}%", "%SCRIPTURLPATH{"view"}%/%WEB%/WebTopicC
 %META{"parent" prefix="Parents: "}%
 %META{"moved"}% </div>%TMPL:END%
 
-%TMPL:DEF{"main"}%
-<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%"> %BROADCASTMESSAGE%
+%TMPL:DEF{"main"}%<form name="main" action="%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%"> %BROADCASTMESSAGE%
 </form>
 %TMPL:P{"standardheader"}%
 %TMPL:P{"content"}%
@@ -63,13 +62,11 @@ pageMenu.Add("%MAKETEXT{"New Topic"}%", "%SCRIPTURLPATH{"view"}%/%WEB%/WebTopicC
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH{"oops"}%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" title='%MAKETEXT{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel='nofollow'>%MAKETEXT{"&More topic actions"}%</a>%TMPL:END%
 
 
-%TMPL:DEF{"content"}%
-<div class=twikiTopic>
+%TMPL:DEF{"content"}%<div class="twikiTopic">
 %TEXT%
 #TopicEnd
 
-%BR%
-%TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicinfo"}%
+%BR% %TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicinfo"}%
 </div>%TMPL:END%
 
 %TMPL:DEF{"topicaction"}%
