@@ -58,8 +58,9 @@ To enable editing of:
 
 |  Plugin Author: | TWiki:Main.DanBoitnott |
 |  Plugin Maintainer: | TWiki:Main.JohnKnottenbelt, TWiki:Main.ThomasWeigert (03 Feb 2005 onwards) |
-|  Plugin Version: | 09 Sep 2006 |
+|  Plugin Version: | 13 Sep 2006 |
 |  Change History: |  |
+|  13 Sep 2006: | Bug fix. |
 |  09 Sep 2006: | Added missing variable declaration. |
 |  17 Aug 2006: | Fixed rendering when STYLE is empty. |
 |  16 Aug 2006: | Added =SECTIONDEPTHMIN= setting to allow to have sections constructed only from specific headings, and exclude lower level headings. Also allow to exclude the initial text before first heading from editing. |
@@ -99,6 +100,6 @@ _Discussion of this plugin can be found in [[TWiki:Plugins.%TOPIC%Dev][%TOPIC%De
 
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.EditContrib
 
--- TWiki:Main/ThomasWeigert - 09 Sep 2006
+-- TWiki:Main/ThomasWeigert - 13 Sep 2006
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
