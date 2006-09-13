@@ -265,6 +265,7 @@ sub edit
 {
     my $session = shift;
 
+    $TWiki::Plugins::SESSION = $session;
     $session->enterContext( 'edit' );
     my $text= '';
     my $tmpl = '';
