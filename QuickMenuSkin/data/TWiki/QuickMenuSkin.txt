@@ -80,17 +80,5 @@ __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, %TWIKIWEB
 
 -- TWiki:Main/VernonLyon - 13 Jun 2006
 
-%META:FILEATTACHMENT{name="menuitem_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="menuitem_over.gif" size="93" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menu_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="menu_over.gif" size="159" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menubaritem_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menubaritem_bg.gif" size="108" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="arrow.gif" attr="" autoattached="1" comment="" date="1151935718" path="arrow.gif" size="85" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.js" attr="" autoattached="1" comment="" date="1153220364" path="qmenu.js" size="12925" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="arrow_over.gif" attr="" autoattached="1" comment="" date="1151935718" path="arrow_over.gif" size="227" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="screenshot.gif" attr="" autoattached="1" comment="" date="1151935718" path="screenshot.gif" size="8839" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="style.css" attr="" autoattached="1" comment="" date="1153220900" path="style.css" size="6879" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.js.old" attr="" autoattached="1" comment="" date="1152787786" path="qmenu.js.old" size="10931" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menu_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menu_bg.gif" size="825" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="qmenu.css" attr="" autoattached="1" comment="" date="1152790863" path="qmenu.css" size="2698" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menuitem_bg.gif" attr="" autoattached="1" comment="" date="1151935718" path="menuitem_bg.gif" size="273" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="fullscreen.gif" attr="" autoattached="1" comment="" date="1151935718" path="fullscreen.gif" size="24979" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="menubar.gif" attr="" autoattached="1" comment="" date="1151935718" path="menubar.gif" size="874" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="screenshot.gif" attr="h" autoattached="1" comment="" date="1151935718" path="screenshot.gif" size="8839" user="VernonLyon" version=""}%
+%META:FILEATTACHMENT{name="fullscreen.gif" attr="h" autoattached="1" comment="" date="1151935718" path="fullscreen.gif" size="24979" user="VernonLyon" version=""}%
