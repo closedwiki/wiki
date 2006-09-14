@@ -133,6 +133,7 @@ proto.convertWikitextToHtml = function(wikitext, func) {
 setHTML = function(reply) {
     var div = document.getElementById('edit-div');
     div.innerHTML = reply;
+    
     var config = {
         doubleClickToEdit: true,
         NNNwysiwyg: {
@@ -141,11 +142,11 @@ setHTML = function(reply) {
         toolbar: {
             imagesLocation: '%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/images/',
             controlLayout: [
-                'save', 'cancel', 'mode_selector', '/',
+                'save', 'cancel', 'mode_selector', '|',     // '/',
                 'h1', 'h2', 'h3', 'h4', 
                 'bold', 'italic', '|', 
                 'ordered', 'unordered', '|',
-                'code', 'pre', '|', 'table'
+                'link', 'pre', '|', 'table'
             ]            
         }, 
         modeClasses: [
@@ -157,7 +158,6 @@ setHTML = function(reply) {
     wikiwyg1 = new Wikiwyg.ClientServer();
     wikiwyg1.createWikiwygArea(div, config);
     wikiwyg1.editMode();
-
 }
 
 window.onload = function() {

@@ -6,7 +6,7 @@
 }
 
 /*undo the weird css things that are done in pattern and nat skin - otherwise the wikiwyg edit html is centered :( */
-.edit-div {
+body {
     text-align:left; /*** IE/Win (not IE/MAC) alignment of page ***/
 }
 

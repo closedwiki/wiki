@@ -163,7 +163,7 @@ proto.apply_inline_stylesheet = function(style, head) {
         }
     }
     if (style_string.length > 0) {
-        style_string += "\nbody { padding: 5px; }\n";
+        style_string += "\nbody { padding: 0px;text-align:left; }\n";   //SVEN-14/Sep/2006 text-align hack
         this.append_inline_style_element(style_string, head);
     }
 }
