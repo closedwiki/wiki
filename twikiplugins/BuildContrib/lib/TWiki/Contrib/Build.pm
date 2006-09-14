@@ -359,7 +359,7 @@ You do not need to install anything in the browser to use this extension. The fo
 Like many other TWiki extensions, this module is shipped with a fully automatic installer script written using the Build<nop>Contrib.
    * If you have TWiki 4.1 or later, and Perl 5.8, you can install from the =configure= interface (Go to Plugins->Find More Extensions)
    * If you have a permanent connection to the internet (and Perl 5.8), you are recommended to use the automatic installer script
-      * Just download the =$this->{MODULE}_installer.pl= script and run it.
+      * Just download the =$this->{MODULE}_installer= perl script and run it.
       * If the \$TWIKI_PACKAGES environment variable is set to point to a directory, the installer will try to get archives from there. Otherwise it will try to download from twiki.org or cpan.org, as appropriate.
       * (Developers only: the script will look for twikiplugins/$this->{MODULE}/$this->{MODULE}.tgz before downloading from TWiki.org)
    * If you don't have a permanent connection, you can still use the automatic installer, by downloading all required TWiki archives to a local directory.
@@ -911,20 +911,20 @@ sub target_archive {
     $this->perl_action('File::Copy::move("'.$project.'.tgz", "'.
                          $this->{basedir}.'/'.$project.'.tgz")');
 
-    $this->cp($this->{tmpDir}.'/'.$project.'_installer.pl',
-              $this->{basedir}.'/'.$project.'_installer.pl');
+    $this->cp($this->{tmpDir}.'/'.$project.'_installer',
+              $this->{basedir}.'/'.$project.'_installer');
 
     $this->popd();
 
     $this->sys_action('md5sum '.$this->{basedir}.'/'.$project.'.tgz '.
-                        $this->{basedir}.'/'.$project.'_installer.pl '.
+                        $this->{basedir}.'/'.$project.'_installer '.
                         $this->{basedir}.'/'.$project.'.zip > '.
                         $this->{basedir}.'/'.$project.'.md5');
 
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
     print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
     print 'Release TOPIC is '.$this->{basedir}.'/'.$project.'.txt',$NL;
-    print 'Release INSTALLER is '.$this->{basedir}.'/'.$project.'_installer.pl',$NL;
+    print 'Release INSTALLER is '.$this->{basedir}.'/'.$project.'_installer',$NL;
     print 'MD5 checksums are in '.$this->{basedir}.'/'.$project.'.md5',$NL;
 }
 
@@ -990,7 +990,7 @@ sub target_handsoff_install {
     $this->sys_action('tar zxpf '.
                         $this->{basedir}.'/'.$this->{project}.'.tgz');
     # kill off the module installer
-    $this->rm($twiki.'/'.$this->{project}.'_installer.pl');
+    $this->rm($twiki.'/'.$this->{project}.'_installer');
     $this->popd();
 }
 
@@ -1006,7 +1006,7 @@ Uses the installer script written by target_installer
 sub target_install {
     my $this = shift;
     $this->build('handsoff_install');
-    $this->sys_action('perl '.$this->{project}.'_installer.pl install');
+    $this->sys_action('perl '.$this->{project}.'_installer install');
 }
 
 =pod
@@ -1023,7 +1023,7 @@ sub target_uninstall {
     my $twiki = $ENV{TWIKI_HOME};
     die 'TWIKI_HOME not set' unless $twiki;
     $this->pushd($twiki);
-    $this->sys_action('perl '.$this->{project}.'_installer.pl uninstall');
+    $this->sys_action('perl '.$this->{project}.'_installer uninstall');
     $this->popd();
 }
 
@@ -1162,8 +1162,8 @@ END
 
     $this->_uploadFile($userAgent, $response, $web, $to, $to.'.zip', $this->{basedir}.'/'.$to.'.zip', 'Download, unzip and run the installer script for manual install');
     $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Download, untar and run the installer script for manual install');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'_installer.pl', $this->{basedir}.'/'.$to.'_installer.perl', 'Download, change the extension to .pl, and run for automatic install');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.md5', $this->{basedir}.'/'.$to.'.md5', 'md5 checksums, calculated for .zip. tgz and .pl');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'_installer', $this->{basedir}.'/'.$to.'_installer', 'Download, and run using perl for automatic install');
+    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.md5', $this->{basedir}.'/'.$to.'.md5', 'md5 checksums');
 }
 
 #%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153565200" path="timeline.jpg" size="11824" user="Main.SvenDowideit" version="1"}%
@@ -1271,7 +1271,7 @@ Write an install/uninstall script that checks dependencies, and optionally
 downloads and installs required zips from twiki.org.
 
 The install script is templated from =contrib/TEMPLATE_installer= and
-is always named =module_installer.pl= (where module is your module). It is
+is always named =module_installer= (where module is your module). It is
 added to the release zip and is always shipped in the root directory.
 It will automatically be added to the manifest if it doesn't appear in
 MANIFEST.
@@ -1300,10 +1300,10 @@ sub target_installer {
     my $this = shift;
 
     # Add the install script to the manifest, unless it is already there
-    unless( grep(/^$this->{project}_installer.pl$/,
+    unless( grep(/^$this->{project}_installer$/,
                  map {$_->{name}} @{$this->{files}})) {
         push(@{$this->{files}},
-             { name => $this->{project}.'_installer.pl',
+             { name => $this->{project}.'_installer',
                description => 'Install script',
                permissions => 0640 });
         print STDERR 'Auto-adding install script to manifest',$NL;
@@ -1343,7 +1343,7 @@ sub target_installer {
     my $satisfies = join(",", @sats);
     $this->{SATISFIES} = $satisfies;
 
-    my $installScript = $this->{basedir}.'/'.$this->{project}.'_installer.pl';
+    my $installScript = $this->{basedir}.'/'.$this->{project}.'_installer';
     if ($this->{-v} || $this->{-n}) {
         print 'Generating installer in ',$installScript,$NL;
     }
