@@ -114,20 +114,13 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>W
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+__Note:__ This plugin works on TWiki 4 and later only. For a version under Cairo, please download [[%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=1;filename=ApprovalPlugin.zip][this version]].
+
+%$INSTALL_INSTRUCTIONS%
+
+Look at the examples in the !WorkflowPluginDemo web.
 
 __Note:__ For strict access control, the plugin should know who is looking at the controlled document/topic at all times.  To enable this, you may want to set up the TWiki in such way that users have to log-in *even if they just display a topic*.
-
-   * Download the archive from the Plugins web
-   * Unpack the archive in your twiki installation directory. Content:
-	 | *File:* | *Description:* |
-     %$MANIFEST%
-   * Run the installer script to automatically resolve dependencies, or manually resolve the following dependencies:
-      %$DEPENDENCIES%
-   * Enable the plugin in =configure=
-   * Look at the examples in the Sandbox web.
-
-__Note:__ This plugin works on TWiki 4 and later only. For a version under Cairo, please download [[%SCRIPTURL{"viewfile"}%/%WEB%/%TOPIC%?rev=1;filename=ApprovalPlugin.zip][this version]].
 
 ---++ Plugin Info
 
@@ -152,3 +145,5 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 -- TWiki:Main/ThomasWeigert - 05 Aug 2006
 
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+
+%META:FILEATTACHMENT{name="Flow.gif" path="Flow.gif" comment="Flow picture"}%

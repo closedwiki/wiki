@@ -1151,39 +1151,42 @@ END
         unless $response->is_redirect &&
           $response->headers->header('Location') =~ /view([\.\w]*)\/$web\/$topic/;
 
-    #upload any attachments to the developer's version of the topic
-    my @attachments;
-    $newform{'text'} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
-    for my $a (@attachments) {
-        $this->_uploadAttachment($userAgent, $response, $web, $to, $a)
-    }
-
     return if($this->{-topiconly});
 
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.zip', $this->{basedir}.'/'.$to.'.zip', 'Download, unzip and run the installer script for manual install');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.tgz', $this->{basedir}.'/'.$to.'.tgz', 'Download, untar and run the installer script for manual install');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'_installer', $this->{basedir}.'/'.$to.'_installer', 'Download, and run using perl for automatic install');
-    $this->_uploadFile($userAgent, $response, $web, $to, $to.'.md5', $this->{basedir}.'/'.$to.'.md5', 'md5 checksums');
-}
+    # upload any attachments to the developer's version of the topic. Any other
+    # attachments to the topic on t.o. will still be there.
+    my @attachments;
+    my %uploaded;
+    # Upload the standard files
+    foreach my $ext ('.zip', '.tgz', '_installer', '.md5') {
 
-#%META:FILEATTACHMENT{name="timeline.jpg" attr="" autoattached="1" comment="" date="1153565200" path="timeline.jpg" size="11824" user="Main.SvenDowideit" version="1"}%
-sub _uploadAttachment {
-    my ($this, $userAgent, $response, $web, $to, $params) = @_;
+        $this->_uploadFile($userAgent, $response, $web, $to, $to.$ext,
+                           $this->{basedir}.'/'.$to.$ext,'');
+        $uploaded{$to.$ext} = 1;
+    }
+    # Upload other files described in the attachments list. They must be
+    # in the pub directory.
+    $newform{'text'} =~ s/%META:FILEATTACHMENT(.*)%/push(@attachments, $1)/ge;
+    for my $a (@attachments) {
+        $a =~ /name="([^"]*)"/;
+        my $name = $1;
+        next if $uploaded{$name};
+        $a =~ /comment="([^"]*)"/;
+        my $path = $1;
+        $a =~ /path="([^"]*)"/;
+        my $comment = $1;
 
-    $params =~ /^.*name="([^"]*)".*comment="([^"]*)".*path="([^"]*)".*$/;
-    my $name = $1;
-    my $path = $3;
-    my $comment = $2;
-
-    print "Uploading attachment ($name, $this->{basedir}/pub/$this->{project}/$path, $comment)",$NL;
-    $this->_uploadFile($userAgent, $response, $web, $to, $name, $this->{basedir}.'/pub/TWiki/'.$this->{project}.'/'.$path, $comment);
-
+        $this->_uploadFile(
+            $userAgent, $response, $web, $to, $name,
+            $this->{basedir}.'/pub/TWiki/'.$this->{project}.'/'.$name,
+            $comment);
+    }
 }
 
 sub _uploadFile {
     my ($this, $userAgent, $response, $web, $to, $filename, $filepath, $filecomment) = @_;
 
-    print "Uploading $filename\n";
+    print "Uploading $filename from $filepath\n";
     $response =
       $userAgent->post( $this->{TWIKIORGSCRIPT}.'/upload/'.$web.'/'.$to,
                         [

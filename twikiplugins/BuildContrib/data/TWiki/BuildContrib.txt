@@ -95,10 +95,11 @@ You are strongly recommended to use this Contrib to help split your code develop
 ---+ Contrib Info
 
 | Authors: | TWiki:Main.CrawfordCurrie |
-| Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
+| Copyright &copy;: | 2004-2006, Crawford Currie http://wikiring.com |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Version: | %$VERSION% |
 | Change History: | |
+| 
 | 11478 | Install made easier to use for developers and end users; will now download an archive if it can't find one locally. Added dependencies target. |
 | 8947 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  discovered that svn log doesn't work recursively, so more code required to find changes. Added new inline tokens for various URLs. Updated history to 8894. |
 | 8894 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  added rel=nofollow to generated links to ~develop |
@@ -146,4 +147,5 @@ You are strongly recommended to use this Contrib to help split your code develop
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main/CrawfordCurrie - %$DATE% %BR%
--- TWiki:Main/MartinCleaver - %$DATE%
+
+%META:FILEATTACHMENT{name="logo.gif" comment="logo" path="logo.gif"}%
