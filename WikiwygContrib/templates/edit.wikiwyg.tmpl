@@ -3,13 +3,15 @@
 %TMPL:DEF{"textarea_old"}%<textarea class="twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>%TMPL:END%
 
 %TMPL:DEF{"textarea"}%
+<div align="left">
 <textarea id="rawtopictext" name="rawtopictext" rows="0" cols="0" style='display:none;width:0;height:0;' >%TEXT%</textarea>
-<div id="edit-div">
+<div class="edit-div" id="edit-div">
 <p />
 <p />
 <h1>Please wait, loading topic into editor....</h1>
 <p />
 <p />
+</div>
 </div>
 %TMPL:END%
 
@@ -27,6 +29,7 @@
 <link rel="stylesheet" type="text/css" href="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/css/wikiwyg.css" />
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Util.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/HTML.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Toolbar.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Wysiwyg.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Wikitext.js"></script>
@@ -102,10 +105,10 @@ proto.requestTopicState = function(restUrl, webDotTopic) {
 proto.editMode = function() { // See IE, below
     this.current_mode = this.first_mode;
 
-//    var htmlDiv = document.getElementById('edit-div');
-//    this.current_mode.fromHtml(htmlDiv.innerHTML);                   //this is needed for wysiwyg
-    var textarea = document.getElementById('rawtopictext');
-    this.current_mode.textarea.value = textarea.value;     //this works for textmode only
+    var htmlDiv = document.getElementById('edit-div');
+    this.current_mode.fromHtml(htmlDiv.innerHTML);                   //this is needed for wysiwyg
+//    var textarea = document.getElementById('rawtopictext');
+//    this.current_mode.textarea.value = textarea.value;     //this works for textmode only
 
     this.toolbarObject.resetModeSelector();
     this.current_mode.enableThis();
@@ -136,11 +139,18 @@ setHTML = function(reply) {
             iframeId: 'wikiwyg-iframe'
         },
         toolbar: {
-            imagesLocation: '%PUBURLPATH%/%TWIKIWEB%/InlineEditPlugin/Wikiwyg-0.12/images/'
+            imagesLocation: '%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/images/',
+            controlLayout: [
+                'save', 'cancel', 'mode_selector', '/',
+                'h1', 'h2', 'h3', 'h4', 
+                'bold', 'italic', '|', 
+                'ordered', 'unordered', '|',
+                'code', 'pre', '|', 'table'
+            ]            
         }, 
         modeClasses: [
             'Wikiwyg.TWikitext',        //used to do the html->tml conversion in wikiwyg (if using the non-html save)
-//            'Wikiwyg.Wysiwyg',        ///waaaaaaa it no work anymore
+            'Wikiwyg.Wysiwyg',
         ]
     };
 //    wikiwyg1 = new Wikiwyg();

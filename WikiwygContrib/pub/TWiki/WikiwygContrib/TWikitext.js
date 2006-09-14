@@ -51,7 +51,7 @@ proto.config = {
         h6: ['start_line', '---++++++'],
         ordered: ['start_lines', '   1'],
         unordered: ['start_lines', '   *'],
-/*        indent: ['start_lines', '>'],	*/
+        indent: ['start_lines', ''],	
         hr: ['line_alone', '---'],
         table: ['line_alone', '| A | B | C |\n|   |   |   |\n|   |   |   |\n']
     }
