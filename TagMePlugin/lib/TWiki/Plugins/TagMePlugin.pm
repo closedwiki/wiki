@@ -27,7 +27,7 @@ use vars qw(
         $alphaNum
     );
 
-$VERSION = '1.009';
+$VERSION = '1.010';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
 
@@ -358,7 +358,7 @@ sub queryTag
 
     # related tags
     unless( $noRelated ) {
-        $text .= "__Related tags:__ "
+        $text .= "__%MAKETEXT{\"Related tags\"}%:__ "
                . join( ', ',
                        map{ printTagLink( $_, $qBy ) }
                        grep{ !/^$qTag$/ }
@@ -403,7 +403,9 @@ sub queryTag
         }
     }
     $text =~ s/\Q$separator\E$//s;
-    $text .= "\nNumber of topics: " . scalar( keys( %tagVotes ) ) unless( $noTotal );
+    $text .= "\n%MAKETEXT{\"Number of topics\"}%: "
+           . scalar( keys( %tagVotes ) ) unless( $noTotal );
+    _handleMakeText( $text );
     return $text;
 }
 
@@ -589,17 +591,19 @@ sub getTagInfoList
 # =========================
 sub readTagInfo
 {
-     my( $webTopic ) = @_;
-     my $text = TWiki::Func::readFile( "$attachDir/_tags_$webTopic.txt" );
-     my @info = grep{ /^[0-9]/ } split( /\n/, $text );
-     return @info;
+    my( $webTopic ) = @_;
+    $webTopic =~ s/[\/\\]/\./;
+    _writeDebug( "readTagInfo( $webTopic )" );
+    my $text = TWiki::Func::readFile( "$attachDir/_tags_$webTopic.txt" );
+    my @info = grep{ /^[0-9]/ } split( /\n/, $text );
+    return @info;
 }
 
 # =========================
 sub writeTagInfo
 {
     my( $webTopic, @info ) = @_;
-    $webTopic =~ s/\//\./;
+    $webTopic =~ s/[\/\\]/\./;
     my $file = "$attachDir/_tags_$webTopic.txt";
     if( scalar @info ) {
         my $text = "# This file is generated, do not edit\n"
@@ -644,6 +648,19 @@ sub _writeLog
           : TWiki::Store::writeLog( "tagme", "$web.$topic", $theText );
         _writeDebug( "TAGME action, $web.$topic, $theText" );
     }
+}
+
+# =========================
+sub _handleMakeText
+{
+### my( $text ) = @_; # do not uncomment, use $_[0] instead
+
+    # for compatibility with TWiki 3
+    return unless( $TWiki::Plugins::VERSION < 1.1 );
+
+    # very crude hack to remove MAKETEXT{"...."}
+    # Note: parameters are _not_ supported!
+    $_[0] =~ s/[%]MAKETEXT{ *\"(.*?)." *}%/$1/go;
 }
 
 # =========================
