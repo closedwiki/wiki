@@ -1,0 +1,165 @@
+%TMPL:INCLUDE{"edit"}%
+
+%TMPL:DEF{"textarea_old"}%<textarea class="twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>%TMPL:END%
+
+%TMPL:DEF{"textarea"}%
+<textarea id="rawtopictext" name="rawtopictext" rows="0" cols="0" style='display:none;width:0;height:0;' >%TEXT%</textarea>
+<div id="edit-div">
+<p />
+<p />
+<h1>Please wait, loading topic into editor....</h1>
+<p />
+<p />
+</div>
+%TMPL:END%
+
+
+%TMPL:DEF{"edittopicform"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}%%TMPL:END%
+%TMPL:DEF{"formend"}%%TMPL:END%
+%TMPL:DEF{"pagehelp_nojavascript"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"twikijavascript"}%
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<link rel='stylesheet' type='text/css' href='%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/twikiwyg.css' />
+<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/css/wikiwyg.css" />
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Util.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Toolbar.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Wysiwyg.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Wikitext.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Preview.js"></script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/TWikitext.js"></script><script>
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//WikiWyg impl
+
+//called after saveChanges has returned
+//redirects to view (because replacing HTML in current doc fails)
+showReply = function(reply) {
+    document.body.style.cursor = "default";
+    location.href = '%SCRIPTURL{"view"}%/%WEB%/%TOPIC%';
+    
+//    Wish there was a replywitherrors=1 param for save, that returns nothing on success....
+// this currently causes teh server to render twice - once as the reply to the save, and once when the browser is re-directed
+}
+
+proto = new Subclass('Wikiwyg.ClientServer', 'Wikiwyg');
+
+proto.saveChanges = function() {
+    document.body.style.cursor = "wait";
+    var postdata = '';
+
+    var twikitext_mode = this.mode_objects['Wikiwyg.TWikitext'];
+    var current_mode = this.current_mode;
+
+    //if the user saves from raw edit mode, use that text literally, otherwise, send html to ysiwygPlugin
+    if (twikitext_mode == current_mode) { 
+        //hard coded not to do html
+        if (twikitext_mode != current_mode) {
+            //does a conversion to TML, and lets the user see what the damage is
+            this.switchMode('Wikiwyg.TWikitext');
+        }
+        postdata = 'replywitherrors=1;forcenewrevision=1'+
+            ';text=' + encodeURIComponent(this.current_mode.textarea.value);        //
+    } else {
+        this.current_mode.toHtml( function(html) { self.html = html });
+    
+        postdata = 'replywitherrors=1;forcenewrevision=1;wysiwyg_edit=1'+
+            ';text=' + encodeURIComponent(self.html);
+    }
+
+    //TODO: redo this to use a rest api that does not return a view..
+    Wikiwyg.liveUpdate(
+        'POST',
+       '%SCRIPTURLPATH{"save"}%/%WEB%/%TOPIC%',
+        postdata,
+        showReply
+    );
+}
+
+proto.cancelEdit = function() {
+    document.body.style.cursor = "default";
+    location.href = '%SCRIPTURL{"view"}%/%WEB%/%TOPIC%?unlock=1';
+}
+
+//TODO:decide how best to de-wikiwyg this
+proto.requestTopicState = function(restUrl, webDotTopic) {
+    var url = restUrl;
+
+    var postdata = 'rest=InlineEditPlugin.setTopicLock;topicName='+webDotTopic;
+    Wikiwyg.liveUpdate(
+        'GET',
+        url,
+        postdata,
+        showTopicState
+    );
+}
+
+// initialise and select edit mode
+proto.editMode = function() { // See IE, below
+    this.current_mode = this.first_mode;
+
+//    var htmlDiv = document.getElementById('edit-div');
+//    this.current_mode.fromHtml(htmlDiv.innerHTML);                   //this is needed for wysiwyg
+    var textarea = document.getElementById('rawtopictext');
+    this.current_mode.textarea.value = textarea.value;     //this works for textmode only
+
+    this.toolbarObject.resetModeSelector();
+    this.current_mode.enableThis();
+}
+
+//not used at this point (stub from wikiwyg demo)
+proto = new Subclass('Wikiwyg.Wikitext.ClientServer', 'Wikiwyg.Wikitext');
+
+proto.convertWikitextToHtml = function(wikitext, func) {
+    var postdata = 'inlineeditsave=1;html2tml=1;section='+
+            this.topicSectionObject.topicSection+';rev='+
+            this.topicSectionObject.topicRevision+
+            ';content=' + encodeURIComponent(wikitext);
+    Wikiwyg.liveUpdate(
+        'POST',
+        Wikiwyg.uri(),
+        postdata,
+        func
+    );
+}
+
+setHTML = function(reply) {
+    var div = document.getElementById('edit-div');
+    div.innerHTML = reply;
+    var config = {
+        doubleClickToEdit: true,
+        NNNwysiwyg: {
+            iframeId: 'wikiwyg-iframe'
+        },
+        toolbar: {
+            imagesLocation: '%PUBURLPATH%/%TWIKIWEB%/InlineEditPlugin/Wikiwyg-0.12/images/'
+        }, 
+        modeClasses: [
+            'Wikiwyg.TWikitext',        //used to do the html->tml conversion in wikiwyg (if using the non-html save)
+//            'Wikiwyg.Wysiwyg',        ///waaaaaaa it no work anymore
+        ]
+    };
+//    wikiwyg1 = new Wikiwyg();
+    wikiwyg1 = new Wikiwyg.ClientServer();
+    wikiwyg1.createWikiwygArea(div, config);
+    wikiwyg1.editMode();
+
+}
+
+window.onload = function() {
+    var postdata = 'skin=text;wysiwyg_edit=1;t=%TIME%';
+    Wikiwyg.liveUpdate(
+        'GET',
+        '%SCRIPTURLPATH{"view"}%/%WEB%/%TOPIC%',
+        postdata,
+        setHTML
+    );
+}
+
+</script>
+%TMPL:END%
+
