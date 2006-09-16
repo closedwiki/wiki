@@ -31,6 +31,7 @@
 # =========================
 package TWiki::Plugins::TreeBrowserPlugin;
 
+
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
@@ -95,6 +96,9 @@ sub handleTreeView {
     my $open1 = &TWiki::Func::extractNameValuePair( $theAttr, "openTo" );
     my $open2 = &TWiki::Func::extractNameValuePair( $theAttr, "openAll" );
     my $shared = &TWiki::Func::extractNameValuePair( $theAttr, "shared" );
+    my $useLines = &TWiki::Func::extractNameValuePair( $theAttr, "uselines" );  
+    my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
+    my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );    
     my $icons = 0;
     $icons = 1 if ($type eq "icon");
     my $wrap = 0;
@@ -104,12 +108,12 @@ sub handleTreeView {
     my $opento = 0;
     $opento = $open1 if (!$openall && $open1);
     
-    return $thePre . &renderTreeView( $type, $params, $theTitle, $icons, $shared, $openall, $opento, $theList );
+    return $thePre . &renderTreeView( $type, $params, $useLines, $useStatusText, $closeSameLevel, $theTitle, $icons, $shared, $openall, $opento, $theList );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
+    my ( $theType, $theParams, $useLines, $useStatusText, $closeSameLevel, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -121,6 +125,8 @@ sub renderTreeView
     my $docgraphics = $attach . "/$installWeb/TWikiDocGraphics";
     $attach .= "/$installWeb/$pluginName";
     my $attachUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
+    
+    $theParams="" unless defined $theParams; #Initialize if not defined to get ride of warnings in apache error logs       
     $theParams =~ s/%PUBURL%/$attachUrl/go;
     $attachUrl .= "/$installWeb/$pluginName";
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
@@ -169,9 +175,15 @@ $var = new dTree('$var');\n";
 #    $text .= "$var.icon.node=\'$docicon\';\n";
     $text .= "$var.config.useIcons=false;\n" unless $icons;
     $text .= "$var.config.shared=true;\n" if $shared;
+    $text .= "$var.config.useLines=false;\n" if ($useLines=~/false|0|off/i);
+    $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
+
+    $text .= "$var.config.useStatusText=false;\n"; #Broken due to dtree usage if ($useStatusText=~/true|1|on/i);
+    $text .= "$var.config.useSelection=false;\n"; #Broken due to dtree usage
+    $text .= "$var.config.folderLinks=false;\n"; #Broken due to dtree usage
     $theTitle = &TWiki::Func::renderText( $theTitle, $web );
     $theTitle =~ s/\"/\\\"/go;
-    $text .= "$var.add(0,-1,\"<b>$theTitle</b>\");\n";
+    $text .= "$var.add(0,-1,\"$theTitle\");\n";
     my @fldrs = ();
     my $fldr = 0;
     for( my $i = 0; $i < scalar( @tree ); $i++ ) {
