@@ -1,11 +1,8 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1158436114" format="1.1" reprev="1.4" version="1.4"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1158440883" format="1.1" reprev="1.5" version="1.5"}%
 ---++ <nop>%TOPIC%
 
 Enables dynamic generation of TWiki topic trees based on topics' parent-child relationships.
-
 Useful for dynamic sitemaps and threads.
-
-_Alpha release. Documentation will be enhanced. More features finalized._
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -65,7 +62,7 @@ See the following pages for sample usage and output.
 
 <!-- The Plugins.<nop>TreePluginHelp topic in the installation contains complete help information. -->
 
----++++ Combination with TreeBrowserPlugin
+---++++ Combination with [[TWiki:Plugins.TreeBrowserPlugin][TreeBrowserPlugin]]
 
 =%<nop>TREEBROWSER{"file" title="%<nop>WEB%"}%= %BR%
 =%<nop>TREEVIEW{web="%<nop>WEB%" topic="GrandParent" formatting="outline" format="* $topic" levelprefix="   "}%=
@@ -73,6 +70,9 @@ See the following pages for sample usage and output.
 
 ---+++ Limitations and Known Issues 
    * The parameter *web* does not work correctly. The Tree gets rendered, but the WikiWords of the topics do not contain the *web* value, but refers to the current web. Since I have limited knowledge of perl OO, I can't repair for now. -- TWiki:Main.MartinRaabe - 16 Jan 2003 
+
+A workaround for that is to do something like:
+=%<nop>TREEVIEW{web="TWiki"  formatting="outline" format="* $web.$topic" levelprefix="   "}%=
 
 ---+++ Plugin Installation Instructions
 
@@ -129,7 +129,7 @@ Contents:
 |  Plugin Author: | TWiki:Main.SlavaKozlov |
 |  Plugin Version: | v0.5 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-| 16 Sep 2006 : | (v0.5) - TWiki:Main.StephaneLenclud: adding levelprefix parameter to unable usage in combination with TreeBrowserPlugin |
+|  16 Sep 2006: | (v0.5) - TWiki:Main.StephaneLenclud: adding levelprefix parameter to unable usage in combination with TreeBrowserPlugin |
 |  26 Jul 2006: | (v0.4) - TWiki:Main.SteffenPoulsen: Ported to TWiki-4 / Dakar. Leading text removed, less warnings, no double bracket links, css classnames around output. |
 |  15 Feb 2002: | Alpha (0.2) release |
 |  08 Feb 2002: | Internal (0.1) release |
