@@ -1,8 +1,10 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1158440883" format="1.1" reprev="1.5" version="1.5"}%
----++ <nop>%TOPIC%
+%META:TOPICINFO{author="StephaneLenclud" date="1158443010" format="1.1" reprev="1.5" version="1.5"}%
+---+!! <nop>%TOPIC%
 
 Enables dynamic generation of TWiki topic trees based on topics' parent-child relationships.
 Useful for dynamic sitemaps and threads.
+
+%TOC%
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -76,8 +78,15 @@ A workaround for that is to do something like:
 
 ---+++ Plugin Installation Instructions
 
-   * Download the ZIP file from the Plugin web (see below). %BR%
-Contents:
+---++++ Manual 
+
+Download the =ZIP= or =TGZ= file from TWiki:Plugins.TreePlugin and unzip it into your TWiki installation directory
+
+---++++ Automatic
+
+Download =TreePlugin_installer= from TWiki:Plugins.TreePlugin put it at the root of your TWiki installation and execute it from there.
+
+---++++ Contents
 
    | *File:* | *Description:* |
    | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
@@ -135,11 +144,11 @@ Contents:
 |  08 Feb 2002: | Internal (0.1) release |
 |  CPAN Dependencies: | none _(test package relies on Wiki:PerlUnit)_ |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.0 _(only tested on 5.6.1 so far)_ |
+|  Perl Version: | 5.0, 5.6.1, 5.8.7 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins.TreeBrowserPlugin
 
 ---++++ Copyright
 This code is protected by the following
