@@ -164,7 +164,7 @@ sub handleTreeView {
     my $attrFormatting = TWiki::Func::extractNameValuePair( $attributes, "formatting" ) || "";
     my $attrStoplevel = TWiki::Func::extractNameValuePair( $attributes, "stoplevel" ) || 999;
     my $doBookView = TWiki::Func::extractNameValuePair( $attributes, "bookview" ) || "";
-	
+	my $attrLevelPrefix = TWiki::Func::extractNameValuePair( $attributes, "levelprefix" ) || "";
 	cgiOverride(\$attrFormatting, "formatting");
 	
     # set the type of formatting
@@ -180,6 +180,7 @@ sub handleTreeView {
     	# else set the format(s), if any
         $formatter->data("format", $attrFormat) if ($attrFormat);
 	    $formatter->data("branchformat",$attrFormatBranch) if ($attrFormatBranch);
+	    $formatter->data("levelprefix",$attrLevelPrefix) if ($attrLevelPrefix);
     }
     
     # get search results

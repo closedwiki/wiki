@@ -48,6 +48,14 @@ sub formatCount { return $_[1] ;}
 
 sub formatNode {
 	my ($this, $node, $count, $level) = @_;	
+  
+   #SL: do not render at level 0
+   if ($level == 0 && $this->data("levelprefix"))
+      {
+      return "";
+      }
+
+
 	my $res = $this->data("format");
 
 	my $nodeLinkName = '[[' . $node->name() . ']]';
@@ -79,7 +87,16 @@ sub formatNode {
 			$res, $node, qw(text summary));
 			
 		# some meta substitutions go here
-	}	
+	}
+
+   #SL: levelprefix
+   my $i=$level;
+   while ($i>0)
+      {
+      $res=$this->data("levelprefix").$res; 
+      $i--;
+      }
+	
 	return $res;
 }
 
