@@ -1,14 +1,29 @@
 ---+ Orphans Plugin
 
-This Plugin is designed to assist in the management of topics within a TWiki web. The Plugin will eventually provide a range of tools, but currently only one tool is supported, _viz_ the location and management of orphaned topics.
+This Plugin assists in the management of topics within a TWiki web by locating orphaned topics (topics that have no parent, or their parent has been deleted).
+
+Orphaned topics are displayed in a table, optionally with a reference count. Example:
+<literal>
+<style>
+.link {
+      color: #66E;
+      text-decoration: underline;
+}
+</style>
+</literal>
+| *Action* | *Lost Topic* | *References* | *Referees* |
+| <span class="link">delete</span> | <span class="link">JohnLocke</span> | 4 | <span class="link">TheFaithless</span> |
+| <span class="link">delete</span> | <span class="link">SayidJarrah</span> | 8 | <span class="link">HugoReyes</span>. <span class="link">FrenchChick</span> |
+| <span class="link">delete</span> | <span class="link">KateAusten</span> | 15 |<span class="link">JackShepherd</span>, <span class="link">JamesSawyer</span> |
+| <span class="link">delete</span> | <span class="link">WaltLloyd</span> | 16 | <span class="link">MichaelDawson</span>, <span class="link">TheLost</span> |
+| <span class="link">delete</span> | <span class="link">MichaelDawson</span> | 23 | <span class="link">TheOthers</span>, <span class="link">TheIrritating</span> |
+| <span class="link">delete</span> | <span class="link">JamesSawyer</span> | 42 | <span class="link">TheHidden</span>, <span class="link">TheOthers</span>, <span class="link">TheFaithful</span> |
+
 
 ---++ Tools
-
-	* ManageOrphanedPages: Discover and remove orphaned topics. Orphaned topics are any topics that don't have any direct references to them (except parent links) from within the current web or from within all public webs in the installation.
+The plugin is used from a page in the %TWIKIWEB% web, %TWIKIWEB%.ManageOrphanedPages. Normally you should be able to get away with just this topic, though you can use the plugin from any topic in any web if you want to.
 
 ---++ Syntax Rules
-
-This section is only of interest to administrators who want to customize this Plugin.
 
 Write <code> %<nop>FINDORPHANS{ _parameters_ }% </code> anywhere in a topic.
 
@@ -45,13 +60,12 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.CrawfordCurrie |
-|  Plugin Version: | 25 Mar 2004 (V1.000) |
+|  Plugin Version: | %$VERSION% |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  | Ported to TWiki-4 |
+|  11498 | Ported to TWiki-4 |
 |  25 Mar 2004: | Initial version |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
-|  Perl Version: | 5.005 and up |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Perl Version: | 5.008 and up |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, ManageOrphanedPages 95% |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
