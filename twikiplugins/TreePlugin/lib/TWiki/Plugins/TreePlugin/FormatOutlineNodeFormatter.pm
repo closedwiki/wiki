@@ -41,7 +41,7 @@ sub new {
 ###########
 
 # let subclasses override if they want
-sub formatLevel { return $_[1] + 1 ;} # humans start counting at 1
+sub formatLevel { return $_[1];} # humans start counting at 1
 
 # let subclasses override if they want
 sub formatCount { return $_[1] ;}
@@ -55,6 +55,11 @@ sub formatNode {
       return "";
       }
 
+   #SL: Experiments
+   #my $itemcount=$this->formatCount($count)+$this->formatCount($level); #=(defined $this->data("itemcount")?$this->data("itemcount"):0);
+   #my $itemcount=(defined $this->data("itemcount")?$this->data("itemcount"):0);
+   #$itemcount++;
+   #$this->data("itemcount",$itemcount);
 
 	my $res = $this->data("format");
 
@@ -70,6 +75,8 @@ sub formatNode {
 
 	$res =~ s/\$outnum/$this->formatOutNum($node)/geo;
 	$res =~ s/\$count/$this->formatCount($count)/geo;
+   #SL: Experiments
+  	#$res =~ s/\$itemcount/$itemcount/geoi;
 	$res =~ s/\$level/$this->formatLevel($level)/geo;
 	$res =~ s/\$n/\n/go;
 	
@@ -82,7 +89,7 @@ sub formatNode {
 		$res, $this, qw(url));
 	
 	# only do this if we are in full substituiton mode
-	if ( $this->data("fullSubs") ) {
+	if ( defined($this->data("fullSubs")) && $this->data("fullSubs") ) {
 		$res = &TWiki::Plugins::TreePlugin::FormatHelper::loopReplaceRefData(
 			$res, $node, qw(text summary));
 			
@@ -90,11 +97,14 @@ sub formatNode {
 	}
 
    #SL: levelprefix
-   my $i=$level;
-   while ($i>0)
+   if (defined($this->data("levelprefix")))
       {
-      $res=$this->data("levelprefix").$res; 
-      $i--;
+      my $i=$level;
+      while ($i>0)
+         {
+         $res=$this->data("levelprefix").$res; 
+         $i--;
+         } 
       }
 	
 	return $res;
