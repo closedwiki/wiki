@@ -158,7 +158,7 @@ use POSIX;
 use CGI ( -any );
 use diagnostics;
 use Carp;
-use vars qw( $VERSION $RELEASE $basedir $twiki_home $buildpldir $libpath );
+use vars qw( $VERSION $RELEASE $SHORTDESCRIPTION $basedir $twiki_home $buildpldir $libpath );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -170,6 +170,7 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'TWiki-4';
 
+$SHORTDESCRIPTION ='Automate build process for Plugins, Add-ons and Contrib modules';
 my $NL = "\n";
 
 $SIG{__DIE__} = sub { Carp::confess $_[0] };

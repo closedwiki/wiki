@@ -81,11 +81,10 @@ If you want your installer to do anything else - for example, optionally install
 ---+ Detailed Documentation
 %$POD%
 
----+ Settings
-	* Name of the perl package
-		* Set STUB = %$STUB%
-	* One line description:
-		* Set SHORTDESCRIPTION = Automate build process for Pugins, Add-ons and Contrib modules
+<!--
+   * Set STUB = %$STUB%
+   * Set SHORTDESCRIPTION = Automate build process for Plugins, Add-ons and Contrib modules
+-->
 
 ---+ Installation Instructions
 You are strongly recommended to use this Contrib to help split your code development away from your live TWiki environment, as described [[#DevelopmentModel][above]].
@@ -94,11 +93,12 @@ You are strongly recommended to use this Contrib to help split your code develop
 
 ---+ Contrib Info
 
-| Authors: | TWiki:Main.CrawfordCurrie |
-| Copyright &copy;: | 2004-2006, Crawford Currie http://wikiring.com |
-| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
-| Version: | %$VERSION% |
-| Change History: | |
+|  Authors: | TWiki:Main.CrawfordCurrie |
+|  Copyright &copy;: | 2004-2006, Crawford Currie http://wikiring.com |
+|  License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+|  Version: | %$VERSION% |
+|  Change History: | |
+|  11505 | Added =twikiplugins/create_new_extension.pl= script |
 |  11492 | Fixed attachment upload. Will now upload attachments attached to the main topic |
 |  11478 | Install made easier to use for developers and end users; will now download an archive if it can't find one locally. Added dependencies target. |
 |  8947 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1718'>Item1718</a>  discovered that svn log doesn't work recursively, so more code required to find changes. Added new inline tokens for various URLs. Updated history to 8894. |
