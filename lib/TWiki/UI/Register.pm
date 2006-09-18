@@ -783,7 +783,7 @@ sub finish {
     # let the client session know that we're logged in. (This probably
     # eliminates the need for the registrationHandler call above,
     # but we'll leave them both in here for now.)
-    $session->{client}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
+    $session->{loginManager}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
 
     # add user to TWikiUsers topic
     my $user = $session->{users}->createUser( $data->{LoginName},
