@@ -245,7 +245,6 @@ templates/previewtopicactions.nat.tmpl 0644
 templates/rdiff.nat.tmpl 0644
 templates/rdiffstyles.nat.tmpl 0644
 templates/rdifftopicactions.nat.tmpl 0644
-templates/registerconfirm.nat.tmpl 0644
 templates/renamebase.nat.tmpl 0644
 templates/renameconfirm.nat.tmpl 0644
 templates/renamedelete.nat.tmpl 0644
