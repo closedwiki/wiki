@@ -27,9 +27,8 @@ use vars qw(
     );
 
 
-$TWikiCompatibility{endRenderingHandler} = 1.1;
 $VERSION = '$Rev$';
-$RELEASE = '1.36';
+$RELEASE = '1.37';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Renders edit-links as little red dots';
 
@@ -114,7 +113,7 @@ sub initRedirector {
     if ($theAction =~ /^view/) {
       writeDebug("found view");
       $theRedirect = &TWiki::Func::getSessionValue($sessionKey);
-      &clearSessionValue($sessionKey);
+      TWiki::Func::clearSessionValue($sessionKey);
     } else {
       writeDebug("found save");
       $theRedirect = $query->param('redirect');
@@ -145,32 +144,10 @@ sub initRedirector {
 }
 
 ###############################################################################
-sub endRenderingHandler {
+sub postRenderingHandler {
   return if $doneRedirect || $redirectUrl eq '' || !$query;
   writeDebug("called endRenderingHandler()");
   &TWiki::Func::redirectCgiQuery($query, $redirectUrl);
-}
-sub postRenderingHandler {
-  return endRenderingHandler(@_);
-}
-
-###############################################################################
-# wrapper
-sub clearSessionValue {
-  my $key = shift;
-
-  # using dakar's client 
-  if (defined &TWiki::Client::clearSessionValue) {
-    return $TWiki::Plugins::SESSION->{client}->clearSessionValue($key);
-  }
-  
-  # using the SessionPlugin
-  if (defined &TWiki::Plugins::SessionPlugin::clearSessionValueHandler) {
-    return &TWiki::Plugins::SessionPlugin::clearSessionValueHandler($key);
-  }
-
-  # last resort
-  return &TWiki::Func::setSessionValue($key, undef);
 }
 
 ###############################################################################
@@ -211,7 +188,7 @@ sub renderRedDot {
     if (&TWiki::Func::topicExists($theWeb, $theTopic)) {
       writeDebug("checking access on $theWeb.$theTopic for $wikiName");
       $hasEditAccess = &TWiki::Func::checkAccessPermission("CHANGE", 
-	$wikiName, '', $theTopic, $theWeb);
+	$wikiName, undef, $theTopic, $theWeb);
       if ($hasEditAccess) {
 	$hasEditAccess = 0 unless $wikiName =~ /$theGrant/; 
 	# SMELL: use the twiki users and groups functions to check
@@ -235,8 +212,8 @@ sub renderRedDot {
   my $result = 
     '<span class="redDot" ';
   $result .=
-    '><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/' .
-    "$theWeb/$theTopic" .
+    '><a href="'.
+    TWiki::Func::getScriptUrl($theWeb,$theTopic,'edit').
     '?t=' . time();
   $result .= 
     "&redirect=$theRedirect" if $theRedirect ne "$theWeb.$theTopic";
