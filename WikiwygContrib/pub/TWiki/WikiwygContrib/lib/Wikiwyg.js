@@ -484,7 +484,7 @@ proto.get_edit_height = function() {
 }
 
 proto.setHeightOf = function(elem) {
-    elem.height = this.get_edit_height() + 'px';
+    elem.height = this.get_edit_height() + 'px';        //argh:( why hardcode this to px? (i want 100%..)
 }
 
 proto.sanitize_dom = function(dom) { // See IE, below

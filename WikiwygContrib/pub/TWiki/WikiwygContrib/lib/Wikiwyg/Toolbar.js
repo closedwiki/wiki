@@ -112,6 +112,8 @@ proto.initializeObject = function() {
 
 proto.enableThis = function() {
     this.div.style.display = 'block';
+    this.div.style.width = '99%';
+    
 }
 
 proto.disableThis = function() {
