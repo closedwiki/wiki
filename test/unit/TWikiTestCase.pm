@@ -10,6 +10,7 @@ package TWikiTestCase;
 #
 use base qw(Test::Unit::TestCase);
 use vars qw( $has_TestFixturePlugin );
+use Data::Dumper;
 
 use TWiki;
 eval "use TWiki::Plugins::TestFixturePlugin::HTMLDiffer";
@@ -39,13 +40,13 @@ sub set_up {
     # force a read of $TWiki::cfg
     my $tmp = new TWiki();
     # This needs to be a deep copy
-    $this->{__TWikiSafe} = _copy( \%TWiki::cfg );
+    $this->{__TWikiSafe} = Data::Dumper->Dump([\%TWiki::cfg], ['*TWiki::cfg']);
 }
 
 # Restores TWiki::cfg from backup and deletes any fake users created
 sub tear_down {
     my $this = shift;
-    %TWiki::cfg = %{$this->{__TWikiSafe}};
+    %TWiki::cfg = eval $this->{__TWikiSafe};
     if(defined($this->{fake_users})) {
         for my $i (@{$this->{fake_users}}) {
             unlink("$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$i.txt");
@@ -76,6 +77,9 @@ sub _copy {
     elsif (UNIVERSAL::isa($n, 'REF') || UNIVERSAL::isa($n, 'SCALAR')) {
         $n = _copy($$n);
         return \$n;
+    }
+    elsif (ref($n) eq 'Regexp') {
+        return qr/$n/;
     }
     else {
         return $n;
