@@ -144,7 +144,11 @@ sub _setAuthUser {
   my $theUser = shift;
 
   $theUser = undef if $theUser eq $defaultWikiUserName;
-  $TWiki::Plugins::SESSION->{client}->userLoggedIn($theUser);
+  if (defined $TWiki::Plugins::SESSION->{client}) {
+    $TWiki::Plugins::SESSION->{client}->userLoggedIn($theUser);
+  } else {
+    $TWiki::Plugins::SESSION->{loginManager}->userLoggedIn($theUser);
+  }
 }
 
 1;

@@ -50,7 +50,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre6';
+$RELEASE = '3.00-pre8';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
@@ -978,7 +978,7 @@ sub renderLogoutUrl {
   }
   my $logoutWeb = &TWiki::Func::getMainWebname(); 
   my $logoutTopic = 'WebHome';
-  if (&TWiki::Func::checkAccessPermission('VIEW', $defaultWikiUserName, '', 
+  if (&TWiki::Func::checkAccessPermission('VIEW', $defaultWikiUserName, undef, 
     $baseTopic, $baseWeb)) {
     $logoutWeb = $baseWeb;
     $logoutTopic = $baseTopic;
