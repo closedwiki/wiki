@@ -98,15 +98,15 @@ sub run {
             # Read cached post parameters
             if (open(F, '<'.$cache)) {
                 local $/;
-                print STDERR "Loading ",<F>,"\n";
+                #print STDERR "Loading ",<F>,"\n";
                 close(F);
                 open(F, '<'.$cache);
                 $query = new CGI(\*F);
                 close(F);
                 unlink($cache);
-                print STDERR "Loaded and unlinked $cache\n";
+                #print STDERR "Loaded and unlinked $cache\n";
             } else {
-                print STDERR "Could not find $cache\n";
+                #print STDERR "Could not find $cache\n";
             }
         }
     } else {
