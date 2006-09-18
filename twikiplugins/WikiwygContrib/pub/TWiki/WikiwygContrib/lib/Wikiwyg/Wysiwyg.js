@@ -74,7 +74,7 @@ proto.fix_up_relative_imgs = function() {
 proto.enableThis = function() {
     Wikiwyg.Mode.prototype.enableThis.call(this);
     this.edit_iframe.style.border = '1px black solid';
-    this.edit_iframe.width = '100%';
+    this.edit_iframe.width = '99%';
     this.setHeightOf(this.edit_iframe);
     this.fix_up_relative_imgs();
     this.get_edit_document().designMode = 'on';
@@ -128,6 +128,8 @@ proto.set_inner_html = function(html) {
 }
 
 proto.apply_stylesheets = function() {
+alert('as')  ;  
+
     var styles = document.styleSheets;
     var head   = this.get_edit_document().getElementsByTagName("head")[0];
 
@@ -145,6 +147,8 @@ proto.apply_stylesheets = function() {
 proto.apply_inline_stylesheet = function(style, head) {
     var style_string = "";
     for ( var i = 0 ; i < style.cssRules.length ; i++ ) {
+alert(style.cssRules[i].type+"   "+style.cssRules[i].href);
+
         if ( style.cssRules[i].type == 3 ) {
             // IMPORT_RULE
 
@@ -156,7 +160,6 @@ proto.apply_inline_stylesheet = function(style, head) {
                 type: 'text/css'
             }, head);
             */
-            
             style_string += Ajax.get(style.cssRules[i].href);
         } else {
             style_string += style.cssRules[i].cssText + "\n";

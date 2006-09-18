@@ -1,32 +1,20 @@
-%TMPL:INCLUDE{"edit"}%
+<html>
+<head>
+  <title>Edit %WEB%.%TOPIC% (wikiwyg)</title>
+  <meta http-equiv="Expires" content="0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%"/>
+%IF{ "$ TWIKILAYOUTURL" then="<link rel='stylesheet' type='text/css' href='%TWIKILAYOUTURL%' type='text/css' media='all'/>"}%
+%IF{ "$ TWIKISTYLEURL"  then="<link rel='stylesheet' type='text/css' href='%TWIKISTYLEURL%' type='text/css' media='all'/>"}%
+%IF{ "$ TWIKICOLORSURL"  then="<link rel='stylesheet' type='text/css' href='%TWIKICOLORSURL%' type='text/css' media='all'/>"}%
+%IF{ "$ USERLAYOUTURL" then="<link rel='stylesheet' type='text/css' href='%USERLAYOUTURL%' type='text/css' media='all'/>"}%
+%IF{ "$ USERSTYLEURL"  then="<link rel='stylesheet' type='text/css' href='%USERSTYLEURL%' type='text/css' media='all'/>"}%
+%IF{ "$ USERCOLORSURL"  then="<link rel='stylesheet' type='text/css' href='%USERCOLORSURL%' type='text/css' media='all'/>"}%
+<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/css/wikiwyg.css" type='text/css' media='all'/>
+<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/twikiwyg.css" type='text/css' media='all'/>
 
-%TMPL:DEF{"textarea_old"}%<textarea class="twikiEditboxStyleProportional" id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>%TEXT%</textarea>%TMPL:END%
-
-%TMPL:DEF{"textarea"}%
-<div align="left">
-<textarea id="rawtopictext" name="rawtopictext" rows="0" cols="0" style='display:none;width:0;height:0;' >%TEXT%</textarea>
-<div class="edit-div" id="edit-div">
-<p />
-<p />
-<h1>Please wait, loading topic into editor....</h1>
-<p />
-<p />
-</div>
-</div>
-%TMPL:END%
-
-
-%TMPL:DEF{"edittopicform"}%%TMPL:END%
-%TMPL:DEF{"topicaction"}%%TMPL:END%
-%TMPL:DEF{"formend"}%%TMPL:END%
-%TMPL:DEF{"pagehelp_nojavascript"}%%TMPL:END%
-
-
-
-%TMPL:DEF{"twikijavascript"}%
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
-<link rel='stylesheet' type='text/css' href='%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/twikiwyg.css' />
-<link rel="stylesheet" type="text/css" href="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/css/wikiwyg.css" />
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Util.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/HTML.js"></script>
@@ -34,7 +22,8 @@
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Wysiwyg.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Wikitext.js"></script>
 <script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/lib/Wikiwyg/Preview.js"></script>
-<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/TWikitext.js"></script><script>
+<script type="text/javascript" src="%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/TWikitext.js"></script>
+<script type="text/javascript">
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //WikiWyg impl
@@ -135,12 +124,15 @@ setHTML = function(reply) {
     div.innerHTML = reply;
     
     var config = {
-        doubleClickToEdit: true,
-        NNNwysiwyg: {
+        doubleClickToEdit: false,
+        editHeightMinimum: 1,
+        editHeightAdjustment: 1,
+        wysiwyg: {
             iframeId: 'wikiwyg-iframe'
         },
         toolbar: {
-            imagesLocation: '%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/images/',
+            imagesLocation: '%PUBURLPATH%/%TWIKIWEB%/WikiwygContrib/TWikiImages/button_',
+            imagesExtension: '.png',
             controlLayout: [
                 'save', 'cancel', 'mode_selector', '|',     // '/',
                 'h1', 'h2', 'h3', 'h4', 
@@ -150,8 +142,8 @@ setHTML = function(reply) {
             ]            
         }, 
         modeClasses: [
-            'Wikiwyg.TWikitext',        //used to do the html->tml conversion in wikiwyg (if using the non-html save)
             'Wikiwyg.Wysiwyg',
+            'Wikiwyg.TWikitext',        //used to do the html->tml conversion in wikiwyg (if using the non-html save)
         ]
     };
 //    wikiwyg1 = new Wikiwyg();
@@ -169,7 +161,18 @@ window.onload = function() {
         setHTML
     );
 }
-
 </script>
-%TMPL:END%
-
+</head>
+<body>
+<div align="left" style="margin:2px;" >
+<div class="edit-div" id="edit-div" >
+<p />
+<p />
+<h1>Please wait, loading topic into editor....</h1>
+<p />
+<p />
+</div>
+</div>
+<textarea id="rawtopictext" name="rawtopictext" rows="0" cols="0" style='display:none;width:0;height:0;' >%TEXT%</textarea>
+<iframe id="wikiwyg-iframe" height="0" width="0" frameborder="0"></iframe
+</body></html>

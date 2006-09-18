@@ -32,7 +32,7 @@ proto.config = {
     supportCamelCaseLinks: true,
     javascriptLocation: null,
     clearRegex: null,
-    editHeightMinimum: 10,
+    editHeightMinimum: 40,
     editHeightAdjustment: 1.3,
     markupRules: {
         link: ['bound_phrase', '[[', ']]'],
