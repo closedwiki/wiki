@@ -173,7 +173,7 @@ sub registerAccount {
                     $this->assert(!$done, $done."\n---------\n".$mail);
                     $done = $mail;
                 } else {
-                    $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
+                    $this->assert_matches(qr/To: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/, $mail );
                 }
             } else {
                 $this->assert(0, $mail);
@@ -462,7 +462,7 @@ sub test_registerBadVerify {
     };
     $this->assert_equals(1, scalar(@mails));
     my $mess = $mails[0];
-    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
+    $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
     $this->assert_matches(qr/To: .*\b$testUserEmail\b/,$mess);
     # check the verification code
     $this->assert_matches(qr/'TestUser\.foo'/,$mess);
@@ -522,7 +522,7 @@ sub test_registerNoVerifyOk {
                     $this->assert(!$done, $done."\n---------\n".$mail);
                     $done = $mail;
                 } else {
-                    $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
+                    $this->assert_matches(qr/To: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/, $mail );
                 }
             } else {
                 $this->assert(0, $mail);
@@ -676,7 +676,7 @@ sub test_resetPasswordOkay {
     };
     $this->assert_equals(1, scalar(@mails));
     my $mess = $mails[0];
-    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
+    $this->assert_matches(qr/From: $TWiki::cfg{WebMasterName} <$TWiki::cfg{WebMasterEmail}>/,$mess);
     $this->assert_matches(qr/To: .*\b$testUserEmail/,$mess);
 }
 
