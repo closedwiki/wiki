@@ -49,16 +49,14 @@ sub afterSaveHandler {
 
 ###############################################################################
 sub handleDBQUERY {
-  my ($session, $params, $theTopic, $theWeb) = @_;
+  my ($session, $params, undef, $theWeb) = @_;
 
   #writeDebug("called handleDBQUERY(" . $params->stringify() . ")");
 
   # params
   my $theSearch = $params->{_DEFAULT} || $params->{search};
-  my $theTopics = $params->{topics} || $params->{topic};
-  
-  return '' if $theTopics && $theTopics eq 'none';
-
+  my $theTopic = $params->{topic} || '';
+  my $theTopics = $params->{topics} || '';
   my $theFormat = $params->{format} || '$topic';
   my $theHeader = $params->{header} || '';
   my $theFooter = $params->{footer} || '';
@@ -70,15 +68,19 @@ sub handleDBQUERY {
   my $theLimit = $params->{limit} || '';
   my $theSkip = $params->{skip} || 0;
   my $theHideNull = $params->{hidenull} || 'off';
-  $theWeb = $params->{web} || $theWeb;
 
-  my $theDB = getDB($theWeb);
-
-  # get topics
+  # get web and topic(s)
   my @topicNames = ();
-  if ($theTopics) {
-    @topicNames = split(/, /, $theTopics);
+  $theWeb = $params->{web} || $theWeb;
+  if ($theTopic) {
+    ($theWeb, $theTopic) = TWiki::Func::normalizeWebTopicName($theWeb, $theTopic);
+    push @topicNames, $theTopic;
+  } else {
+    if ($theTopics) {
+      @topicNames = split(/, /, $theTopics);
+    }
   }
+  my $theDB = getDB($theWeb);
 
   # normalize 
   $theSkip =~ s/[^-\d]//go;
@@ -89,7 +91,6 @@ sub handleDBQUERY {
 
   my ($topicNames, $hits, $msg) = $theDB->dbQuery($theSearch, 
     \@topicNames, $theSort, $theReverse, $theInclude, $theExclude);
-  #print STDERR "DEBUG: got topicNames=@$topicNames\n";
 
   return _inlineError($msg) if $msg;
 
@@ -115,21 +116,29 @@ sub handleDBQUERY {
       $format = $theSep unless $isFirst;
       $isFirst = 0;
       $format .= $theFormat;
-      $format =~ s/\$formfield\((.*?)\)/$theDB->getFormField($topicName, $1)/geo;
-      $format =~ s/\$expand\((.*?)\)/$theDB->expandPath($topicObj, $1)/geo;
+      $format =~ s/\$formfield\((.*?)\)/
+	my $temp = $theDB->getFormField($topicName, $1);
+	$temp =~ s#\)#${TranslationToken}#g;
+	$temp/geo;
+      $format =~ s/\$expand\((.*?)\)/
+	my $temp = $theDB->expandPath($topicObj, $1);
+	$temp =~ s#\)#${TranslationToken}#g;
+	$temp/geo;
       $format =~ s/\$formatTime\((.*?)(?:,\s*'([^']*?)')?\)/TWiki::Func::formatTime($theDB->expandPath($topicObj, $1), $2)/geo; # single quoted
-      #$format =~ s/\$dbcall\((.*?)\)/dbCall($1)/ge; ## TODO
       $format = _expandVariables($format, topic=>$topicName, web=>$topicWeb, index=>$index, count=>$count);
+      $format = &TWiki::Func::expandCommonVariables($format, $topicName, $topicWeb);
       $text .= $format;
       last if $index == $theLimit;
     }
   }
+  $text =~ s/${TranslationToken}/)/go;
 
   $theHeader = _expandVariables($theHeader.$theSep, count=>$count, web=>$theWeb) if $theHeader;
   $theFooter = _expandVariables($theSep.$theFooter, count=>$count, web=>$theWeb) if $theFooter;
 
   $text = &TWiki::Func::expandCommonVariables("$theHeader$text$theFooter", 
     $TWiki::Plugins::DBCachePlugin::currentTopic, $theWeb);
+
   return $text;
 }
 
@@ -137,17 +146,19 @@ sub handleDBQUERY {
 sub handleDBCALL {
   my ($session, $params, $theTopic, $theWeb) = @_;
 
+  my $thisTopic = $params->remove('_DEFAULT');
+  return '' unless $thisTopic;
+  my $thisWeb;
+  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($theWeb, $thisTopic);
+
   # remember args for the key before mangling the params
   my $args = $params->stringify();
 
-  #writeDebug("called handleDBCALL($args)");
+  #writeDebug("called handleDBCALL()");
 
   my $section = $params->remove('section') || 'default';
   my $warn = $params->remove('warn') || 'on';
   $warn = ($warn eq 'on')?1:0;
-  my $thisTopic = $params->remove('_DEFAULT') || '';
-  my $thisWeb = $theWeb;
-  ($thisWeb, $thisTopic) = &TWiki::Func::normalizeWebTopicName($thisWeb, $thisTopic);
 
   #writeDebug("thisWeb=$thisWeb thisTopic=$thisTopic");
 
@@ -347,7 +358,7 @@ sub handleDBSTATS {
     $text = $theSep if $result;
     $text .= $theFormat;
     $result .= &_expandVariables($text, 
-      'web'=>$theWeb,
+      'web'=>$thisWeb,
       'key'=>$key,
       'count'=>$record->{count}, 
       'index'=>$index,
@@ -361,7 +372,7 @@ sub handleDBSTATS {
   }
   $theHeader = &_expandVariables($theHeader);
   $theFooter = &_expandVariables($theFooter);
-  $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $theTopic, $theWeb);
+  $result = &TWiki::Func::expandCommonVariables($theHeader.$result.$theFooter, $theTopic, $thisWeb);
 
   return $result;
 }
@@ -489,7 +500,7 @@ sub _expandVariables {
   
   foreach my $key (keys %params) {
     if($theFormat =~ s/\$$key/$params{$key}/g) {
-      #print STDERR "DEBUG: expanding $key->$params{$key}\n";
+      #writeDebug("expanding $key->$params{$key}");
     }
   }
   $theFormat =~ s/\$percnt/\%/go;
@@ -498,7 +509,7 @@ sub _expandVariables {
   $theFormat =~ s/\$t\b/\t/go;
   $theFormat =~ s/\$nop//g;
   $theFormat =~ s/\$flatten\((.*?)\)/&_flatten($1)/ges;
-  $theFormat =~ s/\$encode\((.*)\)/&_encode($1)/ges;
+  $theFormat =~ s/\$encode\((.*?)\)/&_encode($1)/ges;
   $theFormat =~ s/\$trunc\((.*?),\s*(\d+)\)/substr($1,0,$2)/ges;
 
   return $theFormat;

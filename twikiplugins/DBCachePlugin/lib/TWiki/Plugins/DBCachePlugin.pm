@@ -21,7 +21,7 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = '1.24';
+$RELEASE = '1.25';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Lightweighted frontend to the DBCacheContrib';
 
