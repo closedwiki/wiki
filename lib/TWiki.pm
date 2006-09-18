@@ -195,6 +195,7 @@ BEGIN {
         PLUGINVERSION     => \&_PLUGINVERSION,
         PUBURL            => \&_PUBURL,
         PUBURLPATH        => \&_PUBURLPATH,
+        QUERYPARAMS       => \&_QUERYPARAMS,
         QUERYSTRING       => \&_QUERYSTRING,
         RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
         REMOTE_ADDR       => \&_REMOTE_ADDR,
@@ -294,7 +295,7 @@ BEGIN {
     if( $TWiki::cfg{NoFollow} ) {
         $constantTags{NOFOLLOW} = 'rel='.$TWiki::cfg{NoFollow};
     }
-    $constantTags{ALLOWLOGINNAME}  = $TWiki::cfg{Register}{AllowLoginName};
+    $constantTags{ALLOWLOGINNAME} = $TWiki::cfg{Register}{AllowLoginName} || 0;
 
     # locale setup
     #
@@ -671,7 +672,7 @@ sub writePageHeader {
     $this->{plugins}->modifyHeaderHandler( $hopts, $this->{cgiQuery} );
 
     # add cookie(s)
-    $this->{client}->modifyHeader( $hopts );
+    $this->{loginManager}->modifyHeader( $hopts );
 
     my $hdr = CGI::header( $hopts );
 
@@ -680,36 +681,88 @@ sub writePageHeader {
 
 =pod
 
----++ ObjectMethod redirect( $url, ... )
+---++ ObjectMethod redirect( $url, $passthrough )
 
-Generate a CGI redirect to $url unless (1) $session->{cgiQuery} is undef or
-(2) $query->param('noredirect') is set to a true value. Thus a redirect is
-only generated when in a CGI context.
+Redirects the request to =$url=, *unless*
+   1 It is overridden by a plugin declaring a =redirectCgiQueryHandler=.
+   1 =$session->{cgiQuery}= is =undef= or
+   1 $query->param('noredirect') is set to a true value.
+Thus a redirect is only generated when in a CGI context.
 
-The ... parameters are concatenated to the message written when printing
-to STDOUT, and are ignored for a redirect.
+Normally this method will ignore parameters to the current query.
+If $passthrough is set, then it will pass all parameters that were passed
+to the current query on to the redirect target. If the request_method was
+GET, then all parameters can be passed in the URL. If the
+request_method was POST then it caches the form data and passes over a
+cache reference in the redirect GET.
 
-Redirects the request to $url, via the CGI module object $query unless
-overridden by a plugin declaring a =redirectCgiQueryHandler=.
+Passthrough is only meaningful if the redirect target is on the same server.
 
 =cut
 
 sub redirect {
-    my $this = shift;
-    my $url = shift;
+    my ($this, $url, $passthru) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $query = $this->{cgiQuery};
-    unless( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
-        if ( $query && $query->param( 'noredirect' )) {
-            my $content = join(' ', @_) . "\n";
-            $this->writeCompletePage( $content );
-        } elsif ( $this->{client}->redirectCgiQuery( $query, $url ) ) {
-        } elsif ( $query ) {
-            print $query->redirect( $url );
+    # if we got here without a query, there's not much more we can do
+    return unless $query;
+
+    if( $query->param( 'noredirect' )) {
+        my $content = join(' ', @_) . "\n";
+        $this->writeCompletePage( $content );
+        return;
+    }
+
+    if ($passthru) {
+        die "Passthrough on URL that already has parameters" if $url =~ /\?/;
+        if ($ENV{REQUEST_METHOD} eq 'POST') {
+            # Redirecting from a port to a get
+            my $cache = $this->cacheQuery();
+            if ($cache) {
+                print STDERR "302ing from a POST ".$query->url().$query->path_info()." to $url using $cache\n";
+                $url .= "?$cache";
+            }
+        } else {
+            $url .= '?'.$query->query_string();
         }
     }
+
+    return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) );
+    return if( $this->{loginManager}->redirectCgiQuery( $query, $url ) );
+    die "Login manager returned 0 from redirectCgiQuery";
+}
+
+=pod
+
+---++ ObjectMethod cacheQuery() -> $queryString
+Caches the current query in the params cache, and returns a rewritten
+query string for the cache to be picked up again on the other side of a
+redirect.
+
+We can't encode post params into a redirect, because they may exceed the
+size of the GET request. So we cache the params, and reload them when the
+redirect target is reached.
+
+=cut
+
+sub cacheQuery {
+    my $this = shift;
+    my $query = $this->{cgiQuery};
+
+    return '' unless (scalar($query->param()));
+    # Don't double-cache
+    return '' if ($query->param('twiki_redirect_cache'));
+
+    require Digest::MD5;
+    my $md5 = new Digest::MD5();
+    $md5->add($$, time(), rand(time));
+    my $uid = $TWiki::cfg{PassthroughDir}.'/passthru_'.$md5->hexdigest();
+    open(F, ">$uid") || die "{PassthroughDir} cache not writable $!";
+    $query->save(\*F);
+    close(F);
+    return 'twiki_redirect_cache='.$uid;
 }
 
 =pod
@@ -1129,7 +1182,7 @@ sub new {
     $this->{search} = new TWiki::Search( $this );
     $this->{templates} = new TWiki::Templates( $this );
     $this->{attach} = new TWiki::Attach( $this );
-    $this->{client} = TWiki::Client::makeClient( $this );
+    $this->{loginManager} = TWiki::Client::makeLoginManager( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
@@ -1251,7 +1304,7 @@ sub new {
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override
     # it below.
-    my $login = $this->{client}->loadSession();
+    my $login = $this->{loginManager}->loadSession();
 
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
@@ -1259,12 +1312,14 @@ sub new {
     # Push global preferences from TWiki.TWikiPreferences
     $prefs->pushGlobalPreferences();
 
-    # SMELL: there should be a way for the plugin to specify
-    # the WikiName of the user as well as the login.
-    $login = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} ) || $login;
-    unless( $login ) {
-        $login = $this->{users}->initializeRemoteUser( $remoteUser );
+    my $plogin = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
+    $login = $plogin if $plogin;
+    $login ||= $TWiki::cfg{DefaultUserLogin};
+    unless( $login =~ /$TWiki::cfg{LoginNameFilterIn}/) {
+        die "Illegal format for login name '$login'";
     }
+    $login = TWiki::Sandbox::untaintUnchecked( $login );
+
     my $user = $this->{users}->findUser( $login );
     $this->{user} = $user;
 
@@ -1295,7 +1350,7 @@ sub new {
         $this->{webName}, $this->{topicName}, 'TOPIC' );
 
     $prefs->pushPreferenceValues( 'SESSION',
-                                  $this->{client}->getSessionValues() );
+                                  $this->{loginManager}->getSessionValues() );
 
     # requires preferences (such as NEWTOPICBGCOLOR)
     $this->{renderer} = new TWiki::Render( $this );
@@ -1326,7 +1381,7 @@ to. Right now this does two things:
 
 sub finish {
     my $this = shift;
-    $this->{client}->finish();
+    $this->{loginManager}->finish();
 
 #    use Data::Dumper;
 #    $Data::Dumper::Indent = 1;
@@ -2805,7 +2860,7 @@ sub _INCLUDE {
     $this->{prefs}->restore( $prefsMark );
     $text =~ s/^[\r\n]+/\n/;
     $text =~ s/[\r\n]+$/\n/;
-    
+
     return $text;
 }
 
@@ -2898,6 +2953,8 @@ sub _ENCODE {
     my $text = $params->{_DEFAULT} || '';
     if ( $type && $type =~ /^entit(y|ies)$/i ) {
         return entityEncode( $text );
+    } elsif ( $type && $type =~ /^html$/i ) {
+        return entityEncode( $text, "\n\r" );
     } else {
         $text =~ s/\r*\n\r*/<br \/>/; # Legacy.
         return urlEncode( $text );
@@ -2995,6 +3052,50 @@ sub _TOPICLIST {
 sub _QUERYSTRING {
     my $this = shift;
     return $this->{cgiQuery}->query_string();
+}
+
+sub _QUERYPARAMS {
+    my ( $this, $params ) = @_;
+    return '' unless $this->{cgiQuery};
+    my $format = defined $params->{format} ? $params->{format} : '$name=$value';
+    my $separator = defined $params->{separator} ? $params->{separator} : "\n";
+
+    my @list;
+    foreach my $name ( $this->{cgiQuery}->param() ) {
+        # Issues multi-valued parameters as separate hiddens
+        my $value = $this->{cgiQuery}->param( $name );
+        my $entry = $format;
+        $entry =~ s/\$name/$name/g;
+        $entry =~ s/\$value/$value/;
+        push(@list, $entry);
+    }
+    return expandStandardEscapes(join($separator, @list));
+}
+
+=pod
+
+---++ StaticMethod expandStandardEscapes($str) -> $unescapedStr
+
+Expands standard escapes used in parameter values to block evaluation. The following escapes
+are handled:
+
+| *Escape:* | *Expands To:* |
+| =$n= or =$n()= | New line. Use =$n()= if followed by alphanumeric character, e.g. write =Foo$n()Bar= instead of =Foo$nBar= |
+| =$nop= or =$nop()= | Is a "no operation". |
+| =$quot= | Double quote (="=) |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
+=cut
+
+sub expandStandardEscapes {
+    my $text = shift;
+    $text =~ s/\$n\(\)/\n/gos;         # expand '$n()' to new line
+    $text =~ s/\$n([^$regex{mixedAlpha}]|$)/\n$1/gos; # expand '$n' to new line
+    $text =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
+    $text =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $text =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $text =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
+    return $text;
 }
 
 sub _URLPARAM {

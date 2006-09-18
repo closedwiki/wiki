@@ -117,6 +117,14 @@ my $OS = $TWiki::cfg{OS} || '';
 # Translation files directory (file path, not URL) e.g. /usr/local/twiki/locales
 # $TWiki::cfg{LocalesDir} = '/home/httpd/twiki/po';
 
+# **PATH M**
+# Directory where passthrough files used by twiki are stored. Passthrough files
+# are used by TWiki to work around the limitations of HTTP.
+# <b>Security Note:</b> The directory must <b>not</b> be
+# browseable from the web, otherwise it could be used to intercept parameters
+# used when someone logs in!
+$TWiki::cfg{PassthroughDir} = '/tmp';
+
 # **STRING 10**
 # Suffix of TWiki CGI scripts (e.g. .cgi or .pl). You may need to set this
 # if your webserver requires an extension.
@@ -154,8 +162,9 @@ $TWiki::cfg{Password} = '';
 $TWiki::cfg{UseClientSessions} = 1;
 
 # **STRING 100**
-# Absolute file path of the directory in which session files are stored.
-# Defaults to /tmp.
+# Absolute file path of the directory in which session files
+# are stored. Session files are files used to record data about active
+# users - for example, whether they are logged in or not.
 # <b>Security Note:</b> The directory must <b>not</b> be
 # browseable from the web, otherwise it could be used to mount an attack on
 # the server!
@@ -224,6 +233,13 @@ $TWiki::cfg{Sessions}{MapIP2SID} = 0;
 #   not require client sessions, but works best with them enabled.
 # </li></ol>
 $TWiki::cfg{LoginManager} = 'none';
+
+# **REGEX**
+# The perl regular expressioin used to constrain user login names. Some
+# environments may require funny characters in login names, such as \.
+# This is a filter <b>in</b> expression i.e. a login name must match this
+# expression or an error will be thrown and the login denied.
+$TWiki::cfg{LoginNameFilterIn} = qr/^[^\s\*?~^\$@%`"'&;|<>\x00-\x1f]+$/;
 
 # **STRING 20 EXPERT**
 # Guest user's login name. You are recommended not to change this.
@@ -439,15 +455,19 @@ $TWiki::cfg{INCLUDE}{AllowURLs} = $FALSE;
 $TWiki::cfg{AllowInlineScript} = $TRUE;
 
 # **REGEX EXPERT**
-#Filter-in regex for uploaded (attached) file names (Matching
-# filenames will have .txt appended) WARNING: Be sure to update
+# Filter-in regex for uploaded (attached) file names. This is a filter
+# <b>in</b>, so any files that match this filter will be renamed on upload
+# to prevent upload of files with the same file extensions as executables.
+# <p /> NOTE: Be sure to update
 # this list with any configuration or script filetypes that are
-# automatically run by your web server
+# automatically run by your web server. 
 $TWiki::cfg{UploadFilter} = qr/^(\.htaccess|.*\.(?i)(?:php[0-9s]?(\..*)?|[sp]htm[l]?(\..*)?|pl|py|cgi))$/;
 
 # **REGEX EXPERT**
-#Filter-in regex for webnames, topic names, usernames, include paths
-# and skin names
+# Filter-out regex for webnames, topic names, usernames, include paths
+# and skin names. This is a filter <b>out</b>, so if any of the
+# characters matched by this expression are seen in names, they will be
+# removed.
 $TWiki::cfg{NameFilter} = qr/[\s\*?~^\$@%`"'&;|<>\x00-\x1f]/;
 
 # **BOOLEAN EXPERT**
@@ -758,7 +778,9 @@ $TWiki::cfg{AutoAttachPubFiles} = $TRUE;
 
 # **REGEX EXPERT**
 # Perl regular expression matching suffixes valid on plain text files
-# Defines which attachments will be treated as ASCII in RCS
+# Defines which attachments will be treated as ASCII in RCS. This is a
+# filter <b>in</b>, so any filenames that match this expression will
+# be treated as ASCII.
 $TWiki::cfg{RCS}{asciiFileSuffixes} = qr/\.(txt|html|xml|pl)$/;
 
 # **BOOLEAN EXPERT**

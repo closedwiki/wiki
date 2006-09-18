@@ -1156,7 +1156,7 @@ sub getRenderedVersion {
 
     $this->putBackProtected( \$text, $removedHead );
     $this->putBackProtected( \$text, $removedComments );
-    $this->{session}->{client}->endRenderingHandler( $text );
+    $this->{session}->{loginManager}->endRenderingHandler( $text );
 
     $plugins->postRenderingHandler( $text );
     return $text;

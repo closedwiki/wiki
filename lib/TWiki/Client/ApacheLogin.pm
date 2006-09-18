@@ -68,37 +68,27 @@ sub forceAuthentication {
     my $scriptName = $2;
     $script = $scriptPath.$scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
     if( ! $query->remote_user() && -e $script ) {
+        # Assemble the new URL using the host, the changed script name,
+        # the path info, and the query string.  All three query
+        # variables are in the list of the canonical request meta
+        # variables in CGI 1.1.
         my $url = $ENV{REQUEST_URI};
         if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
             # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
             $url = $twiki->{urlHost}.$url;
+        } elsif( $ENV{SCRIPT_NAME} &&
+                   $ENV{SCRIPT_NAME} =~ s/\/$scriptName/\/${scriptName}auth/ ) {
+            $url = $twiki->{urlHost}.$ENV{SCRIPT_NAME};
         } else {
-            # If REQUEST_URI is rewritten and does not contain the script
-            # name, try looking at the CGI environment variable
-            # SCRIPT_NAME.
-            #
-            # Assemble the new URL using the host, the changed script name,
-            # the path info, and the query string.  All three query
-            # variables are in the list of the canonical request meta
-            # variables in CGI 1.1.
-            $scriptPath     = $ENV{'SCRIPT_NAME'};
-            my $pathInfo    = $ENV{'PATH_INFO'};
-            my $queryString = $ENV{'QUERY_STRING'};
-            $pathInfo    = '/' . $pathInfo    if ($pathInfo);
-            $queryString = '?' . $queryString if ($queryString);
-            if( $scriptPath &&
-                  $scriptPath =~ s/\/$scriptName/\/${scriptName}auth/ ) {
-                $url = $twiki->{urlHost}.$scriptPath;
-            } else {
-                # If SCRIPT_NAME does not contain the script name
-                # the last hope is to try building up the URL using
-                # the SCRIPT_FILENAME.
-                $url = $twiki->{urlhost}.$twiki->{scriptUrlPath}.'/'.
-                    ${scriptName}.$TWiki::cfg{ScriptSuffix};
-            }
-            $url .= $pathInfo.$queryString;
+            # If SCRIPT_NAME does not contain the script name
+            # the last hope is to try building up the URL using
+            # the SCRIPT_FILENAME.
+            $url = $twiki->{urlhost}.$twiki->{scriptUrlPath}.'/'.
+              $scriptName.$TWiki::cfg{ScriptSuffix};
         }
-        $twiki->redirect( $url );
+        $url .= '/' . $ENV{PATH_INFO} if $ENV{PATH_INFO};
+        # Redirect with passthrough so we don't lose the original query params
+        $twiki->redirect( $url, 1 );
         return 1;
     }
 

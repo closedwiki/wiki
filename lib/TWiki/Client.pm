@@ -46,6 +46,23 @@ $TWiki::cfg{Trace}{Client.pm}. The tracing is done in such a way as to
 let the perl optimiser optimise out the trace function as a no-op if tracing
 is disabled.
 
+Here's an overview of how it works:
+
+Early in TWiki::new, the login manager is created. The creation of the login manager does two things:
+   1 If sessions are in use, it loads CGI::Session but doesn't initialise the session yet.
+   1 Creates the login manager object
+Slightly later in TWiki::new, loginManager->loadSession is called.
+   1 Calls loginManager->getUser to get the username *before* the session is created
+      * TWiki::Client::ApacheLogin looks at REMOTE_USER
+      * TWiki::Client::TemplateLogin just returns undef
+   1 reads the TWIKISID cookie to get the SID (or the TWIKISID parameters in the CGI query if cookies aren't available, or IP2SID mapping if that's enabled).
+   1 Creates the CGI::Session object, and the session is thereby read.
+   1 If the username still isn't known, reads it from the cookie. Thus TWiki::Client::ApacheLogin overrides the cookie using REMOTE_USER, and TWiki::Client::TemplateLogin *always* uses the session.
+
+Later again in TWiki::new, plugins are given a chance to *override* the username found from the loginManager.
+
+The last step in TWiki::new is to find the user, using whatever user mapping manager is in place.
+
 ---++ ObjectData =twiki=
 The TWiki object this login manager is attached to.
 
@@ -76,18 +93,18 @@ $M3 = chr(7);
 
 =pod
 
----++ StaticMethod makeClient( $twiki ) -> $TWiki::Client
+---++ StaticMethod makeLoginManager( $twiki ) -> $TWiki::Client
 Factory method, used to generate a new TWiki::Client object
 for the given session.
 
 =cut
 
-sub makeClient {
+sub makeLoginManager {
     my $twiki = shift;
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
 
-    if( $TWiki::cfg{UseClientSessions} && 
-	!$twiki->inContext( 'command_line' )) {
+    if( $TWiki::cfg{UseClientSessions} &&
+          !$twiki->inContext( 'command_line' )) {
 
         my $use = 'use CGI::Session';
         if( $TWiki::cfg{Sessions}{UseIPMatching} ) {
@@ -329,7 +346,7 @@ sub finish {
 =pod
 
 ---++ StaticMethod expireDeadSessions()
-Delete sessions that are sitting around but are really expired.
+Delete sessions and passthrough files that are sitting around but are really expired.
 This *assumes* that the sessions are stored as files.
 
 This is a static method, but requires TWiki::cfg. It is designed to be
@@ -343,17 +360,20 @@ sub expireDeadSessions {
     $exp = -$exp if $exp < 0;
 
 	opendir(D, $TWiki::cfg{Sessions}{Dir}) || return;
-	foreach my $file ( grep { /cgisess_[0-9a-f]{32}/ } readdir(D) ) {
+	foreach my $file ( grep { /^(passthru|cgisess)_[0-9a-f]{32}/ } readdir(D) ) {
         $file = TWiki::Sandbox::untaintUnchecked(
             $TWiki::cfg{Sessions}{Dir}.'/'.$file );
 		my @stat = stat( $file );
-        # Kill small old files. They can't be valid sessions.
+        # Kill old files.
 		# Ignore tiny new files. They can't be complete sessions.
-        if( defined($stat[7]) && $stat[7] <= 50 ) {
+        if( defined($stat[7]) ) {
             my $lat = $stat[8] || $stat[9] || $stat[10] || 0;
             unlink $file if( $time - $lat >= $exp );
             next;
 		}
+
+        # Just kill passthru files
+        next if $file =~ /^passthru_/;
 
 		open(F, $file) || next;
 		my $session = <F>;
@@ -585,7 +605,6 @@ sub modifyHeader {
 
 ---++ ObjectMethod redirectCgiQuery( $url )
 Generate an HTTP redirect on STDOUT, if you can. Return 1 if you did.
-Don't forget to pass all query parameters through.
    * =$url= - target of the redirection.
 
 =cut
@@ -751,7 +770,7 @@ sub getUser {
 sub _LOGIN {
     #my( $twiki, $params, $topic, $web ) = @_;
     my $twiki = shift;
-    my $this = $twiki->{client};
+    my $this = $twiki->{loginManager};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
 
     return '' if $twiki->inContext( 'authenticated' );
@@ -766,7 +785,7 @@ sub _LOGIN {
 
 sub _LOGOUTURL {
     my( $twiki, $params, $topic, $web ) = @_;
-    my $this = $twiki->{client};
+    my $this = $twiki->{loginManager};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
 
     return $twiki->getScriptUrl(
@@ -778,7 +797,7 @@ sub _LOGOUTURL {
 
 sub _LOGOUT {
     my( $twiki, $params, $topic, $web ) = @_;
-    my $this = $twiki->{client};
+    my $this = $twiki->{loginManager};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
 
     return '' unless $twiki->inContext( 'authenticated' );
@@ -793,7 +812,7 @@ sub _LOGOUT {
 
 sub _AUTHENTICATED {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{client};
+    my $this = $twiki->{loginManager};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
 
     if( $twiki->inContext( 'authenticated' )) {
@@ -805,7 +824,7 @@ sub _AUTHENTICATED {
 
 sub _CANLOGIN {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{client};
+    my $this = $twiki->{loginManager};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
     if( $twiki->inContext( 'can_login' )) {
         return $params->{then} || 1;
@@ -816,7 +835,7 @@ sub _CANLOGIN {
 
 sub _SESSION_VARIABLE {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{client};
+    my $this = $twiki->{loginManager};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
     my $name = $params->{_DEFAULT};
 
@@ -833,7 +852,7 @@ sub _SESSION_VARIABLE {
 
 sub _LOGINURL {
     my( $twiki, $params ) = @_;
-    my $this = $twiki->{client};
+    my $this = $twiki->{loginManager};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
     return $this->loginUrl();
 }

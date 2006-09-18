@@ -250,7 +250,7 @@ sub getSessionValue {
 #   my( $key ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->{client}->getSessionValue( @_ );
+    return $TWiki::Plugins::SESSION->{loginManager}->getSessionValue( @_ );
 }
 
 
@@ -271,7 +271,7 @@ sub setSessionValue {
 #   my( $key, $value ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $TWiki::Plugins::SESSION->{client}->setSessionValue( @_ );
+    $TWiki::Plugins::SESSION->{loginManager}->setSessionValue( @_ );
 }
 
 =pod
@@ -290,7 +290,7 @@ sub clearSessionValue {
 #   my( $key, $value ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    $TWiki::Plugins::SESSION->{client}->clearSessionValue( @_ );
+    $TWiki::Plugins::SESSION->{loginManager}->clearSessionValue( @_ );
 }
 
 =pod
@@ -1469,6 +1469,7 @@ sub writeHeader {
 Redirect to URL
    * =$query= - CGI query object. Ignored, only there for compatibility. The session CGI query object is used instead.
    * =$url=   - URL to redirect to
+
 Return:             none, never returns
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)

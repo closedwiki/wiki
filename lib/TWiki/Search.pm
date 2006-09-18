@@ -682,14 +682,8 @@ sub searchWeb {
         my( $beforeText, $repeatText, $afterText ) =
           split( /%REPEAT%/, $tmplTable );
         if( $header ) {
-            $beforeText = $header;
-            $beforeText =~ s/\$n\(\)/\n/gos;         # expand '$n()' to new line
-            $beforeText =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand '$n' to new line
+            $beforeText = TWiki::expandStandardEscapes($header);
             $beforeText =~ s/\$web/$web/gos;         # expand name of web
-            $beforeText =~ s/\$nop(\(\))?//gos;      # remove filler, useful for nested search
-            $beforeText =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
-            $beforeText =~ s/\$percnt(\(\))?/\%/gos; # expand percent
-            $beforeText =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
             if( defined( $separator )) {
                 $beforeText .= $separator;
             } else {
@@ -840,15 +834,7 @@ sub searchWeb {
                         # SMELL: why?
                         $out =~ s/([^\n])$/$1\n/s;
                     }
-                    # expand '$n()' to new line
-                    $out =~ s/\$n\(\)/\n/gs;
-                    # expand '$n' to new line
-                    $out =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
-                    # remove filler, useful for nested search
-                    $out =~ s/\$nop(\(\))?//gs;
-                    $out =~ s/\$quot(\(\))?/"/gs;
-                    $out =~ s/\$percnt(\(\))?/%/gs;
-                    $out =~ s/\$dollar(\(\))?/\$/gs;
+                    $out = TWiki::expandStandardEscapes( $out );
 
                 } elsif( $noSummary ) {
                     $out =~ s/%TEXTHEAD%//go;
