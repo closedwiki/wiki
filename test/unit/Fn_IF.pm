@@ -53,9 +53,29 @@ sub test_correctIF {
     foreach my $test (@tests) {
         my $text = '%IF{"'.$test->{test}.'" then="'.
           $test->{then}.'" else="'.$test->{else}.'"}%';
-        my $result = $this->{twiki}->handleCommonTags($text, $this->{test_web}, $this->{test_topic});
+        my $result = $this->{twiki}->handleCommonTags(
+            $text, $this->{test_web}, $this->{test_topic});
         $this->assert_equals('1', $result, $text." => ".$result);
     }
+}
+
+sub test_INCLUDEparams {
+    my $this = shift;
+
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user},
+        $this->{test_web},
+        "DeadHerring",
+        <<'SMELL');
+one %IF{ "defined NAME" then="1" else="0" }%
+two %IF{ "$ NAME='%NAME%'" then="1" else="0" }%
+SMELL
+    my $text = <<'PONG';
+%INCLUDE{"DeadHerring" NAME="Red" warn="on"}%
+PONG
+    my $result = $this->{twiki}->handleCommonTags(
+        $text, $this->{test_web}, $this->{test_topic});
+    $this->assert_matches(qr/^\s*one 1\s+two 1\s*$/s, $result);
 }
 
 1;
