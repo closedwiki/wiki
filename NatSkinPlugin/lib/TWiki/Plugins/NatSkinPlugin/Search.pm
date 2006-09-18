@@ -289,7 +289,7 @@ sub natTopicSearch {
 
     # filter out non-viewable topics
     @topics = 
-      grep {&TWiki::Func::checkAccessPermission("view", $theUser, "", $_, $thisWebName);}
+      grep {&TWiki::Func::checkAccessPermission("view", $theUser, undef, $_, $thisWebName);}
       @topics;
 
 
