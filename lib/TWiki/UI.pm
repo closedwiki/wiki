@@ -99,8 +99,8 @@ sub run {
             if (open(F, '<'.$cache)) {
                 local $/;
                 #print STDERR "Loading ",<F>,"\n";
-                close(F);
-                open(F, '<'.$cache);
+                #close(F);
+                #open(F, '<'.$cache);
                 $query = new CGI(\*F);
                 close(F);
                 unlink($cache);
