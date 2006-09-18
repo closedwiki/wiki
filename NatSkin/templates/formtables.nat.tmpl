@@ -3,13 +3,13 @@
 %TMPL:DEF{FORM:display:header}% <!-- -->
 <div class="natTopicForm">
 <table class='twikiTable'><tr><th class='natTopicFormTitle' colspan='2'>
-[[%A_TITLE%]]
+%A_TITLE%
 </th></tr> 
 %TMPL:END%
 %{ Each row }% 
 %TMPL:DEF{FORM:display:row}% <!-- -->
-<tr valign='top'><td class='twikiFirstCol natTopicFormFirstCol'> %A_TITLE%: </td><td>
-%A_VALUE%
+<tr valign='top'><td class='twikiFirstCol natTopicFormFirstCol'>%A_TITLE%:</td><td>
+<noautolink>%A_VALUE%</noautolink>
 </td></tr> 
 %TMPL:END%
 %{ Footer }% %TMPL:DEF{FORM:display:footer}% </table></div> 

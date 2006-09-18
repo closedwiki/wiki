@@ -4,10 +4,8 @@
 <a href="%NATLOGINURL%" rel="nofollow" accesskey="l" title="%MAKETEXT{"Login to [_1]" args="<nop>%WIKITOOLNAME%"}%">%TMPL:P{"LOG_IN"}%</a>
 | <a href="%SCRIPTURLPATH{"view"}%/%TWIKIWEB%/TWikiRegistration" accesskey="r" title="%MAKETEXT{"Register on [_1]" args="<nop>%WIKITOOLNAME%"}%">%MAKETEXT{"Register"}%</a>
 %ELSEDEFINED%
-%WIKIUSERNAME%
-<span style="%IF{"{LoginManager} = 'TWiki::Client::ApacheLogin'" then="display:none"}%">
+[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]
 | <a href="%NATLOGOUTURL%" rel="nofollow" accesskey="l" title="%MAKETEXT{"Logout of [_1]" args="<nop>%WIKITOOLNAME%"}%">%TMPL:P{"LOG_OUT"}%</a>
-</span>
 %FIDEFINED% <!-- -->
 | <a href="%SCRIPTURLPATH{"view"}%/%BASEWEB%/%BASETOPIC%?skin=print.nat" rel="nofollow" accesskey="p" title="%MAKETEXT{"Print this page"}%">%MAKETEXT{"Print"}%</a>
 <div class="natUserActions">%USERACTIONS%</div>%STOPINCLUDE%

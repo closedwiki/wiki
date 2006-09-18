@@ -272,7 +272,6 @@ html>body .natSideBar ol { /* hide from IE */
 }
 
 .natMain textarea {
-  font-size:1.0em;
   background:white;
   border:0px;
   color:#444;
@@ -336,6 +335,11 @@ html>body .natSideBar ol { /* hide from IE */
   border-right:0px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
+.twikiPageForm table table {
+  margin-top:2px;
+  margin-bottom:2px;
+  border:0px;
+}
 .natTopicForm {
   padding:5px;
 }
@@ -381,7 +385,7 @@ html>body .natSideBar ol { /* hide from IE */
   border:1px solid #d9d6e7;
   margin:2px;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  font-size:1.1em;
+  font-size:14px;
   color:#444;
   padding:2px;
 }

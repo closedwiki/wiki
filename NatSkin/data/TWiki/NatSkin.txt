@@ -164,7 +164,7 @@ allways open an extra window.
 |  Skin Author: | TWiki:Main/MichaelDaum |
 |  Copyright &copy;: | 2003-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Skin Version: | v3.0-pre6 |
+|  Skin Version: | v3.0-pre8 |
 |  Dependencies: | TWiki:Plugins/NatSkinPlugin |
 |  Description: | Driven by cascading stylesheets, Comes with 12 alternative styles, <nop>MoveableType and Wordpress Look-n-Feel |
 |  Base Name: | nat |
@@ -180,6 +180,9 @@ allways open an extra window.
    <div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
    <div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> |
 |  Change&nbsp;History: | <!-- specify latest version first -->&nbsp; |
+|  18 Sep 2006: | removed private registerconfirm template which whas broken anyway; \
+                  fixed breadcrumbs on edit page; \
+		  some minor formtable cleanups |
 |  29 Aug 2006: | removed spaghetti template code for beijing and cairo; \
                   removed NATSCRIPTURL; \
 		  fixed <nop>MySideBar localization;\
@@ -368,7 +371,7 @@ allways open an extra window.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
 
--- TWiki:Main/MichaelDaum - 29 Aug 2006
+-- TWiki:Main/MichaelDaum - 18 Sep 2006
 
 %META:FILEATTACHMENT{name="favicon.ico" attr="h" comment="" date="1113468984" path="favicon.ico" size="4710" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="previewbg.png" attr="h" comment="" date="1114174051" path="previewbg.png" size="19334" user="TWikiContributor" version="1.1"}%
