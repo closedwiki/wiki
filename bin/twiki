@@ -90,13 +90,13 @@
 # ----------
 #
 # Put the following line
-#!/usr/bin/speedy -wT -- -t300 -M5 -r50
+#!/usr/bin/speedy -wT -- -t600 -M10 -r50
 # at the beginning of this script replacing the '/usr/bin/perl' line
 #
 # Useful parameters:
 #
-#   -t300 : timeout backend after 300 seconds
-#   -M5: limit the number of backends to 5
+#   -t600 : timeout backend after 600 seconds
+#   -M10: limit the number of backends to 5
 #   -r50: re-exec the backend after serving 50 requests
 #
 # The given values are rather arbitrary and quite conservative to prevent
@@ -116,16 +116,16 @@ BEGIN {
     unshift @INC, '.';
     require 'setlib.cfg';
     require 'LocalSite.cfg';
+
+    %isInitialized = (); # useful for perl accelerators
+    $counter = 0;
 }
 
 use strict;
 use CGI;
 use TWiki::UI;
-
-use vars qw(%isInitialized $debug);
-
-my %isInitialized = (); # useful for perl accelerators
-my $debug = 0; # toggle me
+use vars qw(%isInitialized $debug $counter);
+$debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
@@ -136,7 +136,7 @@ sub writeDebug {
 # stub for the template login manager
 sub login {
   my $session = shift;
-  $session->{client}->login( $session->{cgiQuery}, $session );
+  $session->{loginManager}->login( $session->{cgiQuery}, $session );
 }
 
 ###############################################################################
@@ -145,7 +145,7 @@ sub doRequest {
   my $action = 'view';
   my $path = $ENV{PATH_INFO} || '';
 
-  writeDebug("### new request at $path");
+  #writeDebug("### new request at $path");
 
   #if ($debug) {
   #  foreach my $key (sort keys %ENV) {
@@ -174,7 +174,7 @@ sub doRequest {
 
   # lazy compilation
   if ($package ne '' && !$isInitialized{$package}) {
-    writeDebug("initializing package $package");
+    #writeDebug("initializing package $package");
     $isInitialized{$package} = 1;
     eval "use $package;";
     die $@ if $@;
@@ -183,6 +183,9 @@ sub doRequest {
   # do it
   my $sub = $package.'::'.$function;
   TWiki::UI::run(\&$sub);
+
+  #writeDebug("counter=$counter");
+  $counter++;
 }
 
 ###############################################################################
