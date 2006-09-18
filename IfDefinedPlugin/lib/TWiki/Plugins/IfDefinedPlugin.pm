@@ -30,14 +30,15 @@ use vars qw(
 );
 
 $VERSION = '$Rev$';
-$RELEASE = 'v0.94';
+$RELEASE = 'v0.95';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Render content conditionally';
 $debug = 0; # toggle me
 
 ###############################################################################
 sub writeDebug {
-  &TWiki::Func::writeDebug('- IfDefinedPlugin - '.$_[0]) if $debug;
+  #&TWiki::Func::writeDebug('- IfDefinedPlugin - '.$_[0]) if $debug;
+  print STDERR '- IfDefinedPlugin - '.$_[0]."\n" if $debug;
 }
 
 ###############################################################################
@@ -166,7 +167,7 @@ sub ifDefinedImpl {
 	$theVariable = '';
       }
     }
-    if ($theVariable =~ /^($theAs)$/) {
+    if ($theVariable =~ /^($theAs)$/s) {
       if ($theThen =~ s/\$nop//go) {
 	$theThen = TWiki::Func::expandCommonVariables($theThen, $currentTopic, $currentWeb);
       }

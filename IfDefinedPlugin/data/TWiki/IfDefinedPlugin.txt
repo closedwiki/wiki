@@ -124,8 +124,9 @@ advance.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v0.94 |
+|  Plugin Version: | v0.95 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  18 Sep 2006: | allow multinline values to be checked |
 |  31 Aug 2006: | added NO_PREFS_IN_TOPIC |
 |  15 Aug 2006: | added =$test= and =$value= |
 |  07 Aug 2006: | be smarter to detect the cgi action wrt to different apache setups |
@@ -141,4 +142,4 @@ advance.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 
--- TWiki:Main.MichaelDaum - 31 Aug 2006
+-- TWiki:Main.MichaelDaum - 18 Sep 2006
