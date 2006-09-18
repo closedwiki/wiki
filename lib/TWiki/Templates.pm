@@ -319,7 +319,7 @@ sub _readTemplateFile {
     }
 
     # See if it is web.topic
-    if( $name =~ /^(\w+)\.(\w+)$/ ) {
+    if( $name =~ /^(.+)\.(.+?)$/ ) {
         my $web = $1;
         my $topic = $2;
         my $candidate;
