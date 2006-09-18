@@ -152,7 +152,7 @@ setHTML = function(reply) {
     wikiwyg1.editMode();
 }
 
-window.onload = function() {
+windowOnload = function() {
     var postdata = 'skin=text;wysiwyg_edit=1;t=%TIME%';
     Wikiwyg.liveUpdate(
         'GET',
@@ -161,6 +161,7 @@ window.onload = function() {
         setHTML
     );
 }
+addLoadEvent(windowOnload, true);
 </script>
 </head>
 <body>
