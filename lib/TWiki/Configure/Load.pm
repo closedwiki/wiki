@@ -69,12 +69,22 @@ sub readConfig {
 
     # Expand references to $TWiki::cfg vars embedded in the values of
     # other $TWiki::cfg vars.
-    foreach ( values %TWiki::cfg ) {
-        next unless $_;
-        s/\$TWiki::cfg{([[A-Za-z0-9{}]+)}/$TWiki::cfg{$1}/g;
-    }
+    _expand(\%TWiki::cfg);
 
     $TWiki::cfg{ConfigurationFinished} = 1;
+}
+
+sub _expand {
+    my $hash = shift;
+
+    foreach ( values %$hash ) {
+        next unless $_;
+        if (ref($_) eq 'HASH') {
+            _expand(\%$_);
+        } else {
+            s/(\$TWiki::cfg{[[A-Za-z0-9{}]+})/eval $1||'undef'/ge;
+        }
+    }
 }
 
 =pod

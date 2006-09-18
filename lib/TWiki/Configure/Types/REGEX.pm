@@ -24,16 +24,17 @@ use base 'TWiki::Configure::Types::STRING';
 
 sub prompt {
     my( $this, $id, $opts, $value ) = @_;
-    $value =~ s/^\(\?-xism:(.*)\)$/$1/;
+    $value = "$value";
+    while ($value =~ s/^\(\?-xism:(.*)\)$/$1/) { };
     $value =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
     my $res = '<input name="'.$id.'" type="text" size="55%" value="'.$value.'" />';
     return $res;
 }
 
 sub string2value {
-    my ($this, $val) = @_;
-    $val =~ s/^\(\?-xism:(.*)\)$/$1/;
-    return qr/$val/;
+    my ($this, $value) = @_;
+    while ($value =~ s/^\(\?-xism:(.*)\)$/$1/) { };
+    return qr/$value/;
 }
 
 sub equals {
