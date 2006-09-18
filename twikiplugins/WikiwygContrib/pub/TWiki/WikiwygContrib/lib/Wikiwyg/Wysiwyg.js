@@ -128,8 +128,6 @@ proto.set_inner_html = function(html) {
 }
 
 proto.apply_stylesheets = function() {
-alert('as')  ;  
-
     var styles = document.styleSheets;
     var head   = this.get_edit_document().getElementsByTagName("head")[0];
 
@@ -147,7 +145,6 @@ alert('as')  ;
 proto.apply_inline_stylesheet = function(style, head) {
     var style_string = "";
     for ( var i = 0 ; i < style.cssRules.length ; i++ ) {
-alert(style.cssRules[i].type+"   "+style.cssRules[i].href);
 
         if ( style.cssRules[i].type == 3 ) {
             // IMPORT_RULE
