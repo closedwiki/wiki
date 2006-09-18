@@ -125,7 +125,7 @@ setHTML = function(reply) {
     
     var config = {
         doubleClickToEdit: false,
-        editHeightMinimum: 1,
+        editHeightMinimum: 200,
         editHeightAdjustment: 1,
         wysiwyg: {
             iframeId: 'wikiwyg-iframe'
@@ -153,6 +153,7 @@ setHTML = function(reply) {
 }
 
 windowOnload = function() {
+//TODO: add test to see if wikiwyg works in this browser, and if not, got textarea/nat edit.
     var postdata = 'skin=text;wysiwyg_edit=1;t=%TIME%';
     Wikiwyg.liveUpdate(
         'GET',
