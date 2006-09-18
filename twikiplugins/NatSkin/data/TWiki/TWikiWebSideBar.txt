@@ -44,5 +44,11 @@
 %TMPL:P{"searchbox"}%
 </div>
 %FISKINSTATE%
-<div class="natSideBarPersonal"> %INCLUDE{"%CALC{"$IF($EXISTS(%MAINWEB%.%WIKINAME%SideBar),%MAINWEB%.%WIKINAME%SideBar,%TWIKIWEB%.MySideBar)"}%"}% </div>
+<div class="natSideBarPersonal"> 
+%IFDEFINEDTHEN{"$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
+$test
+%ELSEDEFINED%
+%$nopINCLUDE{"%TWIKIWEB%.MySideBar" warn="off"}%
+%FIDEFINED%
+</div>
 %STOPINCLUDE%
