@@ -28,34 +28,36 @@ sub check {
     # Check Script URL Path against REQUEST_URI
     my $n;
     my $val = $TWiki::cfg{ScriptUrlPath};
-    $val =~ s!/$!!;
+    my $report = '';
 
     my $guess = $ENV{REQUEST_URI} || $ENV{SCRIPT_NAME} || '';
     $guess =~ s(/+configure\b.*$)();
 
     if( defined $val && $val ne 'NOT SET' ) {
-        unless( $guess ) {
-            return $this->WARN(<<HERE
+        if( $guess ) {
+            if ( $guess !~ /^$val/ ) {
+                $report .= $this->WARN('I expected this to look like "'.$guess.'"');
+            }
+        } else {
+            $report .= $this->WARN(<<HERE);
 This web server does not set REQUEST_URI or SCRIPT_NAME
-so it isn't possible to check the correctness of this setting.
+so it isn't possible to fully check the correctness of this setting.
 HERE
-                       );
-        };
-        if ( $guess !~ /^$val/ ) {
-            return $this->WARN('I expected this to look like "'.$guess.'"');
+        }
+        if ($val =~ m!/$!) {
+            $report .= $this->WARN('Don\'t put a / at the end of the path. It\'ll still work, but you will get double // in a few places.');
         }
     } else {
         unless( $guess ) {
-            return $this->WARN(<<HERE
+            $report .= $this->WARN(<<HERE);
 This web server does not set REQUEST_URI or SCRIPT_NAME
 so it isn't possible to guess this setting.
 HERE
-                       );
         };
         $TWiki::cfg{ScriptUrlPath} = $guess;
-        return $this->guessed(0);
+        $report = $this->guessed(0);
     }
-    return '';
+    return $report;
 }
 
 1;

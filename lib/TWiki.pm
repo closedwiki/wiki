@@ -1583,11 +1583,6 @@ sub applyPatternToIncludedText {
 sub _includeUrl {
     my( $this, $url, $pattern, $web, $topic, $raw, $options, $warn ) = @_;
     my $text = '';
-    my $host = '';
-    my $port = 80;
-    my $path = '';
-    my $user = '';
-    my $pass = '';
 
     # For speed, read file directly if URL matches an attachment directory
     if( $url =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
@@ -1623,21 +1618,24 @@ sub _includeUrl {
     return $this->_includeWarning( $warn, 'urls_not_allowed' )
       unless $TWiki::cfg{INCLUDE}{AllowURLs};
 
-    if( $url =~ /http\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
-        ( $user, $pass, $host, $port, $path ) = ( $1, $2, $3, $4, $5 );
-    } elsif( $url =~ /http\:\/\/(.+)\:(.+)\@([^\/]+)(\/.*)/ ) {
-        ( $user, $pass, $host, $path ) = ( $1, $2, $3, $4 );
-    } elsif( $url =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
-        ( $host, $port, $path ) = ( $1, $2, $3 );
-    } elsif( $url =~ /http\:\/\/([^\/]+)(\/.*)/ ) {
-        ( $host, $path ) = ( $1, $2 );
-    } else {
+    # SMELL: should use the URI module from CPAN to parse the URL
+    my $path = $url;
+    unless ($path =~ s!^(https?)://!!) {
         $text = $this->_includeWarning( $warn, 'bad_protocol', $url );
         return $text;
     }
+    my $protocol = $1;
+    my ( $user, $pass );
+    if ($path =~ s!([^/\@:]+)(?::([^/\@:]+))?@!!) {
+        ( $user, $pass ) = ( $1, $2 );
+    }
+    unless ($path =~ s!([^:/]+)(?::([0-9]+))?!! ) {
+        return $this->_includeWarning( $warn, 'geturl_failed', $url );
+    }
+    my( $host, $port ) = ( $1, $2 );
 
     try {
-        $text = $this->{net}->getUrl( $host, $port, $path, $user, $pass );
+        $text = $this->{net}->getUrl( $protocol, $host, $port, $path, $user, $pass );
         $text =~ s/\r\n/\n/gs;
         $text =~ s/\r/\n/gs;
         $text =~ s/^(.*?\n)\n//s;
@@ -1650,10 +1648,8 @@ sub _includeUrl {
         }
         if( $contentType =~ /^text\/html/ ) {
             $path =~ s/[#?].*$//;
-            $host = 'http://'.$host;
-            if( $port != 80 ) {
-                $host .= ":$port";
-            }
+            $host = $protocol.'://'.$host;
+            $host .= ":$port" if $port;
             $text = _cleanupIncludedHTML( $text, $host, $path, $options )
               unless $raw;
         } elsif( $contentType =~ /^text\/(plain|css)/ ) {
