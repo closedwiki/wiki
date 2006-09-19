@@ -67,13 +67,17 @@ This Contrib is pre-installed as part of the TWiki release package, and should o
    * To make sure the installation was successful, run the =mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
 
 ---++ Setting up your cron job
-You need to set up a =cron= (or equivalent) job to run =mailnotify=.
+You need to set up a =cron= (or equivalent) job to run =tools/mailnotify=.
 
-<code>Usage: perl -I &lt;bin&gt; mailnotify [-q] [ <i>web1 web2 ... webN</i> ]</code>
-&lt;bin&gt; is the path to the TWiki bin directory (usually =../bin=), so that the script can find the rest of TWiki.
+Usage: <code>perl -I &lt;bin&gt; mailnotify [-q] [ <i>web1 web2 ... webN</i> ]</code>
+&lt;bin&gt; is the path to the TWiki bin directory, so that the script can find the rest of TWiki.
 | =-q= | Don't print progress information |
 | <code><i>web1 web2 ... webN</i></code> | List of webs to process, separated by spaces or commas. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
-For example, =perl -I /usr/local/twiki/bin mailnotify -q Public Private= will generate notifications for the Public and Private webs.
+For example, assuming TWiki was installed at =/usr/local/twiki=, this cron entry:
+<verbatim>
+0 0 * * * cd /usr/local/twiki && perl -I bin tools/mailnotify -q Public Private
+</verbatim>
+will generate notifications for the =Public= and =Private= webs every night at midnight.
 
 ---++ Settings
 	* Set STUB = TWiki::Contrib::Mailer
@@ -84,31 +88,32 @@ For example, =perl -I /usr/local/twiki/bin mailnotify -q Public Private= will ge
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2004, Wind River Systems |
 |  License: | GPL |
-| Change History: | |
-| 8808 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1654'>Item1654</a>  mailnotify must enter the command_line context |
-| 8625 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  Making the dashes in the separatator clearer |
-| 8606 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Brushing up HTML mailnotify template |
-| 8602 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Cleaning up plaintext e-mail template, removing TEXTAREA |
-| 8522 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1511'>Item1511</a>  arguments to getScriptUrl in wrong order :-( |
-| 8434 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Fix 'TWiki.' to '%TWIKIEB%.' |
-| 8398 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1460'>Item1460</a>  polished up the comment a bit |
-| 8308 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1362'>Item1362</a>  moving mailnotify cron script |
-| 7848 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1167'>Item1167</a>  forced all mail operations to generate absolute URLs |
-| 7568 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item910'>Item910</a>  use SCRIPTURL{view} instead of complex url expr |
-| 6864 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item624'>Item624</a>  mailer templates moved the the right places |
-| 6861 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item624'>Item624</a>  Added proper templates support for plain text mails |
-| 6809 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item623'>Item623</a>  don't print anything if verbosity is switched off. |
-| 6659 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item528'>Item528</a>  Updated MailerContrib. it's working and the sendmail parameter is used. |
-| 6474 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item420'>Item420</a>  removed spurious remove_obsolete_locks from MailerContrib |
-| 5924 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item153'>Item153</a>  fix mail URL-fixing scheme |
-| 5269 | Minor doc fixes |
-| 5266 | Doc tidy-ups, added filtering of _ webs, added obsolete lock script |
-| 5264 | Changed default to add web name to user name (I hope) |
-| 5263 | Minor doc tidyups |
-| 5261 | Documentation changes, and fixed to scan all webs. |
-| 5253 | runnable as CGI script, minor bugfixes, removed dependency on DBCacheContrib |
-| 5234 | Minor doc changes |
-| 5231 | Made a change an object, added unit tests to CVS, lots of testing. |
+|  Change History: | |
+|  11534 | Bugs:Item2153: Clarified docs. Bugs:Item2698: Improved error reporting. |
+|  8808 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1654'>Item1654</a>  mailnotify must enter the command_line context |
+|  8625 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  Making the dashes in the separatator clearer |
+|  8606 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Brushing up HTML mailnotify template |
+|  8602 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1508'>Item1508</a>  MailerContrib: Cleaning up plaintext e-mail template, removing TEXTAREA |
+|  8522 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1511'>Item1511</a>  arguments to getScriptUrl in wrong order :-( |
+|  8434 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1465'>Item1465</a>  Fix 'TWiki.' to '%TWIKIEB%.' |
+|  8398 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1460'>Item1460</a>  polished up the comment a bit |
+|  8308 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1362'>Item1362</a>  moving mailnotify cron script |
+|  7848 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item1167'>Item1167</a>  forced all mail operations to generate absolute URLs |
+|  7568 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item910'>Item910</a>  use SCRIPTURL{view} instead of complex url expr |
+|  6864 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item624'>Item624</a>  mailer templates moved the the right places |
+|  6861 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item624'>Item624</a>  Added proper templates support for plain text mails |
+|  6809 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item623'>Item623</a>  don't print anything if verbosity is switched off. |
+|  6659 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item528'>Item528</a>  Updated MailerContrib. it's working and the sendmail parameter is used. |
+|  6474 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item420'>Item420</a>  removed spurious remove_obsolete_locks from MailerContrib |
+|  5924 | <a rel='nofollow' href='http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item153'>Item153</a>  fix mail URL-fixing scheme |
+|  5269 | Minor doc fixes |
+|  5266 | Doc tidy-ups, added filtering of _ webs, added obsolete lock script |
+|  5264 | Changed default to add web name to user name (I hope) |
+|  5263 | Minor doc tidyups |
+|  5261 | Documentation changes, and fixed to scan all webs. |
+|  5253 | runnable as CGI script, minor bugfixes, removed dependency on DBCacheContrib |
+|  5234 | Minor doc changes |
+|  5231 | Made a change an object, added unit tests to CVS, lots of testing. |
 |  4 March 2005 | 1.010 Dakar release ready. |
 |  12 Oct 2004 | 1.004 Added support for anti-subscriptions. Doc fixes from TWiki:Main.PeterThoeny. Bug fixes to permissions code. Back-off and retry if the mailer can't be reached (should really be in Net::sendEmail) |
 |  6 Oct 2004 | 1.003 Excluded _ webs from processing, added =bin/remove_obsolete_locks= for full reverse-compatibility |
