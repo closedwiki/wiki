@@ -128,6 +128,7 @@ $defOps{defined} =
         return 0 unless $eval;
         return 1 if( defined( $twiki->{cgiQuery}->param( $eval )));
         return 1 if( defined( $twiki->{prefs}->getPreferencesValue( $eval )));
+        return 1 if( defined( $twiki->{SESSION_TAGS}{$eval} ));
         return 0;
     }
    };
