@@ -57,11 +57,11 @@
 #   # NatSkinPlugin
 #   $TWiki::cfg{ScriptUrlPaths}{natsearch} = '/bin/twiki/natsearch';
 #   $TWiki::cfg{ScriptUrlPaths}{natlogon} = '/bin/twiki/natlogon';
-#   $TWiki::cfg{Schedule}{natsearch} = [TWiki::Plugins::NatSkinPlugin::Search, natSearchCgi] ;
-#   $TWiki::cfg{Schedule}{natlogon} = [TWiki::Plugins::NatSkinPlugin::Auth, logonCgi] ;
+#   $TWiki::cfg{SwitchBoard}{natsearch} = [TWiki::Plugins::NatSkinPlugin::Search, natSearchCgi] ;
+#   $TWiki::cfg{SwitchBoard}{natlogon} = [TWiki::Plugins::NatSkinPlugin::Auth, logonCgi] ;
 #  
 #   # XmlRpcContrib
-#   $TWiki::cfg{Schedule}{xmlrpc} = [TWiki::Contrib::XmlRpcContrib, dispatch] ;
+#   $TWiki::cfg{SwitchBoard}{xmlrpc} = [TWiki::Contrib::XmlRpcContrib, dispatch] ;
 #
 #
 # SpeedyCGI:
@@ -94,8 +94,8 @@ BEGIN {
   unshift @INC, '.';
   require 'setlib.cfg';
 
-  # default scheduler settings
-  $TWiki::cfg{Schedule} = {
+  # default switchboard settings
+  $TWiki::cfg{SwitchBoard} = {
     'attach' => [TWiki::UI::Upload, 'attach'],
     'changes' => [TWiki::UI::Changes, 'changes'],
     'edit' => [TWiki::UI::Edit, 'edit'],
@@ -161,7 +161,7 @@ sub doRequest {
   if ($path =~ /^\/([a-z]*?)(\/.*)?$/) {
     $action = $1 || 'view';
     $path = $2 || '';
-    unless (defined $TWiki::cfg{Schedule}{$action}) {
+    unless (defined $TWiki::cfg{SwitchBoard}{$action}) {
       #writeDebug("unknown action '$action' ... defaulting to view");
       $action = 'view';
     }
@@ -173,7 +173,7 @@ sub doRequest {
   $ENV{SCRIPT_NAME} =~ s/^(.*)\/twiki(auth)?$/$1\/$action/g;
 
   # get package and function
-  my ($package, $function) = @{$TWiki::cfg{Schedule}{$action}};
+  my ($package, $function) = @{$TWiki::cfg{SwitchBoard}{$action}};
   #writeDebug("package=$package, function=$function");
 
   # lazy compilation
