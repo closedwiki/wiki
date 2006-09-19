@@ -304,8 +304,12 @@ sub handleDBSTATS {
       #writeDebug("reading field $field");
 
       while ($fieldValue =~ /$thePattern/g) { # loop over all occurrences of the pattern
-	my $key = $1;
-	my $record = $statistics{$key};
+	my $key1 = $1;
+	my $key2 = $2 || '';
+	my $key3 = $3 || '';
+	my $key4 = $4 || '';
+	my $key5 = $5 || '';
+	my $record = $statistics{$key1};
 	if ($record) {
 	  $record->{count}++;
 	  $record->{from} = $createdate if $record->{from} > $createdate;
@@ -314,9 +318,10 @@ sub handleDBSTATS {
 	  my %record = (
 	    count=>1,
 	    from=>$createdate,
-	    to=>$createdate
+	    to=>$createdate,
+	    keyList=>[$key1, $key2, $key3, $key4, $key5],
 	  );
-	  $statistics{$key} = \%record;
+	  $statistics{$key1} = \%record;
 	}
       }
     }
@@ -355,11 +360,18 @@ sub handleDBSTATS {
     $index++;
     my $record = $statistics{$key};
     my $text;
+    my ($key1, $key2, $key3, $key4, $key5) =
+      @{$record->{keyList}};
     $text = $theSep if $result;
     $text .= $theFormat;
     $result .= &_expandVariables($text, 
       'web'=>$thisWeb,
       'key'=>$key,
+      'key1'=>$key1,
+      'key2'=>$key2,
+      'key3'=>$key3,
+      'key4'=>$key4,
+      'key5'=>$key5,
       'count'=>$record->{count}, 
       'index'=>$index,
       'min'=>$min,
@@ -499,7 +511,7 @@ sub _expandVariables {
   return '' unless $theFormat;
   
   foreach my $key (keys %params) {
-    if($theFormat =~ s/\$$key/$params{$key}/g) {
+    if($theFormat =~ s/\$$key\b/$params{$key}/g) {
       #writeDebug("expanding $key->$params{$key}");
     }
   }
