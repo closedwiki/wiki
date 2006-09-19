@@ -49,7 +49,6 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-
 =pod
 
 ---++ StaticMethod mailNotify($webs, $session, $verbose)
@@ -78,8 +77,8 @@ sub mailNotify {
     $webstr =~ s/\*/\.\*/g;
 
     if (!defined $twiki) {
-      $twiki = new TWiki( $TWiki::cfg{DefaultUserLogin} );
-      $twiki->enterContext( 'command_line' );
+        $twiki = new TWiki( $TWiki::cfg{DefaultUserLogin}, undef,
+                            command_line => 1 );
     }
 
     # absolute URL context for email generation
@@ -233,19 +232,21 @@ sub _generateEmails {
         $mail =~ s/%LASTDATE%/$lastTime/geo;
         $mail = $twiki->handleCommonTags( $mail, $web, $homeTopic );
 
-        my $url = $TWiki::cfg{ScriptUrlPath};
-        my $base = $TWiki::cfg{DefaultUrlHost} . $url;
+        my $base = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath};
         $mail =~ s/(href=\")([^"]+)/$1.relativeURL($base,$2)/goei;
         $mail =~ s/(action=\")([^"]+)/$1.relativeURL($base,$2)/goei;
 
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        my $error;
+        my $error = $twiki->{net}->sendEmail( $mail, 5 );
 
-        $error = $twiki->{net}->sendEmail( $mail, 5 );
-
-        $sentMails++ unless $error;
+        if ($error) {
+            print STDERR "$error\n";
+            $report .= $error."\n";
+        } else {
+            $sentMails++;
+        }
     }
     $report .= "\t$sentMails change notifications\n";
 
