@@ -88,7 +88,9 @@ my $OS = $TWiki::cfg{OS} || '';
 
 # **PATH M**
 # This is the 'cgi-bin' part of URLs used to access the TWiki bin
-# directory e.g. /twiki/bin<p />
+# directory e.g. <code>/twiki/bin</code><br />
+# Do <b>not</b> include a trailing /.
+# <p />
 # See http://twiki.org/cgi-bin/view/TWiki.ShorterUrlCookbook for more information on setting up
 # TWiki to use shorter script URLs.
 # $TWiki::cfg{ScriptUrlPath} = '/twiki/bin';

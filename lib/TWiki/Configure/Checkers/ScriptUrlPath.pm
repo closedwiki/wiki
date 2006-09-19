@@ -28,10 +28,12 @@ sub check {
     # Check Script URL Path against REQUEST_URI
     my $n;
     my $val = $TWiki::cfg{ScriptUrlPath};
+    $val =~ s!/$!!;
+
     my $guess = $ENV{REQUEST_URI} || $ENV{SCRIPT_NAME} || '';
     $guess =~ s(/+configure\b.*$)();
 
-    if( $val && $val ne 'NOT SET' ) {
+    if( defined $val && $val ne 'NOT SET' ) {
         unless( $guess ) {
             return $this->WARN(<<HERE
 This web server does not set REQUEST_URI or SCRIPT_NAME

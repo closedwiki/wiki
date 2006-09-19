@@ -434,11 +434,31 @@ sub _actionConfigure {
 
     print CGI::h1( 'Configuration');
 
-    $TWiki::cfg{ScriptUrlPath} ||= '';
-    $TWiki::cfg{ScriptSuffix} ||= '';
-    $TWiki::cfg{SystemWebName} ||= '';
+    # Use a common root for the first three sections, because
+    # they will never be saved
+    my $eroot = new TWiki::Configure::Root();
+    my $stub = new TWiki::Configure::Item();
+    $eroot->addChild($stub);
+    my $eui = TWiki::Configure::UI::loadChecker('Environment', $stub);
 
-    print <<'HERE';
+    # See if this platform has special detection or checking requirements
+    # (most don't)
+    $eroot->addChild($stub = new TWiki::Configure::Item());
+    my $osui = TWiki::Configure::UI::loadChecker(
+        $Config::Config{osname}, $stub);
+
+    $eroot->addChild($stub = new TWiki::Configure::Item());
+    my $cgiui = TWiki::Configure::UI::loadChecker('CGISetup', $stub);
+
+    # Use a separate root for the saveable sections
+    my $root = new TWiki::Configure::Root();
+    my $valuer = new TWiki::Configure::Valuer(
+        $TWiki::defaultCfg, \%TWiki::cfg);
+
+    # Load the config structures.
+    TWiki::Configure::TWikiCfg::load($root);
+
+    print <<HERE;
 <div class="patternContent">
  <div class="patternTopic">
   <p><strong>Use this page to set the configuration options for TWiki.
@@ -520,37 +540,12 @@ HERE
                             'Open all options')).
                               CGI::br());
 
-    # Use a common root for the first three sections, because
-    # they will never be saved
-    my $root = new TWiki::Configure::Root();
-    my $stub = new TWiki::Configure::Item();
-    $root->addChild($stub);
-    my $ui = TWiki::Configure::UI::loadChecker('Environment', $stub);
-    print $ui->ui();
-
-    # See if this platform has special detection or checking requirements
-    # (most don't)
-    $root->addChild($stub = new TWiki::Configure::Item());
-    $ui = TWiki::Configure::UI::loadChecker($Config::Config{osname}, $stub);
-    print $ui->ui() if $ui;
-
-    $root->addChild($stub = new TWiki::Configure::Item());
-    $ui = TWiki::Configure::UI::loadChecker('CGISetup', $stub);
-    print $ui->ui();
-
-    # Valuer must be created after the basic sanity checks; they load the
-    # cfg hashes
-    $root = new TWiki::Configure::Root();
-    my $valuer = new TWiki::Configure::Valuer(
-        $TWiki::defaultCfg, \%TWiki::cfg);
-
-    # Load the config structures. Note that this does
-    # note read the actual *values*, it just parses the type information
-    # for each value. The actual values are held in the $valuer
-    TWiki::Configure::TWikiCfg::load($root);
+    print $eui->ui();
+    print $osui->ui() if $osui;
+    print $cgiui->ui() if $cgiui;
 
     # Load the UI for the configuration and whack it out
-    $ui = _checkLoadUI('Root', $root);
+    my $ui = _checkLoadUI('Root', $root);
     return 1 unless $ui;
 
     print $ui->ui($root, $valuer);
