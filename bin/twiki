@@ -182,7 +182,7 @@ sub doRequest {
 
   # do it
   my $sub = $package.'::'.$function;
-  TWiki::UI::run(\&$sub);
+  TWiki::UI::run(\&$sub, $function => 1);
 
   #writeDebug("counter=$counter");
   $counter++;
