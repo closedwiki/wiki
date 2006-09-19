@@ -78,7 +78,7 @@ sub mailNotify {
 
     if (!defined $twiki) {
         $twiki = new TWiki( $TWiki::cfg{DefaultUserLogin}, undef,
-                            command_line => 1 );
+                            {command_line=>1} );
     }
 
     # absolute URL context for email generation
