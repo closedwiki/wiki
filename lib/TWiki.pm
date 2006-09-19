@@ -716,7 +716,8 @@ sub redirect {
     }
 
     if ($passthru) {
-        die "Passthrough on URL that already has parameters" if $url =~ /\?/;
+        $url =~ s/\?(.*)$//;
+        my $existing = $1;
         if ($ENV{REQUEST_METHOD} eq 'POST') {
             # Redirecting from a port to a get
             my $cache = $this->cacheQuery();
@@ -727,6 +728,7 @@ sub redirect {
         } else {
             $url .= '?'.$query->query_string();
         }
+        $url .= (($url =~ /\?/) ? ';' : '?').$existing if $existing;
     }
 
     return if( $this->{plugins}->redirectCgiQueryHandler( $query, $url ) );
@@ -1155,24 +1157,24 @@ sub normalizeWebTopicName {
 
 =pod
 
----++ ClassMethod new( $remoteUser, $query )
+---++ ClassMethod new( $remoteUser, $query, \%initialContext )
 Constructs a new TWiki object. Parameters are taken from the query object.
 
    * =$remoteUser= the logged-in user (login name)
    * =$query= the query
-
+   * =\%initialContext= - reference to a hash containing context name=value pairs to be pre-installed in the context hash
 =cut
 
 sub new {
-    my( $class, $remoteUser, $query, $d ) = @_;
-    ASSERT(!defined($d)) if DEBUG; # upgrade check
+    my( $class, $remoteUser, $query, $initialContext ) = @_;
+
     $query ||= new CGI( {} );
     $remoteUser ||= $query->remote_user() || $TWiki::cfg{DefaultUserLogin};
 
     my $this = bless( {}, $class );
 
     $this->{htmlHeaders} = {};
-    $this->{context} = {};
+    $this->{context} = $initialContext || {};
 
     # create the various sub-objects
     $this->{sandbox} = $sharedSandbox;
@@ -1316,7 +1318,7 @@ sub new {
     $login = $plogin if $plogin;
     $login ||= $TWiki::cfg{DefaultUserLogin};
     unless( $login =~ /$TWiki::cfg{LoginNameFilterIn}/) {
-        die "Illegal format for login name '$login'";
+        die "Illegal format for login name '$login' (does not match ".$TWiki::cfg{LoginNameFilterIn}.")";
     }
     $login = TWiki::Sandbox::untaintUnchecked( $login );
 

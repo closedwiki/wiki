@@ -71,7 +71,6 @@ the =$query= are added as hiddens into the expanded template.
 sub oops {
     my( $session, $web, $topic, $query, $keep ) = @_;
 
-    $session->enterContext( 'oops' );
     my $tmplName;
     my $def;
     my @params;

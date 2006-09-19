@@ -30,5 +30,5 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Search;
-TWiki::UI::run( \&TWiki::UI::Search::search );
+TWiki::UI::run( \&TWiki::UI::Search::search, search => 1 );
 

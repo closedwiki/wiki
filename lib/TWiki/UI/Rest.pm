@@ -46,7 +46,6 @@ the given subject and verb, and execute it if one is found.
 =cut
 sub gateway {
     my $session = shift;
-    $session->enterContext( 'rest' );
     
     my $query = $session->{cgiQuery};
     my $web = $session->{webName};

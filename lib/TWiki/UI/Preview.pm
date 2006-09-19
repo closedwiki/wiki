@@ -30,8 +30,6 @@ use TWiki::OopsException;
 sub preview {
     my $session = shift;
 
-    $session->enterContext( 'preview' );
-
     my $query = $session->{cgiQuery};
     my $web = $session->{webName};
     my $topic = $session->{topicName};

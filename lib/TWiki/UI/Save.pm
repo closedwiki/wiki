@@ -298,8 +298,6 @@ sub save {
     my $store = $session->{store};
     my $user = $session->{user};
 
-    $session->enterContext( 'save' );
-
     #
     # Allow for dynamic topic creation by replacing strings of at least
     # 10 x's XXXXXX with a next-in-sequence number.

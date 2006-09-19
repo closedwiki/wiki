@@ -29,4 +29,4 @@ BEGIN {
 
 use TWiki::UI;
 use TWiki::UI::Oops;
-TWiki::UI::run( \&TWiki::UI::Oops::oops_cgi );
+TWiki::UI::run( \&TWiki::UI::Oops::oops_cgi, oops => 1 );

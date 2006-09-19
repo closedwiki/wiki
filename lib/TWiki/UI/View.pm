@@ -75,8 +75,6 @@ sub view {
     # is this view indexable by search engines? Default yes.
     my $indexableView = 1;
 
-    $session->enterContext( 'view' );
-
     TWiki::UI::checkWebExists( $session, $webName, $topicName, 'view' );
 
     my $skin = $session->getSkin();

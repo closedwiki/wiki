@@ -28,5 +28,5 @@ BEGIN {
 
 use TWiki::UI::Rest;
 
-TWiki::UI::run(\&TWiki::UI::Rest::gateway);
+TWiki::UI::run(\&TWiki::UI::Rest::gateway, rest => 1 );
 

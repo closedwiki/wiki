@@ -69,7 +69,6 @@ Most parameters are in the CGI query:
 sub edit {
     my $session = shift;
 
-    $session->enterContext( 'edit' );
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};

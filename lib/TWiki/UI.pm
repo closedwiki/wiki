@@ -37,18 +37,21 @@ use TWiki::OopsException;
 
 =pod
 
----++ StaticMethod run( \&method )
+---++ StaticMethod run( \&method, ... )
 
 Entry point for execution of a UI function. The parameter is a
 reference to the method.
 
+... is a list of name-value pairs that define initial context identifiers
+that must be set during initPlugin. This set will be extended to include
+command_line if the script is detected as being run outside the browser.
+
 =cut
 
 sub run {
-    my $method = shift;
+    my ( $method, %initialContext ) = @_;
 
     my ( $query, $pathInfo, $user, $url, $topic );
-    my $scripted = 0;
 
     # Use unbuffered IO
     $| = 1;
@@ -111,7 +114,8 @@ sub run {
         }
     } else {
         # script is called by cron job or user
-        $scripted = 1;
+        $initialContext{command_line} = 1;
+
         $user = $TWiki::cfg{SuperAdminGroup};
         $query = new CGI();
         while( scalar( @ARGV )) {
@@ -130,12 +134,9 @@ sub run {
         }
     }
 
-    my $session = new TWiki( $user, $query );
-    $session->enterContext( 'command_line' ) if $scripted;
+    my $session = new TWiki( $user, $query, \%initialContext );
 
     local $SIG{__DIE__} = \&Carp::confess;
-
-    # end of comment out in production version
 
     try {
         $session->{loginManager}->checkAccess();
