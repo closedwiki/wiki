@@ -98,7 +98,7 @@ function disableSubmit(inButton) {
 <div class="twikiFormStep">
 ---------------------------------------------+++ %MAKETEXT{"Use template:"}%
 <p>%STARTSECTION{"topictemplate"}%<select name="templatetopic">
-<option value="%TWIKIWEB%.WebTopicEditTemplate">%MAKETEXT{"Default template"}%</option>%SEARCH{".*Template$" scope="topic" regex="on" nonoise="on" format="<option>$topic</option>"}%</select>%ENDSECTION{"topictemplate"}%</p>
+<option value="%TWIKIWEB%.WebTopicEditTemplate">%MAKETEXT{"Default template"}%</option>%SEARCH{".*Template$" scope="topic" type="regex" nonoise="on" format="<option>$topic</option>"}%</select> <a href="%SCRIPTURL{view}%/%TWIKIWEB%/WebTemplateTopics?web=%BASEWEB%">View templates</a> %ENDSECTION{"topictemplate"}%</p>
 </div><!--/twikiFormStep-->
 <div class="twikiFormStep twikiLast">
 <p>%STARTSECTION{"submit"}%<input id="submit" type="submit" class="twikiSubmit" tabindex="13" value='%MAKETEXT{"Create this topic"}%' />%ENDSECTION{"submit"}%</p>
