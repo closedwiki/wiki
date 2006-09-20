@@ -1,0 +1,33 @@
+%META:TOPICINFO{author="TWikiContributor" date="1140597757" format="1.1" version="$Rev$"}%
+---+!! Google Analytics Plugin
+*Wrapper plugin for !JavaScript tags for Google Analytics.* This plugin adds Google !JavaScript code to all pages.
+
+%TOC%
+
+---++ Settings
+Google provides its users with a piece of html to copy-paste into pages. You only need one piece of it, the value of =_uacct=:
+   * Set GOOGLESITEKEY = 
+   
+---++ Plugin Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
+   | *File:* | *Description:* |
+%$MANIFEST%
+	* Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+   %$DEPENDENCIES%
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	
+---++ Contrib Info
+
+| Authors: | TWiki:Main.ArthurClemens |
+| Copyright &copy;: | 2006 Arthur Clemens |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Dependencies: | %$DEPENDENCIES% |
+|  21 Sep 2006 | 1.0.0 First Version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+ 
