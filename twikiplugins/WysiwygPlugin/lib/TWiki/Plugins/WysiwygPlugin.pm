@@ -78,8 +78,49 @@ sub initPlugin {
 
     $SKIN = TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_WYSIWYGSKIN' );
 
+    # %OWEB%.%OTOPIC% is the topic where the initial content should be
+    # grabbed from, as defined in templates/edit.kupu.tmpl
+    TWiki::Func::registerTagHandler('OWEB',\&_OWEBTAG);
+    TWiki::Func::registerTagHandler('OTOPIC',\&_OTOPICTAG);
+
     # Plugin correctly initialized
     return 1;
+}
+
+sub _OWEBTAG {
+    my($session, $params, $theTopic, $theWeb) = @_;
+
+    my $query = TWiki::Func::getCgiQuery();
+
+    return "$theWeb" unless $query;
+  
+    if(defined($query->param('templatetopic'))) {
+        my @split=split(/\./,$query->param('templatetopic'));
+
+	if($#split==0) {
+	  return $theWeb;
+	} else {
+	  return $split[0];
+	}
+    }
+
+    return $theWeb;
+}
+
+sub _OTOPICTAG {
+    my($session, $params, $theTopic, $theWeb) = @_;
+
+    my $query = TWiki::Func::getCgiQuery();
+
+    return "$theTopic" unless $query;
+  
+    if(defined($query->param('templatetopic'))) {
+        my @split=split(/\./,$query->param('templatetopic'));
+
+	return $split[$#split];
+    }
+
+    return $theTopic;
 }
 
 # This handler is used to determine whether the topic is editable by
@@ -92,18 +133,34 @@ sub beforeEditHandler {
     if( TWiki::Func::getSkin() =~ /\b$SKIN\b/o ) {
         my $exclusions = TWiki::Func::getPreferencesValue(
             'WYSIWYG_EXCLUDE' );
+        my $calls_ok = TWiki::Func::getPreferencesValue(
+            'WYSIWYG_EDITABLE_CALLS' );
         return unless $exclusions;
-        if(( $exclusions =~ /\bcalls\b/
-               && $_[0] =~ /%[A-Z_]+{.*?}%/s )
-             || ( $exclusions =~ /\bvariables\b/ &&
-                    $_[0] =~ /%[A-Z_]+%/s)
-             || ( $exclusions =~ /\bhtml\b/ &&
-                    $_[0] =~ /<\/?(?!verbatim|noautolink|nop|br)\w+/ )
-             || ( $exclusions =~ /\bcomments\b/ &&
-                    $_[0] =~ /<[!]--/ )
-             || ( $exclusions =~ /\bpre\b/ &&
-                    $_[0] =~ /<pre\w/ )
-	  ) {
+        my $not_ok = 0;
+        if( $exclusions =~ /calls/
+              && $_[0] =~ /%((?!($calls_ok){)[A-Z_]+{.*?})%/s ) {
+            #print STDERR "WYSIWYG_DEBUG: has calls $1\n";
+            $not_ok = 1;
+        }
+        if( $exclusions =~ /variables/ && $_[0] =~ /%([A-Z_]+)%/s ) {
+            #print STDERR "$exclusions WYSIWYG_DEBUG: has variables $1\n";
+            $not_ok = 1;
+        }
+        if( $exclusions =~ /html/ &&
+              $_[0] =~ /<\/?((?!literal|verbatim|noautolink|nop|br)\w+)/ ) {
+            #print STDERR "WYSIWYG_DEBUG: has html: $1\n";
+            $not_ok = 1;
+        }
+        if( $exclusions =~ /comments/ && $_[0] =~ /<[!]--/ ) {
+            #print STDERR "WYSIWYG_DEBUG: has comments\n";
+            $not_ok = 1;
+        }
+        if( $exclusions =~ /pre/ && $_[0] =~ /<pre\w/ ) {
+            #print STDERR "WYSIWYG_DEBUG: has pre\n";
+            $not_ok = 1;
+        }
+
+        if( $not_ok ) {
             # redirect
             my $query = TWiki::Func::getCgiQuery();
             foreach my $p qw( skin cover ) {
@@ -169,7 +226,9 @@ sub beforeSaveHandler {
         $_[0] =~ s/   /\t/g;
     }
 
-    $_[0] =~ s/<!--META_(\d+)_META-->/$rescue[$1-1]/g;
+    $_[0] =~ s/\n<!--META_(\d+)_META-->/\n$rescue[$1-1]/gs;
+    # Add a newline if one has been eaten
+    $_[0] =~ s/<!--META_(\d+)_META-->/\n$rescue[$1-1]/g;
 }
 
 # Invoked when the selected skin is in use to convert the text to HTML
