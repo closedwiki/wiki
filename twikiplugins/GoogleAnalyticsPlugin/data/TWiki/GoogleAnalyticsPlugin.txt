@@ -14,10 +14,18 @@ Google Analytics offers a host of compelling features and benefits for everyone 
 Learn how visitors interact with your website and identify the navigational bottlenecks that keep them from completing your conversion goals. Find out how profitable your keywords are across search engines and campaigns. Pinpoint where your best customers come from and which markets are most profitable to you. Google Analytics gives you this and more through easy-to-understand visually enhanced reports.
 </blockquote>
 
+Google presents visitor data in a visually rich dashboard: %BR%
+<a href="%ATTACHURLPATH%/Google_Analytics_Dashboard.png"><img style="margin:.5em 0; padding:4px; border:1px solid #ddd;" src="%ATTACHURLPATH%/Google_Analytics_Dashboard_small.jpg" alt="Google_Analytics_Dashboard_small.jpg" width='484' height='269' /></a> %BR%
+[[%ATTACHURLPATH%/Google_Analytics_Dashboard.png][view large image]]
+
 ---++ Settings
-Google provides its users with a piece of html to copy-paste into pages. You only need one piece of it, the value of =_uacct=:
+
+   * Google provides its users with a piece of html to copy-paste into pages. You only need one piece of it, the value of =_uacct=:
    * Set GOOGLESITEKEY = 
-   
+
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Adds Google Analytics !JavaScript code to all pages
+
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the TWiki server. 
@@ -33,7 +41,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
    None
 	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	
----++ Contrib Info
+---++ Plugin Info
 
 |  Authors: | TWiki:Main.ArthurClemens |
 |  Copyright &copy;: | 2006 Arthur Clemens |
@@ -52,3 +60,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
+%META:FILEATTACHMENT{name="Google_Analytics_Dashboard_small.jpg" attr="" autoattached="1" comment="" date="1158800196" path="Google_Analytics_Dashboard_small.jpg" size="46250" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="Google_Analytics_Dashboard.png" attr="" autoattached="1" comment="" date="1158800010" path="Google_Analytics_Dashboard.png" size="122481" user="UnknownUser" version=""}%
