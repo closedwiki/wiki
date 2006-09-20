@@ -1,12 +1,8 @@
 .twistyHidden { display:none; }
-.twistyVisible {} /* reserved */
-.twistyMakeVisible { display:none; } /* initial state, and is set to visible with javascript */
 .twistyMakeHidden {} /* reserved */
-
-.twistyTransparent { visibility:hidden; }
-.twistyOpaque {} /* reserved */
-.twistyMakeOpaque { visibility:hidden; } /* initial state, and is set to visible with javascript */
-.twistyMakeTransparent {} /* reserved */
+.twistyMakeVisible { display:none; }
 
 .twistyPlaceholder { /* color to be implemented by skin */ }
 .twistyRememberSetting { /* behavior class */ }
+.twistyStartHide { /* behavior class */ }
+.twistyStartShow { /* behavior class */ }

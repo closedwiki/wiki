@@ -1,117 +1,201 @@
+/**
+Singleton class. Requires behaviour.js from BehaviourContrib.
+*/
+TWiki.TwistyPlugin = new function () {
 
-var COOKIE_PREFIX = "TWikiTwistyContrib";
-var COOKIE_EXPIRES = 31; // days
-
-// hide straight away instead of waiting for onload
-// http://www.quirksmode.org/blog/archives/2005/06/three_javascrip_1.html#link4
-// SMELL should this be a <link> to another stylesheet? (probably not worth it)
-document.write("<style type='text/css'>");
-document.write(".twistyMakeHidden {display:none;}");
-document.write("<\/style>");
-
-// Asssume core javascript code is loaded via main template
+	var self = this;
 	
-// Add function initTwist to the head of the functions that are called
-// at onload
-addLoadEvent(initTwist, true);
+	/**
+	Retrieves the name of the twisty from an HTML element id. For example 'demotoggle' will return 'demo'.
+	@param inId : (String) HTML element id
+	@return String
+	@privileged
+	*/
+	this._getName = function (inId) {
+		var re = new RegExp("(.*)(hide|show|toggle)", "g");
+		var m = re.exec(inId);
+		var name = (m && m[1]) ? m[1] : "";
+    	return name;
+	}
+	
+	/**
+	Retrieves the type of the twisty from an HTML element id. For example 'demotoggle' will return 'toggle'.
+	@param inId : (String) HTML element id
+	@return String
+	@privileged
+	*/
+	this._getType = function (inId) {
+		var re = new RegExp("(.*)(hide|show|toggle)", "g");
+		var m = re.exec(inId);
+    	var type = (m && m[2]) ? m[2] : "";
+    	return type;
+	}
+	
+	/**
+	Toggles the collapsed state. Calls _update().
+	@privileged
+	*/
+	this._toggleTwisty = function (ref) {
+		if (!ref) return;
+		ref.state = (ref.state == TWiki.TwistyPlugin.CONTENT_HIDDEN) ? TWiki.TwistyPlugin.CONTENT_SHOWN : TWiki.TwistyPlugin.CONTENT_HIDDEN;
+		self._update(ref, true);
+	}
+	
+	/**
+	Updates the states of UI trinity 'show', 'hide' and 'content'.
+	Saves new state in a cookie if one of the elements has CSS class 'twistyRememberSetting'.
+	@param ref : (Object) TWiki.TwistyPlugin.Storage object
+	@privileged
+	*/
+	this._update = function (ref, inMaySave) {
+		var showControl = ref.show;
+		var hideControl = ref.hide;
+		var contentElem = ref.toggle;
+		if (ref.state == TWiki.TwistyPlugin.CONTENT_SHOWN) {
+			// show content
+			addClass(showControl, 'twistyHidden');	// hide 'show'
+			removeClass(hideControl, 'twistyHidden'); // show 'hide'
+			removeClass(contentElem, 'twistyHidden'); // show content
+		} else {
+			// hide content
+			removeClass(showControl, 'twistyHidden'); // show 'show'	
+			addClass(hideControl, 'twistyHidden'); // hide 'hide'
+			addClass(contentElem, 'twistyHidden'); // hide content
+		}
+		if (inMaySave && ref.saveSetting) {
+	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state, TWiki.TwistyPlugin.COOKIE_EXPIRES);
+		}
+	}
+	
+	/**
+	Stores a twisty HTML element (either show control, hide control or content 'toggle').
+	@param e : (Object) HTMLElement
+	@privileged
+	*/
+	this._register = function (e) {
+		if (!e) return;
+		var name = self._getName(e.id);
+		var ref = self._storage[name];
+		if (!ref) {
+			ref = new TWiki.TwistyPlugin.Storage();
+		}
+		if (hasClass(e, "twistyRememberSetting")) ref.saveSetting = true;
+		if (hasClass(e, "twistyStartShow")) ref.startShown = true;
+		if (hasClass(e, "twistyStartHide")) ref.startHidden = true;
+		if (hasClass(e, "twistyFirstStartShow")) ref.firstStartShown = true;
+		if (hasClass(e, "twistyFirstStartHide")) ref.firstStartHidden = true;
+		ref.name = name;
+		var type = self._getType(e.id);
+		ref[type] = e;
+		self._storage[name] = ref;
+		switch (type) {
+			case 'show': // fall through
+			case 'hide':
+				e.onclick = function() {
+					self._toggleTwisty(ref);
+					return false;
+				}
+				break;
+		}
+		return ref;
+	}
+	
+	/**
+	Key-value set of TWiki.TwistyPlugin.Storage objects. The value is accessed by twisty id identifier name.
+	@example var ref = self._storage["demo"];
+	@privileged
+	*/
+	this._storage = {};
+	
+	/**
+	UI element behaviour, in case no javascript 'trigger' tags are inserted in the html
+	@privileged
+	*/
+	this._UIbehaviour = {	
+		/**
+		Show control, hide control
+		*/
+		'.twistyPlugin .twistyTrigger' : function(e) {
+			TWiki.TwistyPlugin.init(e.id);
+		},
+		/**
+		Content element
+		*/
+		'.twistyPlugin .twistyContent' : function(e) {
+			TWiki.TwistyPlugin.init(e.id);
+		}
+	};
+	Behaviour.register(this._UIbehaviour);
+};
 
-function twist(id) {
-    var toggleElem = document.getElementById(id+'toggle');
-    if (!toggleElem) return;
-    var state;
-    if (toggleElem.twisted) {
-        twistHide(id, toggleElem);
-        state = 0; // hidden
-    } else {
-        twistShow(id, toggleElem);
-        state = 1; // shown
-    }
-    // Use class name 'twistyRememberSetting' to see if a cookie can be set
-    // This is not illegal, see: http://www.w3.org/TR/REC-html40/struct/global.html#h-7.5.2
-    // 'For general purpose processing by user agents'
-    if (hasClass(toggleElem, "twistyRememberSetting")) {
-        writeCookie(COOKIE_PREFIX + id, state, COOKIE_EXPIRES);
-    }
+/**
+Public constants.
+*/
+TWiki.TwistyPlugin.CONTENT_HIDDEN = 0;
+TWiki.TwistyPlugin.CONTENT_SHOWN = 1;
+TWiki.TwistyPlugin.COOKIE_PREFIX = "TwistyContrib_";
+TWiki.TwistyPlugin.COOKIE_EXPIRES = 31; // days
+
+/**
+The cached full TWiki cookie string so the data has to be read only once during init.
+*/
+TWiki.TwistyPlugin.prefList;
+
+/**
+Initializes a twisty HTML element (either show control, hide control or content 'toggle') by registering and setting the visible state.
+Calls _register() and _update().
+@public
+@param inId : (String) id of HTMLElement
+@return The stored TWiki.TwistyPlugin.Storage object.
+*/
+TWiki.TwistyPlugin.init = function(inId) {
+	var e = document.getElementById(inId);
+	if (!e) return;
+
+	// check if already inited
+	var name = this._getName(inId);
+	var ref = this._storage[name];
+	if (ref && ref.show && ref.hide && ref.toggle) return ref;
+
+	// else register
+	ref = this._register(e);
+	
+	if (hasClass(e, "twistyMakeHidden")) replaceClass(e, "twistyMakeHidden", "twistyHidden");
+	if (hasClass(e, "twistyMakeVisible")) removeClass(e, "twistyMakeVisible");
+	
+	if (ref.show && ref.hide && ref.toggle) {
+		// all elements present
+		if (TWiki.TwistyPlugin.prefList == null) {
+			// cache whole cookie string
+			TWiki.TwistyPlugin.prefList = getPrefList();
+		}
+		var cookie = getPrefValueFromPrefList(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, TWiki.TwistyPlugin.prefList);
+
+		if (ref.firstStartHidden) ref.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;
+		if (ref.firstStartShown) ref.state = TWiki.TwistyPlugin.CONTENT_SHOWN;
+		// cookie setting may override  firstStartHidden and firstStartShown
+		if (cookie && cookie == "0") ref.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;
+		if (cookie && cookie == "1") ref.state = TWiki.TwistyPlugin.CONTENT_SHOWN;
+		// startHidden and startShown may override cookie
+		if (ref.startHidden) ref.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;
+		if (ref.startShown) ref.state = TWiki.TwistyPlugin.CONTENT_SHOWN;
+		this._update(ref, false);
+	}
+	return ref;	
 }
-	
-function twistShow(id, toggleElem) {
-    var showControl = document.getElementById(id+'show');
-    var hideControl = document.getElementById(id+'hide');
-    addClass(showControl, 'twistyHidden');	
-    removeClass(hideControl, 'twistyHidden');
-    removeClass(toggleElem, 'twistyHidden');
-    toggleElem.twisted = 1;
-};
-	
-function twistHide(id, toggleElem) {
-    var showControl = document.getElementById(id+'show');
-    var hideControl = document.getElementById(id+'hide');
-    removeClass(showControl, 'twistyHidden');
-    addClass(hideControl, 'twistyHidden');
-    addClass(toggleElem, 'twistyHidden');
-    toggleElem.twisted = 0;
-};
 
-// Replace all elements with css class "twistyMakeHidden" with "twistyHidden"
-// so these elements will become hidden
-// The Twisty content will most probably have a "twistyMakeHidden" class
-// Remove all classnames "twistyMakeVisible" (set to display:none)
-// so these elements become visible
-// Twisty toggle links will most probably have a "twistyMakeVisible" class
-// Initialise all twisty triggers
-var initialiseTwistyClasses = function(e) {
-    if (hasClass(e, "twistyMakeHidden")) {
-        replaceClass(e, "twistyMakeHidden", "twistyHidden");
-    }
-   	if (hasClass(e, "twistyMakeVisible")) {
-        replaceClass(e, "twistyMakeVisible", "twistyVisible");
-    }
-    if (hasClass(e, "twistyMakeTransparent")) {
-        replaceClass(e, "twistyMakeTransparent", "twistyHidden");
-    }
-    if (hasClass(e, "twistyMakeOpaque")) {
-        replaceClass(e, "twistyMakeOpaque", "twistyVisible");
-    }
-    if (hasClass(e, "twistyTransparent")) {
-        replaceClass(e, "twistyTransparent", "twistyHidden");
-    }
-};
-//twistyTransparent twistyMakeOpaque
-// twistyHidden twistyMakeVisible
-
-// The twistyTriggers are the links or buttons that command the toggling.
-// This script assumes that the clickable element is either a link, a
-// button, a span or a div. On finding such an element, we add an
-// onClick handler to it, and show or hide the associated twisty block.
-function initialiseTwistyTriggers(e) {
-    initialiseTwistyClasses(e);
-    if (hasClass(e, "twistyTrigger")) {
-        e.onclick = function() {
-            twist(this.parentNode.id.slice(0,-4));
-            return false;
-        };
-        var twistId = e.parentNode.id.slice(0,-4);
-        var toggleElem = document.getElementById(twistId + 'toggle');
-		if (!toggleElem) return;
-        var cookie  = readCookie(COOKIE_PREFIX + twistId);
-        if (cookie == "1")
-			twistShow(twistId, toggleElem);
-        else if (cookie == "0")
-          twistHide(twistId, toggleElem);
-    }
-};
-
-// Twisty should degrade gracefully when javascript is off.
-// Then the hidden contents should be visible and the toggle links invisible.
-// To do this, the content is hidden with javascript, while the links are
-// displayed with javascript.
-// Hiding and showing is done by adding and removing style classes to the
-// elements.
-function initTwist() {
-	// Twisty can work with spans and with divs
-	applyToAllElements( initialiseTwistyClasses, "span" );
-	applyToAllElements( initialiseTwistyClasses, "div" );
-	applyToAllElements( initialiseTwistyTriggers, "a" );
-	applyToAllElements( initialiseTwistyTriggers, "button" );
+/**
+Storage container for properties of a twisty HTML element: show control, hide control or toggle content.
+*/
+TWiki.TwistyPlugin.Storage = function () {
+	this.name;										// String
+	this.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;	// Number
+	this.hide;										// HTMLElement
+	this.show;										// HTMLElement
+	this.toggle;									// HTMLElement (content element)
+	this.saveSetting = false;						// Boolean; default not saved
+	this.startShown;								// Boolean
+	this.startHidden;								// Boolean
+	this.firstStartShown;							// Boolean
+	this.firstStartHidden;							// Boolean
 }
-
