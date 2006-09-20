@@ -183,4 +183,13 @@ sub test_other {
   $this->check("mother.mother.who='GrandMother'",1);
 }
 
+sub test_caseops {
+  my $this = shift;
+  $this->check("string='String'",1);
+  $this->check("string='string '",0);
+  $this->check("string=lc 'string '",0);
+  $this->check("uc string=uc 'string '",0);
+  $this->check("uc(string)=uc 'string '",0);
+}
+
 1;
