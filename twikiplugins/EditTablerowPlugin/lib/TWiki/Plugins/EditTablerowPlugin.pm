@@ -69,6 +69,9 @@ sub extractParams
     my $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "header" );
     $$theHashRef{"header"} = $tmp if( $tmp );
 
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "include" );
+    $$theHashRef{"include"} = $tmp if( $tmp );
+
     $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "footer" );
     $$theHashRef{"footer"} = $tmp if( $tmp );
 
@@ -192,11 +195,31 @@ sub handleEditTableTag
 	"showHeaderOnEmpty" => "",
     );
 
+    my $iTopic = TWiki::Func::extractNameValuePair( $theArgs, 'include' );
+    if( $iTopic ) {
+       # include topic to read definitions
+       if( $iTopic =~ /^([^\.]+)\.(.*)$/o ) {
+           $web = $1;
+           $topic = $2;
+       }
+       my $text = TWiki::Func::readTopicText( $web, $iTopic );
+       $text =~ /%EDITTABLE{(.*)}%/os;
+       if( $1 ) {
+           my $args = $1;
+           if( $theWeb ne $web || $iTopic ne $theTopic ) {
+               # expand common vars, unless oneself to prevent recursion
+               $args = TWiki::Func::expandCommonVariables( $1, $iTopic, $web );
+           }
+           extractParams( $args, \%params );
+       }
+    }
+
     extractParams( $theArgs, \%params );
 
-    $params{"header"} = "" if( $params{"header"} =~ /^(off|no)$/oi );
     $params{"header"} =~ s/^\s*\|//o;
     $params{"header"} =~ s/\|\s*$//o;
+    $params{"format"} =~ s/^\s*\|//o;
+    $params{"format"} =~ s/\|\s*$//o;
     $params{"headerislabel"} = "" if( $params{"headerislabel"} =~ /^(off|no)$/oi );
     $params{"footer"} = "" if( $params{"footer"} =~ /^(off|no)$/oi );
     $params{"footer"} =~ s/^\s*\|//o;
@@ -215,7 +238,13 @@ sub handleTableStart
 {
     my( $theWeb, $theTopic, $theTableNr ) = @_;
 
-    my $theForm = new TWiki::Form( $TWiki::Plugins::SESSION, $theWeb, $params{"template"} );
+    my $theForm;
+    my $template = $params{"template"};
+    if ( $template ) {
+      $theForm = new TWiki::Form( $TWiki::Plugins::SESSION, $theWeb, $template );
+    } else {
+      $theForm->{fields} = _parseIntoFormDef( $params{"header"}, $params{"format"}, $theWeb, $theTopic );
+    }
 
     my $fieldDefs = $theForm->{fields};
     if ( ! @{$fieldDefs} ) {
@@ -271,6 +300,8 @@ sub handleTableEnd
     if ( $params{"changerows"} ) {
       $header .= "<form action=\"%SCRIPTURLPATH%/editTableRow%SCRIPTSUFFIX%/%WEB%/$topic\">
 <input type=\"hidden\" name=\"template\" value=\"$params{'template'}\">
+<input type=\"hidden\" name=\"header\" value=\"$params{'header'}\">
+<input type=\"hidden\" name=\"format\" value=\"$params{'format'}\">
 <input type=\"hidden\" name=\"helptopic\" value=\"$params{'helptopic'}\">
 <input type=\"hidden\" name=\"sec\" value=\"0\">
 <input type=\"hidden\" name=\"tablename\" value=\"$theTableNr\">\n" .
@@ -324,7 +355,20 @@ sub handleTableRow
 	$button = "$value";
       }
     }
-    $text .= "<a name=\"Tbl${theTableNr}Row${theRowNr}\" href=\"$eurl\?t=" . time() . "&template=$params{'template'}&helptopic=$params{'helptopic'}&tablename=$theTableNr&sec=$theRowNr&changerows=$params{'changerows'}&showtable=$params{'showtable'}#SECEDITBOX\">$button</a> $title";
+    $text .= "<a name=\"Tbl${theTableNr}Row${theRowNr}\" href=\"$eurl\?t=" . time();
+    my $template = $params{"template"};
+    if ( $template ) {
+      $text .= "&template=$params{'template'}";
+    } else {
+      $text .= "&header=" . TWiki::urlEncode($params{'header'}) . "&format=" . TWiki::urlEncode($params{'format'});
+    }
+    $text .= "&helptopic=$params{'helptopic'}&tablename=$theTableNr&sec=$theRowNr&changerows=$params{'changerows'}&showtable=$params{'showtable'}#SECEDITBOX\">$button";
+    if ( $button ) {
+      $text .= "</a> $title"
+    } else {
+      $text .= " $title</a>"
+    }
+
       
     $text .= "*" if $boldTitle;
 
@@ -485,10 +529,12 @@ sub editTablerow
     return unless ( &doEnableEdit ($webName, $topic, $user, $query) );
 
     return unless ( $query );
-    $query->{'jscalendar'} = 0;
+    $query->{'jscalendar'} = 0; # Is this needed?
     my ( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
 
     my $template = $query->param( 'template' ) || "";
+    my $header = $query->param( 'header' ) || "";
+    my $format = $query->param( 'format' ) || "";
     my $tableNr = $query->param( 'tablename' ) || "";
     my $rowNr = $query->param( 'sec' ) || "0";
     my $changerows = $query->param( 'changerows' ) || "";
@@ -501,11 +547,21 @@ sub editTablerow
 
     # This loads the table that you want
     $tmpl =~ s/%TEMPLATE%/$template/go;
+    $tmpl =~ s/%HEADER%/$header/go; # urlEncode?
+    $tmpl =~ s/%FORMAT%/$format/go; # urlEncode?
     $tmpl =~ s/%TABLENAME%/$tableNr/go;
 
     # This renders the editable fields
-    my $theForm = new TWiki::Form( $session, $webName, $template );
-    my $fieldDefs = $theForm->{fields};
+    my $theForm;
+    my $fieldDefs;
+    if ( $template ) {
+      $theForm = new TWiki::Form( $session, $webName, $template );
+      $fieldDefs = $theForm->{fields};
+    } else {
+      $fieldDefs = _parseIntoFormDef( $header, $format, $webName, $topic );
+      $theForm = new TWiki::Form( $session, $webName, undef, $fieldDefs );
+    }
+
 
     # Get rid of CRs (we only want to deal with LFs)
     $text =~ s/\r//g;
@@ -641,6 +697,8 @@ sub uploadTablerow
     return unless ($query);
 	
     my $template = $query->param( 'template' || "");
+    my $header = $query->param( 'header' ) || "";
+    my $format = $query->param( 'format' ) || "";
     my $tableNr = $query->param( 'tablename' || "");
     my $rowNr = $query->param( 'name' || "");
     my $deleteElement = $query->param( 'deleteElement' );
@@ -658,8 +716,15 @@ sub uploadTablerow
 
     # Need to cycle through the fieldDefs and query the parameters to fill the
     # the associative array
-    my $theForm = new TWiki::Form( $session, $webName, $template );
-    my $fieldDefs = $theForm->{fields};
+    my $theForm;
+    my $fieldDefs;
+    if ( $template ) {
+      $theForm = new TWiki::Form( $session, $webName, $template );
+      $fieldDefs = $theForm->{fields};
+    } else {
+      $fieldDefs = _parseIntoFormDef( $header, $format, $webName, $topic );
+      $theForm = new TWiki::Form( $session, $webName, undef, $fieldDefs );
+    }
 
     my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
 		
@@ -701,7 +766,17 @@ sub uploadTablerow
 	}
 	if ( $line =~ m/^\s*$/ ) {
           if ( $enableForm ) {
-	    $line = appendToTable($query, $line, $rowNr, $deleteElement, $copyElement, $fieldDefs);
+	    # There was no header line, create it
+	    if ( $template ) {
+	      $line = '|';
+	      foreach my $fieldInfo ( @{$fieldDefs} ) {
+		$line .= '*' . $fieldInfo->{title} . '*|';
+	      }
+	      $line .= "\n";
+	    } else {
+	      $line = "|$header|\n";
+	    }
+	    $line .= appendToTable($query, '', $rowNr, $deleteElement, $copyElement, $fieldDefs);
 	    $enableForm = 0;
 	  }
         }
@@ -725,6 +800,91 @@ sub uploadTablerow
 sub renderFormFieldForEditHandler {
     use TWiki::Contrib::JSCalendarContrib;
     TWiki::Contrib::JSCalendarContrib::renderFormFieldForEditHandler(@_);
+}
+
+sub _parseIntoFormDef {
+    my ( $header, $format, $web, $topic ) = @_;
+
+    my @headers = split ( /\|/, $header );
+    my @formats = split ( /\|/, $format );
+    # Should there be some error checking that they are the same size?
+
+    my @fields = ();
+
+    for ( my $idx=0; $idx<=$#headers; $idx++ ) {
+
+      my $title = $headers[$idx] || '';
+      $title =~ s/^\s*\*//go;
+      $title =~ s/\*\s*$//go;
+
+      my $tmp = $formats[$idx];
+      $tmp =~ s/^([^,]*),?//;
+      my $type = $1;
+      $tmp =~ s/^([^,]*),?//;
+      my $size = $1;
+      my $vals = $tmp;
+
+      $type ||= '';
+      $type = lc $type;
+      $type =~ s/^\s*//go;
+      $type =~ s/\s*$//go;
+      $type = 'text' if( ! $type );
+
+      $size ||= '';
+      $size = TWiki::Form::_cleanField( $size );
+      unless( $size ) {
+	if( $type eq 'text' ) {
+	  $size = 20;
+	} elsif( $type eq 'textarea' ) {
+	  $size = '40x5';
+	} else {
+	  $size = 1;
+	}
+      }
+
+      $vals ||= '';
+      $vals = $TWiki::Plugins::SESSION->handleCommonTags($vals,$web,$topic);
+
+      $vals =~ s/^\s*//go;
+      $vals =~ s/\s*$//go;
+
+      # SMELL: see comment in Form.pm
+      if( $vals eq '$users' ) {
+	$vals = $TWiki::cfg{UsersWebName} . '.' .
+	  join( ", ${TWiki::cfg{UsersWebName}}.",
+		( $TWiki::Plugins::SESSION->{store}->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
+      }
+
+      my $definingTopic = "";
+      if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  {
+	$definingTopic = TWiki::Form::_cleanField( $1 );
+	$title = $2;
+      }
+
+      my $name = TWiki::Form::_cleanField( $title );
+
+      # Rename fields with reserved names
+      if( $TWiki::Form::reservedFieldNames->{$name} ) {
+	$name .= '_';
+	$title .= '_';
+      }
+
+      push( @fields,
+	    { name => $name,
+	      title => $title,
+	      type => $type,
+	      size => $size,
+	      value => $vals,
+	      tooltip => '',
+	      attributes => '',
+	      definingTopic => $definingTopic
+	    } );
+
+    }
+
+    return \@fields;
+    # Note that this does not expand searches in fields, etc., as in TWiki::Form::new
+    
 }
 
 1;
