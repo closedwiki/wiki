@@ -29,7 +29,7 @@ try { document.main.text.focus(); } catch (er) {}
 %PRETEXT%
 %TMPL:P{"simpleheader"}%
 <form name="main" action="%SCRIPTURLPATH{"savesection"}%/%WEB%/%TOPIC%" method="post">
-<div class"twikiEditTextarea">
+<div id="SECEDITBOX" class="twikiEditTextarea">
 <textarea id='topic' name='text' wrap='virtual' rows='%SECTIONEDITBOXHEIGHT%' cols='%SECTIONEDITBOXWIDTH%' style='%SECTIONEDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>
 %TEXT%</textarea><br />
 </div>%TEXTDETAIL%

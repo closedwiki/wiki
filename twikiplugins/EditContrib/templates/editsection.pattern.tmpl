@@ -48,9 +48,10 @@
 <div class="patternFormHolder twistyMakeHidden" id="formHolder">
 %PRETEXT%
 <form name="main" action="%SCRIPTURLPATH{"savesection"}%/%WEB%/%TOPIC%" method="post">
+<div id="SECEDITBOX">
 <textarea class="twikiEditboxStyleProportional" id="topic" name="text" rows="%SECTIONEDITBOXHEIGHT%" cols="%SECTIONEDITBOXWIDTH%" style='%SECTIONEDITBOXSTYLE%' onkeydown='handleKeyDown(event)'>
 %TEXT%</textarea>
-%TEXTDETAIL%
+</div>%TEXTDETAIL%
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
 <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
