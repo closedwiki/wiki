@@ -1,9 +1,37 @@
-use strict;
+# Module of TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 1999-2006 Peter Thoeny, peter@thoeny.org
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
 
+=pod
+
+---+ package Contrib::BenchmarkContrib::DProf
+
+This package supports Perl's =Devel::DProf= profiler, which is part
+of the standard distribution.
+
+=cut
+
+use strict;
 
 use File::Spec;
 use File::Path;
 
+# This is a constant in the current module
 my $profiler = 'DProf';
 
 package TWiki::Contrib::BenchmarkContrib::DProf;
@@ -14,7 +42,7 @@ sub profile {
 
     my $query          =  $twiki->{cgiQuery};
 
-    # what to profile
+    # what to profile - these values are provided by TWiki::UI
     my $web            =  $twiki->{webName};
     my $topic          =  $twiki->{topicName};
 
@@ -32,8 +60,9 @@ sub profile {
                                     topic => $topic,
                                     params => $script_name);
     }
+
     # extract the parameters which are "private" to profile
-    my $method         =  $query->param('method')   || 'view';
+    my $method         =  $query->param('method')   ||  'view';
     ($method)          =  $method =~ /(\w+)/;
     $method           .=  $TWiki::cfg{ScriptSuffix};
 
@@ -66,7 +95,9 @@ sub profile {
 
     # run the TWiki script
     #    * as a command line script, so that we don't have to set up a
-    #      complete %ENV
+    #      complete CGI %ENV hash
+    #    * for that we have to kill $ENV{GATEWAY_INTERFACE} to make
+    #      sure that TWiki will use command_line syntax instead of CGI.pm
     #    * capturing STDOUT
     #    * redirecting profiling output to a temporary file
     my $tempfile       =  File::Spec->tmpdir() . "/profile.$$";
@@ -146,6 +177,7 @@ EOT
     $query->param(-name => 'text', -value => $text);
 
     $twiki->leaveContext($script_name);
+    $twiki->enterContext('save');
     TWiki::UI::Save::save($twiki);
 }
 
