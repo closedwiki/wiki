@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.2" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1158898025" format="1.2" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 #VarGMTIME2
 
@@ -25,5 +25,5 @@
    * Variables can be shortened to 3 characters
    * Example: =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= expands to =%GMTIME{"$day $month, $year - $hour:$min:$sec"}%=
    * __%X% Note:__ When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
-   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
+   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarREVINFO2][REVINFO]], [[#VarSERVERTIME][SERVERTIME]]
 

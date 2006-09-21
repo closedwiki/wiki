@@ -1539,12 +1539,13 @@ Obtain and render revision info for a topic.
    | =$web= | the web name |
    | =$topic= | the topic name |
    | =$rev= | the rev number |
-   | =$date= | the date of the rev (no time) |
-   | =$time= | the full date and time of the rev |
    | =$comment= | the comment |
    | =$username= | the login of the saving user |
    | =$wikiname= | the wikiname of the saving user |
    | =$wikiusername= | the web.wikiname of the saving user |
+   | =$date= | the date of the rev (no time) |
+   | =$time= | the time of the rev |
+   | =$min=, =$sec=, etc. | Same date format qualifiers as GMTIME |
 
 =cut
 
@@ -1578,6 +1579,10 @@ sub renderRevisionInfo {
     $value =~ s/\$rev/$rev/gi;
     $value =~ s/\$time/TWiki::Time::formatTime($date, '$hour:$min:$sec')/gei;
     $value =~ s/\$date/TWiki::Time::formatTime($date, '$day $mon $year')/gei;
+    $value =~ s/(\$(rcs|http|email|iso))/TWiki::Time::formatTime($date, $1 )/gei;
+    if( $value =~ /\$(sec|min|hou|day|wday|dow|week|mo|ye|epoch|tz)/ ) {
+        $value = TWiki::Time::formatTime( $date, $value );
+    }
     $value =~ s/\$comment/$comment/gi;
     $value =~ s/\$username/$un/gi;
     $value =~ s/\$wikiname/$wn/gi;

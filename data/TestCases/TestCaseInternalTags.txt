@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1158898025" format="1.0" version="$Rev$"}%
 
 Description: Test cases for internal tags *NOT INCLUDING* URLPARAM, SEARCH OR METASEARCH
 
@@ -123,9 +123,9 @@ Tag tests requiring manual inspection
  <td>%REMOTE_USER%</td>
 </tr>
 <tr>
- <td>REVINFO{"" format="$web $topic $rev $date $comment $username $wikiname $wikiusername" web="" topic="" rev=""}</td>
+ <td>REVINFO{"" format="$web $topic $rev $date $time $iso $hou:$min:$sec $comment $username $wikiname $wikiusername" web="" topic="" rev=""}</td>
  <td>Manual check</td>
- <td>%REVINFO{"" format="$web $topic $rev $date $comment $username $wikiname $wikiusername" web="" topic="" rev=""}%</td>
+ <td>%REVINFO{"" format="$web $topic $rev $date $time $iso $hou:$min:$sec $comment $username $wikiname $wikiusername" web="" topic="" rev=""}%</td>
 </tr>
 <tr>
  <td>REVINFO</td>
