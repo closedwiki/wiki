@@ -89,7 +89,8 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-$REVISION = '1.019'; #dro# improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow;
+$REVISION = '1.020'; #dro# added week attribute requested by TWiki:Main.JanFilipsky; added tooltip to day headers;
+#$REVISION = '1.019'; #dro# improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow;
 #$REVISION = '1.018'; #dro# fixed periodic event bug; added navigation feature
 #$REVISION = '1.017'; #dro# fixed minor bug (periodic repeater)
 #$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar)
@@ -204,6 +205,7 @@ sub initDefaults() {
 		navhometitle => 'Go to the start date',
 		navenable => 1,
 		navdays => undef,
+		week => undef,
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -389,7 +391,19 @@ sub getStartDate() {
 			$options{days}=Days_in_Month($yy, $mm);
 		}
 	}
-
+	# handle week (absolute or offset) 
+	if (defined $options{week}) {
+		my $week = $options{week};
+		my $matched = 0;
+		if (($week =~ /^\d+$/)&&($week>0)&&($week<=Weeks_in_Year($yy))) {
+			$matched = 1;
+		} elsif ($week =~ /^[\+\-]\d+$/) {
+			$matched = 1;
+			($yy,$mm,$dd) = Add_Delta_Days($yy,$mm,$dd, 7 * $week);
+			$week = Week_of_Year($yy,$mm,$dd);
+		}
+		($yy,$mm,$dd) = Monday_of_Week($week, $yy) if ($matched);
+	}
 	# handle paging:
 	my $cgi = &TWiki::Func::getCgiQuery();
 	if (defined $cgi->param('hlppage'.$hlid)) {
@@ -882,6 +896,7 @@ sub renderHolidaylist() {
 		$bgcolor=$options{todaybgcolor} if (defined $options{todaybgcolor})&&($today == $date);
 		
 		$text.='<th align="center" bgcolor="'.$bgcolor.'"'
+			.' title="'.Date_to_Text_Long($yy1,$mm1,$dd1).'"'
 			. (((defined $options{tcwidth})&&(($dow<6)||$options{showweekends}))?' width="'.$options{tcwidth}.'"':'')
 		        .((($today==$date)&&(defined $options{todayfgcolor}))?' style="color:' . $options{todayfgcolor} . '"' : '') .'>';
 		$text.='<noautolink>';
@@ -1031,7 +1046,7 @@ sub renderNav {
 	$halfhref.="#hlpid$hlid";
 
 	my $title = $options{'navhometitle'};
-	my $d = $days*($hlppage-$nextp);
+	my $d = int($days*($hlppage-$nextp));
 	if ($d==0) {
 		$d='';
 	} else {
@@ -1046,7 +1061,7 @@ sub renderNav {
 	my $halftitle = "";
 	$halftitle = $options{'navnexthalftitle'} if $nextp==1;
 	$halftitle = $options{'navprevhalftitle'} if $nextp==-1;
-	my $halfdays = $days/2;
+	my $halfdays = int($days/2);
 	$halftitle=~s/%n/$halfdays/g;
 	$halftitle=~s/%d/$d/eg;
 
