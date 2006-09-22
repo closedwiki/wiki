@@ -2,7 +2,7 @@ use strict;
 
 package ActionNotifyTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
@@ -12,37 +12,27 @@ use Time::ParseDate;
 use TWiki::Attrs;
 use TWiki::Store::RcsLite;
 
-my $testWeb = "ActionTrackerPluginTestWeb";
-my $peopleWeb = "ActionTrackerPluginTestPeopleWeb";
-my $twiki;
-my $savePeople;
-my @mails;
-
 sub new {
-    my $self = shift()->SUPER::new(@_);
+    my $self = shift()->SUPER::new('ActionNotify', @_);
     return $self;
 }
 
-BEGIN {
-    new TWiki();
-    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
-};
-
 sub set_up {
     my $this = shift;
+
     $this->SUPER::set_up();
+    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
+    $TWiki::cfg{StoreImpl} = 'RcsLite';
+    # Need this to get the actionnotify template
+    foreach my $lib (@INC) {
+        my $d = "$lib/../templates";
+        if (-e "$d/actionnotify.tmpl") {
+            $TWiki::cfg{TemplateDir} = $d;
+            last;
+        }
+    }
 
-    $twiki = new TWiki();
-    $TWiki::Plugins::SESSION = $twiki;
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
-
-    $twiki->{store}->createWeb($twiki->{user}, $testWeb);
-    $twiki->{store}->createWeb($twiki->{user}, $peopleWeb);
-
-    $twiki->{net}->setMailHandler(\&sentMail);
-
-    $savePeople = $TWiki::cfg{UsersWebName};
-    $TWiki::cfg{UsersWebName} = $peopleWeb;
 
     # Actor 1 - wikiname in main, not a member of any groups
     # email: actor-1\@an-address.net
@@ -78,77 +68,64 @@ sub set_up {
     # A7 - notify changes to Actor5
     # A8 - notify changes to Actor6, Actor8
 
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "ActorOne", <<'HERE'
-   * Email: actor-1@an-address.net
-HERE
-                              );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "ActorTwo", <<'HERE'
-   * Email: actorTwo@another-address.net
-HERE
-                              );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "ActorThree", <<'HERE'
-   * Email: actor3@yet-another-address.net
-HERE
-                              );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "ActorFour", <<'HERE'
-   * E-mail: actorfour@yet-another-address.net
-HERE
-                              );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "ActorFive", <<'HERE'
-   * NoE-mailhere: actor5@wrong-address
-HERE
-                              );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "ActorSix", <<'HERE'
-   * E-mail: actor6@correct-address
-HERE
-                              );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "TWikiFormGroup", <<'HERE'
+    $this->registerUser("ActorOne", "Actor", "One", 'actor-1@an-address.net');
+    $this->registerUser("ActorTwo", "Actor", "Two",
+                        'actorTwo@another-address.net');
+    $this->registerUser("ActorThree", "Actor", "Three",
+                        'actor3@yet-another-address.net');
+    $this->registerUser("ActorFour", "Actor", "Four",
+                        'actorfour@yet-another-address.net');
+    $this->registerUser("ActorFive", "Actor", "Five",
+                       'actor5@example.com');
+    $this->registerUser("ActorSix", "Actor", "Six",
+                        'actor6@correct-address');
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "TWikiFormGroup", <<'HERE'
 Garbage
       * Set GROUP = ActorThree, ActorFour
 More garbage
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "WebNotify", <<"HERE"
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "WebNotify", <<"HERE"
 Garbage
-   * $peopleWeb.ActorFive - actor5\@correct.address
+   * $this->{users_web}.ActorFive - actor5\@correct.address
 More garbage
-   * $peopleWeb.ActorSix
+   * $this->{users_web}.ActorSix
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$testWeb, "WebNotify", <<"HERE"
-   * $peopleWeb.ActorEight - actor-8\@correct.address
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web}, "WebNotify", <<"HERE"
+   * $this->{users_web}.ActorEight - actor-8\@correct.address
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "EMailGroup", <<'HERE'
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "EMailGroup", <<'HERE'
    * Set GROUP = actorTwo@another-address.net,ActorFour
 HERE
                               );
 
-    $twiki->{store}->saveTopic($twiki->{user},$testWeb, "Topic1", <<'HERE'
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web}, "Topic1", <<'HERE'
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,ActorSeven,ActorEight" due="3 Jan 02" state=open}% A1: ontime
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$testWeb, "Topic2", <<'HERE'
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{test_web}, "Topic2", <<'HERE'
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7@seven.net,ActorEight" due="2 Jan 02" state=closed}% A2: closed
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "Topic1", <<'HERE'
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "Topic1", <<'HERE'
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,ActorFive,ActorSix,actor.7@seven.net,ActorEight,NonEntity",due="3 Jan 01",state=open}% A3: late
 %ACTION{who=TWikiFormGroup,due="4 Jan 01",state=open}% A4: late 
 HERE
                               );
-    $twiki->{store}->saveTopic($twiki->{user},$peopleWeb, "Topic2", <<'HERE'
+    $this->{twiki}->{store}->saveTopic($this->{twiki}->{user},$this->{users_web}, "Topic2", <<'HERE'
 %ACTION{who=EMailGroup,due="5 Jan 01",state=open}% A5: late
 %ACTION{who="ActorOne,ActorTwo,ActorThree,ActorFour,TWikiFormGroup,ActorFive,ActorSix,actor.7@seven.net,ActorEight,EMailGroup",due="6 Jan 99",open}% A6: late
 HERE
                               );
 
-    my $rcs = new TWiki::Store::RcsLite($twiki, $testWeb, "ActionChanged" );
+    my $rcs = new TWiki::Store::RcsLite($this->{twiki}, $this->{test_web}, "ActionChanged" );
     my $t1 = Time::ParseDate::parsedate("21 Jun 2001");
     $rcs->addRevisionFromText(<<HERE,
 %META:TOPICINFO{author="guest" date="$t1" format="1.0" version="1.1"}%
-%ACTION{who=ActorFive,due="22-jun-2001",notify=$peopleWeb.ActorFive}% A7: Date change
-%ACTION{who="$peopleWeb.ActorFour",due="22-jul-2001",notify=ActorFive}% A8: Text change
+%ACTION{uid="666" who=ActorFive,due="22-jun-2001",notify=$this->{users_web}.ActorFive}% A7: Date change
+%ACTION{who="$this->{users_web}.ActorFour",due="22-jul-2001",notify=ActorFive}% A8: Text change
 %ACTION{uid=1234 who=NonEntity notify=ActorFive}% A9: No change
 HERE
 
@@ -156,44 +133,35 @@ HERE
     my $t2 = Time::ParseDate::parsedate("21 Jun 2003");
     $rcs->addRevisionFromText(<<HERE,
 %META:TOPICINFO{author="guest" date="$t2" format="1.0" version="1.2"}%
-%ACTION{who=ActorFive,due="22-jun-2002",notify=$peopleWeb.ActorFive}% A7: Date change
+%ACTION{uid="666" who=ActorFive,due="22-jun-2002",notify=$this->{users_web}.ActorFive}% A7: Date change
 %ACTION{who=EMailGroup,due="5 Jan 01",state=open,notify=nobody}% No change
-%ACTION{who=ActorFive,due="22-jun-2002" notify=$peopleWeb.ActorOne}% Stuck in
-%ACTION{who=ActorSix,due="22-jul-2001",notify="$peopleWeb.ActorSix,$peopleWeb.ActorEight"}% A8: Text cha
+%ACTION{who=ActorFive,due="22-jun-2002" notify=$this->{users_web}.ActorOne}% Stuck in
+%ACTION{who=ActorSix,due="22-jul-2001",notify="$this->{users_web}.ActorSix,$this->{users_web}.ActorEight"}% A8: Text cha
 nge from original, late
 %ACTION{uid=1234 who=NonEntity notify=ActorFive}% A9: No change
 HERE
                       '*** empty log message ***', 'crawford', $t2);
-    @mails = ();
+    @TWikiFnTestCase::mails = ();
 }
 
 sub tear_down {
     my $this = shift;
     $this->SUPER::tear_down();
-    $twiki->{store}->removeWeb($twiki->{user}, $testWeb);
-    $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
-}
-
-# callback used by Net.pm
-sub sentMail {
-    my($net, $mess ) = @_;
-    push( @mails, $mess );
-    return undef;
 }
 
 sub test_A_AddressExpansion {
     my $this = shift;
     my %ma = (
-        $peopleWeb.'.BonzoClown' => 'bonzo@circus.com',
-        $peopleWeb.'.BimboChimp' => 'bimbo@zoo.org',
-        $peopleWeb.'.PaxoHen' => 'chicken@farm.net'
+        $this->{users_web}.'.BonzoClown' => 'bonzo@circus.com',
+        $this->{users_web}.'.BimboChimp' => 'bimbo@zoo.org',
+        $this->{users_web}.'.PaxoHen' => 'chicken@farm.net'
        );
     my $who =
       TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress('a@b.c',\%ma);
     $this->assert_str_equals( 'a@b.c', $who);
 
     $who =
-      TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("$peopleWeb.BimboChimp",\%ma);
+      TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("$this->{users_web}.BimboChimp",\%ma);
     $this->assert_str_equals( 'bimbo@zoo.org', $who);
 
     $who =
@@ -213,13 +181,13 @@ sub test_A_AddressExpansion {
     $this->assert_str_equals( "actor3\@yet-another-address.net,actorfour\@yet-another-address.net", $who);
 
     $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
-    $this->assert_null($who);
+    $this->assert_str_equals('actor5@example.com', $who);
     $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
     $this->assert_null($who);
-    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify($peopleWeb,\%ma);
+    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify($this->{users_web},\%ma);
     $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorFive",\%ma);
-    $this->assert_str_equals( "actor5\@correct.address", $who);
-    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify($testWeb,\%ma);
+    $this->assert_str_equals( "actor5\@example.com", $who);
+    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_loadWebNotify($this->{test_web},\%ma);
     $who = TWiki::Plugins::ActionTrackerPlugin::ActionNotify::_getMailAddress("ActorEight",\%ma);
     $this->assert_str_equals( "actor-8\@correct.address", $who);
 }
@@ -229,11 +197,10 @@ sub test_B_NotifyLate {
     my $html;
 
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
-
-    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications($twiki->{webName}, "web='($testWeb|$peopleWeb)' late" );
-    if(scalar(@mails!= 8)) {
-        my $mess = scalar(@mails)." mails:\n";
-        while ( $html = shift(@mails)) {
+    TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications($this->{twiki}->{webName}, "web='($this->{test_web}|$this->{users_web})' late" );
+    if(scalar(@TWikiFnTestCase::mails!= 8)) {
+        my $mess = scalar(@TWikiFnTestCase::mails)." mails received";
+        while ( $html = shift(@TWikiFnTestCase::mails)) {
             $html =~ m/^(To: .*)$/m;
             $mess .= "$1\n";
         }
@@ -241,9 +208,8 @@ sub test_B_NotifyLate {
     }
 
     my $ok = "";
-    while ( $html = shift(@mails)) {
+    while ( $html = shift(@TWikiFnTestCase::mails)) {
         $this->assert_does_not_match(qr/A[12]:/, $html, $html);
-        #print STDERR "Shebang $1\n";
         if ($html =~ /To: actor-1\@an-address\.net/) {
             $this->assert_matches(qr/A3:/,$html, $html);
             $this->assert_does_not_match(qr/A4:/,$html, $html);
@@ -276,7 +242,7 @@ sub test_B_NotifyLate {
             $this->assert_does_not_match(qr/A7:/,$html, $html);
             $this->assert_does_not_match(qr/A8:/,$html, $html);
             $ok .= "D";
-        } elsif ($html =~ /To: actor5\@correct.address/) {
+        } elsif ($html =~ /To: actor5\@example.com/) {
             $this->assert_matches(qr/A3:/,$html, $html);
             $this->assert_does_not_match(qr/A4:/,$html, $html);
             $this->assert_does_not_match(qr/A5:/,$html, $html);
@@ -327,26 +293,26 @@ sub test_C_ChangedSince {
     my $this = shift;
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
     TWiki::Plugins::ActionTrackerPlugin::ActionNotify::doNotifications(
-        $twiki->{webName}, "changedsince=\"1 dec 2001\"" );
+        $this->{twiki}->{webName}, 'changedsince="1 dec 2001"' );
     my $saw = "";
     my $html;
 
-    if(scalar(@mails)!= 1) {
-        my $mess = "";
-        while ( $html = shift(@mails)) {
+    if(scalar(@TWikiFnTestCase::mails)!= 1) {
+        my $mess = scalar(@TWikiFnTestCase::mails)." mails received";
+        while ( $html = shift(@TWikiFnTestCase::mails)) {
             $html =~ m/^(To: .*)$/m;
             $mess .= "$1\n";
             $html =~ m/(Attribute .*)$/m;
             $mess .= "$1\n";
         }
-        $this->assert(0, $mess);
+        $this->assert(0, "$mess\n");
     }
-    while( $html = shift(@mails) ) {
+    while( $html = shift(@TWikiFnTestCase::mails) ) {
         my $re = qr/^From: /m;
         $this->assert_matches($re, $html);
-        $re = qr/Subject: Changes to actions on /;
+        $re = qr/^Subject: .*Changes to actions /m;
         $this->assert_matches($re, $html);
-        if ($html=~ /To: actor5\@correct.address/) {
+        if ($html=~ /To: actor5\@example.com/) {
             $re = qr/Changes to actions since 01 Dec 2001 - 00:00/;
             $this->assert_matches($re, $html);
             $re = qr/Attribute "due" changed, was "Fri, 22 Jun 2001 \(LATE\)", now "Sat, 22 Jun 2002"/;

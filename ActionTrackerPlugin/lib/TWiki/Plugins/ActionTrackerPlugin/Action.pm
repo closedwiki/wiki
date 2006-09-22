@@ -626,9 +626,9 @@ sub _formatField_edit {
 
     my $skin = join( ',', ( 'action', TWiki::Func::getSkin()));
 
-    my $url = '%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/' .
-      $this->{web} . '/' . $this->{topic} .
-		'?skin='.$skin.';atp_action=' . $this->getAnchor() . ';t='.time();
+    my $url = TWiki::Func::getScriptUrl(
+        $this->{web}, $this->{topic}, 'edit').
+          'skin='.$skin.';atp_action=' . $this->getAnchor() . ';t='.time();
     my $attrs = { href => $url };
     if ( $newWindow ) {
         # Javascript window call
@@ -723,7 +723,6 @@ sub findChanges {
 
     # COVERAGE OFF safety net
     if ( !defined( $this->{notify} ) || $this->{notify} !~ m/\w/o ) {
-        # Shouldn't ever get here
         return 0;
     }
     # COVERAGE ON
@@ -757,7 +756,7 @@ sub findChanges {
 sub findActionByUID {
     my ( $web, $topic, $text, $uid ) = @_;
     ASSERT( $uid );
-ASSERT($text !~ /JUNK/);
+
     my $sn = -1;
     if ( $uid =~ m/^AcTion(\d+)$/o ) {
         $sn = $1;
