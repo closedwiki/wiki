@@ -21,11 +21,12 @@ package TWiki::Plugins::RenderListPlugin;    # change the package name and $plug
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
-        $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+        $debug $pubUrl $attachUrl
     );
 
-$VERSION = '1.033';
+$VERSION = '1.034';
+$RELEASE = 'any TWiki';
 $pluginName = 'RenderListPlugin';  # Name of this Plugin
 
 # =========================
@@ -42,19 +43,13 @@ sub initPlugin
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
+    # one time initialization
+    $pubUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
+    $attachUrl = "$pubUrl/$installWeb/$pluginName";
+
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
-}
-
-# =========================
-sub DISABLE_commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # $_[0] =~ s/%RENDERLIST{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+\t[^\n\r]*)+)/&handleRenderList($1, $2, $4)/ges;
 }
 
 # =========================
@@ -70,7 +65,7 @@ sub startRenderingHandler
     # Plugins, TOC and SEARCH can be rendered
     if ($_[0] =~/%RENDERLIST/o ) {
         unless ($_[0] =~ s/%RENDERLIST{(.*?)}%(([\n\r]+[^ ]{3}[^\n\r]*)*?)(([\n\r]+ {3}[^\n\r]*)+)/&handleRenderList($1, $2, $4)/ges ) {
-        	   # Cairo compatibility fallback
+            # Cairo compatibility fallback
             $_[0] =~ s/%RENDERLIST{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+\t[^\n\r]*)+)/&handleRenderList($1, $2, $4)/ges;
         }
     }
@@ -180,9 +175,7 @@ sub renderIconList
         @tree = @tmp;
     }
 
-    my $attachUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
-    $theParams =~ s/%PUBURL%/$attachUrl/go;
-    $attachUrl .= "/$installWeb/$pluginName";
+    $theParams =~ s/%PUBURL%/$pubUrl/go;
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
     $theParams =~ s/%WEB%/$installWeb/go;
     $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
@@ -191,15 +184,15 @@ sub renderIconList
        = split( /, */, $theParams );
     $width   = 16 unless( $width );
     $height  = 16 unless( $height );
-    $iconSp  = "$attachUrl/empty.gif"   unless( $iconSp );
+    $iconSp  = "empty.gif"   unless( $iconSp );
     $iconSp  = fixImageTag( $iconSp, $width, $height );
-    $iconT   = "$attachUrl/dot_udr.gif" unless( $iconT );
+    $iconT   = "dot_udr.gif" unless( $iconT );
     $iconT   = fixImageTag( $iconT, $width, $height );
-    $iconI   = "$attachUrl/dot_ud.gif"  unless( $iconI );
+    $iconI   = "dot_ud.gif"  unless( $iconI );
     $iconI   = fixImageTag( $iconI, $width, $height );
-    $iconL   = "$attachUrl/dot_ur.gif"  unless( $iconL );
+    $iconL   = "dot_ur.gif"  unless( $iconL );
     $iconL   = fixImageTag( $iconL, $width, $height );
-    $iconImg = "$attachUrl/home.gif"    unless( $iconImg );
+    $iconImg = "home.gif"    unless( $iconImg );
     $iconImg = fixImageTag( $iconImg, $width, $height );
 
     $text = "";
@@ -235,11 +228,13 @@ sub renderIconList
             if( $tree[$i]->{'type'} eq " " ) {
                 # continuation line
                 $text .= "<td valign=\"top\">$iconSp</td>\n";
-            } elsif( $tree[$i]->{'text'} =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
+            } elsif( $tree[$i]->{'text'} =~ /^\s*(<b>)?\s*((icon\:)?<img[^>]+>|icon\:[^\s]+)\s*(.*)/ ) {
                 # specific icon
-                $tree[$i]->{'text'} = $3;
-                $tree[$i]->{'text'} = "$1 $3" if( $1 );
-                my $icon = fixImageTag( "$attachUrl/$2.gif", $width, $height );
+                $tree[$i]->{'text'} = $4;
+                $tree[$i]->{'text'} = "$1 $4" if( $1 );
+                my $icon = $2;
+                $icon =~ s/^icon\://o;
+                $icon = fixImageTag( $icon, $width, $height );
                 $text .= "<td valign=\"top\">$icon</td>\n";
             } else {
                 # default icon
@@ -249,11 +244,13 @@ sub renderIconList
 
         } else {
             # tree theme type
-            if( $tree[$i]->{'text'} =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
+            if( $tree[$i]->{'text'} =~ /^\s*(<b>)?\s*((icon\:)?<img[^>]+>|icon\:[^\s]+)\s*(.*)/ ) {
                 # specific icon
-                $tree[$i]->{'text'} = $3;
-                $tree[$i]->{'text'} = "$1 $3" if( $1 );
-                my $icon = fixImageTag( "$attachUrl/$2.gif", $width, $height );
+                $tree[$i]->{'text'} = $4;
+                $tree[$i]->{'text'} = "$1 $4" if( $1 );
+                my $icon = $2;
+                $icon =~ s/^icon\://o;
+                $icon = fixImageTag( $icon, $width, $height );
                 $text .= "<td valign=\"top\">$icon</td>\n";
                 $text .= "<td valign=\"top\"><nobr>&nbsp; $tree[$i]->{'text'} </nobr></td>\n";
             } else {
@@ -270,7 +267,9 @@ sub fixImageTag
 {
     my ( $theIcon, $theWidth, $theHeight ) = @_;
 
-    if( $theIcon =~ /\.(png|gif|jpeg|jpg)/i && $theIcon !~ /<img/i ) {
+    if( $theIcon !~ /^<img/i ) {
+        $theIcon .= '.gif' if( $theIcon !~ /\.(png|gif|jpeg|jpg)$/i );
+        $theIcon = "$attachUrl/$theIcon" if( $theIcon !~ /^(\/|https?\:)/ );
         $theIcon = "<img src=\"$theIcon\" width=\"$theWidth\" height=\"$theHeight\""
                  . " alt=\"\" border=\"0\" />";
     }
