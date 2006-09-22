@@ -65,18 +65,23 @@ sub doNotifications {
 
     my $attrs = new TWiki::Attrs( $expr, 1 );
     my $hdr =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEHEADER' );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEHEADER' )
+          || '| Assigned to | Due date | Description | State | Notify ||';
 
     my $bdy =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEFORMAT' );
-    my $vert =
-      TWiki::Func::getPreferencesFlag( 'ACTIONTRACKERPLUGIN_TABLEVERTICAL' );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEFORMAT' )
+          || '| $who | $due | $text | $state | $notify | $edit |';
+    my $orient =
+      TWiki::Func::getPreferencesFlag( 'ACTIONTRACKERPLUGIN_TABLEORIENT' )
+          || 'cols';
     my $textform =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TEXTFORMAT' );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TEXTFORMAT' )
+          || 'Action for $who, due $due, $state$n$text$n';
     my $changes =
-      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_NOTIFYCHANGES' );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_NOTIFYCHANGES' )
+          || '$who,$due,$state,$text';
 
-    my $format = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdr, $bdy, $vert, $textform, $changes );
+    my $format = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
 
     my $result = '';
     my $webs = $attrs->{web} || '.*';
@@ -101,12 +106,11 @@ sub doNotifications {
     }
 
     my $actions;
-    if ( scalar( keys %$attrs ) > 0 ) {
+    if ( !$attrs->isEmpty() ) {
         # Get all the actions that match the search
         $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $webs, $attrs, 1 );
         $actions->getActionees( \%people );
     }
-
     # Resolve all mail addresses
     my $mailAddress = {};
     my $unsatisfied = 0;
@@ -189,17 +193,19 @@ sub doNotifications {
             $changesHTML = $changesPerEmail{$email}{html};
         }
 
-        my $message = _composeActionsMail($actionsString, $actionsHTML,
-                                          $changesString, $changesHTML,
-                                          $date, $email, $format );
-        # COVERAGE OFF debug only
-        if ( $debugMailer ) {
-            $result .= $message;
-        } else {
-            my $error = TWiki::Func::sendEmail( $message );
-            if ( $error ) {
-                $error = "ActionTrackerPlugin:ActionNotify: $error";
-                TWiki::Func::writeWarning( $error );
+        if( $actionsString || $changesString ) {
+            my $message = _composeActionsMail($actionsString, $actionsHTML,
+                                              $changesString, $changesHTML,
+                                              $date, $email, $format );
+            # COVERAGE OFF debug only
+            if ( $debugMailer ) {
+                $result .= $message;
+            } else {
+                my $error = TWiki::Func::sendEmail( $message );
+                if ( $error ) {
+                    $error = "ActionTrackerPlugin:ActionNotify: $error";
+                    TWiki::Func::writeWarning( $error );
+                }
             }
         }
         # COVERAGE ON
@@ -327,9 +333,19 @@ sub _composeActionsMail {
     my ( $actionsString, $actionsHTML, $changesString, $changesHTML,
          $since, $mailaddr, $format ) = @_;
 
-    my $from = TWiki::Func::getPreferencesValue( 'WIKIWEBMASTER' );
+    my $from =  $TWiki::cfg{WebMasterEmail} ||
+      TWiki::Func::getPreferencesValue( 'WIKIWEBMASTER' ) ||
+          'twikiwebmaster@example.com';
 
-    my $text = TWiki::Func::readTemplate( 'actionnotify' );
+    my $text = TWiki::Func::readTemplate( 'actionnotify' ) || <<'HERE';
+From: %EMAILFROM%
+To: %EMAILTO%
+Subject: %SUBJECT% on %WIKITOOLNAME%
+MIME-Version: 1.0
+Content-Type: text/plain
+
+ERROR: No actionnotify template installed - please inform %WIKIWEBMASTER%
+HERE
 
     my $subject = '';
     if ( $actionsString ) {
@@ -377,6 +393,7 @@ sub _composeActionsMail {
     my $sun = TWiki::Func::getUrlHost() . $sup;
     $text =~ s/href=\"$sup/href=\"$sun/ogi;
     $text =~ s/<\/?nop( \/)?>//goi;
+die unless $text;
 
     return $text;
 }
@@ -399,13 +416,11 @@ sub _findChangesInTopic {
       TWiki::Func::getRevisionAtTime( $theWeb, $theTopic, $theDate );
     return unless defined( $oldrev );
     $oldrev =~ s/\d+\.(\d+)/$1/o;
-
     # Recover the action set at that date
     my $text = TWiki::Func::readTopicText( $theWeb, $theTopic, $oldrev, 1 );
     my $oldActions =
       TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $theWeb,
                                                             $theTopic, $text );
-
     # Recover the current action set.
     $text = TWiki::Func::readTopicText( $theWeb, $theTopic, undef, 1 );
     my $currentActions =

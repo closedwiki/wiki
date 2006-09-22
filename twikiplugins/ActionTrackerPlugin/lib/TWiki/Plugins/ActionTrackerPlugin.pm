@@ -179,7 +179,6 @@ sub beforeEditHandler {
     if ( !$initialised ) {
         return unless _lazyInit();
     }
-
     my $query = TWiki::Func::getCgiQuery();
 
     my $uid = $query->param( 'atp_action' );
@@ -190,6 +189,7 @@ sub beforeEditHandler {
     # without screwing up the content of the subtemplate.
     my $tmpl = TWiki::Func::readTemplate( 'actionform',
                                           TWiki::Func::getSkin());
+
     my $date = TWiki::Func::formatTime( time(), undef, 'gmtime' );
 
     die unless ($date);
@@ -221,14 +221,16 @@ sub beforeEditHandler {
 
     $tmpl =~ s/%UID%/$uid/go;
 
-    my $useNewWindow = _getPref( "USENEWWINDOW", 0 );
+    my $useNewWindow =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_USENEWWINDOW" )
+          || 0;
     my $submitCmd = "preview";
     my $submitCmdName = "Preview";
     my $submitScript = "";
     my $cancelScript = "";
     my $submitCmdOpt = "";
 
-    if ( _getPref( "NOPREVIEW", 0 )) {
+    if ( TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOPREVIEW" )) {
         $submitCmd = "save";
         $submitCmdName = "Save";
         $submitCmdOpt = "?unlock=on";
@@ -251,20 +253,28 @@ sub beforeEditHandler {
     $tmpl =~ s/%SUBMITCMDOPT%/$submitCmdOpt/go;
     $tmpl =~ s/%SUBMITCOMMAND%/$submitCmd/go;
 
-    my $hdrs = _getPref( "EDITHEADER" );
-    my $body = _getPref( "EDITFORMAT" );
-    my $vert = _getPref( "EDITORIENT" );
+    my $hdrs =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITHEADER" )
+          || '| Assigned to | Due date | State | Notify |';
+    my $body =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITFORMAT" )
+          || '| $who | $due | $state | $notify |';
+    my $vert =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITORIENT" )
+          || 'cols';
 
     my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdrs, $body, $vert, "", "" );
     my $editable = $action->formatForEdit( $fmt );
     $tmpl =~ s/%EDITFIELDS%/$editable/o;
 
-    my $dfltH = TWiki::Func::getPreferencesValue( 'EDITBOXHEIGHT' );
-    my $ebh = _getPref( "EDITBOXHEIGHT", $dfltH );
+    my $ebh =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXHEIGHT")
+          || TWiki::Func::getPreferencesValue( 'EDITBOXHEIGHT' );
     $tmpl =~ s/%EBH%/$ebh/go;
 
-    my $dfltW = TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
-    my $ebw = _getPref( "EDITBOXWIDTH", $dfltW );
+    my $ebw =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EDITBOXWIDTH")
+          || TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
     $tmpl =~ s/%EBW%/$ebw/go;
 
     $text = $action->{text};
@@ -443,46 +453,6 @@ sub _addMissingAttributes {
     $_[0] = $text;
 }
 
-# Prefs handling
-
-# PRIVATE Get a prefs value
-sub _getPref {
-    my ( $vbl, $default ) = @_;
-    my $val = $prefs{$vbl};
-    if ( !defined( $val )) {
-        $val = TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_$vbl" );
-        if ( !defined( $val ) || $val eq "" ) {
-            $val = $default;
-            $val = "" unless ( $val );
-        }
-    }
-    return $val;
-}
-
-# PRIVATE Load prefs from WebPreferences so they override the settings
-# in the plugin topic.
-sub _loadPrefsOverrides {
-    my $web = shift;
-
-    # The remaining prefs are defined in the plugin topic but may be overridden
-    # in WebPreferences. Reload ACTIONTRACKERPLUGIN_ prefs from WebPreferences
-    # topic. Note: Default load order is:
-    # TWiki.TWikiPreferences
-    # Main.TWikiPreferences
-    # $web.WebPreferences
-    # Main.TWikiGuest
-    # TWiki.DefaultPlugin
-    # All other plugins
-    if ( TWiki::Func::topicExists( $web, "WebPreferences" )) {
-        my $text = TWiki::Func::readTopicText( $web, "WebPreferences" );
-        foreach my $line ( split( /\r?\n/, $text )) {
-            if ( $line =~ /^\s+\* Set ACTIONTRACKERPLUGIN_(\w+)\s+=\s+(.*)$/o ) {
-                $prefs{$1} = $2;
-            }
-        }
-    }
-}
-
 # =========================
 # Perform filtered search for all actions
 sub _handleActionSearch {
@@ -522,25 +492,38 @@ sub _lazyInit {
     require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
     # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) ||
-      0;
+    $debug = TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" )
+      || 0;
 
-    _loadPrefsOverrides( $web );
+    $useNewWindow =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_USENEWWINDOW" )
+          || 0;
 
-    $useNewWindow = _getPref( "USENEWWINDOW", 0 );
+    my $hdr = 
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" )
+          || '| Assigned to | Due date | Description | State | Notify ||';
+    my $bdy =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEFORMAT" )
+          || '| $who | $due | $text | $state | $notify | $edit |';
+    my $textform =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TEXTFORMAT" )
+          || 'Action for $who, due $due, $state$n$text$n';
+    my $orient =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEORIENT" )
+          || 'cols';
+    my $changes =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" )
+          || '$who,$due,$state,$text';
+    $defaultFormat = new TWiki::Plugins::ActionTrackerPlugin::Format(
+        $hdr, $bdy, $orient, $textform, $changes );
 
-    my $hdr      = _getPref( "TABLEHEADER" );
-    my $bdy      = _getPref( "TABLEFORMAT" );
-    my $textform = _getPref( "TEXTFORMAT" );
-    my $orient   = _getPref( "TABLEORIENT" );
-    my $changes  = _getPref( "NOTIFYCHANGES" );
-    $defaultFormat =
-      new TWiki::Plugins::ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
+    my $extras =
+      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EXTRAS" )
+          || '';
 
-    my $extras = _getPref( "EXTRAS" );
-
-    if ( $extras ) {
-        my $e = TWiki::Plugins::ActionTrackerPlugin::Action::extendTypes( $extras );
+    if( $extras ) {
+        my $e = TWiki::Plugins::ActionTrackerPlugin::Action::extendTypes(
+            $extras );
         # COVERAGE OFF safety net
         if ( defined( $e )) {
             TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );

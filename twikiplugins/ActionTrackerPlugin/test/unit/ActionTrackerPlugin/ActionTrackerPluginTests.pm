@@ -15,11 +15,6 @@ sub new {
   return $self;
 }
 
-BEGIN {
-    new TWiki();
-    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
-};
-
 my $peopleWeb = "TemporaryActionTrackerTestUsersWeb";
 my $savePeople;
 my $testWeb = "TemporaryActionTrackerTestTopicsWeb";
@@ -28,6 +23,15 @@ my $twiki;
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
+    # Need this to get the actionnotify template
+    $TWiki::cfg{Plugins}{ActionTrackerPlugin}{Enabled} = 1;
+    foreach my $lib (@INC) {
+        my $d = "$lib/../templates";
+        if (-e "$d/actionnotify.tmpl") {
+            $TWiki::cfg{TemplateDir} = $d;
+            last;
+        }
+    }
 
     $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
@@ -182,9 +186,9 @@ sub action {
 sub testBeforeEditHandler {
   my $this = shift;
   my $q = new CGI({atp_action=>"AcTion0",
-                   skin=>'action'});
+                   skin=>'action', atp_action=>'666'});
   $twiki->{cgiQuery} = $q;
-  my $text = '%ACTION{who=Fred,due="2 Jan 02",open}% Test1: Fred_open_ontime';
+  my $text = '%ACTION{uid="666" who=Fred,due="2 Jan 02",open}% Test1: Fred_open_ontime';
   TWiki::Plugins::ActionTrackerPlugin::beforeEditHandler($text,"Topic2",$peopleWeb,undef);
   $text = $this->assert_html_matches("<input type=\"text\" name=\"who\" value=\"$peopleWeb\.Fred\" size=\"35\"/>", $text);
 }
