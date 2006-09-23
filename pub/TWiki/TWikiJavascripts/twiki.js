@@ -327,9 +327,8 @@ Writes a TWiki preference value. If the TWiki preference of given name already e
 Characters '|' and '=' are reserved as separators.
 @param inPrefName (String): name of the preference to write, for instance 'SHOWATTACHMENTS'
 @param inPrefValue (String): value to write, for instance '1'
-@param inExpiryDate (Number): (optional) expiry date of cookie; if not set uses COOKIE_EXPIRY_TIME
 */
-function setPref(inPrefName, inPrefValue, inExpiryDate) {
+function setPref(inPrefName, inPrefValue) {
 	var prefName = _getSafeString(inPrefName);
 	var prefValue = (isNaN(inPrefValue)) ? _getSafeString(inPrefValue) : inPrefValue;
 	var cookieString = _getPrefCookie();
@@ -342,7 +341,7 @@ function setPref(inPrefName, inPrefValue, inExpiryDate) {
 	// else not found, so don't remove an existing entry
 	var keyvalueString = prefName + COOKIE_PREF_VALUE_SEPARATOR + prefValue;
 	prefs.push(keyvalueString);
-	_writePrefValues(prefs, inExpiryDate);
+	_writePrefValues(prefs);
 }
 
 /**
@@ -413,14 +412,13 @@ function _getKeyValueLoc (inKeyValues, inKey) {
 /**
 Writes a cookie with the stringified array values of inValues.
 @param inValues: (Array) an array with key-value tuples
-@param inExpiryDate: (Number) (optional) expiry date of cookie; if not set uses COOKIE_EXPIRY_TIME
 */
-function _writePrefValues (inValues, inExpiryDate) {
+function _writePrefValues (inValues) {
 	var cookieString = (inValues != null) ? inValues.join(COOKIE_PREF_SEPARATOR) : '';
-	var expdate = (inExpiryDate != null) ? new Date(inExpiryDate) : new Date ();
-	FixCookieDate (expdate); // Correct for Mac date bug - call only once for given Date object!
-	expdate.setTime (expdate.getTime() + COOKIE_EXPIRY_TIME);
-	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expdate);
+	var expiryDate = new Date ();
+	FixCookieDate (expiryDate); // Correct for Mac date bug - call only once for given Date object!
+	expiryDate.setTime (expiryDate.getTime() + COOKIE_EXPIRY_TIME);
+	SetCookie(TWIKI_PREF_COOKIE_NAME, cookieString, expiryDate);
 }
 
 /**
@@ -481,18 +479,19 @@ function FixCookieDate (date) {
 //      the cookie does not exist.
 //
 function GetCookie (name) {
-  var arg = name + "=";
-  var alen = arg.length;
-  var clen = document.cookie.length;
-  var i = 0;
-  while (i < clen) {
-    var j = i + alen;
-    if (document.cookie.substring(i, j) == arg)
-      return getCookieVal (j);
-    i = document.cookie.indexOf(" ", i) + 1;
-    if (i == 0) break; 
-  }
-  return null;
+	var arg = name + "=";
+	var alen = arg.length;
+	var clen = document.cookie.length;
+	var i = 0;
+	while (i < clen) {
+		var j = i + alen;
+		if (document.cookie.substring(i, j) == arg) {
+			return getCookieVal(j);
+		}
+		i = document.cookie.indexOf(" ", i) + 1;
+		if (i == 0) break; 
+	}
+	return null;
 }
 //
 //  Function to create or update a cookie.
@@ -523,11 +522,12 @@ function GetCookie (name) {
 //      SetCookie (myCookieVar, cookieValueVar, null, "/myPath", null, true);
 //
 function SetCookie (name,value,expires,path,domain,secure) {
-  document.cookie = name + "=" + escape (value) +
+  var cookieString = name + "=" + escape (value) +
     ((expires) ? "; expires=" + expires.toGMTString() : "") +
     ((path) ? "; path=" + path : "") +
     ((domain) ? "; domain=" + domain : "") +
     ((secure) ? "; secure" : "");
+    document.cookie = cookieString;
 }
 
 //  Function to delete a cookie. (Sets expiration date to start of epoch)
@@ -540,10 +540,7 @@ function SetCookie (name,value,expires,path,domain,secure) {
 //             no domain was specified when creating the cookie.
 //
 function DeleteCookie (name,path,domain) {
-  if (GetCookie(name)) {
-    document.cookie = name + "=" +
-      ((path) ? "; path=" + path : "") +
-      ((domain) ? "; domain=" + domain : "") +
-      "; expires=Thu, 01-Jan-70 00:00:01 GMT";
-  }
+	if (GetCookie(name)) {
+		document.cookie = name + "=" + ((path) ? "; path=" + path : "") + ((domain) ? "; domain=" + domain : "") + "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+	}
 }
