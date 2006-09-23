@@ -63,7 +63,7 @@ TWiki.TwistyPlugin = new function () {
 			addClass(contentElem, 'twistyHidden'); // hide content
 		}
 		if (inMaySave && ref.saveSetting) {
-	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state, TWiki.TwistyPlugin.COOKIE_EXPIRES);
+	        setPref(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, ref.state);
 		}
 	}
 	
@@ -134,7 +134,6 @@ Public constants.
 TWiki.TwistyPlugin.CONTENT_HIDDEN = 0;
 TWiki.TwistyPlugin.CONTENT_SHOWN = 1;
 TWiki.TwistyPlugin.COOKIE_PREFIX = "TwistyContrib_";
-TWiki.TwistyPlugin.COOKIE_EXPIRES = 31; // days
 
 /**
 The cached full TWiki cookie string so the data has to be read only once during init.
@@ -164,13 +163,12 @@ TWiki.TwistyPlugin.init = function(inId) {
 	if (hasClass(e, "twistyMakeVisible")) removeClass(e, "twistyMakeVisible");
 	
 	if (ref.show && ref.hide && ref.toggle) {
-		// all elements present
+		// all Twisty elements present
 		if (TWiki.TwistyPlugin.prefList == null) {
-			// cache whole cookie string
+			// cache complete cookie string
 			TWiki.TwistyPlugin.prefList = getPrefList();
 		}
 		var cookie = getPrefValueFromPrefList(TWiki.TwistyPlugin.COOKIE_PREFIX + ref.name, TWiki.TwistyPlugin.prefList);
-
 		if (ref.firstStartHidden) ref.state = TWiki.TwistyPlugin.CONTENT_HIDDEN;
 		if (ref.firstStartShown) ref.state = TWiki.TwistyPlugin.CONTENT_SHOWN;
 		// cookie setting may override  firstStartHidden and firstStartShown

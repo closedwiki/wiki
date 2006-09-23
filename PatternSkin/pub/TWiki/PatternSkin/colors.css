@@ -256,6 +256,11 @@ th.twikiSortedDescendingCol a:hover font {
 .twistyPlaceholder {
 	color:#8E9195; /*T8*/
 }
+.twistyTrigger a:link,
+.twistyTrigger a:visited {
+	color:#06c; /*G_Link_normal_T*/
+}
+.twistyTrigger a:hover,
 a:hover.twistyTrigger {
 	color:#FBF7E8; /*G_Link_hover_T*/
 }
