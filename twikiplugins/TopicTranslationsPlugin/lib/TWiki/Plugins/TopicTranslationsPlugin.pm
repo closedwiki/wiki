@@ -102,6 +102,7 @@ sub commonTagsHandler {
     $_[0] =~ s/%CURRENTLANGUAGE%/&currentLanguage/ge;
     $_[0] =~ s/%DEFAULTLANGUAGE%/$defaultLanguage/ge;
     $_[0] =~ s/%BASETRANSLATION({(.*?)})?%/&handleBaseTranslation($2)/ge;
+    $_[0] =~ s/%TRANSLATEMESSAGE({(.*?)})?%/&handleTranslateMessage($2)/ge;
 }
 
 # transform a language code into a suitable suffix for TWiki topics,
@@ -335,6 +336,13 @@ sub handleBaseTranslation {
     my $params = shift;
     my $myTopic = TWiki::Func::extractNameValuePair($params, "topic") || $topic;
     return findBaseTopicName($myTopic);
+}
+
+
+sub handleTranslateMessage {
+  my $params = shift;
+  my $lang = currentLanguage();
+  return (TWiki::Func::extractNameValuePair($params, $lang));
 }
 
 # =========================
