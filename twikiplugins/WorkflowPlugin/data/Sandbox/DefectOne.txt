@@ -16,6 +16,3 @@ Some defect.
 PS: Note, that the tags %<nop>WORKFLOWBUTTON%, %<nop>WORKFLOWNOTICE%, and
 %<nop>WORKFLOWSTATEMESSAGE% could be placed in the footer or header, as
 well.
-
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
