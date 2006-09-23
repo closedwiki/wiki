@@ -384,6 +384,9 @@ Finds a key-value pair in an array.
 @return The first occurrence of a key-value pair, where key == inKey; null if none is found.
 */
 function _getKeyValue (inKeyValues, inKey) {
+	if (!inKeyValues) {
+	  return null;
+	}
 	var i = inKeyValues.length;
 	while (i--) {
 		var keyvalue = inKeyValues[i].split(COOKIE_PREF_VALUE_SEPARATOR);
