@@ -78,9 +78,9 @@ sub _addHeader {
 <style type="text/css" media="all">
 @import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
 </style>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.compressed.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.compressed.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.compressed.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TWikiJavascripts/twiki.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/BehaviourContrib/behaviour.js"></script>
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 EOF
 
   TWiki::Func::addToHEAD('TWISTYPLUGIN_TWISTY',$header)
