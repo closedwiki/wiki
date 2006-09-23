@@ -335,13 +335,13 @@ th.twikiSortedDescendingCol a:hover font {
 }
 
 /* TwistyContrib */
-a:link.twistyTrigger,
-a:visited.twistyTrigger {
+.twistyTrigger a:link,
+.twistyTrigger a:visited {
 	text-decoration:none;
 }
-a:link .twistyLinkLabel,
-a:visited .twistyLinkLabel {
-      text-decoration:underline;
+.twistyTrigger a:link .twikiLinkLabel,
+.twistyTrigger a:visited .twikiLinkLabel {
+	text-decoration:none;
 }
 
 /*	-----------------------------------------------------------
@@ -416,8 +416,8 @@ table.twikiFormTable th.twikiFormTableHRow {
 	border-width:0 0 1px 0;
 	border-style:solid;
 }
-.twikiAttachments th a:link,
-.twikiAttachments th a:visited {
+.twikiAttachments a:link,
+.twikiAttachments a:visited {
 	text-decoration:none;
 }
 /* don't show any of those ugly sort icons */
