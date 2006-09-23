@@ -1,4 +1,2 @@
 | *Name* | *Type* | *Size* | *Values* | *Tooltip messages* | *Attributes* | 
 | Approving Quality Manager | text | 73 | | | M | 
-
-<!-- Do _not_ attempt to edit this topic; it is auto-generated. -->
