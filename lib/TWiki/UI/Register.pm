@@ -429,7 +429,7 @@ sub _requireVerification {
 
     if($err) {
         throw TWiki::OopsException( 'attention',
-                                    def => 'send_mail_error',
+                                    def => 'registration_mail_failed',
                                     web => $data->{webName},
                                     topic => $topic,
                                     params => [ $data->{Email}, $err ]);

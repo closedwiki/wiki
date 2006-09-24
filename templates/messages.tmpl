@@ -196,7 +196,20 @@
 %TMPL:DEF{"problem_adding"}%
 ---+++ %MAKETEXT{"Error registering user [_1]" args="%PARAM1%"}%
 
-%MAKETEXT{"There has been a problem adding your user id to the Password system."}% %MAKETEXT{"Please contact [_1]." args="%WIKIWEBMASTER%"}%
+%MAKETEXT{"There has been a problem adding your user id to the Password system."}%
+
+%MAKETEXT{"Please contact [_1]." args="%WIKIWEBMASTER%"}%
+
+%MAKETEXT{"You have *not* been registered."}%
+%TMPL:END%
+%TMPL:DEF{"registration_mail_failed"}%
+---+++ %MAKETEXT{"Error registering new user"}%
+
+%MAKETEXT{"Internal error when sending email to [_1]." args="%PARAM1%"}%
+
+%MAKETEXT{"Please contact [_1]." args="%WIKIWEBMASTER%"}%
+
+%MAKETEXT{"You have *not* been registered."}%
 %TMPL:END%
 %TMPL:DEF{"send_mail_error"}%
 ---+++ Mail Error
@@ -247,7 +260,10 @@
 ---+++ %MAKETEXT{"Invalid Activation Code"}%
 %MAKETEXT{"The activation code [_1] is invalid." args="==%PARAM1%=="}% %PARAM2%
 
-%MAKETEXT{"Please try again."}%
+%MAKETEXT{"Either the code is not valid, or you have already confirmed your registration using it."}% %MAKETEXT{"Registration codes can only be used once."}%
+
+__%MAKETEXT{"Note:"}%__
+%MAKETEXT{"Some mail tools have an error that causes them to send the same request twice when you click on a link. It you did this, it is possible that you actually *have* registered successfully."}%
 
 <form action="%SCRIPTURLPATH{"register"}%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
