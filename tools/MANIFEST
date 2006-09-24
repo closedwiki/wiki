@@ -6,6 +6,9 @@
 !include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
 !include twikiplugins/PatternSkin/lib/TWiki/Contrib/PatternSkin
+!include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
+!include twikiplugins/BehaviourContrib/lib/TWiki/Contrib/BehaviourContrib
+!include twikiplugins/TwistyPlugin/lib/TWiki/Plugins/TwistyPlugin
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 !include twikiplugins/RenderListPlugin/lib/TWiki/Plugins/RenderListPlugin
 !include twikiplugins/SlideShowPlugin/lib/TWiki/Plugins/SlideShowPlugin
@@ -13,7 +16,6 @@
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
 !include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
-!include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 !include twikiplugins/WysiwygPlugin/lib/TWiki/Plugins/WysiwygPlugin
 !include twikiplugins/NatSkin/lib/TWiki/Contrib/NatSkin
 AUTHORS 0440
