@@ -156,8 +156,7 @@ $TWiki::cfg{Password} = '';
 # You can use persistent CGI session tracking even if you are not using login.
 # This allows you to have persistent session variables - for example, skins.
 # Client sessions are not required for logins to work, but TWiki will not
-# be able to remember users unless there is some other mechanism - such as
-# browser cacheing of authentication - available.
+# be able to remember logged-in users consistently.
 #
 # See TWiki.TWikiUserAuthentication for a full discussion of the pros and
 # cons of using persistent sessions.
@@ -237,7 +236,7 @@ $TWiki::cfg{Sessions}{MapIP2SID} = 0;
 $TWiki::cfg{LoginManager} = 'none';
 
 # **REGEX**
-# The perl regular expressioin used to constrain user login names. Some
+# The perl regular expression used to constrain user login names. Some
 # environments may require funny characters in login names, such as \.
 # This is a filter <b>in</b> expression i.e. a login name must match this
 # expression or an error will be thrown and the login denied.

@@ -43,9 +43,10 @@ sub main
     my $user = $query->remote_user();
     my $session = new TWiki( $user, $query );
     my $url = $session->getScriptUrl(
-        0, 'view', $session->{webName}, $session->{topicName} );
+        0, 'viewauth', $session->{webName}, $session->{topicName},
+        t => time());
 
-    $url .= ( '?' . $query->query_string() ) if $query->query_string();
+    $url .= ( ';' . $query->query_string() ) if $query->query_string();
 
-    $session->redirect( $url );
+    $session->redirect( $url, 1 );
 }

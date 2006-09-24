@@ -984,7 +984,7 @@ sub _buildConfirmationEmail {
             $before .= $b.' '.$name.': '.$value."\n";
         }
     }
-    $templateText = $before.$after;
+    $templateText = $before.($after||'');
     $templateText = $session->handleCommonTags
       ( $templateText, $TWiki::cfg{UsersWebName}, $data->{WikiName} );
     $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;

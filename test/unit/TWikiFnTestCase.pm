@@ -18,6 +18,8 @@ use TWiki;
 use TWiki::UI::Register;
 use Error qw( :try );
 
+use vars qw( @mails );
+
 sub new {
     my $class = shift;
     my $var = shift;
@@ -46,6 +48,9 @@ sub set_up {
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
     $this->{twiki} = new TWiki(undef, $query);
+    $TWiki::Plugins::SESSION = $this->{twiki};
+    @mails = ();
+    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
     $this->{twiki}->{store}->createWeb( $this->{twiki}->{user}, $this->{test_web} );
     $this->{twiki}->{store}->createWeb( $this->{twiki}->{user}, $this->{users_web} );
     $this->{test_user_forename} = 'Scum';
@@ -73,6 +78,7 @@ sub tear_down {
 # callback used by Net.pm
 sub sentMail {
     my($net, $mess ) = @_;
+    push( @mails, $mess );
     return undef;
 }
 
@@ -93,11 +99,11 @@ sub registerUser {
                          });
 
     $query->path_info( "/$this->{users_web}/TWikiRegistration" );
-    my $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
-    $session->{net}->setMailHandler(\&sentMail);
 
+    my $twiki = new TWiki(undef, $query);
+    $twiki->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
     try {
-        TWiki::UI::Register::register_cgi($session);
+        TWiki::UI::Register::register_cgi($twiki);
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template},$e->stringify());
@@ -112,7 +118,7 @@ sub registerUser {
     };
     # Reload caches
     $this->{twiki} = new TWiki(undef, $this->{twiki}->{cgiQuery});
-
+    $this->{twiki}->{net}->setMailHandler(\&TWikiFnTestCase::sentMail);
 }
 
 1;

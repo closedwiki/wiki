@@ -51,6 +51,8 @@ sub new {
     my( $class, $twiki ) = @_;
     my $this = bless( $class->SUPER::new($twiki), $class );
     $twiki->enterContext( 'can_login', 1 );
+    # Can't logout, though
+    TWiki::registerTagHandler('LOGOUT', sub { return '' });
     return $this;
 }
 
@@ -66,6 +68,7 @@ sub forceAuthentication {
     $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/o;
     my $scriptPath = $1;
     my $scriptName = $2;
+    #print STDERR "Forcing auth for $script\n";
     $script = $scriptPath.$scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
     if( ! $query->remote_user() && -e $script ) {
         # Assemble the new URL using the host, the changed script name,
@@ -87,9 +90,12 @@ sub forceAuthentication {
               $scriptName.$TWiki::cfg{ScriptSuffix};
         }
         $url .= '/' . $ENV{PATH_INFO} if $ENV{PATH_INFO};
+        #print STDERR "Redirect to logon\n";
         # Redirect with passthrough so we don't lose the original query params
         $twiki->redirect( $url, 1 );
         return 1;
+    } else {
+        #print STDERR $query->remote_user()." is already logged in\n";
     }
 
     return 0;
@@ -106,8 +112,9 @@ sub loginUrl {
 sub getUser {
     my $this = shift;
     my $query = $this->{twiki}->{cgiQuery};
-    return $query->remote_user() if(defined($query));
-    return undef;
+    my $authUser;
+    $authUser = $query->remote_user() if $query;
+    return $authUser;
 }
 
 sub checkSession {

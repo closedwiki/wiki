@@ -722,7 +722,7 @@ sub redirect {
             # Redirecting from a port to a get
             my $cache = $this->cacheQuery();
             if ($cache) {
-                print STDERR "302ing from a POST ".$query->url().$query->path_info()." to $url using $cache\n";
+                #print STDERR "302ing from a POST ".$query->url().$query->path_info()." to $url using $cache\n";
                 $url .= "?$cache";
             }
         } else {
@@ -1157,20 +1157,20 @@ sub normalizeWebTopicName {
 
 =pod
 
----++ ClassMethod new( $remoteUser, $query, \%initialContext )
+---++ ClassMethod new( $loginName, $query, \%initialContext )
 Constructs a new TWiki object. Parameters are taken from the query object.
 
-   * =$remoteUser= the logged-in user (login name)
-   * =$query= the query
-   * =\%initialContext= - reference to a hash containing context name=value pairs to be pre-installed in the context hash
+   * =$loginName= is the username of the user you want to be logged-in if none is
+     available from a session or browser. Used mainly for side scripts and debugging.
+   * =$query= the CGI query (may be undef, in which case an empty query is used)
+   * =\%initialContext= - reference to a hash containing context name=value pairs
+     to be pre-installed in the context hash
 =cut
 
 sub new {
-    my( $class, $remoteUser, $query, $initialContext ) = @_;
+    my( $class, $loginName, $query, $initialContext ) = @_;
 
     $query ||= new CGI( {} );
-    $remoteUser ||= $query->remote_user() || $TWiki::cfg{DefaultUserLogin};
-
     my $this = bless( {}, $class );
 
     $this->{htmlHeaders} = {};
@@ -1187,7 +1187,6 @@ sub new {
     $this->{loginManager} = TWiki::Client::makeLoginManager( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
-    $this->{remoteUser} = $remoteUser;
 
     $this->{users} = new TWiki::Users( $this );
 
@@ -1306,8 +1305,7 @@ sub new {
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override
     # it below.
-    my $login = $this->{loginManager}->loadSession();
-
+    my $login = $this->{loginManager}->loadSession($loginName);
     my $prefs = new TWiki::Prefs( $this );
     $this->{prefs} = $prefs;
 

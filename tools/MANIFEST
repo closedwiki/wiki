@@ -506,6 +506,7 @@ lib/TWiki/Configure/Checkers/Htpasswd/Encoding.pm 0440
 lib/TWiki/Configure/Checkers/Htpasswd/FileName.pm 0440
 lib/TWiki/Configure/Checkers/LocalesDir.pm 0440
 lib/TWiki/Configure/Checkers/LogFileName.pm 0440
+lib/TWiki/Configure/Checkers/LoginManager.pm 0440
 lib/TWiki/Configure/Checkers/LowerNational.pm 0440
 lib/TWiki/Configure/Checkers/MSWin32.pm 0440
 lib/TWiki/Configure/Checkers/MailProgram.pm 0440

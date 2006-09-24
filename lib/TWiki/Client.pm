@@ -200,21 +200,30 @@ sub _IP2SID {
 
 =pod
 
----++ ObjectMethod loadSession()
+---++ ObjectMethod loadSession($defaultUser) -> $login
 
 Get the client session data, using the cookie and/or the request URL.
 Set up appropriate session variables in the twiki object and return
 the login name.
 
+$defaultUser is a username to use if one is not available from other
+sources. it is mainly for debugging.
+
 =cut
 
 sub loadSession {
-    return undef unless( $TWiki::cfg{UseClientSessions} );
-
-    my $this = shift;
+    my ($this, $defaultUser) = @_;
     my $twiki = $this->{twiki};
 
-    return undef if $twiki->inContext( 'command_line' );
+    # Try and get the user from the webserver
+    my $authUser = $this->getUser( $this ) || $defaultUser;
+
+    unless( $TWiki::cfg{UseClientSessions} ) {
+        $this->userLoggedIn( $authUser ) if $authUser;
+        return $authUser;
+    }
+
+    return $authUser if $twiki->inContext( 'command_line' );
 
     my $query = $twiki->{cgiQuery};
 
@@ -226,9 +235,6 @@ sub loadSession {
     } else {
         _trace($this, "No cookie ");
     }
-
-    # Try and get the user from the webserver
-    my $authUser = $this->getUser( $this );
 
     # First, see if there is a cookied session, creating a new session
     # if necessary.
@@ -268,9 +274,13 @@ sub loadSession {
     if( $authUser ) {
         _trace($this, "Session says user is $authUser");
     } else {
-        $authUser = $twiki->{remoteUser};
-        _trace($this, "TWiki object says user is $authUser");
+        # Use remote user provided from "new TWiki" call. This is mainly
+        # for testing.
+        $authUser = $defaultUser;
+        _trace($this, "TWiki object says user is $authUser") if $authUser;
     }
+
+    $authUser ||= $defaultUser;
 
     # is this a logout?
     if( $query && $query->param( 'logout' ) ) {
@@ -423,21 +433,24 @@ sub userLoggedIn {
                   { Directory => $TWiki::cfg{Sessions}{Dir} } );
             die CGI::Session->errstr() unless $this->{_cgisession};
         }
-
-        if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
-            _trace($this, "Session is authenticated");
-            $this->{_cgisession}->param( 'AUTHUSER', $authUser );
-            $twiki->enterContext( 'authenticated' );
-        } else {
-            _trace($this, "Session is NOT authenticated");
-            # if we are not authenticated, expire any existing session
-            $this->{_cgisession}->clear( [ 'AUTHUSER' ] );
-            $twiki->leaveContext( 'authenticated' );
-        }
-	# flush the session, to try to fix Item1820 and Item2234
-	$this->{_cgisession}->flush();
-	die $this->{_cgisession}->errstr() if $this->{_cgisession}->errstr();
-	_trace($this, "Flushed");
+    }
+    if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
+        _trace($this, "Session is authenticated");
+        $this->{_cgisession}->param( 'AUTHUSER', $authUser )
+          if( $TWiki::cfg{UseClientSessions} );
+        $twiki->enterContext( 'authenticated' );
+    } else {
+        _trace($this, "Session is NOT authenticated");
+        # if we are not authenticated, expire any existing session
+        $this->{_cgisession}->clear( [ 'AUTHUSER' ] )
+          if( $TWiki::cfg{UseClientSessions} );
+        $twiki->leaveContext( 'authenticated' );
+    }
+    if( $TWiki::cfg{UseClientSessions} ) {
+        # flush the session, to try to fix Item1820 and Item2234
+        $this->{_cgisession}->flush();
+        die $this->{_cgisession}->errstr() if $this->{_cgisession}->errstr();
+        _trace($this, "Flushed");
     }
 }
 
