@@ -72,7 +72,7 @@ May throw TWiki::OopsException
 =cut
 
 sub new {
-    my( $class, $session, $web, $form, $noNameCheck ) = @_;
+    my( $class, $session, $web, $form, $def ) = @_;
     my $this = bless( {}, $class );
 
     ( $web, $form ) =
@@ -80,17 +80,26 @@ sub new {
 
     my $store = $session->{store};
 
-    # Read topic that defines the form
-    unless( $store->topicExists( $web, $form ) ) {
-        return undef;
-    }
-    my( $meta, $text ) =
-      $store->readTopic( $session->{user}, $web, $form, undef );
-
     $this->{session} = $session;
     $this->{web} = $web;
     $this->{topic} = $form;
-    $this->{fields} = $this->_parseFormDefinition( $text );
+
+    unless ( $def ) {
+
+      # Read topic that defines the form
+      unless( $store->topicExists( $web, $form ) ) {
+        return undef;
+      }
+      my( $meta, $text ) =
+	$store->readTopic( $session->{user}, $web, $form, undef );
+
+      $this->{fields} = $this->_parseFormDefinition( $text );
+
+    } else {
+
+      $this->{fields} = $def;
+
+    }
 
     # Expand out values arrays in the definition
     # SMELL: this should be done lazily
