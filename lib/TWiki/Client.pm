@@ -207,7 +207,8 @@ Set up appropriate session variables in the twiki object and return
 the login name.
 
 $defaultUser is a username to use if one is not available from other
-sources. it is mainly for debugging.
+sources. The username passed when you create a TWiki instance is
+passed in here.
 
 =cut
 

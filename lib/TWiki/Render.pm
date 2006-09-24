@@ -721,24 +721,6 @@ sub _handleSquareBracketedLink {
 
     $topic = $link if( $link );
 
-    if( $TWiki::cfg{EnableHierarchicalWebs} ) {
-        # look up the leading path components to see
-        # if they form a valid web path.
-        my @topica = split( /\./, $topic );
-        my @weba;
-        while( @topica && $this->{session}->{store}->webExists(
-            join('.', @weba, $topica[0]))) {
-            push(@weba, shift(@topica));
-        }
-
-        $web = join('.', @weba) if scalar(@weba);
-        $topic = join('', @topica);
-    } else {
-        if( $topic =~ s/^($TWiki::regex{webNameBaseRegex}|$TWiki::regex{defaultWebNameRegex})\.//) {
-            $web = $1;
-        }
-        $topic =~ s/\.//g;
-    }
     # Topic defaults to the current topic
     ($web, $topic) = $this->{session}->normalizeWebTopicName( $web, $topic );
 
