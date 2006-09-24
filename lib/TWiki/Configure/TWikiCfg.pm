@@ -82,7 +82,8 @@ sub new {
 
 # Load the configuration declarations. The core set is defined in
 # TWiki.spec, which must be found on the @INC path and is always loaded
-# first. Other .spec files are read after this.
+# first. Other .spec files are read after this. Then find all settings
+# for plugins in the Plugin.spec files.
 sub load {
     my $root = shift;
     my %read;
@@ -101,6 +102,19 @@ sub load {
             $read{$file} = "$dir/$file";
         }
     }
+    my @modules;
+    my $classes = (TWiki::Configure::Type::load('SELECTCLASS'))->findClasses('TWiki::Plugins::*Plugin');
+    foreach my $module ( @$classes ) {
+        $module =~ s/^.*::([^:]*)/$1/;
+        # only add the first instance of any plugin, as only
+        # the first can get loaded from @INC.
+        push @modules, "TWiki/Plugins/$module/Plugin.spec";
+    }
+    foreach $file ( @modules ) {
+      _parse(TWiki::findFileOnPath($file), $root);
+      $read{$file} = $file;
+    }
+
 }
 
 ###########################################################################
