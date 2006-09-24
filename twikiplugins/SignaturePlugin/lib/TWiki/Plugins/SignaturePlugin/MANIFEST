@@ -1,0 +1,3 @@
+data/TWiki/SignaturePlugin.txt 0660
+lib/TWiki/Plugins/SignaturePlugin.pm 0440
+bin/digisign 0550
