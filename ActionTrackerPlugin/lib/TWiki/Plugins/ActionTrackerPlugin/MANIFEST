@@ -1,6 +1,6 @@
 data/TWiki/ActionTrackerPlugin.txt 0660 Plugin topic
 data/TWiki/ActionTrackerPluginQBE.txt 0660 Query-by-example action search
-pub/TWiki/ActionTrackerPlugin/styles.css 0440 Style sheet
+pub/TWiki/ActionTrackerPlugin/styles.css 0660 Style sheet
 tools/actionnotify 0770 Mailer script
 templates/actionnotify.tmpl 0440 Page template for notify message
 templates/edit.action.tmpl 0440 Action editor page template
