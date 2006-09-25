@@ -66,7 +66,7 @@ sub initPlugin {
     TWiki::Func::registerTagHandler('ENDTWISTY',\&_ENDTWISTYTOGGLE);
     TWiki::Func::registerTagHandler('TWISTYTOGGLE',\&_TWISTYTOGGLE);
     TWiki::Func::registerTagHandler('ENDTWISTYTOGGLE',\&_ENDTWISTYTOGGLE);
-
+	
     return 1;
 }
 
@@ -126,6 +126,11 @@ sub _ENDTWISTYTOGGLE {
     my $mode=shift @modes;
     my $modeTag = ($mode ne '') ? '</'.$mode.'>' : '';
     return $modeTag._twistyCloseDiv();
+}
+
+sub postRenderingHandler {
+    # do not uncomment, use $_[0], $_[1]... instead
+	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)}%/<script type="text\/javascript\"\>$1<\/script>/g;
 }
 
 sub _twistyBtn {
@@ -200,7 +205,7 @@ sub _createHtmlProperties {
 
 sub _createJavascriptTriggerCall {
 	my($idTag) = @_;
-	return '<script type="text/javascript">TWiki.TwistyPlugin.init("'.$idTag.'");</script>';
+	return '%_TWISTYSCRIPT{"TWiki.TwistyPlugin.init("'.$idTag.'");}%';
 }
 
 sub _twistyWrapInDiv {
