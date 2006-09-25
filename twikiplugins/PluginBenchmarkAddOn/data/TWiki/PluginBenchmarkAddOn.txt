@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1100149235" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1159213083" format="1.0" version="1.2"}%
 ---+ Plugin Benchmark Add-On
 
 This is a small script to measure the performance of a Plugin. Plugin authors can use it to measure and document the TWiki:Plugins/Benchmark numbers.
@@ -52,15 +52,19 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 
 ---++ Add-On Info
 
-|  Add-on Author: | TWiki:Main/PeterThoeny |
+	* Set SHORTDESCRIPTION = Measure the performance of a TWiki plugin
+
+|  Add-on Author: | TWiki:Main.PeterThoeny |
+|  Copyright: | &copy; 2006, TWiki:Main.PeterThoeny |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Add-on Version: | 11 Nov 2004 (v1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  11 Nov 2004: | Better accuracy, more flexible configuration |
 |  10 Nov 2004: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.1 (TWiki 4.0) |
 |  CPAN Dependencies: | Time::HiRes |
 |  Other Dependencies: | TWiki's geturl utility |
 |  Perl Version: | 5.005 |
-|  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
