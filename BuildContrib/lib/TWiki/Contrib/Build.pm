@@ -906,23 +906,22 @@ sub target_archive {
 
     $this->apply_perms($this->{files}, $this->{tmpDir} );
 
-    $this->sys_action('zip -r -q '.$project.'.zip *');
-    $this->perl_action('File::Copy::move("'.$project.'.zip", "'.
-                         $this->{basedir}.'/'.$project.'.zip");');
+    $this->sys_action('zip -r -q ' . $project . '.zip *');
+    $this->sys_action('tar czpf '  . $project . '.tgz *');
+    $this->sys_action('md5sum '    . $project . '.tgz '
+                                   . $project . '_installer '
+                                   . $project . '.zip '
+    .'> ' . $this->{basedir} . '/' . $project . '.md5');
 
-    $this->sys_action('tar czpf '.$project.'.tgz *');
     $this->perl_action('File::Copy::move("'.$project.'.tgz", "'.
                          $this->{basedir}.'/'.$project.'.tgz")');
+    $this->perl_action('File::Copy::move("'.$project.'.zip", "'.
+                         $this->{basedir}.'/'.$project.'.zip");');
 
     $this->cp($this->{tmpDir}.'/'.$project.'_installer',
               $this->{basedir}.'/'.$project.'_installer');
 
     $this->popd();
-
-    $this->sys_action('md5sum '.$this->{basedir}.'/'.$project.'.tgz '.
-                        $this->{basedir}.'/'.$project.'_installer '.
-                        $this->{basedir}.'/'.$project.'.zip > '.
-                        $this->{basedir}.'/'.$project.'.md5');
 
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
     print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
