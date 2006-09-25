@@ -48,11 +48,27 @@ overriding the custom code again, we use an "unconfigurable" key
 sub readConfig {
     return if $TWiki::cfg{ConfigurationFinished};
 
-    # Reluctantly we have to do this to prevent uninitialised vars
-    do 'TWiki.spec';
+    # Read LocalSite.cfg
+    unless (do 'TWiki.spec') {
+        die <<GOLLYGOSH;
+Content-type: text/plain
 
-    # Note: no error handling!
-    do 'LocalSite.cfg';
+Perl error when reading TWiki.spec: $@
+Please inform the site admin.
+GOLLYGOSH
+        exit 1;
+    }
+
+    # Read LocalSite.cfg
+    unless (do 'LocalSite.cfg') {
+        die <<GOLLYGOSH;
+Content-type: text/plain
+
+Perl error when reading LocalSite.cfg: $@
+Please inform the site admin.
+GOLLYGOSH
+        exit 1;
+    }
 
     # If we got this far without definitions for key variables, then
     # we need to default them. otherwise we get peppered with
@@ -69,18 +85,18 @@ sub readConfig {
 
     # Expand references to $TWiki::cfg vars embedded in the values of
     # other $TWiki::cfg vars.
-    _expand(\%TWiki::cfg);
+    expand(\%TWiki::cfg);
 
     $TWiki::cfg{ConfigurationFinished} = 1;
 }
 
-sub _expand {
+sub expand {
     my $hash = shift;
 
     foreach ( values %$hash ) {
         next unless $_;
         if (ref($_) eq 'HASH') {
-            _expand(\%$_);
+            expand(\%$_);
         } else {
             s/(\$TWiki::cfg{[[A-Za-z0-9{}]+})/eval $1||'undef'/ge;
         }

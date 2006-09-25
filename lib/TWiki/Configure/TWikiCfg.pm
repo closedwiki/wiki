@@ -82,39 +82,42 @@ sub new {
 
 # Load the configuration declarations. The core set is defined in
 # TWiki.spec, which must be found on the @INC path and is always loaded
-# first. Then find all settings for plugins in the Plugin.spec files.
-# Other .spec files are read after this. 
+# first. Then find all settings for extensions in their .spec files.
 sub load {
     my $root = shift;
-    my %read;
 
     my $file = TWiki::findFileOnPath('TWiki.spec');
     if ($file) {
+        # perl read it to get defaults.
+        do $file;
         _parse($file, $root);
-        $read{'TWiki.spec'} = $file;
     }
     my @modules;
-    my $classes = (TWiki::Configure::Type::load('SELECTCLASS'))->findClasses('TWiki::Plugins::*Plugin');
-    foreach my $module ( @$classes ) {
-        $module =~ s/^.*::([^:]*)/$1/;
-        # only add the first instance of any plugin, as only
-        # the first can get loaded from @INC.
-        push @modules, "TWiki/Plugins/$module/Plugin.spec";
-    }
-    foreach $file ( @modules ) {
-      _parse(TWiki::findFileOnPath($file), $root);
-      $read{$file} = $file;
-    }
+    my %read;
     foreach my $dir (@INC) {
-        opendir(D, $dir) || next;
-        foreach $file (grep { /\.spec$/ } readdir D) {
-            # Only read the first occurrence of each .spec file
-            next if $read{$file};
-            _parse("$dir/$file", $root);
-            $read{$file} = "$dir/$file";
-        }
+        _loadSpecsFrom("$dir/TWiki/Plugins", $root, \%read);
+        _loadSpecsFrom("$dir/TWiki/Contrib", $root, \%read);
     }
 
+    # Use the standard loader to expand $TWiki::cfg{} strings in default
+    # values read from .spec files
+    TWiki::Configure::Load::expand(\%TWiki::cfg);
+
+}
+
+sub _loadSpecsFrom {
+    my ($dir, $root, $read) = @_;
+
+    return unless opendir(D, $dir);
+    foreach my $extension ( grep { !/^\./ } readdir D) {
+        next if $read->{$extension};
+        my $file = "$dir/$extension/Config.spec";
+        next unless -e $file;
+        die "Bad spec $file: $@" unless do $file;
+        _parse($file, $root);
+        $read->{$extension} = $file;
+    }
+    closedir(D);
 }
 
 ###########################################################################
