@@ -82,8 +82,8 @@ sub new {
 
 # Load the configuration declarations. The core set is defined in
 # TWiki.spec, which must be found on the @INC path and is always loaded
-# first. Other .spec files are read after this. Then find all settings
-# for plugins in the Plugin.spec files.
+# first. Then find all settings for plugins in the Plugin.spec files.
+# Other .spec files are read after this. 
 sub load {
     my $root = shift;
     my %read;
@@ -92,15 +92,6 @@ sub load {
     if ($file) {
         _parse($file, $root);
         $read{'TWiki.spec'} = $file;
-    }
-    foreach my $dir (@INC) {
-        opendir(D, $dir) || next;
-        foreach $file (grep { /\.spec$/ } readdir D) {
-            # Only read the first occurrence of each .spec file
-            next if $read{$file};
-            _parse("$dir/$file", $root);
-            $read{$file} = "$dir/$file";
-        }
     }
     my @modules;
     my $classes = (TWiki::Configure::Type::load('SELECTCLASS'))->findClasses('TWiki::Plugins::*Plugin');
@@ -113,6 +104,15 @@ sub load {
     foreach $file ( @modules ) {
       _parse(TWiki::findFileOnPath($file), $root);
       $read{$file} = $file;
+    }
+    foreach my $dir (@INC) {
+        opendir(D, $dir) || next;
+        foreach $file (grep { /\.spec$/ } readdir D) {
+            # Only read the first occurrence of each .spec file
+            next if $read{$file};
+            _parse("$dir/$file", $root);
+            $read{$file} = "$dir/$file";
+        }
     }
 
 }
