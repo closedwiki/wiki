@@ -62,10 +62,12 @@ BEGIN {
 
 =pod
 
----++ ClassMethod new ( $session, $web, $form )
+---++ ClassMethod new ( $session, $web, $form, $def )
 
    * $web - default web to recover form from, if $form doesn't specify a web
    * =$form= - topic name to read form definition from
+   * =$def= - optional. a reference to a list of field definitions. if present,
+              these definitions will be used, rather than those in =$form=.
 
 May throw TWiki::OopsException
 
