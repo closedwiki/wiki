@@ -128,9 +128,18 @@ sub _ENDTWISTYTOGGLE {
     return $modeTag._twistyCloseDiv();
 }
 
+=pod
+Disables _TWISTYSCRIPT tags written in the topic text.
+=cut
+
+sub beforeCommonTagsHandler {
+	# do not uncomment, use $_[0], $_[1]... instead
+	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/$1/g;
+}
+
 sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
-	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)}%/<script type="text\/javascript\"\>$1<\/script>/g;
+	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/<script type="text\/javascript\"\>$1<\/script>/g;
 }
 
 sub _twistyBtn {
@@ -205,7 +214,7 @@ sub _createHtmlProperties {
 
 sub _createJavascriptTriggerCall {
 	my($idTag) = @_;
-	return '%_TWISTYSCRIPT{"TWiki.TwistyPlugin.init("'.$idTag.'");}%';
+	return '%_TWISTYSCRIPT{"TWiki.TwistyPlugin.init("'.$idTag.'");"}%';
 }
 
 sub _twistyWrapInDiv {
