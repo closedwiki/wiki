@@ -1,72 +1,114 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 11354 $"}%
----+ Template Toolkit Plugin
+<!-- %TEMPLATETOOLKIT{"%URLPARAM{TT}%" WRAPPER="demowrapper.tt2"}% -->
+*%RED%Warning: Alpha Code, interfaces may change radically.  Do not use in production code.%ENDCOLOR%*
+---+!! Template Toolkit Plugin
 
 This is a rather slim glue to Andy Wardley's Template Toolkit
 (see http://www.template-toolkit.org/ or TWiki:Codev.TemplateToolkit
 for more, though the latter is pretty stale).
 
 I myself have here and then argued that TT is too heavyweight for use
-in a TWiki, but this does only prevent using TT as the _only_
-template system for TWiki.
+as a template system for TWiki, but this does only prevent using TT as
+the _only_ template system for TWiki.
 
 If, on the other hand, you _do_ have TT installed anyway, and
 especially if you have it running in a mod_perl environment where
 module compilation time is no longer an issue, then you might want to
-share TT blocks or layouts with TWiki.
+share your TT blocks or layouts with TWiki.
 
-Currently, the implementation as a plugin does not allow to install TT
+The implementation as a plugin does not allow to install TT
 as a drop-in replacement for TWiki's own templating system.  But I
-think that for first experiments it is possible to emulate that by
-using very slim TWiki templates to get TWiki's template system out of
-the way and instead run your topics through TT with a
-=preRenderingHandler=.
+think that for first experiments it is possible to emulate that: Use
+very slim TWiki templates to get TWiki's template system out of
+the way, and run your topics through TT instead.
 
-To be honest, I am using this plugin as both a first step to evaluate TT as a
-TWiki template machine, and as a real-life hands-on example for
-BenchmarkContrib to play with.
+To be honest, I am using this plugin as both a first step to evaluate
+TT as a TWiki template machine, and as a real-life hands-on example
+for BenchmarkContrib to play with.
+
+%TOC%
 
 ---++ Syntax Rules
 
 The plugin has just one TWiki tag in the TWiki sense:
 
 %STARTSECTION{"VarTEMPLATETOOLKIT"}%
-   * Syntax: =%<nop>TEMPLATETOOLKIT{"on"}%= or =%<nop>TEMPLATETOOLKIT{"off"}%=
-   * If present at the top of a topic with a value of ="on"=, the whole topic will be
+   * Syntax example: =%<nop>TEMPLATETOOLKIT{"on" WRAPPER="myTTtemplate.tt2"}%=
+   * If present in a topic with a value of ="on"=, the whole topic will be
      processed by TT.
    * A configuration variable named
      =$TWiki::cfg{Plugins}{TemplateToolkitPlugin}{UseTT}= can be used
      to set a site-wide default
-   * Verbatim blocks are excluded from processing by TT
+   * Supported Parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | "on" / "off" | Switch to control TT usage for the current topic.  A value "on" or "1" will activate TT processing for the current topic, every other value will disable it.  To retain the configuration setting, don't specify this parameter. | Config variable ={UseTT}= |
+     | WRAPPER="tt_template" | The TT wrapper template into which the topic will be embedded.  The wrapper must explicitly include the topic content, which is available as a TT variable =[&#37;&nbsp;content&nbsp;&#37;]=. | no wrapper |
 %ENDSECTION{"VarTEMPLATETOOLKIT"}%
 
----+++ A Note on Template Toolkit Syntax
+---++ Configuration Variables
+
+Not fully documented, until I figure out how %SCRIPTURL{configure}% will
+pick up plugin configuration vars.
+
+All configuration variables for this plugin are collected under
+=$TWiki::cfg{Plugins}{TemplateToolkitPlugin}=.
+
+| *Configuration Variable* | *Description* |
+| ={UseTT}= | Sitewide default for TT usage.  Can be overridden in a topic with the =%<nop>TEMPLATETOOLKIT{...}%= tag. |
+| ={TToptions}= | Hash reference passed as =\%config= parameter to =Template->new()=.  Refer to the TT documentation for details.%BR%Per default, the current topic's attachment directory is used as =INCLUDE_PATH=, and the =START_TAG= option is basically the familiar =[&#37;=, but adjusted to take care for TWiki forced link/variable combinations. |
+
+---++ Notes on Template Toolkit Syntax
 
 If you are familiar with the Template Toolkit, then you surely know
-that it per default embeds its directives between the delimiters =[%=
-and =%]=.  As almost everything in TT, this is configurable, but the
-default delimiters usually don't occur.  _Usually_.  In TWiki, there
-is a syntax construction which is quite popular, but makes TT croak:
-Forced links, with an embedded TWiki variable.  Example:
+that it per default embeds its directives between the delimiters
+=[&#37;= and =%]=.  As almost everything in TT this is configurable,
+but the default delimiters are used quite frequently because they usually
+don't occur in "normal text".  _Usually_.  In TWiki, there is a syntax
+construction which is quite popular, but makes TT croak: Forced links,
+with an embedded TWiki variable.  Example:
 <verbatim>
 [[%TWIKIWEB%.%STATISTICSTOPIC%]]
 </verbatim>
 This is a valid TWiki link pointing to
 [[%TWIKIWEB%.%STATISTICSTOPIC%]], but an invalid TT construct
-=[% TWIKIWEB%.%STATISTICSTOPIC %]= within an additional set of square
-brackets
+=[&#37; TWIKIWEB%.%STATISTICSTOPIC %]= within an additional set of square
+brackets.
 
-This plugin tries hardly to cope with this, so the above example will
+This plugin tries hard to cope with this, so the above example will
 work as intended.  Some recommendations, just in case:
-   * It is good practice to write your TT constructs as =[% tt_directive %]=,
+   * It is good practice to write your TT constructs as =[&#37; tt_directive %]=,
      i.e. with surrounding spaces around directives.  By doing so,
-     you'll make sure to never clash with a possible TWiki variable named
+     you'll make sure to never clash with a possible TWiki variable name
      =%<nop>tt_directive%=.
    * Separate TT stuff from heavy TWiki lifting or you'll get severe bracketiquotitis.
+   * If you want to use different delimiters, define both ={TToptions}{START_TAG}= and
+     ={TToptions}{END_TAG}= in =$TWiki::cfg{Plugins}{TemplateToolkitPlugin}=.
+   * When writing TT wrappers for use with this plugin, keep in mind that they are
+     TT-expanded, but not TML-processed.
 
----++ Configuration Variables
+---++ Examples
 
-Yet undocumented, until I figure out how %SCRIPTURL{configure}% will
-pick up plugin configuration vars :-)
+Per default, %TOPIC% ships with a simple TT demo wrapper.  To see it
+in action, prepend a topic with the following line:
+<verbatim>
+%TEMPLATETOOLKIT{"on" WRAPPER="demowrapper.tt2"}%
+</verbatim>
+
+TT expansion can be controlled by URL parameters as well.
+If the plugin is installed, you can apply the demonstration wrapper to
+the current topic by clicking [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?TT=on][here]].
+
+---++ Security Considerations
+
+Unlike in typical TT web applications, in a TWiki many people can edit
+the templates, and so they can introduce TT directives.  To keep your
+TWiki unharmed, some precautions should be made:
+   1 Do not enable EVAL_PERL (it is off per default).
+   1 Do not pass critical data structures like the configuration hash
+     as TT variables.  Remember that with TT directives it is possible
+     to change data, and to call object methods.  With a persistent
+     interpreter like mod_perl, this could lead to a corrupt configuration
+     for subsequent requests.
 
 ---++ Future Directions
 
@@ -74,10 +116,13 @@ If time permits, I'll try to:
    * create a TWiki skin and a TT layout in parallel and run
      benchmarks on both.
    * document (and extend) configuration items
+   * Add a =TWiki= filter for TT templates so that wrappers can use TWiki variables
    * ...
 
 ---++ Plugin Installation Instructions
 
+%$INSTALL_INSTRUCTIONS%
+<!--
    * Download the ZIP file from the Plugin web (see below)
    * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
@@ -88,10 +133,10 @@ If time permits, I'll try to:
       1 Enable the plugin using %SCRIPTURL{configure}%
       2 Create a topic in the Sandbox.WebHome web containing the
         following snippet: %BR%
-        =%<nop>TEMPLATETOOLKIT{"on"}% [% text = 'test' %] [% text %]=
+        =%<nop>TEMPLATETOOLKIT{"on"}% [&#37; text = 'test' %] [&#37; text %]=
       3 If the installation was successful, then on save the topic
         should contain only the word 'test'
-
+-->
 ---++ Plugin Info
 
 |  Author: | TWiki:Main/HaraldJoerg |
@@ -112,3 +157,5 @@ If time permits, I'll try to:
 __Related Topics:__ %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main.HaraldJoerg - 21 Sep 2006
+
+%META:FILEATTACHMENT{name="demowrapper.tt2" comment="A simple grey box around the topic text" path="demowrapper.tt2"}%

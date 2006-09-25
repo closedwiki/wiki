@@ -74,11 +74,11 @@ our $tt;
 #    1 TT preferences - only used once on object creation
 my %tt_defaults  =  (START_TAG => '(?:(?<=\[{2})|(?<=\]\[)|(?<![\[\]]))\[%',
                     );
-my $process_tt_default   =  0;
-
+my %tt_params    =  ();
 # Variables which need to be recorded between different callbacks
 # *Must* be initialized per-request for mod_perl compliance
 my $process_tt;
+my $process_tt_default = 0;
 
 
 
@@ -91,11 +91,8 @@ my $process_tt;
    * =$installWeb= - the name of the web the plugin is installed in
 
 The initialisation performs the following steps:
-   1 compiles =Template.pm= (unless this has been done in advance), 
-     failing gracefully in case of error
-   1 initializes the TT object - again allowing for a persistent instance
-      1 Picks options from =%TWiki::cfg=
    1 saves configuration options as package vars
+   1 registers the tag handler for =%<nop>TEMPLATETOOLKIT%=
 
 =cut
 
@@ -108,57 +105,29 @@ sub initPlugin {
         return 0;
     }
 
-    # Check for availability of the Template module, indicate plugin
-    # initialisation failure if missing
-    eval {require Template;};
-    if ($@) {
-        TWiki::Func::writeWarning("Failed to use the Template Toolkit module");
-        return 0;
-    }
+    # Pick our own subset of %TWiki::cfg for easier reference
+    my $config  =  $TWiki::cfg{Plugins}{TemplateToolkitPlugin};
 
-    # The TT object may have been created before in a persistent interpreter,
-    # so check for existence before doing it for this particular request
-    if (! $tt) {
-        # Initialize TT options from the defaults hash, and override
-        # with values from the configuration if present
-        my $tt_options  =  $TWiki::cfg{Plugins}{TemplateToolkitPlugin}{TTOptions};
-        my %tt_options  =  (defined $tt_options  and  ref $tt_options  eq  'HASH')
-                        ?  (%tt_defaults,%$tt_options)
-                        :  (%tt_defaults);
+    # Initialize request specific data to be passed to the handlers
+    $process_tt  =  defined $config->{UseTT}
+                 ?  _isTrue($config->{UseTT}) : $process_tt_default;
+    $tt_defaults{INCLUDE_PATH}  =  "$TWiki::cfg{PubDir}/$installWeb/$pluginName";
+    %tt_params  =  ();
 
-        # Create the TT object, indicate plugin init failure if it doesn't work
-        $tt = Template->new(\%tt_options);
-        if (! $tt) {
-            TWiki::Func::writeWarning("Failed to create the TT object");
-            return 0;
-        }
+    $debug = $config->{Debug} || 0;
 
-        # Initialize per-block plugin processing options
-        my $use_tt  =  $TWiki::cfg{Plugins}{TemplateToolkitPlugin}{UseTT};
-        $process_tt_default  =  $use_tt if defined $use_tt;
-    }
-
-    $debug = $TWiki::cfg{Plugins}{TemplateToolkitPlugin}{Debug} || 0;
-
-    # per-request option must be explicitly set to default (mod_perl)
-    $process_tt  =  $process_tt_default;
-
-    # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
-    # This will be called whenever %EXAMPLETAG% or %EXAMPLETAG{...}% is
-    # seen in the topic text.
+    # register the _TT function to handle %TEMPLATETOOLKIT{...}%.
     TWiki::Func::registerTagHandler( 'TEMPLATETOOLKIT', \&_TT );
-
-    # Allow a sub to be called from the REST interface 
-    # using the provided alias
-    # TWiki::Func::registerRESTHandler('example', \&restExample);
-
 
     # Plugin correctly initialized
     return 1;
 }
 
-# The function used to handle the %EXAMPLETAG{...}% variable
-# You would have one of these for each variable you want to process.
+
+# ----------------------------------------------------------------------
+# Purpose:          Handle the %TEMPLATETOOLKIT{...} tag
+# Parameters:       See below
+# Returns:          Empty string
 sub _TT {
     my($session, $params, $theTopic, $theWeb) = @_;
     # $session  - a reference to the TWiki session object (if you don't know
@@ -173,6 +142,9 @@ sub _TT {
     #         to control TT processing
 
     $process_tt  =  _isTrue($params->{_DEFAULT})  if  (defined $params->{_DEFAULT});
+    if ($params->{WRAPPER}) {
+        $tt_params{WRAPPER}  =  $params->{WRAPPER};
+    }
     return '';
 }
 
@@ -180,65 +152,112 @@ sub _TT {
 
 ---++ preRenderingHandler( $text, \%map )
    * =$text= - text, with the head, verbatim and pre blocks replaced with placeholders
-   * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
+   * =\%map= - reference to a hash that maps the placeholders to the removed blocks.
 
-Handler called immediately before TWiki syntax structures (such as lists) are
-processed, but after all variables have been expanded. Use this handler to 
-process special syntax only recognised by your plugin.
+This current handler feeds the text without verbatim blocks to TT and
+returns the result (using $_[0] as in/out parameter).
 
-Placeholders are text strings constructed using the tag name and a 
-sequence number e.g. 'pre1', "verbatim6", "head1" etc. Placeholders are 
-inserted into the text inside &lt;!--!marker!--&gt; characters so the 
-text will contain &lt;!--!pre1!--&gt; for placeholder pre1.
-
-Each removed block is represented by the block text and the parameters 
-passed to the tag (usually empty) e.g. for
-<verbatim>
-<pre class='slobadob'>
-XYZ
-</pre>
-the map will contain:
-<pre>
-$removed->{'pre1'}{text}:   XYZ
-$removed->{'pre1'}{params}: class="slobadob"
-</pre>
-Iterating over blocks for a single tag is easy. For example, to prepend a 
-line number to every line of every pre block you might use this code:
-<verbatim>
-foreach my $placeholder ( keys %$map ) {
-    if( $placeholder =~ /^pre/i ) {
-       my $n = 1;
-       $map->{$placeholder}{text} =~ s/^/$n++/gem;
-    }
-}
-</verbatim>
-
-__NOTE__: This handler is called once for each rendered block of text i.e. 
-it may be called several times during the rendering of a topic.
-
-__NOTE:__ meta-data is _not_ embedded in the text passed to this
-handler.
-
-Since TWiki::Plugins::VERSION = '1.026'
-
-The current handler simply feeds the text without verbatim blocks to TT
-and returns the result (using $_[0] as in/out parameter).
+Currently it is disabled because it turned out that many legacy TT
+templates contain blank lines, indented lines or other things which
+would be interpreted by the TML parser.
 
 =cut
 
-sub preRenderingHandler {
+sub DISABLE_preRenderingHandler {
     my ($text,$pMap) = @_;
 
-    my $out;
+    return unless TWiki::Func::getContext()->{body_text};
     if ($process_tt) {
-        $tt->process(\$_[0],{},\$out)  or warn $tt->error();
-        $_[0]  =  $out;
+        return unless _create_TT();
+
+        my $out;
+        if ($tt->process(\$_[0],{},\$out)) {
+            $_[0]  =  $out;
+        }
+        else {
+            TWiki::Func::writeWarning("TT processing error - see web server log for details");
+            warn $tt->error();
+        }
     }
+}
+
+
+=pod
+
+---++ postRenderingHandler( $text )
+   * =$text= - the text that has just been rendered. May be modified in place.
+
+This current handler feeds the text to TT and returns the result
+(using $_[0] as in/out parameter).
+
+=cut
+
+sub postRenderingHandler {
+    my ($text) = @_;
+
+    return unless TWiki::Func::getContext()->{body_text};
+    if ($process_tt) {
+        return unless _create_TT();
+
+        my $out;
+        if ($tt->process(\$_[0],{},\$out)) {
+            $_[0]  =  $out;
+        }
+        else {
+            TWiki::Func::writeWarning("TT processing error - see web server log for details");
+            warn $tt->error();
+        }
+    }
+}
+
+# ----------------------------------------------------------------------
+# Non-serviceable parts inside
+# ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+# Purpose:          Create the TT object if it doesn't exist
+# Parameters:       None
+# Returns:          $tt - TT object
+# Globals:
+#    Configuration: $TWiki::cfg{Plugins}{TemplateToolkitPlugin}
+#    Conf defaults: %tt_defaults
+#    TT object:     $tt
+sub _create_TT {
+    # The TT object may have been created before in a persistent interpreter,
+    # so check for existence before doing it for this particular request
+    if ($tt) {
+        return $tt;
+    }
+
+    eval {require Template;};
+    if ($@) {
+        TWiki::Func::writeWarning("Failed to use the Template Toolkit module");
+        return undef;
+    }
+
+    # Initialize TT options from the defaults hash
+    # override with values from the configuration if present
+    # override with params as obtained from the %TEMPLATETOOLKIT{....}% tag
+    my $tt_config   =  $TWiki::cfg{Plugins}{TemplateToolkitPlugin}{TTOptions};
+    my %tt_options  =  (defined $tt_config  and  ref $tt_config  eq  'HASH')
+                    ?  (%tt_defaults,%$tt_config,%tt_params)
+                    :  (%tt_defaults,%tt_params);
+
+    # Create the TT object
+    $tt = Template->new(\%tt_options);
+    if (! $tt) {
+        TWiki::Func::writeWarning("Failed to create the TT object");
+        return undef;
+    }
+
+    return $tt;
 }
 
 
 # ----------------------------------------------------------------------
-# Non-serviceable parts inside
+# Purpose:          Detect various indicators for "true"
+# Parameters:       $value - string to be identified
+# Returns:          1 if $value is some sort of "true", 0 otherwise
 sub _isTrue {
     my $value = shift;
     return $value =~ /^on|yes|1$/i ? 1 : 0;
