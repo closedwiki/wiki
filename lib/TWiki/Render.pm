@@ -221,10 +221,17 @@ sub renderFormField {
     my $text = '';
     my $name = $attrs->{name};
     $text = renderFormFieldArg( $meta, $name ) if( $name );
+    my $newline = $attrs->{newline};
+    if ( defined $newline ) {
+      $newline =~ s/\$n/\n/gos;
+    } else {
+      $newline = "<br />";
+    }
+    my $bar = $attrs->{bar} || "&#124;";
     # change any new line character sequences to <br />
-    $text =~ s/\r?\n/ <br \/> /gos;
+    $text =~ s/\r?\n/ $newline /gos;
     # escape "|" to HTML entity
-    $text =~ s/\|/\&\#124;/gos;
+    $text =~ s/\|/$bar/gos;
     return $text;
 }
 
