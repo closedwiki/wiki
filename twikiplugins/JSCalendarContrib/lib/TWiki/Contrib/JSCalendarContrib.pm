@@ -44,8 +44,7 @@ HERE
 sub renderFormFieldForEditHandler {
   my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
   return unless ( $type eq 'date' );
-  my $ifFormat = ''; # Need to get the format from somewhere...
-  $ifFormat ||= '%e %b %Y';
+  my $ifFormat = $TWiki::cfg{JSCalendarContrib}{format} || '%e %b %Y';
   $size = 10 if( !$size || $size < 1 );
   $value = TWiki::Plugins::EditTablePlugin::encodeValue( $value ) unless( $theValue eq '' );
   my $text .= CGI::textfield(
