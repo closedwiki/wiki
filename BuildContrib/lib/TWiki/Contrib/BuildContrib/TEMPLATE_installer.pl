@@ -496,18 +496,15 @@ HERE
     }
 
     my $url = "$PACKAGES_URL/$module/$module";
-    my $downloadDir;
+    my $downloadDir = '.';
 
-    if (-d $ENV{TWIKI_PACKAGES}) {
+    if ($ENV{TWIKI_PACKAGES} && -d $ENV{TWIKI_PACKAGES}) {
         # see if we can write in $TWIKI_PACKAGES
         my $test = $ENV{TWIKI_PACKAGES}.'/'.$$;
         if (open(F, ">$test")) {
             close(F);
             unlink($test);
             $downloadDir = $ENV{TWIKI_PACKAGES};
-        } else {
-            # Otherwise save the archive here
-            $downloadDir = '.';
         }
     }
 

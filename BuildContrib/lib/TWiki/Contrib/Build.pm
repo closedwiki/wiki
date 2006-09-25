@@ -728,8 +728,10 @@ sub target_test {
     my $testdir = $tests;
     $testdir =~ s/\/[^\/]*$//;
     print "Running tests in $tests\n";
+    my $cmd = 'perl -w -I'.$inc.' '.$testrunner.' '.$tests;
+    print "$cmd\n";
     $this->pushd($testdir);
-    $this->sys_action('perl -w -I'.$inc.' '.$testrunner.' '.$tests);
+    $this->sys_action($cmd);
     $this->popd();
     shift( @INC );
 }
