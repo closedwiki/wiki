@@ -63,7 +63,7 @@ sub set_up {
         $impl->passwd( $user, $users->{$user}->{pass} );
         $impl->setEmails($user, $users->{$user}->{emails});
         my $uo = $twiki->{users}->findUser($user,$users->{$user}->{wikiname} );
-        $twiki->{users}->addUserToTWikiUsersTopic($uo, $me);
+        $twiki->{users}->addUserToMapping($uo, $me);
     }
     $twiki->{store}->copyTopic(
         $me, $original, $TWiki::cfg{SitePrefsTopicName},
@@ -184,8 +184,8 @@ HERE
 
     my( $m, $t ) = TWiki::Func::readTopic($testWeb,$testTopic);
 
-    $this->assert($t =~ s/^ *\* \*$testWeb\.NotHere\*: Message 1 text here -- $testUsersWeb\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//m);
-    $this->assert($t =~ s/^ *\* \*$testWeb\.IgnoreThis\*: Message 2 text here -- $testUsersWeb\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//m);
+    $this->assert($t =~ s/^ *\* \*$testWeb\.NotHere\*: Message 1 text here\s*-- $testUsersWeb\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//s);
+    $this->assert($t =~ s/^ *\* \*$testWeb\.IgnoreThis\*: Message 2 text here\s*-- $testUsersWeb\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//s);
 
     $this->assert_matches(qr/^\s*$/, $t);
     $this->assert_equals(0, scalar(@mails));
@@ -220,8 +220,8 @@ HERE
 
     my( $m, $t ) = TWiki::Func::readTopic($testWeb,$testTopic);
 
-    $this->assert($t =~ s/^ *\* \*\*: Message 1 text here -- $testUsersWeb\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//m);
-    $this->assert($t =~ s/^ *\* \*SPAM\*: Message 2 text here -- $testUsersWeb\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//m);
+    $this->assert($t =~ s/^\s*\* \*\*: Message 1 text here\s* -- $testUsersWeb\.MoleInnaHole -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+\n//s, $t);
+    $this->assert($t =~ s/^ *\* \*SPAM\*: Message 2 text here\s*-- $testUsersWeb\.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+$//s);
 
     $this->assert_matches(qr/^\s*$/, $t);
     $this->assert_equals(0, scalar(@mails));
@@ -253,7 +253,7 @@ HERE
 
     my( $m, $t ) = TWiki::Func::readTopic($testWeb,'DangleBerries');
 
-    $t =~ s/\* \*no valid topic\*: Message 1 text here -- $testUsersWeb.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+//;;
+    $t =~ s/\* \*no valid topic\*: Message 1 text here\s*-- $testUsersWeb.AllyGator -\s+\d+\s+\w+\s+\d+\s+-\s+\d+:\d+//s;
     $this->assert_matches(qr/^\s*$/, $t);
     $this->assert_equals(0, scalar(@mails));
 }
