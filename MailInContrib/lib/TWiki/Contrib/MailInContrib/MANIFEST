@@ -2,5 +2,6 @@ tools/mailincron command-line perl script
 data/TWiki/MailInContrib.txt this topic
 data/TWiki/MailInContribTemplate.txt file of templates
 lib/TWiki/Contrib/MailInContrib.pm perl module
+lib/TWiki/Contrib/MailInContrib/Config.spec configure spec
 lib/CPAN/lib/Email/Delete/IMAP.pm
 lib/CPAN/lib/Email/Delete/POP3.pm
