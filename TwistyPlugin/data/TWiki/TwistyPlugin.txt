@@ -259,6 +259,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
 | Copyright &copy;: | 2005 Rafael Alvarez, 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
+| 27 Sep 2006 | 1.101 Fixes JavaScript handling when AllowInlineScript in configure is not set |
 | 11 June 2006 | 1.100 Added parameters =start=, =firststart=, =noscript= and =class=; complete javascript rewrite for speed |
 | 12 Sep 2005 | 1.000 First Version |
 | Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
