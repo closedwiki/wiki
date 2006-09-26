@@ -74,10 +74,10 @@ h1 {
 }
 h1 { font-size:210%; }
 h2 { font-size:160%; }
-h3 { font-size:135%; }
-h4 { font-size:122%; }
-h5 { font-size:110%; }
-h6 { font-size:95%; }
+h3 { font-size:135%; font-weight:bold; }
+h4 { font-size:122%; font-weight:bold; }
+h5 { font-size:110%; font-weight:bold; }
+h6 { font-size:95%; font-weight:bold; }
 h2, h3, h4, h5, h6 {
 	display:block;
 	/* give header a background color for easy scanning:*/
@@ -275,7 +275,8 @@ th.twikiSortedAscendingCol a:link font,
 th.twikiSortedAscendingCol a:visited,
 th.twikiSortedAscendingCol a:visited font {
 	border-width:1px 0 0 0;
-	border-style:solid;	
+	border-style:solid;
+	text-decoration:none;
 }
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:link font,
@@ -283,6 +284,7 @@ th.twikiSortedDescendingCol a:visited,
 th.twikiSortedDescendingCol a:visited font {
 	border-width:0 0 1px 0;
 	border-style:solid;
+	text-decoration:none;
 }
 th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover font {
