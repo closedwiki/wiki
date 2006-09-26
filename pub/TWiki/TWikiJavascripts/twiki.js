@@ -428,9 +428,7 @@ Gets the TWiki pref cookie; creates a new cookie if it does not exist.
 function _getPrefCookie () {
 	var cookieString = GetCookie(TWIKI_PREF_COOKIE_NAME);
 	if (cookieString == undefined) {
-		// Cookie does not exist yet. Create a new one by writing without values.
-		_writePrefValues();
-		cookieString = GetCookie(TWIKI_PREF_COOKIE_NAME);
+		cookieString = "";
 	}
 	return cookieString;
 }

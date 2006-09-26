@@ -137,6 +137,10 @@ sub beforeCommonTagsHandler {
 	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/$1/g;
 }
 
+=pod
+Convert the semi-variable tag to JavaScript.
+=cut
+
 sub postRenderingHandler {
     # do not uncomment, use $_[0], $_[1]... instead
 	$_[0] =~ s/%_TWISTYSCRIPT{\"(.*?)\"}%/<script type="text\/javascript\"\>$1<\/script>/g;
@@ -211,6 +215,12 @@ sub _createHtmlProperties {
     push (@propList, 'class="'.join(" ",@classList).'"');
     return @propList;
 }
+
+=pod
+If we write a JavaScript tag here, it will be removed at render time in 
+Render.getRenderedVersion if configure option AllowInlineScript is not set.
+So we create a semi-variable tag here and convert it to a JavaScript tag in #postRenderingHandler.
+=cut
 
 sub _createJavascriptTriggerCall {
 	my($idTag) = @_;
