@@ -127,7 +127,6 @@ Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 %META:FILEATTACHMENT{name="page_bg.gif" attr="" autoattached="1" comment="" date="1129323311" path="page_bg.gif" size="4085" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="layout.css" attr="" autoattached="1" comment="Layout: positioning of page elements" date="1129323310" path="layout.css" size="1676" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="info_bg.gif" attr="" autoattached="1" comment="" date="1129323309" path="info_bg.gif" size="238" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="Text colors, border colors, background colors" date="1129325055" path="colors.css" size="15202" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="twikiPageForm_bg.gif" attr="" autoattached="1" comment="" date="1129323320" path="twikiPageForm_bg.gif" size="238" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bullet-blue.gif" attr="" autoattached="1" comment="" date="1129323302" path="bullet-blue.gif" size="49" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="view.pattern.tmpl" attr="" autoattached="1" comment="" date="1129323322" path="view.pattern.tmpl" size="5629" user="UnknownUser" version=""}%
