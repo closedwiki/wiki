@@ -72,7 +72,7 @@ use vars qw( %TWikiCompatibility );
 
 # number the release version of this plugin
 $VERSION = '$Rev$';
-$RELEASE = '2.61';
+$RELEASE = '2.62';
 
 require Exporter;
 *import = \&Exporter::import;
@@ -356,6 +356,19 @@ sub handleFloat
     my %opts = ( 'label' => $str,
                  'span'  => 'onecol',
                  'caption' => ' ' );
+
+    # fix inputs to catch nested TWiki markup
+    my $cnt = 0; 
+    my $tmp = '{'.$prefs.'}%'.$input;
+    # print STDERR "CrossRef: handleFloat: ".$tmp."\n";
+    while ($tmp =~ m/(\{|\})(%?)/g) {
+        ($1 eq '{') ? $cnt++ : $cnt--;
+        last if ( ($cnt == 0) and ($2 eq '%') );
+    }
+    $prefs = substr($tmp,1,(pos $tmp)-2,'');
+    $input = substr($tmp,2,length($input));
+    # print STDERR "CrossRef: handleFloat: ".pos($tmp)."\t".$prefs."\n\t".$input."\n";
+
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
     map { $opts{$_} = $opts2{$_} } keys %opts2;

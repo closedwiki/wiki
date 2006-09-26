@@ -296,6 +296,7 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin created b
 |  Plugin Author: | TWiki:Main.ScottHoge |
 |  Plugin Version: | 8 Aug 2006 (v 2.61) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 25 Sep 2006 (v 2.62) | fixed handleFloat to allow TWiki markup tags in captions. |
 |  8 Aug 2006 (v 2.61) | fixed INCLUDE-not-rendering bug introduced in v2.6.  Aded =bgcolor= option.  Split symbol list into 5 topics. |
 |  5 Aug 2006 (v 2.6) | added security description and expanded default =donotrenderlist=.  Reworked plugin init to reduce overhead when not in use.  Added =bypssattach= option.  Sandbox now used in place of system calls. |
 |  19 May 2006 (v 2.51) | bug fix: =rerender= hook block of mailnotify corrected |
