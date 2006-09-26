@@ -21,9 +21,9 @@ Edit this topic, and change the color variables as you like.
 
 ---++ Logical groupings
 ---+++ Text on background
----++++ MAIN_TEXT_COLOR Main background color
+---++++ MAIN_TEXT_COLOR Main text color
    * Set MAIN_TEXT_COLOR = #fff
----++++ MAIN_BACKGROUND_COLOR Main text color
+---++++ MAIN_BACKGROUND_COLOR Main background color
    * Set MAIN_BACKGROUND_COLOR = #000
 
 ---+++ Links
