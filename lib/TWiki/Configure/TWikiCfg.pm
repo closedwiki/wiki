@@ -83,13 +83,15 @@ sub new {
 # Load the configuration declarations. The core set is defined in
 # TWiki.spec, which must be found on the @INC path and is always loaded
 # first. Then find all settings for extensions in their .spec files.
+#
+# This *only* reads type specifications, it *does not* read values.
+#
+# SEE ALSO TWiki::Configure::Load::readDefaults
 sub load {
     my $root = shift;
 
     my $file = TWiki::findFileOnPath('TWiki.spec');
     if ($file) {
-        # perl read it to get defaults.
-        do $file;
         _parse($file, $root);
     }
     my @modules;
@@ -98,11 +100,6 @@ sub load {
         _loadSpecsFrom("$dir/TWiki/Plugins", $root, \%read);
         _loadSpecsFrom("$dir/TWiki/Contrib", $root, \%read);
     }
-
-    # Use the standard loader to expand $TWiki::cfg{} strings in default
-    # values read from .spec files
-    TWiki::Configure::Load::expand(\%TWiki::cfg);
-
 }
 
 sub _loadSpecsFrom {
@@ -113,7 +110,6 @@ sub _loadSpecsFrom {
         next if $read->{$extension};
         my $file = "$dir/$extension/Config.spec";
         next unless -e $file;
-        die "Bad spec $file: $@" unless do $file;
         _parse($file, $root);
         $read->{$extension} = $file;
     }

@@ -40,8 +40,17 @@ package TWiki::Configure::Load;
 In normal TWiki operations as a web server this routine is called by the
 =BEGIN= block of =TWiki.pm=.  However, when benchmarking/debugging it can be
 replaced by custom code which sets the configuration hash.  To prevent us from
-overriding the custom code again, we use an "unconfigurable" key 
+overriding the custom code again, we use an "unconfigurable" key
 =$cfg{ConfigurationFinished}= as an indicator.
+
+Note that this method is called by TWiki and configure, and *only* reads
+TWiki.spec= to get defaults. Other spec files (those for extensions) are
+*not* read.
+
+The assumption is that =configure= will be run when an extension is installed,
+and that will add the config values to LocalSite.cfg, so no defaults are
+needed. TWiki.spec is still read because so much of the core code doesn't
+provide defaults, and it would be silly to have them in two places anyway.
 
 =cut
 
@@ -116,6 +125,8 @@ yet been saved to =LocalSite.cfg=.
 
 Returns a reference to a list of the errors it saw.
 
+SEE ALSO: TWiki::Configure::TWikiCfg::load
+
 =cut
 
 sub readDefaults {
@@ -127,18 +138,27 @@ sub readDefaults {
     };
     push(@errors, $@) if ($@);
     foreach my $dir (@INC) {
-        opendir(D, $dir) || next;
-        foreach my $file (grep { /\.spec$/ } readdir D) {
-            # Only read the first occurrence of each .spec file
-            next if $read{$file};
-            eval {
-                do "$dir/$file";
-            };
-            push(@errors, $@) if ($@);
-            $read{$file} = 1;
-        }
+        _loadDefaultsFrom("$dir/TWiki/Plugins", $root, \%read, \@errors);
+        _loadDefaultsFrom("$dir/TWiki/Contrib", $root, \%read, \@errors);
     }
     return \@errors;
+}
+
+sub _loadDefaultsFrom {
+    my ($dir, $root, $read, $errors) = @_;
+
+    return unless opendir(D, $dir);
+    foreach my $extension ( grep { !/^\./ } readdir D) {
+        next if $read->{$extension};
+        my $file = "$dir/$extension/Config.spec";
+        next unless -e $file;
+        eval {
+            do $file;
+        };
+        push(@$errors, $@) if ($@);
+        $read->{$extension} = $file;
+    }
+    closedir(D);
 }
 
 1;

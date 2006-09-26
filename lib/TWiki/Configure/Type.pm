@@ -47,7 +47,7 @@ sub prompt {
     my( $this, $id, $opts, $value ) = @_;
 
     my $size = '55%';
-    if( $opts =~ /\s(\d+)\s/ ) {
+    if( $opts =~ /\b(\d+)\b/ ) {
         $size = $1;
         # These numbers are somewhat arbitrary..
         if( $size > 25 ) {
