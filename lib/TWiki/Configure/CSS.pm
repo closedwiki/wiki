@@ -1972,7 +1972,7 @@ a.error {
 }
 .keydata {
     font-weight: bold;
-    background-color:#FOFOFO;
+    background-color:#F0F0F0;
     vertical-align: top;
 }
 .subHead {
