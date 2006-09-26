@@ -77,8 +77,9 @@ For further troubleshooting and feedback, go to TWiki:Plugins/PatternSkinDev. Re
 |  Preview: | [[%SCRIPTURL{view}%/%WEB%/%TOPIC%?skin=pattern][Preview with this skin]] |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 26 Jun 2006 (v2.0.3) | 
+|  Skin Version: | 26 Sep 2006 (v2.0.4) | 
 |  History: | <!-- specify latest version first -->&nbsp; |
+|  26 Sep 2006: | v.2.0.5 - Fixed form background colors |
 |  22 Jul 2006: | v.2.0.4 - Refactored info in colors.css; fixed textarea color |
 |  26 Jun 2006: | v.2.0.3 - TWiki 4.0.3 (Dakar) RELEASE VERSION |
 |  31 Jan 2006: | v.2.0.0 - TWiki 4.0.0 (Dakar) RELEASE VERSION |
@@ -127,6 +128,7 @@ Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 %META:FILEATTACHMENT{name="page_bg.gif" attr="" autoattached="1" comment="" date="1129323311" path="page_bg.gif" size="4085" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="layout.css" attr="" autoattached="1" comment="Layout: positioning of page elements" date="1129323310" path="layout.css" size="1676" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="info_bg.gif" attr="" autoattached="1" comment="" date="1129323309" path="info_bg.gif" size="238" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="colors.css" attr="" autoattached="1" comment="Text colors, border colors, background colors" date="1129325055" path="colors.css" size="15202" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="twikiPageForm_bg.gif" attr="" autoattached="1" comment="" date="1129323320" path="twikiPageForm_bg.gif" size="238" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="bullet-blue.gif" attr="" autoattached="1" comment="" date="1129323302" path="bullet-blue.gif" size="49" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="view.pattern.tmpl" attr="" autoattached="1" comment="" date="1129323322" path="view.pattern.tmpl" size="5629" user="UnknownUser" version=""}%
