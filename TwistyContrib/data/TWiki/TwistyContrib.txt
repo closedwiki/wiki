@@ -5,25 +5,15 @@
 
 ---++ Summary
 
-This contrib packages in a convenient way the Javascript library and the CSS file needed to implement TWisty Sections.
+This contrib packages in a convenient way the !JavaScript library and the CSS file needed to implement Twisty sections.
 
-See the  [[%ATTACHURL%/toggle-optm-jsoff-sep.html][attached file]] for a demo and an example of usage.
+!TwistyContrib is installed by default in TWiki 4.
 
-To use the libraries, you must place the following scriplet either in the head section of the page (by modifying the %TWIKIWEB%.TWikiSkins) or putting it somewhere in the topic:
-
-<verbatim>
-<style type="text/css" media="all">
-@import url("%PUBURLPATH%/TWiki/TwistyContrib/twist.css");
-</style>
-
-<script type="text/javascript" src="%PUBURLPATH%/TWiki/TwistyContrib/twist.js"></script>
-</verbatim>
-
-It's recommended to use the TWiki:Plugins.TwistyPlugin, as it eases the deployment and use of this contrib.
+It is recommended to use the TWiki:Plugins.TwistyPlugin, as it eases the deployment and use of this contrib.
 
 %RED%Caution: If the previous scriplet is put in the HEAD section of the page or the TWiki:Plugins.TwistyPlugin is used, it won't work if the =&lt;body onload=""&gt;= manager is set by the skin. Check the [[%ATTACHURL%/twist.js][twist.js]] file for an idea on how to register an eventmanager for the onload event without overwriting the previous one.%ENDCOLOR%
 
-This Contrib should work in all versions of TWiki. It has been tested against TWiki:Codev.CairoRelease and TWiki:Codev.DakarRelease.
+This Contrib should work in all versions of TWiki. It has been tested against [[TWiki:Codev.CairoRelease][TWiki 3]] and [[TWiki:Codev.DakarRelease][TWiki 4]].
 
 ---++ Customization
 
@@ -44,9 +34,9 @@ Skins can customize the color of the twisty placeholder by modifiying the =.twis
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 	%$DEPENDENCIES%
 
----++ Demo & Text
+---++ Demo and Text
 
-If the contrib is properly installed (and Javascript is enabled in your browser!), then you should see some folding sections below. Look at [[%SCRIPTURLPATH{"view"}%/%WEB%.%TOPIC%?raw=on]] to see how it's done.
+If the contrib is properly installed (and !JavaScript is enabled in your browser!), then you should see some folding sections below. Look at [[%SCRIPTURLPATH{"view"}%/%WEB%.%TOPIC%?raw=on]] to see how it's done.
 
 <style type="text/css" media="all">
 @import url("%PUBURLPATH%/TWiki/TwistyContrib/twist.css");
@@ -92,18 +82,17 @@ For more Shakespeare plays, see Wikipedia:WilliamShakespeare
 
 ---++ Contrib Info
 
-| Authors: | Javascript created by TWiki:Main.SamHasler, Contrib packaged by  TWiki:Main.RafaelAlvarez |
-| Copyright &copy;: | 2005 Sam Hasler and Rafael Alvarez |
+| Authors: | !JavaScript created by TWiki:Main.SamHasler, Contrib packaged by  TWiki:Main.RafaelAlvarez |
+| Copyright &copy;: | 2005 Sam Hasler and Rafael Alvarez, 2006 Arthur Clemens |
 | License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
-|  12 Sep 2005 | 1.000 First Version |
-|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
-|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+| 26 Sep 2006 | 1.010 Complete JavaScript rewrite |
+| 12 Sep 2005 | 1.000 First Version |
+| Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+| Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+| Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
  
--- TWiki:Main.SamHasler - 12 Sep 2005
-%META:FILEATTACHMENT{name="twist.js" attachment="twist.js" attr="" comment="Javscript library" date="1126427179" path="twist.js" size="3441" stream="twist.js" user="TWikiContributors" version="0"}%
+%META:FILEATTACHMENT{name="twist.js" attachment="twist.js" attr="" comment="!JavaScript library" date="1126427179" path="twist.js" size="3441" stream="twist.js" user="TWikiContributors" version="0"}%
 %META:FILEATTACHMENT{name="twist.css" attachment="twist.css" attr="" comment="Style Sheet" date="1126427224" path="twist.css" size="122" stream="twist.css" user="TWikiContributors" version="0"}%
-%META:FILEATTACHMENT{name="toggle-optm-jsoff-sep.html" attachment="toggle-optm-jsoff-sep.html" attr="" comment="Example of usage" date="1126427282" path="toggle-optm-jsoff-sep.html" size="1716" stream="toggle-optm-jsoff-sep.html" user="TWikiContributors" version="0"}%
