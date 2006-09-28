@@ -280,16 +280,18 @@ sub handleDBSTATS {
   }
 
   # compute statistics
+  my $wikiUserName = TWiki::Func::getWikiUserName();
   my %statistics = ();
   my $theDB = getDB($thisWeb);
   my @topicNames = $theDB->getKeys();
   foreach my $topicName (@topicNames) { # loop over all topics
     my $topicObj = $theDB->fastget($topicName);
     next unless $search->matches($topicObj); # that match the query
-    my $createdate = $topicObj->fastget('createdate');
+    next unless TWiki::Func::checkAccessPermission('VIEW', 
+      $wikiUserName, undef, $topicName, $thisWeb);
 
     #writeDebug("found topic $topicName");
-    
+    my $createdate = $topicObj->fastget('createdate');
     foreach my $field (split(/,\s/, $theFields)) { # loop over all fields
       my $fieldValue = $topicObj->fastget($field);
       unless ($fieldValue) {
