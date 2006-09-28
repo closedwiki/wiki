@@ -271,8 +271,9 @@ following is the default paramenter (omitting the #)
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Copyright &copy;: | 2005-2006, MichaelDaum@WikiRing.com |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.26 |
+|  Plugin Version: | v1.27 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Sep 2006: | security fix in DBQUERY: exclude topics you don't have access to |
 |  19 Sep 2006: | added $key1...$key5 to the pattern matcher and formatter |
 |  18 Sep 2006: | properly fixed parsing $trunc,$flatten and $encode in format strings; \
                   multiple fixes for calls and formatting accross webs |
@@ -308,4 +309,4 @@ following is the default paramenter (omitting the #)
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 19 Sep 2006
+-- TWiki:Main.MichaelDaum - 28 Sep 2006

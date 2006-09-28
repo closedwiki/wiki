@@ -172,6 +172,7 @@ sub dbQuery {
   @topicNames = grep(!/$theExclude/, @topicNames) if $theExclude;
   
   # parse & fetch
+  my $wikiUserName = TWiki::Func::getWikiUserName();
   my %hits;
   if ($theSearch) {
     my $search;
@@ -185,14 +186,18 @@ sub dbQuery {
     }
     foreach my $topicName (@topicNames) {
       my $topicObj = $this->fastget($topicName);
-      if ($search->matches($topicObj)) {
-	$hits{$topicName} = $topicObj;
+      if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{_web})) {
+	if ($search->matches($topicObj)) {
+	  $hits{$topicName} = $topicObj;
+	}
       }
     }
   } else {
     foreach my $topicName (@topicNames) {
       my $topicObj = $this->fastget($topicName);
-      $hits{$topicName} = $topicObj if $topicObj;
+      if (TWiki::Func::checkAccessPermission('VIEW', $wikiUserName, undef, $topicName, $this->{_web})) {
+	$hits{$topicName} = $topicObj if $topicObj;
+      }
     }
   }
 
