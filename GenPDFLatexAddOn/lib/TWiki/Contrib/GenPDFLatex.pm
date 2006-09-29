@@ -42,11 +42,11 @@ use strict;
 
 use vars qw( $VERSION $RELEASE $debug );
 
-use TWiki::Plugins::LatexModePlugin qw($preamble);
+# use TWiki::Plugins::LatexModePlugin qw($preamble);
 
 # number the release version of this addon
 $VERSION = '$Rev$';
-$RELEASE = '1.400';
+$RELEASE = '2.000';
 
 =pod
 
@@ -428,8 +428,9 @@ sub _genlatex {
 
         $tmpl = &TWiki::Store::readTemplate( "view", $skin );
     }
-    
 
+    TWiki::Func::getContext()->{ 'genpdflatex' } = 1;
+    
     ### from TWiki::Contrib::GenPDF::_getRenderedView
 
     my $text = TWiki::Func::readTopicText($webName, $topic, $rev );
@@ -445,6 +446,7 @@ sub _genlatex {
     
     $text =~ s/%META:\w+{.*?}%//gs; # clean out the meta-data
 
+    my $preamble = TWiki::Func::getContext->{'LMPcontext'}->{'preamble'};
     print STDERR $preamble."\n" if ($debug);
 
     # remove the twiki-special <nop> tag (It gets ignored in the HTML
