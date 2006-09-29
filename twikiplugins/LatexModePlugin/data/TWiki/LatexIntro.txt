@@ -55,8 +55,4 @@ The ability to render a complete !LaTeX document, say from an existing file,
 within TWiki is currently under consideration.  See
 TWiki:Codev.IncludeExistingLatexDocsInTWiki for details and current status.
 
----+++Pitfalls
-
-Unlike standard %BEGINLATEX{inline="1"}%\TeX%ENDLATEX%, TWiki.LatexModePlugin is (often) finicky about requiring spaces around the name of each symbol: %BROWN%'%<nop>$ \Gamma \vdash $%'%ENDCOLOR% (with spaces around =\Gamma= and =\vdash=) yields, correctly, '%$ \Gamma \vdash $%,' but %BROWN%'%<nop>$\Gamma\vdash$%'%ENDCOLOR% (no spaces) yields '%$\Gamma\vdash$%'.
-
 -- courtesy of TWiki:Main.ShaughanLavine ([[http://zillion.philosophy.arizona.edu/twiki/bin/view/Courses/LaTeX][see also]])
