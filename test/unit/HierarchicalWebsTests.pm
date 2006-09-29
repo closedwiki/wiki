@@ -212,7 +212,7 @@ sub test_url_parameters {
 }
 
 # Check expansion of [[TestWeb]] in TestWeb/NonExistant
-# It should expand to TestWeb/WebHome
+# It should expand to creation of topic TestWeb
 sub test_squab_simple {
     my $this = shift;
 
@@ -223,7 +223,7 @@ sub test_squab_simple {
     my $text = "[[$testWeb]]";
     $text = $twiki->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
-    $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$TWiki::cfg{HomeTopicName}" class="twikiLink">$testWeb</a>!, $text);
+    $this->assert_matches(qr!<span class="twikiNewLink">$testWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
 
 # Check expansion of [[SubWeb]] in TestWeb/NonExistant.
@@ -244,7 +244,7 @@ sub test_squab_subweb {
 }
 
 # Check expansion of [[TestWeb.SubWeb]] in TestWeb/NonExistant.
-# It should expand to TestWeb/SubWeb/WebHome
+# It should expand to create topic TestWeb/SubWeb
 sub test_squab_subweb_full_path {
     my $this = shift;
 
@@ -256,7 +256,7 @@ sub test_squab_subweb_full_path {
     my $text = "[[$testWeb.$testWebSubWeb]]";
     $text = $twiki->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
-    $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb/$TWiki::cfg{HomeTopicName}" class="twikiLink">$testWeb.$testWebSubWeb</a>!, $text);
+    $this->assert_matches(qr!<span class="twikiNewLink">$testWeb.$testWebSubWeb<a.*href=".*edit$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb\?topicparent=$testWeb.NonExistant"!, $text);
 }
 
 # Check expansion of [[SubWeb]] in TestWeb/NonExistant.
@@ -296,7 +296,7 @@ sub test_squab_full_path_with_topic {
     my $text = "[[$testWeb.$testWebSubWeb]]";
     $text = $twiki->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
-    $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb" class="twikiLink">$testWebSubWeb</a>!, $text);
+    $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb" class="twikiLink">$testWeb.$testWebSubWeb</a>!, $text);
 }
 
 # Check expansion of [[TestWeb.SubWeb.WebHome]] in TestWeb/NonExistant.
@@ -316,7 +316,7 @@ sub test_squab_path_to_topic_in_subweb {
     my $text = "[[$testWeb.$testWebSubWeb.WebHome]]";
     $text = $twiki->{renderer}->getRenderedVersion(
         $text, $testWeb, 'NonExistant');
-    $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb/$TWiki::cfg{HomeTopicName}" class="twikiLink">$testWeb.$testWebSubWeb</a>!, $text);
+    $this->assert_matches(qr!<a href=".*view$TWiki::cfg{ScriptSuffix}/$testWeb/$testWebSubWeb/$TWiki::cfg{HomeTopicName}" class="twikiLink">$testWeb.$testWebSubWeb.$TWiki::cfg{HomeTopicName}</a>!, $text);
 
 }
 

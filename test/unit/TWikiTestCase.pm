@@ -1,4 +1,3 @@
-package TWikiTestCase;
 #
 # Base class of all TWiki tests. Establishes base paths and adds
 # some useful functionality such as comparing HTML
@@ -8,13 +7,13 @@ package TWikiTestCase;
 # have to create a test fixture that duplicates an existing area,
 # you can always create a new web based on that web.
 #
+package TWikiTestCase;
+
 use base qw(Test::Unit::TestCase);
-use vars qw( $has_TestFixturePlugin );
 use Data::Dumper;
+use HTMLDiffer;
 
 use TWiki;
-eval "use TWiki::Plugins::TestFixturePlugin::HTMLDiffer";
-$has_TestFixturePlugin = 1 unless $@;
 use strict;
 use Error qw( :try );
 
@@ -122,22 +121,20 @@ sub createFakeUser {
 sub assert_html_equals {
     my( $this, $e, $a, $mess ) = @_;
 
-    $this->assert(0, "Failed loading TWiki::Plugins::TestFixturePlugin::HTMLDiffer, TestFixturePlugin's lib directory should be in \@INC.") unless $has_TestFixturePlugin;
-    
     my ($package, $filename, $line) = caller(0);
     my $opts =
       {
        options => 'rex',
        reporter =>
-       \&TWiki::Plugins::TestFixturePlugin::HTMLDiffer::defaultReporter,
+       \&HTMLDiffer::defaultReporter,
        result => ''
       };
 
     $mess ||= "$a\ndoes not equal\n$e";
     $this->assert($e, "$filename:$line\n$mess");
     $this->assert($a, "$filename:$line\n$mess");
-    unless( TWiki::Plugins::TestFixturePlugin::HTMLDiffer::diff($e, $a, $opts)) {
-        $this->assert(0, "$filename:$line\n$mess");
+    if( HTMLDiffer::diff($e, $a, $opts)) {
+        $this->assert(0, "$filename:$line\n$mess\n$opts->{result}");
     }
 }
 
@@ -146,11 +143,9 @@ sub assert_html_equals {
 sub assert_html_matches {
     my ($this, $e, $a, $mess ) = @_;
 
-    $this->assert(0, "Failed loading TWiki::Plugins::TestFixturePlugin::HTMLDiffer, TestFixturePlugin's lib directory should be in \@INC.") unless $has_TestFixturePlugin;
-    
     $mess ||= "$a\ndoes not match\n$e";
     my ($package, $filename, $line) = caller(0);
-    unless( TWiki::Plugins::TestFixturePlugin::HTMLDiffer::html_matches($e, $a)) {
+    unless( HTMLDiffer::html_matches($e, $a)) {
         $this->assert(0, "$filename:$line\n$mess");
     }
 }

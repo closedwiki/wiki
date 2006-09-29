@@ -14,14 +14,10 @@ sub include_tests {
     my @list;
     opendir(DIR, ".") || die "Failed to open .";
     foreach my $i (sort readdir(DIR)) {
-        if ($i =~ /^(Fn_[A-Z]+).pm$/) {
-            push(@list, $1);
-        }
-        next if $i =~ /^TWikiSuite/;
-        if( -e "$i/${i}Suite.pm" ) {
-           #push( @list, $i.'::'.$i );
-        } elsif ( $i =~ /^(.*Suite).pm$/ ) {
-            push( @list, $1 );
+        next if $i =~ /^EmptyTests/;
+        if ($i =~ /^Fn_[A-Z]+\.pm$/ ||
+              $i =~ /^.*Tests\.pm$/) {
+            push(@list, $i);
         }
     }
     closedir(DIR);
