@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1159684864" format="1.0" version="$Rev$"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki User Authentication
@@ -200,7 +200,7 @@ If you have to turn IP matching off, and cookies can't be relied on, then you ma
 Most TWiki sites don't use SSL, so, as is the case with *most* sites that don't use SSL, there is always a possibility that a password could be picked out of the aether. Browsers do not encrypt passwords sent over non-SSL links, so using Apache Login is no more secure than Template Login.
 
 Of the two shipped login managers, Apache Login is probably the most useful. It lets you do this sort of thing:
-<tt>wget --http-user=RogerRabbit --http-password=i'mnottelling http://www.idiot.org.nz/cgi-bin/save/Sandbox/StuffXXXXXXXXXX?text=hohoho,%20this%20is%20interesting</tt>
+<tt>wget --http-user=RogerRabbit --http-password=i'mnottelling <nop>http://www.example.com/bin/save/Sandbox/StuffAUTOINC0?text=hohoho,%20this%20is%20interesting</tt>
 i.e. pass in a user and password to a request from the command-line. However it doesn't let you log out.
 
 Template Login degrades to url re-writing when you use a client like dillo that does not support cookies. However, you can log out and back in as a different user.

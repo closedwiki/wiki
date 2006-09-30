@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1152557273" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1159684864" format="1.1" version="1.2"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Templates
@@ -203,11 +203,17 @@ See TWikiScripts for details of the parameters that the =edit= script understand
 #AutomaticallyGeneratedTopicname
 ---+++ Automatically Generated Topicname
 
-If you want to make a TWiki application where you need automatically generated unique topicnames, you can use 10 X's in the edit / save URL, and they will be replaced on topic save with a count value. For example, !BugIDXXXXXXXXXX will result in topics named !BugID0, !BugID1, !BugID2 etc. 
+For TWiki application it is useful to automatically generate unique topicnames, such as !BugID0001, !BugID0002, etc. You can add =AUTOINC&lt;n&gt;= to the topic name in the edit and save scripts, it gets replaced with an auto-incremented number on topic save. =&lt;n&gt;= is a number starting from 0, and may include leading zeros. Leading zeros are used to zero-pad numbers so that auto-incremented topic names can sort properly. Deleted topics are not re-used to ensure uniqueness of topic names. That is, the auto-incremented number is always higher than the existing ones, even if there are gaps in the number sequence.
+
+*Examples:*
+   * =BugAUTOINC0= - creates topic names =Bug0=, =Bug1=, =Bug2=, ... (does not sort properly)
+   * =ItemAUTOINC0000= - creates topic names =Item0000=, =Item0001=,
+   * =Item0002=, ... (sorts properly up to 9999)
+   * =DocTXAUTOINC10001= - start with =DocTX10001=, =DocTX10002=, ... (sorts properly up to 99999; auto-links)
 
 Example link to create a new topic:%BR%
 <verbatim>
-[[%SCRIPTURLPATH{"edit"}%/%WEB%/BugIDXXXXXXXXXX?templatetopic=BugTemplate&amp;topicparent=%TOPIC%&amp;t=%SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
+[[%SCRIPTURLPATH{"edit"}%/%WEB%/BugIDAUTOINC00000?templatetopic=BugTemplate&amp;topicparent=%TOPIC%&amp;t=%SERVERTIME{"$day$hour$min$sec"}%][Create new item]]=
 </verbatim>
 
 ---++ Master Templates by Example

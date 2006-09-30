@@ -298,11 +298,10 @@ sub save {
     my $store = $session->{store};
     my $user = $session->{user};
 
-    #
-    # Allow for dynamic topic creation by replacing strings of at least
-    # 10 x's XXXXXX with a next-in-sequence number.
-    # http://twiki.org/cgi-bin/view/Codev/AllowDynamicTopicNameCreation
-    #
+    # Do not remove, keep as undocumented feature for compatibility with
+    # TWiki 4.0.x: Allow for dynamic topic creation by replacing strings
+    # of at least 10 x's XXXXXX with a next-in-sequence number.
+    # See Codev.AllowDynamicTopicNameCreation
     if ( $topic =~ /X{10}/ ) {
 		my $n = 0;
 		my $baseTopic = $topic;
@@ -312,6 +311,37 @@ sub save {
 			$topic =~ s/X{10}X*/$n/e;
 			$n++;
 		} while( $store->topicExists( $web, $topic ));
+        $session->{topicName} = $topic;
+    }
+
+    # Allow for more flexible topic creation with sortable names and
+    # better performance. See Codev.AutoIncTopicNameOnSave
+    if( $topic =~ /AUTOINC([0-9]+)/ ) {
+        my $start = $1;
+        my $baseTopic = $topic;
+        $store->clearLease( $web, $baseTopic );
+        my $nameFilter = $topic;
+        $nameFilter =~ s/AUTOINC([0-9]+)/([0-9]+)/;
+        my @list =
+          sort{ $a <=> $b }
+          map{ s/^$nameFilter$/$1/; s/^0*([0-9])/$1/; $_ }
+          grep{ /^$nameFilter$/ }
+          $store->getTopicNames( $web );
+        if( scalar @list ) {
+            # find last one, and increment by one
+            my $next = $list[$#list] + 1;
+            my $len = length( $start );
+            $start =~ s/^0*([0-9])/$1/; # cut leading zeros
+            $next = $start if( $start > $next );
+            my $pad =  $len - length($next);
+            if( $pad > 0 ) {
+                $next = '0' x $pad . $next; # zero-pad
+            }
+            $topic =~ s/AUTOINC[0-9]+/$next/;
+        } else {
+            # first auto-inc topic
+            $topic =~ s/AUTOINC[0-9]+/$start/;
+        }
         $session->{topicName} = $topic;
     }
 
