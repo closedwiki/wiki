@@ -387,8 +387,7 @@ sub searchWeb {
     # Note: a defined header overrides noheader
     my $noHeader =
       !defined($header) && TWiki::isTrue( $params{noheader}, $nonoise)
-        # SMELL: this is a horrible Cairo compatibility hack it seems
-        # everyone was relying on
+        # SMELL: This is done for Cairo compatibility
         || (!$header && $format && $inline);
 
     my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
