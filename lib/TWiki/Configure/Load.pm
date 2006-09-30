@@ -56,6 +56,7 @@ provide defaults, and it would be silly to have them in two places anyway.
 
 sub readConfig {
     return if $TWiki::cfg{ConfigurationFinished};
+    local $TRUE = 1;
 
     # Read LocalSite.cfg
     unless (do 'TWiki.spec') {
