@@ -378,14 +378,19 @@ sub searchWeb {
     my $excludeTopic =  $params{excludetopic} || '';
     my $doExpandVars =  TWiki::isTrue( $params{expandvariables} );
     my $format =        $params{format} || '';
-    my $header =        $params{header} || '';
+    my $header =        $params{header};
     my $inline =        $params{inline};
     my $limit =         $params{limit} || '';
     my $doMultiple =    TWiki::isTrue( $params{multiple} );
     my $nonoise =       TWiki::isTrue( $params{nonoise} );
     my $noEmpty =       TWiki::isTrue( $params{noempty}, $nonoise );
-    my $noHeader =      (TWiki::isTrue( $params{noheader}, $nonoise)
-      || (($header eq '') && ($format ne '') && $inline));	#SMELL: this is a horrible Cairo compatibility hack, it seems everyone was relying on
+    # Note: a defined header overrides noheader
+    my $noHeader =
+      !defined($header) && TWiki::isTrue( $params{noheader}, $nonoise)
+        # SMELL: this is a horrible Cairo compatibility hack it seems
+        # everyone was relying on
+        || (!$header && $format && $inline);
+
     my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
     my $noSummary =     TWiki::isTrue( $params{nosummary}, $nonoise );
     my $zeroResults =   1 - TWiki::isTrue( ($params{zeroresults} || 'on'), $nonoise );
@@ -681,7 +686,7 @@ sub searchWeb {
         # header and footer of $web
         my( $beforeText, $repeatText, $afterText ) =
           split( /%REPEAT%/, $tmplTable );
-        if( $header ) {
+        if( defined $header ) {
             $beforeText = TWiki::expandStandardEscapes($header);
             $beforeText =~ s/\$web/$web/gos;         # expand name of web
             if( defined( $separator )) {
