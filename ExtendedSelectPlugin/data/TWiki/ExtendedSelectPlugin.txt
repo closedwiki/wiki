@@ -1,4 +1,7 @@
 %META:TOPICINFO{author="TWikiContributors" date="1129048562" format="1.1" version="1.4"}%
+
+*NOTE: As of TWiki-4.1 the functionality of this plugin is incorporated in the TWiki core. There is no need to install the plugin in TWiki 4.1 or above.*
+
 ---+!! <nop>ExtendedSelectPlugin
 
 Adds flags to the select field form type to allow the following features:
