@@ -745,22 +745,20 @@ sub _externalLink {
         $filename =~ s@.*/([^/]*)@$1@go;
         return CGI::img( { src => $url, alt => $filename } );
     }
-    $text ||= $url;
     my $opt = '';
     if( $url =~ /^mailto:/i ) {
         if( $TWiki::cfg{AntiSpam}{EmailPadding} ) {
             $url =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
-            $text =~ s/(@\w*)/$1$TWiki::cfg{AntiSpam}{EmailPadding}/;
 
         }
         if( $TWiki::cfg{AntiSpam}{HideUserDetails} ) {
             # Much harder obfuscation scheme
             $url =~ s/(\W)/'&#'.ord($1).';'/ge;
-            $text =~ s/(\W)/'&#'.ord($1).';'/ge;
         }
     } else {
         $opt = ' target="_top"';
     }
+    $text ||= $url;
     # SMELL: Can't use CGI::a here, because it encodes ampersands in
     # the link, and those have already been encoded once in the
     # rendering loop (they are identified as "stand-alone"). One
