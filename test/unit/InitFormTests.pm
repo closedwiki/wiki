@@ -81,13 +81,14 @@ sub get_formfield {
   return (($children[$fld]->content_list())[1]->content_list())[0]->as_HTML()
 }
 
-sub test_edit1 {
-  my $this = shift;
-  $twiki->{webName} = $testweb;
-  $twiki->{topicName} = $testtopic;
+sub setup_formtests {
+  my ( $web, $topic, $formtemplate ) = @_;
+
+  $twiki->{webName} = $web;
+  $twiki->{topicName} = $topic;
   my $render = $twiki->{renderer};
 
-  $twiki->{cgiQuery}->param( -name=>"formtemplate", -value=>"$testweb.$testform");
+  $twiki->{cgiQuery}->param( -name=>"formtemplate", -value=>$formtemplate);
 
   # Now generate the form. We pass a template which throws everything away
   # but the form to allow for simpler analysis.
@@ -99,7 +100,14 @@ sub test_edit1 {
     return;
   }
 
-  my $tree = HTML::TreeBuilder->new_from_content($tmpl);
+  return HTML::TreeBuilder->new_from_content($tmpl);
+
+}
+
+sub test_edit1 {
+  my $this = shift;
+  
+  my $tree = setup_formtests( $testweb, $testtopic, "$testweb.$testform" );
 
   # ----- now analyze the resultant $tree
 
