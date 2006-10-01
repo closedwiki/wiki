@@ -207,9 +207,8 @@ For TWiki application it is useful to automatically generate unique topicnames, 
 
 *Examples:*
    * =BugAUTOINC0= - creates topic names =Bug0=, =Bug1=, =Bug2=, ... (does not sort properly)
-   * =ItemAUTOINC0000= - creates topic names =Item0000=, =Item0001=,
-   * =Item0002=, ... (sorts properly up to 9999)
-   * =DocTXAUTOINC10001= - start with =DocTX10001=, =DocTX10002=, ... (sorts properly up to 99999; auto-links)
+   * =ItemAUTOINC0000= - creates topic names =Item0000=, =Item0001=, =Item0002=, ... (sorts properly up to 9999)
+   * =DocIDAUTOINC10001= - start with =DocID10001=, =DocID10002=, ... (sorts properly up to 99999; auto-links)
 
 Example link to create a new topic:%BR%
 <verbatim>
