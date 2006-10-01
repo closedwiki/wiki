@@ -336,7 +336,6 @@ sub init_edit {
     $tmpl =~ s/%FORMFIELDS%/$formText/g;
 
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
-    my $p = $session->{prefs};
 
     return ( $text, $tmpl );
 }
