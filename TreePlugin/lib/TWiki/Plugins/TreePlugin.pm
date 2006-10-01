@@ -36,7 +36,7 @@ use vars qw(
         %FormatMap $RootLabel
     );
 
-$VERSION = '$Rev$';
+$VERSION = 'v0.6';
 
 $RootLabel = "_RootLabel_"; # what we use to label the root of a tree if not a topic
 
@@ -194,9 +194,19 @@ sub handleTreeView {
         my ($topic, $modTime, $author, $summary) = split /\|/; # parse out data
 
 		# get parent
-        my( $meta, $text ) = &TWiki::Func::readTopic( $attrWeb, $topic );
+         my( $meta, $text ) = &TWiki::Func::readTopic( $attrWeb, $topic );
+        
+         my $ref=0;
+         if ($TWiki::Plugins::VERSION < 1.1)
+            {
+            $ref = $meta->findOne( "TOPICPARENT" );
+            }
+         else
+            {
+            $ref = $meta->get( "TOPICPARENT" );
+            }
 
-        my $ref = $meta->get( "TOPICPARENT" );
+
         my %par = (defined $ref ? %$ref : ());
         my $parent = ( %par )
              ?  _findTWikiNode($par{"name"}, \%nodes)    # yes i have a parent, get it
@@ -244,6 +254,14 @@ sub handleTreeView {
 	}
 	#$renderedTree = $AGdebugmsg . $renderedTree;
 	$renderedTree = "<div class=\"treePlugin\">" . $renderedTree . "</div><!--//treePlugin-->";
+
+   #SL: Substitute $index in the rendered tree, $index is most useful to implement menus in combination with TreeBrowserPlugin   
+   if (defined $formatter->data("format"))
+      {
+      my $Index=0;
+      $renderedTree =~ s/\$Index/$Index++;$Index/egi;
+      }
+
 	return $renderedTree;
 }
 
@@ -405,9 +423,20 @@ sub handleCreateChildInput {
 	my $formfields;
 
 	# so: is new topic to have a form? if so, put in new fields
-        my $ref = $meta->get( "FORM" );
-        my %form = (defined $ref ? %$ref : ());
-	#my %form = $meta->get( "FORM" );
+
+
+   my $ref=0;
+   if ($TWiki::Plugins::VERSION < 1.1)
+      {
+      $ref = $meta->findOne( "FORM" );
+      }
+   else
+      {
+      $ref  = $meta->get( "FORM" );
+      }
+
+   my %form = (defined $ref ? %$ref : ());
+
 	if( %form ) {
 		my $name = $form{"name"};
 		$formfields = &TWiki::Form::getFieldParams($meta);
@@ -435,9 +464,17 @@ sub setMetaFromAttr {
 	}
 
 	# get this form name
-        my $ref = $meta->get( "FORM" );
-        my %form = (defined $ref ? %$ref : ());
-	#my %form = $meta->get( "FORM" );
+   my $ref=0;
+   if ($TWiki::Plugins::VERSION < 1.1)
+      {
+      $ref = $meta->findOne( "FORM" );
+      }
+   else
+      {
+      $ref  = $meta->get( "FORM" );
+      }
+
+   my %form = (defined $ref ? %$ref : ());
 	my $name = $form{"name"} if ( %form ) || "";
 
 	# get new form name, if any

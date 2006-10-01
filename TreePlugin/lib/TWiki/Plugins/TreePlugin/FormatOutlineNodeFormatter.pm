@@ -49,17 +49,11 @@ sub formatCount { return $_[1] ;}
 sub formatNode {
 	my ($this, $node, $count, $level) = @_;	
   
-   #SL: do not render at level 0
+   #SL: do not render at level 0 when using "levelprefix" 
    if ($level == 0 && $this->data("levelprefix"))
       {
       return "";
       }
-
-   #SL: Experiments
-   #my $itemcount=$this->formatCount($count)+$this->formatCount($level); #=(defined $this->data("itemcount")?$this->data("itemcount"):0);
-   #my $itemcount=(defined $this->data("itemcount")?$this->data("itemcount"):0);
-   #$itemcount++;
-   #$this->data("itemcount",$itemcount);
 
 	my $res = $this->data("format");
 
@@ -75,8 +69,6 @@ sub formatNode {
 
 	$res =~ s/\$outnum/$this->formatOutNum($node)/geo;
 	$res =~ s/\$count/$this->formatCount($count)/geo;
-   #SL: Experiments
-  	#$res =~ s/\$itemcount/$itemcount/geoi;
 	$res =~ s/\$level/$this->formatLevel($level)/geo;
 	$res =~ s/\$n/\n/go;
 	
@@ -96,7 +88,7 @@ sub formatNode {
 		# some meta substitutions go here
 	}
 
-   #SL: levelprefix
+   #SL: levelprefix allows rendering of bullet list using TWiki syntax thus enabling combination with TreeBrowserPlugin
    if (defined($this->data("levelprefix")))
       {
       my $i=$level;
