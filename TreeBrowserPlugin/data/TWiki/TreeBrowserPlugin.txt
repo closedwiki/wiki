@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1158449493" format="1.1" reprev="1.7" version="1.7"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1159728906" format="1.1" reprev="1.9" version="1.9"}%
 ---+ Tree Browser Plugin
 
 Renders a bulleted or numbered list as a collapsable/expandable tree of nodes.
@@ -17,6 +17,9 @@ Place the tag =%<nop>TREEBROWSER{= _parameters_ =}%= immediately before a bullet
 | =openTo= | Must be an integer. If present, the tree is expanded to the given node, as numbered from the root. | =0= |
 | =shared= | Must be a string. If present, the state of the tree is shared across all trees using this string. For example, if the tree is used in the WebLeftBar, the state will hold at all topics with this WebLeftBar. It's basically the name of the JavaScript object representing your tree. | none |
 | =uselines= | Set to =false= if you don't want to show lines linking nodes and leafs in the tree | =true= |
+| =useplusminus= | Set to =false= if you don't want to show '-' and '+' signs. One can use something like =onclick='javascript: tree.o($index);'= in the tree item to trigger opening/closing of a node. | =true= |
+| =noindent= | Set to =true= to show children at the level their parent. It suppresses children indentation. | =false= |
+| =nocss= | Set to =true= to prevent inclusion of =dtree.css=. | =false= |
 | =closesamelevel= | If =true= only one node within a parent can be expanded at the same time. openAll() and closeAll() functions do not work when this is enabled. | =false= |
 
 Rendering themes can be defined by =&lt;name&gt;_THEME= Plugin settings
@@ -114,7 +117,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-     | ==View.pm.patch== | Patch to =lib/TWiki/UI/View.pm= |
      | ==pub/TWiki/%TOPIC%/dtree.css== | part of dtree |
      | ==pub/TWiki/%TOPIC%/dtree.js== | part of dtree |
      | ==pub/TWiki/%TOPIC%/base.gif== | part of dtree |
@@ -156,23 +158,21 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>T
      | ==pub/TWiki/%TOPIC%/xls.gif== | icons from [[TWiki:Plugins.RenderListPlugin][RenderListPlugin]] |
      | ==pub/TWiki/%TOPIC%/zip.gif== | icons from [[TWiki:Plugins.RenderListPlugin][RenderListPlugin]] |
 
-   0 Patch =lib/TWiki/UI/View.pm= using =View.pm.patch=. This patch inserts code into =lib/TWiki/UI/View.pm= which lifts some !JavaScript up into the head section of the document.
-   0 See if the above example renders correctly.
-
 ---++ Planned Enhancements
 
-   * Support configurable icons for each node (similar to TWiki:Plugins.RenderListPlugin).
-   * Support configurable default icons.
-   * Support wrapping of long node text.
-   * Allow for tree status to be shared across topics (e.g., leave the status of nodes unchanged for a tree used in the WebLeftBar).
-   * Support tree browser in other than view mode also.
-
+   * Support configurable icons for each node (similar to TWiki:Plugins.RenderListPlugin). _SL: Sounds fun!_
+   * Support configurable default icons. _SL: I think this was done sometimes ago._
+   * Support wrapping of long node text. _SL: Not sure how to do that? Looks like it's not such a big problem with Firfox._
+   * Support tree browser in other than view mode also. _SL: Not sure what's that?_
+   * Cleanup and comment !JavaScript code.
+   
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
-|  Plugin Version: | v0.6 |
+|  Plugin Version: | v0.7 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  17 Sep 2006: | (v0.6) - Adding =closesamelevel= and =uselines= functionalities, fix rendering issues with Firefox and pattern skin, fix warnings in apache error logs |
+|  01 Oct 2006: | (v0.7) - Adding =useplusminus= , =noindent= and =nocss= parameters. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]]. |
+|  17 Sep 2006: | (v0.6) - Adding =closesamelevel= and =uselines= functionalities, fix rendering issues with Firefox and pattern skin, fix warnings in apache error logs. By [[TWiki:Main.StephaneLenclud][Stéphane Lenclud]] |
 |  12 Apr 2006: | (v0.5) - Minor update for TWiki:Codev.TWikiRelease04x00  |
 |  16 Sep 2005: | (v0.4) - Fix bug in =openAll= and =openTo= functions  |
 |  06 Sep 2005: | (v0.3) - Adopt the rendering themes from TWiki:Plugins.RenderListPlugin |
@@ -195,6 +195,7 @@ __Related Topics:__ TWiki:Plugins.RenderListPlugin
 
 %META:FILEATTACHMENT{name="empty.gif" attr="" autoattached="1" comment="" date="1151849905" path="empty.gif" size="62" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="email.gif" attr="" autoattached="1" comment="" date="1151849905" path="email.gif" size="183" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="dtree.js~" attr="" autoattached="1" comment="" date="1159656757" path="dtree.js~" size="12407" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="xls.gif" attr="" autoattached="1" comment="" date="1151849905" path="xls.gif" size="918" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="joinbottom.gif" attr="" autoattached="1" comment="" date="1151849905" path="joinbottom.gif" size="66" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="question.gif" attr="" autoattached="1" comment="" date="1151849905" path="question.gif" size="1044" user="UnknownUser" version=""}%
@@ -208,7 +209,7 @@ __Related Topics:__ TWiki:Plugins.RenderListPlugin
 %META:FILEATTACHMENT{name="cd.gif" attr="" autoattached="1" comment="" date="1151849905" path="cd.gif" size="239" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="virtualperson.gif" attr="" autoattached="1" comment="" date="1151849905" path="virtualperson.gif" size="149" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="group.gif" attr="" autoattached="1" comment="" date="1151849905" path="group.gif" size="162" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.css" attr="" autoattached="1" comment="" date="1157137786" path="dtree.css" size="815" user="Main.StephaneLenclud" version="1"}%
+%META:FILEATTACHMENT{name="dtree.css" attr="" autoattached="1" comment="" date="1159656429" path="dtree.css" size="817" user="Main.StephaneLenclud" version="1"}%
 %META:FILEATTACHMENT{name="minus.gif" attr="" autoattached="1" comment="" date="1151849905" path="minus.gif" size="86" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="ppt.gif" attr="" autoattached="1" comment="" date="1151849905" path="ppt.gif" size="921" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="join.gif" attr="" autoattached="1" comment="" date="1151849905" path="join.gif" size="69" user="UnknownUser" version=""}%
@@ -219,7 +220,7 @@ __Related Topics:__ TWiki:Plugins.RenderListPlugin
 %META:FILEATTACHMENT{name="minusbottom.gif" attr="" autoattached="1" comment="" date="1151849905" path="minusbottom.gif" size="85" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="nolines_plus.gif" attr="" autoattached="1" comment="" date="1151849905" path="nolines_plus.gif" size="870" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="persons.gif" attr="" autoattached="1" comment="" date="1151849905" path="persons.gif" size="164" user="UnknownUser" version=""}%
-%META:FILEATTACHMENT{name="dtree.js" attr="" autoattached="1" comment="" date="1157194177" path="dtree.js" size="11964" user="Main.StephaneLenclud" version="8"}%
+%META:FILEATTACHMENT{name="dtree.js" attr="" autoattached="1" comment="" date="1159656769" path="dtree.js" size="12407" user="Main.StephaneLenclud" version="8"}%
 %META:FILEATTACHMENT{name="sound.gif" attr="" autoattached="1" comment="" date="1151849905" path="sound.gif" size="166" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="home.gif" attr="" autoattached="1" comment="" date="1151849905" path="home.gif" size="172" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="folder.gif" attr="" autoattached="1" comment="" date="1151849905" path="folder.gif" size="372" user="UnknownUser" version=""}%
@@ -231,6 +232,7 @@ __Related Topics:__ TWiki:Plugins.RenderListPlugin
 %META:FILEATTACHMENT{name="trend.gif" attr="" autoattached="1" comment="" date="1151849905" path="trend.gif" size="149" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="trash.gif" attr="" autoattached="1" comment="" date="1151849905" path="trash.gif" size="1051" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="line.gif" attr="" autoattached="1" comment="" date="1151849905" path="line.gif" size="66" user="UnknownUser" version=""}%
+%META:FILEATTACHMENT{name="dtree.css~" attr="" autoattached="1" comment="" date="1159398861" path="dtree.css~" size="821" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="virtualhome.gif" attr="" autoattached="1" comment="" date="1151849905" path="virtualhome.gif" size="162" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="plus.gif" attr="" autoattached="1" comment="" date="1151849905" path="plus.gif" size="89" user="UnknownUser" version=""}%
 %META:FILEATTACHMENT{name="globe.gif" attr="" autoattached="1" comment="" date="1151849905" path="globe.gif" size="1095" user="UnknownUser" version=""}%

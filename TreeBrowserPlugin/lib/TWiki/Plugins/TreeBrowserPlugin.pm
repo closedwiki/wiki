@@ -38,7 +38,7 @@ use vars qw(
         $debug $js
     );
 
-$VERSION = '1.031';
+$VERSION = 'v0.7';
 $pluginName = 'TreeBrowserPlugin';
 
 # =========================
@@ -97,6 +97,9 @@ sub handleTreeView {
     my $open2 = &TWiki::Func::extractNameValuePair( $theAttr, "openAll" );
     my $shared = &TWiki::Func::extractNameValuePair( $theAttr, "shared" );
     my $useLines = &TWiki::Func::extractNameValuePair( $theAttr, "uselines" );  
+    my $usePlusMinus = &TWiki::Func::extractNameValuePair( $theAttr, "useplusminus" );
+    my $noIndent = &TWiki::Func::extractNameValuePair( $theAttr, "noindent" );
+    my $noCss = &TWiki::Func::extractNameValuePair( $theAttr, "nocss" );
     my $useStatusText = &TWiki::Func::extractNameValuePair( $theAttr, "usestatustext" );
     my $closeSameLevel = &TWiki::Func::extractNameValuePair( $theAttr, "closesamelevel" );    
     my $icons = 0;
@@ -108,12 +111,12 @@ sub handleTreeView {
     my $opento = 0;
     $opento = $open1 if (!$openall && $open1);
     
-    return $thePre . &renderTreeView( $type, $params, $useLines, $useStatusText, $closeSameLevel, $theTitle, $icons, $shared, $openall, $opento, $theList );
+    return $thePre . &renderTreeView( $type, $params, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noCss, $theTitle, $icons, $shared, $openall, $opento, $theList );
 }
 
 sub renderTreeView
 {
-    my ( $theType, $theParams, $useLines, $useStatusText, $closeSameLevel, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
+    my ( $theType, $theParams, $useLines, $usePlusMinus, $useStatusText, $closeSameLevel, $noIndent, $noCss, $theTitle, $icons, $shared, $openAll, $openTo, $theText ) = @_;
 
     $theText =~ s/^[\n\r]*//os;
     my @tree = ();
@@ -160,10 +163,16 @@ sub renderTreeView
 
     $js++;
     my $var = ($shared)?$shared:"d$js";
-    my $script = "
-<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />
+    
+    my $script = "\n";
+   #add CSS unless no CSS specified
+    #$script .="<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />" unless ($noCss=~/true|1|on/i);  
+    $script .= "
 <script type=\"text/javascript\" src=\"$attachUrl/dtree.js\"></script>";
-    $text = "<div class=\"dtree\"><script type=\"text/javascript\">
+    $text = "<div class=\"dtree\">";
+    #$text .="<link rel=\"StyleSheet\" href=\"$attachUrl/dtree.css\" type=\"text/css\" />" unless ($noCss=~/true|1|on/i);
+   $text .="<style type=\"text/css\" media=\"all\">\@import \"$attachUrl/dtree.css\";</style>" unless ($noCss=~/true|1|on/i);    
+   $text .="<script type=\"text/javascript\">
 <!--
 $var = new dTree('$var');\n";
     $text .= "$var.config.inOrder=true;\n";
@@ -176,7 +185,10 @@ $var = new dTree('$var');\n";
     $text .= "$var.config.useIcons=false;\n" unless $icons;
     $text .= "$var.config.shared=true;\n" if $shared;
     $text .= "$var.config.useLines=false;\n" if ($useLines=~/false|0|off/i);
+    $text .= "$var.config.usePlusMinus=false;\n" if ($usePlusMinus=~/false|0|off/i);
     $text .= "$var.config.closeSameLevel=true;\n" if ($closeSameLevel=~/true|1|on/i);
+    $text .= "$var.config.noIndent=true;\n" if ($noIndent=~/true|1|on/i);
+
 
     $text .= "$var.config.useStatusText=false;\n"; #Broken due to dtree usage if ($useStatusText=~/true|1|on/i);
     $text .= "$var.config.useSelection=false;\n"; #Broken due to dtree usage

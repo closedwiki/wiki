@@ -34,6 +34,8 @@ function dTree(objName) {
 		useSelection : true,
 		useCookies : true,
 		useLines : true,
+		usePlusMinus : true,
+      noIndent : false,
 		useIcons : true,
 		useStatusText : false,
 		closeSameLevel	: false,
@@ -149,12 +151,18 @@ dTree.prototype.node = function(node, nodeId) {
 	return str;
 };// Adds the empty and line icons
 dTree.prototype.indent = function(node, nodeId) {
-	var str = '';
+   var str = '';
+   if (this.config.noIndent) return str;
 	if (this.root.id != node.pid) {
 		for (var n=0; n<this.aIndent.length; n++)
 			str += '<img src="' + ( (this.aIndent[n] == 1 && this.config.useLines) ? this.icon.line : this.icon.empty ) + '" alt="" />';
 		(node._ls) ? this.aIndent.push(0) : this.aIndent.push(1);
 		if (node._hc) {
+         if (!this.config.usePlusMinus) 
+            { //Just indent without + or - icon      
+            str += '<img src="' + ( (this.aIndent[n] == 1 && this.config.useLines) ? this.icon.line : this.icon.empty ) + '" alt="" />';
+            return str;
+            }
 			str += '<a href="javascript: ' + this.obj + '.o(' + nodeId + ');"><img id="j' + this.obj + nodeId + '" src="';
 			if (!this.config.useLines) str += (node._io) ? this.icon.nlMinus : this.icon.nlPlus;
 			else str += ( (node._io) ? ((node._ls && this.config.useLines) ? this.icon.minusBottom : this.icon.minus) : ((node._ls && this.config.useLines) ? this.icon.plusBottom : this.icon.plus ) );
@@ -244,11 +252,14 @@ dTree.prototype.closeAllChildren = function(node) {
 }// Change the status of a node(open or closed)
 dTree.prototype.nodeStatus = function(status, id, bottom) {
 	eDiv	= document.getElementById('d' + this.obj + id);
-	eJoin	= document.getElementById('j' + this.obj + id);
+   var eJoin;
+   if (this.config.usePlusMinus) 
+	  eJoin	= document.getElementById('j' + this.obj + id);
 	if (this.config.useIcons) {
 		eIcon	= document.getElementById('i' + this.obj + id);
 		eIcon.src = (status) ? this.aNodes[id].iconOpen : this.aNodes[id].icon;
 	}
+   if (this.config.usePlusMinus) 
 	eJoin.src = (this.config.useLines)?
 	((status)?((bottom)?this.icon.minusBottom:this.icon.minus):((bottom)?this.icon.plusBottom:this.icon.plus)):
 	((status)?this.icon.nlMinus:this.icon.nlPlus);
