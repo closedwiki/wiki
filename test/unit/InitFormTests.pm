@@ -12,7 +12,8 @@ use CGI;
 use Error qw( :try );
 
 my $testweb = "TestWeb";
-my $testtopic = "InitTestTopic";
+my $testtopic1 = "InitTestTopic1";
+my $testtopic2 = "InitTestTopic2";
 my $testform = "InitTestForm";
 my $testtmpl = "InitTestTemplate";
 
@@ -61,6 +62,22 @@ Then call <a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?formtemplate=$testform">Edi
 
 HERE
 
+my $testtext2 = <<'HERE';
+%META:TOPICINFO{author="TWikiGuest" date="1159721050" format="1.1" reprev="1.3" version="1.3"}%
+Needs the following
+   * TestFormInitFormA - Form to be attached
+Then call <a href="%SCRIPTURL{"edit"}%/%WEB%/%TOPIC%?formtemplate=$testform">Edit</a>
+
+%META:FORM{name="$testform"}%
+%META:FIELD{name="IssueName" attributes="M" title="Issue Name" value="_An issue_"}%
+%META:FIELD{name="IssueDescription" attributes="" title="Issue Description" value="---+ Example problem"}%
+%META:FIELD{name="IssueType" attributes="" title="Issue Type" value="Defect"}%
+%META:FIELD{name="History1" attributes="" title="History1" value="%SCRIPTURL%"}%
+%META:FIELD{name="History2" attributes="" title="History2" value="%SCRIPTURL%"}%
+%META:FIELD{name="History3" attributes="" title="History3" value="%<nop>SCRIPTURL%"}%
+%META:FIELD{name="History4" attributes="" title="History4" value="%<nop>SCRIPTURL%"}%
+HERE
+
 my $edittmpl1 = <<'HERE';
 %FORMFIELDS%
 HERE
@@ -85,7 +102,8 @@ sub set_up {
 
 
     $TWiki::Plugins::SESSION = $twiki;
-    TWiki::Func::saveTopicText( $testweb, $testtopic, $testtext1, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testtopic1, $testtext1, 1, 1 );
+    TWiki::Func::saveTopicText( $testweb, $testtopic2, $testtext2, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testform, $testform1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, $testtmpl, $testtmpl1, 1, 1 );
     TWiki::Func::saveTopicText( $testweb, "MyeditTemplate", $edittmpl1, 1, 1 );
@@ -138,7 +156,7 @@ sub setup_formtests {
 sub test_edit1 {
   my $this = shift;
   
-  my $tree = setup_formtests( $testweb, $testtopic, "formtemplate=\"$testweb.$testform\"" );
+  my $tree = setup_formtests( $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\"" );
 
   # ----- now analyze the resultant $tree
 
@@ -173,7 +191,7 @@ sub test_edit2 {
   # Pass formTemplate and templateTopic
   my $this = shift;
   
-  my $tree = setup_formtests( $testweb, $testtopic, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+  my $tree = setup_formtests( $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
   # ----- now analyze the resultant $tree
 
@@ -208,7 +226,42 @@ sub test_edit3 {
   # Pass formTemplate and templateTopic to empty topic
   my $this = shift;
   
-  my $tree = setup_formtests( $testweb, "${testtopic}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+  my $tree = setup_formtests( $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+
+  # ----- now analyze the resultant $tree
+
+  my @children = $tree->content_list();
+  @children = $children[1]->content_list();
+  @children = $children[0]->content_list();
+  @children = $children[0]->content_list();
+
+  # Now we found the form!
+  # 0 is the header of the form
+  # 1...n are the rows, each has title (0) and value (1)
+
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="_An issue_">
+', get_formfield(1, @children));
+  $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5>
+---+ Example problem</textarea>
+', get_formfield(2, @children));
+  $this->assert_str_equals('<select name="IssueType" size=1><option selected>Defect</option><option>Enhancement</option><option>Other</option></select>
+', get_formfield(3, @children));
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="' . $surl . '">
+', get_formfield(4, @children));
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="' . $surl . '">
+', get_formfield(5, @children));
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%">
+', get_formfield(6, @children));
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%SCRIPTURL%">
+', get_formfield(7, @children));
+
+}
+
+sub test_edit4 {
+  # Pass formTemplate and templateTopic to empty topic
+  my $this = shift;
+  
+  my $tree = setup_formtests( $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
   # ----- now analyze the resultant $tree
 
