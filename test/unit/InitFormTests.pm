@@ -2,7 +2,7 @@ use strict;
 
 package InitFormTests;
 
-# TODO: Should make the template different from form
+# TODO: Should we check untitled labels? There is some special processing there.
 
 =pod
 
@@ -259,9 +259,9 @@ sub test_tmpl_form_new {
 ', get_formfield(4, @children));
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%SCRIPTURL%">
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="$percntSCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%">
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="$percntSCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%SCRIPTURL%">
 ', get_formfield(7, @children));
 
 }
@@ -283,9 +283,9 @@ sub test_tmpl_form_existingform {
 ', get_formfield(4, @children));
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%SCRIPTURL%">
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="$percntSCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%">
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="$percntSCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%SCRIPTURL%">
 ', get_formfield(7, @children));
 
 }
@@ -307,9 +307,9 @@ sub test_tmpl_form_params {
 ', get_formfield(4, @children));
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%SCRIPTURL%">
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="$percntSCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%SCRIPTURL%">
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="$percntSCRIPTURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%SCRIPTURL%">
 ', get_formfield(7, @children));
 
 }
@@ -331,9 +331,9 @@ Simple description of problem</textarea>
 ', get_formfield(4, @children));
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%ATTACHURL%">
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="$percntATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="$percntATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
 ', get_formfield(7, @children));
 
 }
@@ -355,9 +355,9 @@ Simple description of problem</textarea>
 ', get_formfield(4, @children));
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%ATTACHURL%">
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="$percntATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="$percntATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
 ', get_formfield(7, @children));
 
 }
@@ -379,9 +379,9 @@ Simple description of problem</textarea>
 ', get_formfield(4, @children));
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="History2" size=20 type="text" value="%ATTACHURL%">
 ', get_formfield(5, @children));
-  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="$percntATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History3" type="hidden" value="%ATTACHURL%">
 ', get_formfield(6, @children));
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="$percntATTACHURL%">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="History4" size=20 type="text" value="%ATTACHURL%">
 ', get_formfield(7, @children));
 
 }
