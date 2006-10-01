@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MartinRaabe" date="1042732920" format="1.0" version="1.2"}%
+
 %META:TOPICPARENT{name="TWiki.TreePlugin"}%
 Here are some ways of using %TWIKIWEB%.TreePlugin's =%<nop>TREEVIEW%= tag.
 

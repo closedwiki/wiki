@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="StephaneLenclud" date="1158443010" format="1.1" reprev="1.5" version="1.5"}%
+%META:TOPICINFO{author="StephaneLenclud" date="1159730103" format="1.1" reprev="1.7" version="1.7"}%
 ---+!! <nop>%TOPIC%
 
 Enables dynamic generation of TWiki topic trees based on topics' parent-child relationships.
@@ -48,6 +48,7 @@ Attributes:
       * _$modTime_ - the topic's modification time
       * _$level_ - the tree depth of the topic (in whatever format)
       * _$count_ - the topic's child position
+      * _$index_ - the index of the topic in the tree. Starts from one. Most useful when used in combination with [[TWiki:Plugins.TreeBrowserPlugin][TreeBrowserPlugin]]
       * _$onum_ - outline number for the topic (eg, 1.3.4.2) 
       * _$url_ - the current topic's URL
    * *formatbranch* - specify the format for a group of children (=outline= & =coloroutline=)
@@ -136,9 +137,10 @@ Download =TreePlugin_installer= from TWiki:Plugins.TreePlugin put it at the root
 
 |  One Line Description: | View Twiki topics as nodes in a tree |
 |  Plugin Author: | TWiki:Main.SlavaKozlov |
-|  Plugin Version: | v0.5 |
+|  Plugin Version: | v0.6 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  16 Sep 2006: | (v0.5) - TWiki:Main.StephaneLenclud: adding levelprefix parameter to unable usage in combination with TreeBrowserPlugin |
+|  1 Oct 2006: | (v0.6) - TWiki:Main.StephaneLenclud: adding =$index= format subsitution. Useful when used in combination with TreeBrowserPlugin. Also attempting to restore compatibility with Cairo, but still waiting for someone to test it.  |
+|  16 Sep 2006: | (v0.5) - TWiki:Main.StephaneLenclud: adding =levelprefix= parameter to unable usage in combination with TreeBrowserPlugin. |
 |  26 Jul 2006: | (v0.4) - TWiki:Main.SteffenPoulsen: Ported to TWiki-4 / Dakar. Leading text removed, less warnings, no double bracket links, css classnames around output. |
 |  15 Feb 2002: | Alpha (0.2) release |
 |  08 Feb 2002: | Internal (0.1) release |

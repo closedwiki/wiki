@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MartinRaabe" date="1042728360" format="1.0" version="1.1"}%
+
 %META:TOPICPARENT{name="TreePluginSamples"}%
 <h1><a name ="1_TreeTop"> </a> 1 <a href="">TreeTop</a> </h1>
 <h2> 1.1 <a href="">TheOne</a> </h2>
