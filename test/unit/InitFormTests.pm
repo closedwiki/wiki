@@ -24,9 +24,9 @@ my $testform1 = <<'HERE';
 %META:TOPICINFO{author="guest" date="1025373031" format="1.0" version="1.3"}%
 %META:TOPICPARENT{name="WebHome"}%
 | *Name* | *Type* | *Size* | *Values* | *Tooltip messages* | *Mandatory* | 
-| Issue Name | text | 73 |  | Illustrative name of issue | M | 
-| Issue Description | textarea | 55x5 |  | Short description of issue |  | 
-| Issue Type | select | 1 | , Defect, Enhancement, Other |  |  | 
+| Issue Name | text | 73 | My first defect | Illustrative name of issue | M | 
+| Issue Description | textarea | 55x5 | Simple description of problem | Short description of issue |  | 
+| Issue Type | select | 1 | Defect, Enhancement, Other |  |  | 
 | History1 | label | 1 | %ATTACHURL%	         	 |  | |
 | History2 | text | 20 | %ATTACHURL%		         |  | |
 | History3 | label | 1 | %<nop>ATTACHURL%		 |  | |
@@ -82,13 +82,18 @@ sub get_formfield {
 }
 
 sub setup_formtests {
-  my ( $web, $topic, $formtemplate ) = @_;
+  my ( $web, $topic, $params ) = @_;
 
   $twiki->{webName} = $web;
   $twiki->{topicName} = $topic;
   my $render = $twiki->{renderer};
 
-  $twiki->{cgiQuery}->param( -name=>"formtemplate", -value=>$formtemplate);
+  use TWiki::Attrs;
+  my $attr = new TWiki::Attrs( $params );
+  foreach my $k ( keys %$attr ) {
+    next if $k eq '_RAW';
+    $twiki->{cgiQuery}->param( -name=>$k, -value=>$attr->{$k});
+  }
 
   # Now generate the form. We pass a template which throws everything away
   # but the form to allow for simpler analysis.
@@ -107,7 +112,7 @@ sub setup_formtests {
 sub test_edit1 {
   my $this = shift;
   
-  my $tree = setup_formtests( $testweb, $testtopic, "$testweb.$testform" );
+  my $tree = setup_formtests( $testweb, $testtopic, "formtemplate=\"$testweb.$testform\"" );
 
   # ----- now analyze the resultant $tree
 
@@ -120,12 +125,12 @@ sub test_edit1 {
   # 0 is the header of the form
   # 1...n are the rows, each has title (0) and value (1)
 
-  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 tabindex=1 type="text">
+  $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 tabindex=1 type="text" value="My first defect">
 ', get_formfield(1, @children));
   $this->assert_str_equals('<textarea class="twikiEditFormTextAreaField" cols=55 name="IssueDescription" rows=5 tabindex=2>
-</textarea>
+Simple description of problem</textarea>
 ', get_formfield(2, @children));
-  $this->assert_str_equals('<select name="IssueType" size=1><option></option><option>Defect</option><option>Enhancement</option><option>Other</option></select>
+  $this->assert_str_equals('<select name="IssueType" size=1><option>Defect</option><option>Enhancement</option><option>Other</option></select>
 ', get_formfield(3, @children));
   my $url = $twiki->getPubUrl(1, $testweb, $testform);
   $this->assert_str_equals('<input class="twikiEditFormLabelField" name="History1" type="hidden" value="' . $url . '">
