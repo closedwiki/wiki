@@ -127,6 +127,8 @@ sub expandHTML {
         }
     }
     $html =~ s/%REVISION%/$frev/g;
+    $html = $this->{SESSION}->handleCommonTags(
+        $html, $this->{WEB}, $this->{TOPIC} );
     $html = $this->{SESSION}->{renderer}->getRenderedVersion( $html );
     $html =~ s/%TEXTHEAD%/$this->{HTML_SUMMARY}/g;
 
