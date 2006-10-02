@@ -154,10 +154,13 @@ sub init {
 
   # create the topic pubdir if it does not exist already
   my $pubDir = &TWiki::Func::getPubDir();
-  my $topicPubDir = $pubDir."/$web/$topic";
-  $topicPubDir = TWiki::Sandbox::normalizeFileName($topicPubDir);
-  unless (-d $topicPubDir) {
-    mkdir $topicPubDir or die "can't create directory $topicPubDir";
+  my $topicPubDir = $pubDir;
+  foreach my $dir (split(/\//, "$web/$topic")) {
+    $topicPubDir .= '/'.$dir;
+    $topicPubDir = TWiki::Sandbox::normalizeFileName($topicPubDir);
+    unless (-d $topicPubDir) {
+      mkdir $topicPubDir or die "can't create directory $topicPubDir";
+    }
   }
   $this->{topicPubDir} = $topicPubDir;
 
@@ -283,7 +286,7 @@ sub renderImages {
   my $msg;
 
   # create temporary storage
-  my $tempDir = File::Temp::tempdir(CLEANUP =>0);
+  my $tempDir = File::Temp::tempdir(CLEANUP =>1);
   my $tempFile = new File::Temp(DIR=>$tempDir);
   chdir $tempDir or die "can't change to temp dir $tempDir";
 
@@ -367,7 +370,7 @@ PREAMBLE
 
   # cleanup
   $this->{hashedMathStrings} =  {};
-  File::Temp::cleanup();
+  #File::Temp::cleanup(); # SMELL: n/a in perl < 5.8.8
   close $tempFile;
   return $msg;
 }
