@@ -93,7 +93,7 @@ sub process {
 
                } elsif( $query->param( 'etedit' ) ) {
                    # [Edit table] button pressed
-                   $doEdit = doEnableEdit( $theWeb, $theTopic, ($TWiki::Plugins::VERSION < 1.1) );
+                   $doEdit = doEnableEdit( $theWeb, $theTopic, 1 );
                    # never return if locked or no permission
                    return unless( $doEdit );
                    $cgiRows = -1; # make sure to get the actual number of rows
@@ -743,8 +743,12 @@ sub doEnableEdit {
 
     TWiki::Func::writeDebug( "- EditTablePlugin::doEnableEdit( $theWeb, $theTopic )" ) if $TWiki::Plugins::EditTablePlugin::debug;
 
+    my $pTopic = $theTopic;
+    # workaround for plugin API limitation that cannot check for permissions in meta data:
+    $pTopic = undef if( $doCheckIfLocked );
+
     my $wikiUserName = TWiki::Func::getWikiUserName();
-    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $theTopic, $theWeb ) ) {
+    if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $pTopic, $theWeb ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException(
             'accessdenied',
@@ -754,7 +758,7 @@ sub doEnableEdit {
     }
 
     my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
-    if( ( $doCheckIfLocked ) && ( $lockUser ) ) {
+    if( $doCheckIfLocked && $lockUser && ( $lockUser ne $TWiki::Plugins::EditTablePlugin::user ) ) {
         # warn user that other person is editing this topic
         TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
         return 0;
