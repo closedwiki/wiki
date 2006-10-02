@@ -53,7 +53,8 @@ sub initPlugin
     $leftjustify = ($leftjustify =~ /left/i ? 1 : 0);
 
     $alwayssection = &TWiki::Func::getPreferencesValue( "EDITSECTIONS" ) || 0;
-    $sectiondepth = &TWiki::Func::getPreferencesValue( "SECTIONDEPTH" ) || 0;
+    $sectiondepth = &TWiki::Func::getPreferencesValue( "SECTIONDEPTH" ) || "all";
+    $sectiondepth =~ s/all/6/gio;
     $sectiondepthmin = &TWiki::Func::getPreferencesValue( "SECTIONDEPTHMIN" ) || 0;
     $sectiondepthmin = $sectiondepth if ($sectiondepthmin > $sectiondepth);
     $sectioninit = ($sectiondepthmin) ? 0 : 1;
