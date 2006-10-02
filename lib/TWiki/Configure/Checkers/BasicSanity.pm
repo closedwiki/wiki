@@ -27,7 +27,6 @@ sub new {
     my ($class, $item) = @_;
     my $this = $class->SUPER::new($item);
     $this->{LocalSiteDotCfg} = undef;
-    $this->{TWikiDotCfg} = undef;
     $this->{errors} = 0;
 
     return $this;
@@ -44,14 +43,10 @@ sub ui {
     my $result = '';
     my $badLSC = 0;
 
-    # SMELL: this should probably be replaced by Harald's Config.pm
-    # module; but the checking here is more thorough....
-    $this->{TWikiDotCfg} = TWiki::findFileOnPath('TWiki.cfg');
-
     $this->{LocalSiteDotCfg} = TWiki::findFileOnPath('LocalSite.cfg');
     unless ($this->{LocalSiteDotCfg}) {
-        $this->{LocalSiteDotCfg} = TWiki::findFileOnPath('TWiki.cfg') || '';
-        $this->{LocalSiteDotCfg} =~ s/TWiki\.cfg/LocalSite.cfg/;
+        $this->{LocalSiteDotCfg} = TWiki::findFileOnPath('TWiki.spec') || '';
+        $this->{LocalSiteDotCfg} =~ s/TWiki\.spec/LocalSite.cfg/;
     }
 
     # Get default settings by reading .spec files
@@ -112,6 +107,15 @@ General path settings</a>.
 HERE
             $badLSC = 1;
         }
+    }
+
+    # If we got this far without definitions for key variables, then
+    # we need to default them. otherwise we get peppered with
+    # 'uninitialised variable' alerts later.
+    foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
+                        PubDir TemplateDir ScriptUrlPath LocalesDir ) {
+        # NOT SET tells the checker to try and guess the value later on
+        $TWiki::cfg{$var} ||= 'NOT SET';
     }
 
     # Make %ENV safer for CGI (should reflect TWiki.pm)

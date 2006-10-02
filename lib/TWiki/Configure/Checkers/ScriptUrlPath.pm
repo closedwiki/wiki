@@ -48,14 +48,16 @@ HERE
             $report .= $this->WARN('Don\'t put a / at the end of the path. It\'ll still work, but you will get double // in a few places.');
         }
     } else {
-        unless( $guess ) {
+        if( $guess ) {
+            $report .= $this->guessed(0);
+        } else {
             $report .= $this->WARN(<<HERE);
 This web server does not set REQUEST_URI or SCRIPT_NAME
 so it isn't possible to guess this setting.
 HERE
-        };
+            $guess = '';
+        }
         $TWiki::cfg{ScriptUrlPath} = $guess;
-        $report = $this->guessed(0);
     }
     return $report;
 }

@@ -268,9 +268,9 @@ sub save {
 
     my $lsc = TWiki::findFileOnPath('LocalSite.cfg');
     unless ($lsc) {
-        # If not found on the path, park it beside TWiki.cfg
-        $lsc = TWiki::findFileOnPath('TWiki.cfg') || '';
-        $lsc =~ s/TWiki\.cfg/LocalSite.cfg/;
+        # If not found on the path, park it beside TWiki.spec
+        $lsc = TWiki::findFileOnPath('TWiki.spec') || '';
+        $lsc =~ s/TWiki\.spec/LocalSite.cfg/;
     }
 
     if (open(F, '<'.$lsc)) {
@@ -287,7 +287,7 @@ HERE
 
     my $out = $this->_save();
     open(F, '>'.$lsc) ||
-      return $this->ERROR("Could not open $lsc for write: $!");
+      die "Could not open $lsc for write: $!";
     print F $this->{content};
     close(F);
 

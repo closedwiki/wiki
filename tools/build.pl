@@ -63,7 +63,8 @@ to the script e.g. perl build.pl release 4.6.5)
 
 END
     if( $name ||
-          TWiki::Contrib::Build::ask("Do you want to name this release?")) {
+          TWiki::Contrib::Build::ask("Do you want to name this release?",
+                                     'n')) {
         while( $name !~ /^\d\.\d+\.\d+(-\w+)?$/ ) {
             $name =
               TWiki::Contrib::Build::prompt(
