@@ -46,6 +46,7 @@ sub do_test {
     $this->assert_html_equals($expected, $actual);
 }
 
+# WikiWord
 sub test_simpleWikiword {
     my $this = shift;
     my $expected = <<EXPECTED;
@@ -58,6 +59,7 @@ ACTUAL
     $this->do_test($expected, $actual);
 }
 
+# [[WikiWord]]
 sub test_squabbedWikiword {
     my $this = shift;
     my $expected = <<EXPECTED;
@@ -70,6 +72,7 @@ ACTUAL
     $this->do_test($expected, $actual);
 }
 
+# [[Web.WikiWord]]
 sub test_squabbedWebWikiword {
     my $this = shift;
     my $expected = <<EXPECTED;
@@ -82,14 +85,15 @@ ACTUAL
     $this->do_test($expected, $actual);
 }
 
+# [[Web.WikiWord][Alt TextAlt]]
 sub test_squabbedWebWikiWordAltText {
     my $this = shift;
     my $expected = <<EXPECTED;
-<a class="twikiLink" href="$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName}">home</a>
+<a class="twikiLink" href="$this->{sup}/$TWiki::cfg{SystemWebName}/$TWiki::cfg{HomeTopicName}">Alt <nop>TextAlt</a>
 EXPECTED
 
     my $actual = <<ACTUAL;
-[[$TWiki::cfg{SystemWebName}.$TWiki::cfg{HomeTopicName}][home]]
+[[$TWiki::cfg{SystemWebName}.$TWiki::cfg{HomeTopicName}][Alt TextAlt]]
 ACTUAL
     $this->do_test($expected, $actual);
 }
@@ -364,6 +368,7 @@ ACTUAL
 
 sub test_protocols {
     my $this = shift;
+    $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
     my %urls = (
         'file://fnurfle' => 0,
         'ftp://bleem@snot.grumph:flibble' => 0,
@@ -395,6 +400,24 @@ ACTUAL
         $this->do_test($expected, $actual);
     }
 
+    # mailto URL in double squabs
+    $TWiki::cfg{AntiSpam}{HideUserDetails} = 0;
+    my $expected = <<EXPECTED;
+<a href="mailto:flip\@exampleSTUFFED.com">Oh smeg</a>
+EXPECTED
+    my $actual = <<ACTUAL;
+[[mailto:flip\@example.com][Oh smeg]]
+ACTUAL
+    $this->do_test($expected, $actual);
+
+    $TWiki::cfg{AntiSpam}{HideUserDetails} = 1;
+    $expected = <<EXPECTED;
+<a href="mailto:flip\@exampleSTUFFED.com">Oh smeg</a>
+EXPECTED
+    $actual = <<ACTUAL;
+[[mailto:flip\@example.com][Oh smeg]]
+ACTUAL
+    $this->do_test($expected, $actual);
 }
 
 1;

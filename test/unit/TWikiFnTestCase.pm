@@ -44,6 +44,8 @@ sub set_up {
     $TWiki::cfg{Register}{NeedVerification} = 0;
     $TWiki::cfg{MinPasswordLength} = 0;
     $TWiki::cfg{UsersWebName} = $this->{users_web};
+    $TWiki::cfg{LogFileName} = "$this->{var}.log";
+    $TWiki::cfg{WarningFileName} = "$this->{var}.warn";
 
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");

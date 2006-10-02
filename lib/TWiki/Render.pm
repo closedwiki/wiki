@@ -662,9 +662,7 @@ sub _handleWikiWord {
 # format: [[$text]]
 # format: [[$link][$text]]
 sub _handleSquareBracketedLink {
-    my( $this, $web, $topic, $text, $link ) = @_;
-
-    $text ||= $link;
+    my( $this, $web, $topic, $link, $text ) = @_;
 
     # Strip leading/trailing spaces
     $link =~ s/^\s*//;
@@ -674,18 +672,16 @@ sub _handleSquareBracketedLink {
     if( $link =~ /^file\:/ ) {
           # Prevent automatic WikiWord or CAPWORD linking in explicit links
           $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-          $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
           return $this->_externalLink( $link, $text );
     }
 
     # Spot other full explicit URLs
     # (explicit external [[$link][$text]]-style, that can be handled directly)
     if( $link =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
-        if (!($link eq $text)) {
-          # Prevent automatic WikiWord or CAPWORD linking in explicit links
-          $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-          $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
-          return $this->_externalLink( $link, $text );
+        if (defined $text && !($link eq $text)) {
+            # Prevent automatic WikiWord or CAPWORD linking in explicit links
+            $link =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
+            return $this->_externalLink( $link, $text );
         }
     }
 
@@ -697,14 +693,12 @@ sub _handleSquareBracketedLink {
             # '[[URL#anchor display text]]' link:
             $link = $1;
             $text = $2;
-        } else {
-            # '[[Web.odd wiki word#anchor][display text]]' link:
-            # '[[Web.odd wiki word#anchor]]' link:
-            # External link: add <nop> before WikiWord and ABBREV
             $text =~ s/(?<=[\s\(])($TWiki::regex{wikiWordRegex}|[$TWiki::regex{upperAlpha}])/<nop>$1/go;
         }
         return $this->_externalLink( $link, $text );
     }
+
+    $text ||= $link;
 
     # Extract '#anchor'
     # $link =~ s/(\#[a-zA-Z_0-9\-]*$)//;
@@ -1117,7 +1111,7 @@ sub getRenderedVersion {
     $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
-    $text =~ s/\[\[([^\]\n]+)\](\[([^\]\n]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
+    $text =~ s/\[\[([^\]\n]+)\](\[([^\]\n]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$1,$3)/ge;
 
     unless( TWiki::isTrue( $prefs->getPreferencesValue('NOAUTOLINK')) ) {
         # Handle WikiWords
