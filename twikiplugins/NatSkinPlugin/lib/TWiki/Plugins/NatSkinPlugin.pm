@@ -25,7 +25,7 @@ use vars qw(
 	$currentUser $VERSION $RELEASE $debug
         $isGuest $defaultWikiUserName $isEnabled
 	$useEmailObfuscator
-	$query
+	$query %seenWebComponent
 	$defaultSkin $defaultVariation $defaultStyleSearchBox
 	$defaultStyle $defaultStyleBorder $defaultStyleSideBar
 	$defaultStyleButtons
@@ -50,7 +50,7 @@ $STARTWW = qr/^|(?<=[\s\(])/m;
 $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 $VERSION = '$Rev$';
-$RELEASE = '3.00-pre8';
+$RELEASE = '3.00-pre9';
 $NO_PREFS_IN_TOPIC = 1;
 $SHORTDESCRIPTION = 'Supplements the bare bones NatSkin theme for TWiki';
 
@@ -106,6 +106,7 @@ sub initPlugin {
   %emailCollection = (); # collected email addrs
   $nrEmails = 0; # number of collected addrs
   %maxRevs = (); # cache for getMaxRevision()
+  %seenWebComponent = (); # used to prevent deep recursion
 
   #writeDebug("done initPlugin");
   return 1;
@@ -576,7 +577,7 @@ sub initSkinState {
   $skinState{'action'} = getCgiAction();
 
   # temporary toggles
-  $theToggleSideBar = 'off' if $theRaw;
+  $theToggleSideBar = 'off' if $theRaw && $skinState{'border'} eq 'thin';
   $theToggleSideBar = 'off' if $skinState{'border'} eq 'thin' && 
     $skinState{'action'} =~ /^(login|logon|oops|edit|manage|rdiff|natsearch|changes|search)$/;
 
@@ -877,6 +878,12 @@ sub getWebComponent {
   my $component = shift;
 
   #writeDebug("called getWebComponent($component)");
+  if ($seenWebComponent{$component}) {
+    return '<span class="twikiAlert">'.
+      "ERROR: can't include component '$component' twice".
+      '</span>';
+  }
+  $seenWebComponent{$component} = 1;
 
   # get component for web
   my $text = '';
@@ -886,22 +893,29 @@ sub getWebComponent {
 
   my $theWeb = $baseWeb; # NOTE: don't use the currentWeb
   my $theComponent = $component;
-  if (&TWiki::Func::topicExists($theWeb, $theComponent)) { # current
+  if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
+      &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
+    # current
     ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
   } else {
     $theWeb = $mainWeb;
     $theComponent = 'TWiki'.$component;
-    if (&TWiki::Func::topicExists($theWeb, $theComponent)) { # main
+    if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
+        &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
+      # main
       ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
     } else {
       $theWeb = $twikiWeb;
       #$theComponent = 'TWiki'.$component;
-      if (&TWiki::Func::topicExists($theWeb, $theComponent)) { # twiki
+      if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
+          &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
+	# twiki
 	($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
       } else {
 	$theWeb = $twikiWeb;
 	$theComponent = $component;
-	if (&TWiki::Func::topicExists($theWeb, $theComponent)) {
+	if (&TWiki::Func::topicExists($theWeb, $theComponent) &&
+            &TWiki::Func::checkAccessPermission('VIEW',$currentUser,undef,$theComponent, $theWeb)) {
 	  ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theComponent);
 	} else {
 	  return ''; # not found

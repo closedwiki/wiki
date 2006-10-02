@@ -91,7 +91,8 @@ sub natSearch {
   #writeDebug("searchTemplate name =$searchTemplate");
   if ($searchTemplate) {
     $searchTemplate = &TWiki::Func::readTemplate($searchTemplate);
-  } else {
+  }
+  unless ($searchTemplate) {
     $searchTemplate =  &TWiki::Func::readTemplate('search');
   }
   $searchTemplate =~ s/^\s*(.*)\s*$/$1/os;
