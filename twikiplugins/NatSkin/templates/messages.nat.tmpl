@@ -327,3 +327,9 @@ template that doesn't exist." args="%PARAM2%"}%
 %MAKETEXT{"You are trying to [_1] an attachment that does not exist." args="%PARAM1%"}%
 
 %TMPL:END%
+%TMPL:DEF{"oversized_upload"}%
+---+++ %MAKETEXT{"Uploaded file is too big"}%
+%MAKETEXT{"Uploaded file [_1] exceeds limit of [_2] KB" args="<code>%PARAM1%</code>,%PARAM2%"}%
+
+%TMPL:P{"goback"}%
+%TMPL:END%

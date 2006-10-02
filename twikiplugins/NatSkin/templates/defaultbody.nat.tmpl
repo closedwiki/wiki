@@ -15,11 +15,7 @@
 	  %IFSKINSTATETHEN{sidebar="left|both"}%
 	  <td class="natMiddle natMiddleLeft natSideBar natSideBarLeft" rowspan="2" valign="top">
 	    <div class="natSideBarContents">
-	    %IFSKINSTATETHEN{sidebar="both"}%
-%$nopTMPL:P{"leftsidebar"}%
-	    %ELSESKINSTATE%
-%$nopTMPL:P{"sidebar"}%
-	    %FISKINSTATE%
+%TMPL:P{"leftsidebar"}%
 	    </div>
 	  </td>
 	  %FISKINSTATE%
@@ -30,11 +26,7 @@
 	  %IFSKINSTATETHEN{sidebar="right|both"}%
 	  <td class="natMiddle natMiddleRight natSideBar natSideBarRight"  rowspan="2" valign="top">
 	    <div class="natSideBarContents">
-	    %IFSKINSTATETHEN{sidebar="both"}%
-%$nopTMPL:P{"rightsidebar"}%
-	    %ELSESKINSTATE%
-%$nopTMPL:P{"sidebar"}%
-	    %FISKINSTATE%
+%TMPL:P{"rightsidebar"}%
 	    </div>
 	  </td> 
 	  %FISKINSTATE%

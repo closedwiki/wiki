@@ -205,6 +205,10 @@ body { font-size:14px; }
   margin-bottom:10px;
 }
 
+.natMain dt {
+  font-weight:bold;
+}
+
 /* login */
 .natLogonFormHolder {
   padding:10px 0px 10px 0px;
@@ -511,6 +515,7 @@ a.natFeedIcon {
 }
 .twikiBroadcastMessage {
   background:yellow;
+  color:black;
   position:fixed;
   border:2px solid orange;
   padding:2px;
@@ -518,6 +523,7 @@ a.natFeedIcon {
   bottom:0px;
   width:99%;
   line-height:100%;
+  z-index:999; /* fixes opera issues, thanks to ktwilight */
 }
 
 /* twiki tables */

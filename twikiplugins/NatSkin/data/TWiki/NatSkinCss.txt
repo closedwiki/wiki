@@ -53,11 +53,12 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
   renamebase.nat.tmpl, %BR% \
   renamewebbase.nat.tmpl \
 | alternative submit action in skin forms, see also =natOkButton=, =natCancelButton= |
+| =natAttachBody= | attach.nat.tmpl | html body during attach action |
 | =natBody= \
 | page.nat.tmpl, %BR% \
   view.plain.nat.tmpl, %BR% \
   view.print.nat.tmpl \
-| html body, see also =natBodyPlain=, =natBodyPrint= |
+| html body, see also =natBodyPlain=, =natBodyPrint=, =nat...Body= |
 | =natBodyContents= \
 | defaultbody.nat.tmpl, %BR% \
   view.plain.nat.tmpl, %BR% \
@@ -138,6 +139,8 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
   renamewebbase.nat.tmpl, %BR% \
   renamewebconfirm.nat.tmpl \
 | |
+| =natChangeFormBody= | changeform.nat.tmpl | html body during changeform action |
+| =natChangesBody= | changes.nat.tmpl | html body during changes cgi action |
 | =natContact= \
 | oops.nat.tmpl \
 | |
@@ -165,6 +168,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | edit.nat.tmpl, %BR% \
   preview.nat.tmpl \
 | |
+| =natEditBody= | edit.nat.tmpl | html body during edit cgi action |
 | =natEditBoldButton= \
 | edittoolbar.natedit.tmpl \
 | |
@@ -413,6 +417,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | =natMiddleRight= \
 | defaultbody.nat.tmpl \
 | |
+| =natMoveAttachmentBody= | moveattachment.nat.tmpl | html body while moving attachments |
 | =natNotes= \
 | attachsidebar.nat.tmpl, %BR% \
   changeformsidebar.nat.tmpl, %BR% \
@@ -447,6 +452,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | =natOops= \
 | oops.nat.tmpl \
 | |
+| =natOopsBody= | oops.nat.tmpl | html body in oops messages |
 | =natOopsButtons= \
 | oops.nat.tmpl, %BR% \
   oopsattention.nat.tmpl, %BR% \
@@ -469,13 +475,17 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | edit.nat.tmpl, %BR% \
   preview.nat.tmpl \
 | |
+| =natPreviewBody= | preview.nat.tmpl | html body during preview action |
 | =natPreviewToolBar= \
 | previewtoolbar.natedit.tmpl \
 | |
+| =natRdiffBody= | rdiff.nat.tmpl | html body during rdiff action |
 | =natRevision= \
 | rdiff.nat.tmpl, %BR% \
   view.nat.tmpl \
 | |
+| =natRenameBody= | renamebase.nat.tmpl | html body in rename actions |
+| =natRenameWebBody= | renamewebbase.nat.tmpl | html body in rename web action |
 | =natSaveAction= \
 | edit.nat.tmpl, %BR% \
   preview.nat.tmpl \
@@ -486,6 +496,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | =natSearchAuthor= \
 | search.nat.tmpl \
 | |
+| =natSearchBody= | searchbase.nat.tmpl | html body in search action |
 | =natSearchBox= \
 | defaultsidebar.nat.tmpl, %BR% \
   defaulttopbar.nat.tmpl \
@@ -549,6 +560,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
   settings.nat.tmpl, %BR% \
   view.nat.tmpl \
 | |
+| =natSettingsBody= | settings.nat.tmpl | html body during settings action |
 | =natSideBar= \
 | defaultbody.nat.tmpl \
 | |
@@ -625,6 +637,7 @@ the =natBottomBar= will be classified as =natBottomBarBoth=.
 | edit.nat.tmpl, %BR% \
   preview.nat.tmpl \
 | |
+| =natViewBody= | view.nat.tmpl | html body for view action |
 | =natWebButtons= \
 | defaulttopbar.nat.tmpl \
 | |
