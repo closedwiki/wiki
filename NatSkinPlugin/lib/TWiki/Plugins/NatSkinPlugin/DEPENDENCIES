@@ -6,4 +6,3 @@ TWiki::Plugins::FilterPlugin,>=0.94,perl,Required; Download from TWiki:Plugins/F
 TWiki::Plugins::GluePlugin,>=1.5,perl,Required; Download from TWiki:Plugins/GluePlugin 
 TWiki::Plugins::IfDefinedPlugin,>=0.93,perl,Required; Download from TWiki:Plugins/IfDefinedPlugin 
 TWiki::Plugins::TwistyPlugin,>=1.000,perl,Required; Download from TWiki:Plugins/TwistyPlugin 
-TWiki::Contrib::DakarContrib,>=0.1,perl,Optional; Download from TWiki:Plugins/DakarContrib 
