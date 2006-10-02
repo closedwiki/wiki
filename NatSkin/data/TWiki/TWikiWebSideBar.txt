@@ -44,7 +44,7 @@
 %TMPL:P{"searchbox"}%
 </div>
 %FISKINSTATE%
-<div class="natSideBarPersonal"> 
+<div class="natSideBarPersonal" style="%IFDEFINED{"%BASEWEB%.%BASETOPIC%" as="%MAINWEB%.%WIKINAME%SideBar" then="display:none"}%"> 
 %IFDEFINEDTHEN{"$percntINCLUDE{\"%MAINWEB%.%WIKINAME%SideBar\" warn=\"off\"}$percnt"}%
 $test
 %ELSEDEFINED%

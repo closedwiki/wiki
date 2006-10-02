@@ -6,6 +6,7 @@
 <!-- -->%TMPL:INCLUDE{"viewjavascript"}%
 <!-- -->%TMPL:INCLUDE{"viewstyles"}%
 <!-- -->%TMPL:INCLUDE{"searchbox"}%
+%TMPL:DEF{"bodyclass"}%natViewBody%TMPL:END%
 %TMPL:DEF{"title"}%%IFDEFINED{"%PAGETITLE%" then="$test" else="%TOPIC%"}%%TMPL:END%<!-- 
 -->%TMPL:DEF{"meta"}%%HTTP_EQUIV_ON_VIEW%
 %IFDEFINED{"%METAKEYWORDS%" then="<meta name=\"keywords\" content=\"$test\" />$n<meta http-equiv=\"keywords\" content=\"$test\" />"}%
