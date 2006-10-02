@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1158270926" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1159849780" format="1.0" version="1.11"}%
 ---+!! Tag-me Plugin
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
@@ -222,15 +222,16 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 ---++ Limitations
 
-	* Tags are lost if a topic is renamed or moved (this is currently a Plugin API limitation)
+	* TWiki 04-Sep-2005 and older: Tags are lost if a topic is renamed or moved
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 14 Sep 2006 (V1.010) |
+|  Plugin Version: | 02 Oct 2006 (V1.020) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  02 Oct 2006: | Support for topic rename (tags are no longer lost) |
 |  14 Sep 2006: | MAKETEXT support (TWiki:Main.KoenMartens); fixed nested webs issue; fix in generated XHTML (TWiki:Main.ArthurClemens) |
 |  20 May 2006: | Support international characters (contributed by TWiki:Main.AntonioTerceiro) |
 |  09 May 2006: | Support for sub-webs; enclose tag list on topic in =span class="tagMePlugin"=; tag selector not shown if empty; limit max size of new tags to 30 characters |
@@ -252,7 +253,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TagMeViewAllTags, %TWIKIWEB%.TagMeViewMyTags, %TWIKIWEB%.TagMeSearch, %TWIKIWEB%.TagMeDebugViewTags, %TWIKIWEB%.TagMeDebugSearch, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main.PeterThoeny - 14 Sep 2006
+-- TWiki:Main.PeterThoeny - 02 Oct 2006
 
 %META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="" date="1141691885" path="tag_add.gif" size="857" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="tag_ok.gif" attr="h" comment="" date="1141691901" path="tag_ok.gif" size="869" user="PeterThoeny" version="1.2"}%

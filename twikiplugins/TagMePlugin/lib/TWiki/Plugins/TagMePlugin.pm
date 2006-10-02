@@ -22,12 +22,13 @@ package TWiki::Plugins::TagMePlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
         $initialized $attachDir $attachUrl $logAction $tagLinkFormat $tagQueryFormat
         $alphaNum
     );
 
-$VERSION = '1.010';
+$VERSION = '1.020';
+$RELEASE = 'Any TWiki';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
 
@@ -52,6 +53,7 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "\U$pluginName\E_DEBUG" );
+$debug=1;
 
     _writeDebug( "initPlugin( $web.$topic ) is OK" );
     $initialized = 0;
@@ -84,6 +86,21 @@ sub initialize
     $alphaNum = TWiki::Func::getRegularExpression( 'mixedAlphaNum' );
 
     $initialized = 1;
+}
+
+# =========================
+sub afterSaveHandler {
+### my ( $text, $topic, $web, $error, $meta ) = @_;
+
+    _writeDebug( "afterSaveHandler( $_[2].$_[1], $error )" );
+
+    my $newTopic = $_[1];
+    my $newWeb   = $_[2];
+    if( "$newWeb.$newTopic" ne "$web.$topic" ) {
+        _writeDebug( " - topic renamed from $web.$topic to $newWeb.$newTopic" );
+        initialize();
+        renameTagInfo( "$web.$topic", "$newWeb.$newTopic" );
+    }
 }
 
 # =========================
@@ -592,7 +609,7 @@ sub getTagInfoList
 sub readTagInfo
 {
     my( $webTopic ) = @_;
-    $webTopic =~ s/[\/\\]/\./;
+    $webTopic =~ s/[\/\\]/\./g;
     _writeDebug( "readTagInfo( $webTopic )" );
     my $text = TWiki::Func::readFile( "$attachDir/_tags_$webTopic.txt" );
     my @info = grep{ /^[0-9]/ } split( /\n/, $text );
@@ -603,7 +620,7 @@ sub readTagInfo
 sub writeTagInfo
 {
     my( $webTopic, @info ) = @_;
-    $webTopic =~ s/[\/\\]/\./;
+    $webTopic =~ s/[\/\\]/\./g;
     my $file = "$attachDir/_tags_$webTopic.txt";
     if( scalar @info ) {
         my $text = "# This file is generated, do not edit\n"
@@ -611,6 +628,22 @@ sub writeTagInfo
         TWiki::Func::saveFile( $file, $text );
     } elsif( -e $file ) {
         unlink( $file );
+    }
+}
+
+# =========================
+sub renameTagInfo
+{
+    my( $oldWebTopic, $newWebTopic ) = @_;
+    _writeDebug( "renameTagInfo( $oldWebTopic, $newWebTopic )" );
+    $oldWebTopic =~ s/[\/\\]/\./g;
+    $newWebTopic =~ s/[\/\\]/\./g;
+    my $oldFile = "$attachDir/_tags_$oldWebTopic.txt";
+    my $newFile = "$attachDir/_tags_$newWebTopic.txt";
+    if( -e $oldFile ) {
+        my $text = TWiki::Func::readFile( $oldFile );
+        TWiki::Func::saveFile( $newFile, $text );
+        unlink( $oldFile );
     }
 }
 
