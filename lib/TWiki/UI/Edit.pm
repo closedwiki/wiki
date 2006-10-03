@@ -196,7 +196,8 @@ sub init_edit {
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    my $template = $session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
+    my $template = $query->param( 'template' ) ||
+	$session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
         $templateName;
     $tmpl =
       $session->{templates}->readTemplate( $template.$editaction, $skin );
