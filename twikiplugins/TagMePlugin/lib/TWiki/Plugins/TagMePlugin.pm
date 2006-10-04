@@ -96,7 +96,9 @@ sub afterSaveHandler {
 
     my $newTopic = $_[1];
     my $newWeb   = $_[2];
-    if( "$newWeb.$newTopic" ne "$web.$topic" ) {
+    if( "$newWeb.$newTopic" ne "$web.$topic" && $topic ne $TWiki::cfg{HomeTopicName} ) {
+        # excluding WebHome due to TWiki 4 bug on statistics viewed as WebHome
+        # and saved as WebStatistics
         _writeDebug( " - topic renamed from $web.$topic to $newWeb.$newTopic" );
         initialize();
         renameTagInfo( "$web.$topic", "$newWeb.$newTopic" );
