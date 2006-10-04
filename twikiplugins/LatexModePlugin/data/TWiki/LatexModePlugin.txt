@@ -248,8 +248,11 @@ Second,
 	* Unzip ZIP file in your twiki installation directory. Content:
       | *File:* | *Description:* |
       | ==lib/TWiki/Plugins/LatexModePlugin.pm== | Plugin Perl module |
+      | ==lib/TWiki/Plugins/LatexModePlugin/Init.pm== | The initialization module |
+      | ==lib/TWiki/Plugins/LatexModePlugin/Render.pm== | The rendering module |
+      | ==lib/TWiki/Plugins/LatexModePlugin/CrossRef.pm== | The cross-referencing module |
       | ==data/TWiki/LatexModePlugin.txt== | Plugin topic and documentation |
-      | ==data/TWiki/LatexIntro.txt== | a basic description of <nop>LaTeX markup conventions |
+      | ==data/TWiki/LatexIntro.txt== | A basic description of <nop>LaTeX markup conventions |
       | ==data/TWiki/LatexSymbols.txt== | Comprehensive list of available <nop>LaTeX symbols (1 of 5) |
       | ==data/TWiki/LatexSymbols2.txt== | Comprehensive list of available <nop>LaTeX symbols (2 of 5) |
       | ==data/TWiki/LatexSymbols3.txt== | Comprehensive list of available <nop>LaTeX symbols (3 of 5) |
@@ -320,9 +323,10 @@ This plugin is an enhanced version of the TWiki:Plugins.MathModePlugin maintaine
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.ScottHoge |
-|  Plugin Version: | 8 Aug 2006 (v 3.0) |
-|  Change History: |    %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
-|  Oct 2006 (v 3.0) | Significant rewrite of module, including: section numbering/cross-links and mod_perl compatiblity. |
+|  Plugin Version: | 8 Aug 2006 (v 3.1) |
+|  Change History: | %ICON{warning}% v3.0 and above requires TWiki 4.x.x and above %ICON{warning}% <!-- versions below in reverse order --> |
+|  Oct 2006 (v 3.1) | fixed two bugs: populating files to check under Dakar, and itemize env parsing in Parse |
+|  Oct 2006 (v 3.0) | Significant rewrite of module, including: section numbering/cross-links and mod_perl compatibility. |
 |  25 Sep 2006 (v 2.62) | fixed handleFloat to allow TWiki markup tags in captions. |
 |  8 Aug 2006 (v 2.61) | fixed INCLUDE-not-rendering bug introduced in v2.6.  Aded =bgcolor= option.  Split symbol list into 5 topics. |
 |  5 Aug 2006 (v 2.6) | added security description and expanded default =donotrenderlist=.  Reworked plugin init to reduce overhead when not in use.  Added =bypssattach= option.  Sandbox now used in place of system calls. |
