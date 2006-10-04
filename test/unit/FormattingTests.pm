@@ -28,6 +28,9 @@ sub set_up {
     $this->{twiki}->{store}->saveTopic(
         $this->{twiki}->{user}, $this->{test_web},
         $TWiki::cfg{HomeTopicName}, "BLEEGLE");
+    $this->{twiki}->{store}->saveTopic(
+        $this->{twiki}->{user}, $this->{test_web},
+        'Numeric1Wikiword', "BLEEGLE");
     $TWiki::cfg{AntiSpam}{RobotsAreWelcome} = 1;
     $TWiki::cfg{AntiSpam}{EmailPadding} = 'STUFFED';
 }
@@ -250,6 +253,32 @@ EXPECTED
 
     my $actual = <<ACTUAL;
 [[H_]]
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+# Numeric1Wikiword
+sub test_numericWikiWord {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+<a class="twikiLink" href="$this->{sup}/$this->{test_web}/Numeric1Wikiword">Numeric1Wikiword</a>
+EXPECTED
+
+    my $actual = <<ACTUAL;
+Numeric1Wikiword
+ACTUAL
+    $this->do_test($expected, $actual);
+}
+
+# Numeric1nowikiword
+sub test_numericNoWikiWord {
+    my $this = shift;
+    my $expected = <<EXPECTED;
+Numeric1nowikiword
+EXPECTED
+
+    my $actual = <<ACTUAL;
+Numeric1nowikiword
 ACTUAL
     $this->do_test($expected, $actual);
 }

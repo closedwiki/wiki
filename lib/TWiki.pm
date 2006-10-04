@@ -370,7 +370,7 @@ BEGIN {
     $regex{headerPatternNoTOC} = '(\!\!+|%NOTOC%)';
 
     # TWiki concept regexes
-    $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlpha}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
+    $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlphaNum}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
     $regex{webNameBaseRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}_]*/o;
     $regex{webNameRegex} = qr/$regex{webNameBaseRegex}(?:(?:[\.\/]$regex{webNameBaseRegex})+)*/o;
     $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/o;
