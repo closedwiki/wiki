@@ -344,7 +344,7 @@ sub renderEquations {
     #if this is a view script, then we will try to delete old files
     my $delete_files = ( &TWiki::Func::getContext()->{'view'} ) || 0;
 
-    my @extfiles;
+    my @extfiles = ();
     $path = &TWiki::Func::getPubDir() . "/".$LMPc{'web'}.'/'.$LMPc{'topic'};
     if ( ( $TWiki::Plugins::VERSION < 1.1 )  or
          ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) ) {
@@ -355,8 +355,9 @@ sub renderEquations {
     } else { 
         # Dakar interface
         my ( $meta, undef ) = TWiki::Func::readTopic( $LMPc{'web'}, $LMPc{'topic'} );
-        my %h2 = %{$meta};
-        @extfiles = @{$h2{FILEATTACHMENT}}->{name} if defined($h2{FILEATTACHMENT});
+        map { push( @extfiles, $_->{name} ) } 
+          @{ $meta->{FILEATTACHMENT} }
+            if ( defined( $meta->{FILEATTACHMENT} ) );
     }
 
     &TWiki::Func::writeDebug( "LatexModePlugin::Render - Scanning file attachments" ) if $debug;
@@ -383,7 +384,7 @@ sub renderEquations {
                 #delete the old image
                 &TWiki::Func::writeDebug( "Deleting old image that I think belongs to me: $fn ".(-f $path.$pathSep.$fn) ) if $debug;
                 if ( $fn =~ /^([-\@\w.]+)$/ ) { # untaint filename
-                    $fn = $1;
+                    $fn = TWiki::Sandbox::normalizeFileName($1);
                     
                     if ( ( $TWiki::Plugins::VERSION < 1.1 ) or
                          ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) ) { 
@@ -474,25 +475,55 @@ sub renderEquations {
 
         if( exists($opts{'attachment'}) ) {
             # copy image attachments to the working directory
-            my $af = join( '/', &TWiki::Func::getPubDir(),
-                           $LMPc{'web'}, $LMPc{'topic'},
-                           $opts{'attachment'});
-            my $ext;
-            foreach my $e ('','.eps','.eps.gz','.pdf') {
-                $ext = $e;
-                last if (-f $af.$ext);
-                $ext = '';
-            }
-            
-            $markup_opts{$key}->{'attachment'} .= $ext;
 
-            &TWiki::Func::writeDebug( "LatexModePlugin: copy ".$af.$ext ) 
-                if ($debug);
-            copy($af.$ext,$LATEXWDIR) || do {
-                &TWiki::Func::writeDebug( "LatexModePlugin: copy failed ".$! );
-                $value = "attachment \{".$markup_opts{$key}->{'attachment'}."\} not found";
+            my ($ext,$af) = ('','');
+            my @extlist = ('','.eps','.eps.gz','.pdf');
+            if ( ( $TWiki::Plugins::VERSION < 1.1 ) or
+                 ( $TWiki::cfg{Plugins}{LatexModePlugin}{bypassattach}) ) { 
+                # Cairo interface
+                
+                $af = join( $pathSep, &TWiki::Func::getPubDir(),
+                            $LMPc{'web'}, $LMPc{'topic'},
+                            $opts{'attachment'} );
+                
+                $af = TWiki::Sandbox::normalizeFileName( $af );
+
+                foreach my $e (@extlist) {
+                    $ext = $e;
+                    if (-f $af.$ext) {
+                        &TWiki::Func::writeDebug( "LatexModePlugin: copy ".$af.$ext ) 
+                            if ($debug);
+                        copy( $af.$ext, $LATEXWDIR ) || do {
+                            &TWiki::Func::writeDebug( "LatexModePlugin: copy failed ".$! );
+                            $value = "attachment \{".$markup_opts{$key}->{'attachment'}."\} not found";
+                        };
+                        $markup_opts{$key}->{'attachment'} .= $ext;
+                        
+                        last;
+                    }
+                }                
+            } else {
+                # Dakar interface
+                my $ext;
+                my $af= $opts{'attachment'};
+                foreach my $e (@extlist) {
+                    $ext = $e;
+                    if ( TWiki::Func::attachmentExists( $LMPc{'web'},
+                                                        $LMPc{'topic'},
+                                                        $af.$ext ) ) {
+                        
+                        $markup_opts{$key}->{'attachment'} .= $ext;
+                        
+                        open(F,">".$LATEXWDIR.$pathSep.$af.$ext);
+                        print F TWiki::Func::readAttachment( $LMPc{'web'},
+                                                             $LMPc{'topic'},
+                                                             $af.$ext );
+                        close(F);
+                        last;
+                    }
+                }
             }
-        }
+        } # end of copy attachment piece
 
         &TWiki::Func::writeDebug( "LatexModePlugin: ".
                                   $value . " :: " .

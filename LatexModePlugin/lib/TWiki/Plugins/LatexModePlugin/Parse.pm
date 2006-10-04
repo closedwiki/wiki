@@ -376,7 +376,7 @@ sub extractBlocks {
                         printF( "  :".$t.": " );
 
                         if ($t =~ m/([\d\.]+)\\linewidth/) {
-                            $t = sprintf("%4.2f%",($1/1)*100);
+                            $t = sprintf("%4.2f",($1/1)*100)."\%";
                         }
                         $sz++;
                         $str =~ s/\$$sz/$t/gs;
@@ -465,7 +465,7 @@ sub extractBlocks {
             $txt .= $b;
         }
     } while (scalar(@a)>0);
-    
+
     #there is still some $doc left:
     $txt .= $doc;
 
@@ -516,6 +516,10 @@ sub convertEnvironment
 {
     my ($block) = @_;
 
+    printF("\n"); printF('-'x70); printF("\n");
+    printF($block);
+    printF("\n"); printF('-'x70); printF("\n");
+
     #now process the block!
     $block =~ m!^\\begin\{(.*?)\}!si;
     my $bname = $1;
@@ -560,50 +564,36 @@ sub convertEnvironment
         $block =~ s!\\end\{$bname\}$!</verbatim>!;
 
     }
-    elsif ( $bname eq 'description' ) {
-      $block =~ s!^\\begin\{$bname\}!<dl>!;
-      $block =~ s!\\end\{$bname\}$!</dl>!;
-      while ($block =~ m/\\(.+?)\b/g) {
-        my $match = $1;
-        my $pos = (pos $block) - length($match) - 1;
+    elsif ( ($bname =~ m/(itemize|enumerate|description)/ ) ) {
+        my $tag = 'ul>';
+        $tag = 'ol>' if ($1 eq 'enumerate');
+        $tag = 'dl>' if ($1 eq 'description');
 
-        $txt .= substr($block,0,$pos,'');
-        if ($match eq 'item') {
-          $block =~ s/^\\item\[(.*?)\]/<dt> *$1* <\/dt><dd>/;
-          $block =~ s!^\\item!<dt></dt><dd>!;
-        }
-        if ($match eq 'begin') {
-          my ($pre,$blk2,$post);
-          ($pre,$block,$post) = umbrellaHook( $block, 
-                                              '\\\\begin\s*\{.*?\}',
-                                              '\\\\end\s*\{.*?\}');
-          $txt .= $pre.convertEnvironment($block);
-          $block = $post;
-        }
-      }
-      $txt .= $block;
-    }
-    elsif ( ($bname =~ m/(itemize|enumerate)/ ) ) {
-        my $tag = ($1 eq 'enumerate') ? 'ol>' : 'ul>';
         $block =~ s!^\\begin\{$bname\}!\<$tag!;
         $block =~ s!\\end\{$bname\}$!\</$tag!;
         while ($block =~ m/\\(.+?)\b/g) {
             my $match = $1;
             my $pos = (pos $block) - length($match) - 1;
-
             $txt .= substr($block,0,$pos,'');
 
             if ($match eq 'item') {
+              if ($tag eq 'dl>') {
+                $block =~ s/^\\item\[(.*?)\]/<dt> *$1* <\/dt><dd>/;
+                $block =~ s!^\\item!<dt></dt><dd>!;
+              } else {
                 $block =~ s/^\\item\[(.*?)\]/<li value="$1">/;
                 $block =~ s/^\\item/<li>/;
+              }
             }
-            if ($match eq 'begin') {
+            elsif ($match eq 'begin') {
                 my ($pre,$blk2,$post);
                 ($pre,$block,$post) = umbrellaHook( $block, 
                                                     '\\\\begin\s*\{.*?\}',
                                                     '\\\\end\s*\{.*?\}');
                 $txt .= $pre.convertEnvironment($block);
                 $block = $post;
+            } else {            # ignore it...
+                $txt .= substr($block,0,length($match)+2,'');
             }
         }
         $txt .= $block;
