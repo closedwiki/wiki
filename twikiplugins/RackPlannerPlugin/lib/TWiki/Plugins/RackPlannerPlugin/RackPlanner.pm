@@ -228,8 +228,6 @@ sub _render {
 
 	$tr.=$unitColumn if $options{'displayunitcolumn'} && $options{'unitcolumnpos'}=~/^(left|both|all)$/ig; 
 
-	my $notesIcon = &_resizeIcon($options{'notesicon'});
-	my $connectedtoIcon = &_resizeIcon($options{'connectedtoicon'});
 	my $conflictIcon = &_resizeIcon($options{'conflicticon'});
 
 	my $statRow = $cgi->td("");
@@ -264,8 +262,7 @@ sub _render {
 					$fillRows=$rowspan-1;
 
 					$itd = &_renderTextContent($entryRef);
-					$itd .= &_renderIconContent($entryRef, $connectedtoIcon, $notesIcon);
-					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($entryRef);
+					($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($$entryRef{'colimg'});
 
 					$itd = $cgi->td({
 						-title=>&_encodeTitle($$entryRef{'formfactor'}).'('.abs($unit).'-'.(abs($unit+$rowspan-1)).')', 
@@ -367,22 +364,44 @@ sub _renderConflictCell {
 }
 sub _renderTextContent {
 	my ($entryRef) = @_;
-	my $text=$$entryRef{'server'};
-	$text.=":" if ( $options{'displayconnectedto'}||$options{'displayowner'}||$options{'displaynotes'});
-	$text.=" ".$$entryRef{'connectedto'} if defined $$entryRef{'connectedto'} && $options{'displayconnectedto'};
-	$text.=" ".$$entryRef{'owner'} if defined $$entryRef{'owner'} &&  $options{'owner'};
-	$text.=" ".$$entryRef{'notes'} if defined $$entryRef{'notes'} && $options{'notes'};
+	my $ret ="";
+	my @colors = split /\s+[\/\#]\s+/, $$entryRef{'colimg'};
+	my @connectedtos = split /\s+[\/\#]\s+/, $$entryRef{'connectedto'};
+	my @owners = split /\s+[\/\#]\s+/, $$entryRef{'owner'};
+	my @notes  = split /\s+[\/\#]\s+/, $$entryRef{'notes'};
 
+	foreach my $s (split(/\s+[\/\#]\s+/,$$entryRef{'server'})) {
+		my $colors = "";
+		$colors = shift @colors if $#colors !=-1;
+		my $owner = undef; 
+		$owner = shift @owners if $#owners !=-1;
+		my $note = undef;
+		$note = shift @notes if $#notes !=-1 ;
+		my $connectedto = undef;
+		$connectedto = shift @connectedtos if $#connectedtos !=-1;
+		
 
-	$text = $cgi->span({-title=>&_encodeTitle($$entryRef{'owner'},1)}, &TWiki::Func::renderText($text));
+		my $text=$s;
+		$text.=":" if ( $options{'displayconnectedto'}||$options{'displayowner'}||$options{'displaynotes'});
+		$text.=" ".$connectedto if defined $connectedto && $options{'displayconnectedto'};
+		$text.=" ".$owner if defined $owner &&  $options{'owner'};
+		$text.=" ".$note if defined $note && $options{'notes'};
+
+		$text .= &_renderIconContent($connectedto,$note);
+		my ($fgcolor, $bgcolor, $style) = &_getColorsAndStyle($colors);
+		$text = $cgi->span({-style=>$style, -title=>&_encodeTitle($$entryRef{'owner'},1)}, &TWiki::Func::renderText($text));
+		$ret.=$text;
+	}
 	
-	return $text;
+	return $ret;
 }
 sub _renderIconContent {
-	my ($entryRef, $connectedtoIcon, $notesIcon) = @_;
+	my ($connectedto, $note) = @_;
 	my $text="";
-	if ((defined $$entryRef{'connectedto'}) && ($$entryRef{'connectedto'}!~/^\s*$/) && (!$options{'displayconnectedto'})) {
-		foreach my $ct (split(/\s*\,\s*/, $$entryRef{'connectedto'})) {
+	my $notesIcon = &_resizeIcon($options{'notesicon'});
+	my $connectedtoIcon = &_resizeIcon($options{'connectedtoicon'});
+	if ((defined $connectedto) && ($connectedto!~/^\s*$/) && (!$options{'displayconnectedto'})) {
+		foreach my $ct (split(/\s*\,\s*/, $connectedto)) {
 			my $rt = TWiki::Func::renderText($ct);
 			my $title = &_encodeTitle($ct);
 			my $icon = &_retitleIcon($connectedtoIcon, $title);
@@ -396,9 +415,9 @@ sub _renderIconContent {
 	}
 
 
-	if (defined $$entryRef{'notes'} && $$entryRef{'notes'}!~/^\s*$/ && !$options{'notes'}) {
-		my $rt = TWiki::Func::renderText($$entryRef{'notes'});
-		my $title = &_encodeTitle($$entryRef{'notes'});
+	if (defined $note && $note!~/^\s*$/ && !$options{'notes'}) {
+		my $rt = TWiki::Func::renderText($note);
+		my $title = &_encodeTitle($note);
 		my $icon = &_retitleIcon($notesIcon, $title);
 		if ($rt=~/<a\s+[^>]*?href=\"([^\">]+)\"/) {
 			$text.=$cgi->a({-href=>&_encode_entities($1),-title=>$title},$icon);
@@ -409,9 +428,9 @@ sub _renderIconContent {
 	return $text;
 }
 sub _getColorsAndStyle {
-	my ($entryRef) = @_;
+	my ($colors) = @_;
 	my ($fgcolor,$bgcolor,$style) = ($options{'devicefgcolor'}, $options{'devicebgcolor'}, "");
-	foreach my $colimg (split(/\s*,\s*/, $$entryRef{'colimg'})) {
+	foreach my $colimg (split(/\s*,\s*/, $colors)) {
 		if ($colimg=~/[\.\/\:]/) {
 			$style .= $style eq '' ? '' : ';';
 			$style .= 'background-image:url('._encode_entities($colimg).');';
