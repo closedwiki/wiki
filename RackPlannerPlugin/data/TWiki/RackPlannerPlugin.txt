@@ -1,12 +1,15 @@
-%META:TOPICINFO{author="TWikiContributor" date="1157634031" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1159975034" format="1.0" version="$Rev$"}%
 ---+ <nop>RackPlannerPlugin
 The <nop>RackPlannerPlugin handles the tag =%<nop>RACKPLANNER%= and renders a rack overview (HTML table) with devices (computer, router, switches, ...). 
 ---++ Syntax Rules
 Devices are defined within a TWiki table. Following columns are supported (one row per device):
 
 | *Device* | *Rack* | *Starting Unit* | *Form Factor* | *Connected to:* | *Owner* | *Color/Image* | *Notes* |
-| device name | rack name | a starting unit (a number between 1 and =units=) | a form factor (units, e.g. 4U, 2, 1U, ...) | device is connected to ... (comma separated list of other devices, ports ...); every 'connected to' item is displayed as a icon (see =connectedtoicon=, e.g. %M%) with the text as tooltip; if you use links the icons are also links | the device owner is displayed as tooltip of the server name | a color or a background image URL for the table data cell | notes are displayed as a icon (=notesicon= e.g. %P%) with the note as tooltip; if you use a link the icon is also a link |
+| device name(s) (separated by =' / '= or =' # '=) | rack name | a starting unit (a number between 1 and =units=) | a form factor (units, e.g. 4U, 2, 1U, ...) | device(s) is/are connected to ... (comma separated list of other devices, ports ...); every 'connected to' item is displayed as a icon (see =connectedtoicon=, e.g. %M%) with the text as tooltip; if you use links the icons are also links; | the device owner(s) is/are displayed as tooltip of the server name | colors or a background image URL for the table data cell | notes are displayed as a icon (=notesicon= e.g. %P%) with the note as tooltip; if you use a link the icon is also a link |
 | *must* | *must*| *must* | *must* | *optional* | *optional* | *optional* | *optional* | 
+|  *Examples*  ||||||||
+| Server1 | RackS21 | 10 | 2U | port31 | server admins | blue,white | not in use |
+| Patchfield1 / Switch2 | RackS21 | 40 | 1U | switch3 / router4 | network admins / network admins | blue,white / green,white | 3 ports free / 8 ports free |
 
 You can use following =%<nop>EDITTABLE%= tag (EditTablePlugin must be installed) to simplify some things (%X% it must be one line): 
 <verbatim>
@@ -18,6 +21,7 @@ This =%<nop>EDITTABLE%= tag is an example. Feel free to modify the attributes (=
 *Notes:*
 	* The device order in the table is not relevant (except there's a conflict) but the column order is relevant (because the table header will be ignored).
 	* If more than one device uses the same unit the conflict will be displayed with a icon (see =conflicticon= attribute, e.g. %S%). The tooltip of the icon contains the server names.
+	* If you have more than one device in the same unit you have to put them into a single table row and separate server names, 'connected to', owner, colors, notes with a =' / '= or a ' # ' (a whitespace before and after the separator is required).
 	
   
 
@@ -88,7 +92,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin renders a rack overview (e.g. of 19'' computer racks) with HTML tables.
+		* Set SHORTDESCRIPTION = Render a rack overview (e.g. of 19'' computer racks) with HTML tables
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -117,8 +121,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.DanielRohde |
 |  Copyright: | &copy; 2006, TWiki:Main.DanielRohde |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | V1.001 (7 Aug 2006) |
+|  Plugin Version: | V1.002 (BETA) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.002 (BETA): | TWiki:Main.DanielRohde: allowed multiple entries in a single unit |
 |  V1.001 (7 Aug 2006): | TWiki:Main.DanielRohde: improved some features (added statistics); added attributes (rackstatformat, displayunitcolumn, unitcolumn*); renamed attribute statformat; fixed documentation; fixed tooltip bug; fixed conflict bug;|
 |  V1.000 (4 Aug 2006): | TWiki:Main.DanielRohde: Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.021 |
