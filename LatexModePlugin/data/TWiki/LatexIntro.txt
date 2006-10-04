@@ -51,8 +51,8 @@ functionality.  The _text_ area contains the actual text to be rendered.
 One does not need to use the =\documentclass= or =document= environment to
 use !LaTeX in TWiki.
 
-The ability to render a complete !LaTeX document, say from an existing file,
-within TWiki is currently under consideration.  See
+The ability to render a complete !LaTeX document within TWiki, say from an
+existing file, is currently under consideration.  See
 TWiki:Codev.IncludeExistingLatexDocsInTWiki for details and current status.
 
 -- courtesy of TWiki:Main.ShaughanLavine ([[http://zillion.philosophy.arizona.edu/twiki/bin/view/Courses/LaTeX][see also]])
