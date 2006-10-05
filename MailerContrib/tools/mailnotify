@@ -34,7 +34,7 @@ my @webs = ();
 
 # Called from the command line
 foreach my $arg ( @ARGV ) {
-    if ( $arg eq "-q" ) {
+    if( $arg eq "-q" ) {
         $verbose = 0;
     } else {
         push( @webs, $arg );
@@ -43,5 +43,7 @@ foreach my $arg ( @ARGV ) {
 
 use TWiki::Contrib::Mailer;
 
-my $report = TWiki::Contrib::Mailer::mailNotify( \@webs, undef, $verbose );
+my $report =
+  TWiki::Contrib::Mailer::mailNotify( \@webs, undef, $verbose );
+
 print $report."\n" if $verbose;

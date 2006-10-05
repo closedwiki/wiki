@@ -25,20 +25,24 @@ package TWiki::Contrib::MailerContrib::Subscription;
 
 =pod
 
----++ ClassMethod new($pages, $childDepth)
+---++ ClassMethod new($pages, $childDepth, $news)
    * =$pages= - Wildcarded expression matching subscribed pages
    * =$childDepth= - Depth of children of $topic to notify changes for. Defaults to 0
+   * =$mode= - ! if this is a non-changes subscription and the topics should
+   be mailed evebn if there are no changes. ? to mail the full topic only
+   if there are changes. undef to mail changes only.
 Create a new subscription.
 
 =cut
 
 sub new {
-    my ( $class, $topics, $depth ) = @_;
+    my ( $class, $topics, $depth, $mode ) = @_;
 
     my $this = bless( {}, $class );
 
     $this->{topics} = $topics;
     $this->{depth} = $depth;
+    $this->{mode} = $mode;
 
     $topics =~ s/[^\w\*]//g;
     $topics =~ s/\*/\.\*\?/g;
@@ -57,7 +61,7 @@ Return a string representation of this object, in Web<nop>Notify format.
 sub stringify {
     my $this = shift;
 
-    my $record = $this->{topics} . '';
+    my $record = $this->{topics} . ($this->{mode} || '');
     # convert RE back to wildcard
     $record =~ s/\.\*\?/\*/;
     $record .= " ($this->{depth})" if ( $this->{depth} );
@@ -77,10 +81,7 @@ this is a child of a parent that matches within the depth range.
 
 sub matches {
     my ( $this, $topic, $db, $depth ) = @_;
-
-     unless ($topic) {
-         return 0;
-     }
+    return 0 unless ($topic);
 
     return 1 if ( $topic =~ $this->{topicsRE} );
 
@@ -94,6 +95,21 @@ sub matches {
     }
 
     return 0;
+}
+
+=pod
+
+---++ ObjectMethod getMode() -> $mode
+Return ! if this is a non-changes subscription and the topics should
+be mailed even if there are no changes. ? to mail the full topic only
+if there are changes. undef to mail changes only.
+
+=cut
+
+sub getMode {
+    my $this = shift;
+
+    return $this->{mode};
 }
 
 1;
