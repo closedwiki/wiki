@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1160002199" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1160095376" format="1.0" version="1.13"}%
 ---+!! Tag-me Plugin
 
 Plugin to tag wiki content collectively in order to find content by tags and to get a meaningful page ranking.
@@ -229,8 +229,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.PeterThoeny ([[http://www.structuredwikis.com/peter.html][blog]]) |
 |  Copyright: | &copy; 2006, Peter@Thoeny.org, [[http://www.structuredwikis.com/][StructuredWikis LLC]] |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | 04 Oct 2006 (V1.021) |
+|  Plugin Version: | 05 Oct 2006 (V1.022) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  05 Oct 2006: | Fix issue of missing topics in tag search if topic name contains plus or minus sign (workaround for TWiki core Bugs:Item2625 and Bugs:Item2967) |
 |  04 Oct 2006: | Fix issue of statistics moving !WebHome tags to !WebStatistics |
 |  02 Oct 2006: | Support for topic rename (tags are no longer lost) |
 |  14 Sep 2006: | MAKETEXT support (TWiki:Main.KoenMartens); fixed nested webs issue; fix in generated XHTML (TWiki:Main.ArthurClemens) |
@@ -254,7 +255,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TagMeViewAllTags, %TWIKIWEB%.TagMeViewMyTags, %TWIKIWEB%.TagMeSearch, %TWIKIWEB%.TagMeDebugViewTags, %TWIKIWEB%.TagMeDebugSearch, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.DeveloperDocumentationCategory, %TWIKIWEB%.AdminDocumentationCategory, %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main.PeterThoeny - 04 Oct 2006
+-- TWiki:Main.PeterThoeny - 05 Oct 2006
 
 %META:FILEATTACHMENT{name="tag_add.gif" attr="h" comment="" date="1141691885" path="tag_add.gif" size="857" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="tag_ok.gif" attr="h" comment="" date="1141691901" path="tag_ok.gif" size="869" user="PeterThoeny" version="1.2"}%
