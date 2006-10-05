@@ -100,7 +100,7 @@ newTextarea.onkeyup = "TWiki.InlineEditPlugin.TextArea.TextAreaResize(this)";
 newTextarea.onclick = "TWiki.InlineEditPlugin.TextArea.showComponentEdit(event)";
 newTextarea.rows = defaultNumberOfRows;
 newTextarea.cols = defaultNumberOfCols;
-newTextarea.value = this.topicSectionObject.tml;
+newTextarea.innerHTML = this.topicSectionObject.tml;
 newForm.appendChild(newTextarea);
 
 
