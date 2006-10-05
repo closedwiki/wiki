@@ -236,7 +236,7 @@ sub _searchTopicsInWeb {
 
     if( $topic ) {
         # limit search to topic list
-        if( $topic =~ /^\^\([\_\-$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
+        if( $topic =~ /^\^\([\_\-\+$TWiki::regex{mixedAlphaNum}\|]+\)\$$/ ) {
             # topic list without wildcards
             # for speed, do not get all topics in web
             # but convert topic pattern into topic list
@@ -328,7 +328,7 @@ sub _makeTopicPattern {
     my( $topic ) = @_ ;
     return '' unless( $topic );
     # 'Web*, FooBar' ==> ( 'Web*', 'FooBar' ) ==> ( 'Web.*', "FooBar" )
-    my @arr = map { s/[^\*\_\-$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
+    my @arr = map { s/[^\*\_\-\+$TWiki::regex{mixedAlphaNum}]//go; s/\*/\.\*/go; $_ }
               split( /,\s*/, $topic );
     return '' unless( @arr );
     # ( 'Web.*', 'FooBar' ) ==> "^(Web.*|FooBar)$"
