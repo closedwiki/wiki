@@ -25,14 +25,51 @@ General Public License for more details.
     http://www.gnu.org/copyleft/lesser.txt
 
  =============================================================================*/
+//create the TWiki.InlineEditPlugin.TextArea Class constructor
+TWiki.InlineEditPlugin.Wikiwyg = function(topicSectionObject) {
+    this.topicSectionObject = topicSectionObject;
+}
+TWiki.InlineEditPlugin.Wikiwyg.appliesToSection = function(topicSectionObject) {
+    return true;    //TextArea is the fallback editor
+}
+TWiki.InlineEditPlugin.Wikiwyg.getDefaultTml = function() {
+    return 'new Section';    //TextArea is the fallback editor
+}
+TWiki.InlineEditPlugin.Wikiwyg.getTypeName = function() {
+    return "Text";
+}
+
+//register this inline editor component with the main factory
+TWiki.InlineEditPlugin.Wikiwyg.register = function() {
+    if ( typeof( TWiki.InlineEditPlugin.editors ) == "undefined" ) {
+        TWiki.InlineEditPlugin.editors = [];
+    }
+    TWiki.InlineEditPlugin.editors.push('TWiki.InlineEditPlugin.Wikiwyg');
+}
 
 
 //Called by inlineEdit generic functions
 //please define in such a way that it initiates edit mode on the specifed section
-function gotoEditMode(topicSectionObject) {
+TWiki.InlineEditPlugin.Wikiwyg.prototype.OLDcreateEditSection = function() {
     topicSectionObject.editDivSection.editMode();
 }
 
+//ONLY one config for all wikiwygs
+var config = {
+    doubleClickToEdit: false,
+    toolbar: {
+        imagesLocation: '%PLUGINPUBURL%/Wikiwyg-0.12/images/'
+    },
+};
+
+
+TWiki.InlineEditPlugin.Wikiwyg.prototype.createEditSection = function() {
+    var wikiwyg = new Wikiwyg.ClientServer();
+    wikiwyg.createWikiwygArea(this.topicSectionObject.HTMLdiv, config);
+    wikiwyg.setTopicSectionObject(this.topicSectionObject);
+
+	return wikiwyg;
+}
 
 //called after saveChanges has returned
 //redirects to view (because replacing HTML in current doc fails)

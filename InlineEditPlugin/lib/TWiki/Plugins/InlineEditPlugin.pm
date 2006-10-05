@@ -221,7 +221,6 @@ sub postRenderingHandler {
     my $jscript .= TWiki::Func::readTemplate ( 'inlineeditplugin', 'prejavascript' );
     $scriptHeader .= $jscript;
 
-    my $hiddenStyle = 'style="display:none;" ';#visibility:hidden;height:0px;" ';
     my $output = '';
 
     #disable if the user does not have edit permissions
@@ -232,7 +231,7 @@ sub postRenderingHandler {
         #lets add an InfoSection for the topic.
         my $section = 0;
         my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section);
-        my $topicState = '<div class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
+        my $topicState = '<div class="inlineeditTopicInfo hideElement" id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</div>';
         $output .= $topicState;
     } else {
     	#add the inlineEdit JavaScript
@@ -247,7 +246,7 @@ sub postRenderingHandler {
             my $tml = $sectionIds{$key};
             my ($response, $date, $user, $rev, $comment, $oopsUrl, $loginName, $unlockTime, $viewUrl, $saveUrl, $restUrl, $sectionName) = _getTopicSectionState($WEB, $TOPIC, $section, $tml);
             #send the tml in a textarea to stop the browser from closing xml fragments
-            $output .= '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicTML" '.$hiddenStyle.'id="inlineeditTopicTML_'.$section.'" '.'>'.$tml.'</textarea>';
+            $output .= '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicTML hideElement" id="inlineeditTopicTML_'.$section.'" '.'>'.$tml.'</textarea>';
 
             #these need to remain in seperate divs to avoid needing to escape them
     	   if ( $sendHTML == 1) {
@@ -262,12 +261,12 @@ sub postRenderingHandler {
                                                     expandVarsInURL => \&TWiki::Plugins::WysiwygPlugin::expandVarsInURL,        #TODO: not sure if this will work without more magic
                                                     markVars=>1} );
                 $converted = $tml2html->cleanup( $converted );
-                my $tml2htmloutput .= '<form action="'.$saveUrl.'" method="POST"><div class="inlineeditTopicTML2HTML" '.$hiddenStyle.'id="inlineeditTopicTML2HTML_'.$section.'" '.'>'.$converted.'</div>'.$formelements.'</form>';
+                my $tml2htmloutput .= '<form action="'.$saveUrl.'" method="POST"><div class="inlineeditTopicTML2HTML hideElement" id="inlineeditTopicTML2HTML_'.$section.'" '.'>'.$converted.'</div>'.$formelements.'</form>';
                 #do this so that the editor form div directly follows the HTML we are editing
                 $_[0] =~ s/(<div id=.inlineeditTopicHTML_)/$tml2htmloutput$1/g;#TODO: this presumes only one editor
             } else {
             }
-            my $topicState = '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicInfo" '.$hiddenStyle.'id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</textarea>';
+            my $topicState = '<textarea rows="1" cols="1" disabled readonly class="inlineeditTopicInfo hideElement" id="inlineeditTopicInfo_'.$section.'" '.'>'.$response.'</textarea>';
             $output .= $topicState;
         }
     }
