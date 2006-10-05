@@ -1,6 +1,9 @@
 ---+!! %TOPIC%
 
-Add-on to the TWiki kernel that supports e-mail notification of changes, and mail-shotting of newsletters.
+Add-on to the TWiki kernel that allows users to "subscribe" to regularly scheduled e-mails containing either:
+   * A report on changes to all topics that have changed within a particular TWiki web.
+   * A report on changes to a specific topic or set of topics the user can define flexibly.
+   * The entire content of a specific topic or set of topics. This is referred to as "news mode."
 
 <!--
 
@@ -19,16 +22,14 @@ Add-on to the TWiki kernel that supports e-mail notification of changes, and mai
 
 ---+ Summary of Contents
 ---++ <code>tools/mailnotify</code>
-The main part of the mailer module is a script, =tools/mailnotify=. This script is designed to be run from 'cron' (or an equivalent off-line job scheduler), or from the command-line.
+The central component of MailerContrib is a script, =tools/mailnotify=, that generates and sends out the emails based on analysis of 1) users' subcriptions listed in the <nop>%NOTIFYTOPIC%  topic in each web, and 2) changes within the respective webs. This script is designed to be run from 'cron' (or an equivalent off-line job scheduler), or from the command-line. 
 
-In the script sends out mails describing recent changes to subscribers, who subscribe by adding an entry to the <nop>%NOTIFYTOPIC% topic in each web. The script collates the mails so that each subscriber only receives one mail for all changes in the TWiki.
-
-Users can elect to receive just sammaries of changes, or entire topics that have changed.
+The script collates the emails so that each subscriber only receives one mail for all changes in the TWiki. Furthermore, users can elect to receive just summaries of changes, or the entire content of topics that have changed.
 
 Each web can optionally contain a topic called <nop>%NOTIFYTOPIC%.
 <!-- Included by %TWIKIWEB%.WebChangesAlert -->
 %STARTINCLUDE%
-Users add a subscription using one of these bullet list formats:
+Users subscribe to email notifications using their registered email address or an alternative email address, and specifying the webs/topics they wish to track, using one of these bullet list formats:
 
 _three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ <br />
 _three spaces_ * [ _webName_ . ] _wikiName_ <br />
@@ -36,13 +37,13 @@ _three spaces_ * _SMTP mail address_ <br />
 _three spaces_ * _SMTP mail address_ : _topics_ <br />
 _three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
 
-where _topics_ is a space-separated list of topic names.
+In the above examples, _topics_ is a space-separated list of topic names. The user may further customize the specific content they will receive using the following formats:
    * Specify topics without a _Web._ prefix
    * Topics must exist in this web.
    * Topics may be specified using * wildcards
    * Each topic may optionally be preceded by a '+' or '-' sign. The '+' sign means "subscribe to this topic" (the same as not putting anything). The '-' sign means "unsubscribe" or "don't send notifications regarding this topic". This allows users to elect to filter out certain topics (and their children, to an arbitrary depth). Topic filters ('-') take precedence over topic includes ('+').
-   * Each topic may optionally be immediately followed by an exclamation mark ! or a question mark ? with no intervening spaces, indicating that the topic (and children if there is a tree depth specifier as well) should be mailed out as *complete topics* instead of change summaries. ! causes the topic to be mailed every time even if there have been no changes, ? will mail the topic only if there have been changes to it. This only makes sense for subscriptions.
    * Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature.
+   * Each topic may optionally be immediately followed by an exclamation mark ! or a question mark ? with no intervening spaces, indicating that the topic (and children if there is a tree depth specifier as well) should be mailed out as *complete topics* instead of change summaries. ! causes the topic to be mailed every time even if there have been no changes, ? will mail the topic only if there have been changes to it. This only makes sense for subscriptions.
 
 For example:
 Subscribe Daisy to all changes to topics in this web.
@@ -83,9 +84,9 @@ __%T% Tip:__ List names in alphabetical order to make it easier to find the name
 
 In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =mailnotify= script.
 
-%RED% __Note__ =mailnotify= ignores permissions in webs. It is entirely possible for a user to get added to one of the subscription topics in a web, when they are not authorised to view the topics in that web. This could result in them having access to sensitive information (via mailshots). %ENDCOLOR%
+%RED% __Note__ =mailnotify= ignores permissions in webs. It is entirely possible for a user to get added to one of the subscription topics in a web, when they are not authorised to view the topics in that web. This could result in them having access to sensitive information, particularly with news mode. %ENDCOLOR%
 
-Note that when using the news ! or ? specifiers are used the entire topic text is mailed out as HTML. The =newsletter= template is used to generate the content in this mail, using whatever skin is selected in the topic being mailed. See %TWIKIWEB%.TWikiTemplates for more help with templates.
+Note that when using the "news mode" ! or ? specifiers are used the entire topic text is mailed out as HTML. The =newsletter= template is used to generate the content in this mail, using whatever skin is selected in the topic being mailed. See %TWIKIWEB%.TWikiTemplates for more help with templates.
 
 In addition, the %<nop>STARTPUBLISH% and %<nop>STOPPUBLISH% markers used by TWiki:Plugins.PublishContrib to delimit the text to be published are respected.
 
