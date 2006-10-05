@@ -71,21 +71,22 @@ sub mailNotify {
 
     my $webstr;
     if ( defined( $webs )) {
-        $webstr = join( "|", @{$webs} );
+        $webstr = join( '|', @$webs );
     }
     $webstr = '*' unless ( $webstr );
     $webstr =~ s/\*/\.\*/g;
 
     if (!defined $twiki) {
-        $twiki = new TWiki( $TWiki::cfg{DefaultUserLogin}, undef,
-                            {command_line=>1} );
+        $twiki = new TWiki();
     }
+
+    $twiki->enterContext( 'command_line');
 
     # absolute URL context for email generation
     $twiki->enterContext( 'absolute_urls' );
 
     my $report = '';
-    foreach my $web ( grep( /$webstr/o,
+    foreach my $web ( grep( /$webstr/,
                             $twiki->{store}->getListOfWebs( 'user ') )) {
         $report .= _processWeb( $twiki, $web );
     }
@@ -106,21 +107,24 @@ sub _processWeb {
 
     print "Processing $web\n" if $verbose;
 
-    # Read the webnotify and load subscriptions
-    my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $twiki, $web );
     my $report = '';
+
+    # Read the webnotify and load subscriptions
+    my $wn = new TWiki::Contrib::MailerContrib::WebNotify(
+        $twiki, $web, $TWiki::cfg{NotifyTopicName} );
     if ( $wn->isEmpty() ) {
         print "\t$web has no subscribers\n" if $verbose;
     } else {
         # create a DB object for parent pointers
         print $wn->stringify() if $verbose;
         my $db = new TWiki::Contrib::MailerContrib::UpData( $twiki, $web );
-        $report .= _processChanges( $twiki, $web, $wn, $db );
+        $report .= _processSubscriptions( $twiki, $web, $wn, $db );
     }
+
     return $report;
 }
 
-sub _processChanges {
+sub _processSubscriptions {
     my ( $twiki, $web, $notify, $db ) = @_;
 
     my $timeOfLastNotify =
@@ -132,13 +136,19 @@ sub _processChanges {
           TWiki::Time::formatTime( $timeOfLastNotify ). "\n";
     }
 
-    my %changeset;
-    # hash indexed on email address, each entry contains a hash
+    # Hash indexed on email address, each entry contains a hash
     # of topics already processed in the change set for this email.
     # Each subhash maps the topic name to the index of the change
     # record for this topic in the array of Change objects for this
     # email in %changeset.
     my %seenset;
+    # Hash indexed on email address, each entry contains an array
+    # indexed by the index stored in %seenSet. Each entry in the array
+    # is a ref to a Change object.
+    my %changeset;
+    # Hash indexed on topic name, mapping to email address, used to
+    # record simple newsletter subscriptions.
+    my %allSet;
 
     my $changes = $twiki->{store}->readMetaData( $web, 'changes' );
 
@@ -170,13 +180,21 @@ sub _processChanges {
           ( $twiki, $web, $topicName, $userName, $changeTime, $revision );
 
         # Now, find subscribers to this change and extend the change set
-        $notify->processChange( $change, $db, \%changeset, \%seenset );
+        $notify->processChange( $change, $db, \%changeset, \%seenset, \%allSet );
+    }
+
+    # For each topic, see if there's a compulsory subscription independent
+    # of the time since last notify
+    foreach my $topic ($twiki->{store}->getTopicNames($web)) {
+        $notify->processCompulsory( $topic, $db, \%allSet );
     }
 
     # Now generate emails for each recipient
-    my $report = _generateEmails( $twiki, $web,
-                                  \%changeset,
-                                  TWiki::Time::formatTime($timeOfLastNotify) );
+    my $report = _sendChangesMails(
+        $twiki, $web, \%changeset,
+        TWiki::Time::formatTime($timeOfLastNotify) );
+
+    $report .= _sendNewsletterMails( $twiki, $web, \%allSet);
 
     $twiki->{store}->saveMetaData( $web, 'mailnotify', $timeOfLastChange );
 
@@ -184,11 +202,11 @@ sub _processChanges {
 }
 
 # PRIVATE generate and send an email for each user
-sub _generateEmails {
+sub _sendChangesMails {
     my ( $twiki, $web, $changeset, $lastTime ) = @_;
     my $report = '';
 
-    my $skin = $twiki->{prefs}->getPreferencesValue( 'SKIN' );
+    my $skin = $twiki->getSkin();
     my $template = $twiki->{templates}->readTemplate( 'mailnotify', $skin );
 
     my $homeTopic = $TWiki::cfg{HomeTopicName};
@@ -242,7 +260,7 @@ sub _generateEmails {
         my $error = $twiki->{net}->sendEmail( $mail, 5 );
 
         if ($error) {
-            print STDERR "$error\n";
+            print STDERR "Error sending mail: $error\n";
             $report .= $error."\n";
         } else {
             $sentMails++;
@@ -256,6 +274,144 @@ sub _generateEmails {
 sub relativeURL {
     my( $base, $link ) = @_;
     return URI->new_abs( $link, URI->new($base) )->as_string;
+}
+
+sub _sendNewsletterMails {
+    my ($twiki, $web, $allSet) = @_;
+
+    my $report = '';
+    foreach my $topic (keys %$allSet) {
+        $report .= _sendNewsletterMail(
+            $twiki, $web, $topic, $allSet->{$topic});
+    }
+    return $report;
+}
+
+sub _sendNewsletterMail {
+    my ($twiki, $web, $topic, $emails) = @_;
+    my $wikiName = $twiki->{user}->wikiName();
+
+    # SMELL: this code is almost identical to PublishContrib
+
+    # Read topic data.
+    my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
+
+    # tell the session what topic we are currently rendering so the
+    # contexts are correct
+    $twiki->{topicName} = $topic;
+    $twiki->{webName} = $web;
+
+    # SMELL: need a new prefs object for each topic
+    $twiki->{prefs} = new TWiki::Prefs($twiki);
+
+    my $prefs = $twiki->{prefs}->pushPreferences(
+            $TWiki::cfg{SystemWebName},
+	            $TWiki::cfg{SitePrefsTopicName},
+	            'DEFAULT' );
+
+     # Then local site prefs
+     if( $TWiki::cfg{LocalSitePreferences} ) {
+             my( $lweb, $ltopic ) = $twiki->normalizeWebTopicName(
+                        undef, $TWiki::cfg{LocalSitePreferences} );
+             $twiki->{prefs}->pushPreferences( $lweb, $ltopic, 'SITE' );
+    }
+
+    # Get individual user preferences
+    $twiki->{prefs}->pushPreferences(
+        $TWiki::cfg{UsersWebName}, $wikiName, 'USER '.$wikiName);
+
+    # and web preferences
+    $twiki->{prefs}->pushWebPreferences($web);
+    $twiki->{prefs}->pushPreferences($web, $topic, 'TOPIC');
+    $twiki->{prefs}->pushPreferenceValues(
+        'SESSION', $twiki->{client}->getSessionValues()) if $twiki->{client};
+    $twiki->enterContext( 'can_render_meta', $meta );
+
+    # Get the skin for this topic
+    my $skin = $twiki->getSkin();
+    $twiki->{templates}->readTemplate( 'newsletter', $skin );
+    my $header = $twiki->{templates}->expandTemplate( 'NEWS:header' );
+    my $body = $twiki->{templates}->expandTemplate( 'NEWS:body' );
+    my $footer = $twiki->{templates}->expandTemplate( 'NEWS:footer' );
+
+    my ($revdate, $revuser, $maxrev);
+    ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
+    $revuser = $revuser->wikiName();
+
+    # Handle standard formatting.
+    $body =~ s/%TEXT%/$text/g;
+    # Don't render the header, it is preformatted
+    $header = TWiki::Func::expandCommonVariables($header, $topic, $web);
+    my $tmpl = "$body\n$footer";
+    $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
+    $tmpl = TWiki::Func::renderText($tmpl, "", $meta);
+    $tmpl = "$header$tmpl";
+
+    # REFACTOR OPPORTUNITY: stop factor me into getTWikiRendering()
+    # SMELL: this code is identical to PublishContrib!
+
+    # New tags
+    my $newTmpl = '';
+    my $tagSeen = 0;
+    my $publish = 1;
+    foreach my $s ( split( /(%STARTPUBLISH%|%STOPPUBLISH%)/, $tmpl )) {
+        if( $s eq '%STARTPUBLISH%' ) {
+            $publish = 1;
+            $newTmpl = '' unless( $tagSeen );
+            $tagSeen = 1;
+        } elsif( $s eq '%STOPPUBLISH%' ) {
+            $publish = 0;
+            $tagSeen = 1;
+        } elsif( $publish ) {
+            $newTmpl .= $s;
+        }
+    }
+    $tmpl = $newTmpl;
+    $tmpl =~ s/.*?<\/nopublish>//gs;
+    $tmpl =~ s/%MAXREV%/$maxrev/g;
+    $tmpl =~ s/%CURRREV%/$maxrev/g;
+    $tmpl =~ s/%REVTITLE%//g;
+    $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;
+
+    # Remove <base.../> tag
+    $tmpl =~ s/<base[^>]+\/>//;
+    # Remove <base...>...</base> tag
+    $tmpl =~ s/<base[^>]+>.*?<\/base>//;
+
+    # Rewrite absolute URLs
+    my $base = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath};
+    $tmpl =~ s/(href=\")([^"]+)/$1.relativeURL($base,$2)/goei;
+    $tmpl =~ s/(action=\")([^"]+)/$1.relativeURL($base,$2)/goei;
+
+    my $report = '';
+    my $sentMails = 0;
+
+    my %targets = map { $_ => 1 } @$emails;
+
+    foreach my $email ( keys %targets ) {
+        my $mail = $tmpl;
+
+        $mail =~ s/%EMAILTO%/$email/go;
+
+        my $base = $TWiki::cfg{DefaultUrlHost} . $TWiki::cfg{ScriptUrlPath};
+        $mail =~ s/(href=\")([^"]+)/$1.relativeURL($base,$2)/goei;
+        $mail =~ s/(action=\")([^"]+)/$1.relativeURL($base,$2)/goei;
+
+        # remove <nop> and <noautolink> tags
+        $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
+
+        my $error = $twiki->{net}->sendEmail( $mail, 5 );
+
+        if ($error) {
+            print STDERR "Error sending mail: $error\n";
+            $report .= $error."\n";
+        } else {
+            $sentMails++;
+        }
+    }
+    $report .= "\t$sentMails newsletters\n";
+
+    return $report;
 }
 
 1;

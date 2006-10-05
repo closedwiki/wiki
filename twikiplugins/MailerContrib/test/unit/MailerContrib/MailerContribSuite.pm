@@ -2,7 +2,7 @@ use strict;
 
 package MailerContribTests;
 
-use base qw(TWikiTestCase);
+use base qw(TWikiFnTestCase);
 
 use TWiki::Contrib::Mailer;
 
@@ -11,85 +11,9 @@ sub new {
     return $self;
 }
 
-my $testWeb1 = "TemporaryMailerContribTestWeb";
-my $testWeb2 = "$testWeb1/SubWeb";
-my $peopleWeb = "TemporaryMailerContribPeopleWeb";
-my $savePeople;
+my $testWeb2;
 
-my @specs =
-  (
-      # traditional subscriptions
-      {
-          entry => "$peopleWeb.TWikiGuest - example\@test.email",
-          email => "example\@test.email",
-          topicsout => ""
-         },
-      {
-          entry => "$peopleWeb.NonPerson - nonperson\@test.email",
-          email => "nonperson\@test.email",
-          topicsout => "*"
-         },
-      # email subscription
-      {
-          entry => "person\@test.email",
-          email => "person\@test.email",
-          topicsout => "*"
-         },
-      # wikiname subscription
-      {
-          entry => "WikiName1",
-          email => "WikiName1\@test.email",
-          topicsout => "*"
-         },
-      # wikiname subscription
-      {
-          entry => "%MAINWEB%.WikiName2",
-          email => "WikiName2\@test.email",
-          topicsout => "*"
-         },
-      # single topic with one level of children
-      {
-          entry => "email1\@test.email: TestTopic1 (1)",
-          email => "email1\@test.email",
-          topicsout => "TestTopic1 TestTopic11 TestTopic12",
-      },
-      # single topic with 2 levels of children
-      {
-          entry => "WikiName1 : TestTopic1 (2)",
-          email => "WikiName1\@test.email",
-          topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122"
-         },
-      # single topic with 3 levels of children
-      {
-          email => "email3\@test.email",
-          entry => "email3\@test.email : TestTopic1 (3)",
-          topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122 TestTopic1221"
-         },
-      # Comma separated list of subscriptions
-      {
-          email => "email4\@test.email",
-          entry => "email4\@test.email: TestTopic1 (0), TestTopic2 (3)",
-          topicsout => "TestTopic1 TestTopic2 TestTopic21"
-         },
-      # mix of commas, pluses and minuses
-      {
-          email => "email5\@test.email",
-          entry => "email5\@test.email: TestTopic1 + TestTopic2(3), -TestTopic21",
-          topicsout => "TestTopic1 TestTopic2"
-         },
-      # wildcard
-      {
-          email => "email6\@test.email",
-          entry => "email6\@test.email: TestTopic1*1",
-          topicsout => "TestTopic11 TestTopic111"
-         },
-      # wildcard unsubscription
-      {
-          email => "email7\@test.email",
-          entry => "email7\@test.email: TestTopic*1 - \\\n   TestTopic2*",
-          topicsout => "TestTopic1 TestTopic11 TestTopic121"
-         },
-     );
+my @specs;
 
 my %expectedRevs =
   (
@@ -134,23 +58,99 @@ sub set_up {
     $this->SUPER::set_up();
 
     $twiki = new TWiki();
-    $TWiki::cfg{UsersWebName} = $peopleWeb;
+    $TWiki::cfg{UsersWebName} = $this->{users_web};
     $TWiki::cfg{EnableHierarchicalWebs} = 1;
     $twiki->{net}->setMailHandler(\&sentMail);
 
     my $user = $twiki->{user};
     my $text;
 
-    $twiki->{store}->createWeb($user, $testWeb1);
+    $testWeb2 = "$this->{test_web}/SubWeb";
     $twiki->{store}->createWeb($user, $testWeb2);
-    $twiki->{store}->createWeb($user, $peopleWeb);
+    $this->registerUser("tu1", "Test", "User1", "test1\@example.com");
+    $this->registerUser("tu2", "Test", "User2", "test2\@example.com");
+
+    @specs =
+      (
+          # traditional subscriptions
+          {
+              entry => "$this->{users_web}.TWikiGuest - example\@test.email",
+              email => "example\@test.email",
+              topicsout => ""
+             },
+          {
+              entry => "$this->{users_web}.NonPerson - nonperson\@test.email",
+              email => "nonperson\@test.email",
+              topicsout => "*"
+             },
+          # email subscription
+          {
+              entry => "person\@test.email",
+              email => "person\@test.email",
+              topicsout => "*"
+             },
+          # wikiname subscription
+          {
+              entry => "TestUser1",
+              email => "TestUser1\@test.email",
+              topicsout => "*"
+             },
+          # wikiname subscription
+          {
+              entry => "%MAINWEB%.TestUser2",
+              email => "TestUser2\@test.email",
+              topicsout => "*"
+             },
+          # single topic with one level of children
+          {
+              entry => "email1\@test.email: TestTopic1 (1)",
+              email => "email1\@test.email",
+              topicsout => "TestTopic1 TestTopic11 TestTopic12",
+          },
+          # single topic with 2 levels of children
+          {
+              entry => "TestUser1 : TestTopic1 (2)",
+              email => "TestUser1\@test.email",
+              topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122"
+             },
+          # single topic with 3 levels of children
+          {
+              email => "email3\@test.email",
+              entry => "email3\@test.email : TestTopic1 (3)",
+              topicsout => "TestTopic1 TestTopic11 TestTopic111 TestTopic112 TestTopic12 TestTopic121 TestTopic122 TestTopic1221"
+             },
+          # Comma separated list of subscriptions
+          {
+              email => "email4\@test.email",
+              entry => "email4\@test.email: TestTopic1 (0), TestTopic2 (3)",
+              topicsout => "TestTopic1 TestTopic2 TestTopic21"
+             },
+          # mix of commas, pluses and minuses
+          {
+              email => "email5\@test.email",
+              entry => "email5\@test.email: TestTopic1 + TestTopic2(3), -TestTopic21",
+              topicsout => "TestTopic1 TestTopic2"
+             },
+          # wildcard
+          {
+              email => "email6\@test.email",
+              entry => "email6\@test.email: TestTopic1*1",
+              topicsout => "TestTopic11 TestTopic111"
+             },
+          # wildcard unsubscription
+          {
+              email => "email7\@test.email",
+              entry => "email7\@test.email: TestTopic*1 - \\\n   TestTopic2*",
+              topicsout => "TestTopic1 TestTopic11 TestTopic121"
+             },
+         );
 
     my $s = "";
     foreach my $spec (@specs) {
         $s .= "   * $spec->{entry}\n";
     }
 
-    foreach my $web ($testWeb1, $testWeb2) {
+    foreach my $web ($this->{test_web}, $testWeb2) {
         my $meta = new TWiki::Meta($twiki,$web,"WebNotify");
         $meta->put( "TOPICPARENT", { name => "$web.WebHome" } );
         $twiki->{store}->saveTopic( $user, $web, "WebNotify",
@@ -215,14 +215,6 @@ sub set_up {
 
         # stamp the baseline
         $twiki->{store}->saveMetaData($web, "mailnotify", time());
-
-        $meta = new TWiki::Meta($twiki,$peopleWeb,"WikiName1");
-        $twiki->{store}->saveTopic( $user, $peopleWeb, "WikiName1",
-                                    "   * email: WikiName1\@test.email\n",
-                                    $meta);
-        $twiki->{store}->saveTopic( $user, $peopleWeb, "WikiName2",
-                                    "   * email: WikiName2\@test.email\n",
-                                    $meta);
 
         # wait a wee bit for the clock to tick over
         sleep(1);
@@ -290,22 +282,22 @@ sub set_up {
     @mails = ();
 
     # OK, we should have a bunch of changes
-    #print "MN: ",cat $TWiki::cfg{DataDir}/$testWeb1/.mailnotify;
-    #print cat $TWiki::cfg{DataDir}/$testWeb1/.changes;
+    #print "MN: ",cat $TWiki::cfg{DataDir}/$this->{test_web}/.mailnotify;
+    #print cat $TWiki::cfg{DataDir}/$this->{test_web}/.changes;
 }
 
 sub tear_down {
     my $this = shift;
     $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $testWeb2);
-    $twiki->{store}->removeWeb($twiki->{user}, $testWeb1);
-    $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
+    $twiki->{store}->removeWeb($twiki->{user}, $this->{test_web});
+    $twiki->{store}->removeWeb($twiki->{user}, $this->{users_web});
 }
 
 sub testSimple {
     my $this = shift;
 
-    my @webs = ( $testWeb1, $peopleWeb );
+    my @webs = ( $this->{test_web}, $this->{users_web} );
     TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 0 );
     #print "REPORT\n",join("\n\n", @mails);
 
@@ -349,7 +341,7 @@ sub testSimple {
 sub testSubweb {
     my $this = shift;
 
-    my @webs = ( $testWeb2, $peopleWeb );
+    my @webs = ( $testWeb2, $this->{users_web} );
     TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 0 );
     #print "REPORT\n",join("\n\n", @mails);
 

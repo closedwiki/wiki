@@ -123,10 +123,11 @@ sub unsubscribe {
 
 =pod
 
----++ ObjectMethod isSubscribedTo($topic) -> boolean
+---++ ObjectMethod isSubscribedTo($topic) -> $subscription
    * =$topic= - Topic object we are checking
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parents
-Check if we have a subscription to the given topic.
+Check if we have a subscription to the given topic. Return the subscription
+that matches if we do, undef otherwise.
 
 =cut
 
@@ -135,19 +136,19 @@ sub isSubscribedTo {
 
    foreach my $subscription ( @{$this->{subscriptions}} ) {
        if ( $subscription->matches( $topic, $db )) {
-           return 1;
+           return $subscription;
        }
    }
 
-   return 0;
+   return undef;
 }
 
 =pod
 
----++ ObjectMethod isUnsubscribedFrom($topic) -> boolean
+---++ ObjectMethod isUnsubscribedFrom($topic) -> $subscription
    * =$topic= - Topic object we are checking
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parents
-Check if we have an unsubscription from the given topic.
+Check if we have an unsubscription from the given topic. Return the subscription that matches if we do, undef otherwise.
 
 =cut
 
@@ -156,11 +157,11 @@ sub isUnsubscribedFrom {
 
    foreach my $subscription ( @{$this->{unsubscriptions}} ) {
        if ( $subscription->matches( $topic, $db )) {
-           return 1;
+           return $subscription;
        }
    }
 
-   return 0;
+   return undef;
 }
 
 =pod

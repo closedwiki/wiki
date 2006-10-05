@@ -32,28 +32,28 @@ Object that represents the contents of a %NOTIFYTOPIC% topic in a TWiki web
 
 =cut
 
-package  TWiki::Contrib::MailerContrib::WebNotify;
+package TWiki::Contrib::MailerContrib::WebNotify;
 
 =pod
 
----++ ClassMethod new($web)
-Create a new object by parsing the content of the webnotify topic in the
+---++ ClassMethod new($web, $topic)
+Create a new object by parsing the content of the given topic in the
 given web. This is the normal way to load a %NOTIFYTOPIC% topic. If the
 topic does not exist, it will create an empty object.
 
 =cut
 
 sub new {
-    my ( $class, $session, $web ) = @_;
+    my ( $class, $session, $web, $topic ) = @_;
 
     my $this = bless( {}, $class );
 
     $this->{web} = $web;
+    $this->{topic} = $topic || $TWiki::cfg{NotifyTopicName};
     $this->{text} = '';
     $this->{session} = $session;
 
-    if( $session->{store}->topicExists( $web,
-                                        $TWiki::cfg{NotifyTopicName} )) {
+    if( $session->{store}->topicExists( $web, $topic )) {
         $this->_load();
     }
 
@@ -75,7 +75,7 @@ sub writeWebNotify {
     return $this->{session}->{store}->saveTopic(
         $this->{session}->{user},
         $this->{web},
-        $this->{topic_name},
+        $this->{topic},
         $this->{text} . $this->stringify(),
         undef, # meta
         { dontlog => 1, unlock => 1 });
@@ -125,15 +125,18 @@ sub getSubscribers {
    * =$name= - Name of subscriber (wikiname with no web or email address)
    * =$topics= - wildcard expression giving topics to subscribe to
    * =$depth= - Child depth to scan (default 0)
+   * =$mode= - ! if this is a non-changes subscription and the topics should
+   be mailed evebn if there are no changes. ? to mail the full topic only
+   if there are changes. undef to mail changes only.
 Add a subscription, adding the subscriber if necessary.
 
 =cut
 
 sub subscribe {
-    my ( $this, $name, $topics, $depth ) = @_;
+    my ( $this, $name, $topics, $depth, $mode ) = @_;
 
     my $subscriber = $this->getSubscriber( $name );
-    my $sub = new TWiki::Contrib::MailerContrib::Subscription( $topics, $depth );
+    my $sub = new TWiki::Contrib::MailerContrib::Subscription( $topics, $depth, $mode );
     $subscriber->subscribe( $sub );
 }
 
@@ -179,38 +182,70 @@ sub stringify {
 
 =pod
 
----++ ObjectMethod processChange($change, $db, $changeSet, $seenSet)
+---++ ObjectMethod processChange($change, $db, $changeSet, $seenSet, $allSet)
    * =$change= - ref of a TWiki::Contrib::Mailer::Change
    * =$db= - TWiki::Contrib::MailerContrib::UpData database of parent references
    * =$changeSet= - ref of a hash mapping emails to sets of changes
    * =$seenSet= - ref of a hash recording indices of topics already seen
-Find all subscribers that are interested in the given change, and
-add their email expansions to the changeset with pointers to the
-change. Only the most recent change listed in the .changes file is
-retained. This method does _not_ change this object.
+   * =$allSet= - ref of a hash that maps topics to email addresses for news subscriptions
+Find all subscribers that are interested in the given change. Only the most
+recent change to each topic listed in the .changes file is retained. This
+method does _not_ change this object.
 
 =cut
 
 sub processChange {
-    my ( $this, $change, $db, $changeSet, $seenSet ) = @_;
+    my ( $this, $change, $db, $changeSet, $seenSet, $allSet ) = @_;
 
     my $topic = $change->{TOPIC};
 
     foreach my $name ( keys %{$this->{subscribers}} ) {
         my $subscriber = $this->{subscribers}{$name};
-
-        if ( $subscriber->isSubscribedTo( $topic, $db ) &&
-             !$subscriber->isUnsubscribedFrom( $topic, $db )) {
+        my $subs = $subscriber->isSubscribedTo( $topic, $db );
+        if ($subs && !$subscriber->isUnsubscribedFrom( $topic, $db )) {
             my $emails = $subscriber->getEmailAddresses();
             if( $emails ) {
                 foreach my $email ( @$emails ) {
-                    my $at = $seenSet->{$email}{$topic};
-                    if ( $at ) {
-                        $changeSet->{$email}[$at - 1]->merge( $change );
+                    if ($subs->getMode()) { # ? or !
+                        push( @{$allSet->{$topic}}, $email );
                     } else {
-                        $seenSet->{$email}{$topic} =
-                          push( @{$changeSet->{$email}}, $change );
+                        my $at = $seenSet->{$email}{$topic};
+                        if ( $at ) {
+                            $changeSet->{$email}[$at - 1]->merge( $change );
+                        } else {
+                            $seenSet->{$email}{$topic} =
+                              push( @{$changeSet->{$email}}, $change );
+                        }
                     }
+                }
+            }
+        }
+    }
+}
+
+=pod
+
+---++ ObjectMethod processCompulsory($topic, $db, \%allSet)
+   * =$topic= - topic name
+   * =$db= - TWiki::Contrib::MailerContrib::UpData database of parent references
+   * =\%allSet= - ref of a hash that maps topics to email addresses for news subscriptions
+
+=cut
+
+sub processCompulsory {
+    my ($this, $topic, $db, $allSet) = @_;
+
+    foreach my $name ( keys %{$this->{subscribers}} ) {
+        my $subscriber = $this->{subscribers}{$name};
+        my $subs = $subscriber->isSubscribedTo( $topic, $db );
+        next unless $subs;
+        my $mode = $subs->getMode();
+        next if (!defined($mode) || $mode ne '!');
+        unless( $subscriber->isUnsubscribedFrom( $topic, $db )) {
+            my $emails = $subscriber->getEmailAddresses();
+            if( $emails ) {
+                foreach my $address (@$emails) {
+                    push( @{$allSet->{$topic}}, $address );
                 }
             }
         }
@@ -233,11 +268,9 @@ sub isEmpty {
 sub _load {
     my $this = shift;
 
-    my ( $meta, $text ) =
-      $this->{session}->{store}->readTopic( undef, $this->{web},
-                                    $TWiki::cfg{NotifyTopicName} );
+    my ( $meta, $text ) = $this->{session}->{store}->readTopic(
+        undef, $this->{web}, $this->{topic} );
     $this->{meta} = $meta;
-
     # join \ terminated lines
     $text =~ s/\\\r?\n//gs;
     my $webRE = qr/$TWiki::cfg{UsersWebName}\.|%MAINWEB%\./o;
@@ -282,12 +315,13 @@ sub _parsePages {
     my ( $this, $who, $spec ) = @_;
     my $ospec = $spec;
     $spec =~ s/,/ /g;
-    while ( $spec =~ s/^\s*([+-])?\s*([\w\*]+)\s*(?:\((\d+)\))?// ) {
-        my $kids = $3 or 0;
+    while ( $spec =~ s/^\s*([+-])?\s*([\w\*]+)([!?]?)\s*(?:\((\d+)\))?// ) {
+        my $mode = $3 or 0;
+        my $kids = $4 or 0;
         if ( $1 && $1 eq '-' ) {
             $this->unsubscribe( $who, $2, $kids );
         } else {
-            $this->subscribe( $who, $2, $kids );
+            $this->subscribe( $who, $2, $kids, $mode );
         }
     }
     if ( $spec =~ m/\S/ ) {
