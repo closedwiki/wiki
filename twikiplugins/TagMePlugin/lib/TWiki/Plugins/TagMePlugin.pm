@@ -27,7 +27,7 @@ use vars qw(
         $alphaNum
     );
 
-$VERSION = '1.020';
+$VERSION = '1.022';
 $RELEASE = 'Any TWiki';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
@@ -53,14 +53,13 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "\U$pluginName\E_DEBUG" );
-$debug=1;
 
     _writeDebug( "initPlugin( $web.$topic ) is OK" );
     $initialized = 0;
     return 1;
 }
 
-sub initialize
+sub _initialize
 {
     return if( $initialized );
 
@@ -72,15 +71,15 @@ sub initialize
                    . '/TagMeSearch?tag=$tag;by=$by">$tag</a>';
     $tagQueryFormat = 
           '<table style="width:100%;" border="0" cellspacing="0" cellpadding="2"><tr>$n'
-        . '<td style="width:50%;" bgcolor="#EEEEDD"> <b>[[$web.$topic][$topic]]</b> '
-        . '<font size="-1" color="#666666">in $web web</font></td>$n'
+        . '<td style="width:50%;" bgcolor="#EEEEDD"> <b>[[$web.$topic][<nop>$topic]]</b> '
+        . '<font size="-1" color="#666666">in <nop>$web web</font></td>$n'
         . '<td style="width:30%;" bgcolor="#EEEEDD">'
         . '[[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic][$date]] - r$rev </td>$n'
         . '<td style="width:20%;" bgcolor="#EEEEDD"> $wikiusername </td>$n'
         . '</tr></table>$n'
         . '<table style="width:100%;" border="0" cellspacing="0" cellpadding="2"><tr>$n'
         . '<td>&nbsp;</td>$n'
-        . '<td style="width:99%;"><font size="-1" color="#666666">$n'
+        . '<td style="width:99%;"><font size="-1" color="#666666">'
         . '$summary %BR% Tags: $taglist </font></td>$n'
         . '</tr><tr><td></td></tr></table>';
     $alphaNum = TWiki::Func::getRegularExpression( 'mixedAlphaNum' );
@@ -92,7 +91,7 @@ sub initialize
 sub afterSaveHandler {
 ### my ( $text, $topic, $web, $error, $meta ) = @_;
 
-    _writeDebug( "afterSaveHandler( $_[2].$_[1], $error )" );
+    _writeDebug( "afterSaveHandler( $_[2].$_[1] )" );
 
     my $newTopic = $_[1];
     my $newWeb   = $_[2];
@@ -100,7 +99,7 @@ sub afterSaveHandler {
         # excluding WebHome due to TWiki 4 bug on statistics viewed as WebHome
         # and saved as WebStatistics
         _writeDebug( " - topic renamed from $web.$topic to $newWeb.$newTopic" );
-        initialize();
+        _initialize();
         renameTagInfo( "$web.$topic", "$newWeb.$newTopic" );
     }
 }
@@ -111,50 +110,50 @@ sub commonTagsHandler
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     _writeDebug( "commonTagsHandler( $_[2].$_[1] )" );
-    $_[0] =~ s/%TAGME{(.*?)}%/&handleTagMe($1)/ge;
+    $_[0] =~ s/%TAGME{(.*?)}%/_handleTagMe($1)/ge;
 }
 
 # =========================
-sub handleTagMe
+sub _handleTagMe
 {
     my ( $attr ) = @_;
     my $action = TWiki::Func::extractNameValuePair( $attr, 'tpaction' );
     my $text = '';
-    initialize();
+    _initialize();
     if( $action eq 'show' ) {
         $text = showDefault();
     } elsif( $action eq 'showalltags' ) {
-        $text = showAllTags( $attr );
+        $text = _showAllTags( $attr );
     } elsif( $action eq 'query' ) {
-        $text = queryTag( $attr );
+        $text = _queryTag( $attr );
     } elsif( $action eq 'newtag' ) {
         my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-        $text = newTag( $tag );
+        $text = _newTag( $tag );
     } elsif( $action eq 'add' ) {
         my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-        $text = addTag( $tag );
+        $text = _addTag( $tag );
     } elsif( $action eq 'remove' ) {
         my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-        $text = removeTag( $tag );
+        $text = _removeTag( $tag );
     } elsif( $action eq 'nop' ) {
         # no operation
     } elsif( $action ) {
         $text = 'TAGME error: Unrecognized action';
     } else {
-        $text = showDefault();
+        $text = _showDefault();
     }
     return $text;
 }
 
 # =========================
-sub showDefault
+sub _showDefault
 {
     my( @tagInfo ) = @_;
 
     return '' unless( TWiki::Func::topicExists( $web, $topic ) );
 
     my $webTopic = "$web.$topic";
-    @tagInfo = readTagInfo( $webTopic ) unless( scalar( @tagInfo ) );
+    @tagInfo = _readTagInfo( $webTopic ) unless( scalar( @tagInfo ) );
     my $text = '<div class="tagMePlugin" style="display:inline;"><form name="tags" '
              . 'action="%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%" method="post">';
     my $tag = '';
@@ -170,18 +169,18 @@ sub showDefault
             $num = $1;
             $tag = $2;
             $users = $3;
-            $line = printTagLink( $tag, '' ) . " %GRAY% $num%ENDCOLOR% ";
+            $line = _printTagLink( $tag, '' ) . " %GRAY% $num%ENDCOLOR% ";
             if( $users =~ /\b$user\b/ ) {
-                $line .= imgTag( 'tag_remove', 'Remove my vote on this tag', 'remove', $tag );
+                $line .= _imgTag( 'tag_remove', 'Remove my vote on this tag', 'remove', $tag );
             } else {
-                $line .= imgTag( 'tag_add', 'Add my vote for this tag', 'add', $tag );
+                $line .= _imgTag( 'tag_add', 'Add my vote for this tag', 'add', $tag );
             }
             $seen{$tag} = $line;
         }
     }
     $text .= join( ', ', map{ $seen{$_} } sort keys( %seen ) );
     $text .= ', ' if( scalar %seen );
-    my @allTags = readAllTags();
+    my @allTags = _readAllTags();
     my @notSeen = ();
     foreach( @allTags ) {
         push( @notSeen, $_ ) unless( $seen{$_} );
@@ -203,7 +202,7 @@ sub showDefault
 }
 
 # =========================
-sub showAllTags
+sub _showAllTags
 {
     my( $attr ) = @_;
     my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
@@ -246,7 +245,7 @@ sub showAllTags
                         $line = $format;
                         $line =~ s/\$tag/$_/go;
                         $line;
-                    } readAllTags() );
+                    } _readAllTags() );
     } else {
         # slow processing
         # SMELL: Quick hack, should be done with nice data structure
@@ -254,10 +253,10 @@ sub showAllTags
         my %allTags = ();
         my %myTags = ();
         my $webTopic = '';
-        foreach $webTopic ( getTagInfoList() ) {
+        foreach $webTopic ( _getTagInfoList() ) {
             next if( $qWeb && $webTopic !~ /^$qWeb\./  );
             next if( $topicsRegex && $webTopic !~ /$topicsRegex/ );
-            my @tagInfo = readTagInfo( $webTopic );
+            my @tagInfo = _readTagInfo( $webTopic );
             my $tag = '';
             my $num = '';
             my $users = '';
@@ -304,7 +303,7 @@ sub showAllTags
 }
 
 # =========================
-sub queryTag
+sub _queryTag
 {
     my( $attr ) = @_;
     my $qWeb      = TWiki::Func::extractNameValuePair( $attr, 'web' );
@@ -348,10 +347,10 @@ sub queryTag
     my $users = '';
     my @tags = ();
     my $webTopic = '';
-    foreach $webTopic ( getTagInfoList() ) {
+    foreach $webTopic ( _getTagInfoList() ) {
         next if( $qWeb && $webTopic !~ /^$qWeb\./  );
         next if( $topicsRegex && $webTopic !~ /$topicsRegex/ );
-        my @tagInfo = readTagInfo( $webTopic );
+        my @tagInfo = _readTagInfo( $webTopic );
         @tags = ();
         foreach $line ( @tagInfo ) {
             if( $line =~ /^0*([0-9]+), ([^,]+), (.*)/ ) {
@@ -379,7 +378,7 @@ sub queryTag
     unless( $noRelated ) {
         $text .= "__%MAKETEXT{\"Related tags\"}%:__ "
                . join( ', ',
-                       map{ printTagLink( $_, $qBy ) }
+                       map{ _printTagLink( $_, $qBy ) }
                        grep{ !/^$qTag$/ }
                        sort keys( %related )
                      )
@@ -409,14 +408,14 @@ sub queryTag
         foreach $webTopic ( @topics ) {
             $size = int( $maxSize * ( $order{$webTopic} + 1 ) / $max );
             $size = $minSize if( $size < $minSize );
-            $text .= printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy,
+            $text .= _printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy,
                                     $format, $tagVotes{$webTopic}, $size );
             $text .= $separator;
         }
     } else {
         # normal formatting without $size (faster)
         foreach $webTopic ( @topics ) {
-            $text .= printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy,
+            $text .= _printWebTopic( $webTopic, $topicTags{$webTopic}, $qBy,
                                     $format, $tagVotes{$webTopic} );
             $text .= $separator;
         }
@@ -429,26 +428,27 @@ sub queryTag
 }
 
 # =========================
-sub printWebTopic
+sub _printWebTopic
 {
     my( $webTopic, $tagsRef, $qBy, $format, $voteCount, $size ) = @_;
-    $webTopic =~ /^(.*)\.(.*)$/;
+    $webTopic =~ /^(.*)\.(.)(.*)$/;
     my $qWeb = $1;
-    my $qTopic = $2;
+    my $qT1 = $2; # Workaround for core bug Bugs:Item2625, fixed in SVN 11484, hotfix-4.0.4-4
+    my $qTopic = quotemeta( "$2$3" );
     my $text = '%SEARCH{ '
-        . "\"$qTopic\" scope=\"topic\" web=\"$qWeb\" topic=\"$qTopic\" "
-        . 'limit="1" nosearch="on" nototal="on" '
+        . "\"^$qTopic\$\" scope=\"topic\" web=\"$qWeb\" topic=\"$qT1\*\" "
+        . 'regex="on" limit="1" nosearch="on" nototal="on" '
         . "format=\"$format\""
         . ' }%';
     $text = TWiki::Func::expandCommonVariables( $text, $qTopic, $qWeb );
-    $text =~ s/\$taglist/join( ', ', map{ printTagLink( $_, $qBy ) } @{$tagsRef} )/geo;
+    $text =~ s/\$taglist/join( ', ', map{ _printTagLink( $_, $qBy ) } @{$tagsRef} )/geo;
     $text =~ s/\$size/$size/go if( $size );
     $text =~ s/\$votecount/$voteCount/go;
     return $text;
 }
 
 # =========================
-sub printTagLink
+sub _printTagLink
 {
     my( $tag, $by ) = @_;
     my $text = $tagLinkFormat;
@@ -459,7 +459,7 @@ sub printTagLink
 
 # =========================
 # Add new tag to system
-sub newTag
+sub _newTag
 {
     my( $tag ) = @_;
     return "TAGME error: <nop>$user cannot add new tags" if( $user =~ /^(TWikiGuest|guest)$/ );
@@ -468,7 +468,7 @@ sub newTag
     $tag =~ s/[^${alphaNum}_]//go;
     $tag =~ s/^(.{30}).*/$1/;
     return "TAGME error: Please enter a tag" unless( $tag );
-    my @allTags = readAllTags();
+    my @allTags = _readAllTags();
     if( grep( /^$tag$/, @allTags ) ) {
         return "TAGME error: Tag \"$tag\" is already added to system";
     } else {
@@ -481,12 +481,12 @@ sub newTag
 
 # =========================
 # Add tag to topic
-sub addTag
+sub _addTag
 {
     my( $addTag ) = @_;
 
     my $webTopic = "$web.$topic";
-    my @tagInfo = readTagInfo( $webTopic );
+    my @tagInfo = _readTagInfo( $webTopic );
     my $text = '';
     my $tag = '';
     my $num = '';
@@ -523,21 +523,21 @@ sub addTag
             }
         }
         @tagInfo = reverse sort( @result );
-        writeTagInfo( $webTopic, @tagInfo );
+        _writeTagInfo( $webTopic, @tagInfo );
     } else {
         $text .= " (tag not added, topic does not exist)";
     }
-    return showDefault( @tagInfo ) . $text;
+    return _showDefault( @tagInfo ) . $text;
 }
 
 # =========================
 # Remove my tag vote from topic
-sub removeTag
+sub _removeTag
 {
     my( $removeTag ) = @_;
 
     my $webTopic = "$web.$topic";
-    my @tagInfo = readTagInfo( $webTopic );
+    my @tagInfo = _readTagInfo( $webTopic );
     my $text = '';
     my $tag = '';
     my $num = '';
@@ -573,15 +573,15 @@ sub removeTag
     }
     if( $found ) {
         @tagInfo = reverse sort( @result );
-        writeTagInfo( $webTopic, @tagInfo );
+        _writeTagInfo( $webTopic, @tagInfo );
     } else {
         $text .= " (tag \"$removeTag\" not found)";
     }
-    return showDefault( @tagInfo ) . $text;
+    return _showDefault( @tagInfo ) . $text;
 }
 
 # =========================
-sub imgTag
+sub _imgTag
 {
     my( $image, $title, $action, $tag ) = @_;
     my $text = '';
@@ -596,7 +596,7 @@ sub imgTag
 }
 
 # =========================
-sub getTagInfoList
+sub _getTagInfoList
 {
     my @list = ();
     if( opendir( DIR, "$attachDir" ) ) {
@@ -608,18 +608,18 @@ sub getTagInfoList
 }
 
 # =========================
-sub readTagInfo
+sub _readTagInfo
 {
     my( $webTopic ) = @_;
     $webTopic =~ s/[\/\\]/\./g;
-    _writeDebug( "readTagInfo( $webTopic )" );
+    _writeDebug( "_readTagInfo( $webTopic )" );
     my $text = TWiki::Func::readFile( "$attachDir/_tags_$webTopic.txt" );
     my @info = grep{ /^[0-9]/ } split( /\n/, $text );
     return @info;
 }
 
 # =========================
-sub writeTagInfo
+sub _writeTagInfo
 {
     my( $webTopic, @info ) = @_;
     $webTopic =~ s/[\/\\]/\./g;
@@ -650,7 +650,7 @@ sub renameTagInfo
 }
 
 # =========================
-sub readAllTags
+sub _readAllTags
 {
      my $text = TWiki::Func::readFile( "$attachDir/_tags_all.txt" );
      my @tags = grep{ /^[${alphaNum}_]/ } split( /\n/, $text );
