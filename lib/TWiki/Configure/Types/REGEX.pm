@@ -26,7 +26,7 @@ sub prompt {
     my( $this, $id, $opts, $value ) = @_;
     $value = "$value";
     while ($value =~ s/^\(\?-xism:(.*)\)$/$1/) { };
-    $value =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+    $value =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
     my $res = '<input name="'.$id.'" type="text" size="55%" value="'.$value.'" />';
     return $res;
 }

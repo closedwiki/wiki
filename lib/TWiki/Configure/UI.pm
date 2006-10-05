@@ -186,7 +186,7 @@ sub ERROR {
 # HTML encodes the value
 sub hidden {
     my ($this, $name, $value) = @_;
-    $value =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+    $value =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
 	return '<input type="hidden" name="'.$name.'" value="'.$value.'" />';
 }
 
