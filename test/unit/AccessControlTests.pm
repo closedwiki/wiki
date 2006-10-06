@@ -53,6 +53,7 @@ sub tear_down {
     my $this = shift;
     $this->removeWebFixture($twiki, $peopleWeb);
     $this->removeWebFixture($twiki, $testWeb);
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 
@@ -84,6 +85,7 @@ If DENYTOPIC is set to a list of wikinames
    * Set DENYTOPICVIEW = $MrYellow,$peopleWeb.$MrOrange,%MAINWEB%.ReservoirDogsGroup
 THIS
                                 , undef);
+    $twiki->finish();
     $twiki = new TWiki();
 
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
@@ -103,6 +105,7 @@ If DENYTOPIC is set to empty ( i.e. Set DENYTOPIC = )
    * Set DENYTOPICVIEW=
 THIS
                                 , undef);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrYellow);
@@ -121,6 +124,7 @@ If ALLOWTOPIC is set
 \t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
 THIS
                                 , undef);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
@@ -142,14 +146,19 @@ THIS
     my $topicquery = new CGI( "" );
     $topicquery->path_info("/$testWeb/$testTopic");
     # renew TWiki, so WebPreferences gets re-read
+    $twiki->finish();
     $twiki = new TWiki(undef, $topicquery);
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $twiki->finish();
     $twiki = new TWiki(undef, $topicquery);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $twiki->finish();
     $twiki = new TWiki(undef, $topicquery);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $twiki->finish();
     $twiki = new TWiki(undef, $topicquery);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $twiki->finish();
     $twiki = new TWiki(undef, $topicquery);
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
@@ -165,14 +174,19 @@ If ALLOWTOPIC is set
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
+    $twiki->finish();
     $twiki = new TWiki();
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
@@ -188,14 +202,19 @@ If ALLOWTOPIC is set
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
+    $twiki->finish();
     $twiki = new TWiki();
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $twiki->finish();
     $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
@@ -210,6 +229,7 @@ If DENYWEB is set to a list of wikiname
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
+    $twiki->finish();
     $twiki = new TWiki();
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
                                 "Null points");
@@ -232,6 +252,7 @@ If ALLOWWEB is set to a list of wikinames
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
+    $twiki->finish();
     $twiki = new TWiki();
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
                                 "Null points");
@@ -271,6 +292,7 @@ sub test_SetInText {
     my $this = shift;
 
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki->finish();
     $twiki = new TWiki();
 
     my $text = <<THIS;
@@ -283,6 +305,7 @@ sub test_setInMETA {
     my $this = shift;
 
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki->finish();
     $twiki = new TWiki();
     my $meta = new TWiki::Meta($twiki,$testWeb,$testTopic);
     my $args =
@@ -300,6 +323,7 @@ sub test_setInSetAndMETA {
     my $this = shift;
 
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki->finish();
     $twiki = new TWiki();
     my $meta = new TWiki::Meta($twiki,$testWeb,$testTopic);
     my $args =
@@ -320,6 +344,7 @@ sub test_setInEmbedAndNoMETA {
     my $this = shift;
 
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki->finish();
     $twiki = new TWiki();
     my $text = <<THIS;
 %META:PREFERENCE{name="ALLOWTOPICVIEW" title="ALLOWTOPICVIEW" type="Set" value="%25MAINWEB%25.$MrGreen"}%
@@ -331,6 +356,7 @@ sub test_setInEmbedAndMETA {
     my $this = shift;
 
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic, 'Empty');
+    $twiki->finish();
     $twiki = new TWiki();
     my $meta = new TWiki::Meta($twiki,$testWeb,$testTopic);
     my $args =

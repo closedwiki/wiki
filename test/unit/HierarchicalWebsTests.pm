@@ -52,6 +52,7 @@ sub tear_down {
 
     $twiki->{store}->removeWeb(undef, $testWebSubWebPath);
     $twiki->{store}->removeWeb(undef, $testWeb);
+    eval {$twiki->finish()};
 
     $this->SUPER::tear_down();
 }

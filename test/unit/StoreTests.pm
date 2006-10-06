@@ -51,6 +51,7 @@ sub tear_down {
     $this->removeWebFixture($twiki, $web)
       if( $twiki->{store}->webExists( $web ));
 
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 

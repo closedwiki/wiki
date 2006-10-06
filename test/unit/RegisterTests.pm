@@ -75,6 +75,7 @@ sub set_up {
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                      $TWiki::cfg{SuperAdminGroup},
                                      "   * Set GROUP = TestAdmin\n");
+        $session->finish();
         $session = new TWiki();
         my $u = $session->{users}->findUser('TestAdmin');
         $this->assert($u->isAdmin(), $u->stringify());
@@ -134,6 +135,7 @@ sub tear_down {
     $this->removeWebFixture($session,$systemWeb);
     File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
     @mails = ();
+    eval {$session->finish()};
 
     $this->SUPER::tear_down();
 }
@@ -321,6 +323,7 @@ sub registerVerifyOk {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -350,6 +353,7 @@ sub registerVerifyOk {
                                    ]
                       });
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName},$query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -413,6 +417,7 @@ sub test_registerBadVerify {
                                       ]
                          });
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
     try {
@@ -442,6 +447,7 @@ sub test_registerBadVerify {
            ]
     });
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -505,6 +511,7 @@ sub test_registerNoVerifyOk {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -564,6 +571,7 @@ sub test_rejectShortPassword {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -609,6 +617,7 @@ sub test_ignoreShortPassword {
                          });
 
     $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -657,6 +666,7 @@ sub test_resetPasswordOkay {
                          });
 
     $query->path_info( '/'.$peopleWeb.'/WebHome' );
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -699,6 +709,7 @@ sub test_resetPasswordNoSuchUser {
                          });
 
     $query->path_info( '/.'.$peopleWeb.'/WebHome' );
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -740,6 +751,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
                          });
 
     $query->path_info( '/.'.$peopleWeb.'/WebHome' );
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -785,6 +797,7 @@ sub test_resetPasswordNoPassword {
     $query->path_info( '/'.$peopleWeb.'/WebHome' );
     unlink $TWiki::cfg{Htpasswd}{FileName};
 
+    $session->finish();
     $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -899,6 +912,7 @@ EOM
                          });
 
     $query->path_info( "/$testWeb/$regTopic" );
+    $session->finish();
     $session = new TWiki( "testuser", $query);
     $session->{net}->setMailHandler(\&sentMail);
     $session->{users}->findUser( "testuser" )->{isKnownAdmin} = 1;
@@ -992,6 +1006,7 @@ Test User - $testUserWikiName - $testUserEmail
    * Password: mypassword
 EOM
 
+    $session->finish();
     $session = new TWiki( $TWiki::cfg{DefaultUserName});
     $session->{net}->setMailHandler(\&sentMail);
 

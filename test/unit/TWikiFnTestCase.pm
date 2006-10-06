@@ -49,6 +49,7 @@ sub set_up {
 
     my $query = new CGI("");
     $query->path_info("/$this->{test_web}/$this->{test_topic}");
+    eval {$this->{twiki}->finish()};
     $this->{twiki} = new TWiki(undef, $query);
     $TWiki::Plugins::SESSION = $this->{twiki};
     @mails = ();

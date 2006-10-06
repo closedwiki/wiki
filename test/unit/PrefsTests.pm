@@ -66,6 +66,7 @@ sub tear_down {
     $this->removeWebFixture($twiki, $testUsersWeb);
     $this->removeWebFixture($twiki, $testSysWeb);
     $this->removeWebFixture($twiki, $testNormalWeb);
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 

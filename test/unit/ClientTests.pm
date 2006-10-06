@@ -72,6 +72,7 @@ sub set_up_user {
 
 sub tear_down {
     my $this = shift;
+    eval {$session->finish()};
     $this->SUPER::tear_down();
 }
 
@@ -89,6 +90,7 @@ sub verify_edit {
     $query = new CGI ({});
     $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "view";
+    $session->finish();
     $session = new TWiki( undef, $query );
     try {
         $text = $this->capture( \&TWiki::UI::View::view, $session );
@@ -101,6 +103,7 @@ sub verify_edit {
     $query = new CGI ({});
     $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "edit";
+    $session->finish();
     $session = new TWiki( undef, $query );
 
     try {
@@ -118,6 +121,7 @@ sub verify_edit {
     $query = new CGI ({});
     $query->path_info( "/Main/WebHome" );
     $ENV{SCRIPT_NAME} = "edit";
+    $session->finish();
     $session = new TWiki( "joe", $query );
 
     try {

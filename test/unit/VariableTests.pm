@@ -35,6 +35,7 @@ sub tear_down {
     my $this = shift;
 
     $this->removeWebFixture( $twiki, $testWeb );
+    eval {$twiki->finish()};
 
     $this->SUPER::tear_down();
 }

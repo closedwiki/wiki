@@ -60,6 +60,7 @@ sub tear_down {
     # dies, you may end up with spurious test webs
     $this->removeWebFixture($twiki, "Temporarytestweb1");
     $this->removeWebFixture($twiki, "Temporarytwikiweb");
+    eval {$twiki->finish()};
 
     # Always do this, and always do it last
     $this->SUPER::tear_down();

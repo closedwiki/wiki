@@ -90,6 +90,7 @@ sub tear_down {
     my $this = shift;
     $this->removeWebFixture($twiki,$oldweb);
     $this->removeWebFixture($twiki,$newweb);
+    eval {$twiki->finish()};
     $this->SUPER::tear_down();
 }
 

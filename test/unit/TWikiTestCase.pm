@@ -40,6 +40,7 @@ sub set_up {
     my $tmp = new TWiki();
     # This needs to be a deep copy
     $this->{__TWikiSafe} = Data::Dumper->Dump([\%TWiki::cfg], ['*TWiki::cfg']);
+    $tmp->finish();
 }
 
 # Restores TWiki::cfg from backup and deletes any fake users created

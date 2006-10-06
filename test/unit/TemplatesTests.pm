@@ -45,6 +45,7 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    eval {$session->finish()};
     $this->SUPER::tear_down();
     File::Path::rmtree( $test_tmpls );
     File::Path::rmtree( $test_data );
