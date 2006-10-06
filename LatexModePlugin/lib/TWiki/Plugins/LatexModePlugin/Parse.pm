@@ -470,6 +470,13 @@ sub extractBlocks {
     return($txt);
 }
 
+sub mathShortToLong {
+
+    $_[0] =~ s!\\\[(.*?)\\\]!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
+    $_[0] =~ s!\$\$(.*?)\$\$!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
+    $_[0] =~ s!\$(.*?)\$!\\begin\{math\} $1 \\end\{math\}!gis;
+
+}
 
 sub extractEnvironments {
 
@@ -481,6 +488,8 @@ sub extractEnvironments {
 	($pre,$block,$doc) = umbrellaHook( $doc,
                                            '\\\\begin\s*\{.*?\}',
                                            '\\\\end\s*\{.*?\}');
+        &mathShortToLong($pre);
+        $pre = extractEnvironments($pre) if ($pre =~ m/\\begin\{.*?math\}/);
 	$txt .= $pre;
 
         if ($block =~ m/^\\begin\{verbatim\}/) {
@@ -488,15 +497,14 @@ sub extractEnvironments {
         } else {
             #change all $$'s to begin maths!
             ### warning: can't do this within verbatim blocks!
-            $block =~ s!\\\[(.*?)\\\]!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
-            $block =~ s!\$\$(.*?)\$\$!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
-            $block =~ s!\$(.*?)\$!\\begin\{math\} $1 \\end\{math\}!gis;
-
+            &mathShortToLong($block);
             $txt .= convertEnvironment($block) if ($block ne '');
         }
     } while ($block ne '');
 
     #there is still some $doc left:
+    &mathShortToLong($doc);
+    $doc = extractEnvironments($doc) if ($doc =~ m/\\begin\{.*?math\}/);
     $txt .= $doc;
 
     return($txt);
@@ -609,7 +617,7 @@ sub convertEnvironment
     elsif ($bname =~ /(figure|table)(\*?)/) {
         my $type = uc($1);
         my $span = ($2 eq '*') ? ' span="twoc" ' : '';
-        $block =~ s!^\\begin\{$bname\*?\}\[\w+\]!!;
+        $block =~ s!^\\begin\{$bname\*?\}(\[\w+\])?!!;
         $block =~ s!\\end\{$bname\*?\}$!!; 
 
         $block =~ s/(.+)\\caption//s;
