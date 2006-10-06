@@ -384,61 +384,106 @@ sub _getPrefs {
    # HTMLDOC location
    # $TWiki::htmldocCmd must be set in TWiki.cfg
 
+    use constant {
+       BANNER => "",
+       TITLE => "",
+       SUBTITLE => "",
+       HEADERTOPIC => "",
+       TITLETOPIC => "",
+       SKIN => "print.pattern",
+       RECURSIVE => undef,
+       FORMAT => "pdf14",
+       TOCLEVELS => 5,
+       PAGESIZE => "a4",
+       ORIENTATION => "portrait",
+       WIDTH => 860,
+       HEADERSHIFT => 0,
+       KEYWORDS => '%FORMFIELD{"KeyWords"}%',
+       SUBJECT => '%FORMFIELD{"TopicHeadline"}%',
+       TOCHEADER => "...",
+       TOCFOOTER => "..i",
+       HEADFOOTFONT => "",
+       BODYIMAGE => "",
+       LOGOIMAGE => "",
+       NUMBEREDTOC => undef,
+       DUPLEX => undef,
+       PERMISSIONS => undef,
+       MARGINS => undef,
+       BODYCOLOR => undef,
+   };
+
    # header/footer topic
-   $prefs{'hftopic'} = $query->param('pdfheadertopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERTOPIC") || '';
+   $prefs{'hftopic'} = $query->param('pdfheadertopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERTOPIC") || HEADERTOPIC;
+
    # title topic
-   $prefs{'titletopic'} = $query->param('pdftitletopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_TITLETOPIC") || '';
+   $prefs{'titletopic'} = $query->param('pdftitletopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_TITLETOPIC") || TITLETOPIC;
 
    $prefs{'banner'} = $query->param('pdfbanner') || TWiki::Func::getPreferencesValue("GENPDFADDON_BANNER");
-   $prefs{'banner'} = '' unless defined $prefs{'banner'};
+   $prefs{'banner'} = BANNER unless defined $prefs{'banner'};
+
    $prefs{'title'} = $query->param('pdftitle') || TWiki::Func::getPreferencesValue("GENPDFADDON_TITLE");
-   $prefs{'title'} = '' unless defined $prefs{'title'};
+   $prefs{'title'} = TITLE unless defined $prefs{'title'};
+
    $prefs{'subtitle'} = $query->param('pdfsubtitle') || TWiki::Func::getPreferencesValue("GENPDFADDON_SUBTITLE");
-   $prefs{'subtitle'} = '' unless defined $prefs{'subtitle'};
-   $prefs{'keywords'} = $query->param('pdfkeywords') || TWiki::Func::getPreferencesValue("GENPDFADDON_KEYWORDS")
-                        || '%FORMFIELD{"KeyWords"}%' || '';
-   $prefs{'subject'} = $query->param('pdfsubject') || TWiki::Func::getPreferencesValue("GENPDFADDON_SUBJECT")
-                        || '%FORMFIELD{"TopicHeadline"}%' || '';
+   $prefs{'subtitle'} = SUBTITLE unless defined $prefs{'subtitle'};
+
+   $prefs{'keywords'} = $query->param('pdfkeywords') || TWiki::Func::getPreferencesValue("GENPDFADDON_KEYWORDS") || KEYWORDS;
+
+   $prefs{'subject'} = $query->param('pdfsubject') || TWiki::Func::getPreferencesValue("GENPDFADDON_SUBJECT") || SUBJECT;
 
    $prefs{'skin'} = $query->param('skin') || TWiki::Func::getPreferencesValue("GENPDFADDON_SKIN") || '';
    # Force a skin if the current value if the user didn't supply one (note that supplying a null one if OK)
-   $prefs{'skin'} = "print.pattern" unless (defined $prefs{'skin'} || !defined $query->param('skin'));
+   $prefs{'skin'} = SKIN unless (defined $prefs{'skin'} || !defined $query->param('skin'));
 
    # Get TOC header/footer. Set to default if nothing useful given
    $prefs{'tocheader'} = $query->param('pdftocheader') || TWiki::Func::getPreferencesValue("GENPDFADDON_TOCHEADER") || '';
-   $prefs{'tocheader'} = "..." unless ($prefs{'tocheader'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
+   $prefs{'tocheader'} = TOCHEADER unless ($prefs{'tocheader'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
+
    $prefs{'tocfooter'} = $query->param('pdftocfooter') || TWiki::Func::getPreferencesValue("GENPDFADDON_TOCFOOTER") || '';
-   $prefs{'tocfooter'} = "..i" unless ($prefs{'tocfooter'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
+   $prefs{'tocfooter'} = TOCFOOTER unless ($prefs{'tocfooter'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
 
    # Get some other parameters and set reasonable defaults unless not supplied
    $prefs{'format'} = $query->param('pdfformat') || TWiki::Func::getPreferencesValue("GENPDFADDON_FORMAT") || '';
-   $prefs{'format'} = "pdf14" unless ($prefs{'format'} =~ /^(html(sep)?|ps([123])?|pdf(1[1234])?)$/);
+   $prefs{'format'} = FORMAT unless ($prefs{'format'} =~ /^(html(sep)?|ps([123])?|pdf(1[1234])?)$/);
+
    $prefs{'size'} = $query->param('pdfpagesize') || TWiki::Func::getPreferencesValue("GENPDFADDON_PAGESIZE") || '';
-   $prefs{'size'} = "a4" unless ($prefs{'size'} =~ /^(letter|legal|a4|universal|(\d+x\d+)(pt|mm|cm|in))$/);
+   $prefs{'size'} = PAGESIZE unless ($prefs{'size'} =~ /^(letter|legal|a4|universal|(\d+x\d+)(pt|mm|cm|in))$/);
+
    $prefs{'orientation'} = $query->param('pdforientation') || TWiki::Func::getPreferencesValue("GENPDFADDON_ORIENTATION") || '';
-   $prefs{'orientation'} = "portrait" unless ($prefs{'orientation'} =~ /^(landscape|portrait)$/);
+   $prefs{'orientation'} = ORIENTATION unless ($prefs{'orientation'} =~ /^(landscape|portrait)$/);
+
    $prefs{'headfootfont'} = $query->param('pdfheadfootfont') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADFOOTFONT") || '';
-   $prefs{'headfootfont'} = undef unless ($prefs{'headfootfont'} =~
+   $prefs{'headfootfont'} = HEADFOOTFONT unless ($prefs{'headfootfont'} =~
       /^(times(-roman|-bold|-italic|bolditalic)?|(courier|helvetica)(-bold|-oblique|-boldoblique)?)$/);
+
    $prefs{'width'} = $query->param('pdfwidth') || TWiki::Func::getPreferencesValue("GENPDFADDON_WIDTH") || '';
-   $prefs{'width'} = 860 unless ($prefs{'width'} =~ /^\d+$/);
-   $prefs{'toclevels'} = $query->param('pdftoclevels') || TWiki::Func::getPreferencesValue("GENPDFADDON_TOCLEVELS") || '';
-   $prefs{'toclevels'} = 5 unless ($prefs{'toclevels'} =~ /^\d+$/);
+   $prefs{'width'} = WIDTH unless ($prefs{'width'} =~ /^\d+$/);
+
+   $prefs{'toclevels'} = $query->param('pdftoclevels');
+   $prefs{'toclevels'} = TWiki::Func::getPreferencesValue("GENPDFADDON_TOCLEVELS") unless (defined($prefs{'toclevels'}) && ($prefs{'toclevels'} =~ /^\d+$/));
+   $prefs{'toclevels'} = TOCLEVELS unless (defined($prefs{'toclevels'}) && ($prefs{'toclevels'} =~ /^\d+$/));
+
    $prefs{'bodycolor'} = $query->param('pdfbodycolor') || TWiki::Func::getPreferencesValue("GENPDFADDON_BODYCOLOR") || '';
-   $prefs{'bodycolor'} = undef unless ($prefs{'bodycolor'} =~ /^[0-9a-fA-F]{6}$/);
+   $prefs{'bodycolor'} = BODYCOLOR unless ($prefs{'bodycolor'} =~ /^[0-9a-fA-F]{6}$/);
 
    # Anything results in true (use 0 to turn these off or override the preference)
-   $prefs{'recursive'} = $query->param('pdfrecursive') || TWiki::Func::getPreferencesValue("GENPDFADDON_RECURSIVE") || '';
-   $prefs{'bodyimage'} = $query->param('pdfbodyimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_BODYIMAGE") || '';
-   $prefs{'logoimage'} = $query->param('pdflogoimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_LOGOIMAGE") || '';
-   $prefs{'numbered'} = $query->param('pdfnumberedtoc') || TWiki::Func::getPreferencesValue("GENPDFADDON_NUMBEREDTOC") || '';
-   $prefs{'duplex'} = $query->param('pdfduplex') || TWiki::Func::getPreferencesValue("GENPDFADDON_DUPLEX") || '';
-   $prefs{'shift'} = $query->param('pdfheadershift') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERSHIFT") || 0;
-   $prefs{'shift'} = 0 unless ($prefs{'shift'} =~ /^[+-]?(\d+)?$/);
-   $prefs{'permissions'} = $query->param('pdfpermissions') || TWiki::Func::getPreferencesValue("GENPDFADDON_PERMISSIONS") || '';
+   $prefs{'recursive'} = $query->param('pdfrecursive') || TWiki::Func::getPreferencesValue("GENPDFADDON_RECURSIVE") || RECURSIVE || '';
+
+   $prefs{'bodyimage'} = $query->param('pdfbodyimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_BODYIMAGE") || BODYIMAGE;
+
+   $prefs{'logoimage'} = $query->param('pdflogoimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_LOGOIMAGE") || LOGOIMAGE;
+
+   $prefs{'numbered'} = $query->param('pdfnumberedtoc') || TWiki::Func::getPreferencesValue("GENPDFADDON_NUMBEREDTOC") || NUMBEREDTOC || '';
+
+   $prefs{'duplex'} = $query->param('pdfduplex') || TWiki::Func::getPreferencesValue("GENPDFADDON_DUPLEX") || DUPLEX || '';
+
+   $prefs{'shift'} = $query->param('pdfheadershift') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERSHIFT") || HEADERSHIFT;
+
+   $prefs{'permissions'} = $query->param('pdfpermissions') || TWiki::Func::getPreferencesValue("GENPDFADDON_PERMISSIONS") || PERMISSIONS || '';
    $prefs{'permissions'} = join(',', grep(/^(all|annotate|copy|modify|print|no-annotate|no-copy|no-modify|no-print|none)$/,
       split(/,/, $prefs{'permissions'})));
-   my @margins = grep(/^(top|bottom|left|right):\d+(\.\d+)?(cm|mm|in|pt)?$/, split(',', ($query->param('pdfmargins') || TWiki::Func::getPreferencesValue("GENPDFADDON_MARGINS") || '')));
+
+   my @margins = grep(/^(top|bottom|left|right):\d+(\.\d+)?(cm|mm|in|pt)?$/, split(',', ($query->param('pdfmargins') || TWiki::Func::getPreferencesValue("GENPDFADDON_MARGINS") || MARGINS || '')));
    for (@margins) {
       my ($key,$val) = split(/:/);
       $prefs{$key} = $val;
@@ -656,7 +701,7 @@ sub viewPDF {
    my $cd = "filename=${webName}_$topic.";
    try {
        if ($prefs{'format'} =~ /pdf/) {
-           print CGI::header( -TYPE => 'application/x-pdf',
+           print CGI::header( -TYPE => 'application/pdf',
                               -Content_Disposition => $cd.'pdf');
        }
        elsif ($prefs{'format'} =~ /ps/) {
