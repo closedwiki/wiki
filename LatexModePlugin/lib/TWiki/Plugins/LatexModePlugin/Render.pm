@@ -530,7 +530,7 @@ sub renderEquations {
                                   join('; ', map{"$_=>$opts{$_}"} keys(%opts))
                                   ) if ($debug);
         
-        print MATHOUT "\\clearpage\n";
+        print MATHOUT "\n\\clearpage\n";
         print MATHOUT "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
         print MATHOUT '\textcolor{'.$opts{'color'}.'}{'
             unless ($opts{'color'} eq 'black');
