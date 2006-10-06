@@ -178,11 +178,6 @@ sub handleAlltex
     TWiki::Func::getContext()->{'LMPcontext'}->{'thanks'} = '';
     TWiki::Func::getContext()->{'LMPcontext'}->{'thankscnt'} = 0;
 
-    #change all $$'s to begin maths!
-    $doc =~ s!\\\[(.*?)\\\]!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
-    $doc =~ s!\$\$(.*?)\$\$!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
-    $doc =~ s!\$(.*?)\$!\\begin\{math\} $1 \\end\{math\}!gis;
-
     unlink("/tmp/alltex_uH.txt");
     # printF("handleAlltex($params)");
 
@@ -228,6 +223,9 @@ The parsing is done in three stages:
 =end twiki
 
 =cut
+
+    # replace all extracted verbatim blocks
+    $doc =~ s/%VERBATIMBLOCK\{(.*?)\}%/&extractVerbatim($1)/ge;
 
     open(F,">/tmp/after_eB.txt");
     print F $doc;
@@ -485,8 +483,17 @@ sub extractEnvironments {
                                            '\\\\end\s*\{.*?\}');
 	$txt .= $pre;
 
-        $txt .= convertEnvironment($block) if ($block ne '');
+        if ($block =~ m/^\\begin\{verbatim\}/) {
+            $txt .= '%VERBATIMBLOCK{'.storeVerbatim($block).'}%';
+        } else {
+            #change all $$'s to begin maths!
+            ### warning: can't do this within verbatim blocks!
+            $block =~ s!\\\[(.*?)\\\]!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
+            $block =~ s!\$\$(.*?)\$\$!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
+            $block =~ s!\$(.*?)\$!\\begin\{math\} $1 \\end\{math\}!gis;
 
+            $txt .= convertEnvironment($block) if ($block ne '');
+        }
     } while ($block ne '');
 
     #there is still some $doc left:
@@ -559,11 +566,12 @@ sub convertEnvironment
         $block = extractEnvironments($block);
         $block = extractBlocks( $block );
     }
-    elsif ($bname eq 'verbatim') {
-        $block =~ s!^\\begin\{$bname\}!<verbatim>!;
-        $block =~ s!\\end\{$bname\}$!</verbatim>!;
-
-    }
+    # elsif ($bname eq 'verbatim') {
+    #     $block =~ s!^\\begin\{$bname\}!<verbatim>!;
+    #     $block =~ s!\\end\{$bname\}$!</verbatim>!;
+    #     $block =~ s/\\(begin|end){math}/\$/g;
+    #     $txt .= $block;
+    # }
     elsif ( ($bname =~ m/(itemize|enumerate|description)/ ) ) {
         my $tag = 'ul>';
         $tag = 'ol>' if ($1 eq 'enumerate');
@@ -898,6 +906,22 @@ providing the core parsing routines.
 
 =cut
 
+sub storeVerbatim {
+
+    push( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} }, $_[0] );
+    return( scalar( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} } ) );
+}
+
+sub extractVerbatim {
+
+    my @a = @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} };
+
+    my $block = $a[ $_[0] ];
+    $block =~ s!^\\begin\{verbatim\}!<verbatim>!;
+    $block =~ s!\\end\{verbatim\}$!</verbatim>!;
+
+    return( $block );
+}
 
 sub addToTitle {
 
@@ -954,3 +978,4 @@ __DATA__
 :\title:1:&addToTitle(<h1 align="center">$1</h1>):
 :\author:1:&addToTitle(<div align="center"><font size="+1">$1</font></div>):
 !\address!1!&addToTitle(<table align="center"><tr><td valign="top">Address correspondence to:<td valign="top">$1</table>)!
+:\url:1:$1:

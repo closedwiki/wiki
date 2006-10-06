@@ -215,7 +215,7 @@ these plugin settings write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<
 		* Set LATEXMODEPLUGIN_DEBUG = 0
 
 	* Set the dots-per-inch default density level for the rendered images (116 is suggested for 11pt browser fonts.)
-		* Set LATEXMODPLUGIN_DENSITY = 116
+		* Set LATEXMODEPLUGIN_DENSITY = 116
 
 	* Set the gamma correction for the rendered images.  This controls how dark the rendered text appears
 		* Set LATEXMODEPLUGIN_GAMMA = 0.6
