@@ -539,7 +539,7 @@ sub _encode {
   $text =~ s/<nop>//go;
   $text =~ s/[\n\r]+/ /go;
   $text =~ s/\n*<\/?noautolink>\n*//go;
-  $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+  $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
   $text =~ s/^\s*(.*?)\s*$/$1/gos;
 
   return $text;
@@ -564,7 +564,7 @@ sub _flatten {
   $text =~ s/\[\[//go;
   $text =~ s/\]\]//go;
   $text =~ s/\]\[//go;
-  $text =~ s/[[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|]/'&#'.ord($&).';'/ge;
+  $text =~ s/([[\x01-\x09\x0b\x0c\x0e-\x1f"%&'*<=>@[_\|])/'&#'.ord($1).';'/ge;
   $text =~ s/(https?)/<nop>$1/go;
   $text =~ s/\b($wikiWordRegex)\b/<nop>$1/g;
 
