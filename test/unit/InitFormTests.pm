@@ -51,6 +51,8 @@ my $user;
 my $testuser1 = "TestUser1";
 my $testuser2 = "TestUser2";
 
+my $setup_failure = '';
+
 my $aurl; # Holds the %ATTACHURL%
 my $surl;# Holds the %SCRIPTURL%
 
@@ -155,7 +157,7 @@ sub get_formfield {
 }
 
 sub setup_formtests {
-  my ( $web, $topic, $params ) = @_;
+  my ( $this, $web, $topic, $params ) = @_;
 
   $twiki->{webName} = $web;
   $twiki->{topicName} = $topic;
@@ -174,8 +176,18 @@ sub setup_formtests {
 
   eval 'use HTML::TreeBuilder; use HTML::Element;';
   if( $@ ) {
-    print STDERR "$@\nUNABLE TO RUN TEST\n";
-    return;
+      my $current_failure = $@;
+      $current_failure =~ s/\(eval \d+\)//g; # remove number for comparison
+      if ($current_failure  eq  $setup_failure) {
+          # we've seen the same error before.  Probably one of the CPAN
+          # prerequisites is missing.
+          $this->assert(0,"Unable to set up test:  Same problem as above.");
+      }
+      else {
+          $setup_failure  =  $current_failure;
+          $this->assert(0,"Unable to set up test: '$@'");
+      }
+      return;
   }
 
   my $tree = HTML::TreeBuilder->new_from_content($tmpl);
@@ -198,7 +210,7 @@ sub setup_formtests {
 sub test_form {
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\"" );
+  my @children = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\"" );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
 ', get_formfield(1, @children));
@@ -222,7 +234,7 @@ sub test_tmpl_form {
   # Pass formTemplate and templateTopic
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+  my @children = setup_formtests( $this, $testweb, $testtopic1, "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
 ', get_formfield(1, @children));
@@ -246,7 +258,7 @@ sub test_tmpl_form_new {
   # Pass formTemplate and templateTopic to empty topic
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+  my @children = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="_An issue_">
 ', get_formfield(1, @children));
@@ -270,7 +282,7 @@ sub test_tmpl_form_existingform {
   # Pass formTemplate and templateTopic to topic with form
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
+  my @children = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\"" );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="_An issue_">
 ', get_formfield(1, @children));
@@ -294,7 +306,7 @@ sub test_tmpl_form_params {
   # Pass query parameters
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, "$testtopic1", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"_An issue_\" IssueDescription=\"---+ Example problem\" IssueType=\"Defect\" History1=\"%SCRIPTURL%\" History2=\"%SCRIPTURL%\" History3=\"\$percntSCRIPTURL%\" History4=\"\$percntSCRIPTURL%\" " );
+  my @children = setup_formtests( $this, $testweb, "$testtopic1", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"_An issue_\" IssueDescription=\"---+ Example problem\" IssueType=\"Defect\" History1=\"%SCRIPTURL%\" History2=\"%SCRIPTURL%\" History3=\"\$percntSCRIPTURL%\" History4=\"\$percntSCRIPTURL%\" " );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="_An issue_">
 ', get_formfield(1, @children));
@@ -318,7 +330,7 @@ sub test_tmpl_form_existingform_params {
   # Pass query parameters, with field values present
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
+  my @children = setup_formtests( $this, $testweb, "$testtopic2", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
 ', get_formfield(1, @children));
@@ -342,7 +354,7 @@ sub test_tmpl_form_new_params {
   # Pass query parameters, new topic
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
+  my @children = setup_formtests( $this, $testweb, "${testtopic1}XXXXXXXXXX", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" " );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
 ', get_formfield(1, @children));
@@ -366,7 +378,7 @@ sub test_tmpl_form_notext_params {
   # Pass query parameters, no text
   my $this = shift;
   
-  my @children = setup_formtests( $testweb, "", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" text=\"\"" );
+  my @children = setup_formtests( $this, $testweb, "", "formtemplate=\"$testweb.$testform\" templatetopic=\"$testweb.$testtmpl\" IssueName=\"My first defect\" IssueDescription=\"Simple description of problem\" IssueType=\"Enhancement\" History1=\"%ATTACHURL%\" History2=\"%ATTACHURL%\" History3=\"\$percntATTACHURL%\" History4=\"\$percntATTACHURL%\" text=\"\"" );
 
   $this->assert_str_equals('<input class="twikiEditFormTextField" name="IssueName" size=73 type="text" value="My first defect">
 ', get_formfield(1, @children));
