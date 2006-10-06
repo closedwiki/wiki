@@ -40,7 +40,7 @@ Additional options can be included to modify the rendered result.  These include
 | density | positive integer | %LATEXMODEPLUGIN_DENSITY% (set below) | controls rendered font size |
 | scale | positive number | %LATEXMODEPLUGIN_SCALE% (set below) | sets post-rendered image scaling |
 | gamma | positive number | %LATEXMODEPLUGIN_GAMMA% (set below) | controls rendered font darkness |
-| bgcolor | --- | 'white | sets background font color (details below) |
+| bgcolor | --- | 'white' | sets background color (details below) |
 | color | --- | 'black' | sets foreground font color (details below) |
 | attachment | alpha-numeric | --- | allows one to couple the latex command with an attached file.  Useful for latex graphics commands.  |
 </div>

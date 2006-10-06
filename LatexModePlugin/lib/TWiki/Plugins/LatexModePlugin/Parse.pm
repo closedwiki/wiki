@@ -160,12 +160,17 @@ sub handleAlltex
     # %  ... \n
     $math_string =~ s!%.*?\n!!gis;
 
+    my ($pre,$doc);
     #everything between \documentclass and \begin{doc..} is preamble
-    $math_string =~ m!(\\documentclass\s*(\[.*?\])?\s*\{.*?\})\s*(\[.*?\])?(.*?)\\begin\s*\{document\}\s*(.*?)\s*\\end\s*\{document\}!is;
-
-    my $pre = $4;     # preamble
-    my $doc = $5;     # document
-
+    if ( $math_string =~ m!(\\documentclass\s*(\[.*?\])?\s*\{.*?\})\s*(\[.*?\])?(.*?)\\begin\s*\{document\}\s*(.*?)\s*\\end\s*\{document\}!is ) {
+        
+        $pre = $4;     # preamble
+        $doc = $5;     # document
+    }
+    else {
+        $pre = '';
+        $doc = $math_string;
+    }
     TWiki::Func::getContext()->{'LMPcontext'}->{'preamble'} .= $pre;
     TWiki::Func::getContext()->{'LMPcontext'}->{'docclass'} .= $1;
     printF($1);
@@ -470,6 +475,8 @@ sub extractBlocks {
 }
 
 sub mathShortToLong {
+    #change all $ .. $, $$ .. $$, and \[ .. \] to math environments
+    ### warning: can't do this within verbatim blocks!
 
     $_[0] =~ s!\\\[(.*?)\\\]!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
     $_[0] =~ s!\$\$(.*?)\$\$!\\begin\{displaymath\} $1 \\end\{displaymath\}!gis;
@@ -494,8 +501,6 @@ sub extractEnvironments {
         if ($block =~ m/^\\begin\{verbatim\}/) {
             $txt .= '%VERBATIMBLOCK{'.storeVerbatim($block).'}%';
         } else {
-            #change all $$'s to begin maths!
-            ### warning: can't do this within verbatim blocks!
             &mathShortToLong($block);
             $txt .= convertEnvironment($block) if ($block ne '');
         }
@@ -707,7 +712,7 @@ sub convertEnvironment
 }
 
 
-## derived from code contributed by TWiki:EvanChou 
+## derived from code contributed by TWiki:Main.EvanChou 
 #
 #
 #helper function that grabs the right tag (no need for weird divtree)
@@ -733,11 +738,10 @@ sub umbrellaHook
 
     my $before = '';
 
-    if($txt =~ m!$delim_l!is) {
+    if($txt =~ s!^(.*?)($delim_l)!!is) {
 	$nleft++;
-	$before = $`;
-	$umb = $&;
-	$txt = "$'";
+	$before = $1;
+	$umb = $2; 
 
 #	return ($before, $umb,$txt);
 #	my $pl = -1;
@@ -745,10 +749,11 @@ sub umbrellaHook
 
 	while($nright < $nleft) {
 
-	    if($txt =~ m!$delim_r!is) {
+	    if($txt =~ s!^(.*?)($delim_r)!!is) {
 		$nright++;
-	    }
-	    else {
+                $front = $1; 
+                $umb .= $1 . $2;
+	    } else {
 		#mismatch!	       		
 		$txt = $before . $umb . $txt;
 		$before = '';
@@ -756,20 +761,10 @@ sub umbrellaHook
 		last;
 	    }
 
-
-	    $front = $`;
-	    $umb .= $` . $&;
-	    $txt = "$'";
-
 	    #count how many left's are before this right
-	    while($front =~ m!$delim_l!is) {
+	    while($front =~ m!$delim_l!gis) {
 		$nleft++;
-		$front = "$'";
 	    }
-#	    if($pl == $nleft && $pr == $nright) {
-#		die("Delimiter mismatch!");
-#	    }
-
 #	    $pl = $nleft;
 #	    $pr = $nright;
 	}
