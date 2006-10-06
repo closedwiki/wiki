@@ -20,7 +20,7 @@ use strict;
 
 use vars qw( $VERSION $RELEASE );
 
-=head1 The <nop>TWiki <nop>LatexModePlugin<nop>LaTeX Parse module
+=head1 The TWiki LatexModePlugin LaTeX Parse module
 
 This module provides the ability to include <nop>LaTeX source files
 in TWiki topics.
@@ -76,13 +76,14 @@ sub printF {
 
 }
 
-=begin twiki
 
----++ Syntax
+=head2 Syntax
 
 To include full <nop>LaTeX source documents in a TWiki topic, insert
 the text to be converted inbetween the tags %<nop>BEGINALLTEX% and
 %<nop>ENDALLTEX%.
+
+=begin twiki
 
 
 ---+++ Example
@@ -201,26 +202,24 @@ The parsing is done in three stages:
     # convert simple commands to TML
     # convertSimple($doc);
 
-=begin twiki
+=pod
 
-    The output will be rendered in HTML by default.  Alternatively,
-    one can render the output in TWiki Markup (TML).  This is achieved
-    by declaring 
-<verbatim>
+The output will be rendered in HTML by default.  Alternatively,
+one can render the output in TWiki Markup (TML).  This is achieved
+by declaring 
+
    * Set LATEXMODEPLUGIN_ALLTEXMODE = tml
-</verbatim>
-    as a topic/web/twiki-wide preference setting, or by passing in =tml= as
-    the =latex= parameter on view.  e.g. 
-    <a href="%TOPIC%?latex=tml">%TOPIC%?latex=tml</a>
 
-    The option of TML output is provided for the following reason: it
-    is unlikely that all portions of the .tex to TWiki topic
-    conversion will render successfully.  [ The _parser_ in almost
-    complete. The _converter_? not so much. ;-) ] With a .tex to TML
-    converter in place, one can copy-and-paste the twiki markup to
-    another topic to correct the rendering problems.
+as a topic/web/twiki-wide preference setting, or by passing in =tml= as
+the =latex= parameter on view.  e.g. 
+<a href="%TOPIC%?latex=tml">%TOPIC%?latex=tml</a>
 
-=end twiki
+The option of TML output is provided for the following reason: it
+is unlikely that all portions of the .tex to TWiki topic
+conversion will render successfully.  [ The _parser_ in almost
+complete. The _converter_? not so much. ;-) ] With a .tex to TML
+converter in place, one can copy-and-paste the twiki markup to
+another topic to correct the rendering problems.
 
 =cut
 
@@ -510,20 +509,41 @@ sub extractEnvironments {
     return($txt);
 }
 
-=begin twiki
+=head2 Supported Environments
 
----++ Supported Environments
+=over 1
 
-   * $ .. $, $$ .. $$, \[ .. \], math, displaymath, equation, eqnarray
-   * itemize, enumerate, description
-   * table, figure
-   * abstract, bibliography, keywords
+=item *
 
-<nop>LaTeX enviroments that are _not supported_ are passed to the TWiki
-<nop>LaTeX rendering engine to generate an image.  For nested
+$ .. $, $$ .. $$, \[ .. \], math, displaymath, equation, eqnarray
+
+=item * 
+
+itemize, enumerate, description
+
+=item *
+
+table, figure
+
+=item *
+
+verbatim
+
+=item *
+
+abstract, bibliography, keywords
+
+=back
+
+=begin html
+
+<p>
+
+=end html
+
+LaTeX enviroments that are I<not supported> are passed to the TWiki
+LaTeX rendering engine to generate an image.  For nested
 environments, image rendering occurs at the first unrecognized enviroment.
-
-=end  twiki
 
 =cut
 
@@ -799,9 +819,21 @@ sub handleNewTheorem {
 
 1;
 
-=begin twiki
+=head2 Supported simple and complex commands
 
----++ Supported simple and complex commands
+=begin text
+
+use TWiki:Plugins.PerlDocPlugin to see list of supported commands
+
+=end text
+
+=begin man
+
+use TWiki:Plugins.PerlDocPlugin to see list of supported commands
+
+=end man
+
+=begin twiki
 
    * commands with reasonably complete support (.tex --> HTML/TML)
       * section, subsection, subsubsection
@@ -818,6 +850,8 @@ sub handleNewTheorem {
    * commands that are ignored
       * vspace, hspace, vfill, noindent, sloppy
 
+=end twiki
+
 All mathmode commands are supported, as all mathmode enviroments are
 rendered as an image using the background =latex= engine.  Commands
 that are not recognized are tagged as LATEX.  In future versions of
@@ -825,33 +859,46 @@ the module, these may be passed off to the rendering engine as well.
 Error handling needs to be improved before this will be useful,
 however.
 
----++ Installation
+=head2 Installation
 
 For now, the TWiki::Plugins::LatexModePlugin::Parse module is only
-available on the TWiki SVN development tree, <a
-href="http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00/twikiplugins/LatexModePlugin/lib/TWiki/Plugins/LatexModePlugin">here</a>.
+available on the TWiki SVN development tree, 
+<a href="http://svn.twiki.org:8181/svn/twiki/branches/TWikiRelease04x00/twikiplugins/LatexModePlugin/lib/TWiki/Plugins/LatexModePlugin">here</a>.
 Download the Parse.pm file and copy it to the
-=lib/TWiki/Plugins/LatexModePlugin/= directory of your TWiki
+C<lib/TWiki/Plugins/LatexModePlugin/> directory of your TWiki
 installation.  Documentation for the module is provided in 
-=pod= format, and can be view using the TWiki:PerlDocPlugin.
+=pod= format, and can be completely viewed using the TWiki:PerlDocPlugin 
+or partially viewed using C<perldoc> or C<pod2text>.
 
 
----++ Translation syntax
+=head2 Translation syntax
 
 Here is a description of the syntax used to define <nop>LaTeX to
 HTML/TML translations in the module.
 
 Environments are currently handled by code chunks.  See the
-=convertEnvironment= subroutine for examples.
+C<convertEnvironment> subroutine for examples.
 
-The syntax for complex commands is a mash-up between <nop>LaTeX and
+The syntax for complex commands is a mash-up between LaTeX and
 Perl.  In a single line, the command and its replacement are
 described.  This first character is the array seperator, used in the
-Parse =split= command.
+Parse C<split> command.
 
-   * The first array element is the latex command.
-   * The second element is the number of bracketed blocks the command uses
-   * The third array element is the replacement command.
+=over 1 
+
+=item *
+
+The first array element is the latex command.
+
+=item *
+
+The second element is the number of bracketed blocks the command uses
+
+=item *
+
+The third array element is the replacement command.
+
+=back
 
 The numbered strings, =$1, $2, ...= etc., are used to declare the
 placement of the bracketed blocks in the replacement.  Command
@@ -859,23 +906,22 @@ options, =\cmd[ _opts_ ]{ .. }= can be included with an =$o= string in
 the replacement.
 
 An example:
-<verbatim>
-!\parbox!2!<table align="left" width="$1"><tr><td>$2</table>!
-</verbatim>
+
+   !\parbox!2!<table align="left" width="$1"><tr><td>$2</table>!
+
 
 If one needs greater flexibility, the replacement command can be a
 function call.  The function call needs to start with an apersand,
-=&=, and the full function name needs to be regestered in the global
-=regSubs= array.  See the lines for =\author=, =\title=, and
-=\address= for examples.
+C<&>, and the full function name needs to be regestered in the global
+C<regSubs> array.  See the lines for C<\author>, C<\title>, and
+C<\address> for examples.
 
 
 Feel free to submit code patches to expand the list of known commands
 and environments!
 
 
-
----++ Caveat Emptor
+=head2 Caveat Emptor
 
 This is what it is.  And it is not a replacement for more complete
 <nop>LaTeX2HTML translators like
@@ -885,9 +931,9 @@ or [[http://www.ccs.neu.edu/home/dorai/tex2page/tex2page-doc.html][tex2page]].
 It may eventually grow to become something close to those, but it's
 not there yet.
 
----++ Dev Notes
+=head2 Dev Notes
 
----+++ Rendering Weirdness.
+=head3 Rendering Weirdness.
 
 It turns out that the idea of passing off unwieldy markup to the
 rendering engine is dicey at best.  This was attempted with
@@ -899,25 +945,23 @@ Switching between =dvips+convert= and =dvipng= can get around this
 problem to render all of the images.  But this is not a serious
 solution.
 
----+++ Including Graphics
+=head3 Including Graphics
 
-There are many ways to include graphics in latex files.  So, I figured the most reasonable way to support them all is to render them using the backend image rendering.  This actually works OK, but introduces some minor complications.   For parsing and rendering raw latex files, the orginal _graphics_ files needs to be in .eps format in order to be understood by the =latex= command used during background rendering.  However, the =genpdflatex= script uses =pdflatex= instead, which works better with .pdf or .png image files.  One solution is to store .eps files and use =epstopdf= from the <nop>teTeX distribution to convert them to .pdf when using =genpdflatex=.   Alternatively, one can write a custom TWiki macro to handle attached .pdf images (e.g. %<nop>SHOWPDF{image.pdf}%), and then use a translation declaration to render the image (e.g. =:\includegraphics:1:%<nop>SHOWPDF{$1}:=).
+There are many ways to include graphics in latex files.  So, I figured the most reasonable way to support them all is to render them using the backend image rendering.  This actually works OK, but introduces some minor complications.   For parsing and rendering raw latex files, the orginal _graphics_ files needs to be in .eps format in order to be understood by the =latex= command used during background rendering.  However, the =genpdflatex= script uses =pdflatex= instead, which works better with .pdf or .png image files.  One solution is to store .eps files and use =epstopdf= from the teTeX distribution to convert them to .pdf when using =genpdflatex=.   Alternatively, one can write a custom TWiki macro to handle attached .pdf images (e.g. %SHOWPDF{image.pdf}%), and then use a translation declaration to render the image (e.g. =:\includegraphics:1:%SHOWPDF{$1}:=).
 
 
----++ Acknowledgements
+=head2 Acknowledgements
 
 Thanks to <a href="http://twiki.org/cgi-bin/view/Main/EvanChou">EvanChou</a> for the inspiration for taking this on, and for
 providing the core parsing routines.
 
-
-=end twiki
 
 =cut
 
 sub storeVerbatim {
 
     push( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} }, $_[0] );
-    return( scalar( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} } ) );
+    return( scalar( @{ TWiki::Func::getContext()->{'LMPcontext'}->{'verb'} } ) - 1 );
 }
 
 sub extractVerbatim {
