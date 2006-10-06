@@ -526,7 +526,7 @@ sub _getTopicSummary {
 
   # ... but hilight all of them
   foreach my $k (@theKeywords) {
-    $htext =~ s:$k:<font color="#cc0000">$&</font>:gi;
+    $htext =~ s:($k):<font color="#cc0000">$1</font>:gi;
   }
 
   # inline search renders text, 

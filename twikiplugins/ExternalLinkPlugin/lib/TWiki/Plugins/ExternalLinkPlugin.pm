@@ -62,7 +62,7 @@ sub commonTagsHandler
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
     # do custom extension rule, like for example:
-    $_[0] =~ s!\[\[($protocolsPattern://[^]]+?)\]\[[^]]+?\]\]([&]nbsp;)?! handleExternalLink($&, $1) !ge;
+    $_[0] =~ s!(\[\[($protocolsPattern://[^]]+?)\]\[[^]]+?\]\]([&]nbsp;)?)! handleExternalLink($1, $2) !ge;
 }
 
 sub handleExternalLink {

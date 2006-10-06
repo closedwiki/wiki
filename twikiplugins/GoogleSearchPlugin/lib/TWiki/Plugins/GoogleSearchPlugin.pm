@@ -110,7 +110,7 @@ sub _handleTopic( )
           
 	$query =$topic;
         #Following code find parts of topic name to give them to google search 
-	$query =~ s/[A-Z]/+$&/g; 
+	$query =~ s/([A-Z])/+$1/g; 
 	$query =~ s/^\+//;
               
         $name=$query;
@@ -131,7 +131,7 @@ sub _handleKeyword( )
         $query =$topic;
 
         #Following code find parts of topic name to give them to google search 
-	$query =~ s/[A-Z]/+$&/g; 
+	$query =~ s/([A-Z])/+$1/g; 
 	$query =~ s/^\+//;
 	$name=$query;
         $name=~ s/\+/ /g;
