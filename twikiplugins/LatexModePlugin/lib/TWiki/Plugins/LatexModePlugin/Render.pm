@@ -126,6 +126,7 @@ sub handleLatex
                  'density' => $LMPc{'default_density'}, 
                  'gamma' =>   $LMPc{'default_gamma'}, 
                  'scale' =>   $LMPc{'default_scale'},
+                 'bgcolor' => 'white',
                  'color' => 'black' );
 
     my %opts2 = TWiki::Func::extractParameters( $prefs );
@@ -532,16 +533,15 @@ sub renderEquations {
         
         print MATHOUT "\n\\clearpage\n";
         print MATHOUT "% $LATEXBASENAME.$EXT.$image_number --> $key \n";
-        print MATHOUT '\textcolor{'.$opts{'color'}.'}{'
-            unless ($opts{'color'} eq 'black');
+        print MATHOUT '\pagecolor{'.$opts{'bgcolor'}."} \n" if ($LMPc{'use_color'} == 1 );
+        print MATHOUT '\textcolor{'.$opts{'color'}.'}{' if ($LMPc{'use_color'} == 1 );
         print MATHOUT " $value ";
-        print MATHOUT '}'
-            unless ($opts{'color'} eq 'black');
+        print MATHOUT '}' if ($LMPc{'use_color'} == 1);
 
         $hash_code_mapping{$key} = $image_number + 1;
         $image_number++;
     }
-    print MATHOUT "\\clearpage\n(end)\\end{document}\n";
+    print MATHOUT "\n\\clearpage\n(end)\n\\end{document}\n";
     close( MATHOUT );
 
     # generate the output images by running latex-dvips-convert on the file
@@ -685,7 +685,7 @@ sub makePNGsFromDVI {
         # system("echo \"$PATHTOCONVERT $cmd\" >> $LATEXLOG") if ($debug);
         # system("$PATHTOCONVERT $cmd");
             my $ccmd = $convertargs;
-            $ccmd .= " -transparent white " 
+            $ccmd .= " -transparent %BGC|S% " 
                 unless ( ($markup_opts{$key}{'inline'} ne 0) and
                          ($tweakinline ne 0) );
             $ccmd .= " %OUTIMG|F%";
@@ -695,6 +695,7 @@ sub makePNGsFromDVI {
                                   EPS => $LATEXBASENAME.$num.".eps",
                                   EXT => lc($EXT),
                                   GAMMA => $opts{'gamma'},
+                                  BGC => $opts{'bgcolor'},
                                   OUTIMG => $outimg,
                                   LOG => $LATEXLOG );
 
@@ -714,9 +715,10 @@ sub makePNGsFromDVI {
 
                 my ($d,$e) = 
                     $sandbox->sysCommand("$PATHTOCONVERT %IN|F% ".
-                                         " -background black -trim ".
+                                         " -background %BGC|S% -trim ".
                                          " %OUT|F% ",
                                          IN => $tmpfile,
+                                         BGC => $opts{'bgcolor'},
                                          OUT => $outimg );
                 # print STDERR "convert: $d $e\n" if ($e > 0);
 
@@ -733,7 +735,7 @@ sub makePNGsFromDVI {
                 $sh = $1 if ($sh =~ m/(\d+)/); # untaint
                 $sh2 = $1 if ($sh2 =~ m/(\d+)/); # untaint
                  
-                my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 -transparent white $outimg";
+                # my $cmd = " -crop ".$nw."x".$nh."+$sh+$sh2 -transparent white $outimg";
                 
                 move($outimg,$tmpfile);
                 # system("$PATHTOCONVERT $tmpfile $cmd");
@@ -743,12 +745,13 @@ sub makePNGsFromDVI {
                                          " -crop ".
                                          '%NW|N%'.'x'.'%NH|N%'.
                                          '+'.'%SH|N%'.'+'.'%SH2|N%'.
-                                         ' -transparent white %OUTIMG|F%',
+                                         ' -transparent %BGC|S% %OUTIMG|F%',
                                          INIMG => $tmpfile,
                                          NW => $nw,
                                          NH => $nh,
                                          SH => $sh,
                                          SH2 => $sh2,
+                                         BGC => $opts{'bgcolor'},
                                          OUTIMG => $outimg
                                          );
                 # print STDERR "convert: $d $e\n" if ($e > 0);
