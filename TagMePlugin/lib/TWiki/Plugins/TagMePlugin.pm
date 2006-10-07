@@ -1,6 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 2006 Peter Thoeny, peter@thoeny.org
+# Copyright (c) 2006 Fred Morris, m3047-twiki@inwa.net
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -27,7 +28,7 @@ use vars qw(
         $alphaNum
     );
 
-$VERSION = '1.022';
+$VERSION = '1.030';
 $RELEASE = 'Any TWiki';
 $pluginName = 'TagMePlugin';  # Name of this Plugin
 $initialized = 0;
@@ -131,10 +132,14 @@ sub _handleTagMe
         $text = _newTag( $tag );
     } elsif( $action eq 'add' ) {
         my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-        $text = _addTag( $tag );
+        # Add param to suppress status. FWM, 03-Oct-2006
+        my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
+        $text = _addTag( $tag, $noStatus );
     } elsif( $action eq 'remove' ) {
         my $tag = TWiki::Func::extractNameValuePair( $attr, 'tag' );
-        $text = _removeTag( $tag );
+        # Add param to suppress status. FWM, 03-Oct-2006
+        my $noStatus = TWiki::Func::extractNameValuePair( $attr, 'nostatus' );
+        $text = _removeTag( $tag, $noStatus );
     } elsif( $action eq 'nop' ) {
         # no operation
     } elsif( $action ) {
@@ -483,7 +488,7 @@ sub _newTag
 # Add tag to topic
 sub _addTag
 {
-    my( $addTag ) = @_;
+    my( $addTag, $noStatus ) = @_;
 
     my $webTopic = "$web.$topic";
     my @tagInfo = _readTagInfo( $webTopic );
@@ -527,14 +532,15 @@ sub _addTag
     } else {
         $text .= " (tag not added, topic does not exist)";
     }
-    return _showDefault( @tagInfo ) . $text;
+    # Suppress status? FWM, 03-Oct-2006
+    return _showDefault( @tagInfo ) . (( $noStatus ) ? '' : $text);
 }
 
 # =========================
 # Remove my tag vote from topic
 sub _removeTag
 {
-    my( $removeTag ) = @_;
+    my( $removeTag, $noStatus ) = @_;
 
     my $webTopic = "$web.$topic";
     my @tagInfo = _readTagInfo( $webTopic );
@@ -577,7 +583,8 @@ sub _removeTag
     } else {
         $text .= " (tag \"$removeTag\" not found)";
     }
-    return _showDefault( @tagInfo ) . $text;
+    # Suppress status? FWM, 03-Oct-2006
+    return _showDefault( @tagInfo ) . (( $noStatus ) ? '' : $text);
 }
 
 # =========================
